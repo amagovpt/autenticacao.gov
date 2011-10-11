@@ -1,0 +1,21 @@
+## To build this sample, the following should be installed:
+##  - XCode (http://developer.apple.com/tools/xcode/)
+##  - the BE eID middleware
+
+CXX           = g++
+CXXFLAGS      = -O2 -g
+INCPATH       = ../../../pteidlib/C++/include/
+
+LINK          = g++
+LIBPATH	      = /usr/local/lib 
+LIBS          = -Wl,-framework -Wl,PCSC \
+		 -lpteidlib -lpteidcommon -lpteidapplayer -lpteiddialogsQT -lpteidcardlayer
+
+SOURCES       = main.cpp
+TARGET        = wait_card
+
+$(TARGET) : $(SOURCES)
+	$(CXX) $(CXXFLAGS) $(SOURCES) -I$(INCPATH) -o $(TARGET) -L$(LIBPATH) $(LIBS)
+
+
+

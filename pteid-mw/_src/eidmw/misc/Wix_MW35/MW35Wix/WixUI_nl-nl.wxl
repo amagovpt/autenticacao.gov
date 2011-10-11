@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+    Copyright (c) Microsoft Corporation.  All rights reserved.
+
+    The use and distribution terms for this software are covered by the
+    Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+    which can be found in the file CPL.TXT at the root of this distribution.
+    By using this software in any fashion, you are agreeing to be bound by
+    the terms of this license.
+
+    You must not remove this notice, or any other, from this software.
+-->
+<WixLocalization Culture="nl-nl" xmlns="http://schemas.microsoft.com/wix/2003/11/localization" Codepage="1252">
+  
+  <String Id="AdvancedWelcomeEulaDlg_Title" Overridable="yes">[ProductName] Setup</String>
+  <String Id="AdvancedWelcomeEulaDlgBannerBitmap" Overridable="yes">WixUI_Bmp_Banner</String>
+  <String Id="AdvancedWelcomeEulaDlgTitle" Overridable="yes">{\WixUI_Font_Title}Lees aub de [ProductName] Licentie-overeenkomst</String>
+  <String Id="AdvancedWelcomeEulaDlgLicenseAcceptedCheckBox" Overridable="yes">Ik &amp;aanvaard de voorwaarden in de Licentie-overeenkomst</String>
+  <String Id="AdvancedWelcomeEulaDlgDescriptionPerMachine" Overridable="yes">Klik installeer om het product te installeren met de standaard opties voor alle gebruikers. Klik geavanceerd om de opties voor de installatie te wijzigen.</String>
+  <String Id="AdvancedWelcomeEulaDlgDescriptionPerUser" Overridable="yes">Klik installeer om het product te installeren met de standaard opties enkel voor de huidige gebruiker. Klik geavanceerd om de opties voor de installatie te wijzigen.</String>
+  <String Id="AdvancedWelcomeEulaDlgInstall" Overridable="yes">&amp;Installeer</String>
+  <String Id="AdvancedWelcomeEulaDlgAdvanced" Overridable="yes">Geavanceer&amp;d</String>
+  <String Id="Advanced_Font_Normal_Size" Overridable="yes">8</String>
+  <String Id="Advanced_Font_Bigger_Size" Overridable="yes">12</String>
+  <String Id="Advanced_Font_Title_Size" Overridable="yes">9</String>
+  <String Id="Advanced_Font_Emphasized_Size" Overridable="yes">8</String>
+  <String Id="Advanced_Font_FaceName" Overridable="yes">Tahoma</String>
+
+  <String Id="FeaturesDlg_Title" Overridable="yes">[ProductName] Setup</String>
+  <String Id="FeaturesDlgTree" Overridable="yes">Product opties</String>
+  <String Id="FeaturesDlgBannerBitmap" Overridable="yes">WixUI_Bmp_Banner</String>
+  <String Id="FeaturesDlgDescription" Overridable="yes">Selecteer de manier waarop u het product wil installeren.</String>
+  <String Id="FeaturesDlgTitle" Overridable="yes">{\WixUI_Font_Title}Product Opties</String>
+  <String Id="FeaturesDlgItemDescription" Overridable="yes">FeaturesDlgItemDescription</String>
+  <String Id="FeaturesDlgItemSize" Overridable="yes">FeaturesDlgItemSize</String>
+  <String Id="FeaturesDlgInstall" Overridable="yes">&amp;Installeer</String>
+  <String Id="FeaturesDlgChange" Overridable="yes">&amp;Wijzig</String>
+  <String Id="InstallScopeDlg_Title" Overridable="yes">[ProductName] Setup</String>
+  <String Id="InstallScopeDlgBannerBitmap" Overridable="yes">WixUI_Bmp_Banner</String>
+  <String Id="InstallScopeDlgDescription" Overridable="yes">Selecteer de installatiewijze en map</String>
+  <String Id="InstallScopeDlgTitle" Overridable="yes">{\WixUI_Font_Title}Installatiewijze</String>
+  <String Id="InstallScopeDlgPerUser" Overridable="yes">{\WixUI_Font_Emphasized}Installeer &amp;enkel voor de huidige gebruiker: ([USERNAME])</String>
+  <String Id="InstallScopeDlgPerUserDescription" Overridable="yes">[ProductName] wordt geïnstalleerd in een map per gebruiker en is enkel beschikbaar voor uw huidig gebruikersaccount. De installatie vereist geen administrator rechten.</String>
+  <String Id="InstallScopeDlgNoPerUserDescription" Overridable="yes">[ProductName] ondersteunt geen installatie per gebruiker.</String>
+  <String Id="InstallScopeDlgPerMachine" Overridable="yes">{\WixUI_Font_Emphasized}Installeer voor alle gebruikers van deze &amp;computer</String>
+  <String Id="InstallScopeDlgPerMachineDescription" Overridable="yes">[ProductName] wordt geïnstalleerd in een gemeenschappelijke map en is beschikbaar voor alle gebruikers. U kan de installatiemap wijzigen. Hiervoor zijn locale administrator rechten nodig.</String>
+  <String Id="InstallScopeDlgFolderLabel" Overridable="yes">Installatie &amp;map:</String>
+  <String Id="InstallScopeDlgChange" Overridable="yes">&amp;Wijzig...</String>
+
+  <String Id="InvalidDirDlg_Title" Overridable="yes">[ProductName] Setup</String>
+  <String Id="InvalidDirDlgText" Overridable="yes">Installatiemap moet op een locale harde schijf.</String>
+  <String Id="InvalidDirDlgIcon" Overridable="yes">WixUI_Ico_Info</String>
+  <String Id="InvalidDirDlgIconTooltip" Overridable="yes">Information icon</String>
+
+  <String Id="MaintenanceTypeDlgRemoveDisabledText" Overridable="yes">[ProductName] kan niet worden verwijderd.</String>
+
+  <String Id="MaintenanceTypeDlgRepairDisabledText" Overridable="yes">[ProductName] kan niet worden hersteld.</String>
+
+  <String Id="UITextNewFolder" Overridable="yes">Map|Nieuwe Map</String>
+
+</WixLocalization>

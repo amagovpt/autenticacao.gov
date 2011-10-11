@@ -1,0 +1,21 @@
+CC           = gcc
+DEFINES       = 
+CCFLAGS      = -O2 -g
+INCPATH       = ../../../pteidlib/C/include
+
+LINK          = gcc
+LFLAGS        =
+LIBPATH	      = /usr/local/lib 
+LIBS          = -lpteidlibC 
+
+OBJECTS       = main.o
+SOURCES       = pin_eid.c
+TARGET_NAME   = pin_eid
+DESTDIR       = .
+TARGET        = $(DESTDIR)/$(TARGET_NAME)
+
+$(TARGET) : $(SOURCES)
+	$(CC) $(CCFLAGS) $(SOURCES) -I$(INCPATH) -o $(TARGET) -L$(LIBPATH) $(LIBS)
+
+
+

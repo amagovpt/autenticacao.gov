@@ -1,0 +1,30 @@
+ACR38 PCSC Driver Package Installer
+Version: 1.07.09 (100709)
+Date: Mar-01-2008
+Advanced Card Systems Ltd
+
+This ReadMe file includes the following sections:
+- Package Contents
+- Known Problem
+- Workaround Patch
+- Uninstalling the Patch
+
+Package Contents:
+=======================
+This installation meta package includes the following packages
+- ACR38Driver package
+- PCSCD_Fix package (required only for Mac OS X 10.4.x/10.5.x)
+
+Known Problem:
+=======================
+Mac OS X 10.4.x/10.5.x has a problem in the auto launch service of pcscd for Non-CCID type of smart card reader. The OS does not launch and start the pcscd when ACR38 is connected to the Mac system. This renders PC/SC smart card application unable to locate ACR38 reader even after the driver is installed.
+
+Workaround Patch:
+=======================
+PCSCD_Fix is a patch package that workaround this problem. There are two scripts included in this package.
+The first script modified the startup pattern of pcscd such that pcscd always automatically when the system is booted. However, the system still will launch pcscd when a CCID reader is connected to the computer. This results in multiple instance of pcscd being loaded and will hang the smart card services. The 2nd script is used to turn off the pcscd auto launch feature to ensure there will always be only one instance of pcscd loaded.
+
+Uninstalling the Patch:
+=======================
+A shell script, uninstall-pcscd-fix.sh, will be installed in /Library/OpenSC/bin folder together with the PCSCD_Fix package. User can run this script to uninstall the changes made by PCSCD_Fix package and restore the original startup pattern of pcscd.
+Administrator privilege (password) is needed to run this script.

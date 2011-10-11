@@ -1,0 +1,89 @@
+<?xml version="1.0" standalone="no"?>
+<!--
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+
+<!DOCTYPE s1 SYSTEM "sbk:/style/dtd/document.dtd">
+
+<s1 title="Migration">
+    <s2 title="Migration Archive">
+
+       <p>For migration information on earlier versions of &XercesCName; 2
+          please refer to <link idref="migrate-archive-&XercesC3Series;">Migration Archive</link>.</p>
+
+    </s2>
+
+    <s2 title="Migrating from &XercesCName; 3.0.0 to &XercesCName; &XercesC3Version;">
+      <p>The following section is a discussion of the technical differences between
+      &XercesCName; 3.0.0 and &XercesCName; &XercesC3Version;.</p>
+
+      <p>Topics discussed are:</p>
+      <ul>
+        <li><link anchor="NewFeatures300">New features in &XercesCName; &XercesC3Version;</link></li>
+        <li><link anchor="API300">Public API Changes</link></li>
+      </ul>
+
+    <anchor name="NewFeatures300"/>
+    <s3 title="New features in &XercesCName; &XercesC3Version;">
+      <ul>
+    <li>Working multi-import support. The support for handling multiple import
+        declarations with the same target namespaces has been improved and
+        thoroughly tested. Furthermore, the same logic was extended to
+        loadGrammar and the schemaLocation attributes so that you can load
+        several schemas with the same namespace and/or "add" more declarations
+        with the schemaLocation attributes. To enable this feature, set the
+        XMLUni::fgXercesHandleMultipleImports feature/parameter to true.
+        Starting with this release all the tests and examples have multi-import
+        support enabled by default.</li>
+
+    <li>New property, XMLUni::fgXercesLowWaterMark, allows to configure the
+        parser buffer low water mark. In particular, setting this value to 0
+        disables data caching in the parser which can be useful if you want
+        the SAX events to be dispatched as soon as the data is available.</li>
+
+    <li>DOMLSParser::parseWithContext implementation. In particular, this
+        functionality allows one to parse a document fragment with missing
+        namespace declarations as long as the context document provides them.</li>
+
+    <li>Improved performance and reduced memory footprint when validating with
+        large maxOccurs values. If available, the SSE2 instructions are used to
+        further speedup this case.</li>
+
+    <li>Improved scalability of the XML Schema identity checking (key, keyref,
+        and unique).</li>
+
+    <li>Multiple XML Schema conformance fixes.</li>
+
+    <li>More robust external library detection (libcurl and ICU). In particular,
+        the build system no longer tries to inject any additional paths such as
+        /usr or /usr/local.</li>
+
+    <li>Compilation of the ICU message loader resources no longer depends on
+        the ICU implementation details.</li>
+      </ul>
+    </s3>
+
+    <anchor name="API300"/>
+    <s3 title="Public API Changes">
+
+        <p>&XercesCName; &XercesC3Version; is a minor release and does
+           not include any public API changes that would preclude
+           applications using the previous version of &XercesCName; from
+           building successfully with this version.</p>
+    </s3>
+    </s2>
+
+</s1>

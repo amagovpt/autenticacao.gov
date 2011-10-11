@@ -1,0 +1,65 @@
+#!/bin/sh
+#
+####################################
+# prepare the system to build on a debian system
+# - make a link to qmake of Qt (> 4.3.1 !!)
+# - set the PATH variable for javac
+# set the PATH variable to '.' for 'qmake'
+####################################
+if [ -e "./qmake" ]
+then
+	rm qmake
+fi
+
+####################################
+# set the path to Qt4.5.0 if it exists
+####################################
+QTBINDIR=/usr/local/Trolltech/Qt-4.5.0/bin
+if [ ! -d "$QTBINDIR" ]
+then
+	echo "Directory $QTBINDIR does not exist. Please verify."
+	return -1
+fi
+
+ln -s $QTBINDIR/qmake qmake
+
+####################################
+# set the path to java if it exists
+####################################
+JAVABINDIR=`which javac 2> /dev/null | wc -l`
+if [[ $JAVABINDIR -eq 0 ]]
+then
+	echo "[Error] javac not found. Please verify installation of java and set PATH."
+	return -1
+fi
+
+####################################
+# check Python 2.5
+####################################
+WHICHPYTHON=`which python`
+PYTHONBINDIR=`readlink -f $WHICHPYTHON`
+PYTHONTEST=`readlink -f \`which python\` | grep '2\.[0-5]' | wc -l`
+if [ "$PYTHONBINDIR" == "" ]
+then
+	echo "[Error] Python not found"
+	return -1
+else
+	# check if python 2.5 is the default
+	if [[ $PYTHONTEST -eq 0 ]]
+	then
+		PYTHONBASE=`which python`
+		PYTHON25=/usr/local/bin/python2.5
+		echo "[Error] Python version > 2.5. ($PYTHONBINDIR)"
+		if [ -e "$PYTHON25" ]
+		then
+			echo "[Error] Change link $PYTHONBASE to $PYTHON25"
+			exit -1
+		else
+			echo "[Error] Change link $PYTHONBASE to the python 2.5 installation "
+			exit -1
+		fi
+	fi
+fi
+
+
+export PATH=.:$PATH

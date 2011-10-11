@@ -1,0 +1,43 @@
+<RCC>
+    <qresource prefix="/TranslationFiles" >
+        <file alias="transFrans" >../eid-ezinstaller_fr.qm</file>
+    </qresource>
+    <qresource prefix="/images" >
+        <file alias="xknop_down" >../Resources/Xknopje down x649 y7.png</file>
+        <file alias="xknop" >../Resources/Xknopje x649 y7.png</file>
+        <file alias="eidBackGround" >../Resources/eID op achtergrond x176 y105.png</file>
+        <file alias="fondinstaller" >../Resources/fond installer.jpg</file>
+        <file alias="fond_testen" >../Resources/fond testen.png</file>
+        <file alias="foutmelding" >../Resources/foutmelding.png</file>
+        <file alias="groene_vink" >../Resources/groene vink.png</file>
+        <file alias="reader_disconnected" >../Resources/ill lezer verbinden A x81 y262.png</file>
+        <file alias="reader_connected" >../Resources/ill lezer verbinden B x21 y262.png</file>
+        <file alias="reader_and_eid" >../Resources/ill lezer verbinden C x137 y262.png</file>
+        <file alias="kleine_x" >../Resources/kleine X.png</file>
+        <file alias="annuleren_down" >../Resources/kn annuleren down x617 y517.png</file>
+        <file alias="annuleren" >../Resources/kn annuleren x617 y517.png</file>
+        <file alias="knop_breed" >../Resources/kn breed (x242 y518).png</file>
+        <file alias="knop_breed_down" >../Resources/kn breed down (x242 y518).png</file>
+        <file alias="installeer_nl_down" >../Resources/kn installeer down x78 y372.png</file>
+        <file alias="installeer_down" >../Resources/kn installeer down x82 y 315.png</file>
+        <file alias="installeer_nl" >../Resources/kn installeer x78 y372.png</file>
+        <file alias="installeer" >../Resources/kn installeer x82 y315.png</file>
+        <file alias="installeer_fr_down" >../Resources/kn installer down x431 y372.png</file>
+        <file alias="installeer_fr" >../Resources/kn installer x431 y372.png</file>
+        <file alias="knop_down" >../Resources/kn smal down.png</file>
+        <file alias="knop" >../Resources/kn smal.png</file>
+        <file alias="eidSymbol" >../Resources/symbooltje eID x92 y32.png</file>
+        <file alias="tabL_down" >../Resources/tab L down x11 y105.png</file>
+        <file alias="tabL" >../Resources/tab L x11 y 105.png</file>
+        <file alias="tabM_down" >../Resources/tab M down x270 y105.png</file>
+        <file alias="tabM" >../Resources/tab M x270 y105.png</file>
+        <file alias="tabR_down" >../Resources/tab R down x530 y 105.png</file>
+        <file alias="tabR" >../Resources/tab R x530 y105.png</file>
+        <file alias="terugknop_down" >../Resources/terugknop down x17 y29.png</file>
+        <file alias="terugknop" >../Resources/terugknop x17 y29.png</file>
+        <file alias="waarschuwing" >../Resources/waarschuwing x220 y190.png</file>
+    </qresource>
+    <qresource prefix="/scenario" >
+        <file alias="theScenario" >scenario.xml</file>
+    </qresource>
+</RCC>

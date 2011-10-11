@@ -1,0 +1,39 @@
+INFO  14:46:22 [main]: Per user config file: /home/frank/.eidtestinfa.dirs
+INFO  14:46:22 [main]: Control file: /usr/share/PTeidTestCtrl.xml
+INFO  14:46:22 [main]: Using pcsc library: "javax.smartcardio"
+DEBUG 14:46:23 [Thread-2]: Can't parse "/home/frank/X/beer.xml": javax.xml.bind.UnmarshalException
+ - with linked exception:
+[org.xml.sax.SAXParseException: cvc-complex-type.2.3: Element 'file' cannot have character [children], because the type's content type is element-only.]
+DEBUG 14:46:24 [Thread-3]: Started CardReaderMonitorImpl thread
+DEBUG 14:46:37 [Thread-5]: Saved file /home/frank/.eidtestinfa.dirs
+DEBUG 14:46:37 [Thread-3]: Ending CardReaderMonitorImpl thread
+INFO  14:47:43 [main]: Per user config file: /home/frank/.eidtestinfa.dirs
+INFO  14:47:44 [main]: Control file: /usr/share/PTeidTestCtrl.xml
+INFO  14:47:44 [main]: Using pcsc library: "javax.smartcardio"
+DEBUG 14:47:45 [Thread-2]: Can't parse "/home/frank/X/beer.xml": javax.xml.bind.UnmarshalException
+ - with linked exception:
+[org.xml.sax.SAXParseException: cvc-complex-type.2.3: Element 'file' cannot have character [children], because the type's content type is element-only.]
+DEBUG 14:47:45 [Thread-3]: Started CardReaderMonitorImpl thread
+DEBUG 14:48:10 [Thread-5]: Saved file /home/frank/.eidtestinfa.dirs
+DEBUG 14:48:10 [Thread-3]: Ending CardReaderMonitorImpl thread
+INFO  14:56:40 [main]: Per user config file: /home/frank/.eidtestinfa.dirs
+INFO  14:56:41 [main]: Control file: /usr/share/PTeidTestCtrl.xml
+INFO  14:56:41 [main]: Using pcsc library: "javax.smartcardio"
+DEBUG 14:56:42 [Thread-2]: Can't parse "/home/frank/X/beer.xml": javax.xml.bind.UnmarshalException
+ - with linked exception:
+[org.xml.sax.SAXParseException: cvc-complex-type.2.3: Element 'file' cannot have character [children], because the type's content type is element-only.]
+DEBUG 14:56:42 [Thread-3]: Started CardReaderMonitorImpl thread
+DEBUG 14:56:45 [Thread-5]: Saved file /usr/share/PTeidTestCtrl.xml
+DEBUG 14:56:45 [Thread-5]: Saved file /home/frank/.eidtestinfa.dirs
+DEBUG 14:56:47 [Thread-6]: Saved file /usr/share/PTeidTestCtrl.xml
+DEBUG 14:56:47 [Thread-6]: Saved file /home/frank/.eidtestinfa.dirs
+DEBUG 14:57:04 [Thread-3]: Ending CardReaderMonitorImpl thread
+INFO  15:23:00 [main]: Per user config file: /home/frank/.eidtestinfa.dirs
+INFO  15:23:01 [main]: Control file: /usr/share/PTeidTestCtrl.xml
+INFO  15:23:01 [main]: Using pcsc library: "javax.smartcardio"
+DEBUG 15:23:02 [Thread-2]: Can't parse "/home/frank/X/beer.xml": javax.xml.bind.UnmarshalException
+ - with linked exception:
+[org.xml.sax.SAXParseException: cvc-complex-type.2.3: Element 'file' cannot have character [children], because the type's content type is element-only.]
+DEBUG 15:23:02 [Thread-3]: Started CardReaderMonitorImpl thread
+DEBUG 15:37:04 [Thread-5]: Saved file /home/frank/.eidtestinfa.dirs
+DEBUG 15:37:04 [Thread-3]: Ending CardReaderMonitorImpl thread

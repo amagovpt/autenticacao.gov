@@ -1,0 +1,2542 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		7FA1AACA0F860EDE000D9EE1 /* PTeidmw */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7FA1AADC0F860F3E000D9EE1 /* Build configuration list for PBXAggregateTarget "PTeidmw" */;
+			buildPhases = (
+			);
+			dependencies = (
+				7F90D5560F9F37B500BB8F23 /* PBXTargetDependency */,
+				7FA1AAD40F860F12000D9EE1 /* PBXTargetDependency */,
+				7FA1AAD20F860F03000D9EE1 /* PBXTargetDependency */,
+				7FA1AAD00F860F00000D9EE1 /* PBXTargetDependency */,
+				7FA1AACE0F860EFB000D9EE1 /* PBXTargetDependency */,
+			);
+			name = PTeidmw;
+			productName = PTeidmw;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		7F22A36F0F84C588001AD228 /* libpteidcommon.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FBB02530F839352009B751F /* libpteidcommon.3.5.5.dylib */; };
+		7F22A3780F84C5A1001AD228 /* libpteiddialogsQT.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC535DF0F84BCDA00BA96EE /* libpteiddialogsQT.3.5.5.dylib */; };
+		7F22A3C40F84D4A1001AD228 /* libpteidcommon.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FBB02530F839352009B751F /* libpteidcommon.3.5.5.dylib */; };
+		7F872F7B0F84E58300DE6627 /* libpteiddialogsQT.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC535DF0F84BCDA00BA96EE /* libpteiddialogsQT.3.5.5.dylib */; };
+		7F872F7C0F84E58E00DE6627 /* dlgWndAskAccess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535F50F84BDF500BA96EE /* dlgWndAskAccess.cpp */; };
+		7F872F7D0F84E58E00DE6627 /* dlgWndAskPIN.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535F80F84BDF500BA96EE /* dlgWndAskPIN.cpp */; };
+		7F872F7E0F84E58E00DE6627 /* dlgWndAskPINs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535FB0F84BDF500BA96EE /* dlgWndAskPINs.cpp */; };
+		7F872F7F0F84E58E00DE6627 /* dlgWndBadPIN.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535FE0F84BDF500BA96EE /* dlgWndBadPIN.cpp */; };
+		7F872F800F84E58E00DE6627 /* dlgWndBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC536010F84BDF500BA96EE /* dlgWndBase.cpp */; };
+		7F872F810F84E58E00DE6627 /* dlgWndModal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC536030F84BDF500BA96EE /* dlgWndModal.cpp */; };
+		7F872F820F84E58E00DE6627 /* dlgWndPinpadInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC536060F84BDF500BA96EE /* dlgWndPinpadInfo.cpp */; };
+		7F872F830F84E58E00DE6627 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC536090F84BDF500BA96EE /* main.cpp */; };
+		7F872F840F84E58E00DE6627 /* moc_dlgWndAskAccess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC5360A0F84BDF500BA96EE /* moc_dlgWndAskAccess.cpp */; };
+		7F872F850F84E58E00DE6627 /* moc_dlgWndAskPIN.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC5360B0F84BDF500BA96EE /* moc_dlgWndAskPIN.cpp */; };
+		7F872F860F84E58E00DE6627 /* moc_dlgWndAskPINs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC5360C0F84BDF500BA96EE /* moc_dlgWndAskPINs.cpp */; };
+		7F872F870F84E58E00DE6627 /* moc_dlgWndBadPIN.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC5360D0F84BDF500BA96EE /* moc_dlgWndBadPIN.cpp */; };
+		7F872F890F84E58E00DE6627 /* moc_dlgWndModal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC5360F0F84BDF500BA96EE /* moc_dlgWndModal.cpp */; };
+		7F872F8A0F84E58E00DE6627 /* moc_dlgWndPinpadInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC536100F84BDF500BA96EE /* moc_dlgWndPinpadInfo.cpp */; };
+		7F872F8B0F84E58E00DE6627 /* qrc_dlgs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC536110F84BDF500BA96EE /* qrc_dlgs.cpp */; };
+		7F872F8F0F84E5E000DE6627 /* QtGui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F872F8E0F84E5E000DE6627 /* QtGui.framework */; };
+		7F872F930F84E5F800DE6627 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F872F920F84E5F800DE6627 /* QtCore.framework */; };
+		7F900E0A0F84EE15004A5FCC /* libpteidcommon.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FBB02530F839352009B751F /* libpteidcommon.3.5.5.dylib */; };
+		7F900E340F84F709004A5FCC /* moc_dlgWndBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E330F84F709004A5FCC /* moc_dlgWndBase.cpp */; };
+		7F900E900F84FC37004A5FCC /* APLCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E650F84FC37004A5FCC /* APLCard.cpp */; };
+		7F900E920F84FC37004A5FCC /* APLCardPTeid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E670F84FC37004A5FCC /* APLCardPTeid.cpp */; };
+		7F900E950F84FC37004A5FCC /* APLCardSIS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E6A0F84FC37004A5FCC /* APLCardSIS.cpp */; };
+		7F900E970F84FC37004A5FCC /* APLCertif.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E6C0F84FC37004A5FCC /* APLCertif.cpp */; };
+		7F900E990F84FC37004A5FCC /* APLConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E6E0F84FC37004A5FCC /* APLConfig.cpp */; };
+		7F900E9B0F84FC37004A5FCC /* APLCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E700F84FC37004A5FCC /* APLCrypto.cpp */; };
+		7F900E9D0F84FC37004A5FCC /* APLDoc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E720F84FC37004A5FCC /* APLDoc.cpp */; };
+		7F900E9F0F84FC37004A5FCC /* APLReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E740F84FC37004A5FCC /* APLReader.cpp */; };
+		7F900EA10F84FC37004A5FCC /* CardPTeid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E760F84FC37004A5FCC /* CardPTeid.cpp */; };
+		7F900EA40F84FC37004A5FCC /* CardFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E790F84FC37004A5FCC /* CardFile.cpp */; };
+		7F900EA60F84FC37004A5FCC /* CardSIS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E7B0F84FC37004A5FCC /* CardSIS.cpp */; };
+		7F900EA90F84FC37004A5FCC /* CertStatusCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E7E0F84FC37004A5FCC /* CertStatusCache.cpp */; };
+		7F900EAB0F84FC37004A5FCC /* CRLService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E800F84FC37004A5FCC /* CRLService.cpp */; };
+		7F900EAD0F84FC37004A5FCC /* cryptoFramework.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E820F84FC37004A5FCC /* cryptoFramework.cpp */; };
+		7F900EAF0F84FC37004A5FCC /* cryptoFwkPTeid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E840F84FC37004A5FCC /* cryptoFwkPTeid.cpp */; };
+		7F900EB80F84FC37004A5FCC /* MiscUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E8D0F84FC37004A5FCC /* MiscUtil.cpp */; };
+		7F900EBA0F84FC37004A5FCC /* XMLParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900E8F0F84FC37004A5FCC /* XMLParser.cpp */; };
+		7F900EC80F84FC89004A5FCC /* eidlibCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900EBE0F84FC89004A5FCC /* eidlibCard.cpp */; };
+		7F900EC90F84FC89004A5FCC /* eidlibCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900EBF0F84FC89004A5FCC /* eidlibCrypto.cpp */; };
+		7F900ECB0F84FC89004A5FCC /* eidlibDoc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900EC10F84FC89004A5FCC /* eidlibDoc.cpp */; };
+		7F900ECC0F84FC89004A5FCC /* eidlibException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900EC20F84FC89004A5FCC /* eidlibException.cpp */; };
+		7F900ECE0F84FC89004A5FCC /* eidlibReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900EC40F84FC89004A5FCC /* eidlibReader.cpp */; };
+		7F900ECF0F84FC89004A5FCC /* InternalUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900EC50F84FC89004A5FCC /* InternalUtil.cpp */; };
+		7F9010630F84FEC3004A5FCC /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F9010620F84FEC3004A5FCC /* CoreServices.framework */; };
+		7F90110E0F850090004A5FCC /* libpteidcardlayer.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC5353B0F84B83B00BA96EE /* libpteidcardlayer.3.5.5.dylib */; };
+		7F9011100F8500CA004A5FCC /* libpteidcommon.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FBB02530F839352009B751F /* libpteidcommon.3.5.5.dylib */; };
+		7F90111D0F850342004A5FCC /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F90111C0F850342004A5FCC /* libssl.dylib */; };
+		7F90111E0F85034F004A5FCC /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F9011190F8502F8004A5FCC /* libcrypto.dylib */; };
+		7F90111F0F850363004A5FCC /* libpteidapplayer.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F900E540F84FB07004A5FCC /* libpteidapplayer.3.5.5.dylib */; };
+		7F9011270F8503F1004A5FCC /* libpteiddialogsQT.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC535DF0F84BCDA00BA96EE /* libpteiddialogsQT.3.5.5.dylib */; };
+		7F90112D0F850450004A5FCC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F90112C0F850450004A5FCC /* SystemConfiguration.framework */; };
+		7F9011320F85047E004A5FCC /* libpteidcommon.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FBB02530F839352009B751F /* libpteidcommon.3.5.5.dylib */; };
+		7F90116A0F85060A004A5FCC /* CardInformation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F90113F0F85060A004A5FCC /* CardInformation.cpp */; };
+		7F90116B0F85060A004A5FCC /* dlgAbout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9011410F85060A004A5FCC /* dlgAbout.cpp */; };
+		7F90116D0F85060A004A5FCC /* dlgOptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9011440F85060A004A5FCC /* dlgOptions.cpp */; };
+		7F90116F0F85060A004A5FCC /* dlgprint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9011470F85060A004A5FCC /* dlgprint.cpp */; };
+		7F9011710F85060A004A5FCC /* eidmw_de.qm in Resources */ = {isa = PBXBuildFile; fileRef = 7F90114A0F85060A004A5FCC /* eidmw_de.qm */; };
+		7F9011720F85060A004A5FCC /* eidmw_en.qm in Resources */ = {isa = PBXBuildFile; fileRef = 7F90114B0F85060A004A5FCC /* eidmw_en.qm */; };
+		7F9011730F85060A004A5FCC /* eidmw_fr.qm in Resources */ = {isa = PBXBuildFile; fileRef = 7F90114C0F85060A004A5FCC /* eidmw_fr.qm */; };
+		7F9011740F85060A004A5FCC /* eidmw_nl.qm in Resources */ = {isa = PBXBuildFile; fileRef = 7F90114D0F85060A004A5FCC /* eidmw_nl.qm */; };
+		7F9011750F85060A004A5FCC /* genpur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F90114E0F85060A004A5FCC /* genpur.cpp */; };
+		7F9011760F85060A004A5FCC /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9011500F85060A004A5FCC /* main.cpp */; };
+		7F9011770F85060A004A5FCC /* mainwnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9011510F85060A004A5FCC /* mainwnd.cpp */; };
+		7F9011790F85060A004A5FCC /* moc_dlgAbout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9011540F85060A004A5FCC /* moc_dlgAbout.cpp */; };
+		7F90117A0F85060A004A5FCC /* moc_dlgOptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9011550F85060A004A5FCC /* moc_dlgOptions.cpp */; };
+		7F90117B0F85060A004A5FCC /* moc_dlgprint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9011560F85060A004A5FCC /* moc_dlgprint.cpp */; };
+		7F90117C0F85060A004A5FCC /* moc_mainwnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9011570F85060A004A5FCC /* moc_mainwnd.cpp */; };
+		7F90117D0F85060A004A5FCC /* moc_picturepopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9011580F85060A004A5FCC /* moc_picturepopup.cpp */; };
+		7F90117E0F85060A004A5FCC /* moc_qtsingleapplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9011590F85060A004A5FCC /* moc_qtsingleapplication.cpp */; };
+		7F90117F0F85060A004A5FCC /* picturepopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F90115A0F85060A004A5FCC /* picturepopup.cpp */; };
+		7F9011810F85060A004A5FCC /* qrc_eidgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F90115D0F85060A004A5FCC /* qrc_eidgui.cpp */; };
+		7F9011820F85060A004A5FCC /* qtsingleapplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F90115E0F85060A004A5FCC /* qtsingleapplication.cpp */; };
+		7F9011830F85060A004A5FCC /* qtsingleapplication_mac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9011600F85060A004A5FCC /* qtsingleapplication_mac.cpp */; };
+		7F9011900F850649004A5FCC /* libpteidlib.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F900E5B0F84FB1A004A5FCC /* libpteidlib.3.5.5.dylib */; };
+		7F9011910F85065B004A5FCC /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F872F920F84E5F800DE6627 /* QtCore.framework */; };
+		7F9011920F85065B004A5FCC /* QtGui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F872F8E0F84E5E000DE6627 /* QtGui.framework */; };
+		7F90D5530F9F377500BB8F23 /* eidlibJava_Wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F90D5520F9F377500BB8F23 /* eidlibJava_Wrapper.cpp */; };
+		7F90D58D0F9F3B4800BB8F23 /* eidlibCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900EBE0F84FC89004A5FCC /* eidlibCard.cpp */; };
+		7F90D58E0F9F3B4800BB8F23 /* eidlibCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900EBF0F84FC89004A5FCC /* eidlibCrypto.cpp */; };
+		7F90D58F0F9F3B4800BB8F23 /* eidlibDoc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900EC10F84FC89004A5FCC /* eidlibDoc.cpp */; };
+		7F90D5900F9F3B4800BB8F23 /* eidlibException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900EC20F84FC89004A5FCC /* eidlibException.cpp */; };
+		7F90D5910F9F3B4800BB8F23 /* eidlibReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900EC40F84FC89004A5FCC /* eidlibReader.cpp */; };
+		7F90D5920F9F3B4800BB8F23 /* InternalUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F900EC50F84FC89004A5FCC /* InternalUtil.cpp */; };
+		7F90D5B00F9F3F7C00BB8F23 /* libpteidcommon.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FBB02530F839352009B751F /* libpteidcommon.3.5.5.dylib */; };
+		7F90D5B10F9F3F8A00BB8F23 /* libpteidapplayer.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F900E540F84FB07004A5FCC /* libpteidapplayer.3.5.5.dylib */; };
+		7FA1AA2F0F85F439000D9EE1 /* asn1.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1AA1C0F85F439000D9EE1 /* asn1.c */; };
+		7FA1AA320F85F439000D9EE1 /* cal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1AA1F0F85F439000D9EE1 /* cal.cpp */; };
+		7FA1AA340F85F439000D9EE1 /* cert.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1AA210F85F439000D9EE1 /* cert.c */; };
+		7FA1AA360F85F439000D9EE1 /* encrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1AA230F85F439000D9EE1 /* encrypt.c */; };
+		7FA1AA370F85F439000D9EE1 /* general.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1AA240F85F439000D9EE1 /* general.c */; };
+		7FA1AA380F85F439000D9EE1 /* log.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1AA250F85F439000D9EE1 /* log.c */; };
+		7FA1AA3A0F85F439000D9EE1 /* p11.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1AA270F85F439000D9EE1 /* p11.c */; };
+		7FA1AA3C0F85F439000D9EE1 /* phash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1AA290F85F439000D9EE1 /* phash.cpp */; };
+		7FA1AA3E0F85F439000D9EE1 /* session.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1AA2B0F85F439000D9EE1 /* session.c */; };
+		7FA1AA3F0F85F439000D9EE1 /* sign.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1AA2C0F85F439000D9EE1 /* sign.c */; };
+		7FA1AA400F85F439000D9EE1 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1AA2D0F85F439000D9EE1 /* util.cpp */; };
+		7FA1AA620F85F6C1000D9EE1 /* libpteidcommon.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FBB02530F839352009B751F /* libpteidcommon.3.5.5.dylib */; };
+		7FA1AA640F85F6CF000D9EE1 /* libpteidcardlayer.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC5353B0F84B83B00BA96EE /* libpteidcardlayer.3.5.5.dylib */; };
+		7FA1AA920F860748000D9EE1 /* object.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1AA910F860748000D9EE1 /* object.c */; };
+		7FBB02830F839412009B751F /* ByteArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02610F839412009B751F /* ByteArray.cpp */; };
+		7FBB02850F839412009B751F /* ByteArrayReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02630F839412009B751F /* ByteArrayReader.cpp */; };
+		7FBB02870F839412009B751F /* Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02650F839412009B751F /* Config.cpp */; };
+		7FBB02890F839412009B751F /* ConfigCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02670F839412009B751F /* ConfigCommon.cpp */; };
+		7FBB028A0F839412009B751F /* datafile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02680F839412009B751F /* datafile.cpp */; };
+		7FBB028C0F839412009B751F /* DynamicLib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB026A0F839412009B751F /* DynamicLib.cpp */; };
+		7FBB02900F839412009B751F /* Hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB026E0F839412009B751F /* Hash.cpp */; };
+		7FBB02920F839412009B751F /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02700F839412009B751F /* Log.cpp */; };
+		7FBB02940F839412009B751F /* LogBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02720F839412009B751F /* LogBase.cpp */; };
+		7FBB02960F839412009B751F /* Mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02740F839412009B751F /* Mutex.cpp */; };
+		7FBB02980F839412009B751F /* MWException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02760F839412009B751F /* MWException.cpp */; };
+		7FBB029B0F839412009B751F /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02790F839412009B751F /* Thread.cpp */; };
+		7FBB029E0F839412009B751F /* TLV.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB027C0F839412009B751F /* TLV.cpp */; };
+		7FBB02A00F839412009B751F /* TLVBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB027E0F839412009B751F /* TLVBuffer.cpp */; };
+		7FBB02A30F839412009B751F /* Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02810F839412009B751F /* Util.cpp */; };
+		7FBB02B50F839454009B751F /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02AB0F839454009B751F /* md5.c */; };
+		7FBB02B60F839454009B751F /* rmd160.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02AC0F839454009B751F /* rmd160.c */; };
+		7FBB02B70F839454009B751F /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02AD0F839454009B751F /* sha1.c */; };
+		7FBB02B80F839454009B751F /* sha256.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02AE0F839454009B751F /* sha256.c */; };
+		7FBB02B90F839454009B751F /* sha384.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02AF0F839454009B751F /* sha384.c */; };
+		7FBB02BA0F839454009B751F /* sha512.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02B00F839454009B751F /* sha512.c */; };
+		7FBB02D60F839514009B751F /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02D00F839514009B751F /* Socket.cpp */; };
+		7FBB02D80F839514009B751F /* SocketClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02D20F839514009B751F /* SocketClient.cpp */; };
+		7FBB02DA0F839514009B751F /* SocketServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBB02D40F839514009B751F /* SocketServer.cpp */; };
+		7FBB03E00F8397E0009B751F /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB77AAFE841565C02AAC07 /* Carbon.framework */; };
+		7FC535670F84B88600BA96EE /* Cache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535410F84B88600BA96EE /* Cache.cpp */; };
+		7FC535690F84B88600BA96EE /* Card.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535430F84B88600BA96EE /* Card.cpp */; };
+		7FC5356B0F84B88600BA96EE /* CardFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535450F84B88600BA96EE /* CardFactory.cpp */; };
+		7FC5356D0F84B88600BA96EE /* CardLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535470F84B88600BA96EE /* CardLayer.cpp */; };
+		7FC535700F84B88600BA96EE /* CardReaderInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC5354A0F84B88600BA96EE /* CardReaderInfo.cpp */; };
+		7FC535720F84B88600BA96EE /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC5354C0F84B88600BA96EE /* Context.cpp */; };
+		7FC535750F84B88600BA96EE /* P15Correction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC5354F0F84B88600BA96EE /* P15Correction.cpp */; };
+		7FC535780F84B88600BA96EE /* PCSC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535520F84B88600BA96EE /* PCSC.cpp */; };
+		7FC5357A0F84B88600BA96EE /* Pinpad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535540F84B88600BA96EE /* Pinpad.cpp */; };
+		7FC5357D0F84B88600BA96EE /* PinpadLib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535570F84B88600BA96EE /* PinpadLib.cpp */; };
+		7FC5357F0F84B88600BA96EE /* PKCS15.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535590F84B88600BA96EE /* PKCS15.cpp */; };
+		7FC535810F84B88600BA96EE /* PKCS15Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC5355B0F84B88600BA96EE /* PKCS15Parser.cpp */; };
+		7FC535830F84B88600BA96EE /* PkiCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC5355D0F84B88600BA96EE /* PkiCard.cpp */; };
+		7FC535850F84B88600BA96EE /* Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC5355F0F84B88600BA96EE /* Reader.cpp */; };
+		7FC535870F84B88600BA96EE /* ReadersInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535610F84B88600BA96EE /* ReadersInfo.cpp */; };
+		7FC535890F84B88600BA96EE /* ThreadPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535630F84B88600BA96EE /* ThreadPool.cpp */; };
+		7FC5358B0F84B88600BA96EE /* UnknownCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535650F84B88600BA96EE /* UnknownCard.cpp */; };
+		7FC5359A0F84B95600BA96EE /* PTeidCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535960F84B95600BA96EE /* PTeidCard.cpp */; };
+		7FC5359C0F84B95600BA96EE /* PTeidP15Correction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535980F84B95600BA96EE /* PTeidP15Correction.cpp */; };
+		7FC535A30F84B97400BA96EE /* SISCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC5359E0F84B97400BA96EE /* SISCard.cpp */; };
+		7FC535A60F84B97400BA96EE /* SISPluginHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535A10F84B97400BA96EE /* SISPluginHandler.cpp */; };
+		7FC535B80F84BA2E00BA96EE /* SISCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535B70F84BA2E00BA96EE /* SISCard.cpp */; };
+		7FC535BE0F84BADB00BA96EE /* libpteidcommon.3.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FBB02530F839352009B751F /* libpteidcommon.3.5.5.dylib */; };
+		7FC535EA0F84BD3F00BA96EE /* langUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535E60F84BD3F00BA96EE /* langUtil.cpp */; };
+		7FC535EF0F84BD6300BA96EE /* dlgs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535EC0F84BD6300BA96EE /* dlgs.cpp */; };
+		7FC535F00F84BD6300BA96EE /* SharedMem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FC535ED0F84BD6300BA96EE /* SharedMem.cpp */; };
+		7FD8B9FA0F9DBCA10074BE3C /* qrc_qtconf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FD8B9F90F9DBCA10074BE3C /* qrc_qtconf.cpp */; };
+		86A9430D1122D6E50011C6A8 /* libxerces-c-3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 86A9430C1122D6E50011C6A8 /* libxerces-c-3.1.dylib */; };
+		86D0915311ABF313007BC75E /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D0915211ABF313007BC75E /* PCSC.framework */; };
+		86D0918011ABFA40007BC75E /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D0915211ABF313007BC75E /* PCSC.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7F22A3700F84C58C001AD228 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FBB02520F839352009B751F;
+			remoteInfo = pteidcommon;
+		};
+		7F22A3C50F84D4B7001AD228 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FBB02520F839352009B751F;
+			remoteInfo = pteidcommon;
+		};
+		7F872F790F84E57300DE6627 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FC535DE0F84BCDA00BA96EE;
+			remoteInfo = pteiddialogsQT;
+		};
+		7F900E060F84EDBC004A5FCC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FBB02520F839352009B751F;
+			remoteInfo = pteidcommon;
+		};
+		7F90104D0F84FCB6004A5FCC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FC5353A0F84B83B00BA96EE;
+			remoteInfo = pteidcardlayer;
+		};
+		7F90104F0F84FCBE004A5FCC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FBB02520F839352009B751F;
+			remoteInfo = pteidcommon;
+		};
+		7F9010510F84FCC6004A5FCC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FC535DE0F84BCDA00BA96EE;
+			remoteInfo = pteiddialogsQT;
+		};
+		7F9011AE0F8509E2004A5FCC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F900E5A0F84FB1A004A5FCC;
+			remoteInfo = pteidlib;
+		};
+		7F9011B00F8509EF004A5FCC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F900E530F84FB07004A5FCC;
+			remoteInfo = pteidapplayer;
+		};
+		7F90D5550F9F37B500BB8F23 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F90D54D0F9F36F500BB8F23;
+			remoteInfo = pteidlibJava_Wrapper;
+		};
+		7F90D5570F9F37CB00BB8F23 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F900E530F84FB07004A5FCC;
+			remoteInfo = pteidapplayer;
+		};
+		7FA1AA4F0F85F54F000D9EE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FC5353A0F84B83B00BA96EE;
+			remoteInfo = pteidcardlayer;
+		};
+		7FA1AACD0F860EFB000D9EE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F9011370F85057A004A5FCC;
+			remoteInfo = pteidgui;
+		};
+		7FA1AACF0F860F00000D9EE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F872F670F84E53000DE6627;
+			remoteInfo = pteiddialogsQTsrv;
+		};
+		7FA1AAD10F860F03000D9EE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FC535AB0F84B9EF00BA96EE;
+			remoteInfo = siscardplugin;
+		};
+		7FA1AAD30F860F12000D9EE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FA1A9F60F85F36E000D9EE1;
+			remoteInfo = pteidpkcs11;
+		};
+		7FC5353E0F84B84300BA96EE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FBB02520F839352009B751F;
+			remoteInfo = pteidcommon;
+		};
+		7FC535F20F84BD6C00BA96EE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FC535DE0F84BCDA00BA96EE;
+			remoteInfo = pteiddialogsQT;
+		};
+		866CF38912EF23890072505F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F90D54D0F9F36F500BB8F23 /* pteidlibJava_Wrapper */;
+			remoteInfo = pteidlibJava_Wrapper;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		08FB77AAFE841565C02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		7F22A3D60F84D6B0001AD228 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		7F22A4110F84D948001AD228 /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = System/Library/Frameworks/PCSC.framework; sourceTree = SDKROOT; };
+		7F872F680F84E53000DE6627 /* pteiddialogsQTsrv */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pteiddialogsQTsrv; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F872F8E0F84E5E000DE6627 /* QtGui.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtGui.framework; path = Library/Frameworks/QtGui.framework; sourceTree = SDKROOT; };
+		7F872F920F84E5F800DE6627 /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = Library/Frameworks/QtCore.framework; sourceTree = SDKROOT; };
+		7F900E330F84F709004A5FCC /* moc_dlgWndBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = moc_dlgWndBase.cpp; path = ../dialogs/dialogsQTsrv/moc_dlgWndBase.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E540F84FB07004A5FCC /* libpteidapplayer.3.5.5.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libpteidapplayer.3.5.5.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F900E5B0F84FB1A004A5FCC /* libpteidlib.3.5.5.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libpteidlib.3.5.5.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F900E650F84FC37004A5FCC /* APLCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = APLCard.cpp; path = ../applayer/APLCard.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E660F84FC37004A5FCC /* APLCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APLCard.h; path = ../applayer/APLCard.h; sourceTree = SOURCE_ROOT; };
+		7F900E670F84FC37004A5FCC /* APLCardPTeid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = APLCardPTeid.cpp; path = ../applayer/APLCardPTeid.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E680F84FC37004A5FCC /* APLCardPTeid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APLCardPTeid.h; path = ../applayer/APLCardPTeid.h; sourceTree = SOURCE_ROOT; };
+		7F900E690F84FC37004A5FCC /* APLCardFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APLCardFile.h; path = ../applayer/APLCardFile.h; sourceTree = SOURCE_ROOT; };
+		7F900E6A0F84FC37004A5FCC /* APLCardSIS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = APLCardSIS.cpp; path = ../applayer/APLCardSIS.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E6B0F84FC37004A5FCC /* APLCardSIS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APLCardSIS.h; path = ../applayer/APLCardSIS.h; sourceTree = SOURCE_ROOT; };
+		7F900E6C0F84FC37004A5FCC /* APLCertif.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = APLCertif.cpp; path = ../applayer/APLCertif.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E6D0F84FC37004A5FCC /* APLCertif.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APLCertif.h; path = ../applayer/APLCertif.h; sourceTree = SOURCE_ROOT; };
+		7F900E6E0F84FC37004A5FCC /* APLConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = APLConfig.cpp; path = ../applayer/APLConfig.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E6F0F84FC37004A5FCC /* APLConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APLConfig.h; path = ../applayer/APLConfig.h; sourceTree = SOURCE_ROOT; };
+		7F900E700F84FC37004A5FCC /* APLCrypto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = APLCrypto.cpp; path = ../applayer/APLCrypto.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E710F84FC37004A5FCC /* APLCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APLCrypto.h; path = ../applayer/APLCrypto.h; sourceTree = SOURCE_ROOT; };
+		7F900E720F84FC37004A5FCC /* APLDoc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = APLDoc.cpp; path = ../applayer/APLDoc.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E730F84FC37004A5FCC /* APLDoc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APLDoc.h; path = ../applayer/APLDoc.h; sourceTree = SOURCE_ROOT; };
+		7F900E740F84FC37004A5FCC /* APLReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = APLReader.cpp; path = ../applayer/APLReader.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E750F84FC37004A5FCC /* APLReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APLReader.h; path = ../applayer/APLReader.h; sourceTree = SOURCE_ROOT; };
+		7F900E760F84FC37004A5FCC /* CardPTeid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CardPTeid.cpp; path = ../applayer/CardPTeid.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E770F84FC37004A5FCC /* CardPTeid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardPTeid.h; path = ../applayer/CardPTeid.h; sourceTree = SOURCE_ROOT; };
+		7F900E780F84FC37004A5FCC /* CardPTeidDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardPTeidDef.h; path = ../applayer/CardPTeidDef.h; sourceTree = SOURCE_ROOT; };
+		7F900E790F84FC37004A5FCC /* CardFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CardFile.cpp; path = ../applayer/CardFile.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E7A0F84FC37004A5FCC /* CardFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardFile.h; path = ../applayer/CardFile.h; sourceTree = SOURCE_ROOT; };
+		7F900E7B0F84FC37004A5FCC /* CardSIS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CardSIS.cpp; path = ../applayer/CardSIS.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E7C0F84FC37004A5FCC /* CardSIS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardSIS.h; path = ../applayer/CardSIS.h; sourceTree = SOURCE_ROOT; };
+		7F900E7D0F84FC37004A5FCC /* CardSISDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardSISDef.h; path = ../applayer/CardSISDef.h; sourceTree = SOURCE_ROOT; };
+		7F900E7E0F84FC37004A5FCC /* CertStatusCache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CertStatusCache.cpp; path = ../applayer/CertStatusCache.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E7F0F84FC37004A5FCC /* CertStatusCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CertStatusCache.h; path = ../applayer/CertStatusCache.h; sourceTree = SOURCE_ROOT; };
+		7F900E800F84FC37004A5FCC /* CRLService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CRLService.cpp; path = ../applayer/CRLService.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E810F84FC37004A5FCC /* CRLService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRLService.h; path = ../applayer/CRLService.h; sourceTree = SOURCE_ROOT; };
+		7F900E820F84FC37004A5FCC /* cryptoFramework.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cryptoFramework.cpp; path = ../applayer/cryptoFramework.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E830F84FC37004A5FCC /* cryptoFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cryptoFramework.h; path = ../applayer/cryptoFramework.h; sourceTree = SOURCE_ROOT; };
+		7F900E840F84FC37004A5FCC /* cryptoFwkPTeid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cryptoFwkPTeid.cpp; path = ../applayer/cryptoFwkPTeid.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E850F84FC37004A5FCC /* cryptoFwkPTeid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cryptoFwkPTeid.h; path = ../applayer/cryptoFwkPTeid.h; sourceTree = SOURCE_ROOT; };
+		7F900E860F84FC37004A5FCC /* eidmw_EIDTag_processors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eidmw_EIDTag_processors.h; path = ../applayer/eidmw_EIDTag_processors.h; sourceTree = SOURCE_ROOT; };
+		7F900E870F84FC37004A5FCC /* eidmw_EIDTagHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eidmw_EIDTagHandler.h; path = ../applayer/eidmw_EIDTagHandler.h; sourceTree = SOURCE_ROOT; };
+		7F900E880F84FC37004A5FCC /* eidmw_EIDXmlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eidmw_EIDXmlParser.h; path = ../applayer/eidmw_EIDXmlParser.h; sourceTree = SOURCE_ROOT; };
+		7F900E890F84FC37004A5FCC /* eidmw_TagProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eidmw_TagProcessor.h; path = ../applayer/eidmw_TagProcessor.h; sourceTree = SOURCE_ROOT; };
+		7F900E8A0F84FC37004A5FCC /* eidmw_XML_datastorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eidmw_XML_datastorage.h; path = ../applayer/eidmw_XML_datastorage.h; sourceTree = SOURCE_ROOT; };
+		7F900E8B0F84FC37004A5FCC /* eidmw_XML_DefHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eidmw_XML_DefHandler.h; path = ../applayer/eidmw_XML_DefHandler.h; sourceTree = SOURCE_ROOT; };
+		7F900E8C0F84FC37004A5FCC /* eidmw_XMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eidmw_XMLParser.h; path = ../applayer/eidmw_XMLParser.h; sourceTree = SOURCE_ROOT; };
+		7F900E8D0F84FC37004A5FCC /* MiscUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MiscUtil.cpp; path = ../applayer/MiscUtil.cpp; sourceTree = SOURCE_ROOT; };
+		7F900E8E0F84FC37004A5FCC /* MiscUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MiscUtil.h; path = ../applayer/MiscUtil.h; sourceTree = SOURCE_ROOT; };
+		7F900E8F0F84FC37004A5FCC /* XMLParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XMLParser.cpp; path = ../applayer/XMLParser.cpp; sourceTree = SOURCE_ROOT; };
+		7F900EBD0F84FC89004A5FCC /* eidlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eidlib.h; path = ../eidlib/eidlib.h; sourceTree = SOURCE_ROOT; };
+		7F900EBE0F84FC89004A5FCC /* eidlibCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = eidlibCard.cpp; path = ../eidlib/eidlibCard.cpp; sourceTree = SOURCE_ROOT; };
+		7F900EBF0F84FC89004A5FCC /* eidlibCrypto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = eidlibCrypto.cpp; path = ../eidlib/eidlibCrypto.cpp; sourceTree = SOURCE_ROOT; };
+		7F900EC00F84FC89004A5FCC /* eidlibdefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eidlibdefines.h; path = ../eidlib/eidlibdefines.h; sourceTree = SOURCE_ROOT; };
+		7F900EC10F84FC89004A5FCC /* eidlibDoc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = eidlibDoc.cpp; path = ../eidlib/eidlibDoc.cpp; sourceTree = SOURCE_ROOT; };
+		7F900EC20F84FC89004A5FCC /* eidlibException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = eidlibException.cpp; path = ../eidlib/eidlibException.cpp; sourceTree = SOURCE_ROOT; };
+		7F900EC30F84FC89004A5FCC /* eidlibException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eidlibException.h; path = ../eidlib/eidlibException.h; sourceTree = SOURCE_ROOT; };
+		7F900EC40F84FC89004A5FCC /* eidlibReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = eidlibReader.cpp; path = ../eidlib/eidlibReader.cpp; sourceTree = SOURCE_ROOT; };
+		7F900EC50F84FC89004A5FCC /* InternalUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InternalUtil.cpp; path = ../eidlib/InternalUtil.cpp; sourceTree = SOURCE_ROOT; };
+		7F900EC60F84FC89004A5FCC /* InternalUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InternalUtil.h; path = ../eidlib/InternalUtil.h; sourceTree = SOURCE_ROOT; };
+		7F9010620F84FEC3004A5FCC /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		7F9011190F8502F8004A5FCC /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = /usr/lib/libcrypto.dylib; sourceTree = "<absolute>"; };
+		7F90111C0F850342004A5FCC /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = /usr/lib/libssl.dylib; sourceTree = "<absolute>"; };
+		7F90112C0F850450004A5FCC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		7F9011380F85057A004A5FCC /* pteidgui.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pteidgui.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F90113F0F85060A004A5FCC /* CardInformation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CardInformation.cpp; path = ../eidgui/CardInformation.cpp; sourceTree = SOURCE_ROOT; };
+		7F9011400F85060A004A5FCC /* CardInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardInformation.h; path = ../eidgui/CardInformation.h; sourceTree = SOURCE_ROOT; };
+		7F9011410F85060A004A5FCC /* dlgAbout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dlgAbout.cpp; path = ../eidgui/dlgAbout.cpp; sourceTree = SOURCE_ROOT; };
+		7F9011420F85060A004A5FCC /* dlgAbout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dlgAbout.h; path = ../eidgui/dlgAbout.h; sourceTree = SOURCE_ROOT; };
+		7F9011430F85060A004A5FCC /* dlgAbout.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dlgAbout.ui; path = ../eidgui/dlgAbout.ui; sourceTree = SOURCE_ROOT; };
+		7F9011440F85060A004A5FCC /* dlgOptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dlgOptions.cpp; path = ../eidgui/dlgOptions.cpp; sourceTree = SOURCE_ROOT; };
+		7F9011450F85060A004A5FCC /* dlgOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dlgOptions.h; path = ../eidgui/dlgOptions.h; sourceTree = SOURCE_ROOT; };
+		7F9011460F85060A004A5FCC /* dlgOptions.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dlgOptions.ui; path = ../eidgui/dlgOptions.ui; sourceTree = SOURCE_ROOT; };
+		7F9011470F85060A004A5FCC /* dlgprint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dlgprint.cpp; path = ../eidgui/dlgprint.cpp; sourceTree = SOURCE_ROOT; };
+		7F9011480F85060A004A5FCC /* dlgprint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dlgprint.h; path = ../eidgui/dlgprint.h; sourceTree = SOURCE_ROOT; };
+		7F9011490F85060A004A5FCC /* dlgPrint.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dlgPrint.ui; path = ../eidgui/dlgPrint.ui; sourceTree = SOURCE_ROOT; };
+		7F90114A0F85060A004A5FCC /* eidmw_de.qm */ = {isa = PBXFileReference; lastKnownFileType = file; name = eidmw_de.qm; path = ../eidgui/eidmw_de.qm; sourceTree = SOURCE_ROOT; };
+		7F90114B0F85060A004A5FCC /* eidmw_en.qm */ = {isa = PBXFileReference; lastKnownFileType = file; name = eidmw_en.qm; path = ../eidgui/eidmw_en.qm; sourceTree = SOURCE_ROOT; };
+		7F90114C0F85060A004A5FCC /* eidmw_fr.qm */ = {isa = PBXFileReference; lastKnownFileType = file; name = eidmw_fr.qm; path = ../eidgui/eidmw_fr.qm; sourceTree = SOURCE_ROOT; };
+		7F90114D0F85060A004A5FCC /* eidmw_nl.qm */ = {isa = PBXFileReference; lastKnownFileType = file; name = eidmw_nl.qm; path = ../eidgui/eidmw_nl.qm; sourceTree = SOURCE_ROOT; };
+		7F90114E0F85060A004A5FCC /* genpur.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = genpur.cpp; path = ../eidgui/genpur.cpp; sourceTree = SOURCE_ROOT; };
+		7F90114F0F85060A004A5FCC /* genpur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = genpur.h; path = ../eidgui/genpur.h; sourceTree = SOURCE_ROOT; };
+		7F9011500F85060A004A5FCC /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../eidgui/main.cpp; sourceTree = SOURCE_ROOT; };
+		7F9011510F85060A004A5FCC /* mainwnd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mainwnd.cpp; path = ../eidgui/mainwnd.cpp; sourceTree = SOURCE_ROOT; };
+		7F9011520F85060A004A5FCC /* mainwnd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mainwnd.h; path = ../eidgui/mainwnd.h; sourceTree = SOURCE_ROOT; };
+		7F9011530F85060A004A5FCC /* mainwnd.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mainwnd.ui; path = ../eidgui/mainwnd.ui; sourceTree = SOURCE_ROOT; };
+		7F9011540F85060A004A5FCC /* moc_dlgAbout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = moc_dlgAbout.cpp; path = ../eidgui/moc_dlgAbout.cpp; sourceTree = SOURCE_ROOT; };
+		7F9011550F85060A004A5FCC /* moc_dlgOptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = moc_dlgOptions.cpp; path = ../eidgui/moc_dlgOptions.cpp; sourceTree = SOURCE_ROOT; };
+		7F9011560F85060A004A5FCC /* moc_dlgprint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = moc_dlgprint.cpp; path = ../eidgui/moc_dlgprint.cpp; sourceTree = SOURCE_ROOT; };
+		7F9011570F85060A004A5FCC /* moc_mainwnd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = moc_mainwnd.cpp; path = ../eidgui/moc_mainwnd.cpp; sourceTree = SOURCE_ROOT; };
+		7F9011580F85060A004A5FCC /* moc_picturepopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = moc_picturepopup.cpp; path = ../eidgui/moc_picturepopup.cpp; sourceTree = SOURCE_ROOT; };
+		7F9011590F85060A004A5FCC /* moc_qtsingleapplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = moc_qtsingleapplication.cpp; path = ../eidgui/moc_qtsingleapplication.cpp; sourceTree = SOURCE_ROOT; };
+		7F90115A0F85060A004A5FCC /* picturepopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = picturepopup.cpp; path = ../eidgui/picturepopup.cpp; sourceTree = SOURCE_ROOT; };
+		7F90115B0F85060A004A5FCC /* picturepopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = picturepopup.h; path = ../eidgui/picturepopup.h; sourceTree = SOURCE_ROOT; };
+		7F90115C0F85060A004A5FCC /* picturepopup.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = picturepopup.ui; path = ../eidgui/picturepopup.ui; sourceTree = SOURCE_ROOT; };
+		7F90115D0F85060A004A5FCC /* qrc_eidgui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_eidgui.cpp; path = ../eidgui/qrc_eidgui.cpp; sourceTree = SOURCE_ROOT; };
+		7F90115E0F85060A004A5FCC /* qtsingleapplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = qtsingleapplication.cpp; path = ../eidgui/qtsingleapplication.cpp; sourceTree = SOURCE_ROOT; };
+		7F90115F0F85060A004A5FCC /* qtsingleapplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qtsingleapplication.h; path = ../eidgui/qtsingleapplication.h; sourceTree = SOURCE_ROOT; };
+		7F9011600F85060A004A5FCC /* qtsingleapplication_mac.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = qtsingleapplication_mac.cpp; path = ../eidgui/qtsingleapplication_mac.cpp; sourceTree = SOURCE_ROOT; };
+		7F9011610F85060A004A5FCC /* resource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = resource.h; path = ../eidgui/resource.h; sourceTree = SOURCE_ROOT; };
+		7F9011620F85060A004A5FCC /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Settings.h; path = ../eidgui/Settings.h; sourceTree = SOURCE_ROOT; };
+		7F9011630F85060A004A5FCC /* ui_dlgAbout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui_dlgAbout.h; path = ../eidgui/ui_dlgAbout.h; sourceTree = SOURCE_ROOT; };
+		7F9011640F85060A004A5FCC /* ui_dlgOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui_dlgOptions.h; path = ../eidgui/ui_dlgOptions.h; sourceTree = SOURCE_ROOT; };
+		7F9011650F85060A004A5FCC /* ui_dlgPrint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui_dlgPrint.h; path = ../eidgui/ui_dlgPrint.h; sourceTree = SOURCE_ROOT; };
+		7F9011660F85060A004A5FCC /* ui_mainwnd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui_mainwnd.h; path = ../eidgui/ui_mainwnd.h; sourceTree = SOURCE_ROOT; };
+		7F9011670F85060A004A5FCC /* ui_picturepopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui_picturepopup.h; path = ../eidgui/ui_picturepopup.h; sourceTree = SOURCE_ROOT; };
+		7F9011680F85060A004A5FCC /* verinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = verinfo.cpp; path = ../eidgui/verinfo.cpp; sourceTree = SOURCE_ROOT; };
+		7F9011690F85060A004A5FCC /* verinfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = verinfo.h; path = ../eidgui/verinfo.h; sourceTree = SOURCE_ROOT; };
+		7F90D54E0F9F36F500BB8F23 /* libpteidlibJava_Wrapper.3.5.5.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libpteidlibJava_Wrapper.3.5.5.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F90D5520F9F377500BB8F23 /* eidlibJava_Wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = eidlibJava_Wrapper.cpp; path = ../eidlibJava_Wrapper/GeneratedFiles/eidlibJava_Wrapper.cpp; sourceTree = SOURCE_ROOT; };
+		7F90D5620F9F38EC00BB8F23 /* JavaVM.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaVM.framework; path = System/Library/Frameworks/JavaVM.framework; sourceTree = SDKROOT; };
+		7FA1A9F70F85F36E000D9EE1 /* libpteidpkcs11.3.5.5.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libpteidpkcs11.3.5.5.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7FA1AA1C0F85F439000D9EE1 /* asn1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = asn1.c; path = ../pkcs11/asn1.c; sourceTree = SOURCE_ROOT; };
+		7FA1AA1D0F85F439000D9EE1 /* asn1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = asn1.h; path = ../pkcs11/asn1.h; sourceTree = SOURCE_ROOT; };
+		7FA1AA1E0F85F439000D9EE1 /* pteid_p11.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pteid_p11.h; path = ../pkcs11/pteid_p11.h; sourceTree = SOURCE_ROOT; };
+		7FA1AA1F0F85F439000D9EE1 /* cal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cal.cpp; path = ../pkcs11/cal.cpp; sourceTree = SOURCE_ROOT; };
+		7FA1AA200F85F439000D9EE1 /* cal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cal.h; path = ../pkcs11/cal.h; sourceTree = SOURCE_ROOT; };
+		7FA1AA210F85F439000D9EE1 /* cert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cert.c; path = ../pkcs11/cert.c; sourceTree = SOURCE_ROOT; };
+		7FA1AA220F85F439000D9EE1 /* cert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cert.h; path = ../pkcs11/cert.h; sourceTree = SOURCE_ROOT; };
+		7FA1AA230F85F439000D9EE1 /* encrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = encrypt.c; path = ../pkcs11/encrypt.c; sourceTree = SOURCE_ROOT; };
+		7FA1AA240F85F439000D9EE1 /* general.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = general.c; path = ../pkcs11/general.c; sourceTree = SOURCE_ROOT; };
+		7FA1AA250F85F439000D9EE1 /* log.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = log.c; path = ../pkcs11/log.c; sourceTree = SOURCE_ROOT; };
+		7FA1AA260F85F439000D9EE1 /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = log.h; path = ../pkcs11/log.h; sourceTree = SOURCE_ROOT; };
+		7FA1AA270F85F439000D9EE1 /* p11.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = p11.c; path = ../pkcs11/p11.c; sourceTree = SOURCE_ROOT; };
+		7FA1AA280F85F439000D9EE1 /* p11.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = p11.h; path = ../pkcs11/p11.h; sourceTree = SOURCE_ROOT; };
+		7FA1AA290F85F439000D9EE1 /* phash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = phash.cpp; path = ../pkcs11/phash.cpp; sourceTree = SOURCE_ROOT; };
+		7FA1AA2A0F85F439000D9EE1 /* phash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = phash.h; path = ../pkcs11/phash.h; sourceTree = SOURCE_ROOT; };
+		7FA1AA2B0F85F439000D9EE1 /* session.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = session.c; path = ../pkcs11/session.c; sourceTree = SOURCE_ROOT; };
+		7FA1AA2C0F85F439000D9EE1 /* sign.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sign.c; path = ../pkcs11/sign.c; sourceTree = SOURCE_ROOT; };
+		7FA1AA2D0F85F439000D9EE1 /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = ../pkcs11/util.cpp; sourceTree = SOURCE_ROOT; };
+		7FA1AA470F85F47D000D9EE1 /* pkcs11.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pkcs11.h; path = ../pkcs11/include/rsaref220/pkcs11.h; sourceTree = SOURCE_ROOT; };
+		7FA1AA480F85F47D000D9EE1 /* pkcs11f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pkcs11f.h; path = ../pkcs11/include/rsaref220/pkcs11f.h; sourceTree = SOURCE_ROOT; };
+		7FA1AA490F85F47D000D9EE1 /* pkcs11t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pkcs11t.h; path = ../pkcs11/include/rsaref220/pkcs11t.h; sourceTree = SOURCE_ROOT; };
+		7FA1AA4A0F85F47D000D9EE1 /* unix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = unix.h; path = ../pkcs11/include/rsaref220/unix.h; sourceTree = SOURCE_ROOT; };
+		7FA1AA720F85FEE3000D9EE1 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = ../pkcs11/util.h; sourceTree = SOURCE_ROOT; };
+		7FA1AA910F860748000D9EE1 /* object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = object.c; path = ../pkcs11/object.c; sourceTree = SOURCE_ROOT; };
+		7FBB02530F839352009B751F /* libpteidcommon.3.5.5.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libpteidcommon.3.5.5.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7FBB02610F839412009B751F /* ByteArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ByteArray.cpp; path = ../common/ByteArray.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB02620F839412009B751F /* ByteArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ByteArray.h; path = ../common/ByteArray.h; sourceTree = SOURCE_ROOT; };
+		7FBB02630F839412009B751F /* ByteArrayReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ByteArrayReader.cpp; path = ../common/ByteArrayReader.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB02640F839412009B751F /* ByteArrayReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ByteArrayReader.h; path = ../common/ByteArrayReader.h; sourceTree = SOURCE_ROOT; };
+		7FBB02650F839412009B751F /* Config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Config.cpp; path = ../common/Config.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB02660F839412009B751F /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Config.h; path = ../common/Config.h; sourceTree = SOURCE_ROOT; };
+		7FBB02670F839412009B751F /* ConfigCommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigCommon.cpp; path = ../common/ConfigCommon.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB02680F839412009B751F /* datafile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = datafile.cpp; path = ../common/datafile.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB02690F839412009B751F /* datafile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datafile.h; path = ../common/datafile.h; sourceTree = SOURCE_ROOT; };
+		7FBB026A0F839412009B751F /* DynamicLib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicLib.cpp; path = ../common/DynamicLib.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB026B0F839412009B751F /* DynamicLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicLib.h; path = ../common/DynamicLib.h; sourceTree = SOURCE_ROOT; };
+		7FBB026C0F839412009B751F /* eidErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eidErrors.h; path = ../common/eidErrors.h; sourceTree = SOURCE_ROOT; };
+		7FBB026D0F839412009B751F /* Export.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Export.h; path = ../common/Export.h; sourceTree = SOURCE_ROOT; };
+		7FBB026E0F839412009B751F /* Hash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Hash.cpp; path = ../common/Hash.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB026F0F839412009B751F /* Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hash.h; path = ../common/Hash.h; sourceTree = SOURCE_ROOT; };
+		7FBB02700F839412009B751F /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Log.cpp; path = ../common/Log.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB02710F839412009B751F /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Log.h; path = ../common/Log.h; sourceTree = SOURCE_ROOT; };
+		7FBB02720F839412009B751F /* LogBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LogBase.cpp; path = ../common/LogBase.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB02730F839412009B751F /* LogBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogBase.h; path = ../common/LogBase.h; sourceTree = SOURCE_ROOT; };
+		7FBB02740F839412009B751F /* Mutex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mutex.cpp; path = ../common/Mutex.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB02750F839412009B751F /* Mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mutex.h; path = ../common/Mutex.h; sourceTree = SOURCE_ROOT; };
+		7FBB02760F839412009B751F /* MWException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MWException.cpp; path = ../common/MWException.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB02770F839412009B751F /* MWException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWException.h; path = ../common/MWException.h; sourceTree = SOURCE_ROOT; };
+		7FBB02780F839412009B751F /* prefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prefix.h; path = ../common/prefix.h; sourceTree = SOURCE_ROOT; };
+		7FBB02790F839412009B751F /* Thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Thread.cpp; path = ../common/Thread.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB027A0F839412009B751F /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Thread.h; path = ../common/Thread.h; sourceTree = SOURCE_ROOT; };
+		7FBB027B0F839412009B751F /* ThreadDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThreadDefines.h; path = ../common/ThreadDefines.h; sourceTree = SOURCE_ROOT; };
+		7FBB027C0F839412009B751F /* TLV.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TLV.cpp; path = ../common/TLV.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB027D0F839412009B751F /* TLV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TLV.h; path = ../common/TLV.h; sourceTree = SOURCE_ROOT; };
+		7FBB027E0F839412009B751F /* TLVBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TLVBuffer.cpp; path = ../common/TLVBuffer.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB027F0F839412009B751F /* TLVBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TLVBuffer.h; path = ../common/TLVBuffer.h; sourceTree = SOURCE_ROOT; };
+		7FBB02800F839412009B751F /* TLVTagDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TLVTagDefinitions.h; path = ../common/TLVTagDefinitions.h; sourceTree = SOURCE_ROOT; };
+		7FBB02810F839412009B751F /* Util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Util.cpp; path = ../common/Util.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB02820F839412009B751F /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Util.h; path = ../common/Util.h; sourceTree = SOURCE_ROOT; };
+		7FBB02AB0F839454009B751F /* md5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = md5.c; path = ../common/libtomcrypt/md5.c; sourceTree = SOURCE_ROOT; };
+		7FBB02AC0F839454009B751F /* rmd160.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rmd160.c; path = ../common/libtomcrypt/rmd160.c; sourceTree = SOURCE_ROOT; };
+		7FBB02AD0F839454009B751F /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha1.c; path = ../common/libtomcrypt/sha1.c; sourceTree = SOURCE_ROOT; };
+		7FBB02AE0F839454009B751F /* sha256.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha256.c; path = ../common/libtomcrypt/sha256.c; sourceTree = SOURCE_ROOT; };
+		7FBB02AF0F839454009B751F /* sha384.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha384.c; path = ../common/libtomcrypt/sha384.c; sourceTree = SOURCE_ROOT; };
+		7FBB02B00F839454009B751F /* sha512.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha512.c; path = ../common/libtomcrypt/sha512.c; sourceTree = SOURCE_ROOT; };
+		7FBB02B10F839454009B751F /* tomcrypt_argchk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tomcrypt_argchk.h; path = ../common/libtomcrypt/tomcrypt_argchk.h; sourceTree = SOURCE_ROOT; };
+		7FBB02B20F839454009B751F /* tomcrypt_cfg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tomcrypt_cfg.h; path = ../common/libtomcrypt/tomcrypt_cfg.h; sourceTree = SOURCE_ROOT; };
+		7FBB02B30F839454009B751F /* tomcrypt_hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tomcrypt_hash.h; path = ../common/libtomcrypt/tomcrypt_hash.h; sourceTree = SOURCE_ROOT; };
+		7FBB02B40F839454009B751F /* tomcrypt_macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tomcrypt_macros.h; path = ../common/libtomcrypt/tomcrypt_macros.h; sourceTree = SOURCE_ROOT; };
+		7FBB02D00F839514009B751F /* Socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Socket.cpp; path = ../common/Socket/Socket.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB02D10F839514009B751F /* Socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Socket.h; path = ../common/Socket/Socket.h; sourceTree = SOURCE_ROOT; };
+		7FBB02D20F839514009B751F /* SocketClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SocketClient.cpp; path = ../common/Socket/SocketClient.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB02D30F839514009B751F /* SocketClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocketClient.h; path = ../common/Socket/SocketClient.h; sourceTree = SOURCE_ROOT; };
+		7FBB02D40F839514009B751F /* SocketServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SocketServer.cpp; path = ../common/Socket/SocketServer.cpp; sourceTree = SOURCE_ROOT; };
+		7FBB02D50F839514009B751F /* SocketServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocketServer.h; path = ../common/Socket/SocketServer.h; sourceTree = SOURCE_ROOT; };
+		7FBB02F20F839622009B751F /* win_macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = win_macros.h; path = ../common/win_macros.h; sourceTree = SOURCE_ROOT; };
+		7FC5353B0F84B83B00BA96EE /* libpteidcardlayer.3.5.5.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libpteidcardlayer.3.5.5.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7FC535410F84B88600BA96EE /* Cache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Cache.cpp; path = ../cardlayer/Cache.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535420F84B88600BA96EE /* Cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cache.h; path = ../cardlayer/Cache.h; sourceTree = SOURCE_ROOT; };
+		7FC535430F84B88600BA96EE /* Card.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Card.cpp; path = ../cardlayer/Card.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535440F84B88600BA96EE /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Card.h; path = ../cardlayer/Card.h; sourceTree = SOURCE_ROOT; };
+		7FC535450F84B88600BA96EE /* CardFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CardFactory.cpp; path = ../cardlayer/CardFactory.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535460F84B88600BA96EE /* CardFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardFactory.h; path = ../cardlayer/CardFactory.h; sourceTree = SOURCE_ROOT; };
+		7FC535470F84B88600BA96EE /* CardLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CardLayer.cpp; path = ../cardlayer/CardLayer.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535480F84B88600BA96EE /* CardLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardLayer.h; path = ../cardlayer/CardLayer.h; sourceTree = SOURCE_ROOT; };
+		7FC535490F84B88600BA96EE /* CardLayerConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardLayerConst.h; path = ../cardlayer/CardLayerConst.h; sourceTree = SOURCE_ROOT; };
+		7FC5354A0F84B88600BA96EE /* CardReaderInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CardReaderInfo.cpp; path = ../cardlayer/CardReaderInfo.cpp; sourceTree = SOURCE_ROOT; };
+		7FC5354B0F84B88600BA96EE /* CardReaderInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardReaderInfo.h; path = ../cardlayer/CardReaderInfo.h; sourceTree = SOURCE_ROOT; };
+		7FC5354C0F84B88600BA96EE /* Context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Context.cpp; path = ../cardlayer/Context.cpp; sourceTree = SOURCE_ROOT; };
+		7FC5354D0F84B88600BA96EE /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Context.h; path = ../cardlayer/Context.h; sourceTree = SOURCE_ROOT; };
+		7FC5354E0F84B88600BA96EE /* InternalConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InternalConst.h; path = ../cardlayer/InternalConst.h; sourceTree = SOURCE_ROOT; };
+		7FC5354F0F84B88600BA96EE /* P15Correction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = P15Correction.cpp; path = ../cardlayer/P15Correction.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535500F84B88600BA96EE /* P15Correction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = P15Correction.h; path = ../cardlayer/P15Correction.h; sourceTree = SOURCE_ROOT; };
+		7FC535510F84B88600BA96EE /* P15Objects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = P15Objects.h; path = ../cardlayer/P15Objects.h; sourceTree = SOURCE_ROOT; };
+		7FC535520F84B88600BA96EE /* PCSC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PCSC.cpp; path = ../cardlayer/PCSC.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535530F84B88600BA96EE /* PCSC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PCSC.h; path = ../cardlayer/PCSC.h; sourceTree = SOURCE_ROOT; };
+		7FC535540F84B88600BA96EE /* Pinpad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Pinpad.cpp; path = ../cardlayer/Pinpad.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535550F84B88600BA96EE /* Pinpad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Pinpad.h; path = ../cardlayer/Pinpad.h; sourceTree = SOURCE_ROOT; };
+		7FC535560F84B88600BA96EE /* pinpad2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pinpad2.h; path = ../cardlayer/pinpad2.h; sourceTree = SOURCE_ROOT; };
+		7FC535570F84B88600BA96EE /* PinpadLib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PinpadLib.cpp; path = ../cardlayer/PinpadLib.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535580F84B88600BA96EE /* PinpadLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinpadLib.h; path = ../cardlayer/PinpadLib.h; sourceTree = SOURCE_ROOT; };
+		7FC535590F84B88600BA96EE /* PKCS15.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PKCS15.cpp; path = ../cardlayer/PKCS15.cpp; sourceTree = SOURCE_ROOT; };
+		7FC5355A0F84B88600BA96EE /* PKCS15.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PKCS15.h; path = ../cardlayer/PKCS15.h; sourceTree = SOURCE_ROOT; };
+		7FC5355B0F84B88600BA96EE /* PKCS15Parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PKCS15Parser.cpp; path = ../cardlayer/PKCS15Parser.cpp; sourceTree = SOURCE_ROOT; };
+		7FC5355C0F84B88600BA96EE /* PKCS15Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PKCS15Parser.h; path = ../cardlayer/PKCS15Parser.h; sourceTree = SOURCE_ROOT; };
+		7FC5355D0F84B88600BA96EE /* PkiCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PkiCard.cpp; path = ../cardlayer/PkiCard.cpp; sourceTree = SOURCE_ROOT; };
+		7FC5355E0F84B88600BA96EE /* PkiCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PkiCard.h; path = ../cardlayer/PkiCard.h; sourceTree = SOURCE_ROOT; };
+		7FC5355F0F84B88600BA96EE /* Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Reader.cpp; path = ../cardlayer/Reader.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535600F84B88600BA96EE /* Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reader.h; path = ../cardlayer/Reader.h; sourceTree = SOURCE_ROOT; };
+		7FC535610F84B88600BA96EE /* ReadersInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ReadersInfo.cpp; path = ../cardlayer/ReadersInfo.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535620F84B88600BA96EE /* ReadersInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadersInfo.h; path = ../cardlayer/ReadersInfo.h; sourceTree = SOURCE_ROOT; };
+		7FC535630F84B88600BA96EE /* ThreadPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ThreadPool.cpp; path = ../cardlayer/ThreadPool.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535640F84B88600BA96EE /* ThreadPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThreadPool.h; path = ../cardlayer/ThreadPool.h; sourceTree = SOURCE_ROOT; };
+		7FC535650F84B88600BA96EE /* UnknownCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UnknownCard.cpp; path = ../cardlayer/UnknownCard.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535660F84B88600BA96EE /* UnknownCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnknownCard.h; path = ../cardlayer/UnknownCard.h; sourceTree = SOURCE_ROOT; };
+		7FC535960F84B95600BA96EE /* PTeidCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PTeidCard.cpp; path = ../cardlayer/cardpluginPTeid/PTeidCard.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535970F84B95600BA96EE /* PTeidCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PTeidCard.h; path = ../cardlayer/cardpluginPTeid/PTeidCard.h; sourceTree = SOURCE_ROOT; };
+		7FC535980F84B95600BA96EE /* PTeidP15Correction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PTeidP15Correction.cpp; path = ../cardlayer/cardpluginPTeid/PTeidP15Correction.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535990F84B95600BA96EE /* PTeidP15Correction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PTeidP15Correction.h; path = ../cardlayer/cardpluginPTeid/PTeidP15Correction.h; sourceTree = SOURCE_ROOT; };
+		7FC5359E0F84B97400BA96EE /* SISCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SISCard.cpp; path = ../cardlayer/cardpluginSIS/SISCard.cpp; sourceTree = SOURCE_ROOT; };
+		7FC5359F0F84B97400BA96EE /* SISCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SISCard.h; path = ../cardlayer/cardpluginSIS/SISCard.h; sourceTree = SOURCE_ROOT; };
+		7FC535A00F84B97400BA96EE /* SISplugin1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SISplugin1.h; path = ../cardlayer/cardpluginSIS/SISplugin1.h; sourceTree = SOURCE_ROOT; };
+		7FC535A10F84B97400BA96EE /* SISPluginHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SISPluginHandler.cpp; path = ../cardlayer/cardpluginSIS/SISPluginHandler.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535A20F84B97400BA96EE /* SISPluginHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SISPluginHandler.h; path = ../cardlayer/cardpluginSIS/SISPluginHandler.h; sourceTree = SOURCE_ROOT; };
+		7FC535AC0F84B9EF00BA96EE /* libsiscardplugin1__ACS__.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libsiscardplugin1__ACS__.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7FC535B70F84BA2E00BA96EE /* SISCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SISCard.cpp; path = ../cardlayer/cardpluginSIS_ACR38U/SISCard.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535DF0F84BCDA00BA96EE /* libpteiddialogsQT.3.5.5.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libpteiddialogsQT.3.5.5.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7FC535E40F84BD3F00BA96EE /* dialogs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dialogs.h; path = ../dialogs/dialogs.h; sourceTree = SOURCE_ROOT; };
+		7FC535E50F84BD3F00BA96EE /* language.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = language.h; path = ../dialogs/language.h; sourceTree = SOURCE_ROOT; };
+		7FC535E60F84BD3F00BA96EE /* langUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = langUtil.cpp; path = ../dialogs/langUtil.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535E70F84BD3F00BA96EE /* langUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = langUtil.h; path = ../dialogs/langUtil.h; sourceTree = SOURCE_ROOT; };
+		7FC535EC0F84BD6300BA96EE /* dlgs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dlgs.cpp; path = ../dialogs/dialogsQT/dlgs.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535ED0F84BD6300BA96EE /* SharedMem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SharedMem.cpp; path = ../dialogs/dialogsQT/SharedMem.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535EE0F84BD6300BA96EE /* SharedMem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SharedMem.h; path = ../dialogs/dialogsQT/SharedMem.h; sourceTree = SOURCE_ROOT; };
+		7FC535F50F84BDF500BA96EE /* dlgWndAskAccess.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dlgWndAskAccess.cpp; path = ../dialogs/dialogsQTsrv/dlgWndAskAccess.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535F60F84BDF500BA96EE /* dlgWndAskAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dlgWndAskAccess.h; path = ../dialogs/dialogsQTsrv/dlgWndAskAccess.h; sourceTree = SOURCE_ROOT; };
+		7FC535F70F84BDF500BA96EE /* dlgWndAskAccess.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dlgWndAskAccess.ui; path = ../dialogs/dialogsQTsrv/dlgWndAskAccess.ui; sourceTree = SOURCE_ROOT; };
+		7FC535F80F84BDF500BA96EE /* dlgWndAskPIN.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dlgWndAskPIN.cpp; path = ../dialogs/dialogsQTsrv/dlgWndAskPIN.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535F90F84BDF500BA96EE /* dlgWndAskPIN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dlgWndAskPIN.h; path = ../dialogs/dialogsQTsrv/dlgWndAskPIN.h; sourceTree = SOURCE_ROOT; };
+		7FC535FA0F84BDF500BA96EE /* dlgWndAskPIN.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dlgWndAskPIN.ui; path = ../dialogs/dialogsQTsrv/dlgWndAskPIN.ui; sourceTree = SOURCE_ROOT; };
+		7FC535FB0F84BDF500BA96EE /* dlgWndAskPINs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dlgWndAskPINs.cpp; path = ../dialogs/dialogsQTsrv/dlgWndAskPINs.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535FC0F84BDF500BA96EE /* dlgWndAskPINs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dlgWndAskPINs.h; path = ../dialogs/dialogsQTsrv/dlgWndAskPINs.h; sourceTree = SOURCE_ROOT; };
+		7FC535FD0F84BDF500BA96EE /* dlgWndAskPINs.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dlgWndAskPINs.ui; path = ../dialogs/dialogsQTsrv/dlgWndAskPINs.ui; sourceTree = SOURCE_ROOT; };
+		7FC535FE0F84BDF500BA96EE /* dlgWndBadPIN.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dlgWndBadPIN.cpp; path = ../dialogs/dialogsQTsrv/dlgWndBadPIN.cpp; sourceTree = SOURCE_ROOT; };
+		7FC535FF0F84BDF500BA96EE /* dlgWndBadPIN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dlgWndBadPIN.h; path = ../dialogs/dialogsQTsrv/dlgWndBadPIN.h; sourceTree = SOURCE_ROOT; };
+		7FC536000F84BDF500BA96EE /* dlgWndBadPIN.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dlgWndBadPIN.ui; path = ../dialogs/dialogsQTsrv/dlgWndBadPIN.ui; sourceTree = SOURCE_ROOT; };
+		7FC536010F84BDF500BA96EE /* dlgWndBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dlgWndBase.cpp; path = ../dialogs/dialogsQTsrv/dlgWndBase.cpp; sourceTree = SOURCE_ROOT; };
+		7FC536020F84BDF500BA96EE /* dlgWndBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dlgWndBase.h; path = ../dialogs/dialogsQTsrv/dlgWndBase.h; sourceTree = SOURCE_ROOT; };
+		7FC536030F84BDF500BA96EE /* dlgWndModal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dlgWndModal.cpp; path = ../dialogs/dialogsQTsrv/dlgWndModal.cpp; sourceTree = SOURCE_ROOT; };
+		7FC536040F84BDF500BA96EE /* dlgWndModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dlgWndModal.h; path = ../dialogs/dialogsQTsrv/dlgWndModal.h; sourceTree = SOURCE_ROOT; };
+		7FC536050F84BDF500BA96EE /* dlgWndModal.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dlgWndModal.ui; path = ../dialogs/dialogsQTsrv/dlgWndModal.ui; sourceTree = SOURCE_ROOT; };
+		7FC536060F84BDF500BA96EE /* dlgWndPinpadInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dlgWndPinpadInfo.cpp; path = ../dialogs/dialogsQTsrv/dlgWndPinpadInfo.cpp; sourceTree = SOURCE_ROOT; };
+		7FC536070F84BDF500BA96EE /* dlgWndPinpadInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dlgWndPinpadInfo.h; path = ../dialogs/dialogsQTsrv/dlgWndPinpadInfo.h; sourceTree = SOURCE_ROOT; };
+		7FC536080F84BDF500BA96EE /* dlgWndPinpadInfo.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dlgWndPinpadInfo.ui; path = ../dialogs/dialogsQTsrv/dlgWndPinpadInfo.ui; sourceTree = SOURCE_ROOT; };
+		7FC536090F84BDF500BA96EE /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../dialogs/dialogsQTsrv/main.cpp; sourceTree = SOURCE_ROOT; };
+		7FC5360A0F84BDF500BA96EE /* moc_dlgWndAskAccess.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = moc_dlgWndAskAccess.cpp; path = ../dialogs/dialogsQTsrv/moc_dlgWndAskAccess.cpp; sourceTree = SOURCE_ROOT; };
+		7FC5360B0F84BDF500BA96EE /* moc_dlgWndAskPIN.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = moc_dlgWndAskPIN.cpp; path = ../dialogs/dialogsQTsrv/moc_dlgWndAskPIN.cpp; sourceTree = SOURCE_ROOT; };
+		7FC5360C0F84BDF500BA96EE /* moc_dlgWndAskPINs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = moc_dlgWndAskPINs.cpp; path = ../dialogs/dialogsQTsrv/moc_dlgWndAskPINs.cpp; sourceTree = SOURCE_ROOT; };
+		7FC5360D0F84BDF500BA96EE /* moc_dlgWndBadPIN.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = moc_dlgWndBadPIN.cpp; path = ../dialogs/dialogsQTsrv/moc_dlgWndBadPIN.cpp; sourceTree = SOURCE_ROOT; };
+		7FC5360F0F84BDF500BA96EE /* moc_dlgWndModal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = moc_dlgWndModal.cpp; path = ../dialogs/dialogsQTsrv/moc_dlgWndModal.cpp; sourceTree = SOURCE_ROOT; };
+		7FC536100F84BDF500BA96EE /* moc_dlgWndPinpadInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = moc_dlgWndPinpadInfo.cpp; path = ../dialogs/dialogsQTsrv/moc_dlgWndPinpadInfo.cpp; sourceTree = SOURCE_ROOT; };
+		7FC536110F84BDF500BA96EE /* qrc_dlgs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_dlgs.cpp; path = ../dialogs/dialogsQTsrv/qrc_dlgs.cpp; sourceTree = SOURCE_ROOT; };
+		7FC536120F84BDF500BA96EE /* ui_dlgWndAskAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui_dlgWndAskAccess.h; path = ../dialogs/dialogsQTsrv/ui_dlgWndAskAccess.h; sourceTree = SOURCE_ROOT; };
+		7FC536130F84BDF500BA96EE /* ui_dlgWndAskPIN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui_dlgWndAskPIN.h; path = ../dialogs/dialogsQTsrv/ui_dlgWndAskPIN.h; sourceTree = SOURCE_ROOT; };
+		7FC536140F84BDF500BA96EE /* ui_dlgWndAskPINs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui_dlgWndAskPINs.h; path = ../dialogs/dialogsQTsrv/ui_dlgWndAskPINs.h; sourceTree = SOURCE_ROOT; };
+		7FC536150F84BDF500BA96EE /* ui_dlgWndBadPIN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui_dlgWndBadPIN.h; path = ../dialogs/dialogsQTsrv/ui_dlgWndBadPIN.h; sourceTree = SOURCE_ROOT; };
+		7FC536160F84BDF500BA96EE /* ui_dlgWndModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui_dlgWndModal.h; path = ../dialogs/dialogsQTsrv/ui_dlgWndModal.h; sourceTree = SOURCE_ROOT; };
+		7FC536170F84BDF500BA96EE /* ui_dlgWndPinpadInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui_dlgWndPinpadInfo.h; path = ../dialogs/dialogsQTsrv/ui_dlgWndPinpadInfo.h; sourceTree = SOURCE_ROOT; };
+		7FD8B9F90F9DBCA10074BE3C /* qrc_qtconf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_qtconf.cpp; path = ../eidgui/qrc_qtconf.cpp; sourceTree = SOURCE_ROOT; };
+		86A90A2B1122D6880011C6A8 /* trunk */ = {isa = PBXFileReference; lastKnownFileType = folder; name = trunk; path = "/pteid-mw/trunk"; sourceTree = "<absolute>"; };
+		86A9430C1122D6E50011C6A8 /* libxerces-c-3.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libxerces-c-3.1.dylib"; path = "/pteid-mw/trunk/eid-mw/_src/ThirdParty/Xerces/Xerces-3.1.0-mac/lib/libxerces-c-3.1.dylib"; sourceTree = "<absolute>"; };
+		86D0915211ABF313007BC75E /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = SDKs/MacOSX10.6.sdk/System/Library/Frameworks/PCSC.framework; sourceTree = DEVELOPER_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7F872F660F84E53000DE6627 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F900E0A0F84EE15004A5FCC /* libpteidcommon.3.5.5.dylib in Frameworks */,
+				7F872F7B0F84E58300DE6627 /* libpteiddialogsQT.3.5.5.dylib in Frameworks */,
+				7F872F8F0F84E5E000DE6627 /* QtGui.framework in Frameworks */,
+				7F872F930F84E5F800DE6627 /* QtCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F900E520F84FB07004A5FCC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F9011270F8503F1004A5FCC /* libpteiddialogsQT.3.5.5.dylib in Frameworks */,
+				7F90111E0F85034F004A5FCC /* libcrypto.dylib in Frameworks */,
+				7F9011100F8500CA004A5FCC /* libpteidcommon.3.5.5.dylib in Frameworks */,
+				7F90110E0F850090004A5FCC /* libpteidcardlayer.3.5.5.dylib in Frameworks */,
+				7F9010630F84FEC3004A5FCC /* CoreServices.framework in Frameworks */,
+				7F90111D0F850342004A5FCC /* libssl.dylib in Frameworks */,
+				7F90112D0F850450004A5FCC /* SystemConfiguration.framework in Frameworks */,
+				86A9430D1122D6E50011C6A8 /* libxerces-c-3.1.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F900E590F84FB1A004A5FCC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F9011320F85047E004A5FCC /* libpteidcommon.3.5.5.dylib in Frameworks */,
+				7F90111F0F850363004A5FCC /* libpteidapplayer.3.5.5.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F9011360F85057A004A5FCC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F9011910F85065B004A5FCC /* QtCore.framework in Frameworks */,
+				7F9011920F85065B004A5FCC /* QtGui.framework in Frameworks */,
+				7F9011900F850649004A5FCC /* libpteidlib.3.5.5.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F90D54C0F9F36F500BB8F23 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F90D5B10F9F3F8A00BB8F23 /* libpteidapplayer.3.5.5.dylib in Frameworks */,
+				7F90D5B00F9F3F7C00BB8F23 /* libpteidcommon.3.5.5.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FA1A9F50F85F36E000D9EE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FA1AA640F85F6CF000D9EE1 /* libpteidcardlayer.3.5.5.dylib in Frameworks */,
+				7FA1AA620F85F6C1000D9EE1 /* libpteidcommon.3.5.5.dylib in Frameworks */,
+				86D0918011ABFA40007BC75E /* PCSC.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FBB02510F839352009B751F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FBB03E00F8397E0009B751F /* Carbon.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FC535390F84B83B00BA96EE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F22A3780F84C5A1001AD228 /* libpteiddialogsQT.3.5.5.dylib in Frameworks */,
+				7FC535BE0F84BADB00BA96EE /* libpteidcommon.3.5.5.dylib in Frameworks */,
+				86D0915311ABF313007BC75E /* PCSC.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FC535AA0F84B9EF00BA96EE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F22A3C40F84D4A1001AD228 /* libpteidcommon.3.5.5.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FC535DD0F84BCDA00BA96EE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F22A36F0F84C588001AD228 /* libpteidcommon.3.5.5.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DDFF38A45A11DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7FBB02530F839352009B751F /* libpteidcommon.3.5.5.dylib */,
+				7FC5353B0F84B83B00BA96EE /* libpteidcardlayer.3.5.5.dylib */,
+				7FC535AC0F84B9EF00BA96EE /* libsiscardplugin1__ACS__.dylib */,
+				7FC535DF0F84BCDA00BA96EE /* libpteiddialogsQT.3.5.5.dylib */,
+				7F872F680F84E53000DE6627 /* pteiddialogsQTsrv */,
+				7F900E540F84FB07004A5FCC /* libpteidapplayer.3.5.5.dylib */,
+				7F900E5B0F84FB1A004A5FCC /* libpteidlib.3.5.5.dylib */,
+				7F9011380F85057A004A5FCC /* pteidgui.app */,
+				7FA1A9F70F85F36E000D9EE1 /* libpteidpkcs11.3.5.5.dylib */,
+				7F90D54E0F9F36F500BB8F23 /* libpteidlibJava_Wrapper.3.5.5.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* pteidmw */ = {
+			isa = PBXGroup;
+			children = (
+				7FBB025A0F83937F009B751F /* Common */,
+				7FBB02DC0F839518009B751F /* Common_Socket */,
+				7F90113E0F85058E004A5FCC /* PTeidgui */,
+				7F900EBC0F84FC50004A5FCC /* PTeidlib */,
+				7F900EBB0F84FC40004A5FCC /* Applayer */,
+				7FC535E20F84BCFA00BA96EE /* DialogsQt */,
+				7FC535F40F84BD7900BA96EE /* DialogsQtServer */,
+				7FC535950F84B92000BA96EE /* Cardlayer_pluginSIS_ACR38 */,
+				7FC535940F84B90C00BA96EE /* Cardlayer_pluginSIS */,
+				7FC535930F84B8E600BA96EE /* Cardlayer_pluginPTeid */,
+				7FC5358D0F84B88B00BA96EE /* Cardlayer */,
+				7FA1AA420F85F446000D9EE1 /* Pkcs11 */,
+				7F90D5540F9F377F00BB8F23 /* Java_Wrapper */,
+				7FBB02C20F839479009B751F /* Common_tomcrypt */,
+				5073E0CA09E734BC00EC74B6 /* Configuration Files */,
+				08FB77ACFE841707C02AAC07 /* Source */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DDFF38A45A11DB9C8B /* Products */,
+				86A90A2B1122D6880011C6A8 /* trunk */,
+				86D0915211ABF313007BC75E /* PCSC.framework */,
+			);
+			name = pteidmw;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				86A9430C1122D6E50011C6A8 /* libxerces-c-3.1.dylib */,
+				7F90D5620F9F38EC00BB8F23 /* JavaVM.framework */,
+				7F90112C0F850450004A5FCC /* SystemConfiguration.framework */,
+				7F90111C0F850342004A5FCC /* libssl.dylib */,
+				7F9011190F8502F8004A5FCC /* libcrypto.dylib */,
+				7F9010620F84FEC3004A5FCC /* CoreServices.framework */,
+				7F872F920F84E5F800DE6627 /* QtCore.framework */,
+				7F872F8E0F84E5E000DE6627 /* QtGui.framework */,
+				7F22A4110F84D948001AD228 /* PCSC.framework */,
+				7F22A3D60F84D6B0001AD228 /* CoreFoundation.framework */,
+				08FB77AAFE841565C02AAC07 /* Carbon.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		08FB77ACFE841707C02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		5073E0CA09E734BC00EC74B6 /* Configuration Files */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Configuration Files";
+			sourceTree = "<group>";
+		};
+		7F900EBB0F84FC40004A5FCC /* Applayer */ = {
+			isa = PBXGroup;
+			children = (
+				7F900E650F84FC37004A5FCC /* APLCard.cpp */,
+				7F900E660F84FC37004A5FCC /* APLCard.h */,
+				7F900E670F84FC37004A5FCC /* APLCardPTeid.cpp */,
+				7F900E680F84FC37004A5FCC /* APLCardPTeid.h */,
+				7F900E690F84FC37004A5FCC /* APLCardFile.h */,
+				7F900E6A0F84FC37004A5FCC /* APLCardSIS.cpp */,
+				7F900E6B0F84FC37004A5FCC /* APLCardSIS.h */,
+				7F900E6C0F84FC37004A5FCC /* APLCertif.cpp */,
+				7F900E6D0F84FC37004A5FCC /* APLCertif.h */,
+				7F900E6E0F84FC37004A5FCC /* APLConfig.cpp */,
+				7F900E6F0F84FC37004A5FCC /* APLConfig.h */,
+				7F900E700F84FC37004A5FCC /* APLCrypto.cpp */,
+				7F900E710F84FC37004A5FCC /* APLCrypto.h */,
+				7F900E720F84FC37004A5FCC /* APLDoc.cpp */,
+				7F900E730F84FC37004A5FCC /* APLDoc.h */,
+				7F900E740F84FC37004A5FCC /* APLReader.cpp */,
+				7F900E750F84FC37004A5FCC /* APLReader.h */,
+				7F900E760F84FC37004A5FCC /* CardPTeid.cpp */,
+				7F900E770F84FC37004A5FCC /* CardPTeid.h */,
+				7F900E780F84FC37004A5FCC /* CardPTeidDef.h */,
+				7F900E790F84FC37004A5FCC /* CardFile.cpp */,
+				7F900E7A0F84FC37004A5FCC /* CardFile.h */,
+				7F900E7B0F84FC37004A5FCC /* CardSIS.cpp */,
+				7F900E7C0F84FC37004A5FCC /* CardSIS.h */,
+				7F900E7D0F84FC37004A5FCC /* CardSISDef.h */,
+				7F900E7E0F84FC37004A5FCC /* CertStatusCache.cpp */,
+				7F900E7F0F84FC37004A5FCC /* CertStatusCache.h */,
+				7F900E800F84FC37004A5FCC /* CRLService.cpp */,
+				7F900E810F84FC37004A5FCC /* CRLService.h */,
+				7F900E820F84FC37004A5FCC /* cryptoFramework.cpp */,
+				7F900E830F84FC37004A5FCC /* cryptoFramework.h */,
+				7F900E840F84FC37004A5FCC /* cryptoFwkPTeid.cpp */,
+				7F900E850F84FC37004A5FCC /* cryptoFwkPTeid.h */,
+				7F900E860F84FC37004A5FCC /* eidmw_EIDTag_processors.h */,
+				7F900E870F84FC37004A5FCC /* eidmw_EIDTagHandler.h */,
+				7F900E880F84FC37004A5FCC /* eidmw_EIDXmlParser.h */,
+				7F900E890F84FC37004A5FCC /* eidmw_TagProcessor.h */,
+				7F900E8A0F84FC37004A5FCC /* eidmw_XML_datastorage.h */,
+				7F900E8B0F84FC37004A5FCC /* eidmw_XML_DefHandler.h */,
+				7F900E8C0F84FC37004A5FCC /* eidmw_XMLParser.h */,
+				7F900E8D0F84FC37004A5FCC /* MiscUtil.cpp */,
+				7F900E8E0F84FC37004A5FCC /* MiscUtil.h */,
+				7F900E8F0F84FC37004A5FCC /* XMLParser.cpp */,
+			);
+			name = Applayer;
+			sourceTree = "<group>";
+		};
+		7F900EBC0F84FC50004A5FCC /* PTeidlib */ = {
+			isa = PBXGroup;
+			children = (
+				7F900EBD0F84FC89004A5FCC /* eidlib.h */,
+				7F900EBE0F84FC89004A5FCC /* eidlibCard.cpp */,
+				7F900EBF0F84FC89004A5FCC /* eidlibCrypto.cpp */,
+				7F900EC00F84FC89004A5FCC /* eidlibdefines.h */,
+				7F900EC10F84FC89004A5FCC /* eidlibDoc.cpp */,
+				7F900EC20F84FC89004A5FCC /* eidlibException.cpp */,
+				7F900EC30F84FC89004A5FCC /* eidlibException.h */,
+				7F900EC40F84FC89004A5FCC /* eidlibReader.cpp */,
+				7F900EC50F84FC89004A5FCC /* InternalUtil.cpp */,
+				7F900EC60F84FC89004A5FCC /* InternalUtil.h */,
+			);
+			name = PTeidlib;
+			sourceTree = "<group>";
+		};
+		7F90113E0F85058E004A5FCC /* PTeidgui */ = {
+			isa = PBXGroup;
+			children = (
+				7FD8B9F90F9DBCA10074BE3C /* qrc_qtconf.cpp */,
+				7F90113F0F85060A004A5FCC /* CardInformation.cpp */,
+				7F9011400F85060A004A5FCC /* CardInformation.h */,
+				7F9011410F85060A004A5FCC /* dlgAbout.cpp */,
+				7F9011420F85060A004A5FCC /* dlgAbout.h */,
+				7F9011430F85060A004A5FCC /* dlgAbout.ui */,
+				7F9011440F85060A004A5FCC /* dlgOptions.cpp */,
+				7F9011450F85060A004A5FCC /* dlgOptions.h */,
+				7F9011460F85060A004A5FCC /* dlgOptions.ui */,
+				7F9011470F85060A004A5FCC /* dlgprint.cpp */,
+				7F9011480F85060A004A5FCC /* dlgprint.h */,
+				7F9011490F85060A004A5FCC /* dlgPrint.ui */,
+				7F90114A0F85060A004A5FCC /* eidmw_de.qm */,
+				7F90114B0F85060A004A5FCC /* eidmw_en.qm */,
+				7F90114C0F85060A004A5FCC /* eidmw_fr.qm */,
+				7F90114D0F85060A004A5FCC /* eidmw_nl.qm */,
+				7F90114E0F85060A004A5FCC /* genpur.cpp */,
+				7F90114F0F85060A004A5FCC /* genpur.h */,
+				7F9011500F85060A004A5FCC /* main.cpp */,
+				7F9011510F85060A004A5FCC /* mainwnd.cpp */,
+				7F9011520F85060A004A5FCC /* mainwnd.h */,
+				7F9011530F85060A004A5FCC /* mainwnd.ui */,
+				7F9011540F85060A004A5FCC /* moc_dlgAbout.cpp */,
+				7F9011550F85060A004A5FCC /* moc_dlgOptions.cpp */,
+				7F9011560F85060A004A5FCC /* moc_dlgprint.cpp */,
+				7F9011570F85060A004A5FCC /* moc_mainwnd.cpp */,
+				7F9011580F85060A004A5FCC /* moc_picturepopup.cpp */,
+				7F9011590F85060A004A5FCC /* moc_qtsingleapplication.cpp */,
+				7F90115A0F85060A004A5FCC /* picturepopup.cpp */,
+				7F90115B0F85060A004A5FCC /* picturepopup.h */,
+				7F90115C0F85060A004A5FCC /* picturepopup.ui */,
+				7F90115D0F85060A004A5FCC /* qrc_eidgui.cpp */,
+				7F90115E0F85060A004A5FCC /* qtsingleapplication.cpp */,
+				7F90115F0F85060A004A5FCC /* qtsingleapplication.h */,
+				7F9011600F85060A004A5FCC /* qtsingleapplication_mac.cpp */,
+				7F9011610F85060A004A5FCC /* resource.h */,
+				7F9011620F85060A004A5FCC /* Settings.h */,
+				7F9011630F85060A004A5FCC /* ui_dlgAbout.h */,
+				7F9011640F85060A004A5FCC /* ui_dlgOptions.h */,
+				7F9011650F85060A004A5FCC /* ui_dlgPrint.h */,
+				7F9011660F85060A004A5FCC /* ui_mainwnd.h */,
+				7F9011670F85060A004A5FCC /* ui_picturepopup.h */,
+				7F9011680F85060A004A5FCC /* verinfo.cpp */,
+				7F9011690F85060A004A5FCC /* verinfo.h */,
+			);
+			name = PTeidgui;
+			sourceTree = "<group>";
+		};
+		7F90D5540F9F377F00BB8F23 /* Java_Wrapper */ = {
+			isa = PBXGroup;
+			children = (
+				7F90D5520F9F377500BB8F23 /* eidlibJava_Wrapper.cpp */,
+			);
+			name = Java_Wrapper;
+			sourceTree = "<group>";
+		};
+		7FA1AA420F85F446000D9EE1 /* Pkcs11 */ = {
+			isa = PBXGroup;
+			children = (
+				7FA1AA910F860748000D9EE1 /* object.c */,
+				7FA1AA720F85FEE3000D9EE1 /* util.h */,
+				7FA1AA470F85F47D000D9EE1 /* pkcs11.h */,
+				7FA1AA480F85F47D000D9EE1 /* pkcs11f.h */,
+				7FA1AA490F85F47D000D9EE1 /* pkcs11t.h */,
+				7FA1AA4A0F85F47D000D9EE1 /* unix.h */,
+				7FA1AA1C0F85F439000D9EE1 /* asn1.c */,
+				7FA1AA1D0F85F439000D9EE1 /* asn1.h */,
+				7FA1AA1E0F85F439000D9EE1 /* pteid_p11.h */,
+				7FA1AA1F0F85F439000D9EE1 /* cal.cpp */,
+				7FA1AA200F85F439000D9EE1 /* cal.h */,
+				7FA1AA210F85F439000D9EE1 /* cert.c */,
+				7FA1AA220F85F439000D9EE1 /* cert.h */,
+				7FA1AA230F85F439000D9EE1 /* encrypt.c */,
+				7FA1AA240F85F439000D9EE1 /* general.c */,
+				7FA1AA250F85F439000D9EE1 /* log.c */,
+				7FA1AA260F85F439000D9EE1 /* log.h */,
+				7FA1AA270F85F439000D9EE1 /* p11.c */,
+				7FA1AA280F85F439000D9EE1 /* p11.h */,
+				7FA1AA290F85F439000D9EE1 /* phash.cpp */,
+				7FA1AA2A0F85F439000D9EE1 /* phash.h */,
+				7FA1AA2B0F85F439000D9EE1 /* session.c */,
+				7FA1AA2C0F85F439000D9EE1 /* sign.c */,
+				7FA1AA2D0F85F439000D9EE1 /* util.cpp */,
+			);
+			name = Pkcs11;
+			sourceTree = "<group>";
+		};
+		7FBB025A0F83937F009B751F /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				7FBB02F20F839622009B751F /* win_macros.h */,
+				7FBB027E0F839412009B751F /* TLVBuffer.cpp */,
+				7FBB02610F839412009B751F /* ByteArray.cpp */,
+				7FBB02630F839412009B751F /* ByteArrayReader.cpp */,
+				7FBB02650F839412009B751F /* Config.cpp */,
+				7FBB02670F839412009B751F /* ConfigCommon.cpp */,
+				7FBB02680F839412009B751F /* datafile.cpp */,
+				7FBB026A0F839412009B751F /* DynamicLib.cpp */,
+				7FBB026E0F839412009B751F /* Hash.cpp */,
+				7FBB02700F839412009B751F /* Log.cpp */,
+				7FBB02720F839412009B751F /* LogBase.cpp */,
+				7FBB02740F839412009B751F /* Mutex.cpp */,
+				7FBB02760F839412009B751F /* MWException.cpp */,
+				7FBB02790F839412009B751F /* Thread.cpp */,
+				7FBB027C0F839412009B751F /* TLV.cpp */,
+				7FBB027F0F839412009B751F /* TLVBuffer.h */,
+				7FBB02810F839412009B751F /* Util.cpp */,
+				7FBB02620F839412009B751F /* ByteArray.h */,
+				7FBB02640F839412009B751F /* ByteArrayReader.h */,
+				7FBB02660F839412009B751F /* Config.h */,
+				7FBB02690F839412009B751F /* datafile.h */,
+				7FBB026B0F839412009B751F /* DynamicLib.h */,
+				7FBB026C0F839412009B751F /* eidErrors.h */,
+				7FBB026D0F839412009B751F /* Export.h */,
+				7FBB026F0F839412009B751F /* Hash.h */,
+				7FBB02710F839412009B751F /* Log.h */,
+				7FBB02730F839412009B751F /* LogBase.h */,
+				7FBB02750F839412009B751F /* Mutex.h */,
+				7FBB02770F839412009B751F /* MWException.h */,
+				7FBB02780F839412009B751F /* prefix.h */,
+				7FBB027A0F839412009B751F /* Thread.h */,
+				7FBB027B0F839412009B751F /* ThreadDefines.h */,
+				7FBB027D0F839412009B751F /* TLV.h */,
+				7FBB02800F839412009B751F /* TLVTagDefinitions.h */,
+				7FBB02820F839412009B751F /* Util.h */,
+			);
+			name = Common;
+			sourceTree = "<group>";
+		};
+		7FBB02C20F839479009B751F /* Common_tomcrypt */ = {
+			isa = PBXGroup;
+			children = (
+				7FBB02AB0F839454009B751F /* md5.c */,
+				7FBB02AC0F839454009B751F /* rmd160.c */,
+				7FBB02AD0F839454009B751F /* sha1.c */,
+				7FBB02AE0F839454009B751F /* sha256.c */,
+				7FBB02AF0F839454009B751F /* sha384.c */,
+				7FBB02B00F839454009B751F /* sha512.c */,
+				7FBB02B10F839454009B751F /* tomcrypt_argchk.h */,
+				7FBB02B20F839454009B751F /* tomcrypt_cfg.h */,
+				7FBB02B30F839454009B751F /* tomcrypt_hash.h */,
+				7FBB02B40F839454009B751F /* tomcrypt_macros.h */,
+			);
+			name = Common_tomcrypt;
+			sourceTree = "<group>";
+		};
+		7FBB02DC0F839518009B751F /* Common_Socket */ = {
+			isa = PBXGroup;
+			children = (
+				7FBB02D00F839514009B751F /* Socket.cpp */,
+				7FBB02D10F839514009B751F /* Socket.h */,
+				7FBB02D20F839514009B751F /* SocketClient.cpp */,
+				7FBB02D30F839514009B751F /* SocketClient.h */,
+				7FBB02D40F839514009B751F /* SocketServer.cpp */,
+				7FBB02D50F839514009B751F /* SocketServer.h */,
+			);
+			name = Common_Socket;
+			sourceTree = "<group>";
+		};
+		7FC5358D0F84B88B00BA96EE /* Cardlayer */ = {
+			isa = PBXGroup;
+			children = (
+				7FC535410F84B88600BA96EE /* Cache.cpp */,
+				7FC535420F84B88600BA96EE /* Cache.h */,
+				7FC535430F84B88600BA96EE /* Card.cpp */,
+				7FC535440F84B88600BA96EE /* Card.h */,
+				7FC535450F84B88600BA96EE /* CardFactory.cpp */,
+				7FC535460F84B88600BA96EE /* CardFactory.h */,
+				7FC535470F84B88600BA96EE /* CardLayer.cpp */,
+				7FC535480F84B88600BA96EE /* CardLayer.h */,
+				7FC535490F84B88600BA96EE /* CardLayerConst.h */,
+				7FC5354A0F84B88600BA96EE /* CardReaderInfo.cpp */,
+				7FC5354B0F84B88600BA96EE /* CardReaderInfo.h */,
+				7FC5354C0F84B88600BA96EE /* Context.cpp */,
+				7FC5354D0F84B88600BA96EE /* Context.h */,
+				7FC5354E0F84B88600BA96EE /* InternalConst.h */,
+				7FC5354F0F84B88600BA96EE /* P15Correction.cpp */,
+				7FC535500F84B88600BA96EE /* P15Correction.h */,
+				7FC535510F84B88600BA96EE /* P15Objects.h */,
+				7FC535520F84B88600BA96EE /* PCSC.cpp */,
+				7FC535530F84B88600BA96EE /* PCSC.h */,
+				7FC535540F84B88600BA96EE /* Pinpad.cpp */,
+				7FC535550F84B88600BA96EE /* Pinpad.h */,
+				7FC535560F84B88600BA96EE /* pinpad2.h */,
+				7FC535570F84B88600BA96EE /* PinpadLib.cpp */,
+				7FC535580F84B88600BA96EE /* PinpadLib.h */,
+				7FC535590F84B88600BA96EE /* PKCS15.cpp */,
+				7FC5355A0F84B88600BA96EE /* PKCS15.h */,
+				7FC5355B0F84B88600BA96EE /* PKCS15Parser.cpp */,
+				7FC5355C0F84B88600BA96EE /* PKCS15Parser.h */,
+				7FC5355D0F84B88600BA96EE /* PkiCard.cpp */,
+				7FC5355E0F84B88600BA96EE /* PkiCard.h */,
+				7FC5355F0F84B88600BA96EE /* Reader.cpp */,
+				7FC535600F84B88600BA96EE /* Reader.h */,
+				7FC535610F84B88600BA96EE /* ReadersInfo.cpp */,
+				7FC535620F84B88600BA96EE /* ReadersInfo.h */,
+				7FC535630F84B88600BA96EE /* ThreadPool.cpp */,
+				7FC535640F84B88600BA96EE /* ThreadPool.h */,
+				7FC535650F84B88600BA96EE /* UnknownCard.cpp */,
+				7FC535660F84B88600BA96EE /* UnknownCard.h */,
+			);
+			name = Cardlayer;
+			sourceTree = "<group>";
+		};
+		7FC535930F84B8E600BA96EE /* Cardlayer_pluginPTeid */ = {
+			isa = PBXGroup;
+			children = (
+				7FC535960F84B95600BA96EE /* PTeidCard.cpp */,
+				7FC535970F84B95600BA96EE /* PTeidCard.h */,
+				7FC535980F84B95600BA96EE /* PTeidP15Correction.cpp */,
+				7FC535990F84B95600BA96EE /* PTeidP15Correction.h */,
+			);
+			name = Cardlayer_pluginPTeid;
+			sourceTree = "<group>";
+		};
+		7FC535940F84B90C00BA96EE /* Cardlayer_pluginSIS */ = {
+			isa = PBXGroup;
+			children = (
+				7FC5359E0F84B97400BA96EE /* SISCard.cpp */,
+				7FC5359F0F84B97400BA96EE /* SISCard.h */,
+				7FC535A00F84B97400BA96EE /* SISplugin1.h */,
+				7FC535A10F84B97400BA96EE /* SISPluginHandler.cpp */,
+				7FC535A20F84B97400BA96EE /* SISPluginHandler.h */,
+			);
+			name = Cardlayer_pluginSIS;
+			sourceTree = "<group>";
+		};
+		7FC535950F84B92000BA96EE /* Cardlayer_pluginSIS_ACR38 */ = {
+			isa = PBXGroup;
+			children = (
+				7FC535B70F84BA2E00BA96EE /* SISCard.cpp */,
+			);
+			name = Cardlayer_pluginSIS_ACR38;
+			sourceTree = "<group>";
+		};
+		7FC535E20F84BCFA00BA96EE /* DialogsQt */ = {
+			isa = PBXGroup;
+			children = (
+				7FC535EC0F84BD6300BA96EE /* dlgs.cpp */,
+				7FC535ED0F84BD6300BA96EE /* SharedMem.cpp */,
+				7FC535EE0F84BD6300BA96EE /* SharedMem.h */,
+				7FC535E40F84BD3F00BA96EE /* dialogs.h */,
+				7FC535E50F84BD3F00BA96EE /* language.h */,
+				7FC535E60F84BD3F00BA96EE /* langUtil.cpp */,
+				7FC535E70F84BD3F00BA96EE /* langUtil.h */,
+			);
+			name = DialogsQt;
+			sourceTree = "<group>";
+		};
+		7FC535F40F84BD7900BA96EE /* DialogsQtServer */ = {
+			isa = PBXGroup;
+			children = (
+				7F900E330F84F709004A5FCC /* moc_dlgWndBase.cpp */,
+				7FC535F50F84BDF500BA96EE /* dlgWndAskAccess.cpp */,
+				7FC535F60F84BDF500BA96EE /* dlgWndAskAccess.h */,
+				7FC535F70F84BDF500BA96EE /* dlgWndAskAccess.ui */,
+				7FC535F80F84BDF500BA96EE /* dlgWndAskPIN.cpp */,
+				7FC535F90F84BDF500BA96EE /* dlgWndAskPIN.h */,
+				7FC535FA0F84BDF500BA96EE /* dlgWndAskPIN.ui */,
+				7FC535FB0F84BDF500BA96EE /* dlgWndAskPINs.cpp */,
+				7FC535FC0F84BDF500BA96EE /* dlgWndAskPINs.h */,
+				7FC535FD0F84BDF500BA96EE /* dlgWndAskPINs.ui */,
+				7FC535FE0F84BDF500BA96EE /* dlgWndBadPIN.cpp */,
+				7FC535FF0F84BDF500BA96EE /* dlgWndBadPIN.h */,
+				7FC536000F84BDF500BA96EE /* dlgWndBadPIN.ui */,
+				7FC536010F84BDF500BA96EE /* dlgWndBase.cpp */,
+				7FC536020F84BDF500BA96EE /* dlgWndBase.h */,
+				7FC536030F84BDF500BA96EE /* dlgWndModal.cpp */,
+				7FC536040F84BDF500BA96EE /* dlgWndModal.h */,
+				7FC536050F84BDF500BA96EE /* dlgWndModal.ui */,
+				7FC536060F84BDF500BA96EE /* dlgWndPinpadInfo.cpp */,
+				7FC536070F84BDF500BA96EE /* dlgWndPinpadInfo.h */,
+				7FC536080F84BDF500BA96EE /* dlgWndPinpadInfo.ui */,
+				7FC536090F84BDF500BA96EE /* main.cpp */,
+				7FC5360A0F84BDF500BA96EE /* moc_dlgWndAskAccess.cpp */,
+				7FC5360B0F84BDF500BA96EE /* moc_dlgWndAskPIN.cpp */,
+				7FC5360C0F84BDF500BA96EE /* moc_dlgWndAskPINs.cpp */,
+				7FC5360D0F84BDF500BA96EE /* moc_dlgWndBadPIN.cpp */,
+				7FC5360F0F84BDF500BA96EE /* moc_dlgWndModal.cpp */,
+				7FC536100F84BDF500BA96EE /* moc_dlgWndPinpadInfo.cpp */,
+				7FC536110F84BDF500BA96EE /* qrc_dlgs.cpp */,
+				7FC536120F84BDF500BA96EE /* ui_dlgWndAskAccess.h */,
+				7FC536130F84BDF500BA96EE /* ui_dlgWndAskPIN.h */,
+				7FC536140F84BDF500BA96EE /* ui_dlgWndAskPINs.h */,
+				7FC536150F84BDF500BA96EE /* ui_dlgWndBadPIN.h */,
+				7FC536160F84BDF500BA96EE /* ui_dlgWndModal.h */,
+				7FC536170F84BDF500BA96EE /* ui_dlgWndPinpadInfo.h */,
+			);
+			name = DialogsQtServer;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7F900E500F84FB07004A5FCC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F900E570F84FB1A004A5FCC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F90D54A0F9F36F500BB8F23 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FA1A9F30F85F36E000D9EE1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FBB024F0F839352009B751F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FC535370F84B83B00BA96EE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FC535A80F84B9EF00BA96EE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FC535DB0F84BCDA00BA96EE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		7F872F670F84E53000DE6627 /* pteiddialogsQTsrv */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F872F780F84E53F00DE6627 /* Build configuration list for PBXNativeTarget "pteiddialogsQTsrv" */;
+			buildPhases = (
+				7F900E0E0F84EEA0004A5FCC /* ShellScript */,
+				7F872F650F84E53000DE6627 /* Sources */,
+				7F872F660F84E53000DE6627 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7F900E070F84EDBC004A5FCC /* PBXTargetDependency */,
+				7F872F7A0F84E57300DE6627 /* PBXTargetDependency */,
+			);
+			name = pteiddialogsQTsrv;
+			productName = pteiddialogsQTSrv;
+			productReference = 7F872F680F84E53000DE6627 /* pteiddialogsQTsrv */;
+			productType = "com.apple.product-type.tool";
+		};
+		7F900E530F84FB07004A5FCC /* pteidapplayer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F900E630F84FB27004A5FCC /* Build configuration list for PBXNativeTarget "pteidapplayer" */;
+			buildPhases = (
+				7F900E500F84FB07004A5FCC /* Headers */,
+				7F900E510F84FB07004A5FCC /* Sources */,
+				7F900E520F84FB07004A5FCC /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7F9010520F84FCC6004A5FCC /* PBXTargetDependency */,
+				7F9010500F84FCBE004A5FCC /* PBXTargetDependency */,
+				7F90104E0F84FCB6004A5FCC /* PBXTargetDependency */,
+			);
+			name = pteidapplayer;
+			productName = pteidapplayer;
+			productReference = 7F900E540F84FB07004A5FCC /* libpteidapplayer.3.5.5.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		7F900E5A0F84FB1A004A5FCC /* pteidlib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F900E640F84FB27004A5FCC /* Build configuration list for PBXNativeTarget "pteidlib" */;
+			buildPhases = (
+				7F900E570F84FB1A004A5FCC /* Headers */,
+				7F900E580F84FB1A004A5FCC /* Sources */,
+				7F900E590F84FB1A004A5FCC /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7F9011B10F8509EF004A5FCC /* PBXTargetDependency */,
+			);
+			name = pteidlib;
+			productName = pteidlib;
+			productReference = 7F900E5B0F84FB1A004A5FCC /* libpteidlib.3.5.5.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		7F9011370F85057A004A5FCC /* pteidgui */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F90113D0F85057B004A5FCC /* Build configuration list for PBXNativeTarget "pteidgui" */;
+			buildPhases = (
+				7F9011AA0F8507D1004A5FCC /* ShellScript */,
+				7F9011340F85057A004A5FCC /* Resources */,
+				7F9011350F85057A004A5FCC /* Sources */,
+				7F9011360F85057A004A5FCC /* Frameworks */,
+				7FA1AB000F8611CE000D9EE1 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7F9011AF0F8509E2004A5FCC /* PBXTargetDependency */,
+			);
+			name = pteidgui;
+			productName = pteidgui;
+			productReference = 7F9011380F85057A004A5FCC /* pteidgui.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7F90D54D0F9F36F500BB8F23 /* pteidlibJava_Wrapper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F90D5510F9F373900BB8F23 /* Build configuration list for PBXNativeTarget "pteidlibJava_Wrapper" */;
+			buildPhases = (
+				7F90D54A0F9F36F500BB8F23 /* Headers */,
+				7F90D54B0F9F36F500BB8F23 /* Sources */,
+				7F90D54C0F9F36F500BB8F23 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7F90D5580F9F37CB00BB8F23 /* PBXTargetDependency */,
+			);
+			name = pteidlibJava_Wrapper;
+			productName = pteidlibJava_Wrapper;
+			productReference = 7F90D54E0F9F36F500BB8F23 /* libpteidlibJava_Wrapper.3.5.5.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		7FA1A9F60F85F36E000D9EE1 /* pteidpkcs11 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7FA1AA090F85F380000D9EE1 /* Build configuration list for PBXNativeTarget "pteidpkcs11" */;
+			buildPhases = (
+				7FA1A9F30F85F36E000D9EE1 /* Headers */,
+				7FA1A9F40F85F36E000D9EE1 /* Sources */,
+				7FA1A9F50F85F36E000D9EE1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				866CF38A12EF23890072505F /* PBXTargetDependency */,
+				7FA1AA500F85F54F000D9EE1 /* PBXTargetDependency */,
+			);
+			name = pteidpkcs11;
+			productName = pteidpkcs11;
+			productReference = 7FA1A9F70F85F36E000D9EE1 /* libpteidpkcs11.3.5.5.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		7FBB02520F839352009B751F /* pteidcommon */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7FBB02590F83936E009B751F /* Build configuration list for PBXNativeTarget "pteidcommon" */;
+			buildPhases = (
+				7FBB024F0F839352009B751F /* Headers */,
+				7FBB02500F839352009B751F /* Sources */,
+				7FBB02510F839352009B751F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = pteidcommon;
+			productName = pteidcommon;
+			productReference = 7FBB02530F839352009B751F /* libpteidcommon.3.5.5.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		7FC5353A0F84B83B00BA96EE /* pteidcardlayer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7FC535400F84B86100BA96EE /* Build configuration list for PBXNativeTarget "pteidcardlayer" */;
+			buildPhases = (
+				7FC535370F84B83B00BA96EE /* Headers */,
+				7FC535380F84B83B00BA96EE /* Sources */,
+				7FC535390F84B83B00BA96EE /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7FC535F30F84BD6C00BA96EE /* PBXTargetDependency */,
+				7FC5353F0F84B84300BA96EE /* PBXTargetDependency */,
+			);
+			name = pteidcardlayer;
+			productName = pteidcardlayer;
+			productReference = 7FC5353B0F84B83B00BA96EE /* libpteidcardlayer.3.5.5.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		7FC535AB0F84B9EF00BA96EE /* siscardplugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7FC535B60F84BA0400BA96EE /* Build configuration list for PBXNativeTarget "siscardplugin" */;
+			buildPhases = (
+				7FC535A80F84B9EF00BA96EE /* Headers */,
+				7FC535A90F84B9EF00BA96EE /* Sources */,
+				7FC535AA0F84B9EF00BA96EE /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7F22A3C60F84D4B7001AD228 /* PBXTargetDependency */,
+			);
+			name = siscardplugin;
+			productName = siscardplugin;
+			productReference = 7FC535AC0F84B9EF00BA96EE /* libsiscardplugin1__ACS__.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		7FC535DE0F84BCDA00BA96EE /* pteiddialogsQT */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7FC535E30F84BCFA00BA96EE /* Build configuration list for PBXNativeTarget "pteiddialogsQT" */;
+			buildPhases = (
+				7FC535DB0F84BCDA00BA96EE /* Headers */,
+				7FC535DC0F84BCDA00BA96EE /* Sources */,
+				7FC535DD0F84BCDA00BA96EE /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7F22A3710F84C58C001AD228 /* PBXTargetDependency */,
+			);
+			name = pteiddialogsQT;
+			productName = pteiddialogsQT;
+			productReference = 7FC535DF0F84BCDA00BA96EE /* libpteiddialogsQT.3.5.5.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB916408733D950010E9CD /* Build configuration list for PBXProject "pteidmw" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* pteidmw */;
+			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7FA1AACA0F860EDE000D9EE1 /* PTeidmw */,
+				7FBB02520F839352009B751F /* pteidcommon */,
+				7FC535DE0F84BCDA00BA96EE /* pteiddialogsQT */,
+				7F872F670F84E53000DE6627 /* pteiddialogsQTsrv */,
+				7FC5353A0F84B83B00BA96EE /* pteidcardlayer */,
+				7FC535AB0F84B9EF00BA96EE /* siscardplugin */,
+				7F900E530F84FB07004A5FCC /* pteidapplayer */,
+				7F900E5A0F84FB1A004A5FCC /* pteidlib */,
+				7F9011370F85057A004A5FCC /* pteidgui */,
+				7FA1A9F60F85F36E000D9EE1 /* pteidpkcs11 */,
+				7F90D54D0F9F36F500BB8F23 /* pteidlibJava_Wrapper */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7F9011340F85057A004A5FCC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F9011710F85060A004A5FCC /* eidmw_de.qm in Resources */,
+				7F9011720F85060A004A5FCC /* eidmw_en.qm in Resources */,
+				7F9011730F85060A004A5FCC /* eidmw_fr.qm in Resources */,
+				7F9011740F85060A004A5FCC /* eidmw_nl.qm in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7F900E0E0F84EEA0004A5FCC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export MOC=/Developer/Tools/Qt/moc\nexport UIC=/Developer/Tools/Qt/uic\nexport RCC=/Developer/Tools/Qt/rcc\n\nexport DIR=${PROJECT_DIR}/../dialogs/dialogsQTsrv\n\nexport DEFINES=-DPTEID_35\\ -DEIDMW_PREFIX=/usr/local\\ -D__APPLE__\\ -DQT_NO_DEBUG\\ -DQT_GUI_LIB\\ -DQT_CORE_LIB\\ -DQT_SHARED\nexport INCPATH=-I/usr/local/Qt4.5/mkspecs/macx-xcode\\ -I${DIR}\\ -I/Library/Frameworks/QtCore.framework/Versions/4/Headers\\ -I/usr/\n\n${RCC} -name dlgs \"${DIR}/dlgs.qrc\" -o \"${DIR}/qrc_dlgs.cpp\"\n\n${UIC} \"${DIR}/dlgWndAskAccess.ui\" -o \"${DIR}/ui_dlgWndAskAccess.h\"\n${UIC} \"${DIR}/dlgWndAskPIN.ui\" -o \"${DIR}/ui_dlgWndAskPIN.h\"\n${UIC} \"${DIR}/dlgWndAskPINs.ui\" -o \"${DIR}/ui_dlgWndAskPINs.h\"\n${UIC} \"${DIR}/dlgWndBadPIN.ui\" -o \"${DIR}/ui_dlgWndBadPIN.h\"\n${UIC} \"${DIR}/dlgWndModal.ui\" -o \"${DIR}/ui_dlgWndModal.h\"\n${UIC} \"${DIR}/dlgWndPinpadInfo.ui\" -o \"${DIR}/ui_dlgWndPinpadInfo.h\"\n\n${MOC} ${DEFINES} ${INCPATH} -D__GNUC__ \"${DIR}/dlgWndBase.h\" -o \"${DIR}/moc_dlgWndBase.cpp\"\n${MOC} ${DEFINES} ${INCPATH} -D__GNUC__ \"${DIR}/dlgWndAskAccess.h\" -o \"${DIR}/moc_dlgWndAskAccess.cpp\"\n${MOC} ${DEFINES} ${INCPATH} -D__GNUC__ \"${DIR}/dlgWndAskPIN.h\" -o \"${DIR}/moc_dlgWndAskPIN.cpp\"\n${MOC} ${DEFINES} ${INCPATH} -D__GNUC__ \"${DIR}/dlgWndAskPINs.h\" -o \"${DIR}/moc_dlgWndAskPINs.cpp\"\n${MOC} ${DEFINES} ${INCPATH} -D__GNUC__ \"${DIR}/dlgWndBadPIN.h\" -o \"${DIR}/moc_dlgWndBadPIN.cpp\"\n${MOC} ${DEFINES} ${INCPATH} -D__GNUC__ \"${DIR}/dlgWndModal.h\" -o \"${DIR}/moc_dlgWndModal.cpp\"\n${MOC} ${DEFINES} ${INCPATH} -D__GNUC__ \"${DIR}/dlgWndPinpadInfo.h\" -o \"${DIR}/moc_dlgWndPinpadInfo.cpp\"\n";
+		};
+		7F9011AA0F8507D1004A5FCC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export MOC=/Developer/Tools/Qt/moc\nexport UIC=/Developer/Tools/Qt/uic\nexport RCC=/Developer/Tools/Qt/rcc\n\nexport DIR=${PROJECT_DIR}/../eidgui\n\nexport DEFINES=-DPTEID_35\\ -DEIDMW_PREFIX=/usr/local\\ -D__APPLE__\\ -DQT_NO_DEBUG\\ -DQT_GUI_LIB\\ -DQT_CORE_LIB\\ -DQT_SHARED\nexport INCPATH=-I/usr/local/Qt4.5/mkspecs/macx-xcode\\ -I${DIR}\\ -I/Library/Frameworks/QtCore.framework/Versions/4/Headers\\ -I/usr/\n\n${RCC} -name eidgui \"${DIR}/eidgui.qrc\" -o \"${DIR}/qrc_eidgui.cpp\"\n${RCC} -name qtconf \"${DIR}/qtconf.qrc\" -o \"${DIR}/qrc_qtconf.cpp\"\n\n${UIC} \"${DIR}/dlgAbout.ui\" -o \"${DIR}/ui_dlgAbout.h\"\n${UIC} \"${DIR}/dlgOptions.ui\" -o \"${DIR}/ui_dlgOptions.h\"\n${UIC} \"${DIR}/dlgPrint.ui\" -o \"${DIR}/ui_dlgPrint.h\"\n${UIC} \"${DIR}/mainwnd.ui\" -o \"${DIR}/ui_mainwnd.h\"\n${UIC} \"${DIR}/picturepopup.ui\" -o \"${DIR}/ui_picturepopup.h\"\n\n${MOC} ${DEFINES} ${INCPATH} -D__GNUC__ \"${DIR}/dlgAbout.h\" -o \"${DIR}/moc_dlgAbout.cpp\"\n${MOC} ${DEFINES} ${INCPATH} -D__GNUC__ \"${DIR}/dlgOptions.h\" -o \"${DIR}/moc_dlgOptions.cpp\"\n${MOC} ${DEFINES} ${INCPATH} -D__GNUC__ \"${DIR}/dlgprint.h\" -o \"${DIR}/moc_dlgprint.cpp\"\n${MOC} ${DEFINES} ${INCPATH} -D__GNUC__ \"${DIR}/mainwnd.h\" -o \"${DIR}/moc_mainwnd.cpp\"\n${MOC} ${DEFINES} ${INCPATH} -D__GNUC__ \"${DIR}/picturepopup.h\" -o \"${DIR}/moc_picturepopup.cpp\"\n${MOC} ${DEFINES} ${INCPATH} -D__GNUC__ \"${DIR}/qtsingleapplication.h\" -o \"${DIR}/moc_qtsingleapplication.cpp\"\n";
+		};
+		7FA1AB000F8611CE000D9EE1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -f \"${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources/\"*.qm \"${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/MacOS/\"\n\n#Copy the Info.plist into the bundle\ncp -f \"${PROJECT_DIR}/../eidgui/Info.plist\" \"${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/\"\n\ncp -f \"${PROJECT_DIR}/../eidgui/appicon.icns\" \"${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources/\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7F872F650F84E53000DE6627 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F872F7C0F84E58E00DE6627 /* dlgWndAskAccess.cpp in Sources */,
+				7F872F7D0F84E58E00DE6627 /* dlgWndAskPIN.cpp in Sources */,
+				7F872F7E0F84E58E00DE6627 /* dlgWndAskPINs.cpp in Sources */,
+				7F872F7F0F84E58E00DE6627 /* dlgWndBadPIN.cpp in Sources */,
+				7F872F800F84E58E00DE6627 /* dlgWndBase.cpp in Sources */,
+				7F872F810F84E58E00DE6627 /* dlgWndModal.cpp in Sources */,
+				7F872F820F84E58E00DE6627 /* dlgWndPinpadInfo.cpp in Sources */,
+				7F872F830F84E58E00DE6627 /* main.cpp in Sources */,
+				7F872F840F84E58E00DE6627 /* moc_dlgWndAskAccess.cpp in Sources */,
+				7F872F850F84E58E00DE6627 /* moc_dlgWndAskPIN.cpp in Sources */,
+				7F872F860F84E58E00DE6627 /* moc_dlgWndAskPINs.cpp in Sources */,
+				7F872F870F84E58E00DE6627 /* moc_dlgWndBadPIN.cpp in Sources */,
+				7F872F890F84E58E00DE6627 /* moc_dlgWndModal.cpp in Sources */,
+				7F872F8A0F84E58E00DE6627 /* moc_dlgWndPinpadInfo.cpp in Sources */,
+				7F872F8B0F84E58E00DE6627 /* qrc_dlgs.cpp in Sources */,
+				7F900E340F84F709004A5FCC /* moc_dlgWndBase.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F900E510F84FB07004A5FCC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F900E900F84FC37004A5FCC /* APLCard.cpp in Sources */,
+				7F900E920F84FC37004A5FCC /* APLCardPTeid.cpp in Sources */,
+				7F900E950F84FC37004A5FCC /* APLCardSIS.cpp in Sources */,
+				7F900E970F84FC37004A5FCC /* APLCertif.cpp in Sources */,
+				7F900E990F84FC37004A5FCC /* APLConfig.cpp in Sources */,
+				7F900E9B0F84FC37004A5FCC /* APLCrypto.cpp in Sources */,
+				7F900E9D0F84FC37004A5FCC /* APLDoc.cpp in Sources */,
+				7F900E9F0F84FC37004A5FCC /* APLReader.cpp in Sources */,
+				7F900EA10F84FC37004A5FCC /* CardPTeid.cpp in Sources */,
+				7F900EA40F84FC37004A5FCC /* CardFile.cpp in Sources */,
+				7F900EA60F84FC37004A5FCC /* CardSIS.cpp in Sources */,
+				7F900EA90F84FC37004A5FCC /* CertStatusCache.cpp in Sources */,
+				7F900EAB0F84FC37004A5FCC /* CRLService.cpp in Sources */,
+				7F900EAD0F84FC37004A5FCC /* cryptoFramework.cpp in Sources */,
+				7F900EAF0F84FC37004A5FCC /* cryptoFwkPTeid.cpp in Sources */,
+				7F900EB80F84FC37004A5FCC /* MiscUtil.cpp in Sources */,
+				7F900EBA0F84FC37004A5FCC /* XMLParser.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F900E580F84FB1A004A5FCC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F900EC80F84FC89004A5FCC /* eidlibCard.cpp in Sources */,
+				7F900EC90F84FC89004A5FCC /* eidlibCrypto.cpp in Sources */,
+				7F900ECB0F84FC89004A5FCC /* eidlibDoc.cpp in Sources */,
+				7F900ECC0F84FC89004A5FCC /* eidlibException.cpp in Sources */,
+				7F900ECE0F84FC89004A5FCC /* eidlibReader.cpp in Sources */,
+				7F900ECF0F84FC89004A5FCC /* InternalUtil.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F9011350F85057A004A5FCC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F90116A0F85060A004A5FCC /* CardInformation.cpp in Sources */,
+				7F90116B0F85060A004A5FCC /* dlgAbout.cpp in Sources */,
+				7F90116D0F85060A004A5FCC /* dlgOptions.cpp in Sources */,
+				7F90116F0F85060A004A5FCC /* dlgprint.cpp in Sources */,
+				7F9011750F85060A004A5FCC /* genpur.cpp in Sources */,
+				7F9011760F85060A004A5FCC /* main.cpp in Sources */,
+				7F9011770F85060A004A5FCC /* mainwnd.cpp in Sources */,
+				7F9011790F85060A004A5FCC /* moc_dlgAbout.cpp in Sources */,
+				7F90117A0F85060A004A5FCC /* moc_dlgOptions.cpp in Sources */,
+				7F90117B0F85060A004A5FCC /* moc_dlgprint.cpp in Sources */,
+				7F90117C0F85060A004A5FCC /* moc_mainwnd.cpp in Sources */,
+				7F90117D0F85060A004A5FCC /* moc_picturepopup.cpp in Sources */,
+				7F90117E0F85060A004A5FCC /* moc_qtsingleapplication.cpp in Sources */,
+				7F90117F0F85060A004A5FCC /* picturepopup.cpp in Sources */,
+				7F9011810F85060A004A5FCC /* qrc_eidgui.cpp in Sources */,
+				7F9011820F85060A004A5FCC /* qtsingleapplication.cpp in Sources */,
+				7F9011830F85060A004A5FCC /* qtsingleapplication_mac.cpp in Sources */,
+				7FD8B9FA0F9DBCA10074BE3C /* qrc_qtconf.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F90D54B0F9F36F500BB8F23 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F90D58D0F9F3B4800BB8F23 /* eidlibCard.cpp in Sources */,
+				7F90D58E0F9F3B4800BB8F23 /* eidlibCrypto.cpp in Sources */,
+				7F90D58F0F9F3B4800BB8F23 /* eidlibDoc.cpp in Sources */,
+				7F90D5900F9F3B4800BB8F23 /* eidlibException.cpp in Sources */,
+				7F90D5910F9F3B4800BB8F23 /* eidlibReader.cpp in Sources */,
+				7F90D5920F9F3B4800BB8F23 /* InternalUtil.cpp in Sources */,
+				7F90D5530F9F377500BB8F23 /* eidlibJava_Wrapper.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FA1A9F40F85F36E000D9EE1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FA1AA2F0F85F439000D9EE1 /* asn1.c in Sources */,
+				7FA1AA320F85F439000D9EE1 /* cal.cpp in Sources */,
+				7FA1AA340F85F439000D9EE1 /* cert.c in Sources */,
+				7FA1AA360F85F439000D9EE1 /* encrypt.c in Sources */,
+				7FA1AA370F85F439000D9EE1 /* general.c in Sources */,
+				7FA1AA380F85F439000D9EE1 /* log.c in Sources */,
+				7FA1AA3A0F85F439000D9EE1 /* p11.c in Sources */,
+				7FA1AA3C0F85F439000D9EE1 /* phash.cpp in Sources */,
+				7FA1AA3E0F85F439000D9EE1 /* session.c in Sources */,
+				7FA1AA3F0F85F439000D9EE1 /* sign.c in Sources */,
+				7FA1AA400F85F439000D9EE1 /* util.cpp in Sources */,
+				7FA1AA920F860748000D9EE1 /* object.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FBB02500F839352009B751F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FBB02830F839412009B751F /* ByteArray.cpp in Sources */,
+				7FBB02850F839412009B751F /* ByteArrayReader.cpp in Sources */,
+				7FBB02870F839412009B751F /* Config.cpp in Sources */,
+				7FBB02890F839412009B751F /* ConfigCommon.cpp in Sources */,
+				7FBB028A0F839412009B751F /* datafile.cpp in Sources */,
+				7FBB028C0F839412009B751F /* DynamicLib.cpp in Sources */,
+				7FBB02900F839412009B751F /* Hash.cpp in Sources */,
+				7FBB02920F839412009B751F /* Log.cpp in Sources */,
+				7FBB02940F839412009B751F /* LogBase.cpp in Sources */,
+				7FBB02960F839412009B751F /* Mutex.cpp in Sources */,
+				7FBB02980F839412009B751F /* MWException.cpp in Sources */,
+				7FBB029B0F839412009B751F /* Thread.cpp in Sources */,
+				7FBB029E0F839412009B751F /* TLV.cpp in Sources */,
+				7FBB02A00F839412009B751F /* TLVBuffer.cpp in Sources */,
+				7FBB02A30F839412009B751F /* Util.cpp in Sources */,
+				7FBB02B50F839454009B751F /* md5.c in Sources */,
+				7FBB02B60F839454009B751F /* rmd160.c in Sources */,
+				7FBB02B70F839454009B751F /* sha1.c in Sources */,
+				7FBB02B80F839454009B751F /* sha256.c in Sources */,
+				7FBB02B90F839454009B751F /* sha384.c in Sources */,
+				7FBB02BA0F839454009B751F /* sha512.c in Sources */,
+				7FBB02D60F839514009B751F /* Socket.cpp in Sources */,
+				7FBB02D80F839514009B751F /* SocketClient.cpp in Sources */,
+				7FBB02DA0F839514009B751F /* SocketServer.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FC535380F84B83B00BA96EE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FC535670F84B88600BA96EE /* Cache.cpp in Sources */,
+				7FC535690F84B88600BA96EE /* Card.cpp in Sources */,
+				7FC5356B0F84B88600BA96EE /* CardFactory.cpp in Sources */,
+				7FC5356D0F84B88600BA96EE /* CardLayer.cpp in Sources */,
+				7FC535700F84B88600BA96EE /* CardReaderInfo.cpp in Sources */,
+				7FC535720F84B88600BA96EE /* Context.cpp in Sources */,
+				7FC535780F84B88600BA96EE /* PCSC.cpp in Sources */,
+				7FC5357A0F84B88600BA96EE /* Pinpad.cpp in Sources */,
+				7FC5357D0F84B88600BA96EE /* PinpadLib.cpp in Sources */,
+				7FC535750F84B88600BA96EE /* P15Correction.cpp in Sources */,
+				7FC5357F0F84B88600BA96EE /* PKCS15.cpp in Sources */,
+				7FC535810F84B88600BA96EE /* PKCS15Parser.cpp in Sources */,
+				7FC535830F84B88600BA96EE /* PkiCard.cpp in Sources */,
+				7FC535850F84B88600BA96EE /* Reader.cpp in Sources */,
+				7FC535870F84B88600BA96EE /* ReadersInfo.cpp in Sources */,
+				7FC535890F84B88600BA96EE /* ThreadPool.cpp in Sources */,
+				7FC5358B0F84B88600BA96EE /* UnknownCard.cpp in Sources */,
+				7FC5359A0F84B95600BA96EE /* PTeidCard.cpp in Sources */,
+				7FC5359C0F84B95600BA96EE /* PTeidP15Correction.cpp in Sources */,
+				7FC535A30F84B97400BA96EE /* SISCard.cpp in Sources */,
+				7FC535A60F84B97400BA96EE /* SISPluginHandler.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FC535A90F84B9EF00BA96EE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FC535B80F84BA2E00BA96EE /* SISCard.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FC535DC0F84BCDA00BA96EE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FC535EA0F84BD3F00BA96EE /* langUtil.cpp in Sources */,
+				7FC535EF0F84BD6300BA96EE /* dlgs.cpp in Sources */,
+				7FC535F00F84BD6300BA96EE /* SharedMem.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7F22A3710F84C58C001AD228 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7FBB02520F839352009B751F /* pteidcommon */;
+			targetProxy = 7F22A3700F84C58C001AD228 /* PBXContainerItemProxy */;
+		};
+		7F22A3C60F84D4B7001AD228 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7FBB02520F839352009B751F /* pteidcommon */;
+			targetProxy = 7F22A3C50F84D4B7001AD228 /* PBXContainerItemProxy */;
+		};
+		7F872F7A0F84E57300DE6627 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7FC535DE0F84BCDA00BA96EE /* pteiddialogsQT */;
+			targetProxy = 7F872F790F84E57300DE6627 /* PBXContainerItemProxy */;
+		};
+		7F900E070F84EDBC004A5FCC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7FBB02520F839352009B751F /* pteidcommon */;
+			targetProxy = 7F900E060F84EDBC004A5FCC /* PBXContainerItemProxy */;
+		};
+		7F90104E0F84FCB6004A5FCC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7FC5353A0F84B83B00BA96EE /* pteidcardlayer */;
+			targetProxy = 7F90104D0F84FCB6004A5FCC /* PBXContainerItemProxy */;
+		};
+		7F9010500F84FCBE004A5FCC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7FBB02520F839352009B751F /* pteidcommon */;
+			targetProxy = 7F90104F0F84FCBE004A5FCC /* PBXContainerItemProxy */;
+		};
+		7F9010520F84FCC6004A5FCC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7FC535DE0F84BCDA00BA96EE /* pteiddialogsQT */;
+			targetProxy = 7F9010510F84FCC6004A5FCC /* PBXContainerItemProxy */;
+		};
+		7F9011AF0F8509E2004A5FCC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F900E5A0F84FB1A004A5FCC /* pteidlib */;
+			targetProxy = 7F9011AE0F8509E2004A5FCC /* PBXContainerItemProxy */;
+		};
+		7F9011B10F8509EF004A5FCC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F900E530F84FB07004A5FCC /* pteidapplayer */;
+			targetProxy = 7F9011B00F8509EF004A5FCC /* PBXContainerItemProxy */;
+		};
+		7F90D5560F9F37B500BB8F23 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F90D54D0F9F36F500BB8F23 /* pteidlibJava_Wrapper */;
+			targetProxy = 7F90D5550F9F37B500BB8F23 /* PBXContainerItemProxy */;
+		};
+		7F90D5580F9F37CB00BB8F23 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F900E530F84FB07004A5FCC /* pteidapplayer */;
+			targetProxy = 7F90D5570F9F37CB00BB8F23 /* PBXContainerItemProxy */;
+		};
+		7FA1AA500F85F54F000D9EE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7FC5353A0F84B83B00BA96EE /* pteidcardlayer */;
+			targetProxy = 7FA1AA4F0F85F54F000D9EE1 /* PBXContainerItemProxy */;
+		};
+		7FA1AACE0F860EFB000D9EE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F9011370F85057A004A5FCC /* pteidgui */;
+			targetProxy = 7FA1AACD0F860EFB000D9EE1 /* PBXContainerItemProxy */;
+		};
+		7FA1AAD00F860F00000D9EE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F872F670F84E53000DE6627 /* pteiddialogsQTsrv */;
+			targetProxy = 7FA1AACF0F860F00000D9EE1 /* PBXContainerItemProxy */;
+		};
+		7FA1AAD20F860F03000D9EE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7FC535AB0F84B9EF00BA96EE /* siscardplugin */;
+			targetProxy = 7FA1AAD10F860F03000D9EE1 /* PBXContainerItemProxy */;
+		};
+		7FA1AAD40F860F12000D9EE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7FA1A9F60F85F36E000D9EE1 /* pteidpkcs11 */;
+			targetProxy = 7FA1AAD30F860F12000D9EE1 /* PBXContainerItemProxy */;
+		};
+		7FC5353F0F84B84300BA96EE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7FBB02520F839352009B751F /* pteidcommon */;
+			targetProxy = 7FC5353E0F84B84300BA96EE /* PBXContainerItemProxy */;
+		};
+		7FC535F30F84BD6C00BA96EE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7FC535DE0F84BCDA00BA96EE /* pteiddialogsQT */;
+			targetProxy = 7FC535F20F84BD6C00BA96EE /* PBXContainerItemProxy */;
+		};
+		866CF38A12EF23890072505F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F90D54D0F9F36F500BB8F23 /* pteidlibJava_Wrapper */;
+			targetProxy = 866CF38912EF23890072505F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB916508733D950010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CURRENT_PROJECT_VERSION = 3.5.5;
+				DEBUG_INFORMATION_FORMAT = stabs;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PFE_FILE_C_DIALECTS = "c c++";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"EIDMW_PREFIX=/usr/local",
+					LTC_NO_ASM,
+					PTEID_35,
+				);
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_VERSION = 4.0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_EXPAND_BUILD_SETTINGS = NO;
+				LINK_WITH_STANDARD_LIBRARIES = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+			};
+			name = Debug;
+		};
+		1DEB916608733D950010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CURRENT_PROJECT_VERSION = 3.5.5;
+				DEBUG_INFORMATION_FORMAT = stabs;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PFE_FILE_C_DIALECTS = "c c++";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"EIDMW_PREFIX=/usr/local",
+					PTEID_35,
+				);
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_EXPAND_BUILD_SETTINGS = NO;
+				LINK_WITH_STANDARD_LIBRARIES = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Release;
+		};
+		7F872F6A0F84E53100DE6627 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../common",
+					/Library/Frameworks/QtCore.framework/Headers,
+					/Library/Frameworks/QtGui.framework/Headers,
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../lib";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-finput-charset=cp1252",
+					"-fno-strict-aliasing",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = pteiddialogsQTsrv;
+				VALID_ARCHS = i386;
+			};
+			name = Debug;
+		};
+		7F872F6B0F84E53100DE6627 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../bin";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = stabs;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../common",
+					/Library/Frameworks/QtCore.framework/Headers,
+					/Library/Frameworks/QtGui.framework/Headers,
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../lib";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-finput-charset=cp1252",
+					"-fno-strict-aliasing",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = pteiddialogsQTsrv;
+				VALID_ARCHS = i386;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7F900E550F84FB08004A5FCC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../common",
+					"${PROJECT_DIR}/../dialogs",
+					"${PROJECT_DIR}/../cardlayer",
+					/System/Library/Frameworks/CoreServices.framework/Frameworks/CFNetwork.framework/Headers,
+					/Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/PCSC.framework/Headers,
+					"${PROJECT_DIR}/../../ThirdParty/Xerces/Xerces-3.1.0-mac/include",
+				);
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../ThirdParty/Xerces/Xerces-3.1.0-mac/lib\"",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteidapplayer.$(CURRENT_PROJECT_VERSION)";
+				VALID_ARCHS = i386;
+			};
+			name = Debug;
+		};
+		7F900E560F84FB08004A5FCC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../lib";
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 3.5.5;
+				DEBUG_INFORMATION_FORMAT = stabs;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../common",
+					"${PROJECT_DIR}/../dialogs",
+					"${PROJECT_DIR}/../cardlayer",
+					/System/Library/Frameworks/CoreServices.framework/Frameworks/CFNetwork.framework/Headers,
+					/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/PCSC.framework/Headers,
+					"${PROJECT_DIR}/../../ThirdParty/Xerces/Xerces-3.1.0-mac/include",
+				);
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../ThirdParty/Xerces/Xerces-3.1.0-mac/lib\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteidapplayer.$(CURRENT_PROJECT_VERSION)";
+				VALID_ARCHS = i386;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7F900E5C0F84FB1B004A5FCC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteidlib.$(CURRENT_PROJECT_VERSION)";
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Debug;
+		};
+		7F900E5D0F84FB1B004A5FCC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../lib";
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 3.5.5;
+				DEBUG_INFORMATION_FORMAT = stabs;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteidlib.$(CURRENT_PROJECT_VERSION)";
+				VALID_ARCHS = i386;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7F90113B0F85057A004A5FCC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../_Builds",
+					"${PROJECT_DIR}/../eidlib",
+					/Library/Frameworks/QtCore.framework/Headers,
+					/Library/Frameworks/QtGui.framework/Headers,
+				);
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../lib";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = pteidgui;
+				VALID_ARCHS = i386;
+			};
+			name = Debug;
+		};
+		7F90113C0F85057A004A5FCC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../bin";
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 3.5.5;
+				DEBUG_INFORMATION_FORMAT = stabs;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../_Builds",
+					"${PROJECT_DIR}/../eidlib",
+					/Library/Frameworks/QtCore.framework/Headers,
+					/Library/Frameworks/QtGui.framework/Headers,
+				);
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../lib";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = pteidgui;
+				VALID_ARCHS = i386;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7F90D54F0F9F36F600BB8F23 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../eidlib",
+					/Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/JavaVM.framework/Headers,
+				);
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteidlibJava_Wrapper.$(CURRENT_PROJECT_VERSION)";
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Debug;
+		};
+		7F90D5500F9F36F600BB8F23 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../lib";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = stabs;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../eidlib",
+					/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/JavaVM.framework/Headers,
+				);
+				INSTALL_PATH = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteidlibJava_Wrapper.$(CURRENT_PROJECT_VERSION)";
+				VALID_ARCHS = i386;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7FA1A9F80F85F36F000D9EE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 3.5.5;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/SDKs/MacOSX10.6.sdk/System/Library/Frameworks\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../common",
+					/Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/PCSC.framework/Headers,
+				);
+				INSTALL_PATH = /usr/local/lib;
+				OTHER_CFLAGS = "-fno-strict-aliasing";
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteidpkcs11.$(CURRENT_PROJECT_VERSION)";
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Debug;
+		};
+		7FA1A9F90F85F36F000D9EE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../lib";
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 3.5.5;
+				DEBUG_INFORMATION_FORMAT = stabs;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/SDKs/MacOSX10.6.sdk/System/Library/Frameworks\"",
+				);
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../common",
+					/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/PCSC.framework/Headers,
+				);
+				INSTALL_PATH = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "-fno-strict-aliasing";
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteidpkcs11.$(CURRENT_PROJECT_VERSION)";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7FA1AACB0F860EDE000D9EE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
+				PRODUCT_NAME = PTeidmw;
+			};
+			name = Debug;
+		};
+		7FA1AACC0F860EDE000D9EE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 3.5.5;
+				DEBUG_INFORMATION_FORMAT = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = PTeidmw;
+				VALID_ARCHS = i386;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7FBB02540F839352009B751F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = /Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/PCSC.framework/Headers;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteidcommon.$(CURRENT_PROJECT_VERSION)";
+				VALID_ARCHS = "i386 x86_64";
+				VERSION_INFO_SUFFIX = "";
+			};
+			name = Debug;
+		};
+		7FBB02550F839352009B751F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../lib";
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 3.5.5;
+				DEBUG_INFORMATION_FORMAT = stabs;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = /Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/PCSC.framework/Headers;
+				INSTALL_PATH = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteidcommon.$(CURRENT_PROJECT_VERSION)";
+				SDKROOT = macosx10.5;
+				VALID_ARCHS = "i386 x86_64";
+				VERSION_INFO_SUFFIX = "";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7FC5353C0F84B83C00BA96EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/SDKs/MacOSX10.6.sdk/System/Library/Frameworks\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					EIDMW_CAL_EXPORT,
+					CAL_PTEID,
+					CARDPLUGIN_IN_CAL,
+					"EIDMW_PREFIX=/usr/local",
+					PTEID_35,
+				);
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../common",
+					/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/PCSC.framework/Headers,
+				);
+				INSTALL_PATH = "";
+				LD_DYLIB_INSTALL_NAME = "$(EXECUTABLE_PATH)";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_CFLAGS = "-O2";
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteidcardlayer.$(CURRENT_PROJECT_VERSION)";
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Debug;
+		};
+		7FC5353D0F84B83C00BA96EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../lib";
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/SDKs/MacOSX10.6.sdk/System/Library/Frameworks\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					EIDMW_CAL_EXPORT,
+					CAL_PTEID,
+					CARDPLUGIN_IN_CAL,
+					"EIDMW_PREFIX=/usr/local",
+					PTEID_35,
+				);
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../common",
+					/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/PCSC.framework/Headers,
+				);
+				INSTALL_PATH = "";
+				LD_DYLIB_INSTALL_NAME = "$(EXECUTABLE_PATH)";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "-O2";
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteidcardlayer.$(CURRENT_PROJECT_VERSION)";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7FC535AD0F84B9EF00BA96EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = stabs;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = /Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/PCSC.framework/Headers;
+				INSTALL_PATH = /usr/local/lib/siscardplugins;
+				PREBINDING = NO;
+				PRODUCT_NAME = siscardplugin1__ACS__;
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Debug;
+		};
+		7FC535AE0F84B9EF00BA96EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../lib";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = stabs;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = /Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/PCSC.framework/Headers;
+				INSTALL_PATH = /usr/local/lib/siscardplugins;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = siscardplugin1__ACS__;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7FC535E00F84BCDA00BA96EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = stabs;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/../common/**";
+				INSTALL_PATH = /usr/local/lib;
+				OTHER_CFLAGS = (
+					"-finput-charset=cp1252",
+					"-fno-strict-aliasing",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteiddialogsQT.$(CURRENT_PROJECT_VERSION)";
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Debug;
+		};
+		7FC535E10F84BCDA00BA96EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../lib";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = stabs;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/../common/**";
+				INSTALL_PATH = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-finput-charset=cp1252",
+					"-fno-strict-aliasing",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "pteiddialogsQT.$(CURRENT_PROJECT_VERSION)";
+				SDKROOT = macosx10.5;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB916408733D950010E9CD /* Build configuration list for PBXProject "pteidmw" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB916508733D950010E9CD /* Debug */,
+				1DEB916608733D950010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F872F780F84E53F00DE6627 /* Build configuration list for PBXNativeTarget "pteiddialogsQTsrv" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F872F6A0F84E53100DE6627 /* Debug */,
+				7F872F6B0F84E53100DE6627 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F900E630F84FB27004A5FCC /* Build configuration list for PBXNativeTarget "pteidapplayer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F900E550F84FB08004A5FCC /* Debug */,
+				7F900E560F84FB08004A5FCC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F900E640F84FB27004A5FCC /* Build configuration list for PBXNativeTarget "pteidlib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F900E5C0F84FB1B004A5FCC /* Debug */,
+				7F900E5D0F84FB1B004A5FCC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F90113D0F85057B004A5FCC /* Build configuration list for PBXNativeTarget "pteidgui" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F90113B0F85057A004A5FCC /* Debug */,
+				7F90113C0F85057A004A5FCC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F90D5510F9F373900BB8F23 /* Build configuration list for PBXNativeTarget "pteidlibJava_Wrapper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F90D54F0F9F36F600BB8F23 /* Debug */,
+				7F90D5500F9F36F600BB8F23 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7FA1AA090F85F380000D9EE1 /* Build configuration list for PBXNativeTarget "pteidpkcs11" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7FA1A9F80F85F36F000D9EE1 /* Debug */,
+				7FA1A9F90F85F36F000D9EE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7FA1AADC0F860F3E000D9EE1 /* Build configuration list for PBXAggregateTarget "PTeidmw" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7FA1AACB0F860EDE000D9EE1 /* Debug */,
+				7FA1AACC0F860EDE000D9EE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7FBB02590F83936E009B751F /* Build configuration list for PBXNativeTarget "pteidcommon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7FBB02540F839352009B751F /* Debug */,
+				7FBB02550F839352009B751F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7FC535400F84B86100BA96EE /* Build configuration list for PBXNativeTarget "pteidcardlayer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7FC5353C0F84B83C00BA96EE /* Debug */,
+				7FC5353D0F84B83C00BA96EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7FC535B60F84BA0400BA96EE /* Build configuration list for PBXNativeTarget "siscardplugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7FC535AD0F84B9EF00BA96EE /* Debug */,
+				7FC535AE0F84B9EF00BA96EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7FC535E30F84BCFA00BA96EE /* Build configuration list for PBXNativeTarget "pteiddialogsQT" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7FC535E00F84BCDA00BA96EE /* Debug */,
+				7FC535E10F84BCDA00BA96EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

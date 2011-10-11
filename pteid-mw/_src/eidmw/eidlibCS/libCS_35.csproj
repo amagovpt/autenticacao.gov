@@ -1,0 +1,250 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{99AB14F6-976E-4FEA-A07D-78479B55163A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties35</AppDesignerFolder>
+    <RootNamespace>eIDMW</RootNamespace>
+    <AssemblyName>pteid35libCS</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\_Binaries35\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\_Binaries35\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <DocumentationFile>..\_Binaries35\Release\pteid35libCS.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Biometric.cs">
+      <Link>GeneratedFiles\PTEID_Biometric.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ByteArray.cs">
+      <Link>GeneratedFiles\PTEID_ByteArray.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Card.cs">
+      <Link>GeneratedFiles\PTEID_Card.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_CardType.cs">
+      <Link>GeneratedFiles\PTEID_CardType.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_CardVersionInfo.cs">
+      <Link>GeneratedFiles\PTEID_CardVersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Certificate.cs">
+      <Link>GeneratedFiles\PTEID_Certificate.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Certificates.cs">
+      <Link>GeneratedFiles\PTEID_Certificates.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_CertifStatus.cs">
+      <Link>GeneratedFiles\PTEID_CertifStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Config.cs">
+      <Link>GeneratedFiles\PTEID_Config.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Crl.cs">
+      <Link>GeneratedFiles\PTEID_Crl.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_CrlStatus.cs">
+      <Link>GeneratedFiles\PTEID_CrlStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Crypto.cs">
+      <Link>GeneratedFiles\PTEID_Crypto.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_DocumentType.cs">
+      <Link>GeneratedFiles\PTEID_DocumentType.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_EId.cs">
+      <Link>GeneratedFiles\PTEID_EId.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_EIDCard.cs">
+      <Link>GeneratedFiles\PTEID_EIDCard.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_EIdFullDoc.cs">
+      <Link>GeneratedFiles\PTEID_EIdFullDoc.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExBadTransaction.cs">
+      <Link>GeneratedFiles\PTEID_ExBadTransaction.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExBadUsage.cs">
+      <Link>GeneratedFiles\PTEID_ExBadUsage.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExCardBadType.cs">
+      <Link>GeneratedFiles\PTEID_ExCardBadType.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExCardChanged.cs">
+      <Link>GeneratedFiles\PTEID_ExCardChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExCardTypeUnknown.cs">
+      <Link>GeneratedFiles\PTEID_ExCardTypeUnknown.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Exception.cs">
+      <Link>GeneratedFiles\PTEID_Exception.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExCertNoIssuer.cs">
+      <Link>GeneratedFiles\PTEID_ExCertNoIssuer.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExCmdNotAllowed.cs">
+      <Link>GeneratedFiles\PTEID_ExCmdNotAllowed.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExCmdNotSupported.cs">
+      <Link>GeneratedFiles\PTEID_ExCmdNotSupported.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExDocTypeUnknown.cs">
+      <Link>GeneratedFiles\PTEID_ExDocTypeUnknown.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExFileTypeUnknown.cs">
+      <Link>GeneratedFiles\PTEID_ExFileTypeUnknown.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExNoCardPresent.cs">
+      <Link>GeneratedFiles\PTEID_ExNoCardPresent.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExNoReader.cs">
+      <Link>GeneratedFiles\PTEID_ExNoReader.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExNotAllowByUser.cs">
+      <Link>GeneratedFiles\PTEID_ExNotAllowByUser.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExParamRange.cs">
+      <Link>GeneratedFiles\PTEID_ExParamRange.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExReaderSetChanged.cs">
+      <Link>GeneratedFiles\PTEID_ExReaderSetChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExReleaseNeeded.cs">
+      <Link>GeneratedFiles\PTEID_ExReleaseNeeded.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_FileType.cs">
+      <Link>GeneratedFiles\PTEID_FileType.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ForeignerCard.cs">
+      <Link>GeneratedFiles\PTEID_ForeignerCard.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_HashAlgo.cs">
+      <Link>GeneratedFiles\PTEID_HashAlgo.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_KidsCard.cs">
+      <Link>GeneratedFiles\PTEID_KidsCard.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_LogLevel.cs">
+      <Link>GeneratedFiles\PTEID_LogLevel.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_MemoryCard.cs">
+      <Link>GeneratedFiles\PTEID_MemoryCard.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Object.cs">
+      <Link>GeneratedFiles\PTEID_Object.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_OcspResponse.cs">
+      <Link>GeneratedFiles\PTEID_OcspResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Param.cs">
+      <Link>GeneratedFiles\PTEID_Param.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Picture.cs">
+      <Link>GeneratedFiles\PTEID_Picture.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Pin.cs">
+      <Link>GeneratedFiles\PTEID_Pin.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Pins.cs">
+      <Link>GeneratedFiles\PTEID_Pins.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_PinUsage.cs">
+      <Link>GeneratedFiles\PTEID_PinUsage.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_RawDataType.cs">
+      <Link>GeneratedFiles\PTEID_RawDataType.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_RawData_Eid.cs">
+      <Link>GeneratedFiles\PTEID_RawData_Eid.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_RawData_Sis.cs">
+      <Link>GeneratedFiles\PTEID_RawData_Sis.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ReaderContext.cs">
+      <Link>GeneratedFiles\PTEID_ReaderContext.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ReaderSet.cs">
+      <Link>GeneratedFiles\PTEID_ReaderSet.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SISCard.cs">
+      <Link>GeneratedFiles\PTEID_SISCard.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SisFullDoc.cs">
+      <Link>GeneratedFiles\PTEID_SisFullDoc.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SisId.cs">
+      <Link>GeneratedFiles\PTEID_SisId.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SmartCard.cs">
+      <Link>GeneratedFiles\PTEID_SmartCard.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ValidationLevel.cs">
+      <Link>GeneratedFiles\PTEID_ValidationLevel.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ValidationProcess.cs">
+      <Link>GeneratedFiles\PTEID_ValidationProcess.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_XMLDoc.cs">
+      <Link>GeneratedFiles\PTEID_XMLDoc.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_CertifType.cs">
+      <Link>GeneratedFiles\PTEID_CertifType.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExCertNoCrl.cs">
+      <Link>GeneratedFiles\PTEID_ExCertNoCrl.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExCertNoOcsp.cs">
+      <Link>GeneratedFiles\PTEID_ExCertNoOcsp.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExCertNoRoot.cs">
+      <Link>GeneratedFiles\PTEID_ExCertNoRoot.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExUnknown.cs">
+      <Link>GeneratedFiles\PTEID_ExUnknown.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExUserMustAnswer.cs">
+      <Link>GeneratedFiles\PTEID_ExUserMustAnswer.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\pteidlib_dotNet.cs">
+      <Link>GeneratedFiles\pteidlib_dotNet.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\pteidlib_dotNetPINVOKE.cs">
+      <Link>GeneratedFiles\pteidlib_dotNetPINVOKE.cs</Link>
+    </Compile>
+    <Compile Include="Properties35\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PreBuildEvent>cmd.exe /C "$(ProjectDir)prebuild.bat"</PreBuildEvent>
+    <PostBuildEvent>cmd.exe /C "..\..\_DocsInternal\API\doSDK_dotNet.bat"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

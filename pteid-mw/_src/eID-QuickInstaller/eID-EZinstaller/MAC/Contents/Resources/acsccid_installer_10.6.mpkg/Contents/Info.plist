@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleGetInfoString</key>
+	<string>acsccid_installer 1.0.1 Copyrights © 2009 Advanced Card Systems Ltd.</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.acs.acsccid_installer</string>
+	<key>CFBundleName</key>
+	<string>acsccid_installer</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
+	<key>IFMajorVersion</key>
+	<integer>1</integer>
+	<key>IFMinorVersion</key>
+	<integer>0</integer>
+	<key>IFPkgBuildDate</key>
+	<date>2009-11-09T10:22:31Z</date>
+	<key>IFPkgBuildVersion</key>
+	<string>9L31a</string>
+	<key>IFPkgCreator</key>
+	<string>IcebergBuilder 1.2.7</string>
+	<key>IFPkgFlagComponentDirectory</key>
+	<string>Contents/Packages</string>
+	<key>IFPkgFlagPackageList</key>
+	<array>
+		<dict>
+			<key>IFPkgFlagPackageLocation</key>
+			<string>acsccid.pkg</string>
+			<key>IFPkgFlagPackageSelection</key>
+			<string>selected</string>
+		</dict>
+		<dict>
+			<key>IFPkgFlagPackageLocation</key>
+			<string>pcscd_autostart.pkg</string>
+			<key>IFPkgFlagPackageSelection</key>
+			<string>selected</string>
+		</dict>
+	</array>
+	<key>IFPkgFormatVersion</key>
+	<real>0.10000000149011612</real>
+</dict>
+</plist>

@@ -1,0 +1,17 @@
+Title libusb
+Version 
+Description This version of libusb is recompiled and distributed for use with OpenSC package. It will be installed in /Library/OpenSC. You need to install if you want to use Axalto etoken with Cryptoflex cards.
+DefaultLocation /
+DeleteWarning 
+
+### Package Flags
+
+NeedsAuthorization YES
+Required NO
+Relocatable NO
+RequiresReboot NO
+UseUserMask NO
+OverwritePermissions NO
+InstallFat NO
+RootVolumeOnly YES
+OnlyUpdateInstalledLanguages NO

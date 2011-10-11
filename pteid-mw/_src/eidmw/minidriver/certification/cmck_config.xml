@@ -1,0 +1,238 @@
+<CMCKConfig>
+  <V6>
+    <Version>2</Version>
+    <CardDefaults>
+      <DefaultPins>
+        <PinEntry>
+		  <!-- Digital Signature ("Authentication") -->
+          <RoleID>1</RoleID>
+          <Type>AlphaNumericPinType</Type>
+          <Value>0x31 0x32 0x33 0x34</Value>
+          <Blocking>True</Blocking>
+          <AllowZeroLength>False</AllowZeroLength>
+		  <Linking>True</Linking>
+        </PinEntry>
+        <PinEntry>
+		  <!-- Non Repudiation ("Signature") -->
+          <RoleID>3</RoleID>
+          <Type>AlphaNumericPinType</Type>
+          <Value>0x31 0x32 0x33 0x34</Value>
+          <Blocking>True</Blocking>
+          <AllowZeroLength>False</AllowZeroLength>
+		  <Linking>True</Linking>
+        </PinEntry>
+      </DefaultPins>
+      <CardSupports>
+        <MinimumVersion>6</MinimumVersion>
+        <CurrentVersion>6</CurrentVersion>
+        <LoadingUnderCAPI>True</LoadingUnderCAPI>
+        <LoadingUnderCNG>True</LoadingUnderCNG>
+        <KeyImport>True</KeyImport>
+        <KeyTypes>AT_SIGNATURE AT_KEYEXCHANGE</KeyTypes>
+        <OnCardPadding>True</OnCardPadding>
+        <PaddingAlgorithms>CARD_PADDING_PKCS1</PaddingAlgorithms>
+        <SignHashAlgorithms>CALG_SHA1 CALG_SHA_256 CALG_SHA_384 CALG_SHA_512</SignHashAlgorithms>
+        <SignHashFlags />
+     <!--   <SignReturnBufferSize>True</SignReturnBufferSize>-->
+        <KDFTypes></KDFTypes>
+        <KDFHashAlgorithms></KDFHashAlgorithms>
+        <KDFHMACflag>False</KDFHMACflag>
+        <SupportsCardGetChallenge>False</SupportsCardGetChallenge>
+        <SupportsCardAuthenticateChallenge>False</SupportsCardAuthenticateChallenge>
+        <SupportsCardGetChallengeEx>False</SupportsCardGetChallengeEx>
+        <SupportsCardUnblockPin>False</SupportsCardUnblockPin>
+        <SupportsCardChangeAuthenticator>False</SupportsCardChangeAuthenticator>
+        <SupportsCardChangeAuthenticatorEx>False</SupportsCardChangeAuthenticatorEx>
+      </CardSupports>
+    </CardDefaults>
+    <TestSuiteDefaults>
+      <INF>
+        <INFFile>C:\SmartcardMinidriverTest\pteidmdrv.inf</INFFile>
+      </INF>
+      <Logging>
+        <LogFile>CMCK_log.xml</LogFile>
+        <LogToConsole>True</LogToConsole>
+		<CertifyLogLevel>2</CertifyLogLevel>
+      </Logging>
+      <TestParams>
+        <TestParam>
+          <Test>MultiThreaded</Test>
+          <Name>t</Name>
+          <Value>5</Value>
+        </TestParam>
+        <TestParam>
+          <Test>MultiThreaded</Test>
+          <Name>n</Name>
+          <Value>5</Value>
+        </TestParam>
+        <TestParam>
+          <Test>NonRepeatingChallenge</Test>
+          <Name>n</Name>
+          <Value>300</Value>
+        </TestParam>
+      </TestParams>
+    </TestSuiteDefaults>
+  </V6>
+<!--  <V5>
+    <Version>1</Version>
+    <CardDefaults>
+      <DefaultPins>
+        <PinEntry>
+          <RoleID>1</RoleID>
+          <Type>AlphaNumericPinType</Type>
+          <Value>0x31 0x32 0x33 0x34</Value>
+          <Blocking>True</Blocking>
+          <AllowZeroLength>False</AllowZeroLength>
+        </PinEntry>
+        <PinEntry>
+          <RoleID>2</RoleID>
+          <Type>AlphaNumericPinType</Type>
+          <Value>0x31 0x32 0x33 0x34</Value>
+          <Blocking>True</Blocking>
+          <AllowZeroLength>False</AllowZeroLength>
+        </PinEntry>
+      </DefaultPins>
+      <DefaultKeys>
+        <KeyEntry>
+          <Type>Admin</Type>
+          <Algorithm>3DES</Algorithm>
+          <Mode>ECB</Mode>
+          <Blocking>True</Blocking>
+          <Value>0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+          0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+          0x00 0x00 0x00</Value>
+        </KeyEntry>
+      </DefaultKeys>
+      <CardSupports>
+        <MinimumVersion>4</MinimumVersion>
+        <CurrentVersion>7</CurrentVersion>
+        <LoadingUnderCAPI>True</LoadingUnderCAPI>
+        <LoadingUnderCNG>True</LoadingUnderCNG>
+        <KeyImport>True</KeyImport>
+        <KeyTypes>AT_SIGNATURE AT_KEYEXCHANGE</KeyTypes>
+        <OnCardPadding>False</OnCardPadding>
+        <PaddingAlgorithms>CARD_PADDING_PKCS1 CARD_PADDING_PSS</PaddingAlgorithms>
+        <SignHashAlgorithms>CALG_MD2 CALG_MD4 CALG_MD5 CALG_SHA1 CALG_SHA_256 CALG_SHA_384 CALG_SHA_512</SignHashAlgorithms>
+        <SignHashFlags />
+        <SignReturnBufferSize>True</SignReturnBufferSize>
+        <KDFTypes></KDFTypes>
+        <KDFHashAlgorithms></KDFHashAlgorithms>
+        <KDFHMACflag>False</KDFHMACflag>
+        <SupportsCardGetChallenge>False</SupportsCardGetChallenge>
+        <SupportsCardAuthenticateChallenge>False</SupportsCardAuthenticateChallenge>
+        <SupportsCardGetChallengeEx>False</SupportsCardGetChallengeEx>
+        <SupportsCardUnblockPin>False</SupportsCardUnblockPin>
+        <SupportsCardChangeAuthenticator>False</SupportsCardChangeAuthenticator>
+        <SupportsCardChangeAuthenticatorEx>False</SupportsCardChangeAuthenticatorEx>
+      </CardSupports>
+    </CardDefaults>
+    <TestSuiteDefaults>
+      <INF>
+        <INFFile>
+        C:\SmartcardMinidriverTest\minidriver.inf</INFFile>
+      </INF>
+      <Logging>
+        <LogFile>CMCK_log.xml</LogFile>
+        <LogToConsole>True</LogToConsole>
+      </Logging>
+      <TestParams>
+        <TestParam>
+          <Test>MultiThreaded</Test>
+          <Name>t</Name>
+          <Value>5</Value>
+        </TestParam>
+        <TestParam>
+          <Test>MultiThreaded</Test>
+          <Name>n</Name>
+          <Value>5</Value>
+        </TestParam>
+        <TestParam>
+          <Test>NonRepeatingChallenge</Test>
+          <Name>n</Name>
+          <Value>300</Value>
+        </TestParam>
+      </TestParams>
+    </TestSuiteDefaults>
+  </V5>
+  <V7>
+    <Version>1</Version>
+    <CardDefaults>
+      <DefaultPins>
+        <PinEntry>
+          <RoleID>1</RoleID>
+          <Type>AlphaNumericPinType</Type>
+          <Value>0x31 0x32 0x33 0x34</Value>
+          <Blocking>True</Blocking>
+          <AllowZeroLength>False</AllowZeroLength>
+        </PinEntry>
+        <PinEntry>
+          <RoleID>2</RoleID>
+          <Type>AlphaNumericPinType</Type>
+          <Value>0x31 0x32 0x33 0x34</Value>
+          <Blocking>True</Blocking>
+          <AllowZeroLength>False</AllowZeroLength>
+        </PinEntry>
+      </DefaultPins>
+      <DefaultKeys>
+        <KeyEntry>
+          <Type>Admin</Type>
+          <Algorithm>3DES</Algorithm>
+          <Mode>ECB</Mode>
+          <Blocking>True</Blocking>
+          <Value>0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+          0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+          0x00 0x00 0x00</Value>
+        </KeyEntry>
+      </DefaultKeys>
+      <CardSupports>
+        <MinimumVersion>4</MinimumVersion>
+        <CurrentVersion>7</CurrentVersion>
+        <LoadingUnderCAPI>True</LoadingUnderCAPI>
+        <LoadingUnderCNG>True</LoadingUnderCNG>
+        <KeyImport>True</KeyImport>
+        <KeyTypes>AT_SIGNATURE AT_KEYEXCHANGE</KeyTypes>
+        <OnCardPadding>False</OnCardPadding>
+        <PaddingAlgorithms>CARD_PADDING_PKCS1 CARD_PADDING_PSS</PaddingAlgorithms>
+        <SignHashAlgorithms>CALG_MD2 CALG_MD4 CALG_MD5 CALG_SHA1 CALG_SHA_256 CALG_SHA_384 CALG_SHA_512</SignHashAlgorithms>
+        <SignHashFlags />
+        <SignReturnBufferSize>True</SignReturnBufferSize>
+        <KDFTypes></KDFTypes>
+        <KDFHashAlgorithms></KDFHashAlgorithms>
+        <KDFHMACflag>False</KDFHMACflag>
+        <SupportsCardGetChallenge>False</SupportsCardGetChallenge>
+        <SupportsCardAuthenticateChallenge>False</SupportsCardAuthenticateChallenge>
+        <SupportsCardGetChallengeEx>False</SupportsCardGetChallengeEx>
+        <SupportsCardUnblockPin>False</SupportsCardUnblockPin>
+        <SupportsCardChangeAuthenticator>False</SupportsCardChangeAuthenticator>
+        <SupportsCardChangeAuthenticatorEx>False</SupportsCardChangeAuthenticatorEx>
+      </CardSupports>
+    </CardDefaults>
+    <TestSuiteDefaults>
+      <INF>
+        <INFFile>
+        C:\SmartcardMinidriverTest\minidriver.inf</INFFile>
+      </INF>
+      <Logging>
+        <LogFile>CMCK_log.xml</LogFile>
+        <LogToConsole>True</LogToConsole>
+      </Logging>
+      <TestParams>
+        <TestParam>
+          <Test>MultiThreaded</Test>
+          <Name>t</Name>
+          <Value>5</Value>
+        </TestParam>
+        <TestParam>
+          <Test>MultiThreaded</Test>
+          <Name>n</Name>
+          <Value>5</Value>
+        </TestParam>
+        <TestParam>
+          <Test>NonRepeatingChallenge</Test>
+          <Name>n</Name>
+          <Value>300</Value>
+        </TestParam>
+      </TestParams>
+    </TestSuiteDefaults>
+  </V7>-->
+</CMCKConfig>
