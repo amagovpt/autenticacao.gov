@@ -56,7 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <WixLibrary Include="difxapp_x86">
-      <HintPath>C:\Program Files\Windows Installer XML v3\bin\difxapp_x86.wixlib</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\Windows Installer XML v3.5\bin\difxapp_x86.wixlib</HintPath>
       <Name>difxapp_x86</Name>
     </WixLibrary>
   </ItemGroup>
