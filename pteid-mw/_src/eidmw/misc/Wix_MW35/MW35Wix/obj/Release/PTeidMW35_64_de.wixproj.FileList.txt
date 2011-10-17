@@ -1,3 +1,0 @@
-C:\Documents and Settings\Administrator\Desktop\eid-inwork\eid-mw\_src\eidmw\misc\Wix_MW35\MW35Wix\bin\Release\de-de\PTeidMW35-64-Basic-de.wixpdb
-C:\eid-inwork\pteid-mw-win\_src\eidmw\misc\Wix_MW35\MW35Wix\bin\Release\de-de\PTeidMW35-64-Basic-de.wixpdb
-obj\Release\Product64.wixobj

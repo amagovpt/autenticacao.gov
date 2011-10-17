@@ -1,7 +1,0 @@
-C:\Documents and Settings\Administrator\Desktop\eid-inwork\eid-mw\_src\eidmw\misc\Wix_MW35\MW35Wix\bin\Release\fr-fr\PTeidMW35-Basic-fr.wixpdb
-C:\eid-inwork\pteid-mw-win\_src\eidmw\misc\Wix_MW35\MW35Wix\bin\Release\fr-fr\PTeidMW35-Basic-fr.wixpdb
-C:\pteid-mw-win\_src\eidmw\misc\Wix_MW35\MW35Wix\bin\Release\fr-fr\PTeidMW35-Basic-fr.wixpdb
-obj\Release\Product.wixobj
-obj\Release\Product.Generated.wixobj
-C:\pteid-mw2\_src\eidmw\misc\Wix_MW35\MW35Wix\bin\Release\fr-fr\PTeidMW35-Basic-fr.msi
-C:\pteid-mw2\_src\eidmw\misc\Wix_MW35\MW35Wix\bin\Release\fr-fr\PTeidMW35-Basic-fr.wixpdb
