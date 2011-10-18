@@ -1,0 +1,1420 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>beid35libCS</name>
+    </assembly>
+    <members>
+        <member name="T:be.belgium.eid.BEID_XMLDoc">
+            <summary>Abstract base class for all the documents.</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_Object">
+            <summary>Base class for the object of BEID SDK (Can not be instantiated).</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_XMLDoc.isAllowed">
+            <summary>The document is allowed</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_XMLDoc.getXML">
+            <summary>Return the document in an XML format</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_XMLDoc.getCSV">
+            <summary>Return the document in an CSV format</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_XMLDoc.getTLV">
+            <summary>Return the document in an TLV format</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_XMLDoc.writeXmlToFile(System.String)">
+            <summary>Write the xml document into the file csFilePath</summary>
+            <returns>true if succeede</returns> d
+        </member>
+        <member name="M:be.belgium.eid.BEID_XMLDoc.writeCsvToFile(System.String)">
+            <summary>Write the csv document into the file csFilePath	 </summary>
+            <returns>true if succeeded</returns> 
+        </member>
+        <member name="M:be.belgium.eid.BEID_XMLDoc.writeTlvToFile(System.String)">
+            <summary>Write the tlv document into the file csFilePath</summary>
+            <returns>true if succeeded </returns> 
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExCertNoCrl">
+            <summary>
+            Exception class Certificate No CRL (error code = EIDMW_ERR_CERT_NOCRL).
+            Throw when ask for the CRL when the certificate contains no CDP.
+            Used in : 
+            - BEID_Certificate::getCrl()
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_Exception">
+            <summary>Base class for the BEID SDK Exceptions</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Exception.#ctor(System.Int32)">
+            <summary>Constructor - Need error code that comes from eidErrors.h</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Exception.GetError">
+            <summary>Return the error code</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CrlStatus.BEID_CRL_STATUS_UNKNOWN">
+            <summary>Validity unknown</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CrlStatus.BEID_CRL_STATUS_VALID">
+            <summary>Valid Crl</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CrlStatus.BEID_CRL_STATUS_CONNECT">
+            <summary>Connection problem</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CrlStatus.BEID_CRL_STATUS_ERROR">
+            <summary>Error during validation</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_SmartCard">
+            <summary>Abstract base class for Smart card</summary> 
+        </member>
+        <member name="T:be.belgium.eid.BEID_Card">
+            <summary>
+            Abstract base class for all the card type supported.
+            The BEID_ReaderContext::getCard() method will return such an object.
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Card.getType">
+            <summary>Return the type of the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Card.getDocument(be.belgium.eid.BEID_DocumentType)">
+            <summary> 
+            Return a document from the card.
+            </summary>
+            <remarks>
+            Throw BEID_ExDocTypeUnknown exception if the document doesn't exist for this card. 
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Card.getRawData(be.belgium.eid.BEID_RawDataType)">
+            <summary> 
+            Return a raw data from the card.
+            </summary>
+            <remarks>
+            Throw BEID_ExFileTypeUnknown exception if the document doesn't exist for this card. 
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Card.sendAPDU(be.belgium.eid.BEID_ByteArray)">
+            <summary>Send an APDU command to the card and get the result.</summary>
+            <param name="cmd">is the apdu command</param> 
+            <returns>a BEID_ByteArray containing the result</returns>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Card.readFile(System.String,System.UInt32,System.UInt32)">
+            <summary>Read a File from the card.</summary>
+            <param name="fileID">is the path of the file</param>  
+            <param name="ulOffset">is the offset to begins the reading</param> 
+            <param name="ulMaxLength">is the maximum length of bytes to read</param>  
+            <returns>A BEID_ByteArray with the content of the file</returns>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Card.readFile(System.String,System.UInt32)">
+            <summary>Read a File from the card.</summary>
+            <param name="fileID">is the path of the file</param>  
+            <param name="ulOffset">is the offset to begins the reading</param> 
+            <returns>A BEID_ByteArray with the content of the file</returns>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Card.readFile(System.String)">
+            <summary>Read a File from the card.</summary>
+            <param name="fileID">is the path of the file</param>  
+            <returns>A BEID_ByteArray with the content of the file</returns>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Card.writeFile(System.String,be.belgium.eid.BEID_ByteArray,System.UInt32)">
+            <summary>Write a file to the card.</summary>
+            <param name="fileID">is the path of the file</param> 
+            <param name="oData">contents the bytes to write</param> 
+            <param name="ulOffset"> is the offset to begins the writing</param> 
+        </member>
+        <member name="M:be.belgium.eid.BEID_Card.writeFile(System.String,be.belgium.eid.BEID_ByteArray)">
+            <summary>Write a file to the card.</summary>
+            <param name="fileID">is the path of the file</param> 
+            <param name="oData">contents the bytes to write</param> 
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.selectApplication(be.belgium.eid.BEID_ByteArray)">
+            <summary>Select an application from the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.sendAPDU(be.belgium.eid.BEID_ByteArray,be.belgium.eid.BEID_Pin,System.String)">
+            <summary>Send an APDU command to the card and get the result.</summary>
+            <param name="cmd">is the apdu command </param> 
+            <param name="pin">is the pin to ask for writing</param>   
+            <param name="csPinCode">is the code of the pin (it will be asked if needed and not set)</param>
+            <returns>a BEID_ByteArray containing the result</returns>   
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.sendAPDU(be.belgium.eid.BEID_ByteArray,be.belgium.eid.BEID_Pin)">
+            <summary>Send an APDU command to the card and get the result.</summary>
+            <param name="cmd">is the apdu command </param> 
+            <param name="pin">is the pin to ask for writing</param>   
+            <returns>a BEID_ByteArray containing the result</returns>   
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.sendAPDU(be.belgium.eid.BEID_ByteArray)">
+            <summary>Send an APDU command to the card and get the result.</summary>
+            <param name="cmd">is the apdu command</param> 
+            <returns>a BEID_ByteArray containing the result</returns>   
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.readFile(System.String,be.belgium.eid.BEID_ByteArray,be.belgium.eid.BEID_Pin,System.String)">
+            <summary> 
+            Read a File from the card.
+            If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.
+            </summary>
+            <param name="fileID">is the path of the file</param>   
+            <param name="arg1">return the file</param> 
+            <param name="pin">is the pin to ask for reading</param>  
+            <param name="csPinCode"> is the code of the pin (it will be asked if needed and not set)</param> 
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.readFile(System.String,be.belgium.eid.BEID_ByteArray,be.belgium.eid.BEID_Pin)">
+            <summary> 
+            Read a File from the card.
+            If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.
+            </summary>
+            <param name="fileID">is the path of the file</param>   
+            <param name="arg1">return the file</param> 
+            <param name="pin">is the pin to ask for reading</param>  
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.readFile(System.String,be.belgium.eid.BEID_ByteArray)">
+            <summary> 
+            Read a File from the card.
+            If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.
+            </summary>
+            <param name="fileID">is the path of the file</param>   
+            <param name="arg1">return the file</param> 
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.writeFile(System.String,be.belgium.eid.BEID_ByteArray,be.belgium.eid.BEID_Pin,System.String)">
+            <summary> 
+            Write a file to the card.
+            Throw BEID_ExCmdNotAllowed exception you're not allowed to write the file.
+            If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.
+            </summary>
+            <param name="fileID">is the path of the file</param>   
+            <param name="arg1">contents the bytes to write</param>
+            <param name="pin">pin is the pin to ask for writing</param> 
+            <param name="csPinCode">is the code of the pin (it will be asked if needed and not set)</param>  
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.writeFile(System.String,be.belgium.eid.BEID_ByteArray,be.belgium.eid.BEID_Pin)">
+            <summary> 
+            Write a file to the card.
+            Throw BEID_ExCmdNotAllowed exception you're not allowed to write the file.
+            If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.
+            </summary>
+            <param name="fileID">is the path of the file</param>   
+            <param name="arg1">contents the bytes to write</param>
+            <param name="pin">pin is the pin to ask for writing</param> 
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.writeFile(System.String,be.belgium.eid.BEID_ByteArray)">
+            <summary> 
+            Write a file to the card.
+            Throw BEID_ExCmdNotAllowed exception you're not allowed to write the file.
+            If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.
+            </summary>
+            <param name="fileID">is the path of the file</param>   
+            <param name="arg1">contents the bytes to write</param>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.pinCount">
+            <summary>Return the number of pin on the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.getPins">
+            <summary>Return an object to access all the pins on the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.certificateCount">
+            <summary>Return the number of certificate on the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.getCertificates">
+            <summary>Return an object to access all the certificates on the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.getChallenge(System.Boolean)">
+            <summary>Return the challenge.</summary>
+            <param name="bForceNewInit">force a new initialization of the couple challenge/response</param>  
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.getChallenge">
+            <summary>Return the challenge.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.getChallengeResponse">
+            <summary>Return the response to the challenge.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SmartCard.verifyChallengeResponse(be.belgium.eid.BEID_ByteArray,be.belgium.eid.BEID_ByteArray)">
+            <summary>
+            Return true if the response of the card to the given challenge is the same as the response expected.
+            For virtual card (from file), always return false.
+            </summary>
+            <param name="challenge">is the challenge to check</param>  
+            <param name="response">is the response expected from the card</param>  
+        </member>
+        <member name="T:be.belgium.eid.BEID_SisFullDoc">
+            <summary>Class for the full document Sis.</summary> 
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExNoReader">
+            <summary>
+            Exception class No reader (error code = EIDMW_ERR_NO_READER).
+            Throw when the reader set is empty.
+            Used in : 
+            - BEID_Object::checkContextStillOk()
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_Pin">
+            <summary>Class that represent one Pin.</summary> 
+        </member>
+        <member name="T:be.belgium.eid.BEID_Crypto">
+            <summary>Abstract base class for the cryptographic documents.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pin.getIndex">
+            <summary>Get the index of the pin.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pin.getType">
+            <summary>Get the type of the pin.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pin.getId">
+            <summary>Get the id of the pin.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pin.getUsageCode">
+            <summary>Get the usage code of the pin.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pin.getFlags">
+            <summary>Get the flags of the pin.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pin.getLabel">
+            <summary>Get the label of the pin.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pin.getSignature">
+            <summary>Return the signature of the pin.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pin.getTriesLeft">
+            <summary>
+            Return the remaining tries for giving the good pin.
+            This opperation is not supported by all card.
+            </summary>
+            <returns>
+            -1 if not supported 
+            the number of remaining tries in the other case
+            </returns> 
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pin.verifyPin">
+            <summary>
+            Ask the card to verify the pin.
+            A popup will ask for the code.
+            </summary>
+            <returns>true if success and false if failed</returns>  
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pin.verifyPin(System.String,System.UInt32@)">
+            <summary>Ask the card to verify the pin.</summary>
+            <param name="csPin">is the pin code to verify (if csPin is empty, a popup will ask for the code)</param>  
+            <param name="ulRemaining">return the remaining tries (only if verifying failed)</param>  
+            <returns>true if success and false if failed</returns> 
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pin.changePin">
+            <summary>
+            Ask the card to change the pin.
+            A popup will ask for the codes.
+            </summary>
+            <returns>true if success and false if failed</returns> 
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pin.changePin(System.String,System.String,System.UInt32@)">
+            <summary>
+            Ask the card to change the pin.
+            if csPin1 or csPin2 are empty, a popup will ask for the codes.
+            </summary>
+            <param name="csPin1">is the old pin code</param>  
+            <param name="csPin2">is the new pin code</param>  
+            <param name="ulRemaining">return the remaining tries (only when operation failed)</param>  
+            <returns>true if success and false if failed</returns> 
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExParamRange">
+            <summary>
+            Exception class Bad Parameter Range (error code = EIDMW_ERR_PARAM_RANGE).
+            Throw when the element ask is out of range.
+            Used in : 
+            - BEID_ReaderSet::getReaderName(unsigned long ulIndex) 
+            - BEID_ReaderSet::getReaderByNum(unsigned long ulIndex) 
+            - BEID_Certificate::getChildren(unsigned long ulIndex)
+            - BEID_Certificates::getCertByNumber(unsigned long ulIndex)
+            - BEID_Pins::getPinByNumber(unsigned long ulIndex)
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExCmdNotAllowed">
+            <summary>
+            Exception class Command Not Allowed (error code = EIDMW_ERR_CMD_NOT_ALLOWED).
+            Throw when the command asked is not allowed.
+            Used in : 
+            - BEID_SmartCard::writeFile()
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ByteArray">
+            <summary>This class is used to receive/pass bytes array from/to different method in the SDK.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ByteArray.#ctor(System.Byte[],System.UInt32)">
+            <summary>Constructor - initialize a ByteArray with an array of byte.</summary>
+            <param name="pucData">the byte array to append</param>
+            <param name="ulSize">the size of the array</param>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ByteArray.Append(System.Byte[],System.UInt32)">
+            <summary>Append data to the byte array.</summary>
+            <param name="pucData">the byte array to append</param>
+            <param name="ulSize">the size of the array</param>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ByteArray.Append(be.belgium.eid.BEID_ByteArray)">
+            <summary>Append data to the byte array.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ByteArray.Clear">
+            <summary>Remove the data from the byte array.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ByteArray.Equals(be.belgium.eid.BEID_ByteArray)">
+            <summary>Return true if the content of data is the same as this.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ByteArray.Size">
+            <summary>Return the number of bytes in the array.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ByteArray.GetBytes">
+            <summary>
+            Return the array of bytes in the object. 
+            If Size() == 0, then NULL is returned.
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ByteArray.writeToFile(System.String)">
+            <summary>Writing the binary content to a file.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ByteArray.assign(be.belgium.eid.BEID_ByteArray)">
+            <summary>Copy content of bytearray.</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExFileTypeUnknown">
+            <summary>
+            Exception class File Type Unknown (error code = EIDMW_ERR_FILETYPE_UNKNOWN).
+            Throw when the Raw Data type doesn't exist for this card.
+            Used in : 
+            - BEID_Card::getRawData(BEID_RawDataType type)
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExCardTypeUnknown">
+            <summary>
+            Exception class Card Type Unknown (error code = EIDMW_ERR_CARDTYPE_UNKNOWN).
+            Throw when the card type is not supported.
+            Used in : 
+            - BEID_ReaderContext::getCard()
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExBadTransaction">
+            <summary>
+            Exception class Bad Transaction (error code = EIDMW_ERR_BAD_TRANSACTION).
+            Throw when a class/function is not used correctly.
+            Used in : 
+            - BEID_ReaderContext::Lock()
+            - BEID_ReaderContext::Unlock()
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_KidsCard">
+            <summary>
+            This class represents a Kids card which is a particular BEID_EIDCard.
+            To get such an object you have to ask it from the ReaderContext.
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_EIDCard">
+            <summary>
+            This class represents a Belgium EID card.
+            To get such an object you have to ask it from the ReaderContext.
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.isApplicationAllowed">
+            <summary>Return true if the user allow the application.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.isTestCard">
+            <summary>Return true this is a test card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getAllowTestCard">
+            <summary>Return true if test card are allowed.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.setAllowTestCard(System.Boolean)">
+            <summary>Set the flag to allow the test cards.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getDataStatus">
+            <summary>
+            Return the status of the data (RRN certificate validity).
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getDocument(be.belgium.eid.BEID_DocumentType)">
+            <summary>
+            Return a document from the card.
+            </summary>
+            <remarks>
+            Throw BEID_ExDocTypeUnknown exception if the document doesn't exist for this card.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getFullDoc">
+            <summary>Get the full document.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getID">
+            <summary>Get the id document.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getPicture">
+            <summary>Get the picture document.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getVersionInfo">
+            <summary>Get the info document.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getCert(be.belgium.eid.BEID_CertifType)">
+            <summary>Return certificate by type from the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getRrn">
+            <summary>Return the RRN certificate from the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getRoot">
+            <summary>Return the root certificate from the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getCA">
+            <summary>Return the ca certificate from the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getSignature">
+            <summary>Return the signature certificate from the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getAuthentication">
+            <summary>Return the authentication certificate from the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getRawData(be.belgium.eid.BEID_RawDataType)">
+            <summary>
+            Return a raw data from the card.
+            </summary>
+            <remarks>
+            Throw BEID_ExFileTypeUnknown exception if the document doesn't exist for this card. 
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getRawData_Id">
+            <summary>Get the Id RawData.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getRawData_IdSig">
+            <summary>Get the IdSig RawData.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getRawData_Addr">
+            <summary>Get the Addr RawData.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getRawData_AddrSig">
+            <summary>Get the AddrSig RawData.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getRawData_Picture">
+            <summary>Get the picture RawData.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getRawData_CardInfo">
+            <summary>Get the Card Info RawData.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getRawData_TokenInfo">
+            <summary>Get the Token Info RawData.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getRawData_CertRRN">
+            <summary>Get the Cert RRN RawData.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getRawData_Challenge">
+            <summary>Get the challenge RawData.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EIDCard.getRawData_Response">
+            <summary>Get the response RawData.</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ForeignerCard">
+            <summary>
+            This class represents a Foreigner card which is a particular BEID_EIDCard.
+            To get such an object you have to ask it from the ReaderContext.
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExBadUsage">
+            <summary>
+            Exception class Bad Usage (error code = EIDMW_ERR_BAD_USAGE).
+            hrow when a class/function is not used correctly.
+            Used in : 
+            - BEID_Crl class
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_EIdFullDoc">
+            <summary>Class for the full document Eid.</summary> 
+        </member>
+        <member name="T:be.belgium.eid.BEID_Config">
+            <summary>Class to access the config parameters.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Config.#ctor(be.belgium.eid.BEID_Param)">
+            <summary>Create object to access parameter Param.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Config.#ctor(System.String,System.String,System.String)">
+            <summary>Create object to access a string parameter.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Config.#ctor(System.String,System.String,System.Int32)">
+            <summary>Create object to access a numerical parameter.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Config.getString">
+            <summary>Return the string value (Throw exception for numerical parameter).</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Config.getLong">
+            <summary>Return the numerical value (Throw exception for string parameter).</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Config.setString(System.String)">
+            <summary>Set the string value (Throw exception for numerical parameter).</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Config.setLong(System.Int32)">
+            <summary>Set the numerical value (Throw exception for string parameter).</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExUnknown">
+            <summary>
+            Exception class Release Needed (error code = EIDMW_ERR_UNKNOWN).
+            </summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifType.BEID_CERTIF_TYPE_UNKNOWN">
+            <summary>UNKNOWN certificate</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifType.BEID_CERTIF_TYPE_RRN">
+            <summary>RRN certificate</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifType.BEID_CERTIF_TYPE_ROOT">
+            <summary>Root certificate</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifType.BEID_CERTIF_TYPE_CA">
+            <summary>CA certificate</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifType.BEID_CERTIF_TYPE_AUTHENTICATION">
+            <summary>Authentication certificate</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifType.BEID_CERTIF_TYPE_SIGNATURE">
+            <summary>Signature certificate</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExCardBadType">
+            <summary>
+            Exception class Bad Card Type (error code = EIDMW_ERR_CARDTYPE_BAD).
+            Throw when the card type doesn't correspond to what is asked.
+            Used in : 
+            - BEID_ReaderContext::getEIDCard()
+            - BEID_ReaderContext::getKidsCard()
+            - BEID_ReaderContext::getForeignerCard()
+            - BEID_ReaderContext::getSISCard()
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExReleaseNeeded">
+            <summary>
+            Exception class Release Needed (error code = EIDMW_ERR_RELEASE_NEEDED).
+            Throw when the application close without calling the BEID_RealeaseSDK.
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExCardChanged">
+            <summary>
+            Exception class Card changed (error code = EIDMW_ERR_CARD_CHANGED).
+            Throw when accessing to a card object but the card has been changed.
+            Used in : 
+            - BEID_Object::checkContextStillOk()
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_EId">
+            <summary>
+            Class for the id document on a EID Card.
+            You can get such an object from BEID_EIDCard::getID()	(or getDocument).
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getDocumentVersion">
+            <summary>Return Document Version field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getDocumentType">
+            <summary>Return Document Type field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getFirstName">
+            <summary>Return Complete First Names.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getFirstName1">
+            <summary>Return First Name part 1 (2 first given name).</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getFirstName2">
+            <summary>Return First Name part 2 (first letter of the 3rd given name).</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getSurname">
+            <summary>Return Surname field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getGender">
+            <summary>Return Gender field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getDateOfBirth">
+            <summary>Return Date Of Birth field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getLocationOfBirth">
+            <summary>Return Location Of Birth field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getNobility">
+            <summary>Return Nobility field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getNationality">
+            <summary>Return Nationality field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getNationalNumber">
+            <summary>Return National Number field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getDuplicata">
+            <summary>Return Duplicata field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getSpecialOrganization">
+            <summary>Return Special Organization field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getMemberOfFamily">
+            <summary>Return Member Of Family field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getLogicalNumber">
+            <summary>Return Logical Number field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getChipNumber">
+            <summary>Return Chip Number field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getValidityBeginDate">
+            <summary>Return Validity Begin Date field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getValidityEndDate">
+            <summary>Return Validity End Date field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getIssuingMunicipality">
+            <summary>Return Issuing Municipality field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getAddressVersion">
+            <summary>Return Address Version field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getStreet">
+            <summary>Return Street field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getZipCode">
+            <summary>Return Zip Code field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getMunicipality">
+            <summary>Return Municipality field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getCountry">
+            <summary>Return Country field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_EId.getSpecialStatus">
+            <summary>Return Special Status field.</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CardType.BEID_CARDTYPE_UNKNOWN">
+            <summary>Unknown card</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CardType.BEID_CARDTYPE_EID">
+            <summary>Normal eid card</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CardType.BEID_CARDTYPE_KIDS">
+            <summary>Kids eid card</summary>  
+        </member>
+        <member name="F:be.belgium.eid.BEID_CardType.BEID_CARDTYPE_FOREIGNER">
+            <summary>Foreigner eid card</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CardType.BEID_CARDTYPE_SIS">
+            <summary>Sis card</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExUserMustAnswer">
+            <summary>
+            Exception class User must answer (error code = EIDMW_ERR_USER_MUST_ANSWER).
+            Throw when the user did not answer yet to allow or disallow reading the data from the card.
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExCertNoRoot">
+            <summary>
+            Exception class Certificate No OCSP responder (error code = EIDMW_ERR_CERT_NOROOT).
+            Throw when ask for the Root.
+            Used in : 
+            - BEID_Certificate::getRoot()
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_Certificate">
+            <summary>Class that represent one certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getLabel">
+            <summary>Return the label of the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getID">
+            <summary>Return the id of the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getStatus">
+            <summary>Return the status of the certificate using default validation level (from config).</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getStatus(be.belgium.eid.BEID_ValidationLevel,be.belgium.eid.BEID_ValidationLevel)">
+            <summary>Return the status of the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getType">
+            <summary>Return the type of the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getCertData">
+            <summary>Return the content of the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getFormattedData(be.belgium.eid.BEID_ByteArray)">
+            <summary>Return the content of the certificate without ending zero.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getSerialNumber">
+            <summary>Return the serial number of the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getOwnerName">
+            <summary>Return the name of the owner of the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getIssuerName">
+            <summary>Return the name of the issuer of the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getValidityBegin">
+            <summary>Return the validity begin date of the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getValidityEnd">
+            <summary>Return the validity end date of the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getKeyLength">
+            <summary>Return the length of public/private key on the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.isRoot">
+            <summary>Return true if this is a root certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.isTest">
+            <summary>Return the test status.</summary>
+            <returns>
+            - true if test certificate
+            - false if good one
+            </returns>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.isFromBeidValidChain">
+            <summary>Return true if the certificate chain end by the one of beid root.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.isFromCard">
+            <summary>This certificate comes from the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getIssuer">
+            <summary>
+            Return the issuer certificate.
+            </summary>
+            <remarks>
+            If there is no issuer (root), BEID_ExCertNoIssuer exception is thrown.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.countChildren">
+            <summary>Return the number of children for this certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getChildren(System.UInt32)">
+            <summary>
+            Return the children certificate (certificate that has been issued by this one).
+            </summary>
+            <remarks>
+            Throw BEID_ExParamRange exception if the index is out of range.
+            </remarks>
+            <param name="ulIndex">is the children index (the index for the first child is 0</param>  )
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getCRL">
+            <summary>Return the crl of the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.getOcspResponse">
+            <summary>Return the ocsp response object of the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.verifyCRL(System.Boolean)">
+            <summary>Verify the certificate trough CRL validation.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.verifyCRL">
+            <summary>Verify the certificate trough CRL validation.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificate.verifyOCSP">
+            <summary>Verify the certificate trough OCSP validation.</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExCertNoOcsp">
+            <summary>
+            Exception class Certificate No OCSP responder (error code = EIDMW_ERR_CERT_NOOCSP).
+            Throw when ask for the OCSP response when there is no responder.
+            Used in : 
+            - BEID_Certificate::getOcspResponse()
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ReaderContext">
+            <summary>
+            This class represent a reader.
+            You get reader object from the ReaderSet 
+                either by its index (getReaderByNum) or by its name (getReaderByName).
+            Once you have a reader object, you can check if a card is present (isCardPresent).
+            Then you can ask which type of card is in the reader with getCardType()
+            	and then get a card object using one of this method :
+            		getCard, getEIDCard, getKidsCard, getForeignerCard or getSISCard.
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.#ctor(be.belgium.eid.BEID_FileType,System.String)">
+            <summary>
+            Construct using a fileType and fileName.
+            </summary>
+            <remarks>
+            No physical reader are connected.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.#ctor(be.belgium.eid.BEID_FileType,be.belgium.eid.BEID_ByteArray)">
+            <summary>
+            Construct using a fileType and its content (for compatibility with SetRawFile).
+            </summary>
+            <remarks>
+            No physical reader are connected.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.#ctor(be.belgium.eid.BEID_RawData_Eid)">
+            <summary>
+            Construct using Raw data for Eid.
+            </summary>
+            <remarks>
+            No physical reader are connected.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.#ctor(be.belgium.eid.BEID_RawData_Sis)">
+            <summary>
+            Construct using Raw data for Sis.
+            </summary>
+            <remarks>
+            No physical reader are connected.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.getName">
+            <summary>Return the name of the reader.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.isCardPresent">
+            <summary>Return true if a card is present and false otherwise.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.releaseCard(System.Boolean)">
+            <summary>Release the card.</summary>
+            <param name="bAllReference">
+            If true all the invalid reference/pointer are destroyed.
+            PUT THIS PARAMETER TO TRUE IS THREAD UNSAFE. 
+            You have to be sure that you will not use any old reference/pointer after this release
+            </param>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.releaseCard">
+            <summary>Release the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.isCardChanged(System.UInt32@)">
+            <summary>Return true if a card has changed since the last called (with the same ulOldId parameter).</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.getCardType">
+            <summary> 
+            Return the type of the card in the reader.
+            Throw BEID_ExNoCardPresent exception if no card is present. 
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.getCard">
+            <summary> 
+            Get the card in the reader.
+            Instantiation is made regarding the type of the card 
+            		(BEID_EIDCard, BEID_KidsCard, BEID_ForeignerCard or BEID_SISCard).
+            </summary>
+            <remarks>
+            If no card is present in the reader, exception BEID_ExNoCardPresent is thrown.
+            If the card type is not supported, exception BEID_ExCardTypeUnknown is thrown.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.getEIDCard">
+            <summary> 
+            Get the EIDcard in the reader. 
+            	Instantiation is made regarding the type of the card 
+            		(BEID_EIDCard, BEID_KidsCard, BEID_ForeignerCard).
+            </summary>
+            <remarks>
+            If no card is present in the reader, exception BEID_ExNoCardPresent is thrown.
+            If the card is not an EIDcard, exception BEID_ExCardBadType is thrown.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.getKidsCard">
+            <summary> 
+            Get the KidsCard in the reader.
+            </summary>
+            <remarks>
+            If no card is present in the reader, exception BEID_ExNoCardPresent is thrown.
+            If the card is not a KidsCard, exception BEID_ExCardBadType is thrown.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.getForeignerCard">
+            <summary> 
+            Get the ForeignerCard in the reader.
+            </summary>
+            <remarks>
+            If no card is present in the reader, exception BEID_ExNoCardPresent is thrown.
+            If the card is not a ForeignerCard, exception BEID_ExCardBadType is thrown.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.getSISCard">
+            <summary> 
+            Get the SISCard in the reader.
+            </summary>
+            <remarks>
+            If no card is present in the reader, exception BEID_ExNoCardPresent is thrown.
+            If the card is not a SISCard, exception BEID_ExCardBadType is thrown.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.SetEventCallback(be.belgium.eid.BEID_SetEventDelegate,System.IntPtr)">
+            <summary> 
+            Specify a callback function to be called each time a card is inserted/remove in/from this reader.
+            </summary>
+            <returns>A handle can be used to stop the callbacks when they are no longer needed</returns>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.StopEventCallback(System.UInt32)">
+            <summary>To tell that the callbacks are not longer needed.</summary>
+            <param name="ulHandle">is the handle return by SetEventCallback</param>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.BeginTransaction">
+            <summary>Begin a transaction with the reader.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.EndTransaction">
+            <summary>End the transaction.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderContext.isVirtualReader">
+            <summary>Return true if this is a virtual reader (create from a file).</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExDocTypeUnknown">
+            <summary>
+            Exception class Document Type Unknown (error code = EIDMW_ERR_DOCTYPE_UNKNOWN).
+            Throw when the document type doesn't exist for this card.
+            Used in : 
+            - BEID_Card::getDocument(BEID_DocumentType type) 
+            </summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_DocumentType.BEID_DOCTYPE_FULL">
+            <summary>Full document : usefull for XML/CSV/TLV export</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_DocumentType.BEID_DOCTYPE_ID">
+            <summary>ID document : usefull to get value by field</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_DocumentType.BEID_DOCTYPE_PICTURE">
+            <summary>picture document (if available)</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_DocumentType.BEID_DOCTYPE_INFO">
+            <summary>info on the card (if available)</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_DocumentType.BEID_DOCTYPE_PINS">
+            <summary>pins containert (if available)</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_DocumentType.BEID_DOCTYPE_CERTIFICATES">
+            <summary>certificates containert (if available)</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_CardVersionInfo">
+            <summary>
+            Class for the info document.
+            You can get such an object from BEID_EIDCard::getVersionInfo() (or getDocument).
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getSerialNumber">
+            <summary>Return the Serial Number of the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getComponentCode">
+            <summary>Return the ComponenCode of the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getOsNumber">
+            <summary>Return the OS Number of the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getOsVersion">
+            <summary>Return the OS Version of the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getSoftmaskNumber">
+            <summary>Return the Softmask Number of the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getSoftmaskVersion">
+            <summary>Return the Softmask Version of the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getAppletVersion">
+            <summary>Return the Applet Version of the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getGlobalOsVersion">
+            <summary>Return the Global Os Version of the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getAppletInterfaceVersion">
+            <summary>Return the Applet Interface Version of the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getPKCS1Support">
+            <summary>Return the PKCS#1 Support of the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getKeyExchangeVersion">
+            <summary>Return the Key Exchange Version of the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getAppletLifeCycle">
+            <summary>Return the Applet Life Cycle of the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getGraphicalPersonalisation">
+            <summary>Return field GraphicalPersonalisation from the TokenInfo file.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getElectricalPersonalisation">
+            <summary>Return field ElectricalPersonalisation from the TokenInfo file.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getElectricalPersonalisationInterface">
+            <summary>Return field ElectricalPersonalisationInterface from the TokenInfo file.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_CardVersionInfo.getSignature">
+            <summary>Return the signature of the card info.</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_Crl">
+            <summary>Class that represents one CRL.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Crl.#ctor(System.String)">
+            <summary>
+            Create a Crl from its uri (without any certificate link).
+            </summary>
+            <remarks>
+            As there is no issuer, this CRL can't be verify and some method are not allowed (ex. getIssuer).
+            These methods throw BEID_ExBadUsage exception.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Crl.getUri">
+            <summary>Return the uri of the CRL.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Crl.getIssuerName">
+            <summary>Return the name of the issuer of the certificate.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Crl.getIssuer">
+            <summary>
+            Return the issuer certificate.
+            </summary>
+            <remarks>
+            if there is no issuer (root), BEID_ExCertNoIssuer exception is thrown.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Crl.getData(be.belgium.eid.BEID_ByteArray,System.Boolean)">
+            <summary>
+            Return the CRL as a byte array.
+            </summary>
+            <remarks>
+            If it comes from a Certif we verify the signature.
+            If it's created from the URL only we DON'T verify the signature.
+            </remarks>
+            <param name="crl">will content the crl</param>  
+            <param name="bForceDownload">if true the CRL in the cache is not valid anymore and we force a new download</param>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Crl.getData(be.belgium.eid.BEID_ByteArray)">
+            <summary>
+            Return the CRL as a byte array.
+            </summary>
+            <remarks>
+            If it comes from a Certif we verify the signature.
+            If it's created from the URL only we DON'T verify the signature.
+            </remarks>
+            <param name="crl">will content the crl</param>  
+        </member>
+        <member name="T:be.belgium.eid.BEID_Biometric">
+            <summary>Abstract base class for the biometric documents.</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_Picture">
+            <summary>
+            Class for the picture document on a EID Card.
+            You can get such an object from BEID_EIDCard::getPicture()	(or getDocument).
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Picture.getData">
+            <summary>Return the picture itself (jpg format).</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Picture.getHash">
+            <summary>Return the hash of the picture.</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExCmdNotSupported">
+            <summary>
+            Exception class Command Not Supported (error code = EIDMW_ERR_NOT_SUPPORTED).
+            Throw when the command asked is not supported by the card.
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ReaderSet">
+             <summary>
+             This is a singleton class that is the starting point to get all other objects.
+             You get an instance from the static instance() method (or using the define ReaderSet).
+             Then you get a READER							(BEID_ReaderContext)
+            		-> from this reader, you a CARD				(BEID_Card or derived class)
+            			-> from this card, you get DOCUMENT		(BEID_XMLDoc or derived class)
+            				-> ...
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.initSDK(System.Boolean)">
+            <summary>Init the SDK (Optional).</summary>
+            <param name="bManageTestCard">
+            If true the applayer must ask if test cards are allowed (used for compatibility with old C API). 
+            If false other applications (ex. gui) take that into their scope.
+            </param>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.initSDK">
+            <summary>Init the SDK (Optional) without test card managment.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.releaseSDK">
+            <summary>Release the SDK.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.releaseReaders(System.Boolean)">
+            <summary>Release the readers (Useful if readers had changed).</summary>
+            <param name="bAllReference">
+            If true all the invalid reference/pointer are destroyed.
+            PUT THIS PARAMETER TO TRUE IS THREAD UNSAFE. 
+            You have to be sure that you will not use any old reference/pointer after this release.
+            </param>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.releaseReaders">
+            <summary>Release the readers (Useful if readers had changed).</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.isReadersChanged">
+            <summary>Return true if readers has been added or removed.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.readerList(System.Boolean)">
+            <summary>
+            Get the list of the reader.
+            Return an array of string.
+            </summary>
+            <param name="bForceRefresh">
+            force the reconnection to the lower layer to see if reader list have changed
+            </param>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.readerList">
+            <summary>
+            Get the list of the reader.
+            Return an array string.
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.getReader">
+            <summary>
+            Return the first readercontext with a card.
+            </summary>
+            <remarks>
+            	If no card is present, return the firs reader.
+            	If no reader exist, throw an exception BEID_ExNoReader.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.getReaderByName(System.String)">
+            <summary>Get the reader by its name.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.readerCount(System.Boolean)">
+            <summary>
+            Return the number of card readers connected to the computer.
+            </summary>
+            <param name="bForceRefresh">
+            force the reconnection to the lower layer to see if reader list have changed.
+            </param>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.readerCount">
+            <summary>
+            Return the number of card readers connected to the computer.
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.getReaderName(System.UInt32)">
+            <summary>
+            Get the name of the reader by its Index.
+            </summary>
+            <remarks>
+            Throw BEID_ExParamRange exception if the index is out of range.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.getReaderByNum(System.UInt32)">
+            <summary>
+            Get the reader by its Index.
+            </summary>
+            <remarks>
+            Throw BEID_ExParamRange exception if the index is out of range.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.getReaderByCardSerialNumber(System.String)">
+            <summary>
+            Return the reader containing the card with this SN.
+            </summary>
+            <remarks>
+            If no card with this SN is found, throw an exception BEID_ExParamRange.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_ReaderSet.flushCache">
+            <summary>
+            Flush the cached files.
+            Return if any files were flushed (T/F).
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_Pins">
+            <summary>Container class for all pins on the card.</summary> 
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pins.count">
+            <summary>The number of pins on the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Pins.getPinByNumber(System.UInt32)">
+            <summary>
+            Get the pin by its Index.
+            </summary>
+            <remarks>
+            Throw BEID_ExParamRange exception if the index is out of range.
+            </remarks>
+        </member>
+        <member name="T:be.belgium.eid.BEID_MemoryCard">
+            <summary>Abstract base class for Memory card.</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_SisId">
+            <summary>
+            Class for the id document on a SIS Card.
+            You can get such an object from BEID_SISCard::getID()	(or getDocument).
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SisId.getName">
+            <summary>Return Name field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SisId.getSurname">
+            <summary>Return Surname field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SisId.getInitials">
+            <summary>Return Initials field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SisId.getGender">
+            <summary>Return Gender field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SisId.getDateOfBirth">
+            <summary>Return Date Of Birth field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SisId.getSocialSecurityNumber">
+            <summary>Return Social Security Number field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SisId.getLogicalNumber">
+            <summary>Return Logical Number field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SisId.getDateOfIssue">
+            <summary>Return Date Of Issue field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SisId.getValidityBeginDate">
+            <summary>Return Validity Begin Date field.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SisId.getValidityEndDate">
+            <summary>Return Validity End Date field.</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_SISCard">
+            <summary>
+            This class represents a SIS card.
+            To get such an object you have to ask it from the ReaderContext.
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SISCard.getDocument(be.belgium.eid.BEID_DocumentType)">
+            <summary> 
+            Return a document from the card.
+            </summary>
+            <remarks>
+            Throw BEID_ExDocTypeUnknown exception if the document doesn't exist for this card. 
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SISCard.getFullDoc">
+            <summary>Get the full document.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_SISCard.getID">
+            <summary>Get the id document.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:be.belgium.eid.BEID_SISCard.getRawData(be.belgium.eid.BEID_RawDataType)" -->
+        <member name="M:be.belgium.eid.BEID_SISCard.getRawData_Id">
+            <summary>Get the id RawData.</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExReaderSetChanged">
+            <summary>
+            Exception class Readerset changed (error code = EIDMW_ERR_READERSET_CHANGED).
+            Throw when accessing to a card object but the readerset has been changed.
+            Used in : 
+            - BEID_Object::checkContextStillOk()
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExNotAllowByUser">
+            <summary>
+            Exception class Not allow by user (error code = EIDMW_ERR_NOT_ALLOW_BY_USER).
+            Throw when the data could not be read from the card because the user do not allow.
+            </summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExNoCardPresent">
+            <summary>
+            Exception class No Card Present (error code = EIDMW_ERR_NO_CARD).
+            Throw when no card is present.
+            Used in : 
+            - BEID_ReaderContext::getCardType() 
+            - BEID_ReaderContext::getCard() 
+            - BEID_ReaderContext::getEIDCard() 
+            - BEID_ReaderContext::getKidsCard() 
+            - BEID_ReaderContext::getForeignerCard()
+            - BEID_ReaderContext::getSISCard()
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.beidlib_dotNet.BEID_LOG(be.belgium.eid.BEID_LogLevel,System.String,System.String)">
+            <summary>Function for Logging.</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_OcspResponse">
+            <summary>Class that represents one OCSP Response.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_OcspResponse.#ctor(System.String,be.belgium.eid.BEID_HashAlgo,be.belgium.eid.BEID_ByteArray,be.belgium.eid.BEID_ByteArray,be.belgium.eid.BEID_ByteArray)">
+            <summary>
+            Create an OcspResponse object from the URI only and CertID.
+            </summary>
+            <remarks>
+            This OCSP Response is not link to any certificate so some methods could not be used.
+            these methods throw BEID_ExBadUsage exception.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_OcspResponse.getUri">
+            <summary>Return the uri of the responder.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_OcspResponse.getResponse(be.belgium.eid.BEID_ByteArray)">
+            <summary>Return the response.</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_HashAlgo.BEID_ALGO_MD5">
+            <summary>16-byte hash</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_HashAlgo.BEID_ALGO_SHA1">
+            <summary>20-byte hash</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_ExCertNoIssuer">
+            <summary>
+            Exception class Certificate No Issuer (error code = EIDMW_ERR_CERT_NOISSUER).
+            Throw when ask for the issuer of a root certificate.
+            Used in : 
+            - BEID_Certificate::getIssuer()
+            </summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifStatus.BEID_CERTIF_STATUS_UNKNOWN">
+            <summary>Validity unknown</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifStatus.BEID_CERTIF_STATUS_REVOKED">
+            <summary>Revoked certificate</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifStatus.BEID_CERTIF_STATUS_TEST">
+            <summary>Test certificate</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifStatus.BEID_CERTIF_STATUS_DATE">
+            <summary>Certificate no more valid</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifStatus.BEID_CERTIF_STATUS_CONNECT">
+            <summary>Connection problem</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifStatus.BEID_CERTIF_STATUS_ISSUER">
+            <summary>An issuer is missing in the chain</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifStatus.BEID_CERTIF_STATUS_ERROR">
+            <summary>Error during validation</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifStatus.BEID_CERTIF_STATUS_VALID">
+            <summary>Valid certificate</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifStatus.BEID_CERTIF_STATUS_VALID_CRL">
+            <summary>Valid certificate through CRL process</summary>
+        </member>
+        <member name="F:be.belgium.eid.BEID_CertifStatus.BEID_CERTIF_STATUS_VALID_OCSP">
+            <summary>Valid certificate through OCSP process</summary>
+        </member>
+        <member name="T:be.belgium.eid.BEID_Certificates">
+            <summary>Container class for all certificates on the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificates.#ctor">
+            <summary>
+            Create an BEID_Certificates store without any link to a card.
+            </summary>
+            <remarks>
+            This store is not link to any Card, so some methods could not be used.
+            These methods throw BEID_ExBadUsage exception.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificates.countFromCard">
+            <summary>The number of certificates on the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificates.countAll">
+            <summary>The number of certificates (on the card or not).</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificates.getCertFromCard(System.UInt32)">
+            <summary>
+            Get the ulIndex certificate from the card.
+            </summary>
+            <remarks>
+            Throw BEID_ExParamRange exception if the index is out of range.
+            </remarks>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificates.getCert(System.UInt32)">
+            <summary>
+            Return the certificate with the number ulIndexAll.
+            ATTENTION ulIndexAll and ulIndexCard are two different index.
+            Index will change if new certificates are added with addCert().
+            </summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificates.getCert(be.belgium.eid.BEID_CertifType)">
+            <summary>Return the certificate by type.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificates.getRrn">
+            <summary>Return the RRN certificate from the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificates.getRoot">
+            <summary>Return the root certificate from the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificates.getCA">
+            <summary>Return the ca certificate from the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificates.getSignature">
+            <summary>Return the signature certificate from the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificates.getAuthentication">
+            <summary>Return the authentication certificate from the card.</summary>
+        </member>
+        <member name="M:be.belgium.eid.BEID_Certificates.addCertificate(be.belgium.eid.BEID_ByteArray)">
+            <summary>Add a new certificate to the store.</summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,2 @@
+C:\Documents and Settings\Administrator\Desktop\eid-inwork\eid-mw\_src\eidmw\misc\Wix_MW35\MW35Wix\bin\Release\de-de\BeidMW35-64-Basic-de.wixpdb
+obj\Release\Product64.wixobj

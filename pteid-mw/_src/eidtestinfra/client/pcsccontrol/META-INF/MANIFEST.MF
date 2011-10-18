@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.7.1
+Created-By: 14.3-b01 (Sun Microsystems Inc.)
+Main-Class: be.eid.eidtestinfra.pcsccontrol.Main
+Built-By: frank
+Implementation-Vendor: Belgian Government/nv
+Implementation-Title: BE eID PCSC Control
+Implementation-Version: 1.0.7
+

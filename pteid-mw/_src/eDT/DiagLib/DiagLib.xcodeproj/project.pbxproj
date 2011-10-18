@@ -1,0 +1,1081 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7F7EEDF90F6FAA2400C398D1 /* UnitTest++.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F7D55E50F5D56F500142E2A /* UnitTest++.h */; };
+		7F7EEDFD0F6FAA2400C398D1 /* otool in Resources */ = {isa = PBXBuildFile; fileRef = 7F7E60A90F6E68CE00015A7A /* otool */; };
+		7F7EEE000F6FAA2400C398D1 /* csptest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA5EAE70F5EA52900E5099C /* csptest.cpp */; };
+		7F7EEE010F6FAA2400C398D1 /* devicetest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F3CBCB60F601F3800015AEE /* devicetest.cpp */; };
+		7F7EEE020F6FAA2400C398D1 /* diaglibtest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEF40E00F5C4A1D00B5A7BA /* diaglibtest.cpp */; };
+		7F7EEE030F6FAA2400C398D1 /* filetest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEF40E10F5C4A1D00B5A7BA /* filetest.cpp */; };
+		7F7EEE040F6FAA2400C398D1 /* foldertest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEF40E20F5C4A1D00B5A7BA /* foldertest.cpp */; };
+		7F7EEE050F6FAA2400C398D1 /* middlewaretest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952A10F66917300FED937 /* middlewaretest.cpp */; };
+		7F7EEE060F6FAA2400C398D1 /* ocsptest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952A20F66917300FED937 /* ocsptest.cpp */; };
+		7F7EEE070F6FAA2400C398D1 /* pcsctest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952A30F66917300FED937 /* pcsctest.cpp */; };
+		7F7EEE080F6FAA2400C398D1 /* pkcstest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952A40F66917300FED937 /* pkcstest.cpp */; };
+		7F7EEE090F6FAA2400C398D1 /* processtest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA5EAFB0F5EAB8C00E5099C /* processtest.cpp */; };
+		7F7EEE0A0F6FAA2400C398D1 /* progresstest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA5EAE90F5EA54100E5099C /* progresstest.cpp */; };
+		7F7EEE0B0F6FAA2400C398D1 /* readertest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952A50F66917300FED937 /* readertest.cpp */; };
+		7F7EEE0C0F6FAA2400C398D1 /* registrytest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952A60F66917300FED937 /* registrytest.cpp */; };
+		7F7EEE0D0F6FAA2400C398D1 /* servicetest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952A70F66917300FED937 /* servicetest.cpp */; };
+		7F7EEE0E0F6FAA2400C398D1 /* softwaretest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8951FF0F657FAD00FED937 /* softwaretest.cpp */; };
+		7F7EEE0F0F6FAA2400C398D1 /* systemtest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8A87180F5FFFEB007C7CD3 /* systemtest.cpp */; };
+		7F7EEE100F6FAA2400C398D1 /* tokendtest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952A80F66917300FED937 /* tokendtest.cpp */; };
+		7F7EEE110F6FAA2400C398D1 /* usertest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8A86D00F5FFE8D007C7CD3 /* usertest.cpp */; };
+		7F7EEE140F6FAA2400C398D1 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FBFA2BB0F601A040048AD9F /* Carbon.framework */; };
+		7F7EEE150F6FAA2400C398D1 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7D552C0F5D4B1500142E2A /* CoreFoundation.framework */; };
+		7F7EEE170F6FAA2400C398D1 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F9AD6A00F695FC3001575C2 /* Security.framework */; };
+		7F7EEE220F6FAA2400C398D1 /* ProcessTestLib.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8A84F90F5EC614007C7CD3 /* ProcessTestLib.h */; };
+		7F7EEE240F6FAA2400C398D1 /* ProcessTestLib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8A84F80F5EC614007C7CD3 /* ProcessTestLib.cpp */; };
+		7F7EEE2E0F6FAA2400C398D1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8A85570F5ECA52007C7CD3 /* main.cpp */; };
+		7F7EEE3A0F6FAA2400C398D1 /* file.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FEF40020F5C30FB00B5A7BA /* file.h */; };
+		7F7EEE3B0F6FAA2400C398D1 /* folder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FEF40030F5C30FB00B5A7BA /* folder.h */; };
+		7F7EEE3C0F6FAA2400C398D1 /* diaglib.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FEF3FF70F5C308900B5A7BA /* diaglib.h */; };
+		7F7EEE3D0F6FAA2400C398D1 /* error.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FEF3FF80F5C308900B5A7BA /* error.h */; };
+		7F7EEE3E0F6FAA2400C398D1 /* report.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FEF3FF90F5C308900B5A7BA /* report.h */; };
+		7F7EEE3F0F6FAA2400C398D1 /* util.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FEF3FFA0F5C308900B5A7BA /* util.h */; };
+		7F7EEE400F6FAA2400C398D1 /* mac_helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F5B21290F5C03090067D54F /* mac_helper.h */; };
+		7F7EEE410F6FAA2400C398D1 /* log.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FD848D90F5BEF9700C32F65 /* log.h */; };
+		7F7EEE420F6FAA2400C398D1 /* progress.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA5EADD0F5EA38E00E5099C /* progress.h */; };
+		7F7EEE430F6FAA2400C398D1 /* csp.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA5EAE30F5EA4D700E5099C /* csp.h */; };
+		7F7EEE440F6FAA2400C398D1 /* process.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA5EB000F5EABB100E5099C /* process.h */; };
+		7F7EEE450F6FAA2400C398D1 /* user.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8A86AB0F5FF659007C7CD3 /* user.h */; };
+		7F7EEE460F6FAA2400C398D1 /* system.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8A871A0F600039007C7CD3 /* system.h */; };
+		7F7EEE470F6FAA2400C398D1 /* device.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F3CBCB30F601F2800015AEE /* device.h */; };
+		7F7EEE480F6FAA2400C398D1 /* software.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8951FA0F657F6D00FED937 /* software.h */; };
+		7F7EEE490F6FAA2400C398D1 /* card.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8952B20F6691A900FED937 /* card.h */; };
+		7F7EEE4A0F6FAA2400C398D1 /* middleware.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8952B30F6691A900FED937 /* middleware.h */; };
+		7F7EEE4B0F6FAA2400C398D1 /* ocsp.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8952B40F6691A900FED937 /* ocsp.h */; };
+		7F7EEE4C0F6FAA2400C398D1 /* pcsc.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8952B50F6691A900FED937 /* pcsc.h */; };
+		7F7EEE4D0F6FAA2400C398D1 /* pkcs.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8952B60F6691A900FED937 /* pkcs.h */; };
+		7F7EEE4E0F6FAA2400C398D1 /* reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8952B70F6691A900FED937 /* reader.h */; };
+		7F7EEE4F0F6FAA2400C398D1 /* registry.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8952B80F6691A900FED937 /* registry.h */; };
+		7F7EEE500F6FAA2400C398D1 /* services.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8952B90F6691A900FED937 /* services.h */; };
+		7F7EEE510F6FAA2400C398D1 /* tokend.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8952BA0F6691A900FED937 /* tokend.h */; };
+		7F7EEE540F6FAA2400C398D1 /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEF40AF0F5C423300B5A7BA /* file.cpp */; };
+		7F7EEE550F6FAA2400C398D1 /* mac_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEF400E0F5C314C00B5A7BA /* mac_file.cpp */; };
+		7F7EEE560F6FAA2400C398D1 /* mac_folder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEF400F0F5C314C00B5A7BA /* mac_folder.cpp */; };
+		7F7EEE570F6FAA2400C398D1 /* report.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEF3FFF0F5C309E00B5A7BA /* report.cpp */; };
+		7F7EEE580F6FAA2400C398D1 /* mac_helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F5B21380F5C07A10067D54F /* mac_helper.cpp */; };
+		7F7EEE590F6FAA2400C398D1 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FD848D80F5BEF9700C32F65 /* log.cpp */; };
+		7F7EEE5A0F6FAA2400C398D1 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F7AC8D60F5D8336002EB9E2 /* util.cpp */; };
+		7F7EEE5B0F6FAA2400C398D1 /* progress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA5EADF0F5EA3A300E5099C /* progress.cpp */; };
+		7F7EEE5C0F6FAA2400C398D1 /* mac_csp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA5EAE50F5EA4E800E5099C /* mac_csp.cpp */; };
+		7F7EEE5D0F6FAA2400C398D1 /* mac_process.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA5EAFD0F5EAB9E00E5099C /* mac_process.cpp */; };
+		7F7EEE5E0F6FAA2400C398D1 /* process.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA5EAFF0F5EABB100E5099C /* process.cpp */; };
+		7F7EEE5F0F6FAA2400C398D1 /* mac_user.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8A86AD0F5FF66F007C7CD3 /* mac_user.cpp */; };
+		7F7EEE600F6FAA2400C398D1 /* mac_system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8A871C0F600049007C7CD3 /* mac_system.cpp */; };
+		7F7EEE610F6FAA2400C398D1 /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8A87220F60008F007C7CD3 /* system.cpp */; };
+		7F7EEE620F6FAA2400C398D1 /* mac_device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F3CBCB00F601F1B00015AEE /* mac_device.cpp */; };
+		7F7EEE630F6FAA2400C398D1 /* device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F3CBCB20F601F2800015AEE /* device.cpp */; };
+		7F7EEE640F6FAA2400C398D1 /* software.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8951F90F657F6D00FED937 /* software.cpp */; };
+		7F7EEE650F6FAA2400C398D1 /* mac_software.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8951FD0F657F8E00FED937 /* mac_software.cpp */; };
+		7F7EEE660F6FAA2400C398D1 /* card.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952C40F6691C200FED937 /* card.cpp */; };
+		7F7EEE670F6FAA2400C398D1 /* middleware.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952C50F6691C200FED937 /* middleware.cpp */; };
+		7F7EEE680F6FAA2400C398D1 /* pcsc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952C70F6691C200FED937 /* pcsc.cpp */; };
+		7F7EEE690F6FAA2400C398D1 /* pkcs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952C80F6691C200FED937 /* pkcs.cpp */; };
+		7F7EEE6A0F6FAA2400C398D1 /* reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952C90F6691C200FED937 /* reader.cpp */; };
+		7F7EEE6B0F6FAA2400C398D1 /* services.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952CA0F6691C200FED937 /* services.cpp */; };
+		7F7EEE6C0F6FAA2400C398D1 /* mac_middleware.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952D20F6691D500FED937 /* mac_middleware.cpp */; };
+		7F7EEE6D0F6FAA2400C398D1 /* mac_registry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952D50F6691D500FED937 /* mac_registry.cpp */; };
+		7F7EEE6E0F6FAA2400C398D1 /* mac_services.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952D60F6691D500FED937 /* mac_services.cpp */; };
+		7F7EEE6F0F6FAA2400C398D1 /* mac_tokend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8953860F66A22D00FED937 /* mac_tokend.cpp */; };
+		7F7EEE730F6FAA2400C398D1 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7D552C0F5D4B1500142E2A /* CoreFoundation.framework */; };
+		7F7EEE740F6FAA2400C398D1 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FBFA2BB0F601A040048AD9F /* Carbon.framework */; };
+		7F7EEE750F6FAA2400C398D1 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F9AD6A00F695FC3001575C2 /* Security.framework */; };
+		7F7EEE970F6FAA2400C398D1 /* libDiagLib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7EEE790F6FAA2400C398D1 /* libDiagLib.dylib */; };
+		7F7EEE980F6FAA2400C398D1 /* libProcessTestLib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7EEE290F6FAA2400C398D1 /* libProcessTestLib.dylib */; };
+		7F7EEEBF0F6FAE7A00C398D1 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7F7E60E40F6E716100015A7A /* Info.plist */; };
+		7F7EEEC00F6FAE8600C398D1 /* libDiagLib.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 7F7EEE790F6FAA2400C398D1 /* libDiagLib.dylib */; };
+		7F7EEEF10F6FB49900C398D1 /* cardtest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8952A00F66917300FED937 /* cardtest.cpp */; };
+		7F7EEEFC0F6FBA8300C398D1 /* libUnitTest++.macos.i386.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7EEEFA0F6FBA8300C398D1 /* libUnitTest++.macos.i386.a */; };
+		7F7EEEFD0F6FBA8300C398D1 /* libUnitTest++.macos.ppc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7EEEFB0F6FBA8300C398D1 /* libUnitTest++.macos.ppc.a */; };
+		7F85856B0F6FE4FE00C4A876 /* beidlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8958D00F69094F00FED937 /* beidlib.cpp */; };
+		7F85856C0F6FE50100C4A876 /* beidlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F8958D10F69094F00FED937 /* beidlib.h */; };
+		7F8585740F6FE52400C4A876 /* libbeidlib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F8955EB0F67D57800FED937 /* libbeidlib.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
+		7F8DEF980F6FFBF8008E30F5 /* ocsp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F8DEF970F6FFBF8008E30F5 /* ocsp.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7F7EEE920F6FAA2400C398D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7FD848B50F5BEBF000C32F65 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F7EEE380F6FAA2400C398D1;
+			remoteInfo = "DiagLib (Copied)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7F3CBCB00F601F1B00015AEE /* mac_device.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mac_device.cpp; path = ../DiagLib/Mac/mac_device.cpp; sourceTree = SOURCE_ROOT; };
+		7F3CBCB20F601F2800015AEE /* device.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = device.cpp; path = ../DiagLib/device.cpp; sourceTree = SOURCE_ROOT; };
+		7F3CBCB30F601F2800015AEE /* device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = device.h; path = ../DiagLib/device.h; sourceTree = SOURCE_ROOT; };
+		7F3CBCB60F601F3800015AEE /* devicetest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = devicetest.cpp; path = ../DiagLibTest/devicetest.cpp; sourceTree = SOURCE_ROOT; };
+		7F5B21290F5C03090067D54F /* mac_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mac_helper.h; path = ../DiagLib/Mac/mac_helper.h; sourceTree = SOURCE_ROOT; };
+		7F5B21380F5C07A10067D54F /* mac_helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mac_helper.cpp; path = ../DiagLib/Mac/mac_helper.cpp; sourceTree = SOURCE_ROOT; };
+		7F7AC8D60F5D8336002EB9E2 /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = ../DiagLib/util.cpp; sourceTree = SOURCE_ROOT; };
+		7F7D552C0F5D4B1500142E2A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
+		7F7D55E50F5D56F500142E2A /* UnitTest++.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UnitTest++.h"; path = "../../ThirdParty/unittest-cpp-1.3/UnitTest++/src/UnitTest++.h"; sourceTree = SOURCE_ROOT; };
+		7F7E60A90F6E68CE00015A7A /* otool */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = otool; path = Mac/otool; sourceTree = "<group>"; };
+		7F7E60E40F6E716100015A7A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = /Users/johndoe/Project/eDT/DiagLibTest/Info.plist; sourceTree = "<absolute>"; };
+		7F7EEE1E0F6FAA2400C398D1 /* DiagLibTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiagLibTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F7EEE290F6FAA2400C398D1 /* libProcessTestLib.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libProcessTestLib.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F7EEE360F6FAA2400C398D1 /* ProcessTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProcessTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F7EEE790F6FAA2400C398D1 /* libDiagLib.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libDiagLib.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F7EEEFA0F6FBA8300C398D1 /* libUnitTest++.macos.i386.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libUnitTest++.macos.i386.a"; path = "../../ThirdParty/unittest-cpp-1.3/UnitTest++/libUnitTest++.macos.i386.a"; sourceTree = SOURCE_ROOT; };
+		7F7EEEFB0F6FBA8300C398D1 /* libUnitTest++.macos.ppc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libUnitTest++.macos.ppc.a"; path = "../../ThirdParty/unittest-cpp-1.3/UnitTest++/libUnitTest++.macos.ppc.a"; sourceTree = SOURCE_ROOT; };
+		7F8951F90F657F6D00FED937 /* software.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = software.cpp; path = ../DiagLib/software.cpp; sourceTree = SOURCE_ROOT; };
+		7F8951FA0F657F6D00FED937 /* software.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = software.h; path = ../DiagLib/software.h; sourceTree = SOURCE_ROOT; };
+		7F8951FD0F657F8E00FED937 /* mac_software.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mac_software.cpp; path = ../DiagLib/Mac/mac_software.cpp; sourceTree = SOURCE_ROOT; };
+		7F8951FF0F657FAD00FED937 /* softwaretest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = softwaretest.cpp; path = ../DiagLibTest/softwaretest.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952A00F66917300FED937 /* cardtest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cardtest.cpp; path = ../DiagLibTest/cardtest.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952A10F66917300FED937 /* middlewaretest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = middlewaretest.cpp; path = ../DiagLibTest/middlewaretest.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952A20F66917300FED937 /* ocsptest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ocsptest.cpp; path = ../DiagLibTest/ocsptest.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952A30F66917300FED937 /* pcsctest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pcsctest.cpp; path = ../DiagLibTest/pcsctest.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952A40F66917300FED937 /* pkcstest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pkcstest.cpp; path = ../DiagLibTest/pkcstest.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952A50F66917300FED937 /* readertest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = readertest.cpp; path = ../DiagLibTest/readertest.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952A60F66917300FED937 /* registrytest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = registrytest.cpp; path = ../DiagLibTest/registrytest.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952A70F66917300FED937 /* servicetest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = servicetest.cpp; path = ../DiagLibTest/servicetest.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952A80F66917300FED937 /* tokendtest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tokendtest.cpp; path = ../DiagLibTest/tokendtest.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952B20F6691A900FED937 /* card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = card.h; path = ../DiagLib/card.h; sourceTree = SOURCE_ROOT; };
+		7F8952B30F6691A900FED937 /* middleware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = middleware.h; path = ../DiagLib/middleware.h; sourceTree = SOURCE_ROOT; };
+		7F8952B40F6691A900FED937 /* ocsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ocsp.h; path = ../DiagLib/ocsp.h; sourceTree = SOURCE_ROOT; };
+		7F8952B50F6691A900FED937 /* pcsc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pcsc.h; path = ../DiagLib/pcsc.h; sourceTree = SOURCE_ROOT; };
+		7F8952B60F6691A900FED937 /* pkcs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pkcs.h; path = ../DiagLib/pkcs.h; sourceTree = SOURCE_ROOT; };
+		7F8952B70F6691A900FED937 /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reader.h; path = ../DiagLib/reader.h; sourceTree = SOURCE_ROOT; };
+		7F8952B80F6691A900FED937 /* registry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = registry.h; path = ../DiagLib/registry.h; sourceTree = SOURCE_ROOT; };
+		7F8952B90F6691A900FED937 /* services.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = services.h; path = ../DiagLib/services.h; sourceTree = SOURCE_ROOT; };
+		7F8952BA0F6691A900FED937 /* tokend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tokend.h; path = ../DiagLib/tokend.h; sourceTree = SOURCE_ROOT; };
+		7F8952C40F6691C200FED937 /* card.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = card.cpp; path = ../DiagLib/card.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952C50F6691C200FED937 /* middleware.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = middleware.cpp; path = ../DiagLib/middleware.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952C70F6691C200FED937 /* pcsc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pcsc.cpp; path = ../DiagLib/pcsc.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952C80F6691C200FED937 /* pkcs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pkcs.cpp; path = ../DiagLib/pkcs.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952C90F6691C200FED937 /* reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = reader.cpp; path = ../DiagLib/reader.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952CA0F6691C200FED937 /* services.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = services.cpp; path = ../DiagLib/services.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952D20F6691D500FED937 /* mac_middleware.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mac_middleware.cpp; path = ../DiagLib/Mac/mac_middleware.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952D50F6691D500FED937 /* mac_registry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mac_registry.cpp; path = ../DiagLib/Mac/mac_registry.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952D60F6691D500FED937 /* mac_services.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mac_services.cpp; path = ../DiagLib/Mac/mac_services.cpp; sourceTree = SOURCE_ROOT; };
+		7F8952F10F6692E500FED937 /* eidlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eidlib.h; path = ../../eidmw/eidlib/eidlib.h; sourceTree = SOURCE_ROOT; };
+		7F8952F20F6692E500FED937 /* eidlibException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eidlibException.h; path = ../../eidmw/eidlib/eidlibException.h; sourceTree = SOURCE_ROOT; };
+		7F8953210F66991400FED937 /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = /System/Library/Frameworks/PCSC.framework; sourceTree = "<absolute>"; };
+		7F8953860F66A22D00FED937 /* mac_tokend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mac_tokend.cpp; path = ../DiagLib/Mac/mac_tokend.cpp; sourceTree = SOURCE_ROOT; };
+		7F8955EB0F67D57800FED937 /* libbeidlib.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbeidlib.dylib; path = ../../eidmw/lib/libbeidlib.dylib; sourceTree = SOURCE_ROOT; };
+		7F8958D00F69094F00FED937 /* beidlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = beidlib.cpp; sourceTree = "<group>"; };
+		7F8958D10F69094F00FED937 /* beidlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = beidlib.h; sourceTree = "<group>"; };
+		7F8A84F80F5EC614007C7CD3 /* ProcessTestLib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ProcessTestLib.cpp; path = ../ProcessTestLib/ProcessTestLib.cpp; sourceTree = SOURCE_ROOT; };
+		7F8A84F90F5EC614007C7CD3 /* ProcessTestLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProcessTestLib.h; path = ../ProcessTestLib/ProcessTestLib.h; sourceTree = SOURCE_ROOT; };
+		7F8A85570F5ECA52007C7CD3 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../ProcessTest/main.cpp; sourceTree = SOURCE_ROOT; };
+		7F8A86AB0F5FF659007C7CD3 /* user.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = user.h; path = ../DiagLib/user.h; sourceTree = SOURCE_ROOT; };
+		7F8A86AD0F5FF66F007C7CD3 /* mac_user.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mac_user.cpp; path = ../DiagLib/Mac/mac_user.cpp; sourceTree = SOURCE_ROOT; };
+		7F8A86D00F5FFE8D007C7CD3 /* usertest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = usertest.cpp; path = ../DiagLibTest/usertest.cpp; sourceTree = SOURCE_ROOT; };
+		7F8A87180F5FFFEB007C7CD3 /* systemtest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = systemtest.cpp; path = ../DiagLibTest/systemtest.cpp; sourceTree = SOURCE_ROOT; };
+		7F8A871A0F600039007C7CD3 /* system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = system.h; path = ../DiagLib/system.h; sourceTree = SOURCE_ROOT; };
+		7F8A871C0F600049007C7CD3 /* mac_system.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mac_system.cpp; path = ../DiagLib/Mac/mac_system.cpp; sourceTree = SOURCE_ROOT; };
+		7F8A87220F60008F007C7CD3 /* system.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = system.cpp; path = ../DiagLib/system.cpp; sourceTree = SOURCE_ROOT; };
+		7F8DEF970F6FFBF8008E30F5 /* ocsp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ocsp.cpp; sourceTree = "<group>"; };
+		7F9AD6A00F695FC3001575C2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
+		7FA5EADD0F5EA38E00E5099C /* progress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = progress.h; path = ../DiagLib/progress.h; sourceTree = SOURCE_ROOT; };
+		7FA5EADF0F5EA3A300E5099C /* progress.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = progress.cpp; path = ../DiagLib/progress.cpp; sourceTree = SOURCE_ROOT; };
+		7FA5EAE30F5EA4D700E5099C /* csp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = csp.h; path = ../DiagLib/csp.h; sourceTree = SOURCE_ROOT; };
+		7FA5EAE50F5EA4E800E5099C /* mac_csp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mac_csp.cpp; path = ../DiagLib/Mac/mac_csp.cpp; sourceTree = SOURCE_ROOT; };
+		7FA5EAE70F5EA52900E5099C /* csptest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = csptest.cpp; path = ../DiagLibTest/csptest.cpp; sourceTree = SOURCE_ROOT; };
+		7FA5EAE90F5EA54100E5099C /* progresstest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = progresstest.cpp; path = ../DiagLibTest/progresstest.cpp; sourceTree = SOURCE_ROOT; };
+		7FA5EAFB0F5EAB8C00E5099C /* processtest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = processtest.cpp; path = ../DiagLibTest/processtest.cpp; sourceTree = SOURCE_ROOT; };
+		7FA5EAFD0F5EAB9E00E5099C /* mac_process.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mac_process.cpp; path = ../DiagLib/Mac/mac_process.cpp; sourceTree = SOURCE_ROOT; };
+		7FA5EAFF0F5EABB100E5099C /* process.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = process.cpp; path = ../DiagLib/process.cpp; sourceTree = SOURCE_ROOT; };
+		7FA5EB000F5EABB100E5099C /* process.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = process.h; path = ../DiagLib/process.h; sourceTree = SOURCE_ROOT; };
+		7FBFA2BB0F601A040048AD9F /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		7FD848D80F5BEF9700C32F65 /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = log.cpp; path = ../DiagLib/log.cpp; sourceTree = SOURCE_ROOT; };
+		7FD848D90F5BEF9700C32F65 /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = log.h; path = ../DiagLib/log.h; sourceTree = SOURCE_ROOT; };
+		7FEF3FF70F5C308900B5A7BA /* diaglib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = diaglib.h; path = ../DiagLib/diaglib.h; sourceTree = SOURCE_ROOT; };
+		7FEF3FF80F5C308900B5A7BA /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = error.h; path = ../DiagLib/error.h; sourceTree = SOURCE_ROOT; };
+		7FEF3FF90F5C308900B5A7BA /* report.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = report.h; path = ../DiagLib/report.h; sourceTree = SOURCE_ROOT; };
+		7FEF3FFA0F5C308900B5A7BA /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = ../DiagLib/util.h; sourceTree = SOURCE_ROOT; };
+		7FEF3FFF0F5C309E00B5A7BA /* report.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = report.cpp; path = ../DiagLib/report.cpp; sourceTree = SOURCE_ROOT; };
+		7FEF40020F5C30FB00B5A7BA /* file.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = file.h; path = ../DiagLib/file.h; sourceTree = SOURCE_ROOT; };
+		7FEF40030F5C30FB00B5A7BA /* folder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = folder.h; path = ../DiagLib/folder.h; sourceTree = SOURCE_ROOT; };
+		7FEF400E0F5C314C00B5A7BA /* mac_file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mac_file.cpp; path = ../DiagLib/Mac/mac_file.cpp; sourceTree = SOURCE_ROOT; };
+		7FEF400F0F5C314C00B5A7BA /* mac_folder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mac_folder.cpp; path = ../DiagLib/Mac/mac_folder.cpp; sourceTree = SOURCE_ROOT; };
+		7FEF40AF0F5C423300B5A7BA /* file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file.cpp; path = ../DiagLib/file.cpp; sourceTree = SOURCE_ROOT; };
+		7FEF40E00F5C4A1D00B5A7BA /* diaglibtest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diaglibtest.cpp; path = ../DiagLibTest/diaglibtest.cpp; sourceTree = SOURCE_ROOT; };
+		7FEF40E10F5C4A1D00B5A7BA /* filetest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = filetest.cpp; path = ../DiagLibTest/filetest.cpp; sourceTree = SOURCE_ROOT; };
+		7FEF40E20F5C4A1D00B5A7BA /* foldertest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = foldertest.cpp; path = ../DiagLibTest/foldertest.cpp; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7F7EEE120F6FAA2400C398D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F7EEE970F6FAA2400C398D1 /* libDiagLib.dylib in Frameworks */,
+				7F7EEE140F6FAA2400C398D1 /* Carbon.framework in Frameworks */,
+				7F7EEE150F6FAA2400C398D1 /* CoreFoundation.framework in Frameworks */,
+				7F7EEE170F6FAA2400C398D1 /* Security.framework in Frameworks */,
+				7F7EEEFC0F6FBA8300C398D1 /* libUnitTest++.macos.i386.a in Frameworks */,
+				7F7EEEFD0F6FBA8300C398D1 /* libUnitTest++.macos.ppc.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F7EEE250F6FAA2400C398D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F7EEE2F0F6FAA2400C398D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F7EEE980F6FAA2400C398D1 /* libProcessTestLib.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F7EEE720F6FAA2400C398D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F8585740F6FE52400C4A876 /* libbeidlib.dylib in Frameworks */,
+				7F7EEE730F6FAA2400C398D1 /* CoreFoundation.framework in Frameworks */,
+				7F7EEE740F6FAA2400C398D1 /* Carbon.framework in Frameworks */,
+				7F7EEE750F6FAA2400C398D1 /* Security.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7F5B20E90F5BF48B0067D54F /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				7F8DEF970F6FFBF8008E30F5 /* ocsp.cpp */,
+				7F8958D00F69094F00FED937 /* beidlib.cpp */,
+				7F8953860F66A22D00FED937 /* mac_tokend.cpp */,
+				7F8952D20F6691D500FED937 /* mac_middleware.cpp */,
+				7F8952D50F6691D500FED937 /* mac_registry.cpp */,
+				7F8952D60F6691D500FED937 /* mac_services.cpp */,
+				7F8952C40F6691C200FED937 /* card.cpp */,
+				7F8952C50F6691C200FED937 /* middleware.cpp */,
+				7F8952C70F6691C200FED937 /* pcsc.cpp */,
+				7F8952C80F6691C200FED937 /* pkcs.cpp */,
+				7F8952C90F6691C200FED937 /* reader.cpp */,
+				7F8952CA0F6691C200FED937 /* services.cpp */,
+				7F3CBCB20F601F2800015AEE /* device.cpp */,
+				7F8A87220F60008F007C7CD3 /* system.cpp */,
+				7FEF40AF0F5C423300B5A7BA /* file.cpp */,
+				7FD848D80F5BEF9700C32F65 /* log.cpp */,
+				7FA5EAFF0F5EABB100E5099C /* process.cpp */,
+				7FA5EADF0F5EA3A300E5099C /* progress.cpp */,
+				7FEF3FFF0F5C309E00B5A7BA /* report.cpp */,
+				7F8951F90F657F6D00FED937 /* software.cpp */,
+				7F7AC8D60F5D8336002EB9E2 /* util.cpp */,
+				7FA5EAE50F5EA4E800E5099C /* mac_csp.cpp */,
+				7F3CBCB00F601F1B00015AEE /* mac_device.cpp */,
+				7FEF400E0F5C314C00B5A7BA /* mac_file.cpp */,
+				7FEF400F0F5C314C00B5A7BA /* mac_folder.cpp */,
+				7F5B21380F5C07A10067D54F /* mac_helper.cpp */,
+				7FA5EAFD0F5EAB9E00E5099C /* mac_process.cpp */,
+				7F8951FD0F657F8E00FED937 /* mac_software.cpp */,
+				7F8A871C0F600049007C7CD3 /* mac_system.cpp */,
+				7F8A86AD0F5FF66F007C7CD3 /* mac_user.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		7F5B20EA0F5BF4950067D54F /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				7F8958D10F69094F00FED937 /* beidlib.h */,
+				7F8952B20F6691A900FED937 /* card.h */,
+				7F8952B30F6691A900FED937 /* middleware.h */,
+				7F8952B40F6691A900FED937 /* ocsp.h */,
+				7F8952B50F6691A900FED937 /* pcsc.h */,
+				7F8952B60F6691A900FED937 /* pkcs.h */,
+				7F8952B70F6691A900FED937 /* reader.h */,
+				7F8952B80F6691A900FED937 /* registry.h */,
+				7F8952B90F6691A900FED937 /* services.h */,
+				7F8952BA0F6691A900FED937 /* tokend.h */,
+				7FA5EAE30F5EA4D700E5099C /* csp.h */,
+				7F3CBCB30F601F2800015AEE /* device.h */,
+				7FEF3FF70F5C308900B5A7BA /* diaglib.h */,
+				7FEF3FF80F5C308900B5A7BA /* error.h */,
+				7FEF40020F5C30FB00B5A7BA /* file.h */,
+				7FEF40030F5C30FB00B5A7BA /* folder.h */,
+				7FD848D90F5BEF9700C32F65 /* log.h */,
+				7FA5EB000F5EABB100E5099C /* process.h */,
+				7FA5EADD0F5EA38E00E5099C /* progress.h */,
+				7FEF3FF90F5C308900B5A7BA /* report.h */,
+				7F8951FA0F657F6D00FED937 /* software.h */,
+				7F8A871A0F600039007C7CD3 /* system.h */,
+				7F8A86AB0F5FF659007C7CD3 /* user.h */,
+				7FEF3FFA0F5C308900B5A7BA /* util.h */,
+				7F5B21290F5C03090067D54F /* mac_helper.h */,
+			);
+			name = Header;
+			sourceTree = "<group>";
+		};
+		7F7D56020F5D597300142E2A /* UnitTest++ */ = {
+			isa = PBXGroup;
+			children = (
+				7F7EEEFA0F6FBA8300C398D1 /* libUnitTest++.macos.i386.a */,
+				7F7EEEFB0F6FBA8300C398D1 /* libUnitTest++.macos.ppc.a */,
+				7F7D55E50F5D56F500142E2A /* UnitTest++.h */,
+			);
+			name = "UnitTest++";
+			sourceTree = "<group>";
+		};
+		7F8952F00F6692AC00FED937 /* eidlib */ = {
+			isa = PBXGroup;
+			children = (
+				7F8955EB0F67D57800FED937 /* libbeidlib.dylib */,
+				7F8952F10F6692E500FED937 /* eidlib.h */,
+				7F8952F20F6692E500FED937 /* eidlibException.h */,
+			);
+			name = eidlib;
+			sourceTree = "<group>";
+		};
+		7F8953200F6698FD00FED937 /* Pcsc */ = {
+			isa = PBXGroup;
+			children = (
+				7F8953210F66991400FED937 /* PCSC.framework */,
+			);
+			name = Pcsc;
+			sourceTree = "<group>";
+		};
+		7F8956DA0F67EF9B00FED937 /* DiagLib_beidlib */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = DiagLib_beidlib;
+			sourceTree = "<group>";
+		};
+		7F8A84F70F5EC5F9007C7CD3 /* ProcessTestLib */ = {
+			isa = PBXGroup;
+			children = (
+				7F8A84F80F5EC614007C7CD3 /* ProcessTestLib.cpp */,
+				7F8A84F90F5EC614007C7CD3 /* ProcessTestLib.h */,
+			);
+			name = ProcessTestLib;
+			sourceTree = "<group>";
+		};
+		7F8A854C0F5EC9D5007C7CD3 /* ProcessTest */ = {
+			isa = PBXGroup;
+			children = (
+				7F8A85570F5ECA52007C7CD3 /* main.cpp */,
+			);
+			name = ProcessTest;
+			sourceTree = "<group>";
+		};
+		7FBFA2C10F601A1C0048AD9F /* Mac Frameworks & Tools */ = {
+			isa = PBXGroup;
+			children = (
+				7F7E60A90F6E68CE00015A7A /* otool */,
+				7F9AD6A00F695FC3001575C2 /* Security.framework */,
+				7F7D552C0F5D4B1500142E2A /* CoreFoundation.framework */,
+				7FBFA2BB0F601A040048AD9F /* Carbon.framework */,
+			);
+			name = "Mac Frameworks & Tools";
+			sourceTree = "<group>";
+		};
+		7FD848B30F5BEBF000C32F65 = {
+			isa = PBXGroup;
+			children = (
+				7F8956DA0F67EF9B00FED937 /* DiagLib_beidlib */,
+				7F8953200F6698FD00FED937 /* Pcsc */,
+				7F8952F00F6692AC00FED937 /* eidlib */,
+				7FBFA2C10F601A1C0048AD9F /* Mac Frameworks & Tools */,
+				7F8A854C0F5EC9D5007C7CD3 /* ProcessTest */,
+				7F8A84F70F5EC5F9007C7CD3 /* ProcessTestLib */,
+				7F7D56020F5D597300142E2A /* UnitTest++ */,
+				7FEF40DF0F5C49D600B5A7BA /* DiagLibTest */,
+				7FD848E20F5BEFA700C32F65 /* DiagLib */,
+				7FD848C70F5BEEF300C32F65 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7FD848C70F5BEEF300C32F65 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7F7EEE1E0F6FAA2400C398D1 /* DiagLibTest.app */,
+				7F7EEE290F6FAA2400C398D1 /* libProcessTestLib.dylib */,
+				7F7EEE360F6FAA2400C398D1 /* ProcessTest.app */,
+				7F7EEE790F6FAA2400C398D1 /* libDiagLib.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7FD848E20F5BEFA700C32F65 /* DiagLib */ = {
+			isa = PBXGroup;
+			children = (
+				7F5B20EA0F5BF4950067D54F /* Header */,
+				7F5B20E90F5BF48B0067D54F /* Source */,
+			);
+			name = DiagLib;
+			sourceTree = "<group>";
+		};
+		7FEF40DF0F5C49D600B5A7BA /* DiagLibTest */ = {
+			isa = PBXGroup;
+			children = (
+				7F7E60E40F6E716100015A7A /* Info.plist */,
+				7F8952A00F66917300FED937 /* cardtest.cpp */,
+				7F8952A10F66917300FED937 /* middlewaretest.cpp */,
+				7F8952A20F66917300FED937 /* ocsptest.cpp */,
+				7F8952A30F66917300FED937 /* pcsctest.cpp */,
+				7F8952A40F66917300FED937 /* pkcstest.cpp */,
+				7F8952A50F66917300FED937 /* readertest.cpp */,
+				7F8952A60F66917300FED937 /* registrytest.cpp */,
+				7F8952A70F66917300FED937 /* servicetest.cpp */,
+				7F8952A80F66917300FED937 /* tokendtest.cpp */,
+				7F3CBCB60F601F3800015AEE /* devicetest.cpp */,
+				7FEF40E00F5C4A1D00B5A7BA /* diaglibtest.cpp */,
+				7FA5EAE70F5EA52900E5099C /* csptest.cpp */,
+				7FEF40E10F5C4A1D00B5A7BA /* filetest.cpp */,
+				7FEF40E20F5C4A1D00B5A7BA /* foldertest.cpp */,
+				7FA5EAFB0F5EAB8C00E5099C /* processtest.cpp */,
+				7FA5EAE90F5EA54100E5099C /* progresstest.cpp */,
+				7F8951FF0F657FAD00FED937 /* softwaretest.cpp */,
+				7F8A87180F5FFFEB007C7CD3 /* systemtest.cpp */,
+				7F8A86D00F5FFE8D007C7CD3 /* usertest.cpp */,
+			);
+			name = DiagLibTest;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7F7EEDF80F6FAA2400C398D1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F7EEDF90F6FAA2400C398D1 /* UnitTest++.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F7EEE210F6FAA2400C398D1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F7EEE220F6FAA2400C398D1 /* ProcessTestLib.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F7EEE2B0F6FAA2400C398D1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F7EEE390F6FAA2400C398D1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F7EEE3A0F6FAA2400C398D1 /* file.h in Headers */,
+				7F7EEE3B0F6FAA2400C398D1 /* folder.h in Headers */,
+				7F7EEE3C0F6FAA2400C398D1 /* diaglib.h in Headers */,
+				7F7EEE3D0F6FAA2400C398D1 /* error.h in Headers */,
+				7F7EEE3E0F6FAA2400C398D1 /* report.h in Headers */,
+				7F7EEE3F0F6FAA2400C398D1 /* util.h in Headers */,
+				7F7EEE400F6FAA2400C398D1 /* mac_helper.h in Headers */,
+				7F7EEE410F6FAA2400C398D1 /* log.h in Headers */,
+				7F7EEE420F6FAA2400C398D1 /* progress.h in Headers */,
+				7F7EEE430F6FAA2400C398D1 /* csp.h in Headers */,
+				7F7EEE440F6FAA2400C398D1 /* process.h in Headers */,
+				7F7EEE450F6FAA2400C398D1 /* user.h in Headers */,
+				7F7EEE460F6FAA2400C398D1 /* system.h in Headers */,
+				7F7EEE470F6FAA2400C398D1 /* device.h in Headers */,
+				7F7EEE480F6FAA2400C398D1 /* software.h in Headers */,
+				7F7EEE490F6FAA2400C398D1 /* card.h in Headers */,
+				7F7EEE4A0F6FAA2400C398D1 /* middleware.h in Headers */,
+				7F7EEE4B0F6FAA2400C398D1 /* ocsp.h in Headers */,
+				7F7EEE4C0F6FAA2400C398D1 /* pcsc.h in Headers */,
+				7F7EEE4D0F6FAA2400C398D1 /* pkcs.h in Headers */,
+				7F7EEE4E0F6FAA2400C398D1 /* reader.h in Headers */,
+				7F7EEE4F0F6FAA2400C398D1 /* registry.h in Headers */,
+				7F7EEE500F6FAA2400C398D1 /* services.h in Headers */,
+				7F7EEE510F6FAA2400C398D1 /* tokend.h in Headers */,
+				7F85856C0F6FE50100C4A876 /* beidlib.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		7F7EEDF30F6FAA2400C398D1 /* DiagLibTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F7EEE1A0F6FAA2400C398D1 /* Build configuration list for PBXNativeTarget "DiagLibTest" */;
+			buildPhases = (
+				7F7EEDF80F6FAA2400C398D1 /* Headers */,
+				7F7EEDFA0F6FAA2400C398D1 /* Resources */,
+				7F7EEDFE0F6FAA2400C398D1 /* Sources */,
+				7F7EEE120F6FAA2400C398D1 /* Frameworks */,
+				7F7EEE180F6FAA2400C398D1 /* Rez */,
+				7F7EEE190F6FAA2400C398D1 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7F7EEE930F6FAA2400C398D1 /* PBXTargetDependency */,
+			);
+			name = DiagLibTest;
+			productInstallPath = "$(USER_APPS_DIR)";
+			productName = DiagLibTest;
+			productReference = 7F7EEE1E0F6FAA2400C398D1 /* DiagLibTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7F7EEE200F6FAA2400C398D1 /* ProcessTestLib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F7EEE260F6FAA2400C398D1 /* Build configuration list for PBXNativeTarget "ProcessTestLib" */;
+			buildPhases = (
+				7F7EEE210F6FAA2400C398D1 /* Headers */,
+				7F7EEE230F6FAA2400C398D1 /* Sources */,
+				7F7EEE250F6FAA2400C398D1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ProcessTestLib;
+			productName = ProcessTestLib;
+			productReference = 7F7EEE290F6FAA2400C398D1 /* libProcessTestLib.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		7F7EEE2A0F6FAA2400C398D1 /* ProcessTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F7EEE320F6FAA2400C398D1 /* Build configuration list for PBXNativeTarget "ProcessTest" */;
+			buildPhases = (
+				7F7EEE2B0F6FAA2400C398D1 /* Headers */,
+				7F7EEE2C0F6FAA2400C398D1 /* Resources */,
+				7F7EEE2D0F6FAA2400C398D1 /* Sources */,
+				7F7EEE2F0F6FAA2400C398D1 /* Frameworks */,
+				7F7EEE310F6FAA2400C398D1 /* Rez */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ProcessTest;
+			productInstallPath = "$(USER_APPS_DIR)";
+			productName = ProcessTest;
+			productReference = 7F7EEE360F6FAA2400C398D1 /* ProcessTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7F7EEE380F6FAA2400C398D1 /* DiagLib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F7EEE760F6FAA2400C398D1 /* Build configuration list for PBXNativeTarget "DiagLib" */;
+			buildPhases = (
+				7F8702BD0F700B3900CD0B59 /* ShellScript */,
+				7F7EEE390F6FAA2400C398D1 /* Headers */,
+				7F7EEE530F6FAA2400C398D1 /* Sources */,
+				7F7EEE720F6FAA2400C398D1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DiagLib;
+			productName = DiagLib;
+			productReference = 7F7EEE790F6FAA2400C398D1 /* libDiagLib.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7FD848B50F5BEBF000C32F65 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 7FD848B80F5BEBF000C32F65 /* Build configuration list for PBXProject "DiagLib" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 0;
+			mainGroup = 7FD848B30F5BEBF000C32F65;
+			productRefGroup = 7FD848C70F5BEEF300C32F65 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7F7EEDF30F6FAA2400C398D1 /* DiagLibTest */,
+				7F7EEE200F6FAA2400C398D1 /* ProcessTestLib */,
+				7F7EEE2A0F6FAA2400C398D1 /* ProcessTest */,
+				7F7EEE380F6FAA2400C398D1 /* DiagLib */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7F7EEDFA0F6FAA2400C398D1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F7EEEC00F6FAE8600C398D1 /* libDiagLib.dylib in Resources */,
+				7F7EEEBF0F6FAE7A00C398D1 /* Info.plist in Resources */,
+				7F7EEDFD0F6FAA2400C398D1 /* otool in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F7EEE2C0F6FAA2400C398D1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		7F7EEE180F6FAA2400C398D1 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F7EEE310F6FAA2400C398D1 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7F7EEE190F6FAA2400C398D1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "install_name_tool -change /usr/local/lib/libDiagLib.dylib @executable_path/../Resources/libDiagLib.dylib ${BUILT_PRODUCTS_DIR}/DiagLibTest.app/Contents/MacOS/DiagLibTest\nmv -f ${BUILT_PRODUCTS_DIR}/DiagLibTest.app/Contents/Resources/Info.plist ${BUILT_PRODUCTS_DIR}/DiagLibTest.app/Contents/Info.plist";
+		};
+		7F8702BD0F700B3900CD0B59 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd ..\n./getsvnrevision.pl";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7F7EEDFE0F6FAA2400C398D1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F7EEE000F6FAA2400C398D1 /* csptest.cpp in Sources */,
+				7F7EEE010F6FAA2400C398D1 /* devicetest.cpp in Sources */,
+				7F7EEE020F6FAA2400C398D1 /* diaglibtest.cpp in Sources */,
+				7F7EEE030F6FAA2400C398D1 /* filetest.cpp in Sources */,
+				7F7EEE040F6FAA2400C398D1 /* foldertest.cpp in Sources */,
+				7F7EEE050F6FAA2400C398D1 /* middlewaretest.cpp in Sources */,
+				7F7EEE060F6FAA2400C398D1 /* ocsptest.cpp in Sources */,
+				7F7EEE070F6FAA2400C398D1 /* pcsctest.cpp in Sources */,
+				7F7EEE080F6FAA2400C398D1 /* pkcstest.cpp in Sources */,
+				7F7EEE090F6FAA2400C398D1 /* processtest.cpp in Sources */,
+				7F7EEE0A0F6FAA2400C398D1 /* progresstest.cpp in Sources */,
+				7F7EEE0B0F6FAA2400C398D1 /* readertest.cpp in Sources */,
+				7F7EEE0C0F6FAA2400C398D1 /* registrytest.cpp in Sources */,
+				7F7EEE0D0F6FAA2400C398D1 /* servicetest.cpp in Sources */,
+				7F7EEE0E0F6FAA2400C398D1 /* softwaretest.cpp in Sources */,
+				7F7EEE0F0F6FAA2400C398D1 /* systemtest.cpp in Sources */,
+				7F7EEE100F6FAA2400C398D1 /* tokendtest.cpp in Sources */,
+				7F7EEE110F6FAA2400C398D1 /* usertest.cpp in Sources */,
+				7F7EEEF10F6FB49900C398D1 /* cardtest.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F7EEE230F6FAA2400C398D1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F7EEE240F6FAA2400C398D1 /* ProcessTestLib.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F7EEE2D0F6FAA2400C398D1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F7EEE2E0F6FAA2400C398D1 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F7EEE530F6FAA2400C398D1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F7EEE540F6FAA2400C398D1 /* file.cpp in Sources */,
+				7F7EEE550F6FAA2400C398D1 /* mac_file.cpp in Sources */,
+				7F7EEE560F6FAA2400C398D1 /* mac_folder.cpp in Sources */,
+				7F7EEE570F6FAA2400C398D1 /* report.cpp in Sources */,
+				7F7EEE580F6FAA2400C398D1 /* mac_helper.cpp in Sources */,
+				7F7EEE590F6FAA2400C398D1 /* log.cpp in Sources */,
+				7F7EEE5A0F6FAA2400C398D1 /* util.cpp in Sources */,
+				7F7EEE5B0F6FAA2400C398D1 /* progress.cpp in Sources */,
+				7F7EEE5C0F6FAA2400C398D1 /* mac_csp.cpp in Sources */,
+				7F7EEE5D0F6FAA2400C398D1 /* mac_process.cpp in Sources */,
+				7F7EEE5E0F6FAA2400C398D1 /* process.cpp in Sources */,
+				7F7EEE5F0F6FAA2400C398D1 /* mac_user.cpp in Sources */,
+				7F7EEE600F6FAA2400C398D1 /* mac_system.cpp in Sources */,
+				7F7EEE610F6FAA2400C398D1 /* system.cpp in Sources */,
+				7F7EEE620F6FAA2400C398D1 /* mac_device.cpp in Sources */,
+				7F7EEE630F6FAA2400C398D1 /* device.cpp in Sources */,
+				7F7EEE640F6FAA2400C398D1 /* software.cpp in Sources */,
+				7F7EEE650F6FAA2400C398D1 /* mac_software.cpp in Sources */,
+				7F7EEE660F6FAA2400C398D1 /* card.cpp in Sources */,
+				7F7EEE670F6FAA2400C398D1 /* middleware.cpp in Sources */,
+				7F7EEE680F6FAA2400C398D1 /* pcsc.cpp in Sources */,
+				7F7EEE690F6FAA2400C398D1 /* pkcs.cpp in Sources */,
+				7F7EEE6A0F6FAA2400C398D1 /* reader.cpp in Sources */,
+				7F7EEE6B0F6FAA2400C398D1 /* services.cpp in Sources */,
+				7F7EEE6C0F6FAA2400C398D1 /* mac_middleware.cpp in Sources */,
+				7F7EEE6D0F6FAA2400C398D1 /* mac_registry.cpp in Sources */,
+				7F7EEE6E0F6FAA2400C398D1 /* mac_services.cpp in Sources */,
+				7F7EEE6F0F6FAA2400C398D1 /* mac_tokend.cpp in Sources */,
+				7F85856B0F6FE4FE00C4A876 /* beidlib.cpp in Sources */,
+				7F8DEF980F6FFBF8008E30F5 /* ocsp.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7F7EEE930F6FAA2400C398D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F7EEE380F6FAA2400C398D1 /* DiagLib */;
+			targetProxy = 7F7EEE920F6FAA2400C398D1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		7F7EEE1B0F6FAA2400C398D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = "";
+				INFOPLIST_FILE = "Info-DiagLibTest__Upgraded_.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../../ThirdParty/unittest-cpp-1.3/UnitTest++/debug",
+					"$(SRCROOT)/../../ThirdParty/unittest-cpp-1.3/UnitTest++/release",
+					"$(SRCROOT)/../../ThirdParty/unittest-cpp-1.3/UnitTest++",
+					"$(SRCROOT)/build/Debug",
+					"$(SRCROOT)/../../eidmw/lib",
+				);
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = DiagLibTest;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		7F7EEE1C0F6FAA2400C398D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = "";
+				INFOPLIST_FILE = "Info-DiagLibTest__Upgraded_.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../../ThirdParty/unittest-cpp-1.3/UnitTest++/debug",
+					"$(SRCROOT)/../../ThirdParty/unittest-cpp-1.3/UnitTest++/release",
+					"$(SRCROOT)/../../ThirdParty/unittest-cpp-1.3/UnitTest++",
+					"$(SRCROOT)/build/Debug",
+					"$(SRCROOT)/../../eidmw/lib",
+				);
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = DiagLibTest;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7F7EEE270F6FAA2400C398D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = lib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = ProcessTestLib;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7F7EEE280F6FAA2400C398D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = ProcessTestLib;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7F7EEE330F6FAA2400C398D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = "Info-ProcessTest__Upgraded_.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/build/Debug",
+				);
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ProcessTest;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		7F7EEE340F6FAA2400C398D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = "Info-ProcessTest__Upgraded_.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/build/Debug",
+				);
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ProcessTest;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7F7EEE770F6FAA2400C398D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = lib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = BEID_35;
+				HEADER_SEARCH_PATHS = (
+					..,
+					../DiagLib,
+					../DiagLib/Mac,
+					"../../ThirdParty/unittest-cpp-1.3/",
+					../../eidmw/dialogs,
+					../../eidmw/_Builds,
+				);
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../eidmw/lib\"",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = DiagLib;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7F7EEE780F6FAA2400C398D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PREPROCESSOR_DEFINITIONS = BEID_35;
+				HEADER_SEARCH_PATHS = (
+					..,
+					../DiagLib,
+					../DiagLib/Mac,
+					"../../ThirdParty/unittest-cpp-1.3/",
+					../../eidmw/dialogs,
+					../../eidmw/_Builds,
+				);
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../eidmw/lib\"",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = DiagLib;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7FD848B60F5BEBF000C32F65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				COPY_PHASE_STRIP = NO;
+				HEADER_SEARCH_PATHS = (
+					../DiagLib,
+					../DiagLib/Mac,
+					"../../ThirdParty/unittest-cpp-1.3/",
+				);
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_PREFIX_HEADER = "";
+				INFOPLIST_PREPROCESS = YES;
+				LIBRARY_SEARCH_PATHS = "../../ThirdParty/unittest-cpp-1.3/UnitTest++";
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = eDT;
+				SDKROOT = macosx10.5;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "ppc64 ppc7400 ppc970 i386 x86_64 ppc";
+			};
+			name = Debug;
+		};
+		7FD848B70F5BEBF000C32F65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				COPY_PHASE_STRIP = YES;
+				HEADER_SEARCH_PATHS = (
+					../DiagLib,
+					../DiagLib/Mac,
+					"../../ThirdParty/unittest-cpp-1.3/",
+				);
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_PREFIX_HEADER = "";
+				INFOPLIST_PREPROCESS = YES;
+				LIBRARY_SEARCH_PATHS = "../../ThirdParty/unittest-cpp-1.3/UnitTest++";
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = eDT;
+				SDKROOT = macosx10.4;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "ppc64 ppc7400 ppc970 i386 x86_64 ppc";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7F7EEE1A0F6FAA2400C398D1 /* Build configuration list for PBXNativeTarget "DiagLibTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F7EEE1B0F6FAA2400C398D1 /* Debug */,
+				7F7EEE1C0F6FAA2400C398D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F7EEE260F6FAA2400C398D1 /* Build configuration list for PBXNativeTarget "ProcessTestLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F7EEE270F6FAA2400C398D1 /* Debug */,
+				7F7EEE280F6FAA2400C398D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F7EEE320F6FAA2400C398D1 /* Build configuration list for PBXNativeTarget "ProcessTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F7EEE330F6FAA2400C398D1 /* Debug */,
+				7F7EEE340F6FAA2400C398D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F7EEE760F6FAA2400C398D1 /* Build configuration list for PBXNativeTarget "DiagLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F7EEE770F6FAA2400C398D1 /* Debug */,
+				7F7EEE780F6FAA2400C398D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7FD848B80F5BEBF000C32F65 /* Build configuration list for PBXProject "DiagLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7FD848B60F5BEBF000C32F65 /* Debug */,
+				7FD848B70F5BEBF000C32F65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7FD848B50F5BEBF000C32F65 /* Project object */;
+}

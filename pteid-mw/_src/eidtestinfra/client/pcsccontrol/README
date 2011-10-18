@@ -1,0 +1,52 @@
+#####################
+#       JAXB        #
+#####################
+
+The schema files (*.xsd) are compiled using XJC, part of the jaxb package.
+The XJC builder is switched off by default. To build the schema files, select:
+
+Project > properties > Builders
+
+Place a mark in the XJC check box and build the project.
+
+Compiling control.xsd and scard.xsd with XJC will generate:
+
+Card.java
+Control.java
+ObjectFactory.java
+
+After you have successfully ran XJC on the schema files it is best to switch off
+the builder again so that future builds run quicker.
+
+Note that JAXB is part of Java 1.6. The lib directory contains jar files that allow
+the gui to run under Java 1.5.
+
+
+#####################
+#     build.xml     #
+#####################
+
+Do not manually alter the build.xml file. Instead have Eclipse generate it. Select:
+
+File > Export... > Ant Buildfiles
+
+
+#####################
+#  makeJarFile.xml  #
+#####################
+
+This file is not generated and so you have to manually make changes. It is important
+that you step the version contained by attribute "Implementation-Version". The following
+attributes are displayed in the Gui's about box:
+
+Implementation-Title
+Implementation-Vendor
+Implementation-Version
+
+#####################
+#  logging          #
+#####################
+
+To turn on logging, a log4j.conf file should be put
+in the current dir. See the log4j.conf for an example
+of what the file can contain.

@@ -1,0 +1,203 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<title>
+Belgian eID Card Sample using IMG tag
+</title>
+<!--
+Sample info:
+
+This sample assumes
+	- the applet code is in subdirectory 'bin'.
+	- the java wrapper and other libraries are in subdirectory 'bin'
+	- the PATH is set to the directory 'bin'
+	- tested browsers: IE8, Firefox
+
+	starting from IE8, the IMG.src can be set to data, encoded in base64
+
+-->
+<script type="text/javascript">
+
+	//--------------------------------------------
+	// Add a card reader name to the dropdown list
+	//--------------------------------------------
+    function AddCardReaderName( readerName )
+    {
+		var newOption   = document.createElement("OPTION");
+        newOption.text  = readerName;
+        newOption.value = readerName;
+        document.getElementById("ID_CardReadersCombo").options.add(newOption);
+    }
+	//--------------------------------------------
+	// clear the card reader dropdown list
+	//--------------------------------------------
+    function clearCardReaderList()
+    {
+		for (var i = document.getElementById("ID_CardReadersCombo").options.length-1; i >= 0; i--)
+		{
+			document.getElementById("ID_CardReadersCombo").remove(i);
+		}
+    }
+
+	//--------------------------------------------
+	// clear the card reader dropdown list
+	//--------------------------------------------
+    function getSelectedReader()
+    {
+        var nrReaders = document.getElementById("ID_CardReadersCombo").options.length;
+
+		for (var i = 0; i<nrReaders; i++)
+		{
+			if (document.getElementById("ID_CardReadersCombo").options[i].selected)
+			{
+			    return i;
+			}
+		}
+		return -1;
+    }
+	//--------------------------------------------
+	// Add all the card reader names to the dropdown list
+	//--------------------------------------------
+    function getCardReaders()
+    {
+        clearCardReaderList();
+
+   		var nrReaders = document.BEIDApplet.readerCount();
+   		if (nrReaders==0)
+   		{
+   			alert("No card readers found");
+   		}
+
+		for( var idx=0; idx<nrReaders; idx++)
+		{
+			var readerName = document.BEIDApplet.getReaderByNum(idx);
+			AddCardReaderName(readerName);
+		}
+    }
+    function getImg()
+    {
+    	return document.BEIDApplet.GetPicture();
+    }
+	//--------------------------------------------
+	// Read the card from the selected card reader
+	//--------------------------------------------
+	function readCard()
+	{
+	    if (document.getElementById("ID_CardReadersCombo").options.length==0)
+	    {
+	        return;
+	    }
+	    var selectedReaderIdx = getSelectedReader();
+	    if (selectedReaderIdx==-1)
+	    {
+	        alert("Please select a card reader");
+	        return;
+	    }
+
+	    //--------------------------------------------
+	    // get the name of the reader and initialize with this reader
+	    //--------------------------------------------
+        var readerName = document.getElementById("ID_CardReadersCombo").options[selectedReaderIdx].text
+
+		document.BEIDApplet.InitLib(readerName);
+
+		if (document.BEIDApplet.isCardPresent(readerName))
+		{
+			// make sure we read the card data
+			var name = document.BEIDApplet.getSurname();
+
+			//-------------------------------------------
+			// get the picture in Base64 format
+			// we do this to feed the picture to the IMG tag
+			//-------------------------------------------
+			var pictEncoded = document.BEIDApplet.GetPictureBase64();
+			var pictRaw     = document.BEIDApplet.GetPicture();
+
+			var appName		= new String(navigator.appName);
+			var bIEImgBase64 = false;
+
+			//-------------------------------------------
+			// Check which browser we are running in. IE must be
+			// version 8 or higher to be able to use the IMG tag
+			//-------------------------------------------
+			if ( appName == "Microsoft Internet Explorer" )
+			{
+				var appVersion = new String(navigator.appVersion);
+				var versionPos = appVersion.indexOf("MSIE");
+				var version = appVersion.substr(versionPos+5,1);
+				if ( version >= 8 )
+				{
+					bIEImgBase64 = true;
+				}
+			}
+
+			if ( appName != "Microsoft Internet Explorer" || bIEImgBase64 == true)
+			{
+				//-------------------------------------------
+				// create an image object and set the src as the
+				// base64 encoded data
+				//-------------------------------------------
+				var eIDImage = new Image(100,240);
+				eIDImage.src = "data:image/jpg;base64,"+ pictEncoded;
+
+				//-------------------------------------------
+				// get the IMG object and draw the image
+				//-------------------------------------------
+				var img = document.getElementById('theImage');
+				img.src = eIDImage.src;
+			}
+			else
+			{
+				alert("IMG tag possibly not supported");
+			}
+
+		}
+		else
+		{
+			alert("No eID card in card reader");
+		}
+
+	}
+
+</script>
+
+<body topmargin=0>
+<form name=actionform>
+			<p>
+			Below is the applet image
+			<br>
+                <applet
+                  codebase = "."
+                  archive  = "BEID_ImgApplet.jar,beid35libJava.jar"
+                  code     = "be.belgium.beid.BEID_ImgApplet.class"
+                  name     = "BEIDApplet"
+                  width    = "140"
+                  height   = "200"
+                  hspace   = "0"
+                  vspace   = "0"
+                  align    = "middle"
+                  mayscript
+                >
+                <param name="Reader" value="O2Micro CCID SC Reader" >
+                <param name="debug" value="true" >
+                </applet>
+			<p>
+			<input type="button" name="IDButton" 		onclick="javascript:readCard()" 	value="Read Card " title="Read Card"/>
+
+			<select id="ID_CardReadersCombo">
+			</select>
+
+			<p>
+			Below is the IMG tag
+			<br>
+			<img id="theImage" width="140" height="200"/>
+
+
+</form>
+<script language="javascript">
+	document.BEIDApplet.InitLib(null);
+	getCardReaders();
+</script>
+</body>
+</html>

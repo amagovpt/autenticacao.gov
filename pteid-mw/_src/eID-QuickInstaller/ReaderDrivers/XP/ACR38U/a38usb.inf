@@ -1,0 +1,156 @@
+; A38USB.INF
+; Copyright (c) 1994 - 2006 Advanced Card Systems Ltd
+
+[Version]
+DriverVer=03/24/2006,1.1.5.6
+Signature="$Chicago$"
+Class=SmartCardReader
+ClassGuid={50DD5230-BA8A-11D1-BF5D-0000F805F530}
+Provider=%Acs%
+CatalogFile=a38usb.cat
+CatalogFile.NT=a38usb.cat
+LayoutFile=layout.inf
+
+; ================= Class section =====================
+
+[ClassInstall32]
+Addreg=SmartCardReaderClassReg     
+
+[ClassInstall]
+Addreg=SmartCardReaderClassReg
+
+[SmartCardReaderClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-25
+HKLM,"\Software\Microsoft\Cryptography\Calais\Readers",,,
+
+[Manufacturer]
+%ACS%=ACS
+
+; ================= ACS SCR Reader =====================
+
+[ACS]
+; DisplayName       Section     DeviceId
+; -----------       -------     --------
+%ACS.DeviceDesc% = ACS.Install, USB\VID_072F&PID_9000
+
+[ACS.Install]
+AddReg          = ACS.Install.AddReg
+CopyFiles	= ACS.Install.CopySYS, ACS.Install.CopyDLL
+
+[ACS.Install.NT]
+AddReg          = ACS.Install.AddReg.NT
+CopyFiles	= ACS.Install.CopySYS.NT, ACS.Install.CopyDLL.NT
+
+[ACS.Install.AddReg.NT]
+HKR,,AdapterType, 0, "0100"
+HKR,,EnumPropPages32,,"usbr38.dll,ReaderPropPageProvider"
+HKR,,"VendorName",0,%Vendor%
+HKR,,"IFDName",0,%Reader%
+HKR,,"CardType",0,%CardType%
+HKR,,"SFDT",0,%SFDT%
+HKR,,"CardVoltage",0,%CardVoltage%
+HKLM,"System\CurrentControlSet\Services\SCardSvr","Start", 0x00010001,2
+
+[ACS.Install.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,a38usb.sys
+HKR,,AdapterType, 0, "0100"
+HKR,,EnumPropPages,,"usbr3816.dll,EnumPropPages"
+HKR,,"VendorName",0,%Vendor%
+HKR,,"IFDName",0,%Reader%
+HKR,,"CardType",0,%CardType%
+HKR,,"SFDT",0,%SFDT%
+HKR,,"CardVoltage",0,%CardVoltage%
+
+[ACS.Install.CopySYS]
+a38usb.sys,,,2
+
+[ACS.Install.CopyDLL]
+usbr3816.dll,,,2
+
+[ACS.Install.CopySYS.NT]
+a38usb.sys,,,2
+
+[ACS.Install.CopyDLL.NT]
+usbr38.dll,,,2
+
+[ACS.Install.Services]
+AddService = ACSSCR, 2, ACS.Service
+
+[ACS.Install.NT.Services]
+AddService = ACSSCR, 2, ACS.Service, ACS.EventLog
+
+[ACS.Service]
+DisplayName     = %ACS.DeviceDesc%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_DEMAND_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\a38usb.sys
+
+[ACS.EventLog]
+AddReg = ACS.AddEventLog.reg
+
+[ACS.AddEventLog.reg]
+HKR,, EventMessageFile, 0x00020000, "%%SystemRoot%%\System32\drivers\a38usb.sys"
+HKR,, TypesSupported,   0x00010001, 7
+
+[SourceDisksNames]
+1 = "ACR38 USB Smart Card Installation Disk",,,""
+
+[SourceDisksFiles]
+a38usb.sys = 1
+usbr3816.dll = 1
+usbr38.dll = 1
+
+[DestinationDirs]
+ACS.Install.CopyDLL = 10,System
+ACS.Install.CopySYS = 10,System32\Drivers
+ACS.Install.CopyDLL.NT = 10,System32
+ACS.Install.CopySYS.NT = 10,System32\Drivers
+
+; ================= Strings =====================
+
+[Strings]
+Msft			= "Advanced Card System"
+ACS			= "ACS"
+ACS.DeviceDesc		= "ACR38 Smart Card Reader"
+ClassName 		= "Smart Card Readers"
+Vendor			= "ACS"
+Reader			= "ACR38U"
+CardType		= 0		;see below for detail
+SFDT			= TRUE
+CardVoltage		= 0		;see below for detail
+
+; ================= Card Types ==================
+;  0: MCU
+;  1: IIC (Auto Detect Memory Size)
+;  2: IIC (1K)
+;  3: IIC (2K)
+;  4: IIC (4K)
+;  5: IIC (8K)
+;  6: IIC (16K)
+;  7: IIC (32K)
+;  8: IIC (64K)
+;  9: IIC (128K)
+; 10: IIC (256K)
+; 11: IIC (512K)
+; 12: IIC (1024K)
+; 13: AT88SC153
+; 14: AT88SC1608
+; 15: SLE4418
+; 16: SLE4428
+; 17: SLE4432
+; 18: SLE4442
+; 19: SLE4406
+; 20: SLE4436
+; 21: SLE5536
+; 22: MCUT0
+; 23: MCUT1
+; 24: Auto Detection
+
+; ================= Card Voltage =================
+; 0: Auto Detection
+; 1: 5-V Card
+; 2: 3-V Card
+; 3: 1.8-V Card

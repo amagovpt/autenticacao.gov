@@ -1,0 +1,267 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<title>
+Belgian EID Card
+</title>
+
+<script language="javascript">
+    function getIDData()
+    {
+        var strTemp;
+        var strTemp2;
+        var strTemp3;
+
+        strTemp = document.BEIDApplet.getCardNumber() + "&nbsp;";
+        document.getElementById('cardNumberField').innerHTML = strTemp;
+        strTemp = document.BEIDApplet.getChipNumber() + "&nbsp;";
+        document.getElementById('chipNumberField').innerHTML = strTemp;
+        strTemp = document.BEIDApplet.getValidityDateBegin() + "&nbsp;";
+        document.getElementById('valBeginField').innerHTML = strTemp;
+        strTemp = document.BEIDApplet.getValidityDateEnd() + "&nbsp;";
+        document.getElementById('valEndField').innerHTML = strTemp;
+        strTemp = document.BEIDApplet.getIssMunicipality() + "&nbsp;";
+        document.getElementById('issMunicField').innerHTML = strTemp;
+        strTemp = document.BEIDApplet.getNationalNumber() + "&nbsp;";
+        document.getElementById('natNumberField').innerHTML = strTemp;
+        strTemp = document.BEIDApplet.getName() + "&nbsp;";
+        document.getElementById('nameField').innerHTML = strTemp;
+        strTemp = document.BEIDApplet.getFirstName1();
+        strTemp2 = document.BEIDApplet.getFirstName2();
+        strTemp3 = document.BEIDApplet.getFirstName3();
+        document.getElementById('firstNamesField').innerHTML = strTemp + " " + strTemp2 + " " + strTemp3 + "&nbsp;";
+        strTemp = document.BEIDApplet.getNationality() + "&nbsp;";
+        document.getElementById('natField').innerHTML = strTemp;
+        strTemp = document.BEIDApplet.getBirthLocation() + "&nbsp;";
+        document.getElementById('birthLocField').innerHTML = strTemp;
+        strTemp = document.BEIDApplet.getBirthDate() + "&nbsp;";
+        document.getElementById('birthDateField').innerHTML = strTemp;
+        strTemp = document.BEIDApplet.getSex() + "&nbsp;";
+        document.getElementById('sexField').innerHTML = strTemp;
+        document.BEIDApplet.getNobleCondition();
+        document.BEIDApplet.getWhiteCane();
+        document.BEIDApplet.getYellowCane();
+        document.BEIDApplet.getExtendedMinority();
+    }
+
+    function getAddressData()
+    {
+	  var strTemp;
+        var strTemp2;
+        var strTemp3;
+        strTemp = document.BEIDApplet.getStreet();
+        strTemp2 = document.BEIDApplet.getStreetNumber();
+        strTemp3 = document.BEIDApplet.getBoxNumber();
+        document.getElementById('streetField').innerHTML = strTemp + " " + strTemp2 + " " + strTemp3 + "&nbsp;";
+        strTemp = document.BEIDApplet.getZip();
+        strTemp2 = document.BEIDApplet.getMunicipality();
+        document.getElementById('municField').innerHTML = strTemp + " " + strTemp2 + "&nbsp;";
+        strTemp = document.BEIDApplet.getCountry();
+        if(strTemp == "" && strTemp2 != "")
+        {
+          strTemp = "be";
+        }
+        document.getElementById('countryField').innerHTML = strTemp + "&nbsp;";
+    }
+    function EmptyScreen()
+    {
+        var strTemp = "&nbsp;";
+        document.getElementById('cardNumberField').innerHTML = strTemp;
+        document.getElementById('chipNumberField').innerHTML = strTemp;
+        document.getElementById('valBeginField').innerHTML = strTemp;
+        document.getElementById('valEndField').innerHTML = strTemp;
+        document.getElementById('issMunicField').innerHTML = strTemp;
+        document.getElementById('natNumberField').innerHTML = strTemp;
+        document.getElementById('nameField').innerHTML = strTemp;
+        document.getElementById('firstNamesField').innerHTML = strTemp;
+        document.getElementById('natField').innerHTML = strTemp;
+        document.getElementById('birthLocField').innerHTML = strTemp;
+        document.getElementById('birthDateField').innerHTML = strTemp;
+        document.getElementById('sexField').innerHTML = strTemp;
+        document.getElementById('streetField').innerHTML = strTemp;
+        document.getElementById('municField').innerHTML = strTemp;
+        document.getElementById('countryField').innerHTML = strTemp;
+        document.getElementById('StatusField').innerHTML = strTemp;
+    }
+
+    function ReadCard()
+    {
+      var retval;
+      EmptyScreen();
+      document.getElementById('StatusField').innerHTML = "Reading Card, please wait...";
+      retval = document.BEIDApplet.InitLib(null);
+      if(retval == 0)
+      {
+        document.getElementById('StatusField').innerHTML = "Reading Identity, please wait...";
+        getIDData();
+        document.getElementById('StatusField').innerHTML = "Reading Address, please wait...";
+        getAddressData();
+        document.getElementById('StatusField').innerHTML = "Reading Picture, please wait...";
+        document.BEIDApplet.GetPicture();
+	  document.BEIDApplet.ExitLib();
+        document.getElementById('StatusField').innerHTML = "Done";
+      }
+	else
+      {
+        document.getElementById('StatusField').innerHTML = "Error Reading Card";
+      }
+    }
+
+</script>
+
+<style>
+.fontName {font-family:Arial Unicode MS, Verdana, Arial, Helvetica, sans-serif;}
+.backgroundPanel {background-color:#F7F7F7;}
+.backgroundRoundedPanel {background-color:#CED3DE;}
+.labelText {font-size:12px; color:#4A5563;}
+.dataText {font-size:12px; color:#000000;}
+.tableDarkShadow {background-color:#87CFA3;}
+</style>
+
+</head>
+
+<body topmargin=0>
+
+<form name=actionform>
+      <table class="fontName" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td>
+            <table class="fontName" width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr class="tableDarkShadow">
+              <td class="labelText" valign="top" align="center">&nbsp;IDENTITY&nbsp;</td>
+              </tr>
+              </table>
+            </td>
+          </tr>
+<tr>
+<td valign="top">
+<applet
+  codebase = "."
+  archive  = "beidlib.jar"
+  code     = "be.belgium.eid.BEID_Applet.class"
+  name     = "BEIDApplet"
+  width    = "140"
+  height   = "200"
+  hspace   = "0"
+  vspace   = "0"
+  align    = "middle"
+>
+<param name="Reader" value="">
+<param name="OCSP" value="-1">
+<param name="CRL" value="-1">
+<param name="DisableWarning" value="false">
+</applet>
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+</tr>
+<tr>
+          <td valign="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">                  
+                    <tr class="backgroundPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;Card Number:&nbsp;</td>
+                      <td class="dataText" id="cardNumberField" align="left" nowrap>&nbsp;</td>
+                    </tr>
+                    <tr class="backgroundRoundedPanel" height="4"><td colspan="2"></tr>
+                    <tr class="backgroundRoundedPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;Chip Number:&nbsp;</td>
+                      <td class="dataText" align="left" id="chipNumberField" nowrap>&nbsp;</td>
+                    </tr>
+                    <tr class="backgroundPanel" height="4"><td colspan="2"></tr>
+                    <tr class="backgroundPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;Validity From:&nbsp;</td>
+                      <td class="dataText" id="valBeginField" align="left" nowrap>&nbsp;</td>
+                    </tr>
+                    <tr class="backgroundRoundedPanel" height="4"><td colspan="2"></tr>
+                    <tr class="backgroundRoundedPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;Validity Until:&nbsp;</td>
+                      <td class="dataText" id="valEndField" align="left" nowrap>&nbsp;</td>
+                    </tr>
+                    <tr class="backgroundPanel" height="4"><td colspan="2"></tr>
+                    <tr class="backgroundPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;Issuing Municipality:&nbsp;</td>
+                      <td class="dataText" id="issMunicField" align="left" nowrap>&nbsp;</td>
+                    </tr>
+                    <tr class="backgroundRoundedPanel" height="4"><td colspan="2"></tr>
+                    <tr class="backgroundRoundedPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;National Number:&nbsp;</td>
+                      <td class="dataText" align="left" id="natNumberField" nowrap>&nbsp;</td>
+                    </tr>
+                    <tr class="backgroundPanel" height="4"><td colspan="2"></tr>
+                    <tr class="backgroundPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;Name:&nbsp;</td>
+                      <td class="dataText" id="nameField" align="left" nowrap>&nbsp;</td>
+                    </tr>
+                    <tr class="backgroundRoundedPanel" height="4"><td colspan="2"></tr>
+                    <tr class="backgroundRoundedPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;First Names:&nbsp;</td>
+                      <td class="dataText" id="firstNamesField" align="left">&nbsp;</td>
+                    </tr>
+                    <tr class="backgroundPanel" height="4"><td colspan="2"></tr>
+                    <tr class="backgroundPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;Nationality:&nbsp;</td>
+                      <td class="dataText" id="natField" align="left" nowrap>&nbsp;</td>
+                    </tr>
+                    <tr class="backgroundRoundedPanel" height="4"><td colspan="2"></tr>
+                    <tr class="backgroundRoundedPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;Birth Location:&nbsp;</td>
+                      <td class="dataText" align="left" id="birthLocField" nowrap>&nbsp;</td>
+                    </tr>
+                    <tr class="backgroundPanel" height="4"><td colspan="2"></tr>
+                    <tr class="backgroundPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;Birth Date:&nbsp;</td>
+                      <td class="dataText" id="birthDateField" align="left" nowrap>&nbsp;</td>
+                    </tr>
+                    <tr class="backgroundRoundedPanel" height="4"><td colspan="2"></tr>
+                    <tr class="backgroundRoundedPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;Sex:&nbsp;</td>
+                      <td class="dataText" id="sexField" align="left" nowrap>&nbsp;</td>
+                    </tr>                    
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="fontName" width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr height="10"><td>&nbsp;</td></tr>
+              <tr class="tableDarkShadow">
+              <td class="labelText" valign="top" align="center">&nbsp;ADDRESS&nbsp;</td>
+              </tr>
+              </table>
+            </td>
+          </tr>
+        <tr>
+          <td valign="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr class="backgroundPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;Street:&nbsp;</td>
+                      <td class="dataText" id="streetField" align="left" nowrap>&nbsp;</td>
+                    </tr>
+                    <tr class="backgroundRoundedPanel" height="4"><td colspan="2"></tr>
+                    <tr class="backgroundRoundedPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;Municipality:&nbsp;</td>
+                      <td class="dataText" align="left" id="municField">&nbsp;</td>
+                    </tr>
+                    <tr class="backgroundPanel" height="4"><td colspan="2"></tr>
+                    <tr class="backgroundPanel">
+                      <td class="labelText" align="right" width="150" nowrap>&nbsp;Country:&nbsp;</td>
+                      <td class="dataText" align="left" id="countryField">&nbsp;</td>
+                    </tr>
+                    <tr height="5"><td colspan="2"></tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td> <input type="button" name="IDButton" onclick="javascript:ReadCard()" value="Read Card "title="Read Card"/> </td>
+        </tr>
+        <tr height="5"><td colspan="2"></tr>
+        <tr>
+          <td class="labelText" ID="StatusField"/></td>
+        </tr>
+      </table>
+    </form>
+
+</body>
+</html>

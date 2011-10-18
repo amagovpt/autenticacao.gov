@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:annotation>
+    <xs:documentation>
+      This file contains the contents of a virtual card. The contents of the card are
+      divided over several files (referenced by the file id (file path, actually) and these
+      contents are hex encoded.
+    </xs:documentation>
+  </xs:annotation>
+  <xs:element name="card">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="type" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              Type of virtual card, e.g. beid.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="testCardVersion" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              Version info.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="friendlyName" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              Friendly name of the virtual card, this can be used as a way
+              to keep track of the different virtual cards.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="chipNumber" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              Chip number of the virtual card, in hex.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="physicalCardChipNumber" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              Chip number of the physical card, in hex.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="versionNumber" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              The 11 bytes of the Get Card Data command that come
+              after the chip number (bytes 16-27, starting to count
+              from 0), in hex.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="atr" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              ATR of the virtual card, in hex.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="file" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              The file element specifies for each file on the virtual card the
+              path (in hex) of the file (this is the id element) and the contents
+              (in hex) of that file.
+            </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="id" type="xs:string" />
+              <xs:element name="content" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

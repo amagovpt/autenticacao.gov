@@ -1,0 +1,12 @@
+C:\Documents and Settings\Administrator\Desktop\eid-inwork\eid-mw\_src\eidmw\_Binaries35\Release\beid35libCS.XML
+C:\Documents and Settings\Administrator\Desktop\eid-inwork\eid-mw\_src\eidmw\_Binaries35\Release\beid35libCS.dll
+C:\Documents and Settings\Administrator\Desktop\eid-inwork\eid-mw\_src\eidmw\_Binaries35\Release\beid35libCS.pdb
+C:\Documents and Settings\Administrator\Desktop\eid-inwork\eid-mw\_src\eidmw\eidlibCS\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrator\Desktop\eid-inwork\eid-mw\_src\eidmw\eidlibCS\obj\Release\beid35libCS.dll
+C:\Documents and Settings\Administrator\Desktop\eid-inwork\eid-mw\_src\eidmw\eidlibCS\obj\Release\beid35libCS.pdb
+C:\Documents and Settings\Administrator\Desktop\pteid-mw-win\_src\eidmw\eidlibCS\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrator\Desktop\pteid-mw-win\_src\eidmw\_Binaries35\Release\beid35libCS.XML
+C:\Documents and Settings\Administrator\Desktop\pteid-mw-win\_src\eidmw\_Binaries35\Release\beid35libCS.dll
+C:\Documents and Settings\Administrator\Desktop\pteid-mw-win\_src\eidmw\_Binaries35\Release\beid35libCS.pdb
+C:\Documents and Settings\Administrator\Desktop\pteid-mw-win\_src\eidmw\eidlibCS\obj\Release\beid35libCS.dll
+C:\Documents and Settings\Administrator\Desktop\pteid-mw-win\_src\eidmw\eidlibCS\obj\Release\beid35libCS.pdb

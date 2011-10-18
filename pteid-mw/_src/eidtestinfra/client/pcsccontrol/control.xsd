@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:annotation>
+    <xs:documentation>
+      This file keeps track of which virtual card to use for a certain physical test card.
+      The physical test card is representated by it's chip number, the file element contains
+      the path to the virtual card contents file.
+    </xs:documentation>
+  </xs:annotation>
+  <xs:element name="control">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="show">
+          <xs:annotation>
+            <xs:documentation>
+              The show element specifies the visibility of the virtual and physical readers.
+            </xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="REAL_FIRST" />
+              <xs:enumeration value="REAL_LAST" />
+              <xs:enumeration value="HIDE_REAL" />
+              <xs:enumeration value="HIDE_VIRTUAL" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="virtualcard" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              The virtualcard element specifies which virtual card to use
+              for a physical test card. The hardchipnr element is the chip
+              number (in hex) of the physical test card; the file element
+              is the path to the virtual contents file.
+            </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="hardchipnr" type="xs:string" />
+              <xs:element name="file" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

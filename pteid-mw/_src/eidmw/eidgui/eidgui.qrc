@@ -1,0 +1,47 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>Images/Background_ForeignersBack.jpg</file>
+        <file>Images/Background_ForeignersFront.jpg</file>
+        <file>Images/Background_IDBack.jpg</file>
+        <file>Images/Background_IDFront.jpg</file>
+        <file>Images/Background_KidsBack.jpg</file>
+        <file>Images/Background_KidsFront.jpg</file>
+        <file>Images/Background_SisBack.jpg</file>
+        <file>Images/Background_SisFront.jpg</file>
+        <file>Images/Female.png</file>
+        <file>Images/Icons/Chip.png</file>
+        <file>Images/Icons/Clear.png</file>
+        <file>Images/Icons/Exit.png</file>
+        <file>Images/Icons/ICO_CARD_EID_PLAIN_16x16.png</file>
+        <file>Images/Icons/Open.png</file>
+        <file>Images/Icons/Options.png</file>
+        <file>Images/Icons/Print.png</file>
+        <file>Images/Icons/Save.png</file>
+        <file>Images/Icons/save_as.png</file>
+        <file>Images/Icons/Zoom_IN.png</file>
+        <file>Images/Icons/Zoom_OUT.png</file>
+        <file>Images/Icons/reader_card.png</file>
+        <file>Images/Icons/reader_error.png</file>
+        <file>Images/Icons/reader_nocard.png</file>
+        <file>Images/Icons/reader_question.png</file>
+        <file>Images/Icons/Help.png</file>
+        <file>Images/Male.png</file>
+        <file>Images/a-z_identiteitskaart_logo.png</file>
+        <file>Images/schild_de.jpg</file>
+        <file>Images/schild_en.jpg</file>
+        <file>Images/schild_fr.jpg</file>
+        <file>Images/schild_nl.jpg</file>
+        <file>Images/Page_background_Identity.png</file>
+        <file>Images/bg-Blue.png</file>
+        <file>Images/bg_SelectTabTool.png</file>
+        <file>Images/bg_SelectTabButtons.png</file>
+        <file>Images/alpha.png</file>
+        <file>Images/bg_Toolbar.png</file>
+        <file>Images/buttons/button_card.png</file>
+        <file>Images/buttons/button_digital_sign.png</file>
+        <file>Images/buttons/button_help.png</file>
+        <file>Images/buttons/button_language.png</file>
+        <file>Images/buttons/button_tools.png</file>
+        <file>Images/additional_data.png</file>
+    </qresource>
+</RCC>

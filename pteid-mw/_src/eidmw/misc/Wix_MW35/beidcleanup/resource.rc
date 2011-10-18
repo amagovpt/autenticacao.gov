@@ -1,0 +1,147 @@
+/* ****************************************************************************
+
+ * eID Middleware Project.
+ * Copyright (C) 2008-2009 FedICT.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version
+ * 3.0 as published by the Free Software Foundation.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, see
+ * http://www.gnu.org/licenses/.
+
+**************************************************************************** */
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#include "../../../_Builds/beidversions.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// French (Belgium) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRB)
+#ifdef _WIN32
+LANGUAGE LANG_FRENCH, SUBLANG_FRENCH_BELGIAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,SVN_REVISION
+ PRODUCTVERSION 1,0,0,SVN_REVISION
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080c04b0"
+        BEGIN
+            VALUE "FileDescription", "beidcleanup Application"
+	    VALUE "CompanyName", BEID_COMPANY_NAME
+            VALUE "FileVersion", "1, 0, 0, " SVN_REVISION_STR
+            VALUE "InternalName", "beidcleanup"
+            VALUE "LegalCopyright", BEID_COPYRIGHT
+            VALUE "OriginalFilename", "beidcleanup.exe"
+            VALUE "ProductName", BEID_PRODUCT_NAME 
+            VALUE "ProductVersion", BEID_PRODUCT_VERSION
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x80c, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// ISS
+//
+IDR_ISS_24                ISS                     "..\\..\\setup_win\\uninstall24.iss"
+IDR_ISS_25                ISS                     "..\\..\\setup_win\\uninstall25.iss"
+IDR_ISS_26                ISS                     "..\\..\\setup_win\\uninstall26.iss"
+IDR_ISS_30                ISS                     "..\\..\\setup_win\\uninstall30.iss"
+IDR_ISS_35                ISS                     "..\\..\\setup_win\\uninstall35.iss"
+IDR_ISS_35P               ISS                     "..\\..\\setup_win\\uninstall35Pro.iss"
+
+#endif    // French (Belgium) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

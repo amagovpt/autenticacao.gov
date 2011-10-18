@@ -1,0 +1,615 @@
+ OpenSSL License
+ ---------------
+
+/* ====================================================================
+ * Copyright (c) 1998-2008 The OpenSSL Project.  All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *
+ * 3. All advertising materials mentioning features or use of this
+ *    software must display the following acknowledgment:
+ *    "This product includes software developed by the OpenSSL Project
+ *    for use in the OpenSSL Toolkit. (http://www.openssl.org/)"
+ *
+ * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
+ *    endorse or promote products derived from this software without
+ *    prior written permission. For written permission, please contact
+ *    openssl-core@openssl.org.
+ *
+ * 5. Products derived from this software may not be called "OpenSSL"
+ *    nor may "OpenSSL" appear in their names without prior written
+ *    permission of the OpenSSL Project.
+ *
+ * 6. Redistributions of any form whatsoever must retain the following
+ *    acknowledgment:
+ *    "This product includes software developed by the OpenSSL Project
+ *    for use in the OpenSSL Toolkit (http://www.openssl.org/)"
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
+ * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
+ * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * ====================================================================
+ *
+ * This product includes cryptographic software written by Eric Young
+ * (eay@cryptsoft.com).  This product includes software written by Tim
+ * Hudson (tjh@cryptsoft.com).
+ *
+ */
+
+ Original SSLeay License
+ -----------------------
+
+/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
+ * All rights reserved.
+ *
+ * This package is an SSL implementation written
+ * by Eric Young (eay@cryptsoft.com).
+ * The implementation was written so as to conform with Netscapes SSL.
+ *
+ * This library is free for commercial and non-commercial use as long as
+ * the following conditions are aheared to.  The following conditions
+ * apply to all code found in this distribution, be it the RC4, RSA,
+ * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
+ * included with this distribution is covered by the same copyright terms
+ * except that the holder is Tim Hudson (tjh@cryptsoft.com).
+ *
+ * Copyright remains Eric Young's, and as such any Copyright notices in
+ * the code are not to be removed.
+ * If this package is used in a product, Eric Young should be given attribution
+ * as the author of the parts of the library used.
+ * This can be in the form of a textual message at program startup or
+ * in documentation (online or textual) provided with the package.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. All advertising materials mentioning features or use of this software
+ *    must display the following acknowledgement:
+ *    "This product includes cryptographic software written by
+ *     Eric Young (eay@cryptsoft.com)"
+ *    The word 'cryptographic' can be left out if the rouines from the library
+ *    being used are not cryptographic related :-).
+ * 4. If you include any Windows specific code (or a derivative thereof) from
+ *    the apps directory (application code) you must include an acknowledgement:
+ *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
+ *
+ * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ *
+ * The licence and distribution terms for any publically available version or
+ * derivative of this code cannot be changed.  i.e. this code cannot simply be
+ * copied and put under another distribution licence
+ * [including the GNU Public Licence.]
+ */
+
+===============================================================================
+
+ Xerces-C++ License
+ ------------------
+
+Apache License
+Version 2.0, January 2004
+http://www.apache.org/licenses/ 
+
+TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION 
+
+1. Definitions.
+
+"License" shall mean the terms and conditions for use, reproduction, and 
+distribution as defined by Sections 1 through 9 of this document. 
+
+"Licensor" shall mean the copyright owner or entity authorized by the copyright 
+owner that is granting the License. 
+
+"Legal Entity" shall mean the union of the acting entity and all other entities 
+that control, are controlled by, or are under common control with that entity. 
+For the purposes of this definition, "control" means (i) the power, direct or 
+indirect, to cause the direction or management of such entity, whether by 
+contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the 
+outstanding shares, or (iii) beneficial ownership of such entity. 
+
+"You" (or "Your") shall mean an individual or Legal Entity exercising permissions 
+granted by this License. 
+
+"Source" form shall mean the preferred form for making modifications, including 
+but not limited to software source code, documentation source, and configuration files. 
+
+"Object" form shall mean any form resulting from mechanical transformation or 
+translation of a Source form, including but not limited to compiled object code, 
+generated documentation, and conversions to other media types. 
+
+"Work" shall mean the work of authorship, whether in Source or Object form, made 
+available under the License, as indicated by a copyright notice that is included 
+in or attached to the work (an example is provided in the Appendix below). 
+
+"Derivative Works" shall mean any work, whether in Source or Object form, that is 
+based on (or derived from) the Work and for which the editorial revisions, 
+annotations, elaborations, or other modifications represent, as a whole, an 
+original work of authorship. For the purposes of this License, Derivative Works 
+shall not include works that remain separable from, or merely link (or bind by 
+name) to the interfaces of, the Work and Derivative Works thereof. 
+
+"Contribution" shall mean any work of authorship, including the original version 
+of the Work and any modifications or additions to that Work or Derivative Works 
+thereof, that is intentionally submitted to Licensor for inclusion in the Work by 
+the copyright owner or by an individual or Legal Entity authorized to submit on 
+behalf of the copyright owner. For the purposes of this definition, "submitted" 
+means any form of electronic, verbal, or written communication sent to the 
+Licensor or its representatives, including but not limited to communication on 
+electronic mailing lists, source code control systems, and issue tracking systems 
+that are managed by, or on behalf of, the Licensor for the purpose of discussing 
+and improving the Work, but excluding communication that is conspicuously marked 
+or otherwise designated in writing by the copyright owner as "Not a 
+Contribution." 
+
+"Contributor" shall mean Licensor and any individual or Legal Entity on behalf of 
+whom a Contribution has been received by Licensor and subsequently incorporated 
+within the Work. 
+
+2. Grant of Copyright License. Subject to the terms and conditions of this 
+License, each Contributor hereby grants to You a perpetual, worldwide, 
+non-exclusive, no-charge, royalty-free, irrevocable copyright license to 
+reproduce, prepare Derivative Works of, publicly display, publicly perform, 
+sublicense, and distribute the Work and such Derivative Works in Source or Object 
+form. 
+
+3. Grant of Patent License. Subject to the terms and conditions of this License, 
+each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, 
+no-charge, royalty-free, irrevocable (except as stated in this section) patent 
+license to make, have made, use, offer to sell, sell, import, and otherwise 
+transfer the Work, where such license applies only to those patent claims 
+licensable by such Contributor that are necessarily infringed by their 
+Contribution(s) alone or by combination of their Contribution(s) with the Work to 
+which such Contribution(s) was submitted. If You institute patent litigation 
+against any entity (including a cross-claim or counterclaim in a lawsuit) 
+alleging that the Work or a Contribution incorporated within the Work constitutes 
+direct or contributory patent infringement, then any patent licenses granted to 
+You under this License for that Work shall terminate as of the date such 
+litigation is filed. 
+
+4. Redistribution. You may reproduce and distribute copies of the Work or 
+Derivative Works thereof in any medium, with or without modifications, and in 
+Source or Object form, provided that You meet the following conditions: 
+
+You must give any other recipients of the Work or Derivative Works a copy of 
+this License; and 
+
+
+You must cause any modified files to carry prominent notices stating that You 
+changed the files; and 
+
+
+You must retain, in the Source form of any Derivative Works that You distribute, 
+all copyright, patent, trademark, and attribution notices from the Source form of 
+the Work, excluding those notices that do not pertain to any part of the 
+Derivative Works; and 
+
+
+If the Work includes a "NOTICE" text file as part of its distribution, then any 
+Derivative Works that You distribute must include a readable copy of the 
+attribution notices contained within such NOTICE file, excluding those notices 
+that do not pertain to any part of the Derivative Works, in at least one of the 
+following places: within a NOTICE text file distributed as part of the Derivative 
+Works; within the Source form or documentation, if provided along with the 
+Derivative Works; or, within a display generated by the Derivative Works, if and 
+wherever such third-party notices normally appear. The contents of the NOTICE 
+file are for informational purposes only and do not modify the License. You may 
+add Your own attribution notices within Derivative Works that You distribute, 
+alongside or as an addendum to the NOTICE text from the Work, provided that such 
+additional attribution notices cannot be construed as modifying the License. 
+You may add Your own copyright statement to Your modifications and may provide 
+additional or different license terms and conditions for use, reproduction, or 
+distribution of Your modifications, or for any such Derivative Works as a whole, 
+provided Your use, reproduction, and distribution of the Work otherwise complies 
+with the conditions stated in this License. 
+
+5. Submission of Contributions. Unless You explicitly state otherwise, any 
+Contribution intentionally submitted for inclusion in the Work by You to the 
+Licensor shall be under the terms and conditions of this License, without any 
+additional terms or conditions. Notwithstanding the above, nothing herein shall 
+supersede or modify the terms of any separate license agreement you may have 
+executed with Licensor regarding such Contributions. 
+
+6. Trademarks. This License does not grant permission to use the trade names, 
+trademarks, service marks, or product names of the Licensor, except as required 
+for reasonable and customary use in describing the origin of the Work and 
+reproducing the content of the NOTICE file. 
+
+7. Disclaimer of Warranty. Unless required by applicable law or agreed to in 
+writing, Licensor provides the Work (and each Contributor provides its 
+Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+either express or implied, including, without limitation, any warranties or 
+conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A 
+PARTICULAR PURPOSE. You are solely responsible for determining the 
+appropriateness of using or redistributing the Work and assume any risks 
+associated with Your exercise of permissions under this License. 
+
+8. Limitation of Liability. In no event and under no legal theory, whether in 
+tort (including negligence), contract, or otherwise, unless required by 
+applicable law (such as deliberate and grossly negligent acts) or agreed to in 
+writing, shall any Contributor be liable to You for damages, including any 
+direct, indirect, special, incidental, or consequential damages of any character 
+arising as a result of this License or out of the use or inability to use the 
+Work (including but not limited to damages for loss of goodwill, work stoppage, 
+computer failure or malfunction, or any and all other commercial damages or 
+losses), even if such Contributor has been advised of the possibility of such 
+damages. 
+
+9. Accepting Warranty or Additional Liability. While redistributing the Work or 
+Derivative Works thereof, You may choose to offer, and charge a fee for, 
+acceptance of support, warranty, indemnity, or other liability obligations and/or 
+rights consistent with this License. However, in accepting such obligations, You 
+may act only on Your own behalf and on Your sole responsibility, not on behalf of 
+any other Contributor, and only if You agree to indemnify, defend, and hold each 
+Contributor harmless for any liability incurred by, or claims asserted against, 
+such Contributor by reason of your accepting any such warranty or additional 
+liability. 
+
+END OF TERMS AND CONDITIONS 
+
+===============================================================================
+
+ Qt License
+ ----------
+
+Qt COMMERCIAL LICENSE AGREEMENT
+Agreement version 3.4
+
+IMPORTANT-READ CAREFULLY: 
+
+1. This Trolltech End-User License Agreement ("Agreement") is a legal
+agreement between you (either an individual or a legal entity)
+("Licensee") and Trolltech ASA ("Trolltech") for the Trolltech software
+product(s) accompanying this Agreement, which include(s) computer
+software and may include "online" or electronic documentation,
+associated media, and printed materials, including the source code,
+example programs and the documentation ("Licensed Software"). 
+
+2. The Licensed Software is protected by copyright laws and
+international copyright treaties, as well as other intellectual property
+laws and treaties. The Licensed Software is licensed, not sold. 
+
+3. Some of the files in the Licensed Software have been grouped into
+Modules. These files contain specific notices defining the Module of
+which they are a part. The Modules licensed to Licensee are specified in
+the license certificate ("License Certificate") accompanying the
+Licensed Software. The terms of the License Certificate are considered
+part of the Agreement. In the event of inconsistency or conflict between
+the language of this Agreement and the License Certificate, the
+provisions of this Agreement shall govern. 
+
+4. By installing, copying, or otherwise using the Licensed Software,
+Licensee agrees to be bound by the terms of this Agreement. If Licensee
+does not agree to the terms of this Agreement, Licensee may not install,
+copy, or otherwise use the Licensed Software. Licensee may, however,
+return it to Licensee's place of purchase within 14 days of purchase for
+a full refund. In addition, by installing, copying, or otherwise using
+any updates or other components of the Licensed Software that Licensee
+receives separately as part of the Licensed Software ("Updates"),
+Licensee agrees to be bound by any additional license terms that
+accompany such Updates, if any. If Licensee does not agree to the
+additional license terms that accompany such Updates, Licensee may not
+install, copy, or otherwise use such Updates. 
+
+5. Upon Licensee's acceptance of the terms and conditions of this
+Agreement, Trolltech grants Licensee the right to use the Licensed
+Software in the manner provided below. 
+
+6. Trolltech grants to Licensee a non-exclusive, non-transferable,
+perpetual license to make, use and modify copies of the Licensed
+Software for the maximum number of named individuals within Licensee's
+organization ("Named User"(s)) specified in the License Certificate for
+the sole purposes of designing, developing, and testing Licensee's
+software product(s), which may include the Licensed Software
+("Applications"). Modified Licensed Software shall be considered as
+Licensed Software for the purposes of this Agreement. 
+
+7. Licensee may install copies of the Licensed Software on an unlimited
+number of computers provided that only the Named Users use the Licensed
+Software. Licensee may at any time designate another Named User within
+Licensee's organization to replace a then-current Named User by
+notifying Trolltech, provided that a) the then-current Named User has
+not been designated as a replacement during the last six (6) months; and
+b) there is no more than the specified number of Named Users at any
+given time. 
+
+8. Verification: Trolltech or a certified auditor on Trolltech's behalf,
+may, upon its reasonable request and at its expense, audit Licensee with
+respect to the use of the Licensed Software. Such audit may be conducted
+by mail, electronic means or through an in-person visit to Licensee's
+place of business. Any such in-person audit shall be conducted during
+regular business hours at Licensee's facilities and shall not
+unreasonably interfere with Licensee's business activities. Trolltech
+will not remove, copy, or redistribute any electronic material during
+the course of an audit. Licensee does not implicitly grant Trolltech any
+form of license agreement. If an audit reveals that Licensee is using
+the Licensed Software in a way that is in material violation of the
+terms of the Agreement, then Licensee shall pay Trolltech's reasonable
+costs of conducting the audit. In the case of a material violation,
+Licensee agrees to pay Trolltech any amounts owing that are attributable
+to the unauthorized use. In the alternative, Trolltech reserves the
+right, at Trolltech's sole option, to terminate the licenses for the
+Licensed Software. 
+
+9. The Licensed Software may provide links to third party libraries or
+code (collectively "Third Party Libraries") to implement various
+functions. Third Party Libraries do not comprise part of the Licensed
+Software. In some cases, access to Third Party Libraries may be included
+along with the Licensed Software delivery as a convenience for
+development and testing only. Such source code and libraries as are or
+may be listed in the ".../src/3rdparty" source tree delivered with the
+Licensed Software, as may be amended from time to time, do not comprise
+the Licensed Software. Licensee acknowledges (1) that some Third Party
+Libraries may require additional licensing of copyright and patents from
+the owners of such, and (2) that distribution of any of the Licensed
+Software referencing any portion of a Third Party Library may require
+appropriate licensing from such third parties. 
+
+GENERAL TERMS THAT APPLY TO APPLICATIONS AND REDISTRIBUTABLES
+10. a) Trolltech grants Licensee a nonexclusive, royalty-free right to
+reproduce and distribute the object code form of certain portions of the
+Licensed Software ("Redistributables"), as specified in Appendix 1,
+Section 1, for execution on any operating system of a type listed in the
+License Certificate ("Platforms"). Copies of Redistributables may only
+be distributed with and for the sole purpose of executing Applications
+permitted under this Agreement that Licensee has created using the
+Licensed Software. Under no circumstances may any copies of
+Redistributables be distributed separately. This Agreement does not give
+Licensee any rights to distribute any of the parts of the Licensed
+Software listed in Appendix 1, Section 2, neither as a whole nor as
+parts or snippets of code. 
+
+b) Licensee may not distribute, transfer, assign or otherwise dispose of
+Redistributables, solely or as part of an Application, its source code,
+in binary/compiled form, or in any other form, if such action is part of
+a joint software and hardware distribution, except as set forth below or
+provided by a separate runtime distribution license with Trolltech or
+one of its authorized distributors. A joint hardware and software
+distribution shall be defined as either: (i) distribution of a hardware
+device that includes the Licensed Software; or (ii) distribution of the
+Licensed Software onto a device designed to facilitate the installation
+of the Licensed Software onto the same device. 
+
+c) If the combination of the Licensed Software and hardware and/or
+software ("Product"), in the final working end-user configuration either
+(i) relies on Apple OS X ® or Windows 98/ME/2000/2003/ XP/Vista ®
+(however not including embedded versions of these, e.g XP Embedded) as
+an integral part of and foundation for its functionality; or (ii) is a
+workstation, server, desktop computer or notebook computer relying on a
+complete 3rd party desktop environment such as KDE or GNOME as an
+integral part of and foundation for its functionality; or (iii) only
+depends on modules in the Licensed Software's Console edition (Qt Core,
+Database, Network, XML) and is not dependent on a window system (such as
+the X Windows system or similar) or the Java Virtual Machine ("JVM") to
+operate, then Licensee is hereby granted an exception from the
+requirement for a runtime distribution license agreement. 
+
+d) In all instances not covered above, Licensee shall contact Trolltech
+or one of Trolltech's authorized distributors to obtain a distribution
+license agreement. 
+
+
+11. The license granted in this Agreement for Licensee to create
+Applications and distribute them and the Redistributables (if any) to
+Licensee's customers is subject to all of the following conditions: (i)
+all copies of the Applications Licensee creates must bear a valid
+copyright notice, either Licensee's own or the copyright notice that
+appears on the Licensed Software; (ii) Licensee may not remove or alter
+any copyright, trademark or other proprietary rights notice contained in
+any portion of the Licensed Software, including but not limited to the
+About Boxes in "Qt Assistant" and "Qt Linguist" as defined in Appendix
+1; (iii) Redistributables, if any, shall be licensed to Licensee's
+customer "as is"; (iv) Licensee will indemnify and hold Trolltech, its
+related companies and its suppliers, harmless from and against any
+claims or liabilities arising out of the use, reproduction or
+distribution of Applications; (v) Applications must be developed using a
+licensed, registered copy of the Licensed Software; (vi) Applications
+must add primary and substantial functionality to the Licensed Software;
+(vii) Applications may not pass on functionality which in any way makes
+it possible for others to create software with the Licensed Software;
+(viii) Applications may not compete with the Licensed Software; (ix)
+Licensee may not use Trolltech's or any of its suppliers' names, logos,
+or trademarks to market Application(s), except to state that Application
+was developed using the Licensed Software. 
+
+NOTE: Qt Open Source Edition is licensed under the terms of the GPL and
+not under this Agreement. If Licensee has, at any time, developed all
+(or any portions of) the Application(s) using Trolltech's publicly
+licensed Qt Open Source Edition, Licensee must comply with Trolltech's
+requirements (see http:// www.trolltech.com/download/opensource.html )
+and license such Application(s) (or any portions derived there from)
+under the terms of the Free Software Foundation's GNU General Public
+License version 2 (the "GPL") a copy of which is located at
+http://www.fsf.org/licensing/licenses/info/GPLv2.html (i.e., any 
+Product(s) and/or parts, components, portions thereof developed using 
+GPL licensed software, including Qt Open Source Edition, must be 
+licensed under the terms of the GPL, and the GPL-based source code 
+must be made available upon request). 
+
+12. Warranty Disclaimer: The Licensed Software is licensed to Licensee
+"as is". To the maximum extent permitted by applicable law, Trolltech on
+behalf of itself and its suppliers, disclaims all warranties and
+conditions, either express or implied, including, but not limited to,
+implied warranties of merchantability, fitness for a particular purpose,
+title and non-infringement with regard to the Licensed Software. 
+
+13. Limitation of Liability: If, Trolltech's warranty disclaimer
+notwithstanding, Trolltech is held liable to Licensee, whether in
+contract, tort or any other legal theory, based on the Licensed
+Software, Trolltech's entire liability to Licensee and Licensee's
+exclusive remedy shall be, at Trolltech's option, either (A) return of
+the price Licensee paid for the Licensed Software, or (B) repair or
+replacement of the Licensed Software, provided Licensee returns to
+Trolltech all copies of the Licensed Software as originally delivered to
+Licensee. Trolltech shall not under any circumstances be liable to
+Licensee based on failure of the Licensed Software if the failure
+resulted from accident, abuse or misapplication, nor shall Trolltech
+under any circumstances be liable for special damages, punitive or
+exemplary damages, damages for loss of profits or interruption of
+business or for loss or corruption of data. Any award of damages from
+Trolltech to Licensee shall not exceed the total amount Licensee has
+paid to Trolltech in connection with this Agreement. 
+
+14. Support and Updates: Licensee will be eligible to receive email
+based software developer support and access to Updates to the Licensed
+Software ("Support and Updates") for a period not to exceed one year
+from the date of initial delivery ("Initial Term"), in accordance with
+Trolltech's then current policies and procedures, if any. Such policies
+and procedures may be changed from time to time. Following the Initial
+Term, Trolltech will no longer make the Licensed Software available to
+Licensee unless Licensee purchases additional Support and Updates
+according to section 15 below. 
+
+15. Renewal of Support and Updates: Licensee may purchase additional
+Support and Updates following the Initial Term at Trolltech's terms and
+conditions applicable at the time of renewal. 
+
+
+GENERAL PROVISIONS
+16. Marketing: Trolltech may include Licensee's company name and logo in
+a publicly available list of Trolltech customers. 
+
+17. No Assignment: Neither this Agreement nor Licensee's rights under
+this Agreement are assignable or transferable by Licensee either in
+whole or in part to any third party without Trolltech's written consent.
+Any attempted assignment or transfer in violation of the foregoing shall
+be void. Trolltech may assign or transfer this Agreement to any third
+party who acquires substantially all of Trolltech copyrights in and to
+the Licensed Software. 
+
+18. Termination: Trolltech may terminate the Agreement at any time
+immediately upon written notice by Trolltech to Licensee if Licensee
+breaches this Agreement, fails to pay the fees for the Licensed
+Software, or infringes Trolltech's intellectual property in or to the
+Licensed Software. Upon termination of the Licenses, Licensee shall
+return to Trolltech all copies of Licensed Software that were supplied
+by Trolltech. All other copies of Licensed Software in the possession or
+control of Licensee must be erased or destroyed. An officer of Licensee
+must promptly deliver to Trolltech a written confirmation that this has
+occurred. 
+
+19. Clauses that survive termination: Sections 2, 6, 7, 8, 9, 13, 20, 21
+and 22 shall survive the termination of this Agreement, however Sections
+6 and 7 shall not survive if the Agreement is terminated for cause. 
+
+20. Entire Agreement: This Agreement constitutes the complete agreement
+between the parties and supersedes all prior or contemporaneous
+discussions, representations, and proposals, written or oral, with
+respect to the subject matters discussed herein. No modification of this
+Agreement will be effective unless contained in a writing executed by an
+authorized representative of each party. No term or condition contained
+in Licensee's purchase order will apply unless expressly accepted by
+Trolltech in writing. If any provision of the Agreement is found void or
+unenforceable, the remainder will remain valid and enforceable according
+to its terms. If any remedy provided is determined to have failed for
+its essential purpose, all limitations of liability and exclusions of
+damages set forth in this Agreement shall remain in effect. 
+
+21. Confidentiality: Each party acknowledges that during the Term of
+this Agreement it will have access to information about the other
+party's business, business methods, business plans, customers, business
+relations, technology, and other information, including the terms of
+this Agreement, that is confidential and of great value to the other
+party, and the value of which would be significantly reduced if
+disclosed to third parties (the "Confidential Information").
+Accordingly, when a party (the "Receiving Party") receives Confidential
+Information from another party (the "Disclosing Party"), the Receiving
+Party shall, and shall obligate its employees and agents and employees 
+and agents of its affiliates to: (i) maintain the Confidential 
+Information in strict confidence; (ii) not disclose the Confidential 
+Information to a third party without the Disclosing Party's prior 
+written approval; and (iii) not, directly or indirectly, use the 
+Confidential Information for any purpose other than for exercising 
+its rights and fulfilling its responsibilities pursuant to this 
+Agreement. Each party shall take reasonable measures to protect the 
+Confidential Information of the other party, which measures shall
+not be less than the measures taken by such party to protect its own
+confidential and proprietary information. "Confidential Information"
+shall not include information that (a) is or becomes generally known to
+the public through no act or omission of the Receiving Party; (b) was in
+the Receiving Party's lawful possession prior to the disclosure
+hereunder and was not subject to limitations on disclosure or use; (c)
+is developed by the Receiving Party or by persons who have not had
+access to the Confidential Information of the Disclosing Party; (d) is
+lawfully disclosed to the Receiving Party without restrictions, by a
+third party not under an obligation of confidentiality; or (e) the
+Receiving Party is legally compelled to disclose the information, in
+which case the Receiving Party shall assert the privileged and
+confidential nature of the information and cooperate fully with the
+Disclosing Party to protect against and prevent disclosure of any
+Confidential Information and to limit the scope of disclosure and the
+dissemination of disclosed Confidential Information by all legally
+available means. The obligations of the Receiving Party under this
+Section shall continue during the Term and for a period of twelve (12)
+months after expiration or termination thereof; provided, however, that
+with respect to trade secret information, the obligations of the
+Receiving Party under this Section shall continue as long as such
+information remains a trade secret under applicable law. 
+
+22. Governing law, legal venue: This Agreement shall be construed,
+interpreted and governed by the laws of Norway, the legal venue to be
+Oslo City Court. Trolltech reserves all rights not specifically granted
+in this Agreement. 
+
+ 
+Appendix 1:
+
+1.	Parts of the Licensed Software that are permitted for
+distribution ("Redistributables"): 
+
+- The Licensed Software's main and plug-in libraries in object code form
+- The Licensed Software's configuration tool ("qtconfig")
+- The Licensed Software's help tool in object code/executable form ("Qt
+Assistant") 
+- The Licensed Software's internationalization tools in object
+code/executable form ("Qt Linguist", "lupdate", "lrelease") 
+
+2.	Parts of the Licensed Software that are not permitted for
+distribution include, but are not limited to: 
+
+- The Licensed Software's source code and header files
+- The Licensed Software's documentation
+- The Licensed Software's designer tool ("Qt Designer")
+- The Licensed Software's tool for writing makefiles ("qmake")
+- The Licensed Software's Meta Object Compiler ("moc")
+- The Licensed Software's User Interface Compiler ("uic" or in the case 
+of Qt Jambi: "juic"))
+- The Licensed Software's Resource Compiler ("rcc")
+- The Licensed Software's generator (only in the case of Qt Jambi)
+
+
+
+

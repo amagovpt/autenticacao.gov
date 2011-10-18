@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?> 								
+<jnlp codebase="" href="beid.jnlp">
+  <information>
+    <title>Java Binding to Belgium eID Middleware 3.5</title>
+    <vendor>Fedict</vendor>	
+    <offline-allowed/>							
+  </information>											
+  <security>											
+    <all-permissions/>										
+  </security>											
+  <resources os="Windows"><nativelib href = "beid35JavaWrapper-win.jar" /></resources>		
+  <resources os="Linux"><nativelib href = "beid35JavaWrapper-linux.jar" /></resources>		
+  <resources os="Mac OS X"><nativelib href = "beid35JavaWrapper-mac.jar" /></resources>	
+  <resources>
+    <j2se href="http://java.sun.com/products/autodl/j2se" version="1.4+"/>
+    <jar href="beid35libJava.jar" />
+    <jar href="BEID_Applet.jar" />
+  </resources>
+  <applet-desc 
+      name="BEID_Applet"
+      main-class="be.belgium.beid.BEID_Applet"
+      width="140" 
+      height="200">
+     <param name="debug" value="true"/>
+     <param name="Reader" value=""/>
+     <param name="OCSP" value="-1"/>
+     <param name="CRL" value="-1"/>
+  </applet-desc>
+</jnlp>												

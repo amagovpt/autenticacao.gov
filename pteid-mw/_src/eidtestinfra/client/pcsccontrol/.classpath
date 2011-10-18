@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src.junit"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="jaxb-ri-20061211/jsr173_1.0_api.jar"/>
+	<classpathentry kind="lib" path="lib/jpcsc.jar" sourcepath="C:/Documents and Settings/Administrator/My Documents/jpcsc/src/jpcsc"/>
+	<classpathentry kind="lib" path="jaxb-ri-20061211/jaxb_api.jar"/>
+	<classpathentry kind="lib" path="jaxb-ri-20061211/jaxb1-impl.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

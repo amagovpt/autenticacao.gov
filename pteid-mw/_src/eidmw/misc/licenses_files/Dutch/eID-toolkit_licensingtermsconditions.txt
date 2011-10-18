@@ -1,0 +1,78 @@
+OPGELET – LEES DEZE INSTRUCTIES AANDACHTIG VOORDAT U DE SOFTWARE IN GEBRUIK NEEMT: ga pas tot installatie, downloaden of het gebruik van de eID Toolkit software over nadat u onderstaande Overeenkomst (inclusief  de bijlage) hebt gelezen en aanvaard. Door op de knop “Aanvaard” te klikken, de eID Toolkit te installeren, te downloaden of op een andere wijze te gebruiken, stemt u in met de bepalingen van deze Overeenkomst (inclusief de bijlage). Aanvaardt u de voorwaarden van de Overeenkomst (en/of de bijlage) niet, klik dan op de knop "annuleren" en ga niet tot installatie van de eID Toolkit software over.
+
+eID Toolkit Softwarelicentie
+
+Overwegende dat deze eID Toolkit software in een definitieve versie wordt vrijgegeven;
+
+Overwegende dat deze eID Toolkit kosteloos en voor grootschalig gebruik door een derde partij volgens de bepalingen en voorwaarden van deze Overeenkomst door Fedict wordt verstrekt;
+
+Overwegende dat deze overeenkomst verwijst naar een open-source bibliotheek die zelf gebaseerd is op open-source software, waarvan u de algemene voorwaarden in bijlage aantreft en dat derde partijen die de eID Toolkit gebruiken,  reproduceren, kopiëren, wijzigen, weergeven en verdelen tot naleving van deze voorwaarden zijn gehouden;
+
+Overwegende dat deze overeenkomst u niet belet de eID Toolkit te delen of te wijzigen met het oog op een maximale verspreiding ervan onder mogelijke gebruikers, op voorwaarde dat het gebruik van de eID Toolkit beantwoordt aan de algemene voorwaarden zoals beschreven in deze overeenkomst (inclusief de bijlage).
+
+
+Artikel 1: Toekenning van de licentie
+
+De voorwaarden van deze Licentieovereenkomst (hierna “Licentieovereenkomst”) tussen u, de licentiehouder, en de Belgische Federale Overheid (“Fedict”), de licentiegever, verlenen u onder de voorwaarden en binnen de beperkingen beschreven in deze Licentieovereenkomst en in de bijlage (samen “Overeenkomst” genoemd) een wereldwijd, royaltyvrij, niet-exclusief, permanent en overdraagbaar recht om de software zoals beschreven in de bijlage (“eID Toolkit”) te gebruiken, te reproduceren, te kopiëren, te wijzigen, weer te geven en te verdelen. 
+
+
+Artikel 2: Garanties van de licentiegever en Verklaringen van Afstand
+
+2.1. Aangezien de eID Toolkit niet specifiek werd gecreëerd voor, niet werd aangepast aan, en evenmin werd gebaseerd op uw precieze behoeften, garandeert Fedict niet dat de eID Toolkit beantwoordt aan uw specifieke vereisten of dat werking van de eID Toolkit kan worden gecombineerd met de door u gekozen tools.  Aangezien geen enkele software vrij is van fouten, kan Fedict niet garanderen dat de eID Toolkit zonder onderbrekingen of foutloos zal werken. 
+
+2.2. Zonder afstand te doen van bovenstaande paragraaf wordt deze eID Toolkit door Fedict “AS IS” ter beschikking gesteld. Fedict doet dan ook afstand van alle uitdrukkelijke of impliciete garanties die niet onder punt 2.1. staan vermeld, met inbegrip van maar niet beperkt tot de impliciete garanties van verhandelbaarheid en geschiktheid voor een specifiek doel. 
+
+2.3 Deze Overeenkomst verleent geen recht op onderhoud, ondersteuning (via telefoon, fax of e-mail) of op enige andere vorm van bijstand ten aanzien van de eID Toolkit of ten aanzien van wijzigingen die in welke vorm dan ook aan de eID Toolkit werden aangebracht, met inbegrip van maar niet beperkt tot aanvullingen, upgrades, verbeteringen aan de substantie en de structuur van de software (“Wijzigingen").
+
+Artikel 3: Verplichtingen van de licentiehouder
+
+3.1. Ieder gebruik, met inbegrip van maar niet beperkt tot de reproductie, het kopiëren, het wijzigen, het weergeven en de distributie is onderworpen aan de naleving van de voorwaarden van deze Overeenkomst. U verbindt zich tot de naleving van de voorwaarden van deze Overeenkomst evenals tot het naleven van de licenties die van kracht zijn op de bibliotheken of codes die (eventueel beschermd door eigendomsrechten) door derde partijen werden ontwikkeld en geheel of gedeeltelijk voor de ontwikkeling van de eID Toolkit werden gebruikt, in de eID applicatie werden verwerkt, hiermee zijn verbonden, hierin zijn geïntegreerd of werden samengevoegd met andere bibliotheken en codes om te komen tot de eID Toolkit (“Derdenprestatie”).
+
+3.2. Het is niet toegestaan de eID Toolkit op een andere wijze te kopiëren, te wijzigen, hier een sublicentie voor te verlenen of de eID Toolkit te verdelen op een andere wijze dan uitdrukkelijk bepaald onder deze Overeenkomst. Iedere poging om de eID Toolkit op een andere wijze te kopiëren, te wijzigen, hier een sublicentie voor te verlenen of te verdelen is ongeldig en leidt tot de onmiddellijke beëindiging van uw rechten conform deze Overeenkomst.
+
+3.3. De herverdeling in bron- of binaire vorm, al dan niet gewijzigd, dient te gebeuren onder uitdrukkelijke verwijzing naar deze Overeenkomst en naar de licenties die betrekking hebben op de bibliotheken of codes die door derde partijen werden ontwikkeld en die geheel of gedeeltelijk voor de ontwikkeling van de eID Toolkit werden gebruikt.
+
+3.4. De naam van Fedict mag, zonder de uitdrukkelijke voorafgaande schriftelijke toelating, niet worden gebruikt ter bekrachtiging of promotie van producten afgeleid van deze eID Toolkit.
+
+3.5. De licenties van derde partijen die van u volgens de bepalingen van deze Overeenkomst kopieën of rechten hebben verworven, worden niet beëindigd wanneer u een inbreuk op deze Overeenkomst begaat, op voorwaarde dat deze partijen zich strikt aan de voorwaarden houden. 
+
+Artikel 4: Aansprakelijkheid
+
+4.1. Volgens de bepalingen van deze Overeenkomst kan Fedict, onder geen enkele voorwaarde, tenzij in geval van fraude of bij moedwillige misleiding aansprakelijk worden gesteld voor indirecte, speciale, incidentele of gevolgschade, of voor winstderving, verlies van gegevens, verlies van spaartegoeden, verlies van handelsopportuniteiten, commerciële verliezen, personeelskosten of kosten van personeelsomzet, gebreken aan of de verstoorde werking van computers, het uitvallen van IT-systemen, bedrijfsonderbreking of andere technische of operationele schade van welke omvang dan ook, of voor andere indirecte schade, gevolgschade of schadevergoedingen die voortvloeien uit of samenhangen met het gebruik van de eID Toolkit of enig andere gewijzigde of afgeleide vorm, of voor enige andere commerciële schade of verlies die uit het verlies ervan voortvloeien.  
+
+4.2. Fedict kan niet aansprakelijk worden gesteld voor schadevergoedingen ingeval van inbreuken op de intellectuele eigendomsrechten, inclusief medeoorzakelijke inbreuk of aanzetting tot inbreuk op de intellectuele eigendom waarop de auteurs van de Derdenprestaties, zoals aangeduid in de speciale kennisgeving in bijlage hun rechten doen gelden. U verbindt zich ertoe Fedict schadeloos te stellen en te verdedigen in geval van, en te vrijwaren tegen alle vorderingen, eisen, nadelige gevolgen, gerechtelijke acties, verliezen, aansprakelijkheid, schade van welke aard dan ook, kosten, honoraria en uitgaven van elke aard, die op welke wijze dan ook direct of indirect verband houden met de Wijzigingen en/of het gebruik van de eID Toolkit, als dusdanig of in combinatie met andere toestellen, producten, software, diensten en/of materiaal, op voorwaarde dat Fedict u schriftelijk in kennis stelt van de vordering en u toelaat over te gaan tot de controle en redelijkerwijze met u samenwerkt bij de defensie van de vordering en eventuele onderhandelingen voor het treffen van schikkingen die hiermee verband houden.  
+
+4.3. Fedict kan niet aansprakelijk worden gesteld voor (i) de gevolgen van de wijzigingen aangebracht aan de eID Toolkit, het integreren van de eID Toolkit in eigendomsproducten, of het gebruik van de eID Toolkit in combinatie met andere toestellen, producten, software, diensten en/of materiaal of (ii)  het bepalen of u al dan niet een licentie of bijkomende rechten nodig hebt voor de Derdenprestaties, voor het verkrijgen van bedoelde licenties namens Fedict, of voor het betalen van honoraria met betrekking tot dergelijke licenties, in de mate dat wordt beweerd dat bedoelde Derdenprestaties open-source producten zijn.
+
+Artikel 5: Beëindiging
+
+5.1. Inbreuken op deze Overeenkomst leiden automatisch tot de onmiddellijke beëindiging van de Overeenkomst en van alle licenties die door de licentiegever werden verleend. 
+
+5.2. U verbindt zich ertoe om bij beëindiging van de Overeenkomst het gebruik van de eID Toolkit volledig te staken en alle kopieën van de eID Toolkit die u in uw bezit of onder uw controle hebt, te vernietigen.
+
+Artikel 6: Algemeen
+
+6.1 Bepalingen of voorwaarden van deze Overeenkomst die onwettig of onafdwingbaar worden verklaard, worden verondersteld te worden opgeheven, zonder afbreuk te doen aan de algehele rechtsgeldigheid en effectiviteit van de overige voorwaarden en bepalingen. Dergelijke bepalingen worden door de partijen in die mate aangepast dat ze geldig, wettelijk en afdwingbaar zijn en de intentie en het evenwicht tussen de partijen handhaven. 
+
+6.2 Deze Overeenkomst vormt de integrale overeenkomst inzake eID Toolkit tussen de partijen en vervangt alle eerdere mondelinge of schriftelijke mededelingen.
+
+6.3. Deze Overeenkomst is een overeenkomst naar Belgisch recht. Geschillen die niet minnelijk kunnen worden geregeld, worden behandeld voor de rechtbanken van Brussel. 
+
+Bijlage
+
+Specificaties van de Belgische eID Toolkit
+
+
+
+
+[Verwijzing naar het CSC-Zetes document Belgische e-ID Middleware Specificaties (specificaties + licenties)]
+
+
+Deze software maakt gebruik van de volgende Open Source projecten:
+- OpenSSL (zie http://www.openssl.org)  licenties: OpenSSL en SSLeay
+- Xerces (zie http://www.apache.org)
+- Xalan (zie http://www.apache.org)
+
+4
+
+

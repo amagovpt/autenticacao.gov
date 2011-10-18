@@ -1,0 +1,370 @@
+//===========================================================================
+//
+//  File Name:    Setup.rul
+//
+//  Description:  Blank setup main script file
+//
+//  Comments:     Blank setup is an empty setup project. If you want to
+//				  create a new project via. step-by step instructions use the
+//				  Project Assistant.
+//
+//===========================================================================
+
+// Included header files ----------------------------------------------------
+#include "ifx.h"  
+
+#include "Util.rul"
+
+//---------------------------------------------------------------------------                                                                        
+// OnFirstUIBefore
+//
+// First Install UI Sequence - Before Move Data
+//
+// The OnFirstUIBefore event is called by OnShowUI when the setup is
+// running in first install mode. By default this event displays UI allowing
+// the end user to specify installation parameters.
+//
+// Note: This event will not be called automatically in a
+// program...endprogram style setup.
+//---------------------------------------------------------------------------
+function OnFirstUIBefore()
+    number  nResult, nLevel, nSize, nSetupType, nvUser;
+    string  szTitle, szMsg, szOpt1, szOpt2, szLicenseFile;
+    string  szName, szCompany, szTargetPath, szDir, szFeatures;
+    BOOL    bLicenseAccepted;	
+begin	
+
+	if (!SYSINFO.WINNT.bWin2000
+		 && !SYSINFO.WINNT.bWinXP
+	     && !SYSINFO.WINNT.bWinVista) then 
+
+        MessageBox(@BAD_WINDOWS,INFORMATION); 
+        abort;
+    endif; 
+   
+    nSetupType = COMPLETE;	
+    szDir = TARGETDIR;
+    szName = "";
+    szCompany = "";
+    bLicenseAccepted = FALSE;  
+    
+    //Set LANGUAGE variable for use in registry 
+    if ( SELECTED_LANGUAGE = ISLANG_DUTCH ) then
+		FeatureSetTarget(MEDIA,"LANGUAGE","nl");     
+    elseif ( SELECTED_LANGUAGE = ISLANG_FRENCH_STANDARD ) then
+		FeatureSetTarget(MEDIA,"LANGUAGE","fr");     
+    elseif ( SELECTED_LANGUAGE = ISLANG_GERMAN ) then
+		FeatureSetTarget(MEDIA,"LANGUAGE","de");     
+    else
+		FeatureSetTarget(MEDIA,"LANGUAGE","en");     
+	endif;
+	
+	//Set PATH_TO_CSPLIB variable for use in registry 
+	FeatureSetTarget(MEDIA,"PATH_TO_CSPLIB",WINSYSDIR ^ "beidcsp.dll");
+ 
+// Beginning of UI Sequence
+Dlg_Start:
+    nResult = 0;
+
+Dlg_SdWelcome:
+    szTitle = "";
+    szMsg = "";
+    //{{IS_SCRIPT_TAG(Dlg_SdWelcome)
+    nResult = SdWelcome( szTitle, szMsg );
+    //}}IS_SCRIPT_TAG(Dlg_SdWelcome)
+    if (nResult = BACK) goto Dlg_Start;   
+    
+	if (RemoveOldVersions () != TRUE) then
+		abort;
+	endif;
+
+Dlg_SdLicense2:
+    szTitle = "";
+    szOpt1 = "";
+    szOpt2 = "";
+    //{{IS_SCRIPT_TAG(License_File_Path)
+    szLicenseFile = SUPPORTDIR ^ "eID-toolkit_licensingtermsconditions.txt";
+    //}}IS_SCRIPT_TAG(License_File_Path)
+    //{{IS_SCRIPT_TAG(Dlg_SdLicense2)
+    nResult = SdLicense2Rtf( szTitle, szOpt1, szOpt2, szLicenseFile, bLicenseAccepted );
+    //}}IS_SCRIPT_TAG(Dlg_SdLicense2)
+    if (nResult = BACK) then
+        goto Dlg_SdWelcome;
+    else
+        bLicenseAccepted = TRUE;
+    endif;
+
+Dlg_SdRegisterUser:
+    //szMsg = "";
+    szTitle = "";
+    nvUser = 1;
+    //{{IS_SCRIPT_TAG(Dlg_SdRegisterUser)	
+    //nResult = SdRegisterUser( szTitle, szMsg, szName, szCompany );
+   	nResult = SdCustomerInformation( szTitle, szName, szCompany, nvUser );
+    //}}IS_SCRIPT_TAG(Dlg_SdRegisterUser)
+    if (nResult = BACK) goto Dlg_SdLicense2;
+
+Dlg_SetupType2:   
+    szTitle = "";
+    szMsg = "";
+    nResult = CUSTOM;
+    //{{IS_SCRIPT_TAG(Dlg_SetupType2)	
+    nResult = SetupType2( szTitle, szMsg, "", nSetupType, 0 );
+    //}}IS_SCRIPT_TAG(Dlg_SetupType2)
+    if (nResult = BACK) then
+        goto Dlg_SdRegisterUser;
+    else
+        nSetupType = nResult;
+        if (nSetupType != CUSTOM) then
+            szTargetPath = TARGETDIR;
+            nSize = 0;
+            FeatureCompareSizeRequired( MEDIA, szTargetPath, nSize );
+            if (nSize != 0) then      
+                MessageBox( szSdStr_NotEnoughSpace, WARNING );
+                goto Dlg_SetupType2;
+            endif;
+        endif;   
+    endif;
+
+Dlg_SdAskDestPath2:
+    if ((nResult = BACK) && (nSetupType != CUSTOM)) goto Dlg_SetupType2;
+	szTitle = "";
+    szMsg = "";
+    if (nSetupType = CUSTOM) then
+                //{{IS_SCRIPT_TAG(Dlg_SdAskDestPath2)	
+		nResult = SdAskDestPath2( szTitle, szMsg, szDir );
+                //}}IS_SCRIPT_TAG(Dlg_SdAskDestPath2)
+        TARGETDIR = szDir;
+    endif;
+    if (nResult = BACK) goto Dlg_SetupType2;
+
+Dlg_SdFeatureTree: 
+    if ((nResult = BACK) && (nSetupType != CUSTOM)) goto Dlg_SdAskDestPath2;
+    szTitle = "";
+    szMsg = "";
+    szFeatures = "";
+    nLevel = 2;
+    if (nSetupType = CUSTOM) then
+        //{{IS_SCRIPT_TAG(Dlg_SdFeatureTree)	
+        nResult = SdFeatureTree( szTitle, szMsg, TARGETDIR, szFeatures, nLevel );
+        //}}IS_SCRIPT_TAG(Dlg_SdFeatureTree)
+        if (nResult = BACK) goto Dlg_SdAskDestPath2;  
+    endif;
+
+Dlg_SQLServer:
+    nResult = OnSQLServerInitialize( nResult );
+    if( nResult = BACK ) goto Dlg_SdFeatureTree;
+
+Dlg_ObjDialogs:
+    nResult = ShowObjWizardPages( nResult );
+    if (nResult = BACK) goto Dlg_SQLServer;
+    
+Dlg_SdStartCopy2:
+    szTitle = "";
+    szMsg = "";
+    //{{IS_SCRIPT_TAG(Dlg_SdStartCopy2)	
+    nResult = SdStartCopy2( szTitle, szMsg );	
+    //}}IS_SCRIPT_TAG(Dlg_SdStartCopy2)
+    if (nResult = BACK) goto Dlg_ObjDialogs;
+
+    // Added in 11.0 - Set appropriate StatusEx static text.
+    SetStatusExStaticText( SdLoadString( IDS_IFX_STATUSEX_STATICTEXT_FIRSTUI ) );
+     	
+    return 0;
+end;
+//---------------------------------------------------------------------------
+// OnFirstUIAfter
+//
+// First Install UI Sequence - After Move Data
+//
+// The OnFirstUIAfter event called by OnShowUI after the file transfer
+// of the setup when the setup is running in first install mode. By default
+// this event displays UI that informs the end user that the setup has been
+// completed successfully.
+//
+// Note: This event will not be called automatically in a
+// program...endprogram style setup.
+//---------------------------------------------------------------------------
+function OnFirstUIAfter()
+    STRING szTitle, szMsg1, szMsg2, szOpt1, szOpt2;
+    NUMBER bvOpt1, bvOpt2;
+	NUMBER bShowUpdateServiceDlg;
+begin
+
+    ShowObjWizardPages(NEXT);
+    
+    szTitle = "";
+    szMsg1 = ""; 
+    szMsg2 = "";      
+    szOpt1 = "";
+    szOpt2 = "";
+	bvOpt1   = FALSE;
+    bvOpt2   = FALSE;    
+    if (FeatureIsItemSelected(MEDIA, "ManagementTool")) then
+    	szOpt1 = "Launch %p";
+		bvOpt1 = TRUE;
+    endif;
+
+	// Set this to true if you have the update service enabled, and if you want to check for updates.
+	// Note: the ISUS Starter Edition does not support checking for updates programatically.  So, 
+	// only set this to true if you have at least the ISUS Professional Edition.
+	bShowUpdateServiceDlg = FALSE;
+    
+    //{{IS_SCRIPT_TAG(Dlg_SdDinishEx)	
+    
+//    if ( BATCH_INSTALL ) then
+    	SdFinishReboot ( szTitle , szMsg1 , SYS_BOOTMACHINE , szMsg2 , 0 );
+//    else
+		
+		// If the update service is enabled, show finish dialog that includes
+		// update check option.
+//		if( bShowUpdateServiceDlg && ( ENABLED_ISERVICES & SERVICE_ISUPDATE ) ) then
+//
+//			if( SdFinishUpdateEx( szTitle, szMsg1, szMsg2, szOpt1, szOpt2, TRUE ) ) then
+
+				// Don't check for updates in silent mode.
+//				if( MODE != SILENTMODE ) then
+//					UpdateServiceCheckForUpdates( "", FALSE );
+//				endif;
+
+//			endif;
+
+//		else
+//			SdFinish ( szTitle , szMsg1 , szMsg2 , szOpt1 , szOpt2 , bvOpt1 , bvOpt2 );
+//		endif;
+
+//    endif;  
+           
+//    if (bvOpt1) then  
+//    	LaunchApp(TARGETDIR ^ "beidgui.exe", "");
+//    endif;         
+    
+    //}}IS_SCRIPT_TAG(Dlg_SdDinishEx)	
+end;
+//---------------------------------------------------------------------------
+// OnBegin
+//
+// The OnBegin event is called directly by the framework after the setup
+// initializes. Note that this event will be called AFTER "Initialization"
+// events (i.e.) OnSetTARGETDIR, OnCheckMediaPassword.
+//
+// Note: This event will not be called automatically in a
+// program...endprogram style setup.
+//---------------------------------------------------------------------------
+function OnBegin()
+begin
+    // TODO: Perform custom initialization steps, check requirements, etc.
+	
+	DialogSetInfo (DLG_INFO_ALTIMAGE, "", TRUE);
+    IFX_PRODUCT_VERSION = GetRevision();
+    
+end;
+//---------------------------------------------------------------------------
+// OnFileLocked
+//
+// The OnFileLocked event is called when a file that is in use by another
+// application needs to be installed or uninstalled (unless the files are
+// in a file group which is marked as as potentially locked or shared in
+// this case the file will be installed or uninstalled after reboot.
+//
+// szFile will contain the full path of the file that is locked when the
+// event is called.
+//
+// The event should return one of the following values:
+//
+// ERR_IGNORE - The setup should skip installing or uninstalling the file
+//				that is locked and continue the file transfer.
+//
+// ERR_RETRY  - The setup should try to install or uninstall the file again.
+//
+// ERR_ABORT  - The setup should be aborted.
+//
+// ERR_PERFORM_AFTER_REBOOT - The file should be installed or uninstalled
+//							  after the system is rebooted.
+//---------------------------------------------------------------------------
+function OnFileLocked(szFile)
+begin
+	// TODO: Enable this code if you want to show a confirmation dialog box.	
+	//return SdExceptions(LOCKED, szFile);
+	
+	// Return ERR_PERFORM_AFTER_REBOOT so that the file will be updated
+	// w/o confirmation.
+	return ERR_PERFORM_AFTER_REBOOT;
+end;
+//---------------------------------------------------------------------------
+// OnEnd
+//
+// The OnEnd event is called at the end of the setup. This event is not
+// called if the setup is aborted.
+//---------------------------------------------------------------------------
+#define WM_WININICHANGE 0x001A 
+#define HWND_BROADCAST 0xffff 
+function OnEnd()
+	NUMBER nResult, nvType, nvSize; 
+  	STRING szKey, szEnv, szValue; 
+    STRING 	szDirData, szDirCache, szOldDirCache, szCmd, szCmdArgs;    
+  	POINTER pEnv; 
+
+begin  
+ 
+/*
+//Create Beid folder in All Users\Application Data
+    RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+    RegDBGetKeyValueEx("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+    "Common AppData",
+    nvType,szDirData,nvSize);
+    
+	szDirCache = szDirData ^ "Beid";
+	CreateDir(szDirCache);
+
+    szCmd = WINSYSDIR ^ "cmd.exe"; 
+	szCmdArgs = "/c cacls \"" + szDirCache + "\" /T /E /G Users:C";
+	LaunchAppAndWait(szCmd, szCmdArgs, WAIT);   
+        
+    szOldDirCache = FOLDER_APPDATA ^ "Beid";    
+    if (ExistsDir (szOldDirCache) = EXISTS) then   
+   		DeleteDir (szOldDirCache, ALLCONTENTS);
+   	endif;
+*/ 
+/*
+//Add PATH environment variable
+      szKey = "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"; 
+      RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+      
+      nResult = RegDBGetKeyValueEx(szKey, "PATH", nvType, szValue, nvSize); 
+      
+      if(StrFind (szValue, TARGETDIR + ";")<0 ) then
+	      szValue = TARGETDIR + ";" + szValue; 
+	      nResult = RegDBSetKeyValueEx(szKey, "PATH", REGDB_STRING, szValue, -1); 
+	
+	      if (nResult < 0) then 
+	          MessageBox("Failed to Set Environment Variable", WARNING); 
+	      else 
+	          // Flush the NT registry to all applications. 
+	          szEnv = "Environment"; 
+	          pEnv = &szEnv; 
+	          SendMessage (HWND_BROADCAST, WM_WININICHANGE, 0, pEnv ); 
+	      endif; 
+     endif;    
+*/ 
+   
+//Add CLASSPATH environment variable
+      szKey = "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"; 
+      RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+      
+      nResult = RegDBGetKeyValueEx(szKey, "CLASSPATH", nvType, szValue, nvSize); 
+      
+      if(StrFind (szValue, TARGETDIR + ";")<0 ) then
+	      szValue = TARGETDIR + ";" + szValue; 
+	      nResult = RegDBSetKeyValueEx(szKey, "CLASSPATH", REGDB_STRING, szValue, -1); 
+	
+	      if (nResult < 0) then 
+	          MessageBox("Failed to Set Environment Variable", WARNING); 
+	      else 
+	          // Flush the NT registry to all applications. 
+	          szEnv = "Environment"; 
+	          pEnv = &szEnv; 
+	          SendMessage (HWND_BROADCAST, WM_WININICHANGE, 0, pEnv ); 
+	      endif; 
+     endif;
+end;

@@ -1,0 +1,13 @@
+content		belgiumeid									content/
+locale 		belgiumeid	en-US							locale/en-US/
+locale		belgiumeid	en-GB							locale/en-US/
+locale		belgiumeid	nl-NL							locale/nl-NL/
+locale		belgiumeid	fr-FR							locale/fr-FR/
+locale	 	belgiumeid	de-DE							locale/de-DE/
+skin		belgiumeid									classic/1.0	skin/
+overlay	 	chrome://browser/content/browser.xul		chrome://belgiumeid/content/belgiumeidpkcs11.xul
+overlay	 	chrome://global/content/commonDialog.xul	chrome://belgiumeid/content/belgiumeidprompt.xul
+overlay		chrome://pippki/content/protectedAuth.xul	chrome://belgiumeid/content/belgiumeidpromptsecure.xul
+component   {26c4340c-ec4a-4173-bc6e-3d2023012177}      components/belgiumeidpkcs11.js
+contract    @eid.belgium.be/belgiumeidpkcs11;1          {26c4340c-ec4a-4173-bc6e-3d2023012177}
+category    profile-after-change                        BelgiumEidPKCS11 @eid.belgium.be/belgiumeidpkcs11;1
