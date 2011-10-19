@@ -54,10 +54,10 @@
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-image: url(:/images/Images/additional_data.png);</string>
+       <string notr="true">background-image: url(:/images/Images/alpha.png);</string>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="page_Wellcome">
        <widget class="QRadioButton" name="radioButton">
@@ -372,13 +372,16 @@
        <zorder>txtIdentity_ValidFrom_Until</zorder>
       </widget>
       <widget class="QWidget" name="page_IdentityExtra">
+       <property name="styleSheet">
+        <string notr="true">background-image: url(:/images/Images/additional_data.png);</string>
+       </property>
        <widget class="QLineEdit" name="txtIdentityExtra_SocialSecurityNo">
         <property name="geometry">
          <rect>
           <x>190</x>
           <y>60</y>
           <width>131</width>
-          <height>16</height>
+          <height>20</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -388,7 +391,7 @@
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string/>
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
         </property>
         <property name="frame">
          <bool>false</bool>
@@ -400,10 +403,10 @@
        <widget class="QLineEdit" name="txtIdentityExtra_TaxNo">
         <property name="geometry">
          <rect>
-          <x>30</x>
+          <x>27</x>
           <y>60</y>
-          <width>121</width>
-          <height>16</height>
+          <width>125</width>
+          <height>20</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -413,7 +416,7 @@
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string/>
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
         </property>
         <property name="frame">
          <bool>false</bool>
@@ -425,10 +428,10 @@
        <widget class="QLineEdit" name="txtIdentityExtra_CardVersion">
         <property name="geometry">
          <rect>
-          <x>30</x>
-          <y>160</y>
-          <width>141</width>
-          <height>16</height>
+          <x>27</x>
+          <y>159</y>
+          <width>125</width>
+          <height>20</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -438,7 +441,7 @@
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string/>
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
         </property>
         <property name="frame">
          <bool>false</bool>
@@ -451,9 +454,9 @@
         <property name="geometry">
          <rect>
           <x>190</x>
-          <y>280</y>
-          <width>201</width>
-          <height>16</height>
+          <y>275</y>
+          <width>150</width>
+          <height>20</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -463,7 +466,7 @@
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string/>
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
         </property>
         <property name="frame">
          <bool>false</bool>
@@ -475,10 +478,10 @@
        <widget class="QLineEdit" name="txtIdentityExtra_LocalofRequest">
         <property name="geometry">
          <rect>
-          <x>20</x>
-          <y>380</y>
+          <x>27</x>
+          <y>381</y>
           <width>321</width>
-          <height>16</height>
+          <height>20</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -494,7 +497,7 @@
          </size>
         </property>
         <property name="styleSheet">
-         <string/>
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
         </property>
         <property name="frame">
          <bool>false</bool>
@@ -508,8 +511,8 @@
          <rect>
           <x>350</x>
           <y>60</y>
-          <width>201</width>
-          <height>16</height>
+          <width>127</width>
+          <height>20</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -519,7 +522,7 @@
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string/>
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
         </property>
         <property name="frame">
          <bool>false</bool>
@@ -531,10 +534,10 @@
        <widget class="QLineEdit" name="txtIdentityExtra_IssuingEntity">
         <property name="geometry">
          <rect>
-          <x>30</x>
-          <y>280</y>
-          <width>141</width>
-          <height>16</height>
+          <x>27</x>
+          <y>275</y>
+          <width>150</width>
+          <height>20</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -544,7 +547,7 @@
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string/>
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
         </property>
         <property name="frame">
          <bool>false</bool>
@@ -693,7 +696,7 @@
           <x>190</x>
           <y>160</y>
           <width>131</width>
-          <height>16</height>
+          <height>20</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -703,7 +706,7 @@
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string/>
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
         </property>
         <property name="frame">
          <bool>false</bool>
@@ -3304,6 +3307,9 @@ p, li { white-space: pre-wrap; }
           <width>741</width>
           <height>371</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Light-Blue.png);</string>
         </property>
        </widget>
        <widget class="QPushButton" name="btnPersoDataSave">

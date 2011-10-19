@@ -43,5 +43,6 @@
         <file>Images/buttons/button_language.png</file>
         <file>Images/buttons/button_tools.png</file>
         <file>Images/additional_data.png</file>
+        <file>Images/bg-Light-Blue.png</file>
     </qresource>
 </RCC>
