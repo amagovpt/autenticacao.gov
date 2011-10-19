@@ -44,5 +44,10 @@
         <file>Images/buttons/button_tools.png</file>
         <file>Images/additional_data.png</file>
         <file>Images/bg-Light-Blue.png</file>
+        <file>Images/bg_Empty.png</file>
+        <file>Images/bg_address.png</file>
+        <file>Images/bg_Pins.png</file>
+        <file>Images/bt_Pin-Change.png</file>
+        <file>Images/bt_Pin-Check.png</file>
     </qresource>
 </RCC>

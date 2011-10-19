@@ -658,6 +658,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	// - fixed in width
 	// - not clickable
 	//----------------------------------
+	/*
 	{
 		QHeaderView *hhv = m_ui.tblCardAndPIN->horizontalHeader();
 		hhv->setResizeMode(QHeaderView::Stretch);
@@ -667,6 +668,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 		vhv->setClickable(false);
 		vhv->setVisible(false);
 	}
+	*/
 	{
 		QHeaderView *hhv = m_ui.tblInfo->horizontalHeader();
 		hhv->setResizeMode(QHeaderView::Stretch);
@@ -4605,6 +4607,7 @@ void MainWnd::fillCardVersionInfo( BEID_EIDCard& Card )
 	//--------------------------------------------
 	// make sure we start with a cleaned list
 	//--------------------------------------------
+	/*
 	m_ui.tblCardAndPIN->clear();
 
 	m_ui.tblCardAndPIN->setRowCount( Data.size() );
@@ -4629,7 +4632,7 @@ void MainWnd::fillCardVersionInfo( BEID_EIDCard& Card )
 	labels.push_back(tr("Value"));
 
 	m_ui.tblCardAndPIN->setHorizontalHeaderLabels(labels);
-
+	*/
 }
 
 //**************************************************
@@ -4695,10 +4698,7 @@ void MainWnd::setStatus( unsigned int Status )
 		break;
 	}
 
-	m_ui.txtSpecialStatus->setText( tmp );
-	m_ui.txtSpecialStatus->setAccessibleName( tmp );
-	m_ui.txtForeignerSpecialStatus->setText( tmp );
-	m_ui.txtForeignerSpecialStatus->setAccessibleName( tmp );
+
 }
 
 //**************************************************
@@ -5144,7 +5144,7 @@ void MainWnd::zoomTabCertificates( void )
 //*****************************************************
 void MainWnd::zoomTabCardPin(void)
 {
-	// Apply StyleSheet
+/*	// Apply StyleSheet
 	QList<QWidget *> allWidgets = m_ui.tabCardPin->findChildren<QWidget *>();
 //	zoomAllWidgets(allWidgets);
 	setWidgetsPointSize(allWidgets);
@@ -5172,6 +5172,7 @@ void MainWnd::zoomTabCardPin(void)
 
 	m_ui.tblCardAndPIN->setColumnWidth( 0, ( width()-100 )/2 );
 	m_ui.tblCardAndPIN->setColumnWidth( 1, ( width()-100 )/2 );
+*/
 }
 
 //*****************************************************
@@ -5403,7 +5404,8 @@ void MainWnd::initTabCardPin( void )
 	QList<QWidget *> allWidgets = m_ui.tabCardPin->findChildren<QWidget *>();
 	initAllWidgets(allWidgets);
 
-	m_ui.tblCardAndPIN->setColumnCount( 2 );
+/*
+  	m_ui.tblCardAndPIN->setColumnCount( 2 );
 
 	QTableWidgetItem *newItem = new QTableWidgetItem( tr("Field") );
  	m_ui.tblCardAndPIN->setHorizontalHeaderItem( 0, newItem );
@@ -5413,6 +5415,7 @@ void MainWnd::initTabCardPin( void )
 
 	m_ui.tblCardAndPIN->setColumnWidth( 0, 348 );
 	m_ui.tblCardAndPIN->setColumnWidth( 1, 348 );
+	*/
 }
 
 //*****************************************************
@@ -5556,9 +5559,6 @@ void MainWnd::refreshTabIdentityExtra()
 {
 	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
 
-	m_ui.txtIdentityExtra_ChipNumber->setText	( CardFields[CHIP_NUMBER] );
-	m_ui.txtIdentityExtra_ChipNumber->setAccessibleName	( CardFields[CHIP_NUMBER] );
-
 	tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
 
 	m_ui.txtIdentityExtra_TaxNo->setText	( PersonFields[TAXNO] );
@@ -5582,9 +5582,6 @@ void MainWnd::refreshTabIdentityExtra()
 
 	QString cardNumber = m_CI_Data.m_CardInfo.formatCardNumber(CardFields[CARD_NUMBER],m_CI_Data.m_CardInfo.getType());
 
-	m_ui.txtIdentityExtra_Card_Number->setText	( cardNumber );
-	m_ui.txtIdentityExtra_Card_Number->setAccessibleName	( cardNumber );
-
 	QString nationalNumber = m_CI_Data.m_PersonInfo.formatNationalNumber( PersonFields[NATIONALNUMBER],m_CI_Data.m_CardInfo.getType() );
 
 	m_ui.txtIdentityExtra_ValidFrom_Until->setText( CardFields[CARD_VALIDFROM] + " - " + CardFields[CARD_VALIDUNTIL] );
@@ -5599,9 +5596,6 @@ void MainWnd::refreshTabIdentityExtra()
 	SpecialStatus["3"] = tr("white cane/extended minority");
 	SpecialStatus["4"] = tr("yellow cane");
 	SpecialStatus["5"] = tr("yellow cane/extended minority");
-
-	m_ui.txtSpecialStatus->setText(SpecialStatus[PersonExtraFields[SPECIALSTATUS]]);
-	m_ui.txtSpecialStatus->setAccessibleName(SpecialStatus[PersonExtraFields[SPECIALSTATUS]]);
 
 	/*tFieldMap& AddressFields = m_CI_Data.m_PersonInfo.m_AddressInfo.getFields();
 
