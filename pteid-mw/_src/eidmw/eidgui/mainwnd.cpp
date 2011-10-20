@@ -5643,10 +5643,11 @@ void MainWnd::refreshTabAddress( void )
 
 	if (pinactivate == 1)
 	{
-	    	if (addressPINRequest_triggered())
+		if (addressPINRequest_triggered())
 			loadCardDataAddress();
+	}else{
+		loadCardDataAddress();
 	}
-
 	tFieldMap& AddressFields = m_CI_Data.m_AddressInfo.getFields();
 
 	m_ui.txtAddress_Municipality->setText		 ( AddressFields[ADDRESS_MUNICIPALITY] );
