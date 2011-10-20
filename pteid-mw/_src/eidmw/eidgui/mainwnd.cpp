@@ -652,23 +652,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	}
 	m_ui.actionZoom_Out->setEnabled(false);
 
-	//----------------------------------
-	// make the tables for version info and the card info
-	// - without row numbers
-	// - fixed in width
-	// - not clickable
-	//----------------------------------
-	/*
-	{
-		QHeaderView *hhv = m_ui.tblCardAndPIN->horizontalHeader();
-		hhv->setResizeMode(QHeaderView::Stretch);
-		hhv->setClickable(false);
-		QHeaderView *vhv = m_ui.tblCardAndPIN->verticalHeader();
-		vhv->setResizeMode(QHeaderView::Fixed);
-		vhv->setClickable(false);
-		vhv->setVisible(false);
-	}
-	*/
+
 	{
 		QHeaderView *hhv = m_ui.tblInfo->horizontalHeader();
 		hhv->setResizeMode(QHeaderView::Stretch);
@@ -3732,12 +3716,12 @@ void MainWnd::showTabs()
 
 		if(BEID_EIDCard::isApplicationAllowed())
 		{
-			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity,tr("&Identity"));
+			//m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity,tr("&Identity"));
 			refreshTabIdentity();
 			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity_extention,tr("Identity E&xtra"));
 			m_ui.tabWidget_Identity->addTab(m_ui.tabAddress,tr("Address"));
 			connect (m_ui.tabWidget_Identity,SIGNAL (currentChanged(int)), this, SLOT(tabaddress_select(int)));
-			m_ui.tabWidget_Identity->addTab(m_ui.tabPersoData,tr("Personal Data"));
+//			m_ui.tabWidget_Identity->addTab(m_ui.tabPersoData,tr("Personal Data"));
 			connect (m_ui.tabWidget_Identity,SIGNAL (currentChanged(int)), this, SLOT(tabpersodata_select(int)));
 
 
@@ -3768,7 +3752,7 @@ void MainWnd::showTabs()
 	case BEID_CARDTYPE_KIDS:
 		if(BEID_EIDCard::isApplicationAllowed())
 		{
-			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity,tr("&Identity"));
+//			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity,tr("&Identity"));
 			refreshTabIdentity();
 			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity_extention,tr("Identity E&xtra"));
 			refreshTabIdentityExtra();
@@ -3798,7 +3782,7 @@ void MainWnd::showTabs()
 				int cardSubtype = m_CI_Data.m_CardInfo.getSubType();
 				if ( cardSubtype >= CardInfo::EUROPEAN_E && cardSubtype <= CardInfo::EUROPEAN_F_PLUS )
 				{
-					m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity,tr("&Identity"));
+//					m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity,tr("&Identity"));
 					refreshTabIdentity();
 
 					m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity_extention,tr("Identity E&xtra"));
@@ -3813,7 +3797,7 @@ void MainWnd::showTabs()
 				}
 				else
 				{
-					m_ui.tabWidget_Identity->addTab(m_ui.tabForeigners,tr("&Identity"));
+//					m_ui.tabWidget_Identity->addTab(m_ui.tabForeigners,tr("&Identity"));
 					refreshTabForeigners();
 					m_ui.tabWidget_Identity->addTab(m_ui.tabForeigners_Back,tr("Identity E&xtra"));
 					refreshTabForeignersExtra();
@@ -4832,7 +4816,7 @@ void MainWnd::setZoom()
 //**************************************************
 void MainWnd::zoomBackground()
 {
-	//-----------------------------------------------------------
+/*	//-----------------------------------------------------------
 	// Set Background Image for Tab Identity and Tab Identity_extention
 	//-----------------------------------------------------------
 	multiplyerFactor mFactor(m_Zoom);
@@ -4845,8 +4829,8 @@ void MainWnd::zoomBackground()
 		{
 			case BEID_CARDTYPE_EID:
 			case BEID_CARDTYPE_KIDS:
-				m_ui.tabIdentity->setAutoFillBackground( true );
-				Pal = m_ui.tabIdentity->palette();
+//				m_ui.tabIdentity->setAutoFillBackground( true );
+//				Pal = m_ui.tabIdentity->palette();
 				brush = QBrush( m_imgBackground_Front.scaled( m_ui.tabWidget_Identity->width()
 															, m_ui.tabWidget_Identity->height()
 															//,Qt::KeepAspectRatio 
@@ -4966,7 +4950,7 @@ void MainWnd::zoomBackground()
 			break;
 		}
 	}
-
+*/
 }
 //**************************************************
 // Zoom all items on the tab 'Identity'
@@ -5290,8 +5274,8 @@ void MainWnd::initAllTabs( void )
 void MainWnd::initTabIdentity( void )
 {
 	// Apply StyleSheet
-        QList<QWidget *> allWidgets = m_ui.tabIdentity->findChildren<QWidget *>();
-        initAllWidgets(allWidgets);
+//        QList<QWidget *> allWidgets = m_ui.tabIdentity->findChildren<QWidget *>();
+  //      initAllWidgets(allWidgets);
 
         m_ui.txtIdentity_Sex->setAlignment(Qt::AlignRight);
 
@@ -5389,8 +5373,8 @@ void MainWnd::initTabCertificates( void )
 void MainWnd::initTabPersoData( void )
 {
 	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabPersoData->findChildren<QWidget *>();
-	initAllWidgets(allWidgets);
+//	QList<QWidget *> allWidgets = m_ui.tabPersoData->findChildren<QWidget *>();
+//	initAllWidgets(allWidgets);
 
 	//m_ui.txtSis_LogicalNumber->setAlignment(Qt::AlignLeft);
 	//m_ui.txtSis_SocialSecurityNumber->setAlignment(Qt::AlignRight);

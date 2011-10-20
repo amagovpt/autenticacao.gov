@@ -1280,19 +1280,8 @@
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>8</number>
         </property>
-        <widget class="QWidget" name="tabIdentity">
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="accessibleName">
-          <string>Tab Identity</string>
-         </property>
-         <attribute name="title">
-          <string>&amp;Identity</string>
-         </attribute>
-        </widget>
         <widget class="QWidget" name="tabForeigners">
          <property name="focusPolicy">
           <enum>Qt::NoFocus</enum>
@@ -2344,11 +2333,6 @@
            </layout>
           </item>
          </layout>
-        </widget>
-        <widget class="QWidget" name="tabPersoData">
-         <attribute name="title">
-          <string>Bloco de Notas</string>
-         </attribute>
         </widget>
         <widget class="QWidget" name="tabInfo">
          <property name="focusPolicy">
