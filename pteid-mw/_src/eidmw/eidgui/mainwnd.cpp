@@ -3201,7 +3201,7 @@ void MainWnd::on_actionOptions_triggered(void)
 
 		if( !m_ui.txtIdentity_Name->text().isEmpty() )
 			m_ui.lblIdentity_ImgPerson->setPixmap( m_imgPicture );
-			m_ui.lblForeigners_ImgPerson->setPixmap( m_imgPicture );
+//			m_ui.lblForeigners_ImgPerson->setPixmap( m_imgPicture );
 
 	}
 	delete dlg;
@@ -3718,8 +3718,8 @@ void MainWnd::showTabs()
 		{
 			//m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity,tr("&Identity"));
 			refreshTabIdentity();
-			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity_extention,tr("Identity E&xtra"));
-			m_ui.tabWidget_Identity->addTab(m_ui.tabAddress,tr("Address"));
+//			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity_extention,tr("Identity E&xtra"));
+//			m_ui.tabWidget_Identity->addTab(m_ui.tabAddress,tr("Address"));
 			connect (m_ui.tabWidget_Identity,SIGNAL (currentChanged(int)), this, SLOT(tabaddress_select(int)));
 //			m_ui.tabWidget_Identity->addTab(m_ui.tabPersoData,tr("Personal Data"));
 			connect (m_ui.tabWidget_Identity,SIGNAL (currentChanged(int)), this, SLOT(tabpersodata_select(int)));
@@ -3754,7 +3754,7 @@ void MainWnd::showTabs()
 		{
 //			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity,tr("&Identity"));
 			refreshTabIdentity();
-			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity_extention,tr("Identity E&xtra"));
+//			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity_extention,tr("Identity E&xtra"));
 			refreshTabIdentityExtra();
 
 			//m_ui.lblIdentity_Parents->setVisible(true);
@@ -3785,7 +3785,7 @@ void MainWnd::showTabs()
 //					m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity,tr("&Identity"));
 					refreshTabIdentity();
 
-					m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity_extention,tr("Identity E&xtra"));
+//					m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity_extention,tr("Identity E&xtra"));
 					refreshTabIdentityExtra();
 
 					m_imgBackground_Front = QPixmap( ":/images/Images/Background_IDFront.jpg" ); // background
@@ -3817,7 +3817,7 @@ void MainWnd::showTabs()
 		break;
 
 	case BEID_CARDTYPE_SIS:
-		m_ui.tabWidget_Identity->addTab(m_ui.tabSis,tr("&Identity"));
+//		m_ui.tabWidget_Identity->addTab(m_ui.tabSis,tr("&Identity"));
 		refreshTabSis();
 		m_ui.tabWidget_Identity->addTab(m_ui.tabSis_Back,tr("Identity E&xtra"));
 		refreshTabSisExtra();
@@ -5021,7 +5021,7 @@ void MainWnd::zoomTabIdentity( void )
 void MainWnd::zoomTabIdentityExtra(void)
 {
 	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabIdentity_extention->findChildren<QWidget *>();
+//	QList<QWidget *> allWidgets = m_ui.tabIdentity_extention->findChildren<QWidget *>();
 //	zoomAllWidgets(allWidgets);
 //	setWidgetsPointSize(allWidgets);
 //	setWidgetPosition(allWidgets);
@@ -5035,10 +5035,10 @@ void MainWnd::zoomTabIdentityExtra(void)
 void MainWnd::zoomTabAddress(void)
 {
 	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabAddress->findChildren<QWidget *>();
+//	QList<QWidget *> allWidgets = m_ui.tabAddress->findChildren<QWidget *>();
 //	zoomAllWidgets(allWidgets);
-	setWidgetsPointSize(allWidgets);
-	setWidgetPosition(allWidgets);
+//	setWidgetsPointSize(allWidgets);
+//	setWidgetPosition(allWidgets);
 
 }
 
@@ -5049,7 +5049,7 @@ void MainWnd::zoomTabAddress(void)
 //*****************************************************
 void MainWnd::zoomTabForeigners( void )
 {
-	// Apply StyleSheet
+/*	// Apply StyleSheet
 	QList<QWidget *> allWidgets = m_ui.tabForeigners->findChildren<QWidget *>();
 	//zoomAllWidgets(allWidgets);
 	setWidgetsPointSize(allWidgets);
@@ -5060,6 +5060,7 @@ void MainWnd::zoomTabForeigners( void )
 	multiplyerFactor mfactor(m_Zoom);
 	m_ui.lblForeigners_ImgPerson->setFixedHeight( (int) (height*mfactor.HMultiplyer) );
 	m_ui.lblForeigners_ImgPerson->setFixedWidth( (int) (width*mfactor.WMultiplyer) );
+*/
 }
 
 //*****************************************************
@@ -5079,6 +5080,7 @@ void MainWnd::zoomTabForeignersExtra(void)
 //*****************************************************
 void MainWnd::zoomTabSis(void)
 {
+/*
 	// Apply StyleSheet
 	QList<QWidget *> allWidgets = m_ui.tabSis->findChildren<QWidget *>();
 	setWidgetsPointSize(allWidgets);
@@ -5090,6 +5092,8 @@ void MainWnd::zoomTabSis(void)
 
 // 	m_ui.lblSis_Sex->setFixedHeight( IMG_SEX_SIZE_BASE + IMG_SEX_SIZE_INCREMENT * m_Zoom  );
 // 	m_ui.lblSis_Sex->setFixedWidth( (int) ( IMG_SEX_SIZE_BASE + IMG_SEX_SIZE_INCREMENT * m_Zoom  ) );
+ *
+ */
 }
 
 //*****************************************************
@@ -5293,8 +5297,8 @@ void MainWnd::initTabIdentity( void )
 void MainWnd::initTabIdentityExtra( void )
 {
 	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabIdentity_extention->findChildren<QWidget *>();
-	initAllWidgets(allWidgets);
+//	QList<QWidget *> allWidgets = m_ui.tabIdentity_extention->findChildren<QWidget *>();
+//	initAllWidgets(allWidgets);
 }
 
 //*****************************************************
@@ -5304,8 +5308,8 @@ void MainWnd::initTabAddress( void )
 {
 	//addressPINRequest_triggered();
 	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabAddress->findChildren<QWidget *>();
-	initAllWidgets(allWidgets);
+//	QList<QWidget *> allWidgets = m_ui.tabAddress->findChildren<QWidget *>();
+//	initAllWidgets(allWidgets);
 }
 
 //*****************************************************
@@ -5313,12 +5317,12 @@ void MainWnd::initTabAddress( void )
 //*****************************************************
 void MainWnd::initTabForeigners( void )
 {
-	// Apply StyleSheet
+/*	// Apply StyleSheet
 	QList<QWidget *> allWidgets = m_ui.tabForeigners->findChildren<QWidget *>();
 	initAllWidgets(allWidgets);
 
 	m_ui.txtForeigners_Card_Number->setAlignment(Qt::AlignRight);
-
+*/
 }
 
 //*****************************************************
@@ -5337,8 +5341,8 @@ void MainWnd::initTabForeignersExtra( void )
 void MainWnd::initTabSis( void )
 {
 	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabSis->findChildren<QWidget *>();
-	initAllWidgets(allWidgets);
+//	QList<QWidget *> allWidgets = m_ui.tabSis->findChildren<QWidget *>();
+//	initAllWidgets(allWidgets);
 
 	//m_ui.txtSis_LogicalNumber->setAlignment(Qt::AlignLeft);
 	//m_ui.txtSis_SocialSecurityNumber->setAlignment(Qt::AlignRight);
@@ -5793,9 +5797,10 @@ QStringList MainWnd::fillRemarksField( tFieldMap& MiscFields )
 //*****************************************************
 void MainWnd::refreshTabForeigners( void )
 {
+	/*
 	m_ui.lblForeigners_ImgPerson->setPixmap(m_imgPicture);
 
-	/*tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
+	tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
 
 	m_ui.txtForeigners_Name->setText		( PersonFields[NAME] );
 	m_ui.txtForeigners_Name->setAccessibleName( PersonFields[NAME] );
@@ -5814,7 +5819,8 @@ void MainWnd::refreshTabForeigners( void )
 	m_ui.txtForeigners_ValidTot->setText    ( CardFields[CARD_VALIDUNTIL] );
 	m_ui.txtForeigners_ValidTot->setAccessibleName( CardFields[CARD_VALIDUNTIL] );
 	m_ui.txtForeigners_PlaceOfIssue->setText( CardFields[CARD_PLACEOFISSUE] + " " + CardFields[CARD_VALIDFROM]);
-	m_ui.txtForeigners_PlaceOfIssue->setAccessibleName( CardFields[CARD_PLACEOFISSUE] + " " + CardFields[CARD_VALIDFROM]);*/
+	m_ui.txtForeigners_PlaceOfIssue->setAccessibleName( CardFields[CARD_PLACEOFISSUE] + " " + CardFields[CARD_VALIDFROM]);
+	*/
 }
 
 //*****************************************************
@@ -5902,7 +5908,7 @@ void MainWnd::refreshTabForeignersExtra( void )
 //*****************************************************
 void MainWnd::refreshTabSis( void )
 {
-	tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
+/*	tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
 	QString FirstName;
 
 	m_ui.txtSis_Name->setText			( PersonFields[NAME] );
@@ -5945,6 +5951,7 @@ void MainWnd::refreshTabSis( void )
 		//!! oops
 	}
 	m_ui.lblSis_Sex->setPixmap( m_imgSex );
+	*/
 
 }
 
