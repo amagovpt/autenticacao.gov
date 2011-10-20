@@ -22,5 +22,8 @@
         <file>Resources/KeyPadButton8.png</file>
         <file>Resources/KeyPadButton9.png</file>
         <file>Resources/KeyPadButtonCE.png</file>
+        <file>Resources/bg_AuthenticationPin.png</file>
+        <file>Resources/bg_SignaturePin.png</file>
+    	<file>Resources/alpha.png</file>
     </qresource>
 </RCC>

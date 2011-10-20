@@ -44,7 +44,8 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 	QString Title;
 	//if( DApplic == DLG_APP_BELPIC )
 	//{
-		this->setWindowIcon( QIcon( ":/Resources/ICO_CARD_EID_PLAIN_16x16.png" ) );
+	this->setWindowIcon( QIcon( ":/Resources/ICO_CARD_EID_PLAIN_16x16.png" ) );
+
 	//	Title+=QString::fromWCharArray(GETSTRING_DLG(Belpic));
 	//	Title+= ": ";
 	//}
@@ -78,9 +79,9 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 	ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
 
 	if( PinPusage == DLG_PIN_SIGN )
-		ui.lblIcon->setPixmap( QPixmap( ":/Resources/ICO_CARD_DIGSIG_128x128.png" ) );
+		this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin.png);");
 	else
-		ui.lblIcon->setPixmap( QPixmap( ":/Resources/ICO_CARD_PIN_128x128.png" ) );
+		this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin.png);");
 
 	m_ulPinMinLen = pinInfo.ulMinLen;
 	m_ulPinMaxLen = pinInfo.ulMaxLen;
