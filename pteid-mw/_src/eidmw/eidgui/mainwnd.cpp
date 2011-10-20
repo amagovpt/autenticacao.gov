@@ -653,15 +653,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_ui.actionZoom_Out->setEnabled(false);
 
 
-	{
-		QHeaderView *hhv = m_ui.tblInfo->horizontalHeader();
-		hhv->setResizeMode(QHeaderView::Stretch);
-		hhv->setClickable(false);
-		QHeaderView *vhv = m_ui.tblInfo->verticalHeader();
-		vhv->setResizeMode(QHeaderView::Fixed);
-		vhv->setClickable(false);
-		vhv->setVisible(false);
-	}
 	//------------------------------------
 	// set the tray Icon (as it appears in the traybar)
 	//------------------------------------
@@ -958,13 +949,14 @@ GenPur::UI_LANGUAGE MainWnd::LoadTranslationFile(GenPur::UI_LANGUAGE NewLanguage
 }
 void MainWnd::on_tabWidget_Identity_currentChanged( int index )
 {
-	index = index;
+	/*index = index;
 
 	if ((index >= 0) && (index < m_ui.tabWidget_Identity->count()))
 	{
 		QWidget *currentWidget=	m_ui.tabWidget_Identity->currentWidget();
 		m_ui.tabWidget_Identity->setAccessibleName(currentWidget->objectName());
 	}
+	*/
 }
 
 void MainWnd::showEvent( QShowEvent * event )
@@ -3671,11 +3663,12 @@ void MainWnd::on_btnSelectTab_Notes_clicked()
 //******************************************************
 void MainWnd::hideTabs()
 {
-	QList<QWidget *> allTabs = m_ui.tabWidget_Identity->findChildren<QWidget *>();
+/*	QList<QWidget *> allTabs = m_ui.tabWidget_Identity->findChildren<QWidget *>();
 	for (int i = allTabs.size()-1; i >=0; --i) 
 	{	
 		m_ui.tabWidget_Identity->removeTab(i);		// hide the tab (this is not a delete!!)
 	}
+	*/
 }
 
 void MainWnd::tabaddress_select(int index)
@@ -3720,9 +3713,9 @@ void MainWnd::showTabs()
 			refreshTabIdentity();
 //			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity_extention,tr("Identity E&xtra"));
 //			m_ui.tabWidget_Identity->addTab(m_ui.tabAddress,tr("Address"));
-			connect (m_ui.tabWidget_Identity,SIGNAL (currentChanged(int)), this, SLOT(tabaddress_select(int)));
+//			connect (m_ui.tabWidget_Identity,SIGNAL (currentChanged(int)), this, SLOT(tabaddress_select(int)));
 //			m_ui.tabWidget_Identity->addTab(m_ui.tabPersoData,tr("Personal Data"));
-			connect (m_ui.tabWidget_Identity,SIGNAL (currentChanged(int)), this, SLOT(tabpersodata_select(int)));
+//			connect (m_ui.tabWidget_Identity,SIGNAL (currentChanged(int)), this, SLOT(tabpersodata_select(int)));
 
 
 			refreshTabIdentityExtra();
@@ -3740,11 +3733,10 @@ void MainWnd::showTabs()
  			//m_imgBackground_Back = QPixmap( ":/images/Images/Background_IDBack.jpg" ); // background
 		}
 
-		m_ui.tabWidget_Identity->addTab(m_ui.tabCertificates,tr("C&ertificates"));
-		connect (m_ui.tabWidget_Identity,SIGNAL (currentChanged(int)), this, SLOT(tabcertificates_select(int)));
-		m_ui.tabWidget_Identity->addTab(m_ui.tabCardPin,tr("C&ard && PIN"));
+//		m_ui.tabWidget_Identity->addTab(m_ui.tabCertificates,tr("C&ertificates"));
+//		connect (m_ui.tabWidget_Identity,SIGNAL (currentChanged(int)), this, SLOT(tabcertificates_select(int)));
+//		m_ui.tabWidget_Identity->addTab(m_ui.tabCardPin,tr("C&ard && PIN"));
 		refreshTabCardPin();
-		m_ui.tabWidget_Identity->addTab(m_ui.tabInfo,tr("&Info"));
 		refreshTabInfo();
 
 		break;
@@ -3764,11 +3756,10 @@ void MainWnd::showTabs()
 			m_imgBackground_Back = QPixmap( ":/images/Images/Background_KidsBack.jpg" ); // background
 		}
 
-		m_ui.tabWidget_Identity->addTab(m_ui.tabCertificates,tr("C&ertificates"));
+//		m_ui.tabWidget_Identity->addTab(m_ui.tabCertificates,tr("C&ertificates"));
 		refreshTabCertificates();
-		m_ui.tabWidget_Identity->addTab(m_ui.tabCardPin,tr("C&ard && PIN"));
+//		m_ui.tabWidget_Identity->addTab(m_ui.tabCardPin,tr("C&ard && PIN"));
 		refreshTabCardPin();
-		m_ui.tabWidget_Identity->addTab(m_ui.tabInfo,tr("&Info"));
 		refreshTabInfo();
 
 		break;
@@ -3799,7 +3790,7 @@ void MainWnd::showTabs()
 				{
 //					m_ui.tabWidget_Identity->addTab(m_ui.tabForeigners,tr("&Identity"));
 					refreshTabForeigners();
-					m_ui.tabWidget_Identity->addTab(m_ui.tabForeigners_Back,tr("Identity E&xtra"));
+//					m_ui.tabWidget_Identity->addTab(m_ui.tabForeigners_Back,tr("Identity E&xtra"));
 					refreshTabForeignersExtra();
 
 					m_imgBackground_Front = QPixmap( ":/images/Images/Background_ForeignersFront.jpg" ); // background
@@ -3807,11 +3798,10 @@ void MainWnd::showTabs()
 				}
 			}
 
-			m_ui.tabWidget_Identity->addTab(m_ui.tabCertificates,tr("C&ertificates"));
+//			m_ui.tabWidget_Identity->addTab(m_ui.tabCertificates,tr("C&ertificates"));
 			refreshTabCertificates();
-			m_ui.tabWidget_Identity->addTab(m_ui.tabCardPin,tr("C&ard && PIN"));
+//			m_ui.tabWidget_Identity->addTab(m_ui.tabCardPin,tr("C&ard && PIN"));
 			refreshTabCardPin();
-			m_ui.tabWidget_Identity->addTab(m_ui.tabInfo,tr("&Info"));
 			refreshTabInfo();
 		}
 		break;
@@ -3819,9 +3809,8 @@ void MainWnd::showTabs()
 	case BEID_CARDTYPE_SIS:
 //		m_ui.tabWidget_Identity->addTab(m_ui.tabSis,tr("&Identity"));
 		refreshTabSis();
-		m_ui.tabWidget_Identity->addTab(m_ui.tabSis_Back,tr("Identity E&xtra"));
+//		m_ui.tabWidget_Identity->addTab(m_ui.tabSis_Back,tr("Identity E&xtra"));
 		refreshTabSisExtra();
-		m_ui.tabWidget_Identity->addTab(m_ui.tabInfo,tr("&Info"));
 		refreshTabInfo();
 
 		m_imgBackground_Front = QPixmap( ":/images/Images/Background_SisFront.jpg" ); // background
@@ -3839,7 +3828,7 @@ void MainWnd::showTabs()
 	// set the tabs to the first visible tab
 	// set the widget stack to the tabs (not to the splash screen)
 	//------------------------------------------------------
-	m_ui.tabWidget_Identity->setCurrentIndex(0);
+//	m_ui.tabWidget_Identity->setCurrentIndex(0);
 	m_ui.stackedWidget->setCurrentIndex(1);
 	setZoom();
 }
@@ -4323,6 +4312,10 @@ QString MainWnd::getFinalLinkTarget(QString baseName)
 //**************************************************
 void MainWnd::fillSoftwareInfo( void )
 {
+
+	/*
+
+
 	QStringList libPaths = QProcess::systemEnvironment();
 	QStringList searchPaths;
 	QMap<QString,QString> softwareInfo;
@@ -4557,6 +4550,8 @@ void MainWnd::fillSoftwareInfo( void )
 		newItem->setFlags(flags);
 		m_ui.tblInfo->setItem( RowNr, ColNr, newItem );
 	}
+
+	*/
 }
 
 //**************************************************
@@ -4803,10 +4798,10 @@ void MainWnd::setZoom()
 	// looks like we can't change the text size??
 	//-----------------------------------------------------------
 
-	QFont tmpFont = m_ui.tabWidget_Identity->font();
-	tmpFont.setPointSize( stylesheetsInfo[STYLESHEET_NORMAL_LABEL].pointSizes[m_Zoom] );
-	m_ui.tabWidget_Identity->setFont( tmpFont );
-	m_ui.tabWidget_Identity->setIconSize( QSize( IconSize, IconSize ) );
+//	QFont tmpFont = m_ui.tabWidget_Identity->font();
+//	tmpFont.setPointSize( stylesheetsInfo[STYLESHEET_NORMAL_LABEL].pointSizes[m_Zoom] );
+//	m_ui.tabWidget_Identity->setFont( tmpFont );
+//	m_ui.tabWidget_Identity->setIconSize( QSize( IconSize, IconSize ) );
 
 	zoomBackground();
 }
@@ -5068,11 +5063,12 @@ void MainWnd::zoomTabForeigners( void )
 //*****************************************************
 void MainWnd::zoomTabForeignersExtra(void)
 {	
-	// Apply StyleSheet
+/*	// Apply StyleSheet
 	QList<QWidget *> allWidgets = m_ui.tabForeigners_Back->findChildren<QWidget *>();
 //	zoomAllWidgets(allWidgets);
 	setWidgetsPointSize(allWidgets);
 	setWidgetPosition(allWidgets);
+	*/
 }
 
 //*****************************************************
@@ -5101,11 +5097,12 @@ void MainWnd::zoomTabSis(void)
 //*****************************************************
 void MainWnd::zoomTabSisExtra(void)
 {
-	// Apply StyleSheet
+/*	// Apply StyleSheet
 	QList<QWidget *> allWidgets = m_ui.tabSis_Back->findChildren<QWidget *>();
 //	zoomAllWidgets(allWidgets);
 	setWidgetsPointSize(allWidgets);
 	setWidgetPosition(allWidgets);
+	*/
 }
 
 //*****************************************************
@@ -5113,7 +5110,7 @@ void MainWnd::zoomTabSisExtra(void)
 //*****************************************************
 void MainWnd::zoomTabCertificates( void )
 {
-	// Apply StyleSheet
+/*	// Apply StyleSheet
 	QList<QWidget *> allWidgets = m_ui.tabCertificates->findChildren<QWidget *>();
 	zoomAllWidgets(allWidgets);
 
@@ -5126,7 +5123,7 @@ void MainWnd::zoomTabCertificates( void )
 			header->setFont(0,font);
 		}
 	}
-
+*/
 }
 
 //*****************************************************
@@ -5170,6 +5167,7 @@ void MainWnd::zoomTabCardPin(void)
 //*****************************************************
 void MainWnd::zoomTabInfo(void)
 {
+/*
 	// Apply StyleSheet
 	QList<QWidget *> allWidgets = m_ui.tabInfo->findChildren<QWidget *>();
 //	zoomAllWidgets(allWidgets);
@@ -5192,6 +5190,7 @@ void MainWnd::zoomTabInfo(void)
 
 	m_ui.tblInfo->setColumnWidth( 0, ( width()-100 )/2 );
 	m_ui.tblInfo->setColumnWidth( 1, ( width()-100 )/2 );
+*/
 }
 void MainWnd::setWidgetsPointSize(QList<QWidget *> &allWidgets)
 {
@@ -5330,9 +5329,10 @@ void MainWnd::initTabForeigners( void )
 //*****************************************************
 void MainWnd::initTabForeignersExtra( void )
 {
-	// Apply StyleSheet
+/*	// Apply StyleSheet
 	QList<QWidget *> allWidgets = m_ui.tabForeigners_Back->findChildren<QWidget *>();
 	initAllWidgets(allWidgets);
+	*/
 }
 
 //*****************************************************
@@ -5354,10 +5354,10 @@ void MainWnd::initTabSis( void )
 //*****************************************************
 void MainWnd::initTabSisExtra( void )
 {
-	// Apply StyleSheet
+/*	// Apply StyleSheet
 	QList<QWidget *> allWidgets = m_ui.tabSis_Back->findChildren<QWidget *>();
 	initAllWidgets(allWidgets);
-
+*/
 }
 
 //*****************************************************
@@ -5365,10 +5365,10 @@ void MainWnd::initTabSisExtra( void )
 //*****************************************************
 void MainWnd::initTabCertificates( void )
 {
-	// Apply StyleSheet
+/*	// Apply StyleSheet
 	QList<QWidget *> allWidgets = m_ui.tabCertificates->findChildren<QWidget *>();
 	initAllWidgets(allWidgets);
-
+*/
 }
 
 //*****************************************************
@@ -5391,8 +5391,8 @@ void MainWnd::initTabPersoData( void )
 void MainWnd::initTabCardPin( void )
 {
 	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabCardPin->findChildren<QWidget *>();
-	initAllWidgets(allWidgets);
+//	QList<QWidget *> allWidgets = m_ui.tabCardPin->findChildren<QWidget *>();
+//	initAllWidgets(allWidgets);
 
 /*
   	m_ui.tblCardAndPIN->setColumnCount( 2 );
@@ -5413,6 +5413,7 @@ void MainWnd::initTabCardPin( void )
 //*****************************************************
 void MainWnd::initTabInfo( void )
 {
+/*
 	// Apply StyleSheet
 	QList<QWidget *> allWidgets = m_ui.tabInfo->findChildren<QWidget *>();
 	initAllWidgets(allWidgets);
@@ -5431,6 +5432,7 @@ void MainWnd::initTabInfo( void )
 	m_ui.tblInfo->setHorizontalHeaderItem( 1, newItem );
 	m_ui.tblInfo->setColumnWidth( 0, 348 );
 	m_ui.tblInfo->setColumnWidth( 1, 348 );
+	*/
 }
 
 //*****************************************************
@@ -5960,9 +5962,10 @@ void MainWnd::refreshTabSis( void )
 //*****************************************************
 void MainWnd::refreshTabSisExtra( void )
 {
-	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
+/*	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
 	m_ui.txtSisExtra_ValidFrom_Until->setText( CardFields[CARD_VALIDFROM] + " - " + CardFields[CARD_VALIDUNTIL] );
 	m_ui.txtSisExtra_ValidFrom_Until->setAccessibleName( CardFields[CARD_VALIDFROM] + " - " + CardFields[CARD_VALIDUNTIL] );
+	*/
 }
 
 //*****************************************************
