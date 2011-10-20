@@ -49,5 +49,7 @@
         <file>Images/bg_Pins.png</file>
         <file>Images/bt_Pin-Change.png</file>
         <file>Images/bt_Pin-Check.png</file>
+        <file>Images/tab-backgrounds/bg_notes.png</file>
+        <file>Images/tab-backgrounds/bg_pinCodes.png</file>
     </qresource>
 </RCC>

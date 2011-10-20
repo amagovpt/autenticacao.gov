@@ -4973,7 +4973,7 @@ void MainWnd::zoomBackground()
 //**************************************************
 void MainWnd::zoomTabIdentity( void )
 {
-	// Apply StyleSheet 
+/*	// Apply StyleSheet
 	QList<QWidget *> allWidgets = m_ui.tabIdentity->findChildren<QWidget *>();
 	setWidgetsPointSize(allWidgets);
 	setWidgetPosition(allWidgets);
@@ -5026,6 +5026,8 @@ void MainWnd::zoomTabIdentity( void )
 	multiplyerFactor mfactor(m_Zoom);
 	m_ui.lblIdentity_ImgPerson->setFixedHeight( (int) (height*mfactor.HMultiplyer) );
 	m_ui.lblIdentity_ImgPerson->setFixedWidth( (int) (width*mfactor.WMultiplyer) );
+
+	*/
 
 }
 
