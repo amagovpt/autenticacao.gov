@@ -554,8 +554,8 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
     m_ui.setupUi(this);
 
-	QAction* toggleview = m_ui.toolBar->toggleViewAction();
-	toggleview->setVisible(false);
+//	QAction* toggleview = m_ui.toolBar->toggleViewAction();
+//	toggleview->setVisible(false);
 
 	//------------------------------------
 	// make sure we have a fixed, unsizeable window
@@ -587,7 +587,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	Show_Splash();
 
-	connect( m_ui.actionShow_Toolbar, SIGNAL(toggled(bool)), m_ui.toolBar, SLOT(setVisible(bool)) );
+//	connect( m_ui.actionShow_Toolbar, SIGNAL(toggled(bool)), m_ui.toolBar, SLOT(setVisible(bool)) );
 
 	//------------------------------------
 	//SysTray
@@ -1532,13 +1532,13 @@ bool MainWnd::StoreUserCerts (BEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, u
 //*****************************************************
 void MainWnd::on_btnOCSPCheck_clicked( void )
 {
-	//----------------------------------------------------
+/*	//----------------------------------------------------
 	// get the selected certificate and get the OCSP response
 	//----------------------------------------------------
 	try
 	{
-		m_ui.btnOCSPCheck->setEnabled(false);
-		m_ui.btnOCSPCheck->repaint();		//Need to be call explicitly else the repaint comes too late
+//		m_ui.btnOCSPCheck->setEnabled(false);
+//		m_ui.btnOCSPCheck->repaint();		//Need to be call explicitly else the repaint comes too late
 		QTreeWidgetItemIterator it(m_ui.treeCert);
 		while (*it) 
 		{
@@ -1583,6 +1583,7 @@ void MainWnd::on_btnOCSPCheck_clicked( void )
 	{
 		e = e;
 	}
+	*/
 }
 
 //*****************************************************
@@ -1752,31 +1753,23 @@ void MainWnd::on_treeCert_itemClicked(QTreeWidgetItem* baseItem, int column)
 	m_ui.txtCert_KeyLenght->setText(item->getKeyLen());
 	m_ui.txtCert_KeyLenght->setAccessibleName(item->getKeyLen());
 
-	QString strCertStatus;
-	getCertStatusText(item->getOcspStatus(), strCertStatus);
-	m_ui.txtCert_Status->setText(strCertStatus);
-	m_ui.txtCert_Status->setAccessibleName(strCertStatus);
+//	QString strCertStatus;
+//	getCertStatusText(item->getOcspStatus(), strCertStatus);
 
 	if(!ReaderContext.isCardPresent())
 	{
 		m_ui.btnCert_Register->setEnabled(false);
 		m_ui.btnCert_Details->setEnabled(false);
-		m_ui.btnOCSPCheck->setEnabled(false);
-		m_ui.txtCert_Status->setEnabled(false);
 	}
 	else if ( 0 < item->childCount())
 	{
 		m_ui.btnCert_Register->setEnabled(false);
 		m_ui.btnCert_Details->setEnabled(true);
-		m_ui.btnOCSPCheck->setEnabled(false);
-		m_ui.txtCert_Status->setEnabled(false);
 	}
 	else
 	{
 		m_ui.btnCert_Register->setEnabled(true);
 		m_ui.btnCert_Details->setEnabled(true);
-		m_ui.btnOCSPCheck->setEnabled(true);
-		m_ui.txtCert_Status->setEnabled(true);
 	}
 
 }
@@ -3783,13 +3776,12 @@ void MainWnd::Show_Identity_Card(BEID_EIDCard& Card)
 	LoadDataID(Card);
 	showTabs();
 	enableFileMenu();
-	bool bOCSPCheckEnabled = false;
+/*	bool bOCSPCheckEnabled = false;
 	if (!m_virtReaderContext)
 	{
 		bOCSPCheckEnabled = true;
 	}
-	m_ui.btnOCSPCheck->setEnabled(bOCSPCheckEnabled);
-	m_ui.txtCert_Status->setEnabled(bOCSPCheckEnabled);
+	*/
 }
 
 void MainWnd::Show_Address_Card(BEID_EIDCard& Card)
@@ -5037,8 +5029,6 @@ void MainWnd::clearTabCertificates( void )
 	m_ui.txtCert_ValidUntil->setAccessibleName( "" );
 	m_ui.txtCert_KeyLenght->setText( "" );
 	m_ui.txtCert_KeyLenght->setAccessibleName( "" );
-	m_ui.txtCert_Status->setText( "" );
-	m_ui.txtCert_Status->setAccessibleName( "" );
 }
 
 //*****************************************************
@@ -5466,8 +5456,6 @@ void MainWnd::customEvent( QEvent* pEvent )
 			{
 				setEnabledPinButtons(false);
 				setEnabledCertifButtons(false);
-				m_ui.btnOCSPCheck->setEnabled(false);
-				m_ui.txtCert_Status->setEnabled(false);
 				enableFileSave(false);
 			}
 			//----------------------------------------------------------
