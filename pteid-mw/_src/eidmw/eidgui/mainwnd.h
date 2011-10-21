@@ -198,7 +198,6 @@ public:
 	void setEnableReload( bool bEnabled );
 
 private slots:
-	void on_tabWidget_Identity_currentChanged( int index );
 	void on_actionAbout_triggered( void );
 	void on_actionReload_eID_triggered( void );
 	void on_actionClear_triggered( void );
@@ -210,8 +209,6 @@ private slots:
 	void on_actionPINRequest_triggered( void );
 	void on_actionPINChange_triggered( void );
 	void on_actionOptions_triggered(void);
-	void on_actionZoom_In_triggered(void);
-	void on_actionZoom_Out_triggered(void);
 	void on_actionE_xit_triggered(void);
 	void authPINRequest_triggered( void );
 	bool addressPINRequest_triggered( void );
@@ -295,33 +292,9 @@ private:
 	void hideTabs( void );
 	void showTabs( void );
 
-	void initAllTabs( void );
-	void initTabIdentity( void );
-	void initTabIdentityExtra( void );
-	void initTabAddress( void );
-	void initTabForeigners( void );
-	void initTabForeignersExtra( void );
-	void initTabSis( void );
-	void initTabSisExtra( void );
-	void initTabPersoData( void );
-	void initTabCertificates( void );
-	void initTabCardPin( void );
-	void initTabInfo( void );
+
 
 	void initAllWidgets(QList<QWidget *> &allWidgets);
-
-	void setZoom( void );
-	void zoomBackground( void );
-	void zoomTabIdentity( void );
-	void zoomTabIdentityExtra( void );
-	void zoomTabAddress( void );
-	void zoomTabForeigners( void );
-	void zoomTabForeignersExtra( void );
-	void zoomTabSis( void );
-	void zoomTabSisExtra( void );
-	void zoomTabCertificates( void );
-	void zoomTabCardPin( void );
-	void zoomTabInfo( void );
 
 	void zoomAllWidgets(QList<QWidget *>& allWidgets);
 	void setWidgetPosition(QList<QWidget *>& allWidgets);
@@ -329,10 +302,6 @@ private:
 	void refreshTabIdentity( void );
 	void refreshTabIdentityExtra( void );
 	void refreshTabAddress( void );
-	void refreshTabForeigners( void );
-	void refreshTabForeignersExtra( void );
-	void refreshTabSis( void );
-	void refreshTabSisExtra( void );
 	void refreshTabPersoData( void );
 	void refreshTabCertificates( void );
 	void refreshTabCardPin( void );

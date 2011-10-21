@@ -561,8 +561,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	// make sure we have a fixed, unsizeable window
 	//------------------------------------
 
-	setFixedSize( windowSizes[m_Zoom][0], windowSizes[m_Zoom][1] );
-
 	setFixedSize( 850, 700 );
 
 	//------------------------------------
@@ -650,7 +648,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 		connect(m_timerReaderList, SIGNAL(timeout()), this, SLOT(updateReaderList()));
 		m_timerReaderList->start(TIMERREADERLIST); 
 	}
-	m_ui.actionZoom_Out->setEnabled(false);
+
 
 
 	//------------------------------------
@@ -946,17 +944,6 @@ GenPur::UI_LANGUAGE MainWnd::LoadTranslationFile(GenPur::UI_LANGUAGE NewLanguage
 		// this should not happen, since we've built the menu with the translation filenames
 	}
 	return NewLanguage;
-}
-void MainWnd::on_tabWidget_Identity_currentChanged( int index )
-{
-	/*index = index;
-
-	if ((index >= 0) && (index < m_ui.tabWidget_Identity->count()))
-	{
-		QWidget *currentWidget=	m_ui.tabWidget_Identity->currentWidget();
-		m_ui.tabWidget_Identity->setAccessibleName(currentWidget->objectName());
-	}
-	*/
 }
 
 void MainWnd::showEvent( QShowEvent * event )
@@ -3709,33 +3696,10 @@ void MainWnd::showTabs()
 
 		if(BEID_EIDCard::isApplicationAllowed())
 		{
-			//m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity,tr("&Identity"));
 			refreshTabIdentity();
-//			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity_extention,tr("Identity E&xtra"));
-//			m_ui.tabWidget_Identity->addTab(m_ui.tabAddress,tr("Address"));
-//			connect (m_ui.tabWidget_Identity,SIGNAL (currentChanged(int)), this, SLOT(tabaddress_select(int)));
-//			m_ui.tabWidget_Identity->addTab(m_ui.tabPersoData,tr("Personal Data"));
-//			connect (m_ui.tabWidget_Identity,SIGNAL (currentChanged(int)), this, SLOT(tabpersodata_select(int)));
-
-
 			refreshTabIdentityExtra();
-
-			//m_ui.lblIdentity_Parents->setVisible(true);
-			//m_ui.lblIdentity_Parents_2->setVisible(false);
-
-			//refreshTabAddress();
-
-			//TODO Verify if this is really needed
-			//refreshTabPersoData();
-
-			//TODO Remove the background for now until we have a new ones
- 			//m_imgBackground_Front = QPixmap( ":/images/Images/Background_IDFront.jpg" ); // background
- 			//m_imgBackground_Back = QPixmap( ":/images/Images/Background_IDBack.jpg" ); // background
 		}
 
-//		m_ui.tabWidget_Identity->addTab(m_ui.tabCertificates,tr("C&ertificates"));
-//		connect (m_ui.tabWidget_Identity,SIGNAL (currentChanged(int)), this, SLOT(tabcertificates_select(int)));
-//		m_ui.tabWidget_Identity->addTab(m_ui.tabCardPin,tr("C&ard && PIN"));
 		refreshTabCardPin();
 		refreshTabInfo();
 
@@ -3744,21 +3708,15 @@ void MainWnd::showTabs()
 	case BEID_CARDTYPE_KIDS:
 		if(BEID_EIDCard::isApplicationAllowed())
 		{
-//			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity,tr("&Identity"));
-			refreshTabIdentity();
-//			m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity_extention,tr("Identity E&xtra"));
-			refreshTabIdentityExtra();
 
-			//m_ui.lblIdentity_Parents->setVisible(true);
-			//m_ui.lblIdentity_Parents_2->setVisible(true);
+			refreshTabIdentity();
+			refreshTabIdentityExtra();
 
 			m_imgBackground_Front = QPixmap( ":/images/Images/Background_KidsFront.jpg" ); // background
 			m_imgBackground_Back = QPixmap( ":/images/Images/Background_KidsBack.jpg" ); // background
 		}
 
-//		m_ui.tabWidget_Identity->addTab(m_ui.tabCertificates,tr("C&ertificates"));
 		refreshTabCertificates();
-//		m_ui.tabWidget_Identity->addTab(m_ui.tabCardPin,tr("C&ard && PIN"));
 		refreshTabCardPin();
 		refreshTabInfo();
 
@@ -3768,49 +3726,25 @@ void MainWnd::showTabs()
 		{
 			if(BEID_EIDCard::isApplicationAllowed())
 			{
-				//tFieldMap& fields = m_CI_Data.m_CardInfo.getFields();
-				//int cardSubtype = fields[CARD_TYPE].toInt();
 				int cardSubtype = m_CI_Data.m_CardInfo.getSubType();
 				if ( cardSubtype >= CardInfo::EUROPEAN_E && cardSubtype <= CardInfo::EUROPEAN_F_PLUS )
 				{
-//					m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity,tr("&Identity"));
 					refreshTabIdentity();
-
-//					m_ui.tabWidget_Identity->addTab(m_ui.tabIdentity_extention,tr("Identity E&xtra"));
 					refreshTabIdentityExtra();
-
 					m_imgBackground_Front = QPixmap( ":/images/Images/Background_IDFront.jpg" ); // background
 					m_imgBackground_Back = QPixmap( ":/images/Images/Background_IDBack.jpg" ); // background
-
-					//m_ui.lblIdentity_Parents->setVisible(false);
-					//m_ui.lblIdentity_Parents_2->setVisible(false);
-
 				}
 				else
 				{
-//					m_ui.tabWidget_Identity->addTab(m_ui.tabForeigners,tr("&Identity"));
-					refreshTabForeigners();
-//					m_ui.tabWidget_Identity->addTab(m_ui.tabForeigners_Back,tr("Identity E&xtra"));
-					refreshTabForeignersExtra();
-
-					m_imgBackground_Front = QPixmap( ":/images/Images/Background_ForeignersFront.jpg" ); // background
-					m_imgBackground_Back = QPixmap( ":/images/Images/Background_ForeignersBack.jpg" ); // background
 				}
 			}
-
-//			m_ui.tabWidget_Identity->addTab(m_ui.tabCertificates,tr("C&ertificates"));
 			refreshTabCertificates();
-//			m_ui.tabWidget_Identity->addTab(m_ui.tabCardPin,tr("C&ard && PIN"));
 			refreshTabCardPin();
 			refreshTabInfo();
 		}
 		break;
 
 	case BEID_CARDTYPE_SIS:
-//		m_ui.tabWidget_Identity->addTab(m_ui.tabSis,tr("&Identity"));
-		refreshTabSis();
-//		m_ui.tabWidget_Identity->addTab(m_ui.tabSis_Back,tr("Identity E&xtra"));
-		refreshTabSisExtra();
 		refreshTabInfo();
 
 		m_imgBackground_Front = QPixmap( ":/images/Images/Background_SisFront.jpg" ); // background
@@ -3830,7 +3764,6 @@ void MainWnd::showTabs()
 	//------------------------------------------------------
 //	m_ui.tabWidget_Identity->setCurrentIndex(0);
 	m_ui.stackedWidget->setCurrentIndex(1);
-	setZoom();
 }
 
 //*****************************************************
@@ -4312,10 +4245,7 @@ QString MainWnd::getFinalLinkTarget(QString baseName)
 //**************************************************
 void MainWnd::fillSoftwareInfo( void )
 {
-
 	/*
-
-
 	QStringList libPaths = QProcess::systemEnvironment();
 	QStringList searchPaths;
 	QMap<QString,QString> softwareInfo;
@@ -4560,6 +4490,7 @@ void MainWnd::fillSoftwareInfo( void )
 //**************************************************
 void MainWnd::fillCardVersionInfo( BEID_EIDCard& Card )
 {
+	/*
 	BEID_CardVersionInfo& CardVersionInfo = Card.getVersionInfo();
 
 	QTableWidgetItem* newItem = NULL;
@@ -4586,7 +4517,7 @@ void MainWnd::fillCardVersionInfo( BEID_EIDCard& Card )
 	//--------------------------------------------
 	// make sure we start with a cleaned list
 	//--------------------------------------------
-	/*
+
 	m_ui.tblCardAndPIN->clear();
 
 	m_ui.tblCardAndPIN->setRowCount( Data.size() );
@@ -4676,522 +4607,11 @@ void MainWnd::setStatus( unsigned int Status )
 		tmp = "Unkown";
 		break;
 	}
-
-
-}
-
-//**************************************************
-// Zoomin triggered
-//**************************************************
-void MainWnd::on_actionZoom_In_triggered(void)
-{
-	m_ui.actionZoom_In->setEnabled(true);
-	m_ui.actionZoom_Out->setEnabled(true);
-	if( m_Zoom < ZOOM_HUGE )
-	{
-		//------------------------------------------
-		// size the main window 
-		//------------------------------------------
-		m_Zoom = eZOOMSTATUS(m_Zoom+1);
-		setFixedSize( windowSizes[m_Zoom][0], windowSizes[m_Zoom][1] );
-		// size the stacked widget here in function of the toolbar enable or disabled
-		//m_ui.stackedWidget->setFixedSize( windowSizes[m_Zoom][0]/10, windowSizes[m_Zoom][1]/10 );
-
-		//------------------------------------------
-		// size all widgets
-		//------------------------------------------
-		setZoom();
-	}
-	if ( m_Zoom==ZOOM_HUGE )
-	{
-		m_ui.actionZoom_In->setEnabled(false);
-	}
-}
-
-//**************************************************
-// Zoomout triggered
-//**************************************************
-void MainWnd::on_actionZoom_Out_triggered(void)
-{
-	m_ui.actionZoom_In->setEnabled(true);
-	m_ui.actionZoom_Out->setEnabled(true);
-	if( m_Zoom > ZOOM_SMALL )
-	{
-		m_Zoom = eZOOMSTATUS(m_Zoom-1);
-		setFixedSize( windowSizes[m_Zoom][0], windowSizes[m_Zoom][1] );
-		// size the stacked widget here in function of the toolbar enable or disabled
-		//m_ui.stackedWidget->setFixedSize( windowSizes[m_Zoom][0]/10, windowSizes[m_Zoom][1]/10 );
-		setZoom();
-	}
-	if ( m_Zoom==ZOOM_SMALL )
-	{
-		m_ui.actionZoom_Out->setEnabled(false);
-	}
-}
-
-//**************************************************
-// set everything acoording to the zoom factor
-//**************************************************
-void MainWnd::setZoom()
-{
-	//-----------------------------------------------------------
-	// Zoom the tabs
-	//-----------------------------------------------------------
-	// Zoomactions depend on the card type
-	//-----------------------------------------------------------
-	switch (m_TypeCard) 
-	{
-	case BEID_CARDTYPE_EID:
-	case BEID_CARDTYPE_KIDS:
-		zoomTabIdentity();
-		zoomTabIdentityExtra();
-		zoomTabAddress();
-		zoomTabCertificates();
-		zoomTabCardPin();
-		zoomTabInfo();
-		break;
-
-	case BEID_CARDTYPE_FOREIGNER:
-		{
-			int cardSubType = m_CI_Data.m_CardInfo.getFields()[CARD_TYPE].toInt();
-			if( cardSubType>=CardInfo::EUROPEAN_E && cardSubType<=CardInfo::EUROPEAN_F_PLUS )
-			{
-				zoomTabIdentity();
-				zoomTabIdentityExtra();
-				zoomTabCertificates();
-				zoomTabCardPin();
-				zoomTabInfo();
-			}
-			else
-			{
-				zoomTabForeigners();
-				zoomTabForeignersExtra();
-				zoomTabCertificates();
-				zoomTabCardPin();
-				zoomTabInfo();
-			}
-		}
-		break;
-
-		case BEID_CARDTYPE_SIS:
-			zoomTabSis();
-			zoomTabSisExtra();
-			zoomTabCardPin();
-			zoomTabInfo();
-		break;
-
-		case BEID_CARDTYPE_UNKNOWN:
-		default:
-			return;
-			break;
-	}
-	
-	//-----------------------------------------------------------
-	// Zoom the toolbar icons
-	//-----------------------------------------------------------
-	multiplyerFactor multiplyer(m_Zoom);
-	int IconSize = (int) (TOOLBAR_ICON_BASE * multiplyer.HMultiplyer);
-	m_ui.toolBar->setIconSize( QSize( IconSize, IconSize ) );
-
-	//-----------------------------------------------------------
-	// tab label
-	// looks like we can't change the text size??
-	//-----------------------------------------------------------
-
-//	QFont tmpFont = m_ui.tabWidget_Identity->font();
-//	tmpFont.setPointSize( stylesheetsInfo[STYLESHEET_NORMAL_LABEL].pointSizes[m_Zoom] );
-//	m_ui.tabWidget_Identity->setFont( tmpFont );
-//	m_ui.tabWidget_Identity->setIconSize( QSize( IconSize, IconSize ) );
-
-	zoomBackground();
-}
-
-//**************************************************
-// Zoom the background images. 
-//**************************************************
-void MainWnd::zoomBackground()
-{
-/*	//-----------------------------------------------------------
-	// Set Background Image for Tab Identity and Tab Identity_extention
-	//-----------------------------------------------------------
-	multiplyerFactor mFactor(m_Zoom);
-	QPalette Pal; 
-	QBrush brush;
-	
-	if( !m_imgBackground_Front.isNull() )
-	{
-		switch (m_TypeCard) 
-		{
-			case BEID_CARDTYPE_EID:
-			case BEID_CARDTYPE_KIDS:
-//				m_ui.tabIdentity->setAutoFillBackground( true );
-//				Pal = m_ui.tabIdentity->palette();
-				brush = QBrush( m_imgBackground_Front.scaled( m_ui.tabWidget_Identity->width()
-															, m_ui.tabWidget_Identity->height()
-															//,Qt::KeepAspectRatio 
-															) 
-							  );
-				Pal.setBrush(m_ui.tabIdentity->backgroundRole(), brush);
-				m_ui.tabIdentity->setPalette( Pal );
-				break;
-
-			case BEID_CARDTYPE_SIS:
-				m_ui.tabSis->setAutoFillBackground( true );
-				Pal = m_ui.tabSis->palette();
-				brush = QBrush( m_imgBackground_Front.scaled( m_ui.tabWidget_Identity->width()
-															, m_ui.tabWidget_Identity->height()
-															//, Qt::KeepAspectRatio 
-															) 
-							  );
-				Pal.setBrush(m_ui.tabSis->backgroundRole(), brush);
-				m_ui.tabSis->setPalette( Pal );
-				break;
-
-			case BEID_CARDTYPE_FOREIGNER:
-				{
-					int cardSubtype = m_CI_Data.m_CardInfo.getFields()[CARD_TYPE].toInt();
-					if(cardSubtype >= CardInfo::EUROPEAN_E && cardSubtype <= CardInfo::EUROPEAN_F_PLUS)
-					{
-						m_ui.tabIdentity->setAutoFillBackground( true );
-						Pal = m_ui.tabIdentity->palette();
-						brush = QBrush( m_imgBackground_Front.scaled( m_ui.tabWidget_Identity->width()
-																	, m_ui.tabWidget_Identity->height()
-																	//, Qt::KeepAspectRatio 
-																	) 
-									  );
-						Pal.setBrush(m_ui.tabIdentity->backgroundRole(), brush);
-						m_ui.tabIdentity->setPalette( Pal );
-					}
-					else
-					{
-						m_ui.tabForeigners->setAutoFillBackground( true );
-						Pal = m_ui.tabForeigners->palette();
-						brush = QBrush( m_imgBackground_Front.scaled( m_ui.tabWidget_Identity->width()
-																	, m_ui.tabWidget_Identity->height()
-																	//, Qt::KeepAspectRatio 
-																	) 
-									  );
-						Pal.setBrush(m_ui.tabForeigners->backgroundRole(), brush);
-						m_ui.tabForeigners->setPalette( Pal );
-					}
-				}
-				break;
-			case BEID_CARDTYPE_UNKNOWN:
-			default:
-				break;
-		}
-	}
-
-	if( !m_imgBackground_Back.isNull() )
-	{
-		switch (m_TypeCard) 
-		{
-		case BEID_CARDTYPE_EID:
-		case BEID_CARDTYPE_KIDS:
-				m_ui.tabIdentity_extention->setAutoFillBackground( true );
-				Pal = m_ui.tabIdentity_extention->palette();
-				brush = QBrush( m_imgBackground_Back.scaled( m_ui.tabWidget_Identity->width()
-														   , m_ui.tabWidget_Identity->height()
-														   //,Qt::KeepAspectRatio 
-														   ) 
-							  );
-				Pal.setBrush(m_ui.tabIdentity_extention->backgroundRole(), brush);
-				m_ui.tabIdentity_extention->setPalette( Pal );
-				break;
-
-		case BEID_CARDTYPE_SIS:
-				m_ui.tabSis_Back->setAutoFillBackground( true );
-				Pal = m_ui.tabSis_Back->palette();
-				brush = QBrush( m_imgBackground_Back.scaled( m_ui.tabWidget_Identity->width()
-															,m_ui.tabWidget_Identity->height()
-															//,Qt::KeepAspectRatio 
-															) 
-							  );
-				Pal.setBrush(m_ui.tabSis_Back->backgroundRole(), brush);
-				m_ui.tabSis_Back->setPalette( Pal );
-				break;
-
-		case BEID_CARDTYPE_FOREIGNER:
-			{
-				int cardSubtype = m_CI_Data.m_CardInfo.getFields()[CARD_TYPE].toInt();
-				if(cardSubtype>=CardInfo::EUROPEAN_E && cardSubtype<= CardInfo::EUROPEAN_F_PLUS)
-				{
-					m_ui.tabIdentity_extention->setAutoFillBackground( true );
-					Pal = m_ui.tabIdentity_extention->palette();
-					brush = QBrush( m_imgBackground_Back.scaled( m_ui.tabWidget_Identity->width()
-																,m_ui.tabWidget_Identity->height()
-																//,Qt::KeepAspectRatio 
-																) 
-								  );
-					Pal.setBrush(m_ui.tabIdentity_extention->backgroundRole(), brush);
-					m_ui.tabIdentity_extention->setPalette( Pal );
-				}
-				else
-				{
-					m_ui.tabForeigners_Back->setAutoFillBackground( true );
-					Pal = m_ui.tabForeigners_Back->palette();
-					brush = QBrush( m_imgBackground_Back.scaled( m_ui.tabWidget_Identity->width()
-																,m_ui.tabWidget_Identity->height()
-																//,Qt::KeepAspectRatio 
-																) 
-								  );
-					Pal.setBrush(m_ui.tabForeigners_Back->backgroundRole(), brush);
-					m_ui.tabForeigners_Back->setPalette( Pal );
-				}
-				break;
-			}
-		case BEID_CARDTYPE_UNKNOWN:
-		default:
-			break;
-		}
-	}
-*/
-}
-//**************************************************
-// Zoom all items on the tab 'Identity'
-//**************************************************
-void MainWnd::zoomTabIdentity( void )
-{
-/*	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabIdentity->findChildren<QWidget *>();
-	setWidgetsPointSize(allWidgets);
-	setWidgetPosition(allWidgets);
-
-	//----------------------------------------------------
-	// E/E+/F/F+ cards have the same layout as belgian eID cards
-	// The text (like 'identity card') must be changed depending on the
-	// card type.
-	//----------------------------------------------------
-	int cardSubtype = m_CI_Data.m_CardInfo.getFields()[CARD_TYPE].toInt();
-	switch( cardSubtype )
-	{
-	case CardInfo::EUROPEAN_E:
-//		m_ui.lblIdentity_Head2_1->setText(tr("txt_ECard_1"));
-//		m_ui.lblIdentity_Head2_2->setText(tr("txt_ECard_2"));
-		m_ui.lblIdentity_Head2_3->setText(tr("txt_ECard_3"));
-		m_ui.lblIdentity_Head2_4->setText(tr("txt_ECard_4"));
-		break;
-	case CardInfo::EUROPEAN_E_PLUS:
-//		m_ui.lblIdentity_Head2_1->setText(tr("txt_ECard_plus_1"));
-//		m_ui.lblIdentity_Head2_2->setText(tr("txt_ECard_plus_2"));
-		m_ui.lblIdentity_Head2_3->setText(tr("txt_ECard_plus_3"));
-		m_ui.lblIdentity_Head2_4->setText(tr("txt_ECard_plus_4"));
-		break;
-	case CardInfo::EUROPEAN_F:
-//		m_ui.lblIdentity_Head2_1->setText(tr("txt_FCard_1"));
-//		m_ui.lblIdentity_Head2_2->setText(tr("txt_FCard_2"));
-		m_ui.lblIdentity_Head2_3->setText(tr("txt_FCard_3"));
-		m_ui.lblIdentity_Head2_4->setText(tr("txt_FCard_4"));
-		break;
-	case CardInfo::EUROPEAN_F_PLUS:
-//		m_ui.lblIdentity_Head2_1->setText(tr("txt_FCard_plus_1"));
-//		m_ui.lblIdentity_Head2_2->setText(tr("txt_FCard_plus_2"));
-		m_ui.lblIdentity_Head2_3->setText(tr("txt_FCard_plus_3"));
-		m_ui.lblIdentity_Head2_4->setText(tr("txt_FCard_plus_4"));
-		break;
-	default:
-//		m_ui.lblIdentity_Head2_1->setText(tr("txtIdentityCard_1"));
-		//m_ui.lblIdentity_Head2_2->setText(tr("txtIdentityCard_2"));
-		//m_ui.lblIdentity_Head2_3->setText(tr("txtIdentityCard_3"));
-		//m_ui.lblIdentity_Head2_4->setText(tr("txtIdentityCard_4"));
-		break;
-	}
-
-	//-----------------------------------------------------------
-	// Zoom the picture as well
-	//-----------------------------------------------------------
-	int height = m_imgPicture.height();
-	int width  = m_imgPicture.width();
-	multiplyerFactor mfactor(m_Zoom);
-	m_ui.lblIdentity_ImgPerson->setFixedHeight( (int) (height*mfactor.HMultiplyer) );
-	m_ui.lblIdentity_ImgPerson->setFixedWidth( (int) (width*mfactor.WMultiplyer) );
-
-	*/
-
-}
-
-//*****************************************************
-// zoom the tab with extra info ( tab with backside of the card)
-//*****************************************************
-void MainWnd::zoomTabIdentityExtra(void)
-{
-	// Apply StyleSheet
-//	QList<QWidget *> allWidgets = m_ui.tabIdentity_extention->findChildren<QWidget *>();
-//	zoomAllWidgets(allWidgets);
-//	setWidgetsPointSize(allWidgets);
-//	setWidgetPosition(allWidgets);
-
-}
-
-
-//*****************************************************
-// zoom the tab with PTeid Address
-//*****************************************************
-void MainWnd::zoomTabAddress(void)
-{
-	// Apply StyleSheet
-//	QList<QWidget *> allWidgets = m_ui.tabAddress->findChildren<QWidget *>();
-//	zoomAllWidgets(allWidgets);
-//	setWidgetsPointSize(allWidgets);
-//	setWidgetPosition(allWidgets);
-
 }
 
 
 
-//*****************************************************
-// zoom the tab with foreigners info
-//*****************************************************
-void MainWnd::zoomTabForeigners( void )
-{
-/*	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabForeigners->findChildren<QWidget *>();
-	//zoomAllWidgets(allWidgets);
-	setWidgetsPointSize(allWidgets);
-	setWidgetPosition(allWidgets);
 
-	int height = m_imgPicture.height();
-	int width  = m_imgPicture.width();
-	multiplyerFactor mfactor(m_Zoom);
-	m_ui.lblForeigners_ImgPerson->setFixedHeight( (int) (height*mfactor.HMultiplyer) );
-	m_ui.lblForeigners_ImgPerson->setFixedWidth( (int) (width*mfactor.WMultiplyer) );
-*/
-}
-
-//*****************************************************
-// zoom tab with foreigner extra info (backside of card)
-//*****************************************************
-void MainWnd::zoomTabForeignersExtra(void)
-{	
-/*	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabForeigners_Back->findChildren<QWidget *>();
-//	zoomAllWidgets(allWidgets);
-	setWidgetsPointSize(allWidgets);
-	setWidgetPosition(allWidgets);
-	*/
-}
-
-//*****************************************************
-// zoom tab info of SIS card
-//*****************************************************
-void MainWnd::zoomTabSis(void)
-{
-/*
-	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabSis->findChildren<QWidget *>();
-	setWidgetsPointSize(allWidgets);
-	setWidgetPosition(allWidgets);
-
-	multiplyerFactor mfactor(m_Zoom);
-	m_ui.lblSis_Sex->setFixedHeight( (int) (IMG_SEX_SIZE_BASE*mfactor.HMultiplyer) );
-	m_ui.lblSis_Sex->setFixedWidth(  (int) (IMG_SEX_SIZE_BASE*mfactor.WMultiplyer) );
-
-// 	m_ui.lblSis_Sex->setFixedHeight( IMG_SEX_SIZE_BASE + IMG_SEX_SIZE_INCREMENT * m_Zoom  );
-// 	m_ui.lblSis_Sex->setFixedWidth( (int) ( IMG_SEX_SIZE_BASE + IMG_SEX_SIZE_INCREMENT * m_Zoom  ) );
- *
- */
-}
-
-//*****************************************************
-// zoom tab with SIS card extra info (back side of card)
-//*****************************************************
-void MainWnd::zoomTabSisExtra(void)
-{
-/*	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabSis_Back->findChildren<QWidget *>();
-//	zoomAllWidgets(allWidgets);
-	setWidgetsPointSize(allWidgets);
-	setWidgetPosition(allWidgets);
-	*/
-}
-
-//*****************************************************
-// zoom tab with certificate info
-//*****************************************************
-void MainWnd::zoomTabCertificates( void )
-{
-/*	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabCertificates->findChildren<QWidget *>();
-	zoomAllWidgets(allWidgets);
-
-	QFont font;
-	font.setPointSize (stylesheetsInfo[STYLESHEET_NORMAL_LABEL].pointSizes[m_Zoom] );
-	{
-		QTreeWidgetItem* header = m_ui.treeCert->headerItem();
-		if (header)
-		{
-			header->setFont(0,font);
-		}
-	}
-*/
-}
-
-//*****************************************************
-// zoom tab with PIN info
-//*****************************************************
-void MainWnd::zoomTabCardPin(void)
-{
-/*	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabCardPin->findChildren<QWidget *>();
-//	zoomAllWidgets(allWidgets);
-	setWidgetsPointSize(allWidgets);
-	setWidgetPosition(allWidgets);
-
-	QFont font;
-	font.setPointSize (stylesheetsInfo[STYLESHEET_NORMAL_LABEL].pointSizes[m_Zoom] );
-	{
-		QTableWidgetItem* header = NULL;
-		header = m_ui.tblCardAndPIN->horizontalHeaderItem ( 0 );
-		if (header)
-		{
-			header->setFont(font);
-			header = m_ui.tblCardAndPIN->horizontalHeaderItem ( 1 );
-			header->setFont(font);
-		}
-	}
-	{
-		QTreeWidgetItem* header = m_ui.treePIN->headerItem();
-		if (header)
-		{
-			header->setFont(0,font);
-		}
-	}
-
-	m_ui.tblCardAndPIN->setColumnWidth( 0, ( width()-100 )/2 );
-	m_ui.tblCardAndPIN->setColumnWidth( 1, ( width()-100 )/2 );
-*/
-}
-
-//*****************************************************
-// zoom tab with general info
-//*****************************************************
-void MainWnd::zoomTabInfo(void)
-{
-/*
-	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabInfo->findChildren<QWidget *>();
-//	zoomAllWidgets(allWidgets);
-	setWidgetsPointSize(allWidgets);
-	setWidgetPosition(allWidgets);
-
-	QFont font;
-	font.setPointSize (stylesheetsInfo[STYLESHEET_NORMAL_LABEL].pointSizes[m_Zoom] );
-	QTableWidgetItem* header = NULL;
-	header = m_ui.tblInfo->horizontalHeaderItem ( 0 );
-	if (header)
-	{
-		header->setFont(font);
-	}
-	header = m_ui.tblInfo->horizontalHeaderItem ( 1 );
-	if (header)
-	{
-		header->setFont(font);
-	}
-
-	m_ui.tblInfo->setColumnWidth( 0, ( width()-100 )/2 );
-	m_ui.tblInfo->setColumnWidth( 1, ( width()-100 )/2 );
-*/
-}
 void MainWnd::setWidgetsPointSize(QList<QWidget *> &allWidgets)
 {
 	zoomAllWidgets(allWidgets);
@@ -5236,204 +4656,8 @@ void MainWnd::setWidgetPosition(QList<QWidget *>& allWidgets)
 //*****************************************************
 void MainWnd::zoomAllWidgets(QList<QWidget *> &allWidgets)
 {
-
-	multiplyerFactor mFactor(m_Zoom);
-
-	for (int i = 0; i < allWidgets.size(); ++i) 
-	{		
-		QString name = allWidgets.at(i)->objectName();
-		eStyleSheet style=widgetMapStyle[name];
-
-		QFont tmpFont = allWidgets.at(i)->font();
-		if( widgetMapStyle[allWidgets.at(i)->objectName()]!=STYLESHEET_NONE )
-		{
-			tmpFont.setPointSize( stylesheetsInfo[style].pointSizes[m_Zoom] );
-		}
-		allWidgets.at(i)->setFont( tmpFont );
-	}
 }
 
-//*****************************************************
-// init all the tabs
-//*****************************************************
-void MainWnd::initAllTabs( void )
-{
-	initTabIdentity();
-	initTabIdentityExtra();
-	initTabAddress();
-	initTabForeigners();
-	initTabForeignersExtra();
-	initTabSis();
-	initTabSisExtra();
-	initTabPersoData();
-	initTabCertificates();
-	initTabCardPin();
-	initTabInfo();
-}
-
-//*****************************************************
-// initialize the tab with ID info (front side of card)
-//*****************************************************
-void MainWnd::initTabIdentity( void )
-{
-	// Apply StyleSheet
-//        QList<QWidget *> allWidgets = m_ui.tabIdentity->findChildren<QWidget *>();
-  //      initAllWidgets(allWidgets);
-
-        m_ui.txtIdentity_Sex->setAlignment(Qt::AlignRight);
-
-	//m_ui.lblIdentity_Parents_2->setFrameShadow(QFrame::Plain);
-	//m_ui.lblIdentity_Parents_2->setFrameShape(QFrame::Box);
-	//QPalette p = m_ui.lblIdentity_Parents_2->palette();
-	//p.setBrush(QPalette::WindowText, QColor::fromRgb( 255, 0, 0) );
-	//m_ui.lblIdentity_Parents_2->setPalette(p);
-
-}
-
-//*****************************************************
-// initialize the tab with ID extra info (card back side)
-//*****************************************************
-void MainWnd::initTabIdentityExtra( void )
-{
-	// Apply StyleSheet
-//	QList<QWidget *> allWidgets = m_ui.tabIdentity_extention->findChildren<QWidget *>();
-//	initAllWidgets(allWidgets);
-}
-
-//*****************************************************
-// initialize the tab with PTeid Address
-//*****************************************************
-void MainWnd::initTabAddress( void )
-{
-	//addressPINRequest_triggered();
-	// Apply StyleSheet
-//	QList<QWidget *> allWidgets = m_ui.tabAddress->findChildren<QWidget *>();
-//	initAllWidgets(allWidgets);
-}
-
-//*****************************************************
-// init tab with foreigner info (front side of card)
-//*****************************************************
-void MainWnd::initTabForeigners( void )
-{
-/*	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabForeigners->findChildren<QWidget *>();
-	initAllWidgets(allWidgets);
-
-	m_ui.txtForeigners_Card_Number->setAlignment(Qt::AlignRight);
-*/
-}
-
-//*****************************************************
-// init tab with foreigner extra info (back side of card)
-//*****************************************************
-void MainWnd::initTabForeignersExtra( void )
-{
-/*	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabForeigners_Back->findChildren<QWidget *>();
-	initAllWidgets(allWidgets);
-	*/
-}
-
-//*****************************************************
-// init tab with SIS card info (front side of card)
-//*****************************************************
-void MainWnd::initTabSis( void )
-{
-	// Apply StyleSheet
-//	QList<QWidget *> allWidgets = m_ui.tabSis->findChildren<QWidget *>();
-//	initAllWidgets(allWidgets);
-
-	//m_ui.txtSis_LogicalNumber->setAlignment(Qt::AlignLeft);
-	//m_ui.txtSis_SocialSecurityNumber->setAlignment(Qt::AlignRight);
-	//m_ui.txtSis_ValidFrom->setAlignment(Qt::AlignRight);
-}
-
-//*****************************************************
-// init tab with SIS card extra info (back side of card)
-//*****************************************************
-void MainWnd::initTabSisExtra( void )
-{
-/*	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabSis_Back->findChildren<QWidget *>();
-	initAllWidgets(allWidgets);
-*/
-}
-
-//*****************************************************
-// init the tab with certificate info
-//*****************************************************
-void MainWnd::initTabCertificates( void )
-{
-/*	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabCertificates->findChildren<QWidget *>();
-	initAllWidgets(allWidgets);
-*/
-}
-
-//*****************************************************
-// init tab with PTEID Personal Data
-//*****************************************************
-void MainWnd::initTabPersoData( void )
-{
-	// Apply StyleSheet
-//	QList<QWidget *> allWidgets = m_ui.tabPersoData->findChildren<QWidget *>();
-//	initAllWidgets(allWidgets);
-
-	//m_ui.txtSis_LogicalNumber->setAlignment(Qt::AlignLeft);
-	//m_ui.txtSis_SocialSecurityNumber->setAlignment(Qt::AlignRight);
-	//m_ui.txtSis_ValidFrom->setAlignment(Qt::AlignRight);
-}
-
-//*****************************************************
-// init the tab with the PIN info
-//*****************************************************
-void MainWnd::initTabCardPin( void )
-{
-	// Apply StyleSheet
-//	QList<QWidget *> allWidgets = m_ui.tabCardPin->findChildren<QWidget *>();
-//	initAllWidgets(allWidgets);
-
-/*
-  	m_ui.tblCardAndPIN->setColumnCount( 2 );
-
-	QTableWidgetItem *newItem = new QTableWidgetItem( tr("Field") );
- 	m_ui.tblCardAndPIN->setHorizontalHeaderItem( 0, newItem );
-
-	newItem = new QTableWidgetItem( tr("Value") );
-	m_ui.tblCardAndPIN->setHorizontalHeaderItem( 1, newItem );
-
-	m_ui.tblCardAndPIN->setColumnWidth( 0, 348 );
-	m_ui.tblCardAndPIN->setColumnWidth( 1, 348 );
-	*/
-}
-
-//*****************************************************
-// init the tab with the software info (DLLs and version info)
-//*****************************************************
-void MainWnd::initTabInfo( void )
-{
-/*
-	// Apply StyleSheet
-	QList<QWidget *> allWidgets = m_ui.tabInfo->findChildren<QWidget *>();
-	initAllWidgets(allWidgets);
-
-	multiplyerFactor mfactor(m_Zoom);
-
-	QFont font;
-	font.setPointSize (stylesheetsInfo[STYLESHEET_NORMAL_LABEL].pointSizes[m_Zoom] );
-
-	m_ui.tblInfo->setColumnCount( 2 );
-	QTableWidgetItem *newItem = new QTableWidgetItem( tr("Name") );
-	newItem->setFont(font);
-	m_ui.tblInfo->setHorizontalHeaderItem( 0, newItem );
-	newItem = new QTableWidgetItem( tr("Version") );
-	newItem->setFont(font);
-	m_ui.tblInfo->setHorizontalHeaderItem( 1, newItem );
-	m_ui.tblInfo->setColumnWidth( 0, 348 );
-	m_ui.tblInfo->setColumnWidth( 1, 348 );
-	*/
-}
 
 //*****************************************************
 // initialize all the given widgets
@@ -5794,179 +5018,7 @@ QStringList MainWnd::fillRemarksField( tFieldMap& MiscFields )
 	return Remarks;
 }
 
-//*****************************************************
-// refresh the tab with foreigner data (front of card)
-//*****************************************************
-void MainWnd::refreshTabForeigners( void )
-{
-	/*
-	m_ui.lblForeigners_ImgPerson->setPixmap(m_imgPicture);
 
-	tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
-
-	m_ui.txtForeigners_Name->setText		( PersonFields[NAME] );
-	m_ui.txtForeigners_Name->setAccessibleName( PersonFields[NAME] );
-	m_ui.txtForeigners_GivenNames->setText	( PersonFields[FIRSTNAME] );
-	m_ui.txtForeigners_GivenNames->setAccessibleName( PersonFields[FIRSTNAME] );
-
-	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
-
-	QString cardNumber = m_CI_Data.m_CardInfo.formatCardNumber(CardFields[CARD_NUMBER],m_CI_Data.m_CardInfo.getType());
-
-	m_ui.txtForeigners_Card_Number->setText ( cardNumber );
-	m_ui.txtForeigners_Card_Number->setAccessibleName ( cardNumber );
-	QString cardTypeText = GetCardTypeText(CardFields[CARD_TYPE]);
-	m_ui.txtForeigners_CardType->setText    ( cardTypeText );
-	m_ui.txtForeigners_CardType->setAccessibleName( cardTypeText );
-	m_ui.txtForeigners_ValidTot->setText    ( CardFields[CARD_VALIDUNTIL] );
-	m_ui.txtForeigners_ValidTot->setAccessibleName( CardFields[CARD_VALIDUNTIL] );
-	m_ui.txtForeigners_PlaceOfIssue->setText( CardFields[CARD_PLACEOFISSUE] + " " + CardFields[CARD_VALIDFROM]);
-	m_ui.txtForeigners_PlaceOfIssue->setAccessibleName( CardFields[CARD_PLACEOFISSUE] + " " + CardFields[CARD_VALIDFROM]);
-	*/
-}
-
-//*****************************************************
-// refresh tab with foreigner extra info (back of card)
-//*****************************************************
-void MainWnd::refreshTabForeignersExtra( void )
-{
-	/*tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
-
-	m_ui.txtForeignersExtra_BirthDate->setText		( PersonFields[BIRTHDATE] + " " + PersonFields[BIRTHPLACE]);
-	m_ui.txtForeignersExtra_BirthDate->setAccessibleName ( PersonFields[BIRTHDATE] + " " + PersonFields[BIRTHPLACE]);
-	m_ui.txtForeignersExtra_Nationality->setText	( PersonFields[NATIONALITY] );
-	m_ui.txtForeignersExtra_Nationality->setAccessibleName( PersonFields[NATIONALITY] );
-	m_ui.txtForeignersExtra_Sex->setText			( PersonFields[SEX] );
-	m_ui.txtForeignersExtra_Sex->setAccessibleName	( PersonFields[SEX] );
-
-	QString nationalNumber = m_CI_Data.m_PersonInfo.formatNationalNumber(PersonFields[NATIONALNUMBER],m_CI_Data.m_CardInfo.getType());
-	m_ui.txtForeignersExtra_NationalNumber->setText ( nationalNumber );
-	m_ui.txtForeignersExtra_NationalNumber->setAccessibleName ( nationalNumber );*/
-
-	//tFieldMap& AddressFields = m_CI_Data.m_PersonInfo.m_AddressInfo.getFields();
-
-	/*m_ui.txtForeignersExtra_Adress_Street->setText	( AddressFields[ADDRESS_STREET] );
-	m_ui.txtForeignersExtra_Adress_Street->setAccessibleName( AddressFields[ADDRESS_STREET] );
-	m_ui.txtForeignersExtra_Adress_PostalCode->setText( AddressFields[ADDRESS_ZIPCODE] );
-	m_ui.txtForeignersExtra_Adress_PostalCode->setAccessibleName( AddressFields[ADDRESS_ZIPCODE] );
-	m_ui.txtForeignersExtra_Adress_Muncipality->setText( AddressFields[ADDRESS_CITY] );
-	m_ui.txtForeignersExtra_Adress_Muncipality->setAccessibleName( AddressFields[ADDRESS_CITY] );
-	m_ui.txtForeignersExtra_Adress_Country->setText	( AddressFields[ADDRESS_COUNTRY] );
-	m_ui.txtForeignersExtra_Adress_Country->setAccessibleName( AddressFields[ADDRESS_COUNTRY] );
-
-	tFieldMap& MiscFields = m_CI_Data.m_MiscInfo.getFields();
-
-	QStringList Remarks = fillRemarksField(MiscFields);
-
-	m_ui.txtForeignersExtra_Remarks1->setText("");
-	m_ui.txtForeignersExtra_Remarks1->setAccessibleName("");
-	m_ui.txtForeignersExtra_Remarks2->setText("");
-	m_ui.txtForeignersExtra_Remarks2->setAccessibleName("");
-	m_ui.txtForeignersExtra_Remarks3->setText("");
-	m_ui.txtForeignersExtra_Remarks3->setAccessibleName("");
-
-	int idx=0;
-	int FieldCnt = Remarks.size();
-	if (FieldCnt>0)
-	{
-		m_ui.txtForeignersExtra_Remarks1->setText(Remarks[idx++]);
-		m_ui.txtForeignersExtra_Remarks1->setAccessibleName(Remarks[idx++]);
-		FieldCnt--;
-	}
-	if (FieldCnt>0)
-	{
-		m_ui.txtForeignersExtra_Remarks2->setText(Remarks[idx++]);
-		m_ui.txtForeignersExtra_Remarks2->setAccessibleName(Remarks[idx++]);
-		FieldCnt--;
-	}
-	if (FieldCnt>0)
-	{
-		m_ui.txtForeignersExtra_Remarks3->setText(Remarks[idx++]);
-		m_ui.txtForeignersExtra_Remarks3->setAccessibleName(Remarks[idx++]);
-		FieldCnt--;
-	}
-
-	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
-	m_ui.txtForeignersExtra_ChipNumber->setText( CardFields[CHIP_NUMBER] );
-	m_ui.txtForeignersExtra_ChipNumber->setAccessibleName( CardFields[CHIP_NUMBER] );
-
-	tFieldMap& PersonExtraFields = m_CI_Data.m_PersonInfo.m_PersonExtraInfo.getFields();
-
-	QMap<QString,QString> SpecialStatus;
-	SpecialStatus["0"] = tr("none");
-	SpecialStatus["1"] = tr("white cane");
-	SpecialStatus["2"] = tr("extended minority");
-	SpecialStatus["3"] = tr("white cane/extended minority");
-	SpecialStatus["4"] = tr("yellow cane");
-	SpecialStatus["5"] = tr("yellow cane/extended minority");
-
-	m_ui.txtForeignerSpecialStatus->setText(SpecialStatus[PersonExtraFields[SPECIALSTATUS]]);
-	m_ui.txtForeignerSpecialStatus->setAccessibleName(SpecialStatus[PersonExtraFields[SPECIALSTATUS]]);*/
-
-}
-
-//*****************************************************
-// refresh the tab with SIS card info (front of card)
-//*****************************************************
-void MainWnd::refreshTabSis( void )
-{
-/*	tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
-	QString FirstName;
-
-	m_ui.txtSis_Name->setText			( PersonFields[NAME] );
-	m_ui.txtSis_Name->setAccessibleName	( PersonFields[NAME] );
-
-	FirstName=PersonFields[FIRSTNAME];
-	if(PersonFields[INITIALS]!="")
-	{
-		FirstName+=" ";
-		FirstName+=PersonFields[INITIALS];
-	}
-	m_ui.txtSis_GivenNames->setText		( FirstName );
-	m_ui.txtSis_GivenNames->setAccessibleName		( FirstName );
-	m_ui.txtSis_BirthDate->setText		( PersonFields[BIRTHDATE] );
-	m_ui.txtSis_BirthDate->setAccessibleName		( PersonFields[BIRTHDATE] );
-	tFieldMap& PersonExtraFields = m_CI_Data.m_PersonInfo.m_PersonExtraInfo.getFields();
-
-	m_ui.txtSis_SocialSecurityNumber->setText( PersonExtraFields[SOCIALSECURITYNUMBER] );
-	m_ui.txtSis_SocialSecurityNumber->setAccessibleName( PersonExtraFields[SOCIALSECURITYNUMBER] );
-
-	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
-
-	QString cardNumber = m_CI_Data.m_CardInfo.formatCardNumber(CardFields[CARD_NUMBER],m_CI_Data.m_CardInfo.getType());
-
-	m_ui.txtSis_LogicalNumber->setText	( cardNumber );
-	m_ui.txtSis_LogicalNumber->setAccessibleName	( cardNumber );
-	m_ui.txtSis_ValidFrom->setText		( CardFields[CARD_VALIDFROM] );
-	m_ui.txtSis_ValidFrom->setAccessibleName		( CardFields[CARD_VALIDFROM] );
-
-	if (m_CI_Data.m_PersonInfo.isFemale())
-	{
-		m_imgSex=QPixmap(":/images/Images/Female.png");
-	}
-	else if (m_CI_Data.m_PersonInfo.isMale())
-	{
-		m_imgSex=QPixmap(":/images/Images/Male.png");
-	}
-	else
-	{
-		//!! oops
-	}
-	m_ui.lblSis_Sex->setPixmap( m_imgSex );
-	*/
-
-}
-
-//*****************************************************
-// refresh tab with SIS card extra info (back of card)
-//*****************************************************
-void MainWnd::refreshTabSisExtra( void )
-{
-/*	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
-	m_ui.txtSisExtra_ValidFrom_Until->setText( CardFields[CARD_VALIDFROM] + " - " + CardFields[CARD_VALIDUNTIL] );
-	m_ui.txtSisExtra_ValidFrom_Until->setAccessibleName( CardFields[CARD_VALIDFROM] + " - " + CardFields[CARD_VALIDUNTIL] );
-	*/
-}
 
 //*****************************************************
 // clear the tab with the certificates
@@ -6594,15 +5646,11 @@ void MainWnd::changeEvent(QEvent *event)
 	if (event->type() == QEvent::LanguageChange) 
 	{
 		m_ui.retranslateUi(this);
-		initAllTabs();
+		//initAllTabs();
 		try
 		{
 			refreshTabCardPin();
 			refreshTabIdentityExtra();
-			//refreshTabAddress();
-			//refreshTabCertificates();
-			refreshTabForeignersExtra();
-			//refreshTabPersoData();
 		}
 		catch (BEID_ExNoCardPresent& e)
 		{
@@ -6613,7 +5661,6 @@ void MainWnd::changeEvent(QEvent *event)
 			e=e;
 		}
 		createTrayMenu();
-		setZoom();
 		m_ui.lblIdentity_ImgPerson->setPixmap( m_imgPicture );
 
 	} 

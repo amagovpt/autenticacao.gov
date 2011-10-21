@@ -57,7 +57,7 @@
        <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_Wellcome"/>
       <widget class="QWidget" name="page_Identity">
@@ -230,10 +230,10 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>420</x>
-          <y>0</y>
-          <width>131</width>
-          <height>121</height>
+          <x>440</x>
+          <y>110</y>
+          <width>111</width>
+          <height>131</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -1776,7 +1776,6 @@ background-image: url(:/images/Images/alpha.png);</string>
    <addaction name="actionSave_eID"/>
    <addaction name="actionPrint_eID"/>
    <addaction name="separator"/>
-   <addaction name="actionZoom_In"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionE_xit">
