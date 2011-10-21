@@ -119,7 +119,11 @@ namespace eIDMW
 #define PTEIDNG_FIELD_ID_POS_AccidentalIndications		1162
 #define PTEIDNG_FIELD_ID_LEN_AccidentalIndications		120
 #define PTEIDNG_FIELD_ID_POS_Mrz1						1282
-#define PTEIDNG_FIELD_ID_LEN_Mrz1						10
+#define PTEIDNG_FIELD_ID_LEN_Mrz1						30
+#define PTEIDNG_FIELD_ID_POS_Mrz2						1312
+#define PTEIDNG_FIELD_ID_LEN_Mrz2						30
+#define PTEIDNG_FIELD_ID_POS_Mrz3						1342
+#define PTEIDNG_FIELD_ID_LEN_Mrz3						30
 #define PTEIDNG_FIELD_ID_POS_Photo						1583
 #define PTEIDNG_FIELD_ID_LEN_Photo						14128
 

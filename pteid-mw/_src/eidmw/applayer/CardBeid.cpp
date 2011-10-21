@@ -240,7 +240,6 @@ void APL_EidFile_ID::EmptyFields()
 	m_LocationOfBirth.clear();
 	m_DateOfBirth.clear();
 	m_Gender.clear();
-	m_Nobility.clear();
 	m_DocumentType.clear();
 	m_SpecialStatus.clear();
 	m_HealthNo.clear();
@@ -336,12 +335,6 @@ bool APL_EidFile_ID::MapFields()
 	pteidngidBuffer.TrimRight(' ');
 	m_Gender.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
-	//Nobility
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillUTF8Data(BEID_FIELD_TAG_ID_Nobility, cBuffer, &ulLen);
-	m_Nobility.assign(cBuffer, 0, ulLen);
-
 	//DocumentType
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_DocumentType, PTEIDNG_FIELD_ID_LEN_DocumentType);
 	pteidngidBuffer.TrimRight(' ');
@@ -426,6 +419,21 @@ bool APL_EidFile_ID::MapFields()
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Photo, PTEIDNG_FIELD_ID_LEN_Photo);
 	pteidngidBuffer.TrimRight(' ');
 	m_Photo.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
+
+	//MRZ1
+	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Mrz1, PTEIDNG_FIELD_ID_LEN_Mrz1);
+	pteidngidBuffer.TrimRight(' ');
+	m_MRZ1.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
+
+	//MRZ2
+	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Mrz2, PTEIDNG_FIELD_ID_LEN_Mrz2);
+	pteidngidBuffer.TrimRight(' ');
+	m_MRZ2.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
+
+	//MRZ3
+	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Mrz3, PTEIDNG_FIELD_ID_LEN_Mrz3);
+	pteidngidBuffer.TrimRight(' ');
+	m_MRZ3.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
     ofstream myfile;
     APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
@@ -531,14 +539,6 @@ const char *APL_EidFile_ID::getLocationOfBirth()
 {
 	if(ShowData())
 		return m_LocationOfBirth.c_str();
-
-	return "";
-}
-
-const char *APL_EidFile_ID::getNobility()
-{
-	if(ShowData())
-		return m_Nobility.c_str();
 
 	return "";
 }
@@ -725,6 +725,30 @@ const char *APL_EidFile_ID::getPhoto()
 {
 	if(ShowData())
 		return m_Photo.c_str();
+
+	return "";
+}
+
+const char *APL_EidFile_ID::getMRZ1()
+{
+	if(ShowData())
+		return m_MRZ1.c_str();
+
+	return "";
+}
+
+const char *APL_EidFile_ID::getMRZ2()
+{
+	if(ShowData())
+		return m_MRZ2.c_str();
+
+	return "";
+}
+
+const char *APL_EidFile_ID::getMRZ3()
+{
+	if(ShowData())
+		return m_MRZ3.c_str();
 
 	return "";
 }

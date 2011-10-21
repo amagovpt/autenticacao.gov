@@ -878,20 +878,6 @@ const char *BEID_EId::getLocationOfBirth()
 	return out;
 }
 
-const char *BEID_EId::getNobility()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getNobility();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
 const char *BEID_EId::getNationality()
 {
 	const char *out = NULL;
@@ -1270,6 +1256,48 @@ const BEID_ByteArray& BEID_EId::getPhoto()
 	END_TRY_CATCH
 
 	return *out;
+}
+
+const char *BEID_EId::getMRZ1()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
+	out = pimpl->getMRZ1();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+const char *BEID_EId::getMRZ2()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
+	out = pimpl->getMRZ2();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+const char *BEID_EId::getMRZ3()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
+	out = pimpl->getMRZ3();
+
+	END_TRY_CATCH
+
+	return out;
 }
 
 const char *BEID_EId::getPersoData()

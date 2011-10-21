@@ -114,7 +114,6 @@ public:
 	const char *getGender();						/**< Return field Gender */
 	const char *getDateOfBirth();					/**< Return field DateOfBirth */
 	const char *getLocationOfBirth();				/**< Return field LocationOfBirth */
-	const char *getNobility();						/**< Return field Nobility */
 	const char *getNationality();					/**< Return field Nationality */
 	const char *getNationalNumber();				/**< Return field NationalNumber */
 	const char *getDuplicata();						/**< Return field Duplicata */
@@ -139,6 +138,9 @@ public:
 	const char *getSurnameMother();					/**< Return field SurnameMother */
 	const char *getParents();						/**< Return field Parents */
 	const char *getPhoto();							/**< Return field Photo */
+	const char *getMRZ1();							/**< Return field MRZ block 1*/
+	const char *getMRZ2();							/**< Return field MRZ block 2*/
+	const char *getMRZ3();							/**< Return field MRZ block 3*/
 	const CByteArray& getPhotoHash();						/**< Return field PhotoHash */
 
 protected:
@@ -185,7 +187,6 @@ private:
 	std::string m_Gender;									/**< Field Gender */
 	std::string m_DateOfBirth;								/**< Field DateOfBirth */
 	std::string m_LocationOfBirth;							/**< Field LocationOfBirth */
-	std::string m_Nobility;									/**< Field Nobility */
 	std::string m_Nationality;								/**< Field Nationality */
 	std::string m_NationalNumber;							/**< Field NationalNumber */
 	std::string m_Duplicata;								/**< Field Duplicata */
@@ -208,6 +209,9 @@ private:
 	std::string m_GivenNameMother;							/**< Field GivenNameMother */
 	std::string m_SurnameMother;							/**< Field SurnameMother */
 	std::string m_Photo;									/**< Field Photo */
+	std::string m_MRZ1;										/**< Field MRZ block 1 */
+	std::string m_MRZ2;										/**< Field MRZ block 2 */
+	std::string m_MRZ3;										/**< Field MRZ block 3 */
 	CByteArray m_PhotoHash;									/**< Field PhotoHash */	
 
 friend 	APL_EidFile_ID *APL_EIDCard::getFileID();	/**< This method must access protected constructor */

@@ -985,7 +985,6 @@ public:
 	BEIDSDK_API const char *getGender();				/**< Return Gender field */
 	BEIDSDK_API const char *getDateOfBirth();			/**< Return Date Of Birth field */
 	BEIDSDK_API const char *getLocationOfBirth();		/**< Return Location Of Birth field */
-	BEIDSDK_API const char *getNobility();				/**< Return Nobility field */
 	BEIDSDK_API const char *getNationality();			/**< Return Nationality field */
 	BEIDSDK_API const char *getNationalNumber();		/**< Return National Number field */
 	BEIDSDK_API const char *getDuplicata();				/**< Return Duplicata field */
@@ -1015,7 +1014,9 @@ public:
 	BEIDSDK_API	const BEID_ByteArray& getPhoto();							/**< Return field Photo */
 	BEIDSDK_API	const char *getPersoData();						/**< Return field PersoData */
 	BEIDSDK_API	const char *getValidation();					/**< Return field Validation */
-
+	BEIDSDK_API const char *getMRZ1();							/**< Return field MRZ block 1 */
+	BEIDSDK_API const char *getMRZ2();							/**< Return field MRZ block 2 */
+	BEIDSDK_API const char *getMRZ3();							/**< Return field MRZ block 3 */
 
 private:
 	BEID_EId(const BEID_EId& doc);							/**< Copy not allowed - not implemented */

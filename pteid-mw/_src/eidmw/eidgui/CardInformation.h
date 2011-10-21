@@ -699,6 +699,9 @@ public:
 #define PARENTS				"parents"
 #define LOCALOFREQUEST		"localofrequest"
 #define VALIDATION			"validation"
+#define MRZ1				"MRZ1"
+#define MRZ2				"MRZ2"
+#define MRZ3				"MRZ3"
 
 
 #define INITIALS		"initials"
@@ -747,7 +750,6 @@ public:
 		m_Fields[BIRTHDATE]					= QString::fromUtf8(beid_eid.getDateOfBirth());
 		m_Fields[COUNTRY]					= QString::fromUtf8(beid_eid.getCountry());
 		m_Fields[SEX]						= QString::fromUtf8(beid_eid.getGender());
-		m_Fields[TITLE]						= QString::fromUtf8(beid_eid.getNobility());
 		m_Fields[HEIGHT]					= QString::fromUtf8(beid_eid.getHeight());
 		m_Fields[DOCUMENTNUMBER] 			= QString::fromUtf8(beid_eid.getDocumentNumber());
 		m_Fields[PARENTS]					= QString::fromUtf8(beid_eid.getSurnameFather());
@@ -761,7 +763,9 @@ public:
 		m_Fields[PARENTS]					= QString::fromUtf8(beid_eid.getParents());
 		m_Fields[LOCALOFREQUEST]			= QString::fromUtf8(beid_eid.getLocalofRequest());
 		m_Fields[VALIDATION]				= QString::fromUtf8(beid_eid.getValidation());
-
+		m_Fields[MRZ1]						= QString::fromUtf8(beid_eid.getMRZ1());
+		m_Fields[MRZ2]						= QString::fromUtf8(beid_eid.getMRZ2());
+		m_Fields[MRZ3]						= QString::fromUtf8(beid_eid.getMRZ3());
 // 		qDebug() << "PersonInfo::RetrieveData()";
 // 		for (tFieldMap::iterator it=m_Fields.begin(); it!=m_Fields.end(); it++)
 // 		{

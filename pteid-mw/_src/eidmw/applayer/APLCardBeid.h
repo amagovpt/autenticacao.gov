@@ -350,7 +350,6 @@ public:
 	EIDMW_APL_API const char *getGender();				/**< Return field Gender from the ID file */
 	EIDMW_APL_API const char *getDateOfBirth();			/**< Return field DateOfBirth from the ID file */
 	EIDMW_APL_API const char *getLocationOfBirth();		/**< Return field LocationOfBirth from the ID file */
-	EIDMW_APL_API const char *getNobility();			/**< Return field Nobility from the ID file */
 	EIDMW_APL_API const char *getNationality();			/**< Return field Nationality from the ID file */
 	EIDMW_APL_API const char *getNationalNumber();		/**< Return field NationalNumber from the ID file */
 	EIDMW_APL_API const char *getDuplicata();			/**< Return field Duplicata from the ID file */
@@ -375,6 +374,9 @@ public:
 	EIDMW_APL_API const char *getSurnameMother();		/**< Return field SurnameMother */
 	EIDMW_APL_API const char *getParents();				/**< Return field Parents */
 	EIDMW_APL_API const char *getPhoto();				/**< Return field Photo */
+	EIDMW_APL_API const char *getMRZ1();				/**< Return field MRZ block 1 */
+	EIDMW_APL_API const char *getMRZ2();				/**< Return field MRZ block 2 */
+	EIDMW_APL_API const char *getMRZ3();				/**< Return field MRZ block 3 */
 
 	EIDMW_APL_API const char *getValidation();		/**< Return field Validation from the Trace file */
 

@@ -153,7 +153,6 @@ void getEIDData( BEID_EIDCard& card )
 	std::cout << "\tGender             : " << eid.getGender()				<< std::endl;
 	std::cout << "\tDateOfBirth        : " << eid.getDateOfBirth()			<< std::endl;
 	std::cout << "\tLocationOfBirth    : " << eid.getLocationOfBirth()		<< std::endl;
-	std::cout << "\tNobility           : " << eid.getNobility()				<< std::endl;
 	std::cout << "\tNationality        : " << eid.getNationality()			<< std::endl;
 	std::cout << "\tNationalNumber     : " << eid.getNationalNumber()		<< std::endl;
 	std::cout << "\tSpecialOrganization: " << eid.getSpecialOrganization()	<< std::endl;

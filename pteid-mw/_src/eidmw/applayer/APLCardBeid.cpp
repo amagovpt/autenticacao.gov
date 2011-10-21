@@ -1530,9 +1530,6 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	xml+=" 		<location_of_birth>";
 	xml+=				getLocationOfBirth();
 	xml+=			"</location_of_birth>\n";
-	xml+=" 		<nobility>";
-	xml+=				getNobility();
-	xml+=			"</nobility>\n";
 	xml+=" 		<nationality>";
 	xml+=				getNationality();
 	xml+=			"</nationality>\n";
@@ -1551,6 +1548,16 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	xml+=" 		<special_status>";
 	xml+=				getSpecialStatus();
 	xml+=			"</special_status>\n";
+	// MARTINHO: não está na posição certa, mas o documento tb n está correcto, fica aqui para n ficar esquecido
+	xml+="		<mrz1>";
+	xml+=			getMRZ1();
+	xml+="		</mrz1>";
+	xml+="		<mrz2>";
+	xml+=			getMRZ2();
+	xml+="		</mrz2>";
+	xml+="		<mrz3>";
+	xml+=			getMRZ3();
+	xml+="		</mrz3>";
 	xml+="		</id>\n";
 	xml+=" 	<card>\n";
 	xml+=" 		<logical_nr>";
@@ -1615,8 +1622,6 @@ version;type;name;surname;gender;date_of_birth;location_of_birth;nobility;nation
 	csv+=CSV_SEPARATOR;
 	csv+=getLocationOfBirth();
 	csv+=CSV_SEPARATOR;
-	csv+=getNobility();
-	csv+=CSV_SEPARATOR;
 	csv+=getNationality();
 	csv+=CSV_SEPARATOR;
 	csv+=getNationalNumber();
@@ -1636,6 +1641,14 @@ version;type;name;surname;gender;date_of_birth;location_of_birth;nobility;nation
 	csv+=getValidityBeginDate();
 	csv+=CSV_SEPARATOR;
 	csv+=getValidityEndDate();
+	csv+=CSV_SEPARATOR;
+
+	// MARTINHO: fica aqui para n ficar esquecido também, provavelmente nem o CSV vai ser utilizado.
+	csv+=getMRZ1();
+	csv+=CSV_SEPARATOR;
+	csv+=getMRZ2();
+	csv+=CSV_SEPARATOR;
+	csv+=getMRZ3();
 	csv+=CSV_SEPARATOR;
 
 
@@ -1710,11 +1723,6 @@ const char *APL_DocEId::getDateOfBirth()
 const char *APL_DocEId::getLocationOfBirth()
 {
 	return m_card->getFileID()->getLocationOfBirth();
-}
-
-const char *APL_DocEId::getNobility()
-{
-	return m_card->getFileID()->getNobility();
 }
 
 const char *APL_DocEId::getNationality()
@@ -1831,6 +1839,18 @@ const char *APL_DocEId::getParents()
 const char *APL_DocEId::getPhoto()
 {
 	return m_card->getFileID()->getPhoto();
+}
+
+const char *APL_DocEId::getMRZ1(){
+	return m_card->getFileID()->getMRZ1();
+}
+
+const char *APL_DocEId::getMRZ2(){
+	return m_card->getFileID()->getMRZ2();
+}
+
+const char *APL_DocEId::getMRZ3(){
+	return m_card->getFileID()->getMRZ3();
 }
 
 const char *APL_DocEId::getPersoData()
