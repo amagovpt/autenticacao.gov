@@ -223,6 +223,10 @@ private slots:
 	void restoreWindow( void );
 	void messageRespond( const QString& message);
 
+
+	// eventFilter to Catch actions from "personalized toolbar"
+	bool eventFilter(QObject *,QEvent *);
+
 	// SystemTray
 	void iconActivated(QSystemTrayIcon::ActivationReason reason);
 
@@ -243,8 +247,8 @@ private slots:
 	void on_btnSelectTab_Certificates_clicked ( void );
 	void on_btnSelectTab_PinCodes_clicked ( void );
 	void on_btnSelectTab_Notes_clicked ( void );
-
-
+//TOOLBAR MENUS
+	void on_btn_menu_card_clicked( void );
 
 
 

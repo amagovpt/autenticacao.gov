@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>846</width>
-    <height>735</height>
+    <width>925</width>
+    <height>1042</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -32,7 +32,7 @@
       <x>0</x>
       <y>100</y>
       <width>1282</width>
-      <height>761</height>
+      <height>641</height>
      </rect>
     </property>
     <widget class="QWidget" name="widget_3" native="true">
@@ -41,7 +41,7 @@
        <x>10</x>
        <y>10</y>
        <width>1241</width>
-       <height>821</height>
+       <height>621</height>
       </rect>
      </property>
      <widget class="QStackedWidget" name="stackedWidget">
@@ -50,14 +50,14 @@
         <x>0</x>
         <y>0</y>
         <width>813</width>
-        <height>671</height>
+        <height>501</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="page_Wellcome"/>
       <widget class="QWidget" name="page_Identity">
@@ -1541,7 +1541,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>60</y>
+      <y>54</y>
       <width>1021</width>
       <height>38</height>
      </rect>
@@ -1695,25 +1695,28 @@ background-image: url(:/images/Images/alpha.png);</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
+      <y>1</y>
       <width>1021</width>
-      <height>61</height>
+      <height>56</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-image: url(:/images/Images/bg_Toolbar.png);</string>
+     <string notr="true">background-image: url(:/images/Images/backgrounds/bg_toolbarMenu.png);</string>
     </property>
-    <widget class="QPushButton" name="button_menu_card">
+    <widget class="QPushButton" name="btn_menu_card">
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>0</y>
+       <y>-2</y>
        <width>131</width>
        <height>61</height>
       </rect>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/buttons/button_card.png);</string>
+      <string notr="true">background-image: url(:/images/Images/buttons/btn_cartao.png);</string>
      </property>
      <property name="text">
       <string/>
@@ -1722,14 +1725,20 @@ background-image: url(:/images/Images/alpha.png);</string>
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="button_menu_tools">
+    <widget class="QPushButton" name="btn_menu_tools">
      <property name="geometry">
       <rect>
        <x>130</x>
-       <y>0</y>
+       <y>-2</y>
        <width>151</width>
-       <height>61</height>
+       <height>60</height>
       </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
      </property>
      <property name="styleSheet">
       <string notr="true">background-image: url(:/images/Images/buttons/button_tools.png);</string>
@@ -1742,13 +1751,80 @@ background-image: url(:/images/Images/alpha.png);</string>
      </property>
     </widget>
    </widget>
+   <widget class="QWidget" name="wdg_submenu_card" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>6</y>
+      <width>121</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/images/Images/submenu_backgrounds/bg_selected_menu_card.png);</string>
+    </property>
+    <widget class="QLabel" name="lbl_menuCard">
+     <property name="geometry">
+      <rect>
+       <x>56</x>
+       <y>13</y>
+       <width>51</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-image: url(:/images/Images/alpha.png);
+color: rgb(108, 108, 108);
+font: 10pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="text">
+      <string>Card</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Read">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>81</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-image: url(:/images/Images/alpha.png);
+color: rgb(108, 108, 108);
+font: 10pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="text">
+      <string>Read Card</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Quit">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>60</y>
+       <width>51</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-image: url(:/images/Images/alpha.png);
+color: rgb(108, 108, 108);
+font: 10pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="text">
+      <string>Exit</string>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>846</width>
+     <width>925</width>
      <height>25</height>
     </rect>
    </property>

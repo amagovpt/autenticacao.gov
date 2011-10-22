@@ -482,6 +482,16 @@ static const char* fileList[]=
 #endif
 };
 
+
+
+
+
+
+
+
+
+
+
 void MainWnd::createTrayMenu()
 {
 	m_pMinimizeAction = new QAction(tr("Mi&nimize"), this);
@@ -554,14 +564,9 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
     m_ui.setupUi(this);
 
-//	QAction* toggleview = m_ui.toolBar->toggleViewAction();
-//	toggleview->setVisible(false);
-
-	//------------------------------------
-	// make sure we have a fixed, unsizeable window
-	//------------------------------------
-
 	setFixedSize( 850, 700 );
+
+	m_ui.wdg_submenu_card->setVisible(false);
 
 	//------------------------------------
 	// disable the reload button until the first time a card is plugged in. 
@@ -666,7 +671,96 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	{
 		showNoReaderMsg();
 	}
+
+
+
+	m_ui.lbl_menuCard_Read->installEventFilter(this);
+
+
+
 }
+
+
+
+
+
+
+bool MainWnd::eventFilter(QObject *object, QEvent *event)
+{
+    qWarning("Entrei no filtro de eventos");
+    if (event->type() == QEvent::Leave)
+       {
+/*           if (object == ui->widget_IdentificacaoCivil)
+           {
+               qWarning("HERE");
+           }
+
+           if (object == ui->widget_submenu_assinatura_digital )
+           {
+               ui->widget_submenu_assinatura_digital->setVisible(false);
+           }
+*/
+       }
+
+    return false;
+
+}
+
+
+
+//******************************************************
+// Buttons to control tabs
+//******************************************************
+
+void MainWnd::on_btnSelectTab_Identity_clicked()
+{
+	m_ui.stackedWidget->setCurrentIndex(1);
+}
+
+void MainWnd::on_btnSelectTab_Identity_Extra_clicked()
+{
+	m_ui.stackedWidget->setCurrentIndex(2);
+}
+
+void MainWnd::on_btnSelectTab_Address_clicked()
+{
+	m_ui.stackedWidget->setCurrentIndex(3);
+	refreshTabAddress();
+}
+
+void MainWnd::on_btnSelectTab_Certificates_clicked()
+{
+	m_ui.stackedWidget->setCurrentIndex(4);
+	refreshTabCertificates();
+}
+
+void MainWnd::on_btnSelectTab_PinCodes_clicked()
+{
+	m_ui.stackedWidget->setCurrentIndex(5);
+}
+
+void MainWnd::on_btnSelectTab_Notes_clicked()
+{
+	m_ui.stackedWidget->setCurrentIndex(6);
+	refreshTabPersoData();
+}
+
+
+void MainWnd::on_btn_menu_card_clicked()
+{
+	qWarning("Card Cliecked");
+	m_ui.wdg_submenu_card->setVisible(true);
+	m_ui.wdg_submenu_card->setGeometry(0,6,131,171);
+
+}
+
+
+
+
+
+
+
+
 
 //*****************************************************
 // show the message if no reader are available
@@ -3588,51 +3682,6 @@ void MainWnd::on_actionPINChange_triggered()
 }
 
 //
-
-
-//******************************************************
-// Buttons to control tabs
-//******************************************************
-
-void MainWnd::on_btnSelectTab_Identity_clicked()
-{
-	m_ui.stackedWidget->setCurrentIndex(1);
-}
-
-void MainWnd::on_btnSelectTab_Identity_Extra_clicked()
-{
-	m_ui.stackedWidget->setCurrentIndex(2);
-}
-
-void MainWnd::on_btnSelectTab_Address_clicked()
-{
-	m_ui.stackedWidget->setCurrentIndex(3);
-	refreshTabAddress();
-}
-
-void MainWnd::on_btnSelectTab_Certificates_clicked()
-{
-	m_ui.stackedWidget->setCurrentIndex(4);
-	refreshTabCertificates();
-}
-
-void MainWnd::on_btnSelectTab_PinCodes_clicked()
-{
-	m_ui.stackedWidget->setCurrentIndex(5);
-}
-
-void MainWnd::on_btnSelectTab_Notes_clicked()
-{
-	m_ui.stackedWidget->setCurrentIndex(6);
-	refreshTabPersoData();
-}
-
-
-
-
-
-
-
 
 
 
