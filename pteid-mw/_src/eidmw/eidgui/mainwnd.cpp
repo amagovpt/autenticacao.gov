@@ -16,7 +16,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
 
-**************************************************************************** */
+ **************************************************************************** */
 #include <iostream>
 #include <sstream>
 #include <QThread>
@@ -63,17 +63,17 @@ public:
 	// ctor
 	//------------------------------------
 	multiplyerFactor( void )
-		: XMultiplyer(1.0)
-		, YMultiplyer(1.0)
-		, WMultiplyer(1.0)
-		, HMultiplyer(1.0)
+	: XMultiplyer(1.0)
+	, YMultiplyer(1.0)
+	, WMultiplyer(1.0)
+	, HMultiplyer(1.0)
 	{
 	}
 	multiplyerFactor( eZOOMSTATUS zoom )
-		: XMultiplyer(1.0)
-		, YMultiplyer(1.0)
-		, WMultiplyer(1.0)
-		, HMultiplyer(1.0)
+	: XMultiplyer(1.0)
+	, YMultiplyer(1.0)
+	, WMultiplyer(1.0)
+	, HMultiplyer(1.0)
 	{
 		getMultiplyerFactor(zoom);
 	}
@@ -131,10 +131,10 @@ public:
 //*****************************************************
 static int    windowSizes[4][2]= 
 {
-	 {(int) WINDOW_WIDTH_SMALL  , (int) WINDOW_HEIGHT_SMALL}
-	,{(int) WINDOW_WIDTH_MEDIUM , (int) WINDOW_HEIGHT_MEDIUM}
-	,{(int) WINDOW_WIDTH_LARGE  , (int) WINDOW_HEIGHT_LARGE}
-	,{(int) WINDOW_WIDTH_HUGE   , (int) WINDOW_HEIGHT_HUGE}
+		{(int) WINDOW_WIDTH_SMALL  , (int) WINDOW_HEIGHT_SMALL}
+		,{(int) WINDOW_WIDTH_MEDIUM , (int) WINDOW_HEIGHT_MEDIUM}
+		,{(int) WINDOW_WIDTH_LARGE  , (int) WINDOW_HEIGHT_LARGE}
+		,{(int) WINDOW_WIDTH_HUGE   , (int) WINDOW_HEIGHT_HUGE}
 };
 
 //*****************************************************
@@ -171,17 +171,17 @@ struct zoomInfoStyleSheets
 //*****************************************************
 static zoomInfoStyleSheets stylesheetsInfo[]=
 {
-	 {STYLESHEET_BUTTON,		{BUTTON_POINTSIZE_SMALL,     BUTTON_POINTSIZE_MEDIUM,	  BUTTON_POINTSIZE_LARGE,	  BUTTON_POINTSIZE_HUGE}}
-	,{STYLESHEET_TITLE_1,		{TITLE1_POINTSIZE_SMALL,     TITLE1_POINTSIZE_MEDIUM,	  TITLE1_POINTSIZE_LARGE,	  TITLE1_POINTSIZE_HUGE}}
-	,{STYLESHEET_TITLE_2,		{TITLE2_POINTSIZE_SMALL,     TITLE2_POINTSIZE_MEDIUM,	  TITLE2_POINTSIZE_LARGE,	  TITLE2_POINTSIZE_HUGE}}
-	,{STYLESHEET_FOOTER_1,		{FOOTER1_POINTSIZE_SMALL,    FOOTER1_POINTSIZE_MEDIUM,	  FOOTER1_POINTSIZE_LARGE,	  FOOTER1_POINTSIZE_HUGE}}
-	,{STYLESHEET_NORMAL_LABEL,	{LABEL_POINTSIZE_SMALL,      LABEL_POINTSIZE_MEDIUM,	  LABEL_POINTSIZE_LARGE,	  LABEL_POINTSIZE_HUGE}}
-	,{STYLESHEET_NORMAL_VALUE,	{NORMALVALUE_POINTSIZE_SMALL,NORMALVALUE_POINTSIZE_MEDIUM,NORMALVALUE_POINTSIZE_LARGE,NORMALVALUE_POINTSIZE_HUGE}}
-	,{STYLESHEET_BIG_VALUE,		{BIGVALUE_POINTSIZE_SMALL,   BIGVALUE_POINTSIZE_MEDIUM,   BIGVALUE_POINTSIZE_LARGE,	  BIGVALUE_POINTSIZE_HUGE}}
-	,{STYLESHEET_SIS_VALUE,		{SISVALUE_POINTSIZE_SMALL,   SISVALUE_POINTSIZE_MEDIUM,   SISVALUE_POINTSIZE_LARGE,	  SISVALUE_POINTSIZE_HUGE}}
-	,{STYLESHEET_SMALL_RED,		{SMALL_POINTSIZE_SMALL,      SMALL_POINTSIZE_MEDIUM,      SMALL_POINTSIZE_LARGE,	  SMALL_POINTSIZE_HUGE}}
-	,{STYLESHEET_SMALL_BLUE,	{SMALL_POINTSIZE_SMALL,      SMALL_POINTSIZE_MEDIUM,      SMALL_POINTSIZE_LARGE,	  SMALL_POINTSIZE_HUGE}}
-	,{STYLESHEET_SMALL_REDRIGHT,{SMALL_POINTSIZE_SMALL,      SMALL_POINTSIZE_MEDIUM,      SMALL_POINTSIZE_LARGE,	  SMALL_POINTSIZE_HUGE}}
+		{STYLESHEET_BUTTON,		{BUTTON_POINTSIZE_SMALL,     BUTTON_POINTSIZE_MEDIUM,	  BUTTON_POINTSIZE_LARGE,	  BUTTON_POINTSIZE_HUGE}}
+		,{STYLESHEET_TITLE_1,		{TITLE1_POINTSIZE_SMALL,     TITLE1_POINTSIZE_MEDIUM,	  TITLE1_POINTSIZE_LARGE,	  TITLE1_POINTSIZE_HUGE}}
+		,{STYLESHEET_TITLE_2,		{TITLE2_POINTSIZE_SMALL,     TITLE2_POINTSIZE_MEDIUM,	  TITLE2_POINTSIZE_LARGE,	  TITLE2_POINTSIZE_HUGE}}
+		,{STYLESHEET_FOOTER_1,		{FOOTER1_POINTSIZE_SMALL,    FOOTER1_POINTSIZE_MEDIUM,	  FOOTER1_POINTSIZE_LARGE,	  FOOTER1_POINTSIZE_HUGE}}
+		,{STYLESHEET_NORMAL_LABEL,	{LABEL_POINTSIZE_SMALL,      LABEL_POINTSIZE_MEDIUM,	  LABEL_POINTSIZE_LARGE,	  LABEL_POINTSIZE_HUGE}}
+		,{STYLESHEET_NORMAL_VALUE,	{NORMALVALUE_POINTSIZE_SMALL,NORMALVALUE_POINTSIZE_MEDIUM,NORMALVALUE_POINTSIZE_LARGE,NORMALVALUE_POINTSIZE_HUGE}}
+		,{STYLESHEET_BIG_VALUE,		{BIGVALUE_POINTSIZE_SMALL,   BIGVALUE_POINTSIZE_MEDIUM,   BIGVALUE_POINTSIZE_LARGE,	  BIGVALUE_POINTSIZE_HUGE}}
+		,{STYLESHEET_SIS_VALUE,		{SISVALUE_POINTSIZE_SMALL,   SISVALUE_POINTSIZE_MEDIUM,   SISVALUE_POINTSIZE_LARGE,	  SISVALUE_POINTSIZE_HUGE}}
+		,{STYLESHEET_SMALL_RED,		{SMALL_POINTSIZE_SMALL,      SMALL_POINTSIZE_MEDIUM,      SMALL_POINTSIZE_LARGE,	  SMALL_POINTSIZE_HUGE}}
+		,{STYLESHEET_SMALL_BLUE,	{SMALL_POINTSIZE_SMALL,      SMALL_POINTSIZE_MEDIUM,      SMALL_POINTSIZE_LARGE,	  SMALL_POINTSIZE_HUGE}}
+		,{STYLESHEET_SMALL_REDRIGHT,{SMALL_POINTSIZE_SMALL,      SMALL_POINTSIZE_MEDIUM,      SMALL_POINTSIZE_LARGE,	  SMALL_POINTSIZE_HUGE}}
 };
 //*****************************************************
 // structure definition for the position of a widget
@@ -211,175 +211,175 @@ struct widgetInfo
 //*****************************************************
 static widgetInfo widgetTabInfo[]=
 {
-	//-------------------------------------------------------------------------------
-	//								SMALL            
-	// {objectName					{  x, y,  w, h},                style used}
-	//-------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------
+		//								SMALL
+		// {objectName					{  x, y,  w, h},                style used}
+		//-------------------------------------------------------------------------------
 
-	//------- tab Identity --------
-	 {"lblIdentity_Head1_1",		{{ 10,  1,181, 30}},			STYLESHEET_TITLE_1}
-	,{"lblIdentity_Head1_2",		{{200,  1,181, 30}},			STYLESHEET_TITLE_1}
-	,{"lblIdentity_Head1_3",		{{380,  1,181, 30}},			STYLESHEET_TITLE_1}
-	,{"lblIdentity_Head1_4",		{{570,  1,181, 30}},			STYLESHEET_TITLE_1}
-	,{"lblIdentity_Head2_1",		{{ 10, 35,181, 18}},			STYLESHEET_TITLE_2}
-	,{"lblIdentity_Head2_2",		{{200, 35,181, 18}},			STYLESHEET_TITLE_2}
-	,{"lblIdentity_Head2_3",		{{380, 35,181, 18}},			STYLESHEET_TITLE_2}
-	,{"lblIdentity_Head2_4",		{{570, 35,181, 18}},			STYLESHEET_TITLE_2}
-	,{"lblIdentity_Name",			{{ 10, 80,207, 18}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentity_Name",			{{222, 80,529, 20}},			STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_GivenNames",		{{ 10,105,207, 18}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentity_GivenNames",		{{222,105,529, 18}},			STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_BirthDate",		{{222,127,417, 20}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentity_BirthDate",		{{222,151,417, 18}},			STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_Sex",			{{630,123,106, 20}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentity_Sex",			{{630,151,106, 18}},			STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_Nationality",	{{222,175,253, 36}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentity_Nationality",	{{330,175,270, 36}},			STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_Country",		{{570,170,176, 28}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentity_Country",		{{570,204,176, 16}},			STYLESHEET_NORMAL_VALUE}
-	//,{"lblIdentity_Card_Number",	{{222,220,341, 20}},			STYLESHEET_NORMAL_LABEL}
-	//,{"txtIdentity_Card_Number",	{{222,240,341, 20}},			STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_Height",			{{222,220,341, 20}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentity_Height",			{{222,240,341, 20}},			STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_DocumentNumber",	{{222,260,341, 20}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentity_DocumentNumber",	{{222,290,341, 20}},			STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_ValidFrom_Until",{{ 10,347,240, 18}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentity_ValidFrom_Until",{{ 10,367,240, 18}},			STYLESHEET_NORMAL_VALUE}
-	//,{"lblIdentity_Parents",		{{ 350,347,240, 18}},			STYLESHEET_NORMAL_LABEL}
-	//,{"txtIdentity_Parents",		{{ 350,367,240, 18}},			STYLESHEET_NORMAL_VALUE}
-	//,{"lblIdentity_ImgPerson",		{{30,130,50,50}},				STYLESHEET_NORMAL_LABEL}
-	//------- tab foreigners --------
-	,{"txtForeigners_Card_Number",	{{463, 11,288, 24}},			STYLESHEET_BIG_VALUE}
-	,{"label",						{{ 37, 63,230, 20}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtForeigners_Name",			{{280, 63,532, 18}},			STYLESHEET_NORMAL_VALUE}
-	,{"txtForeigners_GivenNames",	{{280, 89,532, 18}},			STYLESHEET_NORMAL_VALUE}
-	,{"label_2",					{{ 37,115,230, 18}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtForeigners_ValidTot",		{{280,115,532, 18}},			STYLESHEET_NORMAL_VALUE}
-	,{"label_3",					{{ 37,141,230, 18}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtForeigners_PlaceOfIssue",	{{280,141,532, 18}},			STYLESHEET_NORMAL_VALUE}
-	,{"label_4",					{{280,165,532, 18}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtForeigners_CardType",		{{280,193,532, 18}},			STYLESHEET_NORMAL_VALUE}
-//	,{"label_5",					{{280,217,532, 18}},			STYLESHEET_NORMAL_LABEL}
-//	,{"txtForeigners_Remarks",		{{280,245,532, 18}},			STYLESHEET_NORMAL_VALUE}
-	,{"lblForeigners_Footer_1",		{{280,410,532, 18}},			STYLESHEET_FOOTER_1}
-	,{"lblForeigners_Footer_2",		{{280,425,532, 18}},			STYLESHEET_FOOTER_1}
-	,{"lblForeigners_ImgPerson",	{{ 63,230,150,270}},			STYLESHEET_NONE}
-	//------- tab SIS --------
-	,{"txtSis_SocialSecurityNumber",{{520, 63,231, 28}},			STYLESHEET_SIS_VALUE}
-	,{"txtSis_Name",				{{286,160,465, 28}},			STYLESHEET_SIS_VALUE}
-	,{"txtSis_GivenNames",			{{286,192,465, 28}},			STYLESHEET_SIS_VALUE}
-	,{"txtSis_BirthDate",			{{286,226,152, 28}},			STYLESHEET_SIS_VALUE}
-	,{"txtSis_LogicalNumber",		{{  9,390,245, 28}},			STYLESHEET_SIS_VALUE}
-	,{"txtSis_ValidFrom",			{{566,390,185, 28}},			STYLESHEET_SIS_VALUE}
-	,{"lblSis_Sex",					{{444,220, 20, 28}},			STYLESHEET_NONE}
-	//------- tab identity extra --------
-	,{"lblIdentity_TaxNo",					{{  9, 50,201, 28}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_TaxNo",				{{  9, 84,201, 16}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_SocialSecurityNo",		{{  230, 50,201, 34}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_SocialSecurityNo",	{{  230, 84,201, 16}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_HealthNo",				{{  470, 50,201, 28}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_HealthNo",			{{  470, 84,201, 16}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_CardVersion",			{{  9, 130,201, 28}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_CardVersion",		{{  9, 164,201, 16}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_DocumentType",			{{  240, 130,201, 28}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_DocumentType",		{{  240, 164,201, 16}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_IssuingEntity",			{{  470, 130,201, 28}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_IssuingEntity",		{{  470, 164,201, 16}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_PlaceOfIssue",			{{9, 206,176, 28}},		STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_PlaceOfIssue",		{{15, 240,260, 28}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblChip_Number",						{{410,300,353, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_ChipNumber",		{{410,320,353, 18}},	STYLESHEET_NORMAL_VALUE}
+		//------- tab Identity --------
+		{"lblIdentity_Head1_1",		{{ 10,  1,181, 30}},			STYLESHEET_TITLE_1}
+		,{"lblIdentity_Head1_2",		{{200,  1,181, 30}},			STYLESHEET_TITLE_1}
+		,{"lblIdentity_Head1_3",		{{380,  1,181, 30}},			STYLESHEET_TITLE_1}
+		,{"lblIdentity_Head1_4",		{{570,  1,181, 30}},			STYLESHEET_TITLE_1}
+		,{"lblIdentity_Head2_1",		{{ 10, 35,181, 18}},			STYLESHEET_TITLE_2}
+		,{"lblIdentity_Head2_2",		{{200, 35,181, 18}},			STYLESHEET_TITLE_2}
+		,{"lblIdentity_Head2_3",		{{380, 35,181, 18}},			STYLESHEET_TITLE_2}
+		,{"lblIdentity_Head2_4",		{{570, 35,181, 18}},			STYLESHEET_TITLE_2}
+		,{"lblIdentity_Name",			{{ 10, 80,207, 18}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentity_Name",			{{222, 80,529, 20}},			STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_GivenNames",		{{ 10,105,207, 18}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentity_GivenNames",		{{222,105,529, 18}},			STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_BirthDate",		{{222,127,417, 20}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentity_BirthDate",		{{222,151,417, 18}},			STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_Sex",			{{630,123,106, 20}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentity_Sex",			{{630,151,106, 18}},			STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_Nationality",	{{222,175,253, 36}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentity_Nationality",	{{330,175,270, 36}},			STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_Country",		{{570,170,176, 28}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentity_Country",		{{570,204,176, 16}},			STYLESHEET_NORMAL_VALUE}
+		//,{"lblIdentity_Card_Number",	{{222,220,341, 20}},			STYLESHEET_NORMAL_LABEL}
+		//,{"txtIdentity_Card_Number",	{{222,240,341, 20}},			STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_Height",			{{222,220,341, 20}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentity_Height",			{{222,240,341, 20}},			STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_DocumentNumber",	{{222,260,341, 20}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentity_DocumentNumber",	{{222,290,341, 20}},			STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_ValidFrom_Until",{{ 10,347,240, 18}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentity_ValidFrom_Until",{{ 10,367,240, 18}},			STYLESHEET_NORMAL_VALUE}
+		//,{"lblIdentity_Parents",		{{ 350,347,240, 18}},			STYLESHEET_NORMAL_LABEL}
+		//,{"txtIdentity_Parents",		{{ 350,367,240, 18}},			STYLESHEET_NORMAL_VALUE}
+		//,{"lblIdentity_ImgPerson",		{{30,130,50,50}},				STYLESHEET_NORMAL_LABEL}
+		//------- tab foreigners --------
+		,{"txtForeigners_Card_Number",	{{463, 11,288, 24}},			STYLESHEET_BIG_VALUE}
+		,{"label",						{{ 37, 63,230, 20}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtForeigners_Name",			{{280, 63,532, 18}},			STYLESHEET_NORMAL_VALUE}
+		,{"txtForeigners_GivenNames",	{{280, 89,532, 18}},			STYLESHEET_NORMAL_VALUE}
+		,{"label_2",					{{ 37,115,230, 18}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtForeigners_ValidTot",		{{280,115,532, 18}},			STYLESHEET_NORMAL_VALUE}
+		,{"label_3",					{{ 37,141,230, 18}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtForeigners_PlaceOfIssue",	{{280,141,532, 18}},			STYLESHEET_NORMAL_VALUE}
+		,{"label_4",					{{280,165,532, 18}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtForeigners_CardType",		{{280,193,532, 18}},			STYLESHEET_NORMAL_VALUE}
+		//	,{"label_5",					{{280,217,532, 18}},			STYLESHEET_NORMAL_LABEL}
+		//	,{"txtForeigners_Remarks",		{{280,245,532, 18}},			STYLESHEET_NORMAL_VALUE}
+		,{"lblForeigners_Footer_1",		{{280,410,532, 18}},			STYLESHEET_FOOTER_1}
+		,{"lblForeigners_Footer_2",		{{280,425,532, 18}},			STYLESHEET_FOOTER_1}
+		,{"lblForeigners_ImgPerson",	{{ 63,230,150,270}},			STYLESHEET_NONE}
+		//------- tab SIS --------
+		,{"txtSis_SocialSecurityNumber",{{520, 63,231, 28}},			STYLESHEET_SIS_VALUE}
+		,{"txtSis_Name",				{{286,160,465, 28}},			STYLESHEET_SIS_VALUE}
+		,{"txtSis_GivenNames",			{{286,192,465, 28}},			STYLESHEET_SIS_VALUE}
+		,{"txtSis_BirthDate",			{{286,226,152, 28}},			STYLESHEET_SIS_VALUE}
+		,{"txtSis_LogicalNumber",		{{  9,390,245, 28}},			STYLESHEET_SIS_VALUE}
+		,{"txtSis_ValidFrom",			{{566,390,185, 28}},			STYLESHEET_SIS_VALUE}
+		,{"lblSis_Sex",					{{444,220, 20, 28}},			STYLESHEET_NONE}
+		//------- tab identity extra --------
+		,{"lblIdentity_TaxNo",					{{  9, 50,201, 28}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_TaxNo",				{{  9, 84,201, 16}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_SocialSecurityNo",		{{  230, 50,201, 34}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_SocialSecurityNo",	{{  230, 84,201, 16}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_HealthNo",				{{  470, 50,201, 28}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_HealthNo",			{{  470, 84,201, 16}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_CardVersion",			{{  9, 130,201, 28}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_CardVersion",		{{  9, 164,201, 16}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_DocumentType",			{{  240, 130,201, 28}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_DocumentType",		{{  240, 164,201, 16}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_IssuingEntity",			{{  470, 130,201, 28}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_IssuingEntity",		{{  470, 164,201, 16}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_PlaceOfIssue",			{{9, 206,176, 28}},		STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_PlaceOfIssue",		{{15, 240,260, 28}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblChip_Number",						{{410,300,353, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_ChipNumber",		{{410,320,353, 18}},	STYLESHEET_NORMAL_VALUE}
 
-	/*,{"lblAdress_Street",					{{  9,102,211, 34}},	STYLESHEET_NORMAL_LABEL}
+		/*,{"lblAdress_Street",					{{  9,102,211, 34}},	STYLESHEET_NORMAL_LABEL}
 	,{"txtIdentityExtra_Adress_Street",		{{  9,136,350, 18}},	STYLESHEET_NORMAL_VALUE}
 	,{"lblAdress_PostalCode",				{{  9,158,201, 34}},	STYLESHEET_NORMAL_LABEL}
 	,{"txtIdentityExtra_Adress_PostalCode",	{{  9,192,201, 18}},	STYLESHEET_NORMAL_VALUE}*/
-	,{"lblCard_Number",						{{  9,300,353, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_Card_Number",		{{  9,320,353, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblCard_Number",						{{  9,300,353, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_Card_Number",		{{  9,320,353, 18}},	STYLESHEET_NORMAL_VALUE}
 
-	,{"lblAdress_Muncipality",				{{230,158,176, 34}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_Adress_Muncipality",{{230,192,201, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblAdress_Country",					{{  9,214,201, 34}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_Adress_Country",	{{  9,246,176, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblCard_ValidFrom_Until",			{{  9,340,353, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_ValidFrom_Until",	{{  9,360,353, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblAdress_Muncipality",				{{230,158,176, 34}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_Adress_Muncipality",{{230,192,201, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblAdress_Country",					{{  9,214,201, 34}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_Adress_Country",	{{  9,246,176, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblCard_ValidFrom_Until",			{{  9,340,353, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_ValidFrom_Until",	{{  9,360,353, 18}},	STYLESHEET_NORMAL_VALUE}
 
-	//,{"lblSpecialStatus",					{{230,214,176, 34}},	STYLESHEET_NORMAL_LABEL}
-	//,{"txtSpecialStatus",					{{230,246,201, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblIdentity_Title",					{{410, 46,353, 34}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_Title",				{{410, 80,353, 18}},	STYLESHEET_NORMAL_VALUE}
+		//,{"lblSpecialStatus",					{{230,214,176, 34}},	STYLESHEET_NORMAL_LABEL}
+		//,{"txtSpecialStatus",					{{230,246,201, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_Title",					{{410, 46,353, 34}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_Title",				{{410, 80,353, 18}},	STYLESHEET_NORMAL_VALUE}
 
-	,{"lblIdentity_Remarks",				{{410,158,201, 34}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_Remarks1",			{{410,200,201, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"txtIdentityExtra_Remarks2",			{{410,220,201, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"txtIdentityExtra_Remarks3",			{{410,240,201, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblIdentity_Remarks",				{{410,158,201, 34}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtIdentityExtra_Remarks1",			{{410,200,201, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"txtIdentityExtra_Remarks2",			{{410,220,201, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"txtIdentityExtra_Remarks3",			{{410,240,201, 18}},	STYLESHEET_NORMAL_VALUE}
 
-	//------- tab SIS extra --------
-	,{"lblSisExtra_Card_ValidFrom_Until",	{{  9, 63,243, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtSisExtra_ValidFrom_Until",		{{258, 63,493, 18}},	STYLESHEET_SIS_VALUE}
+		//------- tab SIS extra --------
+		,{"lblSisExtra_Card_ValidFrom_Until",	{{  9, 63,243, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtSisExtra_ValidFrom_Until",		{{258, 63,493, 18}},	STYLESHEET_SIS_VALUE}
 
-	//------- tab Foreigner extra
-	,{"lblForeignersExtra_BirthDate",		{{ 90, 52,180, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtForeignersExtra_BirthDate",		{{280, 52,576, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblForeignersExtra_Nationality",		{{ 90, 74,180, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtForeignersExtra_Nationality",		{{280, 74,576, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblForeignersExtra_Sex",				{{ 90, 96,180, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtForeignersExtra_Sex",				{{280, 96,576, 18}},	STYLESHEET_NORMAL_VALUE}
-	
-	,{"lblForeignersExtra_street",			{{ 90,118,180, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtForeignersExtra_Adress_Street",	{{280,118,180, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblForeignersExtra_PostalCode",		{{ 90,142,180, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtForeignersExtra_Adress_PostalCode",{{280,142,100, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblForeignersExtra_municipality",	{{350,142,100, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtForeignersExtra_Adress_Muncipality",{{455,142,250, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblForeignersExtra_country",			{{ 90,165,180, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtForeignersExtra_Adress_Country",	{{280,165,100, 18}},	STYLESHEET_NORMAL_VALUE}
+		//------- tab Foreigner extra
+		,{"lblForeignersExtra_BirthDate",		{{ 90, 52,180, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtForeignersExtra_BirthDate",		{{280, 52,576, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblForeignersExtra_Nationality",		{{ 90, 74,180, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtForeignersExtra_Nationality",		{{280, 74,576, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblForeignersExtra_Sex",				{{ 90, 96,180, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtForeignersExtra_Sex",				{{280, 96,576, 18}},	STYLESHEET_NORMAL_VALUE}
 
-	,{"lblForeignersExtra_Remarks1",		{{ 90,188,180, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtForeignersExtra_Remarks1",		{{280,211,400, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"txtForeignersExtra_Remarks2",		{{280,234,400, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"txtForeignersExtra_Remarks3",		{{280,257,400, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"txtForeignerSpecialStatus",			{{280,185,576, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblForeignersExtra_street",			{{ 90,118,180, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtForeignersExtra_Adress_Street",	{{280,118,180, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblForeignersExtra_PostalCode",		{{ 90,142,180, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtForeignersExtra_Adress_PostalCode",{{280,142,100, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblForeignersExtra_municipality",	{{350,142,100, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtForeignersExtra_Adress_Muncipality",{{455,142,250, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblForeignersExtra_country",			{{ 90,165,180, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtForeignersExtra_Adress_Country",	{{280,165,100, 18}},	STYLESHEET_NORMAL_VALUE}
 
-	,{"lblForeignersExtra_NationalNumber",	{{ 40,296,180, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtForeignersExtra_NationalNumber",	{{230,296,609, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblForeignersExtra_ChipNumber",		{{ 40,318,180, 18}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtForeignersExtra_ChipNumber",		{{230,318,609, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblForeignersExtra_Remarks1",		{{ 90,188,180, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtForeignersExtra_Remarks1",		{{280,211,400, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"txtForeignersExtra_Remarks2",		{{280,234,400, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"txtForeignersExtra_Remarks3",		{{280,257,400, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"txtForeignerSpecialStatus",			{{280,185,576, 18}},	STYLESHEET_NORMAL_VALUE}
 
-	//------- tab Certificate
-	,{"lblCert_Owner",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtCert_Owner",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"lblCert_Issuer",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtCert_Issuer",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"lblCert_KeyLenght",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtCert_KeyLenght",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"lblCert_ValidFrom",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtCert_ValidFrom",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"lblCert_ValidUntil",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtCert_ValidUntil",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"lblCert_Status",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtCert_Status",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"lblCert_InfoAdd",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"btnCert_Register",					{{0,0,0,0}},			STYLESHEET_BUTTON}
-	,{"btnCert_Details",					{{0,0,0,0}},			STYLESHEET_BUTTON}
-	,{"btnOCSPCheck",						{{0,0,0,0}},			STYLESHEET_BUTTON}
+		,{"lblForeignersExtra_NationalNumber",	{{ 40,296,180, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtForeignersExtra_NationalNumber",	{{230,296,609, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"lblForeignersExtra_ChipNumber",		{{ 40,318,180, 18}},	STYLESHEET_NORMAL_LABEL}
+		,{"txtForeignersExtra_ChipNumber",		{{230,318,609, 18}},	STYLESHEET_NORMAL_VALUE}
 
-	//------- tab PIN
-	,{"lblPIN_Name",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtPIN_Name",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"lblPIN_ID",							{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtPIN_ID",							{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"lblPIN_Status",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"txtPIN_Status",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"lblPIN_InfoAdd",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-	,{"btnPIN_Test",						{{0,0,0,0}},			STYLESHEET_BUTTON}
-	,{"btnPIN_Change",						{{0,0,0,0}},			STYLESHEET_BUTTON}
+		//------- tab Certificate
+		,{"lblCert_Owner",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtCert_Owner",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"lblCert_Issuer",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtCert_Issuer",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"lblCert_KeyLenght",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtCert_KeyLenght",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"lblCert_ValidFrom",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtCert_ValidFrom",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"lblCert_ValidUntil",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtCert_ValidUntil",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"lblCert_Status",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtCert_Status",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"lblCert_InfoAdd",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"btnCert_Register",					{{0,0,0,0}},			STYLESHEET_BUTTON}
+		,{"btnCert_Details",					{{0,0,0,0}},			STYLESHEET_BUTTON}
+		,{"btnOCSPCheck",						{{0,0,0,0}},			STYLESHEET_BUTTON}
 
-	//------- tab Info
-	,{"lblInfo_Top",		/*{ 160, 40,587, 16}*/{{0,0,0,0}},	STYLESHEET_NORMAL_LABEL}
-	,{"lblInfo_bottom",		{{   1,345,740, 14}},					STYLESHEET_NORMAL_LABEL}
-	,{"lblInfo_Img1",		/*{  10, 10,147, 79}*/{{0,0,0,0}},	STYLESHEET_NONE}
-	
+		//------- tab PIN
+		,{"lblPIN_Name",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtPIN_Name",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"lblPIN_ID",							{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtPIN_ID",							{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"lblPIN_Status",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"txtPIN_Status",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"lblPIN_InfoAdd",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
+		,{"btnPIN_Test",						{{0,0,0,0}},			STYLESHEET_BUTTON}
+		,{"btnPIN_Change",						{{0,0,0,0}},			STYLESHEET_BUTTON}
+
+		//------- tab Info
+		,{"lblInfo_Top",		/*{ 160, 40,587, 16}*/{{0,0,0,0}},	STYLESHEET_NORMAL_LABEL}
+		,{"lblInfo_bottom",		{{   1,345,740, 14}},					STYLESHEET_NORMAL_LABEL}
+		,{"lblInfo_Img1",		/*{  10, 10,147, 79}*/{{0,0,0,0}},	STYLESHEET_NONE}
+
 };
 
 //*****************************************************
@@ -408,76 +408,76 @@ static const char* fileList[]=
 #ifdef BEID_35
 #ifdef WIN32
 #ifdef _DEBUG
-	  "beid35guiD.exe"
-	, "beid35libCppD.dll"
-	, "beid35commonD.dll"
-	, "beid35applayerD.dll"
-	, "beid35DlgsWin32D.dll"
-	, "beid35cardlayerD.dll"
-	, "beidpkcs11D.dll"
+		"beid35guiD.exe"
+		, "beid35libCppD.dll"
+		, "beid35commonD.dll"
+		, "beid35applayerD.dll"
+		, "beid35DlgsWin32D.dll"
+		, "beid35cardlayerD.dll"
+		, "beidpkcs11D.dll"
 #else
-	  "beid35gui.exe"
-	, "beid35libCpp.dll"
-	, "beid35common.dll"
-	, "beid35applayer.dll"
-	, "beid35DlgsWin32.dll"
-	, "beid35cardlayer.dll"
-	, "beidpkcs11.dll"
+		"beid35gui.exe"
+		, "beid35libCpp.dll"
+		, "beid35common.dll"
+		, "beid35applayer.dll"
+		, "beid35DlgsWin32.dll"
+		, "beid35cardlayer.dll"
+		, "beidpkcs11.dll"
 #endif
 #elif __APPLE__
-	  "beidgui"
-	, "libbeidlib"
-	, "libbeidapplayer"
-	, "libbeidcommon"
-	, "libbeidcardlayer"
-	, "libdialogsQT"
-	, "libbeidpkcs11"
+		"beidgui"
+		, "libbeidlib"
+		, "libbeidapplayer"
+		, "libbeidcommon"
+		, "libbeidcardlayer"
+		, "libdialogsQT"
+		, "libbeidpkcs11"
 #else
-	  "beidgui"
-	, "libbeidlib.so"
-	, "libbeidapplayer.so"
-	, "libbeidcommon.so"
-	, "libbeidcardlayer.so"
-	, "libdialogsQT.so"
-	, "libbeidpkcs11.so"
+		"beidgui"
+		, "libbeidlib.so"
+		, "libbeidapplayer.so"
+		, "libbeidcommon.so"
+		, "libbeidcardlayer.so"
+		, "libdialogsQT.so"
+		, "libbeidpkcs11.so"
 #endif
 
 #else
 
 #ifdef WIN32
 #ifdef _DEBUG
-	"beidguiD.exe"
-	, "beidlibCppD.dll"
-	, "beidcommonD.dll"
-	, "beidapplayerD.dll"
-	, "beidDlgsWin32D.dll"
-	, "beidcardlayerD.dll"
-	, "beidpkcs11D.dll"
+		"beidguiD.exe"
+		, "beidlibCppD.dll"
+		, "beidcommonD.dll"
+		, "beidapplayerD.dll"
+		, "beidDlgsWin32D.dll"
+		, "beidcardlayerD.dll"
+		, "beidpkcs11D.dll"
 #else
-	  "beidgui.exe"
-	, "beidlibCpp.dll"
-	, "beidcommon.dll"
-	, "beidapplayer.dll"
-	, "beidDlgsWin32.dll"
-	, "beidcardlayer.dll"
-	, "beidpkcs11.dll"
+		"beidgui.exe"
+		, "beidlibCpp.dll"
+		, "beidcommon.dll"
+		, "beidapplayer.dll"
+		, "beidDlgsWin32.dll"
+		, "beidcardlayer.dll"
+		, "beidpkcs11.dll"
 #endif
 #elif __APPLE__
-	"beidgui"
-	, "libbeidlib"
-	, "libbeidapplayer"
-	, "libbeidcommon"
-	, "libbeidcardlayer"
-	, "libdialogsQT"
-	, "libbeidpkcs11"
+		"beidgui"
+		, "libbeidlib"
+		, "libbeidapplayer"
+		, "libbeidcommon"
+		, "libbeidcardlayer"
+		, "libdialogsQT"
+		, "libbeidpkcs11"
 #else
-	  "beidgui"
-	, "libbeidlib.so"
-	, "libbeidapplayer.so"
-	, "libbeidcommon.so"
-	, "libbeidcardlayer.so"
-	, "libdialogsQT.so"
-	, "libbeidpkcs11.so"
+		"beidgui"
+		, "libbeidlib.so"
+		, "libbeidapplayer.so"
+		, "libbeidcommon.so"
+		, "libbeidcardlayer.so"
+		, "libdialogsQT.so"
+		, "libbeidpkcs11.so"
 #endif
 #endif
 };
@@ -533,21 +533,21 @@ tCertPerReader	MainWnd::m_certContexts;		//!< certificate contexts per reader
 // ctor
 //*****************************************************
 MainWnd::MainWnd( GUISettings& settings, QWidget *parent ) 
-	: QMainWindow(parent)
-	, m_Zoom(ZOOM_SMALL)
-	, m_pPrinter(NULL)
-	, m_Pop(NULL)
-	, m_TypeCard(BEID_CARDTYPE_UNKNOWN)
-	, m_Language(GenPur::LANG_EN)
-	, m_CurrReaderName("")
-	, m_virtReaderContext(NULL)
-	, m_UseKeyPad(false)
-	, m_Settings(settings)
-	, m_timerReaderList(NULL)
-	, m_STATUS_MSG_TIME(5000)
-	, m_ShowBalloon(false)
-	, m_msgBox(NULL)
-	, m_connectionStatus((BEID_CertifStatus)-1)
+: QMainWindow(parent)
+, m_Zoom(ZOOM_SMALL)
+, m_pPrinter(NULL)
+, m_Pop(NULL)
+, m_TypeCard(BEID_CARDTYPE_UNKNOWN)
+, m_Language(GenPur::LANG_EN)
+, m_CurrReaderName("")
+, m_virtReaderContext(NULL)
+, m_UseKeyPad(false)
+, m_Settings(settings)
+, m_timerReaderList(NULL)
+, m_STATUS_MSG_TIME(5000)
+, m_ShowBalloon(false)
+, m_msgBox(NULL)
+, m_connectionStatus((BEID_CertifStatus)-1)
 {
 	///InitWidgetMapStyle();
 
@@ -562,7 +562,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	m_Language = LoadedLng;
 
-    m_ui.setupUi(this);
+	m_ui.setupUi(this);
 
 	setFixedSize( 850, 700 );
 
@@ -592,7 +592,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	Show_Splash();
 
-//	connect( m_ui.actionShow_Toolbar, SIGNAL(toggled(bool)), m_ui.toolBar, SLOT(setVisible(bool)) );
+	//	connect( m_ui.actionShow_Toolbar, SIGNAL(toggled(bool)), m_ui.toolBar, SLOT(setVisible(bool)) );
 
 	//------------------------------------
 	//SysTray
@@ -675,6 +675,10 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 
 	m_ui.lbl_menuCard_Read->installEventFilter(this);
+	m_ui.lbl_menuCard_Quit->installEventFilter(this);
+
+
+	m_ui.wdg_submenu_card->installEventFilter(this);
 
 
 
@@ -687,24 +691,50 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 bool MainWnd::eventFilter(QObject *object, QEvent *event)
 {
-    qWarning("Entrei no filtro de eventos");
-    if (event->type() == QEvent::Leave)
-       {
-/*           if (object == ui->widget_IdentificacaoCivil)
-           {
-               qWarning("HERE");
-           }
+	qWarning("Entrei no filtro de eventos");
 
-           if (object == ui->widget_submenu_assinatura_digital )
-           {
-               ui->widget_submenu_assinatura_digital->setVisible(false);
-           }
-*/
-       }
+	if (event->type() == QEvent::MouseButtonPress)
+	{
 
-    return false;
+		if (object == m_ui.lbl_menuCard_Read )
+		{
+			hide_submenus();
+			pinactivate = 1;
+			m_connectionStatus = (BEID_CertifStatus)-1;
+			m_CI_Data.Reset();
+			loadCardData();
+		}
+
+		if (object == m_ui.lbl_menuCard_Quit )
+		{
+			quit_application();
+		}
+	}
+
+
+	if (event->type() == QEvent::Leave)
+	{
+
+		if (object == m_ui.wdg_submenu_card )
+		{
+			qWarning("sai do panel");
+			hide_submenus();
+		}
+
+
+
+	}
+	return false;
 
 }
+
+
+
+void MainWnd::hide_submenus()
+{
+	m_ui.wdg_submenu_card->setVisible(false);
+}
+
 
 
 
@@ -750,7 +780,7 @@ void MainWnd::on_btn_menu_card_clicked()
 {
 	qWarning("Card Cliecked");
 	m_ui.wdg_submenu_card->setVisible(true);
-	m_ui.wdg_submenu_card->setGeometry(0,6,131,171);
+	m_ui.wdg_submenu_card->setGeometry(0,6,120,80);
 
 }
 
@@ -906,16 +936,16 @@ void MainWnd::setEnabledCertifButtons( bool bEnabled )
 MainWnd::~MainWnd( void )
 {
 	cleanupCallbackData();
- 	if(m_pPrinter)
- 	{
- 		delete m_pPrinter;
+	if(m_pPrinter)
+	{
+		delete m_pPrinter;
 		m_pPrinter = NULL;
- 	}
- 	if(m_Pop)
- 	{
- 		delete m_Pop;
+	}
+	if(m_Pop)
+	{
+		delete m_Pop;
 		m_Pop = NULL;
- 	}
+	}
 
 	releaseVirtualReader();
 }
@@ -924,7 +954,7 @@ MainWnd::~MainWnd( void )
 //*****************************************************
 void MainWnd::cleanupCallbackData()
 {
-	
+
 	while(g_runningCallback)
 	{
 #ifdef WIN32
@@ -933,19 +963,19 @@ void MainWnd::cleanupCallbackData()
 		::usleep(100000);
 #endif
 	}
-	
+
 	g_cleaningCallback = true;
-	
+
 	for (tCallBackData::iterator it = m_callBackData.begin()
-		; it != m_callBackData.end()
-		; it++
-		)
+			; it != m_callBackData.end()
+			; it++
+	)
 	{
 		CallBackData* pCallbackData = it.value();
 		delete pCallbackData;
 	}
 	m_callBackData.clear();
-	
+
 	g_cleaningCallback = false;
 }
 
@@ -955,11 +985,11 @@ void MainWnd::cleanupCallbackData()
 //*****************************************************
 void MainWnd::stopAllEventCallbacks( void )
 {
-	
+
 	for (tCallBackHandles::iterator it = m_callBackHandles.begin()
-		; it != m_callBackHandles.end()
-		; it++
-		)
+			; it != m_callBackHandles.end()
+			; it++
+	)
 	{
 		BEID_ReaderContext& readerContext = ReaderSet.getReaderByName(it.key().toLatin1());
 		unsigned long handle = it.value();
@@ -1074,7 +1104,7 @@ void MainWnd::closeEvent( QCloseEvent *event)
 		event->ignore();
 	}
 }
- 
+
 //*****************************************************
 // Tray icon activation detection
 //*****************************************************
@@ -1082,30 +1112,30 @@ void MainWnd::iconActivated( QSystemTrayIcon::ActivationReason reason )
 {
 	switch (reason) 
 	{
-		case QSystemTrayIcon::Trigger:
-			break;
+	case QSystemTrayIcon::Trigger:
+		break;
 
-		case QSystemTrayIcon::DoubleClick:
-			if( this->isHidden() )
-			{
-				this->restoreWindow();
-				m_pMinimizeAction->setEnabled(true);
-				m_pRestoreAction->setEnabled(false);
-			}
-			else
-			{
-				m_pMinimizeAction->setEnabled(false);
-				m_pRestoreAction->setEnabled(true);
-				this->hide();
-			}
-			break;
-		
-		case QSystemTrayIcon::MiddleClick:
-			m_pTrayIcon->showMessage( "eID", "eID reader: Tray icon", QSystemTrayIcon::Information, 3 * 1000 ); // 3 sec
-			break;
-		
-		default:
-			break;
+	case QSystemTrayIcon::DoubleClick:
+		if( this->isHidden() )
+		{
+			this->restoreWindow();
+			m_pMinimizeAction->setEnabled(true);
+			m_pRestoreAction->setEnabled(false);
+		}
+		else
+		{
+			m_pMinimizeAction->setEnabled(false);
+			m_pRestoreAction->setEnabled(true);
+			this->hide();
+		}
+		break;
+
+	case QSystemTrayIcon::MiddleClick:
+		m_pTrayIcon->showMessage( "eID", "eID reader: Tray icon", QSystemTrayIcon::Information, 3 * 1000 ); // 3 sec
+		break;
+
+	default:
+		break;
 	}
 }
 
@@ -1126,7 +1156,7 @@ bool MainWnd::RemoveCertificates( const char* readerName )
 		return false;
 	}
 
- 	PCCERT_CONTEXT	pCertContext = NULL;
+	PCCERT_CONTEXT	pCertContext = NULL;
 	int nrCerts = m_certContexts[readerName].size();
 	for (int CertIdx=0;CertIdx<nrCerts;CertIdx++)
 	{
@@ -1136,7 +1166,7 @@ bool MainWnd::RemoveCertificates( const char* readerName )
 		// ----------------------------------------------------
 		PCCERT_CONTEXT  pDesiredCert	= NULL;
 		HCERTSTORE		hMyStore		= CertOpenSystemStore(NULL, "MY");
-		
+
 		pCertContext = m_certContexts[readerName][CertIdx];
 
 		if ( NULL != hMyStore )
@@ -1146,7 +1176,7 @@ bool MainWnd::RemoveCertificates( const char* readerName )
 			// If the certificate is not found --> NULL
 			// ----------------------------------------------------
 			if( NULL != (pDesiredCert = CertFindCertificateInStore(hMyStore, X509_ASN_ENCODING, 0, CERT_FIND_EXISTING, pCertContext , NULL))
-				)
+			)
 			{
 				CertDeleteCertificateFromStore( pDesiredCert );
 			}
@@ -1179,7 +1209,7 @@ bool MainWnd::ImportCertificates( const char* readerName )
 	PCCERT_CONTEXT	pCertContext = NULL;
 	QString			strTip;
 	bool			bImported	= false;
-			
+
 	BEID_ReaderContext&  ReaderContext  = ReaderSet.getReaderByName(readerName);
 	if (!ReaderContext.isCardPresent())
 	{
@@ -1236,7 +1266,7 @@ bool MainWnd::ImportCertificates( const char* readerName )
 		QMessageBox::information(NULL,strCaption,strMessage);
 	}
 
-//	showCertImportMessage(bImported);
+	//	showCertImportMessage(bImported);
 
 	return bImported;
 #else
@@ -1369,10 +1399,10 @@ bool MainWnd::StoreAuthorityCerts(PCCERT_CONTEXT pCertContext, unsigned char Key
 	PCCERT_CONTEXT  pDesiredCert = NULL;
 
 	if ( 0 == memcmp ( pCertContext->pCertInfo->Issuer.pbData
-					 , pCertContext->pCertInfo->Subject.pbData
-					 , pCertContext->pCertInfo->Subject.cbData
-				     )
-		)
+			, pCertContext->pCertInfo->Subject.pbData
+			, pCertContext->pCertInfo->Subject.cbData
+	)
+	)
 	{
 		hMemoryStore = CertOpenSystemStoreA (NULL, "ROOT");
 	}
@@ -1384,12 +1414,12 @@ bool MainWnd::StoreAuthorityCerts(PCCERT_CONTEXT pCertContext, unsigned char Key
 	if(NULL != hMemoryStore)
 	{
 		pDesiredCert = CertFindCertificateInStore( hMemoryStore
-												 , X509_ASN_ENCODING
-												 , 0
-												 , CERT_FIND_EXISTING
-												 , pCertContext 
-												 , NULL
-												 );
+				, X509_ASN_ENCODING
+				, 0
+				, CERT_FIND_EXISTING
+				, pCertContext
+				, NULL
+		);
 		if( pDesiredCert )
 		{
 			CertFreeCertificateContext(pDesiredCert);
@@ -1440,7 +1470,7 @@ bool MainWnd::StoreUserCerts (BEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, u
 				// succeeds, the return value is nonzero, or TRUE.
 				// ----------------------------------------------------
 				if(NULL == CertCompareCertificate(X509_ASN_ENCODING,pCertContext->pCertInfo,pDesiredCert->pCertInfo) ||
-					!ProviderNameCorrect(pDesiredCert) )
+						!ProviderNameCorrect(pDesiredCert) )
 				{
 					// ----------------------------------------------------
 					// certificates are not identical, but have the same 
@@ -1465,7 +1495,7 @@ bool MainWnd::StoreUserCerts (BEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, u
 
 
 		if( NULL != (pDesiredCert = CertFindCertificateInStore(hMyStore, X509_ASN_ENCODING, 0, CERT_FIND_EXISTING, pCertContext , NULL))
-			)
+		)
 		{
 			m_certContexts[readerName].push_back(pCertContext);
 			// ----------------------------------------------------
@@ -1531,22 +1561,22 @@ bool MainWnd::StoreUserCerts (BEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, u
 
 		// Set the property.
 		if (CertSetCertificateContextProperty(
-			pCertContext,       // A pointer to the certificate
-			// where the propertiy will be set.
-			dwPropId,           // An identifier of the property to be set. 
-			// In this case, CERT_KEY_PROV_INFO_PROP_ID
-			// is to be set to provide a pointer with the
-			// certificate to its associated private key 
-			// container.
-			dwFlags,            // The flag used in this case is   
-			// CERT_STORE_NO_CRYPT_RELEASE_FLAG
-			// indicating that the cryptographic 
-			// context aquired should not
-			// be released when the function finishes.
-			pCryptKeyProvInfo   // A pointer to a data structure that holds
-			// infomation on the private key container to
-			// be associated with this certificate.
-			))
+				pCertContext,       // A pointer to the certificate
+				// where the propertiy will be set.
+				dwPropId,           // An identifier of the property to be set.
+				// In this case, CERT_KEY_PROV_INFO_PROP_ID
+				// is to be set to provide a pointer with the
+				// certificate to its associated private key
+				// container.
+				dwFlags,            // The flag used in this case is
+				// CERT_STORE_NO_CRYPT_RELEASE_FLAG
+				// indicating that the cryptographic
+				// context aquired should not
+				// be released when the function finishes.
+				pCryptKeyProvInfo   // A pointer to a data structure that holds
+				// infomation on the private key container to
+				// be associated with this certificate.
+		))
 		{
 			if (NULL != pCryptKeyProvInfo)
 			{
@@ -1578,22 +1608,22 @@ bool MainWnd::StoreUserCerts (BEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, u
 			tpFriendlyName.cbData = iFriendLen;
 
 			if (CertSetCertificateContextProperty(
-				pCertContext,       // A pointer to the certificate
-				// where the propertiy will be set.
-				CERT_FRIENDLY_NAME_PROP_ID,           // An identifier of the property to be set. 
-				// In this case, CERT_KEY_PROV_INFO_PROP_ID
-				// is to be set to provide a pointer with the
-				// certificate to its associated private key 
-				// container.
-				dwFlags,            // The flag used in this case is   
-				// CERT_STORE_NO_CRYPT_RELEASE_FLAG
-				// indicating that the cryptographic 
-				// context aquired should not
-				// be released when the function finishes.
-				&tpFriendlyName   // A pointer to a data structure that holds
-				// infomation on the private key container to
-				// be associated with this certificate.
-				))
+					pCertContext,       // A pointer to the certificate
+					// where the propertiy will be set.
+					CERT_FRIENDLY_NAME_PROP_ID,           // An identifier of the property to be set.
+					// In this case, CERT_KEY_PROV_INFO_PROP_ID
+					// is to be set to provide a pointer with the
+					// certificate to its associated private key
+					// container.
+					dwFlags,            // The flag used in this case is
+					// CERT_STORE_NO_CRYPT_RELEASE_FLAG
+					// indicating that the cryptographic
+					// context aquired should not
+					// be released when the function finishes.
+					&tpFriendlyName   // A pointer to a data structure that holds
+					// infomation on the private key container to
+					// be associated with this certificate.
+			))
 			{
 				if (KeyUsageBits & CERT_NON_REPUDIATION_KEY_USAGE)
 				{
@@ -1626,7 +1656,7 @@ bool MainWnd::StoreUserCerts (BEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, u
 //*****************************************************
 void MainWnd::on_btnOCSPCheck_clicked( void )
 {
-/*	//----------------------------------------------------
+	/*	//----------------------------------------------------
 	// get the selected certificate and get the OCSP response
 	//----------------------------------------------------
 	try
@@ -1677,7 +1707,7 @@ void MainWnd::on_btnOCSPCheck_clicked( void )
 	{
 		e = e;
 	}
-	*/
+	 */
 }
 
 //*****************************************************
@@ -1812,12 +1842,12 @@ void MainWnd::on_treePIN_itemSelectionChanged ( void )
 //*****************************************************
 void MainWnd::on_treeCert_itemSelectionChanged ( void )
 {
- 	QList<QTreeWidgetItem *> selectedItems = m_ui.treeCert->selectedItems();
- 	if (selectedItems.size()==1)
- 	{
- 		on_treeCert_itemClicked((QTreeCertItem*)selectedItems[0], 0);
- 	}
-	
+	QList<QTreeWidgetItem *> selectedItems = m_ui.treeCert->selectedItems();
+	if (selectedItems.size()==1)
+	{
+		on_treeCert_itemClicked((QTreeCertItem*)selectedItems[0], 0);
+	}
+
 }
 //*****************************************************
 // a certificate has been clicked
@@ -1847,8 +1877,8 @@ void MainWnd::on_treeCert_itemClicked(QTreeWidgetItem* baseItem, int column)
 	m_ui.txtCert_KeyLenght->setText(item->getKeyLen());
 	m_ui.txtCert_KeyLenght->setAccessibleName(item->getKeyLen());
 
-//	QString strCertStatus;
-//	getCertStatusText(item->getOcspStatus(), strCertStatus);
+	//	QString strCertStatus;
+	//	getCertStatusText(item->getOcspStatus(), strCertStatus);
 
 	if(!ReaderContext.isCardPresent())
 	{
@@ -1927,10 +1957,12 @@ void MainWnd::on_treePIN_itemClicked(QTreeWidgetItem* item, int column)
 //*****************************************************
 void MainWnd::on_actionReload_eID_triggered( void )
 {
-    	pinactivate = 1;
+	/*
+    pinactivate = 1;
 	m_connectionStatus = (BEID_CertifStatus)-1;
 	m_CI_Data.Reset(); 
 	loadCardData();
+	 */
 }
 
 //****************************************************
@@ -1948,7 +1980,7 @@ void MainWnd::on_actionReload_eID_triggered( void )
 void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBackData)
 {
 	g_runningCallback++;
-	
+
 	try
 	{
 		BEID_ReaderContext& readerContext = ReaderSet.getReaderByName(pCallBackData->getReaderName().toLatin1());
@@ -1967,7 +1999,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
 			}
 			PopupEvent* event = new PopupEvent(pCallBackData->getReaderName(),PopupEvent::ET_CARD_REMOVED);
 			QCoreApplication::postEvent(pCallBackData->getMainWnd(),event);
-			
+
 			g_runningCallback--;
 			return;
 		}
@@ -1997,7 +2029,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
 		x++;
 		// we catch ALL exceptions. This is because otherwise the thread throwing the exception stops		
 	}
-	
+
 	g_runningCallback--;
 }
 
@@ -2098,7 +2130,7 @@ void MainWnd::loadCardData( void )
 		bool			bRefresh	   = false;
 		unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
 		unsigned long	ReaderIdx	   = 0;
-		
+
 		if (ReaderStartIdx!=(unsigned long)-1)
 		{
 			ReaderEndIdx = ReaderStartIdx+1;
@@ -2124,51 +2156,51 @@ void MainWnd::loadCardData( void )
 				case BEID_CARDTYPE_KIDS:
 				case BEID_CARDTYPE_EID:
 				{
-						try
-						{
-							BEID_EIDCard& Card = ReaderContext.getEIDCard();
-							if (Card.isTestCard()&&!Card.getAllowTestCard())
-							{
-								if (askAllowTestCard())
-								{
-									Card.setAllowTestCard(true);
-								}
-								else
-								{
-									on_actionClear_triggered();
-									break;
-								}
-							}
-							const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-							m_CurrReaderName = readerName;
-							Show_Identity_Card(Card);
-							//Show_Address_Card(Card);
-	
-							ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-						}
-						catch (BEID_ExCardBadType const& e)
-						{
-							QString errcode;
-							errcode = errcode.setNum(e.GetError());
-						}
-					}
-					break;
-				case BEID_CARDTYPE_SIS:
+					try
 					{
-						try
+						BEID_EIDCard& Card = ReaderContext.getEIDCard();
+						if (Card.isTestCard()&&!Card.getAllowTestCard())
 						{
-							BEID_MemoryCard& Card = ReaderContext.getSISCard();
-							m_CurrReaderName = ReaderSet.getReaderName(ReaderIdx);
-							Show_Memory_Card(Card);
-							ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
+							if (askAllowTestCard())
+							{
+								Card.setAllowTestCard(true);
+							}
+							else
+							{
+								on_actionClear_triggered();
+								break;
+							}
 						}
-						catch (BEID_ExCardBadType const& e)
-						{
-							QString errcode;
-							errcode = errcode.setNum(e.GetError());
-						}
+						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+						m_CurrReaderName = readerName;
+						Show_Identity_Card(Card);
+						//Show_Address_Card(Card);
+
+						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
 					}
-					break;
+					catch (BEID_ExCardBadType const& e)
+					{
+						QString errcode;
+						errcode = errcode.setNum(e.GetError());
+					}
+				}
+				break;
+				case BEID_CARDTYPE_SIS:
+				{
+					try
+					{
+						BEID_MemoryCard& Card = ReaderContext.getSISCard();
+						m_CurrReaderName = ReaderSet.getReaderName(ReaderIdx);
+						Show_Memory_Card(Card);
+						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
+					}
+					catch (BEID_ExCardBadType const& e)
+					{
+						QString errcode;
+						errcode = errcode.setNum(e.GetError());
+					}
+				}
+				break;
 				case BEID_CARDTYPE_UNKNOWN:
 				default:
 					break;
@@ -2294,50 +2326,50 @@ void MainWnd::loadCardDataAddress( void )
 				case BEID_CARDTYPE_KIDS:
 				case BEID_CARDTYPE_EID:
 				{
-						try
-						{
-							BEID_EIDCard& Card = ReaderContext.getEIDCard();
-							if (Card.isTestCard()&&!Card.getAllowTestCard())
-							{
-								if (askAllowTestCard())
-								{
-									Card.setAllowTestCard(true);
-								}
-								else
-								{
-									on_actionClear_triggered();
-									break;
-								}
-							}
-							const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-							m_CurrReaderName = readerName;
-							Show_Address_Card(Card);
-
-							ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-						}
-						catch (BEID_ExCardBadType const& e)
-						{
-							QString errcode;
-							errcode = errcode.setNum(e.GetError());
-						}
-					}
-					break;
-				case BEID_CARDTYPE_SIS:
+					try
 					{
-						try
+						BEID_EIDCard& Card = ReaderContext.getEIDCard();
+						if (Card.isTestCard()&&!Card.getAllowTestCard())
 						{
-							BEID_MemoryCard& Card = ReaderContext.getSISCard();
-							m_CurrReaderName = ReaderSet.getReaderName(ReaderIdx);
-							Show_Memory_Card(Card);
-							ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
+							if (askAllowTestCard())
+							{
+								Card.setAllowTestCard(true);
+							}
+							else
+							{
+								on_actionClear_triggered();
+								break;
+							}
 						}
-						catch (BEID_ExCardBadType const& e)
-						{
-							QString errcode;
-							errcode = errcode.setNum(e.GetError());
-						}
+						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+						m_CurrReaderName = readerName;
+						Show_Address_Card(Card);
+
+						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
 					}
-					break;
+					catch (BEID_ExCardBadType const& e)
+					{
+						QString errcode;
+						errcode = errcode.setNum(e.GetError());
+					}
+				}
+				break;
+				case BEID_CARDTYPE_SIS:
+				{
+					try
+					{
+						BEID_MemoryCard& Card = ReaderContext.getSISCard();
+						m_CurrReaderName = ReaderSet.getReaderName(ReaderIdx);
+						Show_Memory_Card(Card);
+						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
+					}
+					catch (BEID_ExCardBadType const& e)
+					{
+						QString errcode;
+						errcode = errcode.setNum(e.GetError());
+					}
+				}
+				break;
 				case BEID_CARDTYPE_UNKNOWN:
 				default:
 					break;
@@ -2462,50 +2494,50 @@ bool MainWnd::loadCardDataPersoData( void )
 				case BEID_CARDTYPE_KIDS:
 				case BEID_CARDTYPE_EID:
 				{
-						try
-						{
-							BEID_EIDCard& Card = ReaderContext.getEIDCard();
-							if (Card.isTestCard()&&!Card.getAllowTestCard())
-							{
-								if (askAllowTestCard())
-								{
-									Card.setAllowTestCard(true);
-								}
-								else
-								{
-									on_actionClear_triggered();
-									break;
-								}
-							}
-							const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-							m_CurrReaderName = readerName;
-							Show_PersoData_Card(Card);
-
-							ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-						}
-						catch (BEID_ExCardBadType const& e)
-						{
-							QString errcode;
-							errcode = errcode.setNum(e.GetError());
-						}
-					}
-					break;
-				case BEID_CARDTYPE_SIS:
+					try
 					{
-						try
+						BEID_EIDCard& Card = ReaderContext.getEIDCard();
+						if (Card.isTestCard()&&!Card.getAllowTestCard())
 						{
-							BEID_MemoryCard& Card = ReaderContext.getSISCard();
-							m_CurrReaderName = ReaderSet.getReaderName(ReaderIdx);
-							Show_Memory_Card(Card);
-							ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
+							if (askAllowTestCard())
+							{
+								Card.setAllowTestCard(true);
+							}
+							else
+							{
+								on_actionClear_triggered();
+								break;
+							}
 						}
-						catch (BEID_ExCardBadType const& e)
-						{
-							QString errcode;
-							errcode = errcode.setNum(e.GetError());
-						}
+						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+						m_CurrReaderName = readerName;
+						Show_PersoData_Card(Card);
+
+						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
 					}
-					break;
+					catch (BEID_ExCardBadType const& e)
+					{
+						QString errcode;
+						errcode = errcode.setNum(e.GetError());
+					}
+				}
+				break;
+				case BEID_CARDTYPE_SIS:
+				{
+					try
+					{
+						BEID_MemoryCard& Card = ReaderContext.getSISCard();
+						m_CurrReaderName = ReaderSet.getReaderName(ReaderIdx);
+						Show_Memory_Card(Card);
+						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
+					}
+					catch (BEID_ExCardBadType const& e)
+					{
+						QString errcode;
+						errcode = errcode.setNum(e.GetError());
+					}
+				}
+				break;
 				case BEID_CARDTYPE_UNKNOWN:
 				default:
 					break;
@@ -2631,50 +2663,50 @@ void MainWnd::loadCardDataCertificates( void )
 				case BEID_CARDTYPE_KIDS:
 				case BEID_CARDTYPE_EID:
 				{
-						try
-						{
-							BEID_EIDCard& Card = ReaderContext.getEIDCard();
-							if (Card.isTestCard()&&!Card.getAllowTestCard())
-							{
-								if (askAllowTestCard())
-								{
-									Card.setAllowTestCard(true);
-								}
-								else
-								{
-									on_actionClear_triggered();
-									break;
-								}
-							}
-							const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-							m_CurrReaderName = readerName;
-							Show_Certificates_Card(Card);
-
-							ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-						}
-						catch (BEID_ExCardBadType const& e)
-						{
-							QString errcode;
-							errcode = errcode.setNum(e.GetError());
-						}
-					}
-					break;
-				case BEID_CARDTYPE_SIS:
+					try
 					{
-						try
+						BEID_EIDCard& Card = ReaderContext.getEIDCard();
+						if (Card.isTestCard()&&!Card.getAllowTestCard())
 						{
-							BEID_MemoryCard& Card = ReaderContext.getSISCard();
-							m_CurrReaderName = ReaderSet.getReaderName(ReaderIdx);
-							Show_Memory_Card(Card);
-							ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
+							if (askAllowTestCard())
+							{
+								Card.setAllowTestCard(true);
+							}
+							else
+							{
+								on_actionClear_triggered();
+								break;
+							}
 						}
-						catch (BEID_ExCardBadType const& e)
-						{
-							QString errcode;
-							errcode = errcode.setNum(e.GetError());
-						}
+						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+						m_CurrReaderName = readerName;
+						Show_Certificates_Card(Card);
+
+						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
 					}
-					break;
+					catch (BEID_ExCardBadType const& e)
+					{
+						QString errcode;
+						errcode = errcode.setNum(e.GetError());
+					}
+				}
+				break;
+				case BEID_CARDTYPE_SIS:
+				{
+					try
+					{
+						BEID_MemoryCard& Card = ReaderContext.getSISCard();
+						m_CurrReaderName = ReaderSet.getReaderName(ReaderIdx);
+						Show_Memory_Card(Card);
+						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
+					}
+					catch (BEID_ExCardBadType const& e)
+					{
+						QString errcode;
+						errcode = errcode.setNum(e.GetError());
+					}
+				}
+				break;
 				case BEID_CARDTYPE_UNKNOWN:
 				default:
 					break;
@@ -2789,10 +2821,10 @@ void MainWnd::on_actionOpen_eID_triggered( void )
 	{
 		TCHAR strPath[ MAX_PATH ];
 		SHGetSpecialFolderPath( 0				// Hwnd
-			,strPath			// String buffer.
-			,CSIDL_PERSONAL  // CSLID of folder (CSIDL_PERSONAL)
-			,FALSE			// Create if doesn't exists?
-			);
+				,strPath			// String buffer.
+				,CSIDL_PERSONAL  // CSLID of folder (CSIDL_PERSONAL)
+				,FALSE			// Create if doesn't exists?
+		);
 		baseDir = strPath;
 	}
 #else
@@ -2860,34 +2892,34 @@ void MainWnd::OpenSelectedEid( const QString& fileName )
 				case BEID_CARDTYPE_EID:
 				case BEID_CARDTYPE_KIDS:
 				case BEID_CARDTYPE_FOREIGNER:
+				{
+					BEID_EIDCard& card = m_virtReaderContext->getEIDCard();
+					if (card.isTestCard())
 					{
-						BEID_EIDCard& card = m_virtReaderContext->getEIDCard();
-						if (card.isTestCard())
+						if (!askAllowTestCard())
 						{
-							if (!askAllowTestCard())
-							{
-								break;
-							}
-							card.setAllowTestCard(true);
+							break;
 						}
-						m_CI_Data.Reset();
-						Show_Identity_Card(card);
+						card.setAllowTestCard(true);
 					}
-					break;
+					m_CI_Data.Reset();
+					Show_Identity_Card(card);
+				}
+				break;
 				case BEID_CARDTYPE_SIS:
-					{
-						BEID_SISCard& card = m_virtReaderContext->getSISCard();
-						m_CI_Data.Reset();
-						Show_Memory_Card(card);
-					}
-					break;
+				{
+					BEID_SISCard& card = m_virtReaderContext->getSISCard();
+					m_CI_Data.Reset();
+					Show_Memory_Card(card);
+				}
+				break;
 				case BEID_CARDTYPE_UNKNOWN:
 				default:
 					break;
 				}
 				enablePrintMenu();
 				enableFileSave(false);
-//				enableFileMenu();
+				//				enableFileMenu();
 			}
 			else
 			{
@@ -2955,10 +2987,10 @@ void MainWnd::on_actionSave_eID_triggered( void )
 		{
 			TCHAR strPath[ MAX_PATH ];
 			SHGetSpecialFolderPath( 0				// Hwnd
-				,strPath			// String buffer.
-				,CSIDL_PERSONAL  // CSLID of folder (CSIDL_PERSONAL)
-				,FALSE			// Create if doesn't exists?
-				);
+					,strPath			// String buffer.
+					,CSIDL_PERSONAL  // CSLID of folder (CSIDL_PERSONAL)
+					,FALSE			// Create if doesn't exists?
+			);
 			baseDir = strPath;
 		}
 #else
@@ -3028,10 +3060,10 @@ void MainWnd::on_actionSave_eID_as_triggered()
 		{
 			TCHAR strPath[ MAX_PATH ];
 			SHGetSpecialFolderPath( 0				// Hwnd
-				,strPath			// String buffer.
-				,CSIDL_PERSONAL  // CSLID of folder (CSIDL_PERSONAL)
-				,FALSE			// Create if doesn't exists?
-				);
+					,strPath			// String buffer.
+					,CSIDL_PERSONAL  // CSLID of folder (CSIDL_PERSONAL)
+					,FALSE			// Create if doesn't exists?
+			);
 			baseDir = strPath;
 		}
 #else
@@ -3120,19 +3152,19 @@ QString MainWnd::createBaseFilename( BEID_CardType const& cardType )
 	switch(cardType)
 	{
 	case BEID_CARDTYPE_SIS:
-		{
-			tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.m_PersonExtraInfo.getFields();
-			baseFilename = PersonFields[SOCIALSECURITYNUMBER];
-			baseFilename.append("_sis");
-		}
-		break;
+	{
+		tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.m_PersonExtraInfo.getFields();
+		baseFilename = PersonFields[SOCIALSECURITYNUMBER];
+		baseFilename.append("_sis");
+	}
+	break;
 	case BEID_CARDTYPE_EID:
 	case BEID_CARDTYPE_KIDS:
 	case BEID_CARDTYPE_FOREIGNER:
-		{
-			tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
-			baseFilename = PersonFields[NATIONALNUMBER];
-		}
+	{
+		tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
+		baseFilename = PersonFields[NATIONALNUMBER];
+	}
 	default:
 		break;
 	}
@@ -3267,7 +3299,7 @@ void MainWnd::on_actionOptions_triggered(void)
 
 		if( !m_ui.txtIdentity_Name->text().isEmpty() )
 			m_ui.lblIdentity_ImgPerson->setPixmap( m_imgPicture );
-//			m_ui.lblForeigners_ImgPerson->setPixmap( m_imgPicture );
+		//			m_ui.lblForeigners_ImgPerson->setPixmap( m_imgPicture );
 
 	}
 	delete dlg;
@@ -3365,13 +3397,13 @@ void MainWnd::authPINRequest_triggered()
 							break;
 						}
 					}
- 					else
- 					{
- 						QString nrTriesLeft;
- 						nrTriesLeft.setNum(triesLeft);
- 						m_ui.txtPIN_Status->setText(tr("Not available"));
+					else
+					{
+						QString nrTriesLeft;
+						nrTriesLeft.setNum(triesLeft);
+						m_ui.txtPIN_Status->setText(tr("Not available"));
 						m_ui.txtPIN_Status->setAccessibleName(tr("Not available"));
- 					}
+					}
 					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 					break;
 				}
@@ -3466,13 +3498,13 @@ bool MainWnd::addressPINRequest_triggered()
 							return false;
 						}
 					}
- 					else
- 					{
- 						QString nrTriesLeft;
- 						nrTriesLeft.setNum(triesLeft);
- 						m_ui.txtPIN_Status->setText(tr("Not available"));
+					else
+					{
+						QString nrTriesLeft;
+						nrTriesLeft.setNum(triesLeft);
+						m_ui.txtPIN_Status->setText(tr("Not available"));
 						m_ui.txtPIN_Status->setAccessibleName(tr("Not available"));
- 					}
+					}
 					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 					break;
 				}
@@ -3564,13 +3596,13 @@ void MainWnd::on_actionPINRequest_triggered()
 							break;
 						}
 					}
- 					else
- 					{
- 						QString nrTriesLeft;
- 						nrTriesLeft.setNum(triesLeft);
- 						m_ui.txtPIN_Status->setText(tr("Not available"));
+					else
+					{
+						QString nrTriesLeft;
+						nrTriesLeft.setNum(triesLeft);
+						m_ui.txtPIN_Status->setText(tr("Not available"));
 						m_ui.txtPIN_Status->setAccessibleName(tr("Not available"));
- 					}
+					}
 					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 					break;
 				}
@@ -3692,12 +3724,12 @@ void MainWnd::on_actionPINChange_triggered()
 //******************************************************
 void MainWnd::hideTabs()
 {
-/*	QList<QWidget *> allTabs = m_ui.tabWidget_Identity->findChildren<QWidget *>();
+	/*	QList<QWidget *> allTabs = m_ui.tabWidget_Identity->findChildren<QWidget *>();
 	for (int i = allTabs.size()-1; i >=0; --i) 
 	{	
 		m_ui.tabWidget_Identity->removeTab(i);		// hide the tab (this is not a delete!!)
 	}
-	*/
+	 */
 }
 
 void MainWnd::tabaddress_select(int index)
@@ -3763,28 +3795,28 @@ void MainWnd::showTabs()
 		refreshTabInfo();
 
 		break;
-		
+
 	case BEID_CARDTYPE_FOREIGNER:
+	{
+		if(BEID_EIDCard::isApplicationAllowed())
 		{
-			if(BEID_EIDCard::isApplicationAllowed())
+			int cardSubtype = m_CI_Data.m_CardInfo.getSubType();
+			if ( cardSubtype >= CardInfo::EUROPEAN_E && cardSubtype <= CardInfo::EUROPEAN_F_PLUS )
 			{
-				int cardSubtype = m_CI_Data.m_CardInfo.getSubType();
-				if ( cardSubtype >= CardInfo::EUROPEAN_E && cardSubtype <= CardInfo::EUROPEAN_F_PLUS )
-				{
-					refreshTabIdentity();
-					refreshTabIdentityExtra();
-					m_imgBackground_Front = QPixmap( ":/images/Images/Background_IDFront.jpg" ); // background
-					m_imgBackground_Back = QPixmap( ":/images/Images/Background_IDBack.jpg" ); // background
-				}
-				else
-				{
-				}
+				refreshTabIdentity();
+				refreshTabIdentityExtra();
+				m_imgBackground_Front = QPixmap( ":/images/Images/Background_IDFront.jpg" ); // background
+				m_imgBackground_Back = QPixmap( ":/images/Images/Background_IDBack.jpg" ); // background
 			}
-			refreshTabCertificates();
-			refreshTabCardPin();
-			refreshTabInfo();
+			else
+			{
+			}
 		}
-		break;
+		refreshTabCertificates();
+		refreshTabCardPin();
+		refreshTabInfo();
+	}
+	break;
 
 	case BEID_CARDTYPE_SIS:
 		refreshTabInfo();
@@ -3793,9 +3825,9 @@ void MainWnd::showTabs()
 		m_imgBackground_Back = QPixmap( ":/images/Images/Background_SisBack.jpg" ); // background
 
 		break;
-		
+
 	default:
-			break;
+		break;
 	}
 
 	setLanguage();
@@ -3804,7 +3836,7 @@ void MainWnd::showTabs()
 	// set the tabs to the first visible tab
 	// set the widget stack to the tabs (not to the splash screen)
 	//------------------------------------------------------
-//	m_ui.tabWidget_Identity->setCurrentIndex(0);
+	//	m_ui.tabWidget_Identity->setCurrentIndex(0);
 	m_ui.stackedWidget->setCurrentIndex(1);
 }
 
@@ -3825,12 +3857,12 @@ void MainWnd::Show_Identity_Card(BEID_EIDCard& Card)
 	LoadDataID(Card);
 	showTabs();
 	enableFileMenu();
-/*	bool bOCSPCheckEnabled = false;
+	/*	bool bOCSPCheckEnabled = false;
 	if (!m_virtReaderContext)
 	{
 		bOCSPCheckEnabled = true;
 	}
-	*/
+	 */
 }
 
 void MainWnd::Show_Address_Card(BEID_EIDCard& Card)
@@ -3980,10 +4012,10 @@ void MainWnd::fillCertificateList( void )
 			on_treeCert_itemClicked((QTreeCertItem *)itemList[0], 0);
 		}
 	}
-// 	catch (BEID_ExNoCardPresent &e)
-// 	{
-// 		return;
-// 	}
+	// 	catch (BEID_ExNoCardPresent &e)
+	// 	{
+	// 		return;
+	// 	}
 	catch(BEID_ExCertNoRoot &e)
 	{
 		long err = e.GetError();
@@ -4273,9 +4305,9 @@ QString MainWnd::getFinalLinkTarget(QString baseName)
 	{
 		baseName = info.symLinkTarget();
 		baseName = getFinalLinkTarget(baseName);
-//QMessageBox::information(this,"debug_getFinalLinkTarget",baseName);		
+		//QMessageBox::information(this,"debug_getFinalLinkTarget",baseName);
 	}
-	
+
 	return baseName;
 }
 
@@ -4409,7 +4441,7 @@ void MainWnd::fillSoftwareInfo( void )
 				QDir fileInfo(path,thisFile);
 				//QStringList theFiles = fileInfo.entryList();
 				QFileInfoList theFiles = fileInfo.entryInfoList();
-				
+
 				if (theFiles.size()>0)
 				{
 					QString version;
@@ -4418,7 +4450,7 @@ void MainWnd::fillSoftwareInfo( void )
 					caption ="debug_before_getFinalLinkTarget";
 					baseName = getFinalLinkTarget(baseName);
 					caption = "debug_after_getFinalLinkTarget";
-					
+
 					//--------------------------------
 					// abcdefg.x.y.z.dylib
 					// +-----+             == basename
@@ -4429,10 +4461,10 @@ void MainWnd::fillSoftwareInfo( void )
 					//            - ".dylib".size()
 					//--------------------------------
 					QFileInfo info(baseName);
-			
+
 					version = info.fileName();
 					version = version.mid(info.baseName().size()+1,version.size()-(info.baseName().size()+1)-QString(".dylib").size());
-										
+
 					softwareInfo[thisFile]=QString(version);
 				}
 			}
@@ -4522,7 +4554,7 @@ void MainWnd::fillSoftwareInfo( void )
 		m_ui.tblInfo->setItem( RowNr, ColNr, newItem );
 	}
 
-	*/
+	 */
 }
 
 //**************************************************
@@ -4583,7 +4615,7 @@ void MainWnd::fillCardVersionInfo( BEID_EIDCard& Card )
 	labels.push_back(tr("Value"));
 
 	m_ui.tblCardAndPIN->setHorizontalHeaderLabels(labels);
-	*/
+	 */
 }
 
 //**************************************************
@@ -4845,7 +4877,7 @@ void MainWnd::refreshTabIdentityExtra()
 	m_ui.txtIdentityExtra_ValidFrom_Until->setAccessibleName( CardFields[CARD_VALIDFROM] + " - " + CardFields[CARD_VALIDUNTIL] );
 
 	tFieldMap& PersonExtraFields = m_CI_Data.m_PersonInfo.m_PersonExtraInfo.getFields();
-	
+
 	QMap<QString,QString> SpecialStatus;
 	SpecialStatus["0"] = tr("none");
 	SpecialStatus["1"] = tr("white cane");
@@ -4873,20 +4905,20 @@ void MainWnd::refreshTabIdentityExtra()
 	int FieldCnt = Remarks.size();
 	if (FieldCnt>0)
 	{
-//		m_ui.txtIdentityExtra_Remarks1->setText(Remarks[idx++]);
-//		m_ui.txtIdentityExtra_Remarks1->setAccessibleName(Remarks[idx++]);
+		//		m_ui.txtIdentityExtra_Remarks1->setText(Remarks[idx++]);
+		//		m_ui.txtIdentityExtra_Remarks1->setAccessibleName(Remarks[idx++]);
 		FieldCnt--;
 	}
 	if (FieldCnt>0)
 	{
-//		m_ui.txtIdentityExtra_Remarks2->setText(Remarks[idx++]);
-//		m_ui.txtIdentityExtra_Remarks2->setAccessibleName(Remarks[idx++]);
+		//		m_ui.txtIdentityExtra_Remarks2->setText(Remarks[idx++]);
+		//		m_ui.txtIdentityExtra_Remarks2->setAccessibleName(Remarks[idx++]);
 		FieldCnt--;
 	}
 	if (FieldCnt>0)
 	{
-//		m_ui.txtIdentityExtra_Remarks3->setText(Remarks[idx++]);
-//		m_ui.txtIdentityExtra_Remarks3->setAccessibleName(Remarks[idx++]);
+		//		m_ui.txtIdentityExtra_Remarks3->setText(Remarks[idx++]);
+		//		m_ui.txtIdentityExtra_Remarks3->setAccessibleName(Remarks[idx++]);
 		FieldCnt--;
 	}
 
@@ -5085,38 +5117,38 @@ void MainWnd::clearTabCertificates( void )
 //*****************************************************
 void MainWnd::clearTabAddress( void )
 { 
-       m_ui.txtAddress_Municipality->setText            ( "" );
-       m_ui.txtAddress_Municipality->setAccessibleName ( "" );
-       m_ui.txtAddress_District->setText                       ( "" );
-       m_ui.txtAddress_District->setAccessibleName ( "" );
-       m_ui.txtAddress_CivilParish->setText                    ( "" );
-       m_ui.txtAddress_CivilParish->setAccessibleName ( "" );
-       m_ui.txtAddress_StreetType1->setText                    ( "" );
-       m_ui.txtAddress_StreetType1->setAccessibleName ( "" );
-       m_ui.txtAddress_StreetType2->setText                    ( "" );
-       m_ui.txtAddress_StreetType2->setAccessibleName ( "" );
-       m_ui.txtAddress_StreetName->setText                     ( "" );
-       m_ui.txtAddress_StreetName->setAccessibleName ( "" );
-       m_ui.txtAddress_BuildingType1->setText                  ( "" );
-       m_ui.txtAddress_BuildingType1->setAccessibleName ( "" );
-       m_ui.txtAddress_BuildingType2->setText                  ( "" );
-       m_ui.txtAddress_BuildingType2->setAccessibleName ( "" );
-       m_ui.txtAddress_DoorNo->setText                 ( "" );
-       m_ui.txtAddress_DoorNo->setAccessibleName ( "" );
-       m_ui.txtAddress_Floor->setText                  ( "" );
-       m_ui.txtAddress_Floor->setAccessibleName ( "" );
-       m_ui.txtAddress_Side->setText                   ( "" );
-       m_ui.txtAddress_Side->setAccessibleName ( "" );
-       m_ui.txtAddress_Locality->setText                       ( "" );
-       m_ui.txtAddress_Locality->setAccessibleName ( "" );
-       m_ui.txtAddress_Zip4->setText                   ( "" );
-       m_ui.txtAddress_Zip4->setAccessibleName ( "" );
-       m_ui.txtAddress_Zip3->setText                   ( "" );
-       m_ui.txtAddress_Zip3->setAccessibleName ( "" );
-       m_ui.txtAddress_Place->setText                  ( "" );
-       m_ui.txtAddress_Place->setAccessibleName ( "" );
-       m_ui.txtAddress_PostalLocality->setText                 ( "" );
-       m_ui.txtAddress_PostalLocality->setAccessibleName ( "" );
+	m_ui.txtAddress_Municipality->setText            ( "" );
+	m_ui.txtAddress_Municipality->setAccessibleName ( "" );
+	m_ui.txtAddress_District->setText                       ( "" );
+	m_ui.txtAddress_District->setAccessibleName ( "" );
+	m_ui.txtAddress_CivilParish->setText                    ( "" );
+	m_ui.txtAddress_CivilParish->setAccessibleName ( "" );
+	m_ui.txtAddress_StreetType1->setText                    ( "" );
+	m_ui.txtAddress_StreetType1->setAccessibleName ( "" );
+	m_ui.txtAddress_StreetType2->setText                    ( "" );
+	m_ui.txtAddress_StreetType2->setAccessibleName ( "" );
+	m_ui.txtAddress_StreetName->setText                     ( "" );
+	m_ui.txtAddress_StreetName->setAccessibleName ( "" );
+	m_ui.txtAddress_BuildingType1->setText                  ( "" );
+	m_ui.txtAddress_BuildingType1->setAccessibleName ( "" );
+	m_ui.txtAddress_BuildingType2->setText                  ( "" );
+	m_ui.txtAddress_BuildingType2->setAccessibleName ( "" );
+	m_ui.txtAddress_DoorNo->setText                 ( "" );
+	m_ui.txtAddress_DoorNo->setAccessibleName ( "" );
+	m_ui.txtAddress_Floor->setText                  ( "" );
+	m_ui.txtAddress_Floor->setAccessibleName ( "" );
+	m_ui.txtAddress_Side->setText                   ( "" );
+	m_ui.txtAddress_Side->setAccessibleName ( "" );
+	m_ui.txtAddress_Locality->setText                       ( "" );
+	m_ui.txtAddress_Locality->setAccessibleName ( "" );
+	m_ui.txtAddress_Zip4->setText                   ( "" );
+	m_ui.txtAddress_Zip4->setAccessibleName ( "" );
+	m_ui.txtAddress_Zip3->setText                   ( "" );
+	m_ui.txtAddress_Zip3->setAccessibleName ( "" );
+	m_ui.txtAddress_Place->setText                  ( "" );
+	m_ui.txtAddress_Place->setAccessibleName ( "" );
+	m_ui.txtAddress_PostalLocality->setText                 ( "" );
+	m_ui.txtAddress_PostalLocality->setAccessibleName ( "" );
 }
 
 
@@ -5176,12 +5208,12 @@ void MainWnd::refreshTabCardPin( void )
 			case BEID_CARDTYPE_EID:
 			case BEID_CARDTYPE_KIDS:
 			case BEID_CARDTYPE_FOREIGNER:
-				{
-					BEID_EIDCard&		Card		   = ReaderContext.getEIDCard();
-					fillCardVersionInfo( Card );
-					m_ui.txtPIN_Status->setText(tr("Not available"));
-					m_ui.txtPIN_Status->setAccessibleName(tr("Not available"));
-				}
+			{
+				BEID_EIDCard&		Card		   = ReaderContext.getEIDCard();
+				fillCardVersionInfo( Card );
+				m_ui.txtPIN_Status->setText(tr("Not available"));
+				m_ui.txtPIN_Status->setAccessibleName(tr("Not available"));
+			}
 			case BEID_CARDTYPE_SIS:
 			case BEID_CARDTYPE_UNKNOWN:
 			default:
@@ -5281,9 +5313,9 @@ void MainWnd::setLanguageMenu( GenPur::UI_LANGUAGE language)
 	//----------------------------------------------
 
 	for (QMap<GenPur::UI_LANGUAGE,QAction*>::iterator it = m_LanguageActions.begin()
-		; it != m_LanguageActions.end()
-		; it++
-		)
+			; it != m_LanguageActions.end()
+			; it++
+	)
 	{
 		(*it)->setChecked(false);
 	}
@@ -5483,78 +5515,78 @@ void MainWnd::customEvent( QEvent* pEvent )
 	}
 	else
 #endif 
-	if( pEvent->type() == QEvent::User )
-	{
-		try
+		if( pEvent->type() == QEvent::User )
 		{
- 			if (!m_Pop)
- 			{
-				pEvent->accept();
-				return;
- 			}
-
-			//----------------------------------------------------------
-			// look what card reader sent the event and get the picture from
-			// the card, and show the picture
-			//----------------------------------------------------------
-			PopupEvent*	pPopupEvent	= (PopupEvent*)pEvent;
-
-			setCorrespondingTrayIcon(pPopupEvent);
-
-			if (pPopupEvent->getType() ==  PopupEvent::ET_CARD_REMOVED && m_CI_Data.m_cardReader==pPopupEvent->getReaderName())
+			try
 			{
-				setEnabledPinButtons(false);
-				setEnabledCertifButtons(false);
-				enableFileSave(false);
-			}
-			//----------------------------------------------------------
-			// card has been changed in a reader
-			//----------------------------------------------------------
-			if (pPopupEvent->getType() ==  PopupEvent::ET_CARD_CHANGED)
-			{
-				QString	cardReader = pPopupEvent->getReaderName();
-
-				//----------------------------------------------------------
-				// show a message in the status bar that a card has been inserted
-				//----------------------------------------------------------
-				QString statusMsg;
-				statusMsg += tr("Leitor de cartoes: ");
-				statusMsg += pPopupEvent->getReaderName();
-				m_ui.statusBar->showMessage(statusMsg,m_STATUS_MSG_TIME);
-
-				BEID_ReaderContext& readerContext	= ReaderSet.getReaderByName(cardReader.toLatin1());
-
-				if (m_Settings.getShowNotification())
+				if (!m_Pop)
 				{
-					QString title(tr("Cartao Inserido:"));
-					m_pTrayIcon->showMessage ( title, statusMsg, QSystemTrayIcon::Information) ;
-				}
-
-				//----------------------------------------------------------
-				// if no card is present, then just enable the reload button
-				//----------------------------------------------------------
-				if (!readerContext.isCardPresent())
-				{
-					setEnableReload(true);
 					pEvent->accept();
 					return;
 				}
 
 				//----------------------------------------------------------
-				// This custom event is arrived since a card is changed in a reader
-				// check in which reader it is and disable the PIN/CERT buttons
-				// to avoid inconsistencies.
-				// We check on the card data pointer to verify if this is the first time
-				// we have an event for 'card-changed'. The first time the pCard is NULL
-				// meaning that no card was read yet, and thus no inconsistencies can exist.
+				// look what card reader sent the event and get the picture from
+				// the card, and show the picture
 				//----------------------------------------------------------
-				BEID_CardType cardType = readerContext.getCardType();
+				PopupEvent*	pPopupEvent	= (PopupEvent*)pEvent;
 
-				switch( cardType )
+				setCorrespondingTrayIcon(pPopupEvent);
+
+				if (pPopupEvent->getType() ==  PopupEvent::ET_CARD_REMOVED && m_CI_Data.m_cardReader==pPopupEvent->getReaderName())
 				{
-				case BEID_CARDTYPE_EID:
-				case BEID_CARDTYPE_KIDS:
-				case BEID_CARDTYPE_FOREIGNER:
+					setEnabledPinButtons(false);
+					setEnabledCertifButtons(false);
+					enableFileSave(false);
+				}
+				//----------------------------------------------------------
+				// card has been changed in a reader
+				//----------------------------------------------------------
+				if (pPopupEvent->getType() ==  PopupEvent::ET_CARD_CHANGED)
+				{
+					QString	cardReader = pPopupEvent->getReaderName();
+
+					//----------------------------------------------------------
+					// show a message in the status bar that a card has been inserted
+					//----------------------------------------------------------
+					QString statusMsg;
+					statusMsg += tr("Leitor de cartoes: ");
+					statusMsg += pPopupEvent->getReaderName();
+					m_ui.statusBar->showMessage(statusMsg,m_STATUS_MSG_TIME);
+
+					BEID_ReaderContext& readerContext	= ReaderSet.getReaderByName(cardReader.toLatin1());
+
+					if (m_Settings.getShowNotification())
+					{
+						QString title(tr("Cartao Inserido:"));
+						m_pTrayIcon->showMessage ( title, statusMsg, QSystemTrayIcon::Information) ;
+					}
+
+					//----------------------------------------------------------
+					// if no card is present, then just enable the reload button
+					//----------------------------------------------------------
+					if (!readerContext.isCardPresent())
+					{
+						setEnableReload(true);
+						pEvent->accept();
+						return;
+					}
+
+					//----------------------------------------------------------
+					// This custom event is arrived since a card is changed in a reader
+					// check in which reader it is and disable the PIN/CERT buttons
+					// to avoid inconsistencies.
+					// We check on the card data pointer to verify if this is the first time
+					// we have an event for 'card-changed'. The first time the pCard is NULL
+					// meaning that no card was read yet, and thus no inconsistencies can exist.
+					//----------------------------------------------------------
+					BEID_CardType cardType = readerContext.getCardType();
+
+					switch( cardType )
+					{
+					case BEID_CARDTYPE_EID:
+					case BEID_CARDTYPE_KIDS:
+					case BEID_CARDTYPE_FOREIGNER:
 					{
 						try
 						{
@@ -5593,35 +5625,35 @@ void MainWnd::customEvent( QEvent* pEvent )
 						}
 					}
 					break;
-				case BEID_CARDTYPE_SIS:
-					//------------------------------------------------
-					// first load the data if necessary, because this will check the test cards as well
-					// and will ask if test cards are allowed
-					//------------------------------------------------
-					if ( m_Settings.getAutoCardReading() )
-					{
-						m_CI_Data.Reset(); 
-						loadCardData();
-					}
-					break;
-				case BEID_CARDTYPE_UNKNOWN:
+					case BEID_CARDTYPE_SIS:
+						//------------------------------------------------
+						// first load the data if necessary, because this will check the test cards as well
+						// and will ask if test cards are allowed
+						//------------------------------------------------
+						if ( m_Settings.getAutoCardReading() )
+						{
+							m_CI_Data.Reset();
+							loadCardData();
+						}
+						break;
+					case BEID_CARDTYPE_UNKNOWN:
 					{
 						clearGuiContent();
 						QString msg(tr("Unknown card type"));
 						ShowBEIDError( 0, msg );
 					}
-				default:
-					break;
+					default:
+						break;
+					}
 				}
+				pEvent->accept();
 			}
-			pEvent->accept();		
+			catch (BEID_Exception& e)
+			{
+				long err = e.GetError();
+				err = err;
+			}
 		}
-		catch (BEID_Exception& e)
-		{
-			long err = e.GetError();
-			err = err;
-		}
-	}
 	setEnableReload(true);
 }
 //**************************************************
@@ -5722,8 +5754,8 @@ void MainWnd::changeEvent(QEvent *event)
 // Quit the application.
 // Release the SDK before stopping.
 //**************************************************
-void MainWnd::on_actionE_xit_triggered(void)
-{
+void MainWnd::quit_application(){
+
 	try
 	{
 		hide();
@@ -5757,6 +5789,14 @@ void MainWnd::on_actionE_xit_triggered(void)
 		ShowBEIDError( 0, msg );
 	}
 }
+
+
+
+
+void MainWnd::on_actionE_xit_triggered(void)
+{
+	quit_application();
+}
 //**************************************************
 // set the event callback functions
 //**************************************************
@@ -5772,13 +5812,13 @@ void MainWnd::setEventCallbacks( void )
 		for (size_t Ix=0; Ix<maxcount; Ix++)
 		{
 			void (*fCallback)(long lRet, unsigned long ulState, void* pCBData);
-	
+
 			const char*			 readerName		= ReaderSet.getReaderName(Ix);
 			BEID_ReaderContext&  readerContext  = ReaderSet.getReaderByNum(Ix);
 			CallBackData*		 pCBData		= new CallBackData(readerName,this);
-	
+
 			fCallback = (void (*)(long,unsigned long,void *))&cardEventCallback;
-	
+
 			m_callBackHandles[readerName] = readerContext.SetEventCallback(fCallback,pCBData);
 			m_callBackData[readerName]	  = pCBData;
 		}
@@ -5814,15 +5854,15 @@ void MainWnd::ShowBEIDError( unsigned long ErrCode, QString const& msg )
 //**************************************************
 BOOL MainWnd::UseMinidriver( void )
 {
-    OSVERSIONINFO osvi;
-    BOOL bIsWindowsVistaorLater;
+	OSVERSIONINFO osvi;
+	BOOL bIsWindowsVistaorLater;
 
-    ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
-    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+	ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
+	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
-    GetVersionEx(&osvi);
+	GetVersionEx(&osvi);
 
-    bIsWindowsVistaorLater = (osvi.dwMajorVersion >= 6);
+	bIsWindowsVistaorLater = (osvi.dwMajorVersion >= 6);
 
 	return bIsWindowsVistaorLater;
 }
@@ -5841,10 +5881,10 @@ bool MainWnd::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
 		return true;
 
 	if(!(CertGetCertificateContextProperty(
-		pCertContext,		// A pointer to the certificate where the property will be set.
-		dwPropId,           // An identifier of the property to get.
-		NULL,               // NULL on the first call to get the length.
-		&cbData)))          // The number of bytes that must be allocated for the structure.
+			pCertContext,		// A pointer to the certificate where the property will be set.
+			dwPropId,           // An identifier of the property to get.
+			NULL,               // NULL on the first call to get the length.
+			&cbData)))          // The number of bytes that must be allocated for the structure.
 	{
 		if (GetLastError() != CRYPT_E_NOT_FOUND) // The certificate does not have the specified property.
 			return false;

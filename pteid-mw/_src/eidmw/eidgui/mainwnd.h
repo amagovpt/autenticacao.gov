@@ -250,6 +250,13 @@ private slots:
 //TOOLBAR MENUS
 	void on_btn_menu_card_clicked( void );
 
+//SUBMENUS Toolbar
+
+	void hide_submenus( void );
+
+
+	void quit_application();
+
 
 
 	void OpenSelectedEid( const QString& fileName );
