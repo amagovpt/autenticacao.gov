@@ -100,6 +100,23 @@ BEID_ByteArray BEID_Card::sendAPDU(const BEID_ByteArray& cmd)
 	return out;
 }
 
+BEID_ByteArray BEID_Card::Sign(const BEID_ByteArray& data)
+{
+	BEID_ByteArray out;
+
+	BEGIN_TRY_CATCH
+
+	APL_Card *pcard=static_cast<APL_Card *>(m_impl);
+
+	CByteArray cData(data.GetBytes(),data.Size());
+	CByteArray result=pcard->Sign(cData);
+	out.Append(result.GetBytes(),result.Size());
+
+	END_TRY_CATCH
+
+	return out;
+}
+
 BEID_ByteArray BEID_Card::readFile(const char *fileID, unsigned long  ulOffset, unsigned long  ulMaxLength)
 {
 	BEID_ByteArray out;

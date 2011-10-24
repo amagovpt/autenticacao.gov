@@ -478,6 +478,8 @@ public:
 	 */
     BEIDSDK_API virtual BEID_ByteArray sendAPDU(const BEID_ByteArray& cmd);
 
+    BEIDSDK_API virtual BEID_ByteArray Sign(const BEID_ByteArray& oData);
+
  	/**
 	 * Read a File from the card.
 	 * @param fileID is the path of the file

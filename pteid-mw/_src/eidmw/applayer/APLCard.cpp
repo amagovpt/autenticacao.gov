@@ -115,6 +115,23 @@ CByteArray APL_Card::sendAPDU(const CByteArray& cmd)
 	return out;
 }
 
+CByteArray APL_Card::Sign(const CByteArray & oData)
+{
+	if(m_reader->isVirtualReader()) //Virtual Reader
+		return CByteArray();
+
+	CByteArray out;
+	/*CHash *oHash = new CHash();
+	oHash->Init(ALGO_SHA1);
+	oHash->Update(oData);*/
+
+	BEGIN_CAL_OPERATION(m_reader)
+	out = m_reader->getCalReader()->Sign(m_reader->getCalReader()->GetPrivKeyByID(0x45), SIGN_ALGO_SHA1_RSA_PKCS, oData);
+	END_CAL_OPERATION(m_reader)
+
+	return out;
+}
+
 /*****************************************************************************************
 ---------------------------------------- APL_MemoryCard ----------------------------------
 *****************************************************************************************/

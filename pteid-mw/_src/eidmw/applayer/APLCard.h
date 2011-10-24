@@ -105,6 +105,8 @@ public:
 
     EIDMW_APL_API virtual CByteArray sendAPDU(const CByteArray& cmd);
 
+    EIDMW_APL_API virtual CByteArray Sign(const CByteArray & oData);
+
 	/**
 	  * Read a file on the card 
 	  *

@@ -843,7 +843,7 @@ return $jnicall;
 %javaexception("BEID_Exception") getDocument		JAVA_CODE_THROW
 %javaexception("BEID_Exception") getRawData		JAVA_CODE_THROW
 %javaexception("BEID_Exception") sendAPDU			JAVA_CODE_THROW
-%javaexception("BEID_Exception") sign			JAVA_CODE_THROW
+%javaexception("BEID_Exception") Sign			JAVA_CODE_THROW
 %javaexception("BEID_Exception") readFile			JAVA_CODE_THROW
 %javaexception("BEID_Exception") writeFile			JAVA_CODE_THROW
 
