@@ -115,6 +115,8 @@ DWORD WINAPI   CardGetContainerInfo
                   __in      PCONTAINER_INFO  pContainerInfo
                )
 {
+
+	/*TODO: O BeidReadCert() esta broken, como consequencia este falha...   */
    DWORD                dwReturn  = 0;
    DWORD                dwVersion = 0;
    DWORD                cbCertif = 0;
@@ -201,6 +203,7 @@ DWORD WINAPI   CardGetContainerInfo
 		LogTrace(LOGTYPE_ERROR, WHERE, "BeidGetPubKey returned [%d]", dwReturn);
 		CLEANUP(SCARD_E_UNEXPECTED);
 	}
+	/*TODO??? Nao se percebe isto, estamos a devolver a chave de auth sempre vazia... */
 	pContainerInfo->cbKeyExPublicKey = 0;
 	pContainerInfo->pbKeyExPublicKey = NULL;
 

@@ -429,7 +429,7 @@ cleanup:
 DWORD CardGetCacheMode(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
 {
    DWORD    dwReturn    = 0;
-	DWORD    dwCacheMode = CP_CACHE_MODE_SESSION_ONLY;// CP_CACHE_MODE_NO_CACHE;
+	DWORD    dwCacheMode = CP_CACHE_MODE_NO_CACHE;// CP_CACHE_MODE_NO_CACHE;
 
    LogTrace(LOGTYPE_INFO, WHERE, "GET Property: [CP_CARD_CACHE_MODE]");
 
@@ -690,7 +690,7 @@ DWORD CardGetPinInfo(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pd
 	*  Check CCID features for external pin pad
 	**********************************************/
 	CCIDgetFeatures(&(CCIDfeatures), pCardData->hScard);
-	if (CCIDfeatures.VERIFY_PIN_START != 0)
+	if ((CCIDfeatures.VERIFY_PIN_START != 0) || (CCIDfeatures.VERIFY_PIN_DIRECT != 0))
 		pinInfo.PinType                           = ExternalPinType;
 	else
 		pinInfo.PinType                           = AlphaNumericPinType;

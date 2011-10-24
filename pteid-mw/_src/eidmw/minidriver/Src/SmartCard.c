@@ -20,17 +20,11 @@
 /****************************************************************************************************/
 
 #include "globmdrv.h"
-
 #include "log.h"
 #include "smartcard.h"
-
-/*#ifndef __MINGW32__*/
 #include "externalpinui.h"
-/*#endif*/
 
-/* we need to include a newer version of commctrl than the one provided by mingw*/
-#include <commctrl-mingw.h>
-
+#include <commctrl.h>
 /****************************************************************************************************/
 
 #define CHALLENGE_DATA_SIZE         16
@@ -39,6 +33,7 @@
 #define BELPIC_PIN_BUF_SIZE         8
 #define BELPIC_MIN_USER_PIN_LEN     4
 #define BELPIC_MAX_USER_PIN_LEN     12
+/*FIXME: Set a global var with the CardType */
 #define BELPIC_PAD_CHAR			    0xFF
 #define BELPIC_KEY_REF_NONREP		0x83
 
@@ -112,15 +107,16 @@ DWORD BeidAuthenticate(PCARD_DATA   pCardData,
 {
    DWORD             dwReturn  = 0;
 
-   SCARD_IO_REQUEST  ioSendPci = {1, sizeof(SCARD_IO_REQUEST)};
-   SCARD_IO_REQUEST  ioRecvPci = {1, sizeof(SCARD_IO_REQUEST)};
+   SCARD_IO_REQUEST  ioSendPci = {0, sizeof(SCARD_IO_REQUEST)};
+   SCARD_IO_REQUEST  ioRecvPci = {0, sizeof(SCARD_IO_REQUEST)};
 
    unsigned char     Cmd[128];
    unsigned int      uiCmdLg   = 0;
    unsigned char     recvbuf[256];
    unsigned long     recvlen   = sizeof(recvbuf);
    BYTE              SW1, SW2;
-   int               i         = 0;
+   unsigned int              i = 0;
+   unsigned int				 j = 0;
 
    LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
@@ -145,36 +141,37 @@ DWORD BeidAuthenticate(PCARD_DATA   pCardData,
       LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [cbPin]");
       CLEANUP(SCARD_W_WRONG_CHV);
    }
-
+  
    /**********/
    /* Log On */
    /**********/
-   Cmd [0] = 0x00;
-   Cmd [1] = 0x20; /* VERIFY COMMAND */
-   Cmd [2] = 0x00;
-   Cmd [3] = 0x01;
-   Cmd [4] = 0x08;
-
-   /* Fill verification data with padding character */
-   for ( i = 0 ; i < 0x08 ; i++ )
+   Cmd[0] = 0x00;
+   Cmd[1] = 0x20;  /* VERIFY COMMAND */
+   Cmd[2] = 0x00;
+   Cmd[3] = 0x01;  /* Authentication PIN (in my IAS card at least) */
+   Cmd[4] = 0x08;  /* PIN Length (including padding) */
+   
+   while(i < 0x08)
    {
-      Cmd [5 + i] = BELPIC_PAD_CHAR;
+      if(i < cbPin)
+		Cmd[i+5] = pbPin[i];
+	  else
+		  Cmd[i+5] = 0x2F;
+	  i++;
    }
-
-   Cmd [5] = 0x20 + (unsigned char)cbPin;  /* 0x20 + length of pin */
-   for ( i = 0 ; i < (unsigned char) cbPin ; i++ )
+	
+   /*DEBUG */
+   printf("Verify PIN APDU: ");
+     
+   while ( j < 22)
    {
-      if ( (i % 2) == 0 )
-      {
-			// 0x30 = ASCII '0'
-			Cmd [6 + (i/2)] = (((pbPin[i] - 0x30) << 4) & 0xF0);
-      }
-      else
-      {
-		  // 0x30 = ASCII '0'
-          Cmd [6 + (i/2)] = (Cmd[6 + (i/2)] & 0xF0) + ((pbPin[i] - 0x30) & 0x0F);
-      }
+	 printf("%x ", (unsigned int)Cmd[j]);
+	 j++;
    }
+   
+   printf("\n");
+     
+   
    uiCmdLg = 13;
    recvlen = sizeof(recvbuf);
 
@@ -187,12 +184,14 @@ DWORD BeidAuthenticate(PCARD_DATA   pCardData,
                             &recvlen);
    SW1 = recvbuf[recvlen-2];
    SW2 = recvbuf[recvlen-1];
-   BeidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
+
+   /*BeidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
    if ( dwReturn != SCARD_S_SUCCESS )
    {
       LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit errorcode: [0x%02X]", dwReturn);
       CLEANUP(dwReturn);
    }
+   */
 
    if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
    {
@@ -210,6 +209,7 @@ DWORD BeidAuthenticate(PCARD_DATA   pCardData,
       else if ( (SW1 == 0x69) && (SW2 == 0x83) )
       {
          dwReturn = SCARD_W_CHV_BLOCKED;
+		 LogTrace(LOGTYPE_ERROR, WHERE, "Card Blocked, watch out!!");
       }
    }
    else
@@ -228,66 +228,70 @@ cleanup:
 /****************************************************************************************************/
 
 #define WHERE "BeidAuthenticateExternal"
+
+//Helper macros to ease the transition to 3 arg version of swprintf
+#define WRITE_MAIN_INSTRUCTION(MESSAGE) swprintf(wchMainInstruction, 100, MESSAGE)
+#define WRITE_ERROR_MESSAGE(MESSAGE) swprintf(wchErrorMessage, 500, MESSAGE)
+
 DWORD BeidAuthenticateExternal(
-					PCARD_DATA   pCardData, 
-                    PDWORD       pcAttemptsRemaining,
-					BOOL		 bSilent
-					) 
+	PCARD_DATA   pCardData, 
+	PDWORD       pcAttemptsRemaining,
+	BOOL		 bSilent
+	) 
 {
-   DWORD						dwReturn  = 0;
-/* #ifndef __MINGW32__*/
-   SCARD_IO_REQUEST				ioSendPci = {1, sizeof(SCARD_IO_REQUEST)};
-   SCARD_IO_REQUEST				ioRecvPci = {1, sizeof(SCARD_IO_REQUEST)};
+	DWORD						dwReturn  = 0;
+	SCARD_IO_REQUEST				ioSendPci = {1, sizeof(SCARD_IO_REQUEST)};
+	SCARD_IO_REQUEST				ioRecvPci = {1, sizeof(SCARD_IO_REQUEST)};
 
-   PIN_VERIFY_STRUCTURE			verifyCommand;
+	PIN_VERIFY_STRUCTURE			verifyCommand;
 
-   unsigned int					uiCmdLg   = 0;
-   unsigned char				recvbuf[256];
-   unsigned char				ucLastKey;
-   unsigned long				recvlen     = sizeof(recvbuf);
-   BYTE							SW1, SW2;
-   int							i           = 0;
-   int							offset		= 0;
-   DWORD						dwRetriesLeft, dwDataLen;
-   BOOL							bRetry      = TRUE;
-   int							nButton;
-   HRESULT						hResult;
+	unsigned int					uiCmdLg   = 0;
+	unsigned char				recvbuf[256];
+	unsigned char				ucLastKey;
+	unsigned long				recvlen     = sizeof(recvbuf);
+	BYTE							SW1, SW2;
+	int							i           = 0;
+	int							offset		= 0;
+	DWORD						dwRetriesLeft, dwDataLen;
+	BOOL							bRetry      = TRUE;
+	int							nButton;
+	HRESULT						hResult;
 
-   EXTERNAL_PIN_INFORMATION		externalPinInfo;
-   HANDLE						DialogThreadHandle;
-
-
-   wchar_t						wchErrorMessage[500];
-   wchar_t						wchMainInstruction[100];
-     
-   
-   LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
-    
-   /********************/
-   /* Check Parameters */
-   /********************/
-   if ( pCardData == NULL )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
-      CLEANUP(SCARD_E_INVALID_PARAMETER);
-   }
+	EXTERNAL_PIN_INFORMATION		externalPinInfo;
+	HANDLE						DialogThreadHandle;
 
 
-   /*********************/
-   /* External PIN Info */
-   /*********************/
-    externalPinInfo.hCardHandle = pCardData->hScard;
+	wchar_t						wchErrorMessage[500];
+	wchar_t						wchMainInstruction[100];
+
+
+	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
+
+	/********************/
+	/* Check Parameters */
+	/********************/
+	if ( pCardData == NULL )
+	{
+		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
+		CLEANUP(SCARD_E_INVALID_PARAMETER);
+	}
+
+
+	/*********************/
+	/* External PIN Info */
+	/*********************/
+	externalPinInfo.hCardHandle = pCardData->hScard;
 	CCIDgetFeatures(&(externalPinInfo.features), externalPinInfo.hCardHandle);
 
 	/*********************/
-    /* Get Parent Window */
+	/* Get Parent Window */
 	/*********************/
 	dwReturn = CardGetProperty(pCardData, 
-								CP_PARENT_WINDOW, 
-								(PBYTE) &(externalPinInfo.hwndParentWindow), 
-								sizeof(externalPinInfo.hwndParentWindow), 
-								&dwDataLen, 
-								0);
+		CP_PARENT_WINDOW, 
+		(PBYTE) &(externalPinInfo.hwndParentWindow), 
+		sizeof(externalPinInfo.hwndParentWindow), 
+		&dwDataLen, 
+		0);
 	if (dwReturn != 0) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "CardGetProperty Failed: %02X", dwReturn);
 		externalPinInfo.hwndParentWindow = NULL;
@@ -295,31 +299,31 @@ DWORD BeidAuthenticateExternal(
 
 
 	/*********************/
-    /* Get Pin Context String */
+	/* Get Pin Context String */
 	/*********************/		
 	dwReturn = CardGetProperty(pCardData, 
-								CP_PIN_CONTEXT_STRING, 
-								(PBYTE) externalPinInfo.lpstrPinContextString, 
-								sizeof(externalPinInfo.lpstrPinContextString), 
-								&dwDataLen, 
-								0);
+		CP_PIN_CONTEXT_STRING, 
+		(PBYTE) externalPinInfo.lpstrPinContextString, 
+		sizeof(externalPinInfo.lpstrPinContextString), 
+		&dwDataLen, 
+		0);
 	if (dwReturn != 0) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "CardGetProperty Failed: %02X", dwReturn);
 		wcscpy(externalPinInfo.lpstrPinContextString, L"");
 	}
 
-   /**********/
-   /* Log On */
-   /**********/
+	/**********/
+	/* Log On */
+	/**********/
 
-    createVerifyCommand(&verifyCommand);
+	createVerifyCommand(&verifyCommand);
 
-    uiCmdLg = sizeof(verifyCommand);
-    recvlen = sizeof(recvbuf);
-	   
-    while (bRetry) {
-	    bRetry = FALSE;
-	    nButton = -1;
+	uiCmdLg = sizeof(verifyCommand);
+	recvlen = sizeof(recvbuf);
+
+	while (bRetry) {
+		bRetry = FALSE;
+		nButton = -1;
 
 		// We introduce a short sleep before starting the PIN VERIFY procedure
 		// Reason: we do this for users with a combined keyboard/secure PIN pad smartcard reader
@@ -328,39 +332,65 @@ DWORD BeidAuthenticateExternal(
 		//   This sleep gives the user some time to release the Enter key.
 
 		Sleep(100);
-		dwReturn = SCardControl(pCardData->hScard, 
-							externalPinInfo.features.VERIFY_PIN_START, 
-                            &verifyCommand, 
-                            uiCmdLg,                              
-                            recvbuf, 
-                            recvlen,
-                            &recvlen);
-		if ( dwReturn != SCARD_S_SUCCESS )
+
+		if(externalPinInfo.features.VERIFY_PIN_DIRECT != 0)
 		{
-			LogTrace(LOGTYPE_ERROR, WHERE, "SCardControl errorcode: [0x%02X]", dwReturn);
-			CLEANUP(dwReturn);
+			externalPinInfo.iPinCharacters = 0;
+			externalPinInfo.cardState = CS_PINENTRY;
+			// show dialog
+			if (!bSilent)
+				DialogThreadHandle = CreateThread(NULL, 0, DialogThreadPinEntry, &externalPinInfo, 0, NULL);
+
+			dwReturn = SCardControl(pCardData->hScard, 
+				externalPinInfo.features.VERIFY_PIN_DIRECT, 
+				&verifyCommand, 
+				uiCmdLg,                              
+				recvbuf, 
+				recvlen,
+				&recvlen);
+
+			externalPinInfo.cardState = CS_PINENTERED;
+			if ( dwReturn != SCARD_S_SUCCESS )
+			{
+				LogTrace(LOGTYPE_ERROR, WHERE, "SCardControl errorcode: [0x%02X]", dwReturn);
+				CLEANUP(dwReturn);
+			}
 		}
-		externalPinInfo.iPinCharacters = 0;
-		externalPinInfo.cardState = CS_PINENTRY;
-		
-		// show dialog
-		if (!bSilent)
-			DialogThreadHandle = CreateThread(NULL, 0, DialogThreadPinEntry, &externalPinInfo, 0, NULL);
-		while (1) {
-			dwReturn = SCardControl(pCardData->hScard,
-				externalPinInfo.features.GET_KEY_PRESSED,
-				NULL,
-				0,
-				recvbuf,
+		else
+		{
+			dwReturn = SCardControl(pCardData->hScard, 
+				externalPinInfo.features.VERIFY_PIN_START, 
+				&verifyCommand, 
+				uiCmdLg,                              
+				recvbuf, 
 				recvlen,
 				&recvlen);
 			if ( dwReturn != SCARD_S_SUCCESS )
 			{
-			   LogTrace(LOGTYPE_ERROR, WHERE, "SCardControl errorcode: [0x%02X]", dwReturn);
-			   CLEANUP(dwReturn);
+				LogTrace(LOGTYPE_ERROR, WHERE, "SCardControl errorcode: [0x%02X]", dwReturn);
+				CLEANUP(dwReturn);
 			}
-			ucLastKey = recvbuf[0];
-			switch (recvbuf[0]) {
+			externalPinInfo.iPinCharacters = 0;
+			externalPinInfo.cardState = CS_PINENTRY;
+
+			// show dialog
+			if (!bSilent)
+				DialogThreadHandle = CreateThread(NULL, 0, DialogThreadPinEntry, &externalPinInfo, 0, NULL);
+			while (1) {
+				dwReturn = SCardControl(pCardData->hScard,
+					externalPinInfo.features.GET_KEY_PRESSED,
+					NULL,
+					0,
+					recvbuf,
+					recvlen,
+					&recvlen);
+				if ( dwReturn != SCARD_S_SUCCESS )
+				{
+					LogTrace(LOGTYPE_ERROR, WHERE, "SCardControl errorcode: [0x%02X]", dwReturn);
+					CLEANUP(dwReturn);
+				}
+				ucLastKey = recvbuf[0];
+				switch (recvbuf[0]) {
 				case 0x00:
 					// No key 
 					Sleep(200);
@@ -389,141 +419,142 @@ DWORD BeidAuthenticateExternal(
 				default:
 					//printf("Key pressed: 0x%x\n", bRecvBuffer[0]);
 					;
-			}
+				}
 
-		}
+			}
 endkeypress:
-		
-		externalPinInfo.cardState = CS_PINENTERED;
-		dwReturn = SCardControl(pCardData->hScard,
-			externalPinInfo.features.VERIFY_PIN_FINISH,
-            NULL,
-            0,
-            recvbuf,
-            sizeof(recvbuf),
-            &recvlen);
-		if ( dwReturn != SCARD_S_SUCCESS )
-        {
-           LogTrace(LOGTYPE_ERROR, WHERE, "SCardControl errorcode: [0x%02X]", dwReturn);
-           CLEANUP(dwReturn);
-        }
-		SW1 = recvbuf[recvlen-2];
-		SW2 = recvbuf[recvlen-1];
-		if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
-		{
-			dwReturn = SCARD_W_WRONG_CHV;
-			LogTrace(LOGTYPE_ERROR, WHERE, "CardAuthenticateEx Failed: [0x%02X][0x%02X]", SW1, SW2);
-			if (SW1 == 0x64) {
-				//error during pin entry
-				switch(SW2){
+
+			externalPinInfo.cardState = CS_PINENTERED;
+			dwReturn = SCardControl(pCardData->hScard,
+				externalPinInfo.features.VERIFY_PIN_FINISH,
+				NULL,
+				0,
+				recvbuf,
+				sizeof(recvbuf),
+				&recvlen);
+			if ( dwReturn != SCARD_S_SUCCESS )
+			{
+				LogTrace(LOGTYPE_ERROR, WHERE, "SCardControl errorcode: [0x%02X]", dwReturn);
+				CLEANUP(dwReturn);
+			}
+			SW1 = recvbuf[recvlen-2];
+			SW2 = recvbuf[recvlen-1];
+			if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
+			{
+				dwReturn = SCARD_W_WRONG_CHV;
+				LogTrace(LOGTYPE_ERROR, WHERE, "CardAuthenticateEx Failed: [0x%02X][0x%02X]", SW1, SW2);
+				if (SW1 == 0x64) {
+					//error during pin entry
+					switch(SW2){
 					case 0x00:
 						// Timeout
 						if (ucLastKey == 0x0d) {
 							// OK button preceded by no other keys also results in 0x64 0x00
 
-							swprintf(wchMainInstruction, t[PIN_TOO_SHORT_MAININSTRUCTIONS][getLanguage()]);
-							swprintf(wchErrorMessage, t[PIN_TOO_SHORT_CONTENT][getLanguage()] );
+							WRITE_MAIN_INSTRUCTION( t[PIN_TOO_SHORT_MAININSTRUCTIONS][getLanguage()]);
+							WRITE_ERROR_MESSAGE( t[PIN_TOO_SHORT_CONTENT][getLanguage()] );
 						} else {
-							swprintf(wchMainInstruction, t[PIN_TIMED_OUT_MAININSTRUCTIONS][getLanguage()]);
+							WRITE_MAIN_INSTRUCTION( t[PIN_TIMED_OUT_MAININSTRUCTIONS][getLanguage()]);
 							// the user entered something but probably forgot to push OK.
-							swprintf(wchErrorMessage, t[PIN_TIMED_OUT_CONTENT][getLanguage()]);
+							WRITE_ERROR_MESSAGE(t[PIN_TIMED_OUT_CONTENT][getLanguage()]);
 						}
 						break;
 					case 0x01:
 						// Cancelled
-						swprintf(wchMainInstruction, t[PIN_CANCELLED_MAININSTRUCTIONS][getLanguage()]);
-						swprintf(wchErrorMessage, t[PIN_CANCELLED_CONTENT][getLanguage()]);
+						WRITE_MAIN_INSTRUCTION( t[PIN_CANCELLED_MAININSTRUCTIONS][getLanguage()]);
+						WRITE_ERROR_MESSAGE( t[PIN_CANCELLED_CONTENT][getLanguage()]);
 						break;
 					case 0x02:
 						// PINs do not match
-						swprintf(wchMainInstruction, t[PIN_DO_NOT_MATCH_MAININSTRUCTIONS][getLanguage()]);
-						swprintf(wchErrorMessage, t[PIN_DO_NOT_MATCH_CONTENT][getLanguage()]);
+						WRITE_MAIN_INSTRUCTION( t[PIN_DO_NOT_MATCH_MAININSTRUCTIONS][getLanguage()]);
+						WRITE_ERROR_MESSAGE( t[PIN_DO_NOT_MATCH_CONTENT][getLanguage()]);
 						break;
 					case 0x03:
 						// PIN size error
 						if (externalPinInfo.iPinCharacters > 0 && externalPinInfo.iPinCharacters < BELPIC_MIN_USER_PIN_LEN) {
 							// PIN too short
-							swprintf(wchMainInstruction, t[PIN_TOO_SHORT_MAININSTRUCTIONS][getLanguage()]);
-							swprintf(wchErrorMessage, t[PIN_TOO_SHORT_CONTENT][getLanguage()]);
+							WRITE_MAIN_INSTRUCTION( t[PIN_TOO_SHORT_MAININSTRUCTIONS][getLanguage()]);
+							WRITE_ERROR_MESSAGE( t[PIN_TOO_SHORT_CONTENT][getLanguage()]);
 						} else {
 							if (externalPinInfo.iPinCharacters >= BELPIC_MAX_USER_PIN_LEN) {
-							// PIN too long
-							swprintf(wchMainInstruction, t[PIN_TOO_LONG_MAININSTRUCTIONS][getLanguage()]);
-							swprintf(wchErrorMessage, t[PIN_TOO_LONG_CONTENT][getLanguage()]);
+								// PIN too long
+								WRITE_MAIN_INSTRUCTION( t[PIN_TOO_LONG_MAININSTRUCTIONS][getLanguage()]);
+								WRITE_ERROR_MESSAGE( t[PIN_TOO_LONG_CONTENT][getLanguage()]);
 							} else {
-							// no info about PIN chars
-							swprintf(wchMainInstruction,  t[PIN_SIZE_MAININSTRUCTIONS][getLanguage()]);
-							swprintf(wchErrorMessage, t[PIN_SIZE_CONTENT][getLanguage()]);
+								// no info about PIN chars
+								WRITE_MAIN_INSTRUCTION(  t[PIN_SIZE_MAININSTRUCTIONS][getLanguage()]);
+								WRITE_ERROR_MESSAGE( t[PIN_SIZE_CONTENT][getLanguage()]);
 							}
 						}
 						break;
 					default:
 						// Should not happen
-						swprintf(wchMainInstruction, t[PIN_UNKNOWN_MAININSTRUCTIONS][getLanguage()]);
-						swprintf(wchErrorMessage,  t[PIN_UNKNOWN_CONTENT][getLanguage()], SW1,SW2);
+						WRITE_MAIN_INSTRUCTION( t[PIN_UNKNOWN_MAININSTRUCTIONS][getLanguage()]);
+						swprintf (wchErrorMessage, t[PIN_UNKNOWN_CONTENT][getLanguage()], SW1,SW2);
 						break;
+					}
+					if (externalPinInfo.uiState == US_PINENTRY && !bSilent)
+						hResult = TaskDialog(externalPinInfo.hwndParentWindow, 
+						NULL, 
+						t[WINDOW_TITLE][getLanguage()], 
+						wchMainInstruction, 
+						wchErrorMessage, 
+						TDCBF_RETRY_BUTTON  | TDCBF_CANCEL_BUTTON ,
+						TD_ERROR_ICON,
+						&nButton);
+
 				}
-				if (externalPinInfo.uiState == US_PINENTRY && !bSilent)
-					hResult = TaskDialog(externalPinInfo.hwndParentWindow, 
-							NULL, 
-							t[WINDOW_TITLE][getLanguage()], 
-							wchMainInstruction, 
-							wchErrorMessage, 
-							TDCBF_RETRY_BUTTON  | TDCBF_CANCEL_BUTTON ,
-							TD_ERROR_ICON,
-							&nButton);
+				if (SW1 == 0x63) {
+					// Invalid PIN
+					dwRetriesLeft = SW2 & 0x0F;
+					if ( pcAttemptsRemaining != NULL )
+					{
+						/* -1: Don't support returning the count of remaining authentication attempts */
+						*pcAttemptsRemaining = dwRetriesLeft;
+					}
+					WRITE_MAIN_INSTRUCTION( t[PIN_INVALID_MAININSTRUCTIONS][getLanguage()]);
+					swprintf(wchErrorMessage, t[PIN_INVALID_CONTENT][getLanguage()], dwRetriesLeft);
 
-			}
-			if (SW1 == 0x63) {
-				// Invalid PIN
-				dwRetriesLeft = SW2 & 0x0F;
-				if ( pcAttemptsRemaining != NULL )
-				{
-					/* -1: Don't support returning the count of remaining authentication attempts */
-					*pcAttemptsRemaining = dwRetriesLeft;
+					if (externalPinInfo.uiState == US_PINENTRY && !bSilent)
+						hResult = TaskDialog(externalPinInfo.hwndParentWindow, 
+						NULL, 
+						t[WINDOW_TITLE][getLanguage()], 
+						wchMainInstruction, 
+						wchErrorMessage, 
+						TDCBF_RETRY_BUTTON  | TDCBF_CANCEL_BUTTON,
+						TD_ERROR_ICON,
+						&nButton);
 				}
-				swprintf(wchMainInstruction, t[PIN_INVALID_MAININSTRUCTIONS][getLanguage()]);
-				swprintf(wchErrorMessage, t[PIN_INVALID_CONTENT][getLanguage()], dwRetriesLeft);
 
-				if (externalPinInfo.uiState == US_PINENTRY && !bSilent)
-					hResult = TaskDialog(externalPinInfo.hwndParentWindow, 
-								NULL, 
-								t[WINDOW_TITLE][getLanguage()], 
-								wchMainInstruction, 
-								wchErrorMessage, 
-								TDCBF_RETRY_BUTTON  | TDCBF_CANCEL_BUTTON,
-								TD_ERROR_ICON,
-								&nButton);
+				if (SW1 == 0x69 && SW2 == 0x83) {
+					// PIN blocked
+					WRITE_MAIN_INSTRUCTION( t[PIN_BLOCKED_MAININSTRUCTIONS][getLanguage()]);
+					WRITE_ERROR_MESSAGE( t[PIN_BLOCKED_CONTENT][getLanguage()]);
+					if (externalPinInfo.uiState == US_PINENTRY && !bSilent)
+						hResult = TaskDialog(externalPinInfo.hwndParentWindow, 
+						NULL, 
+						t[WINDOW_TITLE][getLanguage()], 
+						wchMainInstruction, 
+						wchErrorMessage, 
+						TDCBF_OK_BUTTON,
+						TD_ERROR_ICON,
+						&nButton);
+					dwReturn = SCARD_W_CHV_BLOCKED;
+				}
+				bRetry = (nButton == IDRETRY);
+
 			}
-
-			if (SW1 == 0x69 && SW2 == 0x83) {
-				// PIN blocked
-				swprintf(wchMainInstruction, t[PIN_BLOCKED_MAININSTRUCTIONS][getLanguage()]);
-				swprintf(wchErrorMessage, t[PIN_BLOCKED_CONTENT][getLanguage()]);
-				if (externalPinInfo.uiState == US_PINENTRY && !bSilent)
-					hResult = TaskDialog(externalPinInfo.hwndParentWindow, 
-								NULL, 
-								t[WINDOW_TITLE][getLanguage()], 
-								wchMainInstruction, 
-								wchErrorMessage, 
-								TDCBF_OK_BUTTON,
-								TD_ERROR_ICON,
-								&nButton);
-				dwReturn = SCARD_W_CHV_BLOCKED;
+			else
+			{
+				LogTrace(LOGTYPE_INFO, WHERE, "Logged on...");
 			}
-			bRetry = (nButton == IDRETRY);
-
-		}
-		else
-		{
-			LogTrace(LOGTYPE_INFO, WHERE, "Logged on...");
 		}
 	}
-/*#endif*/
+
 cleanup:
 
-   LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-   return(dwReturn);
+	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
+	return(dwReturn);
 }
 #undef WHERE
 
@@ -596,16 +627,19 @@ cleanup:
 
 #define WHERE "BeidMSE"
 DWORD BeidMSE(PCARD_DATA   pCardData, 
-              DWORD        dwRole) 
+			  unsigned int uiHashAlgo,  /*This parameter is useful for the Gemsafe version of MSE */
+			  unsigned int size,
+              DWORD        dwRole ) 
 {
+   /* TODO: Gemsafe version of this */
    DWORD             dwReturn = 0;
 
-   SCARD_IO_REQUEST  ioSendPci = {1, sizeof(SCARD_IO_REQUEST)};
-   SCARD_IO_REQUEST  ioRecvPci = {1, sizeof(SCARD_IO_REQUEST)};
+   SCARD_IO_REQUEST  ioSendPci = {0, sizeof(SCARD_IO_REQUEST)};
+   SCARD_IO_REQUEST  ioRecvPci = {0, sizeof(SCARD_IO_REQUEST)};
 
    unsigned char     Cmd[128];
    unsigned int      uiCmdLg = 0;
-   unsigned char     recvbuf[256];
+   unsigned char     recvbuf[256+2]; //MAX_APDU_LENGTH + 2 for SW1 and SW2
    unsigned long     recvlen = sizeof(recvbuf);
    BYTE              SW1, SW2;
 
@@ -617,34 +651,28 @@ DWORD BeidMSE(PCARD_DATA   pCardData,
     * The MSE: SET Command will fail with error 0x000006f7
     * if the command is executed too fast after an command which resulted in an error condition
     */
-   Sleep(20);
-
-   /* Prepare SET COMMAND before a VERIFY PIN */
+   // Sleep(20);
    Cmd [0] = 0x00;
-   Cmd [1] = 0x22;   /* MSE: SET COMMAND */
+   Cmd [1] = 0x22; //MSE
    Cmd [2] = 0x41;
-   Cmd [3] = 0xB6;
-   Cmd [4] = 0x05;
-   Cmd [5] = 0x04;   /* Length of following data      */
-   Cmd [6] = 0x80;   /* ALGO Rreference               */
-   Cmd [7] = 0x01;   /* RSA PKCS#1                    */
-   Cmd [8] = 0x84;   /* TAG for private key reference */
+   Cmd [3] = 0xA4;
+   Cmd [4] = 0x09;
+   Cmd [5] = 0x95;
+   Cmd [6] = 0x01;
+   Cmd [7] = 0x40;
+   Cmd [8] = 0x84;
+   Cmd [9] = 0x01;
+   if (size == 36)
+    Cmd[10] = 0x01;
+   else
+    Cmd[10] = 0x82;
+  	Cmd[11] = 0x80;
+    Cmd[12] = 0x01;
+    Cmd[13] = 0x02;
 
-   if ( dwRole == ROLE_DIGSIG )
-   {
-      Cmd [9] = 0x82;
-   }
-   else if ( dwRole == ROLE_NONREP )
-   {
-      Cmd [9] = 0x83;
-   } 
-   else 
-   {
-      LogTrace(LOGTYPE_INFO, WHERE, "SET COMMAND: undefined role [%d]", dwRole);
-      CLEANUP(SCARD_E_UNEXPECTED);
-   }
-   uiCmdLg = 10;
-
+   uiCmdLg = 14;
+   Sleep(1000);
+  
    dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 
                             Cmd, 
@@ -660,6 +688,7 @@ DWORD BeidMSE(PCARD_DATA   pCardData,
       LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (SET) errorcode: [0x%02X]", dwReturn);
       CLEANUP(dwReturn);
    }
+   
    if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
    {
       LogTrace(LOGTYPE_ERROR, WHERE, "SET Failed: [0x%02X][0x%02X]", SW1, SW2);
@@ -732,7 +761,8 @@ DWORD    BeidChangePIN
       CLEANUP(SCARD_W_WRONG_CHV);
    }
 
-   /* Change PIN code */
+   /*FIXME:  Cmd [3] = 0x81;   */
+   /* Change PIN code: Old PIN + New PIN + Padding */
    Cmd [0] = 0x00;
    Cmd [1] = 0x24;   /* CHANGE REFERENCE DATA COMMAND    */
    Cmd [2] = 0x00;   /* Support 'USER' password change   */
@@ -851,12 +881,12 @@ DWORD BeidGetCardSN(PCARD_DATA  pCardData,
 	}
 
 	*pdwSerialNumber = 0;
-
-   Cmd [0] = 0x80;
-   Cmd [1] = 0xE4;
-   Cmd [2] = 0x00;
-   Cmd [3] = 0x00;
-   Cmd [4] = 0x10;
+// 0x00, 0xCA, 0x02, 0x5A, 0x0D, for IAS
+   Cmd [0] = 0x00;
+   Cmd [1] = 0xCA;
+   Cmd [2] = 0x02;
+   Cmd [3] = 0x5A;
+   Cmd [4] = 0x0D;
    uiCmdLg = 5;
 
 	do {
@@ -899,13 +929,15 @@ DWORD BeidGetCardSN(PCARD_DATA  pCardData,
    SW1 = recvbuf[recvlen-2];
    SW2 = recvbuf[recvlen-1];
 
-   if ( ( SW1 != 0x61 ) || ( SW2 != 0x0C ) )
+  
+   if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
    {
       LogTrace(LOGTYPE_ERROR, WHERE, "Bad status bytes: [0x%02X][0x%02X]", SW1, SW2);
 		CLEANUP(SCARD_E_UNEXPECTED);
    }
-	*pdwSerialNumber = 16;
-	memcpy(pbSerialNumber, recvbuf, 16);
+   
+   *pdwSerialNumber = 13; //For IAS card length(SerialNumber) = 13
+   memcpy(pbSerialNumber, recvbuf, 13);
 
 cleanup:
    return (dwReturn);
@@ -917,6 +949,14 @@ cleanup:
 #define WHERE "BeidSignData"
 DWORD BeidSignData(PCARD_DATA  pCardData, unsigned int HashAlgo, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature)
 {
+
+/**
+* TODO: É essencial para a autenticação client-side SSL e para a assinatura de emails
+A sequencia de comandos é: Verify PIN (que hopefully já foi feito chamado antes pelo BaseCSP), 
+MSE SET e depois:
+em Gemsafe: PSO: Hash e PSO Compute Signature
+em IAS: Só um PSO Compute Signature
+*/
    DWORD                   dwReturn = 0;
 
    SCARD_IO_REQUEST        ioSendPci = {1, sizeof(SCARD_IO_REQUEST)};
@@ -990,13 +1030,23 @@ DWORD BeidSignData(PCARD_DATA  pCardData, unsigned int HashAlgo, DWORD cbToBeSig
    unsigned int            cbHdrHash  = 0;
    const unsigned char     *pbHdrHash = NULL;
 
-   /* Sign Command */
-   Cmd [0] = 0x00;
-   Cmd [1] = 0x2A;   /* PSO: Compute Digital Signature COMMAND */
-   Cmd [2] = 0x9E;
-   Cmd [3] = 0x9A;
+   dwReturn = BeidMSE(pCardData, HashAlgo, cbToBeSigned, ROLE_DIGSIG);
+   if (dwReturn != SCARD_S_SUCCESS)
+   {
+	CLEANUP(dwReturn);
+   }
+
+
+   /* Sign Command for IAS*/
+   /* 00 88 02 00 24 EC 61 B0 5B 70 33 78 39 F0 C8 C5 EB 79 64 */
+   Cmd [0] = 0x00; //0x88, 0x02, 0x00
+   Cmd [1] = 0x88;   /* PSO: Compute Digital Signature COMMAND */
+   Cmd [2] = 0x02;
+   Cmd [3] = 0x00;
+   Cmd [4] = 0x24; //For IAS cards it has to be 0x24 bytes of data to sign!!
 
    /* Length of data to be signed   */
+   /*
    switch (HashAlgo)
    {
    case HASH_ALGO_NONE:
@@ -1043,19 +1093,19 @@ DWORD BeidSignData(PCARD_DATA  pCardData, unsigned int HashAlgo, DWORD cbToBeSig
    default:
       break;
    }
-   if ( HashAlgo == HASH_ALGO_NONE )
-   {
+  */ 
+  
       Cmd [4] = (BYTE)(cbToBeSigned);
       memcpy(Cmd + 5, pbToBeSigned, cbToBeSigned);
       uiCmdLg = 5 + cbToBeSigned;
-   }
-   else
+   /*else
    {
       Cmd [4] = (BYTE)(cbToBeSigned + cbHdrHash);
       memcpy(Cmd + 5, pbHdrHash, cbHdrHash);
       memcpy(Cmd + 5 + cbHdrHash, pbToBeSigned, cbToBeSigned);
       uiCmdLg = 5 + cbHdrHash + cbToBeSigned;
    }
+   */
 
 #ifdef _DEBUG
    LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", cbHdrHash + cbToBeSigned, (char *)&Cmd[5]);
@@ -1131,7 +1181,10 @@ DWORD BeidSignData(PCARD_DATA  pCardData, unsigned int HashAlgo, DWORD cbToBeSig
    *pcbSignature = 0x80;
 
    /* Allocate memory for the target buffer */
-   *ppbSignature = pCardData->pfnCspAlloc(*pcbSignature);
+   //TODO: Descomentar a linha seguinte antes de testar no IE!!
+   //*ppbSignature = pCardData->pfnCspAlloc(*pcbSignature); //pfnCspAlloc é o Memory allocator fornecido pelo CSP
+   *ppbSignature = malloc(*pcbSignature);
+
    if ( *ppbSignature == NULL )
    {
       LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbSignature]");
@@ -1334,9 +1387,30 @@ DWORD BeidSelectAndReadFile(PCARD_DATA  pCardData, DWORD dwOffset, BYTE cbFileID
 cleanup:
    return (dwReturn);
 }
+
+BOOL checkStatusCode(const char * context, BYTE dwReturn, BYTE SW1, BYTE SW2)
+{
+
+   if ( dwReturn != SCARD_S_SUCCESS )
+   {
+      LogTrace(LOGTYPE_ERROR, context, "SCardTransmit errorcode: [0x%02X]", dwReturn);
+      return FALSE;
+   }
+   if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
+   {
+      LogTrace(LOGTYPE_ERROR, context, "Select Failed: [0x%02X][0x%02X]", SW1, SW2);
+      return FALSE;
+   }
+
+   return TRUE;
+}
+
+
 #undef WHERE
 /****************************************************************************************************/
 
+/*
+/**/
 #define WHERE "BeidReadCert"
 DWORD BeidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PBYTE *ppbCertif)
 {
@@ -1352,42 +1426,26 @@ DWORD BeidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PB
    unsigned long     recvlen = sizeof(recvbuf);
    BYTE              SW1, SW2;
 
-   BYTE              bFileID[6] = {0x3F, 0x00, 0xDF, 0x00, 0x50, 0x00};
-   BYTE              cbFileID   = (BYTE)sizeof(bFileID);
-
    BYTE              bRead [255];
    DWORD             cbRead;
 
    DWORD             cbCertif;
 
+   BeidSelectApplet(pCardData);
+   memset(recvbuf, 0, sizeof(recvbuf));
    /***************/
    /* Select File */
    /***************/
    Cmd [0] = 0x00;
    Cmd [1] = 0xA4; /* SELECT COMMAND */
-   Cmd [2] = 0x08;
+   Cmd [2] = 0x00;
    Cmd [3] = 0x0C;
-   Cmd [4] = cbFileID;
-   uiCmdLg = 5;
+   Cmd [4] = 0x02; 
+   Cmd [5] = 0x3F; //5F, (EF, 0C), ReadBinary(), (02, CertID)  
+   Cmd [6] = 0x00;
+   uiCmdLg = 7;
 
-   switch (dwCertSpec)
-   {
-   case CERT_AUTH:
-      bFileID [5] = 0x38;
-      break;
-   case CERT_NONREP:
-      bFileID [5] = 0x39;
-      break;
-   case CERT_CA:
-      bFileID [5] = 0x3a;
-      break;
-   case CERT_ROOTCA:
-      bFileID [5] = 0x3b;
-      break;
-   }
-
-   memcpy(&Cmd[5], bFileID, cbFileID);
-   uiCmdLg += cbFileID;
+   // 00 A4 09 00 02 EF 09
 
    dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 
@@ -1398,37 +1456,76 @@ DWORD BeidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PB
                             &recvlen);
    SW1 = recvbuf[recvlen-2];
    SW2 = recvbuf[recvlen-1];
-   BeidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
-   if ( dwReturn != SCARD_S_SUCCESS )
+   //BeidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
+	if (!checkStatusCode(WHERE" -> select Dir Root", dwReturn, SW1, SW2))
+		CLEANUP(dwReturn);
+
+	Cmd[5] = 0x5F;
+	memset(recvbuf, 0, sizeof(recvbuf));
+	dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            Cmd, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+		                    &recvlen);
+	if (!checkStatusCode(WHERE" -> select Specific Dir", dwReturn, SW1, SW2))
+		CLEANUP(dwReturn);
+/*	
+	Cmd[4] = 0xEF;
+	Cmd[5] = 0x0C;
+	memset(recvbuf, 0, sizeof(recvbuf));
+	dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            Cmd, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+		                    &recvlen);
+	
+	if (!checkStatusCode(WHERE" ->apdu[2]")
+		CLEANUP(dwReturn);
+  */ 
+	/*
+	//Read Binary, just because...
+	dwReturn = BeidReadFile(pCardData, 0, &cbRead, bRead);
+	if (!checkStatusCode(WHERE" ->apdu[3] (read binary)")
+		CLEANUP(dwReturn);
+
+	*/
+
+	Cmd[2] = 0x09;    //09 00 02  [Cert Filename= EF **]
+    Cmd[3] = 0x00;
+	Cmd[4] = 0x02;
+	Cmd[5] = 0xEF;
+   switch (dwCertSpec)
    {
-      LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit errorcode: [0x%02X]", dwReturn);
-      CLEANUP(dwReturn);
-   }
-   if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Select Failed: [0x%02X][0x%02X]", SW1, SW2);
-      CLEANUP(dwReturn);
+   case CERT_AUTH:
+      Cmd[6] = 0x09;
+      break;
+   case CERT_NONREP:
+      Cmd[6] = 0x08;
+      break;
+   case CERT_CA:
+      Cmd[6] = 0x11;
+      break;
+   case CERT_ROOTCA:
+      Cmd[6] = 0x10;
+      break;
    }
 
-   /* Read First 4 bytes */
-   cbRead = 4;
-   dwReturn = BeidReadFile(pCardData, 0, &cbRead, bRead);
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "BeidReadFile errorcode: [0x%02X]", dwReturn);
-      CLEANUP(dwReturn);
-   }
+   memset(recvbuf, 0, sizeof(recvbuf));
+	dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            Cmd, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+		                    &recvlen);
+	if (!checkStatusCode(WHERE" -> select CertFile", dwReturn, SW1, SW2))
+		CLEANUP(dwReturn);
 
-   cbCertif = (bRead[2] << 8) + bRead[3] + 4;
-	if (ppbCertif == NULL) 
-	{
-		// we will only return the file length
-		if (pcbCertif != NULL)
-			*pcbCertif = cbCertif;
-		CLEANUP(SCARD_S_SUCCESS);
-	}
-   cbRead = cbCertif;
-
+   cbCertif = 2500; //More than lmedinas dixit...
    *ppbCertif = pCardData->pfnCspAlloc(cbCertif);
    if ( *ppbCertif == NULL )
    {
@@ -1454,6 +1551,7 @@ cleanup:
 
 
 #define WHERE "BeidSelectApplet"
+/*TODO: IAS Pode suportar */
 DWORD BeidSelectApplet(PCARD_DATA  pCardData)
 {
 	DWORD             dwReturn = 0;
@@ -1467,10 +1565,9 @@ DWORD BeidSelectApplet(PCARD_DATA  pCardData)
 	unsigned char     recvbuf[256];
 	unsigned long     recvlen = sizeof(recvbuf);
 	BYTE              SW1, SW2;
-	BYTE              bBELPIC_AID[12] = { 0xA0, 0x00, 0x00, 0x01, 0x77, 0x50, 0x4B, 0x43, 0x53, 0x2D, 0x31, 0x35 };  
-	BYTE              cbBELPIC_AID = sizeof(bBELPIC_AID);
-	BYTE			  bAPPLET_AID[15] = { 0xA0, 0x00, 0x00, 0x00, 0x30, 0x29, 0x05, 0x70, 0x00, 0xAD, 0x13, 0x10, 0x01, 0x01, 0xFF };
-	BYTE              cbAPPLET_AID = sizeof(bAPPLET_AID);
+	BYTE IAS_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x01, 0x02};
+	BYTE              cAppletID = sizeof(IAS_PTEID_APPLET_AID);
+	
 
 	int               i = 0;
 
@@ -1478,13 +1575,13 @@ DWORD BeidSelectApplet(PCARD_DATA  pCardData)
 	/* Select File */
 	/***************/
 	Cmd [0] = 0x00;
-	Cmd [1] = 0xA4; /* SELECT COMMAND */
+	Cmd [1] = 0xA4; /* SELECT COMMAND 00 A4 04 0C 07 */
 	Cmd [2] = 0x04;
 	Cmd [3] = 0x0C;
-	Cmd [4] = cbBELPIC_AID;
-	memcpy(&Cmd[5], bBELPIC_AID, cbBELPIC_AID);
+	Cmd [4] = 0x07;
+	memcpy(&Cmd[5], IAS_PTEID_APPLET_AID, cAppletID);
 
-	uiCmdLg = 5 + cbBELPIC_AID;
+	uiCmdLg = 5 + cAppletID;
 
 	dwReturn = SCardTransmit(pCardData->hScard, 
 		&ioSendPci, 
@@ -1505,9 +1602,9 @@ DWORD BeidSelectApplet(PCARD_DATA  pCardData)
 	if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
 	{
 		LogTrace(LOGTYPE_ERROR, WHERE, "Select Failed: [0x%02X][0x%02X]", SW1, SW2);
-
+    /*
 		Cmd [0] = 0x00;
-		Cmd [1] = 0xA4; /* SELECT COMMAND */
+		Cmd [1] = 0xA4;
 		Cmd [2] = 0x04;
 		Cmd [3] = 0x00;
 		Cmd [4] = cbAPPLET_AID;
@@ -1530,7 +1627,7 @@ DWORD BeidSelectApplet(PCARD_DATA  pCardData)
 			LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit errorcode: [0x%02X]", dwReturn);
 			CLEANUP(dwReturn);
 		}
-
+		*/
 		if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
 		{
 			LogTrace(LOGTYPE_ERROR, WHERE, "Select Failed: [0x%02X][0x%02X]", SW1, SW2);

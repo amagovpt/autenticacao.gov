@@ -69,13 +69,14 @@ DWORD WINAPI   CardAuthenticatePin
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 
+	/* Cmon man...
 	dwReturn = BeidMSE(pCardData, ROLE_DIGSIG);
 	if ( dwReturn != SCARD_S_SUCCESS )
 	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "MSE: [0x%02X]", dwReturn);
+		LogTrace(LOGTYPE_ERROR, WHERE, "Error in BeidMSE: [0x%02X]", dwReturn);
 		CLEANUP(dwReturn);
 	}
-	LogTrace(LOGTYPE_INFO, WHERE, "SET COMMAND OK, trying to log on...");
+	LogTrace(LOGTYPE_INFO, WHERE, "SET COMMAND OK, trying to log on...");*/
 
 	dwReturn = BeidAuthenticate(pCardData, pbPin, cbPin, pcAttemptsRemaining);
 	if ( dwReturn != SCARD_S_SUCCESS )
@@ -264,7 +265,7 @@ DWORD WINAPI   CardAuthenticateEx
 		}
 	}
 
-	dwReturn = BeidMSE(pCardData, PinId);
+	//FIX dwReturn = BeidMSE(pCardData, PinId);
 	if ( dwReturn != SCARD_S_SUCCESS )
 	{
 		LogTrace(LOGTYPE_ERROR, WHERE, "MSE: [0x%02X]", dwReturn);
@@ -282,10 +283,10 @@ DWORD WINAPI   CardAuthenticateEx
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 
-	if (pbPinInfo.PinType == ExternalPinType && 
-		(dwFlags & CARD_PIN_SILENT_CONTEXT ) != CARD_PIN_SILENT_CONTEXT ) {	
+	if ( pbPinInfo.PinType == ExternalPinType ) {	
 			dwReturn = BeidAuthenticateExternal(pCardData, pcAttemptsRemaining, (dwFlags & CARD_PIN_SILENT_CONTEXT ) == CARD_PIN_SILENT_CONTEXT);
-	} else {
+	} 
+	else {
 		dwReturn = BeidAuthenticate(pCardData, pbPinData, cbPinData, pcAttemptsRemaining);
 	}
 

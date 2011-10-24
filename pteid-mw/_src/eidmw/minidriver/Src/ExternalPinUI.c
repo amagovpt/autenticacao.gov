@@ -22,7 +22,7 @@
 #include "log.h"
 #include "smartcard.h"
 #include "externalpinui.h"
-#include <commctrl-mingw.h>
+#include <commctrl.h>
 
 // Callback function used by taskdialog
 HRESULT CALLBACK TaskDialogCallbackProcPinEntry(      
@@ -41,7 +41,7 @@ HRESULT CALLBACK TaskDialogCallbackProcPinEntry(
 	if (pExternalPinInfo->cardState != CS_PINENTRY) {
 		// Dialog should close when pin entry stopped.
 		SendMessage(hwnd, WM_CLOSE,0,0);
-		return 0;
+		return S_OK;
 	}
 	switch(uNotification) {
 		case (TDN_TIMER):
@@ -62,7 +62,7 @@ HRESULT CALLBACK TaskDialogCallbackProcPinEntry(
 		default:
 			break;
 	}
-	return 0;
+	return S_OK;
 }
 
 // thread function called to show External PIN entry dialog box

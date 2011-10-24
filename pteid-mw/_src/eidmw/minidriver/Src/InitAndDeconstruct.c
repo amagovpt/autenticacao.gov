@@ -31,11 +31,34 @@
 
 #define SUPPORTED_CARDS                3
 
-/* Supported ATRs by the Mini Driver */
-CARD_ATR    CardAtr[] = 
+/* Supported Cards(ATRs)
+TODO: Update ATR lists in the code
+IAS:
+3B 95 95 40 FF D0 00 54 01 31
+3B 95 95 40 FF D0 00 54 01 32
+3B 65 00 00 D0 00 54 01 31
+3B 65 00 00 D0 00 54 01 32
+
+GEMSAFE:
+3B 7B 94 00 00 80 65 B0 83 01 01 74 83 00 90 00
+3B 6B 00 00 80 65 B0 83 01 01 74 83 00 90 00
+    
+3B 6B 00 00 80 65 B0 83 01 03 74 83 00 90 00
+    
+3B 7A 94 00 00 80 65 A2 01 01 01 3D 72 D6 43
+3B 7D 94 00 00 80 31 80 65 B0 83 01 01 90 83 00 90 00
+    
+3B 7D 95 00 00 80 31 80 65 B0 83 11 C0 A9 83 00
+3B 7D 95 00 00 80 31 80 65 B0 83 11 C0 A9 83 00 90 00
+3B 7D 95 00 00 80 31 80 65 B0 83 11 00 C8 83 00
+
+3B 7D 95 00 00 80 31 80 65 B0 83 11 00 C8 83 00 90 00
+*/
+CARD_ATR  CardAtr[] = 
             { 
-               {{0x3B,0x98,0x13,0x40,0x0A,0xA5,0x03,0x01,0x01,0x01,0xAD,0x13,0x11}, 13},
-               {{0x3B,0x98,0x94,0x40,0x0A,0xA5,0x03,0x01,0x01,0x01,0xAD,0x13,0x10}, 13},
+               {{0x3B,0x95,0x95,0x40,0xFF,0xD0,0x00,0x54,0x01,0x31}, 10},
+			   //TODO: Add the remaining ATRs for our cards
+               {{0x3B,0x7D,0x95,0x00,0x00,0x80,0x31,0x80,0x01,0x01,0xAD,0x13,0x10}, 13},
                {{0x3B,0x98,0x94,0x40,0xFF,0xA5,0x03,0x01,0x01,0x01,0xAD,0x13,0x10}, 13}
             };
 
@@ -128,7 +151,7 @@ DWORD WINAPI   CardAcquireContext
       LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData->pwszCardName]");
       CLEANUP(SCARD_E_INVALID_PARAMETER);
    }
-   /* Memory management functions */
+  // Memory management functions 
    if ( ( pCardData->pfnCspAlloc   == NULL ) ||
         ( pCardData->pfnCspReAlloc == NULL ) ||
         ( pCardData->pfnCspFree    == NULL ) )
@@ -136,6 +159,7 @@ DWORD WINAPI   CardAcquireContext
       LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData->pfnCspAlloc], [pCardData->pfnCspReAlloc] or [pCardData->pfnCspFree]");
       CLEANUP(SCARD_E_INVALID_PARAMETER);
    }
+   
    /* Card context */
    if ( pCardData->hSCardCtx == 0 )
    {

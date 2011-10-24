@@ -43,12 +43,12 @@ unsigned int   g_uiLogLevel      = LOGTYPE_NONE;
 /****************************************************************************************************/
 void LogInit()
 {
-	DWORD         dwRet;
-	HKEY          hKey;
+	DWORD       dwRet;
+	HKEY        hKey;
 	BYTE        lpData[MAX_LOG_DIR_NAME];
 	DWORD       dwData = 0; 
 
-	printf("\nRetrieving the data..."); 
+	printf("\nRetrieving the data from registry...\n"); 
 
 	dwRet = RegOpenKeyEx (HKEY_LOCAL_MACHINE, TEXT("Software\\BEID\\Logging"), 0, KEY_READ, &hKey);
 
