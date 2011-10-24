@@ -1122,6 +1122,10 @@ const CByteArray& APL_EIDCard::getRawData_Response()
 
 void APL_EIDCard::askWarningLevel()
 {
+	// Fix this: This modification hides the accept window.
+	// Application will access to the card always without user interaction
+	setWarningLevel(APL_ACCESSWARNINGLEVEL_ACCEPTED);
+	/*
 	APL_AccessWarningLevel lWarningLevel=getWarningLevel();
 
 	if(lWarningLevel==APL_ACCESSWARNINGLEVEL_REFUSED)
@@ -1134,6 +1138,7 @@ void APL_EIDCard::askWarningLevel()
 	{
 		//Ask
 		int result=DLG_ERR;
+
 		try
 		{
 			m_lWarningLevel=APL_ACCESSWARNINGLEVEL_BEING_ASKED;
@@ -1155,6 +1160,7 @@ void APL_EIDCard::askWarningLevel()
 			throw CMWEXCEPTION(EIDMW_ERR_NOT_ALLOW_BY_USER);
 		}
 	}
+	*/
 }
 
 void APL_EIDCard::setWarningLevel(APL_AccessWarningLevel lWarningLevel)
