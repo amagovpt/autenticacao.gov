@@ -486,12 +486,6 @@ static const char* fileList[]=
 
 
 
-
-
-
-
-
-
 void MainWnd::createTrayMenu()
 {
 	m_pMinimizeAction = new QAction(tr("Mi&nimize"), this);
@@ -672,15 +666,17 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 		showNoReaderMsg();
 	}
 
-
-
 	m_ui.lbl_menuCard_Read->installEventFilter(this);
 	m_ui.lbl_menuCard_Quit->installEventFilter(this);
-
+	m_ui.lbl_menuTools_Parameters->installEventFilter(this);
+	m_ui.lbl_menuLanguage_Portuguese->installEventFilter(this);
+	m_ui.lbl_menuLanguage_English->installEventFilter(this);
+	m_ui.lbl_menuHelp_about->installEventFilter(this);
 
 	m_ui.wdg_submenu_card->installEventFilter(this);
-
-
+	m_ui.wdg_submenu_tools->installEventFilter(this);
+	m_ui.wdg_submenu_help->installEventFilter(this);
+	m_ui.wdg_submenu_language->installEventFilter(this);
 
 }
 
@@ -691,8 +687,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 bool MainWnd::eventFilter(QObject *object, QEvent *event)
 {
-	qWarning("Entrei no filtro de eventos");
-
 	if (event->type() == QEvent::MouseButtonPress)
 	{
 
@@ -704,18 +698,43 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			m_CI_Data.Reset();
 			loadCardData();
 		}
-
 		if (object == m_ui.lbl_menuCard_Quit )
 		{
 			quit_application();
 		}
+
+		if (object == m_ui.lbl_menuTools_Parameters )
+		{
+			hide_submenus();
+			show_window_parameters();
+		}
+		if (object == m_ui.lbl_menuLanguage_Portuguese )
+		{
+			hide_submenus();
+			setLanguageNl();
+		}
+		if (object == m_ui.lbl_menuLanguage_English )
+		{
+			hide_submenus();
+			setLanguageEn();
+		}
+		if (object == m_ui.lbl_menuHelp_about )
+		{
+			hide_submenus();
+			show_window_about();
+		}
+
+
+		//lbl_menuLanguage_Portuguese
+
+
 	}
 
 
 	if (event->type() == QEvent::Leave)
 	{
 
-		if (object == m_ui.wdg_submenu_card )
+		if (object == m_ui.wdg_submenu_card || object == m_ui.wdg_submenu_tools || object == m_ui.wdg_submenu_language || object == m_ui.wdg_submenu_help )
 		{
 			qWarning("sai do panel");
 			hide_submenus();
@@ -733,6 +752,11 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 void MainWnd::hide_submenus()
 {
 	m_ui.wdg_submenu_card->setVisible(false);
+	m_ui.wdg_submenu_tools->setVisible(false);
+	m_ui.wdg_submenu_language->setVisible(false);
+	m_ui.wdg_submenu_help->setVisible(false);
+
+
 }
 
 
@@ -778,10 +802,26 @@ void MainWnd::on_btnSelectTab_Notes_clicked()
 
 void MainWnd::on_btn_menu_card_clicked()
 {
-	qWarning("Card Cliecked");
 	m_ui.wdg_submenu_card->setVisible(true);
 	m_ui.wdg_submenu_card->setGeometry(0,6,120,80);
+}
 
+void MainWnd::on_btn_menu_tools_clicked()
+{
+	m_ui.wdg_submenu_tools->setVisible(true);
+	m_ui.wdg_submenu_tools->setGeometry(123,6,140,80);
+}
+
+void MainWnd::on_btn_menu_language_clicked()
+{
+	m_ui.wdg_submenu_language->setVisible(true);
+	m_ui.wdg_submenu_language->setGeometry(270,20,140,90);
+}
+
+void MainWnd::on_btn_menu_help_clicked()
+{
+	m_ui.wdg_submenu_help->setVisible(true);
+	m_ui.wdg_submenu_help->setGeometry(400,20,120,70);
 }
 
 
@@ -3247,11 +3287,11 @@ bool MainWnd::saveCardDataToFile(QString const& fileName, BEID_Card& card )
 	return bRet;
 }
 
+
 //*****************************************************
 // About clicked
 //*****************************************************
-void MainWnd::on_actionAbout_triggered( void )
-{
+void MainWnd::show_window_about(){
 #ifdef WIN32 //version info for Windows
 	QFileInfo	fileInfo(m_Settings.getExePath()) ;
 
@@ -3273,11 +3313,16 @@ void MainWnd::on_actionAbout_triggered( void )
 	delete dlg;
 }
 
+
+void MainWnd::on_actionAbout_triggered( void )
+{
+	show_window_about();
+}
+
 //*****************************************************
 // Options clicked
 //*****************************************************
-void MainWnd::on_actionOptions_triggered(void)
-{
+void MainWnd::show_window_parameters(){
 	if( this->isHidden() )
 	{
 		this->showNormal(); // Otherwise the application will end if the options dialog gets closed
@@ -3305,6 +3350,14 @@ void MainWnd::on_actionOptions_triggered(void)
 	delete dlg;
 
 	m_ui.actionOptions->setEnabled(true);
+
+}
+
+
+
+void MainWnd::on_actionOptions_triggered(void)
+{
+	show_window_parameters();
 }
 
 //*****************************************************

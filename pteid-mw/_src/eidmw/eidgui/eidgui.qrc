@@ -39,11 +39,11 @@
         <file>Images/bg_Toolbar.png</file>
         <file>Images/buttons/button_card.png</file>
         <file>Images/buttons/button_digital_sign.png</file>
-        <file>Images/buttons/button_help.png</file>
-        <file>Images/buttons/button_language.png</file>
-        <file>Images/buttons/button_tools.png</file>
-        <file>Images/buttons/button_help.png</file>
-        <file>Images/buttons/btn_cartao.png</file>
+        <file>Images/buttons/btn_language.png</file>
+        <file>Images/buttons/btn_tools.png</file>
+        <file>Images/buttons/btn_help.png</file>
+        <file>Images/buttons/btn_card.png</file>
+        <file>Images/buttons/btn_arrow.png</file>
         <file>Images/additional_data.png</file>
         <file>Images/bg-Light-Blue.png</file>
         <file>Images/bg_Empty.png</file>
@@ -56,6 +56,9 @@
         <file>Images/tab-backgrounds/bg_certificates.png</file>
         <file>Images/backgrounds/bg_toolbarMenu.png</file>
         <file>Images/submenu_backgrounds/bg_selected_menu_card.png</file>
+        <file>Images/submenu_backgrounds/bg_selected_menu_tools.png</file>
+        <file>Images/submenu_backgrounds/bg_selected_menu_language.png</file>
+        <file>Images/submenu_backgrounds/bg_selected_menu_help.png</file>
         <file>Images/menu_separator.png</file>
     </qresource>
 </RCC>

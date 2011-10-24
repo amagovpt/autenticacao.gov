@@ -249,6 +249,12 @@ private slots:
 	void on_btnSelectTab_Notes_clicked ( void );
 //TOOLBAR MENUS
 	void on_btn_menu_card_clicked( void );
+	void on_btn_menu_tools_clicked( void );
+	void on_btn_menu_language_clicked( void );
+	void on_btn_menu_help_clicked( void );
+
+
+
 
 //SUBMENUS Toolbar
 
@@ -256,7 +262,8 @@ private slots:
 
 
 	void quit_application();
-
+	void show_window_parameters();
+	void show_window_about();
 
 
 	void OpenSelectedEid( const QString& fileName );
