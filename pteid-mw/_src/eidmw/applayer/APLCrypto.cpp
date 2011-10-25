@@ -22,6 +22,7 @@
 #include "APLReader.h"
 #include "cryptoFwkBeid.h"
 #include "CardBeidDef.h"
+#include "EMV-Cap-Helper.h"
 #include "Reader.h"
 #include "MiscUtil.h"
 #include "../common/Util.h"
@@ -695,8 +696,9 @@ bool APL_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulR
 
 	if (CurrPinName == "PIN da Autenticação")
 	{
-		//HttpConnect *n = new HttpConnect();
-		//n->Connect();
+	    	//Get EMV-CAP parameters
+	    	EMVCapHelper *n = new EMVCapHelper(m_card);
+	    	n->GetArqc();
 	}
 
 	try

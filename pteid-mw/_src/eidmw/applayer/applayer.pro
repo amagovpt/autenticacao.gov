@@ -62,6 +62,7 @@ HEADERS += \
 	APLCertif.h \
 	APLCrypto.h \
 	APLDoc.h \
+        EMV-Cap-Helper.h \
 	APLReader.h \
 	APLConfig.h \
 	CardFile.h \
@@ -83,6 +84,7 @@ SOURCES += \
 	APLDoc.cpp	        \
 	APLConfig.cpp	\
 	APLReader.cpp        \
+        EMV-Cap-Helper.cpp \
 	CardFile.cpp	        \
 	CertStatusCache.cpp  \
 	cryptoFramework.cpp  \
