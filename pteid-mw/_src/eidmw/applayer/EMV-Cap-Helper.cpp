@@ -58,7 +58,7 @@ EMVCapHelper::~EMVCapHelper()
 {
 
 }
-void EMVCapHelper::GetPan()
+CByteArray EMVCapHelper::GetPan()
 {
 	CByteArray osecpan, osecpansend, osecpanresp, osecpanrespget;
 	osecpan.Append(0x80);
@@ -81,17 +81,18 @@ void EMVCapHelper::GetPan()
 
 	CByteArray pannr = osecpanrespget.GetBytes(21,8);
 	std::cout << "PAN " << pannr.ToString() << std::endl;
+
+	return pannr;
 }
 
-void EMVCapHelper::GetArqc()
+CByteArray EMVCapHelper::GetArqc()
 {
-
-	GetPan();
-
 	const unsigned char apdu[] = {0x80, 0xAE, 0x80, 0x00, 0x23, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 								  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00,
 								  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-								  0x00, 0x34, 0x00, 0x00, 0x01, 0x00, 0x01 };
+								  0x00, 0x34, 0x00, 0x00, 0x01, 0x00, 0x01};
+
+	GetPan();
 
 	CByteArray askarqc;
 	askarqc.Append(apdu, sizeof(apdu));
@@ -99,6 +100,8 @@ void EMVCapHelper::GetArqc()
 	CByteArray aer= m_card->getCalReader()->SendAPDU(askarqc);
 	CByteArray arqnr = aer.GetBytes(14,8);
 	std::cout << "ARQC  " << arqnr.ToString() << std::endl;
+
+	return arqnr;
 
 }
 

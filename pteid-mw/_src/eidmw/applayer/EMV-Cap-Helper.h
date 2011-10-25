@@ -28,6 +28,11 @@
 
 namespace eIDMW
 {
+
+#define ATC "0002"
+#define PANSEQNUMBER "00"
+#define CDOL1 "0000000000000000000000000000800000000000000000000000000000"
+
 class EMVCapHelper
 {
 public:
@@ -37,8 +42,8 @@ public:
 	  */
 	~EMVCapHelper();
 
-	void GetPan();
-	void GetArqc();
+	CByteArray GetPan();
+	CByteArray GetArqc();
 private:
 	APL_SmartCard *m_card;
 };
