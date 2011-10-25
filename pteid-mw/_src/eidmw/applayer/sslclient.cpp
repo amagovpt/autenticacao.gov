@@ -34,7 +34,7 @@ int tcp_connect(char *host,int port)
 	int sock;
 
 	if(!(hp=gethostbyname(host)))
-		berr_exit("Couldn't resolve host");
+		berr_exit((char *)"Couldn't resolve host");
 	memset(&addr,0,sizeof(addr));
 	addr.sin_addr=*(struct in_addr*)
     		  hp->h_addr_list[0];
@@ -43,10 +43,10 @@ int tcp_connect(char *host,int port)
 
 	if((sock=socket(AF_INET,SOCK_STREAM,
 			IPPROTO_TCP))<0)
-		err_exit("Couldn't create socket");
+		err_exit((char *)"Couldn't create socket");
 	if(connect(sock,(struct sockaddr *)&addr,
 			sizeof(addr))<0)
-		err_exit("Couldn't connect socket");
+		err_exit((char *)"Couldn't connect socket");
 
 	return sock;
 }
@@ -59,7 +59,7 @@ void check_cert(SSL *ssl, char *host)
 	char peer_CN[256];
 
 	if(SSL_get_verify_result(ssl)!=X509_V_OK)
-		berr_exit("Certificate doesn't verify");
+		berr_exit((char *)"Certificate doesn't verify");
 
 	/*Check the cert chain. The chain length
       is automatically checked by OpenSSL when
@@ -71,6 +71,5 @@ void check_cert(SSL *ssl, char *host)
 	(X509_get_subject_name(peer),
 			NID_commonName, peer_CN, 256);
 	if(strcasecmp(peer_CN,host))
-		err_exit
-		("Common name doesn't match host name");
+		err_exit ((char *)"Common name doesn't match host name");
 }

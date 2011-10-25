@@ -105,7 +105,7 @@ SSL_CTX *initialize_ctx(char *keyfile)
 	X509 *m_cert1 = parms.cert;
 
 	if (!(m_pkey = ENGINE_load_private_key(engine,parms.slot_id, NULL, NULL)))
-		berr_exit("Error loading private key. Do you have a card ?");
+		berr_exit((char *)"Error loading private key. Do you have a card ?");
 
 	///////////////////////////////////////////
 
@@ -124,16 +124,16 @@ SSL_CTX *initialize_ctx(char *keyfile)
 
 	/*load our certificates from the card*/
 	if(!(SSL_CTX_use_certificate(ctx,m_cert1)))
-		berr_exit("Can't read certificate file");
+		berr_exit((char *)"Can't read certificate file");
 
 	/*load our private keys from the card*/
 	if(!(SSL_CTX_use_RSAPrivateKey(ctx, EVP_PKEY_get1_RSA(m_pkey))))
-		berr_exit("Can't read key file");
+		berr_exit((char *)"Can't read key file");
 
 	/* Load the CAs we trust*/
 	if(!(SSL_CTX_load_verify_locations(ctx,
 			CA_LIST, "/etc/ssl/certs")))
-		berr_exit("Can't read CA list");
+		berr_exit((char *)"Can't read CA list");
 #if (OPENSSL_VERSION_NUMBER < 0x00905100L)
 	SSL_CTX_set_verify_depth(ctx,1);
 #endif

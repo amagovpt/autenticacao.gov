@@ -37,7 +37,7 @@
    "GET / HTTP/1.0\r\nUser-Agent:"
    "EKRClient\r\nHost: %s:%d\r\n\r\n";*/
 
-static char *REQUEST_TEMPLATE=
+static const char *REQUEST_TEMPLATE=
 		"POST /CAPPINChange/connect HTTP/1.1\r\nHost: otp.cartaodecidadao.pt\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Length: 16\r\n\r\n{\"connect\":\"\"}\r\n";
 
 static char *host="otp.cartaodecidadao.pt";
@@ -58,7 +58,7 @@ static int http_request(SSL *ssl)
 	request_len=strlen(REQUEST_TEMPLATE)+
 			strlen(host)+6;
 	if(!(request=(char *)malloc(request_len)))
-		err_exit("Couldn't allocate request");
+		err_exit((char *)"Couldn't allocate request");
 	snprintf(request,request_len,REQUEST_TEMPLATE,
 			host,port);
 
@@ -69,10 +69,10 @@ static int http_request(SSL *ssl)
 	switch(SSL_get_error(ssl,r)){
 	case SSL_ERROR_NONE:
 		if(request_len!=r)
-			err_exit("Incomplete write!");
+			err_exit((char *)"Incomplete write!");
 		break;
 	default:
-		berr_exit("SSL write problem");
+		berr_exit((char *)"SSL write problem");
 	}
 
 	/* Now read the server's response, assuming
@@ -92,7 +92,7 @@ static int http_request(SSL *ssl)
 					"SSL Error: Premature close\n");
 			goto done;
 		default:
-			berr_exit("SSL read problem wclient.c");
+			berr_exit((char *)"SSL read problem wclient.c");
 		}
 
 		buf[r] = '\0';
@@ -116,7 +116,7 @@ static int http_request(SSL *ssl)
 	case 0:
 	case -1:
 	default:
-		berr_exit("Shutdown failed");
+		berr_exit((char *)"Shutdown failed");
 	}
 
 	done:
@@ -136,7 +136,7 @@ int init ()
 
 	SSL_SESSION *sess;
 	/* Build our SSL context*/
-	ctx=initialize_ctx(KEYFILE);
+	ctx=initialize_ctx((char *)KEYFILE);
 
 	if(ciphers){
 		SSL_CTX_set_cipher_list(ctx,ciphers);
@@ -152,7 +152,7 @@ int init ()
 	SSL_set_bio(ssl,sbio,sbio);
 
 	if(SSL_connect(ssl)<=0)
-		berr_exit("SSL connect error");
+		berr_exit((char *)"SSL connect error");
 	if(require_server_auth)
 		check_cert(ssl,host);
 
@@ -169,7 +169,7 @@ int init ()
 		SSL_set_bio(ssl,sbio,sbio);
 		SSL_set_session(ssl,sess); /*And resume it*/
 		if(SSL_connect(ssl)<=0)
-			berr_exit("SSL connect error (second connect)");
+			berr_exit((char *)"SSL connect error (second connect)");
 		check_cert(ssl,host);
 	}
 
