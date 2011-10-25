@@ -375,6 +375,11 @@ bool APL_EidFile_ID::MapFields()
 	pteidngidBuffer.TrimRight(' ');
 	m_DocumentNumber.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
+	//Civilian Identification Number (NIC)
+	m_CivilianIdNumber.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
+	m_CivilianIdNumber = m_CivilianIdNumber.substr(0,m_CivilianIdNumber.find(" "));
+
+
 	//TaxNo
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_TaxNo, PTEIDNG_FIELD_ID_LEN_TaxNo);
 	pteidngidBuffer.TrimRight(' ');
@@ -434,6 +439,12 @@ bool APL_EidFile_ID::MapFields()
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Mrz3, PTEIDNG_FIELD_ID_LEN_Mrz3);
 	pteidngidBuffer.TrimRight(' ');
 	m_MRZ3.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
+
+	//AccidentalIndications
+	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_AccidentalIndications, PTEIDNG_FIELD_ID_LEN_AccidentalIndications);
+	pteidngidBuffer.TrimRight(' ');
+	m_AccidentalIndications.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
+
 
     ofstream myfile;
     APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
@@ -749,6 +760,22 @@ const char *APL_EidFile_ID::getMRZ3()
 {
 	if(ShowData())
 		return m_MRZ3.c_str();
+
+	return "";
+}
+
+const char *APL_EidFile_ID::getAccidentalIndications()
+{
+	if(ShowData())
+		return m_AccidentalIndications.c_str();
+
+	return "";
+}
+
+const char *APL_EidFile_ID::getCivilianIdNumber()
+{
+	if(ShowData())
+		return m_CivilianIdNumber.c_str();
 
 	return "";
 }

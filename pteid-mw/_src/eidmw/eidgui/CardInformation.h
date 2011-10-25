@@ -702,6 +702,7 @@ public:
 #define MRZ1				"MRZ1"
 #define MRZ2				"MRZ2"
 #define MRZ3				"MRZ3"
+#define ACCIDENTALINDICATIONS "ACCIDENTALINDICATIONS"
 
 
 #define INITIALS		"initials"
@@ -766,6 +767,7 @@ public:
 		m_Fields[MRZ1]						= QString::fromUtf8(beid_eid.getMRZ1());
 		m_Fields[MRZ2]						= QString::fromUtf8(beid_eid.getMRZ2());
 		m_Fields[MRZ3]						= QString::fromUtf8(beid_eid.getMRZ3());
+		m_Fields[ACCIDENTALINDICATIONS]		= QString::fromUtf8(beid_eid.getAccidentalIndications());
 // 		qDebug() << "PersonInfo::RetrieveData()";
 // 		for (tFieldMap::iterator it=m_Fields.begin(); it!=m_Fields.end(); it++)
 // 		{

@@ -1003,6 +1003,7 @@ public:
 	/*New status for PTeid-ng */
 	BEIDSDK_API	const char *getHeight();						/**< Return field Height */
 	BEIDSDK_API	const char *getDocumentNumber();				/**< Return field DocumentNumber */
+	BEIDSDK_API	const char *getCivilianIdNumber();				/**< Return field CivlianIdNumber */
 	BEIDSDK_API	const char *getTaxNo();							/**< Return field TaxNo */
 	BEIDSDK_API	const char *getSocialSecurityNo();				/**< Return field SocialSecurityNo */
 	BEIDSDK_API	const char *getHealthNo();						/**< Return field HealthNo */
@@ -1019,6 +1020,7 @@ public:
 	BEIDSDK_API const char *getMRZ1();							/**< Return field MRZ block 1 */
 	BEIDSDK_API const char *getMRZ2();							/**< Return field MRZ block 2 */
 	BEIDSDK_API const char *getMRZ3();							/**< Return field MRZ block 3 */
+	BEIDSDK_API const char *getAccidentalIndications();			/**< Return field AccidentalIndications */
 
 private:
 	BEID_EId(const BEID_EId& doc);							/**< Copy not allowed - not implemented */

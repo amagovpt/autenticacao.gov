@@ -1859,6 +1859,14 @@ const char *APL_DocEId::getMRZ3(){
 	return m_card->getFileID()->getMRZ3();
 }
 
+const char *APL_DocEId::getAccidentalIndications(){
+	return m_card->getFileID()->getAccidentalIndications();
+}
+
+const char *APL_DocEId::getCivilianIdNumber(){
+	return m_card->getFileID()->getCivilianIdNumber();
+}
+
 const char *APL_DocEId::getPersoData()
 {
 	return m_card->getFilePersoData()->getPersoData();

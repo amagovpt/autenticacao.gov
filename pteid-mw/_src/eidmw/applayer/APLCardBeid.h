@@ -364,6 +364,7 @@ public:
 	/*New status for PTeid-ng */
 	EIDMW_APL_API const char *getHeight();				/**< Return field Height */
 	EIDMW_APL_API const char *getDocumentNumber();		/**< Return field DocumentNumber */
+	EIDMW_APL_API const char *getCivilianIdNumber();	/**< Return field CivilianIdNumber */
 	EIDMW_APL_API const char *getTaxNo();				/**< Return field TaxNo */
 	EIDMW_APL_API const char *getSocialSecurityNo();	/**< Return field SocialSecurityNo */
 	EIDMW_APL_API const char *getHealthNo();			/**< Return field HealthNo */
@@ -377,7 +378,7 @@ public:
 	EIDMW_APL_API const char *getMRZ1();				/**< Return field MRZ block 1 */
 	EIDMW_APL_API const char *getMRZ2();				/**< Return field MRZ block 2 */
 	EIDMW_APL_API const char *getMRZ3();				/**< Return field MRZ block 3 */
-
+	EIDMW_APL_API const char *getAccidentalIndications();	/**< Return field AccidentalIndications */
 	EIDMW_APL_API const char *getValidation();		/**< Return field Validation from the Trace file */
 
 	EIDMW_APL_API const char *getPersoData();

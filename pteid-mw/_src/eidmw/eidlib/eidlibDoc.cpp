@@ -1300,6 +1300,34 @@ const char *BEID_EId::getMRZ3()
 	return out;
 }
 
+const char *BEID_EId::getAccidentalIndications()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
+	out = pimpl->getAccidentalIndications();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+const char *BEID_EId::getCivilianIdNumber()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
+	out = pimpl->getCivilianIdNumber();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
 const char *BEID_EId::getPersoData()
 {
 	const char *out = NULL;

@@ -128,6 +128,7 @@ public:
 	/*New status for PTeid-ng */
 	const char *getHeight();						/**< Return field Height */
 	const char *getDocumentNumber();				/**< Return field DocumentNumber */
+	const char *getCivilianIdNumber();				/**< Return field CivilianIdNumber */
 	const char *getTaxNo();							/**< Return field TaxNo */
 	const char *getSocialSecurityNo();				/**< Return field SocialSecurityNo */
 	const char *getHealthNo();						/**< Return field HealthNo */
@@ -141,7 +142,8 @@ public:
 	const char *getMRZ1();							/**< Return field MRZ block 1*/
 	const char *getMRZ2();							/**< Return field MRZ block 2*/
 	const char *getMRZ3();							/**< Return field MRZ block 3*/
-	const CByteArray& getPhotoHash();						/**< Return field PhotoHash */
+	const char *getAccidentalIndications();			/**< Return field AccidentalIndications */
+	const CByteArray& getPhotoHash();				/**< Return field PhotoHash */
 
 protected:
 	/**
@@ -200,6 +202,7 @@ private:
 	std::string m_Height;									/**< Field Height */
 	std::string m_ChipNumber;								/**< Field ChipNumber */
 	std::string m_DocumentNumber;							/**< Field DocumentNumber */
+	std::string m_CivilianIdNumber;							/**< Field CivilianIdNumber */
 	std::string m_TaxNo;									/**< Field TaxNo */
 	std::string m_SocialSecurityNo;							/**< Field SocialSecurityNo */
 	std::string m_HealthNo;									/**< Field HealthNo */
@@ -208,6 +211,7 @@ private:
 	std::string m_SurnameFather;							/**< Field SurnameFather */
 	std::string m_GivenNameMother;							/**< Field GivenNameMother */
 	std::string m_SurnameMother;							/**< Field SurnameMother */
+	std::string m_AccidentalIndications;					/**< Field AccidentalIndications */
 	std::string m_Photo;									/**< Field Photo */
 	std::string m_MRZ1;										/**< Field MRZ block 1 */
 	std::string m_MRZ2;										/**< Field MRZ block 2 */
