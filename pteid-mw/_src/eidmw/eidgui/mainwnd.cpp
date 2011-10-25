@@ -803,25 +803,25 @@ void MainWnd::on_btnSelectTab_Notes_clicked()
 void MainWnd::on_btn_menu_card_clicked()
 {
 	m_ui.wdg_submenu_card->setVisible(true);
-	m_ui.wdg_submenu_card->setGeometry(0,6,120,80);
+	m_ui.wdg_submenu_card->setGeometry(0,4,126,80);
 }
 
 void MainWnd::on_btn_menu_tools_clicked()
 {
 	m_ui.wdg_submenu_tools->setVisible(true);
-	m_ui.wdg_submenu_tools->setGeometry(123,6,140,80);
+	m_ui.wdg_submenu_tools->setGeometry(127,4,126,80);
 }
 
 void MainWnd::on_btn_menu_language_clicked()
 {
 	m_ui.wdg_submenu_language->setVisible(true);
-	m_ui.wdg_submenu_language->setGeometry(270,20,140,90);
+	m_ui.wdg_submenu_language->setGeometry(254,4,146,90);
 }
 
 void MainWnd::on_btn_menu_help_clicked()
 {
 	m_ui.wdg_submenu_help->setVisible(true);
-	m_ui.wdg_submenu_help->setGeometry(400,20,120,70);
+	m_ui.wdg_submenu_help->setGeometry(380,4,126,70);
 }
 
 

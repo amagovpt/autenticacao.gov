@@ -1213,6 +1213,18 @@ font: 10pt &quot;Arial&quot;;</string>
          <string>Tamanho da Chave</string>
         </property>
        </widget>
+       <zorder>treeCert</zorder>
+       <zorder>txtCert_Owner</zorder>
+       <zorder>txtCert_Issuer</zorder>
+       <zorder>txtCert_KeyLenght</zorder>
+       <zorder>txtCert_ValidFrom</zorder>
+       <zorder>txtCert_ValidUntil</zorder>
+       <zorder>lbl_owner_entity</zorder>
+       <zorder>lbl_issue_entity</zorder>
+       <zorder>lbl_valid_form</zorder>
+       <zorder>lbl_valid_until</zorder>
+       <zorder>lbl_keysize</zorder>
+       <zorder>wdg_submenu_tools</zorder>
       </widget>
       <widget class="QWidget" name="page_PINCodes">
        <property name="styleSheet">
@@ -1708,7 +1720,7 @@ background-image: url(:/images/Images/alpha.png);</string>
       <rect>
        <x>0</x>
        <y>-2</y>
-       <width>121</width>
+       <width>125</width>
        <height>58</height>
       </rect>
      </property>
@@ -1729,9 +1741,9 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QPushButton" name="btn_menu_tools">
      <property name="geometry">
       <rect>
-       <x>123</x>
+       <x>127</x>
        <y>-2</y>
-       <width>140</width>
+       <width>125</width>
        <height>58</height>
       </rect>
      </property>
@@ -1755,7 +1767,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>263</x>
+       <x>253</x>
        <y>0</y>
        <width>5</width>
        <height>61</height>
@@ -1771,7 +1783,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>120</x>
+       <x>126</x>
        <y>0</y>
        <width>5</width>
        <height>61</height>
@@ -1787,9 +1799,9 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QPushButton" name="btn_menu_language">
      <property name="geometry">
       <rect>
-       <x>265</x>
+       <x>254</x>
        <y>-2</y>
-       <width>121</width>
+       <width>124</width>
        <height>58</height>
       </rect>
      </property>
@@ -1813,7 +1825,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>390</x>
+       <x>375</x>
        <y>0</y>
        <width>5</width>
        <height>61</height>
@@ -1829,9 +1841,9 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QPushButton" name="btn_menu_help">
      <property name="geometry">
       <rect>
-       <x>393</x>
+       <x>380</x>
        <y>-2</y>
-       <width>101</width>
+       <width>110</width>
        <height>58</height>
       </rect>
      </property>
@@ -1855,7 +1867,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>100</x>
+       <x>110</x>
        <y>25</y>
        <width>7</width>
        <height>5</height>
@@ -1887,7 +1899,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>375</x>
+       <x>360</x>
        <y>25</y>
        <width>7</width>
        <height>5</height>
@@ -1903,7 +1915,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="label_8">
      <property name="geometry">
       <rect>
-       <x>480</x>
+       <x>470</x>
        <y>25</y>
        <width>7</width>
        <height>5</height>
@@ -1916,6 +1928,17 @@ font: 10pt &quot;Arial&quot;;</string>
       <string/>
      </property>
     </widget>
+    <zorder>btn_menu_card</zorder>
+    <zorder>btn_menu_tools</zorder>
+    <zorder>label_2</zorder>
+    <zorder>label_3</zorder>
+    <zorder>btn_menu_language</zorder>
+    <zorder>label</zorder>
+    <zorder>btn_menu_help</zorder>
+    <zorder>label_4</zorder>
+    <zorder>label_6</zorder>
+    <zorder>label_8</zorder>
+    <zorder>label_7</zorder>
    </widget>
    <widget class="QWidget" name="wdg_submenu_card" native="true">
     <property name="geometry">
@@ -1987,8 +2010,8 @@ font: 10pt &quot;Arial&quot;;</string>
    <widget class="QWidget" name="wdg_submenu_tools" native="true">
     <property name="geometry">
      <rect>
-      <x>123</x>
-      <y>20</y>
+      <x>113</x>
+      <y>600</y>
       <width>140</width>
       <height>141</height>
      </rect>
@@ -2104,7 +2127,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <property name="geometry">
      <rect>
       <x>400</x>
-      <y>20</y>
+      <y>600</y>
       <width>121</width>
       <height>71</height>
      </rect>
@@ -2190,16 +2213,9 @@ font: 10pt &quot;Arial&quot;;</string>
      <string>Language</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="actionAbout"/>
-   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Tools"/>
    <addaction name="menuLanguage"/>
-   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionE_xit">
