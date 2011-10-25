@@ -38,6 +38,9 @@
 #define BELPIC_KEY_REF_NONREP		0x83
 
 /****************************************************************************************************/
+//Forward declaration of helper functions
+void IasSignatureHelper(PCARD_DATA pCardData);
+
 
 #define WHERE "BeidDelayAndRecover"
 void BeidDelayAndRecover(PCARD_DATA  pCardData,
@@ -647,6 +650,8 @@ DWORD BeidMSE(PCARD_DATA   pCardData,
 
    LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
+   if (size != 36)
+    		IasSignatureHelper(pCardData);
    /*
     * The MSE: SET Command will fail with error 0x000006f7
     * if the command is executed too fast after an command which resulted in an error condition
@@ -671,7 +676,7 @@ DWORD BeidMSE(PCARD_DATA   pCardData,
     Cmd[13] = 0x02;
 
    uiCmdLg = 14;
-   Sleep(1000);
+   //Sleep(1000);
   
    dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 
@@ -881,7 +886,6 @@ DWORD BeidGetCardSN(PCARD_DATA  pCardData,
 	}
 
 	*pdwSerialNumber = 0;
-// 0x00, 0xCA, 0x02, 0x5A, 0x0D, for IAS
    Cmd [0] = 0x00;
    Cmd [1] = 0xCA;
    Cmd [2] = 0x02;
@@ -942,6 +946,124 @@ DWORD BeidGetCardSN(PCARD_DATA  pCardData,
 cleanup:
    return (dwReturn);
 }
+
+void IasSignatureHelper(PCARD_DATA pCardData)
+{
+  /* This is another magic incantation (probably RE'd from APDU captures)
+	needed for IAS signing with "unusual" hash lengths  */
+   DWORD                   dwReturn = 0;
+
+   SCARD_IO_REQUEST        ioSendPci = {1, sizeof(SCARD_IO_REQUEST)};
+   SCARD_IO_REQUEST        ioRecvPci = {1, sizeof(SCARD_IO_REQUEST)};
+
+   unsigned int            uiCmdLg = 0;
+   unsigned int		       i = 0;
+
+   unsigned char           recvbuf[1024];
+   unsigned long           recvlen = sizeof(recvbuf);
+
+   BYTE apdu1[] = {0x00, 0xA4, 0x04, 0x00, 0x60, 0x46, 0x32,0xFF, 0x00, 0x01, 0x02};
+   BYTE apdu2[] = {0x00, 0xA4, 0x03, 0x0C};
+   BYTE apdu3[] = {0x00, 0xA4, 0x09, 0x00, 0x2F, 0x00};	
+   BYTE apdu4[] = {0x00, 0xB0, 0x00, 0x00, 0x3E};
+   BYTE apdu5[] = {0x00, 0xA4, 0x09, 0x0C, 0x4F, 0x00};
+   BYTE apdu6[] = {0x00, 0xA4, 0x09, 0x00, 0x50, 0x32};
+   BYTE apdu7[] = {0x00, 0xB0, 0x00, 0x00, 0x2F};
+   BYTE apdu8[] = {0x84, 0x00, 0x00, 0x08}; //To be sent 3 times (?!!)
+   BYTE apdu9[] = {0x00, 0xA4, 0x03, 0x0C};
+   BYTE apdu10[] = {0x00, 0xA4, 0x09, 0x0C, 0x5F, 0x00};
+
+   uiCmdLg = sizeof(apdu1);
+   dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            apdu1, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+                            &recvlen);
+   //TODO: if (!checkStatusCode(WHERE"", dwReturn, S
+   uiCmdLg = sizeof(apdu2);
+   
+   dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            apdu2, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+                            &recvlen);
+	uiCmdLg = sizeof(apdu3);
+	dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            apdu3, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+                            &recvlen);
+	uiCmdLg = sizeof(apdu4);
+	dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            apdu4, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+                            &recvlen);
+	uiCmdLg = sizeof(apdu5);
+	dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            apdu5, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+                            &recvlen);
+	uiCmdLg = sizeof(apdu6);
+	dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            apdu6, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+                            &recvlen);
+	uiCmdLg = sizeof(apdu7);
+	dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            apdu7, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+							&recvlen);
+	uiCmdLg = sizeof(apdu8);
+	while (i != 3)
+	{
+		dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            apdu8, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+							&recvlen);
+
+		i++;
+	}
+	uiCmdLg = sizeof(apdu9);
+	dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            apdu9, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+							&recvlen);
+	
+	uiCmdLg = sizeof(apdu10);
+	dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            apdu10, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+							&recvlen);
+	
+}
+
 #undef WHERE
 
 /****************************************************************************************************/
@@ -969,63 +1091,6 @@ em IAS: Só um PSO Compute Signature
    unsigned long           recvlen = sizeof(recvbuf);
    BYTE                    SW1, SW2;
 
-   static const unsigned char MD2_AID[] = {
-      0x30, 0x20, 
-         0x30, 0x0c, 
-            0x06, 0x08, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x02, 0x02, 
-            0x05, 0x00, 
-         0x04, 0x10
-   };
-   static const unsigned char MD4_AID[] = {
-      0x30, 0x20, 
-         0x30, 0x0c, 
-            0x06, 0x08, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x02, 0x04, 
-            0x05, 0x00, 
-         0x04, 0x10
-   };
-   static const unsigned char MD5_AID[] = {
-       0x30, 0x20,
-           0x30, 0x0c,
-               0x06, 0x08, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x02, 0x05,
-               0x05, 0x00,
-           0x04, 0x10
-   };
-   static const unsigned char SHA1_AID[] = {
-       0x30, 0x21,
-           0x30, 0x09,
-               0x06, 0x05, 0x2b, 0x0e, 0x03, 0x02, 0x1a,
-           0x05, 0x00,
-           0x04, 0x14
-   };
-   static const unsigned char SHA256_AID[] = {
-       0x30, 0x31,
-           0x30, 0x0d,
-               0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01,
-           0x05, 0x00,
-           0x04, 0x20
-   };
-   static const unsigned char SHA384_AID[] = {
-       0x30, 0x41,
-           0x30, 0x0d,
-               0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02,
-           0x05,0x00,
-           0x04, 0x30
-   };
-   static const unsigned char SHA512_AID[] = {
-       0x30, 0x51,
-           0x30, 0x0d,
-               0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03,
-           0x05, 0x00,
-           0x04, 0x40
-   };
-   static const unsigned char RIPEMD160_AID[] = {
-       0x30, 0x21,
-           0x30, 0x09,
-               0x06, 0x05, 0x2B, 0x24,	0x03, 0x02, 0x01,
-           0x05, 0x00,
-           0x04, 0x14
-   };
-
    unsigned int            i          = 0;
    unsigned int            cbHdrHash  = 0;
    const unsigned char     *pbHdrHash = NULL;
@@ -1042,62 +1107,10 @@ em IAS: Só um PSO Compute Signature
    Cmd [0] = 0x00; //0x88, 0x02, 0x00
    Cmd [1] = 0x88;   /* PSO: Compute Digital Signature COMMAND */
    Cmd [2] = 0x02;
-   Cmd [3] = 0x00;
-   Cmd [4] = 0x24; //For IAS cards it has to be 0x24 bytes of data to sign!!
-
-   /* Length of data to be signed   */
-   /*
-   switch (HashAlgo)
-   {
-   case HASH_ALGO_NONE:
-      LogTrace(LOGTYPE_INFO, WHERE, "NONE");
-      cbHdrHash = 0;
-      pbHdrHash = NULL;
-      break;
-
-   case HASH_ALGO_MD2:
-      LogTrace(LOGTYPE_INFO, WHERE, "CALG_MD2");
-      cbHdrHash = sizeof(MD2_AID);
-      pbHdrHash = MD2_AID;
-      break;
-   case HASH_ALGO_MD4:
-      LogTrace(LOGTYPE_INFO, WHERE, "CALG_MD4");
-      cbHdrHash = sizeof(MD4_AID);
-      pbHdrHash = MD4_AID;
-      break;
-   case HASH_ALGO_MD5:
-      LogTrace(LOGTYPE_INFO, WHERE, "CALG_MD5");
-      cbHdrHash = sizeof(MD5_AID);
-      pbHdrHash = MD5_AID;
-      break;
-   case HASH_ALGO_SHA1:
-      LogTrace(LOGTYPE_INFO, WHERE, "CALG_SHA1");
-      cbHdrHash = sizeof(SHA1_AID);
-      pbHdrHash = SHA1_AID;
-      break;
-   case HASH_ALGO_SHA_256:
-      LogTrace(LOGTYPE_INFO, WHERE, "CALG_SHA_256");
-      cbHdrHash = sizeof(SHA256_AID);
-      pbHdrHash = SHA256_AID;
-      break;
-   case HASH_ALGO_SHA_384:
-      LogTrace(LOGTYPE_INFO, WHERE, "CALG_SHA_384");
-      cbHdrHash = sizeof(SHA384_AID);
-      pbHdrHash = SHA384_AID;
-      break;
-   case HASH_ALGO_SHA_512:
-      LogTrace(LOGTYPE_INFO, WHERE, "CALG_SHA_512");
-      cbHdrHash = sizeof(SHA512_AID);
-      pbHdrHash = SHA512_AID;
-      break;
-   default:
-      break;
-   }
-  */ 
-  
-      Cmd [4] = (BYTE)(cbToBeSigned);
-      memcpy(Cmd + 5, pbToBeSigned, cbToBeSigned);
-      uiCmdLg = 5 + cbToBeSigned;
+   Cmd [3] = 0x00; 
+   //Cmd [4] = (BYTE)(cbToBeSigned);
+   memcpy(Cmd + 4, pbToBeSigned, cbToBeSigned);
+   uiCmdLg = 4 + cbToBeSigned;
    /*else
    {
       Cmd [4] = (BYTE)(cbToBeSigned + cbHdrHash);
@@ -1110,7 +1123,8 @@ em IAS: Só um PSO Compute Signature
 #ifdef _DEBUG
    LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", cbHdrHash + cbToBeSigned, (char *)&Cmd[5]);
 #endif
-
+   
+   /* LogTrace(LOGTYPE_INFO, WHERE, "Sign APDU: %X", Cmd); */
    recvlen = sizeof(recvbuf);
    dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 
@@ -1128,7 +1142,7 @@ em IAS: Só um PSO Compute Signature
       CLEANUP(dwReturn);
    }
 
-   if ( (SW1 != 0x61) || (SW2 != 0x80) )
+   if ( ( SW1 != 0x61 ) || ( SW2 != 0x80 ) )
    {
       LogTrace(LOGTYPE_ERROR, WHERE, "Sign Failed: [0x%02X][0x%02X]", SW1, SW2);
 
@@ -1181,9 +1195,8 @@ em IAS: Só um PSO Compute Signature
    *pcbSignature = 0x80;
 
    /* Allocate memory for the target buffer */
-   //TODO: Descomentar a linha seguinte antes de testar no IE!!
-   //*ppbSignature = pCardData->pfnCspAlloc(*pcbSignature); //pfnCspAlloc é o Memory allocator fornecido pelo CSP
-   *ppbSignature = malloc(*pcbSignature);
+   *ppbSignature = pCardData->pfnCspAlloc(*pcbSignature); //pfnCspAlloc é o Memory allocator fornecido pelo CSP
+   //*ppbSignature = malloc(*pcbSignature);
 
    if ( *ppbSignature == NULL )
    {
@@ -1426,9 +1439,6 @@ DWORD BeidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PB
    unsigned long     recvlen = sizeof(recvbuf);
    BYTE              SW1, SW2;
 
-   BYTE              bRead [255];
-   DWORD             cbRead;
-
    DWORD             cbCertif;
 
    BeidSelectApplet(pCardData);
@@ -1534,8 +1544,7 @@ DWORD BeidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PB
    }
 
    dwReturn = BeidReadFile(pCardData, 0, &cbCertif, *ppbCertif);
-   if ( ( dwReturn != SCARD_S_SUCCESS ) ||
-        ( cbCertif != cbRead          ) )
+   if (dwReturn != SCARD_S_SUCCESS)
    {
       LogTrace(LOGTYPE_ERROR, WHERE, "BeidReadFile errorcode: [0x%02X]", dwReturn);
       CLEANUP(dwReturn);
@@ -1551,7 +1560,7 @@ cleanup:
 
 
 #define WHERE "BeidSelectApplet"
-/*TODO: IAS Pode suportar */
+/**/
 DWORD BeidSelectApplet(PCARD_DATA  pCardData)
 {
 	DWORD             dwReturn = 0;
@@ -1568,7 +1577,6 @@ DWORD BeidSelectApplet(PCARD_DATA  pCardData)
 	BYTE IAS_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x01, 0x02};
 	BYTE              cAppletID = sizeof(IAS_PTEID_APPLET_AID);
 	
-
 	int               i = 0;
 
 	/***************/
