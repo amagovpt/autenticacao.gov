@@ -64,7 +64,7 @@ static void sigpipe_handle(int x){
 
 SSL_CTX *initialize_ctx(char *keyfile)
 {
-	SSL_METHOD *meth;
+	const SSL_METHOD *meth;
 	SSL_CTX *ctx;
 
 	if(!bio_err){
