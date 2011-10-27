@@ -796,7 +796,8 @@ void MainWnd::on_btnSelectTab_PinCodes_clicked()
 void MainWnd::on_btnSelectTab_Notes_clicked()
 {
 	m_ui.stackedWidget->setCurrentIndex(6);
-	refreshTabPersoData();
+	if (persodatastatus == 1)
+		refreshTabPersoData();
 }
 
 
