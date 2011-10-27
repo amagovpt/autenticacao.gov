@@ -6,12 +6,12 @@
 Signature="$Windows NT$"
 Class=SmartCard
 ClassGuid={990A2BD7-E738-46c7-B26F-1CF8FB9F1391}
-Provider=%FEDICT%
+Provider=%AMA%
 CatalogFile=beidmdrv.cat
 DriverVer=12/08/2009,4.0.0.2
 
 [Manufacturer]
-%FEDICT%=Fedict,NTamd64,NTamd64.6.1,NTx86,NTx86.6.1
+%AMA%=Fedict,NTamd64,NTamd64.6.1,NTx86,NTx86.6.1
 
 [Fedict.NTamd64]
 %FedictCardDeviceName%=Fedict64_Install,SCFILTER\CID_a503010101ad1310
@@ -54,8 +54,8 @@ CopyFiles=x86_CopyFiles
 AddReg=AddRegDefault32
 
 [SourceDisksFiles]
-beidmdrv64.dll=1
-beidmdrv32.dll=1
+; beidmdrv64.dll=1
+beidmdrv.dll=1
 
 [SourceDisksNames]
 1 = %MediaDescription%
@@ -122,34 +122,47 @@ Needs=UmPass.Interfaces
 
 
 [amd64_CopyFiles]
-beidmdrv32.dll,beidmdrv64.dll
+beidmdrv.dll 
+;,beidmdrv64.dll
 
 [x86_CopyFiles]
-beidmdrv32.dll
+beidmdrv.dll
+;,beidmdrv32.dll
 
 [wow64_CopyFiles]
-beidmdrv32.dll
+beidmdrv.dll
 
 [AddRegDefault32]
-HKLM, %SmartCardName%,"ATR",0x00000001,3b,98,00,40,00,a5,03,01,01,01,ad,13,00
-HKLM, %SmartCardName%,"ATRMask",0x00000001,ff,ff,00,ff,00,ff,ff,ff,ff,ff,ff,ff,00
+HKLM, %SmartCardName%,"ATR",0x00000001,3b,95,95,40,ff,d0,00,54,01,30
+HKLM, %SmartCardName%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,fc
 HKLM, %SmartCardName%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
-HKLM, %SmartCardName%,"80000001",0x00000000,"beidmdrv32.dll"
+HKLM, %SmartCardName%,"80000001",0x00000000,"beidmdrv.dll"
+HKLM, %SmartCardName_1%,"ATR",0x00000001,3B,7D,95,00,00,80,31,80,65,B0,83,11,00,00,83,00,90,00
+HKLM, %SmartCardName_1%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,00,00,ff,ff,ff,ff
+HKLM, %SmartCardName_1%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
+HKLM, %SmartCardName_1%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardName_1%,"80000001",0x00000000,"beidmdrv.dll"
+
+
 
 [AddRegDefault64]
 HKLM, %SmartCardName%,"ATR",0x00000001,3b,98,00,40,00,a5,03,01,01,01,ad,13,00
 HKLM, %SmartCardName%,"ATRMask",0x00000001,ff,ff,00,ff,00,ff,ff,ff,ff,ff,ff,ff,00
 HKLM, %SmartCardName%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
-HKLM, %SmartCardName%,"80000001",0x00000000,"beidmdrv64.dll"
+HKLM, %SmartCardName%,"80000001",0x00000000,"beidmdrv.dll"
+HKLM, %SmartCardName%,"80000100",0x00000000,"en-US,Please enter your PIN;en-EN,Please enter your PIN;nl-BE,Geef uw PIN in;nl-NL,Geef uw PIN in;fr-BE,Entrez votre code PIN;fr-FR,Entrez votre code PIN;de-DE,Bitte geben Sie Ihre PIN ein"
+HKLM, %SmartCardName%,"80000103",0x00000000,"en-US,Please enter your PIN;en-EN,Please enter your PIN;nl-BE,Geef uw PIN in;nl-NL,Geef uw PIN in;fr-BE,Entrez votre code PIN;fr-FR,Entrez votre code PIN;de-DE,Bitte geben Sie Ihre PIN ein"
 
 [AddRegWOW64]
 HKLM, %SmartCardNameWOW64%,"ATR",0x00000001,3b,98,00,40,00,a5,03,01,01,01,ad,13,00
 HKLM, %SmartCardNameWOW64%,"ATRMask",0x00000001,ff,ff,00,ff,00,ff,ff,ff,ff,ff,ff,ff,00
 HKLM, %SmartCardNameWOW64%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardNameWOW64%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
-HKLM, %SmartCardNameWOW64%,"80000001",0x00000000,"beidmdrv32.dll"
+HKLM, %SmartCardNameWOW64%,"80000001",0x00000000,"beidmdrv.dll"
+HKLM, %SmartCardNameWOW64%,"80000100",0x00000000,"en-US,Please enter your PIN;en-EN,Please enter your PIN;nl-BE,Geef uw PIN in;nl-NL,Geef uw PIN in;fr-BE,Entrez votre code PIN;fr-FR,Entrez votre code PIN;de-DE,Bitte geben Sie Ihre PIN ein"
+HKLM, %SmartCardNameWOW64%,"80000103",0x00000000,"en-US,Please enter your PIN;en-EN,Please enter your PIN;nl-BE,Geef uw PIN in;nl-NL,Geef uw PIN in;fr-BE,Entrez votre code PIN;fr-FR,Entrez votre code PIN;de-DE,Bitte geben Sie Ihre PIN ein"
 
 [DestinationDirs]
 amd64_CopyFiles=10,system32
@@ -160,8 +173,11 @@ wow64_CopyFiles=10,syswow64
 ; =================== Generic ==================================
 
 [Strings]
-FEDICT="Fedict"
-MediaDescription="Belgium eID Smart Card Minidriver Installation Disk"
-FedictCardDeviceName="Belgium eID Minidriver for Smart Card"
-SmartCardName="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Beid"
+AMA="Agencia para a Modernização Administrativa"
+MediaDescription="Portuguese eID Smart Card Minidriver Installation Disk"
+FedictCardDeviceName="Portuguese eID Minidriver for Smart Card"
+SmartCardName="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS)"
 SmartCardNameWOW64="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\Beid"
+
+SmartCardName_1="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTEid (GemSafe) 1"
+
