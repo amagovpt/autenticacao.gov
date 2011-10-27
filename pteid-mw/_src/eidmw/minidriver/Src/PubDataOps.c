@@ -177,7 +177,7 @@ DWORD WINAPI   CardReadFile
    }
 
 	if ( pszDirectoryName == NULL)                                 /* root */
-   {
+    {
 		DirFound++;
 		if (_stricmp("cardid", pszFileName) == 0)                   /* /cardid */
 		{
@@ -187,7 +187,7 @@ DWORD WINAPI   CardReadFile
 			{
 				LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbData]");
 				CLEANUP(SCARD_E_NO_MEMORY);
-   }
+    }
 			dwReturn = CardGetProperty(pCardData, 
 				CP_CARD_GUID, 
 				*ppbData, 
@@ -409,6 +409,7 @@ DWORD WINAPI   CardReadFile
 			}
 			if ( _stricmp("photo", pszFileName) == 0)					    /* /id/photo */
 			{
+				/*TODO: Most likely the file ID for the photo is wrong... */
 				BYTE  pbFileID [] = { 0x3f, 0x00, 0xdf, 0x01, 0x40, 0x35};
 				BYTE cbFileID  = (BYTE)sizeof(pbFileID);
 				FileFound++;

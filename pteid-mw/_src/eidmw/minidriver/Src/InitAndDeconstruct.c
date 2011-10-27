@@ -29,7 +29,7 @@
 #define MINIMUM_VERSION_SUPPORTED      CARD_DATA_VERSION_FOUR
 #define CURRENT_VERSION_SUPPORTED      CARD_DATA_VERSION_SIX
 
-#define SUPPORTED_CARDS                3
+
 
 /* Supported Cards(ATRs)
 TODO: Update ATR lists in the code
@@ -55,12 +55,16 @@ GEMSAFE:
 3B 7D 95 00 00 80 31 80 65 B0 83 11 00 C8 83 00 90 00
 */
 CARD_ATR  CardAtr[] = 
-            { 
+            {
+				//IAS
                {{0x3B,0x95,0x95,0x40,0xFF,0xD0,0x00,0x54,0x01,0x31}, 10},
-			   //TODO: Add the remaining ATRs for our cards
+			   {{0x3B,0x95,0x95,0x40,0xFF,0xD0,0x00,0x54,0x01,0x32}, 10},
+			    //GEMSAFE TODO: Check this
                {{0x3B,0x7D,0x95,0x00,0x00,0x80,0x31,0x80,0x01,0x01,0xAD,0x13,0x10}, 13},
                {{0x3B,0x98,0x94,0x40,0xFF,0xA5,0x03,0x01,0x01,0x01,0xAD,0x13,0x10}, 13}
             };
+
+#define SUPPORTED_CARDS sizeof(CardAtr)
 
 /****************************************************************************************************/
 
@@ -124,6 +128,10 @@ DWORD WINAPI   CardAcquireContext
       {
          if ( memcmp(pCardData->pbAtr, CardAtr[iAtr].pbAtr, pCardData->cbAtr) == 0 )
          {
+			if (i > 1)
+				Is_Gemsafe = 1; //GEMSAFE
+			else
+				Is_Gemsafe = 0; //IAS
             iCardCnt++;
             break;
          }

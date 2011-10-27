@@ -24,9 +24,24 @@
 #include "log.h"
 #include "util.h"
 #include "smartcard.h"
+#include <stdio.h>
 
 /****************************************************************************************************/
+void printByteArray(PBYTE arr, unsigned int len)
+{
 
+	int i;
+	char* buf_str = (char*) malloc(2*len + 1);
+	char* buf_ptr = buf_str;
+	for (i = 0; i < len; i++)
+	{
+		buf_ptr += sprintf(buf_ptr, "%02X", arr[i]);
+	}
+	sprintf(buf_ptr, "\n");
+	*(buf_ptr + 1) = '\0';
+	printf("%s\n", buf_str);
+
+}
 #define WHERE "BeidGetPubKey"
 DWORD BeidGetPubKey(PCARD_DATA  pCardData, DWORD cbCertif, PBYTE pbCertif, DWORD *pcbPubKey, PBYTE *ppbPubKey)
 {

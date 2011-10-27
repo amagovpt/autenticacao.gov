@@ -33,7 +33,7 @@
 #define BELPIC_PIN_BUF_SIZE         8
 #define BELPIC_MIN_USER_PIN_LEN     4
 #define BELPIC_MAX_USER_PIN_LEN     12
-/*FIXME: Set a global var with the CardType */
+
 #define BELPIC_PAD_CHAR			    0xFF
 #define BELPIC_KEY_REF_NONREP		0x83
 
@@ -632,7 +632,7 @@ cleanup:
 DWORD BeidMSE(PCARD_DATA   pCardData, 
 			  unsigned int uiHashAlgo,  /*This parameter is useful for the Gemsafe version of MSE */
 			  unsigned int size,
-              DWORD        dwRole ) 
+              DWORD        dwRole) 
 {
    /* TODO: Gemsafe version of this */
    DWORD             dwReturn = 0;
@@ -650,8 +650,8 @@ DWORD BeidMSE(PCARD_DATA   pCardData,
 
    LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
-   if (size != 36)
-    		IasSignatureHelper(pCardData);
+   //if (size != 36)
+   // 		IasSignatureHelper(pCardData);
    /*
     * The MSE: SET Command will fail with error 0x000006f7
     * if the command is executed too fast after an command which resulted in an error condition
@@ -662,18 +662,15 @@ DWORD BeidMSE(PCARD_DATA   pCardData,
    Cmd [2] = 0x41;
    Cmd [3] = 0xA4;
    Cmd [4] = 0x09;
-   Cmd [5] = 0x95;
+   Cmd [5] = 0x95; //Tag (Usage Qualifier)
    Cmd [6] = 0x01;
    Cmd [7] = 0x40;
-   Cmd [8] = 0x84;
+   Cmd [8] = 0x84; //Tag (Key Reference)
    Cmd [9] = 0x01;
-   if (size == 36)
-    Cmd[10] = 0x01;
-   else
-    Cmd[10] = 0x82;
-  	Cmd[11] = 0x80;
-    Cmd[12] = 0x01;
-    Cmd[13] = 0x02;
+   Cmd[10] = 0x01;
+   Cmd[11] = 0x80; //Tag (Algorithm Reference)
+   Cmd[12] = 0x01;
+   Cmd[13] = 0x02; //(RSA-PKCS#1)
 
    uiCmdLg = 14;
    //Sleep(1000);
@@ -1069,16 +1066,9 @@ void IasSignatureHelper(PCARD_DATA pCardData)
 /****************************************************************************************************/
 
 #define WHERE "BeidSignData"
-DWORD BeidSignData(PCARD_DATA  pCardData, unsigned int HashAlgo, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature)
+DWORD BeidSignData(PCARD_DATA pCardData, unsigned int HashAlgo, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature)
 {
 
-/**
-* TODO: É essencial para a autenticação client-side SSL e para a assinatura de emails
-A sequencia de comandos é: Verify PIN (que hopefully já foi feito chamado antes pelo BaseCSP), 
-MSE SET e depois:
-em Gemsafe: PSO: Hash e PSO Compute Signature
-em IAS: Só um PSO Compute Signature
-*/
    DWORD                   dwReturn = 0;
 
    SCARD_IO_REQUEST        ioSendPci = {1, sizeof(SCARD_IO_REQUEST)};
@@ -1094,13 +1084,13 @@ em IAS: Só um PSO Compute Signature
    unsigned int            i          = 0;
    unsigned int            cbHdrHash  = 0;
    const unsigned char     *pbHdrHash = NULL;
-
+	
+   BeidSelectApplet(pCardData);
    dwReturn = BeidMSE(pCardData, HashAlgo, cbToBeSigned, ROLE_DIGSIG);
    if (dwReturn != SCARD_S_SUCCESS)
    {
 	CLEANUP(dwReturn);
    }
-
 
    /* Sign Command for IAS*/
    /* 00 88 02 00 24 EC 61 B0 5B 70 33 78 39 F0 C8 C5 EB 79 64 */
@@ -1108,23 +1098,15 @@ em IAS: Só um PSO Compute Signature
    Cmd [1] = 0x88;   /* PSO: Compute Digital Signature COMMAND */
    Cmd [2] = 0x02;
    Cmd [3] = 0x00; 
-   //Cmd [4] = (BYTE)(cbToBeSigned);
-   memcpy(Cmd + 4, pbToBeSigned, cbToBeSigned);
-   uiCmdLg = 4 + cbToBeSigned;
-   /*else
-   {
-      Cmd [4] = (BYTE)(cbToBeSigned + cbHdrHash);
-      memcpy(Cmd + 5, pbHdrHash, cbHdrHash);
-      memcpy(Cmd + 5 + cbHdrHash, pbToBeSigned, cbToBeSigned);
-      uiCmdLg = 5 + cbHdrHash + cbToBeSigned;
-   }
-   */
-
+   Cmd [4] = (BYTE)(cbToBeSigned);
+   memcpy(Cmd + 5, pbToBeSigned, cbToBeSigned);
+   uiCmdLg = 5 + cbToBeSigned;
+   
 #ifdef _DEBUG
    LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", cbHdrHash + cbToBeSigned, (char *)&Cmd[5]);
 #endif
    
-   /* LogTrace(LOGTYPE_INFO, WHERE, "Sign APDU: %X", Cmd); */
+   //printByteArray(Cmd, uiCmdLg);
    recvlen = sizeof(recvbuf);
    dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 

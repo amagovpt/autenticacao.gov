@@ -116,7 +116,6 @@ DWORD WINAPI   CardGetContainerInfo
                )
 {
 
-	/*TODO: O BeidReadCert() esta broken, como consequencia este falha...   */
    DWORD                dwReturn  = 0;
    DWORD                dwVersion = 0;
    DWORD                cbCertif = 0;

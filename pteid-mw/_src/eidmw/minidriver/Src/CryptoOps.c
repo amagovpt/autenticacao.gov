@@ -23,6 +23,7 @@
 
 #include "log.h"
 #include "smartcard.h"
+#include "util.h"
 
 /****************************************************************************************************/
 #define __USE_SDK__
@@ -182,6 +183,7 @@ DWORD WINAPI   CardSignData
 	unsigned int               uiHashAlgo   = HASH_ALGO_NONE;
 
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
+	LogTrace(LOGTYPE_INFO, WHERE, "CardSignData called with pInfo->aiHashAlg: %d", pInfo->aiHashAlg); 
 
 	/********************/
 	/* Check Parameters */
