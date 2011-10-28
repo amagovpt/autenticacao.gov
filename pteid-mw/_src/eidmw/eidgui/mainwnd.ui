@@ -57,7 +57,7 @@
        <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="page_Wellcome"/>
       <widget class="QWidget" name="page_Identity">
@@ -1011,9 +1011,9 @@
        <widget class="QTreeWidget" name="treeCert">
         <property name="geometry">
          <rect>
-          <x>30</x>
-          <y>24</y>
-          <width>351</width>
+          <x>22</x>
+          <y>20</y>
+          <width>369</width>
           <height>361</height>
          </rect>
         </property>
@@ -1213,18 +1213,6 @@ font: 10pt &quot;Arial&quot;;</string>
          <string>Tamanho da Chave</string>
         </property>
        </widget>
-       <zorder>treeCert</zorder>
-       <zorder>txtCert_Owner</zorder>
-       <zorder>txtCert_Issuer</zorder>
-       <zorder>txtCert_KeyLenght</zorder>
-       <zorder>txtCert_ValidFrom</zorder>
-       <zorder>txtCert_ValidUntil</zorder>
-       <zorder>lbl_owner_entity</zorder>
-       <zorder>lbl_issue_entity</zorder>
-       <zorder>lbl_valid_form</zorder>
-       <zorder>lbl_valid_until</zorder>
-       <zorder>lbl_keysize</zorder>
-       <zorder>wdg_submenu_tools</zorder>
       </widget>
       <widget class="QWidget" name="page_PINCodes">
        <property name="styleSheet">
@@ -1288,19 +1276,6 @@ font: 10pt &quot;Arial&quot;;</string>
          </rect>
         </property>
         <layout class="QGridLayout" name="_10">
-         <item row="0" column="1">
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>108</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
          <item row="1" column="0" colspan="3">
           <widget class="QLabel" name="lblCert_InfoAdd">
            <property name="sizePolicy">
@@ -1320,14 +1295,27 @@ font: 10pt &quot;Arial&quot;;</string>
            </property>
           </widget>
          </item>
+         <item row="0" column="2">
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>108</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
        </widget>
        <widget class="QTreeWidget" name="treePIN">
         <property name="geometry">
          <rect>
-          <x>20</x>
+          <x>22</x>
           <y>20</y>
-          <width>361</width>
+          <width>369</width>
           <height>371</height>
          </rect>
         </property>
@@ -1945,8 +1933,8 @@ font: 10pt &quot;Arial&quot;;</string>
      <rect>
       <x>30</x>
       <y>760</y>
-      <width>121</width>
-      <height>81</height>
+      <width>126</width>
+      <height>111</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -1955,7 +1943,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="lbl_menuCard">
      <property name="geometry">
       <rect>
-       <x>56</x>
+       <x>55</x>
        <y>13</y>
        <width>51</width>
        <height>17</height>
@@ -1973,8 +1961,8 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="lbl_menuCard_Read">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>40</y>
+       <x>15</x>
+       <y>45</y>
        <width>81</width>
        <height>17</height>
       </rect>
@@ -1991,8 +1979,8 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="lbl_menuCard_Quit">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>60</y>
+       <x>15</x>
+       <y>65</y>
        <width>51</width>
        <height>17</height>
       </rect>
@@ -2006,13 +1994,30 @@ font: 10pt &quot;Arial&quot;;</string>
       <string>» Exit</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_11">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>32</y>
+       <width>105</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">image: url(:/images/Images/sub_menu_separator.png);
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="wdg_submenu_tools" native="true">
     <property name="geometry">
      <rect>
-      <x>113</x>
-      <y>600</y>
-      <width>140</width>
+      <x>430</x>
+      <y>750</y>
+      <width>126</width>
       <height>141</height>
      </rect>
     </property>
@@ -2023,7 +2028,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>10</y>
+       <y>13</y>
        <width>51</width>
        <height>17</height>
       </rect>
@@ -2040,8 +2045,8 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="lbl_menuTools_Parameters">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>40</y>
+       <x>15</x>
+       <y>45</y>
        <width>81</width>
        <height>17</height>
       </rect>
@@ -2055,13 +2060,30 @@ font: 10pt &quot;Arial&quot;;</string>
       <string>» Parameters</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>32</y>
+       <width>105</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">image: url(:/images/Images/sub_menu_separator.png);
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="wdg_submenu_language" native="true">
     <property name="geometry">
      <rect>
       <x>250</x>
       <y>750</y>
-      <width>141</width>
+      <width>126</width>
       <height>91</height>
      </rect>
     </property>
@@ -2072,7 +2094,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>10</y>
+       <y>13</y>
        <width>91</width>
        <height>17</height>
       </rect>
@@ -2089,8 +2111,8 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="lbl_menuLanguage_Portuguese">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>40</y>
+       <x>15</x>
+       <y>45</y>
        <width>81</width>
        <height>17</height>
       </rect>
@@ -2107,8 +2129,8 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="lbl_menuLanguage_English">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>60</y>
+       <x>15</x>
+       <y>65</y>
        <width>81</width>
        <height>17</height>
       </rect>
@@ -2122,13 +2144,30 @@ font: 10pt &quot;Arial&quot;;</string>
       <string>» English</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_12">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>32</y>
+       <width>105</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">image: url(:/images/Images/sub_menu_separator.png);
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="wdg_submenu_help" native="true">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>600</y>
-      <width>121</width>
+      <x>590</x>
+      <y>780</y>
+      <width>126</width>
       <height>71</height>
      </rect>
     </property>
@@ -2156,8 +2195,8 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="lbl_menuHelp_about">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>40</y>
+       <x>15</x>
+       <y>45</y>
        <width>81</width>
        <height>17</height>
       </rect>
@@ -2169,6 +2208,23 @@ font: 10pt &quot;Arial&quot;;</string>
      </property>
      <property name="text">
       <string>» About</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_10">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>32</y>
+       <width>105</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">image: url(:/images/Images/sub_menu_separator.png);
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </widget>
@@ -2187,13 +2243,6 @@ font: 10pt &quot;Arial&quot;;</string>
      <string>&amp;Card</string>
     </property>
     <addaction name="actionReload_eID"/>
-    <addaction name="actionClear"/>
-    <addaction name="separator"/>
-    <addaction name="actionOpen_eID"/>
-    <addaction name="actionSave_eID"/>
-    <addaction name="actionSave_eID_as"/>
-    <addaction name="separator"/>
-    <addaction name="actionPrint_eID"/>
     <addaction name="actionPrinter_Settings"/>
     <addaction name="separator"/>
     <addaction name="actionE_xit"/>
@@ -2205,8 +2254,6 @@ font: 10pt &quot;Arial&quot;;</string>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
     <addaction name="separator"/>
-    <addaction name="actionZoom_In"/>
-    <addaction name="actionZoom_Out"/>
    </widget>
    <widget class="QMenu" name="menuLanguage">
     <property name="title">
