@@ -47,7 +47,7 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 	ui.chbRegCert->setEnabled(settings.getAutoCardReading());
 	ui.chbRemoveCert->setEnabled(settings.getAutoCardReading());
 
-	ui.chbUseKeyPad->setChecked( settings.getUseVirtualKeyPad() );
+//	ui.chbUseKeyPad->setChecked( settings.getUseVirtualKeyPad() );
 	ui.cmbCardReader->addItem(tr("Not specified"));
 	const char* const* ReaderList = ReaderSet.readerList();
 	for (unsigned long Idx=0; Idx<ReaderSet.readerCount(); Idx++)
@@ -58,6 +58,7 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 	int SelectedReader = m_Settings.getSelectedReader()+1;
 	ui.cmbCardReader->setCurrentIndex( SelectedReader );
 
+	/*
 	GUISettings::eOCSPvalidation OCSPvalidation = m_Settings.getOCSPValidation();
 
 	switch(OCSPvalidation)
@@ -96,6 +97,7 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 		ui.rbCRLNotUsed->setChecked(true);
 		break;
 	}
+	*/
 #ifndef WIN32
 	ui.chbRegCert->hide();
 	ui.chbRemoveCert->hide();
@@ -118,10 +120,12 @@ void dlgOptions::on_chbShowNotification_toggled( bool bChecked )
 {
 	m_Settings.setShowNotification( bChecked );
 }
+/*
 void dlgOptions::on_chbUseKeyPad_toggled( bool bChecked )
 {
 	m_Settings.setUseVirtualKeyPad( bChecked );
 }
+*/
 void dlgOptions::on_chbAutoCardReading_toggled( bool bChecked )
 {
 	m_Settings.setAutoCardReading(bChecked);
@@ -149,8 +153,10 @@ void dlgOptions::on_chbRemoveCert_toggled( bool bChecked )
 	m_Settings.setRemoveCert(bChecked);
 }
 
+/*
 void dlgOptions::on_rbOCSPNotUsed_clicked( bool checked )
 {
+
 	checked = checked;
 	ui.rbCRLOptional->setEnabled(true);
 	ui.rbCRLMandatory->setEnabled(true);
@@ -169,6 +175,8 @@ void dlgOptions::on_rbOCSPNotUsed_clicked( bool checked )
 		m_Settings.setCRLValidation( GUISettings::CRL_MANDATORY );
 	}
 }
+*/
+/*
 void dlgOptions::on_rbOCSPOptional_clicked( bool checked )
 {
 	checked = checked;
@@ -190,7 +198,9 @@ void dlgOptions::on_rbOCSPOptional_clicked( bool checked )
 		m_Settings.setCRLValidation( GUISettings::CRL_MANDATORY );
 	}
 }
+*/
 
+/*
 void dlgOptions::on_rbOCSPMandatory_clicked( bool checked )
 {
 	checked = checked;
@@ -212,7 +222,9 @@ void dlgOptions::on_rbOCSPMandatory_clicked( bool checked )
 		m_Settings.setCRLValidation( GUISettings::CRL_MANDATORY );
 	}
 }
+*/
 
+/*
 void dlgOptions::on_rbCRLNotUsed_clicked( bool checked )
 {
 	checked = checked;
@@ -234,6 +246,8 @@ void dlgOptions::on_rbCRLNotUsed_clicked( bool checked )
 		m_Settings.setOCSPValidation( GUISettings::OCSP_MANDATORY );
 	}
 }
+*/
+/*
 void dlgOptions::on_rbCRLOptional_clicked( bool checked )
 {
 	checked = checked;
@@ -255,7 +269,9 @@ void dlgOptions::on_rbCRLOptional_clicked( bool checked )
 		m_Settings.setOCSPValidation( GUISettings::OCSP_MANDATORY );
 	}
 }
+*/
 
+/*
 void dlgOptions::on_rbCRLMandatory_clicked( bool checked )
 {
 	checked = checked;
@@ -277,4 +293,4 @@ void dlgOptions::on_rbCRLMandatory_clicked( bool checked )
 		m_Settings.setOCSPValidation( GUISettings::OCSP_MANDATORY );
 	}
 }
-
+*/

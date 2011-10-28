@@ -239,7 +239,7 @@ private slots:
 	void on_btnCert_Details_clicked( void );
 	void on_btnCert_Register_clicked( void );
 	void on_treePIN_itemSelectionChanged ( void );
-	void on_btnOCSPCheck_clicked( void );
+
 
 	void on_btnSelectTab_Identity_clicked ( void );
 	void on_btnSelectTab_Identity_Extra_clicked ( void );

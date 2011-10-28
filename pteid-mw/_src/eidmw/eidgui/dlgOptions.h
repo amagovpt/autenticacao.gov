@@ -32,27 +32,27 @@ class dlgOptions : public QDialog
 private slots:
 	void on_chbShowToolbar_toggled( bool bChecked );
 	void on_chbShowPicture_toggled( bool bChecked );
-	void on_chbUseKeyPad_toggled( bool bChecked );
+	//void on_chbUseKeyPad_toggled( bool bChecked );
 	void on_chbAutoCardReading_toggled( bool bChecked );
 	void on_chbWinAutoStart_toggled( bool bChecked );
 	void on_chbStartMinimized_toggled( bool bChecked );
 	void on_cmbCardReader_activated ( int index );
 	void on_chbRegCert_toggled( bool bChecked );
 	void on_chbRemoveCert_toggled( bool bChecked );
-	void on_rbOCSPNotUsed_clicked( bool checked );
-	void on_rbOCSPOptional_clicked( bool checked );
-	void on_rbOCSPMandatory_clicked( bool checked );
-	void on_rbCRLNotUsed_clicked( bool checked );
-	void on_rbCRLOptional_clicked( bool checked );
-	void on_rbCRLMandatory_clicked( bool checked );
+	//void on_rbOCSPNotUsed_clicked( bool checked );
+	//void on_rbOCSPOptional_clicked( bool checked );
+	//void on_rbOCSPMandatory_clicked( bool checked );
+	//void on_rbCRLNotUsed_clicked( bool checked );
+	//void on_rbCRLOptional_clicked( bool checked );
+	//void on_rbCRLMandatory_clicked( bool checked );
 	void on_chbShowNotification_toggled( bool bChecked );
 
 public:
 	dlgOptions( GUISettings& settings, QWidget *parent = 0);
     ~dlgOptions();
 
-	void setUseKeyPad( bool Checked )	{ ui.chbUseKeyPad->setChecked( Checked ); };
-	bool getUseKeyPad( void )			{ return ui.chbUseKeyPad->isChecked(); };
+//	void setUseKeyPad( bool Checked )	{ ui.chbUseKeyPad->setChecked( Checked ); };
+//	bool getUseKeyPad( void )			{ return ui.chbUseKeyPad->isChecked(); };
 	void setShowToolbar( bool Checked )	{ ui.chbShowToolbar->setChecked( Checked ); };
 	bool getShowToolbar( void )			{ return ui.chbShowToolbar->isChecked(); };
 	void setShowPicture( bool Checked )	{ ui.chbShowPicture->setChecked( Checked ); };

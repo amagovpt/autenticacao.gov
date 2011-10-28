@@ -558,7 +558,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	m_ui.setupUi(this);
 
-	setFixedSize( 850, 700 );
+	setFixedSize( 830, 670 );
 
 	m_ui.wdg_submenu_card->setVisible(false);
 
@@ -736,12 +736,8 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 
 		if (object == m_ui.wdg_submenu_card || object == m_ui.wdg_submenu_tools || object == m_ui.wdg_submenu_language || object == m_ui.wdg_submenu_help )
 		{
-			qWarning("sai do panel");
 			hide_submenus();
 		}
-
-
-
 	}
 	return false;
 
@@ -804,19 +800,19 @@ void MainWnd::on_btnSelectTab_Notes_clicked()
 void MainWnd::on_btn_menu_card_clicked()
 {
 	m_ui.wdg_submenu_card->setVisible(true);
-	m_ui.wdg_submenu_card->setGeometry(0,4,126,80);
+	m_ui.wdg_submenu_card->setGeometry(0,4,126,90);
 }
 
 void MainWnd::on_btn_menu_tools_clicked()
 {
 	m_ui.wdg_submenu_tools->setVisible(true);
-	m_ui.wdg_submenu_tools->setGeometry(127,4,126,80);
+	m_ui.wdg_submenu_tools->setGeometry(128,4,126,80);
 }
 
 void MainWnd::on_btn_menu_language_clicked()
 {
 	m_ui.wdg_submenu_language->setVisible(true);
-	m_ui.wdg_submenu_language->setGeometry(254,4,146,90);
+	m_ui.wdg_submenu_language->setGeometry(254,4,126,90);
 }
 
 void MainWnd::on_btn_menu_help_clicked()
@@ -1695,9 +1691,10 @@ bool MainWnd::StoreUserCerts (BEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, u
 //*****************************************************
 // button to check certificates clicked
 //*****************************************************
+/*
 void MainWnd::on_btnOCSPCheck_clicked( void )
 {
-	/*	//----------------------------------------------------
+		//----------------------------------------------------
 	// get the selected certificate and get the OCSP response
 	//----------------------------------------------------
 	try
@@ -1748,8 +1745,9 @@ void MainWnd::on_btnOCSPCheck_clicked( void )
 	{
 		e = e;
 	}
-	 */
+
 }
+*/
 
 //*****************************************************
 // button to register certificate clicked
@@ -3331,7 +3329,7 @@ void MainWnd::show_window_parameters(){
 
 	dlgOptions* dlg = new dlgOptions( m_Settings, this );
 
-	dlg->setUseKeyPad( m_Settings.getUseVirtualKeyPad() );
+//	dlg->setUseKeyPad( m_Settings.getUseVirtualKeyPad() );
 	dlg->setShowToolbar( m_Settings.getShowToolbar() );
 	dlg->setShowPicture( m_Settings.getShowPicture() );
 	dlg->setShowNotification( m_Settings.getShowNotification() );
@@ -3340,7 +3338,7 @@ void MainWnd::show_window_parameters(){
 
 	if( dlg->exec() )
 	{
-		m_UseKeyPad = dlg->getUseKeyPad();
+//		m_UseKeyPad = dlg->getUseKeyPad();
 		m_ui.actionShow_Toolbar->setChecked( m_Settings.getShowToolbar() );
 
 		if( !m_ui.txtIdentity_Name->text().isEmpty() )
