@@ -115,12 +115,11 @@ public:
 	const char *getDateOfBirth();					/**< Return field DateOfBirth */
 	const char *getLocationOfBirth();				/**< Return field LocationOfBirth */
 	const char *getNationality();					/**< Return field Nationality */
-	const char *getNationalNumber();				/**< Return field NationalNumber */
 	const char *getDuplicata();						/**< Return field Duplicata */
 	const char *getSpecialOrganization();			/**< Return field SpecialOrganization */
 	const char *getMemberOfFamily();				/**< Return field MemberOfFamily */
 	const char *getLogicalNumber();					/**< Return field LogicalNumber */
-	const char *getChipNumber();					/**< Return field ChipNumber */
+	const char *getDocumentPAN();					/**< Return field DocumentPAN */
 	const char *getValidityBeginDate();				/**< Return field ValidityBeginDate */
 	const char *getValidityEndDate();				/**< Return field ValidityEndDate */
 	const char *getLocalofRequest();				/**< Return field LocalofRequest */
@@ -190,7 +189,7 @@ private:
 	std::string m_DateOfBirth;								/**< Field DateOfBirth */
 	std::string m_LocationOfBirth;							/**< Field LocationOfBirth */
 	std::string m_Nationality;								/**< Field Nationality */
-	std::string m_NationalNumber;							/**< Field NationalNumber */
+	std::string m_CivilianIdNumber;							/**< Field NationalNumber */
 	std::string m_Duplicata;								/**< Field Duplicata */
 	std::string m_SpecialOrganization;						/**< Field SpecialOrganization */
 	std::string m_MemberOfFamily;							/**< Field MemberOfFamily */
@@ -202,7 +201,6 @@ private:
 	std::string m_Height;									/**< Field Height */
 	std::string m_ChipNumber;								/**< Field ChipNumber */
 	std::string m_DocumentNumber;							/**< Field DocumentNumber */
-	std::string m_CivilianIdNumber;							/**< Field CivilianIdNumber */
 	std::string m_TaxNo;									/**< Field TaxNo */
 	std::string m_SocialSecurityNo;							/**< Field SocialSecurityNo */
 	std::string m_HealthNo;									/**< Field HealthNo */

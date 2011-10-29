@@ -1540,7 +1540,7 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	xml+=				getNationality();
 	xml+=			"</nationality>\n";
 	xml+=" 		<national_nr>";
-	xml+=				getNationalNumber();
+	xml+=				getCivilianIdNumber();
 	xml+=			"</national_nr>\n";
 	xml+=" 		<duplicata>";
 	xml+=				getDuplicata();
@@ -1570,7 +1570,7 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	xml+=				getLogicalNumber();
 	xml+=			"</logical_nr>\n";
 	xml+=" 		<chip_nr>";
-	xml+=				getChipNumber();
+	xml+=				getDocumentPAN();
 	xml+=			"</chip_nr>\n";
 	xml+=" 		<validity>\n";
 	xml+=" 	 		<date_begin>";
@@ -1630,7 +1630,7 @@ version;type;name;surname;gender;date_of_birth;location_of_birth;nobility;nation
 	csv+=CSV_SEPARATOR;
 	csv+=getNationality();
 	csv+=CSV_SEPARATOR;
-	csv+=getNationalNumber();
+	csv+=getCivilianIdNumber();
 	csv+=CSV_SEPARATOR;
 	csv+=getDuplicata();
 	csv+=CSV_SEPARATOR;
@@ -1642,7 +1642,7 @@ version;type;name;surname;gender;date_of_birth;location_of_birth;nobility;nation
 	csv+=CSV_SEPARATOR;
 	csv+=getLogicalNumber();
 	csv+=CSV_SEPARATOR;
-	csv+=getChipNumber();
+	csv+=getDocumentPAN();
 	csv+=CSV_SEPARATOR;
 	csv+=getValidityBeginDate();
 	csv+=CSV_SEPARATOR;
@@ -1736,11 +1736,6 @@ const char *APL_DocEId::getNationality()
 	return m_card->getFileID()->getNationality();
 }
 
-const char *APL_DocEId::getNationalNumber()
-{
-	return m_card->getFileID()->getNationalNumber();
-}
-
 const char *APL_DocEId::getDuplicata()
 {
 	return m_card->getFileID()->getDuplicata();
@@ -1761,9 +1756,9 @@ const char *APL_DocEId::getLogicalNumber()
 	return m_card->getFileID()->getLogicalNumber();
 }
 
-const char *APL_DocEId::getChipNumber()
+const char *APL_DocEId::getDocumentPAN()
 {
-	return m_card->getFileID()->getChipNumber();
+	return m_card->getFileID()->getDocumentPAN();
 }
 
 const char *APL_DocEId::getValidityBeginDate()

@@ -233,7 +233,7 @@ void APL_EidFile_ID::EmptyFields()
 	m_ValidityBeginDate.clear();
 	m_ValidityEndDate.clear();
 	m_LocalofRequest.clear();
-	m_NationalNumber.clear();
+	m_CivilianIdNumber.clear();
 	m_Surname.clear();
 	m_FirstName1.clear();
 	m_Nationality.clear();
@@ -271,7 +271,7 @@ bool APL_EidFile_ID::MapFields()
     m_DocumentVersion.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//ChipNr
-	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_ChipNr, PTEIDNG_FIELD_ID_LEN_ChipNr);
+	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_DocumentNumberPAN, PTEIDNG_FIELD_ID_LEN_DocumentNumberPAN);
 	pteidngidBuffer.TrimRight(' ');
 	m_ChipNumber.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 	m_SerialNumber = m_ChipNumber;
@@ -296,10 +296,10 @@ bool APL_EidFile_ID::MapFields()
 	pteidngidBuffer.TrimRight(' ');
 	m_LocalofRequest.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
-	//NationalNr
-	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_NacionalNr, PTEIDNG_FIELD_ID_LEN_NacionalNr);
+	//Civilian Identification Number (NIC)
+	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_CivilianIdNumber, PTEIDNG_FIELD_ID_LEN_CivilianIdNumber);
 	pteidngidBuffer.TrimRight(' ');
-	m_NationalNumber.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
+	m_CivilianIdNumber.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//Surname
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Surname, PTEIDNG_FIELD_ID_LEN_Surname);
@@ -374,11 +374,6 @@ bool APL_EidFile_ID::MapFields()
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_DocumentNumber, PTEIDNG_FIELD_ID_LEN_DocumentNumber);
 	pteidngidBuffer.TrimRight(' ');
 	m_DocumentNumber.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
-
-	//Civilian Identification Number (NIC)
-	m_CivilianIdNumber.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
-	m_CivilianIdNumber = m_CivilianIdNumber.substr(0,m_CivilianIdNumber.find(" "));
-
 
 	//TaxNo
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_TaxNo, PTEIDNG_FIELD_ID_LEN_TaxNo);
@@ -562,14 +557,6 @@ const char *APL_EidFile_ID::getNationality()
 	return "";
 }
 
-const char *APL_EidFile_ID::getNationalNumber()
-{
-	if(ShowData())
-		return m_NationalNumber.c_str();
-
-	return "";
-}
-
 const char *APL_EidFile_ID::getDuplicata()
 {
 	if(ShowData())
@@ -602,7 +589,7 @@ const char *APL_EidFile_ID::getLogicalNumber()
 	return "";
 }
 
-const char *APL_EidFile_ID::getChipNumber()
+const char *APL_EidFile_ID::getDocumentPAN()
 {
 	if(ShowData())
 		return m_ChipNumber.c_str();

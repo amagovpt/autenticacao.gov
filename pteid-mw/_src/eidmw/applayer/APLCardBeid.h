@@ -351,12 +351,11 @@ public:
 	EIDMW_APL_API const char *getDateOfBirth();			/**< Return field DateOfBirth from the ID file */
 	EIDMW_APL_API const char *getLocationOfBirth();		/**< Return field LocationOfBirth from the ID file */
 	EIDMW_APL_API const char *getNationality();			/**< Return field Nationality from the ID file */
-	EIDMW_APL_API const char *getNationalNumber();		/**< Return field NationalNumber from the ID file */
 	EIDMW_APL_API const char *getDuplicata();			/**< Return field Duplicata from the ID file */
 	EIDMW_APL_API const char *getSpecialOrganization();	/**< Return field SpecialOrganization from the ID file */
 	EIDMW_APL_API const char *getMemberOfFamily();		/**< Return field MemberOfFamily from the ID file */
 	EIDMW_APL_API const char *getLogicalNumber();		/**< Return field LogicalNumber from the ID file */
-	EIDMW_APL_API const char *getChipNumber();			/**< Return field ChipNumber from the ID file */
+	EIDMW_APL_API const char *getDocumentPAN();			/**< Return field Document PAN from the ID file */
 	EIDMW_APL_API const char *getValidityBeginDate();	/**< Return field ValidityBeginDate from the ID file */
 	EIDMW_APL_API const char *getValidityEndDate();		/**< Return field ValidityEndDate from the ID file */
 	EIDMW_APL_API const char *getLocalofRequest();		/**< Return field LocalofRequest from the ID file */

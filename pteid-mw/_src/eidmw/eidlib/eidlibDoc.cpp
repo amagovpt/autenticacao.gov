@@ -892,20 +892,6 @@ const char *BEID_EId::getNationality()
 	return out;
 }
 
-const char *BEID_EId::getNationalNumber()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getNationalNumber();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
 const char *BEID_EId::getDuplicata()
 {
 	const char *out = NULL;
@@ -962,14 +948,14 @@ const char *BEID_EId::getLogicalNumber()
 	return out;
 }
 
-const char *BEID_EId::getChipNumber()
+const char *BEID_EId::getDocumentPAN()
 {
 	const char *out = NULL;
 
 	BEGIN_TRY_CATCH
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getChipNumber();
+	out = pimpl->getDocumentPAN();
 	
 	END_TRY_CATCH
 

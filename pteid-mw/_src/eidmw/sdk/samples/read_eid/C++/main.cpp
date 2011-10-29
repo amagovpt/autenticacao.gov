@@ -154,7 +154,7 @@ void getEIDData( BEID_EIDCard& card )
 	std::cout << "\tDateOfBirth        : " << eid.getDateOfBirth()			<< std::endl;
 	std::cout << "\tLocationOfBirth    : " << eid.getLocationOfBirth()		<< std::endl;
 	std::cout << "\tNationality        : " << eid.getNationality()			<< std::endl;
-	std::cout << "\tNationalNumber     : " << eid.getNationalNumber()		<< std::endl;
+	std::cout << "\tNationalNumber     : " << eid.getCivilianIdNumber()		<< std::endl;
 	std::cout << "\tSpecialOrganization: " << eid.getSpecialOrganization()	<< std::endl;
 	std::cout << "\tMemberOfFamily     : " << eid.getMemberOfFamily()		<< std::endl;
 	std::cout << "\tAddressVersion     : " << eid.getAddressVersion()		<< std::endl;
@@ -170,7 +170,7 @@ void getEIDData( BEID_EIDCard& card )
 	std::cout << "\tCard data:"		       << std::endl;
 	std::cout << "\t----------"		       << std::endl;
 	std::cout << "\tLogicalNumber      : " << eid.getLogicalNumber()		<< std::endl;
-	std::cout << "\tChipNumber         : " << eid.getChipNumber()			<< std::endl;
+	std::cout << "\tChipNumber         : " << eid.getDocumentPAN()			<< std::endl;
 	std::cout << "\tValidityBeginDate  : " << eid.getValidityBeginDate()	<< std::endl;
 	std::cout << "\tValidityEndDate    : " << eid.getValidityEndDate()		<< std::endl;
 	std::cout << "\tIssuingMunicipality: " << eid.getIssuingMunicipality()	<< std::endl;

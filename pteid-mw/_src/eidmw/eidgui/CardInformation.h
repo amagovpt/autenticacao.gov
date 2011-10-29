@@ -92,7 +92,7 @@ enum eCARD_BASETYPE
 			BEID_EId& beid_eid	= Card.getID();
 
 			m_Fields[CARD_TYPE]			= QString::fromUtf8(beid_eid.getDocumentType());
-			m_Fields[CHIP_NUMBER]		= QString::fromUtf8(beid_eid.getChipNumber());
+			m_Fields[CHIP_NUMBER]		= QString::fromUtf8(beid_eid.getDocumentPAN());
 			m_Fields[CARD_NUMBER]		= QString::fromUtf8(beid_eid.getLogicalNumber());
 			//m_Fields[CARD_PLACEOFISSUE]	= QString::fromUtf8(beid_eid.getIssuingMunicipality());
 			m_Fields[CARD_VALIDFROM]	= QString::fromUtf8(beid_eid.getValidityBeginDate());
@@ -747,7 +747,7 @@ public:
 		m_Fields[NAME]						= QString::fromUtf8(beid_eid.getSurname());
 		m_Fields[FIRSTNAME]					= QString::fromUtf8(beid_eid.getFirstName1());
 		m_Fields[NATIONALITY]				= QString::fromUtf8(beid_eid.getNationality());
-		m_Fields[NATIONALNUMBER]			= QString::fromUtf8(beid_eid.getNationalNumber());
+		m_Fields[NATIONALNUMBER]			= QString::fromUtf8(beid_eid.getCivilianIdNumber());
 		m_Fields[BIRTHDATE]					= QString::fromUtf8(beid_eid.getDateOfBirth());
 		m_Fields[COUNTRY]					= QString::fromUtf8(beid_eid.getCountry());
 		m_Fields[SEX]						= QString::fromUtf8(beid_eid.getGender());

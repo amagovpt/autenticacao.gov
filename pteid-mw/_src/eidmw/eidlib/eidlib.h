@@ -988,12 +988,11 @@ public:
 	BEIDSDK_API const char *getDateOfBirth();			/**< Return Date Of Birth field */
 	BEIDSDK_API const char *getLocationOfBirth();		/**< Return Location Of Birth field */
 	BEIDSDK_API const char *getNationality();			/**< Return Nationality field */
-	BEIDSDK_API const char *getNationalNumber();		/**< Return National Number field */
 	BEIDSDK_API const char *getDuplicata();				/**< Return Duplicata field */
 	BEIDSDK_API const char *getSpecialOrganization();	/**< Return Special Organization field */
 	BEIDSDK_API const char *getMemberOfFamily();		/**< Return Member Of Family field */
 	BEIDSDK_API const char *getLogicalNumber();			/**< Return Logical Number field */
-	BEIDSDK_API const char *getChipNumber();			/**< Return Chip Number field */
+	BEIDSDK_API const char *getDocumentPAN();			/**< Return Document PAN field */
 	BEIDSDK_API const char *getValidityBeginDate();		/**< Return Validity Begin Date field */
 	BEIDSDK_API const char *getValidityEndDate();		/**< Return Validity End Date field */
 	//BEIDSDK_API const char *getAddressVersion();		/**< Return Address Version field */
