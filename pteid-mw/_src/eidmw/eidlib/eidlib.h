@@ -1004,8 +1004,8 @@ public:
 	BEIDSDK_API	const char *getDocumentNumber();				/**< Return field DocumentNumber */
 	BEIDSDK_API	const char *getCivilianIdNumber();				/**< Return field CivlianIdNumber */
 	BEIDSDK_API	const char *getTaxNo();							/**< Return field TaxNo */
-	BEIDSDK_API	const char *getSocialSecurityNo();				/**< Return field SocialSecurityNo */
-	BEIDSDK_API	const char *getHealthNo();						/**< Return field HealthNo */
+	BEIDSDK_API	const char *getSocialSecurityNumber();			/**< Return field SocialSecurityNumber */
+	BEIDSDK_API	const char *getHealthNumber();					/**< Return field HealthNo */
 	BEIDSDK_API	const char *getIssuingEntity();					/**< Return field IssuingEntity */
 	BEIDSDK_API const char *getLocalofRequest();				/**< Return field LocalofRequest*/
 	BEIDSDK_API	const char *getGivenNameFather();				/**< Return field GivenNameFather */

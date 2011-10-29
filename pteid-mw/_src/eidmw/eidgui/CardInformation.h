@@ -755,8 +755,8 @@ public:
 		m_Fields[DOCUMENTNUMBER] 			= QString::fromUtf8(beid_eid.getDocumentNumber());
 		m_Fields[PARENTS]					= QString::fromUtf8(beid_eid.getSurnameFather());
 		m_Fields[TAXNO]						= QString::fromUtf8(beid_eid.getTaxNo());
-		m_Fields[HEALTHNO]					= QString::fromUtf8(beid_eid.getHealthNo());
-		m_Fields[SOCIALSECURITYNO]			= QString::fromUtf8(beid_eid.getSocialSecurityNo());
+		m_Fields[HEALTHNO]					= QString::fromUtf8(beid_eid.getHealthNumber());
+		m_Fields[SOCIALSECURITYNO]			= QString::fromUtf8(beid_eid.getSocialSecurityNumber());
 		m_Fields[CARDVERSION]				= QString::fromUtf8(beid_eid.getDocumentVersion());
 		m_Fields[DOCUMENTTYPE]				= QString::fromUtf8(beid_eid.getDocumentType());
 		m_Fields[ISSUINGENTITY]				= QString::fromUtf8(beid_eid.getIssuingEntity());

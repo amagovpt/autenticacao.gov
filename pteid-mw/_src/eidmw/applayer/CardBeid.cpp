@@ -645,7 +645,7 @@ const char *APL_EidFile_ID::getTaxNo()
 	return "";
 }
 
-const char *APL_EidFile_ID::getSocialSecurityNo()
+const char *APL_EidFile_ID::getSocialSecurityNumber()
 {
 	if(ShowData())
 		return m_SocialSecurityNo.c_str();
@@ -653,7 +653,7 @@ const char *APL_EidFile_ID::getSocialSecurityNo()
 	return "";
 }
 
-const char *APL_EidFile_ID::getHealthNo()
+const char *APL_EidFile_ID::getHealthNumber()
 {
 	if(ShowData())
 		return m_HealthNo.c_str();

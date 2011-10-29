@@ -1792,14 +1792,14 @@ const char *APL_DocEId::getTaxNo()
 	return m_card->getFileID()->getTaxNo();
 }
 
-const char *APL_DocEId::getSocialSecurityNo()
+const char *APL_DocEId::getSocialSecurityNumber()
 {
-	return m_card->getFileID()->getSocialSecurityNo();
+	return m_card->getFileID()->getSocialSecurityNumber();
 }
 
-const char *APL_DocEId::getHealthNo()
+const char *APL_DocEId::getHealthNumber()
 {
-	return m_card->getFileID()->getHealthNo();
+	return m_card->getFileID()->getHealthNumber();
 }
 
 const char *APL_DocEId::getIssuingEntity()

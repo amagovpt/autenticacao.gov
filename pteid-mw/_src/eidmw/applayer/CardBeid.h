@@ -129,8 +129,8 @@ public:
 	const char *getDocumentNumber();				/**< Return field DocumentNumber */
 	const char *getCivilianIdNumber();				/**< Return field CivilianIdNumber */
 	const char *getTaxNo();							/**< Return field TaxNo */
-	const char *getSocialSecurityNo();				/**< Return field SocialSecurityNo */
-	const char *getHealthNo();						/**< Return field HealthNo */
+	const char *getSocialSecurityNumber();			/**< Return field SocialSecurityNumber */
+	const char *getHealthNumber();					/**< Return field HealthNumber */
 	const char *getIssuingEntity();					/**< Return field IssuingEntity */
 	const char *getGivenNameFather();				/**< Return field GivenNameFather */
 	const char *getSurnameFather();					/**< Return field SurnameFather */

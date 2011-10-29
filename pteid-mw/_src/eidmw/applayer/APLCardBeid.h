@@ -365,8 +365,8 @@ public:
 	EIDMW_APL_API const char *getDocumentNumber();		/**< Return field DocumentNumber */
 	EIDMW_APL_API const char *getCivilianIdNumber();	/**< Return field CivilianIdNumber */
 	EIDMW_APL_API const char *getTaxNo();				/**< Return field TaxNo */
-	EIDMW_APL_API const char *getSocialSecurityNo();	/**< Return field SocialSecurityNo */
-	EIDMW_APL_API const char *getHealthNo();			/**< Return field HealthNo */
+	EIDMW_APL_API const char *getSocialSecurityNumber();/**< Return field SocialSecurityNumber */
+	EIDMW_APL_API const char *getHealthNumber();		/**< Return field HealthNumber */
 	EIDMW_APL_API const char *getIssuingEntity();	 	/**< Return field IssuingEntity */
 	EIDMW_APL_API const char *getGivenNameFather();		/**< Return field GivenNameFather */
 	EIDMW_APL_API const char *getSurnameFather();		/**< Return field SurnameFather */

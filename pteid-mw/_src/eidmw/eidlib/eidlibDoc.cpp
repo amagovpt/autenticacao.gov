@@ -1103,28 +1103,28 @@ const char *BEID_EId::getTaxNo()
 	return out;
 }
 
-const char *BEID_EId::getSocialSecurityNo()
+const char *BEID_EId::getSocialSecurityNumber()
 {
 	const char *out = NULL;
 
 	BEGIN_TRY_CATCH
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getSocialSecurityNo();
+	out = pimpl->getSocialSecurityNumber();
 
 	END_TRY_CATCH
 
 	return out;
 }
 
-const char *BEID_EId::getHealthNo()
+const char *BEID_EId::getHealthNumber()
 {
 	const char *out = NULL;
 
 	BEGIN_TRY_CATCH
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getHealthNo();
+	out = pimpl->getHealthNumber();
 
 	END_TRY_CATCH
 
