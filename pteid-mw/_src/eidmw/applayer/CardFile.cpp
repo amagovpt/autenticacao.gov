@@ -64,7 +64,8 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 	//FIX Lenght
 	std::string getPath (cachefile, 25, 12);
 
-	if (getPath == csPath)
+	// Comment cache code until we figure out whats wrong on Windows platforms
+	/*if (getPath == csPath)
 	{
 		//lmedinas: need to tweak this a bit more
 		if (chkfile)
@@ -73,12 +74,14 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 			CByteArray file1;
 			ifstream myReadFile;
 			std::ostringstream out;
-
+			std::string line,buf; 
 			myReadFile.open(contents.c_str());
-			out << myReadFile.rdbuf();
-			std::string s = out.str();
+			//out << myReadFile.rdbuf();
+			//std::string s = out.str();
 
-			file1.Append(s);
+			while(std::getline(myReadFile,line))
+			    buf += line;
+			file1.Append(buf);
 
 			m_data=file1;
 			m_keepdata=true;
@@ -91,7 +94,14 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 	} else {
 		m_path=csPath;
 		m_keepdata=false;
-	}
+	}*/
+
+	if(csPath)
+	    m_path=csPath;
+        else
+	    m_path="";
+
+	m_keepdata=false;
 
 	m_status=CARDFILESTATUS_UNREAD;
 
