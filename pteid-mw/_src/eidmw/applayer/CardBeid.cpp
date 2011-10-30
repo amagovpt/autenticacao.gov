@@ -899,7 +899,7 @@ void APL_EidFile_Address::EmptyFields()
 {
 	m_AddressFile.clear();
 	m_AddressType.clear();
-	m_CountryType.clear();
+	m_Country.clear();
 	m_District.clear();
 	m_StreetName.clear();
 	m_AddressVersion.clear();
@@ -930,10 +930,10 @@ void APL_EidFile_Address::AddressFields()
 		CTLVBuffer oTLVBuffer;
 	    oTLVBuffer.ParseTLV(m_data.GetBytes(), m_data.Size());
 
-	    //Country Type
-	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_COUNTRYTYPE, PTEIDNG_FIELD_ADDRESS_LEN_COUNTRYTYPE);
+	    //Country
+	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_COUNTRY, PTEIDNG_FIELD_ADDRESS_LEN_COUNTRY);
 	    pteidngAddressBuffer.TrimRight(' ');
-	    m_CountryType.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
+	    m_Country.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 		//District
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_DISTRICT, PTEIDNG_FIELD_ADDRESS_LEN_DISTRICT);
@@ -1052,7 +1052,7 @@ void APL_EidFile_Address::ForeignerAddressFields()
 	//Country Type
 	pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_FOREIGNER_COUNTRYTYPE, PTEIDNG_FIELD_ADDRESS_LEN_FOREIGNER_COUNTRYTYPE);
 	pteidngAddressBuffer.TrimRight(' ');
-	m_CountryType.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
+	m_Country.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	//District
 	pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_FOREIGNER_ADDRESS, PTEIDNG_FIELD_ADDRESS_LEN_FOREIGNER_ADDRESS);
@@ -1079,6 +1079,7 @@ void APL_EidFile_Address::ForeignerAddressFields()
     pteidngAddressBuffer.TrimRight(' ');
     m_DoorNo.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
+    /* martinho - do not cache the address file
     ofstream myfile;
     APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
     std::string	m_cachedirpath = conf_dir.getString();
@@ -1093,7 +1094,7 @@ void APL_EidFile_Address::ForeignerAddressFields()
     m_AddressFile.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
     myfile << m_AddressFile;
     myfile.close();
-
+	*/
 }
 
 bool APL_EidFile_Address::MapFields()

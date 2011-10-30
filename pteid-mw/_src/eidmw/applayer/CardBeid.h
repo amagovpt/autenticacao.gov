@@ -329,7 +329,7 @@ private:
 
 	std::string m_AddressFile;
 	std::string m_AddressType;								/**< Field Address type */
-	std::string m_CountryType;								/**< Field Country type */
+	std::string m_Country;									/**< Field Country*/
 	std::string m_District;									/**< Field District */
 	std::string m_StreetName;								/**< Field StreetName */
 	std::string m_AddressVersion;							/**< Field AddressVersion */
