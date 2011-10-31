@@ -962,6 +962,7 @@ return $jnicall;
 %javaexception("BEID_Exception") getDocumentVersion	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getDocumentType		JAVA_CODE_THROW
 %javaexception("BEID_Exception") getFirstName			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getFirstName1			JAVA_CODE_THROW
 %javaexception("BEID_Exception") getSurname			JAVA_CODE_THROW
 %javaexception("BEID_Exception") getGender				JAVA_CODE_THROW
 %javaexception("BEID_Exception") getDateOfBirth		JAVA_CODE_THROW
@@ -985,6 +986,24 @@ return $jnicall;
 %javaexception("BEID_Exception") getCountry			JAVA_CODE_THROW
 %javaexception("BEID_Exception") getSpecialStatus		JAVA_CODE_THROW
 %javaexception("BEID_Exception") getPhoto          JAVA_CODE_THROW
+%javaexception("BEID_Exception") getHeight	          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getDocumentNumber          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getTaxNo	          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getSocialSecurityNo          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getHealthNo	          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getIssuingEntity          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getLocalofRequest          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getGivenNameFather          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getSurnameFather          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getGivenNameMother          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getSurnameMother          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getParents	          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getPersoData	          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getValidation          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getMRZ1	          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getMRZ2	          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getMRZ3        	  	JAVA_CODE_THROW
+
 
 //------------------------------------------------------------
 // class BEID_SisFullDoc: none
