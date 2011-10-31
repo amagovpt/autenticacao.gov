@@ -978,11 +978,9 @@ return $jnicall;
 %javaexception("BEID_Exception") getValidityBeginDate	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getValidityEndDate	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getLocalofRequest		JAVA_CODE_THROW
-%javaexception("BEID_Exception") getPlace				JAVA_CODE_THROW
 %javaexception("BEID_Exception") getAddressVersion		JAVA_CODE_THROW
 %javaexception("BEID_Exception") getStreet				JAVA_CODE_THROW
 %javaexception("BEID_Exception") getZipCode			JAVA_CODE_THROW
-%javaexception("BEID_Exception") getMunicipality		JAVA_CODE_THROW
 %javaexception("BEID_Exception") getCountry			JAVA_CODE_THROW
 %javaexception("BEID_Exception") getSpecialStatus		JAVA_CODE_THROW
 %javaexception("BEID_Exception") getPhoto          JAVA_CODE_THROW
@@ -1004,6 +1002,25 @@ return $jnicall;
 %javaexception("BEID_Exception") getMRZ2	          	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getMRZ3        	  	JAVA_CODE_THROW
 
+//------------------------------------------------------------
+// class BEID_Address
+//------------------------------------------------------------
+%javaexception("BEID_Exception") getMunicipality		JAVA_CODE_THROW
+%javaexception("BEID_Exception") getDistrict			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getStreetName			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getCivilParish			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getStreetType1			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getStreetType2			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getBuildingType1		JAVA_CODE_THROW
+%javaexception("BEID_Exception") getBuildingType2		JAVA_CODE_THROW
+%javaexception("BEID_Exception") getDoorNo			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getFloor			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getSide			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getLocality			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getPlace			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getZip4			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getZip3			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getPostalLocality		JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class BEID_SisFullDoc: none
