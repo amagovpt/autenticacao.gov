@@ -1146,7 +1146,8 @@ try_again:
 		{
 			try {
 				poTmpReader = &g_oCardLayer.getReader(oReadersInfo.ReaderName(i));
-				if (poTmpReader->Connect() && poTmpReader->GetSerialNr() == csSerialNr)
+				/*We gave up on depending on the correct card serial number to be present in the param */
+				if (poTmpReader->Connect())
 				{
 					poReader = poTmpReader;
 					break;
@@ -1216,6 +1217,7 @@ try_again:
  */
 static tPrivKey FindKey(CReader *poReader, const std::string &csContainerName)
 {
+	MWLOG(LEV_DEBUG, MOD_CSP, L"FindKey() Called with csContainerName=%s", csContainerName);
 	const char *csCont = csContainerName.c_str();
 	unsigned long ulKeyID = 0;
 
@@ -1225,21 +1227,11 @@ static tPrivKey FindKey(CReader *poReader, const std::string &csContainerName)
 		// Hardcoded mapping
 		if (csCont[0] == 'A' && csCont[1] == 'u' && csCont[2] == 't')
 		{
-#ifdef CSP_BEID
-			ulKeyID = 2;
-#endif
-#ifdef CSP_PTEID
-			ulKeyID = 1;
-#endif
+			ulKeyID = 0x44+1; /* 0x44 is the base magic number for privKey */
 		}
 		else
 		{
-#ifdef CSP_BEID
-			ulKeyID = 3;
-#endif
-#ifdef CSP_PTEID
-			ulKeyID = 2;
-#endif
+			ulKeyID = 0x44+2;
 		}
 	}
 	else
