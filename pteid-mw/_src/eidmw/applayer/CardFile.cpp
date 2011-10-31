@@ -60,6 +60,9 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 	cachefile.append(csPath);
 	cachefile.append(".bin");
 	contents.append(cachefile);
+
+	try
+	{
 	ifstream chkfile(contents.c_str());
 	//FIX Lenght
 	std::string getPath (cachefile, 25, 12);
@@ -102,6 +105,12 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 	    m_path="";
 
 	m_keepdata=false;
+
+	}
+	catch(CMWException& e)
+	{
+		MWLOG(LEV_INFO, MOD_APL, L"LoadData: File cache failed %ls", csPath);
+	}
 
 	m_status=CARDFILESTATUS_UNREAD;
 
