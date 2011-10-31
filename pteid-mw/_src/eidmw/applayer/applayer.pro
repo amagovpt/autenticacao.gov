@@ -76,10 +76,13 @@ HEADERS += \
 	eidmw_XML_datastorage.h \
 	eidmw_XML_DefHandler.h \
 	eidmw_XMLParser.h \
-	sslcommon.h \
-	sslclient.h \
-	sslconnection.h \
 	MiscUtil.h
+
+### EMV-CAP support
+###        EMV-Cap-Helper.h \
+### 	sslcommon.h \
+### 	sslclient.h \
+### 	sslconnection.h \
 
 SOURCES += \
 	APLCertif.cpp        \  
@@ -87,17 +90,20 @@ SOURCES += \
 	APLDoc.cpp	        \
 	APLConfig.cpp	\
 	APLReader.cpp        \
-    EMV-Cap-Helper.cpp \
 	CardFile.cpp	        \
 	CertStatusCache.cpp  \
 	cryptoFramework.cpp  \
     APLCard.cpp          \ 
     CRLService.cpp       \
     XMLParser.cpp       \
-    sslcommon.cpp		\
-    sslclient.cpp		\
-    sslconnection.cpp   \
     MiscUtil.cpp
+
+### EMV-CAP support
+###    EMV-Cap-Helper.cpp \
+###    sslcommon.cpp		\
+###    sslclient.cpp		\
+###    sslconnection.cpp   \
+
 
 ##
 ## Headers and sources specific to a country
