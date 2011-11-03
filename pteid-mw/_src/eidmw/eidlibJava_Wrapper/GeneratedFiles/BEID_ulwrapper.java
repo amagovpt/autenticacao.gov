@@ -1,4 +1,4 @@
-package be.belgium.eid;
+package pt.gov.cartaodecidadao;
 
 public class BEID_ulwrapper
 {

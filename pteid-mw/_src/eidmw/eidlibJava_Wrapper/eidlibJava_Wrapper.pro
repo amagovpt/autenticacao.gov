@@ -33,7 +33,7 @@ PREPROCESS_FILES=../eidlib/eidlib.i
 preprocess.name = execute swig to generate java and c++ wrapper
 preprocess.input = PREPROCESS_FILES
 preprocess.output = ./GeneratedFiles/eidlibJava_Wrapper.cpp
-preprocess.commands = swig -c++ -java -package be.belgium.eid -o ./GeneratedFiles/eidlibJava_Wrapper.cpp -outdir ./GeneratedFiles ../eidlib/eidlib.i
+preprocess.commands = swig -c++ -java -package pt.gov.cartaodecidadao -o ./GeneratedFiles/eidlibJava_Wrapper.cpp -outdir ./GeneratedFiles ../eidlib/eidlib.i
 QMAKE_EXTRA_COMPILERS += preprocess
 preprocess.variable_out+=SOURCES
 }
@@ -41,7 +41,7 @@ preprocess.variable_out+=SOURCES
 ###
 ### As a postbuild step, compile the generated .java files and jar them to a jar file
 ###
-unix:!macx: QMAKE_POST_LINK = javac -verbose -d ../eidlibJava/class ./GeneratedFiles/*.java; jar cvf ../jar/$${EIDLIBJAR} -C ../eidlibJava/class be/belgium/eid/
+unix:!macx: QMAKE_POST_LINK = javac -verbose -d ../eidlibJava/class ./GeneratedFiles/*.java; jar cvf ../jar/$${EIDLIBJAR} -C ../eidlibJava/class pt/gov/cartaodecidadao/
 
 ## destination directory
 DESTDIR = ../lib

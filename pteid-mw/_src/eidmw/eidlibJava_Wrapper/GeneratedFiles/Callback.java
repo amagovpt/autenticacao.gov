@@ -1,4 +1,4 @@
-package be.belgium.eid;
+package pt.gov.cartaodecidadao;
 
 /**
   * Java callback interface
