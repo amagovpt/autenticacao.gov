@@ -263,7 +263,7 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="call ..\SetPathSwig.bat&#x0D;&#x0A;&quot;%BEID_DIR_SWIG%\swig.exe&quot; -c++ -java -package be.belgium.eid -o .\GeneratedFiles\eidlibJava_Wrapper.cpp -outdir .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					CommandLine="call ..\SetPathSwig.bat&#x0D;&#x0A;&quot;%BEID_DIR_SWIG%\swig.exe&quot; -c++ -java -package pt.gov.cartaodecidadao -o .\GeneratedFiles\eidlibJava_Wrapper.cpp -outdir .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs=".\GeneratedFiles\eidlibJava_Wrapper.cpp"
 				/>
 			</FileConfiguration>
