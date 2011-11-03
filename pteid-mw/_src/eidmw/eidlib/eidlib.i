@@ -969,7 +969,7 @@ return $jnicall;
 %javaexception("BEID_Exception") getLocationOfBirth	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getNobility			JAVA_CODE_THROW
 %javaexception("BEID_Exception") getNationality		JAVA_CODE_THROW
-%javaexception("BEID_Exception") getNationalNumber		JAVA_CODE_THROW
+%javaexception("BEID_Exception") getCivilianIdNumber		JAVA_CODE_THROW
 %javaexception("BEID_Exception") getDuplicata			JAVA_CODE_THROW
 %javaexception("BEID_Exception") getSpecialOrganization	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getMemberOfFamily		JAVA_CODE_THROW
@@ -987,8 +987,8 @@ return $jnicall;
 %javaexception("BEID_Exception") getHeight	          	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getDocumentNumber          	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getTaxNo	          	JAVA_CODE_THROW
-%javaexception("BEID_Exception") getSocialSecurityNo          	JAVA_CODE_THROW
-%javaexception("BEID_Exception") getHealthNo	          	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getSocialSecurityNumber       	JAVA_CODE_THROW
+%javaexception("BEID_Exception") getHealthNumber          	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getIssuingEntity          	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getLocalofRequest          	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getGivenNameFather          	JAVA_CODE_THROW
