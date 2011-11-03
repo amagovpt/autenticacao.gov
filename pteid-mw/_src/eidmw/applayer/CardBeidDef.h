@@ -74,7 +74,7 @@ namespace eIDMW
 #define PTEIDNG_FIELD_ID_POS_DocumentNumber				154
 #define PTEIDNG_FIELD_ID_LEN_DocumentNumber				28
 #define PTEIDNG_FIELD_ID_POS_DocumentNumberPAN			182
-#define PTEIDNG_FIELD_ID_LEN_DocumentNumberPAN			32
+#define PTEIDNG_FIELD_ID_LEN_DocumentNumberPAN			16
 #define PTEIDNG_FIELD_ID_POS_DocumentVersion			214
 #define PTEIDNG_FIELD_ID_LEN_DocumentVersion			16
 #define PTEIDNG_FIELD_ID_POS_ValidityBeginDate			230
