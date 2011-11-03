@@ -19,7 +19,14 @@
 **************************************************************************** */
 #include <iostream>
 #include <fstream>
-#include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <sys/locking.h>
+
+#ifdef WIN32
+#include <io.h>
+#endif
 
 #include "APLReader.h"
 #include "APLCard.h"
@@ -63,48 +70,52 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 
 	try
 	{
-	ifstream chkfile(contents.c_str());
-	//FIX Lenght
-	std::string getPath (cachefile, 25, 12);
+		ifstream chkfile(contents.c_str());
+		//FIX Lenght
+		std::string getPath (cachefile, 25, 12);
 
-	// Comment cache code until we figure out whats wrong on Windows platforms
-	/*if (getPath == csPath)
-	{
-		//lmedinas: need to tweak this a bit more
-		if (chkfile)
+		if (getPath == csPath)
 		{
-			m_path="";
-			CByteArray file1;
-			ifstream myReadFile;
-			std::ostringstream out;
-			std::string line,buf; 
-			myReadFile.open(contents.c_str());
-			//out << myReadFile.rdbuf();
-			//std::string s = out.str();
+			if (chkfile)
+			{
+				m_path="";
+				FILE *m_stream;
+				char *buff;
+				unsigned long fileLen;
+				CByteArray cbdata;
 
-			while(std::getline(myReadFile,line))
-			    buf += line;
-			file1.Append(buf);
+#ifdef WIN32
+				fopen_s(&m_stream, contents.c_str(), "rb");
+				_locking( fileno(m_stream), LK_NBLCK, 17000L );
+#else
+				m_stream = fopen(contents.c_str(), "rb");
+#endif
+				fseek(m_stream, 0, SEEK_END);
+				fileLen = ftell(m_stream);
+				fseek(m_stream, 0, SEEK_SET);
 
-			m_data=file1;
-			m_keepdata=true;
+				buff=(char *)malloc(fileLen+1);
+
+				fread(buff, fileLen, 1, m_stream);
+#ifdef WIN32
+				_locking( fileno(m_stream), LK_UNLCK, 17000L );
+#endif
+				fclose(m_stream);
+			
+			
+				cbdata.Append((unsigned char*)buff, fileLen);
+				m_data=cbdata;
+				m_keepdata=true;
+
+			} else {
+				m_path=csPath;
+				m_keepdata=false;
+			}
 
 		} else {
 			m_path=csPath;
 			m_keepdata=false;
 		}
-
-	} else {
-		m_path=csPath;
-		m_keepdata=false;
-	}*/
-
-	if(csPath)
-	    m_path=csPath;
-        else
-	    m_path="";
-
-	m_keepdata=false;
 
 	}
 	catch(CMWException& e)
