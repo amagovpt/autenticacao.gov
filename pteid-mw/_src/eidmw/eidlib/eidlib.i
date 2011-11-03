@@ -974,7 +974,7 @@ return $jnicall;
 %javaexception("BEID_Exception") getSpecialOrganization	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getMemberOfFamily		JAVA_CODE_THROW
 %javaexception("BEID_Exception") getLogicalNumber		JAVA_CODE_THROW
-%javaexception("BEID_Exception") getChipNumber			JAVA_CODE_THROW
+%javaexception("BEID_Exception") getDocumentPAN			JAVA_CODE_THROW
 %javaexception("BEID_Exception") getValidityBeginDate	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getValidityEndDate	JAVA_CODE_THROW
 %javaexception("BEID_Exception") getLocalofRequest		JAVA_CODE_THROW
