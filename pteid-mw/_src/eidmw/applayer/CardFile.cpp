@@ -22,10 +22,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <sys/locking.h>
-
 #ifdef WIN32
 #include <io.h>
+#include <sys/locking.h>
 #endif
 
 #include "APLReader.h"
