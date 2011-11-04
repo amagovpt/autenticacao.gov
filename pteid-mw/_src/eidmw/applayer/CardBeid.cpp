@@ -27,7 +27,11 @@
 #include "CardBeidDef.h"
 #include "CardFile.h"
 #include "APLCertif.h"
+#include "MWException.h"
+#include "eidErrors.h"
 #include "APLConfig.h"
+
+#include "Log.h"
 
 using namespace std;
 
@@ -440,21 +444,27 @@ bool APL_EidFile_ID::MapFields()
 	pteidngidBuffer.TrimRight(' ');
 	m_AccidentalIndications.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
-
-    ofstream myfile;
-    APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
-    std::string	m_cachedirpath = conf_dir.getString();
-    std::string pteidfile = m_cachedirpath;
-    pteidfile.append("/pteidng-");
-    pteidfile.append(m_SerialNumber);
-    pteidfile.append("-");
-    pteidfile.append(BEID_FILE_ID);
-    pteidfile.append(".bin");
-    myfile.open (pteidfile.c_str());
-    pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FILE, PTEIDNG_FIELD_ID_LEN_FILE);
-    m_IDFile.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
-    myfile << m_IDFile;
-    myfile.close();
+	try
+	{
+		ofstream myfile;
+		APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
+		std::string	m_cachedirpath = conf_dir.getString();
+		std::string pteidfile = m_cachedirpath;
+		pteidfile.append("/pteidng-");
+		pteidfile.append(m_SerialNumber);
+		pteidfile.append("-");
+		pteidfile.append(BEID_FILE_ID);
+		pteidfile.append(".bin");
+		myfile.open (pteidfile.c_str());
+		pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FILE, PTEIDNG_FIELD_ID_LEN_FILE);
+		m_IDFile.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
+		myfile << m_IDFile;
+		myfile.close();
+	}
+	catch(CMWException& e)
+	{
+		MWLOG(LEV_INFO, MOD_APL, L"Write cache file %ls on disk failed", BEID_FILE_ID);
+	}
 
 	//MemberOfFamily - See if this segfaults in every platform
 	//m_MemberOfFamily = m_GivenNameMother + " " + m_SurnameMother + " * " + m_GivenNameFather + " " + m_SurnameFather;
@@ -1369,21 +1379,27 @@ bool APL_EidFile_Sod::MapFields()
     pteidngSodBuffer.TrimRight(' ');
     m_Sod.assign((char*)(pteidngSodBuffer.GetBytes()), pteidngSodBuffer.Size());
 
-    ofstream myfile;
-    APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
-    std::string	m_cachedirpath = conf_dir.getString();
-    std::string pteidfile = m_cachedirpath;
-    pteidfile.append("/pteidng-");
-    pteidfile.append(m_SerialNumber);
-    pteidfile.append("-");
-    pteidfile.append(PTEID_FILE_SOD);
-    pteidfile.append(".bin");
-    myfile.open (pteidfile.c_str());
-    pteidngSodBuffer = m_data.GetBytes(0, 4000);
-    m_SodFile.assign((char*)(pteidngSodBuffer.GetBytes()), pteidngSodBuffer.Size());
-    myfile << m_SodFile;
-    myfile.close();
-
+    try
+    {
+    	ofstream myfile;
+    	APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
+    	std::string	m_cachedirpath = conf_dir.getString();
+    	std::string pteidfile = m_cachedirpath;
+    	pteidfile.append("/pteidng-");
+    	pteidfile.append(m_SerialNumber);
+    	pteidfile.append("-");
+    	pteidfile.append(PTEID_FILE_SOD);
+    	pteidfile.append(".bin");
+    	myfile.open (pteidfile.c_str());
+    	pteidngSodBuffer = m_data.GetBytes(PTEIDNG_FIELD_SOD_POS_FILE, PTEIDNG_FIELD_SOD_LEN_FILE);
+    	m_SodFile.assign((char*)(pteidngSodBuffer.GetBytes()), pteidngSodBuffer.Size());
+    	myfile << m_SodFile;
+    	myfile.close();
+    }
+    catch(CMWException& e)
+    {
+    	MWLOG(LEV_INFO, MOD_APL, L"Write cache file %ls on disk failed", PTEID_FILE_SOD);
+    }
     return true;
 }
 
