@@ -44,47 +44,8 @@ DWORD WINAPI   CardAuthenticatePin
 	DWORD dwReturn = SCARD_S_SUCCESS;
 
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
-
-	/********************/
-	/* Check Parameters */
-	/********************/
-	if ( pCardData == NULL )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-	if ( pwszUserId == NULL )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pwszUserId]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-	if ( pbPin == NULL )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pbPin]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-	if ( wcscmp(pwszUserId, wszCARD_USER_USER) != 0 ) 
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter value [pwszUserId]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-
-	/* Cmon man...
-	dwReturn = BeidMSE(pCardData, ROLE_DIGSIG);
-	if ( dwReturn != SCARD_S_SUCCESS )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Error in BeidMSE: [0x%02X]", dwReturn);
-		CLEANUP(dwReturn);
-	}
-	LogTrace(LOGTYPE_INFO, WHERE, "SET COMMAND OK, trying to log on...");*/
-
-	dwReturn = BeidAuthenticate(pCardData, pbPin, cbPin, pcAttemptsRemaining);
-	if ( dwReturn != SCARD_S_SUCCESS )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Logon: [0x%02X]", dwReturn);
-		CLEANUP(dwReturn);
-	}
-
+	
+	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 cleanup:
 
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
@@ -236,6 +197,7 @@ DWORD WINAPI   CardAuthenticateEx
 	DWORD dwReturn = SCARD_S_SUCCESS;
 	PIN_INFO pbPinInfo;
 	DWORD dwDataLen;
+	BYTE specific_pin_id;
 
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
@@ -265,12 +227,12 @@ DWORD WINAPI   CardAuthenticateEx
 		}
 	}
 
-	//FIX dwReturn = BeidMSE(pCardData, PinId);
-	if ( dwReturn != SCARD_S_SUCCESS )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "MSE: [0x%02X]", dwReturn);
-		CLEANUP(dwReturn);
-	}
+	//dwReturn = BeidMSE(pCardData, PinId);
+	//if ( dwReturn != SCARD_S_SUCCESS )
+	//{
+	//	LogTrace(LOGTYPE_ERROR, WHERE, "MSE: [0x%02X]", dwReturn);
+	//	CLEANUP(dwReturn);
+	//}
 	/* External Pin?  */
 	dwReturn = CardGetProperty(pCardData, 
 		CP_CARD_PIN_INFO, 
@@ -283,11 +245,13 @@ DWORD WINAPI   CardAuthenticateEx
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 
+	specific_pin_id = PinId == ROLE_DIGSIG ? 0 : 1;
+
 	if ( pbPinInfo.PinType == ExternalPinType ) {	
 			dwReturn = BeidAuthenticateExternal(pCardData, pcAttemptsRemaining, (dwFlags & CARD_PIN_SILENT_CONTEXT ) == CARD_PIN_SILENT_CONTEXT);
 	} 
 	else {
-		dwReturn = BeidAuthenticate(pCardData, pbPinData, cbPinData, pcAttemptsRemaining);
+		dwReturn = BeidAuthenticate(pCardData, pbPinData, cbPinData, pcAttemptsRemaining, specific_pin_id);
 	}
 
 	if ( dwReturn != SCARD_S_SUCCESS )

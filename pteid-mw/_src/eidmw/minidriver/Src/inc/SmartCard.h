@@ -84,7 +84,16 @@ extern DWORD BeidGetCardSN
 extern DWORD BeidSignData
 			(
 				PCARD_DATA  pCardData, 
-				unsigned int HashAlgo, 
+				BYTE pin_id,
+				DWORD cbToBeSigned, 
+				PBYTE pbToBeSigned, 
+				DWORD *pcbSignature, 
+				PBYTE *ppbSignature
+			);
+extern DWORD BeidSignDataGemsafe 
+			(
+				PCARD_DATA  pCardData, 
+				BYTE pin_id,
 				DWORD cbToBeSigned, 
 				PBYTE pbToBeSigned, 
 				DWORD *pcbSignature, 
@@ -118,7 +127,8 @@ extern DWORD   BeidAuthenticate
                   PCARD_DATA     pCardData, 
                   PBYTE          pbPin, 
                   DWORD          cbPin, 
-                  PDWORD         pcAttemptsRemaining
+                  PDWORD         pcAttemptsRemaining,
+				  BYTE			 pin_id 
                );
 extern DWORD   BeidAuthenticateExternal
                (
@@ -133,8 +143,8 @@ extern DWORD   BeidDeAuthenticate
 
 extern DWORD   BeidMSE
                (
-                  PCARD_DATA     pCardData,             
-                  DWORD          dwRole
+                  PCARD_DATA     pCardData,
+                  BYTE          dwRole
                ) ;
 
 extern DWORD   BeidChangePIN
@@ -166,5 +176,4 @@ extern DWORD createVerifyCommand
 				(
 					PPIN_VERIFY_STRUCTURE pVerifyCommand
 				);
-
 #endif

@@ -20,13 +20,12 @@
 #ifndef __GLOBMDRV__H__
 #define __GLOBMDRV__H__
 
-#include "cardmod-mingw.h"
 #include <windows.h>
 #include "bcrypt.h"
 #include <cardmod.h>
 #include <stdio.h>
 
-//#include "Log.h"
+#include "Log.h"
 //#include "util.h"
 #include "stdafx.h"
 
@@ -97,5 +96,9 @@ typedef struct _VENDOR_SPECIFIC
 #define HASH_ALGO_SHA_512           7
 
 /************************************************************************************************************************/
+/* Global State, here be dragons... */
+BYTE Is_Gemsafe; /* Gemsafe = 1, IAS = 2   */
+
+
 
 #endif

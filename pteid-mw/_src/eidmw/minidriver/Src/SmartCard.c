@@ -106,7 +106,8 @@ void BeidDelayAndRecover(PCARD_DATA  pCardData,
 DWORD BeidAuthenticate(PCARD_DATA   pCardData, 
                        PBYTE        pbPin, 
                        DWORD        cbPin, 
-                       PDWORD       pcAttemptsRemaining) 
+                       PDWORD       pcAttemptsRemaining,
+					   BYTE			pin_id) 
 {
    DWORD             dwReturn  = 0;
 
@@ -120,6 +121,7 @@ DWORD BeidAuthenticate(PCARD_DATA   pCardData,
    BYTE              SW1, SW2;
    unsigned int              i = 0;
    unsigned int				 j = 0;
+   char				paddingChar;
 
    LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
@@ -144,37 +146,41 @@ DWORD BeidAuthenticate(PCARD_DATA   pCardData,
       LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [cbPin]");
       CLEANUP(SCARD_W_WRONG_CHV);
    }
-  
+
+   BeidSelectApplet(pCardData);
+  //00 20 00 81 08 32 31 34 38 FF FF FF FF
    /**********/
    /* Log On */
    /**********/
    Cmd[0] = 0x00;
    Cmd[1] = 0x20;  /* VERIFY COMMAND */
    Cmd[2] = 0x00;
-   Cmd[3] = 0x01;  /* Authentication PIN (in my IAS card at least) */
+   if (Is_Gemsafe)
+	   Cmd[3] = 0x81 + pin_id; /* PIN ID  */
+   else
+   {
+	   if (pin_id == 0)
+		   Cmd[3] = 0x01;  /* Authentication PIN  */
+	   else
+		   Cmd[3] = 0x82;  /* Signature PIN  */
+   }
+
    Cmd[4] = 0x08;  /* PIN Length (including padding) */
-   
+
+   if (Is_Gemsafe)
+	   paddingChar = 0xFF;
+   else
+	   paddingChar = 0x2F;
+
    while(i < 0x08)
    {
-      if(i < cbPin)
-		Cmd[i+5] = pbPin[i];
-	  else
-		  Cmd[i+5] = 0x2F;
-	  i++;
+	   if(i < cbPin)
+		   Cmd[i+5] = pbPin[i];
+	   else
+		   Cmd[i+5] = paddingChar;
+	   i++;
    }
-	
-   /*DEBUG */
-   printf("Verify PIN APDU: ");
-     
-   while ( j < 22)
-   {
-	 printf("%x ", (unsigned int)Cmd[j]);
-	 j++;
-   }
-   
-   printf("\n");
-     
-   
+	   
    uiCmdLg = 13;
    recvlen = sizeof(recvbuf);
 
@@ -187,14 +193,6 @@ DWORD BeidAuthenticate(PCARD_DATA   pCardData,
                             &recvlen);
    SW1 = recvbuf[recvlen-2];
    SW2 = recvbuf[recvlen-1];
-
-   /*BeidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit errorcode: [0x%02X]", dwReturn);
-      CLEANUP(dwReturn);
-   }
-   */
 
    if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
    {
@@ -630,11 +628,9 @@ cleanup:
 
 #define WHERE "BeidMSE"
 DWORD BeidMSE(PCARD_DATA   pCardData, 
-			  unsigned int uiHashAlgo,  /*This parameter is useful for the Gemsafe version of MSE */
-			  unsigned int size,
-              DWORD        dwRole) 
+			     BYTE      key_id) 
 {
-   /* TODO: Gemsafe version of this */
+  
    DWORD             dwReturn = 0;
 
    SCARD_IO_REQUEST  ioSendPci = {0, sizeof(SCARD_IO_REQUEST)};
@@ -642,16 +638,13 @@ DWORD BeidMSE(PCARD_DATA   pCardData,
 
    unsigned char     Cmd[128];
    unsigned int      uiCmdLg = 0;
-   unsigned char     recvbuf[256+2]; //MAX_APDU_LENGTH + 2 for SW1 and SW2
+   unsigned char     recvbuf[256+2];
    unsigned long     recvlen = sizeof(recvbuf);
    BYTE              SW1, SW2;
 
    int               i = 0;
 
    LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
-
-   //if (size != 36)
-   // 		IasSignatureHelper(pCardData);
    /*
     * The MSE: SET Command will fail with error 0x000006f7
     * if the command is executed too fast after an command which resulted in an error condition
@@ -660,20 +653,44 @@ DWORD BeidMSE(PCARD_DATA   pCardData,
    Cmd [0] = 0x00;
    Cmd [1] = 0x22; //MSE
    Cmd [2] = 0x41;
-   Cmd [3] = 0xA4;
-   Cmd [4] = 0x09;
-   Cmd [5] = 0x95; //Tag (Usage Qualifier)
-   Cmd [6] = 0x01;
-   Cmd [7] = 0x40;
-   Cmd [8] = 0x84; //Tag (Key Reference)
-   Cmd [9] = 0x01;
-   Cmd[10] = 0x01;
-   Cmd[11] = 0x80; //Tag (Algorithm Reference)
-   Cmd[12] = 0x01;
-   Cmd[13] = 0x02; //(RSA-PKCS#1)
+   if (Is_Gemsafe)
+   {
+	   Cmd [3] = 0xB6;
+	   Cmd [4] = 0x06; //Length of data
+	   Cmd [5] = 0x80; //Tag (Algorithm ID)
+	   Cmd [6] = 0x01;
+	   Cmd [7] = 0x02; 
+	   Cmd [8] = 0x84; //Tag (Key Reference) 
+	   Cmd [9] = 0x01;
+	   if(key_id == 0) 
+		Cmd [10] = 0x02; //Auth keyRef
+	   else
+		Cmd [10] = 0x01; //Sign keyRef
+	   uiCmdLg = 11;
 
-   uiCmdLg = 14;
+   }
+   else
+   {
+	   Cmd [3] = 0xA4;
+	   Cmd [4] = 0x09; //Length of data
+	   Cmd [5] = 0x95; //Tag (Usage Qualifier)
+	   Cmd [6] = 0x01;
+	   Cmd [7] = 0x40;
+	   Cmd [8] = 0x84; //Tag (Key Reference)
+	   Cmd [9] = 0x01;
+	   if(key_id == 0)
+		Cmd [10] = 0x01;
+	   else
+		Cmd [10] = 0x82;
+	   Cmd [11] = 0x80; //Tag (Algorithm Reference)
+	   Cmd [12] = 0x01;
+	   Cmd [13] = 0x02; //(RSA-PKCS#1)
+	   uiCmdLg = 14;
+   }
+  
    //Sleep(1000);
+   LogTrace(LOGTYPE_INFO, WHERE, "APDU MSE");
+   LogDump (uiCmdLg, (char *)Cmd);
   
    dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 
@@ -875,19 +892,30 @@ DWORD BeidGetCardSN(PCARD_DATA  pCardData,
    BYTE                    SW1, SW2;
 
    int                     i = 0;
-	int                     iWaitApdu = 100;
-	int   				      bRetry = 0;
+   int                     iWaitApdu = 100;
+   int   				      bRetry = 0;
 
-	if (cbSerialNumber < 16) {
+   if (cbSerialNumber < 16) {
 		CLEANUP(ERROR_INSUFFICIENT_BUFFER);
-	}
+   }
 
-	*pdwSerialNumber = 0;
+   BeidSelectApplet(pCardData);
+
+   *pdwSerialNumber = 0;
    Cmd [0] = 0x00;
    Cmd [1] = 0xCA;
+   if (Is_Gemsafe)
+   {
+   Cmd [2] = 0xDF;
+   Cmd [3] = 0x30;
+   Cmd [4] = 0x08;
+   }
+   else
+   {
    Cmd [2] = 0x02;
    Cmd [3] = 0x5A;
    Cmd [4] = 0x0D;
+   }
    uiCmdLg = 5;
 
 	do {
@@ -936,9 +964,16 @@ DWORD BeidGetCardSN(PCARD_DATA  pCardData,
       LogTrace(LOGTYPE_ERROR, WHERE, "Bad status bytes: [0x%02X][0x%02X]", SW1, SW2);
 		CLEANUP(SCARD_E_UNEXPECTED);
    }
-   
-   *pdwSerialNumber = 13; //For IAS card length(SerialNumber) = 13
+   if (Is_Gemsafe)
+   {
+	*pdwSerialNumber = 8;
+   memcpy(pbSerialNumber, recvbuf, 8);
+   }
+   else
+   {
+   *pdwSerialNumber = 13; //For IAS: length(SerialNumber) = 13
    memcpy(pbSerialNumber, recvbuf, 13);
+   }
 
 cleanup:
    return (dwReturn);
@@ -978,7 +1013,6 @@ void IasSignatureHelper(PCARD_DATA pCardData)
                             &ioRecvPci, 
                             recvbuf, 
                             &recvlen);
-   //TODO: if (!checkStatusCode(WHERE"", dwReturn, S
    uiCmdLg = sizeof(apdu2);
    
    dwReturn = SCardTransmit(pCardData->hScard, 
@@ -1066,7 +1100,7 @@ void IasSignatureHelper(PCARD_DATA pCardData)
 /****************************************************************************************************/
 
 #define WHERE "BeidSignData"
-DWORD BeidSignData(PCARD_DATA pCardData, unsigned int HashAlgo, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature)
+DWORD BeidSignData(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature)
 {
 
    DWORD                   dwReturn = 0;
@@ -1086,7 +1120,8 @@ DWORD BeidSignData(PCARD_DATA pCardData, unsigned int HashAlgo, DWORD cbToBeSign
    const unsigned char     *pbHdrHash = NULL;
 	
    BeidSelectApplet(pCardData);
-   dwReturn = BeidMSE(pCardData, HashAlgo, cbToBeSigned, ROLE_DIGSIG);
+   dwReturn = BeidMSE(pCardData, pin_id);
+
    if (dwReturn != SCARD_S_SUCCESS)
    {
 	CLEANUP(dwReturn);
@@ -1194,6 +1229,131 @@ DWORD BeidSignData(PCARD_DATA pCardData, unsigned int HashAlgo, DWORD cbToBeSign
 cleanup:
    return (dwReturn);
 }
+#undef WHERE
+
+#define WHERE "BeidSignDataGemsafe"
+/*TODO: To be Tested... */
+DWORD BeidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature)
+{
+
+   DWORD                   dwReturn = 0;
+
+   SCARD_IO_REQUEST        ioSendPci = {1, sizeof(SCARD_IO_REQUEST)};
+   SCARD_IO_REQUEST        ioRecvPci = {1, sizeof(SCARD_IO_REQUEST)};
+
+   unsigned char           Cmd[128];
+   unsigned int            uiCmdLg = 0;
+
+   unsigned char           recvbuf[1024];
+   unsigned long           recvlen = sizeof(recvbuf);
+   BYTE                    SW1, SW2;
+
+   unsigned int            i          = 0;
+   unsigned int            cbHdrHash  = 0;
+   const unsigned char     *pbHdrHash = NULL;
+	
+   dwReturn = BeidMSE(pCardData, pin_id);
+
+   if (dwReturn != SCARD_S_SUCCESS)
+   {
+	CLEANUP(dwReturn);
+   }
+
+   /* Sign Command for GEMSAFE*/
+   Cmd [0] = 0x00;
+   Cmd [1] = 0x2A;   /* PSO: Hash COMMAND */
+   Cmd [2] = 0x90;
+   Cmd [3] = 0xA0; 
+   Cmd [4] = cbToBeSigned+2; // The value of cbToBeSigned should always fit a single byte so this cast is safe 
+   Cmd [5] = 0x90;
+   Cmd [6] = (BYTE)(cbToBeSigned);
+   memcpy(Cmd + 7, pbToBeSigned, cbToBeSigned);
+   uiCmdLg = 7 + cbToBeSigned;
+   
+#ifdef _DEBUG
+   LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", cbHdrHash + cbToBeSigned, (char *)&Cmd[5]);
+   
+   LogTrace(LOGTYPE_INFO, WHERE, "APDU PSO Hash");
+   LogDump (uiCmdLg, (char *)Cmd);
+
+#endif
+   
+   //printByteArray(Cmd, uiCmdLg);
+   dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            Cmd, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+                            &recvlen);
+   SW1 = recvbuf[recvlen-2];
+   SW2 = recvbuf[recvlen-1];
+   //BeidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
+   if ( dwReturn != SCARD_S_SUCCESS )
+   {
+	   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: Hash) errorcode: [0x%02X]", dwReturn);
+      CLEANUP(dwReturn);
+   }
+   LogTrace(LOGTYPE_INFO, WHERE, "Return: APDU PSO Hash");
+   LogDump (recvlen, (char *)recvbuf);
+  
+   Cmd [0] = 0x00;
+   Cmd [1] = 0x2A;   /* PSO: Compute Digital Signature COMMAND */
+   Cmd [2] = 0x9E;
+   Cmd [3] = 0x9A; 
+   Cmd [4] = 0x80;  /* Length of expected signature */
+   
+   uiCmdLg = 5;
+
+   LogTrace(LOGTYPE_INFO, WHERE, "APDU (PSO: CDS");
+   LogDump (uiCmdLg, (char *)Cmd);
+   
+   recvlen = sizeof(recvbuf);
+   dwReturn = SCardTransmit(pCardData->hScard,
+                            &ioSendPci, 
+                            Cmd, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+                            &recvlen);
+   SW1 = recvbuf[recvlen-2];
+   SW2 = recvbuf[recvlen-1];
+   
+
+   if ( dwReturn != SCARD_S_SUCCESS )
+   {
+	   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: CDS) errorcode: [0x%02X]", dwReturn);
+      CLEANUP(dwReturn);
+   }
+   LogTrace(LOGTYPE_INFO, WHERE, "Return: APDU PSO CDS");
+   LogDump (recvlen, (char *)recvbuf);
+
+   if ( (recvlen - 2) != 0x80 )
+   {
+      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid length received: [0x%02X][0x%02X]", recvlen - 2, 0x80);
+      CLEANUP(SCARD_E_UNEXPECTED);
+   }
+
+   *pcbSignature = 0x80;
+
+   /* Allocate memory for the target buffer */
+   *ppbSignature = pCardData->pfnCspAlloc(*pcbSignature); //pfnCspAlloc é o Memory allocator fornecido pelo CSP
+
+   if ( *ppbSignature == NULL )
+   {
+      LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbSignature]");
+      CLEANUP(SCARD_E_NO_MEMORY);
+   }
+   /* Copy the signature to output buffer */
+   for ( i = 0 ; i < *pcbSignature ; i++ )
+   {
+      (*ppbSignature)[i] = recvbuf[*pcbSignature - i - 1];
+   }
+
+cleanup:
+   return (dwReturn);
+}
+
 #undef WHERE
 
 /****************************************************************************************************/
@@ -1463,31 +1623,12 @@ DWORD BeidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PB
 		                    &recvlen);
 	if (!checkStatusCode(WHERE" -> select Specific Dir", dwReturn, SW1, SW2))
 		CLEANUP(dwReturn);
-/*	
-	Cmd[4] = 0xEF;
-	Cmd[5] = 0x0C;
-	memset(recvbuf, 0, sizeof(recvbuf));
-	dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            &ioRecvPci, 
-                            recvbuf, 
-		                    &recvlen);
 	
-	if (!checkStatusCode(WHERE" ->apdu[2]")
-		CLEANUP(dwReturn);
-  */ 
-	/*
-	//Read Binary, just because...
-	dwReturn = BeidReadFile(pCardData, 0, &cbRead, bRead);
-	if (!checkStatusCode(WHERE" ->apdu[3] (read binary)")
-		CLEANUP(dwReturn);
-
-	*/
-
+	if (!Is_Gemsafe)
+	{
 	Cmd[2] = 0x09;    //09 00 02  [Cert Filename= EF **]
     Cmd[3] = 0x00;
+	}
 	Cmd[4] = 0x02;
 	Cmd[5] = 0xEF;
    switch (dwCertSpec)
@@ -1506,7 +1647,7 @@ DWORD BeidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PB
       break;
    }
 
-   memset(recvbuf, 0, sizeof(recvbuf));
+    memset(recvbuf, 0, sizeof(recvbuf));
 	dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 
                             Cmd, 
@@ -1517,7 +1658,7 @@ DWORD BeidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PB
 	if (!checkStatusCode(WHERE" -> select CertFile", dwReturn, SW1, SW2))
 		CLEANUP(dwReturn);
 
-   cbCertif = 2500; //More than lmedinas dixit...
+   cbCertif = 2500; //More than enough for any certificate lmedinas dixit...
    *ppbCertif = pCardData->pfnCspAlloc(cbCertif);
    if ( *ppbCertif == NULL )
    {
@@ -1557,6 +1698,7 @@ DWORD BeidSelectApplet(PCARD_DATA  pCardData)
 	unsigned long     recvlen = sizeof(recvbuf);
 	BYTE              SW1, SW2;
 	BYTE IAS_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x01, 0x02};
+	BYTE GEMSAFE_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
 	BYTE              cAppletID = sizeof(IAS_PTEID_APPLET_AID);
 	
 	int               i = 0;
@@ -1567,9 +1709,15 @@ DWORD BeidSelectApplet(PCARD_DATA  pCardData)
 	Cmd [0] = 0x00;
 	Cmd [1] = 0xA4; /* SELECT COMMAND 00 A4 04 0C 07 */
 	Cmd [2] = 0x04;
-	Cmd [3] = 0x0C;
+	if (Is_Gemsafe)
+		Cmd [3] = 0x00;
+	else 
+		Cmd [3] = 0x0C;
 	Cmd [4] = 0x07;
-	memcpy(&Cmd[5], IAS_PTEID_APPLET_AID, cAppletID);
+	if (Is_Gemsafe)
+		memcpy(&Cmd[5], GEMSAFE_APPLET_AID, sizeof(GEMSAFE_APPLET_AID));
+	else
+		memcpy(&Cmd[5], IAS_PTEID_APPLET_AID, cAppletID);
 
 	uiCmdLg = 5 + cAppletID;
 
@@ -1592,32 +1740,7 @@ DWORD BeidSelectApplet(PCARD_DATA  pCardData)
 	if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
 	{
 		LogTrace(LOGTYPE_ERROR, WHERE, "Select Failed: [0x%02X][0x%02X]", SW1, SW2);
-    /*
-		Cmd [0] = 0x00;
-		Cmd [1] = 0xA4;
-		Cmd [2] = 0x04;
-		Cmd [3] = 0x00;
-		Cmd [4] = cbAPPLET_AID;
-		memcpy(&Cmd[5], bAPPLET_AID, cbAPPLET_AID);
-
-		uiCmdLg = 5 + cbAPPLET_AID;
-		recvlen = sizeof(recvbuf);
-		dwReturn = SCardTransmit(pCardData->hScard, 
-			&ioSendPci, 
-			Cmd, 
-			uiCmdLg, 
-			&ioRecvPci, 
-			recvbuf, 
-			&recvlen);
-		SW1 = recvbuf[recvlen-2];
-		SW2 = recvbuf[recvlen-1];
-		BeidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
-		if ( dwReturn != SCARD_S_SUCCESS )
-		{
-			LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit errorcode: [0x%02X]", dwReturn);
-			CLEANUP(dwReturn);
-		}
-		*/
+    
 		if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
 		{
 			LogTrace(LOGTYPE_ERROR, WHERE, "Select Failed: [0x%02X][0x%02X]", SW1, SW2);

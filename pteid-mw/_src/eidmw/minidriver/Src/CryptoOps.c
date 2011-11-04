@@ -360,12 +360,25 @@ DWORD WINAPI   CardSignData
 	LogDump (pInfo->cbData, (char *)pInfo->pbData);
 #endif
 
-	dwReturn = BeidSignData(pCardData, 
-		uiHashAlgo,
+	if (Is_Gemsafe)
+	{
+		dwReturn = BeidSignDataGemsafe(pCardData, 
+		pInfo->bContainerIndex,
 		pInfo->cbData, 
 		pInfo->pbData, 
 		&(pInfo->cbSignedData), 
 		&(pInfo->pbSignedData));
+
+	}
+	else
+	{
+	dwReturn = BeidSignData(pCardData, 
+		pInfo->bContainerIndex,
+		pInfo->cbData, 
+		pInfo->pbData, 
+		&(pInfo->cbSignedData), 
+		&(pInfo->pbSignedData));
+	}
 	if ( dwReturn != 0 )
 	{
 		LogTrace(LOGTYPE_ERROR, WHERE, "BeidSignData() returned [0x%X]", dwReturn);
