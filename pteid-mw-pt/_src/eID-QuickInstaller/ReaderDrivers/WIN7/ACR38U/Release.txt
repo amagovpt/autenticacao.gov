@@ -1,0 +1,28 @@
+Release Notes for ACR38U Driver
+===============================
+
+------------------------------------------
+Update: 1.1.6.1 (RW)	Date: 03-July-2009
+------------------------------------------
+
+Description:
+- ACR38U driver package for win98/ME, 2000, XP, 2003, Vista and Windows 7 (x86 & x64).
+
+Changes:
+- WHQL certified drivers signed by Microsoft for 2000, XP (x86 & x64), Vista (x86 & x64), 
+  Windows 7 (x86 & x64) and 2003 (x86 & x64)
+
+------------------------------------------
+Version: 1.1.6.1 (RW)	Date: 15-June-2009
+------------------------------------------
+
+Description:
+- ACR38U driver package for win98/ME, 2000, XP, 2003/2008, Vista and Windows 7 (x86 & x64).
+
+Changes:
+- Changes for improved support of highspeed SIM cards.
+- Further improvement in changes for Zetes to solve timing issues in ActiveCard cards.
+- 1 driver package for all mentioned OS's.
+- ACS SPC Signed for Vista/Win7 x86 & x64.
+
+-----------------------------------------------

@@ -1,0 +1,29 @@
+LIBRARY pteid35CSPLib
+
+EXPORTS
+	eidmwAcquireContext
+	eidmwAcquireContextW
+	eidmwReleaseContext
+	eidmwGenKey
+	eidmwDeriveKey
+	eidmwDestroyKey
+	eidmwSetKeyParam
+	eidmwGetKeyParam
+	eidmwExportKey
+	eidmwImportKey
+	eidmwEncrypt
+	eidmwDecrypt
+	eidmwCreateHash
+	eidmwHashData
+	eidmwHashSessionKey
+	eidmwDestroyHash
+	eidmwSignHash
+	eidmwVerifySignature
+	eidmwGenRandom
+	eidmwGetUserKey
+	eidmwSetProvParam
+	eidmwGetProvParam
+	eidmwSetHashParam
+	eidmwGetHashParam
+	eidmwDuplicateHash
+	eidmwDuplicateKey

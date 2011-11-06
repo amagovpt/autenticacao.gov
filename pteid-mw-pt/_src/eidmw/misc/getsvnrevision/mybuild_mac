@@ -1,0 +1,3 @@
+g++ -c -O2 -o main.o main.cpp
+
+g++ -o ../../getsvnrevision_mac main.o

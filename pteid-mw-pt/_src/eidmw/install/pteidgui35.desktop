@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Belgian eID
+Name[nl]=Belgische eID
+Name[fr]=eID belge
+GenericName=pteidgui
+Comment=Display and administer your eID card
+Comment[nl]=Weergeven en beheren van uw eID kaart
+Comment[fr]=Affichage et gestion de votre carte eID
+Exec=/usr/local/bin/pteidgui
+Terminal=false
+MultipleArgs=false
+Type=Application
+Icon=/usr/share/icons/eid35.png
+Categories=Application
+

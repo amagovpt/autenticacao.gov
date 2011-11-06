@@ -1,0 +1,98 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "eidgui", "eidgui.vcproj", "{8D2DFD77-6396-4507-9CBC-97D91C7CFDD5}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	ProjectSection(ProjectDependencies) = postProject
+		{E27CF8F7-E472-4966-B7D6-448B1427A0D6} = {E27CF8F7-E472-4966-B7D6-448B1427A0D6}
+		{3A09DD63-945E-40EB-9053-5FE50F74B7C1} = {3A09DD63-945E-40EB-9053-5FE50F74B7C1}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pteidlib", "..\eidlib\pteidlib.vcproj", "{3A09DD63-945E-40EB-9053-5FE50F74B7C1}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	ProjectSection(ProjectDependencies) = postProject
+		{39710980-B40E-4B06-B8E8-D86B125007F3} = {39710980-B40E-4B06-B8E8-D86B125007F3}
+		{DC41E34B-8251-41DE-8065-D56B022F5755} = {DC41E34B-8251-41DE-8065-D56B022F5755}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pteidapplayer", "..\applayer\pteidapplayer.vcproj", "{DC41E34B-8251-41DE-8065-D56B022F5755}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	ProjectSection(ProjectDependencies) = postProject
+		{39710980-B40E-4B06-B8E8-D86B125007F3} = {39710980-B40E-4B06-B8E8-D86B125007F3}
+		{C7DE2B79-F890-4ACB-804A-BDD14E1A9CAE} = {C7DE2B79-F890-4ACB-804A-BDD14E1A9CAE}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pteidcommon", "..\common\pteidcommon.vcproj", "{39710980-B40E-4B06-B8E8-D86B125007F3}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pteidcardlayer", "..\cardlayer\pteidcardlayer.vcproj", "{C7DE2B79-F890-4ACB-804A-BDD14E1A9CAE}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	ProjectSection(ProjectDependencies) = postProject
+		{39710980-B40E-4B06-B8E8-D86B125007F3} = {39710980-B40E-4B06-B8E8-D86B125007F3}
+		{E27CF8F7-E472-4966-B7D6-448B1427A0D6} = {E27CF8F7-E472-4966-B7D6-448B1427A0D6}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pteidDlgsWin32", "..\dialogs\dialogsWin32\BeIdDlgsWin32.vcproj", "{E27CF8F7-E472-4966-B7D6-448B1427A0D6}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	ProjectSection(ProjectDependencies) = postProject
+		{39710980-B40E-4B06-B8E8-D86B125007F3} = {39710980-B40E-4B06-B8E8-D86B125007F3}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pteidprivacyfilterbroker", "..\PrivacyFilterBroker\pteidprivacyfilterbroker.vcproj", "{1D1CFBDD-78AA-43CE-99EC-77E023527B30}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+EndProject
+Global
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D2DFD77-6396-4507-9CBC-97D91C7CFDD5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8D2DFD77-6396-4507-9CBC-97D91C7CFDD5}.Debug|Win32.Build.0 = Debug|Win32
+		{8D2DFD77-6396-4507-9CBC-97D91C7CFDD5}.Release|Win32.ActiveCfg = Release|Win32
+		{8D2DFD77-6396-4507-9CBC-97D91C7CFDD5}.Release|Win32.Build.0 = Release|Win32
+		{3A09DD63-945E-40EB-9053-5FE50F74B7C1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3A09DD63-945E-40EB-9053-5FE50F74B7C1}.Debug|Win32.Build.0 = Debug|Win32
+		{3A09DD63-945E-40EB-9053-5FE50F74B7C1}.Release|Win32.ActiveCfg = Release|Win32
+		{3A09DD63-945E-40EB-9053-5FE50F74B7C1}.Release|Win32.Build.0 = Release|Win32
+		{DC41E34B-8251-41DE-8065-D56B022F5755}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DC41E34B-8251-41DE-8065-D56B022F5755}.Debug|Win32.Build.0 = Debug|Win32
+		{DC41E34B-8251-41DE-8065-D56B022F5755}.Release|Win32.ActiveCfg = Release|Win32
+		{DC41E34B-8251-41DE-8065-D56B022F5755}.Release|Win32.Build.0 = Release|Win32
+		{39710980-B40E-4B06-B8E8-D86B125007F3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{39710980-B40E-4B06-B8E8-D86B125007F3}.Debug|Win32.Build.0 = Debug|Win32
+		{39710980-B40E-4B06-B8E8-D86B125007F3}.Release|Win32.ActiveCfg = Release|Win32
+		{39710980-B40E-4B06-B8E8-D86B125007F3}.Release|Win32.Build.0 = Release|Win32
+		{C7DE2B79-F890-4ACB-804A-BDD14E1A9CAE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C7DE2B79-F890-4ACB-804A-BDD14E1A9CAE}.Debug|Win32.Build.0 = Debug|Win32
+		{C7DE2B79-F890-4ACB-804A-BDD14E1A9CAE}.Release|Win32.ActiveCfg = Release|Win32
+		{C7DE2B79-F890-4ACB-804A-BDD14E1A9CAE}.Release|Win32.Build.0 = Release|Win32
+		{E27CF8F7-E472-4966-B7D6-448B1427A0D6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E27CF8F7-E472-4966-B7D6-448B1427A0D6}.Debug|Win32.Build.0 = Debug|Win32
+		{E27CF8F7-E472-4966-B7D6-448B1427A0D6}.Release|Win32.ActiveCfg = Release|Win32
+		{E27CF8F7-E472-4966-B7D6-448B1427A0D6}.Release|Win32.Build.0 = Release|Win32
+		{1D1CFBDD-78AA-43CE-99EC-77E023527B30}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1D1CFBDD-78AA-43CE-99EC-77E023527B30}.Debug|Win32.Build.0 = Debug|Win32
+		{1D1CFBDD-78AA-43CE-99EC-77E023527B30}.Release|Win32.ActiveCfg = Release|Win32
+		{1D1CFBDD-78AA-43CE-99EC-77E023527B30}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

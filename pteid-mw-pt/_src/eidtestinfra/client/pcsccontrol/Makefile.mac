@@ -1,0 +1,20 @@
+all: ../_Binaries/pcsccontrol.jar ../_Binaries/pcsccontrol.sh ../_Binaries/lib
+
+clean:
+	- rm ../_Binaries/pcsccontrol.jar
+	- rm ../_Binaries/pcsccontrol.sh
+	- rm -rf ../_Binaries/lib/
+
+../_Binaries/pcsccontrol.jar: saved/pcsccontrol.jar
+	cp saved/pcsccontrol.jar ../_Binaries/
+
+../_Binaries/pcsccontrol.sh: pcsccontrol.sh
+	cp pcsccontrol.sh ../_Binaries
+
+../_Binaries/lib:
+	mkdir -p ../_Binaries/lib/
+	cp lib/*.jar ../_Binaries/lib/
+
+#pcsccontrol.jar: *.xsd src/eidmw/pcsccontrol/*.java src/eidmw/pcsccontrol/gui/*.java src/eidmw/pcsccontrol/gui/jpcsc/*.java
+#	ant
+#	ant -f makeJarFile.xml

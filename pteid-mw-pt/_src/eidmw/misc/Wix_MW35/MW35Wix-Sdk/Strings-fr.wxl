@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="fr-fr" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="Lang" Overridable="yes">1036</String>
+  <String Id="Langpref" Overridable="yes">fr</String>
+  <String Id="MinOs" Overridable="yes">Cette installation a besoin de Windows 2000 au mimimum</String>
+  <String Id="Common" Overridable="yes">Common</String>
+  <String Id="CommonDescr" Overridable="yes"></String>
+  <String Id="OpenFolderDescr" Overridable="yes">Ouvrir le dossier SDK</String>
+  <String Id="Cpp" Overridable="yes">C++</String>
+  <String Id="CppDescr" Overridable="yes"></String>
+  <String Id="C" Overridable="yes">C (deprecated)</String>
+  <String Id="CDescr" Overridable="yes"></String>
+  <String Id="Java" Overridable="yes">Java</String>
+  <String Id="JavaDescr" Overridable="yes"></String>
+  <String Id="CS" Overridable="yes">C#</String>
+  <String Id="CSDescr" Overridable="yes"></String>
+  <String Id="VB" Overridable="yes">VB.Net</String>
+  <String Id="VBDescr" Overridable="yes"></String>
+  <String Id="msierrSecureObjectsFailedCreateSD" Overridable="yes">Impossible de créer le security descriptor [3]\[4], erreur: [2]</String>
+  <String Id="msierrSecureObjectsFailedSet" Overridable="yes">Impossible d'appliquer le security descriptor de l'objet [3], erreur: [2]</String>
+  <String Id="msierrSecureObjectsUnknownType" Overridable="yes">Type d'objet [3] inconnu, erreur: [2]</String>
+  <String Id="NoDowngrade" Overridable="yes">Une version plus récente est déjà installée.</String>
+</WixLocalization>

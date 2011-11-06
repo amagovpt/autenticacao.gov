@@ -1,0 +1,13 @@
+content		portugaleid									content/
+locale 		portugaleid	en-US							locale/en-US/
+locale		portugaleid	en-GB							locale/en-US/
+locale		portugaleid	nl-NL							locale/nl-NL/
+locale		portugaleid	fr-FR							locale/fr-FR/
+locale	 	portugaleid	de-DE							locale/de-DE/
+skin		portugaleid									classic/1.0	skin/
+overlay	 	chrome://browser/content/browser.xul		chrome://portugaleid/content/portugaleidpkcs11.xul
+overlay	 	chrome://global/content/commonDialog.xul	chrome://portugaleid/content/portugaleidprompt.xul
+overlay		chrome://pippki/content/protectedAuth.xul	chrome://portugaleid/content/portugaleidpromptsecure.xul
+component   {26c4340c-ec4a-4173-bc6e-3d2023012177}      components/portugaleidpkcs11.js
+contract    @eid.portugal.be/portugaleidpkcs11;1          {26c4340c-ec4a-4173-bc6e-3d2023012177}
+category    profile-after-change                        PortugalEidPKCS11 @eid.portugal.be/portugaleidpkcs11;1

@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML><HEAD></HEAD><BODY>
+<OBJECT type="text/site properties">
+<param name="FrameName" value="right">
+</OBJECT>
+<UL>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="Class List"><param name="ImageNumber" value="1"></OBJECT>
+  <UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="ApplicationException"><param name="Local" value="classSystem_1_1ApplicationException.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Biometric"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Biometric.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ByteArray"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ByteArray.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Card"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Card.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_CardVersionInfo"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__CardVersionInfo.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Certificate"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Certificate.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Certificates"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Certificates.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Config"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Config.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Crl"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Crl.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Crypto"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Crypto.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_EId"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__EId.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_EIDCard"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__EIDCard.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_EIdFullDoc"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__EIdFullDoc.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExBadTransaction"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExBadTransaction.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExBadUsage"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExBadUsage.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCardBadType"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCardBadType.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCardChanged"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCardChanged.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCardTypeUnknown"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCardTypeUnknown.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Exception"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Exception.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCertNoCrl"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCertNoCrl.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCertNoIssuer"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCertNoIssuer.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCertNoOcsp"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCertNoOcsp.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCertNoRoot"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCertNoRoot.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCmdNotAllowed"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCmdNotAllowed.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCmdNotSupported"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCmdNotSupported.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExDocTypeUnknown"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExDocTypeUnknown.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExFileTypeUnknown"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExFileTypeUnknown.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExNoCardPresent"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExNoCardPresent.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExNoReader"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExNoReader.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExNotAllowByUser"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExNotAllowByUser.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExParamRange"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExParamRange.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExReaderSetChanged"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExReaderSetChanged.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExReleaseNeeded"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExReleaseNeeded.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExUnknown"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExUnknown.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExUserMustAnswer"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExUserMustAnswer.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ForeignerCard"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ForeignerCard.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_KidsCard"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__KidsCard.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_MemoryCard"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__MemoryCard.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Object"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Object.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_OcspResponse"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__OcspResponse.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Picture"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Picture.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Pin"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Pin.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Pins"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Pins.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_RawData_Eid"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__RawData__Eid.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_RawData_Sis"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__RawData__Sis.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ReaderContext"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ReaderContext.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ReaderSet"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ReaderSet.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_SISCard"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__SISCard.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_SisFullDoc"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__SisFullDoc.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_SisId"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__SisId.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_SmartCard"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__SmartCard.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_XMLDoc"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__XMLDoc.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::pteidlib_dotNet"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1pteidlib__dotNet.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="IDisposable"><param name="Local" value="classIDisposable.html"><param name="ImageNumber" value="11"></OBJECT>
+  </UL>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="Class Hierarchy"><param name="ImageNumber" value="1"></OBJECT>
+  <UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="ApplicationException"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Exception"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExBadTransaction"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExBadTransaction.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExBadUsage"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExBadUsage.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCardBadType"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCardBadType.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCardChanged"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCardChanged.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCardTypeUnknown"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCardTypeUnknown.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCertNoCrl"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCertNoCrl.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCertNoIssuer"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCertNoIssuer.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCertNoOcsp"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCertNoOcsp.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCertNoRoot"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCertNoRoot.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCmdNotAllowed"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCmdNotAllowed.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExCmdNotSupported"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExCmdNotSupported.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExDocTypeUnknown"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExDocTypeUnknown.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExFileTypeUnknown"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExFileTypeUnknown.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExNoCardPresent"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExNoCardPresent.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExNoReader"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExNoReader.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExNotAllowByUser"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExNotAllowByUser.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExParamRange"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExParamRange.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExReaderSetChanged"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExReaderSetChanged.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExReleaseNeeded"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExReleaseNeeded.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExUnknown"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExUnknown.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ExUserMustAnswer"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ExUserMustAnswer.html"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::pteidlib_dotNet"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1pteidlib__dotNet.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="IDisposable"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Exception"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Exception.html"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Object"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ByteArray"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ByteArray.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Card"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_MemoryCard"><param name="ImageNumber" value="1"></OBJECT>
+          <UL>
+          <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_SISCard"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__SISCard.html"><param name="ImageNumber" value="11"></OBJECT>
+          </UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_SmartCard"><param name="ImageNumber" value="1"></OBJECT>
+          <UL>
+          <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_EIDCard"><param name="ImageNumber" value="1"></OBJECT>
+            <UL>
+            <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ForeignerCard"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ForeignerCard.html"><param name="ImageNumber" value="11"></OBJECT>
+            <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_KidsCard"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__KidsCard.html"><param name="ImageNumber" value="11"></OBJECT>
+            </UL>
+          </UL>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Config"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Config.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Crl"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Crl.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_OcspResponse"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__OcspResponse.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ReaderContext"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ReaderContext.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_ReaderSet"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__ReaderSet.html"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_XMLDoc"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Biometric"><param name="ImageNumber" value="1"></OBJECT>
+          <UL>
+          <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Picture"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Picture.html"><param name="ImageNumber" value="11"></OBJECT>
+          </UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_CardVersionInfo"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__CardVersionInfo.html"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Crypto"><param name="ImageNumber" value="1"></OBJECT>
+          <UL>
+          <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Certificate"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Certificate.html"><param name="ImageNumber" value="11"></OBJECT>
+          <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Certificates"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Certificates.html"><param name="ImageNumber" value="11"></OBJECT>
+          <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Pin"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Pin.html"><param name="ImageNumber" value="11"></OBJECT>
+          <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_Pins"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__Pins.html"><param name="ImageNumber" value="11"></OBJECT>
+          </UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_EId"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__EId.html"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_EIdFullDoc"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__EIdFullDoc.html"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_SisFullDoc"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__SisFullDoc.html"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_SisId"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__SisId.html"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_RawData_Eid"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__RawData__Eid.html"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid::PTEID_RawData_Sis"><param name="Local" value="classbe_1_1portugal_1_1eid_1_1PTEID__RawData__Sis.html"><param name="ImageNumber" value="11"></OBJECT>
+    </UL>
+  </UL>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="Class Members"><param name="Local" value="functions.html"><param name="ImageNumber" value="11"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="Namespace List"><param name="ImageNumber" value="1"></OBJECT>
+  <UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be"><param name="Local" value="namespacebe.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal"><param name="Local" value="namespacebe_1_1portugal.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="be::portugal::eid"><param name="Local" value="namespacebe_1_1portugal_1_1eid.html"><param name="ImageNumber" value="11"></OBJECT>
+  </UL>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="Namespace Members"><param name="Local" value="namespacemembers.html"><param name="ImageNumber" value="11"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="File List"><param name="ImageNumber" value="1"></OBJECT>
+  <UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_Biometric.cs"><param name="Local" value="PTEID__Biometric_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ByteArray.cs"><param name="Local" value="PTEID__ByteArray_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_Card.cs"><param name="Local" value="PTEID__Card_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_CardType.cs"><param name="Local" value="PTEID__CardType_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_CardVersionInfo.cs"><param name="Local" value="PTEID__CardVersionInfo_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_Certificate.cs"><param name="Local" value="PTEID__Certificate_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_Certificates.cs"><param name="Local" value="PTEID__Certificates_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_CertifStatus.cs"><param name="Local" value="PTEID__CertifStatus_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_CertifType.cs"><param name="Local" value="PTEID__CertifType_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_Config.cs"><param name="Local" value="PTEID__Config_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_Crl.cs"><param name="Local" value="PTEID__Crl_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_CrlStatus.cs"><param name="Local" value="PTEID__CrlStatus_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_Crypto.cs"><param name="Local" value="PTEID__Crypto_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_DocumentType.cs"><param name="Local" value="PTEID__DocumentType_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_EId.cs"><param name="Local" value="PTEID__EId_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_EIDCard.cs"><param name="Local" value="PTEID__EIDCard_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_EIdFullDoc.cs"><param name="Local" value="PTEID__EIdFullDoc_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExBadTransaction.cs"><param name="Local" value="PTEID__ExBadTransaction_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExBadUsage.cs"><param name="Local" value="PTEID__ExBadUsage_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExCardBadType.cs"><param name="Local" value="PTEID__ExCardBadType_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExCardChanged.cs"><param name="Local" value="PTEID__ExCardChanged_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExCardTypeUnknown.cs"><param name="Local" value="PTEID__ExCardTypeUnknown_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_Exception.cs"><param name="Local" value="PTEID__Exception_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExCertNoCrl.cs"><param name="Local" value="PTEID__ExCertNoCrl_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExCertNoIssuer.cs"><param name="Local" value="PTEID__ExCertNoIssuer_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExCertNoOcsp.cs"><param name="Local" value="PTEID__ExCertNoOcsp_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExCertNoRoot.cs"><param name="Local" value="PTEID__ExCertNoRoot_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExCmdNotAllowed.cs"><param name="Local" value="PTEID__ExCmdNotAllowed_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExCmdNotSupported.cs"><param name="Local" value="PTEID__ExCmdNotSupported_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExDocTypeUnknown.cs"><param name="Local" value="PTEID__ExDocTypeUnknown_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExFileTypeUnknown.cs"><param name="Local" value="PTEID__ExFileTypeUnknown_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExNoCardPresent.cs"><param name="Local" value="PTEID__ExNoCardPresent_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExNoReader.cs"><param name="Local" value="PTEID__ExNoReader_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExNotAllowByUser.cs"><param name="Local" value="PTEID__ExNotAllowByUser_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExParamRange.cs"><param name="Local" value="PTEID__ExParamRange_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExReaderSetChanged.cs"><param name="Local" value="PTEID__ExReaderSetChanged_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExReleaseNeeded.cs"><param name="Local" value="PTEID__ExReleaseNeeded_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExUnknown.cs"><param name="Local" value="PTEID__ExUnknown_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ExUserMustAnswer.cs"><param name="Local" value="PTEID__ExUserMustAnswer_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_FileType.cs"><param name="Local" value="PTEID__FileType_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ForeignerCard.cs"><param name="Local" value="PTEID__ForeignerCard_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_HashAlgo.cs"><param name="Local" value="PTEID__HashAlgo_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_KidsCard.cs"><param name="Local" value="PTEID__KidsCard_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_LogLevel.cs"><param name="Local" value="PTEID__LogLevel_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_MemoryCard.cs"><param name="Local" value="PTEID__MemoryCard_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_Object.cs"><param name="Local" value="PTEID__Object_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_OcspResponse.cs"><param name="Local" value="PTEID__OcspResponse_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_Param.cs"><param name="Local" value="PTEID__Param_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_Picture.cs"><param name="Local" value="PTEID__Picture_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_Pin.cs"><param name="Local" value="PTEID__Pin_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_Pins.cs"><param name="Local" value="PTEID__Pins_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_PinUsage.cs"><param name="Local" value="PTEID__PinUsage_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_RawData_Eid.cs"><param name="Local" value="PTEID__RawData__Eid_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_RawData_Sis.cs"><param name="Local" value="PTEID__RawData__Sis_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_RawDataType.cs"><param name="Local" value="PTEID__RawDataType_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ReaderContext.cs"><param name="Local" value="PTEID__ReaderContext_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ReaderSet.cs"><param name="Local" value="PTEID__ReaderSet_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_SISCard.cs"><param name="Local" value="PTEID__SISCard_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_SisFullDoc.cs"><param name="Local" value="PTEID__SisFullDoc_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_SisId.cs"><param name="Local" value="PTEID__SisId_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_SmartCard.cs"><param name="Local" value="PTEID__SmartCard_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ValidationLevel.cs"><param name="Local" value="PTEID__ValidationLevel_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_ValidationProcess.cs"><param name="Local" value="PTEID__ValidationProcess_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PTEID_XMLDoc.cs"><param name="Local" value="PTEID__XMLDoc_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="pteidlib_dotNet.cs"><param name="Local" value="pteidlib__dotNet_8cs.html"><param name="ImageNumber" value="11"></OBJECT>
+  </UL>
+</UL>
+</BODY>
+</HTML>

@@ -1,0 +1,285 @@
+<ui version="4.0" >
+ <class>confirmDialogBoxClass</class>
+ <widget class="QDialog" name="confirmDialogBoxClass" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>591</width>
+    <height>348</height>
+   </rect>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>591</width>
+    <height>348</height>
+   </size>
+  </property>
+  <property name="maximumSize" >
+   <size>
+    <width>591</width>
+    <height>348</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>e-ID Quick Installer</string>
+  </property>
+  <widget class="QLabel" name="lblExclamationMark" >
+   <property name="geometry" >
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>91</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Uitroepteken !</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblAreYouSure" >
+   <property name="geometry" >
+    <rect>
+     <x>120</x>
+     <y>70</y>
+     <width>381</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font" >
+    <font>
+     <family>Tahoma</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <italic>false</italic>
+     <bold>true</bold>
+     <underline>false</underline>
+     <strikeout>false</strikeout>
+    </font>
+   </property>
+   <property name="wordWrap" >
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblOnlyTested" >
+   <property name="geometry" >
+    <rect>
+     <x>120</x>
+     <y>130</y>
+     <width>381</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font" >
+    <font>
+     <family>Tahoma</family>
+     <pointsize>12</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+     <underline>false</underline>
+     <strikeout>false</strikeout>
+    </font>
+   </property>
+   <property name="text" >
+    <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">&#xd;
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">&#xd;
+p, li { white-space: pre-wrap; }&#xd;
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Segoe UI'; font-size:12pt; font-weight:400; font-style:normal;">&#xd;
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">De handtekening wordt enkel getest, niet opgeslagen of gebruikt voor andere doeleinden.&lt;/p>&lt;/body>&lt;/html></string>
+   </property>
+   <property name="wordWrap" >
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblWarning" >
+   <property name="geometry" >
+    <rect>
+     <x>120</x>
+     <y>210</y>
+     <width>451</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font" >
+    <font>
+     <family>Tahoma</family>
+     <pointsize>12</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+     <underline>false</underline>
+     <strikeout>false</strikeout>
+    </font>
+   </property>
+   <property name="text" >
+    <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">&#xd;
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">&#xd;
+p, li { white-space: pre-wrap; }&#xd;
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Segoe UI'; font-size:12pt; font-weight:400; font-style:normal;">&#xd;
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">Let op : &lt;/span>als je de verkeerde pincode ingeeft,  kun je de elektronische identiteitskaart blokkeren.&lt;/p>&lt;/body>&lt;/html></string>
+   </property>
+   <property name="wordWrap" >
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblTitle" >
+   <property name="geometry" >
+    <rect>
+     <x>100</x>
+     <y>20</y>
+     <width>311</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="palette" >
+    <palette>
+     <active>
+      <colorrole role="WindowText" >
+       <brush brushstyle="SolidPattern" >
+        <color alpha="255" >
+         <red>95</red>
+         <green>86</green>
+         <blue>130</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </active>
+     <inactive>
+      <colorrole role="WindowText" >
+       <brush brushstyle="SolidPattern" >
+        <color alpha="255" >
+         <red>95</red>
+         <green>86</green>
+         <blue>130</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </inactive>
+     <disabled>
+      <colorrole role="WindowText" >
+       <brush brushstyle="SolidPattern" >
+        <color alpha="255" >
+         <red>118</red>
+         <green>116</green>
+         <blue>108</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </disabled>
+    </palette>
+   </property>
+   <property name="font" >
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>14</pointsize>
+     <weight>75</weight>
+     <italic>false</italic>
+     <bold>true</bold>
+     <underline>false</underline>
+     <strikeout>false</strikeout>
+    </font>
+   </property>
+   <property name="text" >
+    <string>Handtekening testen</string>
+   </property>
+  </widget>
+  <widget class="QCommandLinkButton" name="clbCancel" >
+   <property name="geometry" >
+    <rect>
+     <x>450</x>
+     <y>0</y>
+     <width>95</width>
+     <height>55</height>
+    </rect>
+   </property>
+   <property name="focusPolicy" >
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>85</width>
+     <height>40</height>
+    </size>
+   </property>
+   <property name="autoDefault" >
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QCommandLinkButton" name="clbTestSignature" >
+   <property name="geometry" >
+    <rect>
+     <x>90</x>
+     <y>270</y>
+     <width>176</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="font" >
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <italic>false</italic>
+     <bold>true</bold>
+     <underline>false</underline>
+     <strikeout>false</strikeout>
+    </font>
+   </property>
+   <property name="cursor" >
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="focusPolicy" >
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="text" >
+    <string>Testen</string>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>166</width>
+     <height>65</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QCommandLinkButton" name="clbDoNotTestSignature" >
+   <property name="geometry" >
+    <rect>
+     <x>280</x>
+     <y>270</y>
+     <width>176</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="font" >
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <italic>false</italic>
+     <bold>true</bold>
+     <underline>false</underline>
+     <strikeout>false</strikeout>
+    </font>
+   </property>
+   <property name="cursor" >
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="focusPolicy" >
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="text" >
+    <string>Niet testen</string>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>166</width>
+     <height>65</height>
+    </size>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <resources/>
+ <connections/>
+</ui>

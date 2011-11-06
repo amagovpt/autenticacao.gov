@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/qt/etc">
+        <file>qt.conf</file>
+    </qresource>
+    <qresource>
+        <file>Resources/ICO_CARD_EID_PLAIN_16x16.png</file>
+        <file>Resources/ICO_CARD_DIGSIG_128x128.png</file>
+        <file>Resources/ICO_CARD_INFO_64x64.png</file>
+        <file>Resources/ICO_CARD_NOK_64x64.png</file>
+        <file>Resources/ICO_CARD_PIN_128x128.png</file>
+        <file>Resources/ICO_CARD_QUESTION_64x64.png</file>
+        <file>Resources/ICO_CARD_WARNING_64x64.png</file>
+        <file>Resources/KeyPadButton.png</file>
+        <file>Resources/KeyPadButton0.png</file>
+        <file>Resources/KeyPadButton1.png</file>
+        <file>Resources/KeyPadButton2.png</file>
+        <file>Resources/KeyPadButton3.png</file>
+        <file>Resources/KeyPadButton4.png</file>
+        <file>Resources/KeyPadButton5.png</file>
+        <file>Resources/KeyPadButton6.png</file>
+        <file>Resources/KeyPadButton7.png</file>
+        <file>Resources/KeyPadButton8.png</file>
+        <file>Resources/KeyPadButton9.png</file>
+        <file>Resources/KeyPadButtonCE.png</file>
+        <file>Resources/bg_AuthenticationPin.png</file>
+        <file>Resources/bg_SignaturePin.png</file>
+    	<file>Resources/alpha.png</file>
+    </qresource>
+</RCC>
