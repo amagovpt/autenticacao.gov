@@ -1,3 +1,0 @@
-g++ -c -O2 -o main.o main.cpp
-
-g++ -o ../../getsvnrevision_linux main.o
