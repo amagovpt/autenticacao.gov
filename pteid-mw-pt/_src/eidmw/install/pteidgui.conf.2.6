@@ -1,0 +1,45 @@
+# The pteidgui config file
+
+[PTEID_default]
+# The certificates directory (must exist)
+certs = /usr/share/pteid/certs/
+
+# The CRL directory (must exist)
+crl = /usr/share/pteid/crl/
+
+
+[CA_certs]
+# Certificate http store for downloading issuers not found
+httpstore = http://certs.eid.portugal.be/
+
+# Government certificate names
+government = government,government2004,government2005
+
+# Portugal Root certificate names
+root = portugalrca
+
+
+[PTEID_service]
+# Service IP Address
+serverAddress = 127.0.0.1
+
+# Service Port
+serverPort = 2500
+
+# CRL http store for downloading CRL's
+httpcrlstore = http://crl.eid.portugal.be/
+
+
+[Application_Filtering]
+# List of applications allowed
+pteidgui.exe=*
+iexplore.exe=*
+Mozilla.exe=*
+Firefox.exe=*
+pteidsystemtray.exe=*
+
+
+[VersionCheck]
+enabled = 0
+delay = 30
+url = https://drivers.eid.portugal.be/drivers.txt

@@ -1,0 +1,74 @@
+<ui version="4.0" >
+ <class>dlgPrint</class>
+ <widget class="QDialog" name="dlgPrint" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>645</width>
+    <height>743</height>
+   </rect>
+  </property>
+  <property name="font" >
+   <font>
+    <pointsize>11</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle" >
+   <string>Print</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset>Images/Icons/Print.png</iconset>
+  </property>
+  <property name="modal" >
+   <bool>true</bool>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <layout class="QGridLayout" >
+     <item row="0" column="0" colspan="3" >
+      <widget class="QTextEdit" name="paperview" >
+       <property name="font" >
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="readOnly" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>451</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QPushButton" name="pbCancel" >
+       <property name="text" >
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2" >
+      <widget class="QPushButton" name="pbPrint" >
+       <property name="text" >
+        <string>Print</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

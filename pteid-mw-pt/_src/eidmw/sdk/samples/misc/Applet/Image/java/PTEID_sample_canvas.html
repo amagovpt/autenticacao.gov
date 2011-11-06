@@ -1,0 +1,171 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<title>
+Belgian eID Card Sample
+</title>
+<script type="text/javascript" src="excanvas.js"></script>
+<script type="text/javascript">
+
+	//--------------------------------------------
+	// Add a card reader name to the dropdown list
+	//--------------------------------------------
+    function AddCardReaderName( readerName )
+    {
+		var newOption   = document.createElement("OPTION");
+        newOption.text  = readerName;
+        newOption.value = readerName;
+        document.getElementById("ID_CardReadersCombo").options.add(newOption);
+    }
+	//--------------------------------------------
+	// clear the card reader dropdown list
+	//--------------------------------------------
+    function clearCardReaderList()
+    {
+		for (var i = document.getElementById("ID_CardReadersCombo").options.length-1; i >= 0; i--)
+		{
+			document.getElementById("ID_CardReadersCombo").remove(i);
+		}
+    }
+
+	//--------------------------------------------
+	// clear the card reader dropdown list
+	//--------------------------------------------
+    function getSelectedReader()
+    {
+        var nrReaders = document.getElementById("ID_CardReadersCombo").options.length;
+
+		for (var i = 0; i<nrReaders; i++)
+		{
+			if (document.getElementById("ID_CardReadersCombo").options[i].selected)
+			{
+			    return i;
+			}
+		}
+		return -1;
+    }
+	//--------------------------------------------
+	// Add all the card reader names to the dropdown list
+	//--------------------------------------------
+    function getCardReaders()
+    {
+        clearCardReaderList();
+
+   		var nrReaders = document.PTEIDApplet.readerCount();
+   		if (nrReaders==0)
+   		{
+   			alert("No card readers found");
+   		}
+
+		for( var idx=0; idx<nrReaders; idx++)
+		{
+			var readerName = document.PTEIDApplet.getReaderByNum(idx);
+			AddCardReaderName(readerName);
+		}
+    }
+    function getImg()
+    {
+    	return document.PTEIDApplet.GetPicture();
+    }
+	//--------------------------------------------
+	// Read the card from the selected card reader
+	//--------------------------------------------
+	function readCard()
+	{
+	    if (document.getElementById("ID_CardReadersCombo").options.length==0)
+	    {
+	        return;
+	    }
+	    var selectedReaderIdx = getSelectedReader();
+	    if (selectedReaderIdx==-1)
+	    {
+	        alert("Please select a card reader");
+	        return;
+	    }
+
+	    //--------------------------------------------
+	    // get the name of the reader and initialize with this reader
+	    //--------------------------------------------
+        var readerName = document.getElementById("ID_CardReadersCombo").options[selectedReaderIdx].text
+
+		document.PTEIDApplet.InitLib(readerName);
+
+		if (document.PTEIDApplet.isCardPresent(readerName))
+		{
+			// make sure we read the card data
+			var name = document.PTEIDApplet.getSurname();
+
+			//-------------------------------------------
+			// get the picture in Base64 format
+			// we do this to feed the picture to the IMG tag and the CANVAS tag
+			//-------------------------------------------
+			var pictEncoded = document.PTEIDApplet.GetPictureBase64();
+
+			//-------------------------------------------
+			// create an image object and set the src as the
+			// base64 encoded data
+			//-------------------------------------------
+			var eIDImage = new Image(100,240);
+			eIDImage.src = "data:image/jpg;base64,"+ pictEncoded;
+
+			//-------------------------------------------
+			// get the CANVAS object and draw the image
+			//-------------------------------------------
+			var canvas = document.getElementById('theCanvas');
+			if (canvas.getContext)
+			{
+				var ctx = canvas.getContext("2d");
+				ctx.drawImage(eIDImage, 0, 0);
+			}
+			else
+			{
+				alert("The canvas tag is not supported");
+			// no <canvas> supported
+			}
+
+		}
+		else
+		{
+			alert("No eID card in card reader");
+		}
+
+	}
+
+
+</script>
+
+<body topmargin=0>
+<form name=actionform>
+                <applet
+                  codebase = "."
+                  archive  = "PTEID_ImgApplet.jar,pteid35libJava.jar"
+                  code     = "be.portugal.pteid.PTEID_ImgApplet.class"
+                  name     = "PTEIDApplet"
+                  width    = "140"
+                  height   = "200"
+                  hspace   = "0"
+                  vspace   = "0"
+                  align    = "middle"
+                  mayscript
+                >
+                <param name="Reader" value="O2Micro CCID SC Reader" >
+                <param name="debug" value="true" >
+                </applet>
+			<p>
+			<input type="button" name="IDButton" 		onclick="javascript:readCard()" 	value="Read Card " title="Read Card"/>
+
+			<select id="ID_CardReadersCombo">
+			</select>
+			<p>
+			Below is the CANVAS tag
+			<br>
+			<canvas id="theCanvas" width="140" height="200" name="fred"></canvas>
+
+</form>
+<script language="javascript">
+	document.PTEIDApplet.InitLib(null);
+	getCardReaders();
+</script>
+</body>
+</html>

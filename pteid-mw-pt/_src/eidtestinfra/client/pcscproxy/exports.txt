@@ -1,0 +1,89 @@
+Microsoft (R) COFF/PE Dumper Version 8.00.50727.42
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file C:\Documents and Settings\Administrator\My Documents\apduview\original.dll
+
+File Type: DLL
+
+  Section contains the following exports for WinSCard.dll
+
+    00000000 characteristics
+    41107F2E time date stamp Wed Aug 04 08:16:14 2004
+        0.00 version
+           1 ordinal base
+          63 number of functions
+          63 number of names
+
+    ordinal hint RVA      name
+
+          1    0 00005F5E ClassInstall32
+          2    1 00005DEE SCardAccessNewReaderEvent
+          5    2 00002650 SCardAccessStartedEvent
+          6    3 00007E3E SCardAddReaderToGroupA
+          7    4 00009940 SCardAddReaderToGroupW
+          8    5 00006687 SCardBeginTransaction
+          9    6 0000650B SCardCancel
+         10    7 000085AC SCardConnectA
+         11    8 0000A0AE SCardConnectW
+         12    9 00006A4F SCardControl
+         13    A 000062D2 SCardDisconnect
+         14    B 00006735 SCardEndTransaction
+         15    C 000030D3 SCardEstablishContext
+         16    D 000082CE SCardForgetCardTypeA
+         17    E 00009DD0 SCardForgetCardTypeW
+         18    F 00007D10 SCardForgetReaderA
+         19   10 00007A71 SCardForgetReaderGroupA
+         20   11 00009573 SCardForgetReaderGroupW
+         21   12 00009812 SCardForgetReaderW
+         22   13 0000646C SCardFreeMemory
+         23   14 00006B60 SCardGetAttrib
+         24   15 0000784F SCardGetCardTypeProviderNameA
+         25   16 00009351 SCardGetCardTypeProviderNameW
+         26   17 0000771E SCardGetProviderIdA
+         27   18 00009220 SCardGetProviderIdW
+         28   19 0000849A SCardGetStatusChangeA
+         29   1A 00009F9C SCardGetStatusChangeW
+         30   1B 00008120 SCardIntroduceCardTypeA
+         31   1C 00009C22 SCardIntroduceCardTypeW
+         32   1D 00007B9F SCardIntroduceReaderA
+         33   1E 00007943 SCardIntroduceReaderGroupA
+         34   1F 00009445 SCardIntroduceReaderGroupW
+         35   20 000096A1 SCardIntroduceReaderW
+         36   21 00006394 SCardIsValidContext
+         37   22 00007522 SCardListCardsA
+         38   23 00009024 SCardListCardsW
+         39   24 000075F0 SCardListInterfacesA
+         40   25 000090F2 SCardListInterfacesW
+         41   26 0000725F SCardListReaderGroupsA
+         42   27 00008D61 SCardListReaderGroupsW
+         43   28 000073A0 SCardListReadersA
+         44   29 00008EA2 SCardListReadersW
+         45   2A 0000892E SCardLocateCardsA
+         46   2B 00008382 SCardLocateCardsByATRA
+         47   2C 00009E84 SCardLocateCardsByATRW
+         48   2D 0000A430 SCardLocateCardsW
+         49   2E 000065B3 SCardReconnect
+          3   2F 00005E15 SCardReleaseAllEvents
+         50   30 0000620C SCardReleaseContext
+          4   31 00005E0B SCardReleaseNewReaderEvent
+         51   32 00005DF8 SCardReleaseStartedEvent
+         52   33 00007FAF SCardRemoveReaderFromGroupA
+         53   34 00009AB1 SCardRemoveReaderFromGroupW
+         54   35 00006FB2 SCardSetAttrib
+         55   36 000081E6 SCardSetCardTypeProviderNameA
+         56   37 00009CE8 SCardSetCardTypeProviderNameW
+         57   38 000067E6 SCardState
+         58   39 000087BD SCardStatusA
+         59   3A 0000A2BF SCardStatusW
+         60   3B 00006930 SCardTransmit
+         61   3C 00001700 g_rgSCardRawPci
+         62   3D 000016F0 g_rgSCardT0Pci
+         63   3E 000016F8 g_rgSCardT1Pci
+
+  Summary
+
+        1000 .data
+        2000 .reloc
+        3000 .rsrc
+       15000 .text

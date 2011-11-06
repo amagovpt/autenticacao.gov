@@ -1,0 +1,158 @@
+/* ****************************************************************************
+
+ * eID Middleware Project.
+ * Copyright (C) 2008-2009 FedICT.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version
+ * 3.0 as published by the Free Software Foundation.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, see
+ * http://www.gnu.org/licenses/.
+
+**************************************************************************** */
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+#include "eidlib.h"
+
+#include "FileUtil.h"
+#include "PrintBasic.h"
+#include "PrintStruct.h"
+
+#include "TestBasic.h"
+
+int test_Basic(const char *name, void (*test_fct)(FILE *f, int Ocsp, int Crl), void (*test_virtual)(FILE *f, int Ocsp, int Crl), const char *folder, const char *reader, int bVerify, int Ocsp, int Crl)
+{
+
+	PTEID_Status tStatus = {0};
+	long lHandle = 0;
+	long lRet = 0;
+	FILE *f=NULL;
+	
+	int i = 0;
+	int j = 0;
+
+	int iOcsp = 0;
+	int iCrl = 0;
+	char buffer[50];
+
+	time_t timeStart;
+	time_t timeStop;
+
+	time(&timeStart);
+
+
+	for(i=0;i<3;i++)
+	{
+		if(Ocsp>=0 && Ocsp<=2)
+			i=Ocsp;
+
+		switch(i)
+		{
+		case 0: iOcsp=PTEID_OCSP_CRL_NOT_USED;	break;
+		case 1: iOcsp=PTEID_OCSP_CRL_OPTIONAL;	break;
+		case 2: iOcsp=PTEID_OCSP_CRL_MANDATORY;	break;
+		}
+
+		for(j=0;j<3;j++)
+		{
+			if(Crl>=0 && Crl<=2)
+				j=Crl;
+
+			switch(j)
+			{
+			case 0: iCrl=PTEID_OCSP_CRL_NOT_USED;	break;
+			case 1: iCrl=PTEID_OCSP_CRL_OPTIONAL;	break;
+			case 2: iCrl=PTEID_OCSP_CRL_MANDATORY;	break;
+			}
+
+			if(NULL == (f=FileOpen(name, folder, bVerify, i, j)))
+				return -1;
+
+			PrintTestHeader(f,name);
+			sprintf_s(buffer, sizeof(buffer), "%s (OCSP=%d - CRL=%d)",name,i,j);
+			PrintHeader(f,buffer);
+
+			PrintTestFunction(f,"PTEID_Init");
+			tStatus = PTEID_Init((char*)reader, iOcsp, iCrl, &lHandle);
+			PrintStatus(f,"PTEID_Init",&tStatus);
+			if(PTEID_OK != tStatus.general)
+			{
+				PrintTestFunction(f,"PTEID_Exit");
+				tStatus = PTEID_Exit();
+				PrintStatus(f,"PTEID_Exit",&tStatus);
+				//Don't warn if both parameter are set to mandatory, that's not allow
+				if(iOcsp!=PTEID_OCSP_CRL_MANDATORY || iCrl!=PTEID_OCSP_CRL_MANDATORY)
+					PrintWARNING(f,"Initialisation failed");
+				
+				FileClose(f);
+				lRet = FileVerify(name, folder, bVerify, i, j);
+
+				if(Crl>=0 && Crl<=2)
+					break;
+				else
+					continue;
+			}
+
+			test_fct(f,Ocsp,Crl);
+
+			PrintTestFunction(f,"PTEID_Exit");
+			tStatus = PTEID_Exit();
+			PrintStatus(f,"PTEID_Exit",&tStatus);
+
+			//Virtual Reader
+			if(test_virtual)
+			{
+ 				PrintHeader(f,"INIT VIRTUAL READER");
+
+				PrintTestFunction(f,"PTEID_Init(VIRTUAL)");
+				tStatus = PTEID_Init("VIRTUAL", iOcsp, iCrl, &lHandle);
+				PrintStatus(f,"PTEID_Init",&tStatus);
+				if(PTEID_OK != tStatus.general)
+				{
+					PrintTestFunction(f,"PTEID_Exit");
+					tStatus = PTEID_Exit();
+					PrintWARNING(f,"Initialisation failed");
+					PrintStatus(f,"PTEID_Exit",&tStatus);
+
+					FileClose(f);
+					lRet = FileVerify(name, folder, bVerify, i, j);
+
+					if(Crl>=0 && Crl<=2)
+						break;
+					else
+						continue;
+				}
+
+				test_virtual(f,Ocsp,Crl);
+
+				PrintTestFunction(f,"PTEID_Exit");
+				tStatus = PTEID_Exit();
+				PrintStatus(f,"PTEID_Exit",&tStatus);
+			}
+
+			FileClose(f);
+			lRet = FileVerify(name, folder, bVerify, i, j);
+
+			if(Crl>=0 && Crl<=2)
+				break;
+		}
+
+		if(Ocsp>=0 && Ocsp<=2)
+			break;
+	}
+
+	time(&timeStop);
+
+	printf("TOTAL TEST TIME = %.0lf secondes\n\n",difftime(timeStop,timeStart));
+
+	return lRet;
+}

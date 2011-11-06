@@ -1,0 +1,439 @@
+; cxbu0x64.inf
+; Copyright (c) 2000 - 2009 OMNIKEY
+
+[Version]
+Signature=$Windows NT$
+Class=SmartCardReader
+ClassGuid={50DD5230-BA8A-11D1-BF5D-0000F805F530}
+Provider=%Provider%
+DriverVer=06/24/2009,1.2.1.2
+CatalogFile=cxbu0x64.cat
+
+[SourceDisksNames]
+1=%DiskDescription%,,
+
+[SourceDisksFiles]
+cxbu0x64.sys=1,,
+
+[DestinationDirs]
+DefaultDestDir = 10,system32\drivers
+cxbu0x64.Install.NT.CopyFiles=10,system32\drivers
+
+[Manufacturer]
+%Manufacturer%=OMNIKEY,NTamd64
+
+; =================== Class section =======================
+
+[ClassInstall]
+Addreg=SmartCardReaderClassReg
+
+[ClassInstall32]
+Addreg=SmartCardReaderClassReg
+
+[SmartCardReaderClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-25
+HKR,,NoInstallClass,,1
+HKR,,Installer32,,"winscard.dll,ClassInstall32"
+
+
+; ===================== PnP IDs ===========================
+
+[ControlFlags]
+; All PnP devices should be excluded from manual AddDevice Applet list
+ExcludeFromSelect=*
+
+
+
+[OMNIKEY.NTamd64]
+; DisplayName       	Section           DeviceId
+; -----------       	-------           --------
+%VID1PID1ReaderDescription% =  cm3x21.Install, USB\VID_076B&PID_3021
+%VID1PID2ReaderDescription% =  cm1021.Install, USB\VID_076B&PID_1021
+%VID1PID3ReaderDescription% =  dongle.Install, USB\VID_076B&PID_6622
+%VID1PID4ReaderDescription% =  class2.Install, USB\VID_076B&PID_3621
+%VID1PID5ReaderDescription% =  class2_5.Install, USB\VID_076B&PID_3821
+%VID1PID6ReaderDescription% =  express.Install, USB\VID_076B&PID_4321
+%VID1PID7ReaderDescription% =  kbd4.Install, USB\VID_076B&PID_9621&Mi_01
+%VID1PID8ReaderDescription% =  bio.Install, USB\VID_076B&PID_7021
+
+%VID2PID1ReaderDescription% =  kbd1.Install, USB\VID_046A&PID_0010&Mi_01
+%VID2PID2ReaderDescription% =  scr1.Install, USB\VID_046A&PID_002D
+
+%VID3PID1ReaderDescription% =  fujkbd.Install, USB\VID_0BF8&PID_1005&Mi_01
+%VID3PID2ReaderDescription% =  fujscr.Install, USB\VID_0BF8&PID_1006
+
+
+
+; ================== NT specific =====================
+
+[cm3x21.Install.NT]
+AddReg    = cxbu0x64.Install.NT.AddReg
+CopyFiles = cxbu0x64.Install.NT.CopyFiles
+
+[cm3x21.Install.NT.HW]
+AddReg    = cm3x21.Install.AddReg.HW
+
+[cm3x21.Install.NT.Services]
+AddService = cxbu0x64, 2, cm3x21.Service.NT,cxbu0x64.EventLog.NT
+
+[cm1021.Install.NT]
+AddReg    = cxbu0x64.Install.NT.AddReg
+CopyFiles = cxbu0x64.Install.NT.CopyFiles
+
+[cm1021.Install.NT.HW]
+AddReg    = cm1021.Install.AddReg.HW
+
+[cm1021.Install.NT.Services]
+AddService = cxbu0x64, 2, cm1021.Service.NT,cxbu0x64.EventLog.NT
+
+[dongle.Install.NT]
+AddReg    = cxbu0x64.Install.NT.AddReg
+CopyFiles = cxbu0x64.Install.NT.CopyFiles
+
+[dongle.Install.NT.HW]
+AddReg    = dongle.Install.AddReg.HW
+
+[dongle.Install.NT.Services]
+AddService = cxbu0x64, 2, dongle.Service.NT,cxbu0x64.EventLog.NT
+
+[class2.Install.NT]
+AddReg    = cxbu0x64.Install.NT.AddReg
+CopyFiles = cxbu0x64.Install.NT.CopyFiles
+
+[class2.Install.NT.HW]
+AddReg    = class2.Install.AddReg.HW
+
+[class2.Install.NT.Services]
+AddService = cxbu0x64, 2, class2.Service.NT,cxbu0x64.EventLog.NT
+
+[class2_5.Install.NT]
+AddReg    = cxbu0x64.Install.NT.AddReg
+CopyFiles = cxbu0x64.Install.NT.CopyFiles
+
+[class2_5.Install.NT.HW]
+AddReg    = class2_5.Install.AddReg.HW
+
+[class2_5.Install.NT.Services]
+AddService = cxbu0x64, 2, class2_5.Service.NT,cxbu0x64.EventLog.NT
+
+[express.Install.NT]
+AddReg    = cxbu0x64.Install.NT.AddReg
+CopyFiles = cxbu0x64.Install.NT.CopyFiles
+
+[express.Install.NT.HW]
+AddReg    = express.Install.AddReg.HW
+
+[express.Install.NT.Services]
+AddService = cxbu0x64, 2, express.Service.NT,cxbu0x64.EventLog.NT
+
+[kbd4.Install.NT]
+AddReg    = cxbu0x64.Install.NT.AddReg
+CopyFiles = cxbu0x64.Install.NT.CopyFiles
+
+[kbd4.Install.NT.HW]
+AddReg    = kbd4.Install.AddReg.HW
+
+[kbd4.Install.NT.Services]
+AddService = cxbu0x64, 2, kbd4.Service.NT,cxbu0x64.EventLog.NT
+
+[bio.Install.NT]
+AddReg    = cxbu0x64.Install.NT.AddReg
+CopyFiles = cxbu0x64.Install.NT.CopyFiles
+
+[bio.Install.NT.HW]
+AddReg    = bio.Install.AddReg.HW
+
+[bio.Install.NT.Services]
+AddService = cxbu0x64, 2, bio.Service.NT,cxbu0x64.EventLog.NT
+
+
+
+[kbd1.Install.NT]
+AddReg    = cxbu0x64.Install.NT.AddReg
+CopyFiles = cxbu0x64.Install.NT.CopyFiles
+
+[kbd1.Install.NT.HW]
+AddReg    = kbd1.Install.AddReg.HW
+
+[kbd1.Install.NT.Services]
+AddService = cxbu0x64, 2, kbd1.Service.NT,cxbu0x64.EventLog.NT
+
+[scr1.Install.NT]
+AddReg    = cxbu0x64.Install.NT.AddReg
+CopyFiles = cxbu0x64.Install.NT.CopyFiles
+
+[scr1.Install.NT.HW]
+AddReg    = scr1.Install.AddReg.HW
+
+[scr1.Install.NT.Services]
+AddService = cxbu0x64, 2, scr1.Service.NT,cxbu0x64.EventLog.NT
+
+
+
+[fujkbd.Install.NT]
+AddReg    = cxbu0x64.Install.NT.AddReg
+CopyFiles = cxbu0x64.Install.NT.CopyFiles
+
+[fujkbd.Install.NT.HW]
+AddReg    = fujkbd.Install.AddReg.HW
+
+[fujkbd.Install.NT.Services]
+AddService = cxbu0x64, 2, fujkbd.Service.NT,cxbu0x64.EventLog.NT
+
+[fujscr.Install.NT]
+AddReg    = cxbu0x64.Install.NT.AddReg
+CopyFiles = cxbu0x64.Install.NT.CopyFiles
+
+[fujscr.Install.NT.HW]
+AddReg    = fujscr.Install.AddReg.HW
+
+[fujscr.Install.NT.Services]
+AddService = cxbu0x64, 2, fujscr.Service.NT,cxbu0x64.EventLog.NT
+
+
+
+
+
+[cxbu0x64.Install.NT.AddReg]
+HKR,, AdapterType, 0, "0100"
+HKLM,"SYSTEM\CurrentControlSet\Services\SCardSvr",Start,0x00010001,2
+HKLM,"System\CurrentControlSet\Services\CertPropSvc",Start,0x00010001,2
+HKLM, Software\Microsoft\Cryptography\Calais\Readers,,,
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,DLLName,0,wlnotify.dll
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logon,0,SCardStartCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logoff,0,SCardStopCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Lock,0,SCardSuspendCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Unlock,0,SCardResumeCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Enabled,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Impersonate,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Asynchronous,0x00010001,1
+
+
+[cxbu0x64.Install.NT.CopyFiles]
+cxbu0x64.sys,,,2
+
+
+
+
+
+[cm3x21.Service.NT]
+DisplayName     = %VID1PID1ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\cxbu0x64.sys
+[cm1021.Service.NT]
+DisplayName     = %VID1PID2ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\cxbu0x64.sys
+[dongle.Service.NT]
+DisplayName     = %VID1PID3ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\cxbu0x64.sys
+[class2.Service.NT]
+DisplayName     = %VID1PID4ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\cxbu0x64.sys
+[class2_5.Service.NT]
+DisplayName     = %VID1PID5ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\cxbu0x64.sys
+[express.Service.NT]
+DisplayName     = %VID1PID6ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\cxbu0x64.sys
+[kbd4.Service.NT]
+DisplayName     = %VID1PID7ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\cxbu0x64.sys
+[bio.Service.NT]
+DisplayName     = %VID1PID8ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\cxbu0x64.sys
+
+
+[kbd1.Service.NT]
+DisplayName     = %VID2PID1ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\cxbu0x64.sys
+[scr1.Service.NT]
+DisplayName     = %VID2PID2ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\cxbu0x64.sys
+
+
+[fujkbd.Service.NT]
+DisplayName     = %VID3PID1ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\cxbu0x64.sys
+[fujscr.Service.NT]
+DisplayName     = %VID3PID2ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\cxbu0x64.sys
+
+
+
+[cxbu0x64.EventLog.NT]
+AddReg = cxbu0x64.AddEventLog.reg
+
+[cxbu0x64.AddEventLog.reg]
+HKR,, EventMessageFile, 0x00020000, "%%SystemRoot%%\System32\drivers\cxbu0x64.sys"
+HKR,, TypesSupported,   0x00010001, 7
+
+
+; =====================
+; === CardMan 3x21 ====
+; =====================
+[cm3x21.Install.AddReg.HW]
+HKR,,"VendorName",,"OMNIKEY"
+HKR,,"IfdType",, "CardMan 3x21"
+HKR,,"VidPid",, USB\VID_076B&PID_3021
+
+
+; =====================
+; === CardMan 1021 ====
+; =====================
+[cm1021.Install.AddReg.HW]
+HKR,,"VendorName",,"OMNIKEY"
+HKR,,"IfdType",, "CardMan 1021"
+HKR,,"VidPid",, USB\VID_076B&PID_1021
+
+
+; =====================
+; === CardMan 6121 ====
+; =====================
+[dongle.Install.AddReg.HW]
+HKR,,"VendorName",,"OMNIKEY"
+HKR,,"IfdType",, "CardMan 6121"
+HKR,,"Dongle",0x00010001,1
+HKR,,"VidPid",, USB\VID_076B&PID_6622
+
+
+; =====================
+; === CardMan 3621 ====
+; =====================
+[class2.Install.AddReg.HW]
+HKR,,"VendorName",,"OMNIKEY"
+HKR,,"IfdType",, "CardMan 3621"
+HKR,,"VidPid",, USB\VID_076B&PID_3621
+
+
+; =====================
+; === CardMan 3821 ====
+; =====================
+[class2_5.Install.AddReg.HW]
+HKR,,"VendorName",,"OMNIKEY"
+HKR,,"IfdType",, "CardMan 3821"
+HKR,,"VidPid",, USB\VID_076B&PID_3821
+
+
+; =====================
+; === CardMan 4321 ====
+; =====================
+[express.Install.AddReg.HW]
+HKR,,"VendorName",,"OMNIKEY"
+HKR,,"IfdType",, "CardMan 4321"
+HKR,,"VidPid",, USB\VID_076B&PID_4321
+
+
+; =====================
+; === CardMan 9621 ====
+; =====================
+[kbd4.Install.AddReg.HW]
+HKR,,"VendorName",,"OMNIKEY"
+HKR,,"IfdType",, "CardMan 9621"
+HKR,,"VidPid",, USB\VID_076B&PID_9621&Mi_01
+
+
+; =====================
+; === CardMan 7x21 ====
+; =====================
+[bio.Install.AddReg.HW]
+HKR,,"VendorName",,"OMNIKEY"
+HKR,,"IfdType",, "CardMan 7x21"
+HKR,,"VidPid",, USB\VID_076B&PID_7021
+
+
+
+; =====================
+; === SmartBoard XX44 ====
+; =====================
+[kbd1.Install.AddReg.HW]
+HKR,,"VendorName",,"Cherry"
+HKR,,"IfdType",, "SmartBoard XX44"
+HKR,,"VidPid",, USB\VID_046A&PID_0010&Mi_01
+
+
+; =====================
+; === SmartTerminal XX44 ====
+; =====================
+[scr1.Install.AddReg.HW]
+HKR,,"VendorName",,"Cherry"
+HKR,,"IfdType",, "SmartTerminal XX44"
+HKR,,"VidPid",, USB\VID_046A&PID_002D
+
+
+
+; =====================
+; === SmartCard-Reader Keyboard USB 2A ====
+; =====================
+[fujkbd.Install.AddReg.HW]
+HKR,,"VendorName",,"FUJITSU"
+HKR,,"IfdType",, "SCR Keyboard USB 2A"
+HKR,,"VidPid",, USB\VID_0BF8&PID_1005&Mi_01
+
+
+; =====================
+; === SmartCard-Reader USB 2A ====
+; =====================
+[fujscr.Install.AddReg.HW]
+HKR,,"VendorName",,"FUJITSU"
+HKR,,"IfdType",, "SCR USB 2A"
+HKR,,"VidPid",, USB\VID_0BF8&PID_1006
+
+
+
+
+
+; ================= Strings =====================
+
+[Strings]
+Provider		= "OMNIKEY"
+Manufacturer    	= "OMNIKEY"
+VID1PID1ReaderDescription     = "CardMan 3x21"
+VID1PID2ReaderDescription     = "CardMan 1021"
+VID1PID3ReaderDescription     = "CardMan 6121"
+VID1PID4ReaderDescription     = "CardMan 3621"
+VID1PID5ReaderDescription     = "CardMan 3821"
+VID1PID6ReaderDescription     = "CardMan 4321"
+VID1PID7ReaderDescription     = "CardMan 9621"
+VID1PID8ReaderDescription     = "CardMan 7x21"
+VID2PID1ReaderDescription     = "SmartBoard XX44"
+VID2PID2ReaderDescription     = "SmartTerminal XX44"
+VID3PID1ReaderDescription     = "SmartCard-Reader Keyboard USB 2A"
+VID3PID2ReaderDescription     = "SmartCard-Reader USB 2A"
+DiskDescription         = "CardMan PC/SC Driver Disk"
+ClassName 		= "Smart Card Readers"

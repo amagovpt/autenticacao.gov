@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#remove previous version of pcscd_autostart
+rm -rf /Library/StartupItems/pcscd_autostart
+
+#enable pcscd autolauncher
+#launchctl load -w /Library/LaunchDaemons/org.opensc.pcscd.autostart
+/Library/OpenSC/bin/sc-securityd.py inactive
+
+exit 0

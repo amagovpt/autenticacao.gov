@@ -1,0 +1,21 @@
+Version info
+============
+
+Here's an attempt to put all version info
+as much centralized a possible, so you don't
+have to modify 25 header/.rc/makefiles in
+order to to build a new release (and forget
+number 26 so you have to redo it all again.)
+
+For Windows: the versions of the DLLs and EXEs
+are put in _Builds/pteidversions.h.
+The .rc files for each .vcproj #includes this
+header file to get the versions for its DLL/EXE.
+
+On Linux/Mac: the versions of all binaries are
+put in _Builds/pteidversions.mak.
+All makefiles #include this file to get the
+version for their binary.
+
+PS: it's not needed to have versions on test tools,
+only on things that will be released.
