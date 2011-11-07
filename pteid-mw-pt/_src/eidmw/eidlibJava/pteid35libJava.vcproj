@@ -164,7 +164,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid35$(ProjectName).jar -C class be&#x0D;&#x0A;call ..\_DocsInternal\API\doSDK_java.bat&#x0D;&#x0A;"
+				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid35$(ProjectName).jar -C class pt&#x0D;&#x0A;call ..\_DocsInternal\API\doSDK_java.bat&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
