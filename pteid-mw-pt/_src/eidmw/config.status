@@ -1,1 +1,1 @@
-./configure 
+./configure --lib+=-L/usr/bin/../lib/ --include+=/usr/bin/../include/Qt --include+=/usr/lib/jvm/java-6-sun/bin/../include --include+=/usr/lib/jvm/java-6-sun/bin/../include/linux BUILD_SDK=1 
