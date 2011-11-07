@@ -721,10 +721,11 @@ const char *APL_EidFile_ID::getSurnameMother()
 
 const char *APL_EidFile_ID::getParents()
 {
+
 	string m_Parents = m_GivenNameFather + " " + m_SurnameFather + " * " + m_GivenNameMother + " " + m_SurnameMother;
 
 	if(ShowData())
-		return m_Parents.c_str();
+		return strdup(m_Parents.c_str());
 
 	return "";
 }
