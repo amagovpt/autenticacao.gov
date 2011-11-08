@@ -1108,6 +1108,35 @@ return $jnicall;
 %javaexception("PTEID_Exception") setString	   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") setLong	   JAVA_CODE_THROW
 
+//------------------------------------------------------------
+// class PTEID_Sod
+//------------------------------------------------------------
+%javaexception("PTEID_Exception") getData	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getHash	   JAVA_CODE_THROW
+
+//------------------------------------------------------------
+// class PTEID_Address
+//------------------------------------------------------------
+%javaexception("PTEID_Exception") getAddressVersion	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getStreet	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getZipCode	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getMunicipality	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getDistrict	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getStreetName	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getCivilParish	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getStreetType1	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getStreetType2	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getBuildingType1	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getBuildingType2	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getDoorNo	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getFloor	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getSide	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getLocality	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getPlace	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getZip4	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getZip3	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getPostalLocality	   JAVA_CODE_THROW
+
 ///////////////////////////////////////// SetEventCallback /////////////////////////////////////////////
 %typemap(ctype)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "long" 
 %typemap(in)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "" 
