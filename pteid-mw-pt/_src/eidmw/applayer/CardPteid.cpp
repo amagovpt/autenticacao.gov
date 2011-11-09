@@ -455,7 +455,7 @@ bool APL_EidFile_ID::MapFields()
 		pteidfile.append("-");
 		pteidfile.append(PTEID_FILE_ID);
 		pteidfile.append(".bin");
-		myfile.open (pteidfile.c_str());
+		myfile.open (pteidfile.c_str(), ios::binary);
 		pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FILE, PTEIDNG_FIELD_ID_LEN_FILE);
 		m_IDFile.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 		myfile << m_IDFile;
