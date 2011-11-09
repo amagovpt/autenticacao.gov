@@ -634,8 +634,9 @@ APL_Certif *APL_Certifs::findIssuer(const CByteArray *data)
 	const unsigned char *const *pucIssuer;
 	int i;
 
+	//Comment code that is causing troubles on certificates
 	//we look in the hard coded root array
-	for(pucIssuer=_pteid_root_certs,i=0;*pucIssuer!=NULL;pucIssuer++,i++)
+	/*for(pucIssuer=_pteid_root_certs,i=0;*pucIssuer!=NULL;pucIssuer++,i++)
 	{
 		CByteArray issuer_data(*pucIssuer,_pteid_root_certs_size[i]);
 
@@ -644,10 +645,10 @@ APL_Certif *APL_Certifs::findIssuer(const CByteArray *data)
 			APL_Certif *issuer = addCert(issuer_data,APL_CERTIF_TYPE_ROOT,true);
 			return issuer;
 		}
-	}
+	}*/
 
 	//we look in the hard coded issuer array
-	for(pucIssuer=_pteid_issuer_certs,i=0;*pucIssuer!=NULL;pucIssuer++,i++)
+	/*for(pucIssuer=_pteid_issuer_certs,i=0;*pucIssuer!=NULL;pucIssuer++,i++)
 	{
 		CByteArray issuer_data(*pucIssuer,_pteid_issuer_certs_size[i]);
 
@@ -656,7 +657,7 @@ APL_Certif *APL_Certifs::findIssuer(const CByteArray *data)
 			APL_Certif *issuer = addCert(issuer_data,APL_CERTIF_TYPE_CA,true);
 			return issuer;
 		}
-	}
+	}*/
 
 	return NULL;
 }
@@ -1210,7 +1211,7 @@ void APL_Certif::resetIssuer()
 void APL_Certif::resetRoot()
 {
     	//Make temporary fix to make certificates appear on certain IAS cards
-	if(m_issuer==this || m_issuer==NULL)
+    	if(m_issuer==this || m_issuer==NULL)
 		m_root=1;
 	else
 		m_root=0;
