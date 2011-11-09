@@ -460,8 +460,8 @@
       </Component>
 
       <Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
-        <File Id="libeay32_0_9_8g.dll" Name="libeay32_0_9_8g.dll" KeyPath="yes" Source="$(var.PTEID_DIR_OPENSSL_098G)\lib\libeay32_0_9_8g.dll" />
-        <File Id="ssleay32_0_9_8g.dll" Name="ssleay32_0_9_8g.dll" KeyPath="no" Source="$(var.PTEID_DIR_OPENSSL_098G)\lib\ssleay32_0_9_8g.dll" />
+        <File Id="libeay32.dll" Name="libeay32.dll" KeyPath="yes" Source="$(var.PTEID_DIR_OPENSSL_098G)\bin\libeay32.dll" />
+        <File Id="ssleay32.dll" Name="ssleay32.dll" KeyPath="no" Source="$(var.PTEID_DIR_OPENSSL_098G)\bin\ssleay32.dll" />
       </Component>
 
       <Component Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
@@ -469,7 +469,7 @@
       </Component>
 
       <Component Id="pteidmdrvsystem32" Guid="a8259480-e408-11de-8a39-0800200c9a66" Permanent="no">
-        <File Id="system32_pteidmdrv.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="yes" DiskId="1" />
+        <File Id="system32_pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="yes" DiskId="1" />
       </Component>
 
       <Component Id="CSP" Guid="{54153442-D4CE-4DE6-9321-1BAC5DE4C725}" SharedDllRefCount="yes">
@@ -486,13 +486,14 @@
         <File Id="pteidwinscard.dll" Name="pteidwinscard.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidwinscard.dll" />
         <File Id="pteidgui.dll" Name="pteidgui.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidgui.dll" />
         <File Id="pteidlibopensc.dll" Name="pteidlibopensc.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidlibopensc.dll" />
-        <File Id="pteidlibeay32.dll" Name="pteidlibeay32.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidlibeay32.dll" />
-        <File Id="pteidssleay32.dll" Name="pteidssleay32.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidssleay32.dll" />
       </Component>
       
+	  <!--
       <Component Id="BWCompatibilityQt" Guid="{92FDC305-F375-4a66-9F22-9CBDEF1B0BEB}" SharedDllRefCount="yes">
         <File Id="qt_mt334.dll" Name="qt-mt334.dll" KeyPath="yes" Source="$(var.PTEID_DIR_QT_334)\bin\qt-mt334.dll" />
       </Component>
+	  -->
+	  
 
       <Component Id="BWCompatibilityActiveX" Guid="{FE012727-F90E-4A4A-BC61-F1E93F0C82EB}">
         <File Id="pteidlibaxctrl.dll" Name="pteidlibaxctrl.dll" KeyPath="yes" Source="..\..\..\misc\bw_compatibility\pteidlibaxctrl.dll">
@@ -568,11 +569,13 @@
         <File Id="eidlibj.dll" Name="eidlibj.dll" KeyPath="no" Source="..\..\..\misc\bw_compatibility\eidlibj.dll" />
         <File Id="eidlibj.dll.manifest" Name="eidlibj.dll.manifest" KeyPath="no" Source="..\..\..\misc\bw_compatibility\eidlibj.dll.manifest" />
       </Component>
-
+<!--
       <Component Id="BWPinpad" Guid="{AEB72EF2-7C5E-487E-84E3-0903140D7B74}" SharedDllRefCount="yes">
         <File Id="belpicppgui.dll" Name="belpicppgui.dll" KeyPath="yes" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pinpad\belpicppgui.dll" />
       </Component>
+	  -->
     </DirectoryRef>
+	
 
     <DirectoryRef Id="PTEIDPPDIR">
       <Component Id="PinpadLib" Guid="{9ADA6D75-5DCC-467E-A0CE-B84A482B2115}" SharedDllRefCount="yes">
@@ -606,11 +609,20 @@
 	  
       <Component Id="REGISTERMINIDRIVER" Guid="{B9980C19-883E-49f9-BDD2-AB3D75187C8F}">
         <RegistryKey Root="HKLM"
-                     Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid"
+                     Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid (IAS)"
                      Action="createAndRemoveOnUninstall">
           <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="yes"/>
-          <RegistryValue Type="binary" Name="ATR" Value="3b98004000a503010101ad1300" KeyPath="no"/>
-          <RegistryValue Type="binary" Name="ATRMask" Value="ffff00ff00ffffffffffffff00" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATR" Value="3B959540FFD000540131" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATRMask" Value="fffffffffffffffffffc" KeyPath="no"/>
+          <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+          <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+        </RegistryKey>
+		      <RegistryKey Root="HKLM"
+                     Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid (Gemsafe)"
+                     Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATR" Value="3B7D95000080318065B08311C0A983009000" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
           <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
           <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
         </RegistryKey>
@@ -766,10 +778,10 @@
       <ComponentRef Id="Runtime35ThirdPartyOpenSSL"/>
       <ComponentRef Id="Runtime35ThirdPartyXerces"/>
       <ComponentRef Id="BWCompatibility"/>
-      <ComponentRef Id="BWCompatibilityQt"/>
+      <!-- <ComponentRef Id="BWCompatibilityQt"/> -->
       <ComponentRef Id="BWCompatibilityActiveX"/>
       <ComponentRef Id="BWCompatibilityJava"/>
-      <ComponentRef Id="BWPinpad"/>
+      <!-- <ComponentRef Id="BWPinpad"/> -->
 
       <!-- Pteid pinpad dir-->
       <ComponentRef Id="PinpadLib"/>
