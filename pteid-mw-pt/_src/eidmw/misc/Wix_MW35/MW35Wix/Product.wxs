@@ -628,12 +628,20 @@
             Value="4ca7da22f79d4c8db3acaaf626b757929ff28cd2d205615323885f542f38d9ddfccd1b74d2ccbd99ad0a0a530e22b91dda3f3967ff7846f43a4fa263b41fbdb35976c68d64c3ff931036e009f3d3090d9afdbe8a9f942d1adc8791d5522644d1842bb802907737baa4b318a21554ecc3b25db0f42d7f5cdd3f58269703ffed300000000000000000" />
         </RegistryKey>
         <RegistryKey Root="HKLM"
-                     Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Portugal Identity Card"
+                     Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Portugal Identity Card (IAS)"
                      Action="createAndRemoveOnUninstall">
           <RegistryValue Type="string" Name="Crypto Provider" Value="Portugal Identity Card CSP"/>
           <RegistryValue Type="string" Name="80000001" Value="pteidcsp.dll" KeyPath="no"/>
-          <RegistryValue Type="binary" Name="ATR" Value="3b98004000a503010101ad1300" KeyPath="no"/>
-          <RegistryValue Type="binary" Name="ATRMask" Value="ffff00ff00ffffffffffffff00" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATR" Value="3B959540FFD000540131" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATRMask" Value="fffffffffffffffffffc" KeyPath="no"/>
+        </RegistryKey>
+		<RegistryKey Root="HKLM"
+                     Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Portugal Identity Card (Gemsafe)"
+                     Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Name="Crypto Provider" Value="Portugal Identity Card CSP"/>
+          <RegistryValue Type="string" Name="80000001" Value="pteidcsp.dll" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATR" Value="3B7D95000080318065B08311C0A983009000" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
         </RegistryKey>
       </Component>
 
