@@ -558,7 +558,8 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	m_ui.setupUi(this);
 
-	setFixedSize( 830, 670 );
+	setFixedSize(830, 630);
+	m_ui.menubar->setVisible(false);
 
 	m_ui.wdg_submenu_card->setVisible(false);
 
