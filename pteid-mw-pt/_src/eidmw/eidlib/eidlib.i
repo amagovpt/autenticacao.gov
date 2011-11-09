@@ -814,6 +814,7 @@ return $jnicall;
 %javaexception("PTEID_Exception") getReaderByNum	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getReaderByCardSerialNumber	   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") flushCache		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") instance		JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_ReaderContext:
