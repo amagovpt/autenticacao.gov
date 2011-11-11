@@ -656,7 +656,7 @@
                      Action="createAndRemoveOnUninstall">
           <RegistryValue Type="string" Name="Crypto Provider" Value="Portugal Identity Card CSP"/>
           <RegistryValue Type="string" Name="80000001" Value="pteidcsp.dll" KeyPath="no"/>
-          <RegistryValue Type="binary" Name="ATR" Value="3B959540FFD000540131" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATR" Value="3B959540FFD000540130" KeyPath="no"/>
           <RegistryValue Type="binary" Name="ATRMask" Value="fffffffffffffffffffc" KeyPath="no"/>
         </RegistryKey>
 		<RegistryKey Root="HKLM"
@@ -664,7 +664,7 @@
                      Action="createAndRemoveOnUninstall">
           <RegistryValue Type="string" Name="Crypto Provider" Value="Portugal Identity Card CSP"/>
           <RegistryValue Type="string" Name="80000001" Value="pteidcsp.dll" KeyPath="no"/>
-          <RegistryValue Type="binary" Name="ATR" Value="3B7D95000080318065B08311C0A983009000" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATR" Value="3B7D95000080318065B08311000083009000" KeyPath="no"/>
           <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
         </RegistryKey>
         </Component>   
