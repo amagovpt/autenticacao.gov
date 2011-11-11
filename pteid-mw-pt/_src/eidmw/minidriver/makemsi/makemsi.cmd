@@ -16,10 +16,10 @@ set CERTIFICATESTORE=PrivateCertStore
 
 :: Paths to compiled drivers
 :: We expect libpteidmdrv32_debug.dll, libpteidmdrv32.dll, libpteidmdrv64_debug.dll and libpteidmdrv64.dll 
-set BINPATH=../Win32\Debug
+set BINPATH=..\Win32\Debug
 
 :: Path to images
-set IMG_PATH=../img
+set IMG_PATH=..\img
 
 set BUILDPATH=%~dp0
 
@@ -35,7 +35,7 @@ copy pteidmdrv.inf %BUILDPATH%\Release
 
 :: copy drivers. We use the same files for 32 and 64 bit. But we create architecture dependent MSI's
 ::copy %BINPATH%\pteidmdrv32_debug.dll %BUILDPATH%\Debug\pteidmdrv32.dll
-copy %BINPATH%\pteidmdrv.dll %BUILDPATH%\Release\pteidmdrv.dll
+copy %BINPATH%\pteidmdrv.dll %BUILDPATH%\Release\pteidmdrv32.dll
 ::copy %BINPATH%\pteidmdrv64_debug.dll %BUILDPATH%\Debug\pteidmdrv64.dll
 ::copy %BINPATH%\pteidmdrv64.dll %BUILDPATH%\Release\pteidmdrv64.dll
 

@@ -55,7 +55,7 @@ AddReg=AddRegDefault32
 
 [SourceDisksFiles]
 ; pteidmdrv64.dll=1
-pteidmdrv.dll=1
+pteidmdrv32.dll=1
 
 [SourceDisksNames]
 1 = %MediaDescription%
@@ -122,27 +122,27 @@ Needs=UmPass.Interfaces
 
 
 [amd64_CopyFiles]
-pteidmdrv.dll 
+pteidmdrv32.dll 
 ;,pteidmdrv64.dll
 
 [x86_CopyFiles]
-pteidmdrv.dll
+pteidmdrv32.dll
 ;,pteidmdrv32.dll
 
 [wow64_CopyFiles]
-pteidmdrv.dll
+pteidmdrv32.dll
 
 [AddRegDefault32]
 HKLM, %SmartCardName%,"ATR",0x00000001,3b,95,95,40,ff,d0,00,54,01,30
 HKLM, %SmartCardName%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,fc
 HKLM, %SmartCardName%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
-HKLM, %SmartCardName%,"80000001",0x00000000,"pteidmdrv.dll"
+HKLM, %SmartCardName%,"80000001",0x00000000,"pteidmdrv32.dll"
 HKLM, %SmartCardName_1%,"ATR",0x00000001,3B,7D,95,00,00,80,31,80,65,B0,83,11,00,00,83,00,90,00
 HKLM, %SmartCardName_1%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,00,00,ff,ff,ff,ff
 HKLM, %SmartCardName_1%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName_1%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
-HKLM, %SmartCardName_1%,"80000001",0x00000000,"pteidmdrv.dll"
+HKLM, %SmartCardName_1%,"80000001",0x00000000,"pteidmdrv32.dll"
 
 
 
@@ -151,7 +151,7 @@ HKLM, %SmartCardName%,"ATR",0x00000001,3b,98,00,40,00,a5,03,01,01,01,ad,13,00
 HKLM, %SmartCardName%,"ATRMask",0x00000001,ff,ff,00,ff,00,ff,ff,ff,ff,ff,ff,ff,00
 HKLM, %SmartCardName%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
-HKLM, %SmartCardName%,"80000001",0x00000000,"pteidmdrv.dll"
+HKLM, %SmartCardName%,"80000001",0x00000000,"pteidmdrv32.dll"
 HKLM, %SmartCardName%,"80000100",0x00000000,"en-US,Please enter your PIN;en-EN,Please enter your PIN;nl-BE,Geef uw PIN in;nl-NL,Geef uw PIN in;fr-BE,Entrez votre code PIN;fr-FR,Entrez votre code PIN;de-DE,Bitte geben Sie Ihre PIN ein"
 HKLM, %SmartCardName%,"80000103",0x00000000,"en-US,Please enter your PIN;en-EN,Please enter your PIN;nl-BE,Geef uw PIN in;nl-NL,Geef uw PIN in;fr-BE,Entrez votre code PIN;fr-FR,Entrez votre code PIN;de-DE,Bitte geben Sie Ihre PIN ein"
 
@@ -160,7 +160,7 @@ HKLM, %SmartCardNameWOW64%,"ATR",0x00000001,3b,98,00,40,00,a5,03,01,01,01,ad,13,
 HKLM, %SmartCardNameWOW64%,"ATRMask",0x00000001,ff,ff,00,ff,00,ff,ff,ff,ff,ff,ff,ff,00
 HKLM, %SmartCardNameWOW64%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardNameWOW64%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
-HKLM, %SmartCardNameWOW64%,"80000001",0x00000000,"pteidmdrv.dll"
+HKLM, %SmartCardNameWOW64%,"80000001",0x00000000,"pteidmdrv32.dll"
 HKLM, %SmartCardNameWOW64%,"80000100",0x00000000,"en-US,Please enter your PIN;en-EN,Please enter your PIN;nl-BE,Geef uw PIN in;nl-NL,Geef uw PIN in;fr-BE,Entrez votre code PIN;fr-FR,Entrez votre code PIN;de-DE,Bitte geben Sie Ihre PIN ein"
 HKLM, %SmartCardNameWOW64%,"80000103",0x00000000,"en-US,Please enter your PIN;en-EN,Please enter your PIN;nl-BE,Geef uw PIN in;nl-NL,Geef uw PIN in;fr-BE,Entrez votre code PIN;fr-FR,Entrez votre code PIN;de-DE,Bitte geben Sie Ihre PIN ein"
 
