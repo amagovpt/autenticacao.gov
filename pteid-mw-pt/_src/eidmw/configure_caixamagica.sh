@@ -1,3 +1,4 @@
+#!/bin/bash
 ### TODO - VERIFICAR OUTRA FORMA PARA QUE NAO SEJAM NECESSARIAS ALTERAÇOES AS  CONFIGURAÇOES DO QMAKE
 echo "TODO"
 echo "Sustiutir os caminhos ao inves de criar o symbolic link"
