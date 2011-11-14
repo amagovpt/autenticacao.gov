@@ -8,6 +8,10 @@
   <String Id="PteidRuntimeDesc" Overridable="yes">This module is needed to use electronic Identity card.</String>
   <String Id="PteidGui" Overridable="yes">Management Tool</String>
   <String Id="PteidGuiDescr" Overridable="yes">Read the content of an e-ID card</String>
+  <String Id="CSP" Overridable="yes">Cryptographic Service Provider</String>
+  <String Id="CSPDescr" Overridable="yes">This module provides Cryptographic Services for applications using the Windows CryptoAPI in Windows XP</String>
+  <String Id="Minidriver" Overridable="yes">Smart Card Minidriver</String>
+  <String Id="MinidriverDescr" Overridable="yes">This module provides Cryptographic Services for applications using the Windows CryptoAPI in Windows Vista and Seven</String>
   <String Id="Crypto" Overridable="yes">Cryptographic Module</String>
   <String Id="CryptoDescr" Overridable="yes">This module is required for using the eID card as an electronic identity card in Internet Explorer, Firefox, etc. or for creating digital signatures in Microsoft Office, OpenOffice.org, Microsoft Outlook, Thunderbird, etc.</String>
   <String Id="XSign" Overridable="yes">Xsign</String>

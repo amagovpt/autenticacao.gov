@@ -811,14 +811,14 @@
         <ComponentRef Id="OutlookTool" />
         <!-- Shortcuts -->
         <ComponentRef Id ="OutlookShortcut"/>
-        <Feature Id="Install_Minidriver" Level="0">
+        <Feature Id="Install_Minidriver" Title="!(loc.Minidriver)" Description="!(loc.MinidriverDescr)" Level="0">
           <ComponentRef Id="pteidmdrv"/>
           <ComponentRef Id="CertPropService"/>
           <ComponentRef Id="pteidmdrvsystem32"/>
           <ComponentRef Id="REGISTERMINIDRIVER"/>
           <Condition Level="1">VersionNT >= 600</Condition>
         </Feature>
-        <Feature Id="Install_CSP" Level="1">
+        <Feature Id="Install_CSP" Title="!(loc.CSP)" Description="!(loc.CSPDescr)" Level="1">
           <ComponentRef Id="CSP"/>
           <ComponentRef Id="REGISTERCSP"/>
           <Condition Level="0">VersionNT >= 600</Condition>
@@ -916,7 +916,7 @@
 
     <Binary Id="KILLPROCESS" SourceFile="..\..\..\misc\Wix_MW35\Kill_Process\Release\Kill_Process.exe"/>
 -->
-    <Binary Id="MarkHidden" SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>   
+    <Binary Id="MarkHidden" SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>
     <Binary Id="PTEID_CLEANUP" SourceFile="..\..\..\misc\Wix_MW35\pteidcleanup\Release\pteidcleanup.exe"/>
  
 <!--
