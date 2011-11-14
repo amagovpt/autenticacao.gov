@@ -15,21 +15,25 @@ DriverVer=12/08/2009,4.0.0.2
 
 [Fedict.NTamd64]
 %FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_80318065b0831100c883009000
+%FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_d000540131
 %FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_d000540132
 %FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_80318065B08311C0A983009000	
 
 [Fedict.NTx86]
 %FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_80318065b0831100c883009000
+%FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_d000540131
 %FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_d000540132
 %FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_80318065B08311C0A983009000
 
 [Fedict.NTamd64.6.1]
 %FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_80318065b0831100c883009000
+%FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_d000540131
 %FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_d000540132
 %FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_80318065B08311C0A983009000	
 
 [Fedict.NTx86.6.1]
 %FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_80318065b0831100c883009000
+%FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_d000540131
 %FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_d000540132
 %FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_80318065B08311C0A983009000
 
@@ -48,6 +52,8 @@ CopyFiles=amd64_CopyFiles
 CopyFiles=wow64_CopyFiles
 AddReg=AddRegWOW64
 AddReg=AddRegDefault64
+Include=umpass.inf
+Needs=UmPass
 
 [DefaultInstall.NTx86]
 CopyFiles=x86_CopyFiles
@@ -56,6 +62,30 @@ AddReg=AddRegDefault32
 [DefaultInstall.NTx86.6.1]
 CopyFiles=x86_CopyFiles
 AddReg=AddRegDefault32
+Include=umpass.inf
+Needs=UmPass
+
+[EstadoPortugues64_61_Install.NT.Services]
+Include=umpass.inf
+Needs=UmPass.Services
+
+[DefaultInstall.NTx86.6.1.Services]
+Include=umpass.inf
+Needs=UmPass.Services
+
+[DefaultInstall.NTx86.6.1.NT.HW]
+Include=umpass.inf
+Needs=UmPass.HW
+
+[DefaultInstall.NTx86.6.1.CoInstallers]
+Include=umpass.inf
+Needs=UmPass.CoInstallers
+
+
+[DefaultInstall.NTx86.6.1.Interfaces]
+Include=umpass.inf
+Needs=UmPass.Interfaces
+
 
 [SourceDisksFiles]
 ; pteidmdrv64.dll=1
@@ -64,40 +94,7 @@ pteidmdrv32.dll=1
 [SourceDisksNames]
 1 = %MediaDescription%
 
-[Fedict64_Install.NT]
-CopyFiles=amd64_CopyFiles
-CopyFiles=wow64_CopyFiles
-AddReg=AddRegWOW64
-AddReg=AddRegDefault64
-
-
-[Fedict64_61_Install.NT.HW]
-Include=umpass.inf	
-Needs=UmPass.HW
-
-[Fedict64_61_Install.NT.CoInstallers]
-Include=umpass.inf
-Needs=UmPass.CoInstallers
-
-
-[Fedict64_61_Install.NT.Interfaces]
-Include=umpass.inf
-Needs=UmPass.Interfaces
-
-
-[Fedict32_61_Install.NT.HW]
-Include=umpass.inf
-Needs=UmPass.HW
-
-[Fedict32_61_Install.NT.CoInstallers]
-Include=umpass.inf
-Needs=UmPass.CoInstallers
-
-
-[Fedict32_61_Install.NT.Interfaces]
-Include=umpass.inf
-Needs=UmPass.Interfaces
-
+;FIXME
 [amd64_CopyFiles]
 pteidmdrv32.dll 
 ;,pteidmdrv64.dll
