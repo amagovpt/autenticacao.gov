@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="Lang" Overridable="yes">2070</String>
+  <String Id="Langpref" Overridable="yes">pt</String>
+  <String Id="StartApp" Overridable="yes">Lançar a aplicação utilitária</String>
+  <String Id="MinOs" Overridable="yes">Este Instalador precisa no mínimo de um sistema Windows 2000</String>
+  <String Id="PteidRuntime" Overridable="yes">Middleware do Cartão de Cidadão Português 3.5</String>
+  <String Id="PteidRuntimeDesc" Overridable="yes">Este módulo é necessário para utilizar o Cartão de Cidadão.</String>
+  <String Id="PteidGui" Overridable="yes">Aplicação Utilitária</String>
+  <String Id="PteidGuiDescr" Overridable="yes">Lê e mostra todo o conteúdo do Cartão de Cidadão</String>
+  <String Id="CSP" Overridable="yes">Cryptographic Service Provider</String>
+  <String Id="CSPDescr" Overridable="yes">Este módulo fornece serviços criptográficos às aplcações que usam a Windows CryptoAPI no Windows XP</String>
+  <String Id="Minidriver" Overridable="yes">Smart Card Minidriver</String>
+  <String Id="MinidriverDescr" Overridable="yes">Este módulo fornece serviços criptográficos às aplcações que usam a Windows CryptoAPI no Windows Vista e 7</String>
+  <String Id="Crypto" Overridable="yes">Cryptographic Module</String>
+  <String Id="CryptoDescr" Overridable="yes">Este módulo é necessário para utilizar o Cartão de Cidadão como cartão de identidade eletrónico no Internet Explorer, Firefox, etc. ou para criar assinaturas digitais no Microsoft Office, OpenOffice.org, Microsoft Outlook, Thunderbird, etc.</String>
+  <String Id="XSign" Overridable="yes">Xsign</String>
+  <String Id="XSignDescr" Overridable="yes">Aplicação XSign</String>
+  <String Id="OutlookDescr" Overridable="yes">Configurar MS Outlook para o CC</String>
+  <String Id="Users" Overridable="yes">Utilizadores</String>
+  <String Id="msierrSecureObjectsFailedCreateSD" Overridable="yes">Could not create security descriptor [3]\[4], error: [2]</String>
+  <String Id="msierrSecureObjectsFailedSet" Overridable="yes">Could not apply object security descriptor [3], error: [2]</String>
+  <String Id="msierrSecureObjectsUnknownType" Overridable="yes">Unknown object type [3], error: [2]</String>
+  <String Id="AdminNeeded" Overridable="yes">Necessita de privilégios de Administrador para instalar este produto</String>
+  <String Id="NoDowngrade" Overridable="yes">Versão mais recente já instalada.</String>
+</WixLocalization>
