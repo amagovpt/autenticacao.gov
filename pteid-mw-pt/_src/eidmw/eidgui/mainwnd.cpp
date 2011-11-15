@@ -4334,8 +4334,14 @@ void MainWnd::fillPinList(PTEID_EIDCard& Card)
 
 		QTreeWidgetItem* PinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
 
-		PinTreeItem->setText(COLUMN_PIN_NAME, trUtf8(Pin.getLabel()));
-		m_ui.treePIN->addTopLevelItem ( PinTreeItem );
+		std::string pinname = "PIN";
+
+		if (!DispPinName.toStdString().find(pinname))
+		{
+			PinTreeItem->setText(COLUMN_PIN_NAME, trUtf8(Pin.getLabel()));
+			m_ui.treePIN->addTopLevelItem ( PinTreeItem );
+		}
+
 		if (0==PinNr)
 		{
 			PinTreeItem->setSelected(true);
