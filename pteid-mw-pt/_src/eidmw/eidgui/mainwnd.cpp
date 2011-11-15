@@ -1944,7 +1944,7 @@ void MainWnd::on_treeCert_itemClicked(QTreeWidgetItem* baseItem, int column)
 //*****************************************************
 void MainWnd::on_treePIN_itemClicked(QTreeWidgetItem* item, int column)
 {
-	if (!m_CI_Data.isDataLoaded())
+ 	if (!m_CI_Data.isDataLoaded())
 	{
 		return;
 	}
@@ -4349,7 +4349,7 @@ void MainWnd::fillPinList(PTEID_EIDCard& Card)
 	}
 	m_ui.treePIN->expandAll();
 
-	QList<QTreeWidgetItem*> treeList = m_ui.treePIN->findItems("Basic PIN",Qt::MatchFixedString|Qt::MatchRecursive);
+	QList<QTreeWidgetItem*> treeList = m_ui.treePIN->findItems("PIN ",Qt::MatchContains);
 	if (treeList.size() > 0)
 	{
 		treeList[0]->setSelected(true);
