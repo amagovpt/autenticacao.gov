@@ -21,14 +21,14 @@
            Language="!(loc.Lang)"
            Codepage="1252"
            Version="$(var.ProductVersion)"
-           Manufacturer="Belgian Government"
+           Manufacturer="Portuguese Government"
            UpgradeCode="$(var.UpgradeCode)">
 
     <Package Id="$(var.PackageCode)"
              InstallerVersion="200"
              Keywords="Portugal e-ID Middleware Installer"
              Platform="x86"
-             Manufacturer="Belgian Government"
+             Manufacturer="Portuguese Government"
              Compressed="yes"
              InstallPrivileges="elevated"
     />
@@ -472,8 +472,8 @@
       </Component>
 
       <Component Id="CSP" Guid="{54153442-D4CE-4DE6-9321-1BAC5DE4C725}" SharedDllRefCount="yes">
-        <File Id="pteidCSP.dll" Name="pteidCSP.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteidCSP.dll" />
-        <File Id="pteidCSPlib.dll" Name="pteidCSPlib.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteidCSPlib.dll" />
+        <File Id="beidCSP.dll" Name="beidCSP.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\beidCSP.dll" />
+        <File Id="beidCSPlib.dll" Name="beidCSPlib.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\beidCSPlib.dll" />
       </Component>
 
       <Component Id="pkcs11" Guid="{D54164C0-795D-4B2D-96C6-C8E395100896}" SharedDllRefCount="yes">
@@ -625,7 +625,7 @@
         <RegistryKey Root="HKLM"
                      Key="SOFTWARE\Microsoft\Cryptography\Defaults\Provider\Portugal Identity Card CSP"
                       Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Name="Image Path" Value="pteidcsp.dll" KeyPath="yes"/>
+          <RegistryValue Type="string" Name="Image Path" Value="beidcsp.dll" KeyPath="yes"/>
           <RegistryValue Type="integer" Name="Type" Value="1" />
           <RegistryValue
             Type="binary"
@@ -636,7 +636,7 @@
                      Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Portugal Identity Card (IAS)"
                      Action="createAndRemoveOnUninstall">
           <RegistryValue Type="string" Name="Crypto Provider" Value="Portugal Identity Card CSP"/>
-          <RegistryValue Type="string" Name="80000001" Value="pteidcsp.dll" KeyPath="no"/>
+          <RegistryValue Type="string" Name="80000001" Value="beidcsp.dll" KeyPath="no"/>
           <RegistryValue Type="binary" Name="ATR" Value="3B959540FFD000540131" KeyPath="no"/>
           <RegistryValue Type="binary" Name="ATRMask" Value="fffffffffffffffffffc" KeyPath="no"/>
         </RegistryKey>
@@ -644,7 +644,7 @@
                      Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Portugal Identity Card (Gemsafe)"
                      Action="createAndRemoveOnUninstall">
           <RegistryValue Type="string" Name="Crypto Provider" Value="Portugal Identity Card CSP"/>
-          <RegistryValue Type="string" Name="80000001" Value="pteidcsp.dll" KeyPath="no"/>
+          <RegistryValue Type="string" Name="80000001" Value="beidcsp.dll" KeyPath="no"/>
           <RegistryValue Type="binary" Name="ATR" Value="3B7D95000080318065B08311C0A983009000" KeyPath="no"/>
           <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
         </RegistryKey>
