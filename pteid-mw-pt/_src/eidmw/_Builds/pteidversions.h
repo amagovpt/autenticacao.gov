@@ -10,8 +10,8 @@
 
 // To specified in the .rc files
 
-#define PTEID_COMPANY_NAME    	"Belgian Government"
-#define PTEID_COPYRIGHT    	"Copyright (C) 2010"
+#define PTEID_COMPANY_NAME    	"Portuguese Government"
+#define PTEID_COPYRIGHT    	"Copyright (C) 2010-2011"
 #define PTEID_PRODUCT_NAME    	"Portugal eID MiddleWare"
 
 #ifdef PTEID_35
