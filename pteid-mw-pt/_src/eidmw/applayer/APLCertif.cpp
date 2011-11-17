@@ -1217,9 +1217,9 @@ void APL_Certif::resetIssuer()
 void APL_Certif::resetRoot()
 {
     //Make temporary fix to make certificates appear on certain IAS cards
-    //if(m_issuer==this || m_issuer==NULL)
-		//m_root=1;
-	//else
+    if(m_issuer==this)
+		m_root=1;
+	else
 		m_root=0;
 }
 
