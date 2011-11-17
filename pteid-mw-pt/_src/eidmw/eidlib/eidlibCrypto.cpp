@@ -37,9 +37,10 @@
 #define INCLUDE_OBJECT_CRL			4
 #define INCLUDE_OBJECT_OCSP			5
 #define INCLUDE_OBJECT_PINSIGN		6
-#define	INCLUDE_OBJECT_CACERT		7
+#define	INCLUDE_OBJECT_ROOTAUTHCERT		12
 #define	INCLUDE_OBJECT_AUTHCERT		8
 #define	INCLUDE_OBJECT_SIGNCERT		9
+#define	INCLUDE_OBJECT_ROOTSIGNCERT		10
 
 #define	INCLUDE_OBJECT_FIRSTPIN		1000
 #define	INCLUDE_OBJECT_FIRSTCERT	2000
@@ -637,9 +638,9 @@ PTEID_Certificate &PTEID_Certificates::getCert(PTEID_CertifType type)
 			idxObject=INCLUDE_OBJECT_ROOTCERT;
 			aplType=APL_CERTIF_TYPE_ROOT;
 			break;
-		case PTEID_CERTIF_TYPE_CA:
-			idxObject=INCLUDE_OBJECT_CACERT;
-			aplType=APL_CERTIF_TYPE_CA;
+		case PTEID_CERTIF_TYPE_ROOT_AUTH:
+			idxObject=INCLUDE_OBJECT_ROOTAUTHCERT;
+			aplType=APL_CERTIF_TYPE_ROOT_AUTH;
 			break;
 		case PTEID_CERTIF_TYPE_AUTHENTICATION:
 			idxObject=INCLUDE_OBJECT_AUTHCERT;
@@ -648,6 +649,10 @@ PTEID_Certificate &PTEID_Certificates::getCert(PTEID_CertifType type)
 		case PTEID_CERTIF_TYPE_SIGNATURE:
 			idxObject=INCLUDE_OBJECT_SIGNCERT;
 			aplType=APL_CERTIF_TYPE_SIGNATURE;
+			break;
+		case PTEID_CERTIF_TYPE_ROOT_SIGN:
+			idxObject=INCLUDE_OBJECT_ROOTSIGNCERT;
+			aplType=APL_CERTIF_TYPE_ROOT_SIGN;
 			break;
 		default:
 			throw PTEID_ExBadUsage();
@@ -682,7 +687,7 @@ PTEID_Certificate &PTEID_Certificates::getRoot()
 
 PTEID_Certificate &PTEID_Certificates::getCA()
 {
-	return getCert(PTEID_CERTIF_TYPE_CA);
+	return getCert(PTEID_CERTIF_TYPE_ROOT_AUTH);
 }
 
 PTEID_Certificate &PTEID_Certificates::getAuthentication()
