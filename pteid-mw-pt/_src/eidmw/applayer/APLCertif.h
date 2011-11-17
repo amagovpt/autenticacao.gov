@@ -41,7 +41,8 @@ enum APL_CertifType
 {
 	APL_CERTIF_TYPE_UNKNOWN,		/**< Type unknown */
 	APL_CERTIF_TYPE_ROOT,			/**< Root certificate */
-	APL_CERTIF_TYPE_CA,				/**< CA certificate */
+	APL_CERTIF_TYPE_ROOT_AUTH,		/**< CA certificate */
+	APL_CERTIF_TYPE_ROOT_SIGN,		/**< CA certificate */
 	APL_CERTIF_TYPE_AUTHENTICATION,	/**< Authentication certificate */
 	APL_CERTIF_TYPE_SIGNATURE,		/**< Signature certificate */
 };

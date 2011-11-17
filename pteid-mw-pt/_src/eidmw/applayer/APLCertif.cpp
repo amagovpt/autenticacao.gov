@@ -530,12 +530,12 @@ APL_Certif *APL_Certifs::getSignature(unsigned long ulIndex,bool bOnlyVisible)
 
 unsigned long APL_Certifs::countCA(bool bOnlyVisible)
 {
-	return countCert(APL_CERTIF_TYPE_CA);
+	return countCert(APL_CERTIF_TYPE_ROOT_AUTH);
 }
 
 APL_Certif *APL_Certifs::getCA(unsigned long ulIndex,bool bOnlyVisible)
 {
-	return getCert(APL_CERTIF_TYPE_CA);
+	return getCert(APL_CERTIF_TYPE_ROOT_AUTH);
 }
 
 unsigned long APL_Certifs::countChildren(const APL_Certif *certif)
@@ -1153,15 +1153,21 @@ APL_CertifType APL_Certif::getType()
 		{
 			switch(m_certP15.ulID)
 			{
-				case 2:
-					m_type=APL_CERTIF_TYPE_AUTHENTICATION;
-					break;
-				case 3:
-					m_type=APL_CERTIF_TYPE_SIGNATURE;
-					break;
-				case 4:
-					m_type=APL_CERTIF_TYPE_CA;
-					break;
+			case 69:
+				m_type=APL_CERTIF_TYPE_AUTHENTICATION;
+				break;
+			case 70:
+				m_type=APL_CERTIF_TYPE_SIGNATURE;
+				break;
+			case 81:
+				m_type=APL_CERTIF_TYPE_ROOT_AUTH;
+				break;
+			case 82:
+				m_type=APL_CERTIF_TYPE_ROOT;
+				break;
+			case 80:
+				m_type=APL_CERTIF_TYPE_ROOT_SIGN;
+				break;
 			}
 		}
 	}
@@ -1210,10 +1216,10 @@ void APL_Certif::resetIssuer()
 
 void APL_Certif::resetRoot()
 {
-    	//Make temporary fix to make certificates appear on certain IAS cards
-    	if(m_issuer==this || m_issuer==NULL)
-		m_root=1;
-	else
+    //Make temporary fix to make certificates appear on certain IAS cards
+    //if(m_issuer==this || m_issuer==NULL)
+		//m_root=1;
+	//else
 		m_root=0;
 }
 
@@ -1304,7 +1310,7 @@ bool APL_Certif::isSignature()
 
 bool APL_Certif::isCA()
 {
-	return isType(APL_CERTIF_TYPE_CA);
+	return isType(APL_CERTIF_TYPE_ROOT_AUTH);
 }
 
 bool APL_Certif::isFromPteidValidChain()

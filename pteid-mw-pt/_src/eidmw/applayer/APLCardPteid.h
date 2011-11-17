@@ -216,6 +216,8 @@ private:
 	APL_CardFile_Certificate *m_fileCertSignature;
 	APL_CardFile_Certificate *m_fileCertCA;
 	APL_CardFile_Certificate *m_fileCertRoot;
+	APL_CardFile_Certificate *m_fileCertRootAuth;
+	APL_CardFile_Certificate *m_fileCertRootSign;
 
 	static APL_AccessWarningLevel m_lWarningLevel;
 

@@ -59,8 +59,9 @@ APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader):APL_SmartCard(reader)
 
 	m_fileCertAuthentication=NULL;
 	m_fileCertSignature=NULL;
-	m_fileCertCA=NULL;
+	m_fileCertRootSign=NULL;
 	m_fileCertRoot=NULL;
+	m_fileCertRootAuth=NULL;
 }
 
 APL_EIDCard::~APL_EIDCard()
@@ -158,10 +159,16 @@ APL_EIDCard::~APL_EIDCard()
 		m_fileCertSignature=NULL;
 	}
 
-	if(m_fileCertCA)
+	if(m_fileCertRootAuth)
 	{
-		delete m_fileCertCA;
-		m_fileCertCA=NULL;
+		delete m_fileCertRootAuth;
+		m_fileCertRootAuth=NULL;
+	}
+
+	if(m_fileCertRootSign)
+	{
+		delete m_fileCertRootSign;
+		m_fileCertRootSign=NULL;
 	}
 
 	if(m_fileCertRoot)
@@ -884,13 +891,25 @@ unsigned long APL_EIDCard::certificateCount()
 				}
 			}
 
-			if(!m_fileCertCA)
+			if(!m_fileCertRootAuth)
 			{
-				m_fileCertCA=new APL_CardFile_Certificate(this,PTEID_FILE_CERT_CA);
+				m_fileCertRootAuth=new APL_CardFile_Certificate(this,PTEID_FILE_CERT_ROOT_AUTH);
 				//If status ok, we add the certificate to the store
-				if(m_fileCertCA->getStatus(true)==CARDFILESTATUS_OK)
+				if(m_fileCertRootAuth->getStatus(true)==CARDFILESTATUS_OK)
 				{
-					if(NULL == (getCertificates()->addCert(m_fileCertCA,APL_CERTIF_TYPE_CA,true,false,m_certificateCount,NULL,NULL)))
+					if(NULL == (getCertificates()->addCert(m_fileCertRootAuth,APL_CERTIF_TYPE_ROOT_AUTH,true,false,m_certificateCount,NULL,NULL)))
+						throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+					m_certificateCount++;
+				}
+			}
+
+			if(!m_fileCertRootSign)
+			{
+				m_fileCertRootSign=new APL_CardFile_Certificate(this,PTEID_FILE_CERT_ROOT_SIGN);
+				//If status ok, we add the certificate to the store
+				if(m_fileCertRootSign->getStatus(true)==CARDFILESTATUS_OK)
+				{
+					if(NULL == (getCertificates()->addCert(m_fileCertRootSign,APL_CERTIF_TYPE_ROOT_SIGN,true,false,m_certificateCount,NULL,NULL)))
 						throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 					m_certificateCount++;
 				}
