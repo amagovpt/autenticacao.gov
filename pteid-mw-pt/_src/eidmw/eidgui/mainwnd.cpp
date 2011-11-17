@@ -4050,10 +4050,14 @@ void MainWnd::fillCertificateList( void )
 
 	try
 	{
-		PTEID_Certificate& certificate = certificates->getRoot();
+		PTEID_Certificate& certificate = certificates->getCert(2);
 
 		short Level=0;
 		fillCertTree(&certificate,Level,NULL);
+
+		PTEID_Certificate& certificate1 = certificates->getCert(3);
+
+		fillCertTree(&certificate1,Level,NULL);
 
 		m_ui.treeCert->expandAll();
 		m_ui.treeCert->sortItems(0,Qt::AscendingOrder);
