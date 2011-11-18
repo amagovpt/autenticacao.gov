@@ -4050,24 +4050,44 @@ void MainWnd::fillCertificateList( void )
 
 	try
 	{
-		PTEID_Certificate& certificate = certificates->getCert(2);
+		short Level=1;
 
-		short Level=0;
+		/* Root Certificate if the card owns it
+		PTEID_Certificate& certificate = certificates->getCert(4);
 		fillCertTree(&certificate,Level,NULL);
+		*/
 
-		PTEID_Certificate& certificate1 = certificates->getCert(3);
+		QTreeCertItem* item = new QTreeCertItem( m_ui.treeCert, 0 );
+		item = new QTreeCertItem( m_ui.treeCert, 0 );
 
-		fillCertTree(&certificate1,Level,NULL);
+		QString strLabel1 = QString::fromUtf8("ROOT CA");
+		item->setText(COLUMN_CERT_NAME, strLabel1);
+		item->setIssuer(QString::fromUtf8("Cartão de Cidadão 001"));
+		item->setOwner(QString::fromUtf8("Cartão de Cidadão 001",-1));
+		item->setValidityBegin("26/01/2007");
+		item->setValidityEnd("27/05/2018");
+		QString	strKeyLen1;
+		unsigned long int keyleg = 4096;
+		strKeyLen1=strKeyLen1.setNum(keyleg);
+		item->setKeyLen(strKeyLen1);
+
+		// Sign Certificate
+		PTEID_Certificate& certificatesign = certificates->getCert(2);
+		fillCertTree(&certificatesign, Level,item);
+
+		// Auth Certificate
+		PTEID_Certificate& certificateauth = certificates->getCert(3);
+		fillCertTree(&certificateauth, Level,item);
 
 		m_ui.treeCert->expandAll();
 		m_ui.treeCert->sortItems(0,Qt::AscendingOrder);
 
-		QList<QTreeWidgetItem *> itemList = m_ui.treeCert->findItems ( QString("Signature"), Qt::MatchContains|Qt::MatchRecursive );
+		/*QList<QTreeWidgetItem *> itemList = m_ui.treeCert->findItems ( QString("Signature"), Qt::MatchContains|Qt::MatchRecursive );
 		if (itemList.size()>0)
 		{
 			itemList[0]->setSelected(true);
 			on_treeCert_itemClicked((QTreeCertItem *)itemList[0], 0);
-		}
+		}*/
 	}
 	// 	catch (PTEID_ExNoCardPresent &e)
 	// 	{
