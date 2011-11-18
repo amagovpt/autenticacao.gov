@@ -4080,7 +4080,7 @@ void MainWnd::fillCertificateList( void )
 		fillCertTree(&certificateauth, Level,item);
 
 		m_ui.treeCert->expandAll();
-		m_ui.treeCert->sortItems(0,Qt::AscendingOrder);
+		//m_ui.treeCert->sortItems(0,Qt::AscendingOrder);
 
 		/*QList<QTreeWidgetItem *> itemList = m_ui.treeCert->findItems ( QString("Signature"), Qt::MatchContains|Qt::MatchRecursive );
 		if (itemList.size()>0)
