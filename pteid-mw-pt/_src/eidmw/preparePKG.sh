@@ -6,12 +6,12 @@ mkdir pteid-pkg
 mkdir -p pteid-pkg/lib
 mkdir -p pteid-pkg/bin
 mkdir -p pteid-pkg/eidgui
+mkdir -p pteid-pkg/jar
 
-
-cp -r lib/*  		pteid-pkg/lib/
-cp -r bin/*  		pteid-pkg/bin/
-cp -r eidgui/*.qm	pteid-pkg/eidgui/
-
+cp -r lib/*  			pteid-pkg/lib/
+cp -r bin/*  			pteid-pkg/bin/
+cp -r eidgui/*.qm		pteid-pkg/eidgui/
+cp -r jar/pteid35libJava.jar	pteid-pkg/jar/
 
 
 echo "#!/bin/bash" > pteid-pkg/install_pteid.sh
@@ -76,6 +76,8 @@ echo "  ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.3.5.5 /usr/local/lib/
 echo "  ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.3.5.5 /usr/local/lib/libpteidlibJava_Wrapper.so.3"  >> pteid-pkg/install_pteid.sh
 echo "  ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.3.5.5 /usr/local/lib/libpteidlibJava_Wrapper.so.3.5"  >> pteid-pkg/install_pteid.sh
 
+
+echo "  install -m 755 -p \"jar/pteid35libJava.jar\" \"/usr/local/lib/pteid_jni/\""  >> pteid-pkg/install_pteid.sh
 
 
 echo "  install -m 755 -p \"bin/pteidgui\" \"/usr/local/bin/pteidgui\""  >> pteid-pkg/install_pteid.sh
