@@ -111,12 +111,17 @@ HKLM, %SmartCardName%,"ATR",0x00000001,3b,95,95,40,ff,d0,00,54,01,30
 HKLM, %SmartCardName%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,fc
 HKLM, %SmartCardName%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardName_1%,"ATR",0x00000001,3B,65,00,00,D0,00,54,01,30
 HKLM, %SmartCardName%,"80000001",0x00000000,"pteidmdrv32.dll"
-HKLM, %SmartCardName_1%,"ATR",0x00000001,3B,7D,95,00,00,80,31,80,65,B0,83,11,00,00,83,00,90,00
-HKLM, %SmartCardName_1%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,00,00,ff,ff,ff,ff
+HKLM, %SmartCardName_1%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,fc
 HKLM, %SmartCardName_1%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName_1%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
 HKLM, %SmartCardName_1%,"80000001",0x00000000,"pteidmdrv32.dll"
+HKLM, %SmartCardName_2%,"ATR",0x00000001,3B,7D,95,00,00,80,31,80,65,B0,83,11,00,00,83,00,90,00
+HKLM, %SmartCardName_2%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,00,00,ff,ff,ff,ff
+HKLM, %SmartCardName_2%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
+HKLM, %SmartCardName_2%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardName_2%,"80000001",0x00000000,"pteidmdrv32.dll"
 
 
 [AddRegDefault64]
@@ -145,8 +150,9 @@ wow64_CopyFiles=10,syswow64
 AMA="Agencia para a Modernização Administrativa"
 MediaDescription="Portuguese eID Smart Card Minidriver Installation Disk"
 FedictCardDeviceName="Portuguese eID Minidriver for Smart Card"
-SmartCardName="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS)"
+SmartCardName="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS) 1"
+SmartCardName_1="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS) 2"
 SmartCardNameWOW64="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\Pteid"
 
-SmartCardName_1="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTEid (GemSafe) 1"
+SmartCardName_2="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe)"
 
