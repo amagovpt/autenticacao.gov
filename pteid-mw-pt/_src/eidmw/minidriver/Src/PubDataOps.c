@@ -341,7 +341,7 @@ DWORD WINAPI   CardReadFile
 		{
 			if ( _stricmp("id", pszFileName) == 0)					    /* /id/id */
 			{
-				BYTE  pbFileID [] = { 0x3f, 0x00, 0xdf, 0x01, 0x40, 0x31};
+				BYTE  pbFileID [] = { 0x3f, 0x00, 0x5f, 0x00, 0xef, 0x02};
 				BYTE cbFileID  = (BYTE)sizeof(pbFileID);
 				FileFound++;
 				dwReturn = PteidSelectAndReadFile(pCardData, 0, cbFileID , pbFileID , pcbData, ppbData);
@@ -409,7 +409,7 @@ DWORD WINAPI   CardReadFile
 			}
 			if ( _stricmp("photo", pszFileName) == 0)					    /* /id/photo */
 			{
-				/*TODO: Most likely the file ID for the photo is wrong... */
+				/*TODO: Needs to be fixed for PTEid Photo File */
 				BYTE  pbFileID [] = { 0x3f, 0x00, 0xdf, 0x01, 0x40, 0x35};
 				BYTE cbFileID  = (BYTE)sizeof(pbFileID);
 				FileFound++;

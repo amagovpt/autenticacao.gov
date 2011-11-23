@@ -25,8 +25,52 @@
 #include "util.h"
 #include "smartcard.h"
 #include <stdio.h>
+#include <Strsafe.h>
+#include <direct.h>
+#include <errno.h>
 
 /****************************************************************************************************/
+
+
+void bin2AsciiHex(const unsigned char * pData, char * out, unsigned long ulLen) 
+{
+	char a_cHexChars[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8',
+		'9', 'A', 'B', 'C', 'D', 'E', 'F'};
+	char *pszHex = out;
+	unsigned long i;
+	if(pData != NULL)
+	{
+		int j = 0;
+		for(i = 0; i < ulLen; i++) 
+		{
+			pszHex[j++] = a_cHexChars[pData[i]>>4 & 0x0F];
+			pszHex[j++] = a_cHexChars[pData[i] & 0x0F];
+		}
+		pszHex[j] = 0;
+	}
+
+}
+
+BYTE translateCertType(DWORD dwCertSpec)
+{
+	switch (dwCertSpec)
+	{
+	case CERT_AUTH:
+		return 0x09;
+
+	case CERT_NONREP:
+		return 0x08;
+
+	case CERT_CA:
+		return 0x11;
+		
+	case CERT_ROOTCA:
+		return 0x10;
+	}
+
+}
+
+
 #define WHERE "PteidGetPubKey"
 DWORD PteidGetPubKey(PCARD_DATA  pCardData, DWORD cbCertif, PBYTE pbCertif, DWORD *pcbPubKey, PBYTE *ppbPubKey)
 {
