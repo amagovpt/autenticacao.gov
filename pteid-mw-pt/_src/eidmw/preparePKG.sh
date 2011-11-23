@@ -85,7 +85,6 @@ echo ""  >> pteid-pkg/install_pteid.sh
 echo "  install -m 644 -p \"eidgui/eidmw_de.qm\" \"/usr/local/bin/\""  >> pteid-pkg/install_pteid.sh
 echo "  install -m 644 -p \"eidgui/eidmw_en.qm\" \"/usr/local/bin/\""  >> pteid-pkg/install_pteid.sh
 echo "  install -m 644 -p \"eidgui/eidmw_fr.qm\" \"/usr/local/bin/\""  >> pteid-pkg/install_pteid.sh
-echo "  install -m 644 -p \"eidgui/eidmw_nl.qm\" \"/usr/local/bin/\""  >> pteid-pkg/install_pteid.sh
 
 
 
