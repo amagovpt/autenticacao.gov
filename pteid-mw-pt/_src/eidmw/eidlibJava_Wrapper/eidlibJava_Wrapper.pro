@@ -55,11 +55,13 @@ LIBS += -L../lib  \
 		-l$${APPLAYERLIB} \
 		-l$${EIDLIB}
 
+QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN
+
 macx: INCLUDEPATH += /System/Library/Frameworks/JavaVM.framework/Headers/
 macx: LIB += -Wl,-framework -Wl,Java
 
 DEPENDPATH += .
-INCLUDEPATH += . ../applayer ../common ../cardlayer ../eidlib /usr/lib/jvm/java-6-openjdk/include /usr/lib/jvm/java-6-openjdk/include/linux
+INCLUDEPATH += . ../applayer ../common ../cardlayer ../eidlib /opt/java/include /opt/java/include/linux
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 #INCLUDEPATH += $${JDK_INCLUDE_DIR}
 DEFINES += EIDMW_EIDLIB_EXPORTS
