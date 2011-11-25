@@ -31,31 +31,27 @@
 #include <direct.h>
 #include <errno.h>
 
-BOOL getCacheFilePath(char *filename_bin, char* Path)
+BOOL getCacheFilePath(char *filename_bin, char* Path, size_t Path_max)
 {
 	char ascii_filename[18*2];
 
 	bin2AsciiHex(filename_bin, ascii_filename, 17);
-	GetEnvironmentVariableA("LOCALAPPDATA", (LPSTR)Path, sizeof(Path));
+	GetEnvironmentVariableA("LOCALAPPDATA", (LPSTR)Path, Path_max);
 	
     strncat(Path, "\\pteidmdrv\\", 12);
-
-	//printf("Appdata: %s\n", Path);
-
-	//printf("Creating cache directory %s\n", Path);
-
 	//Create cache directory if not existent
 	if(_mkdir(Path) != 0)
 	{
 		if(errno == ENOENT) {
-			LogTrace(LOGTYPE_ERROR, "getCacheFilePath", "Mkdir() failed on cachedir!");
+			//printf("Mkdir failed!\n");
 			return FALSE;  /* Oops, giving up */
 
 		}
 	}
 
-	//printf( "Writing cache file %s\n", ascii_filename);
+	//Append filename (Card serial number + FileID)
 	strncat(Path, ascii_filename, strlen(ascii_filename));
+	return TRUE;
 }
 
 #define WHERE "readFromCache"
@@ -78,42 +74,18 @@ BOOL readFromCache(const char *cache_path, char * Buf)
 	{
 		fread(Buf, sizeof(char), st.st_size, fp);
 		fclose(fp);
+		return TRUE;
 	}
+	return FALSE;
 
 }
 #undef WHERE
 #define WHERE "CacheCertificate"
-BOOL CacheCertificate(char * ascii_filename, PBYTE data, int data_len)
+BOOL CacheCertificate(const char * Path, PBYTE data, int data_len)
 {
-
 	FILE *fp = NULL;
-	char Path[300];
 	
-	const char * default_path = "C:\\Users\\Default\\pteidmdrv\\";
-	HRESULT res = 0;
-	memset(Path, 0, sizeof(Path));
-
-	if (GetEnvironmentVariableA("LOCALAPPDATA", (LPSTR)Path, sizeof(Path)) == 0)
-	{
-		strncat(Path, default_path, strlen(default_path));
-	}
-	else
-		strncat(Path, "\\pteidmdrv\\", 12);
-
-	//Create cache directory if not existent
-	if(_mkdir(Path) != 0)
-	{
-		if(errno == ENOENT) {
-			//printf("Mkdir failed!\n");
-			return FALSE;  /* Oops, giving up */
-
-		}
-	}
-	
-	//printf( "Writing cache file %s\n", ascii_filename);
-	strncat(Path, ascii_filename, strlen(ascii_filename));
-
-	LogTrace(LOGTYPE_INFO, WHERE ,"Opening file ", Path);
+	LogTrace(LOGTYPE_INFO, WHERE ,"Opening cache file %s", Path);
 	fp = fopen(Path, "wb");
 
 	if ( fp != NULL )

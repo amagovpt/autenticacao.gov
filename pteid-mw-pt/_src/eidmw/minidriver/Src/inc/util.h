@@ -24,5 +24,6 @@ extern BOOL				CacheCertificate(char * filename, PBYTE data, int data_len);
 extern DWORD            PteidGetPubKey(PCARD_DATA  pCardData, DWORD cbCertif, PBYTE pbCertif, DWORD *pcbPubKey, PBYTE *ppbPubKey);
 extern DWORD            PteidCreateMSRoots(PCARD_DATA  pCardData, DWORD *pcbMSRoots, PBYTE *ppbMSRoots);
 extern BYTE				translateCertType(DWORD dwCertSpec);
+extern BOOL runningUnderService();
 
 #endif

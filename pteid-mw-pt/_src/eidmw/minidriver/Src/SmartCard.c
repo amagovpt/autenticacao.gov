@@ -1233,7 +1233,6 @@ cleanup:
 #undef WHERE
 
 #define WHERE "PteidSignDataGemsafe"
-/*TODO: To be Tested... */
 DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature)
 {
 
@@ -1581,7 +1580,7 @@ DWORD PteidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, P
    unsigned char     recvbuf[256];
    unsigned long     recvlen = sizeof(recvbuf);
    char certPath[25];
-   BYTE baseName[512];
+   const int		 max_path = 512;
    BYTE              SW1, SW2;
 
    DWORD             cbCertif;
@@ -1595,18 +1594,22 @@ DWORD PteidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, P
    
    
    vs = (VENDOR_SPECIFIC*)pCardData->pvVendorSpecific;
-   memcpy(certPath, vs->szSerialNumber, serial_len);
-   certPath[serial_len] = translateCertType(dwCertSpec);;
-   
-   //More than enough for long file paths...
-   filename = pCardData->pfnCspAlloc(512);
 
-   getCacheFilePath(certPath, filename);
-
-   if (readFromCache(filename, *ppbCertif))
+   if (!runningUnderService())
    {
-	   pCardData->pfnCspFree(filename);
-	   return SCARD_S_SUCCESS;
+	   memcpy(certPath, vs->szSerialNumber, serial_len);
+	   certPath[serial_len] = translateCertType(dwCertSpec);
+
+	   //More than enough for long file paths...
+	   filename = pCardData->pfnCspAlloc(max_path);
+
+	   getCacheFilePath(certPath, filename, max_path);
+
+	   if (readFromCache(filename, *ppbCertif))
+	   {
+		   pCardData->pfnCspFree(filename);
+		   return SCARD_S_SUCCESS;
+	   }
    }
 
    // Certificate Not Cached
@@ -1688,18 +1691,15 @@ DWORD PteidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, P
   
 	/* Skip caching if running under the Certificate Propagation Service 
 	   It would be painful to grab the cachedir because the relevant
-	   environment variables APPDATA and APPLOCALDATA will point to somewhere under
-	   %WINDIR%
-	   (i.e. not to user-writable directories)
+	   environment variables APPLOCALDATA will point to somewhere under
+	   %WINDIR% (i.e. not to user-writable directories)
 	*/
-   GetModuleFileName(NULL,(LPTSTR)baseName,512);
-
-   if(strstr(baseName, "svchost") == NULL)
-   {
-	   LogTrace(LOGTYPE_INFO, WHERE, "certPath: ", filename);
+  if (!runningUnderService())
+  {
+	   LogTrace(LOGTYPE_INFO, WHERE, "certPath: %s", filename);
 	   CacheCertificate(filename, *ppbCertif, cbCertif);
 	   pCardData->pfnCspFree(filename);
-   }
+  }
 
    /* Certificate Length */
    *pcbCertif = cbCertif;

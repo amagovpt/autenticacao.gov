@@ -51,6 +51,16 @@ void bin2AsciiHex(const unsigned char * pData, char * out, unsigned long ulLen)
 
 }
 
+BOOL runningUnderService()
+{
+	char baseName[512];
+	GetModuleFileName(NULL,(LPTSTR)baseName, sizeof(baseName));
+
+	return strstr(baseName, "svchost")!= NULL;
+
+}
+
+
 BYTE translateCertType(DWORD dwCertSpec)
 {
 	switch (dwCertSpec)

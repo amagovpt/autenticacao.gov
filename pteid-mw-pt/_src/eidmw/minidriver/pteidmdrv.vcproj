@@ -413,6 +413,10 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
+				RelativePath=".\Src\Cache.c"
+				>
+			</File>
+			<File
 				RelativePath=".\src\CardAndContProp.c"
 				>
 			</File>
@@ -474,7 +478,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\inc\pteidmdrv.h"
+				RelativePath=".\Src\inc\cache.h"
 				>
 			</File>
 			<File
@@ -491,6 +495,10 @@
 			</File>
 			<File
 				RelativePath=".\src\inc\log.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\inc\pteidmdrv.h"
 				>
 			</File>
 			<File
