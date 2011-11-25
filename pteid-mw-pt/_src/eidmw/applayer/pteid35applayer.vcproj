@@ -45,6 +45,7 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				StructMemberAlignment="0"
 				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
 				BrowseInformation="0"
@@ -68,7 +69,7 @@
 				AdditionalDependencies="wsock32.lib pteid35DlgsWin32D.lib pteid35cardlayerD.lib pteid35commonD.lib libeay32_0_9_8g.lib ssleay32_0_9_8g.lib xerces-c_3D.lib"
 				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName)D.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\_Binaries35/$(ConfigurationName)&quot;;&quot;$(PTEID_DIR_OPENSSL_098G)\lib&quot;;..\..\ThirdParty\openssl.0.9.8g\lib;&quot;..\..\ThirdParty\Xerces\Xerces-3.1.0\lib&quot;"
+				AdditionalLibraryDirectories="&quot;..\_Binaries35/$(ConfigurationName)&quot;;&quot;$(PTEID_DIR_OPENSSL_098G)\lib&quot;;&quot;$(PTEID_DIR_XERCES_310)\lib&quot;;..\..\ThirdParty\openssl.0.9.8g\lib;&quot;..\..\ThirdParty\Xerces\Xerces-3.1.0\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -145,10 +146,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="wsock32.lib pteid35DlgsWin32.lib pteid35cardlayer.lib pteid35common.lib libeay32_0_9_8g.lib ssleay32_0_9_8g.lib xerces-c_3.lib"
+				AdditionalDependencies="wsock32.lib pteid35DlgsWin32.lib pteid35cardlayer.lib pteid35common.lib libeay32.lib ssleay32.lib xerces-c_3.lib"
 				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName).dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\_Binaries35/$(ConfigurationName)&quot;;&quot;$(PTEID_DIR_OPENSSL_098G)\lib&quot;;..\..\ThirdParty\openssl.0.9.8g\lib;&quot;$(PTEID_DIR_XERCES_310)\lib&quot;;&quot;..\..\ThirdParty\xerces\Xerces-3.1.0\lib&quot;"
+				AdditionalLibraryDirectories="&quot;..\_Binaries35/$(ConfigurationName)&quot;;&quot;$(PTEID_DIR_OPENSSL_098G)\bin&quot;;..\..\ThirdParty\openssl.0.9.8g\bin;&quot;$(PTEID_DIR_XERCES_310)\lib&quot;;&quot;..\..\ThirdParty\xerces\Xerces-3.1.0\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -222,11 +223,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\CardPteid.cpp"
+				RelativePath=".\CardFile.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CardFile.cpp"
+				RelativePath=".\CardPteid.cpp"
 				>
 			</File>
 			<File
@@ -268,11 +269,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\APLCardPteid.h"
+				RelativePath=".\APLCardFile.h"
 				>
 			</File>
 			<File
-				RelativePath=".\APLCardFile.h"
+				RelativePath=".\APLCardPteid.h"
 				>
 			</File>
 			<File
@@ -300,15 +301,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CardFile.h"
+				>
+			</File>
+			<File
 				RelativePath=".\CardPteid.h"
 				>
 			</File>
 			<File
 				RelativePath=".\CardPteidDef.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CardFile.h"
 				>
 			</File>
 			<File
