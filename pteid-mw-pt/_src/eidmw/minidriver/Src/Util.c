@@ -78,6 +78,8 @@ BYTE translateCertType(DWORD dwCertSpec)
 		return 0x10;
 	}
 
+	//It should never happen...
+	return 0x00;
 }
 
 
