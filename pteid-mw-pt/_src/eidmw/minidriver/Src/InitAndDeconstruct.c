@@ -132,7 +132,7 @@ DWORD WINAPI   CardAcquireContext
       {
          if ( memcmp(pCardData->pbAtr, CardAtr[iAtr].pbAtr, pCardData->cbAtr) == 0 )
          {
-			if (iAtr > 2)
+			if (iAtr > 3)
 			{
 				Is_Gemsafe = 1; //GEMSAFE
 				LogTrace(LOGTYPE_INFO, WHERE, "Gemsafe Card Detected");
