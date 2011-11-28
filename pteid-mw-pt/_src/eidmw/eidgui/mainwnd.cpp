@@ -4073,6 +4073,7 @@ void MainWnd::fillCertificateList( void )
 		err = err;
 		return;
 	}
+	}
 }
 
 //**************************************************
