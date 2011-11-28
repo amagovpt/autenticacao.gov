@@ -4066,13 +4066,12 @@ void MainWnd::fillCertificateList( void )
 
 		m_ui.treeCert->expandAll();
 		// m_ui.treeCert->sortItems(0,Qt::AscendingOrder);
-	
+	}
 	catch(PTEID_ExCertNoRoot &e)
 	{
 		long err = e.GetError();
 		err = err;
 		return;
-	}
 	}
 }
 
