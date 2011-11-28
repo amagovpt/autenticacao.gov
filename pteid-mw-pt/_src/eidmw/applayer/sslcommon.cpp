@@ -29,9 +29,9 @@
 #include <openssl/engine.h>
 
 BIO *bio_err=0;
-static char *pass;
 static int password_cb(char *buf,int num, int rwflag,void *userdata);
 static void sigpipe_handle(int x);
+static X509 *m_cert1;
 
 /* A simple error and exit routine*/
 
@@ -49,20 +49,10 @@ int berr_exit(char *str)
 	exit(0);
 }
 
-/*The password code is not thread safe*/
-static int password_cb(char *buf,int num, int rwflag,void *userdata)
-{
-	if(num<strlen(pass)+1)
-		return(0);
-
-	strcpy(buf,pass);
-	return(strlen(pass));
-}
-
 static void sigpipe_handle(int x){
 }
 
-SSL_CTX *initialize_ctx(char *keyfile)
+SSL_CTX *initialize_ctx()
 {
     	#ifdef WIN32
     	const SSL_METHOD *meth;
@@ -96,7 +86,7 @@ SSL_CTX *initialize_ctx(char *keyfile)
 	engine = ENGINE_by_id("dynamic");
 	ENGINE_ctrl_cmd_string(engine,"SO_PATH", "/usr/lib/engines/engine_pkcs11.so" ,0);
 	ENGINE_ctrl_cmd_string(engine,"ID","pkcs11",0);
-	ENGINE_ctrl_cmd_string(engine,"LIST_ADD","1",0);
+	ENGINE_ctrl_cmd_string(engine,"LIST_ADD","0",0);
 	ENGINE_ctrl_cmd_string(engine,"LOAD",NULL,0);
 	ENGINE_ctrl_cmd_string(engine,"VERBOSE",0,0);
 	ENGINE_ctrl_cmd_string(engine,"MODULE_PATH", "/usr/local/lib/libpteidpkcs11.so",0);
@@ -105,7 +95,7 @@ SSL_CTX *initialize_ctx(char *keyfile)
 
 	ENGINE_ctrl_cmd(engine, "LOAD_CERT_CTRL", 0, &parms, NULL, 1);
 
-	X509 *m_cert1 = parms.cert;
+	m_cert1 = parms.cert;
 
 	if (!(m_pkey = ENGINE_load_private_key(engine,parms.slot_id, NULL, NULL)))
 		berr_exit((char *)"Error loading private key. Do you have a card ?");
@@ -130,7 +120,7 @@ SSL_CTX *initialize_ctx(char *keyfile)
 		berr_exit((char *)"Can't read certificate file");
 
 	/*load our private keys from the card*/
-	if(!(SSL_CTX_use_RSAPrivateKey(ctx, EVP_PKEY_get1_RSA(m_pkey))))
+	if(!(SSL_CTX_use_PrivateKey(ctx, m_pkey)))
 		berr_exit((char *)"Can't read key file");
 
 	/* Load the CAs we trust*/

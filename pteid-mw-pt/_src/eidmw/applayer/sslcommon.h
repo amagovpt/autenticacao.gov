@@ -45,7 +45,6 @@
 #define CA_LIST "/home/metalgod/certs/cadeia.pem"
 #define HOST	"otp.cartaodecidadao.pt"
 //#define HOST	"localhost"
-//#define RANDOM  "random.pem"
 #define PORT	443
 #define BUFSIZZ 1024
 
@@ -53,7 +52,7 @@ extern BIO *bio_err;
 int berr_exit (char *str);
 int err_exit(char *str);
 
-SSL_CTX *initialize_ctx(char *keyfile);
+SSL_CTX *initialize_ctx();
 void destroy_ctx(SSL_CTX *ctx);
 
 #ifndef ALLOW_OLD_VERSIONS

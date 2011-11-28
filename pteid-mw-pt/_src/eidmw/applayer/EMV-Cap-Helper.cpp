@@ -98,7 +98,7 @@ CByteArray EMVCapHelper::GetArqc()
 	askarqc.Append(apdu, sizeof(apdu));
 
 	CByteArray aer= m_card->getCalReader()->SendAPDU(askarqc);
-	CByteArray arqnr = aer.GetBytes(14,8);
+	CByteArray arqnr = aer.GetBytes(15,8);
 	std::cout << "ARQC  " << arqnr.ToString() << std::endl;
 
 	return arqnr;

@@ -29,7 +29,11 @@
 #include "sslcommon.h"
 #include "sslclient.h"
 
+namespace eIDMW
+{
+
+char *getparameters (const char *pin, const char *pan, const char *arqc, const char *cdol1, const char *atc, const char *panseqnr, const char *counter, const char *pintrycounter);
 static int http_request(SSL *ssl);
 int init ();
-
+}
 #endif /* SSLCONNECTION_H_ */

@@ -26,6 +26,9 @@
 
 #include "sslcommon.h"
 #include "sslclient.h"
+#include "sslconnection.h"
+
+#include <iostream>
 
 #include <stdio.h>
 #include <openssl/rand.h>
@@ -33,23 +36,43 @@
 #include <openssl/err.h>
 #include <openssl/engine.h>
 
+namespace eIDMW
+{
 static const char *FIRST_POST=
     "POST /CAPPINChange/connect HTTP/1.1\nHost: otp.cartaodecidadao.pt\nContent-Type: text/plain; charset=UTF-8\nContent-Length: 16\r\n\r\n{\"connect\":\"\"}\r\n";
 
-static const char *SECOND_POST=
-    "POST /CAPPINChange/sendParameters HTTP/1.1\r\nHost: otp.cartaodecidadao.pt\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n\r\n";
-
+/*
+char *SECOND_POST=
+    "POST /CAPPINChange/sendParameters HTTP/1.1\r\nHost: otp.cartaodecidadao.pt\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Length: 214\r\n";
+*/
 static char *host="otp.cartaodecidadao.pt";
 static int port=443;
 static int require_server_auth=1;
 static char *ciphers=0;
 static int reconnect=1;
+static char token[80];
 
 /* Read from the POST and write to the server
    Read from the server and write to the POST
 
    we use select() to multiplex
 */ 
+
+char params[100000];
+
+char *getparameters (const char *pin, const char *pan, const char *arqc, const char *cdol1, const char *atc, const char *panseqnr, const char *counter, const char *pintrycounter)
+{
+	//printf ("test pin: %s ; %s ; %s ; %s ; %s ; %s ; %s ; %s\n", pin, pan, arqc, cdol1, atc, panseqnr, counter, pintrycounter);
+
+	//char params[100000];
+	sprintf (params, "{\"PinPafUpdate\":{\"pan\":\"%s\",\"pin\":\"%s\",\"panseqnumber\":\"%s\",\"cdol1\":\"%s\",\"atc\":\"%s\",\"arqc\":\"%s\",\"counter\":\%s,\"pintrycounter\":%s}}", pan, pin, panseqnr, cdol1, atc, arqc, counter, pintrycounter);
+
+	printf ("string final parametros %s\n", params);
+
+	init();
+
+	return params;
+}
 
 void read_write_buf(SSL * ssl, int sock, const char * buf, int len) 
 {
@@ -115,6 +138,12 @@ void read_write_buf(SSL * ssl, int sock, const char * buf, int len)
 					 client. However, in some other applications you
 					 would have to prevent this condition */
 					fwrite(s2c,1,r,stdout);
+					//////////////
+					char *substr;
+					substr = strstr(s2c, "JSESSIONID=");
+					strncpy (token , substr, 65);
+					std::cout << "TOKEN: " <<  token << std::endl;
+					/////////////////
 					fflush(stdout);
 
 					rx_count++;
@@ -225,7 +254,7 @@ int init ()
 
 	SSL_SESSION *sess;
 	/* Build our SSL context*/
-	ctx=initialize_ctx((char *)KEYFILE);
+	ctx=initialize_ctx();
 
 	if(ciphers){
 		SSL_CTX_set_cipher_list(ctx,ciphers);
@@ -272,6 +301,18 @@ int init ()
 	len = strlen(buf);
 	read_write_buf(ssl, sock, buf, len);
 
+	printf ("FINAL %s", token);
+	//token[80] = '\0';
+	char *OLA;
+	OLA = strdup(token);
+	char SECOND_POST[3000];
+	sprintf (SECOND_POST, "POST /CAPPINChange/sendParameters HTTP/1.1\nHost: otp.cartaodecidadao.pt\nContent-Type: text/plain; charset=UTF-8\nContent-Length: 215\nCookie: ");
+	strcat(SECOND_POST, token);
+	strcat(SECOND_POST, "\r\n\r\n");
+	char *fpar = params;
+	strcat(SECOND_POST, fpar);
+	strcat(SECOND_POST, "\r\n");
+
 	printf("\nREQUEST - 2\n");
 	read_write_buf(ssl, sock, SECOND_POST, len);
 
@@ -281,4 +322,5 @@ int init ()
 	close(sock);
 
 	exit(0);
+}
 }
