@@ -226,14 +226,14 @@
         <translation>&amp;Tools</translation>
     </message>
     <message>
-        <location filename="mainwnd.ui" line="2776"/>
+        <location filename="mainwnd.ui" line="2260"/>
         <source>Language</source>
-        <translation>&amp;Language</translation>
+        <translation>Language</translation>
     </message>
     <message>
         <location filename="mainwnd.ui" line="2781"/>
         <source>Help</source>
-        <translation>&amp;Help</translation>
+        <translation>Help</translation>
     </message>
     <message>
         <location filename="mainwnd.ui" line="2795"/>

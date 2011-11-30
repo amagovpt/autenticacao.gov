@@ -226,7 +226,7 @@
         <translation>&amp;Ferramentas</translation>
     </message>
     <message>
-        <location filename="mainwnd.ui" line="2776"/>
+        <location filename="mainwnd.ui" line="2260"/>
         <source>Language</source>
         <translation>Idioma</translation>
     </message>
@@ -582,7 +582,7 @@ Do you want to accept it?
     <message>
         <location filename="mainwnd.cpp" line="2127"/>
         <source>Index out of range</source>
-        <translation>Index out of range</translation>
+        <translation>Impossivel executar a operação</translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="2132"/>
@@ -603,7 +603,7 @@ Do you want to accept it?
         <location filename="mainwnd.cpp" line="2891"/>
         <location filename="mainwnd.cpp" line="5481"/>
         <source>General exception</source>
-        <translation>General exception</translation>
+        <translation>Impossível executar a operação</translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="2312"/>
@@ -853,9 +853,9 @@ Please specify .xml, .csv or .eid</source>
         <translation>Geen kaart gevonden</translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="2736"/>
+        <location filename="mainwnd.cpp" line="3403"/>
         <source>Identity Card: PIN verification</source>
-        <translation>Identiteitskaart: PIN testen</translation>
+        <translation>Verificação de PIN</translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="2858"/>
@@ -865,7 +865,7 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <location filename="mainwnd.cpp" line="2750"/>
         <source>passed</source>
-        <translation>geslaagd</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="2868"/>
@@ -875,9 +875,9 @@ Please specify .xml, .csv or .eid</source>
 ( Aantal pogingen over: </translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="2828"/>
+        <location filename="mainwnd.cpp" line="3680"/>
         <source>Identity Card: PIN change</source>
-        <translation>Identiteitskaart: PIN wijzigen</translation>
+        <translation>Mudança de PIN</translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="1372"/>
@@ -890,19 +890,19 @@ Please specify .xml, .csv or .eid</source>
         <translation>Fout opgetreden bij het verwijderen van het oud certificaat</translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="2763"/>
+        <location filename="mainwnd.cpp" line="3431"/>
         <source>PIN verification passed</source>
-        <translation>PIN test geslaagd</translation>
+        <translation>PIN introduzido correctamente</translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="2763"/>
+        <location filename="mainwnd.cpp" line="3431"/>
         <source>PIN verification failed</source>
-        <translation>PIN test mislukt</translation>
+        <translation>O PIN introduzido está errado!</translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="2856"/>
+        <location filename="mainwnd.cpp" line="3709"/>
         <source>PIN change </source>
-        <translation>PIN wijzigen </translation>
+        <translation>Alteração de PIN </translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="3958"/>
@@ -1064,19 +1064,19 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <location filename="mainwnd.cpp" line="680"/>
         <source>Checking card readers</source>
-        <translation>Detectie van de Leitor de cartõess</translation>
+        <translation>Verifique Leitores de cartões</translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="681"/>
         <source>No card readers are detected.
 </source>
-        <translation>Er zijn geen Leitor de cartõess gedetecteerd.
+        <translation>Leitor de cartões não detectado.
 </translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="682"/>
         <source>Please check the card readers are connected and/or verify the </source>
-        <translation>Kijk de aansluiting van de Leitor de cartõess na en/of verifieer of de </translation>
+        <translation>Verifique que o leitor de cartões se encontra correctamente conectado ao computador e </translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="684"/>
@@ -1086,12 +1086,12 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <location filename="mainwnd.cpp" line="686"/>
         <source>pcsc daemon </source>
-        <translation>pcsc daemon </translation>
+        <translation>o serviço pcsc </translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="688"/>
         <source>is running.</source>
-        <translation>gestart is.</translation>
+        <translation>se encontra a correr.</translation>
     </message>
     <message>
         <location filename="mainwnd.ui" line="2853"/>
@@ -1185,13 +1185,16 @@ Please specify .xml, .csv or .eid</source>
         <translation>Opmerkingen&lt;br&gt;&lt;i&gt;Remarks&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="1832"/>
-        <location filename="mainwnd.cpp" line="2789"/>
-        <location filename="mainwnd.cpp" line="2790"/>
-        <location filename="mainwnd.cpp" line="4889"/>
-        <location filename="mainwnd.cpp" line="4890"/>
+        <location filename="mainwnd.cpp" line="1977"/>
+        <location filename="mainwnd.cpp" line="3457"/>
+        <location filename="mainwnd.cpp" line="3458"/>
+        <location filename="mainwnd.cpp" line="3540"/>
+        <location filename="mainwnd.cpp" line="3541"/>
+        <location filename="mainwnd.cpp" line="5272"/>
+        <location filename="mainwnd.cpp" line="5273"/>
+        
         <source>Not available</source>
-        <translation>Niet beschikbaar</translation>
+        <translation>Não disponível</translation>
     </message>
     <message>
         <location filename="mainwnd.ui" line="2722"/>
