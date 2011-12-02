@@ -27,6 +27,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <Strsafe.h>
 #include <direct.h>
 #include <errno.h>
@@ -72,7 +73,11 @@ BOOL readFromCache(const char *cache_path, char * Buf)
 	
 	if ( fp != NULL )
 	{
-		fread(Buf, sizeof(char), st.st_size, fp);
+		if(fread(Buf, sizeof(char), st.st_size, fp) < st.st_size)
+		{
+			LogTrace(LOGTYPE_ERROR, WHERE, "Error reading cached file: errno=%d", errno);
+		}
+
 		fclose(fp);
 		return TRUE;
 	}

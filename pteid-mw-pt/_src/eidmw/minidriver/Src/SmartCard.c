@@ -1305,7 +1305,7 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    
    uiCmdLg = 5;
 
-   LogTrace(LOGTYPE_INFO, WHERE, "APDU (PSO: CDS");
+   LogTrace(LOGTYPE_INFO, WHERE, "APDU PSO CDS");
    LogDump (uiCmdLg, (char *)Cmd);
    
    recvlen = sizeof(recvbuf);
@@ -1607,6 +1607,7 @@ DWORD PteidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, P
 
 	   if (readFromCache(filename, *ppbCertif))
 	   {
+		   *pcbCertif = cbCertif;
 		   pCardData->pfnCspFree(filename);
 		   return SCARD_S_SUCCESS;
 	   }
