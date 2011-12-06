@@ -57,7 +57,7 @@
        <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="page_Wellcome"/>
       <widget class="QWidget" name="page_Identity">
@@ -1213,6 +1213,82 @@ font: 10pt &quot;Arial&quot;;</string>
          <string>Tamanho da Chave</string>
         </property>
        </widget>
+       <widget class="QPushButton" name="btnCert_Register">
+        <property name="geometry">
+         <rect>
+          <x>680</x>
+          <y>220</y>
+          <width>85</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font/>
+        </property>
+        <property name="text">
+         <string>&amp;Register</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnCert_Details">
+        <property name="geometry">
+         <rect>
+          <x>680</x>
+          <y>250</y>
+          <width>85</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font/>
+        </property>
+        <property name="text">
+         <string>&amp;Details &gt;&gt;</string>
+        </property>
+       </widget>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>220</y>
+          <width>261</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="_10">
+         <item row="1" column="0" colspan="3">
+          <widget class="QLabel" name="lblCert_InfoAdd">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-image: url(:/images/Images/alpha.png);</string>
+           </property>
+           <property name="text">
+            <string>To use your identity card with applications like Internet Explorer, Microsoft Offfice,OpenOffice.org, Adobe Reader, Outlook, ... you first have to register the card in Windows. Select a certificate and click the &quot;Register&quot; button to register your certificates</string>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>108</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
       </widget>
       <widget class="QWidget" name="page_PINCodes">
        <property name="styleSheet">
@@ -1265,50 +1341,6 @@ font: 10pt &quot;Arial&quot;;</string>
         <property name="readOnly">
          <bool>true</bool>
         </property>
-       </widget>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>410</x>
-          <y>210</y>
-          <width>261</width>
-          <height>181</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="_10">
-         <item row="1" column="0" colspan="3">
-          <widget class="QLabel" name="lblCert_InfoAdd">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-image: url(:/images/Images/alpha.png);</string>
-           </property>
-           <property name="text">
-            <string>To use your identity card with applications like Internet Explorer, Microsoft Offfice,OpenOffice.org, Adobe Reader, Outlook, ... you first have to register the card in Windows. Select a certificate and click the &quot;Register&quot; button to register your certificates</string>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>108</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
        </widget>
        <widget class="QTreeWidget" name="treePIN">
         <property name="geometry">
@@ -1385,38 +1417,6 @@ color: rgb(255, 102, 0);</string>
         </property>
         <property name="text">
          <string>Change PIN</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="btnCert_Register">
-        <property name="geometry">
-         <rect>
-          <x>440</x>
-          <y>390</y>
-          <width>85</width>
-          <height>27</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font/>
-        </property>
-        <property name="text">
-         <string>&amp;Register</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="btnCert_Details">
-        <property name="geometry">
-         <rect>
-          <x>550</x>
-          <y>390</y>
-          <width>85</width>
-          <height>27</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font/>
-        </property>
-        <property name="text">
-         <string>&amp;Details &gt;&gt;</string>
         </property>
        </widget>
        <widget class="QLabel" name="lbl_PIN_type">
