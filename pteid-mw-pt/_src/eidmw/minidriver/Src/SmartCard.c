@@ -782,7 +782,7 @@ DWORD    PteidChangePIN
       CLEANUP(SCARD_W_WRONG_CHV);
    }
 
-   /*FIXME:  Cmd [3] = 0x81;   */
+   /* TODO: This must be corrected see PkiCard.cpp in cardlayer sub-project
    /* Change PIN code: Old PIN + New PIN + Padding */
    Cmd [0] = 0x00;
    Cmd [1] = 0x24;   /* CHANGE REFERENCE DATA COMMAND    */

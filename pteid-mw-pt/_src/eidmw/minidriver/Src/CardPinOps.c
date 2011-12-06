@@ -42,10 +42,59 @@ DWORD WINAPI   CardAuthenticatePin
 	)
 {
 	DWORD dwReturn = SCARD_S_SUCCESS;
+	PIN_INFO pbPinInfo;
+	DWORD dwDataLen;
 
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 	
-	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
+
+	/********************/
+	/* Check Parameters */
+	/********************/
+	if ( pCardData == NULL )
+	{
+		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
+		CLEANUP(SCARD_E_INVALID_PARAMETER);
+	}
+
+	if(wcscmp(pwszUserId, L"user") != 0 && wcscmp(pwszUserId, L"anonymous") != 0
+		&& wcscmp(pwszUserId, L"admin") != 0)
+	{
+		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pwszUserId]");
+		CLEANUP(SCARD_E_INVALID_PARAMETER);
+	}
+
+	if(pbPin == NULL || cbPin == 0)
+	{	
+		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pbPin][cbPin]");
+		CLEANUP(SCARD_E_INVALID_PARAMETER);
+	}
+
+	dwReturn = CardGetProperty(pCardData, 
+		CP_CARD_PIN_INFO, 
+		(PBYTE) &pbPinInfo, 
+		sizeof(pbPinInfo), 
+		&dwDataLen, 
+		ROLE_DIGSIG); /* Apparently CardAuthenticatePin() assumes authentication PIN */
+
+	if (dwReturn != 0) {
+		LogTrace(LOGTYPE_ERROR, WHERE, "CardGetProperty Failed: %02X", dwReturn);
+		CLEANUP(SCARD_E_INVALID_PARAMETER);
+	}
+
+	if ( pbPinInfo.PinType == ExternalPinType ) {	
+		dwReturn = PteidAuthenticateExternal(pCardData, pcAttemptsRemaining, FALSE);
+	} 
+	else {
+		dwReturn = PteidAuthenticate(pCardData, pbPin, cbPin, pcAttemptsRemaining, 0);
+	}
+
+	if ( dwReturn != SCARD_S_SUCCESS )
+	{
+		LogTrace(LOGTYPE_ERROR, WHERE, "Logon: [0x%02X]", dwReturn);
+		CLEANUP(dwReturn);
+	}
+
 cleanup:
 
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
@@ -194,6 +243,15 @@ DWORD WINAPI   CardAuthenticateEx
 	__out_opt                              PDWORD         pcAttemptsRemaining
 	)
 {
+
+	/*
+	__in                 PCARD_DATA  pCardData,
+	__in                 LPWSTR      pwszUserId,
+	__in_bcount(cbPin)   PBYTE       pbPin,
+	__in                 DWORD       cbPin,
+	__out_opt            PDWORD      pcAttemptsRemaining
+
+	*/
 	DWORD dwReturn = SCARD_S_SUCCESS;
 	PIN_INFO pbPinInfo;
 	DWORD dwDataLen;
