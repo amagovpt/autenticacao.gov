@@ -183,36 +183,36 @@ DWORD WINAPI   CardGetContainerInfo
 
 #ifdef _DEBUG
 	LogDump (cbCertif, (char *)pbCertif);
-	if (bContainerIndex == 0)
-		LogDumpBin ("C:\\SmartCardMinidriverTest\\auth.crt", cbCertif, (char *)pbCertif);
-	if (bContainerIndex == 1)
-		LogDumpBin ("C:\\SmartCardMinidriverTest\\nonrep.crt", cbCertif, (char *)pbCertif);
+	//if (bContainerIndex == 0)
+	//	LogDumpBin ("C:\\SmartCardMinidriverTest\\auth.crt", cbCertif, (char *)pbCertif);
+	//if (bContainerIndex == 1)
+	//	LogDumpBin ("C:\\SmartCardMinidriverTest\\nonrep.crt", cbCertif, (char *)pbCertif);
 #endif
    
    /* Container Info */
 	pContainerInfo->dwVersion  = CONTAINER_INFO_CURRENT_VERSION;
 	pContainerInfo->dwReserved = 0;
+	
 	dwReturn = PteidGetPubKey(pCardData, 
-                            cbCertif, 
-                            pbCertif, 
-                            &(pContainerInfo->cbSigPublicKey), 
-                            &(pContainerInfo->pbSigPublicKey));
+			cbCertif, 
+			pbCertif, 
+			&(pContainerInfo->cbSigPublicKey), 
+			&(pContainerInfo->pbSigPublicKey));
+
 	if ( dwReturn != SCARD_S_SUCCESS )
 	{
 		LogTrace(LOGTYPE_ERROR, WHERE, "PteidGetPubKey returned [%d]", dwReturn);
 		CLEANUP(SCARD_E_UNEXPECTED);
 	}
-	/*TODO??? Nao se percebe isto, estamos a devolver a chave de auth sempre vazia... */
+	/* Not really sure but I think this means that we don't have public keys for encryption
+	   This conclusion was taken from reading openpgp-minidriver code
+	*/
 	pContainerInfo->cbKeyExPublicKey = 0;
 	pContainerInfo->pbKeyExPublicKey = NULL;
 
 #ifdef _DEBUG
-	if (bContainerIndex == 0)
-  		LogDumpBin("C:\\SmartCardMinidriverTest\\authpk.bin", pContainerInfo->cbSigPublicKey
-                                                       , (char *)pContainerInfo->pbSigPublicKey);
-	if (bContainerIndex == 1)
-  		LogDumpBin("C:\\SmartCardMinidriverTest\\nonreppk.bin", pContainerInfo->cbSigPublicKey
-                                                       , (char *)pContainerInfo->pbSigPublicKey);
+	LogTrace(LOGTYPE_INFO, WHERE, "SigPublicKey [%d]", pContainerInfo->cbSigPublicKey);
+	LogDump(pContainerInfo->cbSigPublicKey, pContainerInfo->pbSigPublicKey);
 #endif
 	
 cleanup:
