@@ -745,9 +745,10 @@ DWORD    PteidChangePIN
    unsigned char     recvbuf[256];
    unsigned long     recvlen = sizeof(recvbuf);
    BYTE              SW1, SW2;
+   char				 paddingChar;	
 
-   int               i        = 0;
-   int               offset   = 0;
+   unsigned int      i        = 0;
+   int				 j		  = 0;	
 
    LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
@@ -782,50 +783,64 @@ DWORD    PteidChangePIN
       CLEANUP(SCARD_W_WRONG_CHV);
    }
 
+   if (!Is_Gemsafe)
+   {
+		dwReturn = PteidAuthenticate(pCardData, pbCurrentAuthenticator, cbCurrentAuthenticator,
+			pcAttemptsRemaining, 1);
+		if(dwReturn != SCARD_S_SUCCESS)
+			CLEANUP(dwReturn);
+   }
+
+   if (Is_Gemsafe)
+	   paddingChar = 0xFF;
+   else
+	   paddingChar = 0x2F;
+  
+
    /* TODO: This must be corrected see PkiCard.cpp in cardlayer sub-project
    /* Change PIN code: Old PIN + New PIN + Padding */
-   Cmd [0] = 0x00;
-   Cmd [1] = 0x24;   /* CHANGE REFERENCE DATA COMMAND    */
-   Cmd [2] = 0x00;   /* Support 'USER' password change   */
-   Cmd [3] = 0x01;
-   Cmd [4] = 0x10;
-
-   /* Fill verification data with padding character */
-   for ( i = 0 ; i < 0x10 ; i++ )
+   Cmd[0] = 0x00;
+   Cmd[1] = 0x24;   /* CHANGE REFERENCE DATA COMMAND    */
+   if (Is_Gemsafe)
+	   Cmd[2] = 0x00;
+   else
+	   Cmd[2] = 0x01; 
+   if (Is_Gemsafe)
+	   Cmd[3] = 0x81;  //PIN Reference
+   else
+       Cmd[3] = 0x01; 
+   if(!Is_Gemsafe)
+	Cmd[4] = 0x08; //Just the new PIN
+   else
+	Cmd[4] = 0x10; // Old and new PIN
+	
+   if(Is_Gemsafe)
    {
-      Cmd [5 + i] = BELPIC_PAD_CHAR;
+	   while(i < 8)
+	   {
+		if (i < cbCurrentAuthenticator)
+			Cmd[4+i] = pbCurrentAuthenticator[i];
+		else
+			Cmd[4+i] = paddingChar;
+		i++;
+	   }
    }
 
-   Cmd [5] = 0x20 + (unsigned char)cbCurrentAuthenticator;  /* 0x20 + length of pin */
-   for ( i = 0 ; i < (unsigned char) cbCurrentAuthenticator ; i++ )
+   if (!Is_Gemsafe)
+	   j = -8;
+
+   while( i < 16)
    {
-    offset = 6 + (i/2);
-
-      if ( (i % 2) == 0 )
-      {
-         Cmd [offset] = (((pbCurrentAuthenticator[i] - 48) << 4) & 0xF0);
-      }
-      else
-      {
-         Cmd [offset] = (Cmd[offset] & 0xF0) + ((pbCurrentAuthenticator[i] - 48) & 0x0F);
-      }
+	   if (i < cbNewAuthenticator)
+		   Cmd[4+i+j] = pbNewAuthenticator[i+j];
+	   else
+		   Cmd[4+i+j] = paddingChar;
+	   i++;
    }
-   Cmd [13] = 0x20 + (unsigned char)cbNewAuthenticator;  /* 0x20 + length of pin */
-   for ( i = 0 ; i < (unsigned char) cbNewAuthenticator ; i++ )
-   {
-    offset = 14 + (i/2);
-
-      if ( (i % 2) == 0 )
-      {
-         Cmd [offset] = (((pbNewAuthenticator[i] - 48) << 4) & 0xF0);
-      }
-      else
-      {
-         Cmd [offset] = (Cmd[offset] & 0xF0) + ((pbNewAuthenticator[i] - 48) & 0x0F);
-      }
-   }
-
-   uiCmdLg = 21;
+   if(Is_Gemsafe)	 
+	   uiCmdLg = 21;
+   else
+	   uiCmdLg = 13; 
    recvlen = sizeof(recvbuf);
 
    dwReturn = SCardTransmit(pCardData->hScard, 
@@ -861,6 +876,8 @@ DWORD    PteidChangePIN
       {
          dwReturn = SCARD_W_CHV_BLOCKED;
       }
+	  else
+		  LogTrace(LOGTYPE_ERROR, WHERE, "Unexpected error reply: [0x%02X][0x%02X]", SW1, SW2);
    }
    else
    {
@@ -981,6 +998,7 @@ cleanup:
    return (dwReturn);
 }
 
+/*@deprecated/unused */
 void IasSignatureHelper(PCARD_DATA pCardData)
 {
   /* This is another magic incantation (probably RE'd from APDU captures)

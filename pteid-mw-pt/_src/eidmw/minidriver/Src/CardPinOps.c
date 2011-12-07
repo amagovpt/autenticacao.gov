@@ -542,7 +542,7 @@ DWORD WINAPI   CardChangeAuthenticator
 		pcAttemptsRemaining);
 	if ( dwReturn != SCARD_S_SUCCESS )
 	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Logon: [0x%02X]", dwReturn);
+		LogTrace(LOGTYPE_ERROR, WHERE, "ChangePIN: [0x%02X]", dwReturn);
 		CLEANUP(dwReturn);
 	}
 
