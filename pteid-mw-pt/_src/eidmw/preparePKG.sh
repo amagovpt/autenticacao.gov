@@ -21,6 +21,8 @@ echo "uid=\`id -u\`"  >> pteid-pkg/install_pteid.sh
 echo "if [ \$uid -eq 0 ]"  >> pteid-pkg/install_pteid.sh
 echo "then"  >> pteid-pkg/install_pteid.sh
 
+echo "  install -m 755 -p \"lib/pteidpp2-gempc.so\" \"/usr/local/lib/pteidpp/pteidpp2-gempc.so\"" >> pteid-pkg/install_pteid.sh
+
 echo "  install -m 755 -p \"lib/libpteidcommon.so.3.5.5\" \"/usr/local/lib/libpteidcommon.so.3.5.5\"" >> pteid-pkg/install_pteid.sh
 echo "  ln -f -s /usr/local/lib/libpteidcommon.so.3.5.5 /usr/local/lib/libpteidcommon.so"  >> pteid-pkg/install_pteid.sh
 echo "  ln -f -s /usr/local/lib/libpteidcommon.so.3.5.5 /usr/local/lib/libpteidcommon.so.3"  >> pteid-pkg/install_pteid.sh
