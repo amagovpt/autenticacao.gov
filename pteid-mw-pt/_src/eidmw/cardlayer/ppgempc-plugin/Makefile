@@ -4,7 +4,7 @@ LDFLAGS = -lpcsclite
 TARGET = /usr/local/lib/pteidpp
 
 all:
-	$(CC) -I/usr/include/PCSC/ -O2 -shared -fPIC -o $(OUTPUT) $(SOURCES)
+	gcc -I/usr/include/PCSC/ -O2 -shared -fPIC -o $(OUTPUT) $(SOURCES)
 
 clean:
 	rm -fv *.o *.so

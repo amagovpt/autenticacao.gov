@@ -1,4 +1,4 @@
-#include "pinpad2.h"
+#include "pinpad2-private.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
