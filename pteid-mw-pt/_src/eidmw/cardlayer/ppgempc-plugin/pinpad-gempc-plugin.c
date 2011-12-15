@@ -3,8 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifndef WIN32
 /* PCSC missing types */
 #include <reader.h>
+#endif
 
 #ifndef TRUE
 #define TRUE 1
@@ -25,12 +27,10 @@ EIDMW_PP_API long EIDMW_PP2_Init(
 	if (hCard == 0 || hCtx == 0)
 		return SCARD_E_INVALID_PARAMETER;
 
-	if (strcasestr(csReader, "GemPC Pinpad") == 0)
+	if (strstr(csReader, "GemPC Pinpad") == 0 &&
+		strstr(csReader, "GemPCPinpad") == 0)
 		return SCARD_E_INVALID_PARAMETER;
-	/*Should we leave the default strings ?? */		
-
-	/* Do some initialization maybe... */
-	printf("\n");
+	
 
 	return SCARD_S_SUCCESS;
 
@@ -181,10 +181,12 @@ EIDMW_PP_API long EIDMW_PP2_Command(
 	DWORD rv = 0;
 	EIDMW_PP_VERIFY_CCID pin_verify;
 	BYTE pbAtr[64];
-	DWORD dwReaderLen, dwState, dwProt, dwAtrLen;
-	dwAtrLen = sizeof(pbAtr);
-	dwReaderLen = 0;
+	DWORD dwReaderLen = 0, dwState, dwProt, dwAtrLen;
 	unsigned int i, length;
+	
+	
+	dwAtrLen = sizeof(pbAtr);
+	
 
 
 	if (ioctl == CM_IOCTL_GET_FEATURE_REQUEST)

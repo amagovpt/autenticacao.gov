@@ -81,6 +81,10 @@ extern "C" {
 #include "wintypes.h"
 #endif
 
+#ifndef CM_IOCTL_GET_FEATURE_REQUEST
+#define CM_IOCTL_GET_FEATURE_REQUEST SCARD_CTL_CODE(3400) //Definition from reader.h in pcsclite
+#endif
+
 #define PTEID_MINOR_VERSION       0
 
 #define EIDMW_PP_TYPE_AUTH         0x01   /* The Authentication PIN/PUK */
@@ -218,24 +222,6 @@ EIDMW_PP_API long EIDMW_PP2_Command(
 #define CCID_CHANGE_START    0x03
 #define CCID_CHANGE_FINISH   0x04
 #define CCID_CHANGE_DIRECT   0x07
-
-/* Big endian encoding to 2 bytes */
-inline void ToUchar2(unsigned long ulIn, unsigned char *pucOut2)
-{
-	pucOut2[0] = (unsigned char) (ulIn % 256);
-	pucOut2[1] = (unsigned char) (ulIn / 256);
-}
-
-/* Big endian encoding to 4 bytes */
-inline void ToUchar4(unsigned long ulIn, unsigned char *pucOut4)
-{
-	pucOut4[0] = (unsigned char) (ulIn % 256);
-	ulIn /= 256;
-	pucOut4[1] = (unsigned char) (ulIn % 256);
-	ulIn /= 256;
-	pucOut4[2] = (unsigned char) (ulIn % 256);
-	pucOut4[3] = (unsigned char) (ulIn / 256);
-}
 
 // The structs below need packing with 1-byte alignment
 #pragma pack(push, pinpad2, 1)
