@@ -26,7 +26,7 @@
 
 // Make sure PP_DUMP_CMDS is not defined in a release!
 #define PP_DUMP_CMDS
-#undef PP_DUMP_CMDS
+// #undef PP_DUMP_CMDS
 
 namespace eIDMW
 {
@@ -74,8 +74,9 @@ bool CPinpad::UsePinpad(tPinOperation operation)
 		// to get and display the remainings attempts. But the BE eID card takes this
 		// empty buffer to be a bad PIN, so you quickly end up with a blocked card.
 		// Therefore, we don't allow this reader to be used as a pinpad reader..
-		if (!m_bUsePinpadLib && StartsWith(m_csReader.c_str(), "Gemplus GemPC Pinpad"))
+		/*if (!m_bUsePinpadLib && StartsWith(m_csReader.c_str(), "Gemplus GemPC Pinpad"))
 			return false;
+			*/
 
 		GetFeatureList();
 	}

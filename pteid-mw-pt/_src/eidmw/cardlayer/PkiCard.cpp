@@ -170,25 +170,8 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
 
 unsigned char CPkiCard::PinUsage2Pinpad(const tPin & Pin, const tPrivKey *pKey)
 {
-	DlgPinUsage dlgUsage = PinUsage2Dlg(Pin, pKey);
-	unsigned char ucPinpadUsage = EIDMW_PP_TYPE_UNKNOWN;
-
-	switch(dlgUsage)
-	{
-	case DLG_PIN_AUTH:
-		ucPinpadUsage = EIDMW_PP_TYPE_AUTH;
-		break;
-	case DLG_PIN_SIGN:
-		ucPinpadUsage = EIDMW_PP_TYPE_SIGN;
-		break;
-	case DLG_PIN_ADDRESS:
-		ucPinpadUsage = EIDMW_PP_TYPE_ADDR;
-		break;
-	default:
-	  break;
-	}
-
-	return ucPinpadUsage;
+	//Its hackish but works for IAS and Gemsafe Cards
+	return (char)Pin.ulID;
 }
 
 bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,

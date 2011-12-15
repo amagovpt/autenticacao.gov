@@ -458,8 +458,8 @@ return(lBits);
     xLev0Item.p_data = (unsigned char*)contents.GetBytes();
     xLev0Item.l_data = contents.Size();
     pinVector.clear();
-	printf("------ PKCS15Parser AODF\n");
-	std::cout << "Data: " << xLev0Item.p_data << "\n";
+//	printf("------ PKCS15Parser AODF\n");
+//	std::cout << "Data: " << xLev0Item.p_data << "\n";
     //decode all Pin's 
     while(xLev0Item.l_data > 0)
     {

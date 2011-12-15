@@ -85,10 +85,10 @@ extern "C" {
 
 #define PTEID_MINOR_VERSION       0
 
-#define EIDMW_PP_TYPE_AUTH         0x00    /* The Authentication PIN/PUK */
-#define EIDMW_PP_TYPE_SIGN         0x01    /* The Signature PIN/PUK */
-#define EIDMW_PP_TYPE_ADDR         0x02    /* The Address PIN/PUK */
-#define EIDMW_PP_TYPE_ACTIV        0x03    /* The Activation PIN */
+#define EIDMW_PP_TYPE_AUTH         0x01   /* The Authentication PIN/PUK */
+#define EIDMW_PP_TYPE_SIGN         0x02    /* The Signature PIN/PUK */
+#define EIDMW_PP_TYPE_ADDR         0x03    /* The Address PIN/PUK */
+#define EIDMW_PP_TYPE_ACTIV        0x04    /* The Activation PIN */
 #define EIDMW_PP_TYPE_UNKNOWN      0xFF    /* Unkonwn PIN/PUK */
 
 #define EIDMW_PP_OP_VERIFY                    0x01    /* PIN verification */
