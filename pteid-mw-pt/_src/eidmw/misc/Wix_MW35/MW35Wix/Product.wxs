@@ -580,7 +580,9 @@
       <Component Id="PinpadLib" Guid="{9ADA6D75-5DCC-467E-A0CE-B84A482B2115}" SharedDllRefCount="yes">
         <!--File Id="ch44xxeid.dll" Name="ch44xxeid.dll" Source="..\..\..\pinpad\ch44xxeid.dll" /-->
         <!--File Id="sprx32eid.dll" Name="sprx32eid.dll" Source="..\..\..\pinpad\sprx32eid.dll" /-->
-        <File Id="xireid.dll" Name="xireid.dll" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pinpad\xireid.dll" />
+        <!--<File Id="xireid.dll" Name="xireid.dll" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pinpad\xireid.dll" /> -->
+
+        <File Id="pteidpp2gempc.dll" Name="pteidpp2-gempc.dll" Source="..\..\..\_Binaries35\Release\pteidpp2-gempc.dll" />
       </Component>
     </DirectoryRef>
     

@@ -21,14 +21,14 @@
            Language="!(loc.Lang)"
            Codepage="1252"
            Version="$(var.ProductVersion)"
-           Manufacturer="Belgian Government"
+           Manufacturer="Portuguese Government"
            UpgradeCode="$(var.UpgradeCode)">
 
     <Package Id="$(var.PackageCode)"
              InstallerVersion="200"
              Keywords="Portugal e-ID Middleware Installer"
              Platform="x64"
-             Manufacturer="Belgian Government"
+             Manufacturer="Portuguese Government"
              Compressed="yes"
              InstallPrivileges="elevated"
     />
@@ -590,6 +590,7 @@
         <!--File Id="ch44xxeid.dll" Name="ch44xxeid.dll" Source="..\..\..\pinpad\ch44xxeid.dll" /-->
         <!--File Id="sprx32eid.dll" Name="sprx32eid.dll" Source="..\..\..\pinpad\sprx32eid.dll" /-->
         <File Id="xireid.dll" Name="xireid.dll" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pinpad\xireid.dll" />
+        <File Id="pteidpp2gempc.dll" Name="pteidpp2-gempc.dll" Source="..\..\..\_Binaries35\Release\pteidpp2-gempc.dll" />
       </Component>
     </DirectoryRef>
     <DirectoryRef Id="TARGETDIR">
