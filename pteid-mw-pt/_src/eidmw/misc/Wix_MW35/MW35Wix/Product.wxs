@@ -178,11 +178,9 @@
 
     <DirectoryRef Id="CERTSDIR">
       <Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AC6}">
-        <File Id="pteidcertportugalrca.der" Name="pteid-cert-portugalrca.der" KeyPath="yes" Source="..\..\certs\pteid-cert-portugalrca.der" />
-        <File Id="pteidcertportugalrca2.der" Name="pteid-cert-portugalrca2.der" KeyPath="no" Source="..\..\certs\pteid-cert-portugalrca2.der" />
-        <File Id="pteidcertgovernment.der" Name="pteid-cert-government.der" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\eidstore\certs\pteid-cert-government.der" />
-        <File Id="pteidcertgovernment2004.der" Name="pteid-cert-government2004.der" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\eidstore\certs\pteid-cert-government2004.der" />
-        <File Id="pteidcertgovernment2005.der" Name="pteid-cert-government2005.der" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\eidstore\certs\pteid-cert-government2005.der" />
+	<File Id="CartaodeCidadao001.der" Name="CartaodeCidadao001.der" KeyPath="yes" Source="..\..\certs\CartaodeCidadao001.der" />
+	<File Id="ECRaizEstado_novo_assinado_GTE.der" Name="ECRaizEstado_novo_assinado_GTE.der" KeyPath="yes" Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" />
+	<File Id="GTEGlobalRoot.der" Name="GTEGlobalRoot.der" KeyPath="yes" Source="..\..\certs\GTEGlobalRoot.der" />
       </Component>
     </DirectoryRef>
 
