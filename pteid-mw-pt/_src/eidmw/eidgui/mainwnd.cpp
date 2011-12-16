@@ -28,6 +28,13 @@
 #include <QImage>
 #include <stdlib.h>	
 #include <time.h>
+
+///Certificates
+#include <openssl/ssl.h>
+#include <openssl/x509.h>
+#include <openssl/pem.h>
+#include <openssl/x509v3.h>
+
 #ifdef WIN32
 #include <shlobj.h>
 #endif
@@ -3994,18 +4001,21 @@ void MainWnd::fillCertTree(PTEID_Certificate *cert, short level, QTreeCertItem* 
 	//------------------------------------------------------
 	// set the text for the the created item
 	//------------------------------------------------------
-	const char* label = cert->getLabel();
-	QString strLabel = QString::fromUtf8(label);
-	item->setText(COLUMN_CERT_NAME, strLabel);
+	if (cert)
+	{
+		const char* label = cert->getLabel();
+		QString strLabel = QString::fromUtf8(label);
+		item->setText(COLUMN_CERT_NAME, strLabel);
 
-	item->setIssuer(QString::fromUtf8(cert->getIssuerName(),-1));
-	item->setOwner(QString::fromUtf8(cert->getOwnerName(),-1));
-	item->setValidityBegin(cert->getValidityBegin());
-	item->setValidityEnd(cert->getValidityEnd());
-	QString	strKeyLen;
-	strKeyLen=strKeyLen.setNum(cert->getKeyLength());
-	item->setKeyLen(strKeyLen);
-	item->setOcspStatus(PTEID_CERTIF_STATUS_OCSP_NOT_CHECKED);
+		item->setIssuer(QString::fromUtf8(cert->getIssuerName(),-1));
+		item->setOwner(QString::fromUtf8(cert->getOwnerName(),-1));
+		item->setValidityBegin(cert->getValidityBegin());
+		item->setValidityEnd(cert->getValidityEnd());
+		QString	strKeyLen;
+		strKeyLen=strKeyLen.setNum(cert->getKeyLength());
+		item->setKeyLen(strKeyLen);
+		item->setOcspStatus(PTEID_CERTIF_STATUS_OCSP_NOT_CHECKED);
+	}
 
 	PTEID_Certificate*	child	= NULL;
 
@@ -4040,29 +4050,55 @@ void MainWnd::fillCertificateList( void )
 		/* Root Certificate if the card owns it
 		PTEID_Certificate& certificate = certificates->getCert(4);
 		fillCertTree(&certificate,Level,NULL);
-		*/
+		 */
 
-		QTreeCertItem* item = new QTreeCertItem( m_ui.treeCert, 0 );
-		item = new QTreeCertItem( m_ui.treeCert, 0 );
+		QTreeCertItem* item1 = new QTreeCertItem( m_ui.treeCert, 0 );
+		item1 = new QTreeCertItem( m_ui.treeCert, 0 );
 
-		QString strLabel1 = QString::fromUtf8("ROOT CA");
-		item->setText(COLUMN_CERT_NAME, strLabel1);
-		item->setIssuer(QString::fromUtf8("Cartão de Cidadão 001"));
-		item->setOwner(QString::fromUtf8("Cartão de Cidadão 001",-1));
-		item->setValidityBegin("26/01/2007");
-		item->setValidityEnd("27/05/2018");
+		QString strLabel1 = QString::fromUtf8(certificates->getExternalCertIssuer(1));
+		item1->setText(COLUMN_CERT_NAME, strLabel1);
+		item1->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(1)));
+		item1->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(1),-1));
+		item1->setValidityBegin(QString(certificates->getExternalCertNotAfter(1)));
+		item1->setValidityEnd(QString(certificates->getExternalCertNotBefore(1)));
 		QString	strKeyLen1;
-		unsigned long int keyleg = 4096;
-		strKeyLen1=strKeyLen1.setNum(keyleg);
-		item->setKeyLen(strKeyLen1);
+		strKeyLen1=strKeyLen1.setNum(certificates->getExternalCertKeylenght(1));
+		item1->setKeyLen(strKeyLen1);
+
+		QTreeCertItem* item2 = new QTreeCertItem( m_ui.treeCert, 0 );
+		item2 = new QTreeCertItem( m_ui.treeCert, 0 );
+
+		QString strLabel2 = QString::fromUtf8(certificates->getExternalCertIssuer(2));
+		item2->setText(COLUMN_CERT_NAME, strLabel2);
+		item2->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(2)));
+		item2->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(2),-1));
+		item2->setValidityBegin(QString(certificates->getExternalCertNotAfter(2)));
+		item2->setValidityEnd(QString(certificates->getExternalCertNotBefore(2)));
+		QString	strKeyLen2;
+		strKeyLen2=strKeyLen2.setNum(certificates->getExternalCertKeylenght(2));
+		item2->setKeyLen(strKeyLen2);
+		//fillCertTree(NULL, Level,item2);
+
+		QTreeCertItem* item3 = new QTreeCertItem( m_ui.treeCert, 0 );
+		item3 = new QTreeCertItem( m_ui.treeCert, 0 );
+
+		QString strLabel3 = QString::fromUtf8(certificates->getExternalCertIssuer(3));
+		item3->setText(COLUMN_CERT_NAME, strLabel3);
+		item3->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(3)));
+		item3->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(3),-1));
+		item3->setValidityBegin(QString(certificates->getExternalCertNotAfter(3)));
+		item3->setValidityEnd(QString(certificates->getExternalCertNotBefore(3)));
+		QString	strKeyLen3;
+		strKeyLen3=strKeyLen3.setNum(certificates->getExternalCertKeylenght(3));
+		item3->setKeyLen(strKeyLen3);
 
 		// Sign Certificate
 		PTEID_Certificate& certificatesign = certificates->getCert(2);
-		fillCertTree(&certificatesign, Level,item);
+		fillCertTree(&certificatesign, Level,item3);
 
 		// Auth Certificate
 		PTEID_Certificate& certificateauth = certificates->getCert(3);
-		fillCertTree(&certificateauth, Level,item);
+		fillCertTree(&certificateauth, Level,item3);
 
 		m_ui.treeCert->expandAll();
 		// m_ui.treeCert->sortItems(0,Qt::AscendingOrder);
