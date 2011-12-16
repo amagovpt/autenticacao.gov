@@ -4055,7 +4055,7 @@ void MainWnd::fillCertificateList( void )
 		QTreeCertItem* item1 = new QTreeCertItem( m_ui.treeCert, 0 );
 		item1 = new QTreeCertItem( m_ui.treeCert, 0 );
 
-		QString strLabel1 = QString::fromUtf8(certificates->getExternalCertIssuer(1));
+		QString strLabel1 = QString::fromUtf8(certificates->getExternalCertSubject(1));
 		item1->setText(COLUMN_CERT_NAME, strLabel1);
 		item1->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(1)));
 		item1->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(1),-1));
@@ -4068,7 +4068,7 @@ void MainWnd::fillCertificateList( void )
 		QTreeCertItem* item2 = new QTreeCertItem( m_ui.treeCert, 0 );
 		item2 = new QTreeCertItem( m_ui.treeCert, 0 );
 
-		QString strLabel2 = QString::fromUtf8(certificates->getExternalCertIssuer(2));
+		QString strLabel2 = QString::fromUtf8(certificates->getExternalCertSubject(2));
 		item2->setText(COLUMN_CERT_NAME, strLabel2);
 		item2->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(2)));
 		item2->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(2),-1));
@@ -4082,7 +4082,7 @@ void MainWnd::fillCertificateList( void )
 		QTreeCertItem* item3 = new QTreeCertItem( m_ui.treeCert, 0 );
 		item3 = new QTreeCertItem( m_ui.treeCert, 0 );
 
-		QString strLabel3 = QString::fromUtf8(certificates->getExternalCertIssuer(3));
+		QString strLabel3 = QString::fromUtf8(certificates->getExternalCertSubject(3));
 		item3->setText(COLUMN_CERT_NAME, strLabel3);
 		item3->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(3)));
 		item3->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(3),-1));
