@@ -356,24 +356,23 @@ std::string CPteidCard::GetPinpadPrefix()
 
 unsigned long CPteidCard::PinStatus(const tPin & Pin)
 {
-		//printf("++++ Pteid4\n");
-    // This command isn't supported on V1 cards
-    if (m_oCardData.GetByte(21) < 0x20)
-        return PIN_STATUS_UNKNOWN;
-
+	long ulSW12 = 0;
+	
+    //if (m_oCardData.GetByte(21) < 0x20)
+    //    return PIN_STATUS_UNKNOWN;
     try
     {
-        m_ucCLA = 0x80;
-        CByteArray oResp = SendAPDU(0xEA, 0x00, (unsigned char) Pin.ulPinRef, 1);
-        m_ucCLA = 0x00;
+        CByteArray oResp = SendAPDU(0x20, 0x00, (unsigned char) Pin.ulPinRef, 0);
+        
+		ulSW12 = getSW12(oResp);
+		MWLOG(LEV_DEBUG, MOD_CAL, L"PinStatus APDU returned: %x", ulSW12 );
 
-        getSW12(oResp, 0x9000);
-
-        return oResp.GetByte(0);
+        return ulSW12 % 16;
     }
     catch(...)
     {
-        m_ucCLA = 0x00;
+        //m_ucCLA = 0x00;
+		MWLOG(LEV_ERROR, MOD_CAL, L"Error in PinStatus", ulSW12);
         throw;
     }
 }
