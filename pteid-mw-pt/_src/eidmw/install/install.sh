@@ -335,6 +335,11 @@ then
 	mkdir -p /usr/local/etc
 	install bin/pteid.conf.3.5	/usr/local/etc/pteid.conf
 
+	######
+	# install certificates
+	######
+	mkdir -p /usr/local/etc
+	install ../misc/certs/*.der /usr/local/etc/
 	#######
 	## if a local config file exists, remove the settings for OCSP and CRL
 	## such that the system wide settings will taken over

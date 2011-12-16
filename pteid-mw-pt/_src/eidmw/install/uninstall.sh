@@ -77,6 +77,9 @@ then
         echo "Removed: global config file"
 	rm -f /usr/local/etc/pteid.conf
 
+	echo "Removed: certificates"
+	rm -rf /usr/local/etc/*.der
+
 	#######################
 	# restoring /etc/ls.so.conf
 	#######################
