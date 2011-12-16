@@ -618,6 +618,75 @@ PTEID_Certificate &PTEID_Certificates::getCert(unsigned long ulIndex)
 
 	return *out;
 }
+const char *PTEID_Certificates::getExternalCertSubject(int cert)
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
+	out = pimpl->ExternalCertSubject(cert).c_str();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+const char *PTEID_Certificates::getExternalCertIssuer(int cert)
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
+	out = pimpl->ExternalCertSubject(cert).c_str();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+const char *PTEID_Certificates::getExternalCertNotBefore(int cert)
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
+	out = pimpl->ExternalCertNotBefore(cert).c_str();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+const char *PTEID_Certificates::getExternalCertNotAfter(int cert)
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
+	out = pimpl->ExternalCertNotAfter(cert).c_str();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+unsigned long PTEID_Certificates::getExternalCertKeylenght(int cert)
+{
+	unsigned long out;
+
+	BEGIN_TRY_CATCH
+
+	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
+	out = pimpl->ExternalCertKeylenght(cert);
+
+	END_TRY_CATCH
+
+	return out;
+}
 
 PTEID_Certificate &PTEID_Certificates::getCert(PTEID_CertifType type)
 {
@@ -630,11 +699,11 @@ PTEID_Certificate &PTEID_Certificates::getCert(PTEID_CertifType type)
 	unsigned long idxObject;
 	APL_CertifType aplType;
 	bool bOnlyVisible=true;
-	std::cout << "getcert 1 \n";
+	std::cout << "getcert eidlibcrypto \n";
  	switch(type)
 	{
 		case PTEID_CERTIF_TYPE_ROOT:
-			std::cout << "root \n";
+			std::cout << "eidlibcrypto root \n";
 			idxObject=INCLUDE_OBJECT_ROOTCERT;
 			aplType=APL_CERTIF_TYPE_ROOT;
 			break;
@@ -682,6 +751,7 @@ PTEID_Certificate &PTEID_Certificates::getCert(PTEID_CertifType type)
 
 PTEID_Certificate &PTEID_Certificates::getRoot()
 {
+	std::cout << "pteid_certificates getroot\n";
 	return getCert(PTEID_CERTIF_TYPE_ROOT);
 }
 
@@ -709,7 +779,7 @@ PTEID_Certificate &PTEID_Certificates::addCertificate(PTEID_ByteArray &cert)
 	APL_Certifs *pimpl=static_cast<APL_Certifs *>(m_impl);
 
 	CByteArray baCert(cert.GetBytes(),cert.Size());
-	APL_Certif *pAplCert=pimpl->addCert(baCert);
+	APL_Certif *pAplCert=pimpl->addCert(baCert, APL_CERTIF_TYPE_ROOT, false);
 
 	out = dynamic_cast<PTEID_Certificate *>(getObject(pAplCert));
 	
