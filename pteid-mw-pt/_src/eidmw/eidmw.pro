@@ -44,3 +44,7 @@ SUBDIRS += eidgui
 ## the subdirs have to be built in the given order
 CONFIG += ordered
 
+data.path +=  /usr/local/share/certs
+data.files += misc/certs/*
+
+INSTALLS += data
