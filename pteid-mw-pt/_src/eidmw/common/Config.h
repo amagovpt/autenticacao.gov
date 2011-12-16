@@ -267,6 +267,7 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_INSTALL_SDK_DIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CACHEDIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_CARDTXDELAY;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY;
