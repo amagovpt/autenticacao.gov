@@ -582,6 +582,10 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	flags ^= Qt::WindowMaximizeButtonHint;
 	setWindowFlags( flags );
 
+	list_of_pins[0] = PinInfo(1, "PIN da Autentica\xc3\xa7\xc3\xa3o");
+	list_of_pins[1] = PinInfo(2, "PIN da Assinatura");
+	list_of_pins[2] = PinInfo(3, "PIN da Morada");
+
 	//------------------------------------
 	// set the window Icon (as it appears in the left corner of the window)
 	//------------------------------------
@@ -1981,7 +1985,8 @@ void MainWnd::on_treePIN_itemClicked(QTreeWidgetItem* item, int column)
 		{
 			QString PINId;
 			PINId = PINId.setNum(Pin.getId());
-			QString PINStatus(tr("Not available"));
+			QString PINStatus;
+			PINStatus.sprintf("Resta(m) %ld tentativa(s)", Pin.getTriesLeft());
 
 			//------------------------------------
 			// fill in the fields
@@ -3449,8 +3454,9 @@ void MainWnd::authPINRequest_triggered()
 							msg += "\n";
 							msg += "( ";
 							msg += tr("Number of tries left: ") + nrTriesLeft + " )";
-							m_ui.txtPIN_Status->setText(msg);
-							m_ui.txtPIN_Status->setAccessibleName(msg);
+							//This wrongly assumes that the PIN selected in the PIN tab is the one we failed
+							// m_ui.txtPIN_Status->setText(msg);
+							// m_ui.txtPIN_Status->setAccessibleName(msg);
 						}
 						else
 						{
@@ -3544,8 +3550,8 @@ bool MainWnd::addressPINRequest_triggered()
 					else
 					{
 						pinactivate = 0;
-						m_ui.txtPIN_Status->setText(tr("Not available"));
-						m_ui.txtPIN_Status->setAccessibleName(tr("Not available"));
+						m_ui.txtPIN_Status->setText("Restam 3 tentativas");
+						m_ui.txtPIN_Status->setAccessibleName("Restam 3 tentativas");
 					}
 					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 					break;
@@ -4172,12 +4178,6 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 		fillPinList( Card );
 
 		//------------------------------------------------------
-		// fill in the table with the card info
-		//------------------------------------------------------
-
-		fillCardVersionInfo( Card );
-
-		//------------------------------------------------------
 		// fill in the table with the software info
 		//------------------------------------------------------
 
@@ -4243,12 +4243,6 @@ void MainWnd::LoadDataAddress(PTEID_EIDCard& Card)
 		fillPinList( Card );
 
 		//------------------------------------------------------
-		// fill in the table with the card info
-		//------------------------------------------------------
-
-		fillCardVersionInfo( Card );
-
-		//------------------------------------------------------
 		// fill in the table with the software info
 		//------------------------------------------------------
 
@@ -4262,47 +4256,7 @@ void MainWnd::LoadDataPersoData(PTEID_EIDCard& Card)
 	setEnabledCertifButtons(false);
 	m_TypeCard = Card.getType();
 	m_CI_Data.LoadDataPersoData(Card,m_CurrReaderName);
-
-	//clearTabCertificates();
-	//fillCertificateList();
-
-	/*if(!m_CI_Data.isDataLoaded())
-	{
-		//------------------------------------------------------
-		// Certificates Tab
-		//------------------------------------------------------
-		//clearTabCertificates();
-
-		//------------------------------------------------------
-		// fill in the tree of Certificates
-		//------------------------------------------------------
-		//fillCertificateList();
-
-		//------------------------------------------------------
-		// PIN's Tab
-		//------------------------------------------------------
-#define TYPE_PINTREE_ITEM 0
-#define COLUMN_PIN_NAME   0
-
-		clearTabPins();
-
-		//------------------------------------------------------
-		// fill in the tree of Pins
-		//------------------------------------------------------
-		fillPinList( Card );
-
-		//------------------------------------------------------
-		// fill in the table with the card info
-		//------------------------------------------------------
-
-		fillCardVersionInfo( Card );
-
-		//------------------------------------------------------
-		// fill in the table with the software info
-		//------------------------------------------------------
-
-		fillSoftwareInfo();
-	}*/
+	
 }
 
 void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
@@ -4314,44 +4268,7 @@ void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 
 	clearTabCertificates();
 	fillCertificateList();
-
-	/*if(!m_CI_Data.isDataLoaded())
-	{
-		//------------------------------------------------------
-		// Certificates Tab
-		//------------------------------------------------------
-		clearTabCertificates();
-
-		//------------------------------------------------------
-		// fill in the tree of Certificates
-		//------------------------------------------------------
-		fillCertificateList();
-
-		//------------------------------------------------------
-		// PIN's Tab
-		//------------------------------------------------------
-#define TYPE_PINTREE_ITEM 0
-#define COLUMN_PIN_NAME   0
-
-		clearTabPins();
-
-		//------------------------------------------------------
-		// fill in the tree of Pins
-		//------------------------------------------------------
-		fillPinList( Card );
-
-		//------------------------------------------------------
-		// fill in the table with the card info
-		//------------------------------------------------------
-
-		fillCardVersionInfo( Card );
-
-		//------------------------------------------------------
-		// fill in the table with the software info
-		//------------------------------------------------------
-
-		fillSoftwareInfo();
-	}*/
+	
 }
 
 //*****************************************************
@@ -4647,67 +4564,6 @@ void MainWnd::fillSoftwareInfo( void )
 		m_ui.tblInfo->setItem( RowNr, ColNr, newItem );
 	}
 
-	 */
-}
-
-//**************************************************
-// fill the table with the card info
-// This function has to be called each time the language is changed
-//**************************************************
-void MainWnd::fillCardVersionInfo( PTEID_EIDCard& Card )
-{
-	/*
-	PTEID_CardVersionInfo& CardVersionInfo = Card.getVersionInfo();
-
-	QTableWidgetItem* newItem = NULL;
-
-	int			RowNr = 0;
-	int			ColNr = 0;
-	QMap<QString,const char*> Data;
-
-	Data[tr("Serial nr")]							= CardVersionInfo.getSerialNumber();
-	Data[tr("Component Code")]						= CardVersionInfo.getComponentCode();
-	Data[tr("OS Number")]							= CardVersionInfo.getOsNumber();
-	Data[tr("OS Number")]							= CardVersionInfo.getOsVersion();
-	Data[tr("Softmask Number")]						= CardVersionInfo.getSoftmaskNumber();
-	Data[tr("Softmask Version")]					= CardVersionInfo.getSoftmaskVersion();
-	Data[tr("Applet Version")]						= CardVersionInfo.getAppletVersion();
-	Data[tr("Global OS Version")]					= CardVersionInfo.getGlobalOsVersion();
-	Data[tr("Applet Interface Version")]			= CardVersionInfo.getAppletInterfaceVersion();
-	Data[tr("PKCS1 Support")]						= CardVersionInfo.getPKCS1Support();
-	Data[tr("Key Exchange Version")]				= CardVersionInfo.getKeyExchangeVersion();
-	Data[tr("Applet Life Cycle")]					= CardVersionInfo.getAppletLifeCycle();
-	Data[tr("Graphical Personalisation")]			= CardVersionInfo.getGraphicalPersonalisation();
-	Data[tr("Electrical Personalisation Interface")]= CardVersionInfo.getElectricalPersonalisationInterface();
-
-	//--------------------------------------------
-	// make sure we start with a cleaned list
-	//--------------------------------------------
-
-	m_ui.tblCardAndPIN->clear();
-
-	m_ui.tblCardAndPIN->setRowCount( Data.size() );
-	Qt::ItemFlags flags;
-	flags &= !Qt::ItemIsEditable;
-
-	for ( QMap<QString,const char*>::iterator itData = Data.begin()
-		; itData != Data.end()
-		; itData++, ColNr=0, RowNr++
-		)
-	{
-		newItem = new QTableWidgetItem( itData.key() );
-		newItem->setFlags(flags);
-		m_ui.tblCardAndPIN->setItem( RowNr, ColNr++, newItem );
-		newItem = new QTableWidgetItem( itData.value() );
-		newItem->setFlags(flags);
-		m_ui.tblCardAndPIN->setItem( RowNr, ColNr, newItem );
-	}
-
-	QStringList labels;
-	labels.push_back(tr("Field"));
-	labels.push_back(tr("Value"));
-
-	m_ui.tblCardAndPIN->setHorizontalHeaderLabels(labels);
 	 */
 }
 
@@ -5302,14 +5158,30 @@ void MainWnd::refreshTabCardPin( void )
 			case PTEID_CARDTYPE_EID:
 			case PTEID_CARDTYPE_KIDS:
 			case PTEID_CARDTYPE_FOREIGNER:
-			{
-				PTEID_EIDCard&		Card		   = ReaderContext.getEIDCard();
-				fillCardVersionInfo( Card );
-				m_ui.txtPIN_Status->setText(tr("Not available"));
-				m_ui.txtPIN_Status->setAccessibleName(tr("Not available"));
-			}
-			case PTEID_CARDTYPE_SIS:
-			case PTEID_CARDTYPE_UNKNOWN:
+                {
+                    PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
+                    PTEID_Pins&		Pins	= Card.getPins();
+
+
+                    PTEID_Pin&	Auth_Pin = Pins.getPinByNumber(0);
+                    QString	CurrPinName	= Auth_Pin.getLabel();
+
+                    QString PINStatus;
+                    PINStatus.sprintf("Resta(m) %ld tentativa(s)", Auth_Pin.getTriesLeft());
+
+                    //------------------------------------
+                    // fill in the fields
+                    //------------------------------------
+                    m_ui.txtPIN_Name->setText(QString::fromUtf8("PIN da Autentica\xc3\xa7\xc3\xa3o"));
+                    m_ui.txtPIN_Name->setAccessibleName(QString::fromUtf8("PIN da Autentica\xc3\xa7\xc3\xa3o"));
+                    m_ui.txtPIN_ID->setText(QString::number(1));
+                    m_ui.txtPIN_ID->setAccessibleName(QString::number(1));
+                        /*	Fill the default value for the PIN status which is the 
+                    status of the Auth PIN (first one of the list)    */
+                    m_ui.txtPIN_Status->setText(PINStatus);
+                    m_ui.txtPIN_Status->setAccessibleName(PINStatus);
+
+                }
 			default:
 				break;
 			}

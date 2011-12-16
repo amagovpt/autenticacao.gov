@@ -44,6 +44,21 @@ using namespace eIDMW;
 
 class MainWnd;
 
+
+class PinInfo
+{
+
+public:
+	QString pin_name;
+	QString pin_status;
+	QString pin_id;
+
+	PinInfo();
+	PinInfo(int id, const char *pin_name, const char *pin_status=""): 
+	  pin_name(QString::fromUtf8(pin_name)), pin_id(QString::number(id)), pin_status(QString::fromUtf8(pin_status))
+	  { };
+};
+
 //***********************************************
 // callback data class
 // This class can be used to store whatever info we
@@ -296,6 +311,8 @@ protected:
 	QMenu*				m_pTrayIconMenu;
 	QTranslator			m_translator;
 
+	PinInfo list_of_pins[3]; 
+
 
 private:
 #define TRANSLATION_FILE_PREFIX	"eidmw_"
@@ -389,7 +406,6 @@ private:
 			break;
 		}
 	}
-	void fillCardVersionInfo( PTEID_EIDCard& pCard );
 	void fillSoftwareInfo( void );
 	void setLanguageMenu( GenPur::UI_LANGUAGE language );
 	void setLanguageMenu( QString const& uiLang );
@@ -466,6 +482,10 @@ public:
 	static tCertPerReader			m_certContexts;			//!< certificate contexts of each reader
 
 };
+
+
+
+
 
 
 #endif
