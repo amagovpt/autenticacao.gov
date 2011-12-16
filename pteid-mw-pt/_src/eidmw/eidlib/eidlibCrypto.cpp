@@ -639,7 +639,7 @@ const char *PTEID_Certificates::getExternalCertIssuer(int cert)
 	BEGIN_TRY_CATCH
 
 	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = pimpl->ExternalCertIssuer(cert).c_str();
+	out = pimpl->ExternalCertSubject(cert).c_str();
 
 	END_TRY_CATCH
 

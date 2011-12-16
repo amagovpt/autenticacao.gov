@@ -113,7 +113,8 @@ enum PTEID_CertifType
 {
 	PTEID_CERTIF_TYPE_UNKNOWN,			/**< UNKNOWN certificate */
 	PTEID_CERTIF_TYPE_ROOT,				/**< Root certificate */
-	PTEID_CERTIF_TYPE_CA,				/**< CA certificate */
+	PTEID_CERTIF_TYPE_ROOT_SIGN,
+	PTEID_CERTIF_TYPE_ROOT_AUTH,				/**< CA certificate */
 	PTEID_CERTIF_TYPE_AUTHENTICATION,	/**< Authentication certificate */
 	PTEID_CERTIF_TYPE_SIGNATURE			/**< Signature certificate */
 };
