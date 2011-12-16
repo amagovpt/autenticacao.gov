@@ -800,7 +800,7 @@ PTEID_Certificate &PTEID_EIDCard::getRoot()
 
 PTEID_Certificate &PTEID_EIDCard::getCA()
 {
-	return getCertificates().getCert(PTEID_CERTIF_TYPE_ROOT_AUTH);
+	return getCertificates().getCert(PTEID_CERTIF_TYPE_CA);
 }
 
 PTEID_Certificate &PTEID_EIDCard::getAuthentication()
