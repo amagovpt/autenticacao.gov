@@ -1582,6 +1582,118 @@ APL_Certifs *APL_Certif::getCertificates()
 	return m_store;
 }
 
+std::string APL_Certif::x509TimeConversion (ASN1_TIME *time)
+{
+	char *data;
+	int length;
+
+	BIO *bio = BIO_new(BIO_s_mem());
+	ASN1_TIME_print(bio, time);
+	length = BIO_get_mem_data(bio, &data);
+	std::string timeconverted(data, length);
+	BIO_free(bio);
+
+	return timeconverted;
+}
+
+X509 *APL_Certif::ExternalCert(int certnr)
+{
+	FILE *m_stream;
+
+	switch (certnr)
+	{
+	case 1:
+		m_stream = fopen("/usr/local/etc/GTEGlobalRoot.der", "r");
+		break;
+	case 2:
+		m_stream = fopen("/usr/local/etc/ECRaizEstado_novo_assinado_GTE.der", "r");
+		break;
+	case 3:
+		m_stream = fopen("/usr/local/etc/CartaodeCidadao001.der", "r");
+		break;
+	default:
+		printf ("fail no options\n");
+	}
+
+	//PEM format
+	//X509* x509 = PEM_read_X509(m_stream, NULL, NULL, NULL);
+	//DER format
+	X509* x509 = d2i_X509_fp(m_stream, NULL);
+	fclose(m_stream);
+	certnr = 0;
+
+	return x509;
+}
+
+std::string APL_Certif::ExternalCertSubject(int certnr)
+{
+	//Subject name
+	X509 *cert;
+
+	cert = ExternalCert(certnr);
+
+	char sntemp[128] = {0};
+	char subject[256] = {0};
+	X509_NAME_get_text_by_NID(X509_get_subject_name(cert), NID_commonName, sntemp, sizeof(sntemp));
+	strcat (subject, sntemp);
+
+	return subject;
+}
+
+std::string APL_Certif::ExternalCertIssuer(int certnr)
+{
+	// issuer name
+	char szTemp[128] = {0};
+	char issuer[256] = {0};
+	X509 *cert;
+
+	cert = ExternalCert(certnr);
+
+	X509_NAME_get_text_by_NID(X509_get_issuer_name(cert), NID_commonName, szTemp, sizeof(szTemp));
+	strcat (issuer, szTemp);
+
+	return issuer;
+}
+
+unsigned long APL_Certif::ExternalCertKeylenght(int certnr)
+{
+	// Keylength
+	X509 *cert;
+	unsigned long keylen;
+
+	cert = ExternalCert(certnr);
+
+	EVP_PKEY *pKey = X509_get_pubkey(cert);
+	keylen = EVP_PKEY_bits(pKey);
+
+	return keylen;
+}
+
+std::string APL_Certif::ExternalCertNotBefore(int certnr)
+{
+	//notbefore
+	std::string result;
+	X509 *cert;
+
+	cert = ExternalCert(certnr);
+
+	result = x509TimeConversion(X509_get_notBefore(cert));
+
+	return result;
+}
+
+std::string APL_Certif::ExternalCertNotAfter(int certnr)
+{
+	// Not after
+	std::string result;
+	X509 *cert;
+
+	cert = ExternalCert(certnr);
+
+	result = x509TimeConversion(X509_get_notAfter(cert));
+
+	return result;
+}
 const char *APL_Certif::getSerialNumber()
 {
 	initInfo();
