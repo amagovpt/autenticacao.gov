@@ -30,6 +30,12 @@
 #include "MiscUtil.h"
 #include "CardPteidDef.h"
 #include "Log.h"
+#include "MiscUtil.h"
+#include "APLConfig.h"
+
+#ifdef WIN32
+#include <io.h>
+#endif
 
 namespace eIDMW
 {
@@ -1600,19 +1606,40 @@ X509 *APL_Certif::ExternalCert(int certnr)
 {
 	FILE *m_stream;
 
+	APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
+	std::string	m_cachedirpath = conf_dir.getString();
+
+	CPathUtil::checkDir (m_cachedirpath.c_str());
+	std::string contents = m_cachedirpath;
+
 	switch (certnr)
 	{
 	case 1:
-		m_stream = fopen("/usr/local/etc/GTEGlobalRoot.der", "r");
+#ifdef WIN32
+		contents.append("/GTEGlobalRoot.der");
+		fopen_s(&m_stream, contents.c_str(), "rb");
+#else
+		m_stream = fopen("/usr/local/share/certs/GTEGlobalRoot.der", "r");
+#endif
 		break;
 	case 2:
-		m_stream = fopen("/usr/local/etc/ECRaizEstado_novo_assinado_GTE.der", "r");
+#ifdef WIN32
+		contents.append("/ECRaizEstado_novo_assinado_GTE.der");
+		fopen_s(&m_stream, contents.c_str(), "rb");
+#else
+		m_stream = fopen("/usr/local/share/certs/ECRaizEstado_novo_assinado_GTE.der", "r");
+#endif
 		break;
 	case 3:
-		m_stream = fopen("/usr/local/etc/CartaodeCidadao001.der", "r");
+#ifdef WIN32
+		contents.append("/CartaodeCidadao001.der");
+		fopen_s(&m_stream, contents.c_str(), "rb");
+#else
+		m_stream = fopen("/usr/local/share/certs/CartaodeCidadao001.der", "r");
+#endif
 		break;
 	default:
-		printf ("fail no options\n");
+		break;
 	}
 
 	//PEM format
