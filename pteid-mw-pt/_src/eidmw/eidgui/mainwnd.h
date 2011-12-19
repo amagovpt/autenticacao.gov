@@ -53,7 +53,7 @@ public:
 	QString pin_status;
 	QString pin_id;
 
-	PinInfo();
+	PinInfo() {};
 	PinInfo(int id, const char *pin_name, const char *pin_status=""): 
 	  pin_name(QString::fromUtf8(pin_name)), pin_id(QString::number(id)), pin_status(QString::fromUtf8(pin_status))
 	  { };

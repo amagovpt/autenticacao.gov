@@ -3459,10 +3459,11 @@ void MainWnd::authPINRequest_triggered()
 					}
 					else
 					{
-						QString nrTriesLeft;
-						nrTriesLeft.setNum(triesLeft);
-						m_ui.txtPIN_Status->setText(tr("Not available"));
-						m_ui.txtPIN_Status->setAccessibleName(tr("Not available"));
+						//QString nrTriesLeft;
+						//nrTriesLeft.setNum(triesLeft);
+						//If PIN verification succeeded the try counter is set to the maximum i.e. 3
+						//m_ui.txtPIN_Status->setText(tr(""));
+						//m_ui.txtPIN_Status->setAccessibleName(tr("Not available"));
 					}
 					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 					break;
@@ -3530,6 +3531,7 @@ bool MainWnd::addressPINRequest_triggered()
 					QString msg = bResult ? tr("PIN verification passed"):tr("PIN verification failed");
 					if (!bResult)
 					{
+							/*
 							QString nrTriesLeft;
 							nrTriesLeft.setNum(triesLeft);
 							msg += "\n";
@@ -3537,6 +3539,7 @@ bool MainWnd::addressPINRequest_triggered()
 							msg += tr("Number of tries left: ") + nrTriesLeft + " )";
 							m_ui.txtPIN_Status->setText(msg);
 							m_ui.txtPIN_Status->setAccessibleName(msg);
+							*/
 
 							pinactivate = 1;
 							return false;
@@ -3544,8 +3547,8 @@ bool MainWnd::addressPINRequest_triggered()
 					else
 					{
 						pinactivate = 0;
-						m_ui.txtPIN_Status->setText("Restam 3 tentativas");
-						m_ui.txtPIN_Status->setAccessibleName("Restam 3 tentativas");
+						//m_ui.txtPIN_Status->setText("Restam 3 tentativas");
+						//m_ui.txtPIN_Status->setAccessibleName("Restam 3 tentativas");
 					}
 					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 					break;
@@ -3590,7 +3593,7 @@ void MainWnd::on_actionPINRequest_triggered()
 		//------------------------------------
 		// make always sure a card is present
 		//------------------------------------
-		QString		  caption(tr("Identity Card: PIN verification"));
+		QString		 caption(tr("Identity Card: PIN verification"));
 
 		if (ReaderContext.isCardPresent())
 		{
@@ -3645,8 +3648,8 @@ void MainWnd::on_actionPINRequest_triggered()
 					{
 						QString nrTriesLeft;
 						nrTriesLeft.setNum(triesLeft);
-						m_ui.txtPIN_Status->setText(tr("Not available"));
-						m_ui.txtPIN_Status->setAccessibleName(tr("Not available"));
+						m_ui.txtPIN_Status->setText("Restam 3 tentativas");
+						m_ui.txtPIN_Status->setAccessibleName("Restam 3 tentativas");
 					}
 					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 					break;
@@ -5036,7 +5039,6 @@ QStringList MainWnd::fillRemarksField( tFieldMap& MiscFields )
 }
 
 
-
 //*****************************************************
 // clear the tab with the certificates
 //*****************************************************
@@ -5162,6 +5164,8 @@ void MainWnd::refreshTabCardPin( void )
 
                     QString PINStatus;
                     PINStatus.sprintf("Resta(m) %ld tentativa(s)", Auth_Pin.getTriesLeft());
+
+		    list_of_pins[0].pin_status = PINStatus;
 
                     //------------------------------------
                     // fill in the fields
