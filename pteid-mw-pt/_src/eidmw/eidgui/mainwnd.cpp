@@ -29,12 +29,6 @@
 #include <stdlib.h>	
 #include <time.h>
 
-///Certificates
-#include <openssl/ssl.h>
-#include <openssl/x509.h>
-#include <openssl/pem.h>
-#include <openssl/x509v3.h>
-
 #ifdef WIN32
 #include <shlobj.h>
 #endif
