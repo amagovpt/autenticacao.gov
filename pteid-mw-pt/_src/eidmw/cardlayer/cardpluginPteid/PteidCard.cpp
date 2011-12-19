@@ -73,14 +73,12 @@ static CByteArray ReadInternal(CPCSC *poPCSC, SCARDHANDLE hCard, unsigned long u
 	//oData.Chop(2); // remove SW12
 
 	MWLOG(LEV_INFO, MOD_CAL, L"   Read %d bytes from the PT eid-ng GemSafe card", oData.Size());
-	cout << "Read " << oData.Size() << " bytes from the PT eid-ng GemSafe card" << endl;
 	return oData;
 
 }
 
 static CByteArray ReadInternalIAS(CPCSC *poPCSC, SCARDHANDLE hCard, unsigned long ulOffset, unsigned long ulMaxLen)
 {
-    cout << "ReadInternal IAS" << endl;
 	long lretVal = 0;
 	CByteArray oCmd(40);
 	unsigned char tucReadDat[] = {0x00, 0xA4, 0x04, 0x0C};
@@ -93,7 +91,6 @@ static CByteArray ReadInternalIAS(CPCSC *poPCSC, SCARDHANDLE hCard, unsigned lon
 	//oData.Chop(2); // remove SW12
 
 	MWLOG(LEV_INFO, MOD_CAL, L"   Read %d bytes from the PT eid-ng IAS card", oData.Size());
-	cout << "Read " << oData.Size() << " bytes from the PT eid-ng IAS card" << endl;
 	return oData;
 }
 
@@ -136,7 +133,6 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 	SCARDHANDLE hCard, CContext *poContext, CPinpad *poPinpad)
 {
 
-	//printf("+++ Pteid2\n");
 	CCard *poCard = NULL;
 
 	if (ulVersion == 1)
@@ -358,21 +354,21 @@ unsigned long CPteidCard::PinStatus(const tPin & Pin)
 {
 	long ulSW12 = 0;
 	
-    //if (m_oCardData.GetByte(21) < 0x20)
-    //    return PIN_STATUS_UNKNOWN;
     try
     {
         CByteArray oResp = SendAPDU(0x20, 0x00, (unsigned char) Pin.ulPinRef, 0);
         
-		ulSW12 = getSW12(oResp);
-		MWLOG(LEV_DEBUG, MOD_CAL, L"PinStatus APDU returned: %x", ulSW12 );
+	ulSW12 = getSW12(oResp);
+	MWLOG(LEV_DEBUG, MOD_CAL, L"PinStatus APDU returned: %x", ulSW12 );
+	if (ulSW12 == 0x9000)
+		return 3; //Maximum Try Counter for PteID Cards
 
         return ulSW12 % 16;
     }
     catch(...)
     {
         //m_ucCLA = 0x00;
-		MWLOG(LEV_ERROR, MOD_CAL, L"Error in PinStatus", ulSW12);
+	MWLOG(LEV_ERROR, MOD_CAL, L"Error in PinStatus", ulSW12);
         throw;
     }
 }
