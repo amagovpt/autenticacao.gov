@@ -7,12 +7,13 @@ mkdir -p pteid-pkg/lib
 mkdir -p pteid-pkg/bin
 mkdir -p pteid-pkg/eidgui
 mkdir -p pteid-pkg/jar
+mkdir -p pteid-pkg/misc/certs/
 
 cp -r lib/*  			pteid-pkg/lib/
 cp -r bin/*  			pteid-pkg/bin/
 cp -r eidgui/*.qm		pteid-pkg/eidgui/
 cp -r jar/pteid35libJava.jar	pteid-pkg/jar/
-
+cp misc/certs/*.der		pteid-pkg/misc/certs/
 
 echo "#!/bin/bash" > pteid-pkg/install_pteid.sh
 
@@ -20,6 +21,8 @@ echo "echo \"Este script instala a aplicação do cartão de cidadao\"" >> pteid
 echo "uid=\`id -u\`"  >> pteid-pkg/install_pteid.sh
 echo "if [ \$uid -eq 0 ]"  >> pteid-pkg/install_pteid.sh
 echo "then"  >> pteid-pkg/install_pteid.sh
+
+echo "  install -m 755 -p \"misc/certs/*.der\" \"/usr/local/share/certs\"" >> pteid-pkg/install_pteid.sh
 
 echo "  install -m 755 -p \"lib/pteidpp2-gempc.so\" \"/usr/local/lib/pteidpp/pteidpp2-gempc.so\"" >> pteid-pkg/install_pteid.sh
 
