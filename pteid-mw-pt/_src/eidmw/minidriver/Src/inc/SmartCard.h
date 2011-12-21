@@ -134,7 +134,9 @@ extern DWORD   PteidAuthenticateExternal
                (
                   PCARD_DATA     pCardData, 
                   PDWORD         pcAttemptsRemaining,
-				  BOOL			 bSilent
+				  BOOL			 bSilent,
+				  DWORD			PinId
+  
                );
 extern DWORD   PteidDeAuthenticate
                (
@@ -154,7 +156,8 @@ extern DWORD   PteidChangePIN
                   DWORD          cbCurrentAuthenticator,
                   PBYTE          pbNewAuthenticator,
                   DWORD          cbNewAuthenticator,
-                  PDWORD         pcAttemptsRemaining
+                  PDWORD         pcAttemptsRemaining,
+				  DWORD		     pin_id
                );
 
 extern DWORD  PteidSelectApplet(PCARD_DATA     pCardData);
@@ -174,6 +177,12 @@ extern DWORD CCIDgetFeatures
 
 extern DWORD createVerifyCommand
 				(
-					PPIN_VERIFY_STRUCTURE pVerifyCommand
+					PPIN_VERIFY_STRUCTURE pVerifyCommand,
+					unsigned int pin_ref
+				);
+extern DWORD createVerifyCommandGemPC
+				(
+					PPIN_VERIFY_STRUCTURE pVerifyCommand,
+					unsigned int pin_ref
 				);
 #endif

@@ -83,7 +83,7 @@ DWORD WINAPI   CardAuthenticatePin
 	}
 
 	if ( pbPinInfo.PinType == ExternalPinType ) {	
-		dwReturn = PteidAuthenticateExternal(pCardData, pcAttemptsRemaining, FALSE);
+		dwReturn = PteidAuthenticateExternal(pCardData, pcAttemptsRemaining, FALSE, 0);
 	} 
 	else {
 		dwReturn = PteidAuthenticate(pCardData, pbPin, cbPin, pcAttemptsRemaining, 0);
@@ -306,7 +306,8 @@ DWORD WINAPI   CardAuthenticateEx
 	specific_pin_id = PinId == ROLE_DIGSIG ? 0 : 1;
 
 	if ( pbPinInfo.PinType == ExternalPinType ) {	
-			dwReturn = PteidAuthenticateExternal(pCardData, pcAttemptsRemaining, (dwFlags & CARD_PIN_SILENT_CONTEXT ) == CARD_PIN_SILENT_CONTEXT);
+		dwReturn = PteidAuthenticateExternal(pCardData, pcAttemptsRemaining, (dwFlags & CARD_PIN_SILENT_CONTEXT ) == CARD_PIN_SILENT_CONTEXT,
+				specific_pin_id);
 	} 
 	else {
 		dwReturn = PteidAuthenticate(pCardData, pbPinData, cbPinData, pcAttemptsRemaining, specific_pin_id);
@@ -539,7 +540,9 @@ DWORD WINAPI   CardChangeAuthenticator
 		cbCurrentAuthenticator,
 		pbNewAuthenticator,
 		cbNewAuthenticator,
-		pcAttemptsRemaining);
+		pcAttemptsRemaining,
+		0 //Auth PIN
+		);
 	if ( dwReturn != SCARD_S_SUCCESS )
 	{
 		LogTrace(LOGTYPE_ERROR, WHERE, "ChangePIN: [0x%02X]", dwReturn);

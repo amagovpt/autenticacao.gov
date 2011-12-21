@@ -40,8 +40,6 @@
 #define BELPIC_KEY_REF_NONREP		0x83
 
 /****************************************************************************************************/
-//Forward declaration of helper functions
-void IasSignatureHelper(PCARD_DATA pCardData);
 
 
 #define WHERE "PteidDelayAndRecover"
@@ -105,7 +103,7 @@ void PteidDelayAndRecover(PCARD_DATA  pCardData,
 
 
 #define WHERE "PteidAuthenticate"
-DWORD PteidAuthenticate(PCARD_DATA   pCardData, 
+DWORD PteidAuthenticate(PCARD_DATA  pCardData, 
                        PBYTE        pbPin, 
                        DWORD        cbPin, 
                        PDWORD       pcAttemptsRemaining,
@@ -237,10 +235,10 @@ cleanup:
 #define WRITE_ERROR_MESSAGE(MESSAGE) swprintf(wchErrorMessage, 500, MESSAGE)
 
 DWORD PteidAuthenticateExternal(
-	PCARD_DATA   pCardData, 
+	PCARD_DATA   pCardData,
 	PDWORD       pcAttemptsRemaining,
-	BOOL		 bSilent
-	) 
+	BOOL		 bSilent,
+	DWORD		 pin_id )
 {
 	DWORD						dwReturn  = 0;
 	SCARD_IO_REQUEST				ioSendPci = {1, sizeof(SCARD_IO_REQUEST)};
@@ -248,7 +246,8 @@ DWORD PteidAuthenticateExternal(
 
 	PIN_VERIFY_STRUCTURE			verifyCommand;
 
-	unsigned int					uiCmdLg   = 0;
+	unsigned int				uiCmdLg = 0;
+	unsigned int                pin_ref = 0;
 	unsigned char				recvbuf[256];
 	unsigned char				ucLastKey;
 	unsigned long				recvlen     = sizeof(recvbuf);
@@ -319,7 +318,16 @@ DWORD PteidAuthenticateExternal(
 	/* Log On */
 	/**********/
 
-	createVerifyCommand(&verifyCommand);
+	if (Is_Gemsafe == 0 && pin_id == 0)
+		pin_ref = 0x01;
+	else 
+		pin_ref = 0x80 + pin_id;
+
+	if (wcsstr(pCardData->pwszCardName, L"GemPC Pinpad") != 0 
+		|| wcsstr(pCardData->pwszCardName, L"GemPCPinpad" != 0))
+		createVerifyCommandGemPC(&verifyCommand, pin_ref);
+	else
+		createVerifyCommand(&verifyCommand, pin_ref);
 
 	uiCmdLg = sizeof(verifyCommand);
 	recvlen = sizeof(recvbuf);
@@ -359,199 +367,7 @@ DWORD PteidAuthenticateExternal(
 				CLEANUP(dwReturn);
 			}
 		}
-		else
-		{
-			dwReturn = SCardControl(pCardData->hScard, 
-				externalPinInfo.features.VERIFY_PIN_START, 
-				&verifyCommand, 
-				uiCmdLg,                              
-				recvbuf, 
-				recvlen,
-				&recvlen);
-			if ( dwReturn != SCARD_S_SUCCESS )
-			{
-				LogTrace(LOGTYPE_ERROR, WHERE, "SCardControl errorcode: [0x%02X]", dwReturn);
-				CLEANUP(dwReturn);
-			}
-			externalPinInfo.iPinCharacters = 0;
-			externalPinInfo.cardState = CS_PINENTRY;
-
-			// show dialog
-			if (!bSilent)
-				DialogThreadHandle = CreateThread(NULL, 0, DialogThreadPinEntry, &externalPinInfo, 0, NULL);
-			while (1) {
-				dwReturn = SCardControl(pCardData->hScard,
-					externalPinInfo.features.GET_KEY_PRESSED,
-					NULL,
-					0,
-					recvbuf,
-					recvlen,
-					&recvlen);
-				if ( dwReturn != SCARD_S_SUCCESS )
-				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "SCardControl errorcode: [0x%02X]", dwReturn);
-					CLEANUP(dwReturn);
-				}
-				ucLastKey = recvbuf[0];
-				switch (recvbuf[0]) {
-				case 0x00:
-					// No key 
-					Sleep(200);
-					break;
-				case 0x0d:
-					// OK button
-					goto endkeypress;
-				case 0x1b:
-					// Cancel button
-					goto endkeypress;
-				case 0x40:
-					// Aborted/timeout
-					goto endkeypress;
-				case 0x2b:
-					// 0-9
-					externalPinInfo.iPinCharacters++;
-					break;
-				case 0x08:	
-					// Backspace
-					externalPinInfo.iPinCharacters--;
-					break;
-				case 0x0a:
-					// Clear
-					externalPinInfo.iPinCharacters = 0;
-					break;
-				default:
-					//printf("Key pressed: 0x%x\n", bRecvBuffer[0]);
-					;
-				}
-
-			}
-endkeypress:
-
-			externalPinInfo.cardState = CS_PINENTERED;
-			dwReturn = SCardControl(pCardData->hScard,
-				externalPinInfo.features.VERIFY_PIN_FINISH,
-				NULL,
-				0,
-				recvbuf,
-				sizeof(recvbuf),
-				&recvlen);
-			if ( dwReturn != SCARD_S_SUCCESS )
-			{
-				LogTrace(LOGTYPE_ERROR, WHERE, "SCardControl errorcode: [0x%02X]", dwReturn);
-				CLEANUP(dwReturn);
-			}
-			SW1 = recvbuf[recvlen-2];
-			SW2 = recvbuf[recvlen-1];
-			if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
-			{
-				dwReturn = SCARD_W_WRONG_CHV;
-				LogTrace(LOGTYPE_ERROR, WHERE, "CardAuthenticateEx Failed: [0x%02X][0x%02X]", SW1, SW2);
-				if (SW1 == 0x64) {
-					//error during pin entry
-					switch(SW2){
-					case 0x00:
-						// Timeout
-						if (ucLastKey == 0x0d) {
-							// OK button preceded by no other keys also results in 0x64 0x00
-
-							WRITE_MAIN_INSTRUCTION( t[PIN_TOO_SHORT_MAININSTRUCTIONS][getLanguage()]);
-							WRITE_ERROR_MESSAGE( t[PIN_TOO_SHORT_CONTENT][getLanguage()] );
-						} else {
-							WRITE_MAIN_INSTRUCTION( t[PIN_TIMED_OUT_MAININSTRUCTIONS][getLanguage()]);
-							// the user entered something but probably forgot to push OK.
-							WRITE_ERROR_MESSAGE(t[PIN_TIMED_OUT_CONTENT][getLanguage()]);
-						}
-						break;
-					case 0x01:
-						// Cancelled
-						WRITE_MAIN_INSTRUCTION( t[PIN_CANCELLED_MAININSTRUCTIONS][getLanguage()]);
-						WRITE_ERROR_MESSAGE( t[PIN_CANCELLED_CONTENT][getLanguage()]);
-						break;
-					case 0x02:
-						// PINs do not match
-						WRITE_MAIN_INSTRUCTION( t[PIN_DO_NOT_MATCH_MAININSTRUCTIONS][getLanguage()]);
-						WRITE_ERROR_MESSAGE( t[PIN_DO_NOT_MATCH_CONTENT][getLanguage()]);
-						break;
-					case 0x03:
-						// PIN size error
-						if (externalPinInfo.iPinCharacters > 0 && externalPinInfo.iPinCharacters < BELPIC_MIN_USER_PIN_LEN) {
-							// PIN too short
-							WRITE_MAIN_INSTRUCTION( t[PIN_TOO_SHORT_MAININSTRUCTIONS][getLanguage()]);
-							WRITE_ERROR_MESSAGE( t[PIN_TOO_SHORT_CONTENT][getLanguage()]);
-						} else {
-							if (externalPinInfo.iPinCharacters >= BELPIC_MAX_USER_PIN_LEN) {
-								// PIN too long
-								WRITE_MAIN_INSTRUCTION( t[PIN_TOO_LONG_MAININSTRUCTIONS][getLanguage()]);
-								WRITE_ERROR_MESSAGE( t[PIN_TOO_LONG_CONTENT][getLanguage()]);
-							} else {
-								// no info about PIN chars
-								WRITE_MAIN_INSTRUCTION(  t[PIN_SIZE_MAININSTRUCTIONS][getLanguage()]);
-								WRITE_ERROR_MESSAGE( t[PIN_SIZE_CONTENT][getLanguage()]);
-							}
-						}
-						break;
-					default:
-						// Should not happen
-						WRITE_MAIN_INSTRUCTION( t[PIN_UNKNOWN_MAININSTRUCTIONS][getLanguage()]);
-						swprintf (wchErrorMessage, t[PIN_UNKNOWN_CONTENT][getLanguage()], SW1,SW2);
-						break;
-					}
-					if (externalPinInfo.uiState == US_PINENTRY && !bSilent)
-						hResult = TaskDialog(externalPinInfo.hwndParentWindow, 
-						NULL, 
-						t[WINDOW_TITLE][getLanguage()], 
-						wchMainInstruction, 
-						wchErrorMessage, 
-						TDCBF_RETRY_BUTTON  | TDCBF_CANCEL_BUTTON ,
-						TD_ERROR_ICON,
-						&nButton);
-
-				}
-				if (SW1 == 0x63) {
-					// Invalid PIN
-					dwRetriesLeft = SW2 & 0x0F;
-					if ( pcAttemptsRemaining != NULL )
-					{
-						/* -1: Don't support returning the count of remaining authentication attempts */
-						*pcAttemptsRemaining = dwRetriesLeft;
-					}
-					WRITE_MAIN_INSTRUCTION( t[PIN_INVALID_MAININSTRUCTIONS][getLanguage()]);
-					swprintf(wchErrorMessage, t[PIN_INVALID_CONTENT][getLanguage()], dwRetriesLeft);
-
-					if (externalPinInfo.uiState == US_PINENTRY && !bSilent)
-						hResult = TaskDialog(externalPinInfo.hwndParentWindow, 
-						NULL, 
-						t[WINDOW_TITLE][getLanguage()], 
-						wchMainInstruction, 
-						wchErrorMessage, 
-						TDCBF_RETRY_BUTTON  | TDCBF_CANCEL_BUTTON,
-						TD_ERROR_ICON,
-						&nButton);
-				}
-
-				if (SW1 == 0x69 && SW2 == 0x83) {
-					// PIN blocked
-					WRITE_MAIN_INSTRUCTION( t[PIN_BLOCKED_MAININSTRUCTIONS][getLanguage()]);
-					WRITE_ERROR_MESSAGE( t[PIN_BLOCKED_CONTENT][getLanguage()]);
-					if (externalPinInfo.uiState == US_PINENTRY && !bSilent)
-						hResult = TaskDialog(externalPinInfo.hwndParentWindow, 
-						NULL, 
-						t[WINDOW_TITLE][getLanguage()], 
-						wchMainInstruction, 
-						wchErrorMessage, 
-						TDCBF_OK_BUTTON,
-						TD_ERROR_ICON,
-						&nButton);
-					dwReturn = SCARD_W_CHV_BLOCKED;
-				}
-				bRetry = (nButton == IDRETRY);
-
-			}
-			else
-			{
-				LogTrace(LOGTYPE_INFO, WHERE, "Logged on...");
-			}
-		}
+	
 	}
 
 cleanup:
@@ -732,7 +548,8 @@ DWORD    PteidChangePIN
             DWORD       cbCurrentAuthenticator,
             PBYTE       pbNewAuthenticator,
             DWORD       cbNewAuthenticator,
-            PDWORD      pcAttemptsRemaining
+            PDWORD      pcAttemptsRemaining,
+			DWORD		     pin_id
          ) 
 {
    DWORD             dwReturn = 0;
@@ -941,7 +758,7 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
 
 		Sleep(iWaitApdu);
 		recvlen = sizeof(recvbuf);
-   dwReturn = SCardTransmit(pCardData->hScard, 
+        dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 
                             Cmd, 
                             uiCmdLg, 
@@ -996,123 +813,6 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
 
 cleanup:
    return (dwReturn);
-}
-
-/*@deprecated/unused */
-void IasSignatureHelper(PCARD_DATA pCardData)
-{
-  /* This is another magic incantation (probably RE'd from APDU captures)
-	needed for IAS signing with "unusual" hash lengths  */
-   DWORD                   dwReturn = 0;
-
-   SCARD_IO_REQUEST        ioSendPci = {1, sizeof(SCARD_IO_REQUEST)};
-   SCARD_IO_REQUEST        ioRecvPci = {1, sizeof(SCARD_IO_REQUEST)};
-
-   unsigned int            uiCmdLg = 0;
-   unsigned int		       i = 0;
-
-   unsigned char           recvbuf[1024];
-   unsigned long           recvlen = sizeof(recvbuf);
-
-   BYTE apdu1[] = {0x00, 0xA4, 0x04, 0x00, 0x60, 0x46, 0x32,0xFF, 0x00, 0x01, 0x02};
-   BYTE apdu2[] = {0x00, 0xA4, 0x03, 0x0C};
-   BYTE apdu3[] = {0x00, 0xA4, 0x09, 0x00, 0x2F, 0x00};	
-   BYTE apdu4[] = {0x00, 0xB0, 0x00, 0x00, 0x3E};
-   BYTE apdu5[] = {0x00, 0xA4, 0x09, 0x0C, 0x4F, 0x00};
-   BYTE apdu6[] = {0x00, 0xA4, 0x09, 0x00, 0x50, 0x32};
-   BYTE apdu7[] = {0x00, 0xB0, 0x00, 0x00, 0x2F};
-   BYTE apdu8[] = {0x84, 0x00, 0x00, 0x08}; //To be sent 3 times (?!!)
-   BYTE apdu9[] = {0x00, 0xA4, 0x03, 0x0C};
-   BYTE apdu10[] = {0x00, 0xA4, 0x09, 0x0C, 0x5F, 0x00};
-
-   uiCmdLg = sizeof(apdu1);
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            apdu1, 
-                            uiCmdLg, 
-                            &ioRecvPci, 
-                            recvbuf, 
-                            &recvlen);
-   uiCmdLg = sizeof(apdu2);
-   
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            apdu2, 
-                            uiCmdLg, 
-                            &ioRecvPci, 
-                            recvbuf, 
-                            &recvlen);
-	uiCmdLg = sizeof(apdu3);
-	dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            apdu3, 
-                            uiCmdLg, 
-                            &ioRecvPci, 
-                            recvbuf, 
-                            &recvlen);
-	uiCmdLg = sizeof(apdu4);
-	dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            apdu4, 
-                            uiCmdLg, 
-                            &ioRecvPci, 
-                            recvbuf, 
-                            &recvlen);
-	uiCmdLg = sizeof(apdu5);
-	dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            apdu5, 
-                            uiCmdLg, 
-                            &ioRecvPci, 
-                            recvbuf, 
-                            &recvlen);
-	uiCmdLg = sizeof(apdu6);
-	dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            apdu6, 
-                            uiCmdLg, 
-                            &ioRecvPci, 
-                            recvbuf, 
-                            &recvlen);
-	uiCmdLg = sizeof(apdu7);
-	dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            apdu7, 
-                            uiCmdLg, 
-                            &ioRecvPci, 
-                            recvbuf, 
-							&recvlen);
-	uiCmdLg = sizeof(apdu8);
-	while (i != 3)
-	{
-		dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            apdu8, 
-                            uiCmdLg, 
-                            &ioRecvPci, 
-                            recvbuf, 
-							&recvlen);
-
-		i++;
-	}
-	uiCmdLg = sizeof(apdu9);
-	dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            apdu9, 
-                            uiCmdLg, 
-                            &ioRecvPci, 
-                            recvbuf, 
-							&recvlen);
-	
-	uiCmdLg = sizeof(apdu10);
-	dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            apdu10, 
-                            uiCmdLg, 
-                            &ioRecvPci, 
-                            recvbuf, 
-							&recvlen);
-	
 }
 
 #undef WHERE
@@ -1337,7 +1037,6 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    SW1 = recvbuf[recvlen-2];
    SW2 = recvbuf[recvlen-1];
    
-
    if ( dwReturn != SCARD_S_SUCCESS )
    {
 	   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: CDS) errorcode: [0x%02X]", dwReturn);
@@ -1410,15 +1109,15 @@ DWORD PteidReadFile(PCARD_DATA  pCardData, DWORD dwOffset, DWORD *cbStream, PBYT
         Cmd[3] = (BYTE)(dwOffset + cbRead);
 
       cbPartRead = *cbStream - cbRead;
-        if(cbPartRead > PTEID_READ_BINARY_MAX_LEN)    /*if more than maximum length */
+      if(cbPartRead > PTEID_READ_BINARY_MAX_LEN)    /*if more than maximum length */
       {
          Cmd[4] = PTEID_READ_BINARY_MAX_LEN;        /* is requested, than read    */
       }
-        else                                         /* maximum length             */
+      else                                         /* maximum length             */
       {
-            Cmd[4] = (BYTE)(cbPartRead);
+         Cmd[4] = (BYTE)(cbPartRead);
       }
-		recvlen = sizeof(recvbuf);
+	  recvlen = sizeof(recvbuf);
       dwReturn = SCardTransmit(pCardData->hScard, 
                                &ioSendPci, 
                                Cmd, 
@@ -1658,8 +1357,8 @@ DWORD PteidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, P
                             &recvlen);
    SW1 = recvbuf[recvlen-2];
    SW2 = recvbuf[recvlen-1];
-   //PteidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
-	if (!checkStatusCode(WHERE" -> select Dir Root", dwReturn, SW1, SW2))
+   
+   if (!checkStatusCode(WHERE" -> select Dir Root", dwReturn, SW1, SW2))
 		CLEANUP(dwReturn);
 
 	Cmd[5] = 0x5F;
@@ -1868,9 +1567,51 @@ cleanup:
    return (dwReturn);
 }
 
+DWORD createVerifyCommandGemPC(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned int pin_ref) {
+	char padding = 0;
+    pVerifyCommand->bTimeOut = 30;
+    pVerifyCommand->bTimeOut2 = 30;
+    pVerifyCommand->bmFormatString = 0x82;
+	pVerifyCommand -> bmPINBlockString = 0x04;
+	pVerifyCommand -> bmPINLengthFormat = 0x00;
+	pVerifyCommand -> wPINMaxExtraDigit= 0x0408; /* Min Max */ //Code smell #1
+	
+	pVerifyCommand -> bEntryValidationCondition = 0x02;
+	/* validation key pressed */
+	pVerifyCommand -> bNumberMessage = 0x01;
+	 
+	pVerifyCommand -> wLangId = 0x0816;  //Code smell #2
+	pVerifyCommand -> bMsgIndex = 0x00;
+	(pVerifyCommand -> bTeoPrologue)[0] = 0x00;
+	pVerifyCommand -> bTeoPrologue[1] = 0x00;
+	pVerifyCommand -> bTeoPrologue[2] = 0x00;
+
+	pVerifyCommand->abData[0] = 0x00; // CLA
+    pVerifyCommand->abData[1] = 0x20; // INS Verify
+    pVerifyCommand->abData[2] = 0x00; // P1
+    pVerifyCommand->abData[3] = pin_ref; // P2
+    pVerifyCommand->abData[4] = 0x08; // Lc = 8 bytes in command data
+    pVerifyCommand->abData[5] = 0x20 ; // 
+	padding = Is_Gemsafe != 0 ? 0xFF: 0x2F;
+	
+    pVerifyCommand->abData[6] = padding; // Pin[1]
+    pVerifyCommand->abData[7] = padding; // Pin[2]
+    pVerifyCommand->abData[8] = padding; // Pin[3]
+    pVerifyCommand->abData[9] = padding; // Pin[4]
+    pVerifyCommand->abData[10] = padding; // Pin[5]
+    pVerifyCommand->abData[11] = padding; // Pin[6]
+    pVerifyCommand->abData[12] = padding; // Pin[7]
+
+    pVerifyCommand->ulDataLength = 13;
+
+	return 0;
+}
+
+
 #undef WHERE
 
-DWORD createVerifyCommand(PPIN_VERIFY_STRUCTURE pVerifyCommand) {
+DWORD createVerifyCommand(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned int pin_ref) {
+	char padding;
     pVerifyCommand->bTimeOut = 30;
     pVerifyCommand->bTimeOut2 = 30;
     pVerifyCommand->bmFormatString = 0x80 | 0x08 | 0x00 | 0x01;
@@ -1948,16 +1689,18 @@ DWORD createVerifyCommand(PPIN_VERIFY_STRUCTURE pVerifyCommand) {
     pVerifyCommand->abData[0] = 0x00; // CLA
     pVerifyCommand->abData[1] = 0x20; // INS Verify
     pVerifyCommand->abData[2] = 0x00; // P1
-    pVerifyCommand->abData[3] = 0x01; // P2
+    pVerifyCommand->abData[3] = pin_ref; // P2
     pVerifyCommand->abData[4] = 0x08; // Lc = 8 bytes in command data
     pVerifyCommand->abData[5] = 0x20 ; // 
-    pVerifyCommand->abData[6] = BELPIC_PAD_CHAR; // Pin[1]
-    pVerifyCommand->abData[7] = BELPIC_PAD_CHAR; // Pin[2]
-    pVerifyCommand->abData[8] = BELPIC_PAD_CHAR; // Pin[3]
-    pVerifyCommand->abData[9] = BELPIC_PAD_CHAR; // Pin[4]
-    pVerifyCommand->abData[10] = BELPIC_PAD_CHAR; // Pin[5]
-    pVerifyCommand->abData[11] = BELPIC_PAD_CHAR; // Pin[6]
-    pVerifyCommand->abData[12] = BELPIC_PAD_CHAR; // Pin[7]
+	padding = Is_Gemsafe != 0 ? 0xFF: 0x2F;
+	
+    pVerifyCommand->abData[6] = padding; // Pin[1]
+    pVerifyCommand->abData[7] = padding; // Pin[2]
+    pVerifyCommand->abData[8] = padding; // Pin[3]
+    pVerifyCommand->abData[9] = padding; // Pin[4]
+    pVerifyCommand->abData[10] = padding; // Pin[5]
+    pVerifyCommand->abData[11] = padding; // Pin[6]
+    pVerifyCommand->abData[12] = padding; // Pin[7]
 
     pVerifyCommand->ulDataLength = 13;
 
