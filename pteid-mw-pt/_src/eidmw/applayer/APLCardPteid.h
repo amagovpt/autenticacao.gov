@@ -23,12 +23,14 @@
 #define __APLCARDEID_H__
 
 #include <string>
+#include <set>
 #include "Export.h"
 #include "APLReader.h"
 #include "APLCertif.h"
 #include "APLCard.h"
 #include "APLDoc.h"
 #include "ByteArray.h"
+#include "../common/xmlUserDataEnum.h"
 
 namespace eIDMW
 {
@@ -46,6 +48,7 @@ class APL_EidFile_TokenInfo;
 class APL_CardFile_Certificate;
 
 class APL_EIdFullDoc;
+class APL_CCXML_Doc;
 class APL_DocEId;
 class APL_AddrEId;
 class APL_SodEid;
@@ -59,6 +62,8 @@ enum APL_AccessWarningLevel
 	APL_ACCESSWARNINGLEVEL_ACCEPTED=1,
 };
 
+class APL_CCXML_Doc;
+class APL_XmlUserRequestedInfo;
 /******************************************************************************//**
   * Class that represent a PTEID card
   *
@@ -107,6 +112,9 @@ public:
 	  * Return a pointer to the document FULL
 	  */
 	EIDMW_APL_API APL_EIdFullDoc& getFullDoc();
+
+	EIDMW_APL_API APL_CCXML_Doc& getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedInfo);
+
 
 	/**
 	  * Return a pointer to the document Address
@@ -198,6 +206,7 @@ private:
 	CByteArray *m_cardinfosign;
 
 	APL_EIdFullDoc *m_docfull;							/**< Pointer to the document FULL */
+	APL_CCXML_Doc *m_CCcustomDoc;						/**< Pointer to the custom document */
 	APL_DocEId *m_docid;								/**< Pointer to the document ID */
 	APL_AddrEId *m_address;								/**< Pointer to the document Address */
 	APL_SodEid *m_sod;								/**< Pointer to the document sod */
@@ -322,6 +331,61 @@ private:
 friend APL_EIdFullDoc& APL_EIDCard::getFullDoc();	/**< This method must access protected constructor */
 };
 
+class APL_XmlUserRequestedInfo;
+/******************************************************************************//**
+  * Class that represent the custom XML document on a PTEID card as requested
+  * To get APL_CCXML_Doc object, we have to ask it from APL_EIDCard
+  *********************************************************************************/
+class APL_CCXML_Doc : public APL_XMLDoc
+{
+public:
+	/**
+	  * Destructor
+	  */
+	EIDMW_APL_API virtual ~APL_CCXML_Doc();
+
+	EIDMW_APL_API virtual bool isAllowed();							/**< The document is allowed*/
+
+	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
+
+
+protected:
+	/**
+	  * Constructor
+	  *		Used only in APL_EIDCard::getXmlCCDoc()
+	  */
+	APL_CCXML_Doc(APL_EIDCard *card, APL_XmlUserRequestedInfo&  xmlUserRequestedInfo);
+
+private:
+	APL_CCXML_Doc(const APL_CCXML_Doc& doc);				/**< Copy not allowed - not implemented */
+	APL_CCXML_Doc &operator= (const APL_CCXML_Doc& doc);	/**< Copy not allowed - not implemented */
+	APL_EIDCard *m_card;									/**< Pointer to the card that construct this object*/
+	APL_XmlUserRequestedInfo *m_xmlUserRequestedInfo;		/**< Pointer to the data parameters to generate the xml*/
+	CByteArray getCSV();									/**< Build the CSV document - not implemented*/
+	CByteArray getTLV();									/**< Build the TLV document - not implemented*/
+friend APL_CCXML_Doc& APL_EIDCard::getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedInfo);	/**< This method must access protected constructor */
+};
+
+
+class APL_XmlUserRequestedInfo
+{
+public:
+	EIDMW_APL_API APL_XmlUserRequestedInfo();
+	EIDMW_APL_API ~APL_XmlUserRequestedInfo();
+	EIDMW_APL_API void add(XMLUserData xmlUData);
+
+protected:
+	bool contains(XMLUserData xmlUData);
+	void remove(XMLUserData xmlUData);
+	bool checkAndRemove(XMLUserData xmlUData);
+	bool isEmpty();
+friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader);
+
+private:
+	std::set<enum XMLUserData> *xmlSet;
+};
+
+
 /******************************************************************************//**
   * Class that represent the document ID on a PTEID card
   *
@@ -390,6 +454,7 @@ protected:
 	  *		Used only in APL_EIDCard::getID()
 	  */    
 	APL_DocEId(APL_EIDCard *card);
+	CByteArray getXML(bool bNoHeader, APL_XmlUserRequestedInfo &xmlUInfo);
 
 private:
 	APL_DocEId(const APL_DocEId& doc);				/**< Copy not allowed - not implemented */
@@ -398,8 +463,10 @@ private:
 	APL_EIDCard *m_card;							/**< Pointer to the card that construct this object*/
 	
 	std::string m_FirstName;						/**< Field FirstName1 follow by FirstName2 */
+	APL_XmlUserRequestedInfo *_xmlUInfo;
 
 friend APL_DocEId& APL_EIDCard::getID();	/**< This method must access protected constructor */
+friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader=false); /* this method accesses getxml(,) */
 };
 
 /******************************************************************************//**
@@ -450,6 +517,7 @@ protected:
 	  *		Used only in APL_EIDCard::getID()
 	  */
 	APL_AddrEId(APL_EIDCard *card);
+	CByteArray getXML(bool bNoHeader, APL_XmlUserRequestedInfo &xmlUInfo);
 
 private:
 	APL_AddrEId(const APL_AddrEId& doc);				/**< Copy not allowed - not implemented */
@@ -458,8 +526,10 @@ private:
 	APL_EIDCard *m_card;							/**< Pointer to the card that construct this object*/
 
 	//std::string m_FirstName;						/**< Field FirstName1 follow by FirstName2 */
+	APL_XmlUserRequestedInfo *_xmlUInfo;
 
 friend APL_AddrEId& APL_EIDCard::getAddr();	/**< This method must access protected constructor */
+friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader=false); /* this method accesses getxml(,) */
 };
 
 /******************************************************************************//**

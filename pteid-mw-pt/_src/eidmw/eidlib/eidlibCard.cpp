@@ -41,6 +41,7 @@
 #define INCLUDE_OBJECT_FULLDOC			6
 #define INCLUDE_OBJECT_CHALLENGE		7
 #define INCLUDE_OBJECT_RESPONSE			8
+#define INCLUDE_OBJECT_CUSTOMDOC		9
 
 #define INCLUDE_OBJECT_DOCSIS			11
 
@@ -638,6 +639,26 @@ PTEID_XMLDoc& PTEID_EIDCard::getDocument(PTEID_DocumentType type)
 	}
 }
 
+PTEID_CCXML_Doc& PTEID_EIDCard::getXmlCCDoc(PTEID_XmlUserRequestedInfo& userRequestedInfo)
+{
+	PTEID_CCXML_Doc *out = NULL;
+
+	BEGIN_TRY_CATCH
+		APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
+		out = dynamic_cast<PTEID_CCXML_Doc *>(getObject(INCLUDE_OBJECT_CUSTOMDOC));
+		if(!out){
+			out = new PTEID_CCXML_Doc(m_context,&pcard->getXmlCCDoc(*(userRequestedInfo.customXml)));
+			if(out)
+				m_objects[INCLUDE_OBJECT_CUSTOMDOC]=out;
+			else
+				throw PTEID_ExUnknown();
+		}
+	END_TRY_CATCH
+
+	return *out;
+}
+
+
 PTEID_EIdFullDoc& PTEID_EIDCard::getFullDoc()
 {
 	PTEID_EIdFullDoc *out = NULL;
@@ -1195,5 +1216,24 @@ PTEID_ForeignerCard::PTEID_ForeignerCard(const SDK_Context *context,APL_Card *im
 PTEID_ForeignerCard::~PTEID_ForeignerCard()
 {
 }
+
+/*****************************************************************************************
+----------------------------- PTEID_XmlUserRequestedInfo ---------------------------------
+*****************************************************************************************/
+PTEID_XmlUserRequestedInfo::PTEID_XmlUserRequestedInfo():PTEID_Object(NULL,NULL)
+{
+	customXml = new APL_XmlUserRequestedInfo();
+}
+
+PTEID_XmlUserRequestedInfo::~PTEID_XmlUserRequestedInfo()
+{
+	if (customXml)
+		delete customXml;
+}
+
+void PTEID_XmlUserRequestedInfo::add(XMLUserData xmlUData){
+	customXml->add(xmlUData);
+}
+
 
 }

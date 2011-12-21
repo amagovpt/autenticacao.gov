@@ -30,6 +30,8 @@
 #include "APLCardSIS.h"
 #include "APLCardPteid.h"
 
+#include <string.h>
+
 //UNIQUE INDEX FOR RETRIEVING OBJECT
 #define INCLUDE_OBJECT_SODEID_DATA	1
 #define INCLUDE_OBJECT_SODEID_HASH	2
@@ -351,6 +353,38 @@ PTEID_EIdFullDoc::PTEID_EIdFullDoc(const SDK_Context *context,APL_EIdFullDoc *im
 PTEID_EIdFullDoc::~PTEID_EIdFullDoc()
 {
 }
+
+
+/*****************************************************************************************
+---------------------------------------- PTEID_CCXML_Doc -------------------------------------------
+*****************************************************************************************/
+PTEID_CCXML_Doc::PTEID_CCXML_Doc(const SDK_Context *context,APL_CCXML_Doc *impl):PTEID_XMLDoc(context,impl)
+{
+	xmltemp = NULL;
+}
+
+PTEID_CCXML_Doc::~PTEID_CCXML_Doc(){
+	if (xmltemp)
+		delete xmltemp;
+}
+
+const char *PTEID_CCXML_Doc::getCCXML(){
+
+	CByteArray cArray;
+
+
+	BEGIN_TRY_CATCH
+
+	APL_CCXML_Doc *pimpl=static_cast<APL_CCXML_Doc *>(m_impl);
+	cArray = pimpl->getXML();
+	if (xmltemp)
+		delete xmltemp;
+	xmltemp = new string((char*)(cArray.GetBytes()),cArray.Size());
+	END_TRY_CATCH
+
+	return xmltemp->c_str();
+}
+
 
 /*****************************************************************************************
 ---------------------------------------- PTEID_CardVersionInfo --------------------------------------

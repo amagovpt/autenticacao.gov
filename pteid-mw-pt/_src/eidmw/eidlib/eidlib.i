@@ -29,12 +29,19 @@
 %{
 #include "eidlib.h"
 #include "eidlibException.h"
+#include "../common/xmlUserDataEnum.h"
 %}
 
 //Define to avoid swig to create definition for NOEXPORT_PTEIDSDK methods
 #define PTEIDSDK_API 
 #define NOEXPORT_PTEIDSDK SLASH(/)
 #define SLASH(s) /##s
+
+/***************************************************************************************
+***                            FILE : xmlUserDataEnum.h                              ***
+****************************************************************************************/
+
+%include "../common/xmlUserDataEnum.h"
 
 /***************************************************************************************
 ***                            FILE : eidErrors.h                                ***

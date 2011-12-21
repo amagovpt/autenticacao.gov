@@ -41,6 +41,7 @@ APL_AccessWarningLevel APL_EIDCard::m_lWarningLevel=APL_ACCESSWARNINGLEVEL_TO_AS
 APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader):APL_SmartCard(reader)
 {
 	m_docfull=NULL;
+	m_CCcustomDoc=NULL;
 	m_docid=NULL;
 	m_address=NULL;
 	m_sod=NULL;
@@ -70,6 +71,11 @@ APL_EIDCard::~APL_EIDCard()
 	{
 		delete m_docfull;
 		m_docfull=NULL;
+	}
+	if(m_CCcustomDoc)
+	{
+		delete m_CCcustomDoc;
+		m_CCcustomDoc=NULL;
 	}
 	if(m_docid)
 	{
@@ -968,6 +974,21 @@ APL_EIdFullDoc& APL_EIDCard::getFullDoc()
 	return *m_docfull;
 }
 
+
+APL_CCXML_Doc& APL_EIDCard::getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedInfo){
+	if(!m_CCcustomDoc)
+		{
+			CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
+			if(!m_CCcustomDoc)
+			{
+				m_CCcustomDoc=new APL_CCXML_Doc(this, userRequestedInfo);
+			}
+		}
+
+		return *m_CCcustomDoc;
+}
+
+
 APL_DocEId& APL_EIDCard::getID()
 {
 	if(!m_docid)
@@ -1442,6 +1463,135 @@ CByteArray APL_EIdFullDoc::getTLV()
 }
 
 /*****************************************************************************************
+---------------------------------------- APL_CCXML_Doc -------------------------------------------
+*****************************************************************************************/
+APL_CCXML_Doc::APL_CCXML_Doc(APL_EIDCard *card, APL_XmlUserRequestedInfo&  xmlUserRequestedInfo)
+{
+	m_card=card;
+	m_xmlUserRequestedInfo = &xmlUserRequestedInfo;
+}
+
+APL_CCXML_Doc::~APL_CCXML_Doc()
+{
+}
+
+bool APL_CCXML_Doc::isAllowed()
+{
+	try
+	{
+		if(m_card->getFileID()->getStatus(true)==CARDFILESTATUS_OK
+			//&& m_card->getFileAddress()->getStatus(true)==CARDFILESTATUS_OK
+			&& m_card->getFileSod()->getStatus(true)==CARDFILESTATUS_OK)
+			return true;
+	}
+	catch(CMWException& e)
+	{
+		if (e.GetError() == EIDMW_ERR_NOT_ALLOW_BY_USER)
+			return false;
+		else
+			throw;
+	}
+	return false;
+}
+
+CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
+{
+	CByteArray xml;
+
+	if(!bNoHeader)
+		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+
+	if (!m_xmlUserRequestedInfo->isEmpty()){
+		xml+="<ccpt>\n";
+		xml+=m_card->getID().getXML(true,*m_xmlUserRequestedInfo);
+		xml+=m_card->getAddr().getXML(true, *m_xmlUserRequestedInfo);
+		//xml+=m_card->getPersonalData().getXML(true, *m_xmlUserRequestedInfo);
+		xml+="</ccpt>\n";
+	}
+	if (m_xmlUserRequestedInfo->contains(XML_NIC))
+		cout << "NIC ENCONTRADO!!!!!!!" << endl;
+
+	/*xml+=m_card->getSod().getXML(true);
+	xml+=m_card->getDocInfo().getXML(true);
+
+	CByteArray baFileB64;
+	xml+="	<challenge_response>\n";
+	if(m_cryptoFwk->b64Encode(m_card->getChallenge(),baFileB64))
+	{
+		xml+="	<challenge encoding=\"base64\">\n";
+		xml+=		baFileB64;
+		xml+="	</challenge>\n";
+	}
+	if(m_cryptoFwk->b64Encode(m_card->getChallengeResponse(),baFileB64))
+	{
+		xml+="	<response encoding=\"base64\">\n";
+		xml+=		baFileB64;
+		xml+="	</response>\n";
+	}
+	xml+="	</challenge_response>\n";
+
+	xml+="	<cryptographic>\n";
+	xml+=m_card->getCertificates()->getXML(true);
+	xml+=m_card->getPins()->getXML(true);
+	xml+="	</cryptographic>\n";
+	xml+="</pteid_card>\n";
+*/
+	return xml;
+}
+
+CByteArray APL_CCXML_Doc::getCSV(){
+}
+
+CByteArray APL_CCXML_Doc::getTLV(){
+}
+
+
+/*****************************************************************************************
+-------------------------------- APL_XmlUserRequestedInfo ---------------------------------------
+*****************************************************************************************/
+APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo()
+{
+	xmlSet = new set<enum XMLUserData>;
+}
+
+APL_XmlUserRequestedInfo::~APL_XmlUserRequestedInfo()
+{
+	if (xmlSet)
+		delete xmlSet;
+}
+
+void APL_XmlUserRequestedInfo::add(XMLUserData xmlUData)
+{
+	xmlSet->insert(xmlUData);
+}
+
+bool APL_XmlUserRequestedInfo::contains(XMLUserData xmlUData)
+{
+	return (xmlSet->find(xmlUData) != xmlSet->end());
+}
+
+void APL_XmlUserRequestedInfo::remove(XMLUserData xmlUData)
+{
+	xmlSet->erase(xmlUData);
+}
+
+bool APL_XmlUserRequestedInfo::checkAndRemove(XMLUserData xmlUData)
+{
+	bool contains;
+
+	contains = (xmlSet->find(xmlUData) != xmlSet->end());
+	if (!contains)
+		xmlSet->erase(xmlUData);
+
+	return contains;
+}
+
+bool APL_XmlUserRequestedInfo::isEmpty(){
+	return xmlSet->empty();
+}
+
+
+/*****************************************************************************************
 ---------------------------------------- APL_DocEId ---------------------------------------------
 *****************************************************************************************/
 APL_DocEId::APL_DocEId(APL_EIDCard *card)
@@ -1449,6 +1599,8 @@ APL_DocEId::APL_DocEId(APL_EIDCard *card)
 	m_card=card;
 
 	m_FirstName.clear();
+
+	_xmlUInfo = NULL;
 }
 
 APL_DocEId::~APL_DocEId()
@@ -1473,58 +1625,27 @@ bool APL_DocEId::isAllowed()
 	return false;
 }
 
+CByteArray APL_DocEId::getXML(bool bNoHeader, APL_XmlUserRequestedInfo &xmlUInfo){
+
+	CByteArray ca;
+	_xmlUInfo = &xmlUInfo;
+	ca = getXML(bNoHeader);
+	_xmlUInfo = NULL;
+
+	return ca;
+}
+
 CByteArray APL_DocEId::getXML(bool bNoHeader)
 {
-/* MISSING Fields from PTeid
-	<biographic>
-		<document>
-			<version></version>
-			<type></type>
-			<id>
-				<name></name>
-				<surname></surname>
-				<gender></gender>
-				<date_of_birth></date_of_birth>
-				<location_of_birth></location_of_birth>
-				<nobility></nobility>
-				<nationality></nationality>
-				<national_nr></national_nr>
-				<special_organization></special_organization>
-				<member_of_family></member_of_family>
-				<special_status></special_status>
-			</id>
-			<card>
-				<logical_nr></logical_nr>
-				<chip_nr></chip_nr>
-				<validity>
-					<date_begin></date_begin>
-					<date_end></date_end>
-				</validity>
-				<issuing_municipality></issuing_municipality>
-			</card>
-		</document>
-		<address>
-			<version></version>
-			<street></street>
-			<zip></zip>
-			<municipality></municipality>
-			<country></country>
-		</address>
-		<files>
-			<file_id encoding="base64">
-			</file_id>
-			<file_id_sign encoding="base64">
-			</file_id_sign>
-			<file_address encoding="base64">
-			</file_address>
-			<file_address_sign encoding="base64">
-			</file_address_sign>
-		</files>
-	</biographic>
-*/
-
 	CByteArray xml;
+	//APL_CryptoFwk *crypto = new APL_CryptoFwkPteid();
 
+	//crypto->b64Encode()
+	xml+="<photo>\n";
+	//xml+=crypto->getPhoto()
+	xml+="</photo>\n";
+
+	/*
 	if(!bNoHeader)
 		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
@@ -1602,7 +1723,7 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	xml+="	 </card>\n";
 	xml+=" </document>\n";
 	xml+="	<files>\n";
-
+/* MARTINHO TEMPORARIO
 	CByteArray baFileB64;
 	if(m_cryptoFwk->b64Encode(m_card->getFileID()->getData(),baFileB64))
 	{
@@ -1618,7 +1739,7 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	}
 	xml+="	</files>\n";
 	xml+="</biographic>\n";
-
+*/
 	return xml;
 }
 
@@ -1915,6 +2036,16 @@ bool APL_AddrEId::isAllowed()
 	return false;
 }
 
+CByteArray APL_AddrEId::getXML(bool bNoHeader, APL_XmlUserRequestedInfo &xmlUInfo){
+	CByteArray ca;
+
+	_xmlUInfo = &xmlUInfo;
+	ca = getXML(bNoHeader);
+	_xmlUInfo = NULL;
+
+	return ca;
+}
+
 CByteArray APL_AddrEId::getXML(bool bNoHeader)
 {
 /* MISSING Fields from PTeid
@@ -1967,9 +2098,10 @@ CByteArray APL_AddrEId::getXML(bool bNoHeader)
 
 	CByteArray xml;
 
+	xml+="MORADA morada MORADA";
 	if(!bNoHeader)
 		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-
+/*
 	xml+="<biographic>\n";
 	xml+=" <address>\n";
 	xml+=" 	<version>";
@@ -2002,7 +2134,7 @@ CByteArray APL_AddrEId::getXML(bool bNoHeader)
 	}
 	xml+="	</files>\n";
 	xml+="</biographic>\n";
-
+*/
 	return xml;
 }
 
