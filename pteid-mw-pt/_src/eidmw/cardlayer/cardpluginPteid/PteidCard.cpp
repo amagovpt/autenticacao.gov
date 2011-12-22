@@ -715,7 +715,7 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
 CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
     const CByteArray & oData, const tPin *pPin)
 {
-    printf("++++ Pteid12\n");
+    // printf("++++ Pteid12\n");
     CAutoLock autolock(this);
 
     m_ucCLA = 0x00;
@@ -733,22 +733,11 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
     SetSecurityEnv(key, algo, oData.Size());
 
     CByteArray oData1;
-    oData1.Append(0x90);
+   
+	oData1.Append(0x90); //SHA-1 Hash as Input
+	oData1.Append(oData.Size());
     
-    if (oData.Size() == 36) {
-	//Autenticacao
-    	cout << "Auth" << endl;
-		oData1.Append(0x24);
-    } else if (oData.Size() == 35) {
-    	cout << "Signature" << endl;
-		oData1.Append(0x23);
-    } else {
-    	cout << "EXCEPTION" << endl;
-    }
-
-
     oData1.Append(oData);
-    cout << "Size: " << oData.Size() << endl;
 
     CByteArray oResp, oResp1;
 
@@ -764,7 +753,7 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
     }
 
     unsigned long ulSW12 = getSW12(oResp);
-    cout << "Resp oResp PSO is: " << hex << ulSW12 << dec << endl;
+    MWLOG(LEV_INFO, MOD_CAL, L"Resp oResp PSO is: 0x%2X", ulSW12);
     if (ulSW12 != 0x9000)
     	throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
 	
