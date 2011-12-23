@@ -690,14 +690,7 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
     	oDataias.Append(0x40);
     	oDataias.Append(0x84);
     	oDataias.Append(0x01);
-    	if (ulInputLen == 36) {
-    		oDataias.Append(0x01);
-    	} else {
-		/* Changed back from 0x82 to permit signing data with
-		 * length different than 36.
-		 */
-    		oDataias.Append(0x01);
-    	}
+    	oDataias.Append(0x01);
     	oDataias.Append(0x80);
     	oDataias.Append(0x01);
     	oDataias.Append(0x02);
