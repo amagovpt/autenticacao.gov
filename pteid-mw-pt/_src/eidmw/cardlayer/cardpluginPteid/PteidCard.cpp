@@ -721,14 +721,14 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
 
     // Pretty unique for smart cards: first MSE SET, then verify PIN
     // (needed for the nonrep key/pin, but also usable for the auth key/pin)
-    /*if (pPin != NULL)
+    if (pPin != NULL)
     {
         unsigned long ulRemaining = 0;
         bool bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
         if (!bOK)
 			throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
     }
-	*/
+	
 
     SetSecurityEnv(key, algo, oData.Size());
 
