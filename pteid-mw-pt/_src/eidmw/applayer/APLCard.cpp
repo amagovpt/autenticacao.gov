@@ -126,7 +126,7 @@ CByteArray APL_Card::Sign(const CByteArray & oData)
 	oHash->Update(oData);*/
 
 	BEGIN_CAL_OPERATION(m_reader)
-	out = m_reader->getCalReader()->Sign(m_reader->getCalReader()->GetPrivKeyByID(0x45), SIGN_ALGO_SHA1_RSA_PKCS, oData);
+	out = m_reader->getCalReader()->Sign(m_reader->getCalReader()->GetPrivKeyByID(0x45), SIGN_ALGO_RSA_PKCS, oData);
 	END_CAL_OPERATION(m_reader)
 
 	return out;

@@ -32,7 +32,7 @@ static const tFileInfo DEFAULT_FILE_INFO = {-1, -1, -1};
 static const tFileInfo PREFS_FILE_INFO_V1 = {-1, -1, 1};
 static const tFileInfo PREFS_FILE_INFO_V2 = {-1, -1, 0x85};
 
-unsigned long ulVersion; 
+unsigned long ulVersion;	
 
 // If we want to 'hardcode' this plugin internally in the CAL, this function
 // can't be present because it's the same for all plugins
@@ -673,13 +673,12 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
     m_ucCLA = 0x00;
 
     if (m_AppletVersion == 1) {
-    	oDatagem.Append(0x80);
-    	oDatagem.Append(ucAlgo);
-    	oDatagem.Append(0x02);
     	oDatagem.Append(0x84);
     	oDatagem.Append(0x01);
     	oDatagem.Append((unsigned char) key.ulKeyRef);
-
+		oDatagem.Append(0x80);
+		oDatagem.Append(0x01);
+    	oDatagem.Append(ucAlgo);
     	oResp = SendAPDU(0x22, 0x41, 0xB6, oDatagem);
     } else {
 
@@ -722,13 +721,14 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
 
     // Pretty unique for smart cards: first MSE SET, then verify PIN
     // (needed for the nonrep key/pin, but also usable for the auth key/pin)
-    if (pPin != NULL)
+    /*if (pPin != NULL)
     {
         unsigned long ulRemaining = 0;
         bool bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
         if (!bOK)
 			throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
     }
+	*/
 
     SetSecurityEnv(key, algo, oData.Size());
 
