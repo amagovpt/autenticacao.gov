@@ -45,7 +45,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release/FreeImage.tlb"
+				TypeLibraryName=".\Release/FreeImagePTEiD.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -55,12 +55,12 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="Source;Source\ZLib;Source\DeprecationManager;Source\OpenEXR\Half;Source\OpenEXR\Iex;Source\OpenEXR\IlmImf;Source\OpenEXR\Imath;Source\OpenEXR\IlmThread"
+				AdditionalIncludeDirectories="Source;Source\DeprecationManager"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;OPJ_STATIC;FREEIMAGE_EXPORTS;_CRT_SECURE_NO_DEPRECATE;LIBRAW_NODLL"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="false"
-				PrecompiledHeaderFile=".\Release/FreeImage.pch"
+				PrecompiledHeaderFile=".\Release/FreeImagePTEiD.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -82,11 +82,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Release/FreeImage.dll"
+				OutputFile=".\Release/FreeImagePTEiD.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\Release/FreeImage.pdb"
-				ImportLibrary=".\Release/FreeImage.lib"
+				ProgramDatabaseFile=".\Release/FreeImagePTEiD.pdb"
+				ImportLibrary=".\Release/FreeImagePTEiD.lib"
 				TargetMachine="1"
 				Profile="true"
 			/>
@@ -113,7 +113,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy Release\FreeImage.dll Dist&#x0D;&#x0A;copy Release\FreeImage.lib Dist&#x0D;&#x0A;copy Source\FreeImagePTEiD.h Dist&#x0D;&#x0A;"
+				CommandLine="copy Release\FreeImagePTEiD.dll Dist&#x0D;&#x0A;copy Release\FreeImagePTEiD.lib Dist&#x0D;&#x0A;copy Source\FreeImagePTEiD.h Dist&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -144,18 +144,18 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Debug/FreeImage.tlb"
+				TypeLibraryName=".\Debug/FreeImagePTEiD.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="Source;Source\ZLib;Source\DeprecationManager;Source\OpenEXR\Half;Source\OpenEXR\Iex;Source\OpenEXR\IlmImf;Source\OpenEXR\Imath;Source\OpenEXR\IlmThread"
+				AdditionalIncludeDirectories="Source;Source\DeprecationManager"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;OPJ_STATIC;FREEIMAGE_EXPORTS;_CRT_SECURE_NO_DEPRECATE;LIBRAW_NODLL"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				PrecompiledHeaderFile=".\Debug/FreeImage.pch"
+				PrecompiledHeaderFile=".\Debug/FreeImagePTEiD.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -178,12 +178,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="Debug/FreeImaged.dll"
+				OutputFile="Debug/FreeImagePTEiDd.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/FreeImaged.pdb"
-				ImportLibrary=".\Debug/FreeImaged.lib"
+				ProgramDatabaseFile=".\Debug/FreeImagePTEiDd.pdb"
+				ImportLibrary=".\Debug/FreeImagePTEiDd.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -209,7 +209,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy Debug\FreeImaged.dll Dist&#x0D;&#x0A;copy Debug\FreeImaged.lib Dist&#x0D;&#x0A;copy Source\FreeImagePTEiD.h Dist&#x0D;&#x0A;"
+				CommandLine="copy Debug\FreeImagePTEiDd.dll Dist&#x0D;&#x0A;copy Debug\FreeImagePTEiDd.lib Dist&#x0D;&#x0A;copy Source\FreeImagePTEiD.h Dist&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -240,7 +240,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="3"
-				TypeLibraryName=".\Release/FreeImage.tlb"
+				TypeLibraryName=".\Release/FreeImagePTEiD.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -250,12 +250,12 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="Source;Source\ZLib;Source\DeprecationManager;Source\OpenEXR\Half;Source\OpenEXR\Iex;Source\OpenEXR\IlmImf;Source\OpenEXR\Imath;Source\OpenEXR\IlmThread"
+				AdditionalIncludeDirectories="Source;Source\DeprecationManager"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;OPJ_STATIC;FREEIMAGE_EXPORTS;_CRT_SECURE_NO_DEPRECATE;LIBRAW_NODLL"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="false"
-				PrecompiledHeaderFile=".\Release/FreeImage.pch"
+				PrecompiledHeaderFile=".\Release/FreeImagePTEiD.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -277,11 +277,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Release/FreeImage.dll"
+				OutputFile=".\Release/FreeImagePTEiD.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\Release/FreeImage.pdb"
-				ImportLibrary=".\Release/FreeImage.lib"
+				ProgramDatabaseFile=".\Release/FreeImagePTEiD.pdb"
+				ImportLibrary=".\Release/FreeImagePTEiD.lib"
 				TargetMachine="17"
 				Profile="true"
 			/>
@@ -308,7 +308,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy Release\FreeImage.dll Dist&#x0D;&#x0A;copy Release\FreeImage.lib Dist&#x0D;&#x0A;copy Source\FreeImagePTEiD.h Dist&#x0D;&#x0A;"
+				CommandLine="copy Release\FreeImagePTEiD.dll Dist&#x0D;&#x0A;copy Release\FreeImagePTEiD.lib Dist&#x0D;&#x0A;copy Source\FreeImagePTEiD.h Dist&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -339,18 +339,18 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="3"
-				TypeLibraryName=".\Debug/FreeImage.tlb"
+				TypeLibraryName=".\Debug/FreeImagePTEiD.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="Source;Source\ZLib;Source\DeprecationManager;Source\OpenEXR\Half;Source\OpenEXR\Iex;Source\OpenEXR\IlmImf;Source\OpenEXR\Imath;Source\OpenEXR\IlmThread"
+				AdditionalIncludeDirectories="Source;Source\DeprecationManager"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;OPJ_STATIC;FREEIMAGE_EXPORTS;_CRT_SECURE_NO_DEPRECATE;LIBRAW_NODLL"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				PrecompiledHeaderFile=".\Debug/FreeImage.pch"
+				PrecompiledHeaderFile=".\Debug/FreeImagePTEiD.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -373,12 +373,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="Debug/FreeImaged.dll"
+				OutputFile="Debug/FreeImagePTEiDd.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/FreeImaged.pdb"
-				ImportLibrary=".\Debug/FreeImaged.lib"
+				ProgramDatabaseFile=".\Debug/FreeImagePTEiDd.pdb"
+				ImportLibrary=".\Debug/FreeImagePTEiDd.lib"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -404,7 +404,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy Debug\FreeImaged.dll Dist&#x0D;&#x0A;copy Debug\FreeImaged.lib Dist&#x0D;&#x0A;copy Source\FreeImagePTEiD.h Dist&#x0D;&#x0A;"
+				CommandLine="copy Debug\FreeImagePTEiDd.dll Dist&#x0D;&#x0A;copy Debug\FreeImagePTEiDd.lib Dist&#x0D;&#x0A;copy Source\FreeImagePTEiD.h Dist&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -463,42 +463,6 @@
 					>
 				</File>
 				<File
-					RelativePath="Source\FreeImage\PluginBMP.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginCUT.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginDDS.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\FreeImage\PluginEXR.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginG3.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginGIF.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginHDR.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginICO.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginIFF.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\Source\FreeImage\PluginJ2K.cpp"
 					>
 				</File>
@@ -508,82 +472,6 @@
 				</File>
 				<File
 					RelativePath="Source\FreeImage\PluginJPEG.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginKOALA.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginMNG.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginPCD.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginPCX.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\FreeImage\PluginPFM.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\FreeImage\PluginPICT.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginPNG.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginPNM.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginPSD.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginRAS.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\FreeImage\PluginRAW.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginSGI.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginTARGA.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginTIFF.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginWBMP.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginXBM.cpp"
-					>
-				</File>
-				<File
-					RelativePath="Source\FreeImage\PluginXPM.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\FreeImage\PSDParser.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\FreeImage\TIFFLogLuv.cpp"
 					>
 				</File>
 			</Filter>
@@ -698,10 +586,6 @@
 					RelativePath="Source\FreeImage\MultiPage.cpp"
 					>
 				</File>
-				<File
-					RelativePath="Source\FreeImage\ZLibInterface.cpp"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Metadata"
@@ -766,10 +650,6 @@
 			</File>
 			<File
 				RelativePath="Source\Plugin.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\FreeImage\PSDParser.h"
 				>
 			</File>
 			<File
