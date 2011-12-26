@@ -532,10 +532,6 @@
 					RelativePath="..\Metadata\TagLib.cpp"
 					>
 				</File>
-				<File
-					RelativePath="..\Metadata\XTIFF.cpp"
-					>
-				</File>
 			</Filter>
 		</Filter>
 		<Filter
