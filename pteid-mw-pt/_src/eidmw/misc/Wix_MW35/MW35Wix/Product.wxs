@@ -179,8 +179,8 @@
     <DirectoryRef Id="CERTSDIR">
       <Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AC6}">
 	<File Id="CartaodeCidadao001.der" Name="CartaodeCidadao001.der" KeyPath="yes" Source="..\..\certs\CartaodeCidadao001.der" />
-	<File Id="ECRaizEstado_novo_assinado_GTE.der" Name="ECRaizEstado_novo_assinado_GTE.der" KeyPath="yes" Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" />
-	<File Id="GTEGlobalRoot.der" Name="GTEGlobalRoot.der" KeyPath="yes" Source="..\..\certs\GTEGlobalRoot.der" />
+	<File Id="ECRaizEstado_novo_assinado_GTE.der" Name="ECRaizEstado_novo_assinado_GTE.der" KeyPath="no" Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" />
+	<File Id="GTEGlobalRoot.der" Name="GTEGlobalRoot.der" KeyPath="no" Source="..\..\certs\GTEGlobalRoot.der" />
       </Component>
     </DirectoryRef>
 
