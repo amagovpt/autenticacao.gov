@@ -18,6 +18,8 @@
 
 **************************************************************************** */
 
+#include <time.h>
+
 #include "APLCertif.h"
 #include "APLConfig.h"
 #include "CardFile.h"
@@ -1588,18 +1590,36 @@ APL_Certifs *APL_Certif::getCertificates()
 	return m_store;
 }
 
-std::string APL_Certif::x509TimeConversion (ASN1_TIME *time)
+std::string APL_Certif::x509TimeConversion (ASN1_TIME *atime)
 {
-	char *data;
-	int length;
+    struct tm r;
+    int cnt;
+    time_t res;
+    char to_buf[256];
+    unsigned buf_size = sizeof(to_buf);
 
-	BIO *bio = BIO_new(BIO_s_mem());
-	ASN1_TIME_print(bio, time);
-	length = BIO_get_mem_data(bio, &data);
-	std::string timeconverted(data, length);
-	BIO_free(bio);
-
-	return timeconverted;
+    ASN1_GENERALIZEDTIME* agtime;
+        
+    agtime = ASN1_TIME_to_generalizedtime(atime, NULL);
+        
+    memset(&r, '\0', sizeof(struct tm));
+    cnt = sscanf((char*)agtime->data, "%04d%02d%02d",
+		 &r.tm_year, &r.tm_mon, &r.tm_mday);
+    ASN1_TIME_free(agtime);
+    
+    r.tm_mon--;
+    r.tm_year -= 1900;
+  
+    res = mktime(&r);
+    if ((time_t)-1 != res) {
+	struct tm ltm;
+	res -= timezone;
+	localtime_r(&res, &ltm);
+	// Use the ISO 8601 timestamp format
+	strftime(to_buf, buf_size, "%d/%m/%Y", &ltm);
+	return(to_buf);
+    }
+    return("Date not available");
 }
 
 X509 *APL_Certif::ExternalCert(int certnr)
@@ -1705,7 +1725,7 @@ std::string APL_Certif::ExternalCertNotBefore(int certnr)
 	cert = ExternalCert(certnr);
 
 	result = x509TimeConversion(X509_get_notBefore(cert));
-
+	
 	return result;
 }
 
