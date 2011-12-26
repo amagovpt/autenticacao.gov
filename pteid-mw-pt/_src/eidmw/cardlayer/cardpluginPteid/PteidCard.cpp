@@ -648,37 +648,15 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
     unsigned char ucAlgo;
     CByteArray oResp;
 
-    switch (algo)
-    {
-    case SIGN_ALGO_RSA_PKCS:
-    	//Right ALGO
-    	ucAlgo = 0x01;
-	break;
-    case SIGN_ALGO_SHA1_RSA_PKCS: ucAlgo = 0x02; break;
-    case SIGN_ALGO_MD5_RSA_PKCS: ucAlgo = 0x04; break;
-    case SIGN_ALGO_SHA1_RSA_PSS:
-        if (m_ucAppletVersion < 0x20)
-        {
-            MWLOG(LEV_WARN, MOD_CAL, L"MSE SET: PSS not supported on V1 cards");
-	    cout << "MSE SET: PSS not supported on V1 cards" << endl;
-            throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
-        }
-        ucAlgo = 0x08;
-        break;
-    default:
-	cout << "EIDMW_ERR_ALGO_BAD" << endl;
-        throw CMWEXCEPTION(EIDMW_ERR_ALGO_BAD);
-    }
-
     m_ucCLA = 0x00;
 
     if (m_AppletVersion == 1) {
+	oDatagem.Append(0x80);
+	oDatagem.Append(0x01);
+    	oDatagem.Append(0x02); //Algorithm: RSA with PKCS#1 Padding
     	oDatagem.Append(0x84);
     	oDatagem.Append(0x01);
     	oDatagem.Append((unsigned char) key.ulKeyRef);
-		oDatagem.Append(0x80);
-		oDatagem.Append(0x01);
-    	oDatagem.Append(ucAlgo);
     	oResp = SendAPDU(0x22, 0x41, 0xB6, oDatagem);
     } else {
 
