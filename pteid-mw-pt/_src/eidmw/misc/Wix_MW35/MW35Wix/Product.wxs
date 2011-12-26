@@ -25,7 +25,7 @@
            UpgradeCode="$(var.UpgradeCode)">
 
     <Package Id="$(var.PackageCode)"
-             InstallerVersion="200"
+             InstallerVersion="300"
              Keywords="Portugal e-ID Middleware Installer"
              Platform="x86"
              Manufacturer="Portuguese Government"
@@ -161,7 +161,7 @@
       </Directory>
 
       
-      <Merge Id="VCRT" SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC80_CRT_x86.msm" Language="0" DiskId="1" />
+      <Merge Id="VCRT"  SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC80_CRT_x86.msm" Language="0" DiskId="1" />
       <Merge Id="VCRT_POLICY" SourceFile="$(var.PTEID_DIR_MSM)\policy_8_0_Microsoft_VC80_CRT_x86.msm" Language="0" DiskId="1" />
 
     </Directory>
@@ -418,12 +418,7 @@
         <File Id="pteidpkcs11register.html" Name="pteid-pkcs11-register.html" KeyPath="yes" Source="..\..\..\misc\pteid\pteid-pkcs11-register.html" />
         <File Id="pteidpkcs11unregister.html" Name="pteid-pkcs11-unregister.html" KeyPath="no" Source="..\..\..\misc\pteid\pteid-pkcs11-unregister.html" />
       </Component>
-   -->   
-      <Component Id="BWCompatibilityJava_Jar" Guid="{9431FC24-8C6B-46FE-A2C2-8C8CD4A50A3D}" SharedDllRefCount="yes">
-        <File Id="pteidlib.jar" Name="pteidlib.jar" KeyPath="yes" Source="..\..\..\misc\bw_compatibility\pteidlib.jar" />
-        <File Id="eidlib.jar" Name="eidlib.jar" KeyPath="no" Source="..\..\..\misc\bw_compatibility\eidlib.jar" />
-        <File Id="PTEID_old.html" Name="PTEID_old.html" KeyPath="no" Source="..\..\..\misc\bw_compatibility\PTEID_old.html" />
-      </Component>
+   -->
       
     </DirectoryRef>
 
@@ -478,12 +473,14 @@
         <File Id="pteidpkcs11.dll" Name="pteidpkcs11.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteidpkcs11.dll" />
         <File Id="PortugalIdentityCardPKCS11.dll" Name="Portugal Identity Card PKCS11.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\Portugal Identity Card PKCS11.dll" />
       </Component>
-
+      
+<!--
       <Component Id="BWCompatibility" Guid="{AFE2F946-0FD9-4FF4-917E-1E0970E8FCB7}" SharedDllRefCount="yes">
         <File Id="pteidwinscard.dll" Name="pteidwinscard.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidwinscard.dll" />
         <File Id="pteidgui.dll" Name="pteidgui.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidgui.dll" />
         <File Id="pteidlibopensc.dll" Name="pteidlibopensc.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidlibopensc.dll" />
       </Component>
+ -->
       
 	  <!--
       <Component Id="BWCompatibilityQt" Guid="{92FDC305-F375-4a66-9F22-9CBDEF1B0BEB}" SharedDllRefCount="yes">
@@ -491,82 +488,14 @@
       </Component>
 	  -->
 	  
-
-      <Component Id="BWCompatibilityActiveX" Guid="{FE012727-F90E-4A4A-BC61-F1E93F0C82EB}">
-        <File Id="pteidlibaxctrl.dll" Name="pteidlibaxctrl.dll" KeyPath="yes" Source="..\..\..\misc\bw_compatibility\pteidlibaxctrl.dll">
-          <Class Id="{28310B8B-0774-4483-85AF-4966EC52D8BC}" Context="InprocServer32" Description="Certif Class" ThreadingModel="apartment">
-            <ProgId Id="EIDLibCtrl.Certif.1" Description="Certif Class">
-              <ProgId Id="EIDLibCtrl.Certif" Description="Certif Class" />
-            </ProgId>
-          </Class>
-          <Class Id="{4CBC8AEE-7684-492E-8AA5-505943987B53}" Context="InprocServer32" Description="CertifCheck Class" ThreadingModel="apartment">
-            <ProgId Id="EIDLibCtrl.CertifCheck.1" Description="CertifCheck Class">
-              <ProgId Id="EIDLibCtrl.CertifCheck" Description="CertifCheck Class" />
-            </ProgId>
-          </Class>
-          <Class Id="{8923F2AE-B06E-430B-93F6-96FE1BDEEFF8}" Context="InprocServer32" Description="RetStatus Class" ThreadingModel="apartment">
-            <ProgId Id="EIDLibCtrl.RetStatus.1" Description="RetStatus Class">
-              <ProgId Id="EIDLibCtrl.RetStatus" Description="RetStatus Class" />
-            </ProgId>
-          </Class>
-          <Class Id="{BB91CEDA-82D5-4889-8732-3DB804619852}" Context="InprocServer32" Description="MapCollection Class" ThreadingModel="apartment">
-            <ProgId Id="EIDLibCtrl.MapCollection.1" Description="MapCollection Class">
-              <ProgId Id="EIDLibCtrl.MapCollection" Description="MapCollection Class" />
-            </ProgId>
-          </Class>
-          <TypeLib Id="{7705C6CB-5A66-4F92-B296-2B34ED21745C}" Description="pteidlibaxctrl 1.1 Type Library" HelpDirectory="SystemFolder" Language="0" MajorVersion="1" MinorVersion="0">
-            <Class Id="{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}" Context="InprocServer32" Description="EIDlib Class" ThreadingModel="apartment" Version="1.0">
-              <ProgId Id="EIDLibCtrl.EIDlib.1" Description="EIDlib Class">
-                <ProgId Id="EIDLibCtrl.EIDlib" Description="EIDlib Class" />
-              </ProgId>
-            </Class>
-            <Class Id="{79EAFF90-57D8-4A58-BC0C-0C5F7F60E65E}" Context="InprocServer32" Description="Raw Class" ThreadingModel="both">
-              <ProgId Id="EIDLibCtrl.Raw.1" Description="Raw Class">
-                <ProgId Id="EIDLibCtrl.Raw" Description="Raw Class" />
-              </ProgId>
-            </Class>
-            <Class Id="{B1731EE0-BE64-4FE3-8EAC-BF37A4D96B35}" Context="InprocServer32" Description="Pin Class" ThreadingModel="both">
-              <ProgId Id="EIDLibCtrl.Pin.1" Description="Pin Class">
-                <ProgId Id="EIDLibCtrl.Pin" Description="Pin Class" />
-              </ProgId>
-            </Class>
-            <Interface Id="{23271379-5195-4384-98DA-F54960DA8A84}" Name="_IEIDlibEvents" ProxyStubClassId="{00020420-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020420-0000-0000-C000-000000000046}" />
-            <Interface Id="{26995400-2928-4E1B-9981-A317D486AC5A}" Name="ICertif" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-            <Interface Id="{886B55ED-4245-4FE9-B3B5-1D78B551000B}" Name="IMapCollection" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-            <Interface Id="{9233063D-D860-4CAD-AD47-BE48CC62D709}" Name="ICertifCheck" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-            <Interface Id="{9B4AD832-6FE8-4826-BFD3-3F278A40F741}" Name="IRetStatus" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-            <Interface Id="{9D5F1B11-8438-4C4E-9011-070F2E43C758}" Name="IRaw" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-            <Interface Id="{B7E86746-2EA7-4237-B523-5BD826A0BAF9}" Name="IPin" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-            <Interface Id="{D5701A16-9D8D-46C6-8E08-B3F1BAE9C4DC}" Name="IEIDlib" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-          </TypeLib>
-        </File>
-        <RegistryValue Root="HKCR" Key="CLSID\{28310B8B-0774-4483-85AF-4966EC52D8BC}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{28310B8B-0774-4483-85AF-4966EC52D8BC}\TypeLib" Value="{08B2900D-5F45-46CB-A6F2-23E7EA559A1A}" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4CBC8AEE-7684-492E-8AA5-505943987B53}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4CBC8AEE-7684-492E-8AA5-505943987B53}\TypeLib" Value="{08B2900D-5F45-46CB-A6F2-23E7EA559A1A}" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}\Control" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}\Insertable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}\MiscStatus\1" Value="132497" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}\MiscStatus" Value="0" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}\ToolboxBitmap32" Value="[#pteidlibaxctrl.dll], 101" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{79EAFF90-57D8-4A58-BC0C-0C5F7F60E65E}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{8923F2AE-B06E-430B-93F6-96FE1BDEEFF8}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{8923F2AE-B06E-430B-93F6-96FE1BDEEFF8}\TypeLib" Value="{08B2900D-5F45-46CB-A6F2-23E7EA559A1A}" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{B1731EE0-BE64-4FE3-8EAC-BF37A4D96B35}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{BB91CEDA-82D5-4889-8732-3DB804619852}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{BB91CEDA-82D5-4889-8732-3DB804619852}\TypeLib" Value="{08B2900D-5F45-46CB-A6F2-23E7EA559A1A}" Type="string" Action="write" />
-
-        <File Id="EIDLibCtrl.dll" Name="EIDLibCtrl.dll" KeyPath="no" Source="..\..\..\misc\bw_compatibility\EIDLibCtrl.dll" />
-      </Component>
-
+      <!--
       <Component Id="BWCompatibilityJava" Guid="{D9F8728F-D955-4356-9316-5050F3D36FE1}" SharedDllRefCount="yes">
         <File Id="pteidlibjni.dll" Name="pteidlibjni.dll" KeyPath="yes" Source="..\..\..\misc\bw_compatibility\pteidlibjni.dll" />
         <File Id="pteidlibjni.dll.manifest" Name="pteidlibjni.dll.manifest" KeyPath="no" Source="..\..\..\misc\bw_compatibility\pteidlibjni.dll.manifest" />
         <File Id="eidlibj.dll" Name="eidlibj.dll" KeyPath="no" Source="..\..\..\misc\bw_compatibility\eidlibj.dll" />
         <File Id="eidlibj.dll.manifest" Name="eidlibj.dll.manifest" KeyPath="no" Source="..\..\..\misc\bw_compatibility\eidlibj.dll.manifest" />
       </Component>
-<!--
+      
       <Component Id="BWPinpad" Guid="{AEB72EF2-7C5E-487E-84E3-0903140D7B74}" SharedDllRefCount="yes">
         <File Id="belpicppgui.dll" Name="belpicppgui.dll" KeyPath="yes" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pinpad\belpicppgui.dll" />
       </Component>
@@ -576,11 +505,7 @@
 
     <DirectoryRef Id="PTEIDPPDIR">
       <Component Id="PinpadLib" Guid="{9ADA6D75-5DCC-467E-A0CE-B84A482B2115}" SharedDllRefCount="yes">
-        <!--File Id="ch44xxeid.dll" Name="ch44xxeid.dll" Source="..\..\..\pinpad\ch44xxeid.dll" /-->
-        <!--File Id="sprx32eid.dll" Name="sprx32eid.dll" Source="..\..\..\pinpad\sprx32eid.dll" /-->
-        <!--<File Id="xireid.dll" Name="xireid.dll" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pinpad\xireid.dll" /> -->
-
-        <File Id="pteidpp2gempc.dll" Name="pteidpp2-gempc.dll" Source="..\..\..\_Binaries35\Release\pteidpp2-gempc.dll" />
+       <File Id="pteidpp2gempc.dll" Name="pteidpp2-gempc.dll" Source="..\..\..\_Binaries35\Release\pteidpp2-gempc.dll" />
       </Component>
     </DirectoryRef>
     
@@ -751,7 +676,6 @@
       <ComponentRef Id="DirectoryCache"/>
       <ComponentRef Id="License"/>
       <ComponentRef Id="LogDir"/>
-      <ComponentRef Id="BWCompatibilityJava_Jar" />
       <ComponentRef Id="Extensions"/>
       <ComponentRef Id="FireFoxRoot"/>
       <ComponentRef Id="XPIRoot"/>
@@ -770,10 +694,6 @@
       <ComponentRef Id="Runtime35"/>
       <ComponentRef Id="Runtime35ThirdPartyOpenSSL"/>
       <ComponentRef Id="Runtime35ThirdPartyXerces"/>
-      <ComponentRef Id="BWCompatibility"/>
-      <!-- <ComponentRef Id="BWCompatibilityQt"/> -->
-      <ComponentRef Id="BWCompatibilityActiveX"/>
-      <ComponentRef Id="BWCompatibilityJava"/>
       <!-- <ComponentRef Id="BWPinpad"/> -->
 
       <!-- Pteid pinpad dir-->
