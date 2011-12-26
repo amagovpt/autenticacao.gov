@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\;..\ZLib;..\DeprecationManager;..\OpenEXR\Half;..\OpenEXR\Iex;..\OpenEXR\IlmImf;..\OpenEXR\Imath;..\OpenEXR\IlmThread"
+				AdditionalIncludeDirectories="..\;..\DeprecationManager;"
 				PreprocessorDefinitions="WIN32;_DEBUG;OPJ_STATIC;FREEIMAGE_LIB;_CRT_SECURE_NO_DEPRECATE;LIBRAW_NODLL"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
@@ -126,7 +126,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="..\;..\ZLib;..\DeprecationManager;..\OpenEXR\Half;..\OpenEXR\Iex;..\OpenEXR\IlmImf;..\OpenEXR\Imath;..\OpenEXR\IlmThread"
+				AdditionalIncludeDirectories="..\;..\DeprecationManager;"
 				PreprocessorDefinitions="WIN32;NDEBUG;OPJ_STATIC;FREEIMAGE_LIB;_CRT_SECURE_NO_DEPRECATE;LIBRAW_NODLL"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -203,7 +203,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\;..\ZLib;..\DeprecationManager;..\OpenEXR\Half;..\OpenEXR\Iex;..\OpenEXR\IlmImf;..\OpenEXR\Imath;..\OpenEXR\IlmThread"
+				AdditionalIncludeDirectories="..\;..\DeprecationManager;"
 				PreprocessorDefinitions="WIN32;_DEBUG;OPJ_STATIC;FREEIMAGE_LIB;_CRT_SECURE_NO_DEPRECATE;LIBRAW_NODLL"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
@@ -285,7 +285,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="..\;..\ZLib;..\DeprecationManager;..\OpenEXR\Half;..\OpenEXR\Iex;..\OpenEXR\IlmImf;..\OpenEXR\Imath;..\OpenEXR\IlmThread"
+				AdditionalIncludeDirectories="..\;..\DeprecationManager"
 				PreprocessorDefinitions="WIN32;NDEBUG;OPJ_STATIC;FREEIMAGE_LIB;_CRT_SECURE_NO_DEPRECATE;LIBRAW_NODLL"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -469,42 +469,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\FreeImage\PluginBMP.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginCUT.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginDDS.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginEXR.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginG3.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginGIF.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginHDR.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginICO.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginIFF.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\FreeImage\PluginJ2K.cpp"
 					>
 				</File>
@@ -514,82 +478,6 @@
 				</File>
 				<File
 					RelativePath="..\FreeImage\PluginJPEG.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginKOALA.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginMNG.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginPCD.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginPCX.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginPFM.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginPICT.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginPNG.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginPNM.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginPSD.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginRAS.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginRAW.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginSGI.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginTARGA.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginTIFF.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginWBMP.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginXBM.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PluginXPM.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\PSDParser.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\TIFFLogLuv.cpp"
 					>
 				</File>
 			</Filter>
@@ -614,10 +502,6 @@
 				</File>
 				<File
 					RelativePath="..\FreeImage\MultiPage.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\FreeImage\ZLibInterface.cpp"
 					>
 				</File>
 			</Filter>
@@ -684,10 +568,6 @@
 			</File>
 			<File
 				RelativePath="..\Plugin.h"
-				>
-			</File>
-			<File
-				RelativePath="..\FreeImage\PSDParser.h"
 				>
 			</File>
 			<File
