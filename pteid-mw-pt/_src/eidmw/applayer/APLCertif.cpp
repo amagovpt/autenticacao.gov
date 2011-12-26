@@ -20,6 +20,10 @@
 
 #include <time.h>
 
+#include "openssl/evp.h"
+#include "openssl/x509.h"
+#include "openssl/x509v3.h"
+
 #include "APLCertif.h"
 #include "APLConfig.h"
 #include "CardFile.h"
@@ -41,6 +45,14 @@
 
 namespace eIDMW
 {
+
+#ifdef _WIN32
+inline struct tm* localtime_r (const time_t *clock, struct tm *result) {
+       if (!clock || !result) return NULL;
+       memcpy(result,localtime(clock),sizeof(*result));
+       return result;
+}
+#endif
 
 APL_CertifStatus ConvertStatus(FWK_CertifStatus eStatus,APL_ValidationProcess eProcess)
 {

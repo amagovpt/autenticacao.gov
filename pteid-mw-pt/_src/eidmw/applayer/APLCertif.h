@@ -25,11 +25,11 @@
 #include <string>
 #include <map>
 
-///openssl
-#include <openssl/ssl.h>
-#include <openssl/x509.h>
-#include <openssl/pem.h>
-#include <openssl/x509v3.h>
+
+#include "openssl/evp.h"
+#include "openssl/ocsp.h"
+#include "openssl/ssl.h"
+#include "openssl/bio.h"
 
 #include "Export.h"
 #include "P15Objects.h"
