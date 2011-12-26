@@ -4068,8 +4068,8 @@ void MainWnd::fillCertificateList( void )
 		strKeyLen1=strKeyLen1.setNum(certificates->getExternalCertKeylenght(1));
 		item1->setKeyLen(strKeyLen1);
 
-		QTreeCertItem* item2 = new QTreeCertItem( m_ui.treeCert, 0 );
-		item2 = new QTreeCertItem( m_ui.treeCert, 0 );
+		QTreeCertItem* item2 = new QTreeCertItem( item1, 0 );
+		item2 = new QTreeCertItem( item1, 0 );
 
 		QString strLabel2 = QString::fromUtf8(certificates->getExternalCertSubject(2));
 		item2->setText(COLUMN_CERT_NAME, strLabel2);
@@ -4080,10 +4080,9 @@ void MainWnd::fillCertificateList( void )
 		QString	strKeyLen2;
 		strKeyLen2=strKeyLen2.setNum(certificates->getExternalCertKeylenght(2));
 		item2->setKeyLen(strKeyLen2);
-		//fillCertTree(NULL, Level,item2);
 
-		QTreeCertItem* item3 = new QTreeCertItem( m_ui.treeCert, 0 );
-		item3 = new QTreeCertItem( m_ui.treeCert, 0 );
+		QTreeCertItem* item3 = new QTreeCertItem( item2, 0 );
+		item3 = new QTreeCertItem( item2, 0 );
 
 		QString strLabel3 = QString::fromUtf8(certificates->getExternalCertSubject(3));
 		item3->setText(COLUMN_CERT_NAME, strLabel3);
@@ -4104,7 +4103,7 @@ void MainWnd::fillCertificateList( void )
 		fillCertTree(&certificateauth, Level,item3);
 
 		m_ui.treeCert->expandAll();
-		// m_ui.treeCert->sortItems(0,Qt::AscendingOrder);
+		m_ui.treeCert->sortItems(0,Qt::DescendingOrder);
 	}
 	catch(PTEID_ExCertNoRoot &e)
 	{

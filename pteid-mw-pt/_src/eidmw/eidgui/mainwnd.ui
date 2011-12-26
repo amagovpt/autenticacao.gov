@@ -1035,8 +1035,14 @@ border-image: url(:/images/Images/bg-Light-Blue.png);
 image: url(:/images/Images/bg-Light-Blue.png);</string>
         </property>
         <property name="sortingEnabled">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
+        <attribute name="headerVisible">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="headerShowSortIndicator" stdset="0">
+         <bool>false</bool>
+        </attribute>
         <column>
          <property name="text">
           <string>Certificates Overview</string>
