@@ -1540,9 +1540,15 @@ CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
 }
 
 CByteArray APL_CCXML_Doc::getCSV(){
+	CByteArray cb;
+
+	return cb;
 }
 
 CByteArray APL_CCXML_Doc::getTLV(){
+	CByteArray cb;
+
+	return cb;
 }
 
 

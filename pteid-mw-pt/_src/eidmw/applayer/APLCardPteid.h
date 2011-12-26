@@ -466,7 +466,7 @@ private:
 	APL_XmlUserRequestedInfo *_xmlUInfo;
 
 friend APL_DocEId& APL_EIDCard::getID();	/**< This method must access protected constructor */
-friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader=false); /* this method accesses getxml(,) */
+friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader); /* this method accesses getxml(,) */
 };
 
 /******************************************************************************//**
@@ -529,7 +529,7 @@ private:
 	APL_XmlUserRequestedInfo *_xmlUInfo;
 
 friend APL_AddrEId& APL_EIDCard::getAddr();	/**< This method must access protected constructor */
-friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader=false); /* this method accesses getxml(,) */
+friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader); /* this method accesses getxml(,) */
 };
 
 /******************************************************************************//**
