@@ -4103,6 +4103,10 @@ void MainWnd::fillCertificateList( void )
 		fillCertTree(&certificateauth, Level,item3);
 
 		m_ui.treeCert->expandAll();
+		m_ui.treeCert->setColumnCount(1);
+		m_ui.treeCert->takeTopLevelItem(0);
+		m_ui.treeCert->takeTopLevelItem(1);
+		m_ui.treeCert->takeTopLevelItem(1);
 		m_ui.treeCert->sortItems(0,Qt::DescendingOrder);
 	}
 	catch(PTEID_ExCertNoRoot &e)
