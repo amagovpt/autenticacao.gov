@@ -4053,7 +4053,7 @@ void MainWnd::fillCertificateList( void )
 		/* Root Certificate if the card owns it
 		PTEID_Certificate& certificate = certificates->getCert(4);
 		fillCertTree(&certificate,Level,NULL);
-		 */
+		*/
 
 		QTreeCertItem* item1 = new QTreeCertItem( m_ui.treeCert, 0 );
 		item1 = new QTreeCertItem( m_ui.treeCert, 0 );
@@ -4062,8 +4062,8 @@ void MainWnd::fillCertificateList( void )
 		item1->setText(COLUMN_CERT_NAME, strLabel1);
 		item1->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(1)));
 		item1->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(1),-1));
-		item1->setValidityBegin(QString(certificates->getExternalCertNotBefore(1)));
-		item1->setValidityEnd(QString(certificates->getExternalCertNotAfter(1)));
+		item1->setValidityBegin(QString::fromUtf8(certificates->getExternalCertNotBefore(1)));
+		item1->setValidityEnd(QString::fromUtf8(certificates->getExternalCertNotAfter(1)));
 		QString	strKeyLen1;
 		strKeyLen1=strKeyLen1.setNum(certificates->getExternalCertKeylenght(1));
 		item1->setKeyLen(strKeyLen1);
@@ -4075,8 +4075,8 @@ void MainWnd::fillCertificateList( void )
 		item2->setText(COLUMN_CERT_NAME, strLabel2);
 		item2->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(2)));
 		item2->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(2),-1));
-		item2->setValidityBegin(QString(certificates->getExternalCertNotBefore(2)));
-		item2->setValidityEnd(QString(certificates->getExternalCertNotAfter(2)));
+		item2->setValidityBegin(QString::fromUtf8(certificates->getExternalCertNotBefore(2)));
+		item2->setValidityEnd(QString::fromUtf8(certificates->getExternalCertNotAfter(2)));
 		QString	strKeyLen2;
 		strKeyLen2=strKeyLen2.setNum(certificates->getExternalCertKeylenght(2));
 		item2->setKeyLen(strKeyLen2);
@@ -4088,8 +4088,8 @@ void MainWnd::fillCertificateList( void )
 		item3->setText(COLUMN_CERT_NAME, strLabel3);
 		item3->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(3)));
 		item3->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(3),-1));
-		item3->setValidityBegin(QString(certificates->getExternalCertNotBefore(3)));
-		item3->setValidityEnd(QString(certificates->getExternalCertNotAfter(3)));
+		item3->setValidityBegin(QString::fromUtf8(certificates->getExternalCertNotBefore(3)));
+		item3->setValidityEnd(QString::fromUtf8(certificates->getExternalCertNotAfter(3)));
 		QString	strKeyLen3;
 		strKeyLen3=strKeyLen3.setNum(certificates->getExternalCertKeylenght(3));
 		item3->setKeyLen(strKeyLen3);
