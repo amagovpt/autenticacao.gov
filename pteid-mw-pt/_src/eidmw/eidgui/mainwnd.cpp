@@ -4049,7 +4049,7 @@ void MainWnd::fillCertificateList( void )
 	try
 	{
 		short Level=1;
-
+		std::string msgtitle = "O Certificado não foi encontrado";
 		/* Root Certificate if the card owns it
 		PTEID_Certificate& certificate = certificates->getCert(4);
 		fillCertTree(&certificate,Level,NULL);
@@ -4064,7 +4064,7 @@ void MainWnd::fillCertificateList( void )
 			std::string certerrmsggte = "<p>O Certificado GTE Global Root não foi encontrado." \
 									     " A sua cadeia de certificação está incorrecta." \
 									     "<p>Verifique o caminho do certificado.";
-			QMessageBox msgBoxgte(QMessageBox::Warning, tr("O Certificado não foi encontrado"), QString::fromUtf8(certerrmsggte.c_str()), 0, this);
+			QMessageBox msgBoxgte(QMessageBox::Warning, QString::fromUtf8(msgtitle.c_str()), QString::fromUtf8(certerrmsggte.c_str()), 0, this);
 			msgBoxgte.exec();
 		}
 		item1->setText(COLUMN_CERT_NAME, strLabel1);
@@ -4085,7 +4085,7 @@ void MainWnd::fillCertificateList( void )
 			std::string certerrmsgecraiz = "<p>O Certificado EC Raiz do Estado não foi encontrado." \
 									       " A sua cadeia de certificação está incorrecta." \
 									       "<p>Verifique o caminho do certificado.";
-			QMessageBox msgBoxec(QMessageBox::Warning, tr("O Certificado não foi encontrado"), QString::fromUtf8(certerrmsgecraiz.c_str()), 0, this);
+			QMessageBox msgBoxec(QMessageBox::Warning, QString::fromUtf8(msgtitle.c_str()), QString::fromUtf8(certerrmsgecraiz.c_str()), 0, this);
 			msgBoxec.exec();
 		}
 		item2->setText(COLUMN_CERT_NAME, strLabel2);
@@ -4106,7 +4106,7 @@ void MainWnd::fillCertificateList( void )
 			std::string certerrmsgcc = "<p>O Certificado Cartão de Cidadão 001 não foi encontrado." \
 									   " A sua cadeia de certificação está incorrecta." \
 									   "<p>Verifique o caminho do certificado.";
-			QMessageBox msgBoxcc(QMessageBox::Warning, tr("O Certificado não foi encontrado"), QString::fromUtf8(certerrmsgcc.c_str()), 0, this);
+			QMessageBox msgBoxcc(QMessageBox::Warning, QString::fromUtf8(msgtitle.c_str()), QString::fromUtf8(certerrmsgcc.c_str()), 0, this);
 			msgBoxcc.exec();
 		}
 		item3->setText(COLUMN_CERT_NAME, strLabel3);
