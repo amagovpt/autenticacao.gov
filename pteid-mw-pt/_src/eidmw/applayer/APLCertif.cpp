@@ -1691,6 +1691,7 @@ X509 *APL_Certif::ExternalCert(int certnr)
 	return x509;
 
 err:
+	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certif::ExternalCert: file %s not found ", contents.c_str());
 	return NULL;
 }
 
