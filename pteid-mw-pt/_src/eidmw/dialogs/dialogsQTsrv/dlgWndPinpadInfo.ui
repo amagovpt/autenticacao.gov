@@ -14,7 +14,7 @@
    <string>dlgWndPinpadInfo</string>
   </property>
   <layout class="QGridLayout">
-   <item row="4" column="0">
+   <item row="3" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>PinName and the message</string>
@@ -46,9 +46,6 @@
       <string>How to use your pinpad:</string>
      </property>
     </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLineEdit" name="lineEdit"/>
    </item>
   </layout>
  </widget>
