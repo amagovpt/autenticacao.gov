@@ -4059,6 +4059,14 @@ void MainWnd::fillCertificateList( void )
 		item1 = new QTreeCertItem( m_ui.treeCert, 0 );
 
 		QString strLabel1 = QString::fromUtf8(certificates->getExternalCertSubject(1));
+		if (strLabel1 == NULL)
+		{
+			std::string certerrmsggte = "<p>O Certificado GTE Global Root não foi encontrado." \
+									     " A sua cadeia de certificação está incorrecta." \
+									     "<p>Verifique o caminho do certificado.";
+			QMessageBox msgBoxgte(QMessageBox::Warning, tr("O Certificado não foi encontrado"), QString::fromUtf8(certerrmsggte.c_str()), 0, this);
+			msgBoxgte.exec();
+		}
 		item1->setText(COLUMN_CERT_NAME, strLabel1);
 		item1->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(1)));
 		item1->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(1),-1));
@@ -4072,6 +4080,14 @@ void MainWnd::fillCertificateList( void )
 		item2 = new QTreeCertItem( item1, 0 );
 
 		QString strLabel2 = QString::fromUtf8(certificates->getExternalCertSubject(2));
+		if (strLabel2 == NULL)
+		{
+			std::string certerrmsgecraiz = "<p>O Certificado EC Raiz do Estado não foi encontrado." \
+									       " A sua cadeia de certificação está incorrecta." \
+									       "<p>Verifique o caminho do certificado.";
+			QMessageBox msgBoxec(QMessageBox::Warning, tr("O Certificado não foi encontrado"), QString::fromUtf8(certerrmsgecraiz.c_str()), 0, this);
+			msgBoxec.exec();
+		}
 		item2->setText(COLUMN_CERT_NAME, strLabel2);
 		item2->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(2)));
 		item2->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(2),-1));
@@ -4085,6 +4101,14 @@ void MainWnd::fillCertificateList( void )
 		item3 = new QTreeCertItem( item2, 0 );
 
 		QString strLabel3 = QString::fromUtf8(certificates->getExternalCertSubject(3));
+		if (strLabel3 == NULL)
+		{
+			std::string certerrmsgcc = "<p>O Certificado Cartão de Cidadão 001 não foi encontrado." \
+									   " A sua cadeia de certificação está incorrecta." \
+									   "<p>Verifique o caminho do certificado.";
+			QMessageBox msgBoxcc(QMessageBox::Warning, tr("O Certificado não foi encontrado"), QString::fromUtf8(certerrmsgcc.c_str()), 0, this);
+			msgBoxcc.exec();
+		}
 		item3->setText(COLUMN_CERT_NAME, strLabel3);
 		item3->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(3)));
 		item3->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(3),-1));
