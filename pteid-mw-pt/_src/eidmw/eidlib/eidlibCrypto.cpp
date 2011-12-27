@@ -625,7 +625,7 @@ const char *PTEID_Certificates::getExternalCertSubject(int cert)
 	BEGIN_TRY_CATCH
 
 	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = pimpl->ExternalCertSubject(cert).c_str();
+	out = pimpl->ExternalCertSubject(cert);
 
 	END_TRY_CATCH
 
@@ -639,7 +639,7 @@ const char *PTEID_Certificates::getExternalCertIssuer(int cert)
 	BEGIN_TRY_CATCH
 
 	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = pimpl->ExternalCertIssuer(cert).c_str();
+	out = pimpl->ExternalCertIssuer(cert);
 
 	END_TRY_CATCH
 
@@ -653,7 +653,7 @@ const char *PTEID_Certificates::getExternalCertNotBefore(int cert)
 	BEGIN_TRY_CATCH
 
 	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = pimpl->ExternalCertNotBefore(cert).c_str();
+	out = pimpl->ExternalCertNotBefore(cert);
 
 	END_TRY_CATCH
 
@@ -667,7 +667,7 @@ const char *PTEID_Certificates::getExternalCertNotAfter(int cert)
 	BEGIN_TRY_CATCH
 
 	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = pimpl->ExternalCertNotAfter(cert).c_str();
+	out = pimpl->ExternalCertNotAfter(cert);
 
 	END_TRY_CATCH
 
@@ -699,11 +699,9 @@ PTEID_Certificate &PTEID_Certificates::getCert(PTEID_CertifType type)
 	unsigned long idxObject;
 	APL_CertifType aplType;
 	bool bOnlyVisible=true;
-	std::cout << "getcert eidlibcrypto \n";
  	switch(type)
 	{
 		case PTEID_CERTIF_TYPE_ROOT:
-			std::cout << "eidlibcrypto root \n";
 			idxObject=INCLUDE_OBJECT_ROOTCERT;
 			aplType=APL_CERTIF_TYPE_ROOT;
 			break;
@@ -751,7 +749,6 @@ PTEID_Certificate &PTEID_Certificates::getCert(PTEID_CertifType type)
 
 PTEID_Certificate &PTEID_Certificates::getRoot()
 {
-	std::cout << "pteid_certificates getroot\n";
 	return getCert(PTEID_CERTIF_TYPE_ROOT);
 }
 
