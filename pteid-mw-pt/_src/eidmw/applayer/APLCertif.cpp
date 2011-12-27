@@ -1638,6 +1638,9 @@ X509 *APL_Certif::ExternalCert(int certnr)
 {
 	FILE *m_stream;
 	X509 *x509;
+#ifdef WIN32
+	errno_t werr;
+#endif
 
 	APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
 	std::string	m_cachedirpath = conf_dir.getString();
@@ -1650,7 +1653,7 @@ X509 *APL_Certif::ExternalCert(int certnr)
 	case 1:
 #ifdef WIN32
 		contents.append("/eidstore/certs/GTEGlobalRoot.der");
-		if ((fopen_s(&m_stream, contents.c_str(), "rb")) == NULL)
+		if ((werr = fopen_s(&m_stream, contents.c_str(), "rb")) != 0)
 			goto err;
 #else
 		if ((m_stream = fopen("/usr/local/share/certs/GTEGlobalRoot.der", "r")) == NULL)
@@ -1660,7 +1663,7 @@ X509 *APL_Certif::ExternalCert(int certnr)
 	case 2:
 #ifdef WIN32
 		contents.append("/eidstore/certs/ECRaizEstado_novo_assinado_GTE.der");
-		if ((fopen_s(&m_stream, contents.c_str(), "rb")) == NULL)
+		if ((werr = fopen_s(&m_stream, contents.c_str(), "rb")) != 0)
 			goto err;
 #else
 		if ((m_stream = fopen("/usr/local/share/certs/ECRaizEstado_novo_assinado_GTE.der", "r")) == NULL)
@@ -1670,7 +1673,7 @@ X509 *APL_Certif::ExternalCert(int certnr)
 	case 3:
 #ifdef WIN32
 		contents.append("/eidstore/certs/CartaodeCidadao001.der");
-		if ((fopen_s(&m_stream, contents.c_str(), "rb")) == NULL)
+		if ((werr = fopen_s(&m_stream, contents.c_str(), "rb")) != 0)
 			goto err;
 #else
 		if ((m_stream = fopen("/usr/local/share/certs/CartaodeCidadao001.der", "r")) == NULL)
