@@ -1602,7 +1602,7 @@ APL_Certifs *APL_Certif::getCertificates()
 	return m_store;
 }
 
-std::string APL_Certif::x509TimeConversion (ASN1_TIME *atime)
+const char *APL_Certif::x509TimeConversion (ASN1_TIME *atime)
 {
     struct tm r;
     int cnt;
@@ -1648,7 +1648,7 @@ X509 *APL_Certif::ExternalCert(int certnr)
 	{
 	case 1:
 #ifdef WIN32
-		contents.append("/GTEGlobalRoot.der");
+		contents.append("/eidstore/certs/GTEGlobalRoot.der");
 		fopen_s(&m_stream, contents.c_str(), "rb");
 #else
 		m_stream = fopen("/usr/local/share/certs/GTEGlobalRoot.der", "r");
@@ -1656,7 +1656,7 @@ X509 *APL_Certif::ExternalCert(int certnr)
 		break;
 	case 2:
 #ifdef WIN32
-		contents.append("/ECRaizEstado_novo_assinado_GTE.der");
+		contents.append("/eidstore/certs/ECRaizEstado_novo_assinado_GTE.der");
 		fopen_s(&m_stream, contents.c_str(), "rb");
 #else
 		m_stream = fopen("/usr/local/share/certs/ECRaizEstado_novo_assinado_GTE.der", "r");
@@ -1664,7 +1664,7 @@ X509 *APL_Certif::ExternalCert(int certnr)
 		break;
 	case 3:
 #ifdef WIN32
-		contents.append("/CartaodeCidadao001.der");
+		contents.append("/eidstore/certs/CartaodeCidadao001.der");
 		fopen_s(&m_stream, contents.c_str(), "rb");
 #else
 		m_stream = fopen("/usr/local/share/certs/CartaodeCidadao001.der", "r");
@@ -1684,26 +1684,26 @@ X509 *APL_Certif::ExternalCert(int certnr)
 	return x509;
 }
 
-std::string APL_Certif::ExternalCertSubject(int certnr)
+const char *APL_Certif::ExternalCertSubject(int certnr)
 {
 	//Subject name
 	X509 *cert;
 
 	cert = ExternalCert(certnr);
 
-	char sntemp[128] = {0};
-	char subject[256] = {0};
+	char sntemp[800] = {0};
+	char subject[800] = {0};
 	X509_NAME_get_text_by_NID(X509_get_subject_name(cert), NID_commonName, sntemp, sizeof(sntemp));
 	strcat (subject, sntemp);
 
 	return subject;
 }
 
-std::string APL_Certif::ExternalCertIssuer(int certnr)
+const char *APL_Certif::ExternalCertIssuer(int certnr)
 {
 	// issuer name
-	char szTemp[128] = {0};
-	char issuer[256] = {0};
+	char szTemp[800] = {0};
+	char issuer[800] = {0};
 	X509 *cert;
 
 	cert = ExternalCert(certnr);
@@ -1728,10 +1728,10 @@ unsigned long APL_Certif::ExternalCertKeylenght(int certnr)
 	return keylen;
 }
 
-std::string APL_Certif::ExternalCertNotBefore(int certnr)
+const char* APL_Certif::ExternalCertNotBefore(int certnr)
 {
 	//notbefore
-	std::string result;
+	const char* result;
 	X509 *cert;
 
 	cert = ExternalCert(certnr);
@@ -1741,10 +1741,10 @@ std::string APL_Certif::ExternalCertNotBefore(int certnr)
 	return result;
 }
 
-std::string APL_Certif::ExternalCertNotAfter(int certnr)
+const char* APL_Certif::ExternalCertNotAfter(int certnr)
 {
 	// Not after
-	std::string result;
+	const char* result;
 	X509 *cert;
 
 	cert = ExternalCert(certnr);
