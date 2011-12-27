@@ -158,17 +158,17 @@ unsigned char CPinpad::GetMaxPinLen(const tPin & pin)
 
 CByteArray CPinpad::PinCmd(tPinOperation operation,
 	const tPin & pin, unsigned char ucPinType,
-    const CByteArray & oAPDU, unsigned long & ulRemaining)
+    const CByteArray & oAPDU, unsigned long & ulRemaining,
+    bool bShowDlg)
 {
 	if (!UsePinpad(operation))
 		throw CMWEXCEPTION(EIDMW_ERR_PIN_OPERATION);
 
 	CByteArray oResp;
-
 	if (operation == PIN_OP_VERIFY)
-		oResp = PinCmd1(operation, pin, ucPinType, oAPDU, ulRemaining);
+		oResp = PinCmd1(operation, pin, ucPinType, oAPDU, ulRemaining,bShowDlg);
 	else
-		oResp = PinCmd2(operation, pin, ucPinType, oAPDU, ulRemaining);
+		oResp = PinCmd2(operation, pin, ucPinType, oAPDU, ulRemaining,bShowDlg);
 
 	if (oResp.Size() != 2)
 	{
@@ -194,7 +194,8 @@ CByteArray CPinpad::PinCmd(tPinOperation operation,
 /** For operations involving 1 PIN */
 CByteArray CPinpad::PinCmd1(tPinOperation operation,
 	const tPin & pin, unsigned char ucPinType,
-    const CByteArray & oAPDU, unsigned long & ulRemaining)
+    const CByteArray & oAPDU, unsigned long & ulRemaining,
+    bool bShowDlg)
 {
 	EIDMW_PP_VERIFY_CCID xVerifyCmd;
 	unsigned long ulVerifyCmdLen;
@@ -219,21 +220,22 @@ CByteArray CPinpad::PinCmd1(tPinOperation operation,
 	if (m_ioctlVerifyDirect)
 	{
 		return PinpadControl(m_ioctlVerifyDirect, oCmd, operation,
-			ucPinType, pin.csLabel, true);
+			ucPinType, pin.csLabel, bShowDlg);
 	}
 	else
 	{
 		PinpadControl(m_ioctlVerifyStart, oCmd, operation,
 			ucPinType, pin.csLabel, false);
 		return PinpadControl(m_ioctlVerifyFinish, CByteArray(), operation,
-			ucPinType, "", true);
+			ucPinType, "", bShowDlg);
 	}
 }
 
 /** For operations involving 2 PINs */
 CByteArray CPinpad::PinCmd2(tPinOperation operation,
 	const tPin & pin, unsigned char ucPinType,
-    const CByteArray & oAPDU, unsigned long & ulRemaining)
+    const CByteArray & oAPDU, unsigned long & ulRemaining,
+    bool bShowDlg)
 {
 	EIDMW_PP_CHANGE_CCID xChangeCmd;
 	unsigned long ulChangeCmdLen;
@@ -263,14 +265,14 @@ CByteArray CPinpad::PinCmd2(tPinOperation operation,
 	if (m_ioctlChangeDirect)
 	{
 		return PinpadControl(m_ioctlChangeDirect, oCmd, operation,
-			ucPinType, pin.csLabel, true);
+			ucPinType, pin.csLabel, bShowDlg);
 	}
 	else
 	{
 		PinpadControl(m_ioctlChangeStart, oCmd, operation,
 			ucPinType, pin.csLabel, false);
 		return PinpadControl(m_ioctlChangeFinish, CByteArray(), operation,
-			ucPinType, "", true);
+			ucPinType, "", bShowDlg);
 	}
 }
 

@@ -176,7 +176,7 @@ unsigned char CPkiCard::PinUsage2Pinpad(const tPin & Pin, const tPrivKey *pKey)
 
 bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, const tPrivKey *pKey)
+        unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg)
 {
 	// No standard for Logoff, so each card has to implement
 	// it's own command here.
@@ -224,7 +224,7 @@ bad_pin:
 		// Send the command
 		if (csPin1.empty() && bUsePinpad)
 			oResp = m_poPinpad->PinCmd(operation, Pin,
-			PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining);
+			PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg);
 		else
 			oResp = SendAPDU(oAPDU);
 	}
@@ -265,7 +265,7 @@ bad_pin:
 
 bool CPkiCard::PinCmdIAS(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, const tPrivKey *pKey)
+        unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg)
 {
 	// No standard for Logoff, so each card has to implement
 	// it's own command here.
@@ -340,7 +340,7 @@ bad_pin:
 		// Send the command
 		if (csPin1.empty() && bUsePinpad) {
 			oResp = m_poPinpad->PinCmd(operation, Pin,
-			PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining);
+			PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg);
 		} else {
 			if (operation != PIN_OP_VERIFY) {
 				oResp = SendAPDU(oAPDU);

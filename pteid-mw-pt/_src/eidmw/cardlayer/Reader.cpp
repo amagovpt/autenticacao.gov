@@ -394,12 +394,12 @@ unsigned long CReader::PinStatus(const tPin & Pin)
 
 bool CReader::PinCmd(tPinOperation operation, const tPin & Pin,
     const std::string & csPin1, const std::string & csPin2,
-    unsigned long & ulRemaining)
+    unsigned long & ulRemaining, bool bShowDlg)
 {
     if (m_poCard == NULL)
         throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
 
-    return m_poCard->PinCmd(operation, Pin, csPin1, csPin2, ulRemaining);
+    return m_poCard->PinCmd(operation, Pin, csPin1, csPin2, ulRemaining, NULL, bShowDlg);
 }
 
 unsigned long CReader::GetSupportedAlgorithms()

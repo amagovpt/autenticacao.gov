@@ -668,12 +668,12 @@ const CByteArray &APL_Pin::getSignature()
 	return *m_signature;
 }
 
-bool APL_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining)
+bool APL_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg)
 {
 	try
 	{
 		if(!m_card->isVirtualCard())
-			return m_card->pinCmd(PIN_OP_VERIFY,m_pinP15,csPin,"",ulRemaining);
+			return m_card->pinCmd(PIN_OP_VERIFY,m_pinP15,csPin,"",ulRemaining,bShowDlg);
 		else
 			return false;
 	}

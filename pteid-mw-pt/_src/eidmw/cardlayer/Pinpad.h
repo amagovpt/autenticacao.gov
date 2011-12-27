@@ -54,7 +54,8 @@ public:
 
     CByteArray PinCmd(tPinOperation operation,
 		const tPin & pin, unsigned char ucPinType,
-        const CByteArray & oAPDU, unsigned long & ulRemaining);
+        const CByteArray & oAPDU, unsigned long & ulRemaining,
+        bool bShowDlg = true);
 
 protected:
 	CByteArray PinpadControl(unsigned long ulControl, const CByteArray & oCmd,
@@ -73,11 +74,14 @@ protected:
 	// For PIN verify and unblock without PIN change (1 PIN needed)
     CByteArray PinCmd1(tPinOperation operation,
 	const tPin & pin, unsigned char ucPinType,
-    const CByteArray & oAPDU, unsigned long & ulRemaining);
+    const CByteArray & oAPDU, unsigned long & ulRemaining,
+    bool bShowDlg = true);
+
 	// For PIN change and unblock with PIN change (2 PINs needed)
     CByteArray PinCmd2(tPinOperation operation,
 	const tPin & pin, unsigned char ucPinType,
-    const CByteArray & oAPDU, unsigned long & ulRemaining);
+    const CByteArray & oAPDU, unsigned long & ulRemaining,
+    bool bShowDlg = true);
 
 	CContext *m_poContext;
     SCARDHANDLE m_hCard;

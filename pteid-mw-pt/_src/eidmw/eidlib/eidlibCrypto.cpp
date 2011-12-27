@@ -945,14 +945,14 @@ bool PTEID_Pin::verifyPin()
 	return out;
 }
 
-bool PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining)
+bool PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg)
 {
 	bool out = false;
 
 	BEGIN_TRY_CATCH
-
+	bShowDlg=false;
 	APL_Pin *pimpl=static_cast<APL_Pin *>(m_impl);
-	out = pimpl->verifyPin(csPin,ulRemaining);
+	out = pimpl->verifyPin(csPin,ulRemaining,bShowDlg);
 	
 	END_TRY_CATCH
 

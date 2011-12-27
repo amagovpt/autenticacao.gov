@@ -1226,7 +1226,7 @@ public:
 	  *
 	  * @return true if success and false if failed
 	  */
-	PTEIDSDK_API bool verifyPin(const char *csPin,unsigned long &ulRemaining);
+	PTEIDSDK_API bool verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg=true);
 
 	/**
 	  * Ask the card to change the pin.

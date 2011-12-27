@@ -117,9 +117,10 @@ public:
 	/* Return the remaining PIN attempts;
 	 * returns PIN_STATUS_UNKNOWN if this info isn't available */
     unsigned long PinStatus(const tPin & Pin);
+
     bool PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining);
+        unsigned long & ulRemaining, bool bShowDlg=true);
 
 	/** Returns the OR-ing of all supported crypto algorithms */
 	unsigned long GetSupportedAlgorithms();

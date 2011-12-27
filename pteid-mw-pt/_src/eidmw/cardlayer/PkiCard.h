@@ -56,10 +56,12 @@ public:
     virtual unsigned long PinStatus(const tPin & Pin) = 0;
     virtual bool PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, const tPrivKey *pKey = NULL);
+        unsigned long & ulRemaining, const tPrivKey *pKey = NULL,
+        bool bShowDlg=true);
     virtual bool PinCmdIAS(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, const tPrivKey *pKey = NULL);
+        unsigned long & ulRemaining, const tPrivKey *pKey = NULL,
+        bool bShowDlg=true);
 	virtual bool LogOff(const tPin & Pin);
 
     virtual CByteArray Sign(const tPrivKey & key, const tPin & Pin,

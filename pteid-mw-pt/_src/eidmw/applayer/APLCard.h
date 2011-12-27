@@ -234,7 +234,7 @@ public:
  	/**
 	  * Execute a pin command from the CAL
 	  */
-	EIDMW_APL_API virtual bool pinCmd(tPinOperation operation, const tPin &Pin,const char *csPin1, const char *csPin2,unsigned long &ulRemaining);
+	EIDMW_APL_API virtual bool pinCmd(tPinOperation operation, const tPin &Pin,const char *csPin1, const char *csPin2,unsigned long &ulRemaining,bool bShowDlg=true);
 
 	/**
 	  * Return the number of certificate on the card
