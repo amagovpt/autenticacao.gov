@@ -122,7 +122,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../applayer;../common;../eidlib;../cardlayer"
+				AdditionalIncludeDirectories="C:\OpenSSL\include;../applayer;../common;../eidlib;../cardlayer"
 				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_WRAPPER"
 				RuntimeLibrary="2"
 				WarningLevel="3"
@@ -260,7 +260,7 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="call ..\SetPathSwig.bat&#x0D;&#x0A;&quot;%PTEID_DIR_SWIG%\swig.exe&quot; -c++ -csharp -namespace be.portugal.eid -dllimport pteid35libCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -outdir -DSWIG_CSHARP_NO_STRING_HELPER  .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					CommandLine="call ..\SetPathSwig.bat&#x0D;&#x0A;&quot;%PTEID_DIR_SWIG%\swig.exe&quot; -c++ -csharp -namespace pt.portugal.eid -dllimport pteid35libCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -outdir -DSWIG_CSHARP_NO_STRING_HELPER  .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					AdditionalDependencies="eidlib.h;eidlibException.h"
 					Outputs=".\GeneratedFiles\eidlibCS_Wrapper.cpp"
 				/>
