@@ -1433,10 +1433,23 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 //--------------------------------------------------
 // rewrite the function verifyPin(...) on the Java side
 //--------------------------------------------------
+%typemap(javaout) bool eIDMW::PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg)
+{
+	  long		pRemaining = pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
+	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_Pin_verifyPin__SWIG_0(swigCPtr, this, csPin, pRemaining, bShowDlg);
+	  
+	  ulRemaining.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
+	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
+	  return retval;
+}
+
+//--------------------------------------------------
+// rewrite the function verifyPin(...) on the Java side
+//--------------------------------------------------
 %typemap(javaout) bool eIDMW::PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining)
 {
 	  long		pRemaining = pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
-	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_Pin_verifyPin(swigCPtr, this, csPin, pRemaining);
+	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_Pin_verifyPin__SWIG_1(swigCPtr, this, csPin, pRemaining);
 	  
 	  ulRemaining.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
 	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
