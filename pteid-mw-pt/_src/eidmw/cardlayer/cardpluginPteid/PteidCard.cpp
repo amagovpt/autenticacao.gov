@@ -667,7 +667,7 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
     	oDataias.Append(0x40);
     	oDataias.Append(0x84);
     	oDataias.Append(0x01);
-    	oDataias.Append(0x01);
+    	oDataias.Append(key.ulKeyRef);
     	oDataias.Append(0x80);
     	oDataias.Append(0x01);
     	oDataias.Append(0x02);
