@@ -385,7 +385,7 @@
       </widget>
       <widget class="QWidget" name="page_IdentityExtra">
        <property name="styleSheet">
-        <string notr="true">background-image: url(:/images/Images/additional_data.png);</string>
+        <string notr="true">background-image: url(:/images/Images/tab-backgrounds/bg_additional_data2.png);</string>
        </property>
        <widget class="QLineEdit" name="txtIdentityExtra_SocialSecurityNo">
         <property name="geometry">
@@ -466,7 +466,7 @@
         <property name="geometry">
          <rect>
           <x>190</x>
-          <y>275</y>
+          <y>245</y>
           <width>150</width>
           <height>20</height>
          </rect>
@@ -547,7 +547,7 @@
         <property name="geometry">
          <rect>
           <x>27</x>
-          <y>275</y>
+          <y>245</y>
           <width>150</width>
           <height>20</height>
          </rect>
@@ -571,9 +571,9 @@
        <widget class="QLineEdit" name="txtIdentityExtra_Validate">
         <property name="geometry">
          <rect>
-          <x>30</x>
+          <x>27</x>
           <y>320</y>
-          <width>381</width>
+          <width>320</width>
           <height>20</height>
          </rect>
         </property>
@@ -590,7 +590,7 @@
          </size>
         </property>
         <property name="styleSheet">
-         <string/>
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
         </property>
         <property name="frame">
          <bool>false</bool>
