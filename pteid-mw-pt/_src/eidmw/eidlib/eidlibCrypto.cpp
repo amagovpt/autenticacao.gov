@@ -950,7 +950,7 @@ bool PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bSho
 	bool out = false;
 
 	BEGIN_TRY_CATCH
-	bShowDlg=false;
+
 	APL_Pin *pimpl=static_cast<APL_Pin *>(m_impl);
 	out = pimpl->verifyPin(csPin,ulRemaining,bShowDlg);
 	
@@ -959,14 +959,15 @@ bool PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bSho
 	return out;
 }
 
-bool PTEID_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName)
+bool PTEID_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg)
 {
+
 	bool out = false;
 
 	BEGIN_TRY_CATCH
 
 	APL_Pin *pimpl=static_cast<APL_Pin *>(m_impl);
-	out = pimpl->changePin(csPin1,csPin2,ulRemaining, PinName);
+	out = pimpl->changePin(csPin1,csPin2,ulRemaining, PinName, bShowDlg);
 	
 	END_TRY_CATCH
 

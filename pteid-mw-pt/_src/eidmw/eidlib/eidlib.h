@@ -1246,7 +1246,7 @@ public:
 	  *
 	  * @return true if success and false if failed
 	  */
-	PTEIDSDK_API bool changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName);
+	PTEIDSDK_API bool changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg=true);
 
 private:
 	PTEID_Pin(const PTEID_Pin& pin);									/**< Copy not allowed - not implemented */
