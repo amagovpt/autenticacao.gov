@@ -57,7 +57,7 @@
        <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page_Wellcome"/>
       <widget class="QWidget" name="page_Identity">
@@ -320,7 +320,7 @@
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtIdentity_ValidFrom_Until">
+       <widget class="QLineEdit" name="txtIdentity_ValidUntil">
         <property name="geometry">
          <rect>
           <x>186</x>
@@ -380,7 +380,7 @@
        <zorder>txtIdentity_BirthDate</zorder>
        <zorder>txtIdentity_Parents_Father</zorder>
        <zorder>txtIdentity_DocumentNumber</zorder>
-       <zorder>txtIdentity_ValidFrom_Until</zorder>
+       <zorder>txtIdentity_ValidUntil</zorder>
        <zorder>txtIdentity_Parents_Mother</zorder>
       </widget>
       <widget class="QWidget" name="page_IdentityExtra">
@@ -599,7 +599,7 @@
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtIdentityExtra_ValidFrom_Until">
+       <widget class="QLineEdit" name="txtIdentityExtra_ValidFrom">
         <property name="geometry">
          <rect>
           <x>190</x>

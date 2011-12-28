@@ -303,7 +303,7 @@ static widgetInfo widgetTabInfo[]=
 		,{"lblAdress_Country",					{{  9,214,201, 34}},	STYLESHEET_NORMAL_LABEL}
 		,{"txtIdentityExtra_Adress_Country",	{{  9,246,176, 18}},	STYLESHEET_NORMAL_VALUE}
 		,{"lblCard_ValidFrom_Until",			{{  9,340,353, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_ValidFrom_Until",	{{  9,360,353, 18}},	STYLESHEET_NORMAL_VALUE}
+		,{"txtIdentityExtra_ValidFrom",	{{  9,360,353, 18}},	STYLESHEET_NORMAL_VALUE}
 
 		//,{"lblSpecialStatus",					{{230,214,176, 34}},	STYLESHEET_NORMAL_LABEL}
 		//,{"txtSpecialStatus",					{{230,246,201, 18}},	STYLESHEET_NORMAL_VALUE}
@@ -4808,8 +4808,8 @@ void MainWnd::refreshTabIdentity( void )
 	m_ui.txtIdentity_Country->setAccessibleName	 ( PersonFields[COUNTRY] );
 	m_ui.txtIdentity_DocumentNumber->setText	 ( PersonFields[DOCUMENTNUMBER] );
 	m_ui.txtIdentity_DocumentNumber->setAccessibleName	 ( PersonFields[DOCUMENTNUMBER] );
-	m_ui.txtIdentity_ValidFrom_Until->setText( CardFields[CARD_VALIDFROM] + " - " + CardFields[CARD_VALIDUNTIL] );
-	m_ui.txtIdentity_ValidFrom_Until->setAccessibleName( CardFields[CARD_VALIDFROM] + " - " + CardFields[CARD_VALIDUNTIL] );
+	m_ui.txtIdentity_ValidUntil->setText( CardFields[CARD_VALIDUNTIL] );
+	m_ui.txtIdentity_ValidUntil->setAccessibleName( CardFields[CARD_VALIDUNTIL] );
 	m_ui.txtIdentity_Parents_Father->setText( PersonFields[FATHER] );
 	m_ui.txtIdentity_Parents_Father->setAccessibleName(PersonFields[FATHER]);
 	m_ui.txtIdentity_Parents_Mother->setText( PersonFields[MOTHER] );
@@ -4848,8 +4848,8 @@ void MainWnd::refreshTabIdentityExtra()
 
 	QString nationalNumber = m_CI_Data.m_PersonInfo.formatNationalNumber( PersonFields[NATIONALNUMBER],m_CI_Data.m_CardInfo.getType() );
 
-	m_ui.txtIdentityExtra_ValidFrom_Until->setText( CardFields[CARD_VALIDFROM] + " - " + CardFields[CARD_VALIDUNTIL] );
-	m_ui.txtIdentityExtra_ValidFrom_Until->setAccessibleName( CardFields[CARD_VALIDFROM] + " - " + CardFields[CARD_VALIDUNTIL] );
+	m_ui.txtIdentityExtra_ValidFrom->setText( CardFields[CARD_VALIDFROM]);
+	m_ui.txtIdentityExtra_ValidFrom->setAccessibleName( CardFields[CARD_VALIDFROM]);
 
 	tFieldMap& PersonExtraFields = m_CI_Data.m_PersonInfo.m_PersonExtraInfo.getFields();
 
@@ -4861,17 +4861,6 @@ void MainWnd::refreshTabIdentityExtra()
 	SpecialStatus["4"] = tr("yellow cane");
 	SpecialStatus["5"] = tr("yellow cane/extended minority");
 
-	/*tFieldMap& AddressFields = m_CI_Data.m_PersonInfo.m_AddressInfo.getFields();
-
-	m_ui.txtIdentityExtra_Adress_Street->setText	( AddressFields[ADDRESS_STREET] );
-	m_ui.txtIdentityExtra_Adress_Street->setAccessibleName	( AddressFields[ADDRESS_STREET] );
-	m_ui.txtIdentityExtra_Adress_PostalCode->setText( AddressFields[ADDRESS_ZIPCODE] );
-	m_ui.txtIdentityExtra_Adress_PostalCode->setAccessibleName( AddressFields[ADDRESS_ZIPCODE] );
-	m_ui.txtIdentityExtra_Adress_Muncipality->setText( AddressFields[ADDRESS_CITY] );
-	m_ui.txtIdentityExtra_Adress_Muncipality->setAccessibleName( AddressFields[ADDRESS_CITY] );
-	m_ui.txtIdentityExtra_Adress_Country->setText	( AddressFields[ADDRESS_COUNTRY] );
-	m_ui.txtIdentityExtra_Adress_Country->setAccessibleName	( AddressFields[ADDRESS_COUNTRY] );*/
-
 	tFieldMap& MiscFields = m_CI_Data.m_MiscInfo.getFields();
 
 	QStringList Remarks = fillRemarksField(MiscFields);
@@ -4880,14 +4869,10 @@ void MainWnd::refreshTabIdentityExtra()
 	int FieldCnt = Remarks.size();
 	if (FieldCnt>0)
 	{
-		//		m_ui.txtIdentityExtra_Remarks1->setText(Remarks[idx++]);
-		//		m_ui.txtIdentityExtra_Remarks1->setAccessibleName(Remarks[idx++]);
 		FieldCnt--;
 	}
 	if (FieldCnt>0)
 	{
-		//		m_ui.txtIdentityExtra_Remarks2->setText(Remarks[idx++]);
-		//		m_ui.txtIdentityExtra_Remarks2->setAccessibleName(Remarks[idx++]);
 		FieldCnt--;
 	}
 	if (FieldCnt>0)
@@ -4904,7 +4889,6 @@ void MainWnd::refreshTabIdentityExtra()
 //*****************************************************
 void MainWnd::refreshTabAddress( void )
 {
-	//DEBUG: m_ui.statusBar->showMessage("Pinactivate flag: "+ QString::number(pinactivate), m_STATUS_MSG_TIME);
 	if (pinactivate == 1)
 	{
 		if (!addressPINRequest_triggered())
@@ -5149,8 +5133,6 @@ void MainWnd::clearTabPins( void )
 void MainWnd::refreshTabCertificates( void )
 {
 	loadCardDataCertificates();
-	//PTEID_Certificates* CertificateFields = m_CI_Data.m_CertifInfo.getCertificates();
-	//We look for the selected item
 	QList<QTreeWidgetItem *> selectedItems = m_ui.treeCert->selectedItems();
 	if(selectedItems.size()==0)
 	{
