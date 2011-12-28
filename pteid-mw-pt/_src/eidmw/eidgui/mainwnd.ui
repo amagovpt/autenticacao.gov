@@ -57,7 +57,7 @@
        <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_Wellcome"/>
       <widget class="QWidget" name="page_Identity">
@@ -230,10 +230,10 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>440</x>
-          <y>110</y>
-          <width>111</width>
-          <height>131</height>
+          <x>420</x>
+          <y>10</y>
+          <width>140</width>
+          <height>160</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -273,13 +273,13 @@
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtIdentity_Parents">
+       <widget class="QLineEdit" name="txtIdentity_Parents_Father">
         <property name="geometry">
          <rect>
           <x>23</x>
-          <y>314</y>
-          <width>361</width>
-          <height>48</height>
+          <y>313</y>
+          <width>375</width>
+          <height>21</height>
          </rect>
         </property>
         <property name="minimumSize">
@@ -345,6 +345,31 @@
          <bool>true</bool>
         </property>
        </widget>
+       <widget class="QLineEdit" name="txtIdentity_Parents_Mother">
+        <property name="geometry">
+         <rect>
+          <x>23</x>
+          <y>344</y>
+          <width>375</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>240</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
        <zorder>lblIdentity_ImgPerson</zorder>
        <zorder>txtIdentity_GivenNames</zorder>
        <zorder>txtIdentity_Name</zorder>
@@ -353,9 +378,10 @@
        <zorder>txtIdentity_Country</zorder>
        <zorder>txtIdentity_Nationality</zorder>
        <zorder>txtIdentity_BirthDate</zorder>
-       <zorder>txtIdentity_Parents</zorder>
+       <zorder>txtIdentity_Parents_Father</zorder>
        <zorder>txtIdentity_DocumentNumber</zorder>
        <zorder>txtIdentity_ValidFrom_Until</zorder>
+       <zorder>txtIdentity_Parents_Mother</zorder>
       </widget>
       <widget class="QWidget" name="page_IdentityExtra">
        <property name="styleSheet">
@@ -1038,7 +1064,7 @@ image: url(:/images/Images/bg-Light-Blue.png);</string>
          <bool>false</bool>
         </property>
         <attribute name="headerVisible">
-         <bool>true</bool>
+         <bool>false</bool>
         </attribute>
         <attribute name="headerShowSortIndicator" stdset="0">
          <bool>false</bool>

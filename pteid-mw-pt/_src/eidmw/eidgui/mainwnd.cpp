@@ -4810,8 +4810,10 @@ void MainWnd::refreshTabIdentity( void )
 	m_ui.txtIdentity_DocumentNumber->setAccessibleName	 ( PersonFields[DOCUMENTNUMBER] );
 	m_ui.txtIdentity_ValidFrom_Until->setText( CardFields[CARD_VALIDFROM] + " - " + CardFields[CARD_VALIDUNTIL] );
 	m_ui.txtIdentity_ValidFrom_Until->setAccessibleName( CardFields[CARD_VALIDFROM] + " - " + CardFields[CARD_VALIDUNTIL] );
-	m_ui.txtIdentity_Parents->setText( PersonFields[PARENTS] );
-	m_ui.txtIdentity_Parents->setAccessibleName( PersonFields[PARENTS] );
+	m_ui.txtIdentity_Parents_Father->setText( PersonFields[FATHER] );
+	m_ui.txtIdentity_Parents_Father->setAccessibleName(PersonFields[FATHER]);
+	m_ui.txtIdentity_Parents_Mother->setText( PersonFields[MOTHER] );
+	m_ui.txtIdentity_Parents_Mother->setAccessibleName( PersonFields[MOTHER] );
 }
 
 //*****************************************************

@@ -697,6 +697,8 @@ public:
 #define ISSUINGENTITY		"issuingentity"
 #define PHOTO				"photo"
 #define PARENTS				"parents"
+#define MOTHER				"mother"
+#define FATHER				"father"
 #define LOCALOFREQUEST		"localofrequest"
 #define VALIDATION			"validation"
 #define MRZ1				"MRZ1"
@@ -753,32 +755,29 @@ public:
 		m_Fields[SEX]						= QString::fromUtf8(pteid_eid.getGender());
 		m_Fields[HEIGHT]					= QString::fromUtf8(pteid_eid.getHeight());
 		m_Fields[DOCUMENTNUMBER] 			= QString::fromUtf8(pteid_eid.getDocumentNumber());
-		m_Fields[PARENTS]					= QString::fromUtf8(pteid_eid.getSurnameFather());
 		m_Fields[TAXNO]						= QString::fromUtf8(pteid_eid.getTaxNo());
 		m_Fields[HEALTHNO]					= QString::fromUtf8(pteid_eid.getHealthNumber());
 		m_Fields[SOCIALSECURITYNO]			= QString::fromUtf8(pteid_eid.getSocialSecurityNumber());
 		m_Fields[CARDVERSION]				= QString::fromUtf8(pteid_eid.getDocumentVersion());
 		m_Fields[DOCUMENTTYPE]				= QString::fromUtf8(pteid_eid.getDocumentType());
 		m_Fields[ISSUINGENTITY]				= QString::fromUtf8(pteid_eid.getIssuingEntity());
-		//m_Fields[PHOTO]						= QString::fromUtf8(pteid_eid.getPhoto());
-		m_Fields[PARENTS]					= QString::fromUtf8(pteid_eid.getParents());
+		m_Fields[FATHER]					= QString::fromUtf8(pteid_eid.getGivenNameFather());
+		m_Fields[FATHER]					+= " " + QString::fromUtf8(pteid_eid.getSurnameFather());
+		m_Fields[MOTHER]					= QString::fromUtf8(pteid_eid.getGivenNameMother());
+		m_Fields[MOTHER]					+= " " + QString::fromUtf8(pteid_eid.getSurnameMother());
+
+		m_Fields[PARENTS]					= m_Fields[FATHER] + " * " + m_Fields[MOTHER];
+
 		m_Fields[LOCALOFREQUEST]			= QString::fromUtf8(pteid_eid.getLocalofRequest());
 		m_Fields[VALIDATION]				= QString::fromUtf8(pteid_eid.getValidation());
 		m_Fields[MRZ1]						= QString::fromUtf8(pteid_eid.getMRZ1());
 		m_Fields[MRZ2]						= QString::fromUtf8(pteid_eid.getMRZ2());
 		m_Fields[MRZ3]						= QString::fromUtf8(pteid_eid.getMRZ3());
 		m_Fields[ACCIDENTALINDICATIONS]		= QString::fromUtf8(pteid_eid.getAccidentalIndications());
-// 		qDebug() << "PersonInfo::RetrieveData()";
-// 		for (tFieldMap::iterator it=m_Fields.begin(); it!=m_Fields.end(); it++)
-// 		{
-// 			qDebug() << "[" << it.key() << "] = " << "Value: " << it.value();
-// 		}
 
-		//m_AddressInfo.RetrieveData(Card);
 		m_RelativesInfo.RetrieveData(Card);
 		m_PersonExtraInfo.RetrieveData(Card);
 		m_BiometricInfo.RetrieveData(Card);
-		//m_PersoDataInfo.RetrieveData(Card);
 
 		return bRetVal;
 
@@ -796,12 +795,6 @@ public:
 		m_Fields[INITIALS]  = QString::fromUtf8(pteid_SisId.getInitials()); 
 		m_Fields[BIRTHDATE] = QString::fromUtf8(pteid_SisId.getDateOfBirth()); 
 		m_Fields[SEX]	    = QString::fromUtf8(pteid_SisId.getGender()); 
-
-// 		qDebug() << "PersonInfo::RetrieveData()";
-// 		for (tFieldMap::iterator it=m_Fields.begin(); it!=m_Fields.end(); it++)
-// 		{
-// 			qDebug() << "[" << it.key() << "] = " << "Value: " << it.value();
-// 		}
 
 		m_PersonExtraInfo.RetrieveData(Card);
 
