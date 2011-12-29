@@ -1,25 +1,20 @@
-Index: ../cardlayer/cardpluginPteid/PteidCard.cpp
+Index: PteidCard.cpp
 ===================================================================
---- ../cardlayer/cardpluginPteid/PteidCard.cpp	(revision 711)
-+++ ../cardlayer/cardpluginPteid/PteidCard.cpp	(working copy)
-@@ -727,13 +727,13 @@
+--- PteidCard.cpp	(revision 1205)
++++ PteidCard.cpp	(working copy)
+@@ -691,13 +691,14 @@
  
      // Pretty unique for smart cards: first MSE SET, then verify PIN
      // (needed for the nonrep key/pin, but also usable for the auth key/pin)
 -    if (pPin != NULL)
--    {
--        unsigned long ulRemaining = 0;
--        bool bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
--        if (!bOK)
--			throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
--    }
-+    // if (pPin != NULL)
-+    // {
-+    //     unsigned long ulRemaining = 0;
-+    //     bool bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
-+    //     if (!bOK)
-+    // 			throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
-+    // }
++   /* if (pPin != NULL)
+     {
+         unsigned long ulRemaining = 0;
+         bool bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
+         if (!bOK)
+ 			throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
+     }
++	*/
+ 	
  
      SetSecurityEnv(key, algo, oData.Size());
- 
