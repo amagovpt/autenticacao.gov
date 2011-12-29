@@ -39,7 +39,6 @@ default: all
 all: dist
 
 dist: FreeImage
-	cp *.a Dist
 	cp *.so Dist
 	cp Source/FreeImagePTEiD.h Dist
 	cp $(SHAREDLIB) $(TEMPDIR)
