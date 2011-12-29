@@ -47,7 +47,6 @@ default: all
 all: dist
 
 dist: FreeImage
-	cp *.a Dist
 	cp *.dylib Dist
 	cp Source/FreeImagePTEiD.h Dist
 
