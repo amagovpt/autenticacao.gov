@@ -1824,6 +1824,9 @@ void MainWnd::on_btnCert_Details_clicked( void )
 			{
 				PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 
+				std::string ccimport = "Cartão de Cidadão 001";
+				QString qccimport = QString::fromUtf8(ccimport.c_str());
+
 				//------------------------------------
 				// make always sure a card is present
 				//------------------------------------
@@ -1831,7 +1834,7 @@ void MainWnd::on_btnCert_Details_clicked( void )
 				{
 					PTEID_EIDCard&		Card		= ReaderContext.getEIDCard();
 					PTEID_Certificates&	certificates= Card.getCertificates();
-
+				
 					//------------------------------------
 					// find the certificate with this label
 					//------------------------------------
@@ -1842,6 +1845,7 @@ void MainWnd::on_btnCert_Details_clicked( void )
 
 						if (CurrCertLabel==CertLabel)
 						{
+
 							const PTEID_ByteArray certData = cert.getCertData();
 
 							CRYPTUI_VIEWCERTIFICATE_STRUCT tCert = {0};
@@ -1853,6 +1857,44 @@ void MainWnd::on_btnCert_Details_clicked( void )
 							CryptUIDlgViewCertificate(&tCert, &bChange);
 							CertFreeCertificateContext (tCert.pCertContext);
 						}
+					}
+					
+					if (CertLabel == "GTE CyberTrust Global Root")
+					{
+							CRYPTUI_VIEWCERTIFICATE_STRUCT tCert = {0};
+							tCert.dwSize		= sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
+							tCert.hwndParent	= this->winId();
+							tCert.dwFlags		= CRYPTUI_DISABLE_EDITPROPERTIES;
+							tCert.pCertContext	= CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, (const BYTE*)certificates.getExternalCertData(1), (DWORD)certificates.getExternalCertDataSize(1));
+							BOOL bChange		= FALSE;
+							CryptUIDlgViewCertificate(&tCert, &bChange);
+							CertFreeCertificateContext (tCert.pCertContext);
+
+					} 
+					
+					if (CertLabel == "ECRaizEstado")
+					{
+							CRYPTUI_VIEWCERTIFICATE_STRUCT tCert = {0};
+							tCert.dwSize		= sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
+							tCert.hwndParent	= this->winId();
+							tCert.dwFlags		= CRYPTUI_DISABLE_EDITPROPERTIES;
+							tCert.pCertContext	= CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, (const BYTE*)certificates.getExternalCertData(2) , (DWORD)certificates.getExternalCertDataSize(2));
+							BOOL bChange		= FALSE;
+							CryptUIDlgViewCertificate(&tCert, &bChange);
+							CertFreeCertificateContext (tCert.pCertContext);
+
+					} 
+
+					if (CertLabel == qccimport) 
+					{
+							CRYPTUI_VIEWCERTIFICATE_STRUCT tCert = {0};
+							tCert.dwSize		= sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
+							tCert.hwndParent	= this->winId();
+							tCert.dwFlags		= CRYPTUI_DISABLE_EDITPROPERTIES;
+							tCert.pCertContext	= CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, (const BYTE*)certificates.getExternalCertData(3) , (DWORD)certificates.getExternalCertDataSize(3));
+							BOOL bChange		= FALSE;
+							CryptUIDlgViewCertificate(&tCert, &bChange);
+							CertFreeCertificateContext (tCert.pCertContext);
 					}
 				}
 			}
