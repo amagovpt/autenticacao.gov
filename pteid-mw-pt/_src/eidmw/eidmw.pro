@@ -5,6 +5,8 @@ include(_Builds/eidcommon.mak)
 
 TEMPLATE = subdirs
 
+SUBDIRS += FreeImagePTEiD
+
 ## list of the subprojects to build:
 ## qmake expects a <NAME>.pro project file in each <NAME> subdirectory
 
