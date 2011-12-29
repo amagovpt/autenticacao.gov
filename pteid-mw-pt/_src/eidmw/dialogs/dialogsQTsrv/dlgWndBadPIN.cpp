@@ -21,6 +21,9 @@
 #include "dlgWndBadPIN.h"
 #include "../langUtil.h"
 
+#include <iostream>
+using namespace std;
+
 dlgWndBadPIN::dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWidget *parent ) : dlgWndBase(parent)
 {
 	ui.setupUi(this);
@@ -40,7 +43,10 @@ dlgWndBadPIN::dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWi
 	Title+=QString::fromWCharArray(GETSTRING_DLG(Bad));
 	Title+=" ";
 	Title+=PINName;
-	this->setWindowTitle( Title );
+
+	wcout << PINName.toStdWString() << endl;
+
+	this->setWindowTitle(Title);
 
 	ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
 	ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Ok)) );

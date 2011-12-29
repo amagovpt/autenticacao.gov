@@ -310,6 +310,7 @@ int main(int argc, char *argv[])
 			try
 			{
 				QString PINName;
+
 				switch( oData->usage ) 
 				{
 					case DLG_PIN_UNKNOWN:
@@ -330,6 +331,14 @@ int main(int argc, char *argv[])
 						}
 						break;
 				}
+
+				//Quickfix for encoding problem! It should be fixed later!
+				if( wcsstr(oData->pinName,L"PIN da Autentica") != 0 )
+					PINName=QString::fromUtf8("Pin de Autenticacao");
+
+				//wcout << "oData->pinName: " << oData->pinName << endl;
+				//wcout << "PINName " << PINName.toStdWString() << endl;
+
 				dlg = new dlgWndBadPIN(	PINName, oData->ulRemainingTries );
 				if( dlg->exec() ) 
 				{
