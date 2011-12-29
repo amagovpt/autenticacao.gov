@@ -618,6 +618,33 @@ PTEID_Certificate &PTEID_Certificates::getCert(unsigned long ulIndex)
 
 	return *out;
 }
+
+const unsigned char *PTEID_Certificates::getExternalCertData(int cert)
+{
+	const unsigned char *out;
+	BEGIN_TRY_CATCH
+
+	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
+	out = pimpl->ExternalCertData(cert);
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+int PTEID_Certificates::getExternalCertDataSize(int cert)
+{
+	int out;
+	BEGIN_TRY_CATCH
+
+	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
+	out = pimpl->ExternalCertDataSize(cert);
+
+	END_TRY_CATCH
+
+	return out;
+}
+
 const char *PTEID_Certificates::getExternalCertSubject(int cert)
 {
 	const char *out = NULL;
