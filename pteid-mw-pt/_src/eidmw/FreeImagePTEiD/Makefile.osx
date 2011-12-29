@@ -27,7 +27,6 @@ LIBTOOL = libtool
 LIPO = lipo
 
 TARGET = freeimage
-STATICLIB = lib$(TARGET).a
 SHAREDLIB = lib$(TARGET)-$(VER_MAJOR).$(VER_MINOR).dylib
 LIBNAME = lib$(TARGET).$(VER_MAJOR).dylib
 HEADER = Source/FreeImagePTEiD.h
@@ -41,14 +40,17 @@ MODULES_X86_64 := $(MODULES_X86_64:.cpp=.o-x86_64)
 PREFIX = /usr/local
 INSTALLDIR = $(PREFIX)/lib
 INCDIR = $(PREFIX)/include
+TEMPDIR ?= ../lib
 
 default: all
 
 all: dist
 
 dist: FreeImage
-	cp *.dylib Dist
+	cp $(SHAREDLIB) Dist
 	cp Source/FreeImagePTEiD.h Dist
+	cp $(SHAREDLIB) $(TEMPDIR)
+	ln -sf $(SHAREDLIB) $(TEMPDIR)/$(LIBNAME)
 
 FreeImage: $(SHAREDLIB)
 
@@ -76,9 +78,11 @@ $(SHAREDLIB)-x86_64: $(MODULES_X86_64)
 install:
 	install -d -m 755 -o root -g wheel $(INCDIR) $(INSTALLDIR)
 	install -m 644 -o root -g wheel $(HEADER) $(INCDIR)
-	install -m 644 -o root -g wheel $(SHAREDLIB) $(STATICLIB) $(INSTALLDIR)
-	ranlib -sf $(INSTALLDIR)/$(STATICLIB)
+	install -m 644 -o root -g wheel $(SHAREDLIB) $(INSTALLDIR)
 	ln -sf $(SHAREDLIB) $(INSTALLDIR)/$(LIBNAME)
 
 clean:
-	rm -f core Dist/*.* u2dtmp* $(MODULES_I386) $(MODULES_X86_64) $(STATICLIB) $(STATICLIB)-i386 $(SHAREDLIB) $(SHAREDLIB)-i386 $(SHAREDLIB)-x86_64
+	rm -f core Dist/*.* u2dtmp* $(MODULES_I386) $(MODULES_X86_64) $(SHAREDLIB) $(SHAREDLIB)-i386 $(SHAREDLIB)-x86_64
+	
+distclean:
+	rm -f core Dist/*.* u2dtmp* $(MODULES_I386) $(MODULES_X86_64) $(SHAREDLIB) $(SHAREDLIB)-i386 $(SHAREDLIB)-x86_64
