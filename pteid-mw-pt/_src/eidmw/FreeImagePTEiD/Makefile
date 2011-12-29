@@ -32,3 +32,6 @@ install:
 clean:
 	$(MAKE) -f Makefile.$(MAKEFILE) clean 
 
+distclean:
+	$(MAKE) -f Makefile.$(MAKEFILE) distclean 
+
