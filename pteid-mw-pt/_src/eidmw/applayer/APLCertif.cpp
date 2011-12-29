@@ -1698,6 +1698,40 @@ err:
 	return NULL;
 }
 
+const unsigned char *APL_Certif::ExternalCertData(int certnr)
+{
+	X509 *cert;
+	unsigned char *rdata = NULL;
+	int len;
+
+	if ((cert = ExternalCert(certnr)) == NULL)
+		return NULL;
+
+	len = i2d_X509 (cert, &rdata);
+
+	if (len < 0)
+		return NULL;
+
+	return rdata;
+}
+
+int APL_Certif::ExternalCertDataSize(int certnr)
+{
+	X509 *cert;
+	unsigned char *rdata = NULL;
+	int len;
+
+	if ((cert = ExternalCert(certnr)) == NULL)
+		return NULL;
+
+	len = i2d_X509 (cert, &rdata);
+
+	if (len < 0)
+		return NULL;
+
+	return len;
+}
+
 const char *APL_Certif::ExternalCertSubject(int certnr)
 {
 	//Subject name

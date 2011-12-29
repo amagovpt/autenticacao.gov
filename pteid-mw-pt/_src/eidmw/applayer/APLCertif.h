@@ -490,6 +490,8 @@ public:
 
 	EIDMW_APL_API const char *x509TimeConversion (ASN1_TIME *time);
 	EIDMW_APL_API X509* ExternalCert(int cert);
+	EIDMW_APL_API const unsigned char * ExternalCertData(int certnr);
+	EIDMW_APL_API int ExternalCertDataSize(int certnr);
 	EIDMW_APL_API const char *ExternalCertSubject(int cert);
 	EIDMW_APL_API const char *ExternalCertIssuer(int cert);
 	EIDMW_APL_API unsigned long ExternalCertKeylenght(int cert);
