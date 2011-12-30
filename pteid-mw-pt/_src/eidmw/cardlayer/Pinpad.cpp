@@ -292,8 +292,8 @@ CByteArray CPinpad::PinpadControl(unsigned long ulControl, const CByteArray & oC
 	unsigned char pinpadOperation = PinOperation2Lib(operation);
 
 #ifdef PP_DUMP_CMDS
-	printf("PP ctrl (%svia pinpad lib): 0x%0x\n", (m_bUsePinpadLib ? "" : "not "), ulControl);
-	printf("PP IN: %s\n", oCmd.ToString(true, false, 0, 0xFFFFFFFF).c_str());
+	//printf("PP ctrl (%svia pinpad lib): 0x%0x\n", (m_bUsePinpadLib ? "" : "not "), ulControl);
+	//printf("PP IN: %s\n", oCmd.ToString(true, false, 0, 0xFFFFFFFF).c_str());
 #endif
 
 	unsigned long ulDlgHandle;
@@ -325,7 +325,7 @@ CByteArray CPinpad::PinpadControl(unsigned long ulControl, const CByteArray & oC
 		m_oPinpadLib.CloseDlg(ulDlgHandle);
 
 #ifdef PP_DUMP_CMDS
-	printf("PP OUT: %s\n", oResp.ToString(true, false, 0, 0xFFFFFFFF).c_str());
+	//printf("PP OUT: %s\n", oResp.ToString(true, false, 0, 0xFFFFFFFF).c_str());
 #endif
 
 	return oResp;
