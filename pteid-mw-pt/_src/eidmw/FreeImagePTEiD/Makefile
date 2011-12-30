@@ -34,4 +34,6 @@ clean:
 
 distclean:
 	$(MAKE) -f Makefile.$(MAKEFILE) distclean 
+
+check:
 
