@@ -620,7 +620,6 @@ bool EIDMW_XMLParser::parse( MemBufInputSource* pMemBufIS				//<! The memory inp
 	catch (const XMLException& e) 
 	{
 		char* message = XMLString::transcode(e.getMessage());
-		std::cout << "Exception message is: \n"	<< message << "\n";
 		XMLString::release(&message);
 		return false;
 	}
@@ -678,7 +677,6 @@ bool EIDMW_XMLParser::parse( void )
 	catch (const XMLException& e) 
 	{
 		char* message = XMLString::transcode(e.getMessage());
-		std::cout << "Exception message is: \n"	<< message << "\n";
 		XMLString::release(&message);
 		return false;
 	}
