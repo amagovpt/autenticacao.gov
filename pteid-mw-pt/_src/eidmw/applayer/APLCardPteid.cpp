@@ -723,7 +723,6 @@ APL_EidFile_ID *APL_EIDCard::getFileID()
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
 		if(!m_FileID)
 		{
-			std::cout << " APL_EidFile_ID " << std::endl;
 			m_FileID=new APL_EidFile_ID(this);
 		}
 	}
@@ -1509,7 +1508,6 @@ CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
 		xml+="</ccpt>\n";
 	}
 	if (m_xmlUserRequestedInfo->contains(XML_NIC))
-		cout << "NIC ENCONTRADO!!!!!!!" << endl;
 
 	/*xml+=m_card->getSod().getXML(true);
 	xml+=m_card->getDocInfo().getXML(true);
