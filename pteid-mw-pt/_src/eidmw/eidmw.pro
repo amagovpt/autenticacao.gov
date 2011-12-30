@@ -49,4 +49,7 @@ CONFIG += ordered
 data.path +=  /usr/local/share/certs
 data.files += misc/certs/*
 
-INSTALLS += data
+datajp2.path +=  /usr/lib/qt4/plugins/imageformats/
+datajp2.files += misc/qtjp2kplugin/*
+
+INSTALLS += data datajp2
