@@ -60,7 +60,7 @@ static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard)
 
 static CByteArray ReadInternal(CPCSC *poPCSC, SCARDHANDLE hCard, unsigned long ulOffset, unsigned long ulMaxLen)
 {
-  	cout << "ReadInternal" << endl;
+
 	long lretVal = 0;
 	CByteArray oCmd(40);
 	unsigned char tucReadDat[] = {0x00, 0xA4, 0x04, 0x0C};
@@ -111,12 +111,10 @@ CCard *PTeidCardGetVersion (unsigned long ulVersion, const char *csReader,
 
 	if (bIsPtgemCard) 
 	{
-		cout << "IS Ptgemsafe" <<endl;
 		ulVersion = 1;
 		poContext->m_oPCSC.EndTransaction(hCard);
 		poCard = PteidCardGetInstance(ulVersion, csReader, hCard, poContext, poPinpad);
 	} else {
-		cout << "NOT Ptgemsafe" << endl;
 		ulVersion = 2;
 		poContext->m_oPCSC.BeginTransaction(hCard);
 		oData = ReadInternalIAS(&poContext->m_oPCSC, hCard, 0, ulReadLen);
@@ -137,7 +135,6 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 
 	if (ulVersion == 1)
 	{
-		cout << "selecionou gemsafe" << endl;
 		try {
 			bool bNeedToSelectApplet = false;
 			CByteArray oData;
@@ -145,7 +142,6 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 			// lmedinas CONFIRMED
 			unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
 			oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
-			cout << "PteidCard.cpp: PteidCardGetInstance - oCmd.Append(tucSelectApp, sizeof(tucSelectApp));" << endl;
 			oCmd.Append((unsigned char) sizeof(GEMSAFE_PTEID_APPLET_AID));
 			oCmd.Append(GEMSAFE_PTEID_APPLET_AID, sizeof(GEMSAFE_PTEID_APPLET_AID));
 			long lRetVal;
@@ -156,7 +152,6 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 				oData = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal);
 				if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED)
 				{
-					cout << "PteidCard.cpp COMM_DATA_LOST " << endl;
 					unsigned long ulLockCount = 0;
 					poContext->m_oPCSC.Recover(hCard, &ulLockCount);
 
@@ -205,7 +200,6 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 
 	} else {
 		try {
-			cout << "Seleccionou ias" << endl;
 			bool bNeedToSelectApplet = false;
 			CByteArray oData;
 			CByteArray oCmd(40);
@@ -676,7 +670,6 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
     }
 
     unsigned long ulSW12 = getSW12(oResp);
-    cout << "SetEnvironment: " << hex << ulSW12 << dec << endl;
 
     getSW12(oResp, 0x9000);
 }
@@ -718,7 +711,6 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
 		oResp = SendAPDU(0x2A, 0x9E, 0x9A, 0x80);
     } else {
     	// PSO:Hash IAS - does CDS
-		cout << "IAS" << endl;
     	oResp = SendAPDU(0x88, 0x02, 0x00, oData);
     }
 
@@ -771,7 +763,6 @@ tBelpicDF CPteidCard::getDF(const std::string & csPath, unsigned long & ulOffset
 tFileInfo CPteidCard::SelectFile(const std::string & csPath, bool bReturnFileInfo)
 {
 		//printf("++++ Pteid15 select file: ");
-		std::cout << csPath << "\n";
 		CPkiCard::SelectFile(csPath, false);
 
 	// The EF(Preferences) file can be written using the authentication PIN;
@@ -816,8 +807,6 @@ CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFile
 			CByteArray oPath(ulPathLen);
 			oPath.Append(Hex2Byte(csPath, ulOffset));
 			oPath.Append(Hex2Byte(csPath, ulOffset + 1));
-			
-			std::cout << "Try by path. APDU: 0xA4 0x00 0x0C " << oPath.ToString() << "\n"; 
 			
 			CByteArray oResp = SendAPDU(0xA4, 0x00, 0x0C, oPath);
 			unsigned long ulSW12 = getSW12(oResp);
