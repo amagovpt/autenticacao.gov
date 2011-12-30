@@ -634,7 +634,6 @@ return(lBits);
     xLev0Item.p_data = (unsigned char*)contents.GetBytes();
 
     //printf("----- PKCS15Parser Odf\n");
-	std::cout << "Data: " << xLev0Item.p_data << " Size: " << xLev0Item.l_data << "\n";
 
     while(xLev0Item.l_data > 0)
     {
