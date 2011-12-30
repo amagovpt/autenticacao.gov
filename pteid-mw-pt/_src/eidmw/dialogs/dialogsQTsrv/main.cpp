@@ -132,6 +132,10 @@ int main(int argc, char *argv[])
 					PINName = GETQSTRING_DLG(Pin);
 				}
 
+				//Quickfix for encoding problem! It should be fixed later!
+				if( wcsstr(oData->pinName,L"PIN da Autentica") != 0 )
+					PINName=QString::fromUtf8("Pin de Autenticacao");
+
 				QString Header;
 				switch( oData->operation )
 				{
@@ -262,6 +266,7 @@ int main(int argc, char *argv[])
 						return 0;
 						break;
 				}
+
 				Header += PINName;
 				Header += " ";
 				Header += GETQSTRING_DLG(Code);
@@ -335,7 +340,6 @@ int main(int argc, char *argv[])
 				//Quickfix for encoding problem! It should be fixed later!
 				if( wcsstr(oData->pinName,L"PIN da Autentica") != 0 )
 					PINName=QString::fromUtf8("Pin de Autenticacao");
-
 				//wcout << "oData->pinName: " << oData->pinName << endl;
 				//wcout << "PINName " << PINName.toStdWString() << endl;
 
