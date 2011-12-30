@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WixLocalization Culture="pt-PT" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
   <String Id="Lang" Overridable="yes">2070</String>
   <String Id="Langpref" Overridable="yes">pt</String>
   <String Id="StartApp" Overridable="yes">Lançar a aplicação utilitária</String>
