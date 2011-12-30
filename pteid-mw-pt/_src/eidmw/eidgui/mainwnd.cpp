@@ -641,7 +641,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 #ifndef WIN32
 	m_ui.btnCert_Details->hide();
 	m_ui.btnCert_Register->hide();
-	m_ui.lblCert_InfoAdd->hide();
+
 #endif
 
 	//----------------------------------

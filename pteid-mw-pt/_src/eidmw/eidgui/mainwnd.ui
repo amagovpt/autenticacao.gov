@@ -57,7 +57,7 @@
        <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_Wellcome"/>
       <widget class="QWidget" name="page_Identity">
@@ -230,10 +230,10 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>430</x>
           <y>10</y>
-          <width>140</width>
-          <height>160</height>
+          <width>202</width>
+          <height>269</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -258,7 +258,7 @@
          <bool>false</bool>
         </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">background-image: url(:/images/Images/alpha.png);</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
@@ -1248,8 +1248,8 @@ font: 10pt &quot;Arial&quot;;</string>
        <widget class="QPushButton" name="btnCert_Register">
         <property name="geometry">
          <rect>
-          <x>680</x>
-          <y>220</y>
+          <x>400</x>
+          <y>340</y>
           <width>85</width>
           <height>27</height>
          </rect>
@@ -1264,8 +1264,8 @@ font: 10pt &quot;Arial&quot;;</string>
        <widget class="QPushButton" name="btnCert_Details">
         <property name="geometry">
          <rect>
-          <x>680</x>
-          <y>250</y>
+          <x>400</x>
+          <y>370</y>
           <width>85</width>
           <height>27</height>
          </rect>
@@ -1276,50 +1276,6 @@ font: 10pt &quot;Arial&quot;;</string>
         <property name="text">
          <string>&amp;Details &gt;&gt;</string>
         </property>
-       </widget>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>410</x>
-          <y>220</y>
-          <width>261</width>
-          <height>181</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="_10">
-         <item row="1" column="0" colspan="3">
-          <widget class="QLabel" name="lblCert_InfoAdd">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-image: url(:/images/Images/alpha.png);</string>
-           </property>
-           <property name="text">
-            <string>To use your identity card with applications like Internet Explorer, Microsoft Offfice,OpenOffice.org, Adobe Reader, Outlook, ... you first have to register the card in Windows. Select a certificate and click the &quot;Register&quot; button to register your certificates</string>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>108</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
        </widget>
       </widget>
       <widget class="QWidget" name="page_PINCodes">
