@@ -61,7 +61,7 @@ namespace eIDMW
 
   CPKCS15::CPKCS15(void)
   {
-      cout << "PKCS15.cpp" << endl;
+
   }
 
   CPKCS15::CPKCS15(CContext *poContext) :
