@@ -34,8 +34,33 @@ EIDMW_PP_API long EIDMW_PP2_Init(
 
 	return SCARD_S_SUCCESS;
 
+}
+
+void printHex(char *array, unsigned int len)
+{
+	unsigned int i = 0;
+	char *p = array;
+
+	if (array == NULL )
+	{   
+		printf("printfHex: NULL Array\n");
+		return;
+	}
+
+	while(i != len)
+	{   
+		if (( i % 16 ) == 0) 
+		{
+			printf("\n");
+		}   
+
+		printf ("%02X ", *p++);
+		i++;
+	}   
+	printf("\n\n");
 
 }
+
 
 
 DLL_LOCAL BOOL IsGemsafe(BYTE *atr, DWORD atrLen)
@@ -46,6 +71,7 @@ DLL_LOCAL BOOL IsGemsafe(BYTE *atr, DWORD atrLen)
 	    "\x3B\x7D\x95\x00\x00\x80\x31\x80\x65\xb0\x83\x11\x00\xc8\x83\x00\x90\x00",
 	    "\x3B\x7D\x95\x00\x00\x80\x31\x80\x65\xb0\x83\x11\x00\xa9\x83\x00\x90\x00",
 	    "\x3B\x7D\x95\x00\x00\x80\x31\x80\x65\xb0\x83\x11\x00\xc8\x83\x00",
+	    "\x3B\x7D\x95\x00\x00\x80\x31\x80\x65\xB0\x83\x11\xC0\xA9\x83\x00\x90\x00",
 	    "\x3B\x7D\x95\x00\x00\x80\x31\x80\x65\xb0\x83\x11\x00\xa9\x83\x00" 
 
 	};
@@ -61,50 +87,61 @@ DLL_LOCAL BOOL IsGemsafe(BYTE *atr, DWORD atrLen)
 }
 
 
-DLL_LOCAL unsigned int fillStructIAS(EIDMW_PP_VERIFY_CCID * pin_verify, unsigned char ucPintype)
+DLL_LOCAL unsigned int fillStructIAS(unsigned char* apdu, unsigned char ucPintype, int changePIN)
 {
 
-	int offset = 0;
+	unsigned int offset = 0;
+        unsigned int apdu_size = 12;
 
-	pin_verify -> abData[offset++] = 0x00;
+	apdu[offset++] = 0x00;
 	/* CLA */ /*********************************/
-	pin_verify -> abData[offset++] = 0x20;
-	/* INS: VERIFY */
-	pin_verify -> abData[offset++] = 0x00;
+	if (changePIN)
+		apdu[offset++] = 0x24;
+	else
+		apdu[offset++] = 0x20;
+	/* INS: VERIFY or CHANGE PIN */
+	if (changePIN)
+		apdu[offset++] = 0x01;
+	else
+		apdu[offset++] = 0x00;
 	/* P1 */
 	switch (ucPintype)
 	{
 		case EIDMW_PP_TYPE_AUTH:
 		printf("ppgemplus-plugin: Get Authentication PIN\n");
-			pin_verify -> abData[offset++] = 0x01;
+			apdu[offset++] = 0x01;
 			break;
 
 		case EIDMW_PP_TYPE_SIGN:
 			printf("ppgemplus-plugin: Get Signature PIN\n");
-			pin_verify -> abData[offset++] = 0x82;
+			apdu[offset++] = 0x82;
 			break;
 
 		case EIDMW_PP_TYPE_ADDR:
 			printf("ppgemplus-plugin: Get Address PIN\n");
-			pin_verify -> abData[offset++] = 0x83;
+			apdu[offset++] = 0x83;
 			break;
 
 	}
-	/* P2 */
-	pin_verify -> abData[offset++] = 0x08;
-	/* Lc: 8 data bytes */
-	while (offset <= 12) 
-		pin_verify -> abData[offset++] = 0x2F; //Padding byte 
 
-	pin_verify -> ulDataLength = offset;
+	apdu[offset++] = apdu_size - 4;
+	/* Lc: Length of data section */
+	
+
+	while (offset <= apdu_size)
+		apdu[offset++] = 0x2F; //Padding byte 
+
 	/* APDU size */
 
-	return sizeof(EIDMW_PP_VERIFY_CCID) + offset -1;
+	if (changePIN)
+		return sizeof(EIDMW_PP_CHANGE_CCID) + offset -1 ;
+	else			
+		return sizeof(EIDMW_PP_VERIFY_CCID) + offset -1;
 
 }
 
 
-DLL_LOCAL void fillControlStruct(EIDMW_PP_VERIFY_CCID * pin_verify)
+DLL_LOCAL void fillVerifyControlStruct(EIDMW_PP_VERIFY_CCID * pin_verify)
 {
 
 	/* PC/SC v2.0.2 Part 10 PIN verification data structure */
@@ -125,46 +162,113 @@ DLL_LOCAL void fillControlStruct(EIDMW_PP_VERIFY_CCID * pin_verify)
 	pin_verify -> bTeoPrologue[1] = 0x00;
 	pin_verify -> bTeoPrologue[2] = 0x00;
 
-}
+} //sizeof() == 19
 
-DLL_LOCAL unsigned int fillStructGemsafe(EIDMW_PP_VERIFY_CCID * pin_verify, unsigned char ucPintype)
+DLL_LOCAL void fillModifyControlStruct(EIDMW_PP_CHANGE_CCID * pin_change)
+{
+
+	pin_change -> bTimerOut = 0; 
+	pin_change -> bTimerOut2 = 0x1E;   //30 seconds timeout
+	pin_change -> bmFormatString = 0x82;
+	pin_change -> bmPINBlockString = 0x04;
+	pin_change -> bmPINLengthFormat = 0x00;
+	pin_change -> bInsertionOffsetOld = 0x00;
+	pin_change -> bInsertionOffsetNew = 0x08;
+	(pin_change -> wPINMaxExtraDigit)[0] = 0x08; /* Min Max */
+	pin_change -> wPINMaxExtraDigit[1] = 0x04; 
+	pin_change -> bConfirmPIN = 0x03;
+	pin_change -> bEntryValidationCondition = 0x02;
+	/* validation key pressed */
+	pin_change -> bNumberMessage = 0x03;
+	(pin_change -> wLangId)[0] = 0x16; //0x0816
+	pin_change -> wLangId[1] = 0x08; 
+	pin_change -> bMsgIndex1 = 0x00;
+	pin_change -> bMsgIndex2 = 0x00;
+	pin_change -> bMsgIndex3 = 0x00;
+	(pin_change -> bTeoPrologue)[0] = 0x00;
+	pin_change -> bTeoPrologue[1] = 0x00;
+	pin_change -> bTeoPrologue[2] = 0x00;
+
+} //sizeof() == 24
+
+DLL_LOCAL unsigned int fillStructGemsafe(unsigned char * apdu, unsigned char ucPintype, int changePin)
 {
 	unsigned int offset = 0;
-	pin_verify -> abData[offset++] = 0x00;
+        unsigned int apdu_size = 0;
+
+	apdu[offset++] = 0x00;
 	/* CLA */ /*********************************/
-	pin_verify -> abData[offset++] = 0x20;
+	if (changePin)
+		apdu[offset++] = 0x24;
+	else
+		apdu[offset++] = 0x20;
 	/* INS: VERIFY */
-	pin_verify -> abData[offset++] = 0x00;
+	apdu[offset++] = 0x00;
 	/* P1 */
 	switch (ucPintype)
 	{
 		case EIDMW_PP_TYPE_AUTH:
 		printf("ppgemplus-plugin: Get Authentication PIN\n");
-			pin_verify -> abData[offset++] = 0x81;
+			apdu[offset++] = 0x81;
 			break;
 
 		case EIDMW_PP_TYPE_SIGN:
 			printf("ppgemplus-plugin: Get Signature PIN\n");
-			pin_verify -> abData[offset++] = 0x82;
+			apdu[offset++] = 0x82;
 			break;
 
 		case EIDMW_PP_TYPE_ADDR:
 			printf("ppgemplus-plugin: Get Address PIN\n");
-			pin_verify -> abData[offset++] = 0x83;
+			apdu[offset++] = 0x83;
 			break;
 
 	}
 	/* P2 */
-	pin_verify -> abData[offset++] = 0x08;
-	/* Lc: 8 data bytes */
+	if (!changePin)	
+		apdu_size = 12;
+	else
+		apdu_size = 20;
 
-	while (offset <= 12) 
-		pin_verify -> abData[offset++] = 0xFF; //Padding byte 
+	apdu[offset++] = apdu_size - 4;
+	/* Lc: Length of data section */
+	
 
-	pin_verify -> ulDataLength = offset;
+	while (offset <= apdu_size)
+		apdu[offset++] = 0xFF; //Padding byte 
+
 	/* APDU size */
+	if (changePin)
+		return sizeof(EIDMW_PP_CHANGE_CCID) + offset -1 ;
+	else			
+		return sizeof(EIDMW_PP_VERIFY_CCID) + offset -1;
+}
 
-	return sizeof(EIDMW_PP_VERIFY_CCID) + offset -1;
+DLL_LOCAL DWORD sendControl(SCARDHANDLE hCard, int ioctl,
+		void * pin_struct, unsigned int length, unsigned char * pucRecvbuf,
+		DWORD dwRecvlen, DWORD *pdwRecvlen) 
+{
+	DWORD rv = 0;
+	int i = 0;
+	printf ("Send buffer: \n");
+	printHex(pin_struct, length);
+
+	rv = SCardControl(hCard, ioctl, pin_struct,
+			length, pucRecvbuf, dwRecvlen, pdwRecvlen);
+
+	printf ("\tCard response:");
+	for (i=0; i < *pdwRecvlen; i++)
+		printf(" %02X", pucRecvbuf[i]);
+	printf("\n");
+
+	if ( rv == SCARD_S_SUCCESS )
+	{
+		printf("Control Message sent successful\n");
+
+	}
+	else
+	      printf("\tppgemplus-plugin =>  %04x\n", 
+				(unsigned int)rv);
+	return rv;
 }
 
 /*
@@ -178,16 +282,16 @@ EIDMW_PP_API long EIDMW_PP2_Command(
 	unsigned char ucPintype, unsigned char ucOperation,
 	unsigned long ulRfu, void *pRfu) 
 {
-	DWORD rv = 0;
 	EIDMW_PP_VERIFY_CCID pin_verify;
+	EIDMW_PP_CHANGE_CCID pin_change;
+	void * pin_struct = NULL;
 	BYTE pbAtr[64];
 	DWORD dwReaderLen = 0, dwState, dwProt, dwAtrLen;
-	unsigned int i, length;
-	
+	DWORD rv;
+	int ioctl2;
+	unsigned int i, apdu_length=0, length=0 ;
 	
 	dwAtrLen = sizeof(pbAtr);
-	
-
 
 	if (ioctl == CM_IOCTL_GET_FEATURE_REQUEST)
 	{
@@ -199,45 +303,68 @@ EIDMW_PP_API long EIDMW_PP2_Command(
 	}
 	else
 	{
-		//Assume verify PIN for now, we would need to implement change PIN also
-		printf("ppgemplus-plugin ==> Verify PIN\n");
-
 		//Check the ATR to get Card Type
 		rv = SCardStatus(hCard, NULL, &dwReaderLen, &dwState, &dwProt,
 				pbAtr, &dwAtrLen);
 
 		printf ("\tATR is: ");
 		for (i=0; i < dwAtrLen; i++)
-			printf(" %02X", pbAtr[i]);
+			printf (" %02X", pbAtr[i]);
 		printf("\n");
 
-		fillControlStruct(&pin_verify);		
+		//For IAS cards we need to VerifyPIN before Modify
+		if (ioctl == CM_IOCTL_VERIFY_PIN || !IsGemsafe(pbAtr, dwAtrLen))
+		{
+			printf("ppgemplus-plugin ==> Verify PIN\n");
+			fillVerifyControlStruct(&pin_verify);
+			pin_struct = &pin_verify;
 
-		if (!IsGemsafe(pbAtr, dwAtrLen))
-			length = fillStructIAS(&pin_verify, ucPintype);
-		else
-			length = fillStructGemsafe(&pin_verify, ucPintype);
+			pin_verify.ulDataLength = 0x0D;
 
+			ioctl2 = CM_IOCTL_VERIFY_PIN;
+			if (!IsGemsafe(pbAtr, dwAtrLen))
+			{
+				length = fillStructIAS(pin_verify.abData, ucPintype, 0);
 
-		rv = SCardControl(hCard, ioctl, &pin_verify,
+			}
+			else
+			{
+				length = fillStructGemsafe(pin_verify.abData, ucPintype, 0);
+
+			}
+			rv = sendControl(hCard, ioctl2, pin_struct,
 				length, pucRecvbuf, dwRrecvlen, pdwRrecvlen);
 
-		if ( rv == SCARD_S_SUCCESS )
-		{
-			printf("\tCard response:");
-			for (i=0; i< *pdwRrecvlen; i++)
-				printf(" %02X", pucRecvbuf[i]);
-			printf("\n");
-
+			if (ioctl == CM_IOCTL_VERIFY_PIN)
+				return rv;
 		}
-		else
-			printf("\tppgemplus-plugin => Error on VerifyPIN. Returning error code: %u\n", 
-					(unsigned int)rv);
+		if (ioctl == CM_IOCTL_MODIFY_PIN)
+		{
+			printf("ppgemplus-plugin ==> Modify PIN\n");
+			fillModifyControlStruct(&pin_change);
+			pin_struct = &pin_change;
 
+			if (!IsGemsafe(pbAtr, dwAtrLen))
+			{
+				pin_change.ulDataLength = 0x0D; // The APDU only includes placeholders for the new PIN
+				//Overriding the prompt options in order to not ask for the old pin again
+				pin_change.bConfirmPIN = 0x01;
+				pin_change.bNumberMessage = 0x02;
+				length = fillStructIAS(pin_change.abData, ucPintype, 1);
+			}
+			else
+			{
+				pin_change.ulDataLength = 0x15; // The APDU only includes placeholders for both PINs
+
+				length = fillStructGemsafe(pin_change.abData, ucPintype, 1);
+			}
+			return sendControl(hCard, ioctl, pin_struct,
+				length, pucRecvbuf, dwRrecvlen, pdwRrecvlen);
+		}
+		
 	}
 
 	return rv;
-
 
 }
 

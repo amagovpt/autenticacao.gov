@@ -8,6 +8,7 @@ CONFIG -= qt
 
 TEMPLATE = lib
 TARGET = pteidpp2-gempc
+QMAKE_CFLAGS += -Wno-unused-variable 
 INCLUDEPATH += .
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 

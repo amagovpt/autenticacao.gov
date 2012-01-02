@@ -84,6 +84,9 @@ extern "C" {
 #ifndef CM_IOCTL_GET_FEATURE_REQUEST
 #define CM_IOCTL_GET_FEATURE_REQUEST SCARD_CTL_CODE(3400) //Definition from reader.h in pcsclite
 #endif
+#define CM_IOCTL_VERIFY_PIN 0x42330006
+#define CM_IOCTL_MODIFY_PIN 0x42330007
+
 
 #define PTEID_MINOR_VERSION       0
 
@@ -271,8 +274,8 @@ typedef struct
 	unsigned char bMsgIndex2; // index of 2d prompting message
 	unsigned char bMsgIndex3; // index of 3d prompting message
 	unsigned char bTeoPrologue[3]; // T=1 block prologue field to use (fill with 00)
-	unsigned char ulDataLength[4]; // length of the following field
-	unsigned char abData[PP_APDU_MAX_LEN]; // APDU to send to the card (to be completed by the reader)
+	DWORD ulDataLength; // length of the following field
+	unsigned char abData[1]; // APDU to send to the card (to be completed by the reader)
 } EIDMW_PP_CHANGE_CCID;
 
 #pragma pack(pop, pinpad2)
