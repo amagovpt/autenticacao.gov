@@ -1,6 +1,6 @@
 @echo [INFO] Define default value for PTEID_DIR_OPENSSL_098G if not defined yet
 @echo [INFO] Input PTEID_DIR_OPENSSL_098G=%PTEID_DIR_OPENSSL_098G%
-@set FILE_TO_FIND="lib\libeay32_0_9_8g.dll" "lib\ssleay32_0_9_8g.dll" "lib\libeay32_0_9_8g.lib" "lib\ssleay32_0_9_8g.lib"
+@set FILE_TO_FIND="bin\libeay32.dll" "bin\ssleay32.dll" "lib\libeay32.lib" "lib\ssleay32.lib"
 @echo [INFO] Looking for files: %FILE_TO_FIND%
 
 @set FILE_NOT_FOUND=
