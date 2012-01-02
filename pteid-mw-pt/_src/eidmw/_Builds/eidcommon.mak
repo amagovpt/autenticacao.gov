@@ -26,6 +26,8 @@ DEFINES += 'EIDMW_PREFIX=$${PREFIX_DIR}'
 ## preset the LIB install directory relative to the bin directory
 INSTALL_DIR_BIN = $${PREFIX_DIR}/bin
 INSTALL_DIR_LIB = $${PREFIX_DIR}/lib
+INSTALL_DIR_INCLUDE = $${PREFIX_DIR}/include
+
 
 isEmpty(JDK_INCLUDE_DIR){
   unix:!macx: JDK_INCLUDE_DIR += /usr/local/j2sdk1.4.2_17/include

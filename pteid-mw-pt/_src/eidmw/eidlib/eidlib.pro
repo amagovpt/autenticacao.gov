@@ -17,6 +17,11 @@ message("Compile $$TARGET")
 target.path = $${INSTALL_DIR_LIB}
 INSTALLS += target
 
+public_headers.files = eidlib.h eidlibdefines.h
+public_headers.path = $${INSTALL_DIR_INCLUDE}
+
+INSTALLS += public_headers
+
 CONFIG -= warn_on qt
 
 ## destination directory
