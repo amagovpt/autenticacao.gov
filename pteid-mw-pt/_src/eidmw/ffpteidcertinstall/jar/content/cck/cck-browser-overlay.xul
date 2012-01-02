@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE overlay SYSTEM "chrome://cck-pteidcm/content/cck.dtd">
+<?xml-stylesheet href="chrome://cck-pteidcm/content/cck.css" type="text/css"?>
+<overlay id="cckOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="chrome://cck-pteidcm/content/cck.js"/>
+
+  
+
+    <window id="main-window" titlemodifier="&mainWindow.titlemodifier;"/>
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="bundle_cck" src="chrome://cck-pteidcm/content/cck.properties"/>
+  </stringbundleset>
+</overlay>

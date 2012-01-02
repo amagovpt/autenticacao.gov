@@ -38,8 +38,7 @@ QMAKE_CXXFLAGS+=-fno-strict-aliasing
 ## destination directory for the compiler
 DESTDIR = ../../lib
 
-unix: LIBS += -L../../lib  \
-		-l$${COMMONLIB}
+unix: LIBS += -L../../lib -l$${COMMONLIB}
 
 macx: LIBS += -L../../lib -l$${COMMONLIB} 
 

@@ -147,7 +147,7 @@ else
 {
 	if ($distro eq "fedora")
  	{
-		$javac_link = "/usr/lib/jvm/java-1.6.0-openjdk/bin/javac";
+		$javac_link = "/usr/lib/jvm/java-1.6.0-openjdk.x86_64/bin/javac";
 	}
 	else
 	{
@@ -200,7 +200,7 @@ $options{"--include"}->[2] = "/System/Library/Frameworks/PCSC.framework/Versions
 
 $options{"--lib"} = ["library path",
 		     1,
-		     "-L/usr/lib/xerces-c-2.7.0 -L/usr/lib ",
+		     "-L/usr/lib/xerces-c-2.7.0/ -L/usr/lib64 -L/usr/lib ",
 		     "LIBS"
                     ];
 

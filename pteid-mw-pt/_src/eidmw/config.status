@@ -1,1 +1,1 @@
-./configure --lib+=-L/usr/bin/../lib/ --include+=/usr/bin/../include/Qt --include+=/usr/lib/jvm/java-6-sun/bin/../include --include+=/usr/lib/jvm/java-6-sun/bin/../include/linux BUILD_SDK=1 
+./configure --lib+=-L/usr/lib64/ --include+=/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/bin/../include --include+=/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/bin/../include/linux --lib+=-L/usr/lib64/xerces-c --include+=/usr/include/xercesc --include+=/usr/include/Qt --with-openssl=/usr/lib64 BUILD_SDK=1 
