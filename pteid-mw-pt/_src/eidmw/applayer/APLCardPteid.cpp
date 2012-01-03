@@ -28,6 +28,9 @@
 #include "MWException.h"
 #include "CardLayer.h"
 #include "MiscUtil.h"
+#include "StringOps.h"
+
+using namespace std;
 
 namespace eIDMW
 {
@@ -35,7 +38,6 @@ namespace eIDMW
 /*****************************************************************************************
 ---------------------------------------- APL_EIDCard -----------------------------------------
 *****************************************************************************************/
-
 APL_AccessWarningLevel APL_EIDCard::m_lWarningLevel=APL_ACCESSWARNINGLEVEL_TO_ASK;
 
 APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader):APL_SmartCard(reader)
@@ -43,6 +45,7 @@ APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader):APL_SmartCard(reader)
 	m_docfull=NULL;
 	m_CCcustomDoc=NULL;
 	m_docid=NULL;
+	m_personal=NULL;
 	m_address=NULL;
 	m_sod=NULL;
 	m_docinfo=NULL;
@@ -81,6 +84,11 @@ APL_EIDCard::~APL_EIDCard()
 	{
 		delete m_docid;
 		m_docid=NULL;
+	}
+	if(m_personal)
+	{
+		delete m_personal;
+		m_personal=NULL;
 	}
 	if(m_address)
 	{
@@ -1002,6 +1010,22 @@ APL_DocEId& APL_EIDCard::getID()
 	return *m_docid;
 }
 
+
+APL_PersonalNotesEId& APL_EIDCard::getPersonalNotes()
+{
+	if(!m_personal)
+		{
+			CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
+			if(!m_personal)
+			{
+				m_personal=new APL_PersonalNotesEId(this);
+			}
+		}
+
+		return *m_personal;
+}
+
+
 APL_AddrEId& APL_EIDCard::getAddr()
 {
 	if(!m_address)
@@ -1499,41 +1523,12 @@ CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
 
 	if(!bNoHeader)
 		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	xml+=XML_OPEN_TAG_NEWLINE(XML_ROOT_ELEMENT);
+	xml+=m_card->getID().getXML(true,*m_xmlUserRequestedInfo);
+	xml+=m_card->getAddr().getXML(true, *m_xmlUserRequestedInfo);
+	xml+=m_card->getPersonalNotes().getXML(true, *m_xmlUserRequestedInfo);
+	xml+=XML_CLOSE_TAG(XML_ROOT_ELEMENT);
 
-	if (!m_xmlUserRequestedInfo->isEmpty()){
-		xml+="<ccpt>\n";
-		xml+=m_card->getID().getXML(true,*m_xmlUserRequestedInfo);
-		xml+=m_card->getAddr().getXML(true, *m_xmlUserRequestedInfo);
-		//xml+=m_card->getPersonalData().getXML(true, *m_xmlUserRequestedInfo);
-		xml+="</ccpt>\n";
-	}
-	if (m_xmlUserRequestedInfo->contains(XML_NIC))
-
-	/*xml+=m_card->getSod().getXML(true);
-	xml+=m_card->getDocInfo().getXML(true);
-
-	CByteArray baFileB64;
-	xml+="	<challenge_response>\n";
-	if(m_cryptoFwk->b64Encode(m_card->getChallenge(),baFileB64))
-	{
-		xml+="	<challenge encoding=\"base64\">\n";
-		xml+=		baFileB64;
-		xml+="	</challenge>\n";
-	}
-	if(m_cryptoFwk->b64Encode(m_card->getChallengeResponse(),baFileB64))
-	{
-		xml+="	<response encoding=\"base64\">\n";
-		xml+=		baFileB64;
-		xml+="	</response>\n";
-	}
-	xml+="	</challenge_response>\n";
-
-	xml+="	<cryptographic>\n";
-	xml+=m_card->getCertificates()->getXML(true);
-	xml+=m_card->getPins()->getXML(true);
-	xml+="	</cryptographic>\n";
-	xml+="</pteid_card>\n";
-*/
 	return xml;
 }
 
@@ -1632,6 +1627,7 @@ bool APL_DocEId::isAllowed()
 CByteArray APL_DocEId::getXML(bool bNoHeader, APL_XmlUserRequestedInfo &xmlUInfo){
 
 	CByteArray ca;
+
 	_xmlUInfo = &xmlUInfo;
 	ca = getXML(bNoHeader);
 	_xmlUInfo = NULL;
@@ -1642,108 +1638,164 @@ CByteArray APL_DocEId::getXML(bool bNoHeader, APL_XmlUserRequestedInfo &xmlUInfo
 CByteArray APL_DocEId::getXML(bool bNoHeader)
 {
 	CByteArray xml;
-	//APL_CryptoFwk *crypto = new APL_CryptoFwkPteid();
+	CByteArray basicInfo;
+	CByteArray civilInfo;
+	CByteArray idNum;
+	CByteArray cardValues;
+	CByteArray b64photo;
+	CByteArray *photojp2;
+	bool addBasicInfo = false;
+	bool addIdNum = false;
+	bool addCardValues = false;
+	bool addCivilInfo = false;
 
-	//crypto->b64Encode()
-	xml+="<photo>\n";
-	//xml+=crypto->getPhoto()
-	xml+="</photo>\n";
+	// provide all the id fields
+	if(_xmlUInfo->isEmpty())
+		_xmlUInfo = NULL;
 
-	/*
-	if(!bNoHeader)
-		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-
-	xml+="<biographic>\n";
-	xml+=" <document>\n";
-	xml+="		<version>";
-	xml+=			getDocumentVersion();
-	xml+=		"</version>\n";
-	xml+="		<type>";
-	xml+=			getDocumentType();
-	xml+=		"</type>\n";
-	xml+=" 	<id>\n";
-	xml+=" 		<name>";
-	xml+=				getFirstName1();
-	xml+=			"</name>\n";
-	xml+=" 		<surname>";
-	xml+=				getSurname();
-	xml+=			"</surname>\n";
-	xml+=" 	<country>";
-	xml+=			getCountry();
-	xml+=		"</country>\n";
-	xml+=" 		<gender>";
-	xml+=				getGender();
-	xml+=			"</gender>\n";
-	xml+=" 		<date_of_birth>";
-	xml+=				getDateOfBirth();
-	xml+=			"</date_of_birth>\n";
-	xml+=" 		<location_of_birth>";
-	xml+=				getLocationOfBirth();
-	xml+=			"</location_of_birth>\n";
-	xml+=" 		<nationality>";
-	xml+=				getNationality();
-	xml+=			"</nationality>\n";
-	xml+=" 		<national_nr>";
-	xml+=				getCivilianIdNumber();
-	xml+=			"</national_nr>\n";
-	xml+=" 		<duplicata>";
-	xml+=				getDuplicata();
-	xml+=			"</duplicata>\n";
-	xml+=" 		<special_organization>";
-	xml+=				getSpecialOrganization();
-	xml+=			"</special_organization>\n";
-	xml+=" 		<member_of_family>";
-	xml+=				getMemberOfFamily();
-	xml+=			"</member_of_family>\n";
-	xml+=" 		<special_status>";
-	xml+=				getSpecialStatus();
-	xml+=			"</special_status>\n";
-	// MARTINHO: não está na posição certa, mas o documento tb n está correcto, fica aqui para n ficar esquecido
-	xml+="		<mrz1>";
-	xml+=			getMRZ1();
-	xml+="		</mrz1>";
-	xml+="		<mrz2>";
-	xml+=			getMRZ2();
-	xml+="		</mrz2>";
-	xml+="		<mrz3>";
-	xml+=			getMRZ3();
-	xml+="		</mrz3>";
-	xml+="		</id>\n";
-	xml+=" 	<card>\n";
-	xml+=" 		<logical_nr>";
-	xml+=				getLogicalNumber();
-	xml+=			"</logical_nr>\n";
-	xml+=" 		<chip_nr>";
-	xml+=				getDocumentPAN();
-	xml+=			"</chip_nr>\n";
-	xml+=" 		<validity>\n";
-	xml+=" 	 		<date_begin>";
-	xml+=					getValidityBeginDate();
-	xml+=			"</date_begin>\n";
-	xml+=" 			<date_end>";
-	xml+=					getValidityEndDate();
-	xml+=			"</date_end>\n";
-	xml+=" 		</validity>\n";
-	xml+="	 </card>\n";
-	xml+=" </document>\n";
-	xml+="	<files>\n";
-/* MARTINHO TEMPORARIO
-	CByteArray baFileB64;
-	if(m_cryptoFwk->b64Encode(m_card->getFileID()->getData(),baFileB64))
-	{
-		xml+="		<file_id encoding=\"base64\">\n";
-		xml+=		baFileB64;
-		xml+="		</file_id>\n";
+	// photo
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_PHOTO)){
+		photojp2 = getPhoto();
+		m_cryptoFwk->b64Encode(*photojp2,b64photo);
+		BUILD_XML_ELEMENT(xml, XML_PHOTO_ELEMENT, b64photo);
 	}
-	if(m_cryptoFwk->b64Encode(m_card->getFileIDSign()->getData(),baFileB64))
-	{
-		xml+="		<file_id_sign encoding=\"base64\">\n";
-		xml+=		baFileB64;
-		xml+="		</file_id_sign>\n";
+
+	// basicInformation
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_NAME)){
+		string s;
+		s+= getGivenName();
+		s+=" ";
+		s+=getSurname();
+		BUILD_XML_ELEMENT(basicInfo, XML_NAME_ELEMENT, s.c_str());
+		addBasicInfo = true;
 	}
-	xml+="	</files>\n";
-	xml+="</biographic>\n";
-*/
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_GIVEN_NAME)){
+		BUILD_XML_ELEMENT(basicInfo,XML_GIVEN_NAME_ELEMENT,getGivenName());
+		addBasicInfo = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_SURNAME)){
+		BUILD_XML_ELEMENT(basicInfo,XML_SURNAME_ELEMENT,getSurname());
+		addBasicInfo = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_NIC)){
+		BUILD_XML_ELEMENT(basicInfo,XML_NIC_ELEMENT,getCivilianIdNumber());
+		addBasicInfo = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_EXPIRY_DATE)){
+		BUILD_XML_ELEMENT(basicInfo,XML_EXPIRY_DATE_ELEMENT, getValidityEndDate());
+		addBasicInfo = true;
+	}
+	if (addBasicInfo){
+		BUILD_XML_ELEMENT_NEWLINE(xml, XML_BASIC_INFO_ELEMENT, basicInfo);
+	}
+
+	// CivilInformation
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_GENDER)){
+		BUILD_XML_ELEMENT(civilInfo, XML_GENDER_ELEMENT, getGender());
+		addCivilInfo = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_HEIGHT)){
+		BUILD_XML_ELEMENT(civilInfo, XML_HEIGHT_ELEMENT, getHeight());
+		addCivilInfo = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_NATIONALITY)){
+		BUILD_XML_ELEMENT(civilInfo, XML_NATIONALITY_ELEMENT, getNationality());
+		addCivilInfo = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_DATE_OF_BIRTH)){
+		BUILD_XML_ELEMENT(civilInfo, XML_DATE_OF_BIRTH_ELEMENT, getDateOfBirth());
+		addCivilInfo = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_GIVEN_NAME_FATHER)){
+		BUILD_XML_ELEMENT(civilInfo, XML_GIVEN_NAME_FATHER_ELEMENT, getGivenNameFather());
+		addCivilInfo = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_SURNAME_FATHER)){
+		BUILD_XML_ELEMENT(civilInfo, XML_SURNAME_FATHER_ELEMENT, getSurnameFather());
+		addCivilInfo = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_GIVEN_NAME_MOTHER)){
+		BUILD_XML_ELEMENT(civilInfo, XML_GIVEN_NAME_MOTHER_ELEMENT, getGivenNameMother());
+		addCivilInfo = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_SURNAME_MOTHER)){
+		BUILD_XML_ELEMENT(civilInfo, XML_SURNAME_MOTHER_ELEMENT, getSurnameMother());
+		addCivilInfo = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_ACCIDENTAL_INDICATIONS)){
+		BUILD_XML_ELEMENT(civilInfo, XML_ACCIDENTAL_INDICATIONS_ELEMENT, getAccidentalIndications());
+		addCivilInfo = true;
+	}
+	if (addCivilInfo){
+		BUILD_XML_ELEMENT_NEWLINE(xml,XML_CIVIL_INFO_ELEMENT, civilInfo);
+	}
+
+	// IdentificationNumbers
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_DOCUMENT_NO)){
+		BUILD_XML_ELEMENT(idNum, XML_DOCUMENT_NO_ELEMENT, getDocumentNumber());
+		addIdNum = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_TAX_NO)){
+		BUILD_XML_ELEMENT(idNum, XML_TAX_NO_ELEMENT, getTaxNo());
+		addIdNum = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_SOCIAL_SECURITY_NO)){
+		BUILD_XML_ELEMENT(idNum, XML_SOCIAL_SECURITY_NO_ELEMENT, getTaxNo());
+		addIdNum = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_HEALTH_NO)){
+		BUILD_XML_ELEMENT(idNum, XML_HEALTH_NO_ELEMENT, getHealthNumber());
+		addIdNum = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_MRZ1)){
+		BUILD_XML_ELEMENT(idNum, XML_MRZ1_ELEMENT, replace(getMRZ1(),XML_ESCAPE_LT));
+		addIdNum = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_MRZ2)){
+		BUILD_XML_ELEMENT(idNum, XML_MRZ2_ELEMENT, replace(getMRZ2(),XML_ESCAPE_LT));
+		addIdNum = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_MRZ3)){
+		BUILD_XML_ELEMENT(idNum, XML_MRZ3_ELEMENT, replace(getMRZ3(),XML_ESCAPE_LT));
+		addIdNum = true;
+	}
+	if (addIdNum){
+		BUILD_XML_ELEMENT_NEWLINE(xml,XML_IDENTIFICATION_NUMBERS_ELEMENT, idNum);
+	}
+
+	// CardValues
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_CARD_VERSION)){
+		BUILD_XML_ELEMENT(cardValues, XML_CARD_VERSION_ELEMENT, getDocumentVersion());
+		addCardValues = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_CARD_NUMBER_PAN)){
+		BUILD_XML_ELEMENT(cardValues, XML_CARD_NUMBER_PAN_ELEMENT, getDocumentPAN());
+		addCardValues = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_ISSUING_DATE)){
+		BUILD_XML_ELEMENT(cardValues, XML_ISSUING_DATE_ELEMENT, getValidityBeginDate());
+		addCardValues = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_ISSUING_ENTITY)){
+		BUILD_XML_ELEMENT(cardValues, XML_ISSUING_ENTITY_ELEMENT, getIssuingEntity());
+		addCardValues = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_DOCUMENT_TYPE)){
+		BUILD_XML_ELEMENT(cardValues, XML_DOCUMENT_TYPE_ELEMENT, getDocumentType());
+		addCardValues = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_LOCAL_OF_REQUEST)){
+		BUILD_XML_ELEMENT(cardValues, XML_LOCAL_OF_REQUEST_ELEMENT, getLocalofRequest());
+		addCardValues = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_VERSION)){
+		BUILD_XML_ELEMENT(cardValues, XML_VERSION_ELEMENT, "0");
+		addCardValues = true;
+	}
+	if (addCardValues){
+		BUILD_XML_ELEMENT_NEWLINE(xml, XML_CARD_VALUES_ELEMENT, cardValues);
+	};
+
 	return xml;
 }
 
@@ -1762,7 +1814,7 @@ version;type;name;surname;gender;date_of_birth;location_of_birth;nobility;nation
 	csv+=CSV_SEPARATOR;
 	csv+=getDocumentType();
 	csv+=CSV_SEPARATOR;
-	csv+=getFirstName1();
+	csv+=getGivenName();
 	csv+=CSV_SEPARATOR;
 	csv+=getSurname();
 	csv+=CSV_SEPARATOR;
@@ -1850,9 +1902,9 @@ const char *APL_DocEId::getCountry()
 	return m_card->getFileID()->getCountry();
 }
 
-const char *APL_DocEId::getFirstName1()
+const char *APL_DocEId::getGivenName()
 {
-	return m_card->getFileID()->getFirstName1();
+	return m_card->getFileID()->getGivenName();
 }
 
 const char *APL_DocEId::getSurname()
@@ -1981,9 +2033,14 @@ const char *APL_DocEId::getParents()
 	return m_card->getFileID()->getParents();
 }
 
-const char *APL_DocEId::getPhoto()
+CByteArray *APL_DocEId::getPhoto()
 {
 	return m_card->getFileID()->getPhoto();
+}
+
+CByteArray *APL_DocEId::getPhotoRaw()
+{
+	return m_card->getFileID()->getPhotoRaw();
 }
 
 const char *APL_DocEId::getMRZ1(){
@@ -2007,6 +2064,88 @@ const char *APL_DocEId::getCivilianIdNumber(){
 }
 
 const char *APL_DocEId::getPersoData()
+{
+	return m_card->getFilePersoData()->getPersoData();
+}
+
+/*****************************************************************************************
+----------------------------------- APL_PersonalNotesEid ----------------------------------------
+*****************************************************************************************/
+APL_PersonalNotesEId::APL_PersonalNotesEId(APL_EIDCard *card)
+{
+	m_card=card;
+}
+
+APL_PersonalNotesEId::~APL_PersonalNotesEId()
+{
+}
+
+bool APL_PersonalNotesEId::isAllowed()
+{
+	try
+	{
+		if(m_card->getFilePersoData()->getStatus(true)==CARDFILESTATUS_OK)
+			return true;
+	}
+	catch(CMWException& e)
+	{
+		if (e.GetError() == EIDMW_ERR_NOT_ALLOW_BY_USER)
+			return false;
+		else
+			throw;
+	}
+	return false;
+}
+
+CByteArray APL_PersonalNotesEId::getXML(bool bNoHeader, APL_XmlUserRequestedInfo &xmlUInfo){
+	CByteArray ca;
+
+	_xmlUInfo = &xmlUInfo;
+	ca = getXML(bNoHeader);
+	_xmlUInfo = NULL;
+
+	return ca;
+}
+
+CByteArray APL_PersonalNotesEId::getXML(bool bNoHeader)
+{
+	CByteArray xml;
+	string str;
+
+
+	if (_xmlUInfo->isEmpty())
+		_xmlUInfo = NULL;
+
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_PERSONAL_NOTES)){
+		str = getPersonalNotes();
+		str = replace(str.c_str(),XML_ESCAPE_AMP);
+		str = replace(str.c_str(),XML_ESCAPE_APOS);
+		str = replace(str.c_str(),XML_ESCAPE_GT);
+		str = replace(str.c_str(),XML_ESCAPE_LT);
+		str = replace(str.c_str(),XML_ESCAPE_QUOTE);
+
+		BUILD_XML_ELEMENT(xml, XML_PERSONAL_NOTES_ELEMENT, str.c_str());
+	}
+
+	return xml;
+}
+
+CByteArray APL_PersonalNotesEId::getCSV()
+{
+	CByteArray csv;
+
+	return csv;
+}
+
+CByteArray APL_PersonalNotesEId::getTLV()
+{
+	CTLVBuffer tlv;
+	CByteArray ba;
+
+	return ba;
+}
+
+const char *APL_PersonalNotesEId::getPersonalNotes()
 {
 	return m_card->getFilePersoData()->getPersoData();
 }
@@ -2052,93 +2191,82 @@ CByteArray APL_AddrEId::getXML(bool bNoHeader, APL_XmlUserRequestedInfo &xmlUInf
 
 CByteArray APL_AddrEId::getXML(bool bNoHeader)
 {
-/* MISSING Fields from PTeid
-	<biographic>
-		<document>
-			<version></version>
-			<type></type>
-			<id>
-				<name></name>
-				<surname></surname>
-				<gender></gender>
-				<date_of_birth></date_of_birth>
-				<location_of_birth></location_of_birth>
-				<nobility></nobility>
-				<nationality></nationality>
-				<national_nr></national_nr>
-				<special_organization></special_organization>
-				<member_of_family></member_of_family>
-				<special_status></special_status>
-			</id>
-			<card>
-				<logical_nr></logical_nr>
-				<chip_nr></chip_nr>
-				<validity>
-					<date_begin></date_begin>
-					<date_end></date_end>
-				</validity>
-				<issuing_municipality></issuing_municipality>
-			</card>
-		</document>
-		<address>
-			<version></version>
-			<street></street>
-			<zip></zip>
-			<municipality></municipality>
-			<country></country>
-		</address>
-		<files>
-			<file_id encoding="base64">
-			</file_id>
-			<file_id_sign encoding="base64">
-			</file_id_sign>
-			<file_address encoding="base64">
-			</file_address>
-			<file_address_sign encoding="base64">
-			</file_address_sign>
-		</files>
-	</biographic>
-*/
-
 	CByteArray xml;
+	CByteArray address;
+	bool addAddress = false;
 
-	xml+="MORADA morada MORADA";
-	if(!bNoHeader)
-		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-/*
-	xml+="<biographic>\n";
-	xml+=" <address>\n";
-	xml+=" 	<version>";
-	xml+=			getAddressVersion();
-	xml+=		"</version>\n";
-	xml+=" 	<street>";
-	xml+=			getStreet();
-	xml+=		"</street>\n";
-	xml+=" 	<zip>";
-	xml+=			getZipCode();
-	xml+=		"</zip>\n";
-	xml+=" 	<municipality>";
-	xml+=			getMunicipality();
-	xml+=		"</municipality>\n";
-	xml+=" </address>\n";
-	xml+="	<files>\n";
+	// provide all the address fields
+	if(_xmlUInfo->isEmpty())
+		_xmlUInfo = NULL;
 
-	CByteArray baFileB64;
-	if(m_cryptoFwk->b64Encode(m_card->getFileAddress()->getData(),baFileB64))
-	{
-		xml+="		<file_address encoding=\"base64\">\n";
-		xml+=		baFileB64;
-		xml+="		</file_address>\n";
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_DISTRICT)){
+		BUILD_XML_ELEMENT(address, XML_DISTRICT_ELEMENT, getDistrict());
+		addAddress = true;
 	}
-	if(m_cryptoFwk->b64Encode(m_card->getFileAddressSign()->getData(),baFileB64))
-	{
-		xml+="		<file_address_sign encoding=\"base64\">\n";
-		xml+=		baFileB64;
-		xml+="		</file_address_sign>\n";
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_MUNICIPALITY)){
+		BUILD_XML_ELEMENT(address, XML_MUNICIPALITY_ELEMENT, getMunicipality());
+		addAddress = true;
 	}
-	xml+="	</files>\n";
-	xml+="</biographic>\n";
-*/
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_CIVIL_PARISH)){
+		BUILD_XML_ELEMENT(address, XML_CIVIL_PARISH_ELEMENT, getCivilParish());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_ABBR_STREET_TYPE)){
+		BUILD_XML_ELEMENT(address, XML_ABBR_STREET_TYPE_ELEMENT, getAbbrStreetType());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_STREET_TYPE)){
+		BUILD_XML_ELEMENT(address, XML_STREET_TYPE_ELEMENT, getStreetType());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_STREET_NAME)){
+		BUILD_XML_ELEMENT(address, XML_STREET_NAME_ELEMENT, getStreetName());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_ABBR_BUILDING_TYPE)){
+		BUILD_XML_ELEMENT(address, XML_ABBR_BUILDING_TYPE_ELEMENT, getAbbrBuildingType());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_BUILDING_TYPE)){
+		BUILD_XML_ELEMENT(address, XML_BUILDING_TYPE_ELEMENT, getBuildingType());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_DOOR_NO)){
+		BUILD_XML_ELEMENT(address, XML_DOOR_NO_ELEMENT, getDoorNo());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_FLOOR)){
+		BUILD_XML_ELEMENT(address, XML_FLOOR_ELEMENT, getFloor());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_SIDE)){
+		BUILD_XML_ELEMENT(address, XML_SIDE_ELEMENT, getSide());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_PLACE)){
+		BUILD_XML_ELEMENT(address, XML_PLACE_ELEMENT, getPlace());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_LOCALITY)){
+		BUILD_XML_ELEMENT(address, XML_LOCALITY_ELEMENT, getLocality());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_ZIP4)){
+		BUILD_XML_ELEMENT(address, XML_ZIP4_ELEMENT, getZip4());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_ZIP3)){
+		BUILD_XML_ELEMENT(address, XML_ZIP3_ELEMENT, getZip3());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_POSTAL_LOCALITY)){
+		BUILD_XML_ELEMENT(address, XML_POSTAL_LOCALITY_ELEMENT, getPostalLocality());
+		addAddress = true;
+	}
+	if (addAddress){
+		BUILD_XML_ELEMENT_NEWLINE(xml,XML_ADDRESS_ELEMENT, address);
+	}
+
 	return xml;
 }
 
@@ -2225,24 +2353,24 @@ const char *APL_AddrEId::getStreetName()
 	return m_card->getFileAddress()->getStreetName();
 }
 
-const char *APL_AddrEId::getStreetType1()
+const char *APL_AddrEId::getAbbrStreetType()
 {
-	return m_card->getFileAddress()->getStreetType1();
+	return m_card->getFileAddress()->getAbbrStreetType();
 }
 
-const char *APL_AddrEId::getStreetType2()
+const char *APL_AddrEId::getStreetType()
 {
-	return m_card->getFileAddress()->getStreetType2();
+	return m_card->getFileAddress()->getStreetType();
 }
 
-const char *APL_AddrEId::getBuildingType1()
+const char *APL_AddrEId::getAbbrBuildingType()
 {
-	return m_card->getFileAddress()->getBuildingType1();
+	return m_card->getFileAddress()->getAbbrBuildingType();
 }
 
-const char *APL_AddrEId::getBuildingType2()
+const char *APL_AddrEId::getBuildingType()
 {
-	return m_card->getFileAddress()->getBuildingType2();
+	return m_card->getFileAddress()->getBuildingType();
 }
 
 const char *APL_AddrEId::getDoorNo()

@@ -4832,8 +4832,8 @@ void MainWnd::refreshTabIdentity( void )
 
 	m_ui.txtIdentity_Name->setText		 ( PersonFields[NAME] );
 	m_ui.txtIdentity_Name->setAccessibleName ( PersonFields[NAME] );
-	m_ui.txtIdentity_GivenNames->setText ( PersonFields[FIRSTNAME] );
-	m_ui.txtIdentity_GivenNames->setAccessibleName ( PersonFields[FIRSTNAME] );
+	m_ui.txtIdentity_GivenNames->setText ( PersonFields[GIVENNAME] );
+	m_ui.txtIdentity_GivenNames->setAccessibleName ( PersonFields[GIVENNAME] );
 	m_ui.txtIdentity_Nationality->setText( PersonFields[NATIONALITY] );
 	m_ui.txtIdentity_Nationality->setAccessibleName( PersonFields[NATIONALITY] );
 	m_ui.txtIdentity_BirthDate->setText ( PersonFields[BIRTHDATE] );
@@ -4947,16 +4947,16 @@ void MainWnd::refreshTabAddress( void )
 	m_ui.txtAddress_District->setAccessibleName ( AddressFields[ADDRESS_DISTRICT] );
 	m_ui.txtAddress_CivilParish->setText			( AddressFields[ADDRESS_CIVILPARISH] );
 	m_ui.txtAddress_CivilParish->setAccessibleName ( AddressFields[ADDRESS_CIVILPARISH] );
-	m_ui.txtAddress_StreetType1->setText			( AddressFields[ADDRESS_STREETTYPE1] );
-	m_ui.txtAddress_StreetType1->setAccessibleName ( AddressFields[ADDRESS_STREETTYPE1] );
-	m_ui.txtAddress_StreetType2->setText			( AddressFields[ADDRESS_STREETTYPE2] );
-	m_ui.txtAddress_StreetType2->setAccessibleName ( AddressFields[ADDRESS_STREETTYPE2] );
+	m_ui.txtAddress_StreetType1->setText			( AddressFields[ADDRESS_ABBRSTREETTYPE] );
+	m_ui.txtAddress_StreetType1->setAccessibleName ( AddressFields[ADDRESS_ABBRSTREETTYPE] );
+	m_ui.txtAddress_StreetType2->setText			( AddressFields[ADDRESS_STREETTYPE] );
+	m_ui.txtAddress_StreetType2->setAccessibleName ( AddressFields[ADDRESS_STREETTYPE] );
 	m_ui.txtAddress_StreetName->setText			( AddressFields[ADDRESS_STREETNAME] );
 	m_ui.txtAddress_StreetName->setAccessibleName ( AddressFields[ADDRESS_STREETNAME] );
-	m_ui.txtAddress_BuildingType1->setText			( AddressFields[ADDRESS_BUILDINGTYPE1] );
-	m_ui.txtAddress_BuildingType1->setAccessibleName ( AddressFields[ADDRESS_BUILDINGTYPE1] );
-	m_ui.txtAddress_BuildingType2->setText			( AddressFields[ADDRESS_BUILDINGTYPE2] );
-	m_ui.txtAddress_BuildingType2->setAccessibleName ( AddressFields[ADDRESS_BUILDINGTYPE2] );
+	m_ui.txtAddress_BuildingType1->setText			( AddressFields[ADDRESS_ABBRBUILDINGTYPE] );
+	m_ui.txtAddress_BuildingType1->setAccessibleName ( AddressFields[ADDRESS_ABBRBUILDINGTYPE] );
+	m_ui.txtAddress_BuildingType2->setText			( AddressFields[ADDRESS_BUILDINGTYPE] );
+	m_ui.txtAddress_BuildingType2->setAccessibleName ( AddressFields[ADDRESS_BUILDINGTYPE] );
 	m_ui.txtAddress_DoorNo->setText			( AddressFields[ADDRESS_DOORNO] );
 	m_ui.txtAddress_DoorNo->setAccessibleName ( AddressFields[ADDRESS_DOORNO] );
 	m_ui.txtAddress_Floor->setText			( AddressFields[ADDRESS_FLOOR] );

@@ -109,7 +109,7 @@ public:
 	const char *getDocumentVersion();				/**< Return field DocumentVersion */
 	const char *getCountry();						/**< Return field Country */
 	const char *getDocumentType();					/**< Return field DocumentType */
-	const char *getFirstName1();					/**< Return field FirstName1 */
+	const char *getGivenName();						/**< Return field GivenName */
 	const char *getSurname();						/**< Return field Surname */
 	const char *getGender();						/**< Return field Gender */
 	const char *getDateOfBirth();					/**< Return field DateOfBirth */
@@ -137,7 +137,8 @@ public:
 	const char *getGivenNameMother();				/**< Return field GivenNameMother */
 	const char *getSurnameMother();					/**< Return field SurnameMother */
 	const char *getParents();						/**< Return field Parents */
-	const char *getPhoto();							/**< Return field Photo */
+	CByteArray *getPhoto();							/**< Return field Photo in jpeg format */
+	CByteArray *getPhotoRaw();						/**< Return field Photo in the original jp2 format */
 	const char *getMRZ1();							/**< Return field MRZ block 1*/
 	const char *getMRZ2();							/**< Return field MRZ block 2*/
 	const char *getMRZ3();							/**< Return field MRZ block 3*/
@@ -183,7 +184,7 @@ private:
 	std::string m_DocumentVersion;							/**< Field DocumentVersion */
 	std::string m_Country;									/**< Field Country */
 	std::string m_DocumentType;								/**< Field DocumentType */
-	std::string m_FirstName1;								/**< Field FirstName1 */
+	std::string m_GivenName;								/**< Field GivenName */
 	std::string m_Surname;									/**< Field Surname */
 	std::string m_Gender;									/**< Field Gender */
 	std::string m_DateOfBirth;								/**< Field DateOfBirth */
@@ -210,7 +211,8 @@ private:
 	std::string m_GivenNameMother;							/**< Field GivenNameMother */
 	std::string m_SurnameMother;							/**< Field SurnameMother */
 	std::string m_AccidentalIndications;					/**< Field AccidentalIndications */
-	std::string m_Photo;									/**< Field Photo */
+	CByteArray* m_Photo;									/**< Field Photo */
+	CByteArray* m_PhotoJpeg;								/**< Field Photo jpeg */
 	std::string m_MRZ1;										/**< Field MRZ block 1 */
 	std::string m_MRZ2;										/**< Field MRZ block 2 */
 	std::string m_MRZ3;										/**< Field MRZ block 3 */
@@ -277,10 +279,10 @@ public:
 	const char *getDistrict();
 	const char *getStreetName();
 	const char *getCivilParish();
-	const char *getStreetType1();
-	const char *getStreetType2();
-	const char *getBuildingType1();
-	const char *getBuildingType2();
+	const char *getAbbrStreetType();
+	const char *getStreetType();
+	const char *getAbbrBuildingType();
+	const char *getBuildingType();
 	const char *getDoorNo();
 	const char *getFloor();
 	const char *getSide();
@@ -337,10 +339,10 @@ private:
 	std::string m_ZipCode;									/**< Field ZipCode */
 	std::string m_Municipality;								/**< Field Municipality */
 	std::string m_CivilParish;
-	std::string m_StreetType1;
-	std::string m_StreetType2;
-	std::string m_BuildingType1;
-	std::string m_BuildingType2;
+	std::string m_AbbrStreetType;
+	std::string m_StreetType;
+	std::string m_AbbrBuildingType;
+	std::string m_BuildingType;
 	std::string m_DoorNo;
 	std::string m_Floor;
 	std::string m_Side;

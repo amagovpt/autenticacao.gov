@@ -29,7 +29,7 @@
 %{
 #include "eidlib.h"
 #include "eidlibException.h"
-#include "../common/xmlUserDataEnum.h"
+#include "../common/xmlUserData.h"
 %}
 
 //Define to avoid swig to create definition for NOEXPORT_PTEIDSDK methods
@@ -41,7 +41,7 @@
 ***                            FILE : xmlUserDataEnum.h                              ***
 ****************************************************************************************/
 
-%include "../common/xmlUserDataEnum.h"
+%include "../common/xmlUserData.h"
 
 /***************************************************************************************
 ***                            FILE : eidErrors.h                                ***
@@ -560,6 +560,19 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 }
 #elif SWIGJAVA	/********************** JAVA SPECIFICS ***********************/
 
+# no need to add a static block on every project that uses the java wrapper
+# the lib must be in the java library path
+%pragma(java) jniclasscode=%{
+  static {
+    try {
+        System.loadLibrary("pteidlibJava_Wrapper");
+    } catch (UnsatisfiedLinkError e) {
+      System.err.println("Native code library failed to load. \n" + e);
+      System.exit(1);
+    }
+  }
+%}
+
 ///////////////////////////////////////// ByteArray /////////////////////////////////////////////
 %typemap(jni)          const unsigned char* "jbyteArray"                    
 %typemap(jtype)        const unsigned char* "byte[]" 
@@ -890,6 +903,7 @@ return $jnicall;
 %javaexception("PTEID_Exception") getAllowTestCard		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") setAllowTestCard		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getDocument			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getXMLCCDoc			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getFullDoc			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getID					JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getAddr				JAVA_CODE_THROW
@@ -914,6 +928,12 @@ return $jnicall;
 //------------------------------------------------------------
 // class PTEID_ForeignerCard : none
 //------------------------------------------------------------
+
+//------------------------------------------------------------
+// class PTEID_CCXML_Doc ccxml
+//------------------------------------------------------------
+%javaexception("PTEID_Exception") getCCXML			JAVA_CODE_THROW
+
 //------------------------------------------------------------
 // class PTEID_XMLDoc
 //------------------------------------------------------------
@@ -967,48 +987,49 @@ return $jnicall;
 //------------------------------------------------------------
 // class PTEID_EId
 //------------------------------------------------------------
-%javaexception("PTEID_Exception") getDocumentVersion	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getDocumentType		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getFirstName			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getFirstName1			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getSurname			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getGender				JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getDateOfBirth		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getLocationOfBirth	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getNobility			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getNationality		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getDocumentVersion		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getDocumentType			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getGivenName				JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getSurname				JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getGender					JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getDateOfBirth			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getLocationOfBirth		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getNobility				JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getNationality			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getCivilianIdNumber		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getDuplicata			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getSpecialOrganization	JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getSpecialOrganization JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getMemberOfFamily		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getLogicalNumber		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getLogicalNumber			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getDocumentPAN			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getValidityBeginDate	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getValidityEndDate	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getLocalofRequest		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getValidityBeginDate		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getValidityEndDate		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getLocalofRequest			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getAddressVersion		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getStreet				JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getZipCode			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getCountry			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getCountry				JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getSpecialStatus		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getPhoto          JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getHeight	          	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getDocumentNumber          	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getTaxNo	          	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getSocialSecurityNumber       	JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getPhoto          		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getPhotoRaw          		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getHeight	          		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getDocumentNumber         JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getTaxNo	          		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getSocialSecurityNumber   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getHealthNumber          	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getIssuingEntity          	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getLocalofRequest          	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getGivenNameFather          	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getSurnameFather          	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getGivenNameMother          	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getSurnameMother          	JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getIssuingEntity          JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getLocalofRequest         JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getGivenNameFather        JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getSurnameFather          JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getGivenNameMother        JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getSurnameMother          JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getParents	          	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getPersoData	          	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getValidation          	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getMRZ1	          	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getMRZ2	          	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getMRZ3        	  	JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getValidation         JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getMRZ1	          		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getMRZ2	          		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getMRZ3        	  		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getAccidentalIndications 	JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_Address
@@ -1016,18 +1037,18 @@ return $jnicall;
 %javaexception("PTEID_Exception") getMunicipality		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getDistrict			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getStreetName			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getCivilParish			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getStreetType1			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getStreetType2			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getBuildingType1		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getBuildingType2		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getDoorNo			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getFloor			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getSide			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getCivilParish		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getAbbrStreetType		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getStreetType			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getAbbrBuildingType	JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getBuildingType		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getDoorNo				JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getFloor				JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getSide				JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getLocality			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getPlace			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getZip4			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getZip3			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getPlace				JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getZip4				JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getZip3				JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getPostalLocality		JAVA_CODE_THROW
 
 //------------------------------------------------------------
@@ -1132,10 +1153,10 @@ return $jnicall;
 %javaexception("PTEID_Exception") getDistrict	   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getStreetName	   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getCivilParish	   JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getStreetType1	   JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getStreetType2	   JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getBuildingType1	   JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getBuildingType2	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getAbbrStreetType	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getStreetType	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getAbbrBuildingType	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getBuildingType	   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getDoorNo	   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getFloor	   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getSide	   JAVA_CODE_THROW

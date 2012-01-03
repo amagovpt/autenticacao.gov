@@ -25,7 +25,7 @@
 #include <map>
 #include <set>
 #include "eidlibdefines.h"
-#include "../common/xmlUserDataEnum.h"
+#include "xmlUserData.h"
 
 namespace eIDMW
 {
@@ -1004,55 +1004,52 @@ class PTEID_EId : public PTEID_XMLDoc
 public:
 	PTEIDSDK_API virtual ~PTEID_EId();						/**< Destructor */
 
-	PTEIDSDK_API const char *getDocumentVersion();		/**< Return Document Version field */
-	PTEIDSDK_API const char *getDocumentType();			/**< Return Document Type field */
-	PTEIDSDK_API const char *getCountry();				/**< Return Country field */
-	PTEIDSDK_API const char *getFirstName1();			/**< Return First Name part 1 (2 first given name) */
-	PTEIDSDK_API const char *getSurname();				/**< Return Surname field */
-	PTEIDSDK_API const char *getGender();				/**< Return Gender field */
-	PTEIDSDK_API const char *getDateOfBirth();			/**< Return Date Of Birth field */
-	PTEIDSDK_API const char *getLocationOfBirth();		/**< Return Location Of Birth field */
-	PTEIDSDK_API const char *getNationality();			/**< Return Nationality field */
+	PTEIDSDK_API const char *getDocumentVersion();			/**< Return Document Version field */
+	PTEIDSDK_API const char *getDocumentType();				/**< Return Document Type field */
+	PTEIDSDK_API const char *getCountry();					/**< Return Country field */
+	PTEIDSDK_API const char *getGivenName();				/**< Return GivenName (2 first given name) */
+	PTEIDSDK_API const char *getSurname();					/**< Return Surname field */
+	PTEIDSDK_API const char *getGender();					/**< Return Gender field */
+	PTEIDSDK_API const char *getDateOfBirth();				/**< Return Date Of Birth field */
+	PTEIDSDK_API const char *getLocationOfBirth();			/**< Return Location Of Birth field */
+	PTEIDSDK_API const char *getNationality();				/**< Return Nationality field */
 	PTEIDSDK_API const char *getDuplicata();				/**< Return Duplicata field */
-	PTEIDSDK_API const char *getSpecialOrganization();	/**< Return Special Organization field */
-	PTEIDSDK_API const char *getMemberOfFamily();		/**< Return Member Of Family field */
+	PTEIDSDK_API const char *getSpecialOrganization();		/**< Return Special Organization field */
+	PTEIDSDK_API const char *getMemberOfFamily();			/**< Return Member Of Family field */
 	PTEIDSDK_API const char *getLogicalNumber();			/**< Return Logical Number field */
-	PTEIDSDK_API const char *getDocumentPAN();			/**< Return Document PAN field */
+	PTEIDSDK_API const char *getDocumentPAN();				/**< Return Document PAN field */
 	PTEIDSDK_API const char *getValidityBeginDate();		/**< Return Validity Begin Date field */
-	PTEIDSDK_API const char *getValidityEndDate();		/**< Return Validity End Date field */
-	//PTEIDSDK_API const char *getAddressVersion();		/**< Return Address Version field */
-	//PTEIDSDK_API const char *getStreet();				/**< Return Street field */
-	//PTEIDSDK_API const char *getZipCode();				/**< Return Zip Code field */
+	PTEIDSDK_API const char *getValidityEndDate();			/**< Return Validity End Date field */
 	PTEIDSDK_API const char *getSpecialStatus();			/**< Return Special Status field */
-	/*New status for PTeid-ng */
-	PTEIDSDK_API	const char *getHeight();						/**< Return field Height */
-	PTEIDSDK_API	const char *getDocumentNumber();				/**< Return field DocumentNumber */
-	PTEIDSDK_API	const char *getCivilianIdNumber();				/**< Return field CivlianIdNumber */
-	PTEIDSDK_API	const char *getTaxNo();							/**< Return field TaxNo */
-	PTEIDSDK_API	const char *getSocialSecurityNumber();			/**< Return field SocialSecurityNumber */
-	PTEIDSDK_API	const char *getHealthNumber();					/**< Return field HealthNo */
-	PTEIDSDK_API	const char *getIssuingEntity();					/**< Return field IssuingEntity */
-	PTEIDSDK_API const char *getLocalofRequest();				/**< Return field LocalofRequest*/
-	PTEIDSDK_API	const char *getGivenNameFather();				/**< Return field GivenNameFather */
-	PTEIDSDK_API	const char *getSurnameFather();					/**< Return field SurnameFather */
-	PTEIDSDK_API	const char *getGivenNameMother();				/**< Return field GivenNameMother */
-	PTEIDSDK_API	const char *getSurnameMother();					/**< Return field SurnameMother */
-	PTEIDSDK_API	const char *getParents();						/**< Return field Parents */
-	PTEIDSDK_API	const PTEID_ByteArray& getPhoto();							/**< Return field Photo */
-	PTEIDSDK_API	const char *getPersoData();						/**< Return field PersoData */
-	PTEIDSDK_API	const char *getValidation();					/**< Return field Validation */
-	PTEIDSDK_API const char *getMRZ1();							/**< Return field MRZ block 1 */
-	PTEIDSDK_API const char *getMRZ2();							/**< Return field MRZ block 2 */
-	PTEIDSDK_API const char *getMRZ3();							/**< Return field MRZ block 3 */
-	PTEIDSDK_API const char *getAccidentalIndications();			/**< Return field AccidentalIndications */
+	PTEIDSDK_API const char *getHeight();					/**< Return field Height */
+	PTEIDSDK_API const char *getDocumentNumber();			/**< Return field DocumentNumber */
+	PTEIDSDK_API const char *getCivilianIdNumber();			/**< Return field CivlianIdNumber */
+	PTEIDSDK_API const char *getTaxNo();					/**< Return field TaxNo */
+	PTEIDSDK_API const char *getSocialSecurityNumber();		/**< Return field SocialSecurityNumber */
+	PTEIDSDK_API const char *getHealthNumber();				/**< Return field HealthNo */
+	PTEIDSDK_API const char *getIssuingEntity();			/**< Return field IssuingEntity */
+	PTEIDSDK_API const char *getLocalofRequest();			/**< Return field LocalofRequest*/
+	PTEIDSDK_API const char *getGivenNameFather();			/**< Return field GivenNameFather */
+	PTEIDSDK_API const char *getSurnameFather();			/**< Return field SurnameFather */
+	PTEIDSDK_API const char *getGivenNameMother();			/**< Return field GivenNameMother */
+	PTEIDSDK_API const char *getSurnameMother();			/**< Return field SurnameMother */
+	PTEIDSDK_API const char *getParents();					/**< Return field Parents */
+	PTEIDSDK_API const PTEID_ByteArray& getPhoto();			/**< Return field Photo in jpeg format*/
+	PTEIDSDK_API const PTEID_ByteArray& getPhotoRaw();		/**< Return field Photo in jp2 format (format stored in the card)*/
+	PTEIDSDK_API const char *getPersoData();				/**< Return field PersoData */
+	PTEIDSDK_API const char *getValidation();				/**< Return field Validation */
+	PTEIDSDK_API const char *getMRZ1();						/**< Return field MRZ block 1 */
+	PTEIDSDK_API const char *getMRZ2();						/**< Return field MRZ block 2 */
+	PTEIDSDK_API const char *getMRZ3();					 	/**< Return field MRZ block 3 */
+	PTEIDSDK_API const char *getAccidentalIndications(); 	/**< Return field AccidentalIndications */
 
 private:
-	PTEID_EId(const PTEID_EId& doc);							/**< Copy not allowed - not implemented */
-	PTEID_EId& operator= (const PTEID_EId& doc);				/**< Copy not allowed - not implemented */
+	PTEID_EId(const PTEID_EId& doc);						/**< Copy not allowed - not implemented */
+	PTEID_EId& operator= (const PTEID_EId& doc);			/**< Copy not allowed - not implemented */
 
-	PTEID_EId(const SDK_Context *context,APL_DocEId *impl);			/**< For internal use : Constructor */
+	PTEID_EId(const SDK_Context *context,APL_DocEId *impl);	/**< For internal use : Constructor */
 
-friend PTEID_EId& PTEID_EIDCard::getID();						/**< For internal use : This method must access protected constructor */
+friend PTEID_EId& PTEID_EIDCard::getID();					/**< For internal use : This method must access protected constructor */
 };
 
 class APL_AddrEId;
@@ -1073,10 +1070,10 @@ public:
 	PTEIDSDK_API	const char *getDistrict();						/**< Return field District */
 	PTEIDSDK_API	const char *getStreetName();					/**< Return field StreetName */
 	PTEIDSDK_API	const char *getCivilParish();					/**< Return field CivilParish */
-	PTEIDSDK_API	const char *getStreetType1();					/**< Return field StreetType1 */
-	PTEIDSDK_API	const char *getStreetType2();					/**< Return field StreetType2 */
-	PTEIDSDK_API	const char *getBuildingType1();					/**< Return field BuildingType1 */
-	PTEIDSDK_API	const char *getBuildingType2();					/**< Return field BuildingType2 */
+	PTEIDSDK_API	const char *getAbbrStreetType();				/**< Return field AbbrStreetType */
+	PTEIDSDK_API	const char *getStreetType();					/**< Return field StreetType */
+	PTEIDSDK_API	const char *getAbbrBuildingType();				/**< Return field AbbrBuildingType */
+	PTEIDSDK_API	const char *getBuildingType();					/**< Return field BuildingType */
 	PTEIDSDK_API	const char *getDoorNo();						/**< Return field DoorNo */
 	PTEIDSDK_API	const char *getFloor();							/**< Return field Floor */
 	PTEIDSDK_API	const char *getSide();							/**< Return field Side */

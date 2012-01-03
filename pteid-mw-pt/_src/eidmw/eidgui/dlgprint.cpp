@@ -232,7 +232,7 @@ dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUA
 			cursor = dataTable->cellAt(row, col++).firstCursorPosition();
 			cursor.insertText(tr("First Names"));
 			cursor = dataTable->cellAt(row++, col).firstCursorPosition();
-			cursor.insertText(personInfo[FIRSTNAME]);
+			cursor.insertText(personInfo[GIVENNAME]);
 
 			col = 0;
 			cursor = dataTable->cellAt(row, col++).firstCursorPosition();
@@ -397,7 +397,7 @@ dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUA
 	cursor = dataTable->cellAt(row, col++).firstCursorPosition();
 	cursor.insertText(tr("First Names"));
 	cursor = dataTable->cellAt(row++, col).firstCursorPosition();
-	cursor.insertText(personInfo[FIRSTNAME]);
+	cursor.insertText(personInfo[GIVENNAME]);
 
 	col = 0;
 	cursor = dataTable->cellAt(row, col++).firstCursorPosition();

@@ -61,6 +61,8 @@ HEADERS += ByteArray.h \
            Util.h \
            win_macros.h \
            prefix.h \
+           StringOps.h \
+           xmlUserData.h \
            libtomcrypt/tomcrypt_argchk.h \
            libtomcrypt/tomcrypt_cfg.h \
            libtomcrypt/tomcrypt_hash.h \
@@ -84,6 +86,7 @@ SOURCES += ByteArray.cpp \
            TLV.cpp \
            TLVBuffer.cpp \
            Util.cpp \
+           StringOps.cpp \
            libtomcrypt/md5.c \
            libtomcrypt/sha1.c \
            libtomcrypt/sha256.c \

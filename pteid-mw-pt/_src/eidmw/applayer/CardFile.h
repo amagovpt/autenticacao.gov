@@ -119,6 +119,8 @@ protected:
 	APL_CryptoFwk *m_cryptoFwk;		/**< Pointer to the crypto framework */
 
 	CMutex m_Mutex;					/**< Mutex */
+	bool m_mappedFields;			/**< are the fields mapped already? */
+
 
 private:
 	APL_CardFile(const APL_CardFile &file);				/**< Copy not allowed - not implemented */

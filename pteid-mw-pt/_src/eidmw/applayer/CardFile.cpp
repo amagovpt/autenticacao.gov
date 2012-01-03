@@ -51,7 +51,7 @@ namespace eIDMW
 APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *file)
 {
 	m_cryptoFwk=AppLayer.getCryptoFwk();
-
+	m_mappedFields = false;
 	m_card=card;
 
 	APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);

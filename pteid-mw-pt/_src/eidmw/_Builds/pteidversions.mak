@@ -6,6 +6,12 @@ REL_MAJ=3
 REL_MIN=5
 REL_REV=5
 
+###### version nr of custom FreeImage (FreeImagePTEiD)
+FREEIMGLIB=FreeImagePTEiD
+FREEIMGLIB_MAJ=1
+FREEIMGLIB_MIN=0
+FREEIMGLIB_REV=0
+
 ###### version nr of GUI
 EIDGUI=pteidgui
 EIDGUI_MAJ=3

@@ -103,7 +103,8 @@ LIBS += -Wl,-rpath,/usr/local/lib/pteidqt
 LIBS += -L../lib  \
         -l$${EIDLIB} \
 	-l$${COMMONLIB} \
-        -l$${APPLAYERLIB}
+        -l$${APPLAYERLIB} \
+        -lfreeimagePTEiD
 
 isEmpty(EMULATE_CARDLAYER) {
   LIBS +=	-l$${CARDLAYERLIB} 

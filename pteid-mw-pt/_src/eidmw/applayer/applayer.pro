@@ -32,7 +32,8 @@ LIBS += -L../lib \
 	    -l$${COMMONLIB} \
 	    -l$${DLGLIB} \
 	    -lcrypto -lssl \
-	    -lxerces-c
+	    -lxerces-c \
+	    -lfreeimagePTEiD
 
 macx: LIBS += -L../../ThirdParty/Xerces/Xerces-2.8.0-mac/lib
 macx: LIBS += -Wl,-framework -Wl,CoreFoundation
@@ -52,7 +53,7 @@ isEmpty(EMULATE_CARDLAYER) {
 }
 
 DEPENDPATH += .
-INCLUDEPATH += . ../common ../cardlayer ../eidlib ../dialogs
+INCLUDEPATH += . ../common ../cardlayer ../eidlib ../dialogs ../FreeImagePTEiD/Source
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 DEFINES += APPLAYER_EXPORTS
 # Input

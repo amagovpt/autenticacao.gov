@@ -273,11 +273,11 @@ public:
 #define ADDRESS_DISTRICT		"address_district"
 #define ADDRESS_MUNICIPALITY 	"address_municipality"
 #define ADDRESS_CIVILPARISH		"address_parish"
-#define ADDRESS_STREETTYPE1		"address_streettype1"
-#define ADDRESS_STREETTYPE2		"address_streettype2"
+#define ADDRESS_ABBRSTREETTYPE	"address_abbrstreettype"
+#define ADDRESS_STREETTYPE		"address_streettype"
 #define ADDRESS_STREETNAME		"address_streetname"
-#define ADDRESS_BUILDINGTYPE1	"address_buildingtype1"
-#define ADDRESS_BUILDINGTYPE2	"address_buildingtype2"
+#define ADDRESS_ABBRBUILDINGTYPE	"address_abbrbuildingtype"
+#define ADDRESS_BUILDINGTYPE	"address_buildingtype"
 #define ADDRESS_DOORNO			"address_doorno"
 #define ADDRESS_FLOOR			"address_floor"
 #define ADDRESS_SIDE			"address_side"
@@ -325,11 +325,11 @@ public:
 		m_Fields[ADDRESS_DISTRICT]			= QString::fromUtf8(pteid_eid.getDistrict());
 		m_Fields[ADDRESS_MUNICIPALITY] 		= QString::fromUtf8(pteid_eid.getMunicipality());
 		m_Fields[ADDRESS_CIVILPARISH]  		= QString::fromUtf8(pteid_eid.getCivilParish());
-		m_Fields[ADDRESS_STREETTYPE1]  		= QString::fromUtf8(pteid_eid.getStreetType1());
-		m_Fields[ADDRESS_STREETTYPE2]  		= QString::fromUtf8(pteid_eid.getStreetType2());
+		m_Fields[ADDRESS_ABBRSTREETTYPE]  	= QString::fromUtf8(pteid_eid.getAbbrStreetType());
+		m_Fields[ADDRESS_STREETTYPE]  		= QString::fromUtf8(pteid_eid.getStreetType());
 		m_Fields[ADDRESS_STREETNAME]   		= QString::fromUtf8(pteid_eid.getStreetName());
-		m_Fields[ADDRESS_BUILDINGTYPE1] 	= QString::fromUtf8(pteid_eid.getBuildingType1());
-		m_Fields[ADDRESS_BUILDINGTYPE2] 	= QString::fromUtf8(pteid_eid.getBuildingType2());
+		m_Fields[ADDRESS_ABBRBUILDINGTYPE] 	= QString::fromUtf8(pteid_eid.getAbbrBuildingType());
+		m_Fields[ADDRESS_BUILDINGTYPE] 		= QString::fromUtf8(pteid_eid.getBuildingType());
 		m_Fields[ADDRESS_DOORNO] 			= QString::fromUtf8(pteid_eid.getDoorNo());
 		m_Fields[ADDRESS_FLOOR] 			= QString::fromUtf8(pteid_eid.getFloor());
 		m_Fields[ADDRESS_SIDE] 				= QString::fromUtf8(pteid_eid.getSide());
@@ -610,7 +610,7 @@ public:
 // 		qDebug() << "BiometricInfo::RetrieveData()";
 // 		qDebug() << "Retrieving picture...";
 		PTEID_EId& pteid_eid = Card.getID();
-		m_pPictureData = QByteArray((const char *)pteid_eid.getPhoto().GetBytes(),pteid_eid.getPhoto().Size());
+		m_pPictureData = QByteArray((const char *)pteid_eid.getPhotoRaw().GetBytes(),pteid_eid.getPhotoRaw().Size());
 
 		bRetVal = true;
 		return bRetVal;
@@ -678,7 +678,7 @@ class PersonInfo
 {
 public:
 #define NAME				"name"
-#define FIRSTNAME			"firstname"
+#define GIVENNAME			"givenname"
 #define BIRTHPLACE			"birthplace"
 #define BIRTHDATE			"birthdate"
 #define COUNTRY				"country"
@@ -747,7 +747,7 @@ public:
 		PTEID_EId& pteid_eid = Card.getID();
 
 		m_Fields[NAME]						= QString::fromUtf8(pteid_eid.getSurname());
-		m_Fields[FIRSTNAME]					= QString::fromUtf8(pteid_eid.getFirstName1());
+		m_Fields[GIVENNAME]					= QString::fromUtf8(pteid_eid.getGivenName());
 		m_Fields[NATIONALITY]				= QString::fromUtf8(pteid_eid.getNationality());
 		m_Fields[NATIONALNUMBER]			= QString::fromUtf8(pteid_eid.getCivilianIdNumber());
 		m_Fields[BIRTHDATE]					= QString::fromUtf8(pteid_eid.getDateOfBirth());
@@ -791,7 +791,7 @@ public:
 		PTEID_SisId& pteid_SisId = Card.getID();
 
 		m_Fields[NAME]      = QString::fromUtf8(pteid_SisId.getSurname()); 
-		m_Fields[FIRSTNAME] = QString::fromUtf8(pteid_SisId.getName()); 
+		m_Fields[GIVENNAME] = QString::fromUtf8(pteid_SisId.getName());
 		m_Fields[INITIALS]  = QString::fromUtf8(pteid_SisId.getInitials()); 
 		m_Fields[BIRTHDATE] = QString::fromUtf8(pteid_SisId.getDateOfBirth()); 
 		m_Fields[SEX]	    = QString::fromUtf8(pteid_SisId.getGender()); 

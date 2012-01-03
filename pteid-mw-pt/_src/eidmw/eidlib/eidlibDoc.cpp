@@ -842,14 +842,14 @@ const char *PTEID_EId::getCountry()
 	return out;
 }
 
-const char *PTEID_EId::getFirstName1()
+const char *PTEID_EId::getGivenName()
 {
 	const char *out = NULL;
 
 	BEGIN_TRY_CATCH
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getFirstName1();
+	out = pimpl->getGivenName();
 	
 	END_TRY_CATCH
 
@@ -1271,12 +1271,29 @@ const PTEID_ByteArray& PTEID_EId::getPhoto()
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
 
-	out = new PTEID_ByteArray((const unsigned char*)pimpl->getPhoto(), 14128);
+	out = new PTEID_ByteArray(m_context,*(pimpl->getPhoto()));
 
 	END_TRY_CATCH
 
 	return *out;
 }
+
+const PTEID_ByteArray& PTEID_EId::getPhotoRaw()
+{
+	PTEID_ByteArray *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
+
+	out = new PTEID_ByteArray(m_context,*(pimpl->getPhotoRaw()));
+
+	END_TRY_CATCH
+
+	return *out;
+}
+
+
 
 const char *PTEID_EId::getMRZ1()
 {
@@ -1415,56 +1432,56 @@ const char *PTEID_Address::getStreetName()
 	return out;
 }
 
-const char *PTEID_Address::getStreetType1()
+const char *PTEID_Address::getAbbrStreetType()
 {
 	const char *out = NULL;
 
 	BEGIN_TRY_CATCH
 
 	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
-	out = pimpl->getStreetType1();
+	out = pimpl->getAbbrStreetType();
 
 	END_TRY_CATCH
 
 	return out;
 }
 
-const char *PTEID_Address::getStreetType2()
+const char *PTEID_Address::getStreetType()
 {
 	const char *out = NULL;
 
 	BEGIN_TRY_CATCH
 
 	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
-	out = pimpl->getStreetType2();
+	out = pimpl->getStreetType();
 
 	END_TRY_CATCH
 
 	return out;
 }
 
-const char *PTEID_Address::getBuildingType1()
+const char *PTEID_Address::getAbbrBuildingType()
 {
 	const char *out = NULL;
 
 	BEGIN_TRY_CATCH
 
 	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
-	out = pimpl->getBuildingType1();
+	out = pimpl->getAbbrBuildingType();
 
 	END_TRY_CATCH
 
 	return out;
 }
 
-const char *PTEID_Address::getBuildingType2()
+const char *PTEID_Address::getBuildingType()
 {
 	const char *out = NULL;
 
 	BEGIN_TRY_CATCH
 
 	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
-	out = pimpl->getBuildingType2();
+	out = pimpl->getBuildingType();
 
 	END_TRY_CATCH
 
