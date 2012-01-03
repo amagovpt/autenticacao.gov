@@ -473,8 +473,12 @@
         <File Id="pteidpkcs11.dll" Name="pteidpkcs11.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteidpkcs11.dll" />
         <File Id="PortugalIdentityCardPKCS11.dll" Name="Portugal Identity Card PKCS11.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\Portugal Identity Card PKCS11.dll" />
       </Component>
-      
-<!--
+
+      <Component Id="PTeIDWin32CertificateImport" Guid="{1075DAF9-9765-4e03-9FA2-F6899B7AD8E2}">
+        <File Id="PTeIDWin32CertificateImport.exe" Name="PTeIDWin32CertificateImport.exe" KeyPath="yes" Source="..\..\..\_Binaries35\Release\PTeIDWin32CertificateImport.exe" />
+      </Component>
+
+      <!--
       <Component Id="BWCompatibility" Guid="{AFE2F946-0FD9-4FF4-917E-1E0970E8FCB7}" SharedDllRefCount="yes">
         <File Id="pteidwinscard.dll" Name="pteidwinscard.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidwinscard.dll" />
         <File Id="pteidgui.dll" Name="pteidgui.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidgui.dll" />
