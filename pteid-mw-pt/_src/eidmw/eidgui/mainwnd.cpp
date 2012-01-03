@@ -673,6 +673,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	}
 
 	m_ui.lbl_menuCard_Read->installEventFilter(this);
+	m_ui.lbl_menuCard_Pdf->installEventFilter(this);
 	m_ui.lbl_menuCard_Quit->installEventFilter(this);
 	m_ui.lbl_menuTools_Parameters->installEventFilter(this);
 	m_ui.lbl_menuLanguage_Portuguese->installEventFilter(this);
@@ -704,6 +705,13 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			m_CI_Data.Reset();
 			loadCardData();
 		}
+
+		if (object == m_ui.lbl_menuCard_Pdf )
+		{
+			//Add the Pdf dialog
+			std::cout << "Pdf dialog" << std::endl;
+		}
+
 		if (object == m_ui.lbl_menuCard_Quit )
 		{
 			quit_application();
@@ -806,7 +814,7 @@ void MainWnd::on_btnSelectTab_Notes_clicked()
 void MainWnd::on_btn_menu_card_clicked()
 {
 	m_ui.wdg_submenu_card->setVisible(true);
-	m_ui.wdg_submenu_card->setGeometry(0,4,126,90);
+	m_ui.wdg_submenu_card->setGeometry(0,4,126,110);
 }
 
 void MainWnd::on_btn_menu_tools_clicked()
