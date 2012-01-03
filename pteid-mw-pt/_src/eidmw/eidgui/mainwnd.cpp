@@ -709,7 +709,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 		if (object == m_ui.lbl_menuCard_Pdf )
 		{
 			//Add the Pdf dialog
-			std::cout << "Pdf dialog" << std::endl;
+			on_actionPrint_eID_triggered();
 		}
 
 		if (object == m_ui.lbl_menuCard_Quit )
@@ -768,9 +768,6 @@ void MainWnd::hide_submenus()
 
 
 }
-
-
-
 
 //******************************************************
 // Buttons to control tabs
@@ -3421,16 +3418,7 @@ void MainWnd::on_actionOptions_triggered(void)
 //*****************************************************
 void MainWnd::on_actionPrint_eID_triggered()
 {
-	if (!m_CI_Data.isDataLoaded())
-	{
-		return;
-	}
-	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
-	QString cardTypeText = GetCardTypeText(CardFields[CARD_TYPE]);
-
-	dlgPrint* dlg = new dlgPrint( this, m_CI_Data, m_Language, cardTypeText);
-	dlg->exec();
-	delete dlg;
+	std::cout << "Pdf Creator" << std::endl;
 }
 
 void MainWnd::on_actionPrinter_Settings_triggered()
