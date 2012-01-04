@@ -97,6 +97,7 @@ PRE_TARGETDEPS += $${translation_de.target} \
 
 DEPENDPATH += . ../dialogs 
 INCLUDEPATH += . ../dialogs ../eidlib ../_Builds ../common
+INCLUDEPATH += /usr/include/cairo
 
 LIBS += -Wl,-rpath,/usr/local/lib/pteidqt
 
@@ -105,6 +106,8 @@ LIBS += -L../lib  \
 	-l$${COMMONLIB} \
         -l$${APPLAYERLIB} \
         -lfreeimagePTEiD
+
+LIBS += -lcairo
 
 isEmpty(EMULATE_CARDLAYER) {
   LIBS +=	-l$${CARDLAYERLIB} 

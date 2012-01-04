@@ -33,6 +33,10 @@ class dlgPrint : public QDialog
 private slots:
 	void on_pbPrint_clicked( void );
 	void on_pbCancel_clicked( void );
+	void on_chboxID_toggled( bool bChecked );
+	void on_chboxAddress_toggled( bool bChecked );
+	void on_chboxIDExtra_toggled( bool bChecked );
+	void on_chboxPersoData_toggled( bool bChecked );
 	//void on_btnPDF_clicked( void );
 
 
@@ -43,6 +47,8 @@ public:
 private:
     Ui_dlgPrint ui;
 	CardInformation const& m_CI_Data;
+
+	void drawpdf(CardInformation& CI_Data, const char *filepath);
 };
 
 #endif

@@ -1,67 +1,130 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>dlgPrint</class>
- <widget class="QDialog" name="dlgPrint" >
-  <property name="geometry" >
+ <widget class="QDialog" name="dlgPrint">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>645</width>
-    <height>743</height>
+    <width>450</width>
+    <height>315</height>
    </rect>
   </property>
-  <property name="font" >
+  <property name="font">
    <font>
     <pointsize>11</pointsize>
    </font>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Print</string>
   </property>
-  <property name="windowIcon" >
-   <iconset>Images/Icons/Print.png</iconset>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../../../../.designer/backup/Images/Icons/Print.png</normaloff>../../../../../.designer/backup/Images/Icons/Print.png</iconset>
   </property>
-  <property name="modal" >
+  <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <layout class="QGridLayout" >
-     <item row="0" column="0" colspan="3" >
-      <widget class="QTextEdit" name="paperview" >
-       <property name="font" >
-        <font>
-         <pointsize>11</pointsize>
-        </font>
+  <layout class="QGridLayout">
+   <item row="1" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbCancel">
+         <property name="text">
+          <string>Cancel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbPrint">
+         <property name="text">
+          <string>Print</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QLabel" name="labelHeader">
+       <property name="text">
+        <string>Introduza os campos que pretende introduzir no PDF.</string>
        </property>
-       <property name="readOnly" >
-        <bool>true</bool>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
-     <item row="1" column="0" >
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
+     <item>
+      <widget class="QCheckBox" name="chboxID">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="sizeHint" >
-        <size>
-         <width>451</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="1" column="1" >
-      <widget class="QPushButton" name="pbCancel" >
-       <property name="text" >
-        <string>Cancel</string>
+       <property name="text">
+        <string>Indicações Básicas</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="2" >
-      <widget class="QPushButton" name="pbPrint" >
-       <property name="text" >
-        <string>Print</string>
+     <item>
+      <widget class="QCheckBox" name="chboxIDExtra">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Indicações Extra</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="chboxAddress">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Morada</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="chboxPersoData">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Indicações Pessoais</string>
        </property>
       </widget>
      </item>

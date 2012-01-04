@@ -3418,7 +3418,12 @@ void MainWnd::on_actionOptions_triggered(void)
 //*****************************************************
 void MainWnd::on_actionPrint_eID_triggered()
 {
-	std::cout << "Pdf Creator" << std::endl;
+	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
+	QString cardTypeText = GetCardTypeText(CardFields[CARD_TYPE]);
+
+	dlgPrint* dlg = new dlgPrint( this, m_CI_Data, m_Language, cardTypeText);
+	dlg->exec();
+	delete dlg;
 }
 
 void MainWnd::on_actionPrinter_Settings_triggered()
