@@ -55,7 +55,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="Source;Source\DeprecationManager"
+				AdditionalIncludeDirectories="Source;Source\ZLib;Source\DeprecationManager"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;OPJ_STATIC;FREEIMAGE_EXPORTS;_CRT_SECURE_NO_DEPRECATE;LIBRAW_NODLL"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -345,7 +345,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="Source;Source\DeprecationManager"
+				AdditionalIncludeDirectories="Source;Source\ZLib;Source\DeprecationManager"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;OPJ_STATIC;FREEIMAGE_EXPORTS;_CRT_SECURE_NO_DEPRECATE;LIBRAW_NODLL"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
@@ -471,7 +471,7 @@
 					>
 				</File>
 				<File
-					RelativePath="Source\FreeImage\PluginJPEG.cpp"
+					RelativePath="Source\FreeImage\PluginPNG.cpp"
 					>
 				</File>
 			</Filter>
@@ -586,14 +586,14 @@
 					RelativePath="Source\FreeImage\MultiPage.cpp"
 					>
 				</File>
+				<File
+					RelativePath="Source\FreeImage\ZLibInterface.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Metadata"
 				>
-				<File
-					RelativePath="Source\Metadata\Exif.cpp"
-					>
-				</File>
 				<File
 					RelativePath="Source\Metadata\FIRational.cpp"
 					>
