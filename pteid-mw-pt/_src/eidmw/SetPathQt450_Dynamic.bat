@@ -1,6 +1,6 @@
 @echo [INFO] Define default value for PTEID_DIR_QT_450_DYNAMIC if not defined yet
 @echo [INFO] Input PTEID_DIR_QT_450_DYNAMIC=%PTEID_DIR_QT_450_DYNAMIC%
-@set FILE_TO_FIND="lib\qtmain.lib" "lib\qtmaind.lib" "lib\QtCore4.lib" "lib\QtCored4.lib" "bin\QtCore4.dll" "bin\QtCored4.dll" "lib\QtGui4.lib" "bin\QtGuid4.dll" "bin\QtGui4.dll" "lib\QtGuid4.lib" "plugins\imageformats\qjpeg4.lib" "plugins\imageformats\qjpegd4.lib" "plugins\imageformats\qjpeg4.dll" "plugins\imageformats\qjpegd4.dll"
+@set FILE_TO_FIND="lib\qtmain.lib" "lib\QtCore4.lib" "bin\QtCore4.dll" "lib\QtGui4.lib"  "bin\QtGui4.dll" "plugins\imageformats\qjpeg4.lib" "plugins\imageformats\qjpeg4.dll"
 @echo [INFO] Looking for files: %FILE_TO_FIND%
 
 @set FILE_NOT_FOUND=
