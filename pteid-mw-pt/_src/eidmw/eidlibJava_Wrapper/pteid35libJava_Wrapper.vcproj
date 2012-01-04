@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="libJava_Wrapper"
 	ProjectGUID="{4066E21F-5A62-4581-A3B3-47A083396D0C}"
 	RootNamespace="eIDMW"
@@ -9,6 +9,9 @@
 	<Platforms>
 		<Platform
 			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
 		/>
 	</Platforms>
 	<ToolFiles>
@@ -174,6 +177,169 @@
 				CommandLine="copy /Y ..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName).dll ..\..\ThirdParty\pteid_sdk\3.5\Java\pteid35$(ProjectName).dll"
 			/>
 		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="1"
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="C:\OpenSSL\include;../applayer;../common;../eidlib;../cardlayer;&quot;$(PTEID_DIR_JDK_142)\include&quot;;&quot;$(PTEID_DIR_JDK_142)\include\win32&quot;;..\..\ThirdParty\jdk\j2sdk1.4.2_17\include;..\..\ThirdParty\jdk\j2sdk1.4.2_17\include\win32;&quot;C:\Program Files\Java\jdk1.4.2_17\include&quot;;&quot;C:\Program Files\Java\jdk1.4.2_17\include\win32&quot;"
+				PreprocessorDefinitions="PTEID_35;WIN32;_DEBUG;_WINDOWS;EIDMW_EIDLIB_WRAPPER"
+				MinimalRebuild="false"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="3"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="PTEID_35;_UNICODE;UNICODE"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				UseLibraryDependencyInputs="false"
+				AdditionalDependencies="pteid35applayerD.lib pteid35commonD.lib"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName)D.dll"
+				AdditionalLibraryDirectories="&quot;..\_Binaries35/$(ConfigurationName)&quot;"
+				GenerateDebugInformation="true"
+				AssemblyDebug="1"
+				SubSystem="2"
+				LinkTimeCodeGeneration="1"
+				TargetMachine="17"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;;../applayer;../common;../eidlib;../cardlayer;&quot;$(PTEID_DIR_JDK_142)\include&quot;;&quot;$(PTEID_DIR_JDK_142)\include\win32&quot;;..\..\ThirdParty\jdk\j2sdk1.4.2_17\include;..\..\ThirdParty\jdk\j2sdk1.4.2_17\include\win32;&quot;C:\Program Files\Java\jdk1.4.2_17\include&quot;;&quot;C:\Program Files\Java\jdk1.4.2_17\include\win32&quot;"
+				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_WRAPPER"
+				RuntimeLibrary="2"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="PTEID_35"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				LinkLibraryDependencies="true"
+				UseLibraryDependencyInputs="true"
+				AdditionalDependencies="pteid35applayer.lib pteid35common.lib"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName).dll"
+				AdditionalLibraryDirectories="&quot;..\_Binaries35\$(PlatformName)\$(ConfigurationName)&quot;"
+				GenerateManifest="true"
+				TargetMachine="17"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy /Y ..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName).dll ..\..\ThirdParty\pteid_sdk\3.5\Java\pteid35$(ProjectName).dll"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -262,6 +428,24 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="call ..\SetPathSwig.bat&#x0D;&#x0A;&quot;%PTEID_DIR_SWIG%\swig.exe&quot; -c++ -java -package pt.gov.cartaodecidadao -o .\GeneratedFiles\eidlibJava_Wrapper.cpp -outdir .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					Outputs=".\GeneratedFiles\eidlibJava_Wrapper.cpp"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Debug|x64"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="call ..\SetPathSwig.bat&#x0D;&#x0A;&quot;%PTEID_DIR_SWIG%\swig.exe&quot; -c++ -java -package pt.gov.cartaodecidadao -o .\GeneratedFiles\eidlibJava_Wrapper.cpp -outdir .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					Outputs=".\GeneratedFiles\eidlibJava_Wrapper.cpp"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|x64"
 				>
 				<Tool
 					Name="VCCustomBuildTool"

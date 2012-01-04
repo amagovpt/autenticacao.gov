@@ -11,6 +11,9 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
@@ -84,6 +87,105 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
 				SubSystem="2"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="copy the necessary files"
+				CommandLine="copy ..\eidgui\*.qm ..\_Binaries35\$(ConfigurationName)"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="1"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			BuildLogFile="$(IntDir)\$(TargetFileName).BuildLog.htm"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				WarningLevel="0"
+				DefaultCharType="0"
+				TargetEnvironment="3"
+				EnableErrorChecks="1"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm200 -w34100 -w34189 -Zm200 -w34100 -w34189 -w34100 -w34189"
+				Optimization="4"
+				AdditionalIncludeDirectories="&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;..\eidlib;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include&quot;;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include\QtCore&quot;;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include\QtGui&quot;;..\..\ThirdParty\Qt\4.5.0\include;..\..\ThirdParty\Qt\4.5.0\include\QtCore;..\..\ThirdParty\Qt\4.5.0\include\QtGui;c:\Qt\4.5.0\include;c:\Qt\4.5.0\include\QtCore;c:\Qt\4.5.0\include\QtGui"
+				PreprocessorDefinitions="PTEID_35;MEMORY_LEAKS_CHECK;_WINDOWS;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT"
+				GeneratePreprocessedFile="0"
+				MinimalRebuild="true"
+				ExceptionHandling="1"
+				RuntimeLibrary="3"
+				BufferSecurityCheck="false"
+				TreatWChar_tAsBuiltInType="true"
+				RuntimeTypeInfo="true"
+				AssemblerListingLocation="$(IntDir)\"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetFileName).vc80.pdb"
+				WarningLevel="3"
+				SuppressStartupBanner="false"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="PTEID_35;_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_THREAD_SUPPORT,_DEBUG"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
+				LinkLibraryDependencies="false"
+				AdditionalDependencies="pteid35libCppD.lib Cryptui.lib Crypt32.lib qtmaind.lib QtGuid4.lib QtCored4.lib"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName)D.exe"
+				SuppressStartupBanner="false"
+				AdditionalLibraryDirectories="&quot;..\_Binaries35\$(ConfigurationName)&quot;;&quot;$(PTEID_DIR_QT_450_DYNAMIC)\lib&quot;;..\..\ThirdParty\Qt\4.5.0\lib;C:\Qt\4.5.0\lib"
+				DelayLoadDLLs=""
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
+				SubSystem="2"
+				TargetMachine="17"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -207,6 +309,103 @@
 				CommandLine="copy ..\eidgui\*.qm ..\_Binaries35\$(ConfigurationName)&#x0D;&#x0A;"
 			/>
 		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="1"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			BuildLogFile="$(IntDir)\$(TargetFileName).BuildLog.htm"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				WarningLevel="0"
+				DefaultCharType="0"
+				TargetEnvironment="3"
+				EnableErrorChecks="1"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm200 -w34100 -w34189 -Zm200 -w34100 -w34189 -w34100 -w34189"
+				Optimization="2"
+				AdditionalIncludeDirectories="&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;..\eidlib;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include&quot;;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include\QtCore&quot;;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include\QtGui&quot;;..\..\ThirdParty\Qt\4.5.0\include;..\..\ThirdParty\Qt\4.5.0\include\QtCore;..\..\ThirdParty\Qt\4.5.0\include\QtGui;c:\Qt\4.5.0\include;c:\Qt\4.5.0\include\QtCore;c:\Qt\4.5.0\include\QtGui"
+				PreprocessorDefinitions="PTEID_35;QT_NO_DEBUG;NDEBUG;_WINDOWS;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT"
+				GeneratePreprocessedFile="0"
+				ExceptionHandling="1"
+				RuntimeLibrary="2"
+				BufferSecurityCheck="false"
+				TreatWChar_tAsBuiltInType="true"
+				RuntimeTypeInfo="true"
+				AssemblerListingLocation="$(IntDir)\"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetFileName).vc80.pdb"
+				WarningLevel="3"
+				SuppressStartupBanner="false"
+				DebugInformationFormat="0"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="PTEID_35;QT_NO_DEBUG,NDEBUG,_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,QT_DLL,QT_NO_DEBUG,QT_GUI_LIB,QT_CORE_LIB,QT_THREAD_SUPPORT"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
+				LinkLibraryDependencies="false"
+				AdditionalDependencies="pteid35libCpp.lib Cryptui.lib Crypt32.lib qtmain.lib QtGui4.lib QtCore4.lib"
+				OutputFile="..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteid35$(ProjectName).exe"
+				LinkIncremental="0"
+				SuppressStartupBanner="false"
+				AdditionalLibraryDirectories="&quot;..\_Binaries35\x64\$(ConfigurationName)&quot;;&quot;$(PTEID_DIR_QT_450_DYNAMIC)\lib&quot;;..\..\ThirdParty\Qt\4.5.0\lib"
+				GenerateDebugInformation="false"
+				ProgramDatabaseFile=""
+				SubSystem="2"
+				TargetMachine="17"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy ..\eidgui\*.qm ..\_Binaries35\$(ConfigurationName)&#x0D;&#x0A;"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -281,7 +480,29 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; &quot;$(InputName).h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputPath)... "
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; &quot;$(InputName).h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -307,7 +528,29 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; &quot;$(InputName).h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; &quot;$(InputName).h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -333,7 +576,29 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; &quot;$(InputName).h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; &quot;$(InputName).h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -367,7 +632,29 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing mainwnd.h..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; &quot;$(InputName).h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;mainwnd.h"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)\moc_mainwnd.cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing mainwnd.h..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; -I&quot;.\..\..\ThirdParty\Qt\4.5.0\include&quot; -I&quot;.\..\..\ThirdParty\Qt\4.5.0\include\QtCore&quot; -I&quot;.\..\..\ThirdParty\Qt\4.5.0\include\QtGui&quot; -I&quot;c:\Qt\4.5.0\include&quot; -I&quot;c:\Qt\4.5.0\include\QtCore&quot; -I&quot;c:\Qt\4.5.0\include\QtGui&quot; &quot;mainwnd.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_mainwnd.cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;mainwnd.h"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)\moc_mainwnd.cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -393,7 +680,29 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; &quot;$(InputName).h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; &quot;$(InputName).h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -419,7 +728,29 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; &quot;$(InputName).h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; &quot;$(InputName).h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -455,12 +786,28 @@
 						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="GeneratedFiles\release\moc_dlgAbout.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -479,12 +826,28 @@
 						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="GeneratedFiles\release\moc_dlgOptions.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -506,7 +869,26 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -526,12 +908,28 @@
 						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="GeneratedFiles\debug\moc_mainwnd.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -553,7 +951,26 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -576,7 +993,26 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -590,6 +1026,14 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -611,7 +1055,26 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -631,12 +1094,28 @@
 						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\generatedfiles\debug\qrc_eidgui.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -658,7 +1137,26 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -678,12 +1176,28 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\generatedfiles\release\ui_dlgAbout.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -702,12 +1216,28 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\generatedfiles\debug\ui_dlgOptions.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -726,12 +1256,28 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\generatedfiles\release\ui_dlgPrint.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -750,12 +1296,28 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\generatedfiles\release\ui_mainwnd.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -774,12 +1336,28 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\generatedfiles\release\ui_picturepopup.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -809,7 +1387,29 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -835,7 +1435,29 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -861,7 +1483,29 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -887,7 +1531,29 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -913,7 +1579,29 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputPath)..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -968,10 +1656,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\pteidgui.rc"
-				>
-			</File>
-			<File
 				RelativePath="Images\belgie.png"
 				>
 			</File>
@@ -1002,7 +1686,29 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Rcc&apos;ing eidgui.qrc..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;.\$(InputName).qrc&quot; -o .\GeneratedFiles\$(ConfigurationName)\qrc_$(InputName).cpp&#x0D;&#x0A;"
+						AdditionalDependencies=".\eidgui.qrc;.\Images\Background_ForeignersBack.jpg;.\Images\Background_ForeignersFront.jpg;.\Images\Background_IDBack.jpg;.\Images\Background_IDFront.jpg;.\Images\Background_KidsBack.jpg;.\Images\Background_KidsFront.jpg;.\Images\Background_SisBack.jpg;.\Images\Background_SisFront.jpg;.\Images\Background_NotAllow.jpg;.\Images\Female.png;.\Images\Icons\Chip.png;.\Images\Icons\Clear.png;.\Images\Icons\Exit.png;.\Images\Icons\ICO_CARD_EID_PLAIN_16x16.png;.\Images\Icons\Open.png;.\Images\Icons\Options.png;.\Images\Icons\Print.png;.\Images\Icons\Save.png;.\Images\Icons\Zoom_IN.png;.\Images\Icons\Zoom_OUT.png;.\Images\Icons\reader_card.png;.\Images\Icons\reader_error.png;.\Images\Icons\reader_nocard.png;.\Images\Icons\reader_question.png;.\Images\Male.png;.\Images\a-z_identiteitskaart_logo.png;.\Images\schild_de.jpg;.\Images\schild_en.jpg;.\Images\schild_fr.jpg;.\Images\schild_nl.jpg"
+						Outputs=".\GeneratedFiles\$(ConfigurationName)\qrc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Rcc&apos;ing eidgui.qrc..."
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;.\$(InputName).qrc&quot; -o .\GeneratedFiles\$(ConfigurationName)\qrc_$(InputName).cpp&#x0D;&#x0A;"
+						AdditionalDependencies=".\eidgui.qrc;.\Images\Background_ForeignersBack.jpg;.\Images\Background_ForeignersFront.jpg;.\Images\Background_IDBack.jpg;.\Images\Background_IDFront.jpg;.\Images\Background_KidsBack.jpg;.\Images\Background_KidsFront.jpg;.\Images\Background_SisBack.jpg;.\Images\Background_SisFront.jpg;.\Images\Female.png;.\Images\Icons\Chip.png;.\Images\Icons\Clear.png;.\Images\Icons\Exit.png;.\Images\Icons\ICO_CARD_EID_PLAIN_16x16.png;.\Images\Icons\Open.png;.\Images\Icons\Options.png;.\Images\Icons\Print.png;.\Images\Icons\Save.png;.\Images\Icons\Zoom_IN.png;.\Images\Icons\Zoom_OUT.png;.\Images\Icons\reader_card.png;.\Images\Icons\reader_error.png;.\Images\Icons\reader_nocard.png;.\Images\Icons\reader_question.png;.\Images\Male.png;.\Images\a-z_identiteitskaart_logo.png;.\Images\schild_de.jpg;.\Images\schild_en.jpg;.\Images\schild_fr.jpg;.\Images\schild_nl.jpg"
+						Outputs=".\GeneratedFiles\$(ConfigurationName)\qrc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1062,11 +1768,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Resources\reader_card.png"
+				RelativePath=".\pteidgui.rc"
 				>
 			</File>
 			<File
 				RelativePath=".\Images\Icons\reader_card.png"
+				>
+			</File>
+			<File
+				RelativePath=".\Resources\reader_card.png"
 				>
 			</File>
 			<File

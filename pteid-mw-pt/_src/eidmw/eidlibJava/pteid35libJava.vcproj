@@ -10,6 +10,9 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
@@ -167,6 +170,161 @@
 				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid35$(ProjectName).jar -C class pt&#x0D;&#x0A;call ..\_DocsInternal\API\doSDK_java.bat&#x0D;&#x0A;"
 			/>
 		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				Description="javac..."
+				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\javac.exe&quot; -verbose -d class ../eidlibJava_Wrapper\GeneratedFiles\*.java&#x0D;&#x0A;"
+				Outputs="$(InputName).class"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				GenerateDebugInformation="true"
+				TargetMachine="17"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="Creating jar file..."
+				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid35$(ProjectName).jar -C class .&#x0D;&#x0A;"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				Description="javac..."
+				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\javac.exe&quot; -verbose -d class ../eidlibJava_Wrapper\GeneratedFiles\*.java&#x0D;&#x0A;"
+				Outputs="$(InputName).class"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				RuntimeLibrary="2"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				GenerateDebugInformation="true"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="17"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid35$(ProjectName).jar -C class pt&#x0D;&#x0A;call ..\_DocsInternal\API\doSDK_java.bat&#x0D;&#x0A;"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -176,6 +334,10 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath="..\eidlibJava_Wrapper\GeneratedFiles\Callback.java"
+				>
+			</File>
 			<File
 				RelativePath="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Biometric.java"
 				>
@@ -426,10 +588,6 @@
 			</File>
 			<File
 				RelativePath="..\eidlibJava_Wrapper\GeneratedFiles\pteidlibJava_WrapperJNI.java"
-				>
-			</File>
-			<File
-				RelativePath="..\eidlibJava_Wrapper\GeneratedFiles\Callback.java"
 				>
 			</File>
 			<File
