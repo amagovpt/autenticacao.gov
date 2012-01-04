@@ -177,7 +177,7 @@ const char *APL_EidFile_Trace::getValidation()
 APL_EidFile_ID::APL_EidFile_ID(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_ID,NULL)
 {
 	m_Photo = NULL;
-	m_PhotoJpeg = NULL;
+	m_PhotoPNG = NULL;
 }
 
 APL_EidFile_ID::~APL_EidFile_ID()
@@ -271,9 +271,9 @@ void APL_EidFile_ID::EmptyFields()
 		delete m_Photo;
 		m_Photo = NULL;
 	}
-	if (m_PhotoJpeg){
-			delete m_PhotoJpeg;
-			m_PhotoJpeg = NULL;
+	if (m_PhotoPNG){
+			delete m_PhotoPNG;
+			m_PhotoPNG= NULL;
 		}
 	m_PhotoHash.ClearContents();
 	m_mappedFields = false;
@@ -760,7 +760,7 @@ CByteArray *APL_EidFile_ID::getPhoto()
 	BYTE *mem_buffer = NULL;
 	DWORD size_in_bytes = 0;
 
-	if (!m_PhotoJpeg){
+	if (!m_PhotoPNG){
 		FreeImage_Initialise(TRUE);
 
 		photojp2 = getPhotoRaw();
@@ -768,9 +768,9 @@ CByteArray *APL_EidFile_ID::getPhoto()
 		FREE_IMAGE_FORMAT imageFormat = FreeImage_GetFileTypeFromMemory(source, 0);
 		FIBITMAP *check = FreeImage_LoadFromMemory(imageFormat, source, JP2_DEFAULT);
 		FIMEMORY *destination = FreeImage_OpenMemory();
-		FreeImage_SaveToMemory(FIF_JPEG, check, destination, JPEG_DEFAULT);
+		FreeImage_SaveToMemory(FIF_PNG, check, destination, PNG_Z_BEST_COMPRESSION);
 		FreeImage_AcquireMemory(destination, &mem_buffer, &size_in_bytes);
-		m_PhotoJpeg = new CByteArray((const unsigned char*)mem_buffer, (unsigned long)size_in_bytes);
+		m_PhotoPNG = new CByteArray((const unsigned char*)mem_buffer, (unsigned long)size_in_bytes);
 		FreeImage_Unload(check);
 		FreeImage_CloseMemory(source);
 		FreeImage_CloseMemory(destination);
@@ -779,7 +779,7 @@ CByteArray *APL_EidFile_ID::getPhoto()
 	}
 
 	if(ShowData())
-		return m_PhotoJpeg;
+		return m_PhotoPNG;
 
 	return NULL;
 }
