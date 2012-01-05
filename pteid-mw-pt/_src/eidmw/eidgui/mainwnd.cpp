@@ -4831,32 +4831,32 @@ void MainWnd::refreshTabIdentity( void )
 
 	tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
 
-	m_ui.txtIdentity_Name->setText		 ( PersonFields[NAME] );
-	m_ui.txtIdentity_Name->setAccessibleName ( PersonFields[NAME] );
-	m_ui.txtIdentity_GivenNames->setText ( PersonFields[GIVENNAME] );
-	m_ui.txtIdentity_GivenNames->setAccessibleName ( PersonFields[GIVENNAME] );
-	m_ui.txtIdentity_Nationality->setText( PersonFields[NATIONALITY] );
-	m_ui.txtIdentity_Nationality->setAccessibleName( PersonFields[NATIONALITY] );
-	m_ui.txtIdentity_BirthDate->setText ( PersonFields[BIRTHDATE] );
-	m_ui.txtIdentity_BirthDate->setAccessibleName ( PersonFields[BIRTHDATE] );
-	m_ui.txtIdentity_Sex->setText        ( PersonFields[SEX] );
-	m_ui.txtIdentity_Sex->setAccessibleName ( PersonFields[SEX] );
+	m_ui.txtIdentity_Name->setText		 ( QString::fromUtf8(PersonFields[NAME].toStdString().c_str()) );
+	m_ui.txtIdentity_Name->setAccessibleName ( QString::fromUtf8(PersonFields[NAME].toStdString().c_str()) );
+	m_ui.txtIdentity_GivenNames->setText ( QString::fromUtf8(PersonFields[GIVENNAME].toStdString().c_str()) );
+	m_ui.txtIdentity_GivenNames->setAccessibleName ( QString::fromUtf8(PersonFields[GIVENNAME].toStdString().c_str()) );
+	m_ui.txtIdentity_Nationality->setText( QString::fromUtf8(PersonFields[NATIONALITY].toStdString().c_str()) );
+	m_ui.txtIdentity_Nationality->setAccessibleName( QString::fromUtf8(PersonFields[NATIONALITY].toStdString().c_str()) );
+	m_ui.txtIdentity_BirthDate->setText ( QString::fromUtf8(PersonFields[BIRTHDATE].toStdString().c_str()) );
+	m_ui.txtIdentity_BirthDate->setAccessibleName ( QString::fromUtf8(PersonFields[BIRTHDATE].toStdString().c_str()) );
+	m_ui.txtIdentity_Sex->setText        ( QString::fromUtf8(PersonFields[SEX].toStdString().c_str()) );
+	m_ui.txtIdentity_Sex->setAccessibleName ( QString::fromUtf8(PersonFields[SEX].toStdString().c_str()) );
 
 	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
 
 	QString cardNumber = m_CI_Data.m_CardInfo.formatCardNumber(CardFields[CARD_NUMBER],m_CI_Data.m_pCard->getType());
-	m_ui.txtIdentity_Height->setText	 ( PersonFields[HEIGHT] );
-	m_ui.txtIdentity_Height->setAccessibleName	 ( PersonFields[HEIGHT] );
-	m_ui.txtIdentity_Country->setText	 ( PersonFields[COUNTRY] );
-	m_ui.txtIdentity_Country->setAccessibleName	 ( PersonFields[COUNTRY] );
-	m_ui.txtIdentity_DocumentNumber->setText	 ( PersonFields[DOCUMENTNUMBER] );
-	m_ui.txtIdentity_DocumentNumber->setAccessibleName	 ( PersonFields[DOCUMENTNUMBER] );
-	m_ui.txtIdentity_ValidUntil->setText( CardFields[CARD_VALIDUNTIL] );
-	m_ui.txtIdentity_ValidUntil->setAccessibleName( CardFields[CARD_VALIDUNTIL] );
-	m_ui.txtIdentity_Parents_Father->setText( PersonFields[FATHER] );
-	m_ui.txtIdentity_Parents_Father->setAccessibleName(PersonFields[FATHER]);
-	m_ui.txtIdentity_Parents_Mother->setText( PersonFields[MOTHER] );
-	m_ui.txtIdentity_Parents_Mother->setAccessibleName( PersonFields[MOTHER] );
+	m_ui.txtIdentity_Height->setText	 ( QString::fromUtf8(PersonFields[HEIGHT].toStdString().c_str()) );
+	m_ui.txtIdentity_Height->setAccessibleName	 ( QString::fromUtf8(PersonFields[HEIGHT].toStdString().c_str()) );
+	m_ui.txtIdentity_Country->setText	 ( QString::fromUtf8(PersonFields[COUNTRY].toStdString().c_str()) );
+	m_ui.txtIdentity_Country->setAccessibleName	 ( QString::fromUtf8(PersonFields[COUNTRY].toStdString().c_str()) );
+	m_ui.txtIdentity_DocumentNumber->setText	 ( QString::fromUtf8(PersonFields[DOCUMENTNUMBER].toStdString().c_str()) );
+	m_ui.txtIdentity_DocumentNumber->setAccessibleName	 ( QString::fromUtf8(PersonFields[DOCUMENTNUMBER].toStdString().c_str()) );
+	m_ui.txtIdentity_ValidUntil->setText( QString::fromUtf8(CardFields[CARD_VALIDUNTIL].toStdString().c_str()) );
+	m_ui.txtIdentity_ValidUntil->setAccessibleName( QString::fromUtf8(CardFields[CARD_VALIDUNTIL].toStdString().c_str()) );
+	m_ui.txtIdentity_Parents_Father->setText(  QString::fromUtf8(PersonFields[FATHER].toStdString().c_str()) );
+	m_ui.txtIdentity_Parents_Father->setAccessibleName(QString::fromUtf8(PersonFields[FATHER].toStdString().c_str()));
+	m_ui.txtIdentity_Parents_Mother->setText( QString::fromUtf8(PersonFields[MOTHER].toStdString().c_str()) );
+	m_ui.txtIdentity_Parents_Mother->setAccessibleName( QString::fromUtf8(PersonFields[MOTHER].toStdString().c_str()) );
 }
 
 //*****************************************************
@@ -4868,31 +4868,31 @@ void MainWnd::refreshTabIdentityExtra()
 
 	tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
 
-	m_ui.txtIdentityExtra_TaxNo->setText	( PersonFields[TAXNO] );
-	m_ui.txtIdentityExtra_TaxNo->setAccessibleName	( PersonFields[TAXNO] );
-	m_ui.txtIdentityExtra_SocialSecurityNo->setText	( PersonFields[SOCIALSECURITYNO] );
-	m_ui.txtIdentityExtra_SocialSecurityNo->setAccessibleName	( PersonFields[SOCIALSECURITYNO] );
-	m_ui.txtIdentityExtra_HealthNo->setText	( PersonFields[HEALTHNO] );
-	m_ui.txtIdentityExtra_HealthNo->setAccessibleName	( PersonFields[HEALTHNO] );
-	m_ui.txtIdentityExtra_CardVersion->setText	( PersonFields[CARDVERSION] );
-	m_ui.txtIdentityExtra_CardVersion->setAccessibleName	( PersonFields[CARDVERSION] );
-	m_ui.txtIdentityExtra_DocumentType->setText	( PersonFields[DOCUMENTTYPE] );
-	m_ui.txtIdentityExtra_DocumentType->setAccessibleName	( PersonFields[DOCUMENTTYPE] );
-	m_ui.txtIdentityExtra_IssuingEntity->setText	( PersonFields[ISSUINGENTITY] );
-	m_ui.txtIdentityExtra_IssuingEntity->setAccessibleName	( PersonFields[ISSUINGENTITY] );
+	m_ui.txtIdentityExtra_TaxNo->setText	( QString::fromUtf8(PersonFields[TAXNO].toStdString().c_str()) );
+	m_ui.txtIdentityExtra_TaxNo->setAccessibleName	( QString::fromUtf8(PersonFields[TAXNO].toStdString().c_str()) );
+	m_ui.txtIdentityExtra_SocialSecurityNo->setText	( QString::fromUtf8(PersonFields[SOCIALSECURITYNO].toStdString().c_str()) );
+	m_ui.txtIdentityExtra_SocialSecurityNo->setAccessibleName	( QString::fromUtf8(PersonFields[SOCIALSECURITYNO].toStdString().c_str()) );
+	m_ui.txtIdentityExtra_HealthNo->setText	( QString::fromUtf8(PersonFields[HEALTHNO].toStdString().c_str()) );
+	m_ui.txtIdentityExtra_HealthNo->setAccessibleName	( QString::fromUtf8(PersonFields[HEALTHNO].toStdString().c_str()) );
+	m_ui.txtIdentityExtra_CardVersion->setText	( QString::fromUtf8(PersonFields[CARDVERSION].toStdString().c_str()) );
+	m_ui.txtIdentityExtra_CardVersion->setAccessibleName	( QString::fromUtf8(PersonFields[CARDVERSION].toStdString().c_str()) );
+	m_ui.txtIdentityExtra_DocumentType->setText	( QString::fromUtf8(PersonFields[DOCUMENTTYPE].toStdString().c_str()) );
+	m_ui.txtIdentityExtra_DocumentType->setAccessibleName	( QString::fromUtf8(PersonFields[DOCUMENTTYPE].toStdString().c_str()) );
+	m_ui.txtIdentityExtra_IssuingEntity->setText	( QString::fromUtf8(PersonFields[ISSUINGENTITY].toStdString().c_str()) );
+	m_ui.txtIdentityExtra_IssuingEntity->setAccessibleName	( QString::fromUtf8(PersonFields[ISSUINGENTITY].toStdString().c_str()) );
 
-	m_ui.txtIdentityExtra_LocalofRequest->setText	( PersonFields[LOCALOFREQUEST] );
-	m_ui.txtIdentityExtra_LocalofRequest->setAccessibleName	( PersonFields[LOCALOFREQUEST] );
+	m_ui.txtIdentityExtra_LocalofRequest->setText	( QString::fromUtf8(PersonFields[LOCALOFREQUEST].toStdString().c_str()) );
+	m_ui.txtIdentityExtra_LocalofRequest->setAccessibleName	( QString::fromUtf8(PersonFields[LOCALOFREQUEST].toStdString().c_str()) );
 
-	m_ui.txtIdentityExtra_Validate->setText ( PersonFields[VALIDATION] );
-	m_ui.txtIdentityExtra_Validate->setAccessibleName ( PersonFields[VALIDATION] );
+	m_ui.txtIdentityExtra_Validate->setText ( QString::fromUtf8(PersonFields[VALIDATION].toStdString().c_str()) );
+	m_ui.txtIdentityExtra_Validate->setAccessibleName ( QString::fromUtf8(PersonFields[VALIDATION].toStdString().c_str()) );
 
 	QString cardNumber = m_CI_Data.m_CardInfo.formatCardNumber(CardFields[CARD_NUMBER],m_CI_Data.m_CardInfo.getType());
 
 	QString nationalNumber = m_CI_Data.m_PersonInfo.formatNationalNumber( PersonFields[NATIONALNUMBER],m_CI_Data.m_CardInfo.getType() );
 
-	m_ui.txtIdentityExtra_ValidFrom->setText( CardFields[CARD_VALIDFROM]);
-	m_ui.txtIdentityExtra_ValidFrom->setAccessibleName( CardFields[CARD_VALIDFROM]);
+	m_ui.txtIdentityExtra_ValidFrom->setText( QString::fromUtf8(CardFields[CARD_VALIDFROM].toStdString().c_str()));
+	m_ui.txtIdentityExtra_ValidFrom->setAccessibleName( QString::fromUtf8(CardFields[CARD_VALIDFROM].toStdString().c_str()));
 
 	tFieldMap& PersonExtraFields = m_CI_Data.m_PersonInfo.m_PersonExtraInfo.getFields();
 
@@ -4942,38 +4942,38 @@ void MainWnd::refreshTabAddress( void )
 
 	tFieldMap& AddressFields = m_CI_Data.m_AddressInfo.getFields();
 
-	m_ui.txtAddress_Municipality->setText		 ( AddressFields[ADDRESS_MUNICIPALITY] );
-	m_ui.txtAddress_Municipality->setAccessibleName ( AddressFields[ADDRESS_MUNICIPALITY] );
-	m_ui.txtAddress_District->setText			( AddressFields[ADDRESS_DISTRICT] );
-	m_ui.txtAddress_District->setAccessibleName ( AddressFields[ADDRESS_DISTRICT] );
-	m_ui.txtAddress_CivilParish->setText			( AddressFields[ADDRESS_CIVILPARISH] );
-	m_ui.txtAddress_CivilParish->setAccessibleName ( AddressFields[ADDRESS_CIVILPARISH] );
-	m_ui.txtAddress_StreetType1->setText			( AddressFields[ADDRESS_ABBRSTREETTYPE] );
-	m_ui.txtAddress_StreetType1->setAccessibleName ( AddressFields[ADDRESS_ABBRSTREETTYPE] );
-	m_ui.txtAddress_StreetType2->setText			( AddressFields[ADDRESS_STREETTYPE] );
-	m_ui.txtAddress_StreetType2->setAccessibleName ( AddressFields[ADDRESS_STREETTYPE] );
-	m_ui.txtAddress_StreetName->setText			( AddressFields[ADDRESS_STREETNAME] );
-	m_ui.txtAddress_StreetName->setAccessibleName ( AddressFields[ADDRESS_STREETNAME] );
-	m_ui.txtAddress_BuildingType1->setText			( AddressFields[ADDRESS_ABBRBUILDINGTYPE] );
-	m_ui.txtAddress_BuildingType1->setAccessibleName ( AddressFields[ADDRESS_ABBRBUILDINGTYPE] );
-	m_ui.txtAddress_BuildingType2->setText			( AddressFields[ADDRESS_BUILDINGTYPE] );
-	m_ui.txtAddress_BuildingType2->setAccessibleName ( AddressFields[ADDRESS_BUILDINGTYPE] );
-	m_ui.txtAddress_DoorNo->setText			( AddressFields[ADDRESS_DOORNO] );
-	m_ui.txtAddress_DoorNo->setAccessibleName ( AddressFields[ADDRESS_DOORNO] );
-	m_ui.txtAddress_Floor->setText			( AddressFields[ADDRESS_FLOOR] );
-	m_ui.txtAddress_Floor->setAccessibleName ( AddressFields[ADDRESS_FLOOR] );
-	m_ui.txtAddress_Side->setText			( AddressFields[ADDRESS_SIDE] );
-	m_ui.txtAddress_Side->setAccessibleName ( AddressFields[ADDRESS_SIDE] );
-	m_ui.txtAddress_Locality->setText			( AddressFields[ADDRESS_LOCALITY] );
-	m_ui.txtAddress_Locality->setAccessibleName ( AddressFields[ADDRESS_LOCALITY] );
-	m_ui.txtAddress_Zip4->setText			( AddressFields[ADDRESS_ZIP4] );
-	m_ui.txtAddress_Zip4->setAccessibleName ( AddressFields[ADDRESS_ZIP4] );
-	m_ui.txtAddress_Zip3->setText			( AddressFields[ADDRESS_ZIP3] );
-	m_ui.txtAddress_Zip3->setAccessibleName ( AddressFields[ADDRESS_ZIP3] );
-	m_ui.txtAddress_Place->setText			( AddressFields[ADDRESS_PLACE] );
-	m_ui.txtAddress_Place->setAccessibleName ( AddressFields[ADDRESS_PLACE] );
-	m_ui.txtAddress_PostalLocality->setText			( AddressFields[ADDRESS_POSTALLOCALITY] );
-	m_ui.txtAddress_PostalLocality->setAccessibleName ( AddressFields[ADDRESS_POSTALLOCALITY] );
+	m_ui.txtAddress_Municipality->setText		 ( QString::fromUtf8(AddressFields[ADDRESS_MUNICIPALITY].toStdString().c_str()) );
+	m_ui.txtAddress_Municipality->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_MUNICIPALITY].toStdString().c_str()) );
+	m_ui.txtAddress_District->setText			( QString::fromUtf8(AddressFields[ADDRESS_DISTRICT].toStdString().c_str()) );
+	m_ui.txtAddress_District->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_DISTRICT].toStdString().c_str()) );
+	m_ui.txtAddress_CivilParish->setText			( QString::fromUtf8(AddressFields[ADDRESS_CIVILPARISH].toStdString().c_str()) );
+	m_ui.txtAddress_CivilParish->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_CIVILPARISH].toStdString().c_str()) );
+	m_ui.txtAddress_StreetType1->setText			( QString::fromUtf8(AddressFields[ADDRESS_ABBRSTREETTYPE].toStdString().c_str()) );
+	m_ui.txtAddress_StreetType1->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_ABBRSTREETTYPE].toStdString().c_str()) );
+	m_ui.txtAddress_StreetType2->setText			( QString::fromUtf8(AddressFields[ADDRESS_STREETTYPE].toStdString().c_str()) );
+	m_ui.txtAddress_StreetType2->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_STREETTYPE].toStdString().c_str()) );
+	m_ui.txtAddress_StreetName->setText			( QString::fromUtf8(AddressFields[ADDRESS_STREETNAME].toStdString().c_str()) );
+	m_ui.txtAddress_StreetName->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_STREETNAME].toStdString().c_str()) );
+	m_ui.txtAddress_BuildingType1->setText			( QString::fromUtf8(AddressFields[ADDRESS_ABBRBUILDINGTYPE].toStdString().c_str()) );
+	m_ui.txtAddress_BuildingType1->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_ABBRBUILDINGTYPE].toStdString().c_str()) );
+	m_ui.txtAddress_BuildingType2->setText			( QString::fromUtf8(AddressFields[ADDRESS_BUILDINGTYPE].toStdString().c_str()) );
+	m_ui.txtAddress_BuildingType2->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_BUILDINGTYPE].toStdString().c_str()) );
+	m_ui.txtAddress_DoorNo->setText			( QString::fromUtf8(AddressFields[ADDRESS_DOORNO].toStdString().c_str()) );
+	m_ui.txtAddress_DoorNo->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_DOORNO].toStdString().c_str()) );
+	m_ui.txtAddress_Floor->setText			( QString::fromUtf8(AddressFields[ADDRESS_FLOOR].toStdString().c_str()) );
+	m_ui.txtAddress_Floor->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_FLOOR].toStdString().c_str()) );
+	m_ui.txtAddress_Side->setText			( QString::fromUtf8(AddressFields[ADDRESS_SIDE].toStdString().c_str()) );
+	m_ui.txtAddress_Side->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_SIDE].toStdString().c_str()) );
+	m_ui.txtAddress_Locality->setText			( QString::fromUtf8(AddressFields[ADDRESS_LOCALITY].toStdString().c_str()) );
+	m_ui.txtAddress_Locality->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_LOCALITY].toStdString().c_str()) );
+	m_ui.txtAddress_Zip4->setText			( QString::fromUtf8(AddressFields[ADDRESS_ZIP4].toStdString().c_str()) );
+	m_ui.txtAddress_Zip4->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_ZIP4].toStdString().c_str()) );
+	m_ui.txtAddress_Zip3->setText			( QString::fromUtf8(AddressFields[ADDRESS_ZIP3].toStdString().c_str()) );
+	m_ui.txtAddress_Zip3->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_ZIP3].toStdString().c_str()) );
+	m_ui.txtAddress_Place->setText			( QString::fromUtf8(AddressFields[ADDRESS_PLACE].toStdString().c_str()) );
+	m_ui.txtAddress_Place->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_PLACE].toStdString().c_str()) );
+	m_ui.txtAddress_PostalLocality->setText			( QString::fromUtf8(AddressFields[ADDRESS_POSTALLOCALITY].toStdString().c_str()) );
+	m_ui.txtAddress_PostalLocality->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_POSTALLOCALITY].toStdString().c_str()) );
 }
 
 void MainWnd::PersoDataSaveButtonClicked( void )
