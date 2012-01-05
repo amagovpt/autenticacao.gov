@@ -297,6 +297,7 @@
 				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
+				SuppressStartupBanner="false"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
@@ -313,7 +314,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="WS2_32.Lib"
+				AdditionalDependencies="WS2_32.lib"
 				OutputFile="..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteid35$(ProjectName).dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
@@ -402,6 +403,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\StringOps.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Thread.cpp"
 				>
 			</File>
@@ -468,6 +473,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\StringOps.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Thread.h"
 				>
 			</File>
@@ -485,6 +494,10 @@
 			</File>
 			<File
 				RelativePath=".\Util.h"
+				>
+			</File>
+			<File
+				RelativePath=".\xmlUserData.h"
 				>
 			</File>
 		</Filter>

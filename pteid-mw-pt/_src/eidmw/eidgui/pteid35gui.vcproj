@@ -245,7 +245,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm200 -w34100 -w34189 -Zm200 -w34100 -w34189 -w34100 -w34189"
 				Optimization="2"
-				AdditionalIncludeDirectories="&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;..\eidlib;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include&quot;;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include\QtCore&quot;;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include\QtGui&quot;;..\..\ThirdParty\Qt\4.5.0\include;..\..\ThirdParty\Qt\4.5.0\include\QtCore;..\..\ThirdParty\Qt\4.5.0\include\QtGui;c:\Qt\4.5.0\include;c:\Qt\4.5.0\include\QtCore;c:\Qt\4.5.0\include\QtGui"
+				AdditionalIncludeDirectories="&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;..\common;..\eidlib;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include&quot;;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include\QtCore&quot;;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include\QtGui&quot;;..\..\ThirdParty\Qt\4.5.0\include;..\..\ThirdParty\Qt\4.5.0\include\QtCore;..\..\ThirdParty\Qt\4.5.0\include\QtGui"
 				PreprocessorDefinitions="PTEID_35;QT_NO_DEBUG;NDEBUG;_WINDOWS;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
@@ -341,7 +341,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm200 -w34100 -w34189 -Zm200 -w34100 -w34189 -w34100 -w34189"
 				Optimization="2"
-				AdditionalIncludeDirectories="&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;..\eidlib;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include&quot;;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include\QtCore&quot;;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include\QtGui&quot;;..\..\ThirdParty\Qt\4.5.0\include;..\..\ThirdParty\Qt\4.5.0\include\QtCore;..\..\ThirdParty\Qt\4.5.0\include\QtGui;c:\Qt\4.5.0\include;c:\Qt\4.5.0\include\QtCore;c:\Qt\4.5.0\include\QtGui"
+				AdditionalIncludeDirectories="&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;..\common;..\eidlib;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include&quot;;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include\QtCore&quot;;&quot;$(PTEID_DIR_QT_450_INCLUDE)\include\QtGui&quot;;..\..\ThirdParty\Qt\4.5.0\include;..\..\ThirdParty\Qt\4.5.0\include\QtCore;..\..\ThirdParty\Qt\4.5.0\include\QtGui"
 				PreprocessorDefinitions="PTEID_35;QT_NO_DEBUG;NDEBUG;_WINDOWS;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
@@ -776,6 +776,26 @@
 			UniqueIdentifier="{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}"
 			>
 			<File
+				RelativePath="GeneratedFiles\release\moc_dlgAbout.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="GeneratedFiles\debug\moc_dlgAbout.cpp"
 				>
 				<FileConfiguration
@@ -796,7 +816,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="GeneratedFiles\release\moc_dlgAbout.cpp"
+				RelativePath="GeneratedFiles\release\moc_dlgOptions.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -836,10 +856,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="GeneratedFiles\release\moc_dlgOptions.cpp"
+				RelativePath=".\GeneratedFiles\debug\moc_dlgprint.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -847,7 +867,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|x64"
+					Name="Release|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -894,26 +914,6 @@
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)\$(InputName)1.obj"
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\GeneratedFiles\debug\moc_dlgprint.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -980,48 +980,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\release\moc_picturepopup.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\debug\moc_picturepopup.cpp"
 				>
 				<FileConfiguration
@@ -1042,7 +1000,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\release\moc_qtsingleapplication.cpp"
+				RelativePath=".\GeneratedFiles\release\moc_picturepopup.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1100,6 +1058,48 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\release\moc_qtsingleapplication.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1166,26 +1166,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\generatedfiles\debug\ui_dlgAbout.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\generatedfiles\release\ui_dlgAbout.h"
 				>
 				<FileConfiguration
@@ -1206,10 +1186,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\generatedfiles\release\ui_dlgOptions.h"
+				RelativePath=".\generatedfiles\debug\ui_dlgAbout.h"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1217,7 +1197,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|x64"
+					Name="Release|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1238,6 +1218,26 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\release\ui_dlgOptions.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1286,26 +1286,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\generatedfiles\debug\ui_mainwnd.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\generatedfiles\release\ui_mainwnd.h"
 				>
 				<FileConfiguration
@@ -1326,7 +1306,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\generatedfiles\debug\ui_picturepopup.h"
+				RelativePath=".\generatedfiles\debug\ui_mainwnd.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1358,6 +1338,26 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\debug\ui_picturepopup.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1796,11 +1796,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Images\Icons\save_as.png"
+				RelativePath=".\Resources\save_as.png"
 				>
 			</File>
 			<File
-				RelativePath=".\Resources\save_as.png"
+				RelativePath=".\Images\Icons\save_as.png"
 				>
 			</File>
 			<File
