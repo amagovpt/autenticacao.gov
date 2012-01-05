@@ -149,7 +149,6 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 		bool bCardPresent = false;
 		PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
 
-		std::cout << "card!!!!!!!!!" << std::endl;
 		const char* readerName = ReaderSet.getReaderName(ReaderIdx);
 		m_CurrReaderName = readerName;
 		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
