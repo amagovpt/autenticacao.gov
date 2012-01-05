@@ -19,6 +19,7 @@
 **************************************************************************** */
 
 #include <QPixmap>
+#include <QImage>
 #include <cairo/cairo.h>
 #include <cairo/cairo-pdf.h>
 
