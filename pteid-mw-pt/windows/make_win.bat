@@ -86,14 +86,14 @@
 
 :: Check MS Platform SDK 2008
 :: ==========================
-@call "%~dp0..\_src\eidmw\SetPathPSdk2008.bat"
-@if %ERRORLEVEL%==0 goto find_mssdk2008
+:: @call "%~dp0..\_src\eidmw\SetPathPSdk2008.bat"
+:: @if %ERRORLEVEL%==0 goto find_mssdk2008
 
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_PLATFORMSDK_2008
-@goto end
+::@echo [TIP] Use set_path.bat script to define PTEID_DIR_PLATFORMSDK_2008
+::@goto end
 
-:find_mssdk2008
-@echo [INFO] Using PTEID_DIR_PLATFORMSDK_2008=%PTEID_DIR_PLATFORMSDK_2008%
+:: :find_mssdk2008
+::@echo [INFO] Using PTEID_DIR_PLATFORMSDK_2008=%PTEID_DIR_PLATFORMSDK_2008%
 
 
 :: Check QT 3.3.4
@@ -104,8 +104,8 @@
 ::@echo [TIP] Use set_path.bat script to define PTEID_DIR_QT_334 
 ::@goto end
 
-:find_qt334
-@echo [INFO] Using PTEID_DIR_QT_334=%PTEID_DIR_QT_334%
+:::find_qt334
+::@echo [INFO] Using PTEID_DIR_QT_334=%PTEID_DIR_QT_334%
 
 
 :: Check QT 4.5.0 exe
@@ -146,14 +146,14 @@
 
 :: Check QT 4.5.0 static
 :: =====================
-@call "%~dp0..\_src\eidmw\SetPathQt450_Static.bat"
-@if %ERRORLEVEL%==0 goto find_qt450_static
+::@call "%~dp0..\_src\eidmw\SetPathQt450_Static.bat"
+::@if %ERRORLEVEL%==0 goto find_qt450_static
 
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_QT_450_STATIC 
-@goto end
+::@echo [TIP] Use set_path.bat script to define PTEID_DIR_QT_450_STATIC 
+::@goto end
 
-:find_qt450_static
-@echo [INFO] Using PTEID_DIR_QT_450_STATIC=%PTEID_DIR_QT_450_STATIC%
+:::find_qt450_static
+::@echo [INFO] Using PTEID_DIR_QT_450_STATIC=%PTEID_DIR_QT_450_STATIC%
 
 
 :: Check OpenSSL 0.9.8g
