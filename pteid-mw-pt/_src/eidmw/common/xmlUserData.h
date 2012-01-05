@@ -6,8 +6,8 @@
  */
 #pragma once
 
-#ifndef XMLUSERDATAENUM_H_
-#define XMLUSERDATAENUM_H_
+#ifndef XMLUSERDATA_H_
+#define XMLUSERDATA_H_
 
 namespace eIDMW
 {
@@ -138,4 +138,4 @@ enum XMLUserData
 };
 }
 
-#endif /* XMLUSERDATAENUM_H_ */
+#endif /* XMLUSERDATA_H_ */

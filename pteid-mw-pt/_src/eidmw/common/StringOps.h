@@ -8,7 +8,7 @@
 #pragma once
 namespace eIDMW {
 
-const char *replace(const char* in, const char* search, const char* replace);
+void replace(std::string& str, const std::string& from, const std::string& to);
 
 }
 
