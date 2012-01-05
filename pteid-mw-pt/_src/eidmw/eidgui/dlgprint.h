@@ -50,6 +50,7 @@ private:
 	QString					m_CurrReaderName;		//!< the current reader we're using
 
 	bool addressPINRequest_triggered(CardInformation& CI_Data);
+	bool persodata_triggered(CardInformation& CI_Data);
 	void drawpdf(CardInformation& CI_Data, const char *filepath);
 };
 
