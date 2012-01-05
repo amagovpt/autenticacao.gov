@@ -423,7 +423,9 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
 	if (ui.chboxPersoData->isChecked())
 	{
-
+		tFieldMap& PersoDataFields = CI_Data.m_PersoDataInfo.getFields();
+		cairo_move_to(cr, 20.0, 760.0);
+		cairo_show_text(cr, (QString::fromUtf8(PersoDataFields[PERSODATA_INFO].toStdString().c_str())).toStdString().c_str());
 	}
 
 	//Page 1
