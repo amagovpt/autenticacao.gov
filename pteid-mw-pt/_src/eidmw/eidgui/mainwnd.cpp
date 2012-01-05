@@ -54,352 +54,7 @@ static int	g_runningCallback=0;
 static unsigned int pinactivate = 1;
 static unsigned int persodatastatus = 1;
 
-//*****************************************************
-// helper class to determine the GUI size multiplication factor
-//*****************************************************
-class multiplyerFactor
-{
-public:
-	//------------------------------------
-	// ctor
-	//------------------------------------
-	multiplyerFactor( void )
-	: XMultiplyer(1.0)
-	, YMultiplyer(1.0)
-	, WMultiplyer(1.0)
-	, HMultiplyer(1.0)
-	{
-	}
-	multiplyerFactor( eZOOMSTATUS zoom )
-	: XMultiplyer(1.0)
-	, YMultiplyer(1.0)
-	, WMultiplyer(1.0)
-	, HMultiplyer(1.0)
-	{
-		getMultiplyerFactor(zoom);
-	}
-	//------------------------------------
-	// calculate the multiplication factor from the zoom factor
-	//------------------------------------
-	void getMultiplyerFactor( eZOOMSTATUS zoom )
-	{
-		double X_INCREMENT[]={1.0,WINDOW_WIDTH_MEDIUM/WINDOW_WIDTH_SMALL,   WINDOW_WIDTH_LARGE/WINDOW_WIDTH_SMALL,   WINDOW_WIDTH_HUGE/WINDOW_WIDTH_SMALL}; 
-		double Y_INCREMENT[]={1.0,WINDOW_HEIGHT_MEDIUM/WINDOW_HEIGHT_SMALL, WINDOW_HEIGHT_LARGE/WINDOW_HEIGHT_SMALL, WINDOW_HEIGHT_HUGE/WINDOW_HEIGHT_SMALL};
-		double W_INCREMENT[]={1.0,WINDOW_WIDTH_MEDIUM/WINDOW_WIDTH_SMALL,   WINDOW_WIDTH_LARGE/WINDOW_WIDTH_SMALL,   WINDOW_WIDTH_HUGE/WINDOW_WIDTH_SMALL};
-		double H_INCREMENT[]={1.0,WINDOW_HEIGHT_MEDIUM/WINDOW_HEIGHT_SMALL, WINDOW_HEIGHT_LARGE/WINDOW_HEIGHT_SMALL, WINDOW_HEIGHT_HUGE/WINDOW_HEIGHT_SMALL};
 
-		XMultiplyer = 1.0;
-		YMultiplyer = 1.0;
-		WMultiplyer = 1.0;
-		HMultiplyer = 1.0;
-
-		switch(zoom)
-		{
-		case ZOOM_HUGE:
-			XMultiplyer *= X_INCREMENT[ZOOM_HUGE];
-			YMultiplyer *= Y_INCREMENT[ZOOM_HUGE];
-			WMultiplyer *= W_INCREMENT[ZOOM_HUGE];
-			HMultiplyer *= H_INCREMENT[ZOOM_HUGE];
-			break;
-		case ZOOM_LARGE:
-			XMultiplyer *= X_INCREMENT[ZOOM_LARGE];
-			YMultiplyer *= Y_INCREMENT[ZOOM_LARGE];
-			WMultiplyer *= W_INCREMENT[ZOOM_LARGE];
-			HMultiplyer *= H_INCREMENT[ZOOM_LARGE];
-			break;
-		case ZOOM_MEDIUM:
-			XMultiplyer *= X_INCREMENT[ZOOM_MEDIUM];
-			YMultiplyer *= Y_INCREMENT[ZOOM_MEDIUM];
-			WMultiplyer *= W_INCREMENT[ZOOM_MEDIUM];
-			HMultiplyer *= H_INCREMENT[ZOOM_MEDIUM];
-			break;
-		case ZOOM_SMALL:
-			XMultiplyer *= X_INCREMENT[ZOOM_SMALL];
-			YMultiplyer *= Y_INCREMENT[ZOOM_SMALL];
-			WMultiplyer *= W_INCREMENT[ZOOM_SMALL];
-			HMultiplyer *= H_INCREMENT[ZOOM_SMALL];
-			break;
-		}
-	};
-	double XMultiplyer;
-	double YMultiplyer;
-	double WMultiplyer;
-	double HMultiplyer;
-};
-
-//*****************************************************
-// size of the main window in the different zoom states
-//*****************************************************
-static int    windowSizes[4][2]= 
-{
-		{(int) WINDOW_WIDTH_SMALL  , (int) WINDOW_HEIGHT_SMALL}
-		,{(int) WINDOW_WIDTH_MEDIUM , (int) WINDOW_HEIGHT_MEDIUM}
-		,{(int) WINDOW_WIDTH_LARGE  , (int) WINDOW_HEIGHT_LARGE}
-		,{(int) WINDOW_WIDTH_HUGE   , (int) WINDOW_HEIGHT_HUGE}
-};
-
-//*****************************************************
-// style sheets used in the GUI
-//*****************************************************
-enum eStyleSheet
-{
-	STYLESHEET_NONE = -1
-	,STYLESHEET_BUTTON
-	,STYLESHEET_TITLE_1
-	,STYLESHEET_TITLE_2
-	,STYLESHEET_FOOTER_1
-	,STYLESHEET_NORMAL_LABEL
-	,STYLESHEET_NORMAL_VALUE
-	,STYLESHEET_BIG_VALUE
-	,STYLESHEET_SIS_VALUE
-	,STYLESHEET_SMALL_RED
-	,STYLESHEET_SMALL_BLUE
-	,STYLESHEET_SMALL_REDRIGHT
-};
-
-//*****************************************************
-// structure definition for point sizes in relation to the style sheet
-// used
-//*****************************************************
-struct zoomInfoStyleSheets
-{
-	int		stylesheet_id;			// style sheet ID
-	int		pointSizes[4];			// point size to be used
-};
-//*****************************************************
-// Array containing the font point sizes to be used for the
-// different style sheets for each zoom status
-//*****************************************************
-static zoomInfoStyleSheets stylesheetsInfo[]=
-{
-		{STYLESHEET_BUTTON,		{BUTTON_POINTSIZE_SMALL,     BUTTON_POINTSIZE_MEDIUM,	  BUTTON_POINTSIZE_LARGE,	  BUTTON_POINTSIZE_HUGE}}
-		,{STYLESHEET_TITLE_1,		{TITLE1_POINTSIZE_SMALL,     TITLE1_POINTSIZE_MEDIUM,	  TITLE1_POINTSIZE_LARGE,	  TITLE1_POINTSIZE_HUGE}}
-		,{STYLESHEET_TITLE_2,		{TITLE2_POINTSIZE_SMALL,     TITLE2_POINTSIZE_MEDIUM,	  TITLE2_POINTSIZE_LARGE,	  TITLE2_POINTSIZE_HUGE}}
-		,{STYLESHEET_FOOTER_1,		{FOOTER1_POINTSIZE_SMALL,    FOOTER1_POINTSIZE_MEDIUM,	  FOOTER1_POINTSIZE_LARGE,	  FOOTER1_POINTSIZE_HUGE}}
-		,{STYLESHEET_NORMAL_LABEL,	{LABEL_POINTSIZE_SMALL,      LABEL_POINTSIZE_MEDIUM,	  LABEL_POINTSIZE_LARGE,	  LABEL_POINTSIZE_HUGE}}
-		,{STYLESHEET_NORMAL_VALUE,	{NORMALVALUE_POINTSIZE_SMALL,NORMALVALUE_POINTSIZE_MEDIUM,NORMALVALUE_POINTSIZE_LARGE,NORMALVALUE_POINTSIZE_HUGE}}
-		,{STYLESHEET_BIG_VALUE,		{BIGVALUE_POINTSIZE_SMALL,   BIGVALUE_POINTSIZE_MEDIUM,   BIGVALUE_POINTSIZE_LARGE,	  BIGVALUE_POINTSIZE_HUGE}}
-		,{STYLESHEET_SIS_VALUE,		{SISVALUE_POINTSIZE_SMALL,   SISVALUE_POINTSIZE_MEDIUM,   SISVALUE_POINTSIZE_LARGE,	  SISVALUE_POINTSIZE_HUGE}}
-		,{STYLESHEET_SMALL_RED,		{SMALL_POINTSIZE_SMALL,      SMALL_POINTSIZE_MEDIUM,      SMALL_POINTSIZE_LARGE,	  SMALL_POINTSIZE_HUGE}}
-		,{STYLESHEET_SMALL_BLUE,	{SMALL_POINTSIZE_SMALL,      SMALL_POINTSIZE_MEDIUM,      SMALL_POINTSIZE_LARGE,	  SMALL_POINTSIZE_HUGE}}
-		,{STYLESHEET_SMALL_REDRIGHT,{SMALL_POINTSIZE_SMALL,      SMALL_POINTSIZE_MEDIUM,      SMALL_POINTSIZE_LARGE,	  SMALL_POINTSIZE_HUGE}}
-};
-//*****************************************************
-// structure definition for the position of a widget
-// defined as X,Y,width,height
-//*****************************************************
-struct widgetPos
-{
-	int pos[4];
-};
-
-//*****************************************************
-// structure definition for widget base position on the window
-//*****************************************************
-struct widgetInfo
-{
-	const char*  widgetName;		//!< name of the widget
-	widgetPos    position;			//!< position on the window (x,y,width,height)
-	eStyleSheet  style;				//!< style of the widget
-};
-
-//*****************************************************
-// Array containing widget position on the window
-// The position is defined as the position in the smallest zoom factor
-// The position is multiplied by a 'zoom factor'.
-// When zooming, the window is in fact enlarged, so we can multiply
-// the x,y,w,h with the same factor as the window is enlarged.
-//*****************************************************
-static widgetInfo widgetTabInfo[]=
-{
-		//-------------------------------------------------------------------------------
-		//								SMALL
-		// {objectName					{  x, y,  w, h},                style used}
-		//-------------------------------------------------------------------------------
-
-		//------- tab Identity --------
-		{"lblIdentity_Head1_1",		{{ 10,  1,181, 30}},			STYLESHEET_TITLE_1}
-		,{"lblIdentity_Head1_2",		{{200,  1,181, 30}},			STYLESHEET_TITLE_1}
-		,{"lblIdentity_Head1_3",		{{380,  1,181, 30}},			STYLESHEET_TITLE_1}
-		,{"lblIdentity_Head1_4",		{{570,  1,181, 30}},			STYLESHEET_TITLE_1}
-		,{"lblIdentity_Head2_1",		{{ 10, 35,181, 18}},			STYLESHEET_TITLE_2}
-		,{"lblIdentity_Head2_2",		{{200, 35,181, 18}},			STYLESHEET_TITLE_2}
-		,{"lblIdentity_Head2_3",		{{380, 35,181, 18}},			STYLESHEET_TITLE_2}
-		,{"lblIdentity_Head2_4",		{{570, 35,181, 18}},			STYLESHEET_TITLE_2}
-		,{"lblIdentity_Name",			{{ 10, 80,207, 18}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentity_Name",			{{222, 80,529, 20}},			STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_GivenNames",		{{ 10,105,207, 18}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentity_GivenNames",		{{222,105,529, 18}},			STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_BirthDate",		{{222,127,417, 20}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentity_BirthDate",		{{222,151,417, 18}},			STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_Sex",			{{630,123,106, 20}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentity_Sex",			{{630,151,106, 18}},			STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_Nationality",	{{222,175,253, 36}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentity_Nationality",	{{330,175,270, 36}},			STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_Country",		{{570,170,176, 28}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentity_Country",		{{570,204,176, 16}},			STYLESHEET_NORMAL_VALUE}
-		//,{"lblIdentity_Card_Number",	{{222,220,341, 20}},			STYLESHEET_NORMAL_LABEL}
-		//,{"txtIdentity_Card_Number",	{{222,240,341, 20}},			STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_Height",			{{222,220,341, 20}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentity_Height",			{{222,240,341, 20}},			STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_DocumentNumber",	{{222,260,341, 20}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentity_DocumentNumber",	{{222,290,341, 20}},			STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_ValidFrom_Until",{{ 10,347,240, 18}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentity_ValidFrom_Until",{{ 10,367,240, 18}},			STYLESHEET_NORMAL_VALUE}
-		//,{"lblIdentity_Parents",		{{ 350,347,240, 18}},			STYLESHEET_NORMAL_LABEL}
-		//,{"txtIdentity_Parents",		{{ 350,367,240, 18}},			STYLESHEET_NORMAL_VALUE}
-		//,{"lblIdentity_ImgPerson",		{{30,130,50,50}},				STYLESHEET_NORMAL_LABEL}
-		//------- tab foreigners --------
-		,{"txtForeigners_Card_Number",	{{463, 11,288, 24}},			STYLESHEET_BIG_VALUE}
-		,{"label",						{{ 37, 63,230, 20}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtForeigners_Name",			{{280, 63,532, 18}},			STYLESHEET_NORMAL_VALUE}
-		,{"txtForeigners_GivenNames",	{{280, 89,532, 18}},			STYLESHEET_NORMAL_VALUE}
-		,{"label_2",					{{ 37,115,230, 18}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtForeigners_ValidTot",		{{280,115,532, 18}},			STYLESHEET_NORMAL_VALUE}
-		,{"label_3",					{{ 37,141,230, 18}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtForeigners_PlaceOfIssue",	{{280,141,532, 18}},			STYLESHEET_NORMAL_VALUE}
-		,{"label_4",					{{280,165,532, 18}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtForeigners_CardType",		{{280,193,532, 18}},			STYLESHEET_NORMAL_VALUE}
-		//	,{"label_5",					{{280,217,532, 18}},			STYLESHEET_NORMAL_LABEL}
-		//	,{"txtForeigners_Remarks",		{{280,245,532, 18}},			STYLESHEET_NORMAL_VALUE}
-		,{"lblForeigners_Footer_1",		{{280,410,532, 18}},			STYLESHEET_FOOTER_1}
-		,{"lblForeigners_Footer_2",		{{280,425,532, 18}},			STYLESHEET_FOOTER_1}
-		,{"lblForeigners_ImgPerson",	{{ 63,230,150,270}},			STYLESHEET_NONE}
-		//------- tab SIS --------
-		,{"txtSis_SocialSecurityNumber",{{520, 63,231, 28}},			STYLESHEET_SIS_VALUE}
-		,{"txtSis_Name",				{{286,160,465, 28}},			STYLESHEET_SIS_VALUE}
-		,{"txtSis_GivenNames",			{{286,192,465, 28}},			STYLESHEET_SIS_VALUE}
-		,{"txtSis_BirthDate",			{{286,226,152, 28}},			STYLESHEET_SIS_VALUE}
-		,{"txtSis_LogicalNumber",		{{  9,390,245, 28}},			STYLESHEET_SIS_VALUE}
-		,{"txtSis_ValidFrom",			{{566,390,185, 28}},			STYLESHEET_SIS_VALUE}
-		,{"lblSis_Sex",					{{444,220, 20, 28}},			STYLESHEET_NONE}
-		//------- tab identity extra --------
-		,{"lblIdentity_TaxNo",					{{  9, 50,201, 28}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_TaxNo",				{{  9, 84,201, 16}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_SocialSecurityNo",		{{  230, 50,201, 34}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_SocialSecurityNo",	{{  230, 84,201, 16}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_HealthNo",				{{  470, 50,201, 28}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_HealthNo",			{{  470, 84,201, 16}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_CardVersion",			{{  9, 130,201, 28}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_CardVersion",		{{  9, 164,201, 16}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_DocumentType",			{{  240, 130,201, 28}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_DocumentType",		{{  240, 164,201, 16}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_IssuingEntity",			{{  470, 130,201, 28}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_IssuingEntity",		{{  470, 164,201, 16}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_PlaceOfIssue",			{{9, 206,176, 28}},		STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_PlaceOfIssue",		{{15, 240,260, 28}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblChip_Number",						{{410,300,353, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_ChipNumber",		{{410,320,353, 18}},	STYLESHEET_NORMAL_VALUE}
-
-		/*,{"lblAdress_Street",					{{  9,102,211, 34}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_Adress_Street",		{{  9,136,350, 18}},	STYLESHEET_NORMAL_VALUE}
-	,{"lblAdress_PostalCode",				{{  9,158,201, 34}},	STYLESHEET_NORMAL_LABEL}
-	,{"txtIdentityExtra_Adress_PostalCode",	{{  9,192,201, 18}},	STYLESHEET_NORMAL_VALUE}*/
-		,{"lblCard_Number",						{{  9,300,353, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_Card_Number",		{{  9,320,353, 18}},	STYLESHEET_NORMAL_VALUE}
-
-		,{"lblAdress_Muncipality",				{{230,158,176, 34}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_Adress_Muncipality",{{230,192,201, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblAdress_Country",					{{  9,214,201, 34}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_Adress_Country",	{{  9,246,176, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblCard_ValidFrom_Until",			{{  9,340,353, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_ValidFrom",	{{  9,360,353, 18}},	STYLESHEET_NORMAL_VALUE}
-
-		//,{"lblSpecialStatus",					{{230,214,176, 34}},	STYLESHEET_NORMAL_LABEL}
-		//,{"txtSpecialStatus",					{{230,246,201, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblIdentity_Title",					{{410, 46,353, 34}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_Title",				{{410, 80,353, 18}},	STYLESHEET_NORMAL_VALUE}
-
-		,{"lblIdentity_Remarks",				{{410,158,201, 34}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtIdentityExtra_Remarks1",			{{410,200,201, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"txtIdentityExtra_Remarks2",			{{410,220,201, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"txtIdentityExtra_Remarks3",			{{410,240,201, 18}},	STYLESHEET_NORMAL_VALUE}
-
-		//------- tab SIS extra --------
-		,{"lblSisExtra_Card_ValidFrom_Until",	{{  9, 63,243, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtSisExtra_ValidFrom_Until",		{{258, 63,493, 18}},	STYLESHEET_SIS_VALUE}
-
-		//------- tab Foreigner extra
-		,{"lblForeignersExtra_BirthDate",		{{ 90, 52,180, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtForeignersExtra_BirthDate",		{{280, 52,576, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblForeignersExtra_Nationality",		{{ 90, 74,180, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtForeignersExtra_Nationality",		{{280, 74,576, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblForeignersExtra_Sex",				{{ 90, 96,180, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtForeignersExtra_Sex",				{{280, 96,576, 18}},	STYLESHEET_NORMAL_VALUE}
-
-		,{"lblForeignersExtra_street",			{{ 90,118,180, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtForeignersExtra_Adress_Street",	{{280,118,180, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblForeignersExtra_PostalCode",		{{ 90,142,180, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtForeignersExtra_Adress_PostalCode",{{280,142,100, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblForeignersExtra_municipality",	{{350,142,100, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtForeignersExtra_Adress_Muncipality",{{455,142,250, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblForeignersExtra_country",			{{ 90,165,180, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtForeignersExtra_Adress_Country",	{{280,165,100, 18}},	STYLESHEET_NORMAL_VALUE}
-
-		,{"lblForeignersExtra_Remarks1",		{{ 90,188,180, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtForeignersExtra_Remarks1",		{{280,211,400, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"txtForeignersExtra_Remarks2",		{{280,234,400, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"txtForeignersExtra_Remarks3",		{{280,257,400, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"txtForeignerSpecialStatus",			{{280,185,576, 18}},	STYLESHEET_NORMAL_VALUE}
-
-		,{"lblForeignersExtra_NationalNumber",	{{ 40,296,180, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtForeignersExtra_NationalNumber",	{{230,296,609, 18}},	STYLESHEET_NORMAL_VALUE}
-		,{"lblForeignersExtra_ChipNumber",		{{ 40,318,180, 18}},	STYLESHEET_NORMAL_LABEL}
-		,{"txtForeignersExtra_ChipNumber",		{{230,318,609, 18}},	STYLESHEET_NORMAL_VALUE}
-
-		//------- tab Certificate
-		,{"lblCert_Owner",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtCert_Owner",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"lblCert_Issuer",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtCert_Issuer",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"lblCert_KeyLenght",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtCert_KeyLenght",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"lblCert_ValidFrom",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtCert_ValidFrom",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"lblCert_ValidUntil",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtCert_ValidUntil",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"lblCert_Status",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtCert_Status",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"lblCert_InfoAdd",					{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"btnCert_Register",					{{0,0,0,0}},			STYLESHEET_BUTTON}
-		,{"btnCert_Details",					{{0,0,0,0}},			STYLESHEET_BUTTON}
-		,{"btnOCSPCheck",						{{0,0,0,0}},			STYLESHEET_BUTTON}
-
-		//------- tab PIN
-		,{"lblPIN_Name",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtPIN_Name",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"lblPIN_ID",							{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtPIN_ID",							{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"lblPIN_Status",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"txtPIN_Status",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"lblPIN_InfoAdd",						{{0,0,0,0}},			STYLESHEET_NORMAL_LABEL}
-		,{"btnPIN_Test",						{{0,0,0,0}},			STYLESHEET_BUTTON}
-		,{"btnPIN_Change",						{{0,0,0,0}},			STYLESHEET_BUTTON}
-
-		//------- tab Info
-		,{"lblInfo_Top",		/*{ 160, 40,587, 16}*/{{0,0,0,0}},	STYLESHEET_NORMAL_LABEL}
-		,{"lblInfo_bottom",		{{   1,345,740, 14}},					STYLESHEET_NORMAL_LABEL}
-		,{"lblInfo_Img1",		/*{  10, 10,147, 79}*/{{0,0,0,0}},	STYLESHEET_NONE}
-
-};
-
-//*****************************************************
-// Map with all the widget information needed
-//*****************************************************
-typedef QMap<QString,eStyleSheet>	tWidgetMapStyle;
-
-static tWidgetMapStyle widgetMapStyle;
-
-//*****************************************************
-// Initialize the map with all widget information
-//*****************************************************
-void InitWidgetMapStyle()
-{
-	for (size_t widget=0;widget<sizeof(widgetTabInfo)/sizeof(struct widgetInfo);widget++)
-	{
-		widgetMapStyle[widgetTabInfo[widget].widgetName]=widgetTabInfo[widget].style;
-	}
-}
 
 //*****************************************************
 // file list of DLL's to be displayed in the info tab
@@ -3922,12 +3577,6 @@ void MainWnd::showTabs()
 	}
 
 	setLanguage();
-
-	//------------------------------------------------------
-	// set the tabs to the first visible tab
-	// set the widget stack to the tabs (not to the splash screen)
-	//------------------------------------------------------
-	//	m_ui.tabWidget_Identity->setCurrentIndex(0);
 	m_ui.stackedWidget->setCurrentIndex(1);
 }
 
@@ -3948,54 +3597,21 @@ void MainWnd::Show_Identity_Card(PTEID_EIDCard& Card)
 	LoadDataID(Card);
 	showTabs();
 	enableFileMenu();
-	/*	bool bOCSPCheckEnabled = false;
-	if (!m_virtReaderContext)
-	{
-		bOCSPCheckEnabled = true;
-	}
-	 */
 }
 
 void MainWnd::Show_Address_Card(PTEID_EIDCard& Card)
 {
 	LoadDataAddress(Card);
-	/*showTabs();
-	enableFileMenu();
-	bool bOCSPCheckEnabled = false;
-	if (!m_virtReaderContext)
-	{
-		bOCSPCheckEnabled = true;
-	}
-	m_ui.btnOCSPCheck->setEnabled(bOCSPCheckEnabled);
-	m_ui.txtCert_Status->setEnabled(bOCSPCheckEnabled);*/
 }
 
 void MainWnd::Show_PersoData_Card(PTEID_EIDCard& Card)
 {
 	LoadDataPersoData(Card);
-	/*showTabs();
-	enableFileMenu();
-	bool bOCSPCheckEnabled = false;
-	if (!m_virtReaderContext)
-	{
-		bOCSPCheckEnabled = true;
-	}
-	m_ui.btnOCSPCheck->setEnabled(bOCSPCheckEnabled);
-	m_ui.txtCert_Status->setEnabled(bOCSPCheckEnabled);*/
 }
 
 void MainWnd::Show_Certificates_Card(PTEID_EIDCard& Card)
 {
 	LoadDataCertificates(Card);
-	/*showTabs();
-	enableFileMenu();
-	bool bOCSPCheckEnabled = false;
-	if (!m_virtReaderContext)
-	{
-		bOCSPCheckEnabled = true;
-	}
-	m_ui.btnOCSPCheck->setEnabled(bOCSPCheckEnabled);
-	m_ui.txtCert_Status->setEnabled(bOCSPCheckEnabled);*/
 }
 //*****************************************************
 // show the tabs for a memory card (SIS)
@@ -4198,56 +3814,16 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 		m_CI_Data.LoadData(Card,m_CurrReaderName);
 		imgPicture = QImage();
 
-		// Debug Qt imageformats plugins
-		/*QString fileFormats = "(";
-		// Get all inputformats
-		for (int i = 0; i < QImageReader::supportedImageFormats().count(); i++) {
-			fileFormats += "*."; // Insert wildcard
-		    fileFormats += QString(QImageReader::supportedImageFormats().at(i)).toLower(); // Insert the format
-		    fileFormats += " "; // Insert a space
-		}
-			fileFormats += ")\n";
-
-		std::string utf8_text = fileFormats.toUtf8().constData();
-
-		std::cout << " " << utf8_text << endl;*/
-
 		imgPicture.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
 		imgPicturescaled = imgPicture.scaled(150, 190);
 		m_imgPicture = QPixmap::fromImage(imgPicturescaled);
-
-		//------------------------------------------------------
-		// Certificates Tab
-		//------------------------------------------------------
 		clearTabCertificates();
-
-		//------------------------------------------------------
-		// Address Tab
-		//------------------------------------------------------
 		clearTabAddress();
-
-		//------------------------------------------------------
-		// fill in the tree of Certificates
-		//------------------------------------------------------
-		//fillCertificateList();
-
-		//------------------------------------------------------
-		// PIN's Tab
-		//------------------------------------------------------
 #define TYPE_PINTREE_ITEM 0
 #define COLUMN_PIN_NAME   0
 
 		clearTabPins();
-
-		//------------------------------------------------------
-		// fill in the tree of Pins
-		//------------------------------------------------------
 		fillPinList( Card );
-
-		//------------------------------------------------------
-		// fill in the table with the software info
-		//------------------------------------------------------
-
 		fillSoftwareInfo();
 	}
 }
@@ -4261,58 +3837,14 @@ void MainWnd::LoadDataAddress(PTEID_EIDCard& Card)
 	m_CI_Data.LoadDataAddress(Card,m_CurrReaderName);
 	if(!m_CI_Data.isDataLoaded())
 	{
-		//m_CI_Data.LoadDataAddress(Card,m_CurrReaderName);
-
-		// Debug Qt imageformats plugins
-		/*QString fileFormats = "(";
-		// Get all inputformats
-		for (int i = 0; i < QImageReader::supportedImageFormats().count(); i++) {
-			fileFormats += "*."; // Insert wildcard
-		    fileFormats += QString(QImageReader::supportedImageFormats().at(i)).toLower(); // Insert the format
-		    fileFormats += " "; // Insert a space
-		}
-			fileFormats += ")\n";
-
-		std::string utf8_text = fileFormats.toUtf8().constData();
-
-		std::cout << " " << utf8_text << endl;*/
-
-		//m_imgPicture.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
-		//m_imgPicture.scaled(0.2, 0.2, Qt::KeepAspectRatio, Qt::FastTransformation );
-		//m_imgPicture.scaled(50,50,Qt::IgnoreAspectRatio,Qt::FastTransformation);
-
-		//------------------------------------------------------
-		// Certificates Tab
-		//------------------------------------------------------
 		clearTabCertificates();
-
-		//------------------------------------------------------
-		// Address Tab
-		//------------------------------------------------------
 		clearTabAddress();
 
-		//------------------------------------------------------
-		// fill in the tree of Certificates
-		//------------------------------------------------------
-		//fillCertificateList();
-
-		//------------------------------------------------------
-		// PIN's Tab
-		//------------------------------------------------------
 #define TYPE_PINTREE_ITEM 0
 #define COLUMN_PIN_NAME   0
 
 		clearTabPins();
-
-		//------------------------------------------------------
-		// fill in the tree of Pins
-		//------------------------------------------------------
 		fillPinList( Card );
-
-		//------------------------------------------------------
-		// fill in the table with the software info
-		//------------------------------------------------------
-
 		fillSoftwareInfo();
 	}
 }
@@ -4382,7 +3914,6 @@ QString MainWnd::getFinalLinkTarget(QString baseName)
 	{
 		baseName = info.symLinkTarget();
 		baseName = getFinalLinkTarget(baseName);
-		//QMessageBox::information(this,"debug_getFinalLinkTarget",baseName);
 	}
 
 	return baseName;
@@ -4703,122 +4234,9 @@ void MainWnd::setStatus( unsigned int Status )
 
 void MainWnd::setWidgetsPointSize(QList<QWidget *> &allWidgets)
 {
-	zoomAllWidgets(allWidgets);
+	//zoomAllWidgets(allWidgets);
 }
 
-//*****************************************************
-// change the position and size of a widget
-//*****************************************************
-void MainWnd::setWidgetPosition(QList<QWidget *>& allWidgets)
-{
-	for (int x=0; x<allWidgets.size(); x++)
-	{
-		QRect point;
-		for (size_t widget=0;widget<sizeof(widgetTabInfo)/sizeof(struct widgetInfo);widget++)
-		{
-			if (allWidgets.at(x)->objectName()==widgetTabInfo[widget].widgetName)
-			{
-				int newXPos   = widgetTabInfo[widget].position.pos[0];
-				int newYPos   = widgetTabInfo[widget].position.pos[1];
-				int newWidth  = widgetTabInfo[widget].position.pos[2];
-				int newHeight = widgetTabInfo[widget].position.pos[3];
-
-				if(newXPos==0 && newYPos==0 && newWidth==0 && newHeight==0)
-					break;
-
-				multiplyerFactor mfactor(m_Zoom);
-
-				point.setX((int) (newXPos*mfactor.XMultiplyer));
-				point.setY((int) (newYPos*mfactor.YMultiplyer));
-				point.setWidth((int) (newWidth*mfactor.WMultiplyer));
-				point.setHeight((int) (newHeight*mfactor.HMultiplyer));
-
-				allWidgets.at(x)->setGeometry(point);
-				break;
-			}
-		}
-	}
-}
-
-//*****************************************************
-// zoom all the widgets
-//*****************************************************
-void MainWnd::zoomAllWidgets(QList<QWidget *> &allWidgets)
-{
-}
-
-
-//*****************************************************
-// initialize all the given widgets
-//*****************************************************
-void MainWnd::initAllWidgets(QList<QWidget *> &allWidgets)
-{
-	for (int i = 0; i < allWidgets.size(); ++i) 
-	{		
-		QFont tmpFont = allWidgets.at(i)->font();
-		QPalette p = allWidgets.at(i)->palette();
-		if( widgetMapStyle[allWidgets.at(i)->objectName()]==STYLESHEET_BUTTON )
-		{
-		}
-		else if( widgetMapStyle[allWidgets.at(i)->objectName()]==STYLESHEET_TITLE_1 )
-		{
-			tmpFont.setFamily( "Helvetica" );
-		}
-		else if( widgetMapStyle[allWidgets.at(i)->objectName()]==STYLESHEET_TITLE_2 )
-		{
-			tmpFont.setFamily( "Helvetica" );
-			tmpFont.setBold( true );
-		}
-		else if( widgetMapStyle[allWidgets.at(i)->objectName()]==STYLESHEET_FOOTER_1 )
-		{
-			tmpFont.setBold( true );
-		}
-		else if( widgetMapStyle[allWidgets.at(i)->objectName()]==STYLESHEET_NORMAL_LABEL )
-		{
-		}
-		else if( widgetMapStyle[allWidgets.at(i)->objectName()]==STYLESHEET_NORMAL_VALUE )
-		{
-			tmpFont.setBold( true );
-			tmpFont.setFamily( "Arial" );
-
-			p.setBrush(QPalette::Base, Qt::transparent);
-		}
-		else if( widgetMapStyle[allWidgets.at(i)->objectName()]==STYLESHEET_BIG_VALUE )
-		{
-			tmpFont.setFamily( "Courrier New" );
-
-			p.setBrush(QPalette::Base, Qt::transparent);
-		}
-		else if( widgetMapStyle[allWidgets.at(i)->objectName()]==STYLESHEET_SIS_VALUE )
-		{
-			tmpFont.setFamily( "Courrier New" );
-
-			p.setBrush(QPalette::Base, Qt::transparent);
-		}
-		else if( widgetMapStyle[allWidgets.at(i)->objectName()]==STYLESHEET_SMALL_RED )
-		{
-			tmpFont.setBold( true );
-			((QLabel *)allWidgets.at(i))->setText(((QLabel *)allWidgets.at(i))->text().toUpper());
-			p.setBrush(QPalette::WindowText, QColor::fromRgb( 183,  48, 88) );
-		}
-		else if( widgetMapStyle[allWidgets.at(i)->objectName()]==STYLESHEET_SMALL_BLUE )
-		{
-			tmpFont.setBold( true );
-			((QLabel *)allWidgets.at(i))->setText(((QLabel *)allWidgets.at(i))->text().toUpper());
-			p.setBrush(QPalette::WindowText, QColor::fromRgb( 92,  105, 150) );
-		}
-		else if( widgetMapStyle[allWidgets.at(i)->objectName()]==STYLESHEET_SMALL_REDRIGHT )
-		{
-			((QLabel *)allWidgets.at(i))->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-			tmpFont.setBold( true );
-			((QLabel *)allWidgets.at(i))->setText(((QLabel *)allWidgets.at(i))->text().toUpper());
-			p.setBrush(QPalette::WindowText, QColor::fromRgb( 183,  48, 88) );
-		}
-		allWidgets.at(i)->setFont( tmpFont );
-		allWidgets.at(i)->setPalette(p);
-	}
-}
 
 //*****************************************************
 // refresh the tab with the ID data (front of card)
@@ -5075,14 +4493,9 @@ QString MainWnd::getFamilyMemberText( void )
 QStringList MainWnd::fillRemarksField( tFieldMap& MiscFields )
 {
 	QStringList Remarks;
-	//QString MemberOfFamily		= MiscFields[MEMBEROFFAMILY];
 	QString Duplicata			= MiscFields[DUPLICATA];
 	QString SpecialOrganization = MiscFields[SPECIALORGANIZATION];
 
-	/*if (MemberOfFamily.size()>0)
-	{
-		Remarks.append(getFamilyMemberText());
-	}*/
 	if (Duplicata.size()>0 && "00"!=Duplicata)
 	{
 		Remarks.append( getDuplicataText() + Duplicata );
