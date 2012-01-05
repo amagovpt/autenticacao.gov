@@ -212,7 +212,7 @@ private:
 	std::string m_SurnameMother;							/**< Field SurnameMother */
 	std::string m_AccidentalIndications;					/**< Field AccidentalIndications */
 	CByteArray* m_Photo;									/**< Field Photo */
-	CByteArray* m_PhotoJpeg;								/**< Field Photo jpeg */
+	CByteArray* m_PhotoPNG;									/**< Field Photo PNG */
 	std::string m_MRZ1;										/**< Field MRZ block 1 */
 	std::string m_MRZ2;										/**< Field MRZ block 2 */
 	std::string m_MRZ3;										/**< Field MRZ block 3 */

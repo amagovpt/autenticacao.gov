@@ -1648,6 +1648,7 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	bool addIdNum = false;
 	bool addCardValues = false;
 	bool addCivilInfo = false;
+	string temp;
 
 	// provide all the id fields
 	if(_xmlUInfo->isEmpty())
@@ -1748,15 +1749,22 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 		addIdNum = true;
 	}
 	if (!_xmlUInfo || _xmlUInfo->contains(XML_MRZ1)){
-		BUILD_XML_ELEMENT(idNum, XML_MRZ1_ELEMENT, replace(getMRZ1(),XML_ESCAPE_LT));
+		temp = getMRZ1();
+		replace(temp,XML_ESCAPE_LT);
+		BUILD_XML_ELEMENT(idNum, XML_MRZ1_ELEMENT, temp);
 		addIdNum = true;
 	}
+
 	if (!_xmlUInfo || _xmlUInfo->contains(XML_MRZ2)){
-		BUILD_XML_ELEMENT(idNum, XML_MRZ2_ELEMENT, replace(getMRZ2(),XML_ESCAPE_LT));
+		temp = getMRZ2();
+		replace(temp,XML_ESCAPE_LT);
+		BUILD_XML_ELEMENT(idNum, XML_MRZ2_ELEMENT, temp);
 		addIdNum = true;
 	}
 	if (!_xmlUInfo || _xmlUInfo->contains(XML_MRZ3)){
-		BUILD_XML_ELEMENT(idNum, XML_MRZ3_ELEMENT, replace(getMRZ3(),XML_ESCAPE_LT));
+		temp = getMRZ3();
+		replace(temp,XML_ESCAPE_LT);
+		BUILD_XML_ELEMENT(idNum, XML_MRZ3_ELEMENT, temp);
 		addIdNum = true;
 	}
 	if (addIdNum){
@@ -2118,11 +2126,11 @@ CByteArray APL_PersonalNotesEId::getXML(bool bNoHeader)
 
 	if (!_xmlUInfo || _xmlUInfo->contains(XML_PERSONAL_NOTES)){
 		str = getPersonalNotes();
-		str = replace(str.c_str(),XML_ESCAPE_AMP);
-		str = replace(str.c_str(),XML_ESCAPE_APOS);
-		str = replace(str.c_str(),XML_ESCAPE_GT);
-		str = replace(str.c_str(),XML_ESCAPE_LT);
-		str = replace(str.c_str(),XML_ESCAPE_QUOTE);
+		replace(str,XML_ESCAPE_AMP);
+		replace(str,XML_ESCAPE_APOS);
+		replace(str,XML_ESCAPE_GT);
+		replace(str,XML_ESCAPE_LT);
+		replace(str,XML_ESCAPE_QUOTE);
 
 		BUILD_XML_ELEMENT(xml, XML_PERSONAL_NOTES_ELEMENT, str.c_str());
 	}
