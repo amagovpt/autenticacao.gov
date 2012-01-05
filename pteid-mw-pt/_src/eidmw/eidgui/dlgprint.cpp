@@ -24,12 +24,14 @@
 
 #include "dlgprint.h"
 #include "eidlib.h"
+#include "mainwnd.h"
 
 using namespace eIDMW;
 
 dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUAGE lng, QString const& cardTypeText) 
 : QDialog(parent)
 , m_CI_Data(CI_Data)
+, m_CurrReaderName("")
 {	
 	ui.setupUi(this);
 	const QIcon Ico = QIcon( ":/images/Images/Icons/Print.png" );
@@ -117,6 +119,113 @@ void dlgPrint::on_chboxIDExtra_toggled( bool bChecked )
 void dlgPrint::on_chboxPersoData_toggled( bool bChecked )
 {
 
+}
+
+bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
+{
+	//Workaround: Make PIN window called only one time
+
+	/*if (!m_CI_Data.isDataLoaded())
+	{
+		return true;
+	}*/
+	try
+	{
+		unsigned long	ReaderStartIdx = 1;
+		bool			bRefresh	   = false;
+		unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
+		unsigned long	ReaderIdx	   = 0;
+
+		if (ReaderStartIdx!=(unsigned long)-1)
+		{
+			ReaderEndIdx = ReaderStartIdx+1;
+		}
+		else
+		{
+			ReaderStartIdx=0;
+		}
+
+		bool bCardPresent = false;
+		PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
+
+		std::cout << "card!!!!!!!!!" << std::endl;
+		const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+		m_CurrReaderName = readerName;
+		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
+
+
+		QString caption(tr("Identity Card: PIN verification"));
+
+
+		//------------------------------------
+		// make always sure a card is present
+		//------------------------------------
+		if (ReaderContext.isCardPresent())
+		{
+			QString PinName = "PIN da Morada";
+
+			PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
+			PTEID_Pins&		Pins	= Card.getPins();
+
+			for (unsigned long PinIdx=0; PinIdx<Pins.count(); PinIdx++)
+			{
+				PTEID_Pin&	Pin			= Pins.getPinByNumber(PinIdx);
+				QString		CurrPinName	= Pin.getLabel();
+
+				if (CurrPinName==PinName)
+				{
+					unsigned long triesLeft = -1;
+					bool		  bResult   = Pin.verifyPin("",triesLeft);
+
+					CI_Data.LoadDataAddress(Card,m_CurrReaderName);
+					//QString		  msg(tr("PIN verification "));
+
+					QString msg = bResult ? tr("PIN verification passed"):tr("PIN verification failed");
+					if (!bResult)
+					{
+							/*
+							QString nrTriesLeft;
+							nrTriesLeft.setNum(triesLeft);
+							msg += "\n";
+							msg += "( ";
+							msg += tr("Number of tries left: ") + nrTriesLeft + " )";
+							m_ui.txtPIN_Status->setText(msg);
+							m_ui.txtPIN_Status->setAccessibleName(msg);
+							*/
+
+							return false;
+					}
+					else
+					{
+						//m_ui.txtPIN_Status->setText("Restam 3 tentativas");
+						//m_ui.txtPIN_Status->setAccessibleName("Restam 3 tentativas");
+					}
+					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
+					break;
+				}
+			}
+		}
+		else
+		{
+			std::cout << "no card" << std::endl;
+			QString msg(tr("No card present"));
+			QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
+			return false;
+		}
+	}
+	catch (PTEID_Exception &e)
+	{
+		QString msg(tr("General exception"));
+		//ShowPTEIDError( e.GetError(), msg );
+		return false;
+	}
+	catch (...)
+	{
+		QString msg(tr("Unknown exception"));
+		//ShowPTEIDError( 0, msg );
+		return false;
+	}
+	return true;
 }
 
 void dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
@@ -239,6 +348,76 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 		////Local of Request
 		cairo_move_to(cr, 220.0, 460.0);
 		cairo_show_text(cr, PersonFields[LOCALOFREQUEST].toStdString().c_str());
+	}
+
+	//////////////////////////////Address FIELDS///////////////////////////
+	if (ui.chboxAddress->isChecked())
+	{
+		addressPINRequest_triggered(CI_Data);
+		tFieldMap& AddressFields = CI_Data.m_AddressInfo.getFields();
+		////ADDRESS Locality
+		cairo_move_to(cr, 410.0, 670.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_LOCALITY].toStdString().c_str());
+
+		////ADDRESS Municipality
+		cairo_move_to(cr, 20.0, 550.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_MUNICIPALITY].toStdString().c_str());
+
+		////ADDRESS District
+		cairo_move_to(cr, 20.0, 510.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_DISTRICT].toStdString().c_str());
+
+		////ADDRESS Civil Parish
+		cairo_move_to(cr, 320.0, 550.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_CIVILPARISH].toStdString().c_str());
+
+		////ADDRESS ABBrStreetType
+		cairo_move_to(cr, 20.0, 590.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_ABBRSTREETTYPE].toStdString().c_str());
+
+		////ADDRESS Street Type
+		cairo_move_to(cr, 240.0, 590.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_STREETTYPE].toStdString().c_str());
+
+		////ADDRESS Street Name
+		cairo_move_to(cr, 350.0, 590.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_STREETNAME].toStdString().c_str());
+
+		////ADDRESS Abbr Building Type
+		cairo_move_to(cr, 20.0, 380.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_ABBRBUILDINGTYPE].toStdString().c_str());
+
+		////ADDRESS Building Type
+		cairo_move_to(cr, 20.0, 380.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_BUILDINGTYPE].toStdString().c_str());
+
+		////ADDRESS Door No
+		cairo_move_to(cr, 20.0, 380.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_DOORNO].toStdString().c_str());
+
+		////ADDRESS Floor
+		cairo_move_to(cr, 20.0, 380.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_FLOOR].toStdString().c_str());
+
+		////ADDRESS Side
+		cairo_move_to(cr, 20.0, 380.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_SIDE].toStdString().c_str());
+
+		////ADDRESS Zip4
+		cairo_move_to(cr, 20.0, 710.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_ZIP4].toStdString().c_str());
+
+		////ADDRESS Zip3
+		cairo_move_to(cr, 20.0, 380.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_ZIP3].toStdString().c_str());
+
+		////ADDRESS Place
+		cairo_move_to(cr, 20.0, 380.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_PLACE].toStdString().c_str());
+
+		////ADDRESS Postal Locality
+		cairo_move_to(cr, 180.0, 710.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_POSTALLOCALITY].toStdString().c_str());
 	}
 
 	if (ui.chboxPersoData->isChecked())
