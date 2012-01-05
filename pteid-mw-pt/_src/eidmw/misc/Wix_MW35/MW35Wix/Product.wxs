@@ -463,13 +463,17 @@
       <Component Id="pteidmdrvsystem32" Guid="a8259480-e408-11de-8a39-0800200c9a66" Permanent="no">
         <File Id="system32_pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="yes" DiskId="1" />
       </Component>
-
-      <Component Id="CSP" Guid="{54153442-D4CE-4DE6-9321-1BAC5DE4C725}" SharedDllRefCount="yes">
+	
+		<Component Id="CSP" Guid="{54153442-D4CE-4DE6-9321-1BAC5DE4C725}" SharedDllRefCount="yes">
         <File Id="beidCSP.dll" Name="beidCSP.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\beidCSP.dll" />
         <File Id="beidCSPlib.dll" Name="beidCSPlib.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\beidCSPlib.dll" />
       </Component>
 
-      <Component Id="pkcs11" Guid="{D54164C0-795D-4B2D-96C6-C8E395100896}" SharedDllRefCount="yes">
+		<Component Id="FreeImage" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F64" SharedDllRefCount="yes">
+				  <File Id="FreeImage.dll" Name="FreeImage.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\FreeImage.dll" />
+	   </Component>
+
+      <Component Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
         <File Id="pteidpkcs11.dll" Name="pteidpkcs11.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteidpkcs11.dll" />
         <File Id="PortugalIdentityCardPKCS11.dll" Name="Portugal Identity Card PKCS11.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\Portugal Identity Card PKCS11.dll" />
       </Component>
@@ -477,33 +481,7 @@
       <Component Id="PTeIDWin32CertificateImport" Guid="{1075DAF9-9765-4e03-9FA2-F6899B7AD8E2}">
         <File Id="PTeIDWin32CertificateImport.exe" Name="PTeIDWin32CertificateImport.exe" KeyPath="yes" Source="..\..\..\_Binaries35\Release\PTeIDWin32CertificateImport.exe" />
       </Component>
-
-      <!--
-      <Component Id="BWCompatibility" Guid="{AFE2F946-0FD9-4FF4-917E-1E0970E8FCB7}" SharedDllRefCount="yes">
-        <File Id="pteidwinscard.dll" Name="pteidwinscard.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidwinscard.dll" />
-        <File Id="pteidgui.dll" Name="pteidgui.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidgui.dll" />
-        <File Id="pteidlibopensc.dll" Name="pteidlibopensc.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidlibopensc.dll" />
-      </Component>
- -->
-      
-	  <!--
-      <Component Id="BWCompatibilityQt" Guid="{92FDC305-F375-4a66-9F22-9CBDEF1B0BEB}" SharedDllRefCount="yes">
-        <File Id="qt_mt334.dll" Name="qt-mt334.dll" KeyPath="yes" Source="$(var.PTEID_DIR_QT_334)\bin\qt-mt334.dll" />
-      </Component>
-	  -->
-	  
-      <!--
-      <Component Id="BWCompatibilityJava" Guid="{D9F8728F-D955-4356-9316-5050F3D36FE1}" SharedDllRefCount="yes">
-        <File Id="pteidlibjni.dll" Name="pteidlibjni.dll" KeyPath="yes" Source="..\..\..\misc\bw_compatibility\pteidlibjni.dll" />
-        <File Id="pteidlibjni.dll.manifest" Name="pteidlibjni.dll.manifest" KeyPath="no" Source="..\..\..\misc\bw_compatibility\pteidlibjni.dll.manifest" />
-        <File Id="eidlibj.dll" Name="eidlibj.dll" KeyPath="no" Source="..\..\..\misc\bw_compatibility\eidlibj.dll" />
-        <File Id="eidlibj.dll.manifest" Name="eidlibj.dll.manifest" KeyPath="no" Source="..\..\..\misc\bw_compatibility\eidlibj.dll.manifest" />
-      </Component>
-      
-      <Component Id="BWPinpad" Guid="{AEB72EF2-7C5E-487E-84E3-0903140D7B74}" SharedDllRefCount="yes">
-        <File Id="belpicppgui.dll" Name="belpicppgui.dll" KeyPath="yes" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pinpad\belpicppgui.dll" />
-      </Component>
-	  -->
+		
     </DirectoryRef>
 	
 
@@ -857,22 +835,28 @@
 
     <CustomAction Id="IsQuietMode" Property="QuietMode" Value="-q " />
     <CustomAction Id="NotIsQuietMode" Property="QuietMode" Value="" />
-    
+	<!--    
     <CustomAction Id="PteidCleanup"
               BinaryKey="PTEID_CLEANUP"
               ExeCommand="[QuietMode][ForceCleanup][LogCleanup]-k $(var.ProductGuidGeneric)"
               Impersonate="no"
               Return="check"
               Execute="deferred"
-    />
-    
-    <CustomAction Id="IsPrivileged" Error="!(loc.AdminNeeded)" />
+    /> -->
+	<CustomAction Id="CertificateRegistration"
+					BinaryKey="PTeIDWin32CertificateImport"
+				    ExeCommand="" 
+					Impersonate="no"
+					Return="check"
+					Execute="deferred" />
+					
+
+	<CustomAction Id="IsPrivileged" Error="!(loc.AdminNeeded)" />
     <CustomAction Id="PreventDowngrading" Error="!(loc.NoDowngrade)" />
 
     <InstallUISequence>
       <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
     </InstallUISequence>
-
 
     <InstallExecuteSequence>
       <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
@@ -891,18 +875,17 @@
       <Custom Action="StopGui35_Remove"       Before="RemoveFiles">1</Custom>
       <Custom Action="StopXSign35_Remove"     Before="RemoveFiles">1</Custom>
 -->
-      <Custom Action="IsQuietMode" Before="PteidCleanup"><![CDATA[UILevel<5 OR NOT UILevel]]></Custom>
-      <Custom Action="NotIsQuietMode" Before="PteidCleanup"><![CDATA[UILevel>=5]]></Custom>
+      <Custom Action="IsQuietMode"><![CDATA[UILevel<5 OR NOT UILevel]]></Custom>
+      <Custom Action="NotIsQuietMode" ><![CDATA[UILevel>=5]]></Custom>
 
-      <Custom Action="LogCleanup" Before="PteidCleanup">CLEANUP_LOG</Custom>
-      <Custom Action="NotLogCleanup" Before="PteidCleanup">NOT CLEANUP_LOG</Custom>
+      <Custom Action="LogCleanup" >CLEANUP_LOG</Custom>
+      <Custom Action="NotLogCleanup" >NOT CLEANUP_LOG</Custom>
      
-      <Custom Action="ForceCleanup" Before="PteidCleanup">CLEANUP_FORCE=1</Custom>
-      <Custom Action="NotForceCleanup" Before="PteidCleanup"><![CDATA[CLEANUP_FORCE<>1 OR NOT CLEANUP_FORCE]]></Custom>
-      
-      <Custom Action="PteidCleanup" After="InstallInitialize"><![CDATA[(CLEANUP_NO<>1 OR NOT CLEANUP_NO)]]></Custom>
+      <Custom Action="ForceCleanup" >CLEANUP_FORCE=1</Custom>
+		<Custom Action="NotForceCleanup"><![CDATA[CLEANUP_FORCE<>1 OR NOT CLEANUP_FORCE]]></Custom>
       
       <Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
+	  <Custom Action="CertificateRegistration" After="InstallFiles">NOT Installed</Custom>
 
       <ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>
     </InstallExecuteSequence>

@@ -116,7 +116,8 @@
         </Directory>
       </Directory>
 
-      <Directory Id="ProgramFilesFolder">
+      <Directory Id="ProgramFiles64Folder">
+	    <Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
         <Directory Id="APPLICATIONROOTFOLDER" Name="Portugal Identity Card">
           <Directory Id="IMAGEFORMATS" Name="imageformats" />
           <Directory Id="EIDSTORE" Name="eidstore">
@@ -149,23 +150,16 @@
           </Directory>
         </Directory>
       </Directory>
-      <Directory Id="ProgramFiles64Folder">
-        <Directory Id="MINIDRIVERROOTFOLDER" Name="BeID Minidriver"/>
-      </Directory>
+
       <Directory Id="DesktopFolder"/>
 
       <Directory Id="WindowsFolder"/>
 
-      <Directory Id="SystemFolder">
-        <Directory Id="PTEIDPPDIR" Name="pteidpp"/>
-      </Directory>
-
       <Directory Id="System64Folder"/>
+		<Directory Id="PTEIDPPDIR" Name="pteidpp"/>
 
-      <!--
       <Merge Id="VCRT" SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC80_CRT_x86.msm" Language="0" DiskId="1" />
       <Merge Id="VCRT_POLICY" SourceFile="$(var.PTEID_DIR_MSM)\policy_8_0_Microsoft_VC80_CRT_x86.msm" Language="0" DiskId="1" />
-      -->
     </Directory>
     
     <DirectoryRef Id="EIDSTORE">
@@ -181,8 +175,8 @@
     <DirectoryRef Id="CERTSDIR">
       <Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AC6}">
 	<File Id="CartaodeCidadao001.der" Name="CartaodeCidadao001.der" KeyPath="yes" Source="..\..\certs\CartaodeCidadao001.der" />
-	<File Id="ECRaizEstado_novo_assinado_GTE.der" Name="ECRaizEstado_novo_assinado_GTE.der" KeyPath="yes" Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" />
-	<File Id="GTEGlobalRoot.der" Name="GTEGlobalRoot.der" KeyPath="yes" Source="..\..\certs\GTEGlobalRoot.der" />
+	<File Id="ECRaizEstado_novo_assinado_GTE.der" Name="ECRaizEstado_novo_assinado_GTE.der" KeyPath="no" Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" />
+	<File Id="GTEGlobalRoot.der" Name="GTEGlobalRoot.der" KeyPath="no" Source="..\..\certs\GTEGlobalRoot.der" />
       </Component>
     </DirectoryRef>
 
@@ -378,8 +372,8 @@
       
       <Component Id="RootFolder" Guid="{2FB5D279-50BD-49ed-98D9-3D043520F450}">
         <CreateFolder/>
-        <Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[ProgramFilesFolder]Portugal Identity Card"/>
-        <Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[ProgramFilesFolder]Portugal Identity Card"/>
+        <Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
+        <Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
       </Component>
 
       <Component Id="Icon" Guid="{5B657BAD-8CFC-4E42-AF8C-13338C50D784}" SharedDllRefCount="yes">
@@ -391,8 +385,8 @@
       </Component>
       
       <Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
-        <File Id="pteid35gui.exe" Name="pteid35gui.exe" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteid35gui.exe" />
-        <File Id="pteid35libCpp.dll" Name="pteid35libCpp.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid35libCpp.dll" />
+        <File Id="pteid35gui.exe" Name="pteid35gui.exe" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\pteid35gui.exe" />
+        <File Id="pteid35libCpp.dll" Name="pteid35libCpp.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35libCpp.dll" />
       </Component>
 
       <Component Id="GuiLang" Guid="{6B03ED1B-DF24-4CE6-A70C-476AF4C0941B}" SharedDllRefCount="yes">
@@ -415,12 +409,6 @@
         <File Id="THIRDPARTY_LICENSES.txt" Name="THIRDPARTY-LICENSES.txt" KeyPath="no" Source="..\..\..\misc\licenses_files\THIRDPARTY-LICENSES.txt" />
       </Component>
       
-      <Component Id="BWCompatibilityJava_Jar" Guid="{9431FC24-8C6B-46FE-A2C2-8C8CD4A50A3D}" SharedDllRefCount="yes">
-        <File Id="pteidlib.jar" Name="pteidlib.jar" KeyPath="yes" Source="..\..\..\misc\bw_compatibility\pteidlib.jar" />
-        <File Id="eidlib.jar" Name="eidlib.jar" KeyPath="no" Source="..\..\..\misc\bw_compatibility\eidlib.jar" />
-        <File Id="PTEID_old.html" Name="PTEID_old.html" KeyPath="no" Source="..\..\..\misc\bw_compatibility\PTEID_old.html" />
-      </Component>
-      
     </DirectoryRef>
 
 
@@ -429,10 +417,10 @@
       <Component Id="pteidgui.conf" Guid="{D46BF825-5D1D-4FE9-AC90-5FDB45240DE0}">
         <File Id="pteidgui.conf" Name="pteidgui.conf" KeyPath="yes" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidgui.conf" />
         <IniFile Id="pteidguiconf1" Directory="WindowsFolder" Name="pteidgui.conf"
-          Section="PTEID_default" Action="addLine" Key="certs"  Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\certs\"
+          Section="PTEID_default" Action="addLine" Key="certs"  Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\certs\"
           />
         <IniFile Id="pteidguiconf2" Directory="WindowsFolder" Name="pteidgui.conf"
-          Section="PTEID_default" Action="addLine" Key="crl"  Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\crl\http\crl.eid.portugal.be\"
+          Section="PTEID_default" Action="addLine" Key="crl"  Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\crl\http\crl.eid.portugal.be\"
           />
       </Component>
 
@@ -441,154 +429,41 @@
     <DirectoryRef Id="System64Folder">
 
       <Component Id="Runtime35_64" Guid="{8FE1C7FB-F06A-40db-8454-88D9E8BDD626}" SharedDllRefCount="yes" Win64="yes">
-        <File Id="pteid35cardlayer_64.dll" Name="pteid35cardlayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35cardlayer.dll" />
-        <File Id="pteid35common_64.dll" Name="pteid35common.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35common.dll" />
-        <File Id="pteid35DlgsWin32_64.dll" Name="pteid35DlgsWin32.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35DlgsWin32.dll" />
+        <File Id="pteid35cardlayer.dll" Name="pteid35cardlayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35cardlayer.dll" />
+        <File Id="pteid35common.dll" Name="pteid35common.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35common.dll" />
+		<File Id="pteid35applayer.dll" Name="pteid35applayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35applayer.dll" />
+        <File Id="pteid35DlgsWin32.dll" Name="pteid35DlgsWin32.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35DlgsWin32.dll" />
       </Component>
 
       <Component Id="pkcs11_64" Guid="{3C4751D6-D92C-40ab-8FA5-3A1DF1D927EA}" SharedDllRefCount="yes" Win64="yes">
         <File Id="pteidpkcs11_64.dll" Name="pteidpkcs11.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\pteidpkcs11.dll" />
         <File Id="PortugalIdentityCardPKCS11_64.dll" Name="Portugal Identity Card PKCS11.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\Portugal Identity Card PKCS11.dll" />
       </Component>
+	  
+		<Component Id="FreeImage" Guid="C3CAF347-FBA3-4d65-A23F-C6357541DAB2" SharedDllRefCount="yes">
+			<File Id="FreeImage.dll" Name="FreeImage.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\FreeImage.dll" />
+	  </Component>
+
 
       <Component Id="MINIDRIVER_64" Guid="{a8259480-e408-11de-8a39-0800200c9a66}" SharedDllRefCount="yes" Win64="yes">
-        <File Id="MINIDRIVER_64.dll" Name="pteidmdrv64.dll" KeyPath="yes" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" />
+        <File Id="pteidmdrv64.dll" Name="pteidmdrv64.dll" KeyPath="yes" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" />
       </Component>
+
+
+		<Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
+			<File Id="libeay32.dll" Name="libeay32.dll" KeyPath="yes" Source="$(var.PTEID_DIR_OPENSSL_098G)\bin\libeay32.dll" />
+			<File Id="ssleay32.dll" Name="ssleay32.dll" KeyPath="no" Source="$(var.PTEID_DIR_OPENSSL_098G)\bin\ssleay32.dll" />
+		</Component>
+
+		<Component Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
+			<File Id="xercesc_3_1.dll" Name="xerces-c_3_1.dll" KeyPath="yes" Source="$(var.PTEID_DIR_XERCES_310)\bin\xerces-c_3_1.dll" />
+		</Component>
       
-    </DirectoryRef>
-    
-    <DirectoryRef Id="SystemFolder">
-
-      <Component Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
-        <File Id="pteid35applayer.dll" Name="pteid35applayer.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteid35applayer.dll" />
-        <File Id="pteid35cardlayer.dll" Name="pteid35cardlayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid35cardlayer.dll" />
-        <File Id="pteid35common.dll" Name="pteid35common.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid35common.dll" />
-        <File Id="pteid35DlgsWin32.dll" Name="pteid35DlgsWin32.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid35DlgsWin32.dll" />
-      </Component>
-      
-      <Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
-        <File Id="libeay32_0_9_8g.dll" Name="libeay32_0_9_8g.dll" KeyPath="yes" Source="$(var.PTEID_DIR_OPENSSL_098G)\lib\libeay32_0_9_8g.dll" />
-        <File Id="ssleay32_0_9_8g.dll" Name="ssleay32_0_9_8g.dll" KeyPath="no" Source="$(var.PTEID_DIR_OPENSSL_098G)\lib\ssleay32_0_9_8g.dll" />
-      </Component>
-      
-      <Component Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
-        <File Id="xercesc_3_1.dll" Name="xerces-c_3_1.dll" KeyPath="yes" Source="$(var.PTEID_DIR_XERCES_310)\bin\xerces-c_3_1.dll" />
-      </Component>
-
-      <Component Id="MINIDRIVER" Guid="{2A6887B1-A020-47e7-847A-F68673A12CE2}" SharedDllRefCount="yes">
-        <File Id="MINIDRIVER.dll" Name="pteidmdrv32.dll" KeyPath="yes" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" />
-      </Component>
-      
-      <Component Id="CSP" Guid="{54153442-D4CE-4DE6-9321-1BAC5DE4C725}" SharedDllRefCount="yes">
-        <File Id="pteidCSP.dll" Name="pteidCSP.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteidCSP.dll" />
-        <File Id="pteidCSPlib.dll" Name="pteidCSPlib.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteidCSPlib.dll" />
-      </Component>
-
-      <Component Id="pkcs11" Guid="{D54164C0-795D-4B2D-96C6-C8E395100896}" SharedDllRefCount="yes">
-        <File Id="pteidpkcs11.dll" Name="pteidpkcs11.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteidpkcs11.dll" />
-        <File Id="PortugalIdentityCardPKCS11.dll" Name="Portugal Identity Card PKCS11.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\Portugal Identity Card PKCS11.dll" />
-      </Component>
-
-      <Component Id="BWCompatibility" Guid="{AFE2F946-0FD9-4FF4-917E-1E0970E8FCB7}" SharedDllRefCount="yes">
-        <File Id="pteidlib.dll" Name="pteidlib.dll" KeyPath="yes" Source="..\..\..\..\pteid-2.6\src\_binaries\release\pteidlib.dll" />
-        <File Id="eidlib.dll" Name="eidlib.dll" KeyPath="no" Source="..\..\..\..\pteid-2.6\src\_binaries\release\eidlib.dll" />
-        <File Id="pteidwinscard.dll" Name="pteidwinscard.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidwinscard.dll" />
-        <File Id="pteidgui.dll" Name="pteidgui.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidgui.dll" />
-        <File Id="pteidlibopensc.dll" Name="pteidlibopensc.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidlibopensc.dll" />
-        <File Id="pteidlibeay32.dll" Name="pteidlibeay32.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidlibeay32.dll" />
-        <File Id="pteidssleay32.dll" Name="pteidssleay32.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidssleay32.dll" />
-      </Component>
-      
-      <Component Id="BWCompatibilityQt" Guid="{92FDC305-F375-4a66-9F22-9CBDEF1B0BEB}" SharedDllRefCount="yes">
-        <File Id="qt_mt334.dll" Name="qt-mt334.dll" KeyPath="yes" Source="$(var.PTEID_DIR_QT_334)\bin\qt-mt334.dll" />
-      </Component>
-
-      <Component Id="BWCompatibilityActiveX" Guid="{FE012727-F90E-4A4A-BC61-F1E93F0C82EB}">
-        <File Id="pteidlibaxctrl.dll" Name="pteidlibaxctrl.dll" KeyPath="yes" Source="..\..\..\misc\bw_compatibility\pteidlibaxctrl.dll">
-          <Class Id="{28310B8B-0774-4483-85AF-4966EC52D8BC}" Context="InprocServer32" Description="Certif Class" ThreadingModel="apartment">
-            <ProgId Id="EIDLibCtrl.Certif.1" Description="Certif Class">
-              <ProgId Id="EIDLibCtrl.Certif" Description="Certif Class" />
-            </ProgId>
-          </Class>
-          <Class Id="{4CBC8AEE-7684-492E-8AA5-505943987B53}" Context="InprocServer32" Description="CertifCheck Class" ThreadingModel="apartment">
-            <ProgId Id="EIDLibCtrl.CertifCheck.1" Description="CertifCheck Class">
-              <ProgId Id="EIDLibCtrl.CertifCheck" Description="CertifCheck Class" />
-            </ProgId>
-          </Class>
-          <Class Id="{8923F2AE-B06E-430B-93F6-96FE1BDEEFF8}" Context="InprocServer32" Description="RetStatus Class" ThreadingModel="apartment">
-            <ProgId Id="EIDLibCtrl.RetStatus.1" Description="RetStatus Class">
-              <ProgId Id="EIDLibCtrl.RetStatus" Description="RetStatus Class" />
-            </ProgId>
-          </Class>
-          <Class Id="{BB91CEDA-82D5-4889-8732-3DB804619852}" Context="InprocServer32" Description="MapCollection Class" ThreadingModel="apartment">
-            <ProgId Id="EIDLibCtrl.MapCollection.1" Description="MapCollection Class">
-              <ProgId Id="EIDLibCtrl.MapCollection" Description="MapCollection Class" />
-            </ProgId>
-          </Class>
-          <TypeLib Id="{7705C6CB-5A66-4F92-B296-2B34ED21745C}" Description="pteidlibaxctrl 1.1 Type Library" HelpDirectory="SystemFolder" Language="0" MajorVersion="1" MinorVersion="0">
-            <Class Id="{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}" Context="InprocServer32" Description="EIDlib Class" ThreadingModel="apartment" Version="1.0">
-              <ProgId Id="EIDLibCtrl.EIDlib.1" Description="EIDlib Class">
-                <ProgId Id="EIDLibCtrl.EIDlib" Description="EIDlib Class" />
-              </ProgId>
-            </Class>
-            <Class Id="{79EAFF90-57D8-4A58-BC0C-0C5F7F60E65E}" Context="InprocServer32" Description="Raw Class" ThreadingModel="both">
-              <ProgId Id="EIDLibCtrl.Raw.1" Description="Raw Class">
-                <ProgId Id="EIDLibCtrl.Raw" Description="Raw Class" />
-              </ProgId>
-            </Class>
-            <Class Id="{B1731EE0-BE64-4FE3-8EAC-BF37A4D96B35}" Context="InprocServer32" Description="Pin Class" ThreadingModel="both">
-              <ProgId Id="EIDLibCtrl.Pin.1" Description="Pin Class">
-                <ProgId Id="EIDLibCtrl.Pin" Description="Pin Class" />
-              </ProgId>
-            </Class>
-            <Interface Id="{23271379-5195-4384-98DA-F54960DA8A84}" Name="_IEIDlibEvents" ProxyStubClassId="{00020420-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020420-0000-0000-C000-000000000046}" />
-            <Interface Id="{26995400-2928-4E1B-9981-A317D486AC5A}" Name="ICertif" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-            <Interface Id="{886B55ED-4245-4FE9-B3B5-1D78B551000B}" Name="IMapCollection" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-            <Interface Id="{9233063D-D860-4CAD-AD47-BE48CC62D709}" Name="ICertifCheck" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-            <Interface Id="{9B4AD832-6FE8-4826-BFD3-3F278A40F741}" Name="IRetStatus" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-            <Interface Id="{9D5F1B11-8438-4C4E-9011-070F2E43C758}" Name="IRaw" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-            <Interface Id="{B7E86746-2EA7-4237-B523-5BD826A0BAF9}" Name="IPin" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-            <Interface Id="{D5701A16-9D8D-46C6-8E08-B3F1BAE9C4DC}" Name="IEIDlib" ProxyStubClassId="{00020424-0000-0000-C000-000000000046}" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
-          </TypeLib>
-        </File>
-        <RegistryValue Root="HKCR" Key="CLSID\{28310B8B-0774-4483-85AF-4966EC52D8BC}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{28310B8B-0774-4483-85AF-4966EC52D8BC}\TypeLib" Value="{08B2900D-5F45-46CB-A6F2-23E7EA559A1A}" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4CBC8AEE-7684-492E-8AA5-505943987B53}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4CBC8AEE-7684-492E-8AA5-505943987B53}\TypeLib" Value="{08B2900D-5F45-46CB-A6F2-23E7EA559A1A}" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}\Control" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}\Insertable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}\MiscStatus\1" Value="132497" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}\MiscStatus" Value="0" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{4E29F09E-EBCC-4A3B-BAA7-8372EC375870}\ToolboxBitmap32" Value="[#pteidlibaxctrl.dll], 101" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{79EAFF90-57D8-4A58-BC0C-0C5F7F60E65E}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{8923F2AE-B06E-430B-93F6-96FE1BDEEFF8}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{8923F2AE-B06E-430B-93F6-96FE1BDEEFF8}\TypeLib" Value="{08B2900D-5F45-46CB-A6F2-23E7EA559A1A}" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{B1731EE0-BE64-4FE3-8EAC-BF37A4D96B35}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{BB91CEDA-82D5-4889-8732-3DB804619852}\Programmable" Value="" Type="string" Action="write" />
-        <RegistryValue Root="HKCR" Key="CLSID\{BB91CEDA-82D5-4889-8732-3DB804619852}\TypeLib" Value="{08B2900D-5F45-46CB-A6F2-23E7EA559A1A}" Type="string" Action="write" />
-
-        <File Id="EIDLibCtrl.dll" Name="EIDLibCtrl.dll" KeyPath="no" Source="..\..\..\misc\bw_compatibility\EIDLibCtrl.dll" />
-      </Component>
-
-      <Component Id="BWCompatibilityJava" Guid="{D9F8728F-D955-4356-9316-5050F3D36FE1}" SharedDllRefCount="yes">
-        <File Id="pteidlibjni.dll" Name="pteidlibjni.dll" KeyPath="yes" Source="..\..\..\misc\bw_compatibility\pteidlibjni.dll" />
-        <File Id="pteidlibjni.dll.manifest" Name="pteidlibjni.dll.manifest" KeyPath="no" Source="..\..\..\misc\bw_compatibility\pteidlibjni.dll.manifest" />
-        <File Id="eidlibj.dll" Name="eidlibj.dll" KeyPath="no" Source="..\..\..\misc\bw_compatibility\eidlibj.dll" />
-        <File Id="eidlibj.dll.manifest" Name="eidlibj.dll.manifest" KeyPath="no" Source="..\..\..\misc\bw_compatibility\eidlibj.dll.manifest" />
-      </Component>
-
-      <Component Id="BWPinpad" Guid="{AEB72EF2-7C5E-487E-84E3-0903140D7B74}" SharedDllRefCount="yes">
-        <File Id="belpicppgui.dll" Name="belpicppgui.dll" KeyPath="yes" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pinpad\belpicppgui.dll" />
-      </Component>
-    </DirectoryRef>
-
+    </DirectoryRef> 
+   
     <DirectoryRef Id="PTEIDPPDIR">
       <Component Id="PinpadLib" Guid="{9ADA6D75-5DCC-467E-A0CE-B84A482B2115}" SharedDllRefCount="yes">
-        <!--File Id="ch44xxeid.dll" Name="ch44xxeid.dll" Source="..\..\..\pinpad\ch44xxeid.dll" /-->
-        <!--File Id="sprx32eid.dll" Name="sprx32eid.dll" Source="..\..\..\pinpad\sprx32eid.dll" /-->
-        <File Id="xireid.dll" Name="xireid.dll" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pinpad\xireid.dll" />
-        <File Id="pteidpp2gempc.dll" Name="pteidpp2-gempc.dll" Source="..\..\..\_Binaries35\Release\pteidpp2-gempc.dll" />
+        <File Id="pteidpp2gempc.dll" Name="pteidpp2-gempc.dll" Source="..\..\..\_Binaries35\x64\Release\pteidpp2-gempc.dll" />
       </Component>
     </DirectoryRef>
     <DirectoryRef Id="TARGETDIR">
@@ -606,7 +481,7 @@
           <RegistryValue Type="string" Name="portugaleid@eid.portugal.be" Value="C:\Program Files\Mozilla Firefox\extensions\portugaleid@eid.portugal.be" KeyPath="yes"/>
 		</RegistryKey>
       </Component> 
-   
+   <!-- 
       <Component Id="REGISTERMINIDRIVER" Guid="{B9980C19-883E-49f9-BDD2-AB3D75187C8F}">
         <RegistryKey Root="HKLM"
                      Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid"
@@ -618,19 +493,29 @@
           <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
         </RegistryKey>
       </Component>
-
+	-->
       <Component Id="REGISTERMINIDRIVER_64" Guid="{3BCA1B2C-08AF-4727-AD85-1C60025656EA}" Win64="yes">
-        <RegistryKey Root="HKLM"
-          Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid"
-          Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="yes"/>
-          <RegistryValue Type="binary" Name="ATR" Value="3b98004000a503010101ad1300" KeyPath="no"/>
-          <RegistryValue Type="binary" Name="ATRMask" Value="ffff00ff00ffffffffffffff00" KeyPath="no"/>
-          <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
-          <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
-        </RegistryKey>
+		  <RegistryKey Root="HKLM"
+							  Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid (IAS)"
+							  Action="createAndRemoveOnUninstall">
+			  <RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="yes"/>
+			  <RegistryValue Type="binary" Name="ATR" Value="3B959540FFD000540130" KeyPath="no"/>
+			  <RegistryValue Type="binary" Name="ATRMask" Value="fffffffffffffffffffc" KeyPath="no"/>
+			  <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+			  <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+		  </RegistryKey>
+		  <RegistryKey Root="HKLM"
+				 Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid (Gemsafe)"
+				 Action="createAndRemoveOnUninstall">
+			  <RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="no"/>
+			  <RegistryValue Type="binary" Name="ATR" Value="3B7D95000080318065B08311000083009000" KeyPath="no"/>
+			  <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
+			  <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+			  <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+		  </RegistryKey>
       </Component> 
      
+		<!-- We're dependent on 32-bit binary from beid so we don't even ship CSP on x64 MSI
       <Component Id="REGISTERCSP" Guid="{3DF6D19A-C268-4D97-B605-1F3E29DC15DC}">
         <RegistryKey Root="HKLM"
                      Key="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Defaults\Provider\Portugal Identity Card CSP"
@@ -659,6 +544,7 @@
           <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
         </RegistryKey>
         </Component>   
+		-->
      
       <Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA3}">
         <RegistryKey Root="HKLM"
@@ -670,21 +556,21 @@
           </RegistryKey>
           
           <RegistryKey Key="certificatecache" Action="createAndRemoveOnUninstall">
-            <RegistryValue Type="string" Name="cert_cachefile" Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\crl\.cache.csc"/>
+            <RegistryValue Type="string" Name="cert_cachefile" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\crl\.cache.csc"/>
           </RegistryKey>
           
           <RegistryKey Key="crl" Action="createAndRemoveOnUninstall">
-            <RegistryValue Type="string" Name="crl_cachedir" Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\crl"/>
+            <RegistryValue Type="string" Name="crl_cachedir" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\crl"/>
           </RegistryKey>
           
           <RegistryKey Key="general" Action="createAndRemoveOnUninstall">
             <RegistryValue Type="string" Name="language" Value="!(loc.Langpref)"/>
-            <RegistryValue Type="string" Name="cache_dirname" Value="[ProgramFilesFolder]Portugal Identity Card\.cache"/>
-            <RegistryValue Type="string" Name="install_dirname" Value="[ProgramFilesFolder]Portugal Identity Card"/>
+            <RegistryValue Type="string" Name="cache_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card\.cache"/>
+            <RegistryValue Type="string" Name="install_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
           </RegistryKey>
           
           <RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
-            <RegistryValue Type="string" Name="log_dirname" Value="[ProgramFilesFolder]Portugal Identity Card\log"/>
+            <RegistryValue Type="string" Name="log_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card\log"/>
           </RegistryKey>
           
           <RegistryKey Key="configuretool" Action="createAndRemoveOnUninstall">
@@ -745,12 +631,10 @@
              Level="1"
              >
 
-      <!--
       <Feature Id="VCRedist" Title="VC++ 8.0 runtime" AllowAdvertise="no" Display="hidden" Level="1">
         <MergeRef Id="VCRT" />
         <MergeRef Id="VCRT_POLICY" />
       </Feature>
-      -->
 
       <!-- Program Files -->
       <ComponentRef Id="RootFolder"/>
@@ -763,7 +647,6 @@
       <ComponentRef Id="DirectoryCache"/>
       <ComponentRef Id="License"/>
       <ComponentRef Id="LogDir"/>
-      <ComponentRef Id="BWCompatibilityJava_Jar" />
       <ComponentRef Id="Extensions"/>
       <ComponentRef Id="FireFoxRoot"/>
       <ComponentRef Id="XPIRoot"/>
@@ -779,15 +662,10 @@
       <ComponentRef Id="XPIskin"/>         
 
       <!-- System32 -->
-      <ComponentRef Id="Runtime35"/>
+
       <ComponentRef Id="Runtime35_64"/>
       <ComponentRef Id="Runtime35ThirdPartyOpenSSL"/>
       <ComponentRef Id="Runtime35ThirdPartyXerces"/>
-      <ComponentRef Id="BWCompatibility"/>
-      <ComponentRef Id="BWCompatibilityQt"/>
-      <ComponentRef Id="BWCompatibilityActiveX"/>
-      <ComponentRef Id="BWCompatibilityJava"/>
-      <ComponentRef Id="BWPinpad"/>
 
       <!-- Pteid pinpad dir-->
       <ComponentRef Id="PinpadLib"/>
@@ -806,6 +684,7 @@
         <ComponentRef Id="GUI" />
         <ComponentRef Id="Qt" />
         <ComponentRef Id="QtPlugin"/>
+		<ComponentRef Id="FreeImage"/>
         <ComponentRef Id="GuiLang" />
         <!-- Shortcuts -->
         <ComponentRef Id="PteidGuiShortcut"/>
@@ -817,7 +696,7 @@
                 Level="1"
                 >
         <ComponentRef Id="SCardSvrService"/>
-        <ComponentRef Id="pkcs11"/>
+		  <!-- Shortcuts <ComponentRef Id="pkcs11"/> -->
         <ComponentRef Id="pkcs11_64"/>
 		<ComponentRef Id="REGISTERXPI"/>
         <ComponentRef Id="OutlookTool" />
@@ -826,17 +705,17 @@
         <Feature Id="Install_Minidriver" Level="0" Display="hidden" >
           <ComponentRef Id="pteidmdrv"/>
           <ComponentRef Id="CertPropService"/>
-          <ComponentRef Id="MINIDRIVER"/>
+		<!--  <ComponentRef Id="MINIDRIVER"/> -->
           <ComponentRef Id="MINIDRIVER_64"/>
-          <ComponentRef Id="REGISTERMINIDRIVER"/>
           <ComponentRef Id="REGISTERMINIDRIVER_64"/>
           <Condition Level="1">VersionNT >= 600</Condition>
         </Feature>
+		  <!--
         <Feature Id="Install_CSP" Level="1" Display="hidden">
           <ComponentRef Id="CSP"/>
           <ComponentRef Id="REGISTERCSP"/>
           <Condition Level="0">"VersionNT >= 600"</Condition>
-        </Feature>
+        </Feature> -->
       </Feature>
     </Feature>
 
@@ -861,14 +740,7 @@
     </UI>
     
     <CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[APPLICATIONROOTFOLDER]" />
-    
-    <CustomAction Id="SetCacheDirHidden"
-                  Impersonate="no"
-                  BinaryKey="MarkHidden" 
-                  ExeCommand="&quot;[ProgramFilesFolder]Portugal Identity Card\.cache&quot;"
-                  Execute="deferred"
-                  Return="asyncNoWait"
-                  />
+   
 
 <!-- 
     <CustomAction Id="StopGui"
@@ -929,15 +801,18 @@
 
     <Binary Id="KILLPROCESS" SourceFile="..\..\..\misc\Wix_MW35\Kill_Process\Release\Kill_Process.exe"/>
 -->
-    <Binary Id="MarkHidden" SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>   
-    <Binary Id="PTEID_CLEANUP" SourceFile="..\..\..\misc\Wix_MW35\pteidcleanup\Release\pteidcleanup.exe"/>
- 
-<!--
+	  <!--     <Binary Id="MarkHidden" SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>   
+           <Binary Id="PTEID_CLEANUP" SourceFile="..\..\..\misc\Wix_MW35\pteidcleanup\Release\pteidcleanup.exe"/>
+	-->
+
+
+	<!--
     Cleanup parameters supported:
     - Avoid to run the cleanup process              =>  CLEANUP_NO=1
     - Force de cleanup to kill all locking process  =>  CLEANUP_FORCE=1
     - Define a specific log file                    =>  CLEANUP_LOG=<FileName>
 -->
+	 <Binary Id="PTeIDWin32CertificateImport" SourceFile="..\..\..\_Binaries35\x64\Release\PTeIDWin32CertificateImport.exe" />
     <CustomAction Id="ForceCleanup" Property="ForceCleanup" Value="-f " />
     <CustomAction Id="NotForceCleanup" Property="ForceCleanup" Value="" />
 
@@ -947,16 +822,14 @@
     <CustomAction Id="IsQuietMode" Property="QuietMode" Value="-q " />
     <CustomAction Id="NotIsQuietMode" Property="QuietMode" Value="" />
     
-    <CustomAction Id="PteidCleanup"
-              BinaryKey="PTEID_CLEANUP"
-              ExeCommand="[QuietMode][ForceCleanup][LogCleanup]-k $(var.ProductGuidGeneric)"
-              Impersonate="no"
-              Return="check"
-              Execute="deferred"
-    />
-    
     <CustomAction Id="IsPrivileged" Error="!(loc.AdminNeeded)" />
     <CustomAction Id="PreventDowngrading" Error="!(loc.NoDowngrade)" />
+	<CustomAction Id="CertificateRegistration"
+					BinaryKey="PTeIDWin32CertificateImport"
+				    ExeCommand=""
+					Impersonate="no"
+					Return="check"
+					Execute="deferred" />
 
     <InstallUISequence>
       <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
@@ -980,6 +853,7 @@
       <Custom Action="StopGui35_Remove"       Before="RemoveFiles">1</Custom>
       <Custom Action="StopXSign35_Remove"     Before="RemoveFiles">1</Custom>
 -->
+		<!---
       <Custom Action="IsQuietMode" Before="PteidCleanup"><![CDATA[UILevel<5 OR NOT UILevel]]></Custom>
       <Custom Action="NotIsQuietMode" Before="PteidCleanup"><![CDATA[UILevel>=5]]></Custom>
 
@@ -988,10 +862,7 @@
      
       <Custom Action="ForceCleanup" Before="PteidCleanup">CLEANUP_FORCE=1</Custom>
       <Custom Action="NotForceCleanup" Before="PteidCleanup"><![CDATA[CLEANUP_FORCE<>1 OR NOT CLEANUP_FORCE]]></Custom>
-      
-      <Custom Action="PteidCleanup" After="InstallInitialize"><![CDATA[(CLEANUP_NO<>1 OR NOT CLEANUP_NO)]]></Custom>
-      
-      <Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
+     -->
 
       <ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>
     </InstallExecuteSequence>

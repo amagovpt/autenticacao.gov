@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>PteidMW35-Basic-nl</OutputName>
     <OutputType>Package</OutputType>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <Name>PteidMW35_en</Name>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
@@ -39,12 +39,15 @@
   <ItemGroup>
     <WixExtension Include="WixDifxAppExtension">
       <HintPath>$(WixExtDir)\WixDifxAppExtension.dll</HintPath>
+      <Name>WixDifxAppExtension</Name>
     </WixExtension>
     <WixExtension Include="WixUtilExtension">
       <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
     </WixExtension>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +57,7 @@
   <ItemGroup>
     <WixLibrary Include="difxapp_x86">
       <HintPath>..\..\..\..\..\..\..\..\..\Program Files (x86)\Windows Installer XML v3\bin\difxapp_x86.wixlib</HintPath>
+      <Name>difxapp_x86</Name>
     </WixLibrary>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
