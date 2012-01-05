@@ -59,7 +59,7 @@ xcopy /D /Y "%TARGET1%" "%~dp0..\..\_Binaries35\Debug\"
 
 ::pteid CSP (This is no 3rd party lib, but because it is signed and can't be rebuild)
 ::========
-set TARGET1=%~dp0..\..\CSP\wrapper\ms_signed\pteidCSP.dll
+set TARGET1=%~dp0..\..\CSP\wrapper\ms_signed\beidCSP.dll
 if not exist "%TARGET1%" goto print_err
 xcopy /D /Y "%TARGET1%" "%~dp0..\..\_Binaries35\Debug\"
 xcopy /D /Y "%TARGET1%" "%~dp0..\..\_Binaries35\Release\"
