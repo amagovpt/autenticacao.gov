@@ -122,6 +122,43 @@ void dlgPrint::on_chboxPersoData_toggled( bool bChecked )
 
 }
 
+bool dlgPrint::persodata_triggered(CardInformation& CI_Data)
+{
+	try
+	{
+		unsigned long	ReaderStartIdx = 1;
+		bool			bRefresh	   = false;
+		unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
+		unsigned long	ReaderIdx	   = 0;
+
+		if (ReaderStartIdx!=(unsigned long)-1)
+		{
+			ReaderEndIdx = ReaderStartIdx+1;
+		}
+		else
+		{
+			ReaderStartIdx=0;
+		}
+
+		bool bCardPresent = false;
+		PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
+
+		const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+		m_CurrReaderName = readerName;
+		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
+
+		if (ReaderContext.isCardPresent())
+		{
+			PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
+			CI_Data.LoadDataPersoData(Card,m_CurrReaderName);
+		}
+	}	catch (PTEID_Exception &e) {
+		QString msg(tr("General exception"));
+		//ShowPTEIDError( e.GetError(), msg );
+		return false;
+	}
+}
+
 bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 {
 	//Workaround: Make PIN window called only one time
@@ -423,6 +460,7 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
 	if (ui.chboxPersoData->isChecked())
 	{
+		persodata_triggered(CI_Data);
 		tFieldMap& PersoDataFields = CI_Data.m_PersoDataInfo.getFields();
 		cairo_move_to(cr, 20.0, 760.0);
 		cairo_show_text(cr, (QString::fromUtf8(PersoDataFields[PERSODATA_INFO].toStdString().c_str())).toStdString().c_str());
