@@ -1,4 +1,4 @@
-LIBRARY pteid35CSPLib
+LIBRARY beidCSPLib
 
 EXPORTS
 	eidmwAcquireContext
