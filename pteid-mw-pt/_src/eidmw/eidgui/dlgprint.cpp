@@ -381,7 +381,7 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
 		///Card Status
 		cairo_move_to(cr, 20.0, 460.0);
-		cairo_show_text(cr, "???????");
+		cairo_show_text(cr, PersonFields[VALIDATION].toStdString().c_str());
 
 		////Local of Request
 		cairo_move_to(cr, 220.0, 460.0);
