@@ -393,15 +393,15 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 		cairo_show_text(cr, AddressFields[ADDRESS_BUILDINGTYPE].toStdString().c_str());
 
 		////ADDRESS Door No
-		cairo_move_to(cr, 20.0, 380.0);
+		cairo_move_to(cr, 20.0, 670.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_DOORNO].toStdString().c_str());
 
 		////ADDRESS Floor
-		cairo_move_to(cr, 20.0, 380.0);
+		cairo_move_to(cr, 180.0, 670.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_FLOOR].toStdString().c_str());
 
 		////ADDRESS Side
-		cairo_move_to(cr, 20.0, 380.0);
+		cairo_move_to(cr, 340.0, 670.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_SIDE].toStdString().c_str());
 
 		////ADDRESS Zip4
@@ -409,11 +409,11 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 		cairo_show_text(cr, AddressFields[ADDRESS_ZIP4].toStdString().c_str());
 
 		////ADDRESS Zip3
-		cairo_move_to(cr, 20.0, 380.0);
+		cairo_move_to(cr, 90.0, 710.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_ZIP3].toStdString().c_str());
 
 		////ADDRESS Place
-		cairo_move_to(cr, 20.0, 380.0);
+		cairo_move_to(cr, 20.0, 420.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_PLACE].toStdString().c_str());
 
 		////ADDRESS Postal Locality
