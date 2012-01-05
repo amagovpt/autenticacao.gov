@@ -245,7 +245,8 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 	cr = cairo_create(surface);
 
 	//// Set Image - Front
-	imagefront = cairo_image_surface_create_from_png("/home/metalgod/CaixaMagica/pteid-mw-pt/_src/eidmw/eidgui/Images/application_print_PDF.png");
+	QImage *qimg = new QImage (":/images/Images/application_print_PDF.png");
+	imagefront = cairo_image_surface_create_for_data(qimg->bits(), CAIRO_FORMAT_RGB24, qimg->width(), qimg->height(), qimg->bytesPerLine());
 	w = cairo_image_surface_get_width (imagefront);
 	h = cairo_image_surface_get_height (imagefront);
 
