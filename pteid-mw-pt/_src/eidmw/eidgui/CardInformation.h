@@ -743,8 +743,7 @@ public:
 	bool RetrieveData(PTEID_EIDCard& Card)
 	{
 		bool bRetVal = false;
-		char father[800];
-		char mother[800];
+		unsigned int fatherlen, motherlen;
 		//m_imgPicture=QPixmap("IDFace.jpg");
 
 		PTEID_EId& pteid_eid = Card.getID();
@@ -765,15 +764,21 @@ public:
 		m_Fields[DOCUMENTTYPE]				= pteid_eid.getDocumentType();
 		m_Fields[ISSUINGENTITY]				= pteid_eid.getIssuingEntity();
 
-		strcat (father, pteid_eid.getGivenNameFather());
-		strcat (father, " ");
-		strcat (father, pteid_eid.getSurnameFather());
+		fatherlen = strlen(pteid_eid.getGivenNameFather()) + strlen(pteid_eid.getSurnameFather()) + 1;
+
+		char* father = new char[fatherlen];
+		strcpy(father, pteid_eid.getGivenNameFather());
+		strcat(father, " ");
+		strcat(father, pteid_eid.getSurnameFather());
 
 		m_Fields[FATHER] = father;
 
-		strcat (mother, pteid_eid.getGivenNameMother());
-		strcat (mother, " ");
-		strcat (mother, pteid_eid.getSurnameMother());
+		motherlen = strlen(pteid_eid.getGivenNameMother()) + strlen(pteid_eid.getSurnameMother()) + 1;
+
+		char* mother = new char[motherlen];
+		strcpy(mother, pteid_eid.getGivenNameMother());
+		strcat(mother, " ");
+		strcat(mother, pteid_eid.getSurnameMother());
 
 		m_Fields[MOTHER] = mother;
 
