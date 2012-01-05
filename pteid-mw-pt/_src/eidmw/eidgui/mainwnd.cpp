@@ -138,10 +138,6 @@ static const char* fileList[]=
 #endif
 };
 
-
-
-
-
 void MainWnd::createTrayMenu()
 {
 	m_pMinimizeAction = new QAction(tr("Mi&nimize"), this);
@@ -180,7 +176,7 @@ void MainWnd::createTrayMenu()
 tCertPerReader	MainWnd::m_certContexts;		//!< certificate contexts per reader
 
 //*****************************************************
-// ctor
+// Constructor
 //*****************************************************
 MainWnd::MainWnd( GUISettings& settings, QWidget *parent ) 
 : QMainWindow(parent)
@@ -199,8 +195,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 , m_msgBox(NULL)
 , m_connectionStatus((PTEID_CertifStatus)-1)
 {
-	///InitWidgetMapStyle();
-
 	//------------------------------------
 	// install the translator object and load the .qm file for
 	// the given language.
@@ -216,15 +210,8 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	setFixedSize(830, 630);
 	m_ui.menubar->setVisible(false);
-
 	m_ui.wdg_submenu_card->setVisible(false);
 
-	//------------------------------------
-	// disable the reload button until the first time a card is plugged in. 
-	// In case of autoread of the inserted card, there is no interference possible 
-	// between the button and the autoread.
-	//------------------------------------
-	setEnableReload(false);
 	InitLanguageMenu();
 
 	Qt::WindowFlags flags = windowFlags();
@@ -246,9 +233,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	setLanguageMenu(m_Language);		// check the language in the language menu
 
 	Show_Splash();
-
-	//	connect( m_ui.actionShow_Toolbar, SIGNAL(toggled(bool)), m_ui.toolBar, SLOT(setVisible(bool)) );
-
 	//------------------------------------
 	//SysTray
 	//------------------------------------
@@ -273,20 +257,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	m_ui.actionShow_Toolbar->setChecked( m_Settings.getShowToolbar() );
 
-	//----------------------------------
-	// button register/details the certificates is by default
-	// disabled
-	//----------------------------------
 	setEnabledCertifButtons( false );
-
-	//----------------------------------
-	// OCSP check button disabled by default
-	//----------------------------------
-	m_ui.btnCert_Register->setEnabled(false);
-
-	//----------------------------------
-	// button for Pins by default disabled
-	//----------------------------------
 	setEnabledPinButtons( false );
 
 	//----------------------------------
@@ -308,8 +279,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 		connect(m_timerReaderList, SIGNAL(timeout()), this, SLOT(updateReaderList()));
 		m_timerReaderList->start(TIMERREADERLIST); 
 	}
-
-
 
 	//------------------------------------
 	// set the tray Icon (as it appears in the traybar)
@@ -334,17 +303,12 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_ui.lbl_menuLanguage_Portuguese->installEventFilter(this);
 	m_ui.lbl_menuLanguage_English->installEventFilter(this);
 	m_ui.lbl_menuHelp_about->installEventFilter(this);
-
 	m_ui.wdg_submenu_card->installEventFilter(this);
 	m_ui.wdg_submenu_tools->installEventFilter(this);
 	m_ui.wdg_submenu_help->installEventFilter(this);
 	m_ui.wdg_submenu_language->installEventFilter(this);
 
 }
-
-
-
-
 
 
 bool MainWnd::eventFilter(QObject *object, QEvent *event)
@@ -363,7 +327,6 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 
 		if (object == m_ui.lbl_menuCard_Pdf )
 		{
-			//Add the Pdf dialog
 			on_actionPrint_eID_triggered();
 		}
 
@@ -392,27 +355,17 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			hide_submenus();
 			show_window_about();
 		}
-
-
-		//lbl_menuLanguage_Portuguese
-
-
 	}
-
 
 	if (event->type() == QEvent::Leave)
 	{
-
 		if (object == m_ui.wdg_submenu_card || object == m_ui.wdg_submenu_tools || object == m_ui.wdg_submenu_language || object == m_ui.wdg_submenu_help )
 		{
 			hide_submenus();
 		}
 	}
 	return false;
-
 }
-
-
 
 void MainWnd::hide_submenus()
 {
@@ -420,14 +373,11 @@ void MainWnd::hide_submenus()
 	m_ui.wdg_submenu_tools->setVisible(false);
 	m_ui.wdg_submenu_language->setVisible(false);
 	m_ui.wdg_submenu_help->setVisible(false);
-
-
 }
 
 //******************************************************
 // Buttons to control tabs
 //******************************************************
-
 void MainWnd::on_btnSelectTab_Identity_clicked()
 {
 	m_ui.stackedWidget->setCurrentIndex(1);
@@ -462,7 +412,6 @@ void MainWnd::on_btnSelectTab_Notes_clicked()
 		refreshTabPersoData();
 }
 
-
 void MainWnd::on_btn_menu_card_clicked()
 {
 	m_ui.wdg_submenu_card->setVisible(true);
@@ -486,13 +435,6 @@ void MainWnd::on_btn_menu_help_clicked()
 	m_ui.wdg_submenu_help->setVisible(true);
 	m_ui.wdg_submenu_help->setGeometry(380,4,126,70);
 }
-
-
-
-
-
-
-
 
 
 //*****************************************************
@@ -539,13 +481,6 @@ void MainWnd::messageRespond( const QString& message)
 	if(message.compare("Restore Windows")==0)
 	{
 		restoreWindow();
-	}
-	else if (message.startsWith("Open File"))
-	{
-		QString filePath = (QString) message;
-		filePath.remove(0,9);
-
-		OpenSelectedEid((const QString)filePath);
 	}
 }
 
@@ -596,13 +531,6 @@ void MainWnd::updateReaderList( void )
 		m_CI_Data.Reset();
 		setCorrespondingTrayIcon(NULL);		
 	}
-}
-//*****************************************************
-// Enable/disable the reload button/menu item
-//*****************************************************
-void MainWnd::setEnableReload( bool bEnabled )
-{
-	m_ui.actionReload_eID->setEnabled(bEnabled);
 }
 
 //*****************************************************
@@ -678,7 +606,6 @@ void MainWnd::cleanupCallbackData()
 		delete pCallbackData;
 	}
 	m_callBackData.clear();
-
 	g_cleaningCallback = false;
 }
 
@@ -699,7 +626,6 @@ void MainWnd::stopAllEventCallbacks( void )
 		readerContext.StopEventCallback(handle);
 	}
 	m_callBackHandles.clear();
-
 	cleanupCallbackData();
 }
 
@@ -1355,67 +1281,6 @@ bool MainWnd::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, 
 }
 
 //*****************************************************
-// button to check certificates clicked
-//*****************************************************
-/*
-void MainWnd::on_btnOCSPCheck_clicked( void )
-{
-		//----------------------------------------------------
-	// get the selected certificate and get the OCSP response
-	//----------------------------------------------------
-	try
-	{
-//		m_ui.btnOCSPCheck->setEnabled(false);
-//		m_ui.btnOCSPCheck->repaint();		//Need to be call explicitly else the repaint comes too late
-		QTreeWidgetItemIterator it(m_ui.treeCert);
-		while (*it) 
-		{
-			if ( (*it)->isSelected() )
-			{
-				QString CertLabel = (*it)->text(0);
-				PTEID_Certificates* pCerts = m_CI_Data.m_CertifInfo.getCertificates();
-
-				for (unsigned long idx=0; idx<pCerts->countFromCard();idx++)
-				{
-					PTEID_Certificate& cert = pCerts->getCertFromCard(idx);
-					QString lbl = cert.getLabel();
-					if (lbl == CertLabel)
-					{
-						QString strMessage(tr("Checking certificate OCSP status"));
-						m_ui.statusBar->showMessage(strMessage,m_STATUS_MSG_TIME);
-
-						PTEID_CertifStatus status = cert.getStatus(PTEID_VALIDATION_LEVEL_NONE, PTEID_VALIDATION_LEVEL_MANDATORY);
-						((QTreeCertItem*)(*it))->setOcspStatus(status);
-
-						strMessage = tr("Done");
-						m_ui.statusBar->showMessage(strMessage,m_STATUS_MSG_TIME);
-
-						QString strCertStatus = "";
-						getCertStatusText(status, strCertStatus);
-						m_ui.txtCert_Status->setText(strCertStatus);
-						m_ui.txtCert_Status->setAccessibleName(strCertStatus);
-					}
-				}
-			}
-			it++;
-		}
-		m_ui.btnOCSPCheck->setEnabled(true);
-	}
-	catch (PTEID_ExNoCardPresent& e)
-	{
-		e = e;
-		QString strMessage(tr("No card found"));
-		m_ui.statusBar->showMessage(strMessage,m_STATUS_MSG_TIME);
-	}
-	catch (PTEID_Exception& e)
-	{
-		e = e;
-	}
-
-}
-*/
-
-//*****************************************************
 // button to register certificate clicked
 //*****************************************************
 void MainWnd::on_btnCert_Register_clicked( void )
@@ -1698,19 +1563,6 @@ void MainWnd::on_treePIN_itemClicked(QTreeWidgetItem* item, int column)
 			break;
 		}
 	}
-}
-
-//*****************************************************
-// Reload EID is clicked
-//*****************************************************
-void MainWnd::on_actionReload_eID_triggered( void )
-{
-	/*
-    pinactivate = 1;
-	m_connectionStatus = (PTEID_CertifStatus)-1;
-	m_CI_Data.Reset(); 
-	loadCardData();
-	 */
 }
 
 //****************************************************
@@ -2555,448 +2407,6 @@ void MainWnd::on_btnPIN_Change_clicked()
 }
 
 //*****************************************************
-// Open a EID file clicked
-//*****************************************************
-void MainWnd::on_actionOpen_eID_triggered( void )
-{
-	QString caption(tr("Open eID"));
-	caption = caption.remove(QChar('&'));
-	m_ui.statusBar->showMessage(caption);
-
-	QString			baseDir=m_Settings.getDefSavePath();
-#ifdef WIN32
-	if (0==baseDir.length())
-	{
-		TCHAR strPath[ MAX_PATH ];
-		SHGetSpecialFolderPath( 0				// Hwnd
-				,strPath			// String buffer.
-				,CSIDL_PERSONAL  // CSLID of folder (CSIDL_PERSONAL)
-				,FALSE			// Create if doesn't exists?
-		);
-		baseDir = strPath;
-	}
-#else
-	if (0==baseDir.length())
-	{
-		baseDir		 = QDir::homePath();
-	}
-#endif
-
-	QString		fileName = QFileDialog::getOpenFileName( this, caption, baseDir, tr("eID bin Files (*.eid);;eID XML files (*.xml);;eID CSV files (*.csv);;all files (*.*)") );
-
-	if ( 0 == fileName.length())
-	{
-		return;
-	}
-	OpenSelectedEid( fileName );
-}
-//*****************************************************
-// Open the selected EID file
-//*****************************************************
-void MainWnd::OpenSelectedEid( const QString& fileName )
-{
-	QString caption(tr("Open eID"));
-	caption = caption.remove(QChar('&'));
-
-	QFile		eidFile(fileName);
-	QFileInfo	fileInfo(eidFile);
-
-	if (fileInfo.isReadable())
-	{
-		QString		  fileSuffix    = fileInfo.completeSuffix();
-		PTEID_FileType fileType		= PTEID_FILETYPE_UNKNOWN;
-
-		if ( "xml" == fileSuffix.toLower() )
-		{
-			fileType = PTEID_FILETYPE_XML;
-		}
-		else if ( "csv" == fileSuffix.toLower() )
-		{
-			fileType = PTEID_FILETYPE_CSV;
-		}
-		else if ( "eid" == fileSuffix.toLower() )
-		{
-			fileType = PTEID_FILETYPE_TLV;
-		}
-		else
-		{
-			QString strCaption(caption);
-			QString strMessage(tr("Incorrect file extension.\nPlease specify .xml, .csv or .eid"));
-			QMessageBox::information(this,strCaption,strMessage);
-			return;
-		}
-
-		m_ui.statusBar->showMessage(caption+": "+fileName);
-		try
-		{
-			releaseVirtualReader();
-			m_virtReaderContext = new PTEID_ReaderContext(fileType,fileName.toLatin1());
-			if(m_virtReaderContext->isCardPresent())
-			{
-				PTEID_CardType cardType = m_virtReaderContext->getCardType();
-
-				switch(cardType)
-				{
-				case PTEID_CARDTYPE_EID:
-				case PTEID_CARDTYPE_KIDS:
-				case PTEID_CARDTYPE_FOREIGNER:
-				{
-					PTEID_EIDCard& card = m_virtReaderContext->getEIDCard();
-					if (card.isTestCard())
-					{
-						if (!askAllowTestCard())
-						{
-							break;
-						}
-						card.setAllowTestCard(true);
-					}
-					m_CI_Data.Reset();
-					Show_Identity_Card(card);
-				}
-				break;
-				case PTEID_CARDTYPE_SIS:
-				{
-					PTEID_SISCard& card = m_virtReaderContext->getSISCard();
-					m_CI_Data.Reset();
-					Show_Memory_Card(card);
-				}
-				break;
-				case PTEID_CARDTYPE_UNKNOWN:
-				default:
-					break;
-				}
-				enablePrintMenu();
-				enableFileSave(false);
-				//				enableFileMenu();
-			}
-			else
-			{
-				QString caption(tr("Warning"));
-				QString msg(tr("Failed to read eID file"));
-				QMessageBox::warning( this, caption,  msg, QMessageBox::Ok );
-			}
-		}
-		catch (PTEID_Exception& e)
-		{
-			long err = e.GetError();
-			err = err;
-		}
-	}
-	else
-	{
-		QString caption(tr("Warning"));
-		QString msg(tr("Failed to open eID file"));
-		QMessageBox::warning( this, caption,  msg, QMessageBox::Ok );
-	}
-	m_ui.statusBar->showMessage(tr("Done"));
-}
-
-//*****************************************************
-// Save EID file clicked
-// We must check if we have been working with a file or a real
-// card.
-//*****************************************************
-void MainWnd::on_actionSave_eID_triggered( void )
-{
-	QString caption(tr("Save eID"));
-	caption = caption.remove(QChar('&'));
-	//------------------------------------
-	// default filename is national number (both SIS and EID contain this number)
-	//------------------------------------
-
-	PTEID_ReaderContext* pReaderContext = NULL;
-
-	if ( 0 < m_CurrReaderName.length() )
-	{
-		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-
-		pReaderContext = &readerContext;
-	}
-	else if ( NULL != m_virtReaderContext )
-	{
-		pReaderContext = m_virtReaderContext;
-	}
-	else
-	{
-		return;
-	}
-	//------------------------------------
-	// make always sure a card is present
-	//------------------------------------
-	if (pReaderContext->isCardPresent())
-	{
-		m_ui.statusBar->showMessage(caption,m_STATUS_MSG_TIME);
-		PTEID_Card&		card		 = pReaderContext->getCard();
-		PTEID_CardType	cardType	 = pReaderContext->getCardType();
-		QString			baseFilename = QDir::toNativeSeparators( createBaseFilename( cardType ));;
-		QString			baseDir		 = m_Settings.getDefSavePath();
-#ifdef WIN32
-		if (0==baseDir.length())
-		{
-			TCHAR strPath[ MAX_PATH ];
-			SHGetSpecialFolderPath( 0				// Hwnd
-					,strPath			// String buffer.
-					,CSIDL_PERSONAL  // CSLID of folder (CSIDL_PERSONAL)
-					,FALSE			// Create if doesn't exists?
-			);
-			baseDir = strPath;
-		}
-#else
-		if (0==baseDir.length())
-		{
-			baseDir		 = QDir::homePath();
-		}
-#endif
-
-		if ( baseFilename.size()>0 )
-		{
-			QString saveStatus = tr("Failed");
-			baseFilename.append(".eid");
-			QString	targetFile	 = baseDir+"/"+baseFilename;
-			if (saveCardDataToFile( targetFile , card ))
-			{
-				saveStatus = tr("Done");
-				QMessageBox::information(NULL,caption, caption + ": " + targetFile + " " + saveStatus);
-			}
-			m_ui.statusBar->showMessage(caption + ": " + targetFile + " " + saveStatus,m_STATUS_MSG_TIME);
-		}
-	}
-	else
-	{
-		QString msg(tr("No card present"));
-		QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-	}
-}
-
-//*****************************************************
-// Save EID as... clicked
-// We must check if we have been working with a file or a real
-// card.
-//*****************************************************
-void MainWnd::on_actionSave_eID_as_triggered()
-{
-	QString caption(tr("Save eID as"));
-	PTEID_ReaderContext* pReaderContext = NULL;
-
-	if ( 0 < m_CurrReaderName.length() )
-	{
-		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-
-		pReaderContext = &readerContext;
-	}
-	else if ( NULL != m_virtReaderContext )
-	{
-		pReaderContext = m_virtReaderContext;
-	}
-	else
-	{
-		return;
-	}
-
-	//------------------------------------
-	// make always sure a card is present
-	//------------------------------------
-	if (pReaderContext->isCardPresent())
-	{
-		m_ui.statusBar->showMessage(caption,m_STATUS_MSG_TIME);
-		PTEID_CardType	cardType	 = pReaderContext->getCardType();
-		PTEID_Card&		card		 = pReaderContext->getCard();
-		QString			baseFilename = createBaseFilename(cardType);
-		QString			baseDir		 = m_Settings.getDefSavePath();
-#ifdef WIN32
-		if(0==baseDir.length())
-		{
-			TCHAR strPath[ MAX_PATH ];
-			SHGetSpecialFolderPath( 0				// Hwnd
-					,strPath			// String buffer.
-					,CSIDL_PERSONAL  // CSLID of folder (CSIDL_PERSONAL)
-					,FALSE			// Create if doesn't exists?
-			);
-			baseDir = strPath;
-		}
-#else
-		if(0==baseDir.length())
-		{
-			baseDir		 = QDir::homePath();
-		}
-#endif
-		if ( baseFilename.size()>0 )
-		{
-			//------------------------------------
-			// filename must contain an extension or the file-exist detection of the dialog will not work properly
-			//------------------------------------
-			QString		targetFile   = QDir::toNativeSeparators(baseDir+"/"+baseFilename+".eid");
-			QString		selectedFilter;
-			QStringList	fileNames;
-			QFileDialog dialog(this, caption, targetFile, tr("eID bin Files (*.eid);;eID XML files (*.xml);;eID CSV files (*.csv)"));
-			dialog.setAcceptMode(QFileDialog::AcceptSave);
-			dialog.setDefaultSuffix("eid");
-			dialog.setOption(QFileDialog::DontUseNativeDialog);
-			dialog.setDirectory(baseDir);
-			QList<QUrl> urls;
-			urls << QUrl::fromLocalFile(baseDir);
-			dialog.setSidebarUrls(urls);
-
-			if (!dialog.exec())
-			{
-				return;
-			}
-
-			QDir dir = dialog.directory();
-			fileNames = dialog.selectedFiles();
-			QString fileName = fileNames.at(0);
-
-			if (fileName.length()>0)
-			{
-				QFileInfo fileInfo(dir.absolutePath(),fileName);
-				fileName = fileInfo.baseName();
-				selectedFilter = dialog.selectedNameFilter();
-				if (selectedFilter.contains("*.eid"))
-				{
-					fileName += ".eid";
-				}
-				else if (selectedFilter.contains("*.xml"))
-				{
-					fileName += ".xml";
-				}
-				else if (selectedFilter.contains("*.csv"))
-				{
-					fileName += ".csv";
-				}
-				else
-				{
-					// this should never happen
-				}
-				fileInfo.setFile(dir.absolutePath(),fileName);
-				QString saveStatus = tr("Failed");
-				if (saveCardDataToFile( fileInfo.filePath(), card ))
-				{
-					QString savePath = fileInfo.absolutePath();
-					m_Settings.setDefSavePath(savePath);
-					saveStatus = tr("Done");
-				}
-				m_ui.statusBar->showMessage(caption + ": " + fileName + " " + saveStatus,m_STATUS_MSG_TIME);
-				QMessageBox::information(NULL,caption, caption + ": " + fileInfo.filePath() + " " + saveStatus);
-			}
-		}
-	}
-	else
-	{
-		QString msg(tr("No card present"));
-		QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-	}
-}
-
-//*****************************************************
-// create a file name for the EID card data to store.
-// The filename is basically the national number with an extension.
-// For the SIS card, '_sis' is added to make the difference with
-// the EID card data.
-//*****************************************************
-QString MainWnd::createBaseFilename( PTEID_CardType const& cardType )
-{
-	QString baseFilename;
-
-	switch(cardType)
-	{
-	case PTEID_CARDTYPE_SIS:
-	{
-		tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.m_PersonExtraInfo.getFields();
-		baseFilename = PersonFields[SOCIALSECURITYNUMBER];
-		baseFilename.append("_sis");
-	}
-	break;
-	case PTEID_CARDTYPE_EID:
-	case PTEID_CARDTYPE_KIDS:
-	case PTEID_CARDTYPE_FOREIGNER:
-	{
-		tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
-		baseFilename = PersonFields[NATIONALNUMBER];
-	}
-	default:
-		break;
-	}
-	return baseFilename;
-}
-
-//*****************************************************
-// Save the card data to the file
-//*****************************************************
-bool MainWnd::saveCardDataToFile(QString const& fileName, PTEID_Card& card )
-{
-	QString strCaption(tr("Save eID"));
-	bool			bRet	 = false;
-	QFileInfo		fileInfo(fileName);
-	QString			fileSuffix = fileInfo.completeSuffix();
-
-	PTEID_ByteArray* fileData	= NULL;
-
-	try
-	{
-		PTEID_XMLDoc&	doc		 = card.getDocument(PTEID_DOCTYPE_FULL);
-
-		if ("xml" == fileSuffix.toLower())
-		{
-			fileData = new PTEID_ByteArray(doc.getXML());
-		}
-		else if ("csv" == fileSuffix.toLower())
-		{
-			fileData = new PTEID_ByteArray(doc.getCSV());
-		}
-		else if ("eid" == fileSuffix.toLower())
-		{
-			fileData = new PTEID_ByteArray(doc.getTLV());
-		}
-		else
-		{
-			QString strMessage(tr("Incorrect file extension.\nPlease specify .xml, .csv or .eid"));
-			QMessageBox::information(this,strCaption,strMessage);
-			bRet = false;
-			return bRet;
-		}
-	}
-	catch(PTEID_Exception &e)
-	{
-		e=e;
-		if (fileData)
-		{
-			delete fileData;
-			fileData = NULL;
-		}
-		QString strMessage(tr("Error writing file"));
-		QMessageBox::information(this,strCaption,strMessage);
-		bRet = false;
-		return bRet;
-	}
-
-	if (fileData)
-	{
-		QFile file(fileName);
-		if (!file.open(QIODevice::WriteOnly|QIODevice::Truncate))
-		{
-			QString msg(tr("Error opening file"));
-			QMessageBox::information(this,strCaption,msg+": "+fileName);
-			bRet = false;
-		}
-		else if ( -1 == file.write((const char*)fileData->GetBytes(),fileData->Size()))
-		{
-			QString msg(tr("Error writing file"));
-			QMessageBox::information(this,strCaption,msg+": "+fileName);
-			bRet = false;
-		}
-		else
-		{
-			bRet = true;
-		}
-		file.close();
-		delete fileData;
-		fileData = NULL;
-	}
-	return bRet;
-}
-
-
-//*****************************************************
 // About clicked
 //*****************************************************
 void MainWnd::show_window_about(){
@@ -3037,8 +2447,6 @@ void MainWnd::show_window_parameters(){
 	}
 
 	dlgOptions* dlg = new dlgOptions( m_Settings, this );
-
-//	dlg->setUseKeyPad( m_Settings.getUseVirtualKeyPad() );
 	dlg->setShowToolbar( m_Settings.getShowToolbar() );
 	dlg->setShowPicture( m_Settings.getShowPicture() );
 	dlg->setShowNotification( m_Settings.getShowNotification() );
@@ -3047,21 +2455,14 @@ void MainWnd::show_window_parameters(){
 
 	if( dlg->exec() )
 	{
-//		m_UseKeyPad = dlg->getUseKeyPad();
 		m_ui.actionShow_Toolbar->setChecked( m_Settings.getShowToolbar() );
 
 		if( !m_ui.txtIdentity_Name->text().isEmpty() )
 			m_ui.lblIdentity_ImgPerson->setPixmap( m_imgPicture );
-		//			m_ui.lblForeigners_ImgPerson->setPixmap( m_imgPicture );
-
 	}
 	delete dlg;
-
 	m_ui.actionOptions->setEnabled(true);
-
 }
-
-
 
 void MainWnd::on_actionOptions_triggered(void)
 {
@@ -3146,22 +2547,11 @@ void MainWnd::authPINRequest_triggered()
 							msg += "\n";
 							msg += "( ";
 							msg += tr("Number of tries left: ") + nrTriesLeft + " )";
-							//This wrongly assumes that the PIN selected in the PIN tab is the one we failed
-							// m_ui.txtPIN_Status->setText(msg);
-							// m_ui.txtPIN_Status->setAccessibleName(msg);
 						}
 						else
 						{
 							break;
 						}
-					}
-					else
-					{
-						//QString nrTriesLeft;
-						//nrTriesLeft.setNum(triesLeft);
-						//If PIN verification succeeded the try counter is set to the maximum i.e. 3
-						//m_ui.txtPIN_Status->setText(tr(""));
-						//m_ui.txtPIN_Status->setAccessibleName(tr("Not available"));
 					}
 					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 					break;
@@ -3192,29 +2582,17 @@ void MainWnd::authPINRequest_triggered()
 //*****************************************************
 bool MainWnd::addressPINRequest_triggered()
 {
-	//Workaround: Make PIN window called only one time
-
-	/*if (!m_CI_Data.isDataLoaded())
-	{
-		return true;
-	}*/
 	try
 	{
 		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-
 		
 		QString caption(tr("Identity Card: PIN verification"));
 		
-		//------------------------------------
-		// make always sure a card is present
-		//------------------------------------
 		if (ReaderContext.isCardPresent())
 		{
 			QString PinName = "PIN da Morada";
-
 			PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
 			PTEID_Pins&		Pins	= Card.getPins();
-
 			for (unsigned long PinIdx=0; PinIdx<Pins.count(); PinIdx++)
 			{
 				PTEID_Pin&	Pin			= Pins.getPinByNumber(PinIdx);
@@ -3229,24 +2607,12 @@ bool MainWnd::addressPINRequest_triggered()
 					QString msg = bResult ? tr("PIN verification passed"):tr("PIN verification failed");
 					if (!bResult)
 					{
-							/*
-							QString nrTriesLeft;
-							nrTriesLeft.setNum(triesLeft);
-							msg += "\n";
-							msg += "( ";
-							msg += tr("Number of tries left: ") + nrTriesLeft + " )";
-							m_ui.txtPIN_Status->setText(msg);
-							m_ui.txtPIN_Status->setAccessibleName(msg);
-							*/
-
 							pinactivate = 1;
 							return false;
 					}
 					else
 					{
 						pinactivate = 0;
-						//m_ui.txtPIN_Status->setText("Restam 3 tentativas");
-						//m_ui.txtPIN_Status->setAccessibleName("Restam 3 tentativas");
 					}
 					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 					break;
@@ -3287,10 +2653,6 @@ void MainWnd::on_actionPINRequest_triggered()
 	try
 	{
 		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-
-		//------------------------------------
-		// make always sure a card is present
-		//------------------------------------
 		QString		 caption(tr("Identity Card: PIN verification"));
 
 		if (ReaderContext.isCardPresent())
@@ -3387,9 +2749,6 @@ void MainWnd::on_actionPINChange_triggered()
 		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 		QString			caption(tr("Identity Card: PIN change"));
 
-		//------------------------------------
-		// make always sure a card is present
-		//------------------------------------
 		if (ReaderContext.isCardPresent())
 		{
 			QString PinNameRaw = m_ui.txtPIN_Name->text();
@@ -3459,35 +2818,10 @@ void MainWnd::on_actionPINChange_triggered()
 	}
 }
 
-//
-
-
-
-
-
-//******************************************************
-// hide all the tabs
-//******************************************************
-void MainWnd::hideTabs()
-{
-	/*	QList<QWidget *> allTabs = m_ui.tabWidget_Identity->findChildren<QWidget *>();
-	for (int i = allTabs.size()-1; i >=0; --i) 
-	{	
-		m_ui.tabWidget_Identity->removeTab(i);		// hide the tab (this is not a delete!!)
-	}
-	 */
-}
-
 void MainWnd::tabaddress_select(int index)
 {
 	if(index == 2)
 		refreshTabAddress();
-
-}
-
-void MainWnd::tabpersodata_select(int index)
-{
-
 }
 
 void MainWnd::tabcertificates_select(int index)
@@ -3502,8 +2836,6 @@ void MainWnd::tabcertificates_select(int index)
 void MainWnd::showTabs()
 {
 	m_ui.stackedWidget->setCurrentIndex(0);
-
-	hideTabs();
 
 	if ( !m_CI_Data.isDataLoaded() )
 	{
@@ -3563,15 +2895,6 @@ void MainWnd::showTabs()
 		refreshTabInfo();
 	}
 	break;
-
-	case PTEID_CARDTYPE_SIS:
-		refreshTabInfo();
-
-		m_imgBackground_Front = QPixmap( ":/images/Images/Background_SisFront.jpg" ); // background
-		m_imgBackground_Back = QPixmap( ":/images/Images/Background_SisBack.jpg" ); // background
-
-		break;
-
 	default:
 		break;
 	}
@@ -4324,25 +3647,6 @@ void MainWnd::refreshTabIdentityExtra()
 
 	tFieldMap& MiscFields = m_CI_Data.m_MiscInfo.getFields();
 
-	QStringList Remarks = fillRemarksField(MiscFields);
-
-	int idx=0;
-	int FieldCnt = Remarks.size();
-	if (FieldCnt>0)
-	{
-		FieldCnt--;
-	}
-	if (FieldCnt>0)
-	{
-		FieldCnt--;
-	}
-	if (FieldCnt>0)
-	{
-		//		m_ui.txtIdentityExtra_Remarks3->setText(Remarks[idx++]);
-		//		m_ui.txtIdentityExtra_Remarks3->setAccessibleName(Remarks[idx++]);
-		FieldCnt--;
-	}
-
 }
 
 //*****************************************************
@@ -4487,25 +3791,6 @@ QString MainWnd::getFamilyMemberText( void )
 {
 	return tr("Family member");
 }
-//*****************************************************
-// Create the string to put in the 'remarks' field
-//*****************************************************
-QStringList MainWnd::fillRemarksField( tFieldMap& MiscFields )
-{
-	QStringList Remarks;
-	QString Duplicata			= MiscFields[DUPLICATA];
-	QString SpecialOrganization = MiscFields[SPECIALORGANIZATION];
-
-	if (Duplicata.size()>0 && "00"!=Duplicata)
-	{
-		Remarks.append( getDuplicataText() + Duplicata );
-	}
-	if (SpecialOrganization.size()>0)
-	{
-		Remarks.append( getSpecialOrganizationText(SpecialOrganization) );
-	}
-	return Remarks;
-}
 
 
 //*****************************************************
@@ -4624,8 +3909,6 @@ void MainWnd::refreshTabCardPin( void )
                 {
                     PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
                     PTEID_Pins&		Pins	= Card.getPins();
-
-
                     PTEID_Pin&	Auth_Pin = Pins.getPinByNumber(0);
                     QString	CurrPinName	= Auth_Pin.getLabel();
 
@@ -4641,8 +3924,6 @@ void MainWnd::refreshTabCardPin( void )
                     m_ui.txtPIN_Name->setAccessibleName(QString::fromUtf8("PIN da Autentica\xc3\xa7\xc3\xa3o"));
                     m_ui.txtPIN_ID->setText(QString::number(1));
                     m_ui.txtPIN_ID->setAccessibleName(QString::number(1));
-                        /*	Fill the default value for the PIN status which is the 
-                    status of the Auth PIN (first one of the list)    */
                     m_ui.txtPIN_Status->setText(PINStatus);
                     m_ui.txtPIN_Status->setAccessibleName(PINStatus);
 
@@ -5001,7 +4282,6 @@ void MainWnd::customEvent( QEvent* pEvent )
 					//----------------------------------------------------------
 					if (!readerContext.isCardPresent())
 					{
-						setEnableReload(true);
 						pEvent->accept();
 						return;
 					}
@@ -5088,7 +4368,6 @@ void MainWnd::customEvent( QEvent* pEvent )
 				err = err;
 			}
 		}
-	setEnableReload(true);
 }
 //**************************************************
 // show the picture on the Card

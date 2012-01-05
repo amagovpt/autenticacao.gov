@@ -210,15 +210,11 @@ public:
 	{
 		return m_Settings;
 	}
-	void setEnableReload( bool bEnabled );
+
 
 private slots:
 	void on_actionAbout_triggered( void );
-	void on_actionReload_eID_triggered( void );
 	void on_actionClear_triggered( void );
-	void on_actionOpen_eID_triggered( void );
-	void on_actionSave_eID_triggered( void );
-	void on_actionSave_eID_as_triggered( void );
 	void on_actionPrint_eID_triggered( void );
 	void on_actionPrinter_Settings_triggered( void );
 	void on_actionPINRequest_triggered( void );
@@ -229,7 +225,6 @@ private slots:
 	bool addressPINRequest_triggered( void );
 	void PersoDataSaveButtonClicked( void );
 	void tabaddress_select ( int index );
-	void tabpersodata_select ( int index );
 	void tabcertificates_select(int index);
 	void setLanguageEn( void );
 	void setLanguageNl( void );
@@ -280,8 +275,6 @@ private slots:
 	void show_window_parameters();
 	void show_window_about();
 
-
-	void OpenSelectedEid( const QString& fileName );
 	void updateReaderList( void );
 	void customEvent( QEvent * event );
 	void changeEvent( QEvent *event );
@@ -324,12 +317,7 @@ private:
 	void setStatus( unsigned int Status );
 
 	// Refresh Data
-	void hideTabs( void );
 	void showTabs( void );
-
-
-
-	void initAllWidgets(QList<QWidget *> &allWidgets);
 
 	void zoomAllWidgets(QList<QWidget *>& allWidgets);
 	void setWidgetPosition(QList<QWidget *>& allWidgets);
@@ -433,9 +421,7 @@ private:
 	static bool ProviderNameCorrect (PCCERT_CONTEXT pCertContext );
 #endif
 	void showCertImportMessage(bool bImported);
-	bool saveCardDataToFile(QString const& fileName, PTEID_Card& card );
 	bool saveCardDataToFile(QString const& fileName, PTEID_EIDCard& card );
-	QString createBaseFilename( PTEID_CardType const& cardType );
 	void setEnabledPinButtons( bool bEnabled );
 	void setEnabledCertifButtons( bool bEnabled );
 	QString GetCardTypeText(QString const& cardType);
@@ -447,7 +433,6 @@ private:
 	void setWidgetsPointSize(QList<QWidget *> &allWidgets);
 	void setCorrespondingTrayIcon( PopupEvent* callbackEvent );
 	void clearGuiContent( void );
-	QStringList fillRemarksField( tFieldMap& MiscFields );
 	QString getSpecialOrganizationText( QString const& code);
 	QString getDuplicataText( void );
 	QString getFamilyMemberText( void );
