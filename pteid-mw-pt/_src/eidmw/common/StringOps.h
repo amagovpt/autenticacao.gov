@@ -6,9 +6,12 @@
  */
 
 #pragma once
-namespace eIDMW {
+#include "Export.h"
+#include <string>
 
-void replace(std::string& str, const std::string& from, const std::string& to);
+namespace eIDMW 
+{
+EIDMW_CMN_API void replace(std::string& str, const std::string& from, const std::string& to);
 
 }
 
