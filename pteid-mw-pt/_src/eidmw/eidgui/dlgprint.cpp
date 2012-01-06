@@ -60,14 +60,6 @@ dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUA
 	QTextBlockFormat textBlockFormat;
 	textBlockFormat.setLeftMargin ( 100 );
 
-	/*PQTextCursor cursor(ui.paperview->textCursor());
-	QTextFrame*  topFrame = cursor.currentFrame();
-	cursor.movePosition(QTextCursor::Start);*/
-
-	/*if (on_pbPrint_clicked())
-	{
-		drawpdf(CI_Data);
-	}*/
 }
 
 dlgPrint::~dlgPrint()
@@ -284,10 +276,8 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 	cairo_t *cr;
 	cairo_surface_t *imagefront;
 	cairo_surface_t *imageback;
+	cairo_surface_t *idphoto;
 	int w, h;
-
-	tFieldMap& PersonFields = CI_Data.m_PersonInfo.getFields();
-	tFieldMap& CardFields = CI_Data.m_CardInfo.getFields();
 
 	//// Create pdf with cairo
 	if (format == PDF)
@@ -317,6 +307,9 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 			CAIRO_FONT_WEIGHT_NORMAL);
 	cairo_set_font_size (cr, 12.0);
 	cairo_set_source_rgb(cr, 0, 0, 0);
+
+	tFieldMap& PersonFields = CI_Data.m_PersonInfo.getFields();
+	tFieldMap& CardFields = CI_Data.m_CardInfo.getFields();
 
 	//////////////////////////////ID FIELDS///////////////////////////
 	if (ui.chboxID->isChecked())
@@ -365,6 +358,11 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 		////Mother
 		cairo_move_to(cr, 20.0, 295.0);
 		cairo_show_text(cr, PersonFields[MOTHER].toStdString().c_str());
+
+		////Accidental Indications
+		cairo_move_to(cr, 20.0, 340.0);
+		cairo_show_text(cr, PersonFields[ACCIDENTALINDICATIONS].toStdString().c_str());
+
 	}
 
 	//////////////////////////////IDExtra FIELDS///////////////////////////
@@ -483,6 +481,26 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 		tFieldMap& PersoDataFields = CI_Data.m_PersoDataInfo.getFields();
 		cairo_move_to(cr, 20.0, 760.0);
 		cairo_show_text(cr, (QString::fromUtf8(PersoDataFields[PERSODATA_INFO].toStdString().c_str())).toStdString().c_str());
+	}
+
+	if (ui.chboxID->isChecked())
+	{
+		//Image
+		img = QImage();
+		img.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
+		QImage imgPicturescaled = img.scaled(150, 190);
+
+
+		idphoto = cairo_image_surface_create_for_data(img.bits(), CAIRO_FORMAT_RGB24, img.width(),
+													img.height(), img.bytesPerLine());
+
+		int w2 = cairo_image_surface_get_width (idphoto);
+		int h2 = cairo_image_surface_get_height (idphoto);
+
+		cairo_scale (cr, 160.0/w2, 220.0/h2);
+
+		cairo_set_source_surface(cr, idphoto, 1050, 110);
+		cairo_paint(cr);
 	}
 
 	if (format == PDF)
