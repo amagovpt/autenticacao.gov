@@ -87,20 +87,6 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
 	drawpdf(cdata, PDF ,pdffilepath.toStdString().c_str());
 
-	/*QPrinter	  printer;
- 	QPrintDialog* dialog = new QPrintDialog(&printer, this);
- 	dialog->setWindowTitle(tr("Print Document"));
-	if (ui.paperview->textCursor().hasSelection())
-	{
-		dialog->addEnabledOption(QAbstractPrintDialog::PrintSelection);
-	}
-	if (dialog->exec() != QDialog::Accepted)
-	{
-		return;
-	}
-
-	ui.paperview->print(&printer);
-	*/
 	done(0);
 }
 
