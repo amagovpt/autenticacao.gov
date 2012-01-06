@@ -764,7 +764,7 @@ public:
 		m_Fields[DOCUMENTTYPE]				= pteid_eid.getDocumentType();
 		m_Fields[ISSUINGENTITY]				= pteid_eid.getIssuingEntity();
 
-		fatherlen = strlen(pteid_eid.getGivenNameFather()) + strlen(pteid_eid.getSurnameFather()) + 1;
+		fatherlen = strlen(pteid_eid.getGivenNameFather()) + strlen(pteid_eid.getSurnameFather()) + 2;
 
 		char* father = new char[fatherlen];
 		strcpy(father, pteid_eid.getGivenNameFather());
@@ -773,7 +773,7 @@ public:
 
 		m_Fields[FATHER] = father;
 
-		motherlen = strlen(pteid_eid.getGivenNameMother()) + strlen(pteid_eid.getSurnameMother()) + 1;
+		motherlen = strlen(pteid_eid.getGivenNameMother()) + strlen(pteid_eid.getSurnameMother()) + 2;
 
 		char* mother = new char[motherlen];
 		strcpy(mother, pteid_eid.getGivenNameMother());
