@@ -598,6 +598,7 @@ public:
 	void Reset( void )
 	{
 		m_pPictureData.clear();
+		m_pPictureRaw.clear();
 	}
 	//----------------------------------------------
 	// retrieve data from EID card
@@ -605,20 +606,18 @@ public:
 	bool RetrieveData( PTEID_EIDCard& Card	)
 	{
 		bool					bRetVal = false;
-		//PTEID_Picture&			Picture = Card.getPicture();
-		//const unsigned char*	PictureData = Picture.getData().GetBytes();
 
-// 		qDebug() << "BiometricInfo::RetrieveData()";
-// 		qDebug() << "Retrieving picture...";
 		PTEID_EId& pteid_eid = Card.getID();
-		m_pPictureData = QByteArray((const char *)pteid_eid.getPhotoRaw().GetBytes(),pteid_eid.getPhotoRaw().Size());
+		m_pPictureRaw = QByteArray((const char *)pteid_eid.getPhotoRaw().GetBytes(),pteid_eid.getPhotoRaw().Size());
+		m_pPictureData = QByteArray((const char *)pteid_eid.getPhoto().GetBytes(),pteid_eid.getPhoto().Size());
 
 		bRetVal = true;
 		return bRetVal;
 	}
 
 public:
-	QByteArray m_pPictureData;			//!< picture on card
+	QByteArray m_pPictureData;			//!< picture on card in png format
+	QByteArray m_pPictureRaw;			//Raw picture in jp2k format
 };
 
 class PersoDataInfo
