@@ -29,6 +29,12 @@
 
 using namespace eIDMW;
 
+enum OutputFormat
+{
+	PDF,
+	PNG
+};
+
 dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUAGE lng, QString const& cardTypeText) 
 : QDialog(parent)
 , m_CI_Data(CI_Data)
@@ -68,7 +74,7 @@ dlgPrint::~dlgPrint()
 {
 }
 
-void dlgPrint::on_pbPrint_clicked( void )
+void dlgPrint::on_pbGeneratePdf_clicked( void )
 {
 	CardInformation cdata = m_CI_Data;
 	QString pdffilepath;
@@ -77,8 +83,9 @@ void dlgPrint::on_pbPrint_clicked( void )
 	defaultfilepath = QDir::homePath();
 	defaultfilepath.append("/CartaoCidadao.pdf");
 	pdffilepath = QFileDialog::getSaveFileName(this, tr("Save File"), defaultfilepath, tr("Pdf Files (*.pdf)"));
+	QCoreApplication::processEvents();
 
-	drawpdf(cdata, pdffilepath.toStdString().c_str());
+	drawpdf(cdata, PDF ,pdffilepath.toStdString().c_str());
 
 	/*QPrinter	  printer;
  	QPrintDialog* dialog = new QPrintDialog(&printer, this);
@@ -94,6 +101,26 @@ void dlgPrint::on_pbPrint_clicked( void )
 
 	ui.paperview->print(&printer);
 	*/
+	done(0);
+}
+
+void dlgPrint::on_pbPrint_clicked( void )
+{
+	CardInformation cdata = m_CI_Data;
+	QString defaultpngpath;
+
+	defaultpngpath = QDir::tempPath();
+	defaultpngpath.append("/CartaoCidadao.png");
+	drawpdf(cdata, PNG ,defaultpngpath.toStdString().c_str());
+	QPrinter printer;
+	QPrintDialog *dlg = new QPrintDialog(&printer,0);
+	if(dlg->exec() == QDialog::Accepted) {
+		QImage img (defaultpngpath);
+		QPainter painter(&printer);
+		painter.drawImage(QPoint(0,0),img);
+		painter.end();
+	}
+
 	done(0);
 }
 
@@ -265,7 +292,7 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 	return true;
 }
 
-void dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
+void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepath)
 {
 	cairo_surface_t *surface;
 	cairo_t *cr;
@@ -277,7 +304,13 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 	tFieldMap& CardFields = CI_Data.m_CardInfo.getFields();
 
 	//// Create pdf with cairo
-	surface = cairo_pdf_surface_create(filepath, 504, 648);
+	if (format == PDF)
+	{
+		surface = cairo_pdf_surface_create(filepath, 504, 648);
+	} else {
+		//PNG
+		surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 504, 648);
+	}
 
 	cr = cairo_create(surface);
 
@@ -466,9 +499,14 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 		cairo_show_text(cr, (QString::fromUtf8(PersoDataFields[PERSODATA_INFO].toStdString().c_str())).toStdString().c_str());
 	}
 
-	//Page 1
-	cairo_show_page(cr);
-
+	if (format == PDF)
+	{
+		//PDF Page 1
+		cairo_show_page(cr);
+	} else {
+		//PNG write
+		cairo_surface_write_to_png(surface, filepath);
+	}
 	cairo_surface_destroy(surface);
 	cairo_destroy(cr);
 	done(0);

@@ -32,6 +32,7 @@ class dlgPrint : public QDialog
 
 private slots:
 	void on_pbPrint_clicked( void );
+	void on_pbGeneratePdf_clicked( void );
 	void on_pbCancel_clicked( void );
 	void on_chboxID_toggled( bool bChecked );
 	void on_chboxAddress_toggled( bool bChecked );
@@ -51,7 +52,7 @@ private:
 
 	bool addressPINRequest_triggered(CardInformation& CI_Data);
 	bool persodata_triggered(CardInformation& CI_Data);
-	void drawpdf(CardInformation& CI_Data, const char *filepath);
+	void drawpdf(CardInformation& CI_Data, int format, const char *filepath);
 };
 
 #endif
