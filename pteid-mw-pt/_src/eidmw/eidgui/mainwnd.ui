@@ -370,18 +370,31 @@
          <bool>true</bool>
         </property>
        </widget>
-       <zorder>lblIdentity_ImgPerson</zorder>
-       <zorder>txtIdentity_GivenNames</zorder>
-       <zorder>txtIdentity_Name</zorder>
-       <zorder>txtIdentity_Sex</zorder>
-       <zorder>txtIdentity_Height</zorder>
-       <zorder>txtIdentity_Country</zorder>
-       <zorder>txtIdentity_Nationality</zorder>
-       <zorder>txtIdentity_BirthDate</zorder>
-       <zorder>txtIdentity_Parents_Father</zorder>
-       <zorder>txtIdentity_DocumentNumber</zorder>
-       <zorder>txtIdentity_ValidUntil</zorder>
-       <zorder>txtIdentity_Parents_Mother</zorder>
+       <widget class="QLineEdit" name="txtIdentity_AccidentalIndications">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>400</y>
+          <width>381</width>
+          <height>61</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>240</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="page_IdentityExtra">
        <property name="styleSheet">
