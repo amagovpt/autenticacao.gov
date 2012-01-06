@@ -40,25 +40,27 @@ dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUA
 , m_CI_Data(CI_Data)
 , m_CurrReaderName("")
 {	
-	ui.setupUi(this);
-	const QIcon Ico = QIcon( ":/images/Images/Icons/Print.png" );
-	this->setWindowIcon( Ico );
-
-	QDesktopWidget* desktop = QApplication::desktop();
-	int screenNr = desktop->screenNumber();
-	QRect rect = desktop->availableGeometry(screenNr);
-	int height = rect.height();
-
-	int thiswidth = this->width();
-	int thisheight = this->height();
-
-	if (thisheight > height)
+	if (CI_Data.isDataLoaded())
 	{
-		this->resize(thiswidth,height-20); //make sure the window fits
-	}
 
-	QTextBlockFormat textBlockFormat;
-	textBlockFormat.setLeftMargin ( 100 );
+		ui.setupUi(this);
+		const QIcon Ico = QIcon( ":/images/Images/Icons/Print.png" );
+		this->setWindowIcon( Ico );
+
+		QDesktopWidget* desktop = QApplication::desktop();
+		int screenNr = desktop->screenNumber();
+		QRect rect = desktop->availableGeometry(screenNr);
+		int height = rect.height();
+
+		int thiswidth = this->width();
+		int thisheight = this->height();
+
+		if (thisheight > height)
+		{
+			this->resize(thiswidth,height-20); //make sure the window fits
+		}
+
+	}
 
 }
 
@@ -360,7 +362,7 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 		cairo_show_text(cr, PersonFields[MOTHER].toStdString().c_str());
 
 		////Accidental Indications
-		cairo_move_to(cr, 20.0, 340.0);
+		cairo_move_to(cr, 20.0, 335.0);
 		cairo_show_text(cr, PersonFields[ACCIDENTALINDICATIONS].toStdString().c_str());
 
 	}
