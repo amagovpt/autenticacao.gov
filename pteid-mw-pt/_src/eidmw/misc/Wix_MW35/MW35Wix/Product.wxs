@@ -11,7 +11,7 @@
   <?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
   <?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F20$(var.RevisionNumber)}?>
   <?define var.ProductGuidGeneric ={824563DE-75AD-4166-9DC0-B6482F2?????}?>
-  <!--<?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F2DED5A})?>-->
+  <!--<?define var.ProductGuid ={824563DE-75AD-4166p-9DC0-B6482F2DED5A})?>-->
   <?define var.ProductName =Portugal e-ID middleware $(var.OfficialProductVersion) (build $(var.RevisionNumber))?>
 
   <?define var.PackageCode="*"?>
@@ -104,21 +104,21 @@
     <Icon Id="eid.ico" SourceFile="..\..\..\eidgui\eid.ico"/>
     
     <Property Id="ARPPRODUCTICON" Value="eid.ico" />
-    <Property Id="ARPURLINFOABOUT" Value="http://eid.portugal.be"/>
+    <Property Id="ARPURLINFOABOUT" Value="http://www.cartaodecidadao.pt"/>
     
     <Property Id="ALLUSERS" Value="1" />
 
     <Directory Id="TARGETDIR" Name="SourceDir">
 
       <Directory Id="ProgramMenuFolder" Name="Menu">
-        <Directory Id="ApplicationProgramsFolder" Name="Portugal - eID">
+        <Directory Id="ApplicationProgramsFolder" Name="Cartão de Cidadão">
           <Directory Id="ApplicationProgramsFolderUtilities" Name="Utilities"/>
         </Directory>
       </Directory>
 
       <Directory Id="ProgramFilesFolder">
         <Directory Id="APPLICATIONROOTFOLDER" Name="Portugal Identity Card">
-          <Directory Id="IMAGEFORMATS" Name="imageformats" />
+         <!-- <Directory Id="IMAGEFORMATS" Name="imageformats" /> -->
           <Directory Id="EIDSTORE" Name="eidstore">
             <Directory Id="CERTSDIR" Name="certs"/>
             <Directory Id="CRLDIR" Name="crl">
@@ -204,13 +204,15 @@
       </Component>
     </DirectoryRef>
 
+    <!--
     <DirectoryRef Id="IMAGEFORMATS">
       <Component Id="QtPlugin" Guid="{7389D5A9-429D-4799-9B68-FD64FA5A463F}" SharedDllRefCount="yes">
-        <File Id="qjpeg4.dll" Name="qjpeg4.dll" KeyPath="yes" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\plugins\imageformats\qjpeg4.dll" />
-		<File Id="qtjp22.dll" Name="qtjp22.dll" KeyPath="no" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\plugins\imageformats\qtjp22.dll" />
+      <File Id="qjpeg4.dll" Name="qjpeg4.dll" KeyPath="yes" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\plugins\imageformats\qjpeg4.dll" />
+		  <File Id="qtjp22.dll" Name="qtjp22.dll" KeyPath="no" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\plugins\imageformats\qtjp22.dll" /> 
 
       </Component>
     </DirectoryRef>
+    -->
 
     <DirectoryRef Id="LOGDIR">
       <Component Id="LogDir" Guid="{A300DA04-F8DF-4506-B654-1E5EB2782DF3}" KeyPath="yes">
@@ -385,6 +387,7 @@
         <File Id="eid.ico" Name="eid.ico" KeyPath="yes" Source="..\..\..\eidgui\eid.ico" />
       </Component>
       
+      <!-- It needs NSI to build from Source -->
       <Component Id="OutlookTool" Guid="{F36A543C-CB17-4D91-BF0C-2EAEFEC3CB3A}">
         <File Id="pteidoutlooksnc.exe" Name="pteidoutlooksnc.exe" KeyPath="yes" Source="..\..\..\misc\setup_win\pteidoutlooksnc.exe" />
       </Component>
@@ -399,6 +402,16 @@
         <File Id="eidmw_nl.qm" Name="eidmw_nl.qm" KeyPath="no" Source="..\..\..\eidgui\eidmw_nl.qm" />
         <File Id="eidmw_fr.qm" Name="eidmw_fr.qm" KeyPath="no" Source="..\..\..\eidgui\eidmw_fr.qm" />
         <File Id="eidmw_de.qm" Name="eidmw_de.qm" KeyPath="no" Source="..\..\..\eidgui\eidmw_de.qm" />
+      </Component>
+
+      <!--Cairo and its dependencies: needed for the PDF export function -->
+      <Component Id="Cairo" Guid="{DF770DAC-0151-49ea-890A-6E47C664F74E}" SharedDllRefCount="yes">
+        <File Id="libcairo2.dll" Name="libcairo-2.dll" KeyPath="yes" Source="..\..\..\..\ThirdParty\cairo\bin\libcairo-2.dll" ></File>
+        <File Id="libfreetype6.dll" Name="freetype6.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\freetype6.dll" ></File>
+        <File Id="libpng12.dll" Name="libpng14-14.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\libpng14-14.dll" ></File>
+        <File Id="libfontconfig1.dll" Name="libfontconfig-1.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\libfontconfig-1.dll" ></File>
+        <File Id="libexpat1.dll" Name="libexpat-1.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\libexpat-1.dll" ></File>
+        <File Id="zlib1.dll" Name="zlib1.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\zlib1.dll" ></File>
       </Component>
 
       <Component Id="Qt" Guid="{AF5AF018-EE70-4EA9-98BA-9C2947F19060}" SharedDllRefCount="yes">
@@ -477,12 +490,9 @@
         <File Id="pteidpkcs11.dll" Name="pteidpkcs11.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteidpkcs11.dll" />
         <File Id="PortugalIdentityCardPKCS11.dll" Name="Portugal Identity Card PKCS11.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\Portugal Identity Card PKCS11.dll" />
       </Component>
-
-      <Component Id="PTeIDWin32CertificateImport" Guid="{1075DAF9-9765-4e03-9FA2-F6899B7AD8E2}">
-        <File Id="PTeIDWin32CertificateImport.exe" Name="PTeIDWin32CertificateImport.exe" KeyPath="yes" Source="..\..\..\_Binaries35\Release\PTeIDWin32CertificateImport.exe" />
-      </Component>
-		
+    
     </DirectoryRef>
+    <Binary Id="PTeIDWin32CertificateImport" SourceFile="..\..\..\_Binaries35\Release\PTeIDWin32CertificateImport.exe" />
 	
 
     <DirectoryRef Id="PTEIDPPDIR">
@@ -608,12 +618,12 @@
     <DirectoryRef Id="ApplicationProgramsFolder">
       <Component Id="PteidGuiShortcut" Guid="{CBD0F388-EAE5-4FA1-8C38-EC223928FF13}">
         <Shortcut Id="PteidGuiStartMenuShortcut"
-                  Name="eID-Viewer"
+                  Name="Cartão de Cidadão"
                   Description="!(loc.PteidGuiDescr)"
                   Target="[APPLICATIONROOTFOLDER]pteid35gui.exe"
                   WorkingDirectory="APPLICATIONROOTFOLDER"/>
         <Shortcut Id="EidViewerShortcut"
-                  Name="eID-Viewer"
+                  Name="Cartão de Cidadão"
                   Directory="DesktopFolder"
                   Description="!(loc.PteidGuiDescr)"
                   Target="[APPLICATIONROOTFOLDER]pteid35gui.exe"
@@ -693,8 +703,10 @@
                 Level="1"
                 >
         <ComponentRef Id="GUI" />
+        <ComponentRef Id="FreeImage"/>
+        <ComponentRef Id="Cairo"/>
         <ComponentRef Id="Qt" />
-        <ComponentRef Id="QtPlugin"/>
+        <!-- <ComponentRef Id="QtPlugin"/> -->
         <ComponentRef Id="GuiLang" />
         <!-- Shortcuts -->
         <ComponentRef Id="PteidGuiShortcut"/>
@@ -703,8 +715,7 @@
       <Feature Id="Crypto"
                 Title="!(loc.Crypto)"
                 Description="!(loc.CryptoDescr)"
-                Level="1"
-                >
+                Level="1">
         <ComponentRef Id="SCardSvrService"/>
         <ComponentRef Id="pkcs11"/>
 		<ComponentRef Id="REGISTERXPI"/>
@@ -875,14 +886,6 @@
       <Custom Action="StopGui35_Remove"       Before="RemoveFiles">1</Custom>
       <Custom Action="StopXSign35_Remove"     Before="RemoveFiles">1</Custom>
 -->
-      <Custom Action="IsQuietMode"><![CDATA[UILevel<5 OR NOT UILevel]]></Custom>
-      <Custom Action="NotIsQuietMode" ><![CDATA[UILevel>=5]]></Custom>
-
-      <Custom Action="LogCleanup" >CLEANUP_LOG</Custom>
-      <Custom Action="NotLogCleanup" >NOT CLEANUP_LOG</Custom>
-     
-      <Custom Action="ForceCleanup" >CLEANUP_FORCE=1</Custom>
-		<Custom Action="NotForceCleanup"><![CDATA[CLEANUP_FORCE<>1 OR NOT CLEANUP_FORCE]]></Custom>
       
       <Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
 	  <Custom Action="CertificateRegistration" After="InstallFiles">NOT Installed</Custom>
