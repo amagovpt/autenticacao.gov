@@ -122,15 +122,14 @@ bool APL_EidFile_Trace::MapFields()
 	unsigned long ulLen=0;
 	CTLVBuffer oTLVBuffer;
     oTLVBuffer.ParseTLV(m_data.GetBytes(), m_data.Size());
+    CByteArray Validation;
 
 	//Card Validation
     pteidngtraceBuffer = m_data.GetBytes(PTEIDNG_FIELD_TRACE_POS_VALIDATION, PTEIDNG_FIELD_TRACE_LEN_VALIDATION);
-    pteidngtraceBuffer.TrimRight(' ');
-    m_Validation.assign((char*)(pteidngtraceBuffer.GetBytes()), pteidngtraceBuffer.Size());
+    pteidngtraceBuffer.TrimRight('\0');
+    Validation = pteidngtraceBuffer;
 
-    //TODO: MARTINHO ANALISAR ESTA SITUACAO
-
-    if (m_Validation == "$")
+    if (Validation.ToString() == "01")
     	m_Validation = "O Cartão de Cidadão encontra-se activo";
     else
     	m_Validation = "O Cartão de Cidadão não encontra-se activo";
