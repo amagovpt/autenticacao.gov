@@ -69,7 +69,8 @@
 	</Target>
 	-->
   <PropertyGroup>
-    <PostBuildEvent>..\..\multi-lang.cmd $(Configuration)</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
     <PreBuildEvent>..\..\clean.cmd $(Configuration) en-us</PreBuildEvent>
   </PropertyGroup>
 </Project>
