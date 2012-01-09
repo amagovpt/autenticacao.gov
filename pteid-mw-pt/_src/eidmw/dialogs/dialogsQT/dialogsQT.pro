@@ -24,7 +24,7 @@ INSTALLS += target
 ### Compiler setup
 ###
 
-CONFIG -= warn_on qt
+CONFIG -= warn_on qt no_lflags_merge
 DEPENDPATH += .
 INCLUDEPATH += . ../../common 
 
