@@ -23,7 +23,7 @@ OBJECT_DIR = ..
 ###
 ### Compiler setup
 ###
-CONFIG -= qt warn_on no_lflags_merge
+CONFIG -= qt warn_on
 
 
 ## destination directory for the compiler
