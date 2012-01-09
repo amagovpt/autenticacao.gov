@@ -3150,9 +3150,6 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 		m_imgPicture = QPixmap::fromImage(imgPicturescaled);
 		clearTabCertificates();
 		clearTabAddress();
-#define TYPE_PINTREE_ITEM 0
-#define COLUMN_PIN_NAME   0
-
 		clearTabPins();
 		fillPinList( Card );
 		fillSoftwareInfo();
@@ -3170,9 +3167,6 @@ void MainWnd::LoadDataAddress(PTEID_EIDCard& Card)
 	{
 		clearTabCertificates();
 		clearTabAddress();
-
-#define TYPE_PINTREE_ITEM 0
-#define COLUMN_PIN_NAME   0
 
 		clearTabPins();
 		fillPinList( Card );
@@ -3200,6 +3194,9 @@ void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 	fillCertificateList();
 	
 }
+
+#define TYPE_PINTREE_ITEM 0
+#define COLUMN_PIN_NAME   0
 
 //*****************************************************
 // fill the PIN list on the window
@@ -4526,7 +4523,7 @@ void MainWnd::on_actionE_xit_triggered(void)
 void MainWnd::setEventCallbacks( void )
 {
 	//----------------------------------------
-	// for all the reader, create a callback such we can know
+	// for all the readers, create a callback such we can know
 	// afterwards, which reader called us
 	//----------------------------------------
 	try
