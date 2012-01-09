@@ -28,7 +28,12 @@ fi
 
 if [ $QT4DIR != "" ]
 then
-./configure --prefix=${QT4DIR}/.. CONFIG=release CONFIG+=no_lflags_merge --lib+=-L${QT4DIR}/../lib --include+=${QT4DIR}/../include/Qt --include+=$JAVAINCPATH --include+=$JAVAINCPATH/linux  BUILD_SDK=1
+    if [[ $ARCH -eq "x86_64" ]]
+    then
+	./configure --prefix=${QT4DIR}/.. CONFIG=release CONFIG+=no_lflags_merge --lib+=-L${QT4DIR}/../lib64 --include+=${QT4DIR}/../include/Qt --include+=$JAVAINCPATH --include+=$JAVAINCPATH/linux  BUILD_SDK=1
+    else
+    ./configure --prefix=${QT4DIR}/.. CONFIG=release CONFIG+=no_lflags_merge --lib+=-L${QT4DIR}/../lib --include+=${QT4DIR}/../include/Qt --include+=$JAVAINCPATH --include+=$JAVAINCPATH/linux  BUILD_SDK=1
+    fi
 else
 ./configure CONFIG=release CONFIG+=no_lflags_merge --include+=/usr/include/Qt --include+=/usr/include/QtGui --include+=$JAVAINCPATH --include+=$JAVAINCPATH/linux  BUILD_SDK=1
 fi
