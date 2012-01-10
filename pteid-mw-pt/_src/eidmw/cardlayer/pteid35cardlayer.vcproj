@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="cardlayer"
 	ProjectGUID="{C7DE2B79-F890-4ACB-804A-BDD14E1A9CAE}"
 	RootNamespace="pteidcardlayer"
@@ -360,14 +360,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\cardpluginPteid\PteidCard.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cardpluginPteid\PteidP15Correction.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Cache.cpp"
 				>
 			</File>
@@ -424,19 +416,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cardpluginPteid\PteidCard.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\cardpluginPteid\PteidP15Correction.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Reader.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\ReadersInfo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cardpluginSIS\SISCard.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cardpluginSIS\SISPluginHandler.cpp"
 				>
 			</File>
 			<File
@@ -453,14 +445,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\cardpluginPteid\PteidCard.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cardpluginPteid\PteidP15Correction.h"
-				>
-			</File>
 			<File
 				RelativePath=".\Cache.h"
 				>
@@ -534,6 +518,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cardpluginPteid\PteidCard.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cardpluginPteid\PteidP15Correction.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Reader.h"
 				>
 			</File>
@@ -554,18 +546,6 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\cardpluginSIS\SISCard.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cardpluginSIS\SISplugin1.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cardpluginSIS\SISPluginHandler.h"
-				>
 			</File>
 			<File
 				RelativePath=".\ThreadPool.h"
