@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/images">
-        <file>Images/Background_ForeignersBack.jpg</file>
-        <file>Images/Background_ForeignersFront.jpg</file>
         <file>Images/Background_IDBack.jpg</file>
         <file>Images/Background_IDFront.jpg</file>
         <file>Images/Female.png</file>
