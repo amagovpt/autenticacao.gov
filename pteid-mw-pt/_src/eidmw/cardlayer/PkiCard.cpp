@@ -591,7 +591,13 @@ CByteArray CPkiCard::UpdateBinary(unsigned long ulOffset, const CByteArray & oDa
 						  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,};
 
 	oDataVoid.Append(a, sizeof(a));
-	SendAPDU(0xD6, 0x00, 0x0F, oDataVoid);
+	SendAPDU(0xD6, 0x00, 0x00, oDataVoid);
+	CByteArray oDatanew;
+	oDatanew.ClearContents();
+	oDatanew.Append(oData);
+	oDatanew.Append(oDataVoid);
+
+	std::cout << "ulOffset, " << ulOffset << std::endl;
 
 	return SendAPDU(0xD6, (unsigned char) (ulOffset / 256),
 		        (unsigned char) (ulOffset % 256), oData);

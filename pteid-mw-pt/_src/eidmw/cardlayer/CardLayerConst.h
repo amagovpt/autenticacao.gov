@@ -68,8 +68,7 @@ typedef enum
 typedef enum
 {
     CARD_PTEID,
-    CARD_SIS,
-	CARD_UNKNOWN,
+    CARD_UNKNOWN,
 } tCardType;
 
 typedef enum
