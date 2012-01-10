@@ -1469,10 +1469,23 @@ bool APL_CCXML_Doc::isAllowed()
 CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
 {
 	CByteArray xml;
+	string *ts, *sn, *sa;
+	string rootATTRS;
+
+	ts = m_xmlUserRequestedInfo->getTimeStamp();
+	sn = m_xmlUserRequestedInfo->getServerName();
+	sa = m_xmlUserRequestedInfo->getServerAddress();
 
 	if(!bNoHeader)
 		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-	xml+=XML_OPEN_TAG_NEWLINE(XML_ROOT_ELEMENT);
+	if (ts && sn && sa){
+		xml+=XML_ROOT_S;
+		XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_TIMESTAMP,ts->c_str());
+		XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_SERVERNAME,sn->c_str());
+		XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_SERVERADDRESS,sa->c_str());
+		xml+=XML_ROOT_E;
+	} else
+		xml+=XML_OPEN_TAG_NEWLINE(XML_ROOT_ELEMENT);
 	xml+=m_card->getID().getXML(true,*m_xmlUserRequestedInfo);
 	xml+=m_card->getAddr().getXML(true, *m_xmlUserRequestedInfo);
 	xml+=m_card->getPersonalNotes().getXML(true, *m_xmlUserRequestedInfo);
@@ -1500,12 +1513,29 @@ CByteArray APL_CCXML_Doc::getTLV(){
 APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo()
 {
 	xmlSet = new set<enum XMLUserData>;
+	_serverName = NULL;
+	_serverAddress = NULL;
+	_timeStamp = NULL;
+}
+
+APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress)
+{
+	xmlSet = new set<enum XMLUserData>;
+	_timeStamp = new string(timeStamp);
+	_serverName = new string(serverName);
+	_serverAddress = new string(serverAddress);
 }
 
 APL_XmlUserRequestedInfo::~APL_XmlUserRequestedInfo()
 {
 	if (xmlSet)
 		delete xmlSet;
+	if (_timeStamp)
+		delete _timeStamp;
+	if (_serverAddress)
+		delete _serverAddress;
+	if (_serverName)
+		delete _serverName;
 }
 
 void APL_XmlUserRequestedInfo::add(XMLUserData xmlUData)
@@ -1536,6 +1566,18 @@ bool APL_XmlUserRequestedInfo::checkAndRemove(XMLUserData xmlUData)
 
 bool APL_XmlUserRequestedInfo::isEmpty(){
 	return xmlSet->empty();
+}
+
+std::string* APL_XmlUserRequestedInfo::getTimeStamp(){
+	return _timeStamp;
+}
+
+std::string* APL_XmlUserRequestedInfo::getServerName(){
+	return _serverName;
+}
+
+std::string* APL_XmlUserRequestedInfo::getServerAddress(){
+	return _serverAddress;
 }
 
 

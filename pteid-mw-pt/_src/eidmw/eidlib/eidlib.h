@@ -683,6 +683,7 @@ class PTEID_XmlUserRequestedInfo : public PTEID_Object
 {
 public:
     PTEIDSDK_API PTEID_XmlUserRequestedInfo();
+    PTEIDSDK_API PTEID_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress);
 	PTEIDSDK_API virtual ~PTEID_XmlUserRequestedInfo();			/**< Destructor */
 	PTEIDSDK_API void add(XMLUserData xmlUData);		/**< add string */
 

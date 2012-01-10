@@ -13,6 +13,9 @@ namespace eIDMW
 {
 
 #define XML_ROOT_ELEMENT 					"ccpt"
+#define XML_ROOT_ELEMENT_ATTR_TIMESTAMP		"timestamp"
+#define XML_ROOT_ELEMENT_ATTR_SERVERNAME	"servername"
+#define XML_ROOT_ELEMENT_ATTR_SERVERADDRESS	"serveraddress"
 #define XML_PHOTO_ELEMENT 					"photo"
 #define XML_BASIC_INFO_ELEMENT				"basicInformation"
 #define XML_NAME_ELEMENT					"name"
@@ -68,6 +71,14 @@ namespace eIDMW
 #define XML_OPEN_TAG(tag) "<" tag ">"
 #define XML_OPEN_TAG_NEWLINE(tag) "<" tag ">\n"
 #define XML_CLOSE_TAG(tag) "</" tag ">\n"
+
+#define XML_ATTRIBUTE(container,attributename, data) \
+	container+=attributename; \
+	container+="=\""; \
+	container+=data; \
+	container+="\" ";
+#define XML_ROOT_S "<" XML_ROOT_ELEMENT " "
+#define XML_ROOT_E ">\n"
 
 #define BUILD_XML_ELEMENT(container, tag, data) \
 	container+=XML_OPEN_TAG(tag); \

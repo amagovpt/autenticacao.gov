@@ -496,6 +496,7 @@ class APL_XmlUserRequestedInfo
 {
 public:
 	EIDMW_APL_API APL_XmlUserRequestedInfo();
+	EIDMW_APL_API APL_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress);
 	EIDMW_APL_API ~APL_XmlUserRequestedInfo();
 	EIDMW_APL_API void add(XMLUserData xmlUData);
 
@@ -504,6 +505,9 @@ protected:
 	void remove(XMLUserData xmlUData);
 	bool checkAndRemove(XMLUserData xmlUData);
 	bool isEmpty();
+	std::string *getTimeStamp();
+	std::string *getServerName();
+	std::string *getServerAddress();
 friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader);
 friend CByteArray APL_DocEId::getXML(bool bNoHeader);
 friend CByteArray APL_AddrEId::getXML(bool bNoHeader);
@@ -511,6 +515,9 @@ friend CByteArray APL_PersonalNotesEId::getXML(bool bNoHeader);
 
 private:
 	std::set<enum XMLUserData> *xmlSet;
+	std::string *_timeStamp;
+	std::string *_serverName;
+	std::string *_serverAddress;
 };
 
 /******************************************************************************//**
