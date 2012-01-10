@@ -118,18 +118,10 @@ HEADERS +=../cardlayer/Cache.h \
 ## be able to parse the project file correctly!
 contains(PKG_NAME,pteid): HEADERS +=  ../pcscEmulation/EmulationPteidCard.h \
          			../cardlayer/cardpluginPteid/PteidCard.h \
-          			../cardlayer/cardpluginPteid/PteidP15Correction.h \
-          			../cardlayer/cardpluginSIS/SISCard.h \
-          			../cardlayer/cardpluginSIS/SISPluginHandler.h \
-          			../cardlayer/cardpluginSIS/SISplugin1.h \
-          			../pcscEmulation/EmulationSISCard.h 
+          			../cardlayer/cardpluginPteid/PteidP15Correction.h
 
 contains(PKG_NAME,pteid): SOURCES +=  ../pcscEmulation/EmulationPteidCard.cpp \
 	           		../cardlayer/cardpluginPteid/PteidCard.cpp \
-        	   		../cardlayer/cardpluginPteid/PteidP15Correction.cpp \
-           			../cardlayer/cardpluginSIS/SISCard.cpp \
-			        ../cardlayer/cardpluginSIS/SISPluginHandler.cpp \
-			        ../pcscEmulation/EmulationSISCard.cpp 
+        	   		../cardlayer/cardpluginPteid/PteidP15Correction.cpp
 
-contains(PKG_NAME,pteid): INCLUDEPATH +=../cardlayer/cardpluginPteid \
-					../cardlayer/cardpluginSIS
+contains(PKG_NAME,pteid): INCLUDEPATH +=../cardlayer/cardpluginPteid
