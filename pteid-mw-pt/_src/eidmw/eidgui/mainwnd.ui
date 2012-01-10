@@ -2480,17 +2480,6 @@ background-image: url(:/images/Images/alpha.png);</string>
     <string>&amp;Identity Card</string>
    </property>
   </action>
-  <action name="actionSIS_Card">
-   <property name="text">
-    <string>SIS Card</string>
-   </property>
-   <property name="iconText">
-    <string>SIS Card</string>
-   </property>
-   <property name="toolTip">
-    <string>SIS Card</string>
-   </property>
-  </action>
   <action name="actionKids_Card">
    <property name="text">
     <string>Kids Card</string>
