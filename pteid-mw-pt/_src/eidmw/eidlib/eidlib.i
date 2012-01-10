@@ -484,7 +484,6 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 	switch(cardType)
 	{
 	case PTEID_CardType.PTEID_CARDTYPE_EID:			
-	case PTEID_CardType.PTEID_CARDTYPE_KIDS:
 	case PTEID_CardType.PTEID_CARDTYPE_FOREIGNER:
 		return getEIDCard();			
 
@@ -504,9 +503,6 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 		PTEID_EIDCard ret = new PTEID_EIDCard($imcall, false);	
 		$excode
 		return ret;
-
-	case PTEID_CardType.PTEID_CARDTYPE_KIDS:			
-		return getKidsCard();		
 
 	case PTEID_CardType.PTEID_CARDTYPE_FOREIGNER:		
 		return getForeignerCard();	
@@ -829,7 +825,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") getCardType 		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getCard			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getEIDCard		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getKidsCard		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getForeignerCard	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") BeginTransaction	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") EndTransaction	JAVA_CODE_THROW
@@ -894,9 +889,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") getRawData_PersoData	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getRawData_Trace		JAVA_CODE_THROW
 
-//------------------------------------------------------------
-// class PTEID_KidsCard : none
-//------------------------------------------------------------
 //------------------------------------------------------------
 // class PTEID_ForeignerCard : none
 //------------------------------------------------------------

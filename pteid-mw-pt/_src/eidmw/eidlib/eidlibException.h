@@ -141,7 +141,6 @@ public:
   * Used in : - PTEID_ReaderContext::getCardType()
   *           - PTEID_ReaderContext::getCard()
   *           - PTEID_ReaderContext::getEIDCard()
-  *           - PTEID_ReaderContext::getKidsCard()
   *           - PTEID_ReaderContext::getForeignerCard()
   *********************************************************************************/
 class PTEID_ExNoCardPresent: public PTEID_Exception
@@ -156,7 +155,6 @@ public:
   *
   *	Throw when the card type doesn't correspond to what is asked
   * Used in : - PTEID_ReaderContext::getEIDCard()
-  *           - PTEID_ReaderContext::getKidsCard()
   *           - PTEID_ReaderContext::getForeignerCard()
   *********************************************************************************/
 class PTEID_ExCardBadType: public PTEID_Exception

@@ -1068,17 +1068,6 @@ const PTEID_ByteArray& PTEID_EIDCard::getRawData_Response()
 }
 
 /*****************************************************************************************
----------------------------------------- PTEID_KidsCard -----------------------------------------
-*****************************************************************************************/
-PTEID_KidsCard::PTEID_KidsCard(const SDK_Context *context,APL_Card *impl):PTEID_EIDCard(context,impl)
-{
-}
-
-PTEID_KidsCard::~PTEID_KidsCard()
-{
-}
-
-/*****************************************************************************************
 ---------------------------------------- PTEID_ForeignerCard -----------------------------------------
 *****************************************************************************************/
 PTEID_ForeignerCard::PTEID_ForeignerCard(const SDK_Context *context,APL_Card *impl):PTEID_EIDCard(context,impl)

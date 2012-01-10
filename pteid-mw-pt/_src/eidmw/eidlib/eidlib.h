@@ -291,7 +291,6 @@ private:
 
 class PTEID_Card;
 class PTEID_EIDCard;
-class PTEID_KidsCard;
 class PTEID_ForeignerCard;
 
 /******************************************************************************//**
@@ -301,7 +300,7 @@ class PTEID_ForeignerCard;
   * Once you have a reader object, you can check if a card is present (isCardPresent).
   * Then you can ask which type of card is in the reader with getCardType()
   *		and then get a card object using one of this method :
-  *			getCard, getEIDCard, getKidsCard or getForeignerCard.
+  *			getCard, getEIDCard or getForeignerCard.
   *********************************************************************************/
 class PTEID_ReaderContext : public PTEID_Object
 {
@@ -360,7 +359,7 @@ public:
 	/**
 	 * Get the card in the reader.
 	 *		Instantiation is made regarding the type of the card
-	 *			(PTEID_EIDCard, PTEID_KidsCard or PTEID_ForeignerCard).
+	 *			(PTEID_EIDCard or PTEID_ForeignerCard).
 	 *
 	 * If no card is present in the reader, exception PTEID_ExNoCardPresent is thrown.
 	 * If the card type is not supported, exception PTEID_ExCardTypeUnknown is thrown.
@@ -370,20 +369,12 @@ public:
 	/**
 	 * Get the EIDcard in the reader.
 	 *		Instantiation is made regarding the type of the card
-	 *			(PTEID_EIDCard, PTEID_KidsCard, PTEID_ForeignerCard).
+	 *			(PTEID_EIDCard or PTEID_ForeignerCard).
 	 *
 	 * If no card is present in the reader, exception PTEID_ExNoCardPresent is thrown.
 	 * If the card is not an EIDcard, exception PTEID_ExCardBadType is thrown.
 	 */
     PTEIDSDK_API PTEID_EIDCard &getEIDCard();
-
- 	/**
-	 * Get the KidsCard in the reader.
-	 *
-	 * If no card is present in the reader, exception PTEID_ExNoCardPresent is thrown.
-	 * If the card is not a KidsCard, exception PTEID_ExCardBadType is thrown.
-	 */
-	PTEIDSDK_API PTEID_KidsCard &getKidsCard();
 
  	/**
 	 * Get the ForeignerCard in the reader.
@@ -711,26 +702,6 @@ private:
 	PTEID_XmlUserRequestedInfo(const PTEID_XmlUserRequestedInfo& info); /**< Copy not allowed - not implemented */
 	PTEID_XmlUserRequestedInfo& operator= (const PTEID_XmlUserRequestedInfo& xmlUserRequestedInfo);	/**< Copy not allowed - not implemented */
 friend PTEID_CCXML_Doc& PTEID_EIDCard::getXmlCCDoc(PTEID_XmlUserRequestedInfo& userRequestedInfo);
-};
-
-class APL_KidsCard;
-
-/******************************************************************************//**
-  * This class represents a Kids card which is a particular PTEID_EIDCard.
-  * To get such an object you have to ask it from the ReaderContext.
-  *********************************************************************************/
-class PTEID_KidsCard : public PTEID_EIDCard
-{
-public:
-	PTEIDSDK_API virtual ~PTEID_KidsCard();				/**< Destructor */
-
-private:
-	PTEID_KidsCard(const PTEID_KidsCard& card);				/**< Copy not allowed - not implemented */
-	PTEID_KidsCard& operator= (const PTEID_KidsCard& card);	/**< Copy not allowed - not implemented */
-
-	PTEID_KidsCard(const SDK_Context *context,APL_Card *impl);/**< For internal use : Constructor */
-
-friend PTEID_Card &PTEID_ReaderContext::getCard();			/**< For internal use : This method must access protected constructor */
 };
 
 class APL_ForeignerCard;
