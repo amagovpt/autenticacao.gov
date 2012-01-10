@@ -66,7 +66,6 @@ enum eCARD_BASETYPE
 	  BASETYPE_BELGIUM = 1
 	, BASETYPE_KIDS	   = 6
 	, BASETYPE_FOREIGNER = 11
-	, BASETYPE_SIS = 99
 };
 
 	//----------------------------------------------
@@ -115,27 +114,6 @@ enum eCARD_BASETYPE
 		return bRetVal;
 
 	}
-	//----------------------------------------------
-	// Retrieve the card specific data 
-	//----------------------------------------------
-	bool RetrieveData(PTEID_SISCard& Card)
-	{
-		bool bRetVal = false;
-		PTEID_SisId& pteid_sisid	= Card.getID();
-
-		m_Fields[CARD_TYPE]			= "99";
-		m_Fields[CARD_NUMBER]		=  pteid_sisid.getLogicalNumber();
-		m_Fields[CARD_VALIDFROM]	=  pteid_sisid.getValidityBeginDate();
-		m_Fields[CARD_VALIDUNTIL]	=  pteid_sisid.getValidityEndDate();
-
-// 		qDebug() << "CardInfo::RetrieveData()";
-// 		for (tFieldMap::iterator it=m_Fields.begin(); it!=m_Fields.end(); it++)
-// 		{
-// 			qDebug() << "[" << it.key() << "] = " << "Value: " << it.value();
-// 		}
-		bRetVal = true;
-		return bRetVal;
-	}
 
 	//----------------------------------------------
 	// get reference to all fields
@@ -168,9 +146,6 @@ enum eCARD_BASETYPE
 			case 17:
 			case 18:
 				cType = PTEID_CARDTYPE_FOREIGNER;
-				break;
-			case 99:
-				cType = PTEID_CARDTYPE_SIS;
 				break;
 			default:
 				break;
@@ -246,9 +221,6 @@ enum eCARD_BASETYPE
 			formatted += card_number.mid(1,7);
 			formatted += " ";
 			formatted += card_number.mid(8,2);
-			break;
-		case PTEID_CARDTYPE_SIS:
-			formatted = card_number;
 			break;
 		default:
 			break;
@@ -468,25 +440,6 @@ public:
 	}
 
 	//----------------------------------------------
-	// Retrieve data from SIS card
-	//----------------------------------------------
-	bool RetrieveData( PTEID_SISCard& Card )
-	{
-		bool bRetVal = false;
-		PTEID_SisId& pteid_SisId = Card.getID();
-
-		m_Fields[SOCIALSECURITYNUMBER] =  pteid_SisId.getSocialSecurityNumber();
-
-
-// 		qDebug() << "PersonExtraInfo::RetrieveData()";
-// 		for (tFieldMap::iterator it=m_Fields.begin(); it!=m_Fields.end(); it++)
-// 		{
-// 			qDebug() << "[" << it.key() << "] = " << "Value: " << it.value();
-// 		}
-		return bRetVal;
-	}
-
-	//----------------------------------------------
 	// get reference to all fields
 	//----------------------------------------------
 	tFieldMap& getFields( void )
@@ -543,18 +496,6 @@ public:
 		m_Fields[DUPLICATA]			  = pteid_eid.getDuplicata();
 		m_Fields[SPECIALORGANIZATION] = pteid_eid.getSpecialOrganization();
 		//m_Fields[MEMBEROFFAMILY]	  = pteid_eid.getMemberOfFamily();
-
-		bRetVal = true;
-		return bRetVal;
-	}
-
-	//----------------------------------------------
-	// Retrieve data from SIS card
-	//----------------------------------------------
-	bool RetrieveData( PTEID_SISCard& Card )
-	{
-		Card.getType();
-		bool bRetVal = false;
 
 		bRetVal = true;
 		return bRetVal;
@@ -799,24 +740,6 @@ public:
 	}
 
 	//----------------------------------------------
-	// retrieve data from SIS card
-	//----------------------------------------------
-	bool RetrieveData(PTEID_SISCard& Card)
-	{
-		PTEID_SisId& pteid_SisId = Card.getID();
-
-		m_Fields[NAME]      = pteid_SisId.getSurname();
-		m_Fields[GIVENNAME] =  pteid_SisId.getName();
-		m_Fields[INITIALS]  =  pteid_SisId.getInitials();
-		m_Fields[BIRTHDATE] =  pteid_SisId.getDateOfBirth();
-		m_Fields[SEX]	    =  pteid_SisId.getGender();
-
-		m_PersonExtraInfo.RetrieveData(Card);
-
-		return true;
-	}
-
-	//----------------------------------------------
 	// get reference to all fields
 	//----------------------------------------------
 	tFieldMap& getFields( void )
@@ -876,9 +799,6 @@ public:
 			formatted += ".";
 			formatted += number.mid(9,2);
 			break;
-			break;
-		case PTEID_CARDTYPE_SIS:
-			formatted = number;
 			break;
 		default:
 			break;
@@ -1073,32 +993,6 @@ private:
 
 		return bRetVal;
 
-	}
-
-	//----------------------------------------------
-	// retrieve data from SIS card
-	//----------------------------------------------
-	bool RetrieveData( PTEID_SISCard& Card )
-	{
-		bool bRetVal = false;
-
-		if(!m_CardInfo.RetrieveData(Card))
-		{
-			return false;
-		}
-		if (!m_PersonInfo.RetrieveData(Card))
-		{
-			return false;
-		}
-		if (!m_MiscInfo.RetrieveData(Card))
-		{
-			return false;
-		}
-		
-		m_pCard = &Card;
-		bRetVal = true;
-
-		return bRetVal;
 	}
 
 public:

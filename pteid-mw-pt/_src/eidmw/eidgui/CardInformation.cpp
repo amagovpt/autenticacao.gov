@@ -41,25 +41,6 @@ void CardInformation::Reset()
 	m_cardReader = "";
 }
 
-bool CardInformation::LoadData(PTEID_MemoryCard& Card, QString const& cardReader)
-{
-	bool bRetVal = false;
-
-	Reset();
-
-	switch(Card.getType())
-	{
-	case PTEID_CARDTYPE_SIS:
-		bRetVal = RetrieveData(dynamic_cast<PTEID_SISCard&>(Card));
-		m_cardReader = cardReader;
-		break;
-	default:
-		break;
-	}
-
-	return bRetVal;
-}
-
 bool CardInformation::LoadData(PTEID_EIDCard& Card, QString const& cardReader)
 {
 	bool bRetVal = false;

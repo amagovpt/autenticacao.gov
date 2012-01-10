@@ -668,9 +668,6 @@ void MainWnd::enablePrintMenu( void )
 		case PTEID_CARDTYPE_FOREIGNER:
 			bEnable = true;
 			break;
-		case PTEID_CARDTYPE_SIS:
-			bEnable = true;
-			break;
 		default:
 			break;
 		}
@@ -1785,22 +1782,6 @@ void MainWnd::loadCardData( void )
 					}
 				}
 				break;
-				case PTEID_CARDTYPE_SIS:
-				{
-					try
-					{
-						PTEID_MemoryCard& Card = ReaderContext.getSISCard();
-						m_CurrReaderName = ReaderSet.getReaderName(ReaderIdx);
-						Show_Memory_Card(Card);
-						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-					}
-					catch (PTEID_ExCardBadType const& e)
-					{
-						QString errcode;
-						errcode = errcode.setNum(e.GetError());
-					}
-				}
-				break;
 				case PTEID_CARDTYPE_UNKNOWN:
 				default:
 					break;
@@ -1945,22 +1926,6 @@ void MainWnd::loadCardDataAddress( void )
 						m_CurrReaderName = readerName;
 						Show_Address_Card(Card);
 
-						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-					}
-					catch (PTEID_ExCardBadType const& e)
-					{
-						QString errcode;
-						errcode = errcode.setNum(e.GetError());
-					}
-				}
-				break;
-				case PTEID_CARDTYPE_SIS:
-				{
-					try
-					{
-						PTEID_MemoryCard& Card = ReaderContext.getSISCard();
-						m_CurrReaderName = ReaderSet.getReaderName(ReaderIdx);
-						Show_Memory_Card(Card);
 						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
 					}
 					catch (PTEID_ExCardBadType const& e)
@@ -2122,22 +2087,6 @@ bool MainWnd::loadCardDataPersoData( void )
 					}
 				}
 				break;
-				case PTEID_CARDTYPE_SIS:
-				{
-					try
-					{
-						PTEID_MemoryCard& Card = ReaderContext.getSISCard();
-						m_CurrReaderName = ReaderSet.getReaderName(ReaderIdx);
-						Show_Memory_Card(Card);
-						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-					}
-					catch (PTEID_ExCardBadType const& e)
-					{
-						QString errcode;
-						errcode = errcode.setNum(e.GetError());
-					}
-				}
-				break;
 				case PTEID_CARDTYPE_UNKNOWN:
 				default:
 					break;
@@ -2282,22 +2231,6 @@ void MainWnd::loadCardDataCertificates( void )
 						m_CurrReaderName = readerName;
 						Show_Certificates_Card(Card);
 
-						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-					}
-					catch (PTEID_ExCardBadType const& e)
-					{
-						QString errcode;
-						errcode = errcode.setNum(e.GetError());
-					}
-				}
-				break;
-				case PTEID_CARDTYPE_SIS:
-				{
-					try
-					{
-						PTEID_MemoryCard& Card = ReaderContext.getSISCard();
-						m_CurrReaderName = ReaderSet.getReaderName(ReaderIdx);
-						Show_Memory_Card(Card);
 						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
 					}
 					catch (PTEID_ExCardBadType const& e)
@@ -2944,32 +2877,6 @@ void MainWnd::Show_Certificates_Card(PTEID_EIDCard& Card)
 {
 	LoadDataCertificates(Card);
 }
-//*****************************************************
-// show the tabs for a memory card (SIS)
-//*****************************************************
-void MainWnd::Show_Memory_Card( PTEID_MemoryCard& Card )
-{
-	LoadDataMC(Card);
-	showTabs();
-}
-
-//*****************************************************
-// load the data of a memory card (SIS card)
-//*****************************************************
-void MainWnd::LoadDataMC(PTEID_MemoryCard& Card)
-{
-	m_TypeCard=Card.getType();
-	if(!m_CI_Data.isDataLoaded())
-	{
-		m_CI_Data.LoadData(Card,m_CurrReaderName);
-
-		//------------------------------------------------------
-		// fill in the table with the software info
-		//------------------------------------------------------
-
-		fillSoftwareInfo();
-	}
-}
 
 //*****************************************************
 // fill up the certificate tree
@@ -3024,11 +2931,6 @@ void MainWnd::fillCertTree(PTEID_Certificate *cert, short level, QTreeCertItem* 
 
 void MainWnd::fillCertificateList( void )
 {
-	if ( PTEID_CARDTYPE_SIS == m_CI_Data.m_CardInfo.getType())
-	{
-		clearTabCertificates();
-		return;
-	}
 	PTEID_Certificates* certificates = m_CI_Data.m_CertifInfo.getCertificates();
 
 	if (!certificates)
@@ -4346,17 +4248,6 @@ void MainWnd::customEvent( QEvent* pEvent )
 						}
 					}
 					break;
-					case PTEID_CARDTYPE_SIS:
-						//------------------------------------------------
-						// first load the data if necessary, because this will check the test cards as well
-						// and will ask if test cards are allowed
-						//------------------------------------------------
-						if ( m_Settings.getAutoCardReading() )
-						{
-							m_CI_Data.Reset();
-							loadCardData();
-						}
-						break;
 					case PTEID_CARDTYPE_UNKNOWN:
 					{
 						clearGuiContent();
@@ -4390,32 +4281,31 @@ void MainWnd::doPicturePopup( PTEID_Card& card )
 	{
 		return;
 	}
-	if (card.getType() != PTEID_CARDTYPE_SIS)
+
+	//------------------------------------------------
+	// To show the picture we must:
+	// - keep the status if test cards were allowed or not
+	// - allways allow a testcard
+	// - load the picture for the popup
+	// - reset the allowTestCard like the user has set it
+	//------------------------------------------------
+	PTEID_EIDCard& eidCard		 = static_cast<PTEID_EIDCard&>(card);
+	bool		  bAllowTestCard = eidCard.getAllowTestCard();
+	
+	if (!bAllowTestCard)
 	{
-		//------------------------------------------------
-		// To show the picture we must:
-		// - keep the status if test cards were allowed or not
-		// - allways allow a testcard
-		// - load the picture for the popup
-		// - reset the allowTestCard like the user has set it
-		//------------------------------------------------
-		PTEID_EIDCard& eidCard		 = static_cast<PTEID_EIDCard&>(card);
-		bool		  bAllowTestCard = eidCard.getAllowTestCard();
-
-		if (!bAllowTestCard)
-		{
-			eidCard.setAllowTestCard(true);
-		}
-		/*const PTEID_ByteArray& picture = eidCard.getPicture().getData();
-		QPixmap				  pixMap;
-
-		if (pixMap.loadFromData(picture.GetBytes(), picture.Size()))
-		{
-			m_Pop->setPixmap(pixMap);
-			m_Pop->popUp();
-		}*/
-		eidCard.setAllowTestCard(bAllowTestCard);
+	    eidCard.setAllowTestCard(true);
 	}
+	/*const PTEID_ByteArray& picture = eidCard.getPicture().getData();
+	  QPixmap				  pixMap;
+
+	  if (pixMap.loadFromData(picture.GetBytes(), picture.Size()))
+	  {
+	  m_Pop->setPixmap(pixMap);
+	  m_Pop->popUp();
+	  }*/
+	eidCard.setAllowTestCard(bAllowTestCard);
+
 }
 
 //**************************************************
