@@ -4185,14 +4185,16 @@ void MainWnd::doPicturePopup( PTEID_Card& card )
 	{
 	    eidCard.setAllowTestCard(true);
 	}
-	/*const PTEID_ByteArray& picture = eidCard.getPicture().getData();
-	  QPixmap				  pixMap;
 
-	  if (pixMap.loadFromData(picture.GetBytes(), picture.Size()))
-	  {
-	  m_Pop->setPixmap(pixMap);
-	  m_Pop->popUp();
-	  }*/
+	QImage myImage, myImagescaled;
+	QPixmap				  pixMap;
+
+	if (pixMap.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData, "PNG"))
+	{
+		pixMap = pixMap.scaledToWidth(50);
+		m_Pop->setPixmap(pixMap);
+		m_Pop->popUp();
+	}
 	eidCard.setAllowTestCard(bAllowTestCard);
 
 }
