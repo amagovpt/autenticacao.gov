@@ -42,8 +42,7 @@ const unsigned long MAX_APDU_READ_LEN = 248;
 const unsigned long MAX_APDU_WRITE_LEN = 248;
 #else
 const unsigned long MAX_APDU_READ_LEN = 256;
-//const unsigned long MAX_APDU_WRITE_LEN = 256;
-const unsigned long MAX_APDU_WRITE_LEN = 1000;
+const unsigned long MAX_APDU_WRITE_LEN = 256;
 #endif
 const unsigned long MAX_APDU_LEN = 256;
 const unsigned long APDU_BUF_LEN = MAX_APDU_LEN + 2; // for SW1 and SW2
