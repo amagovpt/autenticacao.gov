@@ -19,7 +19,6 @@
 **************************************************************************** */
 #include "UnitTest++/src/UnitTest++.h"
 #include "../applayer/APLCardPteid.h"
-#include "../applayer/APLCardSIS.h"
 #include "../applayer/APLReader.h"
 #include "../applayer/CardPteidDef.h"
 #include "../applayer/eidmw_EIDXmlParser.h"

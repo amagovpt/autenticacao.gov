@@ -21,8 +21,6 @@
 #include "../applayer/APLReader.h"
 #include "../applayer/APLCardPteid.h"
 #include "../applayer/CardPteid.h"
-#include "../applayer/APLCardSIS.h"
-#include "../applayer/CardSIS.h"
 #include "../applayer/APLDoc.h"
 #include <vector>
 
@@ -149,103 +147,4 @@ TEST(VirtualTLV_Eid)
 
 	APL_DocEId &doc_virtual=card_virtual->getID();
 	CHECK_EQUAL("Hoeben",doc_virtual.getSurname());
-}
-
-TEST(VirtualRAW_Sis)
-{
-	APL_ReaderContext &reader=AppLayer.getReader("Emulated reader 4");	
-	APL_SISCard *card=reader.getSISCard();
-
-	APL_RawData_Sis RawData;
-
-	RawData.version=1;
-	RawData.idData=card->getFileID()->getData();
-
-	APL_SISCard *card_virtual=NULL;
-
-	APL_ReaderContext reader_virtual(RawData);
-	try
-	{
-		card_virtual=reader_virtual.getSISCard();
-		CHECK(card_virtual);
-	}
-	catch (...)
-	{
-		CHECK(0);
-	}
-
-	APL_DocSisId &doc_virtual=card_virtual->getID();
-	CHECK_EQUAL("HOEBEN",doc_virtual.getSurname());
-}
-
-TEST(VirtualXML_Sis)
-{
-	APL_ReaderContext &reader=AppLayer.getReader("Emulated reader 4");	
-	APL_SISCard *card=reader.getSISCard();
-	APL_XMLDoc &doc=card->getFullDoc();
-	doc.writeXmlToFile("sis.xml");
-
-	APL_SISCard *card_virtual=NULL;
-
-	APL_ReaderContext reader_virtual(APL_SAVEFILETYPE_XML,"sis.xml");
-	try
-	{
-		card_virtual=reader_virtual.getSISCard();
-		CHECK(card_virtual);
-	}
-	catch (...)
-	{
-		CHECK(0);
-	}
-
-	APL_DocSisId &doc_virtual=card_virtual->getID();
-	CHECK_EQUAL("HOEBEN",doc_virtual.getSurname());
-}
-
-TEST(VirtualCSV_Sis)
-{
-	APL_ReaderContext &reader=AppLayer.getReader("Emulated reader 4");	
-	APL_SISCard *card=reader.getSISCard();
-	APL_XMLDoc &doc=card->getFullDoc();
-	doc.writeCsvToFile("sis.csv");
-
-	APL_SISCard *card_virtual=NULL;
-
-	APL_ReaderContext reader_virtual(APL_SAVEFILETYPE_CSV,"sis.csv");
-	try
-	{
-		card_virtual=reader_virtual.getSISCard();
-		CHECK(card_virtual);
-	}
-	catch (...)
-	{
-		CHECK(0);
-	}
-
-	APL_DocSisId &doc_virtual=card_virtual->getID();
-	CHECK_EQUAL("HOEBEN",doc_virtual.getSurname());
-}
-
-TEST(VirtualTLV_Sis)
-{
-	APL_ReaderContext &reader=AppLayer.getReader("Emulated reader 4");	
-	APL_SISCard *card=reader.getSISCard();
-	APL_XMLDoc &doc=card->getFullDoc();
-	doc.writeTlvToFile("sis.tlv");
-
-	APL_SISCard *card_virtual=NULL;
-
-	APL_ReaderContext reader_virtual(APL_SAVEFILETYPE_TLV,"sis.tlv");
-	try
-	{
-		card_virtual=reader_virtual.getSISCard();
-		CHECK(card_virtual);
-	}
-	catch (...)
-	{
-		CHECK(0);
-	}
-
-	APL_DocSisId &doc_virtual=card_virtual->getID();
-	CHECK_EQUAL("HOEBEN",doc_virtual.getSurname());
 }

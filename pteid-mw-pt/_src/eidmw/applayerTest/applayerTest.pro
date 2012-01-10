@@ -72,7 +72,6 @@ SOURCES += APLCertifTest.cpp \
 ## otherwise the script which prepares the tarball will not
 ## be able to parse the project file correctly!
 contains(PKG_NAME,pteid): SOURCES +=  APLCardPteidTest.cpp     \
-				     APLCardSISTest.cpp     \
-           			     cryptoFwkPteidTest.cpp  \	
+           			     cryptoFwkPteidTest.cpp 
 
 
