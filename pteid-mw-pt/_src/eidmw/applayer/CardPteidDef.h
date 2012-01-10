@@ -54,7 +54,6 @@ namespace eIDMW
 #define PTEID_FILE_CHALLENGE				"CHALLENGE"				//pseudo file
 #define PTEID_FILE_CHALLENGE_RESPONSE	"CHALLENGE_RESPONSE"	//pseudo file
 
-#define PTEID_CARDTYPE_KIDS_CODE				6
 #define PTEID_CARDTYPE_FOREIGNER_CODE_MIN	11
 #define PTEID_CARDTYPE_FOREIGNER_CODE_MAX	18
 
@@ -228,7 +227,6 @@ namespace eIDMW
 #define PTEID_FIELD_BYTE_TOKENINFO_ElectricalPersonalisationInterface   39
 
 #define CARDTYPE_NAME_PTEID_EID					"eid"
-#define CARDTYPE_NAME_PTEID_KIDS					"kids"
 #define CARDTYPE_NAME_PTEID_FOREIGNER			"foreigner"
 
 #define PTEID_TLV_TAG_VERSION						0x00

@@ -243,38 +243,6 @@ friend bool APL_ReaderContext::connectCard();	/**< This method must access prote
 };
 
 /******************************************************************************//**
-  * Class that represent a PTEID Kids card
-  *
-  * To get APL_KidsCard object, we have to ask it from APL_ReaderContext 
-  *********************************************************************************/
-class APL_KidsCard : public APL_EIDCard
-{
-public:
-	/**
-	  * Destructor
-	  */
-	EIDMW_APL_API virtual ~APL_KidsCard();
-
-	/**
-	  * Return the type of the card (PTEID_CARDTYPE_KIDS)
-	  */
-	EIDMW_APL_API virtual APL_CardType getType() const;
-
-protected:
-	/**
-	  * Constructor
-	  *		Used only in APL_ReaderContext::connectCard
-	  */    
-	APL_KidsCard(APL_ReaderContext *reader);
-
-private:
-	APL_KidsCard(const APL_KidsCard& card);				/**< Copy not allowed - not implemented */
-	APL_KidsCard &operator= (const APL_KidsCard& card);	/**< Copy not allowed - not implemented */
-
-friend bool APL_ReaderContext::connectCard();	/**< This method must access protected constructor */
-};
-
-/******************************************************************************//**
   * Class that represent a PTEID Foreigner card (
   *
   * To get APL_ForeignerCard object, we have to ask it from APL_ReaderContext 

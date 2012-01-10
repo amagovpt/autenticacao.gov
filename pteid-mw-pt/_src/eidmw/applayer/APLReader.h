@@ -40,7 +40,6 @@ enum APL_CardType
 {
 	APL_CARDTYPE_UNKNOWN=0,
 	APL_CARDTYPE_PTEID_EID,
-	APL_CARDTYPE_PTEID_KIDS,
 	APL_CARDTYPE_PTEID_FOREIGNER
 };
 
@@ -280,7 +279,6 @@ class CReader;
 
 class APL_Card;
 class APL_EIDCard;
-class APL_KidsCard;
 class APL_ForeignerCard;
 
 class APL_SuperParser;
@@ -327,7 +325,7 @@ public:
 	  *		First delete it if not null
 	  *		Then check if a card is present
 	  *		If yes, instanciated regarding the card type
-	  *			APL_EIDCard, APL_KidsCard or APL_ForeignCard
+	  *			APL_EIDCard or APL_ForeignCard
 	  *
 	  * @return true if a new connection has been made
 	  */
@@ -368,12 +366,6 @@ public:
 	  * If there is no EIdcard in the reader NULL is return
 	  */    
     EIDMW_APL_API APL_EIDCard *getEIDCard();
-
-  	/**
-	  * Get the Kidscard in the reader
-	  * If there is no Kidscard in the reader NULL is return
-	  */    
-	EIDMW_APL_API APL_KidsCard *getKidsCard();
 
    	/**
 	  * Get the ForeignerCard in the reader

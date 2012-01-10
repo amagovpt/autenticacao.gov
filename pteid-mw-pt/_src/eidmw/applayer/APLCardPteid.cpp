@@ -1255,21 +1255,6 @@ bool APL_EIDCard::isApplicationAllowed()
 
 	return (m_lWarningLevel==1);
 }
-/*****************************************************************************************
----------------------------------------- APL_KidsCard ---------------------------------------
-*****************************************************************************************/
-APL_KidsCard::APL_KidsCard(APL_ReaderContext *reader):APL_EIDCard(reader)
-{
-}
-
-APL_KidsCard::~APL_KidsCard()
-{
-}
-
-APL_CardType APL_KidsCard::getType() const
-{
-	return APL_CARDTYPE_PTEID_KIDS;
-}
 
 /*****************************************************************************************
 ---------------------------------------- CForeignerCard ----------------------------------
@@ -1358,9 +1343,6 @@ CByteArray APL_EIdFullDoc::getXML(bool bNoHeader)
 	case APL_CARDTYPE_PTEID_EID:
 		xml+=CARDTYPE_NAME_PTEID_EID;
 		break;
-	case APL_CARDTYPE_PTEID_KIDS:
-		xml+=CARDTYPE_NAME_PTEID_KIDS;
-		break;
 	case APL_CARDTYPE_PTEID_FOREIGNER:
 		xml+=CARDTYPE_NAME_PTEID_FOREIGNER;
 		break;
@@ -1412,9 +1394,6 @@ doc_version;card_type;biographic;biometric;certificates;pins;
 	case APL_CARDTYPE_PTEID_EID:
 		csv+=CARDTYPE_NAME_PTEID_EID;
 		break;
-	case APL_CARDTYPE_PTEID_KIDS:
-		csv+=CARDTYPE_NAME_PTEID_KIDS;
-		break;
 	case APL_CARDTYPE_PTEID_FOREIGNER:
 		csv+=CARDTYPE_NAME_PTEID_FOREIGNER;
 		break;
@@ -1455,9 +1434,6 @@ CByteArray APL_EIdFullDoc::getTLV()
 	{
 	case APL_CARDTYPE_PTEID_EID:
 		baCardType.Append(CARDTYPE_NAME_PTEID_EID);
-		break;
-	case APL_CARDTYPE_PTEID_KIDS:
-		baCardType.Append(CARDTYPE_NAME_PTEID_KIDS);
 		break;
 	case APL_CARDTYPE_PTEID_FOREIGNER:
 		baCardType.Append(CARDTYPE_NAME_PTEID_FOREIGNER);

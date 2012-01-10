@@ -320,10 +320,7 @@ APL_CardType APL_ReaderContext::getPhysicalCardType()
 		}
 		CalUnlock();
 		
-		if(lDocType==PTEID_CARDTYPE_KIDS_CODE)
-			ret=APL_CARDTYPE_PTEID_KIDS;
-
-		else if(lDocType>=PTEID_CARDTYPE_FOREIGNER_CODE_MIN 
+	        if(lDocType>=PTEID_CARDTYPE_FOREIGNER_CODE_MIN 
 			&& lDocType<=PTEID_CARDTYPE_FOREIGNER_CODE_MAX)
 			ret=APL_CARDTYPE_PTEID_FOREIGNER;
 
@@ -400,9 +397,6 @@ bool APL_ReaderContext::connectCard()
 	case APL_CARDTYPE_PTEID_EID:
 		m_card = new APL_EIDCard(this);
 		break;
-	case APL_CARDTYPE_PTEID_KIDS:
-		m_card = new APL_KidsCard(this);
-		break;
 	case APL_CARDTYPE_PTEID_FOREIGNER:
 		m_card = new APL_ForeignerCard(this);
 		break;
@@ -441,16 +435,6 @@ APL_EIDCard *APL_ReaderContext::getEIDCard()
 
 	if(m_card != NULL && m_card->getType()==APL_CARDTYPE_PTEID_EID)
 		return dynamic_cast<APL_EIDCard *>(m_card);
-	
-	return NULL;
-}
-
-APL_KidsCard *APL_ReaderContext::getKidsCard()
-{
-	connectCard();
-
-	if(m_card->getType()==APL_CARDTYPE_PTEID_KIDS)
-		return dynamic_cast<APL_KidsCard *>(m_card);
 	
 	return NULL;
 }
@@ -1174,10 +1158,7 @@ APL_SuperParser::APL_SuperParser(const APL_RawData_Eid &data)
 		return;
 	}
 	
-	if(lDocType==PTEID_CARDTYPE_KIDS_CODE)
-		m_cardType=APL_CARDTYPE_PTEID_KIDS;
-
-	else if(lDocType>=PTEID_CARDTYPE_FOREIGNER_CODE_MIN 
+	if(lDocType>=PTEID_CARDTYPE_FOREIGNER_CODE_MIN 
 		&& lDocType<=PTEID_CARDTYPE_FOREIGNER_CODE_MAX)
 		m_cardType=APL_CARDTYPE_PTEID_FOREIGNER;
 
@@ -1384,8 +1365,6 @@ bool APL_SuperParser::parse()
 
 	if(strcmp(type,CARDTYPE_NAME_PTEID_EID)==0)
 		m_cardType=APL_CARDTYPE_PTEID_EID;
-	else if(strcmp(type,CARDTYPE_NAME_PTEID_KIDS)==0)
-		m_cardType=APL_CARDTYPE_PTEID_KIDS;
 	else if(strcmp(type,CARDTYPE_NAME_PTEID_FOREIGNER)==0)
 		m_cardType=APL_CARDTYPE_PTEID_FOREIGNER;
 
@@ -1440,7 +1419,7 @@ unsigned long APL_SuperParser::readData(const char *fileID, CByteArray &in,unsig
 	switch(m_fileType)
 	{
 	case APL_SAVEFILETYPE_RAWDATA:
-		if(((m_cardType==APL_CARDTYPE_PTEID_EID || m_cardType==APL_CARDTYPE_PTEID_KIDS || m_cardType==APL_CARDTYPE_PTEID_FOREIGNER) && !m_rawdata_eid) || m_cardType==APL_CARDTYPE_UNKNOWN)
+		if(((m_cardType==APL_CARDTYPE_PTEID_EID || m_cardType==APL_CARDTYPE_PTEID_FOREIGNER) && !m_rawdata_eid) || m_cardType==APL_CARDTYPE_UNKNOWN)
 			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 		if(!m_fctReadDataRAW)

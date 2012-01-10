@@ -267,10 +267,6 @@ void EIDCardType_Processor::process( const XMLCh *const  chars
 	{
 		((EID_DataStorage&)dataStorage).m_CardType = APL_CARDTYPE_PTEID_EID;
 	}
-	else if ( 0 == w_chars.compare(utilStringWiden(CARDTYPE_NAME_PTEID_KIDS)) )
-	{
-		((EID_DataStorage&)dataStorage).m_CardType = APL_CARDTYPE_PTEID_KIDS;
-	}
 	else if ( 0 == w_chars.compare(utilStringWiden(CARDTYPE_NAME_PTEID_FOREIGNER)) )
 	{
 		((EID_DataStorage&)dataStorage).m_CardType = APL_CARDTYPE_PTEID_FOREIGNER;
@@ -1028,7 +1024,7 @@ TagProcessor* XML_EIDTagHandler::createProcessor(const XMLCh* const localname, c
 
 //***************************************************
 // Xerces implemented functions to interpret the tags
-// of an EID XML file (EID, KIDS, FOREIGNER)
+// of an EID XML file (EID, FOREIGNER)
 //***************************************************
 void XML_EIDTagHandler::startDocument( void )
 {
