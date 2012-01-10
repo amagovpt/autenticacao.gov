@@ -535,10 +535,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_RawData_Sis.java"
-				>
-			</File>
-			<File
 				RelativePath="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_RawDataType.java"
 				>
 			</File>
@@ -548,18 +544,6 @@
 			</File>
 			<File
 				RelativePath="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ReaderSet.java"
-				>
-			</File>
-			<File
-				RelativePath="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_SISCard.java"
-				>
-			</File>
-			<File
-				RelativePath="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_SisFullDoc.java"
-				>
-			</File>
-			<File
-				RelativePath="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_SisId.java"
 				>
 			</File>
 			<File
