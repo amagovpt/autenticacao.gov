@@ -173,7 +173,6 @@ static const inline wchar_t * Type2String(tCardType cardType)
 	switch(cardType)
 	{
 	case CARD_PTEID: return L"PT eID";;
-	case CARD_SIS: return L"SIS";
 	default: return L"unknown";
 	}
 }

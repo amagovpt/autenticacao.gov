@@ -60,8 +60,6 @@
 #include "../common/prefix.h"
 #ifdef CAL_PTEID
 #include "PteidCard.h"
-#include "SISCard.h"
-#include "SISPluginHandler.h"
 #endif
 #include <vector>
 #include <string>
@@ -150,28 +148,14 @@ CCard * CardConnect(const std::string &csReader,
 		if(poCard != NULL)
 			//printf("******* WE HAVE CARD!!! *****\n");
 
-		if (poCard == NULL)
-			poCard = SISPluginReadData(strReader, hCard, poContext, poPinpad, oCardPluginLib);
-
-/* SIS support no longer in the CardLayer, only via the plugins */
-#if SIS_IN_CAL
-
-		if (poCard == NULL && StartsWith(csReader.c_str(), "ACS ACR38"))
-		{
 #ifdef __APPLE__
 			poContext->m_oPCSC.Disconnect(hCard, DISCONNECT_RESET_CARD);
-			poCard = SISCardConnectGetInstance(PLUGIN_VERSION, strReader, poContext, poPinpad);
-#else
-			poCard = SISCardGetInstance(PLUGIN_VERSION, strReader, hCard, poContext, poPinpad);
-#endif
-		}
-#ifdef CAL_EMULATION
-		// Emulated reader doesn't start with "ACS ACR38"
-		if (poCard == NULL)
-			poCard = SISCardGetInstance(PLUGIN_VERSION, strReader, hCard, poContext, poPinpad);
 #endif
 
-#endif // SIS_IN_CAL
+#ifdef CAL_EMULATION
+		// Emulated reader doesn't start with "ACS ACR38"
+
+#endif
 
 #endif // CAL_PTEID
 
@@ -182,10 +166,6 @@ CCard * CardConnect(const std::string &csReader,
 			poCard = new CUnknownCard(hCard, poContext, poPinpad, CByteArray());
 		}
 #else
-		// On Mac OS X, SCardConnect() always works when reading a SIS card on an ACR38U,
-		// but not the following SCardTransmit() to read out the data. So we set hCard
-		// to 0 which will cause SISCardConnectGetInstance() below to first switch to
-		// the correct mode to read out the SIS card.
 		hCard = 0;
 #endif
 	}
@@ -206,16 +186,7 @@ CCard * CardConnect(const std::string &csReader,
 
 #ifdef CAL_PTEID
 		if (poCard == NULL)
-			poCard = SISPluginReadData(strReader, hCard, poContext, poPinpad, oCardPluginLib);
-
-		if (poCard == NULL)
 			poCard = new CUnknownCard(hCard, poContext, poPinpad, CByteArray());
-
-/* SIS support no longer in the CardLayer�, only via the plugins */
-#if SIS_IN_CAL
-		if (poCard == NULL  && StartsWith(csReader.c_str(), "ACS ACR38"))
-			poCard = SISCardConnectGetInstance(PLUGIN_VERSION, strReader, poContext, poPinpad);
-#endif // SIS_IN_CAL
 
 #endif // CAL_PTEID
 
