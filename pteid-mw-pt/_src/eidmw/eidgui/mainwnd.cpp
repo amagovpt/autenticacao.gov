@@ -1417,9 +1417,6 @@ void MainWnd::on_treeCert_itemClicked(QTreeWidgetItem* baseItem, int column)
 	m_ui.txtCert_KeyLenght->setText(item->getKeyLen());
 	m_ui.txtCert_KeyLenght->setAccessibleName(item->getKeyLen());
 
-	//	QString strCertStatus;
-	//	getCertStatusText(item->getOcspStatus(), strCertStatus);
-
 	if(!ReaderContext.isCardPresent())
 	{
 		m_ui.btnCert_Register->setEnabled(false);
@@ -2787,7 +2784,6 @@ void MainWnd::fillCertTree(PTEID_Certificate *cert, short level, QTreeCertItem* 
 		QString	strKeyLen;
 		strKeyLen=strKeyLen.setNum(cert->getKeyLength());
 		item->setKeyLen(strKeyLen);
-		item->setOcspStatus(PTEID_CERTIF_STATUS_OCSP_NOT_CHECKED);
 	}
 
 	PTEID_Certificate*	child	= NULL;

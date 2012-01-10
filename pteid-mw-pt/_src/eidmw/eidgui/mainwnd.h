@@ -182,16 +182,12 @@ public:
 	void setKeyLen(QString KeyLen) {m_KeyLen=KeyLen;}
 	QString const& getKeyLen() {return m_KeyLen;}
 
-	void setOcspStatus(PTEID_CertifStatus OcspStatus) {m_OcspStatus=OcspStatus;}
-	PTEID_CertifStatus getOcspStatus() {return m_OcspStatus;}
-
 private:
 	QString m_Issuer;
 	QString m_Owner;
 	QString m_ValidityBegin;
 	QString m_ValidityEnd;
 	QString m_KeyLen;
-	PTEID_CertifStatus m_OcspStatus;
 };
 
 class MainWnd : public QMainWindow
@@ -374,9 +370,6 @@ private:
 	{
 		switch(certStatus)
 		{
-		case PTEID_CERTIF_STATUS_OCSP_NOT_CHECKED:
-			strCertStatus = tr("OCSP not checked");
-			break;
 		case PTEID_CERTIF_STATUS_REVOKED:
 			strCertStatus = tr("Revoked");
 			break;
