@@ -642,7 +642,6 @@ return(lBits);
         
 	//check if first level = APLI.x
         if ((xLev0Item.l_data < 2)||(asn1_next_item(&xLev0Item, &xLev1Item)!= 0) ||((xLev1Item.tag & ASN_CLASS) != ASN_CONTEXT)){
-		printf(":::: Here 1\n");
          //printf("b-- %d < 2 || %d != 0 || %d != %d\n",xLev0Item.l_data,asn1_next_item(&xLev0Item, &xLev1Item),(xLev1Item.tag & ASN_CLASS),ASN_CONTEXT);
 		//printf("%d vs %d\n",(xLev1Item.tag & ASN_CLASS),ASN_CONTEXT);
 	//printf("FIXE LATTER!!!\n");
@@ -652,7 +651,6 @@ return(lBits);
     
         //get second level
         if ((xLev1Item.l_data < 2)||(asn1_next_item(&xLev1Item, &xLev2Item)!= 0)){
-		printf(":::: Here 2\n");
             throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
 	}
 
