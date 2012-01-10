@@ -695,10 +695,6 @@ PTEID_Card &PTEID_ReaderContext::getCard()
 			out = new PTEID_EIDCard(&context,pAplCard);
 			//out = new PTEID_EIDCard(&context,pimpl->getEIDCard());
 			break;
-		case APL_CARDTYPE_PTEID_FOREIGNER:
-			out = new PTEID_ForeignerCard(&context,pAplCard);
-			//out = new PTEID_ForeignerCard(&context,pimpl->getForeignerCard());
-			break;
 		default:
 			throw PTEID_ExCardTypeUnknown();
 		//}
@@ -721,28 +717,13 @@ PTEID_EIDCard &PTEID_ReaderContext::getEIDCard()
 
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	PTEID_CardType type=ConvertCardType(pimpl->getCardType());
-	if(type!=PTEID_CARDTYPE_EID 
-		&& type!=PTEID_CARDTYPE_FOREIGNER)
+	if(type!=PTEID_CARDTYPE_EID)
 		throw PTEID_ExCardBadType();
 
 	END_TRY_CATCH
 
 	PTEID_Card &card = getCard();
 	return *dynamic_cast<PTEID_EIDCard *>(&card);
-}
-
-PTEID_ForeignerCard &PTEID_ReaderContext::getForeignerCard()
-{
-	BEGIN_TRY_CATCH
-
-	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
-	if(pimpl->getCardType()!=APL_CARDTYPE_PTEID_FOREIGNER)
-		throw PTEID_ExCardBadType();
-
-	END_TRY_CATCH
-
-	PTEID_Card &card = getCard();
-	return *dynamic_cast<PTEID_ForeignerCard *>(&card);
 }
 
 unsigned long PTEID_ReaderContext::SetEventCallback(void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef)

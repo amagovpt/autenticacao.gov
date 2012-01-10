@@ -483,9 +483,8 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 
 	switch(cardType)
 	{
-	case PTEID_CardType.PTEID_CARDTYPE_EID:			
-	case PTEID_CardType.PTEID_CARDTYPE_FOREIGNER:
-		return getEIDCard();			
+	case PTEID_CardType.PTEID_CARDTYPE_EID:
+		return getEIDCard();		
 
     default:										
 		throw new PTEID_ExCardTypeUnknown();
@@ -503,9 +502,6 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 		PTEID_EIDCard ret = new PTEID_EIDCard($imcall, false);	
 		$excode
 		return ret;
-
-	case PTEID_CardType.PTEID_CARDTYPE_FOREIGNER:		
-		return getForeignerCard();	
 
     default:										
 		throw new PTEID_ExCardBadType();
@@ -825,7 +821,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") getCardType 		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getCard			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getEIDCard		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getForeignerCard	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") BeginTransaction	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") EndTransaction	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") isVirtualReader	JAVA_CODE_THROW
@@ -888,10 +883,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") getRawData_Response	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getRawData_PersoData	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getRawData_Trace		JAVA_CODE_THROW
-
-//------------------------------------------------------------
-// class PTEID_ForeignerCard : none
-//------------------------------------------------------------
 
 //------------------------------------------------------------
 // class PTEID_CCXML_Doc ccxml
