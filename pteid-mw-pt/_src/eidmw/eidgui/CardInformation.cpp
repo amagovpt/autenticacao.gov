@@ -49,7 +49,6 @@ bool CardInformation::LoadData(PTEID_EIDCard& Card, QString const& cardReader)
 
 	switch(Card.getType())
 	{
-	case PTEID_CARDTYPE_FOREIGNER:
 	case PTEID_CARDTYPE_EID:
 		bRetVal |= RetrieveData(Card);
 		m_cardReader = cardReader;
@@ -70,7 +69,6 @@ bool CardInformation::LoadDataAddress(PTEID_EIDCard& Card, QString const& cardRe
 
 	switch(Card.getType())
 	{
-	case PTEID_CARDTYPE_FOREIGNER:
 	case PTEID_CARDTYPE_EID:
 		bRetVal |= RetrieveDataAddress(Card);
 		m_cardReader = cardReader;
@@ -91,7 +89,6 @@ bool CardInformation::LoadDataPersoData(PTEID_EIDCard& Card, QString const& card
 
 	switch(Card.getType())
 	{
-	case PTEID_CARDTYPE_FOREIGNER:
 	case PTEID_CARDTYPE_EID:
 		bRetVal |= RetrieveDataPersoData(Card);
 		m_cardReader = cardReader;
@@ -112,7 +109,6 @@ bool CardInformation::LoadDataCertificates(PTEID_EIDCard& Card, QString const& c
 
 	switch(Card.getType())
 	{
-	case PTEID_CARDTYPE_FOREIGNER:
 	case PTEID_CARDTYPE_EID:
 		bRetVal |= RetrieveDataCertificates(Card);
 		m_cardReader = cardReader;

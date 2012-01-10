@@ -599,9 +599,6 @@ void MainWnd::enablePrintMenu( void )
 		switch(m_CI_Data.m_CardInfo.getType())
 		{
 		case PTEID_CARDTYPE_EID:
-		case PTEID_CARDTYPE_FOREIGNER:
-			bEnable = true;
-			break;
 		default:
 			break;
 		}
@@ -1683,7 +1680,6 @@ void MainWnd::loadCardData( void )
 				lastFoundCardType = CardType;
 				switch (CardType)
 				{
-				case PTEID_CARDTYPE_FOREIGNER:
 				case PTEID_CARDTYPE_EID:
 				{
 					try
@@ -1836,7 +1832,6 @@ void MainWnd::loadCardDataAddress( void )
 				lastFoundCardType = CardType;
 				switch (CardType)
 				{
-				case PTEID_CARDTYPE_FOREIGNER:
 				case PTEID_CARDTYPE_EID:
 				{
 					try
@@ -1987,7 +1982,6 @@ bool MainWnd::loadCardDataPersoData( void )
 				lastFoundCardType = CardType;
 				switch (CardType)
 				{
-				case PTEID_CARDTYPE_FOREIGNER:
 				case PTEID_CARDTYPE_EID:
 				{
 					try
@@ -2139,7 +2133,6 @@ void MainWnd::loadCardDataCertificates( void )
 				lastFoundCardType = CardType;
 				switch (CardType)
 				{
-				case PTEID_CARDTYPE_FOREIGNER:
 				case PTEID_CARDTYPE_EID:
 				{
 					try
@@ -2715,28 +2708,6 @@ void MainWnd::showTabs()
 		refreshTabInfo();
 
 		break;
-
-	case PTEID_CARDTYPE_FOREIGNER:
-	{
-		if(PTEID_EIDCard::isApplicationAllowed())
-		{
-			int cardSubtype = m_CI_Data.m_CardInfo.getSubType();
-			if ( cardSubtype >= CardInfo::EUROPEAN_E && cardSubtype <= CardInfo::EUROPEAN_F_PLUS )
-			{
-				refreshTabIdentity();
-				refreshTabIdentityExtra();
-				m_imgBackground_Front = QPixmap( ":/images/Images/Background_IDFront.jpg" ); // background
-				m_imgBackground_Back = QPixmap( ":/images/Images/Background_IDBack.jpg" ); // background
-			}
-			else
-			{
-			}
-		}
-		refreshTabCertificates();
-		refreshTabCardPin();
-		refreshTabInfo();
-	}
-	break;
 	default:
 		break;
 	}
@@ -3734,7 +3705,6 @@ void MainWnd::refreshTabCardPin( void )
 			switch(ReaderContext.getCardType())
 			{
 			case PTEID_CARDTYPE_EID:
-			case PTEID_CARDTYPE_FOREIGNER:
                 {
                     PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
                     PTEID_Pins&		Pins	= Card.getPins();
@@ -4132,45 +4102,6 @@ void MainWnd::customEvent( QEvent* pEvent )
 					switch( cardType )
 					{
 					case PTEID_CARDTYPE_EID:
-					case PTEID_CARDTYPE_FOREIGNER:
-					{
-						try
-						{
-							PTEID_EIDCard& card = readerContext.getEIDCard();
-							doPicturePopup( card );
-
-						}
-						catch (PTEID_ExNotAllowByUser& e)
-						{
-							long err = e.GetError();
-							err = err;
-						}
-						//------------------------------------
-						// register certificates when needed
-						//------------------------------------
-						if (m_Settings.getRegCert())
-						{
-							bool bImported = ImportCertificates(cardReader);
-							if (!isHidden())
-							{
-								showCertImportMessage(bImported);
-							}
-						}
-						if (isHidden())
-						{
-							break;
-						}
-						//------------------------------------------------
-						// first load the data if necessary, because this will check the test cards as well
-						// and will ask if test cards are allowed
-						//------------------------------------------------
-						if ( m_Settings.getAutoCardReading() )
-						{
-							m_CI_Data.Reset(); 
-							loadCardData();
-						}
-					}
-					break;
 					case PTEID_CARDTYPE_UNKNOWN:
 					{
 						clearGuiContent();
