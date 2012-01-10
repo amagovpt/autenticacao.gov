@@ -94,9 +94,15 @@ SOURCES += \
 ## otherwise the script which prepares the tarball will not
 ## be able to parse the project file correctly!
 contains(PKG_NAME,pteid): HEADERS += cardpluginPteid/PteidCard.h \
-          			cardpluginPteid/PteidP15Correction.h
+          			cardpluginPteid/PteidP15Correction.h \
+          			cardpluginSIS/SISCard.h \
+          			cardpluginSIS/SISPluginHandler.h \
+          			cardpluginSIS/SISplugin1.h
 
 contains(PKG_NAME,pteid): SOURCES +=  cardpluginPteid/PteidCard.cpp \
-        	   		cardpluginPteid/PteidP15Correction.cpp
+        	   		cardpluginPteid/PteidP15Correction.cpp \
+           			cardpluginSIS/SISCard.cpp \
+				cardpluginSIS/SISPluginHandler.cpp
 
-contains(PKG_NAME,pteid): INCLUDEPATH += cardpluginPteid
+contains(PKG_NAME,pteid): INCLUDEPATH += cardpluginPteid \
+					cardpluginSIS
