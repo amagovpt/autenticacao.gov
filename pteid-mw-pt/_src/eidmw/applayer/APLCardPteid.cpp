@@ -202,7 +202,6 @@ bool APL_EIDCard::isCardForbidden()
 
 bool APL_EIDCard::initVirtualReader()
 {
-	printf("QQ Here start!\n");
 	bool bRet = true;
 
 	m_reader->getSuperParser()->initReadFunction(&readVirtualFileRAW,&readVirtualFileTLV,&readVirtualFileCSV,&readVirtualFileXML);
@@ -1144,7 +1143,6 @@ const CByteArray& APL_EIDCard::getRawData_IdSig()
 
 const CByteArray& APL_EIDCard::getRawData_Addr()
 {
-	printf("getRawData_Addr\n");
 	return getFileAddress()->getData();
 }
 
