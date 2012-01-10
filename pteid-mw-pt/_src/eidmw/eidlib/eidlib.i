@@ -1026,7 +1026,6 @@ return $jnicall;
 //------------------------------------------------------------
 %javaexception("PTEID_Exception") getLabel			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getID				JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getStatus			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getCertData		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getSerialNumber	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getOwnerName		JAVA_CODE_THROW

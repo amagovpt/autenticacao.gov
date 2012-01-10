@@ -1156,11 +1156,6 @@ public:
 	PTEIDSDK_API const char *getLabel();				/**< Return the label of the certificate */
 	PTEIDSDK_API unsigned long getID();				/**< Return the id of the certificate */
 
-	/**
-	  * Return the status of the certificate using default validation level (from config).
-	  */
-	PTEIDSDK_API PTEID_CertifStatus getStatus();
-
 	PTEIDSDK_API PTEID_CertifType getType();			/**< Return the type of the certificate */
 
 	PTEIDSDK_API const PTEID_ByteArray &getCertData();/**< Return the content of the certificate */

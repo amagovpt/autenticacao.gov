@@ -88,20 +88,6 @@ unsigned long PTEID_Certificate::getID()
 	return out;
 }
 
-PTEID_CertifStatus PTEID_Certificate::getStatus()
-{
-	PTEID_CertifStatus out =PTEID_CERTIF_STATUS_UNKNOWN;
-
-	BEGIN_TRY_CATCH
-
-	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = ConvertCertStatus(pimpl->getStatus());
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
 PTEID_CertifType PTEID_Certificate::getType()
 {
 	PTEID_CertifType out =PTEID_CERTIF_TYPE_UNKNOWN;
