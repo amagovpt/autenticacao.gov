@@ -1076,82 +1076,6 @@ private:
 friend PTEID_Pin &PTEID_Pins::getPinByNumber(unsigned long ulIndex);	/**< For internal use : This method must access protected constructor */
 };
 
-class APL_Crl;
-
-/******************************************************************************//**
-  * Class that represents one CRL.
-  *********************************************************************************/
-class PTEID_Crl : public PTEID_Object
-{
-public:
-	/**
-	  * Create a Crl from its uri (without any certificate link).
-	  * As there is no issuer, this CRL can't be verify and some method are not allowed
-	  * (ex. getIssuer).
-	  * These methods throw PTEID_ExBadUsage exception.
-	  */
-	PTEIDSDK_API PTEID_Crl(const char *uri);
-
-	PTEIDSDK_API virtual ~PTEID_Crl(void);				/**< Destructor */
-
-	PTEIDSDK_API const char *getUri();				/**< Return the uri of the CRL */
-
-	PTEIDSDK_API const char *getIssuerName();			/**< Return the name of the issuer of the certificate */
-
-	/**
-	  * Return the issuer certificate.
-	  *
-	  * if there is no issuer (root), PTEID_ExCertNoIssuer exception is thrown.
-	  */
-	PTEIDSDK_API PTEID_Certificate &getIssuer();
-
-	/**
-	  * Return the CRL as a byte array.
-	  * If it comes from a Certif we verify the signature.
-	  * If it's created from the URL only we DON'T verify the signature.
-	  * @param crl will content the crl
-	  * @param bForceDownload : if true the CRL in the cache is not valid anymore and we force a new download
-	  */
-	PTEIDSDK_API PTEID_CrlStatus getData(PTEID_ByteArray &crl,bool bForceDownload=false);
-
-	NOEXPORT_PTEIDSDK PTEID_Crl(const SDK_Context *context,APL_Crl *impl);	/**< For internal use : Constructor */
-
-private:
-	PTEID_Crl(const PTEID_Crl& crl);				/**< Copy not allowed - not implemented */
-	PTEID_Crl &operator= (const PTEID_Crl& crl);	/**< Copy not allowed - not implemented */
-};
-
-class APL_OcspResponse;
-
-/******************************************************************************//**
-  * Class that represents one OCSP Response.
-  *********************************************************************************/
-class PTEID_OcspResponse : public PTEID_Object
-{
-public:
-	/**
-	  * Create an OcspResponse object from the URI only and CertID.
-	  * This OCSP Response is not link to any certificate so some methods could not be used.
-	  * These methods throw PTEID_ExBadUsage exception.
-	  */
-	PTEIDSDK_API PTEID_OcspResponse(const char *uri,PTEID_HashAlgo hashAlgorithm,const PTEID_ByteArray &issuerNameHash,const PTEID_ByteArray &issuerKeyHash,const PTEID_ByteArray &serialNumber);
-
-	PTEIDSDK_API virtual ~PTEID_OcspResponse(void);		/**< Destructor */
-
-	PTEIDSDK_API const char *getUri();					/**< Return the uri of the responder */
-
-	/**
-	  * Return the response.
-	  */
-	PTEIDSDK_API PTEID_CertifStatus getResponse(PTEID_ByteArray &response);
-
-	NOEXPORT_PTEIDSDK PTEID_OcspResponse(const SDK_Context *context,APL_OcspResponse *impl);	/**< For internal use : Constructor */
-
-private:
-	PTEID_OcspResponse(const PTEID_OcspResponse& ocsp);				/**< Copy not allowed - not implemented */
-	PTEID_OcspResponse &operator= (const PTEID_OcspResponse& ocsp);	/**< Copy not allowed - not implemented */
-};
-
 class APL_Certifs;
 
 /******************************************************************************//**
@@ -1237,11 +1161,6 @@ public:
 	  */
 	PTEIDSDK_API PTEID_CertifStatus getStatus();
 
-	/**
-	  * Return the status of the certificate.
-	  */
-	PTEIDSDK_API PTEID_CertifStatus getStatus(PTEID_ValidationLevel crl, PTEID_ValidationLevel ocsp);
-
 	PTEIDSDK_API PTEID_CertifType getType();			/**< Return the type of the certificate */
 
 	PTEIDSDK_API const PTEID_ByteArray &getCertData();/**< Return the content of the certificate */
@@ -1296,20 +1215,6 @@ public:
 	  */
 	PTEIDSDK_API PTEID_Certificate &getChildren(unsigned long ulIndex);
 
-	/**
-	  * Return the crl of the certificate.
-	  */
-	PTEIDSDK_API PTEID_Crl &getCRL();
-
-	/**
-	  * Return the ocsp response object of the certificate.
-	  */
-	PTEIDSDK_API PTEID_OcspResponse &getOcspResponse();
-
-
-	PTEIDSDK_API PTEID_CertifStatus verifyCRL(bool forceDownload=false);		/**< Verify the certificate trough CRL validation */
-	PTEIDSDK_API PTEID_CertifStatus verifyOCSP();								/**< Verify the certificate trough OCSP validation */
-
 private:
 	PTEID_Certificate(const PTEID_Certificate& certif);				/**< Copy not allowed - not implemented */
 	PTEID_Certificate& operator= (const PTEID_Certificate& certif);	/**< Copy not allowed - not implemented */
@@ -1319,7 +1224,6 @@ private:
 friend PTEID_Certificate &PTEID_Certificates::getCert(unsigned long ulIndex);	/**< For internal use : This method must access protected constructor */
 friend PTEID_Certificate &PTEID_Certificates::getCertFromCard(unsigned long ulIndex);	/**< For internal use : This method must access protected constructor */
 friend PTEID_Certificate &PTEID_Certificates::getCert(PTEID_CertifType type);			/**< For internal use : This method must access protected constructor */
-friend PTEID_Certificate &PTEID_Crl::getIssuer();										/**< For internal use : This method must access protected constructor */
 friend PTEID_Certificate &PTEID_Certificates::addCertificate(PTEID_ByteArray &cert);	/**< For internal use : This method must access protected constructor */
 };
 

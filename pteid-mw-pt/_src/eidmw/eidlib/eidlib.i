@@ -147,8 +147,6 @@
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_CARD_CHANGED)		ex = new PTEID_ExCardChanged();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_READERSET_CHANGED)ex = new PTEID_ExReaderSetChanged();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_NOT_ALLOW_BY_USER)ex = new PTEID_ExNotAllowByUser();
-			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_CERT_NOCRL)		ex = new PTEID_ExCertNoCrl();
-			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_CERT_NOOCSP)		ex = new PTEID_ExCertNoOcsp();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_CERT_NOROOT)		ex = new PTEID_ExCertNoRoot();
 			else															ex = new PTEID_Exception(pteid_excode);
 
@@ -674,12 +672,6 @@ return $jnicall;
 			case EIDMW_ERR_CERT_NOISSUER:
 				classDescription += "/PTEID_ExCertNoIssuer";
 				break;
-			case EIDMW_ERR_CERT_NOCRL:
-				classDescription += "/PTEID_ExCertNoCrl";
-				break;
-			case EIDMW_ERR_CERT_NOOCSP:
-				classDescription += "/PTEID_ExCertNoOcsp";
-				break;
 			case EIDMW_ERR_CERT_NOROOT:
 				classDescription += "/PTEID_ExCertNoRoot";
 				break;
@@ -1016,20 +1008,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") changePin		JAVA_CODE_THROW
 
 //------------------------------------------------------------
-// class PTEID_Crl
-//------------------------------------------------------------
-%javaexception("PTEID_Exception") getUri		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getIssuerName	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getIssuer		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getData		JAVA_CODE_THROW
-
-//------------------------------------------------------------
-// class PTEID_OcspResponse
-//------------------------------------------------------------
-%javaexception("PTEID_Exception") getUri		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getResponse	JAVA_CODE_THROW
-
-//------------------------------------------------------------
 // class PTEID_Certificates
 //------------------------------------------------------------
 %javaexception("PTEID_Exception") countFromCard		JAVA_CODE_THROW
@@ -1062,10 +1040,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") getIssuer			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") countChildren		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getChildren		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getCRL			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getOcspResponse	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") verifyCRL			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") verifyOCSP		JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_Config

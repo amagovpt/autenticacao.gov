@@ -34,8 +34,6 @@
 #define	INCLUDE_OBJECT_CERTDATA		1
 #define	INCLUDE_OBJECT_ROOTCERT		2
 #define	INCLUDE_OBJECT_CERTISSUER	3
-#define INCLUDE_OBJECT_CRL			4
-#define INCLUDE_OBJECT_OCSP			5
 #define INCLUDE_OBJECT_PINSIGN		6
 #define	INCLUDE_OBJECT_ROOTAUTHCERT		12
 #define	INCLUDE_OBJECT_AUTHCERT		8
@@ -98,20 +96,6 @@ PTEID_CertifStatus PTEID_Certificate::getStatus()
 
 	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
 	out = ConvertCertStatus(pimpl->getStatus());
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-PTEID_CertifStatus PTEID_Certificate::getStatus(PTEID_ValidationLevel crl, PTEID_ValidationLevel ocsp)
-{
-	PTEID_CertifStatus out =PTEID_CERTIF_STATUS_UNKNOWN;
-
-	BEGIN_TRY_CATCH
-
-	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = ConvertCertStatus(pimpl->getStatus(ConvertValidationLevel(crl), ConvertValidationLevel(ocsp)));
 	
 	END_TRY_CATCH
 
@@ -324,82 +308,6 @@ PTEID_Certificate &PTEID_Certificate::getChildren(unsigned long ulIndex)
 	return *out;
 }
 
-PTEID_Crl &PTEID_Certificate::getCRL()
-{
-	PTEID_Crl *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-
-	out = dynamic_cast<PTEID_Crl *>(getObject(INCLUDE_OBJECT_CRL));
-
-	if(!out)
-	{
-		//CAutoMutex autoMutex(m_mutex);
-
-		//pCrl=dynamic_cast<PTEID_Crl *>(getObject(INCLUDE_OBJECT_CRL));
-		//if(!pCrl)
-		//{
-			APL_Crl *aplCrl=pimpl->getCRL();
-			if(aplCrl)
-			{
-				out = new PTEID_Crl(m_context,aplCrl);
-				if(out)
-					m_objects[INCLUDE_OBJECT_CRL]=out;
-				else
-					throw PTEID_ExUnknown();
-			}
-			else
-			{
-				throw PTEID_ExCertNoCrl();
-			}
-		//}
-	}
-
-	END_TRY_CATCH
-
-	return *out;
-}
-
-PTEID_OcspResponse &PTEID_Certificate::getOcspResponse()
-{
-	PTEID_OcspResponse *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-
-	out = dynamic_cast<PTEID_OcspResponse *>(getObject(INCLUDE_OBJECT_OCSP));
-
-	if(!out)
-	{
-		//CAutoMutex autoMutex(m_mutex);
-
-		//pOcsp=dynamic_cast<PTEID_OcspResponse *>(getObject(INCLUDE_OBJECT_OCSP));
-		//if(!pOcsp)
-		//{
-			APL_OcspResponse *aplOcsp=pimpl->getOcspResponse();
-			if(aplOcsp)
-			{
-				out = new PTEID_OcspResponse(m_context,aplOcsp);
-				if(out)
-					m_objects[INCLUDE_OBJECT_OCSP]=out;
-				else
-					throw PTEID_ExUnknown();
-			}
-			else
-			{
-				throw PTEID_ExCertNoOcsp();
-			}
-		//}
-	}
-	
-	END_TRY_CATCH
-
-	return *out;
-}
-
 const char *PTEID_Certificate::getSerialNumber()
 {
 	const char *out = NULL;
@@ -478,34 +386,6 @@ unsigned long PTEID_Certificate::getKeyLength()
 
 	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
 	out = pimpl->getKeyLength();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-PTEID_CertifStatus  PTEID_Certificate::verifyCRL(bool forceDownload)
-{
-	PTEID_CertifStatus out = PTEID_CERTIF_STATUS_UNKNOWN;
-
-	BEGIN_TRY_CATCH
-
-	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = ConvertCertStatus(pimpl->verifyCRL(forceDownload));
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-PTEID_CertifStatus PTEID_Certificate::verifyOCSP()
-{
-	PTEID_CertifStatus out = PTEID_CERTIF_STATUS_UNKNOWN;
-
-	BEGIN_TRY_CATCH
-
-	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = ConvertCertStatus(pimpl->verifyOCSP());
 	
 	END_TRY_CATCH
 
@@ -1101,178 +981,6 @@ PTEID_Pin &PTEID_Pins::getPinByNumber(unsigned long ulIndex)
 	END_TRY_CATCH
 
 	return *out;
-}
-
-/*****************************************************************************************
----------------------------------------- PTEID_Crl ------------------------------------
-*****************************************************************************************/
-PTEID_Crl::PTEID_Crl(const SDK_Context *context,APL_Crl *impl):PTEID_Object(context,impl)
-{
-}
-
-PTEID_Crl::PTEID_Crl(const char *uri):PTEID_Object(NULL,new APL_Crl(uri))
-{
-	m_delimpl=true;
-}
-
-PTEID_Crl::~PTEID_Crl()
-{
-	if(m_delimpl && m_impl)
-	{
-		APL_Crl *pimpl=static_cast<APL_Crl *>(m_impl);
-		delete pimpl;
-		m_impl=NULL;
-	}
-}
-
-const char *PTEID_Crl::getUri()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_Crl *pimpl=static_cast<APL_Crl *>(m_impl);
-	out = pimpl->getUri();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_Crl::getIssuerName()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_Crl *pimpl=static_cast<APL_Crl *>(m_impl);
-	out = pimpl->getIssuerName();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-PTEID_Certificate &PTEID_Crl::getIssuer()
-{
-	PTEID_Certificate *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_Crl *pimpl=static_cast<APL_Crl *>(m_impl);
-
-	out = dynamic_cast<PTEID_Certificate *>(getObject(INCLUDE_OBJECT_CERTISSUER));
-
-	if(!out)
-	{
-		//CAutoMutex autoMutex(m_mutex);
-
-		//pIssuer=dynamic_cast<PTEID_Certificate *>(getObject(INCLUDE_OBJECT_CERTISSUER));
-		//if(!pIssuer)
-		//{
-			APL_Certif *aplIssuer=pimpl->getIssuer();
-			if(aplIssuer)
-			{
-				out = new PTEID_Certificate(m_context,aplIssuer);
-				if(out)
-					m_objects[INCLUDE_OBJECT_CERTISSUER]=out;
-				else
-					throw PTEID_ExUnknown();
-			}
-			else
-			{
-				throw PTEID_ExCertNoIssuer();
-			}
-		//}
-	}
-	
-	END_TRY_CATCH
-
-	return *out;
-}
-
-PTEID_CrlStatus PTEID_Crl::getData(PTEID_ByteArray &crl,bool bForceDownload)
-{
-	PTEID_CrlStatus out = PTEID_CRL_STATUS_UNKNOWN;
-
-	BEGIN_TRY_CATCH
-
-	APL_Crl *pimpl=static_cast<APL_Crl *>(m_impl);
-
-	APL_CrlStatus eStatus;
-	CByteArray bytearray;
-
-	eStatus=pimpl->getData(bytearray,bForceDownload);
-	crl=bytearray;
-
-	out = ConvertCrlStatus(eStatus);
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-/*****************************************************************************************
----------------------------------------- PTEID_OcspResponse ------------------------------------
-*****************************************************************************************/
-PTEID_OcspResponse::PTEID_OcspResponse(const SDK_Context *context,APL_OcspResponse *impl):PTEID_Object(context,impl)
-{
-}
-
-PTEID_OcspResponse::PTEID_OcspResponse(const char *uri,PTEID_HashAlgo hashAlgorithm,const PTEID_ByteArray &issuerNameHash,const PTEID_ByteArray &issuerKeyHash,const PTEID_ByteArray &serialNumber):PTEID_Object(NULL,NULL)
-{
-	CByteArray baIssuerNameHash(issuerNameHash.GetBytes(),issuerNameHash.Size());
-	CByteArray baIssuerKeyHash(issuerKeyHash.GetBytes(),issuerKeyHash.Size());
-	CByteArray baSerialNumber(serialNumber.GetBytes(),serialNumber.Size());
-
-	m_impl = new APL_OcspResponse(uri,ConvertHashAlgo(hashAlgorithm),baIssuerNameHash,baIssuerKeyHash,baSerialNumber);
-
-	m_delimpl=true;
-}
-
-PTEID_OcspResponse::~PTEID_OcspResponse()
-{
-	if(m_delimpl && m_impl)
-	{
-		APL_OcspResponse *pimpl=static_cast<APL_OcspResponse *>(m_impl);
-		delete pimpl;
-		m_impl=NULL;
-	}
-}
-
-const char *PTEID_OcspResponse::getUri()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_OcspResponse *pimpl=static_cast<APL_OcspResponse *>(m_impl);
-	out = pimpl->getUri();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-PTEID_CertifStatus PTEID_OcspResponse::getResponse(PTEID_ByteArray &response)
-{
-	PTEID_CertifStatus out = PTEID_CERTIF_STATUS_UNKNOWN;
-
-	BEGIN_TRY_CATCH
-
-	APL_OcspResponse *pimpl=static_cast<APL_OcspResponse *>(m_impl);
-
-	APL_CertifStatus eStatus;
-	CByteArray bytearray;
-
-	eStatus=pimpl->getResponse(bytearray);
-	response=bytearray;
-
-	out = ConvertCertStatus(eStatus);
-
-	END_TRY_CATCH
-
-	return out;
 }
 
 }

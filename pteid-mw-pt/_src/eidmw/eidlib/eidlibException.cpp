@@ -67,10 +67,6 @@ PTEID_Exception PTEID_Exception::THROWException(CMWException &e)
 		throw PTEID_ExCardTypeUnknown();
 	case EIDMW_ERR_CERT_NOISSUER:
 		throw PTEID_ExCertNoIssuer();
-	case EIDMW_ERR_CERT_NOCRL:
-		throw PTEID_ExCertNoCrl();
-	case EIDMW_ERR_CERT_NOOCSP:
-		throw PTEID_ExCertNoOcsp();
 	case EIDMW_ERR_CERT_NOROOT:
 		throw PTEID_ExCertNoRoot();
 	case EIDMW_ERR_BAD_USAGE:
@@ -211,28 +207,6 @@ PTEID_ExCertNoIssuer::PTEID_ExCertNoIssuer():PTEID_Exception(EIDMW_ERR_CERT_NOIS
 }
 
 PTEID_ExCertNoIssuer::~PTEID_ExCertNoIssuer()
-{
-}
-
-/*****************************************************************************************
----------------------------------------- PTEID_ExCertNoCrl --------------------------------------
-*****************************************************************************************/
-PTEID_ExCertNoCrl::PTEID_ExCertNoCrl():PTEID_Exception(EIDMW_ERR_CERT_NOCRL)
-{
-}
-
-PTEID_ExCertNoCrl::~PTEID_ExCertNoCrl()
-{
-}
-
-/*****************************************************************************************
----------------------------------------- PTEID_ExCertNoOcsp --------------------------------------
-*****************************************************************************************/
-PTEID_ExCertNoOcsp::PTEID_ExCertNoOcsp():PTEID_Exception(EIDMW_ERR_CERT_NOOCSP)
-{
-}
-
-PTEID_ExCertNoOcsp::~PTEID_ExCertNoOcsp()
 {
 }
 

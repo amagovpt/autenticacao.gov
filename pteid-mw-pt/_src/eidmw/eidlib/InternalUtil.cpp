@@ -63,12 +63,6 @@ PTEID_CertifStatus ConvertCertStatus(APL_CertifStatus eStatus)
 	case APL_CERTIF_STATUS_VALID:
 		return PTEID_CERTIF_STATUS_VALID;
 
-	case APL_CERTIF_STATUS_VALID_CRL:
-		return PTEID_CERTIF_STATUS_VALID_CRL;
-
-	case APL_CERTIF_STATUS_VALID_OCSP:
-		return PTEID_CERTIF_STATUS_VALID_OCSP;
-
 	default:
 		return PTEID_CERTIF_STATUS_ERROR;
 	}
@@ -92,24 +86,6 @@ PTEID_CertifType ConvertCertType(APL_CertifType eType)
 
 	default:
 		return PTEID_CERTIF_TYPE_UNKNOWN;
-	}
-}
-
-PTEID_CrlStatus ConvertCrlStatus(APL_CrlStatus eStatus)
-{
-	switch(eStatus)
-	{ 
-	case APL_CRL_STATUS_UNKNOWN:
-		return PTEID_CRL_STATUS_UNKNOWN;
-
-	case APL_CRL_STATUS_VALID:
-		return PTEID_CRL_STATUS_VALID;
-
-	case APL_CRL_STATUS_CONNECT:
-		return PTEID_CRL_STATUS_CONNECT;
-
-	default:
-		return PTEID_CRL_STATUS_ERROR;
 	}
 }
 

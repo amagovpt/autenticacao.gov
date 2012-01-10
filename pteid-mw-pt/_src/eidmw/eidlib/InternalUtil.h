@@ -84,8 +84,7 @@ struct SDK_Context
 PTEID_CardType ConvertCardType(APL_CardType eCardType);
 PTEID_CertifStatus ConvertCertStatus(APL_CertifStatus eStatus);
 PTEID_CertifType ConvertCertType(APL_CertifType eType);
-PTEID_CrlStatus ConvertCrlStatus(APL_CrlStatus eStatus);
-;
+
 
 APL_HashAlgo ConvertHashAlgo(PTEID_HashAlgo eAlgo);
 APL_SaveFileType ConvertFileType(PTEID_FileType fileType);

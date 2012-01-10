@@ -79,9 +79,7 @@ enum PTEID_PinUsage
 
 enum PTEID_ValidationProcess
 {
-	PTEID_VALIDATION_PROCESS_NONE=0,
-	PTEID_VALIDATION_PROCESS_CRL,
-	PTEID_VALIDATION_PROCESS_OCSP
+	PTEID_VALIDATION_PROCESS_NONE=0
 };
 
 enum PTEID_ValidationLevel
@@ -101,9 +99,6 @@ enum PTEID_CertifStatus
 	PTEID_CERTIF_STATUS_ISSUER,		/**< An issuer is missing in the chain */
 	PTEID_CERTIF_STATUS_ERROR,		/**< Error during validation */
 	PTEID_CERTIF_STATUS_VALID,		/**< Valid certificate */
-	PTEID_CERTIF_STATUS_VALID_CRL,		/**< Valid certificate through CRL process */
-	PTEID_CERTIF_STATUS_VALID_OCSP,		/**< Valid certificate through OCSP process */
-	PTEID_CERTIF_STATUS_OCSP_NOT_CHECKED	/**< OCSP was not performed */
 };
 
 enum PTEID_CertifType
@@ -114,14 +109,6 @@ enum PTEID_CertifType
 	PTEID_CERTIF_TYPE_ROOT_AUTH,				/**< CA certificate */
 	PTEID_CERTIF_TYPE_AUTHENTICATION,	/**< Authentication certificate */
 	PTEID_CERTIF_TYPE_SIGNATURE			/**< Signature certificate */
-};
-
-enum PTEID_CrlStatus
-{
-	PTEID_CRL_STATUS_UNKNOWN,		/**< Validity unknown */
-	PTEID_CRL_STATUS_VALID,			/**< Valid Crl */
-	PTEID_CRL_STATUS_CONNECT,		/**< Connection problem */
-	PTEID_CRL_STATUS_ERROR			/**< Error during validation */
 };
 
 enum PTEID_HashAlgo {
@@ -153,18 +140,6 @@ enum PTEID_Param
 	PTEID_PARAM_LOGGING_FILESIZE,		//number, Maximum number of log-files; 3
 	PTEID_PARAM_LOGGING_LEVEL,			//string, Specify what should be logged; critical, error, warning, info or debug
 	PTEID_PARAM_LOGGING_GROUP,			//number; 0=no (default), 1=yes (create on log file by module)
-
-	//CRL
-	PTEID_PARAM_CRL_SERVDOWNLOADNR,		//number
-	PTEID_PARAM_CRL_TIMEOUT,				//number, timeout in seconds
-	PTEID_PARAM_CRL_CACHEDIR,			//string
-	PTEID_PARAM_CRL_CACHEFILE,			//string	�$common/crl/
-	PTEID_PARAM_CRL_LOCKFILE,			//string
-
-	//CERTIFIACTE VALIDATION
-	PTEID_PARAM_CERTVALID_ALLOWTESTC,	//number; 0=no, 1=yes
-	PTEID_PARAM_CERTVALID_CRL,			//number; 0=no, 1=optional, 2=always
-	PTEID_PARAM_CERTVALID_OCSP,			//number; 0=no, 1=optional, 2=always
 
 	//CERTIFICATE CACHE
 	PTEID_PARAM_CERTCACHE_CACHEFILE,		//string;
