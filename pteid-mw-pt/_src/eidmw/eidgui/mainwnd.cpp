@@ -664,7 +664,6 @@ void MainWnd::enablePrintMenu( void )
 		switch(m_CI_Data.m_CardInfo.getType())
 		{
 		case PTEID_CARDTYPE_EID:
-		case PTEID_CARDTYPE_KIDS:
 		case PTEID_CARDTYPE_FOREIGNER:
 			bEnable = true;
 			break;
@@ -1750,7 +1749,6 @@ void MainWnd::loadCardData( void )
 				switch (CardType)
 				{
 				case PTEID_CARDTYPE_FOREIGNER:
-				case PTEID_CARDTYPE_KIDS:
 				case PTEID_CARDTYPE_EID:
 				{
 					try
@@ -1904,7 +1902,6 @@ void MainWnd::loadCardDataAddress( void )
 				switch (CardType)
 				{
 				case PTEID_CARDTYPE_FOREIGNER:
-				case PTEID_CARDTYPE_KIDS:
 				case PTEID_CARDTYPE_EID:
 				{
 					try
@@ -2056,7 +2053,6 @@ bool MainWnd::loadCardDataPersoData( void )
 				switch (CardType)
 				{
 				case PTEID_CARDTYPE_FOREIGNER:
-				case PTEID_CARDTYPE_KIDS:
 				case PTEID_CARDTYPE_EID:
 				{
 					try
@@ -2209,7 +2205,6 @@ void MainWnd::loadCardDataCertificates( void )
 				switch (CardType)
 				{
 				case PTEID_CARDTYPE_FOREIGNER:
-				case PTEID_CARDTYPE_KIDS:
 				case PTEID_CARDTYPE_EID:
 				{
 					try
@@ -2793,23 +2788,6 @@ void MainWnd::showTabs()
 			refreshTabIdentityExtra();
 		}
 
-		refreshTabCardPin();
-		refreshTabInfo();
-
-		break;
-
-	case PTEID_CARDTYPE_KIDS:
-		if(PTEID_EIDCard::isApplicationAllowed())
-		{
-
-			refreshTabIdentity();
-			refreshTabIdentityExtra();
-
-			m_imgBackground_Front = QPixmap( ":/images/Images/Background_KidsFront.jpg" ); // background
-			m_imgBackground_Back = QPixmap( ":/images/Images/Background_KidsBack.jpg" ); // background
-		}
-
-		refreshTabCertificates();
 		refreshTabCardPin();
 		refreshTabInfo();
 
@@ -3813,7 +3791,6 @@ void MainWnd::refreshTabCardPin( void )
 			switch(ReaderContext.getCardType())
 			{
 			case PTEID_CARDTYPE_EID:
-			case PTEID_CARDTYPE_KIDS:
 			case PTEID_CARDTYPE_FOREIGNER:
                 {
                     PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
@@ -4208,7 +4185,6 @@ void MainWnd::customEvent( QEvent* pEvent )
 					switch( cardType )
 					{
 					case PTEID_CARDTYPE_EID:
-					case PTEID_CARDTYPE_KIDS:
 					case PTEID_CARDTYPE_FOREIGNER:
 					{
 						try
