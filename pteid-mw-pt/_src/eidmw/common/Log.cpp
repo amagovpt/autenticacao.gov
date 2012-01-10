@@ -92,9 +92,6 @@ CLog &MapModule(tModule moduleIn)
 		case MOD_SDK:
 			group = L"sdk";
 			break;
-		case MOD_SIS:
-			group = L"sis_plugin";
-			break;
 		default: 
 			group = L"";
 			break;

@@ -59,7 +59,6 @@ typedef enum {
     MOD_CRL,  // CRL service
     MOD_SDK,  // SDK
     MOD_TEST,  // Unit test
-    MOD_SIS,  // SIS plugin
 } tModule;
 
 /**
