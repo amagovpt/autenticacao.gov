@@ -67,7 +67,7 @@ public:
 
 	//***************************************************
 	// Xerces implemented functions to interpret the tags
-	// of an EID XML file (EID, KIDS, FOREIGNER)
+	// of an EID XML file (EID)
 	//***************************************************
 	void startDocument( void );
 

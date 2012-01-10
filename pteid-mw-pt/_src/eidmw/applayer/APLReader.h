@@ -39,8 +39,7 @@ namespace eIDMW
 enum APL_CardType
 {
 	APL_CARDTYPE_UNKNOWN=0,
-	APL_CARDTYPE_PTEID_EID,
-	APL_CARDTYPE_PTEID_FOREIGNER
+	APL_CARDTYPE_PTEID_EID
 };
 
 enum APL_SaveFileType
@@ -279,7 +278,6 @@ class CReader;
 
 class APL_Card;
 class APL_EIDCard;
-class APL_ForeignerCard;
 
 class APL_SuperParser;
 
@@ -325,7 +323,7 @@ public:
 	  *		First delete it if not null
 	  *		Then check if a card is present
 	  *		If yes, instanciated regarding the card type
-	  *			APL_EIDCard or APL_ForeignCard
+	  *			APL_EIDCard
 	  *
 	  * @return true if a new connection has been made
 	  */
@@ -366,12 +364,6 @@ public:
 	  * If there is no EIdcard in the reader NULL is return
 	  */    
     EIDMW_APL_API APL_EIDCard *getEIDCard();
-
-   	/**
-	  * Get the ForeignerCard in the reader
-	  * If there is no ForeignerCard in the reader NULL is return
-	  */    
-	EIDMW_APL_API APL_ForeignerCard *getForeignerCard();
 
 	/** 
 	 * Specify a callback function to be called each time a

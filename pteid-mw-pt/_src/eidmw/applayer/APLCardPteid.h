@@ -243,38 +243,6 @@ friend bool APL_ReaderContext::connectCard();	/**< This method must access prote
 };
 
 /******************************************************************************//**
-  * Class that represent a PTEID Foreigner card (
-  *
-  * To get APL_ForeignerCard object, we have to ask it from APL_ReaderContext 
-  *********************************************************************************/
-class APL_ForeignerCard : public APL_EIDCard
-{
-public:
-	/**
-	  * Destructor
-	  */
-	EIDMW_APL_API virtual ~APL_ForeignerCard();
-
-	/**
-	  * Return the type of the card (PTEID_CARDTYPE_FOREIGNER)
-	  */
-	EIDMW_APL_API virtual APL_CardType getType() const;
-
-protected:
-	/**
-	  * Constructor
-	  *		Used only in APL_ReaderContext::connectCard
-	  */    
-	APL_ForeignerCard(APL_ReaderContext *reader);
-
-private:
-	APL_ForeignerCard(const APL_ForeignerCard& card);				/**< Copy not allowed - not implemented */
-	APL_ForeignerCard &operator= (const APL_ForeignerCard& card);	/**< Copy not allowed - not implemented */
-
-friend bool APL_ReaderContext::connectCard();	/**< This method must access protected constructor */
-};
-
-/******************************************************************************//**
   * Class that represent the FULL document on a PTEID card
   * To get APL_DocEIdFull object, we have to ask it from APL_EIDCard 
   *********************************************************************************/

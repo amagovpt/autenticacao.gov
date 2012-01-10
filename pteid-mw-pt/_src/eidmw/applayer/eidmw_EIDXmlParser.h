@@ -31,7 +31,7 @@ namespace eIDMW
 
 //***************************************************
 // Xerces implemented functions to interpret the tags
-// of an EID XML file (EID, KIDS, FOREIGNER)
+// of an EID XML file (EID)
 // The object has a processor pool. This pool can be used to hold
 // the different ptocessors for the tags in the XML file to be
 // processed.

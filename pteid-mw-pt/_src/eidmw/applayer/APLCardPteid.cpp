@@ -1255,22 +1255,6 @@ bool APL_EIDCard::isApplicationAllowed()
 }
 
 /*****************************************************************************************
----------------------------------------- CForeignerCard ----------------------------------
-*****************************************************************************************/
-APL_ForeignerCard::APL_ForeignerCard(APL_ReaderContext *reader):APL_EIDCard(reader)
-{
-}
-
-APL_ForeignerCard::~APL_ForeignerCard()
-{
-}
-
-APL_CardType APL_ForeignerCard::getType() const
-{
-	return APL_CARDTYPE_PTEID_FOREIGNER;
-}
-
-/*****************************************************************************************
 ---------------------------------------- APL_EIdFullDoc -------------------------------------------
 *****************************************************************************************/
 APL_EIdFullDoc::APL_EIdFullDoc(APL_EIDCard *card)
@@ -1341,9 +1325,6 @@ CByteArray APL_EIdFullDoc::getXML(bool bNoHeader)
 	case APL_CARDTYPE_PTEID_EID:
 		xml+=CARDTYPE_NAME_PTEID_EID;
 		break;
-	case APL_CARDTYPE_PTEID_FOREIGNER:
-		xml+=CARDTYPE_NAME_PTEID_FOREIGNER;
-		break;
 	default:
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	}
@@ -1392,9 +1373,6 @@ doc_version;card_type;biographic;biometric;certificates;pins;
 	case APL_CARDTYPE_PTEID_EID:
 		csv+=CARDTYPE_NAME_PTEID_EID;
 		break;
-	case APL_CARDTYPE_PTEID_FOREIGNER:
-		csv+=CARDTYPE_NAME_PTEID_FOREIGNER;
-		break;
 	default:
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	}
@@ -1432,9 +1410,6 @@ CByteArray APL_EIdFullDoc::getTLV()
 	{
 	case APL_CARDTYPE_PTEID_EID:
 		baCardType.Append(CARDTYPE_NAME_PTEID_EID);
-		break;
-	case APL_CARDTYPE_PTEID_FOREIGNER:
-		baCardType.Append(CARDTYPE_NAME_PTEID_FOREIGNER);
 		break;
 	default:
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
