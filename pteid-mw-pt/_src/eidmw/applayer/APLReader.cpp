@@ -291,9 +291,8 @@ APL_CardType APL_ReaderContext::getPhysicalCardType()
 			oTLVBuffer.ParseTLV(file.GetBytes(), file.Size());
 			oTLVBuffer.FillLongData(PTEID_FIELD_TAG_ID_DocumentType, &lDocType);*/
 
-			//////////////////////////////////////////////////////////// READ SOD INIT
-			/*std::cout << "MAPFIELDS Address " << std::endl;
-			CByteArray pteidngSodBuffer;
+			/////////READ SOD INIT as a possible fallback for Identify Citizens
+			/*CByteArray pteidngSodBuffer;
 			ofstream myfile;
 			std::string m_sodfile;
 			std::string pteidfile = "/home/metalgod/.pteid-ng/pteidgui-ng-";
