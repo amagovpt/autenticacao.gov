@@ -570,26 +570,6 @@ PTEID_ReaderContext::PTEID_ReaderContext(const PTEID_RawData_Eid &data):PTEID_Ob
 	END_TRY_CATCH
 }
 
-PTEID_ReaderContext::PTEID_ReaderContext(const PTEID_RawData_Sis &data):PTEID_Object(NULL,NULL)
-{
-	m_cardid=0;
-	m_delimpl=true;
-
-	m_context->mutex=new CMutex;
-
-	BEGIN_TRY_CATCH
-
-	APL_RawData_Sis *pData=new APL_RawData_Sis;
-	pData->version=1;
-	pData->idData.Append(data.idData.GetBytes(),data.idData.Size());
-
-	m_impl=new APL_ReaderContext(*pData);
-	
-	delete pData;
-
-	END_TRY_CATCH
-}
-
 PTEID_ReaderContext::~PTEID_ReaderContext()
 {
 	//BEGIN_TRY_CATCH
@@ -723,10 +703,6 @@ PTEID_Card &PTEID_ReaderContext::getCard()
 			out = new PTEID_ForeignerCard(&context,pAplCard);
 			//out = new PTEID_ForeignerCard(&context,pimpl->getForeignerCard());
 			break;
-		case APL_CARDTYPE_PTEID_SIS:
-			out = new PTEID_SISCard(&context,pAplCard);
-			//out = new PTEID_SISCard(&context,pimpl->getSISCard());
-			break;
 		default:
 			throw PTEID_ExCardTypeUnknown();
 		//}
@@ -786,20 +762,6 @@ PTEID_ForeignerCard &PTEID_ReaderContext::getForeignerCard()
 
 	PTEID_Card &card = getCard();
 	return *dynamic_cast<PTEID_ForeignerCard *>(&card);
-}
-
-PTEID_SISCard &PTEID_ReaderContext::getSISCard()
-{
-	BEGIN_TRY_CATCH
-
-	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
-	if(pimpl->getCardType()!=APL_CARDTYPE_PTEID_SIS)
-		throw PTEID_ExCardBadType();
-
-	END_TRY_CATCH
-
-	PTEID_Card &card = getCard();
-	return *dynamic_cast<PTEID_SISCard *>(&card);
 }
 
 unsigned long PTEID_ReaderContext::SetEventCallback(void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef)

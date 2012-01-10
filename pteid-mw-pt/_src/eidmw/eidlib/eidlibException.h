@@ -143,7 +143,6 @@ public:
   *           - PTEID_ReaderContext::getEIDCard()
   *           - PTEID_ReaderContext::getKidsCard()
   *           - PTEID_ReaderContext::getForeignerCard()
-  *           - PTEID_ReaderContext::getSISCard()
   *********************************************************************************/
 class PTEID_ExNoCardPresent: public PTEID_Exception
 {
@@ -159,7 +158,6 @@ public:
   * Used in : - PTEID_ReaderContext::getEIDCard()
   *           - PTEID_ReaderContext::getKidsCard()
   *           - PTEID_ReaderContext::getForeignerCard()
-  *           - PTEID_ReaderContext::getSISCard()
   *********************************************************************************/
 class PTEID_ExCardBadType: public PTEID_Exception
 {

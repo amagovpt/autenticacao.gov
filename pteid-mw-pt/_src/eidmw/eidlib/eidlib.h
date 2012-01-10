@@ -166,11 +166,6 @@ struct PTEID_RawData_Eid
     PTEID_ByteArray trace;
 };
 
-struct PTEID_RawData_Sis
-{
-    PTEID_ByteArray idData;
-};
-
 /**
   * This define give an easy access to singleton (no declaration/instantiation is needed).
   *
@@ -298,7 +293,6 @@ class PTEID_Card;
 class PTEID_EIDCard;
 class PTEID_KidsCard;
 class PTEID_ForeignerCard;
-class PTEID_SISCard;
 
 /******************************************************************************//**
   * This class represent a reader.
@@ -307,7 +301,7 @@ class PTEID_SISCard;
   * Once you have a reader object, you can check if a card is present (isCardPresent).
   * Then you can ask which type of card is in the reader with getCardType()
   *		and then get a card object using one of this method :
-  *			getCard, getEIDCard, getKidsCard, getForeignerCard or getSISCard.
+  *			getCard, getEIDCard, getKidsCard or getForeignerCard.
   *********************************************************************************/
 class PTEID_ReaderContext : public PTEID_Object
 {
@@ -329,12 +323,6 @@ public:
 	  *		No physical reader are connected (m_reader=NULL)
 	  */
 	PTEIDSDK_API PTEID_ReaderContext(const PTEID_RawData_Eid &data);
-
-	/**
-	  * Construct using Raw data for Sis.
-	  *		No physical reader are connected (m_reader=NULL)
-	  */
-	PTEIDSDK_API PTEID_ReaderContext(const PTEID_RawData_Sis &data);
 
 	PTEIDSDK_API virtual ~PTEID_ReaderContext();	/**< Destructor */
 
@@ -372,7 +360,7 @@ public:
 	/**
 	 * Get the card in the reader.
 	 *		Instantiation is made regarding the type of the card
-	 *			(PTEID_EIDCard, PTEID_KidsCard, PTEID_ForeignerCard or PTEID_SISCard).
+	 *			(PTEID_EIDCard, PTEID_KidsCard or PTEID_ForeignerCard).
 	 *
 	 * If no card is present in the reader, exception PTEID_ExNoCardPresent is thrown.
 	 * If the card type is not supported, exception PTEID_ExCardTypeUnknown is thrown.
@@ -404,14 +392,6 @@ public:
 	 * If the card is not a ForeignerCard, exception PTEID_ExCardBadType is thrown.
 	 */
 	PTEIDSDK_API PTEID_ForeignerCard &getForeignerCard();
-
- 	/**
-	 * Get the SISCard in the reader.
-	 *
-	 * If no card is present in the reader, exception PTEID_ExNoCardPresent is thrown.
-	 * If the card is not a SISCard, exception PTEID_ExCardBadType is thrown.
-	 */
-	PTEIDSDK_API PTEID_SISCard &getSISCard();
 
 	/**
 	 * Specify a callback function to be called each time a
@@ -625,56 +605,6 @@ protected:
 private:
 	PTEID_SmartCard(const PTEID_SmartCard& card);						/**< Copy not allowed - not implemented */
 	PTEID_SmartCard& operator= (const PTEID_SmartCard& card);			/**< Copy not allowed - not implemented */
-};
-
-class PTEID_SisFullDoc;
-class PTEID_SisId;
-class APL_SISCard;
-
-/******************************************************************************//**
-  * This class represents a SIS card.
-  * To get such an object you have to ask it from the ReaderContext.
-  *********************************************************************************/
-class PTEID_SISCard : public PTEID_MemoryCard
-{
-public:
-	PTEIDSDK_API virtual ~PTEID_SISCard();				/**< Destructor */
-
- 	/**
-	 * Return a document from the card.
-	 * Throw PTEID_ExDocTypeUnknown exception if the document doesn't exist for this card.
-	 */
-	PTEIDSDK_API virtual PTEID_XMLDoc& getDocument(PTEID_DocumentType type);
-
- 	/**
-	 * Get the full document.
-	 */
-	PTEIDSDK_API PTEID_SisFullDoc& getFullDoc();
-
- 	/**
-	 * Get the id document.
-	 */
- 	PTEIDSDK_API PTEID_SisId& getID();
-
- 	/**
-	 * Return a raw data from the card.
-	 * Throw PTEID_ExFileTypeUnknown exception if the document doesn't exist for this card.
-	 */
-	PTEIDSDK_API virtual const PTEID_ByteArray& getRawData(PTEID_RawDataType type);
-
- 	/**
-	 * Get the id RawData.
-	 */
- 	PTEIDSDK_API const PTEID_ByteArray& getRawData_Id();
-
-private:
-	PTEID_SISCard(const PTEID_SISCard& card);				/**< Copy not allowed - not implemented */
-	PTEID_SISCard& operator= (const PTEID_SISCard& card);	/**< Copy not allowed - not implemented */
-
-	PTEID_SISCard(const SDK_Context *context,APL_Card *impl);	/**< For internal use : Constructor */
-
-friend PTEID_Card &PTEID_ReaderContext::getCard();		/**< For internal use : This method must access protected constructor */
-
 };
 
 class PTEID_EIdFullDoc;
@@ -962,37 +892,6 @@ private:
 friend PTEID_Sod& PTEID_EIDCard::getSod();		/**< For internal use : This method must access protected constructor */
 };
 
-class APL_DocSisId;
-
-/******************************************************************************//**
-  * Class for the id document on a SIS Card.
-  * You can get such an object from PTEID_SISCard::getID()	(or getDocument).
-  *********************************************************************************/
-class PTEID_SisId : public PTEID_XMLDoc
-{
-public:
-	PTEIDSDK_API virtual ~PTEID_SisId();					/**< Destructor */
-
-    PTEIDSDK_API const char *getName();					/**< Return Name field */
-	PTEIDSDK_API const char *getSurname();				/**< Return Surname field */
-	PTEIDSDK_API const char *getInitials();				/**< Return Initials field */
-	PTEIDSDK_API const char *getGender();					/**< Return Gender field */
-	PTEIDSDK_API const char *getDateOfBirth();			/**< Return Date Of Birth field */
-	PTEIDSDK_API const char *getSocialSecurityNumber();	/**< Return Social Security Number field */
-	PTEIDSDK_API const char *getLogicalNumber();			/**< Return Logical Number field */
-	PTEIDSDK_API const char *getDateOfIssue();			/**< Return Date Of Issue field */
-	PTEIDSDK_API const char *getValidityBeginDate();		/**< Return Validity Begin Date field */
-	PTEIDSDK_API const char *getValidityEndDate();		/**< Return Validity End Date field */
-
-private:
-	PTEID_SisId(const PTEID_SisId& doc);						/**< Copy not allowed - not implemented */
-	PTEID_SisId& operator= (const PTEID_SisId& doc);			/**< Copy not allowed - not implemented */
-
-	PTEID_SisId(const SDK_Context *context,APL_DocSisId *impl);		/**< For internal use : Constructor */
-
-friend PTEID_SisId& PTEID_SISCard::getID();					/**< For internal use : This method must access protected constructor */
-};
-
 class APL_DocEId;
 
 /******************************************************************************//**
@@ -1090,26 +989,6 @@ private:
 	PTEID_Address(const SDK_Context *context,APL_AddrEId *impl);			/**< For internal use : Constructor */
 
 friend PTEID_Address& PTEID_EIDCard::getAddr();						/**< For internal use : This method must access protected constructor */
-};
-
-class APL_SisFullDoc;
-
-/******************************************************************************//**
-  * Class for the full document Sis.
-  *********************************************************************************/
-class PTEID_SisFullDoc : public PTEID_XMLDoc
-{
-public:
-	PTEIDSDK_API virtual ~PTEID_SisFullDoc();					/**< Destructor */
-
-protected:
-	PTEID_SisFullDoc(const SDK_Context *context,APL_SisFullDoc *impl);	/**< For internal use : Constructor */
-
-private:
-	PTEID_SisFullDoc(const PTEID_SisFullDoc& doc);				/**< Copy not allowed - not implemented */
-	PTEID_SisFullDoc& operator= (const PTEID_SisFullDoc& doc);	/**< Copy not allowed - not implemented */
-
-friend PTEID_SisFullDoc& PTEID_SISCard::getFullDoc();				/**< For internal use : This method must access protected constructor */
 };
 
 class APL_EIdFullDoc;

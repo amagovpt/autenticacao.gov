@@ -27,7 +27,6 @@
 
 #include "APLDoc.h"
 #include "APLCrypto.h"
-#include "APLCardSIS.h"
 #include "APLCardPteid.h"
 
 #include <string.h>
@@ -333,17 +332,6 @@ PTEID_Crypto::~PTEID_Crypto()
 }
 
 /*****************************************************************************************
----------------------------------------- PTEID_SisFullDoc -------------------------------------------
-*****************************************************************************************/
-PTEID_SisFullDoc::PTEID_SisFullDoc(const SDK_Context *context,APL_SisFullDoc *impl):PTEID_XMLDoc(context,impl)
-{
-}
-
-PTEID_SisFullDoc::~PTEID_SisFullDoc()
-{
-}
-
-/*****************************************************************************************
 ---------------------------------------- PTEID_EIdFullDoc -------------------------------------------
 *****************************************************************************************/
 PTEID_EIdFullDoc::PTEID_EIdFullDoc(const SDK_Context *context,APL_EIdFullDoc *impl):PTEID_XMLDoc(context,impl)
@@ -636,158 +624,6 @@ const PTEID_ByteArray &PTEID_CardVersionInfo::getSignature()
 
 	return *out;
 }
-/*****************************************************************************************
----------------------------------------- SisId -------------------------------------------
-*****************************************************************************************/
-PTEID_SisId::PTEID_SisId(const SDK_Context *context,APL_DocSisId *impl):PTEID_XMLDoc(context,impl)
-{
-}
-
-PTEID_SisId::~PTEID_SisId()
-{
-}
-
-const char *PTEID_SisId::getName()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocSisId *pimpl=static_cast<APL_DocSisId *>(m_impl);
-	out = pimpl->getName();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_SisId::getSurname()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocSisId *pimpl=static_cast<APL_DocSisId *>(m_impl);
-	out = pimpl->getSurname();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_SisId::getInitials()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocSisId *pimpl=static_cast<APL_DocSisId *>(m_impl);
-	out = pimpl->getInitials();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_SisId::getGender()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocSisId *pimpl=static_cast<APL_DocSisId *>(m_impl);
-	out = pimpl->getGender();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_SisId::getDateOfBirth()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocSisId *pimpl=static_cast<APL_DocSisId *>(m_impl);
-	out = pimpl->getDateOfBirth();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_SisId::getSocialSecurityNumber()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocSisId *pimpl=static_cast<APL_DocSisId *>(m_impl);
-	out = pimpl->getSocialSecurityNumber();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_SisId::getLogicalNumber()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocSisId *pimpl=static_cast<APL_DocSisId *>(m_impl);
-	out = pimpl->getLogicalNumber();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_SisId::getDateOfIssue()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocSisId *pimpl=static_cast<APL_DocSisId *>(m_impl);
-	out = pimpl->getDateOfIssue();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_SisId::getValidityBeginDate()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocSisId *pimpl=static_cast<APL_DocSisId *>(m_impl);
-	out = pimpl->getValidityBeginDate();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_SisId::getValidityEndDate()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocSisId *pimpl=static_cast<APL_DocSisId *>(m_impl);
-	out = pimpl->getValidityEndDate();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-
 
 /*****************************************************************************************
 ---------------------------------------- PTEID_EId ---------------------------------------------

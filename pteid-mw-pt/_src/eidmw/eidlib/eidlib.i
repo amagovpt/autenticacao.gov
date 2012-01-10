@@ -488,9 +488,6 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 	case PTEID_CardType.PTEID_CARDTYPE_FOREIGNER:
 		return getEIDCard();			
 
-	case PTEID_CardType.PTEID_CARDTYPE_SIS:			
-		return getSISCard();			
-
     default:										
 		throw new PTEID_ExCardTypeUnknown();
 	}
@@ -516,21 +513,6 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 
     default:										
 		throw new PTEID_ExCardBadType();
-	}
-}
-
-///////////////////////////////////////// PTEID_XMLDoc& PTEID_SISCard::getDocument(PTEID_DocumentType type) /////////////////////////////////////////////
-%warnfilter(844) eIDMW::PTEID_SISCard::getDocument;
-%typemap(csout) eIDMW::PTEID_XMLDoc& eIDMW::PTEID_SISCard::getDocument(eIDMW::PTEID_DocumentType type)
-{
-	switch(type)
-	{
-	case PTEID_DocumentType.PTEID_DOCTYPE_FULL:
-		return getFullDoc();
-	case PTEID_DocumentType.PTEID_DOCTYPE_ID:
-		return getID();
-	default:
-		throw new PTEID_ExDocTypeUnknown();
 	}
 }
 
@@ -849,7 +831,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") getEIDCard		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getKidsCard		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getForeignerCard	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getSISCard		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") BeginTransaction	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") EndTransaction	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") isVirtualReader	JAVA_CODE_THROW
@@ -885,15 +866,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") getChallenge		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getChallengeResponse		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") verifyChallengeResponse	JAVA_CODE_THROW
-
-//------------------------------------------------------------
-// class PTEID_SISCard
-//------------------------------------------------------------
-%javaexception("PTEID_Exception") getDocument		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getFullDoc		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getID				JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData_Id		JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_EIDCard
@@ -971,20 +943,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") getSignature							JAVA_CODE_THROW
 
 //------------------------------------------------------------
-// class PTEID_SisId
-//------------------------------------------------------------
-%javaexception("PTEID_Exception") getName				JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getSurname			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getInitials			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getGender				JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getDateOfBirth		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getSocialSecurityNumber	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getLogicalNumber		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getDateOfIssue		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getValidityBeginDate	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getValidityEndDate	JAVA_CODE_THROW
-
-//------------------------------------------------------------
 // class PTEID_EId
 //------------------------------------------------------------
 %javaexception("PTEID_Exception") getDocumentVersion		JAVA_CODE_THROW
@@ -1051,9 +1009,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") getZip3				JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getPostalLocality		JAVA_CODE_THROW
 
-//------------------------------------------------------------
-// class PTEID_SisFullDoc: none
-//------------------------------------------------------------
 //------------------------------------------------------------
 // class PTEID_EIdFullDoc: none
 //------------------------------------------------------------

@@ -26,7 +26,6 @@
 
 #include "APLCard.h"
 #include "APLCardPteid.h"
-#include "APLCardSIS.h"
 #include "APLCrypto.h"
 #include "APLCertif.h"
 
@@ -42,8 +41,6 @@
 #define INCLUDE_OBJECT_CHALLENGE		7
 #define INCLUDE_OBJECT_RESPONSE			8
 #define INCLUDE_OBJECT_CUSTOMDOC		9
-
-#define INCLUDE_OBJECT_DOCSIS			11
 
 #define INCLUDE_OBJECT_RAWDATA_ID			21
 #define INCLUDE_OBJECT_RAWDATA_ID_SIG		22
@@ -423,131 +420,6 @@ bool PTEID_SmartCard::verifyChallengeResponse(const PTEID_ByteArray &challenge, 
 	END_TRY_CATCH
 
 	return out;
-}
-
-/*****************************************************************************************
----------------------------------------- PTEID_SISCard -----------------------------------------
-*****************************************************************************************/
-PTEID_SISCard::PTEID_SISCard(const SDK_Context *context,APL_Card *impl):PTEID_MemoryCard(context,impl)
-{
-}
-
-PTEID_SISCard::~PTEID_SISCard()
-{
-}
-
-PTEID_XMLDoc& PTEID_SISCard::getDocument(PTEID_DocumentType type)
-{
-	switch(type)
-	{
-	case PTEID_DOCTYPE_FULL:
-		return getFullDoc();
-	case PTEID_DOCTYPE_ID:
-		return getID();
-	default:
-		throw PTEID_ExDocTypeUnknown();
-	}
-}
-
-PTEID_SisFullDoc& PTEID_SISCard::getFullDoc()
-{
-	PTEID_SisFullDoc *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_SISCard *pcard=static_cast<APL_SISCard *>(m_impl);
-
-	out = dynamic_cast<PTEID_SisFullDoc *>(getObject(INCLUDE_OBJECT_FULLDOC));
-
-	if(!out)
-	{
-		//CAutoMutex autoMutex(m_mutex);
-
-		//pdoc=dynamic_cast<PTEID_SisFullDoc *>(getObject(INCLUDE_OBJECT_FULLDOC));
-		//if(!pdoc)
-		//{
-			out = new PTEID_SisFullDoc(m_context,&pcard->getFullDoc());
-			if(out)
-				m_objects[INCLUDE_OBJECT_FULLDOC]=out;
-			else
-				throw PTEID_ExUnknown();
-		//}
-	}
-
-	END_TRY_CATCH
-
-	return *out;
-}
-
-PTEID_SisId& PTEID_SISCard::getID()
-{
-	PTEID_SisId *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_SISCard *pcard=static_cast<APL_SISCard *>(m_impl);
-
-	out = dynamic_cast<PTEID_SisId *>(getObject(INCLUDE_OBJECT_DOCSIS));
-
-	if(!out)
-	{
-		//CAutoMutex autoMutex(m_mutex);
-
-		//pdoc=dynamic_cast<PTEID_SisId *>(getObject(INCLUDE_OBJECT_DOCSIS));
-		//if(!pdoc)
-		//{
-			out = new PTEID_SisId(m_context,&pcard->getID());
-			if(out)
-				m_objects[INCLUDE_OBJECT_DOCSIS]=out;
-			else
-				throw PTEID_ExUnknown();
-		//}
-	}
-
-	END_TRY_CATCH
-
-	return *out;
-}
-
-const PTEID_ByteArray& PTEID_SISCard::getRawData(PTEID_RawDataType type)
-{
-	switch(type)
-	{
-	case PTEID_RAWDATA_ID:
-		return getRawData_Id();
-	default:
-		throw PTEID_ExFileTypeUnknown();
-	}
-}
-
-const PTEID_ByteArray& PTEID_SISCard::getRawData_Id()
-{
-	PTEID_ByteArray *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_SISCard *pcard=static_cast<APL_SISCard *>(m_impl);
-
-	out = dynamic_cast<PTEID_ByteArray *>(getObject(INCLUDE_OBJECT_RAWDATA_ID));
-
-	if(!out)
-	{
-		//CAutoMutex autoMutex(m_mutex);
-
-		//praw=dynamic_cast<PTEID_ByteArray *>(getObject(INCLUDE_OBJECT_RAWDATA_ID));
-		//if(!praw)
-		//{
-			out = new PTEID_ByteArray(m_context,pcard->getRawData_Id());
-			if(out)
-				m_objects[INCLUDE_OBJECT_RAWDATA_ID]=out;
-			else
-				throw PTEID_ExUnknown();
-		//}
-	}
-
-	END_TRY_CATCH
-
-	return *out;
 }
 
 /*****************************************************************************************

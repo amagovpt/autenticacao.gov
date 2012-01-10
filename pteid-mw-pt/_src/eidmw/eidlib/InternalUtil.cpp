@@ -37,9 +37,6 @@ PTEID_CardType ConvertCardType(APL_CardType eCardType)
 	case APL_CARDTYPE_PTEID_FOREIGNER:
 		return PTEID_CARDTYPE_FOREIGNER;
 
-	case APL_CARDTYPE_PTEID_SIS:
-		return PTEID_CARDTYPE_SIS;
-
 	default:
 		return PTEID_CARDTYPE_UNKNOWN;
 	}

@@ -42,8 +42,7 @@ enum PTEID_CardType
 	PTEID_CARDTYPE_UNKNOWN=0,	/**< Unknown card */
 	PTEID_CARDTYPE_EID,			/**< Normal eid card */
 	PTEID_CARDTYPE_KIDS,			/**< Kids eid card */
-	PTEID_CARDTYPE_FOREIGNER,	/**< Foreigner eid card */
-	PTEID_CARDTYPE_SIS			/**< Sis card */
+	PTEID_CARDTYPE_FOREIGNER	/**< Foreigner eid card */
 };
 
 enum PTEID_DocumentType
