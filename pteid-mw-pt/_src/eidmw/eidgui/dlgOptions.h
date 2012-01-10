@@ -39,12 +39,6 @@ private slots:
 	void on_cmbCardReader_activated ( int index );
 	void on_chbRegCert_toggled( bool bChecked );
 	void on_chbRemoveCert_toggled( bool bChecked );
-	//void on_rbOCSPNotUsed_clicked( bool checked );
-	//void on_rbOCSPOptional_clicked( bool checked );
-	//void on_rbOCSPMandatory_clicked( bool checked );
-	//void on_rbCRLNotUsed_clicked( bool checked );
-	//void on_rbCRLOptional_clicked( bool checked );
-	//void on_rbCRLMandatory_clicked( bool checked );
 	void on_chbShowNotification_toggled( bool bChecked );
 
 public:

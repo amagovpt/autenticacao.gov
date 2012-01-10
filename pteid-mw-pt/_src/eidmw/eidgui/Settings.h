@@ -44,8 +44,6 @@
 #define STR_REGCERT				"register_certificate"
 #define STR_REMOVECERT			"remove_certificate"
 #define STR_CARDREADER			"cardreader"
-#define STR_OCSPVALIDATION		"cert_validation_ocsp"
-#define STR_CRLVALIDATION		"cert_validation_crl"
 
 #define STR_DEF_GUILANGUAGE		"EN"
 
@@ -164,18 +162,6 @@ enum eZOOMSTATUS
 class GUISettings
 {
 public:
-	enum eOCSPvalidation
-	{
-		OCSP_NOT_USED
-		, OCSP_OPTIONAL
-		, OCSP_MANDATORY
-	};
-	enum eCRLvalidation
-	{
-		CRL_NOT_USED
-		, CRL_OPTIONAL
-		, CRL_MANDATORY
-	};
 	//------------------------------------------------------
 	// ctor
 	//------------------------------------------------------
@@ -192,30 +178,11 @@ public:
 		, m_bRemoveCert(false)
 		, m_strExePath("")
 		, m_SelectedReader(-1)
-		, m_OCSPValidation(OCSP_NOT_USED)
-		, m_CRLValidation(CRL_NOT_USED)
 
 	{
 		//----------------------------------------------------------
 		// Check always what is set in the registry
 		//----------------------------------------------------------
-		//----------------------------------------------------------
-		// check the OCSP settings
-		//----------------------------------------------------------
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_CERTVALID_OCSP);
-			eOCSPvalidation value = (eOCSPvalidation)config.getLong();
-			setOCSPValidation(value);
-		}
-
-		//----------------------------------------------------------
-		// check the CRL settings
-		//----------------------------------------------------------
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_CERTVALID_CRL);
-			eCRLvalidation value = (eCRLvalidation)config.getLong();
-			setCRLValidation(value);
-		}
 
 		//----------------------------------------------------------
 		// check the GUI language
@@ -533,26 +500,7 @@ public:
 	{
 		return m_SelectedReader;
 	}
-	void setOCSPValidation( eOCSPvalidation validation )
-	{
-		m_OCSPValidation = validation;
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_CERTVALID_OCSP);
-		config.setLong(m_OCSPValidation);
-	}
-	eOCSPvalidation getOCSPValidation( void )
-	{
-		return m_OCSPValidation;
-	}
-	void setCRLValidation( eCRLvalidation validation )
-	{
-		m_CRLValidation = validation;
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_CERTVALID_CRL);
-		config.setLong(m_CRLValidation);
-	}
-	eCRLvalidation getCRLValidation( void )
-	{
-		return m_CRLValidation;
-	}
+
 	void setGuiVersion( QString const& GUIVersion )
 	{
 		m_GUIVersion = GUIVersion;
@@ -586,8 +534,6 @@ private:
 	bool	m_bRemoveCert;			//!< remove certificates on close (T/F)
 	QString m_strExePath;			//!< path to the executable
 	unsigned long		m_SelectedReader;		//!< selected reader (-1=none)
-	eOCSPvalidation   m_OCSPValidation;
-	eCRLvalidation    m_CRLValidation;
 
 	QString	m_GUIVersion;			//!! Full version of the GUI
 	QString	m_DefSavePath;			//!< default save path for eid,xml,tlv files

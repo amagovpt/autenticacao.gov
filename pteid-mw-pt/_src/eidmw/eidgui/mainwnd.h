@@ -364,13 +364,6 @@ private:
 		case PTEID_CERTIF_STATUS_VALID:
 			strCertStatus = tr("Valid");
 			break;
-		case PTEID_CERTIF_STATUS_VALID_CRL:
-			strCertStatus = tr("Valid CRL");
-			break;
-		case PTEID_CERTIF_STATUS_VALID_OCSP:
-			strCertStatus = tr("Valid OCSP");
-			break;
-		case PTEID_CERTIF_STATUS_CONNECT:
 		case PTEID_CERTIF_STATUS_UNKNOWN:
 		default:
 			strCertStatus = tr("Unknown");
@@ -388,9 +381,6 @@ private:
 			strCertStatus = tr("Revoked");
 			break;
 		case PTEID_CERTIF_STATUS_VALID:
-		case PTEID_CERTIF_STATUS_VALID_OCSP:
-			strCertStatus = tr("Good");
-			break;
 		default:
 			strCertStatus = tr("Unknown");
 			break;
