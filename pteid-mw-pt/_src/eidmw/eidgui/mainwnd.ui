@@ -2480,6 +2480,11 @@ background-image: url(:/images/Images/alpha.png);</string>
     <string>&amp;Identity Card</string>
    </property>
   </action>
+  <action name="actionForeigner_Card">
+   <property name="text">
+    <string>Foreigner Card</string>
+   </property>
+  </action>
   <action name="actionSave_PersoData">
    <property name="text">
     <string>Save PersoData</string>

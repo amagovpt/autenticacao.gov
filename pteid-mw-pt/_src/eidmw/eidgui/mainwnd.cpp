@@ -2708,6 +2708,7 @@ void MainWnd::showTabs()
 		refreshTabInfo();
 
 		break;
+
 	default:
 		break;
 	}
@@ -4102,6 +4103,44 @@ void MainWnd::customEvent( QEvent* pEvent )
 					switch( cardType )
 					{
 					case PTEID_CARDTYPE_EID:
+					{
+						try
+						{
+							PTEID_EIDCard& card = readerContext.getEIDCard();
+							doPicturePopup( card );
+
+						}
+						catch (PTEID_ExNotAllowByUser& e)
+						{
+							long err = e.GetError();
+							err = err;
+						}
+						//------------------------------------
+						// register certificates when needed
+						//------------------------------------
+						if (m_Settings.getRegCert())
+						{
+							bool bImported = ImportCertificates(cardReader);
+							if (!isHidden())
+							{
+								showCertImportMessage(bImported);
+							}
+						}
+						if (isHidden())
+						{
+							break;
+						}
+						//------------------------------------------------
+						// first load the data if necessary, because this will check the test cards as well
+						// and will ask if test cards are allowed
+						//------------------------------------------------
+						if ( m_Settings.getAutoCardReading() )
+						{
+							m_CI_Data.Reset(); 
+							loadCardData();
+						}
+					}
+					break;
 					case PTEID_CARDTYPE_UNKNOWN:
 					{
 						clearGuiContent();

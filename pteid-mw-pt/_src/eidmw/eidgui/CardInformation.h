@@ -64,7 +64,6 @@ enum eCARD_SUBTYPE
 enum eCARD_BASETYPE
 {
 	  BASETYPE_BELGIUM = 1
-	, BASETYPE_FOREIGNER = 11
 };
 
 	//----------------------------------------------
@@ -140,9 +139,6 @@ enum eCARD_BASETYPE
 			case 15:
 			case 16:
 			case 17:
-			case 18:
-				cType = PTEID_CARDTYPE_FOREIGNER;
-				break;
 			default:
 				break;
 			}
@@ -204,13 +200,6 @@ enum eCARD_BASETYPE
 		switch ( type )
 		{
 		case PTEID_CARDTYPE_EID:
-		case PTEID_CARDTYPE_FOREIGNER:
-			formatted += card_number.mid(0,1);
-			formatted += " ";
-			formatted += card_number.mid(1,7);
-			formatted += " ";
-			formatted += card_number.mid(8,2);
-			break;
 		default:
 			break;
 		}
@@ -773,18 +762,6 @@ public:
 		switch ( type )
 		{
 		case PTEID_CARDTYPE_EID:
-		case PTEID_CARDTYPE_FOREIGNER:
-			formatted += number.mid(0,2);
-			formatted += ".";
-			formatted += number.mid(2,2);
-			formatted += ".";
-			formatted += number.mid(4,2);
-			formatted += "-";
-			formatted += number.mid(6,3);
-			formatted += ".";
-			formatted += number.mid(9,2);
-			break;
-			break;
 		default:
 			break;
 		}
