@@ -46,7 +46,6 @@
 #include "ByteArray.h"
 
 #include "CardPteidDef.h"
-#include "CardSISDef.h"
 
 XERCES_CPP_NAMESPACE_USE 
 
@@ -276,10 +275,6 @@ void EIDCardType_Processor::process( const XMLCh *const  chars
 	{
 		((EID_DataStorage&)dataStorage).m_CardType = APL_CARDTYPE_PTEID_FOREIGNER;
 	}
-	else if ( 0 == w_chars.compare(utilStringWiden(CARDTYPE_NAME_PTEID_SIS)) )
-	{
-		((EID_DataStorage&)dataStorage).m_CardType = APL_CARDTYPE_PTEID_SIS;
-	}
 	else
 	{
 		((EID_DataStorage&)dataStorage).m_CardType = APL_CARDTYPE_UNKNOWN;
@@ -441,8 +436,6 @@ size_t DataStorage::getDataSize(std::wstring const& path)
 EID_DataStorage::EID_DataStorage( void )
 	: m_CardType( APL_CARDTYPE_UNKNOWN )
 {
-	m_EIDStoreFields.push_back(utilStringWiden(SIS_XML_PATH_FILE_ID).c_str());
-
 	m_EIDStoreFields.push_back(utilStringWiden(PTEID_XML_PATH_FILE_ID).c_str());
 	m_EIDStoreFields.push_back(utilStringWiden(PTEID_XML_PATH_FILE_IDSIGN).c_str());
 	m_EIDStoreFields.push_back(utilStringWiden(PTEID_XML_PATH_FILE_ADDR).c_str());

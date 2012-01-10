@@ -27,7 +27,6 @@ XERCES_CPP_NAMESPACE_USE
 namespace eIDMW
 {
 #define TAG_PROCESSOR_EIDTAG		L"EIDTag"
-#define TAG_PROCESSOR_SISTAG		L"SISTag"
 #define TAG_PROCESSOR_DOCVERSION	L"doc_version"
 
 //***************************************************

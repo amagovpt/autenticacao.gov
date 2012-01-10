@@ -41,8 +41,7 @@ enum APL_CardType
 	APL_CARDTYPE_UNKNOWN=0,
 	APL_CARDTYPE_PTEID_EID,
 	APL_CARDTYPE_PTEID_KIDS,
-	APL_CARDTYPE_PTEID_FOREIGNER,
-	APL_CARDTYPE_PTEID_SIS
+	APL_CARDTYPE_PTEID_FOREIGNER
 };
 
 enum APL_SaveFileType
@@ -69,12 +68,6 @@ struct APL_RawData_Eid
     CByteArray challenge;
     CByteArray response;
     CByteArray persodata;
-};
-
-struct APL_RawData_Sis
-{
- 	unsigned long version;
-	CByteArray idData;
 };
 
 /**
@@ -289,7 +282,6 @@ class APL_Card;
 class APL_EIDCard;
 class APL_KidsCard;
 class APL_ForeignerCard;
-class APL_SISCard;
 
 class APL_SuperParser;
 
@@ -321,12 +313,6 @@ public:
 	EIDMW_APL_API APL_ReaderContext(const APL_RawData_Eid &data);
 
 	/**
-	  * Construct using Raw data for Sis
-	  *		No reader are connected (m_reader=NULL)
-	  */    
-	EIDMW_APL_API APL_ReaderContext(const APL_RawData_Sis &data);
-
-	/**
 	  * Destructor
 	  */    
 	EIDMW_APL_API ~APL_ReaderContext();
@@ -341,7 +327,7 @@ public:
 	  *		First delete it if not null
 	  *		Then check if a card is present
 	  *		If yes, instanciated regarding the card type
-	  *			APL_EIDCard, APL_KidsCard, APL_ForeignCard or APL_SISCard
+	  *			APL_EIDCard, APL_KidsCard or APL_ForeignCard
 	  *
 	  * @return true if a new connection has been made
 	  */
@@ -394,12 +380,6 @@ public:
 	  * If there is no ForeignerCard in the reader NULL is return
 	  */    
 	EIDMW_APL_API APL_ForeignerCard *getForeignerCard();
-
-   	/**
-	  * Get the SISCard in the reader
-	  * If there is no SISCard in the reader NULL is return
-	  */    
-	EIDMW_APL_API APL_SISCard *getSISCard();
 
 	/** 
 	 * Specify a callback function to be called each time a
@@ -487,7 +467,6 @@ public:
 	APL_SuperParser(const char *fileName, APL_SaveFileType fileType);
 	APL_SuperParser(const CByteArray &data, APL_SaveFileType fileType);
 	APL_SuperParser(const APL_RawData_Eid &data);
-	APL_SuperParser(const APL_RawData_Sis &data);
 
 	virtual ~APL_SuperParser();
 
@@ -504,7 +483,6 @@ public:
 	const char *getFileName();
 
 	APL_RawData_Eid *getRawDataEid();
-	APL_RawData_Sis *getRawDataSis();
 
 	unsigned long readData(const char *fileID, CByteArray &in,unsigned long idx=0);
 
@@ -539,7 +517,6 @@ private:
 	EIDMW_EIDMemParser	*m_parserXml;		/**< XML parser */
 
 	APL_RawData_Eid *m_rawdata_eid;
-	APL_RawData_Sis *m_rawdata_sis;
 };
 
 }

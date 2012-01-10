@@ -34,10 +34,8 @@
 #include "Util.h"
 #include "TLVBuffer.h"
 #include "CardPteidDef.h"
-#include "CardSISDef.h"
 #include "APLCard.h"
 #include "APLCardPteid.h"
-#include "APLCardSIS.h"
 #include "eidErrors.h"
 #include "MWException.h"
 #include "CRLService.h"
@@ -129,24 +127,6 @@ APL_ReaderContext::APL_ReaderContext(const APL_RawData_Eid &data)
 	connectVirtualCard();
 }
 
-APL_ReaderContext::APL_ReaderContext(const APL_RawData_Sis &data)
-{
-	m_calreader=NULL;
-	m_card=NULL;
-	m_cardid=0;
-
-	m_cal_lock=false;
-	m_transaction_lock=false;
-
-	m_virtual=true;
-
-	m_status=CARD_NOT_PRESENT;
-
-	m_parser=new APL_SuperParser(data);
-
-	connectVirtualCard();
-
-}
 APL_ReaderContext::~APL_ReaderContext()
 {
 	if(m_transaction_lock)
@@ -352,9 +332,6 @@ APL_CardType APL_ReaderContext::getPhysicalCardType()
 
 		break;
 	}
-	case CARD_SIS:
-		ret=APL_CARDTYPE_PTEID_SIS;
-		break;
 	case CARD_UNKNOWN:
 	default:
 		break;
@@ -429,9 +406,6 @@ bool APL_ReaderContext::connectCard()
 	case APL_CARDTYPE_PTEID_FOREIGNER:
 		m_card = new APL_ForeignerCard(this);
 		break;
-	case APL_CARDTYPE_PTEID_SIS:
-		m_card = new APL_SISCard(this);
-		break;
 	default:
 		return false;
 	}
@@ -487,16 +461,6 @@ APL_ForeignerCard *APL_ReaderContext::getForeignerCard()
 
 	if(m_card->getType()==APL_CARDTYPE_PTEID_FOREIGNER)
 		return dynamic_cast<APL_ForeignerCard *>(m_card);
-	
-	return NULL;
-}
-
-APL_SISCard *APL_ReaderContext::getSISCard()
-{
-	connectCard();
-
-	if(m_card->getType()==APL_CARDTYPE_PTEID_SIS)
-		return dynamic_cast<APL_SISCard *>(m_card);
 	
 	return NULL;
 }
@@ -1107,7 +1071,6 @@ APL_SuperParser::APL_SuperParser(const char *fileName, APL_SaveFileType fileType
 	m_parserXml=NULL;
 
 	m_rawdata_eid=NULL;
-	m_rawdata_sis=NULL;
 
 	m_fctReadDataRAW=NULL;
 	m_fctReadDataTLV=NULL;
@@ -1147,7 +1110,6 @@ APL_SuperParser::APL_SuperParser(const CByteArray &data, APL_SaveFileType fileTy
 	m_parserXml=NULL;
 
 	m_rawdata_eid=NULL;
-	m_rawdata_sis=NULL;
 
 	m_fctReadDataRAW=NULL;
 	m_fctReadDataTLV=NULL;
@@ -1188,7 +1150,6 @@ APL_SuperParser::APL_SuperParser(const APL_RawData_Eid &data)
 	m_parserXml=NULL;
 
 	m_rawdata_eid=NULL;
-	m_rawdata_sis=NULL;
 
 	m_fctReadDataRAW=NULL;
 	m_fctReadDataTLV=NULL;
@@ -1225,33 +1186,6 @@ APL_SuperParser::APL_SuperParser(const APL_RawData_Eid &data)
 
 }
 
-APL_SuperParser::APL_SuperParser(const APL_RawData_Sis &data)
-{
-	m_cardType=APL_CARDTYPE_UNKNOWN;
-
-	m_fileType=APL_SAVEFILETYPE_RAWDATA;
-	m_fileName="Raw data";
-
-	m_fileData=NULL;
-
-	m_parserTlv=NULL;
-	m_parserCsv=NULL;
-	m_parserXml=NULL;
-
-	m_rawdata_eid=NULL;
-	m_rawdata_sis=NULL;
-
-	m_fctReadDataRAW=NULL;
-	m_fctReadDataTLV=NULL;
-	m_fctReadDataCSV=NULL;
-	m_fctReadDataXML=NULL;
-
-	m_rawdata_sis= new APL_RawData_Sis(data);;
-
-	m_version=m_rawdata_sis->version;
-	m_cardType=APL_CARDTYPE_PTEID_SIS;
-}
-
 APL_SuperParser::~APL_SuperParser()
 {
 	if(m_fileData)
@@ -1279,11 +1213,6 @@ APL_SuperParser::~APL_SuperParser()
 	{
 		delete m_rawdata_eid;
 		m_rawdata_eid=NULL;
-	}
-	if(m_rawdata_sis)
-	{
-		delete m_rawdata_sis;
-		m_rawdata_sis=NULL;
 	}
 }
 
@@ -1459,8 +1388,6 @@ bool APL_SuperParser::parse()
 		m_cardType=APL_CARDTYPE_PTEID_KIDS;
 	else if(strcmp(type,CARDTYPE_NAME_PTEID_FOREIGNER)==0)
 		m_cardType=APL_CARDTYPE_PTEID_FOREIGNER;
-	else if(strcmp(type,CARDTYPE_NAME_PTEID_SIS)==0)
-		m_cardType=APL_CARDTYPE_PTEID_SIS;
 
 	if(type)
 		delete[] type;
@@ -1496,11 +1423,6 @@ APL_RawData_Eid *APL_SuperParser::getRawDataEid()
 	return m_rawdata_eid;
 }
 
-APL_RawData_Sis *APL_SuperParser::getRawDataSis()
-{
-	return m_rawdata_sis;
-}
-
 void APL_SuperParser::initReadFunction(
 			unsigned long (*fctReadDataRAW)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx),
 			unsigned long (*fctReadDataTLV)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx),
@@ -1518,9 +1440,7 @@ unsigned long APL_SuperParser::readData(const char *fileID, CByteArray &in,unsig
 	switch(m_fileType)
 	{
 	case APL_SAVEFILETYPE_RAWDATA:
-		if((m_cardType==APL_CARDTYPE_PTEID_SIS && !m_rawdata_sis)
-			|| ((m_cardType==APL_CARDTYPE_PTEID_EID || m_cardType==APL_CARDTYPE_PTEID_KIDS || m_cardType==APL_CARDTYPE_PTEID_FOREIGNER) && !m_rawdata_eid)
-			|| m_cardType==APL_CARDTYPE_UNKNOWN)
+		if(((m_cardType==APL_CARDTYPE_PTEID_EID || m_cardType==APL_CARDTYPE_PTEID_KIDS || m_cardType==APL_CARDTYPE_PTEID_FOREIGNER) && !m_rawdata_eid) || m_cardType==APL_CARDTYPE_UNKNOWN)
 			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 		if(!m_fctReadDataRAW)
