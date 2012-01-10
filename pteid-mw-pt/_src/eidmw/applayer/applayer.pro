@@ -113,16 +113,11 @@ SOURCES += \
 ## do not define a conditional block with contains(PKG_NAME,pteid)
 ## otherwise the script which prepares the tarball will not
 ## be able to parse the project file correctly!
-contains(PKG_NAME,pteid): HEADERS += CardSIS.h       \
-           			    CardPteid.h	    \
+contains(PKG_NAME,pteid): HEADERS += CardPteid.h	    \
 	  			    CardPteidDef.h   \
 	   			    cryptoFwkPteid.h \
-	   			    APLCardSIS.h    \
-	   			    CardSISDef.h    \
            			    APLCardPteid.h       
 
-contains(PKG_NAME,pteid): SOURCES +=  CardSIS.cpp \
-           		             CardPteid.cpp     \
-           			     APLCardPteid.cpp  \	
-			             APLCardSIS.cpp   \
+contains(PKG_NAME,pteid): SOURCES +=  CardPteid.cpp     \
+           			     APLCardPteid.cpp  \
 	   			     cryptoFwkPteid.cpp
