@@ -36,9 +36,6 @@ TEST(GetCard)
 	PTEID_EIDCard &card3=reader3.getEIDCard();				
 	CHECK(&card3);
 
-	PTEID_ReaderContext &reader=ReaderSet.getReaderByNum(4);	
-	PTEID_SISCard &card4=reader.getSISCard();				
-	CHECK(&card4);
 }
 
 TEST(TestCard)
