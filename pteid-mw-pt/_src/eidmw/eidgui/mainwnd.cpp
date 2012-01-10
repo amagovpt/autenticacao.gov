@@ -51,92 +51,9 @@
 
 static bool	g_cleaningCallback=false;
 static int	g_runningCallback=0;
-static unsigned int pinactivate = 1;
-static unsigned int persodatastatus = 1;
+//State variables for tab data
+static unsigned int pinactivate = 1, certdatastatus = 1, addressdatastatus = 1, persodatastatus = 1 ;
 
-
-
-//*****************************************************
-// file list of DLL's to be displayed in the info tab
-//*****************************************************
-static const char* fileList[]=
-{
-#ifdef PTEID_35
-#ifdef WIN32
-#ifdef _DEBUG
-		"pteid35guiD.exe"
-		, "pteid35libCppD.dll"
-		, "pteid35commonD.dll"
-		, "pteid35applayerD.dll"
-		, "pteid35DlgsWin32D.dll"
-		, "pteid35cardlayerD.dll"
-		, "pteidpkcs11D.dll"
-#else
-		"pteid35gui.exe"
-		, "pteid35libCpp.dll"
-		, "pteid35common.dll"
-		, "pteid35applayer.dll"
-		, "pteid35DlgsWin32.dll"
-		, "pteid35cardlayer.dll"
-		, "pteidpkcs11.dll"
-#endif
-#elif __APPLE__
-		"pteidgui"
-		, "libpteidlib"
-		, "libpteidapplayer"
-		, "libpteidcommon"
-		, "libpteidcardlayer"
-		, "libdialogsQT"
-		, "libpteidpkcs11"
-#else
-		"pteidgui"
-		, "libpteidlib.so"
-		, "libpteidapplayer.so"
-		, "libpteidcommon.so"
-		, "libpteidcardlayer.so"
-		, "libdialogsQT.so"
-		, "libpteidpkcs11.so"
-#endif
-
-#else
-
-#ifdef WIN32
-#ifdef _DEBUG
-		"pteidguiD.exe"
-		, "pteidlibCppD.dll"
-		, "pteidcommonD.dll"
-		, "pteidapplayerD.dll"
-		, "pteidDlgsWin32D.dll"
-		, "pteidcardlayerD.dll"
-		, "pteidpkcs11D.dll"
-#else
-		"pteidgui.exe"
-		, "pteidlibCpp.dll"
-		, "pteidcommon.dll"
-		, "pteidapplayer.dll"
-		, "pteidDlgsWin32.dll"
-		, "pteidcardlayer.dll"
-		, "pteidpkcs11.dll"
-#endif
-#elif __APPLE__
-		"pteidgui"
-		, "libpteidlib"
-		, "libpteidapplayer"
-		, "libpteidcommon"
-		, "libpteidcardlayer"
-		, "libdialogsQT"
-		, "libpteidpkcs11"
-#else
-		"pteidgui"
-		, "libpteidlib.so"
-		, "libpteidapplayer.so"
-		, "libpteidcommon.so"
-		, "libpteidcardlayer.so"
-		, "libdialogsQT.so"
-		, "libpteidpkcs11.so"
-#endif
-#endif
-};
 
 void MainWnd::createTrayMenu()
 {
@@ -221,8 +138,24 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	list_of_pins[0] = PinInfo(1, "PIN da Autentica\xc3\xa7\xc3\xa3o");
 	list_of_pins[1] = PinInfo(2, "PIN da Assinatura");
 	list_of_pins[2] = PinInfo(3, "PIN da Morada");
+	
 
+
+	/*** Setup progress Bar ***/
+	m_progress = new QProgressDialog();
+	m_progress->setLabelText("Reading card data...");
+
+	//Disable cancel button
+	m_progress->setCancelButton(NULL);
+	//Configuring dialog as a "doing-stuff-type" progressBar
+	m_progress->setMinimum(0);
+	m_progress->setMaximum(0);
+
+	m_progress->setWindowModality(Qt::WindowModal);
+
+	connect(&this->FutureWatcher, SIGNAL(finished()), m_progress, SLOT(cancel()));
 	//------------------------------------
+	//
 	// set the window Icon (as it appears in the left corner of the window)
 	//------------------------------------
 	const QIcon Ico = QIcon( ":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png" );
@@ -391,13 +324,15 @@ void MainWnd::on_btnSelectTab_Identity_Extra_clicked()
 void MainWnd::on_btnSelectTab_Address_clicked()
 {
 	m_ui.stackedWidget->setCurrentIndex(3);
-	refreshTabAddress();
+	if (addressdatastatus == 1)
+		refreshTabAddress();
 }
 
 void MainWnd::on_btnSelectTab_Certificates_clicked()
 {
 	m_ui.stackedWidget->setCurrentIndex(4);
-	refreshTabCertificates();
+	if (certdatastatus == 1)
+		refreshTabCertificates();
 }
 
 void MainWnd::on_btnSelectTab_PinCodes_clicked()
@@ -2754,18 +2689,6 @@ void MainWnd::on_actionPINChange_triggered()
 	}
 }
 
-void MainWnd::tabaddress_select(int index)
-{
-	if(index == 2)
-		refreshTabAddress();
-}
-
-void MainWnd::tabcertificates_select(int index)
-{
-	if(index == 4)
-		refreshTabCertificates();
-}
-
 //******************************************************
 // Show the tabs 
 //******************************************************
@@ -3016,13 +2939,23 @@ void MainWnd::fillCertificateList( void )
 //**************************************************
 void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 {
+
+
+	//Progress bar was already hidden so proceed updating the GUI
 	setEnabledPinButtons(false);
 	setEnabledCertifButtons(false);
 	m_TypeCard = Card.getType();
 
 	if(!m_CI_Data.isDataLoaded())
 	{
-		m_CI_Data.LoadData(Card,m_CurrReaderName);
+		
+		//Load data from card in a new thread
+		CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName);
+		QFuture<void> future = QtConcurrent::run(&loader, &CardDataLoader::Load);
+		this->FutureWatcher.setFuture(future);
+		m_progress->exec();
+
+		//Load the picture in PNG format
 		imgPicture = QImage();
 
 		imgPicture.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
@@ -3032,7 +2965,6 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 		clearTabAddress();
 		clearTabPins();
 		fillPinList( Card );
-		fillSoftwareInfo();
 	}
 }
 
@@ -3050,7 +2982,6 @@ void MainWnd::LoadDataAddress(PTEID_EIDCard& Card)
 
 		clearTabPins();
 		fillPinList( Card );
-		fillSoftwareInfo();
 	}
 }
 
@@ -3453,6 +3384,7 @@ void MainWnd::refreshTabIdentity( void )
 {
 
 	m_ui.lblIdentity_ImgPerson->setPixmap(m_imgPicture);
+
 	m_ui.lblIdentity_ImgPerson->show();
 
 	tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
@@ -3583,6 +3515,8 @@ void MainWnd::refreshTabAddress( void )
 	m_ui.txtAddress_Place->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_PLACE].toStdString().c_str()) );
 	m_ui.txtAddress_PostalLocality->setText			( QString::fromUtf8(AddressFields[ADDRESS_POSTALLOCALITY].toStdString().c_str()) );
 	m_ui.txtAddress_PostalLocality->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_POSTALLOCALITY].toStdString().c_str()) );
+
+	addressdatastatus = 0;
 }
 
 void MainWnd::PersoDataSaveButtonClicked( void )
@@ -3609,7 +3543,9 @@ void MainWnd::refreshTabPersoData( void )
 {
 	persodatastatus = 0;
 
-	loadCardDataPersoData();
+	QFuture<void> future = QtConcurrent::run(this, &MainWnd::loadCardDataPersoData);
+	this->FutureWatcher.setFuture(future);
+	m_progress->exec();
 
 	tFieldMap& PersoDataFields = m_CI_Data.m_PersoDataInfo.getFields();
 
@@ -3760,7 +3696,13 @@ void MainWnd::clearTabPins( void )
 //*****************************************************
 void MainWnd::refreshTabCertificates( void )
 {
-	loadCardDataCertificates();
+	certdatastatus = 0;
+	QFuture<void> future = QtConcurrent::run(this, &MainWnd::loadCardDataCertificates);
+	this->FutureWatcher.setFuture(future);
+
+	m_progress->exec();
+
+
 	QList<QTreeWidgetItem *> selectedItems = m_ui.treeCert->selectedItems();
 	if(selectedItems.size()==0)
 	{
@@ -3776,6 +3718,7 @@ void MainWnd::refreshTabCertificates( void )
 	{
 		on_treeCert_itemClicked((QTreeCertItem *)selectedItems[0], 0);
 	}
+
 }
 
 //*****************************************************
@@ -4146,6 +4089,10 @@ void MainWnd::customEvent( QEvent* pEvent )
 
 					//Toggle the Address PIN flag to "false"
 					pinactivate = 1;
+					//Force refresh of Certificates, Address and PersonalNotes tabs
+					persodatastatus = 1;
+					addressdatastatus = 1;
+					certdatastatus = 1;
 
 					//----------------------------------------------------------
 					// show a message in the status bar that a card has been inserted

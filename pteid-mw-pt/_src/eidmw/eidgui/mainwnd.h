@@ -22,6 +22,7 @@
 #define MAINWND_H
 
 #include <QtGui>
+#include <QFutureWatcher>
 #ifdef WIN32
 #include <windows.h>
 #include <Wincrypt.h>
@@ -224,8 +225,6 @@ private slots:
 	void authPINRequest_triggered( void );
 	bool addressPINRequest_triggered( void );
 	void PersoDataSaveButtonClicked( void );
-	void tabaddress_select ( int index );
-	void tabcertificates_select(int index);
 	void setLanguageEn( void );
 	void setLanguageNl( void );
 	void setLanguageFr( void );
@@ -303,6 +302,9 @@ protected:
 	QSystemTrayIcon*	m_pTrayIcon;
 	QMenu*				m_pTrayIconMenu;
 	QTranslator			m_translator;
+
+	QProgressDialog *m_progress;
+	QFutureWatcher<void> FutureWatcher;
 
 	PinInfo list_of_pins[3]; 
 
@@ -468,6 +470,26 @@ public:
 
 };
 
+
+class CardDataLoader
+{
+private:
+	CardInformation& information;
+	PTEID_EIDCard &card;
+	QString &readerName;
+
+	
+	public:
+	CardDataLoader(CardInformation& info, PTEID_EIDCard& Card, QString& ReaderName): 
+		information(info), card(Card), readerName(ReaderName)
+	{ }
+
+	void Load()
+	{
+
+		this->information.LoadData(card, readerName);
+	}
+};
 
 
 
