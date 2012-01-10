@@ -91,15 +91,11 @@ SOURCES += ../applayer/APLCertif.cpp        \
 ## do not define a conditional block with contains(PKG_NAME,pteid)
 ## otherwise the script which prepares the tarball will not
 ## be able to parse the project file correctly!
-contains(PKG_NAME,pteid): HEADERS += ../applayer/APLCardSIS.h	 \
-				    ../applayer/CardSIS.h	 \
-				    ../applayer/CardPteid.h	 \
+contains(PKG_NAME,pteid): HEADERS += ../applayer/CardPteid.h	 \
 	  			    ../applayer/CardPteidDef.h    \
 	   			    ../applayer/cryptoFwkPteid.h  \
            			    ../applayer/APLCardPteid.h       
 
-contains(PKG_NAME,pteid):  SOURCES +=  ../applayer/APLCardSIS.cpp   \
-				      ../applayer/CardSIS.cpp	   \
-				      ../applayer/CardPteid.cpp     \
+contains(PKG_NAME,pteid):  SOURCES += ../applayer/CardPteid.cpp     \
            			      ../applayer/APLCardPteid.cpp  \	
 	   			      ../applayer/cryptoFwkPteid.cpp
