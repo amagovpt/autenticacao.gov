@@ -3496,9 +3496,9 @@ void MainWnd::updatetext()
 
 	QString TxtPersoDataString = m_ui.txtPersoData->toPlainText().toUtf8();
 	strnr = TxtPersoDataString.count();
-	totalstr = 1000-strnr;
+	totalct = 1000-strnr;
 
-	QString TotalBytes = QString::number(totalstr);
+	QString TotalBytes = QString::number(totalct);
 	TotalBytes.append(" / 1000");
 
 	m_ui.txtPersoDataCount->setText(TotalBytes);
