@@ -143,6 +143,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	/*** Setup progress Bar ***/
 	m_progress = new QProgressDialog();
+	m_progress->setWindowTitle(QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"));
 	m_progress->setLabelText("Reading card data...");
 
 	//Disable cancel button
@@ -2469,6 +2470,7 @@ bool MainWnd::addressPINRequest_triggered()
 					if (!bResult)
 					{
 							pinactivate = 1;
+							QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 							return false;
 					}
 					else
