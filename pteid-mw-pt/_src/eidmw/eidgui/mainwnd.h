@@ -220,6 +220,7 @@ private slots:
 	void on_actionE_xit_triggered(void);
 	void authPINRequest_triggered( void );
 	bool addressPINRequest_triggered( void );
+	void updatetext();
 	void PersoDataSaveButtonClicked( void );
 	void setLanguageEn( void );
 	void setLanguageNl( void );

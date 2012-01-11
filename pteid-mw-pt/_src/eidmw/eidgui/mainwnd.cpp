@@ -3489,11 +3489,28 @@ void MainWnd::refreshTabAddress( void )
 	addressdatastatus = 0;
 }
 
+void MainWnd::updatetext()
+{
+	int strnr;
+	int totalct;
+
+	QString TxtPersoDataString = m_ui.txtPersoData->toPlainText().toUtf8();
+	strnr = TxtPersoDataString.count();
+	totalstr = 1000-strnr;
+
+	QString TotalBytes = QString::number(totalstr);
+	TotalBytes.append(" / 1000");
+
+	m_ui.txtPersoDataCount->setText(TotalBytes);
+
+}
+
 void MainWnd::PersoDataSaveButtonClicked( void )
 {
 	std::string PersoDataFile = "3f005f00ef07";
 	std::string Misc = "misc";
 	QString TxtPersoDataString = m_ui.txtPersoData->toPlainText().toUtf8();
+	m_ui.txtPersoData->setMaximumBlockCount(1000);
 
 	PTEID_ReaderContext &ReaderContext  = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 	PTEID_SmartCard	 &Card	= ReaderContext.getEIDCard();
@@ -3518,6 +3535,8 @@ void MainWnd::refreshTabPersoData( void )
 	m_progress->exec();
 
 	tFieldMap& PersoDataFields = m_CI_Data.m_PersoDataInfo.getFields();
+
+	connect(m_ui.txtPersoData, SIGNAL(textChanged()), this, SLOT(updatetext()));
 
 	m_ui.txtPersoData->clear();
 	m_ui.txtPersoData->insertPlainText	 ( PersoDataFields[PERSODATA_INFO] );
