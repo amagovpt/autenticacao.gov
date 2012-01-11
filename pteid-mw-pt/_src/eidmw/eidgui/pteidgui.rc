@@ -1,27 +1,6 @@
-/* ****************************************************************************
-
- * eID Middleware Project.
- * Copyright (C) 2008-2009 FedICT.
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License version
- * 3.0 as published by the Free Software Foundation.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see
- * http://www.gnu.org/licenses/.
-
-**************************************************************************** */
 // Microsoft Visual C++ generated resource script.
 //
-//#include "resource.h"
-
-#include "../_Builds/pteidversions.h"
+#include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -48,24 +27,25 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE
+2 TEXTINCLUDE 
 BEGIN
     "#include ""afxres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE
+3 TEXTINCLUDE 
 BEGIN
     "\r\n"
     "\0"
 END
 
 #endif    // APSTUDIO_INVOKED
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -75,7 +55,6 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDI_ICON1               ICON                    "eid.ico"
-
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -95,8 +74,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION WIN_GUI_VERSION1,WIN_GUI_VERSION2,WIN_GUI_VERSION3,WIN_GUI_VERSION4
- PRODUCTVERSION WIN_GUI_VERSION1,WIN_GUI_VERSION2,WIN_GUI_VERSION3,WIN_GUI_VERSION4
+ FILEVERSION 3,0,1,6483
+ PRODUCTVERSION 3,0,1,6483
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -111,14 +90,14 @@ BEGIN
     BEGIN
         BLOCK "080904b0"
         BEGIN
-            VALUE "FileDescription", "pteidgui executable"
-            VALUE "CompanyName", PTEID_COMPANY_NAME
-            VALUE "FileVersion", WIN_GUI_VERSION_STRING
+            VALUE "CompanyName", "Portuguese Government"
+            VALUE "FileDescription", "Portugal Identity Card Utility Application"
+            VALUE "FileVersion", "3, 0, 1, 6483"
             VALUE "InternalName", "pteidgui"
-            VALUE "LegalCopyright", PTEID_COPYRIGHT
+            VALUE "LegalCopyright", "Copyright (C) 2010-2012"
             VALUE "OriginalFilename", "pteidgui.exe"
-            VALUE "ProductName", PTEID_PRODUCT_NAME
-            VALUE "ProductVersion", PTEID_PRODUCT_VERSION
+            VALUE "ProductName", "Portugal eID MiddleWare"
+            VALUE "ProductVersion", "3.0"
         END
     END
     BLOCK "VarFileInfo"
