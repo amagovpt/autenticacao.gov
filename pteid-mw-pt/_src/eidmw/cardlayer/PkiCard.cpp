@@ -98,21 +98,18 @@ CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,
     bool bEOF = false;
     for (unsigned long i = 0; i < ulMaxLen && !bEOF; i += MAX_APDU_READ_LEN)
     {
-        //unsigned long ulLen = ulMaxLen - i <= MAX_APDU_READ_LEN ?
-	//	ulMaxLen - i : MAX_APDU_READ_LEN;
-		
-        unsigned long ulLen = ulMaxLen - i <= 256 ?
-		ulMaxLen - i : 0;
+        unsigned long ulLen = ulMaxLen - i <= MAX_APDU_READ_LEN ?
+	    ulMaxLen - i : 0;
 	
 	
-        CByteArray oResp = ReadBinary(ulOffset + i, ulLen);//62);//ulLen);
+        CByteArray oResp = ReadBinary(ulOffset + i, ulLen);
 
 
         unsigned long ulSW12 = getSW12(oResp);
 
 
 		// If the file is a multiple of the block read size, you will get
-		// an SW12 = 6B00 (at least with BE eID) but that OK then..
+		// an SW12 = 6B00 (at least with PT eID) but that OK then..
         if (ulSW12 == 0x9000 || (i != 0 && ulSW12 == 0x6B00))
             oData.Append(oResp.GetBytes(), oResp.Size() - 2);
 		else if (ulSW12 == 0x6982) {
