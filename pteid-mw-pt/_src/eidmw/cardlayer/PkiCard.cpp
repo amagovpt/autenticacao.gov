@@ -417,7 +417,7 @@ CByteArray CPkiCard::Sign(const tPrivKey & key, const tPin & Pin,
     // then first do a Pin verify and then try again
 	MWLOG(LEV_INFO, MOD_CAL, L"     Trying to Sign (key: ID=0x%0x, algo=0x%0x, "
 		L"%d bytes input)", key.ulID, algo, oData.Size());
-	printf ("Trying to Sign (key: ID=0x%0x, algo=0x%0x, %d bytes input\n", key.ulID, algo, oData.Size());
+	//printf ("Trying to Sign (key: ID=0x%0x, algo=0x%0x, %d bytes input\n", key.ulID, algo, oData.Size());
     try
     {
         return SignInternal(key, algo, oData, &Pin);
