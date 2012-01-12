@@ -131,10 +131,11 @@ HEADERS += CardInformation.h \
            picturepopup.h \
            qtsingleapplication.h \
            dlgprint.h \
+           dlgsignature.h \
 	   ../_Builds/pteidversions.h \
            ../dialogs/dialogs.h 
            
-FORMS += dlgAbout.ui dlgOptions.ui mainwnd.ui picturepopup.ui dlgPrint.ui
+FORMS += dlgAbout.ui dlgOptions.ui mainwnd.ui picturepopup.ui dlgPrint.ui dlgSignature.ui
 
 SOURCES += CardInformation.cpp \
            dlgAbout.cpp \
@@ -142,6 +143,7 @@ SOURCES += CardInformation.cpp \
            main.cpp \
            mainwnd.cpp \
            dlgprint.cpp \
+           dlgsignature.cpp \
            picturepopup.cpp \
            qtsingleapplication.cpp \
            genpur.cpp

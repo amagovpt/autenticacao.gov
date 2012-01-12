@@ -35,6 +35,7 @@
 #include "mainwnd.h"
 #include "dlgAbout.h"
 #include "dlgprint.h"
+#include "dlgsignature.h"
 #include "dlgOptions.h"
 #include "Settings.h"
 #include "CardInformation.h"
@@ -2336,6 +2337,14 @@ void MainWnd::on_actionOptions_triggered(void)
 //*****************************************************
 void MainWnd::actionSignature_eID_triggered()
 {
+	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
+	QString cardTypeText = GetCardTypeText(CardFields[CARD_TYPE]);
+	if(m_CI_Data.isDataLoaded())
+	{
+		dlgSignature* dlgsig = new dlgSignature( this, m_CI_Data);
+		dlgsig->exec();
+		delete dlgsig;
+	}
 }
 
 //*****************************************************
