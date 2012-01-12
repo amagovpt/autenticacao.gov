@@ -213,6 +213,7 @@ private slots:
 	void on_actionAbout_triggered( void );
 	void on_actionClear_triggered( void );
 	void on_actionPrint_eID_triggered( void );
+	void on_actionSignature_eID_triggered( void );
 	void on_actionPrinter_Settings_triggered( void );
 	void on_actionPINRequest_triggered( void );
 	void on_actionPINChange_triggered( void );

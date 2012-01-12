@@ -2121,6 +2121,24 @@ background-image: url(:/images/Images/alpha.png);</string>
       <string/>
      </property>
     </widget>
+    <widget class="QLabel" name="lbl_menuTools_Signature">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>70</y>
+       <width>81</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-image: url(:/images/Images/alpha.png);
+color: rgb(108, 108, 108);
+font: 10pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="text">
+      <string>» Signature</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="wdg_submenu_language" native="true">
     <property name="geometry">

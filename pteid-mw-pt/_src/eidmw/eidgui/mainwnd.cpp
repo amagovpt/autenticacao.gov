@@ -234,6 +234,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_ui.lbl_menuCard_Pdf->installEventFilter(this);
 	m_ui.lbl_menuCard_Quit->installEventFilter(this);
 	m_ui.lbl_menuTools_Parameters->installEventFilter(this);
+	m_ui.lbl_menuTools_Signature->installEventFilter(this);
 	m_ui.lbl_menuLanguage_Portuguese->installEventFilter(this);
 	m_ui.lbl_menuLanguage_English->installEventFilter(this);
 	m_ui.lbl_menuHelp_about->installEventFilter(this);
@@ -274,6 +275,13 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			hide_submenus();
 			show_window_parameters();
 		}
+
+		if (object == m_ui.lbl_menuTools_Signature )
+		{
+			hide_submenus();
+			on_actionSignature_eID_triggered();
+		}
+
 		if (object == m_ui.lbl_menuLanguage_Portuguese )
 		{
 			hide_submenus();
@@ -357,7 +365,7 @@ void MainWnd::on_btn_menu_card_clicked()
 void MainWnd::on_btn_menu_tools_clicked()
 {
 	m_ui.wdg_submenu_tools->setVisible(true);
-	m_ui.wdg_submenu_tools->setGeometry(128,4,126,80);
+	m_ui.wdg_submenu_tools->setGeometry(128,4,126,100);
 }
 
 void MainWnd::on_btn_menu_language_clicked()
@@ -2321,6 +2329,14 @@ void MainWnd::show_window_parameters(){
 void MainWnd::on_actionOptions_triggered(void)
 {
 	show_window_parameters();
+}
+
+//*****************************************************
+// Signature clicked
+//*****************************************************
+void MainWnd::on_actionSignature_eID_triggered()
+{
+
 }
 
 //*****************************************************
