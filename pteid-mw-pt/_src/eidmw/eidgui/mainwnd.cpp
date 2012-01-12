@@ -279,7 +279,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 		if (object == m_ui.lbl_menuTools_Signature )
 		{
 			hide_submenus();
-			on_actionSignature_eID_triggered();
+			actionSignature_eID_triggered();
 		}
 
 		if (object == m_ui.lbl_menuLanguage_Portuguese )
@@ -2334,9 +2334,8 @@ void MainWnd::on_actionOptions_triggered(void)
 //*****************************************************
 // Signature clicked
 //*****************************************************
-void MainWnd::on_actionSignature_eID_triggered()
+void MainWnd::actionSignature_eID_triggered()
 {
-
 }
 
 //*****************************************************
