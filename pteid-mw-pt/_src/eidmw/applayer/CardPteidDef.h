@@ -196,6 +196,10 @@ namespace eIDMW
 #define PTEIDNG_FIELD_SOD_POS_FILE						0
 #define PTEIDNG_FIELD_SOD_LEN_FILE						4000
 
+//PTeid-ng PersoData defines
+#define PTEIDNG_FIELD_PERSODATA_POS_FILE				0
+#define PTEIDNG_FIELD_PERSODATA_LEN_FILE				1000
+
 #define PTEID_FIELD_TAG_ID_Version				0x00
 #define PTEID_FIELD_TAG_ID_CardNr				0x01
 #define PTEID_FIELD_TAG_ID_ChipNr				0x02

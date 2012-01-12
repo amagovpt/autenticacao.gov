@@ -1557,7 +1557,7 @@ bool APL_EidFile_PersoData::MapFields()
     oTLVBuffer.ParseTLV(m_data.GetBytes(), m_data.Size());
 
     //PersoData
-    pteidngPersoDataBuffer = m_data.GetBytes(0, 50);
+    pteidngPersoDataBuffer = m_data.GetBytes(PTEIDNG_FIELD_PERSODATA_POS_FILE, PTEIDNG_FIELD_PERSODATA_LEN_FILE);
     pteidngPersoDataBuffer.TrimRight(' ');
     m_PersoData.assign((char*)(pteidngPersoDataBuffer.GetBytes()), pteidngPersoDataBuffer.Size());
 
