@@ -3566,7 +3566,7 @@ void MainWnd::refreshTabPersoData( void )
 	connect(m_ui.txtPersoData, SIGNAL(textChanged()), this, SLOT(updatetext()));
 
 	m_ui.txtPersoData->clear();
-	m_ui.txtPersoData->insertPlainText ( PersoDataFields[PERSODATA_INFO] );
+	m_ui.txtPersoData->insertPlainText (QString::fromUtf8(PersoDataFields[PERSODATA_INFO].toStdString().c_str()));
 
 	connect(m_ui.btnPersoDataSave, SIGNAL(clicked()), this, SLOT( PersoDataSaveButtonClicked()));
 }
