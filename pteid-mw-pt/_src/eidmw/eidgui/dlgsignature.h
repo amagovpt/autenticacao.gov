@@ -32,7 +32,9 @@ class dlgSignature : public QDialog
     Q_OBJECT
 
 private slots:
-	void on_pbCancel_clicked( void );
+	void on_pbCancel_clicked ( void );
+	void on_pbAddFiles_clicked ( void );
+	void on_pbSign_clicked ( void );
 
 public:
     dlgSignature(QWidget* parent , CardInformation& CI_Data);
@@ -42,6 +44,8 @@ private:
     Ui_dlgSignature ui;
     CardInformation const& m_CI_Data;
     QString m_CurrReaderName;//!< the current reader we're using
+
+    void SignListView (QStringList list);
 };
 
 #endif

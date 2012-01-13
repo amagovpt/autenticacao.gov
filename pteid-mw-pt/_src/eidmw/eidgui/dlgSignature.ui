@@ -54,16 +54,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pbPrint">
+        <widget class="QPushButton" name="pbSign">
          <property name="text">
-          <string>Print</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pbFile">
-         <property name="text">
-          <string>File</string>
+          <string>Sign</string>
          </property>
         </widget>
        </item>
@@ -76,7 +69,7 @@
      <item>
       <widget class="QLabel" name="labelHeader">
        <property name="text">
-        <string>Introduza os ficheiros para assinar digitalmente</string>
+        <string>Signature</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -84,15 +77,18 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="chboxPersoData">
+      <widget class="QListView" name="listView"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbAddFiles">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+        <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Files</string>
+        <string>Add Files...</string>
        </property>
       </widget>
      </item>
