@@ -122,7 +122,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="C:\OpenSSL\include;../applayer;../common;../eidlib;../cardlayer"
+				AdditionalIncludeDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;../applayer;../common;../eidlib;../cardlayer;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;"
 				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_WRAPPER"
 				RuntimeLibrary="2"
 				WarningLevel="3"

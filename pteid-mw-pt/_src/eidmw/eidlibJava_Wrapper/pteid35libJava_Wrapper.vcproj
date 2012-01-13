@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="libJava_Wrapper"
 	ProjectGUID="{4066E21F-5A62-4581-A3B3-47A083396D0C}"
 	RootNamespace="eIDMW"
@@ -125,7 +125,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="C:\OpenSSL\include;../applayer;../common;../eidlib;../cardlayer;&quot;$(PTEID_DIR_JDK_142)\include&quot;;&quot;$(PTEID_DIR_JDK_142)\include\win32&quot;;..\..\ThirdParty\jdk\j2sdk1.4.2_17\include;..\..\ThirdParty\jdk\j2sdk1.4.2_17\include\win32;&quot;C:\Program Files\Java\jdk1.4.2_17\include&quot;;&quot;C:\Program Files\Java\jdk1.4.2_17\include\win32&quot;"
+				AdditionalIncludeDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;../applayer;../common;../eidlib;../cardlayer;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;;&quot;$(PTEID_DIR_JDK_142)\include&quot;;&quot;$(PTEID_DIR_JDK_142)\include\win32&quot;;..\..\ThirdParty\jdk\j2sdk1.4.2_17\include;..\..\ThirdParty\jdk\j2sdk1.4.2_17\include\win32;&quot;C:\Program Files\Java\jdk1.4.2_17\include&quot;;&quot;C:\Program Files\Java\jdk1.4.2_17\include\win32&quot;"
 				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_WRAPPER"
 				RuntimeLibrary="2"
 				WarningLevel="3"

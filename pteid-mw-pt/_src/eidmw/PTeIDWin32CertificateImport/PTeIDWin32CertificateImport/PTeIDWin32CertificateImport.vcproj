@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="PTeIDWin32CertificateImport"
 	ProjectGUID="{E2B4AED5-9A0C-4556-90AB-4CF69743FB65}"
 	RootNamespace="PTeIDWin32CertificateImport"
@@ -139,7 +139,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Cryptui.lib Crypt32.lib"
-				OutputFile="..\..\_Binaries35\$(PlatformName)\$(ConfigurationName)\$(ProjectName).exe"
+				OutputFile="..\..\_Binaries35\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="false"
 				GenerateDebugInformation="true"
