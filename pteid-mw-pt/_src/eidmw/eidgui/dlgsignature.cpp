@@ -86,6 +86,25 @@ void dlgSignature::SignListView (QStringList list)
 	QStringListModel* localModel = new QStringListModel();
 	localModel->setStringList(list);
 	view->setModel(localModel);
+
+	//signal right click
+	view->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect (ui.listView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ShowContextMenu(const QPoint&)));
+}
+
+void dlgSignature::ShowContextMenu(const QPoint& pos)
+{
+	std::cout << "clicked" << std::endl;
+	QPoint globalPos = ui.listView->mapToGlobal(pos);
+
+	QMenu myMenu;
+	myMenu.addAction("Remove Item");
+	QAction* selectedItem = myMenu.exec(globalPos);
+
+	if (selectedItem)
+	{
+		//remove item;
+	}
 }
 
 void dlgSignature::on_pbSign_clicked ( void )

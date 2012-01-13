@@ -35,6 +35,7 @@ private slots:
 	void on_pbCancel_clicked ( void );
 	void on_pbAddFiles_clicked ( void );
 	void on_pbSign_clicked ( void );
+    void ShowContextMenu(const QPoint& pos);
 
 public:
     dlgSignature(QWidget* parent , CardInformation& CI_Data);
@@ -46,6 +47,7 @@ private:
     QString m_CurrReaderName;//!< the current reader we're using
 
     void SignListView (QStringList list);
+
 };
 
 #endif
