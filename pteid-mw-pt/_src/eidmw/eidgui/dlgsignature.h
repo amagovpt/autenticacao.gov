@@ -31,6 +31,8 @@ class dlgSignature : public QDialog
 {
     Q_OBJECT
 
+private slots:
+	void on_pbCancel_clicked( void );
 
 public:
     dlgSignature(QWidget* parent , CardInformation& CI_Data);

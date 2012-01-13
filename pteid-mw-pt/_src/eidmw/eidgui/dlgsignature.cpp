@@ -59,3 +59,8 @@ dlgSignature::~dlgSignature()
 {
 
 }
+
+void dlgSignature::on_pbCancel_clicked( void )
+{
+	done(0);
+}
