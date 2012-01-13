@@ -456,6 +456,7 @@ public:
 };
 
 
+/* Helper Class for Threaded Data Loading */
 class CardDataLoader
 {
 private:
@@ -471,13 +472,19 @@ private:
 
 	void Load()
 	{
-
 		this->information.LoadData(card, readerName);
 	}
+
+	void LoadPersoData()
+	{
+		this->information.LoadDataPersoData(card, readerName);
+	}
+
+	void LoadCertificateData()
+	{
+		this->information.LoadDataCertificates(card, readerName);
+	}
 };
-
-
-
 
 
 #endif

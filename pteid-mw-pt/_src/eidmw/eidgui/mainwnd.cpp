@@ -2027,10 +2027,7 @@ bool MainWnd::loadCardDataPersoData( void )
 			else
 			{
 				clearGuiContent();
-				if (lastFoundCardType != PTEID_CARDTYPE_UNKNOWN)
-				{
-					clearGuiContent();
-				}
+				
 			}
 			enablePrintMenu();
 		}
@@ -2741,13 +2738,14 @@ void MainWnd::showTabs()
 }
 
 //*****************************************************
-// show the logo
+// Set the First tab as Visible
 //*****************************************************
 void MainWnd::Show_Splash()
 {
 	m_TypeCard = PTEID_CARDTYPE_UNKNOWN;
 	m_ui.stackedWidget->setCurrentIndex(0);
 }
+
 
 //*****************************************************
 // show the tabs for an ID card
@@ -2984,7 +2982,10 @@ void MainWnd::LoadDataPersoData(PTEID_EIDCard& Card)
 	setEnabledPinButtons(false);
 	setEnabledCertifButtons(false);
 	m_TypeCard = Card.getType();
-	m_CI_Data.LoadDataPersoData(Card,m_CurrReaderName);
+	CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName);
+	QFuture<void> future = QtConcurrent::run(loader, &CardDataLoader::LoadPersoData);
+	this->FutureWatcher.setFuture(future);
+	m_progress->exec();
 	
 }
 
@@ -2993,7 +2994,11 @@ void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 	setEnabledPinButtons(false);
 	setEnabledCertifButtons(false);
 	m_TypeCard = Card.getType();
-	m_CI_Data.LoadDataCertificates(Card,m_CurrReaderName);
+
+	CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName);
+	QFuture<void> future = QtConcurrent::run(loader, &CardDataLoader::LoadCertificateData);
+	this->FutureWatcher.setFuture(future);
+	m_progress->exec();
 
 	clearTabCertificates();
 	fillCertificateList();
@@ -3554,16 +3559,14 @@ void MainWnd::refreshTabPersoData( void )
 {
 	persodatastatus = 0;
 
-	QFuture<void> future = QtConcurrent::run(this, &MainWnd::loadCardDataPersoData);
-	this->FutureWatcher.setFuture(future);
-	m_progress->exec();
+	loadCardDataPersoData();
 
 	tFieldMap& PersoDataFields = m_CI_Data.m_PersoDataInfo.getFields();
 
 	connect(m_ui.txtPersoData, SIGNAL(textChanged()), this, SLOT(updatetext()));
 
 	m_ui.txtPersoData->clear();
-	m_ui.txtPersoData->insertPlainText	 ( PersoDataFields[PERSODATA_INFO] );
+	m_ui.txtPersoData->insertPlainText ( PersoDataFields[PERSODATA_INFO] );
 
 	connect(m_ui.btnPersoDataSave, SIGNAL(clicked()), this, SLOT( PersoDataSaveButtonClicked()));
 }
@@ -3710,11 +3713,7 @@ void MainWnd::clearTabPins( void )
 void MainWnd::refreshTabCertificates( void )
 {
 	certdatastatus = 0;
-	QFuture<void> future = QtConcurrent::run(this, &MainWnd::loadCardDataCertificates);
-	this->FutureWatcher.setFuture(future);
-
-	m_progress->exec();
-
+	loadCardDataCertificates();
 
 	QList<QTreeWidgetItem *> selectedItems = m_ui.treeCert->selectedItems();
 	if(selectedItems.size()==0)
