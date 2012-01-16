@@ -189,32 +189,6 @@ public:
 };
 
 /******************************************************************************//**
-  * Exception class Certificate No CRL (error code = EIDMW_ERR_CERT_NOCRL)
-  *
-  *	Throw when ask for the CRL when the certificate contains no CDP
-  * Used in : - PTEID_Certificate::getCrl()
-  *********************************************************************************/
-class PTEID_ExCertNoCrl: public PTEID_Exception
-{
-public:
-	PTEIDSDK_API PTEID_ExCertNoCrl();					/**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExCertNoCrl();		/**< Destructor */
-};
-
-/******************************************************************************//**
-  * Exception class Certificate No OCSP responder (error code = EIDMW_ERR_CERT_NOOCSP)
-  *
-  *	Throw when ask for the OCSP response when there is no responder
-  * Used in : - PTEID_Certificate::getOcspResponse()
-  *********************************************************************************/
-class PTEID_ExCertNoOcsp: public PTEID_Exception
-{
-public:
-	PTEIDSDK_API PTEID_ExCertNoOcsp();					/**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExCertNoOcsp();		/**< Destructor */
-};
-
-/******************************************************************************//**
   * Exception class Certificate No OCSP responder (error code = EIDMW_ERR_CERT_NOROOT)
   *
   *	Throw when ask for the Root
