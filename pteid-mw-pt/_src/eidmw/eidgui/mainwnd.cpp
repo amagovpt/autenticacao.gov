@@ -1372,22 +1372,6 @@ void MainWnd::on_btnCert_Details_clicked( void )
 }
 
 //*****************************************************
-// PIN item selection changed
-//*****************************************************
-void MainWnd::on_treePIN_itemSelectionChanged ( void )
-{
-	QList<QTreeWidgetItem *> selectedItems = m_ui.treePIN->selectedItems();
-	if (selectedItems.size()==1)
-	{
-		setEnabledPinButtons(true);
-	}
-	else
-	{
-		setEnabledPinButtons(false);
-	}
-}
-
-//*****************************************************
 // a certificate has been selected
 //*****************************************************
 void MainWnd::on_treeCert_itemSelectionChanged ( void )
@@ -1404,6 +1388,7 @@ void MainWnd::on_treeCert_itemSelectionChanged ( void )
 //*****************************************************
 void MainWnd::on_treeCert_itemClicked(QTreeWidgetItem* baseItem, int column)
 {
+
 	QTreeCertItem* item=(QTreeCertItem*)baseItem;
 	if (!m_CI_Data.isDataLoaded())
 	{
@@ -1447,11 +1432,30 @@ void MainWnd::on_treeCert_itemClicked(QTreeWidgetItem* baseItem, int column)
 
 
 //*****************************************************
+// PIN item selection changed
+//*****************************************************
+void MainWnd::on_treePIN_itemSelectionChanged ( void )
+{
+	QList<QTreeWidgetItem *> selectedItems = m_ui.treePIN->selectedItems();
+	if (selectedItems.size()==1)
+		setEnabledPinButtons(true);
+	else
+		setEnabledPinButtons(false);
+
+
+	if (selectedItems.size()==1)
+	{
+		on_treePIN_itemClicked((QTreeWidgetItem*)selectedItems[0], 0);
+	}
+
+}
+
+//*****************************************************
 // A Pin is clicked
 //*****************************************************
 void MainWnd::on_treePIN_itemClicked(QTreeWidgetItem* item, int column)
 {
- 	if (!m_CI_Data.isDataLoaded())
+	if (!m_CI_Data.isDataLoaded())
 	{
 		return;
 	}
@@ -2579,7 +2583,7 @@ void MainWnd::on_actionPINRequest_triggered()
 							nrTriesLeft.setNum(triesLeft);
 							msg += "\n";
 							msg += "( ";
-							msg += tr("Number of tries left: ") + nrTriesLeft + " )";
+							msg += tr("Resta(m) ") + nrTriesLeft + " tentativas)";
 							m_ui.txtPIN_Status->setText(msg);
 							m_ui.txtPIN_Status->setAccessibleName(msg);
 						}
@@ -2592,8 +2596,8 @@ void MainWnd::on_actionPINRequest_triggered()
 					{
 						QString nrTriesLeft;
 						nrTriesLeft.setNum(triesLeft);
-						m_ui.txtPIN_Status->setText("Restam 3 tentativas");
-						m_ui.txtPIN_Status->setAccessibleName("Restam 3 tentativas");
+						m_ui.txtPIN_Status->setText("Resta(m) 3 tentativas");
+						m_ui.txtPIN_Status->setAccessibleName("Resta(m) 3 tentativas");
 					}
 					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 					break;
@@ -3518,6 +3522,7 @@ void MainWnd::refreshTabAddress( void )
 	addressdatastatus = 0;
 }
 
+// Set Max of 1000Bytes for personalNotes Field
 void MainWnd::updatetext()
 {
 	int strnr;
@@ -3525,17 +3530,23 @@ void MainWnd::updatetext()
 
 	QString TxtPersoDataString = m_ui.txtPersoData->toPlainText().toUtf8();
 	strnr = TxtPersoDataString.count();
+
 	totalct = 1000-strnr;
 
 	QString TotalBytes = QString::number(totalct);
 	TotalBytes.append(" / 1000");
-
 	m_ui.txtPersoDataCount->setText(TotalBytes);
 
+	if (TxtPersoDataString.count()>1000){
+		TxtPersoDataString = m_ui.txtPersoData->toPlainText();
+		TxtPersoDataString.truncate(TxtPersoDataString.size()-1);
+		m_ui.txtPersoData->setPlainText(TxtPersoDataString);
+	}
 }
 
 void MainWnd::PersoDataSaveButtonClicked( void )
 {
+	m_ui.txtPersoData->setPlainText("teestetettetet");
 	std::string PersoDataFile = "3f005f00ef07";
 	std::string Misc = "misc";
 	QString TxtPersoDataString = m_ui.txtPersoData->toPlainText().toUtf8();
@@ -3567,6 +3578,7 @@ void MainWnd::refreshTabPersoData( void )
 
 	m_ui.txtPersoData->clear();
 	m_ui.txtPersoData->insertPlainText (QString::fromUtf8(PersoDataFields[PERSODATA_INFO].toStdString().c_str()));
+
 
 	connect(m_ui.btnPersoDataSave, SIGNAL(clicked()), this, SLOT( PersoDataSaveButtonClicked()));
 }
