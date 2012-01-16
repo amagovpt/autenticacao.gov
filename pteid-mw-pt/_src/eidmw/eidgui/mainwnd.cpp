@@ -249,7 +249,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 bool MainWnd::eventFilter(QObject *object, QEvent *event)
 {
-	if (event->type() == QEvent::MouseButtonPress)
+	if (event->type() == QEvent::MouseButtonRelease)
 	{
 
 		if (object == m_ui.lbl_menuCard_Read )
