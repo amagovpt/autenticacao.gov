@@ -54,7 +54,8 @@ static bool	g_cleaningCallback=false;
 static int	g_runningCallback=0;
 //State variables for tab data
 static unsigned int pinactivate = 1, certdatastatus = 1, addressdatastatus = 1, persodatastatus = 1 ;
-
+//State of Pin Notes 0->Right PIN 1->Not yet inserted or wrong PIN
+static unsigned int pinNotes = 1 ;
 
 void MainWnd::createTrayMenu()
 {
@@ -256,6 +257,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 		{
 			hide_submenus();
 			pinactivate = 1;
+			pinNotes = 1;
 			m_connectionStatus = (PTEID_CertifStatus)-1;
 			m_CI_Data.Reset();
 			loadCardData();
@@ -2439,6 +2441,8 @@ void MainWnd::authPINRequest_triggered()
 						{
 							break;
 						}
+					}else{
+						pinNotes=0;
 					}
 					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 					break;
@@ -3546,7 +3550,6 @@ void MainWnd::updatetext()
 
 void MainWnd::PersoDataSaveButtonClicked( void )
 {
-	m_ui.txtPersoData->setPlainText("teestetettetet");
 	std::string PersoDataFile = "3f005f00ef07";
 	std::string Misc = "misc";
 	QString TxtPersoDataString = m_ui.txtPersoData->toPlainText().toUtf8();
@@ -3557,11 +3560,16 @@ void MainWnd::PersoDataSaveButtonClicked( void )
 	PTEID_Pins &Pins	= Card.getPins();
 	PTEID_Pin &Pin	= Pins.getPinByNumber(1);
 
-	authPINRequest_triggered();
+	if (pinNotes == 1)
+		authPINRequest_triggered();
 
-	const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), TxtPersoDataString.toStdString().size());
+	if (pinNotes == 0)
+	{
+		const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), TxtPersoDataString.toStdString().size());
+		Card.writeFile(PersoDataFile.c_str(), oData, &Pin, Misc.c_str());
+		QMessageBox::information( this, "Notas Pessais",  "Notas pessoais escritas com sucesso!", QMessageBox::Ok );
+	}
 
-	Card.writeFile(PersoDataFile.c_str(), oData, &Pin, Misc.c_str());
 }
 //*****************************************************
 // refresh the tab with the PTeid Personal Data
