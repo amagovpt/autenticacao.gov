@@ -95,19 +95,40 @@ void dlgSignature::SignListView (QStringList list)
 	connect (ui.listView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ShowContextMenu(const QPoint&)));
 }
 
+void dlgSignature::RemoveFromView()
+{
+	std::cout << "remove from view" << std::endl;
+	QModelIndex index = ui.listView->currentIndex();
+	int row = index.row();
+	int count = 1;
+
+	ui.listView->model()->removeRows( 1, count, index );
+	ui.listView->repaint();
+}
+
 void dlgSignature::ShowContextMenu(const QPoint& pos)
 {
-	std::cout << "clicked" << std::endl;
 	QPoint globalPos = ui.listView->mapToGlobal(pos);
 
-	QMenu myMenu;
-	myMenu.addAction("Remove Item");
-	QAction* selectedItem = myMenu.exec(globalPos);
+	QMenu *myMenu = new QMenu(ui.listView);
+	//myMenu->addAction("Remove Item");
+	QAction *_open = new QAction("Remove", this);
+	myMenu->addAction(_open);
+	connect( _open, SIGNAL( triggered() ), this, SLOT( RemoveFromView() ) );
+	QAction* selectedItem = myMenu->exec(globalPos);
 
-	if (selectedItem)
+
+	/*if (selectedItem)
 	{
+		std::cout << "remove item" << std::endl;
 		//remove item;
-	}
+		QModelIndex index = ui.listView->currentIndex();
+		int row = index.row();
+		int count = 1;
+
+		ui.listView->model()->removeRows( row, count, index );
+		ui.listView->update();
+	}*/
 }
 
 void dlgSignature::on_pbSign_clicked ( void )

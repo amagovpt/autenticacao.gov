@@ -35,6 +35,7 @@ private slots:
 	void on_pbCancel_clicked ( void );
 	void on_pbAddFiles_clicked ( void );
 	void on_pbSign_clicked ( void );
+    void RemoveFromView();
     void ShowContextMenu(const QPoint& pos);
 
 public:
