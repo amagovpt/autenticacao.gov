@@ -45,6 +45,7 @@ private:
     Ui_dlgSignature ui;
     CardInformation const& m_CI_Data;
     QString m_CurrReaderName;//!< the current reader we're using
+    QStringList alist;
 
     void SignListView (QStringList list);
 

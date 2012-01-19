@@ -84,7 +84,10 @@ void dlgSignature::SignListView (QStringList list)
 {
 	QListView *view = ui.listView;
 	QStringListModel* localModel = new QStringListModel();
-	localModel->setStringList(list);
+
+	alist.append(list);
+
+	localModel->setStringList(alist);
 	view->setModel(localModel);
 
 	//signal right click
