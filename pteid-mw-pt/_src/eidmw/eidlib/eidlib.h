@@ -903,27 +903,41 @@ class APL_AddrEId;
 class PTEID_Address : public PTEID_XMLDoc
 {
 public:
-	PTEIDSDK_API virtual ~PTEID_Address();						/**< Destructor */
+	PTEIDSDK_API virtual ~PTEID_Address();							/**< Destructor */
 
-	//PTEIDSDK_API const char *getAddressVersion();		/**< Return Address Version field */
-	//PTEIDSDK_API const char *getStreet();				/**< Return Street field */
-	//PTEIDSDK_API const char *getZipCode();				/**< Return Zip Code field */
-	PTEIDSDK_API const char *getMunicipality();			/**< Return Municipality field */
+	//PTEIDSDK_API const char *getAddressVersion();					/**< Return Address Version field */
+	//PTEIDSDK_API const char *getStreet();							/**< Return Street field */
+	//PTEIDSDK_API const char *getZipCode();						/**< Return Zip Code field */
+	PTEIDSDK_API	bool isNationalAddress();						/**< is the address a portuguese address? */
+	PTEIDSDK_API	const char *getCountryCode();						/**<residence country */
+
 	PTEIDSDK_API	const char *getDistrict();						/**< Return field District */
-	PTEIDSDK_API	const char *getStreetName();					/**< Return field StreetName */
+	PTEIDSDK_API	const char *getDistrictCode();					/**< Return field District Code*/
+	PTEIDSDK_API 	const char *getMunicipality();					/**< Return Municipality field */
+	PTEIDSDK_API 	const char *getMunicipalityCode();				/**< Return Municipality Code field */
 	PTEIDSDK_API	const char *getCivilParish();					/**< Return field CivilParish */
+	PTEIDSDK_API	const char *getCivilParishCode();				/**< Return field CivilParish Code */
 	PTEIDSDK_API	const char *getAbbrStreetType();				/**< Return field AbbrStreetType */
 	PTEIDSDK_API	const char *getStreetType();					/**< Return field StreetType */
+	PTEIDSDK_API	const char *getStreetName();					/**< Return field StreetName */
 	PTEIDSDK_API	const char *getAbbrBuildingType();				/**< Return field AbbrBuildingType */
 	PTEIDSDK_API	const char *getBuildingType();					/**< Return field BuildingType */
 	PTEIDSDK_API	const char *getDoorNo();						/**< Return field DoorNo */
 	PTEIDSDK_API	const char *getFloor();							/**< Return field Floor */
 	PTEIDSDK_API	const char *getSide();							/**< Return field Side */
 	PTEIDSDK_API	const char *getLocality();						/**< Return field Locality */
-	PTEIDSDK_API	const char *getPlace();						/**< Return field Locality */
+	PTEIDSDK_API	const char *getPlace();							/**< Return field Locality */
 	PTEIDSDK_API	const char *getZip4();							/**< Return field Zip4 */
 	PTEIDSDK_API	const char *getZip3();							/**< Return field Zip3 */
 	PTEIDSDK_API	const char *getPostalLocality();				/**< Return field PostalLocality */
+	PTEIDSDK_API	const char *getGeneratedAddressCode();			/**< Return field Address Code */
+
+	PTEIDSDK_API 	const char *getForeignCountry();
+	PTEIDSDK_API 	const char *getForeignAddress();
+	PTEIDSDK_API 	const char *getForeignCity();
+	PTEIDSDK_API 	const char *getForeignRegion();
+	PTEIDSDK_API 	const char *getForeignLocality();
+	PTEIDSDK_API 	const char *getForeignPostalCode();
 
 private:
 	PTEID_Address(const PTEID_Address& doc);							/**< Copy not allowed - not implemented */
@@ -1264,6 +1278,238 @@ private:
   * Function for Logging.
   *********************************************************************************/
 PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const char *format, ...);
+
+
+/******************************************************************************//**
+  * Compatibility layer
+  *********************************************************************************/
+
+#define COMP_LAYER_NATIONAL_ADDRESS "N"
+#define COMP_LAYER_FOREIGN_ADDRESS "I"
+
+#define PTEID_DELIVERY_ENTITY_LEN               40
+#define PTEID_COUNTRY_LEN                       80
+#define PTEID_DOCUMENT_TYPE_LEN                 34
+#define PTEID_CARDNUMBER_LEN                    28
+#define PTEID_CARDNUMBER_PAN_LEN                32
+#define PTEID_CARDVERSION_LEN                   16
+#define PTEID_DATE_LEN                          20
+#define PTEID_LOCALE_LEN                        60
+#define PTEID_NAME_LEN                          120
+#define PTEID_SEX_LEN                           2
+#define PTEID_NATIONALITY_LEN                   6
+#define PTEID_HEIGHT_LEN                        8
+#define PTEID_NUMBI_LEN                         18
+#define PTEID_NUMNIF_LEN                        18
+#define PTEID_NUMSS_LEN                         22
+#define PTEID_NUMSNS_LEN                        18
+#define PTEID_INDICATIONEV_LEN                  120
+#define PTEID_MRZ_LEN							30
+
+#define PTEID_MAX_DELIVERY_ENTITY_LEN               PTEID_DELIVERY_ENTITY_LEN+2
+#define PTEID_MAX_COUNTRY_LEN                       PTEID_COUNTRY_LEN+2
+#define PTEID_MAX_DOCUMENT_TYPE_LEN                 PTEID_DOCUMENT_TYPE_LEN+2
+#define PTEID_MAX_CARDNUMBER_LEN                    PTEID_CARDNUMBER_LEN+2
+#define PTEID_MAX_CARDNUMBER_PAN_LEN                PTEID_CARDNUMBER_PAN_LEN+2
+#define PTEID_MAX_CARDVERSION_LEN                   PTEID_CARDVERSION_LEN+2
+#define PTEID_MAX_DATE_LEN                          PTEID_DATE_LEN+2
+#define PTEID_MAX_LOCALE_LEN                        PTEID_LOCALE_LEN+2
+#define PTEID_MAX_NAME_LEN                          PTEID_NAME_LEN+2
+#define PTEID_MAX_SEX_LEN                           PTEID_SEX_LEN+2
+#define PTEID_MAX_NATIONALITY_LEN                   PTEID_NATIONALITY_LEN+2
+#define PTEID_MAX_HEIGHT_LEN                        PTEID_HEIGHT_LEN+2
+#define PTEID_MAX_NUMBI_LEN                         PTEID_NUMBI_LEN+2
+#define PTEID_MAX_NUMNIF_LEN                        PTEID_NUMNIF_LEN+2
+#define PTEID_MAX_NUMSS_LEN                         PTEID_NUMSS_LEN+2
+#define PTEID_MAX_NUMSNS_LEN                        PTEID_NUMSNS_LEN+2
+#define PTEID_MAX_INDICATIONEV_LEN                  PTEID_INDICATIONEV_LEN+2
+#define PTEID_MAX_MRZ_LEN                           PTEID_MRZ_LEN+2
+
+#define PTEID_ADDR_TYPE_LEN                     2
+#define PTEID_ADDR_COUNTRY_LEN                  4
+#define PTEID_DISTRICT_LEN                      4
+#define PTEID_DISTRICT_DESC_LEN                 100
+#define PTEID_DISTRICT_CON_LEN                  8
+#define PTEID_DISTRICT_CON_DESC_LEN             100
+#define PTEID_DISTRICT_FREG_LEN                 12
+#define PTEID_DISTRICT_FREG_DESC_LEN            100
+#define PTEID_ROAD_ABBR_LEN                     20
+#define PTEID_ROAD_LEN                          100
+#define PTEID_ROAD_DESIG_LEN                    200
+#define PTEID_HOUSE_ABBR_LEN                    20
+#define PTEID_HOUSE_LEN                         100
+#define PTEID_NUMDOOR_LEN                       20
+#define PTEID_FLOOR_LEN                         40
+#define PTEID_SIDE_LEN                          40
+#define PTEID_PLACE_LEN                         100
+#define PTEID_LOCALITY_LEN                      100
+#define PTEID_CP4_LEN                           8
+#define PTEID_CP3_LEN                           6
+#define PTEID_POSTAL_LEN                        50
+#define PTEID_NUMMOR_LEN                        12
+#define PTEID_ADDR_COUNTRYF_DESC_LEN            100
+#define PTEID_ADDRF_LEN                         300
+#define PTEID_CITYF_LEN                         100
+#define PTEID_REGIOF_LEN                        100
+#define PTEID_LOCALITYF_LEN                     100
+#define PTEID_POSTALF_LEN                       100
+#define PTEID_NUMMORF_LEN                       12
+
+#define PTEID_MAX_ADDR_TYPE_LEN                     PTEID_ADDR_TYPE_LEN+2
+#define PTEID_MAX_ADDR_COUNTRY_LEN                  PTEID_ADDR_COUNTRY_LEN+2
+#define PTEID_MAX_DISTRICT_LEN                      PTEID_DISTRICT_LEN+2
+#define PTEID_MAX_DISTRICT_DESC_LEN                 PTEID_DISTRICT_DESC_LEN+2
+#define PTEID_MAX_DISTRICT_CON_LEN                  PTEID_DISTRICT_CON_LEN+2
+#define PTEID_MAX_DISTRICT_CON_DESC_LEN             PTEID_DISTRICT_CON_DESC_LEN+2
+#define PTEID_MAX_DISTRICT_FREG_LEN                 PTEID_DISTRICT_FREG_LEN+2
+#define PTEID_MAX_DISTRICT_FREG_DESC_LEN            PTEID_DISTRICT_FREG_DESC_LEN+2
+#define PTEID_MAX_ROAD_ABBR_LEN                     PTEID_ROAD_ABBR_LEN+2
+#define PTEID_MAX_ROAD_LEN                          PTEID_ROAD_LEN+2
+#define PTEID_MAX_ROAD_DESIG_LEN                    PTEID_ROAD_DESIG_LEN+2
+#define PTEID_MAX_HOUSE_ABBR_LEN                    PTEID_HOUSE_ABBR_LEN+2
+#define PTEID_MAX_HOUSE_LEN                         PTEID_HOUSE_LEN+2
+#define PTEID_MAX_NUMDOOR_LEN                       PTEID_NUMDOOR_LEN+2
+#define PTEID_MAX_FLOOR_LEN                         PTEID_FLOOR_LEN+2
+#define PTEID_MAX_SIDE_LEN                          PTEID_SIDE_LEN+2
+#define PTEID_MAX_PLACE_LEN                         PTEID_PLACE_LEN+2
+#define PTEID_MAX_LOCALITY_LEN                      PTEID_LOCALITY_LEN+2
+#define PTEID_MAX_CP4_LEN                           PTEID_CP4_LEN+2
+#define PTEID_MAX_CP3_LEN                           PTEID_CP3_LEN+2
+#define PTEID_MAX_POSTAL_LEN                        PTEID_POSTAL_LEN+2
+#define PTEID_MAX_NUMMOR_LEN                        PTEID_NUMMOR_LEN+2
+#define PTEID_MAX_ADDR_COUNTRYF_DESC_LEN            PTEID_ADDR_COUNTRYF_DESC_LEN+2
+#define PTEID_MAX_ADDRF_LEN                         PTEID_ADDRF_LEN+2
+#define PTEID_MAX_CITYF_LEN                         PTEID_CITYF_LEN+2
+#define PTEID_MAX_REGIOF_LEN                        PTEID_REGIOF_LEN+2
+#define PTEID_MAX_LOCALITYF_LEN                     PTEID_LOCALITYF_LEN+2
+#define PTEID_MAX_POSTALF_LEN                       PTEID_POSTALF_LEN+2
+#define PTEID_MAX_NUMMORF_LEN                       PTEID_NUMMORF_LEN+2
+
+#define PTEID_MAX_PICTURE_LEN			14128
+#define PTEID_MAX_PICTURE_LEN_HEADER	111
+#define PTEID_MAX_PICTUREH_LEN			(PTEID_MAX_PICTURE_LEN+PTEID_MAX_PICTURE_LEN_HEADER)
+#define PTEID_MAX_CBEFF_LEN				34
+#define PTEID_MAX_FACRECH_LEN			14
+#define PTEID_MAX_FACINFO_LEN			20
+#define PTEID_MAX_IMAGEINFO_LEN			12
+#define PTEID_MAX_IMAGEHEADER_LEN		(PTEID_MAX_CBEFF_LEN+PTEID_MAX_FACRECH_LEN+PTEID_MAX_FACINFO_LEN+PTEID_MAX_IMAGEINFO_LEN)
+
+typedef enum {
+	CARD_TYPE_ERR = 0, // Something went wrong, or unknown card type
+	CARD_TYPE_IAS07,   // IAS 0.7 card
+	CARD_TYPE_IAS101,  // IAS 1.01 card
+} ttCardType;
+
+typedef struct
+{
+    short version;
+    char deliveryEntity[PTEID_MAX_DELIVERY_ENTITY_LEN];
+    char country[PTEID_MAX_COUNTRY_LEN];
+    char documentType[PTEID_MAX_DOCUMENT_TYPE_LEN];
+    char cardNumber[PTEID_MAX_CARDNUMBER_LEN];
+    char cardNumberPAN[PTEID_MAX_CARDNUMBER_PAN_LEN];
+    char cardVersion[PTEID_MAX_CARDVERSION_LEN];
+    char deliveryDate[PTEID_MAX_DATE_LEN];
+    char locale[PTEID_MAX_LOCALE_LEN];
+    char validityDate[PTEID_MAX_DATE_LEN];
+    char name[PTEID_MAX_NAME_LEN];
+    char firstname[PTEID_MAX_NAME_LEN];
+    char sex[PTEID_MAX_SEX_LEN];
+    char nationality[PTEID_MAX_NATIONALITY_LEN];
+    char birthDate[PTEID_MAX_DATE_LEN];
+    char height[PTEID_MAX_HEIGHT_LEN];
+    char numBI[PTEID_MAX_NUMBI_LEN];
+    char nameFather[PTEID_MAX_NAME_LEN];
+    char firstnameFather[PTEID_MAX_NAME_LEN];
+    char nameMother[PTEID_MAX_NAME_LEN];
+    char firstnameMother[PTEID_MAX_NAME_LEN];
+    char numNIF[PTEID_MAX_NUMNIF_LEN];
+    char numSS[PTEID_MAX_NUMSS_LEN];
+    char numSNS[PTEID_MAX_NUMSNS_LEN];
+    char notes[PTEID_MAX_INDICATIONEV_LEN];
+    char mrz1[PTEID_MAX_MRZ_LEN];
+    char mrz2[PTEID_MAX_MRZ_LEN];
+    char mrz3[PTEID_MAX_MRZ_LEN];
+} PTEID_ID;
+
+typedef struct
+{
+    short version;
+    char addrType[PTEID_MAX_ADDR_TYPE_LEN];
+    char country[PTEID_MAX_ADDR_COUNTRY_LEN];
+    char district[PTEID_MAX_DISTRICT_LEN];
+    char districtDesc[PTEID_MAX_DISTRICT_DESC_LEN];
+    char municipality[PTEID_MAX_DISTRICT_CON_LEN];
+    char municipalityDesc[PTEID_MAX_DISTRICT_CON_DESC_LEN];
+    char freguesia[PTEID_MAX_DISTRICT_FREG_LEN];
+    char freguesiaDesc[PTEID_MAX_DISTRICT_FREG_DESC_LEN];
+    char streettypeAbbr[PTEID_MAX_ROAD_ABBR_LEN];
+    char streettype[PTEID_MAX_ROAD_LEN];
+    char street[PTEID_MAX_ROAD_DESIG_LEN];
+    char buildingAbbr[PTEID_MAX_HOUSE_ABBR_LEN];
+    char building[PTEID_MAX_HOUSE_LEN];
+    char door[PTEID_MAX_NUMDOOR_LEN];
+    char floor[PTEID_MAX_FLOOR_LEN];
+    char side[PTEID_MAX_SIDE_LEN];
+    char place[PTEID_MAX_PLACE_LEN];
+    char locality[PTEID_MAX_LOCALITY_LEN];
+    char cp4[PTEID_MAX_CP4_LEN];
+    char cp3[PTEID_MAX_CP3_LEN];
+    char postal[PTEID_MAX_POSTAL_LEN];
+    char numMor[PTEID_MAX_NUMMOR_LEN];
+    char countryDescF[PTEID_MAX_ADDR_COUNTRYF_DESC_LEN];
+    char addressF[PTEID_MAX_ADDRF_LEN];
+    char cityF[PTEID_MAX_CITYF_LEN];
+    char regioF[PTEID_MAX_REGIOF_LEN];
+    char localityF[PTEID_MAX_LOCALITYF_LEN];
+    char postalF[PTEID_MAX_POSTALF_LEN];
+    char numMorF[PTEID_MAX_NUMMORF_LEN];
+} PTEID_ADDR;
+
+typedef struct
+{
+    short version;
+    unsigned char cbeff[PTEID_MAX_CBEFF_LEN];
+    unsigned char facialrechdr[PTEID_MAX_FACRECH_LEN];
+    unsigned char facialinfo[PTEID_MAX_FACINFO_LEN];
+    unsigned char imageinfo[PTEID_MAX_IMAGEINFO_LEN];
+    unsigned char picture[PTEID_MAX_PICTUREH_LEN];
+    unsigned long piclength;
+} PTEID_PIC;
+
+PTEIDSDK_API long PTEID_Init(
+			char *ReaderName		/**< in: the PCSC reader name (as returned by SCardListReaders()),
+								 specify NULL if you want to select the first reader */
+);
+
+PTEIDSDK_API long PTEID_Exit(
+			unsigned long ulMode	/**< in: exit mode, either PTEID_EXIT_LEAVE_CARD or PTEID_EXIT_UNPOWER */
+);
+
+PTEIDSDK_API ttCardType PTEID_GetCardType();
+
+/**
+ * Read the ID data.
+ */
+PTEIDSDK_API long PTEID_GetID(
+	PTEID_ID *IDData		/**< out: the address of a PTEID_ID struct */
+);
+
+/**
+ * Read the Address data.
+ */
+PTEIDSDK_API long PTEID_GetAddr(
+	PTEID_ADDR *AddrData	/**< out: the address of an PTEID_ADDR struct */
+);
+
+
+/**
+ * Read the Picture.
+ */
+PTEIDSDK_API long PTEID_GetPic(
+	PTEID_PIC *PicData		/**< out: the address of a PTEID_PIC struct */
+);
+
 
 }
 

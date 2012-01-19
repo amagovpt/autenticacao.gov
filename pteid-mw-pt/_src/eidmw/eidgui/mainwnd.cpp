@@ -608,12 +608,15 @@ void MainWnd::enablePrintMenu( void )
 	bool bEnable = false;
 	if (m_CI_Data.isDataLoaded())
 	{
+		/*
 		switch(m_CI_Data.m_CardInfo.getType())
 		{
-		case PTEID_CARDTYPE_EID:
+		case PTEID_CARDTYPE_IAS07:
+		case PTEID_CARDTYPE_IAS101:
 		default:
 			break;
 		}
+		*/
 	}
 	m_ui.actionPrint_eID->setEnabled(bEnable);
 	m_ui.actionPrinter_Settings->setEnabled(bEnable);;
@@ -1665,6 +1668,7 @@ void MainWnd::loadCardData( void )
 	//----------------------------------------------------------------
 	// if we load a new card, clear the certificate contexts we kept
 	//----------------------------------------------------------------
+	std::cout << " loadCardData( void )" << std::endl;
 	try
 	{
 		unsigned long	ReaderStartIdx = m_Settings.getSelectedReader();
@@ -1686,6 +1690,7 @@ void MainWnd::loadCardData( void )
 		for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
 		{
 			PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
+			std::cout << "PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);" << std::endl;
 			if (ReaderContext.isCardPresent())
 			{
 				bCardPresent = true;
@@ -1693,11 +1698,13 @@ void MainWnd::loadCardData( void )
 				lastFoundCardType = CardType;
 				switch (CardType)
 				{
-				case PTEID_CARDTYPE_EID:
+				case PTEID_CARDTYPE_IAS07:
+				case PTEID_CARDTYPE_IAS101:
 				{
 					try
 					{
 						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
+						std::cout << " ReaderContext.getEIDCard();" << std::endl;
 						if (Card.isTestCard()&&!Card.getAllowTestCard())
 						{
 							if (askAllowTestCard())
@@ -1719,6 +1726,7 @@ void MainWnd::loadCardData( void )
 					}
 					catch (PTEID_ExCardBadType const& e)
 					{
+						std::cout << "ERROR" << e.GetError()<< std::endl;
 						QString errcode;
 						errcode = errcode.setNum(e.GetError());
 					}
@@ -1845,7 +1853,8 @@ void MainWnd::loadCardDataAddress( void )
 				lastFoundCardType = CardType;
 				switch (CardType)
 				{
-				case PTEID_CARDTYPE_EID:
+				case PTEID_CARDTYPE_IAS07:
+				case PTEID_CARDTYPE_IAS101:
 				{
 					try
 					{
@@ -1995,7 +2004,8 @@ bool MainWnd::loadCardDataPersoData( void )
 				lastFoundCardType = CardType;
 				switch (CardType)
 				{
-				case PTEID_CARDTYPE_EID:
+				case PTEID_CARDTYPE_IAS07:
+				case PTEID_CARDTYPE_IAS101:
 				{
 					try
 					{
@@ -2143,7 +2153,8 @@ void MainWnd::loadCardDataCertificates( void )
 				lastFoundCardType = CardType;
 				switch (CardType)
 				{
-				case PTEID_CARDTYPE_EID:
+				case PTEID_CARDTYPE_IAS07:
+				case PTEID_CARDTYPE_IAS101:
 				{
 					try
 					{
@@ -2724,7 +2735,8 @@ void MainWnd::showTabs()
 
 	switch (m_TypeCard) 
 	{
-	case PTEID_CARDTYPE_EID:
+	case PTEID_CARDTYPE_IAS07:
+	case PTEID_CARDTYPE_IAS101:
 
 		if(PTEID_EIDCard::isApplicationAllowed())
 		{
@@ -3409,7 +3421,7 @@ void MainWnd::refreshTabIdentity( void )
 
 	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
 
-	QString cardNumber = m_CI_Data.m_CardInfo.formatCardNumber(CardFields[CARD_NUMBER],m_CI_Data.m_pCard->getType());
+	QString cardNumber = m_CI_Data.m_CardInfo.formatCardNumber(CardFields[CARD_NUMBER]);
 	m_ui.txtIdentity_Height->setText	 ( QString::fromUtf8(PersonFields[HEIGHT].toStdString().c_str()) );
 	m_ui.txtIdentity_Height->setAccessibleName	 ( QString::fromUtf8(PersonFields[HEIGHT].toStdString().c_str()) );
 	m_ui.txtIdentity_Country->setText	 ( QString::fromUtf8(PersonFields[COUNTRY].toStdString().c_str()) );
@@ -3454,9 +3466,9 @@ void MainWnd::refreshTabIdentityExtra()
 	m_ui.txtIdentityExtra_Validate->setText ( QString::fromUtf8(PersonFields[VALIDATION].toStdString().c_str()) );
 	m_ui.txtIdentityExtra_Validate->setAccessibleName ( QString::fromUtf8(PersonFields[VALIDATION].toStdString().c_str()) );
 
-	QString cardNumber = m_CI_Data.m_CardInfo.formatCardNumber(CardFields[CARD_NUMBER],m_CI_Data.m_CardInfo.getType());
+	QString cardNumber = m_CI_Data.m_CardInfo.formatCardNumber(CardFields[CARD_NUMBER]);
 
-	QString nationalNumber = m_CI_Data.m_PersonInfo.formatNationalNumber( PersonFields[NATIONALNUMBER],m_CI_Data.m_CardInfo.getType() );
+	QString nationalNumber = m_CI_Data.m_PersonInfo.formatNationalNumber( PersonFields[NATIONALNUMBER]);
 
 	m_ui.txtIdentityExtra_ValidFrom->setText( QString::fromUtf8(CardFields[CARD_VALIDFROM].toStdString().c_str()));
 	m_ui.txtIdentityExtra_ValidFrom->setAccessibleName( QString::fromUtf8(CardFields[CARD_VALIDFROM].toStdString().c_str()));
@@ -3765,7 +3777,8 @@ void MainWnd::refreshTabCardPin( void )
 		{
 			switch(ReaderContext.getCardType())
 			{
-			case PTEID_CARDTYPE_EID:
+			case PTEID_CARDTYPE_IAS07:
+			case PTEID_CARDTYPE_IAS101:
                 {
                     PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
                     PTEID_Pins&		Pins	= Card.getPins();
@@ -4162,7 +4175,8 @@ void MainWnd::customEvent( QEvent* pEvent )
 
 					switch( cardType )
 					{
-					case PTEID_CARDTYPE_EID:
+					case PTEID_CARDTYPE_IAS07:
+					case PTEID_CARDTYPE_IAS101:
 					{
 						try
 						{

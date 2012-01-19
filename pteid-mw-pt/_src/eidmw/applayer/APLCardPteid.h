@@ -80,7 +80,7 @@ public:
 	EIDMW_APL_API virtual ~APL_EIDCard();
 
 	/**
-	  * Return the type of the card (PTEID_CARDTYPE_EID)
+	  * Return the type of the card (APL_CARDTYPE_EID_IAS*)
 	  */
 	EIDMW_APL_API virtual APL_CardType getType() const;
 
@@ -191,7 +191,8 @@ protected:
 	  * Constructor
 	  *		Used only in APL_ReaderContext::connectCard
 	  */    
-	APL_EIDCard(APL_ReaderContext *reader);
+	//MARTINHO: APL_EIDCard(APL_ReaderContext *reader);
+	APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType);
 
 	virtual bool initVirtualReader();
 	virtual bool isCardForbidden();
@@ -212,7 +213,7 @@ private:
 	APL_EIDCard &operator= (const APL_EIDCard& card);	/**< Copy not allowed - not implemented */
 
 	CByteArray *m_cardinfosign;
-
+	APL_CardType	m_cardType;
 	APL_EIdFullDoc *m_docfull;							/**< Pointer to the document FULL */
 	APL_CCXML_Doc *m_CCcustomDoc;						/**< Pointer to the custom document */
 	APL_DocEId *m_docid;								/**< Pointer to the document ID */
@@ -417,25 +418,37 @@ public:
 	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
 	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
 
-	EIDMW_APL_API const char *getAddressVersion();		/**< Return field AddressVersion from the Address file */
-	EIDMW_APL_API const char *getStreet();				/**< Return field Street from the Address file */
-	EIDMW_APL_API const char *getZipCode();				/**< Return field ZipCode from the Address file */
-	EIDMW_APL_API const char *getMunicipality();		/**< Return field Municipality from the Address file */
-	EIDMW_APL_API const char *getCivilParish();			/**< Return field CivilParish from the Address file */
-	EIDMW_APL_API const char *getStreetName();			/**< Return field StreetName from the Address file */
-	EIDMW_APL_API const char *getAbbrStreetType();		/**< Return field AbbrStreetType from the Address file */
-	EIDMW_APL_API const char *getStreetType();			/**< Return field StreetType from the Address file */
-	EIDMW_APL_API const char *getAbbrBuildingType();	/**< Return field AbbrBuildingType from the Address file */
-	EIDMW_APL_API const char *getBuildingType();		/**< Return field BuildingType from the Address file */
-	EIDMW_APL_API const char *getDoorNo();				/**< Return field DoorNo from the Address file */
-	EIDMW_APL_API const char *getFloor();				/**< Return field Floor from the Address file */
-	EIDMW_APL_API const char *getSide();				/**< Return field Side from the Address file */
-	EIDMW_APL_API const char *getLocality();			/**< Return field Locality from the Address file */
-	EIDMW_APL_API const char *getPlace();			/**< Return field Locality from the Address file */
-	EIDMW_APL_API const char *getZip4();				/**< Return field Zip4 from the Address file */
-	EIDMW_APL_API const char *getZip3();				/**< Return field Zip3 from the Address file */
-	EIDMW_APL_API const char *getPostalLocality();		/**< Return field PostalLocality from the Address file */
-	EIDMW_APL_API const char *getDistrict();			/**< Return field District from the Address file */
+	EIDMW_APL_API bool isNationalAddress();				/**<is the address a portuguese address? */
+	EIDMW_APL_API const char *getCountryCode();				/**<residence country */
+
+	EIDMW_APL_API const char *getMunicipality();			/**< Return field Municipality from the Address file */
+	EIDMW_APL_API const char *getMunicipalityCode();		/**< Return field Municipality Code from the Address file */
+	EIDMW_APL_API const char *getCivilParish();				/**< Return field CivilParish from the Address file */
+	EIDMW_APL_API const char *getCivilParishCode();			/**< Return field CivilParish Code from the Address file */
+	EIDMW_APL_API const char *getStreetName();				/**< Return field StreetName from the Address file */
+	EIDMW_APL_API const char *getAbbrStreetType();			/**< Return field AbbrStreetType from the Address file */
+	EIDMW_APL_API const char *getStreetType();				/**< Return field StreetType from the Address file */
+	EIDMW_APL_API const char *getAbbrBuildingType();		/**< Return field AbbrBuildingType from the Address file */
+	EIDMW_APL_API const char *getBuildingType();			/**< Return field BuildingType from the Address file */
+	EIDMW_APL_API const char *getDoorNo();					/**< Return field DoorNo from the Address file */
+	EIDMW_APL_API const char *getFloor();					/**< Return field Floor from the Address file */
+	EIDMW_APL_API const char *getSide();					/**< Return field Side from the Address file */
+	EIDMW_APL_API const char *getLocality();				/**< Return field Locality from the Address file */
+	EIDMW_APL_API const char *getPlace();					/**< Return field Locality from the Address file */
+	EIDMW_APL_API const char *getZip4();					/**< Return field Zip4 from the Address file */
+	EIDMW_APL_API const char *getZip3();					/**< Return field Zip3 from the Address file */
+	EIDMW_APL_API const char *getPostalLocality();			/**< Return field PostalLocality from the Address file */
+	EIDMW_APL_API const char *getGeneratedAddressCode(); 	/**< Return field Address Code from the Address file */
+	EIDMW_APL_API const char *getDistrict();				/**< Return field District from the Address file */
+	EIDMW_APL_API const char *getDistrictCode();			/**< Return field District Code from the Address file */
+
+	EIDMW_APL_API const char *getForeignCountry();
+	EIDMW_APL_API const char *getForeignAddress();
+	EIDMW_APL_API const char *getForeignCity();
+	EIDMW_APL_API const char *getForeignRegion();
+	EIDMW_APL_API const char *getForeignLocality();
+	EIDMW_APL_API const char *getForeignPostalCode();
+
 
 protected:
 	/**

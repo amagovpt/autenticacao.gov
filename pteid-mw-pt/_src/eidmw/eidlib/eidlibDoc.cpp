@@ -1254,6 +1254,20 @@ const char *PTEID_Address::getCivilParish()
 	return out;
 }
 
+const char *PTEID_Address::getCivilParishCode()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
+	out = pimpl->getCivilParishCode();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
 const char *PTEID_Address::getStreetName()
 {
 	const char *out = NULL;
@@ -1422,6 +1436,20 @@ const char *PTEID_Address::getPostalLocality()
 	return out;
 }
 
+const char *PTEID_Address::getGeneratedAddressCode()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
+	out = pimpl->getGeneratedAddressCode();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
 const char *PTEID_Address::getDistrict()
 {
 	const char *out = NULL;
@@ -1430,6 +1458,20 @@ const char *PTEID_Address::getDistrict()
 
 	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
 	out = pimpl->getDistrict();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+const char *PTEID_Address::getDistrictCode()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
+	out = pimpl->getDistrictCode();
 
 	END_TRY_CATCH
 
@@ -1450,6 +1492,20 @@ const char *PTEID_Address::getMunicipality()
 	return out;
 }
 
+const char *PTEID_Address::getMunicipalityCode()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
+	out = pimpl->getMunicipalityCode();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
 const char *PTEID_Address::getPlace()
 {
 	const char *out = NULL;
@@ -1458,6 +1514,118 @@ const char *PTEID_Address::getPlace()
 
 	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
 	out = pimpl->getPlace();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+const char *PTEID_Address::getCountryCode()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
+	out = pimpl->getCountryCode();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+bool PTEID_Address::isNationalAddress()
+{
+	bool is;
+
+	BEGIN_TRY_CATCH
+
+	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
+	is =  pimpl->isNationalAddress();
+
+	END_TRY_CATCH
+
+	return is;
+}
+
+const char *PTEID_Address::getForeignCountry()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
+	out = pimpl->getForeignCountry();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+const char *PTEID_Address::getForeignAddress()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
+	out = pimpl->getForeignAddress();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+const char *PTEID_Address::getForeignCity()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
+	out = pimpl->getForeignCity();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+const char *PTEID_Address::getForeignRegion()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
+	out = pimpl->getForeignRegion();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+const char *PTEID_Address::getForeignLocality()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
+	out = pimpl->getForeignLocality();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+const char *PTEID_Address::getForeignPostalCode()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_AddrEId *pimpl=static_cast<APL_AddrEId *>(m_impl);
+	out = pimpl->getForeignPostalCode();
 
 	END_TRY_CATCH
 

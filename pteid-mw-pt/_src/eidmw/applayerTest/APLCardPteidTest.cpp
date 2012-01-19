@@ -703,7 +703,7 @@ static bool doParsing(std::string& XMLFile, const char* XMLData, std::string& te
 	pFile = NULL;
 
 	EIDMW_EIDXMLParser	eidXMLParser;
-	APL_CardType		cardType		= APL_CARDTYPE_PTEID_EID;
+	APL_CardType		cardType		= APL_CARDTYPE_PTEID_IAS101;
 	bool				bParse			= true;
 	try
 	{
@@ -767,7 +767,7 @@ TEST(TestXMLEid)
 
 			{
 				APL_CardType cardType = eidXMLParser.getDataCardType();
-				CHECK_EQUAL(APL_CARDTYPE_PTEID_EID,cardType);
+				CHECK_EQUAL(APL_CARDTYPE_PTEID_IAS101,cardType);
 
 				const wchar_t version[]=L"1";
 
@@ -855,7 +855,7 @@ TEST(TestXMLEid)
 			pFile = NULL;
 
 			EIDMW_EIDXMLParser	eidXMLParser;
-			APL_CardType		cardType		= APL_CARDTYPE_PTEID_EID;
+			APL_CardType		cardType		= APL_CARDTYPE_PTEID_IAS101;
 
 			bool parsing = eidXMLParser.parse( "test_xml_1.xml" );
 

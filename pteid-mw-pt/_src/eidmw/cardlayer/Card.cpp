@@ -365,7 +365,7 @@ CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 
 	CByteArray oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal);
 
-	if ( m_cardType == CARD_PTEID &&
+	if ( (m_cardType == CARD_PTEID_IAS07 || m_cardType == CARD_PTEID_IAS101) &&
 			(lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED) )
 	{
 		m_poContext->m_oPCSC.Recover(m_hCard, &m_ulLockCount);

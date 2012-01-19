@@ -275,12 +275,18 @@ public:
 	virtual ~APL_EidFile_Address();
 
 	/*New status for PTeid-ng */
-	const char *getMunicipality();						/**< Return field Municipality */
+	bool isNationalAddress();							/**<is the address a portuguese address? */
+	const char *getCountryCode();						/**<residence country */
+
 	const char *getDistrict();
-	const char *getStreetName();
+	const char *getDistrictCode();
+	const char *getMunicipality();						/**< Return field Municipality */
+	const char *getMunicipalityCode();
 	const char *getCivilParish();
+	const char *getCivilParishCode();
 	const char *getAbbrStreetType();
 	const char *getStreetType();
+	const char *getStreetName();
 	const char *getAbbrBuildingType();
 	const char *getBuildingType();
 	const char *getDoorNo();
@@ -291,10 +297,14 @@ public:
 	const char *getZip3();
 	const char *getPlace();
 	const char *getPostalLocality();
-	const char *getAddressVersion();					/**< Return field AddressVersion */
-	const char *getStreet();							/**< Return field Street */
-	const char *getZipCode();							/**< Return field ZipCode */
+	const char *getGeneratedAddressCode();
 
+	const char *getForeignCountry();
+	const char *getForeignAddress();
+	const char *getForeignCity();
+	const char *getForeignRegion();
+	const char *getForeignLocality();
+	const char *getForeignPostalCode();
 
 protected:
 	/**
@@ -329,18 +339,21 @@ private:
 	  */
 	virtual bool ShowData();
 
+
 	std::string m_AddressFile;
+
 	std::string m_AddressType;								/**< Field Address type */
-	std::string m_Country;									/**< Field Country*/
-	std::string m_District;									/**< Field District */
-	std::string m_StreetName;								/**< Field StreetName */
-	std::string m_AddressVersion;							/**< Field AddressVersion */
-	std::string m_Street;									/**< Field Street */
-	std::string m_ZipCode;									/**< Field ZipCode */
-	std::string m_Municipality;								/**< Field Municipality */
-	std::string m_CivilParish;
-	std::string m_AbbrStreetType;
-	std::string m_StreetType;
+	std::string m_CountryCode;								/**< Field Country code*/
+
+	std::string m_DistrictCode;								/**< Field District Code*/
+	std::string m_DistrictDescription;						/**< Field District Description*/
+	std::string m_MunicipalityCode;							/**< Field Municipality Code*/
+	std::string m_MunicipalityDescription;					/**< Field Municipality Description*/
+	std::string m_CivilParishCode;							/**< Field Civil Parish Code*/
+	std::string m_CivilParishDescription;					/**< Field Civil Parish Description*/
+	std::string m_AbbrStreetType;							/**< Field Abbreviated Street Type*/
+	std::string m_StreetType;								/**< Field Street Type*/
+	std::string m_StreetName;								/**< Field Street Name*/
 	std::string m_AbbrBuildingType;
 	std::string m_BuildingType;
 	std::string m_DoorNo;
@@ -351,6 +364,18 @@ private:
 	std::string m_Zip3;
 	std::string m_PostalLocality;
 	std::string m_Place;
+
+	std::string m_Foreign_Country;
+	std::string m_Foreign_Generic_Address;
+	std::string m_Foreign_City;
+	std::string m_Foreign_Region;
+	std::string m_Foreign_Locality;
+	std::string m_Foreign_Postal_Code;
+
+	std::string m_Generated_Address_Code;
+
+	static const std::string m_NATIONAL;			/**< portuguese addresses 'N' in the address type field*/
+	static const std::string m_FOREIGN;				/**< foreign addresses have 'I' in the address type field*/
 
 friend 	APL_EidFile_Address *APL_EIDCard::getFileAddress();	/**< This method must access protected constructor */
 

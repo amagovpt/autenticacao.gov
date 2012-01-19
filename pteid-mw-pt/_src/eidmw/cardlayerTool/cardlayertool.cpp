@@ -483,7 +483,8 @@ static const char *cardtype2string(tCardType cardType)
 
 	switch(cardType)
 	{
-	case CARD_PTEID: return "PT eID";
+	case CARD_PTEID_IAS07:
+	case CARD_PTEID_IAS101: return "PT eID";
 	case CARD_UNKNOWN: return "UNKNOWN";
 	}
 #ifdef WIN32

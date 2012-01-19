@@ -40,7 +40,8 @@ namespace eIDMW
 enum PTEID_CardType
 {
 	PTEID_CARDTYPE_UNKNOWN=0,	/**< Unknown card */
-	PTEID_CARDTYPE_EID			/**< Normal eid card */
+	PTEID_CARDTYPE_IAS07,
+	PTEID_CARDTYPE_IAS101
 };
 
 enum PTEID_DocumentType

@@ -40,8 +40,9 @@ namespace eIDMW
 *****************************************************************************************/
 APL_AccessWarningLevel APL_EIDCard::m_lWarningLevel=APL_ACCESSWARNINGLEVEL_TO_ASK;
 
-APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader):APL_SmartCard(reader)
+APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType):APL_SmartCard(reader)
 {
+	m_cardType = cardType;
 	m_docfull=NULL;
 	m_CCcustomDoc=NULL;
 	m_docid=NULL;
@@ -820,7 +821,7 @@ APL_EidFile_TokenInfo *APL_EIDCard::getFileTokenInfo()
 
 APL_CardType APL_EIDCard::getType() const
 {
-	return APL_CARDTYPE_PTEID_EID;
+	return m_cardType;
 }
 
 bool APL_EIDCard::isTestCard()
@@ -1322,7 +1323,8 @@ CByteArray APL_EIdFullDoc::getXML(bool bNoHeader)
 	xml+="	<card_type>";
 	switch(m_card->getType())
 	{
-	case APL_CARDTYPE_PTEID_EID:
+	case APL_CARDTYPE_PTEID_IAS07:
+	case APL_CARDTYPE_PTEID_IAS101:
 		xml+=CARDTYPE_NAME_PTEID_EID;
 		break;
 	default:
@@ -1370,7 +1372,8 @@ doc_version;card_type;biographic;biometric;certificates;pins;
 	csv+=CSV_SEPARATOR;
 	switch(m_card->getType())
 	{
-	case APL_CARDTYPE_PTEID_EID:
+	case APL_CARDTYPE_PTEID_IAS07:
+	case APL_CARDTYPE_PTEID_IAS101:
 		csv+=CARDTYPE_NAME_PTEID_EID;
 		break;
 	default:
@@ -1408,7 +1411,8 @@ CByteArray APL_EIdFullDoc::getTLV()
 	CByteArray baCardType;
 	switch(m_card->getType())
 	{
-	case APL_CARDTYPE_PTEID_EID:
+	case APL_CARDTYPE_PTEID_IAS07:
+	case APL_CARDTYPE_PTEID_IAS101:
 		baCardType.Append(CARDTYPE_NAME_PTEID_EID);
 		break;
 	default:
@@ -2198,72 +2202,99 @@ CByteArray APL_AddrEId::getXML(bool bNoHeader)
 	if(_xmlUInfo->isEmpty())
 		_xmlUInfo = NULL;
 
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_DISTRICT)){
-		BUILD_XML_ELEMENT(address, XML_DISTRICT_ELEMENT, getDistrict());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_MUNICIPALITY)){
-		BUILD_XML_ELEMENT(address, XML_MUNICIPALITY_ELEMENT, getMunicipality());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_CIVIL_PARISH)){
-		BUILD_XML_ELEMENT(address, XML_CIVIL_PARISH_ELEMENT, getCivilParish());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_ABBR_STREET_TYPE)){
-		BUILD_XML_ELEMENT(address, XML_ABBR_STREET_TYPE_ELEMENT, getAbbrStreetType());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_STREET_TYPE)){
-		BUILD_XML_ELEMENT(address, XML_STREET_TYPE_ELEMENT, getStreetType());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_STREET_NAME)){
-		BUILD_XML_ELEMENT(address, XML_STREET_NAME_ELEMENT, getStreetName());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_ABBR_BUILDING_TYPE)){
-		BUILD_XML_ELEMENT(address, XML_ABBR_BUILDING_TYPE_ELEMENT, getAbbrBuildingType());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_BUILDING_TYPE)){
-		BUILD_XML_ELEMENT(address, XML_BUILDING_TYPE_ELEMENT, getBuildingType());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_DOOR_NO)){
-		BUILD_XML_ELEMENT(address, XML_DOOR_NO_ELEMENT, getDoorNo());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_FLOOR)){
-		BUILD_XML_ELEMENT(address, XML_FLOOR_ELEMENT, getFloor());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_SIDE)){
-		BUILD_XML_ELEMENT(address, XML_SIDE_ELEMENT, getSide());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_PLACE)){
-		BUILD_XML_ELEMENT(address, XML_PLACE_ELEMENT, getPlace());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_LOCALITY)){
-		BUILD_XML_ELEMENT(address, XML_LOCALITY_ELEMENT, getLocality());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_ZIP4)){
-		BUILD_XML_ELEMENT(address, XML_ZIP4_ELEMENT, getZip4());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_ZIP3)){
-		BUILD_XML_ELEMENT(address, XML_ZIP3_ELEMENT, getZip3());
-		addAddress = true;
-	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_POSTAL_LOCALITY)){
-		BUILD_XML_ELEMENT(address, XML_POSTAL_LOCALITY_ELEMENT, getPostalLocality());
-		addAddress = true;
-	}
-	if (addAddress){
-		BUILD_XML_ELEMENT_NEWLINE(xml,XML_ADDRESS_ELEMENT, address);
+	if (isNationalAddress()){
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_DISTRICT)){
+			BUILD_XML_ELEMENT(address, XML_DISTRICT_ELEMENT, getDistrict());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_MUNICIPALITY)){
+			BUILD_XML_ELEMENT(address, XML_MUNICIPALITY_ELEMENT, getMunicipality());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_CIVIL_PARISH)){
+			BUILD_XML_ELEMENT(address, XML_CIVIL_PARISH_ELEMENT, getCivilParish());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_ABBR_STREET_TYPE)){
+			BUILD_XML_ELEMENT(address, XML_ABBR_STREET_TYPE_ELEMENT, getAbbrStreetType());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_STREET_TYPE)){
+			BUILD_XML_ELEMENT(address, XML_STREET_TYPE_ELEMENT, getStreetType());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_STREET_NAME)){
+			BUILD_XML_ELEMENT(address, XML_STREET_NAME_ELEMENT, getStreetName());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_ABBR_BUILDING_TYPE)){
+			BUILD_XML_ELEMENT(address, XML_ABBR_BUILDING_TYPE_ELEMENT, getAbbrBuildingType());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_BUILDING_TYPE)){
+			BUILD_XML_ELEMENT(address, XML_BUILDING_TYPE_ELEMENT, getBuildingType());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_DOOR_NO)){
+			BUILD_XML_ELEMENT(address, XML_DOOR_NO_ELEMENT, getDoorNo());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_FLOOR)){
+			BUILD_XML_ELEMENT(address, XML_FLOOR_ELEMENT, getFloor());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_SIDE)){
+			BUILD_XML_ELEMENT(address, XML_SIDE_ELEMENT, getSide());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_PLACE)){
+			BUILD_XML_ELEMENT(address, XML_PLACE_ELEMENT, getPlace());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_LOCALITY)){
+			BUILD_XML_ELEMENT(address, XML_LOCALITY_ELEMENT, getLocality());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_ZIP4)){
+			BUILD_XML_ELEMENT(address, XML_ZIP4_ELEMENT, getZip4());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_ZIP3)){
+			BUILD_XML_ELEMENT(address, XML_ZIP3_ELEMENT, getZip3());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_POSTAL_LOCALITY)){
+			BUILD_XML_ELEMENT(address, XML_POSTAL_LOCALITY_ELEMENT, getPostalLocality());
+			addAddress = true;
+		}
+		if (addAddress){
+			BUILD_XML_ELEMENT_NEWLINE(xml,XML_ADDRESS_ELEMENT, address);
+		}
+	} else {
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_FOREIGN_COUNTRY)){
+			BUILD_XML_ELEMENT(address, XML_FOREIGN_COUNTRY_ELEMENT, getForeignCountry());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_FOREIGN_ADDRESS)){
+			BUILD_XML_ELEMENT(address, XML_FOREIGN_ADDRESS_ELEMENT, getForeignAddress());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_FOREIGN_CITY)){
+			BUILD_XML_ELEMENT(address, XML_FOREIGN_CITY_ELEMENT, getForeignCity());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_FOREIGN_REGION)){
+			BUILD_XML_ELEMENT(address, XML_FOREIGN_REGION_ELEMENT, getForeignRegion());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_FOREIGN_LOCALITY)){
+			BUILD_XML_ELEMENT(address, XML_FOREIGN_LOCALITY_ELEMENT, getForeignLocality());
+			addAddress = true;
+		}
+		if (!_xmlUInfo || _xmlUInfo->contains(XML_FOREIGN_POSTAL_CODE)){
+			BUILD_XML_ELEMENT(address, XML_FOREIGN_POSTAL_CODE_ELEMENT, getForeignPostalCode());
+			addAddress = true;
+		}
 	}
 
 	return xml;
@@ -2271,32 +2302,13 @@ CByteArray APL_AddrEId::getXML(bool bNoHeader)
 
 CByteArray APL_AddrEId::getCSV()
 {
-/*
-version;type;name;surname;gender;date_of_birth;location_of_birth;nobility;nationality;
-	national_nr;special_organization;member_of_family;special_status;logical_nr;chip_nr;
-	date_begin;date_end;issuing_municipality;version;street;zip;municipality;country;
-	file_id;file_id_sign;file_address;file_address_sign;
-*/
-
 	CByteArray csv;
 
-	csv+=getAddressVersion();
-	csv+=CSV_SEPARATOR;
-	csv+=getStreet();
-	csv+=CSV_SEPARATOR;
-	csv+=getZipCode();
-	csv+=CSV_SEPARATOR;
-	csv+=getMunicipality();
-	csv+=CSV_SEPARATOR;
-
+	/*
 	CByteArray baFileB64;
 	if(m_cryptoFwk->b64Encode(m_card->getFileAddress()->getData(),baFileB64,false))
 		csv+=baFileB64;
-	csv+=CSV_SEPARATOR;
-	if(m_cryptoFwk->b64Encode(m_card->getFileAddressSign()->getData(),baFileB64,false))
-		csv+=baFileB64;
-	csv+=CSV_SEPARATOR;
-
+	*/
 	return csv;
 }
 
@@ -2317,24 +2329,14 @@ CByteArray APL_AddrEId::getTLV()
 	return ba;
 }
 
-const char *APL_AddrEId::getAddressVersion()
-{
-	return m_card->getFileAddress()->getAddressVersion();
-}
-
-const char *APL_AddrEId::getStreet()
-{
-	return m_card->getFileAddress()->getStreet();
-}
-
-const char *APL_AddrEId::getZipCode()
-{
-	return m_card->getFileAddress()->getZipCode();
-}
-
 const char *APL_AddrEId::getMunicipality()
 {
 	return m_card->getFileAddress()->getMunicipality();
+}
+
+const char *APL_AddrEId::getMunicipalityCode()
+{
+	return m_card->getFileAddress()->getMunicipalityCode();
 }
 
 const char *APL_AddrEId::getPlace()
@@ -2345,6 +2347,11 @@ const char *APL_AddrEId::getPlace()
 const char *APL_AddrEId::getCivilParish()
 {
 	return m_card->getFileAddress()->getCivilParish();
+}
+
+const char *APL_AddrEId::getCivilParishCode()
+{
+	return m_card->getFileAddress()->getCivilParishCode();
 }
 
 const char *APL_AddrEId::getStreetName()
@@ -2407,9 +2414,59 @@ const char *APL_AddrEId::getPostalLocality()
 	return m_card->getFileAddress()->getPostalLocality();
 }
 
+const char *APL_AddrEId::getGeneratedAddressCode()
+{
+	return m_card->getFileAddress()->getGeneratedAddressCode();
+}
+
 const char *APL_AddrEId::getDistrict()
 {
 	return m_card->getFileAddress()->getDistrict();
+}
+
+const char *APL_AddrEId::getDistrictCode()
+{
+	return m_card->getFileAddress()->getDistrictCode();
+}
+
+const char *APL_AddrEId::getCountryCode()
+{
+	return m_card->getFileAddress()->getCountryCode();
+}
+
+bool APL_AddrEId::isNationalAddress()
+{
+	return m_card->getFileAddress()->isNationalAddress();
+}
+
+const char *APL_AddrEId::getForeignCountry()
+{
+	return m_card->getFileAddress()->getForeignCountry();
+}
+
+const char *APL_AddrEId::getForeignAddress()
+{
+	return m_card->getFileAddress()->getForeignAddress();
+}
+
+const char *APL_AddrEId::getForeignCity()
+{
+	return m_card->getFileAddress()->getForeignCity();
+}
+
+const char *APL_AddrEId::getForeignRegion()
+{
+	return m_card->getFileAddress()->getForeignRegion();
+}
+
+const char *APL_AddrEId::getForeignLocality()
+{
+	return m_card->getFileAddress()->getForeignLocality();
+}
+
+const char *APL_AddrEId::getForeignPostalCode()
+{
+	return m_card->getFileAddress()->getForeignPostalCode();
 }
 
 /*****************************************************************************************

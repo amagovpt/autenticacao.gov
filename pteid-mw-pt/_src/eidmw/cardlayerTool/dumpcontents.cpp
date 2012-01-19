@@ -55,7 +55,8 @@ long DumpContents(const std::string & csReaderName)
 
 			switch(type)
 			{
-			case CARD_PTEID:
+			case CARD_PTEID_IAS07:
+			case CARD_PTEID_IAS101:
 				lRet = DumpPteidContents(oReader);
 				break;
 			default:

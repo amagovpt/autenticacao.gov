@@ -39,7 +39,8 @@ namespace eIDMW
 enum APL_CardType
 {
 	APL_CARDTYPE_UNKNOWN=0,
-	APL_CARDTYPE_PTEID_EID
+	APL_CARDTYPE_PTEID_IAS07,
+	APL_CARDTYPE_PTEID_IAS101
 };
 
 enum APL_SaveFileType
@@ -293,19 +294,19 @@ public:
 	/**
 	  * Construct using a fileType and fileName
 	  *		No reader are connected (m_reader=NULL)
-	  */    
+	  */
 	EIDMW_APL_API APL_ReaderContext(APL_SaveFileType fileType,const char *fileName);
 
 	/**
 	  * Construct using a fileType and its content
 	  *		No reader are connected (m_reader=NULL)
-	  */    
+	  */
 	EIDMW_APL_API APL_ReaderContext(APL_SaveFileType fileType,const CByteArray &data);
 
 	/**
 	  * Construct using Raw data for Eid
 	  *		No reader are connected (m_reader=NULL)
-	  */    
+	  */
 	EIDMW_APL_API APL_ReaderContext(const APL_RawData_Eid &data);
 
 	/**

@@ -28,8 +28,10 @@ PTEID_CardType ConvertCardType(APL_CardType eCardType)
 {
 	switch(eCardType)
 	{ 
-	case APL_CARDTYPE_PTEID_EID:
-		return PTEID_CARDTYPE_EID;
+	case APL_CARDTYPE_PTEID_IAS07:
+		return PTEID_CARDTYPE_IAS07;
+	case APL_CARDTYPE_PTEID_IAS101:
+		return PTEID_CARDTYPE_IAS101;
 	default:
 		return PTEID_CARDTYPE_UNKNOWN;
 	}

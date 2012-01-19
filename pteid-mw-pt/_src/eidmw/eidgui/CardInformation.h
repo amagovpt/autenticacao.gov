@@ -120,75 +120,9 @@ enum eCARD_BASETYPE
 	{
 		return m_Fields;
 	}
-	PTEID_CardType getType( void )
-	{
-		QString cardType = m_Fields[CARD_TYPE];
-		PTEID_CardType cType = PTEID_CARDTYPE_UNKNOWN;
-		if( cardType.size() > 0 )
-		{
-			int iCardType = cardType.toInt();
-			switch(iCardType)
-			{
-			case 1:
-				cType = PTEID_CARDTYPE_EID;
-				break;
-			case 11:
-			case 12:
-			case 13:
-			case 14:
-			case 15:
-			case 16:
-			case 17:
-			default:
-				break;
-			}
-		}
-		return cType;
-	}
-	eCARD_SUBTYPE getSubType( void )
-	{
-		QString cardType = m_Fields[CARD_TYPE];
-		eCARD_SUBTYPE subType = EUROPEAN_UNKNOWN;
-		if( cardType.size() > 0 )
-		{
-			int iCardType = cardType.toInt();
-			switch(iCardType)
-			{
-			case 1:
-			case 6:
-			case 99:
-				break;
-			case 11:
-				subType = NON_EUROPEAN_A;
-				break;
-			case 12:
-				subType = NON_EUROPEAN_B;
-				break;
-			case 13:
-				subType = NON_EUROPEAN_C;
-				break;
-			case 14:
-				subType = NON_EUROPEAN_D;
-				break;
-			case 15:
-				subType = EUROPEAN_E;
-				break;
-			case 16:
-				subType = EUROPEAN_E_PLUS;
-				break;
-			case 17:
-				subType = EUROPEAN_F;
-				break;
-			case 18:
-				subType = EUROPEAN_F_PLUS;
-				break;
-			default:
-				break;
-			}
-		}
-		return subType;
-	}
-	static QString formatCardNumber(QString const& card_number, PTEID_CardType type)
+
+
+	static QString formatCardNumber(QString const& card_number)
 	{
 		QString formatted="";
 
@@ -197,12 +131,6 @@ enum eCARD_BASETYPE
 			return formatted;
 		}
 
-		switch ( type )
-		{
-		case PTEID_CARDTYPE_EID:
-		default:
-			break;
-		}
 		return formatted;
 	}
 private:
@@ -750,7 +678,7 @@ public:
 		}
 		return bRetVal;
 	}
-	static QString formatNationalNumber( QString const& number, PTEID_CardType type /*, CardInfo::eCARD_SUBTYPE subType*/)
+	static QString formatNationalNumber( QString const& number)
 	{
 		QString formatted="";
 
@@ -759,12 +687,6 @@ public:
 			return formatted;
 		}
 
-		switch ( type )
-		{
-		case PTEID_CARDTYPE_EID:
-		default:
-			break;
-		}
 		return formatted;
 	}
 

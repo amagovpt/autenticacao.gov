@@ -51,6 +51,8 @@ std::string m_InitSerialNumber;								/**< Field ChipNumber */
 namespace eIDMW
 {
 
+APL_CardType ConvertCardType(tCardType cardType);
+
 /*****************************************************************************************
 ------------------------------------ APL_ReaderContext ---------------------------------------
 *****************************************************************************************/
@@ -271,7 +273,8 @@ APL_CardType APL_ReaderContext::getPhysicalCardType()
 
 	switch(CalCarType)
 	{
-	case CARD_PTEID:
+	case CARD_PTEID_IAS07:
+	case CARD_PTEID_IAS101:
 	{
 		//Check the document type in the ID file
 		long lDocType=-1;
@@ -319,7 +322,7 @@ APL_CardType APL_ReaderContext::getPhysicalCardType()
 		}
 		CalUnlock();
 		
-       		ret=APL_CARDTYPE_PTEID_EID;
+       		ret=ConvertCardType(CalCarType);
 
 		break;
 	}
@@ -388,8 +391,9 @@ bool APL_ReaderContext::connectCard()
 
 	switch(cardType)
 	{
-	case APL_CARDTYPE_PTEID_EID:
-		m_card = new APL_EIDCard(this);
+	case APL_CARDTYPE_PTEID_IAS07:
+	case APL_CARDTYPE_PTEID_IAS101:
+		m_card = new APL_EIDCard(this, cardType);
 		break;
 	default:
 		return false;
@@ -424,7 +428,7 @@ APL_EIDCard *APL_ReaderContext::getEIDCard()
 {
 	connectCard();
 
-	if(m_card != NULL && m_card->getType()==APL_CARDTYPE_PTEID_EID)
+	if(m_card != NULL && m_card->getType()!=APL_CARDTYPE_UNKNOWN)
 		return dynamic_cast<APL_EIDCard *>(m_card);
 	
 	return NULL;
@@ -565,7 +569,7 @@ public:
 	{
 		if(!m_ReleaseOk)
 		{
-			printf("ERROR : Please do not forget to release the SDK\n");
+			printf("ERRORere : Please do not forget to release the SDK\n");
 			throw CMWEXCEPTION(EIDMW_ERR_RELEASE_NEEDED);
 		}
 	}
@@ -1138,8 +1142,8 @@ APL_SuperParser::APL_SuperParser(const APL_RawData_Eid &data)
 		err = err;
 		return;
 	}
-	
-       	m_cardType=APL_CARDTYPE_PTEID_EID;
+		// MARTINHO: one type had to be chosen
+       	m_cardType=APL_CARDTYPE_PTEID_IAS101;
 
 }
 
@@ -1340,7 +1344,8 @@ bool APL_SuperParser::parse()
 	}
 
 	if(strcmp(type,CARDTYPE_NAME_PTEID_EID)==0)
-		m_cardType=APL_CARDTYPE_PTEID_EID;
+		// MARTINHO one type had to be chosen
+		m_cardType=APL_CARDTYPE_PTEID_IAS101;
 
 	if(type)
 		delete[] type;
@@ -1393,7 +1398,8 @@ unsigned long APL_SuperParser::readData(const char *fileID, CByteArray &in,unsig
 	switch(m_fileType)
 	{
 	case APL_SAVEFILETYPE_RAWDATA:
-	    	if(((m_cardType==APL_CARDTYPE_PTEID_EID) && !m_rawdata_eid) || m_cardType==APL_CARDTYPE_UNKNOWN)
+			//MARTINHO: one type had to be chosen
+	    	if(((m_cardType==APL_CARDTYPE_PTEID_IAS101) && !m_rawdata_eid) || m_cardType==APL_CARDTYPE_UNKNOWN)
 			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 		if(!m_fctReadDataRAW)
@@ -1511,4 +1517,18 @@ unsigned long APL_SuperParser::readDataCsv(CByteArray &in, unsigned long count, 
 
 	return in.Size();
 }
+
+APL_CardType ConvertCardType(tCardType cardType)
+{
+	switch(cardType)
+	{
+	case CARD_PTEID_IAS07:
+		return APL_CARDTYPE_PTEID_IAS07;
+	case CARD_PTEID_IAS101:
+		return APL_CARDTYPE_PTEID_IAS101;
+	default:
+		return APL_CARDTYPE_UNKNOWN;
+	}
+}
+
 }

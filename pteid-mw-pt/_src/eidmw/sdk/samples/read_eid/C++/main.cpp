@@ -212,8 +212,11 @@ std::string getCardTypeStr( PTEID_ReaderContext& readerContext )
 
 	switch(cardType)
 	{
-	case PTEID_CARDTYPE_EID:
-		strCardType = "PTEID_CARDTYPE_EID";
+	case PTEID_CARDTYPE_IAS07:
+		strCardType = "PTEID_CARDTYPE_IAS07";
+		break;
+	case PTEID_CARDTYPE_IAS101:
+		strCardType = "PTEID_CARDTYPE_IAS101";
 		break;
 	case PTEID_CARDTYPE_KIDS:
 		strCardType = "PTEID_CARDTYPE_KIDS";
@@ -244,7 +247,8 @@ void showCardInfo( const char* readerName )
 
 		switch(readerContext.getCardType())
 		{
-		case PTEID_CARDTYPE_EID:
+		case PTEID_CARDTYPE_IAS07:
+		case PTEID_CARDTYPE_IAS101:
 			getEidCardData( readerContext );
 			break;
 		case PTEID_CARDTYPE_KIDS:

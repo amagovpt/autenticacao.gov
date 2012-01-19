@@ -631,6 +631,8 @@ PTEID_CardType PTEID_ReaderContext::getCardType()
 	
 	END_TRY_CATCH
 
+	cout << "TIPO DE CARTAO ENCONTRADO: " << out << endl;
+
 	return out;
 }
 
@@ -691,7 +693,8 @@ PTEID_Card &PTEID_ReaderContext::getCard()
 
 		switch(pimpl->getCardType())
 		{
-		case APL_CARDTYPE_PTEID_EID:
+		case APL_CARDTYPE_PTEID_IAS07:
+		case APL_CARDTYPE_PTEID_IAS101:
 			out = new PTEID_EIDCard(&context,pAplCard);
 			//out = new PTEID_EIDCard(&context,pimpl->getEIDCard());
 			break;
@@ -717,8 +720,11 @@ PTEID_EIDCard &PTEID_ReaderContext::getEIDCard()
 
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	PTEID_CardType type=ConvertCardType(pimpl->getCardType());
-	if(type!=PTEID_CARDTYPE_EID)
+	cout << "tipo antes da transformação = " << pimpl->getCardType() << endl;
+	cout << "tipo depois da transformação = " << type << endl;
+	if(type!=PTEID_CARDTYPE_IAS07 && type!=PTEID_CARDTYPE_IAS101){
 		throw PTEID_ExCardBadType();
+	}
 
 	END_TRY_CATCH
 

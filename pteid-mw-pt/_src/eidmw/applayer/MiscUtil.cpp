@@ -568,5 +568,4 @@ CTLV *TLVParser::GetSubTagData(unsigned char ucTag,unsigned char ucSubTag)
 	else
 		return NULL;
 }
-
 }

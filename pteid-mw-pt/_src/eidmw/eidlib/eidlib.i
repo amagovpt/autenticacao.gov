@@ -41,7 +41,7 @@
 ***                            FILE : xmlUserDataEnum.h                              ***
 ****************************************************************************************/
 
-%include "../common/xmlUserData.h"
+%include "../common/xmlUserData.h"		//This file contains only enum/struct... It doesn't need any typemap
 
 /***************************************************************************************
 ***                            FILE : eidErrors.h                                ***

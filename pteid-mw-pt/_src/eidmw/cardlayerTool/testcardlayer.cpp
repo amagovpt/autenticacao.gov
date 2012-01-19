@@ -50,7 +50,8 @@ long Test(const std::string & csReaderName, const std::string & csPin)
 
 		switch(type)
 		{
-		case CARD_PTEID:
+		case CARD_PTEID_IAS07:
+		case CARD_PTEID_IAS101:
 			lErrors = TestPteid(oReader, csPin);
 			break;
 		default:

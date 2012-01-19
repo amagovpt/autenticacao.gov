@@ -68,6 +68,13 @@ namespace eIDMW
 #define XML_POSTAL_LOCALITY_ELEMENT			"postalLocality"
 #define XML_PERSONAL_NOTES_ELEMENT			"userNotes"
 
+#define XML_FOREIGN_COUNTRY_ELEMENT			"foreignCountry"
+#define XML_FOREIGN_ADDRESS_ELEMENT			"foreignAddress"
+#define XML_FOREIGN_CITY_ELEMENT			"foreignCity"
+#define XML_FOREIGN_REGION_ELEMENT			"foreignRegion"
+#define XML_FOREIGN_LOCALITY_ELEMENT		"foreignLocality"
+#define XML_FOREIGN_POSTAL_CODE_ELEMENT		"foreignPostalCode"
+
 #define XML_OPEN_TAG(tag) "<" tag ">"
 #define XML_OPEN_TAG_NEWLINE(tag) "<" tag ">\n"
 #define XML_CLOSE_TAG(tag) "</" tag ">\n"
@@ -145,7 +152,13 @@ enum XMLUserData
 	XML_ZIP4,
 	XML_ZIP3,
 	XML_POSTAL_LOCALITY,
-	XML_PERSONAL_NOTES
+	XML_PERSONAL_NOTES,
+	XML_FOREIGN_COUNTRY,
+	XML_FOREIGN_ADDRESS,
+	XML_FOREIGN_CITY,
+	XML_FOREIGN_REGION,
+	XML_FOREIGN_LOCALITY,
+	XML_FOREIGN_POSTAL_CODE
 };
 }
 

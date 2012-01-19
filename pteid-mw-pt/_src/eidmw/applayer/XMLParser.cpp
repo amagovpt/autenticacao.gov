@@ -265,7 +265,7 @@ void EIDCardType_Processor::process( const XMLCh *const  chars
 	std::wstring w_chars = FromXMLCh(chars);
 	if ( 0 == w_chars.compare( utilStringWiden(CARDTYPE_NAME_PTEID_EID) ) )
 	{
-		((EID_DataStorage&)dataStorage).m_CardType = APL_CARDTYPE_PTEID_EID;
+		((EID_DataStorage&)dataStorage).m_CardType = APL_CARDTYPE_PTEID_IAS101;
 	}
 	else
 	{

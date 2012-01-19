@@ -251,7 +251,7 @@ int pteidlibFillReaderList(Reader_LIST *readerList,Card_LIST *cardList)
 				if(reader.isCardPresent())
 				{
 					PTEID_CardType type = reader.getCardType();
-					if(type == PTEID_CARDTYPE_EID || type == PTEID_CARDTYPE_KIDS || type == PTEID_CARDTYPE_FOREIGNER)
+					if(type == PTEID_CARDTYPE_IAS07 || type == PTEID_CARDTYPE_IAS101)
 					{
 						PTEID_EIDCard &card=reader.getEIDCard();
 						cardId.Reader=readerId;
@@ -364,7 +364,7 @@ int pteidlibGetCardInfo (Card_ID id, Card_INFO *info)
 		}
 
 		PTEID_CardType type = reader.getCardType();
-		if(type != PTEID_CARDTYPE_EID && type != PTEID_CARDTYPE_KIDS && type != PTEID_CARDTYPE_FOREIGNER)
+		if(type != PTEID_CARDTYPE_IAS07 && type != PTEID_CARDTYPE_IAS101)
 		{
 			PTEID_ReleaseSDK();
 			return RETURN_LOG_ERROR(DIAGLIB_ERR_CARD_BAD_TYPE);
@@ -464,7 +464,7 @@ int pteidlibIsOcspAvailable(Card_ID id, bool *available)
 		}
 
 		PTEID_CardType type = reader.getCardType();
-		if(type != PTEID_CARDTYPE_EID && type != PTEID_CARDTYPE_KIDS && type != PTEID_CARDTYPE_FOREIGNER)
+		if(type != PTEID_CARDTYPE_IAS07 && type != PTEID_CARDTYPE_IAS101)
 		{
 			PTEID_ReleaseSDK();
 			return RETURN_LOG_ERROR(DIAGLIB_ERR_CARD_BAD_TYPE);

@@ -272,7 +272,14 @@ CPkiCard(hCard, poContext, poPinpad)
 {
 		//printf("++++ Pteid3\n");
 
-  m_cardType = CARD_PTEID;
+	switch (ulVersion){
+		case 1:
+			m_cardType = CARD_PTEID_IAS07;
+			break;
+		case 2:
+			m_cardType = CARD_PTEID_IAS101;
+			break;
+	}
   try {
 	  m_ucCLA = 0x00;
 	  if (ulVersion == 1 )
@@ -297,6 +304,7 @@ CPkiCard(hCard, poContext, poPinpad)
 
 		// Get Card Applet Version
 		m_AppletVersion = ulVersion;
+
 
 		//m_ucAppletVersion = m_oCardData.GetByte(21);
         /*if (m_ucAppletVersion < 0x20)
@@ -326,7 +334,7 @@ CPteidCard::~CPteidCard(void)
 
 tCardType CPteidCard::GetType()
 {
-    return CARD_PTEID;
+    return m_cardType;
 }
 
 CByteArray CPteidCard::GetSerialNrBytes()
