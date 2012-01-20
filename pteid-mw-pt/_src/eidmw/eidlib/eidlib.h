@@ -147,6 +147,28 @@ public:
 	NOEXPORT_PTEIDSDK PTEID_ByteArray &operator=(const CByteArray &bytearray);			/**< For internal use : copy from lower level object*/
 };
 
+class PhotoPteid;
+
+class PTEID_Photo : public PTEID_Object
+{
+public:
+	PTEIDSDK_API virtual ~PTEID_Photo();												/**< Destructor */
+
+	PTEIDSDK_API PTEID_ByteArray& getphotoRAW();
+	PTEIDSDK_API PTEID_ByteArray& getphoto();
+	PTEIDSDK_API PTEID_ByteArray& getphotoCbeff();
+	PTEIDSDK_API PTEID_ByteArray& getphotoFacialrechdr();
+	PTEIDSDK_API PTEID_ByteArray& getphotoFacialinfo();
+	PTEIDSDK_API PTEID_ByteArray& getphotoImageinfo();
+
+	NOEXPORT_PTEIDSDK PTEID_Photo(const SDK_Context *context,const PhotoPteid &impl);
+
+private:
+	PTEID_Photo(const PTEID_Photo& photo);				/**< Copy not allowed - not implemented */
+	PTEID_Photo& operator= (const PTEID_Photo& photo);	/**< Copy not allowed - not implemented */
+};
+
+
 /******************************************************************************//**
   * These structure are used for compatibility with old C sdk.
   *********************************************************************************/
@@ -876,8 +898,7 @@ public:
 	PTEIDSDK_API const char *getGivenNameMother();			/**< Return field GivenNameMother */
 	PTEIDSDK_API const char *getSurnameMother();			/**< Return field SurnameMother */
 	PTEIDSDK_API const char *getParents();					/**< Return field Parents */
-	PTEIDSDK_API const PTEID_ByteArray& getPhoto();			/**< Return field Photo in jpeg format*/
-	PTEIDSDK_API const PTEID_ByteArray& getPhotoRaw();		/**< Return field Photo in jp2 format (format stored in the card)*/
+	PTEIDSDK_API PTEID_Photo& getPhotoObj();				/**< Return object Photo */
 	PTEIDSDK_API const char *getPersoData();				/**< Return field PersoData */
 	PTEIDSDK_API const char *getValidation();				/**< Return field Validation */
 	PTEIDSDK_API const char *getMRZ1();						/**< Return field MRZ block 1 */

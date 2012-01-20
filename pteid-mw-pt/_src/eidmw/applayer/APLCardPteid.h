@@ -31,6 +31,7 @@
 #include "APLDoc.h"
 #include "ByteArray.h"
 #include "xmlUserData.h"
+#include "PhotoPteid.h"
 
 namespace eIDMW
 {
@@ -365,8 +366,7 @@ public:
 	EIDMW_APL_API const char *getGivenNameMother();		/**< Return field GivenNameMother */
 	EIDMW_APL_API const char *getSurnameMother();		/**< Return field SurnameMother */
 	EIDMW_APL_API const char *getParents();				/**< Return field Parents */
-	EIDMW_APL_API CByteArray *getPhoto();				/**< Return field Photo in jpeg format*/
-	EIDMW_APL_API CByteArray *getPhotoRaw();			/**< Return field Photo in jp2 format*/
+	EIDMW_APL_API PhotoPteid *getPhotoObj();			/**< Return photo object*/
 	EIDMW_APL_API const char *getMRZ1();				/**< Return field MRZ block 1 */
 	EIDMW_APL_API const char *getMRZ2();				/**< Return field MRZ block 2 */
 	EIDMW_APL_API const char *getMRZ3();				/**< Return field MRZ block 3 */

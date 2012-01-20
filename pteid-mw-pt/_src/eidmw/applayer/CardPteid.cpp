@@ -30,7 +30,7 @@
 #include "MWException.h"
 #include "eidErrors.h"
 #include "APLConfig.h"
-#include <FreeImagePTEiD.h>
+#include "PhotoPteid.h"
 
 #include "Log.h"
 
@@ -175,8 +175,7 @@ const char *APL_EidFile_Trace::getValidation()
 *****************************************************************************************/
 APL_EidFile_ID::APL_EidFile_ID(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_ID,NULL)
 {
-	m_Photo = NULL;
-	m_PhotoPNG = NULL;
+	photo = NULL;
 }
 
 APL_EidFile_ID::~APL_EidFile_ID()
@@ -266,14 +265,10 @@ void APL_EidFile_ID::EmptyFields()
 	m_SurnameFather.clear();
 	m_GivenNameMother.clear();
 	m_SurnameMother.clear();
-	if (m_Photo){
-		delete m_Photo;
-		m_Photo = NULL;
+	if (photo){
+		delete photo;
+		photo = NULL;
 	}
-	if (m_PhotoPNG){
-			delete m_PhotoPNG;
-			m_PhotoPNG= NULL;
-		}
 	m_PhotoHash.ClearContents();
 	m_mappedFields = false;
 }
@@ -442,9 +437,21 @@ bool APL_EidFile_ID::MapFields()
 	m_SurnameMother.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//Photo
-	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Photo, PTEIDNG_FIELD_ID_LEN_Photo);
-	pteidngidBuffer.TrimRight('\0');
-	m_Photo = new CByteArray(pteidngidBuffer);
+	{
+		CByteArray cbeff;
+		CByteArray facialrechdr;
+		CByteArray facialinfo;
+		CByteArray imageinfo;
+		CByteArray photoRAW;
+
+		photoRAW = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Photo, PTEIDNG_FIELD_ID_LEN_Photo);
+		photoRAW.TrimRight(0);
+		cbeff = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_CBEFF, PTEIDNG_FIELD_ID_LEN_CBEFF);
+		facialrechdr = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FACIALRECHDR, PTEIDNG_FIELD_ID_LEN_FACIALRECHDR);
+		facialinfo = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FACIALINFO, PTEIDNG_FIELD_ID_LEN_FACIALINFO);
+		imageinfo = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_IMAGEINFO, PTEIDNG_FIELD_ID_LEN_IMAGEINFO);
+		photo = new PhotoPteid(photoRAW, cbeff, facialrechdr, facialinfo, imageinfo);
+	}
 
 	//MRZ1
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Mrz1, PTEIDNG_FIELD_ID_LEN_Mrz1);
@@ -753,43 +760,14 @@ const char *APL_EidFile_ID::getParents()
 	return "";
 }
 
-CByteArray *APL_EidFile_ID::getPhoto()
+PhotoPteid *APL_EidFile_ID::getPhotoObj()
 {
-	CByteArray *photojp2;
-	BYTE *mem_buffer = NULL;
-	DWORD size_in_bytes = 0;
-
-	if (!m_PhotoPNG){
-		FreeImage_Initialise(TRUE);
-
-		photojp2 = getPhotoRaw();
-		FIMEMORY *source = FreeImage_OpenMemory((BYTE*)photojp2->GetBytes(),(DWORD)(photojp2->Size()));
-		FREE_IMAGE_FORMAT imageFormat = FreeImage_GetFileTypeFromMemory(source, 0);
-		FIBITMAP *check = FreeImage_LoadFromMemory(imageFormat, source, JP2_DEFAULT);
-		FIMEMORY *destination = FreeImage_OpenMemory();
-		FreeImage_SaveToMemory(FIF_PNG, check, destination, PNG_Z_BEST_COMPRESSION);
-		FreeImage_AcquireMemory(destination, &mem_buffer, &size_in_bytes);
-		m_PhotoPNG = new CByteArray((const unsigned char*)mem_buffer, (unsigned long)size_in_bytes);
-		FreeImage_Unload(check);
-		FreeImage_CloseMemory(source);
-		FreeImage_CloseMemory(destination);
-
-		FreeImage_DeInitialise();
-	}
 
 	if(ShowData())
-		return m_PhotoPNG;
+		return photo;
 
 	return NULL;
 }
-
-CByteArray *APL_EidFile_ID::getPhotoRaw(){
-	if(ShowData())
-		return m_Photo;
-
-	return NULL;
-}
-
 
 const char *APL_EidFile_ID::getMRZ1()
 {

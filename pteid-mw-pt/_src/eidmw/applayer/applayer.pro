@@ -32,8 +32,7 @@ LIBS += -L../lib \
 	    -l$${COMMONLIB} \
 	    -l$${DLGLIB} \
 	    -lcrypto -lssl \
-	    -lxerces-c \
-	    -lfreeimagePTEiD
+	    -lxerces-c
 
 macx: LIBS += -L../../ThirdParty/Xerces/Xerces-2.8.0-mac/lib
 macx: LIBS += -Wl,-framework -Wl,CoreFoundation

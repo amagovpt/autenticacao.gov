@@ -63,6 +63,7 @@ HEADERS += ByteArray.h \
            prefix.h \
            StringOps.h \
            xmlUserData.h \
+           PhotoPteid.h \
            libtomcrypt/tomcrypt_argchk.h \
            libtomcrypt/tomcrypt_cfg.h \
            libtomcrypt/tomcrypt_hash.h \
@@ -87,6 +88,7 @@ SOURCES += ByteArray.cpp \
            TLVBuffer.cpp \
            Util.cpp \
            StringOps.cpp \
+           PhotoPteid.cpp \
            libtomcrypt/md5.c \
            libtomcrypt/sha1.c \
            libtomcrypt/sha256.c \

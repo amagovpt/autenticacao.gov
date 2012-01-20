@@ -1638,7 +1638,7 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	CByteArray idNum;
 	CByteArray cardValues;
 	CByteArray b64photo;
-	CByteArray *photojp2;
+	CByteArray *photo;
 	bool addBasicInfo = false;
 	bool addIdNum = false;
 	bool addCardValues = false;
@@ -1651,8 +1651,8 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 
 	// photo
 	if (!_xmlUInfo || _xmlUInfo->contains(XML_PHOTO)){
-		photojp2 = getPhoto();
-		m_cryptoFwk->b64Encode(*photojp2,b64photo);
+		photo = getPhotoObj()->getPhotoPNG();
+		m_cryptoFwk->b64Encode(*photo,b64photo);
 		BUILD_XML_ELEMENT(xml, XML_PHOTO_ELEMENT, b64photo);
 	}
 
@@ -2036,14 +2036,9 @@ const char *APL_DocEId::getParents()
 	return m_card->getFileID()->getParents();
 }
 
-CByteArray *APL_DocEId::getPhoto()
+PhotoPteid *APL_DocEId::getPhotoObj()
 {
-	return m_card->getFileID()->getPhoto();
-}
-
-CByteArray *APL_DocEId::getPhotoRaw()
-{
-	return m_card->getFileID()->getPhotoRaw();
+	return m_card->getFileID()->getPhotoObj();
 }
 
 const char *APL_DocEId::getMRZ1(){

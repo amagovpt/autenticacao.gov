@@ -454,8 +454,8 @@ public:
 		bool					bRetVal = false;
 
 		PTEID_EId& pteid_eid = Card.getID();
-		m_pPictureData = QByteArray((const char *)pteid_eid.getPhoto().GetBytes(),pteid_eid.getPhoto().Size());
-
+		PTEID_ByteArray & p = pteid_eid.getPhotoObj().getphoto();
+		m_pPictureData = QByteArray((const char *)p.GetBytes(),p.Size());
 		bRetVal = true;
 		return bRetVal;
 	}

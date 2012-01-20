@@ -1690,7 +1690,6 @@ void MainWnd::loadCardData( void )
 		for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
 		{
 			PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
-			std::cout << "PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);" << std::endl;
 			if (ReaderContext.isCardPresent())
 			{
 				bCardPresent = true;
@@ -1704,7 +1703,6 @@ void MainWnd::loadCardData( void )
 					try
 					{
 						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-						std::cout << " ReaderContext.getEIDCard();" << std::endl;
 						if (Card.isTestCard()&&!Card.getAllowTestCard())
 						{
 							if (askAllowTestCard())

@@ -28,7 +28,7 @@
 #include "APLCardPteid.h"
 #include "APLCrypto.h"
 #include "APLCertif.h"
-
+#include "PhotoPteid.h"
 #include "ByteArray.h"
 
 //UNIQUE INDEX FOR RETRIEVING OBJECT
@@ -1098,15 +1098,32 @@ PTEID_ReaderContext* readerContext = NULL;
 // MARTINHO OK
 PTEIDSDK_API long PTEID_Init(char *ReaderName){
 
-	if (NULL == ReaderName)
-		readerContext = &ReaderSet.getReaderByNum(0);
-	else
-		readerContext = &ReaderSet.getReaderByName(ReaderName);
-
-	/*if (!readerContext->isCardPresent())
-		{
-			return -1104;
-		}*/
+	try {
+		if (NULL == ReaderName)
+			readerContext = &ReaderSet.getReaderByNum(0);
+		else
+			readerContext = &ReaderSet.getReaderByName(ReaderName);
+	}
+	catch(PTEID_ExCardBadType &ex)
+	{
+		std::cout << "This is not an eid card" << std::endl;
+	}
+	catch(PTEID_ExNoCardPresent &ex)
+	{
+		return -1104;
+	}
+	catch(PTEID_ExNoReader &ex)
+	{
+		return -1101;
+	}
+	catch(PTEID_Exception &ex)
+	{
+		std::cout << "PTEID_Exception exception" << std::endl;
+	}
+	catch(...)
+	{
+		return -1;
+	}
 	return 0;
 }
 
@@ -1115,6 +1132,8 @@ PTEIDSDK_API long PTEID_Exit(unsigned long ulMode){
 	readerContext->Release();
 	PTEID_ReleaseSDK();
 	readerContext = NULL;
+
+	return 0;
 }
 
 // MARTINHO OK
@@ -1239,13 +1258,25 @@ PTEIDSDK_API long PTEID_GetAddr(PTEID_ADDR *AddrData){
 PTEIDSDK_API long PTEID_GetPic(PTEID_PIC *PicData){
 
 	if (readerContext!=NULL){
-		PTEID_EId &id = readerContext->getEIDCard().getID();
+
+		PTEID_Photo &photoOjb = readerContext->getEIDCard().getID().getPhotoObj();
 
 		memset(PicData, 0, sizeof(PTEID_PIC));
 
-		memcpy(PicData->picture, id.getPhotoRaw().GetBytes(), id.getPhotoRaw().Size());
-		PicData->piclength = id.getPhotoRaw().Size();
+		PTEID_ByteArray &scratch = photoOjb.getphoto();
+		memcpy(PicData->picture, scratch.GetBytes(), (PTEID_MAX_PICTUREH_LEN > scratch.Size()) ? scratch.Size(): PTEID_MAX_PICTUREH_LEN);
+		PicData->piclength = scratch.Size();
+		scratch = photoOjb.getphotoCbeff();
+		memcpy(PicData->cbeff, scratch.GetBytes(), (PTEID_MAX_CBEFF_LEN > scratch.Size()) ? scratch.Size(): PTEID_MAX_CBEFF_LEN);
+		scratch = photoOjb.getphotoFacialrechdr();
+		memcpy(PicData->facialrechdr, scratch.GetBytes(), (PTEID_MAX_FACRECH_LEN > scratch.Size()) ? scratch.Size(): PTEID_MAX_FACRECH_LEN);
+		scratch = photoOjb.getphotoFacialinfo();
+		memcpy(PicData->facialinfo, scratch.GetBytes(), (PTEID_MAX_FACINFO_LEN > scratch.Size()) ? scratch.Size(): PTEID_MAX_FACINFO_LEN);
+		scratch = photoOjb.getphotoImageinfo();
+		memcpy(PicData->imageinfo, scratch.GetBytes(), (PTEID_MAX_IMAGEINFO_LEN> scratch.Size()) ? scratch.Size(): PTEID_MAX_IMAGEINFO_LEN);
 	}
+
+	return 0;
 }
 
 

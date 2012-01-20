@@ -31,7 +31,7 @@ DESTDIR = ../bin
 
 DEPENDPATH += .  
 
-LIBS = -L../lib -l$${COMMONLIB} -lpthread
+LIBS = -L../lib -l$${COMMONLIB} -lpthread -lfreeimagePTEiD
 
 ## link to openssl
 macx: LIBS += -L/Developer/SDKs/MacOSX10.4u.sdk/usr/lib 

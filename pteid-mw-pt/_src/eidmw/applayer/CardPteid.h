@@ -29,6 +29,7 @@
 #include "APLCardPteid.h"
 #include "CardFile.h"
 #include "ByteArray.h"
+#include "PhotoPteid.h"
 
 namespace eIDMW
 {
@@ -137,8 +138,7 @@ public:
 	const char *getGivenNameMother();				/**< Return field GivenNameMother */
 	const char *getSurnameMother();					/**< Return field SurnameMother */
 	const char *getParents();						/**< Return field Parents */
-	CByteArray *getPhoto();							/**< Return field Photo in jpeg format */
-	CByteArray *getPhotoRaw();						/**< Return field Photo in the original jp2 format */
+	PhotoPteid *getPhotoObj();						/**< Return object Photo */
 	const char *getMRZ1();							/**< Return field MRZ block 1*/
 	const char *getMRZ2();							/**< Return field MRZ block 2*/
 	const char *getMRZ3();							/**< Return field MRZ block 3*/
@@ -211,8 +211,7 @@ private:
 	std::string m_GivenNameMother;							/**< Field GivenNameMother */
 	std::string m_SurnameMother;							/**< Field SurnameMother */
 	std::string m_AccidentalIndications;					/**< Field AccidentalIndications */
-	CByteArray* m_Photo;									/**< Field Photo */
-	CByteArray* m_PhotoPNG;									/**< Field Photo PNG */
+	PhotoPteid* photo;										/**< object photo */
 	std::string m_MRZ1;										/**< Field MRZ block 1 */
 	std::string m_MRZ2;										/**< Field MRZ block 2 */
 	std::string m_MRZ3;										/**< Field MRZ block 3 */

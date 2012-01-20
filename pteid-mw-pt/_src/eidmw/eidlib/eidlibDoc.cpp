@@ -28,7 +28,6 @@
 #include "APLDoc.h"
 #include "APLCrypto.h"
 #include "APLCardPteid.h"
-
 #include <string.h>
 
 //UNIQUE INDEX FOR RETRIEVING OBJECT
@@ -185,6 +184,157 @@ bool PTEID_ByteArray::writeToFile(const char * csFilePath)
 	END_TRY_CATCH
 
 	return out;
+}
+
+/*****************************************************************************************
+------------------------------------ PTEID_Photo -----------------------------------------
+*****************************************************************************************/
+
+PTEID_Photo::PTEID_Photo(const SDK_Context *context,const PhotoPteid &impl):PTEID_Object(context,(void *)&impl)
+{
+}
+
+PTEID_Photo::~PTEID_Photo()
+{
+	if(m_delimpl)
+	{
+		PhotoPteid *pimpl=static_cast<PhotoPteid *>(m_impl);
+		delete pimpl;
+		m_impl=NULL;
+	}
+}
+
+PTEID_ByteArray& PTEID_Photo::getphotoRAW() {
+	PTEID_ByteArray *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	PhotoPteid *pimpl=static_cast<PhotoPteid *>(m_impl);
+	CByteArray *ca = pimpl->getPhotoRaw();
+
+	out = dynamic_cast<PTEID_ByteArray *>(getObject(ca));
+	if (!out){
+		out = new PTEID_ByteArray(m_context,*(pimpl->getPhotoRaw()));
+		if(out)
+			addObject(out);
+		else
+			throw PTEID_ExParamRange();
+	}
+
+	END_TRY_CATCH
+
+	return *out;
+}
+
+PTEID_ByteArray& PTEID_Photo::getphoto() {
+	PTEID_ByteArray *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	PhotoPteid *pimpl=static_cast<PhotoPteid *>(m_impl);
+	CByteArray *ca = pimpl->getPhotoPNG();
+
+	out = dynamic_cast<PTEID_ByteArray *>(getObject(ca));
+	if (!out){
+		out = new PTEID_ByteArray(m_context,*(pimpl->getPhotoPNG()));
+		if(out)
+			addObject(out);
+		else
+			throw PTEID_ExParamRange();
+	}
+
+
+	END_TRY_CATCH
+
+	return *out;
+}
+
+PTEID_ByteArray& PTEID_Photo::getphotoCbeff() {
+	PTEID_ByteArray *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	PhotoPteid *pimpl=static_cast<PhotoPteid *>(m_impl);
+	CByteArray *ca = pimpl->getCbeff();
+
+	out = dynamic_cast<PTEID_ByteArray *>(getObject(ca));
+	if (!out){
+		out = new PTEID_ByteArray(m_context,*(pimpl->getCbeff()));
+		if(out)
+			addObject(out);
+		else
+			throw PTEID_ExParamRange();
+	}
+
+	END_TRY_CATCH
+
+	return *out;
+}
+
+PTEID_ByteArray& PTEID_Photo::getphotoFacialrechdr() {
+	PTEID_ByteArray *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	PhotoPteid *pimpl=static_cast<PhotoPteid *>(m_impl);
+	CByteArray *ca = pimpl->getFacialrechdr();
+
+	out = dynamic_cast<PTEID_ByteArray *>(getObject(ca));
+	if (!out){
+		out = new PTEID_ByteArray(m_context,*(pimpl->getFacialrechdr()));
+		if(out)
+			addObject(out);
+		else
+			throw PTEID_ExParamRange();
+	}
+
+	END_TRY_CATCH
+
+	return *out;
+}
+
+PTEID_ByteArray& PTEID_Photo::getphotoFacialinfo() {
+	PTEID_ByteArray *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	PhotoPteid *pimpl=static_cast<PhotoPteid *>(m_impl);
+	CByteArray *ca = pimpl->getFacialinfo();
+
+	out = dynamic_cast<PTEID_ByteArray *>(getObject(ca));
+	if (!out){
+		out = new PTEID_ByteArray(m_context,*(pimpl->getFacialinfo()));
+		if(out)
+			addObject(out);
+		else
+			throw PTEID_ExParamRange();
+	}
+
+	END_TRY_CATCH
+
+	return *out;
+}
+
+PTEID_ByteArray& PTEID_Photo::getphotoImageinfo() {
+	PTEID_ByteArray *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	PhotoPteid *pimpl=static_cast<PhotoPteid *>(m_impl);
+	CByteArray *ca = pimpl->getImageinfo();
+
+	out = dynamic_cast<PTEID_ByteArray *>(getObject(ca));
+	if (!out){
+		out = new PTEID_ByteArray(m_context,*(pimpl->getImageinfo()));
+		if(out)
+			addObject(out);
+		else
+			throw PTEID_ExParamRange();
+	}
+
+	END_TRY_CATCH
+
+	return *out;
 }
 
 /*****************************************************************************************
@@ -1099,37 +1249,29 @@ const char *PTEID_EId::getLocalofRequest()
 	return out;
 }
 
-const PTEID_ByteArray& PTEID_EId::getPhoto()
+PTEID_Photo& PTEID_EId::getPhotoObj()
 {
-	PTEID_ByteArray *out = NULL;
+	PTEID_Photo *out = NULL;
 
 	BEGIN_TRY_CATCH
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
+	PhotoPteid *photo = pimpl->getPhotoObj();
 
-	out = new PTEID_ByteArray(m_context,*(pimpl->getPhoto()));
+	out = dynamic_cast<PTEID_Photo *>(getObject(photo));
+	if (!out){
+		out = new PTEID_Photo(m_context,*photo);
+		if(out)
+			addObject(out);
+		else
+			throw PTEID_ExParamRange();
+
+	}
 
 	END_TRY_CATCH
 
 	return *out;
 }
-
-const PTEID_ByteArray& PTEID_EId::getPhotoRaw()
-{
-	PTEID_ByteArray *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-
-	out = new PTEID_ByteArray(m_context,*(pimpl->getPhotoRaw()));
-
-	END_TRY_CATCH
-
-	return *out;
-}
-
-
 
 const char *PTEID_EId::getMRZ1()
 {
