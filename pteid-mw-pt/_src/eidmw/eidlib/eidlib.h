@@ -1415,6 +1415,10 @@ PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const
 #define PTEID_MAX_IMAGEINFO_LEN			12
 #define PTEID_MAX_IMAGEHEADER_LEN		(PTEID_MAX_CBEFF_LEN+PTEID_MAX_FACRECH_LEN+PTEID_MAX_FACINFO_LEN+PTEID_MAX_IMAGEINFO_LEN)
 
+#define PTEID_MAX_CERT_LEN				2500
+#define PTEID_MAX_CERT_NUMBER			10
+#define PTEID_MAX_CERT_LABEL_LEN		256
+
 typedef enum {
 	CARD_TYPE_ERR = 0, // Something went wrong, or unknown card type
 	CARD_TYPE_IAS07,   // IAS 0.7 card
@@ -1498,6 +1502,20 @@ typedef struct
     unsigned long piclength;
 } PTEID_PIC;
 
+typedef struct
+{
+	unsigned char certif[PTEID_MAX_CERT_LEN];	/* Byte stream encoded certificate */
+	long certifLength;					  /* Size in bytes of the encoded certificate */
+	char certifLabel[PTEID_MAX_CERT_LABEL_LEN];     /* Label of the certificate (Authentication, Signature, CA, Root,) */
+} PTEID_Certif;
+
+typedef struct
+{
+	PTEID_Certif certificates[PTEID_MAX_CERT_NUMBER];  /* Array of PTEID_Certif structures */
+	long certificatesLength;			/* Number of elements in Array */
+} PTEID_Certifs;
+
+
 PTEIDSDK_API long PTEID_Init(
 			char *ReaderName		/**< in: the PCSC reader name (as returned by SCardListReaders()),
 								 specify NULL if you want to select the first reader */
@@ -1523,12 +1541,19 @@ PTEIDSDK_API long PTEID_GetAddr(
 	PTEID_ADDR *AddrData	/**< out: the address of an PTEID_ADDR struct */
 );
 
-
 /**
  * Read the Picture.
  */
 PTEIDSDK_API long PTEID_GetPic(
 	PTEID_PIC *PicData		/**< out: the address of a PTEID_PIC struct */
+);
+
+
+/**
+ * Read all the user and CA certificates.
+ */
+PTEIDSDK_API long PTEID_GetCertificates(
+	PTEID_Certifs *Certifs	/**< out: the address of a PTEID_Certifs struct */
 );
 
 

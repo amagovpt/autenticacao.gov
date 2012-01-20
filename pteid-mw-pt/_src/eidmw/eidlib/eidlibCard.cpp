@@ -1264,20 +1264,40 @@ PTEIDSDK_API long PTEID_GetPic(PTEID_PIC *PicData){
 		memset(PicData, 0, sizeof(PTEID_PIC));
 
 		PTEID_ByteArray &scratch = photoOjb.getphoto();
-		memcpy(PicData->picture, scratch.GetBytes(), (PTEID_MAX_PICTUREH_LEN > scratch.Size()) ? scratch.Size(): PTEID_MAX_PICTUREH_LEN);
+		memcpy(PicData->picture, scratch.GetBytes(), (PTEID_MAX_PICTUREH_LEN >= scratch.Size()) ? scratch.Size(): PTEID_MAX_PICTUREH_LEN);
 		PicData->piclength = scratch.Size();
 		scratch = photoOjb.getphotoCbeff();
-		memcpy(PicData->cbeff, scratch.GetBytes(), (PTEID_MAX_CBEFF_LEN > scratch.Size()) ? scratch.Size(): PTEID_MAX_CBEFF_LEN);
+		memcpy(PicData->cbeff, scratch.GetBytes(), (PTEID_MAX_CBEFF_LEN >= scratch.Size()) ? scratch.Size(): PTEID_MAX_CBEFF_LEN);
 		scratch = photoOjb.getphotoFacialrechdr();
-		memcpy(PicData->facialrechdr, scratch.GetBytes(), (PTEID_MAX_FACRECH_LEN > scratch.Size()) ? scratch.Size(): PTEID_MAX_FACRECH_LEN);
+		memcpy(PicData->facialrechdr, scratch.GetBytes(), (PTEID_MAX_FACRECH_LEN >= scratch.Size()) ? scratch.Size(): PTEID_MAX_FACRECH_LEN);
 		scratch = photoOjb.getphotoFacialinfo();
-		memcpy(PicData->facialinfo, scratch.GetBytes(), (PTEID_MAX_FACINFO_LEN > scratch.Size()) ? scratch.Size(): PTEID_MAX_FACINFO_LEN);
+		memcpy(PicData->facialinfo, scratch.GetBytes(), (PTEID_MAX_FACINFO_LEN >= scratch.Size()) ? scratch.Size(): PTEID_MAX_FACINFO_LEN);
 		scratch = photoOjb.getphotoImageinfo();
-		memcpy(PicData->imageinfo, scratch.GetBytes(), (PTEID_MAX_IMAGEINFO_LEN> scratch.Size()) ? scratch.Size(): PTEID_MAX_IMAGEINFO_LEN);
+		memcpy(PicData->imageinfo, scratch.GetBytes(), (PTEID_MAX_IMAGEINFO_LEN>= scratch.Size()) ? scratch.Size(): PTEID_MAX_IMAGEINFO_LEN);
 	}
 
 	return 0;
 }
+
+PTEIDSDK_API long PTEID_GetCertificates(PTEID_Certifs *Certifs){
+	if (readerContext!=NULL){
+		PTEID_Certificates &certificates = readerContext->getEIDCard().getCertificates();
+		PTEID_ByteArray ba;
+		memset(Certifs, 0, sizeof(PTEID_Certifs));
+
+		for (int i=0 ; i< certificates.countAll(); i++){
+			PTEID_Certificate &cert = certificates.getCert(i);
+			cert.getFormattedData(ba);
+			memcpy(Certifs->certificates[i].certif, ba.GetBytes(),(PTEID_MAX_CERT_LEN >= ba.Size()) ? ba.Size() : PTEID_MAX_CERT_LEN);
+			Certifs->certificates[i].certifLength = (PTEID_MAX_CERT_LEN >= ba.Size()) ? ba.Size() : PTEID_MAX_CERT_LEN;
+			strncpy(Certifs->certificates[i].certifLabel, cert.getLabel(), (PTEID_MAX_CERT_LABEL_LEN >= strlen(cert.getLabel()) ? strlen(cert.getLabel()) : PTEID_MAX_CERT_LABEL_LEN-1));
+		}
+		Certifs->certificatesLength = certificates.countAll();
+	}
+
+	return 0;
+}
+
 
 
 
