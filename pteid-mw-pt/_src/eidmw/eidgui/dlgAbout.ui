@@ -50,7 +50,7 @@
      <x>0</x>
      <y>100</y>
      <width>483</width>
-     <height>27</height>
+     <height>29</height>
     </rect>
    </property>
    <layout class="QHBoxLayout">
@@ -71,6 +71,13 @@
      <widget class="QPushButton" name="btnOK">
       <property name="text">
        <string>&amp;OK</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnUpdates">
+      <property name="text">
+       <string>Check Updates</string>
       </property>
      </widget>
     </item>
