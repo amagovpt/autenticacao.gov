@@ -38,3 +38,8 @@ dlgAbout::~dlgAbout()
 {
 
 }
+
+void dlgAbout::on_btnUpdates_clicked ( void )
+{
+}
+
