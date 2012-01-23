@@ -29,7 +29,7 @@ CONFIG -= qt warn_on
 ## destination directory for the compiler
 DESTDIR = ../lib
 
-LIBS = -L../lib -l$${COMMONLIB} -lfreeimagePTEiD
+LIBS = -L../lib -l$${COMMONLIB}
 
 DEFINES += EIDMW_CMN_EXPORT 
 ## About !macx see _Builds/pteidcommon.mak.max
@@ -65,7 +65,6 @@ HEADERS += ByteArray.h \
            prefix.h \
            StringOps.h \
            xmlUserData.h \
-           PhotoPteid.h \
            libtomcrypt/tomcrypt_argchk.h \
            libtomcrypt/tomcrypt_cfg.h \
            libtomcrypt/tomcrypt_hash.h \
@@ -90,7 +89,6 @@ SOURCES += ByteArray.cpp \
            TLVBuffer.cpp \
            Util.cpp \
            StringOps.cpp \
-           PhotoPteid.cpp \
            libtomcrypt/md5.c \
            libtomcrypt/sha1.c \
            libtomcrypt/sha256.c \
