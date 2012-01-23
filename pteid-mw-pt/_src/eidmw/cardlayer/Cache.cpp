@@ -304,7 +304,6 @@ std::string CCache::GetCacheDir(bool bAddSlash)
 
 	//We fist check the config
 	csCacheDir = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR).c_str());
-	std::cout << "csCacheDir" << csCacheDir << std::endl;
 	if(csCacheDir.empty())
 	{
 		csCacheDir = getenv("HOME");
