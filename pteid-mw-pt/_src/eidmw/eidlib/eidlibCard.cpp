@@ -1100,9 +1100,11 @@ PTEIDSDK_API long PTEID_Init(char *ReaderName){
 
 	try {
 		if (NULL == ReaderName)
-			readerContext = &ReaderSet.getReaderByNum(0);
+			readerContext = &ReaderSet.getReader();
 		else
 			readerContext = &ReaderSet.getReaderByName(ReaderName);
+
+		PTEID_EIDCard &card = readerContext->getEIDCard();
 	}
 	catch(PTEID_ExCardBadType &ex)
 	{
@@ -1360,36 +1362,49 @@ PTEIDSDK_API long PTEID_ChangePIN(unsigned char PinId, char *pszOldPin, char *ps
 				} else
 					return -1;
 		}
-
 	}
 
 	return 0;
-
 }
 
 PTEIDSDK_API long PTEID_GetPINs(PTEIDPins *Pins){
 	long int i=0;
 	unsigned long currentId= 0;
 
-	PTEID_Pins &pins = readerContext->getEIDCard().getPins();
-	for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
-		PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
-		if (pin.getId() == 1 || pin.getId() == 2 || pin.getId() == 3){
-			currentId = pin.getId()-1;
-			Pins->pins[currentId].flags = pin.getFlags();
-			Pins->pins[currentId].usageCode = pin.getId();
-			Pins->pins[currentId].pinType = pin.getType();
-			memset(Pins->pins[currentId].label, '\0', PTEID_MAX_PIN_LABEL_LEN);
-			strncpy(Pins->pins[currentId].label, pin.getLabel(), (PTEID_MAX_PIN_LABEL_LEN > strlen(pin.getLabel()) ? strlen(pin.getLabel()) : PTEID_MAX_PIN_LABEL_LEN-1));
-			Pins->pins[currentId].triesLeft = pin.getTriesLeft();
-			Pins->pins[currentId].id = (PTEID_GetCardType() == COMP_CARD_TYPE_IAS101 && pin.getId() == 1) ? pin.getId() : pin.getId() + 128;
-			Pins->pins[currentId].shortUsage = NULL; //martinho don't know where it is used, current MW returns NULL also
-			Pins->pins[currentId].longUsage = NULL; //martinho don't know where it is used, current MW returns NULL also
-			i++;
+	if (readerContext!=NULL){
+		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
+		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
+			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
+			if (pin.getId() == 1 || pin.getId() == 2 || pin.getId() == 3){
+				currentId = pin.getId()-1;
+				Pins->pins[currentId].flags = pin.getFlags();
+				Pins->pins[currentId].usageCode = pin.getId();
+				Pins->pins[currentId].pinType = pin.getType();
+				memset(Pins->pins[currentId].label, '\0', PTEID_MAX_PIN_LABEL_LEN);
+				strncpy(Pins->pins[currentId].label, pin.getLabel(), (PTEID_MAX_PIN_LABEL_LEN > strlen(pin.getLabel()) ? strlen(pin.getLabel()) : PTEID_MAX_PIN_LABEL_LEN-1));
+				Pins->pins[currentId].triesLeft = pin.getTriesLeft();
+				Pins->pins[currentId].id = (PTEID_GetCardType() == COMP_CARD_TYPE_IAS101 && pin.getId() == 1) ? pin.getId() : pin.getId() + 128;
+				Pins->pins[currentId].shortUsage = NULL; //martinho don't know where it is used, current MW returns NULL also
+				Pins->pins[currentId].longUsage = NULL; //martinho don't know where it is used, current MW returns NULL also
+				i++;
+			}
 		}
+		Pins->pinsLength = i;
 	}
-	Pins->pinsLength = i;
 
+	return 0;
+}
+
+PTEIDSDK_API long PTEID_GetTokenInfo(PTEID_TokenInfo *tokenData){
+
+	if (readerContext!=NULL){
+		PTEID_CardVersionInfo &versionInfo = readerContext->getEIDCard().getVersionInfo();
+		cout << "version info1 = " << versionInfo.getGraphicalPersonalisation() << endl;
+		cout << "version info2 = " << versionInfo.getElectricalPersonalisation() << endl;
+		cout << "version info3 = " << versionInfo.getAppletVersion() << endl;
+		cout << "version info4 = " << versionInfo.getAppletLifeCycle() << endl;
+		//cout << "version info5 = " << versionInfo.get << endl;
+	}
 	return 0;
 }
 

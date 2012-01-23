@@ -1421,6 +1421,8 @@ PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const
 #define PTEID_MAX_PINS					8
 #define PTEID_MAX_PIN_LABEL_LEN			256
 
+#define PTEID_MAX_ID_NUMBER_LEN			64
+
 typedef enum {
 	COMP_CARD_TYPE_ERR = 0, // Something went wrong, or unknown card type
 	COMP_CARD_TYPE_IAS07,   // IAS 0.7 card
@@ -1535,6 +1537,12 @@ typedef struct
 	long pinsLength;			        /* Number of elements in Array */
 } PTEIDPins;
 
+typedef struct
+{
+	char label[PTEID_MAX_CERT_LABEL_LEN];
+	char serial[PTEID_MAX_ID_NUMBER_LEN];
+} PTEID_TokenInfo;
+
 
 PTEIDSDK_API long PTEID_Init(
 			char *ReaderName		/**< in: the PCSC reader name (as returned by SCardListReaders()),
@@ -1609,6 +1617,14 @@ PTEIDSDK_API long PTEID_ChangePIN(
 PTEIDSDK_API long PTEID_GetPINs(
 	PTEIDPins *Pins		/**< out: the address of a PTEID_Pins struct */
 );
+
+/**
+ * Return the PKCS15 TokenInfo contents.
+ */
+PTEIDSDK_API long PTEID_GetTokenInfo(
+	PTEID_TokenInfo *tokenData	/**< out: the address of a PTEID_TokenInfo struct */
+);
+
 
 }
 
