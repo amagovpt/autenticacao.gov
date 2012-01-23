@@ -1330,19 +1330,41 @@ PTEIDSDK_API long PTEID_VerifyPIN(unsigned char PinId,	char *Pin, long *triesLef
 }
 
 PTEIDSDK_API long PTEID_VerifyPIN_No_Alert(unsigned char PinId,	char *Pin, long *triesLeft){
-	if (readerContext!=NULL){
 
+	if (readerContext!=NULL){
+		//martinho: in this phase we do not have a distinct functionality for this feature.
+		return PTEID_VerifyPIN(PinId, Pin, triesLeft);
 	}
 
 	return 0;
 }
 
 PTEIDSDK_API long PTEID_ChangePIN(unsigned char PinId, char *pszOldPin, char *pszNewPin, long *triesLeft){
+
+	unsigned long id;
+	const char *a1 = pszOldPin, *a2 = pszNewPin;
+	unsigned long int tries = -1;
+
 	if (readerContext!=NULL){
+		if (PinId != 1 && PinId != 129 && PinId != 130 && PinId != 131)
+			return 0;
+
+		id = (PTEID_GetCardType() == COMP_CARD_TYPE_IAS101 && PinId == 1) ? PinId : PinId - 128;
+		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
+		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
+			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
+			if (pin.getId() == id)
+				if (pin.changePin(pszOldPin ,pszNewPin, tries, pin.getLabel())){
+					*triesLeft = pin.getTriesLeft();
+					return 0;
+				} else
+					return -1;
+		}
 
 	}
 
 	return 0;
+
 }
 
 PTEIDSDK_API long PTEID_GetPINs(PTEIDPins *Pins){
@@ -1361,8 +1383,8 @@ PTEIDSDK_API long PTEID_GetPINs(PTEIDPins *Pins){
 			strncpy(Pins->pins[currentId].label, pin.getLabel(), (PTEID_MAX_PIN_LABEL_LEN > strlen(pin.getLabel()) ? strlen(pin.getLabel()) : PTEID_MAX_PIN_LABEL_LEN-1));
 			Pins->pins[currentId].triesLeft = pin.getTriesLeft();
 			Pins->pins[currentId].id = (PTEID_GetCardType() == COMP_CARD_TYPE_IAS101 && pin.getId() == 1) ? pin.getId() : pin.getId() + 128;
-			Pins->pins[currentId].shortUsage = NULL;
-			Pins->pins[currentId].longUsage = NULL;
+			Pins->pins[currentId].shortUsage = NULL; //martinho don't know where it is used, current MW returns NULL also
+			Pins->pins[currentId].longUsage = NULL; //martinho don't know where it is used, current MW returns NULL also
 			i++;
 		}
 	}
