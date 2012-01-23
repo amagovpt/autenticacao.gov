@@ -1,0 +1,75 @@
+/* xsec/framework/XSECConfig.hpp.in.  Generated from configure.ac by autoheader.  */
+
+/* Define if NSS is in use. */
+#undef XSEC_HAVE_NSS
+
+/* Define if OpenSSL is in use. */
+#undef XSEC_HAVE_OPENSSL
+
+/* Define to 1 if strcasecmp present. */
+#undef XSEC_HAVE_STRCASECMP
+
+/* Define to 1 if Xalan is unavailable. */
+#undef XSEC_NO_XALAN
+
+/* Define to 1 if OpenSSL has EVP_CIPHER_CTX_set_padding. */
+#undef XSEC_OPENSSL_CANSET_PADDING
+
+/* Define to 1 if OpenSSL uses const input buffers. */
+#undef XSEC_OPENSSL_CONST_BUFFERS
+
+/* Define to 1 if OpenSSL X509 API has const input buffer. */
+#undef XSEC_OPENSSL_D2IX509_CONST_BUFFER
+
+/* Define to 1 if OpenSSL has full AES support. */
+#undef XSEC_OPENSSL_HAVE_AES
+
+/* Define to 1 if OpenSSL has CRYPTO_cleanup_all_ex_data. */
+#undef XSEC_OPENSSL_HAVE_CRYPTO_CLEANUP_ALL_EX_DATA
+
+/* Define to 1 if OpenSSL has EC support. */
+#undef XSEC_OPENSSL_HAVE_EC
+
+/* Define to 1 if OpenSSL has SHA2 support. */
+#undef XSEC_OPENSSL_HAVE_SHA2
+
+/* Define to 1 if Xalan XPathEvaluator requires NodeRefList. */
+#undef XSEC_SELECTNODELIST_REQS_NODEREFLIST
+
+/* Define to 1 if Xalan requires MemoryManager */
+#undef XSEC_XALAN_REQS_MEMORYMANAGER
+
+/* Define to 1 if Xalan XercesParserLiaison ctor takes XercesDOMSupport. */
+#undef XSEC_XERCESPARSERLIAISON_REQS_DOMSUPPORT
+
+/* Define to 1 if Xerces has a 64-bit-safe API. */
+#undef XSEC_XERCES_64BITSAFE
+
+/* Define to 1 if Xerces DOMEntity has getInputEncoding. */
+#undef XSEC_XERCES_DOMENTITYINPUTENCODING
+
+/* Define to 1 if Xerces has DOMLSSerializer. */
+#undef XSEC_XERCES_DOMLSSERIALIZER
+
+/* Define to 1 if Xerces XMLFormatter requires version. */
+#undef XSEC_XERCES_FORMATTER_REQUIRES_VERSION
+
+/* Define to 1 if Xerces DOM ID methods take extra parameter. */
+#undef XSEC_XERCES_HAS_BOOLSETIDATTRIBUTE
+
+/* Define to 1 if Xerces has legacy setIdAttribute. */
+#undef XSEC_XERCES_HAS_SETIDATTRIBUTE
+
+/* Define to 1 if Xerces InputStream class requires getContentType. */
+#undef XSEC_XERCES_INPUTSTREAM_HAS_CONTENTTYPE
+
+/* Define to 1 if Xerces XMLFormatter requires MemoryManager. */
+#undef XSEC_XERCES_REQUIRES_MEMMGR
+
+/* Define to 1 if Xerces XMLString has release method. */
+#undef XSEC_XERCES_XMLSTRING_HAS_RELEASE
+
+/* Define to 1 if Xalan XSLException returns XalanDOMString. */
+#undef XSEC_XSLEXCEPTION_RETURNS_DOMSTRING
+
+#include <xsec/framework/XSECVersion.hpp>
