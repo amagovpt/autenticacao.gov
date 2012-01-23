@@ -19,11 +19,13 @@
 **************************************************************************** */
 
 #include <time.h>
+#include <fstream>
 
 #include "openssl/evp.h"
 #include "openssl/x509.h"
 #include "openssl/x509v3.h"
 
+#include "APLReader.h"
 #include "APLCertif.h"
 #include "APLConfig.h"
 #include "CardFile.h"
@@ -277,6 +279,51 @@ APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex)
 		}
 
 		cert = new APL_Certif(m_card,this,ulIndex);
+
+		////////////////////////////Cert CACHE//////////////////////////
+		CByteArray certfilecache;
+		certfilecache.Append(cert->getData());
+		try
+		{
+			ofstream myfile;
+			APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
+			std::string	m_cachedirpath = conf_dir.getString();
+			std::string pteidfile = m_cachedirpath;
+			pteidfile.append("/pteidng-");
+			pteidfile.append(m_InitSerialNumber);
+			pteidfile.append("-");
+			if (ulIndex == 0)
+			{
+				pteidfile.append(PTEID_FILE_CERT_AUTHENTICATION);
+			}
+			else if (ulIndex == 1)
+			{
+				pteidfile.append(PTEID_FILE_CERT_SIGNATURE);
+			}
+			else if (ulIndex == 2)
+			{
+				pteidfile.append(PTEID_FILE_CERT_ROOT_SIGN);
+			}
+			else if (ulIndex == 3)
+			{
+				pteidfile.append(PTEID_FILE_CERT_ROOT_AUTH);
+			}
+			else if (ulIndex == 4)
+			{
+				pteidfile.append(PTEID_FILE_CERT_ROOT);
+			}
+			pteidfile.append(".bin");
+			myfile.open (pteidfile.c_str(), ios::binary);
+			std::string certFile;
+			certFile.assign((char*)certfilecache.GetBytes(), certfilecache.Size());
+			myfile << certFile;
+			myfile.close();
+		}
+		catch(CMWException& e)
+		{
+			MWLOG(LEV_INFO, MOD_APL, L"Write cache certificate file %d on disk failed", ulIndex);
+		}
+		////////////////////////////////////////////////////////////////
 
 		unsigned long ulUniqueId=cert->getUniqueId();
 		itr = m_certifs.find(ulUniqueId);
