@@ -1137,22 +1137,22 @@ PTEIDSDK_API long PTEID_Exit(unsigned long ulMode){
 }
 
 // MARTINHO OK
-PTEIDSDK_API ttCardType PTEID_GetCardType(){
+PTEIDSDK_API tCompCardType PTEID_GetCardType(){
 
 	if (readerContext!=NULL){
 		PTEID_CardType type = readerContext->getCardType();
 		switch (type){
 			case PTEID_CARDTYPE_IAS07:
-				return CARD_TYPE_IAS07;
+				return COMP_CARD_TYPE_IAS07;
 				break;
 			case PTEID_CARDTYPE_IAS101:
-				return CARD_TYPE_IAS101;
+				return COMP_CARD_TYPE_IAS101;
 				break;
 			default:
-				return CARD_TYPE_ERR;
+				return COMP_CARD_TYPE_ERR;
 		}
 	}
-	return CARD_TYPE_ERR;
+	return COMP_CARD_TYPE_ERR;
 }
 
 
@@ -1299,7 +1299,76 @@ PTEIDSDK_API long PTEID_GetCertificates(PTEID_Certifs *Certifs){
 }
 
 
+PTEIDSDK_API long PTEID_VerifyPIN(unsigned char PinId,	char *Pin, long *triesLeft){
+	unsigned long id;
+	unsigned long tleft=-1;
+	bool ret;
 
+	if (readerContext!=NULL){
+		if (PinId != 1 && PinId != 129 && PinId != 130 && PinId != 131)
+			return 0;
 
+		id = (PTEID_GetCardType() == COMP_CARD_TYPE_IAS101 && PinId == 1) ? PinId : PinId - 128;
+
+		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
+		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
+			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
+			if (pin.getId() == id){
+				ret = pin.verifyPin("",tleft);
+				//martinho: verify pin is not working properly for readers without pinpad at this moment,
+				//this is a workaround
+				*triesLeft = pin.getTriesLeft();
+
+				if (ret)
+					return 0;
+				return -1;
+			}
+		}
+	}
+
+	return 0;
+}
+
+PTEIDSDK_API long PTEID_VerifyPIN_No_Alert(unsigned char PinId,	char *Pin, long *triesLeft){
+	if (readerContext!=NULL){
+
+	}
+
+	return 0;
+}
+
+PTEIDSDK_API long PTEID_ChangePIN(unsigned char PinId, char *pszOldPin, char *pszNewPin, long *triesLeft){
+	if (readerContext!=NULL){
+
+	}
+
+	return 0;
+}
+
+PTEIDSDK_API long PTEID_GetPINs(PTEIDPins *Pins){
+	long int i=0;
+	unsigned long currentId= 0;
+
+	PTEID_Pins &pins = readerContext->getEIDCard().getPins();
+	for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
+		PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
+		if (pin.getId() == 1 || pin.getId() == 2 || pin.getId() == 3){
+			currentId = pin.getId()-1;
+			Pins->pins[currentId].flags = pin.getFlags();
+			Pins->pins[currentId].usageCode = pin.getId();
+			Pins->pins[currentId].pinType = pin.getType();
+			memset(Pins->pins[currentId].label, '\0', PTEID_MAX_PIN_LABEL_LEN);
+			strncpy(Pins->pins[currentId].label, pin.getLabel(), (PTEID_MAX_PIN_LABEL_LEN > strlen(pin.getLabel()) ? strlen(pin.getLabel()) : PTEID_MAX_PIN_LABEL_LEN-1));
+			Pins->pins[currentId].triesLeft = pin.getTriesLeft();
+			Pins->pins[currentId].id = (PTEID_GetCardType() == COMP_CARD_TYPE_IAS101 && pin.getId() == 1) ? pin.getId() : pin.getId() + 128;
+			Pins->pins[currentId].shortUsage = NULL;
+			Pins->pins[currentId].longUsage = NULL;
+			i++;
+		}
+	}
+	Pins->pinsLength = i;
+
+	return 0;
+}
 
 }

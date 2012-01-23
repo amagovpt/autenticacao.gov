@@ -1304,7 +1304,6 @@ PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const
 /******************************************************************************//**
   * Compatibility layer
   *********************************************************************************/
-
 #define COMP_LAYER_NATIONAL_ADDRESS "N"
 #define COMP_LAYER_FOREIGN_ADDRESS "I"
 
@@ -1419,11 +1418,14 @@ PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const
 #define PTEID_MAX_CERT_NUMBER			10
 #define PTEID_MAX_CERT_LABEL_LEN		256
 
+#define PTEID_MAX_PINS					8
+#define PTEID_MAX_PIN_LABEL_LEN			256
+
 typedef enum {
-	CARD_TYPE_ERR = 0, // Something went wrong, or unknown card type
-	CARD_TYPE_IAS07,   // IAS 0.7 card
-	CARD_TYPE_IAS101,  // IAS 1.01 card
-} ttCardType;
+	COMP_CARD_TYPE_ERR = 0, // Something went wrong, or unknown card type
+	COMP_CARD_TYPE_IAS07,   // IAS 0.7 card
+	COMP_CARD_TYPE_IAS101,  // IAS 1.01 card
+}tCompCardType;
 
 typedef struct
 {
@@ -1515,6 +1517,24 @@ typedef struct
 	long certificatesLength;			/* Number of elements in Array */
 } PTEID_Certifs;
 
+typedef struct
+{
+  long pinType;             // ILEID_PIN_TYPE_PKCS15 or PTEID_PIN_TYPE_OS
+  unsigned char id;                    // PIN reference or ID
+  long usageCode;       // Usage code (PTEID_USAGE_AUTH, PTEID_USAGE_SIGN, ...)
+  long triesLeft;
+  long flags;
+  char label[PTEID_MAX_PIN_LABEL_LEN];
+  char *shortUsage;     // May be NULL for usage known by the middleware
+  char *longUsage;      // May be NULL for usage known by the middleware
+} PTEIDPin;
+
+typedef struct
+{
+	PTEIDPin pins[PTEID_MAX_PINS];  /* Array of PTEID_Pin structures */
+	long pinsLength;			        /* Number of elements in Array */
+} PTEIDPins;
+
 
 PTEIDSDK_API long PTEID_Init(
 			char *ReaderName		/**< in: the PCSC reader name (as returned by SCardListReaders()),
@@ -1525,7 +1545,7 @@ PTEIDSDK_API long PTEID_Exit(
 			unsigned long ulMode	/**< in: exit mode, either PTEID_EXIT_LEAVE_CARD or PTEID_EXIT_UNPOWER */
 );
 
-PTEIDSDK_API ttCardType PTEID_GetCardType();
+PTEIDSDK_API tCompCardType PTEID_GetCardType();
 
 /**
  * Read the ID data.
@@ -1548,7 +1568,6 @@ PTEIDSDK_API long PTEID_GetPic(
 	PTEID_PIC *PicData		/**< out: the address of a PTEID_PIC struct */
 );
 
-
 /**
  * Read all the user and CA certificates.
  */
@@ -1556,6 +1575,40 @@ PTEIDSDK_API long PTEID_GetCertificates(
 	PTEID_Certifs *Certifs	/**< out: the address of a PTEID_Certifs struct */
 );
 
+/**
+ * Verify a PIN.
+ */
+PTEIDSDK_API long PTEID_VerifyPIN(
+	unsigned char PinId,	/**< in: the PIN ID, see the PTEID_Pins struct */
+	char *Pin,				/**< in: the PIN value, if NULL then the user will be prompted for the PIN */
+	long *triesLeft			/**< out: the remaining PIN tries */
+);
+
+/**
+ * Verify a PIN. If this is the signature PIN, do not display an alert message.
+ */
+PTEIDSDK_API long PTEID_VerifyPIN_No_Alert(
+	unsigned char PinId,	/**< in: the PIN ID, see the PTEID_Pins struct */
+	char *Pin,				/**< in: the PIN value, if NULL then the user will be prompted for the PIN */
+	long *triesLeft			/**< out: the remaining PIN tries */
+);
+
+/**
+ * Change a PIN.
+ */
+PTEIDSDK_API long PTEID_ChangePIN(
+	unsigned char PinId,	/**< in: the PIN ID, see the PTEID_Pins struct */
+	char *pszOldPin,		/**< in: the current PIN value, if NULL then the user will be prompted for the PIN */
+	char *pszNewPin,		/**< in: the new PIN value, if NULL then the user will be prompted for the PIN */
+	long *triesLeft			/**< out: the remaining PIN tries */
+);
+
+/**
+ * Return the PINs (that are listed in the PKCS15 files).
+ */
+PTEIDSDK_API long PTEID_GetPINs(
+	PTEIDPins *Pins		/**< out: the address of a PTEID_Pins struct */
+);
 
 }
 
