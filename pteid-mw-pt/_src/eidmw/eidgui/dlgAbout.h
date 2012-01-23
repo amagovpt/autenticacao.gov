@@ -29,7 +29,6 @@ class dlgAbout : public QDialog
     Q_OBJECT
 
 private slots:
-    void on_btnUpdates_clicked ( void );
 
 public:
     dlgAbout(QString const& version, QWidget *parent = 0);
