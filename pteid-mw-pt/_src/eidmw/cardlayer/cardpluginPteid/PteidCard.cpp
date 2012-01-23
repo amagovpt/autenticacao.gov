@@ -301,7 +301,6 @@ CPkiCard(hCard, poContext, poPinpad)
 		m_oCardData.Chop(2); // remove SW12 = '90 00'
 
 		m_oSerialNr = CByteArray(m_oCardData.GetBytes(), m_oCardData.Size());
-		std::cout << "m_oSerialNr " << m_oSerialNr.ToString() << std::endl;
 		// Get Card Applet Version
 		m_AppletVersion = ulVersion;
 
