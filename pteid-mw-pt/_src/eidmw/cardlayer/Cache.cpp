@@ -59,7 +59,7 @@ CCache::~CCache(void)
 
 std::string CCache::GetSimpleName(const std::string & csSerialNr, const std::string & csPath)
 {
-	return csSerialNr + "_" + csPath + ".kch";
+	return csSerialNr + "_" + csPath + ".bin";
 }
 
 CByteArray CCache::GetFile(const std::string & csName,
@@ -213,7 +213,7 @@ std::string CCache::GetCacheDir(bool bAddSlash)
 	std::string csCacheDir;
 
 	//We fist check the config
-	csCacheDir = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CACHEDIR).c_str());
+	csCacheDir = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR).c_str());
 	if(csCacheDir.empty())
 	{
 		// User home dir (C:\Documents and Settings\xxx)
@@ -227,7 +227,7 @@ std::string CCache::GetCacheDir(bool bAddSlash)
 		}
 	
 		if (pHomeDir != NULL)
-			csCacheDir = pHomeDir + std::string("\\Application Data\\.eidmwcache");
+			csCacheDir = pHomeDir + std::string("\\Application Data\\.pteid-ng");
 		else
 		{
 			// Assuming single-user OS: use the Windows dir
@@ -235,7 +235,7 @@ std::string CCache::GetCacheDir(bool bAddSlash)
 			if (GetWindowsDirectoryA(csPath, sizeof(csPath)) == 0)
 				; // TODO: log
 			else
-				csCacheDir = csPath + std::string("\\.eidmwcache");
+				csCacheDir = csPath + std::string("\\.pteid-ng");
 		}
 		free( pHomeDir );
 	}
@@ -259,7 +259,7 @@ std::string CCache::GetCacheDir(bool bAddSlash)
 bool CCache::Delete(const std::string & csName)
 {
 	std::string strCacheDir = GetCacheDir();
-	std::string strSearchFor = strCacheDir + csName + "*.kch";
+	std::string strSearchFor = strCacheDir + csName + "*.bin";
 	const char *csSearchFor = strSearchFor.c_str();
 
 	bool bDeleted = false; // wether or no we deleted something
@@ -303,11 +303,12 @@ std::string CCache::GetCacheDir(bool bAddSlash)
 	std::string csCacheDir;
 
 	//We fist check the config
-	csCacheDir = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CACHEDIR).c_str());
+	csCacheDir = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR).c_str());
+	std::cout << "csCacheDir" << csCacheDir << std::endl;
 	if(csCacheDir.empty())
 	{
 		csCacheDir = getenv("HOME");
-		csCacheDir += "/.eidmwcache";
+		csCacheDir += "/.pteid-ng";
 	}
 
 	struct stat buffer;

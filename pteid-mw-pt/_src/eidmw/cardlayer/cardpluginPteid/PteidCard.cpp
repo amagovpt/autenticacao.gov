@@ -300,8 +300,8 @@ CPkiCard(hCard, poContext, poPinpad)
 
 		m_oCardData.Chop(2); // remove SW12 = '90 00'
 
-		m_oSerialNr = CByteArray(m_oCardData.GetBytes(), 16);
-
+		m_oSerialNr = CByteArray(m_oCardData.GetBytes(), m_oCardData.Size());
+		std::cout << "m_oSerialNr " << m_oSerialNr.ToString() << std::endl;
 		// Get Card Applet Version
 		m_AppletVersion = ulVersion;
 
@@ -904,7 +904,7 @@ unsigned long CPteidCard::Get6CDelay()
 tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 {
 	tCacheInfo dontCache = {DONT_CACHE, 0};
-/*	tCacheInfo simpleCache = {SIMPLE_CACHE, 0};
+	tCacheInfo simpleCache = {SIMPLE_CACHE, 0};
 	tCacheInfo certCache = {CERT_CACHE, 0};
 	tCacheInfo check16Cache = {CHECK_16_CACHE, 0}; // Check 16 bytes at offset 0
 	tCacheInfo checkSerial = {CHECK_SERIAL, 0}; // Check if the card serial nr is present
@@ -913,7 +913,7 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 	unsigned int uiFileID = 0;
 	unsigned long ulLen = (unsigned long) (csPath.size() / 2);
 	if (ulLen >= 2)
-		uiFileID = 256 * Hex2Byte(csPath, ulLen - 2) + Hex2Byte(csPath, ulLen - 1);
+		uiFileID = Hex2Byte(csPath, ulLen - 2) + Hex2Byte(csPath, ulLen - 1);
 
 	switch(uiFileID)
 	{
@@ -923,10 +923,10 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 	case 0x5032: // EF(TokenInfo)
 	case 0x5034: // EF(AODF)
 	case 0x5035: // EF(PrKDF)
-	case 0x5037: // EF(CDF)
-	case 0x503C: // EF(Cert#8) (RRN)
-	case 0x503D: // EF(Cert#9) (ID CA)
-	case 0x4035: // EF(ID#Photo)
+	case 246: // EF07 (PersoData)
+ 	//case 244: // EF05 (Address)
+	case 241: // EF02 (ID)
+	case 245: // EF06 (SOD)
 #ifdef CAL_EMULATION  // the EF(ID#RN) of the emulated test cards have the same serial nr
 	case 0x4031: // EF(ID#RN)
 #endif
@@ -944,6 +944,6 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 	case 0x503B: // EF(Cert#6) (root)
 		return certCache;
 	}
-*/
-	return dontCache;
+//*/
+	//return dontCache;
 }
