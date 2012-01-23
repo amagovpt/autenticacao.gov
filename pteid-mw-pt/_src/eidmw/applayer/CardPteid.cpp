@@ -473,7 +473,8 @@ bool APL_EidFile_ID::MapFields()
 	pteidngidBuffer.TrimRight(' ');
 	m_AccidentalIndications.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
-	try
+	/* ID File Caching
+	 * try
 	{
 		ofstream myfile;
 		APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
@@ -493,7 +494,7 @@ bool APL_EidFile_ID::MapFields()
 	catch(CMWException& e)
 	{
 		MWLOG(LEV_INFO, MOD_APL, L"Write cache file %ls on disk failed", PTEID_FILE_ID);
-	}
+	}*/
 
 	//MemberOfFamily - See if this segfaults in every platform
 	//m_MemberOfFamily = m_GivenNameMother + " " + m_SurnameMother + " * " + m_GivenNameFather + " " + m_SurnameFather;
@@ -1525,7 +1526,8 @@ bool APL_EidFile_Sod::MapFields()
     pteidngSodBuffer.TrimRight(' ');
     m_Sod.assign((char*)(pteidngSodBuffer.GetBytes()), pteidngSodBuffer.Size());
 
-    try
+    /* File Caching
+     * try
     {
     	ofstream myfile;
     	APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
@@ -1545,7 +1547,7 @@ bool APL_EidFile_Sod::MapFields()
     catch(CMWException& e)
     {
     	MWLOG(LEV_INFO, MOD_APL, L"Write cache file %ls on disk failed", PTEID_FILE_SOD);
-    }
+    }*/
 
     m_mappedFields = true;
 

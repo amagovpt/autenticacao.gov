@@ -54,7 +54,8 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 	m_mappedFields = false;
 	m_card=card;
 
-	APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
+	/* File Caching at Applayer Level
+	 * APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
 	std::string	m_cachedirpath = conf_dir.getString();
 
 	CPathUtil::checkDir (m_cachedirpath.c_str());
@@ -120,6 +121,21 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 	catch(CMWException& e)
 	{
 		MWLOG(LEV_INFO, MOD_APL, L"LoadData: File cache failed %ls", csPath);
+	}*/
+
+	if(csPath)
+		m_path=csPath;
+	else
+		m_path="";
+
+	if(file)
+	{
+		m_data=*file;
+		m_keepdata=true;
+	}
+	else
+	{
+		m_keepdata=false;
 	}
 
 	m_status=CARDFILESTATUS_UNREAD;

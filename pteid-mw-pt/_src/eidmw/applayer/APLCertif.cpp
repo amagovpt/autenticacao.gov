@@ -281,7 +281,7 @@ APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex)
 		cert = new APL_Certif(m_card,this,ulIndex);
 
 		////////////////////////////Cert CACHE//////////////////////////
-		CByteArray certfilecache;
+		/*CByteArray certfilecache;
 		certfilecache.Append(cert->getData());
 		try
 		{
@@ -322,7 +322,7 @@ APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex)
 		catch(CMWException& e)
 		{
 			MWLOG(LEV_INFO, MOD_APL, L"Write cache certificate file %d on disk failed", ulIndex);
-		}
+		}*/
 		////////////////////////////////////////////////////////////////
 
 		unsigned long ulUniqueId=cert->getUniqueId();
