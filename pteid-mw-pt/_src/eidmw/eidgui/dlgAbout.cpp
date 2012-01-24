@@ -23,7 +23,6 @@
 #include "dlgAbout.h"
 #include "eidlib.h"
 #include "mainwnd.h"
-#include "AutoUpdates.h"
 
 using namespace eIDMW;
 
