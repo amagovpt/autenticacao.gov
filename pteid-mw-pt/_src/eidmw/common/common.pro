@@ -29,8 +29,6 @@ CONFIG -= qt warn_on
 ## destination directory for the compiler
 DESTDIR = ../lib
 
-LIBS = -L../lib -l$${COMMONLIB}
-
 DEFINES += EIDMW_CMN_EXPORT 
 ## About !macx see _Builds/pteidcommon.mak.max
 unix:!macx: DEFINES += USING_DL_OPEN
