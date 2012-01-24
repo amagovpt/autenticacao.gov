@@ -39,6 +39,3 @@ dlgAbout::~dlgAbout()
 
 }
 
-	//AutoUpdates *n = new AutoUpdates();
-	//n->DownloadBinary("http://people.caixamagica.pt/lmedinas/autoupdates/PteidMW35-Basic-en.msi", "/tmp/PteidMW35-Basic-en.msi");
-
