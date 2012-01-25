@@ -1,0 +1,85 @@
+#!/usr/bin/env perl
+
+# This script is intented to find which Linux distro PTeID is running
+# this is useful to auto updates mechanism to find supported distros.
+# Author: Luis Medinas <luis.medinas@caixamagica.pt>
+
+use strict;
+
+my $ARCH=`uname -m`;
+my @full_distribution;
+my $distro;
+my $distribution_version;
+
+print ("PTeID OS version!!!!\n\n");
+
+sub getarch
+{
+    print ("Checking Arch...\n");
+    chomp $ARCH;
+    return $ARCH;
+}
+
+sub getlinuxdistro
+{
+    print ("Checking Linux Distro...\n");
+
+    if ($^O =~ m/linux/)
+    {
+        if (-e "/etc/fedora-release")
+        {
+	    @full_distribution    = split(/ /,`cat /etc/fedora-release`);
+	    $distribution_version = $full_distribution[2];
+	    $distro               = "fedora";
+        }
+	elsif (-e "/etc/redhat-release")
+        {
+            @full_distribution    = split(/ /,`cat /etc/redhat-release`);
+            $distribution_version = $full_distribution[2];
+            $distro               = "redhat";
+        }
+        elsif (-e "/etc/SuSE-release")
+        {
+	    @full_distribution    = split(/ /,`cat /etc/SuSE-release`);
+	    $distribution_version = $full_distribution[1];
+	    $distro               = "suse";
+        }
+	elsif (-e "/etc/mandriva-release")
+        {
+            @full_distribution    = split(/ /,`/etc/mandriva-release`);
+            $distribution_version = $full_distribution[1];
+            $distro               = "mandriva";
+	}
+        elsif (-e "/etc/debian_version")
+        {
+	    my $tmp = `cat /etc/debian_version`;
+	    chomp($tmp);    
+	    $distribution_version = "etch";
+	    $distro               = "debian";
+        }
+        else
+        {
+	    $distro = "unsupported";
+        }
+    }
+
+    return $distro;
+}
+
+
+my $linuxdistro = getlinuxdistro;
+
+print "$linuxdistro\n";
+
+my $linuxarch = getarch;
+
+print "$linuxarch\n";
+
+print "Writing to File\n";
+
+open (LINUXVERSIONFILE, '>/tmp/linuxversion');
+print LINUXVERSIONFILE $linuxdistro;
+print LINUXVERSIONFILE " ; ";
+print LINUXVERSIONFILE $linuxarch;
+print LINUXVERSIONFILE " ; \n";
+close (LINUXVERSIONFILE);
