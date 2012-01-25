@@ -1409,4 +1409,26 @@ PTEIDSDK_API long PTEID_GetTokenInfo(PTEID_TokenInfo *tokenData){
 	return 0;
 }
 
+PTEIDSDK_API long PTEID_ReadSOD(unsigned char *out, unsigned long *outlen){
+	if (readerContext!=NULL){
+		PTEID_ByteArray temp;
+		PTEID_EIDCard &card = readerContext->getEIDCard();
+
+		temp = card.getSod().getData();
+		memset(out,0,*outlen);
+		if (temp.Size() < *outlen)
+			*outlen = temp.Size();
+		memcpy(out,temp.GetBytes(), *outlen);
+	}
+
+	return 0;
+}
+
+PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft){
+	if (readerContext!=NULL){
+
+	}
+
+	return 0;
+}
 }

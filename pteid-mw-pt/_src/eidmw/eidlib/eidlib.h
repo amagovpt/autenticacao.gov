@@ -1424,6 +1424,8 @@ PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const
 
 #define PTEID_MAX_ID_NUMBER_LEN			64
 
+#define PTEID_SOD_FILE					"3F005F00EF06"
+
 typedef enum {
 	COMP_CARD_TYPE_ERR = 0, // Something went wrong, or unknown card type
 	COMP_CARD_TYPE_IAS07,   // IAS 0.7 card
@@ -1624,6 +1626,28 @@ PTEIDSDK_API long PTEID_GetPINs(
  */
 PTEIDSDK_API long PTEID_GetTokenInfo(
 	PTEID_TokenInfo *tokenData	/**< out: the address of a PTEID_TokenInfo struct */
+);
+
+/**
+ * Read the contents of the SOD file from the card.
+ * This function calls PTEID_ReadFile() with the SOD file as path.
+ * If *outlen is less then the file's contents, only *outlen
+ * bytes will be read. If *outlen is bigger then the file's
+ * contents then the file's contents are returned without error. */
+PTEIDSDK_API long PTEID_ReadSOD(
+	unsigned char *out,         /**< out: the buffer to hold the file contents */
+	unsigned long *outlen		/**< in/out: number of bytes allocated/number of bytes read */
+);
+
+/**
+ * Unblock PIN with PIN change.
+ * If pszPuk == NULL or pszNewPin == NULL, a GUI is shown asking for the PUK and the new PIN
+ */
+PTEIDSDK_API long PTEID_UnblockPIN(
+	unsigned char PinId,	/**< in: the PIN ID, see the PTEID_Pins struct */
+	char *pszPuk,			/**< in: the PUK value, if NULL then the user will be prompted for the PUK */
+	char *pszNewPin,		/**< in: the new PIN value, if NULL then the user will be prompted for the PIN */
+	long *triesLeft			/**< out: the remaining PUK tries */
 );
 
 
