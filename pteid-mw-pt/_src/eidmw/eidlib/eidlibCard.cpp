@@ -1431,4 +1431,45 @@ PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszN
 
 	return 0;
 }
+
+PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft, unsigned long ulFlags){
+	if (readerContext!=NULL){
+
+	}
+
+	return 0;
+}
+
+PTEIDSDK_API long PTEID_SelectADF(unsigned char *adf, long adflen){
+	if (readerContext!=NULL){
+
+	}
+
+	return 0;
+}
+
+PTEIDSDK_API long PTEID_ReadFile(unsigned char *file,int filelen,unsigned char *out,unsigned long *outlen,unsigned char PinId){
+	if (readerContext!=NULL){
+
+	}
+
+	return 0;
+}
+
+PTEIDSDK_API long PTEID_WriteFile(unsigned char *file, int filelen,	unsigned char *in, unsigned long inlen,	unsigned char PinId){
+	if (readerContext!=NULL){
+
+	}
+
+	return 0;
+}
+
+PTEIDSDK_API long PTEID_IsActivated(unsigned long *pulStatus){
+
+	if (readerContext!=NULL)
+		*pulStatus = (readerContext->getEIDCard().getVersionInfo().isActive() ? PTEID_ACTIVE_CARD : PTEID_INACTIVE_CARD);
+	return 0;
+}
+
+
 }

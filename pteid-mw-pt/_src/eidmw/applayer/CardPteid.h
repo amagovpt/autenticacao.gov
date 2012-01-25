@@ -51,6 +51,7 @@ public:
 	  */
 	virtual ~APL_EidFile_Trace();
 	const char *getValidation();				/**< Return field Validation */
+	bool isActive();							/**< Return the card activation state (true = active) */
 
 protected:
 	/**
@@ -88,6 +89,7 @@ private:
 	virtual bool ShowData();
 
 	std::string m_Validation;							/**< Field Validation */
+	bool isCardActive;
 
 	friend 	APL_EidFile_Trace *APL_EIDCard::getFileTrace();	/**< This method must access protected constructor */
 };

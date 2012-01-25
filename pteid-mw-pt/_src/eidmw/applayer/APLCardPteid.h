@@ -591,6 +591,7 @@ public:
 	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
 	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
 
+	EIDMW_APL_API bool isActive();
 	EIDMW_APL_API const char *getSerialNumber();		/**< Return field SerialNumber from the Info file */
 	EIDMW_APL_API const char *getTokenLabel();			/**< Return field Label from the EFCIA (5032) file */
 	EIDMW_APL_API const char *getComponentCode();		/**< Return field ComponentCode from the Info file */

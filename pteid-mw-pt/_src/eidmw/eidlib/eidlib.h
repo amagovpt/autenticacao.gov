@@ -808,7 +808,8 @@ class PTEID_CardVersionInfo : public PTEID_XMLDoc
 public:
 	PTEIDSDK_API  virtual ~PTEID_CardVersionInfo();		/**< Destructor */
 
-    PTEIDSDK_API const char *getSerialNumber();			/**< Return the Serial Number of the card */
+	PTEIDSDK_API bool isActive();						/**< Returns the card status (true = active) */
+	PTEIDSDK_API const char *getSerialNumber();			/**< Return the Serial Number of the card */
     PTEIDSDK_API const char *getTokenLabel();			/**< Return the Token Label (EFCIA 5032) */
     PTEIDSDK_API const char *getComponentCode();			/**< Return the ComponenCode of the card  */
 	PTEIDSDK_API const char *getOsNumber();				/**< Return the OS Number of the card */
@@ -1426,6 +1427,9 @@ PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const
 
 #define PTEID_SOD_FILE					"3F005F00EF06"
 
+#define PTEID_ACTIVE_CARD				1
+#define PTEID_INACTIVE_CARD 			0
+
 typedef enum {
 	COMP_CARD_TYPE_ERR = 0, // Something went wrong, or unknown card type
 	COMP_CARD_TYPE_IAS07,   // IAS 0.7 card
@@ -1648,6 +1652,67 @@ PTEIDSDK_API long PTEID_UnblockPIN(
 	char *pszPuk,			/**< in: the PUK value, if NULL then the user will be prompted for the PUK */
 	char *pszNewPin,		/**< in: the new PIN value, if NULL then the user will be prompted for the PIN */
 	long *triesLeft			/**< out: the remaining PUK tries */
+);
+
+/**
+ * Extended Unblock PIN functionality.
+ * E.g. calling PTEID_UnblockPIN_Ext() with ulFlags = UNBLOCK_FLAG_NEW_PIN
+ *   is the same as calling PTEID_UnblockPIN(...)
+ */
+PTEIDSDK_API long PTEID_UnblockPIN_Ext(
+	unsigned char PinId,	/**< in: the PIN ID, see the PTEID_Pins struct */
+	char *pszPuk,			/**< in: the PUK value, if NULL then the user will be prompted for the PUK */
+	char *pszNewPin,		/**< in: the new PIN value, if NULL then the user will be prompted for the PIN */
+	long *triesLeft,		/**< out: the remaining PUK tries */
+	unsigned long ulFlags	/**< in: flags: 0, UNBLOCK_FLAG_NEW_PIN, UNBLOCK_FLAG_PUK_MERGE or
+									UNBLOCK_FLAG_NEW_PIN | UNBLOCK_FLAG_PUK_MERGE */
+);
+
+/**
+ * Select an Application Directory File (ADF) by means of the AID (Application ID).
+ */
+PTEIDSDK_API long PTEID_SelectADF(
+	unsigned char *adf,		/**< in: the AID of the ADF */
+	long adflen				/**< in: the length */
+);
+
+/**
+ * Read a file on the card.
+ * If a PIN reference is provided and needed to read the file,
+ * the PIN will be asked and checked if needed.
+ * If *outlen is less then the file's contents, only *outlen
+ * bytes will be read. If *outlen is bigger then the file's
+ * contents then the file's contents are returned without error.
+ */
+PTEIDSDK_API long PTEID_ReadFile(
+	unsigned char *file,	/**< in: a byte array containing the file path,
+								e.g. {0x3F, 0x00, 0x5F, 0x00, 0xEF, 0x02} for the ID file */
+	int filelen,			/**< in: file length */
+	unsigned char *out,		/**< out: the buffer to hold the file contents */
+	unsigned long *outlen,	/**< in/out: number of bytes allocated/number of bytes read */
+	unsigned char PinId		/**< in: the ID of the Address PIN (only needed when reading the Address File) */
+);
+
+/**
+ * Write data to a file on the card.
+ * If a PIN reference is provided, the PIN will be asked and checked
+ * if needed (just-in-time checking).
+ * This function is only applicable for writing to the Personal Data file.
+ */
+PTEIDSDK_API long PTEID_WriteFile(
+	unsigned char *file,	/**< in: a byte array containing the file path,
+								e.g. {0x3F, 0x00, 0x5F, 0x00, 0xEF, 0x02} for the ID file */
+	int filelen,			/**< in: file length */
+	unsigned char *in,		/**< in: the data to be written to the file */
+	unsigned long inlen,	/**< in: length of the data to be written */
+	unsigned char PinId		/**< in: the ID of the Authentication PIN, see the PTEID_Pins struct */
+);
+
+/**
+ * Get the activation status of the card.
+ */
+PTEIDSDK_API long PTEID_IsActivated(
+	unsigned long *pulStatus	/**< out the activation status: 0 if not activate, 1 if activated */
 );
 
 

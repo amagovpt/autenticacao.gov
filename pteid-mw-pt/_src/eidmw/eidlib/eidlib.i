@@ -900,6 +900,7 @@ return $jnicall;
 //------------------------------------------------------------
 // class PTEID_CardVersionInfo
 //------------------------------------------------------------
+%javaexception("PTEID_Exception") isActive								JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getSerialNumber						JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getComponentCode						JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getOsNumber							JAVA_CODE_THROW

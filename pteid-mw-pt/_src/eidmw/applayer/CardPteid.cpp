@@ -128,11 +128,13 @@ bool APL_EidFile_Trace::MapFields()
     pteidngtraceBuffer = m_data.GetBytes(PTEIDNG_FIELD_TRACE_POS_VALIDATION, PTEIDNG_FIELD_TRACE_LEN_VALIDATION);
     pteidngtraceBuffer.TrimRight('\0');
     Validation = pteidngtraceBuffer;
-
     if (Validation.ToString() == "01")
     	m_Validation = "O Cartão de Cidadão encontra-se activo";
     else
     	m_Validation = "O Cartão de Cidadão não encontra-se activo";
+
+
+    isCardActive = (Validation.GetByte(0) == PTEIDNG_ACTIVE_CARD);
 
     m_mappedFields = true;
 
@@ -168,6 +170,12 @@ const char *APL_EidFile_Trace::getValidation()
 		return m_Validation.c_str();
 
 	return "";
+}
+
+bool APL_EidFile_Trace::isActive(){
+	if(ShowData())
+		return isCardActive;
+	return false;
 }
 
 /*****************************************************************************************

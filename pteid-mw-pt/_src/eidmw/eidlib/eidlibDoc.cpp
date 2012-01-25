@@ -535,6 +535,20 @@ PTEID_CardVersionInfo::~PTEID_CardVersionInfo()
 {
 }
 
+bool PTEID_CardVersionInfo::isActive()
+{
+	bool state = false;
+
+	BEGIN_TRY_CATCH
+
+	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
+	state = pimpl->isActive();
+
+	END_TRY_CATCH
+
+	return state;
+}
+
 const char *PTEID_CardVersionInfo::getSerialNumber()
 {
 	const char *out = NULL;

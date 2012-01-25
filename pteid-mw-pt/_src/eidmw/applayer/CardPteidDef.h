@@ -60,6 +60,7 @@ namespace eIDMW
 //Add PTeID-ng Trace defines
 #define PTEIDNG_FIELD_TRACE_POS_VALIDATION				5
 #define PTEIDNG_FIELD_TRACE_LEN_VALIDATION				1
+#define PTEIDNG_ACTIVE_CARD								1
 
 //Add PTeid-ng ID defines
 #define PTEIDNG_FIELD_ID_POS_FILE						0

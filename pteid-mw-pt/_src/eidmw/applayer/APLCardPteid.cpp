@@ -2749,6 +2749,11 @@ CByteArray APL_DocVersionInfo::getTLV()
 	return ba;
 }
 
+bool APL_DocVersionInfo::isActive()
+{
+	return m_card->getFileTrace()->isActive();
+}
+
 const char *APL_DocVersionInfo::getSerialNumber()
 {
 	return m_card->getFileTokenInfo()->getTokenSerialNumber();
