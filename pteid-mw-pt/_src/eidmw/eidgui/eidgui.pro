@@ -98,6 +98,7 @@ PRE_TARGETDEPS += $${translation_de.target} \
 DEPENDPATH += . ../dialogs 
 INCLUDEPATH += . ../dialogs ../eidlib ../_Builds ../common
 INCLUDEPATH += /usr/include/cairo
+INCLUDEPATH += /usr/include/curl
 
 LIBS += -Wl,-rpath,/usr/local/lib/pteidqt
 
@@ -105,7 +106,8 @@ LIBS += -L../lib  \
         -l$${EIDLIB} \
 	-l$${COMMONLIB} \
         -l$${APPLAYERLIB} \
-        -lfreeimagePTEiD
+        -lfreeimagePTEiD \
+        -lcurl
 
 LIBS += -lcairo
 
@@ -125,6 +127,7 @@ macx:LIBS += -L../../ThirdParty/Xerces/Xerces-2.8.0-mac/lib
 HEADERS += CardInformation.h \
            dlgAbout.h \
            dlgOptions.h \
+           AutoUpdates.h \
            mainwnd.h \
            Settings.h \
            genpur.h \
@@ -140,6 +143,7 @@ FORMS += dlgAbout.ui dlgOptions.ui mainwnd.ui picturepopup.ui dlgPrint.ui dlgSig
 SOURCES += CardInformation.cpp \
            dlgAbout.cpp \
            dlgOptions.cpp \
+           AutoUpdates.cpp \
            main.cpp \
            mainwnd.cpp \
            dlgprint.cpp \
