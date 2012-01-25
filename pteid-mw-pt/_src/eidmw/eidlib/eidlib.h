@@ -809,7 +809,8 @@ public:
 	PTEIDSDK_API  virtual ~PTEID_CardVersionInfo();		/**< Destructor */
 
     PTEIDSDK_API const char *getSerialNumber();			/**< Return the Serial Number of the card */
-	PTEIDSDK_API const char *getComponentCode();			/**< Return the ComponenCode of the card  */
+    PTEIDSDK_API const char *getTokenLabel();			/**< Return the Token Label (EFCIA 5032) */
+    PTEIDSDK_API const char *getComponentCode();			/**< Return the ComponenCode of the card  */
 	PTEIDSDK_API const char *getOsNumber();				/**< Return the OS Number of the card */
 	PTEIDSDK_API const char *getOsVersion();				/**< Return the OS Version of the card */
 	PTEIDSDK_API const char *getSoftmaskNumber();			/**< Return the Softmask Number of the card */

@@ -2751,7 +2751,11 @@ CByteArray APL_DocVersionInfo::getTLV()
 
 const char *APL_DocVersionInfo::getSerialNumber()
 {
-	return m_card->getFileInfo()->getSerialNumber();
+	return m_card->getFileTokenInfo()->getTokenSerialNumber();
+}
+
+const char * APL_DocVersionInfo::getTokenLabel(){
+	return m_card->getFileTokenInfo()->getTokenLabel();
 }
 
 const char *APL_DocVersionInfo::getComponentCode()

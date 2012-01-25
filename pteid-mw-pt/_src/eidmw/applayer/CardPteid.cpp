@@ -1122,7 +1122,7 @@ void APL_EidFile_Address::ForeignerAddressFields()
 	m_Foreign_Country.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	//Foreign Generic Address
-	pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_FOREIGNER_ADDRESS, PTEIDNG_FIELD_ADDRESS_LEN_FOREIGNER_ADDRESS);
+	pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_ADDRESS, PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_ADDRESS);
 	pteidngAddressBuffer.TrimRight(' ');
 	m_Foreign_Generic_Address.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
@@ -1685,6 +1685,39 @@ bool APL_EidFile_TokenInfo::MapFields()
 	if (m_mappedFields)
 		return true;
 
+	CByteArray temp;
+	char *ascii;
+
+	/* 	martinho: yes it is an asn1 file but we only need 2 fields, so lets extract them.
+		TODO: read the file as asn1, this might be useful with the asn1c compiler.
+
+		EFCIAFILE DEFINITIONS ::=
+		BEGIN
+
+	  		EFCIA ::= SEQUENCE {
+	  			value		INTEGER,
+	  			number		OCTET STRING,
+	  			applet		UTF8String,
+				text  [0] IMPLICIT IA5String,
+				whatever	BIT STRING
+	  		}
+		END
+	*/
+
+	temp = m_data.GetBytes(PTEID_FIELD_TOKENINFO_POS_LABEL, PTEID_FIELD_TOKENINFO_LEN_LABEL);
+	temp.TrimRight('\0');
+	m_label.assign((char*)(temp.GetBytes()), temp.Size());
+
+	temp = m_data.GetBytes(PTEID_FIELD_TOKENINFO_POS_SERIAL, PTEID_FIELD_TOKENINFO_LEN_SERIAL);
+	temp.TrimRight('\0');
+	//martinho: no need to create a bcd2ascii, this one works fine
+	ascii = bin2AsciiHex(temp.GetBytes(),temp.Size());
+	m_TokenSerialNumber.assign(ascii);
+
+
+
+
+
 	char buffer[50];
 
 	//Graphical Personalisation
@@ -1703,6 +1736,21 @@ bool APL_EidFile_TokenInfo::MapFields()
 
 	return true;
 
+}
+
+
+const char *APL_EidFile_TokenInfo::getTokenLabel(){
+	if(ShowData())
+			return m_label.c_str();
+
+		return "";
+}
+
+const char *APL_EidFile_TokenInfo::getTokenSerialNumber(){
+	if(ShowData())
+			return m_TokenSerialNumber.c_str();
+
+		return "";
 }
 
 const char *APL_EidFile_TokenInfo::getGraphicalPersonalisation()

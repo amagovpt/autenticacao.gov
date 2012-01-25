@@ -549,6 +549,20 @@ const char *PTEID_CardVersionInfo::getSerialNumber()
 	return out;
 }
 
+const char *PTEID_CardVersionInfo::getTokenLabel()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
+	out = pimpl->getTokenLabel();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
 const char *PTEID_CardVersionInfo::getComponentCode()
 {
 	const char *out = NULL;

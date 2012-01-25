@@ -1399,12 +1399,13 @@ PTEIDSDK_API long PTEID_GetTokenInfo(PTEID_TokenInfo *tokenData){
 
 	if (readerContext!=NULL){
 		PTEID_CardVersionInfo &versionInfo = readerContext->getEIDCard().getVersionInfo();
-		cout << "version info1 = " << versionInfo.getGraphicalPersonalisation() << endl;
-		cout << "version info2 = " << versionInfo.getElectricalPersonalisation() << endl;
-		cout << "version info3 = " << versionInfo.getAppletVersion() << endl;
-		cout << "version info4 = " << versionInfo.getAppletLifeCycle() << endl;
-		//cout << "version info5 = " << versionInfo.get << endl;
+
+		memset(tokenData->label, '\0', PTEID_MAX_CERT_LABEL_LEN);
+		strncpy(tokenData->label, versionInfo.getTokenLabel(), (PTEID_MAX_CERT_LABEL_LEN > strlen(versionInfo.getTokenLabel()) ? strlen(versionInfo.getTokenLabel()) : PTEID_MAX_CERT_LABEL_LEN -1));
+		memset(tokenData->serial, '\0', PTEID_MAX_ID_NUMBER_LEN);
+		strncpy(tokenData->serial, versionInfo.getSerialNumber(), (PTEID_MAX_ID_NUMBER_LEN > strlen(versionInfo.getSerialNumber()) ? strlen(versionInfo.getSerialNumber()) : PTEID_MAX_ID_NUMBER_LEN -1));
 	}
+
 	return 0;
 }
 

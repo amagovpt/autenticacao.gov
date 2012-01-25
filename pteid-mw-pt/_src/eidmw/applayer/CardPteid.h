@@ -533,6 +533,8 @@ public:
 	const char *getGraphicalPersonalisation();				/**< Return the Graphical Personalisation of the file */
 	const char *getElectricalPersonalisation();				/**< Return the Electrical Personalisation of the file */
 	const char *getElectricalPersonalisationInterface();	/**< Return the Electrical Personalisation Interface of the file */
+	const char *getTokenLabel();
+	const char *getTokenSerialNumber();
 
 protected:
 	/**
@@ -552,6 +554,8 @@ private:
 	std::string m_GraphicalPersonalisation;				/**< The Graphical Personalisation of the file */
 	std::string m_ElectricalPersonalisation;			/**< The Electrical Personalisation of the file */
 	std::string m_ElectricalPersonalisationInterface;	/**< The Electrical Personalisation Interface of the file */
+	std::string m_label;
+	std::string m_TokenSerialNumber;
 
 friend 	APL_EidFile_TokenInfo *APL_EIDCard::getFileTokenInfo();	/**< This method must access protected constructor */
 };
