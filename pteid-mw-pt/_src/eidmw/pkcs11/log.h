@@ -36,12 +36,6 @@ extern "C" {
 #define LOG_LEVEL_ERROR       0
 
 
-#ifdef _WIN32
-#define DEFAULT_LOG_FILE "c:\\temp\\pteidpkcs11\\p11.log"
-#else
-#define DEFAULT_LOG_FILE "/var/log/pteidpkcs11/p11.log"
-#endif
-
 
 typedef struct P11_MAP_TYPE 
 { 

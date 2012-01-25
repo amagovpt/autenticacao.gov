@@ -20,6 +20,7 @@
 //--module C:\develop\proj\eidmw\eidmw\_Binaries\Debug\pteidpkcs11.dll -t -l 
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include "pteid_p11.h"
 #include "util.h"
@@ -34,6 +35,10 @@ extern CK_FUNCTION_LIST pkcs11_function_list;
 
 static int g_final = 0; /* Belpic */
 static int g_init  = 0;
+
+#ifndef WIN32
+#define _strdup strdup
+#endif
 
 //  CMutex gMutex;
 //  CMutex SlotMutex[MAX_READERS];
@@ -51,13 +56,44 @@ static int g_init  = 0;
 CK_RV C_Initialize(CK_VOID_PTR pReserved)
 {
 int ret = CKR_OK;
+
+ const char *temp;
+ const char *env_vr, *tmpvar;
+ char * homedir;
 CK_C_INITIALIZE_ARGS_PTR p_args;
 
-#if _DEBUG
-   log_init(DEFAULT_LOG_FILE, LOG_LEVEL_INFO);
+#ifdef WIN32
+   env_vr = "APPDATA";
+   char sep = '\\';
+#else    
+   env_vr = "HOME";
+   char sep = '/';
+#endif   
+
+   temp = getenv(env_vr);
+   if (temp != NULL) {
+       tmpvar = _strdup(temp);
+   }
+   if (tmpvar == NULL) 
+   {
+#ifndef WIN32
+	tmpvar = "/tmp";
 #else
-   log_init(DEFAULT_LOG_FILE, LOG_LEVEL_WARNING);
+	tmpvar = "C:\\Temp";
+#endif			
+   }
+
+   char *log_path = (char *)malloc(strlen(tmpvar)+20);
+   snprintf (log_path, strlen(homedir)+20, "%s%c.pteid-pkcs11.log", tmpvar, sep);
+
+#if _DEBUG
+   log_init(log_path, LOG_LEVEL_INFO);
+#else
+   log_init(log_path, LOG_LEVEL_WARNING);
 #endif
+   fprintf(stderr, "Created logfile at %s\n", log_path);
+   free(log_path);
+
 	log_trace(WHERE, "I: enter pReserved = %p",pReserved);
    if (g_init)
       {
