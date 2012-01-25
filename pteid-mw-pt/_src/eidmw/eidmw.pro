@@ -49,4 +49,7 @@ CONFIG += ordered
 data.path +=  /usr/local/share/certs
 data.files += misc/certs/*
 
-INSTALLS += data
+datasc.path += /usr/local/bin
+datasc.files += pteidlinuxversion.pl
+
+INSTALLS += data datasc
