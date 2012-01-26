@@ -305,7 +305,7 @@ APL_Pins *APL_SmartCard::getPins()
 	if(!m_pins)
 	{
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for unly one instanciation
-		if (!m_pins)						//We test again to be sure it isn't instanciated between the first if and the lock
+		if (!m_pins)				//We test again to be sure it isn't instanciated between the first if and the lock
 		{
 			m_pins=new APL_Pins(this);
 		}

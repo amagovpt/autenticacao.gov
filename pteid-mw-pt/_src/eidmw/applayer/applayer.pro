@@ -33,7 +33,8 @@ LIBS += -L../lib \
 	    -l$${DLGLIB} \
 	    -lcrypto -lssl \
 	    -lxerces-c \
-	    -lfreeimagePTEiD
+	    -lfreeimagePTEiD \
+	    -fxml-security-c
 
 macx: LIBS += -L../../ThirdParty/Xerces/Xerces-2.8.0-mac/lib
 macx: LIBS += -Wl,-framework -Wl,CoreFoundation
@@ -79,7 +80,8 @@ HEADERS += \
 	eidmw_XMLParser.h \
 	MiscUtil.h \
 	PhotoPteid.h \
-	APLCardAuthenticationKey.h
+	APLCardAuthenticationKey.h \
+	XadesSignature.h
 
 ### EMV-CAP support
 ###        EMV-Cap-Helper.h \
@@ -101,7 +103,9 @@ SOURCES += \
     XMLParser.cpp       \
     MiscUtil.cpp \
     PhotoPteid.cpp \
-    APLCardAuthenticationKey.cpp
+    APLCardAuthenticationKey.cpp \
+    XadesSignature.cpp
+
 
 ### EMV-CAP support
 ###    EMV-Cap-Helper.cpp \
