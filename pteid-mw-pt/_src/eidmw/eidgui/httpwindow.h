@@ -18,9 +18,8 @@
  *
  * Author: Luis Medinas <luis.medinas@caixamagica.pt>
  **************************************************************************** */
-
-#ifndef AUTOUPDATES_H_
-#define AUTOUPDATES_H_
+#ifndef HTTPWINDOW_H
+#define HTTPWINDOW_H
 
 #include <QDialog>
 #include <QNetworkAccessManager>
@@ -36,37 +35,29 @@ class QSslError;
 class QAuthenticator;
 class QNetworkReply;
 
-class AutoUpdates : public QDialog
+
+class HttpWindow : public QDialog
 {
 	Q_OBJECT
 
 public:
-	AutoUpdates(QWidget *parent = 0);
-	~AutoUpdates();
-
-	std::string CheckUpdates();
-	bool VerifyUpdates(std::string filedata);
-	bool FileExists(const char *filename);
-	//The Perl script can be run only one time to generate the file
-	std::string VerifyOS(std::string param, bool runscript);
-	void ChooseVersion(std::string distro, std::string arch);
-	void DownloadDialog();
+	HttpWindow(std::string uri, QWidget *parent = 0);
 
 	void startRequest(QUrl url);
 
 private slots:
-	void cancelDownload();
 	void downloadFile();
+	void cancelDownload();
 	void httpFinished();
 	void httpReadyRead();
 	void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
 
 private:
-    QPushButton *cancelButton;
-    QDialogButtonBox *buttonBox;
-    QPushButton *downloadButton;
-    QLabel *statusLabel;
-    QProgressDialog *progressDialog;
+	QLabel *statusLabel;
+	QProgressDialog *progressDialog;
+	QPushButton *downloadButton;
+	QPushButton *cancelButton;
+	QDialogButtonBox *buttonBox;
 
 	QUrl url;
 	QNetworkAccessManager qnam;
@@ -74,7 +65,6 @@ private:
 	QFile *file;
 	int httpGetId;
 	bool httpRequestAborted;
-	std::string filedata;
 };
 
-#endif /* AUTOUPDATES_H_ */
+#endif

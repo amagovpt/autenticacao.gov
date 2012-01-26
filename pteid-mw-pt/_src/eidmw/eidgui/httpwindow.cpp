@@ -22,32 +22,17 @@
 #include <QtGui>
 #include <QtNetwork>
 
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <stdlib.h>
-#include <cstring>
-
-#include "eidlib.h"
-#include "AutoUpdates.h"
 #include "httpwindow.h"
 
-#ifdef WIN32
-#include <windows.h>
-#include <stdio.h>
-#include "verinfo.h"
-#else
-#include "pteidversions.h"
-#endif
+std::string urli;
+std::string dtitle ("Cartão de Cidadão");
 
-using namespace eIDMW;
-
-std::string ddtitle ("Cartão de Cidadão");
-
-AutoUpdates::AutoUpdates(QWidget *parent)
+HttpWindow::HttpWindow(std::string uri, QWidget *parent)
 : QDialog(parent)
 {
-	statusLabel = new QLabel(tr("Do you want to check for updates ?"));
+	urli = uri;
+
+	statusLabel = new QLabel(tr("There are updates available press Yes do perform the updates."));
 
 	cancelButton = new QPushButton(tr("Cancel"));
 	cancelButton->setDefault(true);
@@ -59,6 +44,9 @@ AutoUpdates::AutoUpdates(QWidget *parent)
 	buttonBox->addButton(cancelButton, QDialogButtonBox::ActionRole);
 	buttonBox->addButton(downloadButton, QDialogButtonBox::RejectRole);
 
+	QTextEdit *textEditor = new QTextEdit();
+	textEditor->setText("Release Notes");
+	textEditor->setReadOnly(true);
 
 	progressDialog = new QProgressDialog(this);
 
@@ -71,22 +59,14 @@ AutoUpdates::AutoUpdates(QWidget *parent)
 	QVBoxLayout *mainLayout = new QVBoxLayout;
 	mainLayout->addLayout(topLayout);
 	mainLayout->addWidget(statusLabel);
+	mainLayout->addWidget(textEditor);
 	mainLayout->addWidget(buttonBox);
 	setLayout(mainLayout);
 
-	setWindowTitle(QString::fromUtf8(ddtitle.c_str()));
+	setWindowTitle(QString::fromUtf8(dtitle.c_str()));
 }
 
-AutoUpdates::~AutoUpdates()
-{
-}
-
-void AutoUpdates::cancelDownload()
-{
-	httpRequestAborted = true;
-	reply->abort();
-}
-void AutoUpdates::startRequest(QUrl url)
+void HttpWindow::startRequest(QUrl url)
 {
 	reply = qnam.get(QNetworkRequest(url));
 	connect(reply, SIGNAL(finished()),
@@ -97,17 +77,27 @@ void AutoUpdates::startRequest(QUrl url)
 			this, SLOT(updateDataReadProgress(qint64,qint64)));
 }
 
-void AutoUpdates::downloadFile()
+void HttpWindow::downloadFile()
 {
-	url = "http://people.caixamagica.pt/lmedinas/autoupdates/version.txt";
+	url = urli.c_str();
 
 	QFileInfo fileInfo(url.path());
 	QString fileName = fileInfo.fileName();
 	if (fileName.isEmpty())
 	{
-		QMessageBox::information(this, QString::fromUtf8(ddtitle.c_str()),
+		QMessageBox::information(this, QString::fromUtf8(dtitle.c_str()),
 				tr("Unable to download the update please check your Network Connection.")
 		.arg(fileName).arg(file->errorString()));
+	}
+
+	if (QFile::exists(fileName)) {
+		if (QMessageBox::question(this, QString::fromUtf8(dtitle.c_str()),
+				tr("There already exists a file called %1 in "
+						"the current directory. Overwrite?").arg(fileName),
+						QMessageBox::Yes|QMessageBox::No, QMessageBox::No)
+		== QMessageBox::No)
+			return;
+		QFile::remove(fileName);
 	}
 
 	std::string tmpfile;
@@ -117,7 +107,7 @@ void AutoUpdates::downloadFile()
 
 	file = new QFile(QString::fromUtf8((tmpfile.c_str())));
 	if (!file->open(QIODevice::WriteOnly)) {
-		QMessageBox::information(this, QString::fromUtf8(ddtitle.c_str()),
+		QMessageBox::information(this, QString::fromUtf8(dtitle.c_str()),
 				tr("Unable to save the file %1: %2.")
 		.arg(fileName).arg(file->errorString()));
 		delete file;
@@ -125,7 +115,7 @@ void AutoUpdates::downloadFile()
 		return;
 	}
 
-	progressDialog->setWindowTitle(QString::fromUtf8(ddtitle.c_str()));
+	progressDialog->setWindowTitle(QString::fromUtf8(dtitle.c_str()));
 	progressDialog->setLabelText(tr("Downloading %1.").arg(fileName));
 	downloadButton->setEnabled(false);
 
@@ -134,7 +124,15 @@ void AutoUpdates::downloadFile()
 	startRequest(url);
 }
 
-void AutoUpdates::httpFinished()
+void HttpWindow::cancelDownload()
+{
+	statusLabel->setText(tr("Download canceled. Try again."));
+	httpRequestAborted = true;
+	reply->abort();
+	downloadButton->setEnabled(true);
+}
+
+void HttpWindow::httpFinished()
 {
 	if (httpRequestAborted) {
 		if (file) {
@@ -148,8 +146,6 @@ void AutoUpdates::httpFinished()
 		return;
 	}
 
-	std::cout << "eol " << filedata << std::endl;
-	VerifyUpdates(filedata);
 	progressDialog->hide();
 	file->flush();
 	file->close();
@@ -157,13 +153,13 @@ void AutoUpdates::httpFinished()
 	QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
 	if (reply->error()) {
 		file->remove();
-		QMessageBox::information(this, QString::fromUtf8(ddtitle.c_str()),
+		QMessageBox::information(this, QString::fromUtf8(dtitle.c_str()),
 				tr("Download failed: %1.")
 		.arg(reply->errorString()));
 		downloadButton->setEnabled(true);
 	} else if (!redirectionTarget.isNull()) {
 		QUrl newUrl = url.resolved(redirectionTarget.toUrl());
-		if (QMessageBox::question(this, QString::fromUtf8(ddtitle.c_str()),
+		if (QMessageBox::question(this, QString::fromUtf8(dtitle.c_str()),
 				tr("Redirect to %1 ?").arg(newUrl.toString()),
 				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
 			url = newUrl;
@@ -183,145 +179,22 @@ void AutoUpdates::httpFinished()
 	file = 0;
 }
 
-void AutoUpdates::httpReadyRead()
+void HttpWindow::httpReadyRead()
 {
 	// this slot gets called everytime the QNetworkReply has new data.
 	// We read all of its new data and write it into the file.
 	// That way we use less RAM than when reading it at the finished()
 	// signal of the QNetworkReply
-
-	QByteArray data = reply->readAll();
-	QString qsdata(data);
-	filedata = qsdata.toStdString();
-
 	if (file)
 		file->write(reply->readAll());
 }
 
-void AutoUpdates::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
+void HttpWindow::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
 {
 	if (httpRequestAborted)
 		return;
 
 	progressDialog->setMaximum(totalBytes);
 	progressDialog->setValue(bytesRead);
-}
-
-
-
-std::string AutoUpdates::CheckUpdates()
-{
-
-}
-
-bool AutoUpdates::VerifyUpdates(std::string filedata)
-{
-	QString strVersion (WIN_GUI_VERSION_STRING);
-	std::string ver = strVersion.toStdString();
-	ver.replace(2,1,"");
-	ver.replace(3,1,"");
-	ver.replace(3,1,"");
-	ver.replace(4,6, "");
-
-	double localverd = atof(ver.c_str());
-	//printf ("value %f\n", localverd);
-
-	std::string remoteversion = filedata;
-	double remoteversiond = atof(remoteversion.c_str());
-
-	//return true;
-	if (localverd < remoteversiond)
-	{
-		this->close();
-		std::string distrover = VerifyOS("distro", true);
-		std::string archver = VerifyOS("arch", false);
-		ChooseVersion(distrover, archver);
-		return true;
-	} else {
-		std::string titlenoup = "Actualizações";
-		std::string infotextnoup = "Não existem Actualizações de momento!";
-
-		QMessageBox msgBoxnoupdates(QMessageBox::Information, QString::fromUtf8(titlenoup.c_str()), QString::fromUtf8(infotextnoup.c_str()), 0, this);
-		msgBoxnoupdates.exec();
-		return false;
-	}
-}
-
-bool AutoUpdates::FileExists(const char *filename)
-{
-	std::ifstream ifile(filename);
-	ifile.close();
-	return ifile;
-}
-
-std::string AutoUpdates::VerifyOS(std::string param, bool runscript)
-{
-#ifdef WIN32
-
-	//check if it's Windows 32 or 64 bits
-
-#else
-	bool chkfile;
-	std::string distrostr;
-	std::string archstr;
-
-	if (runscript)
-	{
-		int sysret;
-		sysret = system("/usr/local/bin/pteidlinuxversion.pl");
-		if (sysret != 0)
-			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Problem trying to run pteidlinuxversion.pl");
-	}
-
-	try
-	{
-		if (FileExists("/tmp/linuxversion"))
-		{
-			std::ifstream linuxversion("/tmp/linuxversion");
-			std::string line;
-
-			while(std::getline(linuxversion, line))
-			{
-				std::stringstream   linestream(line);
-				std::string         value;
-
-				getline(linestream,value, ';');
-				std::istringstream distro(value);
-				distro >> distrostr;
-
-				getline(linestream, value, ';');
-				std::istringstream arch(value);
-				arch >> archstr;
-			}
-		}
-	} catch (...) {
-		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "can't open file /tmp/linuxversion");
-	}
-
-	if (param == "distro")
-		return distrostr;
-	else
-		return archstr;
-
-#endif
-
-}
-
-void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
-{
-	std::cout << "Choose Version " << distro << " arch " << arch << std::endl;
-	if (arch == "x86_64")
-	{
-		if (distro == "debian")
-		{
-			HttpWindow httpWin("http://people.caixamagica.pt/lmedinas/autoupdates/PteidMW35-Basic-en.msi");
-			httpWin.show();
-			httpWin.exec();
-		}
-		else if (distro == "redhat")
-		{
-
-		}
-	}
 }
 

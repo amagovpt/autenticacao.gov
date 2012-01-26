@@ -9,6 +9,8 @@ TEMPLATE = app
 TARGET = $${EIDGUI} 
 VERSION = $${EIDGUI_MAJ}.$${EIDGUI_MIN}.$${EIDGUI_REV}
 
+QT += network
+
 message("Compile $$TARGET")
 
 ###
@@ -98,7 +100,6 @@ PRE_TARGETDEPS += $${translation_de.target} \
 DEPENDPATH += . ../dialogs 
 INCLUDEPATH += . ../dialogs ../eidlib ../_Builds ../common
 INCLUDEPATH += /usr/include/cairo
-INCLUDEPATH += /usr/include/curl
 
 LIBS += -Wl,-rpath,/usr/local/lib/pteidqt
 
@@ -106,8 +107,7 @@ LIBS += -L../lib  \
         -l$${EIDLIB} \
 	-l$${COMMONLIB} \
         -l$${APPLAYERLIB} \
-        -lfreeimagePTEiD \
-        -lcurl
+        -lfreeimagePTEiD
 
 LIBS += -lcairo
 
@@ -127,6 +127,7 @@ macx:LIBS += -L../../ThirdParty/Xerces/Xerces-2.8.0-mac/lib
 HEADERS += CardInformation.h \
            dlgAbout.h \
            dlgOptions.h \
+           httpwindow.h \
            AutoUpdates.h \
            mainwnd.h \
            Settings.h \
@@ -143,6 +144,7 @@ FORMS += dlgAbout.ui dlgOptions.ui mainwnd.ui picturepopup.ui dlgPrint.ui dlgSig
 SOURCES += CardInformation.cpp \
            dlgAbout.cpp \
            dlgOptions.cpp \
+           httpwindow.cpp \
            AutoUpdates.cpp \
            main.cpp \
            mainwnd.cpp \

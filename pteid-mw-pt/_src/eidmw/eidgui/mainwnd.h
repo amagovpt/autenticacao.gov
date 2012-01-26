@@ -229,8 +229,6 @@ private slots:
 	void setLanguageDe( void );
 	void restoreWindow( void );
 	void messageRespond( const QString& message);
-	void UpdatesCancelled( void );
-
 
 	// eventFilter to Catch actions from "personalized toolbar"
 	bool eventFilter(QObject *,QEvent *);
@@ -303,7 +301,6 @@ protected:
 	QTranslator			m_translator;
 
 	QProgressDialog *m_progress;
-	QProgressDialog *pdialog;
 	QFutureWatcher<void> FutureWatcher;
 
 	PinInfo list_of_pins[3]; 
@@ -344,9 +341,6 @@ private:
 	void LoadDataCertificates(PTEID_EIDCard& Card);
 	void LoadDataMC(PTEID_MemoryCard& Card);
 	void on_actionUpdates_triggered( void );
-	void UpdatesCheck( void );
-	void NeedUpdates( void );
-	void DontNeedUpdates( void );
 
 	void InitLanguageMenu( void );
 	void setLanguage( void );
@@ -455,7 +449,6 @@ private:
 	bool					m_ShowBalloon;			//!< To avoid the message eID still running when the gui start minimize
 	QMessageBox*			m_msgBox;
 	PTEID_CertifStatus		m_connectionStatus;
-	bool needupdates;
 	
 public:
 	static tCertPerReader			m_certContexts;			//!< certificate contexts of each reader

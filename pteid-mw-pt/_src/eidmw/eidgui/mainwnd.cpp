@@ -2293,112 +2293,12 @@ void MainWnd::on_btnPIN_Change_clicked()
 //*****************************************************
 void MainWnd::on_actionUpdates_triggered( void )
 {
-	/*AutoUpdates *r = new AutoUpdates();
-	std::string distro = r->VerifyOS("distro", false);
-	std::string arch = r->VerifyOS("arch", false);
-	r->ChooseVersion(distro, arch);*/
-
 	//Verify OS
-	AutoUpdates *r = new AutoUpdates();
-	std::string osinfo;
-
-	osinfo = r->VerifyOS("distro", true);
-
-	if (osinfo == "unsupported")
-	{
-		std::string titleunsupported = "Actualizações";
-		std::string infounsupported = "A sua versão não é suportada. Utilize outras fontes de actualização.";
-
-		QMessageBox msgBoxunsupported(QMessageBox::Information, QString::fromUtf8(titleunsupported.c_str()), QString::fromUtf8(infounsupported.c_str()), 0, this);
-		msgBoxunsupported.exec();
-	}
-
-	// OS verify passed now check version
-	pdialog = new QProgressDialog();
-	pdialog->setLabelText("Searching for Updates...");
-	pdialog->setMinimum(0);
-	pdialog->setMaximum(0);
-	pdialog->setWindowModality(Qt::WindowModal);
-	connect(pdialog, SIGNAL(canceled()), this, SLOT(UpdatesCancelled()));
-	connect(&this->FutureWatcher, SIGNAL(finished()), m_progress, SLOT(cancel()));
-
-	QFuture<void> future = QtConcurrent::run(this, &MainWnd::UpdatesCheck);
-	this->FutureWatcher.setFuture(future);
-	pdialog->exec();
-	future.cancel();
-
-	if (needupdates)
-		NeedUpdates();
-	else
-		DontNeedUpdates();
+	AutoUpdates r;
+	r.show();
+	r.exec();
 }
 
-void MainWnd::NeedUpdates( void )
-{
-	QMessageBox msgBoxupdates;
-	std::string distro;
-	std::string arch;
-
-	std::string title = "Existem Actualizações para o PTeID";
-	msgBoxupdates.setText(QString::fromUtf8(title.c_str()));
-	std::string infotext = "Deseja descarregar e instalar as actualizações ?";
-	msgBoxupdates.setInformativeText(QString::fromUtf8(infotext.c_str()));
-	msgBoxupdates.setDetailedText("Release Notes");
-	msgBoxupdates.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
-	msgBoxupdates.setDefaultButton(QMessageBox::Cancel);
-	int ret = msgBoxupdates.exec();
-
-	AutoUpdates *r = new AutoUpdates();
-
-	switch (ret) {
-	case QMessageBox::Yes:
-		// Yes was clicked
-		//std::cout << "YES!! let the updates begin" << std::endl;
-		distro = r->VerifyOS("distro", false);
-		arch = r->VerifyOS("arch", false);
-		r->ChooseVersion(distro, arch);
-		break;
-	case QMessageBox::Cancel:
-		msgBoxupdates.close();
-		break;
-	default:
-		// should never be reached
-		break;
-	}
-
-}
-
-void MainWnd::DontNeedUpdates( void )
-{
-
-	std::string titlenoup = "Actualizações";
-	std::string infotextnoup = "Não existem Actualizações de momento!";
-
-	QMessageBox msgBoxnoupdates(QMessageBox::Information, QString::fromUtf8(titlenoup.c_str()), QString::fromUtf8(infotextnoup.c_str()), 0, this);
-	msgBoxnoupdates.exec();
-}
-
-void MainWnd::UpdatesCheck( void )
-{
-	AutoUpdates *r = new AutoUpdates();
-
-	bool checkupdates = r->VerifyUpdates();
-
-	delete r;
-	delete pdialog;
-
-	if (checkupdates)
-	{
-		needupdates = true;
-	} else {
-		needupdates = false;
-	}
-}
-
-void MainWnd::UpdatesCancelled( void )
-{
-	pdialog->close();
-}
 //*****************************************************
 // About clicked
 //*****************************************************
