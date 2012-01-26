@@ -169,6 +169,24 @@ private:
 };
 
 
+class APLCardAuthenticationKey;
+
+class PTEID_CardAuthKey : public PTEID_Object
+{
+public:
+	PTEIDSDK_API virtual ~PTEID_CardAuthKey();												/**< Destructor */
+
+	PTEIDSDK_API PTEID_ByteArray& getCardAuthKeyModulus();
+	PTEIDSDK_API PTEID_ByteArray& getCardAuthKeyExponent();
+
+	NOEXPORT_PTEIDSDK PTEID_CardAuthKey(const SDK_Context *context,const APLCardAuthenticationKey &impl);
+
+private:
+	PTEID_CardAuthKey(const PTEID_CardAuthKey& cardKey);				/**< Copy not allowed - not implemented */
+	PTEID_CardAuthKey& operator= (const PTEID_CardAuthKey& cardKey);	/**< Copy not allowed - not implemented */
+};
+
+
 /******************************************************************************//**
   * These structure are used for compatibility with old C sdk.
   *********************************************************************************/
@@ -901,6 +919,7 @@ public:
 	PTEIDSDK_API const char *getSurnameMother();			/**< Return field SurnameMother */
 	PTEIDSDK_API const char *getParents();					/**< Return field Parents */
 	PTEIDSDK_API PTEID_Photo& getPhotoObj();				/**< Return object Photo */
+	PTEIDSDK_API PTEID_CardAuthKey& getCardAuthKeyObj();	/**< Return object CardAuthKey */
 	PTEIDSDK_API const char *getPersoData();				/**< Return field PersoData */
 	PTEIDSDK_API const char *getValidation();				/**< Return field Validation */
 	PTEIDSDK_API const char *getMRZ1();						/**< Return field MRZ block 1 */
@@ -1555,6 +1574,18 @@ typedef struct
 	char serial[PTEID_MAX_ID_NUMBER_LEN];
 } PTEID_TokenInfo;
 
+/* The modulus and exponent are big integers in big endian notiation
+ * (= network byte order). The first byte can be 0x00 allthough this is
+ * not necessary (the value is allways considered to be positive).
+ */
+typedef struct
+{
+    unsigned char *modulus;
+    unsigned long modulusLength;  // number of bytes in modulus/length of the modulus
+    unsigned char *exponent;
+    unsigned char exponentLength; // number of bytes in exponent/length of the exponent
+} PTEID_RSAPublicKey;
+
 
 PTEIDSDK_API long PTEID_Init(
 			char *ReaderName		/**< in: the PCSC reader name (as returned by SCardListReaders()),
@@ -1730,6 +1761,58 @@ PTEIDSDK_API long PTEID_Activate(
 									e.g. {0x17 0x11 0x20 0x06} for the 17th of Nov. 2006) */
 	unsigned long ulMode	/**<in: mode: MODE_ACTIVATE_BLOCK_PIN to block the Activation PIN,
 									or to 0 otherwise (this should only to be used for testing). */
+);
+
+/**
+* Turn on/off SOD checking.
+* 'SOD' checking means that the validity of the ID data,
+* address data, the photo and the card authentication public
+* key is checked to ensure it is not forged.
+* This is done by reading the SOD file which contains hashes
+* over the above data and is signed by a DocumentSigner
+* certificate.
+*/
+PTEIDSDK_API long PTEID_SetSODChecking(
+	int bDoCheck	/**< in: true to turn on SOD checking, false to turn it off */
+);
+
+/**
+ * Specify the (root) certificates that are used to sign
+ * the DocumentSigner certificates in the SOD file.
+ * (The SOD file in the card is signed by a Document
+ *  Signer cert, and this cert is inside the SOD as well).
+ *
+ * By default, this library reads the certificates that are
+ * present in the %appdir%/eidstore/certs dir (in which %appdir%
+ * is the directory in which the application resides.
+ * So if this directory doesn't exist (or doesn't contain the
+ * correct cert for the card), you should call this function
+ * to specify them; or turn off SOD checkking with the
+ * PTEID_SetSODChecking() function.
+ * If you call this function
+ * If you call this function again with NULL as parameter,
+ * then the default CA certs will be used again.
+ */
+PTEIDSDK_API long PTEID_SetSODCAs(
+	PTEID_Certifs *Certifs	/**< in: the address of a PTEID_Certifs, or NULL */
+);
+
+/**
+ * Get the public key 'card authentication' key which can
+ * be used to verify the authenticity of the eID card.
+ * This public key is encoded in the ID file, and should
+ * not be confused with the 'Citizen Authentication key'.
+ *
+ * No memory allocation will be done for the PTEID_RSAPublicKey struct,
+ * so the 'modulus' and 'exponent' fields should have sufficiently memory
+ * allocated to hold the respective values; and the amount of memory
+ * should be given in the 'Length' fields. For example:
+ *   unsigned char modulus[128];
+ *   unsigned char exponent[3];
+ *   PTEID_RSAPublicKey cardPubKey = {modulus, sizeof(modulus), exponent, sizeof(exponent)};
+ */
+PTEIDSDK_API long PTEID_GetCardAuthenticationKey(
+	PTEID_RSAPublicKey *pCardAuthPubKey	/**< in: the address of a PTEID_RSAPublicKey struct */
 );
 
 

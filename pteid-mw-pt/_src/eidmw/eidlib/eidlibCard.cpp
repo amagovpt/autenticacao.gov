@@ -1519,5 +1519,34 @@ PTEIDSDK_API long PTEID_Activate(char *pszPin, unsigned char *pucDate, unsigned 
 	return 0;
 }
 
+PTEIDSDK_API long PTEID_SetSODChecking(int bDoCheck){
+	if (readerContext!=NULL){
+
+	}
+
+	return 0;
+}
+
+PTEIDSDK_API long PTEID_SetSODCAs( PTEID_Certifs *Certifs){
+	if (readerContext!=NULL){
+
+	}
+
+	return 0;
+}
+
+PTEIDSDK_API long PTEID_GetCardAuthenticationKey(PTEID_RSAPublicKey *pCardAuthPubKey){
+	if (readerContext!=NULL){
+		PTEID_CardAuthKey &cardKey = readerContext->getEIDCard().getID().getCardAuthKeyObj();
+
+		memcpy(pCardAuthPubKey->modulus, cardKey.getCardAuthKeyModulus().GetBytes(), cardKey.getCardAuthKeyModulus().Size());
+		pCardAuthPubKey->modulusLength = cardKey.getCardAuthKeyModulus().Size();
+		memcpy(pCardAuthPubKey->exponent, cardKey.getCardAuthKeyExponent().GetBytes(), cardKey.getCardAuthKeyExponent().Size());
+		pCardAuthPubKey->exponentLength = cardKey.getCardAuthKeyExponent().Size();
+	}
+
+	return 0;
+}
+
 
 }

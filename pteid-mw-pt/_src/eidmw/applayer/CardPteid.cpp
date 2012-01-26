@@ -31,6 +31,7 @@
 #include "eidErrors.h"
 #include "APLConfig.h"
 #include "PhotoPteid.h"
+#include "APLCardAuthenticationKey.h"
 
 #include "Log.h"
 
@@ -278,6 +279,10 @@ void APL_EidFile_ID::EmptyFields()
 		photo = NULL;
 	}
 	m_PhotoHash.ClearContents();
+	if (cardKey){
+		delete cardKey;
+		cardKey = NULL;
+	}
 	m_mappedFields = false;
 }
 
@@ -461,6 +466,13 @@ bool APL_EidFile_ID::MapFields()
 		photo = new PhotoPteid(photoRAW, cbeff, facialrechdr, facialinfo, imageinfo);
 	}
 
+	//Card Authentication Key (modulus + exponent)
+	{
+		CByteArray modulus = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_MODULUS, PTEIDNG_FIELD_ID_LEN_MODULUS);
+		CByteArray exponent = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_EXPONENT, PTEIDNG_FIELD_ID_LEN_EXPONENT);
+
+		cardKey = new APLCardAuthenticationKey(modulus,exponent);
+	}
 	//MRZ1
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Mrz1, PTEIDNG_FIELD_ID_LEN_Mrz1);
 	pteidngidBuffer.TrimRight(' ');
@@ -774,6 +786,13 @@ PhotoPteid *APL_EidFile_ID::getPhotoObj()
 
 	if(ShowData())
 		return photo;
+
+	return NULL;
+}
+
+APLCardAuthenticationKey *APL_EidFile_ID::getCardAuthKeyObj(){
+	if(ShowData())
+		return cardKey;
 
 	return NULL;
 }

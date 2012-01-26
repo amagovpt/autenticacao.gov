@@ -2041,6 +2041,10 @@ PhotoPteid *APL_DocEId::getPhotoObj()
 	return m_card->getFileID()->getPhotoObj();
 }
 
+APLCardAuthenticationKey *APL_DocEId::getCardAuthKeyObj(){
+	return m_card->getFileID()->getCardAuthKeyObj();
+}
+
 const char *APL_DocEId::getMRZ1(){
 	return m_card->getFileID()->getMRZ1();
 }

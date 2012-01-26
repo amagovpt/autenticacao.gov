@@ -337,6 +337,68 @@ PTEID_ByteArray& PTEID_Photo::getphotoImageinfo() {
 	return *out;
 }
 
+
+/*****************************************************************************************
+---------------------------------- PTEID_CardAuthKey ------------------------------------
+*****************************************************************************************/
+PTEID_CardAuthKey::PTEID_CardAuthKey(const SDK_Context *context,const APLCardAuthenticationKey &impl):PTEID_Object(context,(void *)&impl)
+{
+}
+
+PTEID_CardAuthKey::~PTEID_CardAuthKey()
+{
+	if(m_delimpl)
+	{
+		APLCardAuthenticationKey *pimpl=static_cast<APLCardAuthenticationKey *>(m_impl);
+		delete pimpl;
+		m_impl=NULL;
+	}
+}
+
+PTEID_ByteArray& PTEID_CardAuthKey::getCardAuthKeyModulus() {
+	PTEID_ByteArray *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APLCardAuthenticationKey *pimpl=static_cast<APLCardAuthenticationKey *>(m_impl);
+	CByteArray *ca = pimpl->getModulus();
+
+	out = dynamic_cast<PTEID_ByteArray *>(getObject(ca));
+	if (!out){
+		out = new PTEID_ByteArray(m_context,*(pimpl->getModulus()));
+		if(out)
+			addObject(out);
+		else
+			throw PTEID_ExParamRange();
+	}
+
+	END_TRY_CATCH
+
+	return *out;
+}
+
+PTEID_ByteArray& PTEID_CardAuthKey::getCardAuthKeyExponent() {
+	PTEID_ByteArray *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APLCardAuthenticationKey *pimpl=static_cast<APLCardAuthenticationKey *>(m_impl);
+	CByteArray *ca = pimpl->getExponent();
+
+	out = dynamic_cast<PTEID_ByteArray *>(getObject(ca));
+	if (!out){
+		out = new PTEID_ByteArray(m_context,*(pimpl->getExponent()));
+		if(out)
+			addObject(out);
+		else
+			throw PTEID_ExParamRange();
+	}
+
+	END_TRY_CATCH
+
+	return *out;
+}
+
 /*****************************************************************************************
 ---------------------------------------- PTEID_XMLDoc -------------------------------------------
 *****************************************************************************************/
@@ -1289,6 +1351,30 @@ PTEID_Photo& PTEID_EId::getPhotoObj()
 	out = dynamic_cast<PTEID_Photo *>(getObject(photo));
 	if (!out){
 		out = new PTEID_Photo(m_context,*photo);
+		if(out)
+			addObject(out);
+		else
+			throw PTEID_ExParamRange();
+
+	}
+
+	END_TRY_CATCH
+
+	return *out;
+}
+
+PTEID_CardAuthKey& PTEID_EId::getCardAuthKeyObj()
+{
+	PTEID_CardAuthKey *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
+	APLCardAuthenticationKey *cardKey = pimpl->getCardAuthKeyObj();
+
+	out = dynamic_cast<PTEID_CardAuthKey *>(getObject(cardKey));
+	if (!out){
+		out = new PTEID_CardAuthKey(m_context,*cardKey);
 		if(out)
 			addObject(out);
 		else

@@ -78,7 +78,8 @@ HEADERS += \
 	eidmw_XML_DefHandler.h \
 	eidmw_XMLParser.h \
 	MiscUtil.h \
-	PhotoPteid.h
+	PhotoPteid.h \
+	APLCardAuthenticationKey.h
 
 ### EMV-CAP support
 ###        EMV-Cap-Helper.h \
@@ -99,7 +100,8 @@ SOURCES += \
     CRLService.cpp       \
     XMLParser.cpp       \
     MiscUtil.cpp \
-    PhotoPteid.cpp
+    PhotoPteid.cpp \
+    APLCardAuthenticationKey.cpp
 
 ### EMV-CAP support
 ###    EMV-Cap-Helper.cpp \
