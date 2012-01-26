@@ -59,7 +59,6 @@ int ret = CKR_OK;
 
  const char *temp;
  const char *env_vr, *tmpvar;
- char * homedir;
 CK_C_INITIALIZE_ARGS_PTR p_args;
 
 #ifdef WIN32
@@ -84,14 +83,13 @@ CK_C_INITIALIZE_ARGS_PTR p_args;
    }
 
    char *log_path = (char *)malloc(strlen(tmpvar)+20);
-   snprintf (log_path, strlen(homedir)+20, "%s%c.pteid-pkcs11.log", tmpvar, sep);
+   snprintf (log_path, strlen(tmpvar)+20, "%s%c.pteid-pkcs11.log", tmpvar, sep);
 
 #if _DEBUG
    log_init(log_path, LOG_LEVEL_INFO);
 #else
    log_init(log_path, LOG_LEVEL_WARNING);
 #endif
-   fprintf(stderr, "Created logfile at %s\n", log_path);
    free(log_path);
 
 	log_trace(WHERE, "I: enter pReserved = %p",pReserved);
