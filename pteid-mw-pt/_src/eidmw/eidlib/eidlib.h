@@ -1430,6 +1430,11 @@ PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const
 #define PTEID_ACTIVE_CARD				1
 #define PTEID_INACTIVE_CARD 			0
 
+#define PTEID_ADDRESS_PIN_ID			131
+#define PTEID_NO_PIN_NEEDED				0
+
+#define MODE_ACTIVATE_BLOCK_PIN   1
+
 typedef enum {
 	COMP_CARD_TYPE_ERR = 0, // Something went wrong, or unknown card type
 	COMP_CARD_TYPE_IAS07,   // IAS 0.7 card
@@ -1713,6 +1718,18 @@ PTEIDSDK_API long PTEID_WriteFile(
  */
 PTEIDSDK_API long PTEID_IsActivated(
 	unsigned long *pulStatus	/**< out the activation status: 0 if not activate, 1 if activated */
+);
+
+/**
+ * Activate the card (= update a specific file on the card).
+ * If the card has been activated allready, SC_ERROR_NOT_ALLOWED is returned.
+ */
+PTEIDSDK_API long PTEID_Activate(
+	char *pszPin,			/**< in: the value of the Activation PIN */
+	unsigned char *pucDate,	/**< in: the current date in DD MM YY YY format in BCD format (4 bytes),
+									e.g. {0x17 0x11 0x20 0x06} for the 17th of Nov. 2006) */
+	unsigned long ulMode	/**<in: mode: MODE_ACTIVATE_BLOCK_PIN to block the Activation PIN,
+									or to 0 otherwise (this should only to be used for testing). */
 );
 
 

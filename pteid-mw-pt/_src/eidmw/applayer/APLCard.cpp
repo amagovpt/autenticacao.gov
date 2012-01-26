@@ -259,9 +259,10 @@ unsigned long APL_SmartCard::readFile(const char *csPath, CByteArray &oData, uns
 unsigned long APL_SmartCard::readFile(const char *fileID, CByteArray &in,APL_Pin *pin,const char *csPinCode)
 {
 	unsigned long lRemaining=0;
-	if(!pin)
-		if(strlen(csPinCode)>0)
+	if(pin)
+		if(csPinCode != NULL)
 			pin->verifyPin(csPinCode,lRemaining);
+
 
 	return readFile(fileID,in,0UL,0UL);
 }
@@ -269,8 +270,9 @@ unsigned long APL_SmartCard::readFile(const char *fileID, CByteArray &in,APL_Pin
 bool APL_SmartCard::writeFile(const char *fileID,const CByteArray &out,APL_Pin *pin,const char *csPinCode)
 {
 	unsigned long lRemaining=0;
-	if(!pin)
-		if(strlen(csPinCode)>0)
+
+	if(pin)
+		if(csPinCode != NULL)
 			pin->verifyPin(csPinCode,lRemaining);
 
 	return APL_Card::writeFile(fileID,out);

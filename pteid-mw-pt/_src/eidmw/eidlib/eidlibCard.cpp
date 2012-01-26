@@ -1309,7 +1309,7 @@ PTEIDSDK_API long PTEID_VerifyPIN(unsigned char PinId,	char *Pin, long *triesLef
 	if (readerContext!=NULL){
 		if (PinId != 1 && PinId != 129 && PinId != 130 && PinId != 131)
 			return 0;
-
+		// why 128? id = 1,2,3..., pinid = (1 or 129), 130, 131
 		id = (PTEID_GetCardType() == COMP_CARD_TYPE_IAS101 && PinId == 1) ? PinId : PinId - 128;
 
 		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
@@ -1350,7 +1350,7 @@ PTEIDSDK_API long PTEID_ChangePIN(unsigned char PinId, char *pszOldPin, char *ps
 	if (readerContext!=NULL){
 		if (PinId != 1 && PinId != 129 && PinId != 130 && PinId != 131)
 			return 0;
-
+		// why 128? id = 1,2,3..., pinid = (1 or 129), 130, 131
 		id = (PTEID_GetCardType() == COMP_CARD_TYPE_IAS101 && PinId == 1) ? PinId : PinId - 128;
 		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
 		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
@@ -1367,6 +1367,7 @@ PTEIDSDK_API long PTEID_ChangePIN(unsigned char PinId, char *pszOldPin, char *ps
 	return 0;
 }
 
+// why 128? id = 1,2,3..., pinid = (1 or 129), 130, 131
 PTEIDSDK_API long PTEID_GetPINs(PTEIDPins *Pins){
 	long int i=0;
 	unsigned long currentId= 0;
@@ -1449,16 +1450,55 @@ PTEIDSDK_API long PTEID_SelectADF(unsigned char *adf, long adflen){
 }
 
 PTEIDSDK_API long PTEID_ReadFile(unsigned char *file,int filelen,unsigned char *out,unsigned long *outlen,unsigned char PinId){
-	if (readerContext!=NULL){
 
+	if (readerContext!=NULL && (PinId == PTEID_ADDRESS_PIN_ID || PinId == PTEID_NO_PIN_NEEDED)){
+		PTEID_EIDCard &card = readerContext->getEIDCard();
+		CByteArray temp;
+		PTEID_ByteArray in;
+		PTEID_Pin*	pin = NULL;
+
+		if (PinId != PTEID_NO_PIN_NEEDED){
+			PTEID_Pins &pins = readerContext->getEIDCard().getPins();
+			for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
+				pin	= &(pins.getPinByNumber(pinIdx));
+				if (pin->getId() == PinId-128){ // why 128? id = 1,2,3..., pinid = (1 or 129), 130, 131
+					break;
+				}
+			}
+		}
+
+		temp.Append(file,filelen);
+		card.readFile(temp.ToString(false).c_str(),in, pin,"");
+
+		*outlen = (*outlen>in.Size() ? in.Size() : *outlen);
+		memcpy(out, in.GetBytes(),*outlen);
 	}
 
 	return 0;
 }
 
 PTEIDSDK_API long PTEID_WriteFile(unsigned char *file, int filelen,	unsigned char *in, unsigned long inlen,	unsigned char PinId){
-	if (readerContext!=NULL){
+	if (readerContext!=NULL && (PinId == 1 || PinId == 129)){
+		PTEID_EIDCard &card = readerContext->getEIDCard();
+		CByteArray temp;
+		PTEID_ByteArray out;
+		PTEID_Pin*	pin = NULL;
 
+		if (PinId != PTEID_NO_PIN_NEEDED){
+			PinId = 1;
+			PTEID_Pins &pins = readerContext->getEIDCard().getPins();
+			for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
+				pin	= &(pins.getPinByNumber(pinIdx));
+				if (pin->getId() == PinId)
+					break;
+			}
+		}
+
+		out.Append(in,inlen);
+		temp.Append(file,filelen);
+		if (card.writeFile(temp.ToString(false).c_str(),out, pin,""))
+			return 0;
+		return -1;
 	}
 
 	return 0;
@@ -1468,6 +1508,14 @@ PTEIDSDK_API long PTEID_IsActivated(unsigned long *pulStatus){
 
 	if (readerContext!=NULL)
 		*pulStatus = (readerContext->getEIDCard().getVersionInfo().isActive() ? PTEID_ACTIVE_CARD : PTEID_INACTIVE_CARD);
+	return 0;
+}
+
+PTEIDSDK_API long PTEID_Activate(char *pszPin, unsigned char *pucDate, unsigned long ulMode){
+	if (readerContext!=NULL){
+
+	}
+
 	return 0;
 }
 
