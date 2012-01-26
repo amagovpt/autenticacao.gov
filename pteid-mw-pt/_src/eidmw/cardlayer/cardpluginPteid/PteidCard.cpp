@@ -912,18 +912,21 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 	unsigned int uiFileID = 0;
 	unsigned long ulLen = (unsigned long) (csPath.size() / 2);
 	if (ulLen >= 2)
-		uiFileID = Hex2Byte(csPath, ulLen - 2) + Hex2Byte(csPath, ulLen - 1);
+	  uiFileID = Hex2Byte(csPath, ulLen - 2) + Hex2Byte(csPath, ulLen - 1);
 
 	switch(uiFileID)
 	{
 	case 0x2F00: // EF(DIR)
-		return m_ucAppletVersion < 0x20 ? simpleCache : dontCache;
-	case 0x5031: // EF(ODF)
+	  return simpleCache;
+	case 129: // EF(ODF) 4F005031 (Dont cache otherwise will cause issues on IAS cards)
+	  return dontCache;
 	case 0x5032: // EF(TokenInfo)
-	case 0x5034: // EF(AODF)
-	case 0x5035: // EF(PrKDF)
+	case 69: // AOD (4401)
+	case 3: // 0003 (TRACE)
 	case 246: // EF07 (PersoData)
- 	//case 244: // EF05 (Address)
+	  return simpleCache;
+	case 244: // EF05 (Address)
+	  return dontCache;
 	case 241: // EF02 (ID)
 	case 245: // EF06 (SOD)
 #ifdef CAL_EMULATION  // the EF(ID#RN) of the emulated test cards have the same serial nr
@@ -934,15 +937,12 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 	case 0x4031: // EF(ID#RN)
 		return checkSerial;
 #endif	
-	case 0x4032: // EF(SGN#RN)
-	case 0x4034: // EF(SGN#Adress)
-		return check16Cache;
-	case 0x5038: // EF(Cert#2) (authentication)
-	case 0x5039: // EF(Cert#3) (non repudiation)
-	case 0x503A: // EF(Cert#4) (Citizen CA)
-	case 0x503B: // EF(Cert#6) (root)
+	case 251: // EF0C (CertD)
+	case 248: // EF09 (Cert Auth)
+	case 247: // EF08 (Cert Sign)
+	case 254: // EF0F (Cert Root Sign)
+	case 255: // EF10 (Cert Root Auth)
+	case 256: // EF11 (CERT ROOT CA)
 		return certCache;
 	}
-//*/
-	//return dontCache;
 }
