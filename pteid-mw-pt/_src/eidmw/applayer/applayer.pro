@@ -34,7 +34,7 @@ LIBS += -L../lib \
 	    -lcrypto -lssl \
 	    -lxerces-c \
 	    -lfreeimagePTEiD \
-	    -fxml-security-c
+	    -lxml-security-c
 
 macx: LIBS += -L../../ThirdParty/Xerces/Xerces-2.8.0-mac/lib
 macx: LIBS += -Wl,-framework -Wl,CoreFoundation
@@ -54,7 +54,7 @@ isEmpty(EMULATE_CARDLAYER) {
 }
 
 DEPENDPATH += .
-INCLUDEPATH += . ../common ../cardlayer ../eidlib ../dialogs ../FreeImagePTEiD/Source
+INCLUDEPATH += . ../common ../cardlayer ../eidlib ../dialogs ../FreeImagePTEiD/Source ../xml-security-c-1.6.1
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 DEFINES += APPLAYER_EXPORTS
 # Input
@@ -129,3 +129,5 @@ contains(PKG_NAME,pteid): HEADERS += CardPteid.h	    \
 contains(PKG_NAME,pteid): SOURCES +=  CardPteid.cpp     \
            			     APLCardPteid.cpp  \
 	   			     cryptoFwkPteid.cpp
+
+QMAKE_PRE_LINK=cp --no-dereference ../xml-security-c-1.6.1/xsec/.libs/libxml-security* ../lib				     
