@@ -130,4 +130,4 @@ contains(PKG_NAME,pteid): SOURCES +=  CardPteid.cpp     \
            			     APLCardPteid.cpp  \
 	   			     cryptoFwkPteid.cpp
 
-QMAKE_PRE_LINK=cp --no-dereference ../xml-security-c-1.6.1/xsec/.libs/libxml-security* ../lib				     
+QMAKE_PRE_LINK=cp --no-dereference ../xml-security-c-1.6.1/xsec/.libs/libxml-security-c.so* ../lib				     
