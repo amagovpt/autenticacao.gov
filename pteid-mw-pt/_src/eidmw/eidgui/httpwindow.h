@@ -41,8 +41,8 @@ class HttpWindow : public QDialog
 	Q_OBJECT
 
 public:
-	HttpWindow(std::string uri, QWidget *parent = 0);
-
+	HttpWindow(std::string uri, std::string distro, QWidget *parent = 0);
+	~HttpWindow();
 	void startRequest(QUrl url);
 
 private slots:
@@ -65,6 +65,8 @@ private:
 	QFile *file;
 	int httpGetId;
 	bool httpRequestAborted;
+
+	void RunPackage(std::string pkg, std::string distro);
 };
 
 #endif

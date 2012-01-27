@@ -26,11 +26,13 @@
 
 std::string urli;
 std::string dtitle ("Cartão de Cidadão");
+std::string getdistro;
 
-HttpWindow::HttpWindow(std::string uri, QWidget *parent)
+HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
 : QDialog(parent)
 {
 	urli = uri;
+	getdistro = distro;
 
 	statusLabel = new QLabel(tr("There are updates available press Yes do perform the updates."));
 
@@ -66,6 +68,14 @@ HttpWindow::HttpWindow(std::string uri, QWidget *parent)
 	setWindowTitle(QString::fromUtf8(dtitle.c_str()));
 }
 
+HttpWindow::~HttpWindow()
+{
+	reply->deleteLater();
+	reply = 0;
+	delete file;
+	file = 0;
+}
+
 void HttpWindow::startRequest(QUrl url)
 {
 	reply = qnam.get(QNetworkRequest(url));
@@ -90,7 +100,8 @@ void HttpWindow::downloadFile()
 		.arg(fileName).arg(file->errorString()));
 	}
 
-	if (QFile::exists(fileName)) {
+	QFile::remove(fileName);
+	/*if (QFile::exists(fileName)) {
 		if (QMessageBox::question(this, QString::fromUtf8(dtitle.c_str()),
 				tr("There already exists a file called %1 in "
 						"the current directory. Overwrite?").arg(fileName),
@@ -98,7 +109,7 @@ void HttpWindow::downloadFile()
 		== QMessageBox::No)
 			return;
 		QFile::remove(fileName);
-	}
+	}*/
 
 	std::string tmpfile;
 	tmpfile.append(QDir::tempPath().toStdString());
@@ -171,12 +182,10 @@ void HttpWindow::httpFinished()
 		}
 	} else {
 		downloadButton->setEnabled(true);
+		this->close();
 	}
 
-	reply->deleteLater();
-	reply = 0;
-	delete file;
-	file = 0;
+	RunPackage("pteid-mw_1.0.1svn1522-1_amd64.deb", getdistro);
 }
 
 void HttpWindow::httpReadyRead()
@@ -196,5 +205,18 @@ void HttpWindow::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
 
 	progressDialog->setMaximum(totalBytes);
 	progressDialog->setValue(bytesRead);
+}
+
+void HttpWindow::RunPackage(std::string pkg, std::string distro)
+{
+	if (distro == "debian")
+	{
+		std::string systemex;
+		systemex.append("/usr/bin/software-center ");
+		systemex.append(QDir::tempPath().toStdString());
+		systemex.append("/");
+		systemex.append(pkg);
+		system(systemex.c_str());
+	}
 }
 

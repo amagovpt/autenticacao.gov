@@ -43,6 +43,8 @@
 using namespace eIDMW;
 
 std::string ddtitle ("Cartão de Cidadão");
+std::string serverurl = "http://people.caixamagica.pt/lmedinas/autoupdates/";
+std::string remoteversion = "http://people.caixamagica.pt/lmedinas/autoupdates/version.txt";
 
 AutoUpdates::AutoUpdates(QWidget *parent)
 : QDialog(parent)
@@ -99,7 +101,7 @@ void AutoUpdates::startRequest(QUrl url)
 
 void AutoUpdates::downloadFile()
 {
-	url = "http://people.caixamagica.pt/lmedinas/autoupdates/version.txt";
+	url = remoteversion.c_str();
 
 	QFileInfo fileInfo(url.path());
 	QString fileName = fileInfo.fileName();
@@ -148,7 +150,6 @@ void AutoUpdates::httpFinished()
 		return;
 	}
 
-	std::cout << "eol " << filedata << std::endl;
 	VerifyUpdates(filedata);
 	progressDialog->hide();
 	file->flush();
@@ -309,19 +310,53 @@ std::string AutoUpdates::VerifyOS(std::string param, bool runscript)
 
 void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 {
-	std::cout << "Choose Version " << distro << " arch " << arch << std::endl;
+	std::string downloadurl;
+	std::string pkgname;
+	downloadurl.append(serverurl);
+	pkgname.append("pteid-mw");
+
 	if (arch == "x86_64")
 	{
 		if (distro == "debian")
 		{
-			HttpWindow httpWin("http://people.caixamagica.pt/lmedinas/autoupdates/PteidMW35-Basic-en.msi");
+			pkgname.append("_1.0.1svn1522-1");
+			pkgname.append("_amd64.deb");
+			downloadurl.append(pkgname);
+			HttpWindow httpWin(downloadurl, distro);
+			httpWin.show();
+			httpWin.exec();
+			//delete httpWin;
+		}
+		else if (distro == "fedora")
+		{
+			pkgname.append("1.0.1.1522-2.1");
+			pkgname.append(".x86_64.rpm");
+			downloadurl.append(pkgname);
+			HttpWindow httpWin(downloadurl, distro);
 			httpWin.show();
 			httpWin.exec();
 		}
-		else if (distro == "redhat")
+	} else {
+		//32bits
+		if (distro == "debian")
 		{
-
+			pkgname.append("_1.0.1svn1522-1");
+			pkgname.append("_i386.deb");
+			downloadurl.append(pkgname);
+			HttpWindow httpWin(downloadurl, distro);
+			httpWin.show();
+			httpWin.exec();
+		}
+		else if (distro == "fedora")
+		{
+			pkgname.append("1.0.1.1522-2.1");
+			pkgname.append(".i386.rpm");
+			downloadurl.append(pkgname);
+			HttpWindow httpWin(downloadurl, distro);
+			httpWin.show();
+			httpWin.exec();
 		}
 	}
+
 }
 
