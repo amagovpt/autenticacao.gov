@@ -226,5 +226,10 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
 	{
 	  	execl ("/usr/bin/gpk-install-local-file", "gpk-install-local-file", pkgpath.c_str(), NULL);
 	}
+
+	if (distro == "suse")
+	{
+	    	execl ("/usr/bin/gpk-install-local-file", "gpk-install-local-file", pkgpath.c_str(), NULL);
+	}
 }
 

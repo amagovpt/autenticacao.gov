@@ -336,6 +336,16 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 			httpWin.show();
 			httpWin.exec();
 		}
+		else if (distro == "suse")
+		{
+		    	pkgname.append("-1.0.1.1522-2.1");
+		    	pkgname.append(".x86_64.rpm");
+		    	downloadurl.append(pkgname);
+		    	HttpWindow httpWin(downloadurl, distro);
+		    	httpWin.show();
+		    	httpWin.exec();
+		}
+
 	} else {
 		//32bits
 		if (distro == "debian")
@@ -355,6 +365,15 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 			HttpWindow httpWin(downloadurl, distro);
 			httpWin.show();
 			httpWin.exec();
+		}
+		else if (distro == "suse")
+		{
+		    	pkgname.append("-1.0.1.1522-2.1");
+		    	pkgname.append(".i586.rpm");
+		    	downloadurl.append(pkgname);
+		    	HttpWindow httpWin(downloadurl, distro);
+		    	httpWin.show();
+		    	httpWin.exec();
 		}
 	}
 
