@@ -1201,7 +1201,6 @@ void DSIGReference::setExternalHash(XMLByte *hash)
 	else {
 		tmpElt->setNodeValue(MAKE_UNICODE_STRING((char *) base64Hash));
 	}
-	std::cerr << "Debug: setExternalHash() finished" << std::endl;
 }
 
 // --------------------------------------------------------------------------------
