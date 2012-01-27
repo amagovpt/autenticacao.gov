@@ -169,21 +169,21 @@ private:
 };
 
 
-class APLCardAuthenticationKey;
+class APLPublicKey;
 
-class PTEID_CardAuthKey : public PTEID_Object
+class PTEID_PublicKey : public PTEID_Object
 {
 public:
-	PTEIDSDK_API virtual ~PTEID_CardAuthKey();												/**< Destructor */
+	PTEIDSDK_API virtual ~PTEID_PublicKey();												/**< Destructor */
 
 	PTEIDSDK_API PTEID_ByteArray& getCardAuthKeyModulus();
 	PTEIDSDK_API PTEID_ByteArray& getCardAuthKeyExponent();
 
-	NOEXPORT_PTEIDSDK PTEID_CardAuthKey(const SDK_Context *context,const APLCardAuthenticationKey &impl);
+	NOEXPORT_PTEIDSDK PTEID_PublicKey(const SDK_Context *context,const APLPublicKey &impl);
 
 private:
-	PTEID_CardAuthKey(const PTEID_CardAuthKey& cardKey);				/**< Copy not allowed - not implemented */
-	PTEID_CardAuthKey& operator= (const PTEID_CardAuthKey& cardKey);	/**< Copy not allowed - not implemented */
+	PTEID_PublicKey(const PTEID_PublicKey& cardKey);				/**< Copy not allowed - not implemented */
+	PTEID_PublicKey& operator= (const PTEID_PublicKey& cardKey);	/**< Copy not allowed - not implemented */
 };
 
 
@@ -703,6 +703,7 @@ public:
 	PTEIDSDK_API PTEID_Certificate &getCA();					/**< Return the ca certificate from the card */
 	PTEIDSDK_API PTEID_Certificate &getSignature();			/**< Return the signature certificate from the card */
 	PTEIDSDK_API PTEID_Certificate &getAuthentication();		/**< Return the authentication certificate from the card */
+	PTEIDSDK_API PTEID_PublicKey& getRootCAPubKey();				/**< Get the CVC CA public key that this card uses to verify the CVC key */
 
 	/**
 	 * Return a raw data from the card.
@@ -936,7 +937,7 @@ public:
 	PTEIDSDK_API const char *getSurnameMother();			/**< Return field SurnameMother */
 	PTEIDSDK_API const char *getParents();					/**< Return field Parents */
 	PTEIDSDK_API PTEID_Photo& getPhotoObj();				/**< Return object Photo */
-	PTEIDSDK_API PTEID_CardAuthKey& getCardAuthKeyObj();	/**< Return object CardAuthKey */
+	PTEIDSDK_API PTEID_PublicKey& getCardAuthKeyObj();	/**< Return object CardAuthKey */
 	PTEIDSDK_API const char *getPersoData();				/**< Return field PersoData */
 	PTEIDSDK_API const char *getValidation();				/**< Return field Validation */
 	PTEIDSDK_API const char *getMRZ1();						/**< Return field MRZ block 1 */
@@ -1830,6 +1831,26 @@ PTEIDSDK_API long PTEID_SetSODCAs(
  */
 PTEIDSDK_API long PTEID_GetCardAuthenticationKey(
 	PTEID_RSAPublicKey *pCardAuthPubKey	/**< in: the address of a PTEID_RSAPublicKey struct */
+);
+
+/**
+* Get the CVC CA public key that this card uses to verify the CVC key;
+* allowing the application to select the correct CVC certificate for
+* this card.
+*
+* No memory allocation will be done for the PTEID_RSAPublicKey struct,
+* so the 'modulus' and 'exponent' fields should have sufficiently memory
+* allocated to hold the respective values; and the amount of memory
+* should be given in the 'Length' fields. For example:
+*   unsigned char modulus[128];
+*   unsigned char exponent[3];
+*   PTEID_RSAPublicKey CVCRootKey = {modulus, sizeof(modulus), exponent, sizeof(exponent)};
+*
+* Upon successfull return, the modulusLength and exponentLength fields
+* will contain the effective modulus length resp. exponent length.
+*/
+PTEIDSDK_API long PTEID_GetCVCRoot(
+	PTEID_RSAPublicKey *pCVCRootKey	/**< in: the address of a PTEID_RSAPublicKey struct */
 );
 
 

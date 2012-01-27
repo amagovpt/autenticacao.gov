@@ -341,26 +341,26 @@ PTEID_ByteArray& PTEID_Photo::getphotoImageinfo() {
 /*****************************************************************************************
 ---------------------------------- PTEID_CardAuthKey ------------------------------------
 *****************************************************************************************/
-PTEID_CardAuthKey::PTEID_CardAuthKey(const SDK_Context *context,const APLCardAuthenticationKey &impl):PTEID_Object(context,(void *)&impl)
+PTEID_PublicKey::PTEID_PublicKey(const SDK_Context *context,const APLPublicKey &impl):PTEID_Object(context,(void *)&impl)
 {
 }
 
-PTEID_CardAuthKey::~PTEID_CardAuthKey()
+PTEID_PublicKey::~PTEID_PublicKey()
 {
 	if(m_delimpl)
 	{
-		APLCardAuthenticationKey *pimpl=static_cast<APLCardAuthenticationKey *>(m_impl);
+		APLPublicKey *pimpl=static_cast<APLPublicKey *>(m_impl);
 		delete pimpl;
 		m_impl=NULL;
 	}
 }
 
-PTEID_ByteArray& PTEID_CardAuthKey::getCardAuthKeyModulus() {
+PTEID_ByteArray& PTEID_PublicKey::getCardAuthKeyModulus() {
 	PTEID_ByteArray *out = NULL;
 
 	BEGIN_TRY_CATCH
 
-	APLCardAuthenticationKey *pimpl=static_cast<APLCardAuthenticationKey *>(m_impl);
+	APLPublicKey *pimpl=static_cast<APLPublicKey *>(m_impl);
 	CByteArray *ca = pimpl->getModulus();
 
 	out = dynamic_cast<PTEID_ByteArray *>(getObject(ca));
@@ -377,12 +377,12 @@ PTEID_ByteArray& PTEID_CardAuthKey::getCardAuthKeyModulus() {
 	return *out;
 }
 
-PTEID_ByteArray& PTEID_CardAuthKey::getCardAuthKeyExponent() {
+PTEID_ByteArray& PTEID_PublicKey::getCardAuthKeyExponent() {
 	PTEID_ByteArray *out = NULL;
 
 	BEGIN_TRY_CATCH
 
-	APLCardAuthenticationKey *pimpl=static_cast<APLCardAuthenticationKey *>(m_impl);
+	APLPublicKey *pimpl=static_cast<APLPublicKey *>(m_impl);
 	CByteArray *ca = pimpl->getExponent();
 
 	out = dynamic_cast<PTEID_ByteArray *>(getObject(ca));
@@ -1363,18 +1363,18 @@ PTEID_Photo& PTEID_EId::getPhotoObj()
 	return *out;
 }
 
-PTEID_CardAuthKey& PTEID_EId::getCardAuthKeyObj()
+PTEID_PublicKey& PTEID_EId::getCardAuthKeyObj()
 {
-	PTEID_CardAuthKey *out = NULL;
+	PTEID_PublicKey *out = NULL;
 
 	BEGIN_TRY_CATCH
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	APLCardAuthenticationKey *cardKey = pimpl->getCardAuthKeyObj();
+	APLPublicKey *cardKey = pimpl->getCardAuthKeyObj();
 
-	out = dynamic_cast<PTEID_CardAuthKey *>(getObject(cardKey));
+	out = dynamic_cast<PTEID_PublicKey *>(getObject(cardKey));
 	if (!out){
-		out = new PTEID_CardAuthKey(m_context,*cardKey);
+		out = new PTEID_PublicKey(m_context,*cardKey);
 		if(out)
 			addObject(out);
 		else

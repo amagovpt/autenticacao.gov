@@ -161,6 +161,7 @@ APL_SmartCard::APL_SmartCard(APL_ReaderContext *reader):APL_Card(reader)
 
 	m_challenge=NULL;
 	m_challengeResponse=NULL;
+	m_RootCAPubKey = NULL;
 
 	m_certificateCount=COUNT_UNDEF;
 	m_pinCount=COUNT_UNDEF;
@@ -196,6 +197,12 @@ APL_SmartCard::~APL_SmartCard()
 	{
 		delete m_challengeResponse;
 		m_challengeResponse=NULL;
+	}
+
+	if (m_RootCAPubKey)
+	{
+		delete m_RootCAPubKey;
+		m_RootCAPubKey = NULL;
 	}
 
 }

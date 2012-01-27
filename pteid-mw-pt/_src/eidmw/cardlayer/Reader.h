@@ -118,6 +118,10 @@ public:
 	 * returns PIN_STATUS_UNKNOWN if this info isn't available */
     unsigned long PinStatus(const tPin & Pin);
 
+    /* Get the CVC CA public key that
+     * this card uses to verify the CVC key; */
+    CByteArray RootCAPubKey();
+
     bool PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
         unsigned long & ulRemaining, bool bShowDlg=true);

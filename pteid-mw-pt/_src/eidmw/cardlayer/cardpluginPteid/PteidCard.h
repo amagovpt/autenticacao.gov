@@ -74,6 +74,7 @@ public:
             unsigned long & ulRemaining, const tPrivKey *pKey = NULL,
             bool bShowDlg=true);
     virtual unsigned long PinStatus(const tPin & Pin);
+    virtual CByteArray RootCAPubKey();
 	virtual bool LogOff(const tPin & Pin);
 
 	virtual unsigned long GetSupportedAlgorithms();

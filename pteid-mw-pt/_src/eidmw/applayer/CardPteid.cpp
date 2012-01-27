@@ -31,7 +31,7 @@
 #include "eidErrors.h"
 #include "APLConfig.h"
 #include "PhotoPteid.h"
-#include "APLCardAuthenticationKey.h"
+#include "APLPublicKey.h"
 
 #include "Log.h"
 
@@ -471,7 +471,7 @@ bool APL_EidFile_ID::MapFields()
 		CByteArray modulus = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_MODULUS, PTEIDNG_FIELD_ID_LEN_MODULUS);
 		CByteArray exponent = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_EXPONENT, PTEIDNG_FIELD_ID_LEN_EXPONENT);
 
-		cardKey = new APLCardAuthenticationKey(modulus,exponent);
+		cardKey = new APLPublicKey(modulus,exponent);
 	}
 	//MRZ1
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Mrz1, PTEIDNG_FIELD_ID_LEN_Mrz1);
@@ -790,7 +790,7 @@ PhotoPteid *APL_EidFile_ID::getPhotoObj()
 	return NULL;
 }
 
-APLCardAuthenticationKey *APL_EidFile_ID::getCardAuthKeyObj(){
+APLPublicKey *APL_EidFile_ID::getCardAuthKeyObj(){
 	if(ShowData())
 		return cardKey;
 

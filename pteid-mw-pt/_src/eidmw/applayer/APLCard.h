@@ -27,6 +27,7 @@
 #include "ByteArray.h"
 #include "P15Objects.h"
 #include "APLReader.h"
+#include "APLPublicKey.h"
 
 #define BEGIN_CAL_OPERATION(obj) \
 	obj->CalLock();\
@@ -231,6 +232,10 @@ public:
 	  */
 	EIDMW_APL_API virtual unsigned long pinStatus(const tPin & Pin);
 
+	/* Get the CVC CA public key that
+	 * this card uses to verify the CVC key; */
+	EIDMW_APL_API virtual APLPublicKey *getRootCAPubKey()=0;
+
  	/**
 	  * Execute a pin command from the CAL
 	  */
@@ -322,6 +327,7 @@ protected:
 
 	CByteArray *m_challenge;
 	CByteArray *m_challengeResponse;
+	APLPublicKey *m_RootCAPubKey;
 };
 
 /******************************************************************************//**

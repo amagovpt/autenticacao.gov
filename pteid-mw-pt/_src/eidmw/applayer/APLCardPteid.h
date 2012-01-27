@@ -32,7 +32,7 @@
 #include "ByteArray.h"
 #include "xmlUserData.h"
 #include "PhotoPteid.h"
-#include "APLCardAuthenticationKey.h"
+#include "APLPublicKey.h"
 
 namespace eIDMW
 {
@@ -183,6 +183,7 @@ public:
 	APL_EidFile_Sod *getFileSod();				/**< Return a pointer to the file Photo (NOT EXPORTED) */
 	APL_EidFile_PersoData *getFilePersoData();				/**< Return a pointer to the file PersoData (NOT EXPORTED) */
 	APL_EidFile_TokenInfo *getFileTokenInfo();		/**< Return a pointer to the file Token Info (NOT EXPORTED) */
+	APLPublicKey *getRootCAPubKey();					/**< Get the CVC CA public key that this card uses to verify the CVC key (NOT EXPORTED)*/
 
 	static void askWarningLevel();
 	static void setWarningLevel(APL_AccessWarningLevel lWarningLevel);
@@ -368,7 +369,7 @@ public:
 	EIDMW_APL_API const char *getSurnameMother();		/**< Return field SurnameMother */
 	EIDMW_APL_API const char *getParents();				/**< Return field Parents */
 	EIDMW_APL_API PhotoPteid *getPhotoObj();			/**< Return photo object*/
-	EIDMW_APL_API APLCardAuthenticationKey *getCardAuthKeyObj();
+	EIDMW_APL_API APLPublicKey *getCardAuthKeyObj();
 	EIDMW_APL_API const char *getMRZ1();				/**< Return field MRZ block 1 */
 	EIDMW_APL_API const char *getMRZ2();				/**< Return field MRZ block 2 */
 	EIDMW_APL_API const char *getMRZ3();				/**< Return field MRZ block 3 */

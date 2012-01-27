@@ -80,8 +80,9 @@ HEADERS += \
 	eidmw_XMLParser.h \
 	MiscUtil.h \
 	PhotoPteid.h \
-	APLCardAuthenticationKey.h \
+	APLPublicKey.h \
 	XadesSignature.h
+
 
 ### EMV-CAP support
 ###        EMV-Cap-Helper.h \
@@ -103,10 +104,10 @@ SOURCES += \
     XMLParser.cpp       \
     MiscUtil.cpp \
     PhotoPteid.cpp \
-    APLCardAuthenticationKey.cpp \
+    APLPublicKey.cpp \
     XadesSignature.cpp
-
-
+    
+    
 ### EMV-CAP support
 ###    EMV-Cap-Helper.cpp \
 ###    sslcommon.cpp		\

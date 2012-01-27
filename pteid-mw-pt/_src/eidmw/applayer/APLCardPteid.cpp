@@ -1255,6 +1255,25 @@ bool APL_EIDCard::isApplicationAllowed()
 	return (m_lWarningLevel==1);
 }
 
+APLPublicKey *APL_EIDCard::getRootCAPubKey(){
+
+	if (!m_RootCAPubKey){
+		CByteArray out;
+
+		BEGIN_CAL_OPERATION(m_reader)
+		out = m_reader->getCalReader()->RootCAPubKey();
+		END_CAL_OPERATION(m_reader)
+
+		CByteArray modulus = out.GetBytes(PTEIDNG_FIELD_ROOTCA_PK_POS_MODULUS, PTEIDNG_FIELD_ROOTCA_PK_LEN_MODULUS);
+		CByteArray exponent = out.GetBytes(PTEIDNG_FIELD_ROOTCA_PK_POS_EXPONENT, PTEIDNG_FIELD_ROOTCA_PK_LEN_EXPONENT);
+
+		m_RootCAPubKey = new APLPublicKey(modulus,exponent);
+	}
+
+	return m_RootCAPubKey;
+}
+
+
 /*****************************************************************************************
 ---------------------------------------- APL_EIdFullDoc -------------------------------------------
 *****************************************************************************************/
@@ -2041,7 +2060,7 @@ PhotoPteid *APL_DocEId::getPhotoObj()
 	return m_card->getFileID()->getPhotoObj();
 }
 
-APLCardAuthenticationKey *APL_DocEId::getCardAuthKeyObj(){
+APLPublicKey *APL_DocEId::getCardAuthKeyObj(){
 	return m_card->getFileID()->getCardAuthKeyObj();
 }
 

@@ -5,27 +5,27 @@
  *      Author: ruim
  */
 
-#include "APLCardAuthenticationKey.h"
+#include "APLPublicKey.h"
 
 namespace eIDMW {
 
-APLCardAuthenticationKey::APLCardAuthenticationKey(CByteArray &modulus, CByteArray &exponent){
+APLPublicKey::APLPublicKey(CByteArray &modulus, CByteArray &exponent){
 	m_modulus = new CByteArray(modulus);
 	m_exponent = new CByteArray(exponent);
 }
 
-APLCardAuthenticationKey::~APLCardAuthenticationKey(){
+APLPublicKey::~APLPublicKey(){
 	if (m_modulus)
 		delete m_modulus;
 	if (m_exponent)
 		delete m_exponent;
 }
 
-CByteArray *APLCardAuthenticationKey::getModulus(){
+CByteArray *APLPublicKey::getModulus(){
 	return m_modulus;
 }
 
-CByteArray *APLCardAuthenticationKey::getExponent(){
+CByteArray *APLPublicKey::getExponent(){
 	return m_exponent;
 }
 

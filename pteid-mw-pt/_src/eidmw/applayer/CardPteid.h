@@ -30,7 +30,7 @@
 #include "CardFile.h"
 #include "ByteArray.h"
 #include "PhotoPteid.h"
-#include "APLCardAuthenticationKey.h"
+#include "APLPublicKey.h"
 
 namespace eIDMW
 {
@@ -142,7 +142,7 @@ public:
 	const char *getSurnameMother();					/**< Return field SurnameMother */
 	const char *getParents();						/**< Return field Parents */
 	PhotoPteid *getPhotoObj();						/**< Return object Photo */
-	APLCardAuthenticationKey *getCardAuthKeyObj();	/**< Return object Authentication Key */
+	APLPublicKey *getCardAuthKeyObj();				/**< Return object Authentication Key */
 	const char *getMRZ1();							/**< Return field MRZ block 1*/
 	const char *getMRZ2();							/**< Return field MRZ block 2*/
 	const char *getMRZ3();							/**< Return field MRZ block 3*/
@@ -220,7 +220,7 @@ private:
 	std::string m_MRZ2;										/**< Field MRZ block 2 */
 	std::string m_MRZ3;										/**< Field MRZ block 3 */
 	CByteArray m_PhotoHash;									/**< Field PhotoHash */	
-	APLCardAuthenticationKey* cardKey;
+	APLPublicKey* cardKey;
 
 friend 	APL_EidFile_ID *APL_EIDCard::getFileID();	/**< This method must access protected constructor */
 };

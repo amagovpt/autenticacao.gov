@@ -41,6 +41,7 @@
 #define INCLUDE_OBJECT_CHALLENGE		7
 #define INCLUDE_OBJECT_RESPONSE			8
 #define INCLUDE_OBJECT_CUSTOMDOC		9
+#define INCLUDE_OBJECT_ROOT_CA_PK   	10
 
 #define INCLUDE_OBJECT_RAWDATA_ID			21
 #define INCLUDE_OBJECT_RAWDATA_ID_SIG		22
@@ -295,6 +296,8 @@ PTEID_Pins& PTEID_SmartCard::getPins()
 
 	return *out;
 }
+
+
 
 unsigned long PTEID_SmartCard::certificateCount()
 {
@@ -1007,6 +1010,33 @@ const PTEID_ByteArray& PTEID_EIDCard::getRawData_PersoData()
 	return *out;
 }
 
+PTEID_PublicKey& PTEID_EIDCard::getRootCAPubKey()
+{
+	PTEID_PublicKey *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
+
+	out = dynamic_cast<PTEID_PublicKey *>(getObject(INCLUDE_OBJECT_ROOT_CA_PK));
+
+	if(!out)
+	{
+
+		out = new PTEID_PublicKey(m_context,*pcard->getRootCAPubKey());
+		if(out)
+			m_objects[INCLUDE_OBJECT_ROOT_CA_PK]=out;
+		else
+			throw PTEID_ExUnknown();
+	}
+
+	END_TRY_CATCH
+
+	return *out;
+}
+
+
+
 const PTEID_ByteArray& PTEID_EIDCard::getRawData_Challenge()
 {
 	PTEID_ByteArray *out = NULL;
@@ -1537,12 +1567,25 @@ PTEIDSDK_API long PTEID_SetSODCAs( PTEID_Certifs *Certifs){
 
 PTEIDSDK_API long PTEID_GetCardAuthenticationKey(PTEID_RSAPublicKey *pCardAuthPubKey){
 	if (readerContext!=NULL){
-		PTEID_CardAuthKey &cardKey = readerContext->getEIDCard().getID().getCardAuthKeyObj();
+		PTEID_PublicKey &cardKey = readerContext->getEIDCard().getID().getCardAuthKeyObj();
 
 		memcpy(pCardAuthPubKey->modulus, cardKey.getCardAuthKeyModulus().GetBytes(), cardKey.getCardAuthKeyModulus().Size());
 		pCardAuthPubKey->modulusLength = cardKey.getCardAuthKeyModulus().Size();
 		memcpy(pCardAuthPubKey->exponent, cardKey.getCardAuthKeyExponent().GetBytes(), cardKey.getCardAuthKeyExponent().Size());
 		pCardAuthPubKey->exponentLength = cardKey.getCardAuthKeyExponent().Size();
+	}
+
+	return 0;
+}
+
+PTEIDSDK_API long PTEID_GetCVCRoot(PTEID_RSAPublicKey *pCVCRootKey){
+	if (readerContext!=NULL){
+		PTEID_PublicKey &rootCAKey = readerContext->getEIDCard().getRootCAPubKey();
+
+		memcpy(pCVCRootKey->modulus, rootCAKey.getCardAuthKeyModulus().GetBytes(), rootCAKey.getCardAuthKeyModulus().Size());
+		pCVCRootKey->modulusLength = rootCAKey.getCardAuthKeyModulus().Size();
+		memcpy(pCVCRootKey->exponent, rootCAKey.getCardAuthKeyExponent().GetBytes(), rootCAKey.getCardAuthKeyExponent().Size());
+		pCVCRootKey->exponentLength = rootCAKey.getCardAuthKeyExponent().Size();
 	}
 
 	return 0;

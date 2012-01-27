@@ -374,6 +374,28 @@ unsigned long CPteidCard::PinStatus(const tPin & Pin)
     }
 }
 
+CByteArray CPteidCard::RootCAPubKey(){
+	CByteArray oResp;
+
+	try
+	{
+		CByteArray select("3F00",true);
+		oResp = SendAPDU(0xA4, 0x00, 0x0C, select);
+		getSW12(oResp, 0x9000);
+		//4D - extended header list, 04 - size, FFA001 - SDO root CA, 80 - give me all?
+		CByteArray getData("4D04FFA00180",true);
+		oResp = SendAPDU(0xCB, 0x3F, 0xFF, getData);
+		getSW12(oResp, 0x9000);
+		oResp.Chop(2); //martinho: remove the returning code 0x9000
+	}
+	catch(...)
+	{
+		MWLOG(LEV_ERROR, MOD_CAL, L"Error in RootCAPubKey");
+		throw;
+	}
+	return oResp;
+}
+
 DlgPinUsage CPteidCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)
 {
 		//printf("++++ Pteid5\n");
