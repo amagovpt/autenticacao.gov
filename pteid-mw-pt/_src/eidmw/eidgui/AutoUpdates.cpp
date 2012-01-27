@@ -329,7 +329,7 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		}
 		else if (distro == "fedora")
 		{
-			pkgname.append("1.0.1.1522-2.1");
+			pkgname.append("-1.0.1.1522-2.1");
 			pkgname.append(".x86_64.rpm");
 			downloadurl.append(pkgname);
 			HttpWindow httpWin(downloadurl, distro);
@@ -349,7 +349,7 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		}
 		else if (distro == "fedora")
 		{
-			pkgname.append("1.0.1.1522-2.1");
+			pkgname.append("-1.0.1.1522-2.1");
 			pkgname.append(".i386.rpm");
 			downloadurl.append(pkgname);
 			HttpWindow httpWin(downloadurl, distro);

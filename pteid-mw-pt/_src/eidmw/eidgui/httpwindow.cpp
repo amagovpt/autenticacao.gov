@@ -19,6 +19,8 @@
  * Author: Luis Medinas <luis.medinas@caixamagica.pt>
  **************************************************************************** */
 
+#include <iostream>
+
 #include <QtGui>
 #include <QtNetwork>
 
@@ -27,6 +29,7 @@
 std::string urli;
 std::string dtitle ("Cartão de Cidadão");
 std::string getdistro;
+QString fileName;
 
 HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
 : QDialog(parent)
@@ -92,7 +95,7 @@ void HttpWindow::downloadFile()
 	url = urli.c_str();
 
 	QFileInfo fileInfo(url.path());
-	QString fileName = fileInfo.fileName();
+	fileName = fileInfo.fileName();
 	if (fileName.isEmpty())
 	{
 		QMessageBox::information(this, QString::fromUtf8(dtitle.c_str()),
@@ -185,7 +188,7 @@ void HttpWindow::httpFinished()
 		this->close();
 	}
 
-	RunPackage("pteid-mw_1.0.1svn1522-1_amd64.deb", getdistro);
+	RunPackage(fileName.toStdString() , getdistro);
 }
 
 void HttpWindow::httpReadyRead()
@@ -209,21 +212,19 @@ void HttpWindow::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
 
 void HttpWindow::RunPackage(std::string pkg, std::string distro)
 {
+  std::string pkgpath;
+  pkgpath.append(QDir::tempPath().toStdString());
+  pkgpath.append("/");
+  pkgpath.append(pkg);
+  std::cout << "pkgpath " << pkgpath << " distro " << distro << std::endl;
 	if (distro == "debian")
 	{
-		/*std::string systemex;
-		systemex.append("/usr/bin/software-center ");
-		systemex.append(QDir::tempPath().toStdString());
-		systemex.append("/");
-		systemex.append(pkg);
-		system(systemex.c_str());*/
-
-		execl ("/usr/bin/software-center", "software-center", pkg.c_str());
+		execl ("/usr/bin/software-center", "software-center", pkgpath.c_str());
 	}
 
 	if (distro == "fedora")
 	{
-
+	  	execl ("/usr/bin/gpk-install-local-file", "gpk-install-local-file", pkgpath.c_str(), NULL);
 	}
 }
 
