@@ -28,7 +28,6 @@
 #include "openssl/evp.h"
 #include "cryptoFramework.h"
 #include "APLReader.h"
-#include "XadesSignature.h"
 
 namespace eIDMW
 {
@@ -64,7 +63,6 @@ private:
 	APL_CryptoFwkPteid &operator=(const APL_CryptoFwkPteid &service);	/**< Copy not allowed - not implemented */
 
 friend void CAppLayer::startAllServices();			/**< This method must access private constructor */
-friend XadesSignature::XadesSignature(APL_Card&);  /**< This method must access private constructor */
 
 };
 

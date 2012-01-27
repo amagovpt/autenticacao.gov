@@ -29,6 +29,7 @@
 #include "APLCrypto.h"
 #include "APLCertif.h"
 #include "PhotoPteid.h"
+#include "XadesSignature.h"
 #include "ByteArray.h"
 
 //UNIQUE INDEX FOR RETRIEVING OBJECT
@@ -105,7 +106,7 @@ PTEID_ByteArray PTEID_Card::Sign(const PTEID_ByteArray& data)
 
 	BEGIN_TRY_CATCH
 
-	APL_Card *pcard=static_cast<APL_Card *>(m_impl);
+		APL_Card *pcard=static_cast<APL_Card *>(m_impl);
 
 	CByteArray cData(data.GetBytes(),data.Size());
 	CByteArray result=pcard->Sign(cData);
@@ -113,7 +114,7 @@ PTEID_ByteArray PTEID_Card::Sign(const PTEID_ByteArray& data)
 
 	END_TRY_CATCH
 
-	return out;
+		return out;
 }
 
 PTEID_ByteArray PTEID_Card::readFile(const char *fileID, unsigned long  ulOffset, unsigned long  ulMaxLength)
@@ -533,6 +534,29 @@ PTEID_CCXML_Doc& PTEID_EIDCard::getXmlCCDoc(PTEID_XmlUserRequestedInfo& userRequ
 	return *out;
 }
 
+
+PTEID_ByteArray PTEID_EIDCard::SignXades(const char * path, unsigned int n_paths)
+{
+
+	PTEID_ByteArray out;
+	
+	BEGIN_TRY_CATCH
+
+	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
+	XadesSignature sig = XadesSignature(*pcard);
+
+	CByteArray &ca = sig.SignXades(path, n_paths);
+	out.Append(ca.GetBytes(), ca.Size());
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+/*
+ *
+ *
+ */
 
 PTEID_EIdFullDoc& PTEID_EIDCard::getFullDoc()
 {

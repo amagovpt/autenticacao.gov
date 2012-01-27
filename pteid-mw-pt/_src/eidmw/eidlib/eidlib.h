@@ -703,6 +703,7 @@ public:
 	PTEIDSDK_API PTEID_Certificate &getCA();					/**< Return the ca certificate from the card */
 	PTEIDSDK_API PTEID_Certificate &getSignature();			/**< Return the signature certificate from the card */
 	PTEIDSDK_API PTEID_Certificate &getAuthentication();		/**< Return the authentication certificate from the card */
+	PTEIDSDK_API PTEID_ByteArray SignXades(const char * listofPaths, unsigned int n_paths); /** Return a Xades signature as a UTF-8 string */
 	PTEIDSDK_API PTEID_PublicKey& getRootCAPubKey();				/**< Get the CVC CA public key that this card uses to verify the CVC key */
 
 	/**
