@@ -44,7 +44,7 @@ using namespace eIDMW;
 
 std::string ddtitle ("Cartão de Cidadão");
 std::string serverurl = "http://people.caixamagica.pt/lmedinas/autoupdates/";
-std::string remoteversion = "http://people.caixamagica.pt/lmedinas/autoupdates/version.txt";
+std::string remoteversion = "http://people.caixamagica.pt/lmedinas/autoupdates/versioninferior.txt";
 
 AutoUpdates::AutoUpdates(QWidget *parent)
 : QDialog(parent)
@@ -208,13 +208,6 @@ void AutoUpdates::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
 	progressDialog->setValue(bytesRead);
 }
 
-
-
-std::string AutoUpdates::CheckUpdates()
-{
-
-}
-
 bool AutoUpdates::VerifyUpdates(std::string filedata)
 {
 	QString strVersion (WIN_GUI_VERSION_STRING);
@@ -262,7 +255,6 @@ std::string AutoUpdates::VerifyOS(std::string param, bool runscript)
 	//check if it's Windows 32 or 64 bits
 
 #else
-	bool chkfile;
 	std::string distrostr;
 	std::string archstr;
 

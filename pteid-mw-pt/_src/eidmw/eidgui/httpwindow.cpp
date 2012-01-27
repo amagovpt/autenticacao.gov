@@ -219,7 +219,7 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
   std::cout << "pkgpath " << pkgpath << " distro " << distro << std::endl;
 	if (distro == "debian")
 	{
-		execl ("/usr/bin/software-center", "software-center", pkgpath.c_str());
+	  	execl ("/usr/bin/software-center", "software-center", pkgpath.c_str(), NULL);
 	}
 
 	if (distro == "fedora")

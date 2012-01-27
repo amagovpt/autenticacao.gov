@@ -62,11 +62,11 @@ private slots:
 	void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
 
 private:
-    QPushButton *cancelButton;
-    QDialogButtonBox *buttonBox;
-    QPushButton *downloadButton;
-    QLabel *statusLabel;
-    QProgressDialog *progressDialog;
+    	QPushButton *cancelButton;
+    	QDialogButtonBox *buttonBox;
+    	QPushButton *downloadButton;
+    	QLabel *statusLabel;
+    	QProgressDialog *progressDialog;
 
 	QUrl url;
 	QNetworkAccessManager qnam;
