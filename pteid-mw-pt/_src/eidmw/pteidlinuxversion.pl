@@ -30,31 +30,36 @@ sub getlinuxdistro
         {
 	    @full_distribution    = split(/ /,`cat /etc/fedora-release`);
 	    $distribution_version = $full_distribution[2];
+	    chomp $distribution_version;
 	    $distro               = "fedora";
         }
 	elsif (-e "/etc/redhat-release")
         {
             @full_distribution    = split(/ /,`cat /etc/redhat-release`);
             $distribution_version = $full_distribution[2];
+	    chomp $distribution_version;
             $distro               = "redhat";
         }
         elsif (-e "/etc/SuSE-release")
         {
 	    @full_distribution    = split(/ /,`cat /etc/SuSE-release`);
 	    $distribution_version = $full_distribution[1];
+	    chomp $distribution_version;
 	    $distro               = "suse";
         }
 	elsif (-e "/etc/mandriva-release")
         {
             @full_distribution    = split(/ /,`/etc/mandriva-release`);
             $distribution_version = $full_distribution[1];
+	    chomp $distribution_version;
             $distro               = "mandriva";
 	}
         elsif (-e "/etc/debian_version")
         {
 	    my $tmp = `cat /etc/debian_version`;
 	    chomp($tmp);    
-	    $distribution_version = "etch";
+	    $distribution_version = "squeeze";
+	    chomp $distribution_version;
 	    $distro               = "debian";
         }
         else
@@ -81,5 +86,7 @@ open (LINUXVERSIONFILE, '>/tmp/linuxversion');
 print LINUXVERSIONFILE $linuxdistro;
 print LINUXVERSIONFILE " ; ";
 print LINUXVERSIONFILE $linuxarch;
+print LINUXVERSIONFILE " ; ";
+print LINUXVERSIONFILE $distribution_version;
 print LINUXVERSIONFILE " ; \n";
 close (LINUXVERSIONFILE);
