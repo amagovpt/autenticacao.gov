@@ -211,12 +211,19 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
 {
 	if (distro == "debian")
 	{
-		std::string systemex;
+		/*std::string systemex;
 		systemex.append("/usr/bin/software-center ");
 		systemex.append(QDir::tempPath().toStdString());
 		systemex.append("/");
 		systemex.append(pkg);
-		system(systemex.c_str());
+		system(systemex.c_str());*/
+
+		execl ("/usr/bin/software-center", "software-center", pkg.c_str());
+	}
+
+	if (distro == "fedora")
+	{
+
 	}
 }
 
