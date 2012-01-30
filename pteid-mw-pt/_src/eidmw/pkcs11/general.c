@@ -38,6 +38,7 @@ static int g_init  = 0;
 
 #ifndef WIN32
 #define _strdup strdup
+#define _snprintf snprintf
 #endif
 
 //  CMutex gMutex;
@@ -55,18 +56,19 @@ static int g_init  = 0;
 #define WHERE "C_Initialize()"
 CK_RV C_Initialize(CK_VOID_PTR pReserved)
 {
-int ret = CKR_OK;
-
- const char *temp;
- const char *env_vr, *tmpvar;
-CK_C_INITIALIZE_ARGS_PTR p_args;
+	int ret = CKR_OK;
+	char sep;
+	const char *temp;
+	const char *env_vr, *tmpvar;
+	char *log_path;
+	CK_C_INITIALIZE_ARGS_PTR p_args;
 
 #ifdef WIN32
-   env_vr = "APPDATA";
-   char sep = '\\';
+	env_vr = "APPDATA";
+    sep = '\\';
 #else    
    env_vr = "HOME";
-   char sep = '/';
+   sep = '/';
 #endif   
 
    temp = getenv(env_vr);
@@ -82,8 +84,8 @@ CK_C_INITIALIZE_ARGS_PTR p_args;
 #endif			
    }
 
-   char *log_path = (char *)malloc(strlen(tmpvar)+20);
-   snprintf (log_path, strlen(tmpvar)+20, "%s%c.pteid-pkcs11.log", tmpvar, sep);
+   log_path = (char *)malloc(strlen(tmpvar)+20);
+   _snprintf (log_path, strlen(tmpvar)+20, "%s%c.pteid-pkcs11.log", tmpvar, sep);
 
 #if _DEBUG
    log_init(log_path, LOG_LEVEL_INFO);
