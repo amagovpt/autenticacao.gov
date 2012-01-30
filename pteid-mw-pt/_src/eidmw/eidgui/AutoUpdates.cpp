@@ -150,7 +150,6 @@ void AutoUpdates::httpFinished()
 		return;
 	}
 
-	VerifyUpdates(filedata);
 	progressDialog->hide();
 	file->flush();
 	file->close();
@@ -177,7 +176,7 @@ void AutoUpdates::httpFinished()
 	} else {
 		downloadButton->setEnabled(true);
 	}
-
+	VerifyUpdates(filedata);
 	reply->deleteLater();
 	reply = 0;
 	delete file;
@@ -194,9 +193,10 @@ void AutoUpdates::httpReadyRead()
 	QByteArray data = reply->readAll();
 	QString qsdata(data);
 	filedata = qsdata.toStdString();
-
+	
+	//Write to file
 	if (file)
-		file->write(reply->readAll());
+		file->write(data);
 }
 
 void AutoUpdates::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
