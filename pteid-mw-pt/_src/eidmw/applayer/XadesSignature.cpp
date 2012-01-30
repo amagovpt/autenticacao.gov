@@ -464,11 +464,12 @@ CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
 	CByteArray sha1_hash;
 	CByteArray rsa_signature;
 	XMLByte toFill[35 * sizeof(XMLByte)]; //SHA-1 Hash prepended with Algorithm ID as by PKCS#1 standard
+	string default_uri = string("file://localhost") + path;
 #ifdef WIN32
 	XMLCh * uni_reference_uri = (XMLCh*)pathToURI(utf8_decode(path));
 #else
 	//TODO: We also need to URL-encode the path on Linux
-	XMLCh * uni_reference_uri = XMLString::transcode(string("file://localhost") + path);
+	XMLCh * uni_reference_uri = XMLString::transcode(default_uri.c_str());
 #endif
 
     DOMImplementation *impl = 
