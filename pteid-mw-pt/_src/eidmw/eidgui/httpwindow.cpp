@@ -212,6 +212,9 @@ void HttpWindow::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
 
 void HttpWindow::RunPackage(std::string pkg, std::string distro)
 {
+#ifdef WIN32
+
+#else
   std::string pkgpath;
   pkgpath.append(QDir::tempPath().toStdString());
   pkgpath.append("/");
@@ -231,5 +234,6 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
 	{
 	    	execl ("/usr/bin/gpk-install-local-file", "gpk-install-local-file", pkgpath.c_str(), NULL);
 	}
+#endif
 }
 

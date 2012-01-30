@@ -210,10 +210,27 @@ void AutoUpdates::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
 
 bool AutoUpdates::VerifyUpdates(std::string filedata)
 {
-    	std::string distrover;
+    std::string distrover;
 	std::string archver;
+	std::string ver;
+
+#ifdef WIN32
+	/*QFileInfo	fileInfo(m_Settings.getExePath()) ;
+
+	QString filename = QCoreApplication::arguments().at(0);
+	CFileVersionInfo VerInfo;
+	if(VerInfo.Open(filename.toLatin1()))
+	{
+		char version[256];
+		VerInfo.QueryStringValue(VI_STR_FILEVERSION, version);
+		m_Settings.setGuiVersion(version);
+	}*/
+#else
+
 	QString strVersion (WIN_GUI_VERSION_STRING);
-	std::string ver = strVersion.toStdString();
+	ver = strVersion.toStdString();
+#endif
+
 	ver.replace(2,1,"");
 	ver.replace(3,1,"");
 	ver.replace(3,1,"");
@@ -256,13 +273,14 @@ bool AutoUpdates::FileExists(const char *filename)
 
 std::string AutoUpdates::VerifyOS(std::string param, bool runscript)
 {
+	std::string distrostr;
+	std::string archstr;
 #ifdef WIN32
 
 	//check if it's Windows 32 or 64 bits
 
 #else
-	std::string distrostr;
-	std::string archstr;
+
 
 	if (runscript)
 	{
@@ -297,13 +315,11 @@ std::string AutoUpdates::VerifyOS(std::string param, bool runscript)
 		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "can't open file /tmp/linuxversion");
 	}
 
+#endif
 	if (param == "distro")
 		return distrostr;
 	else
 		return archstr;
-
-#endif
-
 }
 
 void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
