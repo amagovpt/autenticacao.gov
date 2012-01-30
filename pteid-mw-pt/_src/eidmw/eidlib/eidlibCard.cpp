@@ -29,7 +29,6 @@
 #include "APLCrypto.h"
 #include "APLCertif.h"
 #include "PhotoPteid.h"
-#include "XadesSignature.h"
 #include "ByteArray.h"
 
 //UNIQUE INDEX FOR RETRIEVING OBJECT
@@ -543,9 +542,8 @@ PTEID_ByteArray PTEID_EIDCard::SignXades(const char * path, unsigned int n_paths
 	BEGIN_TRY_CATCH
 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
-	XadesSignature sig = XadesSignature(*pcard);
 
-	CByteArray &ca = sig.SignXades(path, n_paths);
+	CByteArray &ca = pcard->SignXades(path, n_paths);
 	out.Append(ca.GetBytes(), ca.Size());
 
 	END_TRY_CATCH
