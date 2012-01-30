@@ -210,6 +210,8 @@ void AutoUpdates::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
 
 bool AutoUpdates::VerifyUpdates(std::string filedata)
 {
+    	std::string distrover;
+	std::string archver;
 	QString strVersion (WIN_GUI_VERSION_STRING);
 	std::string ver = strVersion.toStdString();
 	ver.replace(2,1,"");
@@ -226,11 +228,15 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	//return true;
 	if (localverd < remoteversiond)
 	{
-		this->close();
-		std::string distrover = VerifyOS("distro", true);
-		std::string archver = VerifyOS("arch", false);
-		ChooseVersion(distrover, archver);
-		return true;
+	    	this->close();
+#ifdef WIN32
+		distrover = VerifyOS("distro", false);
+#else
+		distrover = VerifyOS("distro", true);
+#endif
+                archver = VerifyOS("arch", false);
+                ChooseVersion(distrover, archver);
+                return true;
 	} else {
 		std::string titlenoup = "Actualizações";
 		std::string infotextnoup = "Não existem Actualizações de momento!";
