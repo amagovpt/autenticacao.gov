@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="xsec_lib"
 	ProjectGUID="{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}"
 	RootNamespace="xsec_lib"
@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../.."
+				AdditionalIncludeDirectories="..\..\..\..;$(PTEID_DIR_OPENSSL_098G)\include&quot;;&quot;$(PTEID_DIR_XERCES_310)\include&quot;"
 				PreprocessorDefinitions="_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_LIB_EXPORTS;PROJ_CANON;PROJ_DSIG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -69,12 +69,272 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="xerces-c_3D.lib Xalan-C_1D.lib crypt32.lib libeay32.lib"
-				OutputFile="$(OutDir)/xsec_1_6D.dll"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\xsec_1_6.dll"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\bin&quot;;&quot;$(PTEID_DIR_XERCES_310)\lib&quot;&quot;;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/xsec_lib.pdb"
 				SubSystem="2"
 				ImportLibrary="$(OutDir)/xsec_1D.lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)\..\_Binaries35\$(ConfigurationName)"
+			IntermediateDirectory="../../../../Build/$(PlatformName)/VC8/$(ConfigurationName)/obj"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				OmitFramePointers="true"
+				AdditionalIncludeDirectories="..\..\..\..;&quot;$(PTEID_DIR_XERCES_310)\include&quot;;&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_LIB_EXPORTS;PROJ_CANON;PROJ_DSIG"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				RuntimeTypeInfo="false"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough=""
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="xerces-c_3.lib crypt32.lib libeay32.lib"
+				OutputFile="$(SolutionDir)\..\_Binaries35\$(ConfigurationName)\xsec_1_6.dll"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\bin&quot;;&quot;$(PTEID_DIR_XERCES_310)\lib&quot;"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				ImportLibrary="$(OutDir)/xsec_1.lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug No Xalan|Win32"
+			OutputDirectory="../../../../Build/$(PlatformName)/VC8/$(ConfigurationName)"
+			IntermediateDirectory="../../../../Build/$(PlatformName)/VC8/$(ConfigurationName)/obj"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops"
+			UseOfMFC="0"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\..\..\..;$(PTEID_DIR_OPENSSL_098G)\include&quot;;&quot;$(PTEID_DIR_XERCES_310)\include&quot;"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_LIB_EXPORTS;PROJ_CANON;PROJ_DSIG"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				RuntimeTypeInfo="false"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough=""
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="xerces-c_3D.lib crypt32.lib libeay32D.lib"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\xsec_1_6.dll"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\bin&quot;;&quot;$(PTEID_DIR_XERCES_310)\lib&quot;&quot;;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)/xsec_lib.pdb"
+				SubSystem="2"
+				ImportLibrary="$(OutDir)/xsec_1D.lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release No Xalan|Win32"
+			OutputDirectory="../../../../Build/$(PlatformName)/VC8/$(ConfigurationName)"
+			IntermediateDirectory="../../../../Build/$(PlatformName)/VC8/$(ConfigurationName)/obj"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				OmitFramePointers="true"
+				AdditionalIncludeDirectories="..\..\..\..;$(PTEID_DIR_OPENSSL_098G)\include&quot;;&quot;$(PTEID_DIR_XERCES_310)\include&quot;"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_LIB_EXPORTS;PROJ_CANON;PROJ_DSIG"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				RuntimeTypeInfo="false"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough=""
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="xerces-c_3.lib crypt32.lib libeay32.lib"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\xsec_1_6.dll"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\bin&quot;;&quot;$(PTEID_DIR_XERCES_310)\lib&quot;&quot;;"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				ImportLibrary="$(OutDir)/xsec_1.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -112,8 +372,8 @@
 			CharacterSet="2"
 			>
 			<Tool
-                Name="VCPreBuildEventTool"
-            />
+				Name="VCPreBuildEventTool"
+			/>
 			<Tool
 				Name="VCCustomBuildTool"
 			/>
@@ -161,92 +421,6 @@
 				SubSystem="2"
 				ImportLibrary="$(OutDir)/xsec_1D.lib"
 				TargetMachine="17"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="../../../../Build/$(PlatformName)/VC8/$(ConfigurationName)"
-			IntermediateDirectory="../../../../Build/$(PlatformName)/VC8/$(ConfigurationName)/obj"
-			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				InlineFunctionExpansion="1"
-				OmitFramePointers="true"
-				AdditionalIncludeDirectories="../../../.."
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_LIB_EXPORTS;PROJ_CANON;PROJ_DSIG"
-				StringPooling="true"
-				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
-				RuntimeTypeInfo="false"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="xerces-c_3.lib crypt32.lib libeay32.lib Xalan-C_1.lib"
-				OutputFile="$(OutDir)/xsec_1_6.dll"
-				LinkIncremental="1"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				ImportLibrary="$(OutDir)/xsec_1.lib"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -361,90 +535,6 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Debug No Xalan|Win32"
-			OutputDirectory="../../../../Build/$(PlatformName)/VC8/$(ConfigurationName)"
-			IntermediateDirectory="../../../../Build/$(PlatformName)/VC8/$(ConfigurationName)/obj"
-			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops"
-			UseOfMFC="0"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="../../../.."
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_LIB_EXPORTS;PROJ_CANON;PROJ_DSIG"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				RuntimeTypeInfo="false"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="xerces-c_3D.lib crypt32.lib libeay32D.lib"
-				OutputFile="$(OutDir)/xsec_1_6D.dll"
-				LinkIncremental="2"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/xsec_lib.pdb"
-				SubSystem="2"
-				ImportLibrary="$(OutDir)/xsec_1D.lib"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
 			Name="Debug No Xalan|x64"
 			OutputDirectory="../../../../Build/$(PlatformName)/VC8/$(ConfigurationName)"
 			IntermediateDirectory="../../../../Build/$(PlatformName)/VC8/$(ConfigurationName)/obj"
@@ -503,92 +593,6 @@
 				SubSystem="2"
 				ImportLibrary="$(OutDir)/xsec_1D.lib"
 				TargetMachine="17"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release No Xalan|Win32"
-			OutputDirectory="../../../../Build/$(PlatformName)/VC8/$(ConfigurationName)"
-			IntermediateDirectory="../../../../Build/$(PlatformName)/VC8/$(ConfigurationName)/obj"
-			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				InlineFunctionExpansion="1"
-				OmitFramePointers="true"
-				AdditionalIncludeDirectories="../../../.."
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_LIB_EXPORTS;PROJ_CANON;PROJ_DSIG"
-				StringPooling="true"
-				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
-				RuntimeTypeInfo="false"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="xerces-c_3.lib crypt32.lib libeay32.lib"
-				OutputFile="$(OutDir)/xsec_1_6.dll"
-				LinkIncremental="1"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				ImportLibrary="$(OutDir)/xsec_1.lib"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -758,6 +762,22 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoDEREncoded.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoDEREncoded.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoExt.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoExt.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoList.cpp"
 				>
 			</File>
@@ -813,14 +833,6 @@
 				RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoX509.hpp"
 				>
 			</File>
-            <File
-                RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoExt.cpp"
-                >
-            </File>
-            <File
-                RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoExt.hpp"
-                >
-            </File>
 			<File
 				RelativePath="..\..\..\..\xsec\dsig\DSIGObject.cpp"
 				>
@@ -987,6 +999,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\..\xsec\enc\XSECCryptoKeyEC.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\xsec\enc\XSECCryptoKeyHMAC.hpp"
 				>
 			</File>
@@ -994,14 +1010,10 @@
 				RelativePath="..\..\..\..\xsec\enc\XSECCryptoKeyRSA.hpp"
 				>
 			</File>
-            <File
-                RelativePath="..\..\..\..\xsec\enc\XSECCryptoKeyEC.hpp"
-                >
-            </File>
-            <File
-                RelativePath="..\..\..\..\xsec\enc\XSECCryptoProvider.cpp"
-                >
-            </File>
+			<File
+				RelativePath="..\..\..\..\xsec\enc\XSECCryptoProvider.cpp"
+				>
+			</File>
 			<File
 				RelativePath="..\..\..\..\xsec\enc\XSECCryptoProvider.hpp"
 				>
@@ -1074,6 +1086,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyEC.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyEC.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyHMAC.cpp"
 					>
 				</File>
@@ -1089,14 +1109,6 @@
 					RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyRSA.hpp"
 					>
 				</File>
-                <File
-                    RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyEC.cpp"
-                    >
-                </File>
-                <File
-                    RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyEC.hpp"
-                    >
-                </File>
 				<File
 					RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoProvider.cpp"
 					>

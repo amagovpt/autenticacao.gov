@@ -1161,7 +1161,7 @@ bool DSIGSignature::verify(void) {
 
 void DSIGSignature::signExternal(XMLByte *signature, unsigned int siglen) {
 
-	XMLByte base64Sig [siglen*2];
+	XMLByte base64Sig[512]; //Siglen should be always 128
 	unsigned int base64SigLen;
 
 	if (!m_loaded) {
