@@ -73,10 +73,6 @@ HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
 
 HttpWindow::~HttpWindow()
 {
-	reply->deleteLater();
-	reply = 0;
-	delete file;
-	file = 0;
 }
 
 void HttpWindow::startRequest(QUrl url)
@@ -189,6 +185,11 @@ void HttpWindow::httpFinished()
 	}
 
 	RunPackage(fileName.toStdString() , getdistro);
+
+	reply->deleteLater();
+	reply = 0;
+	delete file;
+	file = 0;
 }
 
 void HttpWindow::httpReadyRead()
