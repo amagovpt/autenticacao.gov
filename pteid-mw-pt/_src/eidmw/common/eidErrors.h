@@ -190,6 +190,8 @@
 /** Could not find expected elements in parsed ASN.1 vector */
 #define EIDMW_WRONG_ASN1_FORMAT        0xe1d00700
 
+#define EIDMW_XERCES_INIT_ERROR        0xe1d00701
+
 
 // I/O errors
 // errors modelled on the definitions in errno.h

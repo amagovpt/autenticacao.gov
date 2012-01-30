@@ -146,6 +146,17 @@ CByteArray &APL_Card::SignXades(const char * path, unsigned int n_paths)
 
 }
 
+bool APL_Card::ValidateSignature(const CByteArray &signature)
+{
+	if (signature.Size() == 0)
+		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+	
+	XadesSignature sig(this);
+	
+	return sig.ValidateXades(signature);
+
+}
+
 
 
 /*****************************************************************************************

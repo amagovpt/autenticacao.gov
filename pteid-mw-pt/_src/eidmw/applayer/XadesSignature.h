@@ -10,7 +10,6 @@
 
 #include "Export.h" 
 #include "APLCard.h"
-//#include "cryptoFwkPteid.h"
 
 #define ASN1_LEN 43
 #define SHA1_OFFSET 20
@@ -51,15 +50,18 @@ namespace eIDMW
 		CByteArray &SignXadesT(CByteArray ba, const char *URL);
 		CByteArray &SignXades(const char * path, unsigned int n_paths);
 		CByteArray &SignXadesT(const char * path, unsigned int n_paths);
+
+		bool ValidateXades(CByteArray signature);
 		
 
 		private:
-
+		
 		CByteArray HashFile(const char *file_path);
+		void addSignatureProperties(DSIGSignature *sig);
 		CByteArray *WriteToByteArray(xercesc_3_1::DOMDocument *doc); 
 		//Utility methods	
 		void loadCert(CByteArray &ba, EVP_PKEY *pub_key);
-
+		
 		int appendOID(XMLByte *toFill);
 
 		void addTimestampNode(DSIGSignature *sig);
@@ -68,6 +70,9 @@ namespace eIDMW
 		size_t curl_write_data(char *ptr, size_t size, size_t nmemb, void * stream); 
 		CByteArray timestamp_data(const unsigned char *input, unsigned int data_len);
 		void generate_asn1_request_struct(char *sha_1);
+
+		void initXerces();
+
 		
 		X509 * mp_cert;
 		//APL_CryptoFwk *mp_crypto;

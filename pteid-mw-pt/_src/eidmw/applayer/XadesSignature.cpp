@@ -24,25 +24,35 @@
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/framework/LocalFileFormatTarget.hpp>
 #include <xercesc/framework/MemBufFormatTarget.hpp>
+#include <xercesc/framework/MemBufInputSource.hpp>
+#include <xercesc/dom/DOM.hpp>
+#include <xercesc/parsers/XercesDOMParser.hpp>
+#include <xercesc/util/XMLException.hpp>
+#include <xercesc/util/XMLUri.hpp>
+#include <xercesc/util/Janitor.hpp>
 
 // XML-Security-C (XSEC)
 
 #include <xsec/framework/XSECProvider.hpp>
+#include <xsec/framework/XSECException.hpp>
 #include <xsec/dsig/DSIGReference.hpp>
 #include <xsec/dsig/DSIGObject.hpp>
-#include <xsec/enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp>
-#include <xsec/enc/OpenSSL/OpenSSLCryptoX509.hpp>
-#include <xsec/enc/XSECCryptoUtils.hpp>
-#include <xsec/enc/XSECCryptoException.hpp>
-#include <xsec/framework/XSECException.hpp>
-#include <xsec/utils/XSECBinTXFMInputStream.hpp>
 #include <xsec/dsig/DSIGConstants.hpp>
 #include <xsec/dsig/DSIGKeyInfoX509.hpp>
+#include <xsec/enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp>
+#include <xsec/enc/OpenSSL/OpenSSLCryptoX509.hpp>
+#include <xsec/enc/XSECKeyInfoResolverDefault.hpp>
+#include <xsec/enc/XSECCryptoUtils.hpp>
+#include <xsec/enc/XSECCryptoException.hpp>
+#include <xsec/utils/XSECBinTXFMInputStream.hpp>
 #include <xsec/transformers/TXFMBase.hpp>
 #include <xsec/transformers/TXFMChain.hpp>
 
+
+//cURL for Timestamping
 #include <curl/curl.h>
 
+//OpenSSL
 #include <openssl/sha.h>
 
 //stat
@@ -51,8 +61,9 @@
 //
 #ifdef WIN32
 #include <io.h>
+#include <Shlwapi.h> //UrlCreateFromPath()
 #endif
-//
+
 //Solve stupid differences in Windows standards compliance
 #ifndef WIN32
 #define _stat stat
@@ -91,12 +102,44 @@ namespace eIDMW
 			in = new char[20];
 
 		}
-		//cryptoframework.h
+		//OpenSSL call
 		SHA1 ((unsigned char *)in, size, out);
 		return CByteArray((const unsigned char*)out, 20L);
-		//return mp_crypto->GetHashSha1(CByteArray(in, size));
+		
 
 	}
+	
+#ifdef WIN32
+
+	std::wstring utf8_decode(const char *str)
+	{
+		int size_needed = MultiByteToWideChar(CP_UTF8, 0, str, strlen(str), NULL, 0);
+		std::wstring wstrTo(size_needed, 0);
+		MultiByteToWideChar(CP_UTF8, 0, str, strlen(str), &wstrTo[0], size_needed);
+		return wstrTo;
+	}
+
+	const wchar_t * pathToURI(const std::wstring path)
+	{
+		DWORD url_size = MAX_PATH*5;
+		LPWSTR pszUrl = new WCHAR[url_size]; //We have to account for 
+
+		HRESULT ret = UrlCreateFromPath(path.c_str(), pszUrl, &url_size, NULL);
+
+		if (ret != S_OK)
+		{
+			MWLOG(LEV_ERROR, MOD_APL, L"XadesSignature: UrlCreateFromPath returned error, \
+				URI is probably wrongly encoded");
+			return std::wstring(L"file://localhost" + path).c_str();
+		}
+		
+		return pszUrl;
+
+	}
+	
+
+#endif
+
 	int XadesSignature::appendOID(XMLByte *toFill)
 	{
 
@@ -122,6 +165,56 @@ namespace eIDMW
 
 		for (unsigned int i=0; i != 20; i++)
 		    timestamp_asn1_request[SHA1_OFFSET +i] = sha_1[i];
+	}
+
+	static XMLCh s_Id[] = {
+
+	chLatin_I,
+	chLatin_d,
+	chNull
+    };
+
+	/*Add the following elements to the signature to be compliant with XaDES spec
+		 QualifyingProperties -> UnsignedProperties -> UnsignedSignatureProperties 
+		   -> SignatureTimeStamp -> EncapsulatedTimeStamp
+
+		   TODO: Add a reference as target of the SignedProperties Element
+		    <SignedProperties Target="#SignatureWithSignedAndUnsignedProperties">
+			...
+			 <ds:Reference URI="#SignedProperties "
+			Type=http://uri.etsi.org/01903/v1.1.1#SignedProperties">
+			   <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+			<ds:DigestValue>...</ds:DigestValue> 
+			</ds:Reference> 
+
+	*/
+	void XadesSignature::addSignatureProperties(DSIGSignature *sig)
+	{
+		XMLCh *prefix = XMLString::transcode("etsi");
+		XMLCh *xades_namespace = XMLString::transcode("http://uri.etsi.org/01903/v1.1.1#");
+		safeBuffer str; 
+		
+		xercesc_3_1::DOMDocument *doc = sig->getParentDocument();
+		DSIGObject * obj1 = sig->appendObject();
+		
+		obj1->setId(MAKE_UNICODE_STRING("SignaturePteID_Timestamp"));
+	
+		makeQName(str, prefix, "QualifyingProperties");
+		DOMNode * n1 = doc->createElementNS(xades_namespace, str.rawXMLChBuffer());
+		makeQName(str, prefix, "UnsignedProperties");
+		DOMNode * n2 = doc->createElementNS(xades_namespace, str.rawXMLChBuffer());
+		makeQName(str, prefix, "UnsignedSignatureProperties");
+		DOMNode * n3 = doc->createElementNS(xades_namespace, str.rawXMLChBuffer());
+		makeQName(str, prefix, "SignedProperties");
+		DOMNode * n4 = doc->createElementNS(xades_namespace, str.rawXMLChBuffer());
+		((DOMElement *)n4)->setAttributeNS(NULL, s_Id, XMLString::transcode("SignedProperties"));
+
+		n1->appendChild(n2);
+		n1->appendChild(n4);
+		n2->appendChild(n3);
+	
+		obj1->appendChild(n1);
+
 	}
 
 	CByteArray XadesSignature::timestamp_data(const unsigned char *input, unsigned int data_len)
@@ -153,9 +246,6 @@ namespace eIDMW
 
 			curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buf);
 
-			/*TODO: Using WRITEDATA to pass a fp to write response data breaks on Win32
-			 *      according to curl documentation
-			 */
 			//curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp_out);
 			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &XadesSignature::curl_write_data);
 
@@ -221,21 +311,147 @@ void XadesSignature::loadCert(CByteArray &data, EVP_PKEY *pub_key)
 	}
 
 }
-
-//TODO: Needs some refactoring and testing
-CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
+void XadesSignature::initXerces()
 {
-
 	try {
+
 		XMLPlatformUtils::Initialize();
 		XSECPlatformUtils::Initialise();
+
 	}
 	catch (const XMLException &e) {
 
 		MWLOG(LEV_ERROR, MOD_APL, L"Error during initialisation of Xerces. Error Message: %s",
 		     e.getMessage()) ;
+		throw CMWEXCEPTION(EIDMW_XERCES_INIT_ERROR);
+	}
+}
+
+bool XadesSignature::ValidateXades(CByteArray signature)
+{
+	initXerces();
+
+	//Load XML from a MemoryBuffer
+	MemBufInputSource * source = new MemBufInputSource(signature.GetBytes(),
+		(XMLSize_t)signature.Size(),
+		XMLString::transcode(generateId(20)));
+
+	
+	XercesDOMParser * parser = new XercesDOMParser;
+	Janitor<XercesDOMParser> j_parser(parser);
+
+	parser->setDoNamespaces(true);
+	parser->setCreateEntityReferenceNodes(true);
+
+	// Now parse out file
+
+	bool errorsOccured = false;
+	xsecsize_t errorCount = 0;
+    try
+    {
+    	parser->parse(*source);
+        errorCount = parser->getErrorCount();
+        if (errorCount > 0)
+            errorsOccured = true;
+    }
+
+    catch (const XMLException& e)
+    {
+        MWLOG(LEV_ERROR, MOD_APL, L"An error occured during parsing\n   Message: %s",
+			XMLString::transcode(e.getMessage()));
+        errorsOccured = true;
+    }
+
+
+    catch (const DOMException& e)
+    {
+       MWLOG(LEV_ERROR, MOD_APL, L"A DOM error occured during parsing\n   DOMException code: %d",
+            e.code);
+        errorsOccured = true;
+    }
+
+	if (errorsOccured) {
+
+		cout << "Errors during parse" << endl;
+		return false;
+	}
+
+	/*
+		Now that we have the parsed file, get the DOM document and start looking at it
+	*/
+	
+	DOMNode *doc;		// The document that we parsed
+
+	doc = parser->getDocument();
+	xercesc_3_1::DOMDocument *theDOM = parser->getDocument();
+
+	// Find the signature node
+	
+	DOMNode *sigNode = findDSIGNode(doc, "Signature");
+
+	// Create the signature checker
+
+	if (sigNode == 0) {
+
+		MWLOG(LEV_ERROR, MOD_APL, L"ValidateXades: \
+			Could not find <Signature> node in the signature provided");
+		return false;
+	}
+
+	XSECProvider prov;
+	XSECKeyInfoResolverDefault theKeyInfoResolver;
+
+	DSIGSignature * sig = prov.newSignatureFromDOM(theDOM, sigNode);
+
+	// The only way we can verify is using keys read directly from the KeyInfo list,
+	// so we add a KeyInfoResolverDefault to the Signature.
+
+	sig->setKeyInfoResolver(&theKeyInfoResolver);
+	sig->registerIdAttributeName(MAKE_UNICODE_STRING("ID"));
+
+
+	bool result;
+	bool extern_result; 
+	try {
+	
+		sig->load();
+
+		//agrr: "Manually" Check External References
+		/*DSIGReferenceList *refs = sig->getReferenceList();
+		if (refs != NULL)
+			extern_result = checkExternalRefs(refs);
+		if (!extern_result)
+		   cerr << "WARNING: Some of the files referenced in the signature were changed." 
+			   << endl;
+		*/
+		result = sig->verifySignatureOnly();
 
 	}
+	catch (XSECException &e) {
+		char * msg = XMLString::transcode(e.getMsg());
+		cerr << "An error occured during signature verification\n   Message: "
+		<< msg << endl;
+		XSEC_RELEASE_XMLCH(msg);
+		errorsOccured = true;
+		return 2;
+	}
+	catch (XSECCryptoException &e) {
+		cerr << "An error occured during signature verification\n   Message: "
+		<< e.getMsg() << endl;
+		errorsOccured = true;
+
+		return 2;
+	}
+
+
+	return result;
+
+}
+
+CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
+{
+
+	initXerces();
 
 	XSECProvider prov;
 	DSIGSignature *sig;
@@ -248,13 +464,14 @@ CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
 	CByteArray sha1_hash;
 	CByteArray rsa_signature;
 	XMLByte toFill[35 * sizeof(XMLByte)]; //SHA-1 Hash prepended with Algorithm ID as by PKCS#1 standard
+#ifdef WIN32
+	XMLCh * uni_reference_uri = (XMLCh*)pathToURI(utf8_decode(path));
+#else
+	//TODO: We also need to URL-encode the path on Linux
+	XMLCh * uni_reference_uri = XMLString::transcode(string("file://localhost") + path);
+#endif
 
-	const std::string &reference_uri = string("file://localhost") + path;
-
-	XMLCh * uni_reference_uri = XMLString::transcode(reference_uri.c_str());
-	//XMLCh * uni_reference_uri = XMLString::transcode("#hello");
-
-        DOMImplementation *impl = 
+    DOMImplementation *impl = 
 		DOMImplementationRegistry::getDOMImplementation(MAKE_UNICODE_STRING("Core"));
 	
 	xercesc_3_1::DOMDocument *doc = impl->createDocument(0, MAKE_UNICODE_STRING("Document"), NULL);
@@ -272,11 +489,9 @@ CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
 		//sig->setDSIGNSPrefix(MAKE_UNICODE_STRING("ds"));
 
 		// Use it to create a blank signature DOM structure from the doc
-
 		sigNode = sig->createBlankSignature(doc, CANON_C14N_COM, SIGNATURE_RSA, HASH_SHA1);
 
-		// Inser the signature DOM nodes into the doc
-
+		// Insert the signature DOM nodes into the doc
 		rootElem->appendChild(doc->createTextNode(MAKE_UNICODE_STRING("\n")));
 		rootElem->appendChild(sigNode);
 		rootElem->appendChild(doc->createTextNode(MAKE_UNICODE_STRING("\n")));
@@ -339,8 +554,8 @@ CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
 
 
 		sig->signExternal((XMLByte *)(rsa_signature.GetBytes()), PTEID_SIGNATURE_LENGTH); //RSA Signature with modlength=1024 bits
-
-		//addTimestampNode(sig);
+		
+		addSignatureProperties(sig);
 		
 	}
 	catch (XSECCryptoException &e)

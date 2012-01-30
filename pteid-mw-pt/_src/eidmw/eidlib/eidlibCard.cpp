@@ -551,8 +551,24 @@ PTEID_ByteArray PTEID_EIDCard::SignXades(const char * path, unsigned int n_paths
 	return out;
 }
 
+bool PTEID_EIDCard::VerifySignature(PTEID_ByteArray sig)
+{
+
+	bool res = false;
+	
+	BEGIN_TRY_CATCH
+
+	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
+	res = pcard->ValidateSignature(CByteArray(sig.GetBytes(), sig.Size())); 
+	
+	END_TRY_CATCH
+
+	return res;
+
+}
+
+
 /*
- *
  *
  */
 

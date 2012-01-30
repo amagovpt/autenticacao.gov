@@ -150,7 +150,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="wsock32.lib pteid35DlgsWin32.lib pteid35cardlayer.lib pteid35common.lib libeay32.lib ssleay32.lib xerces-c_3.lib freeimage.lib xsec_1.lib libcurl.lib"
+				AdditionalDependencies="wsock32.lib Shlwapi.lib pteid35DlgsWin32.lib pteid35cardlayer.lib pteid35common.lib libeay32.lib ssleay32.lib xerces-c_3.lib freeimage.lib xsec_1.lib libcurl.lib"
 				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName).dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="false"
