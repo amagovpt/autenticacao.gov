@@ -26,6 +26,7 @@
 #include "CardLayer.h"
 #include "cryptoFwkPteid.h"
 #include "CardPteidDef.h"
+#include "XadesSignature.h"
 
 #include <time.h>
 #include <sys/types.h>
@@ -131,6 +132,21 @@ CByteArray APL_Card::Sign(const CByteArray & oData)
 
 	return out;
 }
+
+/* TODO: Implement wrappers for the remaining Xades methods*/
+
+CByteArray &APL_Card::SignXades(const char * path, unsigned int n_paths)
+{
+	if (path == NULL || n_paths < 1)
+	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+
+	XadesSignature sig(this);
+
+	return sig.SignXades(path,n_paths);
+
+}
+
+
 
 /*****************************************************************************************
 ---------------------------------------- APL_MemoryCard ----------------------------------

@@ -25,7 +25,7 @@ XERCES_CPP_NAMESPACE_USE
 namespace eIDMW
 {
 	class CByteArray;
-	static char timestamp_asn1_request[ASN1_LEN] =
+	static unsigned char timestamp_asn1_request[ASN1_LEN] =
 	{
 	0x30, 0x29, 0x02, 0x01, 0x01, 0x30, 0x21, 0x30, 0x09, 0x06, 0x05, 0x2b, 0x0e, 0x03, 0x02, 0x1a,
 	0x05, 0x00, 0x04, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -36,27 +36,27 @@ namespace eIDMW
 	{
 		public:
 
-		EIDMW_APL_API XadesSignature(APL_Card &card): mp_card(card), mp_cert(NULL)
+		XadesSignature(APL_Card *card): mp_card(card), mp_cert(NULL)
 		{
 
 		};
 		
-		EIDMW_APL_API ~XadesSignature()
+		~XadesSignature()
 		{
 			X509_free(mp_cert);
 		};
 		
 		/* Add methods for Sign multiple files */
-		EIDMW_APL_API CByteArray &SignXades(CByteArray ba, const char *URL);
-		EIDMW_APL_API CByteArray &SignXadesT(CByteArray ba, const char *URL);
-		EIDMW_APL_API CByteArray &SignXades(const char * path, unsigned int n_paths);
-		EIDMW_APL_API CByteArray &SignXadesT(const char * path, unsigned int n_paths);
+		CByteArray &SignXades(CByteArray ba, const char *URL);
+		CByteArray &SignXadesT(CByteArray ba, const char *URL);
+		CByteArray &SignXades(const char * path, unsigned int n_paths);
+		CByteArray &SignXadesT(const char * path, unsigned int n_paths);
 		
 
 		private:
 
 		CByteArray HashFile(const char *file_path);
-		CByteArray *WriteToByteArray(DOMDocument *doc); 
+		CByteArray *WriteToByteArray(xercesc_3_1::DOMDocument *doc); 
 		//Utility methods	
 		void loadCert(CByteArray &ba, EVP_PKEY *pub_key);
 
@@ -71,7 +71,7 @@ namespace eIDMW
 		
 		X509 * mp_cert;
 		//APL_CryptoFwk *mp_crypto;
-		APL_Card & mp_card;
+		APL_Card *mp_card;
 		CByteArray mp_timestamp_data;
 
 

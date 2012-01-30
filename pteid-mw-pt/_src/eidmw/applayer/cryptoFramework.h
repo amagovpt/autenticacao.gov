@@ -24,11 +24,12 @@
 
 #include <memory>
 #include <string>
-#include "Mutex.h"
 #include "openssl/evp.h"
 #include "openssl/ocsp.h"
 #include "openssl/ssl.h"
 #include "openssl/bio.h"
+
+#include "Mutex.h"
 
 namespace eIDMW
 {

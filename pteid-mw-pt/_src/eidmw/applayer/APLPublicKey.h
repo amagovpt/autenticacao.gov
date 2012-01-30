@@ -15,12 +15,12 @@
 
 namespace eIDMW {
 
-EIDMW_CMN_API class APLPublicKey {
+class APLPublicKey {
 public:
-	APLPublicKey(CByteArray &modulus, CByteArray &exponent);
-	virtual ~APLPublicKey();
-	CByteArray *getModulus();
-	CByteArray *getExponent();
+	EIDMW_APL_API APLPublicKey(CByteArray &modulus, CByteArray &exponent);
+	EIDMW_APL_API virtual ~APLPublicKey();
+	EIDMW_APL_API CByteArray *getModulus();
+	EIDMW_APL_API CByteArray *getExponent();
 
 private:
 	CByteArray *m_modulus;

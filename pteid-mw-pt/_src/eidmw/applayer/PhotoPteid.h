@@ -14,20 +14,20 @@
 
 namespace eIDMW {
 
-EIDMW_CMN_API class PhotoPteid {
+class PhotoPteid {
 public:
-	PhotoPteid();
-	PhotoPteid(CByteArray &photo, CByteArray &cbeff, CByteArray &facialrechdr, CByteArray &facialinfo, CByteArray &imageinfo);
-	virtual ~PhotoPteid();
-	CByteArray *getPhotoPNG();						/**< Return field Photo in png format */
-	CByteArray *getPhotoRaw();						/**< Return field Photo in the original jp2 format */
-	CByteArray *getCbeff();
-	CByteArray *getFacialrechdr();
-	CByteArray *getFacialinfo();
-	CByteArray *getImageinfo();
+	EIDMW_APL_API PhotoPteid();
+	EIDMW_APL_API PhotoPteid(CByteArray &photo, CByteArray &cbeff, CByteArray &facialrechdr, CByteArray &facialinfo, CByteArray &imageinfo);
+	EIDMW_APL_API virtual ~PhotoPteid();
+	EIDMW_APL_API CByteArray *getPhotoPNG();						/**< Return field Photo in png format */
+	EIDMW_APL_API CByteArray *getPhotoRaw();						/**< Return field Photo in the original jp2 format */
+	EIDMW_APL_API CByteArray *getCbeff();
+	EIDMW_APL_API CByteArray *getFacialrechdr();
+	EIDMW_APL_API CByteArray *getFacialinfo();
+	EIDMW_APL_API CByteArray *getImageinfo();
 
 protected:
-	void setPhoto(CByteArray &photo);
+	EIDMW_APL_API void setPhoto(CByteArray &photo);
 
 private:
 	CByteArray *cbeff;

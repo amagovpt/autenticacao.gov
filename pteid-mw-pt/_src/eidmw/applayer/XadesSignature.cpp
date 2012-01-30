@@ -75,7 +75,7 @@ namespace eIDMW
 		char * in; 
 		unsigned char out[SHA1_LEN];
 
-		std::ifstream::pos_type size = -1; 
+		int size = -1; 
 		if (file.is_open())
 		{   
 			size = file.tellg();
@@ -110,8 +110,10 @@ namespace eIDMW
 	/** Timestamping stuff */
 	size_t XadesSignature::curl_write_data(char *ptr, size_t size, size_t nmemb, void * stream)
 	{
-		mp_timestamp_data.Append((const unsigned char*)ptr, (unsigned long)size*nmemb);
+		size_t realsize = size * nmemb;
+		mp_timestamp_data.Append((const unsigned char*)ptr, realsize);
 
+		return realsize;
 
 	}
 	
@@ -177,7 +179,7 @@ namespace eIDMW
 		return CByteArray(mp_timestamp_data);
 	}
 
-	CByteArray *XadesSignature::WriteToByteArray(DOMDocument * doc)
+	CByteArray *XadesSignature::WriteToByteArray(xercesc_3_1::DOMDocument * doc)
 	{
 		CByteArray * ba_out = new CByteArray();
 		XMLCh tempStr[3] = {chLatin_L, chLatin_S, chNull};
@@ -255,7 +257,7 @@ CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
         DOMImplementation *impl = 
 		DOMImplementationRegistry::getDOMImplementation(MAKE_UNICODE_STRING("Core"));
 	
-	DOMDocument *doc = impl->createDocument(0, MAKE_UNICODE_STRING("Document"), NULL);
+	xercesc_3_1::DOMDocument *doc = impl->createDocument(0, MAKE_UNICODE_STRING("Document"), NULL);
 	DOMElement *rootElem = doc->getDocumentElement();
 
 
@@ -307,7 +309,7 @@ CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
 		
 		//TODO: Load Certificate from the right applayer object
 		CByteArray certData;
-	       	mp_card.readFile(PTEID_FILE_CERT_SIGNATURE, certData);
+	    mp_card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
 
 		loadCert (certData, pub_key);
 
@@ -327,7 +329,7 @@ CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
 		
 		try
 		{
-			rsa_signature = mp_card.Sign(CByteArray(toFill, SHA1_LEN + oidlen));
+			rsa_signature = mp_card->Sign(CByteArray(toFill, SHA1_LEN + oidlen));
 		}
 		catch(...)
 		{
