@@ -210,7 +210,7 @@ void AutoUpdates::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
 
 bool AutoUpdates::VerifyUpdates(std::string filedata)
 {
-    std::string distrover;
+    	std::string distrover;
 	std::string archver;
 	std::string ver;
 
@@ -222,7 +222,7 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	if(VerInfo.Open(filename.toLatin1()))
 	{
 		char version[256];
-		VerInfo.QueryStringValue(VI_STR_FILEVERSION, version);
+		VerInfo.QueryStringValue(VI_STR_FILEVERSION, version)
 		m_Settings.setGuiVersion(version);
 	}*/
 #else
