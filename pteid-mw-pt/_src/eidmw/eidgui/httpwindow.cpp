@@ -28,6 +28,10 @@
 #include "eidlib.h"
 #include "mainwnd.h"
 
+#ifdef WIN32
+#include <process.h>
+#endif
+
 std::string urli;
 std::string dtitle ("Cartão de Cidadão");
 std::string getdistro;
@@ -215,14 +219,27 @@ void HttpWindow::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
 
 void HttpWindow::RunPackage(std::string pkg, std::string distro)
 {
+	std::string pkgpath;
+	pkgpath.append(QDir::tempPath().toStdString());
+	pkgpath.append("/");
+	pkgpath.append(pkg);
 #ifdef WIN32
+	STARTUPINFO si;
+    PROCESS_INFORMATION pi;
+	ZeroMemory(&si,sizeof(si)); 
+	si.cb = sizeof(si); 
+
+	std::string winpath;
+	winpath.append("C:\\Windows\\system32\\msiexec.exe /i ");
+	//TODO: Verificar a path do msi em Windows
+	//C:\\Users\\Luis\\AppData\\Local\\Temp\\PteidMW35-Basic-en.msi
+	winpath.append(pkgpath);
+	CreateProcess(NULL, LPTSTR(winpath.c_str()), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
+	exit(0);
 
 #else
-  std::string pkgpath;
-  pkgpath.append(QDir::tempPath().toStdString());
-  pkgpath.append("/");
-  pkgpath.append(pkg);
-  std::cout << "pkgpath " << pkgpath << " distro " << distro << std::endl;
+
+	std::cout << "pkgpath " << pkgpath << " distro " << distro << std::endl;
 	if (distro == "debian")
 	{
 	  	execl ("/usr/bin/software-center", "software-center", pkgpath.c_str(), NULL);
