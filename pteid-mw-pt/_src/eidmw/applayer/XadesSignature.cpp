@@ -172,7 +172,7 @@ namespace eIDMW
 	chLatin_I,
 	chLatin_d,
 	chNull
-    };
+        };
 
 	/*Add the following elements to the signature to be compliant with XaDES spec
 		 QualifyingProperties -> UnsignedProperties -> UnsignedSignatureProperties 
@@ -327,6 +327,9 @@ void XadesSignature::initXerces()
 	}
 }
 
+
+/*TODO: We'll have to investigate how to validate the timestamp if the signature
+ *      actually contains one  */
 bool XadesSignature::ValidateXades(CByteArray signature)
 {
 	initXerces();
@@ -472,7 +475,7 @@ CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
 	XMLCh * uni_reference_uri = XMLString::transcode(default_uri.c_str());
 #endif
 
-    DOMImplementation *impl = 
+        DOMImplementation *impl = 
 		DOMImplementationRegistry::getDOMImplementation(MAKE_UNICODE_STRING("Core"));
 	
 	xercesc_3_1::DOMDocument *doc = impl->createDocument(0, MAKE_UNICODE_STRING("Document"), NULL);
@@ -525,7 +528,7 @@ CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
 		
 		//TODO: Load Certificate from the right applayer object
 		CByteArray certData;
-	    mp_card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
+	        mp_card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
 
 		loadCert (certData, pub_key);
 
@@ -545,7 +548,7 @@ CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
 		
 		try
 		{
-			rsa_signature = mp_card->Sign(CByteArray(toFill, SHA1_LEN + oidlen));
+			rsa_signature = mp_card->Sign(CByteArray(toFill, SHA1_LEN + oidlen), true);
 		}
 		catch(...)
 		{
