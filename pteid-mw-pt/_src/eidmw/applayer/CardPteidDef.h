@@ -62,7 +62,7 @@ namespace eIDMW
 #define PTEIDNG_FIELD_TRACE_LEN_VALIDATION				1
 #define PTEIDNG_ACTIVE_CARD								1
 
-//Add PTeid-ng ID defines
+//Add PTeid-ng ID defines - ok
 #define PTEIDNG_FIELD_ID_POS_FILE						0
 #define PTEIDNG_FIELD_ID_LEN_FILE						15500
 
@@ -121,14 +121,14 @@ namespace eIDMW
 #define PTEIDNG_FIELD_ID_POS_Mrz3						1342
 #define PTEIDNG_FIELD_ID_LEN_Mrz3						30
 
-//
+// martinho - ok
 #define PTEIDNG_FIELD_ID_POS_MODULUS					1372
 #define PTEIDNG_FIELD_ID_LEN_MODULUS					128
 #define PTEIDNG_FIELD_ID_POS_EXPONENT					1500
 #define PTEIDNG_FIELD_ID_LEN_EXPONENT					3
 
 
-// photo data
+// photo data - ok
 #define PTEIDNG_FIELD_ID_POS_CBEFF						1503
 #define PTEIDNG_FIELD_ID_LEN_CBEFF						34
 #define PTEIDNG_FIELD_ID_POS_FACIALRECHDR				1537
@@ -141,14 +141,13 @@ namespace eIDMW
 #define PTEIDNG_FIELD_ID_LEN_Photo						14128
 
 
-
-// common address defines
+// common address defines - ok
 #define PTEIDNG_FIELD_ADDRESS_POS_TYPE						0
 #define PTEIDNG_FIELD_ADDRESS_LEN_TYPE						2
 #define PTEIDNG_FIELD_ADDRESS_POS_COUNTRY					2
 #define PTEIDNG_FIELD_ADDRESS_LEN_COUNTRY					4
 
-// specific portuguese address details
+// specific portuguese address details - ok
 #define PTEIDNG_FIELD_ADDRESS_POS_DISTRICT					6
 #define PTEIDNG_FIELD_ADDRESS_LEN_DISTRICT					4
 #define PTEIDNG_FIELD_ADDRESS_POS_DISTRICT_DESCRIPTION		10
@@ -190,7 +189,7 @@ namespace eIDMW
 #define PTEIDNG_FIELD_ADDRESS_POS_GENADDRESS_NUM			1134
 #define PTEIDNG_FIELD_ADDRESS_LEN_GENADDRESS_NUM			12
 
-// generic foreign address details
+// generic foreign address details - ok
 #define PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_COUNTRY_DESCRIPTION	6
 #define PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_COUNTRY_DESCRIPTION	100
 #define PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_ADDRESS				106
@@ -244,11 +243,13 @@ namespace eIDMW
 #define PTEID_FIELD_BYTE_TOKENINFO_ElectricalPersonalisation            38
 #define PTEID_FIELD_BYTE_TOKENINFO_ElectricalPersonalisationInterface   39
 
+//martinho - ok
 #define PTEID_FIELD_TOKENINFO_POS_SERIAL		7
 #define PTEID_FIELD_TOKENINFO_LEN_SERIAL		8
 #define PTEID_FIELD_TOKENINFO_POS_LABEL			26
 #define PTEID_FIELD_TOKENINFO_LEN_LABEL			17
 
+//martinho - ok
 #define PTEIDNG_FIELD_ROOTCA_PK_POS_MODULUS				23
 #define PTEIDNG_FIELD_ROOTCA_PK_LEN_MODULUS				128
 #define PTEIDNG_FIELD_ROOTCA_PK_POS_EXPONENT			153

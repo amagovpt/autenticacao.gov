@@ -75,6 +75,7 @@ public:
             bool bShowDlg=true);
     virtual unsigned long PinStatus(const tPin & Pin);
     virtual CByteArray RootCAPubKey();
+    virtual bool Activate(const char *pinCode, CByteArray &BCDDate);
 	virtual bool LogOff(const tPin & Pin);
 
 	virtual unsigned long GetSupportedAlgorithms();

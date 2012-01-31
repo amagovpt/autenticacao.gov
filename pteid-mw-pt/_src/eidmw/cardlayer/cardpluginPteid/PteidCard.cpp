@@ -32,6 +32,17 @@ static const tFileInfo DEFAULT_FILE_INFO = {-1, -1, -1};
 static const tFileInfo PREFS_FILE_INFO_V1 = {-1, -1, 1};
 static const tFileInfo PREFS_FILE_INFO_V2 = {-1, -1, 0x85};
 
+/* martinho - the id must not be changed */
+static const unsigned long PTEIDNG_ACTIVATION_CODE_ID = 4;
+/* martinho - ANY_ID_BIGGER_THAN_6 will be the ulID in the tPin struct 1-6 are already taken */
+static const unsigned long ANY_ID_BIGGER_THAN_6 = 7;
+/* martinho - some meaningful label */
+static const string LABEL = "ACTIVATION_CODE";
+/* martinho - date in bcd format must have 4 bytes*/
+static const unsigned long BCDSIZE = 4;
+/* martinho - trace file*/
+static const string TRACEFILE = "3F000003";
+
 unsigned long ulVersion;	
 
 // If we want to 'hardcode' this plugin internally in the CAL, this function
@@ -382,6 +393,7 @@ CByteArray CPteidCard::RootCAPubKey(){
 		CByteArray select("3F00",true);
 		oResp = SendAPDU(0xA4, 0x00, 0x0C, select);
 		getSW12(oResp, 0x9000);
+
 		//4D - extended header list, 04 - size, FFA001 - SDO root CA, 80 - give me all?
 		CByteArray getData("4D04FFA00180",true);
 		oResp = SendAPDU(0xCB, 0x3F, 0xFF, getData);
@@ -395,6 +407,31 @@ CByteArray CPteidCard::RootCAPubKey(){
 	}
 	return oResp;
 }
+
+
+bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate){
+	/* the activation code is not listed in the internal card structures */
+	tPin activationPin = {true,LABEL,0,0,0,ANY_ID_BIGGER_THAN_6,0,0,8,8,8,PTEIDNG_ACTIVATION_CODE_ID,0x20,PIN_ENC_ASCII,"",""};
+	unsigned long ulRemaining;
+
+	bool bOK = PinCmd(PIN_OP_VERIFY, activationPin, pinCode, "", ulRemaining, NULL);
+	if (!bOK)
+		return bOK;
+
+	if (BCDDate.Size() != BCDSIZE)
+		return false;
+
+	CByteArray oResp;
+	CByteArray data(BCDDate);
+	data.Append(0);
+	data.Append(1); // data = day month year 0 1   -- 6 bytes written to 3F000003 trace file
+
+	WriteFile(TRACEFILE,0,data);
+
+	return true;
+}
+
+
 
 DlgPinUsage CPteidCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)
 {

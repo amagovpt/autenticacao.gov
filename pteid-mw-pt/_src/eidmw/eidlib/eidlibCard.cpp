@@ -1073,6 +1073,38 @@ PTEID_PublicKey& PTEID_EIDCard::getRootCAPubKey()
 	return *out;
 }
 
+bool PTEID_EIDCard::isActive(){
+	bool out = false;
+
+	BEGIN_TRY_CATCH
+
+	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
+
+	out =  pcard->isActive();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+
+void PTEID_EIDCard::doSODCheck(bool check){
+}
+
+bool PTEID_EIDCard::Activate(const char *pinCode, CByteArray &BCDDate){
+	bool out = false;
+
+	BEGIN_TRY_CATCH
+
+	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
+	out =  pcard->Activate(pinCode,BCDDate);
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+
 
 
 const PTEID_ByteArray& PTEID_EIDCard::getRawData_Challenge()
@@ -1511,7 +1543,9 @@ PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *
 
 PTEIDSDK_API long PTEID_SelectADF(unsigned char *adf, long adflen){
 	if (readerContext!=NULL){
-
+		PTEID_ByteArray pb(adf,adflen);
+		PTEID_EIDCard &card = readerContext->getEIDCard();
+		card.selectApplication(pb);
 	}
 
 	return 0;
@@ -1575,13 +1609,17 @@ PTEIDSDK_API long PTEID_WriteFile(unsigned char *file, int filelen,	unsigned cha
 PTEIDSDK_API long PTEID_IsActivated(unsigned long *pulStatus){
 
 	if (readerContext!=NULL)
-		*pulStatus = (readerContext->getEIDCard().getVersionInfo().isActive() ? PTEID_ACTIVE_CARD : PTEID_INACTIVE_CARD);
+		*pulStatus = (readerContext->getEIDCard().isActive() ? PTEID_ACTIVE_CARD : PTEID_INACTIVE_CARD);
 	return 0;
 }
 
 PTEIDSDK_API long PTEID_Activate(char *pszPin, unsigned char *pucDate, unsigned long ulMode){
+	long retval = 0;
 	if (readerContext!=NULL){
-
+		CByteArray bcd(pucDate,4);
+		if (readerContext->getEIDCard().Activate(pszPin,bcd))
+			return 0;
+		return -1;
 	}
 
 	return 0;

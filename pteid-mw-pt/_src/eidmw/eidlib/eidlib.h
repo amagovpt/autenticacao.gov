@@ -705,7 +705,10 @@ public:
 	PTEIDSDK_API PTEID_Certificate &getAuthentication();		/**< Return the authentication certificate from the card */
 	PTEIDSDK_API bool VerifySignature(PTEID_ByteArray signature); /** Validates an XML-DSIG or XAdES signature produced with PTEID_EIDCard::SignXades() method  */
 	PTEIDSDK_API PTEID_ByteArray SignXades(const char * listofPaths, unsigned int n_paths); /** Return a Xades signature as a UTF-8 string */
-	PTEIDSDK_API PTEID_PublicKey& getRootCAPubKey();				/**< Get the CVC CA public key that this card uses to verify the CVC key */
+	PTEIDSDK_API PTEID_PublicKey& getRootCAPubKey();						/**< Get the CVC CA public key that this card uses to verify the CVC key */
+	PTEIDSDK_API bool isActive();
+	PTEIDSDK_API void doSODCheck(bool check);								/**< enable/disable the checking of the data against the sod*/
+	PTEIDSDK_API bool Activate(const char *pinCode, CByteArray &BCDDate); 	/**< Activate the pteid card */
 
 	/**
 	 * Return a raw data from the card.

@@ -183,7 +183,10 @@ public:
 	APL_EidFile_Sod *getFileSod();				/**< Return a pointer to the file Photo (NOT EXPORTED) */
 	APL_EidFile_PersoData *getFilePersoData();				/**< Return a pointer to the file PersoData (NOT EXPORTED) */
 	APL_EidFile_TokenInfo *getFileTokenInfo();		/**< Return a pointer to the file Token Info (NOT EXPORTED) */
-	APLPublicKey *getRootCAPubKey();					/**< Get the CVC CA public key that this card uses to verify the CVC key (NOT EXPORTED)*/
+	APLPublicKey *getRootCAPubKey();						/**< Get the CVC CA public key that this card uses to verify the CVC key (NOT EXPORTED)*/
+	bool isActive();
+	bool Activate(const char *pinCode, CByteArray &BCDDate);	/**< Activate the pteid card (NOT EXPORTED)*/
+
 
 	static void askWarningLevel();
 	static void setWarningLevel(APL_AccessWarningLevel lWarningLevel);
@@ -594,7 +597,6 @@ public:
 	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
 	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
 
-	EIDMW_APL_API bool isActive();
 	EIDMW_APL_API const char *getSerialNumber();		/**< Return field SerialNumber from the Info file */
 	EIDMW_APL_API const char *getTokenLabel();			/**< Return field Label from the EFCIA (5032) file */
 	EIDMW_APL_API const char *getComponentCode();		/**< Return field ComponentCode from the Info file */

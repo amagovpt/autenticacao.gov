@@ -1273,6 +1273,21 @@ APLPublicKey *APL_EIDCard::getRootCAPubKey(){
 	return m_RootCAPubKey;
 }
 
+bool APL_EIDCard::isActive()
+{
+	return getFileTrace()->isActive();
+}
+
+bool APL_EIDCard::Activate(const char *pinCode, CByteArray &BCDDate){
+	bool out = false;
+
+	BEGIN_CAL_OPERATION(m_reader)
+	out = m_reader->getCalReader()->Activate(pinCode,BCDDate);
+	END_CAL_OPERATION(m_reader)
+
+	return out;
+}
+
 
 /*****************************************************************************************
 ---------------------------------------- APL_EIdFullDoc -------------------------------------------
@@ -2770,11 +2785,6 @@ CByteArray APL_DocVersionInfo::getTLV()
 	delete[] pucData;
 
 	return ba;
-}
-
-bool APL_DocVersionInfo::isActive()
-{
-	return m_card->getFileTrace()->isActive();
 }
 
 const char *APL_DocVersionInfo::getSerialNumber()
