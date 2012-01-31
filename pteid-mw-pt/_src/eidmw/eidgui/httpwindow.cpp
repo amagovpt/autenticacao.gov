@@ -29,7 +29,7 @@
 #include "mainwnd.h"
 
 #ifdef WIN32
-#include <process.h>
+#include <windows.h>
 #endif
 
 std::string urli;
