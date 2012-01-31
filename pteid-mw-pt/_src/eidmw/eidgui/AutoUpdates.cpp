@@ -36,6 +36,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include "verinfo.h"
+#include <QSysInfo>
 #else
 #include "pteidversions.h"
 #endif
@@ -44,7 +45,7 @@ using namespace eIDMW;
 
 std::string ddtitle ("Cartão de Cidadão");
 std::string serverurl = "http://people.caixamagica.pt/lmedinas/autoupdates/";
-std::string remoteversion = "http://people.caixamagica.pt/lmedinas/autoupdates/versioninferior.txt";
+std::string remoteversion = "http://people.caixamagica.pt/lmedinas/autoupdates/version.txt";
 
 AutoUpdates::AutoUpdates(QWidget *parent)
 : QDialog(parent)
@@ -210,25 +211,30 @@ void AutoUpdates::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
 
 bool AutoUpdates::VerifyUpdates(std::string filedata)
 {
-    	std::string distrover;
+    std::string distrover;
 	std::string archver;
 	std::string ver;
+	std::string remoteversion;
+	double localverd;
+	double remoteversiond;
 
 #ifdef WIN32
-	/*QFileInfo	fileInfo(m_Settings.getExePath()) ;
-
 	QString filename = QCoreApplication::arguments().at(0);
 	CFileVersionInfo VerInfo;
+	char version[256];
 	if(VerInfo.Open(filename.toLatin1()))
 	{
-		char version[256];
-		VerInfo.QueryStringValue(VI_STR_FILEVERSION, version)
-		m_Settings.setGuiVersion(version);
-	}*/
+		VerInfo.QueryStringValue(VI_STR_FILEVERSION, version);
+	}
+
+	ver = version;
+	//ver = "3,5";
 #else
 
 	QString strVersion (WIN_GUI_VERSION_STRING);
 	ver = strVersion.toStdString();
+
+	//printf ("value %f\n", localverd);
 #endif
 
 	ver.replace(2,1,"");
@@ -236,24 +242,22 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	ver.replace(3,1,"");
 	ver.replace(4,6, "");
 
-	double localverd = atof(ver.c_str());
-	//printf ("value %f\n", localverd);
-
-	std::string remoteversion = filedata;
-	double remoteversiond = atof(remoteversion.c_str());
+	remoteversion = filedata;
+	localverd = atof(ver.c_str());
+	remoteversiond = atof(remoteversion.c_str());
 
 	//return true;
 	if (localverd < remoteversiond)
 	{
-	    	this->close();
+		this->close();
 #ifdef WIN32
 		distrover = VerifyOS("distro", false);
 #else
 		distrover = VerifyOS("distro", true);
 #endif
-                archver = VerifyOS("arch", false);
-                ChooseVersion(distrover, archver);
-                return true;
+        archver = VerifyOS("arch", false);
+        ChooseVersion(distrover, archver);
+        return true;
 	} else {
 		std::string titlenoup = "Actualizações";
 		std::string infotextnoup = "Não existem Actualizações de momento!";
@@ -276,11 +280,15 @@ std::string AutoUpdates::VerifyOS(std::string param, bool runscript)
 	std::string distrostr;
 	std::string archstr;
 #ifdef WIN32
-
 	//check if it's Windows 32 or 64 bits
+	distrostr = "windows";
+
+	if( QSysInfo::WordSize == 64 )
+		archstr = "x86_64";
+	else
+		archstr = "i386";
 
 #else
-
 
 	if (runscript)
 	{
@@ -327,6 +335,23 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 	std::string downloadurl;
 	std::string pkgname;
 	downloadurl.append(serverurl);
+
+#ifdef WIN32
+	if (arch == "x86_64")
+	{
+		pkgname.append("PteidMW35-Basic-en.msi");
+		downloadurl.append(pkgname);
+		HttpWindow httpWin(downloadurl, distro);
+		httpWin.show();
+		httpWin.exec();
+	} else {
+		pkgname.append("PteidMW35-Basic-en.msi");
+		downloadurl.append(pkgname);
+		HttpWindow httpWin(downloadurl, distro);
+		httpWin.show();
+		httpWin.exec();
+	}
+#else
 	pkgname.append("pteid-mw");
 
 	if (arch == "x86_64")
@@ -390,6 +415,6 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		    	httpWin.exec();
 		}
 	}
-
+#endif
 }
 

@@ -22,8 +22,11 @@
 #define HTTPWINDOW_H
 
 #include <QDialog>
+#include <QtGui>
 #include <QNetworkAccessManager>
 #include <QUrl>
+#include <iostream>
+#include <QString>
 
 class QDialogButtonBox;
 class QFile;
@@ -31,7 +34,6 @@ class QLabel;
 class QLineEdit;
 class QProgressDialog;
 class QPushButton;
-class QSslError;
 class QAuthenticator;
 class QNetworkReply;
 

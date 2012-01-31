@@ -25,6 +25,8 @@
 #include <QtNetwork>
 
 #include "httpwindow.h"
+#include "eidlib.h"
+#include "mainwnd.h"
 
 std::string urli;
 std::string dtitle ("Cartão de Cidadão");
