@@ -122,7 +122,7 @@ namespace eIDMW
 	const wchar_t * pathToURI(const std::wstring path)
 	{
 		DWORD url_size = MAX_PATH*5;
-		LPWSTR pszUrl = new WCHAR[url_size]; //We have to account for 
+		LPWSTR pszUrl = new WCHAR[url_size]; //We have to account for chars that must be escaped into %XX sequences
 
 		HRESULT ret = UrlCreateFromPath(path.c_str(), pszUrl, &url_size, NULL);
 
@@ -197,17 +197,21 @@ namespace eIDMW
 		xercesc_3_1::DOMDocument *doc = sig->getParentDocument();
 		DSIGObject * obj1 = sig->appendObject();
 		
-		obj1->setId(MAKE_UNICODE_STRING("SignaturePteID_Timestamp"));
+		obj1->setId(MAKE_UNICODE_STRING("Signature_PteID_Timestamp"));
 	
 		makeQName(str, prefix, "QualifyingProperties");
 		DOMNode * n1 = doc->createElementNS(xades_namespace, str.rawXMLChBuffer());
+		n1->appendChild(doc->createTextNode(DSIGConstants::s_unicodeStrNL)); //Pretty print
 		makeQName(str, prefix, "UnsignedProperties");
 		DOMNode * n2 = doc->createElementNS(xades_namespace, str.rawXMLChBuffer());
+		n2->appendChild(doc->createTextNode(DSIGConstants::s_unicodeStrNL)); //Pretty print
 		makeQName(str, prefix, "UnsignedSignatureProperties");
 		DOMNode * n3 = doc->createElementNS(xades_namespace, str.rawXMLChBuffer());
+		n3->appendChild(doc->createTextNode(DSIGConstants::s_unicodeStrNL)); //Pretty print
 		makeQName(str, prefix, "SignedProperties");
 		DOMNode * n4 = doc->createElementNS(xades_namespace, str.rawXMLChBuffer());
 		((DOMElement *)n4)->setAttributeNS(NULL, s_Id, XMLString::transcode("SignedProperties"));
+		n4->appendChild(doc->createTextNode(DSIGConstants::s_unicodeStrNL)); //Pretty print
 
 		n1->appendChild(n2);
 		n1->appendChild(n4);
@@ -332,14 +336,18 @@ void XadesSignature::initXerces()
  *      actually contains one  */
 bool XadesSignature::ValidateXades(CByteArray signature)
 {
+	bool errorsOccured = false;
+	
+	MWLOG(LEV_DEBUG, MOD_APL, L"ValidateXades() called with XML content of %d bytes",
+			signature.GetBytes());
 	initXerces();
 
 	//Load XML from a MemoryBuffer
 	MemBufInputSource * source = new MemBufInputSource(signature.GetBytes(),
-		(XMLSize_t)signature.Size(),
-		XMLString::transcode(generateId(20)));
+			(XMLSize_t)signature.Size(),
+			XMLString::transcode(generateId(20)));
 
-	
+
 	XercesDOMParser * parser = new XercesDOMParser;
 	Janitor<XercesDOMParser> j_parser(parser);
 
@@ -348,39 +356,33 @@ bool XadesSignature::ValidateXades(CByteArray signature)
 
 	// Now parse out file
 
-	bool errorsOccured = false;
 	xsecsize_t errorCount = 0;
-    try
-    {
-    	parser->parse(*source);
-        errorCount = parser->getErrorCount();
-        if (errorCount > 0)
-            errorsOccured = true;
-    }
+	try
+	{
+		parser->parse(*source);
+	}
 
-    catch (const XMLException& e)
-    {
-        MWLOG(LEV_ERROR, MOD_APL, L"An error occured during parsing\n   Message: %s",
-			XMLString::transcode(e.getMessage()));
-        errorsOccured = true;
-    }
-
-
-    catch (const DOMException& e)
-    {
-       MWLOG(LEV_ERROR, MOD_APL, L"A DOM error occured during parsing\n   DOMException code: %d",
-            e.code);
-        errorsOccured = true;
-    }
+	catch (const XMLException& e)
+	{
+		MWLOG(LEV_ERROR, MOD_APL, L"An error occured during parsing\n   Message: %s",
+				XMLString::transcode(e.getMessage()));
+		errorsOccured = true;
+	}
+	catch (const DOMException& e)
+	{
+		MWLOG(LEV_ERROR, MOD_APL, L"A DOM error occured during parsing\n   DOMException code: %d",
+				e.code);
+		errorsOccured = true;
+	}
 
 	if (errorsOccured) {
 
-		cout << "Errors during parse" << endl;
+		MWLOG(LEV_ERROR, MOD_APL, L"Errors parsing XML Signature, bailing out");
 		return false;
 	}
 
 	/*
-		Now that we have the parsed file, get the DOM document and start looking at it
+	 *   Now that we have the parsed file, get the DOM document and start looking at it
 	*/
 	
 	DOMNode *doc;		// The document that we parsed
@@ -394,12 +396,14 @@ bool XadesSignature::ValidateXades(CByteArray signature)
 
 	// Create the signature checker
 
-	if (sigNode == 0) {
+	if (sigNode == NULL) {
 
 		MWLOG(LEV_ERROR, MOD_APL, L"ValidateXades: \
 			Could not find <Signature> node in the signature provided");
 		return false;
 	}
+
+	MWLOG(LEV_DEBUG, MOD_APL, L"ValidateXades: XML signature correctly parsed.");
 
 	XSECProvider prov;
 	XSECKeyInfoResolverDefault theKeyInfoResolver;
@@ -432,18 +436,15 @@ bool XadesSignature::ValidateXades(CByteArray signature)
 	}
 	catch (XSECException &e) {
 		char * msg = XMLString::transcode(e.getMsg());
-		cerr << "An error occured during signature verification\n   Message: "
-		<< msg << endl;
+		cerr << "An error occured during signature verification\n  (1) Message: "
+			<< msg << endl;
 		XSEC_RELEASE_XMLCH(msg);
-		errorsOccured = true;
-		return 2;
+		return false;
 	}
 	catch (XSECCryptoException &e) {
-		cerr << "An error occured during signature verification\n   Message: "
-		<< e.getMsg() << endl;
-		errorsOccured = true;
-
-		return 2;
+		cerr << "An error occured during signature verification\n  (2) Message: "
+			<< e.getMsg() << endl;
+		return false;
 	}
 
 
@@ -451,7 +452,7 @@ bool XadesSignature::ValidateXades(CByteArray signature)
 
 }
 
-CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
+CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
 {
 
 	initXerces();
@@ -466,7 +467,10 @@ CByteArray &XadesSignature::SignXades(const char * path, unsigned int n_paths)
 
 	CByteArray sha1_hash;
 	CByteArray rsa_signature;
+	const char * path = paths[0];
 	XMLByte toFill[35 * sizeof(XMLByte)]; //SHA-1 Hash prepended with Algorithm ID as by PKCS#1 standard
+	
+
 	string default_uri = string("file://localhost") + path;
 #ifdef WIN32
 	XMLCh * uni_reference_uri = (XMLCh*)pathToURI(utf8_decode(path));

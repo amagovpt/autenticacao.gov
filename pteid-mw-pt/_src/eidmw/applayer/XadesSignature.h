@@ -44,12 +44,11 @@ namespace eIDMW
 		{
 			X509_free(mp_cert);
 		};
-		
-		/* Add methods for Sign multiple files */
+
 		CByteArray &SignXades(CByteArray ba, const char *URL);
 		CByteArray &SignXadesT(CByteArray ba, const char *URL);
-		CByteArray &SignXades(const char * path, unsigned int n_paths);
-		CByteArray &SignXadesT(const char * path, unsigned int n_paths);
+		CByteArray &SignXades(const char ** paths, unsigned int n_paths);
+		CByteArray &SignXadesT(const char ** paths, unsigned int n_paths);
 
 		bool ValidateXades(CByteArray signature);
 		

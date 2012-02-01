@@ -138,7 +138,7 @@ CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey)
 
 /* TODO: Implement wrappers for the remaining Xades methods*/
 
-CByteArray &APL_Card::SignXades(const char * path, unsigned int n_paths)
+CByteArray &APL_Card::SignXades(const char ** path, unsigned int n_paths)
 {
 	if (path == NULL || n_paths < 1)
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);

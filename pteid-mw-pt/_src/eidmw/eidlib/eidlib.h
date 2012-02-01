@@ -703,12 +703,44 @@ public:
 	PTEIDSDK_API PTEID_Certificate &getCA();					/**< Return the ca certificate from the card */
 	PTEIDSDK_API PTEID_Certificate &getSignature();			/**< Return the signature certificate from the card */
 	PTEIDSDK_API PTEID_Certificate &getAuthentication();		/**< Return the authentication certificate from the card */
-	PTEIDSDK_API bool VerifySignature(PTEID_ByteArray signature); /** Validates an XML-DSIG or XAdES signature produced with PTEID_EIDCard::SignXades() method  */
-	PTEIDSDK_API PTEID_ByteArray SignXades(const char * listofPaths, unsigned int n_paths); /** Return a Xades signature as a UTF-8 string */
+
 	PTEIDSDK_API PTEID_PublicKey& getRootCAPubKey();						/**< Get the CVC CA public key that this card uses to verify the CVC key */
 	PTEIDSDK_API bool isActive();
 	PTEIDSDK_API void doSODCheck(bool check);								/**< enable/disable the checking of the data against the sod*/
 	PTEIDSDK_API bool Activate(const char *pinCode, CByteArray &BCDDate); 	/**< Activate the pteid card */
+	
+	/** Validates an XML-DSIG or XAdES signature
+	 *
+	 *  This method is intended to validate XADES signatures produced with PTEID_EIDCard::SignXades() method
+	 *  even though any conforming signature should work
+	 *  Implementation note: External references in the <SignedInfo> element are not checked
+	 *
+	 *  @param IN signature is a byte array containing the UTF-8 representation of an XML document
+	 *  @param OUT error_buffer if not NULL should point to a preallocated char buffer that will be filled with 
+	 *  a description of eventual validation problems
+	 *  @param IN/OUT error_size on input it should point to the size of error_buffer on API return 
+	 *  it points to the length of the string 
+	 *  written into error_buffer
+	 */
+	PTEIDSDK_API bool VerifySignature(PTEID_ByteArray signature, char * error_buffer, unsigned long *error_size);
+	PTEIDSDK_API PTEID_ByteArray SignXades(const char * listofPaths, unsigned int n_paths); /** Return a Xades signature as a UTF-8 string */
+	/** Produce Xades Signature of Arbitrary Contents (from memory or local files)
+	 *
+	 *  The next 4 Methods return an UTF-8 encoded byte array containing a full XAdES or XAdES-T
+	 *  signature of the content supplied (either as pointer to a memory buffer
+	 *  or as local file paths) signed by the Citizen Signature Key.
+	 *  These method perform interactive PIN authentication if needed
+	 *
+	 *  @param IN paths is an array of null-terminated strings representing absolute paths in
+	 *  the local filesystem. Those files content (hashed with SHA-1 algorithm) will be the input data for the RSA signature 
+	 *  @param IN n_paths is the number of elements in the paths array 
+	 */
+	PTEIDSDK_API PTEID_ByteArray SignXades(const char ** paths, unsigned int n_paths); /** Return a Xades signature as a UTF-8 string (supports multiple files)*/
+	PTEIDSDK_API PTEID_ByteArray SignXades(PTEID_ByteArray to_be_signed, const char *URL); /** Return a Xades signature as a UTF-8 string (supports multiple files)*/
+	PTEIDSDK_API PTEID_ByteArray SignXadesT(const char ** path, unsigned int n_paths); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
+	PTEIDSDK_API PTEID_ByteArray SignXadesT(PTEID_ByteArray to_be_signed, const char *URL); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
+
+	PTEIDSDK_API PTEID_PublicKey& getRootCAPubKey();             /**< Get the CVC CA public key that this card uses to verify the CVC key */
 
 	/**
 	 * Return a raw data from the card.

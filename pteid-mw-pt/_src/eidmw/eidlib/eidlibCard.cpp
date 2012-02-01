@@ -534,7 +534,7 @@ PTEID_CCXML_Doc& PTEID_EIDCard::getXmlCCDoc(PTEID_XmlUserRequestedInfo& userRequ
 }
 
 
-PTEID_ByteArray PTEID_EIDCard::SignXades(const char * path, unsigned int n_paths)
+PTEID_ByteArray PTEID_EIDCard::SignXades(const char ** path, unsigned int n_paths)
 {
 
 	PTEID_ByteArray out;
@@ -551,7 +551,63 @@ PTEID_ByteArray PTEID_EIDCard::SignXades(const char * path, unsigned int n_paths
 	return out;
 }
 
-bool PTEID_EIDCard::VerifySignature(PTEID_ByteArray sig)
+PTEID_ByteArray PTEID_EIDCard::SignXades(PTEID_ByteArray to_be_signed, const char *URL)
+{
+
+	PTEID_ByteArray out;
+	
+	BEGIN_TRY_CATCH
+
+	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
+
+	CByteArray &ca = pcard->SignXades(CByteArray(to_be_signed.GetBytes(), 
+			to_be_signed.Size()), URL);
+	out.Append(ca.GetBytes(), ca.Size());
+
+	END_TRY_CATCH
+
+	return out;
+
+
+}
+
+PTEID_ByteArray PTEID_EIDCard::SignXadesT(const char ** path, unsigned int n_paths)
+{
+
+	PTEID_ByteArray out;
+	
+	BEGIN_TRY_CATCH
+
+	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
+
+	CByteArray &ca = pcard->SignXadesT(path, n_paths);
+	out.Append(ca.GetBytes(), ca.Size());
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+PTEID_ByteArray PTEID_EIDCard::SignXadesT(PTEID_ByteArray to_be_signed, const char *URL)
+{
+
+	PTEID_ByteArray out;
+	
+	BEGIN_TRY_CATCH
+
+	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
+
+	CByteArray &ca = pcard->SignXadesT(CByteArray(to_be_signed.GetBytes(), 
+			to_be_signed.Size()), URL);
+	out.Append(ca.GetBytes(), ca.Size());
+
+	END_TRY_CATCH
+
+	return out;
+
+
+}
+bool PTEID_EIDCard::VerifySignature(PTEID_ByteArray sig, char *error, unsigned long *error_length)
 {
 
 	bool res = false;
@@ -559,6 +615,7 @@ bool PTEID_EIDCard::VerifySignature(PTEID_ByteArray sig)
 	BEGIN_TRY_CATCH
 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
+	//TODO: add needed parameters to this method
 	res = pcard->ValidateSignature(CByteArray(sig.GetBytes(), sig.Size())); 
 	
 	END_TRY_CATCH
