@@ -69,7 +69,7 @@
 #define _stat stat
 #define _read read
 #define _fileno fileno
-#define __snprintf _snprintf
+#define _snprintf snprintf
 #endif
 
 #define SHA1_LEN 20
