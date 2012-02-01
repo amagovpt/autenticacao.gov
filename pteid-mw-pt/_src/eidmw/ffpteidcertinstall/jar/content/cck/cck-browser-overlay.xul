@@ -6,8 +6,6 @@
 
   
 
-    <window id="main-window" titlemodifier="&mainWindow.titlemodifier;"/>
-
   <stringbundleset id="stringbundleset">
     <stringbundle id="bundle_cck" src="chrome://cck-pteidcm/content/cck.properties"/>
   </stringbundleset>
