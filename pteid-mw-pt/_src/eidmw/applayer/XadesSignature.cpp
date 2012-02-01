@@ -69,6 +69,7 @@
 #define _stat stat
 #define _read read
 #define _fileno fileno
+#define __snprintf _snprintf
 #endif
 
 #define SHA1_LEN 20
@@ -377,7 +378,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 
 	if (errorsOccured) {
 		//Write to output report 
-		int err_len = snprintf(errors, *error_length, "Validation error: Malformed XML Document");
+		int err_len = _snprintf(errors, *error_length, "Validation error: Malformed XML Document");
 		*error_length = err_len;
 		MWLOG(LEV_ERROR, MOD_APL, L"Errors parsing XML Signature, bailing out");
 		return false;
@@ -400,7 +401,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 
 	if (sigNode == NULL) {
 
-		int err_len = snprintf(errors, *error_length, "Validation error: XML Signature Node not found");
+		int err_len = _snprintf(errors, *error_length, "Validation error: XML Signature Node not found");
 		*error_length = err_len;
 
 		MWLOG(LEV_ERROR, MOD_APL, L"ValidateXades: \
@@ -455,7 +456,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 
 	if (result == false)
 	{
-		int err_len = snprintf(errors, *error_length, "Validation error: RSA Signature of referenced content is invalid");
+		int err_len = _snprintf(errors, *error_length, "Validation error: RSA Signature of referenced content is invalid");
 		*error_length = err_len;
 	}
 
