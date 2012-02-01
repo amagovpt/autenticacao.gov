@@ -1587,12 +1587,12 @@ PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszN
 		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
 			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
 			if (pin.getPinRef() == PinId){
-				pin.unlockPin(NULL,NULL,NULL);
+				pin.unlockPin(pszPuk, pszNewPin,(unsigned long *)triesLeft);
 			}
 		}
-
-		return 0;
 	}
+
+	return 0;
 }
 
 PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft, unsigned long ulFlags){

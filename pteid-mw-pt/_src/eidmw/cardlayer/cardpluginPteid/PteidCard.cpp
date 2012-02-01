@@ -368,12 +368,9 @@ unsigned long CPteidCard::PinStatus(const tPin & Pin)
 
 	try
 	{
-		if (m_cardType == CARD_PTEID_IAS101){
-			CByteArray oResp;
-			CByteArray select("5F00",true);
-			oResp = SendAPDU(0xA4, 0x00, 0x0C, select);
-			getSW12(oResp, 0x9000);
-		}
+
+		if (m_cardType == CARD_PTEID_IAS101)
+			SelectFile((!Pin.csPath.empty()) ? Pin.csPath : "3F005F00"); // martinho pin 1 does not have cspath... why?
 
 		CByteArray oResp = SendAPDU(0x20, 0x00, (unsigned char) Pin.ulPinRef, 0);
 		ulSW12 = getSW12(oResp);
@@ -437,9 +434,31 @@ bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate){
 	return true;
 }
 
-bool CPteidCard::unlockPIN(const tPin &pin, const tPin &puk, const char *pszPuk, const char *pszNewPin, long *triesLeft){
+bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long *triesLeft){
+	CByteArray oResp;
+	bool bOK = false;
+	unsigned long ulRemaining;
 
-	return false;
+	try
+	{
+		if (m_cardType == CARD_PTEID_IAS101){
+			if (PinCmd(PIN_OP_VERIFY, *puk, pszPuk, "", ulRemaining, NULL)) //martinho - verify puk
+				bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", *triesLeft, NULL); // martinho - reset pin
+		} else if (m_cardType == CARD_PTEID_IAS07){
+			// need a gemsafe card!
+			//bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", *triesLeft, NULL); // martinho - reset pin
+			bOk = false;
+		}
+		if (bOK)
+			*triesLeft = PinStatus(pin);
+	}
+	catch(...)
+	{
+		MWLOG(LEV_ERROR, MOD_CAL, L"Error in RootCAPubKey");
+		throw;
+	}
+
+	return bOK;
 }
 
 DlgPinUsage CPteidCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)

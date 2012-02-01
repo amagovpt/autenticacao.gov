@@ -306,20 +306,23 @@ bad_pin:
 	init.Append(0x02);
 	SendAPDU(init);
 
-    if (operation != PIN_OP_VERIFY) {
-        //oPinBuf.Append(MakePinBuf(Pin, *pcsPin2, bUsePinpad));*/
-    	oAPDU = MakePinCmdIAS(PIN_OP_VERIFY, Pin); // add CLA, INS, P1, P2
-    	oAPDU.Append((unsigned char) oPinBuf.Size());  // add P3
-    	oAPDU.Append(oPinBuf);
-    	oAPDUCHANGE = MakePinCmdIAS(PIN_OP_CHANGE, Pin); // add CLA, INS, P1, P2
-    	oAPDUCHANGE.Append((unsigned char) oPinBuf.Size());  // add P3
-    	oAPDUCHANGE.Append(MakePinBuf(Pin, *pcsPin2, bUsePinpad));
-    } else {
-    	oAPDU = MakePinCmdIAS(PIN_OP_VERIFY, Pin); // add CLA, INS, P1, P2
-    	oAPDU.Append((unsigned char) oPinBuf.Size());  // add P3
-    	oAPDU.Append(oPinBuf);
-    }
 
+	switch(operation){
+	case PIN_OP_VERIFY:
+	case PIN_OP_RESET:
+		oAPDU = MakePinCmdIAS(operation, Pin); // add CLA, INS, P1, P2
+		oAPDU.Append((unsigned char) oPinBuf.Size());  // add P3
+		oAPDU.Append(oPinBuf);
+		break;
+	case PIN_OP_CHANGE:
+		oAPDU = MakePinCmdIAS(PIN_OP_VERIFY, Pin); // add CLA, INS, P1, P2
+		oAPDU.Append((unsigned char) oPinBuf.Size());  // add P3
+		oAPDU.Append(oPinBuf);
+		oAPDUCHANGE = MakePinCmdIAS(operation, Pin); // add CLA, INS, P1, P2
+		oAPDUCHANGE.Append((unsigned char) oPinBuf.Size());  // add P3
+		oAPDUCHANGE.Append(MakePinBuf(Pin, *pcsPin2, bUsePinpad));
+		break;
+	}
 
 	bool bSelected = false;
 
@@ -339,11 +342,15 @@ bad_pin:
 			oResp = m_poPinpad->PinCmd(operation, Pin,
 			PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg);
 		} else {
-			if (operation != PIN_OP_VERIFY) {
+			switch(operation){
+			case PIN_OP_VERIFY:
+			case PIN_OP_RESET:
+				oResp = SendAPDU(oAPDU);
+				break;
+			case PIN_OP_CHANGE:
 				oResp = SendAPDU(oAPDU);
 				oResp = SendAPDU(oAPDUCHANGE);
-			} else {
-				oResp = SendAPDU(oAPDU);
+				break;
 			}
 		}
 	}
@@ -647,6 +654,10 @@ CByteArray CPkiCard::MakePinCmdIAS(tPinOperation operation, const tPin & Pin)
         oCmd.Append(0x24);
         oCmd.Append(0x01); // P1
         break;
+    case PIN_OP_RESET:
+    	oCmd.Append(0x2C);
+    	oCmd.Append(0x02); // P1
+    	break;
     default:
         throw CMWEXCEPTION(EIDMW_ERR_PIN_OPERATION);
     }
