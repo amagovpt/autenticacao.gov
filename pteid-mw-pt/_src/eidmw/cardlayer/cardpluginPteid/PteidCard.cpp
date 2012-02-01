@@ -447,7 +447,7 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 		} else if (m_cardType == CARD_PTEID_IAS07){
 			// need a gemsafe card!
 			//bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", *triesLeft, NULL); // martinho - reset pin
-			bOk = false;
+			bOK = false;
 		}
 		if (bOK)
 			*triesLeft = PinStatus(pin);
