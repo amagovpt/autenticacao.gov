@@ -194,7 +194,7 @@ namespace eIDMW
 		XMLCh *xades_namespace = XMLString::transcode("http://uri.etsi.org/01903/v1.1.1#");
 		safeBuffer str; 
 		
-		xercesc_3_1::DOMDocument *doc = sig->getParentDocument();
+		XERCES_NS DOMDocument *doc = sig->getParentDocument();
 		DSIGObject * obj1 = sig->appendObject();
 		
 		obj1->setId(MAKE_UNICODE_STRING("Signature_PteID_Timestamp"));
@@ -273,7 +273,7 @@ namespace eIDMW
 		return CByteArray(mp_timestamp_data);
 	}
 
-	CByteArray *XadesSignature::WriteToByteArray(xercesc_3_1::DOMDocument * doc)
+	CByteArray *XadesSignature::WriteToByteArray(XERCES_NS DOMDocument * doc)
 	{
 		CByteArray * ba_out = new CByteArray();
 		XMLCh tempStr[3] = {chLatin_L, chLatin_S, chNull};
@@ -390,7 +390,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 	DOMNode *doc;		// The document that we parsed
 
 	doc = parser->getDocument();
-	xercesc_3_1::DOMDocument *theDOM = parser->getDocument();
+	XERCES_NS DOMDocument *theDOM = parser->getDocument();
 
 	// Find the signature node
 	
@@ -463,6 +463,20 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 
 }
 
+XMLCh* XadesSignature::createURI(const char *path)
+{
+
+	string default_uri = string("file://localhost") + path;
+#ifdef WIN32
+	XMLCh * uni_reference_uri = (XMLCh*)pathToURI(utf8_decode(path));
+#else
+	//TODO: We also need to URL-encode the path on Unix
+	XMLCh * uni_reference_uri = XMLString::transcode(default_uri.c_str());
+#endif
+	return uni_reference_uri;
+
+}
+
 CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
 {
 
@@ -478,22 +492,13 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
 
 	CByteArray sha1_hash;
 	CByteArray rsa_signature;
-	const char * path = paths[0];
-	XMLByte toFill[35 * sizeof(XMLByte)]; //SHA-1 Hash prepended with Algorithm ID as by PKCS#1 standard
-	
 
-	string default_uri = string("file://localhost") + path;
-#ifdef WIN32
-	XMLCh * uni_reference_uri = (XMLCh*)pathToURI(utf8_decode(path));
-#else
-	//TODO: We also need to URL-encode the path on Linux
-	XMLCh * uni_reference_uri = XMLString::transcode(default_uri.c_str());
-#endif
+	XMLByte toFill[35 * sizeof(XMLByte)]; //SHA-1 Hash prepended with Algorithm ID as by PKCS#1 standard
 
         DOMImplementation *impl = 
 		DOMImplementationRegistry::getDOMImplementation(MAKE_UNICODE_STRING("Core"));
 	
-	xercesc_3_1::DOMDocument *doc = impl->createDocument(0, MAKE_UNICODE_STRING("Document"), NULL);
+	XERCES_NS DOMDocument *doc = impl->createDocument(0, MAKE_UNICODE_STRING("Document"), NULL);
 	DOMElement *rootElem = doc->getDocumentElement();
 
 
@@ -515,21 +520,22 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
 		rootElem->appendChild(sigNode);
 		rootElem->appendChild(doc->createTextNode(MAKE_UNICODE_STRING("\n")));
 
-		//Create a reference to the external file
-		DSIGReference * ref = sig->createReference(uni_reference_uri);
+		for (unsigned int i=0; i != n_paths ; i++)
+		{
+			const char * path = paths[i];
+			//Create a reference to the external file
+			DSIGReference * ref = sig->createReference(createURI(path));
+			sha1_hash = HashFile(path);
 
-		//TODO: iterate over arguments, eventually
-		sha1_hash = HashFile(path);
-		//cerr << "DEBUG: Hash of external file: " << endl;
-		//printByteArray(cerr, sha1_hash, 20);
+			//Fill the hash value as base64-encoded string
+			ref->setExternalHash(sha1_hash.GetBytes());
+		}
 
-		ref->setExternalHash(sha1_hash.GetBytes());
 		try
 		{
-			//This is a somewhat hackish way of getting the canonicalized hash
-			//of the reference
+			// This is a somewhat hackish way of getting the canonicalized hash
+			// of the reference
 			sig->calculateSignedInfoHash(&toFill[oidlen], 20);
-			//ref->makeBinInputStream()->readBytes(toFill, 20); 	
 		}
 		catch (const XMLException &e)
 		{
@@ -537,11 +543,7 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
 				XMLString::transcode(e.getType()), XMLString::transcode(e.getMessage()));
 		
 		}
-
-		//cerr << "DEBUG: SignedInfoHash: " << endl;
-		//printByteArray (cerr, toFill , 35);
 		
-		//TODO: Load Certificate from the right applayer object
 		CByteArray certData;
 	        mp_card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
 
@@ -550,8 +552,6 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
 		//Access pteid card to sign the XML Data
 		//This code will be eventually integrated in applayer
 		// so this connection to the card will be completely different
-		//XXX: We should make the signing key configurable,
-		//for now it is the Authentication key
 
 		// Create KeyInfo element
 

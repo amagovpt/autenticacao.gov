@@ -2,6 +2,7 @@
 #define XADESSIG_H
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
+#include <xercesc/util/XercesDefs.hpp>
 #include <xsec/dsig/DSIGSignature.hpp>
 
 #include <string>
@@ -15,6 +16,8 @@
 #define SHA1_OFFSET 20
 
 #define TIMESTAMPING_HOST "http://ts.cartaodecidadao.pt/tsa/server"
+
+#define XERCES_NS XERCES_CPP_NAMESPACE_QUALIFIER
 
 #ifndef WIN32
 #define _strdup strdup
@@ -57,13 +60,15 @@ namespace eIDMW
 		
 		CByteArray HashFile(const char *file_path);
 		void addSignatureProperties(DSIGSignature *sig);
-		CByteArray *WriteToByteArray(xercesc_3_1::DOMDocument *doc); 
-		//Utility methods	
+		CByteArray *WriteToByteArray(XERCES_NS DOMDocument *doc); 
+		//Utility methods for signature
 		void loadCert(CByteArray &ba, EVP_PKEY *pub_key);
 		
 		int appendOID(XMLByte *toFill);
 
 		void addTimestampNode(DSIGSignature *sig);
+		XMLCh* createURI(const char *path);
+
 
 		//Utility methods for timestamping
 		size_t curl_write_data(char *ptr, size_t size, size_t nmemb, void * stream); 
