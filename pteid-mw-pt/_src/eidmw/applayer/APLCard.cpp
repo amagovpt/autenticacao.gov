@@ -149,6 +149,27 @@ CByteArray &APL_Card::SignXades(const char ** path, unsigned int n_paths)
 
 }
 
+CByteArray &APL_Card::SignXades(CByteArray content, const char *URL)
+{
+	CByteArray * ba = new CByteArray();
+	//TODO
+	return *ba;
+}
+
+CByteArray &APL_Card::SignXadesT(CByteArray content, const char *URL)
+{
+	CByteArray * ba = new CByteArray();
+	//TODO
+	return *ba;
+}
+
+CByteArray &APL_Card::SignXadesT(const char ** path, unsigned int n_paths)
+{
+	CByteArray * ba = new CByteArray();
+	//TODO
+	return *ba;
+}
+
 bool APL_Card::ValidateSignature(const CByteArray &signature)
 {
 	if (signature.Size() == 0)
