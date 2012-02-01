@@ -365,24 +365,30 @@ std::string CPteidCard::GetPinpadPrefix()
 unsigned long CPteidCard::PinStatus(const tPin & Pin)
 {
 	long ulSW12 = 0;
-	
-    try
-    {
-        CByteArray oResp = SendAPDU(0x20, 0x00, (unsigned char) Pin.ulPinRef, 0);
-        
-	ulSW12 = getSW12(oResp);
-	MWLOG(LEV_DEBUG, MOD_CAL, L"PinStatus APDU returned: %x", ulSW12 );
-	if (ulSW12 == 0x9000)
-		return 3; //Maximum Try Counter for PteID Cards
 
-        return ulSW12 % 16;
-    }
-    catch(...)
-    {
-        //m_ucCLA = 0x00;
-	MWLOG(LEV_ERROR, MOD_CAL, L"Error in PinStatus", ulSW12);
-        throw;
-    }
+	try
+	{
+		if (m_cardType == CARD_PTEID_IAS101){
+			CByteArray oResp;
+			CByteArray select("5F00",true);
+			oResp = SendAPDU(0xA4, 0x00, 0x0C, select);
+			getSW12(oResp, 0x9000);
+		}
+
+		CByteArray oResp = SendAPDU(0x20, 0x00, (unsigned char) Pin.ulPinRef, 0);
+		ulSW12 = getSW12(oResp);
+		MWLOG(LEV_DEBUG, MOD_CAL, L"PinStatus APDU returned: %x", ulSW12 );
+		if (ulSW12 == 0x9000)
+			return 3; //Maximum Try Counter for PteID Cards
+
+		return ulSW12 % 16;
+	}
+	catch(...)
+	{
+		//m_ucCLA = 0x00;
+		MWLOG(LEV_ERROR, MOD_CAL, L"Error in PinStatus", ulSW12);
+		throw;
+	}
 }
 
 CByteArray CPteidCard::RootCAPubKey(){
