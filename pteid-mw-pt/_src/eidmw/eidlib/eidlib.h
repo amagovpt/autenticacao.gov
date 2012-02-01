@@ -722,7 +722,6 @@ public:
 	 *  it points to the length of the string written into error_buffer
 	 */
 	PTEIDSDK_API bool VerifySignature(PTEID_ByteArray signature, char * error_buffer, unsigned long *error_size);
-	PTEIDSDK_API PTEID_ByteArray SignXades(const char * listofPaths, unsigned int n_paths); /** Return a Xades signature as a UTF-8 string */
 	/** Produce Xades Signature of Arbitrary Contents (from memory or local files)
 	 *
 	 *  The next 4 Methods return an UTF-8 encoded byte array containing a full XAdES or XAdES-T
