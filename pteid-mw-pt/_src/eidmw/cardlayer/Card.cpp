@@ -322,6 +322,10 @@ bool CCard::Activate(const char *pinCode, CByteArray &BCDDate){
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 }
 
+bool CCard::unlockPIN(const tPin &pin, const tPin &puk, const char *pszPuk, const char *pszNewPin, long *triesLeft){
+	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+}
+
 bool CCard::PinCmd(tPinOperation operation, const tPin & Pin,
     const std::string & csPin1, const std::string & csPin2,
     unsigned long & ulRemaining, const tPrivKey *pKey,

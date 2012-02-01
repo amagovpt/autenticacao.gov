@@ -749,6 +749,35 @@ unsigned long PTEID_Pin::getId()
 	return out;
 }
 
+unsigned long PTEID_Pin::getPinRef()
+{
+	unsigned long out = 0;
+
+	BEGIN_TRY_CATCH
+
+	APL_Pin *pimpl=static_cast<APL_Pin *>(m_impl);
+	out = pimpl->getPinRef();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+bool PTEID_Pin::unlockPin(const char *pszPuk, const char *pszNewPin, long *triesLeft)
+{
+	bool out = false;
+
+	BEGIN_TRY_CATCH
+
+	APL_Pin *pimpl=static_cast<APL_Pin *>(m_impl);
+	out = pimpl->unlockPin(pszPuk, pszNewPin, triesLeft);
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+
 PTEID_PinUsage PTEID_Pin::getUsageCode()
 {
 	PTEID_PinUsage out = PTEID_PIN_USG_UNKNOWN;

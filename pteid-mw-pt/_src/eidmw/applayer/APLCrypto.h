@@ -137,6 +137,7 @@ public:
 	  */
 	EIDMW_APL_API long getTriesLeft();			
 	EIDMW_APL_API unsigned long getIndex();		/**< Return m_ulIndex */
+	EIDMW_APL_API unsigned long getPinRef();
 	EIDMW_APL_API unsigned long getType();		/**< Return P15 Type */	
 	EIDMW_APL_API unsigned long getId();		/**< Return P15 ID */
 	EIDMW_APL_API PinUsage getUsageCode();		/**< Return Usage code from the CAL */
@@ -168,6 +169,7 @@ public:
 	  * @return true if success and false if failed
 	  */
 	EIDMW_APL_API bool changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg=true);
+	EIDMW_APL_API bool unlockPin(const char *pszPuk, const char *pszNewPin, long *triesLeft);
 
 protected:
 	/**

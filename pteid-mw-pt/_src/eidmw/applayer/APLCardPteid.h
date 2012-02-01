@@ -185,7 +185,7 @@ public:
 	APL_EidFile_TokenInfo *getFileTokenInfo();		/**< Return a pointer to the file Token Info (NOT EXPORTED) */
 	APLPublicKey *getRootCAPubKey();						/**< Get the CVC CA public key that this card uses to verify the CVC key (NOT EXPORTED)*/
 	bool isActive();
-	bool Activate(const char *pinCode, CByteArray &BCDDate);	/**< Activate the pteid card (NOT EXPORTED)*/
+	bool Activate(const char *pinCode, CByteArray &BCDDate);						/**< Activate the pteid card (NOT EXPORTED)*/
 
 
 	static void askWarningLevel();

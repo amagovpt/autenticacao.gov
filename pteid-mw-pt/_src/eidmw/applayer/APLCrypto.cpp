@@ -588,6 +588,10 @@ unsigned long APL_Pin::getIndex()
 	return m_ulIndex;
 }
 
+unsigned long APL_Pin::getPinRef(){
+	return m_pinP15.ulPinRef;
+}
+
 unsigned long APL_Pin::getType()
 {
 	return m_pinP15.ulPinType;
@@ -721,6 +725,27 @@ bool APL_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulR
 
 		return false;
 	}
+}
+
+
+bool APL_Pin::unlockPin(const char *pszPuk, const char *pszNewPin, long *triesLeft){
+
+	if (m_card->getType() == APL_CARDTYPE_PTEID_IAS07){ //gemsafe
+		tPin *puk = NULL;
+		return m_card->getCalReader()->unlockPIN(m_pinP15, *puk, pszPuk, pszNewPin, triesLeft);
+
+	} else if (m_card->getType() == APL_CARDTYPE_PTEID_IAS101){ //ias
+		tPin puk;
+
+		for (unsigned long idx=0; idx < m_card->pinCount(); idx++){
+			puk = m_card->getPin(idx); // get the puk for this pin
+			if (((puk.ulPinRef & 0x0F) == (m_pinP15.ulPinRef & 0x0F)) && puk.ulPinRef > m_pinP15.ulPinRef){
+				return m_card->getCalReader()->unlockPIN(m_pinP15, puk, pszPuk, pszNewPin, triesLeft);
+			}
+		}
+	}
+
+	return true;
 }
 
 

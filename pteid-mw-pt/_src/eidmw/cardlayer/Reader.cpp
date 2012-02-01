@@ -408,6 +408,14 @@ bool CReader::Activate(const char *pinCode, CByteArray &BCDDate){
     return m_poCard->Activate(pinCode,BCDDate);
 }
 
+bool CReader::unlockPIN(const tPin &pin, const tPin &puk, const char *pszPuk, const char *pszNewPin, long *triesLeft){
+	if (m_poCard == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+
+	return m_poCard->unlockPIN(pin, puk, pszPuk, pszNewPin, triesLeft);
+}
+
+
 bool CReader::PinCmd(tPinOperation operation, const tPin & Pin,
     const std::string & csPin1, const std::string & csPin2,
     unsigned long & ulRemaining, bool bShowDlg)

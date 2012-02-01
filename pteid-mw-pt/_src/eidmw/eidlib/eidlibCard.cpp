@@ -55,6 +55,8 @@
 #define INCLUDE_OBJECT_RAWDATA_PERSO_DATA   31
 #define INCLUDE_OBJECT_RAWDATA_TRACE		32
 
+#define BCD_DATE_LEN					4
+
 namespace eIDMW
 {
 
@@ -1161,9 +1163,6 @@ bool PTEID_EIDCard::Activate(const char *pinCode, CByteArray &BCDDate){
 	return out;
 }
 
-
-
-
 const PTEID_ByteArray& PTEID_EIDCard::getRawData_Challenge()
 {
 	PTEID_ByteArray *out = NULL;
@@ -1422,7 +1421,7 @@ PTEIDSDK_API long PTEID_GetPic(PTEID_PIC *PicData){
 
 		memset(PicData, 0, sizeof(PTEID_PIC));
 
-		PTEID_ByteArray &scratch = photoOjb.getphoto();
+		PTEID_ByteArray &scratch = photoOjb.getphotoRAW();
 		memcpy(PicData->picture, scratch.GetBytes(), (PTEID_MAX_PICTUREH_LEN >= scratch.Size()) ? scratch.Size(): PTEID_MAX_PICTUREH_LEN);
 		PicData->piclength = scratch.Size();
 		scratch = photoOjb.getphotoCbeff();
@@ -1466,13 +1465,11 @@ PTEIDSDK_API long PTEID_VerifyPIN(unsigned char PinId,	char *Pin, long *triesLef
 	if (readerContext!=NULL){
 		if (PinId != 1 && PinId != 129 && PinId != 130 && PinId != 131)
 			return 0;
-		// why 128? id = 1,2,3..., pinid = (1 or 129), 130, 131
-		id = (PTEID_GetCardType() == COMP_CARD_TYPE_IAS101 && PinId == 1) ? PinId : PinId - 128;
 
 		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
 		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
 			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
-			if (pin.getId() == id){
+			if (pin.getPinRef() == PinId){
 				ret = pin.verifyPin("",tleft);
 				//martinho: verify pin is not working properly for readers without pinpad at this moment,
 				//this is a workaround
@@ -1500,19 +1497,17 @@ PTEIDSDK_API long PTEID_VerifyPIN_No_Alert(unsigned char PinId,	char *Pin, long 
 
 PTEIDSDK_API long PTEID_ChangePIN(unsigned char PinId, char *pszOldPin, char *pszNewPin, long *triesLeft){
 
-	unsigned long id;
 	const char *a1 = pszOldPin, *a2 = pszNewPin;
 	unsigned long int tries = -1;
 
 	if (readerContext!=NULL){
 		if (PinId != 1 && PinId != 129 && PinId != 130 && PinId != 131)
 			return 0;
-		// why 128? id = 1,2,3..., pinid = (1 or 129), 130, 131
-		id = (PTEID_GetCardType() == COMP_CARD_TYPE_IAS101 && PinId == 1) ? PinId : PinId - 128;
+
 		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
 		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
 			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
-			if (pin.getId() == id)
+			if (pin.getPinRef() == PinId)
 				if (pin.changePin(pszOldPin ,pszNewPin, tries, pin.getLabel())){
 					*triesLeft = pin.getTriesLeft();
 					return 0;
@@ -1524,7 +1519,6 @@ PTEIDSDK_API long PTEID_ChangePIN(unsigned char PinId, char *pszOldPin, char *ps
 	return 0;
 }
 
-// why 128? id = 1,2,3..., pinid = (1 or 129), 130, 131
 PTEIDSDK_API long PTEID_GetPINs(PTEIDPins *Pins){
 	long int i=0;
 	unsigned long currentId= 0;
@@ -1536,12 +1530,12 @@ PTEIDSDK_API long PTEID_GetPINs(PTEIDPins *Pins){
 			if (pin.getId() == 1 || pin.getId() == 2 || pin.getId() == 3){
 				currentId = pin.getId()-1;
 				Pins->pins[currentId].flags = pin.getFlags();
-				Pins->pins[currentId].usageCode = pin.getId();
+				Pins->pins[currentId].usageCode = pin.getId(); // martinho: might not be the intended use, but gives the expected compatible result.
 				Pins->pins[currentId].pinType = pin.getType();
 				memset(Pins->pins[currentId].label, '\0', PTEID_MAX_PIN_LABEL_LEN);
 				strncpy(Pins->pins[currentId].label, pin.getLabel(), (PTEID_MAX_PIN_LABEL_LEN > strlen(pin.getLabel()) ? strlen(pin.getLabel()) : PTEID_MAX_PIN_LABEL_LEN-1));
 				Pins->pins[currentId].triesLeft = pin.getTriesLeft();
-				Pins->pins[currentId].id = (PTEID_GetCardType() == COMP_CARD_TYPE_IAS101 && pin.getId() == 1) ? pin.getId() : pin.getId() + 128;
+				Pins->pins[currentId].id = pin.getPinRef();
 				Pins->pins[currentId].shortUsage = NULL; //martinho don't know where it is used, current MW returns NULL also
 				Pins->pins[currentId].longUsage = NULL; //martinho don't know where it is used, current MW returns NULL also
 				i++;
@@ -1583,11 +1577,22 @@ PTEIDSDK_API long PTEID_ReadSOD(unsigned char *out, unsigned long *outlen){
 }
 
 PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft){
+	unsigned long id;
+
 	if (readerContext!=NULL){
+		if (PinId != 1 && PinId != 129 && PinId != 130 && PinId != 131)
+			return 0;
 
+		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
+		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
+			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
+			if (pin.getPinRef() == PinId){
+				pin.unlockPin(NULL,NULL,NULL);
+			}
+		}
+
+		return 0;
 	}
-
-	return 0;
 }
 
 PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft, unsigned long ulFlags){
@@ -1673,7 +1678,7 @@ PTEIDSDK_API long PTEID_IsActivated(unsigned long *pulStatus){
 PTEIDSDK_API long PTEID_Activate(char *pszPin, unsigned char *pucDate, unsigned long ulMode){
 	long retval = 0;
 	if (readerContext!=NULL){
-		CByteArray bcd(pucDate,4);
+		CByteArray bcd(pucDate,BCD_DATE_LEN);
 		if (readerContext->getEIDCard().Activate(pszPin,bcd))
 			return 0;
 		return -1;

@@ -437,7 +437,10 @@ bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate){
 	return true;
 }
 
+bool CPteidCard::unlockPIN(const tPin &pin, const tPin &puk, const char *pszPuk, const char *pszNewPin, long *triesLeft){
 
+	return false;
+}
 
 DlgPinUsage CPteidCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)
 {

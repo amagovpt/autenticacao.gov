@@ -740,8 +740,6 @@ public:
 	PTEIDSDK_API PTEID_ByteArray SignXadesT(const char ** path, unsigned int n_paths); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
 	PTEIDSDK_API PTEID_ByteArray SignXadesT(PTEID_ByteArray to_be_signed, const char *URL); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
 
-	PTEIDSDK_API PTEID_PublicKey& getRootCAPubKey();             /**< Get the CVC CA public key that this card uses to verify the CVC key */
-
 	/**
 	 * Return a raw data from the card.
 	 * Throw PTEID_ExFileTypeUnknown exception if the document doesn't exist for this card.
@@ -1125,9 +1123,11 @@ public:
 	PTEIDSDK_API unsigned long getIndex();		/**< Get the index of the pin */
 	PTEIDSDK_API unsigned long getType();			/**< Get the type of the pin */
 	PTEIDSDK_API unsigned long getId();			/**< Get the id of the pin */
+	PTEIDSDK_API unsigned long getPinRef();		/**< Get the pinref value of the pin */
 	PTEIDSDK_API PTEID_PinUsage getUsageCode();	/**< Get the usage code of the pin */
 	PTEIDSDK_API unsigned long getFlags();		/**< Get the flags of the pin */
 	PTEIDSDK_API const char *getLabel();			/**< Get the label of the pin */
+	PTEIDSDK_API bool unlockPin(const char *pszPuk, const char *pszNewPin, long *triesLeft);
 
 	PTEIDSDK_API const PTEID_ByteArray &getSignature();	/**< Return the signature of the pin */
 
