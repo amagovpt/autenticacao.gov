@@ -718,9 +718,8 @@ public:
 	 *  @param IN signature is a byte array containing the UTF-8 representation of an XML document
 	 *  @param OUT error_buffer if not NULL should point to a preallocated char buffer that will be filled with 
 	 *  a description of eventual validation problems
-	 *  @param IN/OUT error_size on input it should point to the size of error_buffer on API return 
-	 *  it points to the length of the string 
-	 *  written into error_buffer
+	 *  @param IN/OUT error_size on input it should point to the size of error_buffer while on API return 
+	 *  it points to the length of the string written into error_buffer
 	 */
 	PTEIDSDK_API bool VerifySignature(PTEID_ByteArray signature, char * error_buffer, unsigned long *error_size);
 	PTEIDSDK_API PTEID_ByteArray SignXades(const char * listofPaths, unsigned int n_paths); /** Return a Xades signature as a UTF-8 string */

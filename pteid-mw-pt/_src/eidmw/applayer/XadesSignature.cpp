@@ -334,7 +334,7 @@ void XadesSignature::initXerces()
 
 /*TODO: We'll have to investigate how to validate the timestamp if the signature
  *      actually contains one  */
-bool XadesSignature::ValidateXades(CByteArray signature)
+bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned long *error_length)
 {
 	bool errorsOccured = false;
 	
@@ -376,7 +376,9 @@ bool XadesSignature::ValidateXades(CByteArray signature)
 	}
 
 	if (errorsOccured) {
-
+		//Write to output report 
+		int err_len = snprintf(errors, *error_length, "Validation error: Malformed XML Document");
+		*error_length = err_len;
 		MWLOG(LEV_ERROR, MOD_APL, L"Errors parsing XML Signature, bailing out");
 		return false;
 	}
@@ -398,6 +400,9 @@ bool XadesSignature::ValidateXades(CByteArray signature)
 
 	if (sigNode == NULL) {
 
+		int err_len = snprintf(errors, *error_length, "Validation error: XML Signature Node not found");
+		*error_length = err_len;
+
 		MWLOG(LEV_ERROR, MOD_APL, L"ValidateXades: \
 			Could not find <Signature> node in the signature provided");
 		return false;
@@ -417,8 +422,8 @@ bool XadesSignature::ValidateXades(CByteArray signature)
 	sig->registerIdAttributeName(MAKE_UNICODE_STRING("ID"));
 
 
-	bool result;
-	bool extern_result; 
+	bool result = false;
+	bool extern_result = false; 
 	try {
 	
 		sig->load();
@@ -436,17 +441,23 @@ bool XadesSignature::ValidateXades(CByteArray signature)
 	}
 	catch (XSECException &e) {
 		char * msg = XMLString::transcode(e.getMsg());
-		cerr << "An error occured during signature verification\n  (1) Message: "
+		cerr << "An error occured during signature verification\n  (1) XMLSec Error Message: "
 			<< msg << endl;
 		XSEC_RELEASE_XMLCH(msg);
-		return false;
+		result = false;
+	 	
 	}
 	catch (XSECCryptoException &e) {
-		cerr << "An error occured during signature verification\n  (2) Message: "
+		cerr << "An error occured during signature verification\n  (2) XMLSec Error Message: "
 			<< e.getMsg() << endl;
 		return false;
 	}
 
+	if (result == false)
+	{
+		int err_len = snprintf(errors, *error_length, "Validation error: RSA Signature of referenced content is invalid");
+		*error_length = err_len;
+	}
 
 	return result;
 

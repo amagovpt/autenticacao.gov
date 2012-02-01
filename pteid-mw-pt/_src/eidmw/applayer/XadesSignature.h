@@ -42,7 +42,7 @@ namespace eIDMW
 		
 		~XadesSignature()
 		{
-			X509_free(mp_cert);
+		   X509_free(mp_cert);
 		};
 
 		CByteArray &SignXades(CByteArray ba, const char *URL);
@@ -50,7 +50,7 @@ namespace eIDMW
 		CByteArray &SignXades(const char ** paths, unsigned int n_paths);
 		CByteArray &SignXadesT(const char ** paths, unsigned int n_paths);
 
-		bool ValidateXades(CByteArray signature);
+		bool ValidateXades(CByteArray signature, char *errors, unsigned long *error_length);
 		
 
 		private:
@@ -74,7 +74,6 @@ namespace eIDMW
 
 		
 		X509 * mp_cert;
-		//APL_CryptoFwk *mp_crypto;
 		APL_Card *mp_card;
 		CByteArray mp_timestamp_data;
 

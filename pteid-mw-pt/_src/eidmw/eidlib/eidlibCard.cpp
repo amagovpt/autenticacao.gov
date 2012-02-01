@@ -617,8 +617,8 @@ bool PTEID_EIDCard::VerifySignature(PTEID_ByteArray sig, char *error, unsigned l
 	BEGIN_TRY_CATCH
 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
-	//TODO: add needed parameters to this method
-	res = pcard->ValidateSignature(CByteArray(sig.GetBytes(), sig.Size())); 
+	res = pcard->ValidateSignature(CByteArray(sig.GetBytes(), sig.Size()),
+			error, error_length); 
 	
 	END_TRY_CATCH
 

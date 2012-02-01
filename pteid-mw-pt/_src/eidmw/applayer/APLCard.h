@@ -118,7 +118,7 @@ public:
 
 	EIDMW_APL_API CByteArray &SignXadesT(const char ** path, unsigned int n_paths);
 	
-	EIDMW_APL_API bool ValidateSignature(const CByteArray &signature);
+	EIDMW_APL_API bool ValidateSignature(const CByteArray &signature, char * errors, unsigned long* error_len);
 
 
 	/**

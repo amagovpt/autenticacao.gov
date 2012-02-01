@@ -136,7 +136,6 @@ CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey)
 	return out;
 }
 
-/* TODO: Implement wrappers for the remaining Xades methods*/
 
 CByteArray &APL_Card::SignXades(const char ** path, unsigned int n_paths)
 {
@@ -170,15 +169,14 @@ CByteArray &APL_Card::SignXadesT(const char ** path, unsigned int n_paths)
 	return *ba;
 }
 
-bool APL_Card::ValidateSignature(const CByteArray &signature)
+bool APL_Card::ValidateSignature(const CByteArray &signature, char * errors, unsigned long* error_len)
 {
 	if (signature.Size() == 0)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	
 	XadesSignature sig(this);
 	
-	return sig.ValidateXades(signature);
-
+	return sig.ValidateXades(signature, errors, error_len);
 }
 
 
