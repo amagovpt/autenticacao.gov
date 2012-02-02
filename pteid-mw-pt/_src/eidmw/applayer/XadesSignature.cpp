@@ -521,11 +521,12 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
 		rootElem->appendChild(sigNode);
 		rootElem->appendChild(doc->createTextNode(MAKE_UNICODE_STRING("\n")));
 
-		for (unsigned int i=0; i != n_paths ; i++)
+		for (unsigned int i = 0; i != n_paths ; i++)
 		{
 			const char * path = paths[i];
 			//Create a reference to the external file
 			DSIGReference * ref = sig->createReference(createURI(path));
+			MWLOG(LEV_DEBUG, MOD_APL, L"SignXades(): Hashing file %s", path);
 			sha1_hash = HashFile(path);
 
 			//Fill the hash value as base64-encoded string
