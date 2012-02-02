@@ -149,11 +149,6 @@ void dlgSignature::on_pbSign_clicked ( void )
 		strings << model->index( i, 0 ).data( Qt::DisplayRole ).toString() ;
 	}
 
-	QString myString = strings.at(0);
-
-	std::cout << "strings " << myString.toStdString().c_str() << std::endl;
-
-
 	//////////////GET CARD////////////
 
 	try
@@ -186,17 +181,21 @@ void dlgSignature::on_pbSign_clicked ( void )
 			PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
 			PTEID_ByteArray SignXades;
 
-			const char *files_to_sign[20];
 			int i;
 			char *newchar;
+			int listsize = strings.count();
+			const char *files_to_sign[listsize];
 
-			newchar = new char[myString.toStdString().size()];
+			newchar = new char[500];
 
-			strcpy(newchar, myString.toStdString().c_str());
-			for (i= 1; i < 20; i++)
-				files_to_sign[i-1] = newchar;
+			for (i=0; i < listsize; i++) {
+				strcpy(newchar, strings.at(i).toStdString().c_str());
+				files_to_sign[i] = newchar;
+			}
 
-			SignXades = Card.SignXades(files_to_sign, 1);
+			//std::cout << "i " << i << "strings.at(i).toStdString().c_str()" << strings.at(i).toStdString().c_str() << std::endl;
+
+			SignXades = Card.SignXades(files_to_sign, i);
 
 			delete newchar;
 
@@ -217,4 +216,5 @@ void dlgSignature::on_pbSign_clicked ( void )
 		QString msg(tr("General exception"));
 		return;
 	}
+	this->close();
 }
