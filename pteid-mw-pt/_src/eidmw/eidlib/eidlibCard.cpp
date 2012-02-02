@@ -1732,5 +1732,20 @@ PTEIDSDK_API long PTEID_GetCVCRoot(PTEID_RSAPublicKey *pCVCRootKey){
 	return 0;
 }
 
+PTEIDSDK_API long PTEID_SendAPDU(const unsigned char *ucRequest, unsigned long ulRequestLen, unsigned char *ucResponse, unsigned long *ulResponseLen){
+	if (readerContext!=NULL){
+		PTEID_EIDCard &card = readerContext->getEIDCard();
+		PTEID_ByteArray sApdu(ucRequest,ulRequestLen);
+		PTEID_ByteArray resp;
+
+		resp = card.sendAPDU(sApdu);
+
+		*ulResponseLen = (*ulResponseLen > resp.Size()) ? resp.Size() : *ulResponseLen;
+		memcpy(ucResponse,resp.GetBytes(),*ulResponseLen);
+	}
+
+	return 0;
+}
+
 
 }

@@ -1889,6 +1889,21 @@ PTEIDSDK_API long PTEID_GetCVCRoot(
 );
 
 
+/**
+ * Send an APDU to the card, see ISO7816-4 for more info.
+ * - For a case 1 APDU: ulRequestLen should be 4, ulResponseLen should be at least 2 (for SW1-SW2)
+ * - For a case 2 APDU: ulRequestLen should be 5
+ * - For a case 3 APDU: ucRequest[4] + 5 should equal ulRequestLen, ulResponseLen should be at least 2 (for SW1-SW2)
+ * - For a case 4 APDU: ucRequest[4] + 5 should equal ucRequestLen + 1, the last by is the 'Le' value
+ * If the call has been successfull, ucResponse should always contain SW1 and SW2 at the end.
+ */
+PTEIDSDK_API long PTEID_SendAPDU(
+	const unsigned char *ucRequest, /**<in: command APDU */
+	unsigned long ulRequestLen,     /**<in: command APDU length */
+	unsigned char *ucResponse,      /**<out: response APDU */
+	unsigned long *ulResponseLen);  /**<in/out: response APDU length */
+
+
 }
 
 #endif //__PTEIDLIB_H__
