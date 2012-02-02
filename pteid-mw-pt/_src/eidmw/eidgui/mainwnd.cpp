@@ -2374,7 +2374,13 @@ void MainWnd::actionSignature_eID_triggered()
 		dlgSignature* dlgsig = new dlgSignature( this, m_CI_Data);
 		dlgsig->exec();
 		delete dlgsig;
+	} else {
+	  	std::string Pmsgcaption = "Aviso";
+	  	std::string Pmsgbody = "Ocorreu um problema a ler os dados do seu cartão tente novamente";
+	  	QMessageBox msgBoxp(QMessageBox::Warning, QString::fromUtf8(Pmsgcaption.c_str()), QString::fromUtf8(Pmsgbody.c_str()), 0, this);
+	  	msgBoxp.exec();
 	}
+
 }
 
 //*****************************************************
