@@ -352,6 +352,15 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		httpWin.exec();
 	}
 #else
+
+	if (distro == "unsupported")  
+	{
+	  	std::string Pmsgcaption = "Aviso";
+	  	std::string Pmsgbody = "A sua distribuição não é suportada pelo Auto Update.";
+	  	QMessageBox msgBoxp(QMessageBox::Warning, QString::fromUtf8(Pmsgcaption.c_str()), QString::fromUtf8(Pmsgbody.c_str()), 0, this);
+	  	msgBoxp.exec();
+	}
+
 	pkgname.append("pteid-mw");
 
 	if (arch == "x86_64")
