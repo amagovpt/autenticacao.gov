@@ -1255,7 +1255,7 @@ PTEID_ReaderContext* readerContext = NULL;
 PTEIDSDK_API long PTEID_Init(char *ReaderName){
 
 	try {
-		if (NULL == ReaderName)
+		if (NULL == ReaderName || strlen(ReaderName) == 0)
 			readerContext = &ReaderSet.getReader();
 		else
 			readerContext = &ReaderSet.getReaderByName(ReaderName);
@@ -1276,7 +1276,7 @@ PTEIDSDK_API long PTEID_Init(char *ReaderName){
 	}
 	catch(PTEID_Exception &ex)
 	{
-		std::cout << "PTEID_Exception exception" << std::endl;
+		std::cout << "PTEID_Exception exception " << ex.GetError()<< std::endl;
 	}
 	catch(...)
 	{
@@ -1605,9 +1605,12 @@ PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *
 
 PTEIDSDK_API long PTEID_SelectADF(unsigned char *adf, long adflen){
 	if (readerContext!=NULL){
-		PTEID_ByteArray pb(adf,adflen);
 		PTEID_EIDCard &card = readerContext->getEIDCard();
-		card.selectApplication(pb);
+		unsigned char ap[4] = {0x00, 0xA4, 0x00, 0x0C};
+		PTEID_ByteArray apdu(ap,(unsigned long)(sizeof(ap)/sizeof(unsigned char)));
+		apdu.Append((unsigned char*)&adflen,sizeof(unsigned char));
+		apdu.Append(adf,(unsigned long) adflen);
+		card.sendAPDU(apdu);
 	}
 
 	return 0;
