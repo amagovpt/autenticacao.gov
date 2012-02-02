@@ -55,6 +55,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="pbSign">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Sign</string>
          </property>

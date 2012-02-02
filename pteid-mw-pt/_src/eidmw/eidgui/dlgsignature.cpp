@@ -21,6 +21,9 @@
 
 #include <QListView>
 
+#include <fstream>
+#include <iostream>
+
 #include "dlgsignature.h"
 #include "eidlib.h"
 #include "mainwnd.h"
@@ -28,7 +31,7 @@
 using namespace eIDMW;
 
 
-dlgSignature::dlgSignature( QWidget* parent, CardInformation& CI_Data) 
+dlgSignature::dlgSignature( QWidget* parent, CardInformation& CI_Data)
     : QDialog(parent)
     , m_CI_Data(CI_Data)
     , m_CurrReaderName("")
@@ -71,10 +74,10 @@ void dlgSignature::on_pbCancel_clicked( void )
 void dlgSignature::on_pbAddFiles_clicked( void )
 {
 	QStringList fileselect;
-	QString defaultfilepath;
+	QString defaultopenfilepath;
 
-	defaultfilepath = QDir::homePath();
-	fileselect = QFileDialog::getOpenFileNames(this, tr("Select File(s)"), defaultfilepath, NULL);
+	defaultopenfilepath = QDir::homePath();
+	fileselect = QFileDialog::getOpenFileNames(this, tr("Select File(s)"), defaultopenfilepath, NULL);
 	QCoreApplication::processEvents();
 
 	SignListView(fileselect);
@@ -82,13 +85,17 @@ void dlgSignature::on_pbAddFiles_clicked( void )
 
 void dlgSignature::SignListView (QStringList list)
 {
-	QListView *view = ui.listView;
+	view = ui.listView;
 	QStringListModel* localModel = new QStringListModel();
 
 	alist.append(list);
 
 	localModel->setStringList(alist);
 	view->setModel(localModel);
+
+	//Enable sign button now that we have data
+	if (!alist.isEmpty())
+		ui.pbSign->setEnabled(true);
 
 	//signal right click
 	view->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -133,18 +140,81 @@ void dlgSignature::ShowContextMenu(const QPoint& pos)
 
 void dlgSignature::on_pbSign_clicked ( void )
 {
-	QListView *view = ui.listView;
-	QStringList selectfiles ;
-
 	QAbstractItemModel* model = view->model() ;
+	QStringList strings;
 
 	for ( int i = 0 ; i < model->rowCount() ; ++i )
 	{
 		// Get item at row i, col 0.
-		selectfiles << model->index( i, 0 ).data( Qt::DisplayRole ).toString() ;
+		strings << model->index( i, 0 ).data( Qt::DisplayRole ).toString() ;
 	}
 
-	//See result 1 element of Qlistview
-	QString myString = selectfiles.at(1);
-	std::cout << "strings " << myString.toStdString() << std::endl;
+	QString myString = strings.at(0);
+
+	std::cout << "strings " << myString.toStdString().c_str() << std::endl;
+
+
+	//////////////GET CARD////////////
+
+	try
+	{
+		unsigned long	ReaderStartIdx = 1;
+		bool			bRefresh	   = false;
+		unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
+		unsigned long	ReaderIdx	   = 0;
+
+		if (ReaderStartIdx!=(unsigned long)-1)
+		{
+			ReaderEndIdx = ReaderStartIdx+1;
+		}
+		else
+		{
+			ReaderStartIdx=0;
+		}
+
+		bool bCardPresent = false;
+
+		const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+		m_CurrReaderName = readerName;
+		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
+
+		//------------------------------------
+		// make always sure a card is present
+		//------------------------------------
+		if (ReaderContext.isCardPresent())
+		{
+			PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
+			PTEID_ByteArray SignXades;
+
+			const char *files_to_sign[20];
+			int i;
+			char *newchar;
+
+			newchar = new char[myString.toStdString().size()];
+
+			strcpy(newchar, myString.toStdString().c_str());
+			for (i= 1; i < 20; i++)
+				files_to_sign[i-1] = newchar;
+
+			SignXades = Card.SignXades(files_to_sign, 1);
+
+			delete newchar;
+
+			QString defaultsavefilepath;
+			QString savefilepath;
+
+			defaultsavefilepath = QDir::homePath();
+			defaultsavefilepath.append("/xadessign.xml");
+			savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), defaultsavefilepath, tr("XAdES XML files (*.xml)"));
+
+			std::ofstream savefile;
+			savefile.open(savefilepath.toStdString().c_str());
+			savefile << SignXades.GetBytes();
+			savefile.close();
+		}
+	} catch (PTEID_Exception &e)
+	{
+		QString msg(tr("General exception"));
+		return;
+	}
 }
