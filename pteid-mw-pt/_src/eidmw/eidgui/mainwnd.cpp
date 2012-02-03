@@ -238,6 +238,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_ui.lbl_menuCard_Quit->installEventFilter(this);
 	m_ui.lbl_menuTools_Parameters->installEventFilter(this);
 	m_ui.lbl_menuTools_Signature->installEventFilter(this);
+	m_ui.lbl_menuTools_VerifySignature->installEventFilter(this);
 	m_ui.lbl_menuLanguage_Portuguese->installEventFilter(this);
 	m_ui.lbl_menuLanguage_English->installEventFilter(this);
 	m_ui.lbl_menuHelp_about->installEventFilter(this);
@@ -285,6 +286,12 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 		{
 			hide_submenus();
 			actionSignature_eID_triggered();
+		}
+
+		if (object == m_ui.lbl_menuTools_VerifySignature )
+		{
+			hide_submenus();
+			actionVerifySignature_eID_triggered();
 		}
 
 		if (object == m_ui.lbl_menuLanguage_Portuguese )
@@ -375,7 +382,7 @@ void MainWnd::on_btn_menu_card_clicked()
 void MainWnd::on_btn_menu_tools_clicked()
 {
 	m_ui.wdg_submenu_tools->setVisible(true);
-	m_ui.wdg_submenu_tools->setGeometry(128,4,126,100);
+	m_ui.wdg_submenu_tools->setGeometry(128,4,126,110);
 }
 
 void MainWnd::on_btn_menu_language_clicked()
@@ -2380,7 +2387,26 @@ void MainWnd::actionSignature_eID_triggered()
 	  	QMessageBox msgBoxp(QMessageBox::Warning, QString::fromUtf8(Pmsgcaption.c_str()), QString::fromUtf8(Pmsgbody.c_str()), 0, this);
 	  	msgBoxp.exec();
 	}
+}
 
+//*****************************************************
+// VerifySignature clicked
+//*****************************************************
+void MainWnd::actionVerifySignature_eID_triggered()
+{
+	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
+	QString cardTypeText = GetCardTypeText(CardFields[CARD_TYPE]);
+	/*if(m_CI_Data.isDataLoaded())
+	{
+		dlgVerifySignature* dlgversig = new dlgVerifySignature( this, m_CI_Data);
+		dlgversig->exec();
+		delete dlgversig;
+	} else {
+	  	std::string Pmsgcaption = "Aviso";
+	  	std::string Pmsgbody = "Ocorreu um problema a ler os dados do seu cartão tente novamente";
+	  	QMessageBox msgBoxp(QMessageBox::Warning, QString::fromUtf8(Pmsgcaption.c_str()), QString::fromUtf8(Pmsgbody.c_str()), 0, this);
+	  	msgBoxp.exec();
+	}*/
 }
 
 //*****************************************************

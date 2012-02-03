@@ -105,12 +105,19 @@ void dlgSignature::SignListView (QStringList list)
 void dlgSignature::RemoveFromView()
 {
 	std::cout << "remove from view" << std::endl;
-	QModelIndex index = ui.listView->currentIndex();
+	/*QModelIndex index = ui.listView->currentIndex();
 	int row = index.row();
 	int count = 1;
 
 	ui.listView->model()->removeRows( 1, count, index );
-	ui.listView->repaint();
+	ui.listView->repaint();*/
+
+	QModelIndexList indexes = ui.listView->selectionModel()->selectedIndexes();
+	while(indexes.size()) {
+		ui.listView->model()->removeRow(indexes.first().row());
+		indexes = ui.listView->selectionModel()->selectedIndexes();
+	}
+	//ui.listView->repaint();
 }
 
 void dlgSignature::ShowContextMenu(const QPoint& pos)

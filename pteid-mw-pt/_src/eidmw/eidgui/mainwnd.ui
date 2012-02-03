@@ -2125,7 +2125,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      <property name="geometry">
       <rect>
        <x>15</x>
-       <y>70</y>
+       <y>65</y>
        <width>81</width>
        <height>17</height>
       </rect>
@@ -2137,6 +2137,24 @@ font: 10pt &quot;Arial&quot;;</string>
      </property>
      <property name="text">
       <string>» Signature</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuTools_VerifySignature">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>85</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-image: url(:/images/Images/alpha.png);
+color: rgb(108, 108, 108);
+font: 10pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="text">
+      <string>» Verify Signature</string>
      </property>
     </widget>
    </widget>
