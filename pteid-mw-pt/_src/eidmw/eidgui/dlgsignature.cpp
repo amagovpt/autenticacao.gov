@@ -214,5 +214,4 @@ void dlgSignature::on_pbSign_clicked ( void )
 		QString msg(tr("General exception"));
 		return;
 	}
-	this->close();
 }
