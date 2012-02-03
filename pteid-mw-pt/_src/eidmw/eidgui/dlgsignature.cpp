@@ -141,15 +141,13 @@ void dlgSignature::ShowContextMenu(const QPoint& pos)
 void dlgSignature::on_pbSign_clicked ( void )
 {
 	QAbstractItemModel* model = view->model() ;
-	QStringList strings;
+	QStringList strlist;
 
 	for ( int i = 0 ; i < model->rowCount() ; ++i )
 	{
 		// Get item at row i, col 0.
-		strings << model->index( i, 0 ).data( Qt::DisplayRole ).toString() ;
+		strlist << model->index( i, 0 ).data( Qt::DisplayRole ).toString() ;
 	}
-
-	//////////////GET CARD////////////
 
 	try
 	{
@@ -182,22 +180,21 @@ void dlgSignature::on_pbSign_clicked ( void )
 			PTEID_ByteArray SignXades;
 
 			int i;
-			char *newchar;
-			int listsize = strings.count();
+			int listsize = strlist.count();
+			char *cpychar;
 			const char *files_to_sign[listsize];
 
-			newchar = new char[500];
-
-			for (i=0; i < listsize; i++) {
-				strcpy(newchar, strings.at(i).toStdString().c_str());
-				files_to_sign[i] = newchar;
+			for (i=0; i < listsize; i++)
+			{
+				int listtotalLength = strlist.at(i).size();
+				cpychar = new char[listtotalLength+1];
+				strcpy(cpychar, strlist.at(i).toStdString().c_str());
+				files_to_sign[i] = cpychar;
 			}
-
-			//std::cout << "i " << i << "strings.at(i).toStdString().c_str()" << strings.at(i).toStdString().c_str() << std::endl;
 
 			SignXades = Card.SignXades(files_to_sign, i);
 
-			delete newchar;
+			delete cpychar;
 
 			QString defaultsavefilepath;
 			QString savefilepath;
@@ -211,7 +208,8 @@ void dlgSignature::on_pbSign_clicked ( void )
 			savefile << SignXades.GetBytes();
 			savefile.close();
 		}
-	} catch (PTEID_Exception &e)
+	}
+	catch (PTEID_Exception &e)
 	{
 		QString msg(tr("General exception"));
 		return;
