@@ -32,6 +32,8 @@ class dlgVerifySignature : public QDialog
     Q_OBJECT
 
 private slots:
+    void on_pbCancel_clicked ( void );
+    void on_pbOpenSign_clicked ( void );
 
 public:
     dlgVerifySignature(QWidget* parent);

@@ -35,6 +35,7 @@
 #include "mainwnd.h"
 #include "dlgAbout.h"
 #include "dlgprint.h"
+#include "dlgverifysignature.h"
 #include "dlgsignature.h"
 #include "dlgOptions.h"
 #include "Settings.h"
@@ -2394,19 +2395,9 @@ void MainWnd::actionSignature_eID_triggered()
 //*****************************************************
 void MainWnd::actionVerifySignature_eID_triggered()
 {
-	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
-	QString cardTypeText = GetCardTypeText(CardFields[CARD_TYPE]);
-	/*if(m_CI_Data.isDataLoaded())
-	{
-		dlgVerifySignature* dlgversig = new dlgVerifySignature( this, m_CI_Data);
-		dlgversig->exec();
-		delete dlgversig;
-	} else {
-	  	std::string Pmsgcaption = "Aviso";
-	  	std::string Pmsgbody = "Ocorreu um problema a ler os dados do seu cartão tente novamente";
-	  	QMessageBox msgBoxp(QMessageBox::Warning, QString::fromUtf8(Pmsgcaption.c_str()), QString::fromUtf8(Pmsgbody.c_str()), 0, this);
-	  	msgBoxp.exec();
-	}*/
+    dlgVerifySignature* dlgversig = new dlgVerifySignature( this);
+    dlgversig->exec();
+    delete dlgversig;
 }
 
 //*****************************************************
@@ -4152,6 +4143,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 		{
 			try
 			{
+
 				if (!m_Pop)
 				{
 					pEvent->accept();

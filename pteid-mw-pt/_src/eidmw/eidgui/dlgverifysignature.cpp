@@ -20,7 +20,11 @@
  **************************************************************************** */
 
 #include "dlgverifysignature.h"
+
+#include "eidlib.h"
 #include "mainwnd.h"
+
+using namespace eIDMW;
 
 dlgVerifySignature::dlgVerifySignature( QWidget* parent)
     : QDialog(parent)
@@ -49,4 +53,46 @@ dlgVerifySignature::dlgVerifySignature( QWidget* parent)
 dlgVerifySignature::~dlgVerifySignature()
 {
 
+}
+
+void dlgVerifySignature::on_pbCancel_clicked()
+{
+        done(0);
+}
+
+void dlgVerifySignature::on_pbOpenSign_clicked()
+{
+    std::cout << "opensign clicked" << std::endl;
+    QString getSignFile;
+    QString defaultopenfilepath;
+    QByteArray line;
+    bool vsignsucess;
+    PTEID_ByteArray xmlverify;
+
+    defaultopenfilepath = QDir::homePath();
+    getSignFile = QFileDialog::getOpenFileName(this, tr("Open Signature files"), defaultopenfilepath, tr("XAdES XML files (*.xml)"), NULL);
+    QCoreApplication::processEvents();
+
+    QFile file(getSignFile);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+
+    while (!file.atEnd()) {
+        line = file.readLine();
+    }
+
+    line.data();
+    xmlverify.Append((unsigned char*)line.constData(), line.size());
+
+    /*std::cout << "xmlverify " << xmlverify.GetBytes() << std::endl;
+
+    char *error;
+    unsigned long errorlen;
+    vsignsucess = VerifySignature(xmlverify, error, errorlen);
+    if (vsignsuccess)
+    {
+        std::cout << "sucess\n";
+    } else {
+        std::cout << "non sucess\n";
+    }*/
 }
