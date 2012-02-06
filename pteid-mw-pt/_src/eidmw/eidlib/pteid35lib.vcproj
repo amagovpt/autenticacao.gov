@@ -380,6 +380,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\eidlibxades.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\InternalUtil.cpp"
 				>
 			</File>

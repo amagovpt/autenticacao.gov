@@ -46,7 +46,7 @@
 namespace eIDMW
 {
 
-bool APLVerifySignature(const char *container_path, char * errors, unsigned long* error_len);
+EIDMW_APL_API bool APLVerifySignature(const char *container_path, char * errors, unsigned long* error_len);
 enum APL_DocumentType
 {
 	APL_DOCTYPE_FULL=0,

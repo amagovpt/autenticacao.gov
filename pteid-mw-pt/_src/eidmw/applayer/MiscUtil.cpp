@@ -21,7 +21,10 @@
 
 #ifdef WIN32
 #include <Windows.h>
-#include <io.h>
+#include <io.h> //For _sopen and _chsize
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #endif
 
 #include <cstdio>
@@ -51,7 +54,7 @@ namespace eIDMW
 
 		char path_sep = '\\';
 		unsigned int i = 0;
-		char * ptr, *basename_str;
+		char * ptr;
 		char * basename_ptr = absolute_path; 
 
 		while((ptr=strchr(absolute_path, path_sep)) != NULL) 
@@ -68,7 +71,7 @@ namespace eIDMW
 		unsigned int nbytes = BUFSIZ;
 
 		/* This replicates the use of truncate */
-		if (_sopen_s(&fh, path, _O_RDWR) == 0)
+		if (fh = _sopen(path, _O_RDWR, _S_IWRITE) == 0)
 		{
 			if (( result = _chsize(fh, 0)) == 0)
 			_close(fh);

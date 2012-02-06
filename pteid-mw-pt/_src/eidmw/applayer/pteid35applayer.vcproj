@@ -428,6 +428,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SigContainer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\XadesSignature.cpp"
 				>
 			</File>
@@ -539,6 +543,10 @@
 			</File>
 			<File
 				RelativePath=".\PhotoPteid.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SigContainer.h"
 				>
 			</File>
 			<File
