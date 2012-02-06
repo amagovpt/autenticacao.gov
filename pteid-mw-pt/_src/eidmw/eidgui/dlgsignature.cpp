@@ -192,8 +192,6 @@ void dlgSignature::on_pbSign_clicked ( void )
 
             pdialog->exec();
 
-            //pdialog->close();
-
             delete []files_to_sign;
             delete cpychar;
 	}
