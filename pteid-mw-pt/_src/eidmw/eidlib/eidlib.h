@@ -889,7 +889,6 @@ class PTEID_CardVersionInfo : public PTEID_XMLDoc
 public:
 	PTEIDSDK_API  virtual ~PTEID_CardVersionInfo();		/**< Destructor */
 
-	PTEIDSDK_API bool isActive();						/**< Returns the card status (true = active) */
 	PTEIDSDK_API const char *getSerialNumber();			/**< Return the Serial Number of the card */
     PTEIDSDK_API const char *getTokenLabel();			/**< Return the Token Label (EFCIA 5032) */
     PTEIDSDK_API const char *getComponentCode();			/**< Return the ComponenCode of the card  */
