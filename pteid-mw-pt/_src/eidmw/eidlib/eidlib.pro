@@ -50,5 +50,6 @@ SOURCES += eidlibCard.cpp \
            eidlibDoc.cpp \
             eidlibReader.cpp \
            eidlibException.cpp \
+	   eidlibxades.cpp \
            InternalUtil.cpp
 

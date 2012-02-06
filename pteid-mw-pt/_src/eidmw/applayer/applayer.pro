@@ -83,6 +83,7 @@ HEADERS += \
 	MiscUtil.h \
 	PhotoPteid.h \
 	APLPublicKey.h \
+        SigContainer.h \
 	XadesSignature.h
 
 
@@ -107,6 +108,7 @@ SOURCES += \
     MiscUtil.cpp \
     PhotoPteid.cpp \
     APLPublicKey.cpp \
+    SigContainer.cpp \
     XadesSignature.cpp
     
     

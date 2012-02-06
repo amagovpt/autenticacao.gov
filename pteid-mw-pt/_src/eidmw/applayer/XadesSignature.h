@@ -53,7 +53,7 @@ namespace eIDMW
 		CByteArray &SignXades(const char ** paths, unsigned int n_paths);
 		CByteArray &SignXadesT(const char ** paths, unsigned int n_paths);
 
-		bool ValidateXades(CByteArray signature, char *errors, unsigned long *error_length);
+		static bool ValidateXades(CByteArray signature, char *errors, unsigned long *error_length);
 		
 
 		private:
@@ -75,7 +75,7 @@ namespace eIDMW
 		CByteArray timestamp_data(const unsigned char *input, unsigned int data_len);
 		void generate_asn1_request_struct(char *sha_1);
 
-		void initXerces();
+		static void initXerces();
 
 		
 		X509 * mp_cert;

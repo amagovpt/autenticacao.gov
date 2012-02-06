@@ -21,11 +21,17 @@
 
 #ifdef WIN32
 #include <Windows.h>
+#include <io.h>
 #endif
 
-#include <stdio.h>
+#include <cstdio>
+#include <cstring>
+
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifndef WIN32
+#include <unistd.h>
+#endif
 #include <errno.h>
 
 #include "MWException.h"
@@ -35,6 +41,54 @@
 
 namespace eIDMW
 {
+
+#ifdef WIN32
+	char * Basename(char *absolute_path)
+	{
+
+		if (absolute_path == NULL)
+			return NULL;
+
+		char path_sep = '\\';
+		unsigned int i = 0;
+		char * ptr, *basename_str;
+		char * basename_ptr = absolute_path; 
+
+		while((ptr=strchr(absolute_path, path_sep)) != NULL) 
+		{
+			basename_ptr = ptr;
+		}
+
+		return basename_ptr;
+	}
+
+	int Truncate(const char *path)
+	{
+		int fh, result;
+		unsigned int nbytes = BUFSIZ;
+
+		/* This replicates the use of truncate */
+		if (_sopen_s(&fh, path, _O_RDWR) == 0)
+		{
+			if (( result = _chsize(fh, 0)) == 0)
+			_close(fh);
+		}
+
+		return result;
+	}
+
+#else	
+	char * Basename(char *absolute_path)
+	{
+		return basename(absolute_path); //POSIX basename()
+	}
+	
+	int Truncate(const char *path)
+	{
+		return truncate(path, 0); //POSIX truncate()
+	}
+
+#endif
 
 /*****************************************************************************************
 ------------------------------------ CTimestampUtil ---------------------------------------

@@ -23,6 +23,7 @@
 #define __APL_MISCSUTIL_H__
 
 #include <string>
+#include <cstring> //POSIX basename
 #include <vector>
 #include <map>
 #include <time.h>
@@ -30,6 +31,12 @@
 
 namespace eIDMW
 {
+
+//Implementation of some utility functions over POSIX and Win32
+char * Basename(char *absolute_path);
+int Truncate(const char *path);
+
+
 
 /******************************************************************************//**
   * Util class for timestamp features 

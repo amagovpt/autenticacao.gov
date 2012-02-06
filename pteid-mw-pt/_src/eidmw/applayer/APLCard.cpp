@@ -27,6 +27,7 @@
 #include "cryptoFwkPteid.h"
 #include "CardPteidDef.h"
 #include "XadesSignature.h"
+#include "SigContainer.h"
 
 #include <time.h>
 #include <sys/types.h>
@@ -137,15 +138,19 @@ CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey)
 }
 
 
-CByteArray &APL_Card::SignXades(const char ** path, unsigned int n_paths)
+CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const char *output_path)
 {
-	if (path == NULL || n_paths < 1)
+	if (paths == NULL || n_paths < 1)
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
 	XadesSignature sig(this);
 
-	return sig.SignXades(path,n_paths);
+	CByteArray &signature = sig.SignXades(paths,n_paths);
+	StoreSignatureToDisk (signature, paths, n_paths,output_path);
 
+	//Write zip container signature and referenced files in zip container
+
+
+	return signature;
 }
 
 CByteArray &APL_Card::SignXades(CByteArray content, const char *URL)
@@ -162,23 +167,25 @@ CByteArray &APL_Card::SignXadesT(CByteArray content, const char *URL)
 	return *ba;
 }
 
-CByteArray &APL_Card::SignXadesT(const char ** path, unsigned int n_paths)
+CByteArray &APL_Card::SignXadesT(const char ** path, unsigned int n_paths, const char *output_file)
 {
 	CByteArray * ba = new CByteArray();
 	//TODO
 	return *ba;
 }
 
-bool APL_Card::ValidateSignature(const CByteArray &signature, char * errors, unsigned long* error_len)
+bool APLVerifySignature(const char *container_path, char * errors, unsigned long* error_len)
 {
-	if (signature.Size() == 0)
+	if (strlen(container_path) == 0)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	
-	XadesSignature sig(this);
-	
-	return sig.ValidateXades(signature, errors, error_len);
-}
+	CByteArray *sig_content = ExtractSignature(container_path);
 
+	if (sig_content == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+	
+	return XadesSignature::ValidateXades(*sig_content, errors, error_len);
+}
 
 
 /*****************************************************************************************

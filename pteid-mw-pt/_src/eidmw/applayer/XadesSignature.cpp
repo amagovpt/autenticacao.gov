@@ -11,10 +11,12 @@
 #include <cstdio>
 
 #include "APLCard.h"
+
 #include "CardPteidDef.h"
 #include "XadesSignature.h"
 #include "MWException.h"
 #include "eidErrors.h"
+#include "MiscUtil.h"
 
 #include "Log.h"
 #include "ByteArray.h"
@@ -47,7 +49,6 @@
 #include <xsec/utils/XSECBinTXFMInputStream.hpp>
 #include <xsec/transformers/TXFMBase.hpp>
 #include <xsec/transformers/TXFMChain.hpp>
-
 
 //cURL for Timestamping
 #include <curl/curl.h>
@@ -340,7 +341,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 	bool errorsOccured = false;
 	
 	MWLOG(LEV_DEBUG, MOD_APL, L"ValidateXades() called with XML content of %d bytes",
-			signature.GetBytes());
+			signature.Size());
 	initXerces();
 
 	//Load XML from a MemoryBuffer
@@ -404,8 +405,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 		int err_len = _snprintf(errors, *error_length, "Validation error: XML Signature Node not found");
 		*error_length = err_len;
 
-		MWLOG(LEV_ERROR, MOD_APL, L"ValidateXades: \
-			Could not find <Signature> node in the signature provided");
+		MWLOG(LEV_ERROR, MOD_APL, L"ValidateXades: Could not find <Signature> node in the signature provided");
 		return false;
 	}
 
@@ -467,9 +467,11 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 XMLCh* XadesSignature::createURI(const char *path)
 {
 
-	string default_uri = string("file://localhost") + path;
+	string default_uri = string("file://localhost/") + Basename((char *)path);
 #ifdef WIN32
-	XMLCh * uni_reference_uri = (XMLCh*)pathToURI(utf8_decode(path));
+	XMLCh * uni_reference_uri = (XMLCh*)pathToURI(
+			utf8_decode(Basename((char *)path))
+			);
 #else
 	//TODO: We also need to URL-encode the path on Unix
 	XMLCh * uni_reference_uri = XMLString::transcode(default_uri.c_str());
