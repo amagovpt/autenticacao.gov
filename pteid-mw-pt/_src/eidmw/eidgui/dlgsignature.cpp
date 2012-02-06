@@ -158,62 +158,93 @@ void dlgSignature::on_pbSign_clicked ( void )
 
 	try
 	{
-		unsigned long	ReaderStartIdx = 1;
-		bool			bRefresh	   = false;
-		unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
-		unsigned long	ReaderIdx	   = 0;
+            int i;
+            int listsize = strlist.count();
+            char *cpychar;
+            const char **files_to_sign = new const char*[listsize];
 
-		if (ReaderStartIdx!=(unsigned long)-1)
-		{
-			ReaderEndIdx = ReaderStartIdx+1;
-		}
-		else
-		{
-			ReaderStartIdx=0;
-		}
+            for (i=0; i < listsize; i++)
+            {
+                int listtotalLength = strlist.at(i).size();
+                cpychar = new char[listtotalLength+1];
+                strcpy(cpychar, strlist.at(i).toStdString().c_str());
+                files_to_sign[i] = cpychar;
+            }
 
-		bool bCardPresent = false;
+            QString defaultsavefilepath;
+            QString savefilepath;
+            QString nativedafaultpath;
 
-		const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-		m_CurrReaderName = readerName;
-		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
+            defaultsavefilepath = QDir::homePath();
+            defaultsavefilepath.append("/xadessign.zip");
+            nativedafaultpath = QDir::toNativeSeparators(defaultsavefilepath);
+            savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), nativedafaultpath, tr("Zip files 'XAdES' (*.zip)"));
 
-		//------------------------------------
-		// make always sure a card is present
-		//------------------------------------
-		if (ReaderContext.isCardPresent())
-		{
-			PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
-			PTEID_ByteArray SignXades;
+            pdialog = new QProgressDialog();
+            pdialog->setWindowModality(Qt::WindowModal);
+            pdialog->setWindowTitle(tr("Sign"));
+            pdialog->setLabelText(tr("Signing data..."));
+            pdialog->setMinimum(0);
+            pdialog->setMaximum(0);
 
-			int i;
-			int listsize = strlist.count();
-			char *cpychar;
-			const char *files_to_sign[listsize];
+            QFuture<void> future = QtConcurrent::run(this, &dlgSignature::runsign, files_to_sign, i, savefilepath.toStdString().c_str());
+            this->FutureWatcher.setFuture(future);
 
-			for (i=0; i < listsize; i++)
-			{
-				int listtotalLength = strlist.at(i).size();
-				cpychar = new char[listtotalLength+1];
-				strcpy(cpychar, strlist.at(i).toStdString().c_str());
-				files_to_sign[i] = cpychar;
-			}
+            pdialog->exec();
 
-                        QString defaultsavefilepath;
-                        QString savefilepath;
+            //pdialog->close();
 
-                        defaultsavefilepath = QDir::homePath();
-                        defaultsavefilepath.append("/xadessign.zip");
-                        savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), defaultsavefilepath, tr("Zip files 'XAdES' (*.zip)"));
-
-                        SignXades = Card.SignXades(files_to_sign, i, savefilepath.toStdString().c_str());
-
-			delete cpychar;
-		}
+            delete []files_to_sign;
+            delete cpychar;
 	}
 	catch (PTEID_Exception &e)
 	{
-		QString msg(tr("General exception"));
-		return;
+            QString msg(tr("General exception"));
+            return;
 	}
+
+        this->close();
+}
+
+void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char *output_path)
+{
+    unsigned long	ReaderStartIdx = 1;
+    bool		bRefresh = false;
+    unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
+    unsigned long	ReaderIdx	   = 0;
+
+    try
+    {
+        if (ReaderStartIdx!=(unsigned long)-1)
+        {
+            ReaderEndIdx = ReaderStartIdx+1;
+        }
+        else
+        {
+            ReaderStartIdx=0;
+        }
+
+        const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+        m_CurrReaderName = readerName;
+        PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
+
+        //------------------------------------
+        // make always sure a card is present
+        //------------------------------------
+        if (ReaderContext.isCardPresent())
+        {
+            PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
+            PTEID_ByteArray SignXades;
+            SignXades = Card.SignXades(paths, n_paths, output_path);
+        }
+    }
+    catch (PTEID_Exception &e)
+    {
+        QString msg(tr("General exception"));
+        return;
+    }
+
+    pdialog->close();
+
+    return;
 }
