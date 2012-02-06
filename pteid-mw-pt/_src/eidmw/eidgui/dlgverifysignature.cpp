@@ -71,7 +71,6 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
     getSignFile = QFileDialog::getOpenFileName(this, tr("Open Signature files"), defaultopenfilepath, tr("Zip files 'XAdES' (*.zip)"), NULL);
     QCoreApplication::processEvents();
 
-    std::cout << "teste" << std::endl;
     char *error;
     unsigned long errorlen;
 
@@ -83,8 +82,11 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
 
     if (vsignsucess)
     {
-        std::cout << "sucess\n";
+        QMessageBox::information(this, tr("Error"), tr("Verified Signature with success"));
+        this->close();
     } else {
         std::cout << "error " << error << " error_len " << std::string(error, errorlen) << std::endl;
+        QMessageBox::critical(this, tr("Error"), QString::fromUtf8(error, errorlen));
+        this->close();
     }
 }
