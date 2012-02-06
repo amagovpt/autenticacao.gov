@@ -199,21 +199,16 @@ void dlgSignature::on_pbSign_clicked ( void )
 				files_to_sign[i] = cpychar;
 			}
 
-			SignXades = Card.SignXades(files_to_sign, i);
+                        QString defaultsavefilepath;
+                        QString savefilepath;
+
+                        defaultsavefilepath = QDir::homePath();
+                        defaultsavefilepath.append("/xadessign.zip");
+                        savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), defaultsavefilepath, tr("Zip files 'XAdES' (*.zip)"));
+
+                        SignXades = Card.SignXades(files_to_sign, i, savefilepath.toStdString().c_str());
 
 			delete cpychar;
-
-			QString defaultsavefilepath;
-			QString savefilepath;
-
-			defaultsavefilepath = QDir::homePath();
-			defaultsavefilepath.append("/xadessign.xml");
-			savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), defaultsavefilepath, tr("XAdES XML files (*.xml)"));
-
-			std::ofstream savefile;
-			savefile.open(savefilepath.toStdString().c_str());
-			savefile << SignXades.GetBytes();
-			savefile.close();
 		}
 	}
 	catch (PTEID_Exception &e)

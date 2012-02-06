@@ -62,37 +62,29 @@ void dlgVerifySignature::on_pbCancel_clicked()
 
 void dlgVerifySignature::on_pbOpenSign_clicked()
 {
-    std::cout << "opensign clicked" << std::endl;
     QString getSignFile;
     QString defaultopenfilepath;
-    QByteArray line;
     bool vsignsucess;
-    PTEID_ByteArray xmlverify;
+    PTEID_SigVerifier vsign;
 
     defaultopenfilepath = QDir::homePath();
-    getSignFile = QFileDialog::getOpenFileName(this, tr("Open Signature files"), defaultopenfilepath, tr("XAdES XML files (*.xml)"), NULL);
+    getSignFile = QFileDialog::getOpenFileName(this, tr("Open Signature files"), defaultopenfilepath, tr("Zip files 'XAdES' (*.zip)"), NULL);
     QCoreApplication::processEvents();
 
-    QFile file(getSignFile);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-
-    while (!file.atEnd()) {
-        line = file.readLine();
-    }
-
-    line.data();
-    xmlverify.Append((unsigned char*)line.constData(), line.size());
-
-    /*std::cout << "xmlverify " << xmlverify.GetBytes() << std::endl;
-
+    std::cout << "teste" << std::endl;
     char *error;
     unsigned long errorlen;
-    vsignsucess = VerifySignature(xmlverify, error, errorlen);
-    if (vsignsuccess)
+
+    error = new char[500];
+
+    errorlen = sizeof(error);
+
+    vsignsucess = vsign.VerifySignature(getSignFile.toStdString().c_str(), error, &errorlen);
+
+    if (vsignsucess)
     {
         std::cout << "sucess\n";
     } else {
-        std::cout << "non sucess\n";
-    }*/
+        std::cout << "error " << error << " error_len " << std::string(error, errorlen) << std::endl;
+    }
 }
