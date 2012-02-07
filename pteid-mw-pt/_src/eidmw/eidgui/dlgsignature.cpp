@@ -166,9 +166,11 @@ void dlgSignature::on_pbSign_clicked ( void )
             for (i=0; i < listsize; i++)
             {
                 int listtotalLength = strlist.at(i).size();
+				QString &s = QDir::toNativeSeparators(strlist.at(i));
                 cpychar = new char[listtotalLength+1];
-                strcpy(cpychar, strlist.at(i).toStdString().c_str());
+                strcpy(cpychar, s.toStdString().c_str());
                 files_to_sign[i] = cpychar;
+				PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "File to Sign: %s", files_to_sign[i]);
             }
 
             QString defaultsavefilepath;
@@ -179,14 +181,17 @@ void dlgSignature::on_pbSign_clicked ( void )
             defaultsavefilepath.append("/xadessign.zip");
             nativedafaultpath = QDir::toNativeSeparators(defaultsavefilepath);
             savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), nativedafaultpath, tr("Zip files 'XAdES' (*.zip)"));
-
+			savefilepath = QDir::toNativeSeparators(savefilepath);
+			
             pdialog = new QProgressDialog();
             pdialog->setWindowModality(Qt::WindowModal);
             pdialog->setWindowTitle(tr("Sign"));
             pdialog->setLabelText(tr("Signing data..."));
             pdialog->setMinimum(0);
             pdialog->setMaximum(0);
+			
 
+			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Save to file %s", savefilepath.toStdString().c_str());
             QFuture<void> future = QtConcurrent::run(this, &dlgSignature::runsign, files_to_sign, i, savefilepath.toStdString().c_str());
             this->FutureWatcher.setFuture(future);
 

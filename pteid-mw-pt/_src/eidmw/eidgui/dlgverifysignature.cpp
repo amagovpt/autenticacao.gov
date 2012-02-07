@@ -66,6 +66,7 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
     QString nativedafaultpath;
     bool vsignsucess;
     PTEID_SigVerifier vsign;
+	
 
     getSignFile = QFileDialog::getOpenFileName(this, tr("Open Signature files"), QDir::homePath(), tr("Zip files 'XAdES' (*.zip)"), NULL);
     QCoreApplication::processEvents();
@@ -75,21 +76,20 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
         nativedafaultpath = QDir::toNativeSeparators(getSignFile);
 
         char *error;
-        unsigned long errorlen;
+        unsigned long errorlen = 500;
 
-        error = new char[500];
-
-        errorlen = sizeof(error);
+        error = new char[errorlen];
 
         vsignsucess = vsign.VerifySignature(nativedafaultpath.toStdString().c_str(), error, &errorlen);
 
         if (vsignsucess)
         {
-            QMessageBox::information(this, tr("Error"), tr("Verified Signature with success"));
+            QMessageBox::information(this, tr("Verify Signature"), tr("Signature was successfully verified."));
             this->close();
         } else {
-            std::cout << "error " << error << " error_len " << std::string(error, errorlen) << std::endl;
-            QMessageBox::critical(this, tr("Error"), QString::fromUtf8(error, errorlen));
+			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", 
+				"Error message received from VerifySignature() size=%d: %s", errorlen, error);
+			QMessageBox::critical(this, tr("Verify Signature"), QString::fromAscii(error, errorlen));
             this->close();
         }
     }
