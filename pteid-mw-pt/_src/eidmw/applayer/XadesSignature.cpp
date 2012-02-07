@@ -121,17 +121,22 @@ namespace eIDMW
 		return wstrTo;
 	}
 
+	/*str::wstring latin1_to_wstring(const char *str)
+	{
+
+	}*/
+
 	const wchar_t * pathToURI(const std::wstring path)
 	{
 		DWORD url_size = MAX_PATH*5;
 		LPWSTR pszUrl = new WCHAR[url_size]; //We have to account for chars that must be escaped into %XX sequences
 
 		HRESULT ret = UrlCreateFromPath(path.c_str(), pszUrl, &url_size, NULL);
-
+       
 		if (ret != S_OK)
 		{
-			MWLOG(LEV_ERROR, MOD_APL, L"XadesSignature: UrlCreateFromPath returned error, \
-				URI is probably wrongly encoded");
+	    	MWLOG(LEV_ERROR, MOD_APL, L"XadesSignature: UrlCreateFromPath returned error, \
+			URI is probably wrongly encoded");
 			return std::wstring(L"file://localhost" + path).c_str();
 		}
 		
@@ -340,8 +345,8 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 {
 	bool errorsOccured = false;
 	
-	MWLOG(LEV_DEBUG, MOD_APL, L"ValidateXades() called with XML content of %d bytes",
-			signature.Size());
+	MWLOG(LEV_DEBUG, MOD_APL, L"ValidateXades() called with XML content of %d bytes."
+		L"Error buffer addr: 0x%x, error_length=%d ",signature.Size(), (int)errors, *error_length);
 	initXerces();
 
 	//Load XML from a MemoryBuffer
@@ -379,7 +384,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 
 	if (errorsOccured) {
 		//Write to output report 
-		int err_len = _snprintf(errors, *error_length, "Validation error: Malformed XML Document");
+		int err_len = _snprintf(errors, *error_length, "Signature Validation error: Malformed XML Document");
 		*error_length = err_len;
 		MWLOG(LEV_ERROR, MOD_APL, L"Errors parsing XML Signature, bailing out");
 		return false;
@@ -402,7 +407,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 
 	if (sigNode == NULL) {
 
-		int err_len = _snprintf(errors, *error_length, "Validation error: XML Signature Node not found");
+		int err_len = _snprintf(errors, *error_length, "Signature Validation error: XML Signature Node not found");
 		*error_length = err_len;
 
 		MWLOG(LEV_ERROR, MOD_APL, L"ValidateXades: Could not find <Signature> node in the signature provided");
@@ -467,12 +472,10 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 XMLCh* XadesSignature::createURI(const char *path)
 {
 
-	string default_uri = string("file://localhost/") + Basename((char *)path);
 #ifdef WIN32
-	XMLCh * uni_reference_uri = (XMLCh*)pathToURI(
-			utf8_decode(Basename((char *)path))
-			);
+	XMLCh * uni_reference_uri = (XMLCh*)pathToURI(utf8_decode(path));
 #else
+	string default_uri = string("file://localhost/") + Basename((char *)path);
 	//TODO: We also need to URL-encode the path on Unix
 	XMLCh * uni_reference_uri = XMLString::transcode(default_uri.c_str());
 #endif
@@ -528,7 +531,7 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
 			const char * path = paths[i];
 			//Create a reference to the external file
 			DSIGReference * ref = sig->createReference(createURI(path));
-			MWLOG(LEV_DEBUG, MOD_APL, L"SignXades(): Hashing file %s", path);
+			MWLOG(LEV_DEBUG, MOD_APL, L"SignXades(): Hashing file %S", path);
 			sha1_hash = HashFile(path);
 
 			//Fill the hash value as base64-encoded string
@@ -543,7 +546,7 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
 		}
 		catch (const XMLException &e)
 		{
-			MWLOG(LEV_ERROR, MOD_APL, L"Exception in calculateSignedInfoHash(), message: %s - %s", 
+			MWLOG(LEV_ERROR, MOD_APL, L"Exception in calculateSignedInfoHash(), message: %S - %s", 
 				XMLString::transcode(e.getType()), XMLString::transcode(e.getMessage()));
 		
 		}

@@ -28,7 +28,7 @@ namespace eIDMW
 			file.read (in, *size);
 		}
 		else
-			MWLOG(LEV_ERROR, MOD_APL, L"SigContainer::readFile() Error opening file %s\n", path);
+			MWLOG(LEV_ERROR, MOD_APL, L"SigContainer::readFile() Error opening file %S\n", path);
 
 		file.close();
 		return in;
@@ -43,7 +43,7 @@ namespace eIDMW
 				&decompressed_size, 0);
 
 		if (sig == NULL)
-			MWLOG(LEV_ERROR, MOD_APL, L"Error extracting signature from file %s\n", archive_path);
+			MWLOG(LEV_ERROR, MOD_APL, L"Error extracting signature from file %S\n", archive_path);
 		
 		ba->Append((const unsigned char *)sig, decompressed_size);
 		return ba;
@@ -57,23 +57,34 @@ namespace eIDMW
 		char *ptr_content = NULL;
 		const char *absolute_path = NULL;
 		char *zip_entry_name= NULL;
+		char *utf8_filename;
 		mz_bool status;
 
-		MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() called with output_file = %s\n",output_file); 
+		MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() called with output_file = %S\n",output_file); 
+
+		//Truncate the output file first...
+		Truncate(output_file);
 
 		// Append the referenced files to the zip file
 		for (unsigned int  i = 0; i < num_paths; i++)
 		{   
 			absolute_path = paths[i]; 	
 			ptr_content = readFile(absolute_path, &file_size);
-			MWLOG(LEV_DEBUG, MOD_APL, L"Compressing %d bytes from file %s\n", file_size, absolute_path);
-			zip_entry_name = Basename((char *)absolute_path);    
+			MWLOG(LEV_DEBUG, MOD_APL, L"Compressing %d bytes from file %S\n", file_size, absolute_path);
 
-			status = mz_zip_add_mem_to_archive_file_in_place(output_file, zip_entry_name, ptr_content,
+			zip_entry_name = Basename((char *)absolute_path);
+#ifdef WIN32
+			utf8_filename = (char*)malloc(2*strlen(zip_entry_name));
+			latin1_to_utf8(zip_entry_name, utf8_filename);
+#else
+			utf_filename = zip_entry_name;
+#endif
+
+			status = mz_zip_add_mem_to_archive_file_in_place(output_file, utf8_filename, ptr_content,
 					file_size, "", (unsigned short)0, MZ_BEST_COMPRESSION);
 			if (!status)
 			{   
-				MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed with argument %s",
+				MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed with argument %S",
 						absolute_path);
 				return ;
 			}

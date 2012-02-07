@@ -25,6 +25,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <stdlib.h>
 #endif
 
 #include <cstdio>
@@ -46,23 +47,16 @@ namespace eIDMW
 {
 
 #ifdef WIN32
-	char * Basename(char *absolute_path)
+	char *Basename(char *absolute_path)
 	{
-
-		if (absolute_path == NULL)
-			return NULL;
-
-		char path_sep = '\\';
-		unsigned int i = 0;
-		char * ptr;
-		char * basename_ptr = absolute_path; 
-
-		while((ptr=strchr(absolute_path, path_sep)) != NULL) 
-		{
-			basename_ptr = ptr;
-		}
-
-		return basename_ptr;
+		char filename[_MAX_FNAME];
+		char ext[_MAX_EXT];
+		char *basename = (char *)malloc(2*_MAX_FNAME);
+	
+		_splitpath(absolute_path, NULL, NULL, filename, ext);
+		strcpy(basename, filename);
+		strcat(basename, ext);
+		return basename;
 	}
 
 	int Truncate(const char *path)
@@ -70,7 +64,7 @@ namespace eIDMW
 		int fh, result;
 		unsigned int nbytes = BUFSIZ;
 
-		/* This replicates the use of truncate */
+		/* This replicates the use of truncate() on Unix */
 		if (fh = _sopen(path, _O_RDWR, _S_IWRITE) == 0)
 		{
 			if (( result = _chsize(fh, 0)) == 0)
@@ -92,6 +86,18 @@ namespace eIDMW
 	}
 
 #endif
+
+	//Quick fix: Unreadable snippet to convert typical western languages characters
+	//to UTF-8, blame stackoverflow: http://stackoverflow.com/a/4059934/9906
+	void latin1_to_utf8(char * in, char *out)
+	{
+		while (*in)
+		{
+			if (*in<128)
+				*out++=*in++;
+			else *out++=0xc2+(*in>0xbf), *out++=(*in++&0x3f)+0x80;
+		}
+	}
 
 /*****************************************************************************************
 ------------------------------------ CTimestampUtil ---------------------------------------
