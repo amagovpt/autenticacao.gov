@@ -63,12 +63,10 @@ void dlgVerifySignature::on_pbCancel_clicked()
 void dlgVerifySignature::on_pbOpenSign_clicked()
 {
     QString getSignFile;
-    QString defaultopenfilepath;
     QString nativedafaultpath;
     bool vsignsucess;
     PTEID_SigVerifier vsign;
 
-    //defaultopenfilepath = QDir::homePath();
     getSignFile = QFileDialog::getOpenFileName(this, tr("Open Signature files"), QDir::homePath(), tr("Zip files 'XAdES' (*.zip)"), NULL);
     QCoreApplication::processEvents();
 
