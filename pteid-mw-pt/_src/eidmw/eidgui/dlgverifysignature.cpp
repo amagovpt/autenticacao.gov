@@ -64,12 +64,15 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
 {
     QString getSignFile;
     QString defaultopenfilepath;
+    QString nativedafaultpath;
     bool vsignsucess;
     PTEID_SigVerifier vsign;
 
-    defaultopenfilepath = QDir::homePath();
-    getSignFile = QFileDialog::getOpenFileName(this, tr("Open Signature files"), defaultopenfilepath, tr("Zip files 'XAdES' (*.zip)"), NULL);
+    //defaultopenfilepath = QDir::homePath();
+    getSignFile = QFileDialog::getOpenFileName(this, tr("Open Signature files"), QDir::homePath(), tr("Zip files 'XAdES' (*.zip)"), NULL);
     QCoreApplication::processEvents();
+
+    nativedafaultpath = QDir::toNativeSeparators(getSignFile);
 
     char *error;
     unsigned long errorlen;
@@ -78,7 +81,7 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
 
     errorlen = sizeof(error);
 
-    vsignsucess = vsign.VerifySignature(getSignFile.toStdString().c_str(), error, &errorlen);
+    vsignsucess = vsign.VerifySignature(nativedafaultpath.toStdString().c_str(), error, &errorlen);
 
     if (vsignsucess)
     {
