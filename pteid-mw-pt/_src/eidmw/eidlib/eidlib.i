@@ -532,31 +532,6 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 }
 #elif SWIGJAVA	/********************** JAVA SPECIFICS ***********************/
 
-%rename(Init) 								PTEID_Init;
-%rename(Exit) 								PTEID_Exit;
-%rename(GetCardType)						PTEID_GetCardType;
-%rename(GetID)								PTEID_GetID;
-%rename(GetAddr)							PTEID_GetAddr;
-%rename(GetPic)								PTEID_GetPic;
-%rename(GetCertificates)					PTEID_GetCertificates;
-%rename(VerifyPIN)							PTEID_VerifyPIN;
-%rename(ChangePIN)							PTEID_ChangePIN;
-%rename(GetPINs)							PTEID_GetPINs;
-%rename(GetTokenInfo)						PTEID_GetTokenInfo;
-%rename(ReadSOD)							PTEID_ReadSOD;
-%rename(UnblockPIN)							PTEID_UnblockPIN;
-%rename(UnblockPIN_Ext)						PTEID_UnblockPIN_Ext;
-%rename(SelectADF)							PTEID_SelectADF;
-%rename(ReadFile)							PTEID_ReadFile;
-%rename(WriteFile)							PTEID_WriteFile;
-%rename(IsActivated)						PTEID_IsActivated;
-%rename(Activate)							PTEID_Activate;
-%rename(SetSODChecking)						PTEID_SetSODChecking;
-%rename(SetSODCAs)							PTEID_SetSODCAs;
-%rename(GetCardAuthenticationKey)			PTEID_GetCardAuthenticationKey;
-%rename(GetCVCRoot)							PTEID_GetCVCRoot;
-%rename(SendAPDU)							PTEID_SendAPDU;
-
 # no need to add a static block on every project that uses the java wrapper
 # the lib must be in the java library path
 %pragma(java) jniclasscode=%{
