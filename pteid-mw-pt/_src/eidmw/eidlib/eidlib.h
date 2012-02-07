@@ -1386,6 +1386,9 @@ private:
 PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const char *format, ...);
 
 
+
+#if !defined SWIGJAVA && !defined SWIGCSHARP
+
 /******************************************************************************//**
   * Compatibility layer
   *********************************************************************************/
@@ -1914,7 +1917,7 @@ PTEIDSDK_API long PTEID_SendAPDU(
 	unsigned char *ucResponse,      /**<out: response APDU */
 	unsigned long *ulResponseLen);  /**<in/out: response APDU length */
 
-
+#endif // !defined SWIGJAVA && !defined SWIGCSHARP
 }
 
 #endif //__PTEIDLIB_H__
