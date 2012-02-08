@@ -162,11 +162,12 @@ void dlgSignature::on_pbSign_clicked ( void )
             int listsize = strlist.count();
             char *cpychar;
             const char **files_to_sign = new const char*[listsize];
+			char *output_file;
 
             for (i=0; i < listsize; i++)
             {
                 int listtotalLength = strlist.at(i).size();
-				QString &s = QDir::toNativeSeparators(strlist.at(i));
+				QString s = QDir::toNativeSeparators(strlist.at(i));
                 cpychar = new char[listtotalLength+1];
                 strcpy(cpychar, s.toStdString().c_str());
                 files_to_sign[i] = cpychar;
@@ -181,7 +182,7 @@ void dlgSignature::on_pbSign_clicked ( void )
             defaultsavefilepath.append("/xadessign.zip");
             nativedafaultpath = QDir::toNativeSeparators(defaultsavefilepath);
             savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), nativedafaultpath, tr("Zip files 'XAdES' (*.zip)"));
-			savefilepath = QDir::toNativeSeparators(savefilepath);
+			QString native_path = QDir::toNativeSeparators(savefilepath);
 			
             pdialog = new QProgressDialog();
             pdialog->setWindowModality(Qt::WindowModal);
@@ -190,15 +191,19 @@ void dlgSignature::on_pbSign_clicked ( void )
             pdialog->setMinimum(0);
             pdialog->setMaximum(0);
 			
-
-			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Save to file %s", savefilepath.toStdString().c_str());
-            QFuture<void> future = QtConcurrent::run(this, &dlgSignature::runsign, files_to_sign, i, savefilepath.toStdString().c_str());
+			int outp_len = native_path.size();
+			output_file = (char *)malloc(outp_len+1);
+			
+			strncpy(output_file, native_path.toStdString().c_str(),outp_len);
+			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Save to file %s", output_file);
+            QFuture<void> future = QtConcurrent::run(this, &dlgSignature::runsign, files_to_sign, i, output_file);
             this->FutureWatcher.setFuture(future);
 
             pdialog->exec();
 
             delete []files_to_sign;
             delete cpychar;
+			free(output_file);
 	}
 	catch (PTEID_Exception &e)
 	{
