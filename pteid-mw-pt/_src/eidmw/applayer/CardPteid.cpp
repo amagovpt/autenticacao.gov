@@ -845,6 +845,10 @@ const CByteArray& APL_EidFile_ID::getPhotoHash()
 	return EmptyByteArray;
 }
 
+void  APL_EidFile_ID::doSODCheck(bool check){
+	m_SODCheck = check;
+}
+
 /*****************************************************************************************
 ---------------------------------------- APL_EidFile_IDSign -----------------------------------------
 *****************************************************************************************/
@@ -865,7 +869,6 @@ tCardFileStatus APL_EidFile_IDSign::VerifyFile()
 {
 	return CARDFILESTATUS_OK;
 }
-
 
 /*****************************************************************************************
 ---------------------------------------- APL_EidFile_Address -----------------------------------------
@@ -1451,6 +1454,10 @@ const char * APL_EidFile_Address::getForeignPostalCode()
 		return "";
 }
 
+void APL_EidFile_Address::doSODCheck(bool check){
+	m_SODCheck = check;
+}
+
 /*****************************************************************************************
 ---------------------------------------- APL_EidFile_AddressSign -----------------------------------------
 *****************************************************************************************/
@@ -1475,7 +1482,7 @@ tCardFileStatus APL_EidFile_AddressSign::VerifyFile()
 /*****************************************************************************************
 ---------------------------------------- APL_EidFile_Sod -----------------------------------------
 *****************************************************************************************/
-APL_EidFile_Sod::APL_EidFile_Sod(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_PHOTO,NULL)
+APL_EidFile_Sod::APL_EidFile_Sod(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_SOD,NULL)
 {
 }
 
@@ -1485,24 +1492,7 @@ APL_EidFile_Sod::~APL_EidFile_Sod()
 
 tCardFileStatus APL_EidFile_Sod::VerifyFile()
 {
-	/*if(!m_card)
-		return CARDFILESTATUS_ERROR;
-
-	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
-
-	//The hash for the photo is in the ID file
-	//const CByteArray &hash=pcard->getFileID()->getPhotoHash();
-	const CByteArray &hash=pcard->getFileID()->getData();
-
-	//If the status of the ID file is not OK, the hash is not valid.
-	//The id status is return
-	tCardFileStatus idstatus=pcard->getFileID()->getStatus();
-	if(idstatus!=CARDFILESTATUS_OK)
-		return idstatus;
-
-	//We check if the hash correspond to the photo
-	if(!m_cryptoFwk->VerifyHashSha1(m_data,hash))
-		return CARDFILESTATUS_ERROR_HASH;*/
+	// verify SOD file, signature, certificates
 
 	return CARDFILESTATUS_OK;
 }
@@ -1553,40 +1543,9 @@ bool APL_EidFile_Sod::MapFields()
     pteidngSodBuffer.TrimRight(' ');
     m_Sod.assign((char*)(pteidngSodBuffer.GetBytes()), pteidngSodBuffer.Size());
 
-    /* File Caching
-     * try
-    {
-    	ofstream myfile;
-    	APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
-    	std::string	m_cachedirpath = conf_dir.getString();
-    	std::string pteidfile = m_cachedirpath;
-    	pteidfile.append("/pteidng-");
-    	pteidfile.append(m_SerialNumber);
-    	pteidfile.append("-");
-    	pteidfile.append(PTEID_FILE_SOD);
-    	pteidfile.append(".bin");
-    	myfile.open (pteidfile.c_str());
-    	pteidngSodBuffer = m_data.GetBytes(PTEIDNG_FIELD_SOD_POS_FILE, PTEIDNG_FIELD_SOD_LEN_FILE);
-    	m_SodFile.assign((char*)(pteidngSodBuffer.GetBytes()), pteidngSodBuffer.Size());
-    	myfile << m_SodFile;
-    	myfile.close();
-    }
-    catch(CMWException& e)
-    {
-    	MWLOG(LEV_INFO, MOD_APL, L"Write cache file %ls on disk failed", PTEID_FILE_SOD);
-    }*/
-
     m_mappedFields = true;
 
     return true;
-}
-
-const char *APL_EidFile_Sod::getSod()
-{
-	if(ShowData())
-		return m_Sod.c_str();
-
-	return "";
 }
 
 /*****************************************************************************************

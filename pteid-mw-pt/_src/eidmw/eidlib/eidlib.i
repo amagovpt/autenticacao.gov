@@ -1457,6 +1457,21 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 	  pteidlibJava_WrapperJNI.delete_ulongp(pID);
 	  return retval;
 }
+
+//martinho
+//--------------------------------------------------
+// rewrite the function unlockPin(...) on the Java side
+//--------------------------------------------------
+%typemap(javaout) bool eIDMW::PTEID_Pin::unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft)
+{
+	  long		pRemaining = pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
+	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_Pin_unlockPin(swigCPtr, this, pszPuk, pszNewPin, pRemaining);
+	  
+	  triesLeft.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
+	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
+	  return retval;
+}
+
  
 #else
 		TODO

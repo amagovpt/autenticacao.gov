@@ -89,6 +89,8 @@ protected:
 	  */
 	virtual tCardFileStatus VerifyFile()=0;
 
+	virtual void doSODCheck(bool check)=0;
+
 	/**
 	  * Return true if data can be showned 
 	  */
@@ -120,6 +122,8 @@ protected:
 
 	CMutex m_Mutex;					/**< Mutex */
 	bool m_mappedFields;			/**< are the fields mapped already? */
+
+	bool m_SODCheck;
 
 
 private:
@@ -158,9 +162,11 @@ private:
 	APL_CardFile_Certificate(const APL_CardFile_Certificate& file);				/**< Copy not allowed - not implemented */
 	APL_CardFile_Certificate &operator= (const APL_CardFile_Certificate& file);	/**< Copy not allowed - not implemented */
 
+
 	virtual tCardFileStatus VerifyFile();	/**< Always return CARDFILESTATUS_OK */
 	virtual bool MapFields() {return true;}	/**< Nothing to do m_data contains the file */
 	virtual void EmptyFields() {}	/**< Nothing to do m_data contains the file */
+	void doSODCheck(bool check) {}
 
 	unsigned long m_ulUniqueId;				/**< The unique ID of the certificate */
 };
@@ -210,6 +216,7 @@ private:
 	virtual tCardFileStatus VerifyFile();	/**< Always return CARDFILESTATUS_OK */
 	virtual bool MapFields();				/**< Map the fields with the content of the file */
 	virtual void EmptyFields();				/**< Empty all fields */
+	void doSODCheck(bool check) {}
 
 	//std::string m_SerialNumber;				/**< The Serial Number of the card */
 	std::string m_ComponentCode;			/**< The Component Code of the card */

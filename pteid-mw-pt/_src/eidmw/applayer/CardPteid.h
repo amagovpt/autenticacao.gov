@@ -64,6 +64,7 @@ protected:
 private:
 	APL_EidFile_Trace(const APL_EidFile_Trace& file);				/**< Copy not allowed - not implemented */
 	APL_EidFile_Trace &operator= (const APL_EidFile_Trace& file);	/**< Copy not allowed - not implemented */
+	void doSODCheck(bool check) {}
 
 	/**
 	  * Check if the ID signature correspond to this file (using RRN certificate)
@@ -109,6 +110,7 @@ public:
 	  * Destructor
 	  */
 	virtual ~APL_EidFile_ID();
+	void doSODCheck(bool check);
 
 	const char *getDocumentVersion();				/**< Return field DocumentVersion */
 	const char *getCountry();						/**< Return field Country */
@@ -251,6 +253,7 @@ private:
 	APL_EidFile_IDSign(const APL_EidFile_IDSign& file);				/**< Copy not allowed - not implemented */
 	APL_EidFile_IDSign &operator= (const APL_EidFile_IDSign& file);	/**< Copy not allowed - not implemented */
 
+
 	/**
 	  * No verification for this file
 	  * Always return CARDFILESTATUS_OK
@@ -258,7 +261,7 @@ private:
 	virtual tCardFileStatus VerifyFile();
 	virtual bool MapFields() {return true;}							/**< Nothing to do m_data contains the file */
 	virtual void EmptyFields() {}									/**< Nothing to do m_data contains the file */
-
+	void doSODCheck(bool check) {}
 
 friend 	APL_EidFile_IDSign *APL_EIDCard::getFileIDSign();	/**< This method must access protected constructor */
 };
@@ -309,6 +312,8 @@ public:
 	const char *getForeignRegion();
 	const char *getForeignLocality();
 	const char *getForeignPostalCode();
+
+	void doSODCheck(bool check);
 
 protected:
 	/**
@@ -418,6 +423,7 @@ private:
 	virtual tCardFileStatus VerifyFile();
 	virtual bool MapFields() {return true;}							/**< Nothing to do m_data contains the file */
 	virtual void EmptyFields() {}									/**< Nothing to do m_data contains the file */
+	void doSODCheck(bool check) {}
 
 friend 	APL_EidFile_AddressSign *APL_EIDCard::getFileAddressSign();	/**< This method must access protected constructor */
 };
@@ -437,7 +443,7 @@ public:
 	  */
 	virtual ~APL_EidFile_Sod();
 
-	const char *getSod(); /* Get Sod */
+	tCardFileStatus VerifyFile();
 
 protected:
 	/**
@@ -456,9 +462,9 @@ private:
 	  * @return - if hash error => CARDFILESTATUS_ERROR_HASH
 	  * @return - else => CARDFILESTATUS_ERROR_OK
 	  */
-	virtual tCardFileStatus VerifyFile();
 	virtual bool MapFields();									/**< Nothing to do m_data contains the file */
 	virtual void EmptyFields();									/**< Nothing to do m_data contains the file */
+	void doSODCheck(bool check) {}
 
 	/**
 	  * Return true if data can be showned
@@ -499,6 +505,7 @@ private:
 	APL_EidFile_PersoData(const APL_EidFile_PersoData& file);				/**< Copy not allowed - not implemented */
 	APL_EidFile_PersoData &operator= (const APL_EidFile_PersoData& file);	/**< Copy not allowed - not implemented */
 
+
 	/**
 	  * Check if the hash in the ID file correspond to this file
 	  * @return - if bad ID file => status of ID file
@@ -508,6 +515,7 @@ private:
 	virtual tCardFileStatus VerifyFile();
 	virtual bool MapFields();										/**< Nothing to do m_data contains the file */
 	virtual void EmptyFields();										/**< Nothing to do m_data contains the file */
+	void doSODCheck(bool check) {}
 
 	/**
 	  * Return true if data can be showned
@@ -555,6 +563,7 @@ private:
 	virtual tCardFileStatus VerifyFile();	/**< Always return CARDFILESTATUS_OK */
 	virtual bool MapFields();				/**< Map the fields with the content of the file */
 	virtual void EmptyFields();				/**< Empty all the fields */
+	void doSODCheck(bool check) {}
 
 	std::string m_GraphicalPersonalisation;				/**< The Graphical Personalisation of the file */
 	std::string m_ElectricalPersonalisation;			/**< The Electrical Personalisation of the file */

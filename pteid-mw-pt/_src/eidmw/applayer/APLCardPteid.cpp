@@ -67,6 +67,8 @@ APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType):APL_S
 	m_fileCertRootSign=NULL;
 	m_fileCertRoot=NULL;
 	m_fileCertRootAuth=NULL;
+
+	m_sodCheck = false;
 }
 
 APL_EIDCard::~APL_EIDCard()
@@ -732,8 +734,13 @@ APL_EidFile_ID *APL_EIDCard::getFileID()
 		if(!m_FileID)
 		{
 			m_FileID=new APL_EidFile_ID(this);
+			if (m_sodCheck)
+				m_FileID->doSODCheck(m_sodCheck);
 		}
 	}
+
+	if (m_sodCheck)
+		m_FileID->doSODCheck(m_sodCheck);
 
 	return m_FileID;
 }
@@ -760,8 +767,13 @@ APL_EidFile_Address *APL_EIDCard::getFileAddress()
 		if(!m_FileAddress)
 		{
 			m_FileAddress=new APL_EidFile_Address(this);
+			if (m_sodCheck)
+				m_FileAddress->doSODCheck(m_sodCheck);
 		}
 	}
+
+	if (m_sodCheck)
+		m_FileAddress->doSODCheck(m_sodCheck);
 
 	return m_FileAddress;
 }
@@ -1288,6 +1300,21 @@ bool APL_EIDCard::Activate(const char *pinCode, CByteArray &BCDDate){
 	return out;
 }
 
+void APL_EIDCard::doSODCheck(bool check){
+	m_sodCheck = check;
+
+	if (m_FileAddress)
+		m_FileAddress->doSODCheck(check);
+	if (m_FileID)
+		m_FileID->doSODCheck(check);
+
+	if (check){
+		if (!m_FileSod){
+			getFileSod();
+		}
+		m_FileSod->VerifyFile();
+	}
+}
 
 /*****************************************************************************************
 ---------------------------------------- APL_EIdFullDoc -------------------------------------------

@@ -408,7 +408,7 @@ bool CReader::Activate(const char *pinCode, CByteArray &BCDDate){
     return m_poCard->Activate(pinCode,BCDDate);
 }
 
-bool CReader::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long *triesLeft){
+bool CReader::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft){
 	if (m_poCard == NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
 

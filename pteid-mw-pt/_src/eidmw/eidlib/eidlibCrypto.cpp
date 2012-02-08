@@ -763,7 +763,7 @@ unsigned long PTEID_Pin::getPinRef()
 	return out;
 }
 
-bool PTEID_Pin::unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long *triesLeft)
+bool PTEID_Pin::unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft)
 {
 	bool out = false;
 

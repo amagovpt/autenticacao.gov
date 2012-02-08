@@ -434,7 +434,7 @@ bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate){
 	return true;
 }
 
-bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long *triesLeft){
+bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft){
 	CByteArray oResp;
 	bool bOK = false;
 	unsigned long ulRemaining;
@@ -443,14 +443,14 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 	{
 		if (m_cardType == CARD_PTEID_IAS101){
 			if (PinCmd(PIN_OP_VERIFY, *puk, pszPuk, "", ulRemaining, NULL)) //martinho - verify puk
-				bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", *triesLeft, NULL); // martinho - reset pin
+				bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", triesLeft, NULL); // martinho - reset pin
 		} else if (m_cardType == CARD_PTEID_IAS07){
 			// need a gemsafe card!
 			//bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", *triesLeft, NULL); // martinho - reset pin
 			bOK = false;
 		}
 		if (bOK)
-			*triesLeft = PinStatus(pin);
+			triesLeft = PinStatus(pin);
 	}
 	catch(...)
 	{

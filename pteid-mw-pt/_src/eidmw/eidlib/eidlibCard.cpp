@@ -1057,15 +1057,23 @@ bool PTEID_EIDCard::isActive(){
 
 
 void PTEID_EIDCard::doSODCheck(bool check){
-}
-
-bool PTEID_EIDCard::Activate(const char *pinCode, CByteArray &BCDDate){
-	bool out = false;
 
 	BEGIN_TRY_CATCH
 
 	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
-	out =  pcard->Activate(pinCode,BCDDate);
+	pcard->doSODCheck(check);
+
+	END_TRY_CATCH
+}
+
+bool PTEID_EIDCard::Activate(const char *pinCode, PTEID_ByteArray &BCDDate){
+	bool out = false;
+	CByteArray cBCDDate = CByteArray(BCDDate.GetBytes(),BCDDate.Size());
+
+	BEGIN_TRY_CATCH
+
+	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
+	out =  pcard->Activate(pinCode,cBCDDate);
 
 	END_TRY_CATCH
 
@@ -1487,6 +1495,7 @@ PTEIDSDK_API long PTEID_ReadSOD(unsigned char *out, unsigned long *outlen){
 
 PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft){
 	unsigned long id;
+	unsigned long tleft;
 
 	if (readerContext!=NULL){
 		if (PinId != 1 && PinId != 129 && PinId != 130 && PinId != 131)
@@ -1496,7 +1505,8 @@ PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszN
 		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
 			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
 			if (pin.getPinRef() == PinId){
-				pin.unlockPin(pszPuk, pszNewPin,(unsigned long *)triesLeft);
+				pin.unlockPin(pszPuk, pszNewPin,tleft);
+				*triesLeft = tleft;
 			}
 		}
 	}
@@ -1537,7 +1547,7 @@ PTEIDSDK_API long PTEID_ReadFile(unsigned char *file,int filelen,unsigned char *
 			PTEID_Pins &pins = readerContext->getEIDCard().getPins();
 			for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
 				pin	= &(pins.getPinByNumber(pinIdx));
-				if (pin->getId() == PinId-128){ // why 128? id = 1,2,3..., pinid = (1 or 129), 130, 131
+				if (pin->getPinRef() == PTEID_ADDRESS_PIN_ID){
 					break;
 				}
 			}
@@ -1590,7 +1600,7 @@ PTEIDSDK_API long PTEID_IsActivated(unsigned long *pulStatus){
 PTEIDSDK_API long PTEID_Activate(char *pszPin, unsigned char *pucDate, unsigned long ulMode){
 	long retval = 0;
 	if (readerContext!=NULL){
-		CByteArray bcd(pucDate,BCD_DATE_LEN);
+		PTEID_ByteArray bcd(pucDate,BCD_DATE_LEN);
 		if (readerContext->getEIDCard().Activate(pszPin,bcd))
 			return 0;
 		return -1;

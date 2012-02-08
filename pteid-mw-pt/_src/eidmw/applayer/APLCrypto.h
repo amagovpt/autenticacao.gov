@@ -169,7 +169,7 @@ public:
 	  * @return true if success and false if failed
 	  */
 	EIDMW_APL_API bool changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg=true);
-	EIDMW_APL_API bool unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long *triesLeft);
+	EIDMW_APL_API bool unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft);
 
 protected:
 	/**

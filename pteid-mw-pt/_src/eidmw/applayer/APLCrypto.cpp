@@ -728,7 +728,7 @@ bool APL_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulR
 }
 
 
-bool APL_Pin::unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long *triesLeft){
+bool APL_Pin::unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft){
 
 	if (m_card->getType() == APL_CARDTYPE_PTEID_IAS07){ //gemsafe
 		return m_card->getCalReader()->unlockPIN(m_pinP15, NULL, pszPuk, pszNewPin, triesLeft);

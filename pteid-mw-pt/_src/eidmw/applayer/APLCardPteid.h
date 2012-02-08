@@ -174,6 +174,7 @@ public:
  	EIDMW_APL_API const CByteArray& getRawData_Challenge();		/**< Get the challenge RawData */
  	EIDMW_APL_API const CByteArray& getRawData_Response();		/**< Get the response RawData */
  	EIDMW_APL_API const CByteArray& getRawData_PersoData();		/**< Get the response RawData */
+ 	EIDMW_APL_API void doSODCheck(bool check);
 
  	APL_EidFile_Trace *getFileTrace();					/**< Return a pointer to the file Trace (NOT EXPORTED) */
 	APL_EidFile_ID *getFileID();					/**< Return a pointer to the file ID (NOT EXPORTED) */
@@ -243,6 +244,8 @@ private:
 	APL_CardFile_Certificate *m_fileCertRoot;
 	APL_CardFile_Certificate *m_fileCertRootAuth;
 	APL_CardFile_Certificate *m_fileCertRootSign;
+
+	bool m_sodCheck;
 
 	static APL_AccessWarningLevel m_lWarningLevel;
 
