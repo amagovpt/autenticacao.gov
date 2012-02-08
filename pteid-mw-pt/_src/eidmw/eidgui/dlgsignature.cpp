@@ -167,9 +167,13 @@ void dlgSignature::on_pbSign_clicked ( void )
             for (i=0; i < listsize; i++)
             {
                 int listtotalLength = strlist.at(i).size();
-				QString s = QDir::toNativeSeparators(strlist.at(i));
+		QString s = QDir::toNativeSeparators(strlist.at(i));
                 cpychar = new char[listtotalLength+1];
+#ifdef WIN32		
                 strcpy(cpychar, s.toStdString().c_str());
+#else		
+                strcpy(cpychar, s.toUtf8().constData());
+#endif		
                 files_to_sign[i] = cpychar;
 				PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "File to Sign: %s", files_to_sign[i]);
             }
@@ -179,31 +183,36 @@ void dlgSignature::on_pbSign_clicked ( void )
             QString nativedafaultpath;
 
             defaultsavefilepath = QDir::homePath();
-            defaultsavefilepath.append("/xadessign.zip");
-            nativedafaultpath = QDir::toNativeSeparators(defaultsavefilepath);
-            savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), nativedafaultpath, tr("Zip files 'XAdES' (*.zip)"));
-			QString native_path = QDir::toNativeSeparators(savefilepath);
-			
-            pdialog = new QProgressDialog();
-            pdialog->setWindowModality(Qt::WindowModal);
-            pdialog->setWindowTitle(tr("Sign"));
-            pdialog->setLabelText(tr("Signing data..."));
-            pdialog->setMinimum(0);
-            pdialog->setMaximum(0);
-			
-			int outp_len = native_path.size();
-			output_file = (char *)malloc(outp_len+1);
-			
-			strncpy(output_file, native_path.toStdString().c_str(),outp_len);
-			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Save to file %s", output_file);
-            QFuture<void> future = QtConcurrent::run(this, &dlgSignature::runsign, files_to_sign, i, output_file);
-            this->FutureWatcher.setFuture(future);
+	    defaultsavefilepath.append("/xadessign.zip");
+	    nativedafaultpath = QDir::toNativeSeparators(defaultsavefilepath);
+	    savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), nativedafaultpath, tr("Zip files 'XAdES' (*.zip)"));
+	    QString native_path = QDir::toNativeSeparators(savefilepath);
+
+	    pdialog = new QProgressDialog();
+	    pdialog->setWindowModality(Qt::WindowModal);
+	    pdialog->setWindowTitle(tr("Sign"));
+	    pdialog->setLabelText(tr("Signing data..."));
+	    pdialog->setMinimum(0);
+	    pdialog->setMaximum(0);
+	    connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
+
+	    int outp_len = native_path.size();
+	    output_file =  new char[outp_len*2];
+
+#ifdef WIN32		
+	    strncpy(output_file, native_path.toStdString().c_str(),outp_len);
+#else
+	    strncpy(output_file, native_path.toUtf8().constData(), outp_len*2);
+#endif	    
+	    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Save to file %s", output_file);
+	    QFuture<void> future = QtConcurrent::run(this, &dlgSignature::runsign, files_to_sign, i, output_file);
+	    this->FutureWatcher.setFuture(future);
 
             pdialog->exec();
 
             delete []files_to_sign;
             delete cpychar;
-			free(output_file);
+	    delete []output_file;
 	}
 	catch (PTEID_Exception &e)
 	{
@@ -218,33 +227,15 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
 {
     unsigned long	ReaderStartIdx = 1;
     bool		bRefresh = false;
-    unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
+    //unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
     unsigned long	ReaderIdx	   = 0;
 
     try
     {
-        if (ReaderStartIdx!=(unsigned long)-1)
-        {
-            ReaderEndIdx = ReaderStartIdx+1;
-        }
-        else
-        {
-            ReaderStartIdx=0;
-        }
-
-        const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-        m_CurrReaderName = readerName;
-        PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-
-        //------------------------------------
-        // make always sure a card is present
-        //------------------------------------
-        if (ReaderContext.isCardPresent())
-        {
-            PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
+            PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
             PTEID_ByteArray SignXades;
-            SignXades = Card.SignXades(paths, n_paths, output_path);
-        }
+            SignXades = Card->SignXades(paths, n_paths, output_path);
+        
     }
     catch (PTEID_Exception &e)
     {
@@ -252,7 +243,7 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
         return;
     }
 
-    pdialog->close();
+    //pdialog->close();
 
     return;
 }
