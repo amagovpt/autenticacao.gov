@@ -346,7 +346,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 	bool errorsOccured = false;
 	
 	MWLOG(LEV_DEBUG, MOD_APL, L"ValidateXades() called with XML content of %d bytes."
-		L"Error buffer addr: 0x%x, error_length=%d ",signature.Size(), (int)errors, *error_length);
+		L"Error buffer addr: 0x%x, error_length=%d ",signature.Size(), errors, *error_length);
 	initXerces();
 
 	//Load XML from a MemoryBuffer
