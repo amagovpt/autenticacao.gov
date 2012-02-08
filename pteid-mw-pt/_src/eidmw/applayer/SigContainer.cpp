@@ -36,13 +36,7 @@ namespace eIDMW
 		file.close();
 		return in;
 	}
-
-	void latin1_to_cp850(char *in)
-	{
-		
-
-	}
-
+	
 	CByteArray* ExtractSignature(const char *archive_path)
 	{
 
@@ -66,7 +60,6 @@ namespace eIDMW
 		char *ptr_content = NULL;
 		const char *absolute_path = NULL;
 		char *zip_entry_name= NULL;
-		char *utf8_filename;
 		mz_bool status;
 
 		MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() called with output_file = %S\n",output_file); 
@@ -82,17 +75,19 @@ namespace eIDMW
 			MWLOG(LEV_DEBUG, MOD_APL, L"Compressing %d bytes from file %S\n", file_size, absolute_path);
 
 			zip_entry_name = Basename((char *)absolute_path);
+/*
 #ifdef WIN32
 			//In-place conversion to the OEM Codepage (tipically CP850)
 			CharToOemBuffA(zip_entry_name, zip_entry_name, strlen(zip_entry_name));
 #endif
+			*/
 
 			status = mz_zip_add_mem_to_archive_file_in_place(output_file, zip_entry_name, ptr_content,
 					file_size, "", (unsigned short)0, MZ_BEST_COMPRESSION);
 			if (!status)
 			{   
 				MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed with argument %S",
-						absolute_path);
+						zip_entry_name);
 				return ;
 			}
 
