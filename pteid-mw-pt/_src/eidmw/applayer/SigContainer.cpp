@@ -1,5 +1,8 @@
 #include <fstream>
 
+#ifdef WIN32
+#include <Windows.h> //CharToOem()
+#endif
 #include "SigContainer.h"
 #include "MiscUtil.h"
 #include "ByteArray.h"
@@ -32,6 +35,12 @@ namespace eIDMW
 
 		file.close();
 		return in;
+	}
+
+	void latin1_to_cp850(char *in)
+	{
+		
+
 	}
 
 	CByteArray* ExtractSignature(const char *archive_path)
@@ -74,13 +83,11 @@ namespace eIDMW
 
 			zip_entry_name = Basename((char *)absolute_path);
 #ifdef WIN32
-			utf8_filename = (char*)malloc(2*strlen(zip_entry_name));
-			latin1_to_utf8(zip_entry_name, utf8_filename);
-#else
-			utf_filename = zip_entry_name;
+			//In-place conversion to the OEM Codepage (tipically CP850)
+			CharToOemBuffA(zip_entry_name, zip_entry_name, strlen(zip_entry_name));
 #endif
 
-			status = mz_zip_add_mem_to_archive_file_in_place(output_file, utf8_filename, ptr_content,
+			status = mz_zip_add_mem_to_archive_file_in_place(output_file, zip_entry_name, ptr_content,
 					file_size, "", (unsigned short)0, MZ_BEST_COMPRESSION);
 			if (!status)
 			{   
