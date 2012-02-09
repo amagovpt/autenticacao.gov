@@ -1,0 +1,90 @@
+# udev rules for pcscd and ACS CCID readers
+
+# If not adding the device, go away
+ACTION!="add", GOTO="pcscd_acsccid_rules_end"
+
+# ACS ACR33U-A1 3SAM ICC Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="8300", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR33U-A2 3SAM ICC Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="8302", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR33U-A3 3SAM ICC Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="8307", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR33U 4SAM ICC Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="8301", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR38U-CCID
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="90cc", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR3801
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="90d8", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR85 PINPad Reader ICC
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="8306", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR100 ICC Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="1205", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR101 ICC Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="1204", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR102 ICC Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="1206", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR122U
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="2200", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR1222 1SAM PICC Reader (ACR1222U-C1)
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="2214", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR1222 1SAM Dual Reader (ACR1222U-C3)
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="1280", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR1222 Dual Reader (ACR1222U-C6)
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="2207", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR1222 1SAM PICC Reader (ACR1222U-C8)
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="222b", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR1222 3S PICC Reader (ACR1222L-D1)
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="2206", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR125 nPA plus
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="2203", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR1281 CL Reader (qPBOC)
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="220f", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR1281 PICC Reader (qPBOC)
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="2223", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR1281 Dual Reader (qPBOC)
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="2208", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR1281 PICC Reader (BSI)
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="0901", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR1281 Dual Reader (BSI)
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="220a", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR1281 1S PICC Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="2220", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS APG8201Z
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="8202", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS CryptoMate64
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="90db", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS AET62 PICC Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="0102", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS AET62 1SAM PICC Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="0103", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS AET65 ICC Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="0100", RUN+="/usr/sbin/pcscd --hotplug"
+
+# non CCID generic (InterfaceClass: 0x00)
+# ACS ACR83U
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="90d2", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR88U
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="2011", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR128U
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="2100", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR1281 1S Dual Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="2224", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR1281 2S CL Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="2215", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS APG8201
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="8201", RUN+="/usr/sbin/pcscd --hotplug"
+
+# non-CCID readers
+# ACS ACR38U
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="9000", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS ACR38U-SAM
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="90cf", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS AET65 1SAM ICC Reader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="0101", RUN+="/usr/sbin/pcscd --hotplug"
+# IRIS SCR21U
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="90ce", RUN+="/usr/sbin/pcscd --hotplug"
+# ACS CryptoMate
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="072f", ATTRS{idProduct}=="9006", RUN+="/usr/sbin/pcscd --hotplug"
+
+# All done
+LABEL="pcscd_acsccid_rules_end"

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+find ./ -type d -exec chmod 755 {} \;
+find ./ ! -type d -exec chmod 644 {} \;
+
+find ./ -name bootstrap -exec chmod 755 {} \;
+find ./ -name configure -exec chmod 755 {} \;
+find ./ -name *.pl -exec chmod 755 {} \;
+
+umask 022
+autoreconf -fiv
+rm -rf autom4te.cache
