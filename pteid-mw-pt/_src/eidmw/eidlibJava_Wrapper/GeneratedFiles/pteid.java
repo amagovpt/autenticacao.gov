@@ -58,7 +58,7 @@ public class pteid {
    }
   
    
-   public static void Exit() throws PteidException{
+   public static void Exit(int exitCode) throws PteidException{
         try {
             PTEID_ReaderSet.releaseSDK();
         } catch (Exception ex) {
@@ -87,7 +87,7 @@ public class pteid {
    }
    
    
-    public static PTEID_ADDR GetADDR() throws PteidException {
+    public static PTEID_ADDR GetAddr() throws PteidException {
         try {
             PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
             PTEID_Pins pins = idCard.getPins();
