@@ -106,6 +106,31 @@ public class pteid {
             throw new PteidException();
         }
     }
+    
+    
+    public static PTEID_PIC GetPic() throws PteidException{
+        PTEID_PIC pic = null;
+        
+        try {
+            pic = new PTEID_PIC();
+            pic.cbeff = new byte[(int)idCard.getID().getPhotoObj().getphotoCbeff().Size()];
+            System.arraycopy(idCard.getID().getPhotoObj().getphotoCbeff().GetBytes(), 0, pic.cbeff, 0, pic.cbeff.length);
+            pic.facialinfo = new byte[(int)idCard.getID().getPhotoObj().getphotoFacialinfo().Size()];
+            System.arraycopy(idCard.getID().getPhotoObj().getphotoFacialinfo().GetBytes(), 0, pic.facialinfo, 0, pic.facialinfo.length);
+            pic.facialrechdr = new byte[(int)idCard.getID().getPhotoObj().getphotoFacialrechdr().Size()];
+            System.arraycopy(idCard.getID().getPhotoObj().getphotoFacialrechdr().GetBytes(), 0, pic.facialrechdr, 0, pic.facialrechdr.length);
+            pic.imageinfo = new byte[(int)idCard.getID().getPhotoObj().getphotoImageinfo().Size()];
+            System.arraycopy(idCard.getID().getPhotoObj().getphotoImageinfo().GetBytes(), 0, pic.imageinfo, 0, pic.imageinfo.length);
+            pic.picture = new byte[(int)idCard.getID().getPhotoObj().getphotoRAW().Size()];
+            System.arraycopy(idCard.getID().getPhotoObj().getphotoRAW().GetBytes(), 0, pic.picture, 0, pic.picture.length);
+            pic.version = 0;
+        } catch (Exception ex) {
+            throw new PteidException();
+        }
+        
+        return pic;
+    }
+    
 
     public static PTEID_Certif[] GetCertificates() throws PteidException {
         PTEID_Certif[] certs = null;
