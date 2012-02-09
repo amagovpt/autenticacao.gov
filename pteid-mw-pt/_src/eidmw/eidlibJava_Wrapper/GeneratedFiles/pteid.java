@@ -2,7 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pt.gov.cartaodecidadao;
+package javaapplication1;
+
+import pt.gov.cartaodecidadao.*;
+
 
 
 /**
@@ -16,6 +19,7 @@ public class pteid {
     private static PTEID_EIDCard idCard = null;
     
     private static int PTEID_ADDRESS_PIN = 131;
+    private static int PTEID_PIN_COUNT  = 3;
     
     public static final int CARD_TYPE_ERR = 0;
     public static final int CARD_TYPE_IAS07 = 1;
@@ -47,7 +51,7 @@ public class pteid {
             PTEID_ReaderSet.initSDK();
             readerSet = PTEID_ReaderSet.instance();
             if (readerName == null || readerName.isEmpty())
-                readerContext = readerSet.getReaderByNum(0);
+                readerContext = readerSet.getReaderByNum(1);
             else 
                 readerContext = readerSet.getReaderByName(readerName);
             
@@ -58,7 +62,7 @@ public class pteid {
    }
   
    
-   public static void Exit(int exitCode) throws PteidException{
+   public static void Exit() throws PteidException{
         try {
             PTEID_ReaderSet.releaseSDK();
         } catch (Exception ex) {
@@ -87,7 +91,7 @@ public class pteid {
    }
    
    
-    public static PTEID_ADDR GetAddr() throws PteidException {
+    public static PTEID_ADDR GetADDR() throws PteidException {
         try {
             PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
             PTEID_Pins pins = idCard.getPins();
@@ -217,23 +221,25 @@ public class pteid {
     
     public static PTEIDPin[] GetPINs() throws PteidException {
         PTEIDPin[] pinArray = null;
-
+        int currentId;
+        
         if (readerContext != null) {
             try {
                 PTEID_Pins pins = idCard.getPins();
-                pinArray = new PTEIDPin[(int) pins.count()];
+                pinArray = new PTEIDPin[PTEID_PIN_COUNT];
                 for (int pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                     PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getId() == 1 || pin.getId() == 2 || pin.getId() == 3) {
-                        pinArray[pinIdx] = new PTEIDPin();
-                        pinArray[pinIdx].flags = (int) pin.getFlags();
-                        pinArray[pinIdx].usageCode = (int) pin.getId(); // martinho: might not be the intended use, but gives the expected compatible result.
-                        pinArray[pinIdx].pinType = (int) pin.getType();
-                        pinArray[pinIdx].label = pin.getLabel();
-                        pinArray[pinIdx].triesLeft = pin.getTriesLeft();
-                        pinArray[pinIdx].id = (byte) pin.getPinRef();
-                        pinArray[pinIdx].shortUsage = null;
-                        pinArray[pinIdx].longUsage = null;
+                        currentId = (int)pin.getId()-1;
+                        pinArray[currentId] = new PTEIDPin();
+                        pinArray[currentId].flags = (int) pin.getFlags();
+                        pinArray[currentId].usageCode = (int) pin.getId(); // martinho: might not be the intended use, but gives the expected compatible result.
+                        pinArray[currentId].pinType = (int) pin.getType();
+                        pinArray[currentId].label = pin.getLabel();
+                        pinArray[currentId].triesLeft = pin.getTriesLeft();
+                        pinArray[currentId].id = (byte) pin.getPinRef();
+                        pinArray[currentId].shortUsage = null;
+                        pinArray[currentId].longUsage = null;
                     }
                 }
             } catch (Exception ex) {
