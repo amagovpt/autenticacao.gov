@@ -88,7 +88,7 @@ public class pteid {
    }
    
    
-    public static PTEID_ADDR GetADDR() throws PteidException {
+    public static PTEID_ADDR GetAddr() throws PteidException {
         try {
             PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
             PTEID_Pins pins = idCard.getPins();
