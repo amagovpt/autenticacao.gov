@@ -89,14 +89,19 @@ namespace eIDMW
 
 	//Quick fix: Unreadable snippet to convert typical western languages characters
 	//to UTF-8, blame stackoverflow: http://stackoverflow.com/a/4059934/9906
-	void latin1_to_utf8(char * in, char *out)
+	void latin1_to_utf8(unsigned char * in, unsigned char *out)
 	{
 		while (*in)
 		{
 			if (*in<128)
 				*out++=*in++;
-			else *out++=0xc2+(*in>0xbf), *out++=(*in++&0x3f)+0x80;
+			else 
+			{
+				*out++=0xc2+(*in>0xbf);
+				*out++=(*in++&0x3f)+0x80;
+			}
 		}
+		*out = '\0';
 	}
 
 /*****************************************************************************************

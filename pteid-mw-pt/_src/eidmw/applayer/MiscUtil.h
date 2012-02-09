@@ -35,7 +35,8 @@ namespace eIDMW
 //Implementation of some utility functions over POSIX and Win32
 char * Basename(char *absolute_path);
 int Truncate(const char *path);
-void latin1_to_utf8(char * in, char *out);
+//Charset conversion
+void latin1_to_utf8(unsigned char * in, unsigned char *out);
 
 /******************************************************************************//**
   * Util class for timestamp features 
