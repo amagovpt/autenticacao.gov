@@ -48,7 +48,7 @@ public class pteid {
             PTEID_ReaderSet.initSDK();
             readerSet = PTEID_ReaderSet.instance();
             if (readerName == null || readerName.isEmpty())
-                readerContext = readerSet.getReaderByNum(1);
+                readerContext = readerSet.getReaderByNum(0);
             else 
                 readerContext = readerSet.getReaderByName(readerName);
             
