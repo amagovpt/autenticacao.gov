@@ -50,10 +50,10 @@ namespace eIDMW
   const static tPin pinPteidAuthV2   = {true, "Authentication",0,1,1,1,0,NO_ID, 4, 8, 12, 0x85, 0xFF,PIN_ENC_ASCII,"","3F00"};
   const static tPin pinPteidSignV2   = {true, "Signature",0,1,1,1,0,NO_ID,4, 8, 12, 0x86, 0xFF,PIN_ENC_ASCII,"","3F00"};
 
-  const static tPrivKey KeyAuthPteidV1 = {true, "Authentication", 0,2,0,1,0,0,0x82,"3F005F00", 256,true};
-  const static tPrivKey KeySignPteidV1 = {true, "Signature", 0,3,0,1,0,0,0x83,"3F005F00", 256,true};
-  const static tPrivKey KeyAuthPteidV2 = {true, "Authentication", 0,2,0,2,0,0,0x8A,"3F005F00", 256,true};
-  const static tPrivKey KeySignPteidV2 = {true, "Signature", 0,3,0,2,0,0,0x89,"3F005F00", 256,true};
+  //const static tPrivKey KeyAuthPteidV1 = {true, "Authentication", 0,0,0,0,0,0,0x82,"3F005F00", 1024 ,true};
+  //const static tPrivKey KeySignPteidV1 = {true, "Signature", 0,0,0,0,0,0,0x83,"3F005F00", 1024,true};
+  //const static tPrivKey KeyAuthPteidV2 = {true, "Authentication", 0,0,0,0,0,0,0x8A,"3F005F00", 1024,true};
+  //const static tPrivKey KeySignPteidV2 = {true, "Signature", 0,0,0,0,0,0,0x89,"3F005F00", 1024,true};
 
   const std::string defaultEFTokenInfo = "3F004F005032";
   const std::string defaultEFODF       = "3F004F005031";
@@ -113,7 +113,6 @@ namespace eIDMW
 #endif
 	if(! m_xTokenInfo.isRead) ReadLevel2(TOKENINFO); 
       }
-
     return m_csSerial;
   }
 
@@ -235,6 +234,7 @@ namespace eIDMW
     // propagate the information about the path of the corresponding level 3 (only ODF)
     tOdfInfo resultOdf;
     tTokenInfo resultTokenInfo;
+
     switch(name){
     case ODF:
       ReadFile(&m_xODF,1);
@@ -260,36 +260,38 @@ namespace eIDMW
   }
 
   void CPKCS15::ReadLevel3(tPKCSFileName name){
-    CP15Correction * p15correction = m_poCard->GetP15Correction();
-    switch(name){
-    case AODF:
-      ReadFile(&m_xAODF,2);
-      // parse
-      m_oPins = m_poParser->ParseAodf(m_xAODF.byteArray);
-      // correct
-      if (p15correction != NULL)
-	p15correction->CheckPINs(m_oPins);
-      break;
-    case CDF:
-      ReadFile(&m_xCDF,2);
-      // parse 
-      m_oCertificates = m_poParser->ParseCdf(m_xCDF.byteArray);
-      // correct
-      if (p15correction != NULL)
-	p15correction->CheckCerts(m_oCertificates);
-      break;
-    case PRKDF:
-      ReadFile(&m_xPrKDF,2);
-      // parse
-      m_oPrKeys = m_poParser->ParsePrkdf(m_xPrKDF.byteArray);
-      // correct
-      if (p15correction != NULL)
-	p15correction->CheckPrKeys(m_oPrKeys);
-      break;
-    default:
-      // error: this method can only be called with AODF, CDF or PRKDF
-      return;
-    }
+      CP15Correction * p15correction = m_poCard->GetP15Correction();
+      switch(name){
+      case AODF:
+          ReadFile(&m_xAODF,2);
+          // parse
+          m_oPins = m_poParser->ParseAodf(m_xAODF.byteArray);
+          // correct
+          if (p15correction != NULL)
+              p15correction->CheckPINs(m_oPins);
+          break;
+      case CDF:
+          ReadFile(&m_xCDF,2);
+          // parse
+          m_oCertificates = m_poParser->ParseCdf(m_xCDF.byteArray);
+          // correct
+          if (p15correction != NULL)
+              p15correction->CheckCerts(m_oCertificates);
+          break;
+      case PRKDF:
+          ReadFile(&m_xPrKDF,2);
+          // parse
+          m_oPrKeys = m_poParser->ParsePrkdf(m_xPrKDF.byteArray);
+          //Workaround to fix PrivKey parse - it parses 3 instead of 2.
+          m_oPrKeys.pop_back();
+          // correct
+          if (p15correction != NULL)
+              p15correction->CheckPrKeys(m_oPrKeys);
+          break;
+      default:
+          // error: this method can only be called with AODF, CDF or PRKDF
+          return;
+      }
   }
 
   void CPKCS15::ReadFile(tPKCSFile* pFile,int upperLevel){
@@ -300,7 +302,7 @@ namespace eIDMW
 	ReadLevel1();
 	break;
       case 2:
-	ReadLevel2(ODF);
+    ReadLevel2(ODF);
 	break;
       default:
 	 //error: no other levels alllowed
