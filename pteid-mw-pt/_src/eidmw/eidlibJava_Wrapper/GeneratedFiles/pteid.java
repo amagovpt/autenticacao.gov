@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package javaapplication1;
-
-import pt.gov.cartaodecidadao.*;
+package pt.gov.cartaodecidadao;
 
 
 
