@@ -69,6 +69,8 @@ APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType):APL_S
 	m_fileCertRootAuth=NULL;
 
 	m_sodCheck = false;
+	m_tokenLabel = NULL;
+	m_tokenSerial = NULL;
 }
 
 APL_EIDCard::~APL_EIDCard()
@@ -193,6 +195,19 @@ APL_EIDCard::~APL_EIDCard()
 		delete m_fileCertRoot;
 		m_fileCertRoot=NULL;
 	}
+
+	if(m_tokenLabel)
+	{
+		delete m_tokenLabel;
+		m_tokenLabel=NULL;
+	}
+
+	if (m_tokenSerial)
+	{
+		delete m_tokenSerial;
+		m_tokenSerial=NULL;
+	}
+
 }
 
 bool APL_EIDCard::isCardForbidden()
@@ -1265,6 +1280,26 @@ bool APL_EIDCard::isApplicationAllowed()
 	}
 
 	return (m_lWarningLevel==1);
+}
+
+const char *APL_EIDCard::getTokenSerialNumber(){
+	if (!m_tokenSerial){
+
+		BEGIN_CAL_OPERATION(m_reader)
+		m_tokenSerial = new string (m_reader->getCalReader()->GetSerialNr());
+		END_CAL_OPERATION(m_reader)
+	}
+	return m_tokenSerial->c_str();
+}
+
+const char *APL_EIDCard::getTokenLabel(){
+	if (!m_tokenLabel){
+
+		BEGIN_CAL_OPERATION(m_reader)
+					m_tokenLabel = new string (m_reader->getCalReader()->GetCardLabel());
+		END_CAL_OPERATION(m_reader)
+	}
+	return m_tokenLabel->c_str();
 }
 
 APLPublicKey *APL_EIDCard::getRootCAPubKey(){
@@ -2816,11 +2851,11 @@ CByteArray APL_DocVersionInfo::getTLV()
 
 const char *APL_DocVersionInfo::getSerialNumber()
 {
-	return m_card->getFileTokenInfo()->getTokenSerialNumber();
+	return m_card->getTokenSerialNumber();
 }
 
 const char * APL_DocVersionInfo::getTokenLabel(){
-	return m_card->getFileTokenInfo()->getTokenLabel();
+	return m_card->getTokenLabel();
 }
 
 const char *APL_DocVersionInfo::getComponentCode()

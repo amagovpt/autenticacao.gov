@@ -312,6 +312,9 @@ public:
 	
 	APL_CardFile_Info *getFileInfo();		/**< Return a pointer to the pseudo file info */
 
+	virtual const char *getTokenSerialNumber() = 0;	/**< Return the token serial number (pkcs15 parse) (NOT EXPORTED) */
+	virtual	const char *getTokenLabel() = 0;	/**< Return the token label (pkcs15 parse) (NOT EXPORTED) */
+
 protected:
 	/**
 	  * Constructor
@@ -340,6 +343,8 @@ protected:
 	CByteArray *m_challenge;
 	CByteArray *m_challengeResponse;
 	APLPublicKey *m_RootCAPubKey;
+	std::string *m_tokenSerial;
+	std::string *m_tokenLabel;
 };
 
 /******************************************************************************//**
