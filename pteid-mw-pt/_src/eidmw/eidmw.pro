@@ -7,6 +7,7 @@ TEMPLATE = subdirs
 
 SUBDIRS += FreeImagePTEiD
 SUBDIRS += xml-security-c-1.6.1
+SUBDIRS += acsccid-1.0.3
 
 ## list of the subprojects to build:
 ## qmake expects a <NAME>.pro project file in each <NAME> subdirectory
