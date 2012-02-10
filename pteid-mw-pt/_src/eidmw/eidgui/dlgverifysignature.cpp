@@ -32,8 +32,8 @@ dlgVerifySignature::dlgVerifySignature( QWidget* parent)
 	ui.setupUi(this);
 
 	//Set icon
-	//const QIcon Ico = QIcon( ":/images/Images/Icons/Print.png" );
-	//this->setWindowIcon( Ico );
+	const QIcon Ico = QIcon( ":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png" );
+	this->setWindowIcon( Ico );
 
 	QDesktopWidget* desktop = QApplication::desktop();
 	int screenNr = desktop->screenNumber();
