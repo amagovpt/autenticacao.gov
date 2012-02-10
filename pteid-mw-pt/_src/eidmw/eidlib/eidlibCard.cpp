@@ -1484,10 +1484,12 @@ PTEIDSDK_API long PTEID_ReadSOD(unsigned char *out, unsigned long *outlen){
 		PTEID_EIDCard &card = readerContext->getEIDCard();
 
 		temp = card.getSod().getData();
+		CByteArray cb(temp.GetBytes, temp.Size());
+		cb.TrimRight(0);
 		memset(out,0,*outlen);
-		if (temp.Size() < *outlen)
-			*outlen = temp.Size();
-		memcpy(out,temp.GetBytes(), *outlen);
+		if (cb.Size() < *outlen)
+			*outlen = cb.Size();
+		memcpy(out,cb.GetBytes(), *outlen);
 	}
 
 	return 0;
@@ -1539,7 +1541,7 @@ PTEIDSDK_API long PTEID_ReadFile(unsigned char *file,int filelen,unsigned char *
 
 	if (readerContext!=NULL && (PinId == PTEID_ADDRESS_PIN_ID || PinId == PTEID_NO_PIN_NEEDED)){
 		PTEID_EIDCard &card = readerContext->getEIDCard();
-		CByteArray temp;
+		CByteArray filePath;
 		PTEID_ByteArray in;
 		PTEID_Pin*	pin = NULL;
 
@@ -1553,11 +1555,14 @@ PTEIDSDK_API long PTEID_ReadFile(unsigned char *file,int filelen,unsigned char *
 			}
 		}
 
-		temp.Append(file,filelen);
-		card.readFile(temp.ToString(false).c_str(),in, pin,"");
+		filePath.Append(file,filelen);
+		card.readFile(filePath.ToString(false).c_str(),in, pin,"");
 
-		*outlen = (*outlen>in.Size() ? in.Size() : *outlen);
-		memcpy(out, in.GetBytes(),*outlen);
+		CByteArray cb(in.GetBytes(), in.Size());
+		cb.TrimRight(0);
+
+		*outlen = (*outlen>cb.Size() ? cb.Size() : *outlen);
+		memcpy(out, cb.GetBytes(),*outlen);
 	}
 
 	return 0;
