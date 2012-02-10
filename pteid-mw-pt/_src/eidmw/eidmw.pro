@@ -27,7 +27,8 @@ SUBDIRS +=	pkcs11 \
 	        applayer \
 	        eidlib \
 		eidlibJava_Wrapper \
-		cardlayer/ppgempc-plugin
+		cardlayer/ppgempc-plugin \
+                cardlayer/acr83-plugin
 
 !isEmpty(BUILD_SDK) {
 SUBDIRS +=  cardlayerTool
