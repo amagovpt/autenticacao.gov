@@ -160,7 +160,7 @@ public class pteid {
         PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
         int triesLeft =  0;
         
-        // martinho: em honra do artista que se lembrou de criar o verifyPIN com o parametro byte...
+        // martinho: artista
         long pinId = b & 0x00000000000000FF;
             
         if (readerContext != null) {
@@ -191,7 +191,7 @@ public class pteid {
         PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
         int triesLeft = 0;
 
-        // martinho: em honra do artista que se lembrou de criar o verifyPIN com o parametro byte...
+        // martinho: artista
         long pinId = b & 0x00000000000000FF;
 
         if (readerContext != null) {
@@ -283,7 +283,7 @@ public class pteid {
     public static int UnblockPIN(byte b, String puk, String newPin) throws PteidException{
         PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
 
-	// martinho: em honra do artista que se lembrou de criar o verifyPIN com o parametro byte...
+	// martinho: artista
         long pinId = b & 0x00000000000000FF;
         
         if (readerContext!=null){
@@ -333,10 +333,10 @@ public class pteid {
     
     public static byte[] ReadFile(byte[] bytes, byte b) throws PteidException {
         PTEID_ByteArray pb = new PTEID_ByteArray();
-        byte[] retArray;
+        byte[] retArray =null;
         PTEID_Pin pin = null;
         
-        // martinho: em honra do artista que se lembrou de criar o verifyPIN com o parametro byte...
+        // martinho: artista
         long pinId = b & 0x00000000000000FF;
 
         if (readerContext != null) {
@@ -358,7 +358,7 @@ public class pteid {
                 throw new PteidException();
             }
         }
-        return null;
+        return retArray;
     }
     
     
@@ -366,7 +366,7 @@ public class pteid {
         PTEID_ByteArray pb = new PTEID_ByteArray(data,data.length);
         PTEID_Pin pin = null;
         
-        // martinho: em honra do artista que se lembrou de criar o verifyPIN com o parametro byte...
+        // martinho: artista
         long pinId = bpin & 0x00000000000000FF;
 
         if (readerContext != null) {
