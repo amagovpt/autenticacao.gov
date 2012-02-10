@@ -3614,11 +3614,16 @@ void MainWnd::PersoDataSaveButtonClicked( void )
 	if (pinNotes == 1)
 		authPINRequest_triggered();
 
-	if (pinNotes == 0)
-	{
-		const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), TxtPersoDataString.toStdString().size());
-		Card.writeFile(PersoDataFile.c_str(), oData, &Pin, Misc.c_str());
-		QMessageBox::information( this, "Notas Pessais",  "Notas pessoais escritas com sucesso!", QMessageBox::Ok );
+    if (pinNotes == 0)
+    {
+        try {
+
+            const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), TxtPersoDataString.toStdString().size());
+            Card.writeFile(PersoDataFile.c_str(), oData, &Pin, Misc.c_str());
+            QMessageBox::information( this, tr("Notas Pessais"),  tr("Notas pessoais escritas com sucesso!"), QMessageBox::Ok );
+        } catch (PTEID_Exception& e) {
+            QMessageBox::critical(this, tr("Notas Pessais"), tr("Erro ao escrever notas pessoais!"), QMessageBox::Ok );
+        }
 	}
 
 }
