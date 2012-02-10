@@ -8,6 +8,6 @@ package pt.gov.cartaodecidadao;
  *
  * @author ruim
  */
-class PteidException extends Exception {
+public class PteidException extends Exception {
     
 }
