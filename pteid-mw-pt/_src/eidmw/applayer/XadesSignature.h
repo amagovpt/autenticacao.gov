@@ -11,6 +11,7 @@
 
 #include "Export.h" 
 #include "APLCard.h"
+#include "MiscUtil.h"
 
 #define ASN1_LEN 43
 #define SHA1_OFFSET 20
@@ -23,9 +24,12 @@
 #define _strdup strdup
 #endif
 
+
 XERCES_CPP_NAMESPACE_USE
+
 namespace eIDMW
 {
+
 	class CByteArray;
 	static unsigned char timestamp_asn1_request[ASN1_LEN] =
 	{
@@ -53,7 +57,8 @@ namespace eIDMW
 		CByteArray &SignXades(const char ** paths, unsigned int n_paths);
 		CByteArray &SignXadesT(const char ** paths, unsigned int n_paths);
 
-		static bool ValidateXades(CByteArray signature, char *errors, unsigned long *error_length);
+		static bool checkExternalRefs(DSIGReferenceList *refs, tHashedFile **hashes);
+		static bool ValidateXades(CByteArray signature, tHashedFile **hashes, char *errors, unsigned long *error_length);
 		
 
 		private:

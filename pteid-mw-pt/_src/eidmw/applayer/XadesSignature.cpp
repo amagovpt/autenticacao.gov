@@ -59,7 +59,6 @@
 //stat
 #include <sys/types.h>
 #include <sys/stat.h>
-//
 #ifdef WIN32
 #include <io.h>
 #include <Shlwapi.h> //UrlCreateFromPath()
@@ -101,7 +100,7 @@ namespace eIDMW
 		//Special-case empty files
 		if (size == 0)
 		{   
-			in = new char[20];
+			in = new char[SHA1_LEN];
 
 		}
 		//OpenSSL call
@@ -121,11 +120,6 @@ namespace eIDMW
 		return wstrTo;
 	}
 
-	/*str::wstring latin1_to_wstring(const char *str)
-	{
-
-	}*/
-
 	const wchar_t * pathToURI(const std::wstring path)
 	{
 		DWORD url_size = MAX_PATH*5;
@@ -143,8 +137,6 @@ namespace eIDMW
 		return pszUrl;
 
 	}
-	
-
 #endif
 
 	int XadesSignature::appendOID(XMLByte *toFill)
@@ -170,7 +162,7 @@ namespace eIDMW
 	void XadesSignature::generate_asn1_request_struct(char *sha_1)
 	{
 
-		for (unsigned int i=0; i != 20; i++)
+		for (unsigned int i=0; i != SHA1_LEN; i++)
 		    timestamp_asn1_request[SHA1_OFFSET +i] = sha_1[i];
 	}
 
@@ -339,9 +331,48 @@ void XadesSignature::initXerces()
 }
 
 
-/*TODO: We'll have to investigate how to validate the timestamp if the signature
+bool XadesSignature::checkExternalRefs(DSIGReferenceList *refs, tHashedFile **hashes)
+{
+        const char * URI;
+        XMLByte arr[SHA1_LEN*sizeof(unsigned char)];
+
+	bool res;
+	tHashedFile *hashed_file=NULL;
+
+	for (int i = 0; i!=refs->getSize() ; i++)
+	{	
+		res = false;	
+		DSIGReference * r = refs->item(i);
+		URI = XMLString::transcode(r->getURI());
+
+		r->readHash(arr, 20);
+		for (int j=0; hashes[j] != NULL; j++)
+		{	
+			hashed_file = hashes[j];
+			if (memcmp(arr, hashed_file->hash->GetBytes(), SHA1_LEN) == 0)
+			{   
+				res = true;
+				break;
+			}
+
+		}
+		// If a single hash reference fails then abort
+		if (res == false)
+		{
+			MWLOG(LEV_ERROR, MOD_APL,
+				L" checkExternalRefs(): SHA-1 Hash Value for file %s doesn't match.", URI);
+			return false;
+		}
+	}
+
+	MWLOG(LEV_DEBUG, MOD_APL, L" checkExternalRefs(): All External References matched.") ;
+	return true;
+}
+
+
+/*TODO: We'll have to to validate the timestamp if the signature
  *      actually contains one  */
-bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned long *error_length)
+bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, char *errors, unsigned long *error_length)
 {
 	bool errorsOccured = false;
 	
@@ -434,14 +465,17 @@ bool XadesSignature::ValidateXades(CByteArray signature, char *errors, unsigned 
 	
 		sig->load();
 
-		//agrr: "Manually" Check External References
-		/*DSIGReferenceList *refs = sig->getReferenceList();
+		DSIGReferenceList *refs = sig->getReferenceList();
 		if (refs != NULL)
-			extern_result = checkExternalRefs(refs);
+			extern_result = checkExternalRefs(refs, hashes);
 		if (!extern_result)
-		   cerr << "WARNING: Some of the files referenced in the signature were changed." 
-			   << endl;
-		*/
+		{
+			int err_len = _snprintf(errors, *error_length,
+					"At least one of the signed file(s) was changed.");
+			*error_length = err_len;
+			return false;
+		}
+		
 		result = sig->verifySignatureOnly();
 
 	}

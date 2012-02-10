@@ -176,15 +176,31 @@ CByteArray &APL_Card::SignXadesT(const char ** path, unsigned int n_paths, const
 
 bool APLVerifySignature(const char *container_path, char * errors, unsigned long* error_len)
 {
+
 	if (strlen(container_path) == 0)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-	
-	CByteArray *sig_content = ExtractSignature(container_path);
 
+	tHashedFile **hashes = NULL;
+	int i = 0;
+	Container *container = new Container(container_path);
+	int n_files = 0;
+
+	hashes = container->getHashes(&n_files);
+	
+	/*
+	while(i != n_files)
+	{
+		fprintf(stderr, "Found file %s\n", hashes[i]->URI->c_str());
+		fprintf(stderr, "Sha-1 Hash: %s\n", hashes[i]->hash->ToString().c_str());
+		i++;
+	} */
+	
+
+	CByteArray *sig_content = container->ExtractSignature();
 	if (sig_content == NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	
-	return XadesSignature::ValidateXades(*sig_content, errors, error_len);
+	return XadesSignature::ValidateXades(*sig_content, hashes, errors, error_len);
 }
 
 
