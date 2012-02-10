@@ -339,16 +339,16 @@ bool XadesSignature::checkExternalRefs(DSIGReferenceList *refs, tHashedFile **ha
 	bool res;
 	tHashedFile *hashed_file=NULL;
 
-	for (int i = 0; i!=refs->getSize() ; i++)
+	for (int j = 0; hashes[j] != NULL; j++)
 	{	
 		res = false;	
-		DSIGReference * r = refs->item(i);
-		URI = XMLString::transcode(r->getURI());
-
-		r->readHash(arr, 20);
-		for (int j=0; hashes[j] != NULL; j++)
+		hashed_file = hashes[j];
+		for (int i = 0; i!=refs->getSize() ; i++)
 		{	
-			hashed_file = hashes[j];
+			DSIGReference * r = refs->item(i);
+
+			r->readHash(arr, 20);
+
 			if (memcmp(arr, hashed_file->hash->GetBytes(), SHA1_LEN) == 0)
 			{   
 				res = true;
@@ -359,13 +359,14 @@ bool XadesSignature::checkExternalRefs(DSIGReferenceList *refs, tHashedFile **ha
 		// If a single hash reference fails then abort
 		if (res == false)
 		{
-			MWLOG(LEV_ERROR, MOD_APL,
-				L" checkExternalRefs(): SHA-1 Hash Value for file %s doesn't match.", URI);
+			MWLOG (LEV_ERROR, MOD_APL,
+					L" checkExternalRefs(): SHA-1 Hash Value for file %s doesn't match.",
+				       	hashed_file->URI->c_str());
 			return false;
 		}
 	}
 
-	MWLOG(LEV_DEBUG, MOD_APL, L" checkExternalRefs(): All External References matched.") ;
+	MWLOG (LEV_DEBUG, MOD_APL, L" checkExternalRefs(): All External References matched.");
 	return true;
 }
 
@@ -378,6 +379,16 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 	
 	MWLOG(LEV_DEBUG, MOD_APL, L"ValidateXades() called with XML content of %d bytes."
 		L"Error buffer addr: 0x%x, error_length=%d ",signature.Size(), errors, *error_length);
+
+	if (signature.Size() == 0)
+	{
+		int err_len = _snprintf(errors, *error_length, "Signature Validation error: " 
+				"Couldn't extract signature from zip container");
+		*error_length = err_len;
+		MWLOG(LEV_ERROR, MOD_APL, L"ValidateXades() received empty Signature. This most likely means a corrupt zipfile");
+		return false;
+	}
+
 	initXerces();
 
 	//Load XML from a MemoryBuffer
@@ -471,7 +482,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 		if (!extern_result)
 		{
 			int err_len = _snprintf(errors, *error_length,
-					"At least one of the signed file(s) was changed.");
+			"Signature Validation error: At least one of the signed file(s) was changed or is missing");
 			*error_length = err_len;
 			return false;
 		}
