@@ -41,6 +41,16 @@ public class pteid {
        
        return st;
    }
+   
+   
+    private static int trimStart(byte[] array) {
+        int trimmedSize = array.length - 1;
+        
+        while (array[trimmedSize] == 0) 
+            trimmedSize--;
+
+        return trimmedSize;
+    }
 
    
    public static void Init(String readerName) throws PteidException{
@@ -142,7 +152,7 @@ public class pteid {
             certs = new PTEID_Certif[(int)certificates.countAll()];
             for(int i=0;i<certs.length;i++){
                 certs[i] = new PTEID_Certif();
-                ba = certificates.getCert(i).getCertData();
+                certificates.getCert(i).getFormattedData(ba);
                 certs[i].certif = new byte[(int)(ba.Size())];
                 System.arraycopy(ba.GetBytes(), 0, certs[i].certif, 0, (int)ba.Size());
                 certs[i].certifLabel = certificates.getCert(i).getLabel();
@@ -266,12 +276,16 @@ public class pteid {
     
     public static byte[] ReadSOD() throws PteidException {
         byte[] sod = null;
+        byte[] trimmable;
 
         if (readerContext != null) {
             try {
-                PTEID_ByteArray temp = idCard.getSod().getData();
-                sod = new byte[(int)temp.Size()];
-                System.arraycopy(temp.GetBytes(), 0, sod, 0, sod.length);
+                PTEID_ByteArray pba = idCard.getSod().getData();
+               
+                int trimmedSize = trimStart(pba.GetBytes());
+                
+                sod = new byte[trimmedSize];
+                System.arraycopy(pba.GetBytes(), 0, sod, 0, sod.length);
             } catch (Exception ex) {
                 throw new PteidException();
             }
@@ -333,7 +347,8 @@ public class pteid {
     
     public static byte[] ReadFile(byte[] bytes, byte b) throws PteidException {
         PTEID_ByteArray pb = new PTEID_ByteArray();
-        byte[] retArray =null;
+        byte[] retArray = null;
+        byte[] temp;
         PTEID_Pin pin = null;
         
         // martinho: artista
@@ -352,7 +367,10 @@ public class pteid {
                 }
 
                 idCard.readFile(ashex(bytes), pb, pin);
-                retArray = new byte[(int)pb.Size()];
+                  
+                int trimmedSize = trimStart(pb.GetBytes());
+               
+                retArray = new byte[trimmedSize];
                 System.arraycopy(pb.GetBytes(), 0, retArray, 0, retArray.length);
             } catch (Exception ex) {
                 throw new PteidException();
