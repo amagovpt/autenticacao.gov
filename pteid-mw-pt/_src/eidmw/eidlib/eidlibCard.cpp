@@ -1484,7 +1484,7 @@ PTEIDSDK_API long PTEID_ReadSOD(unsigned char *out, unsigned long *outlen){
 		PTEID_EIDCard &card = readerContext->getEIDCard();
 
 		temp = card.getSod().getData();
-		CByteArray cb(temp.GetBytes, temp.Size());
+		CByteArray cb((unsigned char*)temp.GetBytes(), temp.Size());
 		cb.TrimRight(0);
 		memset(out,0,*outlen);
 		if (cb.Size() < *outlen)
