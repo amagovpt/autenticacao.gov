@@ -233,7 +233,8 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
 	winpath.append("C:\\Windows\\system32\\msiexec.exe /i ");
 	//TODO: Verificar a path do msi em Windows
 	//C:\\Users\\Luis\\AppData\\Local\\Temp\\PteidMW35-Basic-en.msi
-	winpath.append(pkgpath);
+    QString s = QDir::toNativeSeparators(QString::fromStdString(pkgpath));
+    winpath.append(s.toStdString());
 	CreateProcess(NULL, LPTSTR(winpath.c_str()), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
 	exit(0);
 
