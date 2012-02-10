@@ -145,7 +145,7 @@ public class pteid {
 
     public static PTEID_Certif[] GetCertificates() throws PteidException {
         PTEID_Certif[] certs = null;
-        PTEID_ByteArray ba = null;
+        PTEID_ByteArray ba = new PTEID_ByteArray();
         
         try {
             PTEID_Certificates certificates = idCard.getCertificates();
