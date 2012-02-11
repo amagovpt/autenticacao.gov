@@ -317,16 +317,16 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 	if (ui.chboxID->isChecked())
 	{
 		////Surname
-		cairo_move_to(cr, 20.0, 90.0);
+		cairo_move_to(cr, 18.0, 90.0);
 		cairo_show_text(cr, PersonFields[NAME].toStdString().c_str());
 
 
 		////Given Name
-		cairo_move_to(cr, 20.0, 125.0);
+		cairo_move_to(cr, 18.0, 128.0);
 		cairo_show_text(cr, PersonFields[GIVENNAME].toStdString().c_str());
 
 		///Sex
-		cairo_move_to(cr, 20.0, 165.0);
+		cairo_move_to(cr, 18.0, 170.0);
 		cairo_show_text(cr, PersonFields[SEX].toStdString().c_str());
 
 		///Height
@@ -334,31 +334,31 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 		cairo_show_text(cr, PersonFields[HEIGHT].toStdString().c_str());
 
 		///Nacionality
-		cairo_move_to(cr, 20.0, 200.0);
+		cairo_move_to(cr, 18.0, 204.0);
 		cairo_show_text(cr, PersonFields[NATIONALITY].toStdString().c_str());
 
 		////Date of Birth
-		cairo_move_to(cr, 145.0, 200.0);
+		cairo_move_to(cr, 145.0, 204.0);
 		cairo_show_text(cr, PersonFields[BIRTHDATE].toStdString().c_str());
 
 		///Document nr
-		cairo_move_to(cr, 20.0, 240.0);
+		cairo_move_to(cr, 18.0, 238.0);
 		cairo_show_text(cr, PersonFields[DOCUMENTNUMBER].toStdString().c_str());
 
 		///Expirity Date
-		cairo_move_to(cr, 145.0, 240.0);
+		cairo_move_to(cr, 145.0, 238.0);
 		cairo_show_text(cr, CardFields[CARD_VALIDUNTIL].toStdString().c_str());
 
 		////Country
-		cairo_move_to(cr, 290.0, 240.0);
+		cairo_move_to(cr, 290.0, 238.0);
 		cairo_show_text(cr, PersonFields[COUNTRY].toStdString().c_str());
 
 		////Father
-		cairo_move_to(cr, 20.0, 270.0);
+		cairo_move_to(cr, 18.0, 273.0);
 		cairo_show_text(cr, PersonFields[FATHER].toStdString().c_str());
 
 		////Mother
-		cairo_move_to(cr, 20.0, 295.0);
+		cairo_move_to(cr, 18.0, 295.0);
 		cairo_show_text(cr, PersonFields[MOTHER].toStdString().c_str());
 
 		////Accidental Indications
@@ -371,7 +371,7 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 	if (ui.chboxIDExtra->isChecked())
 	{
 		////NIF
-		cairo_move_to(cr, 20.0, 380.0);
+		cairo_move_to(cr, 18.0, 380.0);
 		cairo_show_text(cr, PersonFields[TAXNO].toStdString().c_str());
 
 		////NSS
@@ -379,31 +379,31 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 		cairo_show_text(cr, PersonFields[SOCIALSECURITYNO].toStdString().c_str());
 
 		///NUS
-		cairo_move_to(cr, 450.0, 380.0);
+		cairo_move_to(cr, 440.0, 380.0);
 		cairo_show_text(cr, PersonFields[HEALTHNO].toStdString().c_str());
 
 		///Card Version
-		cairo_move_to(cr, 20.0, 420.0);
+		cairo_move_to(cr, 18.0, 418.0);
 		cairo_show_text(cr, PersonFields[CARDVERSION].toStdString().c_str());
 
 		///Issuing Date
-		cairo_move_to(cr, 180.0, 420.0);
+		cairo_move_to(cr, 170.0, 418.0);
 		cairo_show_text(cr, CardFields[CARD_VALIDFROM].toStdString().c_str());
 
 		////Issuing Entity
-		cairo_move_to(cr, 300.0, 420.0);
+		cairo_move_to(cr, 296.0, 418.0);
 		cairo_show_text(cr, PersonFields[ISSUINGENTITY].toStdString().c_str());
 
 		///Document type
-		cairo_move_to(cr, 470.0, 420.0);
+		cairo_move_to(cr, 440.0, 418.0);
 		cairo_show_text(cr, PersonFields[DOCUMENTTYPE].toStdString().c_str());
 
 		///Card Status
-		cairo_move_to(cr, 20.0, 460.0);
+		cairo_move_to(cr, 18.0, 463.0);
 		cairo_show_text(cr, PersonFields[VALIDATION].toStdString().c_str());
 
 		////Local of Request
-		cairo_move_to(cr, 220.0, 460.0);
+		cairo_move_to(cr, 296.0, 463.0);
 		cairo_show_text(cr, PersonFields[LOCALOFREQUEST].toStdString().c_str());
 	}
 
@@ -412,75 +412,81 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 	{
 		addressPINRequest_triggered(CI_Data);
 		tFieldMap& AddressFields = CI_Data.m_AddressInfo.getFields();
-		////ADDRESS Locality
-		cairo_move_to(cr, 410.0, 670.0);
-		cairo_show_text(cr, AddressFields[ADDRESS_LOCALITY].toStdString().c_str());
-
-		////ADDRESS Municipality
-		cairo_move_to(cr, 20.0, 550.0);
-		cairo_show_text(cr, AddressFields[ADDRESS_MUNICIPALITY].toStdString().c_str());
 
 		////ADDRESS District
-		cairo_move_to(cr, 20.0, 510.0);
+		cairo_move_to(cr, 18.0, 511.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_DISTRICT].toStdString().c_str());
 
+		////ADDRESS Municipality
+		cairo_move_to(cr, 18.0, 550.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_MUNICIPALITY].toStdString().c_str());
+
 		////ADDRESS Civil Parish
-		cairo_move_to(cr, 320.0, 550.0);
+		cairo_move_to(cr, 296.0, 550.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_CIVILPARISH].toStdString().c_str());
 
+
+
 		////ADDRESS ABBrStreetType
-		cairo_move_to(cr, 20.0, 590.0);
+		cairo_move_to(cr, 18.0, 590.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_ABBRSTREETTYPE].toStdString().c_str());
 
 		////ADDRESS Street Type
-		cairo_move_to(cr, 240.0, 590.0);
+		cairo_move_to(cr, 185.0, 590.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_STREETTYPE].toStdString().c_str());
 
 		////ADDRESS Street Name
-		cairo_move_to(cr, 350.0, 590.0);
+		cairo_move_to(cr, 340.0, 590.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_STREETNAME].toStdString().c_str());
 
 		////ADDRESS Abbr Building Type
-		cairo_move_to(cr, 20.0, 380.0);
+		cairo_move_to(cr, 18.0, 380.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_ABBRBUILDINGTYPE].toStdString().c_str());
 
 		////ADDRESS Building Type
-		cairo_move_to(cr, 20.0, 380.0);
+		cairo_move_to(cr, 18.0, 380.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_BUILDINGTYPE].toStdString().c_str());
 
 		////ADDRESS Door No
-		cairo_move_to(cr, 20.0, 670.0);
+		cairo_move_to(cr, 18.0, 672.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_DOORNO].toStdString().c_str());
 
 		////ADDRESS Floor
-		cairo_move_to(cr, 180.0, 670.0);
+		cairo_move_to(cr, 170.0, 672.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_FLOOR].toStdString().c_str());
 
 		////ADDRESS Side
-		cairo_move_to(cr, 340.0, 670.0);
+		cairo_move_to(cr, 298.0, 672.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_SIDE].toStdString().c_str());
 
+		////ADDRESS Place
+		cairo_move_to(cr, 30.0, 420.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_PLACE].toStdString().c_str());
+
 		////ADDRESS Zip4
-		cairo_move_to(cr, 20.0, 710.0);
+		cairo_move_to(cr, 18.0, 713.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_ZIP4].toStdString().c_str());
 
 		////ADDRESS Zip3
-		cairo_move_to(cr, 90.0, 710.0);
+		cairo_move_to(cr, 93.0, 713.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_ZIP3].toStdString().c_str());
 
-		////ADDRESS Place
-		cairo_move_to(cr, 20.0, 420.0);
-		cairo_show_text(cr, AddressFields[ADDRESS_PLACE].toStdString().c_str());
 
 		////ADDRESS Postal Locality
-		cairo_move_to(cr, 180.0, 710.0);
+		cairo_move_to(cr, 170.0, 713.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_POSTALLOCALITY].toStdString().c_str());
+
+		////ADDRESS Locality
+		cairo_move_to(cr, 430.0, 713.0);
+		cairo_show_text(cr, AddressFields[ADDRESS_LOCALITY].toStdString().c_str());
 	}
 
 	if (ui.chboxPersoData->isChecked())
 	{
 		persodata_triggered(CI_Data);
 		tFieldMap& PersoDataFields = CI_Data.m_PersoDataInfo.getFields();
+
+		////PERSONAL NOTES
 		cairo_move_to(cr, 20.0, 760.0);
 		cairo_show_text(cr, (QString::fromUtf8(PersoDataFields[PERSODATA_INFO].toStdString().c_str())).toStdString().c_str());
 	}
@@ -501,7 +507,7 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 
 		cairo_scale (cr, 160.0/w2, 220.0/h2);
 
-		cairo_set_source_surface(cr, idphoto, 1050, 110);
+		cairo_set_source_surface(cr, idphoto, 1050, 180);
 		cairo_paint(cr);
 	}
 
