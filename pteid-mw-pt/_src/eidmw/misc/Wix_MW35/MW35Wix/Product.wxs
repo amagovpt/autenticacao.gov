@@ -118,6 +118,7 @@
 
       <Directory Id="ProgramFilesFolder">
         <Directory Id="APPLICATIONROOTFOLDER" Name="Portugal Identity Card">
+          
          <!-- <Directory Id="IMAGEFORMATS" Name="imageformats" /> -->
           <Directory Id="EIDSTORE" Name="eidstore">
             <Directory Id="CERTSDIR" Name="certs"/>
@@ -147,8 +148,9 @@
               <Directory Id="XPISKINFOLDER" Name="skin"/>
             </Directory>
           </Directory>
+          
         </Directory>
-        <Directory Id="MINIDRIVERROOTFOLDER" Name="BeID Minidriver"/>
+        <Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
 
       </Directory>
 
@@ -364,7 +366,7 @@
         <File Id="pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" KeyPath="no" DiskId="1" />
         <difx:Driver ForceInstall="no" PlugAndPlayPrompt="no" DeleteFiles="yes"  />
       </Component>
-      <!-- Certificate Propagation Service is a standard Windows service available in from Windows Vista on. In order to use the minidriver
+        <!-- Certificate Propagation Service is a standard Windows service available in from Windows Vista on. In order to use the minidriver
 			   it is necessary that this service is running. When a smart card reader is inserted this service should be started  by the smart card
 			   driver. As not all drivers are following this guidance, we start CertPropSvc during the minidriver install -->
       <Component Id="CertPropService" Guid="932459d0-df59-11de-8a39-0800200c9a66" Permanent="yes" >
@@ -393,6 +395,7 @@
       </Component>
       
       <Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
+        <RemoveFolder Id='APPLICATIONROOTFOLDER' On='uninstall' />
         <File Id="pteid35gui.exe" Name="pteid35gui.exe" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteid35gui.exe" />
         <File Id="pteid35libCpp.dll" Name="pteid35libCpp.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid35libCpp.dll" />
       </Component>
@@ -413,10 +416,12 @@
         <File Id="libexpat1.dll" Name="libexpat-1.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\libexpat-1.dll" ></File>
         <File Id="zlib1.dll" Name="zlib1.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\zlib1.dll" ></File>
       </Component>
+        
 
       <Component Id="Qt" Guid="{AF5AF018-EE70-4EA9-98BA-9C2947F19060}" SharedDllRefCount="yes">
         <File Id="QtCore4.dll" Name="QtCore4.dll" KeyPath="yes" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\bin\QtCore4.dll" />
         <File Id="QtGui4.dll" Name="QtGui4.dll" KeyPath="no" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\bin\QtGui4.dll" />
+        <File Id="QtNetwork4.dll" Name="QtNetwork4.dll" KeyPath="no" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\bin\QtNetwork4.dll" />
       </Component>
       
       <Component Id="License" Guid="{C00AF621-E882-4805-BA9C-B90AA5DBBCB6}" SharedDllRefCount="yes">
@@ -426,12 +431,6 @@
         <File Id="License_de.rtf" Name="License_de.rtf" KeyPath="no" Source="..\..\..\misc\licenses_files\License_de.rtf" />
         <File Id="THIRDPARTY_LICENSES.txt" Name="THIRDPARTY-LICENSES.txt" KeyPath="no" Source="..\..\..\misc\licenses_files\THIRDPARTY-LICENSES.txt" />
       </Component>
-      
-<!--      <Component Id="pkcs11_register" Guid="{4A415D88-0C1F-4322-8DFE-9A2528C47B2F}" SharedDllRefCount="yes">
-        <File Id="pteidpkcs11register.html" Name="pteid-pkcs11-register.html" KeyPath="yes" Source="..\..\..\misc\pteid\pteid-pkcs11-register.html" />
-        <File Id="pteidpkcs11unregister.html" Name="pteid-pkcs11-unregister.html" KeyPath="no" Source="..\..\..\misc\pteid\pteid-pkcs11-unregister.html" />
-      </Component>
-   -->
       
     </DirectoryRef>
 
@@ -444,14 +443,9 @@
           Section="PTEID_default" Action="addLine" Key="certs"  Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\certs\"
           />
         <IniFile Id="pteidguiconf2" Directory="WindowsFolder" Name="pteidgui.conf"
-          Section="PTEID_default" Action="addLine" Key="crl"  Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\crl\http\crl.eid.portugal.be\"
-          />
+          Section="PTEID_default" Action="addLine" Key="crl"  Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\crl\http\crl.eid.portugal.be\" />
+          
       </Component>
-      
-<!--      <Component Id="pkcs11_cfg" Guid="{30C0E273-8E4E-4C39-8EA5-98CA4F6D86B5}">
-        <File Id="Belgian_eID_PKCS11_java.cfg" Name="Belgian_eID_PKCS11_java.cfg" KeyPath="yes" Source="..\..\..\misc\setup_win\Belgian_eID_PKCS11_java.cfg" />
-      </Component>
--->
 
     </DirectoryRef>
 
@@ -473,6 +467,11 @@
         <File Id="xercesc_3_1.dll" Name="xerces-c_3_1.dll" KeyPath="yes" Source="$(var.PTEID_DIR_XERCES_310)\bin\xerces-c_3_1.dll" />
       </Component>
 
+      <!--Our Build of LibCurl - custom build options to remove unneeded features-->
+      <Component Id="Curl" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
+        <File Id="libcurl.dll" Name="libcurl.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\libcurl-7.24\bin\libcurl.dll" ></File>
+      </Component>
+
       <Component Id="pteidmdrvsystem32" Guid="a8259480-e408-11de-8a39-0800200c9a66" Permanent="no">
         <File Id="system32_pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="yes" DiskId="1" />
       </Component>
@@ -485,6 +484,10 @@
 		<Component Id="FreeImage" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F64" SharedDllRefCount="yes">
 				  <File Id="FreeImage.dll" Name="FreeImage.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\FreeImage.dll" />
 	   </Component>
+      
+      <Component Id="XMLSecurity" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F65" SharedDllRefCount="yes">
+        <File Id="xsec_1_6.dll" Name="xsec_1_6.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\xsec_1_6.dll" />
+      </Component>
 
       <Component Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
         <File Id="pteidpkcs11.dll" Name="pteidpkcs11.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteidpkcs11.dll" />
@@ -704,6 +707,8 @@
                 >
         <ComponentRef Id="GUI" />
         <ComponentRef Id="FreeImage"/>
+        <ComponentRef Id="Curl"/>
+        <ComponentRef Id="XMLSecurity"/>
         <ComponentRef Id="Cairo"/>
         <ComponentRef Id="Qt" />
         <!-- <ComponentRef Id="QtPlugin"/> -->
