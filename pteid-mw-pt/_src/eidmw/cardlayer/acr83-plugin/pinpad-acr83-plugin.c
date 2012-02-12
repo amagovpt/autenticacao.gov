@@ -94,7 +94,7 @@ DLL_LOCAL void fillVerifyControlStruct(EIDMW_PP_VERIFY_CCID * pin_verify)
     pin_verify -> bmPINLengthFormat = 0x00;
     (pin_verify -> wPINMaxExtraDigit)[0] = 0x08; /* Min Max */
     pin_verify -> wPINMaxExtraDigit[1] = 0x04;
-    pin_verify -> bEntryValidationCondition = 0x01;
+    pin_verify -> bEntryValidationCondition = 0x02;
     /* validation key pressed */
     pin_verify -> bNumberMessage = 0x01;
     (pin_verify -> wLangId)[0] = 0x09; //0x0816
