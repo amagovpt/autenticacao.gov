@@ -106,6 +106,34 @@ DLL_LOCAL void fillVerifyControlStruct(EIDMW_PP_VERIFY_CCID * pin_verify)
 
 }
 
+DLL_LOCAL void fillModifyControlStruct(EIDMW_PP_CHANGE_CCID * pin_change)
+{
+
+    pin_change -> bTimerOut = 0;
+    pin_change -> bTimerOut2 = 0x00;   //30 seconds timeout
+    pin_change -> bmFormatString = 0x00;
+    pin_change -> bmPINBlockString = 0x00;
+    pin_change -> bmPINLengthFormat = 0x00;
+    pin_change -> bInsertionOffsetOld = 0x00;
+    pin_change -> bInsertionOffsetNew = 0x08;
+    (pin_change -> wPINMaxExtraDigit)[0] = 0x08; /* Min Max */
+    pin_change -> wPINMaxExtraDigit[1] = 0x04;
+    pin_change -> bConfirmPIN = 0x01;
+    pin_change -> bEntryValidationCondition = 0x02;
+    /* validation key pressed */
+    pin_change -> bNumberMessage = 0x01;
+    (pin_change -> wLangId)[0] = 0x09; //0x0816
+    pin_change -> wLangId[1] = 0x04;
+    pin_change -> bMsgIndex1 = 0x01;
+    pin_change -> bMsgIndex2 = 0x00;
+    pin_change -> bMsgIndex3 = 0x00;
+    (pin_change -> bTeoPrologue)[0] = 0x00;
+    pin_change -> bTeoPrologue[1] = 0x00;
+    pin_change -> bTeoPrologue[2] = 0x00;
+
+} //sizeof() == 24
+
+
 DLL_LOCAL unsigned int fillStructIAS(unsigned char* apdu, unsigned char ucPintype, int changePIN)
 {
 
@@ -266,7 +294,7 @@ EIDMW_PP_API long EIDMW_PP2_Command(
     {
         printf("ppacr83-plugin ==> Get Feature Request\n");
         rv = SCardControl(hCard, CM_IOCTL_GET_FEATURE_REQUEST, NULL, 0,
-                pucRecvbuf, dwRrecvlen, pdwRrecvlen);
+                          pucRecvbuf, dwRrecvlen, pdwRrecvlen);
 
         return rv;
     }
@@ -307,8 +335,30 @@ EIDMW_PP_API long EIDMW_PP2_Command(
             if (ioctl == CM_IOCTL_VERIFY_PIN)
                 return rv;
         }
+
+        if (ioctl == CM_IOCTL_MODIFY_PIN)
+        {
+            printf("ppacr83-plugin ==> Modify PIN\n");
+            fillModifyControlStruct(&pin_change);
+            pin_struct = &pin_change;
+
+            if (!IsGemsafe(pbAtr, dwAtrLen))
+            {
+                pin_change.ulDataLength = 0x0D; // The APDU only includes placeholders for the new PIN
+                //Overriding the prompt options in order to not ask for the old pin again
+                pin_change.bConfirmPIN = 0x01;
+                pin_change.bNumberMessage = 0x02;
+                length = fillStructIAS(pin_change.abData, ucPintype, 1);
+            }
+            else
+            {
+                pin_change.ulDataLength = 0x15; // The APDU only includes placeholders for both PINs
+
+                length = fillStructGemsafe(pin_change.abData, ucPintype, 1);
+            }
+            return sendControl(hCard, ioctl, pin_struct,
+                               length, pucRecvbuf, dwRrecvlen, pdwRrecvlen);
+        }
     }
-
     return rv;
-
 }
