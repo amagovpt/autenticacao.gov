@@ -88,18 +88,18 @@ DLL_LOCAL void fillVerifyControlStruct(EIDMW_PP_VERIFY_CCID * pin_verify)
 
     /* PC/SC v2.0.2 Part 10 PIN verification data structure */
     pin_verify -> bTimerOut = 0;
-    //pin_verify -> bTimerOut2 = 0x1E;   //30 seconds timeout
-    pin_verify -> bmFormatString = 0;
+    pin_verify -> bTimerOut2 = 0x00;   //30 seconds timeout
+    pin_verify -> bmFormatString = 0x00;
     pin_verify -> bmPINBlockString = 0x08;
-    pin_verify -> bmPINLengthFormat = 0;
-    (pin_verify -> wPINMaxExtraDigit)[0] = 0x04; /* Min Max */
-    pin_verify -> wPINMaxExtraDigit[1] = 0x08;
+    pin_verify -> bmPINLengthFormat = 0x00;
+    (pin_verify -> wPINMaxExtraDigit)[0] = 0x08; /* Min Max */
+    pin_verify -> wPINMaxExtraDigit[1] = 0x04;
     pin_verify -> bEntryValidationCondition = 0x01;
     /* validation key pressed */
     pin_verify -> bNumberMessage = 0x01;
-    (pin_verify -> wLangId)[0] = 0x04; //0x0816
-    pin_verify -> wLangId[1] = 0x09;
-    pin_verify -> bMsgIndex = 0;
+    (pin_verify -> wLangId)[0] = 0x09; //0x0816
+    pin_verify -> wLangId[1] = 0x04;
+    pin_verify -> bMsgIndex = 0x00;
     (pin_verify -> bTeoPrologue)[0] = 0x00;
     pin_verify -> bTeoPrologue[1] = 0x00;
     pin_verify -> bTeoPrologue[2] = 0x00;
