@@ -1567,8 +1567,11 @@ cleanup:
    return (dwReturn);
 }
 
+#define WHERE "createVerifyCommandGemPC"
 DWORD createVerifyCommandGemPC(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned int pin_ref) {
 	char padding = 0;
+
+	LogTrace(LOGTYPE_INFO, WHERE, "createVerifyCommandGemPC(): pinRef = %d", pin_ref);
     pVerifyCommand->bTimeOut = 30;
     pVerifyCommand->bTimeOut2 = 30;
     pVerifyCommand->bmFormatString = 0x82;
@@ -1591,9 +1594,8 @@ DWORD createVerifyCommandGemPC(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned in
     pVerifyCommand->abData[2] = 0x00; // P1
     pVerifyCommand->abData[3] = pin_ref; // P2
     pVerifyCommand->abData[4] = 0x08; // Lc = 8 bytes in command data
-    pVerifyCommand->abData[5] = 0x20 ; // 
 	padding = Is_Gemsafe != 0 ? 0xFF: 0x2F;
-	
+	pVerifyCommand->abData[5] = padding;
     pVerifyCommand->abData[6] = padding; // Pin[1]
     pVerifyCommand->abData[7] = padding; // Pin[2]
     pVerifyCommand->abData[8] = padding; // Pin[3]
@@ -1691,16 +1693,16 @@ DWORD createVerifyCommand(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned int pin
     pVerifyCommand->abData[2] = 0x00; // P1
     pVerifyCommand->abData[3] = pin_ref; // P2
     pVerifyCommand->abData[4] = 0x08; // Lc = 8 bytes in command data
-    pVerifyCommand->abData[5] = 0x20 ; // 
 	padding = Is_Gemsafe != 0 ? 0xFF: 0x2F;
 	
-    pVerifyCommand->abData[6] = padding; // Pin[1]
-    pVerifyCommand->abData[7] = padding; // Pin[2]
-    pVerifyCommand->abData[8] = padding; // Pin[3]
-    pVerifyCommand->abData[9] = padding; // Pin[4]
-    pVerifyCommand->abData[10] = padding; // Pin[5]
-    pVerifyCommand->abData[11] = padding; // Pin[6]
-    pVerifyCommand->abData[12] = padding; // Pin[7]
+    pVerifyCommand->abData[5] = padding; // Pin[1]
+    pVerifyCommand->abData[6] = padding; // Pin[2]
+    pVerifyCommand->abData[7] = padding; // Pin[3]
+    pVerifyCommand->abData[8] = padding; // Pin[4]
+    pVerifyCommand->abData[9] = padding; // Pin[5]
+    pVerifyCommand->abData[10] = padding; // Pin[6]
+    pVerifyCommand->abData[11] = padding; // Pin[7]
+	pVerifyCommand->abData[12] = padding; // Pin[8]
 
     pVerifyCommand->ulDataLength = 13;
 
