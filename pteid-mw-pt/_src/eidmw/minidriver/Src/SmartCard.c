@@ -249,6 +249,8 @@ DWORD PteidAuthenticateExternal(
 	unsigned int				uiCmdLg = 0;
 	unsigned int                pin_ref = 0;
 	unsigned char				recvbuf[256];
+	unsigned char				szReaderName[256];
+	DWORD						reader_length = sizeof(szReaderName);
 	unsigned char				ucLastKey;
 	unsigned long				recvlen     = sizeof(recvbuf);
 	BYTE							SW1, SW2;
@@ -258,6 +260,7 @@ DWORD PteidAuthenticateExternal(
 	BOOL							bRetry      = TRUE;
 	int							nButton;
 	HRESULT						hResult;
+	LONG						status_rv;
 
 	EXTERNAL_PIN_INFORMATION		externalPinInfo;
 	HANDLE						DialogThreadHandle;
@@ -323,8 +326,12 @@ DWORD PteidAuthenticateExternal(
 	else 
 		pin_ref = 0x80 + pin_id;
 
-	if (wcsstr(pCardData->pwszCardName, L"GemPC Pinpad") != 0 
-		|| wcsstr(pCardData->pwszCardName, L"GemPCPinpad" != 0))
+	//SCardStatus to get the reader name
+	status_rv = SCardStatus(pCardData->hScard,  szReaderName, &reader_length,
+		NULL, NULL, NULL, NULL);
+
+	if (strstr(szReaderName, "GemPC Pinpad") != 0 
+		|| strstr(szReaderName, "GemPCPinpad") != 0)
 		createVerifyCommandGemPC(&verifyCommand, pin_ref);
 	else
 		createVerifyCommand(&verifyCommand, pin_ref);
@@ -352,6 +359,10 @@ DWORD PteidAuthenticateExternal(
 			if (!bSilent)
 				DialogThreadHandle = CreateThread(NULL, 0, DialogThreadPinEntry, &externalPinInfo, 0, NULL);
 
+			LogTrace(LOGTYPE_INFO, WHERE, "Running SCardControl with ioctl=%08x",externalPinInfo.features.VERIFY_PIN_DIRECT );
+			LogTrace(LOGTYPE_INFO, WHERE, "PIN_VERIFY_STRUCT: ");
+			LogDump(uiCmdLg, (unsigned char*)&verifyCommand);
+
 			dwReturn = SCardControl(pCardData->hScard, 
 				externalPinInfo.features.VERIFY_PIN_DIRECT, 
 				&verifyCommand, 
@@ -359,12 +370,39 @@ DWORD PteidAuthenticateExternal(
 				recvbuf, 
 				recvlen,
 				&recvlen);
+			SW1 = recvbuf[recvlen-2];
+		    SW2 = recvbuf[recvlen-1];
 
 			externalPinInfo.cardState = CS_PINENTERED;
 			if ( dwReturn != SCARD_S_SUCCESS )
 			{
 				LogTrace(LOGTYPE_ERROR, WHERE, "SCardControl errorcode: [0x%02X]", dwReturn);
 				CLEANUP(dwReturn);
+			}
+			else
+			{
+				if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
+				{
+					dwReturn = SCARD_W_WRONG_CHV;
+					LogTrace(LOGTYPE_ERROR, WHERE, "CardAuthenticateExternal Failed: [0x%02X][0x%02X]", SW1, SW2);
+
+					if ( ((SW1 == 0x63) && ((SW2 & 0xF0) == 0xC0)) )
+					{
+						if ( pcAttemptsRemaining != NULL )
+						{
+							/* -1: Don't support returning the count of remaining authentication attempts */
+							*pcAttemptsRemaining = (SW2 & 0x0F);
+						}
+					}
+					else if ( (SW1 == 0x69) && (SW2 == 0x83) )
+					{
+						dwReturn = SCARD_W_CHV_BLOCKED;
+						LogTrace(LOGTYPE_ERROR, WHERE, "Card Blocked, watch out!!");
+					}
+				}
+				else
+					LogTrace(LOGTYPE_INFO, WHERE, "Logged in via Pinpad Reader");
+
 			}
 		}
 	
@@ -1567,6 +1605,8 @@ cleanup:
    return (dwReturn);
 }
 
+#undef WHERE
+
 #define WHERE "createVerifyCommandGemPC"
 DWORD createVerifyCommandGemPC(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned int pin_ref) {
 	char padding = 0;
@@ -1575,9 +1615,9 @@ DWORD createVerifyCommandGemPC(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned in
     pVerifyCommand->bTimeOut = 30;
     pVerifyCommand->bTimeOut2 = 30;
     pVerifyCommand->bmFormatString = 0x82;
-	pVerifyCommand -> bmPINBlockString = 0x04;
+	pVerifyCommand -> bmPINBlockString = 0x00;
 	pVerifyCommand -> bmPINLengthFormat = 0x00;
-	pVerifyCommand -> wPINMaxExtraDigit= 0x0408; /* Min Max */ //Code smell #1
+	pVerifyCommand -> wPINMaxExtraDigit= 0x0408; /* Min Max */
 	
 	pVerifyCommand -> bEntryValidationCondition = 0x02;
 	/* validation key pressed */
@@ -1612,8 +1652,10 @@ DWORD createVerifyCommandGemPC(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned in
 
 #undef WHERE
 
+#define WHERE "createVerifyCommand"
 DWORD createVerifyCommand(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned int pin_ref) {
 	char padding;
+	LogTrace(LOGTYPE_INFO, WHERE, "createVerifyCommand(): pinRef = %d", pin_ref);
     pVerifyCommand->bTimeOut = 30;
     pVerifyCommand->bTimeOut2 = 30;
     pVerifyCommand->bmFormatString = 0x80 | 0x08 | 0x00 | 0x01;
