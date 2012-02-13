@@ -163,25 +163,25 @@ DLL_LOCAL void fillVerifyControlStruct(EIDMW_PP_VERIFY_CCID * pin_verify)
 
 } //sizeof() == 19
 
-DLL_LOCAL void fillModifyControlStruct(EIDMW_PP_CHANGE_CCID * pin_change)
+DLL_LOCAL void fillModifyControlStruct(EIDMW_PP_CHANGE_CCID * pin_change, int include_verify)
 {
 
 	pin_change -> bTimerOut = 0x1E; 
 	pin_change -> bTimerOut2 = 0x1E;   //30 seconds timeout
-    pin_change -> bmFormatString = 0x02;
-    pin_change -> bmPINBlockString = 0x00;
+	pin_change -> bmFormatString = 0x02;
+	pin_change -> bmPINBlockString = 0x00;
 	pin_change -> bmPINLengthFormat = 0x00;
 	pin_change -> bInsertionOffsetOld = 0x00;
-    pin_change -> bInsertionOffsetNew = 0x00;
+	pin_change -> bInsertionOffsetNew = include_verify == 1 ? 0x08 : 0x00; 
 	(pin_change -> wPINMaxExtraDigit)[0] = 0x08; /* Min Max */
 	pin_change -> wPINMaxExtraDigit[1] = 0x04; 
-    pin_change -> bConfirmPIN = 0x01;
+	pin_change -> bConfirmPIN = include_verify == 1 ? 0x03 : 0x01;
 	pin_change -> bEntryValidationCondition = 0x02;
 	/* validation key pressed */
-    pin_change -> bNumberMessage = 0x02;
+	pin_change -> bNumberMessage = include_verify == 1 ? 0x03 : 0x02;
 	(pin_change -> wLangId)[0] = 0x16; //0x0816
 	pin_change -> wLangId[1] = 0x08; 
-    pin_change -> bMsgIndex1 = 0x00;
+	pin_change -> bMsgIndex1 = 0x00;
 	pin_change -> bMsgIndex2 = 0x00;
 	pin_change -> bMsgIndex3 = 0x00;
 	(pin_change -> bTeoPrologue)[0] = 0x00;
@@ -414,19 +414,18 @@ EIDMW_PP_API long EIDMW_PP2_Command(
 		if (ioctl == CM_IOCTL_MODIFY_PIN)
 		{
 			printf("ppgemplus-plugin ==> Modify PIN\n");
-			fillModifyControlStruct(&pin_change);
+
 			pin_struct = &pin_change;
 
 			if (!IsGemsafe(pbAtr, dwAtrLen))
 			{
+				fillModifyControlStruct(&pin_change, 0);
 				pin_change.ulDataLength = 0x0D; // The APDU only includes placeholders for the new PIN
-				//Overriding the prompt options in order to not ask for the old pin again
-				pin_change.bConfirmPIN = 0x01;
-				pin_change.bNumberMessage = 0x02;
 				length = fillStructIAS(pin_change.abData, ucPintype, 1);
 			}
 			else
 			{
+				fillModifyControlStruct(&pin_change, 1);
 				pin_change.ulDataLength = 0x15; // The APDU only includes placeholders for both PINs
 				length = fillStructGemsafe(pin_change.abData, ucPintype, 1);
 			}
