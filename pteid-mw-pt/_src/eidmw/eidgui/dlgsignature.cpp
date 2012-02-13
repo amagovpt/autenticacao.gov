@@ -197,11 +197,14 @@ void dlgSignature::on_pbSign_clicked ( void )
 	    connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
 
 	    int outp_len = native_path.size();
-	    output_file =  new char[outp_len*2];
+	    
 
 #ifdef WIN32		
-	    strncpy(output_file, native_path.toStdString().c_str(),outp_len);
+	    size_t len_2 = strlen(native_path.toStdString().c_str());
+		output_file = new char[len_2+1];
+		strcpy(output_file,(char*)native_path.toStdString().c_str());
 #else
+		output_file =  new char[outp_len*2];
 	    strncpy(output_file, native_path.toUtf8().constData(), outp_len*2);
 #endif	    
 	    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Save to file %s", output_file);
