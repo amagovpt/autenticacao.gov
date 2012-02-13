@@ -84,7 +84,7 @@ namespace eIDMW
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GUITOOL_FILESAVE		=   {EIDMW_CNF_SECTION_GUITOOL, EIDMW_CNF_GUITOOL_FILESAVE,			L""};
 
 //XSIGN
-  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_XSIGN_TSAURL  		=	{EIDMW_CNF_SECTION_XSIGN,	EIDMW_CNF_XSIGN_TSAURL,		L"http://tsa.portugal.be/connect"};
+  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_XSIGN_TSAURL = {EIDMW_CNF_SECTION_XSIGNEIDMW_CNF_XSIGN_TSAURL,	L"http://ts.cartaodecidadao.pt/tsa/server"};
   const struct CConfig::Param_Num CConfig::EIDMW_CONFIG_PARAM_XSIGN_ONLINE  		=	{EIDMW_CNF_SECTION_XSIGN,	EIDMW_CNF_XSIGN_ONLINE,		1};
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_XSIGN_WORKINGDIR 		=	{EIDMW_CNF_SECTION_XSIGN,	EIDMW_CNF_XSIGN_WORKINGDIR,	L""};
   const struct CConfig::Param_Num CConfig::EIDMW_CONFIG_PARAM_XSIGN_TIMEOUT 		=	{EIDMW_CNF_SECTION_XSIGN,	EIDMW_CNF_XSIGN_TIMEOUT,	30};
