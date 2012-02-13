@@ -77,16 +77,21 @@ extern "C" {
 
 #include <winscard.h>
 
-#ifndef WIN32
+#ifndef _WIN32
 #include "wintypes.h"
 #endif
 
 #ifndef CM_IOCTL_GET_FEATURE_REQUEST
 #define CM_IOCTL_GET_FEATURE_REQUEST SCARD_CTL_CODE(3400) //Definition from reader.h in pcsclite
 #endif
+
+#ifdef _WIN32
+#define CM_IOCTL_VERIFY_PIN 0x00312110
+#define CM_IOCTL_MODIFY_PIN 0x00312114
+#else
 #define CM_IOCTL_VERIFY_PIN 0x42330006
 #define CM_IOCTL_MODIFY_PIN 0x42330007
-
+#endif
 
 #define PTEID_MINOR_VERSION       0
 
