@@ -27,8 +27,8 @@ EIDMW_PP_API long EIDMW_PP2_Init(
 	if (hCard == 0 || hCtx == 0)
 		return SCARD_E_INVALID_PARAMETER;
 
-	if (strstr(csReader, "GemPC Pinpad") == 0 &&
-		strstr(csReader, "GemPCPinpad") == 0)
+    if (strstr(csReader, "GemPC Pinpad") == 0 &&
+        strstr(csReader, "GemPCPinpad") == 0)
 		return SCARD_E_INVALID_PARAMETER;
 	
 
@@ -168,20 +168,20 @@ DLL_LOCAL void fillModifyControlStruct(EIDMW_PP_CHANGE_CCID * pin_change)
 
 	pin_change -> bTimerOut = 0x1E; 
 	pin_change -> bTimerOut2 = 0x1E;   //30 seconds timeout
-	pin_change -> bmFormatString = 0x82;
-	pin_change -> bmPINBlockString = 0x04;
+    pin_change -> bmFormatString = 0x02;
+    pin_change -> bmPINBlockString = 0x00;
 	pin_change -> bmPINLengthFormat = 0x00;
 	pin_change -> bInsertionOffsetOld = 0x00;
-	pin_change -> bInsertionOffsetNew = 0x08;
+    pin_change -> bInsertionOffsetNew = 0x00;
 	(pin_change -> wPINMaxExtraDigit)[0] = 0x08; /* Min Max */
 	pin_change -> wPINMaxExtraDigit[1] = 0x04; 
-	pin_change -> bConfirmPIN = 0x03;
+    pin_change -> bConfirmPIN = 0x01;
 	pin_change -> bEntryValidationCondition = 0x02;
 	/* validation key pressed */
-	pin_change -> bNumberMessage = 0x03;
+    pin_change -> bNumberMessage = 0x02;
 	(pin_change -> wLangId)[0] = 0x16; //0x0816
 	pin_change -> wLangId[1] = 0x08; 
-	pin_change -> bMsgIndex1 = 0x00;
+    pin_change -> bMsgIndex1 = 0x00;
 	pin_change -> bMsgIndex2 = 0x00;
 	pin_change -> bMsgIndex3 = 0x00;
 	(pin_change -> bTeoPrologue)[0] = 0x00;
@@ -428,7 +428,6 @@ EIDMW_PP_API long EIDMW_PP2_Command(
 			else
 			{
 				pin_change.ulDataLength = 0x15; // The APDU only includes placeholders for both PINs
-
 				length = fillStructGemsafe(pin_change.abData, ucPintype, 1);
 			}
 			return sendControl(hCard, ioctl, pin_struct,
