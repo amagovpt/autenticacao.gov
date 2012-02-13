@@ -24,6 +24,9 @@
 
 #include <string>
 #include <cstring> //POSIX basename
+#ifdef __APPLE__
+#include <libgen.h>
+#endif
 #include <vector>
 #include <map>
 #include <time.h>
