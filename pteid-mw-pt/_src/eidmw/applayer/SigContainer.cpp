@@ -30,11 +30,19 @@ namespace eIDMW
 
 	}
 
+	Container::~Container()
+	{
+		//Close the zip file and other buffers
+		mz_zip_reader_end(&zip_archive);
+
+	}
+
 	CByteArray *Container::ExtractFile(const char *entry)
 	{
 		void *p;
 		size_t uncompressed_size = 0;
 		CByteArray *ba = new CByteArray();
+		//p = mz_zip_reader_extract_file_to_heap(&zip_archive, entry, &uncompressed_size, MZ_ZIP_FLAG_IGNORE_PATH);
 		p = mz_zip_reader_extract_file_to_heap(&zip_archive, entry, &uncompressed_size, 0);
 		if (!p)
 		{
@@ -69,6 +77,7 @@ namespace eIDMW
 	CByteArray* Container::ExtractSignature()
 	{
 
+		//return ExtractFile("signature.xml");
 		return ExtractFile(SIG_INTERNAL_PATH);
 
 	}
@@ -116,6 +125,9 @@ namespace eIDMW
 				t->URI = new std::string(file_stat.m_filename);
 				hashes[c] = t;
 				c++;
+
+				//Cleanup each read file buffer
+				free(p);
 			}
 		}
 		hashes[c] = NULL;	

@@ -186,17 +186,10 @@ bool APLVerifySignature(const char *container_path, char * errors, unsigned long
 	int n_files = 0;
 
 	hashes = container->getHashes(&n_files);
-	
-	/*
-	while(i != n_files)
-	{
-		fprintf(stderr, "Found file %s\n", hashes[i]->URI->c_str());
-		fprintf(stderr, "Sha-1 Hash: %s\n", hashes[i]->hash->ToString().c_str());
-		i++;
-	} */
-	
 
 	CByteArray *sig_content = container->ExtractSignature();
+
+	delete container;
 	if (sig_content == NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	

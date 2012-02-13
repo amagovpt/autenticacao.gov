@@ -15,6 +15,7 @@ namespace eIDMW
 	{
 		public:
 			Container(const char *zip_path);
+			~Container();
 			CByteArray *ExtractFile(const char *entry);
 			CByteArray *ExtractSignature();
 			//Array of pointers to tHashedFiles
