@@ -377,6 +377,16 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 			httpWin.exec();
 			//delete httpWin;
 		}
+        if (distro == "Ubuntu" || distro == "CaixaMagica")
+        {
+            pkgname.append("_ubuntu");
+            pkgname.append("_amd64.deb");
+            downloadurl.append(pkgname);
+            HttpWindow httpWin(downloadurl, distro);
+            httpWin.show();
+            httpWin.exec();
+            //delete httpWin;
+        }
 		else if (distro == "fedora")
 		{
             pkgname.append("-fedora");
@@ -416,6 +426,16 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 			httpWin.show();
 			httpWin.exec();
 		}
+        if (distro == "Ubuntu" || distro == "CaixaMagica")
+        {
+            pkgname.append("_ubuntu");
+            pkgname.append("_amd64.deb");
+            downloadurl.append(pkgname);
+            HttpWindow httpWin(downloadurl, distro);
+            httpWin.show();
+            httpWin.exec();
+            //delete httpWin;
+        }
 		else if (distro == "fedora")
 		{
             pkgname.append("-fedora");
