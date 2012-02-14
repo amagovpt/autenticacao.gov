@@ -590,11 +590,11 @@ Do you want to accept it?
         <translation>Bad card type</translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="2137"/>
-        <location filename="mainwnd.cpp" line="2404"/>
-        <location filename="mainwnd.cpp" line="2523"/>
-        <location filename="mainwnd.cpp" line="2799"/>
-        <location filename="mainwnd.cpp" line="2885"/>
+        <location filename="mainwnd.cpp" line="1790"/>
+        <location filename="mainwnd.cpp" line="1942"/>
+        <location filename="mainwnd.cpp" line="2090"/>
+        <location filename="mainwnd.cpp" line="2242"/>
+        <location filename="mainwnd.cpp" line="2504"/>
         <source>No card present</source>
         <translation>Cartão não encontrado</translation>
     </message>
@@ -772,25 +772,25 @@ Please specify .xml, .csv or .eid</source>
         <translation>Certificaten ophalen mislukt</translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="1171"/>
+        <location filename="mainwnd.cpp" line="870"/>
         <source>Register certificate</source>
-        <translation>Registreer certificaat</translation>
+        <translation>Registar Certificados/translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="1172"/>
+        <location filename="mainwnd.cpp" line="871"/>
         <source>Registration of certificate </source>
-        <translation>Registratie van certificaat </translation>
+        <translation>Registo de certificados </translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="1175"/>
+        <location filename="mainwnd.cpp" line="874"/>
         <source>successful</source>
-        <translation>gelukt</translation>
+        <translation>bem sucedido</translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="1179"/>
-        <location filename="mainwnd.cpp" line="2858"/>
+        <location filename="mainwnd.cpp" line="878"/>
         <source>failed</source>
-        <translation>mislukt</translation>
+        <translation>falhou</translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="2935"/>
@@ -868,11 +868,12 @@ Please specify .xml, .csv or .eid</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="2868"/>
+        <location filename="mainwnd.cpp" line="2488"/>
+        <location filename="mainwnd.cpp" line="2730"/>
         <source>
 ( Number of tries left: </source>
         <translation>
-( Aantal pogingen over: </translation>
+( Número de tentativas restantes: </translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="3680"/>
@@ -1020,14 +1021,14 @@ Please specify .xml, .csv or .eid</source>
         <translation>Versie</translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="985"/>
+        <location filename="mainwnd.cpp" line="684"/>
         <source>eID is still running</source>
-        <translation>eID is nog steeds aktief</translation>
+        <translation>A aplicação continua em execução</translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="986"/>
+        <location filename="mainwnd.cpp" line="685"/>
         <source>The application will continue to run. To stop this application, select &apos;Exit&apos; from the menu.</source>
-        <translation>Het programma blijft verder werken. Om de applicatie te stoppen, kies &apos;Afsluiten&apos; van het menu.</translation>
+        <translation>Para fechar a aplicação selecione a opção sair.</translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="2142"/>
@@ -1207,8 +1208,8 @@ Please specify .xml, .csv or .eid</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="2174"/>
-        <source>Error loading card data</source>
+        <location filename="mainwnd.cpp" line="1827"/>
+        <source>Erro ao ler os dados do cartão</source>
         <translation></translation>
     </message>
     <message>
