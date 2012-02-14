@@ -144,7 +144,7 @@ CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	XadesSignature sig(this);
 
-	CByteArray &signature = sig.SignXades(paths,n_paths);
+	CByteArray &signature = sig.SignXades(paths, n_paths, false);
 	StoreSignatureToDisk (signature, paths, n_paths,output_path);
 
 	//Write zip container signature and referenced files in zip container
@@ -167,11 +167,18 @@ CByteArray &APL_Card::SignXadesT(CByteArray content, const char *URL)
 	return *ba;
 }
 
-CByteArray &APL_Card::SignXadesT(const char ** path, unsigned int n_paths, const char *output_file)
+CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, const char *output_file)
 {
-	CByteArray * ba = new CByteArray();
-	//TODO
-	return *ba;
+	if (paths == NULL || n_paths < 1)
+	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+	XadesSignature sig(this);
+
+	CByteArray &signature = sig.SignXades(paths, n_paths, true);
+	StoreSignatureToDisk (signature, paths, n_paths, output_file);
+
+	//Write zip container signature and referenced files in zip container
+
+	return signature;
 }
 
 bool APLVerifySignature(const char *container_path, char * errors, unsigned long* error_len)

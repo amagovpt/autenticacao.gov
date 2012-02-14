@@ -90,7 +90,6 @@ namespace eIDMW
 		void *p;
 
 		int n_files = mz_zip_reader_get_num_files(&zip_archive);
-		printf ("mz_zip_reader_get_num_files: %d\n", n_files);
 		tHashedFile **hashes = new tHashedFile*[n_files];
 
 		for (i = 0; i < n_files; i++)
@@ -100,7 +99,7 @@ namespace eIDMW
 			memset(out, 0, 20);
 			if (!mz_zip_reader_file_stat(&zip_archive, i, &file_stat))
 			{
-				fprintf(stderr, "mz_zip_reader_file_stat() failed!\n");
+				fprintf(stderr, "E: mz_zip_reader_file_stat() failed!\n");
 				mz_zip_reader_end(&zip_archive);
 				continue;
 			}
@@ -110,7 +109,7 @@ namespace eIDMW
 				p = mz_zip_reader_extract_file_to_heap(&zip_archive,file_stat.m_filename, &uncomp_size, 0);
 				if (!p)
 				{
-					fprintf(stderr, "mz_zip_reader_extract_file_to_heap() failed!\n");
+					fprintf(stderr, "E: mz_zip_reader_extract_file_to_heap() failed!\n");
 					mz_zip_reader_end(&zip_archive);
 					continue;
 				}
@@ -145,7 +144,7 @@ namespace eIDMW
 		char *utf8_filename;
 		mz_bool status;
 
-		MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() called with output_file = %S\n",output_file); 
+		MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() called with output_file = %s\n",output_file); 
 
 		//Truncate the output file first...
 		Truncate(output_file);
@@ -155,7 +154,7 @@ namespace eIDMW
 		{   
 			absolute_path = paths[i]; 	
 			ptr_content = readFile(absolute_path, &file_size);
-			MWLOG(LEV_DEBUG, MOD_APL, L"Compressing %d bytes from file %S\n", file_size, absolute_path);
+			MWLOG(LEV_DEBUG, MOD_APL, L"Compressing %d bytes from file %s\n", file_size, absolute_path);
 
 			zip_entry_name = Basename((char *)absolute_path);
 
@@ -164,14 +163,14 @@ namespace eIDMW
 			utf8_filename = new char[strlen(zip_entry_name)*2];
 			latin1_to_utf8((unsigned char *)zip_entry_name, (unsigned char *)utf8_filename);
 			zip_entry_name = utf8_filename;
-			MWLOG (LEV_DEBUG, MOD_APL, L"Compressing filename (after conversion): %S\n", zip_entry_name);
+			MWLOG (LEV_DEBUG, MOD_APL, L"Compressing filename (after conversion): %s\n", zip_entry_name);
 #endif
 
 			status = mz_zip_add_mem_to_archive_file_in_place(output_file, zip_entry_name, ptr_content,
 					file_size, "", (unsigned short)0, MZ_BEST_COMPRESSION);
 			if (!status)
 			{
-				MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed with argument %S",
+				MWLOG (LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed with argument %s",
 						zip_entry_name);
 				return;
 			}

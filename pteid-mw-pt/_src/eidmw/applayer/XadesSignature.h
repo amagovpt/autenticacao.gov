@@ -16,8 +16,6 @@
 #define ASN1_LEN 43
 #define SHA1_OFFSET 20
 
-#define TIMESTAMPING_HOST "http://ts.cartaodecidadao.pt/tsa/server"
-
 #define XERCES_NS XERCES_CPP_NAMESPACE_QUALIFIER
 
 #ifndef WIN32
@@ -53,9 +51,7 @@ namespace eIDMW
 		};
 
 		CByteArray &SignXades(CByteArray ba, const char *URL);
-		CByteArray &SignXadesT(CByteArray ba, const char *URL);
-		CByteArray &SignXades(const char ** paths, unsigned int n_paths);
-		CByteArray &SignXadesT(const char ** paths, unsigned int n_paths);
+		CByteArray &SignXades(const char ** paths, unsigned int n_paths, bool do_timestamp);
 
 		static bool checkExternalRefs(DSIGReferenceList *refs, tHashedFile **hashes);
 		static bool ValidateXades(CByteArray signature, tHashedFile **hashes, char *errors, unsigned long *error_length);
@@ -64,28 +60,31 @@ namespace eIDMW
 		private:
 		
 		CByteArray HashFile(const char *file_path);
-		void addSignatureProperties(DSIGSignature *sig);
+		DOMNode * addSignatureProperties(DSIGSignature *sig);
 		CByteArray *WriteToByteArray(XERCES_NS DOMDocument *doc); 
 		//Utility methods for signature
 		void loadCert(CByteArray &ba, EVP_PKEY *pub_key);
 		
 		int appendOID(XMLByte *toFill);
 
-		void addTimestampNode(DSIGSignature *sig);
+		void addTimestampNode(XERCES_NS DOMNode *node, unsigned char *timestamp);
 		XMLCh* createURI(const char *path);
 
 
 		//Utility methods for timestamping
-		size_t curl_write_data(char *ptr, size_t size, size_t nmemb, void * stream); 
-		CByteArray timestamp_data(const unsigned char *input, unsigned int data_len);
-		void generate_asn1_request_struct(char *sha_1);
+		
+		//Curl write_function callback: it writes the data to the static array mp_timestamp_data
+		static size_t curl_write_data(char *ptr, size_t size, size_t nmemb, void * stream); 
+
+		void timestamp_data(const unsigned char *input, unsigned int data_len);
+		void generate_asn1_request_struct(unsigned char *sha_1);
 
 		static void initXerces();
 
 		
 		X509 * mp_cert;
 		APL_Card *mp_card;
-		CByteArray mp_timestamp_data;
+		static CByteArray mp_timestamp_data;
 
 
 	};

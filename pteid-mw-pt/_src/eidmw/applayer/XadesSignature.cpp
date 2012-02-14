@@ -11,6 +11,7 @@
 #include <cstdio>
 
 #include "APLCard.h"
+#include "APLConfig.h"
 
 #include "CardPteidDef.h"
 #include "XadesSignature.h"
@@ -55,6 +56,7 @@
 
 //OpenSSL
 #include <openssl/sha.h>
+#include <openssl/evp.h>
 
 //stat
 #include <sys/types.h>
@@ -80,6 +82,7 @@ XERCES_CPP_NAMESPACE_USE
 namespace eIDMW
 {
 
+	CByteArray XadesSignature::mp_timestamp_data = CByteArray();
 	CByteArray XadesSignature::HashFile(const char *file_path)
 	{
 
@@ -159,7 +162,7 @@ namespace eIDMW
 
 	}
 	
-	void XadesSignature::generate_asn1_request_struct(char *sha_1)
+	void XadesSignature::generate_asn1_request_struct(unsigned char *sha_1)
 	{
 
 		for (unsigned int i=0; i != SHA1_LEN; i++)
@@ -187,7 +190,8 @@ namespace eIDMW
 			</ds:Reference> 
 
 	*/
-	void XadesSignature::addSignatureProperties(DSIGSignature *sig)
+	//Returns the newly created timestamp node
+	DOMNode *XadesSignature::addSignatureProperties(DSIGSignature *sig)
 	{
 		XMLCh *prefix = XMLString::transcode("etsi");
 		XMLCh *xades_namespace = XMLString::transcode("http://uri.etsi.org/01903/v1.1.1#");
@@ -211,21 +215,60 @@ namespace eIDMW
 		DOMNode * n4 = doc->createElementNS(xades_namespace, str.rawXMLChBuffer());
 		((DOMElement *)n4)->setAttributeNS(NULL, s_Id, XMLString::transcode("SignedProperties"));
 		n4->appendChild(doc->createTextNode(DSIGConstants::s_unicodeStrNL)); //Pretty print
-
+		makeQName(str, prefix, "SignatureTimeStamp");
+		DOMNode * n5 = doc->createElementNS(xades_namespace, str.rawXMLChBuffer());
+		makeQName(str, prefix, "EncapsulatedTimeStamp");
+		DOMNode * n6 = doc->createElementNS(xades_namespace, str.rawXMLChBuffer());
 		n1->appendChild(n2);
 		n1->appendChild(n4);
 		n2->appendChild(n3);
+		n3->appendChild(n5);
+		n5->appendChild(n6);
 	
 		obj1->appendChild(n1);
 
+		return n6;
+
+	}
+	
+	/*
+	 * timestamp parameter is the base64-encoded string version of the timestamp
+	 *
+	 */
+	void XadesSignature::addTimestampNode (XERCES_NS DOMNode *node, unsigned char *timestamp)
+	{
+		XERCES_NS DOMDocument *doc = node->getOwnerDocument();
+
+		node->appendChild(doc->createTextNode(
+					XMLString::transcode((const char*)timestamp)));
+
 	}
 
-	CByteArray XadesSignature::timestamp_data(const unsigned char *input, unsigned int data_len)
+	unsigned char* base64Encode(const unsigned char *array, int len)
+	{
+		EVP_ENCODE_CTX ectx;
+		unsigned char* out = new unsigned char[len*2];
+		int outlen = 0;
+
+		EVP_EncodeInit( &ectx );
+		EVP_EncodeUpdate( &ectx, out, &outlen, array, len );
+		//This null-terminates the out string
+		EVP_EncodeFinal( &ectx, out+outlen, &outlen );
+
+		return out;
+
+	}
+
+	void XadesSignature::timestamp_data(const unsigned char *input, unsigned int data_len)
 	{
 
 		CURL *curl;
 		CURLcode res;
 		char error_buf[CURL_ERROR_SIZE];
+
+		//Get Timestamping server URL from config
+		APL_Config tsa_url(CConfig::EIDMW_CONFIG_PARAM_XSIGN_TSAURL);
+		const char * TSA_URL = tsa_url.getString();
 
 		curl = curl_easy_init();
 
@@ -242,7 +285,9 @@ namespace eIDMW
 
 			curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, data_len);
 
-			curl_easy_setopt(curl, CURLOPT_URL, TIMESTAMPING_HOST);
+			curl_easy_setopt(curl, CURLOPT_URL, TSA_URL);
+
+			curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
 
 			/* Now specify the POST data */ 
 			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, input);
@@ -259,7 +304,6 @@ namespace eIDMW
 			{
 				MWLOG(LEV_ERROR, MOD_APL, L"Timestamping error in HTTP POST request. LibcURL returned %s\n", 
 						(char *)error_buf);
-				throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 			}
 
 			curl_slist_free_all(headers);
@@ -269,7 +313,6 @@ namespace eIDMW
 
 		}
 
-		return CByteArray(mp_timestamp_data);
 	}
 
 	CByteArray *XadesSignature::WriteToByteArray(XERCES_NS DOMDocument * doc)
@@ -528,7 +571,7 @@ XMLCh* XadesSignature::createURI(const char *path)
 
 }
 
-CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
+CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths, bool do_timestamping)
 {
 
 	initXerces();
@@ -545,6 +588,7 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
 	CByteArray rsa_signature;
 
 	XMLByte toFill[35 * sizeof(XMLByte)]; //SHA-1 Hash prepended with Algorithm ID as by PKCS#1 standard
+	unsigned char signature_hash[SHA1_LEN];
 
         DOMImplementation *impl = 
 		DOMImplementationRegistry::getDOMImplementation(MAKE_UNICODE_STRING("Core"));
@@ -576,7 +620,7 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
 			const char * path = paths[i];
 			//Create a reference to the external file
 			DSIGReference * ref = sig->createReference(createURI(path));
-			MWLOG(LEV_DEBUG, MOD_APL, L"SignXades(): Hashing file %S", path);
+			MWLOG(LEV_DEBUG, MOD_APL, L"SignXades(): Hashing file %s", path);
 			sha1_hash = HashFile(path);
 
 			//Fill the hash value as base64-encoded string
@@ -601,11 +645,6 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
 
 		loadCert (certData, pub_key);
 
-		//Access pteid card to sign the XML Data
-		//This code will be eventually integrated in applayer
-		// so this connection to the card will be completely different
-
-		// Create KeyInfo element
 
 		keyInfoX509 = sig->appendX509Data();
 
@@ -626,8 +665,30 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)
 
 		sig->signExternal((XMLByte *)(rsa_signature.GetBytes()), PTEID_SIGNATURE_LENGTH); //RSA Signature with modlength=1024 bits
 		
-		addSignatureProperties(sig);
-		
+		DOMNode * timestamp_node = addSignatureProperties(sig);
+
+		if (do_timestamping)
+		{
+
+			//Hash the signature value, generate the ASN.1 encoded request 
+			//and then send it to the timestamp server
+			SHA1 (rsa_signature.GetBytes(), PTEID_SIGNATURE_LENGTH, signature_hash);
+
+			generate_asn1_request_struct(signature_hash);
+
+			timestamp_data(timestamp_asn1_request, ASN1_LEN);
+
+			CByteArray *timestamp_blob = &XadesSignature::mp_timestamp_data;
+
+			if (timestamp_blob->Size() == 0)
+				MWLOG(LEV_ERROR, MOD_APL, L"An error occurred in timestamp_data."
+						"It's possible that the timestamp service is down ");
+			else
+			{
+				unsigned char * base64str = base64Encode(timestamp_blob->GetBytes(), timestamp_blob->Size());
+				addTimestampNode(timestamp_node, base64str);
+			}
+		}
 	}
 	catch (XSECCryptoException &e)
 	{
