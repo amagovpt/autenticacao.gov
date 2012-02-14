@@ -62,6 +62,20 @@ sub getlinuxdistro
 	    chomp $distribution_version;
 	    $distro               = "debian";
         }
+	#Support for Ubuntu/Caixamagica
+	elsif (-e "/etc/lsb-release")
+        {
+	    my $tmp = `cat /etc/lsb-release`;
+	    my @values = ($tmp =~ m/=(\S+)/g);
+	    join(',', @values), "\n";
+	    
+	    if ($values[0] =~ m/CaixaMagica/ || $values[0] =~ m/Ubuntu/)
+	    {
+		$distro = @values[0];
+		$distribution_version = @values[1];
+	    }
+
+	}
         else
         {
 	    $distro = "unsupported";
