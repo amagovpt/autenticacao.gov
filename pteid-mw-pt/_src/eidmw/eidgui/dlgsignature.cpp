@@ -237,7 +237,7 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
     {
             PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
             PTEID_ByteArray SignXades;
-            SignXades = Card->SignXades(paths, n_paths, output_path);
+            SignXades = Card->SignXadesT(paths, n_paths, output_path);
         
     }
     catch (PTEID_Exception &e)
