@@ -43,9 +43,10 @@
 
 using namespace eIDMW;
 
+std::string serverurl = "http://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/";
+std::string remoteversion = "http://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/version.txt";
+
 std::string ddtitle ("Cartão de Cidadão");
-std::string serverurl = "http://people.caixamagica.pt/lmedinas/autoupdates/";
-std::string remoteversion = "http://people.caixamagica.pt/lmedinas/autoupdates/version.txt";
 
 AutoUpdates::AutoUpdates(QWidget *parent)
 : QDialog(parent)
@@ -345,7 +346,7 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		httpWin.show();
 		httpWin.exec();
 	} else {
-		pkgname.append("PteidMW35-Basic-en.msi");
+        pkgname.append("PteidMW35x86_64-Basic-en.msi");
 		downloadurl.append(pkgname);
 		HttpWindow httpWin(downloadurl, distro);
 		httpWin.show();
@@ -361,13 +362,14 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 	  	msgBoxp.exec();
 	}
 
+    //Name of the deb/rpm the rest of the appends will be distro specific
 	pkgname.append("pteid-mw");
 
 	if (arch == "x86_64")
 	{
 		if (distro == "debian")
 		{
-			pkgname.append("_1.0.1svn1522-1");
+            pkgname.append("_debian");
 			pkgname.append("_amd64.deb");
 			downloadurl.append(pkgname);
 			HttpWindow httpWin(downloadurl, distro);
@@ -377,7 +379,7 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		}
 		else if (distro == "fedora")
 		{
-			pkgname.append("-1.0.1.1522-2.1");
+            pkgname.append("-fedora");
 			pkgname.append(".x86_64.rpm");
 			downloadurl.append(pkgname);
 			HttpWindow httpWin(downloadurl, distro);
@@ -386,19 +388,28 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		}
 		else if (distro == "suse")
 		{
-		    	pkgname.append("-1.0.1.1522-2.1");
+                pkgname.append("-suse");
 		    	pkgname.append(".x86_64.rpm");
 		    	downloadurl.append(pkgname);
 		    	HttpWindow httpWin(downloadurl, distro);
 		    	httpWin.show();
 		    	httpWin.exec();
 		}
+        else if (distro == "mandriva")
+        {
+                pkgname.append("-mandriva");
+                pkgname.append(".x86_64.rpm");
+                downloadurl.append(pkgname);
+                HttpWindow httpWin(downloadurl, distro);
+                httpWin.show();
+                httpWin.exec();
+        }
 
 	} else {
 		//32bits
 		if (distro == "debian")
 		{
-			pkgname.append("_1.0.1svn1522-1");
+            pkgname.append("_debian");
 			pkgname.append("_i386.deb");
 			downloadurl.append(pkgname);
 			HttpWindow httpWin(downloadurl, distro);
@@ -407,7 +418,7 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		}
 		else if (distro == "fedora")
 		{
-			pkgname.append("-1.0.1.1522-2.1");
+            pkgname.append("-fedora");
 			pkgname.append(".i386.rpm");
 			downloadurl.append(pkgname);
 			HttpWindow httpWin(downloadurl, distro);
@@ -416,13 +427,22 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		}
 		else if (distro == "suse")
 		{
-		    	pkgname.append("-1.0.1.1522-2.1");
+                pkgname.append("-suse");
 		    	pkgname.append(".i586.rpm");
 		    	downloadurl.append(pkgname);
 		    	HttpWindow httpWin(downloadurl, distro);
 		    	httpWin.show();
 		    	httpWin.exec();
 		}
+        else if (distro == "mandriva")
+        {
+                pkgname.append("-mandriva");
+                pkgname.append(".i586.rpm");
+                downloadurl.append(pkgname);
+                HttpWindow httpWin(downloadurl, distro);
+                httpWin.show();
+                httpWin.exec();
+        }
 	}
 #endif
 }
