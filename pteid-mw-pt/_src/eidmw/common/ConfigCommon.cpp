@@ -89,4 +89,7 @@ namespace eIDMW
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_XSIGN_WORKINGDIR 		=	{EIDMW_CNF_SECTION_XSIGN,	EIDMW_CNF_XSIGN_WORKINGDIR,	L""};
   const struct CConfig::Param_Num CConfig::EIDMW_CONFIG_PARAM_XSIGN_TIMEOUT 		=	{EIDMW_CNF_SECTION_XSIGN,	EIDMW_CNF_XSIGN_TIMEOUT,	30};
 
+//AutoUpdates
+  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_URL      =       {EIDMW_CNF_SECTION_AUTOUPDATES, EIDMW_CNF_AUTOUPDATES_URL,          L""};
+
 } // namespace eidMW

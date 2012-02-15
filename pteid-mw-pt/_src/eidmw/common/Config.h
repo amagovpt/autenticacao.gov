@@ -192,6 +192,8 @@ replace $install by string in install parameter
 #define EIDMW_CNF_XSIGN_WORKINGDIR		L"working_dir"				//string working directory
 #define EIDMW_CNF_XSIGN_TIMEOUT			L"timeout"					//number; 
 
+#define EIDMW_CNF_SECTION_AUTOUPDATES       L"autoupdates"            //section with the autoupdates parameters
+#define EIDMW_CNF_AUTOUPDATES_URL      L"serverurl"       //string
 
 namespace eIDMW
 {
@@ -256,7 +258,7 @@ public:
     static void           SetLong(  tLocation location, const struct Param_Num param, long lValue);
     static void           SetLong(  tLocation location, const std::wstring &csName, const std::wstring &czSection, long lValue);
 
-	static void           DelString(tLocation location, const struct Param_Str param);
+    static void           DelString(tLocation location, const struct Param_Str param);
     static void           DelString(tLocation location, const std::wstring &csName, const std::wstring &czSection);
     static void           DelLong(  tLocation location, const struct Param_Num param);
     static void           DelLong(  tLocation location, const std::wstring &csName, const std::wstring &czSection);
@@ -303,29 +305,32 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_PROXY_HOST;
     static const struct Param_Num EIDMW_CONFIG_PARAM_PROXY_PORT;
     static const struct Param_Str EIDMW_CONFIG_PARAM_PROXY_PACFILE;
-	static const struct Param_Num EIDMW_CONFIG_PARAM_PROXY_CONNECT_TIMEOUT;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_PROXY_CONNECT_TIMEOUT;
 
     //SECURITY
     static const struct Param_Num EIDMW_CONFIG_PARAM_SECURITY_SINGLESIGNON;
 
-	//GUI
+    //GUI
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_STARTWIN;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_STARTMINI;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWPIC;
-	static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWNOTIFICATION;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWNOTIFICATION;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWTBAR;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_VIRTUALKBD;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_AUTOCARDREAD;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_CARDREADNUMB;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_REGCERTIF;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_REMOVECERTIF;
-	static const struct Param_Str EIDMW_CONFIG_PARAM_GUITOOL_FILESAVE;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GUITOOL_FILESAVE;
 
-	//XSIGN
+    //XSIGN
     static const struct Param_Str EIDMW_CONFIG_PARAM_XSIGN_TSAURL;
     static const struct Param_Num EIDMW_CONFIG_PARAM_XSIGN_ONLINE;
     static const struct Param_Str EIDMW_CONFIG_PARAM_XSIGN_WORKINGDIR;
     static const struct Param_Num EIDMW_CONFIG_PARAM_XSIGN_TIMEOUT;
+
+    //AutoUpdates
+    static const struct Param_Str EIDMW_CONFIG_PARAM_AUTOUPDATES_URL;
 
 private:
     //below info if not needed any more when the ini-file is hard-coded.
