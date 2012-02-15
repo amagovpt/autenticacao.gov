@@ -774,7 +774,7 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <location filename="mainwnd.cpp" line="870"/>
         <source>Register certificate</source>
-        <translation>Registar Certificados/translation>
+        <translation>Registar Certificados</translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="871"/>
