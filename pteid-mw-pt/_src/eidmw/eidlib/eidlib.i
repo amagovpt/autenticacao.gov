@@ -475,36 +475,6 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 }
 ///////////////////////////////////////// PTEID_Card &PTEID_ReaderContext::getCard() /////////////////////////////////////////////
 %warnfilter(844) eIDMW::PTEID_ReaderContext::getCard;
-%typemap(csout) eIDMW::PTEID_Card &eIDMW::PTEID_ReaderContext::getCard() 
-{ 
-	PTEID_CardType cardType=getCardType();
-
-	switch(cardType)
-	{
-	case PTEID_CardType.PTEID_CARDTYPE_EID:
-		return getEIDCard();		
-
-    default:										
-		throw new PTEID_ExCardTypeUnknown();
-	}
-}
-
-///////////////////////////////////////// PTEID_EIDCard &PTEID_ReaderContext::getEIDCard() /////////////////////////////////////////////
-%typemap(csout, excode=CSHARP_CODE_THROW) eIDMW::PTEID_EIDCard &eIDMW::PTEID_ReaderContext::getEIDCard()
-{ 
-	PTEID_CardType cardType=getCardType();
-
-	switch(cardType)
-	{
-	case PTEID_CardType.PTEID_CARDTYPE_EID:			
-		PTEID_EIDCard ret = new PTEID_EIDCard($imcall, false);	
-		$excode
-		return ret;
-
-    default:										
-		throw new PTEID_ExCardBadType();
-	}
-}
 
 ///////////////////////////////////////// PTEID_XMLDoc& PTEID_EIDCard::getDocument(PTEID_DocumentType type) /////////////////////////////////////////////
 %warnfilter(844) eIDMW::PTEID_EIDCard::getDocument;
@@ -534,16 +504,6 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 
 # no need to add a static block on every project that uses the java wrapper
 # the lib must be in the java library path
-%pragma(java) jniclasscode=%{
-  static {
-    try {
-        System.loadLibrary("pteidlibJava_Wrapper");
-    } catch (UnsatisfiedLinkError e) {
-      System.err.println("Native code library failed to load. \n" + e);
-      System.exit(1);
-    }
-  }
-%}
 
 ///////////////////////////////////////// ByteArray /////////////////////////////////////////////
 %typemap(jni)          const unsigned char* "jbyteArray"                    
