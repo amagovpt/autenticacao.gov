@@ -61,11 +61,13 @@ sub getlinuxdistro
             my @values = ($tmp =~ m/=(\S+)/g);
             join(',', @values), "\n";
 
-            if ($values[0] =~ m/CaixaMagica/ || $values[0] =~ m/Ubuntu/)
+            if ($values[0] =~ m/CaixaMagica/ || $values[0] =~ m/Ubuntu/ || $values[0] =~ m/Debian/)
             {
                 $distro = @values[0];
                 $distribution_version = @values[1];
-            }
+            } else {
+		$distro = "unsupported";
+	    }
 	}
         elsif (-e "/etc/debian_version")
         {
