@@ -501,6 +501,7 @@
     <DirectoryRef Id="PTEIDPPDIR">
       <Component Id="PinpadLib" Guid="{9ADA6D75-5DCC-467E-A0CE-B84A482B2115}" SharedDllRefCount="yes">
        <File Id="pteidpp2gempc.dll" Name="pteidpp2-gempc.dll" Source="..\..\..\_Binaries35\Release\pteidpp2-gempc.dll" />
+       <File Id="pteidpp2-acr83-plugin.dll" Name="pteidpp2-acr83-plugin.dll" Source="..\..\..\_Binaries35\Release\pteidpp2-acr83-plugin.dll" />
       </Component>
     </DirectoryRef>
     
