@@ -20,7 +20,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>PTeID-NG</string>
+   <string>Portuguese ID Card Management</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>

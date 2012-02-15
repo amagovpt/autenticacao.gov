@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Print</string>
+   <string>Export PDF / Print</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -36,7 +36,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>30</y>
+        <y>50</y>
         <width>140</width>
         <height>20</height>
        </rect>
@@ -71,7 +71,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>50</y>
+        <y>30</y>
         <width>154</width>
         <height>20</height>
        </rect>
@@ -127,7 +127,7 @@
      <widget class="QPushButton" name="pbCancel">
       <property name="geometry">
        <rect>
-        <x>250</x>
+        <x>60</x>
         <y>120</y>
         <width>81</width>
         <height>27</height>
@@ -153,7 +153,7 @@
      <widget class="QPushButton" name="pbGeneratePdf">
       <property name="geometry">
        <rect>
-        <x>50</x>
+        <x>240</x>
         <y>120</y>
         <width>91</width>
         <height>27</height>

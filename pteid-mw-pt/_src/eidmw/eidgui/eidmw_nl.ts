@@ -24,6 +24,45 @@
         <translation>Data de Nascimento / &lt;i&gt;Date of Birth&lt;/i&gt;</translation>
     </message>
     <message>
+        <location filename="mainwnd.ui" line="23"/>
+        <source>Portuguese ID Card Management</source>
+        <translation>Aplicação Oficial do Cartão de Cidadão</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="1629"/>
+        <source>Additional Data</source>
+        <translation>Outros Dados</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="1608"/>
+        <source>Identity</source>
+        <translation>Identidade</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="1713"/>
+        <source>Notes</source>
+        <translation>Notas</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="1692"/>
+        <source>PIN Codes</source>
+        <translation>Códigos PIN</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="1775"/>
+        <location filename="mainwnd.ui" line="2086"/>
+        <source>Tools</source>
+        <translation>Opções</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="1984"/>
+        <location filename="mainwnd.ui" line="1749"/>
+        <location filename="mainwnd.ui" line="2341"/>
+        <source>Card</source>
+        <translation>Cartão</translation>
+    </message>
+    
+    <message>
         <location filename="mainwnd.ui" line="404"/>
         <source>Kaartnr. / &lt;i&gt;Card No&lt;/i&gt;</source>
         <translation>Num. Cartão / &lt;i&gt;Card No&lt;/i&gt;</translation>
@@ -250,23 +289,6 @@
         <location filename="mainwnd.cpp" line="2112"/>
         <source>Reload eID</source>
         <translation>(Re)Ler Cartão</translation>
-    </message>
-    <message>
-        <location filename="mainwnd.cpp" line="2339"/>
-        <location filename="mainwnd.cpp" line="2565"/>
-        <source>Save eID</source>
-        <translation>Guardar eID</translation>
-    </message>
-    <message>
-        <location filename="mainwnd.ui" line="2862"/>
-        <source>Save eID as...</source>
-        <translation>Guardar eID como</translation>
-    </message>
-    <message>
-        <location filename="mainwnd.cpp" line="2200"/>
-        <location filename="mainwnd.cpp" line="2236"/>
-        <source>Open eID</source>
-        <translation>Abrir eID</translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="3613"/>
@@ -1537,6 +1559,11 @@ Please specify .xml, .csv or .eid</source>
         <location filename="dlgPrint.ui" line="64"/>
         <source>Print</source>
         <translation>Afdrukken</translation>
+    </message>
+    <message>
+        <location filename="dlgPrint.ui" line="14"/>
+        <source>Export PDF / Print</source>
+        <translation>Exportação PDF / Impressão</translation>
     </message>
     <message>
         <location filename="dlgPrint.ui" line="57"/>
