@@ -180,6 +180,9 @@ enum PTEID_Param
 	//PROXY
 	PTEID_PARAM_PROXY_CONNECT_TIMEOUT,	//number
 
+	//AUTOUPDATES
+	PTEID_PARAM_AUTOUPDATES_SERVER_URL,      //string
+
 };
 
 enum PTEID_LogLevel
