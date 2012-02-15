@@ -63,6 +63,7 @@ sub getlinuxdistro
 
             if ($values[0] =~ m/CaixaMagica/ || $values[0] =~ m/Ubuntu/ || $values[0] =~ m/Debian/)
             {
+		$values[0] =~ s/"//g;
                 $distro = @values[0];
                 $distribution_version = @values[1];
             } else {
