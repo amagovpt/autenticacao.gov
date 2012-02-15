@@ -251,7 +251,6 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 		}
 		else
 		{
-			std::cout << "no card" << std::endl;
 			QString msg(tr("No card present"));
 			QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 			return false;
@@ -260,13 +259,12 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 	catch (PTEID_Exception &e)
 	{
 		QString msg(tr("General exception"));
-		//ShowPTEIDError( e.GetError(), msg );
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCard on dlgprint failed %s", e.GetError());
 		return false;
 	}
 	catch (...)
 	{
 		QString msg(tr("Unknown exception"));
-		//ShowPTEIDError( 0, msg );
 		return false;
 	}
 	return true;

@@ -1683,7 +1683,6 @@ void MainWnd::loadCardData( void )
 	//----------------------------------------------------------------
 	// if we load a new card, clear the certificate contexts we kept
 	//----------------------------------------------------------------
-	std::cout << " loadCardData( void )" << std::endl;
 	try
 	{
 		unsigned long	ReaderStartIdx = m_Settings.getSelectedReader();
@@ -1739,8 +1738,8 @@ void MainWnd::loadCardData( void )
 					}
 					catch (PTEID_ExCardBadType const& e)
 					{
-						std::cout << "ERROR" << e.GetError()<< std::endl;
 						QString errcode;
+                        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed %s", e.GetError());
 						errcode = errcode.setNum(e.GetError());
 					}
 				}
