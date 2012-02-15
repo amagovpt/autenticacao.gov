@@ -1671,7 +1671,6 @@ const char *APL_Certif::x509TimeConversion (ASN1_TIME *atime)
     res = mktime(&r);
     if ((time_t)-1 != res) {
 	struct tm ltm;
-	res -= timezone;
 	localtime_r(&res, &ltm);
 	// Use the ISO 8601 timestamp format
 	strftime(to_buf, buf_size, "%d/%m/%Y", &ltm);
