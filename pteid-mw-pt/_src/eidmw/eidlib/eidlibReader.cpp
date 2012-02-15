@@ -885,7 +885,7 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 
 	//AUTOUPDATES
 	case PTEID_PARAM_AUTOUPDATES_URL:
-	  	m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_URL);                       break;
+        m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_URL);         break;
 
 	default:
 		throw PTEID_ExParamRange();
