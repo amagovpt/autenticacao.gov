@@ -130,6 +130,7 @@ typedef struct T_OID
 
 
 #define OID_RSA_ENCRYPTION      "\x2A\x86\x48\x86\xF7\x0D\x01\x01\x01"
+#define OID_SHA256_ALGORITHM	"\x60\x86\x48\x01\x65\x03\x04\x02\x01"
 #define ASNPATH_FIRST           "\x01"
 
 /* ASN1 decoding functions */
