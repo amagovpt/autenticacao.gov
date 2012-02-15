@@ -335,7 +335,14 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 {
 	std::string downloadurl;
 	std::string pkgname;
-	downloadurl.append(serverurl);
+
+    eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_URL);
+    std::string configurl = config.getString();
+
+    if (configurl.empty())
+        downloadurl.append(serverurl);
+    else
+        downloadurl.append(configurl);
 
 #ifdef WIN32
 	if (arch == "x86_64")
