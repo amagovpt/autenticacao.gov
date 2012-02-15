@@ -29,6 +29,8 @@
 #include "CardLayer.h"
 #include "MiscUtil.h"
 #include "StringOps.h"
+#include "APLConfig.h"
+
 
 using namespace std;
 
@@ -747,15 +749,10 @@ APL_EidFile_ID *APL_EIDCard::getFileID()
 	{
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
 		if(!m_FileID)
-		{
 			m_FileID=new APL_EidFile_ID(this);
-			if (m_sodCheck)
-				m_FileID->doSODCheck(m_sodCheck);
-		}
 	}
 
-	if (m_sodCheck)
-		m_FileID->doSODCheck(m_sodCheck);
+	m_FileID->doSODCheck(m_sodCheck);
 
 	return m_FileID;
 }
@@ -780,15 +777,10 @@ APL_EidFile_Address *APL_EIDCard::getFileAddress()
 	{
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
 		if(!m_FileAddress)
-		{
 			m_FileAddress=new APL_EidFile_Address(this);
-			if (m_sodCheck)
-				m_FileAddress->doSODCheck(m_sodCheck);
-		}
 	}
 
-	if (m_sodCheck)
-		m_FileAddress->doSODCheck(m_sodCheck);
+	m_FileAddress->doSODCheck(m_sodCheck);
 
 	return m_FileAddress;
 }
@@ -1345,9 +1337,9 @@ void APL_EIDCard::doSODCheck(bool check){
 
 	if (check){
 		if (!m_FileSod){
-			getFileSod();
+			m_FileSod = getFileSod();
+			m_FileSod->doSODCheck(check);
 		}
-		m_FileSod->VerifyFile();
 	}
 }
 
@@ -2664,7 +2656,17 @@ CByteArray APL_SodEid::getTLV()
 
 const CByteArray& APL_SodEid::getData()
 {
-	return m_card->getFileSod()->getData();
+	cout << "ddksadsjksdjskdjs 1" << endl;
+	const CByteArray &cb = m_card->getFileSod()->getData();
+
+	m_card->getFileSod()->getAddressHash();
+	cout << "tamanho = " << m_card->getFileSod()->getAddressHash().Size() << endl;
+	APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
+	cout << "DIRECTORIA = "<< conf_dir.getString() << endl;
+
+
+
+	return cb;
 }
 
 /*****************************************************************************************

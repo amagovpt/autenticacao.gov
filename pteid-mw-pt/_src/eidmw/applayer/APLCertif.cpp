@@ -101,18 +101,26 @@ APL_CertifStatus ConvertStatus(FWK_CertifStatus eStatus,APL_ValidationProcess eP
 *****************************************************************************************/
 APL_Certifs::APL_Certifs(APL_SmartCard *card)
 {
-	m_cryptoFwk=AppLayer.getCryptoFwk();
-
-	m_card=card;
+	init(card);
 
 	loadCard();
+	loadFromFile();
 }
 
 APL_Certifs::APL_Certifs()
 {
+	init(NULL);
+	loadFromFile();
+}
+
+void APL_Certifs::init(APL_SmartCard *card){
+
+	APL_Config certs_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
+	m_certs_dir = certs_dir.getString();
 	m_cryptoFwk=AppLayer.getCryptoFwk();
 
-	m_card=NULL;
+	m_card=card;
+	m_certExtension = "der";
 }
 
 APL_Certifs::~APL_Certifs(void)
@@ -673,6 +681,62 @@ void APL_Certifs::loadCard()
 	}
 
 	resetFlags();
+}
+
+void APL_Certifs::loadFromFile()
+{
+	bool bStopRequest = false;
+	CPathUtil::scanDir(m_certs_dir.c_str(),"",m_certExtension.c_str(),bStopRequest,this,&APL_Certifs::foundCertificate);
+}
+
+void APL_Certifs::foundCertificate(const char *SubDir, const char *File, void *param)
+{
+	APL_Certifs *certifs = static_cast < APL_Certifs * > ( param );
+	std::string path=certifs->m_certs_dir;
+	FILE *m_stream;
+	long int bufsize;
+	int result;
+	unsigned char *buf;
+	CByteArray *cert;
+
+#ifdef WIN32
+	errno_t werr;
+#endif
+	path+=SubDir;
+#ifdef WIN32
+	path+=(strlen(SubDir)!=0?"\\":"");
+#else
+	path+=(strlen(SubDir)!=0 ? "/" : "");
+#endif
+	path+=File;
+
+#ifdef WIN32
+	if ((werr = fopen_s(&m_stream, path.c_str(), "rb")) != 0)
+		goto err;
+#else
+	if ((m_stream = fopen(path.c_str(), "rb")) == NULL)
+		goto err;
+#endif
+
+	if (fseek( m_stream, 0L, SEEK_END))
+		goto err;
+
+	bufsize = ftell(m_stream);
+	buf = (unsigned char *) malloc(bufsize*sizeof(unsigned char));
+
+	if (fseek(m_stream, 0L, SEEK_SET)){
+		free(buf);
+		goto err;
+	}
+
+	if (fread(buf, sizeof( unsigned char ), bufsize, m_stream) != bufsize)
+		goto err;
+
+	cert = new CByteArray(buf,bufsize);
+	certifs->addCert(*cert, APL_CERTIF_TYPE_UNKNOWN, false);
+
+	err:
+	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certifs::foundCertificate: problem with file %s ", path.c_str());
 }
 
 APL_Certif *APL_Certifs::findIssuer(const APL_Certif *cert)

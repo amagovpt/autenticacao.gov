@@ -122,7 +122,7 @@ protected:
 
 	CMutex m_Mutex;					/**< Mutex */
 	bool m_mappedFields;			/**< are the fields mapped already? */
-
+	bool m_isVerified;				/**< verify file only once */
 	bool m_SODCheck;
 
 

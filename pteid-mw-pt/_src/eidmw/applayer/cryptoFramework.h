@@ -65,7 +65,8 @@ struct tCrlInfo
 
 enum FWK_HashAlgo {
 	FWK_ALGO_MD5,      // 16-byte hash
-	FWK_ALGO_SHA1     // 20-byte hash
+	FWK_ALGO_SHA1,     // 20-byte hash
+	FWK_ALGO_SHA256
 };
 
 class CByteArray;
@@ -162,6 +163,11 @@ public:
 	  * Verify if the data has the correct hash (sha1 algorithm)
 	  */
 	bool VerifyHashSha1(const CByteArray &data, const CByteArray &hash);
+
+	/**
+	 * Verify if the data has the correct hash (sha256 algorithm)
+	 */
+	bool VerifyHashSha256(const CByteArray &data, const CByteArray &hash);
 
 	/**
 	  * Get the hash of the data

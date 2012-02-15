@@ -272,10 +272,20 @@
 #define EIDMW_ERR_USER_MUST_ANSWER		0xe1d00b0D
 
 
+//SOD related errors
+
+#define EIDMW_SOD_UNEXPECTED_VALUE					0xe1d00c01
+#define EIDMW_SOD_UNEXPECTED_ASN1_TAG      			0xe1d00c02
+#define EIDMW_SOD_UNEXPECTED_ALGO_OID				0xe1d00c03
+#define EIDMW_SOD_ERR_HASH_NO_MATCH_ID				0xe1d00c04
+#define EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS			0xe1d00c05
+#define EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE			0xe1d00c06
+#define EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY		0xe1d00c07
+
 // Errors in system calls
 
 /** a system call returned an error */
-#define EIDMW_ERR_SYSTEM                      0xe1d00c01
+#define EIDMW_ERR_SYSTEM                      0xe1d00d01
 
 /** a signal function returned an error */
-#define EIDMW_ERR_SIGNAL                     0xe1d00c02
+#define EIDMW_ERR_SIGNAL                     0xe1d00d02

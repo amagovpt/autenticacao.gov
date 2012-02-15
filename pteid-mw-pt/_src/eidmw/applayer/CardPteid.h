@@ -176,6 +176,12 @@ private:
 	  */
 	virtual bool MapFields();
 
+	virtual void MapFieldsInternal();
+
+	virtual void PackIdData(CByteArray &cb);
+	virtual void PackPublicKeyData(CByteArray &cb);
+	virtual void PackPictureData(CByteArray &cb);
+
 	/**
 	  * Empty all fields
 	  */
@@ -217,7 +223,7 @@ private:
 	std::string m_GivenNameMother;							/**< Field GivenNameMother */
 	std::string m_SurnameMother;							/**< Field SurnameMother */
 	std::string m_AccidentalIndications;					/**< Field AccidentalIndications */
-	PhotoPteid* photo;										/**< object photo */
+	PhotoPteid* m_photo;										/**< object photo */
 	std::string m_MRZ1;										/**< Field MRZ block 1 */
 	std::string m_MRZ2;										/**< Field MRZ block 2 */
 	std::string m_MRZ3;										/**< Field MRZ block 3 */
@@ -342,6 +348,8 @@ private:
 	virtual void ForeignerAddressFields();
 	virtual bool MapFields();
 	virtual void EmptyFields();									/**< Empty all fields */
+	void PackAddressData(CByteArray &cb, bool isNational);
+	void MapFieldsInternal();
 
 	/**
 	  * Return true if data can be showned 
@@ -445,6 +453,16 @@ public:
 
 	tCardFileStatus VerifyFile();
 
+	const CByteArray& getAddressHash();
+
+	const CByteArray& getPictureHash();
+
+	const CByteArray& getCardPublicKeyHash();
+
+	const CByteArray& getIdHash();
+
+	void doSODCheck(bool check);
+
 protected:
 	/**
 	  * Constructor
@@ -464,15 +482,17 @@ private:
 	  */
 	virtual bool MapFields();									/**< Nothing to do m_data contains the file */
 	virtual void EmptyFields();									/**< Nothing to do m_data contains the file */
-	void doSODCheck(bool check) {}
 
 	/**
 	  * Return true if data can be showned
 	  */
 	virtual bool ShowData();
 
-	std::string m_Sod;                                            	/**< Field Sod */
-	std::string m_SodFile;											/**< Whole Sod Field */
+	CByteArray m_idHash;
+	CByteArray m_addressHash;
+	CByteArray m_pkHash;
+	CByteArray m_picHash;
+	CByteArray m_encapsulatedContent;
 
 friend 	APL_EidFile_Sod *APL_EIDCard::getFileSod();	/**< This method must access protected constructor */
 };

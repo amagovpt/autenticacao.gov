@@ -1615,9 +1615,8 @@ PTEIDSDK_API long PTEID_Activate(char *pszPin, unsigned char *pucDate, unsigned 
 }
 
 PTEIDSDK_API long PTEID_SetSODChecking(int bDoCheck){
-	if (readerContext!=NULL){
-
-	}
+	if (readerContext!=NULL)
+		readerContext->getEIDCard().doSODCheck(bDoCheck!=0);
 
 	return 0;
 }

@@ -52,6 +52,7 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 {
 	m_cryptoFwk=AppLayer.getCryptoFwk();
 	m_mappedFields = false;
+	m_isVerified = false;
 	m_card=card;
 
 	/* File Caching at Applayer Level

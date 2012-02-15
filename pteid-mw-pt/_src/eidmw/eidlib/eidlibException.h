@@ -290,6 +290,26 @@ public:
 	PTEIDSDK_API PTEID_ExUserMustAnswer();				/**< Constructor */
 	PTEIDSDK_API virtual ~PTEID_ExUserMustAnswer();		/**< Destructor */
 };
+
+/******************************************************************************//**
+ * Exception class SOD error error codes:
+ *
+ *  	EIDMW_SOD_UNEXPECTED_VALUE
+ *		EIDMW_SOD_UNEXPECTED_ASN1_TAG
+ *		EIDMW_SOD_UNEXPECTED_ALGO_OID
+ *		EIDMW_SOD_ERR_HASH_NO_MATCH_ID
+ *		EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS
+ *		EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE
+ *		EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY
+ *
+ *	Throw when the SOD is not correct
+ *********************************************************************************/
+class PTEID_ExSOD: public PTEID_Exception
+{
+public:
+	PTEIDSDK_API PTEID_ExSOD(long lError);				/**< Constructor */
+	PTEIDSDK_API virtual ~PTEID_ExSOD();				/**< Destructor */
+};
 }
 
 #endif //__EIDLIB_EXCEPTION_H__

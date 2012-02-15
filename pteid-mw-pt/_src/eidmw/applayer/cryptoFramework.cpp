@@ -580,6 +580,13 @@ bool APL_CryptoFwk::VerifyHashSha1(const CByteArray &data, const CByteArray &has
 	return VerifyHash(data,hash,EVP_sha1());
 }
 
+bool APL_CryptoFwk::VerifyHashSha256(const CByteArray &data, const CByteArray &hash)
+{
+	//Check the hash with sha256 algorithm
+	return VerifyHash(data,hash,EVP_sha256());
+}
+
+
 bool APL_CryptoFwk::VerifyHash(const CByteArray &data, const CByteArray &hash, const EVP_MD *algorithm)
 {
 	CByteArray baCalculatedHash;

@@ -81,6 +81,14 @@ PTEID_Exception PTEID_Exception::THROWException(CMWException &e)
 		throw PTEID_ExNoReader();
 	case EIDMW_ERR_NOT_ALLOW_BY_USER:
 		throw PTEID_ExNotAllowByUser();
+	case EIDMW_SOD_UNEXPECTED_VALUE:
+	case EIDMW_SOD_UNEXPECTED_ASN1_TAG:
+	case EIDMW_SOD_UNEXPECTED_ALGO_OID:
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_ID:
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS:
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE:
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY:
+		throw PTEID_ExSOD(e.GetError());
 
 	case EIDMW_ERR_CARD:
 	default:
@@ -295,6 +303,17 @@ PTEID_ExUserMustAnswer::PTEID_ExUserMustAnswer():PTEID_Exception(EIDMW_ERR_USER_
 }
 
 PTEID_ExUserMustAnswer::~PTEID_ExUserMustAnswer()
+{
+}
+
+/*****************************************************************************************
+---------------------------- PTEID_ExUnexpectedValue --------------------------------------
+*****************************************************************************************/
+PTEID_ExSOD::PTEID_ExSOD(long lError):PTEID_Exception(lError)
+{
+}
+
+PTEID_ExSOD::~PTEID_ExSOD()
 {
 }
 }

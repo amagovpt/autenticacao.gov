@@ -84,7 +84,8 @@ HEADERS += \
 	PhotoPteid.h \
 	APLPublicKey.h \
         SigContainer.h \
-	XadesSignature.h
+	XadesSignature.h \
+	SODParser.h
 
 
 ### EMV-CAP support
@@ -109,7 +110,8 @@ SOURCES += \
     PhotoPteid.cpp \
     APLPublicKey.cpp \
     SigContainer.cpp \
-    XadesSignature.cpp
+    XadesSignature.cpp \
+    SODParser.cpp
     
     
 ### EMV-CAP support

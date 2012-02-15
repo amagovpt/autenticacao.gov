@@ -32,6 +32,7 @@
 #include "APLConfig.h"
 #include "PhotoPteid.h"
 #include "APLPublicKey.h"
+#include "SODParser.h"
 
 #include "Log.h"
 
@@ -184,63 +185,86 @@ bool APL_EidFile_Trace::isActive(){
 *****************************************************************************************/
 APL_EidFile_ID::APL_EidFile_ID(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_ID,NULL)
 {
-	photo = NULL;
+	m_photo = NULL;
 }
 
 APL_EidFile_ID::~APL_EidFile_ID()
 {
 }
 
+
+void APL_EidFile_ID::PackIdData(CByteArray &cb){
+	cb.Append((unsigned char*)m_IssuingEntity.c_str(),m_IssuingEntity.length());
+	cb.Append((unsigned char*)m_Country.c_str(),m_Country.length());
+	cb.Append((unsigned char*)m_DocumentType.c_str(),m_DocumentType.length());
+	cb.Append((unsigned char*)m_DocumentNumber.c_str(),m_DocumentNumber.length());
+	cb.Append((unsigned char*)m_ChipNumber.c_str(),m_ChipNumber.length());
+	cb.Append((unsigned char*)m_DocumentVersion.c_str(),m_DocumentVersion.length());
+	cb.Append((unsigned char*)m_ValidityBeginDate.c_str(),m_ValidityBeginDate.length());
+	cb.Append((unsigned char*)m_LocalofRequest.c_str(),m_LocalofRequest.length());
+	cb.Append((unsigned char*)m_ValidityEndDate.c_str(),m_ValidityEndDate.length());
+	cb.Append((unsigned char*)m_Surname.c_str(),m_Surname.length());
+	cb.Append((unsigned char*)m_GivenName.c_str(),m_GivenName.length());
+	cb.Append((unsigned char*)m_Gender.c_str(),m_Gender.length());
+	cb.Append((unsigned char*)m_Nationality.c_str(),m_Nationality.length());
+	cb.Append((unsigned char*)m_DateOfBirth.c_str(),m_DateOfBirth.length());
+	cb.Append((unsigned char*)m_Height.c_str(),m_Height.length());
+	cb.Append((unsigned char*)m_CivilianIdNumber.c_str(),m_CivilianIdNumber.length());
+	cb.Append((unsigned char*)m_SurnameMother.c_str(),m_SurnameMother.length());
+	cb.Append((unsigned char*)m_GivenNameMother.c_str(),m_GivenNameMother.length());
+	cb.Append((unsigned char*)m_SurnameFather.c_str(),m_SurnameFather.length());
+	cb.Append((unsigned char*)m_GivenNameFather.c_str(),m_GivenNameFather.length());
+	cb.Append((unsigned char*)m_AccidentalIndications.c_str(),m_AccidentalIndications.length());
+	cb.Append((unsigned char*)m_TaxNo.c_str(),m_TaxNo.length());
+	cb.Append((unsigned char*)m_SocialSecurityNo.c_str(),m_SocialSecurityNo.length());
+	cb.Append((unsigned char*)m_HealthNo.c_str(),m_HealthNo.length());
+}
+
+void APL_EidFile_ID::PackPublicKeyData(CByteArray &cb){
+	cb.Append(*cardKey->getModulus());
+	cb.Append(*cardKey->getExponent());
+}
+
+
+void APL_EidFile_ID::PackPictureData(CByteArray &cb){
+	cb.Append(*m_photo->getCbeff());
+	cb.Append(*m_photo->getFacialrechdr());
+	cb.Append(*m_photo->getFacialinfo());
+	cb.Append(*m_photo->getImageinfo());
+	cb.Append(*m_photo->getPhotoRaw());
+}
+
+
 tCardFileStatus APL_EidFile_ID::VerifyFile()
 {
 	if(!m_card)
-		return CARDFILESTATUS_ERROR;
+			return CARDFILESTATUS_ERROR;
+
+	if (m_isVerified)
+		return CARDFILESTATUS_OK;
 
 	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
-	tCardFileStatus filestatus;
 
-	//Remove since it's rrn related
-	/*if(!CertRrn)
-		return CARDFILESTATUS_ERROR_RRN;
+	MapFieldsInternal();
 
-	//If the status of the RRN file is not OK, 
-	//The rrn status is return
-	filestatus=CertRrn->getFileStatus();
-	if(filestatus!=CARDFILESTATUS_OK)
-		return filestatus;
+	if (m_SODCheck){
+		CByteArray pkData;
+		CByteArray idData;
+		CByteArray picData;
+		PackPublicKeyData(pkData);
+		PackIdData(idData);
+		PackPictureData(picData);
 
-	//Get the status of the certificate RRN
-	APL_CertifStatus rrnstatus=CertRrn->getStatus();
-	if((rrnstatus==APL_CERTIF_STATUS_TEST || rrnstatus==APL_CERTIF_STATUS_ISSUER) && !pcard->getAllowTestCard())
-		return CARDFILESTATUS_ERROR_TEST; 
+		if (!m_cryptoFwk->VerifyHashSha256(pkData,pcard->getFileSod()->getCardPublicKeyHash()))
+			throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY);
 
-	if(rrnstatus==APL_CERTIF_STATUS_DATE && !pcard->getAllowBadDate())
-		return CARDFILESTATUS_ERROR_DATE; 
+		if (!m_cryptoFwk->VerifyHashSha256(idData,pcard->getFileSod()->getIdHash()))
+			throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ID);
 
-	//We test the oid of the RRN 
-	//except for test card because, test card may have a bad oid
-	if(!pcard->isTestCard())
-		if(!m_cryptoFwk->VerifyOidRrn(CertRrn->getData()))
-			return CARDFILESTATUS_ERROR_RRN;
-
-	APL_EidFile_IDSign *sign=pcard->getFileIDSign();
-
-	//If the status of the IDSign file is not OK, 
-	//The IDSign status is return
-	filestatus=sign->getStatus(true);
-	if(filestatus!=CARDFILESTATUS_OK)
-		return filestatus;*/
-
-	//if(!m_cryptoFwk->VerifySignatureSha1(m_data,sign->getData(),CertRrn->getData()))
-	//	return CARDFILESTATUS_ERROR_SIGNATURE;
-
-	//If this is not a test card, the rrn status must be OK, unless we return an error
-	//For a test card, the status could be something else (for ex ISSUER)
-	/*L_CERTIF_STATUS_VALID
-			&& rrnstatus!=APL_CERTIF_STATUS_VALID_CRL
-			&& rrnstatus!=APL_CERTIF_STATUS_VALID_OCSP)
-			return CARDFILESTATUS_ERROR_CERT; 
-	}*/
+		if (!m_cryptoFwk->VerifyHashSha256(picData,pcard->getFileSod()->getPictureHash()))
+			throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE);
+	}
+	m_isVerified = true;
 
 	return CARDFILESTATUS_OK;
 }
@@ -274,9 +298,9 @@ void APL_EidFile_ID::EmptyFields()
 	m_SurnameFather.clear();
 	m_GivenNameMother.clear();
 	m_SurnameMother.clear();
-	if (photo){
-		delete photo;
-		photo = NULL;
+	if (m_photo){
+		delete m_photo;
+		m_photo = NULL;
 	}
 	m_PhotoHash.ClearContents();
 	if (cardKey){
@@ -284,149 +308,111 @@ void APL_EidFile_ID::EmptyFields()
 		cardKey = NULL;
 	}
 	m_mappedFields = false;
+	m_isVerified = false;
+	m_SODCheck = false;
 }
 
-bool APL_EidFile_ID::MapFields()
-{
+void APL_EidFile_ID::MapFieldsInternal(){
+	CByteArray pteidngidBuffer;
+
 	// we dont want to read the fields every time
 	if (m_mappedFields)
-		return true;
-
-	CByteArray pteidngidBuffer;
-	char cBuffer[15500];
-	unsigned char ucBuffer[15500];
-	unsigned long ulLen=0;
-	CTLVBuffer oTLVBuffer;
-    oTLVBuffer.ParseTLV(m_data.GetBytes(), m_data.Size());
+		return;
 
 	//IDVersion - Card Version
-    pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_DocumentVersion, PTEIDNG_FIELD_ID_LEN_DocumentVersion);
-    pteidngidBuffer.TrimRight(' ');
-    m_DocumentVersion.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
+	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_DocumentVersion, PTEIDNG_FIELD_ID_LEN_DocumentVersion);
+	pteidngidBuffer.TrimRight('\0');
+	m_DocumentVersion.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//ChipNr
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_DocumentNumberPAN, PTEIDNG_FIELD_ID_LEN_DocumentNumberPAN);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_ChipNumber.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 	m_SerialNumber = m_ChipNumber;
 
 	//Country
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Country,PTEIDNG_FIELD_ID_LEN_Country);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_Country.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//ValidityBeginDate
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_ValidityBeginDate,PTEIDNG_FIELD_ID_LEN_ValidityBeginDate);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_ValidityBeginDate.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//ValidityEndDate
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_ValidityEndDate,PTEIDNG_FIELD_ID_LEN_ValidityEndDate);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_ValidityEndDate.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//IssuingMunicipality
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_LocalofRequest, PTEIDNG_FIELD_ID_LEN_LocalofRequest);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_LocalofRequest.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//Civilian Identification Number (NIC)
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_CivilianIdNumber, PTEIDNG_FIELD_ID_LEN_CivilianIdNumber);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_CivilianIdNumber.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//Surname
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Surname, PTEIDNG_FIELD_ID_LEN_Surname);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_Surname.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//FirstName_1
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Name, PTEIDNG_FIELD_ID_LEN_Name);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_GivenName.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
-	/*std::string in_utf8;
-	in_utf8 = IBM850_toUtf8(m_FirstName1);
-	m_FirstName1 = in_utf8;*/
 
 	//Nationality
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Nacionality, PTEIDNG_FIELD_ID_LEN_Nacionality);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_Nationality.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
-
-	//LocationOfBirth
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillUTF8Data(PTEID_FIELD_TAG_ID_LocationOfBirth, cBuffer, &ulLen);
-	m_LocationOfBirth.assign(cBuffer, 0, ulLen);
 
 	//DateOfBirth
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_DateOfBirth, PTEIDNG_FIELD_ID_LEN_DateOfBirth);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_DateOfBirth.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//Gender
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Gender, PTEIDNG_FIELD_ID_LEN_Gender);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_Gender.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//DocumentType
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_DocumentType, PTEIDNG_FIELD_ID_LEN_DocumentType);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_DocumentType.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
-
-	//SpecialStatus
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillASCIIData(PTEID_FIELD_TAG_ID_SpecialStatus, cBuffer, &ulLen);
-	m_SpecialStatus.assign(cBuffer, 0, ulLen);
-
-	//PhotoHash
-    ulLen = sizeof(cBuffer);
-	memset(ucBuffer,0,ulLen);
-	oTLVBuffer.FillBinaryData(PTEID_FIELD_TAG_ID_PhotoHash, ucBuffer, &ulLen);
-	m_PhotoHash.ClearContents();
-	m_PhotoHash.Append(ucBuffer,ulLen);
-
-	//Duplicata
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillASCIIData(PTEID_FIELD_TAG_ID_Duplicata, cBuffer, &ulLen);
-	m_Duplicata.assign(cBuffer, 0, ulLen);
-
-	//SpecialOrganization
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillASCIIData(PTEID_FIELD_TAG_ID_SpecialOrganization, cBuffer, &ulLen);
-	m_SpecialOrganization.assign(cBuffer, 0, ulLen);
 
 	//Height
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Height, PTEIDNG_FIELD_ID_LEN_Height);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_Height.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//DocumentNumber
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_DocumentNumber, PTEIDNG_FIELD_ID_LEN_DocumentNumber);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_DocumentNumber.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//TaxNo
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_TaxNo, PTEIDNG_FIELD_ID_LEN_TaxNo);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_TaxNo.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//SocialSecurityNo
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_SocialSecurityNo, PTEIDNG_FIELD_ID_LEN_SocialSecurityNo);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_SocialSecurityNo.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//HealthNo
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_HealthNo, PTEIDNG_FIELD_ID_LEN_HealthNo);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_HealthNo.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//IssuingEntity
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_IssuingEntity, PTEIDNG_FIELD_ID_LEN_IssuingEntity);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_IssuingEntity.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//GivenNameFather
@@ -463,7 +449,7 @@ bool APL_EidFile_ID::MapFields()
 		facialrechdr = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FACIALRECHDR, PTEIDNG_FIELD_ID_LEN_FACIALRECHDR);
 		facialinfo = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FACIALINFO, PTEIDNG_FIELD_ID_LEN_FACIALINFO);
 		imageinfo = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_IMAGEINFO, PTEIDNG_FIELD_ID_LEN_IMAGEINFO);
-		photo = new PhotoPteid(photoRAW, cbeff, facialrechdr, facialinfo, imageinfo);
+		m_photo = new PhotoPteid(photoRAW, cbeff, facialrechdr, facialinfo, imageinfo);
 	}
 
 	//Card Authentication Key (modulus + exponent)
@@ -475,52 +461,30 @@ bool APL_EidFile_ID::MapFields()
 	}
 	//MRZ1
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Mrz1, PTEIDNG_FIELD_ID_LEN_Mrz1);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_MRZ1.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//MRZ2
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Mrz2, PTEIDNG_FIELD_ID_LEN_Mrz2);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_MRZ2.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//MRZ3
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Mrz3, PTEIDNG_FIELD_ID_LEN_Mrz3);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_MRZ3.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
 	//AccidentalIndications
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_AccidentalIndications, PTEIDNG_FIELD_ID_LEN_AccidentalIndications);
-	pteidngidBuffer.TrimRight(' ');
+	pteidngidBuffer.TrimRight('\0');
 	m_AccidentalIndications.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
 
-	/* ID File Caching
-	 * try
-	{
-		ofstream myfile;
-		APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
-		std::string	m_cachedirpath = conf_dir.getString();
-		std::string pteidfile = m_cachedirpath;
-		pteidfile.append("/pteidng-");
-		pteidfile.append(m_SerialNumber);
-		pteidfile.append("-");
-		pteidfile.append(PTEID_FILE_ID);
-		pteidfile.append(".bin");
-		myfile.open (pteidfile.c_str(), ios::binary);
-		pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FILE, PTEIDNG_FIELD_ID_LEN_FILE);
-		m_IDFile.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
-		myfile << m_IDFile;
-		myfile.close();
-	}
-	catch(CMWException& e)
-	{
-		MWLOG(LEV_INFO, MOD_APL, L"Write cache file %ls on disk failed", PTEID_FILE_ID);
-	}*/
-
-	//MemberOfFamily - See if this segfaults in every platform
-	//m_MemberOfFamily = m_GivenNameMother + " " + m_SurnameMother + " * " + m_GivenNameFather + " " + m_SurnameFather;
-
 	m_mappedFields = true;
+}
 
+bool APL_EidFile_ID::MapFields()
+{
+	// do nothing verify will load the data and then verify if sod check is active
 	return true;
 }
 
@@ -785,7 +749,7 @@ PhotoPteid *APL_EidFile_ID::getPhotoObj()
 {
 
 	if(ShowData())
-		return photo;
+		return m_photo;
 
 	return NULL;
 }
@@ -847,6 +811,10 @@ const CByteArray& APL_EidFile_ID::getPhotoHash()
 
 void  APL_EidFile_ID::doSODCheck(bool check){
 	m_SODCheck = check;
+	if (check){
+		m_isVerified = false;
+		m_mappedFields = false;
+	}
 }
 
 /*****************************************************************************************
@@ -883,66 +851,89 @@ APL_EidFile_Address::~APL_EidFile_Address()
 {
 }
 
+
+void APL_EidFile_Address::PackAddressData(CByteArray &cb, bool isNational){
+
+	if (isNational){
+		cb.Append((unsigned char*)m_CountryCode.c_str(),m_CountryCode.length());
+		cb.Append((unsigned char*)m_DistrictCode.c_str(),m_DistrictCode.length());
+		cb.Append((unsigned char*)m_DistrictDescription.c_str(),m_DistrictDescription.length());
+		cb.Append((unsigned char*)m_MunicipalityCode.c_str(),m_MunicipalityCode.length());
+		cb.Append((unsigned char*)m_MunicipalityDescription.c_str(),m_MunicipalityDescription.length());
+		cb.Append((unsigned char*)m_CivilParishCode.c_str(),m_CivilParishCode.length());
+		cb.Append((unsigned char*)m_CivilParishDescription.c_str(),m_CivilParishDescription.length());
+		cb.Append((unsigned char*)m_AbbrStreetType.c_str(),m_AbbrStreetType.length());
+		cb.Append((unsigned char*)m_StreetType.c_str(),m_StreetType.length());
+		cb.Append((unsigned char*)m_StreetName.c_str(),m_StreetName.length());
+		cb.Append((unsigned char*)m_AbbrBuildingType.c_str(),m_AbbrBuildingType.length());
+		cb.Append((unsigned char*)m_BuildingType.c_str(),m_BuildingType.length());
+		cb.Append((unsigned char*)m_DoorNo.c_str(),m_DoorNo.length());
+		cb.Append((unsigned char*)m_Floor.c_str(),m_Floor.length());
+		cb.Append((unsigned char*)m_Side.c_str(),m_Side.length());
+		cb.Append((unsigned char*)m_Place.c_str(),m_Place.length());
+		cb.Append((unsigned char*)m_Locality.c_str(),m_Locality.length());
+		cb.Append((unsigned char*)m_Zip4.c_str(),m_Zip4.length());
+		cb.Append((unsigned char*)m_Zip3.c_str(),m_Zip3.length());
+		cb.Append((unsigned char*)m_PostalLocality.c_str(),m_PostalLocality.length());
+		cb.Append((unsigned char*)m_Generated_Address_Code.c_str(),m_Generated_Address_Code.length());
+	} else {
+		cb.Append((unsigned char*)m_Foreign_Country.c_str(),m_Foreign_Country.length());
+		cb.Append((unsigned char*)m_Foreign_Generic_Address.c_str(),m_Foreign_Generic_Address.length());
+		cb.Append((unsigned char*)m_Foreign_City.c_str(),m_Foreign_City.length());
+		cb.Append((unsigned char*)m_Foreign_Region.c_str(),m_Foreign_Region.length());
+		cb.Append((unsigned char*)m_Foreign_Locality.c_str(),m_Foreign_Locality.length());
+		cb.Append((unsigned char*)m_Foreign_Postal_Code.c_str(),m_Foreign_Postal_Code.length());
+		cb.Append((unsigned char*)m_Generated_Address_Code.c_str(),m_Generated_Address_Code.length());
+	}
+}
+
+
+void APL_EidFile_Address::MapFieldsInternal(){
+
+	if (m_mappedFields) // MARTINHO: have we mapped the fields yet?
+		return;
+
+	CByteArray pteidngAddressBuffer;
+
+	// Address Type
+	pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_TYPE, PTEIDNG_FIELD_ADDRESS_LEN_TYPE);
+	pteidngAddressBuffer.TrimRight('\0');
+	m_AddressType.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
+
+	// Country code
+	pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_COUNTRY, PTEIDNG_FIELD_ADDRESS_LEN_COUNTRY);
+	pteidngAddressBuffer.TrimRight('\0');
+	m_CountryCode.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
+
+	if (m_AddressType == m_FOREIGN)
+		ForeignerAddressFields();
+	else
+		AddressFields();
+
+	// MARTINHO: so we've mapped the fields no need to map them again
+	m_mappedFields = true;
+}
+
 tCardFileStatus APL_EidFile_Address::VerifyFile()
 {
 	if(!m_card)
 		return CARDFILESTATUS_ERROR;
-	
-	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
-	tCardFileStatus filestatus;
 
-	//APL_Certif *CertRrn=pcard->getRrn();
+	if (m_isVerified)
+			return CARDFILESTATUS_OK;
 
-	/*if(!CertRrn)
-		return CARDFILESTATUS_ERROR_RRN;
+		APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
-	//If the status of the RRN file is not OK, 
-	//The rrn status is return
-	filestatus=CertRrn->getFileStatus();
-	if(filestatus!=CARDFILESTATUS_OK)
-		return filestatus;
+		MapFieldsInternal();
 
-	//Get the status of the certificate RRN
-	APL_CertifStatus rrnstatus=CertRrn->getStatus();
-	if((rrnstatus==APL_CERTIF_STATUS_TEST || rrnstatus==APL_CERTIF_STATUS_ISSUER) && !pcard->getAllowTestCard())
-		return CARDFILESTATUS_ERROR_TEST; 
+		if (m_SODCheck){
+			CByteArray addrData;
+			PackAddressData(addrData, isNationalAddress());
 
-	if(rrnstatus==APL_CERTIF_STATUS_DATE && !pcard->getAllowBadDate())
-		return CARDFILESTATUS_ERROR_DATE; 
-
-	//We test the oid of the RRN 
-	//except for test card because, test card may have a bad oid
-	if(!pcard->isTestCard())
-		if(!m_cryptoFwk->VerifyOidRrn(CertRrn->getData()))
-			return CARDFILESTATUS_ERROR_RRN;
-
-	APL_EidFile_AddressSign *sign=pcard->getFileAddressSign();
-
-	//If the status of the IDSign file is not OK, 
-	//The IDSign status is return
-	filestatus=sign->getStatus(true);
-	if(filestatus!=CARDFILESTATUS_OK)
-		return filestatus;
-
-	APL_EidFile_IDSign *idsign=pcard->getFileIDSign();
-
-	CByteArray dataToSign;					//To check the signature,
-	dataToSign.Append(m_data);				//we need to remove the null byte
-	dataToSign.TrimRight();					//at the end of the address file
-	dataToSign.Append(idsign->getData());	//then, we add the signature of the id file
-
-	if(!m_cryptoFwk->VerifySignatureSha1(dataToSign,sign->getData(),CertRrn->getData()))
-		return CARDFILESTATUS_ERROR_SIGNATURE;
-
-	//If this is not a test card, the rrn status must be OK, unless we return an error
-	//For a test card, the status could be something else (for ex ISSUER)
-	if(!pcard->isTestCard())
-	{
-		if(rrnstatus!=APL_CERTIF_STATUS_VALID 
-			&& rrnstatus!=APL_CERTIF_STATUS_VALID_CRL
-			&& rrnstatus!=APL_CERTIF_STATUS_VALID_OCSP)
-			return CARDFILESTATUS_ERROR_CERT; 
-	}*/
+			if (!m_cryptoFwk->VerifyHashSha256(addrData,pcard->getFileSod()->getAddressHash()))
+				throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS);
+		}
+		m_isVerified = true;
 
 	return CARDFILESTATUS_OK;
 }
@@ -1009,110 +1000,107 @@ void APL_EidFile_Address::EmptyFields()
 	m_Foreign_Postal_Code.clear();
 
 	m_mappedFields = false;
+	m_isVerified = false;
+	m_SODCheck = false;
 }
 
 void APL_EidFile_Address::AddressFields()
 {
 		CByteArray pteidngAddressBuffer;
-		char cBuffer[1200];
-		unsigned long ulLen=0;
-
-		CTLVBuffer oTLVBuffer;
-	    oTLVBuffer.ParseTLV(m_data.GetBytes(), m_data.Size());
 
 		//District Code
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_DISTRICT, PTEIDNG_FIELD_ADDRESS_LEN_DISTRICT);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_DistrictCode.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //District Description
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_DISTRICT_DESCRIPTION, PTEIDNG_FIELD_ADDRESS_LEN_DISTRICT_DESCRIPTION);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_DistrictDescription.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Municipality Code
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_MUNICIPALITY, PTEIDNG_FIELD_ADDRESS_LEN_MUNICIPALITY);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_MunicipalityCode.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Municipality Description
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_MUNICIPALITY_DESCRIPTION, PTEIDNG_FIELD_ADDRESS_LEN_MUNICIPALITY_DESCRIPTION);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_MunicipalityDescription.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //CivilParish Code
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_CIVILPARISH, PTEIDNG_FIELD_ADDRESS_LEN_CIVILPARISH);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_CivilParishCode.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //CivilParish Description
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_CIVILPARISH_DESCRIPTION, PTEIDNG_FIELD_ADDRESS_LEN_CIVILPARISH_DESCRIPTION);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_CivilParishDescription.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Abbreviated Street Type
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_ABBR_STREET_TYPE, PTEIDNG_FIELD_ADDRESS_LEN_ABBR_STREET_TYPE);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_AbbrStreetType.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Street Type
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_STREET_TYPE, PTEIDNG_FIELD_ADDRESS_LEN_STREET_TYPE);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_StreetType.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Street Name
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_STREETNAME, PTEIDNG_FIELD_ADDRESS_LEN_STREETNAME);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_StreetName.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Abbreviated Building Type
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_ABBR_BUILDING_TYPE, PTEIDNG_FIELD_ADDRESS_LEN_ABBR_BUILDING_TYPE);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_AbbrBuildingType.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Building Type
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_BUILDING_TYPE, PTEIDNG_FIELD_ADDRESS_LEN_BUILDING_TYPE);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_BuildingType.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //DoorNo
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_DOORNO, PTEIDNG_FIELD_ADDRESS_LEN_DOORNO);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_DoorNo.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Floor
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_FLOOR, PTEIDNG_FIELD_ADDRESS_LEN_FLOOR);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_Floor.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Side
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_SIDE, PTEIDNG_FIELD_ADDRESS_LEN_SIDE);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_Side.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Place
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_PLACE, PTEIDNG_FIELD_ADDRESS_LEN_PLACE);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_Place.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Locality
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_LOCALITY, PTEIDNG_FIELD_ADDRESS_LEN_LOCALITY);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_Locality.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Zip4
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_ZIP4, PTEIDNG_FIELD_ADDRESS_LEN_ZIP4);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_Zip4.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Zip3
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_ZIP3, PTEIDNG_FIELD_ADDRESS_LEN_ZIP3);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_Zip3.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Postal Locality
 	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_POSTALLOCALITY, PTEIDNG_FIELD_ADDRESS_LEN_POSTALLOCALITY);
-	    pteidngAddressBuffer.TrimRight(' ');
+	    pteidngAddressBuffer.TrimRight('\0');
 	    m_PostalLocality.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	    //Generated Address Code
@@ -1120,116 +1108,52 @@ void APL_EidFile_Address::AddressFields()
 	    pteidngAddressBuffer.TrimRight('\0');
 	    m_Generated_Address_Code.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
-	    /* lmedinas: Address File caching */
-	    /*ofstream myfile;
-	    APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
-	    std::string	m_cachedirpath = conf_dir.getString();
-	    std::string pteidfile = m_cachedirpath;
-	    pteidfile.append("/pteidng-");
-	    pteidfile.append(m_SerialNumber);
-	    pteidfile.append("-");
-	    pteidfile.append(PTEID_FILE_ADDRESS);
-	    pteidfile.append(".bin");
-	    myfile.open (pteidfile.c_str());
-	    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FILE, PTEIDNG_FIELD_ID_LEN_FILE);
-	    m_AddressFile.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
-	    myfile << m_AddressFile;
-	    myfile.close();*/
 }
 
 void APL_EidFile_Address::ForeignerAddressFields()
 {
 	CByteArray pteidngAddressBuffer;
-	char cBuffer[1200];
-	unsigned long ulLen=0;
-
-	CTLVBuffer oTLVBuffer;
-    oTLVBuffer.ParseTLV(m_data.GetBytes(), m_data.Size());
 
 	//Foreign Country
 	pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_COUNTRY_DESCRIPTION, PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_COUNTRY_DESCRIPTION);
-	pteidngAddressBuffer.TrimRight(' ');
+	pteidngAddressBuffer.TrimRight('\0');
 	m_Foreign_Country.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	//Foreign Generic Address
 	pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_ADDRESS, PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_ADDRESS);
-	pteidngAddressBuffer.TrimRight(' ');
+	pteidngAddressBuffer.TrimRight('\0');
 	m_Foreign_Generic_Address.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
 	//Foreign City
 	pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_CITY, PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_CITY);
-	pteidngAddressBuffer.TrimRight(' ');
+	pteidngAddressBuffer.TrimRight('\0');
 	m_Foreign_City.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
     //Foreign Region
     pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_REGION, PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_REGION);
-    pteidngAddressBuffer.TrimRight(' ');
+    pteidngAddressBuffer.TrimRight('\0');
     m_Foreign_Region.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
     //Foreign Locality
     pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_LOCALITY, PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_LOCALITY);
-    pteidngAddressBuffer.TrimRight(' ');
+    pteidngAddressBuffer.TrimRight('\0');
     m_Foreign_Locality.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
     //Foreign Postal Code
     pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_POSTAL_CODE, PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_POSTAL_CODE);
-    pteidngAddressBuffer.TrimRight(' ');
+    pteidngAddressBuffer.TrimRight('\0');
     m_Foreign_Postal_Code.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
     //Foreign Generated Address Code
     pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_GENADDRESS_NUM, PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_GENADDRESS_NUM);
-    pteidngAddressBuffer.TrimRight(' ');
+    pteidngAddressBuffer.TrimRight('\0');
     m_Generated_Address_Code.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
 
-    /* martinho - do not cache the address file
-    ofstream myfile;
-    APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
-    std::string	m_cachedirpath = conf_dir.getString();
-    std::string pteidfile = m_cachedirpath;
-    pteidfile.append("/pteidng-");
-    pteidfile.append(m_SerialNumber);
-    pteidfile.append("-");
-    pteidfile.append(PTEID_FILE_ADDRESS);
-    pteidfile.append(".bin");
-    myfile.open (pteidfile.c_str());
-    pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FILE, PTEIDNG_FIELD_ID_LEN_FILE);
-    m_AddressFile.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
-    myfile << m_AddressFile;
-    myfile.close();
-	*/
 }
 
 bool APL_EidFile_Address::MapFields()
 {
-	// MARTINHO: have we mapped the fields yet?
-	if (m_mappedFields)
-		return true;
-
-	CByteArray pteidngAddressBuffer;
-	char cBuffer[1200];
-	unsigned long ulLen=0;
-
-	CTLVBuffer oTLVBuffer;
-	oTLVBuffer.ParseTLV(m_data.GetBytes(), m_data.Size());
-
-	// Address Type
-	pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_TYPE, PTEIDNG_FIELD_ADDRESS_LEN_TYPE);
-	pteidngAddressBuffer.TrimRight(' ');
-	m_AddressType.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
-
-	// Country code
-	pteidngAddressBuffer = m_data.GetBytes(PTEIDNG_FIELD_ADDRESS_POS_COUNTRY, PTEIDNG_FIELD_ADDRESS_LEN_COUNTRY);
-	pteidngAddressBuffer.TrimRight('\0');
-	m_CountryCode.assign((char*)(pteidngAddressBuffer.GetBytes()), pteidngAddressBuffer.Size());
-
-	if (m_AddressType == m_FOREIGN)
-		ForeignerAddressFields();
-	else
-		AddressFields();
-
-	// MARTINHO: so we've mapped the fields no need to map them again
-	m_mappedFields = true;
-
+	// do nothing verify will load the data and then verify if sod check is active
 	return true;
 }
 
@@ -1403,7 +1327,7 @@ const char * APL_EidFile_Address::getCountryCode()
 }
 
 bool APL_EidFile_Address::isNationalAddress(){
-	return (m_AddressType.compare(m_NATIONAL));
+	return (m_AddressType.compare(m_NATIONAL)==0);
 }
 
 const char *APL_EidFile_Address::getForeignCountry()
@@ -1484,6 +1408,7 @@ tCardFileStatus APL_EidFile_AddressSign::VerifyFile()
 *****************************************************************************************/
 APL_EidFile_Sod::APL_EidFile_Sod(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_SOD,NULL)
 {
+
 }
 
 APL_EidFile_Sod::~APL_EidFile_Sod()
@@ -1492,61 +1417,151 @@ APL_EidFile_Sod::~APL_EidFile_Sod()
 
 tCardFileStatus APL_EidFile_Sod::VerifyFile()
 {
-	// verify SOD file, signature, certificates
+	tCardFileStatus filestatus = CARDFILESTATUS_ERROR_SIGNATURE;
 
-	return CARDFILESTATUS_OK;
+	cout << "APL_EidFile_Sod::VerifyFile() - I" << endl;
+	if (m_isVerified) // no need to check again
+		return CARDFILESTATUS_OK;
+
+	if (!m_SODCheck) // check is not activated
+		return CARDFILESTATUS_OK;
+
+	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
+
+	PKCS7 *p7 = NULL;
+
+	ERR_load_PKCS7_strings();
+	ERR_load_X509_strings();
+	OpenSSL_add_all_digests();
+
+	const unsigned char *temp = m_data.GetBytes();
+	long int len = m_data.Size();
+	temp+=4; //martinho: jump the response message template format 2" (DER type 77)
+
+	p7 = d2i_PKCS7(NULL, (const unsigned char **)&temp, len);
+
+	STACK_OF(X509) *pSigners = PKCS7_get0_signers(p7, NULL, 0);
+
+	X509_STORE *store = X509_STORE_new();
+
+	// martinho: load all certificates, let openssl do the job and find the needed ones...
+	for (int i = 0; i<pcard->getCertificates()->countAll(true);i++){
+		X509 *pX509 = NULL;
+		const unsigned char *p = pcard->getCertificates()->getCert(i,false)->getData().GetBytes();
+		pX509 = d2i_X509(&pX509, &p, pcard->getCertificates()->getCert(i,false)->getData().Size());
+		X509_STORE_add_cert(store, pX509);
+	}
+	BIO *Out = BIO_new(BIO_s_mem());
+
+	if (PKCS7_verify(p7,pSigners,store,NULL,Out,0)==1){
+		unsigned char *p;
+		long size;
+		size = BIO_get_mem_data(Out, &p);
+		m_encapsulatedContent.Append(p,size);
+
+		m_isVerified = true;
+		filestatus = CARDFILESTATUS_OK;
+	}
+
+	X509_STORE_free(store);
+	sk_X509_free(pSigners);
+	BIO_free_all(Out);
+	PKCS7_free(p7);
+
+	cout << "APL_EidFile_Sod::VerifyFile() - F" << endl;
+	return filestatus;
 }
 
 bool APL_EidFile_Sod::ShowData()
 {
-        APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
+	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
-        bool bAllowTest=pcard->getAllowTestCard();
-        bool bAllowBadDate=pcard->getAllowBadDate();
+	bool bAllowTest=pcard->getAllowTestCard();
+	bool bAllowBadDate=pcard->getAllowBadDate();
 
-        tCardFileStatus status=getStatus(true,&bAllowTest,&bAllowBadDate);
-        if(status==CARDFILESTATUS_OK)
-                return true;
+	tCardFileStatus status=getStatus(true,&bAllowTest,&bAllowBadDate);
+	if(status==CARDFILESTATUS_OK)
+		return true;
 
-        //If the autorisation changed, we read the card again
-        if((status==CARDFILESTATUS_ERROR_TEST && pcard->getAllowTestCard())
-                || (status==CARDFILESTATUS_ERROR_DATE && pcard->getAllowBadDate()))
+	//If the autorisation changed, we read the card again
+	if((status==CARDFILESTATUS_ERROR_TEST && pcard->getAllowTestCard())
+			|| (status==CARDFILESTATUS_ERROR_DATE && pcard->getAllowBadDate()))
 
-                status=LoadData(true);
+		status=LoadData(false);
 
-        if(status==CARDFILESTATUS_OK)
-                return true;
+	if(status==CARDFILESTATUS_OK)
+		return true;
 
-        return false;
+	return false;
 }
 
 void APL_EidFile_Sod::EmptyFields()
 {
-	m_Sod.clear();
 	m_mappedFields = false;
+	m_isVerified = false;
+	m_picHash.ClearContents();
+	m_pkHash.ClearContents();
+	m_idHash.ClearContents();
+	m_addressHash.ClearContents();
+	m_encapsulatedContent.ClearContents();
+}
+
+void APL_EidFile_Sod::doSODCheck(bool check){
+	m_SODCheck = check;
+	if (check) {
+		m_isVerified = false;
+		m_mappedFields = false;
+	}
 }
 
 bool APL_EidFile_Sod::MapFields()
 {
-	if (m_mappedFields)
+	if (m_mappedFields) // map only one time
 		return true;
 
-	CByteArray pteidngSodBuffer;
-    char cBuffer[1200];
-    unsigned long ulLen=0;
+	if (!m_SODCheck) // map only if sod check is active
+		return true;
 
-    CTLVBuffer oTLVBuffer;
-    oTLVBuffer.ParseTLV(m_data.GetBytes(), m_data.Size());
+	SODParser parser;
 
-    //PersoData
-    pteidngSodBuffer = m_data.GetBytes(0, 50);
-    pteidngSodBuffer.TrimRight(' ');
-    m_Sod.assign((char*)(pteidngSodBuffer.GetBytes()), pteidngSodBuffer.Size());
+	parser.ParseSodEncapsulatedContent(m_encapsulatedContent);
 
-    m_mappedFields = true;
+	SODAttributes &attr = parser.getHashes();
 
-    return true;
+	m_idHash.Append(attr.hashes[0]);
+	m_addressHash.Append(attr.hashes[1]);
+	m_picHash.Append(attr.hashes[2]);
+	m_pkHash.Append(attr.hashes[3]);
+
+	m_mappedFields = true;
+
+	return true;
 }
+
+const CByteArray& APL_EidFile_Sod::getAddressHash(){
+	if(ShowData())
+		return m_addressHash;
+	return EmptyByteArray;
+}
+
+const CByteArray& APL_EidFile_Sod::getPictureHash(){
+	if(ShowData())
+		return m_picHash;
+	return EmptyByteArray;
+}
+
+const CByteArray& APL_EidFile_Sod::getCardPublicKeyHash(){
+	if(ShowData())
+		return m_pkHash;
+	return EmptyByteArray;
+}
+
+const CByteArray& APL_EidFile_Sod::getIdHash(){
+	if(ShowData())
+		return m_idHash;
+	return EmptyByteArray;
+}
+
 
 /*****************************************************************************************
 ---------------------------------------- APL_EidFile_PersoData -----------------------------------------

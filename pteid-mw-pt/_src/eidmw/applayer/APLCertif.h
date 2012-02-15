@@ -306,10 +306,21 @@ private:
 	APL_Certifs &operator= (const APL_Certifs& certstore);	/**< Copy not allowed - not implemented */
 
 	void loadCard();										/**< Load all the certificates from the card */
+	void loadFromFile();									/**< Load all the certificates from the certificates directory */
+	void init(APL_SmartCard *card);
 
 	void resetIssuers(); /**< Reset issuer pointer in the certifactes from the store */
 	void resetRoots();	/**< Reset root flag in the certifactes from the store */
 	void resetTests();	/**< Reset test flag in the certifactes from the store */
+
+	/**
+	 * This is a callback function for the scanDir
+	 *
+	 * @param SubDir is the sub directory relative the the Dir of scanDir
+	 * @param File is the file to threat
+	 * @param param must be this pointer
+	 */
+	static void foundCertificate(const char *SubDir, const char *File, void *param);
 
 	APL_SmartCard *m_card;									/**< The smart card from which some certificate comes */
 	APL_CryptoFwk *m_cryptoFwk;								/**< Pointer to the crypto framework */
@@ -322,6 +333,8 @@ private:
 	  */
 	std::map<unsigned long,APL_Certif *> m_certifs;
 	std::vector<unsigned long> m_certifsOrder;
+	std::string m_certExtension;
+	std::string m_certs_dir;
 
 friend APL_Certifs *APL_SmartCard::getCertificates();	/**< This method must access protected constructor */
 };
