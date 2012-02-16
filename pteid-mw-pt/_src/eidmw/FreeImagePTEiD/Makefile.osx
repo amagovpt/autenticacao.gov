@@ -26,7 +26,7 @@ LIBRARIES_X86_64 = -Wl,-syslibroot /Developer/SDKs/MacOSX10.6.sdk
 LIBTOOL = libtool
 LIPO = lipo
 
-TARGET = freeimage
+TARGET = freeimagePTEiD
 SHAREDLIB = lib$(TARGET)-$(VER_MAJOR).$(VER_MINOR).dylib
 LIBNAME = lib$(TARGET).$(VER_MAJOR).dylib
 HEADER = Source/FreeImagePTEiD.h
@@ -83,7 +83,7 @@ install:
 
 clean:
 	rm -f core Dist/*.* u2dtmp* $(MODULES_I386) $(MODULES_X86_64) $(SHAREDLIB) $(SHAREDLIB)-i386 $(SHAREDLIB)-x86_64
-	
+
 distclean:
 	rm -f core Dist/*.* u2dtmp* $(MODULES_I386) $(MODULES_X86_64) $(SHAREDLIB) $(SHAREDLIB)-i386 $(SHAREDLIB)-x86_64
 
