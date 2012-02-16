@@ -111,6 +111,8 @@ LIBS += -L../lib  \
 
 LIBS += -lcairo
 
+macx: LIBS += -framework Foundation
+
 isEmpty(EMULATE_CARDLAYER) {
   LIBS +=	-l$${CARDLAYERLIB} 
   macx: LIBS += -Wl,-framework -Wl,PCSC 	
@@ -120,8 +122,6 @@ isEmpty(EMULATE_CARDLAYER) {
 
 unix:!macx:LIBS += -lX11 -Wl,-R,"'\$\$ORIGIN/$${LINK_RELATIVE_PATH}'"
 LIBS +=	-l$${DLGLIB}
-
-macx:LIBS += -L../../ThirdParty/Xerces/Xerces-2.8.0-mac/lib
 
 # Input
 HEADERS += CardInformation.h \
