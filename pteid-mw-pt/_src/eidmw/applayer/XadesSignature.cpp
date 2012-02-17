@@ -681,8 +681,7 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths,
 			CByteArray *timestamp_blob = &XadesSignature::mp_timestamp_data;
 
 			if (timestamp_blob->Size() == 0)
-				MWLOG(LEV_ERROR, MOD_APL, L"An error occurred in timestamp_data."
-						"It's possible that the timestamp service is down ");
+				MWLOG(LEV_ERROR, MOD_APL, L"An error occurred in timestamp_data.IIt's possible that the timestamp service is down ");
 			else
 			{
 				unsigned char * base64str = base64Encode(timestamp_blob->GetBytes(), timestamp_blob->Size());
