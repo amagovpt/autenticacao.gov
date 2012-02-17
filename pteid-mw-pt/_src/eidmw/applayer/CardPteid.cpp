@@ -1419,7 +1419,7 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 {
 	tCardFileStatus filestatus = CARDFILESTATUS_ERROR_SIGNATURE;
 
-	cout << "APL_EidFile_Sod::VerifyFile() - I" << endl;
+	//cout << "APL_EidFile_Sod::VerifyFile() - I" << endl;
 	if (m_isVerified) // no need to check again
 		return CARDFILESTATUS_OK;
 
@@ -1468,7 +1468,7 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	BIO_free_all(Out);
 	PKCS7_free(p7);
 
-	cout << "APL_EidFile_Sod::VerifyFile() - F" << endl;
+	//cout << "APL_EidFile_Sod::VerifyFile() - F" << endl;
 	return filestatus;
 }
 
