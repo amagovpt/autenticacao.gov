@@ -142,15 +142,8 @@ CCard * CardConnect(const std::string &csReader,
 		if (poCard == NULL) {
 		  StartsWith(csReader.c_str(), "G");
 	 	  MWLOG(LEV_DEBUG, MOD_CAL, L"Using Reader: %s", csReader.c_str());
-		  //poCard = PteidCardGetInstance(PLUGIN_VERSION, strReader, hCard, poContext, poPinpad);
 		  poCard = PTeidCardGetVersion(PLUGIN_VERSION, strReader, hCard, poContext, poPinpad);
 		}
-		if(poCard != NULL)
-			//printf("******* WE HAVE CARD!!! *****\n");
-
-#ifdef __APPLE__
-			poContext->m_oPCSC.Disconnect(hCard, DISCONNECT_RESET_CARD);
-#endif
 
 #ifdef CAL_EMULATION
 		// Emulated reader doesn't start with "ACS ACR38"
@@ -161,8 +154,8 @@ CCard * CardConnect(const std::string &csReader,
 
 #ifndef __APPLE__
 		// If no other CCard subclass could be found
-		if (poCard == NULL){
-			//printf("We get unknown card :(\n");
+        if (poCard == NULL)
+        {
 			poCard = new CUnknownCard(hCard, poContext, poPinpad, CByteArray());
 		}
 #else
@@ -173,7 +166,6 @@ CCard * CardConnect(const std::string &csReader,
 	if (hCard == 0)
 	{
 		// 2. A card is present, but connecting to it is reader-specific (e.g. synchron. cards)
-		//printf("---------------- NOT HERE!!!!!\n");
 		strReader = csReader.c_str();
 		for (size_t i = 0; poCard == NULL && i < m_Plugins.size(); i++)
 		{
