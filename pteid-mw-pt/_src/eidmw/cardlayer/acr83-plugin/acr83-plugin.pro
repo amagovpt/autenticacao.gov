@@ -19,7 +19,8 @@ target.path = $${INSTALL_DIR_LIB}/pteidpp
 INSTALLS += target
 
 DESTDIR = ../../lib
-LIBS = -lpcsclite
+unix:!macx:LIBS = -lpcsclite
+macx: LIBS += -Wl,-framework -Wl,PCSC
 
 # Input
 HEADERS += pinpad2-private.h
