@@ -3,11 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef WIN32
-/* PCSC missing types */
-#include <reader.h>
-#endif
-
 #ifndef TRUE
 #define TRUE 1
 #define FALSE 0
