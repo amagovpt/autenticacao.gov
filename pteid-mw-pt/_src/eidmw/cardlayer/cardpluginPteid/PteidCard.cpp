@@ -281,9 +281,7 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
 		     CPinpad *poPinpad, const CByteArray & oData, tSelectAppletMode selectAppletMode, unsigned long ulVersion) :
 CPkiCard(hCard, poContext, poPinpad)
 {
-		//printf("++++ Pteid3\n");
-
-	switch (ulVersion){
+    switch (ulVersion){
 		case 1:
 			m_cardType = CARD_PTEID_IAS07;
 			break;
@@ -442,7 +440,7 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 
 DlgPinUsage CPteidCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)
 {
-		//printf("++++ Pteid5\n");
+        //printf("++++ Pteid5\n");
 	DlgPinUsage usage = DLG_PIN_UNKNOWN;
 
 	if (pKey != NULL)
@@ -464,7 +462,7 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
         std::string & csPin1, std::string & csPin2,	const tPrivKey *pKey)
 {
 
-		//printf("++++ Pteid6\n");
+        //printf("++++ Pteid6\n");
 	// Convert params
 	wchar_t wsPin1[PIN_MAX_LENGTH+1];
 	wchar_t wsPin2[PIN_MAX_LENGTH+1];
@@ -708,7 +706,7 @@ void CPteidCard::IasSignatureHelper()
 void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
     unsigned long ulInputLen)
 {
-    printf("++++ Pteid11\n");
+    //printf("++++ Pteid11\n");
 	// Data = [04 80 <algoref> 84 <keyref>]  (5 bytes)
     CByteArray oDataias, oDatagem;
     unsigned char ucAlgo;
@@ -816,7 +814,7 @@ bool CPteidCard::SelectApplet()
 
 tBelpicDF CPteidCard::getDF(const std::string & csPath, unsigned long & ulOffset)
 {
-		//printf("++++ Pteid14\n");
+    //printf("++++ Pteid14\n");
 	ulOffset = 0;
 	if (csPath.substr(0, 4) == "3F00")
 		ulOffset = 4;
@@ -835,20 +833,20 @@ tBelpicDF CPteidCard::getDF(const std::string & csPath, unsigned long & ulOffset
 
 tFileInfo CPteidCard::SelectFile(const std::string & csPath, bool bReturnFileInfo)
 {
-		//printf("++++ Pteid15 select file: ");
-		CPkiCard::SelectFile(csPath, false);
+    //printf("++++ Pteid15 select file: ");
+    CPkiCard::SelectFile(csPath, false);
 
-	// The EF(Preferences) file can be written using the authentication PIN;
-	// that's the only exception to the 'read always' - 'write never' ACs.
-	if (csPath.substr(csPath.size() - 4, 4) == "4039")
-	{
-		if (m_ucAppletVersion < 0x20)
-			return PREFS_FILE_INFO_V1;
-		else
-			return PREFS_FILE_INFO_V2;
-	}
-	else
-		return DEFAULT_FILE_INFO;
+    // The EF(Preferences) file can be written using the authentication PIN;
+    // that's the only exception to the 'read always' - 'write never' ACs.
+    if (csPath.substr(csPath.size() - 4, 4) == "4039")
+    {
+        if (m_ucAppletVersion < 0x20)
+            return PREFS_FILE_INFO_V1;
+        else
+            return PREFS_FILE_INFO_V2;
+    }
+    else
+        return DEFAULT_FILE_INFO;
 }
 
 /**
@@ -866,7 +864,7 @@ tFileInfo CPteidCard::SelectFile(const std::string & csPath, bool bReturnFileInf
  */
 CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFileInfo)
 {
-		//printf("++++ Pteid16\n");
+    //printf("++++ Pteid16\n");
 	unsigned long ulOffset = 0;
 	tBelpicDF belpicDF = getDF(csPath, ulOffset);
 
@@ -968,13 +966,13 @@ unsigned long CPteidCard::Get6CDelay()
 
 tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 {
-	tCacheInfo dontCache = {DONT_CACHE, 0};
-	tCacheInfo simpleCache = {SIMPLE_CACHE, 0};
+    tCacheInfo dontCache = {DONT_CACHE, 0};
+    tCacheInfo simpleCache = {SIMPLE_CACHE, 0};
 	tCacheInfo certCache = {CERT_CACHE, 0};
 	tCacheInfo check16Cache = {CHECK_16_CACHE, 0}; // Check 16 bytes at offset 0
 	tCacheInfo checkSerial = {CHECK_SERIAL, 0}; // Check if the card serial nr is present
 
-	// csPath -> file ID
+    // csPath -> file ID ... FIXME get the right IDs
 	unsigned int uiFileID = 0;
 	unsigned long ulLen = (unsigned long) (csPath.size() / 2);
 	if (ulLen >= 2)
@@ -982,33 +980,36 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 
 	switch(uiFileID)
 	{
-	case 0x2F00: // EF(DIR)
-	  return simpleCache;
-	case 129: // EF(ODF) 4F005031 (Dont cache otherwise will cause issues on IAS cards)
-	  return dontCache;
-	case 0x5032: // EF(TokenInfo)
-	case 69: // AOD (4401)
-	case 3: // 0003 (TRACE)
-	case 246: // EF07 (PersoData)
-          return dontCache;
-	case 244: // EF05 (Address)
-	  return dontCache;
-	case 241: // EF02 (ID)
-	case 245: // EF06 (SOD)
+    case 129: // EF(ODF) 4F005031 (ID on OSX Dont cache otherwise will cause issues on IAS cards)
+        return dontCache;
+    case 47: // EF(ODF) 4F005031 (Dont cache otherwise will cause issues on IAS cards)
+        return dontCache;
+    case 0x5032: // EF(TokenInfo)
+        return dontCache;
+    case 69: // AOD (4401)
+        return dontCache;
+    case 3: // 0003 (TRACE)
+        //return dontCache;
+    case 246: // EF07 (PersoData)
+        return dontCache;
+    case 244: // EF05 (Address)
+        return dontCache;
+    case 241: // EF02 (ID)
+    case 245: // EF06 (SOD)
 #ifdef CAL_EMULATION  // the EF(ID#RN) of the emulated test cards have the same serial nr
-	case 0x4031: // EF(ID#RN)
+    case 0x4031: // EF(ID#RN)
 #endif
-		return simpleCache;
+        return simpleCache;
 #ifndef CAL_EMULATION
-	case 0x4031: // EF(ID#RN)
-		return checkSerial;
+    case 0x4031: // EF(ID#RN)
+        return checkSerial;
 #endif	
-	case 251: // EF0C (CertD)
-	case 248: // EF09 (Cert Auth)
-	case 247: // EF08 (Cert Sign)
-	case 254: // EF0F (Cert Root Sign)
-	case 255: // EF10 (Cert Root Auth)
-	case 256: // EF11 (CERT ROOT CA)
-		return certCache;
-	}
+    case 251: // EF0C (CertD)
+    case 248: // EF09 (Cert Auth)
+    case 247: // EF08 (Cert Sign)
+    case 254: // EF0F (Cert Root Sign)
+    case 255: // EF10 (Cert Root Auth)
+    case 256: // EF11 (CERT ROOT CA)
+        return certCache;
+    }
 }
