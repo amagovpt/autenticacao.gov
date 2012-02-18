@@ -2382,9 +2382,10 @@ void MainWnd::actionSignature_eID_triggered()
 		dlgsig->exec();
 		delete dlgsig;
 	} else {
-	  	std::string Pmsgcaption = "Aviso";
-	  	std::string Pmsgbody = "Ocorreu um problema a ler os dados do seu cartão tente novamente";
-	  	QMessageBox msgBoxp(QMessageBox::Warning, QString::fromUtf8(Pmsgcaption.c_str()), QString::fromUtf8(Pmsgbody.c_str()), 0, this);
+		QString caption  = tr("Warning");
+	  	QString msg = tr("A problem has occurred while trying to read card. Please, try again.");
+	  	//std::string Pmsgbody
+	  	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
 	  	msgBoxp.exec();
 	}
 }
@@ -2412,11 +2413,10 @@ void MainWnd::on_actionPrint_eID_triggered()
 		dlg->exec();
 		delete dlg;
 	} else {
-	  	std::string Pmsgcaption = "Aviso";
-	  	std::string Pmsgbody = "Ocorreu um problema a ler os dados do seu cartão tente novamente";
-	  	QMessageBox msgBoxp(QMessageBox::Warning, QString::fromUtf8(Pmsgcaption.c_str()), QString::fromUtf8(Pmsgbody.c_str()), 0, this);
-	  	msgBoxp.exec();
-
+		QString caption  = tr("Warning");
+		QString msg = tr("A problem has occurred while trying to read card. Please, try again.");
+		QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
+		msgBoxp.exec();
 	}
 }
 

@@ -4,24 +4,16 @@
 <context>
     <name>MainWnd</name>
     <message>
-        <location filename="mainwnd.ui" line="164"/>
-        <location filename="mainwnd.cpp" line="2933"/>
-        <location filename="mainwnd.cpp" line="2963"/>
-        <location filename="mainwnd.cpp" line="2998"/>
-        <location filename="mainwnd.cpp" line="3018"/>
-        <location filename="mainwnd.cpp" line="3038"/>
-        <source>&amp;Identity</source>
-        <translation>&amp;Identidade</translation>
+        <location filename="mainwnd.cpp" line="2385"/>
+        <location filename="mainwnd.cpp" line="2416"/>
+        <source>Warning</source>
+        <translation>Aviso</translation>
     </message>
     <message>
-        <location filename="mainwnd.ui" line="331"/>
-        <source>Voornamen / &lt;i&gt;Given names&lt;/i&gt;</source>
-        <translation>Nomes / &lt;i&gt;Given names&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <location filename="mainwnd.ui" line="369"/>
-        <source>Geboorteplaats en -datum / &lt;i&gt;Place and date of Birth&lt;/i&gt;</source>
-        <translation>Data de Nascimento / &lt;i&gt;Date of Birth&lt;/i&gt;</translation>
+        <location filename="mainwnd.cpp" line="2386"/>
+        <location filename="mainwnd.cpp" line="2417"/>
+        <source>A problem has occurred while trying to read card. Please, try again.</source>
+        <translation>Ocorreu um erro ao tentar ler o cartão. Tente novamente por favor.</translation>
     </message>
     <message>
         <location filename="mainwnd.ui" line="23"/>
@@ -49,6 +41,65 @@
         <translation>Códigos PIN</translation>
     </message>
     <message>
+        <location filename="mainwnd.ui" line="1875"/>
+        <source>Help</source>
+        <translation>Ajuda</translation>
+    </message>
+    
+    <message>
+        <location filename="mainwnd.ui" line="2002"/>
+        <source>Read Card</source>
+        <translation>Ler Cartão</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="2055"/>
+        <source>Export / Print</source>
+        <translation>Exportar/Imprimir</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="2020"/>
+        <source>Exit</source>
+        <translation>Sair</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="2314"/>
+        <source>Portuguese</source>
+        <translation>Português</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="2332"/>
+        <source>English</source>
+        <translation>Inglês</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="2158"/>
+        <source>Parameters</source>
+        <translation>Parâmetros</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="2193"/>
+        <source>Signature</source>
+        <translation>Assinatura</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="2211"/>
+        <source>Verify Signature</source>
+        <translation>Verificar Assinatura</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="2469"/>
+        <source>Updates</source>
+        <translation>Actualizações</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="2434"/>
+        <source>About</source>
+        <translation>Acerca</translation>
+    </message>
+    
+    
+    
+    <message>
         <location filename="mainwnd.ui" line="1775"/>
         <location filename="mainwnd.ui" line="2086"/>
         <source>Tools</source>
@@ -58,6 +109,7 @@
         <location filename="mainwnd.ui" line="1984"/>
         <location filename="mainwnd.ui" line="1749"/>
         <location filename="mainwnd.ui" line="2341"/>
+        <location filename="mainwnd.ui" line="2521"/>
         <source>Card</source>
         <translation>Cartão</translation>
     </message>
@@ -266,6 +318,9 @@
     </message>
     <message>
         <location filename="mainwnd.ui" line="2260"/>
+        <location filename="mainwnd.ui" line="1833"/>
+        <location filename="mainwnd.ui" line="2296"/>
+        <location filename="mainwnd.ui" line="2538"/>
         <source>Language</source>
         <translation>Idioma</translation>
     </message>
@@ -1284,26 +1339,6 @@ Please specify .xml, .csv or .eid</source>
         <source>Card reader: </source>
         <translation>Leitor de cartões: </translation>
     </message>
-    <message>
-        <location filename="mainwnd.ui" line="2043"/>
-        <source>Street</source>
-        <translation>Straat</translation>
-    </message>
-    <message>
-        <location filename="mainwnd.ui" line="2078"/>
-        <source>Postal code</source>
-        <translation>Postcode</translation>
-    </message>
-    <message>
-        <location filename="mainwnd.ui" line="2126"/>
-        <source>Municipality</source>
-        <translation>Gemeente</translation>
-    </message>
-    <message>
-        <location filename="mainwnd.ui" line="2158"/>
-        <source>Country</source>
-        <translation>Land</translation>
-    </message>
 </context>
 <context>
     <name>dlgAbout</name>
@@ -1478,34 +1513,6 @@ Please specify .xml, .csv or .eid</source>
         <translation>Kaart nummer</translation>
     </message>
     <message>
-        <location filename="dlgPrint.cpp" line="359"/>
-        <source>Chip number</source>
-        <translation>Chip nummer</translation>
-    </message>
-    <message>
-        <location filename="dlgPrint.cpp" line="205"/>
-        <location filename="dlgPrint.cpp" line="365"/>
-        <source>Valid from</source>
-        <translation>Geldig van</translation>
-    </message>
-    <message>
-        <location filename="dlgPrint.cpp" line="211"/>
-        <location filename="dlgPrint.cpp" line="371"/>
-        <source>Valid until</source>
-        <translation>Geldig tot</translation>
-    </message>
-    <message>
-        <location filename="dlgPrint.cpp" line="219"/>
-        <location filename="dlgPrint.cpp" line="379"/>
-        <source>National Number</source>
-        <translation>Nationaal nummer</translation>
-    </message>
-    <message>
-        <location filename="dlgPrint.cpp" line="386"/>
-        <source>Title</source>
-        <translation>Titel</translation>
-    </message>
-    <message>
         <location filename="dlgPrint.cpp" line="227"/>
         <location filename="dlgPrint.cpp" line="392"/>
         <source>Name</source>
@@ -1545,51 +1552,27 @@ Please specify .xml, .csv or .eid</source>
         <translation>Morada</translation>
     </message>
     <message>
-        <location filename="dlgPrint.cpp" line="443"/>
-        <source>Issuing municipality</source>
-        <translation>Uitreikingsgemeente</translation>
-    </message>
-    <message>
-        <location filename="dlgPrint.cpp" line="456"/>
-        <source>Print Document</source>
-        <translation>Document afdrukken</translation>
-    </message>
-    <message>
-        <location filename="dlgPrint.ui" line="18"/>
-        <location filename="dlgPrint.ui" line="64"/>
-        <source>Print</source>
-        <translation>Afdrukken</translation>
-    </message>
-    <message>
         <location filename="dlgPrint.ui" line="14"/>
         <source>Export PDF / Print</source>
         <translation>Exportação PDF / Impressão</translation>
     </message>
-    <message>
-        <location filename="dlgPrint.ui" line="57"/>
-        <source>Cancel</source>
-        <translation>Annuleren</translation>
+</context>
+<context>
+	<name>Updates</name>
+	<message>
+        <location filename="AutoUpdates.cpp" line="54"/>
+        <location filename="AutoUpdates.cpp" line="113"/>
+        <location filename="AutoUpdates.cpp" line="125"/>
+        <location filename="AutoUpdates.cpp" line="133"/>
+        <location filename="AutoUpdates.cpp" line="163"/>
+        <location filename="AutoUpdates.cpp" line="169"/>
+        <source>Auto-update</source>
+        <translation>Actualizações Automáticas</translation>
     </message>
     <message>
-        <location filename="dlgPrint.cpp" line="163"/>
-        <location filename="dlgPrint.cpp" line="308"/>
-        <source>BELGIUM</source>
-        <translation>BELGIË</translation>
-    </message>
-    <message>
-        <location filename="dlgPrint.cpp" line="323"/>
-        <source>IDENTITY CARD</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="dlgPrint.cpp" line="170"/>
-        <source>RESIDENCE PERMIT</source>
-        <translation>RESIDENCE PERMIT</translation>
-    </message>
-    <message>
-        <location filename="dlgPrint.cpp" line="154"/>
-        <source>SIS CARD</source>
-        <translation>SIS Cartão</translation>
+        <location filename="AutoUpdates.cpp" line="55"/>
+        <source>Do you want to check for updates?</source>
+        <translation>Deseja verificar se existem actulizações disponiveis?</translation>
     </message>
 </context>
 </TS>

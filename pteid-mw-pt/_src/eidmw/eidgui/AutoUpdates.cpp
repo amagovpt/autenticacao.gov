@@ -46,12 +46,13 @@ using namespace eIDMW;
 std::string serverurl = "http://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/";
 std::string remoteversion = "http://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/version.txt";
 
-std::string ddtitle ("Cartão de Cidadão");
+
 
 AutoUpdates::AutoUpdates(QWidget *parent)
 : QDialog(parent)
 {
-	statusLabel = new QLabel(tr("Do you want to check for updates ?"));
+	QString ddtitle = tr("Auto-update");
+	statusLabel = new QLabel(tr("Do you want to check for updates?"));
 
 	cancelButton = new QPushButton(tr("Cancel"));
 	cancelButton->setDefault(true);
@@ -78,7 +79,7 @@ AutoUpdates::AutoUpdates(QWidget *parent)
 	mainLayout->addWidget(buttonBox);
 	setLayout(mainLayout);
 
-	setWindowTitle(QString::fromUtf8(ddtitle.c_str()));
+	setWindowTitle(ddtitle);
 }
 
 AutoUpdates::~AutoUpdates()
@@ -109,7 +110,7 @@ void AutoUpdates::downloadFile()
 	QString fileName = fileInfo.fileName();
 	if (fileName.isEmpty())
 	{
-		QMessageBox::information(this, QString::fromUtf8(ddtitle.c_str()),
+		QMessageBox::information(this, tr("Auto-update"),
 				tr("Unable to download the update please check your Network Connection.")
 		.arg(fileName).arg(file->errorString()));
 	}
@@ -121,7 +122,7 @@ void AutoUpdates::downloadFile()
 
 	file = new QFile(QString::fromUtf8((tmpfile.c_str())));
 	if (!file->open(QIODevice::WriteOnly)) {
-		QMessageBox::information(this, QString::fromUtf8(ddtitle.c_str()),
+		QMessageBox::information(this, tr("Auto-update"),
 				tr("Unable to save the file %1: %2.")
 		.arg(fileName).arg(file->errorString()));
 		delete file;
@@ -129,7 +130,7 @@ void AutoUpdates::downloadFile()
 		return;
 	}
 
-	progressDialog->setWindowTitle(QString::fromUtf8(ddtitle.c_str()));
+	progressDialog->setWindowTitle(tr("Auto-update"));
 	progressDialog->setLabelText(tr("Downloading %1.").arg(fileName));
 	downloadButton->setEnabled(false);
 
@@ -159,13 +160,13 @@ void AutoUpdates::httpFinished()
 	QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
 	if (reply->error()) {
 		file->remove();
-		QMessageBox::information(this, QString::fromUtf8(ddtitle.c_str()),
+		QMessageBox::information(this, tr("Auto-update"),
 				tr("Download failed: %1.")
 		.arg(reply->errorString()));
 		downloadButton->setEnabled(true);
 	} else if (!redirectionTarget.isNull()) {
 		QUrl newUrl = url.resolved(redirectionTarget.toUrl());
-		if (QMessageBox::question(this, QString::fromUtf8(ddtitle.c_str()),
+		if (QMessageBox::question(this, tr("Auto-update"),
 				tr("Redirect to %1 ?").arg(newUrl.toString()),
 				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
 			url = newUrl;
