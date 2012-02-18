@@ -1329,25 +1329,14 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 %typemap(javaout) bool eIDMW::PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg)
 {
 	  long		pRemaining = pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
-	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_Pin_verifyPin__SWIG_0(swigCPtr, this, csPin, pRemaining, bShowDlg);
+	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_Pin_verifyPin(swigCPtr, this, csPin, pRemaining, bShowDlg);
 	  
 	  ulRemaining.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
 	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
 	  return retval;
 }
 
-//--------------------------------------------------
-// rewrite the function verifyPin(...) on the Java side
-//--------------------------------------------------
-%typemap(javaout) bool eIDMW::PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining)
-{
-	  long		pRemaining = pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
-	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_Pin_verifyPin__SWIG_1(swigCPtr, this, csPin, pRemaining);
-	  
-	  ulRemaining.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
-	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
-	  return retval;
-}
+%ignore eIDMW::PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining);
 
 // --------------------------------------
 // the following should be generated for the method without parameters, but
@@ -1371,27 +1360,14 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 %typemap(javaout) bool eIDMW::PTEID_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg)
 {
 	  long		pRemaining	= pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
-	  boolean	retval		= pteidlibJava_WrapperJNI.PTEID_Pin_changePin__SWIG_0(swigCPtr, this, csPin1, csPin2, pRemaining, PinName, bShowDlg);
+	  boolean	retval		= pteidlibJava_WrapperJNI.PTEID_Pin_changePin(swigCPtr, this, csPin1, csPin2, pRemaining, PinName, bShowDlg);
 	  
 	  ulRemaining.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
 	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
 	  return retval;
 }
 
-//--------------------------------------------------
-// rewrite the function changePin(...) on the Java side
-//--------------------------------------------------
-%typemap(javaout) bool eIDMW::PTEID_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName)
-{
-	  long		pRemaining	= pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
-	  boolean	retval		= pteidlibJava_WrapperJNI.PTEID_Pin_changePin__SWIG_1(swigCPtr, this, csPin1, csPin2, pRemaining, PinName);
-	  
-	  ulRemaining.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
-	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
-	  return retval;
-}
-
-
+%ignore eIDMW::PTEID_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName);
 
 
 // --------------------------------------

@@ -33,7 +33,7 @@ bool PTEID_SigVerifier::VerifySignature(const char *container_path, char * error
 }
 
 
-PTEID_ByteArray PTEID_EIDCard::SignXades(const char ** path, unsigned int n_paths, const char *output_path)
+PTEID_ByteArray PTEID_EIDCard::SignXades(const char * const* paths, unsigned int n_paths, const char *output_path)
 {
 
 	PTEID_ByteArray out;
@@ -42,7 +42,7 @@ PTEID_ByteArray PTEID_EIDCard::SignXades(const char ** path, unsigned int n_path
 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
 
-	CByteArray &ca = pcard->SignXades(path, n_paths, output_path);
+	CByteArray &ca = pcard->SignXades((const char **)paths, n_paths, output_path);
 	out.Append(ca.GetBytes(), ca.Size());
 
 	END_TRY_CATCH
@@ -70,7 +70,7 @@ PTEID_ByteArray PTEID_EIDCard::SignXades(PTEID_ByteArray to_be_signed, const cha
 
 }
 
-PTEID_ByteArray PTEID_EIDCard::SignXadesT(const char ** path, unsigned int n_paths, const char *output_path)
+PTEID_ByteArray PTEID_EIDCard::SignXadesT(const char *const * path, unsigned int n_paths, const char *output_path)
 {
 
 	PTEID_ByteArray out;
@@ -79,7 +79,7 @@ PTEID_ByteArray PTEID_EIDCard::SignXadesT(const char ** path, unsigned int n_pat
 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
 
-	CByteArray &ca = pcard->SignXadesT(path, n_paths, output_path);
+	CByteArray &ca = pcard->SignXadesT((const char **)path, n_paths, output_path);
 	out.Append(ca.GetBytes(), ca.Size());
 
 	END_TRY_CATCH
