@@ -105,7 +105,7 @@ public class pteid {
             for (long i = 0; i < pins.count(); i++) {
                 PTEID_Pin pin = pins.getPinByNumber(i);
                 if (pin.getPinRef() == 131) {
-                    if (pin.verifyPin("", ul)) {
+                    if (pin.verifyPin("", ul,true)) {
                         return new PTEID_ADDR(idCard.getAddr());
                     }
                 }
@@ -182,7 +182,7 @@ public class pteid {
                 for (long pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                     PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getPinRef() == pinId) {
-                        pin.verifyPin("", ul);
+                        pin.verifyPin("", ul,true);
                         //martinho: verify pin is not working properly for readers without pinpad at this moment,
                         //this is a workaround
                         triesLeft = pin.getTriesLeft();
@@ -213,7 +213,7 @@ public class pteid {
                 for (long pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                     PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getPinRef() == pinId)
-                        if (pin.changePin(oldPin, newPin, ul, pin.getLabel())) {
+                        if (pin.changePin(oldPin, newPin, ul, pin.getLabel(),true)) {
                             triesLeft = pin.getTriesLeft();
                             return 0;
                         } 
