@@ -775,6 +775,7 @@ class PTEID_SigVerifier
 
 	public:
 	PTEIDSDK_API static bool VerifySignature(const char *container, char * error_buffer, unsigned long *error_size);
+	PTEIDSDK_API static bool VerifySignature(const char *container, char * error_buffer, unsigned long &error_size);
 
 };
 

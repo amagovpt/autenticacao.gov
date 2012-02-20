@@ -530,6 +530,37 @@ return $jnicall;
 
 %typemap(javain) const unsigned char* "$javainput"
 
+%ignore eIDMW::PTEID_SigVerifier::VerifySignature(const char *container, char * error_buffer, unsigned long *error_size);
+
+%typemap(javaout) bool eIDMW::PTEID_SigVerifier::VerifySignature(const char *container, char * error_buffer, unsigned long &error_size)
+{
+
+	  long		error_size_internal  = pteidlibJava_WrapperJNI.new_ulongp();
+	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_SigVerifier_VerifySignature(container, error_buffer, error_size_internal);
+	  
+	  error_size.m_long = pteidlibJava_WrapperJNI.ulongp_value(error_size_internal);
+	  pteidlibJava_WrapperJNI.delete_ulongp(error_size_internal);
+	  return retval;
+}
+
+%typemap(in) const char * const * (jint size) {
+
+    int i = 0;
+    size = jenv->GetArrayLength($input);
+    $1 = (char **) malloc((size+1)*sizeof(char *));
+    /* make a copy of each string */
+    for (i = 0; i<size; i++) {
+        jstring j_string = (jstring)jenv->GetObjectArrayElement($input, i);
+        const char * c_string = jenv->GetStringUTFChars( j_string, 0);
+        $1[i] = (char*) malloc((strlen(c_string)+1)*sizeof(char));
+        strcpy($1[i], c_string);
+        jenv->ReleaseStringUTFChars(j_string, c_string);
+        jenv->DeleteLocalRef(j_string);
+    }
+    $1[i] = 0;
+
+}
+
 //------------------------------------------------
 // This allows a C++ function to return a 'const char * const *' as a Java String array
 // The code will be put in the CPP-wrapper to convert the 'const char * const *' coming

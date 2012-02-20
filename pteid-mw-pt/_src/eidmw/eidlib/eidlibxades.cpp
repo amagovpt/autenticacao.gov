@@ -32,6 +32,14 @@ bool PTEID_SigVerifier::VerifySignature(const char *container_path, char * error
 
 }
 
+bool PTEID_SigVerifier::VerifySignature(const char *container_path, char * error_buffer, unsigned long &error_size)
+{
+	bool res = false;
+
+	res = APLVerifySignature(container_path, error_buffer, &error_size);
+	return res;
+
+}
 
 PTEID_ByteArray PTEID_EIDCard::SignXades(const char * const* paths, unsigned int n_paths, const char *output_path)
 {
