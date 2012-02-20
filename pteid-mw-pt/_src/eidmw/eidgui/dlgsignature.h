@@ -52,7 +52,7 @@ private:
     QFutureWatcher<void> FutureWatcher;
 
     void SignListView (QStringList list);
-    void runsign(const char ** paths, unsigned int n_paths, const char *output_path);
+    void runsign(const char ** paths, unsigned int n_paths, const char *output_path, bool timestamp);
 
 };
 
