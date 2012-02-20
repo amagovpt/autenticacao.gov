@@ -211,6 +211,7 @@ void dlgSignature::on_pbSign_clicked ( void )
 		output_file = new char[len_2+1];
 		strcpy(output_file,(char*)native_path.toStdString().c_str());
 #else
+		int outp_len = native_path.size(); 
 		output_file =  new char[outp_len*2];
 	    strncpy(output_file, native_path.toUtf8().constData(), outp_len*2);
 #endif	    
