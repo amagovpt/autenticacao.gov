@@ -346,7 +346,7 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
         downloadurl.append(configurl);
 
 #ifdef WIN32
-	if (arch == "x86_64")
+	if (arch == "i386")
 	{
 		pkgname.append("PteidMW35-Basic-en.msi");
 		downloadurl.append(pkgname);
