@@ -1,1 +1,1 @@
-swig -c++ -java -package be.portugal.eid -o ./GeneratedFiles/eidlibJava_Wrapper.cpp -outdir ./GeneratedFiles ../eidlib/eidlib.i 
+swig -c++ -java -package pt.gov.cartaodecidadao -o ./GeneratedFiles/eidlibJava_Wrapper.cpp -outdir ./GeneratedFiles ../eidlib/eidlib.i 
