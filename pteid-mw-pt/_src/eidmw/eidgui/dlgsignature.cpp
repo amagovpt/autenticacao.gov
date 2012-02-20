@@ -56,6 +56,12 @@ dlgSignature::dlgSignature( QWidget* parent, CardInformation& CI_Data)
 		{
 			this->resize(thiswidth,height-20); //make sure the window fits
 		}
+		
+		/* QVBoxLayout *layout = new QVBoxLayout;
+        this->setLayout(layout);
+
+		this->layout()->setSizeConstraint(QLayout::SetFixedSize);
+		this->setSizeGripEnabled(false); */
 
 	}
 
@@ -126,11 +132,10 @@ void dlgSignature::ShowContextMenu(const QPoint& pos)
 
 	QMenu *myMenu = new QMenu(ui.listView);
 	//myMenu->addAction("Remove Item");
-	QAction *_open = new QAction("Remove", this);
-	myMenu->addAction(_open);
-	connect( _open, SIGNAL( triggered() ), this, SLOT( RemoveFromView() ) );
+	QAction *_remove = new QAction("Remove", this);
+	myMenu->addAction(_remove);
+	connect( _remove, SIGNAL( triggered() ), this, SLOT( RemoveFromView() ) );
 	QAction* selectedItem = myMenu->exec(globalPos);
-
 
 	/*if (selectedItem)
 	{
@@ -196,7 +201,9 @@ void dlgSignature::on_pbSign_clicked ( void )
 	    pdialog->setMaximum(0);
 	    connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
 
-	    int outp_len = native_path.size();
+		//Get the Xades-T checkbox value
+		QCheckBox *xades_t = ui.checkBox;
+		bool is_xades_t = xades_t->checkState() == Qt::Checked;
 	    
 
 #ifdef WIN32		
@@ -208,7 +215,7 @@ void dlgSignature::on_pbSign_clicked ( void )
 	    strncpy(output_file, native_path.toUtf8().constData(), outp_len*2);
 #endif	    
 	    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Save to file %s", output_file);
-	    QFuture<void> future = QtConcurrent::run(this, &dlgSignature::runsign, files_to_sign, i, output_file);
+	    QFuture<void> future = QtConcurrent::run(this, &dlgSignature::runsign, files_to_sign, i, output_file, is_xades_t);
 	    this->FutureWatcher.setFuture(future);
 
             pdialog->exec();
@@ -226,18 +233,17 @@ void dlgSignature::on_pbSign_clicked ( void )
         this->close();
 }
 
-void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char *output_path)
+void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char *output_path, bool timestamp)
 {
-    unsigned long	ReaderStartIdx = 1;
-    bool		bRefresh = false;
-    //unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
-    unsigned long	ReaderIdx	   = 0;
 
     try
     {
             PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
             PTEID_ByteArray SignXades;
-            SignXades = Card->SignXadesT(paths, n_paths, output_path);
+			if (timestamp)
+				SignXades = Card->SignXadesT(paths, n_paths, output_path);
+			else
+				SignXades = Card->SignXades(paths, n_paths, output_path);
         
     }
     catch (PTEID_Exception &e)
@@ -245,8 +251,6 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
         QString msg(tr("General exception"));
         return;
     }
-
-    //pdialog->close();
 
     return;
 }
