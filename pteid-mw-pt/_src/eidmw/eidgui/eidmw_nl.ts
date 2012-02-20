@@ -107,11 +107,15 @@
     </message>
     <message>
         <location filename="mainwnd.ui" line="1984"/>
-        <location filename="mainwnd.ui" line="1749"/>
         <location filename="mainwnd.ui" line="2341"/>
         <location filename="mainwnd.ui" line="2521"/>
         <source>Card</source>
         <translation>Cartão</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="1749"/>
+        <source>      Card</source>
+        <translation>      Cartão</translation>
     </message>
     
     <message>
@@ -323,6 +327,11 @@
         <location filename="mainwnd.ui" line="2538"/>
         <source>Language</source>
         <translation>Idioma</translation>
+    </message>
+    <message>
+        <location filename="mainwnd.ui" line="1833"/>
+        <source>      Language</source>
+        <translation>      Idioma</translation>
     </message>
     <message>
         <location filename="mainwnd.ui" line="2781"/>
