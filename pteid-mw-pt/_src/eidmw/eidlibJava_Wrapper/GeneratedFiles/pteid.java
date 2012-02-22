@@ -323,7 +323,7 @@ public class pteid {
     
     
     public static int UnblockPIN_Ext(byte b, String string, String string1, int i) throws PteidException{
-        return 0;
+    	return UnblockPIN(b,string, string1);
     }
     
     
