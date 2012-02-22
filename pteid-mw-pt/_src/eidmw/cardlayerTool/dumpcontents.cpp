@@ -143,7 +143,7 @@ static void DumpFile(CReader &oReader,
 
 static long DumpPteidContents(CReader &oReader)
 {
-	printf("Type: BE eID\n");
+	printf("Type: PT eID\n");
 	printf("Version: %0x\n", oReader.GetInfo().GetByte(21));
 
 	std::string csPath;
