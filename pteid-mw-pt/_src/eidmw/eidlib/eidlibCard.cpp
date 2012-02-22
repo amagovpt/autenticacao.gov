@@ -1518,10 +1518,10 @@ PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszN
 
 PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft, unsigned long ulFlags){
 	if (readerContext!=NULL){
-
+		return PTEID_UnblockPIN(PinId,	pszPuk,pszNewPin,triesLeft);
 	}
 
-	return 0;
+	return -1;
 }
 
 PTEIDSDK_API long PTEID_SelectADF(unsigned char *adf, long adflen){
@@ -1621,9 +1621,13 @@ PTEIDSDK_API long PTEID_SetSODChecking(int bDoCheck){
 	return 0;
 }
 
-PTEIDSDK_API long PTEID_SetSODCAs( PTEID_Certifs *Certifs){
+PTEIDSDK_API long PTEID_SetSODCAs(PTEID_Certifs *Certifs){
 	if (readerContext!=NULL){
-
+		for(int i=0;i<Certifs->certificatesLength;i++){
+			PTEID_ByteArray *pba = new PTEID_ByteArray(Certifs->certificates[i].certif,Certifs->certificates[i].certifLength);
+			readerContext->getEIDCard().getCertificates().addCertificate(*pba);
+			delete pba;
+		}
 	}
 
 	return 0;
