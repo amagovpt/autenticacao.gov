@@ -273,7 +273,6 @@ EIDMW_PP_API long EIDMW_PP2_Command(
     unsigned char ucPintype, unsigned char ucOperation,
     unsigned long ulRfu, void *pRfu)
 {
-    printf ("ACR83U Command\n");
     EIDMW_PP_VERIFY_CCID pin_verify;
     EIDMW_PP_CHANGE_CCID pin_change;
     void * pin_struct = NULL;
@@ -284,6 +283,8 @@ EIDMW_PP_API long EIDMW_PP2_Command(
     unsigned int i, apdu_length=0, length=0 ;
 
     dwAtrLen = sizeof(pbAtr);
+
+	printf("ppacr83 plugin: PP2_Command()\n");
 
     if (ioctl == CM_IOCTL_GET_FEATURE_REQUEST)
     {

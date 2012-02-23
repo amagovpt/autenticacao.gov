@@ -310,7 +310,8 @@ Global
 		{DC41E34B-8251-41DE-8065-D56B022F5755}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{DC41E34B-8251-41DE-8065-D56B022F5755}.Release|Win32.ActiveCfg = Release|Win32
 		{DC41E34B-8251-41DE-8065-D56B022F5755}.Release|Win32.Build.0 = Release|Win32
-		{DC41E34B-8251-41DE-8065-D56B022F5755}.Release|x64.ActiveCfg = Release|Win32
+		{DC41E34B-8251-41DE-8065-D56B022F5755}.Release|x64.ActiveCfg = Release|x64
+		{DC41E34B-8251-41DE-8065-D56B022F5755}.Release|x64.Build.0 = Release|x64
 		{DC41E34B-8251-41DE-8065-D56B022F5755}.Release|x86.ActiveCfg = Release|Win32
 		{3A09DD63-945E-40EB-9053-5FE50F74B7C1}.Debug No Xalan|Any CPU.ActiveCfg = Debug|Win32
 		{3A09DD63-945E-40EB-9053-5FE50F74B7C1}.Debug No Xalan|Mixed Platforms.ActiveCfg = Debug|Win32
@@ -1093,7 +1094,8 @@ Global
 		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Release|Win32.ActiveCfg = Release|Win32
 		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Release|Win32.Build.0 = Release|Win32
-		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Release|x64.ActiveCfg = Release|Win32
+		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Release|x64.ActiveCfg = Release|x64
+		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Release|x64.Build.0 = Release|x64
 		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Release|x86.ActiveCfg = Release|Win32
 		{E25D19BA-813C-477E-BB1A-7ADA0B339CED}.Debug No Xalan|Any CPU.ActiveCfg = Debug|Win32
 		{E25D19BA-813C-477E-BB1A-7ADA0B339CED}.Debug No Xalan|Mixed Platforms.ActiveCfg = Debug|Win32
@@ -1121,7 +1123,8 @@ Global
 		{E25D19BA-813C-477E-BB1A-7ADA0B339CED}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{E25D19BA-813C-477E-BB1A-7ADA0B339CED}.Release|Win32.ActiveCfg = Release|Win32
 		{E25D19BA-813C-477E-BB1A-7ADA0B339CED}.Release|Win32.Build.0 = Release|Win32
-		{E25D19BA-813C-477E-BB1A-7ADA0B339CED}.Release|x64.ActiveCfg = Release|Win32
+		{E25D19BA-813C-477E-BB1A-7ADA0B339CED}.Release|x64.ActiveCfg = Release|x64
+		{E25D19BA-813C-477E-BB1A-7ADA0B339CED}.Release|x64.Build.0 = Release|x64
 		{E25D19BA-813C-477E-BB1A-7ADA0B339CED}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
