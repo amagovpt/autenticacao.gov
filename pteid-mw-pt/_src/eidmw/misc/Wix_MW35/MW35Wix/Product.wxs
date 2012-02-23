@@ -216,16 +216,6 @@
       </Component>
     </DirectoryRef>
 
-    <!--
-    <DirectoryRef Id="IMAGEFORMATS">
-      <Component Id="QtPlugin" Guid="{7389D5A9-429D-4799-9B68-FD64FA5A463F}" SharedDllRefCount="yes">
-      <File Id="qjpeg4.dll" Name="qjpeg4.dll" KeyPath="yes" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\plugins\imageformats\qjpeg4.dll" />
-		  <File Id="qtjp22.dll" Name="qtjp22.dll" KeyPath="no" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\plugins\imageformats\qtjp22.dll" /> 
-
-      </Component>
-    </DirectoryRef>
-    -->
-
     <DirectoryRef Id="LOGDIR">
       <Component Id="LogDir" Guid="{A300DA04-F8DF-4506-B654-1E5EB2782DF3}" KeyPath="yes">
         <CreateFolder>
@@ -438,7 +428,6 @@
       </Component>
 
       <Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
-        <RemoveFolder Id='APPLICATIONROOTFOLDER' On='uninstall' />
         <File Id="pteid35gui.exe" Name="pteid35gui.exe" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteid35gui.exe" />
         <File Id="pteid35libCpp.dll" Name="pteid35libCpp.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid35libCpp.dll" />
       </Component>
@@ -538,6 +527,7 @@
       </Component>
 
     </DirectoryRef>
+	  
     <Binary Id="PTeIDWin32CertificateImport" SourceFile="..\..\..\_Binaries35\Release\PTeIDWin32CertificateImport.exe" />
 
 

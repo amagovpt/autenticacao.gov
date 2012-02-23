@@ -155,8 +155,9 @@
 
       <Directory Id="WindowsFolder"/>
 
-      <Directory Id="System64Folder"/>
-		<Directory Id="PTEIDPPDIR" Name="pteidpp"/>
+		<Directory Id="System64Folder">
+			<Directory Id="PTEIDPPDIR" Name="pteidpp"/>
+		</Directory>
 
       <Merge Id="VCRT" SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC80_CRT_x86.msm" Language="0" DiskId="1" />
       <Merge Id="VCRT_POLICY" SourceFile="$(var.PTEID_DIR_MSM)\policy_8_0_Microsoft_VC80_CRT_x86.msm" Language="0" DiskId="1" />
@@ -194,18 +195,11 @@
       </Component>
     </DirectoryRef>
 
-    <DirectoryRef Id="CRLEIDBELGIUMBE">
-      <Component Id="CrlEidPortugalBe" Guid="{26BEC283-40A5-43A8-BC57-351DA9F79B33}" KeyPath="yes">
-        <CreateFolder />
-      </Component>
-    </DirectoryRef>
-
-    <DirectoryRef Id="IMAGEFORMATS">
-      <Component Id="QtPlugin" Guid="{7389D5A9-429D-4799-9B68-FD64FA5A463F}" SharedDllRefCount="yes">
-        <File Id="qjpeg4.dll" Name="qjpeg4.dll" KeyPath="yes" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\plugins\imageformats\qjpeg4.dll" />
-		<File Id="qtjp22.dll" Name="qtjp22.dll" KeyPath="no" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\plugins\imageformats\qtjp22.dll" />
-		</Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="CRLEIDBELGIUMBE">
+		  <Component Id="CrlEidPortugalBe" Guid="{26BEC283-40A5-43A8-BC57-351DA9F79B33}" KeyPath="yes">
+			  <CreateFolder />
+		  </Component>
+	  </DirectoryRef>
 
     <DirectoryRef Id="LOGDIR">
       <Component Id="LogDir" Guid="{A300DA04-F8DF-4506-B654-1E5EB2782DF3}" KeyPath="yes">
@@ -389,6 +383,11 @@
         <File Id="pteid35libCpp.dll" Name="pteid35libCpp.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35libCpp.dll" />
       </Component>
 
+	<!--Our Build of LibCurl - custom build options to remove unneeded features-->
+	<Component Id="Curl" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
+			<File Id="libcurl.dll" Name="libcurl.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\libcurl-7.24\bin\libcurl.dll" ></File>
+	</Component>
+
       <Component Id="GuiLang" Guid="{6B03ED1B-DF24-4CE6-A70C-476AF4C0941B}" SharedDllRefCount="yes">
         <File Id="eidmw_en.qm" Name="eidmw_en.qm" KeyPath="yes" Source="..\..\..\eidgui\eidmw_en.qm" />
         <File Id="eidmw_nl.qm" Name="eidmw_nl.qm" KeyPath="no" Source="..\..\..\eidgui\eidmw_nl.qm" />
@@ -396,10 +395,22 @@
         <File Id="eidmw_de.qm" Name="eidmw_de.qm" KeyPath="no" Source="..\..\..\eidgui\eidmw_de.qm" />
       </Component>
 
-      <Component Id="Qt" Guid="{AF5AF018-EE70-4EA9-98BA-9C2947F19060}" SharedDllRefCount="yes">
-        <File Id="QtCore4.dll" Name="QtCore4.dll" KeyPath="yes" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\bin\QtCore4.dll" />
-        <File Id="QtGui4.dll" Name="QtGui4.dll" KeyPath="no" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\bin\QtGui4.dll" />
-      </Component>
+
+		<!--Cairo and its dependencies: needed for the PDF export function -->
+		<Component Id="Cairo" Guid="{DF770DAC-0151-49ea-890A-6E47C664F74E}" SharedDllRefCount="yes">
+			<File Id="libcairo2.dll" Name="libcairo-2.dll" KeyPath="yes" Source="..\..\..\..\ThirdParty\cairo\bin\libcairo-2.dll" ></File>
+			<File Id="libfreetype6.dll" Name="libfreetype-6.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\libfreetype-6.dll" ></File>
+			<File Id="libpng12.dll" Name="libpng14-14.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\libpng14-14.dll" ></File>
+			<File Id="libfontconfig1.dll" Name="libfontconfig-1.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\libfontconfig-1.dll" ></File>
+			<File Id="libexpat1.dll" Name="libexpat-1.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\libexpat-1.dll" ></File>
+			<File Id="zlib1.dll" Name="zlib1.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\zlib1.dll" ></File>
+		</Component>
+
+		<Component Id="Qt" Guid="{AF5AF018-EE70-4EA9-98BA-9C2947F19060}" SharedDllRefCount="yes">
+			<File Id="QtCore4.dll" Name="QtCore4.dll" KeyPath="yes" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\bin\QtCore4.dll" />
+			<File Id="QtGui4.dll" Name="QtGui4.dll" KeyPath="no" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\bin\QtGui4.dll" />
+			<File Id="QtNetwork4.dll" Name="QtNetwork4.dll" KeyPath="no" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\bin\QtNetwork4.dll" />
+		</Component>
       
       <Component Id="License" Guid="{C00AF621-E882-4805-BA9C-B90AA5DBBCB6}" SharedDllRefCount="yes">
         <File Id="License_en.rtf" Name="License_en.rtf" KeyPath="yes" Source="..\..\..\misc\licenses_files\License_en.rtf" />
@@ -444,10 +455,14 @@
 			<File Id="FreeImage.dll" Name="FreeImage.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\FreeImage.dll" />
 	  </Component>
 
+		<Component Id="XMLSecurity" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F65" SharedDllRefCount="yes">
+			<File Id="xsec_1_6.dll" Name="xsec_1_6.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\xsec_1_6.dll" />
+		</Component>
 
+		<!--  
       <Component Id="MINIDRIVER_64" Guid="{a8259480-e408-11de-8a39-0800200c9a66}" SharedDllRefCount="yes" Win64="yes">
         <File Id="pteidmdrv64.dll" Name="pteidmdrv64.dll" KeyPath="yes" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" />
-      </Component>
+      </Component> -->
 
 
 		<Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
@@ -458,14 +473,21 @@
 		<Component Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
 			<File Id="xercesc_3_1.dll" Name="xerces-c_3_1.dll" KeyPath="yes" Source="$(var.PTEID_DIR_XERCES_310)\bin\xerces-c_3_1.dll" />
 		</Component>
+
       
-    </DirectoryRef> 
-   
-    <DirectoryRef Id="PTEIDPPDIR">
-      <Component Id="PinpadLib" Guid="{9ADA6D75-5DCC-467E-A0CE-B84A482B2115}" SharedDllRefCount="yes">
-        <File Id="pteidpp2gempc.dll" Name="pteidpp2-gempc.dll" Source="..\..\..\_Binaries35\x64\Release\pteidpp2-gempc.dll" />
-      </Component>
     </DirectoryRef>
+
+
+	  <DirectoryRef Id="PTEIDPPDIR">
+		  <Component Id="PinpadLib" Guid="{9ADA6D75-5DCC-467E-A0CE-B84A482B2115}" SharedDllRefCount="yes">
+			  <File Id="pteidpp2gempc.dll" Name="pteidpp2-gempc.dll" Source="..\..\..\_Binaries35\x64\Release\pteidpp2-gempc.dll" />
+			  <File Id="pteidpp2acr83plugin.dll" Name="pteidpp2-acr83-plugin.dll" Source="..\..\..\_Binaries35\Release\pteidpp2-acr83-plugin.dll" />
+		  </Component>
+	  </DirectoryRef>
+	  
+	  <Binary Id="PTeIDWin32CertificateImport" SourceFile="..\..\..\_Binaries35\x64\Release\PTeIDWin32CertificateImport.exe" />
+   
+    
     <DirectoryRef Id="TARGETDIR">
       <Component Id="SCardSvrService" Guid="{C3BC9746-0843-41b2-BDDA-3192772974CE}" Permanent="yes">
         <!-- Start SCardSvr Service during startup -->
@@ -683,8 +705,11 @@
                 >
         <ComponentRef Id="GUI" />
         <ComponentRef Id="Qt" />
-        <ComponentRef Id="QtPlugin"/>
+		  
 		<ComponentRef Id="FreeImage"/>
+		<ComponentRef Id="Curl"/>
+		<ComponentRef Id="XMLSecurity"/>
+		<ComponentRef Id="Cairo"/>
         <ComponentRef Id="GuiLang" />
         <!-- Shortcuts -->
         <ComponentRef Id="PteidGuiShortcut"/>
@@ -706,8 +731,8 @@
           <ComponentRef Id="pteidmdrv"/>
           <ComponentRef Id="CertPropService"/>
 		<!--  <ComponentRef Id="MINIDRIVER"/> -->
-          <ComponentRef Id="MINIDRIVER_64"/>
-          <ComponentRef Id="REGISTERMINIDRIVER_64"/>
+		<!--  <ComponentRef Id="MINIDRIVER_64"/>  -->
+		  <ComponentRef Id="REGISTERMINIDRIVER_64"/>
           <Condition Level="1">VersionNT >= 600</Condition>
         </Feature>
 		  <!--
@@ -718,6 +743,8 @@
         </Feature> -->
       </Feature>
     </Feature>
+
+	<Binary Id="MarkHidden" SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>
 
     <CustomAction Id="LaunchApplication" 
                   FileKey="pteid35gui.exe" 
@@ -740,7 +767,14 @@
     </UI>
     
     <CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[APPLICATIONROOTFOLDER]" />
-   
+
+	  <CustomAction Id="SetCacheDirHidden"
+					Impersonate="no"
+					BinaryKey="MarkHidden"
+					ExeCommand="&quot;[ProgramFilesFolder]Portugal Identity Card\.cache&quot;"
+					Execute="deferred"
+					Return="asyncNoWait"
+					/>
 
 <!-- 
     <CustomAction Id="StopGui"
@@ -811,8 +845,7 @@
     - Avoid to run the cleanup process              =>  CLEANUP_NO=1
     - Force de cleanup to kill all locking process  =>  CLEANUP_FORCE=1
     - Define a specific log file                    =>  CLEANUP_LOG=<FileName>
--->
-	 <Binary Id="PTeIDWin32CertificateImport" SourceFile="..\..\..\_Binaries35\x64\Release\PTeIDWin32CertificateImport.exe" />
+-->	 
     <CustomAction Id="ForceCleanup" Property="ForceCleanup" Value="-f " />
     <CustomAction Id="NotForceCleanup" Property="ForceCleanup" Value="" />
 
@@ -863,6 +896,8 @@
       <Custom Action="ForceCleanup" Before="PteidCleanup">CLEANUP_FORCE=1</Custom>
       <Custom Action="NotForceCleanup" Before="PteidCleanup"><![CDATA[CLEANUP_FORCE<>1 OR NOT CLEANUP_FORCE]]></Custom>
      -->
+	  <Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
+	  <Custom Action="CertificateRegistration" After="InstallFiles">NOT Installed</Custom>
 
       <ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>
     </InstallExecuteSequence>
