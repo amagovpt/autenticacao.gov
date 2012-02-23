@@ -40,9 +40,8 @@ dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUA
 , m_CI_Data(CI_Data)
 , m_CurrReaderName("")
 {	
-	if (CI_Data.isDataLoaded())
-	{
-
+    if (CI_Data.isDataLoaded())
+    {
 		ui.setupUi(this);
 		const QIcon Ico = QIcon( ":/images/Images/Icons/Print.png" );
 		this->setWindowIcon( Ico );
@@ -60,7 +59,37 @@ dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUA
 			this->resize(thiswidth,height-20); //make sure the window fits
 		}
 
-	}
+        try
+        {
+            unsigned long	ReaderStartIdx = 1;
+            bool			bRefresh	   = false;
+            unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
+            unsigned long	ReaderIdx	   = 0;
+
+            if (ReaderStartIdx!=(unsigned long)-1)
+            {
+                ReaderEndIdx = ReaderStartIdx+1;
+            }
+            else
+            {
+                ReaderStartIdx=0;
+            }
+
+            const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+            m_CurrReaderName = readerName;
+            PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
+
+            if (ReaderContext.isCardPresent())
+            {
+                PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
+                CI_Data.LoadData(Card,m_CurrReaderName);
+            }
+        }	catch (PTEID_Exception &e) {
+            return;
+        }
+
+
+    }
 
 }
 
@@ -204,8 +233,8 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 		//------------------------------------
 		// make always sure a card is present
 		//------------------------------------
-		if (ReaderContext.isCardPresent())
-		{
+        if (ReaderContext.isCardPresent())
+        {
 			QString PinName = "PIN da Morada";
 
 			PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
@@ -247,14 +276,14 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 					break;
 				}
-			}
-		}
+            }
+        }
 		else
 		{
 			QString msg(tr("No card present"));
 			QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 			return false;
-		}
+        }
 	}
 	catch (PTEID_Exception &e)
 	{
