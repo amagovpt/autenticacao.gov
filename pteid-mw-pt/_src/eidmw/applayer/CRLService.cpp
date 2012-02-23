@@ -256,50 +256,11 @@ APL_CrlDownload::~APL_CrlDownload()
 
 int APL_CrlDownload::Start()
 {
-	//If the thread start, the flag m_bWaitingStart is set to false
-	int iRet=CThread::Start();
 
-	if(!iRet)
-	{
-		m_bStarted=true;
-	}
-
-	return iRet;
 }
 
 void APL_CrlDownload::Run()
 {
-	try
-	{
-		if(!m_bStopRequest)
-		{
-			setValidity();
-			if(m_cache)
-				m_cache->notifyDownload(m_uri.c_str(),DOWNLOAD_NOTIFY_BEGIN,m_Validity.c_str());
-
-			if(download())
-			{
-			//When the download is finished, we notify the cache
-				if(m_cache)
-					m_cache->notifyDownload(m_uri.c_str(),DOWNLOAD_NOTIFY_END_OK,m_Validity.c_str());
-			}
-			else
-			{
-				if(m_cache)
-					m_cache->notifyDownload(m_uri.c_str(),DOWNLOAD_NOTIFY_ERR_CONNECT,m_Validity.c_str());
-			}
-		}
-		resetValidity();
-
-	}
-	catch (...)
-	{
-		if(m_cache)
-			m_cache->notifyDownload(m_uri.c_str(),DOWNLOAD_NOTIFY_END_INTERRUPT,m_Validity.c_str());
-
-		m_isRunning = false;
-		throw;
-	}
 
 }
 void APL_CrlDownload::Stop()
@@ -337,33 +298,6 @@ bool APL_CrlDownload::isFinished()
 
 bool APL_CrlDownload::download()
 {
-	bool bRet = false;
-	CByteArray baData;
-    FILE *pf = NULL;  
-
-    if (m_cryptoFwk->downloadFile(m_uri.c_str(), baData,m_bStopRequest))
-    {
-
-		//First get the direcory and check if it exist
-		std::string directory=CPathUtil::getDir(m_file.c_str());
-		CPathUtil::checkDir(directory.c_str());
-
-        // Then save the file
-#ifdef WIN32
-        fopen_s(&pf,m_file.c_str(), "wb");
-#else
-        pf = fopen(m_file.c_str(), "wb");
-#endif
-        if(NULL != pf)
-        {
-            size_t ulNumWritten = 0;
-            ulNumWritten = fwrite(baData.GetBytes(), sizeof(unsigned char), baData.Size(), pf);
-            fclose(pf);
-            bRet = true;
-        }
-	}
-
-    return bRet;
 
 }
 
@@ -419,25 +353,6 @@ APL_DownloadControl::~APL_DownloadControl()
 
 void APL_DownloadControl::Run()
 {
-
-	try
-	{
-		while(!m_bStopRequest)
-		{
-			if(!m_bStopRequest)
-				deleteOldThreads(false);
-			if(!m_bStopRequest)
-				startNewThreads();
-
-			if(!m_bStopRequest)
-				SleepMillisecs(100);
-		}
-	}
-	catch (...)
-	{
-		m_isRunning = false;
-		throw;
-	}
 }
 
 bool APL_DownloadControl::pushNewDownload(const char *uri, const char *file, bool bHighPriority,APL_CrlDownloadingCache *cache)
@@ -527,71 +442,6 @@ void APL_DownloadControl::deleteOldThreads(bool bForceAll)
 
 void APL_DownloadControl::startNewThreads()
 {
-	CAutoMutex autoMutex(&m_Mutex);			//To prevent multi-access to vector m_threads
-
-	std::vector<APL_CrlDownload *>::iterator itr;
-	APL_CrlDownload *pThread;
-	
-	//We loop 2 times through the vector.
-	//The fisrt time we only run all the HighPriority threads
-	itr = m_threads.begin();
-	while(itr!=m_threads.end())
-	{
-		pThread=*itr;
-		
-		//If the thread is not yet started
-		if(!pThread->isStarted())
-		{
-			if(pThread->isHighPriority()) 
-			{
-				pThread->Start();			//Start the new thread
-				m_ulCurrentlyRunning++;
-			}
-		}
-
-		itr++;
-	} 
-
-	//Then if there is place for other threads
-	//we made another vector for random selection
-	if(m_ulCurrentlyRunning<m_ulMaxNumber)
-	{
-		std::vector<APL_CrlDownload *> listDownload;
-
-		itr = m_threads.begin();
-		while(itr!=m_threads.end())
-		{
-			pThread=*itr;
-			
-			//If the thread is not yet started
-			if(!pThread->isStarted())
-			{
-				listDownload.push_back(pThread);
-			}
-			if(m_ulCurrentlyRunning>=m_ulMaxNumber)
-				break;
-
-			itr++;
-		} 
-		
-		while(listDownload.size()>0 && m_ulCurrentlyRunning<m_ulMaxNumber) 
-		{
-			int idx=(int)((double)listDownload.size()*(double)rand()/(double)RAND_MAX);
-
-			itr = listDownload.begin();
-			for(int i=0;i<idx;i++)
-			{
-				itr++;
-			}
-			pThread=*itr;
-
-			pThread->Start();			//Start the new thread
-			m_ulCurrentlyRunning++;
-
-			listDownload.erase(itr);
-		}
-
-	}
 }
 
 void APL_DownloadControl::Stop()
@@ -634,7 +484,7 @@ APL_CrlDownloadingCache::APL_CrlDownloadingCache(APL_CryptoFwk *cryptoFwk)
 	APL_CdcLine::setCryptoFwk(m_cryptoFwk);
 
 	//Start the threads
-	startAllThreads();
+	//startAllThreads();
 }
 
 APL_CrlDownloadingCache::~APL_CrlDownloadingCache()
