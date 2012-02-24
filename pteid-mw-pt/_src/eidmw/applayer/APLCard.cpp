@@ -28,6 +28,7 @@
 #include "CardPteidDef.h"
 #include "XadesSignature.h"
 #include "SigContainer.h"
+#include "MiscUtil.h"
 
 #include <time.h>
 #include <sys/types.h>
@@ -137,11 +138,23 @@ CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey)
 	return out;
 }
 
+bool checkExistingFiles(const char **files, unsigned int n_paths)
+{
+	for(unsigned int i=0; i != n_paths; i++)
+	{
+		if (!CPathUtil::existFile(files[i]))	
+			return false;
+	}
+
+	return true;
+}
+
 
 CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const char *output_path)
 {
-	if (paths == NULL || n_paths < 1)
+	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+	
 	XadesSignature sig(this);
 
 	CByteArray &signature = sig.SignXades(paths, n_paths, false);
@@ -169,7 +182,7 @@ CByteArray &APL_Card::SignXadesT(CByteArray content, const char *URL)
 
 CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, const char *output_file)
 {
-	if (paths == NULL || n_paths < 1)
+	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	XadesSignature sig(this);
 
