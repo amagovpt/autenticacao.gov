@@ -16,8 +16,6 @@ EIDMW_PP_API long EIDMW_PP2_Init(
     tGuiInfo *pGuiInfo,
     unsigned long ulRfu, void *pRfu)
 {
-    printf ("ACR83U init\n");
-
     if (hCard == 0 || hCtx == 0)
         return SCARD_E_INVALID_PARAMETER;
 
