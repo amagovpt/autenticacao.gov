@@ -256,7 +256,7 @@ APL_CrlDownload::~APL_CrlDownload()
 
 int APL_CrlDownload::Start()
 {
-
+	return 0;
 }
 
 void APL_CrlDownload::Run()
@@ -298,7 +298,7 @@ bool APL_CrlDownload::isFinished()
 
 bool APL_CrlDownload::download()
 {
-
+	return true;
 }
 
 //Set Downloading timestamp in format YYYYMMDDThhmmss by default
