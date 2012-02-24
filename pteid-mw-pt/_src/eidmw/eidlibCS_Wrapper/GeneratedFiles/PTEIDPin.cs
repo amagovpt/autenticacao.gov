@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Project1
+namespace pt.portugal.eid
 {
     public class PTEIDPin
     {
