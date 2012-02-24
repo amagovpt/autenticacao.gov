@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Project1
+namespace pt.portugal.eid
 {
     public class PTEID_RSAPublicKey
     {
