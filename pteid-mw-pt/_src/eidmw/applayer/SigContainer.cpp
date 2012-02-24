@@ -2,6 +2,7 @@
 
 #ifdef WIN32
 #include <Windows.h> //CharToOem()
+#define unlink _unlink
 #endif
 
 #include "MiscUtil.h"
@@ -42,7 +43,6 @@ namespace eIDMW
 		void *p;
 		size_t uncompressed_size = 0;
 		CByteArray *ba = new CByteArray();
-		//p = mz_zip_reader_extract_file_to_heap(&zip_archive, entry, &uncompressed_size, MZ_ZIP_FLAG_IGNORE_PATH);
 		p = mz_zip_reader_extract_file_to_heap(&zip_archive, entry, &uncompressed_size, 0);
 		if (!p)
 		{
@@ -77,7 +77,6 @@ namespace eIDMW
 	CByteArray* Container::ExtractSignature()
 	{
 
-		//return ExtractFile("signature.xml");
 		return ExtractFile(SIG_INTERNAL_PATH);
 
 	}
@@ -146,8 +145,9 @@ namespace eIDMW
 
 		MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() called with output_file = %s\n",output_file); 
 
-		//Truncate the output file first...
-		Truncate(output_file);
+		//Try to delete the output file first...
+		if (unlink(output_file) == 0)
+		    MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() overwriting output file %s\n",output_file); 
 
 		// Append the referenced files to the zip file
 		for (unsigned int  i = 0; i < num_paths; i++)
