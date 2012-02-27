@@ -2022,8 +2022,6 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload)
 
 	switch(getData(baCrl,forceDownload))
 	{
-	case APL_CRL_STATUS_CONNECT:
-		return APL_CERTIF_STATUS_CONNECT;
 	case APL_CRL_STATUS_ERROR:
 		return APL_CERTIF_STATUS_ERROR;
 	case APL_CRL_STATUS_UNKNOWN:
@@ -2039,137 +2037,9 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload)
 //Get data from the file and make the verification
 APL_CrlStatus APL_Crl::getData(CByteArray &data,bool forceDownload)
 {
-	tDownloadStatus eDownloadStatus;
 	APL_CrlStatus eRetStatus=APL_CRL_STATUS_ERROR;
 
 	bool bValidity=false;
-
-	if(forceDownload)		
-		m_cache->forceCacheUpdate(m_uri.c_str(),true);
-
-	//We load the crl
-	eDownloadStatus=m_cache->getCrlDataFromUri(m_uri.c_str(),data);
-	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Crl::getData: getCrlDataFromUri return=%ld, data=%ls",eDownloadStatus,data.ToWString().c_str());
-
-	switch(eDownloadStatus)
-	{
-		//If we have a connect error, we leave
-	case DOWNLOAD_STATUS_ERR_CONNECT:
-		eRetStatus=APL_CRL_STATUS_CONNECT;
-		break;
-
-	case DOWNLOAD_STATUS_ERR_UNKNOWN:
-		eRetStatus=APL_CRL_STATUS_UNKNOWN;
-		break;
-
-	case DOWNLOAD_STATUS_OK:
-		if(!m_info)
-		{
-			CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
-			if(!m_info)
-				m_info = new tCrlInfo;
-		}
-
-		bValidity=m_cryptoFwk->getCrlInfo(data,*m_info,CDC_VALIDITY_FORMAT);
-		MWLOG(LEV_DEBUG, MOD_APL, L"APL_Crl::getData: getCrlInfo return=%d",bValidity);
-
-
-		//If the certif is not linked, we can't get the issuer and verify the signature
-		if(m_certif)
-		{
-			if(m_issuer==NULL)
-			{
-				m_issuer=m_certif->getCertificates()->findCrlIssuer(data);
-				MWLOG(LEV_DEBUG, MOD_APL, L"APL_Crl::getData: findCrlIssuer return=0x%x",m_issuer);
-			}	
-
-			if(m_issuer!=NULL)	
-			{
-				bValidity=m_cryptoFwk->isCrlValid(data,m_issuer->getData());
-				MWLOG(LEV_DEBUG, MOD_APL, L"APL_Crl::getData: isCrlValid return=%d",bValidity);
-			}
-			else 
-			{
-				//For a real card, we must have an issuer and the CRL must be valid 
-				//For a test card, if we don't have issuer, we just check the date validity 
-				if(m_certif->isTest())
-				{
-					bValidity=m_cryptoFwk->VerifyCrlDateValidity(data);
-					MWLOG(LEV_DEBUG, MOD_APL, L"APL_Crl::getData: VerifyCrlDateValidity return=%d",bValidity);
-				}
-			}
-		}
-
-		//We check if the date validity
-		if(!bValidity)
-		{
-			//if we already force the download, the crl is invalid
-			if(!forceDownload)
-			{
-				MWLOG(LEV_DEBUG, MOD_APL, L"APL_Crl::getData: Invalid CRL -> asked again");
-
-				m_issuer=NULL;
-
-				//If CRL is not valid, we ask to remove it from the cache
-				//and download it and check again
-				m_cache->forceCacheUpdate(m_uri.c_str(),true);
-
-				eDownloadStatus=m_cache->getCrlDataFromUri(m_uri.c_str(),data);
-				MWLOG(LEV_DEBUG, MOD_APL, L"APL_Crl::getData: getCrlDataFromUri return=%ld, data=%ls",eDownloadStatus,data.ToWString().c_str());
-
-				switch(eDownloadStatus)
-				{
-				case DOWNLOAD_STATUS_ERR_CONNECT:
-					eRetStatus=APL_CRL_STATUS_CONNECT;
-					break;
-
-				case DOWNLOAD_STATUS_ERR_UNKNOWN:
-					eRetStatus=APL_CRL_STATUS_UNKNOWN;
-					break;
-
-				case DOWNLOAD_STATUS_OK:
-					if(m_cryptoFwk->getCrlInfo(data,*m_info,CDC_VALIDITY_FORMAT))
-						eRetStatus=APL_CRL_STATUS_UNKNOWN;			//As Verify the signature is not possible, we return Unknown status
-					else
-						eRetStatus=APL_CRL_STATUS_ERROR;
-
-					if(m_certif)
-					{
-						if(m_issuer==NULL)
-						{
-							m_issuer=m_certif->getCertificates()->findCrlIssuer(data);
-							MWLOG(LEV_DEBUG, MOD_APL, L"APL_Crl::getData: findCrlIssuer return=0x%x",m_issuer);
-						}
-
-						if(m_issuer!=NULL)	
-						{
-							//For a real card, we must have an issuer and the CRL must be valid 
-							if(m_cryptoFwk->isCrlValid(data,m_issuer->getData()))
-								eRetStatus=APL_CRL_STATUS_VALID;
-							else
-								eRetStatus=APL_CRL_STATUS_ERROR;
-						}
-						else 
-						{
-							//For a test card, if we don't have issuer, we just check the date validity 
-							if(m_certif->isTest() && m_cryptoFwk->VerifyCrlDateValidity(data))
-								eRetStatus=APL_CRL_STATUS_VALID;
-							else
-								eRetStatus=APL_CRL_STATUS_ERROR;
-						}
-					}
-				}
-			}
-		}
-		else
-		{
-			if(m_certif)
-				eRetStatus=APL_CRL_STATUS_VALID;
-			else
-				eRetStatus=APL_CRL_STATUS_UNKNOWN;					//As Verify the signature is not possible, we return Unknown status
-		}
-		break;
-	}
 
 	//If ok, we get the info, unless we return an empty bytearray
 	if(eRetStatus==APL_CRL_STATUS_ERROR)
