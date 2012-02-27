@@ -99,56 +99,61 @@ dlgPrint::~dlgPrint()
 
 void dlgPrint::on_pbGeneratePdf_clicked( void )
 {
-	CardInformation cdata = m_CI_Data;
-	QString pdffilepath;
-	QString defaultfilepath;
+    CardInformation cdata = m_CI_Data;
+    QString pdffilepath;
+    QString defaultfilepath;
 
-	defaultfilepath = QDir::homePath();
-
-    if (ui.chboxSignature->isChecked())
+    defaultfilepath = QDir::homePath();
+    try
     {
-        QString pdffiletmp;
-        QString signfilepath;
-        QString outputsign;
-        QString nativepdftmp;
-        PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
-        PTEID_ByteArray SignXades;
+        if (ui.chboxSignature->isChecked())
+        {
+            QString pdffiletmp;
+            QString signfilepath;
+            QString outputsign;
+            QString nativepdftmp;
+            PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+            PTEID_ByteArray SignXades;
 
-        signfilepath = QDir::homePath();
-        signfilepath.append("/CartaoCidadao.zip");
-        outputsign = QFileDialog::getSaveFileName(this, tr("Save Signature File"), signfilepath, tr("Zip files 'XAdES' (*.zip)"));
+            signfilepath = QDir::homePath();
+            signfilepath.append("/CartaoCidadao.zip");
+            outputsign = QFileDialog::getSaveFileName(this, tr("Save Signature File"), signfilepath, tr("Zip files 'XAdES' (*.zip)"));
 
-        pdffiletmp = QDir::tempPath();
-        pdffiletmp.append("/CartaoCidadao.pdf");
+            pdffiletmp = QDir::tempPath();
+            pdffiletmp.append("/CartaoCidadao.pdf");
 
-        nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
+            nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
 
-        drawpdf(cdata, PDF ,nativepdftmp.toStdString().c_str());
+            drawpdf(cdata, PDF ,nativepdftmp.toStdString().c_str());
 
-        char *cpychar;
-        const char **files_to_sign = new const char*[1];
+            char *cpychar;
+            const char **files_to_sign = new const char*[1];
 
-        cpychar = new char[500];
+            cpychar = new char[500];
 #ifdef WIN32
-        strcpy(cpychar, nativepdftmp.toStdString().c_str());
+            strcpy(cpychar, nativepdftmp.toStdString().c_str());
 #else
-        strcpy(cpychar, nativepdftmp.toUtf8().constData());
+            strcpy(cpychar, nativepdftmp.toUtf8().constData());
 #endif
-        files_to_sign[0] = cpychar;
+            files_to_sign[0] = cpychar;
 
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Pdf File to Sign: %s", files_to_sign[0]);
+            PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Pdf File to Sign: %s", files_to_sign[0]);
 
-        SignXades = Card->SignXades(files_to_sign, 1, outputsign.toStdString().c_str());
-    } else {
-        QString nativepdfpath;
+            SignXades = Card->SignXades(files_to_sign, 1, outputsign.toStdString().c_str());
+        } else {
+            QString nativepdfpath;
 
-        defaultfilepath.append("/CartaoCidadao.pdf");
-        pdffilepath = QFileDialog::getSaveFileName(this, tr("Save Pdf File"), defaultfilepath, tr("Pdf Files (*.pdf)"));
-        QCoreApplication::processEvents();
+            defaultfilepath.append("/CartaoCidadao.pdf");
+            pdffilepath = QFileDialog::getSaveFileName(this, tr("Save Pdf File"), defaultfilepath, tr("Pdf Files (*.pdf)"));
+            QCoreApplication::processEvents();
 
-        nativepdfpath = QDir::toNativeSeparators(pdffilepath);
+            nativepdfpath = QDir::toNativeSeparators(pdffilepath);
 
-        drawpdf(cdata, PDF ,nativepdfpath.toStdString().c_str());
+            drawpdf(cdata, PDF ,nativepdfpath.toStdString().c_str());
+        }
+    }	catch (PTEID_Exception &e) {
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "GeneratePdf failed");
+        QString msg(tr("General exception"));
     }
 
 	done(0);
@@ -185,7 +190,8 @@ void dlgPrint::on_chboxID_toggled( bool bChecked )
     {
         ui.pbGeneratePdf->setEnabled(true);
         ui.pbPrint->setEnabled(true);
-    } else
+    }
+    else
     {
         ui.pbGeneratePdf->setEnabled(false);
         ui.pbPrint->setEnabled(false);
@@ -198,7 +204,8 @@ void dlgPrint::on_chboxAddress_toggled( bool bChecked )
     {
         ui.pbGeneratePdf->setEnabled(true);
         ui.pbPrint->setEnabled(true);
-    } else
+    }
+    else
     {
         ui.pbGeneratePdf->setEnabled(false);
         ui.pbPrint->setEnabled(false);
@@ -211,7 +218,8 @@ void dlgPrint::on_chboxIDExtra_toggled( bool bChecked )
     {
         ui.pbGeneratePdf->setEnabled(true);
         ui.pbPrint->setEnabled(true);
-    } else
+    }
+    else
     {
         ui.pbGeneratePdf->setEnabled(false);
         ui.pbPrint->setEnabled(false);
@@ -224,7 +232,8 @@ void dlgPrint::on_chboxPersoData_toggled( bool bChecked )
     {
         ui.pbGeneratePdf->setEnabled(true);
         ui.pbPrint->setEnabled(true);
-    } else
+    }
+    else
     {
         ui.pbGeneratePdf->setEnabled(false);
         ui.pbPrint->setEnabled(false);
