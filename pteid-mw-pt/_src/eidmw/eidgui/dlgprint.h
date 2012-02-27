@@ -38,6 +38,7 @@ private slots:
 	void on_chboxAddress_toggled( bool bChecked );
 	void on_chboxIDExtra_toggled( bool bChecked );
 	void on_chboxPersoData_toggled( bool bChecked );
+    void on_chboxSignature_toggled( bool bChecked );
 	//void on_btnPDF_clicked( void );
 
 
@@ -47,13 +48,13 @@ public:
 
 private:
     Ui_dlgPrint ui;
-	CardInformation const& m_CI_Data;
-	QString					m_CurrReaderName;		//!< the current reader we're using
-	QImage img;
+    CardInformation const& m_CI_Data;
+    QString					m_CurrReaderName;		//!< the current reader we're using
+    QImage img;
 
-	bool addressPINRequest_triggered(CardInformation& CI_Data);
-	bool persodata_triggered(CardInformation& CI_Data);
-	void drawpdf(CardInformation& CI_Data, int format, const char *filepath);
+    bool addressPINRequest_triggered(CardInformation& CI_Data);
+    void persodata_triggered(CardInformation& CI_Data);
+    void drawpdf(CardInformation& CI_Data, int format, const char *filepath);
 };
 
 #endif

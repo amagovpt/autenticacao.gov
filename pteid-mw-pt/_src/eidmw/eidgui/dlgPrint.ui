@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>354</width>
-    <height>169</height>
+    <width>378</width>
+    <height>233</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -127,8 +127,8 @@
      <widget class="QPushButton" name="pbCancel">
       <property name="geometry">
        <rect>
-        <x>60</x>
-        <y>120</y>
+        <x>80</x>
+        <y>180</y>
         <width>81</width>
         <height>27</height>
        </rect>
@@ -138,10 +138,13 @@
       </property>
      </widget>
      <widget class="QPushButton" name="pbPrint">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
-        <x>150</x>
-        <y>120</y>
+        <x>170</x>
+        <y>180</y>
         <width>91</width>
         <height>27</height>
        </rect>
@@ -151,16 +154,54 @@
       </property>
      </widget>
      <widget class="QPushButton" name="pbGeneratePdf">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
-        <x>240</x>
-        <y>120</y>
+        <x>260</x>
+        <y>180</y>
         <width>91</width>
         <height>27</height>
        </rect>
       </property>
       <property name="text">
        <string>Criar PDF</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chboxSignature">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>150</y>
+        <width>221</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Assinatura Digital (XAdES)</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelHeader_Options">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>120</y>
+        <width>421</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>Opções:</string>
       </property>
      </widget>
     </widget>

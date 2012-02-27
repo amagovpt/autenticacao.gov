@@ -104,11 +104,52 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 	QString defaultfilepath;
 
 	defaultfilepath = QDir::homePath();
-	defaultfilepath.append("/CartaoCidadao.pdf");
-	pdffilepath = QFileDialog::getSaveFileName(this, tr("Save File"), defaultfilepath, tr("Pdf Files (*.pdf)"));
-	QCoreApplication::processEvents();
 
-	drawpdf(cdata, PDF ,pdffilepath.toStdString().c_str());
+    if (ui.chboxSignature->isChecked())
+    {
+        QString pdffiletmp;
+        QString signfilepath;
+        QString outputsign;
+        QString nativepdftmp;
+        PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+        PTEID_ByteArray SignXades;
+
+        signfilepath = QDir::homePath();
+        signfilepath.append("/CartaoCidadao.zip");
+        outputsign = QFileDialog::getSaveFileName(this, tr("Save Signature File"), signfilepath, tr("Zip files 'XAdES' (*.zip)"));
+
+        pdffiletmp = QDir::tempPath();
+        pdffiletmp.append("/CartaoCidadao.pdf");
+
+        nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
+
+        drawpdf(cdata, PDF ,nativepdftmp.toStdString().c_str());
+
+        char *cpychar;
+        const char **files_to_sign = new const char*[1];
+
+        cpychar = new char[500];
+#ifdef WIN32
+        strcpy(cpychar, nativepdftmp.toStdString().c_str());
+#else
+        strcpy(cpychar, nativepdftmp.toUtf8().constData());
+#endif
+        files_to_sign[0] = cpychar;
+
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Pdf File to Sign: %s", files_to_sign[0]);
+
+        SignXades = Card->SignXades(files_to_sign, 1, outputsign.toStdString().c_str());
+    } else {
+        QString nativepdfpath;
+
+        defaultfilepath.append("/CartaoCidadao.pdf");
+        pdffilepath = QFileDialog::getSaveFileName(this, tr("Save Pdf File"), defaultfilepath, tr("Pdf Files (*.pdf)"));
+        QCoreApplication::processEvents();
+
+        nativepdfpath = QDir::toNativeSeparators(pdffilepath);
+
+        drawpdf(cdata, PDF ,nativepdfpath.toStdString().c_str());
+    }
 
 	done(0);
 }
@@ -140,69 +181,109 @@ void dlgPrint::on_pbCancel_clicked( void )
 
 void dlgPrint::on_chboxID_toggled( bool bChecked )
 {
-
+    if(ui.chboxID->isChecked() || ui.chboxAddress->isChecked() || ui.chboxIDExtra->isChecked() || ui.chboxPersoData->isChecked())
+    {
+        ui.pbGeneratePdf->setEnabled(true);
+        ui.pbPrint->setEnabled(true);
+    } else
+    {
+        ui.pbGeneratePdf->setEnabled(false);
+        ui.pbPrint->setEnabled(false);
+    }
 }
 
 void dlgPrint::on_chboxAddress_toggled( bool bChecked )
 {
-
+    if(ui.chboxID->isChecked() || ui.chboxAddress->isChecked() || ui.chboxIDExtra->isChecked() || ui.chboxPersoData->isChecked())
+    {
+        ui.pbGeneratePdf->setEnabled(true);
+        ui.pbPrint->setEnabled(true);
+    } else
+    {
+        ui.pbGeneratePdf->setEnabled(false);
+        ui.pbPrint->setEnabled(false);
+    }
 }
 
 void dlgPrint::on_chboxIDExtra_toggled( bool bChecked )
 {
-
+    if(ui.chboxID->isChecked() || ui.chboxAddress->isChecked() || ui.chboxIDExtra->isChecked() || ui.chboxPersoData->isChecked())
+    {
+        ui.pbGeneratePdf->setEnabled(true);
+        ui.pbPrint->setEnabled(true);
+    } else
+    {
+        ui.pbGeneratePdf->setEnabled(false);
+        ui.pbPrint->setEnabled(false);
+    }
 }
 
 void dlgPrint::on_chboxPersoData_toggled( bool bChecked )
 {
-
+    if(ui.chboxID->isChecked() || ui.chboxAddress->isChecked() || ui.chboxIDExtra->isChecked() || ui.chboxPersoData->isChecked())
+    {
+        ui.pbGeneratePdf->setEnabled(true);
+        ui.pbPrint->setEnabled(true);
+    } else
+    {
+        ui.pbGeneratePdf->setEnabled(false);
+        ui.pbPrint->setEnabled(false);
+    }
 }
 
-bool dlgPrint::persodata_triggered(CardInformation& CI_Data)
+void dlgPrint::on_chboxSignature_toggled( bool bChecked )
 {
-	try
-	{
-		unsigned long	ReaderStartIdx = 1;
-		bool			bRefresh	   = false;
-		unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
-		unsigned long	ReaderIdx	   = 0;
+    if(ui.chboxID->isChecked() || ui.chboxAddress->isChecked() || ui.chboxIDExtra->isChecked() || ui.chboxPersoData->isChecked())
+    {
+        ui.pbGeneratePdf->setEnabled(true);
+        ui.pbPrint->setEnabled(true);
+    } else
+    {
+        ui.pbGeneratePdf->setEnabled(false);
+        ui.pbPrint->setEnabled(false);
+    }
+}
 
-		if (ReaderStartIdx!=(unsigned long)-1)
-		{
-			ReaderEndIdx = ReaderStartIdx+1;
-		}
-		else
-		{
-			ReaderStartIdx=0;
-		}
+void dlgPrint::persodata_triggered(CardInformation& CI_Data)
+{
+    try
+    {
+        unsigned long	ReaderStartIdx = 1;
+        bool			bRefresh	   = false;
+        unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
+        unsigned long	ReaderIdx	   = 0;
 
-		bool bCardPresent = false;
-		PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
+        if (ReaderStartIdx!=(unsigned long)-1)
+        {
+            ReaderEndIdx = ReaderStartIdx+1;
+        }
+        else
+        {
+            ReaderStartIdx=0;
+        }
 
-		const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-		m_CurrReaderName = readerName;
-		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
+        const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+        m_CurrReaderName = readerName;
+        PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 
-		if (ReaderContext.isCardPresent())
-		{
-			PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
-			CI_Data.LoadDataPersoData(Card,m_CurrReaderName);
-		}
-	}	catch (PTEID_Exception &e) {
-		QString msg(tr("General exception"));
-		//ShowPTEIDError( e.GetError(), msg );
-		return false;
-	}
+        if (ReaderContext.isCardPresent())
+        {
+            PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
+            CI_Data.LoadDataPersoData(Card,m_CurrReaderName);
+        }
+    }	catch (PTEID_Exception &e) {
+        QString msg(tr("General exception"));
+    }
 }
 
 bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 {
 	//Workaround: Make PIN window called only one time
-
 	/*if (!m_CI_Data.isDataLoaded())
 	{
 		return true;
 	}*/
+
 	try
 	{
 		unsigned long	ReaderStartIdx = 1;
@@ -218,9 +299,6 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 		{
 			ReaderStartIdx=0;
 		}
-
-		bool bCardPresent = false;
-		PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
 
 		const char* readerName = ReaderSet.getReaderName(ReaderIdx);
 		m_CurrReaderName = readerName;
@@ -304,7 +382,6 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 	cairo_surface_t *surface;
 	cairo_t *cr;
 	cairo_surface_t *imagefront;
-	cairo_surface_t *imageback;
 	cairo_surface_t *idphoto;
 	int w, h;
 
