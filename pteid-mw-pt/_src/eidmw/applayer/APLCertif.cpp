@@ -1963,7 +1963,6 @@ unsigned long APL_Certif::getKeyLength()
 APL_Crl::APL_Crl(const char *uri)
 {
 	m_cryptoFwk=AppLayer.getCryptoFwk();
-	m_cache=AppLayer.getCrlDownloadCache();
 
 	m_uri=uri;
 	
@@ -1978,7 +1977,6 @@ APL_Crl::APL_Crl(const char *uri)
 APL_Crl::APL_Crl(const char *uri,APL_Certif *certif)
 {
 	m_cryptoFwk=AppLayer.getCryptoFwk();
-	m_cache=AppLayer.getCrlDownloadCache();
 
 	m_uri=uri;
 	

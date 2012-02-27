@@ -788,15 +788,6 @@ CCardLayer *CAppLayer::getCardLayer() const
 	return m_Cal; 
 }
 
-//Return a reference to the CRL download cache
-APL_CrlDownloadingCache *CAppLayer::getCrlDownloadCache() const
-{
-	if(!m_crlDownloadCache)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-	return m_crlDownloadCache; 
-}
-
 //Return a reference to the crypto framework
 APL_CryptoFwkPteid *CAppLayer::getCryptoFwk() const
 {
