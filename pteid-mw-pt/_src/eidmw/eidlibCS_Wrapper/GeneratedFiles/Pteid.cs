@@ -57,8 +57,8 @@ namespace pt.portugal.eid
                 readerContext = readerSet.getReaderByName(readerName);
             
             idCard = readerContext.getEIDCard();
-        } catch (Exception) {
-            throw new PteidException();
+        } catch (Exception ex) {
+            throw new PteidException(0);
         }
    }
   
@@ -67,7 +67,7 @@ namespace pt.portugal.eid
         try {
             PTEID_ReaderSet.releaseSDK();
         } catch (Exception ex) {
-            throw new PteidException();
+            throw new PteidException(0);
         }
    }
    
@@ -78,7 +78,7 @@ namespace pt.portugal.eid
             
             return (int)cardType;
         } catch (Exception ex) {
-            throw new PteidException();
+            throw new PteidException(0);
         }
    }
    
@@ -87,7 +87,7 @@ namespace pt.portugal.eid
        try {
            return new PTEID_ID(idCard.getID());
         } catch (Exception ex) {
-            throw new PteidException();
+            throw new PteidException(0);
         }
    }
    
@@ -106,10 +106,10 @@ namespace pt.portugal.eid
             }
         } catch (PteidException ex) {
             throw ex;
-        } catch (Exception ex) {
-            throw new PteidException();
+        } catch (Exception) {
+            throw new PteidException(0);
         }
-        throw new PteidException();
+        throw new PteidException(0);
     }
     
     
@@ -130,7 +130,7 @@ namespace pt.portugal.eid
             Array.Copy(idCard.getID().getPhotoObj().getphotoRAW().GetBytes(), 0, pic.picture, 0, pic.picture.Length);
             pic.version = 0;
         } catch (Exception ex) {
-            throw new PteidException();
+            throw new PteidException(0);
         }
         
         return pic;
@@ -152,7 +152,7 @@ namespace pt.portugal.eid
                 certs[i].certifLabel = certificates.getCert(i).getLabel();
             }
         } catch (Exception ex) {
-            throw new PteidException();
+            throw new PteidException(0);
         }
 
         return certs;
@@ -181,7 +181,7 @@ namespace pt.portugal.eid
                 }
                 return triesLeft;
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
         return triesLeft;
@@ -207,7 +207,7 @@ namespace pt.portugal.eid
                         } 
                 }
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
         return 0;
@@ -238,7 +238,7 @@ namespace pt.portugal.eid
                     }
                 }
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
 
@@ -254,7 +254,7 @@ namespace pt.portugal.eid
                 PTEID_CardVersionInfo info = idCard.getVersionInfo();
                 token = new PTEID_TokenInfo(info.getTokenLabel(), info.getSerialNumber());
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
 
@@ -264,7 +264,6 @@ namespace pt.portugal.eid
     
     public static byte[] ReadSOD(){
         byte[] sod = null;
-        byte[] trimmable;
 
         if (readerContext != null) {
             try {
@@ -275,7 +274,7 @@ namespace pt.portugal.eid
                 sod = new byte[trimmedSize];
                 Array.Copy(pba.GetBytes(), 0, sod, 0, sod.Length);
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
         return sod;
@@ -299,7 +298,7 @@ namespace pt.portugal.eid
 			}
 		}
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
 	}
 
@@ -324,7 +323,7 @@ namespace pt.portugal.eid
                 PTEID_ByteArray sendAPDU = idCard.sendAPDU(apdu);
                 //verificar se correu tudo bem... ?
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
     }
@@ -354,7 +353,7 @@ namespace pt.portugal.eid
                 retArray = new byte[trimmedSize];
                 Array.Copy(pb.GetBytes(), 0, retArray, 0, retArray.Length);
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
         return retArray;
@@ -380,7 +379,7 @@ namespace pt.portugal.eid
                 idCard.writeFile(ashex(file),pb,pin);
                 
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
     }
@@ -390,7 +389,7 @@ namespace pt.portugal.eid
             try {
                 return idCard.isActive() ? 1 : 0;
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
         return 0;
@@ -403,7 +402,7 @@ namespace pt.portugal.eid
             try {
                 idCard.Activate(actPin, pb);
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
     }
@@ -414,7 +413,7 @@ namespace pt.portugal.eid
             try {
                 readerContext.getEIDCard().doSODCheck(bln);
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
     }
@@ -428,7 +427,7 @@ namespace pt.portugal.eid
                     readerContext.getEIDCard().getCertificates().addCertificate(pba);
                 }
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
     }
@@ -446,7 +445,7 @@ namespace pt.portugal.eid
                 Array.Copy(cardKey.getCardAuthKeyExponent().GetBytes(), 0, key.exponent, 0, key.exponent.Length);
                 Array.Copy(cardKey.getCardAuthKeyModulus().GetBytes(), 0, key.modulus, 0, key.modulus.Length);
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
         
@@ -466,7 +465,7 @@ namespace pt.portugal.eid
                 Array.Copy(rootCAKey.getCardAuthKeyExponent().GetBytes(), 0, key.exponent, 0, key.exponent.Length);
                 Array.Copy(rootCAKey.getCardAuthKeyModulus().GetBytes(), 0, key.modulus, 0, key.modulus.Length);
             } catch (Exception ex) {
-                throw new PteidException();
+                throw new PteidException(0);
             }
         }
         
@@ -485,7 +484,7 @@ namespace pt.portugal.eid
 
                 ret = new byte[(int) resp.Size()];
                 Array.Copy(resp.GetBytes(), 0, ret, 0, ret.Length);
-            } catch (Exception ex) {
+            } catch (Exception) {
             }
         }
         

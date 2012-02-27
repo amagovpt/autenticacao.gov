@@ -6,8 +6,32 @@ namespace pt.portugal.eid
     public class PTEID_TokenInfo
     {
 
-        public String label { get; private set; }
-        public String serial { get; private set; }
+        private String Label; 
+        private String Serial;
+
+        public string label
+        {
+            get
+            {
+                return Label;
+            }
+            private set
+            {
+                Label = value;
+            }
+        }
+
+        public string serial
+        {
+            get
+            {
+                return Serial;
+            }
+            private set
+            {
+                Serial = value;
+            }
+        }
 
         internal PTEID_TokenInfo(String label, String serial)
         {

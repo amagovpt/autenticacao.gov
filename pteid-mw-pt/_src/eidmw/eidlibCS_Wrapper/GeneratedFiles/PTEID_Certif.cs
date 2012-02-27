@@ -8,7 +8,7 @@ namespace pt.portugal.eid
         public byte[] certif;
         public String certifLabel;
 
-        internal PTEID_Certif()
+        public PTEID_Certif()
         {
 
         }

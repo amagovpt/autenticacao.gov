@@ -5,34 +5,343 @@ namespace pt.portugal.eid
 {
     public class PTEID_ID {
     
-    public short version { get; private set; }
-    public String deliveryEntity { get; private set; }
-    public String country { get; private set; }
-    public String documentType { get; private set; }
-    public String cardNumber { get; private set; }
-    public String cardNumberPAN { get; private set; }
-    public String cardVersion { get; private set; }
-    public String deliveryDate { get; private set; }
-    public String locale { get; private set; }
-    public String validityDate { get; private set; }
-    public String name { get; private set; }
-    public String firstname { get; private set; }
-    public String sex { get; private set; }
-    public String nationality { get; private set; }
-    public String birthDate { get; private set; }
-    public String height { get; private set; }
-    public String numBI { get; private set; }
-    public String nameFather { get; private set; }
-    public String firstnameFather { get; private set; }
-    public String nameMother { get; private set; }
-    public String firstnameMother { get; private set; }
-    public String numNIF { get; private set; }
-    public String numSS { get; private set; }
-    public String numSNS { get; private set; }
-    public String notes { get; private set; }
-    public String mrz1 { get; private set; }
-    public String mrz2 { get; private set; }
-    public String mrz3 { get; private set; }
+    private short Version;
+    private String DeliveryEntity;
+    private String Country;
+    private String DocumentType;
+    private String CardNumber;
+    private String CardNumberPAN;
+    private String CardVersion;
+    private String DeliveryDate;
+    private String Locale;
+    private String ValidityDate;
+    private String Name;
+    private String Firstname;
+    private String Sex;
+    private String Nationality;
+    private String BirthDate;
+    private String Height;
+    private String NumBI;
+    private String NameFather;
+    private String FirstnameFather;
+    private String NameMother;
+    private String FirstnameMother;
+    private String NumNIF;
+    private String NumSS;
+    private String NumSNS;
+    private String Notes;
+    private String Mrz1;
+    private String Mrz2;
+    private String Mrz3;
+
+    public short version
+    {
+        get
+        {
+            return Version;
+        }
+        private set
+        {
+            Version = value;
+        }
+    }
+    public string deliveryEntity
+    {
+        get
+        {
+            return DeliveryEntity;
+        }
+        private set
+        {
+            DeliveryEntity = value;
+        }
+    }
+    public string country
+    {
+        get
+        {
+            return Country;
+        }
+        private set
+        {
+            Country = value;
+        }
+    }
+    public string documentType
+    {
+        get
+        {
+            return DocumentType;
+        }
+        private set
+        {
+            DocumentType = value;
+        }
+    }
+    public string cardNumber
+    {
+        get
+        {
+            return CardNumber;
+        }
+        private set
+        {
+            CardNumber = value;
+        }
+    }
+    public string cardNumberPAN
+    {
+        get
+        {
+            return CardNumberPAN;
+        }
+        private set
+        {
+            CardNumberPAN = value;
+        }
+    }
+    public string cardVersion
+    {
+        get
+        {
+            return CardVersion;
+        }
+        private set
+        {
+            CardVersion = value;
+        }
+    }
+    public string deliveryDate
+    {
+        get
+        {
+            return DeliveryDate;
+        }
+        private set
+        {
+            DeliveryDate = value;
+        }
+    }
+    public string locale
+    {
+        get
+        {
+            return Locale;
+        }
+        private set
+        {
+            Locale = value;
+        }
+    }
+    public string validityDate
+    {
+        get
+        {
+            return ValidityDate;
+        }
+        private set
+        {
+            ValidityDate = value;
+        }
+    }
+    public string name
+    {
+        get
+        {
+            return Name;
+        }
+        private set
+        {
+            Name = value;
+        }
+    }
+    public string firstname
+    {
+        get
+        {
+            return Firstname;
+        }
+        private set
+        {
+            Firstname = value;
+        }
+    }
+    public string sex
+    {
+        get
+        {
+            return Sex;
+        }
+        private set
+        {
+            Sex = value;
+        }
+    }
+    public string nationality
+    {
+        get
+        {
+            return Nationality;
+        }
+        private set
+        {
+            Nationality = value;
+        }
+    }
+    public string birthDate
+    {
+        get
+        {
+            return BirthDate;
+        }
+        private set
+        {
+            BirthDate = value;
+        }
+    }
+    public string height
+    {
+        get
+        {
+            return Height;
+        }
+        private set
+        {
+            Height = value;
+        }
+    }
+    public string numBI
+    {
+        get
+        {
+            return NumBI;
+        }
+        private set
+        {
+            NumBI = value;
+        }
+    }
+    public string nameFather
+    {
+        get
+        {
+            return NameFather;
+        }
+        private set
+        {
+            NameFather = value;
+        }
+    }
+    public string firstnameFather
+    {
+        get
+        {
+            return FirstnameFather;
+        }
+        private set
+        {
+            FirstnameFather = value;
+        }
+    }
+    public string nameMother
+    {
+        get
+        {
+            return NameMother;
+        }
+        private set
+        {
+            NameMother = value;
+        }
+    }
+    public string firstnameMother
+    {
+        get
+        {
+            return FirstnameMother;
+        }
+        private set
+        {
+            FirstnameMother = value;
+        }
+    }
+    public string numNIF
+    {
+        get
+        {
+            return NumNIF;
+        }
+        private set
+        {
+            NumNIF = value;
+        }
+    }
+    public string numSS
+    {
+        get
+        {
+            return NumSS;
+        }
+        private set
+        {
+            NumSS = value;
+        }
+    }
+    public string numSNS
+    {
+        get
+        {
+            return NumSNS;
+        }
+        private set
+        {
+            NumSNS = value;
+        }
+    }
+    public string notes
+    {
+        get
+        {
+            return Notes;
+        }
+        private set
+        {
+            Notes = value;
+        }
+    }
+    public string mrz1
+    {
+        get
+        {
+            return Mrz1;
+        }
+        private set
+        {
+            Mrz1 = value;
+        }
+    }
+    public string mrz2
+    {
+        get
+        {
+            return Mrz2;
+        }
+        private set
+        {
+            Mrz2 = value;
+        }
+    }
+    public string mrz3
+    {
+        get
+        {
+            return Mrz3;
+        }
+        private set
+        {
+            Mrz3 = value;
+        }
+    }
 
     internal PTEID_ID(PTEID_EId id)
     {
@@ -66,7 +375,7 @@ namespace pt.portugal.eid
             mrz2 = id.getMRZ2();
             mrz3 = id.getMRZ3();
         } catch (Exception) {
-            throw new PteidException();
+            throw new PteidException(0);
         }
     }
 }
