@@ -38,6 +38,7 @@
 #include "APLCardPteid.h"
 #include "eidErrors.h"
 #include "MWException.h"
+#include "CRLService.h"
 #include "dialogs.h"
 #include "cryptoFwkPteid.h"
 #include "CertStatusCache.h"
@@ -593,6 +594,8 @@ CAppLayer::CAppLayer()
 
 	m_Cal=NULL;
 	m_cryptoFwk=NULL;
+	m_crlDownloadCache=NULL;
+	m_certStatusCache=NULL;
 
 	m_askfortestcard=false;
 	
@@ -675,12 +678,33 @@ void CAppLayer::startAllServices()
 	if(!m_cryptoFwk)
 		m_cryptoFwk = new APL_CryptoFwkPteid;
 
+	//Then start the caches (Certificates and CRL)
+	if(!m_certStatusCache)
+		m_certStatusCache = new APL_CertStatusCache(m_cryptoFwk);
+
+	//At least, start the CrlDownloadCache, which will Run CRL service and DownloadControl
+	if(!m_crlDownloadCache)
+		m_crlDownloadCache = new APL_CrlDownloadingCache(m_cryptoFwk);
 }
 
 void CAppLayer::stopAllServices() 
 {
 	//stopping is made in the opposite order then starting
 	MWLOG(LEV_INFO, MOD_APL, L"Stop all applayer services");
+
+	/*if(m_crlDownloadCache)
+	{
+		m_crlDownloadCache->stopAllThreads();
+
+		delete m_crlDownloadCache;
+		m_crlDownloadCache=NULL;
+	}
+
+	if(m_certStatusCache)
+	{
+		delete m_certStatusCache;
+		m_certStatusCache=NULL;
+	}*/
 
 	if(m_cryptoFwk)
 	{
@@ -771,7 +795,24 @@ void CAppLayer::updateVersion()
 	{
 		APL_Config conf_BuildNbr(CConfig::EIDMW_CONFIG_PARAM_GENERAL_BUILDNBR);     
 		conf_BuildNbr.ChangeLookupBehaviour(APL_Config::USER_ONLY);
+		long build = conf_BuildNbr.getLong();
 		
+		if(build<4876)
+		{
+			APL_Config conf_ValidCrl(CConfig::EIDMW_CONFIG_PARAM_CERTVALID_CRL);     
+			conf_ValidCrl.setLong(0);
+
+			APL_Config conf_ValidOcsp(CConfig::EIDMW_CONFIG_PARAM_CERTVALID_OCSP);     
+			conf_ValidOcsp.setLong(0);
+		}
+
+		/*
+		if(build<...)
+		{
+			...
+		}
+		*/
+
 		conf_BuildNbr.setLong(SVN_REVISION);
 	}
 	catch(...) //If the update failed, we will try next time
