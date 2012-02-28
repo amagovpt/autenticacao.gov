@@ -79,18 +79,8 @@ APL_CertifStatus ConvertStatus(FWK_CertifStatus eStatus,APL_ValidationProcess eP
 		return APL_CERTIF_STATUS_ERROR;
 
 	case FWK_CERTIF_STATUS_VALID:
-		switch(eProcess)
-		{ 
-		case APL_VALIDATION_PROCESS_CRL:
-			return APL_CERTIF_STATUS_VALID_CRL;
-
-		case APL_VALIDATION_PROCESS_OCSP:
-			return APL_CERTIF_STATUS_VALID_OCSP;
-
-		default:
-			return APL_CERTIF_STATUS_VALID;
-		}
-
+	       	return APL_CERTIF_STATUS_VALID;
+	
 	default:
 		return APL_CERTIF_STATUS_UNCHECK;
 	}
