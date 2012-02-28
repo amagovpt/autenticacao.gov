@@ -106,6 +106,7 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
     defaultfilepath = QDir::homePath();
     try
     {
+        //Sign with XAdES
         if (ui.chboxSignature->isChecked())
         {
             QString pdffiletmp;
@@ -119,27 +120,30 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
             signfilepath.append("/CartaoCidadao.zip");
             outputsign = QFileDialog::getSaveFileName(this, tr("Save Signature File"), signfilepath, tr("Zip files 'XAdES' (*.zip)"));
 
-            pdffiletmp = QDir::tempPath();
-            pdffiletmp.append("/CartaoCidadao.pdf");
+            if (!outputsign.isEmpty())
+            {
+                pdffiletmp = QDir::tempPath();
+                pdffiletmp.append("/CartaoCidadao.pdf");
 
-            nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
+                nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
 
-            drawpdf(cdata, PDF ,nativepdftmp.toStdString().c_str());
+                drawpdf(cdata, PDF ,nativepdftmp.toStdString().c_str());
 
-            char *cpychar;
-            const char **files_to_sign = new const char*[1];
+                char *cpychar;
+                const char **files_to_sign = new const char*[1];
 
-            cpychar = new char[500];
+                cpychar = new char[500];
 #ifdef WIN32
-            strcpy(cpychar, nativepdftmp.toStdString().c_str());
+                strcpy(cpychar, nativepdftmp.toStdString().c_str());
 #else
-            strcpy(cpychar, nativepdftmp.toUtf8().constData());
+                strcpy(cpychar, nativepdftmp.toUtf8().constData());
 #endif
-            files_to_sign[0] = cpychar;
+                files_to_sign[0] = cpychar;
 
-            PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Pdf File to Sign: %s", files_to_sign[0]);
+                PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Pdf File to Sign: %s", files_to_sign[0]);
 
-            SignXades = Card->SignXades(files_to_sign, 1, outputsign.toStdString().c_str());
+                SignXades = Card->SignXades(files_to_sign, 1, outputsign.toStdString().c_str());
+            }
         } else {
             QString nativepdfpath;
 
