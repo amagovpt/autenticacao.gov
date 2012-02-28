@@ -49,7 +49,6 @@ class APL_EidFile_PersoData;
 class APL_EidFile_TokenInfo;
 class APL_CardFile_Certificate;
 
-class APL_EIdFullDoc;
 class APL_CCXML_Doc;
 class APL_DocEId;
 class APL_AddrEId;
@@ -109,11 +108,6 @@ public:
 	 * Return a document from the card
 	 */
 	EIDMW_APL_API virtual APL_XMLDoc& getDocument(APL_DocumentType type);
-
-	/**
-	  * Return a pointer to the document FULL
-	  */
-	EIDMW_APL_API APL_EIdFullDoc& getFullDoc();
 
 	EIDMW_APL_API APL_CCXML_Doc& getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedInfo);
 
@@ -223,7 +217,6 @@ private:
 
 	CByteArray *m_cardinfosign;
 	APL_CardType	m_cardType;
-	APL_EIdFullDoc *m_docfull;							/**< Pointer to the document FULL */
 	APL_CCXML_Doc *m_CCcustomDoc;						/**< Pointer to the custom document */
 	APL_DocEId *m_docid;								/**< Pointer to the document ID */
 	APL_PersonalNotesEId *m_personal;					/**< Pointer to the personal notes document*/
@@ -254,39 +247,6 @@ private:
 friend bool APL_ReaderContext::connectCard();	/**< This method must access protected constructor */
 };
 
-/******************************************************************************//**
-  * Class that represent the FULL document on a PTEID card
-  * To get APL_DocEIdFull object, we have to ask it from APL_EIDCard 
-  *********************************************************************************/
-class APL_EIdFullDoc : public APL_XMLDoc
-{
-public:
-	/**
-	  * Destructor
-	  */
-	EIDMW_APL_API virtual ~APL_EIdFullDoc();
-
-	EIDMW_APL_API virtual bool isAllowed();							/**< The document is allowed*/
-
-	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
-	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
-	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
-
-protected:
-	/**
-	  * Constructor
-	  *		Used only in APL_EIDCard::getDocFull()
-	  */    
-	APL_EIdFullDoc(APL_EIDCard *card);
-
-private:
-	APL_EIdFullDoc(const APL_EIdFullDoc& doc);				/**< Copy not allowed - not implemented */
-	APL_EIdFullDoc &operator= (const APL_EIdFullDoc& doc);	/**< Copy not allowed - not implemented */
-
-	APL_EIDCard *m_card;							/**< Pointer to the card that construct this object*/
-
-friend APL_EIdFullDoc& APL_EIDCard::getFullDoc();	/**< This method must access protected constructor */
-};
 
 class APL_XmlUserRequestedInfo;
 /******************************************************************************//**

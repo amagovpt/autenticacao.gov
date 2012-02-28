@@ -45,7 +45,6 @@ APL_AccessWarningLevel APL_EIDCard::m_lWarningLevel=APL_ACCESSWARNINGLEVEL_TO_AS
 APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType):APL_SmartCard(reader)
 {
 	m_cardType = cardType;
-	m_docfull=NULL;
 	m_CCcustomDoc=NULL;
 	m_docid=NULL;
 	m_personal=NULL;
@@ -77,11 +76,6 @@ APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType):APL_S
 
 APL_EIDCard::~APL_EIDCard()
 {
-	if(m_docfull)
-	{
-		delete m_docfull;
-		m_docfull=NULL;
-	}
 	if(m_CCcustomDoc)
 	{
 		delete m_CCcustomDoc;
@@ -967,8 +961,6 @@ APL_XMLDoc& APL_EIDCard::getDocument(APL_DocumentType type)
 {
 	switch(type)
 	{
-	case APL_DOCTYPE_FULL:
-		return getFullDoc();
 	case APL_DOCTYPE_ID:
 		return getID();
 	case APL_DOCTYPE_ADDRESS:
@@ -986,20 +978,6 @@ APL_XMLDoc& APL_EIDCard::getDocument(APL_DocumentType type)
 	}
 }
 
-APL_EIdFullDoc& APL_EIDCard::getFullDoc()
-{
-	if(!m_docfull)
-	{
-		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
-		if(!m_docfull)
-		{
-			m_docfull=new APL_EIdFullDoc(this);
-		}
-	}
-
-	return *m_docfull;
-}
-
 
 APL_CCXML_Doc& APL_EIDCard::getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedInfo){
 	if(!m_CCcustomDoc)
@@ -1010,7 +988,7 @@ APL_CCXML_Doc& APL_EIDCard::getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedI
 				m_CCcustomDoc=new APL_CCXML_Doc(this, userRequestedInfo);
 			}
 		}
-
+		cout << "getXmlCCDoc" << endl;
 		return *m_CCcustomDoc;
 }
 
@@ -1343,188 +1321,6 @@ void APL_EIDCard::doSODCheck(bool check){
 	}
 }
 
-/*****************************************************************************************
----------------------------------------- APL_EIdFullDoc -------------------------------------------
-*****************************************************************************************/
-APL_EIdFullDoc::APL_EIdFullDoc(APL_EIDCard *card)
-{	
-	m_card=card;
-}
-
-APL_EIdFullDoc::~APL_EIdFullDoc()
-{
-}
-
-bool APL_EIdFullDoc::isAllowed()
-{
-	try
-	{
-		if(m_card->getFileID()->getStatus(true)==CARDFILESTATUS_OK
-			//&& m_card->getFileAddress()->getStatus(true)==CARDFILESTATUS_OK
-			&& m_card->getFileSod()->getStatus(true)==CARDFILESTATUS_OK)
-			return true;
-	}
-	catch(CMWException& e)
-	{
-		if (e.GetError() == EIDMW_ERR_NOT_ALLOW_BY_USER)
-			return false;
-		else
-			throw;
-	}
-	return false;
-}
-
-CByteArray APL_EIdFullDoc::getXML(bool bNoHeader)
-{
-/*
-	<pteid_card>
-		<doc_version></doc_version>
-		<card_type></card_type>
-		<biographic>
-		</biographic>
-		<biometric>
-		</biometric>
-		<scard>
-		</scard>
-		<challenge_response>
-			<challenge encoding="base64">
-			</challenge>
-			<response encoding="base64">
-			</response>
-		</challenge_response>
-		<cryptographic>
-			<certificates>
-			</certificates>
-			<pins>
-			</pins>
-		</cryptographic>
-	</pteid_card>
-*/
-
-	CByteArray xml;
-
-	if(!bNoHeader)
-		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-
-	xml+="<pteid_card>\n";
-	xml+="	<doc_version>1</doc_version>\n";
-	xml+="	<card_type>";
-	switch(m_card->getType())
-	{
-	case APL_CARDTYPE_PTEID_IAS07:
-	case APL_CARDTYPE_PTEID_IAS101:
-		xml+=CARDTYPE_NAME_PTEID_EID;
-		break;
-	default:
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-	}
-	xml+=   "</card_type>\n";
-	xml+=m_card->getID().getXML(true);
-	xml+=m_card->getSod().getXML(true);
-	xml+=m_card->getDocInfo().getXML(true);
-
-	CByteArray baFileB64;
-	xml+="	<challenge_response>\n";
-	if(m_cryptoFwk->b64Encode(m_card->getChallenge(),baFileB64))
-	{
-		xml+="	<challenge encoding=\"base64\">\n";
-		xml+=		baFileB64;
-		xml+="	</challenge>\n";
-	}
-	if(m_cryptoFwk->b64Encode(m_card->getChallengeResponse(),baFileB64))
-	{
-		xml+="	<response encoding=\"base64\">\n";
-		xml+=		baFileB64;
-		xml+="	</response>\n";
-	}
-	xml+="	</challenge_response>\n";
-
-	xml+="	<cryptographic>\n";
-	xml+=m_card->getCertificates()->getXML(true);
-	xml+=m_card->getPins()->getXML(true);
-	xml+="	</cryptographic>\n";
-	xml+="</pteid_card>\n";
-
-	return xml;
-}
-
-CByteArray APL_EIdFullDoc::getCSV()
-{
-/*
-doc_version;card_type;biographic;biometric;certificates;pins;
-*/
-
-	CByteArray csv;
-
-	csv+="1";
-	csv+=CSV_SEPARATOR;
-	switch(m_card->getType())
-	{
-	case APL_CARDTYPE_PTEID_IAS07:
-	case APL_CARDTYPE_PTEID_IAS101:
-		csv+=CARDTYPE_NAME_PTEID_EID;
-		break;
-	default:
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-	}
-	csv+=CSV_SEPARATOR;
-	csv+=m_card->getID().getCSV();
-	csv+=m_card->getSod().getCSV();
-	csv+=m_card->getDocInfo().getCSV();
-
-	CByteArray baFileB64;
-
-	if(m_cryptoFwk->b64Encode(m_card->getChallenge(),baFileB64,false))
-		csv+=		baFileB64;
-	csv+=CSV_SEPARATOR;
-
-	if(m_cryptoFwk->b64Encode(m_card->getChallengeResponse(),baFileB64,false))
-		csv+=		baFileB64;
-	csv+=CSV_SEPARATOR;
-
-	csv+=m_card->getCertificates()->getCSV();
-	csv+=m_card->getPins()->getCSV();
-	csv+=CSV_SEPARATOR;
-
-	return csv;
-}
-
-CByteArray APL_EIdFullDoc::getTLV()
-{
-	CTLVBuffer tlv;
-
-	CByteArray baVersion;
-	baVersion.Append(0x02);		//Version 2 (Version 1 was the old MW)
-	tlv.SetTagData(PTEID_TLV_TAG_VERSION,baVersion.GetBytes(),baVersion.Size());
-	CByteArray baCardType;
-	switch(m_card->getType())
-	{
-	case APL_CARDTYPE_PTEID_IAS07:
-	case APL_CARDTYPE_PTEID_IAS101:
-		baCardType.Append(CARDTYPE_NAME_PTEID_EID);
-		break;
-	default:
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-	}
-	tlv.SetTagData(PTEID_TLV_TAG_CARDTYPE,baCardType.GetBytes(),baCardType.Size());
-	tlv.SetTagData(PTEID_TLV_TAG_FILE_CHALLENGE,m_card->getChallenge().GetBytes(),m_card->getChallenge().Size());
-	tlv.SetTagData(PTEID_TLV_TAG_FILE_CHALLENGE_RESPONSE,m_card->getChallengeResponse().GetBytes(),m_card->getChallengeResponse().Size());
-
-	unsigned long ulLen=tlv.GetLengthNeeded();
-	unsigned char *pucData= new unsigned char[ulLen];
-	tlv.Extract(pucData,ulLen);
-	CByteArray ba(pucData,ulLen);
-
-	delete[] pucData;
-
-	ba.Append(m_card->getID().getTLV());
-	ba.Append(m_card->getSod().getTLV());
-	ba.Append(m_card->getDocInfo().getTLV());
-	ba.Append(m_card->getCertificates()->getTLV());
-	ba.Append(m_card->getPins()->getTLV());
-
-	return ba;
-}
 
 /*****************************************************************************************
 ---------------------------------------- APL_CCXML_Doc -------------------------------------------
@@ -1533,6 +1329,7 @@ APL_CCXML_Doc::APL_CCXML_Doc(APL_EIDCard *card, APL_XmlUserRequestedInfo&  xmlUs
 {
 	m_card=card;
 	m_xmlUserRequestedInfo = &xmlUserRequestedInfo;
+	cout << "APL_CCXML_Doc" << endl;
 }
 
 APL_CCXML_Doc::~APL_CCXML_Doc()

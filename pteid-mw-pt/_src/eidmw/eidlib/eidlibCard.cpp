@@ -497,8 +497,6 @@ PTEID_XMLDoc& PTEID_EIDCard::getDocument(PTEID_DocumentType type)
 {
 	switch(type)
 	{
-	case PTEID_DOCTYPE_FULL:
-		return getFullDoc();
 	case PTEID_DOCTYPE_ID:
 		return getID();
 	case PTEID_DOCTYPE_ADDRESS:
@@ -535,40 +533,6 @@ PTEID_CCXML_Doc& PTEID_EIDCard::getXmlCCDoc(PTEID_XmlUserRequestedInfo& userRequ
 	return *out;
 }
 
-
-/*
- *
- */
-
-PTEID_EIdFullDoc& PTEID_EIDCard::getFullDoc()
-{
-	PTEID_EIdFullDoc *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
-
-	out = dynamic_cast<PTEID_EIdFullDoc *>(getObject(INCLUDE_OBJECT_FULLDOC));
-
-	if(!out)
-	{
-		//CAutoMutex autoMutex(m_mutex);
-
-		//pdoc=dynamic_cast<PTEID_EIdFullDoc *>(getObject(INCLUDE_OBJECT_FULLDOC));
-		//if(!pdoc)
-		//{
-			out = new PTEID_EIdFullDoc(m_context,&pcard->getFullDoc());
-			if(out)
-				m_objects[INCLUDE_OBJECT_FULLDOC]=out;
-			else
-				throw PTEID_ExUnknown();
-		//}
-	}
-	
-	END_TRY_CATCH
-
-	return *out;
-}
 
 PTEID_EId& PTEID_EIDCard::getID()
 {

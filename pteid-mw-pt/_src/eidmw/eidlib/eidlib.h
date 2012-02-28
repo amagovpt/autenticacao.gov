@@ -646,7 +646,6 @@ private:
 	PTEID_SmartCard& operator= (const PTEID_SmartCard& card);			/**< Copy not allowed - not implemented */
 };
 
-class PTEID_EIdFullDoc;
 class PTEID_EId;
 class PTEID_Address;
 class PTEID_Sod;
@@ -691,7 +690,6 @@ public:
 	 */
 	PTEIDSDK_API virtual PTEID_XMLDoc& getDocument(PTEID_DocumentType type);
 
-	PTEIDSDK_API PTEID_EIdFullDoc& getFullDoc();				/**< Get the full document */
 	PTEIDSDK_API PTEID_CCXML_Doc& getXmlCCDoc(PTEID_XmlUserRequestedInfo& userRequestedInfo);
 	PTEIDSDK_API PTEID_EId& getID();							/**< Get the id document */
 	PTEIDSDK_API PTEID_Address& getAddr();					/**< Get the Address document */
@@ -1053,25 +1051,6 @@ private:
 friend PTEID_Address& PTEID_EIDCard::getAddr();						/**< For internal use : This method must access protected constructor */
 };
 
-class APL_EIdFullDoc;
-
-/******************************************************************************//**
-  * Class for the full document Eid.
-  *********************************************************************************/
-class PTEID_EIdFullDoc : public PTEID_XMLDoc
-{
-public:
-	PTEIDSDK_API virtual ~PTEID_EIdFullDoc();					/**< Destructor */
-
-protected:
-	PTEID_EIdFullDoc(const SDK_Context *context,APL_EIdFullDoc *impl);	/**< For internal use : Constructor */
-
-private:
-	PTEID_EIdFullDoc(const PTEID_EIdFullDoc& doc);				/**< Copy not allowed - not implemented */
-	PTEID_EIdFullDoc& operator= (const PTEID_EIdFullDoc& doc);	/**< Copy not allowed - not implemented */
-
-friend PTEID_EIdFullDoc& PTEID_EIDCard::getFullDoc();				/**< For internal use : This method must access protected constructor */
-};
 
 class APL_CCXML_Doc;
 
