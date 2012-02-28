@@ -160,7 +160,6 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
         QString msg(tr("General exception"));
     }
 
-    //done(0);
 }
 
 void dlgPrint::on_pbPrint_clicked( void )
@@ -180,7 +179,6 @@ void dlgPrint::on_pbPrint_clicked( void )
 		painter.end();
 	}
 
-	done(0);
 }
 
 void dlgPrint::on_pbCancel_clicked( void )
@@ -638,7 +636,6 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 	}
 	cairo_surface_destroy(surface);
 	cairo_destroy(cr);
-	done(0);
 	return;
 }
 
