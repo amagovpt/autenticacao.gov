@@ -160,7 +160,7 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
         QString msg(tr("General exception"));
     }
 
-	done(0);
+    //done(0);
 }
 
 void dlgPrint::on_pbPrint_clicked( void )
