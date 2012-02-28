@@ -651,7 +651,7 @@ return(lBits);
     
         //get second level
         if ((xLev1Item.l_data < 2)||(asn1_next_item(&xLev1Item, &xLev2Item)!= 0)){
-            throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
+            continue;
 	}
 
         if(xLev2Item.tag == ASN_SEQUENCE)
