@@ -172,6 +172,7 @@
 %typemap(in) 					unsigned char * %{ $1 = $input; %} 
 %typemap(out) 					unsigned char * %{ $result = $1; %} 
 %typemap(csin) 					unsigned char * "$csinput" 
+%typemap(csin) 					const char * const *  "$csinput" 
 
 %typemap(csout, excode=CSHARP_CODE_THROW) unsigned char * 
 { 
@@ -296,8 +297,9 @@ protected class CUSTOM_StringArrayHelper
 static protected CUSTOM_StringArrayHelper custom_StringArrayHelper = new CUSTOM_StringArrayHelper();
 %}
 
-%typemap(ctype) 					const char * const * "void *" 
-%typemap(imtype,out="IntPtr") 		const char * const * "string[]" 
+%typemap(imtype, out="IntPtr", inattributes="[MarshalAs(UnmanagedType.LPArray)]") const char * const *  "string[]"
+%typemap(ctype)		           const char ** "const char * const *"
+%typemap(ctype) 					const char * const *  "const char * const *"
 %typemap(cstype) 					const char * const * "string[]" 
 %typemap(out) 						const char * const * 
 {
@@ -305,8 +307,11 @@ static protected CUSTOM_StringArrayHelper custom_StringArrayHelper = new CUSTOM_
 	for(char **p=$1;*p!=NULL;p++)
 		size++;
 
-	$result = CUSTOM_CSharpStringArrayCallback((void *)$1, size); 
+	$result = (const char *const*)CUSTOM_CSharpStringArrayCallback((void *)$1, size); 
 } 
+
+//%typemap(in) 					const char * const * %{ $1 = $input; %}
+
 
 %typemap(csout, excode=CSHARP_CODE_THROW) const char * const * 
 { 
@@ -315,6 +320,7 @@ static protected CUSTOM_StringArrayHelper custom_StringArrayHelper = new CUSTOM_
 	string[] rslt = $imclassname.custom_StringArrayResult;
 	return rslt; 
 }
+
 
 ///////////////////////////////////////// SetEventCallback /////////////////////////////////////////////
 //------------------------------------------------------------
