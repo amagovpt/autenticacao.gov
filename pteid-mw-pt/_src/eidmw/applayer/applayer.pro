@@ -71,7 +71,6 @@ HEADERS += \
 	APLConfig.h \
 	CardFile.h \
 	CertStatusCache.h \
-	CRLService.h \
 	cryptoFramework.h \
 	eidmw_EIDTagHandler.h \
 	eidmw_EIDTag_processors.h \
@@ -104,7 +103,6 @@ SOURCES += \
 	CertStatusCache.cpp  \
 	cryptoFramework.cpp  \
     APLCard.cpp          \ 
-    CRLService.cpp       \
     XMLParser.cpp       \
     MiscUtil.cpp \
     PhotoPteid.cpp \

@@ -179,6 +179,13 @@ public:
 	CCardLayer *getCardLayer() const;
 
 	/**
+	  * Return the CRL download cache object
+	  *
+	  * NOT for using outside the library (NO EXPORT)
+	  */
+	APL_CrlDownloadingCache *getCrlDownloadCache() const;
+
+	/**
 	  * Return the crypto framework object
 	  *
 	  * NOT for using outside the library (NO EXPORT)

@@ -33,7 +33,6 @@
 #include "Util.h"
 #include "MWException.h"
 #include "CertStatusCache.h"
-#include "CRLService.h"
 #include "MiscUtil.h"
 #include "CardPteidDef.h"
 #include "Log.h"
@@ -1536,46 +1535,8 @@ APL_CertifStatus APL_Certif::getStatus(APL_ValidationLevel crl, APL_ValidationLe
 		|| statusOcsp==CSC_STATUS_UNKNOWN)
 		return APL_CERTIF_STATUS_UNKNOWN;
 
-	//If ocsp mandatory and connection problem => CONNECT
-	if(ocsp==APL_VALIDATION_LEVEL_MANDATORY)
-	{
-		if(statusOcsp==CSC_STATUS_CONNECT)
-			return APL_CERTIF_STATUS_CONNECT;
-
-		if(statusOcsp==CSC_STATUS_VALID_FULL)
-			return APL_CERTIF_STATUS_VALID_OCSP;
-
-		if(statusOcsp==CSC_STATUS_VALID_SIGN)
-			return APL_CERTIF_STATUS_VALID;
-
-		return APL_CERTIF_STATUS_ERROR;
-	}
-
-	//If crl mandatory and connection problem => CONNECT
-	if(crl==APL_VALIDATION_LEVEL_MANDATORY)
-	{
-		if(statusCrl==CSC_STATUS_CONNECT)
-			return APL_CERTIF_STATUS_CONNECT;
-			
-		if(statusCrl==CSC_STATUS_VALID_FULL)
-			return APL_CERTIF_STATUS_VALID_CRL;
-
-		if(statusCrl==CSC_STATUS_VALID_SIGN)
-			return APL_CERTIF_STATUS_VALID;
-
-		return APL_CERTIF_STATUS_ERROR;
-	}
-
 	if(ocsp==APL_VALIDATION_LEVEL_OPTIONAL || crl==APL_VALIDATION_LEVEL_OPTIONAL)
 	{
-		//If ocsp and valid => OCSP
-		if(statusOcsp==CSC_STATUS_VALID_FULL)
-			return APL_CERTIF_STATUS_VALID_OCSP;
-
-		//If crl and valid => VALID_CRL
-		if(statusCrl==CSC_STATUS_VALID_FULL)
-			return APL_CERTIF_STATUS_VALID_CRL;
-
 		return APL_CERTIF_STATUS_VALID;
 	}
 
