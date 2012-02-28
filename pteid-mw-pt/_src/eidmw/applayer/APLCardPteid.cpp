@@ -988,7 +988,7 @@ APL_CCXML_Doc& APL_EIDCard::getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedI
 				m_CCcustomDoc=new APL_CCXML_Doc(this, userRequestedInfo);
 			}
 		}
-		cout << "getXmlCCDoc" << endl;
+
 		return *m_CCcustomDoc;
 }
 
@@ -1329,7 +1329,6 @@ APL_CCXML_Doc::APL_CCXML_Doc(APL_EIDCard *card, APL_XmlUserRequestedInfo&  xmlUs
 {
 	m_card=card;
 	m_xmlUserRequestedInfo = &xmlUserRequestedInfo;
-	cout << "APL_CCXML_Doc" << endl;
 }
 
 APL_CCXML_Doc::~APL_CCXML_Doc()
@@ -2453,15 +2452,10 @@ CByteArray APL_SodEid::getTLV()
 
 const CByteArray& APL_SodEid::getData()
 {
-	cout << "ddksadsjksdjskdjs 1" << endl;
 	const CByteArray &cb = m_card->getFileSod()->getData();
 
 	m_card->getFileSod()->getAddressHash();
-	cout << "tamanho = " << m_card->getFileSod()->getAddressHash().Size() << endl;
 	APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
-	cout << "DIRECTORIA = "<< conf_dir.getString() << endl;
-
-
 
 	return cb;
 }

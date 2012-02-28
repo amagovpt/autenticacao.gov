@@ -46,8 +46,7 @@ enum PTEID_CardType
 
 enum PTEID_DocumentType
 {
-	PTEID_DOCTYPE_FULL=0,		/**< Full document : usefull for XML/CSV/TLV export */
-	PTEID_DOCTYPE_ID,			/**< ID document : usefull to get value by field */
+	PTEID_DOCTYPE_ID=0,			/**< ID document : usefull to get value by field */
 	PTEID_DOCTYPE_ADDRESS,		/**< Address document : usefull to get value by field */
 	PTEID_DOCTYPE_SOD,			/**< sod document (if available) */
 	PTEID_DOCTYPE_INFO,			/**< info on the card (if available) */

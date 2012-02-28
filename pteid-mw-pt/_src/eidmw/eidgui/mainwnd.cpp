@@ -603,16 +603,6 @@ void MainWnd::enableFileMenu( void )
 {
 	m_ui.actionSave_eID->setEnabled(false);
 	m_ui.actionSave_eID_as->setEnabled(false);
-
-	if (m_CI_Data.isDataLoaded())
-	{
-		PTEID_XMLDoc &fulldoc = m_CI_Data.m_pCard->getDocument(PTEID_DOCTYPE_FULL);
-		if(fulldoc.isAllowed())
-		{
-			m_ui.actionSave_eID->setEnabled(true);
-			m_ui.actionSave_eID_as->setEnabled(true);
-		}
-	}
 }
 //*****************************************************
 // Enable the File print menu items depending on the fact we have a card loaded or not
