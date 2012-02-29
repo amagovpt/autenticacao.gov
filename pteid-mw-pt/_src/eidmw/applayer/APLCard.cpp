@@ -514,15 +514,8 @@ bool APL_SmartCard::isTestCard()
 
 bool APL_SmartCard::getAllowTestCard()
 {
-	if(isTestCard() && m_allowTestParam && !m_allowTestAsked && AppLayer.getAskForTestCard())
-	{
-		if(DLG_YES==DlgDisplayModal(DLG_ICON_QUESTION,DLG_MESSAGE_TESTCARD,L"",DLG_BUTTON_YES + DLG_BUTTON_NO,DLG_BUTTON_YES,DLG_BUTTON_NO))
-			setAllowTestCard(true);
-		else
-			setAllowTestCard(false);
-	}
 
-	return m_allowTestParam && m_allowTestAnswer;
+	return true;
 }
 
 void APL_SmartCard::setAllowTestCard(bool allow)

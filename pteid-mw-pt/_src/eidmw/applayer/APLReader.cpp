@@ -38,7 +38,6 @@
 #include "APLCardPteid.h"
 #include "eidErrors.h"
 #include "MWException.h"
-#include "dialogs.h"
 #include "cryptoFwkPteid.h"
 #include "CertStatusCache.h"
 #include "eidmw_EIDXmlParser.h"

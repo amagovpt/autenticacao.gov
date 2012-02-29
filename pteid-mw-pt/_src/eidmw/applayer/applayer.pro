@@ -30,7 +30,6 @@ DEFINED += APPLAYER_EXPORTS
 
 LIBS += -L../lib \
 	    -l$${COMMONLIB} \
-	    -l$${DLGLIB} \
 	    -lcrypto -lssl \
 	    -lxerces-c \
 	    -lfreeimagePTEiD \

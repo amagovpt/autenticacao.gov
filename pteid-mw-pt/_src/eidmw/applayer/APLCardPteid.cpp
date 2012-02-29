@@ -1184,42 +1184,6 @@ void APL_EIDCard::askWarningLevel()
 	// Fix this: This modification hides the accept window.
 	// Application will access to the card always without user interaction
 	setWarningLevel(APL_ACCESSWARNINGLEVEL_ACCEPTED);
-	/*
-	APL_AccessWarningLevel lWarningLevel=getWarningLevel();
-
-	if(lWarningLevel==APL_ACCESSWARNINGLEVEL_REFUSED)
-		throw CMWEXCEPTION(EIDMW_ERR_NOT_ALLOW_BY_USER);
-
-	if(lWarningLevel==APL_ACCESSWARNINGLEVEL_BEING_ASKED)
-		throw CMWEXCEPTION(EIDMW_ERR_USER_MUST_ANSWER);
-
-	if(lWarningLevel==APL_ACCESSWARNINGLEVEL_TO_ASK)
-	{
-		//Ask
-		int result=DLG_ERR;
-
-		try
-		{
-			m_lWarningLevel=APL_ACCESSWARNINGLEVEL_BEING_ASKED;
-			result = DlgDisplayModal(DLG_ICON_WARN,DLG_MESSAGE_USER_WARNING,L"",DLG_BUTTON_YES + DLG_BUTTON_NO, DLG_BUTTON_YES, DLG_BUTTON_NO);
-		}
-		catch(...)
-		{
-			setWarningLevel(APL_ACCESSWARNINGLEVEL_REFUSED);
-			throw;
-		}
-
-		if(result==DLG_YES)
-		{
-			setWarningLevel(APL_ACCESSWARNINGLEVEL_ACCEPTED);
-		}
-		else
-		{
-			setWarningLevel(APL_ACCESSWARNINGLEVEL_REFUSED);
-			throw CMWEXCEPTION(EIDMW_ERR_NOT_ALLOW_BY_USER);
-		}
-	}
-	*/
 }
 
 void APL_EIDCard::setWarningLevel(APL_AccessWarningLevel lWarningLevel)
