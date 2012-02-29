@@ -30,7 +30,7 @@ INCLUDEPATH += . ../dialogsQT ../../common
 ###
 ### Special compiler flags used
 ###
-QMAKE_CXXFLAGS+=-finput-charset=cp1252
+## QMAKE_CXXFLAGS+=-finput-charset=cp1252
 QMAKE_CXXFLAGS+=-fno-strict-aliasing
 
 DESTDIR = ../../bin
@@ -55,16 +55,12 @@ LIBS += -lpthread
 HEADERS += dlgWndBase.h \
            dlgWndAskPIN.h \
            dlgWndAskPINs.h \
-           dlgWndAskAccess.h \
-           dlgWndModal.h \
            dlgWndBadPIN.h \
 	   dlgWndPinpadInfo.h
 
 
 FORMS += dlgWndAskPIN.ui \
          dlgWndAskPINs.ui \
-         dlgWndAskAccess.ui \
-         dlgWndModal.ui \
          dlgWndBadPIN.ui \
 	 dlgWndPinpadInfo.ui
 
@@ -73,8 +69,6 @@ SOURCES += main.cpp \
            dlgWndBase.cpp \
            dlgWndAskPIN.cpp \
            dlgWndAskPINs.cpp  \
-           dlgWndAskAccess.cpp  \
-           dlgWndModal.cpp  \
            dlgWndBadPIN.cpp \
 	   dlgWndPinpadInfo.cpp
 
