@@ -398,10 +398,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\dlgWndAskAccess.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\dlgWndAskPIN.cpp"
 				>
 			</File>
@@ -415,10 +411,6 @@
 			</File>
 			<File
 				RelativePath=".\dlgWndBase.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\dlgWndModal.cpp"
 				>
 			</File>
 			<File
@@ -440,10 +432,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\dlgWndAskAccess.h"
-				>
-			</File>
-			<File
 				RelativePath=".\dlgWndAskPIN.h"
 				>
 			</File>
@@ -457,10 +445,6 @@
 			</File>
 			<File
 				RelativePath=".\dlgWndBase.h"
-				>
-			</File>
-			<File
-				RelativePath=".\dlgWndModal.h"
 				>
 			</File>
 			<File
