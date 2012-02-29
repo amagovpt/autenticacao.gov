@@ -41,7 +41,7 @@ unsigned char clearbinary[] = { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0
                                 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
                                 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
                                 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,};
+                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 
 namespace eIDMW
 {
@@ -160,10 +160,12 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
 {
     CAutoLock autolock(this);
 
+    CByteArray oDatan = oData;
+
     tFileInfo fileInfo = SelectFile(csPath, true);
 
-    const unsigned char *pucData = oData.GetBytes();
-    unsigned long ulDataLen = oData.Size();
+    const unsigned char *pucData = oDatan.GetBytes();
+    unsigned long ulDataLen = oDatan.Size();
 
     if(ulDataLen == 0)
     {
@@ -173,19 +175,34 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
 
     }
 
-    for (unsigned long i = 0; i < ulDataLen; i += MAX_APDU_WRITE_LEN)
+    bool bEOF = false;
+
+    int cardfilesize = 1000;
+
+    for (unsigned long i = 0; i < cardfilesize && !bEOF && ulDataLen != 0; i += MAX_APDU_WRITE_LEN)
     {
         unsigned long ulLen = ulDataLen - i;
-                if (ulLen > MAX_APDU_WRITE_LEN)
+        if (ulLen > MAX_APDU_WRITE_LEN)
             ulLen = MAX_APDU_WRITE_LEN;
 
         CByteArray oResp = UpdateBinary(ulOffset + i, CByteArray(pucData + i, ulLen));
-                unsigned long ulSW12 = getSW12(oResp);
-                if (ulSW12 == 0x6982)
-                        throw CNotAuthenticatedException(
-                                EIDMW_ERR_NOT_AUTHENTICATED, fileInfo.lWritePINRef);
-                else if (ulSW12 != 0x9000)
-                        throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
+        unsigned long ulSW12 = getSW12(oResp);
+
+        if (ulSW12 == 0x9000 || (i != 0 && ulSW12 == 0x6B00))
+            oDatan.Append(oResp.GetBytes(), oResp.Size());
+        else if (ulSW12 == 0x6982) {
+            throw CNotAuthenticatedException(
+                        EIDMW_ERR_NOT_AUTHENTICATED, fileInfo.lReadPINRef);
+        }
+        else if (ulSW12 == 0x6B00)
+            throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
+        else if (ulSW12 == 0x6D00)
+            throw CMWEXCEPTION(EIDMW_ERR_NOT_ACTIVATED);
+
+        else if (ulSW12 == 0x6282)
+            bEOF = false;
+        else
+            throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
     }
 
         MWLOG(LEV_INFO, MOD_CAL, L"Written file %ls to card", utilStringWiden(csPath).c_str());
@@ -603,8 +620,11 @@ CByteArray CPkiCard::UpdateBinary(unsigned long ulOffset, const CByteArray & oDa
     // Update Binary
 	CByteArray oDataVoid;
 
-    oDataVoid.Append(clearbinary, sizeof(clearbinary));
-    SendAPDU(0xD6, 0x00, 0x00, oDataVoid);
+    if (ulOffset == 0)
+    {
+        oDataVoid.Append(clearbinary, sizeof(clearbinary));
+        SendAPDU(0xD6, 0x00, 0x00, oDataVoid);
+    }
 
     CByteArray ret = SendAPDU(0xD6, (unsigned char) (ulOffset / 256),
                               (unsigned char) (ulOffset % 256), oData);

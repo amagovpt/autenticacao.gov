@@ -39,10 +39,10 @@ typedef struct
 #ifdef __APPLE__
 // SCM331 reader on Mac PPC 10.4 can't read 252 bytes
 const unsigned long MAX_APDU_READ_LEN = 256;
-const unsigned long MAX_APDU_WRITE_LEN = 256;
+const unsigned long MAX_APDU_WRITE_LEN = 255;
 #else
 const unsigned long MAX_APDU_READ_LEN = 256;
-const unsigned long MAX_APDU_WRITE_LEN = 256;
+const unsigned long MAX_APDU_WRITE_LEN = 255;
 #endif
 const unsigned long MAX_APDU_LEN = 256;
 const unsigned long APDU_BUF_LEN = MAX_APDU_LEN + 2; // for SW1 and SW2
