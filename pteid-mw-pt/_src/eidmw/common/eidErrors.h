@@ -79,6 +79,8 @@
 /** Card not activated */
 #define EIDMW_ERR_NOT_ACTIVATED        0xe1d0020A
 
+#define EIDMW_ERR_PINREF_NOT_FOUND	   0xe1d0020B
+
 
 // Reader errors
 

@@ -183,7 +183,7 @@ APL_Pin *APL_Pins::getPinByPinRef(unsigned long pinRef)
 
 	//auth pin on IAS101 is 1
 	if (m_card->getType() == APL_CARDTYPE_PTEID_IAS101)
-		pinRef = (pinRef & 0b10) == 0b10 ? pinRef : 1;
+		pinRef = (pinRef & 2 ) == 2 ? pinRef : 1;
 
 	for(itr = m_pins.begin(); itr != m_pins.end(); itr++){
 	    if (itr->second->getPinRef() == pinRef)
