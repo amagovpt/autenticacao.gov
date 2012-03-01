@@ -174,12 +174,12 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
         SendAPDU(0xD6, 0x00, 0x00, oDataVoid);
 
     }
-
+    SendAPDU(0x0E, 0x00, 0x02, 0x00);
     bool bEOF = false;
 
     for (unsigned long i = 0; i < PERSODATAFILESIZE && !bEOF && ulDataLen != 0; i += MAX_APDU_WRITE_LEN)
     {
-        unsigned long ulLen = ulDataLen - i + 2;
+        unsigned long ulLen = ulDataLen - i ;
         if (ulLen > MAX_APDU_WRITE_LEN)
             ulLen = MAX_APDU_WRITE_LEN;
 
@@ -188,7 +188,7 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
 
         if (ulSW12 == 0x9000 || (i != 0 && ulSW12 == 0x6B00))
         {
-            oDatan.Append(oResp.GetBytes(), oResp.Size());
+            oDatan.Chop(2);
         }
         else if (ulSW12 == 0x6982)
             throw CNotAuthenticatedException(EIDMW_ERR_NOT_AUTHENTICATED, fileInfo.lReadPINRef);
