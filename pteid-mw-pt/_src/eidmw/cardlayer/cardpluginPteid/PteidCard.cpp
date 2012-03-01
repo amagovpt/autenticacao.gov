@@ -180,28 +180,9 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 						oData = poContext->m_oPCSC.Transmit(hCard, oCmd,&lRetVal);
 				}
 
-				bool bIsPteidCard = oData.Size() == 2 && oData.GetByte(0) == 0x90 && oData.GetByte(1) == 0x00;
-
-				if (bIsPteidCard)
-				{
-					ulVersion = 1;
-					poCard = new CPteidCard(hCard, poContext, poPinpad, oData,
+				ulVersion = 1;
+				poCard = new CPteidCard(hCard, poContext, poPinpad, oData,
 							bNeedToSelectApplet ? ALW_SELECT_APPLET : TRY_SELECT_APPLET, ulVersion);
-					//#ifdef __APPLE__
-				} else {
-					// On Mac, if an unknown asynchronous card is inserted,
-					// we don't return NULL but a CUnknownCard instance.
-					// Reason: if we return NULL then the SISCardPlugin who
-					// will be consulted next in card of a ACR38U reader
-					// causes the reader/driver to get in a strange state
-					// (if no SIS card is present) and if then a CUnknownCard
-					// is instantiated, it will throw an exception if e.g.
-					// SCardStatus() is called.
-					// Remark: this trick won't work if synchronous card
-					// (other then the SIS card is inserted).
-					//return new CUnknownCard(hCard, poContext, poPinpad, CByteArray());
-				}
-				//#endif
 			}
 		}
 		catch(...)
@@ -245,27 +226,9 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 						oData = poContext->m_oPCSC.Transmit(hCard, oCmd,&lRetVal);
 				}
 
-				bool bIsPteidCard = oData.Size() == 2 && oData.GetByte(0) == 0x90 && oData.GetByte(1) == 0x00;
-
-				if (bIsPteidCard) {
 					ulVersion = 2;
 					poCard = new CPteidCard(hCard, poContext, poPinpad, oData,
 							bNeedToSelectApplet ? ALW_SELECT_APPLET : TRY_SELECT_APPLET, ulVersion);
-					//#ifdef __APPLE__
-				} else {
-					// On Mac, if an unknown asynchronous card is inserted,
-					// we don't return NULL but a CUnknownCard instance.
-					// Reason: if we return NULL then the SISCardPlugin who
-					// will be consulted next in card of a ACR38U reader
-					// causes the reader/driver to get in a strange state
-					// (if no SIS card is present) and if then a CUnknownCard
-					// is instantiated, it will throw an exception if e.g.
-					// SCardStatus() is called.
-					// Remark: this trick won't work if synchronous card
-					// (other then the SIS card is inserted).
-					//return new CUnknownCard(hCard, poContext, poPinpad, CByteArray());
-				}
-				//#endif
 			}
 		}
 		catch(...)
@@ -753,14 +716,12 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
 
     m_ucCLA = 0x00;
 
-    // Pretty unique for smart cards: first MSE SET, then verify PIN
-    // (needed for the nonrep key/pin, but also usable for the auth key/pin)
     if (pPin != NULL)
     {
         unsigned long ulRemaining = 0;
         bool bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
         if (!bOK)
-			throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
+		throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
     }
 	
 
