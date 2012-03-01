@@ -82,6 +82,8 @@ typedef enum
 	CARD_OTHER,
 } tCardStatus;
 
+const unsigned int PERSODATAFILESIZE = 1000;
+
 const unsigned long TIMEOUT_INFINITE = 0xFFFFFFFF; // used in CCardLayer::GetStatusChange()
 
 const unsigned long ALL_READERS = 0xFFFFFFFF; // used in CCardLayer::GetStatusChange()
