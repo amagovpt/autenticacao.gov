@@ -1,4 +1,5 @@
 #include <fstream>
+#include <cstring>
 
 #ifdef WIN32
 #include <Windows.h> //CharToOem()
@@ -133,6 +134,35 @@ namespace eIDMW
 		return hashes;
 	}
 
+	#define OFFICIAL_DOWNLOAD_URL "http://svn.gov.pt/projects/ccidadao/"
+	
+	void AddReadMe(const char *output)
+	{
+		
+	const char *README = 
+		"Este ficheiro .zip contém ficheiros electronicamente assinados pelo middleware \n"
+		"oficial do Cartão de Cidadão Português (versão 2.0). Para validar a assinatura deve utilizar o \n"
+		"mesmo software que está disponível para download em " OFFICIAL_DOWNLOAD_URL "\n\n"
+		"This .zip file contains files electronically signed by the official Portuguese Identity Card Middleware \n"
+		"(version 2). To validate the signature you should use the software available for download at "
+		OFFICIAL_DOWNLOAD_URL;
+
+		mz_bool status = MZ_FALSE;
+
+		#ifdef WIN32
+		//TODO: Convert README to "system codepage" or something
+
+		#endif
+
+		status = mz_zip_add_mem_to_archive_file_in_place (output, "README.txt", README, strlen(README),
+				"", (unsigned short)0, MZ_BEST_COMPRESSION);
+
+		if (!status)
+		{
+			MWLOG (LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed for README.txt");
+		}
+	}
+
 	void StoreSignatureToDisk(CByteArray& sig, const char **paths, int num_paths, const char *output_file)
 	{
 
@@ -178,7 +208,7 @@ namespace eIDMW
 			free(ptr_content);
 		}
 
-		//Append the signature file to the container
+		//Add the signature file to the container
 
 		status = mz_zip_add_mem_to_archive_file_in_place(output_file, SIG_INTERNAL_PATH, sig.GetBytes(),
 				sig.Size(), "", (unsigned short)0, MZ_BEST_COMPRESSION);
@@ -187,6 +217,10 @@ namespace eIDMW
 			MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed for the signature file");
 			return ;
 		}
+
+		//Add a README file to the container 
+
+		AddReadMe(output_file);
 
 	}
 };
