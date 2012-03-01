@@ -1090,6 +1090,12 @@ public:
  	  */
 	PTEIDSDK_API PTEID_Pin &getPinByNumber(unsigned long ulIndex);
 
+	/**
+	  * Get the pin by its pin reference.
+	  * Throw PTEID_ExParamRange exception if the index is out of range.
+	  */
+	PTEIDSDK_API PTEID_Pin &getPinByPinRef(unsigned long pinRef);
+
 private:
 	PTEID_Pins(const PTEID_Pins& pins);					/**< Copy not allowed - not implemented */
 	PTEID_Pins& operator= (const PTEID_Pins& pins);		/**< Copy not allowed - not implemented */
@@ -1107,6 +1113,11 @@ class APL_Pin;
 class PTEID_Pin : public PTEID_Crypto
 {
 public:
+
+	static const unsigned long AUTH_PIN = 129;
+	static const unsigned long SIGN_PIN = 130;
+	static const unsigned long ADDR_PIN = 131;
+
 	PTEIDSDK_API virtual ~PTEID_Pin();				/**< Destructor */
 
 	PTEIDSDK_API unsigned long getIndex();		/**< Get the index of the pin */
@@ -1174,6 +1185,7 @@ private:
 	PTEID_Pin(const SDK_Context *context,APL_Pin *impl);						/**< For internal use : Constructor */
 
 friend PTEID_Pin &PTEID_Pins::getPinByNumber(unsigned long ulIndex);	/**< For internal use : This method must access protected constructor */
+friend PTEID_Pin &PTEID_Pins::getPinByPinRef(unsigned long pinRef);		/**< For internal use : This method must access protected constructor */
 };
 
 class APL_Certifs;

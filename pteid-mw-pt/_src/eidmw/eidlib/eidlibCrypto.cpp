@@ -41,6 +41,7 @@
 #define	INCLUDE_OBJECT_ROOTSIGNCERT		10
 
 #define	INCLUDE_OBJECT_FIRSTPIN		1000
+#define	INCLUDE_OBJECT_FIRSTPINREF	1100
 #define	INCLUDE_OBJECT_FIRSTCERT	2000
 #define	INCLUDE_OBJECT_FIRSTCHILD	3000
 
@@ -980,19 +981,38 @@ PTEID_Pin &PTEID_Pins::getPinByNumber(unsigned long ulIndex)
 
 	if(!out)
 	{
-		//CAutoMutex autoMutex(m_mutex);
-
-		//ppin=dynamic_cast<PTEID_Pin *>(getObject(INCLUDE_OBJECT_FIRSTPIN+ulIndex));
-		//if(!ppin)
-		//{
-			out = new PTEID_Pin(m_context,pimpl->getPinByNumber(ulIndex));
-			if(out)
-				m_objects[INCLUDE_OBJECT_FIRSTPIN+ulIndex]=out;
+		out = new PTEID_Pin(m_context,pimpl->getPinByNumber(ulIndex));
+		if(out)
+			m_objects[INCLUDE_OBJECT_FIRSTPIN+ulIndex]=out;
 			else
-				throw PTEID_ExParamRange();
-		//}
+			throw PTEID_ExParamRange();
 	}
 	
+	END_TRY_CATCH
+
+	return *out;
+}
+
+PTEID_Pin &PTEID_Pins::getPinByPinRef(unsigned long pinRef)
+{
+	PTEID_Pin *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_Pins *pimpl=static_cast<APL_Pins *>(m_impl);
+
+	// offset the PTEID_Pin
+	out = dynamic_cast<PTEID_Pin *>(getObject(INCLUDE_OBJECT_FIRSTPINREF+pinRef));
+
+	if(!out)
+	{
+		out = new PTEID_Pin(m_context,pimpl->getPinByPinRef(pinRef));
+		if(out)
+			m_objects[INCLUDE_OBJECT_FIRSTPINREF+pinRef]=out;
+		else
+			throw PTEID_ExParamRange();
+	}
+
 	END_TRY_CATCH
 
 	return *out;

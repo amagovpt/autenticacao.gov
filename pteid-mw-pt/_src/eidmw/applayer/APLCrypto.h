@@ -80,6 +80,13 @@ public:
 	EIDMW_APL_API APL_Pin *getPinByNumber(unsigned long ulIndex);
 
 	/**
+	  * Return the pin with the pin reference from the card
+	  *
+	  * If the pin is not found an exception is thrown
+	  */
+	EIDMW_APL_API APL_Pin *getPinByPinRef(unsigned long pinRef);
+
+	/**
 	  * Add pin in the map for internal use (No need to export)
 	  */
 	APL_Pin *addPin(unsigned long ulIndex,const CByteArray *pin_tlv_struct);

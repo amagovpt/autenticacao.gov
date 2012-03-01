@@ -177,6 +177,22 @@ APL_Pin *APL_Pins::getPinByNumber(unsigned long ulIndex)
 	throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
 }
 
+APL_Pin *APL_Pins::getPinByPinRef(unsigned long pinRef)
+{
+	std::map<unsigned long,APL_Pin *>::const_iterator itr;
+
+	//auth pin on IAS101 is 1
+	if (m_card->getType() == APL_CARDTYPE_PTEID_IAS101)
+		pinRef = (pinRef & 0b10) == 0b10 ? pinRef : 1;
+
+	for(itr = m_pins.begin(); itr != m_pins.end(); itr++){
+	    if (itr->second->getPinRef() == pinRef)
+	    	return itr->second;
+	}
+
+	throw CMWEXCEPTION(EIDMW_ERR_PINREF_NOT_FOUND);
+}
+
 APL_Pin *APL_Pins::addPin(unsigned long ulIndex,const CByteArray *pin_tlv_struct)
 {
 	std::map<unsigned long,APL_Pin *>::const_iterator itr;

@@ -991,11 +991,12 @@ return $jnicall;
 //------------------------------------------------------------
 // class PTEID_Pins
 //------------------------------------------------------------
-%javaexception("PTEID_Exception") count 	   JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getPinByNumber 	   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") count 	   		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getPinByNumber	JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getPinByPinRef	JAVA_CODE_THROW
 
 //------------------------------------------------------------
-// class PTEID_Pins
+// class PTEID_Pin
 //------------------------------------------------------------
 %javaexception("PTEID_Exception") getIndex		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getType		JAVA_CODE_THROW
@@ -1007,6 +1008,7 @@ return $jnicall;
 %javaexception("PTEID_Exception") getTriesLeft	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") verifyPin		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") changePin		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getPinRef 	JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_Certificates
