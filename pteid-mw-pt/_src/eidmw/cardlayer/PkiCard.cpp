@@ -190,22 +190,19 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
         {
             oDatan.Append(oResp.GetBytes(), oResp.Size());
         }
-        else if (ulSW12 == 0x6982) {
-            throw CNotAuthenticatedException(
-                        EIDMW_ERR_NOT_AUTHENTICATED, fileInfo.lReadPINRef);
-        }
+        else if (ulSW12 == 0x6982)
+            throw CNotAuthenticatedException(EIDMW_ERR_NOT_AUTHENTICATED, fileInfo.lReadPINRef);
         else if (ulSW12 == 0x6B00)
             throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
         else if (ulSW12 == 0x6D00)
             throw CMWEXCEPTION(EIDMW_ERR_NOT_ACTIVATED);
-
         else if (ulSW12 == 0x6282)
             bEOF = false;
         else
             throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
     }
 
-        MWLOG(LEV_INFO, MOD_CAL, L"Written file %ls to card", utilStringWiden(csPath).c_str());
+    MWLOG(LEV_INFO, MOD_CAL, L"Written file %ls to card", utilStringWiden(csPath).c_str());
 }
 
 unsigned char CPkiCard::PinUsage2Pinpad(const tPin & Pin, const tPrivKey *pKey)
@@ -619,7 +616,7 @@ CByteArray CPkiCard::ReadBinary(unsigned long ulOffset, unsigned long ulLen)
 CByteArray CPkiCard::UpdateBinary(unsigned long ulOffset, const CByteArray & oData)
 {
     // Update Binary
-	CByteArray oDataVoid;
+    CByteArray oDataVoid;
 
     if (ulOffset == 0)
     {
@@ -627,10 +624,8 @@ CByteArray CPkiCard::UpdateBinary(unsigned long ulOffset, const CByteArray & oDa
         SendAPDU(0xD6, 0x00, 0x00, oDataVoid);
     }
 
-    CByteArray ret = SendAPDU(0xD6, (unsigned char) (ulOffset / 256),
-                              (unsigned char) (ulOffset % 256), oData);
-
-    return ret;
+    return SendAPDU(0xD6, (unsigned char) (ulOffset / 256),
+                    (unsigned char) (ulOffset % 256), oData);
 }
 
 DlgPinOperation CPkiCard::PinOperation2Dlg(tPinOperation operation)
