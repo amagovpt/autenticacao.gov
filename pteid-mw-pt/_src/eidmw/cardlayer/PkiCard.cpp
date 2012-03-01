@@ -177,11 +177,9 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
 
     bool bEOF = false;
 
-    int cardfilesize = 1000;
-
-    for (unsigned long i = 0; i < cardfilesize && !bEOF && ulDataLen != 0; i += MAX_APDU_WRITE_LEN)
+    for (unsigned long i = 0; i < PERSODATAFILESIZE && !bEOF && ulDataLen != 0; i += MAX_APDU_WRITE_LEN)
     {
-        unsigned long ulLen = ulDataLen - i;
+        unsigned long ulLen = ulDataLen - i + 2;
         if (ulLen > MAX_APDU_WRITE_LEN)
             ulLen = MAX_APDU_WRITE_LEN;
 
@@ -189,7 +187,9 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
         unsigned long ulSW12 = getSW12(oResp);
 
         if (ulSW12 == 0x9000 || (i != 0 && ulSW12 == 0x6B00))
+        {
             oDatan.Append(oResp.GetBytes(), oResp.Size());
+        }
         else if (ulSW12 == 0x6982) {
             throw CNotAuthenticatedException(
                         EIDMW_ERR_NOT_AUTHENTICATED, fileInfo.lReadPINRef);
@@ -593,14 +593,15 @@ CByteArray CPkiCard::SelectByPath(const std::string & csPath, bool bReturnFileIn
         oPath.Append(Hex2Byte(csPath, i));
 
     CByteArray oResp = SendAPDU(0xA4, 0x00, ucP2, oPath);
-	if (ShouldSelectApplet(0xA4, getSW12(oResp)))
-	{
-		// The file still wasn't found, so let's first try to select the applet
-		if (SelectApplet())
-		{
-			m_selectAppletMode = ALW_SELECT_APPLET;
-			oResp = SendAPDU(0xA4, 0x80, ucP2, oPath);		}
-	}
+    if (ShouldSelectApplet(0xA4, getSW12(oResp)))
+    {
+        // The file still wasn't found, so let's first try to select the applet
+        if (SelectApplet())
+        {
+            m_selectAppletMode = ALW_SELECT_APPLET;
+            oResp = SendAPDU(0xA4, 0x80, ucP2, oPath);
+        }
+    }
 
 	getSW12(oResp, 0x9000);
 
