@@ -196,10 +196,15 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
             throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
         else if (ulSW12 == 0x6D00)
             throw CMWEXCEPTION(EIDMW_ERR_NOT_ACTIVATED);
+        //EOF for Gemsafe cards
         else if (ulSW12 == 0x6282)
             bEOF = false;
-        else
-            throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
+        //Avoid problems with IAS cards (file not found)
+        else if (ulSW12 == 0x6D80)
+            bEOF = false;
+        //Comment to Avoid problems with IAS cards
+        //else
+            //throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
     }
 
     MWLOG(LEV_INFO, MOD_CAL, L"Written file %ls to card", utilStringWiden(csPath).c_str());
