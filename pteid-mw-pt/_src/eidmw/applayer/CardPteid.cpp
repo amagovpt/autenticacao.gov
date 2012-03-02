@@ -1327,6 +1327,7 @@ const char * APL_EidFile_Address::getCountryCode()
 }
 
 bool APL_EidFile_Address::isNationalAddress(){
+	ShowData();
 	return (m_AddressType.compare(m_NATIONAL)==0);
 }
 
