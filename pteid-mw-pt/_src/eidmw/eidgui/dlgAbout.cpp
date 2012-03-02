@@ -31,7 +31,6 @@ dlgAbout::dlgAbout(QString const& version, QWidget *parent)
 		: QDialog(parent)
 {
 	ui.setupUi(this);
-	ui.lblVersion->setText(version);
 }
 
 dlgAbout::~dlgAbout()
