@@ -20,7 +20,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Identity Card: About</string>
+   <string>About</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>

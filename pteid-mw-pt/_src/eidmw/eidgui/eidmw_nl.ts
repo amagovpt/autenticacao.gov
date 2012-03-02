@@ -933,10 +933,11 @@ Please specify .xml, .csv or .eid</source>
         <translation>Kaart niet aanwezig</translation>
     </message>
     <message>
-        <location filename="mainwnd.cpp" line="1591"/>
-        <location filename="mainwnd.cpp" line="2114"/>
+        <location filename="mainwnd.cpp" line="1756"/>
+        <location filename="mainwnd.cpp" line="2056"/>
+        <location filename="mainwnd.cpp" line="2208"/>
         <source>No card found</source>
-        <translation>Geen kaart gevonden</translation>
+        <translation>O cartão não está introduzido no leitor.</translation>
     </message>
     <message>
         <location filename="mainwnd.cpp" line="3403"/>
@@ -1213,7 +1214,7 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <location filename="mainwnd.ui" line="2838"/>
         <source>&amp;Reload eID</source>
-        <translation>(Re)Ler o cartão</translation>
+        <translation>Ler o cartão</translation>
     </message>
     <message>
         <location filename="mainwnd.ui" line="2850"/>
