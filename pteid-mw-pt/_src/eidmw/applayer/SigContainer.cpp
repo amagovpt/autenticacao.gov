@@ -134,18 +134,9 @@ namespace eIDMW
 		return hashes;
 	}
 
-	#define OFFICIAL_DOWNLOAD_URL "http://svn.gov.pt/projects/ccidadao/"
 	
 	void AddReadMe(const char *output)
 	{
-		
-	const char *README = 
-		"Este ficheiro .zip contém ficheiros electronicamente assinados pelo middleware \n"
-		"oficial do Cartão de Cidadão Português (versão 2.0). Para validar a assinatura deve utilizar o \n"
-		"mesmo software que está disponível para download em " OFFICIAL_DOWNLOAD_URL "\n\n"
-		"This .zip file contains files electronically signed by the official Portuguese Identity Card Middleware \n"
-		"(version 2). To validate the signature you should use the software available for download at "
-		OFFICIAL_DOWNLOAD_URL;
 
 		mz_bool status = MZ_FALSE;
 
