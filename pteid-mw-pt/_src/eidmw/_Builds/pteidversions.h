@@ -3,6 +3,7 @@
 
 /**
  * Versions for the Windows binaries
+ * This versions are the real version of the middleware
  */
 
 #pragma once
@@ -15,15 +16,15 @@
 #define PTEID_PRODUCT_NAME    	"Portugal eID MiddleWare"
 
 #ifdef PTEID_35
-	#define PTEID_PRODUCT_VERSION    "3.5.5"
-	#define BASE_VERSION_STRING    "3, 5, 5, "
-	#define BASE_VERSION1          3
-	#define BASE_VERSION2          5
-	#define BASE_VERSION3          5
+	#define PTEID_PRODUCT_VERSION    "1.9.8"
+	#define BASE_VERSION_STRING    "1, 9, 8, "
+	#define BASE_VERSION1          1
+	#define BASE_VERSION2          9
+	#define BASE_VERSION3          8
 #else
-	#define PTEID_PRODUCT_VERSION    "3.0"
-	#define BASE_VERSION_STRING    "3, 0, 1, "
-	#define BASE_VERSION1          3
+	#define PTEID_PRODUCT_VERSION    "1.0"
+	#define BASE_VERSION_STRING    "1, 0, 1, "
+	#define BASE_VERSION1          1
 	#define BASE_VERSION2          0
 	#define BASE_VERSION3          1
 #endif
