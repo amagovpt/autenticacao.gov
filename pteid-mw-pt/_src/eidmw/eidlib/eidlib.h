@@ -695,6 +695,7 @@ public:
 	PTEIDSDK_API PTEID_Address& getAddr();					/**< Get the Address document */
 	PTEIDSDK_API PTEID_Sod& getSod();							/**< Get the sod document */
 	PTEIDSDK_API PTEID_CardVersionInfo& getVersionInfo();		/**< Get the info document  */
+	PTEIDSDK_API bool writePersonalNotes(const PTEID_ByteArray &out,PTEID_Pin *pin=NULL,const char *csPinCode="");
 
 	PTEIDSDK_API PTEID_Certificate &getCert(PTEID_CertifType type);/**< Return certificate by type from the card */
 	PTEIDSDK_API PTEID_Certificate &getRoot();				/**< Return the root certificate from the card */

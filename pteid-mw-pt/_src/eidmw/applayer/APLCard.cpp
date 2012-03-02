@@ -336,8 +336,8 @@ CByteArray APL_SmartCard::sendAPDU(const CByteArray& cmd,APL_Pin *pin,const char
 		return CByteArray();
 
 	unsigned long lRemaining=0;
-	if(!pin)
-		if(strlen(csPinCode)>0)
+	if(pin)
+		if(csPinCode != NULL)
 			pin->verifyPin(csPinCode,lRemaining);
 
 	return APL_Card::sendAPDU(cmd);

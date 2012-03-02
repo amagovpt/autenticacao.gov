@@ -1044,6 +1044,11 @@ bool PTEID_EIDCard::Activate(const char *pinCode, PTEID_ByteArray &BCDDate){
 	return out;
 }
 
+bool PTEID_EIDCard::writePersonalNotes(const PTEID_ByteArray &out,PTEID_Pin *pin,const char *csPinCode){
+	//martinho: TODO: isto terá de ser muito melhorado...
+	return writeFile("3F005F00EF07", out, pin, csPinCode);
+}
+
 const PTEID_ByteArray& PTEID_EIDCard::getRawData_Challenge()
 {
 	PTEID_ByteArray *out = NULL;

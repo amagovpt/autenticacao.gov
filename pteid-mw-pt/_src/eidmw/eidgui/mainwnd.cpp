@@ -3590,13 +3590,11 @@ void MainWnd::updatetext()
 
 void MainWnd::PersoDataSaveButtonClicked( void )
 {
-	std::string PersoDataFile = "3f005f00ef07";
-	std::string Misc = "misc";
 	QString TxtPersoDataString = m_ui.txtPersoData->toPlainText().toUtf8();
 	m_ui.txtPersoData->setMaximumBlockCount(1000);
 
 	PTEID_ReaderContext &ReaderContext  = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-	PTEID_SmartCard	 &Card	= ReaderContext.getEIDCard();
+	PTEID_EIDCard	 &Card	= ReaderContext.getEIDCard();
 	PTEID_Pins &Pins	= Card.getPins();
 	PTEID_Pin &Pin	= Pins.getPinByNumber(1);
 
@@ -3608,7 +3606,7 @@ void MainWnd::PersoDataSaveButtonClicked( void )
         try {
 
             const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), TxtPersoDataString.toStdString().size());
-            Card.writeFile(PersoDataFile.c_str(), oData, &Pin, Misc.c_str());
+            Card.writePersonalNotes(oData);
             QMessageBox::information( this, tr("Notas Pessais"),  tr("Notas pessoais escritas com sucesso!"), QMessageBox::Ok );
         } catch (PTEID_Exception& e) {
             QMessageBox::critical(this, tr("Notas Pessais"), tr("Erro ao escrever notas pessoais!"), QMessageBox::Ok );
