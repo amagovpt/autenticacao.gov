@@ -28,6 +28,7 @@
 dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString & Header, QString & PINName, bool UseKeypad, QWidget *parent ) : dlgWndBase(parent)
 {
 	ui.setupUi(this);
+	setFixedSize(416,258);
 
 	if( pinInfo.ulFlags & PIN_FLAG_DIGITS )
 	{

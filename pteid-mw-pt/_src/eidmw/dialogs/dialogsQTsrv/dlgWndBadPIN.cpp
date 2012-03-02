@@ -28,6 +28,8 @@ dlgWndBadPIN::dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWi
 {
 	ui.setupUi(this);
 
+	setFixedSize(411, 183);
+
 	QString Title="";
 	//if( DApplic == DLG_APP_BELPIC )
 	//{

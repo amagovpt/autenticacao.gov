@@ -28,6 +28,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 	: QWidget(parent)
 {
 	ui.setupUi(this);
+	setFixedSize(417, 259);
 
 	QString Title="";
 

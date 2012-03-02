@@ -29,6 +29,8 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 {
 	ui.setupUi(this);
 
+	setFixedSize(416, 258);
+
 	//this->resize( 350, 280 );
 	m_UK_InputField = 0;
 	m_ulPin1MinLen = pinInfo1.ulMinLen;
