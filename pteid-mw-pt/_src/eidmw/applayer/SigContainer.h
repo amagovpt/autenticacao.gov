@@ -52,7 +52,7 @@ static const char *README =
 "" NL
 "Signature technical specification:" NL
 "Xades / Xades-T" NL
-"http://www.w3.org/TR/XAdES/NL" NL;
+"http://www.w3.org/TR/XAdES" NL;
 
 	class Container
 	{
