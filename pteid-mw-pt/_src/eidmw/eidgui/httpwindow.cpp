@@ -281,6 +281,10 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
 	CreateProcess(NULL, LPTSTR(winpath.c_str()), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
 	exit(0);
 
+#elif __APPLE__
+
+	execl("/usr/bin/hdiutil", "hdiutil attach ", pkgpath.c_str(), NULL);
+
 #else
 
 	std::cout << "pkgpath " << pkgpath << " distro " << distro << std::endl;
