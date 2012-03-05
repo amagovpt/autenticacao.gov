@@ -1,20 +1,13 @@
-Index: ../cardlayer/cardpluginPteid/PteidCard.cpp
+Index: ../cardlayer/PkiCard.cpp
 ===================================================================
---- ../cardlayer/cardpluginPteid/PteidCard.cpp	(revision 1212)
-+++ ../cardlayer/cardpluginPteid/PteidCard.cpp	(working copy)
-@@ -691,13 +691,13 @@
+--- ../cardlayer/PkiCard.cpp	(revision 2097)
++++ ../cardlayer/PkiCard.cpp	(working copy)
+@@ -443,7 +443,7 @@
  
-     // Pretty unique for smart cards: first MSE SET, then verify PIN
-     // (needed for the nonrep key/pin, but also usable for the auth key/pin)
--    if (pPin != NULL)
-+    /*if (pPin != NULL)
-     {
-         unsigned long ulRemaining = 0;
-         bool bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
-         if (!bOK)
- 			throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
--    }
-+    } */
- 	
+ 	MWLOG(LEV_INFO, MOD_CAL, L"     No SSO: ask PIN and sign (key: ID=0x%0x, algo=0x%0x, "
+ 			L"%d bytes input)", key.ulID, algo, oData.Size());
+-	return SignInternal(key, algo, oData, &Pin);
++	return SignInternal(key, algo, oData);
  
-     SetSecurityEnv(key, algo, oData.Size());
+ }
+ 
