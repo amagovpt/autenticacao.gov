@@ -40,45 +40,74 @@ QString fileName;
 HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
 : QDialog(parent)
 {
-	urli = uri;
-	getdistro = distro;
+    urli = uri;
+    getdistro = distro;
 
-	statusLabel = new QLabel(tr("There are updates available press Yes do perform the updates."));
+    statusLabel = new QLabel(tr("There are updates available press Yes do perform the updates."));
 
-	cancelButton = new QPushButton(tr("Cancel"));
-	cancelButton->setDefault(true);
-	downloadButton = new QPushButton(tr("Yes"));
-	downloadButton->setAutoDefault(false);
+    cancelButton = new QPushButton(tr("Cancel"));
+    cancelButton->setDefault(true);
+    downloadButton = new QPushButton(tr("Yes"));
+    downloadButton->setAutoDefault(false);
 
 
-	buttonBox = new QDialogButtonBox;
-	buttonBox->addButton(cancelButton, QDialogButtonBox::ActionRole);
-	buttonBox->addButton(downloadButton, QDialogButtonBox::RejectRole);
+    buttonBox = new QDialogButtonBox;
+    buttonBox->addButton(cancelButton, QDialogButtonBox::ActionRole);
+    buttonBox->addButton(downloadButton, QDialogButtonBox::RejectRole);
 
-	QTextEdit *textEditor = new QTextEdit();
-	textEditor->setText("Release Notes");
-	textEditor->setReadOnly(true);
+    QTextEdit *textEditor = new QTextEdit();
+    textEditor->setText(GetReleaseNotes());
+    textEditor->setReadOnly(true);
 
-	progressDialog = new QProgressDialog(this);
+    progressDialog = new QProgressDialog(this);
 
-	connect(progressDialog, SIGNAL(canceled()), this, SLOT(cancelDownload()));
-	connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
-	connect(downloadButton, SIGNAL(clicked()), this, SLOT(downloadFile()));
+    connect(progressDialog, SIGNAL(canceled()), this, SLOT(cancelDownload()));
+    connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(downloadButton, SIGNAL(clicked()), this, SLOT(downloadFile()));
 
-	QHBoxLayout *topLayout = new QHBoxLayout;
+    QHBoxLayout *topLayout = new QHBoxLayout;
 
-	QVBoxLayout *mainLayout = new QVBoxLayout;
-	mainLayout->addLayout(topLayout);
-	mainLayout->addWidget(statusLabel);
-	mainLayout->addWidget(textEditor);
-	mainLayout->addWidget(buttonBox);
-	setLayout(mainLayout);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addLayout(topLayout);
+    mainLayout->addWidget(statusLabel);
+    mainLayout->addWidget(textEditor);
+    mainLayout->addWidget(buttonBox);
+    setLayout(mainLayout);
 
-	setWindowTitle(QString::fromUtf8(dtitle.c_str()));
+    setWindowTitle(QString::fromUtf8(dtitle.c_str()));
 }
 
 HttpWindow::~HttpWindow()
 {
+}
+
+QString HttpWindow::GetReleaseNotes()
+{
+    QString line;
+    QString str;
+    QRegExp sep("\\#");
+
+    QString rnpath = QDir::tempPath();
+    rnpath.append("/version.txt");
+
+
+
+    QString s = QDir::toNativeSeparators(rnpath);
+
+    QFile file(s);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return "Get Release Notes failed";
+
+    QTextStream in(&file);
+
+    while (!in.atEnd())
+    {
+        line = in.readAll();
+    }
+
+    str = line.section(sep, 1, -1);
+
+    return str;
 }
 
 void HttpWindow::startRequest(QUrl url)

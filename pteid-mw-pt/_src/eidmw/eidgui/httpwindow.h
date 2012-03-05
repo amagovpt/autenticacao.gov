@@ -55,6 +55,8 @@ private slots:
 	void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
 
 private:
+    QString GetReleaseNotes();
+
 	QLabel *statusLabel;
 	QProgressDialog *progressDialog;
 	QPushButton *downloadButton;
