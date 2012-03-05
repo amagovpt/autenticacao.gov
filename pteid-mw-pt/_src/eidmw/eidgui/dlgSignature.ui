@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Assinatura de Ficheiros (XADES)</string>
+   <string>File Signature (XAdES)</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -42,7 +42,7 @@
     </sizepolicy>
    </property>
    <property name="text">
-    <string>Adicionar Ficheiros</string>
+    <string>Add Files...</string>
    </property>
   </widget>
   <widget class="QLabel" name="labelHeader">
@@ -55,7 +55,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Lista de Ficheiros a assinar</string>
+    <string>Files to Sign</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pbCancel">
@@ -68,7 +68,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Cancelar</string>
+    <string>Cancel</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pbSign">
@@ -84,7 +84,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Assinar</string>
+    <string>Sign...</string>
    </property>
   </widget>
   <widget class="QListView" name="listView">
@@ -107,7 +107,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Adicionar TimeStamp (XADES-T)</string>
+    <string>Add Timestamp (XAdES-T)</string>
    </property>
   </widget>
   <widget class="QCheckBox" name="checkbox_singlefiles">
@@ -120,7 +120,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Criar Assinaturas Individuais</string>
+    <string>Create Individual Signatures</string>
    </property>
   </widget>
  </widget>

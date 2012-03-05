@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Validação de Assinaturas</string>
+   <string>Signature Validation</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -43,7 +43,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Fechar</string>
+    <string>Close</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pbOpenSign">
@@ -59,7 +59,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Selecionar Assinatura</string>
+    <string>Select Signature File...</string>
    </property>
   </widget>
  </widget>

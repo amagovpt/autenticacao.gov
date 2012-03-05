@@ -37,7 +37,7 @@
        <rect>
         <x>20</x>
         <y>50</y>
-        <width>140</width>
+        <width>191</width>
         <height>20</height>
        </rect>
       </property>
@@ -48,7 +48,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Indicações Extra</string>
+       <string>Additional Indications</string>
       </property>
      </widget>
      <widget class="QLabel" name="labelHeader">
@@ -57,14 +57,14 @@
         <x>10</x>
         <y>0</y>
         <width>421</width>
-        <height>20</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
       </property>
       <property name="text">
-       <string>Selecione os grupos de campos pretendidos:</string>
+       <string>Select the fields you want to include:</string>
       </property>
      </widget>
      <widget class="QCheckBox" name="chboxID">
@@ -72,7 +72,7 @@
        <rect>
         <x>20</x>
         <y>30</y>
-        <width>154</width>
+        <width>191</width>
         <height>20</height>
        </rect>
       </property>
@@ -83,7 +83,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Indicações Básicas</string>
+       <string>Basic Indications</string>
       </property>
      </widget>
      <widget class="QCheckBox" name="chboxAddress">
@@ -102,7 +102,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Morada</string>
+       <string>Address</string>
       </property>
      </widget>
      <widget class="QCheckBox" name="chboxPersoData">
@@ -121,7 +121,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Indicações Pessoais</string>
+       <string>Personal Notes</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pbCancel">
@@ -134,7 +134,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Cancelar</string>
+       <string>Cancel</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pbPrint">
@@ -150,7 +150,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Imprimir</string>
+       <string>Print...</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pbGeneratePdf">
@@ -166,7 +166,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Criar PDF</string>
+       <string>Create PDF...</string>
       </property>
      </widget>
      <widget class="QCheckBox" name="chboxSignature">
@@ -185,7 +185,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Assinatura Digital (XAdES)</string>
+       <string>Digital Signature (XAdES)</string>
       </property>
      </widget>
      <widget class="QLabel" name="labelHeader_Options">
@@ -201,7 +201,7 @@
        <enum>Qt::LeftToRight</enum>
       </property>
       <property name="text">
-       <string>Opções:</string>
+       <string>Options:</string>
       </property>
      </widget>
     </widget>
