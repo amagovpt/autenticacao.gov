@@ -101,12 +101,8 @@ DEPENDPATH += . ../dialogs
 INCLUDEPATH += . ../dialogs ../eidlib ../_Builds ../common
 INCLUDEPATH += /usr/include/cairo
 
-LIBS += -Wl,-rpath,/usr/local/lib/pteidqt
-
 LIBS += -L../lib  \
         -l$${EIDLIB} \
-	-l$${COMMONLIB} \
-        -l$${APPLAYERLIB} \
         -lfreeimagePTEiD
 
 LIBS += -lcairo
