@@ -150,7 +150,7 @@ bool APL_EidFile_Trace::ShowData()
 	bool bAllowTest=pcard->getAllowTestCard();
 	bool bAllowBadDate=pcard->getAllowBadDate();
 
-	tCardFileStatus status=getStatus(true,&bAllowTest,&bAllowBadDate);
+	tCardFileStatus status=getStatus(false,&bAllowTest,&bAllowBadDate);
 	if(status==CARDFILESTATUS_OK)
 		return true;
 
@@ -495,7 +495,7 @@ bool APL_EidFile_ID::ShowData()
 	bool bAllowTest=pcard->getAllowTestCard();
 	bool bAllowBadDate=pcard->getAllowBadDate();
 
-	tCardFileStatus status=getStatus(true,&bAllowTest,&bAllowBadDate);
+	tCardFileStatus status=getStatus(false,&bAllowTest,&bAllowBadDate);
 	if(status==CARDFILESTATUS_OK)
 		return true;
 	//If the autorisation changed, we read the card again
@@ -945,7 +945,7 @@ bool APL_EidFile_Address::ShowData()
 	bool bAllowTest=pcard->getAllowTestCard();
 	bool bAllowBadDate=pcard->getAllowBadDate();
 
-	tCardFileStatus status=getStatus(true,&bAllowTest,&bAllowBadDate);
+	tCardFileStatus status=getStatus(false,&bAllowTest,&bAllowBadDate);
 	if(status==CARDFILESTATUS_OK)
 		return true;
 
@@ -1480,7 +1480,7 @@ bool APL_EidFile_Sod::ShowData()
 	bool bAllowTest=pcard->getAllowTestCard();
 	bool bAllowBadDate=pcard->getAllowBadDate();
 
-	tCardFileStatus status=getStatus(true,&bAllowTest,&bAllowBadDate);
+	tCardFileStatus status=getStatus(false,&bAllowTest,&bAllowBadDate);
 	if(status==CARDFILESTATUS_OK)
 		return true;
 
@@ -1606,7 +1606,7 @@ bool APL_EidFile_PersoData::ShowData()
         bool bAllowTest=pcard->getAllowTestCard();
         bool bAllowBadDate=pcard->getAllowBadDate();
 
-        tCardFileStatus status=getStatus(true,&bAllowTest,&bAllowBadDate);
+        tCardFileStatus status=getStatus(false,&bAllowTest,&bAllowBadDate);
         if(status==CARDFILESTATUS_OK)
                 return true;
 

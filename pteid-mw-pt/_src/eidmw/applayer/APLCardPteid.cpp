@@ -897,7 +897,7 @@ unsigned long APL_EIDCard::certificateCount()
 			{
 				m_fileCertAuthentication=new APL_CardFile_Certificate(this,PTEID_FILE_CERT_AUTHENTICATION);
 				//If status ok, we add the certificate to the store
-				if(m_fileCertAuthentication->getStatus(true)==CARDFILESTATUS_OK)
+				if(m_fileCertAuthentication->getStatus(false)==CARDFILESTATUS_OK)
 				{
 					if(NULL == (getCertificates()->addCert(m_fileCertAuthentication,APL_CERTIF_TYPE_AUTHENTICATION,true,false,m_certificateCount,NULL,NULL)))
 						throw CMWEXCEPTION(EIDMW_ERR_CHECK);
@@ -1911,11 +1911,6 @@ const char *APL_DocEId::getAccidentalIndications(){
 
 const char *APL_DocEId::getCivilianIdNumber(){
 	return m_card->getFileID()->getCivilianIdNumber();
-}
-
-const char *APL_DocEId::getPersoData()
-{
-	return m_card->getFilePersoData()->getPersoData();
 }
 
 /*****************************************************************************************

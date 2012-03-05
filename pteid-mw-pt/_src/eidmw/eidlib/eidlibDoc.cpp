@@ -1432,20 +1432,6 @@ const char *PTEID_EId::getCivilianIdNumber()
 	return out;
 }
 
-const char *PTEID_EId::getPersoData()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getPersoData();
-
-	END_TRY_CATCH
-
-	return out;
-}
-
 const char *PTEID_EId::getValidation()
 {
 	const char *out = NULL;

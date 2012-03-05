@@ -497,9 +497,8 @@ public:
     bool RetrieveData(PTEID_EIDCard& Card)
     {
     	bool            bRetVal = false;
-    	PTEID_EId&       pteid_eid= Card.getID();
 
-    	m_Fields[PERSODATA_INFO]	=  pteid_eid.getPersoData();
+    	m_Fields[PERSODATA_INFO]	=  Card.readPersonalNotes();
     	return bRetVal;
 	}
     //----------------------------------------------

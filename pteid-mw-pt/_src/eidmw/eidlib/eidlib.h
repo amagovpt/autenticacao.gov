@@ -847,6 +847,7 @@ public:
 	PTEIDSDK_API PTEID_Sod& getSod();							/**< Get the sod document */
 	PTEIDSDK_API PTEID_CardVersionInfo& getVersionInfo();		/**< Get the info document  */
 	PTEIDSDK_API bool writePersonalNotes(const PTEID_ByteArray &out,PTEID_Pin *pin=NULL,const char *csPinCode="");
+	PTEIDSDK_API const char *readPersonalNotes();
 
 	PTEIDSDK_API PTEID_Certificate &getCert(PTEID_CertifType type);/**< Return certificate by type from the card */
 	PTEIDSDK_API PTEID_Certificate &getRoot();				/**< Return the root certificate from the card */
@@ -903,6 +904,7 @@ protected:
 private:
 	PTEID_EIDCard(const PTEID_EIDCard& card);						/**< Copy not allowed - not implemented */
 	PTEID_EIDCard& operator= (const PTEID_EIDCard& card);			/**< Copy not allowed - not implemented */
+	bool persoNotesDirty;
 
 friend PTEID_Card &PTEID_ReaderContext::getCard();				/**< For internal use : This method must access protected constructor */
 };
@@ -1135,7 +1137,6 @@ public:
 	PTEIDSDK_API const char *getParents();					/**< Return field Parents */
 	PTEIDSDK_API PTEID_Photo& getPhotoObj();				/**< Return object Photo */
 	PTEIDSDK_API PTEID_PublicKey& getCardAuthKeyObj();	/**< Return object CardAuthKey */
-	PTEIDSDK_API const char *getPersoData();				/**< Return field PersoData */
 	PTEIDSDK_API const char *getValidation();				/**< Return field Validation */
 	PTEIDSDK_API const char *getMRZ1();						/**< Return field MRZ block 1 */
 	PTEIDSDK_API const char *getMRZ2();						/**< Return field MRZ block 2 */

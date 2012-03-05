@@ -45,10 +45,9 @@ class APL_EidFile_IDSign;
 class APL_EidFile_Address;
 class APL_EidFile_AddressSign;
 class APL_EidFile_Sod;
-class APL_EidFile_PersoData;
 class APL_EidFile_TokenInfo;
 class APL_CardFile_Certificate;
-
+class APL_EidFile_PersoData;
 class APL_CCXML_Doc;
 class APL_DocEId;
 class APL_AddrEId;
@@ -343,8 +342,6 @@ public:
 	EIDMW_APL_API const char *getMRZ3();				/**< Return field MRZ block 3 */
 	EIDMW_APL_API const char *getAccidentalIndications();	/**< Return field AccidentalIndications */
 	EIDMW_APL_API const char *getValidation();		/**< Return field Validation from the Trace file */
-
-	EIDMW_APL_API const char *getPersoData();
 
 protected:
 	/**

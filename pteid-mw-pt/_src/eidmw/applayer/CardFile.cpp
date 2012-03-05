@@ -164,7 +164,7 @@ tCardFileStatus APL_CardFile::getStatus(bool bForceRead,const bool *pbNewAllowTe
 	}*/
 
 	//if(bForceRead && m_status==CARDFILESTATUS_UNREAD)
-		LoadData();
+		LoadData(bForceRead);
 
 	return m_status; 
 }
@@ -244,7 +244,7 @@ void APL_CardFile::ReadFile()
 
 bool APL_CardFile::ShowData()
 {
-	tCardFileStatus status=getStatus(true);
+	tCardFileStatus status=getStatus(false);
 	if(status==CARDFILESTATUS_OK)
 		return true;
 

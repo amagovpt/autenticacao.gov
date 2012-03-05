@@ -394,7 +394,7 @@ APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file,APL_CertifType t
 
 	if(file)
 	{
-		if(file->getStatus(true)!=CARDFILESTATUS_OK)
+		if(file->getStatus(false)!=CARDFILESTATUS_OK)
 			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 		ulUniqueId=file->getUniqueId();
@@ -1449,7 +1449,7 @@ bool APL_Certif::isFromPteidValidChain()
 
 tCardFileStatus APL_Certif::getFileStatus()
 {
-	return m_certFile->getStatus(true);
+	return m_certFile->getStatus(false);
 }
 
 APL_CertifStatus APL_Certif::getStatus()

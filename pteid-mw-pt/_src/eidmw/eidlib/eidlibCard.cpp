@@ -30,6 +30,7 @@
 #include "APLCertif.h"
 #include "PhotoPteid.h"
 #include "ByteArray.h"
+#include "CardPteid.h"
 
 //UNIQUE INDEX FOR RETRIEVING OBJECT
 #define INCLUDE_OBJECT_DOCEID			1
@@ -432,6 +433,7 @@ bool PTEID_SmartCard::verifyChallengeResponse(const PTEID_ByteArray &challenge, 
 *****************************************************************************************/
 PTEID_EIDCard::PTEID_EIDCard(const SDK_Context *context,APL_Card *impl):PTEID_SmartCard(context,impl)
 {
+	persoNotesDirty = false;
 }
 
 PTEID_EIDCard::~PTEID_EIDCard()
@@ -1045,8 +1047,29 @@ bool PTEID_EIDCard::Activate(const char *pinCode, PTEID_ByteArray &BCDDate){
 }
 
 bool PTEID_EIDCard::writePersonalNotes(const PTEID_ByteArray &out,PTEID_Pin *pin,const char *csPinCode){
+	BEGIN_TRY_CATCH
+
 	//martinho: TODO: isto terá de ser muito melhorado...
-	return writeFile("3F005F00EF07", out, pin, csPinCode);
+	persoNotesDirty = writeFile("3F005F00EF07", out, pin, csPinCode);
+
+	END_TRY_CATCH
+
+	return persoNotesDirty;
+}
+
+const char *PTEID_EIDCard::readPersonalNotes(){
+	char *out = NULL;
+	BEGIN_TRY_CATCH
+
+	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
+
+	// ensure that the file is read after being written
+	pcard->getFilePersoData()->getStatus(persoNotesDirty);
+	out = (char*)pcard->getPersonalNotes().getPersonalNotes();
+
+	END_TRY_CATCH
+
+	return out;
 }
 
 const PTEID_ByteArray& PTEID_EIDCard::getRawData_Challenge()
