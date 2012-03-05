@@ -283,7 +283,7 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
 
 #elif __APPLE__
 
-	execl("/usr/bin/hdiutil", "hdiutil attach ", pkgpath.c_str(), NULL);
+	execl("/usr/bin/hdiutil", "hdiutil", "attach", pkgpath.c_str(), NULL);
 
 #else
 
