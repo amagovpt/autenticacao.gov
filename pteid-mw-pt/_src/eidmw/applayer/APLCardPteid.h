@@ -30,9 +30,9 @@
 #include "APLCard.h"
 #include "APLDoc.h"
 #include "ByteArray.h"
-#include "xmlUserData.h"
 #include "PhotoPteid.h"
 #include "APLPublicKey.h"
+#include "eidlib.h"
 
 namespace eIDMW
 {

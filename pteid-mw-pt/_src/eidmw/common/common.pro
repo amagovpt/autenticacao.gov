@@ -62,7 +62,6 @@ HEADERS += ByteArray.h \
            win_macros.h \
            prefix.h \
            StringOps.h \
-           xmlUserData.h \
            libtomcrypt/tomcrypt_argchk.h \
            libtomcrypt/tomcrypt_cfg.h \
            libtomcrypt/tomcrypt_hash.h \
