@@ -103,8 +103,10 @@ namespace eIDMW
 				mz_zip_reader_end(&zip_archive);
 				continue;
 			}
-
-			if (strcmp(file_stat.m_filename, SIG_INTERNAL_PATH)!=0)
+			// Exclude from signed file checking the Signature itself 
+			// and the README file that gets added to all signed containers
+			if (strcmp(file_stat.m_filename, SIG_INTERNAL_PATH) != 0
+				&& strcmp(file_stat.m_filename, "README.txt") != 0)
 			{
 				p = mz_zip_reader_extract_file_to_heap(&zip_archive,file_stat.m_filename, &uncomp_size, 0);
 				if (!p)

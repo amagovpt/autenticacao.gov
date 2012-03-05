@@ -687,8 +687,8 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
     	oResp = SendAPDU(0x22, 0x41, 0xB6, oDatagem);
     } else {
 
-    	if (ulInputLen != 36)
-    		IasSignatureHelper();
+    	//if (ulInputLen != 36)
+    	//	IasSignatureHelper();
 
     	oDataias.Append(0x95);
     	oDataias.Append(0x01);
@@ -713,13 +713,25 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
 {
     // printf("++++ Pteid12\n");
     CAutoLock autolock(this);
-
+    bool bOK = false;
     m_ucCLA = 0x00;
 
     if (pPin != NULL)
     {
         unsigned long ulRemaining = 0;
-        bool bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
+	if (m_poContext->m_bSSO)
+	{
+		std::string cached_pin = "";
+		if (m_verifiedPINs.find(pPin->ulID) != m_verifiedPINs.end())
+		{
+			cached_pin = m_verifiedPINs[pPin->ulID];
+
+    			MWLOG(LEV_DEBUG, MOD_CAL, L"Debug: Using cached pin for %s", pPin->csLabel.c_str());
+		}
+        	bOK = PinCmd(PIN_OP_VERIFY, *pPin, cached_pin, "", ulRemaining, &key);
+	}
+	else
+	        bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
         if (!bOK)
 		throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
     }

@@ -162,22 +162,90 @@ CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const
 
 	//Write zip container signature and referenced files in zip container
 
-
 	return signature;
 }
 
-CByteArray &APL_Card::SignXades(CByteArray content, const char *URL)
+void replace_lastdot_inplace(char* str_in)
 {
-	CByteArray * ba = new CByteArray();
-	//TODO
-	return *ba;
+	// We can only search forward because memrchr and strrchr 
+	// are not available on Windows *sigh*
+	char ch = '.';
+	char * pdest = str_in, *last_dot= NULL;
+       	while ((pdest = strchr(pdest, ch)) != NULL)
+	{
+	     last_dot = pdest;
+	     pdest++;
+	}
+
+	// Don't replace '.' if its a UNIX dotfile
+	if (last_dot != NULL && *(last_dot-1) != '/')
+		*last_dot = '_';
 }
 
-CByteArray &APL_Card::SignXadesT(CByteArray content, const char *URL)
+#ifdef WIN32
+#define PATH_SEP "\\"
+#else
+#define PATH_SEP "/"
+#endif
+
+char *generateFinalPath(const char *output_dir, const char *path)
 {
-	CByteArray * ba = new CByteArray();
-	//TODO
-	return *ba;
+
+	char * zip_filename = Basename((char*)path);
+	//We need a local copy of basename(path) because basename may return a pointer to some part
+	//of its argument and we don't want to change the input by replacing the last dot
+	char * tmp_path = new char[strlen(zip_filename)+1];
+	strcpy(tmp_path, zip_filename);
+
+	replace_lastdot_inplace(tmp_path);
+
+	//Buffer for the filename components plus ".zip" and terminating NULL
+	char *final_path = new char[strlen(output_dir)+strlen(tmp_path)+6];
+	sprintf(final_path, "%s" PATH_SEP "%s.zip", output_dir, tmp_path);
+	delete []tmp_path;
+
+	return final_path;
+}
+
+void APL_Card::SignXadesIndividual(const char ** paths, unsigned int n_paths, const char *output_dir)
+{
+	SignIndividual(paths, n_paths, output_dir, false);
+}
+
+void APL_Card::SignXadesTIndividual(const char ** paths, unsigned int n_paths, const char *output_dir)
+{
+	SignIndividual(paths, n_paths, output_dir, true);
+}
+
+// Implementation of the PIN-caching version of Xades-T
+// It signs each input file seperately and creates a .zip container for each
+void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const char *output_dir, bool timestamp)
+{
+
+	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
+	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+
+	XadesSignature sig(this);
+        const char **files_to_sign = new const char*[1];
+
+	for (unsigned int i=0; i!= n_paths; i++)
+	{
+
+		files_to_sign[0] = paths[i];
+		CByteArray &signature = sig.SignXades(files_to_sign, 1, timestamp);
+		
+		const char *output_file = generateFinalPath(output_dir, paths[i]);
+		StoreSignatureToDisk (signature, files_to_sign, 1, output_file);
+		delete []output_file;
+
+		//Set SSO on after first iteration to avoid more PinCmd() user interaction for the remaining 
+		// iterations
+		if (i==0)
+			getCalReader()->setSSO(true);
+	}
+
+	getCalReader()->setSSO(false);
+
 }
 
 CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, const char *output_file)

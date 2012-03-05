@@ -59,6 +59,11 @@ bool CCard::Status()
 	return  m_poContext->m_oPCSC.Status(m_hCard);
 }
 
+void CCard::setSSO(bool value)
+{
+	m_poContext->m_bSSO = value;
+}
+
 bool CCard::IsPinpadReader()
 {
 	return false;

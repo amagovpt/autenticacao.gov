@@ -79,9 +79,9 @@ public:
 	/**
 	 * Returns the ATR of the card that is currently present.
 	 */
-	CByteArray GetATR();
+    CByteArray GetATR();
 
-	bool IsPinpadReader();
+    bool IsPinpadReader();
 
     tCardType GetCardType();
     /* Return card-specific info.
@@ -91,6 +91,8 @@ public:
 
     std::string GetSerialNr();
     std::string GetCardLabel();
+
+    void setSSO(bool value);
 
 	/* Lock the card for exclusive use. Multiple calls are possible
 	 * (only the first call will lock the card), but for each Lock()

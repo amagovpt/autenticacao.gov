@@ -52,7 +52,8 @@ public:
     virtual void WriteUncachedFile(const std::string & csPath, unsigned long ulOffset,
         const CByteArray & oData);
 
-	virtual DlgPinUsage PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey) = 0;
+    virtual DlgPinUsage PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey) = 0;
+
     virtual unsigned long PinStatus(const tPin & Pin) = 0;
     virtual CByteArray RootCAPubKey() = 0;
     virtual bool Activate(const char *pinCode, CByteArray &BCDDate) = 0;
@@ -77,9 +78,9 @@ public:
     virtual CByteArray Ctrl(long ctrl, const CByteArray & oCmdData) = 0;
 
 protected:
-	std::vector <unsigned long> m_verifiedPINs;
+    std::map <unsigned int, std::string> m_verifiedPINs;
 
-	virtual bool ShouldSelectApplet(unsigned char ins, unsigned long ulSW12);
+    virtual bool ShouldSelectApplet(unsigned char ins, unsigned long ulSW12);
     virtual bool SelectApplet();
 
 	virtual tFileInfo SelectFile(const std::string & csPath, bool bReturnFileInfo = false);

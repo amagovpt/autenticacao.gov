@@ -36,7 +36,6 @@
 #include "Pinpad.h"
 #include "P15Correction.h"
 #include "../dialogs/dialogs.h"
-
 namespace eIDMW
 {
 
@@ -55,11 +54,10 @@ public:
 
     virtual void Disconnect(tDisconnectMode disconnectMode = DISCONNECT_LEAVE_CARD);
 
-	virtual CByteArray GetATR();
-
-	virtual CByteArray GetIFDVersion();
-
-	virtual bool Status();
+    virtual CByteArray GetATR();
+    
+    virtual CByteArray GetIFDVersion();
+    virtual bool Status();
 
     virtual bool IsPinpadReader();
 	virtual std::string GetPinpadPrefix();
@@ -74,6 +72,7 @@ public:
     virtual void Unlock();
 
     virtual void SelectApplication(const CByteArray & oAID);
+    virtual void setSSO(bool value);
 
 	CByteArray ReadCachedFile(const std::string & csPath, std::string & csName,
 		bool & bFound, unsigned long ulOffset, unsigned long ulMaxLen, bool &bFromDisk);

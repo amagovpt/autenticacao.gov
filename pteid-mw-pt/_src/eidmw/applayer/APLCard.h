@@ -104,9 +104,9 @@ public:
 	 */
 	EIDMW_APL_API virtual const CByteArray& getRawData(APL_RawDataType type)=0;
 
-    EIDMW_APL_API virtual CByteArray sendAPDU(const CByteArray& cmd);
+        EIDMW_APL_API virtual CByteArray sendAPDU(const CByteArray& cmd);
 
-    EIDMW_APL_API virtual CByteArray Sign(const CByteArray & oData, bool signatureKey=false);
+        EIDMW_APL_API virtual CByteArray Sign(const CByteArray & oData, bool signatureKey=false);
 
 	/* XADeS Signature Methods  */
 
@@ -117,7 +117,10 @@ public:
 	EIDMW_APL_API CByteArray &SignXades(const char ** path, unsigned int n_paths, const char *output_path);
 
 	EIDMW_APL_API CByteArray &SignXadesT(const char ** path, unsigned int n_paths, const char *output_path);
+
+	EIDMW_APL_API void SignXadesIndividual(const char**, unsigned int, const char*);
 	
+	EIDMW_APL_API void SignXadesTIndividual(const char**, unsigned int, const char*);
 
 	/**
 	  * Read a file on the card 
@@ -158,6 +161,8 @@ protected:
 
 
 	virtual bool isCardForbidden()=0;
+
+	void SignIndividual(const char**, unsigned int, const char*, bool);
 
 	static APL_CryptoFwk *m_cryptoFwk;			/**< Pointer to the crypto framework */
 	APL_ReaderContext *m_reader;				/**< Pointer to CAL reader (came from constructor) */	

@@ -293,13 +293,9 @@ bad_pin:
 
 	// If PIN command OK and no SSO, then state that we have now
 	// verified this PIN, this info is needed in the Sign() method
-	if (bRet && !m_poContext->m_bSSO)
+	if (bRet)
 	{
-		bool bFound = false;
-		for (size_t i = 0; i < m_verifiedPINs.size() && !bFound; i++)
-			bFound = (m_verifiedPINs[i] == Pin.ulID);
-		if (!bFound)
-			m_verifiedPINs.push_back(Pin.ulID);
+		m_verifiedPINs[Pin.ulID] = *pcsPin1; //Caching PIN
 	}
 
 	return bRet;
@@ -422,13 +418,14 @@ bad_pin:
 
 	// If PIN command OK and no SSO, then state that we have now
 	// verified this PIN, this info is needed in the Sign() method
-	if (bRet && !m_poContext->m_bSSO)
+	if (bRet)
 	{
-		bool bFound = false;
+		/*bool bFound = false;
 		for (size_t i = 0; i < m_verifiedPINs.size() && !bFound; i++)
 			bFound = (m_verifiedPINs[i] == Pin.ulID);
 		if (!bFound)
-			m_verifiedPINs.push_back(Pin.ulID);
+			m_verifiedPINs.push_back(Pin.ulID); */
+		m_verifiedPINs[Pin.ulID] = *pcsPin1; //Caching PIN
 	}
 
 	return bRet;
@@ -443,44 +440,11 @@ bool CPkiCard::LogOff(const tPin & Pin)
 CByteArray CPkiCard::Sign(const tPrivKey & key, const tPin & Pin,
         unsigned long algo, const CByteArray & oData)
 {
-	// If SSO (Single Sign-On) is false and we didn't verify the
-	// PIN yet, then we do this first without trying if it's
-	// realy needed.
 
-    	if (!m_poContext->m_bSSO)
-	{
-		bool bFound = false;
-		for (size_t i = 0; i < m_verifiedPINs.size() && !bFound; i++)
-			bFound = (m_verifiedPINs[i] == Pin.ulID);
+	MWLOG(LEV_INFO, MOD_CAL, L"     No SSO: ask PIN and sign (key: ID=0x%0x, algo=0x%0x, "
+			L"%d bytes input)", key.ulID, algo, oData.Size());
+	return SignInternal(key, algo, oData, &Pin);
 
-		if (!bFound)
-		{
-			MWLOG(LEV_INFO, MOD_CAL, L"     No SSO: ask PIN and sign (key: ID=0x%0x, algo=0x%0x, "
-				L"%d bytes input)", key.ulID, algo, oData.Size());
-			return SignInternal(key, algo, oData, &Pin);
-		}
-	}
-
-	// First try to sign.
-    // If this returns a "Security conditions not satisfied"
-    // then first do a Pin verify and then try again
-	MWLOG(LEV_INFO, MOD_CAL, L"     Trying to Sign (key: ID=0x%0x, algo=0x%0x, "
-		L"%d bytes input)", key.ulID, algo, oData.Size());
-	//printf ("Trying to Sign (key: ID=0x%0x, algo=0x%0x, %d bytes input\n", key.ulID, algo, oData.Size());
-    try
-    {
-        return SignInternal(key, algo, oData, &Pin);
-    }
-    catch(CMWException & e)
-    {
-      if ((unsigned)e.GetError() == EIDMW_ERR_NOT_AUTHENTICATED)
-        {
-			MWLOG(LEV_INFO, MOD_CAL, L"     Couldn't sign, asking PIN and trying again");
-            return SignInternal(key, algo, oData);
-        }
-        else
-            throw e;
-    }
 }
 
 CByteArray CPkiCard::Sign(const tPrivKey & key, const tPin & Pin,

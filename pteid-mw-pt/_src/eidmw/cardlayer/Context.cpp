@@ -24,7 +24,7 @@ namespace eIDMW
 {
 	CContext::CContext()
 	{
-		m_bSSO = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_SECURITY_SINGLESIGNON) != 0;
+		m_bSSO = false; 
 
 		m_ulConnectionDelay = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY);
 	}

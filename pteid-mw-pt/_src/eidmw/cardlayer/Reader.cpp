@@ -211,6 +211,11 @@ bool CReader::Connect()
 	return m_poCard != 0;
 }
 
+void CReader::setSSO(bool value)
+{
+	m_poCard->setSSO(value);
+}
+
 void CReader::Disconnect(tDisconnectMode disconnectMode)
 {
 	m_oPKCS15.Clear(NULL);
