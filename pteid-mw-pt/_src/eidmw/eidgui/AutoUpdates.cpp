@@ -230,12 +230,11 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	}
 
 	ver = version;
-	//ver = "3,5";
 #else
 
 	QString strVersion (WIN_GUI_VERSION_STRING);
 	ver = strVersion.toStdString();
-
+    std::cout << "LOCAL VER " << ver << std::endl;
 	//printf ("value %f\n", localverd);
 #endif
 
@@ -290,6 +289,14 @@ std::string AutoUpdates::VerifyOS(std::string param, bool runscript)
 	else
 		archstr = "i386";
 
+#elif __APPLE__
+    //check if it's OSX 32 or 64 bits
+    distrostr = "osx";
+
+    if( QSysInfo::WordSize == 64 )
+        archstr = "x86_64";
+    else
+        archstr = "i386";
 #else
 
 	if (runscript)
@@ -359,7 +366,22 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		HttpWindow httpWin(downloadurl, distro);
 		httpWin.show();
 		httpWin.exec();
-	}
+	}    
+#elif __APPLE__
+    if (arch == "i386")
+    {
+        pkgname.append("pteidmw32.dmg");
+        downloadurl.append(pkgname);
+        HttpWindow httpWin(downloadurl, distro);
+        httpWin.show();
+        httpWin.exec();
+    } else {
+        pkgname.append("pteidmw64.dmg");
+        downloadurl.append(pkgname);
+        HttpWindow httpWin(downloadurl, distro);
+        httpWin.show();
+        httpWin.exec();
+    }
 #else
 
 	if (distro == "unsupported")  
