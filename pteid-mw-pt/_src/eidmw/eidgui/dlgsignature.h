@@ -17,6 +17,8 @@
  * http://www.gnu.org/licenses/.
  * 
  * Author: Luis Medinas <luis.medinas@caixamagica.pt>
+ * 	   André Guerreiro <andre.guerreiro@caixamagica.pt>	
+ *
  **************************************************************************** */
 
 #ifndef _DLGSIGNATURE_H_
@@ -53,6 +55,8 @@ private:
 
     void SignListView (QStringList list);
     void runsign(const char ** paths, unsigned int n_paths, const char *output_path, bool timestamp);
+    void run_multiple_sign(const char**, unsigned int, const char*, bool);
+    void ShowErrorMsgBox();
 
 };
 

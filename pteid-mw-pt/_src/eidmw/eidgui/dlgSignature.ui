@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>483</width>
-    <height>292</height>
+    <width>489</width>
+    <height>290</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -97,7 +97,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox">
+  <widget class="QCheckBox" name="checkbox_timestamp">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -108,6 +108,19 @@
    </property>
    <property name="text">
     <string>Adicionar TimeStamp (XADES-T)</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkbox_singlefiles">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>260</y>
+     <width>221</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Criar Assinaturas Individuais</string>
    </property>
   </widget>
  </widget>

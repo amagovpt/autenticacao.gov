@@ -16,15 +16,21 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  *
- * Author: Luis Medinas <luis.medinas@caixamagica.pt>
+ * Authors: Luis Medinas <luis.medinas@caixamagica.pt>
+ * 	    André Guerreiro <andre.guerreiro@caixamagica.pt>	
+ *
  **************************************************************************** */
 
 #include <QListView>
+#include <QFileInfo>
+#include <QDir>
 
 #include <fstream>
 #include <iostream>
+#include <string.h>
 
 #include "dlgsignature.h"
+
 #include "eidlib.h"
 #include "mainwnd.h"
 
@@ -70,6 +76,15 @@ dlgSignature::dlgSignature( QWidget* parent, CardInformation& CI_Data)
 dlgSignature::~dlgSignature()
 {
 
+}
+
+void dlgSignature::ShowErrorMsgBox()
+{
+
+	QString caption  = tr("Error");
+        QString msg = tr("Error Generating Signature!");
+  	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
+  	msgBoxp.exec();
 }
 
 void dlgSignature::on_pbCancel_clicked( void )
@@ -154,6 +169,8 @@ void dlgSignature::on_pbSign_clicked ( void )
 {
 	QAbstractItemModel* model = view->model() ;
 	QStringList strlist;
+	QFuture<void> future;
+	int n_files;
 
 	for ( int i = 0 ; i < model->rowCount() ; ++i )
 	{
@@ -161,77 +178,87 @@ void dlgSignature::on_pbSign_clicked ( void )
 		strlist << model->index( i, 0 ).data( Qt::DisplayRole ).toString() ;
 	}
 
-	try
-	{
-            int i;
-            int listsize = strlist.count();
-            char *cpychar;
-            const char **files_to_sign = new const char*[listsize];
-			char *output_file;
+	int listsize = strlist.count();
+	char *cpychar;
+	const char **files_to_sign = new const char*[listsize];
+	char *output_file;
 
-            for (i=0; i < listsize; i++)
-            {
-                int listtotalLength = strlist.at(i).size();
-		QString s = QDir::toNativeSeparators(strlist.at(i));
-                cpychar = new char[listtotalLength+1];
+	QCheckBox *signatures_checkbox = ui.checkbox_singlefiles;
+	bool individual_sigs = signatures_checkbox->checkState() == Qt::Checked;
+	for (n_files = 0; n_files < listsize; n_files++)
+	{
+		int listtotalLength = strlist.at(n_files).size();
+		QString s = QDir::toNativeSeparators(strlist.at(n_files));
+
+		cpychar = new char[listtotalLength+1];
 #ifdef WIN32		
-                strcpy(cpychar, s.toStdString().c_str());
+		strcpy(cpychar, s.toStdString().c_str());
 #else		
-                strcpy(cpychar, s.toUtf8().constData());
+		strcpy(cpychar, s.toUtf8().constData());
 #endif		
-                files_to_sign[i] = cpychar;
-				PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "File to Sign: %s", files_to_sign[i]);
-            }
+		files_to_sign[n_files] = cpychar;
+		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "File to Sign: %s", files_to_sign[n_files]);
+	}
 
-            QString defaultsavefilepath;
-            QString savefilepath;
-            QString nativedafaultpath;
+	QString defaultsavefilepath;
+	QString savefilepath;
+	QString nativedafaultpath;
 
-            defaultsavefilepath = QDir::homePath();
-	    defaultsavefilepath.append("/xadessign.zip");
-	    nativedafaultpath = QDir::toNativeSeparators(defaultsavefilepath);
-	    savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), nativedafaultpath, tr("Zip files 'XAdES' (*.zip)"));
-	    QString native_path = QDir::toNativeSeparators(savefilepath);
+	defaultsavefilepath = QDir::homePath();
+	defaultsavefilepath.append("/xadessign.zip");
+	nativedafaultpath = QDir::toNativeSeparators(defaultsavefilepath);
+	if (individual_sigs)
+	{
+		savefilepath = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+				QDir::homePath(),
+				QFileDialog::ShowDirsOnly);
+		//std::cout << "Savefilepath: " << savefilepath.toStdString() << std::endl;
 
-	    pdialog = new QProgressDialog();
-	    pdialog->setWindowModality(Qt::WindowModal);
-	    pdialog->setWindowTitle(tr("Sign"));
-	    pdialog->setLabelText(tr("Signing data..."));
-	    pdialog->setMinimum(0);
-	    pdialog->setMaximum(0);
-	    connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
+	}
+	else
+		savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), 
+				nativedafaultpath, tr("Zip files 'XAdES' (*.zip)"));
+	QString native_path = QDir::toNativeSeparators(savefilepath);
 
-		//Get the Xades-T checkbox value
-		QCheckBox *xades_t = ui.checkBox;
-		bool is_xades_t = xades_t->checkState() == Qt::Checked;
-	    
+	pdialog = new QProgressDialog();
+	pdialog->setWindowModality(Qt::WindowModal);
+	pdialog->setWindowTitle(tr("Sign"));
+	pdialog->setLabelText(tr("Signing data..."));
+	pdialog->setMinimum(0);
+	pdialog->setMaximum(0);
+	connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
+
+	//Get the Xades-T checkbox value
+	QCheckBox *xades_t = ui.checkbox_timestamp;
+	bool is_xades_t = xades_t->checkState() == Qt::Checked;
+
 
 #ifdef WIN32		
-	    size_t len_2 = strlen(native_path.toStdString().c_str());
-		output_file = new char[len_2+1];
-		strcpy(output_file,(char*)native_path.toStdString().c_str());
+	size_t len_2 = strlen(native_path.toStdString().c_str());
+	output_file = new char[len_2+1];
+	strcpy(output_file,(char*)native_path.toStdString().c_str());
 #else
-		int outp_len = native_path.size(); 
-		output_file =  new char[outp_len*2];
-	    strncpy(output_file, native_path.toUtf8().constData(), outp_len*2);
+	int outp_len = native_path.size(); 
+	output_file =  new char[outp_len*2];
+	strncpy(output_file, native_path.toUtf8().constData(), outp_len*2);
 #endif	    
-	    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Save to file %s", output_file);
-	    QFuture<void> future = QtConcurrent::run(this, &dlgSignature::runsign, files_to_sign, i, output_file, is_xades_t);
-	    this->FutureWatcher.setFuture(future);
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Save to file %s", output_file);
+	if (individual_sigs)
+		future = 
+			QtConcurrent::run(this, &dlgSignature::run_multiple_sign, files_to_sign, n_files, output_file, is_xades_t);
+		
+	else
+		future = 
+			QtConcurrent::run(this, &dlgSignature::runsign, files_to_sign, n_files, output_file, is_xades_t);
+	this->FutureWatcher.setFuture(future);
 
-            pdialog->exec();
+	pdialog->exec();
 
-            delete []files_to_sign;
-            delete cpychar;
-	    delete []output_file;
-	}
-	catch (PTEID_Exception &e)
-	{
-            QString msg(tr("General exception"));
-            return;
-	}
+	delete []files_to_sign;
+	delete cpychar;
+	delete []output_file;
 
-        this->close();
+	this->close();
 }
 
 void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char *output_path, bool timestamp)
@@ -239,18 +266,52 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
 
     try
     {
-            PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
-            PTEID_ByteArray SignXades;
-			if (timestamp)
-				SignXades = Card->SignXadesT(paths, n_paths, output_path);
-			else
-				SignXades = Card->SignXades(paths, n_paths, output_path);
-        
+	    PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+	    PTEID_ByteArray SignXades;
+	    if (timestamp)
+		    SignXades = Card->SignXadesT(paths, n_paths, output_path);
+	    else
+		    SignXades = Card->SignXades(paths, n_paths, output_path);
+
     }
     catch (PTEID_Exception &e)
     {
-        QString msg(tr("General exception"));
-        return;
+	    ShowErrorMsgBox();
+    }
+
+    return;
+}
+
+void replace_lastdot_inplace(char* initial_file_path)
+{
+	// We can only search forward because memrchr and strrchr 
+	// are not available on Windows *sigh*
+	char ch = '.';
+	char * pdest = NULL, *last_dot= NULL;
+       	while ((pdest = strchr(initial_file_path, ch)) != NULL)
+	     last_dot = pdest;
+	if (last_dot != NULL)
+		*last_dot = '_';
+}
+
+
+
+//XXX: output_path in this case should be a directory path
+void dlgSignature::run_multiple_sign(const char ** paths, unsigned int n_paths, const char *output_path, bool timestamp)
+{
+
+    try
+    {
+        
+	    PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+	    if (timestamp)
+		    Card->SignXadesTIndividual(paths, n_paths, output_path);
+	    else
+		    Card->SignXadesIndividual(paths, n_paths, output_path);
+    }
+    catch (PTEID_Exception &e)
+    {
+	    ShowErrorMsgBox();
     }
 
     return;
