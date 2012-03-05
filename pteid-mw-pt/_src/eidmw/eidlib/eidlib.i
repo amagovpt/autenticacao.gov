@@ -29,7 +29,6 @@
 %{
 #include "eidlib.h"
 #include "eidlibException.h"
-#include "../common/xmlUserData.h"
 %}
 
 //Define to avoid swig to create definition for NOEXPORT_PTEIDSDK methods
