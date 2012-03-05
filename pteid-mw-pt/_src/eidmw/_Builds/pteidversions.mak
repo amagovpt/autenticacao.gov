@@ -127,7 +127,7 @@ JAVALIB_MIN=0
 JAVALIB_REV=0
 JAVALIB_COMPAT_VERSION=1.0
 
-EIDLIBJAR=pteid35libJava.jar
+EIDLIBJAR=pteidlibJava.jar
 
 ###################################################################################
 
