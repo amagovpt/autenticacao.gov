@@ -860,7 +860,7 @@ public:
 	PTEIDSDK_API bool Activate(const char *pinCode, PTEID_ByteArray &BCDDate); 	/**< Activate the pteid card */
 
 
-	/** Produce Xades Signature of Arbitrary Contents (from memory or local files)
+	    /** Produce Xades Signature of Arbitrary Contents (from memory or local files)
 	    *
 	    *  The next 4 Methods return an UTF-8 encoded byte array containing a full XAdES or XAdES-T
 	    *  signature of the content supplied (either as pointer to a memory buffer
@@ -875,6 +875,8 @@ public:
 	     PTEIDSDK_API PTEID_ByteArray SignXades(PTEID_ByteArray to_be_signed, const char *URL); /** Return a Xades signature as a UTF-8 string (supports multiple files)*/
 	     PTEIDSDK_API PTEID_ByteArray SignXadesT(const char * const* path, unsigned int n_paths, const char *output_path); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
 	     PTEIDSDK_API PTEID_ByteArray SignXadesT(PTEID_ByteArray to_be_signed, const char *URL); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
+	     PTEIDSDK_API void SignXadesIndividual(const char * const* paths, unsigned int n_paths, const char *output_path); /** Store the XAdes signature in individual zip containers  */
+	     PTEIDSDK_API void SignXadesTIndividual(const char * const* paths, unsigned int n_paths, const char *output_path); /** Store the Xades-T signature in individual zip containers  */
 
 
 	/**
