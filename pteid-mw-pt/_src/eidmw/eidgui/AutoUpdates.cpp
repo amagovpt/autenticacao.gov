@@ -368,20 +368,20 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		httpWin.exec();
 	}    
 #elif __APPLE__
-    if (arch == "i386")
-    {
-        pkgname.append("pteidmw32.dmg");
-        downloadurl.append(pkgname);
-        HttpWindow httpWin(downloadurl, distro);
-        httpWin.show();
-        httpWin.exec();
-    } else {
-        pkgname.append("pteidmw64.dmg");
-        downloadurl.append(pkgname);
-        HttpWindow httpWin(downloadurl, distro);
-        httpWin.show();
-        httpWin.exec();
-    }
+    	if (arch == "i386")
+    	{
+        	pkgname.append("pteidgui.dmg");
+        	downloadurl.append(pkgname);
+        	HttpWindow httpWin(downloadurl, distro);
+        	httpWin.show();
+        	httpWin.exec();
+    	} else {
+        	pkgname.append("pteidgui.dmg");
+        	downloadurl.append(pkgname);
+        	HttpWindow httpWin(downloadurl, distro);
+        	httpWin.show();
+        	httpWin.exec();
+    	}
 #else
 
 	if (distro == "unsupported")  
