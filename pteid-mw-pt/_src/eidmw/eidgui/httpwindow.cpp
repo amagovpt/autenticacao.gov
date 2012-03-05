@@ -150,52 +150,63 @@ void HttpWindow::cancelDownload()
 
 void HttpWindow::httpFinished()
 {
-	if (httpRequestAborted) {
-		if (file) {
-			file->close();
-			file->remove();
-			delete file;
-			file = 0;
-		}
-		reply->deleteLater();
-		progressDialog->hide();
-		return;
-	}
+    if (httpRequestAborted)
+    {
+        if (file)
+        {
+            file->close();
+            file->remove();
+            delete file;
+            file = 0;
+        }
+        reply->deleteLater();
+        progressDialog->hide();
+        return;
+    }
 
-	progressDialog->hide();
-	file->flush();
-	file->close();
+    progressDialog->hide();
+    file->flush();
+    file->close();
 
-	QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
-	if (reply->error()) {
-		file->remove();
-		QMessageBox::information(this, QString::fromUtf8(dtitle.c_str()),
-				tr("Download failed: %1.")
-		.arg(reply->errorString()));
-		downloadButton->setEnabled(true);
-	} else if (!redirectionTarget.isNull()) {
-		QUrl newUrl = url.resolved(redirectionTarget.toUrl());
-		if (QMessageBox::question(this, QString::fromUtf8(dtitle.c_str()),
-				tr("Redirect to %1 ?").arg(newUrl.toString()),
-				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-			url = newUrl;
-			reply->deleteLater();
-			file->open(QIODevice::WriteOnly);
-			file->resize(0);
-			startRequest(url);
-			return;
-		}
-	} else {
-		downloadButton->setEnabled(true);
-		this->close();
-	}
+    QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    if (reply->error())
+    {
+        file->remove();
+        QMessageBox::information(this, QString::fromUtf8(dtitle.c_str()),
+                                 tr("Download failed: %1.")
+                                 .arg(reply->errorString()));
+        downloadButton->setEnabled(true);
+        this->close();
+    }
+    else if (!redirectionTarget.isNull())
+    {
+        QUrl newUrl = url.resolved(redirectionTarget.toUrl());
 
-	RunPackage(fileName.toStdString() , getdistro);
+        if (QMessageBox::question(this, QString::fromUtf8(dtitle.c_str()),
+                                  tr("Redirect to %1 ?").arg(newUrl.toString()),
+                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+        {
+            url = newUrl;
+            reply->deleteLater();
+            file->open(QIODevice::WriteOnly);
+            file->resize(0);
+            startRequest(url);
+            return;
+        }
+    }
+    else
+    {
+        downloadButton->setEnabled(true);
+        this->close();
+    }
 
-	reply->deleteLater();
-	reply = 0;
-	delete file;
-	file = 0;
+    if (!reply->error())
+        RunPackage(fileName.toStdString() , getdistro);
+
+    reply->deleteLater();
+    reply = 0;
+    delete file;
+    file = 0;
 }
 
 void HttpWindow::httpReadyRead()
