@@ -103,6 +103,8 @@ INCLUDEPATH += /usr/include/cairo
 
 LIBS += -L../lib  \
         -l$${EIDLIB} \
+	-l$${COMMONLIB} \
+	-l$${APPLAYERLIB} \
         -lfreeimagePTEiD
 
 LIBS += -lcairo
