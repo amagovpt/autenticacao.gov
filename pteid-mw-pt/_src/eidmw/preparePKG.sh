@@ -12,7 +12,7 @@ mkdir -p pteid-pkg/misc/certs/
 cp -r lib/*  			pteid-pkg/lib/
 cp -r bin/*  			pteid-pkg/bin/
 cp -r eidgui/*.qm		pteid-pkg/eidgui/
-cp -r jar/pteid35libJava.jar	pteid-pkg/jar/
+cp -r jar/pteidlibJava.jar	pteid-pkg/jar/
 cp misc/certs/*.der		pteid-pkg/misc/certs/
 
 echo "#!/bin/bash" > pteid-pkg/install_pteid.sh
@@ -36,52 +36,51 @@ echo "  install -m 755 -p \"lib/libfreeimagePTEiD-3.15.1.so\" \"/usr/local/lib/l
 echo "  ln -f -s /usr/local/lib/libfreeimagePTEiD-3.15.1.so /usr/local/lib/libfreeimagePTEiD.so"  >> pteid-pkg/install_pteid.sh
 echo "  ln -f -s /usr/local/lib/libfreeimagePTEiD-3.15.1.so /usr/local/lib/libfreeimagePTEiD.so.3"  >> pteid-pkg/install_pteid.sh
 
-echo "  install -m 755 -p \"lib/libpteidcommon.so.3.5.5\" \"/usr/local/lib/libpteidcommon.so.3.5.5\"" >> pteid-pkg/install_pteid.sh
-echo "  ln -f -s /usr/local/lib/libpteidcommon.so.3.5.5 /usr/local/lib/libpteidcommon.so"  >> pteid-pkg/install_pteid.sh
-echo "  ln -f -s /usr/local/lib/libpteidcommon.so.3.5.5 /usr/local/lib/libpteidcommon.so.3"  >> pteid-pkg/install_pteid.sh
-echo "  ln -f -s /usr/local/lib/libpteidcommon.so.3.5.5 /usr/local/lib/libpteidcommon.so.3.5"  >> pteid-pkg/install_pteid.sh
+echo "  install -m 755 -p \"lib/libpteidcommon.so.2.0.0\" \"/usr/local/lib/libpteidcommon.so.2.0.0\"" >> pteid-pkg/install_pteid.sh
+echo "  ln -f -s /usr/local/lib/libpteidcommon.so.2.0.0 /usr/local/lib/libpteidcommon.so"  >> pteid-pkg/install_pteid.sh
+echo "  ln -f -s /usr/local/lib/libpteidcommon.so.2.0.0 /usr/local/lib/libpteidcommon.so.2"  >> pteid-pkg/install_pteid.sh
+echo "  ln -f -s /usr/local/lib/libpteidcommon.so.2.0.0 /usr/local/lib/libpteidcommon.so.2.0"  >> pteid-pkg/install_pteid.sh
 
-echo "  install -m 755 -p \"lib/libpteiddialogsQT.so.3.5.5\" \"/usr/local/lib/libpteiddialogsQT.so.3.5.5\""  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteiddialogsQT.so.3.5.5 /usr/local/lib/libpteiddialogsQT.so"  >> pteid-pkg/install_pteid.sh  
-echo "  ln -s -f /usr/local/lib/libpteiddialogsQT.so.3.5.5 /usr/local/lib/libpteiddialogsQT.so.3"  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteiddialogsQT.so.3.5.5 /usr/local/lib/libpteiddialogsQT.so.3.5"  >> pteid-pkg/install_pteid.sh
+echo "  install -m 755 -p \"lib/libpteiddialogsQT.so.2.0.0\" \"/usr/local/lib/libpteiddialogsQT.so.2.0.0\""  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteiddialogsQT.so.2.0.0 /usr/local/lib/libpteiddialogsQT.so"  >> pteid-pkg/install_pteid.sh  
+echo "  ln -s -f /usr/local/lib/libpteiddialogsQT.so.2.0.0 /usr/local/lib/libpteiddialogsQT.so.2"  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteiddialogsQT.so.2.0.0 /usr/local/lib/libpteiddialogsQT.so.2.0"  >> pteid-pkg/install_pteid.sh
 
 
 echo "  install -m 755 -p \"bin/pteiddialogsQTsrv\" \"/usr/local/bin/pteiddialogsQTsrv\""  >> pteid-pkg/install_pteid.sh
 
-echo "  install -m 755 -p \"lib/libpteidcardlayer.so.3.5.5\" \"/usr/local/lib/libpteidcardlayer.so.3.5.5\""  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidcardlayer.so.3.5.5 /usr/local/lib/libpteidcardlayer.so"  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidcardlayer.so.3.5.5 /usr/local/lib/libpteidcardlayer.so.3"  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidcardlayer.so.3.5.5 /usr/local/lib/libpteidcardlayer.so.3.5"  >> pteid-pkg/install_pteid.sh
+echo "  install -m 755 -p \"lib/libpteidcardlayer.so.2.0.0\" \"/usr/local/lib/libpteidcardlayer.so.2.0.0\""  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidcardlayer.so.2.0.0 /usr/local/lib/libpteidcardlayer.so"  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidcardlayer.so.2.0.0 /usr/local/lib/libpteidcardlayer.so.2"  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidcardlayer.so.2.0.0 /usr/local/lib/libpteidcardlayer.so.2.0"  >> pteid-pkg/install_pteid.sh
 
-echo "  install -m 755 -p \"lib/libcardpluginPteid.so.3.0.1\" \"/usr/local/lib/libcardpluginPteid.so.3.0.1\""  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libcardpluginPteid.so.3.0.1 /usr/local/lib/libcardpluginPteid.so"  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libcardpluginPteid.so.3.0.1 /usr/local/lib/libcardpluginPteid.so.3"  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libcardpluginPteid.so.3.0.1 /usr/local/lib/libcardpluginPteid.so.3.0"  >> pteid-pkg/install_pteid.sh
+echo "  install -m 755 -p \"lib/libcardpluginPteid.so.2.0.0\" \"/usr/local/lib/libcardpluginPteid.so.2.0.0\""  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libcardpluginPteid.so.2.0.0 /usr/local/lib/libcardpluginPteid.so"  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libcardpluginPteid.so.2.0.0 /usr/local/lib/libcardpluginPteid.so.2"  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libcardpluginPteid.so.2.0.0 /usr/local/lib/libcardpluginPteid.so.2.0"  >> pteid-pkg/install_pteid.sh
+
+echo "  install -m 755 -p \"lib/libpteidpkcs11.so.2.0.0\" \"/usr/local/lib/libpteidpkcs11.2.0.0\""  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidpkcs11.so.2.0.0 /usr/local/lib/libpteidpkcs11.so"  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidpkcs11.so.2.0.0 /usr/local/lib/libpteidpkcs11.so.2"  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidpkcs11.so.2.0.0 /usr/local/lib/libpteidpkcs11.so.2.0"  >> pteid-pkg/install_pteid.sh
+
+echo "  install -m 755 -p \"lib/libpteidapplayer.so.2.0.0\" \"/usr/local/lib/libpteidapplayer.2.0.0\""  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplayer.so"  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplayer.so.2"  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplayer.so.2.0"  >> pteid-pkg/install_pteid.sh
+
+echo "  install -m 755 -p \"lib/libpteidlib.so.2.0.0\" \"/usr/local/lib/libpteidlib.2.0.0\""  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so"  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2"  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2.0"  >> pteid-pkg/install_pteid.sh
+
+echo "  install -m 755 -p \"lib/libpteidlibJava_Wrapper.so.2.0.0\" \"/usr/local/lib/libpteidlibJava_Wrapper.so.2.0.0\""  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.2.0.0 /usr/local/lib/libpteidlibJava_Wrapper.so"  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.2.0.0 /usr/local/lib/libpteidlibJava_Wrapper.so.2"  >> pteid-pkg/install_pteid.sh
+echo "  ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.2.0.0 /usr/local/lib/libpteidlibJava_Wrapper.so.2.0"  >> pteid-pkg/install_pteid.sh
 
 
-echo "  install -m 755 -p \"lib/libpteidpkcs11.so.3.5.5\" \"/usr/local/lib/libpteidpkcs11.so.3.5.5\""  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidpkcs11.so.3.5.5 /usr/local/lib/libpteidpkcs11.so"  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidpkcs11.so.3.5.5 /usr/local/lib/libpteidpkcs11.so.3"  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidpkcs11.so.3.5.5 /usr/local/lib/libpteidpkcs11.so.3.5"  >> pteid-pkg/install_pteid.sh
-
-echo "  install -m 755 -p \"lib/libpteidapplayer.so.3.5.5\" \"/usr/local/lib/libpteidapplayer.so.3.5.5\""  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidapplayer.so.3.5.5 /usr/local/lib/libpteidapplayer.so"  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidapplayer.so.3.5.5 /usr/local/lib/libpteidapplayer.so.3"  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidapplayer.so.3.5.5 /usr/local/lib/libpteidapplayer.so.3.5"  >> pteid-pkg/install_pteid.sh
-
-echo "  install -m 755 -p \"lib/libpteidlib.so.3.5.5\" \"/usr/local/lib/libpteidlib.so.3.5.5\""  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidlib.so.3.5.5 /usr/local/lib/libpteidlib.so"  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidlib.so.3.5.5 /usr/local/lib/libpteidlib.so.3"  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidlib.so.3.5.5 /usr/local/lib/libpteidlib.so.3.5"  >> pteid-pkg/install_pteid.sh
-
-echo "  install -m 755 -p \"lib/libpteidlibJava_Wrapper.so.3.5.5\" \"/usr/local/lib/libpteidlibJava_Wrapper.so.3.5.5\""  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.3.5.5 /usr/local/lib/libpteidlibJava_Wrapper.so"  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.3.5.5 /usr/local/lib/libpteidlibJava_Wrapper.so.3"  >> pteid-pkg/install_pteid.sh
-echo "  ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.3.5.5 /usr/local/lib/libpteidlibJava_Wrapper.so.3.5"  >> pteid-pkg/install_pteid.sh
-
-
-echo "  install -m 755 -p \"jar/pteid35libJava.jar\" \"/usr/local/lib/pteid_jni/\""  >> pteid-pkg/install_pteid.sh
+echo "  install -m 755 -p \"jar/pteidlibJava.jar\" \"/usr/local/lib/pteid_jni/\""  >> pteid-pkg/install_pteid.sh
 
 
 echo "  install -m 755 -p \"bin/pteidgui\" \"/usr/local/bin/pteidgui\""  >> pteid-pkg/install_pteid.sh
