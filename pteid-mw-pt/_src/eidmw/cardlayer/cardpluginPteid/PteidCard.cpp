@@ -413,10 +413,12 @@ DlgPinUsage CPteidCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)
 		else if (pKey->ulID == 3)
 			usage = DLG_PIN_SIGN;
 	}
-	else if (Pin.ulID == 2)
-		usage = DLG_PIN_SIGN;
-	else
-		usage = DLG_PIN_AUTH;
+    else if (Pin.ulID == 1)
+        usage = DLG_PIN_AUTH;
+    else if (Pin.ulID == 2)
+        usage = DLG_PIN_SIGN;
+    else if (Pin.ulID == 3)
+        usage = DLG_PIN_ADDRESS;
 
 	return usage;
 }
