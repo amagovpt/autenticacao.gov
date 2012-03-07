@@ -21,6 +21,8 @@
 #include "dlgWndPinpadInfo.h"
 #include "../langUtil.h"
 
+#include <iostream>
+
 dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 		DlgPinOperation operation, const QString & Reader,  
 		const QString &PINName, const QString & Message, QWidget *parent )
@@ -28,7 +30,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 	: QWidget(parent)
 {
 	ui.setupUi(this);
-	setFixedSize(417, 259);
+    setFixedSize(417, 259);
 
 	QString Title="";
 
@@ -38,6 +40,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 	//	Title+=QString::fromWCharArray(GETSTRING_DLG(Belpic));
 	//	Title+=": ";
 	//}
+    std::cout << "PINName " << PINName.toStdString() << std::endl;
     if (operation == DLG_PIN_OP_CHANGE)
         Title+=QString::fromUtf8("Alterar PIN ");
     else if (operation == DLG_PIN_OP_VERIFY)
@@ -56,10 +59,8 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 	QString tmpHeader;
 	tmpHeader = PINName;
 
-//	ui.label_2->setText( tmpHeader );
-//	ui.label_2->setAccessibleName( tmpHeader );
-//	ui.label->setText( Message );
-//	ui.label->setAccessibleName( Message );
+    ui.label_2->setText( tmpHeader );
+    ui.label_2->setAccessibleName( tmpHeader );
 	m_ulHandle = ulHandle;
 //	ui.lblIcon->setPixmap( QPixmap( ":/Resources/ICO_CARD_PIN_128x128.png" ) );
 
