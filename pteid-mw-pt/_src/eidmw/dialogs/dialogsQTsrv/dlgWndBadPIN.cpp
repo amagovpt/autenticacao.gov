@@ -39,14 +39,12 @@ dlgWndBadPIN::dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWi
 	//}
 	//else
 	//{
-		Title+=QString::fromWCharArray(GETSTRING_DLG(Notification));
+        Title+=QString::fromWCharArray(GETSTRING_DLG(Notification));
 		Title+=": ";
 	//}
-	Title+=QString::fromWCharArray(GETSTRING_DLG(Bad));
-	Title+=" ";
-	Title+=PINName;
-
-	wcout << PINName.toStdWString() << endl;
+    //Title+=QString::fromWCharArray(GETSTRING_DLG(Bad));
+    Title+=" ";
+    Title+=PINName;
 
 	this->setWindowTitle(Title);
 
@@ -73,7 +71,7 @@ dlgWndBadPIN::dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWi
 	if( RemainingTries == 0 )
 	{
 		sCenter+=PINName;
-		sCenter+=" ";
+        sCenter+=" ";
 		sCenter+=QString::fromWCharArray(GETSTRING_DLG(PinBlocked));
 		ui.btnRetry->setVisible(false);
 		ui.btnCancel->setVisible(false);

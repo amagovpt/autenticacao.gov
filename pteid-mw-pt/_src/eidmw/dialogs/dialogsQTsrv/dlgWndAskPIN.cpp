@@ -18,6 +18,8 @@
 
 **************************************************************************** */
 
+#include <iostream>
+
 #include "dlgWndAskPIN.h"
 #include "../langUtil.h"
 
@@ -43,6 +45,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 	}
 
 	QString Title;
+
 	//if( DApplic == DLG_APP_BELPIC )
 	//{
 	this->setWindowIcon( QIcon( ":/Resources/ICO_CARD_EID_PLAIN_16x16.png" ) );
@@ -69,19 +72,19 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 
 	ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
 	ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
-	ui.lblPINName->setText( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
-	ui.lblPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
-	ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
-	ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
+    ui.lblPINName->setText( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
+    ui.lblPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
+    ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
+    ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
 
 	ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
 	ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
 	ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
 	ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
 
-	if( PinPusage == DLG_PIN_SIGN )
+    if( PinPusage == DLG_PIN_SIGN )
 		this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin.png);");
-	else
+    else
 		this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin.png);");
 
 	m_ulPinMinLen = pinInfo.ulMinLen;

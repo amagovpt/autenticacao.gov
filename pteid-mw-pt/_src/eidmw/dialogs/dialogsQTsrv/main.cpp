@@ -125,10 +125,18 @@ int main(int argc, char *argv[])
 				{
 					PINName = QString::fromWCharArray(oData->pinName);
 				}
-				else
+                else if (oData->usage == DLG_PIN_AUTH)
 				{
-					PINName = GETQSTRING_DLG(Pin);
+                    PINName = QString::fromUtf8("PIN da Autenticação");
 				}
+                else if (oData->usage == DLG_PIN_SIGN)
+                {
+                    PINName = QString::fromUtf8("PIN da Assinatura");
+                }
+                else if (oData->usage == DLG_PIN_ADDRESS)
+                {
+                    PINName = QString::fromUtf8("PIN da Morada");
+                }
 
 				//Quickfix for encoding problem! It should be fixed later!
 				//if( wcsstr(oData->pinName,L"PIN da Autentica") != 0 )
@@ -141,7 +149,7 @@ int main(int argc, char *argv[])
 						switch( oData->usage )
 						{
 							case DLG_PIN_AUTH:
-								Header = GETQSTRING_DLG(PleaseEnterYourPin);
+                                Header = GETQSTRING_DLG(PleaseEnterYourPin);
 								Header += ", ";
 								Header += GETQSTRING_DLG(InOrderToAuthenticateYourself);
 								Header += "\n";
@@ -331,15 +339,18 @@ int main(int argc, char *argv[])
 						else
 						{
 							PINName = QString::fromWCharArray(oData->pinName);
+                            QByteArray teste = PINName.toUtf8();
+                            QString mystr(teste);
+                            std::wcout << "main.cpp " << mystr.toStdWString() << std::endl;
 						}
 						break;
 				}
 
 				//Quickfix for encoding problem! It should be fixed later!
-				//if( wcsstr(oData->pinName,L"PIN da Autentica") != 0 )
-				//	PINName=QString::fromUtf8("Pin de Autenticacao");
-				//wcout << "oData->pinName: " << oData->pinName << endl;
-				//wcout << "PINName " << PINName.toStdWString() << endl;
+                if( wcsstr(oData->pinName,L"PIN da Autentica") != 0 )
+                    PINName=QString::fromUtf8("PIN da Autentica\xc3\xa7\xc3\xa3o");
+                wcout << "oData->pinName: " << oData->pinName << endl;
+                wcout << "PINName " << PINName.toStdWString() << endl;
 
 				dlg = new dlgWndBadPIN(	PINName, oData->ulRemainingTries );
 				if( dlg->exec() ) 
