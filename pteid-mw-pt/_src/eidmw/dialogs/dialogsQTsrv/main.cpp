@@ -123,7 +123,10 @@ int main(int argc, char *argv[])
 				QString PINName;
 				if( oData->usage == DLG_PIN_UNKNOWN )
 				{
-					PINName = QString::fromWCharArray(oData->pinName);
+                    if( wcsstr(oData->pinName,L"PIN da Autentica") != 0 )
+                        PINName=QString::fromUtf8("Pin de Autenticação");
+                    else
+                        PINName = QString::fromWCharArray(oData->pinName);
 				}
                 else if (oData->usage == DLG_PIN_AUTH)
 				{
@@ -499,6 +502,15 @@ int main(int argc, char *argv[])
 							}
 							PINName = QString::fromWCharArray(oInfoData->pinName);
 							break;
+                        case DLG_PIN_AUTH:
+                            PINName = QString::fromUtf8("PIN da Autenticação");
+                            break;
+                        case DLG_PIN_SIGN:
+                            PINName = QString::fromUtf8("PIN da Assinatura");
+                            break;
+                        case DLG_PIN_ADDRESS:
+                            PINName = QString::fromUtf8("PIN da Morada");
+                            break;
 						default:
 							if( wcscmp(oInfoData->pinName,L"") == 0  )
 							{
