@@ -38,12 +38,19 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 	//	Title+=QString::fromWCharArray(GETSTRING_DLG(Belpic));
 	//	Title+=": ";
 	//}
-	Title+=QString::fromWCharArray(GETSTRING_DLG(PinpadInfo));
+    if (operation == DLG_PIN_OP_CHANGE)
+        Title+=QString::fromUtf8("Alterar PIN ");
+    else if (operation == DLG_PIN_OP_VERIFY)
+        Title+=QString::fromUtf8("Verificar PIN ");
+    else
+        Title+=QString::fromWCharArray(GETSTRING_DLG(PinpadInfo));
+
 	if(!Reader.isEmpty())
 	{
 		Title+=" - ";
 		Title+=Reader;
 	}
+
 	parent->setWindowTitle( Title );
 
 	QString tmpHeader;
