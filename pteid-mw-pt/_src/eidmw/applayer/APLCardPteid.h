@@ -175,7 +175,7 @@ public:
 	APL_EidFile_Address *getFileAddress();			/**< Return a pointer to the file Address (NOT EXPORTED) */
 	APL_EidFile_AddressSign *getFileAddressSign();	/**< Return a pointer to the file Address signature (NOT EXPORTED) */
 	APL_EidFile_Sod *getFileSod();				/**< Return a pointer to the file Photo (NOT EXPORTED) */
-	APL_EidFile_PersoData *getFilePersoData();				/**< Return a pointer to the file PersoData (NOT EXPORTED) */
+	EIDMW_APL_API APL_EidFile_PersoData *getFilePersoData();				/**< Return a pointer to the file PersoData (NOT EXPORTED) */
 	APL_EidFile_TokenInfo *getFileTokenInfo();		/**< Return a pointer to the file Token Info (NOT EXPORTED) */
 	const char *getTokenSerialNumber();				/**< Return the token serial number (pkcs15 parse) (NOT EXPORTED) */
 	const char *getTokenLabel();					/**< Return the token label (pkcs15 parse) (NOT EXPORTED) */
