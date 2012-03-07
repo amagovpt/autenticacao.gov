@@ -341,7 +341,6 @@ int main(int argc, char *argv[])
 							PINName = QString::fromWCharArray(oData->pinName);
                             QByteArray teste = PINName.toUtf8();
                             QString mystr(teste);
-                            std::wcout << "main.cpp " << mystr.toStdWString() << std::endl;
 						}
 						break;
 				}
@@ -349,8 +348,6 @@ int main(int argc, char *argv[])
 				//Quickfix for encoding problem! It should be fixed later!
                 if( wcsstr(oData->pinName,L"PIN da Autentica") != 0 )
                     PINName=QString::fromUtf8("PIN da Autentica\xc3\xa7\xc3\xa3o");
-                wcout << "oData->pinName: " << oData->pinName << endl;
-                wcout << "PINName " << PINName.toStdWString() << endl;
 
 				dlg = new dlgWndBadPIN(	PINName, oData->ulRemainingTries );
 				if( dlg->exec() ) 
