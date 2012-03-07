@@ -1065,7 +1065,8 @@ const char *PTEID_EIDCard::readPersonalNotes(){
 
 	// ensure that the file is read after being written
 	pcard->getFilePersoData()->getStatus(persoNotesDirty);
-	out = (char*)pcard->getPersonalNotes().getPersonalNotes();
+	// ensure that the attributes are mapped again persoNotesDirty = true.
+	out = (char*)pcard->getPersonalNotes().getPersonalNotes(persoNotesDirty);
 
 	END_TRY_CATCH
 

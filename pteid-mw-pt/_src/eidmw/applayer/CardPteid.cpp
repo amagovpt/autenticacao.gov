@@ -1650,10 +1650,14 @@ bool APL_EidFile_PersoData::MapFields()
     return true;
 }
 
-const char *APL_EidFile_PersoData::getPersoData()
+const char *APL_EidFile_PersoData::getPersoData(bool forceMap)
 {
-	if(ShowData())
+
+	if (forceMap)
+		m_mappedFields = !forceMap;
+	if(ShowData()){
 		return m_PersoData.c_str();
+	}
 
 	return "";
 }

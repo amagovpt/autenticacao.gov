@@ -512,7 +512,7 @@ public:
 	  */
 	virtual ~APL_EidFile_PersoData();
 
-	const char *getPersoData(); /* Get PersonalData */
+	const char *getPersoData(bool forceMap=false); /* Get PersonalData */
 
 protected:
 	/**

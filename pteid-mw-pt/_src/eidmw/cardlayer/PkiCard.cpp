@@ -151,7 +151,6 @@ CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,
 		utilStringWiden(csPath).c_str(), oData.Size());
 
 	//printf(".... Read file %ls (%d bytes) from card\n",utilStringWiden(csPath).c_str(),oData.Size());
-
     return oData;
 }
 
@@ -331,23 +330,6 @@ bad_pin:
     CByteArray oAPDUCHANGE;
     CByteArray oResp;
 
-	//00 A4 04 00 07 60 46 32 FF 00 01 02
-	CByteArray init;
-	init.Append(0x00);
-	init.Append(0xA4);
-	init.Append(0x04);
-	init.Append(0x00);
-	init.Append(0x07);
-	init.Append(0x60);
-	init.Append(0x46);
-	init.Append(0x32);
-	init.Append(0xFF);
-	init.Append(0x00);
-	init.Append(0x01);
-	init.Append(0x02);
-	SendAPDU(init);
-
-
 	switch(operation){
 	case PIN_OP_VERIFY:
 	case PIN_OP_RESET:
@@ -356,6 +338,10 @@ bad_pin:
 		oAPDU.Append(oPinBuf);
 		break;
 	case PIN_OP_CHANGE:
+
+		CByteArray init("00A4040007604632FF000102", true);
+		SendAPDU(init);
+
 		oAPDU = MakePinCmdIAS(PIN_OP_VERIFY, Pin); // add CLA, INS, P1, P2
 		oAPDU.Append((unsigned char) oPinBuf.Size());  // add P3
 		oAPDU.Append(oPinBuf);

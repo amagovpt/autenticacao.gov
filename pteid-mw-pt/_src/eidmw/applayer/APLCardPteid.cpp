@@ -1990,9 +1990,9 @@ CByteArray APL_PersonalNotesEId::getTLV()
 	return ba;
 }
 
-const char *APL_PersonalNotesEId::getPersonalNotes()
+const char *APL_PersonalNotesEId::getPersonalNotes(bool forceMap)
 {
-	return m_card->getFilePersoData()->getPersoData();
+	return m_card->getFilePersoData()->getPersoData(forceMap);
 }
 
 /*****************************************************************************************

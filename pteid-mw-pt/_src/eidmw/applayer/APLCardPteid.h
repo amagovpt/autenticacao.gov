@@ -450,7 +450,7 @@ public:
 	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
 	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
 
-	EIDMW_APL_API const char *getPersonalNotes();					/**< Return field AddressVersion from the Address file */
+	EIDMW_APL_API const char *getPersonalNotes(bool forceMap=false);					/**< Return field AddressVersion from the Address file */
 
 protected:
 	/**
