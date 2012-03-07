@@ -21,8 +21,6 @@
 #include "dlgWndPinpadInfo.h"
 #include "../langUtil.h"
 
-#include <iostream>
-
 dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 		DlgPinOperation operation, const QString & Reader,  
 		const QString &PINName, const QString & Message, QWidget *parent )
@@ -40,7 +38,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 	//	Title+=QString::fromWCharArray(GETSTRING_DLG(Belpic));
 	//	Title+=": ";
 	//}
-    std::cout << "PINName " << PINName.toStdString() << std::endl;
+
     if (operation == DLG_PIN_OP_CHANGE)
         Title+=QString::fromUtf8("Alterar PIN ");
     else if (operation == DLG_PIN_OP_VERIFY)
