@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="libJava"
 	ProjectGUID="{F810EA71-3A5A-4C86-BCFF-EC47017CF9CE}"
 	RootNamespace="pteidlibJava"
@@ -167,7 +167,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid35$(ProjectName).jar -C class pt&#x0D;&#x0A;call ..\_DocsInternal\API\doSDK_java.bat&#x0D;&#x0A;"
+				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid$(ProjectName).jar -C class pt&#x0D;&#x0A;call ..\_DocsInternal\API\doSDK_java.bat&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration

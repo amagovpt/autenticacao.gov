@@ -141,8 +141,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="pteid35applayer.lib pteid35common.lib"
-				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName).dll"
+				AdditionalDependencies="pteidapplayer.lib pteidcommon.lib"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName).dll"
 				AdditionalLibraryDirectories="..\_Binaries35/$(ConfigurationName)"
 			/>
 			<Tool
@@ -197,6 +197,10 @@
 			</File>
 			<File
 				RelativePath="..\eidlib\eidlibReader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\eidlib\eidlibxades.cpp"
 				>
 			</File>
 			<File
@@ -270,7 +274,7 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="call ..\SetPathSwig.bat&#x0D;&#x0A;&quot;%PTEID_DIR_SWIG%\swig.exe&quot; -c++ -csharp -namespace be.portugal.eid -dllimport pteid35libCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					CommandLine="call ..\SetPathSwig.bat&#x0D;&#x0A;&quot;%PTEID_DIR_SWIG%\swig.exe&quot; -c++ -csharp -namespace pt.portugal.eid -dllimport pteid35libCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					AdditionalDependencies="eidlib.h;eidlibException.h"
 					Outputs=".\GeneratedFiles\eidlibCS_Wrapper.cpp"
 				/>

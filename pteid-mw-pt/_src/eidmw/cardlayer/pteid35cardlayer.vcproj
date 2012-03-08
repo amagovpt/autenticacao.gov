@@ -148,8 +148,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="WS2_32.Lib pteid35DlgsWin32.lib pteid35common.lib winscard.lib"
-				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName).dll"
+				AdditionalDependencies="WS2_32.Lib pteidDlgsWin32.lib pteidcommon.lib winscard.lib"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\_Binaries35/$(ConfigurationName)"
 				GenerateDebugInformation="true"
