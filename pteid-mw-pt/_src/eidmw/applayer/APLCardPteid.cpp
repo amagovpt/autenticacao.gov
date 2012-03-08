@@ -980,16 +980,13 @@ APL_XMLDoc& APL_EIDCard::getDocument(APL_DocumentType type)
 
 
 APL_CCXML_Doc& APL_EIDCard::getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedInfo){
-	if(!m_CCcustomDoc)
-		{
-			CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
-			if(!m_CCcustomDoc)
-			{
-				m_CCcustomDoc=new APL_CCXML_Doc(this, userRequestedInfo);
-			}
-		}
+	if (m_CCcustomDoc)
+		delete m_CCcustomDoc;
 
-		return *m_CCcustomDoc;
+	CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
+	m_CCcustomDoc=new APL_CCXML_Doc(this, userRequestedInfo);
+
+	return *m_CCcustomDoc;
 }
 
 

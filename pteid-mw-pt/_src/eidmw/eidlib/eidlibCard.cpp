@@ -523,13 +523,14 @@ PTEID_CCXML_Doc& PTEID_EIDCard::getXmlCCDoc(PTEID_XmlUserRequestedInfo& userRequ
 	BEGIN_TRY_CATCH
 		APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
 		out = dynamic_cast<PTEID_CCXML_Doc *>(getObject(INCLUDE_OBJECT_CUSTOMDOC));
-		if(!out){
-			out = new PTEID_CCXML_Doc(m_context,&pcard->getXmlCCDoc(*(userRequestedInfo.customXml)));
-			if(out)
-				m_objects[INCLUDE_OBJECT_CUSTOMDOC]=out;
-			else
-				throw PTEID_ExUnknown();
-		}
+		if(out)
+			delete out;
+		out = new PTEID_CCXML_Doc(m_context,&pcard->getXmlCCDoc(*(userRequestedInfo.customXml)));
+		if(out)
+			m_objects[INCLUDE_OBJECT_CUSTOMDOC]=out;
+		else
+			throw PTEID_ExUnknown();
+
 	END_TRY_CATCH
 
 	return *out;
