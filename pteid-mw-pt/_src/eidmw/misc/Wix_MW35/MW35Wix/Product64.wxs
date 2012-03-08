@@ -379,8 +379,8 @@
       </Component>
       
       <Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
-        <File Id="pteid35gui.exe" Name="pteid35gui.exe" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\pteid35gui.exe" />
-        <File Id="pteid35libCpp.dll" Name="pteid35libCpp.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35libCpp.dll" />
+        <File Id="pteidgui.exe" Name="pteidgui.exe" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\pteidgui.exe" />
+        <File Id="pteidlibCpp.dll" Name="pteidlibCpp.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteidlibCpp.dll" />
       </Component>
 
 	<!--Our Build of LibCurl - custom build options to remove unneeded features-->
@@ -440,10 +440,10 @@
     <DirectoryRef Id="System64Folder">
 
       <Component Id="Runtime35_64" Guid="{8FE1C7FB-F06A-40db-8454-88D9E8BDD626}" SharedDllRefCount="yes" Win64="yes">
-        <File Id="pteid35cardlayer.dll" Name="pteid35cardlayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35cardlayer.dll" />
-        <File Id="pteid35common.dll" Name="pteid35common.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35common.dll" />
-		<File Id="pteid35applayer.dll" Name="pteid35applayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35applayer.dll" />
-        <File Id="pteid35DlgsWin32.dll" Name="pteid35DlgsWin32.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid35DlgsWin32.dll" />
+        <File Id="pteidcardlayer.dll" Name="pteidcardlayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteidcardlayer.dll" />
+        <File Id="pteidcommon.dll" Name="pteidcommon.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteidcommon.dll" />
+		<File Id="pteidapplayer.dll" Name="pteidapplayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteidapplayer.dll" />
+        <File Id="pteidDlgsWin32.dll" Name="pteidDlgsWin32.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteidDlgsWin32.dll" />
       </Component>
 
       <Component Id="pkcs11_64" Guid="{3C4751D6-D92C-40ab-8FA5-3A1DF1D927EA}" SharedDllRefCount="yes" Win64="yes">
@@ -609,7 +609,7 @@
         
         <RegistryKey Root="HKLM"
                     Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
-          <RegistryValue  Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteid35gui.exe&quot; /startup"/>
+          <RegistryValue  Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteidgui.exe&quot; /startup"/>
         </RegistryKey>
       </Component>
 
@@ -621,13 +621,13 @@
         <Shortcut Id="PteidGuiStartMenuShortcut"
                   Name="eID-Viewer"
                   Description="!(loc.PteidGuiDescr)"
-                  Target="[APPLICATIONROOTFOLDER]pteid35gui.exe"
+                  Target="[APPLICATIONROOTFOLDER]pteidgui.exe"
                   WorkingDirectory="APPLICATIONROOTFOLDER"/>
         <Shortcut Id="EidViewerShortcut"
                   Name="eID-Viewer"
                   Directory="DesktopFolder"
                   Description="!(loc.PteidGuiDescr)"
-                  Target="[APPLICATIONROOTFOLDER]pteid35gui.exe"
+                  Target="[APPLICATIONROOTFOLDER]pteidgui.exe"
                   WorkingDirectory="APPLICATIONROOTFOLDER"/>
         <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
         <RegistryValue Root="HKCU" Key="SOFTWARE\PTEID\Installer" Name="GuiShortcut" Type="integer" Value="1" KeyPath="yes" />
@@ -747,7 +747,7 @@
 	<Binary Id="MarkHidden" SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>
 
     <CustomAction Id="LaunchApplication" 
-                  FileKey="pteid35gui.exe" 
+                  FileKey="pteidgui.exe" 
                   ExeCommand="" 
                   Execute="immediate" 
                   Impersonate="yes" 
@@ -787,7 +787,7 @@
 
     <CustomAction Id="StopGui35"
               BinaryKey="KILLPROCESS"
-              ExeCommand="pteid35gui.exe"
+              ExeCommand="pteidgui.exe"
               Impersonate="no"
               Return="ignore"
               Execute="deferred"
@@ -795,7 +795,7 @@
     
     <CustomAction Id="StopGui35_Remove"
               BinaryKey="KILLPROCESS"
-              ExeCommand="pteid35gui.exe"
+              ExeCommand="pteidgui.exe"
               Impersonate="no"
               Return="ignore"
               Execute="deferred"
@@ -819,7 +819,7 @@
     
     <CustomAction Id="StopXSign35"
                   BinaryKey="KILLPROCESS"
-                  ExeCommand="pteid35xsign.exe"
+                  ExeCommand="pteidxsign.exe"
                   Impersonate="no"
                   Return="ignore"
                   Execute="deferred"
@@ -827,7 +827,7 @@
 
     <CustomAction Id="StopXSign35_Remove"
               BinaryKey="KILLPROCESS"
-              ExeCommand="pteid35xsign.exe"
+              ExeCommand="pteidxsign.exe"
               Impersonate="no"
               Return="ignore"
               Execute="deferred"
