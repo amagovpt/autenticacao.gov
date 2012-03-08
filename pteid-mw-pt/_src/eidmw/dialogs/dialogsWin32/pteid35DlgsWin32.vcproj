@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="DlgsWin32"
 	ProjectGUID="{E27CF8F7-E472-4966-B7D6-448B1427A0D6}"
 	RootNamespace="BeIdDlgsWin32"
@@ -163,9 +163,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				UseUnicodeResponseFiles="true"
-				AdditionalDependencies="pteid35commonD.lib psapi.lib"
-				OutputFile="..\..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteid35$(ProjectName)D.dll"
+				AdditionalDependencies="pteidcommon.lib psapi.lib"
+				OutputFile="..\..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\_Binaries35\$(PlatformName)\$(ConfigurationName)"
 				ManifestFile="$(IntDir)\$(TargetFileName).intermediate.manifest"
@@ -398,6 +397,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\dlgWndAskAccess.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\dlgWndAskPIN.cpp"
 				>
 			</File>
@@ -411,6 +414,10 @@
 			</File>
 			<File
 				RelativePath=".\dlgWndBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dlgWndModal.cpp"
 				>
 			</File>
 			<File
@@ -432,6 +439,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\dlgWndAskAccess.h"
+				>
+			</File>
+			<File
 				RelativePath=".\dlgWndAskPIN.h"
 				>
 			</File>
@@ -445,6 +456,10 @@
 			</File>
 			<File
 				RelativePath=".\dlgWndBase.h"
+				>
+			</File>
+			<File
+				RelativePath=".\dlgWndModal.h"
 				>
 			</File>
 			<File
