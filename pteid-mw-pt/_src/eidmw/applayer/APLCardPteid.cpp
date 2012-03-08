@@ -2044,75 +2044,76 @@ CByteArray APL_AddrEId::getXML(bool bNoHeader)
 	if(_xmlUInfo->isEmpty())
 		_xmlUInfo = NULL;
 
-	if (isNationalAddress()){
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_DISTRICT)){
-			BUILD_XML_ELEMENT(address, XML_DISTRICT_ELEMENT, getDistrict());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_MUNICIPALITY)){
-			BUILD_XML_ELEMENT(address, XML_MUNICIPALITY_ELEMENT, getMunicipality());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_CIVIL_PARISH)){
-			BUILD_XML_ELEMENT(address, XML_CIVIL_PARISH_ELEMENT, getCivilParish());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_ABBR_STREET_TYPE)){
-			BUILD_XML_ELEMENT(address, XML_ABBR_STREET_TYPE_ELEMENT, getAbbrStreetType());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_STREET_TYPE)){
-			BUILD_XML_ELEMENT(address, XML_STREET_TYPE_ELEMENT, getStreetType());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_STREET_NAME)){
-			BUILD_XML_ELEMENT(address, XML_STREET_NAME_ELEMENT, getStreetName());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_ABBR_BUILDING_TYPE)){
-			BUILD_XML_ELEMENT(address, XML_ABBR_BUILDING_TYPE_ELEMENT, getAbbrBuildingType());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_BUILDING_TYPE)){
-			BUILD_XML_ELEMENT(address, XML_BUILDING_TYPE_ELEMENT, getBuildingType());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_DOOR_NO)){
-			BUILD_XML_ELEMENT(address, XML_DOOR_NO_ELEMENT, getDoorNo());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_FLOOR)){
-			BUILD_XML_ELEMENT(address, XML_FLOOR_ELEMENT, getFloor());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_SIDE)){
-			BUILD_XML_ELEMENT(address, XML_SIDE_ELEMENT, getSide());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_PLACE)){
-			BUILD_XML_ELEMENT(address, XML_PLACE_ELEMENT, getPlace());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_LOCALITY)){
-			BUILD_XML_ELEMENT(address, XML_LOCALITY_ELEMENT, getLocality());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_ZIP4)){
-			BUILD_XML_ELEMENT(address, XML_ZIP4_ELEMENT, getZip4());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_ZIP3)){
-			BUILD_XML_ELEMENT(address, XML_ZIP3_ELEMENT, getZip3());
-			addAddress = true;
-		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_POSTAL_LOCALITY)){
-			BUILD_XML_ELEMENT(address, XML_POSTAL_LOCALITY_ELEMENT, getPostalLocality());
-			addAddress = true;
-		}
-		if (addAddress){
-			BUILD_XML_ELEMENT_NEWLINE(xml,XML_ADDRESS_ELEMENT, address);
-		}
-	} else {
+	/*	if (isNationalAddress()){ //specification for xml does not include foreign addresses, this will stay here if specification changes */
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_DISTRICT)){
+		BUILD_XML_ELEMENT(address, XML_DISTRICT_ELEMENT, getDistrict());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_MUNICIPALITY)){
+		BUILD_XML_ELEMENT(address, XML_MUNICIPALITY_ELEMENT, getMunicipality());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_CIVIL_PARISH)){
+		BUILD_XML_ELEMENT(address, XML_CIVIL_PARISH_ELEMENT, getCivilParish());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_ABBR_STREET_TYPE)){
+		BUILD_XML_ELEMENT(address, XML_ABBR_STREET_TYPE_ELEMENT, getAbbrStreetType());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_STREET_TYPE)){
+		BUILD_XML_ELEMENT(address, XML_STREET_TYPE_ELEMENT, getStreetType());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_STREET_NAME)){
+		BUILD_XML_ELEMENT(address, XML_STREET_NAME_ELEMENT, getStreetName());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_ABBR_BUILDING_TYPE)){
+		BUILD_XML_ELEMENT(address, XML_ABBR_BUILDING_TYPE_ELEMENT, getAbbrBuildingType());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_BUILDING_TYPE)){
+		BUILD_XML_ELEMENT(address, XML_BUILDING_TYPE_ELEMENT, getBuildingType());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_DOOR_NO)){
+		BUILD_XML_ELEMENT(address, XML_DOOR_NO_ELEMENT, getDoorNo());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_FLOOR)){
+		BUILD_XML_ELEMENT(address, XML_FLOOR_ELEMENT, getFloor());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_SIDE)){
+		BUILD_XML_ELEMENT(address, XML_SIDE_ELEMENT, getSide());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_PLACE)){
+		BUILD_XML_ELEMENT(address, XML_PLACE_ELEMENT, getPlace());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_LOCALITY)){
+		BUILD_XML_ELEMENT(address, XML_LOCALITY_ELEMENT, getLocality());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_ZIP4)){
+		BUILD_XML_ELEMENT(address, XML_ZIP4_ELEMENT, getZip4());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_ZIP3)){
+		BUILD_XML_ELEMENT(address, XML_ZIP3_ELEMENT, getZip3());
+		addAddress = true;
+	}
+	if (!_xmlUInfo || _xmlUInfo->contains(XML_POSTAL_LOCALITY)){
+		BUILD_XML_ELEMENT(address, XML_POSTAL_LOCALITY_ELEMENT, getPostalLocality());
+		addAddress = true;
+	}
+	if (addAddress){
+		BUILD_XML_ELEMENT_NEWLINE(xml,XML_ADDRESS_ELEMENT, address);
+	}
+
+	/* } else { //specification for xml does not include foreign addresses, this will stay here if specification changes
 		if (!_xmlUInfo || _xmlUInfo->contains(XML_FOREIGN_COUNTRY)){
 			BUILD_XML_ELEMENT(address, XML_FOREIGN_COUNTRY_ELEMENT, getForeignCountry());
 			addAddress = true;
@@ -2138,7 +2139,7 @@ CByteArray APL_AddrEId::getXML(bool bNoHeader)
 			addAddress = true;
 		}
 	}
-
+	 */
 	return xml;
 }
 
