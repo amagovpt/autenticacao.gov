@@ -315,7 +315,7 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				AdditionalDependencies="pteidapplayer.lib pteidcommon.lib"
-				OutputFile="..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteid35$(ProjectName).dll"
+				OutputFile="..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteid$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;..\_Binaries35\x64\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
