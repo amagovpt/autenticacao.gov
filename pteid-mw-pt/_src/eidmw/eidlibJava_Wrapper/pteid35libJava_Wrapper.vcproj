@@ -127,7 +127,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;../applayer;../common;../eidlib;../cardlayer;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;;&quot;$(PTEID_DIR_JDK_142)\include&quot;;&quot;$(PTEID_DIR_JDK_142)\include\win32&quot;;..\..\ThirdParty\jdk\j2sdk1.4.2_17\include;..\..\ThirdParty\jdk\j2sdk1.4.2_17\include\win32;&quot;C:\Program Files\Java\jdk1.4.2_17\include&quot;;&quot;C:\Program Files\Java\jdk1.4.2_17\include\win32&quot;"
 				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_WRAPPER"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
@@ -146,8 +146,8 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="true"
 				UseLibraryDependencyInputs="true"
-				AdditionalDependencies="pteid35applayer.lib pteid35common.lib"
-				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName).dll"
+				AdditionalDependencies="pteidapplayer.lib pteidcommon.lib"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;..\_Binaries35/$(ConfigurationName)&quot;"
 				GenerateManifest="true"
 			/>
@@ -174,7 +174,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /Y ..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName).dll ..\..\ThirdParty\pteid_sdk\3.5\Java\pteid35$(ProjectName).dll"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -367,6 +367,10 @@
 			</File>
 			<File
 				RelativePath="..\eidlib\eidlibReader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\eidlib\eidlibxades.cpp"
 				>
 			</File>
 			<File

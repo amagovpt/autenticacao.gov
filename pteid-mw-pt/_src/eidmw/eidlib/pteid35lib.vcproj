@@ -43,7 +43,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="C:\OpenSSL\include;../applayer;../common;../cardlayer"
+				AdditionalIncludeDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;../applayer;../common;../cardlayer;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;"
 				PreprocessorDefinitions="PTEID_35;WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -150,9 +150,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="pteidapplayerD.lib pteidcommonD.lib"
-				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName)D.dll"
-				LinkIncremental="2"
+				AdditionalDependencies="pteidapplayer.lib pteidcommon.lib"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName).dll"
+				LinkIncremental="1"
+
 				AdditionalLibraryDirectories="..\_Binaries35/$(ConfigurationName)"
 				GenerateDebugInformation="true"
 				SubSystem="2"
