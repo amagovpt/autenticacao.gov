@@ -315,7 +315,7 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				AdditionalDependencies="pteidDlgsWin32.lib pteidcommon.lib pteidcardlayer.lib"
-				OutputFile="..\_Binaries35\$(PlatformName)\$(ConfigurationName)/pteid35$(ProjectName).dll"
+				OutputFile="..\_Binaries35\$(PlatformName)\$(ConfigurationName)/pteid$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\_Binaries35\$(PlatformName)\$(ConfigurationName)"
 				GenerateDebugInformation="true"
