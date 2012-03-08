@@ -67,8 +67,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="pteid35applayerD.lib pteid35commonD.lib"
-				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName)D.dll"
+				AdditionalDependencies="pteidapplayerD.lib pteidcommonD.lib"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName)D.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\_Binaries35/$(ConfigurationName)"
 				GenerateDebugInformation="true"
@@ -150,8 +150,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="pteid35applayerD.lib pteid35commonD.lib"
-				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName)D.dll"
+				AdditionalDependencies="pteidapplayerD.lib pteidcommonD.lib"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName)D.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\_Binaries35/$(ConfigurationName)"
 				GenerateDebugInformation="true"
@@ -230,8 +230,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="pteid35applayer.lib pteid35common.lib"
-				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid35$(ProjectName).dll"
+				AdditionalDependencies="pteidapplayer.lib pteidcommon.lib"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\_Binaries35/$(ConfigurationName)"
 				GenerateDebugInformation="true"
