@@ -66,8 +66,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="pteid35DlgsWin32D.lib pteid35commonD.lib pteid35cardlayerD.lib"
-				OutputFile="../_Binaries35/$(ConfigurationName)/pteid35$(ProjectName)D.dll"
+				AdditionalDependencies="pteidDlgsWin32D.lib pteidcommonD.lib pteidcardlayerD.lib"
+				OutputFile="../_Binaries35/$(ConfigurationName)/pteid$(ProjectName)D.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\_Binaries35/$(ConfigurationName)"
 				GenerateDebugInformation="true"
@@ -97,7 +97,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy ..\_Binaries35\$(ConfigurationName)\pteid35pkcs11D.dll ..\_Binaries35\$(ConfigurationName)\pteidpkcs11D.dll"
+				CommandLine="copy ..\_Binaries35\$(ConfigurationName)\pteidpkcs11D.dll ..\_Binaries35\$(ConfigurationName)\pteidpkcs11D.dll"
 			/>
 		</Configuration>
 		<Configuration
@@ -149,8 +149,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="pteid35DlgsWin32D.lib pteid35commonD.lib pteid35cardlayerD.lib"
-				OutputFile="..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteid35$(ProjectName)D.dll"
+				AdditionalDependencies="pteidDlgsWin32D.lib pteidcommonD.lib pteidcardlayerD.lib"
+				OutputFile="..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteid$(ProjectName)D.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\_Binaries35\$(PlatformName)\$(ConfigurationName)"
 				GenerateDebugInformation="true"
@@ -180,7 +180,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy ..\_Binaries35\$(ConfigurationName)\pteid35pkcs11D.dll ..\_Binaries35\$(ConfigurationName)\pteidpkcs11D.dll"
+				CommandLine="copy ..\_Binaries35\$(ConfigurationName)\pteidpkcs11D.dll ..\_Binaries35\$(ConfigurationName)\pteidpkcs11D.dll"
 			/>
 		</Configuration>
 		<Configuration
@@ -230,8 +230,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="pteid35DlgsWin32.lib pteid35common.lib pteid35cardlayer.lib"
-				OutputFile="../_Binaries35/$(ConfigurationName)/pteid35$(ProjectName).dll"
+				AdditionalDependencies="pteidDlgsWin32.lib pteidcommon.lib pteidcardlayer.lib"
+				OutputFile="../_Binaries35/$(ConfigurationName)/pteid$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\_Binaries35/$(ConfigurationName)"
 				GenerateDebugInformation="true"
@@ -263,7 +263,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy ..\_Binaries35\$(ConfigurationName)\pteid35pkcs11.dll ..\_Binaries35\$(ConfigurationName)\pteidpkcs11.dll&#x0D;&#x0A;copy ..\_Binaries35\$(ConfigurationName)\pteid35pkcs11.dll &quot;..\_Binaries35\$(ConfigurationName)\Portugal Identity Card PKCS11.dll&quot;&#x0D;&#x0A;"
+				CommandLine="copy ..\_Binaries35\$(ConfigurationName)\pteidpkcs11.dll ..\_Binaries35\$(ConfigurationName)\pteidpkcs11.dll&#x0D;&#x0A;copy ..\_Binaries35\$(ConfigurationName)\pteidpkcs11.dll &quot;..\_Binaries35\$(ConfigurationName)\Portugal Identity Card PKCS11.dll&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -347,7 +347,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy ..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteid35pkcs11.dll ..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteidpkcs11.dll&#x0D;&#x0A;copy ..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteid35pkcs11.dll &quot;..\_Binaries35\$(PlatformName)\$(ConfigurationName)\Portugal Identity Card PKCS11.dll&quot;&#x0D;&#x0A;"
+				CommandLine="copy ..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteidpkcs11.dll ..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteidpkcs11.dll&#x0D;&#x0A;copy ..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteidpkcs11.dll &quot;..\_Binaries35\$(PlatformName)\$(ConfigurationName)\Portugal Identity Card PKCS11.dll&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
