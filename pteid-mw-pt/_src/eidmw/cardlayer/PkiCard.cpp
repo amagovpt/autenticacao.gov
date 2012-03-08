@@ -331,22 +331,23 @@ bad_pin:
     CByteArray oAPDUCHANGE;
     CByteArray oResp;
 
-        //00 A4 04 00 07 60 46 32 FF 00 01 02
-        CByteArray init;
-        init.Append(0x00);
-        init.Append(0xA4);
-        init.Append(0x04);
-        init.Append(0x00);
-        init.Append(0x07);
-        init.Append(0x60);
-        init.Append(0x46);
-        init.Append(0x32);
-        init.Append(0xFF);
-        init.Append(0x00);
-        init.Append(0x01);
-        init.Append(0x02);
-        SendAPDU(init);
-
+    if (Pin.ulPinRef == 130 || Pin.ulPinRef == 131){ // signature and address pins need the next apdu first
+    	//00 A4 04 00 07 60 46 32 FF 00 01 02
+    	CByteArray init;
+    	init.Append(0x00);
+    	init.Append(0xA4);
+    	init.Append(0x04);
+    	init.Append(0x00);
+    	init.Append(0x07);
+    	init.Append(0x60);
+    	init.Append(0x46);
+    	init.Append(0x32);
+    	init.Append(0xFF);
+    	init.Append(0x00);
+    	init.Append(0x01);
+    	init.Append(0x02);
+    	SendAPDU(init);
+    }
 
 	switch(operation){
 	case PIN_OP_VERIFY:
@@ -356,7 +357,6 @@ bad_pin:
 		oAPDU.Append(oPinBuf);
 		break;
 	case PIN_OP_CHANGE:
-
 		oAPDU = MakePinCmdIAS(PIN_OP_VERIFY, Pin); // add CLA, INS, P1, P2
 		oAPDU.Append((unsigned char) oPinBuf.Size());  // add P3
 		oAPDU.Append(oPinBuf);

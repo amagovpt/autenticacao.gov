@@ -389,8 +389,6 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 			//bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", *triesLeft, NULL); // martinho - reset pin
 			bOK = false;
 		}
-		  if (bOK) 
-		  	triesLeft = PinStatus(pin); 
 	}
 	catch(...)
 	{
@@ -486,7 +484,7 @@ bool CPteidCard::PinCmd(tPinOperation operation, const tPin & Pin,
 		pincheck = CPkiCard::PinCmdIAS(operation, pteidPin, csPin1, csPin2, ulRemaining, pKey,bShowDlg);
 	}
 
-	//ulRemaining = PinStatus(Pin);
+	ulRemaining = PinStatus(Pin);
 
 	return pincheck;
 }
