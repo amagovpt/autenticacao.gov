@@ -59,6 +59,9 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 
     ui.label_2->setText( tmpHeader );
     ui.label_2->setAccessibleName( tmpHeader );
+    ui.label->wordWrap();
+    ui.label->setText(QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader)));
+    ui.label->setAccessibleName(QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader)));
 	m_ulHandle = ulHandle;
 //	ui.lblIcon->setPixmap( QPixmap( ":/Resources/ICO_CARD_PIN_128x128.png" ) );
 
