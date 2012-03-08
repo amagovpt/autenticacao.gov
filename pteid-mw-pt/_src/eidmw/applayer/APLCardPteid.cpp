@@ -1493,19 +1493,15 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	bool addCivilInfo = false;
 	string temp;
 
-	// provide all the id fields
-	if(_xmlUInfo->isEmpty())
-		_xmlUInfo = NULL;
-
 	// photo
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_PHOTO)){
+	if (_xmlUInfo->contains(XML_PHOTO)){
 		photo = getPhotoObj()->getPhotoPNG();
 		m_cryptoFwk->b64Encode(*photo,b64photo);
 		BUILD_XML_ELEMENT(xml, XML_PHOTO_ELEMENT, b64photo);
 	}
 
 	// basicInformation
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_NAME)){
+	if (_xmlUInfo->contains(XML_NAME)){
 		string s;
 		s+= getGivenName();
 		s+=" ";
@@ -1513,19 +1509,19 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 		BUILD_XML_ELEMENT(basicInfo, XML_NAME_ELEMENT, s.c_str());
 		addBasicInfo = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_GIVEN_NAME)){
+	if (_xmlUInfo->contains(XML_GIVEN_NAME)){
 		BUILD_XML_ELEMENT(basicInfo,XML_GIVEN_NAME_ELEMENT,getGivenName());
 		addBasicInfo = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_SURNAME)){
+	if (_xmlUInfo->contains(XML_SURNAME)){
 		BUILD_XML_ELEMENT(basicInfo,XML_SURNAME_ELEMENT,getSurname());
 		addBasicInfo = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_NIC)){
+	if (_xmlUInfo->contains(XML_NIC)){
 		BUILD_XML_ELEMENT(basicInfo,XML_NIC_ELEMENT,getCivilianIdNumber());
 		addBasicInfo = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_EXPIRY_DATE)){
+	if (_xmlUInfo->contains(XML_EXPIRY_DATE)){
 		BUILD_XML_ELEMENT(basicInfo,XML_EXPIRY_DATE_ELEMENT, getValidityEndDate());
 		addBasicInfo = true;
 	}
@@ -1534,39 +1530,39 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	}
 
 	// CivilInformation
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_GENDER)){
+	if (_xmlUInfo->contains(XML_GENDER)){
 		BUILD_XML_ELEMENT(civilInfo, XML_GENDER_ELEMENT, getGender());
 		addCivilInfo = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_HEIGHT)){
+	if (_xmlUInfo->contains(XML_HEIGHT)){
 		BUILD_XML_ELEMENT(civilInfo, XML_HEIGHT_ELEMENT, getHeight());
 		addCivilInfo = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_NATIONALITY)){
+	if (_xmlUInfo->contains(XML_NATIONALITY)){
 		BUILD_XML_ELEMENT(civilInfo, XML_NATIONALITY_ELEMENT, getNationality());
 		addCivilInfo = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_DATE_OF_BIRTH)){
+	if (_xmlUInfo->contains(XML_DATE_OF_BIRTH)){
 		BUILD_XML_ELEMENT(civilInfo, XML_DATE_OF_BIRTH_ELEMENT, getDateOfBirth());
 		addCivilInfo = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_GIVEN_NAME_FATHER)){
+	if (_xmlUInfo->contains(XML_GIVEN_NAME_FATHER)){
 		BUILD_XML_ELEMENT(civilInfo, XML_GIVEN_NAME_FATHER_ELEMENT, getGivenNameFather());
 		addCivilInfo = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_SURNAME_FATHER)){
+	if (_xmlUInfo->contains(XML_SURNAME_FATHER)){
 		BUILD_XML_ELEMENT(civilInfo, XML_SURNAME_FATHER_ELEMENT, getSurnameFather());
 		addCivilInfo = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_GIVEN_NAME_MOTHER)){
+	if (_xmlUInfo->contains(XML_GIVEN_NAME_MOTHER)){
 		BUILD_XML_ELEMENT(civilInfo, XML_GIVEN_NAME_MOTHER_ELEMENT, getGivenNameMother());
 		addCivilInfo = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_SURNAME_MOTHER)){
+	if (_xmlUInfo->contains(XML_SURNAME_MOTHER)){
 		BUILD_XML_ELEMENT(civilInfo, XML_SURNAME_MOTHER_ELEMENT, getSurnameMother());
 		addCivilInfo = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_ACCIDENTAL_INDICATIONS)){
+	if (_xmlUInfo->contains(XML_ACCIDENTAL_INDICATIONS)){
 		BUILD_XML_ELEMENT(civilInfo, XML_ACCIDENTAL_INDICATIONS_ELEMENT, getAccidentalIndications());
 		addCivilInfo = true;
 	}
@@ -1575,36 +1571,36 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	}
 
 	// IdentificationNumbers
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_DOCUMENT_NO)){
+	if (_xmlUInfo->contains(XML_DOCUMENT_NO)){
 		BUILD_XML_ELEMENT(idNum, XML_DOCUMENT_NO_ELEMENT, getDocumentNumber());
 		addIdNum = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_TAX_NO)){
+	if (_xmlUInfo->contains(XML_TAX_NO)){
 		BUILD_XML_ELEMENT(idNum, XML_TAX_NO_ELEMENT, getTaxNo());
 		addIdNum = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_SOCIAL_SECURITY_NO)){
+	if (_xmlUInfo->contains(XML_SOCIAL_SECURITY_NO)){
 		BUILD_XML_ELEMENT(idNum, XML_SOCIAL_SECURITY_NO_ELEMENT, getTaxNo());
 		addIdNum = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_HEALTH_NO)){
+	if (_xmlUInfo->contains(XML_HEALTH_NO)){
 		BUILD_XML_ELEMENT(idNum, XML_HEALTH_NO_ELEMENT, getHealthNumber());
 		addIdNum = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_MRZ1)){
+	if (_xmlUInfo->contains(XML_MRZ1)){
 		temp = getMRZ1();
 		replace(temp,XML_ESCAPE_LT);
 		BUILD_XML_ELEMENT(idNum, XML_MRZ1_ELEMENT, temp);
 		addIdNum = true;
 	}
 
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_MRZ2)){
+	if (_xmlUInfo->contains(XML_MRZ2)){
 		temp = getMRZ2();
 		replace(temp,XML_ESCAPE_LT);
 		BUILD_XML_ELEMENT(idNum, XML_MRZ2_ELEMENT, temp);
 		addIdNum = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_MRZ3)){
+	if (_xmlUInfo->contains(XML_MRZ3)){
 		temp = getMRZ3();
 		replace(temp,XML_ESCAPE_LT);
 		BUILD_XML_ELEMENT(idNum, XML_MRZ3_ELEMENT, temp);
@@ -1615,31 +1611,31 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	}
 
 	// CardValues
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_CARD_VERSION)){
+	if (_xmlUInfo->contains(XML_CARD_VERSION)){
 		BUILD_XML_ELEMENT(cardValues, XML_CARD_VERSION_ELEMENT, getDocumentVersion());
 		addCardValues = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_CARD_NUMBER_PAN)){
+	if (_xmlUInfo->contains(XML_CARD_NUMBER_PAN)){
 		BUILD_XML_ELEMENT(cardValues, XML_CARD_NUMBER_PAN_ELEMENT, getDocumentPAN());
 		addCardValues = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_ISSUING_DATE)){
+	if (_xmlUInfo->contains(XML_ISSUING_DATE)){
 		BUILD_XML_ELEMENT(cardValues, XML_ISSUING_DATE_ELEMENT, getValidityBeginDate());
 		addCardValues = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_ISSUING_ENTITY)){
+	if (_xmlUInfo->contains(XML_ISSUING_ENTITY)){
 		BUILD_XML_ELEMENT(cardValues, XML_ISSUING_ENTITY_ELEMENT, getIssuingEntity());
 		addCardValues = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_DOCUMENT_TYPE)){
+	if (_xmlUInfo->contains(XML_DOCUMENT_TYPE)){
 		BUILD_XML_ELEMENT(cardValues, XML_DOCUMENT_TYPE_ELEMENT, getDocumentType());
 		addCardValues = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_LOCAL_OF_REQUEST)){
+	if (_xmlUInfo->contains(XML_LOCAL_OF_REQUEST)){
 		BUILD_XML_ELEMENT(cardValues, XML_LOCAL_OF_REQUEST_ELEMENT, getLocalofRequest());
 		addCardValues = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_VERSION)){
+	if (_xmlUInfo->contains(XML_VERSION)){
 		BUILD_XML_ELEMENT(cardValues, XML_VERSION_ELEMENT, "0");
 		addCardValues = true;
 	}
@@ -1957,11 +1953,7 @@ CByteArray APL_PersonalNotesEId::getXML(bool bNoHeader)
 	CByteArray xml;
 	string str;
 
-
-	if (_xmlUInfo->isEmpty())
-		_xmlUInfo = NULL;
-
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_PERSONAL_NOTES)){
+	if (_xmlUInfo->contains(XML_PERSONAL_NOTES)){
 		str = getPersonalNotes();
 		replace(str,XML_ESCAPE_AMP);
 		replace(str,XML_ESCAPE_APOS);
@@ -2040,72 +2032,68 @@ CByteArray APL_AddrEId::getXML(bool bNoHeader)
 	CByteArray address;
 	bool addAddress = false;
 
-	// provide all the address fields
-	if(_xmlUInfo->isEmpty())
-		_xmlUInfo = NULL;
-
 	/*	if (isNationalAddress()){ //specification for xml does not include foreign addresses, this will stay here if specification changes */
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_DISTRICT)){
+	if (_xmlUInfo->contains(XML_DISTRICT)){
 		BUILD_XML_ELEMENT(address, XML_DISTRICT_ELEMENT, getDistrict());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_MUNICIPALITY)){
+	if (_xmlUInfo->contains(XML_MUNICIPALITY)){
 		BUILD_XML_ELEMENT(address, XML_MUNICIPALITY_ELEMENT, getMunicipality());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_CIVIL_PARISH)){
+	if (_xmlUInfo->contains(XML_CIVIL_PARISH)){
 		BUILD_XML_ELEMENT(address, XML_CIVIL_PARISH_ELEMENT, getCivilParish());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_ABBR_STREET_TYPE)){
+	if (_xmlUInfo->contains(XML_ABBR_STREET_TYPE)){
 		BUILD_XML_ELEMENT(address, XML_ABBR_STREET_TYPE_ELEMENT, getAbbrStreetType());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_STREET_TYPE)){
+	if (_xmlUInfo->contains(XML_STREET_TYPE)){
 		BUILD_XML_ELEMENT(address, XML_STREET_TYPE_ELEMENT, getStreetType());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_STREET_NAME)){
+	if (_xmlUInfo->contains(XML_STREET_NAME)){
 		BUILD_XML_ELEMENT(address, XML_STREET_NAME_ELEMENT, getStreetName());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_ABBR_BUILDING_TYPE)){
+	if (_xmlUInfo->contains(XML_ABBR_BUILDING_TYPE)){
 		BUILD_XML_ELEMENT(address, XML_ABBR_BUILDING_TYPE_ELEMENT, getAbbrBuildingType());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_BUILDING_TYPE)){
+	if (_xmlUInfo->contains(XML_BUILDING_TYPE)){
 		BUILD_XML_ELEMENT(address, XML_BUILDING_TYPE_ELEMENT, getBuildingType());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_DOOR_NO)){
+	if (_xmlUInfo->contains(XML_DOOR_NO)){
 		BUILD_XML_ELEMENT(address, XML_DOOR_NO_ELEMENT, getDoorNo());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_FLOOR)){
+	if (_xmlUInfo->contains(XML_FLOOR)){
 		BUILD_XML_ELEMENT(address, XML_FLOOR_ELEMENT, getFloor());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_SIDE)){
+	if (_xmlUInfo->contains(XML_SIDE)){
 		BUILD_XML_ELEMENT(address, XML_SIDE_ELEMENT, getSide());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_PLACE)){
+	if (_xmlUInfo->contains(XML_PLACE)){
 		BUILD_XML_ELEMENT(address, XML_PLACE_ELEMENT, getPlace());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_LOCALITY)){
+	if (_xmlUInfo->contains(XML_LOCALITY)){
 		BUILD_XML_ELEMENT(address, XML_LOCALITY_ELEMENT, getLocality());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_ZIP4)){
+	if (_xmlUInfo->contains(XML_ZIP4)){
 		BUILD_XML_ELEMENT(address, XML_ZIP4_ELEMENT, getZip4());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_ZIP3)){
+	if (_xmlUInfo->contains(XML_ZIP3)){
 		BUILD_XML_ELEMENT(address, XML_ZIP3_ELEMENT, getZip3());
 		addAddress = true;
 	}
-	if (!_xmlUInfo || _xmlUInfo->contains(XML_POSTAL_LOCALITY)){
+	if (_xmlUInfo->contains(XML_POSTAL_LOCALITY)){
 		BUILD_XML_ELEMENT(address, XML_POSTAL_LOCALITY_ELEMENT, getPostalLocality());
 		addAddress = true;
 	}
@@ -2114,27 +2102,27 @@ CByteArray APL_AddrEId::getXML(bool bNoHeader)
 	}
 
 	/* } else { //specification for xml does not include foreign addresses, this will stay here if specification changes
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_FOREIGN_COUNTRY)){
+		if (_xmlUInfo->contains(XML_FOREIGN_COUNTRY)){
 			BUILD_XML_ELEMENT(address, XML_FOREIGN_COUNTRY_ELEMENT, getForeignCountry());
 			addAddress = true;
 		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_FOREIGN_ADDRESS)){
+		if (_xmlUInfo->contains(XML_FOREIGN_ADDRESS)){
 			BUILD_XML_ELEMENT(address, XML_FOREIGN_ADDRESS_ELEMENT, getForeignAddress());
 			addAddress = true;
 		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_FOREIGN_CITY)){
+		if (_xmlUInfo->contains(XML_FOREIGN_CITY)){
 			BUILD_XML_ELEMENT(address, XML_FOREIGN_CITY_ELEMENT, getForeignCity());
 			addAddress = true;
 		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_FOREIGN_REGION)){
+		if (_xmlUInfo->contains(XML_FOREIGN_REGION)){
 			BUILD_XML_ELEMENT(address, XML_FOREIGN_REGION_ELEMENT, getForeignRegion());
 			addAddress = true;
 		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_FOREIGN_LOCALITY)){
+		if (_xmlUInfo->contains(XML_FOREIGN_LOCALITY)){
 			BUILD_XML_ELEMENT(address, XML_FOREIGN_LOCALITY_ELEMENT, getForeignLocality());
 			addAddress = true;
 		}
-		if (!_xmlUInfo || _xmlUInfo->contains(XML_FOREIGN_POSTAL_CODE)){
+		if (_xmlUInfo->contains(XML_FOREIGN_POSTAL_CODE)){
 			BUILD_XML_ELEMENT(address, XML_FOREIGN_POSTAL_CODE_ELEMENT, getForeignPostalCode());
 			addAddress = true;
 		}
