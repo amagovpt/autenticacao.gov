@@ -272,9 +272,10 @@ bad_pin:
 	}
 
     unsigned long ulSW12 = getSW12(oResp);
-    if (ulSW12 == 0x9000)
+    if (ulSW12 == 0x9000){
         bRet = true;
-    else if (ulSW12 == 0x6983)
+        ulRemaining = 3;
+    } else if (ulSW12 == 0x6983)
         ulRemaining = 0;
     else if (ulSW12 / 16 == 0x63C)
         ulRemaining = ulSW12 % 16;
@@ -398,9 +399,10 @@ bad_pin:
 	}
 
     unsigned long ulSW12 = getSW12(oResp);
-    if (ulSW12 == 0x9000)
+    if (ulSW12 == 0x9000){
         bRet = true;
-    else if (ulSW12 == 0x6983)
+        ulRemaining = 3;
+    }else if (ulSW12 == 0x6983)
         ulRemaining = 0;
     else if (ulSW12 / 16 == 0x63C)
         ulRemaining = ulSW12 % 16;
