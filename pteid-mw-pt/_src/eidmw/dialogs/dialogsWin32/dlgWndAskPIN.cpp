@@ -25,6 +25,8 @@
 #include "../langUtil.h"
 #include "Log.h"
 
+#include "Config.h"
+
 #define IDC_STATIC 0
 #define IDB_OK 1
 #define IDB_CANCEL 2
@@ -43,6 +45,8 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 	PinResult[0] = ' ';
 	PinResult[1] = (char)0;
 
+	std::wstring lang = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
+
 	std::wstring tmpTitle = L"";
 
 	if( PinPusage == DLG_PIN_SIGN )
@@ -51,7 +55,19 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 		tmpTitle += GETSTRING_DLG(Asking);
 
 	tmpTitle += L" ";
-	tmpTitle += PINName;
+
+	//Change to pt once fixed the language issues.
+	if(wcscmp(L"nl",lang.c_str())==0)
+	{
+		if (PinPusage == DLG_PIN_AUTH)
+			tmpTitle.append(L"Pin da Autenticação");
+		else if (PinPusage == DLG_PIN_ADDRESS)
+			tmpTitle.append(L"Pin da Morada");
+		else
+			tmpTitle.append(L"Pin da Assinatura");
+	}
+	else
+		tmpTitle.append(PINName);
 
 	m_ulPinMinLen = pinInfo.ulMinLen;
 	m_ulPinMaxLen = pinInfo.ulMaxLen;
