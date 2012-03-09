@@ -59,17 +59,17 @@ echo "  ln -s -f /usr/local/lib/libcardpluginPteid.so.2.0.0 /usr/local/lib/libca
 echo "  ln -s -f /usr/local/lib/libcardpluginPteid.so.2.0.0 /usr/local/lib/libcardpluginPteid.so.2"  >> pteid-pkg/install_pteid.sh
 echo "  ln -s -f /usr/local/lib/libcardpluginPteid.so.2.0.0 /usr/local/lib/libcardpluginPteid.so.2.0"  >> pteid-pkg/install_pteid.sh
 
-echo "  install -m 755 -p \"lib/libpteidpkcs11.so.2.0.0\" \"/usr/local/lib/libpteidpkcs11.2.0.0\""  >> pteid-pkg/install_pteid.sh
+echo "  install -m 755 -p \"lib/libpteidpkcs11.so.2.0.0\" \"/usr/local/lib/libpteidpkcs11.so.2.0.0\""  >> pteid-pkg/install_pteid.sh
 echo "  ln -s -f /usr/local/lib/libpteidpkcs11.so.2.0.0 /usr/local/lib/libpteidpkcs11.so"  >> pteid-pkg/install_pteid.sh
 echo "  ln -s -f /usr/local/lib/libpteidpkcs11.so.2.0.0 /usr/local/lib/libpteidpkcs11.so.2"  >> pteid-pkg/install_pteid.sh
 echo "  ln -s -f /usr/local/lib/libpteidpkcs11.so.2.0.0 /usr/local/lib/libpteidpkcs11.so.2.0"  >> pteid-pkg/install_pteid.sh
 
-echo "  install -m 755 -p \"lib/libpteidapplayer.so.2.0.0\" \"/usr/local/lib/libpteidapplayer.2.0.0\""  >> pteid-pkg/install_pteid.sh
+echo "  install -m 755 -p \"lib/libpteidapplayer.so.2.0.0\" \"/usr/local/lib/libpteidapplayer.so.2.0.0\""  >> pteid-pkg/install_pteid.sh
 echo "  ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplayer.so"  >> pteid-pkg/install_pteid.sh
 echo "  ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplayer.so.2"  >> pteid-pkg/install_pteid.sh
 echo "  ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplayer.so.2.0"  >> pteid-pkg/install_pteid.sh
 
-echo "  install -m 755 -p \"lib/libpteidlib.so.2.0.0\" \"/usr/local/lib/libpteidlib.2.0.0\""  >> pteid-pkg/install_pteid.sh
+echo "  install -m 755 -p \"lib/libpteidlib.so.2.0.0\" \"/usr/local/lib/libpteidlib.so.2.0.0\""  >> pteid-pkg/install_pteid.sh
 echo "  ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so"  >> pteid-pkg/install_pteid.sh
 echo "  ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2"  >> pteid-pkg/install_pteid.sh
 echo "  ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2.0"  >> pteid-pkg/install_pteid.sh
