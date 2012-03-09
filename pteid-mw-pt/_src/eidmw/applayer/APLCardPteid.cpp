@@ -1577,7 +1577,7 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 		addIdNum = true;
 	}
 	if (_xmlUInfo->contains(XML_SOCIAL_SECURITY_NO)){
-		BUILD_XML_ELEMENT(idNum, XML_SOCIAL_SECURITY_NO_ELEMENT, getTaxNo());
+		BUILD_XML_ELEMENT(idNum, XML_SOCIAL_SECURITY_NO_ELEMENT, getSocialSecurityNumber());
 		addIdNum = true;
 	}
 	if (_xmlUInfo->contains(XML_HEALTH_NO)){
@@ -1590,7 +1590,6 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 		BUILD_XML_ELEMENT(idNum, XML_MRZ1_ELEMENT, temp);
 		addIdNum = true;
 	}
-
 	if (_xmlUInfo->contains(XML_MRZ2)){
 		temp = getMRZ2();
 		replace(temp,XML_ESCAPE_LT);
