@@ -24,6 +24,7 @@
 #include "resource.h"
 #include "../langUtil.h"
 #include "Log.h"
+#include "Config.h"
 
 #define IDC_STATIC 0
 #define IDB_OK 1
@@ -31,16 +32,25 @@
 #define IDB_RETRY 3
 #define IMG_SIZE 128
 
+std::wstring langbad = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
+
 dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries, HWND Parent )
 :Win32Dialog(L"WndBadPIN")
 {
 	std::wstring tmpTitle = L"";
 
-	tmpTitle += GETSTRING_DLG(Notification);
+	if(wcscmp(L"nl",langbad.c_str())==0)
+		tmpTitle += (L"Atenção");
+	else
+		tmpTitle += GETSTRING_DLG(Notification);
 	tmpTitle += L": ";
 	tmpTitle += GETSTRING_DLG(Bad); 
 	tmpTitle += L" ";
-	tmpTitle += PINName;
+
+	if ( wcsstr(const_cast<wchar_t*>( PINName.c_str()), (L"PIN da Autentica")) != 0)
+		tmpTitle += (L"Pin da Autenticação");
+	else
+		tmpTitle += PINName;
 
 	wchar_t tmpBuf[128];
 	std::wstring tmpStr = L"";
@@ -50,7 +60,10 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 
 	tmpStr = GETSTRING_DLG(Bad);
 	tmpStr += L" \""; 
-	tmpStr += PINName;
+	if ( wcsstr(const_cast<wchar_t*>( PINName.c_str()), (L"PIN da Autentica")) != 0)
+		tmpStr += (L"Pin da Autenticação");
+	else
+		tmpStr += PINName;
 	tmpStr += L"\": ";
 	tmpStr += tmpBuf;
 	tmpStr += L" "; 
@@ -58,7 +71,10 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 	wcscpy_s( szHeader, 128, tmpStr.c_str() );
 	if( RemainingTries == 0 )
 	{
-		tmpStr = PINName;
+		if ( wcsstr(const_cast<wchar_t*>( PINName.c_str()), (L"PIN da Autentica")) != 0)
+			tmpTitle += (L"Pin da Autenticação");
+		else
+			tmpTitle += PINName;
 		tmpStr += L" ";
 		tmpStr = GETSTRING_DLG(PinBlocked);
 		szBody = tmpStr.c_str();

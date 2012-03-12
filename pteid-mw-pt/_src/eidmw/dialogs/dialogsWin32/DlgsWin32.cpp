@@ -44,6 +44,7 @@ dlgWndPinpadInfo *dlgModal = NULL;
 TD_WNDPINPAD_MAP dlgPinPadInfoCollector;
 unsigned long dlgPinPadInfoCollectorIndex = 0;
 
+std::wstring lang1 = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
 #ifdef _MANAGED
 #pragma managed(push, off)
@@ -97,8 +98,16 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 	try
 	{
 		std::wstring PINName;
-		if( usage == DLG_PIN_UNKNOWN )
-			PINName = csPinName;
+
+		if(wcscmp(L"nl",lang1.c_str())==0)
+		{
+			if (usage == DLG_PIN_AUTH)
+				PINName.append(L"Pin da Autenticação");
+			else if (usage == DLG_PIN_ADDRESS)
+				PINName.append(L"Pin da Morada");
+			else
+				PINName.append(L"Pin da Assinatura");
+		}
 		else
 			PINName = GETSTRING_DLG(Pin);
 
@@ -109,31 +118,60 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			switch( usage )
 			{
 			case DLG_PIN_AUTH:
-				sMessage = GETSTRING_DLG(PleaseEnterYourPin);
+				if(wcscmp(L"nl",lang1.c_str())==0)
+				{
+					sMessage = (L"Introduza o Código PIN");
+				}
+				else
+					sMessage = GETSTRING_DLG(PleaseEnterYourPin);
 				sMessage += L", ";
 				sMessage += GETSTRING_DLG(InOrderToAuthenticateYourself);
 				sMessage += L"\n";
 				break;
 			case DLG_PIN_SIGN:
-				sMessage = GETSTRING_DLG(Caution);
+				if(wcscmp(L"nl",lang1.c_str())==0)
+				{
+					sMessage = (L"Atenção");
+				}
+				else
+					sMessage = GETSTRING_DLG(Caution);
 				sMessage += L" ";
-				sMessage += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic);
+				if(wcscmp(L"nl",lang1.c_str())==0)
+				{
+					sMessage += (L"Voce está prestes a realizar uma assinatura electrónica legalmente válida com o seu Cartão de Cidadão");
+				}
+				else
+					sMessage += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic);
 				sMessage += L"\n";
-				sMessage += GETSTRING_DLG(PleaseEnterYourPin);
+				if(wcscmp(L"nl",lang1.c_str())==0)
+				{
+					sMessage += (L"Introduza o código PIN");
+				}
+				else 
+					sMessage += GETSTRING_DLG(PleaseEnterYourPin);
 				sMessage += L", ";
 				sMessage += GETSTRING_DLG(ToContinueOrClickTheCancelButton);
 				sMessage += L"\n\n";
-				sMessage += GETSTRING_DLG(Warning);
-				sMessage += L" ";
-				sMessage += GETSTRING_DLG(IfYouOnlyWantToLogOnToA);
+				break;
+			case DLG_PIN_ADDRESS:
+				if(wcscmp(L"nl",lang1.c_str())==0)
+				{
+					sMessage += (L"Introduza o Código PIN");
+				}
+				else
+					sMessage += (L"Please Enter your PIN");
 				sMessage += L"\n";
 				break;
 			default:
-				sMessage = GETSTRING_DLG(PleaseEnterYourPin);
+				if(wcscmp(L"nl",lang1.c_str())==0)
+				{
+					sMessage += (L"Introduza o Código PIN");
+				}
+				else
+					sMessage += GETSTRING_DLG(PleaseEnterYourPin);
 				sMessage += L"\n";
 				break;
 			}
-
 			break;
 		case DLG_PIN_OP_UNBLOCK_NO_CHANGE:
 			sMessage = GETSTRING_DLG(PleaseEnterYourPuk);

@@ -24,7 +24,6 @@
 #include "resource.h"
 #include "../langUtil.h"
 #include "Log.h"
-
 #include "Config.h"
 
 #define IDC_STATIC 0
@@ -37,6 +36,8 @@
 #define KP_BTN_SIZE 48
 #define KP_LBL_SIZE 24
 
+std::wstring lang = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
+
 dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & Header, std::wstring & PINName, bool UseKeypad, HWND Parent )
 :Win32Dialog(L"WndAskPIN")
 {
@@ -44,8 +45,6 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 
 	PinResult[0] = ' ';
 	PinResult[1] = (char)0;
-
-	std::wstring lang = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
 	std::wstring tmpTitle = L"";
 
