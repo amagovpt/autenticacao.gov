@@ -1074,64 +1074,7 @@ const char *PTEID_EId::getValidityEndDate()
 
 	return out;
 }
-/*
-const char *PTEID_EId::getIssuingMunicipality()
-{
-	const char *out = NULL;
 
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getIssuingMunicipality();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_EId::getAddressVersion()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getAddressVersion();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_EId::getStreet()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getStreet();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_EId::getZipCode()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getZipCode();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-*/
 const char *PTEID_EId::getSpecialStatus()
 {
 	const char *out = NULL;

@@ -271,7 +271,6 @@ tCardFileStatus APL_EidFile_ID::VerifyFile()
 
 void APL_EidFile_ID::EmptyFields()
 {
-	m_IDFile.clear();
 	m_DocumentVersion.clear();
 	m_Country.clear();
 	m_LogicalNumber.clear();

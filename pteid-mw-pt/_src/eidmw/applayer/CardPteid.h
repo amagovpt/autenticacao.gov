@@ -192,7 +192,6 @@ private:
 	  */
 	virtual bool ShowData();
 
-	std::string m_IDFile;									/**< Whole ID Field */
 	std::string m_DocumentVersion;							/**< Field DocumentVersion */
 	std::string m_Country;									/**< Field Country */
 	std::string m_DocumentType;								/**< Field DocumentType */
