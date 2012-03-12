@@ -78,24 +78,25 @@ bool CPinpadLib::CheckLib(const std::string & csPinpadDir, const char *csFileNam
 {
 	bool bRet = false;
 	// Load the pinpad lib
-	unsigned long ulRes = m_oPinpadLib.Open(csPinpadDir + csFileName);
-	if (ulRes == EIDMW_OK)
-	{
-		// Get the 2 functions
+    unsigned long ulRes = m_oPinpadLib.Open(csPinpadDir + csFileName);
+    std::cout << "csPinpadDir + csFileName " << csPinpadDir + csFileName << std::endl;
+    if (ulRes == EIDMW_OK)
+    {
+        // Get the 2 functions
 		EIDMW_PP2_INIT ppInit2 = (EIDMW_PP2_INIT) m_oPinpadLib.GetAddress("EIDMW_PP2_Init");
 		m_ppCmd2 = (EIDMW_PP2_COMMAND) m_oPinpadLib.GetAddress("EIDMW_PP2_Command");
-		if (ppInit2 == NULL || m_ppCmd2 == NULL)
+        if (ppInit2 == NULL || m_ppCmd2 == NULL)
 			m_oPinpadLib.Close();
 		else
-		{
+        {
 			long lRet = ppInit2(PTEID_MINOR_VERSION, hContext, hCard, csReader,
 				ulLanguage, InitGuiInfo(), 0, NULL);
 			if (lRet == SCARD_S_SUCCESS)
 				bRet = true; // OK, the pinpad lib supports this reader
 			else
 				m_oPinpadLib.Close();
-		}
-	}
+        }
+    }
 
 	if (!bRet)
 		m_ppCmd2 = NULL;
@@ -299,7 +300,6 @@ bool CPinpadLib::Load(unsigned long hContext, SCARDHANDLE hCard,
 		std::string strSearchFor = GetSearchString(csPinpadDir,
 			csPinpadPrefix, iVersion);
 		const char *csSearchFor = strSearchFor.c_str();
-
 		// Search for files in csPinpadDir that are candidate pinpad lib,
 		// load them and ask them if they support this reader + pinpad lib version
 		DIR *pDir = opendir(csSearchFor);
@@ -322,7 +322,32 @@ bool CPinpadLib::Load(unsigned long hContext, SCARDHANDLE hCard,
 				break; // OK: a good pinpad lib was found and loaded
 			}
 			closedir(pDir);
-		}
+        } else {
+            std::string altstrSearchFor = GetSearchString("./", "", iVersion);
+            const char *altcsSearchFor = altstrSearchFor.c_str();
+            // Search for files in csPinpadDir that are candidate pinpad lib,
+            // load them and ask them if they support this reader + pinpad lib version
+            DIR *altpDir = opendir(altcsSearchFor);
+            // If pDir is NULL then the dir doesn't exist
+
+            struct dirent *altpFile = readdir(altpDir);
+            char altcsBuf[50];
+            sprintf_s(altcsBuf,sizeof(altcsBuf), "lib%s%i", csPinpadPrefix.c_str(), iVersion);
+            altcsBuf[sizeof(altcsBuf) - 1] = '\0';
+            for ( ;altpFile != NULL; altpFile = readdir(altpDir))
+            {
+              // only look at files called libpteidpp<version>
+              if(strstr(altpFile->d_name, altcsBuf) == NULL ) continue;
+
+                bPinpadLibFound = CheckLib(altstrSearchFor, altpFile->d_name,
+                               ulLanguage, iVersion, hContext, hCard, csReader);
+
+              if (bPinpadLibFound){
+                break; // OK: a good pinpad lib was found and loaded
+              }
+            }
+            closedir(altpDir);
+        }
 	}
 	return bPinpadLibFound;
 }
