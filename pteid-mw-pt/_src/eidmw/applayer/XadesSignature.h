@@ -36,6 +36,8 @@ namespace eIDMW
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0xff
 	};
 
+
+
 	class XadesSignature
 	{
 		public:
@@ -56,14 +58,25 @@ namespace eIDMW
 		static bool checkExternalRefs(DSIGReferenceList *refs, tHashedFile **hashes);
 		static bool ValidateXades(CByteArray signature, tHashedFile **hashes, char *errors, unsigned long *error_length);
 		
+		static bool ValidateTimestamp (CByteArray signature, CByteArray ts_resp, char *errors, unsigned long *error_length);
+		static bool grep_validation_result (char *time_and_date);
+
+		static CByteArray mp_timestamp_data;
+		static CByteArray mp_validate_data;
+		static void do_post_validate_timestamp(char *input, unsigned int input_len, char *sha1_string);
 
 		private:
 		
+		std::string getTS_CAPath();
 		CByteArray HashFile(const char *file_path);
 		DOMNode * addSignatureProperties(DSIGSignature *sig);
 		CByteArray *WriteToByteArray(XERCES_NS DOMDocument *doc); 
 		//Utility methods for signature
 		void loadCert(CByteArray &ba, EVP_PKEY *pub_key);
+
+
+		//Locate the text subnode of an EncapsulatedTimestamp
+		static XMLCh * locateTimestamp(XERCES_NS DOMDocument *doc);
 		
 		int appendOID(XMLByte *toFill);
 
@@ -73,18 +86,21 @@ namespace eIDMW
 
 		//Utility methods for timestamping
 		
-		//Curl write_function callback: it writes the data to the static array mp_timestamp_data
+		//Curl write_function callback: it writes the data to the static CByteArray mp_timestamp_data
 		static size_t curl_write_data(char *ptr, size_t size, size_t nmemb, void * stream); 
 
+		//Curl write_function callback: it writes the data to the static CByteArray mp_validate_data
+		static size_t curl_write_validation_data(char *ptr, size_t size, size_t nmemb, void * stream); 
+
 		void timestamp_data(const unsigned char *input, unsigned int data_len);
+
+	
 		void generate_asn1_request_struct(unsigned char *sha_1);
 
 		static void initXerces();
-
 		
 		X509 * mp_cert;
 		APL_Card *mp_card;
-		static CByteArray mp_timestamp_data;
 
 
 	};

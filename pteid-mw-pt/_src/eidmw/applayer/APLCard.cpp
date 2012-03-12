@@ -158,7 +158,7 @@ CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const
 	XadesSignature sig(this);
 
 	CByteArray &signature = sig.SignXades(paths, n_paths, false);
-	StoreSignatureToDisk (signature, paths, n_paths,output_path);
+	StoreSignatureToDisk (signature, NULL, paths, n_paths,output_path);
 
 	//Write zip container signature and referenced files in zip container
 
@@ -217,7 +217,7 @@ void APL_Card::SignXadesTIndividual(const char ** paths, unsigned int n_paths, c
 	SignIndividual(paths, n_paths, output_dir, true);
 }
 
-// Implementation of the PIN-caching version of Xades-T
+// Implementation of the PIN-caching version of SignXades()
 // It signs each input file seperately and creates a .zip container for each
 void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const char *output_dir, bool timestamp)
 {
@@ -235,7 +235,7 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 		CByteArray &signature = sig.SignXades(files_to_sign, 1, timestamp);
 		
 		const char *output_file = generateFinalPath(output_dir, paths[i]);
-		StoreSignatureToDisk (signature, files_to_sign, 1, output_file);
+		StoreSignatureToDisk (signature, NULL, files_to_sign, 1, output_file);
 		delete []output_file;
 
 		//Set SSO on after first iteration to avoid more PinCmd() user interaction for the remaining 
@@ -255,9 +255,10 @@ CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, cons
 	XadesSignature sig(this);
 
 	CByteArray &signature = sig.SignXades(paths, n_paths, true);
-	StoreSignatureToDisk (signature, paths, n_paths, output_file);
+	CByteArray *ts_data = &XadesSignature::mp_timestamp_data;
 
 	//Write zip container signature and referenced files in zip container
+	StoreSignatureToDisk (signature, ts_data, paths, n_paths, output_file);
 
 	return signature;
 }
@@ -270,18 +271,26 @@ bool APLVerifySignature(const char *container_path, char * errors, unsigned long
 
 	tHashedFile **hashes = NULL;
 	int i = 0;
+	bool result = false;
 	Container *container = new Container(container_path);
 	int n_files = 0;
 
 	hashes = container->getHashes(&n_files);
 
 	CByteArray *sig_content = container->ExtractSignature();
+	CByteArray *timestamp = container->ExtractTimestamp();
 
 	delete container;
 	if (sig_content == NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	
-	return XadesSignature::ValidateXades(*sig_content, hashes, errors, error_len);
+	result = XadesSignature::ValidateXades(*sig_content, hashes, errors, error_len);
+	
+	if (timestamp != NULL)
+	result &= XadesSignature::ValidateTimestamp(*sig_content, *timestamp, errors, error_len);
+
+	return result;
+
 }
 
 

@@ -2,6 +2,8 @@
 #define SIGCONTAINER_H
 
 #define SIG_INTERNAL_PATH "META-INF/signature.xml"
+#define TS_INTERNAL_PATH "META-INF/ts_resp.bin"
+
 #include <cstdio>
 #include "ByteArray.h"
 #include "MiscUtil.h"
@@ -61,6 +63,7 @@ static const char *README =
 			~Container();
 			CByteArray *ExtractFile(const char *entry);
 			CByteArray *ExtractSignature();
+			CByteArray *ExtractTimestamp();
 			//Array of pointers to tHashedFiles
 			tHashedFile **getHashes(int *);
 	
@@ -71,7 +74,8 @@ static const char *README =
 	};
 
 
-	void StoreSignatureToDisk(CByteArray& sig, const char **paths, int num_paths, const char *output_file);
+	void StoreSignatureToDisk(CByteArray& sig, CByteArray* ts_data, const char **paths, int num_paths, const char *output_file);
+
 }
 
 #endif
