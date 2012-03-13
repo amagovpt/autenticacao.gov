@@ -277,17 +277,15 @@ bool APLVerifySignature(const char *container_path, char * errors, unsigned long
 
 	hashes = container->getHashes(&n_files);
 
-	CByteArray *sig_content = container->ExtractSignature();
-	CByteArray *timestamp = container->ExtractTimestamp();
+	CByteArray sig_content = container->ExtractSignature();
+	CByteArray timestamp = container->ExtractTimestamp();
 
 	delete container;
-	if (sig_content == NULL)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	
-	result = XadesSignature::ValidateXades(*sig_content, hashes, errors, error_len);
+	result = XadesSignature::ValidateXades(sig_content, hashes, errors, error_len);
 	
-	if (timestamp != NULL)
-	result &= XadesSignature::ValidateTimestamp(*sig_content, *timestamp, errors, error_len);
+	if (timestamp.Size() > 0)
+		result &= XadesSignature::ValidateTimestamp(sig_content, timestamp, errors, error_len);
 
 	else if (result)
 	//This indicates that we don't have any "success message" on *errors* parameter

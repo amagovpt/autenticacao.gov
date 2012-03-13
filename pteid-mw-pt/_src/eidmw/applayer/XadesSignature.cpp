@@ -392,7 +392,7 @@ namespace eIDMW
 
 			if (res != 0)
 			{
-				MWLOG(LEV_ERROR, MOD_APL, L"Timestamp Validation error in HTTP POST request. LibcURL returned %s\n", 
+				MWLOG(LEV_ERROR, MOD_APL, L"Timestamp Validation error in HTTP POST request. LibcURL returned %S\n", 
 						(char *)error_buf);
 			}
 
@@ -454,7 +454,7 @@ namespace eIDMW
 
 			if (res != 0)
 			{
-				MWLOG(LEV_ERROR, MOD_APL, L"Timestamping error in HTTP POST request. LibcURL returned %s\n", 
+				MWLOG(LEV_ERROR, MOD_APL, L"Timestamping error in HTTP POST request. LibcURL returned %S\n", 
 						(char *)error_buf);
 			}
 
@@ -630,8 +630,7 @@ bool XadesSignature::ValidateTimestamp (CByteArray signature, CByteArray ts_resp
 
 	if (signature.Size() == 0)
 	{
-		int err_len = _snprintf(errors, *error_length, "Signature Validation error: " 
-				"Couldn't extract signature from zip container");
+		int err_len = _snprintf(errors, *error_length, getString(0));
 		*error_length = err_len;
 		MWLOG(LEV_ERROR, MOD_APL, L"ValidateTimestamp() received empty Signature. This most likely means a corrupt zipfile");
 		return false;
@@ -701,14 +700,19 @@ bool XadesSignature::ValidateTimestamp (CByteArray signature, CByteArray ts_resp
 	//std::cerr << "POST Parameter (hash): " << sha1_string << std::endl; 
 	
 	do_post_validate_timestamp((char *)ts_resp.GetBytes(), ts_resp.Size(), sha1_string);
+
+	if (mp_validate_data.Size() == 0)
+	{
+		*error_length = _snprintf(errors, *error_length, getString(8));
+		return false;
+	}
 	
 	result = grep_validation_result(time_and_date);
 
 	if (result)
 		*error_length = _snprintf(errors, *error_length, "%s", time_and_date);
 	else
-		*error_length = _snprintf(errors, *error_length, "ValidateTimestamp: "
-				"The timestamp does not match the signed content.");
+		*error_length = _snprintf(errors, *error_length, getString(2));
 
 	return result;
 
@@ -768,7 +772,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 
 	if (errorsOccured) {
 		//Write to output report 
-		int err_len = _snprintf(errors, *error_length, "Signature Validation error: Malformed XML Document");
+		int err_len = _snprintf(errors, *error_length, getString(4));
 		*error_length = err_len;
 		MWLOG(LEV_ERROR, MOD_APL, L"Errors parsing XML Signature, bailing out");
 		return false;
@@ -823,8 +827,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 			extern_result = checkExternalRefs(refs, hashes);
 		if (!extern_result)
 		{
-			int err_len = _snprintf(errors, *error_length,
-			"Signature Validation error: At least one of the signed file(s) was changed or is missing");
+			int err_len = _snprintf(errors, *error_length, getString(6));
 			*error_length = err_len;
 			return false;
 		}

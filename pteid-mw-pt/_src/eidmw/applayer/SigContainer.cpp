@@ -39,7 +39,7 @@ namespace eIDMW
 
 	}
 
-	CByteArray *Container::ExtractFile(const char *entry)
+	CByteArray &Container::ExtractFile(const char *entry)
 	{
 		void *p;
 		size_t uncompressed_size = 0;
@@ -48,12 +48,12 @@ namespace eIDMW
 		if (!p)
 		{
 			MWLOG(LEV_ERROR, MOD_APL, L"Error in ExtractFile() %s\n", entry);
-			return NULL;
+			return *ba;
 		}
 
 		ba->Append ((const unsigned char *)p, uncompressed_size);
 
-		return ba;
+		return *ba;
 	}
 
 	char *readFile(const char *path, int *size)
@@ -75,18 +75,14 @@ namespace eIDMW
 		return in;
 	}
 	
-	CByteArray* Container::ExtractSignature()
+	CByteArray& Container::ExtractSignature()
 	{
-
 		return ExtractFile(SIG_INTERNAL_PATH);
-
 	}
 
-	CByteArray* Container::ExtractTimestamp()
+	CByteArray& Container::ExtractTimestamp()
 	{
-
 		return ExtractFile(TS_INTERNAL_PATH);
-
 	}
 
 	tHashedFile** Container::getHashes(int *pn_files)

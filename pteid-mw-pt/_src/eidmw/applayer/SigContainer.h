@@ -61,9 +61,9 @@ static const char *README =
 		public:
 			Container(const char *zip_path);
 			~Container();
-			CByteArray *ExtractFile(const char *entry);
-			CByteArray *ExtractSignature();
-			CByteArray *ExtractTimestamp();
+			CByteArray &ExtractFile(const char *entry);
+			CByteArray &ExtractSignature();
+			CByteArray &ExtractTimestamp();
 			//Array of pointers to tHashedFiles
 			tHashedFile **getHashes(int *);
 	
