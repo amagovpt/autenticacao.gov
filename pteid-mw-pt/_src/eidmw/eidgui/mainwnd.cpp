@@ -377,13 +377,21 @@ void MainWnd::on_btnSelectTab_Notes_clicked()
 void MainWnd::on_btn_menu_card_clicked()
 {
 	m_ui.wdg_submenu_card->setVisible(true);
-	m_ui.wdg_submenu_card->setGeometry(0,4,126,110);
+	//If defined language is portuguese, then the dialog needs to be larger
+	if (m_Settings.getGuiLanguageCode() == GenPur::LANG_NL)
+		m_ui.wdg_submenu_card->setGeometry(0,4,136,110);
+	else
+		m_ui.wdg_submenu_card->setGeometry(0,4,126,110);
 }
 
 void MainWnd::on_btn_menu_tools_clicked()
 {
 	m_ui.wdg_submenu_tools->setVisible(true);
-	m_ui.wdg_submenu_tools->setGeometry(128,4,126,110);
+	if (m_Settings.getGuiLanguageCode() == GenPur::LANG_NL)
+		m_ui.wdg_submenu_tools->setGeometry(128,4,146,110);
+	else
+		m_ui.wdg_submenu_tools->setGeometry(128,4,126,110);
+
 }
 
 void MainWnd::on_btn_menu_language_clicked()
@@ -3866,27 +3874,11 @@ void MainWnd::setLanguageEn( void )
 }
 
 //**************************************************
-// Switch UI language to Dutch
+// Switch UI language to Portuguese
 //**************************************************
 void MainWnd::setLanguageNl( void )
 {
 	setLanguage(GenPur::LANG_NL);
-}
-
-//**************************************************
-// Switch UI language to French
-//**************************************************
-void MainWnd::setLanguageFr( void )
-{
-	setLanguage(GenPur::LANG_FR);
-}
-
-//**************************************************
-// Switch UI language to German
-//**************************************************
-void MainWnd::setLanguageDe( void )
-{
-	setLanguage(GenPur::LANG_DE);
 }
 
 //**************************************************

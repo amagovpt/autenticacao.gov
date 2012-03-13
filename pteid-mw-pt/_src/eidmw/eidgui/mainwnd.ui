@@ -2042,7 +2042,7 @@ background-image: url(:/images/Images/alpha.png);</string>
       <rect>
        <x>30</x>
        <y>65</y>
-       <width>81</width>
+       <width>101</width>
        <height>17</height>
       </rect>
      </property>
@@ -2198,7 +2198,7 @@ font: 10pt &quot;Arial&quot;;</string>
       <rect>
        <x>30</x>
        <y>85</y>
-       <width>111</width>
+       <width>131</width>
        <height>17</height>
       </rect>
      </property>

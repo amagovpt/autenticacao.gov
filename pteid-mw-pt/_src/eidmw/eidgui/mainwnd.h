@@ -226,8 +226,6 @@ private slots:
 	void PersoDataSaveButtonClicked( void );
 	void setLanguageEn( void );
 	void setLanguageNl( void );
-	void setLanguageFr( void );
-	void setLanguageDe( void );
 	void restoreWindow( void );
 	void messageRespond( const QString& message);
 
