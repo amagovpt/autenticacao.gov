@@ -43,7 +43,7 @@ dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUA
     if (CI_Data.isDataLoaded())
     {
 		ui.setupUi(this);
-		setFixedSize(378, 233);
+		setFixedSize(385, 245);
 		const QIcon Ico = QIcon( ":/images/Images/Icons/Print.png" );
 		this->setWindowIcon( Ico );
 
