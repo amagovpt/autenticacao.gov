@@ -3536,6 +3536,9 @@ void MainWnd::refreshTabIdentityExtra()
 //*****************************************************
 void MainWnd::refreshTabAddress( void )
 {
+    if (!m_CI_Data.isDataLoaded())
+        return;
+
 	if (pinactivate == 1)
 	{
 		if (!addressPINRequest_triggered())
