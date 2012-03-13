@@ -85,7 +85,16 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
 
         if (vsignsucess)
         {
-            QMessageBox::information(this, tr("Verify Signature"), tr("Signature was successfully verified."));
+	    QString msg = tr("Signature was successfully verified.");
+	    // A quick hack, use the error message string buffer to get the timestamp out	    
+	    if (errorlen > 0)
+	    {
+		    msg += tr("\nTimestamp: ");
+		    msg += error;
+	    }
+		    
+            QMessageBox::information(this, tr("Verify Signature"), msg);
+
             this->close();
 
         }
