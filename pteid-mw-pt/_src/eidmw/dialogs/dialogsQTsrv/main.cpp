@@ -280,12 +280,15 @@ int main(int argc, char *argv[])
                 {
                     case DLG_PIN_AUTH:
                         Header += QString::fromUtf8("Pin da Autenticação");
+                        PINName = QString::fromUtf8("Pin da Autenticação");
                         break;
                     case DLG_PIN_SIGN:
                         Header +=  QString::fromWCharArray(oData->pinName);
+                        PINName = QString::fromWCharArray(oData->pinName);
                         break;
                     case DLG_PIN_ADDRESS:
                         Header +=  QString::fromWCharArray(oData->pinName);
+                        PINName = QString::fromWCharArray(oData->pinName);
                         break;
                     default:
                         Header += PINName;
@@ -293,7 +296,7 @@ int main(int argc, char *argv[])
                 }
 
 				Header += " ";
-
+                std::cout << "main.cpp PINName " << PINName.toStdString() << std::endl;
 				dlg = new dlgWndAskPINs(  
 										oData->pin1Info, 
 										oData->pin2Info, 

@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>dlgWndAskPINs</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-image: url(:/Resources/bg_AuthenticationPin.png);</string>
+  </property>
   <widget class="QFrame" name="fraPIN_Keypad">
    <property name="geometry">
     <rect>
@@ -148,7 +151,7 @@
     <bool>false</bool>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-image: url(:/Resources/bg_AuthenticationPin.png);</string>
+    <string notr="true"/>
    </property>
    <widget class="QLabel" name="lblOldPINName">
     <property name="enabled">
@@ -341,14 +344,20 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>2</width>
+     <height>2</height>
+    </rect>
+   </property>
    <layout class="QHBoxLayout"/>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="dlgs.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>btnCancel</sender>

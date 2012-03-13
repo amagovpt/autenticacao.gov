@@ -21,6 +21,7 @@
 #include "dlgWndAskPINs.h"
 #include "../langUtil.h"
 
+#include <iostream>
 #include <stdio.h>
 
 #define KP_BTN_SIZE 48
@@ -30,6 +31,11 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 	ui.setupUi(this);
 
 	setFixedSize(416, 258);
+
+    if(PINName.contains("Assinatura", Qt::CaseInsensitive))
+        this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin.png);");
+    else
+        this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin.png);");
 
 	//this->resize( 350, 280 );
 	m_UK_InputField = 0;
@@ -216,7 +222,7 @@ void dlgWndAskPINs::on_txtPIN_Keypad_textChanged( const QString & text )
 
 void dlgWndAskPINs::NextField()
 {
-	switch( m_UK_InputField )
+    switch( m_UK_InputField )
 	{
 		case INPUTFIELD_OLD: // 0 
 		{
