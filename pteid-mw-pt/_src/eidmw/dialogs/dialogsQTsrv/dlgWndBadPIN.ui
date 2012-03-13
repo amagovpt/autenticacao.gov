@@ -80,7 +80,7 @@
    <widget class="QPushButton" name="btnRetry">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>170</x>
       <y>140</y>
       <width>111</width>
       <height>27</height>
@@ -93,7 +93,7 @@
    <widget class="QPushButton" name="btnOk">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>50</x>
       <y>140</y>
       <width>111</width>
       <height>27</height>
@@ -106,9 +106,7 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="dlgs.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>btnOk</sender>
