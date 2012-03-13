@@ -34,6 +34,9 @@
   <property name="windowTitle">
    <string>dlgWndPinpadInfo</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-image: url(:/Resources/bg_AuthenticationPin.png);</string>
+  </property>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
@@ -44,7 +47,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-image: url(:/Resources/bg_AuthenticationPin.png);</string>
+    <string notr="true"/>
    </property>
    <widget class="QLabel" name="label">
     <property name="geometry">

@@ -30,6 +30,11 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 	ui.setupUi(this);
     setFixedSize(417, 259);
 
+    if(PINName.contains("Assinatura", Qt::CaseInsensitive))
+        this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin.png);");
+    else
+        this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin.png);");
+
 	QString Title="";
 
 	//if( DApplic == DLG_APP_BELPIC )
@@ -63,8 +68,6 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
     ui.label->setText(QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader)));
     ui.label->setAccessibleName(QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader)));
 	m_ulHandle = ulHandle;
-//	ui.lblIcon->setPixmap( QPixmap( ":/Resources/ICO_CARD_PIN_128x128.png" ) );
-
 }
 
 dlgWndPinpadInfo::~dlgWndPinpadInfo()
