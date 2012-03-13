@@ -76,8 +76,8 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 
 	ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
 	ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
-	ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
-	ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
+    ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
+    ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
 
 	ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
 	ui.lblOldPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
@@ -91,7 +91,7 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 	ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
 	ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
 
-	ui.lblIcon->setPixmap( QPixmap( ":/Resources/ICO_CARD_PIN_128x128.png" ) );
+    //ui.lblIcon->setPixmap( QPixmap( ":/Resources/ICO_CARD_PIN_128x128.png" ) );
 
 	if( m_UseKeypad = UseKeypad )
 	{
@@ -115,7 +115,7 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 		ui.tbtNUM_0->setIcon( QIcon( ":/Resources/KeyPadButton0.png" ) );
 		ui.tbtClear->setIcon( QIcon( ":/Resources/KeyPadButtonCE.png" ) );
 
-		ui.fraPIN_Normal->setVisible( false );
+        //ui.fraPIN_Normal->setVisible( false );
 		connect( ui.btnOk, SIGNAL( clicked() ), this, SLOT( NextField() ) );
 		m_ulPinMaxLen=m_ulPin1MaxLen;
 		if( pinInfo1.ulFlags & PIN_FLAG_DIGITS )
@@ -126,8 +126,8 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 
 		if( !PINName.isEmpty() )
 		{
-			ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYour)) + " " + PINName + " " + QString::fromWCharArray(GETSTRING_DLG(Code)) );
-			ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYour)) + " " + PINName + " " + QString::fromWCharArray(GETSTRING_DLG(Code)) );
+            ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYour)) + " " + PINName + " " + QString::fromWCharArray(GETSTRING_DLG(Code)) );
+            ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYour)) + " " + PINName + " " + QString::fromWCharArray(GETSTRING_DLG(Code)) );
 		}
 	}
 	else
@@ -137,17 +137,17 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 
 		if( !Header.isEmpty() )
 		{
-			ui.lblHeader->setText( Header );
-			ui.lblHeader->setAccessibleName( Header );
+            ui.lblHeader->setText( Header );
+            ui.lblHeader->setAccessibleName( Header );
 		}
 		if( !PINName.isEmpty() )
 		{
-			ui.lblOldPINName->setText( PINName );
-			ui.lblOldPINName->setAccessibleName( PINName );
+            ui.lblOldPINName->setText( PINName );
+            ui.lblOldPINName->setAccessibleName( PINName );
 		}
 	}
 
-	ui.lblError->setVisible( false );
+    //ui.lblError->setVisible( false );
 	OldPIN_OK = NewPIN1_OK = NewPIN2_OK = false;
 
 
@@ -239,7 +239,7 @@ void dlgWndAskPINs::NextField()
 			ui.txtNewPIN1->setAccessibleName( ui.txtPIN_Keypad->text() );
 			ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourNewPinCodeAgainToConfirm)));
 			ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourNewPinCodeAgainToConfirm)));
-			ui.lblError->setVisible( false );
+            //ui.lblError->setVisible( false );
 			break;
 		}
 
@@ -263,9 +263,9 @@ void dlgWndAskPINs::FinalCheck()
 	}
 	else
 	{
-		ui.lblError->setText( QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)) );
-		ui.lblError->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)) );
-		ui.lblError->setVisible( true );
+        //ui.lblError->setText( QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)) );
+        //ui.lblError->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)) );
+        //ui.lblError->setVisible( true );
 		if( m_UseKeypad )
 		{
 			m_UK_InputField = INPUTFIELD_NEW;
