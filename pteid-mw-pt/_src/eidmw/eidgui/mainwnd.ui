@@ -1499,6 +1499,9 @@ font: 10pt &quot;Arial&quot;;</string>
         </property>
        </widget>
        <widget class="QPushButton" name="btnPersoDataSave">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>710</x>
@@ -2513,7 +2516,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <x>0</x>
      <y>0</y>
      <width>925</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
