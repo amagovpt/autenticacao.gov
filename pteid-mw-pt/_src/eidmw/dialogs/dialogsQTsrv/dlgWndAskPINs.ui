@@ -159,9 +159,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>200</x>
       <y>100</y>
-      <width>111</width>
+      <width>131</width>
       <height>32</height>
      </rect>
     </property>
@@ -226,9 +226,9 @@
    <widget class="QLabel" name="lblNewPIN2">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>200</x>
       <y>160</y>
-      <width>111</width>
+      <width>131</width>
       <height>32</height>
      </rect>
     </property>
@@ -309,9 +309,9 @@
    <widget class="QLabel" name="lblNewPIN1">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>200</x>
       <y>130</y>
-      <width>111</width>
+      <width>131</width>
       <height>32</height>
      </rect>
     </property>
