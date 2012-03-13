@@ -120,10 +120,16 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			case DLG_PIN_AUTH:
 				if(wcscmp(L"nl",lang1.c_str())==0)
 				{
-					sMessage = (L"Introduza o Código PIN");
+					//sMessage += (L"PIN da Autenticação");
+					sMessage += L"\n\n";
+					sMessage += (L"Introduza o Código PIN");
 				}
 				else
-					sMessage = GETSTRING_DLG(PleaseEnterYourPin);
+				{
+					//sMessage += GETSTRING_DLG(Pin); 
+					sMessage += L"\n\n";
+					sMessage += GETSTRING_DLG(PleaseEnterYourPin);
+				}
 				sMessage += L", ";
 				sMessage += GETSTRING_DLG(InOrderToAuthenticateYourself);
 				sMessage += L"\n";
@@ -237,10 +243,15 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 		switch( operation )
 		{
 		case DLG_PIN_OP_CHANGE:
-			if( usage == DLG_PIN_UNKNOWN )
-				PINName = csPinName;
+			if( usage == DLG_PIN_AUTH )
+			{
+				if(wcscmp(L"nl",lang1.c_str())==0)
+					PINName = (L"Pin da Autenticação");
+				else
+					PINName = csPinName;
+			}
 			else
-				PINName = GETSTRING_DLG(Pin);
+				PINName = csPinName;
 			break;
 		case DLG_PIN_OP_UNBLOCK_CHANGE:
 			if( usage == DLG_PIN_UNKNOWN )
@@ -255,7 +266,6 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 		}
 		Header += PINName;
 		Header += L" ";
-		Header += GETSTRING_DLG(Code);
 
 		dlg = new dlgWndAskPINs( pin1Info, pin2Info, Header, PINName, DlgGetKeyPad() );
 		if( dlg->exec() )
