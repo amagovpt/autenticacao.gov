@@ -284,7 +284,7 @@ namespace eIDMW
 
 	}
 
-	unsigned char *base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded, unsigned int &decoded_len)
+	void base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded, unsigned int &decoded_len)
 	{
 
 		BIO *bio, *b64;
@@ -579,8 +579,7 @@ bool XadesSignature::grep_validation_result (char *time_and_date)
 
 	if (mp_validate_data.Size() == 0)
 	{
-		MWLOG(LEV_DEBUG, MOD_APL, L"ValidateTimestamp: grep_validation_result called with empty"  
-			"mp_timestamp_data");
+		MWLOG(LEV_DEBUG, MOD_APL, L"ValidateTimestamp: grep_validation_result called with empty mp_timestamp_data");
 		return false;
 	}
 	
@@ -598,8 +597,8 @@ bool XadesSignature::grep_validation_result (char *time_and_date)
 	{
 		if (strstr((const char *)haystack, invalid_timestamp_pattern) == NULL)
 		//Unexpected output but invalid nonetheless!
-			MWLOG(LEV_ERROR, MOD_APL, L"ValidateTimestamp: "
-			"Unexpected output in the timestamp validation form, it was considered invalid preventively");
+			MWLOG(LEV_ERROR, MOD_APL, 
+	L"ValidateTimestamp: Unexpected output in the timestamp validation form, considered invalid");
 
 		return false; 
 	}
@@ -609,7 +608,7 @@ bool XadesSignature::grep_validation_result (char *time_and_date)
 char *getHexString(unsigned char *bytes, unsigned int len)
 {
 	char *hex = new char[len*2+1];
-	bzero (hex, len*2+1);
+	memset (hex, 0, len*2+1);
 	
 	for (unsigned int i = 0; i!=len; i++)
 		sprintf(hex+(i*2), "%02x", bytes[i]);
@@ -1001,8 +1000,8 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths,
 			CByteArray *timestamp_blob = &XadesSignature::mp_timestamp_data;
 
 			if (timestamp_blob->Size() == 0)
-				MWLOG(LEV_ERROR, MOD_APL, L"An error occurred in timestamp_data. "
-						"It's possible that the timestamp service is down ");
+				MWLOG(LEV_ERROR, MOD_APL,
+			    L"An error occurred in timestamp_data. It's possible that the timestamp service is down ");
 			else
 			{
 				unsigned char * base64str = base64Encode(timestamp_blob->GetBytes(), timestamp_blob->Size());
