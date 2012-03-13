@@ -733,7 +733,6 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 	}
 
 	initXerces();
-	*error_length = 0;
 
 	//Load XML from a MemoryBuffer
 	MemBufInputSource * source = new MemBufInputSource(signature.GetBytes(),

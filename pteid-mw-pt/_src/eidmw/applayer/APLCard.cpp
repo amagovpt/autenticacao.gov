@@ -289,6 +289,10 @@ bool APLVerifySignature(const char *container_path, char * errors, unsigned long
 	if (timestamp != NULL)
 	result &= XadesSignature::ValidateTimestamp(*sig_content, *timestamp, errors, error_len);
 
+	else if (result)
+	//This indicates that we don't have any "success message" on *errors* parameter
+		*error_len = 0; 	    	
+
 	return result;
 
 }
