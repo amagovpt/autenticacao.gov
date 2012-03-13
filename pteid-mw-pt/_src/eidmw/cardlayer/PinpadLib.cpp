@@ -79,7 +79,7 @@ bool CPinpadLib::CheckLib(const std::string & csPinpadDir, const char *csFileNam
 	bool bRet = false;
 	// Load the pinpad lib
     unsigned long ulRes = m_oPinpadLib.Open(csPinpadDir + csFileName);
-    std::cout << "csPinpadDir + csFileName " << csPinpadDir + csFileName << std::endl;
+    
     if (ulRes == EIDMW_OK)
     {
         // Get the 2 functions
