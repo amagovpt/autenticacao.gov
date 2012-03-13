@@ -63,6 +63,7 @@
 //OpenSSL
 #include <openssl/sha.h>
 #include <openssl/evp.h>
+#include <openssl/bio.h>
 
 //stat
 #include <sys/types.h>
@@ -283,20 +284,39 @@ namespace eIDMW
 
 	}
 
-	unsigned char *base64Decode(const char *array, unsigned char **decoded, unsigned int *decoded_len)
+	unsigned char *base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded, unsigned int &decoded_len)
 	{
-		EVP_ENCODE_CTX ctx;
-		int len = strlen(array);
-		unsigned char* out = new unsigned char[len];
-		int outlen = 0;
 
-		EVP_DecodeInit(&ctx);
-		EVP_DecodeUpdate(&ctx, (unsigned char*)out, &len,
-			(const unsigned char*)array, len);
-		EVP_DecodeFinal(&ctx, (unsigned char*)out, &len);
+		BIO *bio, *b64;
+		unsigned int outlen = 0;
+		unsigned char *inbuf = new unsigned char[512];
+		memset(inbuf, 0, 512);
 
-		*decoded_len = len;
-		*decoded = out;
+		b64 = BIO_new(BIO_f_base64());
+		BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+
+		bio = BIO_new_mem_buf((void *)array, inlen);
+		bio = BIO_push(b64, bio);
+
+		outlen = BIO_read(bio, inbuf, 512);
+		decoded = inbuf;
+
+		decoded_len = outlen;
+
+		BIO_free_all(bio);
+	}
+
+	char *strip_backslashes(const char *str)
+	{
+		char *cleaned = new char[strlen(str)];
+		int j = 0;
+		for (unsigned int i=0; i < strlen(str); i++)
+		{
+			if (str[i] != '\n') //Skips all backslash sequences, it works for base64 strings
+				cleaned[j++] = str[i]; 
+		}
+		cleaned[j] = 0;
+		return cleaned;
 	}
 
 
@@ -340,8 +360,8 @@ namespace eIDMW
 
 			curl_formadd(&formpost,
 				     &lastptr,
-				    CURLFORM_COPYNAME, "filename",
-				    CURLFORM_COPYCONTENTS, "stuff.xml", //It should have some randomness
+				    CURLFORM_COPYNAME, "filename", "filename.xml",
+				    CURLFORM_COPYCONTENTS, generateId(20),  //It should have some randomness
 			            CURLFORM_END);
 
 			curl_formadd(&formpost,
@@ -361,9 +381,9 @@ namespace eIDMW
 
 			curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
 
-			curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
-
 			curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buf);
+
+			//curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
 
 			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &XadesSignature::curl_write_validation_data);
 
@@ -569,8 +589,8 @@ bool XadesSignature::grep_validation_result (char *time_and_date)
 	if (ts_str != NULL)
 	{
 		//Grab the TimeDate string
-		//HACKISH: hardcoded offsets
-		strncpy(time_and_date, ts_str+37, 27);
+		strncpy(time_and_date, ts_str+36, 27);
+		time_and_date[27] = 0;
 
 		return true; 
 	}
@@ -589,9 +609,10 @@ bool XadesSignature::grep_validation_result (char *time_and_date)
 char *getHexString(unsigned char *bytes, unsigned int len)
 {
 	char *hex = new char[len*2+1];
+	bzero (hex, len*2+1);
 	
 	for (unsigned int i = 0; i!=len; i++)
-		sprintf(hex+(i*2), "%02x", bytes[len]);
+		sprintf(hex+(i*2), "%02x", bytes[i]);
 
 	return hex;
 }
@@ -604,7 +625,7 @@ bool XadesSignature::ValidateTimestamp (CByteArray signature, CByteArray ts_resp
 	bool errorsOccured = false;
 
 	bool result = false;
-	unsigned char **signature_bin;
+	unsigned char *signature_bin;
 	MWLOG(LEV_DEBUG, MOD_APL, L"ValidateTimestamp() called with XML content of %d bytes."
 		L"Error buffer addr: 0x%x, error_length=%d ", signature.Size(), errors, *error_length);
 
@@ -651,7 +672,10 @@ bool XadesSignature::ValidateTimestamp (CByteArray signature, CByteArray ts_resp
 		errorsOccured = true;
 	}
 
-	DOMNode *doc;		// The document that we parsed
+	if (errorsOccured)
+		return false;
+
+	DOMNode *doc;
 
 	doc = parser->getDocument();
 
@@ -668,23 +692,26 @@ bool XadesSignature::ValidateTimestamp (CByteArray signature, CByteArray ts_resp
 	
 	sig->load();
 
-	char* signature_value = XMLString::transcode( sig->getSignatureValue());
-	base64Decode(signature_value, signature_bin, &sig_len);
-	SHA1(*signature_bin, sig_len, signature_hash);
+	const char* tmp = XMLString::transcode(sig->getSignatureValue());
+	char *tmp2 = strip_backslashes(tmp);
+	base64Decode(tmp2, strlen(tmp2), signature_bin, sig_len);
+	SHA1(signature_bin, sig_len, signature_hash);
 
 	char * sha1_string = getHexString(signature_hash, SHA1_LEN);
 
-	std::cerr << "POST Parameter (hash): " << sha1_string << std::endl; 
+	//std::cerr << "POST Parameter (hash): " << sha1_string << std::endl; 
 	
 	do_post_validate_timestamp((char *)ts_resp.GetBytes(), ts_resp.Size(), sha1_string);
-
-	std::cerr << "Debug: TSA Returned:" << endl;
-	std::cerr << mp_validate_data.GetBytes() << endl;
 	
 	result = grep_validation_result(time_and_date);
 
-	if(result)
-		std::cout << "Valid Timestamp: " << time_and_date << std::endl; //Fix this
+	if (result)
+		*error_length = _snprintf(errors, *error_length, "%s", time_and_date);
+	else
+		*error_length = _snprintf(errors, *error_length, "ValidateTimestamp: "
+				"The timestamp does not match the signed content.");
+
+	return result;
 
 }
 
@@ -706,6 +733,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 	}
 
 	initXerces();
+	*error_length = 0;
 
 	//Load XML from a MemoryBuffer
 	MemBufInputSource * source = new MemBufInputSource(signature.GetBytes(),
@@ -826,8 +854,6 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 		*error_length = err_len;
 	}
 
-
-
 	return result;
 
 }
@@ -842,11 +868,9 @@ const XMLCh * locateTimestamp(XERCES_NS DOMDocument *doc)
 
 	if (list->getLength() == 0)
 	{
-	   std::cout << "Timestamp not found." << std::endl;
 	   return NULL;
 	}
 
-	std::cout << "Timestamp was found." << std::endl;
 
 	DOMNode * timestamp = list->item(0);
 

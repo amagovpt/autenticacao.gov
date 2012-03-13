@@ -48,7 +48,7 @@ namespace eIDMW
 		if (!p)
 		{
 			MWLOG(LEV_ERROR, MOD_APL, L"Error in ExtractFile() %s\n", entry);
-			return ba;
+			return NULL;
 		}
 
 		ba->Append ((const unsigned char *)p, uncompressed_size);
