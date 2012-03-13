@@ -1832,6 +1832,8 @@ void MainWnd::loadCardData( void )
 //*****************************************************
 void MainWnd::loadCardDataAddress( void )
 {
+    if (!m_CI_Data.isDataLoaded())
+        return;
 	//----------------------------------------------------------------
 	// if we load a new card, clear the certificate contexts we kept
 	//----------------------------------------------------------------
@@ -1983,6 +1985,9 @@ void MainWnd::loadCardDataAddress( void )
 //*****************************************************
 bool MainWnd::loadCardDataPersoData( void )
 {
+    if (!m_CI_Data.isDataLoaded())
+        return false;
+
 	//----------------------------------------------------------------
 	// if we load a new card, clear the certificate contexts we kept
 	//----------------------------------------------------------------
@@ -2132,6 +2137,8 @@ bool MainWnd::loadCardDataPersoData( void )
 //*****************************************************
 void MainWnd::loadCardDataCertificates( void )
 {
+    if (!m_CI_Data.isDataLoaded())
+        return;
 	//----------------------------------------------------------------
 	// if we load a new card, clear the certificate contexts we kept
 	//----------------------------------------------------------------
@@ -3037,6 +3044,7 @@ void MainWnd::LoadDataPersoData(PTEID_EIDCard& Card)
 {
 	setEnabledPinButtons(false);
 	setEnabledCertifButtons(false);
+    m_ui.btnPersoDataSave->setEnabled(true);
 	m_TypeCard = Card.getType();
 	CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName);
 	QFuture<void> future = QtConcurrent::run(loader, &CardDataLoader::LoadPersoData);
@@ -3589,7 +3597,8 @@ void MainWnd::updatetext()
 	TotalBytes.append(" / 1000");
 	m_ui.txtPersoDataCount->setText(TotalBytes);
 
-	if (TxtPersoDataString.count()>1000){
+    if (TxtPersoDataString.count()>1000)
+    {
 		TxtPersoDataString = m_ui.txtPersoData->toPlainText();
 		TxtPersoDataString.truncate(TxtPersoDataString.size()-1);
 		m_ui.txtPersoData->setPlainText(TxtPersoDataString);
