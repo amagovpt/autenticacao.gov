@@ -298,7 +298,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../common;../dialogs;..\FreeImagePTEiD\Source;../cardlayer;&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;&quot;$(PTEID_DIR_XERCES_310)\include&quot;;&quot;..\..\ThirdParty\libcurl-7.24\include&quot;;&quot;..\xml-security-c-1.6.1&quot;;&quot;..\..\ThirdParty\xerces\Xerces-3.1.0\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;;..\..\ThirdParty\MSPlatformSDK_2003\Include;..\..\ThirdParty\MSPlatformSDK\Include"
+				AdditionalIncludeDirectories="../eidlib;../common;../dialogs;..\FreeImagePTEiD\Source;../cardlayer;&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;&quot;$(PTEID_DIR_XERCES_310)\include&quot;;&quot;..\..\ThirdParty\libcurl-7.24\include&quot;;&quot;..\xml-security-c-1.6.1&quot;;&quot;..\..\ThirdParty\xerces\Xerces-3.1.0\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;;..\..\ThirdParty\MSPlatformSDK_2003\Include;..\..\ThirdParty\MSPlatformSDK\Include"
 				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="true"
@@ -320,8 +320,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="wsock32.lib Shlwapi.lib pteid35DlgsWin32.lib pteid35cardlayer.lib pteid35common.lib libeay32.lib ssleay32.lib xerces-c_3.lib freeimage.lib xsec_1.lib libcurl.lib"
-				OutputFile="..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteid35$(ProjectName).dll"
+				AdditionalDependencies="wsock32.lib Shlwapi.lib pteidDlgsWin32.lib pteidcardlayer.lib pteidcommon.lib libeay32.lib ssleay32.lib xerces-c_3.lib freeimage.lib xsec_1.lib libcurl.lib"
+				OutputFile="..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteid$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;..\_Binaries35\x64\$(ConfigurationName)&quot;;&quot;$(PTEID_DIR_OPENSSL_098G)\lib&quot;;..\..\ThirdParty\openssl.0.9.8g\bin;&quot;$(PTEID_DIR_XERCES_310)\lib&quot;;&quot;..\..\ThirdParty\xerces\Xerces-3.1.0\lib&quot;;&quot;..\..\ThirdParty\libcurl-7.24\lib&quot;"
 				GenerateDebugInformation="true"
