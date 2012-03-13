@@ -296,7 +296,7 @@ int main(int argc, char *argv[])
                 }
 
 				Header += " ";
-                std::cout << "main.cpp PINName " << PINName.toStdString() << std::endl;
+
 				dlg = new dlgWndAskPINs(  
 										oData->pin1Info, 
 										oData->pin2Info, 
