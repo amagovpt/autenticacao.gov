@@ -276,9 +276,23 @@ int main(int argc, char *argv[])
 						break;
 				}
 
-				Header += PINName;
+                switch( oData->usage )
+                {
+                    case DLG_PIN_AUTH:
+                        Header += QString::fromUtf8("Pin da Autenticação");
+                        break;
+                    case DLG_PIN_SIGN:
+                        Header +=  QString::fromWCharArray(oData->pinName);
+                        break;
+                    case DLG_PIN_ADDRESS:
+                        Header +=  QString::fromWCharArray(oData->pinName);
+                        break;
+                    default:
+                        Header += PINName;
+                        break;
+                }
+
 				Header += " ";
-				Header += GETQSTRING_DLG(Code);
 
 				dlg = new dlgWndAskPINs(  
 										oData->pin1Info, 
@@ -673,7 +687,7 @@ int main(int argc, char *argv[])
 												   dlg);
 		
 					MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : dlgWndPinpadInfo created", argv[0]);
-					dlg->raise();
+                    dlg->raise();
 					dlg->exec();
 
 					if (dlgInfo) 
