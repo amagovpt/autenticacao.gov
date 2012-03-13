@@ -23,6 +23,7 @@
 #include "resource.h"
 #include "../langUtil.h"
 #include "Log.h"
+#include "Config.h"
 
 #define IDC_STATIC 0
 #define IDB_OK 1
@@ -41,6 +42,8 @@
 #define INPUTFIELD_NEW 1
 #define INPUTFIELD_CONFIRM 2
 
+std::wstring langchange = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
+
 dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & PINName, bool UseKeypad, HWND Parent )
 :Win32Dialog(L"WndAskPINs")
 {
@@ -54,7 +57,10 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 	DrawError = false;
 
 	std::wstring tmpTitle = L"";
-	tmpTitle += GETSTRING_DLG(RenewingPinCode);
+	if(wcscmp(L"nl",langchange.c_str())==0)
+		tmpTitle += (L"Renovar o código PIN");
+	else
+		tmpTitle += GETSTRING_DLG(RenewingPinCode);
 
 	m_ulPinMaxLen = pinInfo1.ulMaxLen;
 	m_ulPin1MinLen = pinInfo1.ulMinLen;
@@ -196,8 +202,14 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 				0, clientRect.bottom - 116, clientRect.right/2 - 35, 22,
 				m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
 
+			wstring confirm;
+			if(wcscmp(L"nl",langchange.c_str())==0)
+				confirm = (L"Confirmar código PIN");
+			else
+				confirm = (L"Confirm new PIN");
+
 			HWND hStaticText3 = CreateWindow( 
-				L"STATIC", GETSTRING_DLG(ConfirmNewPin), WS_CHILD | WS_VISIBLE | SS_RIGHT,
+				L"STATIC", confirm.c_str(), WS_CHILD | WS_VISIBLE | SS_RIGHT,
 				0, clientRect.bottom - 86, clientRect.right/2 - 35, 22, 
 				m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
 
