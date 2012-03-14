@@ -107,7 +107,6 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
     defaultfilepath = QDir::homePath();
     try
     {
-        //Sign with XAdES
         if (ui.chboxSignature->isChecked())
         {
             QString pdffiletmp;
@@ -121,30 +120,27 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
             signfilepath.append("/CartaoCidadao.zip");
             outputsign = QFileDialog::getSaveFileName(this, tr("Save Signature File"), signfilepath, tr("Zip files 'XAdES' (*.zip)"));
 
-            if (!outputsign.isEmpty())
-            {
-                pdffiletmp = QDir::tempPath();
-                pdffiletmp.append("/CartaoCidadao.pdf");
+            pdffiletmp = QDir::tempPath();
+            pdffiletmp.append("/CartaoCidadao.pdf");
 
-                nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
+            nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
 
-                drawpdf(cdata, PDF ,nativepdftmp.toStdString().c_str());
+            drawpdf(cdata, PDF ,nativepdftmp.toStdString().c_str());
 
-                char *cpychar;
-                const char **files_to_sign = new const char*[1];
+            char *cpychar;
+            const char **files_to_sign = new const char*[1];
 
-                cpychar = new char[500];
+            cpychar = new char[500];
 #ifdef WIN32
-                strcpy(cpychar, nativepdftmp.toStdString().c_str());
+            strcpy(cpychar, nativepdftmp.toStdString().c_str());
 #else
-                strcpy(cpychar, nativepdftmp.toUtf8().constData());
+            strcpy(cpychar, nativepdftmp.toUtf8().constData());
 #endif
-                files_to_sign[0] = cpychar;
+            files_to_sign[0] = cpychar;
 
-                PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Pdf File to Sign: %s", files_to_sign[0]);
+            PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Pdf File to Sign: %s", files_to_sign[0]);
 
-                SignXades = Card->SignXades(files_to_sign, 1, outputsign.toStdString().c_str());
-            }
+            SignXades = Card->SignXades(files_to_sign, 1, outputsign.toStdString().c_str());
         } else {
             QString nativepdfpath;
 
@@ -295,98 +291,57 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 	{
 		return true;
 	}*/
+    try
+    {
+        PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 
-	try
-	{
-		unsigned long	ReaderStartIdx = 1;
-		bool			bRefresh	   = false;
-		unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
-		unsigned long	ReaderIdx	   = 0;
+        QString caption(tr("Identity Card: PIN verification"));
 
-		if (ReaderStartIdx!=(unsigned long)-1)
-		{
-			ReaderEndIdx = ReaderStartIdx+1;
-		}
-		else
-		{
-			ReaderStartIdx=0;
-		}
-
-		const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-		m_CurrReaderName = readerName;
-		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-
-
-		QString caption(tr("Identity Card: PIN verification"));
-
-
-		//------------------------------------
-		// make always sure a card is present
-		//------------------------------------
         if (ReaderContext.isCardPresent())
         {
-			QString PinName = "PIN da Morada";
+            QString PinName = "PIN da Morada";
+            PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
+            PTEID_Pins&		Pins	= Card.getPins();
+            for (unsigned long PinIdx=0; PinIdx<Pins.count(); PinIdx++)
+            {
+                PTEID_Pin&	Pin			= Pins.getPinByNumber(PinIdx);
+                QString		CurrPinName	= Pin.getLabel();
 
-			PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
-			PTEID_Pins&		Pins	= Card.getPins();
+                if (CurrPinName==PinName)
+                {
+                    unsigned long triesLeft = -1;
+                    bool		  bResult   = Pin.verifyPin("",triesLeft);
+                    //QString		  msg(tr("PIN verification "));
 
-			for (unsigned long PinIdx=0; PinIdx<Pins.count(); PinIdx++)
-			{
-				PTEID_Pin&	Pin			= Pins.getPinByNumber(PinIdx);
-				QString		CurrPinName	= Pin.getLabel();
-
-				if (CurrPinName==PinName)
-				{
-					unsigned long triesLeft = -1;
-					bool		  bResult   = Pin.verifyPin("",triesLeft);
-
-					CI_Data.LoadDataAddress(Card,m_CurrReaderName);
-					//QString		  msg(tr("PIN verification "));
-
-					QString msg = bResult ? tr("PIN verification passed"):tr("PIN verification failed");
-					if (!bResult)
-					{
-							/*
-							QString nrTriesLeft;
-							nrTriesLeft.setNum(triesLeft);
-							msg += "\n";
-							msg += "( ";
-							msg += tr("Number of tries left: ") + nrTriesLeft + " )";
-							m_ui.txtPIN_Status->setText(msg);
-							m_ui.txtPIN_Status->setAccessibleName(msg);
-							*/
-
-							return false;
-					}
-					else
-					{
-						//m_ui.txtPIN_Status->setText("Restam 3 tentativas");
-						//m_ui.txtPIN_Status->setAccessibleName("Restam 3 tentativas");
-					}
-					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-					break;
-				}
+                    QString msg = bResult ? tr("PIN verification passed"):tr("PIN verification failed");
+                    if (!bResult)
+                    {
+                            QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
+                            return false;
+                    }
+                    QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
+                    break;
+                }
             }
         }
-		else
-		{
-			QString msg(tr("No card present"));
-			QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-			return false;
+        else
+        {
+            QString msg(tr("No card present"));
+            QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
+            return false;
         }
-	}
-	catch (PTEID_Exception &e)
-	{
-		QString msg(tr("General exception"));
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCard on dlgprint failed %s", e.GetError());
-		return false;
-	}
-	catch (...)
-	{
-		QString msg(tr("Unknown exception"));
-		return false;
-	}
-	return true;
+    }
+    catch (PTEID_Exception &e)
+    {
+        QString msg(tr("General exception"));
+        return false;
+    }
+    catch (...)
+    {
+        QString msg(tr("Unknown exception"));
+        return false;
+    }
+    return true;
 }
 
 void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepath)
