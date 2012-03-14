@@ -204,7 +204,7 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 
 			wstring confirm;
 			if(wcscmp(L"nl",langchange.c_str())==0)
-				confirm = (L"Confirmar código PIN");
+				confirm = (L"Confirmar novo PIN");
 			else
 				confirm = (L"Confirm new PIN");
 
