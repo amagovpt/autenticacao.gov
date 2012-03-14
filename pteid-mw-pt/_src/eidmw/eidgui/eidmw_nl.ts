@@ -28,6 +28,10 @@
         <translation>Morada</translation>
     </message>
     <message>
+        <source>Certificates</source>
+        <translation>Certificados</translation>
+    </message>
+    <message>
         <source>Notes</source>
         <translation>Notas</translation>
     </message>
@@ -1089,24 +1093,24 @@ Please specify .xml, .csv or .eid</source>
         <translation>Arranque</translation>
     </message>
     <message>
-        <source>determins whether the application should start reading the card from the moment it&apos;s detected in the cartdreader or not</source>
-        <translation>Bepaalt of het programma de kaart leest van zodra de kaart in de Leitor de cartões is waargenomen</translation>
+        <source>Determins whether the application should start reading the card from the moment it&apos;s detected in the cardreader or not</source>
+        <translation>Determina se a aplicação deve começar a ler o cartão logo que é detectada a sua inserção</translation>
     </message>
     <message>
         <source>Automatic card reading</source>
         <translation>Leitura automática do cartão</translation>
     </message>
     <message>
-        <source>Determins whether this application should start when windows starts or not</source>
-        <translation>Bepaalt of dit programma opstart als Windows opstart</translation>
+        <source>Determins whether this application should start when Windows starts or not</source>
+        <translation>Coloca a aplicação no arranque do Windows</translation>
     </message>
     <message>
         <source>Activate on Windows startup</source>
-        <translation>Arrancar automaticamente com o windows</translation>
+        <translation>Arrancar automaticamente com o Windows</translation>
     </message>
     <message>
-        <source>Determins whether the mainwindow should stay hidden on startup or not (Tray Icon will stay available)</source>
-        <translation>Bepaalt of het hoofdvenster verborgen blijft bij het opstarten (Tray ikoon blijft beschikbaar)</translation>
+        <source>Determins whether the main window should stay hidden on startup or not (Tray Icon will stay available)</source>
+        <translation>Determina se a janela deve ficar minimizada no arranque (o ícone da área de notificações estará sempre visível)</translation>
     </message>
     <message>
         <source>Start minimized</source>

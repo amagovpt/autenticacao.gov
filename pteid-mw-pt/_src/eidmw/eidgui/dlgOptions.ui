@@ -50,7 +50,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>determins whether the application should start reading the card from the moment it's detected in the cartdreader or not</string>
+     <string>determins whether the application should start reading the card from the moment it's detected in the cardreader or not</string>
     </property>
     <property name="text">
      <string>Automatic card reading</string>
@@ -66,7 +66,7 @@
      </rect>
     </property>
     <property name="statusTip">
-     <string>Determins whether this application should start when windows starts or not</string>
+     <string>Determins whether this application should start when Windows starts or not</string>
     </property>
     <property name="text">
      <string>Activate on Windows startup</string>
@@ -82,7 +82,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>Determins whether the mainwindow should stay hidden on startup or not (Tray Icon will stay available)</string>
+     <string>Determins whether the main window should stay hidden on startup or not (Tray Icon will stay available)</string>
     </property>
     <property name="text">
      <string>Start minimized</string>
