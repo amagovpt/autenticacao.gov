@@ -4,10 +4,12 @@ OSDEF=__NONE__
 
 ver=`sw_vers -productVersion`
 
-if [[ $ver > "10.6.0" || $ver = "10.6.0" ]]
+if [[ $ver > "10.7.0" || $ver = "10.7.0" ]]
 then
-	OSDEF=osx10_6
-
+	OSDEF=osx10_7
+else 	if [[ $ver > "10.6.0" || $ver = "10.6.0" ]]
+	then
+		OSDEF=osx10_6
 else	if [[ $ver > "10.5.0" || $ver = "10.5.0" ]]
 	then
 		OSDEF=osx10_5
@@ -19,6 +21,7 @@ else	if [[ $ver > "10.5.0" || $ver = "10.5.0" ]]
 			echo "[Error] OSX version: $ver < 10.4.0"
 			exit -1
 		fi
+	fi
 	fi
 fi
 
