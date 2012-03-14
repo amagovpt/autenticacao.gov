@@ -134,6 +134,7 @@ HEADERS += CardInformation.h \
            qtsingleapplication.h \
            dlgprint.h \
            dlgverifysignature.h \
+	   mylistview.h \
            dlgsignature.h \
 	   ../_Builds/pteidversions.h \
            ../dialogs/dialogs.h 
@@ -152,6 +153,7 @@ SOURCES += CardInformation.cpp \
            dlgsignature.cpp \
            picturepopup.cpp \
            qtsingleapplication.cpp \
+	   mylistview.cpp \
            genpur.cpp
 unix:!macx: SOURCES += qtsingleapplication_x11.cpp
 macx: SOURCES += qtsingleapplication_mac.cpp	

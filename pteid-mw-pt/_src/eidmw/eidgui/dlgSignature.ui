@@ -87,7 +87,7 @@
     <string>Sign...</string>
    </property>
   </widget>
-  <widget class="QListView" name="listView">
+  <widget class="MyListView" name="listView">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -124,6 +124,13 @@
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyListView</class>
+   <extends>QListView</extends>
+   <header>mylistview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

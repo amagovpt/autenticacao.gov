@@ -28,6 +28,8 @@
 #include <QDialog>
 #include "genpur.h"
 #include "CardInformation.h"
+#include "mylistview.h"
+
 
 class dlgSignature : public QDialog
 {
@@ -37,8 +39,7 @@ private slots:
     void on_pbCancel_clicked ( void );
     void on_pbAddFiles_clicked ( void );
     void on_pbSign_clicked ( void );
-    void RemoveFromView();
-    void ShowContextMenu(const QPoint& pos);
+    //void ShowContextMenu(const QPoint& pos);
 
 public:
     dlgSignature(QWidget* parent , CardInformation& CI_Data);
@@ -47,9 +48,9 @@ public:
 private:
     Ui_dlgSignature ui;
     CardInformation const& m_CI_Data;
-    QString m_CurrReaderName;//!< the current reader we're using
+    QString m_CurrReaderName; //!< the current reader we're using
     QStringList alist;
-    QListView *view;
+    MyListView *view;
     QProgressDialog *pdialog;
     QFutureWatcher<void> FutureWatcher;
 

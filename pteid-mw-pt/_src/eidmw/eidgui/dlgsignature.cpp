@@ -104,6 +104,8 @@ void dlgSignature::on_pbAddFiles_clicked( void )
 	SignListView(fileselect);
 }
 
+
+
 void dlgSignature::SignListView (QStringList list)
 {
 	view = ui.listView;
@@ -119,28 +121,11 @@ void dlgSignature::SignListView (QStringList list)
 		ui.pbSign->setEnabled(true);
 
 	//signal right click
-	view->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect (ui.listView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ShowContextMenu(const QPoint&)));
+	//view->setContextMenuPolicy(Qt::CustomContextMenu);
+	//connect (ui.listView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ShowContextMenu(const QPoint&)));
 }
 
-void dlgSignature::RemoveFromView()
-{
-	std::cout << "remove from view" << std::endl;
-	/*QModelIndex index = ui.listView->currentIndex();
-	int row = index.row();
-	int count = 1;
-
-	ui.listView->model()->removeRows( 1, count, index );
-	ui.listView->repaint();*/
-
-	QModelIndexList indexes = ui.listView->selectionModel()->selectedIndexes();
-	while(indexes.size()) {
-		ui.listView->model()->removeRow(indexes.first().row());
-		indexes = ui.listView->selectionModel()->selectedIndexes();
-	}
-	//ui.listView->repaint();
-}
-
+/* Replaced the broken right-click menu by removing on delete keypress
 void dlgSignature::ShowContextMenu(const QPoint& pos)
 {
 	QPoint globalPos = ui.listView->mapToGlobal(pos);
@@ -152,7 +137,7 @@ void dlgSignature::ShowContextMenu(const QPoint& pos)
 	connect( _remove, SIGNAL( triggered() ), this, SLOT( RemoveFromView() ) );
 	QAction* selectedItem = myMenu->exec(globalPos);
 
-	/*if (selectedItem)
+	if (selectedItem)
 	{
 		std::cout << "remove item" << std::endl;
 		//remove item;
@@ -162,8 +147,11 @@ void dlgSignature::ShowContextMenu(const QPoint& pos)
 
 		ui.listView->model()->removeRows( row, count, index );
 		ui.listView->update();
-	}*/
+	}
 }
+*/
+
+
 
 void dlgSignature::on_pbSign_clicked ( void )
 {
