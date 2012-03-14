@@ -24,6 +24,10 @@
         <translation>Identidade</translation>
     </message>
     <message>
+        <source>Address</source>
+        <translation>Morada</translation>
+    </message>
+    <message>
         <source>Notes</source>
         <translation>Notas</translation>
     </message>
@@ -1001,7 +1005,7 @@ Please specify .xml, .csv or .eid</source>
     </message>
     <message>
         <source>Unknown exception</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Erro Genérico</translation>
     </message>
     <message>
         <source>Resta(m) </source>
@@ -1033,6 +1037,10 @@ Please specify .xml, .csv or .eid</source>
     </message>
     <message>
         <source>setEventCallbacks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>EID Viewer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1209,12 +1217,12 @@ Please specify .xml, .csv or .eid</source>
     </message>
     <message>
         <source>Additional Indications</source>
-        <translation>Indicações Básicas</translation>
+        <translation>Informações Adicionais</translation>
     </message>
     <message>
         <source>Select the fields you want to include:</source>
         <oldsource>Select the needed fields:</oldsource>
-        <translation type="unfinished">Selecione os grupos de campos pretendidos:</translation>
+        <translation type="unfinished">Selecione os campos pretendidos:</translation>
     </message>
     <message>
         <source>Basic Indications</source>
@@ -1389,6 +1397,12 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <source>Signature was successfully verified.</source>
         <translation>Assinatura verificada com sucesso.</translation>
+    </message>
+    <message>
+        <source>
+Timestamp: </source>
+	<translation>
+Selo Temporal: </translation>
     </message>
 </context>
 </TS>
