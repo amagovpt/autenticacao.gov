@@ -171,7 +171,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 				sMessage += L"\n";
 				break;
 			default:
-				sMessage += L"\n\n"
+				sMessage += L"\n\n";
 				if(wcscmp(L"nl",lang1.c_str())==0)
 				{
 					sMessage += (L"Introduza o Código PIN");
