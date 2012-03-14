@@ -80,17 +80,17 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 	Title+= QString::fromWCharArray(GETSTRING_DLG(RenewingPinCode));
 	this->setWindowTitle( Title );
 
-	ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
-	ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
-    ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
-    ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
+    	ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
+    	ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
+    	ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
+    	ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
 
-	ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
-	ui.lblOldPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
+    	ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
+    	ui.lblOldPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
 	ui.lblNewPIN1->setText( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
 	ui.lblNewPIN1->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
-	ui.lblNewPIN2->setText( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
-	ui.lblNewPIN2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
+    	ui.lblNewPIN2->setText( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
+    	ui.lblNewPIN2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
 
 	ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
 	ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
@@ -145,11 +145,6 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 		{
             ui.lblHeader->setText( Header );
             ui.lblHeader->setAccessibleName( Header );
-		}
-		if( !PINName.isEmpty() )
-		{
-            ui.lblOldPINName->setText( PINName );
-            ui.lblOldPINName->setAccessibleName( PINName );
 		}
 	}
 
