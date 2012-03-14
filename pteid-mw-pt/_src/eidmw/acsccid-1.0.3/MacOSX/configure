@@ -54,8 +54,8 @@ LIBUSB_LIBS="/usr/local/lib/libusb.a -Wl,-framework -Wl,IOKit -Wl,-framework -Wl
 CFLAGS="$CFLAGS -DRESPONSECODE_DEFINED_IN_WINTYPES_H"
 
 # Build a Universal Binary
-CFLAGS="$CFLAGS -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch ppc -arch i386 -arch x86_64"
-LDFLAGS="-arch ppc -arch i386 -arch x86_64"
+CFLAGS="$CFLAGS -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/ -arch x86_64"
+LDFLAGS="-arch x86_64"
 CONFIGURE_ARGS="--disable-dependency-tracking"
 
 # do not build a static driver
