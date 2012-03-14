@@ -6,23 +6,23 @@ include Makefile.srcs
 
 # General configuration variables:
 
-CC_I386 = gcc-4.0
-CC_X86_64 = gcc-4.0
-CPP_I386 = g++-4.0
-CPP_X86_64 = g++-4.0
+CC_I386 = gcc-4.2
+CC_X86_64 = gcc-4.2
+CPP_I386 = g++-4.2
+CPP_X86_64 = g++-4.2
 COMPILERFLAGS = -Os -fexceptions -fvisibility=hidden -DNO_LCMS
 COMPILERFLAGS_I386 = -arch i386
 COMPILERFLAGS_X86_64 = -arch x86_64
 COMPILERPPFLAGS = -Wno-ctor-dtor-privacy
 INCLUDE += 
-INCLUDE_I386 = -isysroot /Developer/SDKs/MacOSX10.6.sdk
-INCLUDE_X86_64 = -isysroot /Developer/SDKs/MacOSX10.6.sdk
+INCLUDE_I386 = -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/
+INCLUDE_X86_64 = -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/
 CFLAGS_I386 = $(COMPILERFLAGS) $(COMPILERFLAGS_I386) $(INCLUDE) $(INCLUDE_I386)
 CFLAGS_X86_64 = $(COMPILERFLAGS) $(COMPILERFLAGS_X86_64) $(INCLUDE) $(INCLUDE_X86_64)
 CPPFLAGS_I386 = $(COMPILERPPFLAGS) $(CFLAGS_I386)
 CPPFLAGS_X86_64 = $(COMPILERPPFLAGS) $(CFLAGS_X86_64)
-LIBRARIES_I386 = -Wl,-syslibroot /Developer/SDKs/MacOSX10.6.sdk
-LIBRARIES_X86_64 = -Wl,-syslibroot /Developer/SDKs/MacOSX10.6.sdk
+LIBRARIES_I386 = -Wl,-syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/
+LIBRARIES_X86_64 = -Wl,-syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/
 LIBTOOL = libtool
 LIPO = lipo
 
