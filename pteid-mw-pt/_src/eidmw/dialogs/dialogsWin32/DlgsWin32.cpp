@@ -135,31 +135,33 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 				sMessage += L"\n";
 				break;
 			case DLG_PIN_SIGN:
+				sMessage += L"\n\n";
 				if(wcscmp(L"nl",lang1.c_str())==0)
 				{
-					sMessage = (L"Atenção");
+					sMessage += (L"Atenção");
 				}
 				else
-					sMessage = GETSTRING_DLG(Caution);
+					sMessage += GETSTRING_DLG(Caution);
 				sMessage += L" ";
 				if(wcscmp(L"nl",lang1.c_str())==0)
 				{
-					sMessage += (L"Voce está prestes a realizar uma assinatura electrónica legalmente válida com o seu Cartão de Cidadão");
+					sMessage += (L"Voce está prestes a realizar uma assinatura electrónica legalmente válida com o seu Cartão de Cidadão.");
 				}
 				else
 					sMessage += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic);
-				sMessage += L"\n";
+				/*sMessage += L"\n";
 				if(wcscmp(L"nl",lang1.c_str())==0)
 				{
 					sMessage += (L"Introduza o código PIN");
 				}
 				else 
-					sMessage += GETSTRING_DLG(PleaseEnterYourPin);
-				sMessage += L", ";
-				sMessage += GETSTRING_DLG(ToContinueOrClickTheCancelButton);
-				sMessage += L"\n\n";
+					sMessage += GETSTRING_DLG(PleaseEnterYourPin);*/
+				//sMessage += L", ";
+				//sMessage += GETSTRING_DLG(ToContinueOrClickTheCancelButton);
+				//sMessage += L"\n\n";
 				break;
 			case DLG_PIN_ADDRESS:
+				sMessage += L"\n\n";
 				if(wcscmp(L"nl",lang1.c_str())==0)
 				{
 					sMessage += (L"Introduza o Código PIN");
@@ -169,6 +171,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 				sMessage += L"\n";
 				break;
 			default:
+				sMessage += L"\n\n"
 				if(wcscmp(L"nl",lang1.c_str())==0)
 				{
 					sMessage += (L"Introduza o Código PIN");

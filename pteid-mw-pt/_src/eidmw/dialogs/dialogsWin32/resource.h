@@ -2,6 +2,9 @@
 // Microsoft Visual C++ generated include file.
 // Used by DlgsWin32.rc
 //
+#define BASE_VERSION2                   0
+#define BASE_VERSION1                   1
+#define BASE_VERSION3                   1
 #define IDB_PIN                         106
 #define IDB_ICO_INFO                    107
 #define IDB_ICO_NOK                     108
@@ -20,12 +23,15 @@
 #define IDB_KP_9                        125
 #define IDB_KP_CE                       126
 #define IDB_PINSIGN                     128
+#define IDB_BITMAP1                     129
+#define IDB_BITMAP2                     131
+#define SVN_REVISION                    6483
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        129
+#define _APS_NEXT_RESOURCE_VALUE        132
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1002
 #define _APS_NEXT_SYMED_VALUE           101

@@ -78,7 +78,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 	if( m_UseKeypad )
 		Height = 480;
 
-	if( CreateWnd( tmpTitle.c_str() , 480, Height, 0, Parent ) )
+	if( CreateWnd( tmpTitle.c_str() , 420, Height, 0, Parent ) )
 	{
 		RECT clientRect;
 		GetClientRect( m_hWnd, &clientRect );
@@ -90,14 +90,14 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 		//OK Button
 		HWND hOkButton = CreateWindow(
 			L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_DEFPUSHBUTTON, 
-			clientRect.right - 160, clientRect.bottom - 36, 72, 24, 
+			clientRect.right - 180, clientRect.bottom - 65, 72, 24, 
 			m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL );
 		EnableWindow( hOkButton, false );
 
 		//Cancel Button
 		HWND hCancelButton = CreateWindow(
 			L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT, 
-			clientRect.right - 80, clientRect.bottom - 36, 72, 24, 
+			clientRect.right - 100, clientRect.bottom - 65, 72, 24, 
 			m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL );
 
 		m_KeypadHeight=0;
@@ -150,12 +150,12 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 			dwStyle |= ES_NUMBER;
 
 		LONG pinTop=0;
-		LONG pinLeft=clientRect.right/2 - 100 + 40;
+		LONG pinLeft=clientRect.right/2 - 100 + 120;
 
 		if( m_UseKeypad )
 			pinTop = clientRect.top + 20;
 		else
-			pinTop = clientRect.bottom - 80;
+			pinTop = clientRect.bottom - 100;
 
 		HWND hTextEdit = CreateWindowEx( WS_EX_CLIENTEDGE,
 			L"EDIT", L"", dwStyle, 
@@ -164,8 +164,8 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 		SendMessage( hTextEdit, EM_LIMITTEXT, m_ulPinMaxLen, 0 );
 
 		HWND hStaticText = CreateWindow( 
-			L"STATIC", szPIN, WS_CHILD | WS_VISIBLE | SS_RIGHT, 
-			pinLeft-100, pinTop +4 , 96, 22, 
+			L"STATIC", szPIN, WS_CHILD | WS_VISIBLE | SS_LEFT, 
+			pinLeft, pinTop - 125 , 126, 16, 
 			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
 
 		SendMessage( hStaticText, WM_SETFONT, (WPARAM)TextFont, 0 );
@@ -174,9 +174,9 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 		SendMessage( hCancelButton, WM_SETFONT, (WPARAM)TextFont, 0 );
 
 		if( PinPusage == DLG_PIN_SIGN )
-			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_PINSIGN) );
+			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP2) );
 		else
-			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_PIN) );
+			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP1) );
 		CreateBitapMask( ImagePIN, ImagePIN_Mask );
 
 		SetFocus(GetDlgItem( m_hWnd, IDC_EDIT ));
@@ -340,8 +340,9 @@ LRESULT dlgWndAskPIN::ProcecEvent
 			HGDIOBJ oldObj = SelectObject( hdcMem , ImagePIN );
 
 			GetClientRect( m_hWnd, &rect );
+			//Size of the background Image
 			MaskBlt( m_hDC, 4, m_KeypadHeight + 8,
-				IMG_SIZE, IMG_SIZE,	hdcMem, 0, 0,
+				410, 261,	hdcMem, 0, 0,
 				ImagePIN_Mask, 0, 0, MAKEROP4( SRCCOPY, 0x00AA0029 ) );
 		
 			
@@ -359,11 +360,12 @@ LRESULT dlgWndAskPIN::ProcecEvent
 				DrawEdge( m_hDC, &rect, EDGE_RAISED, BF_RECT );
 			}
 
+			//Change top header dimensions
 			GetClientRect( m_hWnd, &rect );
-			rect.left += IMG_SIZE + 16;
-			rect.top = m_KeypadHeight + 8;
-			rect.right -= 8;
-			rect.bottom = rect.bottom - 40;
+			rect.left += IMG_SIZE + 100;
+			rect.top = m_KeypadHeight + 60;
+			rect.right -= 20;
+			rect.bottom = rect.bottom - 60;
 			SetBkColor( m_hDC, GetSysColor( COLOR_3DFACE ) );
 			SelectObject( m_hDC, TextFont );
 			DrawText( m_hDC, szHeader, -1, &rect, DT_WORDBREAK );
