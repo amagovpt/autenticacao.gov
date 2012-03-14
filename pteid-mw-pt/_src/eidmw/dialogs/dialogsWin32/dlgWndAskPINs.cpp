@@ -224,7 +224,11 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 		SendMessage( hOkButton, WM_SETFONT, (WPARAM)TextFont, 0 );
 		SendMessage( hCancelButton, WM_SETFONT, (WPARAM)TextFont, 0 );
 
-		ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP1) );
+		if(wcscmp(L"PIN da Assinatura", PINName.c_str())==0)
+			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP2) );
+		else
+			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP1) );
+
 		CreateBitapMask( ImagePIN, ImagePIN_Mask );
 
 		SetFocus( GetDlgItem( m_hWnd, IDC_EDIT ) );
