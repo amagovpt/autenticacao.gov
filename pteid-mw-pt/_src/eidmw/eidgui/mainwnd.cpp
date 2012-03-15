@@ -4302,6 +4302,7 @@ void MainWnd::doPicturePopup( PTEID_Card& card )
     QImage myImage, myImagescaled;
     QPixmap				  pixMap;
 
+    m_CI_Data.Reset();
     loadCardData();
 
     if (pixMap.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData, "PNG"))
