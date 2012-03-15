@@ -668,14 +668,14 @@ void MainWnd::resizeEvent( QResizeEvent * event )
 
 void MainWnd::closeEvent( QCloseEvent *event)
 {
-	if ( m_pTrayIcon->isVisible() ) 
+    if ( m_pTrayIcon->isVisible() )
 	{
 		if (m_msgBox)
 		{
 			delete(m_msgBox);
 			m_msgBox = NULL;
 		}
-		//clearGuiContent();
+        clearGuiContent();
 		hide();
 		if(m_ShowBalloon)
 		{
@@ -687,6 +687,9 @@ void MainWnd::closeEvent( QCloseEvent *event)
 		m_pMinimizeAction->setEnabled(false);
 		m_pRestoreAction->setEnabled(true);
 		event->ignore();
+
+        //To avoid problem when restoring the eidgui and clears data
+        loadCardData();
 	}
 }
 
@@ -2096,7 +2099,7 @@ bool MainWnd::loadCardDataPersoData( void )
 	{
 		QString msg(tr("Card changed"));
 		ShowPTEIDError( e.GetError(), msg );
-		m_CI_Data.Reset();
+        m_CI_Data.Reset();
 		loadCardData();
 	}
 	catch (PTEID_ExReaderSetChanged e)
