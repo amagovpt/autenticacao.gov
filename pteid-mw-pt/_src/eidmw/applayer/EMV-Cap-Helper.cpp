@@ -27,6 +27,7 @@
 #include "APLCard.h"
 #include "APLReader.h"
 #include "Reader.h"
+#include "sslconnection.h"
 
 #include "EMV-Cap-Helper.h"
 
@@ -52,6 +53,16 @@ EMVCapHelper::EMVCapHelper(APL_SmartCard *card)
 	oresp.Append(0x00);
 	oresp.Append(0x01);
 	oresp2 = m_card->getCalReader()->SendAPDU(oresp);
+
+    std::cout << "TESTE\n" << std::endl;
+
+    CByteArray pan, arqc;
+    std::string panstr = GetPan().ToString();
+    std::string arqcstr = GetArqc().ToString();
+
+    getparameters("4786", panstr.c_str(), arqcstr.c_str(),
+                  CDOL1, ATC, PANSEQNUMBER, COUNTER, PINTRYCOUNTER);
+
 }
 
 EMVCapHelper::~EMVCapHelper()
@@ -63,7 +74,7 @@ CByteArray EMVCapHelper::GetPan()
 	CByteArray osecpan, osecpansend, osecpanresp, osecpanrespget;
 	osecpan.Append(0x80);
 	osecpan.Append(0xA8);
-	osecpan.Append(0x00);
+    osecpan.Append(0x00);
 	osecpan.Append(0x00);
 	osecpan.Append(0x02);
 	osecpan.Append(0x83);
@@ -80,7 +91,7 @@ CByteArray EMVCapHelper::GetPan()
 	osecpanrespget = m_card->getCalReader()->SendAPDU(osecpanresp);
 
 	CByteArray pannr = osecpanrespget.GetBytes(21,8);
-	std::cout << "PAN " << pannr.ToString() << std::endl;
+    std::cout << "PAN " << pannr.ToString() << std::endl;
 
 	return pannr;
 }
@@ -92,14 +103,12 @@ CByteArray EMVCapHelper::GetArqc()
 								  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 								  0x00, 0x34, 0x00, 0x00, 0x01, 0x00, 0x01};
 
-	GetPan();
-
 	CByteArray askarqc;
 	askarqc.Append(apdu, sizeof(apdu));
 
 	CByteArray aer= m_card->getCalReader()->SendAPDU(askarqc);
 	CByteArray arqnr = aer.GetBytes(15,8);
-	std::cout << "ARQC  " << arqnr.ToString() << std::endl;
+    std::cout << "ARQC  " << arqnr.ToString() << std::endl;
 
 	return arqnr;
 
