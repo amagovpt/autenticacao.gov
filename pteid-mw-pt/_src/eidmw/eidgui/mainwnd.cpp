@@ -4306,7 +4306,7 @@ void MainWnd::doPicturePopup( PTEID_Card& card )
 
     if (pixMap.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData, "PNG"))
     {
-        pixMap = pixMap.scaledToWidth(50);
+        pixMap = pixMap.scaledToWidth(150);
         m_Pop->setPixmap(pixMap);
         m_Pop->popUp();
     }
