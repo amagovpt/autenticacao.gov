@@ -54,10 +54,7 @@ static void sigpipe_handle(int x){
 
 SSL_CTX *initialize_ctx()
 {
-    	#ifdef WIN32
-    	const SSL_METHOD *meth;
-	#endif
-	SSL_METHOD *meth;
+	const SSL_METHOD *meth;
 	SSL_CTX *ctx;
 
 	if(!bio_err){
