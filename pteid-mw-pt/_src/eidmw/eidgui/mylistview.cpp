@@ -29,9 +29,7 @@ bool CompareSelectionRanges(const QItemSelectionRange& a, const QItemSelectionRa
 //Code gently provided by Clementine
 void MyListView::removeSelected()
 {
-  
-  std::cout << "MyListView::removeSelected() called" << std::endl;
-
+ 
   int rows_removed = 0;
   QItemSelection selection(selectionModel()->selection());
 
