@@ -1101,6 +1101,10 @@ Please specify .xml, .csv or .eid</source>
         <translation>Leitura automática do cartão</translation>
     </message>
     <message>
+      	<source>Show picture on startup</source>
+    	<translation>Mostrar fotografia ao iniciar</translation>
+    </message>
+    <message>
         <source>Determins whether this application should start when Windows starts or not</source>
         <translation>Coloca a aplicação no arranque do Windows</translation>
     </message>
@@ -1186,7 +1190,7 @@ Please specify .xml, .csv or .eid</source>
     </message>
     <message>
         <source>Show picture</source>
-        <translation>Toon foto</translation>
+        <translation>Mostrar Fotografia</translation>
     </message>
 </context>
 <context>

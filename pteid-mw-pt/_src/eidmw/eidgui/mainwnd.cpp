@@ -4274,42 +4274,43 @@ void MainWnd::customEvent( QEvent* pEvent )
 //**************************************************
 void MainWnd::doPicturePopup( PTEID_Card& card )
 {
-	//------------------------------------------------
-	// just return, we don't show the picture when the card is inserted
-	// The setting to show the picture is used for the textballoon
-	//------------------------------------------------
-	return;
-	if (!m_Settings.getShowPicture())
-	{
-		return;
-	}
+    //------------------------------------------------
+    // just return, we don't show the picture when the card is inserted
+    // The setting to show the picture is used for the textballoon
+    //------------------------------------------------
 
-	//------------------------------------------------
-	// To show the picture we must:
-	// - keep the status if test cards were allowed or not
-	// - allways allow a testcard
-	// - load the picture for the popup
-	// - reset the allowTestCard like the user has set it
-	//------------------------------------------------
-	PTEID_EIDCard& eidCard		 = static_cast<PTEID_EIDCard&>(card);
-	bool		  bAllowTestCard = eidCard.getAllowTestCard();
-	
-	if (!bAllowTestCard)
-	{
-	    eidCard.setAllowTestCard(true);
-	}
+    if (!m_Settings.getShowPicture())
+    {
+        return;
+    }
 
-	QImage myImage, myImagescaled;
-	QPixmap				  pixMap;
+    //------------------------------------------------
+    // To show the picture we must:
+    // - keep the status if test cards were allowed or not
+    // - allways allow a testcard
+    // - load the picture for the popup
+    // - reset the allowTestCard like the user has set it
+    //------------------------------------------------
+    PTEID_EIDCard& eidCard		 = static_cast<PTEID_EIDCard&>(card);
+    bool		  bAllowTestCard = eidCard.getAllowTestCard();
 
-	if (pixMap.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData, "PNG"))
-	{
-		pixMap = pixMap.scaledToWidth(50);
-		m_Pop->setPixmap(pixMap);
-		m_Pop->popUp();
-	}
-	eidCard.setAllowTestCard(bAllowTestCard);
+    if (!bAllowTestCard)
+    {
+        eidCard.setAllowTestCard(true);
+    }
 
+    QImage myImage, myImagescaled;
+    QPixmap				  pixMap;
+
+    loadCardData();
+
+    if (pixMap.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData, "PNG"))
+    {
+        pixMap = pixMap.scaledToWidth(50);
+        m_Pop->setPixmap(pixMap);
+        m_Pop->popUp();
+    }
+    eidCard.setAllowTestCard(bAllowTestCard);
 }
 
 //**************************************************

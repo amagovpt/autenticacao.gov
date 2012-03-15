@@ -28,10 +28,10 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 	, m_Settings(settings)
 {	
 	ui.setupUi(this); 
-	ui.chbShowPicture->hide();
 	ui.chbShowToolbar->hide();
 	ui.chbAutoCardReading->setChecked( settings.getAutoCardReading() );
 	ui.chbWinAutoStart->setChecked( settings.getAutoStartup() );
+
 #ifndef WIN32 
 //#ifndef __APPLE__
 	ui.chbWinAutoStart->hide();

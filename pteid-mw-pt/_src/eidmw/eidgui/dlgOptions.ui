@@ -93,9 +93,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>240</y>
+     <y>260</y>
      <width>291</width>
-     <height>91</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="title">
@@ -134,7 +134,7 @@
      <x>10</x>
      <y>180</y>
      <width>281</width>
-     <height>51</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="title">
@@ -151,6 +151,22 @@
     </property>
     <property name="text">
      <string>Show notification</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="chbShowPicture">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>261</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show picture on startup</string>
     </property>
    </widget>
   </widget>
@@ -188,22 +204,6 @@
    </property>
    <property name="text">
     <string>OK</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="chbShowPicture">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>340</y>
-     <width>261</width>
-     <height>19</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Show picture</string>
    </property>
   </widget>
   <widget class="QCheckBox" name="chbShowToolbar">
