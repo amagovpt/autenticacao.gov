@@ -501,9 +501,6 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 }
 #elif SWIGJAVA	/********************** JAVA SPECIFICS ***********************/
 
-# no need to add a static block on every project that uses the java wrapper
-# the lib must be in the java library path
-
 ///////////////////////////////////////// ByteArray /////////////////////////////////////////////
 %typemap(jni)          const unsigned char* "jbyteArray"                    
 %typemap(jtype)        const unsigned char* "byte[]" 
@@ -686,6 +683,27 @@ return $jnicall;
 			case EIDMW_ERR_UNKNOWN:
 				classDescription += "/PTEID_ExUnknown";
 				break;
+			case EIDMW_SOD_UNEXPECTED_VALUE:	
+			case EIDMW_SOD_UNEXPECTED_ASN1_TAG:      			
+			case EIDMW_SOD_UNEXPECTED_ALGO_OID:				
+			case EIDMW_SOD_ERR_HASH_NO_MATCH_ID:				
+			case EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS:			
+			case EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE:			
+			case EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY:		
+			case EIDMW_SOD_ERR_VERIFY_SOD_SIGN:
+				classDescription += "/PTEID_ExSOD";
+				clazz = jenv->FindClass(classDescription.c_str());
+				if (clazz)
+				{
+					methodID   = jenv->GetMethodID(clazz, "<init>", "(I)V"); 
+					if(methodID)
+					{
+						jthrowable  exc   = static_cast<jthrowable>(jenv->NewObject(clazz, methodID, err));
+						jint success = jenv->Throw(exc);
+					}
+				}
+				return;
+				break;			
 			case EIDMW_ERR_CARD:
 			default:
 				classDescription += "/PTEID_Exception";

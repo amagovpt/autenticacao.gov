@@ -1419,7 +1419,6 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 {
 	tCardFileStatus filestatus = CARDFILESTATUS_ERROR_SIGNATURE;
 
-	//cout << "APL_EidFile_Sod::VerifyFile() - I" << endl;
 	if (m_isVerified) // no need to check again
 		return CARDFILESTATUS_OK;
 
@@ -1429,6 +1428,7 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
 	PKCS7 *p7 = NULL;
+	bool verifySOD = false;
 
 	ERR_load_PKCS7_strings();
 	ERR_load_X509_strings();
@@ -1453,7 +1453,8 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	}
 	BIO *Out = BIO_new(BIO_s_mem());
 
-	if (PKCS7_verify(p7,pSigners,store,NULL,Out,0)==1){
+	verifySOD = PKCS7_verify(p7,pSigners,store,NULL,Out,0)==1;
+	if (verifySOD){
 		unsigned char *p;
 		long size;
 		size = BIO_get_mem_data(Out, &p);
@@ -1468,7 +1469,9 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	BIO_free_all(Out);
 	PKCS7_free(p7);
 
-	//cout << "APL_EidFile_Sod::VerifyFile() - F" << endl;
+	if (!verifySOD)
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_VERIFY_SOD_SIGN);
+
 	return filestatus;
 }
 
