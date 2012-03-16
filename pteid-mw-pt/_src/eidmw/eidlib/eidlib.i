@@ -885,7 +885,8 @@ return $jnicall;
 %javaexception("PTEID_Exception") getRawData_Trace		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") SignXades		        JAVA_CODE_THROW
 %javaexception("PTEID_Exception") SignXadesT		    JAVA_CODE_THROW
-
+%javaexception("PTEID_Exception") SignXadesIndividual	JAVA_CODE_THROW
+%javaexception("PTEID_Exception") SignXadesTIndividual	JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_CCXML_Doc ccxml
