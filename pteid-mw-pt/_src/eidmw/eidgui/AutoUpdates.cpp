@@ -46,7 +46,20 @@ using namespace eIDMW;
 std::string serverurl = "http://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/";
 std::string remoteversion = "http://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/version.txt";
 
-
+std::string WINDOWS32 = "PteidMW-Basic-en.msi";
+std::string WINDOWS64 = "PteidMW-Basic-en-x64.msi";
+std::string OSX32 = "pteidgui.dmg";
+std::string OSX64 = "pteidgui.dmg";
+std::string DEBIAN32 = "pteid-mw_debian_i386.deb";
+std::string DEBIAN64 = "pteid-mw_debian_amd64.deb";
+std::string UBUNTU32 = "pteid-mw_ubuntu_i386.deb";
+std::string UBUNTU64 = "pteid-mw_ubuntu_amd64.deb";
+std::string FEDORA32 = "pteid-mw-fedora.i386.rpm";
+std::string FEDORA64 = "pteid-mw-fedora.x86_64.rpm";
+std::string SUSE32 = "pteid-mw-suse.i586.rpm";
+std::string SUSE64 = "pteid-mw-suse.x86_64.rpm";
+std::string MANDRIVA32 = "pteid-mw-mandriva.i586.rpm";
+std::string MANDRIVA64 = "pteid-mw-mandriva.x86_64.rpm";
 
 AutoUpdates::AutoUpdates(QWidget *parent)
 : QDialog(parent)
@@ -342,7 +355,6 @@ std::string AutoUpdates::VerifyOS(std::string param, bool runscript)
 void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 {
 	std::string downloadurl;
-	std::string pkgname;
 
     eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_URL);
     std::string configurl = config.getString();
@@ -355,14 +367,12 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 #ifdef WIN32
 	if (arch == "i386")
 	{
-		pkgname.append("PteidMW35-Basic-en.msi");
-		downloadurl.append(pkgname);
+        downloadurl.append(WINDOWS32);
 		HttpWindow httpWin(downloadurl, distro);
 		httpWin.show();
 		httpWin.exec();
 	} else {
-        pkgname.append("PteidMW35x86_64-Basic-en.msi");
-		downloadurl.append(pkgname);
+        downloadurl.append(WINDOWS64);
 		HttpWindow httpWin(downloadurl, distro);
 		httpWin.show();
 		httpWin.exec();
@@ -370,14 +380,12 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 #elif __APPLE__
     	if (arch == "i386")
     	{
-        	pkgname.append("pteidgui.dmg");
-        	downloadurl.append(pkgname);
+            downloadurl.append(OSX32);
         	HttpWindow httpWin(downloadurl, distro);
         	httpWin.show();
         	httpWin.exec();
     	} else {
-        	pkgname.append("pteidgui.dmg");
-        	downloadurl.append(pkgname);
+            downloadurl.append(OSX64);
         	HttpWindow httpWin(downloadurl, distro);
         	httpWin.show();
         	httpWin.exec();
@@ -393,15 +401,12 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 	}
 
     //Name of the deb/rpm the rest of the appends will be distro specific
-	pkgname.append("pteid-mw");
 
 	if (arch == "x86_64")
 	{
 		if (distro == "debian")
 		{
-            pkgname.append("_debian");
-			pkgname.append("_amd64.deb");
-			downloadurl.append(pkgname);
+            downloadurl.append(DEBIAN64);
 			HttpWindow httpWin(downloadurl, distro);
 			httpWin.show();
 			httpWin.exec();
@@ -409,37 +414,29 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		}
         if (distro == "Ubuntu" || distro == "CaixaMagica")
         {
-            pkgname.append("_ubuntu");
-            pkgname.append("_amd64.deb");
-            downloadurl.append(pkgname);
+            downloadurl.append(UBUNTU64);
             HttpWindow httpWin(downloadurl, distro);
             httpWin.show();
             httpWin.exec();
             //delete httpWin;
         }
 		else if (distro == "fedora")
-		{
-            pkgname.append("-fedora");
-			pkgname.append(".x86_64.rpm");
-			downloadurl.append(pkgname);
+        {
+            downloadurl.append(FEDORA64);
 			HttpWindow httpWin(downloadurl, distro);
 			httpWin.show();
 			httpWin.exec();
 		}
 		else if (distro == "suse")
 		{
-                pkgname.append("-suse");
-		    	pkgname.append(".x86_64.rpm");
-		    	downloadurl.append(pkgname);
+                downloadurl.append(SUSE64);
 		    	HttpWindow httpWin(downloadurl, distro);
 		    	httpWin.show();
 		    	httpWin.exec();
 		}
         else if (distro == "mandriva")
         {
-                pkgname.append("-mandriva");
-                pkgname.append(".x86_64.rpm");
-                downloadurl.append(pkgname);
+                downloadurl.append(MANDRIVA64);
                 HttpWindow httpWin(downloadurl, distro);
                 httpWin.show();
                 httpWin.exec();
@@ -449,18 +446,14 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		//32bits
 		if (distro == "debian")
 		{
-            pkgname.append("_debian");
-			pkgname.append("_i386.deb");
-			downloadurl.append(pkgname);
+            downloadurl.append(DEBIAN32);
 			HttpWindow httpWin(downloadurl, distro);
 			httpWin.show();
 			httpWin.exec();
 		}
         if (distro == "Ubuntu" || distro == "CaixaMagica")
         {
-            pkgname.append("_ubuntu");
-            pkgname.append("_amd64.deb");
-            downloadurl.append(pkgname);
+            downloadurl.append(UBUNTU32);
             HttpWindow httpWin(downloadurl, distro);
             httpWin.show();
             httpWin.exec();
@@ -468,27 +461,21 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
         }
 		else if (distro == "fedora")
 		{
-            pkgname.append("-fedora");
-			pkgname.append(".i386.rpm");
-			downloadurl.append(pkgname);
+            downloadurl.append(FEDORA32);
 			HttpWindow httpWin(downloadurl, distro);
 			httpWin.show();
 			httpWin.exec();
 		}
 		else if (distro == "suse")
 		{
-                pkgname.append("-suse");
-		    	pkgname.append(".i586.rpm");
-		    	downloadurl.append(pkgname);
+                downloadurl.append(SUSE32);
 		    	HttpWindow httpWin(downloadurl, distro);
 		    	httpWin.show();
 		    	httpWin.exec();
 		}
         else if (distro == "mandriva")
         {
-                pkgname.append("-mandriva");
-                pkgname.append(".i586.rpm");
-                downloadurl.append(pkgname);
+                downloadurl.append(MANDRIVA32);
                 HttpWindow httpWin(downloadurl, distro);
                 httpWin.show();
                 httpWin.exec();
