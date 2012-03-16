@@ -1418,6 +1418,11 @@ class APL_Certif;
 class PTEID_Certificate : public PTEID_Crypto
 {
 public:
+	static const unsigned long CITIZEN_AUTH = 0;
+	static const unsigned long CITIZEN_SIGN = 1;
+	static const unsigned long SUB_CA_SIGN = 2;
+	static const unsigned long SUB_CA_AUTH = 3;
+
 	PTEIDSDK_API virtual ~PTEID_Certificate();			/**< Destructor */
 
 	PTEIDSDK_API const char *getLabel();				/**< Return the label of the certificate */
