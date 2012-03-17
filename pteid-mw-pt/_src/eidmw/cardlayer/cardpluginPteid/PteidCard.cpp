@@ -331,17 +331,44 @@ unsigned long CPteidCard::PinStatus(const tPin & Pin)
 CByteArray CPteidCard::RootCAPubKey(){
 	CByteArray oResp;
 
+
 	try
 	{
-		CByteArray select("3F00",true);
-		oResp = SendAPDU(0xA4, 0x00, 0x0C, select);
-		getSW12(oResp, 0x9000);
+		switch (GetType()){
+		case CARD_PTEID_IAS101:
+		{
+			CByteArray select("3F00",true);
+			oResp = SendAPDU(0xA4, 0x00, 0x0C, select);
+			getSW12(oResp, 0x9000);
 
-		//4D - extended header list, 04 - size, FFA001 - SDO root CA, 80 - give me all?
-		CByteArray getData("4D04FFA00180",true);
-		oResp = SendAPDU(0xCB, 0x3F, 0xFF, getData);
-		getSW12(oResp, 0x9000);
-		oResp.Chop(2); //martinho: remove the returning code 0x9000
+			//4D - extended header list, 04 - size, FFA001 - SDO root CA, 80 - give me all?
+			CByteArray getData("4D04FFA00180",true);
+			oResp = SendAPDU(0xCB, 0x3F, 0xFF, getData);
+			getSW12(oResp, 0x9000);
+			oResp.Chop(2); //martinho: remove the returning code 0x9000
+		}
+		break;
+		case CARD_PTEID_IAS07:
+		{
+			CByteArray getModule("B6038301447F490281008E",true);
+			CByteArray oRespModule = SendAPDU(0xCB, 0x00, 0xFF, getModule);
+			getSW12(oRespModule, 0x9000);
+			oRespModule.Chop(2); //martinho: remove the returning code 0x9000
+
+			CByteArray getExponent("B6038301447F4902820010",true);
+			CByteArray oRespExponent = SendAPDU(0xCB, 0x00, 0xFF, getExponent);
+			getSW12(oRespExponent, 0x9000);
+			oRespExponent.Chop(2); //martinho: remove the returning code 0x9000
+
+			//martinho: hmmm ok..
+			oResp.Append(oRespModule);
+			oResp.Append(oRespExponent);
+		}
+		break;
+		default:
+			throw CMWEXCEPTION(EIDMW_ERR_CARDTYPE_UNKNOWN);
+			break;
+		}
 	}
 	catch(...)
 	{
