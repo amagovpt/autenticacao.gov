@@ -979,6 +979,7 @@ return $jnicall;
 %javaexception("PTEID_Exception") getMRZ2	          		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getMRZ3        	  		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getAccidentalIndications 	JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getPhotoObj				JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_Address
