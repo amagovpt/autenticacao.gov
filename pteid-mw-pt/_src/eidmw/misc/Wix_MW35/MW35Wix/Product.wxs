@@ -4,8 +4,8 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <?include ..\..\..\svn_revision.wxs ?>
 
-  <?define var.OfficialProductVersion =3.5.5?>
-  <?define var.ProductVersion =3.5.$(var.RevisionNumber)?>
+  <?define var.OfficialProductVersion =2.0.0?>
+  <?define var.ProductVersion =2.0.$(var.RevisionNumber)?>
   <?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
   <?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
@@ -39,7 +39,7 @@
                       OnlyDetect="yes"
                       Property="NEWPRODUCTFOUND"
       />
-      <UpgradeVersion Minimum="3.5.0"
+      <UpgradeVersion Minimum="1.0.0"
                       IncludeMinimum="yes"
                       Maximum="$(var.ProductVersion)"
                       IncludeMaximum="no"
@@ -130,6 +130,10 @@
           </Directory>
           <Directory Id="DIRECTORYCACHE" Name=".cache"/>
           <Directory Id="LOGDIR" Name="log"/>
+          <Directory Id="SDK" Name="sdk">
+            <Directory Id="JAVA_SDK" Name="Java"/>
+            <Directory Id="CSHARP_SDK" Name="CSharp"/>
+          </Directory>
         </Directory>
         <Directory Id="FIREFOXROOTFOLDER" Name="Mozilla Firefox">
           <Directory Id="FIREFOXEXTENSIONS" Name="extensions">
@@ -185,6 +189,20 @@
         </CreateFolder>
         <RemoveFile Id="RemoveEidstoreFiles" On="uninstall" Name="*"/>
         <RemoveFolder Id="RemoveEidstoreFolder" On="uninstall"/>
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="JAVA_SDK">
+      <Component Id="Java_SDK_Component" Guid="{8B0D8006-DB84-4986-A8D7-AC5F84F4AEF8}" >
+        <File Id="pteidlibJavaWrapper.dll" Name="pteidlibJava_Wrapper.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteidlibJava_Wrapper.dll" />
+        <File Id="pteidlibJava.jar" Name="pteidlibJava.jar" KeyPath="no" Source="..\..\..\jar\pteidlibJava.jar" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="CSHARP_SDK">
+      <Component Id="CSharp_SDK_Component" Guid="{67F8BF67-A48C-4711-9AB7-CAC056FA6C35}">
+        <File Id="pteidlibCSWrapper.dll" Name="pteidlibCS_Wrapper.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteidlibCS_Wrapper.dll" />
+        <File Id="pteidlibCS.dll" Name="pteidlibCS.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteidlibCS.dll" />
       </Component>
     </DirectoryRef>
 
@@ -428,8 +446,8 @@
       </Component>
 
       <Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
-        <File Id="pteid35gui.exe" Name="pteid35gui.exe" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteid35gui.exe" />
-        <File Id="pteid35libCpp.dll" Name="pteid35libCpp.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid35libCpp.dll" />
+        <File Id="pteidgui.exe" Name="pteidgui.exe" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteidgui.exe" />
+        <File Id="pteidlibCpp.dll" Name="pteidlibCpp.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteidlibCpp.dll" />
       </Component>
 
       <Component Id="GuiLang" Guid="{6B03ED1B-DF24-4CE6-A70C-476AF4C0941B}" SharedDllRefCount="yes">
@@ -484,10 +502,10 @@
     <DirectoryRef Id="SystemFolder">
 
       <Component Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
-        <File Id="pteid35applayer.dll" Name="pteid35applayer.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteid35applayer.dll" />
-        <File Id="pteid35cardlayer.dll" Name="pteid35cardlayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid35cardlayer.dll" />
-        <File Id="pteid35common.dll" Name="pteid35common.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid35common.dll" />
-        <File Id="pteid35DlgsWin32.dll" Name="pteid35DlgsWin32.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid35DlgsWin32.dll" />
+        <File Id="pteidapplayer.dll" Name="pteidapplayer.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteidapplayer.dll" />
+        <File Id="pteidcardlayer.dll" Name="pteidcardlayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteidcardlayer.dll" />
+        <File Id="pteidcommon.dll" Name="pteidcommon.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteidcommon.dll" />
+        <File Id="pteidDlgsWin32.dll" Name="pteidDlgsWin32.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteidDlgsWin32.dll" />
       </Component>
 
       <Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
@@ -633,7 +651,7 @@
 
           <RegistryKey Key="configuretool" Action="createAndRemoveOnUninstall">
             <RegistryValue Type="integer" Name="start_with_windows" Value="1"/>
-            <RegistryValue Type="integer" Name="start_minimized" Value="1"/>
+            <RegistryValue Type="integer" Name="start_minimized" Value="0"/>
             <RegistryValue Type="integer" Name="show_toolbar" Value="1"/>
             <RegistryValue Type="integer" Name="show_picture" Value="0"/>
             <RegistryValue Type="integer" Name="show_notification" Value="1"/>
@@ -645,7 +663,7 @@
 
         <RegistryKey Root="HKLM"
                     Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
-          <RegistryValue  Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteid35gui.exe&quot; /startup"/>
+          <RegistryValue  Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteidgui.exe&quot; /startup"/>
         </RegistryKey>
       </Component>
 
@@ -657,13 +675,13 @@
         <Shortcut Id="PteidGuiStartMenuShortcut"
                   Name="Cartão de Cidadão"
                   Description="!(loc.PteidGuiDescr)"
-                  Target="[APPLICATIONROOTFOLDER]pteid35gui.exe"
+                  Target="[APPLICATIONROOTFOLDER]pteidgui.exe"
                   WorkingDirectory="APPLICATIONROOTFOLDER"/>
         <Shortcut Id="EidViewerShortcut"
                   Name="Cartão de Cidadão"
                   Directory="DesktopFolder"
                   Description="!(loc.PteidGuiDescr)"
-                  Target="[APPLICATIONROOTFOLDER]pteid35gui.exe"
+                  Target="[APPLICATIONROOTFOLDER]pteidgui.exe"
                   WorkingDirectory="APPLICATIONROOTFOLDER"/>
         <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
         <RegistryValue Root="HKCU" Key="SOFTWARE\PTEID\Installer" Name="GuiShortcut" Type="integer" Value="1" KeyPath="yes" />
@@ -744,13 +762,15 @@
                 Description="!(loc.PteidGuiDescr)"
                 Level="1"
                 >
-        <ComponentRef Id="GUI" />
+        <ComponentRef Id="GUI"/>
+        <ComponentRef Id="Qt"/>
         <ComponentRef Id="FreeImage"/>
         <ComponentRef Id="Curl"/>
         <ComponentRef Id="XMLSecurity"/>
         <ComponentRef Id="Cairo"/>
-        <ComponentRef Id="Qt" />
-        <!-- <ComponentRef Id="QtPlugin"/> -->
+        <ComponentRef Id="Java_SDK_Component"/>
+        <ComponentRef Id="CSharp_SDK_Component"/>
+
         <ComponentRef Id="GuiLang" />
         <!-- Shortcuts -->
         <ComponentRef Id="PteidGuiShortcut"/>
@@ -785,7 +805,7 @@
     </Feature>
 
     <CustomAction Id="LaunchApplication"
-                  FileKey="pteid35gui.exe"
+                  FileKey="pteidgui.exe"
                   ExeCommand=""
                   Execute="immediate"
                   Impersonate="yes"
@@ -825,7 +845,7 @@
 
     <CustomAction Id="StopGui35"
               BinaryKey="KILLPROCESS"
-              ExeCommand="pteid35gui.exe"
+              ExeCommand="pteidgui.exe"
               Impersonate="no"
               Return="ignore"
               Execute="deferred"
@@ -833,7 +853,7 @@
     
     <CustomAction Id="StopGui35_Remove"
               BinaryKey="KILLPROCESS"
-              ExeCommand="pteid35gui.exe"
+              ExeCommand="pteidgui.exe"
               Impersonate="no"
               Return="ignore"
               Execute="deferred"
@@ -847,30 +867,6 @@
               Execute="deferred"
                  />
     
-    <CustomAction Id="StopXSign"
-                  BinaryKey="KILLPROCESS"
-                  ExeCommand="xsign.exe"
-                  Impersonate="no"
-                  Return="ignore"
-                  Execute="deferred"
-                 />
-    
-    <CustomAction Id="StopXSign35"
-                  BinaryKey="KILLPROCESS"
-                  ExeCommand="pteid35xsign.exe"
-                  Impersonate="no"
-                  Return="ignore"
-                  Execute="deferred"
-                  />
-
-    <CustomAction Id="StopXSign35_Remove"
-              BinaryKey="KILLPROCESS"
-              ExeCommand="pteid35xsign.exe"
-              Impersonate="no"
-              Return="ignore"
-              Execute="deferred"
-                  />
-
     <Binary Id="KILLPROCESS" SourceFile="..\..\..\misc\Wix_MW35\Kill_Process\Release\Kill_Process.exe"/>
 -->
     <Binary Id="MarkHidden" SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>
