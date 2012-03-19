@@ -1024,6 +1024,7 @@ return $jnicall;
 %javaexception("PTEID_Exception") verifyPin		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") changePin		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getPinRef 	JAVA_CODE_THROW
+%javaexception("PTEID_Exception") unlockPin		JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_Certificates
