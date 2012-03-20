@@ -1062,24 +1062,44 @@ Please specify .xml, .csv or .eid</source>
 <context>
     <name>dlgAbout</name>
     <message>
-        <source>Identity Card: About</source>
-        <translation>Identity Card: About</translation>
+        <source>Portuguese ID Card Management.</source>
+        <translation>Aplicação Oficial do Cartão de Cidadão Português.</translation>
     </message>
     <message>
-        <source>Developed by the Belgian Government</source>
-        <translation>Ontwikkeld door de Belgische overheid</translation>
+        <source>Version 2.0</source>
+        <translation>Versão 2.0</translation>
     </message>
     <message>
-        <source>&amp;OK</source>
-        <translation>&amp;OK</translation>
+        <source>If you have any troubles during the use of this software,</source>
+        <translation>Caso tenha dificuldades na utilização desta aplicação,</translation>
     </message>
     <message>
-        <source>Belgian eID Runtime</source>
-        <translation>Belgische eID Runtime</translation>
+        <source>please check the user manuals and FAQ section in this</source>
+        <translation>por favor consulte os manuais e secção de "Perguntas</translation>
+    </message>
+    <message>
+        <source>site:</source>
+        <translation>Frequentes" (FAQ), no site do cartão de cidadão:</translation>
+    </message>
+    <message utf8="true">
+        <source>Developed by Portuguese Government (Agência para a</source>
+        <translation>Desenvolvido pelo Estado Português (Agência para a</translation>
+    </message>
+    <message>
+        <source>Modernização Administrativa IP e Instituto de Registos</source>
+        <translation>Modernização Administrativa IP e Instituto de Registos</translation>
+    </message>
+    <message>
+        <source>e Notariado IP).</source>
+        <translation>e Notariado IP).</translation>
     </message>
     <message utf8="true">
         <source>Copyright © 2009-2010</source>
         <translation>Copyright © 2009-2010</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Fechar</translation>
     </message>
 </context>
 <context>

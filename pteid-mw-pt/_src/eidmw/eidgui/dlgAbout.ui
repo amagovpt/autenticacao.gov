@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>406</width>
-    <height>436</height>
+    <height>358</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -28,30 +28,17 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>250</y>
-     <width>371</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>O software de Middleware do cartão de cidadão é </string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btnOK">
    <property name="geometry">
     <rect>
      <x>300</x>
-     <y>400</y>
+     <y>320</y>
      <width>85</width>
      <height>27</height>
     </rect>
    </property>
    <property name="text">
-    <string>Fechar</string>
+    <string>Close</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
@@ -64,36 +51,36 @@
     </rect>
    </property>
    <property name="text">
-    <string>Aplicação Oficial do Cartão de Cidadão Português.</string>
+    <string>Portuguese ID Card Management.</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>150</y>
-     <width>361</width>
+     <y>160</y>
+     <width>371</width>
      <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>Caso tenha dificuldades na utilização desta aplicação,</string>
+    <string>If you have any troubles during the use of this software,</string>
    </property>
    <property name="textFormat">
-    <enum>Qt::PlainText</enum>
+    <enum>Qt::AutoText</enum>
    </property>
   </widget>
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>170</y>
+     <y>180</y>
      <width>361</width>
      <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>por favor consulte os manuais e secção de &quot;Perguntas </string>
+    <string>please check the user manuals and FAQ section in this </string>
    </property>
    <property name="textFormat">
     <enum>Qt::PlainText</enum>
@@ -103,13 +90,13 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>190</y>
+     <y>200</y>
      <width>361</width>
      <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>Frequentes&quot; (FAQ), no site do cartão de cidadão:</string>
+    <string>site:</string>
    </property>
    <property name="textFormat">
     <enum>Qt::PlainText</enum>
@@ -151,7 +138,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>210</y>
+     <y>220</y>
      <width>241</width>
      <height>17</height>
     </rect>
@@ -163,75 +150,17 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="label_7">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>270</y>
-     <width>371</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>disponibilizado sob licença EUPL 1.1:</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_8">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>290</y>
-     <width>361</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;a href=&quot;http://ec.europa.eu/idabc/servlets/Doca924.pdf?id=31990&quot;&gt; http://ec.europa.eu/idabc/servlets/Doca924.pdf?id=31990</string>
-   </property>
-   <property name="openExternalLinks">
-    <bool>true</bool>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_9">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>330</y>
+     <y>260</y>
      <width>371</width>
      <height>22</height>
     </rect>
    </property>
    <property name="text">
-    <string>Desenvolvido por Caixa Mágica Software e Mr.Net,</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_10">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>350</y>
-     <width>371</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>com base no projecto belga eID Middleware :</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_11">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>370</y>
-     <width>361</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;a href=&quot;http://code.google.com/p/eid-mw/&quot;&gt; http://code.google.com/p/eid-mw/</string>
-   </property>
-   <property name="openExternalLinks">
-    <bool>true</bool>
+    <string>Developed by Portuguese Government (Agência para a</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_12">
@@ -244,25 +173,35 @@
     </rect>
    </property>
    <property name="text">
-    <string>Versão 2.0</string>
+    <string>Version 2.0</string>
    </property>
   </widget>
-  <zorder>label_2</zorder>
-  <zorder></zorder>
-  <zorder></zorder>
-  <zorder>btnOK</zorder>
-  <zorder>label_3</zorder>
-  <zorder>label_4</zorder>
-  <zorder>label_5</zorder>
-  <zorder>label_6</zorder>
-  <zorder>widget</zorder>
-  <zorder>label</zorder>
-  <zorder>label_7</zorder>
-  <zorder>label_8</zorder>
-  <zorder>label_9</zorder>
-  <zorder>label_10</zorder>
-  <zorder>label_11</zorder>
-  <zorder>label_12</zorder>
+  <widget class="QLabel" name="label_13">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>280</y>
+     <width>371</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Modernização Administrativa IP e Instituto de Registos</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_14">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>300</y>
+     <width>371</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>e Notariado IP).</string>
+   </property>
+  </widget>
  </widget>
  <resources>
   <include location="eidgui.qrc"/>

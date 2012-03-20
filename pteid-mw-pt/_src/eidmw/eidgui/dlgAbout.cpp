@@ -31,7 +31,7 @@ dlgAbout::dlgAbout(QString const& version, QWidget *parent)
 		: QDialog(parent)
 {
 	ui.setupUi(this);
-	setFixedSize(406,436);
+	setFixedSize(406,358);
 }
 
 dlgAbout::~dlgAbout()
