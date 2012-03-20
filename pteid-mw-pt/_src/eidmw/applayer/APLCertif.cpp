@@ -1712,7 +1712,7 @@ X509 *APL_Certif::ExternalCert(int certnr)
 	{
 	case 1:
 #ifdef WIN32
-		contents.append("/eidstore/certs/GTEGlobalRoot.der");
+		contents.append("\\eidstore\\certs\\GTEGlobalRoot.der");
 		if ((werr = fopen_s(&m_stream, contents.c_str(), "rb")) != 0)
 			goto err;
 #else
@@ -1722,7 +1722,7 @@ X509 *APL_Certif::ExternalCert(int certnr)
 		break;
 	case 2:
 #ifdef WIN32
-		contents.append("/eidstore/certs/ECRaizEstado_novo_assinado_GTE.der");
+		contents.append("\\eidstore\\certs\\ECRaizEstado_novo_assinado_GTE.der");
 		if ((werr = fopen_s(&m_stream, contents.c_str(), "rb")) != 0)
 			goto err;
 #else
@@ -1732,7 +1732,7 @@ X509 *APL_Certif::ExternalCert(int certnr)
 		break;
 	case 3:
 #ifdef WIN32
-		contents.append("/eidstore/certs/CartaodeCidadao001.der");
+		contents.append("\\eidstore\\certs\\CartaodeCidadao001.der");
 		if ((werr = fopen_s(&m_stream, contents.c_str(), "rb")) != 0)
 			goto err;
 #else
@@ -1796,14 +1796,14 @@ const char *APL_Certif::ExternalCertSubject(int certnr)
 {
 	//Subject name
 	X509 *cert;
+	const int BUFSIZE = 800;
 
 	if ((cert = ExternalCert(certnr)) == NULL)
 		return NULL;
 
-	char sntemp[800] = {0};
-	char subject[800] = {0};
-	X509_NAME_get_text_by_NID(X509_get_subject_name(cert), NID_commonName, sntemp, sizeof(sntemp));
-	strcat (subject, sntemp);
+	char * subject = (char *)malloc(BUFSIZE*sizeof(unsigned char));
+
+	X509_NAME_get_text_by_NID(X509_get_subject_name(cert), NID_commonName, subject, BUFSIZE);
 
 	return subject;
 }
@@ -1811,15 +1811,15 @@ const char *APL_Certif::ExternalCertSubject(int certnr)
 const char *APL_Certif::ExternalCertIssuer(int certnr)
 {
 	// issuer name
-	char szTemp[800] = {0};
-	char issuer[800] = {0};
+	const int BUFSIZE = 800;
+	char * issuer = (char *)malloc(BUFSIZE*sizeof(unsigned char));
 	X509 *cert;
 
 	if ((cert = ExternalCert(certnr)) == NULL)
 		return NULL;
 
-	X509_NAME_get_text_by_NID(X509_get_issuer_name(cert), NID_commonName, szTemp, sizeof(szTemp));
-	strcat (issuer, szTemp);
+	X509_NAME_get_text_by_NID(X509_get_issuer_name(cert), NID_commonName, issuer, BUFSIZE);
+	
 
 	return issuer;
 }
