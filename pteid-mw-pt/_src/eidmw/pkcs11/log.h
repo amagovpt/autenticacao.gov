@@ -165,6 +165,8 @@ static P11_MAP_TYPE const P11_ATTR_TYPES[]= {
 extern void log_init(char *pszLogFile, unsigned int uiLogLevel);
 extern void log_trace(const char *where, const char *string,... );
 extern void log_xtrace(const char *where, char *string,void *data,int len);
+void _log_xtrace(char *text, void *data, int l_data);
+
 void log_attr(CK_ATTRIBUTE_PTR pAttr);
 void log_template(const char *string, CK_ATTRIBUTE_PTR pTemplate, CK_ULONG count);
 char* log_map_error(int err);
