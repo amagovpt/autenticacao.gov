@@ -1336,8 +1336,8 @@ Please specify .xml, .csv or .eid</source>
         <translation>Assinatura de Ficheiros (XAdES)</translation>
     </message>
     <message>
-        <source>Add Files...</source>
-        <translation>Adicionar Ficheiros...</translation>
+        <source>Add Files</source>
+        <translation>Adicionar Ficheiros</translation>
     </message>
     <message>
         <source>Files to Sign</source>
@@ -1399,16 +1399,20 @@ Please specify .xml, .csv or .eid</source>
         <translation>Validação de Assinatura</translation>
     </message>
     <message>
-        <source>Selecione o ficheiro de Assinaturas a validar:</source>
-        <translation></translation>
+        <source>The success in the signature validation proves the integrity</source>
+        <translation>A validação bem sucedida de uma assinatura digital garante</translation>
+    </message>
+    <message>
+        <source>of it.</source>
+        <translation>a integridade da assinatura.</translation>
     </message>
     <message>
         <source>Close</source>
         <translation>Fechar</translation>
     </message>
     <message>
-        <source>Select Signature File...</source>
-        <translation>Seleccionar Ficheiro Assinado...</translation>
+        <source>Verify signature file</source>
+        <translation>Validar assinatura</translation>
     </message>
     <message>
         <source>Open Signature files</source>
