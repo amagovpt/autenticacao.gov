@@ -80,7 +80,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>please check the user manuals and FAQ section in this </string>
+    <string>please check the user manuals and FAQ section in this</string>
    </property>
    <property name="textFormat">
     <enum>Qt::PlainText</enum>
