@@ -104,7 +104,7 @@
     <Icon Id="eid.ico" SourceFile="..\..\..\eidgui\eid.ico"/>
     
     <Property Id="ARPPRODUCTICON" Value="eid.ico" />
-    <Property Id="ARPURLINFOABOUT" Value="http://eid.portugal.be"/>
+    <Property Id="ARPURLINFOABOUT" Value="http://www.cartaodecidadao.pt"/>
     
     <Property Id="ALLUSERS" Value="1" />
 
