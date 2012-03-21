@@ -45,6 +45,7 @@ AddReg=AddRegDefault32
 CopyFiles=amd64_CopyFiles
 CopyFiles=wow64_CopyFiles
 AddReg=AddRegDefault64
+AddReg=AddRegDefaultWOW64
 Include=umpass.inf
 Needs=UmPass
 
@@ -52,6 +53,7 @@ Needs=UmPass
 CopyFiles=amd64_CopyFiles
 CopyFiles=wow64_CopyFiles
 AddReg=AddRegDefault64
+AddReg=AddRegDefaultWOW64
 Include=umpass.inf
 Needs=UmPass
 
@@ -108,23 +110,21 @@ pteidmdrv32.dll=1
 1 = %MediaDescription%
 
 [amd64_CopyFiles]
-pteidmdrv32.dll 
 pteidmdrv64.dll
 
 [x86_CopyFiles]
-pteidmdrv32.dll
 pteidmdrv32.dll
 
 [wow64_CopyFiles]
 pteidmdrv32.dll
 
-[AddRegDefault32]
+[AddRegDefault32]  
 HKLM, %SmartCardName%,"ATR",0x00000001,3b,95,95,40,ff,d0,00,54,01,30
 HKLM, %SmartCardName%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,fc
 HKLM, %SmartCardName%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
-HKLM, %SmartCardName_1%,"ATR",0x00000001,3B,65,00,00,D0,00,54,01,30
 HKLM, %SmartCardName%,"80000001",0x00000000,"pteidmdrv32.dll"
+HKLM, %SmartCardName_1%,"ATR",0x00000001,3B,65,00,00,D0,00,54,01,30
 HKLM, %SmartCardName_1%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,fc
 HKLM, %SmartCardName_1%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName_1%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
@@ -134,6 +134,11 @@ HKLM, %SmartCardName_2%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff
 HKLM, %SmartCardName_2%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName_2%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
 HKLM, %SmartCardName_2%,"80000001",0x00000000,"pteidmdrv32.dll"
+HKLM, %SmartCardName_3%,"ATR",0x00000001,3B,7D,95,00,00,80,31,80,65,B0,83,11,00,00,83,00
+HKLM, %SmartCardName_3%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,00,00,ff,ff
+HKLM, %SmartCardName_3%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
+HKLM, %SmartCardName_3%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardName_3%,"80000001",0x00000000,"pteidmdrv32.dll"
 
 
 [AddRegDefault64]
@@ -141,8 +146,8 @@ HKLM, %SmartCardName%,"ATR",0x00000001,3b,95,95,40,ff,d0,00,54,01,30
 HKLM, %SmartCardName%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,fc
 HKLM, %SmartCardName%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
-HKLM, %SmartCardName_1%,"ATR",0x00000001,3B,65,00,00,D0,00,54,01,30
 HKLM, %SmartCardName%,"80000001",0x00000000,"pteidmdrv64.dll"
+HKLM, %SmartCardName_1%,"ATR",0x00000001,3B,65,00,00,D0,00,54,01,30
 HKLM, %SmartCardName_1%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,fc
 HKLM, %SmartCardName_1%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName_1%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
@@ -152,6 +157,33 @@ HKLM, %SmartCardName_2%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff
 HKLM, %SmartCardName_2%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName_2%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
 HKLM, %SmartCardName_2%,"80000001",0x00000000,"pteidmdrv64.dll"
+HKLM, %SmartCardName_3%,"ATR",0x00000001,3B,7D,95,00,00,80,31,80,65,B0,83,11,00,00,83,00
+HKLM, %SmartCardName_3%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,00,00,ff,ff
+HKLM, %SmartCardName_3%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
+HKLM, %SmartCardName_3%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardName_3%,"80000001",0x00000000,"pteidmdrv64.dll"
+
+[AddRegDefaultWOW64]
+HKLM, %SmartCardNameWOW64%,"ATR",0x00000001,3b,95,95,40,ff,d0,00,54,01,30
+HKLM, %SmartCardNameWOW64%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,fc
+HKLM, %SmartCardNameWOW64%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
+HKLM, %SmartCardNameWOW64%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardNameWOW64%,"80000001",0x00000000,"pteidmdrv32.dll"
+HKLM, %SmartCardNameWOW64_1%,"ATR",0x00000001,3B,65,00,00,D0,00,54,01,30
+HKLM, %SmartCardNameWOW64_1%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,fc
+HKLM, %SmartCardNameWOW64_1%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
+HKLM, %SmartCardNameWOW64_1%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardNameWOW64_1%,"80000001",0x00000000,"pteidmdrv32.dll"
+HKLM, %SmartCardNameWOW64_2%,"ATR",0x00000001,3B,7D,95,00,00,80,31,80,65,B0,83,11,00,00,83,00,90,00
+HKLM, %SmartCardNameWOW64_2%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,00,00,ff,ff,ff,ff
+HKLM, %SmartCardNameWOW64_2%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
+HKLM, %SmartCardNameWOW64_2%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardNameWOW64_2%,"80000001",0x00000000,"pteidmdrv32.dll"
+HKLM, %SmartCardNameWOW64_3%,"ATR",0x00000001,3B,7D,95,00,00,80,31,80,65,B0,83,11,00,00,83,00
+HKLM, %SmartCardNameWOW64_3%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,00,00,ff,ff
+HKLM, %SmartCardNameWOW64_3%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
+HKLM, %SmartCardNameWOW64_3%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardNameWOW64_3%,"80000001",0x00000000,"pteidmdrv32.dll"
 
 [DestinationDirs]
 amd64_CopyFiles=10,system32
@@ -162,12 +194,17 @@ wow64_CopyFiles=10,syswow64
 ; =================== Generic ==================================
 
 [Strings]
-AMA="Agencia para a Modernização Administrativa"
-MediaDescription="Portuguese eID Smart Card Minidriver Installation Disk"
-FedictCardDeviceName="Portuguese eID Minidriver for Smart Card"
+AMA="Estado Português"
+MediaDescription="Instalação do Minidriver do Cartão de Cidadão Português"
+FedictCardDeviceName="Minidriver do Cartão de Cidadão Português"
 SmartCardName="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS) 1"
 SmartCardName_1="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS) 2"
-SmartCardNameWOW64="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\Pteid"
+SmartCardName_2="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 1"
+SmartCardName_3="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 2"
+SmartCardNameWOW64="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS) 1"
+SmartCardNameWOW64_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS) 2"
+SmartCardNameWOW64_2="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 1"
+SmartCardNameWOW64_3="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 2"
 
-SmartCardName_2="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe)"
+
 
