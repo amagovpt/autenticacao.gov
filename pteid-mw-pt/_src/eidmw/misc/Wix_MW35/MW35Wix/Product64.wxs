@@ -25,7 +25,7 @@
            UpgradeCode="$(var.UpgradeCode)">
 
     <Package Id="$(var.PackageCode)"
-             InstallerVersion="200"
+             InstallerVersion="300"
              Keywords="Portugal e-ID Middleware Installer"
              Platform="x64"
              Manufacturer="Portuguese Government"
@@ -37,9 +37,9 @@
       <UpgradeVersion Minimum="$(var.ProductVersion)"
                       IncludeMinimum="no"
                       OnlyDetect="yes"
-                      Property="NEWPRODUCTFOUND" 
+                      Property="NEWPRODUCTFOUND"
       />
-      <UpgradeVersion Minimum="3.5.0"
+      <UpgradeVersion Minimum="1.0.0"
                       IncludeMinimum="yes"
                       Maximum="$(var.ProductVersion)"
                       IncludeMaximum="no"
