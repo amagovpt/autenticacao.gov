@@ -239,7 +239,9 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation,
 	printf("Debug: GemPcPinpad - PinCmd() called with tPinOperation= %d\n", operation);
 	CByteArray atr = m_poContext->m_oPCSC.GetATR(m_hCard);
 
+#ifdef WIN32 //Can't get this to work on Linux :(
 	rv = loadStrings(m_hCard, ucPinType);
+#endif	
 
 		//For IAS cards we need to VerifyPIN before Modify
 		if (operation == PIN_OP_VERIFY )
