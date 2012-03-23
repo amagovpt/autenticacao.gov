@@ -279,9 +279,14 @@ bad_pin:
 	else
 		throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
 
+	//Wrong PIN with no user interaction: return false and don't ask for retries
+	if (!bRet && !bShowDlg)
+	{
+	    return bRet;
+	}
 	// Bad PIN: show a dialog to ask the user to try again
 	// PIN blocked: show a dialog to tell the user
-	if (bAskPIN && !bRet)
+	else if (bAskPIN && !bRet)
 	{
 		DlgPinUsage usage = PinUsage2Dlg(Pin, pKey);
 		DlgRet dlgret = DlgBadPin(usage, utilStringWiden(Pin.csLabel).c_str(), ulRemaining);
@@ -419,9 +424,14 @@ bad_pin:
 	else
 		throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
 
+	// Wrong PIN with no user interaction: return false and don't ask for retries
+	if (!bRet && !bShowDlg)
+	{
+	    return bRet;
+	}
 	// Bad PIN: show a dialog to ask the user to try again
 	// PIN blocked: show a dialog to tell the user
-	if (bAskPIN && !bRet)
+	else if (bAskPIN && !bRet)
 	{
 		DlgPinUsage usage = PinUsage2Dlg(Pin, pKey);
 		DlgRet dlgret = DlgBadPin(usage, utilStringWiden(Pin.csLabel).c_str(), ulRemaining);
