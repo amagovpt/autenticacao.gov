@@ -26,9 +26,7 @@ contains(PKG_NAME,pteid): SUBDIRS += cardlayer/cardpluginPteid
 SUBDIRS +=	pkcs11 \
 	        applayer \
 	        eidlib \
-		eidlibJava_Wrapper \
-		cardlayer/ppgempc-plugin \
-                cardlayer/acr83-plugin
+		eidlibJava_Wrapper
 
 !isEmpty(BUILD_SDK) {
 SUBDIRS +=  cardlayerTool

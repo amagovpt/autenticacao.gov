@@ -16,71 +16,21 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
 
-**************************************************************************** */
-/*
- * This API should be implemented by libraries (also called
- * plugins) that want to support a pinpad reader for use
- * with the eID middleware.
- *
- * The middleware has support for CCID readers; see the PCSC V2
- * part 10 standard and the USB CCID specifications.
- *
- * However these standards don't specify how to display messages
- * on the reader's display. Because the middleware will show a
- * some explanation on the PC whenever a pinpad operation needs
- * to be done, this restriction is not important for pinpad
- * readers without display.
- *
- * But for readers with display, it is important that the correct
- * message be displayed, as to avoid confusion between the different
- * PINs on the eID card and the fact that the "PIN change command"
- * is used for both PIN change and PIN unblock.
- *
- * In this case, as well as for non-CCID pinpad readers or readers
- * that offer extra functionality, a library (a DLL on Windows, an
- * .so file on Linux and a .dylib file on Mac) can be made that
- * exports the 2 functions below.
- * The middleware will first try to load this library and check if
- * it can be used by mean of the EIDMW_PP_Init() function. If so, then
- * all pinpad functionality will be requested  through this library.
- *
- * To allow the middleware to find the library, it must be placed in
- * the following directory:
- *   - On Linux and Mac OS X: /usr/local/lib/pteidpp
- *   - On Windows: <systemdir>\pteidpp
- *     (<systemdir> is the Windows system folder, usually this is
- *      C:\WINDOWS\system32 on WinXP and Vista)
- * And the name of the library should start with "pteidpp2" on
- * Windows, and with "libpteidpp2" on Linux and Mac.
- *
- * Future, incompatible versions of this library will start with
- * "pteidpp3" etc.
- *
- * Remark: for the middleware for other country, "pteid" should be
- * replace by e.g. "pteid", "ileid", ...
- */
+**************************************************************************** *
+*
+*/
 
-#ifndef __PINPAD2_H__
-#define __PINPAD2_H__
-
-#ifdef  __cplusplus
-extern "C" {
-#endif
-
-#if defined(_WIN32) || defined(WIN32)
-#ifdef EIDMW_PP_IMPORT
-#define EIDMW_PP_API __declspec(dllimport)
-#else
-#define EIDMW_PP_API __declspec(dllexport)
-#endif
-#else
-#define EIDMW_PP_API
-#endif
+#ifndef __PINPAD3_H__
+#define __PINPAD3_H__
 
 #include <winscard.h>
 
-#ifndef WIN32
+#ifndef _WIN32
 #include "wintypes.h"
+#endif
+
+#ifndef CM_IOCTL_GET_FEATURE_REQUEST
+#define CM_IOCTL_GET_FEATURE_REQUEST SCARD_CTL_CODE(3400) //Definition from reader.h in pcsclite
 #endif
 
 #define PTEID_MINOR_VERSION       0
@@ -106,40 +56,6 @@ extern "C" {
 #define PP_LANG_DE   0x0407
 
 
-/**
- * This function is called for a "Get Feature Request" with control = CM_IOCTL_GET_FEATURE_REQUEST
- * (right after a successfull call to EIDMW_PP_Init())
- * and when a pinpad operation (verify, change, unblock) is needed.
- *
- * The following ioctl codes are recognized and used by the middleware
- *  - For PIN verification:
- *       FEATURE_VERIFY_PIN_DIRECT
- *       FEATURE_VERIFY_PIN_START and FEATURE_VERIFY_PIN_FINISH
- *  - For PIN change and unblock:
- *       FEATURE_MODIFY_PIN_DIRECT
- *       FEATURE_MODIFY_PIN_START and FEATURE_MODIFY_PIN_FINISH
- *
- * - The first 7 parameters are identical to the ones given in an SCardControl()
- *     command, as specified in part 10 of the PCSC standard.
- *   In case of a standard CCID pinpad reader without display, this function could
- *     directly 'forward' these parameters to an SCardControl() function.
- * - ucPintype: one of EIDMW_PP_TYPE_AUTH, ..., EIDMW_PP_TYPE_ACTIV; is ignored for
- *     a "Get Feature Request"
- * - ucOperation: one of EIDMW_PP_OP_VERIFY, ..., EIDMW_PP_OP_UNBLOCK_MERGE; is
- *     ignored for a "Get Feature Request"
- * - ulRfu: reserved for future use, set to 0 for this ucMinorVersion
- * - pRfu: reserved for future use, set to NULL for this ucMinorVersion
- *
- * Returns SC_ERROR_SUCCESS upon success, or another (preferably) PCSC error code otherwise.
- */
-EIDMW_PP_API long EIDMW_PP2_Command(
-	SCARDHANDLE hCard, int ioctl,
-	const unsigned char *pucSendbuf, DWORD dwSendlen,
-	unsigned char *pucRecvbuf, DWORD dwRrecvlen, DWORD *pdwRrecvlen,
-	unsigned char ucPintype, unsigned char ucOperation,
-	unsigned long ulRfu, void *pRfu);
-
-
 /////////////////////////////////// CCID things ///////////////////////////////
 // More info:
 // http://www.pcscworkgroup.com/specifications/files/pcsc10_v2.01.6.pdf
@@ -157,24 +73,6 @@ EIDMW_PP_API long EIDMW_PP2_Command(
 #define CCID_CHANGE_START    0x03
 #define CCID_CHANGE_FINISH   0x04
 #define CCID_CHANGE_DIRECT   0x07
-
-/* Big endian encoding to 2 bytes */
-inline void ToUchar2(unsigned long ulIn, unsigned char *pucOut2)
-{
-	pucOut2[0] = (unsigned char) (ulIn % 256);
-	pucOut2[1] = (unsigned char) (ulIn / 256);
-}
-
-/* Big endian encoding to 4 bytes */
-inline void ToUchar4(unsigned long ulIn, unsigned char *pucOut4)
-{
-	pucOut4[0] = (unsigned char) (ulIn % 256);
-	ulIn /= 256;
-	pucOut4[1] = (unsigned char) (ulIn % 256);
-	ulIn /= 256;
-	pucOut4[2] = (unsigned char) (ulIn % 256);
-	pucOut4[3] = (unsigned char) (ulIn / 256);
-}
 
 // The structs below need packing with 1-byte alignment
 #pragma pack(push, pinpad2, 1)
@@ -198,9 +96,9 @@ typedef struct
 	unsigned char wLangId[2]; // LANG_ID code
 	unsigned char bMsgIndex; // Message index (should be 00)
 	unsigned char bTeoPrologue[3]; // T=1 block prologue field to use (fill with 00)
-	unsigned char ulDataLength[4]; // length of the following field
+    unsigned int ulDataLength; // length of the following field
 	unsigned char abData[PP_APDU_MAX_LEN]; // APDU to send to the card (to be completed by the reader)
-} EIDMW_PP_VERIFY_CCID;
+} PP_VERIFY_CCID;
 
 /**
  * Data to be sent during a PIN change
@@ -224,14 +122,11 @@ typedef struct
 	unsigned char bMsgIndex2; // index of 2d prompting message
 	unsigned char bMsgIndex3; // index of 3d prompting message
 	unsigned char bTeoPrologue[3]; // T=1 block prologue field to use (fill with 00)
-	unsigned char ulDataLength[4]; // length of the following field
+        unsigned int ulDataLength; // length of the following field
 	unsigned char abData[PP_APDU_MAX_LEN]; // APDU to send to the card (to be completed by the reader)
-} EIDMW_PP_CHANGE_CCID;
+} PP_CHANGE_CCID;
 
 #pragma pack(pop, pinpad2)
 
-#ifdef  __cplusplus
-}
-#endif
 
 #endif

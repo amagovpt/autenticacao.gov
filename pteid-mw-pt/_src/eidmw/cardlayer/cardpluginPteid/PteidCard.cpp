@@ -49,7 +49,7 @@ unsigned long ulVersion;
 // can't be present because it's the same for all plugins
 #ifndef CARDPLUGIN_IN_CAL
 CCard *GetCardInstance(unsigned long ulVersion, const char *csReader,
-	unsigned long hCard, CContext *poContext, CPinpad *poPinpad)
+	unsigned long hCard, CContext *poContext, GenericPinpad *poPinpad)
 {
 	return PteidCardGetInstance(ulVersion, csReader, hCard, poContext, poPinpad);
 }
@@ -106,7 +106,7 @@ static CByteArray ReadInternalIAS(CPCSC *poPCSC, SCARDHANDLE hCard, unsigned lon
 }
 
 CCard *PTeidCardGetVersion (unsigned long ulVersion, const char *csReader,
-	SCARDHANDLE hCard, CContext *poContext, CPinpad *poPinpad)
+	SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad)
 {
 	CCard *poCard = NULL;
 	bool bIsPtgemCard = false;
@@ -139,7 +139,7 @@ CCard *PTeidCardGetVersion (unsigned long ulVersion, const char *csReader,
 }
 
 CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
-	SCARDHANDLE hCard, CContext *poContext, CPinpad *poPinpad)
+	SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad)
 {
 
 	CCard *poCard = NULL;
@@ -241,7 +241,7 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 }
 
 CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
-		     CPinpad *poPinpad, const CByteArray & oData, tSelectAppletMode selectAppletMode, unsigned long ulVersion) :
+		     GenericPinpad *poPinpad, const CByteArray & oData, tSelectAppletMode selectAppletMode, unsigned long ulVersion) :
 CPkiCard(hCard, poContext, poPinpad)
 {
     switch (ulVersion){

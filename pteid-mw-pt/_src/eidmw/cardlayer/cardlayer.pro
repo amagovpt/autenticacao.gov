@@ -54,8 +54,8 @@ HEADERS += \
            P15Correction.h \
            P15Objects.h \
            PCSC.h \
+           GenericPinpad.h \
            Pinpad.h \
-           PinpadLib.h \
            PKCS15.h \
            PKCS15Parser.h \
            PkiCard.h \
@@ -64,6 +64,8 @@ HEADERS += \
            ThreadPool.h \
            UnknownCard.h \
            pinpad2.h \
+	   GempcPinpad.h \
+	   ACR83Pinpad.h \
            CardReaderInfo.h
 
 SOURCES += \
@@ -75,7 +77,7 @@ SOURCES += \
            Context.cpp \
            PCSC.cpp \
            Pinpad.cpp \
-           PinpadLib.cpp \
+           GenericPinpad.cpp \
            P15Correction.cpp \
            PKCS15.cpp \
            PKCS15Parser.cpp \
@@ -83,6 +85,8 @@ SOURCES += \
            Reader.cpp \
            ReadersInfo.cpp \
            ThreadPool.cpp \
+	   GempcPinpad.cpp \
+	   ACR83Pinpad.cpp \
            UnknownCard.cpp
 
 

@@ -26,7 +26,7 @@ namespace eIDMW
 {
 
 CCard * CardConnect(const std::string &csReader,
-	CContext *poContext, CPinpad *poPinpad,
+	CContext *poContext, GenericPinpad *poPinpad,
 	CDynamicLib &oCardPluginLib);
 
 }

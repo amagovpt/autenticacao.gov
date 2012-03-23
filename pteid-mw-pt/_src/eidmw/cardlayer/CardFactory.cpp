@@ -64,8 +64,8 @@
 #include <vector>
 #include <string>
 
-typedef class eIDMW::CCard * (*GETCARDINSTANCE)(unsigned long,char const*,SCARDHANDLE,class eIDMW::CContext *,class eIDMW::CPinpad *);
-typedef class eIDMW::CCard * (*CONNECTGETCARDINSTANCE)(unsigned long,char const*,class eIDMW::CContext *,class eIDMW::CPinpad *);
+typedef class eIDMW::CCard * (*GETCARDINSTANCE)(unsigned long,char const*,SCARDHANDLE,class eIDMW::CContext *,class eIDMW::GenericPinpad *);
+typedef class eIDMW::CCard * (*CONNECTGETCARDINSTANCE)(unsigned long,char const*,class eIDMW::CContext *,class eIDMW::GenericPinpad *);
 
 namespace eIDMW
 {
@@ -83,15 +83,15 @@ typedef struct {
 static std::vector <tPluginInfo> m_Plugins;
 
 static CCard *GetCardInstance(const char *csReader, SCARDHANDLE hCard,
-	CContext *poContext, CPinpad *poPinpad,
+	CContext *poContext, GenericPinpad *poPinpad,
 	const std::string &csPluginPath, CDynamicLib &oCardPluginLib);
 
 static CCard *ConnectGetCardInstance(const char *csReader,
-	CContext *poContext, CPinpad *poPinpad,
+	CContext *poContext, GenericPinpad *poPinpad,
 	const std::string &csPluginPath, CDynamicLib &oCardPluginLib);
 
 CCard * CardConnect(const std::string &csReader,
-	CContext *poContext, CPinpad *poPinpad, CDynamicLib &oCardPluginLib)
+	CContext *poContext, GenericPinpad *poPinpad, CDynamicLib &oCardPluginLib)
 {
 	CCard *poCard = NULL;
 	long lErrCode = EIDMW_ERR_CHECK; // should never be returned
@@ -197,17 +197,17 @@ done:
 
 #ifdef WIN32
 // Use Dependency Walker (depends.exe) to get these strings
-#define csGetCardInstanceName        "?GetCardInstance@@YAPAVCCard@eIDMW@@KPBDKPAVCContext@2@PAVCPinpad@2@@Z"
-#define csConnectGetCardInstanceName "?ConnectGetCardInstance@@YAPAVCCard@eIDMW@@KPBDPAVCContext@2@PAVCPinpad@2@@Z"
+#define csGetCardInstanceName        "?GetCardInstance@@YAPAVCCard@eIDMW@@KPBDKPAVCContext@2@PAVGenericPinpad@2@@Z"
+#define csConnectGetCardInstanceName "?ConnectGetCardInstance@@YAPAVCCard@eIDMW@@KPBDPAVCContext@2@PAVGenericPinpad@2@@Z"
 
 #else
 // Use nm <dll> to get these strings
-#define csGetCardInstanceName        "_Z15GetCardInstancemPKcmPN5eIDMW8CContextEPNS1_7CPinpadE"
-#define csConnectGetCardInstanceName "_Z22ConnectGetCardInstancemPKcPN5eIDMW8CContextEPNS1_7CPinpadE"
+#define csGetCardInstanceName        "_Z15GetCardInstancemPKcmPN5eIDMW8CContextEPNS1_7GenericPinpadE"
+#define csConnectGetCardInstanceName "_Z22ConnectGetCardInstancemPKcPN5eIDMW8CContextEPNS1_7GenericPinpadE"
 #endif
 
 static CCard *GetCardInstance(const char *csReader, SCARDHANDLE hCard,
-	CContext *poContext, CPinpad *poPinpad,
+	CContext *poContext, GenericPinpad *poPinpad,
 	const std::string &csPluginPath, CDynamicLib &oCardPluginLib)
 {
 	CCard * poCard = NULL;
@@ -242,7 +242,7 @@ static CCard *GetCardInstance(const char *csReader, SCARDHANDLE hCard,
 }
 
 static CCard *ConnectGetCardInstance(const char *csReader,
-	CContext *poContext, CPinpad *poPinpad,
+	CContext *poContext, GenericPinpad *poPinpad,
 	const std::string &csPluginPath, CDynamicLib &oCardPluginLib)
 {
 	CCard * poCard = NULL;

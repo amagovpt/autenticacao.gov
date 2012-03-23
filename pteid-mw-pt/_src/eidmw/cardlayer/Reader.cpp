@@ -71,10 +71,11 @@ CReader::CReader(const std::string & csReader, CContext *poContext) :
 	m_poCard(NULL), m_oPKCS15(poContext)
 {
     m_csReader = csReader;
-	m_wsReader = utilStringWiden(csReader);
+    m_wsReader = utilStringWiden(csReader);
     m_poContext = poContext;
     m_poCard = NULL;
-	m_bIgnoreRemoval = false;
+    m_bIgnoreRemoval = false;
+    m_oPinpad = new CPinpad(m_poContext, m_csReader); 	
 }
 
 CReader::~CReader(void)
@@ -138,7 +139,8 @@ tCardStatus CReader::Status(bool bReconnect)
 	{
 		if (m_poContext->m_oPCSC.Status(m_csReader)){
 			status = Connect() ? CARD_INSERTED : CARD_NOT_PRESENT;
-		}else
+		}
+		else
 			status = CARD_NOT_PRESENT;
 	}
 	else
@@ -181,34 +183,26 @@ static const inline wchar_t * Type2String(tCardType cardType)
 
 bool CReader::Connect()
 {
-    if (m_poCard != NULL)
-        Disconnect(DISCONNECT_LEAVE_CARD);
-	
+	if (m_poCard != NULL)
+		Disconnect(DISCONNECT_LEAVE_CARD);
 
-    m_poCard = CardConnect(m_csReader, m_poContext, &m_oPinpad, m_oCardPluginLib);
+	GenericPinpad specific_pinpad; 
+
+	m_poCard = CardConnect(m_csReader, m_poContext, &specific_pinpad, m_oCardPluginLib);
 	if (m_poCard != NULL)
 	{
-		//printf("We have a new card... a unknown one?!?\n");
 		m_oPKCS15.SetCard(m_poCard);
-#ifdef WIN32
-		/*if((strstr(m_csReader.c_str(), "SPRx32 USB") != NULL))
-		{
-			m_oPinpad.Init(m_poContext, m_poCard->m_hCard,
-				m_csReader, m_poCard->GetPinpadPrefix(), m_poCard->GetIFDVersion());
+		if (m_oPinpad->UsePinpad()){
+			std::cout << "Using Pinpad!!!" << std::endl;
+			m_poCard->setPinpadHandler(m_oPinpad->getPinpadHandler(m_poCard->m_hCard));
+
 		}
-		else
-		{*/
-#endif
-			m_oPinpad.Init(m_poContext, m_poCard->m_hCard,
-				m_csReader, m_poCard->GetPinpadPrefix());
-#ifdef WIN32
-		//}
-#endif
+
 		MWLOG(LEV_INFO, MOD_CAL, L" Connected to %ls card in reader %ls",
-			Type2String(m_poCard->GetType()), m_wsReader.c_str());
+				Type2String(m_poCard->GetType()), m_wsReader.c_str());
 	}
 
-	return m_poCard != 0;
+	return m_poCard != NULL;
 }
 
 void CReader::setSSO(bool value)
@@ -252,12 +246,10 @@ CByteArray CReader::GetATR()
 	return m_poCard->GetATR();
 }
 
+/*TODO: Is this really needed?    */
 bool CReader::IsPinpadReader()
 {
-    if (m_poCard == NULL)
-        throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
-
-    return m_poCard->IsPinpadReader();
+    return m_oPinpad->UsePinpad();
 }
 
 tCardType CReader::GetCardType()

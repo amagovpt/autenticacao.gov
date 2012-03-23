@@ -30,14 +30,14 @@ using namespace eIDMW;
 // can't be present because it's the same for all plugins
 #ifndef CARDPLUGIN_IN_CAL
 EIDMW_CAL_API CCard *GetCardInstance(unsigned long ulVersion, const char *csReader,
-	unsigned long hCard, CContext *poContext, CPinpad *poPinpad);
+	unsigned long hCard, CContext *poContext, GenericPinpad *poPinpad);
 #endif
 
 CCard *PTeidCardGetVersion (unsigned long ulVersion, const char *csReader,
-			    SCARDHANDLE hCard, CContext *poContext, CPinpad *poPinpad);
+			    SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
 
 CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
-	SCARDHANDLE hCard, CContext *poContext, CPinpad *poPinpad);
+	SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
 
 //CCard PteidCardSelectPteid();
 
@@ -55,7 +55,7 @@ typedef enum {
 class CPteidCard : public CPkiCard
 {
 public:
-	CPteidCard(SCARDHANDLE hCard, CContext *poContext, CPinpad *poPinpad,
+	CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad,
 		  const CByteArray & oData, tSelectAppletMode selectAppletMode, unsigned long ulVersion);
     ~CPteidCard(void);
 

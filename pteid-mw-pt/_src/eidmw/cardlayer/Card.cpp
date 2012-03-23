@@ -23,7 +23,7 @@
 namespace eIDMW
 {
 
-CCard::CCard(SCARDHANDLE hCard, CContext *poContext, CPinpad *poPinpad) :
+CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad) :
 	m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad),
 	m_oCache(poContext), m_ulLockCount(0), m_bSerialNrString(false),m_cardType(CARD_UNKNOWN)
 {
@@ -67,11 +67,6 @@ void CCard::setSSO(bool value)
 bool CCard::IsPinpadReader()
 {
 	return false;
-}
-
-std::string CCard::GetPinpadPrefix()
-{
-	return "";
 }
 
 std::string CCard::GetSerialNr()

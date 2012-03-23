@@ -33,7 +33,7 @@
 #include "../common/MWException.h"
 #include "../common/Hash.h"
 #include "../common/Util.h"
-#include "Pinpad.h"
+#include "GenericPinpad.h"
 #include "P15Correction.h"
 #include "../dialogs/dialogs.h"
 namespace eIDMW
@@ -45,12 +45,12 @@ const unsigned long PLUGIN_VERSION = 100;
 class EIDMW_CAL_API CCard
 {
 public:
-	CCard(SCARDHANDLE hCard, CContext *poContext, CPinpad *poPinpad);
+	CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
     virtual ~CCard(void);
 
     /** Find out which card is present and return the appropriate subclass */
     static CCard *Connect(const std::string &csReader,
-		CContext *poContext, CPinpad *poPinpad);
+		CContext *poContext, GenericPinpad *poPinpad);
 
     virtual void Disconnect(tDisconnectMode disconnectMode = DISCONNECT_LEAVE_CARD);
 
@@ -60,7 +60,6 @@ public:
     virtual bool Status();
 
     virtual bool IsPinpadReader();
-	virtual std::string GetPinpadPrefix();
 
     virtual tCardType GetType() = 0;
     virtual std::string GetSerialNr();
@@ -125,6 +124,12 @@ public:
     /* retrieve the correction class for PINs, certificates and private keys */
     virtual CP15Correction* GetP15Correction();
 
+    virtual void setPinpadHandler(GenericPinpad * pinpad)
+    {
+	m_poPinpad = pinpad;
+
+    }
+
     SCARDHANDLE m_hCard;
 
 protected:
@@ -142,7 +147,7 @@ protected:
     virtual unsigned long getSW12(const CByteArray & oRespAPDU, unsigned long ulExpected = 0);
 
 	CContext *m_poContext;
-	CPinpad *m_poPinpad;
+	GenericPinpad *m_poPinpad;
 	CCache m_oCache;
 	tCardType m_cardType;
     unsigned long m_ulLockCount;

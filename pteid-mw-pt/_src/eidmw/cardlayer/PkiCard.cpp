@@ -46,7 +46,7 @@ unsigned char clearbinary[] = { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0
 namespace eIDMW
 {
 
-CPkiCard::CPkiCard(SCARDHANDLE hCard, CContext *poContext, CPinpad *poPinpad) :
+CPkiCard::CPkiCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad) :
 CCard(hCard, poContext, poPinpad)
 {
    	m_ucCLA = 0;
@@ -58,10 +58,6 @@ CPkiCard::~CPkiCard(void)
 {
 }
 
-bool CPkiCard::IsPinpadReader()
-{
-    return m_poPinpad->UsePinpad(PIN_OP_VERIFY);
-}
 
 bool CPkiCard::ShouldSelectApplet(unsigned char ins, unsigned long ulSW12)
 {
@@ -222,7 +218,7 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
 {
 	// No standard for Logoff, so each card has to implement
 	// it's own command here.
-	if (operation == PIN_OP_LOGOFF )
+	if (operation == PIN_OP_LOGOFF)
 		return LogOff(Pin);
 
 	bool bRet = false;
@@ -230,7 +226,8 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
 	const std::string *pcsPin1 = &csPin1;
 	const std::string *pcsPin2 = &csPin2;
 	bool bAskPIN = csPin1.empty();
-	bool bUsePinpad = bAskPIN ? m_poPinpad->UsePinpad(operation) : false;
+	bool bUsePinpad = bAskPIN ? m_poPinpad->m_fully_built == 1 : false;
+;
 
 bad_pin:
     // If no Pin(s) provided and it's no Pinpad reader -> ask Pins
@@ -316,7 +313,7 @@ bool CPkiCard::PinCmdIAS(tPinOperation operation, const tPin & Pin,
 	const std::string *pcsPin1 = &csPin1;
 	const std::string *pcsPin2 = &csPin2;
 	bool bAskPIN = csPin1.empty();
-	bool bUsePinpad = bAskPIN ? m_poPinpad->UsePinpad(operation) : false;
+	bool bUsePinpad = bAskPIN ? m_poPinpad->m_fully_built == 1 : false;
 
 bad_pin:
     // If no Pin(s) provided and it's no Pinpad reader -> ask Pins
@@ -326,6 +323,8 @@ bad_pin:
 		pcsPin1 = &csReadPin1;
 		pcsPin2 = &csReadPin2;
 	}
+    std::cout << "bAskPIN = " << std::boolalpha << bAskPIN << std::endl;        
+    std::cout << "bUsePinpad = " << std::boolalpha << bUsePinpad  << std::endl;
 
     CByteArray oPinBuf = MakePinBuf(Pin, *pcsPin1, bUsePinpad);
     CByteArray oAPDU;
@@ -382,8 +381,19 @@ bad_pin:
 
 		// Send the command
 		if (csPin1.empty() && bUsePinpad) {
-			oResp = m_poPinpad->PinCmd(operation, Pin,
+
+			if (operation == PIN_OP_CHANGE)
+			{
+			oResp = m_poPinpad->PinCmd(PIN_OP_VERIFY, Pin,
 			PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg);
+
+			oResp =	m_poPinpad->PinCmd(operation, Pin,
+				   PinUsage2Pinpad(Pin, pKey), oAPDUCHANGE, ulRemaining, bShowDlg);
+			}
+			else
+			 oResp = m_poPinpad->PinCmd(operation, Pin,
+				PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg);
+
 		} else {
 			switch(operation){
 			case PIN_OP_VERIFY:

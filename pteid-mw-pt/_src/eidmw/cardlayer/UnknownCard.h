@@ -34,7 +34,7 @@ public:
 		CByteArray & oData);
 
 	CUnknownCard(SCARDHANDLE hCard, CContext *poContext,
-		CPinpad *poPinpad, const CByteArray & oData);
+		GenericPinpad *poPinpad, const CByteArray & oData);
     ~CUnknownCard(void);
 
     virtual CByteArray ReadUncachedFile(const std::string & csPath,

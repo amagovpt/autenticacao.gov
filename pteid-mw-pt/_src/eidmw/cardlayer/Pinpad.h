@@ -31,9 +31,9 @@
 #ifndef PINPAD_H
 #define PINPAD_H
 
+#include "GenericPinpad.h"
 #include "P15Objects.h"
 #include "InternalConst.h"
-#include "PinpadLib.h"
 
 namespace eIDMW
 {
@@ -42,66 +42,33 @@ class CContext;
 class EIDMW_CAL_API CPinpad
 {
 public:
-    CPinpad(void);
+    CPinpad(CContext *poContext,
+			 const std::string & csReader);
 
-	void Init(CContext *poContext, SCARDHANDLE hCard,
-		const std::string & csReader, const std::string & csPinpadPrefix);
-	void Init(CContext *poContext, SCARDHANDLE hCard,
-		const std::string & csReader, const std::string & csPinpadPrefix,
-		CByteArray usReaderFirmVers);
-
-    bool UsePinpad(tPinOperation operation);
-
-    CByteArray PinCmd(tPinOperation operation,
-		const tPin & pin, unsigned char ucPinType,
-        const CByteArray & oAPDU, unsigned long & ulRemaining,
-        bool bShowDlg = true);
+    bool UsePinpad();
+    GenericPinpad *getPinpadHandler(SCARDHANDLE hCard);
 
 protected:
 	CByteArray PinpadControl(unsigned long ulControl, const CByteArray & oCmd,
 		tPinOperation operation, unsigned char ucPintype,
 		const std::string & csPinLabel,	bool bShowDlg);
-	void UnloadPinpadLib();
 	void GetFeatureList();
-	unsigned long GetLanguage();
-	unsigned char PinOperation2Lib(tPinOperation operation);
-
-	unsigned char ToFormatString(const tPin & pin);
-	unsigned char ToPinBlockString(const tPin & pin);
-	unsigned char ToPinLengthFormat(const tPin & pin);
-	unsigned char GetMaxPinLen(const tPin & pin);
-
-	// For PIN verify and unblock without PIN change (1 PIN needed)
-    CByteArray PinCmd1(tPinOperation operation,
-	const tPin & pin, unsigned char ucPinType,
-    const CByteArray & oAPDU, unsigned long & ulRemaining,
-    bool bShowDlg = true);
-
-	// For PIN change and unblock with PIN change (2 PINs needed)
-    CByteArray PinCmd2(tPinOperation operation,
-	const tPin & pin, unsigned char ucPinType,
-    const CByteArray & oAPDU, unsigned long & ulRemaining,
-    bool bShowDlg = true);
 
 	CContext *m_poContext;
-    SCARDHANDLE m_hCard;
+    	SCARDHANDLE m_hCard;
 	std::string m_csReader;
-	unsigned short m_usReaderFirmVers;
-	std::string m_csPinpadPrefix;
-	bool m_bNewCard;
-	bool m_bUsePinpadLib;
-	unsigned long m_ulLangCode;
-
-	CPinpadLib m_oPinpadLib;
 
 	bool m_bCanVerifyUnlock;  // Can do operations with 1 PIN
 	bool m_bCanChangeUnlock;  // Can do operations with 2 PINs
+
 	unsigned long m_ioctlVerifyStart;
 	unsigned long m_ioctlVerifyFinish;
 	unsigned long m_ioctlVerifyDirect;
 	unsigned long m_ioctlChangeStart;
 	unsigned long m_ioctlChangeFinish;
 	unsigned long m_ioctlChangeDirect;
+
+	unsigned short m_usReaderFirmVers;
 };
 
 }

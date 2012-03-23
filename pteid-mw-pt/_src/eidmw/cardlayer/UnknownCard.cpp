@@ -30,7 +30,7 @@ bool CUnknownCard::IsUnknownCard(SCARDHANDLE hCard, CContext *poContext,
 }
 
 CUnknownCard::CUnknownCard(SCARDHANDLE hCard, CContext *poContext,
-	CPinpad *poPinpad, const CByteArray & oData) :
+	GenericPinpad *poPinpad, const CByteArray & oData) :
 CCard(hCard, poContext, poPinpad)
 {
 }
