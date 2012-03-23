@@ -210,6 +210,8 @@ CByteArray GenericPinpad::PinCmd2(tPinOperation operation,
 {
 	EIDMW_PP_CHANGE_CCID xChangeCmd;
 	unsigned long ulChangeCmdLen;
+	//Gemsafe and IAS need different parameters for VERIFY control interaction
+	bool includes_verify = oAPDU.Size() == 21; 
 
 	memset(&xChangeCmd, 0, sizeof(xChangeCmd));
 	xChangeCmd.bTimerOut = 30;
@@ -218,12 +220,12 @@ CByteArray GenericPinpad::PinCmd2(tPinOperation operation,
 	xChangeCmd.bmPINBlockString = ToPinBlockString(pin);
 	xChangeCmd.bmPINLengthFormat = ToPinLengthFormat(pin);
 	xChangeCmd.bInsertionOffsetOld = 0x00;
-	xChangeCmd.bInsertionOffsetNew = (unsigned char) pin.ulStoredLen;
+	xChangeCmd.bInsertionOffsetNew = includes_verify? 0x08 : 0x00;
 	xChangeCmd.wPINMaxExtraDigit[0] = GetMaxPinLen(pin);
 	xChangeCmd.wPINMaxExtraDigit[1] = (unsigned char) pin.ulMinLen;
-	xChangeCmd.bConfirmPIN = 0x03;
+	xChangeCmd.bConfirmPIN = includes_verify? 0x03 : 0x01;
 	xChangeCmd.bEntryValidationCondition = 0x02;
-	xChangeCmd.bNumberMessage = 0x03;
+	xChangeCmd.bNumberMessage = includes_verify? 0x03 : 0x02;
 	ToUchar2(m_ulLangCode, xChangeCmd.wLangId);
 	xChangeCmd.bMsgIndex1 = 0x00;
 	xChangeCmd.bMsgIndex2 = 0x01;

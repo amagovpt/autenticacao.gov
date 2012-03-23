@@ -58,6 +58,7 @@
 #include "../common/Log.h"
 #include "../common/Util.h"
 #include "../common/prefix.h"
+#include "../common/DynamicLib.h"
 #ifdef CAL_PTEID
 #include "PteidCard.h"
 #endif
