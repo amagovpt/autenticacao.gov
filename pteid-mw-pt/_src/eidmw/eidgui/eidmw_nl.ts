@@ -1044,8 +1044,8 @@ Please specify .xml, .csv or .eid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>EID Viewer</source>
-        <translation type="unfinished"></translation>
+        <source>Portuguese ID Card Management</source>
+        <translation>Aplicação Oficial do Cartão de Cidadão Português</translation>
     </message>
 </context>
 <context>

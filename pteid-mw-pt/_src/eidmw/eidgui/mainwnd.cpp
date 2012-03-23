@@ -78,7 +78,7 @@ void MainWnd::createTrayMenu()
 	if (!m_pTrayIcon)
 	{
 		m_pTrayIcon = new QSystemTrayIcon( this );
-		m_pTrayIcon->setToolTip(QString(tr("EID Viewer")));
+		m_pTrayIcon->setToolTip(QString(tr("Portuguese ID Card Management")));
 	}
 	m_pTrayIcon->setContextMenu( m_pTrayIconMenu );
 	if (isHidden())
@@ -175,7 +175,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	//SysTray
 	//------------------------------------
 	m_pTrayIcon = new QSystemTrayIcon( this );
-	m_pTrayIcon->setToolTip(QString(tr("EID Viewer")));
+	m_pTrayIcon->setToolTip(QString(tr("Portuguese ID Card Management")));
 	createTrayMenu();
 
 	connect(m_pTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
