@@ -26,6 +26,7 @@ using namespace eIDMW;
 class dlgWndPinpadInfo : public Win32Dialog
 {
 	HBITMAP ImagePIN;
+	HBITMAP ImagePIN_Mask;
 	HFONT TextFont;
 	
 	wchar_t * m_szHeader;

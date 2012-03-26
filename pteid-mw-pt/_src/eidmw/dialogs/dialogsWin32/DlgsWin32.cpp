@@ -135,6 +135,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 				sMessage += L"\n";
 				break;
 			case DLG_PIN_SIGN:
+					
 				sMessage += L"\n\n";
 				if(wcscmp(L"nl",lang1.c_str())==0)
 				{
@@ -145,10 +146,11 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 				sMessage += L" ";
 				if(wcscmp(L"nl",lang1.c_str())==0)
 				{
-					sMessage += (L"Voce está prestes a realizar uma assinatura electrónica legalmente válida com o seu Cartão de Cidadão.");
+					sMessage += (L"Você está prestes a realizar uma assinatura electrónica legalmente válida com o seu Cartão de Cidadão.");
 				}
 				else
 					sMessage += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic);
+				
 				/*sMessage += L"\n";
 				if(wcscmp(L"nl",lang1.c_str())==0)
 				{
@@ -402,10 +404,11 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 					sMessage += L"\n";
 					break;
 				case DLG_PIN_SIGN:
+					/*
 					sMessage = GETSTRING_DLG(Caution);
 					sMessage += L" ";
 					sMessage += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic);
-					sMessage += L"\n";
+					sMessage += L"\n";*/
 					sMessage += GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader);
 					if(wcslen(csReader)!=0)
 					{
@@ -413,6 +416,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 						sMessage += csReader;
 						sMessage += L"\"";
 					}
+					/*
 					sMessage += L", ";
 					sMessage += GETSTRING_DLG(ToContinueOrClickTheCancelButton);
 					sMessage += L"\n\n";
@@ -420,6 +424,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 					sMessage += L" ";
 					sMessage += GETSTRING_DLG(IfYouOnlyWantToLogOnToA);
 					sMessage += L"\n";
+					*/
 					break;
 				default:
 					sMessage = GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader);
