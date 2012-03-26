@@ -226,7 +226,7 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
 	const std::string *pcsPin1 = &csPin1;
 	const std::string *pcsPin2 = &csPin2;
 	bool bAskPIN = csPin1.empty();
-	bool bUsePinpad = bAskPIN ? m_poPinpad->m_fully_built == 1 : false;
+	bool bUsePinpad = bAskPIN ? m_poPinpad != NULL : false;
 ;
 
 bad_pin:
@@ -318,7 +318,7 @@ bool CPkiCard::PinCmdIAS(tPinOperation operation, const tPin & Pin,
 	const std::string *pcsPin1 = &csPin1;
 	const std::string *pcsPin2 = &csPin2;
 	bool bAskPIN = csPin1.empty();
-	bool bUsePinpad = bAskPIN ? m_poPinpad->m_fully_built == 1 : false;
+	bool bUsePinpad = bAskPIN ? m_poPinpad != NULL : false;
 
 bad_pin:
     // If no Pin(s) provided and it's no Pinpad reader -> ask Pins
@@ -328,8 +328,6 @@ bad_pin:
 		pcsPin1 = &csReadPin1;
 		pcsPin2 = &csReadPin2;
 	}
-    std::cout << "bAskPIN = " << std::boolalpha << bAskPIN << std::endl;        
-    std::cout << "bUsePinpad = " << std::boolalpha << bUsePinpad  << std::endl;
 
     CByteArray oPinBuf = MakePinBuf(Pin, *pcsPin1, bUsePinpad);
     CByteArray oAPDU;

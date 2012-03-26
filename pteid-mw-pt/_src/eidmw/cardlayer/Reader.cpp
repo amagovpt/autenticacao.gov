@@ -186,17 +186,18 @@ bool CReader::Connect()
 	if (m_poCard != NULL)
 		Disconnect(DISCONNECT_LEAVE_CARD);
 
-	GenericPinpad specific_pinpad; 
-
-	m_poCard = CardConnect(m_csReader, m_poContext, &specific_pinpad, m_oCardPluginLib);
+	m_poCard = CardConnect(m_csReader, m_poContext, NULL, m_oCardPluginLib);
 	if (m_poCard != NULL)
 	{
 		m_oPKCS15.SetCard(m_poCard);
-		if (m_oPinpad->UsePinpad()){
-			std::cout << "Using Pinpad!!!" << std::endl;
+		if (m_oPinpad->UsePinpad())
+		{
+			std::cout << "Using Pinpad reader." << std::endl;
 			m_poCard->setPinpadHandler(m_oPinpad->getPinpadHandler(m_poCard->m_hCard));
 
 		}
+		else
+			std::cerr << "Using non-pinpad reader." << std::endl;
 
 		MWLOG(LEV_INFO, MOD_CAL, L" Connected to %ls card in reader %ls",
 				Type2String(m_poCard->GetType()), m_wsReader.c_str());

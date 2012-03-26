@@ -42,7 +42,6 @@ public:
     GemPcPinpad(CContext *poContext, SCARDHANDLE hCard,
 		const std::string & csReader): GenericPinpad(poContext, hCard, csReader)
 	{
-		std::cout << "GempcPinpad constructor" << std::endl;
 	};
 
     virtual CByteArray PinCmd(tPinOperation operation,

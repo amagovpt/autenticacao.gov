@@ -47,7 +47,7 @@ class EIDMW_CAL_API GenericPinpad
 {
 public:
    //Warning: This ctor shouldn't be used, it's just a workaround for a convoluted Pinpad detection process
-   GenericPinpad() : m_fully_built(0)
+   GenericPinpad()
    {
 	   m_ulLangCode = 0x0813;
    }

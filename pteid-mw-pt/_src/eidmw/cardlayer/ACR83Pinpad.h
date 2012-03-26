@@ -41,7 +41,6 @@ public:
     ACR83Pinpad(CContext *poContext, SCARDHANDLE hCard,
 		const std::string & csReader): GenericPinpad(poContext, hCard, csReader)
 	{
-		std::cout << "ACR83Pinpad constructor" << std::endl;
 	};
 
     virtual CByteArray PinCmd(tPinOperation operation,

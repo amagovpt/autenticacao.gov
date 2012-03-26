@@ -33,7 +33,7 @@ namespace eIDMW
 	GenericPinpad::GenericPinpad(CContext *poContext, SCARDHANDLE hCard,
 			const std::string & csReader): m_poContext(poContext), m_csReader(csReader), m_hCard(hCard)
 	{
-		m_fully_built = 1;
+		m_ulLangCode = 0x0813;
 		GetFeatureList();
 	};
 	// See par 4.1.11.3 bmFormatString description
