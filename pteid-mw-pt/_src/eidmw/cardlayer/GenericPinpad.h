@@ -34,7 +34,7 @@
 #include "P15Objects.h"
 #include "InternalConst.h"
 
-#include "ByteArray.h"
+#include "../common/ByteArray.h"
 
 #include <winscard.h>
 #include <iostream>
