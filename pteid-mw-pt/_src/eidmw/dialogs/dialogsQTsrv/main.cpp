@@ -745,86 +745,35 @@ pid_t getPidFromParentid(pid_t parentid, const char *CommandLineToFind)
 	pid_t pid = 0;
 	
 	FILE *			pF;
-	char *pPid = NULL;
-	char *pPpid = NULL;
-	char *pCommand = NULL;
+	pid_t pPid;
+	pid_t pPpid;
+	char pCommand[8192];
 	
 	// popen will fork and invoke the ps command and return a stream reference with its result data
-	char buffer[256];
+	char buffer[8192];
+#ifdef __APPLE__
 	const char *psCommand="ps -A -o pid,ppid,command";
+#else
+	const char *psCommand="ps -A -o pid,ppid,command --sort=-etime";
+#endif
+
 	pF = popen(psCommand, "r");		
+
 	if (pF == NULL )
 	{
 		MWLOG(LEV_ERROR, MOD_DLG, L"  getPidFromParentid : popen %s failed", psCommand);
 		return 0;
 	}
-	
-	while(fgets(buffer,sizeof(buffer),pF) != NULL)
-	{
-		// strip trailing '\n' if it exists
-		if(buffer[strlen(buffer)-1] == '\n') 
-		{
-			buffer[strlen(buffer)-1] = 0;
-		}
-		
-		int len = strlen(buffer);
-		
-		pPid = NULL;
-		pPpid = NULL;
-		pCommand = NULL;
-		
-		for(int i=0;i<len-1;i++)
-		{
-			if(i==0 && buffer[i] !=' ')
-			{
-				pPid = &buffer[i];
-			}
-			else if(buffer[i]==' ' && buffer[i+1] !=' ')
-			{
-				if(pPid == NULL)
-				{
-					pPid = &buffer[i+1];
-				}
-				else if(pPpid == NULL)
-				{
-					pPpid = &buffer[i+1];
-				}
-				else
-				{
-					pCommand = &buffer[i+1];
-					break;
-				}
-			}
-		}
-		
-		if(pCommand == NULL)
-		{
-			MWLOG(LEV_ERROR, MOD_DLG, L"  getPidFromParentid : bad output format");
-			return 0;
-		}
-	
-		if(parentid == atol(pPpid))
-		{
-			if(pCommand == NULL)
-			{
-				pid=atol(pPid);
-				MWLOG(LEV_DEBUG, MOD_DLG, L"  getPidFromParentid :found pid=%ld", pid);
-				break;
-			}
-			else 
-			{
-				if(0 == strcmp(pCommand,CommandLineToFind))
-				{	
-					pid=atol(pPid);
-					MWLOG(LEV_DEBUG, MOD_DLG, L"  getPidFromParentid :found pid=%ld", pid);
-					break;
-				}
-			}
+	while(fgets(buffer,sizeof(buffer),pF) != NULL){
+		sscanf(buffer,"%ld %ld %[^\n]\n",&pPid,&pPpid,pCommand);
+		if(0 == strcmp(pCommand,CommandLineToFind)){
+			pid=pPid;
+			MWLOG(LEV_DEBUG, MOD_DLG, L"  getPidFromParentid :found pid=%ld", pid);
+			break;
 		}
 	}
 
 	// Close the stream
 	pclose (pF);
-			
 	return pid;
 }
