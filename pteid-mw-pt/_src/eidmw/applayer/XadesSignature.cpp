@@ -324,7 +324,7 @@ namespace eIDMW
 	 at http://ts.cartaodecidadao.pt/tsaclient/validate.html */
 	#define TSA_VALIDATE_URL "http://ts.cartaodecidadao.pt/tsaclient/validate.html"
 
-	void XadesSignature::do_post_validate_timestamp(char *input, unsigned int input_len, char *sha1_string)
+	void XadesSignature::do_post_validate_timestamp(char *input, long input_len, char *sha1_string)
 	{
 
 		CURL *curl;
@@ -699,7 +699,7 @@ bool XadesSignature::ValidateTimestamp (CByteArray signature, CByteArray ts_resp
 
 	//std::cerr << "POST Parameter (hash): " << sha1_string << std::endl; 
 	
-	do_post_validate_timestamp((char *)ts_resp.GetBytes(), ts_resp.Size(), sha1_string);
+	do_post_validate_timestamp((char *)ts_resp.GetBytes(), (long)ts_resp.Size(), sha1_string);
 
 	if (mp_validate_data.Size() == 0)
 	{

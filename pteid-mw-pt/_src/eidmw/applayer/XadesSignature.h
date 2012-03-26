@@ -75,7 +75,7 @@ namespace eIDMW
 
 		static CByteArray mp_timestamp_data;
 		static CByteArray mp_validate_data;
-		static void do_post_validate_timestamp(char *input, unsigned int input_len, char *sha1_string);
+		static void do_post_validate_timestamp(char *input, long input_len, char *sha1_string);
 
 		private:
 		
