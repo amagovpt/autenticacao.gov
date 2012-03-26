@@ -53,7 +53,7 @@ isEmpty(EMULATE_CARDLAYER) {
 LIBS +=	-l$${DLGLIB}
 unix:!macx:LIBS += -Wl,-R,"'\$\$ORIGIN/$${LINK_RELATIVE_PATH}'"
 
-INCLUDEPATH += .  $${PCSC_INCLUDE_DIR}
+INCLUDEPATH += .  $${PCSC_INCLUDE_DIR} ../common
 
 # Input
 HEADERS += 
