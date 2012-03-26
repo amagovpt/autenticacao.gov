@@ -64,7 +64,7 @@
        <property name="styleSheet">
         <string notr="true">background-image: url(:/images/Images/Page_background_Identity.png);</string>
        </property>
-       <widget class="QLineEdit" name="txtIdentity_GivenNames">
+       <widget class="QLineEdit" name="txtIdentity_Name">
         <property name="geometry">
          <rect>
           <x>23</x>
@@ -89,12 +89,12 @@
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtIdentity_Name">
+       <widget class="QLineEdit" name="txtIdentity_GivenNames">
         <property name="geometry">
          <rect>
           <x>23</x>
           <y>40</y>
-          <width>197</width>
+          <width>376</width>
           <height>20</height>
          </rect>
         </property>
