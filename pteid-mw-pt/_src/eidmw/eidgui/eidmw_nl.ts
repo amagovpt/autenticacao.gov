@@ -488,10 +488,6 @@
         <translation>Género / &lt;i&gt;Sex&lt;/i&gt; </translation>
     </message>
     <message>
-        <source>Belgian EID Middleware</source>
-        <translation type="unfinished">Belgian EID Middleware</translation>
-    </message>
-    <message>
         <source>The Root Certificate is not correct.
 This may be a test card.
 
@@ -827,39 +823,35 @@ Please specify .xml, .csv or .eid</source>
     </message>
     <message>
         <source>Error writing file</source>
-        <translation>Fout bij het schrijven van bestand</translation>
+        <translation>Erro durante a escrita do ficheiro</translation>
     </message>
     <message>
         <source>Version</source>
-        <translation>Versie</translation>
+        <translation>Versão</translation>
     </message>
     <message>
-        <source>eID is still running</source>
-        <translation type="unfinished">A aplicação continua em execução</translation>
+        <source>Portuguese ID Card Management is still running</source>
+        <translation>A aplicação continua em execução</translation>
     </message>
     <message>
         <source>The application will continue to run. To stop this application, select &apos;Exit&apos; from the menu.</source>
-        <translation type="unfinished">Para fechar a aplicação selecione a opção sair.</translation>
+        <translation>Para fechar a aplicação selecione a opção sair.</translation>
     </message>
     <message>
         <source>Card changed</source>
-        <translation type="unfinished">Kaart gewijzigd</translation>
+        <translation>Cartão alterado</translation>
     </message>
     <message>
         <source>Readers changed</source>
-        <translation type="unfinished">Leitor de cartões alterado</translation>
+        <translation>Leitor de cartões alterado</translation>
     </message>
     <message>
         <source>Bad transaction</source>
-        <translation type="unfinished">Bad transaction</translation>
-    </message>
-    <message>
-        <source>eID bin Files (*.eid);;eID XML files (*.xml);;eID CSV files (*.csv);;all files (*.*)</source>
-        <translation>eID bin bestanden (*.eid);;eID XML bestanden (*.xml);;eID CSV bestanden (*.csv);;alle bestanden (*.*)</translation>
+        <translation>Bad transaction</translation>
     </message>
     <message>
         <source>Number of tries left: </source>
-        <translation type="unfinished">Aantal pogingen over: </translation>
+        <translation>Número de tentativas restantes: </translation>
     </message>
     <message>
         <source>Checking card readers</source>
@@ -1148,7 +1140,7 @@ Please specify .xml, .csv or .eid</source>
         <translation>Arranque</translation>
     </message>
     <message>
-        <source>Determins whether the application should start reading the card from the moment it&apos;s detected in the cardreader or not</source>
+        <source>determins whether the application should start reading the card from the moment it's detected in the cardreader or not</source>
         <translation>Determina se a aplicação deve começar a ler o cartão logo que é detectada a sua inserção</translation>
     </message>
     <message>

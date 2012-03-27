@@ -679,7 +679,7 @@ void MainWnd::closeEvent( QCloseEvent *event)
 		hide();
 		if(m_ShowBalloon)
 		{
-			QString title(tr("eID is still running"));
+			QString title(tr("Portuguese ID Card Management is still running"));
 			QString message(tr("The application will continue to run. To stop this application, select 'Exit' from the menu."));
 			m_pTrayIcon->showMessage ( title, message, QSystemTrayIcon::Information) ;
 			m_ShowBalloon = false;
@@ -1654,7 +1654,7 @@ bool MainWnd::askAllowTestCard( void )
 		return false;
 	}
 	bool    bAllowTestCard = false;
-	QString strCaption     = tr("Belgian EID Middleware");
+	QString strCaption     = tr("Portuguese ID Card Management");
 	QString strMessage     = tr("The Root Certificate is not correct.\nThis may be a test card.\n\nDo you want to accept it?");
 
 	if (QMessageBox::Yes == QMessageBox::warning(this,strCaption,strMessage,QMessageBox::Yes|QMessageBox::No))
