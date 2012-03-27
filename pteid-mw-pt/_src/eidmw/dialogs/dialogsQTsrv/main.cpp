@@ -769,7 +769,6 @@ pid_t getPidFromParentid(pid_t parentid, const char *CommandLineToFind)
 		if(0 == strcmp(pCommand,CommandLineToFind)){
 			pid=pPid;
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  getPidFromParentid :found pid=%ld", pid);
-			break;
 		}
 	}
 
