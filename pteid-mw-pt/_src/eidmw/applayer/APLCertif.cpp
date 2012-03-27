@@ -1668,9 +1668,9 @@ const char *APL_Certif::x509TimeConversion (ASN1_TIME *atime)
     struct tm r;
     int cnt;
     time_t res;
-    char to_buf[256];
-    unsigned buf_size = sizeof(to_buf);
-
+	const unsigned int buf_size = 256;
+    char *to_buf = (char *)malloc(buf_size);
+    
     ASN1_GENERALIZEDTIME* agtime;
         
     agtime = ASN1_TIME_to_generalizedtime(atime, NULL);
