@@ -37,7 +37,7 @@ static const unsigned long PTEIDNG_ACTIVATION_CODE_ID = 4;
 /* martinho - ANY_ID_BIGGER_THAN_6 will be the ulID in the tPin struct 1-6 are already taken */
 static const unsigned long ANY_ID_BIGGER_THAN_6 = 7;
 /* martinho - some meaningful label */
-static const string LABEL = "ACTIVATION_CODE";
+static const string LABEL = "Card Activation Code";
 /* martinho - date in bcd format must have 4 bytes*/
 static const unsigned long BCDSIZE = 4;
 /* martinho - trace file*/
@@ -380,8 +380,21 @@ CByteArray CPteidCard::RootCAPubKey(){
 
 
 bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate){
+	unsigned char padChar;
+
+	switch (GetType()){
+		case CARD_PTEID_IAS101:
+			padChar = 0x2F;
+			break;
+		case CARD_PTEID_IAS07:
+			padChar = 0xFF;
+			break;
+		default:
+			throw CMWEXCEPTION(EIDMW_ERR_CARDTYPE_UNKNOWN);
+	}
+
 	/* the activation code is not listed in the internal card structures */
-	tPin activationPin = {true,LABEL,0,0,0,ANY_ID_BIGGER_THAN_6,0,0,8,8,8,PTEIDNG_ACTIVATION_CODE_ID,0x20,PIN_ENC_ASCII,"",""};
+	tPin activationPin = {true,LABEL,0,0,0,ANY_ID_BIGGER_THAN_6,0,0,4,8,8,PTEIDNG_ACTIVATION_CODE_ID,padChar,PIN_ENC_ASCII,"",""};
 	unsigned long ulRemaining;
 
 	bool bOK = PinCmd(PIN_OP_VERIFY, activationPin, pinCode, "", ulRemaining, NULL);
@@ -397,6 +410,8 @@ bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate){
 	data.Append(1); // data = day month year 0 1   -- 6 bytes written to 3F000003 trace file
 
 	WriteFile(TRACEFILE,0,data);
+	while (ulRemaining > 0) // block puk
+		PinCmd(PIN_OP_VERIFY, activationPin, "1000", "", ulRemaining, NULL);
 
 	return true;
 }
