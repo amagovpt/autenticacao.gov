@@ -33,7 +33,7 @@
 #endif
 
 std::string urli;
-std::string dtitle ("Cartão de Cidadão");
+//std::string dtitle ("Cartão de Cidadão");
 std::string getdistro;
 QString fileName;
 
@@ -43,11 +43,11 @@ HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
     urli = uri;
     getdistro = distro;
 
-    statusLabel = new QLabel(tr("There are updates available press Yes do perform the updates."));
+    statusLabel = new QLabel(tr("There are updates available press Install do perform the updates."));
 
     cancelButton = new QPushButton(tr("Cancel"));
     cancelButton->setDefault(true);
-    downloadButton = new QPushButton(tr("Yes"));
+    downloadButton = new QPushButton(tr("Install"));
     downloadButton->setAutoDefault(false);
 
 
@@ -74,7 +74,10 @@ HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
     mainLayout->addWidget(buttonBox);
     setLayout(mainLayout);
 
-    setWindowTitle(QString::fromUtf8(dtitle.c_str()));
+    setWindowTitle(tr("Auto-Update"));
+
+    //statusLabel = new QLabel(tr("There are updates available press Install do perform the updates."));
+
 }
 
 HttpWindow::~HttpWindow()
@@ -129,7 +132,7 @@ void HttpWindow::downloadFile()
 	fileName = fileInfo.fileName();
 	if (fileName.isEmpty())
 	{
-		QMessageBox::information(this, QString::fromUtf8(dtitle.c_str()),
+		QMessageBox::information(this, tr("Auto-Update"),
 				tr("Unable to download the update please check your Network Connection.")
 		.arg(fileName).arg(file->errorString()));
 	}
@@ -152,7 +155,7 @@ void HttpWindow::downloadFile()
 
 	file = new QFile(QString::fromUtf8((tmpfile.c_str())));
 	if (!file->open(QIODevice::WriteOnly)) {
-		QMessageBox::information(this, QString::fromUtf8(dtitle.c_str()),
+		QMessageBox::information(this, tr("Auto-Update"),
 				tr("Unable to save the file %1: %2.")
 		.arg(fileName).arg(file->errorString()));
 		delete file;
@@ -160,7 +163,7 @@ void HttpWindow::downloadFile()
 		return;
 	}
 
-	progressDialog->setWindowTitle(QString::fromUtf8(dtitle.c_str()));
+	progressDialog->setWindowTitle(tr("Auto-Update"));
 	progressDialog->setLabelText(tr("Downloading %1.").arg(fileName));
 	downloadButton->setEnabled(false);
 
@@ -201,7 +204,7 @@ void HttpWindow::httpFinished()
     if (reply->error())
     {
         file->remove();
-        QMessageBox::information(this, QString::fromUtf8(dtitle.c_str()),
+        QMessageBox::information(this, tr("Auto-Update"),
                                  tr("Download failed: %1.")
                                  .arg(reply->errorString()));
         downloadButton->setEnabled(true);
@@ -211,7 +214,7 @@ void HttpWindow::httpFinished()
     {
         QUrl newUrl = url.resolved(redirectionTarget.toUrl());
 
-        if (QMessageBox::question(this, QString::fromUtf8(dtitle.c_str()),
+        if (QMessageBox::question(this, tr("Auto-Update"),
                                   tr("Redirect to %1 ?").arg(newUrl.toString()),
                                   QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
         {

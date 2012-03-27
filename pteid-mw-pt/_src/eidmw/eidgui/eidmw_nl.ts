@@ -1049,10 +1049,45 @@ Please specify .xml, .csv or .eid</source>
     </message>
 </context>
 <context>
-    <name>Updates</name>
+	<name>HttpWindow</name>
+	<message>
+        <source>Auto-Update</source>
+        <translation>Actualização automática</translation>
+    </message>
+	<message>
+        <source>There are updates available press Install do perform the updates.</source>
+        <translation>Existem Actualizações Disponíves. Clique em Instalar para prosseguir.</translation>
+    </message>
+    <message>
+        <source>Unable to download the update please check your Network Connection.</source>
+        <translation>Impossível transferir o ficheiro. Verifique a sua ligação à internet.</translation>
+    </message>
+    <message>
+        <source>Download failed: %1.</source>
+        <translation>A Transferência falhou: %1.</translation>
+    </message>
+    <message>
+        <source>Downloading %1.</source>
+        <translation>A transferir %1.</translation>
+    </message>
+    <message>
+        <source>Install</source>
+        <translation>Instalar</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancelar</translation>
+    </message>
+</context>
+<context>
+    <name>AutoUpdates</name>
     <message>
         <source>Auto-update</source>
         <translation>Actualizações Automáticas</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation>Sim</translation>
     </message>
     <message>
         <source>Do you want to check for updates?</source>
