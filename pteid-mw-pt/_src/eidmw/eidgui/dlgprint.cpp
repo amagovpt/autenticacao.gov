@@ -319,6 +319,12 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
                             QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
                             return false;
                     }
+					else
+					{
+					
+							CI_Data.LoadDataAddress(Card, m_CurrReaderName);
+				
+					}
                     QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
                     break;
                 }
