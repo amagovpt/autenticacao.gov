@@ -173,7 +173,7 @@
       <Directory Id="WindowsFolder"/>
 
       <Directory Id="SystemFolder">
-        <Directory Id="PTEIDPPDIR" Name="pteidpp"/>
+        <!-- <Directory Id="PTEIDPPDIR" Name="pteidpp"/> -->
       </Directory>
 
 
@@ -548,13 +548,14 @@
 	  
     <Binary Id="PTeIDWin32CertificateImport" SourceFile="..\..\..\_Binaries35\Release\PTeIDWin32CertificateImport.exe" />
 
-
+    <!--
     <DirectoryRef Id="PTEIDPPDIR">
       <Component Id="PinpadLib" Guid="{9ADA6D75-5DCC-467E-A0CE-B84A482B2115}" SharedDllRefCount="yes">
         <File Id="pteidpp2gempc.dll" Name="pteidpp2-gempc.dll" Source="..\..\..\_Binaries35\Release\pteidpp2-gempc.dll" />
         <File Id="pteidpp2acr83plugin.dll" Name="pteidpp2-acr83-plugin.dll" Source="..\..\..\_Binaries35\Release\pteidpp2-acr83-plugin.dll" />
       </Component>
     </DirectoryRef>
+    -->
 
     <DirectoryRef Id="TARGETDIR">
       <Component Id="SCardSvrService" Guid="{C3BC9746-0843-41b2-BDDA-3192772974CE}" Permanent="yes">
@@ -749,7 +750,7 @@
       <!-- <ComponentRef Id="BWPinpad"/> -->
 
       <!-- Pteid pinpad dir-->
-      <ComponentRef Id="PinpadLib"/>
+      <!-- <ComponentRef Id="PinpadLib"/> -->
 
       <!-- Windows -->
       <ComponentRef Id="pteidgui.conf"/>
