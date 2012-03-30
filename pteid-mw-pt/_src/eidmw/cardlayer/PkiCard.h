@@ -95,7 +95,7 @@ protected:
 
     virtual CByteArray MakePinCmd(tPinOperation operation, const tPin & Pin);
     virtual CByteArray MakePinCmdIAS(tPinOperation operation, const tPin & Pin);
-    virtual CByteArray MakePinBuf(const tPin & Pin, const std::string & csPin, bool bEmptyPin);
+    virtual CByteArray MakePinBuf(const tPin & Pin, const std::string & csPin, bool bEmptyPin, bool bPukMerge);
 
     virtual void SetSecurityEnv(const tPrivKey & key, unsigned long algo,
         unsigned long ulInputLen) = 0;
