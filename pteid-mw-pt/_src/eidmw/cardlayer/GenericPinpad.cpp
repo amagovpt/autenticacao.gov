@@ -147,6 +147,7 @@ CByteArray GenericPinpad::PinCmd(tPinOperation operation,
 	  return EIDMW_ERR_UNKNOWN; // should never happen
 	}
 
+	/* moved to PkiCard
 	const unsigned char *pucSW12 = oResp.GetBytes();
 	if (pucSW12[0] == 0x64 && pucSW12[1] == 0x00)
 		throw CMWEXCEPTION(EIDMW_ERR_TIMEOUT);
@@ -156,9 +157,11 @@ CByteArray GenericPinpad::PinCmd(tPinOperation operation,
 		throw CMWEXCEPTION(EIDMW_NEW_PINS_DIFFER);
 	if (pucSW12[0] == 0x64 && pucSW12[1] == 0x03)
 		throw CMWEXCEPTION(EIDMW_WRONG_PIN_FORMAT);
-	if (pucSW12[0] == 0x6B && pucSW12[1] == 0x80)
+	if (pucSW12[0] == 0x6B && pucSW12[1] == 0x80){
 		throw CMWEXCEPTION(EIDMW_PINPAD_ERR);
 
+	}
+	*/
 	return oResp;
 }
 
@@ -297,6 +300,12 @@ CByteArray GenericPinpad::PinpadControl(unsigned long ulControl, const CByteArra
 	try
 	{
 			oResp = m_poContext->m_oPCSC.Control(m_hCard, ulControl, oCmd);
+
+			// give some time for the dialog process to fork() (it was killing too fast :-) )
+			unsigned long ulSW12 = 256 * oResp.GetByte(oResp.Size() - 2) + oResp.GetByte(oResp.Size() - 1);
+			if (ulSW12 == 0x6B80)
+				CThread::SleepMillisecs(500);
+
 	}
 	catch (...)
 	{
@@ -364,6 +373,7 @@ unsigned char GenericPinpad::PinOperation2Lib(tPinOperation operation)
 	{
 	case PIN_OP_VERIFY: return EIDMW_PP_OP_VERIFY;
 	case PIN_OP_CHANGE: return EIDMW_PP_OP_CHANGE;
+	case PIN_OP_RESET:	return EIDMW_PP_OP_CHANGE;
 	// Add others when needed
 	default: throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	}

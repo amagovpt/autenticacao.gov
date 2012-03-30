@@ -387,15 +387,17 @@ bad_pin:
 
 			if (operation == PIN_OP_CHANGE)
 			{
-			oResp = m_poPinpad->PinCmd(PIN_OP_VERIFY, Pin,
-			PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg);
+				oResp = m_poPinpad->PinCmd(PIN_OP_VERIFY, Pin,
+						PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg);
 
-			oResp =	m_poPinpad->PinCmd(operation, Pin,
-				   PinUsage2Pinpad(Pin, pKey), oAPDUCHANGE, ulRemaining, bShowDlg);
+				unsigned long ulSW12 = getSW12(oResp);
+				if (ulSW12 == 0x9000)
+					oResp =	m_poPinpad->PinCmd(operation, Pin,
+							PinUsage2Pinpad(Pin, pKey), oAPDUCHANGE, ulRemaining, bShowDlg);
 			}
 			else
-			 oResp = m_poPinpad->PinCmd(operation, Pin,
-				PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg);
+				oResp = m_poPinpad->PinCmd(operation, Pin,
+						PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg);
 
 		} else {
 			switch(operation){
@@ -405,7 +407,10 @@ bad_pin:
 				break;
 			case PIN_OP_CHANGE:
 				oResp = SendAPDU(oAPDU);
-				oResp = SendAPDU(oAPDUCHANGE);
+
+				unsigned long ulSW12 = getSW12(oResp);
+				if (ulSW12 == 0x9000)
+					oResp = SendAPDU(oAPDUCHANGE);
 				break;
 			}
 		}

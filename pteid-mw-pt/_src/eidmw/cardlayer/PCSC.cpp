@@ -504,11 +504,16 @@ long CPCSC::SW12ToErr(unsigned long ulSW12)
 	switch (ulSW12)
 	{
 	case 0x9000: lRet = EIDMW_OK; break;
+	case 0x6400: lRet = EIDMW_ERR_TIMEOUT; break;
+	case 0x6401: lRet = EIDMW_ERR_PIN_CANCEL; break;
+	case 0x6402: lRet = EIDMW_NEW_PINS_DIFFER; break;
+	case 0x6403: lRet = EIDMW_WRONG_PIN_FORMAT; break;
 	case 0x6982: lRet = EIDMW_ERR_NOT_AUTHENTICATED; break;
 	case 0x6B00: lRet = EIDMW_ERR_BAD_P1P2; break;
 	case 0x6A86: lRet = EIDMW_ERR_BAD_P1P2; break;
 	case 0x6986: lRet = EIDMW_ERR_CMD_NOT_ALLOWED; break;
 	case 0x6A82: lRet = EIDMW_ERR_FILE_NOT_FOUND; break;
+	case 0x6B80: lRet = EIDMW_PINPAD_ERR; break;
 	}
 
 	return lRet;

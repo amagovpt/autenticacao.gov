@@ -92,6 +92,11 @@ PTEID_Exception PTEID_Exception::THROWException(CMWException &e)
 		throw PTEID_ExSOD(e.GetError());
 
 	case EIDMW_ERR_CARD:
+	case EIDMW_ERR_TIMEOUT:
+	case EIDMW_ERR_PIN_CANCEL:
+	case EIDMW_NEW_PINS_DIFFER:
+	case EIDMW_WRONG_PIN_FORMAT:
+	case EIDMW_PINPAD_ERR:
 	default:
 		throw PTEID_Exception(e.GetError());
 	}

@@ -690,57 +690,21 @@ const CByteArray &APL_Pin::getSignature()
 
 bool APL_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg)
 {
-	try
-	{
-		if(!m_card->isVirtualCard())
-			return m_card->pinCmd(PIN_OP_VERIFY,m_pinP15,csPin,"",ulRemaining,bShowDlg);
-		else
-			return false;
-	}
-	catch(CMWException &e)
-	{
-		unsigned long err = e.GetError();	// avoid warning
-		err = err;
-		/*EIDMW_ERR_PIN_CANCEL
-		EIDMW_PINPAD_ERR
-		EIDMW_ERR_TIMEOUT
-		EIDMW_NEW_PINS_DIFFER*/
 
+	if(!m_card->isVirtualCard())
+		return m_card->pinCmd(PIN_OP_VERIFY,m_pinP15,csPin,"",ulRemaining,bShowDlg);
+	else
 		return false;
-	}
+
 }
 
 bool APL_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg)
 {
-	std::string CurrPinName = PinName;
 
-	/*if (CurrPinName == "PIN da Autenticação")
-	{
-	    	//Get EMV-CAP parameters
-	    	EMVCapHelper *n = new EMVCapHelper(m_card);
-	    	n->GetArqc();
-		}*/
-
-
-
-	try
-	{
-		if(!m_card->isVirtualCard())
-			return m_card->pinCmd(PIN_OP_CHANGE,m_pinP15,csPin1,csPin2,ulRemaining, bShowDlg);
-		else
-			return false;
-	}
-	catch(CMWException &e)
-	{
-		unsigned long err = e.GetError();	// avoid warning
-		err = err;
-		/*EIDMW_ERR_PIN_CANCEL
-		EIDMW_PINPAD_ERR
-		EIDMW_ERR_TIMEOUT
-		EIDMW_NEW_PINS_DIFFER*/
-
+	if(!m_card->isVirtualCard())
+		return m_card->pinCmd(PIN_OP_CHANGE,m_pinP15,csPin1,csPin2,ulRemaining, bShowDlg);
+	else
 		return false;
-	}
 }
 
 
