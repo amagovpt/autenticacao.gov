@@ -586,7 +586,7 @@
           </RegistryKey>
           
           <RegistryKey Key="general" Action="createAndRemoveOnUninstall">
-            <RegistryValue Type="string" Name="language" Value="!(loc.Langpref)"/>
+            <RegistryValue Type="string" Name="language" Value="nl"/>
             <RegistryValue Type="string" Name="cache_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card\.cache"/>
             <RegistryValue Type="string" Name="install_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
           </RegistryKey>

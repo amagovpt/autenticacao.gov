@@ -77,15 +77,8 @@
     <?define var.PTEID_DIR_XERCES_310=$(env.PTEID_DIR_XERCES_310)?>
     <?endif?>
 
-    <?if $(var.Lang) = "nl"?>
-    <WixVariable Id="WixUILicenseRtf" Value="..\..\..\misc\licenses_files\License_nl.rtf" />
-    <?elseif $(var.Lang) = "fr"?>
-    <WixVariable Id="WixUILicenseRtf" Value="..\..\..\misc\licenses_files\License_fr.rtf" />
-    <?elseif $(var.Lang) = "de"?>
-    <WixVariable Id="WixUILicenseRtf" Value="..\..\..\misc\licenses_files\License_de.rtf" />
-    <?else?>
+   
     <WixVariable Id="WixUILicenseRtf" Value="..\..\..\misc\licenses_files\License_en.rtf" />
-    <?endif?>
 
     <WixVariable Id="WixUIBannerBmp" Value="..\..\..\misc\Wix_MW35\bannrbmp.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="..\..\..\misc\Wix_MW35\dlgbmp.bmp" />
@@ -453,9 +446,7 @@
       <Component Id="GuiLang" Guid="{6B03ED1B-DF24-4CE6-A70C-476AF4C0941B}" SharedDllRefCount="yes">
         <File Id="eidmw_en.qm" Name="eidmw_en.qm" KeyPath="yes" Source="..\..\..\eidgui\eidmw_en.qm" />
         <File Id="eidmw_nl.qm" Name="eidmw_nl.qm" KeyPath="no" Source="..\..\..\eidgui\eidmw_nl.qm" />
-        <File Id="eidmw_fr.qm" Name="eidmw_fr.qm" KeyPath="no" Source="..\..\..\eidgui\eidmw_fr.qm" />
-        <File Id="eidmw_de.qm" Name="eidmw_de.qm" KeyPath="no" Source="..\..\..\eidgui\eidmw_de.qm" />
-      </Component>
+       </Component>
 
       <!--Cairo and its dependencies: needed for the PDF export function -->
       <Component Id="Cairo" Guid="{DF770DAC-0151-49ea-890A-6E47C664F74E}" SharedDllRefCount="yes">
@@ -476,9 +467,6 @@
 
       <Component Id="License" Guid="{C00AF621-E882-4805-BA9C-B90AA5DBBCB6}" SharedDllRefCount="yes">
         <File Id="License_en.rtf" Name="License_en.rtf" KeyPath="yes" Source="..\..\..\misc\licenses_files\License_en.rtf" />
-        <File Id="License_nl.rtf" Name="License_nl.rtf" KeyPath="no" Source="..\..\..\misc\licenses_files\License_nl.rtf" />
-        <File Id="License_fr.rtf" Name="License_fr.rtf" KeyPath="no" Source="..\..\..\misc\licenses_files\License_fr.rtf" />
-        <File Id="License_de.rtf" Name="License_de.rtf" KeyPath="no" Source="..\..\..\misc\licenses_files\License_de.rtf" />
         <File Id="THIRDPARTY_LICENSES.txt" Name="THIRDPARTY-LICENSES.txt" KeyPath="no" Source="..\..\..\misc\licenses_files\THIRDPARTY-LICENSES.txt" />
       </Component>
 
@@ -547,15 +535,6 @@
     </DirectoryRef>
 	  
     <Binary Id="PTeIDWin32CertificateImport" SourceFile="..\..\..\_Binaries35\Release\PTeIDWin32CertificateImport.exe" />
-
-    <!--
-    <DirectoryRef Id="PTEIDPPDIR">
-      <Component Id="PinpadLib" Guid="{9ADA6D75-5DCC-467E-A0CE-B84A482B2115}" SharedDllRefCount="yes">
-        <File Id="pteidpp2gempc.dll" Name="pteidpp2-gempc.dll" Source="..\..\..\_Binaries35\Release\pteidpp2-gempc.dll" />
-        <File Id="pteidpp2acr83plugin.dll" Name="pteidpp2-acr83-plugin.dll" Source="..\..\..\_Binaries35\Release\pteidpp2-acr83-plugin.dll" />
-      </Component>
-    </DirectoryRef>
-    -->
 
     <DirectoryRef Id="TARGETDIR">
       <Component Id="SCardSvrService" Guid="{C3BC9746-0843-41b2-BDDA-3192772974CE}" Permanent="yes">
@@ -641,7 +620,7 @@
           </RegistryKey>
 
           <RegistryKey Key="general" Action="createAndRemoveOnUninstall">
-            <RegistryValue Type="string" Name="language" Value="!(loc.Langpref)"/>
+            <RegistryValue Type="string" Name="language" Value="nl"/>
             <RegistryValue Type="string" Name="cache_dirname" Value="[ProgramFilesFolder]Portugal Identity Card\.cache"/>
             <RegistryValue Type="string" Name="install_dirname" Value="[ProgramFilesFolder]Portugal Identity Card"/>
           </RegistryKey>
@@ -747,11 +726,7 @@
       <ComponentRef Id="Runtime35"/>
       <ComponentRef Id="Runtime35ThirdPartyOpenSSL"/>
       <ComponentRef Id="Runtime35ThirdPartyXerces"/>
-      <!-- <ComponentRef Id="BWPinpad"/> -->
-
-      <!-- Pteid pinpad dir-->
-      <!-- <ComponentRef Id="PinpadLib"/> -->
-
+     
       <!-- Windows -->
       <ComponentRef Id="pteidgui.conf"/>
 
