@@ -182,7 +182,7 @@ DWORD WINAPI   CardGetContainerInfo
 	}
 
 #ifdef _DEBUG
-	LogDump (cbCertif, (char *)pbCertif);
+	//LogDump (cbCertif, (char *)pbCertif);
 	//if (bContainerIndex == 0)
 	//	LogDumpBin ("C:\\SmartCardMinidriverTest\\auth.crt", cbCertif, (char *)pbCertif);
 	//if (bContainerIndex == 1)

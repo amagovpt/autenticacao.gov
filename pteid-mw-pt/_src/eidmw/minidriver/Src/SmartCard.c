@@ -324,7 +324,7 @@ DWORD PteidAuthenticateExternal(
 	if (Is_Gemsafe == 0 && pin_id == 0)
 		pin_ref = 0x01;
 	else 
-		pin_ref = 0x80 + pin_id;
+		pin_ref = 0x81 + pin_id;
 
 	//SCardStatus to get the reader name
 	status_rv = SCardStatus(pCardData->hScard,  szReaderName, &reader_length,
@@ -338,6 +338,8 @@ DWORD PteidAuthenticateExternal(
 
 	uiCmdLg = sizeof(verifyCommand);
 	recvlen = sizeof(recvbuf);
+
+	PteidSelectApplet(pCardData);
 
 	while (bRetry) {
 		bRetry = FALSE;
@@ -1523,11 +1525,11 @@ DWORD PteidSelectApplet(PCARD_DATA  pCardData)
 
 	if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
 	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Select Failed: [0x%02X][0x%02X]", SW1, SW2);
+		LogTrace(LOGTYPE_ERROR, WHERE, "Select Applet Failed (wrong smartcard type?): [0x%02X][0x%02X]", SW1, SW2);
     
 		if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
 		{
-			LogTrace(LOGTYPE_ERROR, WHERE, "Select Failed: [0x%02X][0x%02X]", SW1, SW2);
+			LogTrace(LOGTYPE_ERROR, WHERE, "Select Applet Failed (wrong smartcard type?): [0x%02X][0x%02X]", SW1, SW2);
 			CLEANUP(dwReturn);
 		}
 	}

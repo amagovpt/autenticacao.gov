@@ -442,11 +442,7 @@ DWORD WINAPI   CardReadFile
 		}
 	}
 
-	LogTrace(LOGTYPE_INFO, WHERE, "#bytes: [%d]", *pcbData);
-
-#ifdef _DEBUG
-   LogDump (*pcbData, (char *)*ppbData);
-#endif
+	LogTrace(LOGTYPE_INFO, WHERE, "#bytes read: [%d]", *pcbData);
 
 cleanup:
    LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
