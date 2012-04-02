@@ -53,7 +53,7 @@ private:
     QImage img;
 
     bool addressPINRequest_triggered(CardInformation& CI_Data);
-    void persodata_triggered(CardInformation& CI_Data);
+    const char * persodata_triggered();
     void drawpdf(CardInformation& CI_Data, int format, const char *filepath);
 };
 
