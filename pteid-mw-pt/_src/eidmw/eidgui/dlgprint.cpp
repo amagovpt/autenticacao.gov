@@ -20,6 +20,7 @@
 
 #include <QPixmap>
 #include <QImage>
+#include <QString>
 #include <cairo/cairo.h>
 #include <cairo/cairo-pdf.h>
 
@@ -252,7 +253,7 @@ void dlgPrint::on_chboxSignature_toggled( bool bChecked )
     }
 }
 
-void dlgPrint::persodata_triggered(CardInformation& CI_Data)
+const char * dlgPrint::persodata_triggered()
 {
     try
     {
@@ -277,10 +278,12 @@ void dlgPrint::persodata_triggered(CardInformation& CI_Data)
         if (ReaderContext.isCardPresent())
         {
             PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
-            CI_Data.LoadDataPersoData(Card,m_CurrReaderName);
+			return Card.readPersonalNotes();
+            
         }
     }	catch (PTEID_Exception &e) {
         QString msg(tr("General exception"));
+		return NULL;
     }
 }
 
@@ -517,11 +520,11 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 		cairo_show_text(cr, AddressFields[ADDRESS_STREETNAME].toStdString().c_str());
 
 		////ADDRESS Abbr Building Type
-		cairo_move_to(cr, 18.0, 380.0);
+		cairo_move_to(cr, 18.0, 630.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_ABBRBUILDINGTYPE].toStdString().c_str());
 
 		////ADDRESS Building Type
-		cairo_move_to(cr, 18.0, 380.0);
+		cairo_move_to(cr, 230.0, 630.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_BUILDINGTYPE].toStdString().c_str());
 
 		////ADDRESS Door No
@@ -537,7 +540,7 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 		cairo_show_text(cr, AddressFields[ADDRESS_SIDE].toStdString().c_str());
 
 		////ADDRESS Place
-		cairo_move_to(cr, 30.0, 420.0);
+		cairo_move_to(cr, 430.0, 672.0);
 		cairo_show_text(cr, AddressFields[ADDRESS_PLACE].toStdString().c_str());
 
 		////ADDRESS Zip4
@@ -560,12 +563,21 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 
 	if (ui.chboxPersoData->isChecked())
 	{
-		persodata_triggered(CI_Data);
-		tFieldMap& PersoDataFields = CI_Data.m_PersoDataInfo.getFields();
+		const char *notes = persodata_triggered();
+		QString perso_data = QString::fromUtf8(notes);
 
 		////PERSONAL NOTES
-		cairo_move_to(cr, 20.0, 760.0);
-		cairo_show_text(cr, (QString::fromUtf8(PersoDataFields[PERSODATA_INFO].toStdString().c_str())).toStdString().c_str());
+		
+		// cairo_show_text() doesn't render linebreaks so we have to 
+		// do it ourselves
+		QStringList lines = perso_data.split("\n");
+		// The personal notes field is limited to 4 Lines ATM
+		for (int i = 0; i < lines.size() && i < 4 ; ++i)
+		{
+			cairo_move_to(cr, 20.0, 760 + 20*i);
+			cairo_show_text(cr, lines.at(i).toUtf8());
+		}
+		
 	}
 
 	if (ui.chboxID->isChecked())
@@ -573,8 +585,6 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 		//Image
 		img = QImage();
 		img.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
-		QImage imgPicturescaled = img.scaled(150, 190);
-
 
 		idphoto = cairo_image_surface_create_for_data(img.bits(), CAIRO_FORMAT_RGB24, img.width(),
 													img.height(), img.bytesPerLine());
