@@ -226,6 +226,60 @@ cleanup:
 }
 #undef WHERE
 
+void GemPCLoadStrings(SCARDHANDLE hCard, DWORD pin_id)
+{
+/*The Following Blob contains the Portuguese strings to show on the Pinpad Display:
+		PIN Autent.?   
+		Novo PIN?    
+		Conf. novo PIN
+		OK  
+		PIN falhou      
+		Tempo expirou   
+		* tentiv. restam
+		Introduza cartao
+		Erro cartao 
+		PIN bloqueado   
+	*/
+	char stringTable[] =
+		"\xB2\xA0\x00\x4D\x4C\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x4E\x6F\x76"
+		"\x6F\x20\x50\x49\x4E\x3F\x20\x20\x20\x20\x20\x20\x20\x43\x6F\x6E\x66\x2E\x20\x6E\x6F\x76\x6F"
+		"\x20\x50\x49\x4E\x20\x20\x50\x49\x4E\x20\x4F\x4B\x2E\x20\x20\x20\x20\x20\x20\x20\x20\x20\x50"
+		"\x49\x4E\x20\x66\x61\x6C\x68\x6F\x75\x20\x20\x20\x20\x20\x20\x54\x65\x6D\x70\x6F\x20\x65\x78"
+		"\x70\x69\x72\x6F\x75\x20\x20\x20\x2A\x20\x74\x65\x6E\x74\x69\x76\x2E\x20\x72\x65\x73\x74\x61\x6D"
+		"\x49\x6E\x74\x72\x6F\x64\x75\x7A\x61\x20\x63\x61\x72\x74\x61\x6F\x45\x72\x72\x6F\x20\x63\x61\x72"
+		"\x74\x61\x6F\x20\x20\x20\x20\x20\x50\x49\x4E\x20\x62\x6C\x6F\x71\x75\x65\x61\x64\x6F\x20\x20\x20";
+
+	DWORD ioctl = 0x00312000;
+	char recvBuf[200];
+	DWORD rv = 0;
+	unsigned int STRING_LEN = 16;
+	DWORD recvlen = sizeof(recvBuf);
+
+	switch (pin_id)
+	{
+		case 0:
+			memcpy(&stringTable[5], "PIN Autent.?    ", STRING_LEN); 
+			break;
+		case 1:
+			memcpy(&stringTable[5], "PIN Assinatura? ", STRING_LEN); 
+			break;
+
+	}
+	
+	rv = SCardControl(hCard, ioctl, stringTable, sizeof(stringTable)-1,
+		recvBuf, recvlen, &recvlen);
+
+	
+	if ( rv == SCARD_S_SUCCESS )
+	{
+		LogTrace(LOGTYPE_INFO, "GemPCLoadStrings()", "Strings Loaded successfully");
+	}
+	else
+		LogTrace(LOGTYPE_INFO, "GemPCLoadStrings()", "Error in LoadStrings: SCardControl() returned: %08x", 
+				(unsigned int)rv);
+
+}
+
 /****************************************************************************************************/
 
 #define WHERE "PteidAuthenticateExternal"
@@ -248,26 +302,21 @@ DWORD PteidAuthenticateExternal(
 
 	unsigned int				uiCmdLg = 0;
 	unsigned int                pin_ref = 0;
+	unsigned int				is_gempc = 0;
 	unsigned char				recvbuf[256];
 	unsigned char				szReaderName[256];
 	DWORD						reader_length = sizeof(szReaderName);
-	unsigned char				ucLastKey;
 	unsigned long				recvlen     = sizeof(recvbuf);
 	BYTE							SW1, SW2;
 	int							i           = 0;
 	int							offset		= 0;
-	DWORD						dwRetriesLeft, dwDataLen;
-	BOOL							bRetry      = TRUE;
+	DWORD						dwDataLen;
+	BOOL						bRetry      = TRUE;
 	int							nButton;
-	HRESULT						hResult;
 	LONG						status_rv;
 
 	EXTERNAL_PIN_INFORMATION		externalPinInfo;
 	HANDLE						DialogThreadHandle;
-
-
-	wchar_t						wchErrorMessage[500];
-	wchar_t						wchMainInstruction[100];
 
 
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
@@ -332,7 +381,10 @@ DWORD PteidAuthenticateExternal(
 
 	if (strstr(szReaderName, "GemPC Pinpad") != 0 
 		|| strstr(szReaderName, "GemPCPinpad") != 0)
+	{
 		createVerifyCommandGemPC(&verifyCommand, pin_ref);
+		is_gempc = 1;
+	}
 	else
 		createVerifyCommand(&verifyCommand, pin_ref);
 
@@ -365,6 +417,9 @@ DWORD PteidAuthenticateExternal(
 			LogTrace(LOGTYPE_INFO, WHERE, "PIN_VERIFY_STRUCT: ");
 			LogDump(uiCmdLg, (unsigned char*)&verifyCommand);
 
+			if (is_gempc == 1)
+				GemPCLoadStrings(pCardData->hScard, pin_id);
+
 			dwReturn = SCardControl(pCardData->hScard, 
 				externalPinInfo.features.VERIFY_PIN_DIRECT, 
 				&verifyCommand, 
@@ -385,7 +440,7 @@ DWORD PteidAuthenticateExternal(
 			{
 				if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
 				{
-					dwReturn = SCARD_W_WRONG_CHV;
+					
 					LogTrace(LOGTYPE_ERROR, WHERE, "CardAuthenticateExternal Failed: [0x%02X][0x%02X]", SW1, SW2);
 
 					if ( ((SW1 == 0x63) && ((SW2 & 0xF0) == 0xC0)) )
@@ -398,7 +453,6 @@ DWORD PteidAuthenticateExternal(
 					}
 					else if ( (SW1 == 0x69) && (SW2 == 0x83) )
 					{
-						dwReturn = SCARD_W_CHV_BLOCKED;
 						LogTrace(LOGTYPE_ERROR, WHERE, "Card Blocked, watch out!!");
 					}
 				}
