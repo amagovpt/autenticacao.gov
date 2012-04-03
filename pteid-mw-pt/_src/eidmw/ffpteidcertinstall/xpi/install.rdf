@@ -7,7 +7,7 @@ xmlns:em="http://www.mozilla.org/2004/em-rdf#">
         <em:name>PTeID Certificate Install</em:name>
         <em:version>1.0</em:version>
         <em:description>A Firefox extension to install PTeID certificates.</em:description>
-        <em:creator>Luis Medinas</em:creator>
+        <em:creator>Estado Português</em:creator>
         <em:homepageURL>http://www.caixamagica.pt</em:homepageURL>
         
         
