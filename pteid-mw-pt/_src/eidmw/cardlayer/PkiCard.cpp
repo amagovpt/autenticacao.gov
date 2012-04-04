@@ -270,7 +270,7 @@ bad_pin:
     if (ulSW12 == 0x9000){
         bRet = true;
         ulRemaining = 3;
-    } else if (ulSW12 == 0x6983)
+    } else if (ulSW12 == 0x6984)
         ulRemaining = 0;
     else if (ulSW12 / 16 == 0x63C)
         ulRemaining = ulSW12 % 16;
