@@ -262,6 +262,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			hide_submenus();
 			pinactivate = 1;
 			pinNotes = 1;
+			certdatastatus = 1;
 			m_connectionStatus = (PTEID_CertifStatus)-1;
 			m_CI_Data.Reset();
 			loadCardData();
@@ -387,6 +388,7 @@ void MainWnd::on_btn_menu_card_clicked()
 void MainWnd::on_btn_menu_tools_clicked()
 {
 	m_ui.wdg_submenu_tools->setVisible(true);
+	//If defined language is portuguese, then the dialog needs to be larger
 	if (m_Settings.getGuiLanguageCode() == GenPur::LANG_NL)
 		m_ui.wdg_submenu_tools->setGeometry(128,4,146,110);
 	else
@@ -462,8 +464,8 @@ void MainWnd::restoreWindow( void )
 	if( this->isHidden() )
 	{
 		showNoReaderMsg();
-
-		if (m_Settings.getAutoCardReading())
+		//If the application was started as minimized we need to load it once
+		if(!m_CI_Data.isDataLoaded())
 		{
 			loadCardData();
 		}
@@ -675,7 +677,7 @@ void MainWnd::closeEvent( QCloseEvent *event)
 			delete(m_msgBox);
 			m_msgBox = NULL;
 		}
-        clearGuiContent();
+        //clearGuiContent();
 		hide();
 		if(m_ShowBalloon)
 		{
@@ -689,7 +691,7 @@ void MainWnd::closeEvent( QCloseEvent *event)
 		event->ignore();
 
         //To avoid problem when restoring the eidgui and clears data
-        loadCardData();
+        //loadCardData();
 	}
 }
 
@@ -2140,8 +2142,7 @@ bool MainWnd::loadCardDataPersoData( void )
 //*****************************************************
 void MainWnd::loadCardDataCertificates( void )
 {
-    if (!m_CI_Data.isDataLoaded())
-        return;
+  
 	//----------------------------------------------------------------
 	// if we load a new card, clear the certificate contexts we kept
 	//----------------------------------------------------------------
@@ -3019,8 +3020,8 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 		imgPicture.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
 		imgPicturescaled = imgPicture.scaled(150, 190);
 		m_imgPicture = QPixmap::fromImage(imgPicturescaled);
-		clearTabCertificates();
-		clearTabAddress();
+		//clearTabCertificates();
+		//clearTabAddress();
 		clearTabPins();
 		fillPinList( Card );
 	}
@@ -3035,11 +3036,11 @@ void MainWnd::LoadDataAddress(PTEID_EIDCard& Card)
 	m_CI_Data.LoadDataAddress(Card,m_CurrReaderName);
 	if(!m_CI_Data.isDataLoaded())
 	{
-		clearTabCertificates();
-		clearTabAddress();
+		//clearTabCertificates();
+		//clearTabAddress();
 
-		clearTabPins();
-		fillPinList( Card );
+		//clearTabPins();
+		//fillPinList( Card );
 	}
 }
 
