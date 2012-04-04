@@ -712,7 +712,7 @@ bool XadesSignature::ValidateTimestamp (CByteArray signature, CByteArray ts_resp
 	if (result)
 		*error_length = _snprintf(errors, *error_length, "%s", time_and_date);
 	else
-		*error_length = _snprintf(errors, *error_length, getString(2));
+		*error_length = _snprintf(errors, *error_length, "%s", getString(2));
 
 	return result;
 
@@ -827,7 +827,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 			extern_result = checkExternalRefs(refs, hashes);
 		if (!extern_result)
 		{
-			int err_len = _snprintf(errors, *error_length, getString(6));
+			int err_len = _snprintf(errors, *error_length, "%s",  getString(6));
 			*error_length = err_len;
 			return false;
 		}
