@@ -80,30 +80,6 @@ set TARGET1=%PTEID_DIR_QT_450_DYNAMIC%\bin\QtGui4.dll
 if not exist "%TARGET1%" goto print_err
 xcopy /D /Y "%TARGET1%" "%~dp0..\..\_Binaries35\x64\Release\"
 
-mkdir "%~dp0..\..\_Binaries35\x64\Release\imageformats"
-mkdir "%~dp0..\..\_Binaries35\x64\Debug\imageformats"
-
-set TARGET1=%PTEID_DIR_QT_450_DYNAMIC%\plugins\imageformats\qjpeg4.dll
-if not exist "%TARGET1%" goto print_err
-xcopy /D /Y "%TARGET1%" "%~dp0..\..\_Binaries35\x64\Release\imageformats\"
-
-::Licence files for windows setup
-::===============================
-set TARGET1=%~dp0..\licenses_files\Dutch\eID-toolkit_licensingtermsconditions.rtf
-if not exist "%TARGET1%" goto print_err
-copy /Y "%TARGET1%" "%~dp0..\licenses_files\License_nl.rtf"
-
-set TARGET1=%~dp0..\licenses_files\French\eID-toolkit_licensingtermsconditions.rtf
-if not exist "%TARGET1%" goto print_err
-copy /Y "%TARGET1%" "%~dp0..\licenses_files\License_fr.rtf"
-
-set TARGET1=%~dp0..\licenses_files\German\eID-toolkit_licensingtermsconditions.rtf
-if not exist "%TARGET1%" goto print_err
-copy /Y "%TARGET1%" "%~dp0..\licenses_files\License_de.rtf"
-
-set TARGET1=%~dp0..\licenses_files\English\eID-toolkit_licensingtermsconditions.rtf
-if not exist "%TARGET1%" goto print_err
-copy /Y "%TARGET1%" "%~dp0\..\licenses_files\License_en.rtf"
 
 goto done
 
