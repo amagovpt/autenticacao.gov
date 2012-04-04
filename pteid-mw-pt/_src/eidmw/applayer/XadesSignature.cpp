@@ -630,7 +630,7 @@ bool XadesSignature::ValidateTimestamp (CByteArray signature, CByteArray ts_resp
 
 	if (signature.Size() == 0)
 	{
-		int err_len = _snprintf(errors, *error_length, getString(0));
+		int err_len = _snprintf(errors, *error_length, "%s", getString(0));
 		*error_length = err_len;
 		MWLOG(LEV_ERROR, MOD_APL, L"ValidateTimestamp() received empty Signature. This most likely means a corrupt zipfile");
 		return false;
@@ -703,7 +703,7 @@ bool XadesSignature::ValidateTimestamp (CByteArray signature, CByteArray ts_resp
 
 	if (mp_validate_data.Size() == 0)
 	{
-		*error_length = _snprintf(errors, *error_length, getString(8));
+		*error_length = _snprintf(errors, *error_length, "%s", getString(8));
 		return false;
 	}
 	
@@ -772,7 +772,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 
 	if (errorsOccured) {
 		//Write to output report 
-		int err_len = _snprintf(errors, *error_length, getString(4));
+		int err_len = _snprintf(errors, *error_length, "%s", getString(4));
 		*error_length = err_len;
 		MWLOG(LEV_ERROR, MOD_APL, L"Errors parsing XML Signature, bailing out");
 		return false;
