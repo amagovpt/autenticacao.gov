@@ -464,9 +464,23 @@ CByteArray CPCSC::Control(SCARDHANDLE hCard, unsigned long ulControl, const CByt
 #endif
 	if (SCARD_S_SUCCESS != lRet)
 	{
+#ifndef WIN32		
+		//Special-casing the PIN Blocked response for GemPC Pinpad under pcscd
+		if (lRet == SCARD_E_NOT_TRANSACTED)
+		{
+			pucRecv[0] = 0x64;
+			pucRecv[1] = 0x02;
+			dwRecvLen = 2;
+		}
+		else
+		{
+#endif			
 		MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardControl() err: 0x%0x", lRet);
 		delete pucRecv;
 		throw CMWEXCEPTION(PcscToErr(lRet));
+#ifndef WIN32
+		}
+#endif		
 	}
 
 	if (dwRecvLen == 2)
