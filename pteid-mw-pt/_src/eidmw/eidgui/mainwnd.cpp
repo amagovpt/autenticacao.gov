@@ -2476,7 +2476,17 @@ void MainWnd::authPINRequest_triggered()
 
 				if (CurrPinName==PinName)
 				{
+					if (Pin.getTriesLeft() == 0)
+					{
+						QString msg = tr("Maximum number of" 
+								" PIN entry attempts has been reached! Couldn't save personal notes");	
+						
+					        QMessageBox::critical(this, caption,  msg, QMessageBox::Ok);
+						break;
+
+					}
 					unsigned long triesLeft = -1;
+
 					bool		  bResult   = Pin.verifyPin("",triesLeft);
 					//QString		  msg(tr("PIN verification "));
 
@@ -2549,6 +2559,16 @@ bool MainWnd::addressPINRequest_triggered()
 
 				if (CurrPinName==PinName)
 				{
+					
+					if (Pin.getTriesLeft() == 0)
+					{
+						QString msg = tr("The address cannot be accessed because the maximum number of" 
+								" PIN entry attempts has been reached");	
+						
+					        QMessageBox::critical( this, caption,  msg, QMessageBox::Ok );
+						return false;
+
+					}
 					unsigned long triesLeft = -1;
 					bool		  bResult   = Pin.verifyPin("",triesLeft);
 					//QString		  msg(tr("PIN verification "));

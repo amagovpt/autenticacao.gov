@@ -12,6 +12,14 @@
         <translation type="unfinished">Ocorreu um erro ao tentar ler o cartão. Tente novamente por favor.</translation>
     </message>
     <message>
+        <source>The address cannot be accessed because the maximum number of PIN entry attempts has been reached</source>
+        <translation>Não foi possível aceder aos dados da morada porque o respectivo PIN está bloqueado</translation>
+    </message>
+    <message>
+        <source>Maximum number of PIN entry attempts has been reached! Couldn't save personal notes</source>
+        <translation>PIN da autenticação bloqueado. Não foi possível guardar as notas pessoais</translation>
+    </message>
+    <message>
         <source>Portuguese ID Card Management</source>
         <translation>Aplicação Oficial do Cartão de Cidadão</translation>
     </message>
@@ -1028,7 +1036,7 @@ Please specify .xml, .csv or .eid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Cartao Inserido:</source>
+        <source>Cartão Inserido:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1083,7 +1091,7 @@ Please specify .xml, .csv or .eid</source>
     </message>
     <message>
         <source>Do you want to check for updates?</source>
-        <translation>Deseja verificar se existem actulizações disponiveis?</translation>
+        <translation>Deseja verificar se existem actualizações disponíveis?</translation>
     </message>
 </context>
 <context>
