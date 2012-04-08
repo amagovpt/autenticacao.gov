@@ -532,9 +532,10 @@ bool XadesSignature::checkExternalRefs(DSIGReferenceList *refs, tHashedFile **ha
         XMLByte arr[SHA1_LEN*sizeof(unsigned char)];
 
 	bool res;
+	int j;
 	tHashedFile *hashed_file=NULL;
 
-	for (int j = 0; hashes[j] != NULL; j++)
+	for ( j = 0 ; hashes[j] != NULL; j++)
 	{	
 		res = false;	
 		hashed_file = hashes[j];
@@ -559,6 +560,13 @@ bool XadesSignature::checkExternalRefs(DSIGReferenceList *refs, tHashedFile **ha
 				       	hashed_file->URI->c_str());
 			return false;
 		}
+	}
+	
+	//If container has no signed files this test is automatically false
+	if (j == 0)
+	{
+		MWLOG (LEV_DEBUG, MOD_APL, L"checkExternalRefs(): Container has no signed files!");
+		return false;
 	}
 
 	MWLOG (LEV_DEBUG, MOD_APL, L" checkExternalRefs(): All External References matched.");
