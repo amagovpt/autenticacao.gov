@@ -393,8 +393,7 @@ void CPathUtil::scanDir(const char *Dir,
 	    }  else  {	
 	      // this is a regular file
 	      std::string file = pFile->d_name;
-	      std::string ext=".";
-	      ext+=Ext;
+	      std::string ext = Ext;
 	      // check if the file has the requested extension
 	      if(strlen(Ext)==0
 		 || (file.size()>ext.size() && file.compare(file.size()-ext.size(),ext.size(),ext)==0))

@@ -284,6 +284,9 @@ bool APLVerifySignature(const char *container_path, char * errors, unsigned long
 	CByteArray timestamp = container->ExtractTimestamp();
 
 	delete container;
+
+	//TODO: We need to sort out the multiple checks issue, error messages are
+	// getting overwritten by valid timestamp messages
 	
 	result = XadesSignature::ValidateXades(sig_content, hashes, errors, error_len);
 	
