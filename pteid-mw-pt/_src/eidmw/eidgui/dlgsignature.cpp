@@ -270,21 +270,7 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
     return;
 }
 
-void replace_lastdot_inplace(char* initial_file_path)
-{
-	// We can only search forward because memrchr and strrchr 
-	// are not available on Windows *sigh*
-	char ch = '.';
-	char * pdest = NULL, *last_dot= NULL;
-       	while ((pdest = strchr(initial_file_path, ch)) != NULL)
-	     last_dot = pdest;
-	if (last_dot != NULL)
-		*last_dot = '_';
-}
 
-
-
-//XXX: output_path in this case should be a directory path
 void dlgSignature::run_multiple_sign(const char ** paths, unsigned int n_paths, const char *output_path, bool timestamp)
 {
 
