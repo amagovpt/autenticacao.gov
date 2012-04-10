@@ -332,6 +332,10 @@ namespace eIDMW
 		CURLcode res;
 		char error_buf[CURL_ERROR_SIZE];
 
+		//Make sure the static array receiving the network reply 
+		// is zero'd out before each request
+		mp_validate_data.Chop(mp_validate_data.Size());
+
 		//Get Timestamping server URL from config
 		APL_Config tsa_url(CConfig::EIDMW_CONFIG_PARAM_XSIGN_TSAURL);
 		const char * TSA_URL = tsa_url.getString();
@@ -416,6 +420,10 @@ namespace eIDMW
 		CURL *curl;
 		CURLcode res;
 		char error_buf[CURL_ERROR_SIZE];
+
+		//Make sure the static array receiving the network reply 
+		// is zero'd out before each request
+		mp_timestamp_data.Chop(mp_timestamp_data.Size());
 
 		//Get Timestamping server URL from config
 		APL_Config tsa_url(CConfig::EIDMW_CONFIG_PARAM_XSIGN_TSAURL);
