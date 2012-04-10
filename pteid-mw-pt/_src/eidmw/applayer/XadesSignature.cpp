@@ -63,6 +63,7 @@
 //OpenSSL
 #include <openssl/sha.h>
 #include <openssl/evp.h>
+#include <openssl/pem.h>
 #include <openssl/bio.h>
 
 //stat
@@ -306,13 +307,13 @@ namespace eIDMW
 		BIO_free_all(bio);
 	}
 
-	char *strip_backslashes(const char *str)
+	char *strip_newlines(const char *str)
 	{
 		char *cleaned = new char[strlen(str)];
 		int j = 0;
 		for (unsigned int i=0; i < strlen(str); i++)
 		{
-			if (str[i] != '\n') //Skips all backslash sequences, it works for base64 strings
+			if (str[i] != '\n')
 				cleaned[j++] = str[i]; 
 		}
 		cleaned[j] = 0;
@@ -699,7 +700,7 @@ bool XadesSignature::ValidateTimestamp (CByteArray signature, CByteArray ts_resp
 	sig->load();
 
 	const char* tmp = XMLString::transcode(sig->getSignatureValue());
-	char *tmp2 = strip_backslashes(tmp);
+	char *tmp2 = strip_newlines(tmp);
 	base64Decode(tmp2, strlen(tmp2), signature_bin, sig_len);
 	SHA1(signature_bin, sig_len, signature_hash);
 
@@ -723,6 +724,182 @@ bool XadesSignature::ValidateTimestamp (CByteArray signature, CByteArray ts_resp
 		*error_length = _snprintf(errors, *error_length, "%s", getString(2));
 
 	return result;
+
+}
+
+
+X509 *loadCertFromPEM(const char *pem_buffer)
+{
+
+	char * final_pem = (char *)calloc(strlen(pem_buffer)+ 65, sizeof(char));
+	strcat(final_pem, "-----BEGIN CERTIFICATE-----\n");
+	strcat(final_pem, pem_buffer);
+	strcat(final_pem, "-----END CERTIFICATE-----\n");
+
+	BIO *pem_bio = BIO_new_mem_buf((void *)final_pem, -1);
+	X509 *cert = NULL;
+
+	if (pem_bio != NULL)
+	{
+		cert = PEM_read_bio_X509(pem_bio, NULL, NULL, NULL);
+		if (cert == NULL)
+			MWLOG(LEV_ERROR, MOD_APL, L"Error parsing certificate from PEM string!");
+
+	}
+	
+	BIO_free_all(pem_bio);	
+	return cert;
+
+}
+
+X509 * loadCertFromB64Der(const char *base64_string)
+{
+	X509 *cert = NULL;
+	unsigned int bufsize = strlen(base64_string);
+
+	unsigned char *der_buffer = (unsigned char *)malloc(bufsize);
+
+	base64Decode(base64_string, bufsize, der_buffer, bufsize);
+
+	if (der_buffer != NULL)
+	{
+		cert = d2i_X509(NULL, (const unsigned char**)(&der_buffer), bufsize);
+		
+		if (cert == NULL)
+			MWLOG(LEV_ERROR, MOD_APL, L"Error parsing certificate from DER buffer!\n");
+
+	}
+	return cert;
+
+}
+/*
+* This method validates the supplied PEM certificate.
+* To be used by ValidateXades()
+*
+*/
+bool XadesSignature::ValidateCert(const char *pem_certificate)
+{
+	if (pem_certificate == NULL || strlen(pem_certificate) == 0)
+		return false;
+
+	bool bStopRequest = false;
+	bool res = false;
+
+	OpenSSL_add_all_algorithms();
+
+	X509_STORE *store = X509_STORE_new();
+	
+	X509 *pCert = NULL;
+
+	APL_Config certs_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
+	const char * str_certs_dir = certs_dir.getString();
+	CPathUtil::scanDir(str_certs_dir, "", ".der", bStopRequest, store, &XadesSignature::foundCertificate);
+
+	X509_STORE_CTX *ctx;
+	X509 *cert = NULL;
+
+	ctx = X509_STORE_CTX_new();
+
+	if (ctx == NULL)
+	{
+		/* Bad error */
+		return false;
+	}
+	
+	cert = loadCertFromPEM(pem_certificate);
+
+	if (cert == NULL)
+	{
+		MWLOG(LEV_ERROR, MOD_APL, L"ValidateCert(): Broken or corrupt certificate");
+		return false;
+	}
+
+	//Load cert chain into store
+
+	X509_STORE_CTX_init(ctx, store, cert, NULL);
+
+	X509_STORE_CTX_set_flags(ctx, X509_V_FLAG_CB_ISSUER_CHECK);
+	
+	int validate_res = X509_verify_cert(ctx);
+
+	if (validate_res == 1)
+	{
+		MWLOG(LEV_DEBUG, MOD_APL, L"ValidateCert(): Valid certificate");
+		res = true;
+	}
+	else
+	{
+		res = false;
+		char subject_buf[1024];
+		MWLOG(LEV_DEBUG, MOD_APL, L"ValidateCert(): Invalid certificate! OpenSSL Error: %s", 
+			X509_verify_cert_error_string(ctx->error));
+
+		X509* error_cert = X509_STORE_CTX_get_current_cert(ctx);
+		X509_NAME_oneline(X509_get_subject_name(ctx->current_cert), subject_buf, sizeof(subject_buf));
+		MWLOG(LEV_DEBUG, MOD_APL, L"Certificate that caused the error: %s", subject_buf);
+
+	}
+
+	X509_STORE_CTX_free(ctx);
+	return res;
+
+}
+
+void XadesSignature::foundCertificate (const char *SubDir, const char *File, void *param)
+{
+	X509_STORE *certificate_store =  (X509_STORE *)param;
+	APL_Config certs_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
+	string path = string(certs_dir.getString());
+	FILE *m_stream;
+	X509 *pCert = NULL;
+	long int bufsize;
+	unsigned char *buf;
+
+#ifdef WIN32
+	errno_t werr;
+	path += "\\";
+#endif
+	path+=SubDir;
+#ifdef WIN32
+	path += "\\";
+#else
+	path+= "/";
+#endif
+	path+=File;
+	
+#ifdef WIN32
+	if ((werr = fopen_s(&m_stream, path.c_str(), "rb")) != 0)
+		goto err;
+#else
+	if ((m_stream = fopen(path.c_str(), "rb")) == NULL)
+		goto err;
+#endif
+
+	if (fseek( m_stream, 0L, SEEK_END))
+		goto err;
+
+	bufsize = ftell(m_stream);
+	buf = (unsigned char *) malloc(bufsize*sizeof(unsigned char));
+
+	if (fseek(m_stream, 0L, SEEK_SET)){
+		free(buf);
+		goto err;
+	}
+
+	if (fread(buf, sizeof( unsigned char ), bufsize, m_stream) != bufsize)
+		goto err;
+
+	pCert = d2i_X509(&pCert, (const unsigned char **)&buf, bufsize);
+	if (pCert == NULL)
+	   goto err;
+	
+	if(X509_STORE_add_cert(certificate_store, pCert) == 0)
+	   goto err;
+	return;
+
+
+	err:
+		MWLOG(LEV_DEBUG, MOD_APL, L"XadesSignature::foundCertificate: problem with file %s ", path.c_str());
 
 }
 
@@ -823,14 +1000,36 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 	sig->setKeyInfoResolver(&theKeyInfoResolver);
 	sig->registerIdAttributeName(MAKE_UNICODE_STRING("ID"));
 
-
 	bool result = false;
 	bool extern_result = false; 
 	try {
-	
+
 		sig->load();
 
+		// Validate signing certificate first
+		DSIGKeyInfo *keyinfo = sig->getKeyInfoList()->item(0);
+
+		//This should always be the case for signatures created by pteid-mw
+		if (keyinfo->getKeyInfoType() == DSIGKeyInfo::KEYINFO_X509)
+		{
+			DSIGKeyInfoX509 *cert_element = dynamic_cast<DSIGKeyInfoX509 *> (keyinfo);
+			const XMLCh *pem_cert = cert_element->getCertificateItem(0);
+			char * tmp_cert = XMLString::transcode(pem_cert);
+			bool cert_result = ValidateCert(tmp_cert);
+
+			if (!cert_result)
+			{
+				int err_len = _snprintf(errors, *error_length, "%s",  getString(12));
+				*error_length = err_len;
+				return false;
+			}
+
+			XMLString::release(&tmp_cert);
+
+		}
+
 		DSIGReferenceList *refs = sig->getReferenceList();
+
 		if (refs != NULL)
 			extern_result = checkExternalRefs(refs, hashes);
 		if (!extern_result)
@@ -859,7 +1058,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 
 	if (result == false)
 	{
-		int err_len = _snprintf(errors, *error_length, "Validation error: RSA Signature of referenced content is invalid");
+		int err_len = _snprintf(errors, *error_length, "%s", getString(10));
 		*error_length = err_len;
 	}
 
