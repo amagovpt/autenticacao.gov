@@ -93,7 +93,7 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
 		    msg += error;
 	    }
 		    
-            QMessageBox::information(this, tr("Verify Signature"), msg);
+            QMessageBox::information(this, tr("Signature Validation"), msg);
 
             this->close();
 
@@ -102,7 +102,7 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
 	{
 		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", 
 				"Error message received from VerifySignature() size=%d: %s", errorlen, error);
-		QMessageBox::critical(this, tr("Verify Signature"), QString::fromAscii(error, errorlen));
+		QMessageBox::critical(this, tr("Signature Validation"), QString::fromAscii(error, errorlen));
 		this->close();
 	}
     }
