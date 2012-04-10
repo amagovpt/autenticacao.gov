@@ -2832,6 +2832,7 @@ void MainWnd::showTabs()
 
 	setLanguage();
 	m_ui.stackedWidget->setCurrentIndex(1);
+	m_ui.btnSelectTab_Identity->setFocus();
 }
 
 //*****************************************************
@@ -3565,6 +3566,42 @@ void MainWnd::refreshTabIdentityExtra()
 
 }
 
+void MainWnd::clearAddressData(void){
+	m_ui.txtAddress_Municipality->setText(QString());
+	m_ui.txtAddress_Municipality->setAccessibleName(QString());
+	m_ui.txtAddress_District->setText(QString());
+	m_ui.txtAddress_District->setAccessibleName(QString());
+	m_ui.txtAddress_CivilParish->setText(QString());
+	m_ui.txtAddress_CivilParish->setAccessibleName(QString());
+	m_ui.txtAddress_StreetType1->setText(QString());
+	m_ui.txtAddress_StreetType1->setAccessibleName(QString());
+	m_ui.txtAddress_StreetType2->setText(QString());
+	m_ui.txtAddress_StreetType2->setAccessibleName(QString());
+	m_ui.txtAddress_StreetName->setText(QString());
+	m_ui.txtAddress_StreetName->setAccessibleName(QString());
+	m_ui.txtAddress_BuildingType1->setText(QString());
+	m_ui.txtAddress_BuildingType1->setAccessibleName(QString());
+	m_ui.txtAddress_BuildingType2->setText(QString());
+	m_ui.txtAddress_BuildingType2->setAccessibleName(QString());
+	m_ui.txtAddress_DoorNo->setText(QString());
+	m_ui.txtAddress_DoorNo->setAccessibleName(QString());
+	m_ui.txtAddress_Floor->setText(QString());
+	m_ui.txtAddress_Floor->setAccessibleName(QString());
+	m_ui.txtAddress_Side->setText(QString());
+	m_ui.txtAddress_Side->setAccessibleName(QString());
+	m_ui.txtAddress_Locality->setText(QString());
+	m_ui.txtAddress_Locality->setAccessibleName(QString());
+	m_ui.txtAddress_Zip4->setText(QString());
+	m_ui.txtAddress_Zip4->setAccessibleName(QString());
+	m_ui.txtAddress_Zip3->setText(QString());
+	m_ui.txtAddress_Zip3->setAccessibleName(QString());
+	m_ui.txtAddress_Place->setText(QString());
+	m_ui.txtAddress_Place->setAccessibleName(QString());
+	m_ui.txtAddress_PostalLocality->setText(QString());
+	m_ui.txtAddress_PostalLocality->setAccessibleName(QString());
+
+}
+
 //*****************************************************
 // refresh the tab with the PTeid Address
 //*****************************************************
@@ -3572,6 +3609,7 @@ void MainWnd::refreshTabAddress( void )
 {
     if (!m_CI_Data.isDataLoaded())
         return;
+
 
 	if (pinactivate == 1)
 	{
@@ -4192,6 +4230,17 @@ void MainWnd::customEvent( QEvent* pEvent )
 					setEnabledPinButtons(false);
 					setEnabledCertifButtons(false);
 					enableFileSave(false);
+
+					m_imgPicture = NULL;
+					m_CI_Data.Reset();
+					refreshTabIdentity();
+					refreshTabIdentityExtra();
+					refreshTabPersoData();
+					refreshTabCardPin();
+					refreshTabCertificates();
+					clearAddressData();
+					m_ui.btnSelectTab_Identity->setFocus();
+
 				}
 				//----------------------------------------------------------
 				// card has been changed in a reader

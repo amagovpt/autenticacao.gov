@@ -323,6 +323,7 @@ private:
 	void refreshTabIdentity( void );
 	void refreshTabIdentityExtra( void );
 	void refreshTabAddress( void );
+	void clearAddressData( void );
 	void refreshTabPersoData( void );
 	void refreshTabCertificates( void );
 	void refreshTabCardPin( void );
