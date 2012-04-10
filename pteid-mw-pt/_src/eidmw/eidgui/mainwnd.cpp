@@ -59,6 +59,12 @@ static unsigned int pinactivate = 1, certdatastatus = 1, addressdatastatus = 1, 
 //State of Pin Notes 0->Right PIN 1->Not yet inserted or wrong PIN
 static unsigned int pinNotes = 1 ;
 
+//Definitions lifted from eidErrors.h: they are error codes not mapped into specific Exceptions 
+// in eidlib
+#define EIDMW_ERR_PIN_BAD      0xe1d00203
+#define EIDMW_ERR_PIN_BLOCKED  0xe1d00204
+
+
 void MainWnd::createTrayMenu()
 {
 	m_pMinimizeAction = new QAction(tr("Mi&nimize"), this);
@@ -2598,8 +2604,12 @@ bool MainWnd::addressPINRequest_triggered()
 	}
 	catch (PTEID_Exception &e)
 	{
-		QString msg(tr("General exception"));
-		ShowPTEIDError( e.GetError(), msg );
+		if (e.GetError() != EIDMW_ERR_PIN_BAD && 
+			e.GetError() != EIDMW_ERR_PIN_BLOCKED)
+		{
+			QString msg(tr("General exception"));
+			ShowPTEIDError( e.GetError(), msg );
+		}
 		return false;
 	}
 	catch (...)
