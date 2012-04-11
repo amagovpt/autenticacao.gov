@@ -77,33 +77,33 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
     {
         nativedafaultpath = QDir::toNativeSeparators(getSignFile);
 	
-	sig_path_native = new char[nativedafaultpath.size()*2];
+		sig_path_native = new char[nativedafaultpath.size()*2];
         error = new char[errorlen];
-	strcpy(sig_path_native, nativedafaultpath.toStdString().c_str());
+		strcpy(sig_path_native, nativedafaultpath.toStdString().c_str());
 
         vsignsucess = vsign.VerifySignature(sig_path_native, error, &errorlen);
-
-        if (vsignsucess)
-        {
-	    QString msg = tr("Signature was successfully verified.");
-	    // A quick hack, use the error message string buffer to get the timestamp out	    
-	    if (errorlen > 0)
-	    {
-		    msg += tr("\nTimestamp: ");
-		    msg += error;
-	    }
-		    
-            QMessageBox::information(this, tr("Signature Validation"), msg);
-
-            this->close();
-
-        }
-	else
-	{
 		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", 
-				"Error message received from VerifySignature() size=%d: %s", errorlen, error);
-		QMessageBox::critical(this, tr("Signature Validation"), QString::fromAscii(error, errorlen));
-		this->close();
+				"Message received from VerifySignature() size=%d: %s", errorlen, error);
+
+		if (vsignsucess)
+		{
+			QString msg = tr("Signature was successfully verified.");
+
+			if (errorlen > 0)
+			{
+				msg += QString("\n")+QString::fromAscii(error);
+			}
+
+			QMessageBox::information(this, tr("Signature Validation"), msg);
+
+			this->close();
+
+		}
+		else
+		{
+
+			QMessageBox::critical(this, tr("Signature Validation"), QString::fromAscii(error));
+			this->close();
+		}
 	}
-    }
 }
