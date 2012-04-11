@@ -107,7 +107,7 @@ namespace eIDMW
 
 #ifdef WIN32
 //TODO: Needs testing...
-	char * utf8_to_latin1(unsigned char * in)
+	char * utf8_to_latin1(char * in)
 	{
 		char* ansi = NULL;
 		int length = MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)in, -1, NULL, 0);
@@ -125,17 +125,110 @@ namespace eIDMW
 
 	}
 #else
-	//TODO: Needs testing...
-	char * utf8_to_latin1(unsigned char * in)
-	{
-		char * myUTF8Text = new char[strlen(in)];
-		iconv_t ic = iconv_open("UTF-8", "ISO-8859-1");
-		iconv(ic, &in, strlen(in), &myUTF8Text, strlen(in));
-		iconv_close(ic);
 
-		return myUTF8Text;
-	
+const char * OUTSET = "WINDOWS-1252";
+const char * INSET = "UTF-8";
+
+/* Iconv Wrapper for UNIX */
+
+iconv_t
+iconv_init(void)
+{
+    iconv_t conv_desc;
+    conv_desc = iconv_open (OUTSET, INSET);
+    if ((int) conv_desc == -1) {
+	/* Initialization failure. */
+	if (errno == EINVAL) {
+	    fprintf (stderr,
+		     "Conversion from '%s' to '%s' is not supported.\n",
+		     INSET, OUTSET);
+	} else {
+	    fprintf (stderr, "Initialization failure: %s\n",
+		     strerror (errno));
 	}
+    }
+    return conv_desc;
+}
+
+
+/* Convert UTF-8 into LATIN-1 using the iconv library. */
+
+char *
+utf82latin1(iconv_t conv_desc, char * euc)
+{
+    size_t iconv_value;
+    char * utf8;
+    unsigned int len;
+    unsigned int utf8len;
+    /* The variables with "start" in their name are solely for display
+       of what the function is doing. As iconv runs, it alters the
+       values of the variables, so these are for keeping track of the
+       start points and start lengths. */
+    char * utf8start;
+    const char * euc_start;
+    int len_start;
+    int utf8len_start;
+
+    len = strlen (euc);
+    if (!len) {
+	fprintf (stderr, "Input string is empty.\n");
+	return (0);
+    }
+    /* Assign enough space to put the Latin1. */
+    utf8len = len;
+    utf8 = (char *)calloc (utf8len, 1);
+    /* Keep track of the variables. */
+    len_start = len;
+    utf8len_start = utf8len;
+    utf8start = utf8;
+    euc_start = euc;
+    iconv_value = iconv (conv_desc, & euc, & len, & utf8, & utf8len);
+    /* Handle failures. */
+    if (iconv_value == (size_t) -1) {
+	fprintf (stderr, "iconv failed: in string '%s', length %d, "
+		"out string '%s', length %d\n",
+		 euc, len, utf8start, utf8len);
+	switch (errno) {
+	    /* See "man 3 iconv" for an explanation. */
+	case EILSEQ:
+	    fprintf (stderr, "Invalid multibyte sequence.\n");
+	    break;
+	case EINVAL:
+	    fprintf (stderr, "Incomplete multibyte sequence.\n");
+	    break;
+	case E2BIG:
+	    fprintf (stderr, "No more room.\n");
+	    break;
+	default:
+	    fprintf (stderr, "Error: %s.\n", strerror (errno));
+	}
+    }
+    return utf8start;
+}
+
+/* Close the connection with the library. */
+
+void
+iconv_finalize (iconv_t conv_desc)
+{
+    int v;
+    v = iconv_close (conv_desc);
+    if (v != 0) {
+	fprintf (stderr, "iconv_close failed: %s\n", strerror (errno));
+    }
+}
+//TODO: Needs testing...
+char * utf8_to_latin1(char * in)
+{
+	size_t blah = strlen((const char *)in);
+	iconv_t conv_desc;
+	conv_desc = iconv_init();
+	char *out_string = utf82latin1(conv_desc, in);
+	iconv_finalize (conv_desc);
+
+	return out_string;
+
+}
 
 #endif
 

@@ -1064,7 +1064,7 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 				mp_subject_name.Chop(mp_subject_name.Size());
 				//Parse the signer's name from the certificate
 				char * subject_name = utf8_to_latin1(
-					   (unsigned char *)parseSubjectFromCert(tmp_cert));
+					   parseSubjectFromCert(tmp_cert));
 
 				if (subject_name != NULL)
 				{
