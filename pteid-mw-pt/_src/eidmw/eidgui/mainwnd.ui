@@ -57,7 +57,7 @@
        <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
       </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="page_Wellcome"/>
       <widget class="QWidget" name="page_Identity">
@@ -1091,8 +1091,8 @@ image: url(:/images/Images/bg-Light-Blue.png);</string>
        <widget class="QLineEdit" name="txtCert_Owner">
         <property name="geometry">
          <rect>
-          <x>408</x>
-          <y>47</y>
+          <x>410</x>
+          <y>50</y>
           <width>380</width>
           <height>20</height>
          </rect>
@@ -1107,8 +1107,8 @@ image: url(:/images/Images/bg-Light-Blue.png);</string>
        <widget class="QLineEdit" name="txtCert_Issuer">
         <property name="geometry">
          <rect>
-          <x>408</x>
-          <y>95</y>
+          <x>410</x>
+          <y>120</y>
           <width>380</width>
           <height>20</height>
          </rect>
@@ -1124,7 +1124,7 @@ image: url(:/images/Images/bg-Light-Blue.png);</string>
         <property name="geometry">
          <rect>
           <x>410</x>
-          <y>190</y>
+          <y>245</y>
           <width>175</width>
           <height>20</height>
          </rect>
@@ -1140,7 +1140,7 @@ image: url(:/images/Images/bg-Light-Blue.png);</string>
         <property name="geometry">
          <rect>
           <x>410</x>
-          <y>143</y>
+          <y>180</y>
           <width>175</width>
           <height>20</height>
          </rect>
@@ -1156,7 +1156,7 @@ image: url(:/images/Images/bg-Light-Blue.png);</string>
         <property name="geometry">
          <rect>
           <x>610</x>
-          <y>143</y>
+          <y>180</y>
           <width>175</width>
           <height>20</height>
          </rect>
@@ -1166,96 +1166,6 @@ image: url(:/images/Images/bg-Light-Blue.png);</string>
         </property>
         <property name="readOnly">
          <bool>true</bool>
-        </property>
-       </widget>
-       <widget class="QLabel" name="lbl_owner_entity">
-        <property name="geometry">
-         <rect>
-          <x>408</x>
-          <y>25</y>
-          <width>341</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
-        </property>
-        <property name="text">
-         <string>Cidadão / Entidade</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="lbl_issue_entity">
-        <property name="geometry">
-         <rect>
-          <x>408</x>
-          <y>74</y>
-          <width>121</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
-        </property>
-        <property name="text">
-         <string>Entidade Emissora</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="lbl_valid_form">
-        <property name="geometry">
-         <rect>
-          <x>408</x>
-          <y>123</y>
-          <width>121</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
-        </property>
-        <property name="text">
-         <string>Válido desde</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="lbl_valid_until">
-        <property name="geometry">
-         <rect>
-          <x>609</x>
-          <y>123</y>
-          <width>121</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
-        </property>
-        <property name="text">
-         <string>até</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="lbl_keysize">
-        <property name="geometry">
-         <rect>
-          <x>408</x>
-          <y>172</y>
-          <width>121</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
-        </property>
-        <property name="text">
-         <string>Tamanho da Chave</string>
         </property>
        </widget>
        <widget class="QPushButton" name="btnCert_Register">
@@ -1299,7 +1209,7 @@ font: 10pt &quot;Arial&quot;;</string>
         <property name="geometry">
          <rect>
           <x>410</x>
-          <y>50</y>
+          <y>60</y>
           <width>175</width>
           <height>20</height>
          </rect>
@@ -1315,7 +1225,7 @@ font: 10pt &quot;Arial&quot;;</string>
         <property name="geometry">
          <rect>
           <x>610</x>
-          <y>50</y>
+          <y>60</y>
           <width>175</width>
           <height>20</height>
          </rect>
@@ -1331,7 +1241,7 @@ font: 10pt &quot;Arial&quot;;</string>
         <property name="geometry">
          <rect>
           <x>410</x>
-          <y>98</y>
+          <y>130</y>
           <width>370</width>
           <height>20</height>
          </rect>
@@ -1367,7 +1277,7 @@ image: url(:/images/Images/bg-Light-Blue.png);</string>
         <property name="geometry">
          <rect>
           <x>400</x>
-          <y>130</y>
+          <y>180</y>
           <width>131</width>
           <height>31</height>
          </rect>
@@ -1397,7 +1307,7 @@ color: rgb(255, 102, 0);</string>
         <property name="geometry">
          <rect>
           <x>540</x>
-          <y>130</y>
+          <y>180</y>
           <width>121</width>
           <height>27</height>
          </rect>
@@ -1418,60 +1328,6 @@ color: rgb(255, 102, 0);</string>
         </property>
         <property name="text">
          <string>Change PIN</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="lbl_PIN_type">
-        <property name="geometry">
-         <rect>
-          <x>410</x>
-          <y>25</y>
-          <width>121</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
-        </property>
-        <property name="text">
-         <string>Tipo de Código PIN</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="lbl_PIN_id">
-        <property name="geometry">
-         <rect>
-          <x>610</x>
-          <y>25</y>
-          <width>181</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
-        </property>
-        <property name="text">
-         <string>Identificação do Código PIN</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="lbl_PIN_status">
-        <property name="geometry">
-         <rect>
-          <x>410</x>
-          <y>75</y>
-          <width>221</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
-        </property>
-        <property name="text">
-         <string>Estado do Código PIN</string>
         </property>
        </widget>
       </widget>
@@ -2516,7 +2372,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <x>0</x>
      <y>0</y>
      <width>925</width>
-     <height>23</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
