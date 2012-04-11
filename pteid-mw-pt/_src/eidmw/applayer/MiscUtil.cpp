@@ -35,6 +35,7 @@
 #include <sys/stat.h>
 #ifndef WIN32
 #include <unistd.h>
+#include <iconv.h>
 #endif
 #include <errno.h>
 
@@ -103,6 +104,40 @@ namespace eIDMW
 		}
 		*out = '\0';
 	}
+
+#ifdef WIN32
+//TODO: Needs testing...
+	char * utf8_to_latin1(unsigned char * in)
+	{
+		char* ansi = NULL;
+		int length = MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)in, -1, NULL, 0);
+		if (length > 0)
+		{
+			wchar_t* wide = new wchar_t[length];
+			MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)in, -1, wide, length);
+
+			// convert it to ANSI, use setlocale() to set your locale, if not set
+			size_t convertedChars = 0;
+			ansi = new char[length];
+			wcstombs_s(&convertedChars, ansi, length, wide, _TRUNCATE);
+		}
+		return ansi;
+
+	}
+#else
+	//TODO: Needs testing...
+	char * utf8_to_latin1(unsigned char * in)
+	{
+		char * myUTF8Text = new char[strlen(in)];
+		iconv_t ic = iconv_open("UTF-8", "ISO-8859-1");
+		iconv(ic, &in, strlen(in), &myUTF8Text, strlen(in));
+		iconv_close(ic);
+
+		return myUTF8Text;
+	
+	}
+
+#endif
 
 /*****************************************************************************************
 ------------------------------------ CTimestampUtil ---------------------------------------
