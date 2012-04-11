@@ -204,6 +204,18 @@
         <File Id="CartaodeCidadao001.der" Name="CartaodeCidadao001.der" KeyPath="yes" Source="..\..\certs\CartaodeCidadao001.der" />
         <File Id="ECRaizEstado_novo_assinado_GTE.der" Name="ECRaizEstado_novo_assinado_GTE.der" KeyPath="no" Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" />
         <File Id="GTEGlobalRoot.der" Name="GTEGlobalRoot.der" KeyPath="no" Source="..\..\certs\GTEGlobalRoot.der" />
+        <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der"/>
+        <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0002.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0002.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0002.der"/>
+        <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0003.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0003.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0003.der"/>
+        <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0004.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0004.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0004.der"/>
+        <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0005.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0005.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0005.der"/>
+        <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der"/>
+        <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der"/>
+        <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der"/>
+        <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der"/>
+        <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0004.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0004.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0004.der"/>
+        <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0005.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0005.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0005.der"/>
+        <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der"/>
       </Component>
     </DirectoryRef>
 
