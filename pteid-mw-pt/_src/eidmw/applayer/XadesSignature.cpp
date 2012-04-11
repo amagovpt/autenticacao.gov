@@ -17,6 +17,7 @@
 #include "XadesSignature.h"
 #include "MWException.h"
 #include "eidErrors.h"
+#include "Util.h"
 
 #include "MiscUtil.h"
 
@@ -397,8 +398,8 @@ namespace eIDMW
 
 			if (res != 0)
 			{
-				MWLOG(LEV_ERROR, MOD_APL, L"Timestamp Validation error in HTTP POST request. LibcURL returned %S\n", 
-						(char *)error_buf);
+				MWLOG(LEV_ERROR, MOD_APL, L"Timestamp Validation error in HTTP POST request. LibcURL returned %ls\n", 
+					utilStringWiden(string(error_buf)).c_str());
 			}
 
 			/* always cleanup */ 
@@ -463,8 +464,8 @@ namespace eIDMW
 
 			if (res != 0)
 			{
-				MWLOG(LEV_ERROR, MOD_APL, L"Timestamping error in HTTP POST request. LibcURL returned %S\n", 
-						(char *)error_buf);
+				MWLOG(LEV_ERROR, MOD_APL, L"Timestamping error in HTTP POST request. LibcURL returned %ls\n", 
+						utilStringWiden(string(error_buf)).c_str());
 			}
 
 			curl_slist_free_all(headers);
@@ -565,8 +566,8 @@ bool XadesSignature::checkExternalRefs(DSIGReferenceList *refs, tHashedFile **ha
 		if (res == false)
 		{
 			MWLOG (LEV_ERROR, MOD_APL,
-					L" checkExternalRefs(): SHA-1 Hash Value for file %s doesn't match.",
-				       	hashed_file->URI->c_str());
+					L" checkExternalRefs(): SHA-1 Hash Value for file %ls doesn't match.",
+				       	utilStringWiden(*(hashed_file->URI)).c_str());
 			return false;
 		}
 	}
@@ -702,6 +703,7 @@ bool XadesSignature::ValidateTimestamp (CByteArray signature, CByteArray ts_resp
 	unsigned char signature_hash[SHA1_LEN];
 	char time_and_date[100];
 	unsigned int sig_len = 0;
+	memset(time_and_date, 0, sizeof(time_and_date));
 	XERCES_NS DOMDocument * theDOM = dynamic_cast<XERCES_NS DOMDocument *>(doc);
 	DSIGSignature * sig = prov.newSignatureFromDOM(theDOM, sigNode);
 	
@@ -801,7 +803,7 @@ bool XadesSignature::ValidateCert(const char *pem_certificate)
 
 	APL_Config certs_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
 	const char * str_certs_dir = certs_dir.getString();
-	CPathUtil::scanDir(str_certs_dir, "", ".der", bStopRequest, store, &XadesSignature::foundCertificate);
+	CPathUtil::scanDir(str_certs_dir, "", "der", bStopRequest, store, &XadesSignature::foundCertificate);
 
 	X509_STORE_CTX *ctx;
 	X509 *cert = NULL;
@@ -839,12 +841,15 @@ bool XadesSignature::ValidateCert(const char *pem_certificate)
 	{
 		res = false;
 		char subject_buf[1024];
-		MWLOG(LEV_DEBUG, MOD_APL, L"ValidateCert(): Invalid certificate! OpenSSL Error: %s", 
-			X509_verify_cert_error_string(ctx->error));
+		std::string ssl_error = std::string(X509_verify_cert_error_string(ctx->error));
+		MWLOG(LEV_DEBUG, MOD_APL, L"ValidateCert(): Invalid certificate! OpenSSL Error: %ls", 
+			utilStringWiden(ssl_error).c_str());
 
 		X509* error_cert = X509_STORE_CTX_get_current_cert(ctx);
 		X509_NAME_oneline(X509_get_subject_name(ctx->current_cert), subject_buf, sizeof(subject_buf));
-		MWLOG(LEV_DEBUG, MOD_APL, L"Certificate that caused the error: %s", subject_buf);
+		std::string subject_str = std::string(subject_buf);
+		MWLOG(LEV_DEBUG, MOD_APL, L"Certificate that caused the error: %ls",
+			utilStringWiden(subject_str).c_str());
 
 	}
 
@@ -903,11 +908,15 @@ void XadesSignature::foundCertificate (const char *SubDir, const char *File, voi
 	
 	if(X509_STORE_add_cert(certificate_store, pCert) == 0)
 	   goto err;
+	
+	MWLOG(LEV_DEBUG, MOD_APL, L"XadesSignature::foundCertificate: successfully added cert %ls", 
+			utilStringWiden(path).c_str());
 	return;
 
 
 	err:
-		MWLOG(LEV_DEBUG, MOD_APL, L"XadesSignature::foundCertificate: problem with file %s ", path.c_str());
+		MWLOG(LEV_DEBUG, MOD_APL, L"XadesSignature::foundCertificate: problem with file %ls ", 
+			utilStringWiden(path).c_str());
 
 }
 
@@ -1013,28 +1022,32 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 	try {
 
 		sig->load();
-
+				
 		// Validate signing certificate first
 		DSIGKeyInfo *keyinfo = sig->getKeyInfoList()->item(0);
-
-		//This should always be the case for signatures created by pteid-mw
-		if (keyinfo->getKeyInfoType() == DSIGKeyInfo::KEYINFO_X509)
+		// If keyinfo is NULL this most certainly means a broken signature
+		// just skip certificate checking
+		if (keyinfo != NULL)
 		{
-			DSIGKeyInfoX509 *cert_element = dynamic_cast<DSIGKeyInfoX509 *> (keyinfo);
-			const XMLCh *pem_cert = cert_element->getCertificateItem(0);
-			char * tmp_cert = XMLString::transcode(pem_cert);
-			bool cert_result = ValidateCert(tmp_cert);
 
-			if (!cert_result)
+			//This should always be the case for signatures created by pteid-mw
+			if (keyinfo->getKeyInfoType() == DSIGKeyInfo::KEYINFO_X509)
 			{
-				int err_len = _snprintf(errors, *error_length, "%s",  getString(12));
-				*error_length = err_len;
-				return false;
+				DSIGKeyInfoX509 *cert_element = dynamic_cast<DSIGKeyInfoX509 *> (keyinfo);
+				const XMLCh *pem_cert = cert_element->getCertificateItem(0);
+				char * tmp_cert = XMLString::transcode(pem_cert);
+				bool cert_result = ValidateCert(tmp_cert);
+
+				if (!cert_result)
+				{
+					int err_len = _snprintf(errors, *error_length, "%s",  getString(12));
+					*error_length = err_len;
+					return false;
+				}
+				XMLString::release(&tmp_cert);
 			}
-
-			XMLString::release(&tmp_cert);
-
 		}
+		
 
 		DSIGReferenceList *refs = sig->getReferenceList();
 
@@ -1051,16 +1064,13 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 
 	}
 	catch (XSECException &e) {
-		char * msg = XMLString::transcode(e.getMsg());
-		cerr << "An error occured during signature verification\n  (1) XMLSec Error Message: "
-			<< msg << endl;
-		XSEC_RELEASE_XMLCH(msg);
+		MWLOG(LEV_ERROR, MOD_APL, L"ValidateXades(): XSECException thrown. Detail: %ls",
+			e.getMsg());
 		result = false;
-	 	
 	}
 	catch (XSECCryptoException &e) {
-		cerr << "An error occured during signature verification\n  (2) XMLSec Error Message: "
-			<< e.getMsg() << endl;
+		MWLOG(LEV_ERROR, MOD_APL, L"ValidateXades(): XSECCryptoException thrown. Detail: %ls",
+			e.getMsg());
 		return false;
 	}
 
