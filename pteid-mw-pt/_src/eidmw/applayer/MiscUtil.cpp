@@ -136,7 +136,7 @@ iconv_init(void)
 {
     iconv_t conv_desc;
     conv_desc = iconv_open (OUTSET, INSET);
-    if ((int) conv_desc == -1) {
+    if (conv_desc == (iconv_t)-1) {
 	/* Initialization failure. */
 	if (errno == EINVAL) {
 	    fprintf (stderr,
@@ -158,8 +158,8 @@ utf82latin1(iconv_t conv_desc, char * euc)
 {
     size_t iconv_value;
     char * utf8;
-    unsigned int len;
-    unsigned int utf8len;
+    size_t len;
+    size_t utf8len;
     /* The variables with "start" in their name are solely for display
        of what the function is doing. As iconv runs, it alters the
        values of the variables, so these are for keeping track of the
@@ -187,7 +187,7 @@ utf82latin1(iconv_t conv_desc, char * euc)
     if (iconv_value == (size_t) -1) {
 	fprintf (stderr, "iconv failed: in string '%s', length %d, "
 		"out string '%s', length %d\n",
-		 euc, len, utf8start, utf8len);
+		 euc, (int)len, utf8start, (int)utf8len);
 	switch (errno) {
 	    /* See "man 3 iconv" for an explanation. */
 	case EILSEQ:
@@ -217,10 +217,8 @@ iconv_finalize (iconv_t conv_desc)
 	fprintf (stderr, "iconv_close failed: %s\n", strerror (errno));
     }
 }
-//TODO: Needs testing...
 char * utf8_to_latin1(char * in)
 {
-	size_t blah = strlen((const char *)in);
 	iconv_t conv_desc;
 	conv_desc = iconv_init();
 	char *out_string = utf82latin1(conv_desc, in);
