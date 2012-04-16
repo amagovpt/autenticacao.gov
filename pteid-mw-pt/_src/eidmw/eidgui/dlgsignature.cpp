@@ -206,6 +206,10 @@ void dlgSignature::on_pbSign_clicked ( void )
 	else
 		savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), 
 				nativedafaultpath, tr("Zip files 'XAdES' (*.zip)"));
+
+	if (savefilepath.isNull() || savefilepath.isEmpty())
+		return;
+
 	QString native_path = QDir::toNativeSeparators(savefilepath);
 
 	pdialog = new QProgressDialog();
