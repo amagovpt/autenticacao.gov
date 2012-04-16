@@ -243,40 +243,21 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 {
 	try
 	{
-
-
 		QString caption(tr("Identity Card: PIN verification"));
 
-		QString PinName = "PIN da Morada";
 		PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
-		PTEID_Pins&		Pins	= Card->getPins();
-		for (unsigned long PinIdx=0; PinIdx<Pins.count(); PinIdx++)
-		{
-			PTEID_Pin&	Pin			= Pins.getPinByNumber(PinIdx);
-			QString		CurrPinName	= Pin.getLabel();
+		PTEID_Pin&		Pin	= Card->getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
 
-			if (CurrPinName==PinName)
-			{
-				unsigned long triesLeft = -1;
-				bool		  bResult   = Pin.verifyPin("",triesLeft);
-				//QString		  msg(tr("PIN verification "));
+		unsigned long triesLeft = -1;
+		bool		  bResult   = Pin.verifyPin("",triesLeft);
+		//QString		  msg(tr("PIN verification "));
 
-				QString msg = bResult ? tr("PIN verification passed"):tr("PIN verification failed");
-				if (!bResult)
-				{
-					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-					return false;
-				}
-				else
-				{
+		QString msg = bResult ? tr("PIN verification passed"):tr("PIN verification failed");
+		QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
+		if (!bResult)
+			return false;
 
-					CI_Data.LoadDataAddress(*Card, m_CurrReaderName);
-
-				}
-				QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-				break;
-			}
-		}
+		CI_Data.LoadDataAddress(*Card, m_CurrReaderName);
 	}
 	catch (PTEID_Exception &e)
 	{
