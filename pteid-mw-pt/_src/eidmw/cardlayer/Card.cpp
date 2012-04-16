@@ -62,6 +62,15 @@ bool CCard::Status()
 void CCard::setSSO(bool value)
 {
 	m_poContext->m_bSSO = value;
+	if (!value)
+	{
+		//Zero-out currently stored PINs
+		for (size_t i = 0; i < m_verifiedPINs.size(); i++)
+		{
+			std::string &pin = m_verifiedPINs[i];
+			std::fill(pin.begin(), pin.end(), 0);
+		}
+	}
 }
 
 bool CCard::IsPinpadReader()

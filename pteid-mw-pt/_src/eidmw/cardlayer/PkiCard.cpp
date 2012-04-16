@@ -474,7 +474,7 @@ CByteArray CPkiCard::Sign(const tPrivKey & key, const tPin & Pin,
         unsigned long algo, const CByteArray & oData)
 {
 
-	MWLOG(LEV_INFO, MOD_CAL, L"     No SSO: ask PIN and sign (key: ID=0x%0x, algo=0x%0x, "
+	MWLOG(LEV_INFO, MOD_CAL, L"PKiCard::Sign(): ask PIN and sign (key: ID=0x%0x, algo=0x%0x, "
 			L"%d bytes input)", key.ulID, algo, oData.Size());
 	return SignInternal(key, algo, oData, &Pin);
 

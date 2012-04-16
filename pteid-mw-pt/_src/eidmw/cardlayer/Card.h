@@ -154,6 +154,7 @@ protected:
 	bool m_bSerialNrString;
 	std::string m_csSerialNr;
 
+    std::map <unsigned int, std::string> m_verifiedPINs;
     unsigned char m_ucCLA;
 
 private:
