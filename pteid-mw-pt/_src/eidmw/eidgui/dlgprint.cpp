@@ -43,7 +43,8 @@ dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUA
 {	
     if (CI_Data.isDataLoaded())
     {
-		ui.setupUi(this);
+    	PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+    	ui.setupUi(this);
 		setFixedSize(398, 245);
 		const QIcon Ico = QIcon( ":/images/Images/Icons/Print.png" );
 		this->setWindowIcon( Ico );
@@ -61,36 +62,7 @@ dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUA
 			this->resize(thiswidth,height-20); //make sure the window fits
 		}
 
-        try
-        {
-            unsigned long	ReaderStartIdx = 1;
-            bool			bRefresh	   = false;
-            unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
-            unsigned long	ReaderIdx	   = 0;
-
-            if (ReaderStartIdx!=(unsigned long)-1)
-            {
-                ReaderEndIdx = ReaderStartIdx+1;
-            }
-            else
-            {
-                ReaderStartIdx=0;
-            }
-
-            const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-            m_CurrReaderName = readerName;
-            PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-
-            if (ReaderContext.isCardPresent())
-            {
-                PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
-                CI_Data.LoadData(Card,m_CurrReaderName);
-            }
-        }	catch (PTEID_Exception &e) {
-            return;
-        }
-
-
+        CI_Data.LoadData(*Card,m_CurrReaderName);
     }
 
 }
@@ -255,102 +227,68 @@ void dlgPrint::on_chboxSignature_toggled( bool bChecked )
 
 const char * dlgPrint::persodata_triggered()
 {
-    try
-    {
-        unsigned long	ReaderStartIdx = 1;
-        bool			bRefresh	   = false;
-        unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
-        unsigned long	ReaderIdx	   = 0;
+	try
+	{
+		PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
 
-        if (ReaderStartIdx!=(unsigned long)-1)
-        {
-            ReaderEndIdx = ReaderStartIdx+1;
-        }
-        else
-        {
-            ReaderStartIdx=0;
-        }
+		return Card->readPersonalNotes();
 
-        const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-        m_CurrReaderName = readerName;
-        PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-
-        if (ReaderContext.isCardPresent())
-        {
-            PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
-			return Card.readPersonalNotes();
-            
-        }
-    }	catch (PTEID_Exception &e) {
-        QString msg(tr("General exception"));
+	}	catch (PTEID_Exception &e) {
+		QString msg(tr("General exception"));
 		return NULL;
-    }
+	}
 }
 
 bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 {
-	//Workaround: Make PIN window called only one time
-	/*if (!m_CI_Data.isDataLoaded())
+	try
 	{
-		return true;
-	}*/
-    try
-    {
-        PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 
-        QString caption(tr("Identity Card: PIN verification"));
 
-        if (ReaderContext.isCardPresent())
-        {
-            QString PinName = "PIN da Morada";
-            PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
-            PTEID_Pins&		Pins	= Card.getPins();
-            for (unsigned long PinIdx=0; PinIdx<Pins.count(); PinIdx++)
-            {
-                PTEID_Pin&	Pin			= Pins.getPinByNumber(PinIdx);
-                QString		CurrPinName	= Pin.getLabel();
+		QString caption(tr("Identity Card: PIN verification"));
 
-                if (CurrPinName==PinName)
-                {
-                    unsigned long triesLeft = -1;
-                    bool		  bResult   = Pin.verifyPin("",triesLeft);
-                    //QString		  msg(tr("PIN verification "));
+		QString PinName = "PIN da Morada";
+		PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+		PTEID_Pins&		Pins	= Card->getPins();
+		for (unsigned long PinIdx=0; PinIdx<Pins.count(); PinIdx++)
+		{
+			PTEID_Pin&	Pin			= Pins.getPinByNumber(PinIdx);
+			QString		CurrPinName	= Pin.getLabel();
 
-                    QString msg = bResult ? tr("PIN verification passed"):tr("PIN verification failed");
-                    if (!bResult)
-                    {
-                            QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-                            return false;
-                    }
-					else
-					{
-					
-							CI_Data.LoadDataAddress(Card, m_CurrReaderName);
-				
-					}
-                    QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-                    break;
-                }
-            }
-        }
-        else
-        {
-            QString msg(tr("No card present"));
-            QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-            return false;
-        }
-    }
-    catch (PTEID_Exception &e)
-    {
-        QString msg(tr("General exception"));
-        return false;
-    }
-    catch (...)
-    {
-        QString msg(tr("Unknown exception"));
-        return false;
-    }
-    return true;
+			if (CurrPinName==PinName)
+			{
+				unsigned long triesLeft = -1;
+				bool		  bResult   = Pin.verifyPin("",triesLeft);
+				//QString		  msg(tr("PIN verification "));
+
+				QString msg = bResult ? tr("PIN verification passed"):tr("PIN verification failed");
+				if (!bResult)
+				{
+					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
+					return false;
+				}
+				else
+				{
+
+					CI_Data.LoadDataAddress(*Card, m_CurrReaderName);
+
+				}
+				QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
+				break;
+			}
+		}
+	}
+	catch (PTEID_Exception &e)
+	{
+		QString msg(tr("General exception"));
+		return false;
+	}
+	catch (...)
+	{
+		QString msg(tr("Unknown exception"));
+		return false;
+	}
+	return true;
 }
 
 void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepath)
