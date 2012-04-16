@@ -3,6 +3,14 @@
 <TS version="2.0" language="nl">
 <context>
     <name>MainWnd</name>
+     <message>
+        <source>Time for entering PIN expired (30 seconds)</source>
+        <translation>O tempo para introdução do PIN expirou (30 segundos)</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>Gravar</translation>
+    </message>
     <message>
         <source>Warning</source>
         <translation type="unfinished">Aviso</translation>

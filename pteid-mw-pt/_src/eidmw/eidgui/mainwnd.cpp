@@ -44,6 +44,7 @@
 #include "eidlibException.h"
 #include "picturepopup.h"
 #include "AutoUpdates.h"
+#include "eidErrors.h"
 #ifdef WIN32
 #include <windows.h>
 #include <stdio.h>
@@ -2531,7 +2532,18 @@ void MainWnd::authPINRequest_triggered()
 	}
 	catch (PTEID_Exception &e)
 	{
-		QString msg(tr("General exception"));
+		QString msg;
+
+		switch(e.GetError()){
+		case EIDMW_ERR_PIN_CANCEL:
+			// show nothing user pressed cancel.
+			return;
+		case EIDMW_ERR_TIMEOUT:
+			msg = tr("Time for entering PIN expired (30 seconds)");
+			break;
+		default:
+			msg = tr("General exception");
+		}
 		ShowPTEIDError( e.GetError(), msg );
 	}
 	catch (...)
@@ -2604,12 +2616,20 @@ bool MainWnd::addressPINRequest_triggered()
 	}
 	catch (PTEID_Exception &e)
 	{
-		if (e.GetError() != EIDMW_ERR_PIN_BAD && 
-			e.GetError() != EIDMW_ERR_PIN_BLOCKED)
-		{
-			QString msg(tr("General exception"));
-			ShowPTEIDError( e.GetError(), msg );
+		QString msg;
+
+		switch(e.GetError()){
+		case EIDMW_ERR_PIN_CANCEL:
+			// show nothing user pressed cancel.
+			return false;
+		case EIDMW_ERR_TIMEOUT:
+			msg = tr("Time for entering PIN expired (30 seconds)");
+			break;
+		default:
+			msg = tr("General exception");
 		}
+		ShowPTEIDError( e.GetError(), msg );
+
 		return false;
 	}
 	catch (...)
@@ -2704,7 +2724,18 @@ void MainWnd::on_actionPINRequest_triggered()
 	}
 	catch (PTEID_Exception &e)
 	{
-		QString msg(tr("General exception"));
+		QString msg;
+
+		switch(e.GetError()){
+		case EIDMW_ERR_PIN_CANCEL:
+			// show nothing user pressed cancel.
+			return;
+		case EIDMW_ERR_TIMEOUT:
+			msg = tr("Time for entering PIN expired (30 seconds)");
+			break;
+		default:
+			msg = tr("General exception");
+		}
 		ShowPTEIDError( e.GetError(), msg );
 	}
 	catch (...)
@@ -2788,7 +2819,18 @@ void MainWnd::on_actionPINChange_triggered()
 	}
 	catch (PTEID_Exception &e)
 	{
-		QString msg(tr("General exception"));
+		QString msg;
+
+		switch(e.GetError()){
+		case EIDMW_ERR_PIN_CANCEL:
+			// show nothing user pressed cancel.
+			return;
+		case EIDMW_ERR_TIMEOUT:
+			msg = tr("Time for entering PIN expired (30 seconds)");
+			break;
+		default:
+			msg = tr("General exception");
+		}
 		ShowPTEIDError( e.GetError(), msg );
 	}
 	catch (...)
