@@ -409,7 +409,7 @@ namespace eIDMW
 			curl_slist_free_all(headers);
 			curl_formfree(formpost);
 
-
+			curl_global_cleanup();
 		}
 
 
@@ -473,6 +473,7 @@ namespace eIDMW
 
 			/* always cleanup */ 
 			curl_easy_cleanup(curl);
+			curl_global_cleanup();
 
 		}
 
