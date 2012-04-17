@@ -4,6 +4,10 @@
 <context>
     <name>MainWnd</name>
      <message>
+        <source>Reading card data...</source>
+        <translation>A ler os dados do cartão...</translation>
+    </message>
+     <message>
         <source>Time for entering PIN expired (30 seconds)</source>
         <translation>O tempo para introdução do PIN expirou (30 segundos)</translation>
     </message>

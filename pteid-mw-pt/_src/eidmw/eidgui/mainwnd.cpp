@@ -155,7 +155,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	/*** Setup progress Bar ***/
 	m_progress = new QProgressDialog();
 	m_progress->setWindowTitle(QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"));
-	m_progress->setLabelText("Reading card data...");
+	m_progress->setLabelText(tr("Reading card data..."));
 
 	//Disable cancel button
 	m_progress->setCancelButton(NULL);
@@ -3178,11 +3178,10 @@ void MainWnd::fillPinList(PTEID_EIDCard& Card)
 	}
 	m_ui.treePIN->expandAll();
 
-	QList<QTreeWidgetItem*> treeList = m_ui.treePIN->findItems("PIN ",Qt::MatchContains);
-	if (treeList.size() > 0)
+	if (m_ui.treePIN->topLevelItemCount() > 0)
 	{
-		treeList[0]->setSelected(true);
-		on_treePIN_itemClicked(treeList[0], 0);
+		m_ui.treePIN->topLevelItem(0)->setSelected(true);
+		m_ui.treePIN->setCurrentItem (m_ui.treePIN->topLevelItem(0));
 	}
 }
 
