@@ -83,14 +83,15 @@ HEADERS += \
 	APLPublicKey.h \
         SigContainer.h \
 	XadesSignature.h \
-	SODParser.h
+	SODParser.h \ 
+ 	SSLConnection.h 	
 
 
 ### EMV-CAP support
 ###        EMV-Cap-Helper.h \
 ### 	sslcommon.h \
 ### 	sslclient.h \
-### 	sslconnection.h \
+
 
 SOURCES += \
 	APLCertif.cpp        \  
@@ -108,14 +109,16 @@ SOURCES += \
     APLPublicKey.cpp \
     SigContainer.cpp \
     XadesSignature.cpp \
-    SODParser.cpp
+    SODParser.cpp \
+    SSLConnection.cpp	
     
     
 ### EMV-CAP support
 ###    EMV-Cap-Helper.cpp \
 ###    sslcommon.cpp		\
 ###    sslclient.cpp		\
-###    sslconnection.cpp   \
+
+QMAKE_CXXFLAGS += -Wno-write-strings
 
 
 ##
