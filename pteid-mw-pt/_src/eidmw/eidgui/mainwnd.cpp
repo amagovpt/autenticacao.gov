@@ -926,13 +926,13 @@ bool MainWnd::ImportSelectedCertificate( void )
 			}
 			else
 			{
-				if(StoreUserCerts (Card, pCertContext, KeyUsageBits, item->getCert(), m_CurrReaderName.toLatin1().data()))
+				if(StoreUserCerts (Card, pCertContext, KeyUsageBits, (*item->getCert()), m_CurrReaderName.toLatin1().data()))
 				{
 
 					//now store each time the issuer until we're done
 					// an exception is thrown when there is no issuer
 					bool bDone = false;
-					PTEID_Certificate* currCert = &cert;
+					PTEID_Certificate* currCert = item->getCert();
 					while(!bDone)
 					{
 						try
@@ -1248,7 +1248,7 @@ void MainWnd::on_btnCert_Register_clicked( void )
 void MainWnd::on_btnCert_Details_clicked( void )
 {
 #if WIN32
-	QList<QTreeWidgetItem *> listItem = m_ui.treeCert.selectedItems();
+	QList<QTreeWidgetItem *> listItem = m_ui.treeCert->selectedItems();
 	if (!listItem.isEmpty()){
 
 		QTreeCertItem *item = dynamic_cast<QTreeCertItem *>(listItem.first());
@@ -1355,7 +1355,7 @@ void MainWnd::on_treePIN_itemClicked(QTreeWidgetItem* item, int column)
 		return;
 
 	unsigned int pinRef = item->data(0,Qt::UserRole).value<uint>();
-	PinInfo* pinfo = m_pinsInfo.at(pinRef);
+	PinInfo* pinfo = m_pinsInfo.find(pinRef)->second;
 
 	QString status;
 	if (1 == pinfo->triesLeft)
@@ -2313,7 +2313,7 @@ void MainWnd::authPINRequest_triggered()
 			if (!bResult && -1 == triesLeft)
 				return;
 
-			m_pinsInfo.at(PTEID_Pin::AUTH_PIN)->triesLeft = triesLeft;
+			m_pinsInfo.find(PTEID_Pin::AUTH_PIN)->second->triesLeft = triesLeft;
 
 			QString status;
 			if (1 == triesLeft)
@@ -2390,7 +2390,7 @@ bool MainWnd::addressPINRequest_triggered()
 			if (!bResult && -1 == triesLeft)
 				return false;
 
-			m_pinsInfo.at(PTEID_Pin::ADDR_PIN)->triesLeft = triesLeft;
+			m_pinsInfo.find(PTEID_Pin::ADDR_PIN)->second->triesLeft = triesLeft;
 
 			QString status;
 			if (1 == triesLeft)
@@ -2470,7 +2470,7 @@ void MainWnd::on_actionPINRequest_triggered()
 			if (!bResult && -1 == triesLeft)
 				return;
 
-			m_pinsInfo.at(pinRef)->triesLeft = triesLeft;
+			m_pinsInfo.find(pinRef)->second->triesLeft = triesLeft;
 
 			QString status;
 			if (1 == triesLeft)
@@ -2549,7 +2549,7 @@ void MainWnd::on_actionPINChange_triggered()
 			if (!bResult && -1 == triesLeft)
 				return;
 
-			m_pinsInfo.at(pinRef)->triesLeft = triesLeft;
+			m_pinsInfo.find(pinRef)->second->triesLeft = triesLeft;
 
 			QString status;
 			if (1 == triesLeft)
@@ -3595,14 +3595,14 @@ void MainWnd::refreshTabCardPin( void )
                 	unsigned long triesLeft = m_pinsInfo[pinRef]->triesLeft;
 
                 	QString status;
-                	if (1 == m_pinsInfo.at(pinRef)->triesLeft)
-                		status = tr("%1 try remaining").arg(m_pinsInfo.at(pinRef)->triesLeft);
+                	if (1 == m_pinsInfo.find(pinRef)->second->triesLeft)
+                		status = tr("%1 try remaining").arg(m_pinsInfo.find(pinRef)->second->triesLeft);
                 	else
-                		status = tr("%1 tries remaining").arg(m_pinsInfo.at(pinRef)->triesLeft);
-                	m_ui.txtPIN_Name->setText(m_pinsInfo.at(pinRef)->pin_name);
-                	m_ui.txtPIN_Name->setAccessibleName(m_pinsInfo.at(pinRef)->pin_name);
-                	m_ui.txtPIN_ID->setText(m_pinsInfo.at(pinRef)->pin_id);
-                	m_ui.txtPIN_ID->setAccessibleName(m_pinsInfo.at(pinRef)->pin_id);
+                		status = tr("%1 tries remaining").arg(m_pinsInfo.find(pinRef)->second->triesLeft);
+                	m_ui.txtPIN_Name->setText(m_pinsInfo.find(pinRef)->second->pin_name);
+                	m_ui.txtPIN_Name->setAccessibleName(m_pinsInfo.find(pinRef)->second->pin_name);
+                	m_ui.txtPIN_ID->setText(m_pinsInfo.find(pinRef)->second->pin_id);
+                	m_ui.txtPIN_ID->setAccessibleName(m_pinsInfo.find(pinRef)->second->pin_id);
                 	m_ui.txtPIN_Status->setText(status);
                 	m_ui.txtPIN_Status->setAccessibleName(status);
                 }
