@@ -895,12 +895,14 @@ bool MainWnd::ImportSelectedCertificate( void )
 	QString			strTip;
 	bool			bImported	= false;
 
-	QList<QTreeWidgetItem *> listItem = m_ui.treeCert.selectedItems();
+	QList<QTreeWidgetItem *> listItem = m_ui.treeCert->selectedItems();
 	if (!listItem.isEmpty()){
 
 		QTreeCertItem *item = dynamic_cast<QTreeCertItem *>(listItem.first());
 
-		const PTEID_ByteArray certData = item->cert->getCertData();
+		const PTEID_ByteArray certData = item->getCert()->getCertData();
+		PTEID_ReaderContext& ReaderContext  = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
+		PTEID_EIDCard& Card	= ReaderContext.getEIDCard();
 
 		// ----------------------------------------------------
 		// create the certificate context with the certificate raw data
@@ -924,7 +926,7 @@ bool MainWnd::ImportSelectedCertificate( void )
 			}
 			else
 			{
-				if(StoreUserCerts (Card, pCertContext, KeyUsageBits, cert, m_CurrReaderName.toLatin1().data()))
+				if(StoreUserCerts (Card, pCertContext, KeyUsageBits, item->getCert(), m_CurrReaderName.toLatin1().data()))
 				{
 
 					//now store each time the issuer until we're done
@@ -1251,7 +1253,7 @@ void MainWnd::on_btnCert_Details_clicked( void )
 
 		QTreeCertItem *item = dynamic_cast<QTreeCertItem *>(listItem.first());
 
-		const PTEID_ByteArray certData = item->cert->getCertData();
+		const PTEID_ByteArray certData = item->getCert()->getCertData();
 
 		CRYPTUI_VIEWCERTIFICATE_STRUCT tCert = {0};
 		tCert.dwSize		= sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);

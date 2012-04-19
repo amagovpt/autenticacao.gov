@@ -21,6 +21,7 @@
 #ifndef MAINWND_H
 #define MAINWND_H
 
+#include <map>
 #include <QtGui>
 #include <QFutureWatcher>
 #ifdef WIN32
@@ -174,6 +175,7 @@ public:
 	QString const& getValidityBegin() {return m_ValidityBegin;}
 	QString const& getValidityEnd() {return m_ValidityEnd;}
 	QString const& getKeyLen() {return m_KeyLen;}
+	PTEID_Certificate *getCert() { return cert;}
 
 private:
 	QString m_Issuer;
