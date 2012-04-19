@@ -371,7 +371,7 @@ bool APL_CryptoFwk::isSelfIssuer(const CByteArray &cert)
 
 	//Convert cert into pX509
 	pucCert=cert.GetBytes();
-	
+
 	if ( ! d2i_X509_Wrapper(&pX509, pucCert,cert.Size() ) )
 	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
@@ -497,26 +497,33 @@ bool APL_CryptoFwk::isIssuer(const CByteArray &cert,const CByteArray &issuer)
 
 bool APL_CryptoFwk::VerifyCertSignature(X509 *pX509_Cert,X509 *pX509_Issuer)
 {
+	bool bOk = false;
+
 	if(pX509_Cert==NULL || pX509_Issuer==NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-	bool bOk = false;
 
 	//Convert pX509_Cert->cert_info into unsigned char * and then into CByteArray
 	unsigned char *pucInfo,*pucInfoNext;
 	long lLen=i2d_X509_CINF(pX509_Cert->cert_info,NULL); //Get the length for the buffer
 	if(lLen > 0)
 	{
+		OpenSSL_add_all_digests();
 		//Convert the signature into CByteArray
 		CByteArray signature(pX509_Cert->signature->data,pX509_Cert->signature->length);
-
 		pucInfo = pucInfoNext = (unsigned char *)malloc(lLen);	//Allocate the buffer
 		i2d_X509_CINF(pX509_Cert->cert_info,&pucInfoNext);		//Fill the buffer
 		CByteArray certinfo(pucInfo,lLen);						//Fill the CByteArray
 		free(pucInfo);											//Free buffer
 
+		const EVP_MD *algorithm;
+		int i=OBJ_obj2nid(pX509_Cert->sig_alg->algorithm);
+		const char *algoName=OBJ_nid2sn(i);
+		algorithm=EVP_get_digestbyname(algoName);
+		if(algorithm==NULL)
+			algorithm=EVP_sha1();
+
 		//Verify if the signature of the certinfo is correct (regarding the issuer certificate)
-		bOk=VerifySignature(certinfo,signature,pX509_Issuer,EVP_sha1());
+		bOk=VerifySignature(certinfo,signature,pX509_Issuer,algorithm);
 	}
 
 	return bOk;

@@ -146,14 +146,9 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	flags ^= Qt::WindowMaximizeButtonHint;
 	setWindowFlags( flags );
 
-	list_of_pins[0] = PinInfo(1, "PIN da Autentica\xc3\xa7\xc3\xa3o");
-	list_of_pins[1] = PinInfo(2, "PIN da Assinatura");
-	list_of_pins[2] = PinInfo(3, "PIN da Morada");
-	
-
-
 	/*** Setup progress Bar ***/
-	m_progress = new QProgressDialog();
+	m_progress = new QProgressDialog(this);
+	m_progress->setWindowModality(Qt::WindowModal);
 	m_progress->setWindowTitle(QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"));
 	m_progress->setLabelText(tr("Reading card data..."));
 
@@ -163,7 +158,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_progress->setMinimum(0);
 	m_progress->setMaximum(0);
 
-	m_progress->setWindowModality(Qt::WindowModal);
 
 	connect(&this->FutureWatcher, SIGNAL(finished()), m_progress, SLOT(cancel()));
 	//------------------------------------
@@ -901,84 +895,70 @@ bool MainWnd::ImportSelectedCertificate( void )
 	QString			strTip;
 	bool			bImported	= false;
 
-	QTreeWidgetItemIterator it(m_ui.treeCert);
+	QList<QTreeWidgetItem *> listItem = m_ui.treeCert.selectedItems();
+	if (!listItem.isEmpty()){
 
-	while (*it) 
-	{
+		QTreeCertItem *item = dynamic_cast<QTreeCertItem *>(listItem.first());
+
+		const PTEID_ByteArray certData = item->cert->getCertData();
+
 		// ----------------------------------------------------
-		// only if certificate is selected, store it
+		// create the certificate context with the certificate raw data
 		// ----------------------------------------------------
-		if ( (*it)->isSelected() )
+		pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, certData.GetBytes(), certData.Size());
+
+		if( pCertContext )
 		{
-			unsigned long CertIdx = getCertificateIndex( (*it)->text(0) );
+			unsigned char KeyUsageBits = 0; // Intended key usage bits copied to here.
+			CertGetIntendedKeyUsage(X509_ASN_ENCODING, pCertContext->pCertInfo, &KeyUsageBits, 1);
 
-			if (CertIdx != -1)
+			// ----------------------------------------------------
+			// Only store the context of the certificates with usages for an end-user
+			// ----------------------------------------------------
+			if((KeyUsageBits & CERT_KEY_CERT_SIGN_KEY_USAGE) == CERT_KEY_CERT_SIGN_KEY_USAGE)
 			{
-				PTEID_ReaderContext&  ReaderContext  = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-				PTEID_EIDCard&		 Card			= ReaderContext.getEIDCard();
-				PTEID_Certificates&	 certificates	= Card.getCertificates();
-				PTEID_Certificate&	 cert			= certificates.getCertFromCard(CertIdx);
-				const PTEID_ByteArray certData		= cert.getCertData();
-
-				// ----------------------------------------------------
-				// create the certificate context with the certificate raw data
-				// ----------------------------------------------------
-				pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, certData.GetBytes(), certData.Size());
-
-				if( pCertContext )
+				if(StoreAuthorityCerts (pCertContext, KeyUsageBits, m_CurrReaderName.toLatin1().data()))
 				{
-					unsigned char KeyUsageBits = 0; // Intended key usage bits copied to here.
-					CertGetIntendedKeyUsage(X509_ASN_ENCODING, pCertContext->pCertInfo, &KeyUsageBits, 1);
-
-					// ----------------------------------------------------
-					// Only store the context of the certificates with usages for an end-user 
-					// ----------------------------------------------------
-					if((KeyUsageBits & CERT_KEY_CERT_SIGN_KEY_USAGE) == CERT_KEY_CERT_SIGN_KEY_USAGE)
-					{
-						if(StoreAuthorityCerts (pCertContext, KeyUsageBits, m_CurrReaderName.toLatin1().data()))                     
-						{
-							bImported = true;
-						}
-					}
-					else
-					{
-						if(StoreUserCerts (Card, pCertContext, KeyUsageBits, cert, m_CurrReaderName.toLatin1().data()))
-						{
-
-							//now store each time the issuer until we're done
-							// an exception is thrown when there is no issuer
-							bool bDone = false;
-							PTEID_Certificate* currCert = &cert;
-							while(!bDone)
-							{
-								try
-								{
-									PTEID_Certificate*	 issuer		= &currCert->getIssuer();
-									const PTEID_ByteArray certData	= issuer->getCertData();
-
-									pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, certData.GetBytes(), certData.Size());
-									StoreAuthorityCerts (pCertContext, KeyUsageBits, m_CurrReaderName.toLatin1().data());
-									currCert	 = issuer;
-								}
-								catch (PTEID_ExCertNoIssuer& e)
-								{
-									long err = e.GetError();
-									err = err;
-									// ok, we're at the end of the tree
-									bDone = true;
-								}
-							}
-
-							bImported = true;
-						}
-					}
-					pCertContext = NULL;
+					bImported = true;
 				}
-				showCertImportMessage(bImported);
 			}
+			else
+			{
+				if(StoreUserCerts (Card, pCertContext, KeyUsageBits, cert, m_CurrReaderName.toLatin1().data()))
+				{
+
+					//now store each time the issuer until we're done
+					// an exception is thrown when there is no issuer
+					bool bDone = false;
+					PTEID_Certificate* currCert = &cert;
+					while(!bDone)
+					{
+						try
+						{
+							PTEID_Certificate*	 issuer		= &currCert->getIssuer();
+							const PTEID_ByteArray certData	= issuer->getCertData();
+
+							pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, certData.GetBytes(), certData.Size());
+							StoreAuthorityCerts (pCertContext, KeyUsageBits, m_CurrReaderName.toLatin1().data());
+							currCert	 = issuer;
+						}
+						catch (PTEID_ExCertNoIssuer& e)
+						{
+							long err = e.GetError();
+							err = err;
+							// ok, we're at the end of the tree
+							bDone = true;
+						}
+					}
+
+					bImported = true;
+				}
+			}
+			pCertContext = NULL;
 		}
-		++it;
+		showCertImportMessage(bImported);
 	}
+
 	return bImported;
 #else
 	return true;
@@ -1258,47 +1238,6 @@ void MainWnd::on_btnCert_Register_clicked( void )
 #endif
 }
 
-//*****************************************************
-// get the index of a certificate starting from its label
-//*****************************************************
-unsigned long MainWnd::getCertificateIndex(QString const& CertLabel )
-{
-	try
-	{
-		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-
-		//------------------------------------
-		// make always sure a card is present
-		//------------------------------------
-		if (ReaderContext.isCardPresent())
-		{
-			PTEID_EIDCard&		Card		= ReaderContext.getEIDCard();
-			PTEID_Certificates&	certificates= Card.getCertificates();
-
-			//------------------------------------
-			// find the certificate with this label
-			//------------------------------------
-			for (unsigned long CertIdx=0; CertIdx<certificates.countFromCard(); CertIdx++)
-			{
-				PTEID_Certificate&	cert			= certificates.getCertFromCard(CertIdx);
-				QString				CurrCertLabel	= QString::fromUtf8(cert.getLabel());
-
-				if (CurrCertLabel==CertLabel)
-				{
-					return CertIdx;
-				}
-			}
-		}
-	}
-	catch (PTEID_Exception& e)
-	{
-		unsigned long err = 0;
-		err = e.GetError();
-		QString msg = tr("Card not present");
-	}
-	return -1;
-}
-
 //****************************************************
 // Show certificate details (only for Windows)
 // The certificate data is retrieved from the card and
@@ -1307,96 +1246,21 @@ unsigned long MainWnd::getCertificateIndex(QString const& CertLabel )
 void MainWnd::on_btnCert_Details_clicked( void )
 {
 #if WIN32
-	QTreeWidgetItemIterator it(m_ui.treeCert);
-	while (*it) 
-	{
-		if ( (*it)->isSelected() )
-		{
-			QString CertLabel = (*it)->text(0);
-			try
-			{
-				PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
+	QList<QTreeWidgetItem *> listItem = m_ui.treeCert.selectedItems();
+	if (!listItem.isEmpty()){
 
-				std::string ccimport = "Cartão de Cidadão 001";
-				QString qccimport = QString::fromUtf8(ccimport.c_str());
+		QTreeCertItem *item = dynamic_cast<QTreeCertItem *>(listItem.first());
 
-				//------------------------------------
-				// make always sure a card is present
-				//------------------------------------
-				if (ReaderContext.isCardPresent())
-				{
-					PTEID_EIDCard&		Card		= ReaderContext.getEIDCard();
-					PTEID_Certificates&	certificates= Card.getCertificates();
-				
-					//------------------------------------
-					// find the certificate with this label
-					//------------------------------------
-					for (size_t CertIdx=0; CertIdx<certificates.countFromCard(); CertIdx++)
-					{
-						PTEID_Certificate&	cert			= certificates.getCertFromCard(CertIdx);
-						QString				CurrCertLabel	= QString::fromUtf8(cert.getLabel());
+		const PTEID_ByteArray certData = item->cert->getCertData();
 
-						if (CurrCertLabel==CertLabel)
-						{
-
-							const PTEID_ByteArray certData = cert.getCertData();
-
-							CRYPTUI_VIEWCERTIFICATE_STRUCT tCert = {0};
-							tCert.dwSize		= sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
-							tCert.hwndParent	= this->winId();
-							tCert.dwFlags		= CRYPTUI_DISABLE_EDITPROPERTIES;
-							tCert.pCertContext	= CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, certData.GetBytes(), certData.Size());
-							BOOL bChange		= FALSE;
-							CryptUIDlgViewCertificate(&tCert, &bChange);
-							CertFreeCertificateContext (tCert.pCertContext);
-						}
-					}
-					
-					if (CertLabel == "GTE CyberTrust Global Root")
-					{
-							CRYPTUI_VIEWCERTIFICATE_STRUCT tCert = {0};
-							tCert.dwSize		= sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
-							tCert.hwndParent	= this->winId();
-							tCert.dwFlags		= CRYPTUI_DISABLE_EDITPROPERTIES;
-							tCert.pCertContext	= CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, (const BYTE*)certificates.getExternalCertData(1), (DWORD)certificates.getExternalCertDataSize(1));
-							BOOL bChange		= FALSE;
-							CryptUIDlgViewCertificate(&tCert, &bChange);
-							CertFreeCertificateContext (tCert.pCertContext);
-
-					} 
-					
-					if (CertLabel == "ECRaizEstado")
-					{
-							CRYPTUI_VIEWCERTIFICATE_STRUCT tCert = {0};
-							tCert.dwSize		= sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
-							tCert.hwndParent	= this->winId();
-							tCert.dwFlags		= CRYPTUI_DISABLE_EDITPROPERTIES;
-							tCert.pCertContext	= CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, (const BYTE*)certificates.getExternalCertData(2) , (DWORD)certificates.getExternalCertDataSize(2));
-							BOOL bChange		= FALSE;
-							CryptUIDlgViewCertificate(&tCert, &bChange);
-							CertFreeCertificateContext (tCert.pCertContext);
-
-					} 
-
-					if (CertLabel == qccimport) 
-					{
-							CRYPTUI_VIEWCERTIFICATE_STRUCT tCert = {0};
-							tCert.dwSize		= sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
-							tCert.hwndParent	= this->winId();
-							tCert.dwFlags		= CRYPTUI_DISABLE_EDITPROPERTIES;
-							tCert.pCertContext	= CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, (const BYTE*)certificates.getExternalCertData(3) , (DWORD)certificates.getExternalCertDataSize(3));
-							BOOL bChange		= FALSE;
-							CryptUIDlgViewCertificate(&tCert, &bChange);
-							CertFreeCertificateContext (tCert.pCertContext);
-					}
-				}
-			}
-			catch (PTEID_Exception e)
-			{
-
-			}
-		}
-		++it;
+		CRYPTUI_VIEWCERTIFICATE_STRUCT tCert = {0};
+		tCert.dwSize		= sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
+		tCert.hwndParent	= this->winId();
+		tCert.dwFlags		= CRYPTUI_DISABLE_EDITPROPERTIES;
+		tCert.pCertContext	= CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, certData.GetBytes(), certData.Size());
+		BOOL bChange		= FALSE;
+		CryptUIDlgViewCertificate(&tCert, &bChange);
+		CertFreeCertificateContext (tCert.pCertContext);
 	} 
 #endif
 }
@@ -1420,13 +1284,11 @@ void MainWnd::on_treeCert_itemClicked(QTreeWidgetItem* baseItem, int column)
 {
 
 	QTreeCertItem* item=(QTreeCertItem*)baseItem;
-	if (!m_CI_Data.isDataLoaded())
-	{
-		return;
-	}
-	PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 
-	QString CertLabel = item->text(column);
+	if (!m_CI_Data.isDataLoaded())
+		return;
+
+	PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 
 	//------------------------------------
 	// fill in the GUI
@@ -1457,7 +1319,6 @@ void MainWnd::on_treeCert_itemClicked(QTreeWidgetItem* baseItem, int column)
 		m_ui.btnCert_Register->setEnabled(true);
 		m_ui.btnCert_Details->setEnabled(true);
 	}
-
 }
 
 
@@ -1474,10 +1335,7 @@ void MainWnd::on_treePIN_itemSelectionChanged ( void )
 
 
 	if (selectedItems.size()==1)
-	{
 		on_treePIN_itemClicked((QTreeWidgetItem*)selectedItems[0], 0);
-	}
-
 }
 
 //*****************************************************
@@ -1486,52 +1344,29 @@ void MainWnd::on_treePIN_itemSelectionChanged ( void )
 void MainWnd::on_treePIN_itemClicked(QTreeWidgetItem* item, int column)
 {
 	if (!m_CI_Data.isDataLoaded())
-	{
 		return;
-	}
-	QString PinName = item->text(column);
+
+	int index = m_ui.treePIN->indexOfTopLevelItem(item);
 
 	PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-
-	//------------------------------------
-	// make always sure a card is present
-	//------------------------------------
 	if (!ReaderContext.isCardPresent())
-	{
 		return;
-	}
-	PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
-	PTEID_Pins&		Pins	= Card.getPins();
 
-	//------------------------------------
-	// find the pin with this label
-	//------------------------------------
-	for (unsigned long PinIdx=0; PinIdx<Pins.count(); PinIdx++)
-	{
-		PTEID_Pin&	Pin			= Pins.getPinByNumber(PinIdx);
-		QString		CurrPinName	= Pin.getLabel();
+	unsigned int pinRef = item->data(0,Qt::UserRole).value<uint>();
+	PinInfo* pinfo = m_pinsInfo.at(pinRef);
 
-		if ( CurrPinName == PinName.toUtf8().constData())
-		{
-			QString PINId;
-			PINId = PINId.setNum(Pin.getId());
-			QString PINStatus;
-			PINStatus.sprintf("Resta(m) %ld tentativa(s)", Pin.getTriesLeft());
-
-			//------------------------------------
-			// fill in the fields
-			//------------------------------------
-			m_ui.txtPIN_Name->setText(trUtf8(Pin.getLabel()));
-			m_ui.txtPIN_Name->setAccessibleName(CurrPinName);
-			m_ui.txtPIN_ID->setText(PINId);
-			m_ui.txtPIN_ID->setAccessibleName(PINId);
-			m_ui.txtPIN_Status->setText(PINStatus);
-			m_ui.txtPIN_Status->setAccessibleName(PINStatus);
-			setEnabledPinButtons(true);
-
-			break;
-		}
-	}
+	QString status;
+	if (1 == pinfo->triesLeft)
+		status = tr("%1 try remaining").arg(pinfo->triesLeft);
+	else
+		status = tr("%1 tries remaining").arg(pinfo->triesLeft);
+	m_ui.txtPIN_Name->setText(pinfo->pin_name);
+	m_ui.txtPIN_Name->setAccessibleName(pinfo->pin_name);
+	m_ui.txtPIN_ID->setText(pinfo->pin_id);
+	m_ui.txtPIN_ID->setAccessibleName(pinfo->pin_id);
+	m_ui.txtPIN_Status->setText(status);
+	m_ui.txtPIN_Status->setAccessibleName(status);
+	setEnabledPinButtons(pinfo->triesLeft > 0);
 }
 
 //****************************************************
@@ -2449,86 +2284,54 @@ void MainWnd::on_actionPrinter_Settings_triggered()
 void MainWnd::authPINRequest_triggered()
 {
 	if (!m_CI_Data.isDataLoaded())
-	{
 		return;
-	}
+
 	try
 	{
 		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-
-		//------------------------------------
-		// make always sure a card is present
-		//------------------------------------
-		QString		  caption(tr("Identity Card: PIN verification"));
+		QString	caption(tr("Identity Card: PIN verification"));
+		QString msg;
 
 		if (ReaderContext.isCardPresent())
 		{
-			//QString PinName = m_ui.txtPIN_Name->text();
-			QString PinName = "PIN da Autenticação";
-			if (PinName.length()==0)
+			PTEID_Pin &pin = ReaderContext.getEIDCard().getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
+
+			if (pin.getTriesLeft() == 0)
 			{
-				//--------------------------
-				// no pin selected in tree
-				//--------------------------
+				QString msg = tr("Maximum number of"
+						" PIN entry attempts has been reached! Couldn't save personal notes");
+
+				QMessageBox::critical(this, caption,  msg, QMessageBox::Ok);
 				return;
 			}
 
-			PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
-			PTEID_Pins&		Pins	= Card.getPins();
+			unsigned long triesLeft = -1;
+			bool bResult   = pin.verifyPin("",triesLeft);
 
-			for (unsigned long PinIdx=0; PinIdx<Pins.count(); PinIdx++)
-			{
-				PTEID_Pin&	Pin			= Pins.getPinByNumber(PinIdx);
-				QString		CurrPinName	= Pin.getLabel();
+			if (!bResult && -1 == triesLeft)
+				return;
 
-				if (CurrPinName==PinName)
-				{
-					if (Pin.getTriesLeft() == 0)
-					{
-						QString msg = tr("Maximum number of" 
-								" PIN entry attempts has been reached! Couldn't save personal notes");	
-						
-					        QMessageBox::critical(this, caption,  msg, QMessageBox::Ok);
-						break;
+			m_pinsInfo.at(PTEID_Pin::AUTH_PIN)->triesLeft = triesLeft;
 
-					}
-					unsigned long triesLeft = -1;
+			QString status;
+			if (1 == triesLeft)
+				status = tr("%1 try remaining").arg(triesLeft);
+			else
+				status = tr("%1 tries remaining").arg(triesLeft);
 
-					bool		  bResult   = Pin.verifyPin("",triesLeft);
-					//QString		  msg(tr("PIN verification "));
-
-					QString msg = bResult?tr("PIN verification passed"):tr("PIN verification failed");
-					if (!bResult)
-					{
-						//--------------------------
-						// if it remains to -1, then CANCEL was pressed
-						// so, don't give a message
-						//--------------------------
-						if ((unsigned long)-1!=triesLeft)
-						{
-							QString nrTriesLeft;
-							nrTriesLeft.setNum(triesLeft);
-							msg += "\n";
-							msg += "( ";
-							msg += tr("Number of tries left: ") + nrTriesLeft + " )";
-						}
-						else
-						{
-							break;
-						}
-					}else{
-						pinNotes=0;
-					}
-					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-					break;
-				}
+			if (bResult){
+				pinNotes=0;
+			} else {
+				msg = tr("PIN verification failed");
+				msg += "\n";
+				msg += status;
 			}
 		}
 		else
-		{
-			QString msg(tr("No card present"));
+			msg = tr("No card present");
+
+		if (!msg.isEmpty())
 			QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-		}
 	}
 	catch (PTEID_Exception &e)
 	{
@@ -2562,57 +2365,52 @@ bool MainWnd::addressPINRequest_triggered()
 	try
 	{
 		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-		
+
 		QString caption(tr("Identity Card: PIN verification"));
-		
+		QString msg;
+
 		if (ReaderContext.isCardPresent())
 		{
-			QString PinName = "PIN da Morada";
-			PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
-			PTEID_Pins&		Pins	= Card.getPins();
-			for (unsigned long PinIdx=0; PinIdx<Pins.count(); PinIdx++)
+			PTEID_Pin &pin = ReaderContext.getEIDCard().getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
+
+			if (pin.getTriesLeft() == 0)
 			{
-				PTEID_Pin&	Pin			= Pins.getPinByNumber(PinIdx);
-				QString		CurrPinName	= Pin.getLabel();
+				QString msg = tr("The address cannot be accessed because the maximum number of"
+					" PIN entry attempts has been reached");
 
-				if (CurrPinName==PinName)
-				{
-					
-					if (Pin.getTriesLeft() == 0)
-					{
-						QString msg = tr("The address cannot be accessed because the maximum number of" 
-								" PIN entry attempts has been reached");	
-						
-					        QMessageBox::critical( this, caption,  msg, QMessageBox::Ok );
-						return false;
+				QMessageBox::critical(this, caption,  msg, QMessageBox::Ok);
+				return false;
+			}
 
-					}
-					unsigned long triesLeft = -1;
-					bool		  bResult   = Pin.verifyPin("",triesLeft);
-					//QString		  msg(tr("PIN verification "));
+			unsigned long triesLeft = -1;
+			bool bResult   = pin.verifyPin("",triesLeft);
 
-					QString msg = bResult ? tr("PIN verification passed"):tr("PIN verification failed");
-					if (!bResult)
-					{
-							pinactivate = 1;
-							QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-							return false;
-					}
-					else
-					{
-						pinactivate = 0;
-					}
-					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-					break;
-				}
+			if (!bResult && -1 == triesLeft)
+				return false;
+
+			m_pinsInfo.at(PTEID_Pin::ADDR_PIN)->triesLeft = triesLeft;
+
+			QString status;
+			if (1 == triesLeft)
+				status = tr("%1 try remaining").arg(triesLeft);
+			else
+				status = tr("%1 tries remaining").arg(triesLeft);
+
+			if (bResult){
+				pinactivate = 0;
+			} else {
+				msg = tr("PIN verification failed");
+				msg += "\n";
+				msg += status;
+				pinactivate = 1;
 			}
 		}
 		else
-		{
-			QString msg(tr("No card present"));
+			msg = tr("No card present");
+
+		if (!msg.isEmpty())
 			QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-			return false;
-		}
+		return pinactivate == 0;
 	}
 	catch (PTEID_Exception &e)
 	{
@@ -2638,7 +2436,6 @@ bool MainWnd::addressPINRequest_triggered()
 		ShowPTEIDError( 0, msg );
 		return false;
 	}
-	return true;
 }
 
 //*****************************************************
@@ -2647,80 +2444,53 @@ bool MainWnd::addressPINRequest_triggered()
 void MainWnd::on_actionPINRequest_triggered()
 {
 	if (!m_CI_Data.isDataLoaded())
-	{
 		return;
-	}
+
 	try
 	{
 		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 		QString		 caption(tr("Identity Card: PIN verification"));
+		QString msg;
 
 		if (ReaderContext.isCardPresent())
 		{
-			QString PinNameRaw = m_ui.txtPIN_Name->text();
-			QString PinName = PinNameRaw.toUtf8().constData();
+			QTreeWidgetItem *item = m_ui.treePIN->currentItem();
 
-			if (PinName.length()==0)
-			{
-				//--------------------------
-				// no pin selected in tree
-				//--------------------------
+			if (!item)
 				return;
+
+			unsigned int pinRef = item->data(0,Qt::UserRole).value<uint>();
+			PTEID_Pin &pin = ReaderContext.getEIDCard().getPins().getPinByPinRef(pinRef);
+
+			unsigned long triesLeft = -1;
+			bool bResult   = pin.verifyPin("",triesLeft);
+
+			if (!bResult && -1 == triesLeft)
+				return;
+
+			m_pinsInfo.at(pinRef)->triesLeft = triesLeft;
+
+			QString status;
+			if (1 == triesLeft)
+				status = tr("%1 try remaining").arg(triesLeft);
+			else
+				status = tr("%1 tries remaining").arg(triesLeft);
+
+			if (bResult){
+				msg = tr("PIN verification passed");
+			} else {
+				msg = tr("PIN verification failed");
+				msg += "\n";
+				msg += status;
 			}
 
-			PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
-			PTEID_Pins&		Pins	= Card.getPins();
-
-			for (unsigned long PinIdx=0; PinIdx<Pins.count(); PinIdx++)
-			{
-				PTEID_Pin&	Pin			= Pins.getPinByNumber(PinIdx);
-				QString		CurrPinName	= Pin.getLabel();
-
-				if (CurrPinName==PinName)
-				{
-					unsigned long triesLeft = -1;
-					bool		  bResult   = Pin.verifyPin("",triesLeft);
-					//QString		  msg(tr("PIN verification "));
-
-					QString msg = bResult?tr("PIN verification passed"):tr("PIN verification failed");
-					if (!bResult)
-					{
-						//--------------------------
-						// if it remains to -1, then CANCEL was pressed
-						// so, don't give a message
-						//--------------------------
-						if ((unsigned long)-1!=triesLeft)
-						{
-							QString nrTriesLeft;
-							nrTriesLeft.setNum(triesLeft);
-							msg += "\n";
-							msg += "( ";
-							msg += tr("Resta(m) ") + nrTriesLeft + " tentativas)";
-							m_ui.txtPIN_Status->setText(msg);
-							m_ui.txtPIN_Status->setAccessibleName(msg);
-						}
-						else
-						{
-							break;
-						}
-					}
-					else
-					{
-						QString nrTriesLeft;
-						nrTriesLeft.setNum(triesLeft);
-						m_ui.txtPIN_Status->setText("Resta(m) 3 tentativas");
-						m_ui.txtPIN_Status->setAccessibleName("Resta(m) 3 tentativas");
-					}
-					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-					break;
-				}
-			}
+			m_ui.txtPIN_Status->setText(status);
+			m_ui.txtPIN_Status->setAccessibleName(status);
 		}
 		else
-		{
-			QString msg(tr("No card present"));
-			QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-		}
+			msg = tr("No card present");
+
+		QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 	}
 	catch (PTEID_Exception &e)
 	{
@@ -2758,64 +2528,48 @@ void MainWnd::on_actionPINChange_triggered()
 	try
 	{
 		PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
-		QString			caption(tr("Identity Card: PIN change"));
+		QString	caption(tr("Identity Card: PIN change"));
+		QString msg;
 
 		if (ReaderContext.isCardPresent())
 		{
-			QString PinNameRaw = m_ui.txtPIN_Name->text();
-			QString PinName = PinNameRaw.toUtf8().constData();
-			if (PinName.length()==0)
-			{
-				//--------------------------
-				// no pin selected in tree
-				//--------------------------
+			QTreeWidgetItem *item = m_ui.treePIN->currentItem();
+
+			if (!item)
 				return;
+
+			unsigned int pinRef = item->data(0,Qt::UserRole).value<uint>();
+			PTEID_Pin &pin = ReaderContext.getEIDCard().getPins().getPinByPinRef(pinRef);
+
+			unsigned long triesLeft = -1;
+			bool bResult = pin.changePin("","",triesLeft, pin.getLabel());
+
+			if (!bResult && -1 == triesLeft)
+				return;
+
+			m_pinsInfo.at(pinRef)->triesLeft = triesLeft;
+
+			QString status;
+			if (1 == triesLeft)
+				status = tr("%1 try remaining").arg(triesLeft);
+			else
+				status = tr("%1 tries remaining").arg(triesLeft);
+
+			if (bResult){
+				msg = tr("PIN change passed");
+			} else {
+				msg = tr("PIN change failed");
+				msg += "\n";
+				msg += status;
 			}
 
-			PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
-			PTEID_Pins&		Pins	= Card.getPins();
-
-			for (unsigned long PinIdx=0; PinIdx<Pins.count(); PinIdx++)
-			{
-				PTEID_Pin&	Pin			= Pins.getPinByNumber(PinIdx);
-				QString		CurrPinName	= Pin.getLabel();
-
-				if (CurrPinName==PinName)
-				{
-					unsigned long	triesLeft = -1;
-					bool			bResult   = Pin.changePin("","",triesLeft, PinName.toStdString().c_str());
-					QString			msg(tr("PIN change "));
-
-					msg += bResult?tr("passed"):tr("failed");
-					if (!bResult)
-					{ 
-						//--------------------------
-						// if it remains to -1, then CANCEL was pressed
-						// so don't give a message
-						//--------------------------
-						if ((unsigned long)-1 != triesLeft)
-						{
-							QString nrTriesLeft;nrTriesLeft.setNum(triesLeft);
-							msg += tr("\n( Number of tries left: ") + nrTriesLeft + " )";
-							m_ui.txtPIN_Status->setText(msg);
-							m_ui.txtPIN_Status->setAccessibleName(msg);
-						}
-						else
-						{
-							break;
-						}
-					}
-
-					QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-					break;
-				}
-			}
+			m_ui.txtPIN_Status->setText(status);
+			m_ui.txtPIN_Status->setAccessibleName(status);
 		}
 		else
-		{
-			QString msg(tr("No card present"));
-			QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-		}
+			msg = tr("No card present");
+
+		QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 	}
 	catch (PTEID_Exception &e)
 	{
@@ -2912,157 +2666,46 @@ void MainWnd::Show_Certificates_Card(PTEID_EIDCard& Card)
 	LoadDataCertificates(Card);
 }
 
-//*****************************************************
-// fill up the certificate tree
-//*****************************************************
-void MainWnd::fillCertTree(PTEID_Certificate *cert, short level, QTreeCertItem* item)
-{
-#define COLUMN_CERT_NAME 0
-
-	//------------------------------------------------------
-	// in case of root level, then create an item in the tree widget
-	// else create an item connected to the previous item
-	//------------------------------------------------------
-	if (0==level)
-	{
-		item = new QTreeCertItem( m_ui.treeCert, 0 );
-	}
-	else
-	{
-		item = new QTreeCertItem( item, 0 );
-	}
-
-	//------------------------------------------------------
-	// set the text for the the created item
-	//------------------------------------------------------
-	if (cert)
-	{
-		const char* label = cert->getLabel();
-		QString strLabel = QString::fromUtf8(label);
-		item->setText(COLUMN_CERT_NAME, strLabel);
-
-		item->setIssuer(QString::fromUtf8(cert->getIssuerName(),-1));
-		item->setOwner(QString::fromUtf8(cert->getOwnerName(),-1));
-		item->setValidityBegin(cert->getValidityBegin());
-		item->setValidityEnd(cert->getValidityEnd());
-		QString	strKeyLen;
-		strKeyLen=strKeyLen.setNum(cert->getKeyLength());
-		item->setKeyLen(strKeyLen);
-	}
-
-	PTEID_Certificate*	child	= NULL;
-
-	for (unsigned long ulIndex = 0; ulIndex<cert->countChildren();ulIndex++)
-	{
-		//------------------------------------------------------
-		// get the child certificate if it exists
-		//------------------------------------------------------
-		child=&cert->getChildren(ulIndex);
-		fillCertTree(child, level+1, item);
+QTreeCertItem* MainWnd::buildTree(PTEID_Certificate &cert, bool &bEx){
+	if (cert.isRoot())
+		return new QTreeCertItem(m_ui.treeCert,0,cert);
+	else {
+		QList<QTreeWidgetItem *> listItem = m_ui.treeCert->findItems(QString::fromUtf8(cert.getLabel()), Qt::MatchContains | Qt::MatchRecursive);
+		if (listItem.isEmpty()){
+			try {
+				return new QTreeCertItem(buildTree(cert.getIssuer(),bEx),0,cert);
+			} catch (PTEID_ExCertNoIssuer &ex){
+				bEx = true;
+				return new QTreeCertItem(m_ui.treeCert,0,cert);
+			}
+		}
+		else
+			return dynamic_cast<QTreeCertItem *>(listItem.first());
 	}
 }
 
 void MainWnd::fillCertificateList( void )
 {
+	bool noIssuer = false;
+
 	PTEID_Certificates* certificates = m_CI_Data.m_CertifInfo.getCertificates();
 
 	if (!certificates)
-	{
 		return;
-	}
 
-	try
-	{
-		short Level=1;
-		std::string msgtitle = "O Certificado não foi encontrado";
-		/* Root Certificate if the card owns it
-		PTEID_Certificate& certificate = certificates->getCert(4);
-		fillCertTree(&certificate,Level,NULL);
-		*/
+	buildTree(certificates->getCert(PTEID_Certificate::CITIZEN_AUTH),noIssuer);
+	buildTree(certificates->getCert(PTEID_Certificate::CITIZEN_SIGN),noIssuer);
 
-		QTreeCertItem* item1 = new QTreeCertItem( m_ui.treeCert, 0 );
-		item1 = new QTreeCertItem( m_ui.treeCert, 0 );
+	m_ui.treeCert->expandAll();
+	m_ui.treeCert->setColumnCount(1);
+	m_ui.treeCert->sortItems(0,Qt::DescendingOrder);
 
-		QString strLabel1 = QString::fromUtf8(certificates->getExternalCertSubject(1));
-		if (strLabel1 == NULL)
-		{
-			std::string certerrmsggte = "<p>O Certificado GTE Global Root não foi encontrado." \
-									     " A sua cadeia de certificação está incorrecta." \
-									     "<p>Verifique o caminho do certificado.";
-			QMessageBox msgBoxgte(QMessageBox::Warning, QString::fromUtf8(msgtitle.c_str()), QString::fromUtf8(certerrmsggte.c_str()), 0, this);
-			msgBoxgte.exec();
-		}
-		item1->setText(COLUMN_CERT_NAME, strLabel1);
-		item1->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(1)));
-		item1->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(1),-1));
-		item1->setValidityBegin(QString::fromUtf8(certificates->getExternalCertNotBefore(1)));
-		item1->setValidityEnd(QString::fromUtf8(certificates->getExternalCertNotAfter(1)));
-		QString	strKeyLen1;
-		strKeyLen1=strKeyLen1.setNum(certificates->getExternalCertKeylenght(1));
-		item1->setKeyLen(strKeyLen1);
-
-		QTreeCertItem* item2 = new QTreeCertItem( m_ui.treeCert, 0 );
-		item2 = new QTreeCertItem( item1, 0 );
-
-		QString strLabel2 = QString::fromUtf8(certificates->getExternalCertSubject(2));
-		if (strLabel2 == NULL)
-		{
-			std::string certerrmsgecraiz = "<p>O Certificado EC Raiz do Estado não foi encontrado." \
-									       " A sua cadeia de certificação está incorrecta." \
-									       "<p>Verifique o caminho do certificado.";
-			QMessageBox msgBoxec(QMessageBox::Warning, QString::fromUtf8(msgtitle.c_str()), QString::fromUtf8(certerrmsgecraiz.c_str()), 0, this);
-			msgBoxec.exec();
-		}
-		item2->setText(COLUMN_CERT_NAME, strLabel2);
-		item2->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(2)));
-		item2->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(2),-1));
-		item2->setValidityBegin(QString::fromUtf8(certificates->getExternalCertNotBefore(2)));
-		item2->setValidityEnd(QString::fromUtf8(certificates->getExternalCertNotAfter(2)));
-		QString	strKeyLen2;
-		strKeyLen2=strKeyLen2.setNum(certificates->getExternalCertKeylenght(2));
-		item2->setKeyLen(strKeyLen2);
-
-		QTreeCertItem* item3 = new QTreeCertItem( m_ui.treeCert, 0 );
-		item3 = new QTreeCertItem( item2, 0 );
-
-		QString strLabel3 = QString::fromUtf8(certificates->getExternalCertSubject(3));
-		if (strLabel3 == NULL)
-		{
-			std::string certerrmsgcc = "<p>O Certificado Cartão de Cidadão 001 não foi encontrado." \
-									   " A sua cadeia de certificação está incorrecta." \
-									   "<p>Verifique o caminho do certificado.";
-			QMessageBox msgBoxcc(QMessageBox::Warning, QString::fromUtf8(msgtitle.c_str()), QString::fromUtf8(certerrmsgcc.c_str()), 0, this);
-			msgBoxcc.exec();
-		}
-		item3->setText(COLUMN_CERT_NAME, strLabel3);
-		item3->setIssuer(QString::fromUtf8(certificates->getExternalCertIssuer(3)));
-		item3->setOwner(QString::fromUtf8(certificates->getExternalCertSubject(3),-1));
-		item3->setValidityBegin(QString::fromUtf8(certificates->getExternalCertNotBefore(3)));
-		item3->setValidityEnd(QString::fromUtf8(certificates->getExternalCertNotAfter(3)));
-		QString	strKeyLen3;
-		strKeyLen3=strKeyLen3.setNum(certificates->getExternalCertKeylenght(3));
-		item3->setKeyLen(strKeyLen3);
-
-		// Sign Certificate
-		PTEID_Certificate& certificatesign = certificates->getCert(2);
-		fillCertTree(&certificatesign, Level,item3);
-
-		// Auth Certificate
-		PTEID_Certificate& certificateauth = certificates->getCert(3);
-		fillCertTree(&certificateauth, Level,item3);
-
-		m_ui.treeCert->expandAll();
-		m_ui.treeCert->setColumnCount(1);
-		m_ui.treeCert->takeTopLevelItem(0);
-		m_ui.treeCert->takeTopLevelItem(1);
-		m_ui.treeCert->takeTopLevelItem(1);
-		m_ui.treeCert->sortItems(0,Qt::DescendingOrder);
-	}
-	catch(PTEID_ExCertNoRoot &e)
-	{
-		long err = e.GetError();
-		err = err;
-		return;
+	if (noIssuer){
+		QString title = tr("Certification path");
+		QString msg = tr("The certificates could not be validated, the certification path is not complete");
+		QMessageBox msgBoxcc(QMessageBox::Warning, title, msg, 0, this);
+		msgBoxcc.setModal(true) ;
+		msgBoxcc.exec();
 	}
 }
 
@@ -3082,7 +2725,7 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 	{
 		
 		//Load data from card in a new thread
-		CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName);
+		CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName, this);
 		QFuture<void> future = QtConcurrent::run(&loader, &CardDataLoader::Load);
 		this->FutureWatcher.setFuture(future);
 		m_progress->exec();
@@ -3093,10 +2736,8 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 		imgPicture.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
 		imgPicturescaled = imgPicture.scaled(150, 190);
 		m_imgPicture = QPixmap::fromImage(imgPicturescaled);
-		//clearTabCertificates();
-		//clearTabAddress();
-		clearTabPins();
-		fillPinList( Card );
+
+		fillPinList();
 	}
 }
 
@@ -3152,38 +2793,81 @@ void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 //*****************************************************
 // fill the PIN list on the window
 //*****************************************************
-void MainWnd::fillPinList(PTEID_EIDCard& Card)
+/*void MainWnd::fillPinList(PTEID_EIDCard& Card)
 {
+	QTreeWidgetItem* pinTreeItem;
 	PTEID_Pins& Pins = Card.getPins();
 
-	for ( unsigned long PinNr = 0; PinNr < Pins.count(); PinNr++ )
-	{
-		PTEID_Pin& Pin = Pins.getPinByNumber(PinNr);
-		QString		DispPinName	= QString::fromLocal8Bit(Pin.getLabel());
+	PTEID_Pin& pinAuth = Pins.getPinByPinRef(PTEID_Pin::AUTH_PIN);
+	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
+	pinTreeItem->setText(COLUMN_PIN_NAME, trUtf8(pinAuth.getLabel()));
+	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
+	m_pinsInfo[PTEID_Pin::AUTH_PIN] = new PinInfo(pinAuth.getId(), pinAuth.getLabel(), pinAuth.getTriesLeft());
+	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::AUTH_PIN));
 
-		QTreeWidgetItem* PinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
+	PTEID_Pin& pinSign = Pins.getPinByPinRef(PTEID_Pin::SIGN_PIN);
+	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
+	pinTreeItem->setText(COLUMN_PIN_NAME, trUtf8(pinSign.getLabel()));
+	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
+	m_pinsInfo[PTEID_Pin::SIGN_PIN] = new PinInfo(pinSign.getId(), pinSign.getLabel(), pinSign.getTriesLeft());
+	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::SIGN_PIN));
 
-		std::string pinname = "PIN";
+	PTEID_Pin& pinAddr = Pins.getPinByPinRef(PTEID_Pin::ADDR_PIN);
+	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
+	pinTreeItem->setText(COLUMN_PIN_NAME, trUtf8(pinAddr.getLabel()));
+	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
+	m_pinsInfo[PTEID_Pin::ADDR_PIN] = new PinInfo(pinAddr.getId(), pinAddr.getLabel(), pinAddr.getTriesLeft());
+	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::ADDR_PIN));
 
-		if (!DispPinName.toStdString().find(pinname))
-		{
-			PinTreeItem->setText(COLUMN_PIN_NAME, trUtf8(Pin.getLabel()));
-			m_ui.treePIN->addTopLevelItem ( PinTreeItem );
-		}
 
-		if (0==PinNr)
-		{
-			PinTreeItem->setSelected(true);
-		}
-	}
 	m_ui.treePIN->expandAll();
 
-	if (m_ui.treePIN->topLevelItemCount() > 0)
-	{
-		m_ui.treePIN->topLevelItem(0)->setSelected(true);
-		m_ui.treePIN->setCurrentItem (m_ui.treePIN->topLevelItem(0));
-	}
+	m_ui.treePIN->topLevelItem(0)->setSelected(true);
+	m_ui.treePIN->setCurrentItem (m_ui.treePIN->topLevelItem(0));
 }
+*/
+
+void MainWnd::fillPinList()
+{
+	QTreeWidgetItem* pinTreeItem;
+
+	clearTabPins();
+
+	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
+	pinTreeItem->setText(COLUMN_PIN_NAME, m_pinsInfo[PTEID_Pin::AUTH_PIN]->pin_name);
+	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
+	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::AUTH_PIN));
+
+	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
+	pinTreeItem->setText(COLUMN_PIN_NAME, m_pinsInfo[PTEID_Pin::SIGN_PIN]->pin_name);
+	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
+	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::SIGN_PIN));
+
+	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
+	pinTreeItem->setText(COLUMN_PIN_NAME, m_pinsInfo[PTEID_Pin::ADDR_PIN]->pin_name);
+	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
+	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::ADDR_PIN));
+
+	m_ui.treePIN->expandAll();
+
+	m_ui.treePIN->topLevelItem(0)->setSelected(true);
+	m_ui.treePIN->setCurrentItem (m_ui.treePIN->topLevelItem(0));
+}
+
+void MainWnd::loadPinData(PTEID_EIDCard& Card){
+
+	PTEID_Pins& Pins = Card.getPins();
+
+	PTEID_Pin& pinAuth = Pins.getPinByPinRef(PTEID_Pin::AUTH_PIN);
+	m_pinsInfo[PTEID_Pin::AUTH_PIN] = new PinInfo(pinAuth.getId(), pinAuth.getLabel(), pinAuth.getTriesLeft());
+
+	PTEID_Pin& pinSign = Pins.getPinByPinRef(PTEID_Pin::SIGN_PIN);
+	m_pinsInfo[PTEID_Pin::SIGN_PIN] = new PinInfo(pinSign.getId(), pinSign.getLabel(), pinSign.getTriesLeft());
+
+	PTEID_Pin& pinAddr = Pins.getPinByPinRef(PTEID_Pin::ADDR_PIN);
+	m_pinsInfo[PTEID_Pin::ADDR_PIN] = new PinInfo(pinAddr.getId(), pinAddr.getLabel(), pinAddr.getTriesLeft());
+}
+
 
 QString MainWnd::getFinalLinkTarget(QString baseName)
 {
@@ -3469,52 +3153,12 @@ void MainWnd::clearGuiContent( void )
 	releaseVirtualReader();
 	m_CurrReaderName = "";
 
-	setStatus( SPECIALSTATUS_NA );
-
 	clearTabCertificates();
 	clearTabPins();
 
 	enableFileMenu();
 	enablePrintMenu();
 }
-
-//*****************************************************
-// put the card status info on the window
-//*****************************************************
-void MainWnd::setStatus( unsigned int Status )
-{
-	QString tmp;
-	switch( Status )
-	{
-	case SPECIALSTATUS_NA:
-		tmp = "";
-		break;
-	case SPECIALSTATUS_YELLOWCANE:
-		tmp = "Yellow cane";
-		break;
-
-	case SPECIALSTATUS_WHITECANE:
-		tmp = "White cane";
-		break;
-
-	case SPECIALSTATUS_EXTMINORITY:
-		tmp = "Extended minority";
-		break;
-
-	default:
-		tmp = "Unkown";
-		break;
-	}
-}
-
-
-
-
-void MainWnd::setWidgetsPointSize(QList<QWidget *> &allWidgets)
-{
-	//zoomAllWidgets(allWidgets);
-}
-
 
 //*****************************************************
 // refresh the tab with the ID data (front of card)
@@ -3943,26 +3587,22 @@ void MainWnd::refreshTabCardPin( void )
 			case PTEID_CARDTYPE_IAS07:
 			case PTEID_CARDTYPE_IAS101:
                 {
-                    PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
-                    PTEID_Pins&		Pins	= Card.getPins();
-                    PTEID_Pin&	Auth_Pin = Pins.getPinByNumber(0);
-                    QString	CurrPinName	= Auth_Pin.getLabel();
+                	QTreeWidgetItem *item = m_ui.treePIN->currentItem();
 
-                    QString PINStatus;
-                    PINStatus.sprintf("Resta(m) %ld tentativa(s)", Auth_Pin.getTriesLeft());
+                	unsigned int pinRef = item->data(0,Qt::UserRole).value<uint>();
+                	unsigned long triesLeft = m_pinsInfo[pinRef]->triesLeft;
 
-		    list_of_pins[0].pin_status = PINStatus;
-
-                    //------------------------------------
-                    // fill in the fields
-                    //------------------------------------
-                    m_ui.txtPIN_Name->setText(QString::fromUtf8("PIN da Autentica\xc3\xa7\xc3\xa3o"));
-                    m_ui.txtPIN_Name->setAccessibleName(QString::fromUtf8("PIN da Autentica\xc3\xa7\xc3\xa3o"));
-                    m_ui.txtPIN_ID->setText(QString::number(1));
-                    m_ui.txtPIN_ID->setAccessibleName(QString::number(1));
-                    m_ui.txtPIN_Status->setText(PINStatus);
-                    m_ui.txtPIN_Status->setAccessibleName(PINStatus);
-
+                	QString status;
+                	if (1 == m_pinsInfo.at(pinRef)->triesLeft)
+                		status = tr("%1 try remaining").arg(m_pinsInfo.at(pinRef)->triesLeft);
+                	else
+                		status = tr("%1 tries remaining").arg(m_pinsInfo.at(pinRef)->triesLeft);
+                	m_ui.txtPIN_Name->setText(m_pinsInfo.at(pinRef)->pin_name);
+                	m_ui.txtPIN_Name->setAccessibleName(m_pinsInfo.at(pinRef)->pin_name);
+                	m_ui.txtPIN_ID->setText(m_pinsInfo.at(pinRef)->pin_id);
+                	m_ui.txtPIN_ID->setAccessibleName(m_pinsInfo.at(pinRef)->pin_id);
+                	m_ui.txtPIN_Status->setText(status);
+                	m_ui.txtPIN_Status->setAccessibleName(status);
                 }
 			default:
 				break;
@@ -4273,6 +3913,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 					enableFileSave(false);
 
 					m_imgPicture = NULL;
+					m_pinsInfo.clear();
 					m_CI_Data.Reset();
 					refreshTabIdentity();
 					refreshTabIdentityExtra();
@@ -4641,3 +4282,23 @@ bool MainWnd::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
 	return true;
 }
 #endif
+
+void CardDataLoader::Load()
+{
+	this->information.LoadData(card, readerName);
+	if (this->mwnd)
+		this->mwnd->loadPinData(this->card);
+}
+
+void CardDataLoader::LoadPersoData()
+{
+	this->information.LoadDataPersoData(card, readerName);
+}
+
+void CardDataLoader::LoadCertificateData()
+{
+	this->information.LoadDataCertificates(card, readerName);
+}
+
+
+

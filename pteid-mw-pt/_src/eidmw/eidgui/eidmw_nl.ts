@@ -3,6 +3,22 @@
 <TS version="2.0" language="nl">
 <context>
     <name>MainWnd</name>
+      <message>
+        <source>Certification path</source>
+        <translation>Caminho da certificação</translation>
+     </message>
+     <message>
+        <source>The certificates could not be validated, the certification path is not complete</source>
+        <translation>Os certificados não foram validados, o caminho de certificação não está completo</translation>
+     </message>
+     <message>
+        <source>%1 tries remaining</source>
+        <translation>Restam %1 tentativas</translation>
+     </message>
+     <message>
+        <source>%1 try remaining</source>
+        <translation>Resta %1 tentativa</translation>
+     </message>
      <message>
         <source>Reading card data...</source>
         <translation>A ler os dados do cartão...</translation>
@@ -758,8 +774,12 @@ Please specify .xml, .csv or .eid</source>
         <translation type="unfinished">O PIN introduzido está errado!</translation>
     </message>
     <message>
-        <source>PIN change </source>
-        <translation type="unfinished">Alteração de PIN </translation>
+        <source>PIN change passed</source>
+        <translation type="unfinished">Alteração de PIN efectuada</translation>
+    </message>
+    <message>
+        <source>PIN change failed</source>
+        <translation type="unfinished">Alteração de PIN falhou</translation>
     </message>
     <message>
         <source>txt_ECard_1</source>
