@@ -690,6 +690,7 @@ void APL_Certifs::foundCertificate(const char *SubDir, const char *File, void *p
 
 #ifdef WIN32
 	errno_t werr;
+	path+= "\\"; //Quick Fix for a messy situation with the certificates subdir
 #endif
 	path+=SubDir;
 #ifdef WIN32
@@ -725,7 +726,7 @@ void APL_Certifs::foundCertificate(const char *SubDir, const char *File, void *p
 	certifs->addCert(*cert, APL_CERTIF_TYPE_UNKNOWN, false);
 
 	err:
-	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certifs::foundCertificate: problem with file %s ", path.c_str());
+	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certifs::foundCertificate: problem with file %ls ", utilStringWiden(string(path)).c_str());
 }
 
 APL_Certif *APL_Certifs::findIssuer(const APL_Certif *cert)
