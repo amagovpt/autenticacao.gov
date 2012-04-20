@@ -151,10 +151,8 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_progress->setWindowModality(Qt::WindowModal);
 	m_progress->setWindowTitle(QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"));
 	m_progress->setLabelText(tr("Reading card data..."));
-	Qt::WindowFlags progressflags = m_progress->windowFlags();
-	progressflags ^= Qt::WindowMinMaxButtonsHint;
-	m_progress->setWindowFlags(progressflags);
-
+	m_progress->setWindowFlags(m_progress->windowFlags()^ Qt::WindowMinimizeButtonHint);
+	m_progress->setFixedSize(m_progress->size());
 	//Disable cancel button
 	m_progress->setCancelButton(NULL);
 	//Configuring dialog as a "doing-stuff-type" progressBar
