@@ -940,18 +940,6 @@ unsigned long APL_EIDCard::certificateCount()
 					m_certificateCount++;
 				}
 			}
-
-			if(!m_fileCertRoot)
-			{
-				m_fileCertRoot=new APL_CardFile_Certificate(this,PTEID_FILE_CERT_ROOT);
-				//If status ok, we add the certificate to the store
-				if(m_fileCertRoot->getStatus(true)==CARDFILESTATUS_OK)
-				{
-					if(NULL == (getCertificates()->addCert(m_fileCertRoot,APL_CERTIF_TYPE_ROOT,true,false,m_certificateCount,NULL,NULL)))
-						throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-					m_certificateCount++;
-				}
-			}
 		}
 	}
 	return m_certificateCount;
