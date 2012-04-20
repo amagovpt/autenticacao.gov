@@ -824,6 +824,12 @@ bool MainWnd::ImportCertificates( const char* readerName )
 
 			if( pCertContext )
 			{
+				if ( 0 == memcmp ( pCertContext->pCertInfo->Issuer.pbData,
+				       pCertContext->pCertInfo->Subject.pbData,
+					   pCertContext->pCertInfo->Subject.cbData
+					   )
+					)
+					continue;
 				unsigned char KeyUsageBits = 0; // Intended key usage bits copied to here.
 				CertGetIntendedKeyUsage(X509_ASN_ENCODING, pCertContext->pCertInfo, &KeyUsageBits, 1);
 
