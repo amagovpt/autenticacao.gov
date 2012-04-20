@@ -151,6 +151,9 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_progress->setWindowModality(Qt::WindowModal);
 	m_progress->setWindowTitle(QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"));
 	m_progress->setLabelText(tr("Reading card data..."));
+	Qt::WindowFlags progressflags = m_progress->windowFlags();
+	progressflags ^= Qt::WindowMinMaxButtonsHint;
+	m_progress->setWindowFlags(progressflags);
 
 	//Disable cancel button
 	m_progress->setCancelButton(NULL);
@@ -1353,6 +1356,20 @@ void MainWnd::on_treePIN_itemClicked(QTreeWidgetItem* item, int column)
 	PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 	if (!ReaderContext.isCardPresent())
 		return;
+
+
+	/* BEGIN - the pin information have to be always sinchronized - quick fix
+	 * this chunk of code can be removed if in the future the pin information sinchronization requirement is dropped
+	 */
+	unsigned int _pinRef = item->data(0,Qt::UserRole).value<uint>();
+	PTEID_EIDCard&	Card	= ReaderContext.getEIDCard();
+	PTEID_Pins&		Pins	= Card.getPins();
+
+	PTEID_Pin& pin = Pins.getPinByPinRef(_pinRef);
+	delete m_pinsInfo[_pinRef]; // doesn't make sense, but this way the quick fix can be removed with no harm
+	m_pinsInfo[_pinRef] = new PinInfo(pin.getId(), pin.getLabel(), pin.getTriesLeft());
+	/* END - the pin information have to be always sinchronized */
+
 
 	unsigned int pinRef = item->data(0,Qt::UserRole).value<uint>();
 	PinInfo* pinfo = m_pinsInfo.find(pinRef)->second;
@@ -4266,6 +4283,7 @@ void CardDataLoader::LoadCertificateData()
 {
 	this->information.LoadDataCertificates(card, readerName);
 }
+
 
 
 

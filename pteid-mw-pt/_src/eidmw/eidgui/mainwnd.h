@@ -216,7 +216,6 @@ public:
 	void Load();
 	void LoadPersoData();
 	void LoadCertificateData();
-
 };
 
 class MainWnd : public QMainWindow
@@ -483,7 +482,6 @@ public:
 	static tCertPerReader			m_certContexts;			//!< certificate contexts of each reader
 
 friend void CardDataLoader::Load();
-
 };
 
 #endif
