@@ -165,9 +165,9 @@ private:
 class QTreeCertItem : public QTreeWidgetItem
 {
 public:
-	QTreeCertItem(int type, PTEID_Certificate &cert):QTreeWidgetItem(QStringList(QString::fromUtf8(cert.getLabel())),type) {init(cert);}
-	QTreeCertItem(QTreeWidget *view, int type, PTEID_Certificate &cert):QTreeWidgetItem(view,QStringList(QString::fromUtf8(cert.getLabel())),type) {init(cert);}
-	QTreeCertItem(QTreeCertItem *parent, int type, PTEID_Certificate &cert):QTreeWidgetItem(parent,QStringList(QString::fromUtf8(cert.getLabel())),type){init(cert);}
+	QTreeCertItem(int type, PTEID_Certificate &cert):QTreeWidgetItem(QStringList(QString::fromUtf8(cert.getOwnerName())),type) {init(cert);}
+	QTreeCertItem(QTreeWidget *view, int type, PTEID_Certificate &cert):QTreeWidgetItem(view,QStringList(QString::fromUtf8(cert.getOwnerName())),type) {init(cert);}
+	QTreeCertItem(QTreeCertItem *parent, int type, PTEID_Certificate &cert):QTreeWidgetItem(parent,QStringList(QString::fromUtf8(cert.getOwnerName())),type){init(cert);}
 
 
 	QString const& getIssuer() {return m_Issuer;}
@@ -175,6 +175,7 @@ public:
 	QString const& getValidityBegin() {return m_ValidityBegin;}
 	QString const& getValidityEnd() {return m_ValidityEnd;}
 	QString const& getKeyLen() {return m_KeyLen;}
+	QString const& getLabel() {return m_Label;}
 	PTEID_Certificate *getCert() { return cert;}
 
 private:
@@ -183,6 +184,7 @@ private:
 	QString m_ValidityBegin;
 	QString m_ValidityEnd;
 	QString m_KeyLen;
+	QString m_Label;
 	PTEID_Certificate *cert;
 
 	void init(PTEID_Certificate &cert){
@@ -192,6 +194,7 @@ private:
 		m_ValidityBegin = QString::fromUtf8(cert.getValidityBegin());
 		m_ValidityEnd = QString::fromUtf8(cert.getValidityEnd());
 		m_KeyLen = QString::number(cert.getKeyLength());
+		m_Label = QString::fromUtf8(cert.getLabel());
 	}
 };
 

@@ -2672,8 +2672,8 @@ QTreeCertItem* MainWnd::buildTree(PTEID_Certificate &cert, bool &bEx){
 	if (cert.isRoot())
 		return new QTreeCertItem(m_ui.treeCert,0,cert);
 	else {
-		QList<QTreeWidgetItem *> listItem = m_ui.treeCert->findItems(QString::fromUtf8(cert.getLabel()), Qt::MatchContains | Qt::MatchRecursive);
-		if (listItem.isEmpty()){
+		QList<QTreeWidgetItem *> listItem = m_ui.treeCert->findItems(QString::fromUtf8(cert.getOwnerName()), Qt::MatchContains | Qt::MatchRecursive);
+		if (listItem.isEmpty() || dynamic_cast<QTreeCertItem *>(listItem.first())->getLabel().compare(QString::fromUtf8(cert.getLabel()))!=0){
 			try {
 				return new QTreeCertItem(buildTree(cert.getIssuer(),bEx),0,cert);
 			} catch (PTEID_ExCertNoIssuer &ex){
@@ -2701,6 +2701,8 @@ void MainWnd::fillCertificateList( void )
 	m_ui.treeCert->expandAll();
 	m_ui.treeCert->setColumnCount(1);
 	m_ui.treeCert->sortItems(0,Qt::DescendingOrder);
+	if (m_ui.treeCert->topLevelItem(0))
+		m_ui.treeCert->setCurrentItem (m_ui.treeCert->topLevelItem(0));
 
 	if (noIssuer){
 		QString title = tr("Certification path");
@@ -2791,43 +2793,6 @@ void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 
 #define TYPE_PINTREE_ITEM 0
 #define COLUMN_PIN_NAME   0
-
-//*****************************************************
-// fill the PIN list on the window
-//*****************************************************
-/*void MainWnd::fillPinList(PTEID_EIDCard& Card)
-{
-	QTreeWidgetItem* pinTreeItem;
-	PTEID_Pins& Pins = Card.getPins();
-
-	PTEID_Pin& pinAuth = Pins.getPinByPinRef(PTEID_Pin::AUTH_PIN);
-	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, trUtf8(pinAuth.getLabel()));
-	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
-	m_pinsInfo[PTEID_Pin::AUTH_PIN] = new PinInfo(pinAuth.getId(), pinAuth.getLabel(), pinAuth.getTriesLeft());
-	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::AUTH_PIN));
-
-	PTEID_Pin& pinSign = Pins.getPinByPinRef(PTEID_Pin::SIGN_PIN);
-	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, trUtf8(pinSign.getLabel()));
-	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
-	m_pinsInfo[PTEID_Pin::SIGN_PIN] = new PinInfo(pinSign.getId(), pinSign.getLabel(), pinSign.getTriesLeft());
-	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::SIGN_PIN));
-
-	PTEID_Pin& pinAddr = Pins.getPinByPinRef(PTEID_Pin::ADDR_PIN);
-	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, trUtf8(pinAddr.getLabel()));
-	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
-	m_pinsInfo[PTEID_Pin::ADDR_PIN] = new PinInfo(pinAddr.getId(), pinAddr.getLabel(), pinAddr.getTriesLeft());
-	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::ADDR_PIN));
-
-
-	m_ui.treePIN->expandAll();
-
-	m_ui.treePIN->topLevelItem(0)->setSelected(true);
-	m_ui.treePIN->setCurrentItem (m_ui.treePIN->topLevelItem(0));
-}
-*/
 
 void MainWnd::fillPinList()
 {
