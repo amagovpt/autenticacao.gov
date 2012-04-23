@@ -32,7 +32,7 @@ static const char *README =
 "Mais Informação:" NL
 "" NL
 "Download da Aplicação Oficial do Cartão de Cidadão:" NL
-"http://svn.gov.pt/projects/ccidadao/browser/middleware-offline/tags/builds" NL
+"http://svn.gov.pt/projects/ccidadao" NL
 "" NL
 "Especificação Técnica da Assinatura Digital:" NL
 "Xades / Xades-T" NL
@@ -50,7 +50,7 @@ static const char *README =
 "More Info:" NL
 "" NL
 "Download Portuguese ID Card Management application:" NL
-"http://svn.gov.pt/projects/ccidadao/browser/middleware-offline/tags/builds" NL
+"http://svn.gov.pt/projects/ccidadao" NL
 "" NL
 "Signature technical specification:" NL
 "Xades / Xades-T" NL
