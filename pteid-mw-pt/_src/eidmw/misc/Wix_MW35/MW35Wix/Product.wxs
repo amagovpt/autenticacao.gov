@@ -105,7 +105,7 @@
 
       <Directory Id="ProgramMenuFolder" Name="Menu">
         <Directory Id="ApplicationProgramsFolder" Name="Cartão de Cidadão">
-          <Directory Id="ApplicationProgramsFolderUtilities" Name="Utilities"/>
+          <Directory Id="ApplicationProgramsFolderUtilities" Name="Utilitários"/>
         </Directory>
       </Directory>
 
@@ -683,7 +683,7 @@
     <DirectoryRef Id="ApplicationProgramsFolderUtilities">
       <Component Id="OutlookShortcut" Guid="{813C0984-0401-4604-9D7F-E13BDD28FBD7}">
         <Shortcut Id="OutlookStartMenuShortcut"
-          Name="MS Outlook registry configuration"
+          Name="Parametrização do Microsoft Outlook"
           Description="!(loc.OutlookDescr)"
           Target="[APPLICATIONROOTFOLDER]pteidoutlooksnc.exe"
           WorkingDirectory="APPLICATIONROOTFOLDER"/>
