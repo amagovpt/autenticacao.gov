@@ -3345,12 +3345,9 @@ void MainWnd::updatetext()
 	TotalBytes.append(" / 1000");
 	m_ui.txtPersoDataCount->setText(TotalBytes);
 
-    if (TxtPersoDataString.count()>1000)
-    {
-		TxtPersoDataString = m_ui.txtPersoData->toPlainText();
-		TxtPersoDataString.truncate(TxtPersoDataString.size()-1);
-		m_ui.txtPersoData->setPlainText(TxtPersoDataString);
-	}
+
+	if (TxtPersoDataString.count()>1000)
+		m_ui.txtPersoData->textCursor().deletePreviousChar();
 }
 
 void MainWnd::PersoDataSaveButtonClicked( void )
