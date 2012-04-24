@@ -34,6 +34,8 @@
 #include "eidlib.h"
 #include "mainwnd.h"
 
+#include "eidErrors.h"
+
 using namespace eIDMW;
 
 
@@ -155,6 +157,7 @@ void dlgSignature::ShowContextMenu(const QPoint& pos)
 
 void dlgSignature::on_pbSign_clicked ( void )
 {
+	std::cout << "pb sign" << std::endl;
 	QAbstractItemModel* model = view->model() ;
 	QStringList strlist;
 	QFuture<void> future;
@@ -258,6 +261,7 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
 
     try
     {
+    	std::cout << "run sign" << std::endl;
 	    PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
 	    PTEID_ByteArray SignXades;
 	    if (timestamp)
@@ -266,11 +270,20 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
 		    SignXades = Card->SignXades(paths, n_paths, output_path);
 
     }
-    catch (PTEID_Exception &e)
-    {
-	    ShowErrorMsgBox();
-    }
 
+    catch (PTEID_Exception &e)
+    	{
+    		switch(e.GetError()){
+    		case EIDMW_ERR_PIN_CANCEL:
+    			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PIN introduction - CANCELED!");
+    			break;
+    		case EIDMW_ERR_TIMEOUT:
+    			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PIN introduction - TIMEOUT!");
+    			break;
+    		default:
+    			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "GENERAL EXCEPTION CAUGHT!");
+    		}
+    	}
     return;
 }
 
@@ -288,9 +301,17 @@ void dlgSignature::run_multiple_sign(const char ** paths, unsigned int n_paths, 
 		    Card->SignXadesIndividual(paths, n_paths, output_path);
     }
     catch (PTEID_Exception &e)
-    {
-	    ShowErrorMsgBox();
-    }
-
+        	{
+        		switch(e.GetError()){
+        		case EIDMW_ERR_PIN_CANCEL:
+        			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PIN introduction - CANCELED!");
+        			break;
+        		case EIDMW_ERR_TIMEOUT:
+        			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PIN introduction - TIMEOUT!");
+        			break;
+        		default:
+        			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "GENERAL EXCEPTION CAUGHT!");
+        		}
+        	}
     return;
 }
