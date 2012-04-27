@@ -765,7 +765,7 @@ pid_t getPidFromParentid(pid_t parentid, const char *CommandLineToFind)
 		return 0;
 	}
 	while(fgets(buffer,sizeof(buffer),pF) != NULL){
-		sscanf(buffer,"%ld %ld %[^\n]\n",&pPid,&pPpid,pCommand);
+		sscanf(buffer,"%d %d %[^\n]\n",&pPid,&pPpid,pCommand);
 		if(0 == strcmp(pCommand,CommandLineToFind)){
 			pid=pPid;
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  getPidFromParentid :found pid=%ld", pid);
