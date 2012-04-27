@@ -2317,7 +2317,7 @@ void MainWnd::authPINRequest_triggered()
 
 		if (ReaderContext.isCardPresent())
 		{
-			PTEID_Pin &pin = ReaderContext.getEIDCard().getPins().getPinByPinRef((unsigned int)PTEID_Pin::AUTH_PIN);
+			PTEID_Pin &pin = ReaderContext.getEIDCard().getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
 
 			if (pin.getTriesLeft() == 0)
 			{
@@ -2334,7 +2334,7 @@ void MainWnd::authPINRequest_triggered()
 			if (!bResult && -1 == triesLeft)
 				return;
 
-			m_pinsInfo.find((unsigned int)PTEID_Pin::AUTH_PIN)->second->triesLeft = triesLeft;
+			m_pinsInfo.find(PTEID_Pin::AUTH_PIN)->second->triesLeft = triesLeft;
 
 			QString status;
 			if (1 == triesLeft)
@@ -2394,7 +2394,7 @@ bool MainWnd::addressPINRequest_triggered()
 
 		if (ReaderContext.isCardPresent())
 		{
-			PTEID_Pin &pin = ReaderContext.getEIDCard().getPins().getPinByPinRef((unsigned int)PTEID_Pin::ADDR_PIN);
+			PTEID_Pin &pin = ReaderContext.getEIDCard().getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
 
 			if (pin.getTriesLeft() == 0)
 			{
@@ -2411,7 +2411,7 @@ bool MainWnd::addressPINRequest_triggered()
 			if (!bResult && -1 == triesLeft)
 				return false;
 
-			m_pinsInfo.find((unsigned int)PTEID_Pin::ADDR_PIN)->second->triesLeft = triesLeft;
+			m_pinsInfo.find(PTEID_Pin::ADDR_PIN)->second->triesLeft = triesLeft;
 
 			QString status;
 			if (1 == triesLeft)
@@ -2822,19 +2822,19 @@ void MainWnd::fillPinList()
 	clearTabPins();
 
 	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, m_pinsInfo[(unsigned int)PTEID_Pin::AUTH_PIN]->pin_name);
+	pinTreeItem->setText(COLUMN_PIN_NAME, m_pinsInfo[PTEID_Pin::AUTH_PIN]->pin_name);
 	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
-	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)(unsigned int)PTEID_Pin::AUTH_PIN));
+	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::AUTH_PIN));
 
 	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, m_pinsInfo[(unsigned int)PTEID_Pin::SIGN_PIN]->pin_name);
+	pinTreeItem->setText(COLUMN_PIN_NAME, m_pinsInfo[PTEID_Pin::SIGN_PIN]->pin_name);
 	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
-	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)(unsigned int)PTEID_Pin::SIGN_PIN));
+	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::SIGN_PIN));
 
 	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, m_pinsInfo[(unsigned int)PTEID_Pin::ADDR_PIN]->pin_name);
+	pinTreeItem->setText(COLUMN_PIN_NAME, m_pinsInfo[PTEID_Pin::ADDR_PIN]->pin_name);
 	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
-	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)(unsigned int)PTEID_Pin::ADDR_PIN));
+	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::ADDR_PIN));
 
 	m_ui.treePIN->expandAll();
 
@@ -2846,14 +2846,14 @@ void MainWnd::loadPinData(PTEID_EIDCard& Card){
 
 	PTEID_Pins& Pins = Card.getPins();
 
-	PTEID_Pin& pinAuth = Pins.getPinByPinRef((unsigned int)PTEID_Pin::AUTH_PIN);
-	m_pinsInfo[(unsigned int)PTEID_Pin::AUTH_PIN] = new PinInfo(pinAuth.getId(), pinAuth.getLabel(), pinAuth.getTriesLeft());
+	PTEID_Pin& pinAuth = Pins.getPinByPinRef(PTEID_Pin::AUTH_PIN);
+	m_pinsInfo[PTEID_Pin::AUTH_PIN] = new PinInfo(pinAuth.getId(), pinAuth.getLabel(), pinAuth.getTriesLeft());
 
-	PTEID_Pin& pinSign = Pins.getPinByPinRef((unsigned int)PTEID_Pin::SIGN_PIN);
-	m_pinsInfo[(unsigned int)PTEID_Pin::SIGN_PIN] = new PinInfo(pinSign.getId(), pinSign.getLabel(), pinSign.getTriesLeft());
+	PTEID_Pin& pinSign = Pins.getPinByPinRef(PTEID_Pin::SIGN_PIN);
+	m_pinsInfo[PTEID_Pin::SIGN_PIN] = new PinInfo(pinSign.getId(), pinSign.getLabel(), pinSign.getTriesLeft());
 
-	PTEID_Pin& pinAddr = Pins.getPinByPinRef((unsigned int)PTEID_Pin::ADDR_PIN);
-	m_pinsInfo[(unsigned int)PTEID_Pin::ADDR_PIN] = new PinInfo(pinAddr.getId(), pinAddr.getLabel(), pinAddr.getTriesLeft());
+	PTEID_Pin& pinAddr = Pins.getPinByPinRef(PTEID_Pin::ADDR_PIN);
+	m_pinsInfo[PTEID_Pin::ADDR_PIN] = new PinInfo(pinAddr.getId(), pinAddr.getLabel(), pinAddr.getTriesLeft());
 }
 
 
@@ -3344,7 +3344,6 @@ void MainWnd::updatetext()
 	QString TotalBytes = QString::number(totalct);
 	TotalBytes.append(" / 1000");
 	m_ui.txtPersoDataCount->setText(TotalBytes);
-
 
 	if (TxtPersoDataString.count()>1000)
 		m_ui.txtPersoData->textCursor().deletePreviousChar();

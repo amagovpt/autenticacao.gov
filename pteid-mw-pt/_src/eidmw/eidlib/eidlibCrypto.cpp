@@ -700,6 +700,10 @@ PTEID_Certificate &PTEID_Certificates::addCertificate(PTEID_ByteArray &cert)
 /*****************************************************************************************
 ---------------------------------------- PTEID_Pin -------------------------------------------
 *****************************************************************************************/
+const unsigned long PTEID_Pin::AUTH_PIN;
+const unsigned long PTEID_Pin::SIGN_PIN;
+const unsigned long PTEID_Pin::ADDR_PIN;
+
 PTEID_Pin::PTEID_Pin(const SDK_Context *context,APL_Pin *impl):PTEID_Crypto(context,impl)
 {
 }
