@@ -289,14 +289,14 @@ double lineSize(cairo_t *ct, const QString &str){
 void formatLines(cairo_t *ct, const QString &str, QStringList &qSList){
 	QString strTemp;
 	QString oldStrTemp;
-	QStringList lstTemp = str.split(QRegExp("[^\\s]\\s[^\\s]"));
+	QStringList lstTemp = str.split(QRegExp("\\s"));
 	int i=0;
 
 	if (lstTemp.size()>1){
 		while (i<lstTemp.size()){
 			while (lineSize(ct,strTemp)<552 && i<lstTemp.size()){
 				oldStrTemp = strTemp;
-				strTemp+=lstTemp.at(i++);
+				strTemp+=lstTemp.at(i++)+" ";
 			}
 			if (!oldStrTemp.isEmpty()){
 				qSList.append(oldStrTemp);
