@@ -62,12 +62,4 @@ private:
     cairo_t *createPage(int format, bool firstPage, const char *filepath, cairo_t *crt);
 };
 
-
-class MyImage
-{
-private:
-	QImage *img;
-	unsigned char *buffer;
-};
-
 #endif
