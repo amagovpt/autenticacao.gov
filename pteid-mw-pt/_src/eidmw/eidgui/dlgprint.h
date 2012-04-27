@@ -25,6 +25,7 @@
 #include <QDialog>
 #include "genpur.h"
 #include "CardInformation.h"
+#include <cairo/cairo.h>
 
 class dlgPrint : public QDialog
 {
@@ -51,10 +52,22 @@ private:
     CardInformation const& m_CI_Data;
     QString					m_CurrReaderName;		//!< the current reader we're using
     QImage img;
+    QImage *background;
+    QList<QImage> imageList;
+    QByteArray image;
 
     bool addressPINRequest_triggered(CardInformation& CI_Data);
     const char * persodata_triggered();
     void drawpdf(CardInformation& CI_Data, int format, const char *filepath);
+    cairo_t *createPage(int format, bool firstPage, const char *filepath, cairo_t *crt);
+};
+
+
+class MyImage
+{
+private:
+	QImage *img;
+	unsigned char *buffer;
 };
 
 #endif

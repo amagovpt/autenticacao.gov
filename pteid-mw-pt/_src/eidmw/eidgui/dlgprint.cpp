@@ -132,23 +132,29 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
 }
 
+//static cairo_status_t cairowriteQimageLst(void *closure, unsigned char const *data, unsigned int length);
+
+
+
+
 void dlgPrint::on_pbPrint_clicked( void )
 {
 	CardInformation cdata = m_CI_Data;
-	QString defaultpngpath;
+	imageList.clear();
 
-	defaultpngpath = QDir::tempPath();
-	defaultpngpath.append("/CartaoCidadao.png");
-	drawpdf(cdata, PNG ,defaultpngpath.toStdString().c_str());
+	drawpdf(cdata, PNG , "");
 	QPrinter printer;
 	QPrintDialog *dlg = new QPrintDialog(&printer,0);
 	if(dlg->exec() == QDialog::Accepted) {
-		QImage img (defaultpngpath);
-		QPainter painter(&printer);
-		painter.drawImage(QPoint(0,0),img);
-		painter.end();
+		QListIterator<QImage> i(imageList);
+		while (i.hasNext()){
+			QPainter painter(&printer);
+			painter.drawImage(QPoint(0,0), i.next());
+			painter.end();
+		}
 	}
 
+	delete dlg;
 }
 
 void dlgPrint::on_pbCancel_clicked( void )
@@ -272,42 +278,132 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 	return true;
 }
 
-void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepath)
-{
-	cairo_surface_t *surface;
-	cairo_t *cr;
-	cairo_surface_t *imagefront;
-	cairo_surface_t *idphoto;
-	int w, h;
 
-	//// Create pdf with cairo
-	if (format == PDF)
-	{
-		surface = cairo_pdf_surface_create(filepath, 504, 648);
+double lineSize(cairo_t *ct, const QString &str){
+	cairo_text_extents_t extents;
+
+	cairo_text_extents(ct,str.toUtf8(),&extents);
+	return extents.x_advance;
+}
+
+void formatLines(cairo_t *ct, const QString &str, QStringList &qSList){
+	QString strTemp;
+	QString oldStrTemp;
+	QStringList lstTemp = str.split(QRegExp("[^\\s]\\s[^\\s]"));
+	int i=0;
+
+	if (lstTemp.size()>1){
+		while (i<lstTemp.size()){
+			while (lineSize(ct,strTemp)<552 && i<lstTemp.size()){
+				oldStrTemp = strTemp;
+				strTemp+=lstTemp.at(i++);
+			}
+			if (!oldStrTemp.isEmpty()){
+				qSList.append(oldStrTemp);
+				oldStrTemp.clear();
+				if (i<lstTemp.size())
+					strTemp = lstTemp.at(--i);
+			} else {
+				QString temp = strTemp;
+				while(!temp.isEmpty()){
+					int j=0;
+					while((temp.size()>=46+j) && lineSize(ct,temp.left(46+j))<552){
+						j++;
+					}
+					qSList.append(temp.left(46+(j-1)));
+					if (temp.size()>=46+j){
+						temp = temp.right(temp.size()-(46+(j-1)));
+					} else
+						temp.clear();
+				}
+			}
+		}
 	} else {
-		//PNG
-		surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 504, 648);
+		QString temp = str;
+		while(!temp.isEmpty()){
+			int j=0;
+			while((temp.size()>=46+j) && lineSize(ct,temp.left(46+j))<552)
+				j++;
+			qSList.append(temp.left(46+(j-1)));
+			if (temp.size()>=46+j){
+				temp = temp.right(temp.size()-(46+(j-1)));
+			} else
+				temp.clear();
+		}
 	}
+}
 
-	cr = cairo_create(surface);
 
-	//// Set Image - Front
-	QImage *qimg = new QImage (":/images/Images/application_print_PDF.png");
-	imagefront = cairo_image_surface_create_for_data(qimg->bits(), CAIRO_FORMAT_RGB24, qimg->width(), qimg->height(), qimg->bytesPerLine());
+void formatNotes(QString &personalNotes, cairo_t *ct, QStringList &qSList){
+	personalNotes.replace("\t", "    ");
+	QStringList lines = personalNotes.split("\n");
+
+	for (int i = 0; i < lines.size(); ++i){
+		if (lineSize(ct, lines.at(i)) < 552)
+			qSList.append(lines.at(i));
+		else
+			formatLines(ct, lines.at(i), qSList);
+	}
+}
+
+cairo_t *dlgPrint::createPage(int format, bool firstPage, const char *filepath, cairo_t *crt){
+	cairo_surface_t *surface;
+	cairo_surface_t *imagefront;
+	int w, h;
+	cairo_t *cr;
+
+	if (firstPage)
+		background = new QImage (":/images/Images/application_print_PDF.png");
+	else
+		background = new QImage (":/images/Images/application_print_PDF_pg_2.png");
+
+	if (format == PDF && firstPage)
+			surface = cairo_pdf_surface_create(filepath, 504, 648);
+		else if (format == PNG)
+			surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 504, 648);
+
+	if ((format == PDF && firstPage) || format == PNG)
+		cr = cairo_create(surface);
+	else
+		cr = crt;
+
+	imagefront = cairo_image_surface_create_for_data(background->bits(), CAIRO_FORMAT_RGB24, background->width(), background->height(), background->bytesPerLine());
 	w = cairo_image_surface_get_width (imagefront);
 	h = cairo_image_surface_get_height (imagefront);
 
-	cairo_scale (cr, 510.0/w, 650.0/h);
+	if ((format == PDF && firstPage) || format == PNG)
+		cairo_scale (cr, 510.0/w, 650.0/h);
 
 	cairo_set_source_surface(cr, imagefront, 0, 0);
 	cairo_paint(cr);
 
-
-	//// Set Text Entries ////
 	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
 			CAIRO_FONT_WEIGHT_NORMAL);
 	cairo_set_font_size (cr, 12.0);
 	cairo_set_source_rgb(cr, 0, 0, 0);
+
+	return cr;
+}
+
+
+static cairo_status_t write_png_stream_to_Qimage (void *in_closure, const unsigned char *data,
+                                                unsigned int length)
+{
+	QByteArray *img = (QByteArray*) in_closure;
+
+	img->append((const char*)data, length);
+
+    return CAIRO_STATUS_SUCCESS; //CAIRO_STATUS_WRITE_ERROR
+}
+
+
+void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepath)
+{
+	cairo_t *cr;
+	cairo_surface_t *idphoto;
+	int w, h;
+
+	cr = createPage(format, true, filepath, NULL);
 
 	tFieldMap& PersonFields = CI_Data.m_PersonInfo.getFields();
 	tFieldMap& CardFields = CI_Data.m_CardInfo.getFields();
@@ -480,33 +576,16 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 		cairo_show_text(cr, AddressFields[ADDRESS_LOCALITY].toStdString().c_str());
 	}
 
-	if (ui.chboxPersoData->isChecked())
-	{
-		const char *notes = persodata_triggered();
-		QString perso_data = QString::fromUtf8(notes);
-
-		////PERSONAL NOTES
-		
-		// cairo_show_text() doesn't render linebreaks so we have to 
-		// do it ourselves
-		QStringList lines = perso_data.split("\n");
-		// The personal notes field is limited to 4 Lines ATM
-		for (int i = 0; i < lines.size() && i < 4 ; ++i)
-		{
-			cairo_move_to(cr, 20.0, 760 + 20*i);
-			cairo_show_text(cr, lines.at(i).toUtf8());
-		}
-		
-	}
-
 	if (ui.chboxID->isChecked())
 	{
+		cairo_save(cr);
+
 		//Image
 		img = QImage();
 		img.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
 
 		idphoto = cairo_image_surface_create_for_data(img.bits(), CAIRO_FORMAT_RGB24, img.width(),
-													img.height(), img.bytesPerLine());
+				img.height(), img.bytesPerLine());
 
 		int w2 = cairo_image_surface_get_width (idphoto);
 		int h2 = cairo_image_surface_get_height (idphoto);
@@ -515,20 +594,66 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 
 		cairo_set_source_surface(cr, idphoto, 1050, 180);
 		cairo_paint(cr);
+
+		cairo_restore(cr);
+	}
+
+	if (ui.chboxPersoData->isChecked())
+	{
+		const char *notes = persodata_triggered();
+		QString perso_data = QString::fromUtf8(notes);
+
+		// cairo_show_text() doesn't render linebreaks, at this time pango wasnt an alternative (strategies)
+		QStringList notesFormt;
+		formatNotes(perso_data,cr,notesFormt);
+		if (!notesFormt.isEmpty()){
+			int i=0;
+			for (; i < notesFormt.size() && i < 5; ++i)
+			{
+				cairo_move_to(cr, 20.0, 760 + 15*i);
+				cairo_show_text(cr, notesFormt.at(i).toUtf8());
+			}
+
+			if (i<notesFormt.size()){
+				int firstLineYpos;
+				for (; i<notesFormt.size(); i++){
+					if ((i-5)%50 == 0){
+						firstLineYpos = 90;
+						if (format == PDF){
+							cairo_show_page(cr);
+						} else {
+							cairo_surface_write_to_png_stream (cairo_get_target(cr), write_png_stream_to_Qimage,&image);
+							imageList.append(QImage::fromData(image));
+							image.clear();
+							cairo_surface_destroy(cairo_get_target(cr));
+							cairo_destroy(cr);
+							delete background;
+						}
+						cr = createPage(format, false, NULL, cr);
+					}
+					cairo_move_to(cr, 20.0, firstLineYpos + 15*((i-5)%50));
+					cairo_show_text(cr, notesFormt.at(i).toUtf8());
+				}
+			}
+		}
 	}
 
 	if (format == PDF)
 	{
-		//PDF Page 1
 		cairo_show_page(cr);
 	} else {
-		//PNG write
-		cairo_surface_write_to_png(surface, filepath);
+		cairo_surface_write_to_png_stream (cairo_get_target(cr), write_png_stream_to_Qimage,&image);
+		imageList.append(QImage::fromData(image));
+		image.clear();
 	}
-	cairo_surface_destroy(surface);
+
+	cairo_surface_destroy(cairo_get_target(cr));
 	cairo_destroy(cr);
+	delete background;
 	return;
 }
+
+
 
 
 //-----------------------------------------------------------
