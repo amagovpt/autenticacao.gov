@@ -34,6 +34,7 @@ namespace eIDMW
 #define XML_ROOT_ELEMENT_ATTR_TIMESTAMP		"timestamp"
 #define XML_ROOT_ELEMENT_ATTR_SERVERNAME	"servername"
 #define XML_ROOT_ELEMENT_ATTR_SERVERADDRESS	"serveraddress"
+#define XML_ROOT_ELEMENT_ATTR_TOKENID		"tokenid"
 #define XML_PHOTO_ELEMENT 					"photo"
 #define XML_BASIC_INFO_ELEMENT				"basicInformation"
 #define XML_NAME_ELEMENT					"name"
@@ -942,6 +943,7 @@ class PTEID_XmlUserRequestedInfo : public PTEID_Object
 public:
     PTEIDSDK_API PTEID_XmlUserRequestedInfo();
     PTEIDSDK_API PTEID_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress);
+    PTEIDSDK_API PTEID_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress, const char *tokenID);
 	PTEIDSDK_API virtual ~PTEID_XmlUserRequestedInfo();			/**< Destructor */
 	PTEIDSDK_API void add(XMLUserData xmlUData);		/**< add string */
 

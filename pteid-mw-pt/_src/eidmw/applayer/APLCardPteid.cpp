@@ -1320,12 +1320,13 @@ bool APL_CCXML_Doc::isAllowed()
 CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
 {
 	CByteArray xml;
-	string *ts, *sn, *sa;
+	string *ts, *sn, *sa, *tk;
 	string rootATTRS;
 
 	ts = m_xmlUserRequestedInfo->getTimeStamp();
 	sn = m_xmlUserRequestedInfo->getServerName();
 	sa = m_xmlUserRequestedInfo->getServerAddress();
+	tk = m_xmlUserRequestedInfo->getTokenID();
 
 	if(!bNoHeader)
 		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -1334,9 +1335,13 @@ CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
 		XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_TIMESTAMP,ts->c_str());
 		XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_SERVERNAME,sn->c_str());
 		XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_SERVERADDRESS,sa->c_str());
+		if (tk){
+			XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_TOKENID,tk->c_str());
+		}
 		xml+=XML_ROOT_E;
 	} else
 		xml+=XML_OPEN_TAG_NEWLINE(XML_ROOT_ELEMENT);
+
 	xml+=m_card->getID().getXML(true,*m_xmlUserRequestedInfo);
 	xml+=m_card->getAddr().getXML(true, *m_xmlUserRequestedInfo);
 	xml+=m_card->getPersonalNotes().getXML(true, *m_xmlUserRequestedInfo);
@@ -1367,6 +1372,7 @@ APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo()
 	_serverName = NULL;
 	_serverAddress = NULL;
 	_timeStamp = NULL;
+	_tokenID = NULL;
 }
 
 APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress)
@@ -1375,6 +1381,16 @@ APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo(const char *timeStamp, const 
 	_timeStamp = new string(timeStamp);
 	_serverName = new string(serverName);
 	_serverAddress = new string(serverAddress);
+	_tokenID = NULL;
+}
+
+APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress, const char *tokenID)
+{
+	xmlSet = new set<enum XMLUserData>;
+	_timeStamp = new string(timeStamp);
+	_serverName = new string(serverName);
+	_serverAddress = new string(serverAddress);
+	_tokenID = new string(tokenID);
 }
 
 APL_XmlUserRequestedInfo::~APL_XmlUserRequestedInfo()
@@ -1387,6 +1403,8 @@ APL_XmlUserRequestedInfo::~APL_XmlUserRequestedInfo()
 		delete _serverAddress;
 	if (_serverName)
 		delete _serverName;
+	if (_tokenID)
+		delete _tokenID;
 }
 
 void APL_XmlUserRequestedInfo::add(XMLUserData xmlUData)
@@ -1429,6 +1447,10 @@ std::string* APL_XmlUserRequestedInfo::getServerName(){
 
 std::string* APL_XmlUserRequestedInfo::getServerAddress(){
 	return _serverAddress;
+}
+
+std::string* APL_XmlUserRequestedInfo::getTokenID(){
+	return _tokenID;
 }
 
 

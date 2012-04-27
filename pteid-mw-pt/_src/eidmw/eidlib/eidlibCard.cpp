@@ -1147,6 +1147,11 @@ PTEID_XmlUserRequestedInfo::PTEID_XmlUserRequestedInfo(const char *timeStamp, co
 	customXml = new APL_XmlUserRequestedInfo(timeStamp, serverName, serverAddress);
 }
 
+PTEID_XmlUserRequestedInfo::PTEID_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress, const char *tokenID):PTEID_Object(NULL,NULL)
+{
+	customXml = new APL_XmlUserRequestedInfo(timeStamp, serverName, serverAddress, tokenID);
+}
+
 PTEID_XmlUserRequestedInfo::~PTEID_XmlUserRequestedInfo()
 {
 	if (customXml)
