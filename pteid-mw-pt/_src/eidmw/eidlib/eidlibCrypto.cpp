@@ -700,9 +700,13 @@ PTEID_Certificate &PTEID_Certificates::addCertificate(PTEID_ByteArray &cert)
 /*****************************************************************************************
 ---------------------------------------- PTEID_Pin -------------------------------------------
 *****************************************************************************************/
+/* This allocation is not needed on MSVC and generates a linking error
+   (duplicate definitions for the symbols) */
+#ifndef WIN32 
 const unsigned long PTEID_Pin::AUTH_PIN;
 const unsigned long PTEID_Pin::SIGN_PIN;
 const unsigned long PTEID_Pin::ADDR_PIN;
+#endif
 
 PTEID_Pin::PTEID_Pin(const SDK_Context *context,APL_Pin *impl):PTEID_Crypto(context,impl)
 {
