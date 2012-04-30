@@ -18,6 +18,7 @@
 #include "MWException.h"
 #include "eidErrors.h"
 #include "Util.h"
+#include "static_pteid_certs.h"
 
 #include "MiscUtil.h"
 
@@ -66,6 +67,7 @@
 #include <openssl/evp.h>
 #include <openssl/pem.h>
 #include <openssl/bio.h>
+#include <openssl/err.h>
 
 //stat
 #include <sys/types.h>
@@ -806,11 +808,37 @@ bool XadesSignature::ValidateCert(const char *pem_certificate)
 	X509_STORE *store = X509_STORE_new();
 	
 	X509 *pCert = NULL;
+	unsigned char * cert_data = NULL;
+	char *parsing_error = NULL;
 
+	/*
 	APL_Config certs_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
 	const char * str_certs_dir = certs_dir.getString();
 	CPathUtil::scanDir(str_certs_dir, "", "der", bStopRequest, store, &XadesSignature::foundCertificate);
+	*/
 
+	for (unsigned int i = 0; i != (sizeof(PTEID_CERTS)/sizeof(CERT_S));
+		i++)
+	{
+		pCert = NULL;
+		cert_data = PTEID_CERTS[i].cert_data;
+	    pCert = d2i_X509(&pCert, (const unsigned char **)&cert_data, 
+			PTEID_CERTS[i].cert_len);
+
+		if (pCert == NULL)
+		{
+			parsing_error = ERR_error_string(ERR_get_error(), NULL);
+		MWLOG(LEV_ERROR, MOD_APL, L"XadesSignature::ValidateCert: Error parsing certificate #%d. Details: %s",
+				i, parsing_error);
+		}
+		else
+		{
+			if(X509_STORE_add_cert(store, pCert) == 0)
+				printf("XadesSignature::ValidateCert: error adding certificate #%d\n",  i);
+		}
+	
+	}
+	
 	X509_STORE_CTX *ctx;
 	X509 *cert = NULL;
 
