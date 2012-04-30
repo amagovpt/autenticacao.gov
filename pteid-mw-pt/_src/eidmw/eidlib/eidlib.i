@@ -481,8 +481,6 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 {
 	switch(type)
 	{
-	case PTEID_DocumentType.PTEID_DOCTYPE_FULL:
-		return getFullDoc();
 	case PTEID_DocumentType.PTEID_DOCTYPE_ID:
 		return getID();
 	case PTEID_DocumentType.PTEID_DOCTYPE_ADDRESS:
@@ -866,7 +864,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") setAllowTestCard		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getDocument			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getXMLCCDoc			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getFullDoc			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getID					JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getAddr				JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getPicture			JAVA_CODE_THROW
