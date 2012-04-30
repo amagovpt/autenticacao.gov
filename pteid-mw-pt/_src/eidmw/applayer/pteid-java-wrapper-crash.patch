@@ -1,6 +1,6 @@
 Index: MiscUtil.h
 ===================================================================
---- MiscUtil.h	(revision 2619)
+--- MiscUtil.h	(revision 2631)
 +++ MiscUtil.h	(working copy)
 @@ -40,7 +40,6 @@
  int Truncate(const char *path);
@@ -12,9 +12,9 @@ Index: MiscUtil.h
  typedef struct _hashed_file_
 Index: XadesSignature.cpp
 ===================================================================
---- XadesSignature.cpp	(revision 2619)
+--- XadesSignature.cpp	(revision 2631)
 +++ XadesSignature.cpp	(working copy)
-@@ -94,7 +94,6 @@
+@@ -96,7 +96,6 @@
  	CByteArray XadesSignature::mp_timestamp_data = CByteArray();
  
  	CByteArray XadesSignature::mp_validate_data = CByteArray();
@@ -22,7 +22,7 @@ Index: XadesSignature.cpp
  
  	CByteArray XadesSignature::HashFile(const char *file_path)
  	{
-@@ -586,7 +585,7 @@
+@@ -588,7 +587,7 @@
  }
  
  /*
@@ -31,7 +31,7 @@ Index: XadesSignature.cpp
   */
  bool XadesSignature::grep_validation_result (char *time_and_date)
  {
-@@ -595,7 +594,6 @@
+@@ -597,7 +596,6 @@
  	const char * valid_timestamp_pattern = "Selo Temporal V\xE1lido.";
  	const char * invalid_timestamp_pattern = "Selo Temporal n\xE3o corresponde ao ficheiro seleccionado";
  	const char * general_error_pattern = "Ocorreu um erro";
@@ -39,7 +39,7 @@ Index: XadesSignature.cpp
  	unsigned char *haystack = mp_validate_data.GetBytes();
  
  	if (mp_validate_data.Size() == 0)
-@@ -606,14 +604,11 @@
+@@ -608,14 +606,11 @@
  	
  	const char *ts_str = strstr((const char *)haystack, valid_timestamp_pattern);
  
@@ -56,7 +56,7 @@ Index: XadesSignature.cpp
  
  		return true; 
  	}
-@@ -926,25 +921,7 @@
+@@ -954,25 +949,7 @@
  
  }
  
@@ -82,7 +82,7 @@ Index: XadesSignature.cpp
  bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, char *errors, unsigned long *error_length)
  {
  	bool errorsOccured = false;
-@@ -1060,19 +1037,6 @@
+@@ -1088,19 +1065,6 @@
  				DSIGKeyInfoX509 *cert_element = dynamic_cast<DSIGKeyInfoX509 *> (keyinfo);
  				const XMLCh *pem_cert = cert_element->getCertificateItem(0);
  				char * tmp_cert = XMLString::transcode(pem_cert);
@@ -102,7 +102,7 @@ Index: XadesSignature.cpp
  				bool cert_result = ValidateCert(tmp_cert);
  
  				if (!cert_result)
-@@ -1081,10 +1045,6 @@
+@@ -1109,10 +1073,6 @@
  					*error_length = err_len;
  					return false;
  				}
@@ -115,7 +115,7 @@ Index: XadesSignature.cpp
  		}
 Index: MiscUtil.cpp
 ===================================================================
---- MiscUtil.cpp	(revision 2619)
+--- MiscUtil.cpp	(revision 2631)
 +++ MiscUtil.cpp	(working copy)
 @@ -35,7 +35,6 @@
  #include <sys/stat.h>
@@ -259,7 +259,7 @@ Index: MiscUtil.cpp
  *****************************************************************************************/
 Index: APLCard.cpp
 ===================================================================
---- APLCard.cpp	(revision 2619)
+--- APLCard.cpp	(revision 2631)
 +++ APLCard.cpp	(working copy)
 @@ -294,16 +294,11 @@
  	{
@@ -283,7 +283,7 @@ Index: APLCard.cpp
  }
 Index: XadesSignature.h
 ===================================================================
---- XadesSignature.h	(revision 2619)
+--- XadesSignature.h	(revision 2631)
 +++ XadesSignature.h	(working copy)
 @@ -18,8 +18,6 @@
  
