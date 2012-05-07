@@ -3,6 +3,10 @@
 <TS version="2.0" language="nl">
 <context>
     <name>MainWnd</name>
+     <message>
+        <source>Bytes available:</source>
+        <translation>Bytes disponíveis:</translation>
+     </message>
       <message>
         <source>Certification path</source>
         <translation>Caminho da certificação</translation>
