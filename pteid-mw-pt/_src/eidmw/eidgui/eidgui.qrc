@@ -2,7 +2,6 @@
     <qresource prefix="/images">
         <file>Images/Background_IDBack.jpg</file>
         <file>Images/Background_IDFront.jpg</file>
-        <file>Images/Female.png</file>
         <file>Images/Icons/Chip.png</file>
         <file>Images/Icons/Clear.png</file>
         <file>Images/Icons/Exit.png</file>
@@ -19,12 +18,7 @@
         <file>Images/Icons/reader_nocard.png</file>
         <file>Images/Icons/reader_question.png</file>
         <file>Images/Icons/Help.png</file>
-        <file>Images/Male.png</file>
         <file>Images/a-z_identiteitskaart_logo.png</file>
-        <file>Images/schild_de.jpg</file>
-        <file>Images/schild_en.jpg</file>
-        <file>Images/schild_fr.jpg</file>
-        <file>Images/schild_nl.jpg</file>
         <file>Images/Page_background_Identity.png</file>
         <file>Images/bg-Blue.png</file>
         <file>Images/bg_SelectTabTool.png</file>
