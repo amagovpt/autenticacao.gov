@@ -887,6 +887,7 @@ return $jnicall;
 %javaexception("PTEID_Exception") doSODCheck			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getRootCAPubKey		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") readPersonalNotes		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") ChangeCapPin                  JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_CCXML_Doc ccxml

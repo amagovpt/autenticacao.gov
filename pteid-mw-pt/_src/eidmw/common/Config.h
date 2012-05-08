@@ -137,6 +137,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GENERAL_CARDTXDELAY   L"card_transmit_delay"  //number, delay while communicating with the smartcard, in mili-seconds, default 1 mSec
 #define EIDMW_CNF_GENERAL_CARDCONNDELAY L"card_connect_delay"   //number, delay before connecting to a smartcard, in mili-seconds, default 0 mSec
 #define EIDMW_CNF_GENERAL_BUILDNBR		L"build_number"			//Number of the installed build
+#define EIDMW_CNF_GENERAL_OTP_SERVER    L"otp_server"
 
 #define EIDMW_CNF_SECTION_LOGGING       L"logging"              //section with the logging parameters
 #define EIDMW_CNF_LOGGING_DIRNAME       L"log_dirname"          //string, location of the log-file; $home/pteid/	Full path with volume name.
@@ -274,6 +275,7 @@ public:
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_CARDTXDELAY;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_BUILDNBR;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_OTP_SERVER;
 
     //LOGGING
     static const struct Param_Str EIDMW_CONFIG_PARAM_LOGGING_DIRNAME;

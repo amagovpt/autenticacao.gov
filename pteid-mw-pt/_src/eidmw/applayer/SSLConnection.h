@@ -8,6 +8,7 @@
 
 #include "APLCard.h"
 #include "APLReader.h"
+#include "EMV-Cap-Helper.h"
 #include "Export.h"
 
 namespace eIDMW
@@ -32,27 +33,32 @@ class SSLConnection
 		CloseConnection();
 		};
 		
-		//Send HTTP POST requests using the connection through the BIO object stored in m_bio
-		EIDMW_APL_API char * do_OTP_1stpost();
-		EIDMW_APL_API char * do_OTP_2ndpost(char * cookie);
-		//EIDMW_APL_API void do_OTP_3rdpost();
+		//The following functions implement the communication protocol with the OTP server
+		char * do_OTP_1stpost();
+		char * do_OTP_2ndpost(char * cookie, OTPParams *params);
+		void do_OTP_3rdpost(char *cookie, const char *change_pin_response);
+		char * do_OTP_4thpost(char *cookie, OTPParams *params);
+		void do_OTP_5thpost(char *cookie, const char *reset_scriptcounter_response);
 
 	private:
 		void ReadUserCert();
+		//Generic POST routine that actually writes and reads from the SSL connection
+		char * Post(char *cookie, char *url_path, char *body);
 
-		int write_to_stream(BIO* bio, char* req_string);
-		ssize_t read_from_stream(BIO* bio, char* buffer, ssize_t length);
-		int InitConnection();
+		unsigned int write_to_stream(SSL* bio, char* req_string);
+		unsigned int read_from_stream(SSL* bio, char* buffer, unsigned int length);
+		SSL *connect_encrypted(char *host_and_port);
+		bool InitConnection();
 		void CloseConnection();
+		void loadUserCert(SSL_CTX *ctx);
+		void loadCertChain(X509_STORE *store);
 
-		//static CURLcode SetConnectionParams(CURL *curl, void *sslctx, void *parm);
-		//User auth certificate to be used in SSL Configuration
-		static unsigned char *user_auth_cert;
-		static unsigned int user_cert_len;
 
 		RSA *current_private_key;
-		CURL * m_curl_handle;
-		BIO *m_bio;
+		//BIO *m_bio;
+		SSL * m_ssl_connection;
+		//Hostname of our OTP server
+		char * m_otp_host;
 		//APL_Card card_handle;
 
 

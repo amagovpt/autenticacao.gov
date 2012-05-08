@@ -1,26 +1,8 @@
 /*
- * EMV-Cap-Helper.h
- *
- *  Created on: 2011/10/24
- *      Author: Luis Medinas <luis.medinas@caixamagica.pt>
- */
-
-/*
- *  pteid-mw-ng is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  pteid-mw-ng is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Library General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to:
- * 	The Free Software Foundation, Inc.,
- * 	51 Franklin Street, Fifth Floor
- * 	Boston, MA  02110-1301, USA.
+ *  PTeID Middleware Project.
+ *  Copyright (C) 2011-2012
+ *  Luis Medinas <lmedinas@gmail.com>
+ *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  */
 
 #ifndef EMVCAPHELPER_H_
@@ -29,25 +11,45 @@
 namespace eIDMW
 {
 
-#define ATC "0002"
 #define PANSEQNUMBER "00"
 #define CDOL1 "0000000000000000000000000000800000000000000000000000000000"
 #define COUNTER "0"
 #define PINTRYCOUNTER "3"
 
+struct OTPParams
+{
+char *pan;
+char *pin;
+char *arqc;
+char *cdol1;
+char *atc;
+char *pan_seq_nr;
+char *counter;
+char *pin_try_counter;
+
+};
+
 class EMVCapHelper
 {
 public:
-	EMVCapHelper(APL_SmartCard *card);
+	EMVCapHelper(APL_Card *card);
 	/**
 	  * Destructor
 	  */
 	~EMVCapHelper();
 
-	CByteArray GetPan();
-	CByteArray GetArqc();
+	void GetPan();
+	void GetArqc(char p1);
+	bool getOtpParams(OTPParams *);
+	char *changeCapPin(char * change_apdu_str);
+	char *resetScriptCounter(char *cdol2);
+	void getOnlineTransactionParams(OTPParams *);
 private:
-	APL_SmartCard *m_card;
+	bool checkSW12(CByteArray &in);
+	APL_Card *m_card;
+	char *m_pan;
+	char *m_arqc;
+	char *m_atc;
 };
 
 }

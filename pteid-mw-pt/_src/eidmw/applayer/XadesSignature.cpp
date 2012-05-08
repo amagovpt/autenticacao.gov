@@ -1,10 +1,16 @@
 /**
- *
- * XAdES and XAdES-T signature generation for PT-Eid Middleware
- *
- * Author: André Guerreiro <andre.guerreiro@caixamagica.pt>
- *
- */
+******************************************************************************
+*
+**  PTeID Middleware Project.
+**  Copyright (C) 2011-2012
+**  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+**
+**  XAdES and XAdES-T signature generator and validator 
+**
+**
+**
+*/
+
 
 #include <iostream>
 #include <fstream>
@@ -22,10 +28,6 @@
 
 #include "MiscUtil.h"
 
-// Timestamp.cc contains the implementation for local
-// timestamp validation using OpenSSL 1.0. ATM its disabled because
-// it complicates the deployment
-//#include "Timestamp.h"
 
 #include "Log.h"
 #include "ByteArray.h"
@@ -817,7 +819,7 @@ bool XadesSignature::ValidateCert(const char *pem_certificate)
 	CPathUtil::scanDir(str_certs_dir, "", "der", bStopRequest, store, &XadesSignature::foundCertificate);
 	*/
 
-	for (unsigned int i = 0; i != (sizeof(PTEID_CERTS)/sizeof(CERT_S));
+	for (unsigned int i = 0; i != CERTS_N;
 		i++)
 	{
 		pCert = NULL;

@@ -65,7 +65,6 @@ HEADERS += \
 	APLCertif.h \
 	APLCrypto.h \
 	APLDoc.h \
-        EMV-Cap-Helper.h \
 	APLReader.h \
 	APLConfig.h \
 	CardFile.h \
@@ -84,13 +83,8 @@ HEADERS += \
         SigContainer.h \
 	XadesSignature.h \
 	SODParser.h \ 
+        EMV-Cap-Helper.h \
  	SSLConnection.h 	
-
-
-### EMV-CAP support
-###        EMV-Cap-Helper.h \
-### 	sslcommon.h \
-### 	sslclient.h \
 
 
 SOURCES += \
@@ -102,22 +96,19 @@ SOURCES += \
 	CardFile.cpp	        \
 	CertStatusCache.cpp  \
 	cryptoFramework.cpp  \
-    APLCard.cpp          \ 
-    XMLParser.cpp       \
-    MiscUtil.cpp \
-    PhotoPteid.cpp \
-    APLPublicKey.cpp \
-    SigContainer.cpp \
-    XadesSignature.cpp \
-    SODParser.cpp \
-    SSLConnection.cpp	
-    
-    
-### EMV-CAP support
-###    EMV-Cap-Helper.cpp \
-###    sslcommon.cpp		\
-###    sslclient.cpp		\
+	APLCard.cpp          \ 
+	XMLParser.cpp       \
+	MiscUtil.cpp \
+	PhotoPteid.cpp \
+	APLPublicKey.cpp \
+	SigContainer.cpp \
+	XadesSignature.cpp \
+	SODParser.cpp \
+	SSLConnection.cpp \
+	static_pteid_certs.cpp \
+	EMV-Cap-Helper.cpp
 
+# Disable annoying and mostly useless gcc warning
 QMAKE_CXXFLAGS += -Wno-write-strings
 
 

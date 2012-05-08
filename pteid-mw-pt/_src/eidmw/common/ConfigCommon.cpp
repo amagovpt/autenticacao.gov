@@ -97,5 +97,6 @@ namespace eIDMW
 
 //AutoUpdates
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_URL      =       {EIDMW_CNF_SECTION_AUTOUPDATES, EIDMW_CNF_AUTOUPDATES_URL,          L""};
+  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_OTP_SERVER      =       {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_OTP_SERVER, L"otp.cartaodecidadao.pt:443"};
 
 } // namespace eidMW

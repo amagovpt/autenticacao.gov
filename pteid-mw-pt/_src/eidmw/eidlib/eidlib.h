@@ -880,6 +880,14 @@ public:
 	     PTEIDSDK_API void SignXadesIndividual(const char * const* paths, unsigned int n_paths, const char *output_path); /** Store the XAdes signature in individual zip containers  */
 	     PTEIDSDK_API void SignXadesTIndividual(const char * const* paths, unsigned int n_paths, const char *output_path); /** Store the Xades-T signature in individual zip containers  */
 
+	     /* Change the OTP/EMV-CAP PIN through interaction with the appropriate HTTPS server
+	      * Note: This method SHOULD be always called before any change to the Authentication PIN
+	      * because the two PINs are the same from the user's perspective 
+	      * 
+	      */
+	     PTEIDSDK_API bool ChangeCapPin(const char *new_pin);
+
+
 
 	/**
 	 * Return a raw data from the card.

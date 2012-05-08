@@ -1022,6 +1022,20 @@ bool PTEID_EIDCard::isActive(){
 	return out;
 }
 
+bool PTEID_EIDCard::ChangeCapPin(const char *new_pin){
+	bool out = false;
+
+	BEGIN_TRY_CATCH
+
+	APL_EIDCard *pcard = static_cast<APL_EIDCard *>(m_impl);
+
+	out = pcard->ChangeCapPin(new_pin);
+
+	END_TRY_CATCH
+
+	return out;
+}
+
 
 void PTEID_EIDCard::doSODCheck(bool check){
 

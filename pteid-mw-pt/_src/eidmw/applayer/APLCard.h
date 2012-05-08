@@ -121,6 +121,8 @@ public:
 	EIDMW_APL_API void SignXadesIndividual(const char**, unsigned int, const char*);
 	
 	EIDMW_APL_API void SignXadesTIndividual(const char**, unsigned int, const char*);
+	
+	EIDMW_APL_API bool ChangeCapPin(const char * new_pin);
 
 	/**
 	  * Read a file on the card 
@@ -198,7 +200,7 @@ public:
 	  */
 	EIDMW_APL_API void selectApplication(const CByteArray &applicationId) const;
 
-    EIDMW_APL_API virtual CByteArray sendAPDU(const CByteArray& cmd,APL_Pin *pin=NULL,const char *csPinCode="");
+    	EIDMW_APL_API virtual CByteArray sendAPDU(const CByteArray& cmd,APL_Pin *pin=NULL,const char *csPinCode="");
 
 	/**
 	  * Read a file on the card 
