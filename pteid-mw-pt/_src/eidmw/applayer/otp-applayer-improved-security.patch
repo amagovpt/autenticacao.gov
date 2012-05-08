@@ -1,0 +1,13 @@
+Index: SSLConnection.cpp
+===================================================================
+--- SSLConnection.cpp	(revision 2660)
++++ SSLConnection.cpp	(working copy)
+@@ -472,7 +472,7 @@
+      * We leave it like this because the current production server has one expired certificate
+      * and we can't do much about it...
+      */
+-    //SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
++    SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
+ 
+     bio = BIO_new_connect(host_and_port);
+ 

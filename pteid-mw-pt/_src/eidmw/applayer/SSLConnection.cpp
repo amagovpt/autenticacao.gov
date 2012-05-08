@@ -472,7 +472,7 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
      * We leave it like this because the current production server has one expired certificate
      * and we can't do much about it...
      */
-    //SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
+    SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
 
     bio = BIO_new_connect(host_and_port);
 
