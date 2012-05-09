@@ -490,6 +490,27 @@ namespace pt.portugal.eid
         
         return ret;
     }
+    
+    public static long CAP_ChangeCapPin(String string, byte[] bytes, PTEID_Proxy_Info ptdp, String string1, String string2){
+        uint ul;
+        try {
+            if (eidCard.ChangeCapPin(string1)){
+                    PTEID_Pin pin = eidCard.getPins().getPinByPinRef(PTEID_Pin.AUTH_PIN);
+                    pin.changePin(string1, string2, ref ul, pin.getLabel(),false));
+            } 
+            return 0;
+        } catch (PTEID_Exception ex) {
+        }
+        return -1;
+    }
+
+    public static int CAP_GetCapPinChangeProgress(){
+        return 0;
+    }
+
+    public static void CAP_CancelCapPinChange(){
+        return;
+    }
 
    private static String findReaderNameWithCard(){
 	long nrReaders  = readerSet.readerCount();
