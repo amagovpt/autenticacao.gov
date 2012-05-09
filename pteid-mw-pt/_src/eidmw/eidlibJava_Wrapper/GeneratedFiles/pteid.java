@@ -522,7 +522,7 @@ public class pteid {
             
             if (eidCard.ChangeCapPin(string1)){
                     PTEID_Pin pin = eidCard.getPins().getPinByPinRef(PTEID_Pin.AUTH_PIN);
-                    pin.changePin(string1, string2, ul, pin.getLabel(), true);
+                    pin.changePin(string1, string2, ul, pin.getLabel(), false);
             } 
             return 0;
         } catch (PTEID_Exception ex) {
