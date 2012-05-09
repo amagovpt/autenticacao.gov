@@ -39,7 +39,7 @@ public:
 	~EMVCapHelper();
 
 	void GetPan();
-	void GetArqc(char p1);
+	void GetArqc(unsigned char p1);
 	bool getOtpParams(OTPParams *);
 	char *changeCapPin(char * change_apdu_str);
 	char *resetScriptCounter(char *cdol2);
