@@ -513,6 +513,30 @@ public class pteid {
         
         return ret;
     }
+    
+    
+    public static long CAP_ChangeCapPin(String string, byte[] bytes, PTEID_Proxy_Info ptdp, String string1, String string2){
+        try {
+            PTEID_EIDCard eidCard = readerContext.getEIDCard();
+            PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
+            
+            if (eidCard.ChangeCapPin(string1)){
+                    PTEID_Pin pin = eidCard.getPins().getPinByPinRef(PTEID_Pin.AUTH_PIN);
+                    pin.changePin(string1, string2, ul, pin.getLabel(), true);
+            } 
+            return 0;
+        } catch (PTEID_Exception ex) {
+        }
+        return -1;
+    }
+
+    public static int CAP_GetCapPinChangeProgress(){
+        return 0;
+    }
+
+    public static void CAP_CancelCapPinChange(){
+        return;
+    }
 
    private static String findReaderNameWithCard() throws Exception{
 	long nrReaders  = readerSet.readerCount();
