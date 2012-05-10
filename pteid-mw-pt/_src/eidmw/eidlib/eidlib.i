@@ -887,7 +887,8 @@ return $jnicall;
 %javaexception("PTEID_Exception") doSODCheck			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getRootCAPubKey		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") readPersonalNotes		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") ChangeCapPin                  JAVA_CODE_THROW
+%javaexception("PTEID_Exception") ChangeCapPin          JAVA_CODE_THROW
+%javaexception("PTEID_Exception") ChangeCapPinCompLayer JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_CCXML_Doc ccxml
@@ -1462,6 +1463,19 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_Pin_unlockPin(swigCPtr, this, pszPuk, pszNewPin, pRemaining);
 	  
 	  triesLeft.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
+	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
+	  return retval;
+}
+
+//--------------------------------------------------
+// rewrite the function ChangeCapPinCompLayer(...) on the Java side
+//--------------------------------------------------
+%typemap(javaout) bool eIDMW::PTEID_EIDCard::ChangeCapPinCompLayer(const char *old_pin, const char *new_pin,unsigned long &ulRemaining)
+{
+	  long		pRemaining = pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
+	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_EIDCard_ChangeCapPinCompLayer(swigCPtr, this, old_pin, new_pin, pRemaining);
+	  
+	  ulRemaining.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
 	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
 	  return retval;
 }

@@ -34,7 +34,7 @@ LIBS += -L../lib  \
 		-l$${APPLAYERLIB} 
 
 DEPENDPATH += .
-INCLUDEPATH += . ../applayer ../common ../cardlayer
+INCLUDEPATH += . ../applayer ../common ../cardlayer ../dialogs
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 DEFINES += EIDMW_EIDLIB_EXPORTS
 
@@ -43,7 +43,9 @@ DEFINES += EIDMW_EIDLIB_EXPORTS
 HEADERS += eidlib.h \
            eidlibdefines.h \
            eidlibException.h \
-           InternalUtil.h
+           InternalUtil.h \
+           dialogs.h \
+           Util.h
 
 SOURCES += eidlibCard.cpp \
            eidlibCrypto.cpp \

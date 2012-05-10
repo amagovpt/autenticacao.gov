@@ -31,6 +31,9 @@
 #include "PhotoPteid.h"
 #include "ByteArray.h"
 #include "CardPteid.h"
+#include "dialogs.h"
+#include "Util.h"
+#include <sstream>
 
 //UNIQUE INDEX FOR RETRIEVING OBJECT
 #define INCLUDE_OBJECT_DOCEID			1
@@ -1030,8 +1033,66 @@ bool PTEID_EIDCard::ChangeCapPin(const char *new_pin){
 	APL_EIDCard *pcard = static_cast<APL_EIDCard *>(m_impl);
 
 	out = pcard->ChangeCapPin(new_pin);
-
+	
 	END_TRY_CATCH
+
+	return out;
+}
+
+bool testPIN(const char* pin){
+	int i;
+	std::stringstream ss(pin);
+
+	if ((ss >> i).fail() || !(ss >> std::ws).eof())
+		return false;
+	return true;
+}
+
+bool PTEID_EIDCard::ChangeCapPinCompLayer(const char *old_pin, const char *new_pin, unsigned long &ulRemaining){
+	bool out = false;
+	bool validPins;
+	std::string *oldPin;
+	std::string *newPin;
+	PTEID_Pin &pin = getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
+
+	if (old_pin && strlen(old_pin) > 0)
+		validPins = testPIN(old_pin);
+	if (new_pin && strlen(new_pin) > 0)
+		validPins &= testPIN(new_pin);
+
+	if (!validPins){
+		wchar_t wsPin1[5]; // 4 + \0
+		wchar_t wsPin2[5]; // 4 + \0
+		DlgPinOperation pinOperation = DLG_PIN_OP_CHANGE;
+		DlgPinUsage usage = DLG_PIN_AUTH;
+		DlgPinInfo pinInfo = {4, 4, PIN_FLAG_DIGITS};
+		DlgRet ret;
+		std::wstring wideLabel(utilStringWiden(pin.getLabel()));
+
+		ret = DlgAskPins(DLG_PIN_OP_CHANGE,
+				DLG_PIN_AUTH, wideLabel.c_str(),
+				pinInfo, wsPin1,4+1,
+				pinInfo, wsPin2,4+1);
+
+		if (ret == DLG_OK){
+			oldPin = new string (utilStringNarrow(wsPin1));
+			newPin = new string (utilStringNarrow(wsPin2));
+		}
+	} else {
+		oldPin = new string(old_pin);
+		newPin = new string(new_pin);
+	}
+
+	if (ChangeCapPin(newPin->c_str())){
+		if (!pin.changePin(oldPin->c_str(),newPin->c_str(),ulRemaining, pin.getLabel(),false)){
+			ChangeCapPin(oldPin->c_str());
+			out = false;
+		} else {
+			out = true;
+		}
+	}
+	delete oldPin;
+	delete newPin;
 
 	return out;
 }
@@ -1685,6 +1746,29 @@ PTEIDSDK_API long PTEID_SendAPDU(const unsigned char *ucRequest, unsigned long u
 	}
 
 	return 0;
+}
+
+PTEIDSDK_API long PTEID_CAP_ChangeCapPin(const char *csServer, const unsigned char *ucServerCaCert,	unsigned long ulServerCaCertLen, tProxyInfo *proxyInfo,	const char *pszOldPin, const char *pszNewPin, long *triesLeft){
+
+	PTEID_EIDCard& card = readerContext->getEIDCard();
+	bool ret = card.ChangeCapPinCompLayer(pszOldPin, pszNewPin, (unsigned long int&)*triesLeft);
+
+	return ret ? 0 : -1;
+}
+
+/* not implemented */
+PTEIDSDK_API tCapPinChangeState PTEID_CAP_GetCapPinChangeProgress(){
+	return CAP_INITIALISING;
+}
+
+/* not implemented */
+PTEIDSDK_API void PTEID_CAP_SetCapPinChangeCallback(void(_USERENTRY * callback)(tCapPinChangeState state)){
+	return;
+}
+
+/* not implemented */
+PTEIDSDK_API void PTEID_CAP_CancelCapPinChange(){
+	return;
 }
 
 
