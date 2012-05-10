@@ -2600,7 +2600,7 @@ void MainWnd::ChangeAuthPin(PTEID_ReaderContext &ReaderContext, unsigned int pin
 	{
 		
 		//Some Way to detect pinpads to show different message
-		QString msg(tr("Verification of your current PIN failed."));
+		QString msg(tr("Verification of your current PIN failed"));
 		QMessageBox msgBoxcc(QMessageBox::Critical, dialog_title, msg, 0, this);
 		msgBoxcc.setModal(true) ;
 		msgBoxcc.exec();
@@ -2647,8 +2647,8 @@ void MainWnd::ChangeAuthPin(PTEID_ReaderContext &ReaderContext, unsigned int pin
 	catch(PTEID_Exception &ex)
 	{
 
-		QString msg(tr("Error ocurred changing the authentication Pin\n"
-				"Please try again to avoid out-of-sync pins"));
+		QString msg(tr("Error ocurred changing the authentication PIN. "
+				"Please try again to avoid out-of-sync PINs"));
 		QMessageBox msgBoxcc(QMessageBox::Warning, dialog_title, msg, 0, this);
 		msgBoxcc.setModal(true) ;
 		msgBoxcc.exec();

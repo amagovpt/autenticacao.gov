@@ -14,7 +14,46 @@
      <message>
         <source>The certificates could not be validated, the certification path is not complete</source>
         <translation>Os certificados não foram validados, o caminho de certificação não está completo</translation>
-     </message>
+</message>
+<message>
+	<source>Change Authentication and OTP PIN</source>
+	<translation>Alterar Pin de Autenticação e OTP</translation>
+</message>
+<message>
+	<source>Attention: your current authentication PIN will be requested twice in two different dialog boxes.</source>
+	<translation>Atenção: o seu PIN de autenticação vai ser requerido duas vezes neste processo.</translation>
+	</message>
+
+	<message>
+	<source>Sorry, this operation is unsupported on this reader</source>
+	<translation>Pedimos desculpa, mas esta operação não é suportada neste leitor de cartões</translation>
+</message>
+
+	<message>
+	<source>Verification of your current PIN failed</source>
+	<translation>O PIN actual está incorrecto.</translation>
+</message>
+<message>
+	<source>Error connecting to the OTP Server. Please check your internet connection.</source>
+	<translation>Erro na ligação ao servidor de OTP. Por favor certifica-se de que está ligado à Internet.</translation>
+</message>
+<message>
+	<source>Error connecting to the OTP Server. Your authentication certificate was rejected.</source>
+	<translation>Erro na ligação ao servidor de OTP. O seu certificado de autenticação foi rejeitado.</translation>
+</message>
+<message>
+	<source>Error connecting to the OTP Server. </source>
+	<translation>Erro na ligação ao servidor de OTP.</translation>
+</message>
+<message>
+	<source> Unexpected error in the OTP Server results. Aborting Pin change operation"</source>
+	<translation>Resultado inesperado recebido do servidor de OTP. Operação abortada.</translation>
+</message>
+<message>
+
+	<source>Error ocurred changing the authentication PIN. Please try again to avoid out-of-sync PINs</source>
+	<translation>Erro ocorrido na alteração de PIN de autenticação. Por favor tente outra vez para evitar ter PINs dessincronizados</translation>
+</message>
      <message>
         <source>%1 tries remaining</source>
         <translation>Restam %1 tentativas</translation>
