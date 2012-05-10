@@ -38,7 +38,7 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 		unsigned char *sigret, unsigned int *siglen, const RSA * rsa)
 {
 	
-	APL_Card *card = AppLayer.getReader(0UL).getCard();
+	APL_Card *card = AppLayer.getReader().getCard();
 
 	if (card == NULL) {
 	       	fprintf(stderr, "rsa_sign(): Failed to get card from global aplayer object\n"); 
@@ -82,7 +82,7 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 void SSLConnection::loadUserCert(SSL_CTX *ctx)
 {
 
-	APL_Card *card = AppLayer.getReader(0UL).getCard();
+	APL_Card *card = AppLayer.getReader().getCard();
 	CByteArray user_cert;
 	card->readFile(PTEID_FILE_CERT_AUTHENTICATION, user_cert);
 	const unsigned char *p = user_cert.GetBytes();
