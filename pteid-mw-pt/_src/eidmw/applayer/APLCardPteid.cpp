@@ -1330,12 +1330,18 @@ CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
 
 	if(!bNoHeader)
 		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-	if (ts && sn && sa){
+	if (ts || sn || sa || tk){
 		xml+=XML_ROOT_S;
-		XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_TIMESTAMP,ts->c_str());
-		XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_SERVERNAME,sn->c_str());
-		XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_SERVERADDRESS,sa->c_str());
-		if (tk){
+		if (ts){
+			XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_TIMESTAMP,ts->c_str());
+		}
+		if (sn) {
+			XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_SERVERNAME,sn->c_str());
+		}
+		if (sa) {
+			XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_SERVERADDRESS,sa->c_str());
+		}
+		if (tk) {
 			XML_ATTRIBUTE(xml,XML_ROOT_ELEMENT_ATTR_TOKENID,tk->c_str());
 		}
 		xml+=XML_ROOT_E;
@@ -1378,19 +1384,20 @@ APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo()
 APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress)
 {
 	xmlSet = new set<enum XMLUserData>;
-	_timeStamp = new string(timeStamp);
-	_serverName = new string(serverName);
-	_serverAddress = new string(serverAddress);
+	_timeStamp = (timeStamp) ? new string(timeStamp) : NULL;
+	_serverName = (serverName) ? new string(serverName) : NULL;
+	_serverAddress = (serverAddress) ? new string(serverAddress) : NULL;
 	_tokenID = NULL;
 }
 
 APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress, const char *tokenID)
 {
 	xmlSet = new set<enum XMLUserData>;
-	_timeStamp = new string(timeStamp);
-	_serverName = new string(serverName);
-	_serverAddress = new string(serverAddress);
-	_tokenID = new string(tokenID);
+
+	_timeStamp = (timeStamp) ? new string(timeStamp) : NULL;
+	_serverName = (serverName) ? new string(serverName) : NULL;
+	_serverAddress = (serverAddress) ? new string(serverAddress) : NULL;
+	_tokenID = (tokenID) ? new string(tokenID) : NULL;
 }
 
 APL_XmlUserRequestedInfo::~APL_XmlUserRequestedInfo()
