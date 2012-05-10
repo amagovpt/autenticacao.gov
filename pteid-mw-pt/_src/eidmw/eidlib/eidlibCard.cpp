@@ -1050,7 +1050,7 @@ bool testPIN(const char* pin){
 
 bool PTEID_EIDCard::ChangeCapPinCompLayer(const char *old_pin, const char *new_pin, unsigned long &ulRemaining){
 	bool out = false;
-	bool validPins;
+	bool validPins = false;
 	std::string *oldPin;
 	std::string *newPin;
 	PTEID_Pin &pin = getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
@@ -1061,25 +1061,26 @@ bool PTEID_EIDCard::ChangeCapPinCompLayer(const char *old_pin, const char *new_p
 		validPins &= testPIN(new_pin);
 
 	if (!validPins){
-		wchar_t wsPin1[5]; // 4 + \0
-		wchar_t wsPin2[5]; // 4 + \0
+		wchar_t wsPin1[9]; // 8 + \0
+		wchar_t wsPin2[9]; // 8 + \0
 		DlgPinOperation pinOperation = DLG_PIN_OP_CHANGE;
 		DlgPinUsage usage = DLG_PIN_AUTH;
-		DlgPinInfo pinInfo = {4, 4, PIN_FLAG_DIGITS};
+		DlgPinInfo pinInfo = {4, 8, PIN_FLAG_DIGITS};
 		DlgRet ret;
 		std::wstring wideLabel(utilStringWiden(pin.getLabel()));
 
 		ret = DlgAskPins(DLG_PIN_OP_CHANGE,
 				DLG_PIN_AUTH, wideLabel.c_str(),
-				pinInfo, wsPin1,4+1,
-				pinInfo, wsPin2,4+1);
+				pinInfo, wsPin1,8+1,
+				pinInfo, wsPin2,8+1);
 
 		if (ret == DLG_OK){
 			oldPin = new string (utilStringNarrow(wsPin1));
 			newPin = new string (utilStringNarrow(wsPin2));
-		}
+		} else
+			return false;
 	} else {
-		oldPin = new string(old_pin);
+ 		oldPin = new string(old_pin);
 		newPin = new string(new_pin);
 	}
 

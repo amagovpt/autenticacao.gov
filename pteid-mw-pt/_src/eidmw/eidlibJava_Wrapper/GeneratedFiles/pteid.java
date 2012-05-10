@@ -516,19 +516,20 @@ public class pteid {
     
     
     public static long CAP_ChangeCapPin(String string, byte[] bytes, PTEID_Proxy_Info ptdp, String string1, String string2){
+        PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
+        
         try {
-            PTEID_EIDCard eidCard = readerContext.getEIDCard();
-            PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
             
-            if (eidCard.ChangeCapPin(string1)){
-                    PTEID_Pin pin = eidCard.getPins().getPinByPinRef(PTEID_Pin.AUTH_PIN);
-                    pin.changePin(string1, string2, ul, pin.getLabel(), false);
-            } 
-            return 0;
+            if (idCard.ChangeCapPinCompLayer(string1, string2, ul))
+                return ul.m_long;
+            
         } catch (PTEID_Exception ex) {
+        //TODO:
         }
+        
         return -1;
     }
+    
 
     public static int CAP_GetCapPinChangeProgress(){
         return 0;
