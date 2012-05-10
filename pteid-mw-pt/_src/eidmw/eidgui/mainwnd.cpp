@@ -45,6 +45,9 @@
 #include "picturepopup.h"
 #include "AutoUpdates.h"
 #include "eidErrors.h"
+#include "dialogs.h"
+#include "Util.h"
+#include <wchar.h>
 #ifdef WIN32
 #include <windows.h>
 #include <stdio.h>
@@ -60,10 +63,6 @@ static unsigned int pinactivate = 1, certdatastatus = 1, addressdatastatus = 1, 
 //State of Pin Notes 0->Right PIN 1->Not yet inserted or wrong PIN
 static unsigned int pinNotes = 1 ;
 
-//Definitions lifted from eidErrors.h: they are error codes not mapped into specific Exceptions 
-// in eidlib
-#define EIDMW_ERR_PIN_BAD      0xe1d00203
-#define EIDMW_ERR_PIN_BLOCKED  0xe1d00204
 
 
 void MainWnd::createTrayMenu()
@@ -2539,6 +2538,135 @@ void MainWnd::on_actionPINRequest_triggered()
 	return;
 }
 
+void MainWnd::ChangeAuthPin(PTEID_ReaderContext &ReaderContext, unsigned int pin_ref)
+{
+
+	PTEID_EIDCard &card = ReaderContext.getEIDCard();
+	//Show AskPins dialogs
+	PTEID_Pin &pin = card.getPins().getPinByPinRef(pin_ref);
+	bool bResult = false; 
+	bool verify_ret = false; 
+	wchar_t wsPin1[PIN_MAX_LENGTH+1];
+	wchar_t wsPin2[PIN_MAX_LENGTH+1];
+	char old_pin[PIN_MAX_LENGTH+1];
+	char new_pin[PIN_MAX_LENGTH+1];
+	QString dialog_title(tr("Change Authentication and OTP PIN"));
+
+	//Some Way to detect pinpads to show different message
+	QString msg(tr("Attention: your current authentication PIN will be requested twice "
+				"in two different dialog boxes."));
+	QMessageBox msgBoxcc(QMessageBox::Information, dialog_title, msg, 0, this);
+	msgBoxcc.setModal(true);
+	msgBoxcc.exec();
+
+	DlgPinInfo pinInfo = {4, 8, PIN_FLAG_DIGITS};
+
+	DlgRet ret = DlgAskPins(DLG_PIN_OP_CHANGE,
+			DLG_PIN_AUTH, L"Pin de Autenticação",
+			pinInfo, wsPin1,PIN_MAX_LENGTH+1, 
+		pinInfo, wsPin2,PIN_MAX_LENGTH+1);
+
+	if (ret == DLG_OK)
+	{
+		strcpy(old_pin, utilStringNarrow(std::wstring(wsPin1)).c_str());
+		strcpy(new_pin, utilStringNarrow(std::wstring(wsPin2)).c_str());
+	} 
+	else
+	   return;	
+	
+	// Perform a verifyPin with no interaction (to rule out pinpad readers like Xiring)
+	// and abort if wrong/blocked/not supported
+	unsigned long triesLeft = -1;
+	try
+	{
+		verify_ret = pin.verifyPin(old_pin,
+				triesLeft, false);
+	}
+	catch (PTEID_Exception &ex)
+	{
+		if (strstr(m_CurrReaderName.toLatin1().data(), "Xiring")!= NULL)
+		{
+			QString pinpad_msg(tr("Sorry, this operation is unsupported on this reader"));
+
+			QMessageBox msgBoxcc(QMessageBox::Critical, dialog_title, pinpad_msg, 0, this);
+			msgBoxcc.setModal(true) ;
+			msgBoxcc.exec();
+			return;
+		}
+
+	}
+
+	if (!verify_ret)
+	{
+		
+		//Some Way to detect pinpads to show different message
+		QString msg(tr("Verification of your current PIN failed."));
+		QMessageBox msgBoxcc(QMessageBox::Critical, dialog_title, msg, 0, this);
+		msgBoxcc.setModal(true) ;
+		msgBoxcc.exec();
+
+		return;
+	}
+	
+	//Call ChangeCapPin
+	try
+	{
+
+	    card.ChangeCapPin(new_pin);
+
+	}
+	catch(PTEID_Exception &ex)
+	{
+		QString msg = "";
+		switch(ex.GetError())
+		{
+			case EIDMW_OTP_CONNECTION_ERROR:
+			msg = tr("Error connecting to the OTP Server. Please check your internet connection.");
+			break;
+			case EIDMW_OTP_PROTOCOL_ERROR:
+			msg = tr("Unexpected error in the OTP Server results. Aborting Pin change operation");
+			break;
+			case EIDMW_OTP_CERTIFICATE_ERROR:
+			msg = tr("Error connecting to the OTP Server. Your authentication certificate was rejected");
+			case EIDMW_OTP_UNKNOWN_ERROR:
+			msg = tr("Error connecting to the OTP Server.");
+			break;
+		default:
+			msg = tr("General exception");
+		}
+
+		ShowPTEIDError( ex.GetError(), msg );
+		return;
+	}
+	
+	try
+	{
+		// Actually change the Auth Pin with no interaction
+		bResult = pin.changePin(old_pin, new_pin, triesLeft, pin.getLabel());
+	}
+	catch(PTEID_Exception &ex)
+	{
+
+		QString msg(tr("Error ocurred changing the authentication Pin\n"
+				"Please try again to avoid out-of-sync pins"));
+		QMessageBox msgBoxcc(QMessageBox::Warning, dialog_title, msg, 0, this);
+		msgBoxcc.setModal(true) ;
+		msgBoxcc.exec();
+		return;
+
+	}
+	if (!bResult && -1 == triesLeft)
+	{
+	//TODO: another error msg
+	    return;
+
+	}
+	
+	QMessageBox::information( this, dialog_title,  QString(tr("Pin Change passed")), QMessageBox::Ok );
+
+
+}
+
 //*****************************************************
 // PIN change button clicked
 //*****************************************************
@@ -2562,6 +2690,11 @@ void MainWnd::on_actionPINChange_triggered()
 				return;
 
 			unsigned int pinRef = item->data(0,Qt::UserRole).value<uint>();
+			if (pinRef == 0x01 || pinRef == 0x81)
+			{
+				ChangeAuthPin(ReaderContext, pinRef);
+				return;
+			}
 			PTEID_Pin &pin = ReaderContext.getEIDCard().getPins().getPinByPinRef(pinRef);
 
 			unsigned long triesLeft = -1;

@@ -409,6 +409,7 @@ private:
 			break;
 		}
 	}
+	void ChangeAuthPin(PTEID_ReaderContext&, unsigned int);
 	void fillSoftwareInfo( void );
 	void setLanguageMenu( GenPur::UI_LANGUAGE language );
 	void setLanguageMenu( QString const& uiLang );
