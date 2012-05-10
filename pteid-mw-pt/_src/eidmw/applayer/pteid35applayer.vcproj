@@ -417,6 +417,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\EMV-Cap-Helper.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MiscUtil.cpp"
 				>
 			</File>
@@ -434,6 +438,14 @@
 			</File>
 			<File
 				RelativePath=".\SODParser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SSLConnection.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\static_pteid_certs.cpp"
 				>
 			</File>
 			<File
@@ -539,6 +551,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\EMV-Cap-Helper.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MiscUtil.h"
 				>
 			</File>
@@ -548,6 +564,14 @@
 			</File>
 			<File
 				RelativePath=".\SigContainer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SSLConnection.h"
+				>
+			</File>
+			<File
+				RelativePath=".\static_pteid_certs.h"
 				>
 			</File>
 			<File
