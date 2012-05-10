@@ -287,6 +287,8 @@
 
 #define EIDMW_OTP_CONNECTION_ERROR		0xe1d00d01
 #define EIDMW_OTP_PROTOCOL_ERROR		0xe1d00d02
+#define EIDMW_OTP_CERTIFICATE_ERROR		0xe1d00d03
+#define EIDMW_OTP_UNKNOWN_ERROR			0xe1d00d04
 
 // Errors in system calls
 
