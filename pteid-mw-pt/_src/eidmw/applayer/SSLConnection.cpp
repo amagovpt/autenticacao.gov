@@ -61,6 +61,7 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 	catch (CMWException &e)
 	{
 		MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection->rsa_sign(): Exception caught in card.Sign. Aborting connection");
+		fprintf(stderr, "Exception in card.sign() %s:%lu\n",e.GetFile().c_str(), e.GetLine());
 		return 0;
 	}
 	
@@ -161,6 +162,24 @@ void get_ssl_state_callback(const SSL *s, int where, int ret)
 	}
 }
 
+
+//Translate the string via specific OpenSSL error codes 
+//is not feasible AFAICT
+unsigned int translate_openssl_error(unsigned int error)
+{
+
+	char *error_string = ERR_error_string(error, NULL);
+
+	if(strstr(error_string, "Connection refused") != NULL
+	|| strstr(error_string, "bad hostname lookup") != NULL)
+		return EIDMW_OTP_CONNECTION_ERROR;
+
+	else if (strstr(error_string, "certificate verify failed") != NULL)
+		return EIDMW_OTP_CERTIFICATE_ERROR;
+	else 
+		return EIDMW_OTP_UNKNOWN_ERROR;
+
+}
 
 void translate_ssl_error(SSL *ssl, int error_code)
 {
@@ -272,7 +291,7 @@ char *parseCookie(char *server_response)
 	substr = strstr(server_response, "JSESSIONID=");
 	if (substr == NULL)
 	{
-	    MWLOG(LEV_ERROR, MOD_APL, L"parseCookie() failed server returned unexpected content");
+	    MWLOG(LEV_ERROR, MOD_APL, L"parseCookie() failed!");
 	    return NULL;
 	}
 
@@ -334,7 +353,12 @@ char * SSLConnection::do_OTP_1stpost()
 	//fprintf(stderr, "Server reply: \n%s\n", server_response);
 
 	if (ret > 0)
+	{
 		cookie = parseCookie(server_response);
+		if (cookie == NULL)
+			//Catch renegotiation errors (e.g. using test cards)
+			throw CMWEXCEPTION(translate_openssl_error(ERR_get_error()));
+	}
 
 	return cookie;
 
@@ -485,10 +509,11 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
 
     if (ret_connect != 1)
     {
-	translate_ssl_error(ssl_handle, ret_connect);
+	//translate_ssl_error(ssl_handle, ret_connect);
+	//fprintf(stderr, "Error returned by SSL_connect (cause): %s\n", ERR_error_string(ERR_get_error(), NULL));
 	MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection: error establishing connection");
 
-	throw CMWEXCEPTION(EIDMW_OTP_CONNECTION_ERROR);
+	throw CMWEXCEPTION(translate_openssl_error(ERR_get_error()));
     }
 
     return ssl_handle;
