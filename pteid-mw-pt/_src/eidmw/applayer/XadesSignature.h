@@ -18,6 +18,8 @@
 
 #define XERCES_NS XERCES_CPP_NAMESPACE_QUALIFIER
 
+#define CONST_STR (const unsigned char *)
+
 #ifndef WIN32
 #define _strdup strdup
 #endif
@@ -51,7 +53,11 @@ namespace eIDMW
 		"Validation error: RSA Signature of referenced content is invalid",
 		"Erro de validação da assinatura: A assinatura criptográfica do conteúdo está inválida",
 		"Validation Error: The certificate used to sign this data is not trusted",
-		"Erro de validação da assinatura: O certificado contido na assinatura não provém de uma fonte confiável"
+		"Erro de validação da assinatura: O certificado contido na assinatura não provém de uma fonte confiável",
+		"Signed by:",
+		"Assinado por:",
+		"Timestamp: ",
+		"Selo temporal: "
 	};
 
 	class XadesSignature
@@ -81,6 +87,7 @@ namespace eIDMW
 
 		static CByteArray mp_timestamp_data;
 		static CByteArray mp_validate_data;
+		static CByteArray mp_subject_name;
 		static void do_post_validate_timestamp(char *input, long input_len, char *sha1_string);
 
 		private:
@@ -88,6 +95,7 @@ namespace eIDMW
 		std::string getTS_CAPath();
 		
 		CByteArray HashFile(const char *file_path);
+		static char * parseSubjectFromCert(const char *cert);
 		DOMNode * addSignatureProperties(DSIGSignature *sig);
 		CByteArray *WriteToByteArray(XERCES_NS DOMDocument *doc); 
 		//Utility methods for signature
