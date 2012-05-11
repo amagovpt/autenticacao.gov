@@ -193,7 +193,7 @@ void EMVCapHelper::getOnlineTransactionParams(OTPParams *otp_struct)
 	CByteArray verify;
 	verify.Append(verify_apdu, sizeof(verify_apdu));
 
-	m_card->getCalReader()->SendAPDU(verify);
+	//m_card->getCalReader()->SendAPDU(verify);
 	GetPan();
 	GetArqc(0x80);
 
