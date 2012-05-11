@@ -438,41 +438,41 @@
 	<DirectoryRef Id="SystemFolder">
 	  
 	  <Component Win64="no" Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
-        <File Id="pteidapplayer.dll" Name="pteidapplayer.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\x86\pteidapplayer.dll" />
-        <File Id="pteidcardlayer.dll" Name="pteidcardlayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\x86\pteidcardlayer.dll" />
-        <File Id="pteidcommon.dll" Name="pteidcommon.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\x86\pteidcommon.dll" />
-        <File Id="pteidDlgsWin32.dll" Name="pteidDlgsWin32.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\x86\pteidDlgsWin32.dll" />
+        <File Id="pteidapplayer.dll" Name="pteidapplayer.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\pteidapplayer.dll" />
+        <File Id="pteidcardlayer.dll" Name="pteidcardlayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\release\pteidcardlayer.dll" />
+        <File Id="pteidcommon.dll" Name="pteidcommon.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\release\pteidcommon.dll" />
+        <File Id="pteidDlgsWin32.dll" Name="pteidDlgsWin32.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\release\pteidDlgsWin32.dll" />
       </Component>
 
 		<Component Win64="no" Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F8}" SharedDllRefCount="yes">
-        <File Id="libeay32.dll" Name="libeay32.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\x86\libeay32.dll" />
-        <File Id="ssleay32.dll" Name="ssleay32.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\x86\ssleay32.dll" />
+        <File Id="libeay32.dll" Name="libeay32.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\libeay32.dll" />
+        <File Id="ssleay32.dll" Name="ssleay32.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\release\ssleay32.dll" />
       </Component>
 
 		<Component Win64="no" Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
-        <File Id="xercesc_3_1.dll" Name="xerces-c_3_1.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\x86\xerces-c_3_1.dll" />
+        <File Id="xercesc_3_1.dll" Name="xerces-c_3_1.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\xerces-c_3_1.dll" />
       </Component>
 
       <!--Our Build of LibCurl - custom build options to remove unneeded features-->
 		<Component Win64="no" Id="Curl" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
-        <File Id="libcurl.dll" Name="libcurl.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\x86\libcurl.dll" ></File>
+        <File Id="libcurl.dll" Name="libcurl.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\release\libcurl.dll" ></File>
       </Component>
 
 		<Component Win64="no" Id="CSP" Guid="{54153442-D4CE-4DE6-9321-1BAC5DE4C725}" SharedDllRefCount="yes">
-        <File Id="beidCSP.dll" Name="beidCSP.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\x86\beidcsp.dll" />
-        <File Id="beidCSPlib.dll" Name="beidCSPlib.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\x86\beidCSPlib.dll" />
+        <File Id="beidCSP.dll" Name="beidCSP.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\beidcsp.dll" />
+        <File Id="beidCSPlib.dll" Name="beidCSPlib.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\release\beidCSPlib.dll" />
       </Component>
 
 		<Component Win64="no" Id="FreeImage" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F64" SharedDllRefCount="yes">
-        <File Id="FreeImage.dll" Name="FreeImage.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\x86\FreeImage.dll" />
+        <File Id="FreeImage.dll" Name="FreeImage.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\FreeImage.dll" />
       </Component>
 
 		<Component Win64="no" Id="XMLSecurity" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F65" SharedDllRefCount="yes">
-        <File Id="xsec_1_6.dll" Name="xsec_1_6.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\x86\xsec_1_6.dll" />
+        <File Id="xsec_1_6.dll" Name="xsec_1_6.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\xsec_1_6.dll" />
       </Component>
 
 		<Component Win64="no" Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
-        <File Id="pteidpkcs11.dll" Name="pteidpkcs11.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\x86\pteidpkcs11.dll" />
+        <File Id="pteidpkcs11.dll" Name="pteidpkcs11.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\pteidpkcs11.dll" />
         
       </Component>
 	  

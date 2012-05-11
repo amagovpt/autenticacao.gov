@@ -360,6 +360,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\ACR83Pinpad.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Cache.cpp"
 				>
 			</File>
@@ -384,6 +388,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GempcPinpad.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GenericPinpad.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\P15Correction.cpp"
 				>
 			</File>
@@ -393,14 +405,6 @@
 			</File>
 			<File
 				RelativePath=".\Pinpad.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\PinpadLib.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\old\PinpadLibOldPteid.cpp"
 				>
 			</File>
 			<File
@@ -446,6 +450,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\ACR83Pinpad.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Cache.h"
 				>
 			</File>
@@ -471,6 +479,14 @@
 			</File>
 			<File
 				RelativePath=".\Context.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GempcPinpad.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GenericPinpad.h"
 				>
 			</File>
 			<File

@@ -153,7 +153,6 @@
 				AdditionalDependencies="pteidapplayer.lib pteidcommon.lib"
 				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName).dll"
 				LinkIncremental="1"
-
 				AdditionalLibraryDirectories="..\_Binaries35/$(ConfigurationName)"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -293,7 +292,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;;../applayer;../common;../cardlayer"
+				AdditionalIncludeDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;;../applayer;../common;../cardlayer;../dialogs"
 				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_EXPORTS"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="true"
@@ -315,7 +314,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="pteidapplayer.lib pteidcommon.lib"
+				AdditionalDependencies="pteidapplayer.lib pteidcommon.lib pteidDlgsWin32.lib"
 				OutputFile="..\_Binaries35\$(PlatformName)\$(ConfigurationName)\pteid$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;..\_Binaries35\x64\$(ConfigurationName)&quot;"
