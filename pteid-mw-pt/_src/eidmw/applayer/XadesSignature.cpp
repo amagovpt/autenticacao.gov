@@ -98,7 +98,6 @@ namespace eIDMW
 	CByteArray XadesSignature::mp_timestamp_data = CByteArray();
 
 	CByteArray XadesSignature::mp_validate_data = CByteArray();
-	CByteArray XadesSignature::mp_subject_name = CByteArray();
 
 	CByteArray XadesSignature::HashFile(const char *file_path)
 	{
@@ -590,7 +589,7 @@ bool XadesSignature::checkExternalRefs(DSIGReferenceList *refs, tHashedFile **ha
 }
 
 /*
- * A little HTML-scraping to get the validation result and timestamp value
+ * A little HTML-scraping to get the validation result
  */
 bool XadesSignature::grep_validation_result (char *time_and_date)
 {
@@ -599,7 +598,6 @@ bool XadesSignature::grep_validation_result (char *time_and_date)
 	const char * valid_timestamp_pattern = "Selo Temporal V\xE1lido.";
 	const char * invalid_timestamp_pattern = "Selo Temporal n\xE3o corresponde ao ficheiro seleccionado";
 	const char * general_error_pattern = "Ocorreu um erro";
-	const char * signed_by = getString(16);
 	unsigned char *haystack = mp_validate_data.GetBytes();
 
 	if (mp_validate_data.Size() == 0)
@@ -610,14 +608,11 @@ bool XadesSignature::grep_validation_result (char *time_and_date)
 	
 	const char *ts_str = strstr((const char *)haystack, valid_timestamp_pattern);
 
-	//Warning: magic offsets ahead...
 	if (ts_str != NULL)
 	{
 		//Grab the TimeDate string
-		strcat(time_and_date, signed_by);
-		strncpy(time_and_date+strlen(signed_by), ts_str+36, 27);
-		time_and_date[27+strlen(signed_by)] = '\n';
-		time_and_date[28+strlen(signed_by)] = 0;
+		strncpy(time_and_date, ts_str+36, 27);
+		time_and_date[27] = 0;
 
 		return true; 
 	}
@@ -956,24 +951,6 @@ void XadesSignature::foundCertificate (const char *SubDir, const char *File, voi
 
 }
 
-char * XadesSignature::parseSubjectFromCert(const char *cert_buffer)
-{
-
-	//Subject name
-	X509 *cert;
-	const int BUFSIZE = 500;
-
-	if ((cert = loadCertFromPEM(cert_buffer)) == NULL)
-		return NULL;
-
-	char *subject = (char *)malloc(BUFSIZE*sizeof(unsigned char));
-
-	X509_NAME_get_text_by_NID(X509_get_subject_name(cert), NID_commonName, subject, BUFSIZE);
-
-	return subject;
-
-}
-
 
 bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, char *errors, unsigned long *error_length)
 {
@@ -1090,19 +1067,6 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 				DSIGKeyInfoX509 *cert_element = dynamic_cast<DSIGKeyInfoX509 *> (keyinfo);
 				const XMLCh *pem_cert = cert_element->getCertificateItem(0);
 				char * tmp_cert = XMLString::transcode(pem_cert);
-				
-				//Clear the static array
-				mp_subject_name.Chop(mp_subject_name.Size());
-				//Parse the signer's name from the certificate
-				char * subject_name = utf8_to_latin1(
-					   parseSubjectFromCert(tmp_cert));
-
-				if (subject_name != NULL)
-				{
-					mp_subject_name.Append(CONST_STR getString(14), strlen(getString(14)));
-					mp_subject_name.Append(CONST_STR " ", 1);
-					mp_subject_name.Append(CONST_STR subject_name, strlen(subject_name));
-				}
 				bool cert_result = ValidateCert(tmp_cert);
 
 				if (!cert_result)
@@ -1111,10 +1075,6 @@ bool XadesSignature::ValidateXades(CByteArray signature, tHashedFile **hashes, c
 					*error_length = err_len;
 					return false;
 				}
-				
-					
-
-				
 				XMLString::release(&tmp_cert);
 			}
 		}

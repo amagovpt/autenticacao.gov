@@ -364,15 +364,10 @@ bool APLVerifySignature(const char *container_path, char * errors, unsigned long
 	{
 	   if (timestamp.Size() > 0)
 		   result &= XadesSignature::ValidateTimestamp(sig_content, timestamp, errors, error_len);
+	   else
+	     //This indicates that we don't have any timestamp string piggybacked on the *errors* parameter
+		 *error_len = 0;
 	}
-	unsigned long subject_len = XadesSignature::mp_subject_name.Size();
-	
-	if (errors[*error_len-1] != '\n')
-		strcat(errors, "\n");
-
-	if (subject_len > 0)
-	  strncat(errors, (const char*)XadesSignature::mp_subject_name.GetBytes(),
-	    subject_len);
 
 	return result;
 
