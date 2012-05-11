@@ -525,7 +525,7 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
 unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned int buffer_length)
 {
 
-    unsigned int r = -1;
+    int r = -1;
     unsigned int i = 0;
     unsigned int bytes_read = 0, header_len=0, content_length = 0;
 
@@ -553,7 +553,8 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned in
     }
     while( bytes_read - header_len  < content_length );
 
-    buffer[bytes_read] = '\0';
+    if (bytes_read > 0)
+	    buffer[bytes_read] = '\0';
 
     return bytes_read;
 }
