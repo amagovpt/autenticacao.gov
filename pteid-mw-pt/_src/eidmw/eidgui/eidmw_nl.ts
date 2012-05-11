@@ -21,7 +21,7 @@
 </message>
 <message>
 	<source>Attention: your current authentication PIN will be requested twice in two different dialog boxes.</source>
-	<translation>Atenção: o seu PIN de autenticação vai ser requerido duas vezes neste processo.</translation>
+	<translation>Atenção: o seu actual PIN de autenticação vai ser requerido duas vezes neste processo.</translation>
 	</message>
 
 	<message>
@@ -1117,10 +1117,6 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <source>setEventCallbacks</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Portuguese ID Card Management</source>
-        <translation>Aplicação Oficial do Cartão de Cidadão Português</translation>
     </message>
 </context>
 <context>
