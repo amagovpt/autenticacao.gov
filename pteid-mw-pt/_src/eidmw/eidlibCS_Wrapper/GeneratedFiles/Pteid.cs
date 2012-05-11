@@ -494,12 +494,10 @@ namespace pt.portugal.eid
     public static long CAP_ChangeCapPin(String string, byte[] bytes, PTEID_Proxy_Info ptdp, String string1, String string2){
         uint ul;
         try {
-            if (eidCard.ChangeCapPin(string1)){
-                    PTEID_Pin pin = eidCard.getPins().getPinByPinRef(PTEID_Pin.AUTH_PIN);
-                    pin.changePin(string1, string2, ref ul, pin.getLabel(),false));
-            } 
-            return 0;
+            if (idCard.ChangeCapPinCompLayer(string1, string2, ref ul))
+                return ul;
         } catch (PTEID_Exception ex) {
+        	//TODO:
         }
         return -1;
     }
