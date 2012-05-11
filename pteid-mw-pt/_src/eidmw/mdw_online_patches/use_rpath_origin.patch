@@ -1,6 +1,6 @@
-Index: ../eidlibJava_Wrapper/eidlibJava_Wrapper.pro
+Index: eidlibJava_Wrapper.pro
 ===================================================================
---- ../eidlibJava_Wrapper/eidlibJava_Wrapper.pro	(revision 795)
+--- ../eidlibJava_Wrapper/eidlibJava_Wrapper.pro	(revision 2723)
 +++ ../eidlibJava_Wrapper/eidlibJava_Wrapper.pro	(working copy)
 @@ -55,11 +55,13 @@
  		-l$${APPLAYERLIB} \
@@ -12,8 +12,14 @@ Index: ../eidlibJava_Wrapper/eidlibJava_Wrapper.pro
  macx: LIB += -Wl,-framework -Wl,Java
  
  DEPENDPATH += .
--INCLUDEPATH += . ../applayer ../common ../cardlayer ../eidlib /usr/lib/jvm/java-6-openjdk/include /usr/lib/jvm/java-6-openjdk/include/linux
+-INCLUDEPATH += . ../applayer ../dialogs ../common ../cardlayer ../eidlib /usr/lib/jvm/java-6-openjdk/include /usr/lib/jvm/java-6-openjdk/include/linux
 +INCLUDEPATH += . ../applayer ../common ../cardlayer ../eidlib /opt/java/include /opt/java/include/linux
  INCLUDEPATH += $${PCSC_INCLUDE_DIR}
  #INCLUDEPATH += $${JDK_INCLUDE_DIR}
  DEFINES += EIDMW_EIDLIB_EXPORTS
+@@ -75,5 +77,3 @@
+ SOURCES += ../eidlib/InternalUtil.cpp
+ 
+ 
+-
+-
