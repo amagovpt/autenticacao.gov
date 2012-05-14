@@ -2661,8 +2661,8 @@ void MainWnd::ChangeAuthPin(PTEID_ReaderContext &ReaderContext, unsigned int pin
 	    return;
 
 	}
-	
-	QMessageBox::information( this, dialog_title,  QString(tr("Pin Change passed")), QMessageBox::Ok );
+	QString msg_tmp(tr("PIN change passed"));
+	QMessageBox::information( this, dialog_title, msg_tmp, QMessageBox::Ok );
 
 
 }
