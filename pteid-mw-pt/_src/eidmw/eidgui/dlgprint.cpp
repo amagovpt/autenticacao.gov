@@ -93,6 +93,9 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
             signfilepath.append("/CartaoCidadao.zip");
             outputsign = QFileDialog::getSaveFileName(this, tr("Save Signature File"), signfilepath, tr("Zip files 'XAdES' (*.zip)"));
 
+            if (outputsign.isNull() || outputsign.isEmpty())
+            	return;
+
             pdffiletmp = QDir::tempPath();
             pdffiletmp.append("/CartaoCidadao.pdf");
 
