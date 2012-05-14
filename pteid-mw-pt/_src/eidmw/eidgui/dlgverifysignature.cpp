@@ -79,6 +79,7 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
 	
 		sig_path_native = new char[nativedafaultpath.size()*2];
         error = new char[errorlen];
+	memset(error, 0, errorlen);
 		strcpy(sig_path_native, nativedafaultpath.toStdString().c_str());
 
         vsignsucess = vsign.VerifySignature(sig_path_native, error, &errorlen);
