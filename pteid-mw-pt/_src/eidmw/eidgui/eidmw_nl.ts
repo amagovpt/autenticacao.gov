@@ -712,11 +712,11 @@ Please specify .xml, .csv or .eid</source>
     </message>
     <message>
         <source>Retrieving certificates</source>
-        <translation type="unfinished">Ophalen van certificaten</translation>
+        <translation type="unfinished">Obtendo os certificados do cartão</translation>
     </message>
     <message>
         <source>Error retrieving certificates</source>
-        <translation type="unfinished">Certificaten ophalen mislukt</translation>
+        <translation type="unfinished">Erro durante a leitura dos certificados</translation>
     </message>
     <message>
         <source>Register certificate</source>
