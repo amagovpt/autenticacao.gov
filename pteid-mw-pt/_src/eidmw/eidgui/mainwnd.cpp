@@ -64,6 +64,97 @@ static unsigned int pinactivate = 1, certdatastatus = 1, addressdatastatus = 1, 
 static unsigned int pinNotes = 1 ;
 
 
+void ImportECRaizCert()
+{
+	PCCERT_CONTEXT pCertCtx = NULL;
+
+	if (CryptQueryObject (
+		CERT_QUERY_OBJECT_FILE,
+		L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\ECRaizEstado_novo_assinado_GTE.der",
+		CERT_QUERY_CONTENT_FLAG_ALL,
+		CERT_QUERY_FORMAT_FLAG_ALL,
+		0,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		(const void **)&pCertCtx) != 0)
+	{
+		
+		HCERTSTORE hCertStore = CertOpenSystemStoreA (NULL, "CA");
+
+		if (hCertStore != NULL)
+		{
+			CertAddEnhancedKeyUsageIdentifier (pCertCtx, szOID_PKIX_KP_EMAIL_PROTECTION);
+			CertAddEnhancedKeyUsageIdentifier (pCertCtx, szOID_PKIX_KP_SERVER_AUTH);
+			if (CertAddCertificateContextToStore (
+				hCertStore,
+				pCertCtx,
+				CERT_STORE_ADD_ALWAYS,
+				NULL))
+			{
+				std::cout << "Added certificate to store." << std::endl;
+			}
+
+			if (CertCloseStore (hCertStore, 0))
+			{
+				std::cout << "Cert. store handle closed." << std::endl;
+			}
+		}
+
+		if (pCertCtx)
+		{
+			CertFreeCertificateContext (pCertCtx);
+		}
+	}
+}
+
+void ImportCCCert()
+{
+	PCCERT_CONTEXT pCertCtx = NULL;
+
+	if (CryptQueryObject (
+		CERT_QUERY_OBJECT_FILE,
+		L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\CartaodeCidadao001.der",
+		CERT_QUERY_CONTENT_FLAG_ALL,
+		CERT_QUERY_FORMAT_FLAG_ALL,
+		0,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		(const void **)&pCertCtx) != 0)
+	   {
+		HCERTSTORE hCertStore = CertOpenSystemStoreA (NULL, "CA");
+
+		if (hCertStore != NULL)
+		{
+			CertAddEnhancedKeyUsageIdentifier (pCertCtx, szOID_PKIX_KP_EMAIL_PROTECTION);
+			CertAddEnhancedKeyUsageIdentifier (pCertCtx, szOID_PKIX_KP_SERVER_AUTH);
+			if (CertAddCertificateContextToStore (
+				hCertStore,
+				pCertCtx,
+				CERT_STORE_ADD_ALWAYS,
+				NULL))
+			{
+				std::cout << "Added certificate to store." << std::endl;
+			}
+
+			if (CertCloseStore (hCertStore, 0))
+			{
+				std::cout << "Cert. store handle closed." << std::endl;
+			}
+		}
+
+		if (pCertCtx)
+		{
+			CertFreeCertificateContext (pCertCtx);
+		}
+	}
+}
+
 
 void MainWnd::createTrayMenu()
 {
@@ -806,6 +897,11 @@ bool MainWnd::ImportCertificates( const char* readerName )
 	{
 		return false;
 	}
+
+	//Register the 2 higher-level CA Certs from disk files
+	ImportCCCert();
+	ImportECRaizCert();
+
 	try
 	{
 		PTEID_EIDCard&		 Card			= ReaderContext.getEIDCard();
@@ -982,7 +1078,7 @@ bool MainWnd::StoreAuthorityCerts(PCCERT_CONTEXT pCertContext, unsigned char Key
 	bool			bRet		 = false;
 	HCERTSTORE		hMemoryStore = NULL;   // memory store handle
 	PCCERT_CONTEXT  pDesiredCert = NULL;
-
+	
 	if ( 0 == memcmp ( pCertContext->pCertInfo->Issuer.pbData
 			, pCertContext->pCertInfo->Subject.pbData
 			, pCertContext->pCertInfo->Subject.cbData
