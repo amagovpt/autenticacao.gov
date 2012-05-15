@@ -916,7 +916,7 @@
 -->
 
       <Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
-      <Custom Action="CertificateRegistration" After="InstallFiles">NOT Installed</Custom>
+     <!--  <Custom Action="CertificateRegistration" After="InstallFiles">NOT Installed</Custom> -->
 
       <ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>
     </InstallExecuteSequence>
