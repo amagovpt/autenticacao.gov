@@ -12,15 +12,15 @@
 // To specified in the .rc files
 
 #define PTEID_COMPANY_NAME    	"Portuguese Government"
-#define PTEID_COPYRIGHT    	"Copyright (C) 2010-2011"
+#define PTEID_COPYRIGHT    	"Copyright (C) 2010-2012"
 #define PTEID_PRODUCT_NAME    	"Portugal eID MiddleWare"
 
 #ifdef PTEID_35
-	#define PTEID_PRODUCT_VERSION    "1.9.8"
-	#define BASE_VERSION_STRING    "1, 9, 8, "
-	#define BASE_VERSION1          1
-	#define BASE_VERSION2          9
-	#define BASE_VERSION3          8
+	#define PTEID_PRODUCT_VERSION    "2.0.0"
+	#define BASE_VERSION_STRING    "2, 0, 0, "
+	#define BASE_VERSION1          2
+	#define BASE_VERSION2          0
+	#define BASE_VERSION3          0
 #else
 	#define PTEID_PRODUCT_VERSION    "1.0"
 	#define BASE_VERSION_STRING    "1, 0, 1, "
