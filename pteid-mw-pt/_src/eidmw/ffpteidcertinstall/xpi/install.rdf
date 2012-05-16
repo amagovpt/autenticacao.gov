@@ -8,7 +8,7 @@ xmlns:em="http://www.mozilla.org/2004/em-rdf#">
         <em:version>1.0</em:version>
         <em:description>A Firefox extension to install PTeID certificates.</em:description>
         <em:creator>Estado Português</em:creator>
-        <em:homepageURL>http://www.caixamagica.pt</em:homepageURL>
+        <em:homepageURL>http://www.ama.pt</em:homepageURL>
         
         
         <em:iconURL>chrome://cck-pteidcm/content/dlgbmp.bmp</em:iconURL>
