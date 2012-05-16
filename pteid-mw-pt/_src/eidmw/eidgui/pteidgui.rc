@@ -9,6 +9,8 @@
 //
 #include "afxres.h"
 
+#include "../_Builds/pteidversions.h"
+
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -74,8 +76,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,0,1,6483
- PRODUCTVERSION 3,0,1,6483
+ FILEVERSION WIN_GUI_VERSION1,WIN_GUI_VERSION2,WIN_GUI_VERSION3,WIN_GUI_VERSION4
+ PRODUCTVERSION WIN_GUI_VERSION1,WIN_GUI_VERSION2,WIN_GUI_VERSION3,WIN_GUI_VERSION4
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -92,12 +94,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Portuguese Government"
             VALUE "FileDescription", "Portugal Identity Card Utility Application"
-            VALUE "FileVersion", "3, 0, 1, 6483"
+            VALUE "FileVersion", WIN_GUI_VERSION_STRING
             VALUE "InternalName", "pteidgui"
             VALUE "LegalCopyright", "Copyright (C) 2010-2012"
             VALUE "OriginalFilename", "pteidgui.exe"
             VALUE "ProductName", "Portugal eID MiddleWare"
-            VALUE "ProductVersion", "3.0"
+            VALUE "ProductVersion", PTEID_PRODUCT_VERSION
         END
     END
     BLOCK "VarFileInfo"
