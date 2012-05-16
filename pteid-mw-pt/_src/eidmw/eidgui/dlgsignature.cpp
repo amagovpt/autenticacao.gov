@@ -115,6 +115,8 @@ void dlgSignature::SignListView (QStringList list)
 
 	alist.append(list);
 
+	alist.removeDuplicates();
+
 	localModel->setStringList(alist);
 	view->setModel(localModel);
 
