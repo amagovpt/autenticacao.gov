@@ -63,7 +63,7 @@ static unsigned int pinactivate = 1, certdatastatus = 1, addressdatastatus = 1, 
 //State of Pin Notes 0->Right PIN 1->Not yet inserted or wrong PIN
 static unsigned int pinNotes = 1 ;
 
-
+#ifdef WIN32
 void ImportECRaizCert()
 {
 	PCCERT_CONTEXT pCertCtx = NULL;
@@ -154,6 +154,8 @@ void ImportCCCert()
 		}
 	}
 }
+
+#endif
 
 
 void MainWnd::createTrayMenu()
@@ -898,9 +900,11 @@ bool MainWnd::ImportCertificates( const char* readerName )
 		return false;
 	}
 
+	#ifdef WIN32
 	//Register the 2 higher-level CA Certs from disk files
 	ImportCCCert();
 	ImportECRaizCert();
+	#endif
 
 	try
 	{
