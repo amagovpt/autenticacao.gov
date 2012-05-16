@@ -46,8 +46,8 @@ using namespace eIDMW;
 std::string serverurl = "http://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/";
 std::string remoteversion = "http://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/version.txt";
 
-std::string WINDOWS32 = "PteidMW-Basic-en.msi";
-std::string WINDOWS64 = "PteidMW-Basic-en-x64.msi";
+std::string WINDOWS32 = "PteidMW-Basic.msi";
+std::string WINDOWS64 = "PteidMW-Basic-x64.msi";
 std::string OSX32 = "pteidgui.dmg";
 std::string OSX64 = "pteidgui.dmg";
 std::string DEBIAN32 = "pteid-mw_debian_i386.deb";
@@ -60,6 +60,14 @@ std::string SUSE32 = "pteid-mw-suse.i586.rpm";
 std::string SUSE64 = "pteid-mw-suse.x86_64.rpm";
 std::string MANDRIVA32 = "pteid-mw-mandriva.i586.rpm";
 std::string MANDRIVA64 = "pteid-mw-mandriva.x86_64.rpm";
+
+struct PteidVersion
+{
+int major;
+int minor;
+int release;
+};
+
 
 AutoUpdates::AutoUpdates(QWidget *parent)
 : QDialog(parent)
@@ -224,14 +232,27 @@ void AutoUpdates::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
 	progressDialog->setValue(bytesRead);
 }
 
+int compareVersions(PteidVersion v1, PteidVersion v2)
+{
+
+	unsigned int ret = 0;
+	ret = v2.release - v1.release;
+	if (ret != 0)
+		return ret;
+	ret = v2.minor - v1.minor;
+	if (ret != 0)
+		return ret;
+	ret = v2.major - v1.major;
+	return ret;
+}
+
+
 bool AutoUpdates::VerifyUpdates(std::string filedata)
 {
     std::string distrover;
 	std::string archver;
-	std::string ver;
-	std::string remoteversion;
-	double localverd;
-	double remoteversiond;
+
+
 
 #ifdef WIN32
 	QString filename = QCoreApplication::arguments().at(0);
@@ -241,27 +262,31 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	{
 		VerInfo.QueryStringValue(VI_STR_FILEVERSION, version);
 	}
+	QString ver = QString::fromAscii(version);
 
-	ver = version;
 #else
 
-	QString strVersion (WIN_GUI_VERSION_STRING);
-	ver = strVersion.toStdString();
-    std::cout << "LOCAL VER " << ver << std::endl;
-	//printf ("value %f\n", localverd);
+	QString ver (WIN_GUI_VERSION_STRING);
 #endif
 
-	ver.replace(2,1,"");
-	ver.replace(3,1,"");
-	ver.replace(3,1,"");
-	ver.replace(4,6, "");
+	QStringList list1 = ver.split(",");
+	
+	QStringList list2 = QString(filedata.c_str()).split(",");
+	
+	//Parse local version into PteidVersion
+	PteidVersion local_version;
+	local_version.major = list1.at(0).toInt();
+	local_version.minor = list1.at(1).toInt();
+	local_version.release = list1.at(2).toInt();
 
-	remoteversion = filedata;
-	localverd = atof(ver.c_str());
-	remoteversiond = atof(remoteversion.c_str());
+	//Parse remote version into PteidVersion
+	PteidVersion remote_version;
+	remote_version.major = list2.at(0).toInt();
+	remote_version.minor = list2.at(1).toInt();
+	remote_version.release = list2.at(2).toInt();
 
 	//return true;
-	if (localverd < remoteversiond)
+	if (compareVersions(local_version, remote_version) > 0)
 	{
 		this->close();
 #ifdef WIN32
