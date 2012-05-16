@@ -122,6 +122,10 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
             defaultfilepath.append("/CartaoCidadao.pdf");
             pdffilepath = QFileDialog::getSaveFileName(this, tr("Save Pdf File"), defaultfilepath, tr("Pdf Files (*.pdf)"));
+
+            if (pdffilepath.isNull() || pdffilepath.isEmpty())
+            	return;
+
             QCoreApplication::processEvents();
 
             nativepdfpath = QDir::toNativeSeparators(pdffilepath);
