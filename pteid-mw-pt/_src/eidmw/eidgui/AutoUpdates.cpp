@@ -236,13 +236,13 @@ int compareVersions(PteidVersion v1, PteidVersion v2)
 {
 
 	unsigned int ret = 0;
-	ret = v2.release - v1.release;
+	ret = v2.major - v1.major;
 	if (ret != 0)
 		return ret;
 	ret = v2.minor - v1.minor;
 	if (ret != 0)
 		return ret;
-	ret = v2.major - v1.major;
+	ret = v2.release - v1.release;
 	return ret;
 }
 
