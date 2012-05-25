@@ -1192,12 +1192,12 @@ Please specify .xml, .csv or .eid</source>
         <translation>Desenvolvido pelo Estado Português (Agência para a</translation>
     </message>
     <message>
-        <source>Modernização Administrativa IP e Instituto de Registos</source>
-        <translation>Modernização Administrativa IP e Instituto de Registos</translation>
+        <source>Modernização Administrativa IP e Instituto dos Registos</source>
+        <translation>Modernização Administrativa IP e Instituto dos Registos</translation>
     </message>
     <message>
-        <source>e Notariado IP).</source>
-        <translation>e Notariado IP).</translation>
+        <source>e do Notariado IP).</source>
+        <translation>e do Notariado IP).</translation>
     </message>
     <message utf8="true">
         <source>Copyright © 2009-2010</source>

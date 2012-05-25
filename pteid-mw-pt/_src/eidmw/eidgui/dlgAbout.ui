@@ -181,12 +181,12 @@
     <rect>
      <x>20</x>
      <y>280</y>
-     <width>371</width>
+     <width>381</width>
      <height>22</height>
     </rect>
    </property>
    <property name="text">
-    <string>Modernização Administrativa IP e Instituto de Registos</string>
+    <string>Modernização Administrativa IP e Instituto dos Registos</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_14">
@@ -199,7 +199,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>e Notariado IP).</string>
+    <string>e do Notariado IP).</string>
    </property>
   </widget>
  </widget>
