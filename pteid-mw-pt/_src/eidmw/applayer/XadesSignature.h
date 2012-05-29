@@ -79,17 +79,8 @@ namespace eIDMW
 		
 		static bool ValidateCert(const char *pem_certificate);
 		static void foundCertificate (const char *SubDir, const char *File, void *param);
-		static bool checkExternalRefs(DSIGReferenceList *refs, tHashedFile **hashes);
-		static bool ValidateXades(CByteArray signature, tHashedFile **hashes, char *errors, unsigned long *error_length);
-		
-		static bool ValidateTimestamp (CByteArray signature, CByteArray ts_resp, char *errors, unsigned long *error_length);
-		static bool grep_validation_result (char *time_and_date);
 
 		static CByteArray mp_timestamp_data;
-		static CByteArray mp_validate_data;
-		static CByteArray mp_subject_name;
-		static void do_post_validate_timestamp(char *input, long input_len, char *sha1_string);
-
 		private:
 		
 		std::string getTS_CAPath();

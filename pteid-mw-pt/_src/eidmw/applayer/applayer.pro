@@ -84,7 +84,8 @@ HEADERS += \
 	XadesSignature.h \
 	SODParser.h \ 
         EMV-Cap-Helper.h \
- 	SSLConnection.h 	
+	SigVerifier.h \
+ 	SSLConnection.h \	 
 
 
 SOURCES += \
@@ -106,7 +107,8 @@ SOURCES += \
 	SODParser.cpp \
 	SSLConnection.cpp \
 	static_pteid_certs.cpp \
-	EMV-Cap-Helper.cpp
+	SigVerifier.cpp \
+	EMV-Cap-Helper.cpp \
 
 # Disable annoying and mostly useless gcc warning
 QMAKE_CXXFLAGS += -Wno-write-strings

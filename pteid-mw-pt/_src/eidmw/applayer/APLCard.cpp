@@ -336,47 +336,7 @@ CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, cons
 	return signature;
 }
 
-bool APLVerifySignature(const char *container_path, char * errors, unsigned long* error_len)
-{
 
-	if (strlen(container_path) == 0)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-	tHashedFile **hashes = NULL;
-	int i = 0;
-	bool result = false;
-	Container *container = new Container(container_path);
-	int n_files = 0;
-
-	hashes = container->getHashes(&n_files);
-
-	CByteArray sig_content = container->ExtractSignature();
-	CByteArray timestamp = container->ExtractTimestamp();
-
-	delete container;
-
-	//TODO: We need to sort out the multiple checks issue, error messages are
-	// getting overwritten by valid timestamp messages
-	
-	result = XadesSignature::ValidateXades(sig_content, hashes, errors, error_len);
-	
-	if (result)
-	{
-	   if (timestamp.Size() > 0)
-		   result &= XadesSignature::ValidateTimestamp(sig_content, timestamp, errors, error_len);
-	}
-	unsigned long subject_len = XadesSignature::mp_subject_name.Size();
-	
-	if (errors[*error_len-1] != '\n')
-		strcat(errors, "\n");
-
-	if (subject_len > 0)
-	  strncat(errors, (const char*)XadesSignature::mp_subject_name.GetBytes(),
-	    subject_len);
-
-	return result;
-
-}
 
 
 /*****************************************************************************************
