@@ -47,7 +47,6 @@ namespace eIDMW
 		const char * m_sigcontainer_path;
 		char * m_time_and_date;
 		X509 *m_cert;
-		CByteArray m_timestamp_blob;
 		XERCES_NS DOMNode * m_signature_dom;
 
 	};

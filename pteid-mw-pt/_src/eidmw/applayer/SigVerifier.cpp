@@ -57,7 +57,6 @@ namespace eIDMW
 	SignatureVerifier::SignatureVerifier(const char *sig_container_path)
 	{
 		m_sigcontainer_path = sig_container_path;
-		m_timestamp_blob = CByteArray();
 		m_time_and_date = (char *)calloc(50, sizeof(char));
 		m_signature_dom = NULL;
 		m_cert = NULL;
@@ -330,22 +329,11 @@ bool SignatureVerifier::grep_validation_result (CByteArray validate_data)
 		{
 			if (timestamp.Size() > 0)
 			{
-				//Save the blob in an instance variable for the getTimestamp* methods
-				m_timestamp_blob = timestamp;
+
 				result = ValidateTimestamp(sig_content, timestamp);
 
 			}
 		}
-
-		/*	unsigned long subject_len = XadesSignature::mp_subject_name.Size();
-
-		if (errors[*error_len-1] != '\n')
-			strcat(errors, "\n");
-
-		if (subject_len > 0)
-			strncat(errors, (const char*)XadesSignature::mp_subject_name.GetBytes(),
-					subject_len);
-		*/
 
 		return result;
 
@@ -396,8 +384,6 @@ char * SignatureVerifier::GetTimestampString()
 
 }
 
-
-//TODO: For Windows we'll need our own strptime: probably the NetBSD one...
 time_t SignatureVerifier::GetUnixTimestamp()
 {
 	if (strlen(m_time_and_date) == 0)
@@ -418,12 +404,11 @@ char * SignatureVerifier::parseSubjectFromCert()
  
        //Subject name
        X509 *cert;
-       const int BUFSIZE = 500;
 
        X509_NAME * subject_struct = X509_get_subject_name(m_cert);	
 
-       int space_needed = X509_NAME_get_text_by_NID(subject_struct, NID_commonName, NULL, 0);
-       char *subject = (char *)malloc(space_needed * sizeof(char));
+       int space_needed = X509_NAME_get_text_by_NID(subject_struct, NID_commonName, NULL, 0) +1;
+       char *subject = (char *)malloc(space_needed);
 
        X509_NAME_get_text_by_NID(subject_struct, NID_commonName, subject, space_needed);
 
