@@ -40,6 +40,7 @@ public:
     ~dlgVerifySignature();
 
 private:
+    QString translateVerifyReturnCode(int return_code);
     Ui_dlgVerifySignature ui;
 };
 

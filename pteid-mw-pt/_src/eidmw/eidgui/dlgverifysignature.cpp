@@ -60,14 +60,42 @@ void dlgVerifySignature::on_pbCancel_clicked()
         done(0);
 }
 
+
+QString dlgVerifySignature::translateVerifyReturnCode(int return_code)
+{
+
+	QString msg(tr("Signature Validation error: "));
+switch (return_code)
+{
+	case 1:
+		msg += tr("Couldn't extract signature from zip container");
+		break;
+	case 2:
+		msg += tr("RSA Signature of referenced content is invalid");
+		break;
+	case 3:
+		msg += tr("At least one of the signed file(s) was changed or is missing");
+		break;
+	case 4:
+		msg += tr("RSA Signature of referenced content is invalid");
+		break;
+	case 5:
+		msg += tr("The certificate used to sign this data is not trusted");
+		break;
+	case 6:
+		msg += tr("The timestamp appended to the signature is invalid");
+		break;
+
+}
+
+return msg;
+}
+
 void dlgVerifySignature::on_pbOpenSign_clicked()
 {
     QString getSignFile;
     QString nativedafaultpath;
-    bool vsignsucess;
-    PTEID_SigVerifier vsign;
-    char *error, *sig_path_native;
-    unsigned long errorlen = 500;
+    char *sig_path_native;
 	
 
     getSignFile = QFileDialog::getOpenFileName(this, tr("Open Signature files"), QDir::homePath(), tr("Zip files 'XAdES' (*.zip)"), NULL);
@@ -78,22 +106,24 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
         nativedafaultpath = QDir::toNativeSeparators(getSignFile);
 	
 		sig_path_native = new char[nativedafaultpath.size()*2];
-        error = new char[errorlen];
-	memset(error, 0, errorlen);
 		strcpy(sig_path_native, nativedafaultpath.toStdString().c_str());
+		PTEID_SigVerifier vsign(sig_path_native);
 
-        vsignsucess = vsign.VerifySignature(sig_path_native, error, &errorlen);
+	        int return_code = vsign.Verify();
+
 		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", 
-				"Message received from VerifySignature() size=%d: %s", errorlen, error);
+				"Return code from VerifySignature(): %d", return_code);
 
-		if (vsignsucess)
+		QString signer = QString("\n")+tr("Signed by: ");
+		signer += QString::fromUtf8(vsign.GetSigner());
+
+		if (return_code == 0)
 		{
 			QString msg = tr("Signature was successfully verified.");
-
-			if (errorlen > 0)
-			{
-				msg += QString("\n")+QString::fromAscii(error);
-			}
+			QString timestamp = QString("\n") + tr("Timestamp: ");
+			msg += timestamp;
+			msg += vsign.GetTimestampString();
+			msg += signer;
 
 			QMessageBox::information(this, tr("Signature Validation"), msg);
 
@@ -102,8 +132,10 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
 		}
 		else
 		{
+			QString error = translateVerifyReturnCode(return_code);
+			error += signer;
 
-			QMessageBox::critical(this, tr("Signature Validation"), QString::fromAscii(error));
+			QMessageBox::critical(this, tr("Signature Validation"), error);
 			this->close();
 		}
 	}

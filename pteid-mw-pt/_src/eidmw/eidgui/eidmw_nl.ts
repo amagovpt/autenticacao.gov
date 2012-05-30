@@ -1537,10 +1537,37 @@ Please specify .xml, .csv or .eid</source>
         <translation>Assinatura verificada com sucesso.</translation>
     </message>
     <message>
-        <source>
-Timestamp: </source>
-	<translation>
-Selo Temporal: </translation>
+        <source>Timestamp: </source>
+	<translation>Selo Temporal: </translation>
     </message>
+    <message>
+        <source>Signed by: </source>
+	<translation>Assinado por: </translation>
+    </message>
+    <message>
+        <source>Signature Validation error: </source>
+	<translation>Erro de validação da assinatura: </translation>
+    </message>
+    <message>
+        <source>Couldn't extract signature from zip container</source>
+	<translation>Não foi possível extrair a assinatura</translation>
+    </message>
+    <message>
+        <source>RSA Signature of referenced content is invalid</source>
+	<translation>A assinatura criptográfica do conteúdo está inválida</translation>
+    </message>
+    <message>
+        <source>At least one of the signed file(s) was modified or is missing</source>
+	<translation>Pelo menos um dos ficheiros assinados foi alterado ou está em falta</translation>
+    </message>
+    <message>
+        <source>The certificate used to sign this data is not trusted</source>
+	<translation>O certificado contido na assinatura não provém de uma fonte confiável</translation>
+    </message>
+    <message>
+        <source>The timestamp appended to the signature is invalid</source>
+	<translation>Não foi possível validar o selo temporal</translation>
+    </message>
+
 </context>
 </TS>
