@@ -19,6 +19,7 @@
 #include <xsec/dsig/DSIGReference.hpp>
 #include <xsec/dsig/DSIGSignature.hpp>
 #include <xsec/dsig/DSIGObject.hpp>
+#include <xsec/dsig/DSIGReferenceList.hpp>
 #include <xsec/dsig/DSIGConstants.hpp>
 #include <xsec/dsig/DSIGKeyInfoX509.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp>
@@ -48,17 +49,29 @@
 #include "strptime.c"
 #endif
 
+#define XERCES_NS XERCES_CPP_NAMESPACE_QUALIFIER
 
 XERCES_CPP_NAMESPACE_USE
 
 namespace eIDMW
 {
 
+	//PIMPL Idiom, just to avoid exposing private details in the header file
+	class SignatureImpl
+	{
+	public:
+		bool checkExternalRefs(DSIGReferenceList *refs, tHashedFile **hashes);
+		XERCES_NS DOMNode *m_signature_dom;
+	};
+
+
 	SignatureVerifier::SignatureVerifier(const char *sig_container_path)
 	{
 		m_sigcontainer_path = sig_container_path;
 		m_time_and_date = (char *)calloc(50, sizeof(char));
-		m_signature_dom = NULL;
+		
+		pimpl = new SignatureImpl();
+		pimpl->m_signature_dom = NULL;
 		m_cert = NULL;
 
 	}
@@ -220,11 +233,11 @@ SigVerifyErrorCode SignatureVerifier::ValidateTimestamp (CByteArray signature, C
 	bool result = false;
 	unsigned char *signature_bin;
 
-	DOMNode * doc = m_signature_dom;
+	XERCES_NS DOMNode * doc = pimpl->m_signature_dom;
 
 	// Find the signature node
 	
-	DOMNode *sigNode = findDSIGNode(m_signature_dom, "Signature");
+	XERCES_NS DOMNode *sigNode = findDSIGNode(doc, "Signature");
 
 	XSECProvider prov;
 	unsigned char signature_hash[SHA1_LEN];
@@ -527,7 +540,7 @@ void SignatureVerifier::initXerces()
 
 
 
-bool SignatureVerifier::checkExternalRefs(DSIGReferenceList *refs, tHashedFile **hashes)
+bool SignatureImpl::checkExternalRefs(DSIGReferenceList *refs, tHashedFile **hashes)
 {
         const char * URI;
         XMLByte arr[SHA1_LEN*sizeof(unsigned char)];
@@ -640,7 +653,7 @@ SigVerifyErrorCode SignatureVerifier::ValidateXades(CByteArray signature, tHashe
 	doc = parser->getDocument();
 	//Saving the DOM Node as an instance variable to avoid reparsing
 	// We need to clone the Node because its memory is owned by the parser object
-	m_signature_dom = doc->cloneNode(true);
+	pimpl->m_signature_dom = doc->cloneNode(true);
 
 	XERCES_NS DOMDocument *theDOM = parser->getDocument();
 
@@ -728,7 +741,7 @@ SigVerifyErrorCode SignatureVerifier::ValidateXades(CByteArray signature, tHashe
 		DSIGReferenceList *refs = sig->getReferenceList();
 
 		if (refs != NULL)
-			extern_result = checkExternalRefs(refs, hashes);
+			extern_result = pimpl->checkExternalRefs(refs, hashes);
 		if (!extern_result)
 		{
 		/*	int err_len = _snprintf(errors, *error_length, "%s",  getString(6));
