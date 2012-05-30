@@ -24,6 +24,9 @@
 #include <vector>
 #include <map>
 #include <set>
+#ifndef _WIN32
+#include <stdint.h>
+#endif
 #include "eidlibdefines.h"
 
 namespace eIDMW
@@ -944,7 +947,7 @@ class PTEID_SigVerifier
 	PTEIDSDK_API int Verify();
 	PTEIDSDK_API char * GetSigner();
 	PTEIDSDK_API char *GetTimestampString();
-	PTEIDSDK_API time_t GetUnixTimestamp();
+	PTEIDSDK_API long long GetUnixTimestamp();
       	//PTEIDSDK_API getTimestamp() //TODO: Create a custom class struct that expresses the timestamp in all its glorious detail
 	
 	private:

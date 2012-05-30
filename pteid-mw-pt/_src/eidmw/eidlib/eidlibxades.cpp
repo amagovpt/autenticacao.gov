@@ -51,7 +51,7 @@ char *PTEID_SigVerifier::GetTimestampString()
 }
 
 
-time_t PTEID_SigVerifier::GetUnixTimestamp()
+long long PTEID_SigVerifier::GetUnixTimestamp()
 {
 
 
