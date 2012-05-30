@@ -231,9 +231,66 @@ SigVerifyErrorCode SignatureVerifier::ValidateTimestamp (CByteArray signature, C
 	bool errorsOccured = false;
 
 	bool result = false;
-	unsigned char *signature_bin;
+	unsigned char * signature_bin;
 
-	XERCES_NS DOMNode * doc = pimpl->m_signature_dom;
+	if (signature.Size() == 0)
+	{
+		/*int err_len = _snprintf(errors, *error_length, "Signature Validation error: " 
+				"Couldn't extract signature from zip container");
+		*error_length = err_len; */
+		MWLOG(LEV_ERROR, MOD_APL, L"ValidateTimestamp() received empty Signature. This most likely means a corrupt zipfile");
+		return XADES_ERROR_INVALID_TIMESTAMP;
+	}
+
+	initXerces();
+
+	//Load XML from a MemoryBuffer
+	MemBufInputSource * source = new MemBufInputSource(signature.GetBytes(),
+			(XMLSize_t)signature.Size(),
+			XMLString::transcode(generateId(20)));
+
+
+	XercesDOMParser * parser = new XercesDOMParser;
+	Janitor<XercesDOMParser> j_parser(parser);
+
+	parser->setDoNamespaces(true);
+	parser->setCreateEntityReferenceNodes(true);
+
+	// Now parse out file
+
+	xsecsize_t errorCount = 0;
+	try
+	{
+		parser->parse(*source);
+	}
+
+	catch (const XMLException& e)
+	{
+		MWLOG(LEV_ERROR, MOD_APL, L"An error occured during parsing\n   Message: %s",
+				XMLString::transcode(e.getMessage()));
+		errorsOccured = true;
+	}
+	catch (const DOMException& e)
+	{
+		MWLOG(LEV_ERROR, MOD_APL, L"A DOM error occured during parsing\n   DOMException code: %d",
+				e.code);
+		errorsOccured = true;
+	}
+
+	if (errorsOccured) {
+		//Write to output report 
+		/* int err_len = _snprintf(errors, *error_length, "%s", getString(4));
+		*error_length = err_len; */
+		MWLOG(LEV_ERROR, MOD_APL, L"Errors parsing XML Signature, bailing out");
+		return XADES_ERROR_BROKENSIG;
+	}
+
+	
+	DOMNode *doc;		// The document that we parsed
+
+	doc = parser->getDocument();
+
+	//XERCES_NS DOMNode * doc = pimpl->m_signature_dom;
 
 	// Find the signature node
 	
@@ -651,9 +708,20 @@ SigVerifyErrorCode SignatureVerifier::ValidateXades(CByteArray signature, tHashe
 	DOMNode *doc;		// The document that we parsed
 
 	doc = parser->getDocument();
+	/*
 	//Saving the DOM Node as an instance variable to avoid reparsing
 	// We need to clone the Node because its memory is owned by the parser object
+	try
+	{
 	pimpl->m_signature_dom = doc->cloneNode(true);
+	}
+	catch (const DOMException& e)
+	{
+	
+		MWLOG(LEV_ERROR, MOD_APL, L"An error occured during cloneNode(). Message: %s",
+				e.getMessage());
+	}
+	*/
 
 	XERCES_NS DOMDocument *theDOM = parser->getDocument();
 
