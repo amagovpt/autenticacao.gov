@@ -44,6 +44,10 @@
 #include "static_pteid_certs.h"
 #include "SigVerifier.h"
 
+#ifdef _WIN32
+#include "strptime.c"
+#endif
+
 
 XERCES_CPP_NAMESPACE_USE
 
