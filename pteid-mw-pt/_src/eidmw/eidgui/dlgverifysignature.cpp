@@ -120,9 +120,13 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
 		if (return_code == 0)
 		{
 			QString msg = tr("Signature was successfully verified.");
-			QString timestamp = QString("\n") + tr("Timestamp: ");
-			msg += timestamp;
-			msg += vsign.GetTimestampString();
+			char *ts = vsign.GetTimestampString();
+			if (ts != NULL)
+			{
+				QString timestamp = QString("\n") + tr("Timestamp: ");
+				msg += timestamp;
+				msg += ts;
+			}
 			msg += signer;
 
 			QMessageBox::information(this, tr("Signature Validation"), msg);
