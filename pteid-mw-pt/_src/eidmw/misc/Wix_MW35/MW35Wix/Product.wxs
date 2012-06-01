@@ -12,7 +12,7 @@
   <?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F20$(var.RevisionNumber)}?>
   <?define var.ProductGuidGeneric ={824563DE-75AD-4166-9DC0-B6482F2?????}?>
   <!--<?define var.ProductGuid ={824563DE-75AD-4166p-9DC0-B6482F2DED5A})?>-->
-  <?define var.ProductName =Portugal e-ID middleware $(var.OfficialProductVersion) (build $(var.RevisionNumber))?>
+  <?define var.ProductName =Cartão de Cidadão Português $(var.OfficialProductVersion) (build $(var.RevisionNumber))?>
 
   <?define var.PackageCode="*"?>
 
