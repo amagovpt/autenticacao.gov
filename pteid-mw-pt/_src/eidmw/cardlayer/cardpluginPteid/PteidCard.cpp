@@ -446,14 +446,7 @@ DlgPinUsage CPteidCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)
         //printf("++++ Pteid5\n");
 	DlgPinUsage usage = DLG_PIN_UNKNOWN;
 
-	if (pKey != NULL)
-	{
-		if (pKey->ulID == 2)
-			usage = DLG_PIN_AUTH;
-		else if (pKey->ulID == 3)
-			usage = DLG_PIN_SIGN;
-	}
-    else if (Pin.ulID == 1)
+    if (Pin.ulID == 1)
         usage = DLG_PIN_AUTH;
     else if (Pin.ulID == 2)
         usage = DLG_PIN_SIGN;
