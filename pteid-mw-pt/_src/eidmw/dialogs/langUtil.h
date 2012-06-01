@@ -23,8 +23,11 @@
 
 
 #pragma once
-
+#ifdef _WIN32
+#include "language_latin1.h"
+#else
 #include "language.h"
+#endif
 #include "dialogs.h"
 
 namespace eIDMW

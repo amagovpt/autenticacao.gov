@@ -55,6 +55,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 
 	tmpTitle += L" ";
 
+	/*
 	//Change to pt once fixed the language issues.
 	if(wcscmp(L"nl",lang.c_str())==0)
 	{
@@ -66,6 +67,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 			tmpTitle.append(L"Pin da Assinatura");
 	}
 	else
+	*/
 		tmpTitle.append(PINName);
 
 	m_ulPinMinLen = pinInfo.ulMinLen;

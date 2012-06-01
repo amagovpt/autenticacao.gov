@@ -72,7 +72,7 @@ DEFINE_LANG_STR(ReadUnknownData) = {L"Read Unknown data", L"Onbekende data lezen
 DEFINE_LANG_STR(DoYouWantToAcceptIt) = {L"Do you want to accept it ?", L"Deseja aceitar ?", L"Acceptez-vous ?", L"Mï¿½chten Sie akzeptieren?"};
 DEFINE_LANG_STR(ForAllOperations) = {L"For all operations", L"Para todas as operacoes", L"Pour toutes les opï¿½rations", L"Fï¿½r alle Funktionen"};
 DEFINE_LANG_STR(EnterYourPin) = {L"Enter your PIN", L"Introduza o PIN", L"Entrer votre code PIN", L"PIN eingeben"};
-DEFINE_LANG_STR(Asking) = {L"Asking", L"Perguntar", L"Entrez", L"Eingeben"};
+DEFINE_LANG_STR(Asking) = {L"Asking", L"Pedir", L"Entrez", L"Eingeben"};
 DEFINE_LANG_STR(SigningWith) = {L"Signing with", L"Assinar com", L"Signez avec", L"Unterschreiben mit"};
 DEFINE_LANG_STR(PrivacyFilter) = {L"Privacy Filter", L"Filtro de privacidade", L"Privacy Filter", L"Datenschutz-Filter"};
 DEFINE_LANG_STR(EnterYour) = {L"Enter your", L"Introduza o seu", L"Entrez votre", L"Geben Sie Ihre"};
@@ -86,8 +86,8 @@ DEFINE_LANG_STR(CurrentPin) = {L"Current PIN", L"PIN Actual", L"Code actuel", L"
 DEFINE_LANG_STR(NewPin) = {L"New PIN", L"Novo PIN", L"Nouveau", L"Neue PIN"};
 DEFINE_LANG_STR(ConfirmNewPin) = {L"Confirm new PIN", L"Confirmar novo PIN", L"Confimez", L"Neue PIN bestï¿½tigen"};
 DEFINE_LANG_STR(EnterYourNewPinCode) = {L"Enter your New PIN code", L"Introduza o novo código PIN", L"Entrez votre nouveau code PIN", L"Neue PIN-Kennzahl eingeben"};
-DEFINE_LANG_STR(EnterYourNewPinCodeAgainToConfirm) = {L"Enter your New PIN code again to confirm", L"Introduza novamente o novo cÃ³digo PIN", L"Confimez votre nouveau code PIN", L"Neue PIN-Kennzahl erneut bestï¿½tigen"};
-DEFINE_LANG_STR(ErrorTheNewPinCodesAreNotIdentical) = {L"Error: The new PIN codes are not identical", L"Erro: os PINS nao sao iguais", L"Erreur: Les codes PIN ne sont pas identiques", L"Fehler: Die PIN-Kennzahlen sind nicht identisch"};
+DEFINE_LANG_STR(EnterYourNewPinCodeAgainToConfirm) = {L"Enter your New PIN code again to confirm", L"Introduza novamente o novo código PIN", L"Confimez votre nouveau code PIN", L"Neue PIN-Kennzahl erneut bestï¿½tigen"};
+DEFINE_LANG_STR(ErrorTheNewPinCodesAreNotIdentical) = {L"Error: The new PIN codes are not identical", L"Erro: os novos PINs não são iguais", L"Erreur: Les codes PIN ne sont pas identiques", L"Fehler: Die PIN-Kennzahlen sind nicht identisch"};
 DEFINE_LANG_STR(RetryEnterYourNewPinCode) = {L"Retry: Enter your New PIN code", L"Repetir: Introduza o novo código PIN", L"Rï¿½essayez: Entrez votre nouveau code PIN", L"Erneut versuchen: Neue PIN-Kennzahl eingeben"};
 DEFINE_LANG_STR(Bad) = {L"Bad", L"Erro", L"Erreur", L"Fehler"};
 DEFINE_LANG_STR(Notification) = {L"Notification", L"Atenção", L"Notification", L"Meldung"};
@@ -98,11 +98,11 @@ DEFINE_LANG_STR(PinpadInfo) = {L"Pinpad info", L"Pinpad info", L"Pinpad info", L
 DEFINE_LANG_STR(Message) = {L"Message", L"Mensagem", L"Message", L"Nachricht"};
 DEFINE_LANG_STR(SignaturePin) = {L"Signature PIN", L"PIN de assinatura", L"Signature PIN", L"Unterschrift-PIN"};
 DEFINE_LANG_STR(AuthenticationPin) = {L"Authentication PIN", L"PIN de autenticação", L"Authentification PIN", L"Authentisierungs-PIN"};
-DEFINE_LANG_STR(TheRootCertificateIsNotCorrect) = {L"The Root Certificate is not correct.", L"O certificado de Root estÃ¡ incorrecto.", L"Le certificat Root n'est pas correct.", L"Das Root-Zertifikat ist nicht korrekt."};
-DEFINE_LANG_STR(ThisMayBeATestCard) = {L"This may be a test card.", L"Este pode ser um cartao de testes.", L"Il s'agit peut-ï¿½tre d'une carte de test.", L"Dies kann eine Testkarte sein."};
+DEFINE_LANG_STR(TheRootCertificateIsNotCorrect) = {L"The Root Certificate is not correct.", L"O certificado de Root está incorrecto.", L"Le certificat Root n'est pas correct.", L"Das Root-Zertifikat ist nicht korrekt."};
+DEFINE_LANG_STR(ThisMayBeATestCard) = {L"This may be a test card.", L"Este pode ser um cartão de testes.", L"Il s'agit peut-ï¿½tre d'une carte de test.", L"Dies kann eine Testkarte sein."};
 DEFINE_LANG_STR(PleaseEnterTheCorrectEidCard) = {L"Please enter the correct eID card.", L"Introduza um cartão válido.", L"Insï¿½rez une carte valide.", L"Bitte geben Sie die richtige eID-Karte ein."};
 DEFINE_LANG_STR(Caution) = {L"Caution:", L"Atenção:", L"Attention:", L"Achtung:"};
-DEFINE_LANG_STR(YouAreAboutToMakeALegallyBindingElectronic) = {L"You are about to make a legally binding electronic signature with your identity card.", L"Voce está prestes a realizar uma assinatura electrónica legalmente válida com o seu cartão de identidade.", L"Vous allez apposer une signature ï¿½lectronique juridiquement valide avec votre carte d'identitï¿½", L"Mit Ihrem Personalausweis werden Sie eine rechtsgï¿½ltige elektronische Unterschrift eingeben."};
+DEFINE_LANG_STR(YouAreAboutToMakeALegallyBindingElectronic) = {L"You are about to make a legally binding electronic signature with your identity card.", L"Você está prestes a realizar uma assinatura electrónica legalmente válida com o seu cartão de identidade.", L"Vous allez apposer une signature ï¿½lectronique juridiquement valide avec votre carte d'identitï¿½", L"Mit Ihrem Personalausweis werden Sie eine rechtsgï¿½ltige elektronische Unterschrift eingeben."};
 DEFINE_LANG_STR(PleaseEnterYourPin) = {L"Please enter your PIN", L"Introduza o código PIN", L"Entrez votre code PIN", L"Bitte geben Sie Ihre PIN ein"};
 DEFINE_LANG_STR(PleaseEnterYourPinOnThePinpadReader) = {L"Please enter your PIN on the pinpad reader", L"Por favor, introduza o PIN no seu leitor PINPAD.", L"Entrez votre code PIN sur le clavier du lecteur de carte", L"Bitte geben Sie Ihre PIN am Kartenlesegerï¿½t ein"};
 DEFINE_LANG_STR(ToContinueOrClickTheCancelButton) = {L"to continue or click the Cancel button.", L"para continuar ou clique em cancelar", L"ou cliquez sur le bouton Annuler.", L"um fortzufahren, oder klicken Sie auf die Schaltflï¿½che \"Abbrechen\"."};
@@ -121,7 +121,7 @@ DEFINE_LANG_STR(UnknownApplication) = {L"??? Unknown application ???", L"??? Apl
 DEFINE_LANG_STR(PathOfTheApplication) = {L"PATH of the application :", L"Caminho para a aplicacao :", L"EMPLACEMENT de l'application :", L"PFAD der Anwendung :"};
 //DEFINE_LANG_STR(EnterOldNewVerify) = {L"Please enter your old PIN, followed by your new PIN and then enter your new PIN once more for verification purposes.", L"Geef eerst uw oude PIN in, nadien uw nieuwe PIN, en ten slotte ter controle nogmaals uw nieuwe PIN.", L"Veillez d'abord introduire votre ancien code PIN et ensuite votre nouveau code PIN. Pour terminer, veuillez rï¿½introduire votre nouveau code PIN ï¿½ des fins de vï¿½rification.", L"Geben Sie zunï¿½chst Ihre alte PIN ein, dann Ihre neue PIN und abschlieï¿½end zur Kontrolle noch einmal Ihre neue PIN."};
 DEFINE_LANG_STR(EnterOldNewVerify) = {L"1) Enter your old PIN and press 'OK'. \n2) Enter your new PIN and press 'OK'.\n3) Enter your new PIN again and press 'OK'.",
-																			L"1) Introduza o seu PIN anterior e clique em 'OK'. \n2) Introduza o seu novo PIN e clique em 'OK'.\n3) Introduza novamente o seu novo PIN e clique em 'OK'.",
+																			L"1) Introduza o seu PIN actual e clique em 'OK'. \n2) Introduza o seu novo PIN e clique em 'OK'.\n3) Introduza novamente o seu novo PIN e clique em 'OK'.",
 																			L"1) Insï¿½rez votre ancien code PIN et appuyez sur ï¿½ï¿½OKï¿½ï¿½.\n2) Insï¿½rez votre nouveau code PIN et appuyez sur ï¿½ï¿½OKï¿½ï¿½.\n3) Insï¿½rez une nouvelle fois votre nouveau code PIN et appuyez sur ï¿½ï¿½OKï¿½ï¿½.",
 																			L"1) Geben Sie Ihre alte PIN ein und drï¿½cken Sie 'OK'.\n2) Geben Sie Ihre neue PIN ein und drï¿½cken Sie 'OK'.\n3) Geben Sie Ihre neue PIN erneut ein und drï¿½cken Sie 'OK'."};
 

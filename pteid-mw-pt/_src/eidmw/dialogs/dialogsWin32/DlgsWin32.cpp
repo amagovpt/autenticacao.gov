@@ -89,7 +89,8 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			DlgPinUsage usage, const wchar_t *csPinName,
 			DlgPinInfo pinInfo, wchar_t *csPin, unsigned long ulPinBufferLen)
 {
-	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgAskPin() called");
+	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgAskPin() called with arguments usage: %d, PinName: %s, Operation:%d",
+		usage, csPinName,operation);
 
 	CLang::ResetInit();				// Reset language to take into account last change
 	g_UseKeyPad=-1;					// Reset the keypad
@@ -99,17 +100,17 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 	{
 		std::wstring PINName;
 
-		if(wcscmp(L"nl",lang1.c_str())==0)
-		{
+		/*if(wcscmp(L"nl",lang1.c_str())==0)
+		{ */
 			if (usage == DLG_PIN_AUTH)
 				PINName.append(L"Pin da Autenticação");
 			else if (usage == DLG_PIN_ADDRESS)
 				PINName.append(L"Pin da Morada");
 			else
 				PINName.append(L"Pin da Assinatura");
-		}
+		/*}
 		else
-			PINName = GETSTRING_DLG(Pin);
+			PINName = GETSTRING_DLG(Pin); */
 
 		std::wstring sMessage;
 		switch( operation )
@@ -118,18 +119,9 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			switch( usage )
 			{
 			case DLG_PIN_AUTH:
-				if(wcscmp(L"nl",lang1.c_str())==0)
-				{
-					//sMessage += (L"PIN da Autenticação");
-					sMessage += L"\n\n";
-					sMessage += (L"Introduza o Código PIN");
-				}
-				else
-				{
-					//sMessage += GETSTRING_DLG(Pin); 
-					sMessage += L"\n\n";
-					sMessage += GETSTRING_DLG(PleaseEnterYourPin);
-				}
+			
+				sMessage += L"\n\n";
+				sMessage += GETSTRING_DLG(PleaseEnterYourPin);
 				sMessage += L", ";
 				sMessage += GETSTRING_DLG(InOrderToAuthenticateYourself);
 				sMessage += L"\n";
@@ -137,49 +129,19 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			case DLG_PIN_SIGN:
 					
 				sMessage += L"\n\n";
-				if(wcscmp(L"nl",lang1.c_str())==0)
-				{
-					sMessage += (L"Atenção");
-				}
-				else
-					sMessage += GETSTRING_DLG(Caution);
+				sMessage += GETSTRING_DLG(Caution);
 				sMessage += L" ";
-				if(wcscmp(L"nl",lang1.c_str())==0)
-				{
-					sMessage += (L"Você está prestes a realizar uma assinatura electrónica legalmente válida com o seu Cartão de Cidadão.");
-				}
-				else
-					sMessage += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic);
+				sMessage += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic);
 				
-				/*sMessage += L"\n";
-				if(wcscmp(L"nl",lang1.c_str())==0)
-				{
-					sMessage += (L"Introduza o código PIN");
-				}
-				else 
-					sMessage += GETSTRING_DLG(PleaseEnterYourPin);*/
-				//sMessage += L", ";
-				//sMessage += GETSTRING_DLG(ToContinueOrClickTheCancelButton);
-				//sMessage += L"\n\n";
 				break;
 			case DLG_PIN_ADDRESS:
 				sMessage += L"\n\n";
-				if(wcscmp(L"nl",lang1.c_str())==0)
-				{
-					sMessage += (L"Introduza o Código PIN");
-				}
-				else
-					sMessage += (L"Please Enter your PIN");
+				sMessage += GETSTRING_DLG(PleaseEnterYourPin);
 				sMessage += L"\n";
 				break;
+
 			default:
-				sMessage += L"\n\n";
-				if(wcscmp(L"nl",lang1.c_str())==0)
-				{
-					sMessage += (L"Introduza o Código PIN");
-				}
-				else
-					sMessage += GETSTRING_DLG(PleaseEnterYourPin);
+				sMessage += L"----Default PIN Type????----";
 				sMessage += L"\n";
 				break;
 			}
