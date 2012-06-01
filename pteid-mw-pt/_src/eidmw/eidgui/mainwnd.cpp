@@ -174,11 +174,6 @@ void MainWnd::createTrayMenu()
 	m_pTrayIconMenu->addSeparator();
 	m_pTrayIconMenu->addAction(m_ui.actionE_xit);
 
-	if (!m_pTrayIcon)
-	{
-		m_pTrayIcon = new QSystemTrayIcon( this );
-		m_pTrayIcon->setToolTip(QString(tr("Portuguese ID Card Management")));
-	}
 	m_pTrayIcon->setContextMenu( m_pTrayIconMenu );
 	if (isHidden())
 	{
@@ -269,7 +264,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	//SysTray
 	//------------------------------------
 	m_pTrayIcon = new QSystemTrayIcon( this );
-	m_pTrayIcon->setToolTip(QString(tr("Portuguese ID Card Management")));
+	m_pTrayIcon->setToolTip(QString(tr("Portuguese Citizen Card")));
 	createTrayMenu();
 
 	connect(m_pTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
@@ -3600,11 +3595,11 @@ void MainWnd::PersoDataSaveButtonClicked( void )
         {
             const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), TxtPersoDataString.toStdString().size());
             Card.writePersonalNotes(oData);
-            QMessageBox::information( this, tr("Notas Pessais"),  tr("Notas pessoais escritas com sucesso!"), QMessageBox::Ok );
+            QMessageBox::information( this, tr("Personal Notes"),  tr("Personal notes successfully written!"), QMessageBox::Ok );
 
         }
     } catch (PTEID_Exception& e) {
-        QMessageBox::critical(this, tr("Notas Pessais"), tr("Erro ao escrever notas pessoais!"), QMessageBox::Ok );
+        QMessageBox::critical(this, tr("Personal Notes"), tr("Error writing personal notes!"), QMessageBox::Ok );
     }
 }
 //*****************************************************
@@ -4159,7 +4154,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 					// show a message in the status bar that a card has been inserted
 					//----------------------------------------------------------
 					QString statusMsg;
-					statusMsg += tr("Leitor de cartoes: ");
+					statusMsg += tr("Card Reader: ");
 					statusMsg += pPopupEvent->getReaderName();
 					m_ui.statusBar->showMessage(statusMsg,m_STATUS_MSG_TIME);
 
@@ -4167,7 +4162,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 
 					if (m_Settings.getShowNotification())
 					{
-						QString title(tr("Cartao Inserido:"));
+						QString title(tr("Card Inserted"));
 						m_pTrayIcon->showMessage ( title, statusMsg, QSystemTrayIcon::Information) ;
 					}
 

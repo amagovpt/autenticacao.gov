@@ -91,9 +91,13 @@
         <translation>PIN da autenticação bloqueado. Não foi possível guardar as notas pessoais</translation>
     </message>
     <message>
-        <source>Portuguese ID Card Management</source>
-        <translation>Aplicação Oficial do Cartão de Cidadão</translation>
+        <source>Portuguese Citizen Card</source>
+        <translation>Cartão de Cidadão</translation>
     </message>
+	<message>
+	    <source>Portuguese Citizen Card Management</source>
+		<translation>Cartão de Cidadão</translation>
+	</message>
     <message>
         <source>Additional Data</source>
         <translation>Outros Dados</translation>
@@ -1091,28 +1095,28 @@ Please specify .xml, .csv or .eid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Notas Pessais</source>
-        <translation type="unfinished"></translation>
+        <source>Personal Notes</source>
+        <translation>Notas Pessoais</translation>
     </message>
     <message>
-        <source>Notas pessoais escritas com sucesso!</source>
-        <translation type="unfinished"></translation>
+        <source>Personal notes successfully written!</source>
+        <translation>Notas pessoais escritas com sucesso!</translation>
     </message>
     <message>
-        <source>Erro ao escrever notas pessoais!</source>
-        <translation type="unfinished"></translation>
+        <source>Error writing personal notes!</source>
+        <translation>Erro ao escrever notas pessoais!</translation>
     </message>
     <message>
         <source>&amp;Portuguese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Leitor de cartoes: </source>
-        <translation type="unfinished"></translation>
+        <source>Card Reader: </source>
+        <translation>Leitor de Cartões: </translation>
     </message>
     <message>
-        <source>Cartão Inserido:</source>
-        <translation type="unfinished"></translation>
+        <source>Card Inserted</source>
+        <translation>Cartão Inserido</translation>
     </message>
     <message>
         <source>setEventCallbacks</source>

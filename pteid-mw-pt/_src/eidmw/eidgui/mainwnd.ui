@@ -20,7 +20,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Portuguese ID Card Management</string>
+   <string>Portuguese Citizen Card Management</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
