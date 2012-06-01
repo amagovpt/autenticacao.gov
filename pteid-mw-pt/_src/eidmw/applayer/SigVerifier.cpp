@@ -45,11 +45,13 @@
 #include "static_pteid_certs.h"
 #include "SigVerifier.h"
 
+//Make up for the absence of strptime on Windows CRT
 #ifdef _WIN32
 #include "strptime.c"
 #endif
 
 #define XERCES_NS XERCES_CPP_NAMESPACE_QUALIFIER
+#define SHA1_LEN 20
 
 XERCES_CPP_NAMESPACE_USE
 
@@ -67,13 +69,21 @@ namespace eIDMW
 
 	SignatureVerifier::SignatureVerifier(const char *sig_container_path)
 	{
-		m_sigcontainer_path = sig_container_path;
+		m_sigcontainer_path = (char *)malloc(strlen(sig_container_path)+1);
+		strcpy((char *)m_sigcontainer_path, sig_container_path);
 		m_time_and_date = (char *)calloc(50, sizeof(char));
 		
 		pimpl = new SignatureImpl();
 		pimpl->m_signature_dom = NULL;
 		m_cert = NULL;
 
+	}
+
+	SignatureVerifier::~SignatureVerifier()
+	{
+		free(m_sigcontainer_path);
+		free(m_time_and_date);
+		delete pimpl;
 	}
 
 	size_t curl_write_validation_data(char *ptr, size_t size, size_t nmemb, void * userdata)
@@ -235,9 +245,6 @@ SigVerifyErrorCode SignatureVerifier::ValidateTimestamp (CByteArray signature, C
 
 	if (signature.Size() == 0)
 	{
-		/*int err_len = _snprintf(errors, *error_length, "Signature Validation error: " 
-				"Couldn't extract signature from zip container");
-		*error_length = err_len; */
 		MWLOG(LEV_ERROR, MOD_APL, L"ValidateTimestamp() received empty Signature. This most likely means a corrupt zipfile");
 		return XADES_ERROR_INVALID_TIMESTAMP;
 	}
@@ -278,9 +285,6 @@ SigVerifyErrorCode SignatureVerifier::ValidateTimestamp (CByteArray signature, C
 	}
 
 	if (errorsOccured) {
-		//Write to output report 
-		/* int err_len = _snprintf(errors, *error_length, "%s", getString(4));
-		*error_length = err_len; */
 		MWLOG(LEV_ERROR, MOD_APL, L"Errors parsing XML Signature, bailing out");
 		return XADES_ERROR_BROKENSIG;
 	}
@@ -654,9 +658,6 @@ SigVerifyErrorCode SignatureVerifier::ValidateXades(CByteArray signature, tHashe
 
 	if (signature.Size() == 0)
 	{
-		/*int err_len = _snprintf(errors, *error_length, "Signature Validation error: " 
-				"Couldn't extract signature from zip container");
-		*error_length = err_len; */
 		MWLOG(LEV_ERROR, MOD_APL, L"ValidateXades() received empty Signature. This most likely means a corrupt zipfile");
 		return XADES_ERROR_NOSIG;
 	}
@@ -697,9 +698,6 @@ SigVerifyErrorCode SignatureVerifier::ValidateXades(CByteArray signature, tHashe
 	}
 
 	if (errorsOccured) {
-		//Write to output report 
-		/* int err_len = _snprintf(errors, *error_length, "%s", getString(4));
-		*error_length = err_len; */
 		MWLOG(LEV_ERROR, MOD_APL, L"Errors parsing XML Signature, bailing out");
 		return XADES_ERROR_BROKENSIG;
 	}
@@ -733,10 +731,6 @@ SigVerifyErrorCode SignatureVerifier::ValidateXades(CByteArray signature, tHashe
 	// Create the signature checker
 
 	if (sigNode == NULL) {
-
-	/*	int err_len = _snprintf(errors, *error_length, "Signature Validation error: XML Signature Node not found");
-		*error_length = err_len;
-		*/
 
 		MWLOG(LEV_ERROR, MOD_APL, L"ValidateXades: Could not find <Signature> node in the signature provided");
 		return XADES_ERROR_BROKENSIG;
@@ -775,30 +769,12 @@ SigVerifyErrorCode SignatureVerifier::ValidateXades(CByteArray signature, tHashe
 				const XMLCh *pem_cert = cert_element->getCertificateItem(0);
 				char * tmp_cert = XMLString::transcode(pem_cert);
 			
-				/*	
-				//Clear the static array
-				mp_subject_name.Chop(mp_subject_name.Size());
-				//Parse the signer's name from the certificate
-				char * subject_name = utf8_to_latin1(
-					   parseSubjectFromCert(tmp_cert));
-
-				if (subject_name != NULL)
-				{
-					mp_subject_name.Append(CONST_STR getString(14), strlen(getString(14)));
-					mp_subject_name.Append(CONST_STR " ", 1);
-					mp_subject_name.Append(CONST_STR subject_name, strlen(subject_name));
-				}
-				*/
 				bool cert_result = ValidateCert(tmp_cert);
 
 				if (!cert_result)
 				{
-					//int err_len = _snprintf(errors, *error_length, "%s",  getString(12));
-					//*error_length = err_len;
 					return XADES_ERROR_INVALID_CERTIFICATE;
 				}
-				
-					
 
 				
 				XMLString::release(&tmp_cert);
@@ -812,9 +788,6 @@ SigVerifyErrorCode SignatureVerifier::ValidateXades(CByteArray signature, tHashe
 			extern_result = pimpl->checkExternalRefs(refs, hashes);
 		if (!extern_result)
 		{
-		/*	int err_len = _snprintf(errors, *error_length, "%s",  getString(6));
-			*error_length = err_len;
-			*/
 			return XADES_ERROR_EXTERNAL_REFS;
 		}
 		
@@ -834,10 +807,6 @@ SigVerifyErrorCode SignatureVerifier::ValidateXades(CByteArray signature, tHashe
 
 	if (result == false)
 	{
-	/*	int err_len = _snprintf(errors, *error_length, "%s", getString(10));
-		*error_length = err_len;
-		
-		*/
 		return XADES_ERROR_INVALID_RSA;
 	}
 
