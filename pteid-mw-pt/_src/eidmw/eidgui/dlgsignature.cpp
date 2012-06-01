@@ -129,33 +129,6 @@ void dlgSignature::SignListView (QStringList list)
 	//connect (ui.listView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ShowContextMenu(const QPoint&)));
 }
 
-/* Replaced the broken right-click menu by removing on delete keypress
-void dlgSignature::ShowContextMenu(const QPoint& pos)
-{
-	QPoint globalPos = ui.listView->mapToGlobal(pos);
-
-	QMenu *myMenu = new QMenu(ui.listView);
-	//myMenu->addAction("Remove Item");
-	QAction *_remove = new QAction("Remove", this);
-	myMenu->addAction(_remove);
-	connect( _remove, SIGNAL( triggered() ), this, SLOT( RemoveFromView() ) );
-	QAction* selectedItem = myMenu->exec(globalPos);
-
-	if (selectedItem)
-	{
-		std::cout << "remove item" << std::endl;
-		//remove item;
-		QModelIndex index = ui.listView->currentIndex();
-		int row = index.row();
-		int count = 1;
-
-		ui.listView->model()->removeRows( row, count, index );
-		ui.listView->update();
-	}
-}
-*/
-
-
 
 void dlgSignature::on_pbSign_clicked ( void )
 {
@@ -192,20 +165,19 @@ void dlgSignature::on_pbSign_clicked ( void )
 		files_to_sign[n_files] = cpychar;
 		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "File to Sign: %s", files_to_sign[n_files]);
 	}
-
-	QString defaultsavefilepath;
+	
+	//Default save filepath should be helpful and try to save in the same directory as the file(s)
+	QString defaultsavefilepath = QFileInfo(strlist.last()).dir().absolutePath();
 	QString savefilepath;
 	QString nativedafaultpath;
-
-	defaultsavefilepath = QDir::homePath();
-	defaultsavefilepath.append("/xadessign.zip");
+	if (!individual_sigs)
+		defaultsavefilepath.append("/xadessign.zip");
 	nativedafaultpath = QDir::toNativeSeparators(defaultsavefilepath);
 	if (individual_sigs)
 	{
 		savefilepath = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-				QDir::homePath(),
+				nativedafaultpath,
 				QFileDialog::ShowDirsOnly);
-		//std::cout << "Savefilepath: " << savefilepath.toStdString() << std::endl;
 
 	}
 	else
