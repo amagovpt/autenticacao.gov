@@ -137,10 +137,9 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
         QString msg(tr("General exception"));
     }
 
+	this->close();
+
 }
-
-//static cairo_status_t cairowriteQimageLst(void *closure, unsigned char const *data, unsigned int length);
-
 
 
 
@@ -263,12 +262,14 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 
 		unsigned long triesLeft = -1;
 		bool		  bResult   = Pin.verifyPin("",triesLeft);
-		//QString		  msg(tr("PIN verification "));
 
 		QString msg = bResult ? tr("PIN verification passed"):tr("PIN verification failed");
-		QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
+		
 		if (!bResult)
+		{
+			QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 			return false;
+		}
 
 		CI_Data.LoadDataAddress(*Card, m_CurrReaderName);
 	}
