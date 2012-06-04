@@ -941,8 +941,8 @@ class PTEID_SigVerifier
 
 	public:
 	
-	PTEID_SigVerifier(const char * container_path);
-	~PTEID_SigVerifier();
+	PTEIDSDK_API PTEID_SigVerifier(const char * container_path);
+	PTEIDSDK_API ~PTEID_SigVerifier();
 
 	PTEIDSDK_API int Verify();
 	PTEIDSDK_API char * GetSigner();
