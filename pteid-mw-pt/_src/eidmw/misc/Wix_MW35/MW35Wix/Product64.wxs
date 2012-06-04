@@ -515,8 +515,6 @@
 		</Component>
       
     </DirectoryRef>
-	  
-	  <Binary Id="PTeIDWin32CertificateImport" SourceFile="..\..\..\_Binaries35\x64\Release\PTeIDWin32CertificateImport.exe" />
    
     
     <DirectoryRef Id="TARGETDIR">
@@ -887,12 +885,6 @@
 					
 					/>
 	 
-	<CustomAction Id="CertificateRegistration"
-					BinaryKey="PTeIDWin32CertificateImport"
-				    ExeCommand=""
-					Impersonate="no"
-					Return="check"
-					Execute="deferred" />
     <InstallUISequence>
       <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
     </InstallUISequence>

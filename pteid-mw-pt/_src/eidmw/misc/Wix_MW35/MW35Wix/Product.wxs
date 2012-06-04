@@ -545,8 +545,6 @@
       </Component>
 
     </DirectoryRef>
-	  
-    <Binary Id="PTeIDWin32CertificateImport" SourceFile="..\..\..\_Binaries35\Release\PTeIDWin32CertificateImport.exe" />
 
     <DirectoryRef Id="TARGETDIR">
       <Component Id="SCardSvrService" Guid="{C3BC9746-0843-41b2-BDDA-3192772974CE}" Permanent="yes">
@@ -882,13 +880,6 @@
               Return="check"
               Execute="deferred"
     /> -->
-    <CustomAction Id="CertificateRegistration"
-            BinaryKey="PTeIDWin32CertificateImport"
-              ExeCommand=""
-            Impersonate="no"
-            Return="check"
-            Execute="deferred" />
-
 
     <CustomAction Id="IsPrivileged" Error="!(loc.AdminNeeded)" />
     <CustomAction Id="PreventDowngrading" Error="!(loc.NoDowngrade)" />
