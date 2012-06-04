@@ -89,6 +89,17 @@ void dlgSignature::ShowErrorMsgBox()
   	msgBoxp.exec();
 }
 
+void dlgSignature::ShowSuccessMsgBox()
+{
+
+		QString caption  = tr("File Signature (XAdES)");
+        QString msg = tr("Signature(s) succesfully generated");
+		QMessageBox msgBoxp(QMessageBox::Information, caption, msg, 0, this);
+  		msgBoxp.exec();
+
+
+}
+
 void dlgSignature::on_pbCancel_clicked( void )
 {
 	done(0);
@@ -223,12 +234,18 @@ void dlgSignature::on_pbSign_clicked ( void )
 
 	pdialog->exec();
 
+	if (this->success)
+		ShowSuccessMsgBox();
+	else
+		ShowErrorMsgBox();
+
 	delete []files_to_sign;
 	delete cpychar;
 	delete []output_file;
 
 	this->close();
 }
+
 
 void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char *output_path, bool timestamp)
 {
@@ -242,11 +259,13 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
 		    SignXades = Card->SignXadesT(paths, n_paths, output_path);
 	    else
 		    SignXades = Card->SignXades(paths, n_paths, output_path);
+		this->success = true;
 
     }
 
     catch (PTEID_Exception &e)
     	{
+			this->success = false;
     		switch(e.GetError()){
     		case EIDMW_ERR_PIN_CANCEL:
     			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PIN introduction - CANCELED!");
@@ -273,9 +292,11 @@ void dlgSignature::run_multiple_sign(const char ** paths, unsigned int n_paths, 
 		    Card->SignXadesTIndividual(paths, n_paths, output_path);
 	    else
 		    Card->SignXadesIndividual(paths, n_paths, output_path);
+		this->success = true;
     }
     catch (PTEID_Exception &e)
         	{
+				this->success = false;
         		switch(e.GetError()){
         		case EIDMW_ERR_PIN_CANCEL:
         			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PIN introduction - CANCELED!");

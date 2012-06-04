@@ -1172,7 +1172,7 @@ Please specify .xml, .csv or .eid</source>
 <context>
     <name>dlgAbout</name>
     <message>
-        <source>Portuguese ID Card Management.</source>
+        <source>Portuguese Identification Card Management Software</source>
         <translation>Aplicação Oficial do Cartão de Cidadão Português.</translation>
     </message>
     <message>
@@ -1180,8 +1180,8 @@ Please specify .xml, .csv or .eid</source>
         <translation>Versão 2.0</translation>
     </message>
     <message>
-        <source>If you have any troubles during the use of this software,</source>
-        <translation>Caso tenha dificuldades na utilização desta aplicação,</translation>
+        <source>For information or support about this software please visit</source>
+        <translation>Caso tenha dificuldades na utilização desta aplicação consulte</translation>
     </message>
     <message>
         <source>please check the user manuals and FAQ section in this</source>
@@ -1192,16 +1192,12 @@ Please specify .xml, .csv or .eid</source>
         <translation>Frequentes" (FAQ), no site do cartão de cidadão:</translation>
     </message>
     <message utf8="true">
-        <source>Developed by Portuguese Government (Agência para a</source>
-        <translation>Desenvolvido pelo Estado Português (Agência para a</translation>
+        <source>Developed by the Portuguese State</source>
+        <translation>Desenvolvido pelo Estado Português</translation>
     </message>
-    <message>
-        <source>Modernização Administrativa IP e Instituto dos Registos</source>
-        <translation>Modernização Administrativa IP e Instituto dos Registos</translation>
-    </message>
-    <message>
-        <source>e do Notariado IP).</source>
-        <translation>e do Notariado IP).</translation>
+    <message utf8="true">
+        <source>(Agência para a Modernização Administrativa, IP and Instituto dos Registos</source>
+        <translation>(Agência para a Modernização Administrativa, IP e Instituto dos Registos</translation>
     </message>
     <message utf8="true">
         <source>Copyright © 2009-2010</source>
@@ -1497,6 +1493,10 @@ Please specify .xml, .csv or .eid</source>
         <source>Sign</source>
         <translation>Assinar</translation>
     </message>
+	<message>
+	<source>Signature(s) succesfully generated</source>
+	<translation>Ficheiro(s) assinado(s) com sucesso</translation>
+	</message>
     <message>
         <source>Signing data...</source>
         <translation>A assinar dados...</translation>

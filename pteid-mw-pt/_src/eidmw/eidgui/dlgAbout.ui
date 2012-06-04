@@ -51,7 +51,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Portuguese ID Card Management.</string>
+    <string>Portuguese Identification Card Management Software</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_4">
@@ -64,7 +64,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>If you have any troubles during the use of this software,</string>
+    <string>For information or support about this software please visit</string>
    </property>
    <property name="textFormat">
     <enum>Qt::AutoText</enum>
@@ -80,23 +80,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>please check the user manuals and FAQ section in this</string>
-   </property>
-   <property name="textFormat">
-    <enum>Qt::PlainText</enum>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_6">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>200</y>
-     <width>361</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>site:</string>
+    <string/>
    </property>
    <property name="textFormat">
     <enum>Qt::PlainText</enum>
@@ -138,7 +122,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>220</y>
+     <y>190</y>
      <width>241</width>
      <height>17</height>
     </rect>
@@ -154,13 +138,13 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>260</y>
+     <y>240</y>
      <width>371</width>
      <height>22</height>
     </rect>
    </property>
    <property name="text">
-    <string>Developed by Portuguese Government (Agência para a</string>
+    <string>Developed by the Portuguese State</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_12">
@@ -180,26 +164,26 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>280</y>
+     <y>270</y>
      <width>381</width>
      <height>22</height>
     </rect>
    </property>
    <property name="text">
-    <string>Modernização Administrativa IP e Instituto dos Registos</string>
+    <string>(Agência para a Modernização Administrativa, IP and Instituto dos Registos</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_14">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>300</y>
+     <y>290</y>
      <width>371</width>
      <height>22</height>
     </rect>
    </property>
    <property name="text">
-    <string>e do Notariado IP).</string>
+    <string>e do Notariado, IP).</string>
    </property>
   </widget>
  </widget>

@@ -53,11 +53,13 @@ private:
     MyListView *view;
     QProgressDialog *pdialog;
     QFutureWatcher<void> FutureWatcher;
+	bool success;
 
     void SignListView (QStringList list);
     void runsign(const char ** paths, unsigned int n_paths, const char *output_path, bool timestamp);
     void run_multiple_sign(const char**, unsigned int, const char*, bool);
     void ShowErrorMsgBox();
+	void ShowSuccessMsgBox();
 
 };
 
