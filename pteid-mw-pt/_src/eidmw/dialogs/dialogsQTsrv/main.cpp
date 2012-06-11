@@ -162,14 +162,14 @@ int main(int argc, char *argv[])
 								Header += " ";
 								Header += GETQSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic);
 								Header += "\n";
-								Header += GETQSTRING_DLG(PleaseEnterYourPin);
+						/*		Header += GETQSTRING_DLG(PleaseEnterYourPin);
 								Header += ", ";
 								Header += GETQSTRING_DLG(ToContinueOrClickTheCancelButton);
 								Header += "\n\n";
 								Header += GETQSTRING_DLG(Warning);
 								Header += " ";
 								Header += GETQSTRING_DLG(IfYouOnlyWantToLogOnToA);
-								Header += "\n";
+								Header += "\n"; */
 								break;
 							default:
 								Header = GETQSTRING_DLG(PleaseEnterYourPin);

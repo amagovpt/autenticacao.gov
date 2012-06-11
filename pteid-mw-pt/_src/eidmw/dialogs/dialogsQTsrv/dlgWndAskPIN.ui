@@ -252,7 +252,7 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>220</x>
      <y>200</y>
      <width>71</width>
      <height>27</height>
@@ -266,9 +266,9 @@
    <property name="geometry">
     <rect>
      <x>220</x>
-     <y>90</y>
+     <y>70</y>
      <width>171</width>
-     <height>71</height>
+     <height>90</height>
     </rect>
    </property>
    <property name="sizePolicy">
