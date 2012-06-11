@@ -528,7 +528,7 @@ void eIDMW::DeleteFile(const char *csFilename){
 void eIDMW::CallQTServer(const DlgFunctionIndex index,
 			   const char *csFilename){
   char csCommand[100];
-  sprintf(csCommand,"%s %i %s ",csServerName.c_str(),index,csFilename);
+  sprintf(csCommand,"%s/%s %i %s ", "/usr/local/bin", csServerName.c_str(),index,csFilename);
   int code = system(csCommand);
   if(code != 0) {
     MWLOG(g_bSystemCallsFail ? LEV_WARN : LEV_ERROR,
