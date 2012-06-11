@@ -690,7 +690,8 @@ int main(int argc, char *argv[])
 												   dlg);
 		
 					MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : dlgWndPinpadInfo created", argv[0]);
-                    dlg->raise();
+					dlg->show();
+                   			dlg->raise();
 					dlg->exec();
 
 					if (dlgInfo) 
