@@ -224,10 +224,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_ui.setupUi(this);
 
 	setFixedSize(830, 630);
-	m_ui.menubar->setVisible(false);
 	m_ui.wdg_submenu_card->setVisible(false);
-
-	InitLanguageMenu();
 
 	Qt::WindowFlags flags = windowFlags();
 	flags ^= Qt::WindowMaximizeButtonHint;
@@ -343,6 +340,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 bool MainWnd::eventFilter(QObject *object, QEvent *event)
 {
+
 	if (event->type() == QEvent::MouseButtonRelease)
 	{
 
@@ -558,9 +556,11 @@ void MainWnd::restoreWindow( void )
 		{
 			loadCardData();
 		}
-		this->activateWindow();
+
 	}
 	this->showNormal();
+	this->raise();
+	this->setFocus();
 }
 //*****************************************************
 // update the readerlist. In case a reader is added to the machine
@@ -3914,50 +3914,6 @@ void MainWnd::setLanguageMenu( GenPur::UI_LANGUAGE language)
 	}
 }
 
-//**************************************************
-// Initialize the language menu.
-// Depending on the .qm files found we add menu items.
-// It is assumed the .qm files are located with the exe.
-// The translation files have the format:
-// <prefix><language>.qm
-// with the language a 2-character language string
-//**************************************************
-void MainWnd::InitLanguageMenu( void )
-{
-	QDir directory(m_Settings.getExePath());
-
-	QString filePrefix(TRANSLATION_FILE_PREFIX);
-
-	QStringList FileFilters;
-	FileFilters << filePrefix + "*.qm";
-	QStringList fileList = directory.entryList(FileFilters,QDir::Files);
-
-	for (int x=0;x<fileList.size();x++)
-	{
-
-		QString language = fileList[x].mid(filePrefix.length(),2);
-		QString filename = filePrefix + language + ".qm";
-
-		if ( "eidmw_nl.qm" == fileList[x])
-		{
-			QString LanguageName = tr("&Portuguese");
-			QAction *action1 = new QAction(LanguageName,this);
-			m_LanguageActions[GenPur::LANG_NL]=action1;
-			action1->setCheckable(true);
-			m_ui.menuLanguage->addAction(action1);
-			connect(action1, SIGNAL( triggered() ), this, SLOT(setLanguageNl()) );
-		}
-		else if( "eidmw_en.qm" == fileList[x])
-		{
-			QString LanguageName = tr("&English");
-			QAction *action1 = new QAction(LanguageName,this);
-			m_LanguageActions[GenPur::LANG_EN]=action1;
-			action1->setCheckable(true);
-			m_ui.menuLanguage->addAction(action1);
-			connect(action1, SIGNAL( triggered() ), this, SLOT(setLanguageEn()) );
-		}
-	}
-}
 
 //**************************************************
 // set tray icon corresponding to card(s) in the reader(s)

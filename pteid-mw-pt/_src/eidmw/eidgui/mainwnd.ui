@@ -2369,41 +2369,6 @@ font: 10pt &quot;Arial&quot;;</string>
     </widget>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>925</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menu_File">
-    <property name="title">
-     <string>Card</string>
-    </property>
-    <addaction name="actionReload_eID"/>
-    <addaction name="actionPrinter_Settings"/>
-    <addaction name="separator"/>
-    <addaction name="actionE_xit"/>
-   </widget>
-   <widget class="QMenu" name="menu_Tools">
-    <property name="title">
-     <string>&amp;Tools</string>
-    </property>
-    <addaction name="separator"/>
-    <addaction name="actionOptions"/>
-    <addaction name="separator"/>
-   </widget>
-   <widget class="QMenu" name="menuLanguage">
-    <property name="title">
-     <string>Language</string>
-    </property>
-   </widget>
-   <addaction name="menu_File"/>
-   <addaction name="menu_Tools"/>
-   <addaction name="menuLanguage"/>
-  </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionE_xit">
    <property name="icon">
