@@ -55,10 +55,14 @@ private:
     QImage *background;
     QList<QImage> imageList;
     QByteArray image;
+    QFutureWatcher<void> FutureWatcher;
+    QProgressDialog *pdialog;
 
     bool addressPINRequest_triggered(CardInformation& CI_Data);
+    void ShowErrorMsgBox();	 
+    void ShowSuccessMsgBox();	 
     const char * persodata_triggered();
-    void drawpdf(CardInformation& CI_Data, int format, const char *filepath);
+    bool drawpdf(CardInformation& CI_Data, int format, const char *filepath);
     cairo_t *createPage(int format, bool firstPage, const char *filepath, cairo_t *crt);
 };
 

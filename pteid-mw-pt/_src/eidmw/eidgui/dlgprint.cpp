@@ -71,11 +71,61 @@ dlgPrint::~dlgPrint()
 {
 }
 
+char *QStringToCString(QString &string)
+{
+
+            char * cpychar = new char[string.length()*2];
+#ifdef WIN32
+            strcpy(cpychar, string.toStdString().c_str());
+#else
+            strcpy(cpychar, string.toUtf8().constData());
+#endif
+	return cpychar;
+}
+
+void CenterParent(QWidget* parent, QWidget* child) 
+{
+	QPoint centerparent(             
+			parent->x() + ((parent->frameGeometry().width() - child->frameGeometry().width()) /2),             
+			parent->y() + ((parent->frameGeometry().height() - child->frameGeometry().height()) /2));      
+
+	QDesktopWidget * pDesktop = QApplication::desktop();     
+	QRect sgRect = pDesktop->screenGeometry(pDesktop->screenNumber(parent));     
+	QRect childFrame = child->frameGeometry(); 
+
+	if(centerparent.x() < sgRect.left())         
+		centerparent.setX(sgRect.left());     
+	else if((centerparent.x() + childFrame.width()) > sgRect.right()) 
+		centerparent.setX(sgRect.right() - childFrame.width()); 
+
+	if(centerparent.y() < sgRect.top()) 
+		centerparent.setY(sgRect.top());     
+	else if((centerparent.y() + childFrame.height()) > sgRect.bottom()) 
+		centerparent.setY(sgRect.bottom() - childFrame.height()); 
+
+	child->move(centerparent);
+}
+
+bool SignXades_wrapper(PTEID_EIDCard * card, const char ** files_to_sign, QString &outputsign)
+{
+
+	try
+	{
+		card->SignXades(files_to_sign, 1, QStringToCString(outputsign));
+	}
+	catch(...)
+	{
+		return false;
+	}
+	return true;
+}
+
 void dlgPrint::on_pbGeneratePdf_clicked( void )
 {
     CardInformation cdata = m_CI_Data;
     QString pdffilepath;
     QString defaultfilepath;
+    bool res = false;	
 
     defaultfilepath = QDir::homePath();
     try
@@ -101,22 +151,21 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
             nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
 
-            drawpdf(cdata, PDF ,nativepdftmp.toStdString().c_str());
+            char * cpychar = QStringToCString(nativepdftmp);
+            drawpdf( cdata, PDF , cpychar);
 
-            char *cpychar;
             const char **files_to_sign = new const char*[1];
 
-            cpychar = new char[500];
-#ifdef WIN32
-            strcpy(cpychar, nativepdftmp.toStdString().c_str());
-#else
-            strcpy(cpychar, nativepdftmp.toUtf8().constData());
-#endif
-            files_to_sign[0] = cpychar;
+	    files_to_sign[0] = cpychar;
 
-            PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Pdf File to Sign: %s", files_to_sign[0]);
+	    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Pdf File to Sign: %s", files_to_sign[0]);
 
-            SignXades = Card->SignXades(files_to_sign, 1, outputsign.toStdString().c_str());
+	    QFuture<bool> new_thread = QtConcurrent::run(SignXades_wrapper, Card, files_to_sign, outputsign);
+	    this->FutureWatcher.setFuture(new_thread);
+
+	    pdialog->exec();
+	    res = new_thread.result();
+
         } else {
             QString nativepdfpath;
 
@@ -130,14 +179,18 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
             nativepdfpath = QDir::toNativeSeparators(pdffilepath);
 
-            drawpdf(cdata, PDF ,nativepdfpath.toStdString().c_str());
+            res = drawpdf(cdata, PDF, QStringToCString(nativepdfpath));
         }
     }	catch (PTEID_Exception &e) {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "GeneratePdf failed");
         QString msg(tr("General exception"));
     }
 
-	this->close();
+    if (res)
+	    ShowSuccessMsgBox();
+    else 
+	    ShowErrorMsgBox();	
+    this->close();
 
 }
 
@@ -148,7 +201,12 @@ void dlgPrint::on_pbPrint_clicked( void )
 	CardInformation cdata = m_CI_Data;
 	imageList.clear();
 
-	drawpdf(cdata, PNG , "");
+	bool res = drawpdf(cdata, PNG , "");
+    	if (!res)
+	{ 
+	    ShowErrorMsgBox();
+	    return;	
+	}
 	QPrinter printer;
 	QPrintDialog *dlg = new QPrintDialog(&printer,0);
 	if(dlg->exec() == QDialog::Accepted) {
@@ -251,6 +309,44 @@ const char * dlgPrint::persodata_triggered()
 	}
 }
 
+//The argument needs to be a PTEID_Pin * because
+// this class has no copy construtor which is needed for the QtConcurrent operation 
+bool verifyPin_wrapper(PTEID_Pin *pin)
+{
+
+	unsigned long triesLeft = -1;
+	const char * csPin = "";
+	bool res = false;
+	try
+	{
+		res = pin->verifyPin( csPin, triesLeft, true);
+	}
+	catch(PTEID_Exception &e)
+	{ 
+		res = false;  
+	}
+
+	return res;
+}
+
+void dlgPrint::ShowSuccessMsgBox()
+{
+
+	QString caption  = tr("Export / Print");
+	QString msg = tr("PDF file successfully generated");
+	QMessageBox *msgBoxp = new QMessageBox(QMessageBox::Information, caption, msg, 0, this);
+	msgBoxp->exec();
+}
+
+void dlgPrint::ShowErrorMsgBox()
+{
+
+	QString caption  = tr("Export / Print");
+    QString msg = tr("Error Generating PDF File!");
+  	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
+  	msgBoxp.exec();
+}
+
 bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 {
 	try
@@ -260,8 +356,11 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 		PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
 		PTEID_Pin&		Pin	= Card->getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
 
-		unsigned long triesLeft = -1;
-		bool		  bResult   = Pin.verifyPin("",triesLeft);
+		QFuture<bool> new_thread = QtConcurrent::run(verifyPin_wrapper, &Pin);
+		this->FutureWatcher.setFuture(new_thread);
+
+		pdialog->exec();
+		bool bResult = new_thread.result();
 
 		QString msg = bResult ? tr("PIN verification passed"):tr("PIN verification failed");
 		
@@ -285,6 +384,8 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 	}
 	return true;
 }
+
+
 
 
 double lineSize(cairo_t *ct, const QString &str){
@@ -405,11 +506,29 @@ static cairo_status_t write_png_stream_to_Qimage (void *in_closure, const unsign
 }
 
 
-void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepath)
+
+bool dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepath)
 {
 	cairo_t *cr;
 	cairo_surface_t *idphoto;
 	int w, h;
+
+	pdialog = new QProgressDialog();
+#ifdef _WIN32
+	pdialog->setWindowTitle(tr("Export PDF / Print"));
+#else
+	pdialog->setWindowFlags(Qt::Popup);
+	pdialog->setWindowModality(Qt::WindowModal);
+	// We need to reset geometry because in Linux/Xorg
+	// the progress popup would be positioned at (0, 0)
+	CenterParent(this, pdialog);
+#endif
+
+	pdialog->setCancelButton(NULL);
+	pdialog->setMinimum(0);
+	pdialog->setMaximum(0);
+	connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
+
 
 	cr = createPage(format, true, filepath, NULL);
 
@@ -513,7 +632,10 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 	//////////////////////////////Address FIELDS///////////////////////////
 	if (ui.chboxAddress->isChecked())
 	{
-		addressPINRequest_triggered(CI_Data);
+		bool res = addressPINRequest_triggered(CI_Data);
+		if (!res)
+			return false;
+
 		tFieldMap& AddressFields = CI_Data.m_AddressInfo.getFields();
 
 		////ADDRESS District
@@ -658,7 +780,7 @@ void dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 	cairo_surface_destroy(cairo_get_target(cr));
 	cairo_destroy(cr);
 	delete background;
-	return;
+	return true;
 }
 
 

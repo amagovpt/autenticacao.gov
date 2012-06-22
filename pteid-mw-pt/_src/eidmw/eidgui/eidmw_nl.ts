@@ -132,7 +132,6 @@
     </message>
     <message>
         <source>Export / Print</source>
-        <translation>Exportar/Imprimir</translation>
     </message>
     <message>
         <source>Exit</source>
@@ -1426,6 +1425,20 @@ Please specify .xml, .csv or .eid</source>
         <source>PIN verification failed</source>
         <translation>O PIN introduzido está errado!</translation>
     </message>
+	   <message>
+        <source>Export / Print</source>
+		<translation>Exportar/Imprimir</translation>
+
+    </message>
+	<message>
+	<source>PDF file successfully generated</source>
+		<translation>Ficheiro PDF generado com sucesso</translation>
+	</message>
+	<message>
+	<source>Error Generating PDF File!</source>
+		<translation>Erro ao gerar ficheiro PDF!</translation>
+	</message>
+	
     <message>
         <source>No card present</source>
         <translation>Cartão não encontrado</translation>
