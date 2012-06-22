@@ -404,7 +404,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			show_window_about();
 		}
 	}
-
+	
 	if (event->type() == QEvent::Leave)
 	{
 		if (object == m_ui.wdg_submenu_card || object == m_ui.wdg_submenu_tools || object == m_ui.wdg_submenu_language || object == m_ui.wdg_submenu_help )
@@ -412,6 +412,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			hide_submenus();
 		}
 	}
+
 	return false;
 }
 
@@ -757,8 +758,10 @@ void MainWnd::resizeEvent( QResizeEvent * event )
 	event->accept();
 }
 
+
 void MainWnd::closeEvent( QCloseEvent *event)
 {
+#ifndef __APPLE__
     if ( m_pTrayIcon->isVisible() )
 	{
 		if (m_msgBox)
@@ -782,7 +785,9 @@ void MainWnd::closeEvent( QCloseEvent *event)
         //To avoid problem when restoring the eidgui and clears data
         //loadCardData();
 	}
+#endif
 }
+
 
 //*****************************************************
 // Tray icon activation detection
