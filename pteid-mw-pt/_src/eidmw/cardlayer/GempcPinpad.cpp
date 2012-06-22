@@ -138,7 +138,6 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation,
 	int ioctl2;
 	unsigned int apdu_length=0, length=0 ;
 
-	fprintf(stderr, "Debug: GemPcPinpad - PinCmd() called with tPinOperation= %d\n", operation);
 	CByteArray atr = m_poContext->m_oPCSC.GetATR(m_hCard);
 
 #ifdef WIN32 //Can't get this to work on Linux :(

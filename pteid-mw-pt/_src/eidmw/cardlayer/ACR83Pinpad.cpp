@@ -78,7 +78,6 @@ CByteArray ACR83Pinpad::PinCmd(tPinOperation operation,
     int ioctl2;
     unsigned int apdu_length=0, length=0 ;
 
-	printf("Debug: ACR83 - PinCmd() called with tPinOperation= %d\n", operation);
 	CByteArray atr = m_poContext->m_oPCSC.GetATR(m_hCard);
 
         //For IAS cards we need to VerifyPIN before Modify
