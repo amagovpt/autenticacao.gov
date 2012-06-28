@@ -1432,7 +1432,7 @@ Please specify .xml, .csv or .eid</source>
     </message>
 	<message>
 	<source>PDF file successfully generated</source>
-		<translation>Ficheiro PDF generado com sucesso</translation>
+		<translation>Ficheiro PDF gerado com sucesso</translation>
 	</message>
 	<message>
 	<source>Error Generating PDF File!</source>
