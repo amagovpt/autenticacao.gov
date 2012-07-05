@@ -9,14 +9,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>406</width>
-    <height>358</height>
+    <width>421</width>
+    <height>347</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="maximumSize">
    <size>
-    <width>550</width>
-    <height>500</height>
+    <width>1024</width>
+    <height>800</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -50,6 +56,12 @@
      <height>22</height>
     </rect>
    </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="text">
     <string>Portuguese Identification Card Management Software</string>
    </property>
@@ -59,9 +71,21 @@
     <rect>
      <x>20</x>
      <y>160</y>
-     <width>371</width>
+     <width>400</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>400</width>
+     <height>21</height>
+    </size>
    </property>
    <property name="text">
     <string>For information or support about this software please visit</string>
@@ -91,7 +115,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>541</width>
+     <width>421</width>
      <height>91</height>
     </rect>
    </property>
@@ -170,7 +194,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>(Agência para a Modernização Administrativa, IP and Instituto dos Registos</string>
+    <string>(Agência para a Modernização Administrativa, IP and</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_14">
@@ -183,7 +207,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>e do Notariado, IP).</string>
+    <string>Instituto dos Registos e do Notariado, IP).</string>
    </property>
   </widget>
  </widget>

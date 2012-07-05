@@ -1195,8 +1195,8 @@ Please specify .xml, .csv or .eid</source>
         <translation>Desenvolvido pelo Estado Português</translation>
     </message>
     <message utf8="true">
-        <source>(Agência para a Modernização Administrativa, IP and Instituto dos Registos</source>
-        <translation>(Agência para a Modernização Administrativa, IP e Instituto dos Registos</translation>
+        <source>(Agência para a Modernização Administrativa, IP and</source>
+        <translation>(Agência para a Modernização Administrativa, IP e</translation>
     </message>
     <message utf8="true">
         <source>Copyright © 2009-2010</source>
