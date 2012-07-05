@@ -761,6 +761,7 @@ void MainWnd::resizeEvent( QResizeEvent * event )
 
 void MainWnd::closeEvent( QCloseEvent *event)
 {
+	printf("closeEvent() called");
 #ifndef __APPLE__
     if ( m_pTrayIcon->isVisible() )
 	{
@@ -4292,10 +4293,17 @@ void MainWnd::changeEvent(QEvent *event)
 		QWindowStateChangeEvent* ev = (QWindowStateChangeEvent*)event;	
 		if (ev->oldState()== Qt::WindowNoState)
 		{
-			QApplication::postEvent(this, new QCloseEvent());
+
+			m_pMinimizeAction->setEnabled(false);
+			m_pRestoreAction->setEnabled(true);
+			event->ignore();
+			//QApplication::postEvent(this, new QCloseEvent());
 		}
 		else if (ev->oldState()==Qt::WindowMinimized)
 		{
+			m_pMinimizeAction->setEnabled(true);
+			m_pRestoreAction->setEnabled(false);
+			event->ignore();
 		}
 	}
 	else
