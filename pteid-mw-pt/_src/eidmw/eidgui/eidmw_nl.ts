@@ -1164,9 +1164,21 @@ Please specify .xml, .csv or .eid</source>
         <translation>Sim</translation>
     </message>
     <message>
+        <source>Warning</source>
+        <translation>Aviso</translation>
+</message>
+	<message>
+	<source>Your Linux distribution is not supported by Auto-updates</source>
+	<source>A sua distribuição não é suportada pelas Actualizações Automáticas</source>
+	</message>
+    <message>
         <source>Do you want to check for updates?</source>
         <translation>Deseja verificar se existem actualizações disponíveis?</translation>
-    </message>
+</message>
+<message>
+	<source>No updates available at the moment</source>
+	<translation>Não existem Actualizações de momento</translation>
+</message>
 </context>
 <context>
     <name>dlgAbout</name>

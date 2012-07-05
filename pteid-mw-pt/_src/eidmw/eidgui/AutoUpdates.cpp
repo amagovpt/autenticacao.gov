@@ -298,10 +298,9 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
         ChooseVersion(distrover, archver);
         return true;
 	} else {
-		std::string titlenoup = "Actualizações";
-		std::string infotextnoup = "Não existem Actualizações de momento!";
 
-		QMessageBox msgBoxnoupdates(QMessageBox::Information, QString::fromUtf8(titlenoup.c_str()), QString::fromUtf8(infotextnoup.c_str()), 0, this);
+		QMessageBox msgBoxnoupdates(QMessageBox::Information, tr("Auto-update"),
+			       	tr("No updates available at the moment."), 0, this);
 		msgBoxnoupdates.exec();
 		return false;
 	}
@@ -419,9 +418,8 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 
 	if (distro == "unsupported")  
 	{
-	  	std::string Pmsgcaption = "Aviso";
-	  	std::string Pmsgbody = "A sua distribuição não é suportada pelo Auto Update.";
-	  	QMessageBox msgBoxp(QMessageBox::Warning, QString::fromUtf8(Pmsgcaption.c_str()), QString::fromUtf8(Pmsgbody.c_str()), 0, this);
+	  	QMessageBox msgBoxp(QMessageBox::Warning, tr("Warning"), 
+			tr("Your Linux distribution is not supported by Auto-updates"), 0, this);
 	  	msgBoxp.exec();
 	}
 
