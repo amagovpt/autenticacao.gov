@@ -464,7 +464,6 @@ private:
 	GenPur::UI_LANGUAGE		m_Language;				//!< current UI language
 	CardInformation			m_CI_Data;				//!< card information being retrieved
 
-	QMap<GenPur::UI_LANGUAGE,QAction*>	m_LanguageActions;		//!< array with actions for each language item in the menu
 	tCallBackHandles		m_callBackHandles;
 	tCallBackData			m_callBackData;
 	QString					m_CurrReaderName;		//!< the current reader we're using

@@ -254,8 +254,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	m_pPrinter	= new QPrinter();
 
-	setLanguageMenu(m_Language);		// check the language in the language menu
-
 	Show_Splash();
 	//------------------------------------
 	//SysTray
@@ -3882,42 +3880,7 @@ void MainWnd::setLanguage(GenPur::UI_LANGUAGE language)
 	{
 		m_Language = lngLoaded;					// keep what language we are in
 	}
-	setLanguageMenu(lngLoaded);					// set the language menu according to the loaded language
-	//showTabs();
-}
-
-//**************************************************
-// change the language of the interface to the given language
-//**************************************************
-void MainWnd::setLanguageMenu(QString const& strLang)
-{
-	setLanguageMenu(GenPur::getLanguage(strLang));		// set the correct menu item checked
-}
-//**************************************************
-// Set the language menu item 
-//**************************************************
-void MainWnd::setLanguageMenu( GenPur::UI_LANGUAGE language)
-{
-	//----------------------------------------------
-	// remove the check marks on the menu
-	//----------------------------------------------
-
-	for (QMap<GenPur::UI_LANGUAGE,QAction*>::iterator it = m_LanguageActions.begin()
-			; it != m_LanguageActions.end()
-			; it++
-	)
-	{
-		(*it)->setChecked(false);
-	}
-
-	//----------------------------------------------
-	// set the language check mark and write the setting
-	//----------------------------------------------
-	if (m_LanguageActions.end() != m_LanguageActions.find(language))
-	{
-		m_LanguageActions[language]->setChecked(true);
-		m_Settings.setGuiLanguage(language);
-	}
+	m_Settings.setGuiLanguage(language);
 }
 
 
