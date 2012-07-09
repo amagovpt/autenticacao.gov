@@ -300,7 +300,7 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	} else {
 
 		QMessageBox msgBoxnoupdates(QMessageBox::Information, tr("Auto-update"),
-			       	tr("No updates available at the moment."), 0, this);
+			       	tr("No updates available at the moment"), 0, this);
 		msgBoxnoupdates.exec();
 		return false;
 	}
