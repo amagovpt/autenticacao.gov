@@ -438,29 +438,29 @@
 	<DirectoryRef Id="SystemFolder">
 	  
 	  <Component Win64="no" Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
-        <File Id="pteidapplayer.dll" Name="pteidapplayer.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\pteidapplayer.dll" />
-        <File Id="pteidcardlayer.dll" Name="pteidcardlayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\release\pteidcardlayer.dll" />
-        <File Id="pteidcommon.dll" Name="pteidcommon.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\release\pteidcommon.dll" />
-        <File Id="pteidDlgsWin32.dll" Name="pteidDlgsWin32.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\release\pteidDlgsWin32.dll" />
+        <File Id="pteidapplayer.dll" Name="pteidapplayer.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\pteidapplayer.dll" />
+        <File Id="pteidcardlayer.dll" Name="pteidcardlayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\pteidcardlayer.dll" />
+        <File Id="pteidcommon.dll" Name="pteidcommon.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\pteidcommon.dll" />
+        <File Id="pteidDlgsWin32.dll" Name="pteidDlgsWin32.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\pteidDlgsWin32.dll" />
       </Component>
 
 		<Component Win64="no" Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F8}" SharedDllRefCount="yes">
-        <File Id="libeay32.dll" Name="libeay32.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\libeay32.dll" />
-        <File Id="ssleay32.dll" Name="ssleay32.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\release\ssleay32.dll" />
+        <File Id="libeay32.dll" Name="libeay32.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\libeay32.dll" />
+        <File Id="ssleay32.dll" Name="ssleay32.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\ssleay32.dll" />
       </Component>
 
 		<Component Win64="no" Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
-        <File Id="xercesc_3_1.dll" Name="xerces-c_3_1.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\xerces-c_3_1.dll" />
+        <File Id="xercesc_3_1.dll" Name="xerces-c_3_1.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\xerces-c_3_1.dll" />
       </Component>
 
       <!--Our Build of LibCurl - custom build options to remove unneeded features-->
 		<Component Win64="no" Id="Curl" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
-        <File Id="libcurl.dll" Name="libcurl.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\release\libcurl.dll" ></File>
+        <File Id="libcurl.dll" Name="libcurl.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\libcurl.dll" ></File>
       </Component>
 
 		<Component Win64="no" Id="CSP" Guid="{54153442-D4CE-4DE6-9321-1BAC5DE4C725}" SharedDllRefCount="yes">
-        <File Id="beidCSP.dll" Name="beidCSP.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\beidcsp.dll" />
-        <File Id="beidCSPlib.dll" Name="beidCSPlib.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\release\beidCSPlib.dll" />
+        <File Id="beidCSP.dll" Name="beidCSP.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\beidcsp.dll" />
+        <File Id="beidCSPlib.dll" Name="beidCSPlib.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\beidCSPlib.dll" />
       </Component>
 
 		<Component Win64="no" Id="FreeImage" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F64" SharedDllRefCount="yes">
@@ -497,7 +497,7 @@
 	  </Component>
 
 		<Component Id="XMLSecurity_64" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F66" SharedDllRefCount="yes">
-			<File Id="xsec_1_6_64.dll" Name="xsec_1_6.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\xsec_1_6.dll" />
+			<File Id="xsec_1_6_64.dll" Name="xsec_1_6.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\xsec_1_6.dll" />
 		</Component>
 
 		<Component Id="Runtime35ThirdPartyOpenSSL_64" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
@@ -918,7 +918,6 @@
       <Custom Action="NotForceCleanup" Before="PteidCleanup"><![CDATA[CLEANUP_FORCE<>1 OR NOT CLEANUP_FORCE]]></Custom>
      -->
 	  <Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
-		<Custom Action="CertificateRegistration" After="InstallFiles">NOT Installed</Custom>
 		<Custom Action="MinidriverManualInstall" After="InstallFiles"> NOT Installed and VersionNT = 600</Custom>
 
       <ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>

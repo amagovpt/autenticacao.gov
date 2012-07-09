@@ -337,7 +337,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /Y ..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName).dll ..\..\ThirdParty\pteid_sdk\3.5\Java\pteid$(ProjectName).dll"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>

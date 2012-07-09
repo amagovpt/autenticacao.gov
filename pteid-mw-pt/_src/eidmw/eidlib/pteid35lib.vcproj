@@ -208,7 +208,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;../applayer;../common;../cardlayer;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;../applayer;../common;&quot;C:\Users\a\pteid-mw-pt\_src\eidmw\dialogs&quot;;../cardlayer;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;"
 				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_EXPORTS"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="true"
