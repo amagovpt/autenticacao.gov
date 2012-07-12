@@ -46,16 +46,8 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 
 	QString Title;
 
-	//if( DApplic == DLG_APP_BELPIC )
-	//{
 	this->setWindowIcon( QIcon( ":/Resources/ICO_CARD_EID_PLAIN_16x16.png" ) );
 
-	//	Title+=QString::fromWCharArray(GETSTRING_DLG(Belpic));
-	//	Title+= ": ";
-	//}
-	//else
-	//{
-	//}
 	if( PinPusage == DLG_PIN_SIGN )
 	{
 		Title+=QString::fromWCharArray(GETSTRING_DLG(SigningWith));
@@ -72,19 +64,19 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 
 	ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
 	ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
-    ui.lblPINName->setText( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
-    ui.lblPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
-    ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
-    ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
+	ui.lblPINName->setText( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
+	ui.lblPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
+	ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
+	ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
 
 	ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
 	ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
 	ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
 	ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
 
-    if( PinPusage == DLG_PIN_SIGN )
+	if( PinPusage == DLG_PIN_SIGN )
 		this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin.png);");
-    else
+	else
 		this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin.png);");
 
 	m_ulPinMinLen = pinInfo.ulMinLen;
@@ -92,61 +84,21 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 
 	m_UseKeypad = UseKeypad;
 
-	if( m_UseKeypad )
+	ui.fraPIN_Keypad->setVisible( false );
+
+	if( !PINName.isEmpty() )
 	{
-		QList<QToolButton *> allTBT = ui.fraPIN_Keypad->findChildren<QToolButton *>();
-		for (int i = 0; i < allTBT.size(); ++i) 
-		{
-			allTBT.at(i)->setMinimumSize( KP_BTN_SIZE, KP_BTN_SIZE );
-			allTBT.at(i)->setIconSize( QSize( KP_BTN_SIZE, KP_BTN_SIZE ) );
-			allTBT.at(i)->setAutoRaise( true );
-		}
-
-		ui.tbtNUM_1->setIcon( QIcon( ":/Resources/KeyPadButton1.png" ) );
-		ui.tbtNUM_2->setIcon( QIcon( ":/Resources/KeyPadButton2.png" ) );
-		ui.tbtNUM_3->setIcon( QIcon( ":/Resources/KeyPadButton3.png" ) );
-		ui.tbtNUM_4->setIcon( QIcon( ":/Resources/KeyPadButton4.png" ) );
-		ui.tbtNUM_5->setIcon( QIcon( ":/Resources/KeyPadButton5.png" ) );
-		ui.tbtNUM_6->setIcon( QIcon( ":/Resources/KeyPadButton6.png" ) );
-		ui.tbtNUM_7->setIcon( QIcon( ":/Resources/KeyPadButton7.png" ) );
-		ui.tbtNUM_8->setIcon( QIcon( ":/Resources/KeyPadButton8.png" ) );
-		ui.tbtNUM_9->setIcon( QIcon( ":/Resources/KeyPadButton9.png" ) );
-		ui.tbtNUM_0->setIcon( QIcon( ":/Resources/KeyPadButton0.png" ) );
-		ui.tbtClear->setIcon( QIcon( ":/Resources/KeyPadButtonCE.png" ) );
-
-		ui.fraPIN_Normal->setVisible( false );
-		ui.lblHeader->setVisible( false );
-
-		if( !PINName.isEmpty() )
-		{
-			ui.lblPINName_2->setText( PINName );
-			ui.lblPINName_2->setAccessibleName( PINName );
-		}
-		if( pinInfo.ulFlags & PIN_FLAG_DIGITS )
-			ui.txtPIN_2->setValidator(m_PinValidator);
-		else
-			ui.txtPIN_2->setMaxLength( pinInfo.ulMaxLen );
+		ui.lblPINName->setText( PINName );
+		ui.lblPINName->setAccessibleName( PINName );
 	}
-	else
+	if( !Header.isEmpty() )
 	{
-		 ui.fraPIN_Keypad->setVisible( false );
-
-		if( !PINName.isEmpty() )
-		{
-			ui.lblPINName->setText( PINName );
-			ui.lblPINName->setAccessibleName( PINName );
-		}
-		if( !Header.isEmpty() )
-		{
-			ui.lblHeader->setText( Header );
-			ui.lblHeader->setAccessibleName( Header );
-		}
-		if( pinInfo.ulFlags & PIN_FLAG_DIGITS )
-			//lmedinas limit the max pin to 8 digits
-			/*ui.txtPIN->setValidator(m_PinValidator);
-		else*/
-			ui.txtPIN->setMaxLength( 8 );
+		ui.lblHeader->setText( Header );
+		ui.lblHeader->setAccessibleName( Header );
 	}
+	if( pinInfo.ulFlags & PIN_FLAG_DIGITS )
+
+	ui.txtPIN->setMaxLength( 8 );
 }
 
 dlgWndAskPIN::~dlgWndAskPIN()
