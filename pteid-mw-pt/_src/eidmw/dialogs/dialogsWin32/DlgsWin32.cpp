@@ -81,6 +81,23 @@ bool DlgGetKeyPad()
     return (g_UseKeyPad==0 ? false: true);
 }
 
+std::wstring translatePinName(std::wstring &PinName)
+{
+	if(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE)
+		== L"en")
+	{
+	if (PinName.find(L"Autentic") != std::wstring::npos)
+		return std::wstring(L"Authentication PIN");
+	if (PinName.find(L"Assinatura") != std::wstring::npos)
+		return std::wstring(L"Signature PIN");
+	if (PinName.find(L"Morada") != std::wstring::npos)
+		return std::wstring(L"Address PIN");
+	}
+
+	return PinName;
+
+}
+
 	/************************
 	*       DIALOGS
 	************************/
@@ -167,7 +184,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 		}
 
 
-		dlg = new dlgWndAskPIN( pinInfo, usage, sMessage, PINName, DlgGetKeyPad() );
+		dlg = new dlgWndAskPIN( pinInfo, usage, sMessage, translatePinName(PINName), DlgGetKeyPad() );
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
@@ -234,7 +251,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 		Header += PINName;
 		Header += L" ";
 
-		dlg = new dlgWndAskPINs( pin1Info, pin2Info, Header, PINName, DlgGetKeyPad() );
+		dlg = new dlgWndAskPINs( pin1Info, pin2Info, Header, translatePinName(PINName), DlgGetKeyPad() );
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
@@ -288,7 +305,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgBadPin(
 			break;
 		}
 
-		dlg = new dlgWndBadPIN( PINName, ulRemainingTries );
+		dlg = new dlgWndBadPIN( translatePinName(PINName), ulRemainingTries );
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
@@ -466,7 +483,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 		//QString buf = "dlg num: " + QString().setNum( dlgPinPadInfoCollectorIndex );
 		dlgPinPadInfoCollectorIndex++;
 		dlgModal = new dlgWndPinpadInfo( dlgPinPadInfoCollectorIndex, usage,
-			operation, csReader, PINName, sMessage);
+			operation, csReader, translatePinName(PINName), sMessage);
 
 		dlgModal->show();
 		dlgModal->ProcecEvent(WM_PAINT,NULL,NULL);
