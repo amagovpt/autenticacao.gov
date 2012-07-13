@@ -45,9 +45,9 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 	//}
 
     if (operation == DLG_PIN_OP_CHANGE)
-        Title+=QString::fromUtf8("Alterar PIN ");
+        Title+= QString::fromWCharArray(GETSTRING_DLG(ChangeYourPin));
     else if (operation == DLG_PIN_OP_VERIFY)
-        Title+=QString::fromUtf8("Verificar PIN ");
+	Title+=QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPin));
     else
         Title+=QString::fromWCharArray(GETSTRING_DLG(PinpadInfo));
 

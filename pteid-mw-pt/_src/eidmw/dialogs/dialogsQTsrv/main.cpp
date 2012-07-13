@@ -59,7 +59,8 @@ pid_t getPidFromParentid(pid_t parentid, const char *CommandLineToFind);
 
 using namespace eIDMW;
 
-void sigint_handler(int sig){
+void sigint_handler(int sig)
+{
   // this is needed because after the first call
   // to this function, the handler is reset to the
   // unix default
@@ -85,6 +86,29 @@ bool DlgGetKeyPad()
 	}
 	return g_UseKeyPad;
 }
+
+/*
+ * Translate Pin names to english from their native labels 
+ * present on the in-card objects
+ */
+
+QString translatePinName(QString &ptPinName)
+{
+	wstring lang_pref = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
+	if (lang_pref == L"en")
+	{
+		if (ptPinName.contains("Autent"))
+			return QString("Authentication PIN");
+		else if (ptPinName.contains("Assinatura"))
+			return QString("Signature PIN");
+		else if (ptPinName.contains("Morada"))
+			return QString("Address PIN");
+		else return QString("PIN");
+	}
+	else return ptPinName;
+
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -121,29 +145,24 @@ int main(int argc, char *argv[])
 			try 
 			{
 				QString PINName;
-				if( oData->usage == DLG_PIN_UNKNOWN )
+				if(oData->usage == DLG_PIN_UNKNOWN)
 				{
-                    if( wcsstr(oData->pinName,L"PIN da Autentica") != 0 )
-                        PINName=QString::fromUtf8("Pin de Autenticação");
-                    else
-                        PINName = QString::fromWCharArray(oData->pinName);
+					PINName = QString::fromWCharArray(oData->pinName);
 				}
-                else if (oData->usage == DLG_PIN_AUTH)
+				else if (oData->usage == DLG_PIN_AUTH)
 				{
-                    PINName = QString::fromUtf8("PIN da Autenticação");
+					PINName = QString::fromUtf8("PIN da Autenticação");
 				}
-                else if (oData->usage == DLG_PIN_SIGN)
-                {
-                    PINName = QString::fromUtf8("PIN da Assinatura");
-                }
-                else if (oData->usage == DLG_PIN_ADDRESS)
-                {
-                    PINName = QString::fromUtf8("PIN da Morada");
-                }
+				else if (oData->usage == DLG_PIN_SIGN)
+				{
+					PINName = QString::fromUtf8("PIN da Assinatura");
+				}
+				else if (oData->usage == DLG_PIN_ADDRESS)
+				{
+					PINName = QString::fromUtf8("PIN da Morada");
+				}
 
-				//Quickfix for encoding problem! It should be fixed later!
-				//if( wcsstr(oData->pinName,L"PIN da Autentica") != 0 )
-				//	PINName=QString::fromUtf8("Pin de Autenticacao");
+				PINName = translatePinName(PINName);
 
 				QString Header;
 				switch( oData->operation )
@@ -296,13 +315,12 @@ int main(int argc, char *argv[])
                 }
 
 				Header += " ";
-
-				dlg = new dlgWndAskPINs(  
-										oData->pin1Info, 
-										oData->pin2Info, 
-										Header, 
-										PINName, 
-										DlgGetKeyPad() );
+				QString tr_pin = translatePinName(PINName);
+				dlg = new dlgWndAskPINs(oData->pin1Info, 
+						oData->pin2Info, 
+						Header, 
+						tr_pin, 
+						DlgGetKeyPad());
 				if( dlg->exec() ) 
 				{
 				        wcscpy_s(oData->pin1, sizeof(oData->pin1)/sizeof(wchar_t), dlg->getPIN1().c_str());
@@ -316,7 +334,7 @@ int main(int argc, char *argv[])
 				delete dlg;
 				dlg = NULL;
 			}
-			catch( ... )   
+			catch( ... )
 			{
 				if( dlg ) delete dlg;
 				oData->returnValue = DLG_ERR;
@@ -365,11 +383,11 @@ int main(int argc, char *argv[])
 						break;
 				}
 
-				//Quickfix for encoding problem! It should be fixed later!
+		//Quickfix for encoding problem! It should be fixed later!
                 if( wcsstr(oData->pinName,L"PIN da Autentica") != 0 )
                     PINName=QString::fromUtf8("PIN da Autentica\xc3\xa7\xc3\xa3o");
-
-				dlg = new dlgWndBadPIN(	PINName, oData->ulRemainingTries );
+		    QString tr_pin = translatePinName(PINName);
+				dlg = new dlgWndBadPIN(tr_pin, oData->ulRemainingTries);
 				if( dlg->exec() ) 
 				{
 					delete dlg;
@@ -461,7 +479,7 @@ int main(int argc, char *argv[])
 				
 					pid_t subpid=0;
 					
-					for(int i=0;i<10;i++)
+					for(int i=0; i<10; i++)
 					{
 						CThread::SleepMillisecs(100); //Wait for the child process to start
 						if(0 != (subpid = getPidFromParentid(pid, csCommand)))
@@ -519,15 +537,15 @@ int main(int argc, char *argv[])
 							}
 							PINName = QString::fromWCharArray(oInfoData->pinName);
 							break;
-                        case DLG_PIN_AUTH:
-                            PINName = QString::fromUtf8("PIN da Autenticação");
-                            break;
-                        case DLG_PIN_SIGN:
-                            PINName = QString::fromUtf8("PIN da Assinatura");
-                            break;
-                        case DLG_PIN_ADDRESS:
-                            PINName = QString::fromUtf8("PIN da Morada");
-                            break;
+						case DLG_PIN_AUTH:
+							PINName = QString::fromUtf8("PIN de Autenticação");
+							break;
+						case DLG_PIN_SIGN:
+							PINName = QString::fromUtf8("PIN da Assinatura");
+							break;
+						case DLG_PIN_ADDRESS:
+							PINName = QString::fromUtf8("PIN da Morada");
+							break;
 						default:
 							if( wcscmp(oInfoData->pinName,L"") == 0  )
 							{
@@ -685,7 +703,7 @@ int main(int argc, char *argv[])
 												   infoCollectorIndex, 
 												   operation, 
 												   qsReader, 
-												   PINName, 
+												   translatePinName(PINName), 
 												   qsMessage,
 												   dlg);
 		
