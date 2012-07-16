@@ -132,6 +132,7 @@
     </message>
     <message>
         <source>Export / Print</source>
+        <translation>Exportar PDF</translation>
     </message>
     <message>
         <source>Exit</source>
