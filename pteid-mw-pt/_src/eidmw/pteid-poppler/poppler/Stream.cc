@@ -358,7 +358,7 @@ void MemOutStream::printf(const char *format, ...)
 	  //Buffer is full need to reallocate to twice the size
 	buffer = (unsigned char *)grealloc(buffer, buffer_size*2);
 	buffer_size *=2;
-  	fprintf(stderr, "Realloc\tbuffer ptr=%08X, remaining buffer=%d\n", (unsigned int)buffer+used, buffer_size-used);
+  	//fprintf(stderr, "Realloc\tbuffer ptr=%08X, remaining buffer=%d\n", (long)(buffer+used), buffer_size-used);
   	ret = vsnprintf((char *)buffer+used, buffer_size-used, format, argptr);
 
   }

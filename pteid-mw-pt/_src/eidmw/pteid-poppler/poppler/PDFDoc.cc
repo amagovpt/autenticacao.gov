@@ -639,9 +639,9 @@ void PDFDoc::prepareSignature(const char * name, const char *location, const cha
 	//dump_to_file(mem_stream.getData(), (int)mem_stream.size());
 	//
 	long found = 
-		(int)memmem((char *)mem_stream.getData(), mem_stream.size(),
+		(long)memmem((char *)mem_stream.getData(), mem_stream.size(),
 			       	(const void *) needle, sizeof(needle)-1);
-	long haystack = (int)mem_stream.getData();
+	long haystack = (long)mem_stream.getData();
 	if (found == 0)
 		fprintf(stderr, "Warning: can't find /Type /Sig... Abort!!\n");
 	unsigned long offset = found - haystack + 21;
