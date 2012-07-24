@@ -7,7 +7,8 @@ TEMPLATE = subdirs
 
 SUBDIRS += FreeImagePTEiD
 SUBDIRS += xml-security-c-1.6.1
-SUBDIRS += acsccid-1.0.3
+SUBDIRS += pteid-poppler
+
 
 ## list of the subprojects to build:
 ## qmake expects a <NAME>.pro project file in each <NAME> subdirectory
@@ -27,6 +28,8 @@ SUBDIRS +=	pkcs11 \
 	        applayer \
 	        eidlib \
 		eidlibJava_Wrapper
+
+applayer.depends = pteid-poppler		
 
 !isEmpty(BUILD_SDK) {
 SUBDIRS +=  cardlayerTool

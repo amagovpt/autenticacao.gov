@@ -33,6 +33,7 @@ LIBS += -L../lib \
 	    -lcrypto -lssl \
 	    -lxerces-c \
 	    -lfreeimagePTEiD \
+	    -lpteid-poppler \
 	    -lcurl
 
 !macx: LIBS += -Wl,-R,'../lib' -lxml-security-c
@@ -57,6 +58,7 @@ isEmpty(EMULATE_CARDLAYER) {
 DEPENDPATH += .
 INCLUDEPATH += . ../common ../cardlayer ../eidlib ../dialogs ../FreeImagePTEiD/Source ../xml-security-c-1.6.1
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
+INCLUDEPATH += ../pteid-poppler/
 DEFINES += APPLAYER_EXPORTS
 # Input
 HEADERS += \
@@ -108,6 +110,8 @@ SOURCES += \
 	SSLConnection.cpp \
 	static_pteid_certs.cpp \
 	SigVerifier.cpp \
+	sign-pkcs7.cpp \
+	PDFSignature.cpp \
 	EMV-Cap-Helper.cpp \
 
 # Disable annoying and mostly useless gcc warning
