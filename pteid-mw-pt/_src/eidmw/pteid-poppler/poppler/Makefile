@@ -1,4 +1,3 @@
-include Makefile.config
 CFLAGS= -Wall -fPIC -O2 -I.. -I../goo/
 
 SOURCES =		\
@@ -92,6 +91,6 @@ clean:
 	rm -fv libpteid-poppler.so
 
 install:
-	install -s libpteid-poppler.so $(PREFIX)/lib
+	install -s libpteid-poppler.so $(INSTALL_ROOT)/usr/local/bin/
 
 .PHONY:	clean install prepare

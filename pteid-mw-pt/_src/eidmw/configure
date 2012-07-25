@@ -454,13 +454,6 @@ if ($configOptionIdxEnd != -1)
 #############################################################
 print STDERR "$qmakeCmd $qmakeOptions\n" if($verbose > 1);
 
-#Generate Makefile.config for poppler
-open(MYFILE, ">>pteid-poppler/poppler/Makefile.config");
-print MYFILE 'PREFIX=';
-my $prefix = $options{"--prefix"}->[2];
-print MYFILE "$prefix\n";
-close(MYFILE);
-
 system("export PATH=\"" . join(":",split( /\s+/,$options{"--path"}->[2]) ) .":\$PATH\"; ".
        " [ -e Makefile ] && make distclean &> /dev/null ; $qmakeCmd $pro_file $qmakeOptions ");
 
