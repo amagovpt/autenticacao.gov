@@ -2,7 +2,7 @@
 #include "poppler/PDFDoc.h"
 #include "poppler/GlobalParams.h"
 #include "sign-pkcs7.h"
-#include "poppler/goo/GooString.h"
+#include "goo/GooString.h"
 #include "PDFSignature.h"
 #include "MWException.h"
 #include "eidErrors.h"
