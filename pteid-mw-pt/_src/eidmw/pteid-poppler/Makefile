@@ -1,6 +1,9 @@
 all: 
 	cd poppler && make
 
+check:
+
+
 clean:
 	cd poppler && make clean
 
