@@ -91,6 +91,6 @@ clean:
 	rm -fv libpteid-poppler.so
 
 install:
-	install -s libpteid-poppler.so $(INSTALL_ROOT)/usr/local/bin/
+	install -s libpteid-poppler.so $(INSTALL_ROOT)/usr/local/lib/
 
 .PHONY:	clean install prepare
