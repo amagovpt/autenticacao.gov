@@ -28,6 +28,10 @@
 #include "eidlib.h"
 #include "mainwnd.h"
 
+#ifndef WIN32
+#include <unistd.h>
+#endif
+
 #ifdef WIN32
 #include <windows.h>
 #endif
