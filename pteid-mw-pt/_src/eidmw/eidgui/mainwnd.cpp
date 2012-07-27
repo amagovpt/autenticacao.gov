@@ -26,7 +26,11 @@
 #include <QEvent>
 #include <QPixmap>
 #include <QImage>
-#include <stdlib.h>	
+#include <stdlib.h>
+#ifndef _WIN32
+//This has to be explicitly included in gcc4.7
+#include <unistd.h>
+#endif
 #include <time.h>
 
 #ifdef WIN32

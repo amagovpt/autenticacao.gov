@@ -23,7 +23,9 @@
 #include <iostream>
 #include <iterator>
 #include <locale>
-
+#ifndef WIN32
+#include <unistd.h>
+#endif
 #include <stdlib.h>
 
 #ifdef WIN32

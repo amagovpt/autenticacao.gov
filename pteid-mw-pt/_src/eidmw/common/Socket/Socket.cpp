@@ -21,6 +21,10 @@
 #include "../eidErrors.h"
 #include <iostream>
 
+#ifndef _WIN32
+#include <unistd.h>
+#endif
+
 namespace eIDMW
 {
 

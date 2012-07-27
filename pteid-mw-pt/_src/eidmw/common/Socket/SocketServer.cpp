@@ -23,6 +23,7 @@
 #include <errno.h>
 
 #ifndef WIN32
+#include <unistd.h>
 #include <netinet/in.h>
 #include <sys/ioctl.h>
 #include <errno.h>
