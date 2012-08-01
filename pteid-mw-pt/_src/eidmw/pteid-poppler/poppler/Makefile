@@ -71,7 +71,7 @@ FOFI_OBJS := $(subst .cc,.o,$(FOFI_SRC))
 
 all:    libpteid-poppler.so
 
-libpteid-poppler.so: $(OBJS) $(GOO_OBJS) $(FOFI_OBJS)
+libpteid-poppler.so: $(OBJS) $(GOO_OBJS) $(FOFI_OBJS) memmem.o
 	 g++ -shared -o $@ $^ $(LDLIBS) $(LDFLAGS)
 	 cp libpteid-poppler.so ../../lib
 
@@ -80,6 +80,9 @@ libpteid-poppler.so: $(OBJS) $(GOO_OBJS) $(FOFI_OBJS)
 
 ../fofi/%.o : ../fofi/%.cc
 	g++ -o $@ $(CFLAGS) -c $<
+
+memmem.o: memmem.c
+	gcc $(CFLAGS) -c memmem.c
 
 %.o: %.cc
 	g++ $(CFLAGS) -c $<

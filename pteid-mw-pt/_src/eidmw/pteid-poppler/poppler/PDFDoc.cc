@@ -50,8 +50,6 @@
 #include <time.h>
 #ifdef _WIN32
 #include <windows.h>
-//Definition of our own memmem()
-void *memmem(const void *haystack, size_t n, const void *needle, size_t m);
 #endif
 #include <sys/stat.h>
 #include "goo/gstrtod.h"
@@ -76,6 +74,10 @@ void *memmem(const void *haystack, size_t n, const void *needle, size_t m);
 #endif
 #include "PDFDoc.h"
 #include "Hints.h"
+
+//Definition of our own memmem(), generally its only available in Linux
+//and Mac OSX Lion and later so it's better to just use our own implementation
+void *memmem(const void *haystack, size_t n, const void *needle, size_t m);
 
 //------------------------------------------------------------------------
 
