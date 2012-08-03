@@ -26,7 +26,6 @@
 #ifdef ENABLE_PLUGINS
 
 #include "gmem.h"
-#include "GlobalParams.h"
 #include "Object.h"
 #include "PDFDoc.h"
 #include "XpdfPluginAPI.h"

@@ -521,7 +521,6 @@ public:
   FormField* getRootField(int i) const { return rootFields[i]; }
   GooString* getDefaultAppearance() const { return defaultAppearance; }
   VariableTextQuadding getTextQuadding() const { return quadding; }
-  GfxResources* getDefaultResources() const { return defaultResources; }
   Object* getDefaultResourcesObj() { return &resDict; }
 
   FormWidget* findWidgetByRef (Ref aref);

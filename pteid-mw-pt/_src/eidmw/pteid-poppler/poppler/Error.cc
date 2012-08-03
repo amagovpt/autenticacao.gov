@@ -32,7 +32,6 @@
 #include <stddef.h>
 #include <stdarg.h>
 #include "GooString.h"
-#include "GlobalParams.h"
 #include "Error.h"
 
 static const char *errorCategoryNames[] = {
@@ -62,7 +61,7 @@ void CDECL error(ErrorCategory category, int pos, const char *msg, ...) {
   GooString *s;
 
   // NB: this can be called before the globalParams object is created
-  if (!errorCbk && globalParams && globalParams->getErrQuiet()) {
+  if (!errorCbk) {
     return;
   }
   va_start(args, msg);

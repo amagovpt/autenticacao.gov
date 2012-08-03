@@ -39,9 +39,7 @@
 #include "Object.h"
 
 class XRef;
-class Gfx;
 class CharCodeToUnicode;
-class GfxFont;
 class GfxResources;
 class PDFDoc;
 class Form;
@@ -523,10 +521,6 @@ public:
   void incRefCnt();
   void decRefCnt();
 
-  virtual void draw(Gfx *gfx, GBool printing);
-  // Get the resource dict of the appearance stream
-  virtual Object *getAppearanceResDict(Object *dest);
-
   GBool match(Ref *refA)
     { return ref.num == refA->num && ref.gen == refA->gen; }
 
@@ -592,12 +586,6 @@ private:
 protected:
   virtual ~Annot();
   void setColor(AnnotColor *color, GBool fill);
-  void drawCircle(double cx, double cy, double r, GBool fill);
-  void drawCircleTopLeft(double cx, double cy, double r);
-  void drawCircleBottomRight(double cx, double cy, double r);
-  void layoutText(GooString *text, GooString *outBuf, int *i, GfxFont *font,
-		  double *width, double widthLimit, int *charCount,
-		  GBool noReencode);
   void writeString(GooString *str, GooString *appearBuf);
   void createForm(double *bbox, GBool transparencyGroup, Object *resDict, Object *aStream);
   void createResourcesDict(const char *formName, Object *formStream, const char *stateName,
@@ -739,7 +727,6 @@ public:
   AnnotText(PDFDoc *docA, Dict *dict, Object *obj);
   ~AnnotText();
 
-  virtual void draw(Gfx *gfx, GBool printing);
 
   // getters
   GBool getOpen() const { return open; }
@@ -772,7 +759,6 @@ class AnnotMovie: public Annot {
   AnnotMovie(PDFDoc *docA, Dict *dict, Object *obj);
   ~AnnotMovie();
 
-  virtual void draw(Gfx *gfx, GBool printing);
 
   GooString* getTitle() { return title; }
   Movie* getMovie() { return movie; }
@@ -832,7 +818,6 @@ public:
   AnnotLink(PDFDoc *docA, Dict *dict, Object *obj);
   virtual ~AnnotLink();
 
-  virtual void draw(Gfx *gfx, GBool printing);
 
   // getters
   LinkAction *getAction() const { return action; }
@@ -874,9 +859,6 @@ public:
   AnnotFreeText(PDFDoc *docA, Dict *dict, Object *obj);
   ~AnnotFreeText();
 
-  virtual void draw(Gfx *gfx, GBool printing);
-  virtual Object *getAppearanceResDict(Object *dest);
-
   void setAppearanceString(GooString *new_string);
   void setQuadding(AnnotFreeTextQuadding new_quadding);
   void setStyleString(GooString *new_string);
@@ -898,7 +880,6 @@ protected:
 
   void initialize(PDFDoc *docA, Dict *dict);
   static void parseAppearanceString(GooString *da, double &fontsize, AnnotColor* &fontcolor);
-  void generateFreeTextAppearance();
 
   // required
   GooString *appearanceString;      // DA
@@ -936,9 +917,6 @@ public:
   AnnotLine(PDFDoc *docA, PDFRectangle *rect, PDFRectangle *lRect);
   AnnotLine(PDFDoc *docA, Dict *dict, Object *obj);
   ~AnnotLine();
-
-  virtual void draw(Gfx *gfx, GBool printing);
-  virtual Object *getAppearanceResDict(Object *dest);
 
   void setVertices(double x1, double y1, double x2, double y2);
   void setStartEndStyle(AnnotLineEndingStyle start, AnnotLineEndingStyle end);
@@ -1003,7 +981,6 @@ public:
   AnnotTextMarkup(PDFDoc *docA, Dict *dict, Object *obj);
   virtual ~AnnotTextMarkup();
 
-  virtual void draw(Gfx *gfx, GBool printing);
 
   // typeHighlight, typeUnderline, typeSquiggly or typeStrikeOut
   void setType(AnnotSubtype new_type);
@@ -1053,7 +1030,6 @@ public:
   AnnotGeometry(PDFDoc *docA, Dict *dict, Object *obj);
   ~AnnotGeometry();
 
-  virtual void draw(Gfx *gfx, GBool printing);
 
   void setType(AnnotSubtype new_type); // typeSquare or typeCircle
   void setInteriorColor(AnnotColor *new_color);
@@ -1089,7 +1065,6 @@ public:
   AnnotPolygon(PDFDoc *docA, Dict *dict, Object *obj);
   ~AnnotPolygon();
 
-  virtual void draw(Gfx *gfx, GBool printing);
 
   void setType(AnnotSubtype new_type); // typePolygon or typePolyLine
   void setVertices(AnnotPath *path);
@@ -1164,7 +1139,6 @@ public:
   AnnotInk(PDFDoc *docA, Dict *dict, Object *obj);
   ~AnnotInk();
 
-  virtual void draw(Gfx *gfx, GBool printing);
 
   void setInkList(AnnotPath **paths, int n_paths);
 
@@ -1199,7 +1173,6 @@ public:
   AnnotFileAttachment(PDFDoc *docA, Dict *dict, Object *obj);
   ~AnnotFileAttachment();
 
-  virtual void draw(Gfx *gfx, GBool printing);
 
   // getters
   Object *getFile() { return &file; }
@@ -1227,7 +1200,6 @@ public:
   AnnotSound(PDFDoc *docA, Dict *dict, Object *obj);
   ~AnnotSound();
 
-  virtual void draw(Gfx *gfx, GBool printing);
 
   // getters
   Sound *getSound() { return sound; }
@@ -1262,13 +1234,6 @@ public:
   AnnotWidget(PDFDoc *docA, Dict *dict, Object *obj, FormField *fieldA);
   virtual ~AnnotWidget();
 
-  virtual void draw(Gfx *gfx, GBool printing);
-
-  void drawBorder();
-  void drawFormFieldButton(GfxResources *resources, GooString *da);
-  void drawFormFieldText(GfxResources *resources, GooString *da);
-  void drawFormFieldChoice(GfxResources *resources, GooString *da);
-  void generateFieldAppearance ();
 
   AnnotWidgetHighlightMode getMode() { return mode; }
   AnnotAppearanceCharacs *getAppearCharacs() { return appearCharacs; }
@@ -1279,13 +1244,6 @@ public:
 private:
 
   void initialize(PDFDoc *docA, Dict *dict);
-
-  void drawText(GooString *text, GooString *da, GfxResources *resources,
-		GBool multiline, int comb, int quadding,
-		GBool txField, GBool forceZapfDingbats,
-		GBool password=false);
-  void drawListBox(FormFieldChoice *fieldChoice,
-		   GooString *da, GfxResources *resources, int quadding);
 
   Form *form;
   FormField *field;                       // FormField object for this annotation

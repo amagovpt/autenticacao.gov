@@ -52,7 +52,6 @@
 #include "Error.h"
 #include "Object.h"
 #include "Lexer.h"
-#include "GfxState.h"
 #include "Stream.h"
 #include "JBIG2Stream.h"
 #include "Stream-CCITT.h"
@@ -83,6 +82,8 @@ static GBool setDJSYSFLAGS = gFalse;
 #define SEEK_END 2
 #endif
 #endif
+
+#define gfxColorMaxComps 32
 
 //------------------------------------------------------------------------
 // Stream (base class)
@@ -313,8 +314,9 @@ Stream *Stream::makeFilter(char *name, Stream *str, Object *params) {
     }
     str = new JBIG2Stream(str, &globals);
     globals.free();
+    
   } else if (!strcmp(name, "JPXDecode")) {
-    str = new JPXStream(str);
+	str = new JPXStream(str);
   } else {
     error(errSyntaxError, getPos(), "Unknown filter '{0:s}'", name);
     str = new EOFStream(str);
@@ -575,6 +577,7 @@ StreamPredictor::StreamPredictor(Stream *strA, int predictorA,
   nVals = width * nComps;
   pixBytes = (nComps * nBits + 7) >> 3;
   rowBytes = ((nVals * nBits + 7) >> 3) + pixBytes;
+  
   if (width <= 0 || nComps <= 0 || nBits <= 0 ||
       nComps > gfxColorMaxComps ||
       nBits > 16 ||
@@ -582,6 +585,7 @@ StreamPredictor::StreamPredictor(Stream *strA, int predictorA,
       nVals >= (INT_MAX - 7) / nBits) { // check for overflow in rowBytes
     return;
   }
+  
   predLine = (Guchar *)gmalloc(rowBytes);
   memset(predLine, 0, rowBytes);
   predIdx = rowBytes;

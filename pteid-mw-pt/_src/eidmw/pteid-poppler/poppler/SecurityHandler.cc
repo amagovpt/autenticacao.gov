@@ -30,7 +30,6 @@
 #include "PDFDoc.h"
 #include "Decrypt.h"
 #include "Error.h"
-#include "GlobalParams.h"
 #ifdef ENABLE_PLUGINS
 #  include "XpdfPluginAPI.h"
 #endif

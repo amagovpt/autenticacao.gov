@@ -203,44 +203,12 @@ public:
   // Get actions
   Object *getActions(Object *obj) { return actions.fetch(xref, obj); }
 
-  Gfx *createGfx(OutputDev *out, double hDPI, double vDPI,
-		 int rotate, GBool useMediaBox, GBool crop,
-		 int sliceX, int sliceY, int sliceW, int sliceH,
-		 GBool printing,
-		 GBool (*abortCheckCbk)(void *data),
-		 void *abortCheckCbkData);
-
-  // Display a page.
-  void display(OutputDev *out, double hDPI, double vDPI,
-	       int rotate, GBool useMediaBox, GBool crop,
-	       GBool printing,
-	       GBool (*abortCheckCbk)(void *data) = NULL,
-	       void *abortCheckCbkData = NULL,
-               GBool (*annotDisplayDecideCbk)(Annot *annot, void *user_data) = NULL,
-               void *annotDisplayDecideCbkData = NULL);
-
-  // Display part of a page.
-  void displaySlice(OutputDev *out, double hDPI, double vDPI,
-		    int rotate, GBool useMediaBox, GBool crop,
-		    int sliceX, int sliceY, int sliceW, int sliceH,
-		    GBool printing,
-		    GBool (*abortCheckCbk)(void *data) = NULL,
-		    void *abortCheckCbkData = NULL,
-                    GBool (*annotDisplayDecideCbk)(Annot *annot, void *user_data) = NULL,
-                    void *annotDisplayDecideCbkData = NULL);
-
-  void display(Gfx *gfx);
 
   void makeBox(double hDPI, double vDPI, int rotate,
 	       GBool useMediaBox, GBool upsideDown,
 	       double sliceX, double sliceY, double sliceW, double sliceH,
 	       PDFRectangle *box, GBool *crop);
 
-  void processLinks(OutputDev *out);
-
-  // Get the page's default CTM.
-  void getDefaultCTM(double *ctm, double hDPI, double vDPI,
-		     int rotate, GBool useMediaBox, GBool upsideDown);
 
 private:
 

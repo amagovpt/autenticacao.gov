@@ -1,27 +1,16 @@
-CFLAGS= -Wall -fPIC -O2 -I.. -I../goo/
+CFLAGS= -Wall -fPIC -O3 -I.. -I../goo/
 
 SOURCES =		\
-	Annot.cc		\
 	Array.cc 		\
-	BuiltinFont.cc		\
-	BuiltinFontTables.cc	\
+	Annot.cc		\
 	CachedFile.cc		\
 	Catalog.cc 		\
-	CharCodeToUnicode.cc	\
-	CMap.cc			\
 	DateInfo.cc		\
 	Decrypt.cc		\
 	Dict.cc 		\
 	Error.cc 		\
 	FileSpec.cc		\
-	FontEncodingTables.cc	\
 	Form.cc 		\
-	FontInfo.cc		\
-	Function.cc		\
-	Gfx.cc 			\
-	GfxFont.cc 		\
-	GfxState.cc		\
-	GlobalParams.cc		\
 	Hints.cc		\
 	JArithmeticDecoder.cc	\
 	JBIG2Stream.cc		\
@@ -35,7 +24,6 @@ SOURCES =		\
 	Object.cc 		\
 	OptionalContent.cc	\
 	Outline.cc		\
-	OutputDev.cc 		\
 	Page.cc 		\
 	PageTransition.cc	\
 	Parser.cc 		\
@@ -44,22 +32,28 @@ SOURCES =		\
 	PDFDocFactory.cc	\
 	PopplerCache.cc		\
 	ProfileData.cc		\
-	PreScanOutputDev.cc \
 	PSTokenizer.cc		\
 	Rendition.cc		\
 	StdinCachedFile.cc	\
 	StdinPDFDocBuilder.cc	\
 	Stream.cc 		\
-	UnicodeMap.cc		\
-	UnicodeTypeTable.cc	\
 	ViewerPreferences.cc	\
 	XRef.cc			\
-	PSOutputDev.cc		\
-	TextOutputDev.cc	\
 	PageLabelInfo.cc	\
 	SecurityHandler.cc	\
 	Sound.cc	\
-	XpdfPluginAPI.cc
+	XpdfPluginAPI.cc        
+#	UnicodeMap.cc		\
+#	CMap.cc			\
+#	Gfx.cc 			\
+#	GlobalParams.cc		\
+#	GfxFont.cc 		\
+#	GfxState.cc		\
+#	FontInfo.cc		\
+#	UnicodeTypeTable.cc	\
+#	CharCodeToUnicode.cc	\
+#	Function.cc		\
+#	FontEncodingTables.cc	\
 
 GOO_SRC = $(wildcard ../goo/*cc)
 FOFI_SRC = $(wildcard ../fofi/*.cc)
@@ -71,7 +65,7 @@ FOFI_OBJS := $(subst .cc,.o,$(FOFI_SRC))
 
 all:    libpteid-poppler.so
 
-libpteid-poppler.so: $(OBJS) $(GOO_OBJS) $(FOFI_OBJS) memmem.o
+libpteid-poppler.so: $(OBJS) $(GOO_OBJS) memmem.o
 	 g++ -shared -o $@ $^ $(LDLIBS) $(LDFLAGS)
 	 cp libpteid-poppler.so ../../lib
 

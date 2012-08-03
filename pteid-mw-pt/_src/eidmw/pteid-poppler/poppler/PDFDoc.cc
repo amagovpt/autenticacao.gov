@@ -55,14 +55,12 @@
 #include "goo/gstrtod.h"
 #include "goo/GooString.h"
 #include "poppler-config.h"
-#include "GlobalParams.h"
 #include "Page.h"
 #include "Catalog.h"
 #include "Stream.h"
 #include "XRef.h"
 #include "Linearization.h"
 #include "Link.h"
-#include "OutputDev.h"
 #include "Error.h"
 #include "ErrorCodes.h"
 #include "Lexer.h"
@@ -699,57 +697,6 @@ unsigned int PDFDoc::getSignedVersionLen()
 	return preparedSigLength;
 }
 
-void PDFDoc::displayPage(OutputDev *out, int page,
-			 double hDPI, double vDPI, int rotate,
-			 GBool useMediaBox, GBool crop, GBool printing,
-			 GBool (*abortCheckCbk)(void *data),
-			 void *abortCheckCbkData,
-                         GBool (*annotDisplayDecideCbk)(Annot *annot, void *user_data),
-                         void *annotDisplayDecideCbkData) {
-  if (globalParams->getPrintCommands()) {
-    printf("***** page %d *****\n", page);
-  }
-
-  if (getPage(page))
-    getPage(page)->display(out, hDPI, vDPI,
-				    rotate, useMediaBox, crop, printing,
-				    abortCheckCbk, abortCheckCbkData,
-				    annotDisplayDecideCbk, annotDisplayDecideCbkData);
-
-}
-
-void PDFDoc::displayPages(OutputDev *out, int firstPage, int lastPage,
-			  double hDPI, double vDPI, int rotate,
-			  GBool useMediaBox, GBool crop, GBool printing,
-			  GBool (*abortCheckCbk)(void *data),
-			  void *abortCheckCbkData,
-                          GBool (*annotDisplayDecideCbk)(Annot *annot, void *user_data),
-                          void *annotDisplayDecideCbkData) {
-  int page;
-
-  for (page = firstPage; page <= lastPage; ++page) {
-    displayPage(out, page, hDPI, vDPI, rotate, useMediaBox, crop, printing,
-		abortCheckCbk, abortCheckCbkData,
-                annotDisplayDecideCbk, annotDisplayDecideCbkData);
-  }
-}
-
-void PDFDoc::displayPageSlice(OutputDev *out, int page,
-			      double hDPI, double vDPI, int rotate,
-			      GBool useMediaBox, GBool crop, GBool printing,
-			      int sliceX, int sliceY, int sliceW, int sliceH,
-			      GBool (*abortCheckCbk)(void *data),
-			      void *abortCheckCbkData,
-                              GBool (*annotDisplayDecideCbk)(Annot *annot, void *user_data),
-                              void *annotDisplayDecideCbkData) {
-  if (getPage(page))
-    getPage(page)->displaySlice(out, hDPI, vDPI,
-					 rotate, useMediaBox, crop,
-					 sliceX, sliceY, sliceW, sliceH,
-					 printing,
-					 abortCheckCbk, abortCheckCbkData,
-					 annotDisplayDecideCbk, annotDisplayDecideCbkData);
-}
 
 Links *PDFDoc::getLinks(int page) {
   Page *p = getPage(page);
@@ -757,11 +704,6 @@ Links *PDFDoc::getLinks(int page) {
     return new Links (NULL);
   }
   return p->getLinks();
-}
-
-void PDFDoc::processLinks(OutputDev *out, int page) {
-  if (getPage(page))
-    getPage(page)->processLinks(out);
 }
 
 Linearization *PDFDoc::getLinearization()
