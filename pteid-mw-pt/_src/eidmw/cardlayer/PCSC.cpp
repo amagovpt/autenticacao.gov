@@ -78,7 +78,7 @@ CByteArray CPCSC::ListReaders()
 	char csReaders[1024];
 	DWORD dwReadersLen = sizeof(csReaders);
 
-	long lRet = SCardListReaders(m_hContext, NULL, csReaders, &dwReadersLen);
+	LONG lRet = SCardListReaders(m_hContext, NULL, csReaders, &dwReadersLen);
 	if (SCARD_S_SUCCESS != lRet || m_iListReadersCount < 6)
 	{
 		MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardListReaders(): 0x%0x", lRet);
@@ -88,7 +88,7 @@ CByteArray CPCSC::ListReaders()
 	{
 		return CByteArray((unsigned char *) csReaders, dwReadersLen);
 	}
-	else if ((long)SCARD_E_NO_READERS_AVAILABLE == lRet)
+	else if (SCARD_E_NO_READERS_AVAILABLE == lRet)
 	{
 		return CByteArray();
 	}
@@ -152,9 +152,9 @@ bool CPCSC::GetStatusChange(unsigned long ulTimeout,
 	}
 
 wait_again:
-	long lRet = SCardGetStatusChange(m_hContext,
+	LONG lRet = SCardGetStatusChange(m_hContext,
 		ulTimeout, txReaderStates, ulReaderCount);
-	if ((long)SCARD_E_TIMEOUT != lRet)
+	if (SCARD_E_TIMEOUT != lRet)
 	{
 		if (SCARD_S_SUCCESS != lRet)
 			throw CMWEXCEPTION(PcscToErr(lRet));
@@ -229,7 +229,7 @@ bool CPCSC::Status(const std::string &csReader)
 	xReaderState.dwCurrentState = 0;
 	xReaderState.cbAtr = 0;
 
-	long lRet = SCardGetStatusChange(m_hContext, 0, &xReaderState, 1);
+	LONG lRet = SCardGetStatusChange(m_hContext, 0, &xReaderState, 1);
 	if (SCARD_S_SUCCESS != lRet)
 		throw CMWEXCEPTION(PcscToErr(lRet));
 
@@ -246,12 +246,12 @@ SCARDHANDLE CPCSC::Connect(const std::string &csReader,
 
 	//    MWLOG(LEV_DEBUG, MOD_CAL, L"    Calling connect: %0x, %ls, 0x%0x, %0x\n", m_hContext, utilStringWiden(csReader).c_str(), ulShareMode, ulPreferredProtocols);
 
-	long lRet = SCardConnect(m_hContext, csReader.c_str(),
+	LONG lRet = SCardConnect(m_hContext, csReader.c_str(),
 		ulShareMode, ulPreferredProtocols, &hCard, &dwProtocol);
 
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardConnect(%ls): 0x%0x", utilStringWiden(csReader).c_str(), lRet);
 
-	if ((long)SCARD_E_NO_SMARTCARD == lRet)
+	if (SCARD_E_NO_SMARTCARD == lRet)
 		hCard = 0;
 	else if (SCARD_S_SUCCESS != lRet)
 		throw CMWEXCEPTION(PcscToErr(lRet));
@@ -275,7 +275,7 @@ void CPCSC::Disconnect(SCARDHANDLE hCard, tDisconnectMode disconnectMode)
     DWORD dwDisposition = disconnectMode == DISCONNECT_RESET_CARD ?
         SCARD_RESET_CARD : SCARD_LEAVE_CARD;
 
-	long lRet = SCardDisconnect(hCard, dwDisposition);
+	LONG lRet = SCardDisconnect(hCard, dwDisposition);
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardDisconnect(0x%0x): 0x%0x ; mode: %d", hCard, lRet, dwDisposition);
 	if (SCARD_S_SUCCESS != lRet)
 		throw CMWEXCEPTION(PcscToErr(lRet));
@@ -288,7 +288,7 @@ CByteArray CPCSC::GetATR(SCARDHANDLE hCard)
 	unsigned char tucATR[64];
 	DWORD dwATRLen = sizeof(tucATR);
 
-	long lRet = SCardStatus(hCard, NULL, &dwReaderLen,
+	LONG lRet = SCardStatus(hCard, NULL, &dwReaderLen,
 		&dwState, &dwProtocol, tucATR, &dwATRLen);
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardStatus(0x%0x): 0x%0x", hCard, lRet);
 	if (SCARD_S_SUCCESS != lRet)
@@ -302,7 +302,7 @@ CByteArray CPCSC::GetIFDVersion(SCARDHANDLE hCard)
 	unsigned char tucIFDVers[4] = {0,0,0,0};
 	DWORD dwIFDVersLen = sizeof(tucIFDVers);
 
-	long lRet = SCardGetAttrib(hCard, SCARD_ATTR_VENDOR_IFD_VERSION,
+	LONG lRet = SCardGetAttrib(hCard, SCARD_ATTR_VENDOR_IFD_VERSION,
 		tucIFDVers, &dwIFDVersLen);
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardGetAttrib(0x%0x): 0x%0x", hCard, lRet);
 
@@ -317,7 +317,7 @@ bool CPCSC::Status(SCARDHANDLE hCard)
 	DWORD dwATRLen = sizeof(tucATR);
 	static int iStatusCount = 0;
 
-	long lRet = SCardStatus(hCard, NULL, &dwReaderLen,
+	LONG lRet = SCardStatus(hCard, NULL, &dwReaderLen,
 		&dwState, &dwProtocol, tucATR, &dwATRLen);
 
 	//lRet = 0;
@@ -361,7 +361,7 @@ CByteArray CPCSC::Transmit(SCARDHANDLE hCard, const CByteArray &oCmdAPDU, long *
 	int iRetryCount = 0;
 try_again:
 #endif
-	long lRet = SCardTransmit(hCard,
+	LONG lRet = SCardTransmit(hCard,
 		pioSendPci, oCmdAPDU.GetBytes(), (DWORD) oCmdAPDU.Size(),
 		pioRecvPci, tucRecv, &dwRecvLen);
 
@@ -410,7 +410,7 @@ void CPCSC::Recover(SCARDHANDLE hCard, unsigned long * pulLockCount )
 
 	DWORD ap = 0;
 	int i = 0;
-	long lRet = SCARD_F_INTERNAL_ERROR;
+	LONG lRet = SCARD_F_INTERNAL_ERROR;
 
 	MWLOG(LEV_WARN, MOD_CAL, L"Card is not responding properly, trying to recover...");
 
@@ -458,7 +458,7 @@ CByteArray CPCSC::Control(SCARDHANDLE hCard, unsigned long ulControl, const CByt
 		oCmd.GetBytes(), (DWORD) oCmd.Size(),
 		pucRecv, dwRecvLen, &dwRecvLen);
 #else
-	long lRet = SCardControl((SCARDHANDLE)hCard,
+	LONG lRet = SCardControl((SCARDHANDLE)hCard,
 		oCmd.GetBytes(), (DWORD) oCmd.Size(),
 		pucRecv, &dwRecvLen);
 #endif
@@ -499,7 +499,7 @@ CByteArray CPCSC::Control(SCARDHANDLE hCard, unsigned long ulControl, const CByt
 
 void CPCSC::BeginTransaction(SCARDHANDLE hCard)
 {
-	long lRet = SCardBeginTransaction(hCard);
+	LONG lRet = SCardBeginTransaction(hCard);
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardBeginTransaction(0x%0x): 0x%0x", hCard, lRet);
 	if (SCARD_S_SUCCESS != lRet)
 		throw CMWEXCEPTION(PcscToErr(lRet));
@@ -507,7 +507,7 @@ void CPCSC::BeginTransaction(SCARDHANDLE hCard)
 
 void CPCSC::EndTransaction(SCARDHANDLE hCard)
 {
-	long lRet = SCardEndTransaction(hCard, SCARD_LEAVE_CARD);
+	LONG lRet = SCardEndTransaction(hCard, SCARD_LEAVE_CARD);
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardEndTransaction(0x%0x): 0x%0x", hCard, lRet);
 }
 
