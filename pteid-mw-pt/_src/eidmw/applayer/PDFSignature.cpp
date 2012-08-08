@@ -1,6 +1,5 @@
 #include "poppler/Error.h"
 #include "poppler/PDFDoc.h"
-#include "poppler/GlobalParams.h"
 #include "sign-pkcs7.h"
 #include "goo/GooString.h"
 #include "PDFSignature.h"
@@ -14,7 +13,7 @@ namespace eIDMW
 	{
 		// Initialize this Poppler global object 
 		// is mandatory I think
-		globalParams = new GlobalParams();
+		//globalParams = new GlobalParams();
 	
 	}
 
