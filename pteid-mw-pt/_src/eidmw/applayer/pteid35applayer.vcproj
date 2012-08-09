@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="applayer"
 	ProjectGUID="{DC41E34B-8251-41DE-8065-D56B022F5755}"
 	RootNamespace="pteidapplayer"
@@ -103,6 +103,91 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="1"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="../common;../dialogs;../eidlib;&quot;../pteid-poppler/&quot;;&quot;../pteid-poppler/poppler&quot;;../cardlayer;../FreeImagePTEiD/Source;&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;&quot;$(PTEID_DIR_XERCES_310)\include&quot;;&quot;..\xml-security-c-1.6.1&quot;;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;;&quot;..\..\ThirdParty\libcurl-7.24\include&quot;"
+				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS"
+				GeneratePreprocessedFile="0"
+				RuntimeLibrary="2"
+				TreatWChar_tAsBuiltInType="true"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+				ShowIncludes="false"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="PTEID_35;_UNICODE;UNICODE"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				AdditionalDependencies="wsock32.lib Shlwapi.lib pteidDlgsWin32.lib pteidcardlayer.lib pteidcommon.lib libeay32.lib ssleay32.lib xerces-c_3.lib freeimage.lib xsec_1.lib libcurl.lib pteid-poppler.lib"
+				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName).dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="false"
+				AdditionalLibraryDirectories="&quot;..\_Binaries35\$(ConfigurationName)&quot;;&quot;..\_Binaries35\x64\$(ConfigurationName)&quot;;&quot;C:\Users\agrr\pteid-poppler\builds\release&quot;;&quot;$(PTEID_DIR_OPENSSL_098G)\lib&quot;;&quot;$(PTEID_DIR_XERCES_310)\lib&quot;;&quot;..\..\ThirdParty\libcurl-7.24\lib&quot;"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="0"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Debug|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
@@ -161,91 +246,6 @@
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="17"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
-			CharacterSet="1"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../common;../dialogs;../eidlib;../cardlayer;../FreeImagePTEiD/Source;&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;&quot;$(PTEID_DIR_XERCES_310)\include&quot;;&quot;..\xml-security-c-1.6.1&quot;;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;;&quot;..\..\ThirdParty\libcurl-7.24\include&quot;"
-				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS"
-				GeneratePreprocessedFile="0"
-				RuntimeLibrary="2"
-				TreatWChar_tAsBuiltInType="true"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="3"
-				ShowIncludes="false"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="PTEID_35;_UNICODE;UNICODE"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				LinkLibraryDependencies="false"
-				AdditionalDependencies="wsock32.lib Shlwapi.lib pteidDlgsWin32.lib pteidcardlayer.lib pteidcommon.lib libeay32.lib ssleay32.lib xerces-c_3.lib freeimage.lib xsec_1.lib libcurl.lib"
-				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName).dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="false"
-				AdditionalLibraryDirectories="&quot;..\_Binaries35\$(ConfigurationName)&quot;;&quot;..\_Binaries35\x64\$(ConfigurationName)&quot;;&quot;$(PTEID_DIR_OPENSSL_098G)\lib&quot;;&quot;$(PTEID_DIR_XERCES_310)\lib&quot;;&quot;..\..\ThirdParty\libcurl-7.24\lib&quot;"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -425,11 +425,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PDFSignature.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\PhotoPteid.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\SigContainer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\sign-pkcs7.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\sign-pkcs7.h"
 				>
 			</File>
 			<File
@@ -567,11 +579,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PDFSignature.h"
+				>
+			</File>
+			<File
 				RelativePath=".\PhotoPteid.h"
 				>
 			</File>
 			<File
 				RelativePath=".\SigContainer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SigVerifier.h"
 				>
 			</File>
 			<File
