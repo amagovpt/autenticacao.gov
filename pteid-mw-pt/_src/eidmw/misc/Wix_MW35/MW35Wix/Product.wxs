@@ -521,6 +521,11 @@
       <Component Id="Curl" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
         <File Id="libcurl.dll" Name="libcurl.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\libcurl-7.24\bin\libcurl.dll" ></File>
       </Component>
+      
+      <!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
+      <Component Id="Poppler" Guid="{54E15AA8-F4A5-42e8-9D38-3B151223B003}">
+        <File Id="pteid-poppler.dll" Name="pteid-poppler.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid-poppler.dll" ></File>
+      </Component>
 
       <Component Id="pteidmdrvsystem32" Guid="a8259480-e408-11de-8a39-0800200c9a66" Permanent="no">
         <File Id="system32_pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="yes" DiskId="1" />
@@ -752,6 +757,7 @@
         <ComponentRef Id="Qt"/>
         <ComponentRef Id="FreeImage"/>
         <ComponentRef Id="Curl"/>
+        <ComponentRef Id="Poppler"/>
         <ComponentRef Id="XMLSecurity"/>
         <ComponentRef Id="Cairo"/>
         <ComponentRef Id="Java_SDK_Component"/>
