@@ -34,16 +34,17 @@
 #include <limits.h> // for LLONG_MAX and ULLONG_MAX
 #include <stdarg.h>
 #include <stdlib.h> // for NULL
+#include "poppler/poppler-config.h"
 #include "gtypes.h"
 
 class GooString {
 public:
 
   // Create an empty string.
-  GooString();
+  POPPLER_API GooString();
 
   // Create a string from a C string.
-  explicit GooString(const char *sA);
+  POPPLER_API explicit GooString(const char *sA);
 
   // Create a string from <lengthA> chars at <sA>.  This string
   // can contain null characters.
@@ -95,7 +96,7 @@ public:
   static GooString *formatv(const char *fmt, va_list argList);
 
   // Destructor.
-  ~GooString();
+  POPPLER_API ~GooString();
 
   // Get length.
   int getLength() { return length; }

@@ -211,7 +211,7 @@ void Catalog::prepareSignature(const char * name, Ref *firstPageRef, const char 
 	obj4.arrayAdd (obj2.initInt(0));
 
 	signature_field.dictAdd(copyString("Rect"), &obj4);
-	signature_field.dictAdd(copyString("T"), obj2.initString(new GooString("Signature1")));
+	signature_field.dictAdd(copyString("T"), obj2.initString(new GooString("Signature2")));
 	addSignatureAppearance(&signature_field);
 
 	Ref *refFirstPage = firstPageRef != NULL ? firstPageRef: &(pageRefs[0]);

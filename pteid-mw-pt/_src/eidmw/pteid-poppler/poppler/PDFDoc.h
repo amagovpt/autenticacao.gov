@@ -42,6 +42,7 @@
 #include "Catalog.h"
 #include "Page.h"
 #include "Annot.h"
+#include "poppler/poppler-config.h"
 #include "OptionalContent.h"
 
 class GooString;
@@ -68,22 +69,22 @@ enum PDFWriteMode {
 class PDFDoc {
 public:
 
-  PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
+POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
 	 GooString *userPassword = NULL, void *guiDataA = NULL);
 
 #ifdef _WIN32
-  PDFDoc(wchar_t *fileNameA, int fileNameLen, GooString *ownerPassword = NULL,
+  POPPLER_API PDFDoc(wchar_t *fileNameA, int fileNameLen, GooString *ownerPassword = NULL,
 	 GooString *userPassword = NULL, void *guiDataA = NULL);
 #endif
 
   PDFDoc(BaseStream *strA, GooString *ownerPassword = NULL,
 	 GooString *userPassword = NULL, void *guiDataA = NULL);
-  ~PDFDoc();
+  POPPLER_API ~PDFDoc();
 
   static PDFDoc *ErrorPDFDoc(int errorCode, GooString *fileNameA = NULL);
 
   // Was PDF document successfully opened?
-  GBool isOk() { return ok; }
+  POPPLER_API GBool isOk() { return ok; }
 
   // Get the error code (if isOk() returns false).
   int getErrorCode() { return errCode; }
@@ -136,7 +137,7 @@ public:
   Object *getStructTreeRoot() { return catalog->getStructTreeRoot(); }
 
   // Get page.
-  Page *getPage(int page);
+  POPPLER_API Page *getPage(int page);
 
   // Find a page, given its object ID.  Returns page number, or 0 if
   // not found.
@@ -162,17 +163,17 @@ public:
 
   /* PTEID-Changes */
   // Is the file signed?
-  GBool isSigned();
-  unsigned long getSigByteArray(unsigned char **byte_array);
-  int getSignatureContents(unsigned char **);
+  POPPLER_API GBool isSigned();
+  POPPLER_API unsigned long getSigByteArray(unsigned char **byte_array);
+  POPPLER_API int getSignatureContents(unsigned char **);
 
-  Object *getByteRange();
+  POPPLER_API Object *getByteRange();
 
 
-  void prepareSignature(const char * name, const char *location, const char *reason);
+  POPPLER_API void prepareSignature(const char * name, const char *location, const char *reason);
 
-  void closeSignature(const char *signature_contents);
-  unsigned int getSignedVersionLen();
+  POPPLER_API void closeSignature(const char *signature_contents);
+  POPPLER_API unsigned int getSignedVersionLen();
 
   /* End of PTEID Changes */
 
@@ -210,15 +211,15 @@ public:
   GBool getID(GooString *permanent_id, GooString *update_id);
 
   // Save one page with another name.
-  int savePageAs(GooString *name, int pageNo);
+  POPPLER_API int savePageAs(GooString *name, int pageNo);
   // Save this file with another name.
-  int saveAs(GooString *name, PDFWriteMode mode=writeStandard);
+  POPPLER_API int saveAs(GooString *name, PDFWriteMode mode=writeStandard);
   // Save this file in the given output stream.
-  int saveAs(OutStream *outStr, PDFWriteMode mode=writeStandard);
+  POPPLER_API int saveAs(OutStream *outStr, PDFWriteMode mode=writeStandard);
   // Save this file with another name without saving changes
-  int saveWithoutChangesAs(GooString *name);
+  POPPLER_API int saveWithoutChangesAs(GooString *name);
   // Save this file in the given output stream without saving changes
-  int saveWithoutChangesAs(OutStream *outStr);
+  POPPLER_API int saveWithoutChangesAs(OutStream *outStr);
 
   // Return a pointer to the GUI (XPDFCore or WinPDFCore object).
   void *getGUIData() { return guiData; }

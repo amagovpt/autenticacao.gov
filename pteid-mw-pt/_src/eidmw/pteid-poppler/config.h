@@ -45,16 +45,22 @@
 /* #undef HAVE_FSEEK64 */
 
 /* Define to 1 if fseeko (and presumably ftello) exists and is declared. */
-#define HAVE_FSEEKO 1
+#ifndef _WIN32
+ #define HAVE_FSEEKO 1
+ #endif
 
 /* Define to 1 if you have the `ftell64' function. */
 /* #undef HAVE_FTELL64 */
 
 /* Defines if gettimeofday is available on your system */
+#ifndef _WIN32
 #define HAVE_GETTIMEOFDAY 1
+#endif
 
 /* Defines if gmtime_r is available on your system */
+#ifndef _WIN32
 #define HAVE_GMTIME_R 1
+#endif
 
 /* Define if you have the iconv() function and it works. */
 /* #undef HAVE_ICONV */
@@ -128,7 +134,9 @@
 /* #undef HAVE_TIFFIO_H */
 
 /* Define to 1 if you have the <unistd.h> header file. */
+#ifndef _WIN32
 #define HAVE_UNISTD_H 1
+#endif
 
 /* Define to 1 if you have the <zlib.h> header file. */
 /* #undef HAVE_ZLIB_H */
@@ -237,6 +245,9 @@
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 #define _FILE_OFFSET_BITS 64
+#ifdef _WIN32
+#define snprintf _snprintf
+#endif
 
 /* Define to 1 to make fseeko visible on some hosts (e.g. glibc 2.2). */
 /* #undef _LARGEFILE_SOURCE */

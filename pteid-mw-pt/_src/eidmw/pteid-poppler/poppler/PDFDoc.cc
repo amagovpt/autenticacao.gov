@@ -77,7 +77,7 @@ extern "C"
 {
 //Definition of our own memmem(), generally its only available in Linux
 //and Mac OSX Lion and later so it's better to just use our own implementation
-void *memmem(const void *haystack, size_t n, const void *needle, size_t m);
+POPPLER_API void *memmem(const void *haystack, size_t n, const void *needle, size_t m);
 }
 
 //------------------------------------------------------------------------

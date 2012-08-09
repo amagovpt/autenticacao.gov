@@ -87,8 +87,10 @@
 #endif
 
 /* Defines if gettimeofday is available on your system */
+#ifndef _WIN32
 #ifndef HAVE_GETTIMEOFDAY
 #define HAVE_GETTIMEOFDAY 1
+#endif
 #endif
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
@@ -162,6 +164,16 @@
 #elif __MINGW32__
 char * strtok_r (char *s, const char *delim, char **save_ptr);
 #endif
+#endif
+
+#ifdef _WIN32
+#ifdef EXPORTING
+#define POPPLER_API __declspec(dllexport)
+#else
+#define POPPLER_API __declspec(dllimport)
+#endif
+#else
+#define POPPLER_API
 #endif
 
 //------------------------------------------------------------------------
