@@ -1,5 +1,13 @@
 CFLAGS= -Wall -fPIC -O3 -I.. -I../goo/
 
+BASENAME=libpteid-poppler
+
+ifeq ($(shell uname), Darwin)
+	LIB_FILENAME=$(BASENAME).dylib
+else
+	LIB_FILENAME=$(BASENAME).so
+endif
+
 SOURCES =		\
 	Array.cc 		\
 	Annot.cc		\
@@ -63,11 +71,11 @@ GOO_OBJS := $(subst .cc,.o,$(GOO_SRC))
 FOFI_OBJS := $(subst .cc,.o,$(FOFI_SRC))
 
 
-all:    libpteid-poppler.so
+all:    $(LIB_FILENAME)
 
-libpteid-poppler.so: $(OBJS) $(GOO_OBJS) memmem.o
+$(LIB_FILENAME): $(OBJS) $(GOO_OBJS) memmem.o
 	 g++ -shared -o $@ $^ $(LDLIBS) $(LDFLAGS)
-	 cp libpteid-poppler.so ../../lib
+	 cp $(LIB_FILENAME) ../../lib
 
 ../goo/%.o : ../goo/%.cc
 	g++ -o $@  $(CFLAGS) -c $<
@@ -85,9 +93,9 @@ clean:
 	rm -fv ../goo/*.o
 	rm -fv ../fofi/*.o
 	rm -fv *.o
-	rm -fv libpteid-poppler.so
+	rm -fv $(LIB_FILENAME)
 
 install:
-	install -s libpteid-poppler.so $(INSTALL_ROOT)/usr/local/lib/
+	install -s $(LIB_FILENAME) $(INSTALL_ROOT)/usr/local/lib/
 
 .PHONY:	clean install prepare
