@@ -3,7 +3,7 @@ all:
 
 check:
 
-dist-clean:
+distclean:
 
 clean:
 	cd poppler && make clean
