@@ -293,6 +293,11 @@ void Catalog::prepareSignature(const char * name, Ref *firstPageRef, const char 
 
 	}
 
+	Object o1;
+	o1.initNull();
+	//Remove NeedApperances field if present
+	local_acroForm.dictSet(copyString("NeedAppearances"), &o1);
+
 	local_acroForm.dictLookup("Fields", &fields_array);
 	if (fields_array.isArray())
 	{
@@ -431,7 +436,6 @@ void Catalog::addSignatureAppearance(Object *signature_field)
 	ap_dict.initDict(xref);
 	ap_dict.dictAdd(copyString("N"), &ref_to_dict);
 	
-	//If it is visible signature, uncomment the next line
 	signature_field->dictAdd(copyString("AP"), &ap_dict);
 
 
