@@ -654,7 +654,7 @@ public:
 	 */
     PTEIDSDK_API virtual PTEID_ByteArray sendAPDU(const PTEID_ByteArray& cmd);
 
-    PTEIDSDK_API virtual PTEID_ByteArray Sign(const PTEID_ByteArray& oData);
+    PTEIDSDK_API virtual PTEID_ByteArray Sign(const PTEID_ByteArray& data, bool signatureKey=false);
 
  	/**
 	 * Read a File from the card.
