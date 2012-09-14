@@ -65,11 +65,6 @@ dlgSignature::dlgSignature( QWidget* parent, CardInformation& CI_Data)
 			this->resize(thiswidth,height-20); //make sure the window fits
 		}
 		
-		/* QVBoxLayout *layout = new QVBoxLayout;
-        this->setLayout(layout);
-
-		this->layout()->setSizeConstraint(QLayout::SetFixedSize);
-		this->setSizeGripEnabled(false); */
 
 	}
 
@@ -143,7 +138,6 @@ void dlgSignature::SignListView (QStringList list)
 
 void dlgSignature::on_pbSign_clicked ( void )
 {
-	std::cout << "pb sign" << std::endl;
 	QAbstractItemModel* model = view->model() ;
 	QStringList strlist;
 	QFuture<void> future;
@@ -279,7 +273,6 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
 
     try
     {
-    	std::cout << "run sign" << std::endl;
 	    PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
 	    PTEID_ByteArray SignXades;
 	    if (timestamp)
@@ -292,8 +285,9 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
 
     catch (PTEID_Exception &e)
     	{
-			this->success = false;
-    		switch(e.GetError()){
+		this->success = false;
+    		switch(e.GetError())
+		{
     		case EIDMW_ERR_PIN_CANCEL:
     			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PIN introduction - CANCELED!");
     			break;
