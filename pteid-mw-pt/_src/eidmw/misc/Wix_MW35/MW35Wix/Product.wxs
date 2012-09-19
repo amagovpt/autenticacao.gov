@@ -524,7 +524,7 @@
       
       <!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
       <Component Id="Poppler" Guid="{54E15AA8-F4A5-42e8-9D38-3B151223B003}">
-        <File Id="pteid-poppler.dll" Name="pteid-poppler.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid-poppler.dll" ></File>
+        <File Id="pteid_poppler.dll" Name="pteid-poppler.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid-poppler.dll" ></File>
       </Component>
 
       <Component Id="pteidmdrvsystem32" Guid="a8259480-e408-11de-8a39-0800200c9a66" Permanent="no">

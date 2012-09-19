@@ -450,8 +450,8 @@
       </Component>
 
       <!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
-      <Component Win64="no" Id="Poppler" Guid="{54E15AA8-F4A5-42e8-9D38-3B151223B003}">
-        <File Id="pteid-poppler.dll" Name="pteid-poppler.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid-poppler.dll" ></File>
+      <Component Win64="no" Id="Poppler" Guid="{54E15AA8-F4A5-42e8-9D38-3B151223B004}">
+        <File Id="pteid_poppler.dll" Name="pteid-poppler.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid-poppler.dll" ></File>
       </Component>
 
       <Component Win64="no" Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
@@ -507,7 +507,7 @@
 
       <!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
       <Component Id="Poppler_64" Guid="{54E15AA8-F4A5-42e8-9D38-3B151223B003}">
-        <File Id="pteid-poppler.dll" Name="pteid-poppler.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid-poppler.dll" ></File>
+        <File Id="pteid_poppler_64.dll" Name="pteid-poppler.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid-poppler.dll" ></File>
       </Component>
 
       <Component Id="Runtime35ThirdPartyOpenSSL_64" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
@@ -521,7 +521,7 @@
 
       <!--Our Build of LibCurl - custom build options to remove unneeded features-->
       <Component Id="Curl_64" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFB}" SharedDllRefCount="yes">
-        <File Id="libcurl_64.dll" Name="libcurl.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\libcurl-7.24\bin\libcurl.dll" ></File>
+        <File Id="libcurl_64.dll" Name="libcurl.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\libcurl.dll" ></File>
       </Component>
 
     </DirectoryRef>
