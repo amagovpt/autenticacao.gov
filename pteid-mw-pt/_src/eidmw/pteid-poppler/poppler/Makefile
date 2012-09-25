@@ -74,20 +74,20 @@ FOFI_OBJS := $(subst .cc,.o,$(FOFI_SRC))
 all:    $(LIB_FILENAME)
 
 $(LIB_FILENAME): $(OBJS) $(GOO_OBJS) memmem.o
-	 g++ -shared -o $@ $^ $(LDLIBS) $(LDFLAGS)
+	 $(CXX) -shared -o $@ $^ $(LDLIBS) $(LDFLAGS)
 	 cp $(LIB_FILENAME) ../../lib
 
 ../goo/%.o : ../goo/%.cc
-	g++ -o $@  $(CFLAGS) -c $<
+	$(CXX) -o $@  $(CFLAGS) -c $<
 
 ../fofi/%.o : ../fofi/%.cc
-	g++ -o $@ $(CFLAGS) -c $<
+	$(CXX) -o $@ $(CFLAGS) -c $<
 
 memmem.o: memmem.c
-	gcc $(CFLAGS) -c memmem.c
+	$(CC) $(CFLAGS) -c memmem.c
 
 %.o: %.cc
-	g++ $(CFLAGS) -c $<
+	$(CXX) $(CFLAGS) -c $<
 
 clean:
 	rm -fv ../goo/*.o
