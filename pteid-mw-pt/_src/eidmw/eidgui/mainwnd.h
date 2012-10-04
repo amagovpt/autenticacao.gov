@@ -242,6 +242,7 @@ private slots:
 	void on_actionClear_triggered( void );
 	void on_actionPrint_eID_triggered( void );
 	void actionSignature_eID_triggered( void );
+	void actionPDFSignature_triggered( void );
 	void actionVerifySignature_eID_triggered( void );
 	void on_actionPrinter_Settings_triggered( void );
 	void on_actionPINRequest_triggered( void );

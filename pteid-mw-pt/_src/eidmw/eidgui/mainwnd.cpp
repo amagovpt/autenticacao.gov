@@ -40,6 +40,7 @@
 #include "dlgAbout.h"
 #include "dlgprint.h"
 #include "dlgverifysignature.h"
+#include "PDFSignWindow.h"
 #include "dlgsignature.h"
 #include "dlgOptions.h"
 #include "Settings.h"
@@ -327,6 +328,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_ui.lbl_menuCard_Quit->installEventFilter(this);
 	m_ui.lbl_menuTools_Parameters->installEventFilter(this);
 	m_ui.lbl_menuTools_Signature->installEventFilter(this);
+	m_ui.lbl_menuTools_PDFSignature->installEventFilter(this);
 	m_ui.lbl_menuTools_VerifySignature->installEventFilter(this);
 	m_ui.lbl_menuLanguage_Portuguese->installEventFilter(this);
 	m_ui.lbl_menuLanguage_English->installEventFilter(this);
@@ -377,6 +379,11 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 		{
 			hide_submenus();
 			actionSignature_eID_triggered();
+		}
+		if (object == m_ui.lbl_menuTools_PDFSignature)
+		{
+			hide_submenus();
+			actionPDFSignature_triggered();
 		}
 
 		if (object == m_ui.lbl_menuTools_VerifySignature )
@@ -480,9 +487,9 @@ void MainWnd::on_btn_menu_tools_clicked()
 	m_ui.wdg_submenu_tools->setVisible(true);
 	//If defined language is portuguese, then the dialog needs to be larger
 	if (m_Settings.getGuiLanguageCode() == GenPur::LANG_NL)
-		m_ui.wdg_submenu_tools->setGeometry(128,4,146,110);
+		m_ui.wdg_submenu_tools->setGeometry(128,4,146,130);
 	else
-		m_ui.wdg_submenu_tools->setGeometry(128,4,126,110);
+		m_ui.wdg_submenu_tools->setGeometry(128,4,126,130);
 
 }
 
@@ -2364,6 +2371,25 @@ void MainWnd::actionSignature_eID_triggered()
 	  	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
 	  	msgBoxp.exec();
 	}
+}
+
+void MainWnd::actionPDFSignature_triggered()
+{
+
+//	if(m_CI_Data.isDataLoaded())
+//	{
+		PDFSignWindow* dlgPDFSig = new PDFSignWindow(this, m_CI_Data);
+		dlgPDFSig->exec();
+//	}
+       /*	else {
+		QString caption  = tr("Warning");
+	  	QString msg = tr("A problem has occurred while trying to read card. Please, try again.");
+	  	//std::string Pmsgbody
+	  	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
+	  	msgBoxp.exec();
+	}
+*/
+
 }
 
 //*****************************************************
