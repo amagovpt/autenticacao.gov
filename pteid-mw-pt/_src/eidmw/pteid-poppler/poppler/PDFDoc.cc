@@ -618,7 +618,8 @@ Ref PDFDoc::getFirstPageRef()
 }
 
 
-void PDFDoc::prepareSignature(const char * name, const char *location, const char *reason)
+void PDFDoc::prepareSignature(PDFRectangle *rect,
+		const char * name, const char *civil_number, const char *location, const char *reason)
 {
 	const char needle[] = "/Type /Sig";
 	// Turn Signature mode On
@@ -628,10 +629,10 @@ void PDFDoc::prepareSignature(const char * name, const char *location, const cha
 	if (isLinearized())
 	{
 	   Ref first_page = getFirstPageRef();
-	   getCatalog()->prepareSignature(name, &first_page, location, reason, this->fileSize);
+	   getCatalog()->prepareSignature(rect, name, &first_page, location, civil_number, reason, this->fileSize);
 	}
 	else
-	   getCatalog()->prepareSignature(name, NULL, location, reason, this->fileSize);
+	   getCatalog()->prepareSignature(rect, name, NULL, location, civil_number, reason, this->fileSize);
 
 	MemOutStream mem_stream(this->fileSize + 20000); //We need to write the 8K placeholder string
 	OutStream * str = &mem_stream;
@@ -651,7 +652,6 @@ void PDFDoc::prepareSignature(const char * name, const char *location, const cha
 
 	//Save it for getSigByteArray()
 	m_sig_offset = offset;
-	//fprintf(stderr, "Signature offset: %ld\n", offset);
 	
 	getCatalog()->setSignatureByteRange(offset, ESTIMATED_LEN, mem_stream.size());
 
@@ -1281,8 +1281,11 @@ Guint PDFDoc::writeObject (Object* obj, Ref* ref, OutStream* outStr, XRef *xRef,
           stream->getDict()->set("Length", &obj1);
 
           //Remove Stream encoding
-          stream->getDict()->remove("Filter");
-          stream->getDict()->remove("DecodeParms");
+          //We need to comment it out because we're creating Streams of type strWeird 
+	  //which are actually FlateEncoded, poppler stream classes are not really
+	  //suited for this, so its a hack ...
+	  //stream->getDict()->remove("Filter");
+          //stream->getDict()->remove("DecodeParms");
 
           writeDictionnary (stream->getDict(),outStr, xRef, numOffset);
           writeStream (stream,outStr);

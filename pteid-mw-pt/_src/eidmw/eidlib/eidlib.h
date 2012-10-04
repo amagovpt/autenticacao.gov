@@ -884,10 +884,10 @@ public:
 	     PTEIDSDK_API void SignXadesTIndividual(const char * const* paths, unsigned int n_paths, const char *output_path); /** Store the Xades-T signature in individual zip containers  */
 
 		 /**
-		 * Produce PDF ISO 32000-1 Compliant Signatures of the supplied input path
+		 * Produce PDF ISO 32000-1 Compliant Signatures of the supplied input PDF Document
 		 */
 
-		 PTEIDSDK_API void SignPDF(const char *input_path, const char *name, const char *location, const char *reason,
+	      PTEIDSDK_API void SignPDF(const char *input_path,int page, int page_sector, const char *name, const char *location, const char *reason,
 			const char *outfile_path);
 
 

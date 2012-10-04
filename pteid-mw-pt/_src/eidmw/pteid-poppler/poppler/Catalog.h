@@ -51,6 +51,7 @@ class Form;
 class OCGs;
 class ViewerPreferences;
 class FileSpec;
+class PDFRectangle;
 
 //------------------------------------------------------------------------
 // NameTree
@@ -108,13 +109,21 @@ public:
 
   GBool addSigRefToPage(Ref *, Object* sig_ref);
 
-  int setSignatureByteRange(unsigned long sig_contents_offset, unsigned long estimated_len, unsigned long filesize);
+  int setSignatureByteRange(unsigned long sig_contents_offset, unsigned long estimated_len,
+		  unsigned long filesize);
 
   // Get number of pages.
   int getNumPages();
 
-  void prepareSignature(const char * name, Ref *first_page_ref, const char *location, const char *reason, unsigned long);
-  void addSignatureAppearance(Object *);
+  void prepareSignature(PDFRectangle *rect, const char * name, Ref *first_page_ref, const char *location,
+       const char * civil_number, const char *reason, unsigned long);
+  Ref addFontDict(const char *basefont);
+  Ref addImageXObject(int width, int height, unsigned char *data, int length_in_bytes);
+  Ref newXObject(char *plain_text_stream,
+	 int height, int width, bool needs_font, bool needs_image);
+  void addSignatureAppearance(Object *signature_field, const char* name, const char *civil_number,
+	char *date_str,	const char* location, const char* reason, int rect_x, int rect_y);
+  void addSignatureAppearance(Object *parent, int, int);
   void closeSignature(const char *signature_contents, unsigned long len);
 
   // Get a page.

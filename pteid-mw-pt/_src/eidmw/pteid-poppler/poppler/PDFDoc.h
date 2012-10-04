@@ -169,8 +169,9 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
 
   POPPLER_API Object *getByteRange();
 
-
-  POPPLER_API void prepareSignature(const char * name, const char *location, const char *reason);
+  POPPLER_API void prepareSignature(PDFRectangle *rect, const char * name, 
+		  const char *civil_number, const char *location,
+		  const char *reason);
 
   POPPLER_API void closeSignature(const char *signature_contents);
   POPPLER_API unsigned int getSignedVersionLen();

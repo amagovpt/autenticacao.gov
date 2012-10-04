@@ -39,6 +39,9 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <time.h>
+#include <iostream>
+#include <sstream>
+#include <string>
 #include <math.h>
 #include "goo/gmem.h"
 #include "Object.h"
@@ -55,6 +58,15 @@
 #include "OptionalContent.h"
 #include "ViewerPreferences.h"
 #include "FileSpec.h"
+#include "BuiltinFontTables.h"
+#include "BuiltinFontTables.h"
+#include "BuiltinFont.h"
+#include "FontEncodingTables.h"
+#include "VisibleSignatureBitmap.h"
+
+//Forward-declaration of the function defined in Iconv.cc
+//couldn't bother to write a header for it
+extern char *utf8_to_latin1(const char *str);
 
 //------------------------------------------------------------------------
 // Catalog
@@ -175,8 +187,10 @@ Catalog::~Catalog() {
 
 
 //TODO: Too long, split this into 2 functions at least
-void Catalog::prepareSignature(const char * name, Ref *firstPageRef, const char *location,
-	       	const char *reason, unsigned long filesize) {
+void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *firstPageRef,
+	       	const char *location, const char *civil_number,
+		const char *reason, unsigned long filesize) 
+{
 
 	Object signature_field;
 	Object *signature_dict = new Object();
@@ -184,10 +198,13 @@ void Catalog::prepareSignature(const char * name, Ref *firstPageRef, const char 
 
 	char date_outstr[200];
 	time_t t;
-	struct tm *tmp;
+	struct tm *tmp_date;
+	double r0=0, r1=0, r2=0, r3=0;
 
 	t = time(NULL);
-	tmp = localtime(&t);
+	tmp_date = localtime(&t);
+	//Date String for visible signature
+	strftime(date_outstr, sizeof(date_outstr), "%Y.%m.%d %T %z", tmp_date);
 
 	signature_field.initDict(xref);
 	Object obj1, obj2, obj3, obj4, obj5, obj6, ref_to_dict;
@@ -200,30 +217,46 @@ void Catalog::prepareSignature(const char * name, Ref *firstPageRef, const char 
 	/* Annotation Flags: Hidden and Locked (bits 1 and 8 counting from
 	 * lowest order bit as 1)  */
 	signature_field.dictAdd(copyString("F"), obj3.initInt(132));
+	signature_field.dictAdd(copyString("SigSector"), obj3.initInt(6));
 
 	obj4.initArray (xref);
-
-	// Invisible signature means the Field will have this appearance
-	// i.e.: Zero-sized rectangle
-	obj4.arrayAdd (obj2.initInt(0));
-	obj4.arrayAdd (obj2.initInt(0));
-	obj4.arrayAdd (obj2.initInt(0));
-	obj4.arrayAdd (obj2.initInt(0));
+	
+	//Visible Signature location 
+	if (rect)
+	{
+	/*	fprintf(stderr, "x1=%f, y1=%f, x2=%f, y2=%f\n", 
+				rect->x1, rect->y1, rect->x2, rect->y2 );
+				*/
+		r0=rect->x1;
+	       	r1=rect->y1;
+	       	r2=rect->x2; 
+		r3=rect->y2;
+	}
+	obj4.arrayAdd (obj2.initReal(r0));
+	obj4.arrayAdd (obj2.initReal(r1));
+	obj4.arrayAdd (obj2.initReal(r2));
+	obj4.arrayAdd (obj2.initReal(r3));
 
 	signature_field.dictAdd(copyString("Rect"), &obj4);
+
+	//TODO: This should have a random component to avoid name conflicts in fields
 	signature_field.dictAdd(copyString("T"), obj2.initString(new GooString("Signature2")));
-	addSignatureAppearance(&signature_field);
+
+	addSignatureAppearance(&signature_field, name, civil_number, date_outstr,
+		 location, reason, r2-r0 - 1, r3-r1 -1);
+
+	memset(date_outstr, 0, sizeof(date_outstr));
 
 	Ref *refFirstPage = firstPageRef != NULL ? firstPageRef: &(pageRefs[0]);
 
 	Object ref_to_first_page;
-	/*Init a placeholder string;
+	/*
+	  Init a placeholder string;
 	  This needs to be present in preparation phase to make sure all the
 	  offsets in the XRef table are unchanged when the real signature is
 	  added
 	*/
 	char * placeholder = (char *)gmalloc(PLACEHOLDER_LEN+1);
-	//char * placeholder = "";
 	memset(placeholder, '0', PLACEHOLDER_LEN);
 	placeholder[PLACEHOLDER_LEN] = '\0';
 
@@ -239,10 +272,10 @@ void Catalog::prepareSignature(const char * name, Ref *firstPageRef, const char 
 
 	signature_dict->dictAdd(copyString("Contents"), obj1.initString(sig_content));
 	signature_dict->dictAdd(copyString("SubFilter"), obj1.initName("adbe.pkcs7.detached"));
-	signature_dict->dictAdd(copyString("Name"), obj1.initString(new GooString(name)));
+	signature_dict->dictAdd(copyString("Name"), obj1.initString(new GooString(utf8_to_latin1(name))));
 	signature_dict->dictAdd(copyString("Location"), obj1.initString(new GooString(location) ));
 	signature_dict->dictAdd(copyString("Reason"), obj1.initString(new GooString(reason)));
-	if (strftime(date_outstr, sizeof(date_outstr), "D:%Y%m%d%H%M%S+00'00'", tmp) == 0) {
+	if (strftime(date_outstr, sizeof(date_outstr), "D:%Y%m%d%H%M%S+00'00'", tmp_date) == 0) {
                fprintf(stderr, "strftime returned 0");
         }
 	else
@@ -274,7 +307,6 @@ void Catalog::prepareSignature(const char * name, Ref *firstPageRef, const char 
 	//PDF File has no AcroForm dict, we need to create it
 	if (!local_acroForm.isDict())
 	{
-		fprintf(stderr, "Debug: Acroform is not a dict...\n");
 		if (local_acroForm.isRef())
 			fprintf(stderr, "but its a ref...we'll try to dereference the pointer to the real object...\n");
 
@@ -350,6 +382,13 @@ void Catalog::closeSignature(const char * signature_contents, unsigned long len)
 {
 	Object obj;
 	char * padded_string = (char *)gmalloc(len+1);
+
+	if (signature_contents == NULL)
+	{
+      		error(errInternal, -1, "closeSignature(): Signature object is NULL!");
+		return;
+	}
+
 	if (strlen(signature_contents) > len)
       		error(errInternal, -1, "Signature length is greater than allocated buffer!");
 
@@ -387,13 +426,18 @@ GBool Catalog::addSigRefToPage(Ref * refPage, Object* sig_ref)
 	return gTrue;
 }
 
-void Catalog::addSignatureAppearance(Object *signature_field)
+/**
+* Create a Standard XObject with plain text content stream
+*
+*/
+Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool needs_font, bool needs_image)
 {
-	Object ap_dict, appearance_obj, obj1, obj2, obj3, ref_to_dict;
-	const char dsblank_token[] = "% DSBlank";
-	appearance_obj.initDict(xref);
-	appearance_obj.dictAdd(copyString("Type"), obj1.initName("XObject"));
-	appearance_obj.dictAdd(copyString("SubType"), obj1.initName("Form"));
+	Object * appearance_obj = new Object();
+	Object obj1, obj2, font_dict, ref_to_dict;
+
+	appearance_obj->initDict(xref);
+	appearance_obj->dictAdd(copyString("Type"), obj1.initName("XObject"));
+
 	Object procset, resources;
 	procset.initArray(xref);
 	resources.initDict(xref);
@@ -403,41 +447,292 @@ void Catalog::addSignatureAppearance(Object *signature_field)
 	procset.arrayAdd(obj1.initName("ImageC"));
 	procset.arrayAdd(obj1.initName("ImageI"));
 	resources.dictAdd(copyString("ProcSet"), &procset);
+
+	if (needs_font)
+	{
+
+		Ref font_f1 = addFontDict("Helvetica"); //FIXME: Personal choice #1 :)
+		ref_to_dict.initRef(font_f1.num, font_f1.gen);
+
+		font_dict.initDict(xref);
+		font_dict.dictAdd(copyString("F1"), &ref_to_dict);
+		resources.dictAdd(copyString("Font"), &font_dict);
+
+	}
+
+	if (needs_image)
+	{
+		//Get the CC logo already encoded as JPEG
+		Ref image_background = addImageXObject(294, 66, cc_logo_bitmap_compressed,
+				sizeof(cc_logo_bitmap_compressed));
+
+		ref_to_dict.initRef(image_background.num, image_background.gen);
+		Object image_dict;
+		image_dict.initDict(xref);
+		image_dict.dictAdd(copyString("Im0"), &ref_to_dict);
+
+		resources.dictAdd(copyString("XObject"), &image_dict);
+
+	}
+
+	appearance_obj->dictAdd(copyString("Resources"), &resources);
+	appearance_obj->dictAdd(copyString("Subtype"), obj1.initName("Form"));
+
+	obj1.initArray(xref);
+	// BBox gives the coordinates (left, bottom, right, top) of the
+	// Signature Rectangle relative to its origin point
+	obj1.arrayAdd(obj2.initReal(0));
+	obj1.arrayAdd(obj2.initReal(0));
+	obj1.arrayAdd(obj2.initReal(height));
+	obj1.arrayAdd(obj2.initReal(width));
+	appearance_obj->dictAdd(copyString("BBox"), &obj1);
+	appearance_obj->dictAdd(copyString("Length"),
+	obj1.initInt(strlen(plain_text_stream))); 
+
+	MemStream *mStream = new MemStream(strdup(plain_text_stream), 0,
+			strlen(plain_text_stream), appearance_obj);
+
+	mStream->setNeedFree(gTrue);
+	Object *aStream = new Object();
+	aStream->initStream(mStream);
+
+	Ref ref_to_appearance = xref->addIndirectObject(aStream);
+	return ref_to_appearance;
+}
+
+
+Ref Catalog::addFontDict(const char *baseFontName)
+{
+
+	Object font_dict, name;
+	font_dict.initDict(xref);
+	font_dict.dictAdd(copyString("BaseFont"), name.initName(baseFontName));
+	font_dict.dictAdd(copyString("Type"), name.initName("Font"));
+	font_dict.dictAdd(copyString("Encoding"), name.initName("WinAnsiEncoding"));
+	font_dict.dictAdd(copyString("Subtype"), name.initName("Type1"));
+	//TODO: should be generated??
+	font_dict.dictAdd(copyString("Name"), name.initName("F1"));
+
+	Ref ref_to_appearance = xref->addIndirectObject(&font_dict);
+
+	return ref_to_appearance;
+}
+
+Ref Catalog::addImageXObject(int width, int height, unsigned char *data, int length_in_bytes)
+{
+
+	Object * image_obj = new Object();
+	Object obj1, obj2;
+
+	image_obj->initDict(xref);
+	image_obj->dictAdd(copyString("Type"), obj1.initName("XObject"));
+	image_obj->dictAdd(copyString("Subtype"), obj1.initName("Image"));
+	image_obj->dictAdd(copyString("ColorSpace"), obj1.initName("DeviceRGB"));
+	image_obj->dictAdd(copyString("BitsPerComponent"), obj1.initInt(8));
+	image_obj->dictAdd(copyString("Width"), obj1.initInt(width));
+	image_obj->dictAdd(copyString("Height"), obj1.initInt(height));
+	//We're adding a bitmap compressed with jpeg, which is what DCTDecode means
+	image_obj->dictAdd(copyString("Filter"), obj2.initName("DCTDecode"));
+	image_obj->dictAdd(copyString("Length"), obj1.initInt(length_in_bytes));
+
+	MemStream *mStream = new MemStream((char *)data, 0,
+			length_in_bytes, image_obj);
+
+	mStream->setNeedFree(gTrue);
+	Object *aStream = new Object();
+	aStream->initStream(mStream);
+
+	Ref ref_to_appearance = xref->addIndirectObject(aStream);
+	return ref_to_appearance;
+}
+
+/*
+ * Get the exact widths of the glyphs necessary to represent
+ * our text in our chosen font-face and fontsize
+ * Units: postscript points (pts)
+ */
+double getStringWidth(const char *winansi_encoded_string, double font_size)
+{
+      double total_width = 0;
+      BuiltinFont * builtinFont = NULL;
+
+    //Find builtin font table for Helvetica
+
+    for (int i = 0; i < nBuiltinFonts; ++i) {
+      if (!strcmp("Helvetica", builtinFonts[i].name)) {
+	builtinFont = &builtinFonts[i];
+	break;
+      }
+    }
+    Gushort w = 0;
+    unsigned char code = 0;
+
+    //Lookup each winansi char width 
+    for (unsigned int i = 0; i!= strlen(winansi_encoded_string); i++)
+    {
+       code = (unsigned char)winansi_encoded_string[i];
+       if (winAnsiEncoding[code] && builtinFont->widths->getWidth(winAnsiEncoding[code], &w))
+	total_width += 0.001 * font_size * w;	 
+    }
+
+    return total_width;
+
+}
+
+/*
+ * Generate PDF text display commands according to a fixed-column
+ * layout 
+ */
+GooString *formatMultilineString(char *content, double available_space, double font_size)
+//		int lines_available, int *lines_used)
+{
+	GooString *multi_line = new GooString();
+	std::string line = std::string(content);
+	std::string word;
+	double space_width = 278 * 8 * 0.001;
+	std::istringstream iss(line, std::istringstream::in);
+
+	double space_left = available_space;
+	double word_width;
+
+	multi_line->append("("); //Init String
+
+	//(*lines_used)++;
+
+	while( iss >> word)
+	{
+		word_width = getStringWidth(word.c_str(), font_size);
+		//No more space in current line
+		if (word_width + space_width > space_left)
+		{
+			//Start new line
+			multi_line->append(") Tj\r\n");
+			multi_line->append("0 -10 Td\r\n"); //Line spacing
+			multi_line->append("("); 	  //Begin new line
+			multi_line->append(word.c_str());
+		
+			//Reset space_left
+			space_left = available_space - word_width;
+		}
+		else
+		{
+			if (multi_line->getLength() > 1)
+				multi_line->append(" ");
+
+			multi_line->append(word.c_str());
+			space_left -= (word_width + space_width);
+
+		}
+
+	}
+
+	multi_line->append(") Tj\r\n");
+
+	return multi_line;
+
+}
+
+void Catalog::addSignatureAppearance(Object *signature_field, const char *name, const char *civil_number,
+	char * date_str, const char* location, const char* reason, int rect_x, int rect_y)
+{
+	Object ap_dict, appearance_obj, obj1, obj2, obj3,
+	       ref_to_dict, ref_to_dict2, ref_to_n2, ref_to_n0, font_dict, xobject_layers;
+
+	initBuiltinFontTables();
+	
+	const char appearance_command1[] = 
+		"q 1 0 0 1 0 0 cm /n0 Do Q\r\nq 1 0 0 1 0 0 cm /n2 Do Q\r\n";
+	
+	char n0_commands[] = "% DSBlank\n";
+	GooString *n2_commands = new GooString(
+	GooString::format("q\r\n220.5 0 0 49.5 0 0 cm\r\n/Im0 Do\r\nQ\r\nBT\r\n0 {0:d} Td\r\n/F1 8 Tf\r\n",
+			rect_y - 10));
+
+	GooString *tmp = GooString::format("Assinado por: {0:s}\r\n",
+			utf8_to_latin1(name));
+	
+	n2_commands->append(formatMultilineString(tmp->getCString(), rect_x, 6.0));
+	n2_commands->append("0 -10 Td\r\n");
+	n2_commands->append(GooString::format("(Num. de Ident. Civil: {0:s}) Tj\r\n",
+				civil_number));
+
+	n2_commands->append(GooString::format("0 -10 Td\r\n(Data: {0:s}) Tj\r\n",
+		date_str ));
+
+	if (location != NULL && strlen(location) > 0)
+	{
+		n2_commands->append("0 -10 Td\r\n");
+		GooString * tmp_location = GooString::format("Localiza\xE7\xE3o: {0:s}",
+					utf8_to_latin1(location));
+		n2_commands->append(formatMultilineString(tmp_location->getCString(), 
+					rect_x, 6.0));
+	}
+
+	if (reason != NULL && strlen(reason) > 0)
+	{
+		n2_commands->append("0 -10 Td\r\n");
+		GooString *abc = GooString::format("Raz\xE3o: {0:s}",
+				utf8_to_latin1(reason));
+		n2_commands->append(formatMultilineString(abc->getCString(), rect_x, 6.0));
+	}
+	n2_commands->append("\r\nET\r\n");
+
+	appearance_obj.initDict(xref);
+	appearance_obj.dictAdd(copyString("Type"), obj1.initName("XObject"));
+	appearance_obj.dictAdd(copyString("Subtype"), obj1.initName("Form"));
+	Object procset, resources;
+	procset.initArray(xref);
+	resources.initDict(xref);
+	/* Obsolete according to the spec since PDF 1.4 ?? */
+        procset.arrayAdd(obj1.initName("PDF"));
+	procset.arrayAdd(obj1.initName("Text"));
+	procset.arrayAdd(obj1.initName("ImageB"));
+	procset.arrayAdd(obj1.initName("ImageC"));
+	procset.arrayAdd(obj1.initName("ImageI"));
+	resources.dictAdd(copyString("ProcSet"), &procset);
+
+	xobject_layers.initDict(xref);
+	Ref n2_layer = newXObject(n2_commands->getCString(), rect_x, rect_y, true, true);
+	ref_to_n2.initRef(n2_layer.num, n2_layer.gen);
+	xobject_layers.dictAdd(copyString("n2"), &ref_to_n2);
+
+	Ref n0_layer = newXObject(n0_commands, rect_x, rect_y, false, false);
+	ref_to_n0.initRef(n0_layer.num, n0_layer.gen);
+	xobject_layers.dictAdd(copyString("n0"), &ref_to_n0);
+
+	resources.dictAdd(copyString("XObject"), &xobject_layers);
+
+	//Adding /Resources to AP dict
 	appearance_obj.dictAdd(copyString("Resources"), &resources);
 
-	appearance_obj.dictAdd(copyString("FormType"), obj1.initInt(1));
 	obj1.initArray(xref);
-	obj1.arrayAdd(obj2.initReal(0));
-	obj1.arrayAdd(obj2.initReal(0));
-	obj1.arrayAdd(obj2.initReal(0));
-	obj1.arrayAdd(obj2.initReal(0));
-	appearance_obj.dictAdd(copyString("BBox"), &obj1);
 
-	obj3.initArray(xref);
-	obj3.arrayAdd(obj2.initReal(1));
-	obj3.arrayAdd(obj2.initReal(0));
-	obj3.arrayAdd(obj2.initReal(0));
-	obj3.arrayAdd(obj2.initReal(1));
-	obj3.arrayAdd(obj2.initReal(0));
-	obj3.arrayAdd(obj2.initReal(0));
-	appearance_obj.dictAdd(copyString("Matrix"), &obj3);
+	// BBox gives the coordinates (left, bottom, right, top) of the
+	// Signature Rectangle relative to its origin point
+	obj1.arrayAdd(obj2.initReal(0));
+	obj1.arrayAdd(obj2.initReal(0));
+	obj1.arrayAdd(obj2.initReal(rect_x));
+	obj1.arrayAdd(obj2.initReal(rect_y));
+	appearance_obj.dictAdd(copyString("BBox"), &obj1);
+	appearance_obj.dictAdd(copyString("Length"), 
+			obj1.initInt(strlen(appearance_command1)));
+
 	//appearance_obj.dictAdd(copyString("Filter"), obj1.initName("FlateDecode"));
 
-	MemStream *mStream = new MemStream(copyString(dsblank_token), 0,
-			sizeof(dsblank_token), &appearance_obj);
+	MemStream *mStream = new MemStream(strdup(appearance_command1), 0,
+			sizeof(appearance_command1), &appearance_obj);
 
 	mStream->setNeedFree(gTrue);
 	Object aStream;
 	aStream.initStream(mStream);
 
 	Ref ref_to_appearance = xref->addIndirectObject(&aStream);
-	ref_to_dict.initRef(ref_to_appearance.num, ref_to_appearance.gen);
+	ref_to_dict2.initRef(ref_to_appearance.num, ref_to_appearance.gen);
 
 	ap_dict.initDict(xref);
-	ap_dict.dictAdd(copyString("N"), &ref_to_dict);
+	ap_dict.dictAdd(copyString("N"), &ref_to_dict2);
 	
 	signature_field->dictAdd(copyString("AP"), &ap_dict);
-
 
 }
 

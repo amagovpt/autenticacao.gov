@@ -20,6 +20,7 @@ SOURCES =		\
 	FileSpec.cc		\
 	Form.cc 		\
 	Hints.cc		\
+	Iconv.cc		\
 	JArithmeticDecoder.cc	\
 	JBIG2Stream.cc		\
 	JPXStream.cc		\
@@ -50,6 +51,9 @@ SOURCES =		\
 	PageLabelInfo.cc	\
 	SecurityHandler.cc	\
 	Sound.cc	\
+	BuiltinFont.cc	\
+	BuiltinFontTables.cc \
+	FontEncodingTables.cc \
 	XpdfPluginAPI.cc        
 #	UnicodeMap.cc		\
 #	CMap.cc			\

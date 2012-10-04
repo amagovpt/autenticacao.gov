@@ -265,8 +265,6 @@ char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long dat
 	card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
 
 	BIO *in = BIO_new_mem_buf(certData.GetBytes(), certData.Size());
-	//if ((in=BIO_new_file("/home/agrr/my_signature_cert.pem","r")) == NULL) goto err;
-	//if ((x509=PEM_read_bio_X509(in,NULL,NULL,NULL)) == NULL) goto err;
 	unsigned char * cert_data = certData.GetBytes();
 
 	x509 = d2i_X509(NULL, (const unsigned char**)&cert_data, certData.Size());
@@ -355,11 +353,6 @@ char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long dat
 	i2d_PKCS7(p7, &p);
 
 	signature_hex_string = BinaryToHexString(buf2, len);
-
-	/*printf("PKCS#7 Signature as hex string bytelength: %d\n %s\n", 
-			len, signature_hex_string); */
-
-	//dump_to_file("pkcs7-test.bin", buf2, len);
 	
 	PKCS7_free(p7);
 
