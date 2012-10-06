@@ -205,7 +205,7 @@ for (iIndex=1; iIndex < iPath; iIndex++)
 			 p_cDat++;
 			 if (p_cDat > p_cEnd)
 				return (E_ASN_INCOMPLETE);
-			 iLengthLen += (iLengthLen << 8) | *p_cDat;
+			 iLengthLen = (iLengthLen << 8) | *p_cDat;
 			 }
 		  }
 
