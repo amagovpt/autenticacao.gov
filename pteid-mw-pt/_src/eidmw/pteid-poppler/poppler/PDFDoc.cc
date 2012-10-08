@@ -554,22 +554,6 @@ Object *PDFDoc::getByteRange()
 	return NULL;
 }
 
-static bool srand_flag = false;
-
-char *randomStrGen(int length) {
-    char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    char *result = (char *)calloc(length, 1);
-    if (!srand_flag)
-    {    
-	    srand(time(NULL));
-	    srand_flag = true;
-    }
-    for (int i = 0; i < length; i++)
-        result[i] = charset[rand() % sizeof(charset)-1];
-
-    return result;
-}
-
 
 void dump_to_file(unsigned char * buf, unsigned int len)
 {
@@ -578,7 +562,6 @@ void dump_to_file(unsigned char * buf, unsigned int len)
 	char *path = (char *)calloc(200, 1);
 	strncat(path, home, 199);
 	strcat(path, "/data_to_be_signed_");
-	strcat(path, randomStrGen(10));
 	strcat(path, ".bin");
 	fprintf(stderr, "DEBUG: storing file to %s\n", path);
 

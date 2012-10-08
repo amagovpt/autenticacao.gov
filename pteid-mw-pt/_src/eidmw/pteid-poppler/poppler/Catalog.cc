@@ -186,6 +186,21 @@ Catalog::~Catalog() {
 }
 
 
+//Auxiliar function for prepareSignature and its static flag
+static bool srand_flag = false;
+int randomInt() 
+{
+    //Seed the PRNG
+    if (!srand_flag)
+    { 
+	    srand(time(NULL));
+	    srand_flag = true;
+    }
+    return rand();
+
+}
+
+
 //TODO: Too long, split this into 2 functions at least
 void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *firstPageRef,
 	       	const char *location, const char *civil_number,
@@ -224,9 +239,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	//Visible Signature location 
 	if (rect)
 	{
-	/*	fprintf(stderr, "x1=%f, y1=%f, x2=%f, y2=%f\n", 
-				rect->x1, rect->y1, rect->x2, rect->y2 );
-				*/
+				
 		r0=rect->x1;
 	       	r1=rect->y1;
 	       	r2=rect->x2; 
@@ -240,7 +253,8 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	signature_field.dictAdd(copyString("Rect"), &obj4);
 
 	//TODO: This should have a random component to avoid name conflicts in fields
-	signature_field.dictAdd(copyString("T"), obj2.initString(new GooString("Signature2")));
+	signature_field.dictAdd(copyString("T"), obj2.initString(GooString::format("Signature{0:d}", 
+					randomInt())));
 
 	addSignatureAppearance(&signature_field, name, civil_number, date_outstr,
 		 location, reason, r2-r0 - 1, r3-r1 -1);
@@ -273,8 +287,8 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	signature_dict->dictAdd(copyString("Contents"), obj1.initString(sig_content));
 	signature_dict->dictAdd(copyString("SubFilter"), obj1.initName("adbe.pkcs7.detached"));
 	signature_dict->dictAdd(copyString("Name"), obj1.initString(new GooString(utf8_to_latin1(name))));
-	signature_dict->dictAdd(copyString("Location"), obj1.initString(new GooString(location) ));
-	signature_dict->dictAdd(copyString("Reason"), obj1.initString(new GooString(reason)));
+	signature_dict->dictAdd(copyString("Location"), obj1.initString(new GooString(utf8_to_latin1(location))));
+	signature_dict->dictAdd(copyString("Reason"), obj1.initString(new GooString(utf8_to_latin1(reason))));
 	if (strftime(date_outstr, sizeof(date_outstr), "D:%Y%m%d%H%M%S+00'00'", tmp_date) == 0) {
                fprintf(stderr, "strftime returned 0");
         }
@@ -589,7 +603,9 @@ GooString *formatMultilineString(char *content, double available_space, double f
 	GooString *multi_line = new GooString();
 	std::string line = std::string(content);
 	std::string word;
-	double space_width = 278 * 8 * 0.001;
+
+	//Length of the ' ' char in Helvetica 8pt
+	double space_width = 278 * font_size * 0.001; 	
 	std::istringstream iss(line, std::istringstream::in);
 
 	double space_left = available_space;
@@ -644,14 +660,15 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 		"q 1 0 0 1 0 0 cm /n0 Do Q\r\nq 1 0 0 1 0 0 cm /n2 Do Q\r\n";
 	
 	char n0_commands[] = "% DSBlank\n";
+	const float font_size = 8;
 	GooString *n2_commands = new GooString(
-	GooString::format("q\r\n220.5 0 0 49.5 0 0 cm\r\n/Im0 Do\r\nQ\r\nBT\r\n0 {0:d} Td\r\n/F1 8 Tf\r\n",
-			rect_y - 10));
+	GooString::format("q\r\n220.5 0 0 49.5 0 0 cm\r\n/Im0 Do\r\nQ\r\nBT\r\n0 {0:d} Td\r\n/F1 {1:d} Tf\r\n",
+			rect_y - 10, (int)font_size));
 
 	GooString *tmp = GooString::format("Assinado por: {0:s}\r\n",
 			utf8_to_latin1(name));
 	
-	n2_commands->append(formatMultilineString(tmp->getCString(), rect_x, 6.0));
+	n2_commands->append(formatMultilineString(tmp->getCString(), rect_x, font_size));
 	n2_commands->append("0 -10 Td\r\n");
 	n2_commands->append(GooString::format("(Num. de Ident. Civil: {0:s}) Tj\r\n",
 				civil_number));
@@ -665,7 +682,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 		GooString * tmp_location = GooString::format("Localiza\xE7\xE3o: {0:s}",
 					utf8_to_latin1(location));
 		n2_commands->append(formatMultilineString(tmp_location->getCString(), 
-					rect_x, 6.0));
+					rect_x, font_size));
 	}
 
 	if (reason != NULL && strlen(reason) > 0)
@@ -673,7 +690,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 		n2_commands->append("0 -10 Td\r\n");
 		GooString *abc = GooString::format("Raz\xE3o: {0:s}",
 				utf8_to_latin1(reason));
-		n2_commands->append(formatMultilineString(abc->getCString(), rect_x, 6.0));
+		n2_commands->append(formatMultilineString(abc->getCString(), rect_x, font_size));
 	}
 	n2_commands->append("\r\nET\r\n");
 
