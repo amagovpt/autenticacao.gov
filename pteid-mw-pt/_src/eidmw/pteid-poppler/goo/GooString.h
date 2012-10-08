@@ -34,9 +34,8 @@
 #include <limits.h> // for LLONG_MAX and ULLONG_MAX
 #include <stdarg.h>
 #include <stdlib.h> // for NULL
-#include "poppler/poppler-config.h"
 #include "gtypes.h"
-#include "poppler-config.h"
+#include "poppler/poppler-config.h"
 
 class GooString {
 public:
