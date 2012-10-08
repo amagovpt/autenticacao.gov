@@ -42,16 +42,16 @@ namespace eIDMW
 	}
 	PDFRectangle PDFSignature::getSignatureRectangle(double page_height, double page_width)
 	{
-		// Add padding, adjust to subtly tweak the location The units
-		// for x_pad, y_pad and sig_height sig_width are postscript
+		// Add padding, adjust to subtly tweak the location 
+		// The units for x_pad, y_pad, sig_height and sig_width are postscript
 		// points (1 px == 0.75 points)
-	//	fprintf(stderr, "DEBUG: getSignatureRectangle(), page_height=%f, page_width=%f\n",
-	//			page_height, page_width);
+	/*	fprintf(stderr, "DEBUG: getSignatureRectangle(), page_height=%f, page_width=%f\n",
+				page_height, page_width); */
 		
-		double sig_height = 80; 
+		double sig_height = 85; 
 		double sig_width = page_width/3.0;
 		//double x_pad = 0, y_pad = (page_height/3.0-sig_height)/2.0; //Vertically Center the Signature on each sector
-		double x_pad = 0, y_pad = 10.0; //Vertically Center the Signature on each sector
+		double x_pad = 0, y_pad = 30.0; //Vertically Center the Signature on each sector
 
 
 		PDFRectangle sig_rect;
@@ -63,12 +63,12 @@ namespace eIDMW
 		
 		if (m_sector < 7)
 		{
-			if (m_sector >= 4) // Sectors 4, 5, and 6
+			if (m_sector >= 4) // Sectors 4 - 6
 			{
 				sig_rect.y1 += page_height / 3.0;
 				sig_rect.y2 += page_height / 3.0;
 			}
-			if (m_sector >= 1) // Sectors 1, 2 and 3
+			else if (m_sector >= 1) // Sectors 1 - 3
 			{
 				sig_rect.y1 += page_height * 2.0 / 3.0;
 				sig_rect.y2 += page_height * 2.0 / 3.0;
@@ -86,9 +86,12 @@ namespace eIDMW
 			sig_rect.x1 += page_width * 2.0 /3.0;
 			sig_rect.x2 += page_width * 2.0 /3.0;
 		}
-
+		
+	//Add some padding to avoid having the signature too close to page border
 		sig_rect.x1 += x_pad;
 		sig_rect.y1 += y_pad;
+
+	//Define height and width of the rectangle
 		sig_rect.x2 += sig_width + x_pad;
 		sig_rect.y2 += sig_height + y_pad;
 		
