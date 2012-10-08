@@ -36,6 +36,7 @@
 #include <stdlib.h> // for NULL
 #include "poppler/poppler-config.h"
 #include "gtypes.h"
+#include "poppler-config.h"
 
 class GooString {
 public:

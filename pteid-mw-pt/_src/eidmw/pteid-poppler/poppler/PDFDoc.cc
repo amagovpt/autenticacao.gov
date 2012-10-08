@@ -457,6 +457,11 @@ GBool PDFDoc::checkEncryption(GooString *ownerPassword, GooString *userPassword)
   return ret;
 }
 
+GBool PDFDoc::isOk()
+{ 
+	return ok; 
+}
+
 #define SIGFLAGS_SIGNATURES_EXIST   0x1
 #define SIGFLAGS_APPEND_ONLY        0x2
 

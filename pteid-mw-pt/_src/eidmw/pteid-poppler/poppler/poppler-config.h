@@ -27,6 +27,17 @@
 
 #undef HAVE_SPLASH
 
+/* On Windows we need to export symbols... */
+#ifdef _WIN32
+#ifdef _EXPORTING
+   #define POPPLER_API __declspec(dllexport)
+#else
+   #define POPPLER_API __declspec(dllimport)
+#endif
+#else
+#define POPPLER_API
+#endif
+
 /* Use fixedpoint. */
 #ifndef USE_FIXEDPOINT
 /* #undef USE_FIXEDPOINT */
@@ -51,8 +62,8 @@
 #undef WITH_FONTCONFIGURATION_FONTCONFIG
 
 /* Use win32 font configuration backend */
-#ifndef WITH_FONTCONFIGURATION_WIN32
-/* #undef WITH_FONTCONFIGURATION_WIN32 */
+#ifdef _WIN32
+#define WITH_FONTCONFIGURATION_WIN32 1
 #endif
 
 /* Support for curl is compiled in. */
@@ -88,9 +99,7 @@
 
 /* Defines if gettimeofday is available on your system */
 #ifndef _WIN32
-#ifndef HAVE_GETTIMEOFDAY
 #define HAVE_GETTIMEOFDAY 1
-#endif
 #endif
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */

@@ -84,7 +84,7 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
   static PDFDoc *ErrorPDFDoc(int errorCode, GooString *fileNameA = NULL);
 
   // Was PDF document successfully opened?
-  POPPLER_API GBool isOk() { return ok; }
+  POPPLER_API GBool isOk();
 
   // Get the error code (if isOk() returns false).
   int getErrorCode() { return errCode; }
@@ -127,7 +127,7 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
     { return getPage(page) ? getPage(page)->getRotate() : 0 ; }
 
   // Get number of pages.
-  int getNumPages();
+  POPPLER_API int getNumPages();
 
   // Return the contents of the metadata stream, or NULL if there is
   // no metadata.

@@ -1,16 +1,15 @@
-#ifndef _WIN32
-#include <iconv.h>
+
 #include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+
+#ifndef _WIN32
+#include <iconv.h>
+#else
+#include "win_iconv.h"
 #endif
-
-
-/*
- *TODO: Include the public domain iconv implementation for windows win_iconv.c from glib
- */
 
 /* Iconv Wrapper for UNIX */
 
@@ -68,7 +67,11 @@ utf82latin1(iconv_t conv_desc, const char * euc)
     utf8len_start = utf8len;
     utf8start = utf8;
     euc_start = euc;
-    iconv_value = iconv (conv_desc, (char **)&euc, & len, & utf8, & utf8len);
+#ifdef _WIN32
+    iconv_value = iconv (conv_desc, (const char **)&euc, & len, & utf8, & utf8len);
+#else
+	iconv_value = iconv (conv_desc, (char **)&euc, & len, & utf8, & utf8len);
+#endif
     /* Handle failures. */
     if (iconv_value == (size_t) -1) {
 	fprintf (stderr, "iconv failed: in string '%s', length %d, "
