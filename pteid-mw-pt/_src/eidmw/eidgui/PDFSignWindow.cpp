@@ -38,13 +38,16 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	int i=1,j=1;
 	
 	ui.label_choose_sector->setText(tr("<html>Choose the page sector<br> where you want your<br> signature to appear:</html>"));
-	for(;i<=3 && j <= 3;) 
+	ui.spinBox_page->setValue(1);
+
+	for( ;i<=3 && j <= 3; ) 
 	{
 		QTableWidgetItem * it = new QTableWidgetItem(QString("   "));
 		ui.tableWidget->setItem(i, j, it); 
 		i++; j++;
 	}
 	//ui.tableWidget->resizeColumnsToContents();
+	this->setFixedSize(this->width(), this->height());
 
 }
 
@@ -103,6 +106,9 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 	ui.label_selectedsector->setEnabled(checked);
 	ui.spinBox_page->setEnabled(checked);
 	ui.tableWidget->setEnabled(checked);
+	//Set sensible defaults for sector
+	ui.tableWidget->setCurrentCell (0, 0);
+	m_selected_sector = 1;
 
 }
 
@@ -116,24 +122,24 @@ void PDFSignWindow::on_button_sign_clicked()
 				                                    QDir::homePath()+"/signed.pdf", tr("PDF files (*.pdf)"));
 
 		char *reason = NULL, *location = NULL;
-		if (ui.location_textbox->isEnabled()) {
+		if (ui.location_textbox->isEnabled() && ui.location_textbox->text().size() > 0) {
 			location = strdup(ui.location_textbox->text().toUtf8().data());
 
 		}
-		if (ui.reason_textbox->isEnabled()) {
+		if (ui.reason_textbox->isEnabled() && ui.reason_textbox->text().size() > 0) {
 			reason = strdup(ui.reason_textbox->text().toUtf8().data());
 
 		}
 
 		
 		//Single File Signature case
-		card->SignPDF(aList.last().toUtf8(), ui.spinBox_page->isEnabled() ? ui.spinBox_page->value(): 1,
+		card->SignPDF(aList.last().toUtf8(), ui.spinBox_page->isEnabled() ? ui.spinBox_page->value(): 0,
 			m_selected_sector, NULL, location, reason, savefilepath.toUtf8());
 
 
 	}
 	catch (PTEID_Exception &e)
-	{ 
+	{
 		fprintf(stderr, "Caught exception in some SDK method. Error code: 0x%08x\n", (unsigned int)e.GetError());
 	}
 

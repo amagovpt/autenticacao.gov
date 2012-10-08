@@ -10,6 +10,12 @@
     <height>632</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>PDF Signature</string>
   </property>
@@ -19,8 +25,14 @@
      <x>0</x>
      <y>0</y>
      <width>411</width>
-     <height>627</height>
+     <height>630</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
    <widget class="QCheckBox" name="visible_checkBox">
     <property name="geometry">
@@ -126,6 +138,9 @@
      <property name="spacing">
       <number>0</number>
      </property>
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMaximumSize</enum>
+     </property>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
@@ -166,12 +181,12 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0">
        <property name="spacing">
         <number>5</number>
        </property>
        <property name="sizeConstraint">
-        <enum>QLayout::SetMinimumSize</enum>
+        <enum>QLayout::SetMaximumSize</enum>
        </property>
        <property name="topMargin">
         <number>0</number>
@@ -191,7 +206,7 @@
           <string/>
          </property>
          <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -217,15 +232,21 @@
           <bool>false</bool>
          </property>
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>120</height>
+          </size>
+         </property>
          <property name="baseSize">
           <size>
-           <width>60</width>
-           <height>84</height>
+           <width>0</width>
+           <height>0</height>
           </size>
          </property>
          <property name="verticalScrollBarPolicy">
@@ -246,17 +267,20 @@
          <attribute name="horizontalHeaderVisible">
           <bool>false</bool>
          </attribute>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>false</bool>
+         </attribute>
          <attribute name="horizontalHeaderDefaultSectionSize">
           <number>20</number>
          </attribute>
          <attribute name="horizontalHeaderMinimumSectionSize">
-          <number>20</number>
+          <number>10</number>
          </attribute>
          <attribute name="verticalHeaderVisible">
           <bool>false</bool>
          </attribute>
          <attribute name="verticalHeaderMinimumSectionSize">
-          <number>20</number>
+          <number>10</number>
          </attribute>
          <row/>
          <row/>
