@@ -241,7 +241,7 @@ char *FormatOtpParameters (OTPParams *otp)
 {
 	char *params = (char *)malloc(1000);
 
-	int ret = sprintf (params, "{\"PinPafUpdate\":{\"pan\":\"%s\",\"pin\":\"%s\",\"panseqnumber\":\"%s\",\"cdol1\":\"%s\",\"atc\":\"%s\",\"arqc\":\"%s\",\"counter\":%s,\"pintrycounter\":%s}}", otp->pan, otp->pin, otp->pan_seq_nr, otp->cdol1, otp->atc, otp->arqc, otp->counter, otp->pin_try_counter);
+	sprintf (params, "{\"PinPafUpdate\":{\"pan\":\"%s\",\"pin\":\"%s\",\"panseqnumber\":\"%s\",\"cdol1\":\"%s\",\"atc\":\"%s\",\"arqc\":\"%s\",\"counter\":%s,\"pintrycounter\":%s}}", otp->pan, otp->pin, otp->pan_seq_nr, otp->cdol1, otp->atc, otp->arqc, otp->counter, otp->pin_try_counter);
 	
 	return params;
 }
@@ -251,7 +251,7 @@ char *FormatResetSCParameters(OTPParams* otp)
 
 	char *params = (char *)malloc(1000);
 
-	int ret = sprintf(params, "{\"OnlineTransactionParameters\" : {\"pan\":\"%s\",\"pin\":\"%s\",\"panseqnumber\":\"%s\",\"cdol1\":\"%s\",\"atc\":\"%s\",\"arqc\":\"%s\",\"counter\":%s,\"pintrycounter\":%s}}", otp->pan, otp->pin, otp->pan_seq_nr, otp->cdol1, otp->atc, otp->arqc, otp->counter, otp->pin_try_counter);
+	sprintf(params, "{\"OnlineTransactionParameters\" : {\"pan\":\"%s\",\"pin\":\"%s\",\"panseqnumber\":\"%s\",\"cdol1\":\"%s\",\"atc\":\"%s\",\"arqc\":\"%s\",\"counter\":%s,\"pintrycounter\":%s}}", otp->pan, otp->pin, otp->pan_seq_nr, otp->cdol1, otp->atc, otp->arqc, otp->counter, otp->pin_try_counter);
 
 	return params;
 
@@ -453,11 +453,9 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
 {
 
     BIO* bio = NULL;
-    int r = 0;
 
     /* Set up the SSL pointers */
     SSL_CTX *ctx = SSL_CTX_new(SSLv3_client_method());
-    SSL *ssl = NULL;
 
     SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
 
@@ -526,10 +524,8 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned in
 {
 
     int r = -1;
-    unsigned int i = 0;
     unsigned int bytes_read = 0, header_len=0, content_length = 0;
 
-    int err = 1;
     do
     {
 	    // We're using blocking IO so SSL_Write either succeeds completely or not...
