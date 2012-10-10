@@ -239,20 +239,44 @@ long PTEID_SmartCard::readFile(const char *fileID, PTEID_ByteArray &in,PTEID_Pin
 }
 
 
-void PTEID_EIDCard::SignPDF(const char *input_path, int page, int page_sector, const char *name, const char *location, const char *reason,
+void PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, const char *location, const char *reason,
 			const char *outfile_path)
 {
 	BEGIN_TRY_CATCH
 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
-	PDFSignature pdf_sig(*pcard, input_path);
 
+	//Accessing PTEID_PDFSignature private parts because we're friends :)
+	PDFSignature *pdf_sig = sig_handler.mp_signature; 
 	if (page_sector != 0 && page != 0)
-		pdf_sig.setVisible(page, page_sector);
+		pdf_sig->setVisible(page, page_sector);
 
-	pdf_sig.signFile(name, location, reason, outfile_path);
+	pcard->SignPDF(pdf_sig, location, reason, outfile_path);
 	
 	END_TRY_CATCH
+}
+
+PTEID_PDFSignature::PTEID_PDFSignature(const char *input_path)
+{
+	mp_signature = new PDFSignature(input_path);
+}
+
+PTEID_PDFSignature::~PTEID_PDFSignature()
+{
+	delete mp_signature;
+}
+
+char *PTEID_PDFSignature::getOccupiedSectors(int page)
+{
+	if (page < 1)
+		throw PTEID_ExParamRange();
+	return mp_signature->getOccupiedSectors(page);
+
+}
+
+int PTEID_PDFSignature::getPageCount()
+{
+	return mp_signature->getPageCount();
 }
 
 bool PTEID_SmartCard::writeFile(const char *fileID,const PTEID_ByteArray &baOut,PTEID_Pin *pin,const char *csPinCode)

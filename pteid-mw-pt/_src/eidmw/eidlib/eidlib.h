@@ -240,66 +240,66 @@ class CByteArray;
   *********************************************************************************/
 class PTEID_ByteArray : public PTEID_Object
 {
-public:
-    PTEIDSDK_API PTEID_ByteArray();								/**< Default constructor */
-	PTEIDSDK_API PTEID_ByteArray(const PTEID_ByteArray &bytearray); /**< Copy constructor */
+	public:
+		PTEIDSDK_API PTEID_ByteArray();	/**< Default constructor */
+		PTEIDSDK_API PTEID_ByteArray(const PTEID_ByteArray &bytearray); /**< Copy constructor */
 
-	 /**
-	  * Constructor - initialize a byte array with an array of unsigned char.
-	  *
-	  * @param pucData is the byte array
-	  * @param ulSize is the size of the array
-	  */
-    PTEIDSDK_API PTEID_ByteArray(const unsigned char * pucData, unsigned long ulSize);
+		/**
+		 * Constructor - initialize a byte array with an array of unsigned char.
+		 *
+		 * @param pucData is the byte array
+		 * @param ulSize is the size of the array
+		 */
+		PTEIDSDK_API PTEID_ByteArray(const unsigned char * pucData, unsigned long ulSize);
 
-	PTEIDSDK_API virtual ~PTEID_ByteArray();				/**< Destructor */
+		PTEIDSDK_API virtual ~PTEID_ByteArray();				/**< Destructor */
 
-	 /**
-	  * Append data to the byte array.
-	  *
-	  * @param pucData is the byte array
-	  * @param ulSize is the size of the array
-	  */
-    PTEIDSDK_API void Append(const unsigned char * pucData, unsigned long ulSize);
+		/**
+		 * Append data to the byte array.
+		 *
+		 * @param pucData is the byte array
+		 * @param ulSize is the size of the array
+		 */
+		PTEIDSDK_API void Append(const unsigned char * pucData, unsigned long ulSize);
 
-	 /**
-	  * Append data to the byte array.
-	  */
-    PTEIDSDK_API void Append(const PTEID_ByteArray &data);
+		/**
+		 * Append data to the byte array.
+		 */
+		PTEIDSDK_API void Append(const PTEID_ByteArray &data);
 
-	 /**
-	  * Remove the data from the byte array.
-	  */
-    PTEIDSDK_API void Clear();
+		/**
+		 * Remove the data from the byte array.
+		 */
+		PTEIDSDK_API void Clear();
 
-	 /**
-	  * Return true if the content of data is the same as this.
-	  */
-    PTEIDSDK_API bool Equals(const PTEID_ByteArray &data) const;
+		/**
+		 * Return true if the content of data is the same as this.
+		 */
+		PTEIDSDK_API bool Equals(const PTEID_ByteArray &data) const;
 
- 	 /**
-	  * Return the number of bytes in the array.
-	  */
-    PTEIDSDK_API unsigned long Size() const;
+		/**
+		 * Return the number of bytes in the array.
+		 */
+		PTEIDSDK_API unsigned long Size() const;
 
- 	/**
-	  * Return the array of bytes in the object.
-	  * If Size() == 0, then NULL is returned.
-	  */
-	PTEIDSDK_API const unsigned char *GetBytes() const;
+		/**
+		 * Return the array of bytes in the object.
+		 * If Size() == 0, then NULL is returned.
+		 */
+		PTEIDSDK_API const unsigned char *GetBytes() const;
 
-	/**
-	  * Writing the binary content to a file.
-	  */
-	PTEIDSDK_API bool writeToFile(const char * csFilePath);
+		/**
+		 * Writing the binary content to a file.
+		 */
+		PTEIDSDK_API bool writeToFile(const char * csFilePath);
 
-	/**
-	  * Copy content of bytearray.
-	  */
-	PTEIDSDK_API PTEID_ByteArray &operator=(const PTEID_ByteArray &bytearray);
+		/**
+		 * Copy content of bytearray.
+		 */
+		PTEIDSDK_API PTEID_ByteArray &operator=(const PTEID_ByteArray &bytearray);
 
-	NOEXPORT_PTEIDSDK PTEID_ByteArray(const SDK_Context *context,const CByteArray &impl);	/**< For internal use : construct from lower level object*/
-	NOEXPORT_PTEIDSDK PTEID_ByteArray &operator=(const CByteArray &bytearray);			/**< For internal use : copy from lower level object*/
+		NOEXPORT_PTEIDSDK PTEID_ByteArray(const SDK_Context *context,const CByteArray &impl);	/**< For internal use : construct from lower level object*/
+		NOEXPORT_PTEIDSDK PTEID_ByteArray &operator=(const CByteArray &bytearray);			/**< For internal use : copy from lower level object*/
 };
 
 class PhotoPteid;
@@ -810,6 +810,25 @@ class APL_EIDCard;
 class PTEID_XmlUserRequestedInfo;
 class PTEID_CCXML_Doc;
 
+class PDFSignature;
+
+
+PTEIDSDK_API class PTEID_PDFSignature
+{
+	public:
+		PTEID_PDFSignature(const char *input_path);
+		~PTEID_PDFSignature();
+		int getPageCount();
+		char *getOccupiedSectors(int page);
+
+	private:
+	//The applayer object that actually implements the signature
+		PDFSignature *mp_signature;
+
+	friend class PTEID_EIDCard;
+
+};
+
 /******************************************************************************//**
   * This class represents a Portugal EID card.
   * To get such an object you have to ask it from the ReaderContext.
@@ -883,13 +902,8 @@ public:
 	     PTEIDSDK_API void SignXadesIndividual(const char * const* paths, unsigned int n_paths, const char *output_path); /** Store the XAdes signature in individual zip containers  */
 	     PTEIDSDK_API void SignXadesTIndividual(const char * const* paths, unsigned int n_paths, const char *output_path); /** Store the Xades-T signature in individual zip containers  */
 
-		 /**
-		 * Produce PDF ISO 32000-1 Compliant Signatures of the supplied input PDF Document
-		 */
-
-	      PTEIDSDK_API void SignPDF(const char *input_path,int page, int page_sector, const char *name, const char *location, const char *reason,
+	     PTEIDSDK_API void SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, const char *location, const char *reason,
 			const char *outfile_path);
-
 
 
 	     /* Change the OTP/EMV-CAP PIN through interaction with the appropriate HTTPS server
@@ -932,6 +946,7 @@ private:
 
 friend PTEID_Card &PTEID_ReaderContext::getCard();				/**< For internal use : This method must access protected constructor */
 };
+
 
 class SignatureVerifier;
 
