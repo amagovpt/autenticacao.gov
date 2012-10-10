@@ -20,6 +20,7 @@
  *
  **************************************************************************** */
 #include <QListView>
+#include <QComboBox>
 #include <QFileDialog>
 
 
@@ -37,7 +38,9 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	this->setWindowIcon( Ico );
 	int i=1,j=1;
 	
-	ui.label_choose_sector->setText(tr("<html>Choose the page sector<br> where you want your<br> signature to appear:</html>"));
+	ui.label_choose_sector->setText(tr(
+	"<html>Choose the page sector<br> where you want your<br> signature to appear:</html>"));
+	m_pdf_sig = NULL;
 	ui.spinBox_page->setValue(1);
 
 	for( ;i<=3 && j <= 3; ) 
@@ -58,7 +61,8 @@ PDFSignWindow::~PDFSignWindow()
 
 }
 
-void PDFSignWindow::on_tableWidget_currentCellChanged(int row, int column, int prev_row, int prev_column)
+void PDFSignWindow::on_tableWidget_currentCellChanged(int row, int column, 
+		int prev_row, int prev_column)
 {
 
 	update_sector(row,column);
@@ -130,11 +134,11 @@ void PDFSignWindow::on_button_sign_clicked()
 			reason = strdup(ui.reason_textbox->text().toUtf8().data());
 
 		}
-
 		
 		//Single File Signature case
-		card->SignPDF(aList.last().toUtf8(), ui.spinBox_page->isEnabled() ? ui.spinBox_page->value(): 0,
-			m_selected_sector, NULL, location, reason, savefilepath.toUtf8());
+		//TODO: Batch signing
+		card->SignPDF(*m_pdf_sig, ui.spinBox_page->isEnabled() ? ui.spinBox_page->value(): 0,
+			m_selected_sector, location, reason, savefilepath.toUtf8().data());
 
 
 	}
@@ -156,15 +160,39 @@ void PDFSignWindow::on_button_addfile_clicked()
 	fileselect = QFileDialog::getOpenFileNames(this, tr("Select File(s)"),
 			defaultopenfilepath, "PDF Documents (*.pdf)");
 	QCoreApplication::processEvents();
+	
+	addFileToListView(fileselect);
+
+
+}
+
+void PDFSignWindow::addFileToListView(QStringList &str)
+{
 
 	QStringListModel* localModel = new QStringListModel();
-
-	aList.append(fileselect);
+	aList.append(str);
 
 	aList.removeDuplicates();
 
 	localModel->setStringList(aList);
+
+	m_pdf_sig = new PTEID_PDFSignature(aList.at(0).toUtf8().data());
 	ui.pdf_listview->setModel(localModel);
+
+	//Set the spinbox with the appropriate value
+	ui.spinBox_page->setMaximum(m_pdf_sig->getPageCount());
+
+	if (aList.size() > 1)
+	{
+		//Replace the spinbox with a combo box with first/last page options
+		ui.horizontalLayout->removeWidget(ui.spinBox_page);
+		//This is needed AFAICT to make the widget disappear
+		ui.spinBox_page->setGeometry(0, 0, 0, 0);
+		QComboBox *combo_pages = new QComboBox();
+		combo_pages->addItem("First Page");
+		combo_pages->addItem("Last Page");
+		ui.horizontalLayout->addWidget(combo_pages);
+	}
 
 	//Enable sign button now that we have data
 	if (!aList.isEmpty())

@@ -22,6 +22,7 @@
 #ifndef PDFSIGNWINDOW_H_
 
 #include <QDialog>
+#include <QDropEvent>
 #include "ui_PDFSignWindow.h"
 #include "CardInformation.h"
 
@@ -45,12 +46,14 @@ class PDFSignWindow : public QDialog
 
 	private:
 	    void update_sector(int row, int column);
+	    void addFileToListView(QStringList &str);
 
 	    Ui_PDFSignWindow ui;
     	    CardInformation const& m_CI_Data;
 	    QStringList aList;
 	    QProgressDialog *pdialog;
 	    QFutureWatcher<void> FutureWatcher;
+	    PTEID_PDFSignature *m_pdf_sig;
 
 	    int m_selected_sector;
 
