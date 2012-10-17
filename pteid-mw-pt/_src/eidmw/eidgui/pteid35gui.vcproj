@@ -470,6 +470,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PDFSignWindow.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\picturepopup.cpp"
 				>
 			</File>
@@ -491,32 +495,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\AutoUpdates.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
-			</File>
 			<File
 				RelativePath="AutoUpdates.h"
 				>
@@ -562,6 +540,32 @@
 						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; -I&quot;.\..\..\ThirdParty\Qt\4.5.0\include&quot; -I&quot;.\..\..\ThirdParty\Qt\4.5.0\include\QtCore&quot; -I&quot;.\..\..\ThirdParty\Qt\4.5.0\include\QtGui&quot; -I&quot;c:\Qt\4.5.0\include&quot; -I&quot;c:\Qt\4.5.0\include\QtCore&quot; -I&quot;c:\Qt\4.5.0\include\QtGui&quot; &quot;AutoUpdates.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_autoupdates.cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;AutoUpdates.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)\moc_autoupdates.cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\AutoUpdates.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Custom Build Step"
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Custom Build Step"
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
 					/>
 				</FileConfiguration>
 			</File>
@@ -1019,6 +1023,20 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\PDFSignWindow.h"
+				>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;call ..\SetPathQt450_Include&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\moc.exe&quot;  -DPTEID_35 -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;.\GeneratedFiles\$(ConfigurationName)&quot; -I&quot;.\..\eidlib&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtCore&quot; -I&quot;%PTEID_DIR_QT_450_INCLUDE%\include\QtGui&quot; &quot;$(InputName).h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+						AdditionalDependencies="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+						Outputs="Moc&apos;ing $(InputName)..."
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\picturepopup.h"
 				>
 				<FileConfiguration
@@ -1177,26 +1195,6 @@
 				>
 			</File>
 			<File
-				RelativePath="GeneratedFiles\release\moc_dlgAbout.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="GeneratedFiles\debug\moc_dlgAbout.cpp"
 				>
 				<FileConfiguration
@@ -1217,10 +1215,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="GeneratedFiles\debug\moc_dlgOptions.cpp"
+				RelativePath="GeneratedFiles\release\moc_dlgAbout.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1228,7 +1226,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|x64"
+					Name="Debug|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1249,6 +1247,26 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="GeneratedFiles\debug\moc_dlgOptions.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1331,6 +1349,26 @@
 				>
 			</File>
 			<File
+				RelativePath="GeneratedFiles\debug\moc_mainwnd.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\generatedfiles\release\moc_mainwnd.cpp"
 				>
 				<FileConfiguration
@@ -1373,27 +1411,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="GeneratedFiles\debug\moc_mainwnd.cpp"
+				RelativePath=".\generatedfiles\release\moc_mylistview.cpp"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\generatedfiles\release\moc_mylistview.cpp"
+				RelativePath=".\generatedfiles\release\moc_PDFSignWindow.cpp"
 				>
 			</File>
 			<File
@@ -1583,41 +1605,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\generatedfiles\release\ui_dlgAbout.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\generatedfiles\debug\ui_dlgAbout.h"
 				>
 				<FileConfiguration
@@ -1653,10 +1640,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\generatedfiles\debug\ui_dlgOptions.h"
+				RelativePath=".\generatedfiles\release\ui_dlgAbout.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1664,11 +1652,18 @@
 						CommandLine=""
 						AdditionalDependencies=""
 						Outputs=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1676,14 +1671,6 @@
 						CommandLine=""
 						AdditionalDependencies=""
 						Outputs=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1723,7 +1710,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\generatedfiles\debug\ui_dlgPrint.h"
+				RelativePath=".\generatedfiles\debug\ui_dlgOptions.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1793,15 +1780,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\generatedfiles\release\ui_dlgSignature.h"
-				>
-			</File>
-			<File
-				RelativePath=".\generatedfiles\release\ui_dlgVerifySignature.h"
-				>
-			</File>
-			<File
-				RelativePath=".\generatedfiles\debug\ui_mainwnd.h"
+				RelativePath=".\generatedfiles\debug\ui_dlgPrint.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1834,6 +1813,14 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\release\ui_dlgSignature.h"
+				>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\release\ui_dlgVerifySignature.h"
+				>
 			</File>
 			<File
 				RelativePath=".\generatedfiles\release\ui_mainwnd.h"
@@ -1871,11 +1858,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\generatedfiles\release\ui_picturepopup.h"
+				RelativePath=".\generatedfiles\debug\ui_mainwnd.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
-					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1883,18 +1869,11 @@
 						CommandLine=""
 						AdditionalDependencies=""
 						Outputs=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1902,6 +1881,14 @@
 						CommandLine=""
 						AdditionalDependencies=""
 						Outputs=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1937,6 +1924,41 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\release\ui_picturepopup.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Custom Build Step"
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Custom Build Step"
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
 					/>
 				</FileConfiguration>
 			</File>
@@ -2230,6 +2252,29 @@
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputPath)..."
 						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\PDFSignWindow.ui"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;"
+						AdditionalDependencies="&quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="call ..\SetPathQt450_Exe&#x0D;&#x0A;&quot;%PTEID_DIR_QT_450_EXE%\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;"
 						AdditionalDependencies=""
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\ui_$(InputName).h&quot;"
 					/>
@@ -3149,7 +3194,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Resources\save_as.png"
+				RelativePath=".\Images\Icons\save_as.png"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3175,7 +3220,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Images\Icons\save_as.png"
+				RelativePath=".\Resources\save_as.png"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
