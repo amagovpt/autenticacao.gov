@@ -56,7 +56,8 @@ enum StreamKind {
   strFlate,
   strJBIG2,
   strJPX,
-  strWeird			// internal-use stream types
+  strWeird,			// internal-use stream types
+  strDeflate
 };
 
 enum StreamColorSpaceMode {
@@ -272,7 +273,7 @@ class MemOutStream : public OutStream {
 
 		int getPos() { return used; };
 
-		virtual void put (char c) { };
+		virtual void put (char c);
 
 		~MemOutStream();
 		virtual void printf (const char *format, ...);

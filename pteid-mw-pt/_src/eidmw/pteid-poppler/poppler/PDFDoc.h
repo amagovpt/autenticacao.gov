@@ -164,14 +164,15 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
   /* PTEID-Changes */
   // Is the file signed?
   POPPLER_API GBool isSigned();
-  POPPLER_API unsigned long getSigByteArray(unsigned char **byte_array);
+  POPPLER_API unsigned long getSigByteArray(unsigned char **byte_array, bool incremental);
   POPPLER_API int getSignatureContents(unsigned char **);
 
   POPPLER_API Object *getByteRange();
 
-  POPPLER_API void prepareSignature(PDFRectangle *rect, const char * name, 
+  POPPLER_API void prepareSignature(bool incremental, PDFRectangle *rect, const char * name, 
 		  const char *civil_number, const char *location,
-		  const char *reason);
+		  const char *reason, int page, int sector);
+  POPPLER_API char* getOccupiedSectors(int page);
 
   POPPLER_API void closeSignature(const char *signature_contents);
   POPPLER_API unsigned int getSignedVersionLen();
@@ -261,7 +262,7 @@ private:
   void saveCompleteRewrite (OutStream* outStr);
 
   Page *parsePage(int page);
-  Ref getFirstPageRef();
+  Ref getPageRef(int page);
 
   // Get hints.
   Hints *getHints();

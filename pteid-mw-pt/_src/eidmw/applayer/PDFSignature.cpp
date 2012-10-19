@@ -16,16 +16,17 @@
 namespace eIDMW
 {
 
-	PDFSignature::PDFSignature(APL_Card &card, const char *pdf_file_path): m_card(card), m_pdf_file_path(pdf_file_path)
+	PDFSignature::PDFSignature(const char *pdf_file_path): m_pdf_file_path(pdf_file_path)
 	{
 		// Initialize this Poppler global object 
 		// is mandatory I think
 		//globalParams = new GlobalParams();
 		m_visible = false;
-		m_page = 0;
+		m_page = 1;
 		m_sector = 0;
 		m_civil_number = NULL;
 		m_citizen_fullname = NULL;
+		m_doc = new PDFDoc(new GooString(pdf_file_path));
 	
 	}
 
@@ -45,16 +46,20 @@ namespace eIDMW
 		// Add padding, adjust to subtly tweak the location 
 		// The units for x_pad, y_pad, sig_height and sig_width are postscript
 		// points (1 px == 0.75 points)
-	/*	fprintf(stderr, "DEBUG: getSignatureRectangle(), page_height=%f, page_width=%f\n",
-				page_height, page_width); */
-		
+		PDFRectangle sig_rect;
+	 	int lr_margin = 30;	
 		double sig_height = 85; 
-		double sig_width = page_width/3.0;
+
+		double sig_width = (page_width - lr_margin*2) / 3.0;
 		//double x_pad = 0, y_pad = (page_height/3.0-sig_height)/2.0; //Vertically Center the Signature on each sector
 		double x_pad = 0, y_pad = 30.0; //Vertically Center the Signature on each sector
+		
+		//Add left margin
+		sig_rect.x1 = lr_margin;
+		sig_rect.x2 = lr_margin;
 
 
-		PDFRectangle sig_rect;
+
 
 		if (m_sector < 1 || m_sector > 9)
 			fprintf (stderr, "Illegal value for signature page sector: %d Valid values [1-6]\n", 
@@ -77,22 +82,20 @@ namespace eIDMW
 
 		if (m_sector % 3 == 2 )
 		{
-			sig_rect.x1 += page_width / 3.0;
-			sig_rect.x2 += page_width / 3.0;
+			sig_rect.x1 += sig_width;
+			sig_rect.x2 += sig_width;
 		}
 
 		if (m_sector % 3 == 0 )
 		{
-			sig_rect.x1 += page_width * 2.0 /3.0;
-			sig_rect.x2 += page_width * 2.0 /3.0;
+			sig_rect.x1 += sig_width * 2.0;
+			sig_rect.x2 += sig_width * 2.0;
 		}
 		
-	//Add some padding to avoid having the signature too close to page border
-		sig_rect.x1 += x_pad;
 		sig_rect.y1 += y_pad;
 
 	//Define height and width of the rectangle
-		sig_rect.x2 += sig_width + x_pad;
+		sig_rect.x2 += sig_width;
 		sig_rect.y2 += sig_height + y_pad;
 		
 
@@ -106,7 +109,7 @@ namespace eIDMW
 		char *data_common_name = (char *)malloc(256);
 
 
-		m_card.readFile(PTEID_FILE_CERT_SIGNATURE, certData);
+		m_card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
 
 		unsigned char * cert_data = certData.GetBytes();
 		X509 *x509 = d2i_X509(NULL, (const unsigned char**)&cert_data, certData.Size());
@@ -125,47 +128,56 @@ namespace eIDMW
 
 	}
 
+	int PDFSignature::getPageCount()
+	{
+		return m_doc->getNumPages();
 
-	// TODO: Possible refactoring- PDFDoc object should be constructed on 
-	// PDFSignature ctor
+	}
 
-	void PDFSignature::signFile(const char *name, const char *location,
+	char* PDFSignature::getOccupiedSectors(int page)
+	{
+		return m_doc->getOccupiedSectors(page);	
+	}
+
+
+	void PDFSignature::signFile(const char *location,
 		const char *reason, const char *outfile_path)
 	{
 
-		PDFDoc *doc;
+		PDFDoc *doc = m_doc;
 		//The class ctor initializes it to (0,0,0,0)
 		//so we can use this for invisible sig
 		PDFRectangle sig_location;
 
-		GooString *inputName, *outputName;
-
-		inputName = new GooString(m_pdf_file_path);
+		GooString *outputName;
 		outputName = new GooString(outfile_path);
-
-		doc = new PDFDoc(inputName);
+		
+		doc = m_doc;
 
 		if (!doc->isOk()) {
 			delete doc;
 			fprintf(stderr, "Poppler returned error loading PDF document %s\n", 
 					m_pdf_file_path);
-			return;
+			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}
 
 		if (doc->isEncrypted())
 		{
+			fprintf(stderr, "Encrypted PDF: This is the TODO List\n");
 			//TODO: Add proper error code(s)
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
-			return;
 		}
 
-		if (m_page < 1 || m_page > doc->getNumPages())
+		if (m_page > doc->getNumPages())
+		{
 			fprintf(stderr, "Error: Signature Page %d is out of bounds for document %s",
 				m_page, m_pdf_file_path);
+			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+		}
 
-		//FIXME: Another Ugly hack:
-		//Force the parsing of the Page Tree structure to get the pageref for page 1 
-		Page *p = doc->getPage(1);
+		// A little ugly hack:
+		//Force the parsing of the Page Tree structure to get the pagerefs loaded in Catalog class
+		Page *p = doc->getPage(m_page);
 
 		//By the spec, the visible/writable area can be cropped by the CropBox, BleedBox, etc...
 		//We're assuming the most common case of MediaBox matching the visible area
@@ -183,15 +195,20 @@ namespace eIDMW
 
 		getCitizenData();
 
-		doc->prepareSignature(&sig_location, name != NULL ? name : m_citizen_fullname, m_civil_number,
-				location, reason);
-		unsigned long len = doc->getSigByteArray(&to_sign);
+		bool incremental = doc->isSigned();
 
-                const char * signature_contents = pteid_sign_pkcs7(&m_card, to_sign, len);
+		doc->prepareSignature(incremental, &sig_location, m_citizen_fullname, m_civil_number,
+				location, reason, m_page, m_sector);
+		unsigned long len = doc->getSigByteArray(&to_sign, incremental);
+
+                const char * signature_contents = pteid_sign_pkcs7(m_card, to_sign, len);
 
 		doc->closeSignature(signature_contents);
 
-		int res = doc->saveAs(outputName, writeForceRewrite);
+		if (incremental)
+			doc->saveAs(outputName, writeForceIncremental);
+		else
+			doc->saveAs(outputName, writeForceRewrite);
 
 		delete doc;
 		delete outputName;

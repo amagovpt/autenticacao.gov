@@ -570,6 +570,7 @@ public:
   AnnotBorder *getBorder() const { return border; }
   AnnotColor *getColor() const { return color; }
   int getTreeKey() const { return treeKey; }
+  Object getDict() { return annotObj; }
 
   int getId() { return ref.num; }
 

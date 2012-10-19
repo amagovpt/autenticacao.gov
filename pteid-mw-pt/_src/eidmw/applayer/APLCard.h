@@ -74,6 +74,7 @@ enum APL_RawDataType
 
 
 class CReader;
+class PDFSignature;
 class APL_CryptoFwk;
 class APL_ReaderContext;
 class APL_Pin;
@@ -123,6 +124,11 @@ public:
 	EIDMW_APL_API void SignXadesTIndividual(const char**, unsigned int, const char*);
 	
 	EIDMW_APL_API bool ChangeCapPin(const char * new_pin);
+
+	/* PDF Signature */
+
+	EIDMW_APL_API void SignPDF(PDFSignature *pdf_sig,  const char *location,
+	                       const char *reason, const char *outfile_path);
 
 	/**
 	  * Read a file on the card 

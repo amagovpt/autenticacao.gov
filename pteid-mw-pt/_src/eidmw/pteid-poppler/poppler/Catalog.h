@@ -115,9 +115,11 @@ public:
   // Get number of pages.
   int getNumPages();
 
+  void setIncrementalSignature(bool);
+
   void prepareSignature(PDFRectangle *rect, const char * name, Ref *first_page_ref, const char *location,
-       const char * civil_number, const char *reason, unsigned long);
-  Ref addFontDict(const char *basefont);
+       const char * civil_number, const char *reason, unsigned long, int page, int sig_sector);
+  Ref addFontDict(const char *basefont, const char *name);
   Ref addImageXObject(int width, int height, unsigned char *data, int length_in_bytes);
   Ref newXObject(char *plain_text_stream,
 	 int height, int width, bool needs_font, bool needs_image);
@@ -219,8 +221,10 @@ private:
   Form *form;
   ViewerPreferences *viewerPrefs;
   Object catDict;       //****Signing patch**** The actual raw dict, for later modification
+ // bool m_is_compressed;	   	//is the catalog object compressed, this matter if we need to change it
   Ref m_sig_ref;
   Object *m_sig_dict;
+  bool incremental_update;
   int numPages;			// number of pages
   int pagesSize;		// size of pages array
   Object dests;			// named destination dictionary

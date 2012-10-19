@@ -131,6 +131,8 @@ HEADERS += CardInformation.h \
            Settings.h \
            genpur.h \
            picturepopup.h \
+	   qtlockedfile.h \
+	   qtlocalpeer.h \
            qtsingleapplication.h \
            dlgprint.h \
            dlgverifysignature.h \
@@ -153,12 +155,14 @@ SOURCES += CardInformation.cpp \
            dlgverifysignature.cpp \
            dlgsignature.cpp \
            picturepopup.cpp \
-           qtsingleapplication.cpp \
+	   qtlockedfile.cpp \
+	   qtlocalpeer.cpp \
+	   qtsingleapplication.cpp \
 	   PDFSignWindow.cpp \
 	   mylistview.cpp \
            genpur.cpp
-unix:!macx: SOURCES += qtsingleapplication_x11.cpp
-macx: SOURCES += qtsingleapplication_mac.cpp	
+# unix:!macx: SOURCES += qtsingleapplication_x11.cpp
+# macx: SOURCES += qtsingleapplication_mac.cpp	
 
 RESOURCES += eidgui.qrc 
     #         qtconf.qrc

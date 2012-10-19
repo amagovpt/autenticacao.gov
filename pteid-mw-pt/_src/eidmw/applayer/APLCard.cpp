@@ -28,6 +28,7 @@
 #include "CardPteidDef.h"
 #include "XadesSignature.h"
 #include "SigContainer.h"
+#include "PDFSignature.h"
 #include "MiscUtil.h"
 #include "EMV-Cap-Helper.h"
 #include "SSLConnection.h"
@@ -151,6 +152,19 @@ bool checkExistingFiles(const char **files, unsigned int n_paths)
 	return true;
 }
 
+void APL_Card::SignPDF(PDFSignature *pdf_sig,  const char *location,
+		         const char *reason, const char *outfile_path)
+{
+
+	if (pdf_sig)
+	{
+		pdf_sig->setCard(this);
+		pdf_sig->signFile(location, reason, outfile_path);
+	}
+		
+
+
+}
 
 CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const char *output_path)
 {

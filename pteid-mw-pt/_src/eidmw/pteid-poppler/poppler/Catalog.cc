@@ -52,6 +52,7 @@
 #include "Page.h"
 #include "Error.h"
 #include "Link.h"
+#include "DeflateStream.h"
 #include "PageLabelInfo.h"
 #include "Catalog.h"
 #include "Form.h"
@@ -101,7 +102,9 @@ Catalog::Catalog(PDFDoc *docA) {
   kidsIdxList = NULL;
   lastCachedPage = 0;
 
+
   xref->getCatalog(&catDict);
+   
   if (!catDict.isDict()) {
     error(errSyntaxError, -1, "Catalog object is wrong type ({0:s})", catDict.getTypeName());
     goto err1;
@@ -200,11 +203,17 @@ int randomInt()
 
 }
 
+void Catalog::setIncrementalSignature(bool incremental)
+{
+	incremental_update = incremental;
+
+}
+
 
 //TODO: Too long, split this into 2 functions at least
 void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *firstPageRef,
 	       	const char *location, const char *civil_number,
-		const char *reason, unsigned long filesize) 
+		const char *reason, unsigned long filesize, int page, int sig_sector) 
 {
 
 	Object signature_field;
@@ -232,7 +241,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	/* Annotation Flags: Hidden and Locked (bits 1 and 8 counting from
 	 * lowest order bit as 1)  */
 	signature_field.dictAdd(copyString("F"), obj3.initInt(132));
-	signature_field.dictAdd(copyString("SigSector"), obj3.initInt(6));
+	signature_field.dictAdd(copyString("SigSector"), obj3.initInt(sig_sector));
 
 	obj4.initArray (xref);
 	
@@ -261,7 +270,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 
 	memset(date_outstr, 0, sizeof(date_outstr));
 
-	Ref *refFirstPage = firstPageRef != NULL ? firstPageRef: &(pageRefs[0]);
+	Ref *refFirstPage = firstPageRef != NULL ? firstPageRef: &(pageRefs[page-1]);
 
 	Object ref_to_first_page;
 	/*
@@ -335,6 +344,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	}
 	else
 	{
+		fprintf(stderr, "local_acroform is a dict!\n");
 		setSigFlags(&local_acroForm, 3);
 
 	}
@@ -355,7 +365,23 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	catalog_ref.gen = xref->getRootGen();
 	catalog_ref.num = xref->getRootNum();
 	catDict.dictAdd(copyString("AcroForm"), &local_acroForm);
-	xref->setModifiedObject(&catDict, catalog_ref);
+
+	//By the spec we should be handling the case
+	//where the acroform object is compressed and we're doing 
+	//an incremental update to sign. For now it works as is...
+	/*
+	if (m_is_compressed) // && is_incremental
+	{
+		DeflateStream *str = new DeflateStream(&catDict);
+		Object obj_stream;
+		obj_stream.initStream(str);
+		xref->addIndirectObject(&obj_stream);
+	}
+	*/
+
+	if(!incremental_update)
+		xref->setModifiedObject(&catDict, catalog_ref);
+
 
 }
 
@@ -447,7 +473,8 @@ GBool Catalog::addSigRefToPage(Ref * refPage, Object* sig_ref)
 Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool needs_font, bool needs_image)
 {
 	Object * appearance_obj = new Object();
-	Object obj1, obj2, font_dict, ref_to_dict;
+	Object obj1, obj2, font_dict, ref_to_dict, ref_to_dict2, 
+	       ref_to_dict3;
 
 	appearance_obj->initDict(xref);
 	appearance_obj->dictAdd(copyString("Type"), obj1.initName("XObject"));
@@ -465,11 +492,18 @@ Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool nee
 	if (needs_font)
 	{
 
-		Ref font_f1 = addFontDict("Helvetica"); //FIXME: Personal choice #1 :)
+		Ref font_f1 = addFontDict("Helvetica", "F1"); //FIXME: Personal choice #1 :)
+		Ref font_f2 = addFontDict("Helvetica-Oblique", "F2"); 
+		Ref font_f3 = addFontDict("Helvetica-Bold", "F3"); 
+
 		ref_to_dict.initRef(font_f1.num, font_f1.gen);
+		ref_to_dict2.initRef(font_f2.num, font_f2.gen);
+		ref_to_dict3.initRef(font_f3.num, font_f3.gen);
 
 		font_dict.initDict(xref);
 		font_dict.dictAdd(copyString("F1"), &ref_to_dict);
+		font_dict.dictAdd(copyString("F2"), &ref_to_dict2);
+		font_dict.dictAdd(copyString("F3"), &ref_to_dict3);
 		resources.dictAdd(copyString("Font"), &font_dict);
 
 	}
@@ -477,7 +511,7 @@ Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool nee
 	if (needs_image)
 	{
 		//Get the CC logo already encoded as JPEG
-		Ref image_background = addImageXObject(294, 66, cc_logo_bitmap_compressed,
+		Ref image_background = addImageXObject(cc_logo_bitmap_width, cc_logo_bitmap_height, cc_logo_bitmap_compressed,
 				sizeof(cc_logo_bitmap_compressed));
 
 		ref_to_dict.initRef(image_background.num, image_background.gen);
@@ -515,7 +549,7 @@ Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool nee
 }
 
 
-Ref Catalog::addFontDict(const char *baseFontName)
+Ref Catalog::addFontDict(const char *baseFontName, const char *font_name)
 {
 
 	Object font_dict, name;
@@ -525,7 +559,7 @@ Ref Catalog::addFontDict(const char *baseFontName)
 	font_dict.dictAdd(copyString("Encoding"), name.initName("WinAnsiEncoding"));
 	font_dict.dictAdd(copyString("Subtype"), name.initName("Type1"));
 	//TODO: should be generated??
-	font_dict.dictAdd(copyString("Name"), name.initName("F1"));
+	font_dict.dictAdd(copyString("Name"), name.initName(font_name));
 
 	Ref ref_to_appearance = xref->addIndirectObject(&font_dict);
 
@@ -597,18 +631,20 @@ double getStringWidth(const char *winansi_encoded_string, double font_size)
  * Generate PDF text display commands according to a fixed-column
  * layout 
  */
-GooString *formatMultilineString(char *content, double available_space, double font_size)
+GooString *formatMultilineString(char *content, double available_space, double font_size, double space_first_line=0)
 //		int lines_available, int *lines_used)
 {
 	GooString *multi_line = new GooString();
 	std::string line = std::string(content);
 	std::string word;
 
+	//fprintf(stderr, "formatting %s space_first_line=%f\n", content, space_first_line);
+
 	//Length of the ' ' char in Helvetica 8pt
 	double space_width = 278 * font_size * 0.001; 	
 	std::istringstream iss(line, std::istringstream::in);
 
-	double space_left = available_space;
+	double space_left = space_first_line == 0 ? available_space : space_first_line;
 	double word_width;
 
 	multi_line->append("("); //Init String
@@ -623,7 +659,10 @@ GooString *formatMultilineString(char *content, double available_space, double f
 		{
 			//Start new line
 			multi_line->append(") Tj\r\n");
-			multi_line->append("0 -10 Td\r\n"); //Line spacing
+			//Line spacing
+			multi_line->append(GooString::format("{0:f} -10 Td\r\n", -(available_space -space_first_line))); 
+			//Space first line is only relevant for the 1st line
+			space_first_line = 0;
 			multi_line->append("("); 	  //Begin new line
 			multi_line->append(word.c_str());
 		
@@ -661,20 +700,39 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	
 	char n0_commands[] = "% DSBlank\n";
 	const float font_size = 8;
+	//Start with Italics font
 	GooString *n2_commands = new GooString(
-	GooString::format("q\r\n220.5 0 0 49.5 0 0 cm\r\n/Im0 Do\r\nQ\r\nBT\r\n0 {0:d} Td\r\n/F1 {1:d} Tf\r\n",
+           GooString::format("q\r\n198.3333 0 0 42.75 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n",
 			rect_y - 10, (int)font_size));
-
-	GooString *tmp = GooString::format("Assinado por: {0:s}\r\n",
-			utf8_to_latin1(name));
 	
-	n2_commands->append(formatMultilineString(tmp->getCString(), rect_x, font_size));
+
+	if (reason != NULL && strlen(reason) > 0)
+	{
+		GooString *abc = new GooString(utf8_to_latin1(reason));
+		n2_commands->append(formatMultilineString(abc->getCString(), rect_x, font_size));
+	}
+
 	n2_commands->append("0 -10 Td\r\n");
-	n2_commands->append(GooString::format("(Num. de Ident. Civil: {0:s}) Tj\r\n",
+	//Change font to regular black font
+	n2_commands->append(GooString::format("0 0 0 rg\r\n/F1 {0:d} Tf\r\n",
+			       	(int)font_size));
+
+	double assinado_por_length = 51.0;
+	//Change to bold font for the signer name
+	n2_commands->append(GooString::format("(Assinado por: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
+		assinado_por_length, (int)font_size));
+
+	n2_commands->append(formatMultilineString(utf8_to_latin1(name), 
+					rect_x, font_size, rect_x - assinado_por_length));
+	//Back to regular font
+	n2_commands->append(GooString::format("/F1 {0:d} Tf\r\n", (int)font_size));
+	
+	n2_commands->append("0 -10 Td\r\n");
+	n2_commands->append(GooString::format("(Num. de Identifica\xE7\xE3o Civil: {0:s}) Tj\r\n",
 				civil_number));
 
 	n2_commands->append(GooString::format("0 -10 Td\r\n(Data: {0:s}) Tj\r\n",
-		date_str ));
+		date_str));
 
 	if (location != NULL && strlen(location) > 0)
 	{
@@ -684,7 +742,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 		n2_commands->append(formatMultilineString(tmp_location->getCString(), 
 					rect_x, font_size));
 	}
-
+	/*
 	if (reason != NULL && strlen(reason) > 0)
 	{
 		n2_commands->append("0 -10 Td\r\n");
@@ -692,6 +750,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 				utf8_to_latin1(reason));
 		n2_commands->append(formatMultilineString(abc->getCString(), rect_x, font_size));
 	}
+	*/
 	n2_commands->append("\r\nET\r\n");
 
 	appearance_obj.initDict(xref);

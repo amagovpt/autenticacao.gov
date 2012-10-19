@@ -60,6 +60,7 @@
 #include "Stream.h"
 #include "XRef.h"
 #include "Linearization.h"
+#include "DeflateStream.h"
 #include "Link.h"
 #include "Error.h"
 #include "ErrorCodes.h"
@@ -485,6 +486,53 @@ GBool PDFDoc::isSigned() {
 }
 
 
+char *PDFDoc::getOccupiedSectors(int page)
+{
+	GooString *sectors = new GooString();
+  	Page *p = getPage(page);
+	Object type, obj1;
+
+	if(!p)
+		return NULL;
+	Annots *annotations = p->getAnnots();
+	
+	//Find the Signature Field and retrieve /Contents
+	for (int i = 0; i != annotations->getNumAnnots(); i++)
+	{
+	    Object sector;	
+	    Annot *an = annotations->getAnnot(i);
+	    if (an->getType() != Annot::typeWidget)
+		    continue;
+	    Object f = an->getDict();
+
+	    f.dictLookup("Type", &type);
+	    f.dictLookup("FT", &obj1);
+
+	    if (obj1.isNull())
+		   continue;
+	    //Search for signature fields
+	    if (strcmp(obj1.getName(), "Sig") == 0)
+	    {
+		    f.dictLookup("SigSector", &sector);
+		    if (sector.isNull())
+			    continue;
+
+		    // If we find a signature field marked
+		    // with SigSector save this value 
+		    if (sectors->getLength() == 0)
+			    sectors->append(GooString::format("{0:d}", sector.getInt()));
+		    else
+			    sectors->append(GooString::format(",{0:d}", sector.getInt()));
+
+	    }
+
+	}
+	
+	return sectors->getCString();
+
+}
+
+
 //TODO: The next 2 methods consider only the first signature they happen to find
 // in the file
 int PDFDoc::getSignatureContents(unsigned char **contents)
@@ -584,12 +632,12 @@ void dump_to_file(unsigned char * buf, unsigned int len)
 
 /* Workaround for linearized documents */
 
-Ref PDFDoc::getFirstPageRef()
+Ref PDFDoc::getPageRef(int page)
 {
 
   Ref pageRef;
 
-  pageRef.num = getHints()->getPageObjectNum(1);
+  pageRef.num = getHints()->getPageObjectNum(page);
   if (!pageRef.num) {
     error(errSyntaxWarning, -1, "Failed to get object num from hint tables for page 1");
   }
@@ -606,42 +654,66 @@ Ref PDFDoc::getFirstPageRef()
 }
 
 
-void PDFDoc::prepareSignature(PDFRectangle *rect,
-		const char * name, const char *civil_number, const char *location, const char *reason)
+void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
+		const char * name, const char *civil_number, const char *location, const char *reason, int page, int sector)
 {
 	const char needle[] = "/Type /Sig";
 	// Turn Signature mode On
 	// This class-level flag affects Trailer /ID generation
 	signature_mode = gTrue;
+	long found = 0;
+	char *base_search = NULL;
+
+	getCatalog()->setIncrementalSignature(incremental_mode);
 
 	if (isLinearized())
 	{
-	   Ref first_page = getFirstPageRef();
-	   getCatalog()->prepareSignature(rect, name, &first_page, location, civil_number, reason, this->fileSize);
+	   Ref first_page = getPageRef(page);
+	   getCatalog()->prepareSignature(rect, name, &first_page, location,
+			   civil_number, reason, this->fileSize, page, sector);
 	}
 	else
-	   getCatalog()->prepareSignature(rect, name, NULL, location, civil_number, reason, this->fileSize);
-
-	MemOutStream mem_stream(this->fileSize + 20000); //We need to write the 8K placeholder string
-	OutStream * str = &mem_stream;
-	saveAs(str, writeForceRewrite);
+	   getCatalog()->prepareSignature(rect, name, NULL, location,
+			   civil_number, reason, this->fileSize, page, sector);
 	
+	//Add enough space for the placeholder string
+	MemOutStream mem_stream(this->fileSize + 20000); 
+	OutStream * str = &mem_stream;
+
+	if(incremental_mode)
+	{
+		//We're adding additional signature so it has to be an incremental update
+	   	fprintf(stderr, "prepareSignature(): Incremental Update Mode\n");	
+		saveIncrementalUpdate(str);
+	}
+	else
+	{
+		saveAs(str, writeForceRewrite);
+	}
 	//DEBUG
 	//fprintf(stderr, "Dumping prepared Signature - with dummy ByteRanges...\n");
-	//dump_to_file(mem_stream.getData(), (int)mem_stream.size());
-	//
-	long found = 
-		(long)memmem((char *)mem_stream.getData(), mem_stream.size(),
-			       	(const void *) needle, sizeof(needle)-1);
+
+	//fprintf(stderr, "Current size: %d\n", mem_stream.size());	
 	long haystack = (long)mem_stream.getData();
+
+	//Start searching after the end of current file	to skip previous
+	//Sig fields
+	if (incremental_mode)
+		base_search = (char *)mem_stream.getData()+this->fileSize;
+	else
+		base_search = (char *)mem_stream.getData();
+
+	found = (long)memmem(base_search, mem_stream.size(),
+			       	(const void *) needle, sizeof(needle)-1);
+
+
+	m_sig_offset = found - haystack + 21;
 	if (found == 0)
 		fprintf(stderr, "Warning: can't find /Type /Sig... Abort!!\n");
-	unsigned long offset = found - haystack + 21;
 
-	//Save it for getSigByteArray()
-	m_sig_offset = offset;
+	//fprintf(stderr, "Sig offset: %d\n", m_sig_offset);	
 	
-	getCatalog()->setSignatureByteRange(offset, ESTIMATED_LEN, mem_stream.size());
+	getCatalog()->setSignatureByteRange(m_sig_offset, ESTIMATED_LEN, mem_stream.size());
 
 
 }
@@ -649,13 +721,19 @@ void PDFDoc::prepareSignature(PDFRectangle *rect,
  * i.e. everything except the placeholder hex string <0000...>
    The return value is the size of the array
 */
-unsigned long PDFDoc::getSigByteArray(unsigned char **byte_array)
+unsigned long PDFDoc::getSigByteArray(unsigned char **byte_array, bool incremental_mode)
 {
 	MemOutStream mem_stream(this->fileSize+ESTIMATED_LEN +1000);
 	unsigned int i = 0, ret_len = 0;
-	OutStream * str = &mem_stream;
-	saveAs(str, writeForceRewrite);
+	OutStream * out_str = &mem_stream;
 
+	if (incremental_mode)
+	    saveIncrementalUpdate(out_str);
+	else 
+	    saveAs(out_str, writeForceRewrite);
+	
+	//DEBUG
+	//saveAs(new GooString("/home/agrr/debug_to_be_signed.bin"), writeForceIncremental);
 	char * base_ptr = (char *)mem_stream.getData();
 
 	ret_len = mem_stream.size() - ESTIMATED_LEN - 2; 
@@ -1060,7 +1138,8 @@ void PDFDoc::saveIncrementalUpdate (OutStream* outStr)
     uxref->add(uxrefStreamRef.num, uxrefStreamRef.gen, uxrefOffset, gTrue);
   }
 
-  Dict *trailerDict = createTrailerDict(numobjects, gTrue, getStartXRef(), &rootRef, getXRef(), fileNameA, uxrefOffset);
+  Dict *trailerDict = createTrailerDict(numobjects, gTrue, getStartXRef(), &rootRef, getXRef(),
+		  fileNameA, uxrefOffset, signature_mode);
   if (xRefStream) {
     writeXRefStreamTrailer(trailerDict, uxref, &uxrefStreamRef, uxrefOffset, outStr, getXRef());
   } else {
@@ -1278,7 +1357,25 @@ Guint PDFDoc::writeObject (Object* obj, Ref* ref, OutStream* outStr, XRef *xRef,
           writeDictionnary (stream->getDict(),outStr, xRef, numOffset);
           writeStream (stream,outStr);
           obj1.free();
-        } else {
+        }
+	/*
+	else if (stream->getKind() == strDeflate) {
+
+		Object obj_stream_dict;
+		obj_stream_dict.initDict(xRef);
+		//TODO complete with ObjStm attributes
+		//obj_stream.dictAdd("", );
+		//TODO 
+		DeflateStream *def = dynamic_cast<DeflateStream*>(stream);
+
+	  MemOutStream *out_mem_str = new MemOutStream(256);
+	  writeDictionnary(stream->getDict(), out_mem_str, xRef, numOffset);
+
+	  def->setStream(out_mem_str);
+          writeStream (stream,outStr);
+
+	} */
+	else {
           //raw stream copy
           FilterStream *fs = dynamic_cast<FilterStream*>(stream);
           if (fs) {
@@ -1370,21 +1467,7 @@ Dict *PDFDoc::createTrailerDict(int uxrefSize, GBool incrUpdate, Guint startxRef
 
   Object obj4;
   xRef->getTrailerDict()->getDict()->lookup("ID", &obj4);
-  if (incrUpdate) {
-
-    if (!obj4.isArray()) {
-      error(errSyntaxWarning, -1, "PDFDoc::createTrailerDict original file's ID entry isn't an array. Trying to continue");
-    } else {
-      //Get the first part of the ID
-      obj4.arrayGet(0,&obj3); 
-
-      obj2.arrayAdd(&obj3);
-      obj2.arrayAdd(&obj1);
-      trailerDict->set("ID", &obj2);
-    }
-
-  }
-  else if (is_signature_mode)
+  if (is_signature_mode)
   {
 	  if (!obj4.isArray()) {
 		  error(errSyntaxWarning, -1, "PDFDoc::createTrailerDict original file's ID entry isn't an array. Trying to continue");

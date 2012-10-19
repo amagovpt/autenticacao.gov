@@ -38,27 +38,6 @@ namespace eIDMW
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0xff
 	};
 
-	static char *XADES_STRINGS[] = 
-	{
-		"Signature Validation error: Couldn't extract signature from zip container", 
-		"Erro de validação da assinatura: Não foi possível extrair a assinatura",
-		"Timestamp Validation: The timestamp does not match the signed content", 
-		"Validação de Selo Temporal: O selo temporal não corresponde ao conteúdo assinado",
-		"Signature Validation error: Malformed XML Document",
-		"Erro de validação da assinatura: Erro de sintaxe na assinatura XML",
-		"Signature Validation error: At least one of the signed file(s) was changed or is missing",
-		"Erro de validação da assinatura: Pelo menos um dos ficheiros assinados foi alterado ou está em falta",
-		"Timestamp Validation: Internal Error, couldn't validate timestamp", 
-		"Validação de Selo Temporal: Erro Interno, não foi possível validar o selo temporal", 
-		"Validation error: RSA Signature of referenced content is invalid",
-		"Erro de validação da assinatura: A assinatura criptográfica do conteúdo está inválida",
-		"Validation Error: The certificate used to sign this data is not trusted",
-		"Erro de validação da assinatura: O certificado contido na assinatura não provém de uma fonte confiável",
-		"Signed by:",
-		"Assinado por:",
-		"Timestamp: ",
-		"Selo temporal: "
-	};
 
 	class XadesSignature
 	{
@@ -116,18 +95,6 @@ namespace eIDMW
 		void generate_asn1_request_struct(unsigned char *sha_1);
 
 		static void initXerces();
-
-		static const char * getString(unsigned int id)
-		{
-			
-			std::wstring language = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
-			if(wcscmp(L"nl", language.c_str())==0)
-			{
-				return XADES_STRINGS[id+1];
-			}
-			else
-				return XADES_STRINGS[id];
-		}
 		
 		X509 * mp_cert;
 		APL_Card *mp_card;

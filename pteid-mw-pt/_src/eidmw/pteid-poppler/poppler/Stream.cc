@@ -348,6 +348,11 @@ MemOutStream::~MemOutStream()
 	free(buffer);
 }
 
+void MemOutStream::put(char c) {
+	*(buffer+used) = c;
+	used++;
+}
+
 void MemOutStream::printf(const char *format, ...)
 {
 

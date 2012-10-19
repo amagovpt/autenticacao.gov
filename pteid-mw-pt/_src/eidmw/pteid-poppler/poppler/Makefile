@@ -1,6 +1,9 @@
-CFLAGS= -Wall -fPIC -O3 -I.. -I../goo/
+CFLAGS= -Wall -fPIC -O3 -I.. -I../goo/ -g
 
 BASENAME=libpteid-poppler
+
+#Need to link to zlib to get FlateEncode compression and decompression
+#LDFLAGS += -lz
 
 ifeq ($(shell uname), Darwin)
 	LIB_FILENAME=$(BASENAME).dylib

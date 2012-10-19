@@ -139,10 +139,40 @@
       <number>0</number>
      </property>
      <property name="sizeConstraint">
-      <enum>QLayout::SetMaximumSize</enum>
+      <enum>QLayout::SetMinimumSize</enum>
      </property>
      <item>
+      <widget class="QRadioButton" name="radioButton_firstpage">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>First Page</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButton_lastpage">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Last Page</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QRadioButton" name="radioButton_choosepage">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Choose Page...</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QLabel" name="label_page">
          <property name="enabled">

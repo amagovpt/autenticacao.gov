@@ -36,6 +36,8 @@ class PDFSignWindow : public QDialog
 	    void on_checkBox_location_toggled(bool);
 	    void on_checkBox_reason_toggled(bool);
 	    void on_visible_checkBox_toggled(bool);
+	    void on_radioButton_choosepage_toggled(bool);
+	    void on_spinBox_page_valueChanged(int);
 	    void on_tableWidget_currentCellChanged(int row, int column, int prev_row, int prev_column);
 
 
@@ -46,6 +48,8 @@ class PDFSignWindow : public QDialog
 
 	private:
 	    void update_sector(int row, int column);
+	    void highlightSectors(QString &csv_sectors);
+	    void clearAllSectors();
 	    void addFileToListView(QStringList &str);
 
 	    Ui_PDFSignWindow ui;
@@ -54,6 +58,9 @@ class PDFSignWindow : public QDialog
 	    QProgressDialog *pdialog;
 	    QFutureWatcher<void> FutureWatcher;
 	    PTEID_PDFSignature *m_pdf_sig;
+
+	    QString current_input_path;
+	    QBrush m_default_background;
 
 	    int m_selected_sector;
 
