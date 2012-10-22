@@ -52,7 +52,7 @@
 #include "Page.h"
 #include "Error.h"
 #include "Link.h"
-#include "DeflateStream.h"
+//#include "DeflateStream.h"
 #include "PageLabelInfo.h"
 #include "Catalog.h"
 #include "Form.h"
@@ -64,6 +64,7 @@
 #include "BuiltinFont.h"
 #include "FontEncodingTables.h"
 #include "VisibleSignatureBitmap.h"
+#include "Myriad-Font.h"
 
 //Forward-declaration of the function defined in Iconv.cc
 //couldn't bother to write a header for it
@@ -467,7 +468,8 @@ GBool Catalog::addSigRefToPage(Ref * refPage, Object* sig_ref)
 }
 
 /**
-* Create a Standard XObject with plain text content stream
+* Creates an XObject with plain text content stream for the Visual Signature N0 and N2 Layers
+* For the N2 layer it adds the needed fonts and image.
 *
 */
 Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool needs_font, bool needs_image)
@@ -492,10 +494,13 @@ Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool nee
 	if (needs_font)
 	{
 
-		Ref font_f1 = addFontDict("Helvetica", "F1"); //FIXME: Personal choice #1 :)
-		Ref font_f2 = addFontDict("Helvetica-Oblique", "F2"); 
-		Ref font_f3 = addFontDict("Helvetica-Bold", "F3"); 
+		Object myriad_regular = createMyriadDict(xref, MYRIAD_REGULAR);
+		Object myriad_italic = createMyriadDict(xref, MYRIAD_ITALIC);
+		Object myriad_bold = createMyriadDict(xref, MYRIAD_BOLD);
 
+		Ref font_f1 = xref->addIndirectObject(&myriad_regular);
+		Ref font_f2 = xref->addIndirectObject(&myriad_italic);
+		Ref font_f3 = xref->addIndirectObject(&myriad_bold);
 		ref_to_dict.initRef(font_f1.num, font_f1.gen);
 		ref_to_dict2.initRef(font_f2.num, font_f2.gen);
 		ref_to_dict3.initRef(font_f3.num, font_f3.gen);
@@ -510,7 +515,7 @@ Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool nee
 
 	if (needs_image)
 	{
-		//Get the CC logo already encoded as JPEG
+		//Get the Cartao de Cidadao logo already encoded as JPEG
 		Ref image_background = addImageXObject(cc_logo_bitmap_width, cc_logo_bitmap_height, cc_logo_bitmap_compressed,
 				sizeof(cc_logo_bitmap_compressed));
 
@@ -702,7 +707,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	const float font_size = 8;
 	//Start with Italics font
 	GooString *n2_commands = new GooString(
-           GooString::format("q\r\n198.3333 0 0 42.75 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n",
+           GooString::format("q\r\n175.5 0 0 31.5 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n",
 			rect_y - 10, (int)font_size));
 	
 

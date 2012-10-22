@@ -60,7 +60,7 @@
 #include "Stream.h"
 #include "XRef.h"
 #include "Linearization.h"
-#include "DeflateStream.h"
+//#include "DeflateStream.h"
 #include "Link.h"
 #include "Error.h"
 #include "ErrorCodes.h"

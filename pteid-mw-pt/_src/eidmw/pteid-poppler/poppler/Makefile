@@ -31,6 +31,7 @@ SOURCES =		\
 	Linearization.cc 	\
 	Link.cc 		\
 	LocalPDFDocBuilder.cc	\
+	Myriad-Font.cc		\
 	Movie.cc                \
 	NameToCharCode.cc	\
 	Object.cc 		\
