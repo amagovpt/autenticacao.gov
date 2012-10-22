@@ -49,17 +49,17 @@ private:
     Ui_dlgSignature ui;
     CardInformation const& m_CI_Data;
     QString m_CurrReaderName; //!< the current reader we're using
-    QStringList alist;
+    QAbstractItemModel *list_model;
     MyListView *view;
     QProgressDialog *pdialog;
     QFutureWatcher<void> FutureWatcher;
-	bool success;
+    bool success;
 
     void SignListView (QStringList list);
     void runsign(const char ** paths, unsigned int n_paths, const char *output_path, bool timestamp);
     void run_multiple_sign(const char**, unsigned int, const char*, bool);
     void ShowErrorMsgBox();
-	void ShowSuccessMsgBox();
+    void ShowSuccessMsgBox();
 
 };
 

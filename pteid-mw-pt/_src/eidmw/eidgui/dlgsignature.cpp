@@ -56,6 +56,8 @@ dlgSignature::dlgSignature( QWidget* parent, CardInformation& CI_Data)
 		int screenNr = desktop->screenNumber();
 		QRect rect = desktop->availableGeometry(screenNr);
 		int height = rect.height();
+		list_model = new QStringListModel();
+		ui.listView->setModel(list_model);
 
 		int thiswidth = this->width();
 		int thisheight = this->height();
@@ -117,17 +119,17 @@ void dlgSignature::on_pbAddFiles_clicked( void )
 void dlgSignature::SignListView (QStringList list)
 {
 	view = ui.listView;
-	QStringListModel* localModel = new QStringListModel();
 
-	alist.append(list);
+	for(int i=0; i != list.size(); i++)
+	{
 
-	alist.removeDuplicates();
+		list_model->insertRows(list_model->rowCount(), 1);
+		list_model->setData(list_model->index(list_model->rowCount()-1, 0), list.at(i));
 
-	localModel->setStringList(alist);
-	view->setModel(localModel);
+	}
 
 	//Enable sign button now that we have data
-	if (!alist.isEmpty())
+	if (!list.isEmpty())
 		ui.pbSign->setEnabled(true);
 
 	//signal right click
