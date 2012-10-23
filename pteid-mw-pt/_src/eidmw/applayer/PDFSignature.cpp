@@ -7,14 +7,32 @@
 #include "PDFSignature.h"
 #include "MWException.h"
 #include "eidErrors.h"
+#include "MiscUtil.h"
 #include "CardPteidDef.h"
 #include "Log.h"
+
+#include <string>
+
+//For the setSSO calls
+#include "CardLayer.h"
 
 #include <openssl/bio.h>
 #include <openssl/x509.h>
 
 namespace eIDMW
 {
+
+	PDFSignature::PDFSignature()
+	{
+
+		m_visible = false;
+		m_page = 1;
+		m_sector = 0;
+		m_civil_number = NULL;
+		m_citizen_fullname = NULL;
+		m_batch_mode = true;
+
+	}
 
 	PDFSignature::PDFSignature(const char *pdf_file_path): m_pdf_file_path(pdf_file_path)
 	{
@@ -26,12 +44,19 @@ namespace eIDMW
 		m_sector = 0;
 		m_civil_number = NULL;
 		m_citizen_fullname = NULL;
+		m_batch_mode = false;
 		m_doc = new PDFDoc(new GooString(pdf_file_path));
 	
 	}
 
 	PDFSignature::~PDFSignature()
 	{
+	}
+
+	void PDFSignature::batchAddFile(char *file_path)
+	{
+		m_files_to_sign.push_back(file_path);	
+
 	}
 
 	void PDFSignature::setVisible(unsigned int page_number, int sector_number)
@@ -57,8 +82,6 @@ namespace eIDMW
 		//Add left margin
 		sig_rect.x1 = lr_margin;
 		sig_rect.x2 = lr_margin;
-
-
 
 
 		if (m_sector < 1 || m_sector > 9)
@@ -136,14 +159,61 @@ namespace eIDMW
 
 	char* PDFSignature::getOccupiedSectors(int page)
 	{
-		return m_doc->getOccupiedSectors(page);	
+		if (m_doc)
+			return m_doc->getOccupiedSectors(page);	
+		else
+			return "";
 	}
 
+#ifdef WIN32
+#define PATH_SEP "\\"
+#else
+#define PATH_SEP "/"
+#endif
+	std::string PDFSignature::generateFinalPath(const char *output_dir, const char *path)
+	{
 
-	void PDFSignature::signFile(const char *location,
+		char * pdf_filename = Basename((char*)path);
+		//sprintf(final_path, "%s" PATH_SEP "%s.pdf", output_dir, tmp_path);
+
+		std::string final_path = string(output_dir) + PATH_SEP +pdf_filename+ "_signed.pdf";
+
+		return final_path;
+	}
+
+	void PDFSignature::signFiles(const char *location,
 		const char *reason, const char *outfile_path)
 	{
 
+		if (!m_batch_mode)
+		{
+			signSingleFile(location, reason, outfile_path);
+
+		}
+		//PIN-Caching is ON after the first signature
+		else
+		{
+			 for (int i = 0; i < m_files_to_sign.size(); i++)
+			 {
+				 char *current_file = m_files_to_sign.at(i);
+				 std::string f = generateFinalPath(outfile_path, current_file);
+				 m_doc = new PDFDoc(new GooString(current_file));
+
+				 signSingleFile(location, reason, f.c_str());
+				 if (i == 0)
+					 m_card->getCalReader()->setSSO(true);
+
+			 }
+			 m_card->getCalReader()->setSSO(false);
+		}
+
+	}
+
+
+	void PDFSignature::signSingleFile(const char *location,
+		const char *reason, const char *outfile_path)
+	{
+		
 		PDFDoc *doc = m_doc;
 		//The class ctor initializes it to (0,0,0,0)
 		//so we can use this for invisible sig
@@ -163,7 +233,7 @@ namespace eIDMW
 
 		if (doc->isEncrypted())
 		{
-			fprintf(stderr, "Encrypted PDF: This is the TODO List\n");
+			fprintf(stderr, "Encrypted PDF: This is in the TODO List\n");
 			//TODO: Add proper error code(s)
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}
@@ -192,8 +262,10 @@ namespace eIDMW
 			fprintf(stderr, "Pteid Oops...\n");
 
 		unsigned char *to_sign;
-
-		getCitizenData();
+		
+		//Civil number and name should be only read once
+		if (m_civil_number == NULL)
+		   getCitizenData();
 
 		bool incremental = doc->isSigned();
 

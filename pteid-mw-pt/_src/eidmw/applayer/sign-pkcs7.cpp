@@ -75,15 +75,7 @@ CByteArray PteidSign(APL_Card *card, CByteArray &to_sign, bool use_sha256)
 
 	to_sign_padded.Append(to_sign);
 	
-	try
-	{
-		output = card->Sign(to_sign_padded, true);
-	}
-	catch (...)
-	{ 
-		MWLOG(LEV_ERROR, MOD_APL, L"Caught exception in APLCard::Sign()"); 
-	}
-	
+	output = card->Sign(to_sign_padded, true);
 
 	return output;
 
