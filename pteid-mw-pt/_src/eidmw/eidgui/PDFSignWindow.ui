@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>411</width>
-    <height>632</height>
+    <height>650</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -60,7 +60,7 @@
      <string>Add Files...</string>
     </property>
    </widget>
-   <widget class="QListView" name="pdf_listview">
+   <widget class="MyListView" name="pdf_listview">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -90,7 +90,7 @@
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>590</y>
+      <y>600</y>
       <width>91</width>
       <height>27</height>
      </rect>
@@ -107,7 +107,7 @@
      <rect>
       <x>130</x>
       <y>200</y>
-      <width>231</width>
+      <width>251</width>
       <height>26</height>
      </rect>
     </property>
@@ -120,7 +120,7 @@
      <rect>
       <x>130</x>
       <y>230</y>
-      <width>231</width>
+      <width>251</width>
       <height>26</height>
      </rect>
     </property>
@@ -129,7 +129,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>280</y>
+      <y>300</y>
       <width>351</width>
       <height>304</height>
      </rect>
@@ -236,7 +236,7 @@
           <string/>
          </property>
          <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -301,7 +301,7 @@
           <bool>false</bool>
          </attribute>
          <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>20</number>
+          <number>26</number>
          </attribute>
          <attribute name="horizontalHeaderMinimumSectionSize">
           <number>10</number>
@@ -309,8 +309,11 @@
          <attribute name="verticalHeaderVisible">
           <bool>false</bool>
          </attribute>
+         <attribute name="verticalHeaderDefaultSectionSize">
+          <number>40</number>
+         </attribute>
          <attribute name="verticalHeaderMinimumSectionSize">
-          <number>10</number>
+          <number>15</number>
          </attribute>
          <row/>
          <row/>
@@ -341,7 +344,7 @@
     <property name="geometry">
      <rect>
       <x>290</x>
-      <y>590</y>
+      <y>600</y>
       <width>91</width>
       <height>27</height>
      </rect>
@@ -376,8 +379,41 @@
      <string>Location:</string>
     </property>
    </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>180</y>
+      <width>351</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>280</y>
+      <width>351</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyListView</class>
+   <extends>QListView</extends>
+   <header>mylistview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -256,6 +256,11 @@ void PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_
 	END_TRY_CATCH
 }
 
+PTEID_PDFSignature::PTEID_PDFSignature()
+{
+	mp_signature = new PDFSignature();
+}
+
 PTEID_PDFSignature::PTEID_PDFSignature(const char *input_path)
 {
 	mp_signature = new PDFSignature(input_path);
@@ -264,6 +269,12 @@ PTEID_PDFSignature::PTEID_PDFSignature(const char *input_path)
 PTEID_PDFSignature::~PTEID_PDFSignature()
 {
 	delete mp_signature;
+}
+
+void PTEID_PDFSignature::addToBatchSigning(char *input_path)
+{
+	mp_signature->batchAddFile(input_path);
+
 }
 
 char *PTEID_PDFSignature::getOccupiedSectors(int page)

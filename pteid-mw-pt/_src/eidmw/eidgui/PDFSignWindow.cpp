@@ -44,7 +44,10 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	"<br>The positioning mechanism is optimized<br>for pages of A4 size in portrait<br> orientation."
 	"</html>"));
 	m_pdf_sig = NULL;
+	success = false;
 	ui.spinBox_page->setValue(1);
+	list_model = new QStringListModel();
+	ui.pdf_listview->setModel(list_model);
 	
 	char conteudo = 0x31;
 
@@ -143,14 +146,77 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 
 }
 
+void PDFSignWindow::ShowSuccessMsgBox()
+{
+
+	QString caption = tr("PDF Signature");
+        QString msg = tr("Signature(s) succesfully generated");
+	QMessageBox msgBoxp(QMessageBox::Information, caption, msg, 0, this);
+	msgBoxp.exec();
+
+}
+
+void PDFSignWindow::ShowErrorMsgBox()
+{
+
+	QString caption  = tr("Error");
+        QString msg = tr("Error Generating Signature!");
+  	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
+  	msgBoxp.exec();
+}
+
+
+void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
+	       	char *location, char *reason)
+{
+
+	PTEID_EIDCard* card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+	try
+	{
+		card->SignPDF(*m_pdf_sig, selected_page,
+				m_selected_sector, location, reason, strdup(savefilepath.toUtf8().data()));
+		this->success = true;
+
+	}
+
+	catch (PTEID_Exception &e)
+	{
+		this->success = false;
+		fprintf(stderr, "Caught exception in some SDK method. Error code: 0x%08x\n", (unsigned int)e.GetError());
+		//TODO: Show error message box
+	}
+
+
+}
+
 void PDFSignWindow::on_button_sign_clicked()
 {
 	//For invisible sigs the implementation we'll
 	//need to add a reference to the sigfield in some page so...
 	int selected_page = 1;
-	PTEID_EIDCard*  card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+	QString savefilepath;
 
-	QString savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), 
+
+	QStringListModel *model = dynamic_cast<QStringListModel *>(list_model);
+
+	if (model->rowCount() > 1)
+	{
+		m_pdf_sig = new PTEID_PDFSignature();
+		for (int i=0; i < model->rowCount(); i++)
+		{
+			QString tmp = model->data(model->index(i, 0), 0).toString();
+			char *final = strdup(tmp.toUtf8().data());
+			m_pdf_sig->addToBatchSigning(final);
+
+		}
+
+		savefilepath = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+				QDir::homePath(),
+				QFileDialog::ShowDirsOnly);
+
+	}
+	else
+	savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), 
 			QDir::homePath()+"/signed.pdf", tr("PDF files (*.pdf)"));
 
 	char *reason = NULL, *location = NULL;
@@ -174,32 +240,31 @@ void PDFSignWindow::on_button_sign_clicked()
 
 	}
 
-	try
-	{
-		/*
-		//Single File Signature case
-		//TODO: Batch signing
-		pdialog = new QProgressDialog();
-		pdialog->setWindowModality(Qt::WindowModal);
-		pdialog->setWindowTitle(tr(" PDF Sign"));
-		pdialog->setLabelText(tr("Signing PDF file..."));
-		pdialog->setMinimum(0);
-		pdialog->setMaximum(0);
-		connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
-		*/
-		card->SignPDF(*m_pdf_sig, selected_page,
-				m_selected_sector, location, reason, savefilepath.toUtf8().data());
-	}
-	catch (PTEID_Exception &e)
-	{
-		fprintf(stderr, "Caught exception in some SDK method. Error code: 0x%08x\n", (unsigned int)e.GetError());
-		return;
-		//TODO: Show error message box
-	}
-	
-	//TODO: Fix this for Windows URLs
-	QDesktopServices::openUrl(QString("file://")+ current_input_path);
 
+	//Single File Signature case
+	pdialog = new QProgressDialog();
+	pdialog->setWindowModality(Qt::WindowModal);
+	pdialog->setWindowTitle(tr(" PDF Sign"));
+	pdialog->setLabelText(tr("Signing PDF file..."));
+	pdialog->setMinimum(0);
+	pdialog->setMaximum(0);
+	connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
+
+	QFuture<void> future = QtConcurrent::run(this,
+			&PDFSignWindow::run_sign, selected_page,savefilepath, location, reason );
+
+	this->FutureWatcher.setFuture(future);
+	pdialog->exec();
+
+	if (this->success)
+		ShowSuccessMsgBox();
+	else
+		ShowErrorMsgBox();
+
+	//TODO: Fix this for Windows URLs or else just remove it
+	//if (model->rowCount() == 1)
+	//	QDesktopServices::openUrl(QString("file://")+ savefilepath);
+	this->close();
 
 }
 
@@ -236,31 +301,31 @@ void mapSectorToRC(int sector, int *row, int *column)
 		switch(sector)
 		{
 			case 1:
-				*row = 0 ; *column = 0 ;
+				*row = 0 ; *column = 0;
 				break;
 			case 2:
-				*row = 0 ; *column = 1 ;
+				*row = 0 ; *column = 1;
 				break;
 			case 3:
-				*row = 0 ; *column =2 ;
+				*row = 0 ; *column = 2;
 				break;
 			case 4:
-				*row = 1; *column =0 ;
+				*row = 1; *column = 0;
 				break;
 			case 5:
-				*row = 1; *column =1 ;
+				*row = 1; *column = 1;
 				break;
 			case 6:
 				*row = 1; *column = 2;
 				break;
 			case 7:
-				*row = 2 ; *column = 0 ;
+				*row = 2 ; *column = 0;
 				break;
 			case 8:
 				*row = 2; *column = 1;
 				break;
 			case 9:
-				*row = 2; *column = 2 ;
+				*row = 2; *column = 2;
 				break;
 			default:
 				fprintf(stderr, "Invalid Sector: %d\n", sector);
@@ -281,8 +346,6 @@ void PDFSignWindow::clearAllSectors()
 
 }
 
-
-//TODO ListView: delete
 
 void PDFSignWindow::highlightSectors(QString &csv_sectors)
 {
@@ -315,17 +378,17 @@ void PDFSignWindow::highlightSectors(QString &csv_sectors)
 void PDFSignWindow::addFileToListView(QStringList &str)
 {
 
-	QStringListModel* localModel = new QStringListModel();
-	aList.append(str);
+	for(int i=0; i != str.size(); i++)
+	{
 
-	aList.removeDuplicates();
+		list_model->insertRows(list_model->rowCount(), 1);
+		list_model->setData(list_model->index(list_model->rowCount()-1, 0), str.at(i));
 
-	localModel->setStringList(aList);
+	}
 
-	current_input_path = aList.at(0);
+	current_input_path = str.at(0);
 
 	m_pdf_sig = new PTEID_PDFSignature(current_input_path.toUtf8().data());
-	ui.pdf_listview->setModel(localModel);
 
 	//Set the spinbox with the appropriate value
 	ui.spinBox_page->setMaximum(m_pdf_sig->getPageCount());
@@ -333,14 +396,14 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(1));
 	highlightSectors(sectors);
 
-	if (aList.size() > 1)
+	if (list_model->rowCount() > 1)
 	{
 		clearAllSectors();
 		//TODO
 	}
 
 	//Enable sign button now that we have data
-	if (!aList.isEmpty())
+	if (!str.isEmpty())
 		ui.button_sign->setEnabled(true);
 
 }

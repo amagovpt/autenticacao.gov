@@ -51,10 +51,14 @@ class PDFSignWindow : public QDialog
 	    void highlightSectors(QString &csv_sectors);
 	    void clearAllSectors();
 	    void addFileToListView(QStringList &str);
+	    void run_sign(int page, QString& savefile, char *location, char *reason);
+	    void ShowSuccessMsgBox();
+	    void ShowErrorMsgBox();
+
 
 	    Ui_PDFSignWindow ui;
     	    CardInformation const& m_CI_Data;
-	    QStringList aList;
+	    QAbstractItemModel *list_model;
 	    QProgressDialog *pdialog;
 	    QFutureWatcher<void> FutureWatcher;
 	    PTEID_PDFSignature *m_pdf_sig;
@@ -64,6 +68,8 @@ class PDFSignWindow : public QDialog
 
 	    int m_selected_sector;
 
+	    //Success flag for the error messages
+	    bool success;
 
 };
 

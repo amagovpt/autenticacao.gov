@@ -816,8 +816,11 @@ class PDFSignature;
 PTEIDSDK_API class PTEID_PDFSignature
 {
 	public:
+		PTEID_PDFSignature();
 		PTEID_PDFSignature(const char *input_path);
 		~PTEID_PDFSignature();
+
+		void addToBatchSigning(char *input_path);
 		int getPageCount();
 		char *getOccupiedSectors(int page);
 
