@@ -297,8 +297,10 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	signature_dict->dictAdd(copyString("Contents"), obj1.initString(sig_content));
 	signature_dict->dictAdd(copyString("SubFilter"), obj1.initName("adbe.pkcs7.detached"));
 	signature_dict->dictAdd(copyString("Name"), obj1.initString(new GooString(utf8_to_latin1(name))));
-	signature_dict->dictAdd(copyString("Location"), obj1.initString(new GooString(utf8_to_latin1(location))));
-	signature_dict->dictAdd(copyString("Reason"), obj1.initString(new GooString(utf8_to_latin1(reason))));
+	const char *loc = location != NULL ? utf8_to_latin1(location) : "";
+	signature_dict->dictAdd(copyString("Location"), obj1.initString(new GooString(loc)));
+	const char *rea = reason != NULL ? utf8_to_latin1(reason): "";
+	signature_dict->dictAdd(copyString("Reason"), obj1.initString(new GooString(rea)));
 	if (strftime(date_outstr, sizeof(date_outstr), "D:%Y%m%d%H%M%S+00'00'", tmp_date) == 0) {
                fprintf(stderr, "strftime returned 0");
         }
