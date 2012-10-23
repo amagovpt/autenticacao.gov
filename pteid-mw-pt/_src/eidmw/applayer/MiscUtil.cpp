@@ -105,6 +105,25 @@ namespace eIDMW
 	}
 
 
+
+void replace_lastdot_inplace(char* str_in)
+{
+	// We can only search forward because memrchr and strrchr 
+	// are not available on Windows *sigh*
+	char ch = '.';
+	char * pdest = str_in, *last_dot= NULL;
+       	while ((pdest = strchr(pdest, ch)) != NULL)
+	{
+	     last_dot = pdest;
+	     pdest++;
+	}
+
+	// Don't replace '.' if its a UNIX dotfile
+	if (last_dot != NULL && *(last_dot-1) != '/')
+		*last_dot = '_';
+}
+
+
 /*****************************************************************************************
 ------------------------------------ CTimestampUtil ---------------------------------------
 *****************************************************************************************/

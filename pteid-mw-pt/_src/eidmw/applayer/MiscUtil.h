@@ -42,6 +42,8 @@ int Truncate(const char *path);
 void latin1_to_utf8(unsigned char * in, unsigned char *out);
 char * utf8_to_latin1(char * in);
 
+void replace_lastdot_inplace(char *in);
+
 //Common type between 2/3 different cpp files
 typedef struct _hashed_file_
 {
