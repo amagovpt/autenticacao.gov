@@ -50,9 +50,9 @@
    <widget class="QPushButton" name="button_addfile">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>219</x>
       <y>150</y>
-      <width>91</width>
+      <width>151</width>
       <height>27</height>
      </rect>
     </property>
@@ -105,9 +105,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>140</x>
       <y>200</y>
-      <width>251</width>
+      <width>241</width>
       <height>26</height>
      </rect>
     </property>
@@ -118,9 +118,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>140</x>
       <y>230</y>
-      <width>251</width>
+      <width>241</width>
       <height>26</height>
      </rect>
     </property>
@@ -358,7 +358,7 @@
      <rect>
       <x>30</x>
       <y>200</y>
-      <width>89</width>
+      <width>101</width>
       <height>21</height>
      </rect>
     </property>
@@ -371,7 +371,7 @@
      <rect>
       <x>30</x>
       <y>230</y>
-      <width>89</width>
+      <width>101</width>
       <height>21</height>
      </rect>
     </property>

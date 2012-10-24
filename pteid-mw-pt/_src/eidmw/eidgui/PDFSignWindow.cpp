@@ -39,10 +39,10 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	const QIcon Ico = QIcon(":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png");
 	this->setWindowIcon(Ico);
 	int i=0, j=0;
-	
+
 	ui.label_choose_sector->setText(tr(
 	"<html>Choose the page sector where you <br> want your signature to appear."
-	"<br>The positioning mechanism is optimized<br>for pages of A4 size in portrait<br> orientation."
+	"<br>The shaded sectors are already occupied."
 	"</html>"));
 	m_pdf_sig = NULL;
 	success = false;
@@ -53,7 +53,7 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	
 	char conteudo = 0x31;
 
-	for( i = 0 ;i < 3; i++ ) 
+	for ( i = 0; i < 3; i++ ) 
 	{
 		for ( j = 0; j < 3; j++)
 		{
@@ -233,6 +233,9 @@ void PDFSignWindow::on_button_sign_clicked()
 		savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), 
 			QDir::homePath()+"/signed.pdf", tr("PDF files (*.pdf)"));
 
+	if (savefilepath.isNull() || savefilepath.isEmpty())
+		return;
+
 	char *reason = NULL, *location = NULL;
 	if (ui.location_textbox->isEnabled() && ui.location_textbox->text().size() > 0) {
 		location = strdup(ui.location_textbox->text().toUtf8().data());
@@ -258,8 +261,8 @@ void PDFSignWindow::on_button_sign_clicked()
 	//Single File Signature case
 	pdialog = new QProgressDialog();
 	pdialog->setWindowModality(Qt::WindowModal);
-	pdialog->setWindowTitle(tr(" PDF Sign"));
-	pdialog->setLabelText(tr("Signing PDF file..."));
+	pdialog->setWindowTitle(tr("PDF Signature"));
+	pdialog->setLabelText(tr("Signing PDF file(s)..."));
 	pdialog->setMinimum(0);
 	pdialog->setMaximum(0);
 	connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
@@ -391,6 +394,8 @@ void PDFSignWindow::highlightSectors(QString &csv_sectors)
 
 void PDFSignWindow::addFileToListView(QStringList &str)
 {
+	if (str.isEmpty())
+		return;
 
 	for(int i=0; i != str.size(); i++)
 	{

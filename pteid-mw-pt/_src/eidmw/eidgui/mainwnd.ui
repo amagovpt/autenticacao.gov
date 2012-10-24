@@ -2042,7 +2042,7 @@ background-image: url(:/images/Images/alpha.png);</string>
       <rect>
        <x>30</x>
        <y>65</y>
-       <width>81</width>
+       <width>131</width>
        <height>17</height>
       </rect>
      </property>
@@ -2052,7 +2052,7 @@ color: rgb(108, 108, 108);
 font: 10pt &quot;Arial&quot;;</string>
      </property>
      <property name="text">
-      <string>Signature</string>
+      <string>Universal Signature</string>
      </property>
     </widget>
     <widget class="QLabel" name="lbl_menuTools_VerifySignature">
@@ -2132,7 +2132,7 @@ font: 10pt &quot;Arial&quot;;</string>
       <rect>
        <x>30</x>
        <y>85</y>
-       <width>85</width>
+       <width>131</width>
        <height>17</height>
       </rect>
      </property>
@@ -2142,7 +2142,25 @@ color: rgb(108, 108, 108);
 font: 10pt &quot;Arial&quot;;</string>
      </property>
      <property name="text">
-      <string>Sign PDF</string>
+      <string>PDF Signature</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Read_12">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>105</y>
+       <width>16</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-image: url(:/images/Images/alpha.png);
+color: rgb(108, 108, 108);
+font: 10pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="text">
+      <string>»</string>
      </property>
     </widget>
    </widget>

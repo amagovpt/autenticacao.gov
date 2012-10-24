@@ -11,6 +11,14 @@
         <source>Certification path</source>
         <translation>Caminho da certificação</translation>
      </message>
+      <message>
+        <source>PDF Signature</source>
+        <translation>Assinatura de PDF</translation>
+     </message>
+      <message>
+        <source>Universal Signature</source>
+        <translation>Assinatura Universal</translation>
+     </message>
      <message>
         <source>The certificates could not be validated, the certification path is not complete</source>
         <translation>Os certificados não foram validados, o caminho de certificação não está completo</translation>
@@ -149,10 +157,6 @@
     <message>
         <source>Parameters</source>
         <translation>Parâmetros</translation>
-    </message>
-    <message>
-        <source>Signature</source>
-        <translation>Assinatura</translation>
     </message>
     <message>
         <source>Verify Signature</source>
@@ -1603,5 +1607,101 @@ Please specify .xml, .csv or .eid</source>
 	<translation>Não foi possível validar o selo temporal</translation>
     </message>
 
+</context>
+<context>
+    <name>PDFSignWindow</name>
+     <message>
+        <source>&lt;html&gt;Choose the page sector where you &lt;br&gt; want your signature to appear.&lt;br&gt;The shaded sectors are already occupied.&lt;/html&gt;</source>
+	     <translation>&lt;html&gt;Escolha a área da página onde pretende &lt;br&gt;colocar a assinatura &lt;br&gt;As áreas sombreadas já estão ocupadas.&lt;/html&gt;</translation>
+     </message>
+     <message>
+        <source>Selected sector: </source>
+        <translation>Área Seleccionada: </translation>
+     </message>
+<message>
+	<source>PDF Signature</source> 
+	<translation>Assinatura de ficheiros PDF</translation>
+</message>
+<message>   
+	<source>Error</source> 
+	<translation>Erro</translation>
+</message>
+<message>   
+	<source>Visible Signature?</source> 
+	<translation>Assinatura Visível?</translation>
+</message>
+<message>
+	<source>First Page</source>
+	<translation>Primeira Página</translation>
+</message>
+<message>
+	<source>Last Page</source>
+	<translation>Última Página</translation>
+</message>
+<message>
+	<source>Choose Page...</source>
+	<translation>Escolher Página...</translation>
+</message>
+<message>
+	<source>Selected sector : 1</source>
+	<translation>Área seleccionada : 1</translation>
+</message>
+<message>
+	<source>Cancel</source>
+	<translation>Cancelar</translation>
+</message>
+<message>
+	<source>Reason:</source>
+	<translation>Motivo:</translation>
+</message>
+<message>
+	<source>Location:</source>
+	<translation>Localização:</translation>
+</message>
+<message>
+	<source>Error Generating Signature!</source>
+	<translation>Erro ao Gerar Assinatura!</translation>
+</message>
+<message>
+	<source>Signature(s) succesfully generated</source>
+	<translation>Ficheiro(s) assinado(s) com sucesso</translation>
+</message>
+<message>
+        <source>Open Directory</source>
+        <translation>Seleccionar Pasta</translation>
+</message>
+
+<message>
+	<source>Save File</source>
+	<translation>Guardar Ficheiro</translation>
+</message>
+<message>
+	<source>PDF Files to sign</source>
+	<translation>Ficheiros PDF para assinar</translation>
+</message>
+<message>
+	<source>PDF Files (*.pdf)</source>
+	<translation>Ficheiros PDF (*.pdf)</translation>
+</message>
+<message>
+	<source>PDF Documents (*.pdf)</source>
+	<translation>Ficheiros PDF (*.pdf)</translation>
+</message>
+<message> 
+	<source>Add Files...</source>
+	<translation>Adicionar Ficheiros...</translation>
+</message>
+<message>
+	<source>Select File(s)</source>
+	<translation>Seleccionar ficheiro(s)</translation>
+</message>
+<message>
+	<source>Signing PDF file(s)...</source>
+	<translation>A Assinar ficheiro(s)...</translation>
+</message>
+<message>
+	<source>Sign</source>
+	<translation>Assinar</translation>
+</message>
 </context>
 </TS>
