@@ -1,11 +1,14 @@
 #include <QListView>
 #include <QKeyEvent>
+#include <QCoreApplication>
 #include "mylistview.h"
 #include <iostream>
 
 
-MyListView::MyListView(QWidget *parent): QListView(parent)
+MyListView::MyListView(QWidget *parent): 
+	QListView(parent)
 {
+notify = false;
 }
 
 
@@ -20,6 +23,11 @@ void MyListView::keyPressEvent(QKeyEvent* event)
 		QListView::keyPressEvent(event);
 	}
 
+}
+
+void MyListView::enableNotify()
+{
+	notify = true;
 }
 
 bool CompareSelectionRanges(const QItemSelectionRange& a, const QItemSelectionRange& b) {
@@ -61,7 +69,9 @@ void MyListView::removeSelected()
 	  // Update keyboard selected row, if it's not the first row
 	  if (new_row != 0)
 		  keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier));
-  } else {
+  }
+  else
+  {
 	  // We're removing the last item, select the new last row
 	  selectionModel()->select(QItemSelection(model()->index(model()->rowCount()-1, 0),
 				  model()->index(model()->rowCount()-1, model()->columnCount()-1)),
@@ -76,4 +86,14 @@ void MyListView::removeSelected()
 	}
 	//ui.listView->repaint();
 	*/
+
+  if (notify && model()->rowCount() == 0)
+  {
+	  QEvent * delete_event =  new MyDeleteEvent();
+	  //We have to deliver the event to the Window/dialog class
+	  //which is the grandparent because we have the centralwidget in between
+	  QCoreApplication::sendEvent(parentWidget()->parentWidget(), delete_event);
+
+  }
+
 }

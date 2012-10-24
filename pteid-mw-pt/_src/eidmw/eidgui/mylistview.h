@@ -1,7 +1,16 @@
 #ifndef PLAYLISTVIEW_H
 #define PLAYLISTVIEW_H
 
+#include <QEvent>
 #include <QListView>
+
+class MyDeleteEvent : public QEvent
+{
+	public:
+		MyDeleteEvent(): QEvent(QEvent::User) {}
+		~MyDeleteEvent() {}
+
+};
 
 class MyListView : public QListView
 {
@@ -12,8 +21,11 @@ class MyListView : public QListView
     void keyPressEvent(QKeyEvent* event);
     MyListView(QWidget *parent = 0);
     void removeSelected(); 
+    void enableNotify();
 
-    private slots:
+    private:
+    bool notify;
+
 
 };
 

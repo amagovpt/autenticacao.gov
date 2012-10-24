@@ -26,6 +26,7 @@
 
 #include <eidlib.h>
 #include "PDFSignWindow.h"
+#include "mylistview.h"
 
 using namespace eIDMW;
 
@@ -35,8 +36,8 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 
 	ui.setupUi(this);
 	//Set icon
-	const QIcon Ico = QIcon( ":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png" );
-	this->setWindowIcon( Ico );
+	const QIcon Ico = QIcon(":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png");
+	this->setWindowIcon(Ico);
 	int i=0, j=0;
 	
 	ui.label_choose_sector->setText(tr(
@@ -48,6 +49,7 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	ui.spinBox_page->setValue(1);
 	list_model = new QStringListModel();
 	ui.pdf_listview->setModel(list_model);
+	ui.pdf_listview->enableNotify();
 	
 	char conteudo = 0x31;
 
@@ -64,6 +66,7 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	m_default_background = ui.tableWidget->item(0,0)->background();
 	this->setFixedSize(this->width(), this->height());
 
+
 }
 
 
@@ -79,6 +82,12 @@ void PDFSignWindow::on_tableWidget_currentCellChanged(int row, int column,
 
 	update_sector(row,column);
 
+}
+//Event received from myListView
+void PDFSignWindow::customEvent(QEvent *ev)
+{
+	if (ev->type() == QEvent::User)
+		ui.button_sign->setEnabled(false);
 }
 
 void PDFSignWindow::update_sector(int row, int column)
@@ -105,14 +114,14 @@ void PDFSignWindow::on_button_cancel_clicked()
 
 void PDFSignWindow::on_checkBox_reason_toggled(bool checked)
 {
-ui.reason_textbox->setEnabled(checked);
+	ui.reason_textbox->setEnabled(checked);
 
 }
 
 
 void PDFSignWindow::on_checkBox_location_toggled(bool checked)
 {
-ui.location_textbox->setEnabled(checked);
+	ui.location_textbox->setEnabled(checked);
 
 }
 
@@ -198,6 +207,11 @@ void PDFSignWindow::on_button_sign_clicked()
 
 
 	QStringListModel *model = dynamic_cast<QStringListModel *>(list_model);
+	if (model->rowCount() == 0)
+	{
+	   return;
+
+	}
 
 	if (model->rowCount() > 1)
 	{
@@ -216,7 +230,7 @@ void PDFSignWindow::on_button_sign_clicked()
 
 	}
 	else
-	savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), 
+		savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), 
 			QDir::homePath()+"/signed.pdf", tr("PDF files (*.pdf)"));
 
 	char *reason = NULL, *location = NULL;
@@ -251,7 +265,7 @@ void PDFSignWindow::on_button_sign_clicked()
 	connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
 
 	QFuture<void> future = QtConcurrent::run(this,
-			&PDFSignWindow::run_sign, selected_page,savefilepath, location, reason );
+			&PDFSignWindow::run_sign, selected_page, savefilepath, location, reason );
 
 	this->FutureWatcher.setFuture(future);
 	pdialog->exec();

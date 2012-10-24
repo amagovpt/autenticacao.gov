@@ -42,6 +42,7 @@ class PDFSignWindow : public QDialog
 
 
 	public:
+	    void customEvent(QEvent *ev);
 	    PDFSignWindow(QWidget * parent, CardInformation &ci);
 	    ~PDFSignWindow();
 
