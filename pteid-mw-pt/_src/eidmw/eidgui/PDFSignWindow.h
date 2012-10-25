@@ -37,6 +37,8 @@ class PDFSignWindow : public QDialog
 	    void on_checkBox_reason_toggled(bool);
 	    void on_visible_checkBox_toggled(bool);
 	    void on_radioButton_choosepage_toggled(bool);
+	    void on_radioButton_firstpage_toggled(bool);
+	    void on_radioButton_lastpage_toggled(bool);
 	    void on_spinBox_page_valueChanged(int);
 	    void on_tableWidget_currentCellChanged(int row, int column, int prev_row, int prev_column);
 
@@ -63,6 +65,9 @@ class PDFSignWindow : public QDialog
 	    QProgressDialog *pdialog;
 	    QFutureWatcher<void> FutureWatcher;
 	    PTEID_PDFSignature *m_pdf_sig;
+	
+	    //Number of pages of currently loaded document
+	    int m_current_page_number;
 
 	    QString current_input_path;
 	    QBrush m_default_background;

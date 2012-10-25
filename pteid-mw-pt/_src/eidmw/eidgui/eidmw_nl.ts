@@ -1611,8 +1611,8 @@ Please specify .xml, .csv or .eid</source>
 <context>
     <name>PDFSignWindow</name>
      <message>
-        <source>&lt;html&gt;Choose the page sector where you &lt;br&gt; want your signature to appear.&lt;br&gt;The shaded sectors are already occupied.&lt;/html&gt;</source>
-	     <translation>&lt;html&gt;Escolha a área da página onde pretende &lt;br&gt;colocar a assinatura &lt;br&gt;As áreas sombreadas já estão ocupadas.&lt;/html&gt;</translation>
+        <source>&lt;html&gt;Choose the page sector where you &lt;br&gt; want your signature to appear.&lt;br&gt;The grey sectors are already filled&lt;br&gt;with other signatures.&lt;/html&gt;</source>
+	     <translation>&lt;html&gt;Escolha a área da página onde pretende &lt;br&gt;colocar a assinatura &lt;br&gt;As áreas cinzentas já estão ocupadas&lt;br&gt;com outras assinaturas&lt;/html&gt;</translation>
      </message>
      <message>
         <source>Selected sector: </source>

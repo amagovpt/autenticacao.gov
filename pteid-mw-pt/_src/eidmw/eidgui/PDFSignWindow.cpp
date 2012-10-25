@@ -42,7 +42,7 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 
 	ui.label_choose_sector->setText(tr(
 	"<html>Choose the page sector where you <br> want your signature to appear."
-	"<br>The shaded sectors are already occupied."
+	"<br>The grey sectors are already filled<br>with other signatures."
 	"</html>"));
 	m_pdf_sig = NULL;
 	success = false;
@@ -301,6 +301,30 @@ void PDFSignWindow::on_button_addfile_clicked()
 
 }
 
+void PDFSignWindow::on_radioButton_firstpage_toggled(bool value)
+{
+	if (value)
+	{
+		clearAllSectors();
+		QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(1));
+		highlightSectors(sectors);
+
+	}
+
+}
+
+void PDFSignWindow::on_radioButton_lastpage_toggled(bool value)
+{
+	if (value)
+	{
+		clearAllSectors();
+		QString sectors =
+			QString::fromAscii(m_pdf_sig->getOccupiedSectors(m_current_page_number));
+		highlightSectors(sectors);
+	}
+
+}
+
 void PDFSignWindow::on_spinBox_page_valueChanged(int new_value)
 {
 	//Check if there is at least 1 PDF chosen
@@ -318,13 +342,13 @@ void mapSectorToRC(int sector, int *row, int *column)
 		switch(sector)
 		{
 			case 1:
-				*row = 0 ; *column = 0;
+				*row = 0; *column = 0;
 				break;
 			case 2:
-				*row = 0 ; *column = 1;
+				*row = 0; *column = 1;
 				break;
 			case 3:
-				*row = 0 ; *column = 2;
+				*row = 0; *column = 2;
 				break;
 			case 4:
 				*row = 1; *column = 0;
@@ -336,7 +360,7 @@ void mapSectorToRC(int sector, int *row, int *column)
 				*row = 1; *column = 2;
 				break;
 			case 7:
-				*row = 2 ; *column = 0;
+				*row = 2; *column = 0;
 				break;
 			case 8:
 				*row = 2; *column = 1;
@@ -408,9 +432,10 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	current_input_path = str.at(0);
 
 	m_pdf_sig = new PTEID_PDFSignature(current_input_path.toUtf8().data());
+	m_current_page_number = m_pdf_sig->getPageCount();
 
-	//Set the spinbox with the appropriate value
-	ui.spinBox_page->setMaximum(m_pdf_sig->getPageCount());
+	//Set the spinbox with the appropriate max value
+	ui.spinBox_page->setMaximum(m_current_page_number);
 
 	QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(1));
 	highlightSectors(sectors);
