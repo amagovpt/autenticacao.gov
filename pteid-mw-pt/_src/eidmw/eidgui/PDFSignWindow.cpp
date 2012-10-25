@@ -303,7 +303,7 @@ void PDFSignWindow::on_button_addfile_clicked()
 
 void PDFSignWindow::on_radioButton_firstpage_toggled(bool value)
 {
-	if (value)
+	if (value && m_pdf_sig)
 	{
 		clearAllSectors();
 		QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(1));
@@ -315,7 +315,7 @@ void PDFSignWindow::on_radioButton_firstpage_toggled(bool value)
 
 void PDFSignWindow::on_radioButton_lastpage_toggled(bool value)
 {
-	if (value)
+	if (value && m_pdf_sig)
 	{
 		clearAllSectors();
 		QString sectors =
