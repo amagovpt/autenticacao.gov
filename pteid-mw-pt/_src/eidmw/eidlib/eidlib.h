@@ -813,16 +813,16 @@ class PTEID_CCXML_Doc;
 class PDFSignature;
 
 
-PTEIDSDK_API class PTEID_PDFSignature
+class PTEID_PDFSignature
 {
 	public:
-		PTEID_PDFSignature();
-		PTEID_PDFSignature(const char *input_path);
-		~PTEID_PDFSignature();
+		PTEIDSDK_API PTEID_PDFSignature();
+		PTEIDSDK_API PTEID_PDFSignature(const char *input_path);
+		PTEIDSDK_API ~PTEID_PDFSignature();
 
-		void addToBatchSigning(char *input_path);
-		int getPageCount();
-		char *getOccupiedSectors(int page);
+		PTEIDSDK_API void addToBatchSigning(char *input_path);
+		PTEIDSDK_API int getPageCount();
+		PTEIDSDK_API char *getOccupiedSectors(int page);
 
 	private:
 	//The applayer object that actually implements the signature
