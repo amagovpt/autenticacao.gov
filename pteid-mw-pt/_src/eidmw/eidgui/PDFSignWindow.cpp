@@ -111,6 +111,19 @@ void PDFSignWindow::on_button_cancel_clicked()
 
 }
 
+/* For filenames we need to maintain latin-1 or UTF-8 native encoding
+*/
+const char *getPlatformNativeString(QString &s)
+{
+#if 0
+	std::string s_new = s.toStdString();
+	return s_new.c_str();
+#else
+	return s.toUtf8().constData();
+#endif
+
+}
+
 
 void PDFSignWindow::on_checkBox_reason_toggled(bool checked)
 {
@@ -183,7 +196,7 @@ void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
 	try
 	{
 		card->SignPDF(*m_pdf_sig, selected_page,
-				m_selected_sector, location, reason, strdup(savefilepath.toUtf8().data()));
+				m_selected_sector, location, reason, strdup(getPlatformNativeString(savefilepath)));
 		this->success = true;
 
 	}
@@ -219,7 +232,7 @@ void PDFSignWindow::on_button_sign_clicked()
 		for (int i=0; i < model->rowCount(); i++)
 		{
 			QString tmp = model->data(model->index(i, 0), 0).toString();
-			char *final = strdup(tmp.toUtf8().data());
+			char *final = strdup(getPlatformNativeString(tmp));
 			m_pdf_sig->addToBatchSigning(final);
 
 		}
@@ -431,7 +444,8 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 
 	current_input_path = str.at(0);
 
-	m_pdf_sig = new PTEID_PDFSignature(current_input_path.toUtf8().data());
+	m_pdf_sig = new PTEID_PDFSignature(strdup(getPlatformNativeString(current_input_path)));
+
 	m_current_page_number = m_pdf_sig->getPageCount();
 
 	//Set the spinbox with the appropriate max value
