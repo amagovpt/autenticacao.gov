@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties35</AppDesignerFolder>
     <RootNamespace>eIDMW</RootNamespace>
-    <AssemblyName>pteid35libCS</AssemblyName>
+    <AssemblyName>pteidlibCS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -27,7 +27,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RegisterForComInterop>false</RegisterForComInterop>
-    <DocumentationFile>..\_Binaries35\Release\pteid35libCS.XML</DocumentationFile>
+    <DocumentationFile>..\_Binaries35\Release\pteidlibCS.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,6 +53,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\Pteid.cs">
+      <Link>GeneratedFiles\Pteid.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PteidException.cs">
+      <Link>GeneratedFiles\PteidException.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEIDPin.cs">
+      <Link>GeneratedFiles\PTEIDPin.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ADDR.cs">
+      <Link>GeneratedFiles\PTEID_ADDR.cs</Link>
+    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Biometric.cs">
       <Link>GeneratedFiles\PTEID_Biometric.cs</Link>
     </Compile>
@@ -69,6 +82,9 @@
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_CCXML_Doc.cs">
       <Link>GeneratedFiles\PTEID_CCXML_Doc.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Certif.cs">
+      <Link>GeneratedFiles\PTEID_Certif.cs</Link>
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Certificate.cs">
       <Link>GeneratedFiles\PTEID_Certificate.cs</Link>
@@ -151,6 +167,9 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_HashAlgo.cs">
       <Link>GeneratedFiles\PTEID_HashAlgo.cs</Link>
     </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ID.cs">
+      <Link>GeneratedFiles\PTEID_ID.cs</Link>
+    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_LogLevel.cs">
       <Link>GeneratedFiles\PTEID_LogLevel.cs</Link>
     </Compile>
@@ -163,8 +182,14 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Param.cs">
       <Link>GeneratedFiles\PTEID_Param.cs</Link>
     </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_PDFSignature.cs">
+      <Link>GeneratedFiles\PTEID_PDFSignature.cs</Link>
+    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Photo.cs">
       <Link>GeneratedFiles\PTEID_Photo.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_PIC.cs">
+      <Link>GeneratedFiles\PTEID_PIC.cs</Link>
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Pin.cs">
       <Link>GeneratedFiles\PTEID_Pin.cs</Link>
@@ -174,6 +199,9 @@
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_PinUsage.cs">
       <Link>GeneratedFiles\PTEID_PinUsage.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Proxy_Info.cs">
+      <Link>GeneratedFiles\PTEID_Proxy_Info.cs</Link>
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_PublicKey.cs">
       <Link>GeneratedFiles\PTEID_PublicKey.cs</Link>
@@ -190,8 +218,17 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ReaderSet.cs">
       <Link>GeneratedFiles\PTEID_ReaderSet.cs</Link>
     </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_RSAPublicKey.cs">
+      <Link>GeneratedFiles\PTEID_RSAPublicKey.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SigVerifier.cs">
+      <Link>GeneratedFiles\PTEID_SigVerifier.cs</Link>
+    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SmartCard.cs">
       <Link>GeneratedFiles\PTEID_SmartCard.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_TokenInfo.cs">
+      <Link>GeneratedFiles\PTEID_TokenInfo.cs</Link>
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ValidationLevel.cs">
       <Link>GeneratedFiles\PTEID_ValidationLevel.cs</Link>
@@ -244,6 +281,7 @@
   -->
   <PropertyGroup>
     <PreBuildEvent>cmd.exe /C "$(ProjectDir)prebuild.bat"</PreBuildEvent>
-    <PostBuildEvent>cmd.exe /C "..\..\_DocsInternal\API\doSDK_dotNet.bat"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
