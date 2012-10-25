@@ -489,7 +489,7 @@ void MainWnd::on_btn_menu_tools_clicked()
 	if (m_Settings.getGuiLanguageCode() == GenPur::LANG_NL)
 		m_ui.wdg_submenu_tools->setGeometry(128,4,155,130);
 	else
-		m_ui.wdg_submenu_tools->setGeometry(128,4,126,130);
+		m_ui.wdg_submenu_tools->setGeometry(128,4,145,130);
 
 }
 
