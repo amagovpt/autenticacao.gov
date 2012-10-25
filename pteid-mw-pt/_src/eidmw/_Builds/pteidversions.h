@@ -16,10 +16,10 @@
 #define PTEID_PRODUCT_NAME    	"Portugal eID MiddleWare"
 
 #ifdef PTEID_35
-	#define PTEID_PRODUCT_VERSION    "2.0.0"
-	#define BASE_VERSION_STRING    "2, 0, 0, "
+	#define PTEID_PRODUCT_VERSION    "2.1.0"
+	#define BASE_VERSION_STRING    "2, 1, 0, "
 	#define BASE_VERSION1          2
-	#define BASE_VERSION2          0
+	#define BASE_VERSION2          1
 	#define BASE_VERSION3          0
 #else
 	#define PTEID_PRODUCT_VERSION    "1.0"
