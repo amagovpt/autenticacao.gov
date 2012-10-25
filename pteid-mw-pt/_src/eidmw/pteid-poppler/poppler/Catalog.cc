@@ -229,7 +229,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	t = time(NULL);
 	tmp_date = localtime(&t);
 	//Date String for visible signature
-	strftime(date_outstr, sizeof(date_outstr), "%Y.%m.%d %T %z", tmp_date);
+	strftime(date_outstr, sizeof(date_outstr), "%Y.%m.%d %H:%M:%S %z", tmp_date);
 
 	signature_field.initDict(xref);
 	Object obj1, obj2, obj3, obj4, obj5, obj6, ref_to_dict;
