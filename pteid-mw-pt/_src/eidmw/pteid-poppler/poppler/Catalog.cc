@@ -653,6 +653,7 @@ GooString *formatMultilineString(char *content, double available_space, double f
 
 	double space_left = space_first_line == 0 ? available_space : space_first_line;
 	double word_width;
+	double horizontal_shift = 0;
 
 	multi_line->append("("); //Init String
 
@@ -666,8 +667,11 @@ GooString *formatMultilineString(char *content, double available_space, double f
 		{
 			//Start new line
 			multi_line->append(") Tj\r\n");
+			
+			if (space_first_line)
+				horizontal_shift = -(available_space - space_first_line);
 			//Line spacing
-			multi_line->append(GooString::format("{0:f} -10 Td\r\n", -(available_space -space_first_line))); 
+			multi_line->append(GooString::format("{0:f} -10 Td\r\n", horizontal_shift)); 
 			//Space first line is only relevant for the 1st line
 			space_first_line = 0;
 			multi_line->append("("); 	  //Begin new line
