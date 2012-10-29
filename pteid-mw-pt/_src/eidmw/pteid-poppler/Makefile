@@ -1,5 +1,5 @@
 all: 
-	cd poppler && make
+	cd poppler && $(MAKE) 
 
 check:
 
