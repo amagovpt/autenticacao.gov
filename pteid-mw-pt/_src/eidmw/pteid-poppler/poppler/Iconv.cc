@@ -61,7 +61,7 @@ utf82latin1(iconv_t conv_desc, const char * euc)
     }
     /* Assign enough space to put the Latin1. */
     utf8len = len;
-    utf8 = (char *)calloc (utf8len, 1);
+    utf8 = (char *)calloc (utf8len+1, 1);
     /* Keep track of the variables. */
     len_start = len;
     utf8len_start = utf8len;
