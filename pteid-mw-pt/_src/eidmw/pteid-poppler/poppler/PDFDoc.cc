@@ -48,7 +48,11 @@
 #include <stddef.h>
 #include <string.h>
 #include <time.h>
+#if defined(_DEBUG) && !defined(_WIN32)
 #include <fcntl.h>
+#include <unistd.h>
+#endif
+
 #ifdef _WIN32
 #include <windows.h>
 
@@ -609,7 +613,7 @@ Object *PDFDoc::getByteRange()
 	return NULL;
 }
 
-#ifndef _WIN32
+#if defined(_DEBUG) && !defined(_WIN32)
 char *read_random_bytes(int n)
 {
 	char * buf = (char *)malloc(n+1);
