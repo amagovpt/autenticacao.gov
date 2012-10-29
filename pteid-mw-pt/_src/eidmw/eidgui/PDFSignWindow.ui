@@ -50,11 +50,17 @@
    <widget class="QPushButton" name="button_addfile">
     <property name="geometry">
      <rect>
-      <x>219</x>
+      <x>210</x>
       <y>150</y>
-      <width>151</width>
+      <width>156</width>
       <height>27</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
     </property>
     <property name="text">
      <string>Add Files...</string>
