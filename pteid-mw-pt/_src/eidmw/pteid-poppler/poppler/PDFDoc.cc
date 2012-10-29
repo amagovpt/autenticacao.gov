@@ -48,8 +48,10 @@
 #include <stddef.h>
 #include <string.h>
 #include <time.h>
+#include <fcntl.h>
 #ifdef _WIN32
 #include <windows.h>
+
 #endif
 #include <sys/stat.h>
 #include "goo/gstrtod.h"
@@ -607,6 +609,21 @@ Object *PDFDoc::getByteRange()
 	return NULL;
 }
 
+#ifndef _WIN32
+char *read_random_bytes(int n)
+{
+	char * buf = (char *)malloc(n+1);
+	int fd = open("/dev/urandom", O_RDONLY);
+	read(fd, buf, n);
+	close(fd);
+	//Replace by readable char
+	for (unsigned int i=0; i!= n; i++)
+	    buf[i] = (buf[i] % 26) + 0x61;
+	
+	buf[n] = '\0';
+	return buf;
+}
+
 
 void dump_to_file(unsigned char * buf, unsigned int len)
 {
@@ -615,6 +632,7 @@ void dump_to_file(unsigned char * buf, unsigned int len)
 	char *path = (char *)calloc(200, 1);
 	strncat(path, home, 199);
 	strcat(path, "/data_to_be_signed_");
+	strcat(path, read_random_bytes(10));
 	strcat(path, ".bin");
 	fprintf(stderr, "DEBUG: storing file to %s\n", path);
 
@@ -628,6 +646,7 @@ void dump_to_file(unsigned char * buf, unsigned int len)
 	fclose(out_fp);
 
 }
+#endif
 
 
 /* Workaround for linearized documents */
@@ -723,7 +742,7 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 */
 unsigned long PDFDoc::getSigByteArray(unsigned char **byte_array, bool incremental_mode)
 {
-	MemOutStream mem_stream(this->fileSize+ESTIMATED_LEN +1000);
+	MemOutStream mem_stream(this->fileSize+ESTIMATED_LEN +190000);
 	unsigned int i = 0, ret_len = 0;
 	OutStream * out_str = &mem_stream;
 
@@ -732,8 +751,6 @@ unsigned long PDFDoc::getSigByteArray(unsigned char **byte_array, bool increment
 	else 
 	    saveAs(out_str, writeForceRewrite);
 	
-	//DEBUG
-	//saveAs(new GooString("/home/agrr/debug_to_be_signed.bin"), writeForceIncremental);
 	char * base_ptr = (char *)mem_stream.getData();
 
 	ret_len = mem_stream.size() - ESTIMATED_LEN - 2; 
