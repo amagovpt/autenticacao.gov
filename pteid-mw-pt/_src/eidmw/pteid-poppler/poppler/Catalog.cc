@@ -36,6 +36,13 @@
 #pragma implementation
 #endif
 
+#ifdef _WIN32
+#define _CRT_RAND_S
+#else 
+#include <unistd.h>
+#include <fcntl.h>
+#endif
+
 #include <stddef.h>
 #include <stdlib.h>
 #include <time.h>
@@ -190,25 +197,58 @@ Catalog::~Catalog() {
 }
 
 
-//Auxiliar function for prepareSignature and its static flag
-static bool srand_flag = false;
-int randomInt() 
-{
-    //Seed the PRNG
-    if (!srand_flag)
-    { 
-	    srand(time(NULL));
-	    srand_flag = true;
-    }
-    return rand();
-
-}
-
 void Catalog::setIncrementalSignature(bool incremental)
 {
 	incremental_update = incremental;
 
 }
+
+#ifdef _WIN32
+unsigned int getBigRandom()
+{
+	unsigned int tmp =0;
+	errno_t err;
+	
+	err = rand_s(&tmp);
+	if (err)
+	{
+		fprintf (stderr, "rand_s (1) failed, using rand() as fallback!\n");
+		srand(time(NULL));
+		return rand();
+
+	}
+	return tmp;
+
+}
+#else
+unsigned int getBigRandom()
+{
+	unsigned int res=0;
+	int ret_read = 0;
+
+	int fd = open("/dev/urandom", O_RDONLY);
+
+	if (fd == -1)
+	{
+		//TODO: get/translate errno
+		fprintf(stderr, "Failed to open /dev/urandom, using rand() as fallback!\n");
+		goto fallback;
+	}
+	ret_read = read(fd, &res, sizeof(res));
+	close(fd);
+	if (ret_read == -1)
+	{
+		fprintf(stderr, "Failed to open /dev/urandom, using rand() as fallback!\n");
+		goto fallback;
+	}
+	return res;
+
+fallback:
+	srand(time(NULL));
+	return rand();
+}
+
+#endif
 
 
 //TODO: Too long, split this into 2 functions at least
@@ -262,9 +302,8 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 
 	signature_field.dictAdd(copyString("Rect"), &obj4);
 
-	//TODO: This should have a random component to avoid name conflicts in fields
-	signature_field.dictAdd(copyString("T"), obj2.initString(GooString::format("Signature{0:d}", 
-					randomInt())));
+	signature_field.dictAdd(copyString("T"), obj2.initString(GooString::format("Signature{0:ud}", 
+					getBigRandom())));
 
 	addSignatureAppearance(&signature_field, name, civil_number, date_outstr,
 		 location, reason, r2-r0 - 1, r3-r1 -1);
