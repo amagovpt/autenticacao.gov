@@ -51,15 +51,20 @@ class PDFSignWindow : public QDialog
 
 	private:
 	    void update_sector(int row, int column);
+	    bool validateSelectedSector();
 	    void highlightSectors(QString &csv_sectors);
 	    void clearAllSectors();
 	    void addFileToListView(QStringList &str);
 	    void run_sign(int page, QString& savefile, char *location, char *reason);
 	    void ShowSuccessMsgBox();
+	    void ShowSectorErrorMessage();
 	    void ShowErrorMsgBox();
 
 
 	    Ui_PDFSignWindow ui;
+	    static const int table_lines = 3;
+	    static const int table_columns = 3;
+
     	    CardInformation const& m_CI_Data;
 	    QAbstractItemModel *list_model;
 	    QProgressDialog *pdialog;

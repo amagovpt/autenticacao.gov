@@ -53,12 +53,12 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	
 	char conteudo = 0x31;
 
-	for ( i = 0; i < 3; i++ ) 
+	for ( i = 0; i < table_lines; i++ ) 
 	{
-		for ( j = 0; j < 3; j++)
+		for ( j = 0; j < table_columns; j++)
 		{
 			QTableWidgetItem * it = new QTableWidgetItem(QString(conteudo++));
-			ui.tableWidget->setItem(i, j, it); 
+			ui.tableWidget->setItem(i, j, it);
 		}
 	}
 
@@ -183,6 +183,15 @@ void PDFSignWindow::ShowErrorMsgBox()
   	msgBoxp.exec();
 }
 
+void PDFSignWindow::ShowSectorErrorMessage()
+{
+
+	QString caption  = tr("Error");
+        QString msg = tr("The selected sector is already filled!\nPlease choose another one.");
+  	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
+  	msgBoxp.exec();
+
+}
 
 void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
 	       	char *location, char *reason)
@@ -215,6 +224,25 @@ void PDFSignWindow::on_button_sign_clicked()
 	QString savefilepath;
 
 
+	//Read Page
+	if (ui.visible_checkBox->isChecked())
+	{
+		if (ui.radioButton_firstpage->isChecked())
+			selected_page = 1;
+		else if (ui.radioButton_lastpage->isChecked())
+			selected_page = ui.spinBox_page->maximum();
+		else
+			selected_page = ui.spinBox_page->value();
+
+		if (!validateSelectedSector())
+		{
+		   ShowSectorErrorMessage();
+		   return;
+
+		}
+
+	}
+
 	QStringListModel *model = dynamic_cast<QStringListModel *>(list_model);
 	if (model->rowCount() == 0)
 	{
@@ -225,7 +253,7 @@ void PDFSignWindow::on_button_sign_clicked()
 	if (model->rowCount() > 1)
 	{
 		m_pdf_sig = new PTEID_PDFSignature();
-		for (int i=0; i < model->rowCount(); i++)
+		for (int i = 0; i < model->rowCount(); i++)
 		{
 			QString tmp = model->data(model->index(i, 0), 0).toString();
 			char *final = strdup(getPlatformNativeString(tmp));
@@ -254,17 +282,6 @@ void PDFSignWindow::on_button_sign_clicked()
 		reason = strdup(ui.reason_textbox->text().toUtf8().data());
 	}
 
-	//Read Page
-	if (ui.visible_checkBox->isChecked())
-	{
-		if (ui.radioButton_firstpage->isChecked())
-			selected_page = 1;
-		else if (ui.radioButton_lastpage->isChecked())
-			selected_page = ui.spinBox_page->maximum();
-		else
-			selected_page = ui.spinBox_page->value();
-
-	}
 
 
 	//Single File Signature case
@@ -386,14 +403,24 @@ void mapSectorToRC(int sector, int *row, int *column)
 void PDFSignWindow::clearAllSectors()
 {
 
-	for(int i = 0 ;i < 3; i++ ) 
+	for(int i = 0 ;i < table_lines; i++ ) 
 	{
-		for (int j = 0; j < 3; j++)
+		for (int j = 0; j < table_columns; j++)
 		{
 		ui.tableWidget->item(i, j)->setBackground(m_default_background);
 		}
 	}
 
+}
+
+
+bool PDFSignWindow::validateSelectedSector()
+{
+	int row, col;
+	mapSectorToRC(m_selected_sector, &row, &col);
+
+	return ui.tableWidget->item(row, col)->background() !=
+			     QBrush(Qt::darkGray);
 }
 
 
