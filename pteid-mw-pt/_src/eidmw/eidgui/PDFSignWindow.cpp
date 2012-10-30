@@ -209,8 +209,8 @@ void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
 	catch (PTEID_Exception &e)
 	{
 		this->success = false;
-		fprintf(stderr, "Caught exception in some SDK method. Error code: 0x%08x\n", (unsigned int)e.GetError());
-		//TODO: Show error message box
+		fprintf(stderr, "Caught exception in some SDK method. Error code: 0x%08x\n", 
+			(unsigned int)e.GetError());
 	}
 
 
@@ -249,6 +249,8 @@ void PDFSignWindow::on_button_sign_clicked()
 	   return;
 
 	}
+	QFileInfo my_file_info(current_input_path);
+	QString defaultsavefilepath = my_file_info.dir().absolutePath();
 
 	if (model->rowCount() > 1)
 	{
@@ -262,13 +264,17 @@ void PDFSignWindow::on_button_sign_clicked()
 		}
 
 		savefilepath = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-				QDir::homePath(),
+				QDir::toNativeSeparators(defaultsavefilepath),
 				QFileDialog::ShowDirsOnly);
 
 	}
 	else
+	{
+		QString basename = my_file_info.completeBaseName();
 		savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), 
-			QDir::homePath()+"/signed.pdf", tr("PDF files (*.pdf)"));
+			QDir::toNativeSeparators(defaultsavefilepath+"/"+basename+"_signed.pdf"), tr("PDF files (*.pdf)"));
+
+	}
 
 	if (savefilepath.isNull() || savefilepath.isEmpty())
 		return;
@@ -281,8 +287,6 @@ void PDFSignWindow::on_button_sign_clicked()
 	if (ui.reason_textbox->isEnabled() && ui.reason_textbox->text().size() > 0) {
 		reason = strdup(ui.reason_textbox->text().toUtf8().data());
 	}
-
-
 
 	//Single File Signature case
 	pdialog = new QProgressDialog();
@@ -304,9 +308,6 @@ void PDFSignWindow::on_button_sign_clicked()
 	else
 		ShowErrorMsgBox();
 
-	//TODO: Fix this for Windows URLs or else just remove it
-	//if (model->rowCount() == 1)
-	//	QDesktopServices::openUrl(QString("file://")+ savefilepath);
 	this->close();
 
 }
@@ -480,7 +481,6 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	if (list_model->rowCount() > 1)
 	{
 		clearAllSectors();
-		//TODO
 	}
 
 	//Enable sign button now that we have data
