@@ -1627,8 +1627,10 @@ Please specify .xml, .csv or .eid</source>
 	<translation>Erro</translation>
 </message>
 <message>   
-	<source>The selected sector is already filled!\nPlease choose another one.</source> 
-	<translation>A área que seleccionou para a assinatura já está ocupada!\nEscolha outra por favor.</translation>
+        <source>The selected sector is already filled!
+Please choose another one.</source>
+	<translation>A área que seleccionou para a assinatura já está ocupada!
+Escolha outra por favor.</translation>
 </message>
 <message>   
 	<source>Visible Signature?</source> 
