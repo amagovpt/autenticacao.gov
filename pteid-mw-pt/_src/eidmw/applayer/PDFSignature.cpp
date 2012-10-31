@@ -36,9 +36,7 @@ namespace eIDMW
 
 	PDFSignature::PDFSignature(const char *pdf_file_path): m_pdf_file_path(pdf_file_path)
 	{
-		// Initialize this Poppler global object 
-		// is mandatory I think
-		//globalParams = new GlobalParams();
+	
 		m_visible = false;
 		m_page = 1;
 		m_sector = 0;
@@ -55,7 +53,7 @@ namespace eIDMW
 
 	void PDFSignature::batchAddFile(char *file_path)
 	{
-		m_files_to_sign.push_back(file_path);	
+		m_files_to_sign.push_back(file_path);
 
 	}
 
@@ -66,25 +64,27 @@ namespace eIDMW
 		m_sector = sector_number;
 
 	}
+
+
 	PDFRectangle PDFSignature::getSignatureRectangle(double page_height, double page_width)
 	{
 		// Add padding, adjust to subtly tweak the location 
 		// The units for x_pad, y_pad, sig_height and sig_width are postscript
 		// points (1 px == 0.75 points)
 		PDFRectangle sig_rect;
-	 	int lr_margin = 30;	
-		double sig_height = 85; 
+	 	int lr_margin = 30;	//Left/Right Margin
+		double sig_height = 90;
+		double vert_align = 16; //Add this to vertically center inside each cell
 
 		double sig_width = (page_width - lr_margin*2) / 3.0;
-		//double x_pad = 0, y_pad = (page_height/3.0-sig_height)/2.0; //Vertically Center the Signature on each sector
-		double x_pad = 0, y_pad = 40.0; //Vertically Center the Signature on each sector
+		double y_pad = 40.0;
 		
 		//Add left margin
 		sig_rect.x1 = lr_margin;
 		sig_rect.x2 = lr_margin;
 
 		if (m_sector < 1 || m_sector > 18)
-			fprintf (stderr, "Illegal value for signature page sector: %d Valid values [1-6]\n", 
+			fprintf (stderr, "Illegal value for signature page sector: %d Valid values [1-18]\n", 
 					m_sector);
 		
 		if (m_sector < 16)
@@ -109,11 +109,11 @@ namespace eIDMW
 			sig_rect.x2 += sig_width * 2.0;
 		}
 		
-		sig_rect.y1 += y_pad;
+		sig_rect.y1 += y_pad + vert_align;
 
-	//Define height and width of the rectangle
+		//Define height and width of the rectangle
 		sig_rect.x2 += sig_width;
-		sig_rect.y2 += sig_height + y_pad;
+		sig_rect.y2 += sig_height + y_pad + vert_align;
 		
 
 		return sig_rect;
@@ -159,16 +159,15 @@ namespace eIDMW
 			return "";
 	}
 
-#ifdef WIN32
-#define PATH_SEP "\\"
-#else
-#define PATH_SEP "/"
-#endif
+	#ifdef WIN32
+	#define PATH_SEP "\\"
+	#else
+	#define PATH_SEP "/"
+	#endif
 	std::string PDFSignature::generateFinalPath(const char *output_dir, const char *path)
 	{
 
 		char * pdf_filename = Basename((char*)path);
-		//sprintf(final_path, "%s" PATH_SEP "%s.pdf", output_dir, tmp_path);
 
 		std::string final_path = string(output_dir) + PATH_SEP +pdf_filename+ "_signed.pdf";
 
@@ -240,7 +239,7 @@ namespace eIDMW
 		}
 
 		// A little ugly hack:
-		//Force the parsing of the Page Tree structure to get the pagerefs loaded in Catalog class
+		//Force the parsing of the Page Tree structure to get the pagerefs loaded in Catalog object
 		Page *p = doc->getPage(m_page);
 
 		//By the spec, the visible/writable area can be cropped by the CropBox, BleedBox, etc...
@@ -253,7 +252,7 @@ namespace eIDMW
 			sig_location = getSignatureRectangle(height, width);
 
 		if (p == NULL)
-			fprintf(stderr, "Pteid Oops...\n");
+			fprintf(stderr, "Failed to read page MediaBox\n");
 
 		unsigned char *to_sign;
 		
