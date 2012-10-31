@@ -51,13 +51,14 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	ui.pdf_listview->setModel(list_model);
 	ui.pdf_listview->enableNotify();
 	
-	char conteudo = 0x31;
+	int cell_number = 1;	
 
-	for ( i = 0; i < table_lines; i++ ) 
+	for (i = 0; i < table_lines; i++) 
 	{
-		for ( j = 0; j < table_columns; j++)
+		for (j = 0; j < table_columns; j++)
 		{
-			QTableWidgetItem * it = new QTableWidgetItem(QString(conteudo++));
+			QTableWidgetItem * it = new QTableWidgetItem(
+					QString::number(cell_number++));
 			ui.tableWidget->setItem(i, j, it);
 		}
 	}
@@ -92,13 +93,7 @@ void PDFSignWindow::customEvent(QEvent *ev)
 
 void PDFSignWindow::update_sector(int row, int column)
 {
-	if (row == 0)
-		m_selected_sector = 1+column;
-	else if (row == 1)
-		m_selected_sector = 4+column;
-
-	else if (row == 2)
-		m_selected_sector = 7+column;
+	m_selected_sector = 1 + table_columns*row + column;
 
 	ui.label_selectedsector->setText(tr("Selected sector: ")+
 			QString::number(m_selected_sector));
@@ -366,38 +361,17 @@ void PDFSignWindow::on_spinBox_page_valueChanged(int new_value)
 
 void mapSectorToRC(int sector, int *row, int *column)
 {
-		switch(sector)
-		{
-			case 1:
-				*row = 0; *column = 0;
-				break;
-			case 2:
-				*row = 0; *column = 1;
-				break;
-			case 3:
-				*row = 0; *column = 2;
-				break;
-			case 4:
-				*row = 1; *column = 0;
-				break;
-			case 5:
-				*row = 1; *column = 1;
-				break;
-			case 6:
-				*row = 1; *column = 2;
-				break;
-			case 7:
-				*row = 2; *column = 0;
-				break;
-			case 8:
-				*row = 2; *column = 1;
-				break;
-			case 9:
-				*row = 2; *column = 2;
-				break;
-			default:
-				fprintf(stderr, "Invalid Sector: %d\n", sector);
-		}
+
+	int rem = sector % 3;
+
+	*row = sector / 3;
+
+	if (rem == 0)
+		*column = 2;
+	else if (rem == 1)
+		*column = 0;
+	else if (rem == 2)
+		*column = 1;
 
 }
 

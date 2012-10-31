@@ -295,7 +295,7 @@
           <enum>Qt::DashLine</enum>
          </property>
          <property name="rowCount">
-          <number>3</number>
+          <number>6</number>
          </property>
          <property name="columnCount">
           <number>3</number>
@@ -316,11 +316,14 @@
           <bool>false</bool>
          </attribute>
          <attribute name="verticalHeaderDefaultSectionSize">
-          <number>40</number>
+          <number>20</number>
          </attribute>
          <attribute name="verticalHeaderMinimumSectionSize">
-          <number>15</number>
+          <number>10</number>
          </attribute>
+         <row/>
+         <row/>
+         <row/>
          <row/>
          <row/>
          <row/>

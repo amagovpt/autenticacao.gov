@@ -62,7 +62,7 @@ class PDFSignWindow : public QDialog
 
 
 	    Ui_PDFSignWindow ui;
-	    static const int table_lines = 3;
+	    static const int table_lines = 6;
 	    static const int table_columns = 3;
 
     	    CardInformation const& m_CI_Data;
