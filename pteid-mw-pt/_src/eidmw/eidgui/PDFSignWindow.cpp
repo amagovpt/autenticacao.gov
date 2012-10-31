@@ -364,7 +364,7 @@ void mapSectorToRC(int sector, int *row, int *column)
 
 	int rem = sector % 3;
 
-	*row = sector / 3;
+	*row = (sector-1) / 3;
 
 	if (rem == 0)
 		*column = 2;
