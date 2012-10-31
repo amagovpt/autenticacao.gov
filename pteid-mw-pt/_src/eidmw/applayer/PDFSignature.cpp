@@ -77,30 +77,24 @@ namespace eIDMW
 
 		double sig_width = (page_width - lr_margin*2) / 3.0;
 		//double x_pad = 0, y_pad = (page_height/3.0-sig_height)/2.0; //Vertically Center the Signature on each sector
-		double x_pad = 0, y_pad = 30.0; //Vertically Center the Signature on each sector
+		double x_pad = 0, y_pad = 40.0; //Vertically Center the Signature on each sector
 		
 		//Add left margin
 		sig_rect.x1 = lr_margin;
 		sig_rect.x2 = lr_margin;
 
-
-		if (m_sector < 1 || m_sector > 9)
+		if (m_sector < 1 || m_sector > 18)
 			fprintf (stderr, "Illegal value for signature page sector: %d Valid values [1-6]\n", 
 					m_sector);
-
 		
-		if (m_sector < 7)
+		if (m_sector < 16)
 		{
-			if (m_sector >= 4) // Sectors 4 - 6
-			{
-				sig_rect.y1 += page_height / 3.0;
-				sig_rect.y2 += page_height / 3.0;
-			}
-			else if (m_sector >= 1) // Sectors 1 - 3
-			{
-				sig_rect.y1 += page_height * 2.0 / 3.0;
-				sig_rect.y2 += page_height * 2.0 / 3.0;
-			}
+			int line = m_sector / 3 + 1;
+			if (m_sector % 3 == 0)
+			   line = m_sector / 3;
+
+			sig_rect.y1 += (page_height - 2*y_pad) * (6-line) / 6.0;
+			sig_rect.y2 += (page_height - 2*y_pad) * (6-line) / 6.0;
 		}
 
 		if (m_sector % 3 == 2 )
