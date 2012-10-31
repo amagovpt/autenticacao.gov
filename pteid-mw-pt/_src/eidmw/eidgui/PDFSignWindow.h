@@ -58,7 +58,7 @@ class PDFSignWindow : public QDialog
 	    void run_sign(int page, QString& savefile, char *location, char *reason);
 	    void ShowSuccessMsgBox();
 	    void ShowSectorErrorMessage();
-	    void ShowErrorMsgBox();
+	    void ShowErrorMsgBox(QString &message);
 
 
 	    Ui_PDFSignWindow ui;

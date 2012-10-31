@@ -169,11 +169,10 @@ void PDFSignWindow::ShowSuccessMsgBox()
 
 }
 
-void PDFSignWindow::ShowErrorMsgBox()
+void PDFSignWindow::ShowErrorMsgBox(QString &msg)
 {
 
 	QString caption  = tr("Error");
-        QString msg = tr("Error Generating Signature!");
   	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
   	msgBoxp.exec();
 }
@@ -301,7 +300,7 @@ void PDFSignWindow::on_button_sign_clicked()
 	if (this->success)
 		ShowSuccessMsgBox();
 	else
-		ShowErrorMsgBox();
+		ShowErrorMsgBox(tr("Error Generating Signature!"));
 
 	this->close();
 
@@ -432,6 +431,21 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	if (str.isEmpty())
 		return;
 
+	current_input_path = str.at(0);
+
+	m_pdf_sig = new PTEID_PDFSignature(strdup(getPlatformNativeString(current_input_path)));
+
+	try
+	{
+		m_current_page_number = m_pdf_sig->getPageCount();
+	}
+	catch (PTEID_Exception &e)
+	{
+		ShowErrorMsgBox(tr("Unsupported or corrupted file!"));
+		m_pdf_sig = NULL;
+		return;
+	}
+
 	for(int i=0; i != str.size(); i++)
 	{
 
@@ -439,12 +453,6 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 		list_model->setData(list_model->index(list_model->rowCount()-1, 0), str.at(i));
 
 	}
-
-	current_input_path = str.at(0);
-
-	m_pdf_sig = new PTEID_PDFSignature(strdup(getPlatformNativeString(current_input_path)));
-
-	m_current_page_number = m_pdf_sig->getPageCount();
 
 	//Set the spinbox with the appropriate max value
 	ui.spinBox_page->setMaximum(m_current_page_number);
