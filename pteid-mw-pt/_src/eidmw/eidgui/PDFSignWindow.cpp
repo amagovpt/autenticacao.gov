@@ -169,7 +169,7 @@ void PDFSignWindow::ShowSuccessMsgBox()
 
 }
 
-void PDFSignWindow::ShowErrorMsgBox(QString &msg)
+void PDFSignWindow::ShowErrorMsgBox(QString msg)
 {
 
 	QString caption  = tr("Error");
