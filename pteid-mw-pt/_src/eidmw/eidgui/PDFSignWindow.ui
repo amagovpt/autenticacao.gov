@@ -285,6 +285,9 @@
            <height>0</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">font-size: 8pt</string>
+         </property>
          <property name="verticalScrollBarPolicy">
           <enum>Qt::ScrollBarAlwaysOff</enum>
          </property>
