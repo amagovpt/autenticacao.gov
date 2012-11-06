@@ -13773,6 +13773,35 @@ int MYRIAD_ITALIC_WIDTHS[] =
 };
 
 
+
+unsigned int getWidth(unsigned char c, MyriadFontType ft)
+{
+
+	switch(ft)
+	{
+		case MYRIAD_REGULAR:
+			if (c < sizeof(MYRIAD_REGULAR_WIDTHS))
+				return MYRIAD_REGULAR_WIDTHS[c];
+			else
+				return 0;
+		case MYRIAD_ITALIC:
+			if (c < sizeof(MYRIAD_ITALIC_WIDTHS))
+				return MYRIAD_ITALIC_WIDTHS[c];
+			else
+				return 0;
+		case MYRIAD_BOLD:
+			if (c < sizeof(MYRIAD_BOLD_WIDTHS))
+				return MYRIAD_BOLD_WIDTHS[c];
+			else
+				return 0;
+	}
+
+	fprintf(stderr, "Shouldnt be reached!\n");
+	return 0;
+
+}
+
+
 Object createMyriadDict(XRef *xref, MyriadFontType ft)
 {
 	Object font_dict, obj_tmp, widths;

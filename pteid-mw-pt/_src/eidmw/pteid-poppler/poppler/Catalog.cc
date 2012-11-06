@@ -645,27 +645,17 @@ Ref Catalog::addImageXObject(int width, int height, unsigned char *data, int len
  * our text in our chosen font-face and fontsize
  * Units: postscript points (pts)
  */
-double getStringWidth(const char *winansi_encoded_string, double font_size)
+double getStringWidth(const char *winansi_encoded_string, double font_size, MyriadFontType font)
 {
-      double total_width = 0;
-      BuiltinFont * builtinFont = NULL;
-
-    //Find builtin font table for Helvetica
-
-    for (int i = 0; i < nBuiltinFonts; ++i) {
-      if (!strcmp("Helvetica", builtinFonts[i].name)) {
-	builtinFont = &builtinFonts[i];
-	break;
-      }
-    }
-    Gushort w = 0;
+    double total_width = 0;
+    unsigned int w = 0;
     unsigned char code = 0;
 
     //Lookup each winansi char width 
     for (unsigned int i = 0; i!= strlen(winansi_encoded_string); i++)
     {
        code = (unsigned char)winansi_encoded_string[i];
-       if (winAnsiEncoding[code] && builtinFont->widths->getWidth(winAnsiEncoding[code], &w))
+       w = getWidth(code, font);
 	total_width += 0.001 * font_size * w;	 
     }
 
@@ -673,47 +663,72 @@ double getStringWidth(const char *winansi_encoded_string, double font_size)
 
 }
 
+std::string getFittingSubString(std::string &str, double font_size,
+			   	MyriadFontType font, double space_available)
+{
+	int i = str.length() - 1;
+	const double reserved = getStringWidth("(...)", font_size, font);
+   	while(i >= 0)
+	{
+	    std::string tmp = str.substr(0, i);
+	    if (getStringWidth(tmp.c_str(), font_size, font) <= 
+						(space_available - reserved))
+		return tmp;
+		i--;
+
+	}
+	return "";
+}
+
 /*
  * Generate PDF text display commands according to a fixed-column
  * layout 
  */
-GooString *formatMultilineString(char *content, double available_space, double font_size, double space_first_line=0)
-//		int lines_available, int *lines_used)
+GooString *formatMultilineString(char *content, double available_space, double font_size, MyriadFontType font,
+	       int available_lines, double space_first_line=0)
 {
 	GooString *multi_line = new GooString();
 	std::string line = std::string(content);
 	std::string word;
 
-	//fprintf(stderr, "formatting %s space_first_line=%f\n", content, space_first_line);
-
-	//Length of the ' ' char in Helvetica 8pt
-	double space_width = 278 * font_size * 0.001; 	
+	//Length of the ' ' char in current font and font-size
+	double space_width = getWidth(' ', font) * font_size * 0.001; 	
 	std::istringstream iss(line, std::istringstream::in);
 
 	double space_left = space_first_line == 0 ? available_space : space_first_line;
 	double word_width;
 	/* Shift to the left to offset the left margin of the 
 	first line if space_first_line > 0 */
-	double horizontal_shift = 0;
-	int lines_used = 0;
+	double horizontal_shift = -(available_space - space_first_line);
+	int lines_used = 0, word_count = 0;
 
 	multi_line->append("("); //Init String
 
-	//(*lines_used)++;
-
 	while( iss >> word)
 	{
-		word_width = getStringWidth(word.c_str(), font_size);
+		word_width = getStringWidth(word.c_str(), font_size, font);
 		//No more space in current line
 		if (word_width + space_width > space_left)
 		{
 			lines_used++;
-			//Start new line
+			
+			if (word_count == 0)
+			{
+				multi_line->append(
+						getFittingSubString(word, font_size, font, space_left).c_str());
+				lines_used = available_lines;
+			}
+
+			if (lines_used == available_lines)
+			{
+			 //No more available lines so its an early exit...
+			 multi_line->append("\\(...\\)) Tj \r\n");
+			 return multi_line;
+
+			}
 			multi_line->append(") Tj\r\n");
-			if (lines_used > 1)
+			if (lines_used > 1 || space_first_line == 0)
 				horizontal_shift = 0;
-			else if (space_first_line)
-				horizontal_shift = -(available_space - space_first_line);
 
 			//Line spacing
 			multi_line->append(GooString::format("{0:f} -10 Td\r\n", horizontal_shift)); 
@@ -735,9 +750,14 @@ GooString *formatMultilineString(char *content, double available_space, double f
 
 		}
 
+		word_count++;
+
 	}
 
+
 	multi_line->append(") Tj\r\n");
+
+
 
 	return multi_line;
 
@@ -765,7 +785,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	if (reason != NULL && strlen(reason) > 0)
 	{
 		GooString *abc = new GooString(utf8_to_latin1(reason));
-		n2_commands->append(formatMultilineString(abc->getCString(), rect_x, font_size));
+		n2_commands->append(formatMultilineString(abc->getCString(), rect_x, font_size, MYRIAD_ITALIC, 2));
 	}
 
 	n2_commands->append("0 -10 Td\r\n");
@@ -777,13 +797,30 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	//Change to bold font for the signer name
 	n2_commands->append(GooString::format("(Assinado por: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
 		assinado_por_length, (int)font_size));
+	
+	//The parameter 5 in lines is intended to allow as much lines as needed to the name field	
+	GooString *name_str = formatMultilineString(utf8_to_latin1(name), 
+					rect_x, font_size, MYRIAD_BOLD, 5, rect_x - assinado_por_length);
+	n2_commands->append(name_str);
 
-	n2_commands->append(formatMultilineString(utf8_to_latin1(name), 
-					rect_x, font_size, rect_x - assinado_por_length));
+	int lines = 0;
+        char *haystack = name_str->getCString();
+	while ((haystack = strstr(haystack, "Tj")) != NULL)
+	{
+		haystack += 2; //Skip current match of "Tj"
+	       	lines++; 
+	}
+
+	if (lines < 2)
+	{
+		n2_commands->append(GooString::format("{0:f} -10 Td\r\n", -assinado_por_length)); 
+	}
+	else
+		n2_commands->append("0 -10 Td\r\n");
+
 	//Back to regular font
 	n2_commands->append(GooString::format("/F1 {0:d} Tf\r\n", (int)font_size));
-	
-	n2_commands->append("0 -10 Td\r\n");
+
 	n2_commands->append(GooString::format("(Num. de Identifica\xE7\xE3o Civil: {0:s}) Tj\r\n",
 				civil_number));
 
@@ -796,17 +833,9 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 		GooString * tmp_location = GooString::format("Localiza\xE7\xE3o: {0:s}",
 					utf8_to_latin1(location));
 		n2_commands->append(formatMultilineString(tmp_location->getCString(), 
-					rect_x, font_size));
+					rect_x, font_size, MYRIAD_REGULAR, 1));
 	}
-	/*
-	if (reason != NULL && strlen(reason) > 0)
-	{
-		n2_commands->append("0 -10 Td\r\n");
-		GooString *abc = GooString::format("Raz\xE3o: {0:s}",
-				utf8_to_latin1(reason));
-		n2_commands->append(formatMultilineString(abc->getCString(), rect_x, font_size));
-	}
-	*/
+
 	n2_commands->append("\r\nET\r\n");
 
 	appearance_obj.initDict(xref);

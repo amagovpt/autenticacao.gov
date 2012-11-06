@@ -34,6 +34,9 @@ typedef struct __font_descriptor
 Object createFontDescriptor(XRef * xref, MyriadFontType ft);
 Object createMyriadDict(XRef *xref, MyriadFontType ft);
 
+unsigned int getWidth(unsigned char c, MyriadFontType ft);
+	
+
 class MyriadFonts
 {
 
