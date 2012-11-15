@@ -23,6 +23,10 @@
 #include "UnknownCard.h"
 #endif
 
+#ifdef __GNUC__
+#include <termios.h>
+#endif
+
 using namespace eIDMW;
 
 static const unsigned char IAS_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x01, 0x02};
@@ -456,11 +460,81 @@ DlgPinUsage CPteidCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)
 	return usage;
 }
 
+#ifdef __GNUC__
+
+/* 
+ * Alternative Console PIN UI for Linux systems with no X server
+ *
+ */
+int consoleAskForPin(tPinOperation operation, const tPin &Pin, 
+								char *sPin1, char* sPin2)
+{
+
+    struct termios oflags, nflags;
+    char password[64];
+
+    /* disabling echo */
+    tcgetattr(fileno(stdin), &oflags);
+    nflags = oflags;
+    nflags.c_lflag &= ~ECHO;
+    nflags.c_lflag |= ECHONL;
+
+    if (tcsetattr(fileno(stdin), TCSANOW, &nflags) != 0) {
+        perror("tcsetattr");
+        return EXIT_FAILURE;
+    }
+
+    printf("Please introduce your %s: ", Pin.csLabel.c_str());
+    fgets(password, sizeof(password), stdin);
+		//Delete trailing newline
+		password[strlen(password)- 1] = 0;
+
+		/* restore terminal */
+		if (tcsetattr(fileno(stdin), TCSANOW, &oflags) != 0) {
+						perror("tcsetattr");
+						return EXIT_FAILURE;
+		}
+
+		strcpy(sPin1, password);
+
+		if (operation == PIN_OP_CHANGE)
+		{
+						memset(password, 0, sizeof(password)); 
+						printf("New PIN: ");
+						if (tcsetattr(fileno(stdin), TCSANOW, &nflags) != 0) {
+										perror("tcsetattr");
+										return EXIT_FAILURE;
+						}
+
+						fgets (password, sizeof(password), stdin);
+						//Delete trailing newline
+						password[strlen(password)- 1] = 0;
+
+						if (tcsetattr(fileno(stdin), TCSANOW, &oflags) != 0) {
+										perror("tcsetattr");
+										return EXIT_FAILURE;
+						}
+						strcpy(sPin2, password);
+		}
+
+}
+
+bool detectXorgRunning()
+{
+
+		char * display = getenv("DISPLAY");
+		char * x_authority = getenv("XAUTHORITY");
+
+		return display && x_authority;
+
+}
+
+#endif
+
 void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
         std::string & csPin1, std::string & csPin2,	const tPrivKey *pKey)
 {
 
-        //printf("++++ Pteid6\n");
 	// Convert params
 	wchar_t wsPin1[PIN_MAX_LENGTH+1];
 	wchar_t wsPin2[PIN_MAX_LENGTH+1];
@@ -470,6 +544,22 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 
 	// The actual call
 	DlgRet ret;
+
+#ifdef __GNUC__	
+	if (!detectXorgRunning())
+	{
+			char *sPin1 = new char[PIN_MAX_LENGTH +1];
+		  char *sPin2 = new char[PIN_MAX_LENGTH +1];
+			consoleAskForPin(operation, Pin, sPin1, sPin2);
+
+			csPin1 = std::string(sPin1);
+			csPin2 = std::string(sPin2);
+
+			return;
+	}
+	else
+	{
+#endif	
 	std::wstring wideLabel = utilStringWiden(Pin.csLabel);
 	if (operation != PIN_OP_CHANGE)
 	{
@@ -478,11 +568,14 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 	}
 	else
 	{
-		ret = DlgAskPins(pinOperation,
-			usage, wideLabel.c_str(),
+		ret = DlgAskPins(pinOperation, usage, wideLabel.c_str(),
 			pinInfo, wsPin1,PIN_MAX_LENGTH+1, 
 			pinInfo, wsPin2,PIN_MAX_LENGTH+1);
 	}
+#ifdef __GNUC__	
+
+	}
+#endif
 
 	// Convert back
 	if (ret == DLG_OK)
