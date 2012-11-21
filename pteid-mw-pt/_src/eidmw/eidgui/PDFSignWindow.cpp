@@ -26,6 +26,7 @@
 
 #include <eidlib.h>
 #include "PDFSignWindow.h"
+#include "FreeSelectionDialog.h"
 #include "mylistview.h"
 
 using namespace eIDMW;
@@ -84,6 +85,24 @@ void PDFSignWindow::on_tableWidget_currentCellChanged(int row, int column,
 	update_sector(row,column);
 
 }
+
+//Launch the Free Selection Dialog
+void PDFSignWindow::on_pushButton_freeselection_clicked()
+{
+	int coord_x=0, coord_y=0;
+	FreeSelectionDialog * d = new FreeSelectionDialog(this);
+	d->exec();
+	d->getValues(&coord_x, &coord_y);
+
+	QString caption = tr("PDF Signature");
+        QString msg = QString("Coord x= "+QString::number(coord_x)+" Coord y="+
+			QString::number(coord_y));
+	QMessageBox msgBoxp(QMessageBox::Information, caption, msg, 0, this);
+	msgBoxp.exec();
+
+
+}
+
 //Event received from myListView
 void PDFSignWindow::customEvent(QEvent *ev)
 {

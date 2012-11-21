@@ -33,6 +33,7 @@ class PDFSignWindow : public QDialog
 	    void on_button_addfile_clicked();
 	    void on_button_sign_clicked();
 	    void on_button_cancel_clicked();
+	    void on_pushButton_freeselection_clicked();
 	    void on_checkBox_location_toggled(bool);
 	    void on_checkBox_reason_toggled(bool);
 	    void on_visible_checkBox_toggled(bool);
