@@ -460,7 +460,7 @@ DlgPinUsage CPteidCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)
 	return usage;
 }
 
-#ifdef __GNUC__
+#ifdef __linux__
 
 /* 
  * Alternative Console PIN UI for Linux systems with no X server
@@ -545,7 +545,7 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 	// The actual call
 	DlgRet ret;
 
-#ifdef __GNUC__	
+#ifdef _linux_
 	if (!detectXorgRunning())
 	{
 			char *sPin1 = new char[PIN_MAX_LENGTH +1];
