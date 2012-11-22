@@ -545,7 +545,7 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 	// The actual call
 	DlgRet ret;
 
-#ifdef _linux_
+#ifdef __linux__
 	if (!detectXorgRunning())
 	{
 			char *sPin1 = new char[PIN_MAX_LENGTH +1];
@@ -572,7 +572,7 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 			pinInfo, wsPin1,PIN_MAX_LENGTH+1, 
 			pinInfo, wsPin2,PIN_MAX_LENGTH+1);
 	}
-#ifdef __GNUC__	
+#ifdef __linux__	
 
 	}
 #endif
