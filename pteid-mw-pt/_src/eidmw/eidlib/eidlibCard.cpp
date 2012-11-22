@@ -255,6 +255,23 @@ void PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_
 	
 	END_TRY_CATCH
 }
+void PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
+			const char *outfile_path)
+
+{
+
+	BEGIN_TRY_CATCH
+
+	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
+
+	PDFSignature *pdf_sig = sig_handler.mp_signature; 
+	pdf_sig->setVisibleCoordinates(page, coord_x, coord_y);
+
+	pcard->SignPDF(pdf_sig, location, reason, outfile_path);
+	
+	END_TRY_CATCH
+
+}
 
 PTEID_PDFSignature::PTEID_PDFSignature()
 {

@@ -65,6 +65,8 @@ class PDFSignWindow : public QDialog
 	    Ui_PDFSignWindow ui;
 	    static const int table_lines = 6;
 	    static const int table_columns = 3;
+	    double sig_coord_x;
+	    double sig_coord_y;
 
     	    CardInformation const& m_CI_Data;
 	    QAbstractItemModel *list_model;

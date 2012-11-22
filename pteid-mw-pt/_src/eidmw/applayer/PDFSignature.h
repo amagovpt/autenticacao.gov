@@ -24,9 +24,9 @@ namespace eIDMW
 		EIDMW_APL_API void batchAddFile(char *file_path);
 
 		EIDMW_APL_API void setVisible(unsigned int page, int sector);
+		EIDMW_APL_API void setVisibleCoordinates(unsigned int page, double coord_x, double coord_y);
 		EIDMW_APL_API char *getOccupiedSectors(int page);
 		EIDMW_APL_API int getPageCount();
-
 		void setCard(APL_Card *card) { m_card = card; };
 		
 		//General interface to signing in single file-mode or batch-mode
@@ -35,6 +35,7 @@ namespace eIDMW
 
 
 	private:
+
 		void getCitizenData();
 		std::string generateFinalPath(const char *output_dir, const char *path);
 		PDFRectangle getSignatureRectangle(double, double);
@@ -45,10 +46,14 @@ namespace eIDMW
 		PDFDoc *m_doc;
 
 		const char * m_pdf_file_path;
+		static const double sig_height = 90;
+		static const int lr_margin = 30;
+		static const double tb_margin = 40.0;
 
 		char *m_civil_number;
 		char *m_citizen_fullname;
 		unsigned int m_page, m_sector;
+		int location_x, location_y;
 		bool m_visible;
 		bool m_batch_mode;
 		std::vector<char *> m_files_to_sign;

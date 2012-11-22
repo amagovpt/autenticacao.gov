@@ -1,9 +1,9 @@
-/***********************************************************************
+/*********************************************************************
 **
 ** Graphical Widget with draggable rectangle
 ** for selection of an area within an A4-sized page
 **
-************************************************************************/
+**********************************************************************/
 
 #include <QtGui>
 #include <QPainter>
@@ -182,10 +182,10 @@ void FreeSelectionDialog::on_text_edit_y_editingFinished()
 
 }
 
-void FreeSelectionDialog::getValues(int *x, int *y)
+void FreeSelectionDialog::getValues(double *x, double *y)
 {
-       *x = ui.text_edit_x->text().toInt();
-       *y = ui.text_edit_y->text().toInt();
+       *x = ui.text_edit_x->text().toInt() / scene_width;
+       *y = ui.text_edit_y->text().toInt() / scene_height;
 
 }
 

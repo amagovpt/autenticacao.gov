@@ -20,7 +20,7 @@ class FreeSelectionDialog : public QDialog
 		FreeSelectionDialog (QWidget *parent);
 		void setPosition(QPointF new_pos);
 		//This is intended to be called after the dialog is closed
-		void getValues(int *x, int *y);
+		void getValues(double *x, double *y);
 
 	private:
 		void changeRectanglePos();

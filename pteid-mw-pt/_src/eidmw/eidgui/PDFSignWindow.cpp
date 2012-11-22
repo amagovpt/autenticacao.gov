@@ -46,6 +46,7 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	"<br>The grey sectors are already filled<br>with other signatures."
 	"</html>"));
 	m_pdf_sig = NULL;
+	sig_coord_x = -1, sig_coord_y = -1;
 	success = false;
 	ui.spinBox_page->setValue(1);
 	list_model = new QStringListModel();
@@ -89,17 +90,9 @@ void PDFSignWindow::on_tableWidget_currentCellChanged(int row, int column,
 //Launch the Free Selection Dialog
 void PDFSignWindow::on_pushButton_freeselection_clicked()
 {
-	int coord_x=0, coord_y=0;
 	FreeSelectionDialog * d = new FreeSelectionDialog(this);
 	d->exec();
-	d->getValues(&coord_x, &coord_y);
-
-	QString caption = tr("PDF Signature");
-        QString msg = QString("Coord x= "+QString::number(coord_x)+" Coord y="+
-			QString::number(coord_y));
-	QMessageBox msgBoxp(QMessageBox::Information, caption, msg, 0, this);
-	msgBoxp.exec();
-
+	d->getValues(&sig_coord_x, &sig_coord_y);
 
 }
 
@@ -213,7 +206,12 @@ void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
 	PTEID_EIDCard* card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
 	try
 	{
-		card->SignPDF(*m_pdf_sig, selected_page,
+		printf("x=%f, y=%f\n", sig_coord_x, sig_coord_y);
+		if (sig_coord_x != -1 && sig_coord_y != -1)
+			card->SignPDF(*m_pdf_sig, selected_page,
+			  sig_coord_x, sig_coord_y, location, reason, strdup(getPlatformNativeString(savefilepath)));
+		else
+			card->SignPDF(*m_pdf_sig, selected_page,
 				m_selected_sector, location, reason, strdup(getPlatformNativeString(savefilepath)));
 		this->success = true;
 

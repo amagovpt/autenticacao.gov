@@ -28,6 +28,9 @@ namespace eIDMW
 		m_visible = false;
 		m_page = 1;
 		m_sector = 0;
+		//Illegal values to start with
+		location_x = -1;
+		location_y = -1;
 		m_civil_number = NULL;
 		m_citizen_fullname = NULL;
 		m_batch_mode = true;
@@ -40,6 +43,9 @@ namespace eIDMW
 		m_visible = false;
 		m_page = 1;
 		m_sector = 0;
+		//Illegal values to start with
+		location_x = -1;
+		location_y = -1;
 		m_civil_number = NULL;
 		m_citizen_fullname = NULL;
 		m_batch_mode = false;
@@ -70,7 +76,15 @@ namespace eIDMW
 		m_sector = sector_number;
 
 	}
+	
+	void PDFSignature::setVisibleCoordinates(unsigned int page, double coord_x, double coord_y)
+	{
+	   m_visible = true;
+	   m_page = page;
+	   location_x = coord_x;
+	   location_y = coord_y;
 
+	}
 
 	PDFRectangle PDFSignature::getSignatureRectangle(double page_height, double page_width)
 	{
@@ -78,12 +92,9 @@ namespace eIDMW
 		// The units for x_pad, y_pad, sig_height and sig_width are postscript
 		// points (1 px == 0.75 points)
 		PDFRectangle sig_rect;
-	 	int lr_margin = 30;	//Left/Right Margin
-		double sig_height = 90;
 		double vert_align = 16; //Add this to vertically center inside each cell
 
 		double sig_width = (page_width - lr_margin*2) / 3.0;
-		double y_pad = 40.0;
 		
 		//Add left margin
 		sig_rect.x1 = lr_margin;
@@ -99,8 +110,8 @@ namespace eIDMW
 			if (m_sector % 3 == 0)
 			   line = m_sector / 3;
 
-			sig_rect.y1 += (page_height - 2*y_pad) * (6-line) / 6.0;
-			sig_rect.y2 += (page_height - 2*y_pad) * (6-line) / 6.0;
+			sig_rect.y1 += (page_height - 2*tb_margin) * (6-line) / 6.0;
+			sig_rect.y2 += (page_height - 2*tb_margin) * (6-line) / 6.0;
 		}
 
 		if (m_sector % 3 == 2 )
@@ -115,11 +126,11 @@ namespace eIDMW
 			sig_rect.x2 += sig_width * 2.0;
 		}
 		
-		sig_rect.y1 += y_pad + vert_align;
+		sig_rect.y1 += tb_margin + vert_align;
 
 		//Define height and width of the rectangle
 		sig_rect.x2 += sig_width;
-		sig_rect.y2 += sig_height + y_pad + vert_align;
+		sig_rect.y2 += sig_height + tb_margin + vert_align;
 		
 
 		return sig_rect;
@@ -204,9 +215,8 @@ namespace eIDMW
 			 for (int i = 0; i < m_files_to_sign.size(); i++)
 			 {
 				 char *current_file = m_files_to_sign.at(i);
-				 fprintf(stderr, "DEBUG:  Trying to sign file %s\n",
+				 std::string f = generateFinalPath(outfile_path,
 						 current_file);
-				 std::string f = generateFinalPath(outfile_path, current_file);
 				 m_doc = new PDFDoc(new GooString(current_file));
 
 				 signSingleFile(location, reason, f.c_str());
@@ -266,7 +276,23 @@ namespace eIDMW
 		double height = p_media->y2, width = p_media->x2;
 
 		if (m_visible)
-			sig_location = getSignatureRectangle(height, width);
+		{
+			//Sig Location by sector
+			if (location_x == -1)
+				sig_location = getSignatureRectangle(height, width);
+			else
+			{
+			    double sig_width = (width - lr_margin*2) / 3.0;
+			    sig_location.x1 = (width-lr_margin*2)*location_x;
+			    
+			    //Coordinates from the GUI are inverted => (1- location_y)
+			    sig_location.y1 = (height-tb_margin*2) * (1.0-location_y);  
+			    sig_location.x2 = sig_location.x1 + sig_width;
+			    sig_location.y2 = sig_location.y1 + sig_height;
+
+			}
+
+		}
 
 		if (p == NULL)
 			fprintf(stderr, "Failed to read page MediaBox\n");

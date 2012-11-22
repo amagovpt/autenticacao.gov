@@ -137,10 +137,11 @@ HEADERS += CardInformation.h \
 					 mylistview.h \
 					 dlgsignature.h \
 					 PDFSignWindow.h \
+					 FreeSelectionDialog.h \
 					 ../_Builds/pteidversions.h \
 					 ../dialogs/dialogs.h 
            
-FORMS += dlgAbout.ui dlgOptions.ui mainwnd.ui picturepopup.ui dlgPrint.ui dlgSignature.ui dlgVerifySignature.ui PDFSignWindow.ui
+FORMS += dlgAbout.ui dlgOptions.ui mainwnd.ui picturepopup.ui dlgPrint.ui dlgSignature.ui dlgVerifySignature.ui PDFSignWindow.ui FreeSelectionDialog.ui
 
 SOURCES += CardInformation.cpp \
            dlgAbout.cpp \
@@ -155,6 +156,7 @@ SOURCES += CardInformation.cpp \
 					 picturepopup.cpp \
 					 qtsingleapplication.cpp \
 					 PDFSignWindow.cpp \
+					 FreeSelectionDialog.cpp \
 					 mylistview.cpp \
 					 genpur.cpp
 unix:!macx: SOURCES += qtsingleapplication_x11.cpp
