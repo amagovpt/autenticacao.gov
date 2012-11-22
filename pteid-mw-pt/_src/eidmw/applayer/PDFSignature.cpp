@@ -53,7 +53,7 @@ namespace eIDMW
 
 	void PDFSignature::batchAddFile(char *file_path)
 	{
-		m_files_to_sign.push_back(file_path);
+		m_files_to_sign.push_back(strdup(file_path));
 
 	}
 
@@ -198,6 +198,8 @@ namespace eIDMW
 			 for (int i = 0; i < m_files_to_sign.size(); i++)
 			 {
 				 char *current_file = m_files_to_sign.at(i);
+				 fprintf(stderr, "DEBUG:  Trying to sign file %s\n",
+						 current_file);
 				 std::string f = generateFinalPath(outfile_path, current_file);
 				 m_doc = new PDFDoc(new GooString(current_file));
 
@@ -229,7 +231,7 @@ namespace eIDMW
 		if (!doc->isOk()) {
 			delete doc;
 			fprintf(stderr, "Poppler returned error loading PDF document %s\n", 
-					m_pdf_file_path);
+					doc->getFileName()->getCString());
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}
 
@@ -243,7 +245,7 @@ namespace eIDMW
 		if (m_page > doc->getNumPages())
 		{
 			fprintf(stderr, "Error: Signature Page %d is out of bounds for document %s",
-				m_page, m_pdf_file_path);
+				m_page, doc->getFileName()->getCString());
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}
 
