@@ -49,6 +49,12 @@ namespace eIDMW
 
 	PDFSignature::~PDFSignature()
 	{
+		free(m_citizen_fullname);
+		free(m_civil_number);
+
+		//Free the strdup'ed strings from batchAddFile
+		for (int i = 0; i != m_files_to_sign.size(); i++)
+			free(m_files_to_sign.at(i));
 	}
 
 	void PDFSignature::batchAddFile(char *file_path)
