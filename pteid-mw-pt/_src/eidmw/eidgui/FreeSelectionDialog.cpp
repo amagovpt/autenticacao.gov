@@ -63,7 +63,7 @@ class Rectangle : public QGraphicsItem
 		Rectangle(MyGraphicsScene *parent ): my_scene(parent)
 	{
     		setFlag(QGraphicsItem::ItemIsMovable);
-		setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+		//setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 		setFlag(QGraphicsItem::ItemIsSelectable);
 		setAcceptHoverEvents(true);
 
