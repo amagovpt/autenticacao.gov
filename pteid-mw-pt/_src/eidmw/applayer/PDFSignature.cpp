@@ -22,6 +22,9 @@
 namespace eIDMW
 {
 
+	const double PDFSignature::sig_height = 90;
+	const double PDFSignature::tb_margin = 40.0;
+
 	PDFSignature::PDFSignature()
 	{
 
@@ -212,7 +215,7 @@ namespace eIDMW
 		//PIN-Caching is ON after the first signature
 		else
 		{
-			 for (int i = 0; i < m_files_to_sign.size(); i++)
+			 for (unsigned int i = 0; i < m_files_to_sign.size(); i++)
 			 {
 				 char *current_file = m_files_to_sign.at(i);
 				 std::string f = generateFinalPath(outfile_path,
@@ -258,7 +261,7 @@ namespace eIDMW
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}
 
-		if (m_page > doc->getNumPages())
+		if (m_page > (unsigned int)doc->getNumPages())
 		{
 			fprintf(stderr, "Error: Signature Page %d is out of bounds for document %s",
 				m_page, doc->getFileName()->getCString());
