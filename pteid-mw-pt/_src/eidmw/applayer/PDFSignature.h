@@ -53,7 +53,7 @@ namespace eIDMW
 		char *m_civil_number;
 		char *m_citizen_fullname;
 		unsigned int m_page, m_sector;
-		int location_x, location_y;
+		double location_x, location_y;
 		bool m_visible;
 		bool m_batch_mode;
 		std::vector<char *> m_files_to_sign;
