@@ -4,8 +4,8 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <?include ..\..\..\svn_revision.wxs ?>
 
-  <?define var.OfficialProductVersion =2.0.0?>
-  <?define var.ProductVersion =2.0.$(var.RevisionNumber)?>
+  <?define var.OfficialProductVersion =2.1.0?>
+  <?define var.ProductVersion =2.1.$(var.RevisionNumber)?>
   <?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
   <?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
@@ -98,276 +98,288 @@
     <Property Id="ARPURLINFOABOUT" Value="http://www.cartaodecidadao.pt"/>
 
     <Property Id="ALLUSERS" Value="1" />
+	  
+	  <Property Id="OLDMIDDLEWAREINSTALLED">
+		  <RegistrySearch Id="OldMiddlewareInstalled_search" Name="Version" Type="raw" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{89266692-369C-4B31-BA95-DA601180FB03}"/>
+	  </Property>
 
-    <Directory Id="TARGETDIR" Name="SourceDir">
+	  <Condition Message="!(loc.OldMiddlewareErrorMsg)" >
+		  <![CDATA[Installed OR NOT OLDMIDDLEWAREINSTALLED]]>
+	   </Condition>
 
-      <Directory Id="ProgramMenuFolder" Name="Menu">
-        <Directory Id="ApplicationProgramsFolder" Name="Cartão de Cidadão">
-          <Directory Id="ApplicationProgramsFolderUtilities" Name="Utilitários"/>
-        </Directory>
-      </Directory>
+	  <Directory Id="TARGETDIR" Name="SourceDir">
 
-      <Directory Id="ProgramFiles64Folder">
-        <Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
-        <Directory Id="APPLICATIONROOTFOLDER" Name="Portugal Identity Card">
-          <Directory Id="IMAGEFORMATS" Name="imageformats" />
-          <Directory Id="EIDSTORE" Name="eidstore">
-            <Directory Id="CERTSDIR" Name="certs"/>
-            <Directory Id="CRLDIR" Name="crl">
-              <Directory Id="HTTPDIR" Name="http">
-                <Directory Id="CRLEIDBELGIUMBE" Name="crl.eid.portugal.be"/>
-              </Directory>
-            </Directory>
-          </Directory>
-          <Directory Id="DIRECTORYCACHE" Name=".cache"/>
-          <Directory Id="LOGDIR" Name="log"/>
-        </Directory>
-        <Directory Id="FIREFOXROOTFOLDER" Name="Mozilla Firefox">
-          <Directory Id="FIREFOXEXTENSIONS" Name="extensions">
-            <Directory Id="XPIROOTFOLDER" Name="portugaleid@eid.portugal.be">
-              <Directory Id="XPICONTENTFOLDER" Name="content"/>
-              <Directory Id="XPICOMPONENTSFOLDER" Name="components"/>
-              <Directory Id="XPIDEFAULTSFOLDER" Name="defaults">
-                <Directory Id="XPIDEFAULTSPREFSFOLDER" Name="preferences"/>
-              </Directory>
-              <Directory Id="XPILOCALEFOLDER" Name="locale">
-                <Directory Id="XPILOCALEENFOLDER" Name="en-US"/>
-                <Directory Id="XPILOCALEFRFOLDER" Name="fr-FR"/>
-                <Directory Id="XPILOCALENLFOLDER" Name="nl-NL"/>
-                <Directory Id="XPILOCALEDEFOLDER" Name="de-DE"/>
-              </Directory>
-              <Directory Id="XPISKINFOLDER" Name="skin"/>
-            </Directory>
-          </Directory>
-        </Directory>
-      </Directory>
+		  <Directory Id="ProgramMenuFolder" Name="Menu">
+			  <Directory Id="ApplicationProgramsFolder" Name="Cartão de Cidadão">
+				  <Directory Id="ApplicationProgramsFolderUtilities" Name="Utilitários"/>
+			  </Directory>
+		  </Directory>
 
-      <Directory Id="DesktopFolder"/>
+		  <Directory Id="ProgramFiles64Folder">
+			  <Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
+			  <Directory Id="APPLICATIONROOTFOLDER" Name="Portugal Identity Card">
+				  <Directory Id="IMAGEFORMATS" Name="imageformats" />
+				  <Directory Id="EIDSTORE" Name="eidstore">
+					  <Directory Id="CERTSDIR" Name="certs"/>
+					  <Directory Id="CRLDIR" Name="crl">
+						  <Directory Id="HTTPDIR" Name="http">
+							  <Directory Id="CRLEIDBELGIUMBE" Name="crl.eid.portugal.be"/>
+						  </Directory>
+					  </Directory>
+				  </Directory>
+				  <Directory Id="DIRECTORYCACHE" Name=".cache"/>
+				  <Directory Id="LOGDIR" Name="log"/>
+				  <Directory Id="SDK" Name="sdk">
+					  <Directory Id="JAVA_SDK" Name="Java"/>
+					  <Directory Id="CSHARP_SDK" Name="CSharp"/>
+				  </Directory>
+			  </Directory>
+			  <Directory Id="FIREFOXROOTFOLDER" Name="Mozilla Firefox">
+				  <Directory Id="FIREFOXEXTENSIONS" Name="extensions">
+					  <Directory Id="XPIROOTFOLDER" Name="portugaleid@eid.portugal.be">
+						  <Directory Id="XPICONTENTFOLDER" Name="content"/>
+						  <Directory Id="XPICOMPONENTSFOLDER" Name="components"/>
+						  <Directory Id="XPIDEFAULTSFOLDER" Name="defaults">
+							  <Directory Id="XPIDEFAULTSPREFSFOLDER" Name="preferences"/>
+						  </Directory>
+						  <Directory Id="XPILOCALEFOLDER" Name="locale">
+							  <Directory Id="XPILOCALEENFOLDER" Name="en-US"/>
+							  <Directory Id="XPILOCALEFRFOLDER" Name="fr-FR"/>
+							  <Directory Id="XPILOCALENLFOLDER" Name="nl-NL"/>
+							  <Directory Id="XPILOCALEDEFOLDER" Name="de-DE"/>
+						  </Directory>
+						  <Directory Id="XPISKINFOLDER" Name="skin"/>
+					  </Directory>
+				  </Directory>
+			  </Directory>
+		  </Directory>
 
-      <Directory Id="WindowsFolder"/>
+		  <Directory Id="DesktopFolder"/>
 
-      <Directory Id="System64Folder">
+		  <Directory Id="WindowsFolder"/>
 
-      </Directory>
+		  <Directory Id="System64Folder">
 
-      <Directory Id="SystemFolder"></Directory>
+		  </Directory>
 
-      <Merge Id="VCRT" SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC80_CRT_x86_x64.msm" Language="0" DiskId="1" />
-      <Merge Id="VCRT_POLICY" SourceFile="$(var.PTEID_DIR_MSM)\policy_8_0_Microsoft_VC80_CRT_x86_x64.msm" Language="0" DiskId="1" />
-    </Directory>
+		  <Directory Id="SystemFolder"></Directory>
 
-    <DirectoryRef Id="EIDSTORE">
-      <Component Id="EidStore" Guid="{F30FFFBD-4F50-4e4d-86D2-90F192A3F01B}" KeyPath="yes">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-        <RemoveFile Id="RemoveEidstoreFiles" On="uninstall" Name="*"/>
-        <RemoveFolder Id="RemoveEidstoreFolder" On="uninstall"/>
-      </Component>
-    </DirectoryRef>
+		  <Merge Id="VCRT" SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC80_CRT_x86_x64.msm" Language="0" DiskId="1" />
+		  <Merge Id="VCRT_POLICY" SourceFile="$(var.PTEID_DIR_MSM)\policy_8_0_Microsoft_VC80_CRT_x86_x64.msm" Language="0" DiskId="1" />
+	  </Directory>
 
-    <DirectoryRef Id="CERTSDIR">
-      <Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AC6}">
-        <File Id="CartaodeCidadao001.der" Name="CartaodeCidadao001.der" KeyPath="yes" Source="..\..\certs\CartaodeCidadao001.der" />
-        <File Id="ECRaizEstado_novo_assinado_GTE.der" Name="ECRaizEstado_novo_assinado_GTE.der" KeyPath="no" Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" />
-        <File Id="GTEGlobalRoot.der" Name="GTEGlobalRoot.der" KeyPath="no" Source="..\..\certs\GTEGlobalRoot.der" />
-        <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der"/>
-        <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0002.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0002.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0002.der"/>
-        <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0003.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0003.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0003.der"/>
-        <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0004.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0004.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0004.der"/>
-        <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0005.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0005.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0005.der"/>
-        <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der"/>
-        <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der"/>
-        <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der"/>
-        <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der"/>
-        <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0004.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0004.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0004.der"/>
-        <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0005.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0005.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0005.der"/>
-        <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der"/>
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="EIDSTORE">
+		  <Component Id="EidStore" Guid="{F30FFFBD-4F50-4e4d-86D2-90F192A3F01B}" KeyPath="yes">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+			  <RemoveFile Id="RemoveEidstoreFiles" On="uninstall" Name="*"/>
+			  <RemoveFolder Id="RemoveEidstoreFolder" On="uninstall"/>
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="CRLDIR">
-      <Component Id="CrlDir" Guid="{5731B322-17EE-4d08-90A5-9DB53F53EC29}">
-        <CreateFolder/>
-        <RemoveFile Id="RemoveCrlCacheFiles" On="uninstall" Name="*"/>
-        <RemoveFolder Id="RemoveCrlCacheFolder" On="uninstall"/>
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="CERTSDIR">
+		  <Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AC6}">
+			  <File Id="CartaodeCidadao001.der" Name="CartaodeCidadao001.der" KeyPath="yes" Source="..\..\certs\CartaodeCidadao001.der" />
+			  <File Id="ECRaizEstado_novo_assinado_GTE.der" Name="ECRaizEstado_novo_assinado_GTE.der" KeyPath="no" Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" />
+			  <File Id="GTEGlobalRoot.der" Name="GTEGlobalRoot.der" KeyPath="no" Source="..\..\certs\GTEGlobalRoot.der" />
+			  <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der"/>
+			  <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0002.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0002.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0002.der"/>
+			  <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0003.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0003.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0003.der"/>
+			  <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0004.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0004.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0004.der"/>
+			  <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0005.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0005.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0005.der"/>
+			  <File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der"/>
+			  <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der"/>
+			  <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der"/>
+			  <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der"/>
+			  <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0004.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0004.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0004.der"/>
+			  <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0005.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0005.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0005.der"/>
+			  <File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der"/>
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="HTTPDIR">
-      <Component Id="HttpDir" Guid="{24B807B8-E1F2-42BB-976D-C98B7F52A119}" KeyPath="yes">
-        <CreateFolder />
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="CRLDIR">
+		  <Component Id="CrlDir" Guid="{5731B322-17EE-4d08-90A5-9DB53F53EC29}">
+			  <CreateFolder/>
+			  <RemoveFile Id="RemoveCrlCacheFiles" On="uninstall" Name="*"/>
+			  <RemoveFolder Id="RemoveCrlCacheFolder" On="uninstall"/>
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="CRLEIDBELGIUMBE">
-      <Component Id="CrlEidPortugalBe" Guid="{26BEC283-40A5-43A8-BC57-351DA9F79B33}" KeyPath="yes">
-        <CreateFolder />
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="HTTPDIR">
+		  <Component Id="HttpDir" Guid="{24B807B8-E1F2-42BB-976D-C98B7F52A119}" KeyPath="yes">
+			  <CreateFolder />
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="LOGDIR">
-      <Component Id="LogDir" Guid="{A300DA04-F8DF-4506-B654-1E5EB2782DF3}" KeyPath="yes">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-        <RemoveFile Id="RemoveLogFiles" On="uninstall" Name="*"/>
-        <RemoveFolder Id="RemoveLogFolder" On="uninstall"/>
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="CRLEIDBELGIUMBE">
+		  <Component Id="CrlEidPortugalBe" Guid="{26BEC283-40A5-43A8-BC57-351DA9F79B33}" KeyPath="yes">
+			  <CreateFolder />
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="DIRECTORYCACHE">
-      <Component Id="DirectoryCache" Guid="{7CAEB639-7068-4084-B422-D7B5E55D0FBC}" KeyPath="yes">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-        <RemoveFile Id="RemoveCacheFiles" On="uninstall" Name="*"/>
-        <RemoveFolder Id="RemoveCacheFolder" On="uninstall"/>
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="LOGDIR">
+		  <Component Id="LogDir" Guid="{A300DA04-F8DF-4506-B654-1E5EB2782DF3}" KeyPath="yes">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+			  <RemoveFile Id="RemoveLogFiles" On="uninstall" Name="*"/>
+			  <RemoveFolder Id="RemoveLogFolder" On="uninstall"/>
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="FIREFOXEXTENSIONS">
-      <Component Id="Extensions" Guid="{DBEFB6AD-3282-4625-8257-2CF7EA4E7264}">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="DIRECTORYCACHE">
+		  <Component Id="DirectoryCache" Guid="{7CAEB639-7068-4084-B422-D7B5E55D0FBC}" KeyPath="yes">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+			  <RemoveFile Id="RemoveCacheFiles" On="uninstall" Name="*"/>
+			  <RemoveFolder Id="RemoveCacheFolder" On="uninstall"/>
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="FIREFOXROOTFOLDER">
-      <Component Id="FireFoxRoot" Guid="{3F6140E7-B25A-41c5-BACE-9DBCDE8019D9}" KeyPath="no">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="FIREFOXEXTENSIONS">
+		  <Component Id="Extensions" Guid="{DBEFB6AD-3282-4625-8257-2CF7EA4E7264}">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="XPIROOTFOLDER">
-      <Component Id="XPIRoot" Guid="{6E56CA5C-29ED-47e0-9EEF-64FDF8A0B353}" KeyPath="no">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-        <File Id="chrome.manifest" Name="chrome.manifest" KeyPath="no" Source="..\..\..\xpi\src\chrome.manifest" />
-        <File Id="icon.png.root" Name="icon.png" KeyPath="no" Source="..\..\..\xpi\src\icon.png" />
-        <File Id="install.rdf" Name="install.rdf" KeyPath="no" Source="..\..\..\xpi\src\install.rdf" />
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="FIREFOXROOTFOLDER">
+		  <Component Id="FireFoxRoot" Guid="{3F6140E7-B25A-41c5-BACE-9DBCDE8019D9}" KeyPath="no">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="XPICONTENTFOLDER">
-      <Component Id="XPIContent" Guid="{DC052180-264F-4ace-ACF1-FC482715EB86}" KeyPath="no">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-        <File Id="portugaleidpkcs11.js" Name="portugaleidpkcs11.js" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidpkcs11.js" />
-        <File Id="portugaleidpkcs11.xul" Name="portugaleidpkcs11.xul" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidpkcs11.xul" />
-        <File Id="portugaleidprompt.js" Name="portugaleidprompt.js" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidprompt.js" />
-        <File Id="portugaleidprompt.xul" Name="portugaleidprompt.xul" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidprompt.xul" />
-        <File Id="portugaleidpromptsecure.js" Name="portugaleidpromptsecure.js" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidpromptsecure.js" />
-        <File Id="portugaleidpromptsecure.xul" Name="portugaleidpromptsecure.xul" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidpromptsecure.xul" />
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="XPIROOTFOLDER">
+		  <Component Id="XPIRoot" Guid="{6E56CA5C-29ED-47e0-9EEF-64FDF8A0B353}" KeyPath="no">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+			  <File Id="chrome.manifest" Name="chrome.manifest" KeyPath="no" Source="..\..\..\xpi\src\chrome.manifest" />
+			  <File Id="icon.png.root" Name="icon.png" KeyPath="no" Source="..\..\..\xpi\src\icon.png" />
+			  <File Id="install.rdf" Name="install.rdf" KeyPath="no" Source="..\..\..\xpi\src\install.rdf" />
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="XPICOMPONENTSFOLDER">
-      <Component Id="XPIComponents" Guid="{2761C1B0-4EA2-4047-8A31-32679BB4651D}" KeyPath="no">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-        <File Id="comp_portugaleidpkcs11.js" Name="portugaleidpkcs11.js" KeyPath="no" Source="..\..\..\xpi\src\components\portugaleidpkcs11.js" />
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="XPICONTENTFOLDER">
+		  <Component Id="XPIContent" Guid="{DC052180-264F-4ace-ACF1-FC482715EB86}" KeyPath="no">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+			  <File Id="portugaleidpkcs11.js" Name="portugaleidpkcs11.js" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidpkcs11.js" />
+			  <File Id="portugaleidpkcs11.xul" Name="portugaleidpkcs11.xul" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidpkcs11.xul" />
+			  <File Id="portugaleidprompt.js" Name="portugaleidprompt.js" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidprompt.js" />
+			  <File Id="portugaleidprompt.xul" Name="portugaleidprompt.xul" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidprompt.xul" />
+			  <File Id="portugaleidpromptsecure.js" Name="portugaleidpromptsecure.js" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidpromptsecure.js" />
+			  <File Id="portugaleidpromptsecure.xul" Name="portugaleidpromptsecure.xul" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidpromptsecure.xul" />
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="XPIDEFAULTSFOLDER">
-      <Component Id="XPIdefaults" Guid="{B635FD45-0FCE-4285-9FA6-F9559C0F7EBB}" KeyPath="no">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="XPICOMPONENTSFOLDER">
+		  <Component Id="XPIComponents" Guid="{2761C1B0-4EA2-4047-8A31-32679BB4651D}" KeyPath="no">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+			  <File Id="comp_portugaleidpkcs11.js" Name="portugaleidpkcs11.js" KeyPath="no" Source="..\..\..\xpi\src\components\portugaleidpkcs11.js" />
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="XPIDEFAULTSPREFSFOLDER">
-      <Component Id="XPIdefaultsprefs" Guid="{FA937E34-AE32-4acd-AC77-3487EBC2ABCD}" KeyPath="no">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-        <File Id="portugaleid.js" Name="portugaleid.js" KeyPath="no" Source="..\..\..\xpi\src\defaults\preferences\portugaleid.js" />
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="XPIDEFAULTSFOLDER">
+		  <Component Id="XPIdefaults" Guid="{B635FD45-0FCE-4285-9FA6-F9559C0F7EBB}" KeyPath="no">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="XPILOCALEFOLDER">
-      <Component Id="XPIlocale" Guid="{B8A44A30-F2EF-44c3-BBE5-54395F47C869}" KeyPath="no">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="XPIDEFAULTSPREFSFOLDER">
+		  <Component Id="XPIdefaultsprefs" Guid="{FA937E34-AE32-4acd-AC77-3487EBC2ABCD}" KeyPath="no">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+			  <File Id="portugaleid.js" Name="portugaleid.js" KeyPath="no" Source="..\..\..\xpi\src\defaults\preferences\portugaleid.js" />
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="XPILOCALEENFOLDER">
-      <Component Id="XPIlocaleen" Guid="{F2BBAA41-E463-409d-B4AB-CE3626339663}" KeyPath="no">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-        <File Id="portugaleid.properties.en" Name="portugaleid.properties" KeyPath="no" Source="..\..\..\xpi\src\locale\en-US\portugaleid.properties" />
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="XPILOCALEFOLDER">
+		  <Component Id="XPIlocale" Guid="{B8A44A30-F2EF-44c3-BBE5-54395F47C869}" KeyPath="no">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="XPILOCALEFRFOLDER">
-      <Component Id="XPIlocalefr" Guid="{C0F969BB-3678-4828-BAE7-023054072A01}" KeyPath="no">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-        <File Id="portugaleid.properties.fr" Name="portugaleid.properties" KeyPath="no" Source="..\..\..\xpi\src\locale\fr-FR\portugaleid.properties" />
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="XPILOCALEENFOLDER">
+		  <Component Id="XPIlocaleen" Guid="{F2BBAA41-E463-409d-B4AB-CE3626339663}" KeyPath="no">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+			  <File Id="portugaleid.properties.en" Name="portugaleid.properties" KeyPath="no" Source="..\..\..\xpi\src\locale\en-US\portugaleid.properties" />
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="XPILOCALENLFOLDER">
-      <Component Id="XPIlocalenl" Guid="{E8587941-7B32-4a9d-8F4B-23C1E8EC1126}" KeyPath="no">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-        <File Id="portugaleid.properties.nl" Name="portugaleid.properties" KeyPath="no" Source="..\..\..\xpi\src\locale\nl-NL\portugaleid.properties" />
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="XPILOCALEFRFOLDER">
+		  <Component Id="XPIlocalefr" Guid="{C0F969BB-3678-4828-BAE7-023054072A01}" KeyPath="no">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+			  <File Id="portugaleid.properties.fr" Name="portugaleid.properties" KeyPath="no" Source="..\..\..\xpi\src\locale\fr-FR\portugaleid.properties" />
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="XPILOCALEDEFOLDER">
-      <Component Id="XPIlocalede" Guid="{54BC660D-7C9D-4ddc-AA96-29D7A5DD0E53}" KeyPath="no">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-        <File Id="portugaleid.properties.de" Name="portugaleid.properties" KeyPath="no" Source="..\..\..\xpi\src\locale\de-DE\portugaleid.properties" />
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="XPILOCALENLFOLDER">
+		  <Component Id="XPIlocalenl" Guid="{E8587941-7B32-4a9d-8F4B-23C1E8EC1126}" KeyPath="no">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+			  <File Id="portugaleid.properties.nl" Name="portugaleid.properties" KeyPath="no" Source="..\..\..\xpi\src\locale\nl-NL\portugaleid.properties" />
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="XPISKINFOLDER">
-      <Component Id="XPIskin" Guid="{7FF22F5F-E42E-47af-91EE-9A9491B196AC}" KeyPath="no">
-        <CreateFolder>
-          <util:PermissionEx GenericAll="yes" User="Users" />
-        </CreateFolder>
-        <File Id="overlay.css" Name="overlay.css" KeyPath="no" Source="..\..\..\xpi\src\skin\overlay.css" />
-        <File Id="icon.png" Name="icon.png" KeyPath="no" Source="..\..\..\xpi\src\skin\icon.png" />
-        <File Id="icon40x40.png" Name="icon40x40.png" KeyPath="no" Source="..\..\..\xpi\src\skin\icon40x40.png" />
-      </Component>
-    </DirectoryRef>
+	  <DirectoryRef Id="XPILOCALEDEFOLDER">
+		  <Component Id="XPIlocalede" Guid="{54BC660D-7C9D-4ddc-AA96-29D7A5DD0E53}" KeyPath="no">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+			  <File Id="portugaleid.properties.de" Name="portugaleid.properties" KeyPath="no" Source="..\..\..\xpi\src\locale\de-DE\portugaleid.properties" />
+		  </Component>
+	  </DirectoryRef>
 
-    <DirectoryRef Id="MINIDRIVERROOTFOLDER">
-      <Component Id="pteidmdrv" Guid="2bdf2bb0-4f7a-4ed6-a3d4-abcbe212fa14" Win64="yes">
-        <File Id="pteidmdrv.inf" Name="pteidmdrv.inf" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.inf" KeyPath="yes" DiskId="1" />
-        <File Id="pteidmdrv.cat" Name="pteidmdrv.cat" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.cat" KeyPath="no" DiskId="1" />
-        <File Id="pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="no" DiskId="1" />
-        <File Id="pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" KeyPath="no" DiskId="1" />
-        <difx:Driver ForceInstall="no" PlugAndPlayPrompt="no" DeleteFiles="yes" />
-      </Component>
-      <!-- Certificate Propagation Service is a standard Windows service available in from Windows Vista on. In order to use the minidriver
+	  <DirectoryRef Id="XPISKINFOLDER">
+		  <Component Id="XPIskin" Guid="{7FF22F5F-E42E-47af-91EE-9A9491B196AC}" KeyPath="no">
+			  <CreateFolder>
+				  <util:PermissionEx GenericAll="yes" User="Users" />
+			  </CreateFolder>
+			  <File Id="overlay.css" Name="overlay.css" KeyPath="no" Source="..\..\..\xpi\src\skin\overlay.css" />
+			  <File Id="icon.png" Name="icon.png" KeyPath="no" Source="..\..\..\xpi\src\skin\icon.png" />
+			  <File Id="icon40x40.png" Name="icon40x40.png" KeyPath="no" Source="..\..\..\xpi\src\skin\icon40x40.png" />
+		  </Component>
+	  </DirectoryRef>
+
+	  <DirectoryRef Id="MINIDRIVERROOTFOLDER">
+		  <Component Id="pteidmdrv" Guid="2bdf2bb0-4f7a-4ed6-a3d4-abcbe212fa14" Win64="yes">
+			  <File Id="pteidmdrv.inf" Name="pteidmdrv.inf" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.inf" KeyPath="yes" DiskId="1" />
+			  <File Id="pteidmdrv.cat" Name="pteidmdrv.cat" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.cat" KeyPath="no" DiskId="1" />
+			  <File Id="pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="no" DiskId="1" />
+			  <File Id="pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" KeyPath="no" DiskId="1" />
+			  <difx:Driver ForceInstall="no" PlugAndPlayPrompt="no" DeleteFiles="yes" />
+		  </Component>
+		  <!-- Certificate Propagation Service is a standard Windows service available in from Windows Vista on. In order to use the minidriver
 			   it is necessary that this service is running. When a smart card reader is inserted this service should be started  by the smart card
 			   driver. As not all drivers are following this guidance, we start CertPropSvc during the minidriver install -->
-      <Component Id="CertPropService" Guid="932459d0-df59-11de-8a39-0800200c9a66" Permanent="yes" Win64="yes">
-        <!-- Start Certificate Propagation Service during startup -->
-        <RegistryValue Root="HKLM" Key="System\CurrentControlSet\Services\CertPropSvc" Type="integer" Name="Start" Value="2" KeyPath="yes"/>
-        <!-- Start Certificate Propagation Service now -->
-        <!--<ServiceControl Id="StartCertPropSvc" Name="CertPropSvc" Start="install" />-->
+		  <Component Id="CertPropService" Guid="932459d0-df59-11de-8a39-0800200c9a66" Permanent="yes" Win64="yes">
+			  <!-- Start Certificate Propagation Service during startup -->
+			  <RegistryValue Root="HKLM" Key="System\CurrentControlSet\Services\CertPropSvc" Type="integer" Name="Start" Value="2" KeyPath="yes"/>
+			  <!-- Start Certificate Propagation Service now -->
+			  <!--<ServiceControl Id="StartCertPropSvc" Name="CertPropSvc" Start="install" />-->
       </Component>
     </DirectoryRef>
-
-    <DirectoryRef Id="APPLICATIONROOTFOLDER">
+	  
+	  <DirectoryRef Id="APPLICATIONROOTFOLDER">
 
       <Component Id="RootFolder" Guid="{2FB5D279-50BD-49ed-98D9-3D043520F450}">
         <CreateFolder/>
@@ -450,9 +462,10 @@
       </Component>
 
       <!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
-      <Component Win64="no" Id="Poppler" Guid="{54E15AA8-F4A5-42e8-9D38-3B151223B004}">
+     <!--  <Component Win64="no" Id="Poppler" Guid="{54E15AA8-F4A5-42e8-9D38-3B151223B003}">
         <File Id="pteid_poppler.dll" Name="pteid-poppler.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid-poppler.dll" ></File>
       </Component>
+	  -->
 
       <Component Win64="no" Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
         <File Id="xercesc_3_1.dll" Name="xerces-c_3_1.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\xerces-c_3_1.dll" />
@@ -469,15 +482,15 @@
       </Component>
 
       <Component Win64="no" Id="FreeImage" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F64" SharedDllRefCount="yes">
-        <File Id="FreeImage.dll" Name="FreeImage.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\FreeImage.dll" />
+        <File Id="FreeImage.dll" Name="FreeImage.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\FreeImage.dll" />
       </Component>
 
       <Component Win64="no" Id="XMLSecurity" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F65" SharedDllRefCount="yes">
-        <File Id="xsec_1_6.dll" Name="xsec_1_6.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\xsec_1_6.dll" />
+        <File Id="xsec_1_6.dll" Name="xsec_1_6.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\xsec_1_6.dll" />
       </Component>
 
       <Component Win64="no" Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
-        <File Id="pteidpkcs11.dll" Name="pteidpkcs11.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\release\pteidpkcs11.dll" />
+        <File Id="pteidpkcs11.dll" Name="pteidpkcs11.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\pteidpkcs11.dll" />
 
       </Component>
 
@@ -521,10 +534,24 @@
 
       <!--Our Build of LibCurl - custom build options to remove unneeded features-->
       <Component Id="Curl_64" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFB}" SharedDllRefCount="yes">
-        <File Id="libcurl_64.dll" Name="libcurl.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\libcurl.dll" ></File>
+		  <File Id="libcurl_64.dll" Name="libcurl.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\libcurl.dll" ></File>
       </Component>
 
     </DirectoryRef>
+
+	  <DirectoryRef Id="JAVA_SDK">
+		  <Component Id="Java_SDK_Component" Guid="{8B0D8006-DB84-4986-A8D7-AC5F84F4AEF8}" >
+			  <File Id="pteidlibJavaWrapper.dll" Name="pteidlibJava_Wrapper.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\pteidlibJava_Wrapper.dll" />
+			  <File Id="pteidlibJava.jar" Name="pteidlibJava.jar" KeyPath="no" Source="..\..\..\jar\pteidlibJava.jar" />
+		  </Component>
+	  </DirectoryRef>
+
+	  <DirectoryRef Id="CSHARP_SDK">
+		  <Component Id="CSharp_SDK_Component" Guid="{67F8BF67-A48C-4711-9AB7-CAC056FA6C35}">
+			  <File Id="pteidlibCSWrapper.dll" Name="pteidlibCS_Wrapper.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\pteidlibCS_Wrapper.dll" />
+			  <File Id="pteidlibCS.dll" Name="pteidlibCS.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteidlibCS.dll" />
+		  </Component>
+	  </DirectoryRef>
 
 
     <DirectoryRef Id="TARGETDIR">
@@ -736,12 +763,14 @@
         <ComponentRef Id="FreeImage_64"/>
         <ComponentRef Id="Curl"/>
         <ComponentRef Id="Curl_64"/>
-        <ComponentRef Id="Poppler"/>
+<!--    <ComponentRef Id="Poppler"/> -->
         <ComponentRef Id="Poppler_64"/>
 
         <ComponentRef Id="XMLSecurity"/>
         <ComponentRef Id="XMLSecurity_64"/>
         <ComponentRef Id="Cairo"/>
+		<ComponentRef Id="Java_SDK_Component"/>
+		<ComponentRef Id="CSharp_SDK_Component"/>
         <ComponentRef Id="GuiLang" />
         <!-- Shortcuts -->
         <ComponentRef Id="PteidGuiShortcut"/>
