@@ -317,6 +317,7 @@ char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long dat
 			OBJ_nid2obj(NID_pkcs7_data));
 	   
 	PKCS7_add1_attrib_digest(signer_info, out, hash_size); 
+	free(out);
 
 	add_signed_time(signer_info);
 
@@ -324,6 +325,7 @@ char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long dat
 				                                ASN1_ITEM_rptr(PKCS7_ATTR_SIGN));
 	my_hash((unsigned char *)attr_buf, auth_attr_len, attr_digest);
 	attr_hash = CByteArray((const unsigned char *)attr_digest, hash_size);
+	free(attr_digest);
 
 	signature = PteidSign(card, attr_hash, use_sha256);
 	

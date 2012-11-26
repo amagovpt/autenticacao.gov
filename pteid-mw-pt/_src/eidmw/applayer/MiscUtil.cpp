@@ -61,7 +61,7 @@ namespace eIDMW
 
 	int Truncate(const char *path)
 	{
-		int fh, result;
+		int fh = 0, result = 0;
 		unsigned int nbytes = BUFSIZ;
 
 		/* This replicates the use of truncate() on Unix */

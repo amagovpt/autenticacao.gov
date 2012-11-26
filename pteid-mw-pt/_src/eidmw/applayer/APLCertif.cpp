@@ -1655,6 +1655,7 @@ const char *APL_Certif::x509TimeConversion (ASN1_TIME *atime)
 	strftime(to_buf, buf_size, "%d/%m/%Y", &ltm);
 	return(to_buf);
     }
+    free (to_buf);
     return("Date not available");
 }
 
@@ -1780,7 +1781,10 @@ const char *APL_Certif::ExternalCertIssuer(int certnr)
 	X509 *cert;
 
 	if ((cert = ExternalCert(certnr)) == NULL)
+	{
+		free(issuer);
 		return NULL;
+	}
 
 	X509_NAME_get_text_by_NID(X509_get_issuer_name(cert), NID_commonName, issuer, BUFSIZE);
 	
