@@ -1835,7 +1835,7 @@ const PTEID_ByteArray& PTEID_Sod::getData()
 
 const PTEID_ByteArray& PTEID_Sod::getHash()
 {
-	PTEID_ByteArray *out = NULL;
+	PTEID_ByteArray out;
 
 	/*BEGIN_TRY_CATCH
 
@@ -1860,7 +1860,7 @@ const PTEID_ByteArray& PTEID_Sod::getHash()
 	
 	END_TRY_CATCH
 	*/
-	return *out;
+	return out;
 }
 	
 }
