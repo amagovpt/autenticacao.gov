@@ -237,7 +237,7 @@ void dlgSignature::on_pbSign_clicked ( void )
 		ShowErrorMsgBox();
 
 	delete []files_to_sign;
-	delete cpychar;
+	delete []cpychar;
 	delete []output_file;
 
 	this->close();
