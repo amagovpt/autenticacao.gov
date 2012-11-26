@@ -27,6 +27,43 @@
 namespace eIDMW
 {
 
+static const char *SIGCONTAINER_README= 
+"############################################################" NL
+"LEIA-ME" NL
+"" NL
+"Este ficheiro zip contém informação assinada com a respectiva assinatura em META-INF/signature.xml" NL
+"Esta assinatura foi criada através da Aplicação Oficial do Cartão de Cidadão." NL
+"" NL
+"Para verificar a validade da assinatura, deverá na Aplicação Oficial do Cartão de Cidadão aceder ao seguinte menu:" NL
+"	\"Opções\" -> \"Verificar Assinatura\" -> Introduzir o ficheiro zip a validar." NL
+"" NL
+"Mais Informação:" NL
+"" NL
+"Download da Aplicação Oficial do Cartão de Cidadão:" NL
+"http://svn.gov.pt/projects/ccidadao" NL
+"" NL
+"Especificação Técnica da Assinatura Digital:" NL
+"Xades / Xades-T" NL
+"http://www.w3.org/TR/XAdES/" NL
+"" NL
+"############################################################" NL
+"README" NL
+"" NL
+"This zip file includes signed information. The signature file can be found in META-INF/signature.xml" NL
+"This signature was produced through Portuguese ID Card Management application." NL
+"" NL
+"To verify this signature, use the Portuguese ID Card Management application, following these instructions:" NL
+"	\"Tools\" -> \"Verify Signature\" -> Introduce file to be verified." NL
+"" NL
+"More Info:" NL
+"" NL
+"Download Portuguese ID Card Management application:" NL
+"http://svn.gov.pt/projects/ccidadao" NL
+"" NL
+"Signature technical specification:" NL
+"Xades / Xades-T" NL
+"http://www.w3.org/TR/XAdES" NL;
+
 	Container::Container(const char *zip_path)
 	{
 	  memset(&zip_archive, 0, sizeof(zip_archive));
@@ -150,7 +187,7 @@ namespace eIDMW
 
 		mz_bool status = MZ_FALSE;
 
-		status = mz_zip_add_mem_to_archive_file_in_place (output, "README.txt", README, strlen(README),
+		status = mz_zip_add_mem_to_archive_file_in_place (output, "README.txt", SIGCONTAINER_README, strlen(SIGCONTAINER_README),
 				"", (unsigned short)0, MZ_BEST_COMPRESSION);
 
 		if (!status)
