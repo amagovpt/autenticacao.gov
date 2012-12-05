@@ -936,6 +936,10 @@ DWORD PteidSignData(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE
    unsigned int            i          = 0;
    unsigned int            cbHdrHash  = 0;
    const unsigned char     *pbHdrHash = NULL;
+   unsigned char sha256OID[] = {
+	       	0x30, 0x31, 0x30, 0x0d, 0x06, 0x09,
+		0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01,
+		0x05, 0x00, 0x04, 0x20 };
 	
    PteidSelectApplet(pCardData);
    dwReturn = PteidMSE(pCardData, pin_id);
@@ -945,15 +949,32 @@ DWORD PteidSignData(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE
 	CLEANUP(dwReturn);
    }
 
+   
+
    /* Sign Command for IAS*/
    /* 00 88 02 00 24 EC 61 B0 5B 70 33 78 39 F0 C8 C5 EB 79 64 */
    Cmd [0] = 0x00; //0x88, 0x02, 0x00
    Cmd [1] = 0x88;   /* PSO: Compute Digital Signature COMMAND */
    Cmd [2] = 0x02;
    Cmd [3] = 0x00; 
-   Cmd [4] = (BYTE)(cbToBeSigned);
-   memcpy(Cmd + 5, pbToBeSigned, cbToBeSigned);
-   uiCmdLg = 5 + cbToBeSigned;
+   
+   //Workaround for SHA-256 with PKCS1 padding
+   //Adobe Reader 10 is using this combination
+   if (cbToBeSigned == 32)
+   {
+	    Cmd [4] = (BYTE)(sizeof(sha256OID) + cbToBeSigned);
+		uiCmdLg = sizeof(sha256OID) + 5 + cbToBeSigned;
+		memcpy(Cmd + 5, sha256OID, sizeof(sha256OID));
+		memcpy(Cmd + 5 + sizeof(sha256OID) , pbToBeSigned, cbToBeSigned);
+   }
+   else
+   {
+	    Cmd [4] = (BYTE)(cbToBeSigned);
+		uiCmdLg = 5 + cbToBeSigned;
+		memcpy(Cmd + 5, pbToBeSigned, cbToBeSigned);
+   }
+   
+   
    
 #ifdef _DEBUG
    LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", cbHdrHash + cbToBeSigned, (char *)&Cmd[5]);
