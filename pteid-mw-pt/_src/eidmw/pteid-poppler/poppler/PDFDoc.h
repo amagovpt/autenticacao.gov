@@ -165,6 +165,7 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
   // Is the file signed?
   POPPLER_API GBool isSigned();
   POPPLER_API unsigned long getSigByteArray(unsigned char **byte_array, bool incremental);
+  POPPLER_API GBool isReaderEnabled();
   POPPLER_API int getSignatureContents(unsigned char **);
 
   POPPLER_API Object *getByteRange();

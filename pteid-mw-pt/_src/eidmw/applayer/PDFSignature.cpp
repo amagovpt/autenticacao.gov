@@ -306,7 +306,7 @@ namespace eIDMW
 		if (m_civil_number == NULL)
 		   getCitizenData();
 
-		bool incremental = doc->isSigned();
+		bool incremental = doc->isSigned() || doc->isReaderEnabled();
 
 		doc->prepareSignature(incremental, &sig_location, m_citizen_fullname, m_civil_number,
 				location, reason, m_page, m_sector);

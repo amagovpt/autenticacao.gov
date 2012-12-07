@@ -369,11 +369,11 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 
 	catDict.dictLookup("AcroForm", &local_acroForm);
 
+	Object acroForm_ref;
+
 	//PDF File has no AcroForm dict, we need to create it
 	if (!local_acroForm.isDict())
 	{
-		if (local_acroForm.isRef())
-			fprintf(stderr, "but its a ref...we'll try to dereference the pointer to the real object...\n");
 
 		Object fields;
 		acroform.initDict(xref);
@@ -386,6 +386,8 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	}
 	else
 	{
+		catDict.dictLookupNF("AcroForm", &acroForm_ref);
+		
 		fprintf(stderr, "local_acroform is a dict!\n");
 		setSigFlags(&local_acroForm, 3);
 
@@ -399,7 +401,17 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	local_acroForm.dictLookup("Fields", &fields_array);
 	if (fields_array.isArray())
 	{
+		fprintf(stderr, "Fields array found adding signature field\n");
+		Object fields_ref;
+		local_acroForm.dictLookupNF("Fields", &fields_ref);
 		fields_array.arrayAdd(&ref_to_sig);
+
+		if (fields_ref.isRef())
+		{
+			fprintf(stderr, "Fields array is an indirect object...\n");
+			xref->setModifiedObject(&fields_array, fields_ref.getRef());
+
+		}
 	}
 
 	//Set the catalog object as modified to force rewrite
@@ -420,8 +432,14 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 		xref->addIndirectObject(&obj_stream);
 	}
 	*/
+	if (acroForm_ref.isRef())
+	{
+		xref->setModifiedObject(&local_acroForm, acroForm_ref.getRef());
+		fprintf(stderr, "AcroForm is an indirect object so we'll just update it...\n");
 
-	if(!incremental_update)
+	}
+
+	else if(!incremental_update)
 		xref->setModifiedObject(&catDict, catalog_ref);
 
 
@@ -489,7 +507,7 @@ void Catalog::closeSignature(const char * signature_contents, unsigned long len)
 
 GBool Catalog::addSigRefToPage(Ref * refPage, Object* sig_ref)
 {
-	Object page, annots;
+	Object page, annots, tmp_ref;
 	xref->fetch(refPage->num, refPage->gen, &page);
 
 	Dict *pageDict = page.getDict();
@@ -501,10 +519,24 @@ GBool Catalog::addSigRefToPage(Ref * refPage, Object* sig_ref)
 		annots.initArray(xref);
 		page.dictSet("Annots", &annots);
 	}
+	else
+	{
+
+	    pageDict->lookupNF("Annots", &tmp_ref);
+
+	}
 
 	annots.arrayAdd(sig_ref);
 
-	xref->setModifiedObject(&page, *refPage);
+	if (tmp_ref.isRef())
+	{
+		xref->setModifiedObject(&annots, tmp_ref.getRef());
+	}
+	else
+	{
+		xref->setModifiedObject(&page, *refPage);
+	}
+
 	return gTrue;
 }
 
@@ -909,8 +941,6 @@ GBool Catalog::setSigFlags(Object * acroform, int value)
 		catalog_ref.num = xref->getRootNum();
 
 		acroform->dictSet("SigFlags", obj1.initInt(value));
-
-		xref->setModifiedObject(&catDict, catalog_ref);
 
 	}
 	else
@@ -1654,6 +1684,22 @@ Object *Catalog::getNames()
   }
 
   return &names;
+}
+
+bool Catalog::getUS3Dict()
+{
+	Object perms_dict;
+	catDict.dictLookup("Perms", &perms_dict);
+
+	if (perms_dict.isDict())
+	{
+		Object ur3;	
+		perms_dict.dictLookup("UR3", &ur3);
+
+		return !ur3.isNull();
+	}
+	else
+		return gFalse;
 }
 
 NameTree *Catalog::getDestNameTree()

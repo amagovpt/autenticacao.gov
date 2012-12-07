@@ -156,9 +156,6 @@ namespace eIDMW
 
 		CByteArray *validate_data = new CByteArray();
 
-		//Get Timestamping server URL from config
-		APL_Config tsa_url(CConfig::EIDMW_CONFIG_PARAM_XSIGN_TSAURL);
-		const char * TSA_URL = tsa_url.getString();
 		static const char expect_header[] = "Expect:";
 
 		curl_global_init(CURL_GLOBAL_ALL);

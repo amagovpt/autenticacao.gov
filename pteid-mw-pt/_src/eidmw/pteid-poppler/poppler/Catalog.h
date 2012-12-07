@@ -115,6 +115,8 @@ public:
   // Get number of pages.
   int getNumPages();
 
+  bool getUS3Dict();
+
   void setIncrementalSignature(bool);
 
   void prepareSignature(PDFRectangle *rect, const char * name, Ref *first_page_ref, const char *location,

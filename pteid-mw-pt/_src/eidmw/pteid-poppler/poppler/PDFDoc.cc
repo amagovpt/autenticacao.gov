@@ -539,6 +539,14 @@ char *PDFDoc::getOccupiedSectors(int page)
 }
 
 
+GBool PDFDoc::isReaderEnabled()
+{
+
+	return getCatalog()->getUS3Dict();
+
+}
+
+
 //TODO: The next 2 methods consider only the first signature they happen to find
 // in the file
 int PDFDoc::getSignatureContents(unsigned char **contents)
