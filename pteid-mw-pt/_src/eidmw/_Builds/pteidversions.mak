@@ -2,9 +2,9 @@
 ############## Fill in/change here the names and versions of the libs #############
 
 ###### version nr of the complete package (real version)
-REL_MAJ=1
-REL_MIN=9
-REL_REV=8
+REL_MAJ=2
+REL_MIN=1
+REL_REV=1
 
 
 ##########WARNING!!!#####CHANGING THIS VERSIONS WILL CHANGE THE SO VERSION######### 
