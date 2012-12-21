@@ -15,19 +15,13 @@
 #define PTEID_COPYRIGHT    	"Copyright (C) 2010-2012"
 #define PTEID_PRODUCT_NAME    	"Portugal eID MiddleWare"
 
-#ifdef PTEID_35
-	#define PTEID_PRODUCT_VERSION    "2.1.0"
-	#define BASE_VERSION_STRING    "2, 1, 0, "
-	#define BASE_VERSION1          2
-	#define BASE_VERSION2          1
-	#define BASE_VERSION3          0
-#else
-	#define PTEID_PRODUCT_VERSION    "1.0"
-	#define BASE_VERSION_STRING    "1, 0, 1, "
-	#define BASE_VERSION1          1
-	#define BASE_VERSION2          0
-	#define BASE_VERSION3          1
-#endif
+
+#define PTEID_PRODUCT_VERSION    "2.1.1"
+#define BASE_VERSION_STRING    "2, 1, 1, "
+#define BASE_VERSION1          2
+#define BASE_VERSION2          1
+#define BASE_VERSION3          1
+
 
 // Common Lib
 #define WIN_CL_VERSION_STRING    BASE_VERSION_STRING SVN_REVISION_STR
