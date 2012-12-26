@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="libJava"
 	ProjectGUID="{F810EA71-3A5A-4C86-BCFF-EC47017CF9CE}"
 	RootNamespace="pteidlibJava"
@@ -91,7 +91,85 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Creating jar file..."
-				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid35$(ProjectName).jar -C class .&#x0D;&#x0A;"
+				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid$(ProjectName).jar -C class .&#x0D;&#x0A;"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				Description="javac..."
+				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\javac.exe&quot; -verbose -d class ../eidlibJava_Wrapper\GeneratedFiles\*.java&#x0D;&#x0A;"
+				Outputs="$(InputName).class"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				GenerateDebugInformation="true"
+				TargetMachine="17"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="Creating jar file..."
+				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid$(ProjectName).jar -C class .&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -171,84 +249,6 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Debug|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
-			ConfigurationType="1"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-				Description="javac..."
-				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\javac.exe&quot; -verbose -d class ../eidlibJava_Wrapper\GeneratedFiles\*.java&#x0D;&#x0A;"
-				Outputs="$(InputName).class"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				LinkLibraryDependencies="false"
-				GenerateDebugInformation="true"
-				TargetMachine="17"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				Description="Creating jar file..."
-				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid35$(ProjectName).jar -C class .&#x0D;&#x0A;"
-			/>
-		</Configuration>
-		<Configuration
 			Name="Release|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
@@ -322,7 +322,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid35$(ProjectName).jar -C class pt&#x0D;&#x0A;call ..\_DocsInternal\API\doSDK_java.bat&#x0D;&#x0A;"
+				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid$(ProjectName).jar -C class pt&#x0D;&#x0A;call ..\_DocsInternal\API\doSDK_java.bat&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
