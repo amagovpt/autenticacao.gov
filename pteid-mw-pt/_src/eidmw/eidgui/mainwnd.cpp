@@ -56,10 +56,10 @@
 #ifdef WIN32
 #include <windows.h>
 #include <stdio.h>
-#include "verinfo.h"
-#else
-#include "pteidversions.h"
 #endif
+
+#include "pteidversions.h"
+
 
 static bool	g_cleaningCallback=false;
 static int	g_runningCallback=0;
