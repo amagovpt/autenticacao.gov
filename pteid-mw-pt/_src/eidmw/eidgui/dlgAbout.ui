@@ -176,12 +176,12 @@
     <rect>
      <x>20</x>
      <y>120</y>
-     <width>349</width>
+     <width>51</width>
      <height>22</height>
     </rect>
    </property>
    <property name="text">
-    <string>Version 2.0</string>
+    <string>Version</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_13">
@@ -208,6 +208,19 @@
    </property>
    <property name="text">
     <string>Instituto dos Registos e do Notariado, IP).</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_version">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>120</y>
+     <width>91</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>

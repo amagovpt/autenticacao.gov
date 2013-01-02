@@ -1196,8 +1196,8 @@ Please specify .xml, .csv or .eid</source>
         <translation>Aplicação Oficial do Cartão de Cidadão Português.</translation>
     </message>
     <message>
-        <source>Version 2.0</source>
-        <translation>Versão 2.0</translation>
+        <source>Version</source>
+        <translation>Versão</translation>
     </message>
     <message>
         <source>For information or support about this software please visit</source>

@@ -32,6 +32,7 @@ dlgAbout::dlgAbout(QString const& version, QWidget *parent)
 {
 	ui.setupUi(this);
 	setFixedSize(426,358);
+	ui.label_version->setText(version);
 }
 
 dlgAbout::~dlgAbout()

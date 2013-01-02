@@ -2293,22 +2293,9 @@ void MainWnd::on_actionUpdates_triggered( void )
 // About clicked
 //*****************************************************
 void MainWnd::show_window_about(){
-#ifdef WIN32 //version info for Windows
-	QFileInfo	fileInfo(m_Settings.getExePath()) ;
-
-	QString filename = QCoreApplication::arguments().at(0);
-	CFileVersionInfo VerInfo;
-	if(VerInfo.Open(filename.toLatin1()))
-	{
-		char version[256];
-		VerInfo.QueryStringValue(VI_STR_FILEVERSION, version);
-		m_Settings.setGuiVersion(version);
-	}
-
-#else //linux, apple
-	QString strVersion (WIN_GUI_VERSION_STRING);
+	QString strVersion (PTEID_PRODUCT_VERSION);
 	m_Settings.setGuiVersion(strVersion);
-#endif
+
 	dlgAbout * dlg = new dlgAbout( m_Settings.getGuiVersion() , this);
 	dlg->exec();
 	delete dlg;
