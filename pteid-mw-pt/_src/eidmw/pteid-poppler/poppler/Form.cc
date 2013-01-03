@@ -1276,6 +1276,7 @@ FormFieldSignature::FormFieldSignature(PDFDoc *docA, Object *dict, const Ref& re
   : FormField(docA, dict, ref, parent, usedParents, formSignature)
 {
     Object v, contents;
+    this->contents = NULL;
 
     if (dict->dictLookup("V", &v)->isDict()) {
         if (v.dictLookup("Contents", &contents)->isString()) {
@@ -1291,9 +1292,9 @@ FormFieldSignature::FormFieldSignature(PDFDoc *docA, Object *dict, const Ref& re
 
 FormFieldSignature::~FormFieldSignature()
 {
-    if(contents) {
+    if (contents) {
         delete contents;
-}
+    }
     byteRange.free();
     filter.free();
     subFilter.free();
