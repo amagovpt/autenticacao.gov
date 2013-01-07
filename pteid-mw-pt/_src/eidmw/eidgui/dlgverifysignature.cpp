@@ -96,6 +96,7 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
     QString getSignFile;
     QString nativedafaultpath;
     char *sig_path_native;
+    int return_code = 0;
 	
 
     getSignFile = QFileDialog::getOpenFileName(this, tr("Open Signature files"), QDir::homePath(), tr("Zip files 'XAdES' (*.zip)"), NULL);
@@ -107,15 +108,18 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
 	
 		sig_path_native = new char[nativedafaultpath.size()*2];
 		strcpy(sig_path_native, nativedafaultpath.toStdString().c_str());
-		PTEID_SigVerifier vsign(sig_path_native);
 
-	        int return_code = vsign.Verify();
+		PTEID_SigVerifier vsign(sig_path_native);
+	        return_code = vsign.Verify();
 
 		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", 
 				"Return code from VerifySignature(): %d", return_code);
 
 		QString signer = QString("\n")+tr("Signed by: ");
-		signer += QString::fromUtf8(vsign.GetSigner());
+
+		//If the signature was extracted get the signer name
+		if (return_code != 1)
+			signer += QString::fromUtf8(vsign.GetSigner());
 
 		if (return_code == 0)
 		{
@@ -137,7 +141,8 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
 		else
 		{
 			QString error = translateVerifyReturnCode(return_code);
-			error += signer;
+			if (return_code != 1)
+				error += signer;
 
 			QMessageBox::critical(this, tr("Signature Validation"), error);
 			this->close();
