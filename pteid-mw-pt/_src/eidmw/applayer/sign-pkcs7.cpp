@@ -9,6 +9,9 @@
 #include "Log.h"
 #include "ByteArray.h"
 #include "APLCard.h"
+#include "TsaClient.h"
+//ASN.1 definitions for timestamp tokens
+#include "tsp.h"
 #include "CardPteidDef.h"
 #include "static_pteid_certs.h"
 
@@ -146,7 +149,7 @@ int PKCS7_add1_attrib_digest (PKCS7_SIGNER_INFO *si,
 #endif
 
 void add_signed_time(PKCS7_SIGNER_INFO *si)
-{   
+{
 	ASN1_UTCTIME *sign_time;
 
 	/* The last parameter is the amount to add/subtract from the current
@@ -154,7 +157,7 @@ void add_signed_time(PKCS7_SIGNER_INFO *si)
 	sign_time=X509_gmtime_adj(NULL,0);
 	PKCS7_add_signed_attribute(si,NID_pkcs9_signingTime,
 			V_ASN1_UTCTIME,(char *)sign_time);
-}   
+}
 
 
 unsigned int SHA256_Wrapper(unsigned char *data, unsigned long data_len, unsigned char *digest)
@@ -224,19 +227,60 @@ typedef unsigned int
 
 
 /*
+ * Appends the TSP TimestampToken to the existing PKCS7 signature as an unsigned attribute
+ * The parsing function is provided by source code borrowed from OpenEvidence project
+ * http://www.openevidence.org/
+ */
+void append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_len)
+{
+
+	TSP_TIME_STAMP_RESP *tsp = d2i_TSP_TIME_STAMP_RESP(NULL, (const unsigned char**)&token, token_len);
+
+	if (tsp != NULL)
+	{
+		PKCS7* token = tsp->timeStampToken;
+
+		int p7_len = i2d_PKCS7(token, NULL); 
+		unsigned char *p7_der = (unsigned char *)OPENSSL_malloc(p7_len); 
+		unsigned char *p = p7_der; 
+		i2d_PKCS7(token, &p);
+
+		if (!PKCS7_type_is_signed(token))
+		{
+			MWLOG(LEV_ERROR, MOD_APL, L"Error in timestamp token: not signed!\n");
+		}
+
+		//Add timestamp token to the PKCS7 signature object
+		ASN1_STRING *value = ASN1_STRING_new();
+		ASN1_STRING_set(value, p7_der, p7_len);
+
+		int rc = PKCS7_add_attribute(sinfo, NID_id_smime_aa_timeStampToken,
+				V_ASN1_SEQUENCE, value);
+
+	}
+	else
+		MWLOG(LEV_ERROR, MOD_APL, L"Error decoding timestamp token!\n");
+
+
+}
+
+
+/*
  * Returns as hex-encoded string the PKCS7 signature of the input data
  * The data is hashed with SHA-256 or SHA-1 and then signed on PTEID card
  *
  */
 
-char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_len)
+char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_len, bool timestamp)
 {
 	X509 *x509;
 	PKCS7 *p7;
 	PKCS7_SIGNER_INFO *signer_info;
-	CByteArray hash, attr_hash, signature, certData, certData2;
+	CByteArray hash, attr_hash, signature, certData, certData2, tsresp;
 	char * signature_hex_string = NULL;
 	unsigned char *attr_buf = NULL;
+	unsigned char *timestamp_token = NULL;
+	int tsp_token_len = 0;
 	int auth_attr_len = 0;
 	unsigned int len = 0;
 	
@@ -301,14 +345,6 @@ char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long dat
 	my_hash(data, data_len, out);
 	
 	//ASN1_OCTET_STRING_set(p7->d.sign->contents->d.data, out, SHA1_LEN); 
-	
-	/* 
-	//Without authenticated attributes
-        hash = PTEID_ByteArray((const unsigned char*)out, 20L);
-	signature = PteidSign(hash);
-
-	*/
-
 
 	/* Add the signing time and digest authenticated attributes */
 	//With authenticated attributes
@@ -318,8 +354,9 @@ char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long dat
 	   
 	PKCS7_add1_attrib_digest(signer_info, out, hash_size); 
 	free(out);
-
-	add_signed_time(signer_info);
+	
+	if (!timestamp)
+		add_signed_time(signer_info);
 
 	auth_attr_len = ASN1_item_i2d((ASN1_VALUE *)signer_info->auth_attr, &attr_buf,
 				                                ASN1_ITEM_rptr(PKCS7_ATTR_SIGN));
@@ -338,8 +375,37 @@ char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long dat
 	ASN1_OCTET_STRING_set(signer_info->enc_digest, (unsigned char*)signature.GetBytes(),
 			signature.Size());
 
-	unsigned char *buf2, *p, *sig_buf;
-	sig_buf = NULL;
+	if (timestamp)
+	{
+		TSAClient tsp;
+		unsigned char *digest_tp = (unsigned char *)malloc(SHA1_LEN);
+		//Compute SHA-1 of the signed digest
+		SHA1_Wrapper(signature.GetBytes(), signature.Size(), digest_tp);
+
+		tsp.timestamp_data(digest_tp, SHA1_LEN);
+		tsresp = tsp.getResponse();
+
+		if (tsresp.Size() == 0)
+		{
+			MWLOG(LEV_ERROR, MOD_APL, L"PKCS7 Sign: Timestamp Error - response is empty\n");
+		
+		}
+		else
+		{
+			timestamp_token = tsresp.GetBytes();
+			tsp_token_len = tsresp.Size();
+		}
+
+	}
+
+
+	if (timestamp_token && tsp_token_len > 0)
+	{
+		append_tsp_token(signer_info, timestamp_token, tsp_token_len);
+
+	}
+
+	unsigned char *buf2, *p;
 
 	len = i2d_PKCS7(p7, NULL); 
 	buf2 = (unsigned char *)OPENSSL_malloc(len); 

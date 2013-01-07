@@ -28,6 +28,8 @@
 
 #include "MiscUtil.h"
 
+//for Timestamping
+#include "TsaClient.h"
 
 #include "Log.h"
 #include "ByteArray.h"
@@ -61,8 +63,6 @@
 #include <xsec/transformers/TXFMBase.hpp>
 #include <xsec/transformers/TXFMChain.hpp>
 
-//cURL for Timestamping
-#include <curl/curl.h>
 
 //OpenSSL
 #include <openssl/sha.h>
@@ -94,8 +94,6 @@ XERCES_CPP_NAMESPACE_USE
 
 namespace eIDMW
 {
-
-	CByteArray XadesSignature::mp_timestamp_data = CByteArray();
 
 	static unsigned char timestamp_asn1_request[ASN1_LEN] =
 	{
@@ -173,24 +171,6 @@ namespace eIDMW
 
 	}
 
-	/** Timestamping stuff */
-	size_t XadesSignature::curl_write_data(char *ptr, size_t size, size_t nmemb, void * stream)
-	{
-		size_t realsize = size * nmemb;
-		mp_timestamp_data.Append((const unsigned char*)ptr, realsize);
-
-		return realsize;
-
-	}
-	
-
-
-	void XadesSignature::generate_asn1_request_struct(unsigned char *sha_1)
-	{
-
-		for (unsigned int i=0; i != SHA1_LEN; i++)
-		    timestamp_asn1_request[SHA1_OFFSET +i] = sha_1[i];
-	}
 
 	std::string XadesSignature::getTS_CAPath()
 	{
@@ -309,72 +289,6 @@ namespace eIDMW
 		decoded_len = outlen;
 
 		BIO_free_all(bio);
-	}
-
-
-
-
-	void XadesSignature::timestamp_data(const unsigned char *input, unsigned int data_len)
-	{
-
-		CURL *curl;
-		CURLcode res;
-		char error_buf[CURL_ERROR_SIZE];
-
-		//Make sure the static array receiving the network reply 
-		// is zero'd out before each request
-		mp_timestamp_data.Chop(mp_timestamp_data.Size());
-
-		//Get Timestamping server URL from config
-		APL_Config tsa_url(CConfig::EIDMW_CONFIG_PARAM_XSIGN_TSAURL);
-		const char * TSA_URL = tsa_url.getString();
-
-		curl_global_init(CURL_GLOBAL_ALL);
-
-		curl = curl_easy_init();
-
-		if (curl) 
-		{
-
-			struct curl_slist *headers= NULL;
-
-			headers = curl_slist_append(headers, "Content-Type: application/timestamp-request");
-			headers = curl_slist_append(headers, "Content-Transfer-Encoding: binary");
-			headers = curl_slist_append(headers, "User-Agent: PTeID Middleware v2");
-
-			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-
-			curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, data_len);
-
-			curl_easy_setopt(curl, CURLOPT_URL, TSA_URL);
-
-			curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
-
-			/* Now specify the POST data */ 
-			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, input);
-
-			curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buf);
-
-			//curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp_out);
-			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &XadesSignature::curl_write_data);
-
-			/* Perform the request, res will get the return code */ 
-			res = curl_easy_perform(curl);
-
-			if (res != 0)
-			{
-				MWLOG(LEV_ERROR, MOD_APL, L"Timestamping error in HTTP POST request. LibcURL returned %ls\n", 
-						utilStringWiden(string(error_buf)).c_str());
-			}
-
-			curl_slist_free_all(headers);
-
-			/* always cleanup */ 
-			curl_easy_cleanup(curl);
-			curl_global_cleanup();
-
-		}
-
 	}
 
 	CByteArray *XadesSignature::WriteToByteArray(XERCES_NS DOMDocument * doc)
@@ -652,23 +566,22 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths,
 
 		if (do_timestamping)
 		{
+			TSAClient tsa;
 
 			//Hash the signature value, generate the ASN.1 encoded request 
 			//and then send it to the timestamp server
 			SHA1 (rsa_signature.GetBytes(), PTEID_SIGNATURE_LENGTH, signature_hash);
 
-			generate_asn1_request_struct(signature_hash);
+			tsa.timestamp_data(signature_hash, SHA1_LEN);
 
-			timestamp_data(timestamp_asn1_request, ASN1_LEN);
+			mp_timestamp_data = tsa.getResponse();
 
-			CByteArray *timestamp_blob = &XadesSignature::mp_timestamp_data;
-
-			if (timestamp_blob->Size() == 0)
+			if (mp_timestamp_data.Size() == 0)
 				MWLOG(LEV_ERROR, MOD_APL,
 			    L"An error occurred in timestamp_data. It's possible that the timestamp service is down ");
 			else
 			{
-				unsigned char * base64str = base64Encode(timestamp_blob->GetBytes(), timestamp_blob->Size());
+				unsigned char * base64str = base64Encode(mp_timestamp_data.GetBytes(), mp_timestamp_data.Size());
 				addTimestampNode(timestamp_node, base64str);
 			}
 		}

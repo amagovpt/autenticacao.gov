@@ -293,16 +293,17 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	XadesSignature sig(this);
-	CByteArray *ts_data = NULL;
+
         const char **files_to_sign = new const char*[1];
 
 	for (unsigned int i=0; i!= n_paths; i++)
 	{
+		CByteArray * ts_data = NULL;
 
 		files_to_sign[0] = paths[i];
 		CByteArray &signature = sig.SignXades(files_to_sign, 1, timestamp);
 		if (timestamp)
-			ts_data = &XadesSignature::mp_timestamp_data;
+			ts_data = &(sig.mp_timestamp_data);
 		
 		const char *output_file = generateFinalPath(output_dir, paths[i]);
 		StoreSignatureToDisk (signature, ts_data, files_to_sign, 1, output_file);
@@ -326,7 +327,7 @@ CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, cons
 	XadesSignature sig(this);
 
 	CByteArray &signature = sig.SignXades(paths, n_paths, true);
-	CByteArray *ts_data = &XadesSignature::mp_timestamp_data;
+	CByteArray *ts_data = &sig.mp_timestamp_data;
 
 	//Write zip container signature and referenced files in zip container
 	StoreSignatureToDisk (signature, ts_data, paths, n_paths, output_file);

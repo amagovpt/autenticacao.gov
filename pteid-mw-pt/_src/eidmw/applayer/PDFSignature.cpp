@@ -311,8 +311,9 @@ namespace eIDMW
 		doc->prepareSignature(incremental, &sig_location, m_citizen_fullname, m_civil_number,
 				location, reason, m_page, m_sector);
 		unsigned long len = doc->getSigByteArray(&to_sign, incremental);
-
-                const char * signature_contents = pteid_sign_pkcs7(m_card, to_sign, len);
+		
+		//Last arg means timestamping is required
+                const char * signature_contents = pteid_sign_pkcs7(m_card, to_sign, len, true);
 
 		doc->closeSignature(signature_contents);
 

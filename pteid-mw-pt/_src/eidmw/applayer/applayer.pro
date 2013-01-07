@@ -84,6 +84,7 @@ HEADERS += \
 	APLPublicKey.h \
         SigContainer.h \
 	XadesSignature.h \
+	TSAClient.h \
 	SODParser.h \ 
         EMV-Cap-Helper.h \
 	SigVerifier.h \
@@ -108,9 +109,13 @@ SOURCES += \
 	XadesSignature.cpp \
 	SODParser.cpp \
 	SSLConnection.cpp \
+	TSAClient.cpp \
 	static_pteid_certs.cpp \
 	SigVerifier.cpp \
 	sign-pkcs7.cpp \
+	cmp_asn1.c \
+	tsp_asn1.c \
+	tsproto.c \
 	PDFSignature.cpp \
 	EMV-Cap-Helper.cpp \
 

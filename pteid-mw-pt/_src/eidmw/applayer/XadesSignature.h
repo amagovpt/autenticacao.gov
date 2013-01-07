@@ -52,7 +52,7 @@ namespace eIDMW
 		static bool ValidateCert(const char *pem_certificate);
 		static void foundCertificate (const char *SubDir, const char *File, void *param);
 
-		static CByteArray mp_timestamp_data;
+		CByteArray mp_timestamp_data;
 		private:
 		
 		std::string getTS_CAPath();
