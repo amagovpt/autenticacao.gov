@@ -1,6 +1,7 @@
 #include "poppler/Error.h"
 #include "poppler/PDFDoc.h"
 #include "poppler/Page.h"
+#include "poppler/ErrorCodes.h"
 
 #include "sign-pkcs7.h"
 #include "goo/GooString.h"
@@ -317,10 +318,15 @@ namespace eIDMW
 
 		doc->closeSignature(signature_contents);
 
+		int final_ret = 0;
+
 		if (incremental)
-			doc->saveAs(outputName, writeForceIncremental);
+			final_ret = doc->saveAs(outputName, writeForceIncremental);
 		else
-			doc->saveAs(outputName, writeForceRewrite);
+			final_ret = doc->saveAs(outputName, writeForceRewrite);
+
+		if (final_ret != errNone)
+			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 
 		delete doc;
 		delete outputName;
