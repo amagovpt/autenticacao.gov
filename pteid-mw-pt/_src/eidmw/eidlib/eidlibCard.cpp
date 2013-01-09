@@ -239,7 +239,7 @@ long PTEID_SmartCard::readFile(const char *fileID, PTEID_ByteArray &in,PTEID_Pin
 }
 
 
-void PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, const char *location, const char *reason,
+int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, const char *location, const char *reason,
 			const char *outfile_path)
 {
 	BEGIN_TRY_CATCH
@@ -251,11 +251,11 @@ void PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_
 	if (page_sector != 0 && page != 0)
 		pdf_sig->setVisible(page, page_sector);
 
-	pcard->SignPDF(pdf_sig, location, reason, outfile_path);
+	return pcard->SignPDF(pdf_sig, location, reason, outfile_path);
 	
 	END_TRY_CATCH
 }
-void PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
+int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
 			const char *outfile_path)
 
 {
@@ -267,7 +267,7 @@ void PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double co
 	PDFSignature *pdf_sig = sig_handler.mp_signature; 
 	pdf_sig->setVisibleCoordinates(page, coord_x, coord_y);
 
-	pcard->SignPDF(pdf_sig, location, reason, outfile_path);
+	return pcard->SignPDF(pdf_sig, location, reason, outfile_path);
 	
 	END_TRY_CATCH
 
@@ -291,6 +291,12 @@ PTEID_PDFSignature::~PTEID_PDFSignature()
 void PTEID_PDFSignature::addToBatchSigning(char *input_path)
 {
 	mp_signature->batchAddFile(input_path);
+
+}
+
+void PTEID_PDFSignature::enableTimestamp()
+{
+	mp_signature->enableTimestamp();
 
 }
 
