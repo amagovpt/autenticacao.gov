@@ -231,7 +231,7 @@ typedef unsigned int
  * The parsing function is provided by source code borrowed from OpenEvidence project
  * http://www.openevidence.org/
  */
-void append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_len)
+int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_len)
 {
 
 	TSP_TIME_STAMP_RESP *tsp = d2i_TSP_TIME_STAMP_RESP(NULL, (const unsigned char**)&token, token_len);
@@ -248,6 +248,7 @@ void append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_
 		if (!PKCS7_type_is_signed(token))
 		{
 			MWLOG(LEV_ERROR, MOD_APL, L"Error in timestamp token: not signed!\n");
+			return 1;
 		}
 
 		//Add timestamp token to the PKCS7 signature object
@@ -259,8 +260,12 @@ void append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_
 
 	}
 	else
+	{
 		MWLOG(LEV_ERROR, MOD_APL, L"Error decoding timestamp token!\n");
+		return 1;
+	}
 
+	return 0;
 
 }
 
@@ -271,7 +276,8 @@ void append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_
  *
  */
 
-char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_len, bool timestamp)
+int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_len,
+	    bool timestamp, const char ** signature_contents)
 {
 	X509 *x509;
 	PKCS7 *p7;
@@ -280,6 +286,7 @@ char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long dat
 	char * signature_hex_string = NULL;
 	unsigned char *attr_buf = NULL;
 	unsigned char *timestamp_token = NULL;
+	int return_code = 0;
 	int tsp_token_len = 0;
 	int auth_attr_len = 0;
 	unsigned int len = 0;
@@ -365,7 +372,6 @@ char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long dat
 	free(attr_digest);
 
 	signature = PteidSign(card, attr_hash, use_sha256);
-	
 
 	if (signature.Size() == 0)
 		goto err;
@@ -388,6 +394,7 @@ char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long dat
 		if (tsresp.Size() == 0)
 		{
 			MWLOG(LEV_ERROR, MOD_APL, L"PKCS7 Sign: Timestamp Error - response is empty\n");
+			return_code = 1;
 		
 		}
 		else
@@ -401,7 +408,7 @@ char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long dat
 
 	if (timestamp_token && tsp_token_len > 0)
 	{
-		append_tsp_token(signer_info, timestamp_token, tsp_token_len);
+		return_code = append_tsp_token(signer_info, timestamp_token, tsp_token_len);
 
 	}
 
@@ -416,10 +423,12 @@ char * pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long dat
 	
 	PKCS7_free(p7);
 
-	return signature_hex_string;
+	*signature_contents = signature_hex_string;
+
+	return return_code;
 err:
 	ERR_load_crypto_strings();
 	ERR_print_errors_fp(stderr);
-	return NULL;
+	return 2;
 }
 

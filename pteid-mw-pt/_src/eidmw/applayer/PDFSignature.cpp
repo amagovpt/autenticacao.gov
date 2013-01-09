@@ -53,6 +53,7 @@ namespace eIDMW
 		m_civil_number = NULL;
 		m_citizen_fullname = NULL;
 		m_batch_mode = false;
+		m_timestamp = false;
 		m_doc = new PDFDoc(new GooString(pdf_file_path));
 	
 	}
@@ -71,6 +72,11 @@ namespace eIDMW
 	{
 		m_files_to_sign.push_back(strdup(file_path));
 
+	}
+
+	void PDFSignature::enableTimestamp()
+	{
+		m_timestamp = true;
 	}
 
 	void PDFSignature::setVisible(unsigned int page_number, int sector_number)
@@ -204,13 +210,14 @@ namespace eIDMW
 		return final_path;
 	}
 
-	void PDFSignature::signFiles(const char *location,
+	int PDFSignature::signFiles(const char *location,
 		const char *reason, const char *outfile_path)
 	{
+		int rc = 0;
 
 		if (!m_batch_mode)
 		{
-			signSingleFile(location, reason, outfile_path);
+			rc = signSingleFile(location, reason, outfile_path);
 
 		}
 		//PIN-Caching is ON after the first signature
@@ -223,18 +230,20 @@ namespace eIDMW
 						 current_file);
 				 m_doc = new PDFDoc(new GooString(current_file));
 
-				 signSingleFile(location, reason, f.c_str());
-				 if (i == 0)
+				rc += signSingleFile(location, reason, f.c_str());
+				if (i == 0)
 					 m_card->getCalReader()->setSSO(true);
 
 			 }
 			 m_card->getCalReader()->setSSO(false);
 		}
 
+		return rc;
+
 	}
 
 
-	void PDFSignature::signSingleFile(const char *location,
+	int PDFSignature::signSingleFile(const char *location,
 		const char *reason, const char *outfile_path)
 	{
 		
@@ -242,6 +251,7 @@ namespace eIDMW
 		//The class ctor initializes it to (0,0,0,0)
 		//so we can use this for invisible sig
 		PDFRectangle sig_location;
+		const char * signature_contents = NULL;
 
 		GooString *outputName;
 		outputName = new GooString(outfile_path);
@@ -313,8 +323,7 @@ namespace eIDMW
 				location, reason, m_page, m_sector);
 		unsigned long len = doc->getSigByteArray(&to_sign, incremental);
 		
-		//Last arg means timestamping is required
-                const char * signature_contents = pteid_sign_pkcs7(m_card, to_sign, len, true);
+                int rc = pteid_sign_pkcs7(m_card, to_sign, len, m_timestamp, &signature_contents);
 
 		doc->closeSignature(signature_contents);
 
@@ -330,6 +339,8 @@ namespace eIDMW
 
 		delete doc;
 		delete outputName;
+
+		return rc;
 
 	}
 

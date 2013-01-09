@@ -22,6 +22,7 @@ namespace eIDMW
 		
 		//Batch Operations (with PIN caching)
 		EIDMW_APL_API void batchAddFile(char *file_path);
+		EIDMW_APL_API void enableTimestamp();
 
 		EIDMW_APL_API void setVisible(unsigned int page, int sector);
 		EIDMW_APL_API void setVisibleCoordinates(unsigned int page, double coord_x, double coord_y);
@@ -30,7 +31,7 @@ namespace eIDMW
 		void setCard(APL_Card *card) { m_card = card; };
 		
 		//General interface to signing in single file-mode or batch-mode
-		EIDMW_APL_API void signFiles(const char *location, const char *reason,
+		EIDMW_APL_API int signFiles(const char *location, const char *reason,
 			const char *outfile_path);
 
 
@@ -39,7 +40,7 @@ namespace eIDMW
 		void getCitizenData();
 		std::string generateFinalPath(const char *output_dir, const char *path);
 		PDFRectangle getSignatureRectangle(double, double);
-		void signSingleFile(const char *location, const char *reason,
+		int signSingleFile(const char *location, const char *reason,
 			const char *outfile_path);
 
 		APL_Card *m_card;
@@ -56,6 +57,7 @@ namespace eIDMW
 		double location_x, location_y;
 		bool m_visible;
 		bool m_batch_mode;
+		bool m_timestamp;
 		std::vector<char *> m_files_to_sign;
 
 	};

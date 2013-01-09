@@ -152,16 +152,17 @@ bool checkExistingFiles(const char **files, unsigned int n_paths)
 	return true;
 }
 
-void APL_Card::SignPDF(PDFSignature *pdf_sig,  const char *location,
+int APL_Card::SignPDF(PDFSignature *pdf_sig,  const char *location,
 		         const char *reason, const char *outfile_path)
 {
 
 	if (pdf_sig)
 	{
 		pdf_sig->setCard(this);
-		pdf_sig->signFiles(location, reason, outfile_path);
+		return pdf_sig->signFiles(location, reason, outfile_path);
 	}
 
+	return -1;
 
 }
 

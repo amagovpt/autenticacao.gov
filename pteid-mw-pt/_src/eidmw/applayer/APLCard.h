@@ -127,7 +127,7 @@ public:
 
 	/* PDF Signature */
 
-	EIDMW_APL_API void SignPDF(PDFSignature *pdf_sig,  const char *location,
+	EIDMW_APL_API int SignPDF(PDFSignature *pdf_sig,  const char *location,
 	                       const char *reason, const char *outfile_path);
 
 	/**
