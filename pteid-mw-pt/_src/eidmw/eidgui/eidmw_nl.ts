@@ -1618,6 +1618,18 @@ Please specify .xml, .csv or .eid</source>
         <source>Selected sector: </source>
         <translation>Área Seleccionada: </translation>
      </message>
+     <message>
+        <source>some of the timestamps could not be applied</source>
+        <translation>alguns dos selos temporais não foram aplicados</translation>
+     </message>
+     <message>
+        <source>the timestamp could not be applied</source>
+        <translation>o selo temporal não foi aplicado</translation>
+</message>
+<message>
+	<source>Signature(s) successfully generated but </source>
+	<translation>Ficheiro(s) assinados com sucesso mas </translation>
+</message>
 <message>
 	<source>PDF Signature</source> 
 	<translation>Assinatura de ficheiros PDF</translation>

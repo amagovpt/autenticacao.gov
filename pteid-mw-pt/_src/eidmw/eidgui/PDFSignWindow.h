@@ -26,6 +26,14 @@
 #include "ui_PDFSignWindow.h"
 #include "CardInformation.h"
 
+enum ErrorCode
+{
+SUCCESS,
+ERROR,
+TS_WARNING
+
+};
+
 class PDFSignWindow : public QDialog
 {
 	Q_OBJECT
@@ -83,7 +91,7 @@ class PDFSignWindow : public QDialog
 	    int m_selected_sector;
 
 	    //Success flag for the error messages
-	    bool success;
+	    ErrorCode success;
 
 };
 

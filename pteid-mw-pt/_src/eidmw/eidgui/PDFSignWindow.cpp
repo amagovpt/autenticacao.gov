@@ -16,7 +16,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  *
- * Authors: André Guerreiro <andre.guerreiro@caixamagica.pt>	
+ * Author: André Guerreiro <andre.guerreiro@caixamagica.pt>	
  *
  **************************************************************************** */
 #include <QListView>
@@ -47,7 +47,7 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	"</html>"));
 	m_pdf_sig = NULL;
 	sig_coord_x = -1, sig_coord_y = -1;
-	success = false;
+	success = ERROR;
 	ui.spinBox_page->setValue(1);
 	list_model = new QStringListModel();
 	ui.pdf_listview->setModel(list_model);
@@ -204,25 +204,33 @@ void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
 {
 
 	PTEID_EIDCard* card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+	int sign_rc = 0;
+	char * save_path = strdup(getPlatformNativeString(savefilepath));
 	try
 	{
-		printf("x=%f, y=%f\n", sig_coord_x, sig_coord_y);
+		//printf("x=%f, y=%f\n", sig_coord_x, sig_coord_y);
 		if (sig_coord_x != -1 && sig_coord_y != -1)
-			card->SignPDF(*m_pdf_sig, selected_page,
-			  sig_coord_x, sig_coord_y, location, reason, strdup(getPlatformNativeString(savefilepath)));
+			sign_rc = card->SignPDF(*m_pdf_sig, selected_page,
+			sig_coord_x, sig_coord_y, location, reason, save_path);
 		else
-			card->SignPDF(*m_pdf_sig, selected_page,
-				m_selected_sector, location, reason, strdup(getPlatformNativeString(savefilepath)));
-		this->success = true;
+			sign_rc = card->SignPDF(*m_pdf_sig, selected_page,
+				m_selected_sector, location, reason, save_path);
+
+		if (sign_rc == 0)
+			this->success = SUCCESS;
+		else
+			this->success = TS_WARNING;
 
 	}
 
 	catch (PTEID_Exception &e)
 	{
-		this->success = false;
+		this->success = ERROR;
 		fprintf(stderr, "Caught exception in some SDK method. Error code: 0x%08x\n", 
 			(unsigned int)e.GetError());
 	}
+
+	free(save_path);
 
 
 }
@@ -287,6 +295,9 @@ void PDFSignWindow::on_button_sign_clicked()
 
 	}
 
+	if (ui.timestamp_checkBox->isChecked())
+		m_pdf_sig->enableTimestamp();
+
 	if (savefilepath.isNull() || savefilepath.isEmpty())
 		return;
 
@@ -309,14 +320,20 @@ void PDFSignWindow::on_button_sign_clicked()
 	connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
 
 	QFuture<void> future = QtConcurrent::run(this,
-			&PDFSignWindow::run_sign, selected_page, savefilepath, location, reason );
+			&PDFSignWindow::run_sign, selected_page, savefilepath, location, reason);
 
 	this->FutureWatcher.setFuture(future);
 	pdialog->exec();
 
-	if (this->success)
+	if (this->success == SUCCESS)
 		ShowSuccessMsgBox();
-	else
+	else if (this->success = TS_WARNING)
+	{
+		QString sig_detail = model->rowCount() > 1 ?  tr("some of the timestamps could not be applied") :
+				tr("the timestamp could not be applied");
+		ShowErrorMsgBox(tr("Signature(s) successfully generated but ")+ sig_detail);
+	}
+	else			
 		ShowErrorMsgBox(tr("Error Generating Signature!"));
 
 	this->close();
