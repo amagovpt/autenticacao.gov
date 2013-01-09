@@ -28,11 +28,14 @@
 
 enum ErrorCode
 {
-SUCCESS,
-ERROR,
-TS_WARNING
+	SUCCESS,
+	ERROR,
+	TS_WARNING
 
 };
+
+/* FW declaration */
+class FreeSelectionDialog;
 
 class PDFSignWindow : public QDialog
 {
@@ -60,6 +63,7 @@ class PDFSignWindow : public QDialog
 
 	private:
 	    void update_sector(int row, int column);
+	    void update_sector(double x_pos, double y_pos);
 	    bool validateSelectedSector();
 	    void highlightSectors(QString &csv_sectors);
 	    void clearAllSectors();
@@ -79,6 +83,8 @@ class PDFSignWindow : public QDialog
     	    CardInformation const& m_CI_Data;
 	    QAbstractItemModel *list_model;
 	    QProgressDialog *pdialog;
+	    FreeSelectionDialog *m_selection_dialog;
+
 	    QFutureWatcher<void> FutureWatcher;
 	    PTEID_PDFSignature *m_pdf_sig;
 	

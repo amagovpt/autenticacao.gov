@@ -23,6 +23,7 @@
 #include <QComboBox>
 #include <QFileDialog>
 #include <QProgressDialog>
+#include <QTextStream>
 
 #include <eidlib.h>
 #include "PDFSignWindow.h"
@@ -46,6 +47,7 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	"<br>The grey sectors are already filled<br>with other signatures."
 	"</html>"));
 	m_pdf_sig = NULL;
+	m_selection_dialog = NULL;
 	sig_coord_x = -1, sig_coord_y = -1;
 	success = ERROR;
 	ui.spinBox_page->setValue(1);
@@ -76,6 +78,8 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 PDFSignWindow::~PDFSignWindow()
 {
 
+	delete list_model;
+	delete m_selection_dialog;
 
 }
 
@@ -83,16 +87,23 @@ void PDFSignWindow::on_tableWidget_currentCellChanged(int row, int column,
 		int prev_row, int prev_column)
 {
 
-	update_sector(row,column);
+	update_sector(row, column);
+
+	/* Reset to default values to flag we're not using precise position */
+	sig_coord_x = -1;
+	sig_coord_y = -1;
 
 }
 
 //Launch the Free Selection Dialog
 void PDFSignWindow::on_pushButton_freeselection_clicked()
 {
-	FreeSelectionDialog * d = new FreeSelectionDialog(this);
-	d->exec();
-	d->getValues(&sig_coord_x, &sig_coord_y);
+	if (!m_selection_dialog)
+		m_selection_dialog = new FreeSelectionDialog(this);
+	m_selection_dialog->exec();
+	m_selection_dialog->getValues(&sig_coord_x, &sig_coord_y);
+
+	update_sector(sig_coord_x, sig_coord_y);
 
 }
 
@@ -110,6 +121,20 @@ void PDFSignWindow::update_sector(int row, int column)
 	ui.label_selectedsector->setText(tr("Selected sector: ")+
 			QString::number(m_selected_sector));
 
+}
+
+void PDFSignWindow::update_sector(double x_pos, double y_pos)
+{
+	QString result;
+
+	//Convert coordinates to millimeters
+	QTextStream stream(&result);
+	//Dont show fraction digits
+	stream.setRealNumberPrecision(1);
+	stream.setRealNumberNotation(QTextStream::FixedNotation);
+	stream << tr("Signature Position: ") << x_pos*209.916 <<
+		"mm Horizontal " << y_pos*297.0576 << "mm Vertical";
+	ui.label_selectedsector->setText(result);
 }
 
 void PDFSignWindow::on_button_cancel_clicked()

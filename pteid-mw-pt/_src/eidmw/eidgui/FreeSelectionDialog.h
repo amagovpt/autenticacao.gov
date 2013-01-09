@@ -11,8 +11,8 @@ class FreeSelectionDialog : public QDialog
 
 	private slots:
 
-	void on_text_edit_x_editingFinished();
-	void on_text_edit_y_editingFinished();
+//	void on_text_edit_x_editingFinished();
+//	void on_text_edit_y_editingFinished();
 	void on_pushButton_reset_clicked();
 	void on_pushButton_ok_clicked();
 
@@ -26,5 +26,6 @@ class FreeSelectionDialog : public QDialog
 		void changeRectanglePos();
 		Ui_FreeSelectionDialog ui;
 		QGraphicsScene * my_scene;
+		double rx, ry;
 
 };
