@@ -28,9 +28,9 @@
 
 enum ErrorCode
 {
-	SUCCESS,
-	ERROR,
-	TS_WARNING
+	SIG_SUCCESS
+	,SIG_ERROR
+	,TS_WARNING
 
 };
 

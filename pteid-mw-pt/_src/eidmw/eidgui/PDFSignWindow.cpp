@@ -49,7 +49,7 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	m_pdf_sig = NULL;
 	m_selection_dialog = NULL;
 	sig_coord_x = -1, sig_coord_y = -1;
-	success = ERROR;
+	success = SIG_ERROR;
 	ui.spinBox_page->setValue(1);
 	list_model = new QStringListModel();
 	ui.pdf_listview->setModel(list_model);
@@ -243,7 +243,7 @@ void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
 				m_selected_sector, location, reason, save_path);
 
 		if (sign_rc == 0)
-			this->success = SUCCESS;
+			this->success = SIG_SUCCESS;
 		else
 			this->success = TS_WARNING;
 
@@ -251,7 +251,7 @@ void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
 
 	catch (PTEID_Exception &e)
 	{
-		this->success = ERROR;
+		this->success = SIG_ERROR;
 		fprintf(stderr, "Caught exception in some SDK method. Error code: 0x%08x\n", 
 			(unsigned int)e.GetError());
 	}
@@ -351,7 +351,7 @@ void PDFSignWindow::on_button_sign_clicked()
 	this->FutureWatcher.setFuture(future);
 	pdialog->exec();
 
-	if (this->success == SUCCESS)
+	if (this->success == SIG_SUCCESS)
 		ShowSuccessMsgBox();
 	else if (this->success = TS_WARNING)
 	{
