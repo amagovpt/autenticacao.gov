@@ -4,7 +4,7 @@
 ###### version nr of the complete package (real version)
 REL_MAJ=2
 REL_MIN=1
-REL_REV=1
+REL_REV=2
 
 
 ##########WARNING!!!#####CHANGING THIS VERSIONS WILL CHANGE THE SO VERSION######### 
