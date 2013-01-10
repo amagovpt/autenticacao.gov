@@ -21,6 +21,10 @@ class MyGraphicsScene : public QGraphicsScene
 {
 	
 public: 
+	MyGraphicsScene(QString background_string): QGraphicsScene()
+	{
+		background = background_string;
+	}
 	void itemMoved(QPointF newPos);
 	void setParent(FreeSelectionDialog *my_parent)
 	{
@@ -33,6 +37,7 @@ public:
 private:
 
 	FreeSelectionDialog *parent;
+	QString background;
 
 
 };
@@ -51,8 +56,7 @@ void MyGraphicsScene::drawBackground(QPainter * painter, const QRectF & rect )
 	painter->setPen(Qt::lightGray);
 	painter->setFont(sansSerifFont);
 
-	painter->drawText(rect, Qt::AlignCenter,
-		       	QString::fromUtf8("Página A4"));
+	painter->drawText(rect, Qt::AlignCenter, this->background);
 
 }
 
@@ -150,7 +154,7 @@ void FreeSelectionDialog::setPosition(QPointF new_pos)
 {
 	this->rx = new_pos.rx()-margin;
 	this->ry = new_pos.ry()-margin;
-	printf("Pos: rx=%f, ry=%f\n", this->rx, this->ry);
+	//printf("Pos: rx=%f, ry=%f\n", this->rx, this->ry);
 	ui.text_edit_x->setText(
 			QString::number(this->rx/scene_width * 209.916, 'f', 1));
 	ui.text_edit_y->setText(
@@ -226,7 +230,7 @@ FreeSelectionDialog::FreeSelectionDialog(QWidget *parent): QDialog(parent)
     
     ui.setupUi(this);
 
-    MyGraphicsScene *scene = new MyGraphicsScene();
+    MyGraphicsScene *scene = new MyGraphicsScene(tr("A4 Page"));
 
     double real_scene_width = scene_width + 18;
     double real_scene_height = scene_height + 24;

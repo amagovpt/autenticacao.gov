@@ -133,7 +133,7 @@ void PDFSignWindow::update_sector(double x_pos, double y_pos)
 	stream.setRealNumberPrecision(1);
 	stream.setRealNumberNotation(QTextStream::FixedNotation);
 	stream << tr("Signature Position: ") << x_pos*209.916 <<
-		"mm Horizontal " << y_pos*297.0576 << "mm Vertical";
+		" mm Horizontal " << y_pos*297.0576 << " mm Vertical";
 	ui.label_selectedsector->setText(result);
 }
 
@@ -188,6 +188,7 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 	ui.label_page->setEnabled(checked);
 	ui.label_choose_sector->setEnabled(checked);
 	ui.label_selectedsector->setEnabled(checked);
+	ui.pushButton_freeselection->setEnabled(checked);
 
 	ui.tableWidget->setEnabled(checked);
 	//Set sensible defaults for sector

@@ -1123,6 +1123,10 @@ Please specify .xml, .csv or .eid</source>
         <translation>Cartão Inserido</translation>
     </message>
     <message>
+        <source>Please insert your card on the smart card reader</source>
+        <translation>Por favor introduza o Cartão de Cidadão no leitor</translation>
+    </message>
+    <message>
         <source>setEventCallbacks</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1729,5 +1733,30 @@ Escolha outra por favor.</translation>
 	<source>Sign</source>
 	<translation>Assinar</translation>
 </message>
+</context>
+<context>
+	<name>FreeSelectionDialog</name>
+	<message>
+		<source>Horizontal position</source>
+		<translation>Na horizontal</translation>
+	</message>
+	<message>
+		<source>Vertical position</source>
+		<translation>Na vertical</translation>
+	</message>
+	<message>
+		<source>PDF Signature - Free Positioning</source>
+		<translation>Assinatura de PDF - Posicionamento preciso</translation>
+
+	</message>
+	<message>
+		<source>Reset</source>
+		<translation>Limpar</translation>
+	</message>
+	<message>
+		<source>A4 Page</source>
+		<translation>Página A4</translation>
+	</message>
+
 </context>
 </TS>

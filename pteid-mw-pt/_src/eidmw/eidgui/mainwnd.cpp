@@ -2353,8 +2353,7 @@ void MainWnd::actionSignature_eID_triggered()
 		delete dlgsig;
 	} else {
 		QString caption  = tr("Warning");
-	  	QString msg = tr("A problem has occurred while trying to read card. Please, try again.");
-	  	//std::string Pmsgbody
+	  	QString msg = tr("Please insert your card on the smart card reader");
 	  	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
 	  	msgBoxp.exec();
 	}
@@ -2362,20 +2361,24 @@ void MainWnd::actionSignature_eID_triggered()
 
 void MainWnd::actionPDFSignature_triggered()
 {
+	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
+	QString cardTypeText = GetCardTypeText(CardFields[CARD_TYPE]);
 
-//	if(m_CI_Data.isDataLoaded())
-//	{
+	if(m_CI_Data.isDataLoaded())
+	{
+
 		PDFSignWindow* dlgPDFSig = new PDFSignWindow(this, m_CI_Data);
 		dlgPDFSig->exec();
-//	}
-       /*	else {
+		delete dlgPDFSig;
+	}
+	else
+	{
 		QString caption  = tr("Warning");
-	  	QString msg = tr("A problem has occurred while trying to read card. Please, try again.");
-	  	//std::string Pmsgbody
+	  	QString msg = tr("Please insert your card on the smart card reader");
 	  	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
 	  	msgBoxp.exec();
+
 	}
-*/
 
 }
 
