@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>411</width>
+    <width>430</width>
     <height>671</height>
    </rect>
   </property>
@@ -22,10 +22,10 @@
   <widget class="QWidget" name="centralwidget" native="true">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>-10</x>
      <y>10</y>
      <width>411</width>
-     <height>651</height>
+     <height>671</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -37,7 +37,7 @@
    <widget class="QCheckBox" name="visible_checkBox">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>280</y>
       <width>351</width>
       <height>21</height>
@@ -50,7 +50,7 @@
    <widget class="QPushButton" name="button_addfile">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>230</x>
       <y>120</y>
       <width>156</width>
       <height>27</height>
@@ -69,7 +69,7 @@
    <widget class="MyListView" name="pdf_listview">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>50</x>
       <y>30</y>
       <width>341</width>
       <height>81</height>
@@ -79,7 +79,7 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>50</x>
       <y>10</y>
       <width>341</width>
       <height>16</height>
@@ -118,9 +118,9 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>310</y>
-      <width>351</width>
+      <width>361</width>
       <height>304</height>
      </rect>
     </property>
@@ -333,6 +333,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_freeselection">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -341,9 +344,6 @@
        </property>
        <property name="text">
         <string>Free Positioning</string>
-       </property>
-       <property name="enabled">
-        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -355,8 +355,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>620</y>
+      <x>300</x>
+      <y>610</y>
       <width>91</width>
       <height>27</height>
      </rect>
@@ -368,7 +368,7 @@
    <widget class="QCheckBox" name="checkBox_reason">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>180</y>
       <width>111</width>
       <height>21</height>
@@ -381,7 +381,7 @@
    <widget class="QCheckBox" name="checkBox_location">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>220</y>
       <width>111</width>
       <height>21</height>
@@ -394,7 +394,7 @@
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>150</y>
       <width>351</width>
       <height>20</height>
@@ -407,7 +407,7 @@
    <widget class="QCheckBox" name="timestamp_checkBox">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>250</y>
       <width>351</width>
       <height>21</height>
@@ -417,22 +417,22 @@
      <string>Add Timestamp</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QPushButton" name="button_sign">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>630</y>
-     <width>91</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Sign</string>
-   </property>
+   <widget class="QPushButton" name="button_sign">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>610</y>
+      <width>91</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Sign</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <customwidgets>
