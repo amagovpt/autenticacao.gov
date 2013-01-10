@@ -46,6 +46,10 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	"<html>Choose the page sector where you <br> want your signature to appear."
 	"<br>The grey sectors are already filled<br>with other signatures."
 	"</html>"));
+
+	//DEBUG
+	ui.label_selectedsector->setWordWrap(true);	
+
 	m_pdf_sig = NULL;
 	m_selection_dialog = NULL;
 	sig_coord_x = -1, sig_coord_y = -1;
@@ -133,7 +137,7 @@ void PDFSignWindow::update_sector(double x_pos, double y_pos)
 	stream.setRealNumberPrecision(1);
 	stream.setRealNumberNotation(QTextStream::FixedNotation);
 	stream << tr("Signature Position: ") << x_pos*209.916 <<
-		" mm Horizontal " << y_pos*297.0576 << " mm Vertical";
+		" mm Horizontal, " << y_pos*297.0576 << " mm Vertical";
 	ui.label_selectedsector->setText(result);
 }
 

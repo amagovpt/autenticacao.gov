@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>430</width>
+    <width>421</width>
     <height>671</height>
    </rect>
   </property>
@@ -22,9 +22,9 @@
   <widget class="QWidget" name="centralwidget" native="true">
    <property name="geometry">
     <rect>
-     <x>-10</x>
-     <y>10</y>
-     <width>411</width>
+     <x>10</x>
+     <y>0</y>
+     <width>410</width>
      <height>671</height>
     </rect>
    </property>
@@ -37,7 +37,7 @@
    <widget class="QCheckBox" name="visible_checkBox">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>10</x>
       <y>280</y>
       <width>351</width>
       <height>21</height>
@@ -50,7 +50,7 @@
    <widget class="QPushButton" name="button_addfile">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>220</x>
       <y>120</y>
       <width>156</width>
       <height>27</height>
@@ -69,9 +69,9 @@
    <widget class="MyListView" name="pdf_listview">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>10</x>
       <y>30</y>
-      <width>341</width>
+      <width>371</width>
       <height>81</height>
      </rect>
     </property>
@@ -79,7 +79,7 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>10</x>
       <y>10</y>
       <width>341</width>
       <height>16</height>
@@ -95,7 +95,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>110</x>
       <y>180</y>
       <width>241</width>
       <height>26</height>
@@ -108,7 +108,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>110</x>
       <y>220</y>
       <width>241</width>
       <height>26</height>
@@ -118,10 +118,10 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>10</x>
       <y>310</y>
-      <width>361</width>
-      <height>304</height>
+      <width>381</width>
+      <height>321</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -326,8 +326,23 @@
        <property name="enabled">
         <bool>false</bool>
        </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>40</height>
+        </size>
+       </property>
        <property name="text">
         <string>Selected sector : 1</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
        </property>
       </widget>
      </item>
@@ -356,7 +371,7 @@
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>610</y>
+      <y>625</y>
       <width>91</width>
       <height>27</height>
      </rect>
@@ -368,7 +383,7 @@
    <widget class="QCheckBox" name="checkBox_reason">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>10</x>
       <y>180</y>
       <width>111</width>
       <height>21</height>
@@ -381,7 +396,7 @@
    <widget class="QCheckBox" name="checkBox_location">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>10</x>
       <y>220</y>
       <width>111</width>
       <height>21</height>
@@ -394,9 +409,9 @@
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>10</x>
       <y>150</y>
-      <width>351</width>
+      <width>381</width>
       <height>20</height>
      </rect>
     </property>
@@ -407,7 +422,7 @@
    <widget class="QCheckBox" name="timestamp_checkBox">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>10</x>
       <y>250</y>
       <width>351</width>
       <height>21</height>
@@ -424,7 +439,7 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>610</y>
+      <y>625</y>
       <width>91</width>
       <height>27</height>
      </rect>
