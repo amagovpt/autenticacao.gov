@@ -44,6 +44,8 @@ typedef const void *PCX509CERT;
 
 using namespace eIDMW;
 
+
+class PDFSignWindow;
 class MainWnd;
 
 
@@ -464,6 +466,7 @@ private:
 	PTEID_CardType			m_TypeCard;				//!< current card type being used
 	GenPur::UI_LANGUAGE		m_Language;				//!< current UI language
 	CardInformation			m_CI_Data;				//!< card information being retrieved
+	PDFSignWindow                   *m_pdf_signature_dialog;
 
 	tCallBackHandles		m_callBackHandles;
 	tCallBackData			m_callBackData;

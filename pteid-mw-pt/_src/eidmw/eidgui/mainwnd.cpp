@@ -210,6 +210,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 , m_UseKeyPad(false)
 , m_Settings(settings)
 , m_timerReaderList(NULL)
+, m_pdf_signature_dialog(NULL)
 , m_STATUS_MSG_TIME(5000)
 , m_ShowBalloon(false)
 , m_msgBox(NULL)
@@ -2367,9 +2368,9 @@ void MainWnd::actionPDFSignature_triggered()
 	if(m_CI_Data.isDataLoaded())
 	{
 
-		PDFSignWindow* dlgPDFSig = new PDFSignWindow(this, m_CI_Data);
-		dlgPDFSig->exec();
-		delete dlgPDFSig;
+ 		m_pdf_signature_dialog = new PDFSignWindow(this, m_CI_Data);
+ 		m_pdf_signature_dialog->exec();
+ 		delete m_pdf_signature_dialog;
 	}
 	else
 	{
@@ -4080,6 +4081,9 @@ void MainWnd::customEvent( QEvent* pEvent )
 					clearAddressData();
 					m_ui.btnSelectTab_Identity->setFocus();
 
+				if (m_pdf_signature_dialog)
+                    			m_pdf_signature_dialog->disableSignButton();
+
 				}
 				//----------------------------------------------------------
 				// card has been changed in a reader
@@ -4170,6 +4174,12 @@ void MainWnd::customEvent( QEvent* pEvent )
 							m_CI_Data.Reset(); 
 							loadCardData();
 						}
+
+
+						if (m_pdf_signature_dialog)
+						{
+							m_pdf_signature_dialog->enableSignButton();
+						}
 					}
 					break;
 					case PTEID_CARDTYPE_UNKNOWN:
@@ -4183,6 +4193,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 					}
 				}
 				pEvent->accept();
+
 			}
 			catch (PTEID_Exception& e)
 			{

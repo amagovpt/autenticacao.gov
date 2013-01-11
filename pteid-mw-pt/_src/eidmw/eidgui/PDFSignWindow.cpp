@@ -118,6 +118,19 @@ void PDFSignWindow::customEvent(QEvent *ev)
 		ui.button_sign->setEnabled(false);
 }
 
+void PDFSignWindow::enableSignButton()
+{
+
+	ui.button_sign->setEnabled(true);
+}
+
+void PDFSignWindow::disableSignButton()
+{
+
+	ui.button_sign->setEnabled(false);
+}
+
+
 void PDFSignWindow::update_sector(int row, int column)
 {
 	m_selected_sector = 1 + table_columns*row + column;

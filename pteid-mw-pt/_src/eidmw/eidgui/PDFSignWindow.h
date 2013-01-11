@@ -57,6 +57,11 @@ class PDFSignWindow : public QDialog
 
 	public:
 	    void customEvent(QEvent *ev);
+	    /*Event Handlers for card inserted/removed events
+	    that come from Main Window
+	    */
+	    void enableSignButton();
+	    void disableSignButton();
 	    PDFSignWindow(QWidget * parent, CardInformation &ci);
 	    ~PDFSignWindow();
 
