@@ -52,6 +52,8 @@ tHashAlgo GetHashAlgo(ALG_ID Algid)
 		return ALGO_MD5;
 	case CALG_SHA1:
 		return ALGO_SHA1;
+	case CALG_SHA_256:
+		return ALGO_SHA256;
 	case CALG_SSL3_SHAMD5:
 		return ALGO_MD5_SHA1;
 	default:
@@ -68,6 +70,8 @@ unsigned long GetSignAlgo(ALG_ID Algid)
 		return SIGN_ALGO_MD5_RSA_PKCS;
 	case CALG_SHA1:
 		return SIGN_ALGO_SHA1_RSA_PKCS;
+	case CALG_SHA_256:
+		return SIGN_ALGO_SHA256_RSA_PKCS;
 	case CALG_SSL3_SHAMD5:
 		return SIGN_ALGO_RSA_PKCS;
 	default:
