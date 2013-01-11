@@ -1646,6 +1646,10 @@ Please specify .xml, .csv or .eid</source>
 	<source>Free Positioning</source> 
 	<translation>Posicionamento preciso</translation>
 </message>
+<message>
+	<source>Add Timestamp</source>
+	<translation>Adicionar selo temporal</translation>
+</message>
 <message>   
 	<source>Error</source> 
 	<translation>Erro</translation>
