@@ -242,19 +242,26 @@ long PTEID_SmartCard::readFile(const char *fileID, PTEID_ByteArray &in,PTEID_Pin
 int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, const char *location, const char *reason,
 			const char *outfile_path)
 {
+	PDFSignature *pdf_sig = NULL;
+	int rc = 0;
+
 	BEGIN_TRY_CATCH
 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
 
 	//Accessing PTEID_PDFSignature private parts because we're friends :)
-	PDFSignature *pdf_sig = sig_handler.mp_signature; 
+	pdf_sig = sig_handler.mp_signature; 
+
 	if (page_sector != 0 && page != 0)
 		pdf_sig->setVisible(page, page_sector);
 
-	return pcard->SignPDF(pdf_sig, location, reason, outfile_path);
-	
+	rc = pcard->SignPDF(pdf_sig, location, reason, outfile_path);
+
 	END_TRY_CATCH
+
+	return rc;
 }
+
 int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
 			const char *outfile_path)
 
