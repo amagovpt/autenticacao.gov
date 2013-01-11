@@ -476,7 +476,7 @@ CByteArray CPCSC::Control(SCARDHANDLE hCard, unsigned long ulControl, const CByt
 		{
 #endif			
 		MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardControl() err: 0x%0x", lRet);
-		delete pucRecv;
+		delete[] pucRecv;
 		throw CMWEXCEPTION(PcscToErr(lRet));
 #ifndef WIN32
 		}
@@ -492,7 +492,7 @@ CByteArray CPCSC::Control(SCARDHANDLE hCard, unsigned long ulControl, const CByt
 		MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardControl(): 2 bytes returned", dwRecvLen);
 
 	CByteArray oResp(pucRecv, (unsigned long) dwRecvLen);
-	delete pucRecv;
+	delete[] pucRecv;
 
 	return oResp;
 }
