@@ -33,7 +33,7 @@
 using namespace eIDMW;
 
 PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
-	: m_CI_Data(CI_Data), m_selected_sector(0)
+	: m_CI_Data(CI_Data), m_selected_sector(0), card_present(true)
 {
 
 	ui.setupUi(this);
@@ -120,14 +120,14 @@ void PDFSignWindow::customEvent(QEvent *ev)
 
 void PDFSignWindow::enableSignButton()
 {
-
-	ui.button_sign->setEnabled(true);
+	this->card_present = true;
 }
 
 void PDFSignWindow::disableSignButton()
 {
 
 	ui.button_sign->setEnabled(false);
+	this->card_present = false;
 }
 
 
@@ -542,8 +542,8 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 		clearAllSectors();
 	}
 
-	//Enable sign button now that we have data
-	if (!str.isEmpty())
+	//Enable sign button now that we have data and a card inserted
+	if (!str.isEmpty() && this->card_present)
 		ui.button_sign->setEnabled(true);
 
 }
