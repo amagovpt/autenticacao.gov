@@ -27,11 +27,11 @@
 #include <openssl/asn1.h>
 #include <openssl/sha.h>
 
-using namespace eIDMW;
-
 #define SHA1_LEN 20
 #define SHA256_LEN 32
 
+namespace eIDMW
+{
 
 char * BinaryToHexString(unsigned char * argbuf, unsigned int len)
 {
@@ -77,7 +77,7 @@ CByteArray PteidSign(APL_Card *card, CByteArray &to_sign, bool use_sha256)
 		to_sign_padded.Append(sha1OID, sizeof(sha1OID));
 
 	to_sign_padded.Append(to_sign);
-	
+
 	output = card->Sign(to_sign_padded, true);
 
 	return output;
@@ -430,5 +430,7 @@ err:
 	ERR_load_crypto_strings();
 	ERR_print_errors_fp(stderr);
 	return 2;
+}
+
 }
 
