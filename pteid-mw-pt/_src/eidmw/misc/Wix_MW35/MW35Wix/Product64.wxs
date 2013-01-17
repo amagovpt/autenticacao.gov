@@ -4,7 +4,7 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <?include ..\..\..\svn_revision.wxs ?>
 
-  <?define var.OfficialProductVersion =2.1.0?>
+  <?define var.OfficialProductVersion =2.1.2?>
   <?define var.ProductVersion =2.1.$(var.RevisionNumber)?>
   <?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
@@ -640,7 +640,6 @@
 
           <RegistryKey Key="general" Action="createAndRemoveOnUninstall">
             <RegistryValue Type="string" Name="language" Value="nl"/>
-            <RegistryValue Type="string" Name="cache_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card\.cache"/>
             <RegistryValue Type="string" Name="install_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
           </RegistryKey>
 
