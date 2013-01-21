@@ -211,35 +211,30 @@ void CCache::DiskStoreFile(const std::string & csName,
 std::string CCache::GetCacheDir(bool bAddSlash)
 {
 	std::string csCacheDir;
-
-	//We fist check the config
-	csCacheDir = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR).c_str());
-	if(csCacheDir.empty())
-	{
-		// User home dir (C:\Documents and Settings\xxx)
-		char *pHomeDir;
-		size_t len;
-		errno_t err = _dupenv_s( &pHomeDir, &len, "USERPROFILE" );
-		if ( err ) 
-		{
-			pHomeDir = (char*)malloc(1);
-			pHomeDir[0]=0;
-		}
 	
-		if (pHomeDir != NULL)
-			csCacheDir = pHomeDir + std::string("\\Application Data\\.pteid-ng");
-		else
-		{
-			// Assuming single-user OS: use the Windows dir
-			char csPath[_MAX_PATH];
-			if (GetWindowsDirectoryA(csPath, sizeof(csPath)) == 0)
-				; // TODO: log
-			else
-				csCacheDir = csPath + std::string("\\.pteid-ng");
-		}
-		free( pHomeDir );
+	char *pHomeDir;
+	size_t len;
+	errno_t err = _dupenv_s( &pHomeDir, &len, "APPDATA" );
+	if ( err ) 
+	{
+		pHomeDir = (char*)malloc(1);
+		pHomeDir[0]=0;
 	}
 
+	if (pHomeDir != NULL)
+		csCacheDir = pHomeDir + std::string("\\.pteid-ng");
+	else
+	{
+		// Assuming single-user OS: use the Windows dir
+		char csPath[_MAX_PATH];
+		if (GetWindowsDirectoryA(csPath, sizeof(csPath)) == 0)
+			; // TODO: log
+		else
+			csCacheDir = csPath + std::string("\\.pteid-ng");
+	}
+	free( pHomeDir );
+
+	
 	DWORD dwError = 0;
 	DWORD dwAttr = GetFileAttributesA(csCacheDir.c_str());
 	if(dwAttr == INVALID_FILE_ATTRIBUTES) dwError = GetLastError();
