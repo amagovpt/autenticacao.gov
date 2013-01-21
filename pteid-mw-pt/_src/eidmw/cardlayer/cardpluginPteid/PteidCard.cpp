@@ -805,14 +805,17 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
 
     m_ucCLA = 0x00;
 
-    if (m_AppletVersion == 1) {
-	oDatagem.Append(0x80);
-	oDatagem.Append(0x01);
-    	oDatagem.Append(0x02); //Algorithm: RSA with PKCS#1 Padding
-    	oDatagem.Append(0x84);
-    	oDatagem.Append(0x01);
-    	oDatagem.Append((unsigned char) key.ulKeyRef);
-    	oResp = SendAPDU(0x22, 0x41, 0xB6, oDatagem);
+	if (m_AppletVersion == 1) {
+		oDatagem.Append(0x80);
+		oDatagem.Append(0x01);
+		if (algo == SIGN_ALGO_SHA256_RSA_PKCS)
+			oDatagem.Append(0x42);
+		else
+			oDatagem.Append(0x02); //Algorithm: RSA with PKCS#1 Padding
+		oDatagem.Append(0x84);
+		oDatagem.Append(0x01);
+		oDatagem.Append((unsigned char) key.ulKeyRef);
+		oResp = SendAPDU(0x22, 0x41, 0xB6, oDatagem);
     } else {
 
     	//if (ulInputLen != 36)
