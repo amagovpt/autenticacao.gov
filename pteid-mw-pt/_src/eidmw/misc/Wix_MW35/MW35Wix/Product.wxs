@@ -138,7 +138,7 @@
         </Directory>
         <Directory Id="FIREFOXROOTFOLDER" Name="Mozilla Firefox">
           <Directory Id="FIREFOXEXTENSIONS" Name="extensions">
-            <Directory Id="XPIROOTFOLDER" Name="portugaleid@eid.portugal.be">
+            <Directory Id="XPIROOTFOLDER" Name="portugaleid@eid.portugal.pt">
               <Directory Id="XPICONTENTFOLDER" Name="content"/>
               <Directory Id="XPICOMPONENTSFOLDER" Name="components"/>
               <Directory Id="XPIDEFAULTSFOLDER" Name="defaults">
