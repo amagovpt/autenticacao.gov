@@ -1088,7 +1088,7 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
         return dontCache;
     case 47: // EF(ODF) 4F005031 (Dont cache otherwise will cause issues on IAS cards)
         return dontCache;
-    case 0x5032: // EF(TokenInfo)
+    case 130: // EF(TokenInfo)
         return dontCache;
     case 69: // AOD (4401)
         return dontCache;

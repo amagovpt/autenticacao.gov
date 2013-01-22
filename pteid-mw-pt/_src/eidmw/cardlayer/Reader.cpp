@@ -449,7 +449,7 @@ CByteArray CReader::Sign(const tPrivKey & key, unsigned long algo,
 
 	unsigned long ulSupportedAlgos = m_poCard->GetSupportedAlgorithms();
 
-	if (algo & ulSupportedAlgos)
+	if (algo & ulSupportedAlgos || GetCardType() == CARD_PTEID_IAS07)
 	    return m_poCard->Sign(key, GetPinByID(key.ulAuthID), algo, oData);
 	else
 	{
