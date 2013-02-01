@@ -20,6 +20,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef _WIN32
+#include "windows.h"
+#endif
+#ifdef __APPLE__
+#include <mach-o/dyld.h>
+#endif
+
 #include "pteid_p11.h"
 #include "p11.h"
 #include "log.h"
@@ -208,6 +216,36 @@ if (ret != CKR_OK)
 }
 #undef WHERE
 
+int isAcroread()
+{
+   const int buf_len = 1024;
+   char *buf = (char*)malloc(buf_len);
+
+#ifdef _WIN32
+
+   DWORD bufsize;
+   bufsize = GetModuleFileName(NULL,(LPTSTR)buf, (DWORD)buf_len);
+#endif   
+#ifdef __linux__
+   ssize_t s = readlink("/proc/self/exe", buf, (size_t)buf_len);
+   buf[s] = 0;
+#endif
+#ifdef __APPLE__
+   _NSGetExecutablePath(buf, &buf_len);	
+#endif
+
+   if (strstr(buf, "acroread") != NULL 
+		   || strstr(buf, "AcroRd32") != NULL
+		   || strstr(buf, "AdobeReader") != NULL
+		   )
+   {
+	   fprintf(stderr, "We're being called by acroread!!\n");
+	   return 1;
+
+   }
+   return 0;
+
+}
 
 
 #define WHERE "C_GetSessionInfo()"
@@ -215,31 +253,34 @@ CK_RV C_GetSessionInfo(CK_SESSION_HANDLE hSession,  /* the session's handle */
                        CK_SESSION_INFO_PTR pInfo)   /* receives session information */
 {
    int ret;
+   char buf[256];
    P11_SESSION *pSession = NULL;
    P11_SLOT *pSlot = NULL;
    CK_TOKEN_INFO tokeninfo;
-log_trace(WHERE, "I: enter");
+   log_trace(WHERE, "I: enter");
    ret = p11_lock();
-if (ret != CKR_OK)
-{
-	log_trace(WHERE, "I: leave, p11_lock failed with %i",ret);
-   return ret;
-}
+   if (ret != CKR_OK)
+   {
+	   log_trace(WHERE, "I: leave, p11_lock failed with %i",ret);
+	   return ret;
+   }
 
    log_trace(WHERE, "S: C_GetSessionInfo(session %d)", hSession);
 
    if (pInfo == NULL_PTR) 
-      {
-      ret = CKR_ARGUMENTS_BAD;
-      goto cleanup;
-      }
+   {
+	   ret = CKR_ARGUMENTS_BAD;
+	   goto cleanup;
+   }
 
    ret = p11_get_session(hSession, &pSession);
    if (ret)
-      {
-      log_trace(WHERE, "E: Invalid session handle (%d) (%s)", hSession, log_map_error(ret));
-      goto cleanup;
-      }
+   {
+	   log_trace(WHERE, "E: Invalid session handle (%d) (%s)", hSession, log_map_error(ret));
+	   goto cleanup;
+   }
+
+
 
    pInfo->slotID = pSession->hslot;
    pInfo->flags = pSession->flags;
@@ -331,9 +372,14 @@ if (ret != CKR_OK)
    return ret;
 }
 
-   memset(&tokeninfo, 0, sizeof(CK_TOKEN_INFO));
+if (isAcroread())
+{
+	return CKR_OK;
+}
 
-   log_trace(WHERE, "S: Login (session %d)", hSession);
+memset(&tokeninfo, 0, sizeof(CK_TOKEN_INFO));
+
+log_trace(WHERE, "S: Login (session %d)", hSession);
 
 	//printf("Login (session %d)\n",hSession);
 
