@@ -224,8 +224,8 @@ int isAcroread()
 #ifdef _WIN32
 
    DWORD bufsize;
-   bufsize = GetModuleFileName(NULL,(LPTSTR)buf, (DWORD)buf_len);
-#endif   
+   bufsize = GetModuleFileNameA(NULL,(LPTSTR)buf, (DWORD)buf_len);
+   #endif   
 #ifdef __linux__
    ssize_t s = readlink("/proc/self/exe", buf, (size_t)buf_len);
    buf[s] = 0;
@@ -357,8 +357,8 @@ CK_RV C_Login(CK_SESSION_HANDLE hSession,  /* the session's handle */
    P11_SESSION *pSession = NULL;
    P11_SLOT *pSlot = NULL;
    CK_TOKEN_INFO tokeninfo;
-   	//printf("\n********************\n");
-	//printf("CK_RV C_Login called\n");
+   	printf("\n********************\n");
+	printf("CK_RV C_Login called\n");
 
 //return(CKR_OK);
 log_trace(WHERE, "I: enter");
@@ -381,7 +381,7 @@ memset(&tokeninfo, 0, sizeof(CK_TOKEN_INFO));
 
 log_trace(WHERE, "S: Login (session %d)", hSession);
 
-	//printf("Login (session %d)\n",hSession);
+	printf("Login (session %d)\n",hSession);
 
    if (userType != CKU_USER && userType != CKU_SO)
       {
