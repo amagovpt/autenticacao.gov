@@ -237,6 +237,7 @@ int isAcroread()
    if (strstr(buf, "acroread") != NULL 
 		   || strstr(buf, "AcroRd32") != NULL
 		   || strstr(buf, "AdobeReader") != NULL
+		   || strstr(buf, "Acrobat") != NULL
 		   )
    {
 	   fprintf(stderr, "We're being called by acroread!!\n");
