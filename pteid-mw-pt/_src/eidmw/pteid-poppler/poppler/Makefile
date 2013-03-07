@@ -7,6 +7,7 @@ BASENAME=libpteid-poppler
 
 ifeq ($(shell uname), Darwin)
 	LIB_FILENAME=$(BASENAME).dylib
+	LDFLAGS += -liconv
 else
 	LIB_FILENAME=$(BASENAME).so
 endif
