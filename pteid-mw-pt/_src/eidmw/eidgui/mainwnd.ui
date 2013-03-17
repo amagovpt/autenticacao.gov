@@ -57,7 +57,7 @@
        <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
       </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_Wellcome"/>
       <widget class="QWidget" name="page_Identity">
@@ -393,6 +393,45 @@
         </property>
         <property name="readOnly">
          <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnShortcut_UnivSign">
+        <property name="geometry">
+         <rect>
+          <x>430</x>
+          <y>310</y>
+          <width>171</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Assinatura Universal</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnShortcut_PDFSign">
+        <property name="geometry">
+         <rect>
+          <x>610</x>
+          <y>310</y>
+          <width>171</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Assinatura Universal</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnShortcut_verifySign">
+        <property name="geometry">
+         <rect>
+          <x>430</x>
+          <y>360</y>
+          <width>351</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Assinatura Universal</string>
         </property>
        </widget>
       </widget>
