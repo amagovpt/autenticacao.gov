@@ -371,6 +371,10 @@
         <translation>Opções</translation>
     </message>
     <message>
+        <source>&amp;Services</source>
+        <translation>Serviços</translation>
+    </message>
+    <message>
         <source>&amp;English</source>
         <translation type="unfinished">&amp;English</translation>
     </message>

@@ -405,12 +405,13 @@
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">color: rgb(108, 108, 108);
-font: 75 12pt &quot;Arial&quot;;
-background-image: url(:/images/Images/alpha.png);</string>
+         <string notr="true">background-image: url(:/images/Images/bg_SelectTabTool.png);</string>
         </property>
         <property name="text">
          <string>Assinatura Universal</string>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
        <widget class="QPushButton" name="btnShortcut_PDFSign">
@@ -1673,7 +1674,7 @@ font: 10pt &quot;Arial&quot;;</string>
       <rect>
        <x>127</x>
        <y>-2</y>
-       <width>125</width>
+       <width>121</width>
        <height>58</height>
       </rect>
      </property>
@@ -1688,7 +1689,7 @@ font: 10pt &quot;Arial&quot;;</string>
 font: 10pt &quot;Arial&quot;;</string>
      </property>
      <property name="text">
-      <string>Tools</string>
+      <string>     Services</string>
      </property>
      <property name="flat">
       <bool>true</bool>
@@ -1737,6 +1738,9 @@ font: 10pt &quot;Arial&quot;;</string>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="whatsThis">
+      <string/>
      </property>
      <property name="autoFillBackground">
       <bool>false</bool>
@@ -1858,6 +1862,19 @@ font: 10pt &quot;Arial&quot;;</string>
       <string/>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>820</x>
+       <y>20</y>
+       <width>101</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+    </widget>
     <zorder>btn_menu_card</zorder>
     <zorder>btn_menu_tools</zorder>
     <zorder>label_2</zorder>
@@ -1869,6 +1886,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <zorder>label_6</zorder>
     <zorder>label_8</zorder>
     <zorder>label_7</zorder>
+    <zorder>pushButton</zorder>
    </widget>
    <widget class="QWidget" name="wdg_submenu_card" native="true">
     <property name="geometry">
