@@ -340,6 +340,13 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_ui.wdg_submenu_help->installEventFilter(this);
 	m_ui.wdg_submenu_language->installEventFilter(this);
 
+
+// add Shortcuts
+
+
+	m_ui.btnShortcut_UnivSign->installEventFilter(this);
+
+
 }
 
 
@@ -381,6 +388,15 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			hide_submenus();
 			actionSignature_eID_triggered();
 		}
+
+
+ 		if (object == m_ui.lbl_menuTools_Signature )
+	          {
+		       actionSignature_eID_triggered();
+	          }
+
+
+
 		if (object == m_ui.lbl_menuTools_PDFSignature)
 		{
 			hide_submenus();

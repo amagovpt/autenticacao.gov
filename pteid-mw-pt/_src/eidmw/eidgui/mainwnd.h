@@ -290,6 +290,9 @@ private slots:
 	void on_btn_menu_help_clicked( void );
 
 
+//SHORTCUT BUTTONS
+	void on_btnShortcut_UnivSign_clicked( void );
+
 
 
 //SUBMENUS Toolbar
