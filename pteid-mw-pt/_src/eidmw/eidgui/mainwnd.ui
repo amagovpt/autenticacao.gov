@@ -404,6 +404,11 @@
           <height>41</height>
          </rect>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(108, 108, 108);
+font: 75 12pt &quot;Arial&quot;;
+background-image: url(:/images/Images/alpha.png);</string>
+        </property>
         <property name="text">
          <string>Assinatura Universal</string>
         </property>
@@ -417,6 +422,11 @@
           <height>41</height>
          </rect>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(108, 108, 108);
+font: 75 12pt &quot;Arial&quot;;
+background-image: url(:/images/Images/alpha.png);</string>
+        </property>
         <property name="text">
          <string>Assinatura Universal</string>
         </property>
@@ -429,6 +439,11 @@
           <width>351</width>
           <height>41</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(108, 108, 108);
+font: 75 12pt &quot;Arial&quot;;
+background-image: url(:/images/Images/alpha.png);</string>
         </property>
         <property name="text">
          <string>Assinatura Universal</string>
