@@ -283,22 +283,21 @@ private slots:
 	void on_btnSelectTab_Certificates_clicked ( void );
 	void on_btnSelectTab_PinCodes_clicked ( void );
 	void on_btnSelectTab_Notes_clicked ( void );
+	
 //TOOLBAR MENUS
 	void on_btn_menu_card_clicked( void );
 	void on_btn_menu_tools_clicked( void );
-	void on_btn_menu_language_clicked( void );
+	void on_btn_menu_settings_clicked( void );
+	//void on_btn_menu_language_clicked( void );
 	void on_btn_menu_help_clicked( void );
-
 
 //SHORTCUT BUTTONS
 	void on_btnShortcut_UnivSign_clicked( void );
-
-
+	void on_btnShortcut_PdfSign_clicked( void );
+	void on_btnShortcut_VerifSign_clicked( void );
 
 //SUBMENUS Toolbar
-
 	void hide_submenus( void );
-
 
 	void quit_application();
 	void show_window_parameters();

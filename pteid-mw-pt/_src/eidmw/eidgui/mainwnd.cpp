@@ -327,21 +327,24 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_ui.lbl_menuCard_Read->installEventFilter(this);
 	m_ui.lbl_menuCard_Pdf->installEventFilter(this);
 	m_ui.lbl_menuCard_Quit->installEventFilter(this);
-	m_ui.lbl_menuTools_Parameters->installEventFilter(this);
+	
 	m_ui.lbl_menuTools_Signature->installEventFilter(this);
 	m_ui.lbl_menuTools_PDFSignature->installEventFilter(this);
 	m_ui.lbl_menuTools_VerifySignature->installEventFilter(this);
-	m_ui.lbl_menuLanguage_Portuguese->installEventFilter(this);
-	m_ui.lbl_menuLanguage_English->installEventFilter(this);
+	
+	m_ui.lbl_menuSettings_Parameters->installEventFilter(this);
+	
+	//m_ui.lbl_menuLanguage_Portuguese->installEventFilter(this);
+	//m_ui.lbl_menuLanguage_English->installEventFilter(this);
+	
 	m_ui.lbl_menuHelp_about->installEventFilter(this);
 	m_ui.lbl_menuHelp_updates->installEventFilter(this);
+	m_ui.lbl_menuHelp_documentation->installEventFilter(this);
+	
 	m_ui.wdg_submenu_card->installEventFilter(this);
 	m_ui.wdg_submenu_tools->installEventFilter(this);
+	m_ui.wdg_submenu_settings->installEventFilter(this);;
 	m_ui.wdg_submenu_help->installEventFilter(this);
-	m_ui.wdg_submenu_language->installEventFilter(this);
-
-
-
 
 }
 
@@ -373,19 +376,11 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			quit_application();
 		}
 
-		if (object == m_ui.lbl_menuTools_Parameters )
-		{
-			hide_submenus();
-			show_window_parameters();
-		}
-
 		if (object == m_ui.lbl_menuTools_Signature )
 		{
 			hide_submenus();
 			actionSignature_eID_triggered();
 		}
-
-
 
 		if (object == m_ui.lbl_menuTools_PDFSignature)
 		{
@@ -399,6 +394,12 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			actionVerifySignature_eID_triggered();
 		}
 
+		if (object == m_ui.lbl_menuSettings_Parameters )
+		{
+			hide_submenus();
+			show_window_parameters();
+		}
+		
 		if (object == m_ui.lbl_menuLanguage_Portuguese )
 		{
 			hide_submenus();
@@ -419,11 +420,17 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			hide_submenus();
 			show_window_about();
 		}
+		if (object == m_ui.lbl_menuHelp_documentation )
+		{
+			hide_submenus();
+			//TODO: link to online docs
+			//show_window_about();
+		}
 	}
 	
 	if (event->type() == QEvent::Leave)
 	{
-		if (object == m_ui.wdg_submenu_card || object == m_ui.wdg_submenu_tools || object == m_ui.wdg_submenu_language || object == m_ui.wdg_submenu_help )
+		if (object == m_ui.wdg_submenu_card || object == m_ui.wdg_submenu_tools || object == m_ui.wdg_submenu_settings || object == m_ui.wdg_submenu_help )
 		{
 			hide_submenus();
 		}
@@ -436,12 +443,9 @@ void MainWnd::hide_submenus()
 {
 	m_ui.wdg_submenu_card->setVisible(false);
 	m_ui.wdg_submenu_tools->setVisible(false);
-	m_ui.wdg_submenu_language->setVisible(false);
+	m_ui.wdg_submenu_settings->setVisible(false);
 	m_ui.wdg_submenu_help->setVisible(false);
 }
-
-
-
 
 
 
@@ -451,10 +455,18 @@ void MainWnd::hide_submenus()
 
 void MainWnd::on_btnShortcut_UnivSign_clicked()
 {
-	actionSignature_eID_triggered();	
+	actionSignature_eID_triggered();
 }
 
+void MainWnd::on_btnShortcut_PdfSign_clicked()
+{
+	actionPDFSignature_triggered();
+}
 
+void MainWnd::on_btnShortcut_VerifSign_clicked()
+{
+	actionVerifySignature_eID_triggered();
+}
 
 
 //******************************************************
@@ -517,11 +529,17 @@ void MainWnd::on_btn_menu_tools_clicked()
 
 }
 
-void MainWnd::on_btn_menu_language_clicked()
+void MainWnd::on_btn_menu_settings_clicked()
+{
+	m_ui.wdg_submenu_settings->setVisible(true);
+	m_ui.wdg_submenu_settings->setGeometry(254,4,126,90);
+}
+
+/*void MainWnd::on_btn_menu_language_clicked()
 {
 	m_ui.wdg_submenu_language->setVisible(true);
 	m_ui.wdg_submenu_language->setGeometry(254,4,126,90);
-}
+}*/
 
 void MainWnd::on_btn_menu_help_clicked()
 {

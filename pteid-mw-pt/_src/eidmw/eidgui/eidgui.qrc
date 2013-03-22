@@ -52,5 +52,7 @@
         <file>Images/submenu_backgrounds/bg_selected_menu_help.png</file>
         <file>Images/menu_separator.png</file>
         <file>Images/sub_menu_separator.png</file>
+        <file>Images/flags/pt32.png</file>
+        <file>Images/flags/uk32.png</file>
     </qresource>
 </RCC>
