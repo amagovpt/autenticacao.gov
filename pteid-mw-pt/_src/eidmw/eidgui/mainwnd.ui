@@ -408,7 +408,7 @@
          <string notr="true">background-image: url(:/images/Images/bg_SelectTabTool.png);</string>
         </property>
         <property name="text">
-         <string>Assinatura Universal</string>
+         <string>Universal Signature</string>
         </property>
         <property name="flat">
          <bool>true</bool>
@@ -429,7 +429,7 @@ font: 75 12pt &quot;Arial&quot;;
 background-image: url(:/images/Images/alpha.png);</string>
         </property>
         <property name="text">
-         <string>Assinatura Universal</string>
+         <string>PDF Signature</string>
         </property>
        </widget>
        <widget class="QPushButton" name="btnShortcut_VerifSign">
@@ -447,7 +447,7 @@ font: 75 12pt &quot;Arial&quot;;
 background-image: url(:/images/Images/alpha.png);</string>
         </property>
         <property name="text">
-         <string>Assinatura Universal</string>
+         <string>Verify Signature</string>
         </property>
        </widget>
       </widget>
@@ -1651,7 +1651,7 @@ background-image: url(:/images/Images/alpha.png);</string>
       <rect>
        <x>0</x>
        <y>-2</y>
-       <width>125</width>
+       <width>127</width>
        <height>58</height>
       </rect>
      </property>
@@ -1666,7 +1666,7 @@ background-image: url(:/images/Images/alpha.png);</string>
 font: 10pt &quot;Arial&quot;;</string>
      </property>
      <property name="text">
-      <string>      Card</string>
+      <string>   Card</string>
      </property>
      <property name="flat">
       <bool>true</bool>
@@ -1677,7 +1677,7 @@ font: 10pt &quot;Arial&quot;;</string>
       <rect>
        <x>127</x>
        <y>-2</y>
-       <width>121</width>
+       <width>127</width>
        <height>58</height>
       </rect>
      </property>
@@ -1692,7 +1692,7 @@ font: 10pt &quot;Arial&quot;;</string>
 font: 10pt &quot;Arial&quot;;</string>
      </property>
      <property name="text">
-      <string>     Services</string>
+      <string>   Services</string>
      </property>
      <property name="flat">
       <bool>true</bool>
@@ -1701,7 +1701,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>253</x>
+       <x>254</x>
        <y>0</y>
        <width>5</width>
        <height>61</height>
@@ -1717,7 +1717,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>126</x>
+       <x>127</x>
        <y>0</y>
        <width>5</width>
        <height>61</height>
@@ -1735,7 +1735,7 @@ font: 10pt &quot;Arial&quot;;</string>
       <rect>
        <x>254</x>
        <y>-2</y>
-       <width>124</width>
+       <width>127</width>
        <height>58</height>
       </rect>
      </property>
@@ -1753,7 +1753,7 @@ font: 10pt &quot;Arial&quot;;</string>
 font: 10pt &quot;Arial&quot;;</string>
      </property>
      <property name="text">
-      <string>      Settings</string>
+      <string>   Settings</string>
      </property>
      <property name="flat">
       <bool>true</bool>
@@ -1762,7 +1762,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>375</x>
+       <x>381</x>
        <y>0</y>
        <width>5</width>
        <height>61</height>
@@ -1778,9 +1778,9 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QPushButton" name="btn_menu_help">
      <property name="geometry">
       <rect>
-       <x>380</x>
+       <x>381</x>
        <y>-2</y>
-       <width>110</width>
+       <width>108</width>
        <height>58</height>
       </rect>
      </property>
@@ -1795,7 +1795,7 @@ font: 10pt &quot;Arial&quot;;</string>
 font: 10pt &quot;Arial&quot;;</string>
      </property>
      <property name="text">
-      <string>Help</string>
+      <string>   Help</string>
      </property>
      <property name="flat">
       <bool>true</bool>
@@ -1865,36 +1865,64 @@ font: 10pt &quot;Arial&quot;;</string>
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="btn_menu_language">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
-       <x>820</x>
-       <y>20</y>
-       <width>101</width>
-       <height>27</height>
+       <x>752</x>
+       <y>8</y>
+       <width>44</width>
+       <height>36</height>
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="eidgui.qrc">
+       <normaloff>:/images/Images/flags/pt32.png</normaloff>:/images/Images/flags/pt32.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="shortcut">
+      <string/>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
      </property>
     </widget>
-    <zorder>btn_menu_card</zorder>
-    <zorder>btn_menu_tools</zorder>
-    <zorder>label_2</zorder>
-    <zorder>label_3</zorder>
-    <zorder>btn_menu_settings</zorder>
     <zorder>label</zorder>
     <zorder>btn_menu_help</zorder>
+    <zorder>label_2</zorder>
+    <zorder>btn_menu_settings</zorder>
+    <zorder>label_3</zorder>
+    <zorder>btn_menu_tools</zorder>
+    <zorder>btn_menu_card</zorder>
     <zorder>label_4</zorder>
     <zorder>label_6</zorder>
     <zorder>label_8</zorder>
     <zorder>label_7</zorder>
-    <zorder>pushButton</zorder>
+    <zorder>btn_menu_language</zorder>
    </widget>
    <widget class="QWidget" name="wdg_submenu_card" native="true">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>760</y>
       <width>126</width>
       <height>111</height>
@@ -1906,9 +1934,9 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="lbl_menuCard">
      <property name="geometry">
       <rect>
-       <x>55</x>
-       <y>13</y>
-       <width>51</width>
+       <x>58</x>
+       <y>15</y>
+       <width>61</width>
        <height>17</height>
       </rect>
      </property>
@@ -2046,14 +2074,22 @@ font: 10pt &quot;Arial&quot;;</string>
       <string>»</string>
      </property>
     </widget>
+    <zorder>lbl_menuCard_Read</zorder>
+    <zorder>lbl_menuCard_Quit</zorder>
+    <zorder>label_11</zorder>
+    <zorder>lbl_menuCard_Pdf</zorder>
+    <zorder>lbl_menuCard_Read_2</zorder>
+    <zorder>lbl_menuCard_Read_3</zorder>
+    <zorder>lbl_menuCard_Read_4</zorder>
+    <zorder>lbl_menuCard</zorder>
    </widget>
    <widget class="QWidget" name="wdg_submenu_tools" native="true">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>150</x>
       <y>760</y>
       <width>151</width>
-      <height>121</height>
+      <height>111</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -2063,8 +2099,8 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>13</y>
-       <width>71</width>
+       <y>15</y>
+       <width>81</width>
        <height>17</height>
       </rect>
      </property>
@@ -2098,7 +2134,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      <property name="geometry">
       <rect>
        <x>25</x>
-       <y>50</y>
+       <y>45</y>
        <width>131</width>
        <height>17</height>
       </rect>
@@ -2116,7 +2152,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>25</x>
-       <y>90</y>
+       <y>85</y>
        <width>131</width>
        <height>17</height>
       </rect>
@@ -2134,7 +2170,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>50</y>
+       <y>45</y>
        <width>16</width>
        <height>17</height>
       </rect>
@@ -2152,7 +2188,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>70</y>
+       <y>65</y>
        <width>16</width>
        <height>17</height>
       </rect>
@@ -2170,7 +2206,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>25</x>
-       <y>70</y>
+       <y>65</y>
        <width>131</width>
        <height>17</height>
       </rect>
@@ -2188,7 +2224,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>90</y>
+       <y>85</y>
        <width>16</width>
        <height>17</height>
       </rect>
@@ -2326,10 +2362,10 @@ font: 10pt &quot;Arial&quot;;</string>
    <widget class="QWidget" name="wdg_submenu_help" native="true">
     <property name="geometry">
      <rect>
-      <x>530</x>
+      <x>420</x>
       <y>760</y>
-      <width>151</width>
-      <height>121</height>
+      <width>171</width>
+      <height>111</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -2338,8 +2374,8 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="lbl_menuHelp">
      <property name="geometry">
       <rect>
-       <x>50</x>
-       <y>10</y>
+       <x>47</x>
+       <y>15</y>
        <width>91</width>
        <height>17</height>
       </rect>
@@ -2357,7 +2393,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>25</x>
-       <y>90</y>
+       <y>85</y>
        <width>81</width>
        <height>17</height>
       </rect>
@@ -2392,7 +2428,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      <property name="geometry">
       <rect>
        <x>25</x>
-       <y>70</y>
+       <y>65</y>
        <width>81</width>
        <height>17</height>
       </rect>
@@ -2410,7 +2446,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>70</y>
+       <y>65</y>
        <width>16</width>
        <height>17</height>
       </rect>
@@ -2428,7 +2464,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>90</y>
+       <y>85</y>
        <width>16</width>
        <height>17</height>
       </rect>
@@ -2446,7 +2482,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>50</y>
+       <y>45</y>
        <width>16</width>
        <height>17</height>
       </rect>
@@ -2464,7 +2500,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>25</x>
-       <y>50</y>
+       <y>45</y>
        <width>131</width>
        <height>17</height>
       </rect>
@@ -2482,10 +2518,10 @@ font: 10pt &quot;Arial&quot;;</string>
    <widget class="QWidget" name="wdg_submenu_settings" native="true">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>300</x>
       <y>760</y>
       <width>121</width>
-      <height>81</height>
+      <height>71</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -2495,7 +2531,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>13</y>
+       <y>15</y>
        <width>71</width>
        <height>17</height>
       </rect>
@@ -2512,8 +2548,8 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="lbl_menuSettings_Parameters">
      <property name="geometry">
       <rect>
-       <x>35</x>
-       <y>50</y>
+       <x>31</x>
+       <y>45</y>
        <width>81</width>
        <height>17</height>
       </rect>
@@ -2547,8 +2583,8 @@ background-image: url(:/images/Images/alpha.png);</string>
     <widget class="QLabel" name="lbl_menuCard_Read_17">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>50</y>
+       <x>16</x>
+       <y>45</y>
        <width>16</width>
        <height>17</height>
       </rect>

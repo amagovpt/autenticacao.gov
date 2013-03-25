@@ -131,10 +131,6 @@
         <translation>Códigos PIN</translation>
     </message>
     <message>
-        <source>Help</source>
-        <translation>Ajuda</translation>
-    </message>
-    <message>
         <source>Read Card</source>
         <translation>Ler Cartão</translation>
     </message>
@@ -170,18 +166,44 @@
         <source>About</source>
         <translation>Acerca</translation>
     </message>
+     <message>
+        <source>Online Documentation</source>
+        <translation>Documentação on-line</translation>
+    </message>
+    
     <message>
-        <source>Tools</source>
-        <translation>Opções</translation>
+        <source>   Card</source>
+        <translation>     Cartão</translation>
     </message>
     <message>
         <source>Card</source>
         <translation>Cartão</translation>
     </message>
     <message>
-        <source>      Card</source>
-        <translation>      Cartão</translation>
+        <source>   Services</source>
+        <translation>   Serviços</translation>
     </message>
+    <message>
+        <source>Services</source>
+        <translation>Serviços</translation>
+    </message>
+    <message>
+        <source>   Settings</source>
+        <translation>     Definições</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Definições</translation>
+    </message>
+    <message>
+        <source>   Help</source>
+        <translation>    Ajuda</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation>Ajuda</translation>
+    </message>
+    
     <message>
         <source>Kaartnr. / &lt;i&gt;Card No&lt;/i&gt;</source>
         <translation>Num. Cartão / &lt;i&gt;Card No&lt;/i&gt;</translation>
@@ -366,14 +388,7 @@
         <source>Printer Settings</source>
         <translation>Definições de Impressão</translation>
     </message>
-    <message>
-        <source>&amp;Options</source>
-        <translation>Opções</translation>
-    </message>
-    <message>
-        <source>&amp;Services</source>
-        <translation>Serviços</translation>
-    </message>
+ 
     <message>
         <source>&amp;English</source>
         <translation type="unfinished">&amp;English</translation>

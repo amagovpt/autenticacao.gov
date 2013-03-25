@@ -288,7 +288,7 @@ private slots:
 	void on_btn_menu_card_clicked( void );
 	void on_btn_menu_tools_clicked( void );
 	void on_btn_menu_settings_clicked( void );
-	//void on_btn_menu_language_clicked( void );
+	void on_btn_menu_language_clicked( void );
 	void on_btn_menu_help_clicked( void );
 
 //SHORTCUT BUTTONS

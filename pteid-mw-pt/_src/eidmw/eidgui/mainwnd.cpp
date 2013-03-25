@@ -334,8 +334,8 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	
 	m_ui.lbl_menuSettings_Parameters->installEventFilter(this);
 	
-	//m_ui.lbl_menuLanguage_Portuguese->installEventFilter(this);
-	//m_ui.lbl_menuLanguage_English->installEventFilter(this);
+	m_ui.lbl_menuLanguage_Portuguese->installEventFilter(this);
+	m_ui.lbl_menuLanguage_English->installEventFilter(this);
 	
 	m_ui.lbl_menuHelp_about->installEventFilter(this);
 	m_ui.lbl_menuHelp_updates->installEventFilter(this);
@@ -508,6 +508,8 @@ void MainWnd::on_btnSelectTab_Notes_clicked()
 		refreshTabPersoData();
 }
 
+
+
 void MainWnd::on_btn_menu_card_clicked()
 {
 	m_ui.wdg_submenu_card->setVisible(true);
@@ -523,28 +525,28 @@ void MainWnd::on_btn_menu_tools_clicked()
 	m_ui.wdg_submenu_tools->setVisible(true);
 	//If defined language is portuguese, then the dialog needs to be larger
 	if (m_Settings.getGuiLanguageCode() == GenPur::LANG_NL)
-		m_ui.wdg_submenu_tools->setGeometry(128,4,155,130);
+		m_ui.wdg_submenu_tools->setGeometry(127,4,155,110);
 	else
-		m_ui.wdg_submenu_tools->setGeometry(128,4,145,130);
+		m_ui.wdg_submenu_tools->setGeometry(127,4,145,110);
 
 }
 
 void MainWnd::on_btn_menu_settings_clicked()
 {
 	m_ui.wdg_submenu_settings->setVisible(true);
-	m_ui.wdg_submenu_settings->setGeometry(254,4,126,90);
+	m_ui.wdg_submenu_settings->setGeometry(254,4,126,75);
 }
 
-/*void MainWnd::on_btn_menu_language_clicked()
+void MainWnd::on_btn_menu_language_clicked()
 {
 	m_ui.wdg_submenu_language->setVisible(true);
-	m_ui.wdg_submenu_language->setGeometry(254,4,126,90);
-}*/
+	m_ui.wdg_submenu_language->setGeometry(700,4,126,90);
+}
 
 void MainWnd::on_btn_menu_help_clicked()
 {
 	m_ui.wdg_submenu_help->setVisible(true);
-	m_ui.wdg_submenu_help->setGeometry(380,4,126,90);
+	m_ui.wdg_submenu_help->setGeometry(381,4,165,110);
 }
 
 
