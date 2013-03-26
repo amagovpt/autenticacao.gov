@@ -53,6 +53,9 @@
 #include "dialogs.h"
 #include "Util.h"
 #include <wchar.h>
+#include <QDesktopServices>
+#include <QUrl>
+
 #ifdef WIN32
 #include <windows.h>
 #include <stdio.h>
@@ -229,6 +232,12 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	m_ui.setupUi(this);
 
+
+	if (m_Settings.getGuiLanguageCode() == GenPur::LANG_NL)
+		setLanguageNl();
+	else
+		setLanguageEn();
+
 	setFixedSize(830, 630);
 	m_ui.wdg_submenu_card->setVisible(false);
 
@@ -334,9 +343,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	
 	m_ui.lbl_menuSettings_Parameters->installEventFilter(this);
 	
-	m_ui.lbl_menuLanguage_Portuguese->installEventFilter(this);
-	m_ui.lbl_menuLanguage_English->installEventFilter(this);
-	
 	m_ui.lbl_menuHelp_about->installEventFilter(this);
 	m_ui.lbl_menuHelp_updates->installEventFilter(this);
 	m_ui.lbl_menuHelp_documentation->installEventFilter(this);
@@ -400,16 +406,6 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			show_window_parameters();
 		}
 		
-		if (object == m_ui.lbl_menuLanguage_Portuguese )
-		{
-			hide_submenus();
-			setLanguageNl();
-		}
-		if (object == m_ui.lbl_menuLanguage_English )
-		{
-			hide_submenus();
-			setLanguageEn();
-		}
 		if (object == m_ui.lbl_menuHelp_updates )
 		{
 			hide_submenus();
@@ -423,8 +419,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 		if (object == m_ui.lbl_menuHelp_documentation )
 		{
 			hide_submenus();
-			//TODO: link to online docs
-			//show_window_about();
+			QDesktopServices::openUrl(QUrl("http://svn.gov.pt/projects/ccidadao/export/244/middleware-offline/trunk/docs/Manual_de_Utilizacao.pdf"));		
 		}
 	}
 	
@@ -539,8 +534,11 @@ void MainWnd::on_btn_menu_settings_clicked()
 
 void MainWnd::on_btn_menu_language_clicked()
 {
-	m_ui.wdg_submenu_language->setVisible(true);
-	m_ui.wdg_submenu_language->setGeometry(700,4,126,90);
+	//If defined language is portuguese, language should change to EN
+	if (m_Settings.getGuiLanguageCode() == GenPur::LANG_NL)
+		setLanguageEn();
+	else
+		setLanguageNl();
 }
 
 void MainWnd::on_btn_menu_help_clicked()
@@ -2451,7 +2449,7 @@ void MainWnd::on_actionPrint_eID_triggered()
 		delete dlg;
 	} else {
 		QString caption  = tr("Warning");
-		QString msg = tr("A problem has occurred while trying to read card. Please, try again.");
+		QString msg = tr("Please insert your card on the smart card reader");
 		QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
 		msgBoxp.exec();
 	}
@@ -3916,6 +3914,10 @@ void MainWnd::refreshTabInfo( void )
 void MainWnd::setLanguageEn( void )
 {
 	setLanguage(GenPur::LANG_EN);
+	QPixmap pixmap(":/images/Images/flags/pt32.png");
+	QIcon ButtonIcon(pixmap);
+	m_ui.btn_menu_language->setIcon(ButtonIcon);
+	m_ui.btn_menu_language->setIconSize(pixmap.rect().size());
 }
 
 //**************************************************
@@ -3924,6 +3926,10 @@ void MainWnd::setLanguageEn( void )
 void MainWnd::setLanguageNl( void )
 {
 	setLanguage(GenPur::LANG_NL);
+	QPixmap pixmap(":/images/Images/flags/uk32.png");
+	QIcon ButtonIcon(pixmap);
+	m_ui.btn_menu_language->setIcon(ButtonIcon);
+	m_ui.btn_menu_language->setIconSize(pixmap.rect().size());
 }
 
 //**************************************************
@@ -4501,6 +4507,7 @@ bool MainWnd::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
 	return true;
 }
 #endif
+
 
 void CardDataLoader::Load()
 {
