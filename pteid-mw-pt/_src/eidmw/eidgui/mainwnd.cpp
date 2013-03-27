@@ -3914,10 +3914,12 @@ void MainWnd::refreshTabInfo( void )
 void MainWnd::setLanguageEn( void )
 {
 	setLanguage(GenPur::LANG_EN);
+	
 	QPixmap pixmap(":/images/Images/flags/pt32.png");
 	QIcon ButtonIcon(pixmap);
 	m_ui.btn_menu_language->setIcon(ButtonIcon);
 	m_ui.btn_menu_language->setIconSize(pixmap.rect().size());
+	m_ui.btn_menu_language->setToolTip(tr("Change language", "to english"));
 }
 
 //**************************************************
@@ -3926,10 +3928,12 @@ void MainWnd::setLanguageEn( void )
 void MainWnd::setLanguageNl( void )
 {
 	setLanguage(GenPur::LANG_NL);
+	
 	QPixmap pixmap(":/images/Images/flags/uk32.png");
 	QIcon ButtonIcon(pixmap);
 	m_ui.btn_menu_language->setIcon(ButtonIcon);
 	m_ui.btn_menu_language->setIconSize(pixmap.rect().size());
+	m_ui.btn_menu_language->setToolTip(tr("Change language", "to portuguese"));
 }
 
 //**************************************************

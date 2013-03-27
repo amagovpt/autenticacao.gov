@@ -173,7 +173,7 @@
     
     <message>
         <source>   Card</source>
-        <translation>     Cartão</translation>
+        <translation>      Cartão</translation>
     </message>
     <message>
         <source>Card</source>
@@ -189,19 +189,25 @@
     </message>
     <message>
         <source>   Settings</source>
-        <translation>     Definições</translation>
+        <translation>      Definições</translation>
     </message>
     <message>
         <source>Settings</source>
         <translation>Definições</translation>
     </message>
     <message>
-        <source>   Help</source>
+        <source>  Help</source>
         <translation>    Ajuda</translation>
     </message>
     <message>
         <source>Help</source>
         <translation>Ajuda</translation>
+    </message>
+    
+    <message>
+        <source>Change language</source>
+        <comment>to english</comment>
+        <translation>Change the interface language to english</translation>
     </message>
     
     <message>

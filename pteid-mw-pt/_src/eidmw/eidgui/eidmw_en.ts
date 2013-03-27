@@ -230,6 +230,13 @@
         <source>Language</source>
         <translation>Language</translation>
     </message>
+    
+    <message>
+        <source>Change language</source>
+        <comment>to portuguese</comment>
+        <translation>Modificar a linguagem da interface para português</translation>
+    </message>
+
     <message>
         <location filename="mainwnd.ui" line="2781"/>
         <source>Help</source>
