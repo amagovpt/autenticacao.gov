@@ -412,9 +412,6 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
         <property name="text">
          <string>Universal Signature</string>
         </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
        </widget>
        <widget class="QPushButton" name="btnShortcut_PdfSign">
         <property name="geometry">
@@ -433,9 +430,6 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
         <property name="text">
          <string>PDF Signature</string>
         </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
        </widget>
        <widget class="QPushButton" name="btnShortcut_VerifSign">
         <property name="geometry">
@@ -453,9 +447,6 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
         </property>
         <property name="text">
          <string>Verify Signature</string>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
         </property>
        </widget>
       </widget>
