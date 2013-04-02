@@ -202,11 +202,11 @@ namespace eIDMW
 	#endif
 	std::string PDFSignature::generateFinalPath(const char *output_dir, const char *path)
 	{
-
 		char * pdf_filename = Basename((char*)path);
-
-		std::string final_path = string(output_dir) + PATH_SEP +pdf_filename+ "_signed.pdf";
-
+		std::string clean_filename = CPathUtil::remove_ext_from_basename(pdf_filename);
+		
+		std::string final_path = string(output_dir) + PATH_SEP + clean_filename + "_signed.pdf";
+		
 		return final_path;
 	}
 
