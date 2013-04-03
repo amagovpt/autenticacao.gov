@@ -210,8 +210,11 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 	ui.tableWidget->setEnabled(checked);
 	//Set sensible defaults for sector
 	ui.tableWidget->setCurrentCell (0, 0);
-	m_selected_sector = 1;
 
+	// force default values for "invisible mode" signature
+	sig_coord_x = -1;
+	sig_coord_y = -1;
+	m_selected_sector = 0;
 }
 
 void PDFSignWindow::ShowSuccessMsgBox()
@@ -251,7 +254,10 @@ void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
 	char * save_path = strdup(getPlatformNativeString(savefilepath));
 	try
 	{
+		//printf("@PDFSignWindow::run_sign:\n");
 		//printf("x=%f, y=%f\n", sig_coord_x, sig_coord_y);
+		//printf("selected_page=%d, selected_sector=%d\n", selected_page, m_selected_sector);
+
 		if (sig_coord_x != -1 && sig_coord_y != -1)
 			sign_rc = card->SignPDF(*m_pdf_sig, selected_page,
 			sig_coord_x, sig_coord_y, location, reason, save_path);
