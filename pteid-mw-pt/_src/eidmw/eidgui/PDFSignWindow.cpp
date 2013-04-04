@@ -197,10 +197,11 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 
 	bool choose_b = ui.radioButton_choosepage->isChecked();
 
-	if(checked)
+	if (checked) {
 		ui.spinBox_page->setEnabled(choose_b);
-	else
+	} else {
 		ui.spinBox_page->setEnabled(false);
+	}
 
 	ui.label_page->setEnabled(checked);
 	ui.label_choose_sector->setEnabled(checked);
@@ -208,13 +209,17 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 	ui.pushButton_freeselection->setEnabled(checked);
 
 	ui.tableWidget->setEnabled(checked);
-	//Set sensible defaults for sector
-	ui.tableWidget->setCurrentCell (0, 0);
 
-	// force default values for "invisible mode" signature
-	sig_coord_x = -1;
-	sig_coord_y = -1;
-	m_selected_sector = 0;
+	if (checked) {
+		//Set sensible defaults for sector
+		ui.tableWidget->setCurrentCell (0, 0);
+		m_selected_sector = 1;
+	} else {
+		// force default values for "invisible mode" signature
+		sig_coord_x = -1;
+		sig_coord_y = -1;
+		m_selected_sector = 0;    
+	}
 }
 
 void PDFSignWindow::ShowSuccessMsgBox()
