@@ -307,11 +307,12 @@ void PDFSignWindow::on_button_sign_clicked()
 		else
 			selected_page = ui.spinBox_page->value();
 
-		if (!validateSelectedSector())
+		// only check if selectedSector is valid when not using free position
+		bool is_free_pos_mode = (sig_coord_x != -1 && sig_coord_y != -1);
+		if (!is_free_pos_mode && !validateSelectedSector())
 		{
 		   ShowSectorErrorMessage();
 		   return;
-
 		}
 
 	}
