@@ -127,6 +127,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="2"
 				AdditionalIncludeDirectories="../common;../dialogs;../eidlib;&quot;../pteid-poppler/&quot;;&quot;../pteid-poppler/poppler&quot;;../cardlayer;../FreeImagePTEiD/Source;&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;&quot;$(PTEID_DIR_XERCES_310)\include&quot;;&quot;..\xml-security-c-1.6.1&quot;;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;;&quot;..\..\ThirdParty\libcurl-7.24\include&quot;"
 				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS"
 				GeneratePreprocessedFile="0"
@@ -409,6 +410,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cmp_asn1.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cryptoFramework.cpp"
 				>
 			</File>
@@ -466,6 +471,18 @@
 			</File>
 			<File
 				RelativePath=".\static_pteid_certs.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TsaClient.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tsp_asn1.c"
+				>
+			</File>
+			<File
+				RelativePath=".\tsproto.c"
 				>
 			</File>
 			<File

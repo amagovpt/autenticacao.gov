@@ -125,7 +125,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;../applayer;../common;../eidlib;../cardlayer;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;../applayer;../common;../dialogs;../eidlib;../cardlayer;&quot;$(PTEID_DIR_PLATFORMSDK_2003)\include&quot;"
 				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_WRAPPER"
 				RuntimeLibrary="2"
 				WarningLevel="3"
@@ -144,7 +144,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="pteidapplayer.lib pteidcommon.lib"
+				AdditionalDependencies="pteidapplayer.lib pteidcommon.lib pteidDlgsWin32.lib"
 				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName).dll"
 				AdditionalLibraryDirectories="..\_Binaries35/$(ConfigurationName)"
 			/>

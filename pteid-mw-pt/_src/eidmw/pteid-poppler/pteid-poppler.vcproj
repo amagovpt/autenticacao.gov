@@ -110,6 +110,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="2"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)\goo&quot;;&quot;$(ProjectDir)&quot;"
 				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;EXPORTING"
 				RuntimeLibrary="2"
@@ -185,6 +186,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\poppler\BuiltinFont.cc"
+				>
+			</File>
+			<File
+				RelativePath=".\poppler\BuiltinFontTables.cc"
+				>
+			</File>
+			<File
+				RelativePath=".\poppler\BuiltinFontTables.h"
+				>
+			</File>
+			<File
 				RelativePath=".\poppler\CachedFile.cc"
 				>
 			</File>
@@ -246,6 +259,10 @@
 			</File>
 			<File
 				RelativePath=".\goo\FixedPoint.h"
+				>
+			</File>
+			<File
+				RelativePath=".\poppler\FontEncodingTables.cc"
 				>
 			</File>
 			<File
@@ -341,6 +358,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\poppler\Iconv.cc"
+				>
+			</File>
+			<File
 				RelativePath=".\goo\ImgWriter.cc"
 				>
 			</File>
@@ -422,6 +443,14 @@
 			</File>
 			<File
 				RelativePath=".\poppler\Movie.h"
+				>
+			</File>
+			<File
+				RelativePath=".\poppler\Myriad-Font.cc"
+				>
+			</File>
+			<File
+				RelativePath=".\poppler\Myriad-Font.h"
 				>
 			</File>
 			<File
@@ -606,6 +635,14 @@
 			</File>
 			<File
 				RelativePath=".\poppler\ViewerPreferences.h"
+				>
+			</File>
+			<File
+				RelativePath=".\poppler\win_iconv.c"
+				>
+			</File>
+			<File
+				RelativePath=".\poppler\win_iconv.h"
 				>
 			</File>
 			<File
