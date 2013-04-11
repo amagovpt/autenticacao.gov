@@ -115,12 +115,6 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
 		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", 
 				"Return code from VerifySignature(): %d", return_code);
 
-		QString signer = QString("\n")+tr("Signed by: ");
-
-		//If the signature was extracted get the signer name
-		if (return_code != 1)
-			signer += QString::fromUtf8(vsign.GetSigner());
-
 		if (return_code == 0)
 		{
 			QString msg = tr("Signature was successfully verified.");
@@ -130,20 +124,19 @@ void dlgVerifySignature::on_pbOpenSign_clicked()
 				QString timestamp = QString("\n") + tr("Timestamp: ");
 				msg += timestamp;
 				msg += ts;
-			}
-			msg += signer;
+            }
+
+            //Get signer name to show
+            QString signer = QString("\n")+tr("Signed by: ");
+            msg += signer;
+            msg += QString::fromUtf8(vsign.GetSigner());
 
 			QMessageBox::information(this, tr("Signature Validation"), msg);
-
 			this->close();
-
 		}
 		else
 		{
 			QString error = translateVerifyReturnCode(return_code);
-			if (return_code != 1)
-				error += signer;
-
 			QMessageBox::critical(this, tr("Signature Validation"), error);
 			this->close();
 		}
