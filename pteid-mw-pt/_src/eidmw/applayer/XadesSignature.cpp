@@ -171,14 +171,6 @@ namespace eIDMW
 
 	}
 
-
-	std::string XadesSignature::getTS_CAPath()
-	{
-		APL_Config certs_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
-		std::string m_certs_dir = certs_dir.getString();
-		return m_certs_dir + "tsa_chain.pem";
-	}
-
 	static XMLCh s_Id[] = {
 
 	chLatin_I,
@@ -333,7 +325,7 @@ void XadesSignature::loadCert(CByteArray &data, EVP_PKEY *pub_key)
 	}
 
 }
-void XadesSignature::initXerces()
+void XadesSignature::initXMLUtils()
 {
 	try {
 
@@ -349,110 +341,11 @@ void XadesSignature::initXerces()
 	}
 }
 
-
-X509 * loadCertFromB64Der(const char *base64_string)
+/*void XadesSignature::terminateXMLUtils()
 {
-	X509 *cert = NULL;
-	unsigned int bufsize = strlen(base64_string);
-
-	unsigned char *der_buffer = (unsigned char *)malloc(bufsize);
-
-	base64Decode(base64_string, bufsize, der_buffer, bufsize);
-
-	if (der_buffer != NULL)
-	{
-		cert = d2i_X509(NULL, (const unsigned char**)(&der_buffer), bufsize);
-		
-		if (cert == NULL)
-			MWLOG(LEV_ERROR, MOD_APL, L"Error parsing certificate from DER buffer!\n");
-
-	}
-	return cert;
-
-}
-
-void XadesSignature::foundCertificate (const char *SubDir, const char *File, void *param)
-{
-	X509_STORE *certificate_store =  (X509_STORE *)param;
-	APL_Config certs_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
-	string path = string(certs_dir.getString());
-	FILE *m_stream;
-	X509 *pCert = NULL;
-	long int bufsize;
-	unsigned char *buf;
-
-#ifdef WIN32
-	errno_t werr;
-	path += "\\";
-#endif
-	path+=SubDir;
-#ifdef WIN32
-	path += "\\";
-#else
-	path+= "/";
-#endif
-	path+=File;
-	
-#ifdef WIN32
-	if ((werr = fopen_s(&m_stream, path.c_str(), "rb")) != 0)
-		goto err;
-#else
-	if ((m_stream = fopen(path.c_str(), "rb")) == NULL)
-		goto err;
-#endif
-
-	if (fseek( m_stream, 0L, SEEK_END))
-		goto err;
-
-	bufsize = ftell(m_stream);
-	buf = (unsigned char *) malloc(bufsize*sizeof(unsigned char));
-
-	if (fseek(m_stream, 0L, SEEK_SET)){
-		free(buf);
-		goto err;
-	}
-
-	if (fread(buf, sizeof( unsigned char ), bufsize, m_stream) != bufsize)
-		goto err;
-
-	pCert = d2i_X509(&pCert, (const unsigned char **)&buf, bufsize);
-	if (pCert == NULL)
-	   goto err;
-	
-	if(X509_STORE_add_cert(certificate_store, pCert) == 0)
-	   goto err;
-	
-	MWLOG(LEV_DEBUG, MOD_APL, L"XadesSignature::foundCertificate: successfully added cert %ls", 
-			utilStringWiden(path).c_str());
-	return;
-
-
-	err:
-		MWLOG(LEV_DEBUG, MOD_APL, L"XadesSignature::foundCertificate: problem with file %ls ", 
-			utilStringWiden(path).c_str());
-
-}
-
-
-const XMLCh * locateTimestamp(XERCES_NS DOMDocument *doc)
-{
-	safeBuffer str;
-	//Qualified Tag Name
-	makeQName(str, XMLString::transcode("etsi") ,"EncapsulatedTimeStamp");
-	DOMNodeList *list = doc->getElementsByTagNameNS(XMLString::transcode("*"),
-		       	XMLString::transcode("EncapsulatedTimeStamp"));
-
-	if (list->getLength() == 0)
-	{
-	   return NULL;
-	}
-
-
-	DOMNode * timestamp = list->item(0);
-
-	return timestamp->getFirstChild()->getNodeValue();
-	
-}
+	XSECPlatformUtils::Terminate();
+	XMLPlatformUtils::Terminate();
+}*/
 
 XMLCh* XadesSignature::createURI(const char *path)
 {
@@ -471,7 +364,7 @@ XMLCh* XadesSignature::createURI(const char *path)
 CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths, bool do_timestamping)
 {
 
-	initXerces();
+	initXMLUtils();
 
 	XSECProvider prov;
 	DSIGSignature *sig;
@@ -599,9 +492,12 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths,
 		
 	}
 
-	return *WriteToByteArray(doc);
+	CByteArray &result = *WriteToByteArray(doc);
 
+	XSECPlatformUtils::Terminate();
+	//XMLPlatformUtils::Terminate(); - SF
+
+	return result;
 }
-
 
 }

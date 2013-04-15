@@ -68,6 +68,7 @@ namespace eIDMW
 		generate_asn1_request_struct(input);
 
 		curl_global_init(CURL_GLOBAL_ALL);
+		//curl_global_init(CURL_GLOBAL_NOTHING);
 
 		curl = curl_easy_init();
 

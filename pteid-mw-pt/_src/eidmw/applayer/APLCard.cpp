@@ -328,7 +328,7 @@ CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, cons
 	XadesSignature sig(this);
 
 	CByteArray &signature = sig.SignXades(paths, n_paths, true);
-	CByteArray *ts_data = &sig.mp_timestamp_data;
+	CByteArray *ts_data = &(sig.mp_timestamp_data);
 
 	//Write zip container signature and referenced files in zip container
 	StoreSignatureToDisk (signature, ts_data, paths, n_paths, output_file);
