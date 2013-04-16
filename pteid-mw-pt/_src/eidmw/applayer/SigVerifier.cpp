@@ -802,6 +802,9 @@ SigVerifyErrorCode SignatureVerifier::ValidateXades(CByteArray signature, tHashe
 		result = false;
 	}
 
+	XSECPlatformUtils::Terminate();
+	XMLPlatformUtils::Terminate();
+
 	if (result == false)
 	{
 		return XADES_ERROR_INVALID_RSA;

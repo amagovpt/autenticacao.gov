@@ -44,15 +44,15 @@ namespace eIDMW
 				X509_free(mp_cert);
 		};
 
-		CByteArray &SignXades(CByteArray ba, const char *URL);
 		CByteArray &SignXades(const char ** paths, unsigned int n_paths, bool do_timestamp);
 
 		CByteArray mp_timestamp_data;
 		private:
 
 		static void initXMLUtils();
-		//static void terminateXMLUtils();
+		static void terminateXMLUtils();
 
+		CByteArray &Sign(const char ** paths, unsigned int n_paths, bool do_timestamp);
 		CByteArray HashFile(const char *file_path);
 		DOMNode * addSignatureProperties(DSIGSignature *sig);
 		CByteArray *WriteToByteArray(XERCES_NS DOMDocument *doc); 

@@ -341,11 +341,11 @@ void XadesSignature::initXMLUtils()
 	}
 }
 
-/*void XadesSignature::terminateXMLUtils()
+void XadesSignature::terminateXMLUtils()
 {
 	XSECPlatformUtils::Terminate();
 	XMLPlatformUtils::Terminate();
-}*/
+}
 
 XMLCh* XadesSignature::createURI(const char *path)
 {
@@ -361,11 +361,8 @@ XMLCh* XadesSignature::createURI(const char *path)
 
 }
 
-CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths, bool do_timestamping)
+CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths, bool do_timestamping)
 {
-
-	initXMLUtils();
-
 	XSECProvider prov;
 	DSIGSignature *sig;
 	DOMElement *sigNode;
@@ -492,10 +489,14 @@ CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths,
 		
 	}
 
-	CByteArray &result = *WriteToByteArray(doc);
+	return *WriteToByteArray(doc); 
+}
 
-	XSECPlatformUtils::Terminate();
-	//XMLPlatformUtils::Terminate(); - SF
+CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths, bool do_timestamping)
+{
+	initXMLUtils();
+	CByteArray &result = Sign(paths, n_paths, do_timestamping);
+	terminateXMLUtils();
 
 	return result;
 }
