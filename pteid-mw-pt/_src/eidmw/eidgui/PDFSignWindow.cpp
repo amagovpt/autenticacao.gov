@@ -382,7 +382,7 @@ void PDFSignWindow::on_button_sign_clicked()
 
 	if (this->success == SIG_SUCCESS)
 		ShowSuccessMsgBox();
-	else if (this->success = TS_WARNING)
+	else if (this->success == TS_WARNING)
 	{
 		QString sig_detail = model->rowCount() > 1 ?  tr("some of the timestamps could not be applied") :
 				tr("the timestamp could not be applied");
