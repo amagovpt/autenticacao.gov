@@ -33,6 +33,8 @@ namespace eIDMW
 		//getTimestamp() //TODO: Create a custom class struct that expresses the timestamp in all its glorious detail
 
 	private:
+		void terminateXMLUtils();
+		void initXMLUtils();
 		SigVerifyErrorCode ValidateXades(CByteArray, tHashedFile **);
 		SigVerifyErrorCode ValidateTimestamp(CByteArray signature, CByteArray timestamp);
 		CByteArray do_post_validate_timestamp(char *input, long input_len, char *sha1_string);
