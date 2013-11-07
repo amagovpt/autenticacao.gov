@@ -74,7 +74,7 @@ switch (return_code)
 		msg += tr("RSA Signature of referenced content is invalid");
 		break;
 	case 3:
-		msg += tr("At least one of the signed file(s) was changed or is missing");
+		msg += tr("At least one of the signed file(s) was modified or is missing");
 		break;
 	case 4:
 		msg += tr("RSA Signature of referenced content is invalid");

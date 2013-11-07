@@ -1755,6 +1755,10 @@ Escolha outra por favor.</translation>
 	<translation>Seleccionar ficheiro(s)</translation>
 </message>
 <message>
+	<source>Page</source>
+	<translation>Página</translation>
+</message>
+<message>
 	<source>Signing PDF file(s)...</source>
 	<translation>A Assinar ficheiro(s)...</translation>
 </message>
