@@ -450,6 +450,9 @@ void PDFSignWindow::on_spinBox_page_valueChanged(int new_value)
 void mapSectorToRC(int sector, int *row, int *column)
 {
 
+	if (sector < 1)
+		return;
+
 	int rem = sector % 3;
 
 	*row = (sector-1) / 3;
