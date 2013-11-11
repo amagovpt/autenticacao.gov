@@ -988,7 +988,6 @@ try
    if (algo == SIGN_ALGO_RSA_PKCS && l_in == 51 
 		  && oReader.GetCardType() == CARD_PTEID_IAS07)
    {
-	fprintf (stderr, "Trimming signature input data for Gemsafe cards\n", algo, oData.Size());
 	//Strip away the PKCS-1 padding (first 19 bytes)
 	oData = oData.GetBytes(19);
 	algo = SIGN_ALGO_SHA256_RSA_PKCS;
