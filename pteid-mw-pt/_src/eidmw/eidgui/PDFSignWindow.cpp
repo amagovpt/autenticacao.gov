@@ -67,6 +67,8 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 		{
 			QTableWidgetItem * it = new QTableWidgetItem(
 					QString::number(cell_number++));
+			//Set flags because the default values allow editing
+			it->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 			ui.tableWidget->setItem(i, j, it);
 		}
 	}
