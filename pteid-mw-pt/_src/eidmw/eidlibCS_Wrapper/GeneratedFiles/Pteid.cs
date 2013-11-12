@@ -491,8 +491,8 @@ namespace pt.portugal.eid
         return ret;
     }
     
-    public static long CAP_ChangeCapPin(String string, byte[] bytes, PTEID_Proxy_Info ptdp, String string1, String string2){
-        uint ul;
+    public static long CAP_ChangeCapPin(String server_unused, byte[] bytes, PTEID_Proxy_Info ptdp, String string1, String string2){
+        uint ul = 0;
         try {
             if (idCard.ChangeCapPinCompLayer(string1, string2, ref ul))
                 return ul;
