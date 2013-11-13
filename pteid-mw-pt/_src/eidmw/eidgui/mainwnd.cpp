@@ -72,13 +72,13 @@ static unsigned int pinactivate = 1, certdatastatus = 1, addressdatastatus = 1, 
 static unsigned int pinNotes = 1 ;
 
 #ifdef WIN32
-void ImportECRaizCert()
+void ImportCertFromDisk(void *cert_path)
 {
 	PCCERT_CONTEXT pCertCtx = NULL;
 
 	if (CryptQueryObject (
 		CERT_QUERY_OBJECT_FILE,
-		L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\ECRaizEstado_novo_assinado_GTE.der",
+		cert_path,
 		CERT_QUERY_CONTENT_FLAG_ALL,
 		CERT_QUERY_FORMAT_FLAG_ALL,
 		0,
@@ -118,50 +118,6 @@ void ImportECRaizCert()
 	}
 }
 
-void ImportCCCert()
-{
-	PCCERT_CONTEXT pCertCtx = NULL;
-
-	if (CryptQueryObject (
-		CERT_QUERY_OBJECT_FILE,
-		L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\CartaodeCidadao001.der",
-		CERT_QUERY_CONTENT_FLAG_ALL,
-		CERT_QUERY_FORMAT_FLAG_ALL,
-		0,
-		NULL,
-		NULL,
-		NULL,
-		NULL,
-		NULL,
-		(const void **)&pCertCtx) != 0)
-	   {
-		HCERTSTORE hCertStore = CertOpenSystemStoreA (NULL, "CA");
-
-		if (hCertStore != NULL)
-		{
-			CertAddEnhancedKeyUsageIdentifier (pCertCtx, szOID_PKIX_KP_EMAIL_PROTECTION);
-			CertAddEnhancedKeyUsageIdentifier (pCertCtx, szOID_PKIX_KP_SERVER_AUTH);
-			if (CertAddCertificateContextToStore (
-				hCertStore,
-				pCertCtx,
-				CERT_STORE_ADD_ALWAYS,
-				NULL))
-			{
-				std::cout << "Added certificate to store." << std::endl;
-			}
-
-			if (CertCloseStore (hCertStore, 0))
-			{
-				std::cout << "Cert. store handle closed." << std::endl;
-			}
-		}
-
-		if (pCertCtx)
-		{
-			CertFreeCertificateContext (pCertCtx);
-		}
-	}
-}
 
 #endif
 
@@ -954,8 +910,9 @@ bool MainWnd::ImportCertificates( const char* readerName )
 
 	#ifdef WIN32
 	//Register the 2 higher-level CA Certs from disk files
-	ImportCCCert();
-	ImportECRaizCert();
+	ImportCertFromDisk(L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\ECRaizEstado_novo_assinado_GTE.der");
+	ImportCertFromDisk(L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\CartaodeCidadao001.der");
+	ImportCertFromDisk(L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\CartaodeCidadao002.der");
 	#endif
 
 	try
