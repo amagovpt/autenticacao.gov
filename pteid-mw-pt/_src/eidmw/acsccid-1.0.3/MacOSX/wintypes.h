@@ -1,1 +1,0 @@
-#include <PCSC/wintypes.h>
