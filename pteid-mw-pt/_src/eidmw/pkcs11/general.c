@@ -98,7 +98,7 @@ CK_RV C_Initialize(CK_VOID_PTR pReserved)
    if (g_init)
       {
       ret = CKR_CRYPTOKI_ALREADY_INITIALIZED;
-      log_trace(WHERE, "I: Module is allready initialized");
+      log_trace(WHERE, "I: Module is already initialized in this process");
       }
    else
       {
