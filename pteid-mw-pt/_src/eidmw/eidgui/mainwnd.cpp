@@ -375,7 +375,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 		if (object == m_ui.lbl_menuHelp_documentation )
 		{
 			hide_submenus();
-			QDesktopServices::openUrl(QUrl("http://svn.gov.pt/projects/ccidadao/export/246/middleware-offline/trunk/docs/Manual_de_Utilizacao.pdf"));		
+			QDesktopServices::openUrl(QUrl("http://svn.gov.pt/projects/ccidadao/repository/middleware-offline/trunk/docs/Manual_de_Utilizacao.pdf"));
 		}
 	}
 	
