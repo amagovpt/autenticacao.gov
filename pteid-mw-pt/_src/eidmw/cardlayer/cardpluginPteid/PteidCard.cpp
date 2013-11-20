@@ -731,68 +731,6 @@ tFileInfo CPteidCard::ParseFileInfo(CByteArray & oFCI)
 	throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 }
 
-void CPteidCard::IasSignatureHelper()
-{
-
-	CByteArray oData99;
-	oData99.Append(0x60);
-	oData99.Append(0x46);
-	oData99.Append(0x32);
-	oData99.Append(0xFF);
-	oData99.Append(0x00);
-	oData99.Append(0x01);
-	oData99.Append(0x02);
-	CByteArray oResp99 = SendAPDU(0xA4, 0x04, 0x00, oData99);
-
-	CByteArray oDataspec;
-	oDataspec.Append(0x00);
-	oDataspec.Append(0xA4);
-	oDataspec.Append(0x03);
-	oDataspec.Append(0x0C);
-	CByteArray oRespspec = SendAPDU(oDataspec);
-
-	CByteArray oData98;
-	oData98.Append(0x2F);
-	oData98.Append(0x00);
-	CByteArray oResp98 = SendAPDU(0xA4, 0x09, 0x00, oData98);
-	oResp98.Chop(2);
-
-	CByteArray oResp97 = SendAPDU(0xB0, 0x00, 0x00, 0x3E);
-
-	CByteArray oDataroot;
-	oDataroot.Append(0x4F);
-	oDataroot.Append(0x00);
-	CByteArray oResproot = SendAPDU(0xA4, 0x09, 0x0C, oDataroot);
-
-	CByteArray oDataia98;
-	oDataia98.Append(0x50);
-	oDataia98.Append(0x32);
-	CByteArray oRespia98 = SendAPDU(0xA4, 0x09, 0x00, oDataia98);
-
-	CByteArray oRespia95 = SendAPDU(0xB0, 0x00, 0x00, 0x2F);
-
-	//Get Challenge
-	CByteArray oRespcha1 = SendAPDU(0x84, 0x00, 0x00, 0x08);
-	oRespcha1.Chop(2);
-	CByteArray oRespcha2 = SendAPDU(0x84, 0x00, 0x00, 0x08);
-	oRespcha2.Chop(2);
-	CByteArray oRespcha3 = SendAPDU(0x84, 0x00, 0x00, 0x08);
-	oRespcha3.Chop(2);
-
-	//Next blocks are helpers only for signature
-	CByteArray oData123;
-	oData123.Append(0x00);
-	oData123.Append(0xA4);
-	oData123.Append(0x03);
-	oData123.Append(0x0C);
-	CByteArray oResp123 = SendAPDU(oData123);
-
-	CByteArray oData456;
-	oData456.Append(0x5F);
-	oData456.Append(0x00);
-	CByteArray oResp456 = SendAPDU(0xA4, 0x09, 0x0C, oData456);
-
-}
 
 void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
     unsigned long ulInputLen)
@@ -817,9 +755,6 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
 		oDatagem.Append((unsigned char) key.ulKeyRef);
 		oResp = SendAPDU(0x22, 0x41, 0xB6, oDatagem);
     } else {
-
-    	//if (ulInputLen != 36)
-    	//	IasSignatureHelper();
 
     	oDataias.Append(0x95);
     	oDataias.Append(0x01);
