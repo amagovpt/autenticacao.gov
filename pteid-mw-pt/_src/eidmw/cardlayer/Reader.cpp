@@ -442,58 +442,53 @@ unsigned long CReader::GetSupportedAlgorithms()
 }
 
 CByteArray CReader::Sign(const tPrivKey & key, unsigned long algo,
-    const CByteArray & oData)
+		const CByteArray & oData)
 {
-    if (m_poCard == NULL)
-        throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+	if (m_poCard == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
 
 	unsigned long ulSupportedAlgos = m_poCard->GetSupportedAlgorithms();
 
-	if (algo & ulSupportedAlgos || GetCardType() == CARD_PTEID_IAS07)
-	    return m_poCard->Sign(key, GetPinByID(key.ulAuthID), algo, oData);
-	else
+	CByteArray oAID_Data;
+	if (algo & SIGN_ALGO_MD5_RSA_PKCS)
+		oAID_Data.Append(MD5_AID, sizeof(MD5_AID));
+	else if (algo & SIGN_ALGO_SHA1_RSA_PKCS)
+		oAID_Data.Append(SHA1_AID, sizeof(SHA1_AID));
+	else if (algo & SIGN_ALGO_SHA256_RSA_PKCS)
+		oAID_Data.Append(SHA256_AID, sizeof(SHA256_AID));
+	else if (algo & SIGN_ALGO_SHA384_RSA_PKCS)
+		oAID_Data.Append(SHA384_AID, sizeof(SHA256_AID));
+	else if (algo & SIGN_ALGO_SHA512_RSA_PKCS)
+		oAID_Data.Append(SHA512_AID, sizeof(SHA256_AID));
+	else if (algo & SIGN_ALGO_RIPEMD160_RSA_PKCS)
+		oAID_Data.Append(RIPEMD160_AID, sizeof(RIPEMD160_AID));
+	oAID_Data.Append(oData);
+
+	if (ulSupportedAlgos & SIGN_ALGO_RSA_PKCS)
 	{
-		CByteArray oAID_Data;
-		if (algo & SIGN_ALGO_MD5_RSA_PKCS)
-			oAID_Data.Append(MD5_AID, sizeof(MD5_AID));
-		else if (algo & SIGN_ALGO_SHA1_RSA_PKCS)
-			oAID_Data.Append(SHA1_AID, sizeof(SHA1_AID));
-		else if (algo & SIGN_ALGO_SHA256_RSA_PKCS)
-			oAID_Data.Append(SHA256_AID, sizeof(SHA256_AID));
-		else if (algo & SIGN_ALGO_SHA384_RSA_PKCS)
-			oAID_Data.Append(SHA384_AID, sizeof(SHA256_AID));
-		else if (algo & SIGN_ALGO_SHA512_RSA_PKCS)
-			oAID_Data.Append(SHA512_AID, sizeof(SHA256_AID));
-		else if (algo & SIGN_ALGO_RIPEMD160_RSA_PKCS)
-			oAID_Data.Append(RIPEMD160_AID, sizeof(RIPEMD160_AID));
-		oAID_Data.Append(oData);
-
-		if (ulSupportedAlgos & SIGN_ALGO_RSA_PKCS)
-		{
-			return m_poCard->Sign(key, GetPinByID(key.ulAuthID),
+		return m_poCard->Sign(key, GetPinByID(key.ulAuthID),
 				SIGN_ALGO_RSA_PKCS, oAID_Data);
-		}
-		else if (ulSupportedAlgos & SIGN_ALGO_RSA_RAW)
-		{
-			if (oAID_Data.Size() > key.ulKeyLenBytes - 11)
-			{
-				throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
-			}
-
-			CByteArray oRawData(NULL, 0, key.ulKeyLenBytes);
-
-			oRawData.Append(0x00);
-			oRawData.Append(0x01);
-			for (unsigned long i = 2; i < key.ulKeyLenBytes - oAID_Data.Size() - 1; i++)
-				oRawData.Append(0xFF);
-			oRawData.Append(0x00);
-			oRawData.Append(oAID_Data);
-
-			return m_poCard->Sign(key, GetPinByID(key.ulID), SIGN_ALGO_RSA_RAW, oData);
-		}
-		else
-			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	}
+	else if (ulSupportedAlgos & SIGN_ALGO_RSA_RAW)
+	{
+		if (oAID_Data.Size() > key.ulKeyLenBytes - 11)
+		{
+			throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
+		}
+
+		CByteArray oRawData(NULL, 0, key.ulKeyLenBytes);
+
+		oRawData.Append(0x00);
+		oRawData.Append(0x01);
+		for (unsigned long i = 2; i < key.ulKeyLenBytes - oAID_Data.Size() - 1; i++)
+			oRawData.Append(0xFF);
+		oRawData.Append(0x00);
+		oRawData.Append(oAID_Data);
+
+		return m_poCard->Sign(key, GetPinByID(key.ulID), SIGN_ALGO_RSA_RAW, oData);
+	}
+	else
+		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 }
 
 CByteArray CReader::Sign(const tPrivKey & key, unsigned long algo,
