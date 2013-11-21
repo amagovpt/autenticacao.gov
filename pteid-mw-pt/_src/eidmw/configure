@@ -195,7 +195,7 @@ if($javac_path ne $java_path)
 #############################################################
 ## other path for Mac for the default include path
 #############################################################
-$options{"--include"}->[2] = "/System/Library/Frameworks/PCSC.framework/Versions/A/Headers/ /Library/Frameworks/QtCore.framework/Versions/Current/Headers/ /Library/Frameworks/QtGui.framework/Versions/Current/Headers/"
+$options{"--include"}->[2] = "/System/Library/Frameworks/PCSC.framework/Versions/A/Headers/ /Library/Frameworks/QtCore.framework/Versions/Current/Headers/ /Library/Frameworks/QtGui.framework/Versions/Current/Headers/ /Library/Frameworks/QtNetwork.framework/Versions/Current/Headers/"
   unless($^O =~ m/linux/);
 
 $options{"--lib"} = ["library path",
@@ -415,6 +415,7 @@ if ($configOptionIdxEnd != -1)
     #substr($qmakeOptions,$configOptionIdx,($configOptionIdxEnd-$configOptionIdx))="";
     $qmakeOptions .= "\"CONFIG-=debug\"";
 }
+	$qmakeOptions .= " -spec macx-g++42";
 #############################################################
 ## for MAC OSX 10.4 the following parameter has to be set:
 ##    CONFIG+=osx10_4
