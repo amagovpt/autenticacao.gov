@@ -291,6 +291,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	int tsp_token_len = 0;
 	int auth_attr_len = 0;
 	unsigned int len = 0;
+	APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
 	
 
 	/* Use stronger SHA-256 Hash with IAS 1.01 applet, SHA-1 otherwise */
@@ -344,7 +345,6 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	cc01 = CByteArray(PTEID_CERTS[18].cert_data, PTEID_CERTS[18].cert_len);
 	cc02 = CByteArray(PTEID_CERTS[19].cert_data, PTEID_CERTS[19].cert_len);
 
-	APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
 
 	// Add issuer of Signature SubCA
 	if (fwk->isIssuer(certData2, cc01))

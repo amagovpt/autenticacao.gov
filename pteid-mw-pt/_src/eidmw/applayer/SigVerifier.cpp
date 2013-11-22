@@ -789,12 +789,13 @@ SigVerifyErrorCode SignatureVerifier::ValidateXades(CByteArray signature, tHashe
 				const XMLCh *pem_cert = cert_element->getCertificateItem(0);
 				char * tmp_cert = XMLString::transcode(pem_cert);
 			
-				bool cert_result = ValidateCert(tmp_cert);
+	/*			bool cert_result = ValidateCert(tmp_cert);
 
 				if (!cert_result)
 				{
 					return XADES_ERROR_INVALID_CERTIFICATE;
 				}
+				*/
 
 				
 				XMLString::release(&tmp_cert);
