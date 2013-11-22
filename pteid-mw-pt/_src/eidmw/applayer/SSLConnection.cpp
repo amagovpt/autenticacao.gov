@@ -370,10 +370,7 @@ char * SSLConnection::do_OTP_2ndpost(char *cookie, OTPParams *params)
 
 	char * otp_params = FormatOtpParameters(params);
 
-	MWLOG(LEV_ERROR, MOD_APL, L"OTP Params: %s", otp_params);
-
 	char * server_response = Post(cookie, "/CAPPINChange/sendParameters", otp_params);
-	MWLOG(LEV_ERROR, MOD_APL, L"2nd Post: %s", (const char *)server_response);
 	//Build the full request
 	return parseToken(server_response, "\"apdu\":\"");
 
@@ -390,7 +387,6 @@ void SSLConnection::do_OTP_3rdpost(char *cookie, const char *changepin_card_resp
 			changepin_card_response);
 
 	server_response = Post(cookie, "/CAPPINChange/sendChangePINResponse", request_body);
-	MWLOG(LEV_ERROR, MOD_APL, L"3rd Post: %s", (const char *)server_response);
 	//TODO: We should at least check for an HTTP 200 return code
 
 }
@@ -403,7 +399,6 @@ char * SSLConnection::do_OTP_4thpost(char *cookie, OTPParams *params)
 
 	char * server_response = Post(cookie, "/CAPPINChange/sendResetScriptCounterParameters", otp_params);
 
-	MWLOG(LEV_ERROR, MOD_APL, L"4th Post: %s", (const char *)server_response);
 	return parseToken(server_response, "\"cdol2\":\"");
 
 }
