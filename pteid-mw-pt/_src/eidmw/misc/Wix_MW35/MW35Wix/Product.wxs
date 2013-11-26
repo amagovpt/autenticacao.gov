@@ -4,8 +4,8 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <?include ..\..\..\svn_revision.wxs ?>
 
-  <?define var.OfficialProductVersion =2.1.2?>
-  <?define var.ProductVersion = 2.1.$(var.RevisionNumber)?>
+  <?define var.OfficialProductVersion =2.2.0?>
+  <?define var.ProductVersion = 2.2.$(var.RevisionNumber)?>
   <?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
   <?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
@@ -522,8 +522,8 @@
       </Component>
 
       <Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
-        <File Id="libeay32.dll" Name="libeay32.dll" KeyPath="yes" Source="$(var.PTEID_DIR_OPENSSL_098G)\bin\libeay32.dll" />
-        <File Id="ssleay32.dll" Name="ssleay32.dll" KeyPath="no" Source="$(var.PTEID_DIR_OPENSSL_098G)\bin\ssleay32.dll" />
+        <File Id="libeay32.dll" Name="libeay32.dll" KeyPath="yes" Source="$(var.PTEID_DIR_OPENSSL_098G)\bin\libeay32_098_25.dll" />
+        <File Id="ssleay32.dll" Name="ssleay32.dll" KeyPath="no" Source="$(var.PTEID_DIR_OPENSSL_098G)\bin\ssleay32_098_25.dll" />
       </Component>
 
       <Component Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
@@ -599,6 +599,16 @@
           <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
           <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
         </RegistryKey>
+
+		  <RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
+						Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (GemSafe)" />
+		  <RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
+			  Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS)" />
+		  <RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
+			  Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (GemSafe) 1"/>
+		  <RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
+			  Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS) 1"/>
+		  
       </Component>
 
       <Component Id="REGISTERCSP" Guid="{3DF6D19A-C268-4D97-B605-1F3E29DC15DC}">
