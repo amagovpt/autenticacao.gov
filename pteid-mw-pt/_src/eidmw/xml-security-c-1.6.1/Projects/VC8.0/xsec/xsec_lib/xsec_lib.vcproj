@@ -327,7 +327,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="xerces-c_3.lib crypt32.lib libeay32.lib"
+				AdditionalDependencies="xerces-c_3.lib crypt32.lib libeay32_098_25.lib"
 				OutputFile="C:\Users\a\pteid-mw-pt\_src\eidmw\_Binaries35\x64\release\xsec_1_6.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;C:\Users\a\Downloads\xerces-c-3.1.1\lib&quot;;&quot;$(PTEID_DIR_OPENSSL_098G)\lib&quot;"
