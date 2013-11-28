@@ -169,7 +169,7 @@ namespace eIDMW
 
 		m_civil_number = data_serial;
 		m_citizen_fullname = data_common_name;
-
+		X509_free(x509);
 	}
 
 	int PDFSignature::getPageCount()
@@ -320,11 +320,13 @@ namespace eIDMW
 		bool incremental = doc->isSigned() || doc->isReaderEnabled();
 
 		doc->prepareSignature(incremental, &sig_location, m_citizen_fullname, m_civil_number,
-				location, reason, m_page, m_sector);
+			location, reason, m_page, m_sector);
 		unsigned long len = doc->getSigByteArray(&to_sign, incremental);
-		
-                int rc = pteid_sign_pkcs7(m_card, to_sign, len, m_timestamp, &signature_contents);
 
+		int rc = pteid_sign_pkcs7(m_card, to_sign, len, m_timestamp, &signature_contents);
+
+		if (to_sign)
+			free(to_sign);
 		doc->closeSignature(signature_contents);
 
 		int final_ret = 0;
