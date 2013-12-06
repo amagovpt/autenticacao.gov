@@ -86,12 +86,20 @@ void SSLConnection::loadUserCert(SSL_CTX *ctx)
 	APL_Card *card = AppLayer.getReader().getCard();
 	CByteArray user_cert;
 	card->readFile(PTEID_FILE_CERT_AUTHENTICATION, user_cert);
-	const unsigned char *p = user_cert.GetBytes();
 
-	X509 * cert = d2i_X509(NULL, &p, user_cert.Size());
+	//const unsigned char *p = user_cert.GetBytes();
 
-	if (cert != NULL) 
-		SSL_CTX_use_certificate(ctx, cert);
+	//X509 * cert = d2i_X509(NULL, &p, user_cert.Size());
+
+	//if (cert != NULL) 
+	//	SSL_CTX_use_certificate(ctx, cert);
+	int ret = SSL_CTX_use_certificate_ASN1(ctx, user_cert.Size(), user_cert.GetBytes());
+
+	if (ret != 1)
+	{
+		fprintf(stderr, "Error loading auth certificate for SSL handshake!\n");
+		ERR_print_errors_fp(stderr);
+	}
 
 }
 
@@ -228,12 +236,13 @@ void print_ssl_error(char* message, FILE* out) {
  */
 void init_openssl() {
 
+    OpenSSL_add_all_algorithms();
     /* call the standard SSL init functions */
     SSL_library_init();
     SSL_load_error_strings();
 
     ERR_load_BIO_strings();
-    OpenSSL_add_all_algorithms();
+
 
 }
 
@@ -241,7 +250,7 @@ char *FormatOtpParameters (OTPParams *otp)
 {
 	char *params = (char *)malloc(1000);
 
-	sprintf (params, "{\"PinPafUpdate\":{\"pan\":\"%s\",\"pin\":\"%s\",\"panseqnumber\":\"%s\",\"cdol1\":\"%s\",\"atc\":\"%s\",\"arqc\":\"%s\",\"counter\":%s,\"pintrycounter\":%s}}", otp->pan, otp->pin, otp->pan_seq_nr, otp->cdol1, otp->atc, otp->arqc, otp->counter, otp->pin_try_counter);
+	sprintf (params, "{\r\n\t\"PinPafUpdate\" :\r\n\t{\r\n\t\t\"pin\" : \"%s\",\r\n\t\t\"pan\" : \"%s\",\r\n\t\t\"panseqnumber\" : \"%s\",\r\n\t\t\"cdol1\" : \"%s\",\r\n\t\t\"atc\" : \"%s\",\r\n\t\t\"arqc\" : \"%s\",\r\n\t\t\"counter\" : %s,\r\n\t\t\"pintrycounter\" : %x\r\n\t}\r\n}\r\n", otp->pin, otp->pan, otp->pan_seq_nr, otp->cdol1, otp->atc, otp->arqc, otp->counter, otp->pin_try_counter);
 	
 	return params;
 }
@@ -251,7 +260,7 @@ char *FormatResetSCParameters(OTPParams* otp)
 
 	char *params = (char *)malloc(1000);
 
-	sprintf(params, "{\"OnlineTransactionParameters\" : {\"pan\":\"%s\",\"pin\":\"%s\",\"panseqnumber\":\"%s\",\"cdol1\":\"%s\",\"atc\":\"%s\",\"arqc\":\"%s\",\"counter\":%s,\"pintrycounter\":%s}}", otp->pan, otp->pin, otp->pan_seq_nr, otp->cdol1, otp->atc, otp->arqc, otp->counter, otp->pin_try_counter);
+	sprintf(params, "{\"OnlineTransactionParameters\" : {\"pan\":\"%s\",\"panseqnumber\":\"%s\",\"cdol1\":\"%s\",\"atc\":\"%s\",\"arqc\":\"%s\",\"counter\":%s\r\n}}", otp->pan, otp->pan_seq_nr, otp->cdol1, otp->atc, otp->arqc, otp->counter);
 
 	return params;
 
@@ -294,8 +303,7 @@ char *parseCookie(char *server_response)
 	    MWLOG(LEV_ERROR, MOD_APL, L"parseCookie() failed!");
 	    return NULL;
 	}
-
-	char * end_of_cookie = strchr(substr, '\n');
+	char * end_of_cookie = strchr(substr, '\r');
 	size_t cookie_len = end_of_cookie - substr;
 
 	char * cookie = (char *)malloc(cookie_len+1);
@@ -328,7 +336,7 @@ char *parseToken(char * server_response, const char * token)
 }
 
 
-#define REPLY_BUFSIZE 10000
+#define REPLY_BUFSIZE 100000
 /*
  * The return value of this method will be the cookie set by the server
  * if the connection is successfull
@@ -336,6 +344,7 @@ char *parseToken(char * server_response, const char * token)
 char * SSLConnection::do_OTP_1stpost()
 {
 	char * cookie = NULL;
+	int ret_channel = 0;
 	char * request_headers = (char *) calloc(1000, sizeof(char));
 
 	snprintf(request_headers, 1000,	
@@ -344,13 +353,15 @@ char * SSLConnection::do_OTP_1stpost()
     	char * request_body = "{\"Connect\" : {}}";
 	char * server_response = (char *) malloc(REPLY_BUFSIZE);
 
-	write_to_stream(m_ssl_connection, request_headers);
-	write_to_stream(m_ssl_connection, request_body);
+	ret_channel = write_to_stream(m_ssl_connection, request_headers);
+//	fprintf(stderr, "Wrote to channel: %d bytes\n", ret_channel);
+	ret_channel = write_to_stream(m_ssl_connection, request_body);
+//	fprintf(stderr, "Wrote to channel: %d bytes\n", ret_channel);
 
 	//Read response
 	unsigned int ret = read_from_stream(m_ssl_connection, server_response, REPLY_BUFSIZE);
 
-	//fprintf(stderr, "Server reply: \n%s\n", server_response);
+//	fprintf(stderr, "Server reply: \n%s\n", server_response);
 
 	if (ret > 0)
 	{
@@ -366,11 +377,10 @@ char * SSLConnection::do_OTP_1stpost()
 
 char * SSLConnection::do_OTP_2ndpost(char *cookie, OTPParams *params)
 {
-	
-
 	char * otp_params = FormatOtpParameters(params);
-
-	char * server_response = Post(cookie, "/CAPPINChange/sendParameters", otp_params);
+	//fprintf(stderr, "%s\n", otp_params);
+	char * server_response = "";
+	server_response = Post(cookie, "/CAPPINChange/sendParameters", otp_params);
 	//Build the full request
 	return parseToken(server_response, "\"apdu\":\"");
 
@@ -412,12 +422,14 @@ void SSLConnection::do_OTP_5thpost(char *cookie, const char *reset_scriptcounter
 	snprintf (request_body, 200, body_template, reset_scriptcounter_response);
 
 	server_response = Post(cookie, "/CAPPINChange/resetScriptCounterResponse", request_body);
-	//TODO: We should at least check for an HTTP 200 return code
+	//TODO: We should at least check for an HTTP 200 return code but we currently
+	//dont because the server is erroneously returning error 500
 
 }
 
 char * SSLConnection::Post(char *cookie, char *url_path, char *body)
 {
+	int ret_channel = 0;
 
 	char * request_template= "POST %s HTTP/1.1\r\nHost: %s\r\nKeep-Alive: 300\r\nContent-Type: text/plain; charset=UTF-8\r\nCookie: %s\r\nContent-Length: %d\r\n\r\n";
 	char * server_response = (char *) malloc(REPLY_BUFSIZE);
@@ -427,18 +439,18 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body)
 	snprintf (request_headers, 1000, request_template, url_path, m_otp_host,
 			cookie, strlen(body));
 
-	//fprintf(stderr, "DEBUG: Sending POST Headers: \n%s\n", request_headers);
-	write_to_stream(m_ssl_connection, request_headers);
+//	fprintf(stderr, "DEBUG: Sending POST Headers: \n%s\n", request_headers);
+	ret_channel = write_to_stream(m_ssl_connection, request_headers);
 
-	//fprintf(stderr, "DEBUG: Sending POST Body: \n%s\n", body);
+//	fprintf(stderr, "DEBUG: Sending POST Body: \n%s\n", body);
 
-	write_to_stream(m_ssl_connection, body);
+	ret_channel = write_to_stream(m_ssl_connection, body);
 
 	//Read response
 	unsigned int ret = read_from_stream(m_ssl_connection, server_response, REPLY_BUFSIZE);
 
-	if (ret == 0)
-	   ERR_print_errors_fp(stderr); //Connection aborted by server
+//	if (ret == 0)
+//	   ERR_print_errors_fp(stderr); //Connection aborted by server
 
 	//fprintf(stderr, "Server reply: \n%s\n", server_response);
 
@@ -459,27 +471,11 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
 
     SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
 
-    RSA *rsa = RSA_new();
-
-    rsa->flags |= RSA_FLAG_SIGN_VER;
-
-    
-    RSA_METHOD *current_method = (RSA_METHOD *)RSA_PKCS1_SSLeay();
-    current_method->rsa_sign = eIDMW::rsa_sign;
-    current_method->flags |= RSA_FLAG_SIGN_VER;
-    current_method->flags |= RSA_METHOD_FLAG_NO_CHECK;
-
-    RSA_set_method(rsa, current_method);
 
     //NOTE: to get more debug output from the SSL layer uncomment this
     //SSL_CTX_set_info_callback(ctx, eIDMW::get_ssl_state_callback);
-    if (SSL_CTX_use_RSAPrivateKey(ctx, rsa) != 1)
-    {
-        fprintf(stderr, "SSL_CTX_use_RSAPrivateKey failed!");
-        return NULL;
-    }
 
-    loadUserCert(ctx);	
+    loadUserCert(ctx);
 
     X509_STORE *store = SSL_CTX_get_cert_store(ctx);
 
@@ -489,17 +485,34 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
 			NULL, "/etc/ssl/certs")))
 	fprintf(stderr, "Can't read CA list\n");
 	
-    /* 
-     * WARNING: the next line should be commented out to properly verify the server certificates      
-     * We leave it like this because the current production server has one expired certificate
-     * and we can't do much about it...
-     */
+    SSL_CTX_set_options(ctx, SSL_OP_NO_TICKET | SSL_OP_NO_SSLv2);
     SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
 
     bio = BIO_new_connect(host_and_port);
-
+    if (BIO_do_connect(bio) <= 0) {
+	    fprintf(stderr, "Error connecting to OTP server\n");
+	    ERR_print_errors_fp(stderr);
+    }
     SSL *ssl_handle = SSL_new(ctx);
     SSL_set_bio (ssl_handle, bio, bio);
+
+    RSA *rsa = RSA_new();
+
+    rsa->flags |= RSA_FLAG_SIGN_VER;
+
+    RSA_METHOD *current_method = (RSA_METHOD *)RSA_PKCS1_SSLeay(); 
+    current_method->rsa_sign = eIDMW::rsa_sign;
+    current_method->flags |= RSA_FLAG_SIGN_VER;
+    current_method->flags |= RSA_METHOD_FLAG_NO_CHECK;
+
+    RSA_set_method(rsa, current_method);
+
+    if (SSL_use_RSAPrivateKey(ssl_handle, rsa) != 1)
+    {
+        fprintf(stderr, "SSL_CTX_use_RSAPrivateKey failed!");
+        return NULL;
+    }
+
 
     SSL_set_connect_state(ssl_handle);
 
@@ -530,7 +543,7 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned in
     {
 	    // We're using blocking IO so SSL_Write either succeeds completely or not...
 	    r = SSL_read(ssl, buffer+bytes_read, buffer_length-bytes_read);
-	    if (bytes_read == 0)
+	    if (r > 0 && bytes_read == 0)
 	    {
 		   
 		    header_len = r;
@@ -538,8 +551,18 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned in
 		    strcpy(buffer_tmp, buffer);
 		    content_length = parseContentLength(buffer_tmp);
 	    }
+	    if (r == -1)
+	    {
+		if (SSL_get_error(ssl, r) == SSL_ERROR_WANT_READ)
+		{
+			fprintf(stderr, "SSL_ERROR_WANT_READ\n!");
+			continue;
+		}
+		else
+			fprintf(stderr, "???\n");
+	    }
 
-	    if (r <= 0) {
+	    else if (r == 0) {
 
 		    translate_ssl_error(ssl, r);
 
@@ -547,7 +570,7 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned in
 	    else
 		    bytes_read += r;
     }
-    while( bytes_read - header_len  < content_length );
+    while(bytes_read == 0 || bytes_read - header_len  < content_length );
 
     if (bytes_read > 0)
 	    buffer[bytes_read] = '\0';

@@ -187,22 +187,28 @@ bool APL_Card::ChangeCapPin(const char * new_pin)
 	// TODO and notes: Detect usage of Pinpad readers (we'll need to do an unsecure PIN verify)
 	// and cases where the PINs will be asked interactively 
 	char *encrypted_apdu = NULL;
+	CByteArray token_info_data;
 	const unsigned char IAS_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x01, 0x02};
 	const unsigned char GEMSAFE_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
 
 	//Establish SSL Connection with otp server to get the CAP PIN Change APDU
 	SSLConnection conn;
-
+	
 	char* cookie = conn.do_OTP_1stpost();
 
 	if (cookie == NULL)
 		throw CMWEXCEPTION(EIDMW_OTP_PROTOCOL_ERROR);
 
+	this->readFile(PTEID_FILE_TOKENINFO, token_info_data);
+	CByteArray PAN = token_info_data.GetBytes(7, 8);
+	std:string pan_string = PAN.ToString(false);
+
 	//Get OTP Params from EMV-Applet
 	OTPParams otp_params, otp_params2;
-	EMVCapHelper cap_helper(this);
+	EMVCapHelper cap_helper(this, new_pin);
 	cap_helper.getOtpParams(&otp_params);
 	otp_params.pin = (char*)new_pin;
+	strcpy(otp_params.pan, pan_string.c_str());
 
 	encrypted_apdu = conn.do_OTP_2ndpost(cookie, &otp_params);
 
@@ -210,27 +216,24 @@ bool APL_Card::ChangeCapPin(const char * new_pin)
 	{
 		char * response_code = cap_helper.changeCapPin(encrypted_apdu);
 		conn.do_OTP_3rdpost(cookie, response_code);
-		//Reset script counter only needed for Gemsafe Cards
-		if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
-		{
 
-			EMVCapHelper new_cap_helper(this);
-			new_cap_helper.getOnlineTransactionParams(&otp_params2);
-			otp_params2.pin = (char*)new_pin;
-			char *cdol2 = conn.do_OTP_4thpost(cookie, &otp_params2);
+		EMVCapHelper new_cap_helper(this, new_pin);
+		new_cap_helper.getOnlineTransactionParams(&otp_params2);
+		otp_params2.pin = (char*)new_pin;
+		strcpy(otp_params2.pan, pan_string.c_str());
 
-			char *reset_response_code = new_cap_helper.resetScriptCounter(cdol2);
-			conn.do_OTP_5thpost(cookie, reset_response_code);
-		}
+		char *cdol2 = conn.do_OTP_4thpost(cookie, &otp_params2);
+
+		char *reset_response_code = new_cap_helper.resetScriptCounter(cdol2);
+		conn.do_OTP_5thpost(cookie, reset_response_code);
 
 	}
 	else
 		throw CMWEXCEPTION(EIDMW_OTP_PROTOCOL_ERROR);
-
-	//Re-select the IAS applet before returning
-	bool IsGemsafe = this->getType() == APL_CARDTYPE_PTEID_IAS07;
 	CByteArray Cmd;
-
+	 //Re-select the IAS applet before returning
+        bool IsGemsafe = this->getType() == APL_CARDTYPE_PTEID_IAS07;
+ 
 	Cmd.Append(0x00);
 	Cmd.Append(0xA4); 
 	Cmd.Append(0x04);

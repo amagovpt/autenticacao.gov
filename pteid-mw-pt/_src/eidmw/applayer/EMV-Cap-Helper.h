@@ -25,14 +25,14 @@ char *cdol1;
 char *atc;
 char *pan_seq_nr;
 char *counter;
-char *pin_try_counter;
+unsigned char pin_try_counter;
 
 };
 
 class EMVCapHelper
 {
 public:
-	EMVCapHelper(APL_Card *card);
+	EMVCapHelper(APL_Card *card, const char *new_pin);
 	/**
 	  * Destructor
 	  */
@@ -50,6 +50,8 @@ private:
 	char *m_pan;
 	char *m_arqc;
 	char *m_atc;
+	unsigned char m_trycounter;
+	const char *m_new_pin;
 };
 
 }
