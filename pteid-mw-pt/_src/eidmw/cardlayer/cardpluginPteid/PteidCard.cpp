@@ -485,37 +485,39 @@ int consoleAskForPin(tPinOperation operation, const tPin &Pin,
     }
 
     printf("Please introduce your %s: ", Pin.csLabel.c_str());
-    fgets(password, sizeof(password), stdin);
-		//Delete trailing newline
-		password[strlen(password)- 1] = 0;
+    if (fgets(password, sizeof(password), stdin) == NULL)
+	    return EXIT_FAILURE;
+    //Delete trailing newline
+    password[strlen(password)- 1] = 0;
 
-		/* restore terminal */
-		if (tcsetattr(fileno(stdin), TCSANOW, &oflags) != 0) {
-						perror("tcsetattr");
-						return EXIT_FAILURE;
-		}
+    /* restore terminal */
+    if (tcsetattr(fileno(stdin), TCSANOW, &oflags) != 0) {
+	    perror("tcsetattr");
+	    return EXIT_FAILURE;
+    }
 
-		strcpy(sPin1, password);
+    strcpy(sPin1, password);
 
-		if (operation == PIN_OP_CHANGE)
-		{
-						memset(password, 0, sizeof(password)); 
-						printf("New PIN: ");
-						if (tcsetattr(fileno(stdin), TCSANOW, &nflags) != 0) {
-										perror("tcsetattr");
-										return EXIT_FAILURE;
-						}
+    if (operation == PIN_OP_CHANGE)
+    {
+	    memset(password, 0, sizeof(password)); 
+	    printf("New PIN: ");
+	    if (tcsetattr(fileno(stdin), TCSANOW, &nflags) != 0) {
+		    perror("tcsetattr");
+		    return EXIT_FAILURE;
+	    }
 
-						fgets (password, sizeof(password), stdin);
-						//Delete trailing newline
-						password[strlen(password)- 1] = 0;
+	    if (fgets(password, sizeof(password), stdin) == NULL)
+		    return EXIT_FAILURE;
+	    //Delete trailing newline
+	    password[strlen(password)- 1] = 0;
 
-						if (tcsetattr(fileno(stdin), TCSANOW, &oflags) != 0) {
-										perror("tcsetattr");
-										return EXIT_FAILURE;
-						}
-						strcpy(sPin2, password);
-		}
+	    if (tcsetattr(fileno(stdin), TCSANOW, &oflags) != 0) {
+		    perror("tcsetattr");
+		    return EXIT_FAILURE;
+	    }
+	    strcpy(sPin2, password);
+    }
 
 }
 
@@ -548,14 +550,14 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 #ifdef __linux__
 	if (!detectXorgRunning())
 	{
-			char *sPin1 = new char[PIN_MAX_LENGTH +1];
-		  char *sPin2 = new char[PIN_MAX_LENGTH +1];
-			consoleAskForPin(operation, Pin, sPin1, sPin2);
+		char *sPin1 = new char[PIN_MAX_LENGTH +1];
+		char *sPin2 = new char[PIN_MAX_LENGTH +1];
+		consoleAskForPin(operation, Pin, sPin1, sPin2);
 
-			csPin1 = std::string(sPin1);
-			csPin2 = std::string(sPin2);
+		csPin1 = std::string(sPin1);
+		csPin2 = std::string(sPin2);
 
-			return;
+		return;
 	}
 	else
 	{
