@@ -5,7 +5,7 @@
     <ProductVersion>3.0</ProductVersion>
     <ProjectGuid>{13ba0068-a852-4123-84d8-ed786d196991}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>Pteid-MW-2.1.2-PT-x64</OutputName>
+    <OutputName>Pteid-MW-2.2-PT-x64</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <Name>PteidMW35_64_pt</Name>
