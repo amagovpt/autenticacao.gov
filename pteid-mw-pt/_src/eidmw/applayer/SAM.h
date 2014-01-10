@@ -1,0 +1,60 @@
+#ifndef SAMMY_H_
+#define SAMMY_H_
+
+
+namespace eIDMW
+{
+
+struct DHParams
+{
+
+char *dh_p;
+char *dh_q;
+char *dh_g;
+char *cvc_ca_public_key;
+char *card_auth_public_key;
+char *certificateChain;
+unsigned int version;
+
+};
+
+struct DHParamsResponse
+{
+	char *kifd;
+	char *cv_ifd_aut;
+
+};
+
+struct SignedChallengeResponse
+{
+	char *signed_challenge;
+	char *internal_auth;
+	char *set_se_command;
+};
+
+class SAM
+{
+
+public:
+	SAM(APL_Card *card);
+
+	bool getDHParams(DHParams *otp_struct);
+	bool verifyCVCCertificate(const char *cvc_certificate_hex);
+	bool verifySignedChallenge(char *signed_challenge);
+	bool sendKIFD(char *kifd);
+	char *getKICC();
+	bool verifyCert_CV_IFD(char * cv_cert);
+	char *generateChallenge();
+
+private:
+	char * _getDH_Param(char specific_byte, unsigned long offset);
+	char *_getCVCPublicKey();
+	char *_getCardAuthPublicKey();
+	char * _getSODCert();
+    APL_Card *m_card;
+};
+
+
+}
+
+#endif

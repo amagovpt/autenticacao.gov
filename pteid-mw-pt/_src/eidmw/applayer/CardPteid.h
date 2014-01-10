@@ -436,7 +436,7 @@ friend 	APL_EidFile_AddressSign *APL_EIDCard::getFileAddressSign();	/**< This me
 };
 
 /******************************************************************************//**
-  * Class that represent the file containing the SOD on a PTID card
+  * Class that represent the file containing the SOD on a PTEID card
   *
   * This class is for internal use in APL_EIDCard
   *

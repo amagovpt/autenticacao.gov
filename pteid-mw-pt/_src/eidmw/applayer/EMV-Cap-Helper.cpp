@@ -142,7 +142,7 @@ void EMVCapHelper::GetPan()
  */
 char *getEMVPinBlock(const char *pin)
 {
-
+	char tmp[2];
 	char * buffer = (char*)malloc(8);
 
 	int i = 0;
@@ -155,7 +155,6 @@ char *getEMVPinBlock(const char *pin)
 	int high_nibble = 1;
 	for(; i < strlen(pin); i++)
 	{
-		char * tmp = (char*)malloc(2);
 		tmp[0] = pin[i];
 		tmp[1] = 0;
 		digit = atoi(tmp);

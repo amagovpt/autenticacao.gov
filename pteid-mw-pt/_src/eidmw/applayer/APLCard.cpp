@@ -181,6 +181,31 @@ CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const
 	return signature;
 }
 
+bool APL_Card::ChangeAddress(char *secret_code, char *process)
+{
+	SAM sam_helper(this);
+
+	DHParams dh_params;
+
+	sam_helper.getDHParams(&dh_params);
+
+	SSLConnection conn;
+
+	DHParamsResponse *p1 = conn.do_SAM_1stpost(&dh_params, secret_code, process);
+
+	sam_helper.sendKIFD(p1->kifd);
+	char * kicc = sam_helper.getKICC();
+
+	sam_helper.verifyCert_CV_IFD(p1->cv_ifd_aut);
+
+	char *challenge = sam_helper.generateChallenge();
+
+	conn.do_SAM_2ndpost(challenge, kicc);
+
+
+
+}
+
 bool APL_Card::ChangeCapPin(const char * new_pin)
 {
 

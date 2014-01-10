@@ -1,10 +1,11 @@
 /* ****************************************************************************
  *
  *  PTeID Middleware Project.
- *  Copyright (C) 2011-2012
+ *  Copyright (C) 2011-2014
  *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *
  *  HTTPS Client with Client Certificate Authentication for PT-eID Middleware
+ *  It provides the communication protocol with the OTP and Address Change HTTPS WebServices
  *
 */
 #include "SSLConnection.h"
@@ -15,6 +16,7 @@
 #include "Log.h"
 #include "static_pteid_certs.h"
 #include "CardPteidDef.h"
+#include "cJSON.h"
 
 /* Standard headers */
 #include <stdlib.h>
@@ -293,6 +295,20 @@ unsigned long parseContentLength(char * headers)
 	return content_length;
 }
 
+char *skipHTTPHeaders(char *http_reply)
+{
+	char *needle = strstr(http_reply, "\r\n\r\n");
+	if (needle)
+	{
+		return needle + 4;
+	}
+	else
+	{
+		fprintf(stderr, "Malformed HTTP reply!:\n%s\n", http_reply);
+		return NULL;
+	}
+}
+
 char *parseCookie(char *server_response)
 {
 
@@ -372,6 +388,98 @@ char * SSLConnection::do_OTP_1stpost()
 	}
 
 	return cookie;
+
+}
+
+SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *kicc)
+{
+	cJSON *json = NULL;
+	SignedChallengeResponse *result = new SignedChallengeResponse();
+	const char *challenge_format = "{\"Challenge\":{ \"challenge\" : \"%s\", \"kicc\" : \"%s\", \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
+	char *challenge_params = (char *) malloc(5*1024);
+
+	sprintf(challenge_params, challenge_format, challenge, kicc);
+	fprintf(stderr, "POSTing JSON %s\n", challenge_params);
+	char *server_response = Post(this->m_session_cookie, "/changeaddress/signChallenge", challenge_params);
+
+	char *body = skipHTTPHeaders(server_response);
+	fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
+
+	json=cJSON_Parse(server_response);
+	cJSON *my_json = json->child;
+	if (!json) {fprintf(stderr, "Error before: [%s]\n",cJSON_GetErrorPtr()); return NULL;}
+	else
+	{
+		cJSON *child = cJSON_GetObjectItem(my_json, "signedChallenge");
+		result->signed_challenge = child->valuestring;
+		child = cJSON_GetObjectItem(my_json, "InternalAuthenticateCommand")->child;
+		result->internal_auth = child->valuestring;
+		child = cJSON_GetObjectItem(my_json, "SetSECommand")->child;
+		result->set_se_command = child->valuestring;
+
+		return result;
+	}
+
+	return NULL;
+}
+
+DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, char *process)
+{
+	int ret_channel = 0;
+	cJSON *json = NULL;
+	DHParamsResponse *server_params = new DHParamsResponse();
+	char *dh_params_template = "{\"DHParams\":{ \"secretCode\" : \"%s\", \"process\" : \"%s\", \"P\": \"%s\", \"Q\": \"%s\", \"G\":\"%s\", \"cvc_ca_public_key\": \"%s\",\"card_auth_public_key\": \"%s\", \"certificateChain\": \"%s\", \"version\": %d, \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
+	char * post_dhparams = (char *) malloc(5*1024);
+	char request_headers[1000];
+
+	sprintf(post_dhparams, dh_params_template,
+	secretCode, process, p->dh_p, p->dh_q, p->dh_g, p->cvc_ca_public_key,
+	p->card_auth_public_key, p->certificateChain, p->version);
+
+	snprintf(request_headers, sizeof(request_headers),	
+    "POST /changeaddress/sendDHParams HTTP/1.1\r\nHost: %s\r\nKeep-Alive: 300\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Length: %lu\r\n\r\n",
+    	m_otp_host, strlen(post_dhparams));
+
+	char * server_response = (char *) malloc(REPLY_BUFSIZE);
+
+	fprintf(stderr, "POSTing JSON %s\n", post_dhparams);
+
+	ret_channel = write_to_stream(m_ssl_connection, request_headers);
+	fprintf(stderr, "Wrote to channel: %d bytes\n", ret_channel);
+	ret_channel = write_to_stream(m_ssl_connection, post_dhparams);
+	fprintf(stderr, "Wrote to channel: %d bytes\n", ret_channel);
+
+	//Read response
+	unsigned int ret = read_from_stream(m_ssl_connection, server_response, REPLY_BUFSIZE);
+
+	fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
+
+	if (ret > 0)
+	{
+		m_session_cookie = parseCookie(server_response);
+		if (m_session_cookie == NULL)
+			//Catch renegotiation errors (e.g. using test cards)
+			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+	}
+
+	char *body = skipHTTPHeaders(server_response);
+
+	json = cJSON_Parse(body);
+	cJSON *my_json = json->child;
+	if (my_json == NULL)
+	{
+		fprintf(stderr, "OMG this will Blow up in no time!!\n");
+		return NULL;
+	}
+
+	cJSON *child = cJSON_GetObjectItem(my_json, "kifd");
+	if (child)
+		server_params->kifd = child->valuestring;
+	child = cJSON_GetObjectItem(my_json, "c_cv_ifd_aut");
+	if (child)
+		server_params->cv_ifd_aut = child->valuestring;
+
+	return server_params;
 
 }
 
@@ -601,9 +709,12 @@ unsigned int SSLConnection::write_to_stream(SSL* ssl, char* request_string) {
 bool SSLConnection::InitConnection()
 {
 
-    APL_Config otp_server(CConfig::EIDMW_CONFIG_PARAM_GENERAL_OTP_SERVER);
+    APL_Config otp_server(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER);
+    // APL_Config otp_server(CConfig::EIDMW_CONFIG_PARAM_GENERAL_OTP_SERVER);
     std::string otp_server_str = otp_server.getString();
     char * host_and_port = (char *)otp_server_str.c_str();
+
+
 
     //Split hostname and port
     m_otp_host = (char *)malloc(strlen(host_and_port)+1);

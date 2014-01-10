@@ -8,6 +8,7 @@
 
 #include "APLCard.h"
 #include "APLReader.h"
+#include "SAM.h"
 #include "EMV-Cap-Helper.h"
 #include "Export.h"
 
@@ -32,9 +33,17 @@ class SSLConnection
 		{
 		CloseConnection();
 		};
+
+		/* The following functions implement the communication protocol for the Address Change process */
+
+		SignedChallengeResponse *do_SAM_2ndpost(char *challenge, char *kicc);
+		//Returns the session cookie
+		DHParamsResponse *do_SAM_1stpost(DHParams *params, char *secretCode, char *process);
 		
-		//The following functions implement the communication protocol with the OTP server
+		/* The following functions implement the communication protocol with the OTP server */
 		char * do_OTP_1stpost();
+
+		//Returns encrypted EMV-CAP changePin APDU
 		char * do_OTP_2ndpost(char * cookie, OTPParams *params);
 		void do_OTP_3rdpost(char *cookie, const char *change_pin_response);
 		char * do_OTP_4thpost(char *cookie, OTPParams *params);
@@ -53,6 +62,7 @@ class SSLConnection
 		void loadUserCert(SSL_CTX *ctx);
 		void loadCertChain(X509_STORE *store);
 
+		char *m_session_cookie;
 
 		RSA *current_private_key;
 		//BIO *m_bio;

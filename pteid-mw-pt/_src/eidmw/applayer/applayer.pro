@@ -86,6 +86,7 @@ HEADERS += \
 	XadesSignature.h \
 	TSAClient.h \
 	SODParser.h \ 
+	cJSON.h \
         EMV-Cap-Helper.h \
 	SigVerifier.h \
  	SSLConnection.h \	 
@@ -113,10 +114,12 @@ SOURCES += \
 	static_pteid_certs.cpp \
 	SigVerifier.cpp \
 	sign-pkcs7.cpp \
+	cJSON.c \
 	cmp_asn1.c \
 	tsp_asn1.c \
 	tsproto.c \
 	PDFSignature.cpp \
+	SAM.cpp \
 	EMV-Cap-Helper.cpp \
 
 # Disable annoying and mostly useless gcc warning
