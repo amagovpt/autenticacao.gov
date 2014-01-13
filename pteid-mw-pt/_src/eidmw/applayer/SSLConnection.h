@@ -21,13 +21,20 @@ namespace eIDMW
 
 int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 	                unsigned char *sigret, unsigned int *siglen, const RSA * rsa);
+
+enum SSLConnectionTarget
+{
+	OTP_SERVER,
+	ADDRESS_CHANGE_SERVER
+};
+
 class SSLConnection
 {
 	public:
 
-		EIDMW_APL_API SSLConnection()
+		EIDMW_APL_API SSLConnection(SSLConnectionTarget target_server)
 		{
-		InitConnection();
+		InitConnection(target_server);
 		};
 		EIDMW_APL_API ~SSLConnection() 
 		{
@@ -39,6 +46,9 @@ class SSLConnection
 		SignedChallengeResponse *do_SAM_2ndpost(char *challenge, char *kicc);
 		//Returns the session cookie
 		DHParamsResponse *do_SAM_1stpost(DHParams *params, char *secretCode, char *process);
+
+		StartWriteResponse *do_SAM_3rdpost(char * mse_resp, char *internal_auth_resp);
+		bool do_SAM_4thpost(StartWriteResponse &resp);
 		
 		/* The following functions implement the communication protocol with the OTP server */
 		char * do_OTP_1stpost();
@@ -52,12 +62,13 @@ class SSLConnection
 	private:
 		void ReadUserCert();
 		//Generic POST routine that actually writes and reads from the SSL connection
-		char * Post(char *cookie, char *url_path, char *body);
+		char * Post(char *cookie, char *url_path, char *body, bool chunked_expected=false);
 
 		unsigned int write_to_stream(SSL* bio, char* req_string);
 		unsigned int read_from_stream(SSL* bio, char* buffer, unsigned int length);
+		unsigned int read_chunked_reply(SSL *bio, char* buffer, unsigned int length);
 		SSL *connect_encrypted(char *host_and_port);
-		bool InitConnection();
+		bool InitConnection(SSLConnectionTarget target);
 		void CloseConnection();
 		void loadUserCert(SSL_CTX *ctx);
 		void loadCertChain(X509_STORE *store);

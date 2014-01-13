@@ -1,6 +1,8 @@
 #ifndef SAMMY_H_
 #define SAMMY_H_
 
+#include <vector>
+
 
 namespace eIDMW
 {
@@ -16,6 +18,12 @@ char *card_auth_public_key;
 char *certificateChain;
 unsigned int version;
 
+};
+
+struct StartWriteResponse
+{
+	std::vector<char *> apdu_write_address;
+	std::vector<char *> apdu_write_sod;
 };
 
 struct DHParamsResponse
@@ -45,6 +53,8 @@ public:
 	char *getKICC();
 	bool verifyCert_CV_IFD(char * cv_cert);
 	char *generateChallenge();
+	char *sendPrebuiltAPDU(char *apdu_string);
+	std::vector<char *> sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_array);
 
 private:
 	char * _getDH_Param(char specific_byte, unsigned long offset);

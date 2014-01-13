@@ -189,7 +189,7 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process)
 
 	sam_helper.getDHParams(&dh_params);
 
-	SSLConnection conn;
+	SSLConnection conn(ADDRESS_CHANGE_SERVER);
 
 	DHParamsResponse *p1 = conn.do_SAM_1stpost(&dh_params, secret_code, process);
 
@@ -200,9 +200,38 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process)
 
 	char *challenge = sam_helper.generateChallenge();
 
-	conn.do_SAM_2ndpost(challenge, kicc);
+	SignedChallengeResponse * resp_2ndpost = conn.do_SAM_2ndpost(challenge, kicc);
 
+	if (resp_2ndpost != NULL && resp_2ndpost->signed_challenge != NULL)
+	{
+		bool ret_signed_ch = sam_helper.verifySignedChallenge(resp_2ndpost->signed_challenge);
 
+		if (!ret_signed_ch)
+		{
+			fprintf(stderr, "EXTERNAL AUTHENTICATE command failed! Aborting operation.\n");
+			//TODO: add new error code(s) for SAM
+			throw CMWEXCEPTION(EIDMW_OTP_PROTOCOL_ERROR);
+		}
+
+		char * resp_mse = sam_helper.sendPrebuiltAPDU(resp_2ndpost->set_se_command);
+
+		char * resp_internal_auth = sam_helper.sendPrebuiltAPDU(resp_2ndpost->internal_auth);
+
+		StartWriteResponse * r1 = conn.do_SAM_3rdpost(resp_mse, resp_internal_auth);
+
+		if (r1 != NULL)
+		{
+			fprintf(stderr, "DEBUG: writing new address...\n");
+			std::vector<char *> address_response = sam_helper.sendSequenceOfPrebuiltAPDUs(r1->apdu_write_address);
+			fprintf(stderr, "DEBUG: writing new SOD...\n");
+			std::vector<char *> sod_response = sam_helper.sendSequenceOfPrebuiltAPDUs(r1->apdu_write_sod);
+
+			StartWriteResponse start_write_resp = {address_response, sod_response};
+			//Report the results to the server for verification purposes
+			conn.do_SAM_4thpost(start_write_resp);
+		}
+
+	}
 
 }
 
@@ -217,7 +246,7 @@ bool APL_Card::ChangeCapPin(const char * new_pin)
 	const unsigned char GEMSAFE_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
 
 	//Establish SSL Connection with otp server to get the CAP PIN Change APDU
-	SSLConnection conn;
+	SSLConnection conn(OTP_SERVER);
 	
 	char* cookie = conn.do_OTP_1stpost();
 

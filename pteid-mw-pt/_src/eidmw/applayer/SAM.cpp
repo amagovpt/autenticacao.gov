@@ -273,9 +273,37 @@ char *SAM::generateChallenge()
 
 }
 
+std::vector<char *> SAM::sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_array)
+{
+	int i = 0;
+	std::vector <char *> responses;
+	while(i != apdu_array.size())
+	{
+		char * tmp = sendPrebuiltAPDU(apdu_array.at(i));
+		fprintf(stderr, "APDU %d -> result: %s\n", i, tmp);
+		responses.push_back(tmp);
+		i++;
+	}
+	return responses;
+}
+
+char *SAM::sendPrebuiltAPDU(char *apdu_string)
+{
+	char *resp_string = NULL;
+
+	CByteArray mse_ba(std::string(apdu_string), true);
+	CByteArray resp = m_card->getCalReader()->SendAPDU(mse_ba);
+
+	resp_string = (char *)malloc(resp.Size()*2 +1);
+
+	binToHex(resp.GetBytes(), resp.Size(), resp_string, resp.Size()*2 +1);
+
+	return resp_string;
+}
+
 bool SAM::verifySignedChallenge(char *signed_challenge)
 {
-	char external_authenticate[] = {0x80, 0x82, 0x00, 0x00, 0x88};
+	unsigned char external_authenticate[] = {0x80, 0x82, 0x00, 0x00, 0x88};
 	CByteArray ba1(external_authenticate, sizeof(external_authenticate));
 
 	CByteArray signed_ba(std::string(signed_challenge), true);
@@ -302,16 +330,6 @@ bool SAM::getDHParams(DHParams *dh_struct)
 	return true;
 }
 
-
-/*
-bool SAM::verifyCVCCertificate(const char *cvc_certificate_hex)
-{
-
-//TODO
-
-return true;
-}
-*/
 
 }
 
