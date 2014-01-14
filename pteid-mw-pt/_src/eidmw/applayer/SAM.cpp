@@ -306,6 +306,12 @@ bool SAM::verifySignedChallenge(char *signed_challenge)
 	unsigned char external_authenticate[] = {0x80, 0x82, 0x00, 0x00, 0x88};
 	CByteArray ba1(external_authenticate, sizeof(external_authenticate));
 
+	if (signed_challenge == NULL || strlen(signed_challenge) == 0)
+	{
+		fprintf(stderr, "Invalid signed_challenge in SAM::verifySignedChallenge()!\n");
+		return false;
+	}
+
 	CByteArray signed_ba(std::string(signed_challenge), true);
 	ba1.Append(signed_ba);
 

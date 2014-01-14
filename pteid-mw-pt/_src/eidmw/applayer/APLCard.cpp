@@ -193,10 +193,18 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process)
 
 	DHParamsResponse *p1 = conn.do_SAM_1stpost(&dh_params, secret_code, process);
 
+	if (p1->kifd == NULL || p1->cv_ifd_aut == NULL)
+	{
+		throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
+	}
+
 	sam_helper.sendKIFD(p1->kifd);
 	char * kicc = sam_helper.getKICC();
 
-	sam_helper.verifyCert_CV_IFD(p1->cv_ifd_aut);
+	if( !sam_helper.verifyCert_CV_IFD(p1->cv_ifd_aut))
+	{
+		throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);	
+	}
 
 	char *challenge = sam_helper.generateChallenge();
 
@@ -210,7 +218,7 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process)
 		{
 			fprintf(stderr, "EXTERNAL AUTHENTICATE command failed! Aborting operation.\n");
 			//TODO: add new error code(s) for SAM
-			throw CMWEXCEPTION(EIDMW_OTP_PROTOCOL_ERROR);
+			throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
 		}
 
 		char * resp_mse = sam_helper.sendPrebuiltAPDU(resp_2ndpost->set_se_command);
@@ -229,9 +237,12 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process)
 			StartWriteResponse start_write_resp = {address_response, sod_response};
 			//Report the results to the server for verification purposes
 			conn.do_SAM_4thpost(start_write_resp);
+
+			return true;
 		}
 
 	}
+
 
 }
 
