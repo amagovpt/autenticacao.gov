@@ -181,17 +181,21 @@ CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const
 	return signature;
 }
 
-bool APL_Card::ChangeAddress(char *secret_code, char *process)
+typedef void (* t_callback_addr) (void*, int);
+
+bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr callback, void* callback_data)
 {
 	SAM sam_helper(this);
-
 	DHParams dh_params;
-
 	sam_helper.getDHParams(&dh_params);
 
 	SSLConnection conn(ADDRESS_CHANGE_SERVER);
 
+	(*callback)(callback_data, 10);
+
 	DHParamsResponse *p1 = conn.do_SAM_1stpost(&dh_params, secret_code, process);
+	
+	(*callback)(callback_data, 25);
 
 	if (p1->kifd == NULL || p1->cv_ifd_aut == NULL)
 	{
@@ -201,14 +205,18 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process)
 	sam_helper.sendKIFD(p1->kifd);
 	char * kicc = sam_helper.getKICC();
 
-	if( !sam_helper.verifyCert_CV_IFD(p1->cv_ifd_aut))
+	if ( !sam_helper.verifyCert_CV_IFD(p1->cv_ifd_aut))
 	{
 		throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);	
 	}
 
 	char *challenge = sam_helper.generateChallenge();
 
+	(*callback)(callback_data, 30);
+
 	SignedChallengeResponse * resp_2ndpost = conn.do_SAM_2ndpost(challenge, kicc);
+
+	(*callback)(callback_data, 40);
 
 	if (resp_2ndpost != NULL && resp_2ndpost->signed_challenge != NULL)
 	{
@@ -227,6 +235,8 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process)
 
 		StartWriteResponse * r1 = conn.do_SAM_3rdpost(resp_mse, resp_internal_auth);
 
+		(*callback)(callback_data, 60);
+
 		if (r1 != NULL)
 		{
 			fprintf(stderr, "DEBUG: writing new address...\n");
@@ -235,15 +245,16 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process)
 			std::vector<char *> sod_response = sam_helper.sendSequenceOfPrebuiltAPDUs(r1->apdu_write_sod);
 
 			StartWriteResponse start_write_resp = {address_response, sod_response};
+
+			(*callback)(callback_data, 90);
 			//Report the results to the server for verification purposes
 			conn.do_SAM_4thpost(start_write_resp);
 
+			(*callback)(callback_data, 100);
+
 			return true;
 		}
-
 	}
-
-
 }
 
 bool APL_Card::ChangeCapPin(const char * new_pin)

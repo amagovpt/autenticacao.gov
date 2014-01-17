@@ -584,8 +584,8 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 	cJSON *my_json = json->child;
 	if (my_json == NULL)
 	{
-		fprintf(stderr, "OMG this will Blow up in no time!!\n");
-		return NULL;
+		fprintf(stderr, "DEBUG: Server returned malformed JSON data: %s\n", body);
+		return server_params;
 	}
 
 	cJSON *child = cJSON_GetObjectItem(my_json, "kifd");
