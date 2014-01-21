@@ -1427,6 +1427,14 @@ DWORD PteidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, P
    char * filename;
 
    cbCertif = 2500; //More than enough for any certificate lmedinas dixit...
+
+   if (ppbCertif == NULL) 
+   {
+	   // we will only return the file length
+	   if (pcbCertif != NULL)
+		   *pcbCertif = cbCertif;
+	   CLEANUP(SCARD_S_SUCCESS);
+   }
    *ppbCertif = pCardData->pfnCspAlloc(cbCertif);
    
    
