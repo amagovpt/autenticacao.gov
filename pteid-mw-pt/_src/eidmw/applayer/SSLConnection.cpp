@@ -391,24 +391,76 @@ char * SSLConnection::do_OTP_1stpost()
 
 }
 
+
+char * SSLConnection::do_SAM_mutualAuthentication_IAS101(char *challenge)
+{
+	const char * endpoint = "/changeaddress101/mutualAuthentication";
+	const char *mutual_format = 
+	"{\"MutualAuthenticateInit\":{ \"challenge\" : \"%s\", \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } }";
+	char *challenge_params = (char *) malloc(1024);
+
+	sprintf(challenge_params, mutual_format, challenge);
+
+	fprintf(stderr, "POSTing JSON %s\n", challenge_params);
+	char *server_response = Post(this->m_session_cookie, (char *)endpoint, challenge_params);
+
+	char *body = skipHTTPHeaders(server_response);
+
+	fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
+
+	cJSON *json = cJSON_Parse(body);
+	if (!json)
+	{
+		fprintf(stderr, "JSON parsing error before: [%s]\n", cJSON_GetErrorPtr());
+		return NULL;
+	}
+	else
+	{
+		cJSON *my_json = json->child;
+		cJSON *child = cJSON_GetObjectItem(my_json, "MutualAuthenticateCommand");	
+		return strdup(child->child->valuestring);
+	}
+
+	return NULL;
+}
+
+#define ENDPOINT_07 "/changeaddress/signChallenge"
+#define ENDPOINT_101 "/changeaddress101/signChallenge"
+
+//TODO: we need to make sure what MSE set commands we need to send before each GET RANDOM on IAS 0.7
+
 SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *kicc)
 {
 	cJSON *json = NULL;
+	char *endpoint = NULL;
+
 	SignedChallengeResponse *result = new SignedChallengeResponse();
 	const char *challenge_format = "{\"Challenge\":{ \"challenge\" : \"%s\", \"kicc\" : \"%s\", \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
+	const char *challenge_format2 = "{\"Challenge\":{ \"challenge\" : \"%s\", \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
+
 	char *challenge_params = (char *) malloc(5*1024);
 
-	sprintf(challenge_params, challenge_format, challenge, kicc);
+	if (kicc != NULL)
+	{
+		sprintf(challenge_params, challenge_format, challenge, kicc);
+		endpoint = ENDPOINT_07;
+	}
+	else
+	{
+		sprintf(challenge_params, challenge_format2, challenge);
+		endpoint = ENDPOINT_101;
+	}
+
 	fprintf(stderr, "POSTing JSON %s\n", challenge_params);
-	char *server_response = Post(this->m_session_cookie, "/changeaddress/signChallenge", challenge_params);
+	char *server_response = Post(this->m_session_cookie, endpoint, challenge_params);
 
 	char *body = skipHTTPHeaders(server_response);
 	fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
 
-	json=cJSON_Parse(body);
-	if (!json) 
+	json = cJSON_Parse(body);
+	if (!json)
 	{
-		fprintf(stderr, "JSON parsing error before: [%s]\n", cJSON_GetErrorPtr()); 
+		fprintf(stderr, "JSON parsing error before: [%s]\n", cJSON_GetErrorPtr());
 		return NULL;
 	}
 	else
@@ -424,17 +476,19 @@ SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *k
 		cJSON *elem = cJSON_GetObjectItem(my_json, "InternalAuthenticateCommand");
 		if (!elem)
 		{
-			fprintf(stderr, "DEBUG: JSON does not contain InternalAuthenticateCommand element!\n");
-			return NULL;
+			 if (strcmp(endpoint, ENDPOINT_07) == 0)
+				fprintf(stderr, "DEBUG: JSON does not contain InternalAuthenticateCommand element!\n");
 		}
-		result->internal_auth = strdup(elem->child->valuestring);
-		elem = cJSON_GetObjectItem(my_json, "SetSECommand");
-		if (!elem)
+		else
+			result->internal_auth = strdup(elem->child->valuestring);
+		cJSON *elem2 = cJSON_GetObjectItem(my_json, "SetSECommand");
+		if (!elem2)
 		{
-			fprintf(stderr, "DEBUG: JSON does not contain SetSECommand element!\n");
-			return NULL;
+			if (strcmp(endpoint, ENDPOINT_07) == 0)
+				fprintf(stderr, "DEBUG: JSON does not contain SetSECommand element!\n");
 		}
-		result->set_se_command = strdup(elem->child->valuestring);
+		else
+			result->set_se_command = strdup(elem2->child->valuestring);
 
 		return result;
 	}
@@ -468,7 +522,6 @@ char *build_json_object_sam(StartWriteResponse &resp)
 	cJSON_AddItemToObject(real_root, "WriteResults", root);
 	return cJSON_Print(real_root);
 }
-
 
 
 bool SSLConnection::do_SAM_4thpost(StartWriteResponse &resp)
@@ -539,22 +592,36 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 	return NULL;
 }
 
-DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, char *process)
+DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, char *process, char *serialNumber)
 {
 	int ret_channel = 0;
 	cJSON *json = NULL;
+	char *endpoint = NULL;
 	DHParamsResponse *server_params = new DHParamsResponse();
 	char *dh_params_template = "{\"DHParams\":{ \"secretCode\" : \"%s\", \"process\" : \"%s\", \"P\": \"%s\", \"Q\": \"%s\", \"G\":\"%s\", \"cvc_ca_public_key\": \"%s\",\"card_auth_public_key\": \"%s\", \"certificateChain\": \"%s\", \"version\": %d, \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
+
+	char *dh_params_template2 = "{\"DHParams\":{ \"secretCode\" : \"%s\", \"process\" : \"%s\", \"cvc_ca_public_key\": \"%s\",\"card_auth_public_key\": \"%s\", \"certificateChain\": \"%s\", \"serialNumber\": \"%s\", \"version\": %d, \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
 	char * post_dhparams = (char *) malloc(5*1024);
 	char request_headers[1000];
 
-	sprintf(post_dhparams, dh_params_template,
-	secretCode, process, p->dh_p, p->dh_q, p->dh_g, p->cvc_ca_public_key,
-	p->card_auth_public_key, p->certificateChain, p->version);
+	if (serialNumber == NULL)
+	{
+		sprintf(post_dhparams, dh_params_template,
+			secretCode, process, p->dh_p, p->dh_q, p->dh_g, p->cvc_ca_public_key,
+			p->card_auth_public_key, p->certificateChain, p->version);
+
+		endpoint = "/changeaddress";
+	}
+	else
+	{
+		sprintf(post_dhparams, dh_params_template2,
+			secretCode, process, p->cvc_ca_public_key, p->card_auth_public_key, p->certificateChain, serialNumber, p->version);
+		endpoint = "/changeaddress101";
+	}
 
 	snprintf(request_headers, sizeof(request_headers),	
-    "POST /changeaddress/sendDHParams HTTP/1.1\r\nHost: %s\r\nKeep-Alive: 300\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Length: %lu\r\n\r\n",
-    	m_otp_host, strlen(post_dhparams));
+    "POST %s/sendDHParams HTTP/1.1\r\nHost: %s\r\nKeep-Alive: 300\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Length: %lu\r\n\r\n",
+    	endpoint, m_otp_host, strlen(post_dhparams));
 
 	char * server_response = (char *) malloc(REPLY_BUFSIZE);
 
@@ -799,7 +866,7 @@ long parseLong(char *str)
 	return val;
 }
 
-unsigned int SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buffer_len)
+void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buffer_len)
 {
 	int r;
 	bool final_chunk_read = false;

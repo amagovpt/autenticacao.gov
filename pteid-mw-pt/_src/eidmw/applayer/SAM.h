@@ -53,6 +53,7 @@ public:
 	char *getKICC();
 	bool verifyCert_CV_IFD(char * cv_cert);
 	char *generateChallenge();
+	char *getSerialNumberIAS101();
 	char *sendPrebuiltAPDU(char *apdu_string);
 	std::vector<char *> sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_array);
 

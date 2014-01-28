@@ -167,6 +167,24 @@ char * SAM::_getSODCert()
 	return sod_cert;
 }
 
+char *SAM::getSerialNumberIAS101()
+{
+	const unsigned char apdu_serial[] = {0x00, 0xCA, 0x02, 0x5A, 0x0D};
+
+	CByteArray serial_apdu = CByteArray(apdu_serial,
+		sizeof(apdu_serial));
+
+	CByteArray serial_ba = m_card->getCalReader()->SendAPDU(serial_apdu);
+
+	serial_ba.Chop(2);
+
+	char *serial = (char *)malloc(serial_ba.Size()*2+1);
+
+	binToHex(serial_ba.GetBytes(), serial_ba.Size(), serial, serial_ba.Size()*2+1);
+
+	return serial;
+}
+
 bool checkResultSW12(CByteArray &result)
 {
 	unsigned long ulRespLen = result.Size();
@@ -180,7 +198,7 @@ bool SAM::sendKIFD(char *kifd)
 {
 	const unsigned char verify_apdu_key_agreement[] = {0x00, 0x22, 0x41, 0xA6, 0x89, 0x83, 0x01, 0x32, 0x95, 0x01, 0x80, 0x91, 0x81, 0x80}; 
 	CByteArray sendKIFD_apdu = CByteArray(verify_apdu_key_agreement,
-		sizeof(verify_apdu_key_agreement));
+			sizeof(verify_apdu_key_agreement));
 
 	//Create ByteArray from hex-encoded string
 	CByteArray kifd_ba(std::string(kifd), true);
@@ -189,8 +207,12 @@ bool SAM::sendKIFD(char *kifd)
 	CByteArray resp = m_card->getCalReader()->SendAPDU(sendKIFD_apdu);
 
 	if (!checkResultSW12(resp))
+	{
 		fprintf(stderr, "SendKIFD() failed!\n");
-	
+		return false;
+	}
+
+	return true;	
 }
 
 char *SAM::getKICC()
@@ -250,10 +272,15 @@ bool SAM::verifyCert_CV_IFD(char * cv_cert)
 	return true;
 }
 
+
+/*
+The parameter external_auth indicates the Security environment that's going to be used in the MSE SET command
+TODO: This should be parameterized to be reused in both cards scenarios
+*/
 char *SAM::generateChallenge()
 {
 	char *challenge = NULL;
-	//MSE SET External auth
+	//MSE SET External auth or Mutual Auth
 	unsigned char ba1[] = {0x00, 0x22, 0x41 ,0xA4 ,0x0D ,0x95 ,0x01 ,0x80 ,0x83 ,0x08 ,0x04 ,0x06 ,0x02 ,0x02 ,0x00 ,0x04 ,0x03 ,0x07};
 
 	//GET CHALLENGE

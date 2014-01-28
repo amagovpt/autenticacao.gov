@@ -183,27 +183,45 @@ CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const
 
 typedef void (* t_callback_addr) (void*, int);
 
+
+/*
+	Implements the address change protocol as implemented by the Portuguese State hosted website
+	It conditionally executes some card interactions and sends different parameters to the server 
+	depending on the version of the smart card applet, IAS 0.7 or IAS 1.01.
+	Technical specification: the confidential document "Change Address Technical Solution" by Zetes version 5.3
+*/
 bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr callback, void* callback_data)
 {
+	char * kicc = NULL;
 	SAM sam_helper(this);
+	char *serialNumber = NULL;
+	char *resp_internal_auth = NULL , *resp_mse = NULL;
+	
 	DHParams dh_params;
-	sam_helper.getDHParams(&dh_params);
+
+	if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
+		sam_helper.getDHParams(&dh_params);
+	//else
+	//	serialNumber = sam_helper.getSerialNumberIAS101();
 
 	SSLConnection conn(ADDRESS_CHANGE_SERVER);
 
-	(*callback)(callback_data, 10);
+	callback(callback_data, 10);
 
-	DHParamsResponse *p1 = conn.do_SAM_1stpost(&dh_params, secret_code, process);
+	DHParamsResponse *p1 = conn.do_SAM_1stpost(&dh_params, secret_code, process, serialNumber);
 	
-	(*callback)(callback_data, 25);
+	callback(callback_data, 25);
 
-	if (p1->kifd == NULL || p1->cv_ifd_aut == NULL)
+	if (p1->cv_ifd_aut == NULL)
 	{
 		throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
 	}
 
-	sam_helper.sendKIFD(p1->kifd);
-	char * kicc = sam_helper.getKICC();
+	if (p1->kifd != NULL)
+		sam_helper.sendKIFD(p1->kifd);
+
+	if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
+		kicc = sam_helper.getKICC();
 
 	if ( !sam_helper.verifyCert_CV_IFD(p1->cv_ifd_aut))
 	{
@@ -212,11 +230,11 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 
 	char *challenge = sam_helper.generateChallenge();
 
-	(*callback)(callback_data, 30);
+	callback(callback_data, 30);
 
 	SignedChallengeResponse * resp_2ndpost = conn.do_SAM_2ndpost(challenge, kicc);
 
-	(*callback)(callback_data, 40);
+	callback(callback_data, 40);
 
 	if (resp_2ndpost != NULL && resp_2ndpost->signed_challenge != NULL)
 	{
@@ -225,17 +243,18 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 		if (!ret_signed_ch)
 		{
 			fprintf(stderr, "EXTERNAL AUTHENTICATE command failed! Aborting operation.\n");
-			//TODO: add new error code(s) for SAM
 			throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
 		}
+		if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
+		{
+			resp_mse = sam_helper.sendPrebuiltAPDU(resp_2ndpost->set_se_command);
 
-		char * resp_mse = sam_helper.sendPrebuiltAPDU(resp_2ndpost->set_se_command);
-
-		char * resp_internal_auth = sam_helper.sendPrebuiltAPDU(resp_2ndpost->internal_auth);
+			resp_internal_auth = sam_helper.sendPrebuiltAPDU(resp_2ndpost->internal_auth);
+		}
 
 		StartWriteResponse * r1 = conn.do_SAM_3rdpost(resp_mse, resp_internal_auth);
 
-		(*callback)(callback_data, 60);
+		callback(callback_data, 60);
 
 		if (r1 != NULL)
 		{
@@ -246,15 +265,19 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 
 			StartWriteResponse start_write_resp = {address_response, sod_response};
 
-			(*callback)(callback_data, 90);
+			callback(callback_data, 90);
 			//Report the results to the server for verification purposes
 			conn.do_SAM_4thpost(start_write_resp);
 
-			(*callback)(callback_data, 100);
+			callback(callback_data, 100);
 
 			return true;
 		}
+		else
+			return false;
 	}
+
+	return false;
 }
 
 bool APL_Card::ChangeCapPin(const char * new_pin)

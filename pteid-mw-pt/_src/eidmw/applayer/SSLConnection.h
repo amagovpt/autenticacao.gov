@@ -42,13 +42,15 @@ class SSLConnection
 		};
 
 		/* The following functions implement the communication protocol for the Address Change process */
+		DHParamsResponse *do_SAM_1stpost(DHParams *params, char *secretCode, char *process, char *serialNumber);
 
 		SignedChallengeResponse *do_SAM_2ndpost(char *challenge, char *kicc);
-		//Returns the session cookie
-		DHParamsResponse *do_SAM_1stpost(DHParams *params, char *secretCode, char *process);
 
+		//Returns the session cookie
 		StartWriteResponse *do_SAM_3rdpost(char * mse_resp, char *internal_auth_resp);
 		bool do_SAM_4thpost(StartWriteResponse &resp);
+
+		char * do_SAM_mutualAuthentication_IAS101(char *challenge);
 		
 		/* The following functions implement the communication protocol with the OTP server */
 		char * do_OTP_1stpost();
@@ -66,7 +68,7 @@ class SSLConnection
 
 		unsigned int write_to_stream(SSL* bio, char* req_string);
 		unsigned int read_from_stream(SSL* bio, char* buffer, unsigned int length);
-		unsigned int read_chunked_reply(SSL *bio, char* buffer, unsigned int length);
+		void read_chunked_reply(SSL *bio, char* buffer, unsigned int length);
 		SSL *connect_encrypted(char *host_and_port);
 		bool InitConnection(SSLConnectionTarget target);
 		void CloseConnection();
