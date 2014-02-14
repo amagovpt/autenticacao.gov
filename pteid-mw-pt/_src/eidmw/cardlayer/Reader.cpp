@@ -454,7 +454,8 @@ CByteArray CReader::Sign(const tPrivKey & key, unsigned long algo,
 		oAID_Data.Append(MD5_AID, sizeof(MD5_AID));
 	else if (algo & SIGN_ALGO_SHA1_RSA_PKCS)
 		oAID_Data.Append(SHA1_AID, sizeof(SHA1_AID));
-	else if (algo & SIGN_ALGO_SHA256_RSA_PKCS)
+	else if (m_poCard->GetType() == CARD_PTEID_IAS101 && 
+		algo & SIGN_ALGO_SHA256_RSA_PKCS)
 		oAID_Data.Append(SHA256_AID, sizeof(SHA256_AID));
 	else if (algo & SIGN_ALGO_SHA384_RSA_PKCS)
 		oAID_Data.Append(SHA384_AID, sizeof(SHA256_AID));
@@ -467,7 +468,7 @@ CByteArray CReader::Sign(const tPrivKey & key, unsigned long algo,
 	if (ulSupportedAlgos & SIGN_ALGO_RSA_PKCS)
 	{
 		return m_poCard->Sign(key, GetPinByID(key.ulAuthID),
-				SIGN_ALGO_RSA_PKCS, oAID_Data);
+				algo, oAID_Data);
 	}
 	else if (ulSupportedAlgos & SIGN_ALGO_RSA_RAW)
 	{
