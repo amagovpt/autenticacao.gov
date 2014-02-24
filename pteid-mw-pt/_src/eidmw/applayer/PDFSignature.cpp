@@ -174,14 +174,16 @@ namespace eIDMW
 
 	int PDFSignature::getPageCount()
 	{
-		if (!m_doc->isOk()) {
-				throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+		if (!m_doc->isOk()) 
+		{
+			fprintf(stderr, "getPageCount(): Probably broken PDF...\n");
+			return -1;
 		}
 		if (m_doc->isEncrypted())
 		{
 			fprintf(stderr,
-				"Error in getPageCount(): Encrypted PDFs are unsupported At the moment\n");
-			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+				"getPageCount(): Encrypted PDFs are unsupported at the moment\n");
+			return -1;
 		}
 		return m_doc->getNumPages();
 

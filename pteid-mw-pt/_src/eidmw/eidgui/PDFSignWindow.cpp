@@ -528,17 +528,17 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	current_input_path = str.at(0);
 
 	m_pdf_sig = new PTEID_PDFSignature(strdup(getPlatformNativeString(current_input_path)));
+	
+	
+	int tmp_count = m_pdf_sig->getPageCount();
 
-	try
-	{
-		m_current_page_number = m_pdf_sig->getPageCount();
-	}
-	catch (PTEID_Exception &e)
+	if (tmp_count < 1)
 	{
 		ShowErrorMsgBox(tr("Unsupported or corrupted file!"));
 		m_pdf_sig = NULL;
 		return;
 	}
+	m_current_page_number = tmp_count;
 
 	for(int i=0; i != str.size(); i++)
 	{
