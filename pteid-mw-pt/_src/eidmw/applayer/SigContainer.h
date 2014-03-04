@@ -1,7 +1,7 @@
 #ifndef SIGCONTAINER_H
 #define SIGCONTAINER_H
 
-#define SIG_INTERNAL_PATH "META-INF/signature.xml"
+#define SIG_INTERNAL_PATH "META-INF/signatures.xml"
 #define TS_INTERNAL_PATH "META-INF/ts_resp.bin"
 
 #include <cstdio>
@@ -39,7 +39,7 @@ namespace eIDMW
 	};
 
 
-	void StoreSignatureToDisk(CByteArray& sig, CByteArray* ts_data, const char **paths, int num_paths, const char *output_file);
+	void StoreSignatureToDisk(CByteArray& sig, const char **paths, int num_paths, const char *output_file);
 
 }
 

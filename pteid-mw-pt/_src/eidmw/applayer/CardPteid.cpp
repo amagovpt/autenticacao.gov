@@ -61,49 +61,6 @@ tCardFileStatus APL_EidFile_Trace::VerifyFile()
 	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 	tCardFileStatus filestatus;
 
-	//Remove since it's rrn related
-	/*if(!CertRrn)
-		return CARDFILESTATUS_ERROR_RRN;
-
-	//If the status of the RRN file is not OK,
-	//The rrn status is return
-	filestatus=CertRrn->getFileStatus();
-	if(filestatus!=CARDFILESTATUS_OK)
-		return filestatus;
-
-	//Get the status of the certificate RRN
-	APL_CertifStatus rrnstatus=CertRrn->getStatus();
-	if((rrnstatus==APL_CERTIF_STATUS_TEST || rrnstatus==APL_CERTIF_STATUS_ISSUER) && !pcard->getAllowTestCard())
-		return CARDFILESTATUS_ERROR_TEST;
-
-	if(rrnstatus==APL_CERTIF_STATUS_DATE && !pcard->getAllowBadDate())
-		return CARDFILESTATUS_ERROR_DATE;
-
-	//We test the oid of the RRN
-	//except for test card because, test card may have a bad oid
-	if(!pcard->isTestCard())
-		if(!m_cryptoFwk->VerifyOidRrn(CertRrn->getData()))
-			return CARDFILESTATUS_ERROR_RRN;
-
-	APL_EidFile_IDSign *sign=pcard->getFileIDSign();
-
-	//If the status of the IDSign file is not OK,
-	//The IDSign status is return
-	filestatus=sign->getStatus(true);
-	if(filestatus!=CARDFILESTATUS_OK)
-		return filestatus;*/
-
-	//if(!m_cryptoFwk->VerifySignatureSha1(m_data,sign->getData(),CertRrn->getData()))
-	//	return CARDFILESTATUS_ERROR_SIGNATURE;
-
-	//If this is not a test card, the rrn status must be OK, unless we return an error
-	//For a test card, the status could be something else (for ex ISSUER)
-	/*L_CERTIF_STATUS_VALID
-			&& rrnstatus!=APL_CERTIF_STATUS_VALID_CRL
-			&& rrnstatus!=APL_CERTIF_STATUS_VALID_OCSP)
-			return CARDFILESTATUS_ERROR_CERT;
-	}*/
-
 	return CARDFILESTATUS_OK;
 }
 

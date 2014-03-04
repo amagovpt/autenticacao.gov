@@ -182,12 +182,12 @@ static const char *SIGCONTAINER_README=
 	}
 
 	
-	void AddReadMe(const char *output)
+	void AddReadMe(const char *output_file)
 	{
 
 		mz_bool status = MZ_FALSE;
 
-		status = mz_zip_add_mem_to_archive_file_in_place (output, "README.txt", SIGCONTAINER_README, strlen(SIGCONTAINER_README),
+		status = mz_zip_add_mem_to_archive_file_in_place (output_file, "META-INF/README.txt", SIGCONTAINER_README, strlen(SIGCONTAINER_README),
 				"", (unsigned short)0, MZ_BEST_COMPRESSION);
 
 		if (!status)
@@ -196,7 +196,26 @@ static const char *SIGCONTAINER_README=
 		}
 	}
 
-	void StoreSignatureToDisk(CByteArray& sig, CByteArray *ts_data, const char **paths, int num_paths, const char *output_file)
+	void AddMimeTypeFile(const char *output_file, int num_paths)
+	{
+		mz_bool status = MZ_FALSE;
+
+		const char * MIMETYPE_ASIC_S = "application/vnd.etsi.asic-s+zip";
+		const char * MIMETYPE_ASIC_E = "application/vnd.etsi.asic-e+zip";
+
+		const char *mimetype = num_paths > 1 ? MIMETYPE_ASIC_E : MIMETYPE_ASIC_S;
+
+		//We need to store the file with no compression to act as a kind of "magic number" within the zip container
+		status = mz_zip_add_mem_to_archive_file_in_place(output_file, "mimetype", mimetype, strlen(mimetype),
+				"", (unsigned short)0, MZ_NO_COMPRESSION);
+
+		if (!status)
+		{
+			MWLOG (LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed for mimetype");
+		}
+	}
+
+	void StoreSignatureToDisk(CByteArray& sig, const char **paths, int num_paths, const char *output_file)
 	{
 
 		int file_size = 0;
@@ -210,7 +229,12 @@ static const char *SIGCONTAINER_README=
 
 		//Try to delete the output file first...
 		if (unlink(output_file) == 0)
-		    MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() overwriting output file %s\n",output_file); 
+		    MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() overwriting output file %s\n",output_file);
+
+		//Add a mimetype file as defined in the ASIC standard ETSI TS 102 918
+		//It needs to be stored first in the archive and uncompressed so it can be used as a kind of magic number
+		//for systems that use them
+		AddMimeTypeFile(output_file, num_paths);
 
 		// Append the referenced files to the zip file
 		for (unsigned int  i = 0; i < num_paths; i++)
@@ -251,20 +275,7 @@ static const char *SIGCONTAINER_README=
 			return ;
 		}
 
-		if (ts_data != NULL)
-		{
-			status = mz_zip_add_mem_to_archive_file_in_place(output_file, TS_INTERNAL_PATH, ts_data->GetBytes(),
-					ts_data->Size(), "", (unsigned short)0, MZ_BEST_COMPRESSION);
-
-			if (!status)
-			{   
-				MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed for the Timestamp file");
-				return ;
-			}
-		}
-
 		//Add a README file to the container 
-
 		AddReadMe(output_file);
 
 	}

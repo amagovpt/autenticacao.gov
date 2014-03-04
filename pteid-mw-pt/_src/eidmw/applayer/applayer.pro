@@ -102,7 +102,7 @@ SOURCES += \
 	CertStatusCache.cpp  \
 	cryptoFramework.cpp  \
 	APLCard.cpp          \ 
-	XMLParser.cpp       \
+	XMLParser.cpp   	\
 	MiscUtil.cpp \
 	PhotoPteid.cpp \
 	APLPublicKey.cpp \
@@ -115,11 +115,13 @@ SOURCES += \
 	SigVerifier.cpp \
 	sign-pkcs7.cpp \
 	cJSON.c \
+	CRLFetcher.cpp \
 	cmp_asn1.c \
 	tsp_asn1.c \
 	tsproto.c \
 	PDFSignature.cpp \
 	SAM.cpp \
+	OCSP.cpp \
 	EMV-Cap-Helper.cpp \
 
 # Disable annoying and mostly useless gcc warning

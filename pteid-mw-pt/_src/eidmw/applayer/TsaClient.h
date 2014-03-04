@@ -15,8 +15,6 @@ namespace eIDMW
 			void generate_asn1_request_struct(const unsigned char *);
 			static CByteArray received_data;
 
-
 	};
-
 
 }

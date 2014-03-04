@@ -232,6 +232,19 @@ public:
 	bool GetCDPUrl(const CByteArray &cert, std::string &url);
 
 	/**
+	  * Return the Url of the OCSP responder
+	  * The char * buffer is created and must be destroy by the caller
+	  */
+	char *GetOCSPUrl(X509 *pX509_Cert);
+
+	/**
+	  * Return the CRL distribution point Url
+	  * The char * buffer is created and must be destroy by the caller
+	  */
+	char *GetCDPUrl(X509 *pX509_Cert);
+
+
+	/**
 	  * Fill the info structure with value from certificate
 	  *
 	  * @return true if everything ok, false otherwise
@@ -244,13 +257,6 @@ public:
 	  * @return true if the file is up to date
 	  */
 	bool getCrlInfo(const CByteArray &crl,tCrlInfo &info, const char *dateFormat);
-
-	/**
-	  * Download a file from internet
-	  *
-	  * @return true if the file has correctly be downloaded
-	  */
-	bool downloadFile(const char *pszUri, CByteArray &baData,bool &bStopping);
 
 	/**
 	  * Encode the byte array in b64
@@ -324,11 +330,6 @@ protected:
 	bool VerifyRoot(const CByteArray &cert, const unsigned char *const *roots);
 
 	/**
-	  * Verify if the cert has a correct OID
-	  */
-	bool VerifyOid(const CByteArray &cert, const char *const *oids);
-
-	/**
 	  * Send a OCSP request and get the response
 	  *
 	  * @return The status
@@ -341,18 +342,6 @@ protected:
 	  * @return The status
 	  */
 	FWK_CertifStatus GetOCSPResponse(const char *pUrlResponder,OCSP_CERTID *pCertID, OCSP_RESPONSE **pResponse,X509 *pX509_Issuer=NULL);
-
-	/**
-	  * Return the Url of the OCSP responder
-	  * The char * buffer is created and must be destroy by the caller
-	  */
-	char *GetOCSPUrl(X509 *pX509_Cert);
-
-	/**
-	  * Return the CRL distribution point Url
-	  * The char * buffer is created and must be destroy by the caller
-	  */
-	char *GetCDPUrl(X509 *pX509_Cert);
 
 	/**
 	  * Make a connection to an internet service
