@@ -77,14 +77,6 @@ PTEID_ByteArray PTEID_EIDCard::SignXades(const char * const* paths, unsigned int
 	return out;
 }
 
-PTEID_ByteArray PTEID_EIDCard::SignXades(PTEID_ByteArray to_be_signed, const char *URL)
-{
-	//
-	PTEID_ByteArray out;
-
-	return out;
-}
-
 
 void PTEID_EIDCard::SignXadesIndividual(const char *const * path, unsigned int n_paths, const char *output_path)
 {
@@ -129,12 +121,22 @@ PTEID_ByteArray PTEID_EIDCard::SignXadesT(const char *const * path, unsigned int
 	return out;
 }
 
-PTEID_ByteArray PTEID_EIDCard::SignXadesT(PTEID_ByteArray to_be_signed, const char *URL)
+PTEID_ByteArray PTEID_EIDCard::SignXadesA(const char *const * path, unsigned int n_paths, const char *output_path)
 {
 
 	PTEID_ByteArray out;
+	
+	BEGIN_TRY_CATCH
+
+	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
+
+	CByteArray &ca = pcard->SignXadesA((const char **)path, n_paths, output_path);
+	out.Append(ca.GetBytes(), ca.Size());
+
+	END_TRY_CATCH
 
 	return out;
-
 }
+
+
 }

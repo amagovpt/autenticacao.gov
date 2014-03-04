@@ -1125,6 +1125,21 @@ bool PTEID_EIDCard::ChangeCapPin(const char *new_pin){
 	return out;
 }
 
+bool PTEID_EIDCard::ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data)
+{
+	bool out = false;
+
+	BEGIN_TRY_CATCH
+
+	APL_EIDCard *pcard = static_cast<APL_EIDCard *>(m_impl);
+
+	out = pcard->ChangeAddress(secretCode, process, callback, callback_data);
+	
+	END_TRY_CATCH
+
+	return out;
+}
+
 bool testPIN(const char* pin){
 	int i;
 	std::stringstream ss(pin);

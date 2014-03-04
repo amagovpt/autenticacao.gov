@@ -900,9 +900,10 @@ public:
 	    *  @param IN n_paths is the number of elements in the paths array 
 	    */
 	     PTEIDSDK_API PTEID_ByteArray SignXades(const char * const* paths, unsigned int n_paths, const char *output_path); /** Return a Xades signature as a UTF-8 string (supports multiple files)*/
-	     PTEIDSDK_API PTEID_ByteArray SignXades(PTEID_ByteArray to_be_signed, const char *URL); /** Return a Xades signature as a UTF-8 string (supports multiple files)*/
+	     
 	     PTEIDSDK_API PTEID_ByteArray SignXadesT(const char * const* path, unsigned int n_paths, const char *output_path); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
-	     PTEIDSDK_API PTEID_ByteArray SignXadesT(PTEID_ByteArray to_be_signed, const char *URL); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
+	     PTEIDSDK_API PTEID_ByteArray SignXadesA(const char * const* path, unsigned int n_paths, const char *output_path); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
+	     
 	     PTEIDSDK_API void SignXadesIndividual(const char * const* paths, unsigned int n_paths, const char *output_path); /** Store the XAdes signature in individual zip containers  */
 	     PTEIDSDK_API void SignXadesTIndividual(const char * const* paths, unsigned int n_paths, const char *output_path); /** Store the Xades-T signature in individual zip containers  */
 		
@@ -922,6 +923,10 @@ public:
 	      * 
 	      */
 	     PTEIDSDK_API bool ChangeCapPin(const char *new_pin);
+
+	     typedef void (*t_address_change_callback)(void *, int);
+
+	     PTEIDSDK_API bool ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data);
 
 	     /* helper method for the compatibility layer */
 	     PTEIDSDK_API bool ChangeCapPinCompLayer(const char *old_pin, const char *new_pin,unsigned long &ulRemaining);
