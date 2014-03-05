@@ -108,7 +108,7 @@ public:
         EIDMW_APL_API virtual CByteArray sendAPDU(const CByteArray& cmd);
 
         EIDMW_APL_API virtual CByteArray Sign(const CByteArray & oData, bool signatureKey=false);
-        EIDMW_APL_API virtual CByteArray SignSHA256(const CByteArray & oData, bool signatureKey=false);
+        EIDMW_APL_API CByteArray SignSHA256(const CByteArray & oData, bool signatureKey=false);
 
 	/* XADeS Signature Methods  */
 
