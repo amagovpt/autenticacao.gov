@@ -41,6 +41,12 @@ unix:!macx: {
     preprocess.variable_out += SOURCES
 }
 
+## Specific libs for the wrapper
+LIBS += -lperl
+
+## Specific includes so the wraper compiles
+INCLUDEPATH += /usr/lib/perl/5.14/CORE
+
 ## destination directory
 DESTDIR = ./GeneratedModule
 
@@ -51,12 +57,13 @@ LIBS += -L../lib  \
 		-l$${DLGLIB} \
 		-l$${CARDLAYERLIB} \
 		-l$${APPLAYERLIB} \
-		-l$${EIDLIB} \
-		-lperl
+		-l$${EIDLIB}
 
-INCLUDEPATH += . ../applayer ../dialogs ../common ../cardlayer ../eidlib /usr/lib/perl/5.14/CORE
 DEPENDPATH += .
+
+INCLUDEPATH += . ../applayer ../dialogs ../common ../cardlayer ../eidlib
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
+
 DEFINES += EIDMW_EIDLIB_EXPORTS
 
 # Input

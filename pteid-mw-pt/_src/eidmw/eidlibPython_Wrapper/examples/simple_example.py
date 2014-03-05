@@ -19,7 +19,7 @@ def start():
   readers = pteid.PTEID_ReaderSet.instance()
 
   count = readers.readerCount()
-  print("Number of connected cards to the system:", count)
+  print("Number of connected card readers to the system:", count)
 
   # Check if we have connected smart card readers
   if count:

@@ -20,7 +20,7 @@ sub start {
   my $readers = Pteid::PTEID_ReaderSet::instance();
 
   my $count = $readers->readerCount();
-  print("Number of connected cards to the system: $count\n");
+  print("Number of connected card readers to the system: $count\n");
 
   if ($count) {
     my @devices_names = ();
@@ -62,33 +62,33 @@ sub dump_card_info {
   my $id = shift;
   print("Card ID: $id\n");
   print("-------------------------------------------------------", "\n");
-  print("deliveryEntity             ", $id->getIssuingEntity(), "\n");
-  print("country                    ", $id->getCountry(), "\n");
-  print("documentType               ", $id->getDocumentType(), "\n");
-  print("cardNumber                 ", $id->getDocumentNumber(), "\n");
-  print("cardNumberPAN              ", $id->getDocumentPAN(), "\n");
-  print("cardVersion                ", $id->getDocumentVersion(), "\n");
-  print("deliveryDate               ", $id->getValidityBeginDate(), "\n");
-  print("locale                     ", $id->getLocalofRequest(), "\n");
-  print("validityDate               ", $id->getValidityEndDate(), "\n");
-  print("name                       ", $id->getSurname(), "\n");
-  print("firstname                  ", $id->getGivenName(), "\n");
-  print("sex                        ", $id->getGender(), "\n");
-  print("nationality                ", $id->getNationality(), "\n");
-  print("birthDate                  ", $id->getDateOfBirth(), "\n");
-  print("height                     ", $id->getHeight(), "\n");
-  print("numBI                      ", $id->getCivilianIdNumber(), "\n");
-  print("nameFather                 ", $id->getSurnameFather(), "\n");
-  print("firstnameFather            ", $id->getGivenNameFather(), "\n");
-  print("nameMother                 ", $id->getSurnameMother(), "\n");
-  print("firstnameMother            ", $id->getGivenNameMother(), "\n");
-  print("numNIF                     ", $id->getTaxNo(), "\n");
-  print("numSS                      ", $id->getSocialSecurityNumber(), "\n");
-  print("numSNS                     ", $id->getHealthNumber(), "\n");
-  print("Accidental indications     ", $id->getAccidentalIndications(), "\n");
-  print("mrz1                       ", $id->getMRZ1(), "\n");
-  print("mrz2                       ", $id->getMRZ2(), "\n");
-  print("mrz3                       ", $id->getMRZ3(), "\n");
+  print("deliveryEntity             ", $id->getIssuingEntity(),          "\n");
+  print("country                    ", $id->getCountry(),                "\n");
+  print("documentType               ", $id->getDocumentType(),           "\n");
+  print("cardNumber                 ", $id->getDocumentNumber(),         "\n");
+  print("cardNumberPAN              ", $id->getDocumentPAN(),            "\n");
+  print("cardVersion                ", $id->getDocumentVersion(),        "\n");
+  print("deliveryDate               ", $id->getValidityBeginDate(),      "\n");
+  print("locale                     ", $id->getLocalofRequest(),         "\n");
+  print("validityDate               ", $id->getValidityEndDate(),        "\n");
+  print("name                       ", $id->getSurname(),                "\n");
+  print("firstname                  ", $id->getGivenName(),              "\n");
+  print("sex                        ", $id->getGender(),                 "\n");
+  print("nationality                ", $id->getNationality(),            "\n");
+  print("birthDate                  ", $id->getDateOfBirth(),            "\n");
+  print("height                     ", $id->getHeight(),                 "\n");
+  print("numBI                      ", $id->getCivilianIdNumber(),       "\n");
+  print("nameFather                 ", $id->getSurnameFather(),          "\n");
+  print("firstnameFather            ", $id->getGivenNameFather(),        "\n");
+  print("nameMother                 ", $id->getSurnameMother(),          "\n");
+  print("firstnameMother            ", $id->getGivenNameMother(),        "\n");
+  print("numNIF                     ", $id->getTaxNo(),                  "\n");
+  print("numSS                      ", $id->getSocialSecurityNumber(),   "\n");
+  print("numSNS                     ", $id->getHealthNumber(),           "\n");
+  print("Accidental indications     ", $id->getAccidentalIndications(),  "\n");
+  print("mrz1                       ", $id->getMRZ1(),                   "\n");
+  print("mrz2                       ", $id->getMRZ2(),                   "\n");
+  print("mrz3                       ", $id->getMRZ3(),                   "\n");
   print("-------------------------------------------------------", "\n");
 }
 

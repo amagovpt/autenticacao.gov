@@ -41,10 +41,16 @@ unix:!macx: {
     preprocess.name = execute swig to generate python and c++ wrapper
     preprocess.input = PREPROCESS_FILES
     preprocess.output = ./GeneratedFiles/eidlibPython_Wrapper.cpp
-    preprocess.commands = swig -v -c++ -python -o ./GeneratedFiles/eidlibPython_Wrapper.cpp -outdir ./GeneratedModule ../eidlib/eidlib.i
+    preprocess.commands = swig -v -c++ -python -shadow -modern -o ./GeneratedFiles/eidlibPython_Wrapper.cpp -outdir ./GeneratedModule ../eidlib/eidlib.i
     QMAKE_EXTRA_COMPILERS += preprocess
     preprocess.variable_out += SOURCES
 }
+
+## Specific libs for the wrapper
+LIBS += -lpython3.3m
+
+## Specific includes so the wraper compiles
+INCLUDEPATH += /usr/include/python3.3m /usr/include/x86_64-linux-gnu/python3.3m
 
 ## destination directory
 DESTDIR = ./GeneratedModule
@@ -56,12 +62,13 @@ LIBS += -L../lib  \
 		-l$${DLGLIB} \
 		-l$${CARDLAYERLIB} \
 		-l$${APPLAYERLIB} \
-		-l$${EIDLIB} \
-		-lpython3.3m
+		-l$${EIDLIB}
 
 DEPENDPATH += .
-INCLUDEPATH += . ../applayer ../dialogs ../common ../cardlayer ../eidlib /usr/include/python3.3m /usr/include/x86_64-linux-gnu/python3.3m
+
+INCLUDEPATH += . ../applayer ../dialogs ../common ../cardlayer ../eidlib
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
+
 DEFINES += EIDMW_EIDLIB_EXPORTS
 
 # Input
@@ -71,7 +78,4 @@ SOURCES += ../eidlib/eidlibDoc.cpp
 SOURCES += ../eidlib/eidlibException.cpp
 SOURCES += ../eidlib/eidlibReader.cpp
 SOURCES += ../eidlib/InternalUtil.cpp
-
-
-
 
