@@ -10,13 +10,28 @@ namespace eIDMW
 {
 
 #define SHA1_LEN 20
-#define ASN1_LEN 43
+#define SHA256_LEN 32
+#define TS_REQUEST_SHA1_LEN 43
+#define TS_REQUEST_SHA256_LEN 59	
 #define SHA1_OFFSET 20
-	static unsigned char timestamp_asn1_request[ASN1_LEN] =
+#define SHA256_OFFSET 24
+
+	/* ASN1 "templates" for timestamp requests of SHA-1 and SHA-256 hashes  */
+
+	static unsigned char timestamp_asn1_request[TS_REQUEST_SHA1_LEN] =
 	{
-	0x30, 0x29, 0x02, 0x01, 0x01, 0x30, 0x21, 0x30, 0x09, 0x06, 0x05, 0x2b, 0x0e, 0x03, 0x02, 0x1a,
-	0x05, 0x00, 0x04, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0xff
+		0x30, 0x29, 0x02, 0x01, 0x01, 0x30, 0x21, 0x30, 0x09, 0x06, 0x05, 0x2b, 0x0e, 0x03, 0x02, 0x1a,
+		0x05, 0x00, 0x04, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0xff
+	};
+
+	static unsigned char timestamp_asn1_sha256[TS_REQUEST_SHA256_LEN] =
+	{
+		0x30,0x39,0x02,0x01,0x01,0x30,0x31,0x30,0x0D,0x06,0x09,0x60,0x86,0x48,
+		0x01,0x65,0x03,0x04,0x02,0x01,0x05,0x00,0x04,0x20,0x00,0x00,0x00,0x00,
+		0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+		0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+		0x01,0x01,0xFF
 	};
 
 	TSAClient::TSAClient()
@@ -43,11 +58,22 @@ namespace eIDMW
 
 	}
 
-	void TSAClient::generate_asn1_request_struct(const unsigned char *sha_1)
+	/* Fill the template with the supplied hash */
+	void TSAClient::generate_asn1_request_struct(const unsigned char *hash, bool is_sha256)
 	{
+		int hash_length = SHA1_LEN;
+		int hash_offset = SHA1_OFFSET;
 
-		for (unsigned int i=0; i != SHA1_LEN; i++)
-		    timestamp_asn1_request[SHA1_OFFSET +i] = sha_1[i];
+		unsigned char * ts_request_buffer = timestamp_asn1_request;
+		if (is_sha256)
+		{
+			hash_length = SHA256_LEN;
+			hash_offset = SHA256_OFFSET;
+			ts_request_buffer = timestamp_asn1_sha256;
+		}
+
+		for (unsigned int i=0; i != hash_length; i++)
+		    ts_request_buffer[hash_offset +i] = hash[i];
 	}
 
 	void TSAClient::timestamp_data(const unsigned char *input, unsigned int data_len)
@@ -56,6 +82,8 @@ namespace eIDMW
 		CURL *curl;
 		CURLcode res;
 		char error_buf[CURL_ERROR_SIZE];
+		unsigned char *ts_request = timestamp_asn1_request;
+		size_t post_size = sizeof(timestamp_asn1_request);
 
 		//Make sure the static array receiving the network reply 
 		// is zero'd out before each request
@@ -65,7 +93,17 @@ namespace eIDMW
 		APL_Config tsa_url(CConfig::EIDMW_CONFIG_PARAM_XSIGN_TSAURL);
 		const char * TSA_URL = tsa_url.getString();
 
-		generate_asn1_request_struct(input);
+		if (data_len == SHA256_LEN)
+		{
+			generate_asn1_request_struct(input, true);
+			ts_request = timestamp_asn1_sha256;
+			post_size = sizeof(timestamp_asn1_sha256);
+
+		}
+		else
+		{
+			generate_asn1_request_struct(input, false);
+		}
 
 #ifdef _WIN32
 		curl_global_init(CURL_GLOBAL_WIN32);
@@ -85,14 +123,14 @@ namespace eIDMW
 
 			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
-			curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, sizeof(timestamp_asn1_request));
+			curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, post_size);
 
 			curl_easy_setopt(curl, CURLOPT_URL, TSA_URL);
 
 			curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
 
 			/* Now specify the POST data */ 
-			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, timestamp_asn1_request);
+			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, ts_request);
 
 			curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buf);
 

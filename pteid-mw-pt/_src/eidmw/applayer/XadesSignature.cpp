@@ -97,6 +97,7 @@
 #endif
 
 #define SHA1_LEN 20
+#define SHA256_LEN 32
 #define PTEID_SIGNATURE_LENGTH 128
 
 XERCES_CPP_NAMESPACE_USE
@@ -109,7 +110,7 @@ namespace eIDMW
 	#define XADES_NAMESPACE "http://uri.etsi.org/01903/v1.3.2#"
 	#define DSIG_NAMESPACE "http://www.w3.org/2000/09/xmldsig#"
 
-	
+	/*
 	CByteArray XadesSignature::HashFile(const char *file_path)
 	{
 
@@ -147,6 +148,70 @@ namespace eIDMW
 		return CByteArray((const unsigned char*)out, 20L);
 
 	}
+
+	*/
+
+
+	//Implemented in sign-pkcs7.cpp should be moved to a common file though
+	unsigned int SHA256_Wrapper(unsigned char *data, unsigned long data_len, unsigned char *digest);
+	
+	CByteArray XadesSignature::HashFile(const char *filename)
+	{
+		const int BUFSIZE = 4*1024;
+		EVP_MD_CTX *mdctx;
+		struct stat sb;
+		long long filesize;
+		unsigned char md_value[EVP_MAX_MD_SIZE];
+		unsigned int md_len, i;
+		char buffer[BUFSIZE];
+
+		OpenSSL_add_all_digests();
+
+		FILE *fp = fopen(filename, "rb");
+		if (!fp)
+		{
+			fprintf(stderr, "Error opening file!\n");
+			return CByteArray();
+		}
+
+		mdctx = EVP_MD_CTX_create();
+		EVP_DigestInit_ex(mdctx, EVP_sha256(), NULL);
+
+		stat(filename, &sb);
+		filesize = (long long) sb.st_size;
+
+		if (filesize <= BUFSIZE)
+		{
+			size_t read_b = fread(buffer, 1, filesize, fp);
+			if (read_b < filesize)
+				fprintf(stderr, "IO error in first block!\n");
+			EVP_DigestUpdate(mdctx, buffer, filesize);
+		}
+		else
+		{
+			while(1)
+			{
+				int read_b = fread(buffer, 1, BUFSIZE, fp);
+				EVP_DigestUpdate(mdctx, buffer, read_b);
+
+				if (read_b < BUFSIZE)
+					break;
+			}
+
+		}
+
+		if (m_do_long_term_validation)
+		{
+			//Cache the intermediate hash to reuse it later for ArchiveTimestamp
+			m_digest_state = EVP_MD_CTX_create();
+			EVP_MD_CTX_copy_ex(m_digest_state, mdctx);
+		}
+
+		EVP_DigestFinal_ex(mdctx, md_value, &md_len);
+		EVP_MD_CTX_destroy(mdctx);
+
+		return CByteArray(md_value, SHA256_LEN);
+	}
 	
 #ifdef WIN32
 
@@ -181,7 +246,7 @@ namespace eIDMW
 	{
 
 		int oidLen;
-		unsigned char * oid = getRSASigOID(HASH_SHA1, oidLen);
+		unsigned char * oid = getRSASigOID(HASH_SHA256, oidLen);
 		memcpy(toFill, oid, oidLen);
 		return oidLen;
 
@@ -291,12 +356,13 @@ XMLCh *createSignedPropertiesURI()
 	void appendCertRef(DOMDocument *doc, CByteArray &cert_data, X509* cert, DOMNode* parent)
 	{
 		safeBuffer str;
-		unsigned char cert_digest[SHA1_LEN];
+		unsigned char cert_digest[SHA256_LEN];
 		XMLCh *prefix = XMLString::transcode("etsi");
 		XMLCh *prefix_ds = XMLString::transcode("");
 		const std::string SHA1_ID = "http://www.w3.org/2000/09/xmldsig#sha1";
+		const std::string SHA256_ID = "http://www.w3.org/2001/04/xmlenc#sha256";
 
-		SHA1(cert_data.GetBytes(), cert_data.Size(), cert_digest);
+		SHA256_Wrapper(cert_data.GetBytes(), cert_data.Size(), cert_digest);
 
 		makeQName(str, prefix, "Cert");
 		DOMNode * n_Cert = CREATE_DOM_NODE
@@ -317,10 +383,10 @@ XMLCh *createSignedPropertiesURI()
 		std::string issuer = x509_name_toString(X509_get_issuer_name(cert));
 		std::string serial = x509_getSerial(cert);
 		
-		XMLCh *CertDigest = EncodeToBase64XMLCh(cert_digest, SHA1_LEN);
+		XMLCh *CertDigest = EncodeToBase64XMLCh(cert_digest, SHA256_LEN);
 
 		((DOMElement *)n_CertDigestMeth)->setAttribute(XMLString::transcode("Algorithm"),
-					 XMLString::transcode(SHA1_ID.c_str()));
+					 XMLString::transcode(SHA256_ID.c_str()));
 		n_CertDigestValue->appendChild(doc->createTextNode(CertDigest));
 		n_CertSerialNumber->appendChild(doc->createTextNode(
 			XMLString::transcode(serial.c_str())) );
@@ -547,10 +613,10 @@ int XadesSignature::HashSignedInfoNode(DOMDocument *doc, XMLByte *hash_buf)
     //fprintf(stderr, "DEBUG: C14n SignedProperties: %s\n", c14n.c_str());
 
     //TODO: Should be configurable
-    SHA1((const unsigned char*)c14n.c_str(), c14n.size(), hash_buf);
+    SHA256_Wrapper((unsigned char*)c14n.c_str(), c14n.size(), hash_buf);
 
     delete partial_xml_file;
-    return SHA1_LEN;
+    return SHA256_LEN;
 
 }
 
@@ -598,13 +664,13 @@ int XadesSignature::HashSignedPropertiesNode(DOMDocument *doc, XMLByte *hash_buf
     {
         c14n.append( (char*)&buffer[0], size_t(bytes));
     }
-    fprintf(stderr, "DEBUG: C14n SignedProperties: %s\n", c14n.c_str());
+    // fprintf(stderr, "DEBUG: C14n SignedProperties: %s\n", c14n.c_str());
 
     //TODO: Should be configurable
-    SHA1((const unsigned char*)c14n.c_str(), c14n.size(), hash_buf);
+    SHA256_Wrapper((unsigned char*)c14n.c_str(), c14n.size(), hash_buf);
 
     delete partial_xml_file;
-    return SHA1_LEN;
+    return SHA256_LEN;
 }
 
 X509 * XadesSignature::addCertificateToKeyInfo(CByteArray &cert, DSIGKeyInfoX509 *keyInfo)
@@ -960,7 +1026,6 @@ bool XadesSignature::AddArchiveTimestamp(DOMDocument *dom)
 		return false;
 
 	//Concatenation of all the signed files which always come before SignedProperties in SignedInfo element
-	digest_input += m_referenced_data;
 
 	digest_input += canonicalNode(findDOMNodeHelper(new_dom, XADES_NAMESPACE, "SignedProperties"), new_dom);
 	digest_input += canonicalNode(findDOMNodeHelper(new_dom, DSIG_NAMESPACE, "SignedInfo"), new_dom);
@@ -982,14 +1047,22 @@ bool XadesSignature::AddArchiveTimestamp(DOMDocument *dom)
 
 bool XadesSignature::appendTimestamp(DOMDocument * dom, DOMNode *parent, const char * tag_name, std::string to_timestamp)
 {
-	unsigned char signature_hash[SHA1_LEN];
+	unsigned char signature_hash[SHA256_LEN];
 	TSAClient tsa;
 	safeBuffer str;
 
-	//TODO: Should be configurable
-    SHA1((const unsigned char*)to_timestamp.c_str(), to_timestamp.size(), signature_hash);
 
-	tsa.timestamp_data(signature_hash, SHA1_LEN);
+	if (strcmp(tag_name, "ArchiveTimeStamp") == 0)
+	{
+		unsigned int md_len;
+		EVP_DigestUpdate(m_digest_state, to_timestamp.c_str(), to_timestamp.size());
+		EVP_DigestFinal_ex(m_digest_state, signature_hash, &md_len);
+	}
+	else
+	//TODO: Should be configurable
+    	SHA256_Wrapper((unsigned char*)to_timestamp.c_str(), to_timestamp.size(), signature_hash);
+
+	tsa.timestamp_data(signature_hash, SHA256_LEN);
 
 	CByteArray raw_response = tsa.getResponse();
 	//Try to get rid of the PKIStatusInfo integer from the ASN1 response!
@@ -1080,10 +1153,10 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	CByteArray sha1_hash;
 	CByteArray rsa_signature;
 
-	XMLByte sha1_hash_signed_props[SHA1_LEN];
+	XMLByte sha1_hash_signed_props[SHA256_LEN];
 
-	XMLByte toFill[35 * sizeof(XMLByte)]; //SHA-1 Hash prepended with Algorithm ID as by PKCS#1 standard
-	unsigned char signature_hash[SHA1_LEN];
+	XMLByte toFill[SHA256_LEN* sizeof(XMLByte)]; //SHA-1 Hash prepended with Algorithm ID as by PKCS#1 standard
+	// unsigned char signature_hash[SHA1_LEN];
 
         DOMImplementation *impl = 
 		DOMImplementationRegistry::getDOMImplementation(MAKE_UNICODE_STRING("Core"));
@@ -1093,8 +1166,8 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	DOMElement *rootElem = doc->getDocumentElement();
 
 
-	memset(toFill, 0x2f, 20);
-	oidlen = appendOID(toFill);
+	memset(toFill, 0x2f, SHA256_LEN);
+	//oidlen = appendOID(toFill);
 
 	try {
 		
@@ -1104,7 +1177,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		//sig->setDSIGNSPrefix(MAKE_UNICODE_STRING("ds"));
 
 		// Use it to create a blank signature DOM structure from the doc
-		sigNode = sig->createBlankSignature(doc, CANON_C14NE_NOC, SIGNATURE_RSA, HASH_SHA1);
+		sigNode = sig->createBlankSignature(doc, CANON_C14NE_NOC, SIGNATURE_RSA, HASH_SHA256);
 
 		//Add Id attribute to signature
 		signature_id = generateNodeID();
@@ -1119,7 +1192,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		{
 			const char * path = paths[i];
 			//Create a reference to the external file
-			DSIGReference * ref = sig->createReference(createURI(path));
+			DSIGReference * ref = sig->createReference(createURI(path), HASH_SHA256);
 			MWLOG(LEV_DEBUG, MOD_APL, L"SignXades(): Hashing file %s", path);
 			sha1_hash = HashFile(path);
 
@@ -1135,7 +1208,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		
 		HashSignedPropertiesNode(sig->getParentDocument(), sha1_hash_signed_props);
 
-		DSIGReference * ref_signed_props = sig->createReference(createSignedPropertiesURI());
+		DSIGReference * ref_signed_props = sig->createReference(createSignedPropertiesURI(), HASH_SHA256);
 		ref_signed_props->setType(XMLString::transcode("http://uri.etsi.org/01903/v1.1.1#SignedProperties"));
 		ref_signed_props->setExternalHash(sha1_hash_signed_props);
 		ref_signed_props->appendCanonicalizationTransform(
@@ -1145,8 +1218,8 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		{
 			// This is a somewhat hackish way of getting the canonicalized hash
 			// of the reference
-			HashSignedInfoNode(sig->getParentDocument(), toFill+oidlen);
-			sig->calculateSignedInfoHash(&toFill[oidlen], 20);
+			HashSignedInfoNode(sig->getParentDocument(), toFill);
+			//sig->calculateSignedInfoHash(toFill, SHA256_LEN);
 		}
 		catch (const XMLException &e)
 		{
@@ -1166,11 +1239,11 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		
 		try
 		{
-			rsa_signature = mp_card->Sign(CByteArray(toFill, SHA1_LEN + oidlen), true);
+			rsa_signature = mp_card->SignSHA256(CByteArray(toFill, SHA256_LEN), true);
 		}
 		catch(...)
 		{
-			MWLOG(LEV_ERROR, MOD_APL, L"APLCard::Sign() failed, can't generate XADES signature");
+			MWLOG(LEV_ERROR, MOD_APL, L"APLCard::SignSHA256() failed, can't generate XADES signature");
 			throw;
 		}
 

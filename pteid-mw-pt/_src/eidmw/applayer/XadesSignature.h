@@ -39,7 +39,7 @@ namespace eIDMW
 	{
 		public:
 
-		XadesSignature(APL_Card *card): mp_card(card), mp_cert(NULL), m_do_timestamping(false), m_do_long_term_validation(false) 
+		XadesSignature(APL_Card *card): mp_card(card), mp_cert(NULL), m_digest_state(NULL), m_do_timestamping(false), m_do_long_term_validation(false) 
 		{ };
 		
 		~XadesSignature()
@@ -89,7 +89,8 @@ namespace eIDMW
 		std::vector<X509 *> m_certs;
 		std::vector<CByteArray> m_cert_bas;
 
-		std::string m_referenced_data;
+		//Intermediate hash containing the signedinfo external file
+		EVP_MD_CTX *m_digest_state;
 		APL_Card *mp_card;
 	};
 }

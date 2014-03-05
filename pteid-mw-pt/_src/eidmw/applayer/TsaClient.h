@@ -12,7 +12,7 @@ namespace eIDMW
 
 		private:
 			static size_t curl_write_data(char *, size_t, size_t, void *);
-			void generate_asn1_request_struct(const unsigned char *);
+			void generate_asn1_request_struct(const unsigned char *, bool);
 			static CByteArray received_data;
 
 	};
