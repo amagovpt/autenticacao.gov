@@ -1072,7 +1072,7 @@ bool XadesSignature::appendTimestamp(DOMDocument * dom, DOMNode *parent, const c
 	{
 		MWLOG(LEV_ERROR, MOD_APL,
 			L"An error occurred in timestamp_data. It's possible that the timestamp service is down ");
-		return false;
+		throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
 	}
 	else
 	{
