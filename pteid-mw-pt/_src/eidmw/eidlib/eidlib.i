@@ -28,6 +28,8 @@
     %module Pteid
 #elif SWIGPHP
     %module pteid
+#elif SWIGJAVASCRIPT
+    %module pteid
 #else
 		TODO
 #endif
@@ -69,9 +71,11 @@
 
 #elif SWIGPYTHON
 
-#elif SWIGPERL
+#elif SWIGPERL  
 
 #elif SWIGPHP
+
+#elif SWIGJAVASCRIPT
 
 #else
     TODO
@@ -1500,6 +1504,8 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 #elif SWIGPERL
 
 #elif SWIGPHP
+
+#elif SWIGJAVASCRIPT
 
 #else
 		TODO
