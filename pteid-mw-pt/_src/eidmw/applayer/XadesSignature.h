@@ -49,8 +49,8 @@ namespace eIDMW
 		};
 
 		CByteArray &SignXades(const char ** paths, unsigned int n_paths);
-		bool enableTimestamp() { m_do_timestamping = true; }
-		bool enableLongTermValidation() { m_do_long_term_validation = true; };
+		void enableTimestamp() { m_do_timestamping = true; }
+		void enableLongTermValidation() { m_do_long_term_validation = true; };
 
 		CByteArray mp_timestamp_data;
 

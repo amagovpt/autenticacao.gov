@@ -110,7 +110,10 @@ static const char *SIGCONTAINER_README=
 			file.read (in, *size);
 		}
 		else
+		{
 			MWLOG(LEV_ERROR, MOD_APL, L"SigContainer::readFile() Error opening file %s\n", path);
+			return NULL;
+		}
 
 		file.close();
 		return in;
@@ -222,7 +225,9 @@ static const char *SIGCONTAINER_README=
 		char *ptr_content = NULL;
 		const char *absolute_path = NULL;
 		char *zip_entry_name= NULL;
+#ifdef WIN32
 		char *utf8_filename;
+#endif		
 		mz_bool status;
 
 		MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() called with output_file = %s\n",output_file); 

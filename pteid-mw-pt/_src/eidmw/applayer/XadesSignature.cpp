@@ -1000,7 +1000,6 @@ bool XadesSignature::AddSigAndRefsTimestamp(DOMDocument *doc)
 bool XadesSignature::AddArchiveTimestamp(DOMDocument *dom)
 {
 	std::string digest_input;
-	DOMNode * node;
 
 	DOMNode *node_unsigned_props_orig = findDOMNodeHelper(dom, XADES_NAMESPACE, "UnsignedSignatureProperties");
 
@@ -1145,7 +1144,6 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	XSECProvider prov;
 	DSIGSignature *sig;
 	DOMElement *sigNode;
-	int oidlen;
 	OpenSSLCryptoX509 *ssl_cert = NULL;
 	DSIGKeyInfoX509 * keyInfoX509 = NULL;
 	EVP_PKEY *pub_key = NULL;
@@ -1205,7 +1203,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	    loadSignerCert(certData, pub_key);
 	    certData.TrimRight(0);
 
-		DOMNode * timestamp_node = addSignatureProperties(sig, signature_id, certData);
+		addSignatureProperties(sig, signature_id, certData);
 		
 		HashSignedPropertiesNode(sig->getParentDocument(), sha1_hash_signed_props);
 

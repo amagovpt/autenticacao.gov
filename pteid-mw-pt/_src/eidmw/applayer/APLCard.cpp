@@ -318,7 +318,7 @@ bool APL_Card::ChangeCapPin(const char * new_pin)
 
 	this->readFile(PTEID_FILE_TOKENINFO, token_info_data);
 	CByteArray PAN = token_info_data.GetBytes(7, 8);
-	std:string pan_string = PAN.ToString(false);
+	std::string pan_string = PAN.ToString(false);
 
 	//Get OTP Params from EMV-Applet
 	OTPParams otp_params, otp_params2;
