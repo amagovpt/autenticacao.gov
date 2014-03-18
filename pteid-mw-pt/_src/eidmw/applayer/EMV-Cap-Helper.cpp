@@ -102,7 +102,7 @@ bool EMVCapHelper::getOtpParams(OTPParams *otp_struct)
 	otp_struct->counter = COUNTER;
 	otp_struct->pin_try_counter = m_trycounter;
 
-	if (m_pan == NULL || m_arqc == NULL || m_pan == NULL)
+	if (m_pan == NULL || m_arqc == NULL || m_atc == NULL)
 		return false;
 	else 
 		return true;
