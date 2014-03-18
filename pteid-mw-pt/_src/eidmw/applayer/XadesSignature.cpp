@@ -199,6 +199,7 @@ namespace eIDMW
 			}
 
 		}
+		fclose(fp);
 
 		if (m_do_long_term_validation)
 		{
