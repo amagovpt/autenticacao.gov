@@ -111,7 +111,7 @@ namespace eIDMW
 		sig_rect.x2 = lr_margin;
 
 		if (m_sector < 1 || m_sector > 18)
-			fprintf (stderr, "Illegal value for signature page sector: %d Valid values [1-18]\n", 
+			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-18]\n", 
 					m_sector);
 		
 		if (m_sector < 16)
@@ -161,6 +161,8 @@ namespace eIDMW
 		if (x509 == NULL)
 		{
 			MWLOG(LEV_ERROR, MOD_APL, L"loadCert() Error decoding certificate data!");
+			free(data_serial);
+			free(data_common_name);
 			return;
 		}
 		X509_NAME * subj = X509_get_subject_name(x509);
@@ -258,8 +260,6 @@ namespace eIDMW
 		GooString *outputName;
 		outputName = new GooString(outfile_path);
 		
-		doc = m_doc;
-
 		if (!doc->isOk()) {
 			delete doc;
 			fprintf(stderr, "Poppler returned error loading PDF document %s\n", 
@@ -276,7 +276,7 @@ namespace eIDMW
 
 		if (m_page > (unsigned int)doc->getNumPages())
 		{
-			fprintf(stderr, "Error: Signature Page %d is out of bounds for document %s",
+			fprintf(stderr, "Error: Signature Page %u is out of bounds for document %s",
 				m_page, doc->getFileName()->getCString());
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}

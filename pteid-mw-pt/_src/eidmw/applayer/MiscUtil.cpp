@@ -93,10 +93,9 @@ const void *memmem(const void *haystack, size_t n, const void *needle, size_t m)
 	int Truncate(const char *path)
 	{
 		int fh = 0, result = 0;
-		unsigned int nbytes = BUFSIZ;
 
 		/* This replicates the use of truncate() on Unix */
-		if (fh = _sopen(path, _O_RDWR, _S_IWRITE) == 0)
+		if ((fh = _sopen(path, _O_RDWR, _S_IWRITE)) == NULL)
 		{
 			if (( result = _chsize(fh, 0)) == 0)
 			_close(fh);
