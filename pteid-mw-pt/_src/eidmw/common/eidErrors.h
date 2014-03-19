@@ -294,6 +294,8 @@
 #define EIDMW_SAM_PROTOCOL_ERROR      0xe1d00d06
 #define EIDMW_SAM_UNKNOWN_ERROR      0xe1d00d07
 
+#define EIDMW_TIMESTAMP_ERROR 0xe1d00d08
+
 
 // Errors in system calls
 
