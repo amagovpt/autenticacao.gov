@@ -85,7 +85,7 @@ public:
 	  *
 	  * Create a new line with status = CSC_STATUS_NONE
 	  */
-	APL_CscLine(unsigned long ulUniqueID,CSC_Validation validationType,bool bAllowTestRoot,bool bAllowBadDate);
+	APL_CscLine(unsigned long ulUniqueID,CSC_Validation validationType,bool bAllowTestRoot);
 
 	/**
 	  * Constructor
@@ -143,12 +143,6 @@ public:
 
 	bool allowTestRoot() const					
 		{return (allowTestRoot(m_ulFlags))!=0;}					/**< Return true if test root are allow */
-
-	static bool allowBadDate(unsigned long ulFlags)				
-		{return (ulFlags & CSC_VALIDATION_FLAG_BADDATE)!=0;}	/**< Convert the flags into bool for wrong date allow */
-
-	bool allowBadDate() const					
-		{return (allowBadDate(m_ulFlags))!=0;}					/**< Return true if bad date are allow */
 
 	CSC_Status getStatus() const				
 		{return m_Status;}									/**< Return the Status of the line */

@@ -301,16 +301,6 @@ public:
 	EIDMW_APL_API virtual void setAllowTestCard(bool allow);
 
 	/**
-	  * Return true if bad date card are allowed
-	  */
-	EIDMW_APL_API virtual bool getAllowBadDate();
-
-	/**
-	  * Set the flag to allow the bad date cards
-	  */
-	EIDMW_APL_API virtual void setAllowBadDate(bool allow);
-
-	/**
 	  * Return the challenge
 	  *
 	  * @param bForceNewInit force a new initialization of the couple challenge/response
@@ -351,8 +341,6 @@ protected:
 	bool m_allowTestParam;			/**< Allow test card (from config) */
 	bool m_allowTestAnswer;			/**< User's answer to allow test card */
 	bool m_allowTestAsked;			/**< Already asked for allowing test card */
-
-	bool m_allowBadDate;			/**< Allow bad date card */
 
 	unsigned long m_certificateCount;
 	unsigned long m_pinCount;

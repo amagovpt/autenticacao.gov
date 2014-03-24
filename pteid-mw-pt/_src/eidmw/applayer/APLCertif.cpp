@@ -34,6 +34,7 @@
 #include "MWException.h"
 #include "CertStatusCache.h"
 #include "MiscUtil.h"
+#include "CRLFetcher.h"
 #include "CardPteidDef.h"
 #include "Log.h"
 #include "MiscUtil.h"
@@ -724,6 +725,7 @@ void APL_Certifs::foundCertificate(const char *SubDir, const char *File, void *p
 
 	cert = new CByteArray(buf,bufsize);
 	certifs->addCert(*cert, APL_CERTIF_TYPE_UNKNOWN, false);
+	return;
 
 	err:
 	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certifs::foundCertificate: problem with file %ls ", utilStringWiden(string(path)).c_str());
@@ -816,14 +818,6 @@ bool APL_Certifs::getAllowTestCard()
 		return true;
 
 	return m_card->getAllowTestCard();
-}
-
-bool APL_Certifs::getAllowBadDate()
-{
-	if(!m_card)
-		return true;
-
-	return m_card->getAllowBadDate();
 }
 
 APL_SmartCard *APL_Certifs::getCard()
@@ -1419,7 +1413,11 @@ tCardFileStatus APL_Certif::getFileStatus()
 APL_CertifStatus APL_Certif::getStatus()
 {
 	APL_ValidationLevel crl=APL_VALIDATION_LEVEL_NONE;
-	APL_ValidationLevel ocsp=APL_VALIDATION_LEVEL_NONE;
+	APL_ValidationLevel ocsp=APL_VALIDATION_LEVEL_MANDATORY;
+	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certif::getStatus for cert: %s", this->getOwnerName());
+
+
+/*
 
 	APL_Config conf_crl(CConfig::EIDMW_CONFIG_PARAM_CERTVALID_CRL); 
 	switch(conf_crl.getLong())
@@ -1442,73 +1440,27 @@ APL_CertifStatus APL_Certif::getStatus()
 		ocsp=APL_VALIDATION_LEVEL_MANDATORY;
 		break;
 	}
+*/
 
 	return getStatus(crl, ocsp);
 }
 
 APL_CertifStatus APL_Certif::getStatus(APL_ValidationLevel crl, APL_ValidationLevel ocsp)
 {
-	CSC_Status statusNone=CSC_STATUS_NONE;
-	CSC_Status statusCrl=CSC_STATUS_NONE;
+	// CSC_Status statusNone=CSC_STATUS_NONE;
+	// CSC_Status statusCrl=CSC_STATUS_NONE;
 	CSC_Status statusOcsp=CSC_STATUS_NONE;
-
-	if(crl==APL_VALIDATION_LEVEL_NONE && ocsp==APL_VALIDATION_LEVEL_NONE)
-	{
-		statusNone=m_statusCache->getCertStatus(getUniqueId(),CSC_VALIDATION_NONE,m_store);
-	}
-	else
-	{
-		if(crl!=APL_VALIDATION_LEVEL_NONE)
-		{
-			statusCrl=m_statusCache->getCertStatus(getUniqueId(),CSC_VALIDATION_CRL,m_store);
-		}
-
-		if(ocsp!=APL_VALIDATION_LEVEL_NONE)
-		{
-			statusOcsp=m_statusCache->getCertStatus(getUniqueId(),CSC_VALIDATION_OCSP,m_store);
-		}
-	}
-
-	//If one status is test => TEST
-	if(statusNone==CSC_STATUS_TEST
-		|| statusCrl==CSC_STATUS_TEST
-		|| statusOcsp==CSC_STATUS_TEST)
-		return APL_CERTIF_STATUS_TEST;
-
-	//If one issuer is missing => ISSUER
-	if(statusNone==CSC_STATUS_ISSUER
-		|| statusCrl==CSC_STATUS_ISSUER
-		|| statusOcsp==CSC_STATUS_ISSUER)
-		return APL_CERTIF_STATUS_ISSUER;
-
-	//If one status is date => DATE
-	if(statusNone==CSC_STATUS_DATE
-		|| statusCrl==CSC_STATUS_DATE
-		|| statusOcsp==CSC_STATUS_DATE)
-		return APL_CERTIF_STATUS_DATE;
-
-	//If one status is revoked => REVOKED
-	if(statusNone==CSC_STATUS_REVOKED
-		|| statusCrl==CSC_STATUS_REVOKED
-		|| statusOcsp==CSC_STATUS_REVOKED)
-		return APL_CERTIF_STATUS_REVOKED;
-
-	//If one status is unknown => UNKNOWN
-	if(statusNone==CSC_STATUS_UNKNOWN
-		|| statusCrl==CSC_STATUS_UNKNOWN
-		|| statusOcsp==CSC_STATUS_UNKNOWN)
-		return APL_CERTIF_STATUS_UNKNOWN;
-
-	if(ocsp==APL_VALIDATION_LEVEL_OPTIONAL || crl==APL_VALIDATION_LEVEL_OPTIONAL)
-	{
-		return APL_CERTIF_STATUS_VALID;
-	}
+	
+	statusOcsp=m_statusCache->getCertStatus(getUniqueId(),CSC_VALIDATION_OCSP,m_store);
+	fprintf(stderr, "DEBUG APL_Certif::getStatus() returned: %d\n", statusOcsp);
 
 	//If no crl neither ocsp and valid => VALID
-	if(statusNone==CSC_STATUS_VALID_SIGN)
+	if (statusOcsp==CSC_STATUS_VALID_SIGN)
 		return APL_CERTIF_STATUS_VALID;
-
-	return APL_CERTIF_STATUS_ERROR;
+	else if (statusOcsp == CSC_STATUS_REVOKED)
+		return APL_CERTIF_STATUS_REVOKED;
+	else
+		return APL_CERTIF_STATUS_ERROR;
 
 }
 
@@ -1546,6 +1498,7 @@ APL_OcspResponse *APL_Certif::getOcspResponse()
 
 APL_CertifStatus APL_Certif::validationCRL()
 {
+	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certif::validationCRL() for certificate %s", this->getOwnerName());
 	APL_Crl *crl=getCRL();
 
 	//If there is no crl (ex. root), validation is ok
@@ -1564,9 +1517,9 @@ APL_CertifStatus APL_Certif::validationOCSP()
 {
 	APL_OcspResponse *ocsp=getOcspResponse();
 
-	//If there is no crl (ex. root), validation is ok
+	//This cert does not contain an OCPS URL
 	if(!ocsp)
-		return APL_CERTIF_STATUS_VALID;
+		return APL_CERTIF_STATUS_UNKNOWN;
 
 	return ocsp->verifyCert();
 }
@@ -1896,6 +1849,7 @@ APL_Crl::APL_Crl(const char *uri)
 APL_Crl::APL_Crl(const char *uri,APL_Certif *certif)
 {
 	m_cryptoFwk=AppLayer.getCryptoFwk();
+	//m_cache=AppLayer.getCrlDownloadCache();
 
 	m_uri=uri;
 	
@@ -1939,6 +1893,9 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload)
 	FWK_CertifStatus eStatus;
 	CByteArray baCrl;
 
+	/*agrr TODO: getData() needs to be reimplemented to get rid of the CRLService dependency
+				basically just download the damn file ! */
+
 	switch(getData(baCrl,forceDownload))
 	{
 	case APL_CRL_STATUS_ERROR:
@@ -1949,23 +1906,25 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload)
 		break;
 	}
 	
-	eStatus=m_cryptoFwk->CRLValidation(m_certif->getData(),baCrl);
+	eStatus=m_cryptoFwk->CRLValidation(m_certif->getData(), baCrl);
 	return ConvertStatus(eStatus,APL_VALIDATION_PROCESS_CRL);
 }
 
 //Get data from the file and make the verification
-APL_CrlStatus APL_Crl::getData(CByteArray &data,bool forceDownload)
+APL_CrlStatus APL_Crl::getData(CByteArray &data, bool forceDownload)
 {
+	CRLFetcher crl_fetcher;
 	APL_CrlStatus eRetStatus=APL_CRL_STATUS_ERROR;
-
-	bool bValidity=false;
+	data = crl_fetcher.fetch_CRL_file(m_uri.c_str());
 
 	//If ok, we get the info, unless we return an empty bytearray
-	if(eRetStatus==APL_CRL_STATUS_ERROR)
+	if(data.Size() == 0)
 	{
 		data=EmptyByteArray;
-		MWLOG(LEV_DEBUG, MOD_APL, L"APL_Crl::getData: Return an empty array");
+		MWLOG(LEV_DEBUG, MOD_APL, L"APL_Crl::getData: Returning an empty array");
 	}
+	else
+		eRetStatus = APL_CRL_STATUS_VALID;
 
 	m_initOk=true;
 
@@ -1994,6 +1953,7 @@ const char *APL_Crl::getIssuerName()
 *****************************************************************************************/
 APL_OcspResponse::APL_OcspResponse(const char *uri,APL_Certif *certif)
 {
+	MWLOG(LEV_DEBUG, MOD_APL, L"OCSPResponse ctor for URI: %s", uri);
 	m_cryptoFwk=AppLayer.getCryptoFwk();
 
 	m_uri=uri;
@@ -2069,6 +2029,7 @@ APL_CertifStatus APL_OcspResponse::getResponse(CByteArray &response)
 
 APL_CertifStatus APL_OcspResponse::getResponse(CByteArray *response)
 {
+	MWLOG(LEV_DEBUG, MOD_APL, L"getOCSPResponse called");
 	//If we already have a response, we check if the status was acceptable and if it's still valid
 	if(m_response)
 	{

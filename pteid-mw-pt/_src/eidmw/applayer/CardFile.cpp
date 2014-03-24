@@ -142,14 +142,13 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 	m_status=CARDFILESTATUS_UNREAD;
 
 	m_testCardAllowed=false;
-	m_badDateAllowed=false;
 }
 
 APL_CardFile::~APL_CardFile()
 {
 }
 
-tCardFileStatus APL_CardFile::getStatus(bool bForceRead,const bool *pbNewAllowTest,const bool *pbNewAllowBadDate) 
+tCardFileStatus APL_CardFile::getStatus(bool bForceRead,const bool *pbNewAllowTest) 
 { 
 	/*if(pbNewAllowTest && m_testCardAllowed!=*pbNewAllowTest)
 	{
@@ -182,9 +181,9 @@ tCardFileStatus APL_CardFile::LoadData(bool bForceReload)
 		try
 		{
 			//Fill the m_data with the content of the file
-			MWLOG(LEV_INFO, MOD_APL, L"LoadData: Ask for file %ls", wsPath);	//TODO replace by DEBUG
+			//MWLOG(LEV_INFO, MOD_APL, L"LoadData: Ask for file %ls", wsPath);	//TODO replace by DEBUG
 			ReadFile();
-			MWLOG(LEV_INFO, MOD_APL, L"LoadData: Read file %ls ok", wsPath);	//TODO replace by DEBUG
+			//MWLOG(LEV_INFO, MOD_APL, L"LoadData: Read file %ls ok", wsPath);	//TODO replace by DEBUG
 		}
 		catch(CMWException& e)
 		{
@@ -230,7 +229,7 @@ tCardFileStatus APL_CardFile::LoadData(bool bForceReload)
 			m_data.ClearContents();
 	}
 
-	MWLOG(LEV_INFO, MOD_APL, L"LoadData: File : %ls - status : 0x%x", wsPath,m_status);
+	//MWLOG(LEV_INFO, MOD_APL, L"LoadData: File : %ls - status : 0x%x", wsPath,m_status);
 
 	return m_status;
 }

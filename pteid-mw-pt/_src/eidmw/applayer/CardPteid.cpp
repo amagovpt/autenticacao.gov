@@ -105,16 +105,13 @@ bool APL_EidFile_Trace::ShowData()
 	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
 	bool bAllowTest=pcard->getAllowTestCard();
-	bool bAllowBadDate=pcard->getAllowBadDate();
 
-	tCardFileStatus status=getStatus(false,&bAllowTest,&bAllowBadDate);
+	tCardFileStatus status=getStatus(false,&bAllowTest);
 	if(status==CARDFILESTATUS_OK)
 		return true;
 
 	//If the autorisation changed, we read the card again
-	if((status==CARDFILESTATUS_ERROR_TEST && pcard->getAllowTestCard())
-		|| (status==CARDFILESTATUS_ERROR_DATE && pcard->getAllowBadDate()))
-
+	if((status==CARDFILESTATUS_ERROR_TEST && pcard->getAllowTestCard()))
 		status=LoadData(true);
 
 	if(status==CARDFILESTATUS_OK)
@@ -449,15 +446,12 @@ bool APL_EidFile_ID::ShowData()
 	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
 	bool bAllowTest=pcard->getAllowTestCard();
-	bool bAllowBadDate=pcard->getAllowBadDate();
 
-	tCardFileStatus status=getStatus(false,&bAllowTest,&bAllowBadDate);
+	tCardFileStatus status=getStatus(false,&bAllowTest);
 	if(status==CARDFILESTATUS_OK)
 		return true;
 	//If the autorisation changed, we read the card again
-	if((status==CARDFILESTATUS_ERROR_TEST && pcard->getAllowTestCard())
-		|| (status==CARDFILESTATUS_ERROR_DATE && pcard->getAllowBadDate()))
-
+	if((status==CARDFILESTATUS_ERROR_TEST && pcard->getAllowTestCard()))
 		status=LoadData(true);
 
 	if(status==CARDFILESTATUS_OK)
@@ -899,16 +893,13 @@ bool APL_EidFile_Address::ShowData()
 	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
 	bool bAllowTest=pcard->getAllowTestCard();
-	bool bAllowBadDate=pcard->getAllowBadDate();
 
-	tCardFileStatus status=getStatus(false,&bAllowTest,&bAllowBadDate);
+	tCardFileStatus status=getStatus(false,&bAllowTest);
 	if(status==CARDFILESTATUS_OK)
 		return true;
 
 	//If the autorisation changed, we read the card again
-	if((status==CARDFILESTATUS_ERROR_TEST && pcard->getAllowTestCard())
-		|| (status==CARDFILESTATUS_ERROR_DATE && pcard->getAllowBadDate()))
-
+	if((status==CARDFILESTATUS_ERROR_TEST && pcard->getAllowTestCard()))
 		status=LoadData(true);
 
 	if(status==CARDFILESTATUS_OK)
@@ -1437,16 +1428,13 @@ bool APL_EidFile_Sod::ShowData()
 	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
 	bool bAllowTest=pcard->getAllowTestCard();
-	bool bAllowBadDate=pcard->getAllowBadDate();
 
-	tCardFileStatus status=getStatus(false,&bAllowTest,&bAllowBadDate);
+	tCardFileStatus status=getStatus(false,&bAllowTest);
 	if(status==CARDFILESTATUS_OK)
 		return true;
 
 	//If the autorisation changed, we read the card again
-	if((status==CARDFILESTATUS_ERROR_TEST && pcard->getAllowTestCard())
-			|| (status==CARDFILESTATUS_ERROR_DATE && pcard->getAllowBadDate()))
-
+	if((status==CARDFILESTATUS_ERROR_TEST && pcard->getAllowTestCard()))
 		status=LoadData(false);
 
 	if(status==CARDFILESTATUS_OK)
@@ -1563,16 +1551,13 @@ bool APL_EidFile_PersoData::ShowData()
         APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
         bool bAllowTest=pcard->getAllowTestCard();
-        bool bAllowBadDate=pcard->getAllowBadDate();
 
-        tCardFileStatus status=getStatus(false,&bAllowTest,&bAllowBadDate);
+        tCardFileStatus status=getStatus(false,&bAllowTest);
         if(status==CARDFILESTATUS_OK)
                 return true;
 
         //If the autorisation changed, we read the card again
-        if((status==CARDFILESTATUS_ERROR_TEST && pcard->getAllowTestCard())
-                || (status==CARDFILESTATUS_ERROR_DATE && pcard->getAllowBadDate()))
-
+        if((status==CARDFILESTATUS_ERROR_TEST && pcard->getAllowTestCard()))
                 status=LoadData(true);
 
         if(status==CARDFILESTATUS_OK)

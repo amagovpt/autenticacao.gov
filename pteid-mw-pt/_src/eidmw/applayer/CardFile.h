@@ -64,7 +64,7 @@ public:
 	  * Return the status of the file
 	  * @param bForceRead if true, the file is read before returning the status 
 	  */
-	virtual tCardFileStatus getStatus(bool bForceRead=false,const bool *pbNewAllowTest=NULL,const bool *pbNewAllowBadDate=NULL);
+	virtual tCardFileStatus getStatus(bool bForceRead=false,const bool *pbNewAllowTest=NULL);
 
 	/**
 	  * Return the content of the file
@@ -116,7 +116,6 @@ protected:
 	bool m_keepdata;				/**< m_data could not be read from card or clear (comes from constructor) */
 
 	bool m_testCardAllowed;			/**< Allow test card */
-	bool m_badDateAllowed;			/**< Allow bad date card */
 
 	APL_CryptoFwk *m_cryptoFwk;		/**< Pointer to the crypto framework */
 

@@ -24,6 +24,14 @@ namespace eIDMW
 		CURLcode res;
 		char error_buf[CURL_ERROR_SIZE];
 
+		if (strlen(url) == 0 || strstr(url, "http") != url)
+		{
+			fprintf(stderr, "Invalid URL for fetch_CRL_file()\n");
+			return received_data;
+		}
+
+		MWLOG(LEV_DEBUG, MOD_APL, L"Downloading CRL: %ls",utilStringWiden(url).c_str());
+
 		//Make sure the static array receiving the network reply 
 		// is zero'd out before each request
 		received_data.Chop(received_data.Size());
@@ -35,7 +43,7 @@ namespace eIDMW
 #endif
 		curl = curl_easy_init();
 
-		if (curl) 
+		if (curl)
 		{
 			struct curl_slist *headers= NULL;
 

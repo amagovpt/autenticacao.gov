@@ -286,6 +286,8 @@ void CPathUtil::checkDir(const char *dirIn)
 	if(strlen(dirIn)==0)
 		return;
 
+	fprintf(stderr, "checkDir() was called with %s\n", dirIn);
+
 	std::string directory = std::string(dirIn) + PATH_SEP_STR;
 #ifdef WIN32
 	DWORD dwError = 0;
@@ -334,7 +336,7 @@ void CPathUtil::checkDir(const char *dirIn)
 		if( mkdir(directory.c_str(),S_IRWXU | S_IRWXG | S_IRWXO) != 0)
 #endif
 		{
-			printf("The path '%s' does not exist.\nCreate it or change the config parameter\n",dirIn);
+			fprintf(stderr, "The path '%s' does not exist.\nCreate it or change the config parameter\n",dirIn);
 			throw CMWEXCEPTION(EIDMW_INVALID_PATH);
 		}
 	}

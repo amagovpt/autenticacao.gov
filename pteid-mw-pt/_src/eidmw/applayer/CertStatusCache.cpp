@@ -89,12 +89,11 @@ APL_CscLine::APL_CscLine(const char *lineIn)
 	}
 }
 
-APL_CscLine::APL_CscLine(unsigned long ulUniqueID,CSC_Validation validationType,bool bAllowTestRoot,bool bAllowBadDate)
+APL_CscLine::APL_CscLine(unsigned long ulUniqueID,CSC_Validation validationType,bool bAllowTestRoot)
 {
 	m_ulUniqueID=ulUniqueID;
 	m_ulFlags=	validationType 
-				+ (bAllowTestRoot?1:0) * CSC_VALIDATION_FLAG_TESTROOT
-				+ (bAllowBadDate?1:0) * CSC_VALIDATION_FLAG_BADDATE;
+				+ (bAllowTestRoot?1:0) * CSC_VALIDATION_FLAG_TESTROOT;
 	m_Status=CSC_STATUS_NONE;
 	m_Validity=""; 
 }
@@ -209,7 +208,7 @@ CSC_Status APL_CertStatusCache::getCertStatus(unsigned long ulUniqueID,const CSC
 
 	CSC_Status status;
 
-	APL_CscLine line(ulUniqueID,validationType,certStore->getAllowTestCard(),certStore->getAllowBadDate());
+	APL_CscLine line(ulUniqueID,validationType,certStore->getAllowTestCard());
 	unsigned long ulFlags=line.getFlags();
 
 	//Check if the certificate is in the cache and the status still valid
@@ -347,9 +346,9 @@ CSC_Status APL_CertStatusCache::checkCertValidation(unsigned long ulUniqueID,uns
 		return CSC_STATUS_TEST;
 
 	//If this is not a root
-	if(bRoot)
+	if (bRoot)
 	{
-		issuerstatus=CSC_STATUS_VALID_SIGN;
+		return CSC_STATUS_VALID_SIGN;
 	}
 	else
 	{
@@ -367,26 +366,21 @@ CSC_Status APL_CertStatusCache::checkCertValidation(unsigned long ulUniqueID,uns
 	bool bDateOk=m_cryptoFwk->VerifyDateValidity(cert->getData());
 
 	//Check date validity
-	if(!bDateOk && !APL_CscLine::allowBadDate(ulFlags))
+	if(!bDateOk)
 		return CSC_STATUS_DATE;
 
-	switch(APL_CscLine::getValidationType(ulFlags))
+	certstatus = convertStatus(cert->validationOCSP());
+
+	//In case the OCSP query failed fallback to CRL
+	//TODO: Fallback to CRL under the right conditions
+	if (certstatus != CSC_STATUS_REVOKED && certstatus != CSC_STATUS_VALID_SIGN)
 	{
-	case CSC_VALIDATION_NONE:
-		certstatus = CSC_STATUS_VALID_SIGN;
-		break;
-
-	case CSC_VALIDATION_CRL:
+		fprintf(stderr, "DEBUG: falling back to CRL validation for certificate %s: OCSP return code %d\n",
+			 cert->getOwnerName(), certstatus);
 		certstatus = convertStatus(cert->validationCRL());
-		break;
 
-	case CSC_VALIDATION_OCSP:
-		certstatus = convertStatus(cert->validationOCSP());
-		break;
-
-	default:
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK); //No other validation type are allowd
 	}
+
 
 	return certstatus;
 }

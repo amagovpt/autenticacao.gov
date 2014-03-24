@@ -272,10 +272,6 @@ public:
 	  */
 	EIDMW_APL_API bool getAllowTestCard();
 
-	/**
-	  * Return true if bad date cards are allowed
-	  */
-	EIDMW_APL_API bool getAllowBadDate();
 
 	void resetFlags();	/**< Reset flags (issuer, root and test) in the certifactes from the store */
 

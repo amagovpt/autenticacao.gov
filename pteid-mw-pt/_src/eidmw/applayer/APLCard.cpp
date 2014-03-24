@@ -500,7 +500,6 @@ APL_SmartCard::APL_SmartCard(APL_ReaderContext *reader):APL_Card(reader)
 
 	m_allowTestAsked=false;
 	m_allowTestAnswer=false;
-	m_allowBadDate=true;
 
 	m_challenge=NULL;
 	m_challengeResponse=NULL;
@@ -781,16 +780,6 @@ void APL_SmartCard::setAllowTestCard(bool allow)
 	m_allowTestAnswer=allow;
 
 	m_allowTestAsked=true;
-}
-
-bool APL_SmartCard::getAllowBadDate()
-{
-	return m_allowBadDate;
-}
-
-void APL_SmartCard::setAllowBadDate(bool allow)
-{
-	m_allowBadDate=allow;
 }
 
 void APL_SmartCard::initChallengeResponse()

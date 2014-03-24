@@ -31,6 +31,7 @@
 #include "openssl/evp.h"
 #include "openssl/x509.h"
 #include "openssl/x509v3.h"
+#include <openssl/err.h> 
 #include "xercesc/util/Base64.hpp"
 #include "xercesc/util/XMLString.hpp"
 
@@ -185,64 +186,6 @@ public:
 
 private:
 	CrlMemoryElement *m_CrlMemoryArray;
-};
-
-/* *********************************
-*** Internal class ThreadConnect ***
-********************************* */
-class ThreadConnect : public CThread
-{
-public:
-	ThreadConnect(char *pszHost, int iPort, int iSSL, SSL_CTX **ppSSLCtx)
-	{
-		m_pszHost=pszHost; 
-		m_iPort=iPort; 
-		m_iSSL=iSSL; 
-		m_ppSSLCtx=ppSSLCtx;
-		m_pConnect = NULL;
-	}
-
-	void Run()
-	{
-		BIO *pConnect = NULL;
-
-		if (m_iSSL) 
-		{
-			OpenSSL_add_all_algorithms();
-			*m_ppSSLCtx = SSL_CTX_new(SSLv23_client_method());
-	    
-			if (!(pConnect = BIO_new_ssl_connect(*m_ppSSLCtx))) 
-				return;
-
-			BIO_set_conn_hostname(pConnect, m_pszHost);   
-		}
-		else
-		{
-			if (!(pConnect = BIO_new_connect(m_pszHost)))
-				return;
-		}
-
-		BIO_set_conn_int_port(pConnect, &m_iPort);
-
-		if ( BIO_do_connect(pConnect) <= 0 )
-			return;
-
-		m_pConnect=pConnect;
-
-		return;
-	}
-
-	BIO *getConnect()
-	{
-		return m_pConnect;
-	}
-
-private:
-	char *m_pszHost;
-	int m_iPort;
-	int m_iSSL;
-	SSL_CTX **m_ppSSLCtx;
-	BIO *m_pConnect;
 };
 
 /* ***************
@@ -1065,20 +1008,20 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 		goto cleanup;
 	}
 
-    OCSP_request_add1_nonce(pRequest, 0, -1);
+	OCSP_request_add1_nonce(pRequest, 0, -1);
 
-    try
-	{
+	fprintf(stderr, "DEBUG: OCSP connecting to host %s port: %s IsSSL? %d\n",
+		pszHost, pszPort, iSSL);
 		/* establish a connection to the OCSP responder */
-		pBio = Connect(pszHost, atoi(pszPort),iSSL,&pSSLCtx);
-		bConnect = true;
-	}
-	catch(CMWException e)
+	pBio = Connect(pszHost, atoi(pszPort),iSSL,&pSSLCtx);
+	
+	if (pBio == NULL)
 	{
+
 		eStatus=FWK_CERTIF_STATUS_CONNECT;
 	}
 
-	if(bConnect)
+	else
 	{
 		/* send the request and get a response */
 		if( NULL == (*pResponse = OCSP_sendreq_bio(pBio, pszPath, pRequest)))
@@ -1434,18 +1377,49 @@ X509_CRL *APL_CryptoFwk::getX509CRL(const CByteArray &crl)
 
 BIO *APL_CryptoFwk::Connect(char *pszHost, int iPort, int iSSL, SSL_CTX **ppSSLCtx) 
 {
-	ThreadConnect thread_connect(pszHost,iPort,iSSL,ppSSLCtx);
-	thread_connect.Start();
 
-	APL_Config conf_timeout(CConfig::EIDMW_CONFIG_PARAM_PROXY_CONNECT_TIMEOUT);
-	long timeout=conf_timeout.getLong();
+	BIO * pConnect = NULL;
+	// ThreadConnect thread_connect(pszHost,iPort,iSSL,ppSSLCtx);
+	// thread_connect.Start();
 
-	if(!thread_connect.WaitTimeout(timeout,1))
-		throw CMWEXCEPTION(EIDMW_ERR_SOCKET_CONNECT);
+	// APL_Config conf_timeout(CConfig::EIDMW_CONFIG_PARAM_PROXY_CONNECT_TIMEOUT);
+	// long timeout=conf_timeout.getLong();
 
-	BIO *pConnect = thread_connect.getConnect();
-	if(pConnect==NULL)
-		throw CMWEXCEPTION(EIDMW_ERR_SOCKET_CONNECT);
+	// if(!thread_connect.WaitTimeout(timeout,1))
+	// 	throw CMWEXCEPTION(EIDMW_ERR_SOCKET_CONNECT);
+
+	// BIO *pConnect = thread_connect.getConnect();
+	// if(pConnect==NULL)
+	// 	throw CMWEXCEPTION(EIDMW_ERR_SOCKET_CONNECT);
+
+		if (iSSL) 
+		{
+			OpenSSL_add_all_algorithms();
+			SSL_CTX *pSSLCtx = SSL_CTX_new(SSLv23_client_method());
+	    
+			if (!(pConnect = BIO_new_ssl_connect(pSSLCtx))) 
+				return NULL;
+
+			BIO_set_conn_hostname(pConnect, pszHost);   
+		}
+		else
+		{
+			if (!(pConnect = BIO_new_connect(pszHost)))
+			{
+				ERR_print_errors_fp(stderr);
+				return NULL;
+
+			}
+		}
+
+		BIO_set_conn_int_port(pConnect, &iPort);
+
+		if ( BIO_do_connect(pConnect) <= 0 )
+		{
+			ERR_print_errors_fp(stderr);
+			return NULL;
+		}
+
 
     return pConnect;
 }
