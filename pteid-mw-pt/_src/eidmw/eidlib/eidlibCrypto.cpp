@@ -103,6 +103,21 @@ PTEID_CertifType PTEID_Certificate::getType()
 	return out;
 }
 
+PTEID_CertifStatus PTEID_Certificate::getStatus()
+{
+        PTEID_CertifStatus out = PTEID_CERTIF_STATUS_UNKNOWN;
+
+        BEGIN_TRY_CATCH
+
+        APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
+        out = ConvertCertStatus(pimpl->getStatus());
+       
+        END_TRY_CATCH
+
+        return out;
+}
+
+
 const PTEID_ByteArray& PTEID_Certificate::getCertData()
 {
 	PTEID_ByteArray *out = NULL;

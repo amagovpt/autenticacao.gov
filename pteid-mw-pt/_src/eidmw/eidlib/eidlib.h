@@ -1489,6 +1489,7 @@ public:
 
 	PTEIDSDK_API const char *getLabel();				/**< Return the label of the certificate */
 	PTEIDSDK_API unsigned long getID();				/**< Return the id of the certificate */
+	PTEIDSDK_API PTEID_CertifStatus getStatus();			/** OCSP/CRL validation status */
 
 	PTEIDSDK_API PTEID_CertifType getType();			/**< Return the type of the certificate */
 
