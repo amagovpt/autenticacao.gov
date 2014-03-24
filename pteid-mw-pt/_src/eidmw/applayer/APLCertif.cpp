@@ -1700,12 +1700,12 @@ int APL_Certif::ExternalCertDataSize(int certnr)
 	int len;
 
 	if ((cert = ExternalCert(certnr)) == NULL)
-		return NULL;
+		return 0;
 
 	len = i2d_X509 (cert, &rdata);
 
 	if (len < 0)
-		return NULL;
+		return 0;
 
 	return len;
 }
@@ -1752,7 +1752,7 @@ unsigned long APL_Certif::ExternalCertKeylenght(int certnr)
 	unsigned long keylen;
 
 	if ((cert = ExternalCert(certnr)) == NULL)
-		return NULL;
+		return 0;
 
 	EVP_PKEY *pKey = X509_get_pubkey(cert);
 	keylen = EVP_PKEY_bits(pKey);
@@ -1892,9 +1892,6 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload)
 
 	FWK_CertifStatus eStatus;
 	CByteArray baCrl;
-
-	/*agrr TODO: getData() needs to be reimplemented to get rid of the CRLService dependency
-				basically just download the damn file ! */
 
 	switch(getData(baCrl,forceDownload))
 	{

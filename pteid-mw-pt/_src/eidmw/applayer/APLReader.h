@@ -80,7 +80,6 @@ class CCardLayer;
 class CReader;
 
 class APL_ReaderContext;
-class APL_CrlDownloadingCache;
 class APL_CryptoFwkPteid;
 class APL_CertStatusCache;
 
@@ -178,12 +177,6 @@ public:
 	  */
 	CCardLayer *getCardLayer() const;
 
-	/**
-	  * Return the CRL download cache object
-	  *
-	  * NOT for using outside the library (NO EXPORT)
-	  */
-	APL_CrlDownloadingCache *getCrlDownloadCache() const;
 
 	/**
 	  * Return the crypto framework object
@@ -272,7 +265,6 @@ private:
 	CCardLayer *m_Cal;								/**< Pointer to cardlayer */
 	APL_CryptoFwkPteid *m_cryptoFwk;					/**< Pointer to APL_CryptoFwkPteid */
 	APL_CertStatusCache *m_certStatusCache;			/**< Pointer to APL_CertStatusCache */
-	APL_CrlDownloadingCache *m_crlDownloadCache;	/**< Pointer to crl download cache */
 };
 
 class CReader;

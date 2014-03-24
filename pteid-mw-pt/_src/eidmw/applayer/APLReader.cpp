@@ -30,7 +30,6 @@
 #include "CardLayer.h"
 #include "APLReader.h"
 #include "APLConfig.h"
-#include "CRLService.h" 
 #include "ReadersInfo.h"
 #include "Util.h"
 #include "TLVBuffer.h"
@@ -572,7 +571,6 @@ CAppLayer::CAppLayer()
 
 	m_Cal=NULL;
 	m_cryptoFwk=NULL;
-	m_crlDownloadCache=NULL;
 	m_certStatusCache=NULL;
 
 	m_askfortestcard=false;
@@ -660,23 +658,12 @@ void CAppLayer::startAllServices()
 	if(!m_certStatusCache)
 		m_certStatusCache = new APL_CertStatusCache(m_cryptoFwk);
 
-	//At least, start the CrlDownloadCache, which will Run CRL service and DownloadControl
-	// if(!m_crlDownloadCache)
-	// 	m_crlDownloadCache = new APL_CrlDownloadingCache(m_cryptoFwk);
 }
 
 void CAppLayer::stopAllServices() 
 {
 	//stopping is made in the opposite order then starting
 	MWLOG(LEV_INFO, MOD_APL, L"Stop all applayer services");
-
-	if(m_crlDownloadCache)
-	{
-		m_crlDownloadCache->stopAllThreads();
-
-		delete m_crlDownloadCache;
-		m_crlDownloadCache=NULL;
-	}
 
 	if(m_cryptoFwk)
 	{
@@ -783,15 +770,6 @@ CCardLayer *CAppLayer::getCardLayer() const
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	return m_Cal; 
-}
-
-//Return a reference to the CRL download cache
-APL_CrlDownloadingCache *CAppLayer::getCrlDownloadCache() const
-{
-	if(!m_crlDownloadCache)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-	return m_crlDownloadCache; 
 }
 
 //Return a reference to the crypto framework
