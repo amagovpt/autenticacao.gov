@@ -1,0 +1,109 @@
+Index: pkcs11/cal.cpp
+===================================================================
+--- pkcs11/cal.cpp	(revision 3506)
++++ pkcs11/cal.cpp	(working copy)
+@@ -38,6 +38,7 @@
+ 
+ CCardLayer *oCardLayer;
+ CReadersInfo *oReadersInfo;
++int g_PINCache = 0;
+ 
+ extern "C" {
+ extern unsigned int   gRefCount;
+@@ -64,7 +65,6 @@
+    }
+ catch (CMWException e)
+    {
+-     printf ("FOI AQUI CCLAYER\n");
+    return(cal_translate_error(WHERE, e.GetError()));
+    }
+ catch (...) 
+@@ -88,22 +88,49 @@
+ #define WHERE "cal_close()"
+ int cal_close()
+ {
+-int ret = 0;
++   int ret = 0;
+ 
+ //Reference count countdown, clean if 0
+ //if (--gRefCount > 0)
+ //   return (0);
+ 
+-if (oCardLayer)
+-   delete(oCardLayer);
+-if (oReadersInfo)
+-   delete(oReadersInfo);
++   if (g_PINCache)
++   {
+ 
+-oCardLayer = NULL;
+-oReadersInfo   = NULL;
++      P11_SLOT *pSlot = NULL;
++      
++      //XXX: hardcoded to slot 0
++      pSlot = p11_get_slot(0);
++      if (pSlot == NULL)
++      {
++         log_trace(WHERE, "E: Invalid slot 0");
++         return (CKR_SLOT_ID_INVALID);
++      }
++      std::string szReader = pSlot->name;
+ 
+-return (ret);
++      try
++      {
++         CReader &oReader = oCardLayer->getReader(szReader);
++
++         oReader.setSSO(false);
++      }
++      catch (CMWException e)
++      {
++
++      }
++   }
++
++   if (oCardLayer)
++      delete(oCardLayer);
++   if (oReadersInfo)
++      delete(oReadersInfo);
++
++   oCardLayer = NULL;
++   oReadersInfo = NULL;
++
++   return (ret);
+ }
++
+ #undef WHERE
+ 
+ 
+@@ -963,6 +990,17 @@
+ try
+    {
+    CReader &oReader = oCardLayer->getReader(szReader);
++
++   if (g_PINCache)
++   {
++      oReader.setSSO(true);
++   }
++   //HACK: Auth PIN caching for the purpose of making the SCAP application work properly
++   if (pSignData->id == 0x45 && !g_PINCache)
++   {
++      g_PINCache = 1;
++   }
++
+    tPrivKey key = oReader.GetPrivKeyByID(pSignData->id);
+ 
+    switch(pSignData->mechanism)
+Index: cardlayer/Card.h
+===================================================================
+--- cardlayer/Card.h	(revision 3506)
++++ cardlayer/Card.h	(working copy)
+@@ -126,7 +126,7 @@
+ 
+     virtual void setPinpadHandler(GenericPinpad * pinpad)
+     {
+-	m_poPinpad = pinpad;
++	//m_poPinpad = pinpad;
+ 
+     }
+ 
