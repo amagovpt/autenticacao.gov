@@ -375,8 +375,8 @@ CSC_Status APL_CertStatusCache::checkCertValidation(unsigned long ulUniqueID,uns
 	//TODO: Fallback to CRL under the right conditions
 	if (certstatus != CSC_STATUS_REVOKED && certstatus != CSC_STATUS_VALID_SIGN)
 	{
-		fprintf(stderr, "DEBUG: falling back to CRL validation for certificate %s: OCSP return code %d\n",
-			 cert->getOwnerName(), certstatus);
+		//fprintf(stderr, "DEBUG: falling back to CRL validation for certificate %s: OCSP return code %d\n",
+		//	 cert->getOwnerName(), certstatus);
 		certstatus = convertStatus(cert->validationCRL());
 
 	}

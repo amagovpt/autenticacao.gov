@@ -98,7 +98,7 @@ enum PTEID_CertifStatus
 	PTEID_CERTIF_STATUS_CONNECT,		/**< Connection problem */
 	PTEID_CERTIF_STATUS_ISSUER,		/**< An issuer is missing in the chain */
 	PTEID_CERTIF_STATUS_ERROR,		/**< Error during validation */
-	PTEID_CERTIF_STATUS_VALID,		/**< Valid certificate */
+	PTEID_CERTIF_STATUS_VALID		/**< Valid certificate */
 };
 
 enum PTEID_CertifType

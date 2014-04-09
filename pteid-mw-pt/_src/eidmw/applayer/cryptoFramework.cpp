@@ -1010,8 +1010,8 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 
 	OCSP_request_add1_nonce(pRequest, 0, -1);
 
-	fprintf(stderr, "DEBUG: OCSP connecting to host %s port: %s IsSSL? %d\n",
-		pszHost, pszPort, iSSL);
+	//fprintf(stderr, "DEBUG: OCSP connecting to host %s port: %s IsSSL? %d\n",
+	//	pszHost, pszPort, iSSL);
 		/* establish a connection to the OCSP responder */
 	pBio = Connect(pszHost, atoi(pszPort),iSSL,&pSSLCtx);
 	

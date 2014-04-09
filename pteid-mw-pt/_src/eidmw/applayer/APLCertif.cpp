@@ -1452,7 +1452,7 @@ APL_CertifStatus APL_Certif::getStatus(APL_ValidationLevel crl, APL_ValidationLe
 	CSC_Status statusOcsp=CSC_STATUS_NONE;
 	
 	statusOcsp=m_statusCache->getCertStatus(getUniqueId(),CSC_VALIDATION_OCSP,m_store);
-	fprintf(stderr, "DEBUG APL_Certif::getStatus() returned: %d\n", statusOcsp);
+	//fprintf(stderr, "DEBUG APL_Certif::getStatus() returned: %d\n", statusOcsp);
 
 	//If no crl neither ocsp and valid => VALID
 	if (statusOcsp==CSC_STATUS_VALID_SIGN)
