@@ -31,6 +31,7 @@
 using namespace eIDMW;
 
 typedef QMap<QString,QString> tFieldMap;
+
 //**************************************************
 // Card information
 // This class contains all the card specific data
@@ -48,6 +49,7 @@ public:
 #define CARD_VALIDFROM		"card_validfrom"
 #define CARD_VALIDUNTIL		"card_validuntil"
 
+/*
 enum eCARD_SUBTYPE
 {
 	  NON_EUROPEAN_A = 11
@@ -60,18 +62,19 @@ enum eCARD_SUBTYPE
 	, EUROPEAN_F_PLUS		// 18
 	, EUROPEAN_UNKNOWN		// 19
 };
-
+*/
+/*
 enum eCARD_BASETYPE
 {
 	  BASETYPE_BELGIUM = 1
 };
+*/
 
 	//----------------------------------------------
 	// ctor
 	//----------------------------------------------
-	CardInfo( void )
-	{
-	}
+	CardInfo( void ) {}
+
 	//----------------------------------------------
 	// Reset: reset all the members to default values
 	//----------------------------------------------
@@ -79,6 +82,7 @@ enum eCARD_BASETYPE
 	{
 		m_Fields.clear();
 	}
+
 	//----------------------------------------------
 	// Retrieve the card specific data 
 	//----------------------------------------------
@@ -110,7 +114,6 @@ enum eCARD_BASETYPE
 
 		bRetVal = true;
 		return bRetVal;
-
 	}
 
 	//----------------------------------------------
@@ -133,9 +136,9 @@ enum eCARD_BASETYPE
 
 		return formatted;
 	}
+
 private:
 	tFieldMap m_Fields;
-
 };
 
 //**************************************************
@@ -227,6 +230,7 @@ public:
 		m_pCard = &Card;
 		return bRetVal;
 	};
+
 	//----------------------------------------------
 	// get reference to all fields
 	//----------------------------------------------
@@ -240,10 +244,12 @@ public:
 private:
 	tFieldMap m_Fields;
 };
+
 //**************************************************
 // Person relatives information
 // This class contains all the persons relatives specific data
 //**************************************************
+/*
 class RelativesInfo
 {
 public:
@@ -293,6 +299,7 @@ public:
 private:
 	tFieldMap m_Fields;
 };
+*/
 
 //**************************************************
 // Person extra information
@@ -573,7 +580,7 @@ public:
 	{
 		m_Fields.clear();
 		//m_AddressInfo.Reset();
-		m_RelativesInfo.Reset();
+        //m_RelativesInfo.Reset();
 		m_PersonExtraInfo.Reset();
 		m_BiometricInfo.Reset();
 		m_PersoDataInfo.Reset();
@@ -633,12 +640,11 @@ public:
 		m_Fields[MRZ3]						= pteid_eid.getMRZ3();
 		m_Fields[ACCIDENTALINDICATIONS]		= pteid_eid.getAccidentalIndications();
 
-		m_RelativesInfo.RetrieveData(Card);
+        //m_RelativesInfo.RetrieveData(Card);
 		m_PersonExtraInfo.RetrieveData(Card);
 		m_BiometricInfo.RetrieveData(Card);
 
 		return bRetVal;
-
 	}
 
 	//----------------------------------------------
@@ -690,8 +696,8 @@ public:
 	}
 
 public:
-	//AddressInfo		m_AddressInfo;			//!< address info
-	RelativesInfo	m_RelativesInfo;		//!< person relatives info
+	//AddressInfo		m_AddressInfo;		//!< address info
+	//RelativesInfo	m_RelativesInfo;		//!< person relatives info
 	PersonExtraInfo	m_PersonExtraInfo;		//!< person extra info
 	BiometricInfo	m_BiometricInfo;		//!< person biometric data
 	PersoDataInfo   m_PersoDataInfo;		//!< personal data info
@@ -699,6 +705,7 @@ public:
 private:
 	tFieldMap m_Fields;
 };
+
 //**************************************************
 // Certificate info on the card
 //**************************************************
@@ -707,32 +714,77 @@ class CertifInfo
 public:
 	CertifInfo( void )
 		: m_pCertificates(NULL)
+		//, m_pSignatureCert(NULL)
+		//, m_pAuthenticationCert(NULL)
 	{
 	}
+
 	virtual ~CertifInfo( void )
 	{
 	}
-	bool RetrieveDataCertificates( PTEID_EIDCard& card )
+
+    //void Reset( void )
+    //{
+    //    m_MainCertifs.clear();
+    //}
+
+    bool RetrieveData( PTEID_EIDCard& card )
 	{
 		m_pCertificates = &card.getCertificates();
-		/*if (m_pCertificates)
-		{
-			return true;
-		}*/
 		return true;
 	}
+
 	PTEID_Certificates* getCertificates( void )
 	{
 		return m_pCertificates;
 	}
 
+    /*QList<PTEID_Certificate *>& getMainCertificates()
+    {
+        if (m_MainCertifs.empty())
+        {
+            m_MainCertifs.append(&m_pCertificates->getAuthentication());
+            m_MainCertifs.append(&m_pCertificates->getSignature());
+        }
+
+        return m_MainCertifs;
+    }*/
+
+/*
+    // Just load the two essential certificates (sign & auth) and
+    // avoid the overhead of loading every cert we now.
+    bool RetrieveDataSimpleCertificates( PTEID_EIDCard& card )
+    {
+        m_pSignatureCert = &card.getSignature();
+        m_pAuthenticationCert = &card.getAuthentication();
+
+        return true;
+    }
+
+    PTEID_Certificate* getSignatureCert ( void )
+    {
+        return m_pSignatureCert;
+    }
+
+    PTEID_Certificate* getAuthenticationCert ( void )
+    {
+        return m_pAuthenticationCert;
+    }
+*/
 private:
 	PTEID_Certificates* m_pCertificates;
+	//QList<PTEID_Certificate *> m_MainCertifs;
+
+/*
+    PTEID_Certificate*  m_pSignatureCert;
+    PTEID_Certificate*  m_pAuthenticationCert;
+*/
 };
+
 //**************************************************
 // Pins info on the card
 //**************************************************
-class PinsInfo
+/*class PinsInfo
 {
 public:
 	PinsInfo( void )
@@ -741,7 +793,8 @@ public:
 	virtual ~PinsInfo( void )
 	{
 	}
-};
+};*/
+
 //**************************************************
 // Base class containing the card information
 // The data for the cards is spread over several classes to separate
@@ -774,10 +827,10 @@ public:
 	//----------------------------------------------
 	// Load the data from an EID card
 	//----------------------------------------------
-	bool LoadData(PTEID_EIDCard&	   Card, QString const& cardReader );
-	bool LoadDataAddress(PTEID_EIDCard&	   Card, QString const& cardReader );
-	bool LoadDataPersoData(PTEID_EIDCard&	   Card, QString const& cardReader );
-	bool LoadDataCertificates(PTEID_EIDCard&	   Card, QString const& cardReader );
+	bool LoadData             (PTEID_EIDCard& Card, QString const& cardReader );
+	bool LoadDataAddress      (PTEID_EIDCard& Card, QString const& cardReader );
+	bool LoadDataPersoData    (PTEID_EIDCard& Card, QString const& cardReader );
+	bool LoadDataCertificates (PTEID_EIDCard& Card, QString const& cardReader );
 
 	//----------------------------------------------
 	// Load the data from a memory card
@@ -798,6 +851,8 @@ private:
 			bRetVal |= m_CardInfo.RetrieveData(Card);
 			bRetVal |= m_PersonInfo.RetrieveData(Card);
 			bRetVal |= m_MiscInfo.RetrieveData(Card);
+			bRetVal |= m_CertifInfo.RetrieveData(Card);
+
 			//TODO just a marker
 			//bRetVal |= m_AddressInfo.RetrieveData(Card);
 		}
@@ -807,12 +862,11 @@ private:
 			// ok fine, we don't read the personal information if not allowed
 		}
 
-//		bRetVal |= m_PinsInfo.RetrieveData(pCard);
+		//bRetVal |= m_PinsInfo.RetrieveData(pCard);
 		//bRetVal |= m_CertifInfo.RetrieveData(Card);
 		m_pCard = &Card;
 
 		return bRetVal;
-
 	}
 
 	bool RetrieveDataAddress (PTEID_EIDCard& Card)
@@ -828,12 +882,11 @@ private:
 			// ok fine, we don't read the personal information if not allowed
 		}
 
-	//		bRetVal |= m_PinsInfo.RetrieveData(pCard);
-			//bRetVal |= m_CertifInfo.RetrieveData(Card);
+		//bRetVal |= m_PinsInfo.RetrieveData(pCard);
+		//bRetVal |= m_CertifInfo.RetrieveData(Card);
 		m_pCard = &Card;
 
 		return bRetVal;
-
 	}
 
 	bool RetrieveDataPersoData (PTEID_EIDCard& Card)
@@ -849,12 +902,11 @@ private:
 			// ok fine, we don't read the personal information if not allowed
 		}
 
-		//		bRetVal |= m_PinsInfo.RetrieveData(pCard);
+		//bRetVal |= m_PinsInfo.RetrieveData(pCard);
 		//bRetVal |= m_CertifInfo.RetrieveDataCertificates(Card);
 		m_pCard = &Card;
 
 		return bRetVal;
-
 	}
 
 	bool RetrieveDataCertificates (PTEID_EIDCard& Card)
@@ -862,7 +914,7 @@ private:
 		bool bRetVal = false;
 		try
 		{
-			bRetVal |= m_CertifInfo.RetrieveDataCertificates (Card);
+			bRetVal |= m_CertifInfo.RetrieveData (Card);
 		}
 		catch (PTEID_ExNotAllowByUser& e)
 		{
@@ -870,28 +922,25 @@ private:
 			// ok fine, we don't read the personal information if not allowed
 		}
 
-		//		bRetVal |= m_PinsInfo.RetrieveData(pCard);
-		bRetVal |= m_CertifInfo.RetrieveDataCertificates(Card);
+		//bRetVal |= m_PinsInfo.RetrieveData(pCard);
+		bRetVal |= m_CertifInfo.RetrieveData(Card);
 		m_pCard = &Card;
 
 		return bRetVal;
-
 	}
 
 public:
 	CardInfo		m_CardInfo;				//!< card specific data
 	PersonInfo		m_PersonInfo;			//!< person info
 	MiscInfo		m_MiscInfo;				//!< miscellaneous info
-	AddressInfo		m_AddressInfo;				//!< Address info
-	PersoDataInfo	m_PersoDataInfo;			//!< info on the PersoData
+	AddressInfo		m_AddressInfo;			//!< Address info
+	PersoDataInfo	m_PersoDataInfo;		//!< info on the PersoData
 
-	PinsInfo		m_PinsInfo;				//!< info on all the pins
+	//PinsInfo		m_PinsInfo;				//!< info on all the pins
 	CertifInfo		m_CertifInfo;			//!< info on the certificates
 
 	PTEID_Card*		m_pCard;				//!< pointer to the card this data belongs to
-	//std::string		m_cardReader;			//!< cardreader from which we read the data
-	//PTEID_Card*		m_pCardaddress;
-	QString		m_cardReader;			//!< cardreader from which we read the data
+	QString			m_cardReader;			//!< cardreader from which we read the data
 };
 
 #endif

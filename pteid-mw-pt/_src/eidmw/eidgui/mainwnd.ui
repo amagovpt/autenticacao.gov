@@ -57,7 +57,7 @@
        <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="page_Wellcome"/>
       <widget class="QWidget" name="page_Identity">
@@ -447,6 +447,82 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
         </property>
         <property name="text">
          <string>Verify Signature</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentity_CertStatusAuth">
+        <property name="geometry">
+         <rect>
+          <x>660</x>
+          <y>40</y>
+          <width>138</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentity_CertStatusSign">
+        <property name="geometry">
+         <rect>
+          <x>660</x>
+          <y>90</y>
+          <width>138</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_12">
+        <property name="geometry">
+         <rect>
+          <x>660</x>
+          <y>70</y>
+          <width>131</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Cert Signature:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_13">
+        <property name="geometry">
+         <rect>
+          <x>660</x>
+          <y>20</y>
+          <width>141</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Cert Authentication:</string>
         </property>
        </widget>
       </widget>
@@ -1255,6 +1331,35 @@ image: url(:/images/Images/bg-Light-Blue.png);</string>
         </property>
         <property name="text">
          <string>&amp;Details &gt;&gt;</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtCert_RevStatus">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>300</y>
+          <width>175</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_14">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>280</y>
+          <width>171</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Estado do certificado</string>
         </property>
        </widget>
       </widget>
@@ -2690,6 +2795,73 @@ font: 10pt &quot;Arial&quot;;</string>
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>txtIdentity_GivenNames</tabstop>
+  <tabstop>txtIdentity_Sex</tabstop>
+  <tabstop>txtIdentity_Height</tabstop>
+  <tabstop>txtIdentity_Country</tabstop>
+  <tabstop>txtIdentity_Nationality</tabstop>
+  <tabstop>txtIdentity_BirthDate</tabstop>
+  <tabstop>txtIdentity_Parents_Father</tabstop>
+  <tabstop>txtIdentity_DocumentNumber</tabstop>
+  <tabstop>txtIdentity_ValidUntil</tabstop>
+  <tabstop>txtIdentity_Parents_Mother</tabstop>
+  <tabstop>txtIdentity_AccidentalIndications</tabstop>
+  <tabstop>btnShortcut_UnivSign</tabstop>
+  <tabstop>btnShortcut_PdfSign</tabstop>
+  <tabstop>btnShortcut_VerifSign</tabstop>
+  <tabstop>txtIdentityExtra_SocialSecurityNo</tabstop>
+  <tabstop>txtIdentityExtra_TaxNo</tabstop>
+  <tabstop>txtIdentityExtra_CardVersion</tabstop>
+  <tabstop>txtIdentityExtra_DocumentType</tabstop>
+  <tabstop>txtIdentityExtra_LocalofRequest</tabstop>
+  <tabstop>txtIdentityExtra_HealthNo</tabstop>
+  <tabstop>txtIdentityExtra_IssuingEntity</tabstop>
+  <tabstop>txtIdentityExtra_Validate</tabstop>
+  <tabstop>txtIdentityExtra_ValidFrom</tabstop>
+  <tabstop>txtAddress_District</tabstop>
+  <tabstop>txtAddress_Place</tabstop>
+  <tabstop>txtAddress_Municipality</tabstop>
+  <tabstop>txtAddress_Zip3</tabstop>
+  <tabstop>txtAddress_PostalLocality</tabstop>
+  <tabstop>txtAddress_CivilParish</tabstop>
+  <tabstop>txtAddress_StreetType1</tabstop>
+  <tabstop>txtAddress_StreetType2</tabstop>
+  <tabstop>txtAddress_StreetName</tabstop>
+  <tabstop>txtAddress_BuildingType1</tabstop>
+  <tabstop>txtAddress_BuildingType2</tabstop>
+  <tabstop>txtAddress_DoorNo</tabstop>
+  <tabstop>txtAddress_Floor</tabstop>
+  <tabstop>txtAddress_Side</tabstop>
+  <tabstop>txtAddress_Locality</tabstop>
+  <tabstop>txtAddress_Zip4</tabstop>
+  <tabstop>treeCert</tabstop>
+  <tabstop>txtCert_Owner</tabstop>
+  <tabstop>txtCert_Issuer</tabstop>
+  <tabstop>txtIdentity_Name</tabstop>
+  <tabstop>txtCert_ValidFrom</tabstop>
+  <tabstop>txtCert_ValidUntil</tabstop>
+  <tabstop>txtCert_KeyLenght</tabstop>
+  <tabstop>txtCert_RevStatus</tabstop>
+  <tabstop>btnCert_Register</tabstop>
+  <tabstop>btnCert_Details</tabstop>
+  <tabstop>txtPIN_Name</tabstop>
+  <tabstop>txtPIN_ID</tabstop>
+  <tabstop>txtPIN_Status</tabstop>
+  <tabstop>treePIN</tabstop>
+  <tabstop>btnPIN_Test</tabstop>
+  <tabstop>btnPIN_Change</tabstop>
+  <tabstop>txtPersoData</tabstop>
+  <tabstop>btnPersoDataSave</tabstop>
+  <tabstop>txtPersoDataCount</tabstop>
+  <tabstop>btnSelectTab_Identity</tabstop>
+  <tabstop>btnSelectTab_Identity_Extra</tabstop>
+  <tabstop>btnSelectTab_Address</tabstop>
+  <tabstop>btnSelectTab_Certificates</tabstop>
+  <tabstop>btnSelectTab_PinCodes</tabstop>
+  <tabstop>btnSelectTab_Notes</tabstop>
+  <tabstop>btn_menu_language</tabstop>
+ </tabstops>
  <resources>
   <include location="eidgui.qrc"/>
  </resources>

@@ -137,7 +137,3 @@ void LoadPinInfo(PTEID_EIDCard&	   Card, QString const& cardReader ){
 
 }
 */
-
-
-
-

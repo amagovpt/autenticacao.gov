@@ -173,7 +173,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 , m_STATUS_MSG_TIME(5000)
 , m_ShowBalloon(false)
 , m_msgBox(NULL)
-, m_connectionStatus((PTEID_CertifStatus)-1)
 {
 	//------------------------------------
 	// install the translator object and load the .qm file for
@@ -216,6 +215,10 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 
 	connect(&this->FutureWatcher, SIGNAL(finished()), m_progress, SLOT(cancel()));
+
+	connect(&this->watcherCertStatusAuth, SIGNAL(finished()), this, SLOT(showCertStatusAuth()));
+	connect(&this->watcherCertStatusSign, SIGNAL(finished()), this, SLOT(showCertStatusSign()));
+
 	//------------------------------------
 	//
 	// set the window Icon (as it appears in the left corner of the window)
@@ -320,10 +323,11 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 		if (object == m_ui.lbl_menuCard_Read )
 		{
 			hide_submenus();
+
 			pinactivate = 1;
 			pinNotes = 1;
 			certdatastatus = 1;
-			m_connectionStatus = (PTEID_CertifStatus)-1;
+
 			m_CI_Data.Reset();
 			loadCardData();
 		}
@@ -684,7 +688,6 @@ void MainWnd::cleanupCallbackData()
 //*****************************************************
 void MainWnd::stopAllEventCallbacks( void )
 {
-
 	for (tCallBackHandles::iterator it = m_callBackHandles.begin()
 			; it != m_callBackHandles.end()
 			; it++
@@ -1383,24 +1386,21 @@ void MainWnd::on_btnCert_Details_clicked( void )
 }
 
 //*****************************************************
-// a certificate has been selected
+// current selected cert in the tree changed.
+// This event seems to be fired both with clicked event and on select.
 //*****************************************************
-void MainWnd::on_treeCert_itemSelectionChanged ( void )
+void MainWnd::on_treeCert_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
-	QList<QTreeWidgetItem *> selectedItems = m_ui.treeCert->selectedItems();
-	if (selectedItems.size()==1)
+	qDebug() << "\ntree_currentItemChanged() " << previous << "-> " << current;
+	if (current)
 	{
-		on_treeCert_itemClicked((QTreeCertItem*)selectedItems[0], 0);
+		syncTreeItemWithSideinfo(dynamic_cast<QTreeCertItem *>(current));
 	}
-
 }
-//*****************************************************
-// a certificate has been clicked
-//*****************************************************
-void MainWnd::on_treeCert_itemClicked(QTreeWidgetItem* baseItem, int column)
-{
 
-	QTreeCertItem* item=(QTreeCertItem*)baseItem;
+void MainWnd::syncTreeItemWithSideinfo(QTreeCertItem *item)
+{
+	qDebug() << "syncTreeItemWithSideInfo()";
 
 	if (!m_CI_Data.isDataLoaded())
 		return;
@@ -1421,6 +1421,13 @@ void MainWnd::on_treeCert_itemClicked(QTreeWidgetItem* baseItem, int column)
 	m_ui.txtCert_KeyLenght->setText(item->getKeyLen());
 	m_ui.txtCert_KeyLenght->setAccessibleName(item->getKeyLen());
 
+	// Put some text while loading the status
+	m_ui.txtCert_RevStatus->setText(QString(tr("Checking...")));
+	m_ui.txtCert_RevStatus->setAccessibleName(QString(tr("Checking...")));
+
+	// ask for the cert status
+	item->askCertStatus();
+
 	if(!ReaderContext.isCardPresent())
 	{
 		m_ui.btnCert_Register->setEnabled(false);
@@ -1438,6 +1445,62 @@ void MainWnd::on_treeCert_itemClicked(QTreeWidgetItem* baseItem, int column)
 	}
 }
 
+//*****************************************************
+// Received the reply with the status of the certificate
+//*****************************************************
+void MainWnd::showCertStatusSideinfo(PTEID_CertifStatus certStatus)
+{
+	qDebug() << "showCertStatusSideinfo()";
+
+	QString treeItemStatus;
+	getCertStatusText(certStatus, treeItemStatus);
+
+	m_ui.txtCert_RevStatus->setText(treeItemStatus);
+	m_ui.txtCert_RevStatus->setAccessibleName(treeItemStatus);
+}
+
+void MainWnd::showCertStatusAuth()
+{
+	QString msgResultStatus;
+	getCertStatusText(watcherCertStatusAuth.result(), msgResultStatus);
+
+	m_ui.txtIdentity_CertStatusAuth->setText(msgResultStatus);
+	m_ui.txtIdentity_CertStatusAuth->setAccessibleName(msgResultStatus);
+}
+
+void MainWnd::showCertStatusSign()
+{
+    QString msgResultStatus;
+    getCertStatusText(watcherCertStatusSign.result(), msgResultStatus);
+
+    m_ui.txtIdentity_CertStatusSign->setText(msgResultStatus);
+    m_ui.txtIdentity_CertStatusSign->setAccessibleName(msgResultStatus);
+}
+
+void MainWnd::getCertStatusText(PTEID_CertifStatus certStatus, QString &strCertStatus)
+{
+	//Currently eidlib only gives us 3 status from the enum:
+	// Valid, Revoked and Unknown for all other erros/problems
+	switch(certStatus)
+	{
+	case PTEID_CERTIF_STATUS_REVOKED:
+		strCertStatus = tr("Revoked");
+		break;
+	case PTEID_CERTIF_STATUS_TEST:
+		strCertStatus = tr("Test");
+		break;
+	case PTEID_CERTIF_STATUS_DATE:
+		strCertStatus= tr("Date");
+		break;
+	case PTEID_CERTIF_STATUS_VALID:
+		strCertStatus = tr("Valid");
+		break;
+	case PTEID_CERTIF_STATUS_UNKNOWN:
+	default:
+		strCertStatus = tr("Unknown");
+		break;
+	}
+}
 
 //*****************************************************
 // PIN item selection changed
@@ -1532,8 +1595,8 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
 				//------------------------------------
 				MainWnd::RemoveCertificates(pCallBackData->getReaderName() );
 			}
-			PopupEvent* event = new PopupEvent(pCallBackData->getReaderName(),PopupEvent::ET_CARD_REMOVED);
-			QCoreApplication::postEvent(pCallBackData->getMainWnd(),event);
+			PopupEvent* event = new PopupEvent(pCallBackData->getReaderName(), PopupEvent::ET_CARD_REMOVED);
+			QCoreApplication::postEvent(pCallBackData->getMainWnd(), event);
 
 			g_runningCallback--;
 			return;
@@ -1549,8 +1612,8 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
 			// main thread.
 			//------------------------------------
 
-			PopupEvent* event = new PopupEvent(pCallBackData->getReaderName(),PopupEvent::ET_CARD_CHANGED);
-			QCoreApplication::postEvent(pCallBackData->getMainWnd(),event);
+			PopupEvent* event = new PopupEvent(pCallBackData->getReaderName(), PopupEvent::ET_CARD_CHANGED);
+			QCoreApplication::postEvent(pCallBackData->getMainWnd(), event);
 		}
 	}
 	catch (PTEID_ExBadTransaction& e)
@@ -1651,6 +1714,7 @@ void MainWnd::releaseVirtualReader( void )
 		m_virtReaderContext = NULL;
 	}
 }
+
 //*****************************************************
 // load the card data
 //*****************************************************
@@ -1693,7 +1757,7 @@ void MainWnd::loadCardData( void )
 					try
 					{
 						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-						if (Card.isTestCard()&&!Card.getAllowTestCard())
+						if (Card.isTestCard() && !Card.getAllowTestCard())
 						{
 							if (askAllowTestCard())
 							{
@@ -1707,8 +1771,8 @@ void MainWnd::loadCardData( void )
 						}
 						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
 						m_CurrReaderName = readerName;
+
 						Show_Identity_Card(Card);
-						//Show_Address_Card(Card);
 
 						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
 					}
@@ -1740,7 +1804,7 @@ void MainWnd::loadCardData( void )
 			QString strCaption(tr("Reload eID"));
 			strCaption = strCaption.remove(QChar('&'));
 			QString strMessage(tr("No card found"));
-			m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
+			m_ui.statusBar->showMessage(strCaption+":"+strMessage, m_STATUS_MSG_TIME);
 		}
 		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
 		{
@@ -1810,8 +1874,9 @@ void MainWnd::loadCardData( void )
 //*****************************************************
 void MainWnd::loadCardDataAddress( void )
 {
-    if (!m_CI_Data.isDataLoaded())
-        return;
+	if (!m_CI_Data.isDataLoaded())
+		return;
+
 	//----------------------------------------------------------------
 	// if we load a new card, clear the certificate contexts we kept
 	//----------------------------------------------------------------
@@ -2261,6 +2326,7 @@ void MainWnd::loadCardDataCertificates( void )
 		ShowPTEIDError( e.GetError(), msg );
 	}
 }
+
 //*****************************************************
 // Test PIN clicked
 //*****************************************************
@@ -2893,7 +2959,7 @@ void MainWnd::showTabs()
 		}
 
 		refreshTabCardPin();
-		refreshTabInfo();
+		//refreshTabInfo();
 
 		break;
 
@@ -2941,21 +3007,48 @@ void MainWnd::Show_Certificates_Card(PTEID_EIDCard& Card)
 	LoadDataCertificates(Card);
 }
 
-QTreeCertItem* MainWnd::buildTree(PTEID_Certificate &cert, bool &bEx){
+QTreeCertItem* MainWnd::buildTree(PTEID_Certificate &cert, bool &bEx)
+{
 	if (cert.isRoot())
-		return new QTreeCertItem(m_ui.treeCert,0,cert);
-	else {
-		QList<QTreeWidgetItem *> listItem = m_ui.treeCert->findItems(QString::fromUtf8(cert.getOwnerName()), Qt::MatchContains | Qt::MatchRecursive);
-		if (listItem.isEmpty() || dynamic_cast<QTreeCertItem *>(listItem.first())->getLabel().compare(QString::fromUtf8(cert.getLabel()))!=0){
+	{
+		// put the root cert as the tree top
+		return new QTreeCertItem(m_ui.treeCert, cert);
+	}
+	else
+	{
+		// search for the cert in the widgettree
+		QList<QTreeWidgetItem *> listItem = m_ui.treeCert->findItems(
+											QString::fromUtf8(cert.getOwnerName()),
+											Qt::MatchContains | Qt::MatchRecursive);
+
+		if (listItem.isEmpty() || dynamic_cast<QTreeCertItem *>(listItem.first())->getLabel().compare(QString::fromUtf8(cert.getLabel())) != 0) {
+			// when not in the tree add it
+
 			try {
-				return new QTreeCertItem(buildTree(cert.getIssuer(),bEx),0,cert);
-			} catch (PTEID_ExCertNoIssuer &ex){
+                return new QTreeCertItem(buildTree(cert.getIssuer(), bEx), cert);
+			} catch (PTEID_ExCertNoIssuer &ex) {
 				bEx = true;
-				return new QTreeCertItem(m_ui.treeCert,0,cert);
+				return new QTreeCertItem(m_ui.treeCert, cert);
 			}
 		}
 		else
+		{
 			return dynamic_cast<QTreeCertItem *>(listItem.first());
+		}
+	}
+}
+
+void MainWnd::connectTreeCertItems(void)
+{
+	QTreeWidgetItemIterator it(m_ui.treeCert);
+	while (*it)
+	{
+		QTreeCertItem *item = dynamic_cast<QTreeCertItem *>(*it);
+
+		connect(item, SIGNAL(certStatusReady(PTEID_CertifStatus)),
+				this, SLOT  (showCertStatusSideinfo(PTEID_CertifStatus)));
+
+		++it;
 	}
 }
 
@@ -2964,20 +3057,24 @@ void MainWnd::fillCertificateList( void )
 	bool noIssuer = false;
 
 	PTEID_Certificates* certificates = m_CI_Data.m_CertifInfo.getCertificates();
-
 	if (!certificates)
 		return;
 
-	buildTree(certificates->getCert(PTEID_Certificate::CITIZEN_AUTH),noIssuer);
-	buildTree(certificates->getCert(PTEID_Certificate::CITIZEN_SIGN),noIssuer);
+    buildTree(certificates->getCert(PTEID_Certificate::CITIZEN_AUTH), noIssuer);
+    buildTree(certificates->getCert(PTEID_Certificate::CITIZEN_SIGN), noIssuer);
+
+	connectTreeCertItems();
 
 	m_ui.treeCert->expandAll();
 	m_ui.treeCert->setColumnCount(1);
-	m_ui.treeCert->sortItems(0,Qt::DescendingOrder);
+	m_ui.treeCert->sortItems(0, Qt::DescendingOrder);
 	if (m_ui.treeCert->topLevelItem(0))
-		m_ui.treeCert->setCurrentItem (m_ui.treeCert->topLevelItem(0));
+	{
+		m_ui.treeCert->setCurrentItem(m_ui.treeCert->topLevelItem(0));
+	}
 
-	if (noIssuer){
+	if (noIssuer)
+	{
 		QString title = tr("Certification path");
 		QString msg = tr("The certificates could not be validated, the certification path is not complete");
 		QMessageBox msgBoxcc(QMessageBox::Warning, title, msg, 0, this);
@@ -2991,8 +3088,6 @@ void MainWnd::fillCertificateList( void )
 //**************************************************
 void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 {
-
-
 	//Progress bar was already hidden so proceed updating the GUI
 	setEnabledPinButtons(false);
 	setEnabledCertifButtons(false);
@@ -3000,12 +3095,26 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 
 	if(!m_CI_Data.isDataLoaded())
 	{
-		
-		//Load data from card in a new thread
+	//Load data from card in a new thread
 		CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName, this);
 		QFuture<void> future = QtConcurrent::run(&loader, &CardDataLoader::Load);
 		this->FutureWatcher.setFuture(future);
 		m_progress->exec();
+
+		// progress->exec() blocks until the data we want is loaded
+		PTEID_Certificates *certs = m_CI_Data.m_CertifInfo.getCertificates();
+
+		if (certs)
+		{
+			QFuture<PTEID_CertifStatus> futureCertStatusAuth = QtConcurrent::run(&certs->getAuthentication(), &PTEID_Certificate::getStatus);
+			QFuture<PTEID_CertifStatus> futureCertStatusSign = QtConcurrent::run(&certs->getSignature(), &PTEID_Certificate::getStatus);
+
+			//QFuture<PTEID_CertifStatus> futureCertStatusAuth = QtConcurrent::run(this, &MainWnd::checkCertStatus, &certs->getAuthentication());
+			//QFuture<PTEID_CertifStatus> futureCertStatusSign = QtConcurrent::run(this, &MainWnd::checkCertStatus, &certs->getSignature());
+
+			watcherCertStatusAuth.setFuture(futureCertStatusAuth);
+			watcherCertStatusSign.setFuture(futureCertStatusSign);
+		}
 
 		//Load the picture in PNG format
 		imgPicture = QImage();
@@ -3018,13 +3127,23 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 	}
 }
 
+/*
+PTEID_CertifStatus MainWnd::checkCertStatus(PTEID_Certificate *cert)
+{
+	qDebug() << cert->getLabel();
+	sleep(5);
+
+	return cert->getStatus();
+}
+*/
 
 void MainWnd::LoadDataAddress(PTEID_EIDCard& Card)
 {
 	setEnabledPinButtons(false);
 	setEnabledCertifButtons(false);
 	m_TypeCard = Card.getType();
-	m_CI_Data.LoadDataAddress(Card,m_CurrReaderName);
+	m_CI_Data.LoadDataAddress(Card, m_CurrReaderName);
+
 	if(!m_CI_Data.isDataLoaded())
 	{
 		//clearTabCertificates();
@@ -3039,13 +3158,13 @@ void MainWnd::LoadDataPersoData(PTEID_EIDCard& Card)
 {
 	setEnabledPinButtons(false);
 	setEnabledCertifButtons(false);
-    m_ui.btnPersoDataSave->setEnabled(true);
+	m_ui.btnPersoDataSave->setEnabled(true);
 	m_TypeCard = Card.getType();
+
 	CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName);
 	QFuture<void> future = QtConcurrent::run(loader, &CardDataLoader::LoadPersoData);
 	this->FutureWatcher.setFuture(future);
 	m_progress->exec();
-	
 }
 
 void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
@@ -3061,7 +3180,6 @@ void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 
 	clearTabCertificates();
 	fillCertificateList();
-	
 }
 
 #define TYPE_PINTREE_ITEM 0
@@ -3108,7 +3226,6 @@ void MainWnd::loadPinData(PTEID_EIDCard& Card){
 	m_pinsInfo[PTEID_Pin::ADDR_PIN] = new PinInfo(pinAddr.getId(), pinAddr.getLabel(), pinAddr.getTriesLeft());
 }
 
-
 QString MainWnd::getFinalLinkTarget(QString baseName)
 {
 	QFileInfo info(baseName);
@@ -3121,13 +3238,11 @@ QString MainWnd::getFinalLinkTarget(QString baseName)
 	return baseName;
 }
 
-
-
 //**************************************************
 // fill the software info table
 //**************************************************
-void MainWnd::fillSoftwareInfo( void )
-{
+//void MainWnd::fillSoftwareInfo( void )
+//{
 	/*
 	QStringList libPaths = QProcess::systemEnvironment();
 	QStringList searchPaths;
@@ -3365,7 +3480,7 @@ void MainWnd::fillSoftwareInfo( void )
 	}
 
 	 */
-}
+//}
 
 //**************************************************
 // clear button clicked
@@ -3382,6 +3497,7 @@ void MainWnd::on_actionClear_triggered()
 	clearGuiContent();
 
 }
+
 //*****************************************************
 // Clear the content of the GUI
 //*****************************************************
@@ -3405,7 +3521,6 @@ void MainWnd::clearGuiContent( void )
 //*****************************************************
 void MainWnd::refreshTabIdentity( void )
 {
-
 	m_ui.lblIdentity_ImgPerson->setPixmap(m_imgPicture);
 
 	m_ui.lblIdentity_ImgPerson->show();
@@ -3440,6 +3555,9 @@ void MainWnd::refreshTabIdentity( void )
 	m_ui.txtIdentity_Parents_Mother->setAccessibleName( QString::fromUtf8(PersonFields[MOTHER].toStdString().c_str()) );
 	m_ui.txtIdentity_AccidentalIndications->setText( QString::fromUtf8(PersonFields[ACCIDENTALINDICATIONS].toStdString().c_str()) );
 	m_ui.txtIdentity_AccidentalIndications->setAccessibleName( QString::fromUtf8(PersonFields[ACCIDENTALINDICATIONS].toStdString().c_str()) );
+
+	m_ui.txtIdentity_CertStatusAuth->setText(tr("Checking..."));
+	m_ui.txtIdentity_CertStatusSign->setText(tr("Checking..."));
 }
 
 //*****************************************************
@@ -3535,7 +3653,6 @@ void MainWnd::refreshTabAddress( void )
     if (!m_CI_Data.isDataLoaded())
         return;
 
-
 	if (pinactivate == 1)
 	{
 		if (!addressPINRequest_triggered())
@@ -3626,6 +3743,7 @@ void MainWnd::PersoDataSaveButtonClicked( void )
         QMessageBox::critical(this, tr("Personal Notes"), tr("Error writing personal notes!"), QMessageBox::Ok );
     }
 }
+
 //*****************************************************
 // refresh the tab with the PTeid Personal Data
 //*****************************************************
@@ -3724,6 +3842,8 @@ void MainWnd::clearTabCertificates( void )
 	m_ui.txtCert_ValidUntil->setAccessibleName( "" );
 	m_ui.txtCert_KeyLenght->setText( "" );
 	m_ui.txtCert_KeyLenght->setAccessibleName( "" );
+	m_ui.txtCert_RevStatus->setText("");
+	m_ui.txtCert_RevStatus->setAccessibleName("");
 }
 
 //*****************************************************
@@ -3790,21 +3910,33 @@ void MainWnd::refreshTabCertificates( void )
 	certdatastatus = 0;
 	loadCardDataCertificates();
 
-	QList<QTreeWidgetItem *> selectedItems = m_ui.treeCert->selectedItems();
-	if(selectedItems.size()==0)
+	//qDebug() << "columns: " << m_ui.treeCert->columnCount();
+	//qDebug() << "top level count: " << m_ui.treeCert->topLevelItemCount();
+	//qDebug() << "selected items: " << m_ui.treeCert->selectedItems();
+	//qDebug() << "# seleteced: " << m_ui.treeCert->selectedItems().size();
+	//qDebug() << "find 'Signature': " << m_ui.treeCert->findItems ( QString("Signature"), Qt::MatchContains|Qt::MatchRecursive );
+
+    // este pedaço de codigo parece nao estar a fazer nada.
+    // no fillCertificateList que corre antes disto dentro do loadCardCertificates
+    // o cert de root ´e selected, logo os selected items sao 1 sendo o root o selecionado.
+    // o findItems para tentar selecionar o cert com o nome "Signature" retorna vazio
+    // pk n existe nehum item na tree com esse texto.
+
+	//QList<QTreeWidgetItem *> selectedItems = m_ui.treeCert->selectedItems();
+	/*if(selectedItems.size() == 0)
 	{
 		//If no item is selected, we select the signature certificate
 		selectedItems = m_ui.treeCert->findItems ( QString("Signature"), Qt::MatchContains|Qt::MatchRecursive );
-		if (selectedItems.size()>0)
+        if (selectedItems.size() > 0)
 		{
 			selectedItems[0]->setSelected(true);
 		}
 	}
 
-	if (selectedItems.size()>0)
+	if (selectedItems.size() > 0)
 	{
 		on_treeCert_itemClicked((QTreeCertItem *)selectedItems[0], 0);
-	}
+	}*/
 
 }
 
@@ -3850,9 +3982,9 @@ void MainWnd::refreshTabCardPin( void )
 //*****************************************************
 // refresh the tab with the software info
 //*****************************************************
-void MainWnd::refreshTabInfo( void )
-{
-}
+//void MainWnd::refreshTabInfo( void )
+//{
+//}
 
 //**************************************************
 // menu items to change the language
@@ -4084,16 +4216,18 @@ void MainWnd::customEvent( QEvent* pEvent )
 					m_imgPicture = NULL;
 					m_pinsInfo.clear();
 					m_CI_Data.Reset();
+
 					refreshTabIdentity();
 					refreshTabIdentityExtra();
 					refreshTabPersoData();
 					refreshTabCardPin();
 					refreshTabCertificates();
+
 					clearAddressData();
 					m_ui.btnSelectTab_Identity->setFocus();
 
-				if (m_pdf_signature_dialog)
-                    			m_pdf_signature_dialog->disableSignButton();
+					if (m_pdf_signature_dialog)
+						m_pdf_signature_dialog->disableSignButton();
 
 				}
 				//----------------------------------------------------------
@@ -4116,7 +4250,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 					QString statusMsg;
 					statusMsg += tr("Card Reader: ");
 					statusMsg += pPopupEvent->getReaderName();
-					m_ui.statusBar->showMessage(statusMsg,m_STATUS_MSG_TIME);
+					m_ui.statusBar->showMessage(statusMsg, m_STATUS_MSG_TIME);
 
 					PTEID_ReaderContext& readerContext	= ReaderSet.getReaderByName(cardReader.toLatin1());
 
@@ -4213,6 +4347,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 			}
 		}
 }
+
 //**************************************************
 // show the picture on the Card
 //**************************************************
@@ -4364,12 +4499,13 @@ void MainWnd::on_actionE_xit_triggered(void)
 {
 	quit_application();
 }
+
 //**************************************************
 // set the event callback functions
 //**************************************************
 void MainWnd::setEventCallbacks( void )
 {
-	//----------------------------------------
+    //----------------------------------------
 	// for all the readers, create a callback such we can know
 	// afterwards, which reader called us
 	//----------------------------------------
@@ -4381,12 +4517,12 @@ void MainWnd::setEventCallbacks( void )
 			void (*fCallback)(long lRet, unsigned long ulState, void* pCBData);
 
 			const char*			 readerName		= ReaderSet.getReaderName(Ix);
-			PTEID_ReaderContext&  readerContext  = ReaderSet.getReaderByNum(Ix);
-			CallBackData*		 pCBData		= new CallBackData(readerName,this);
+			PTEID_ReaderContext& readerContext  = ReaderSet.getReaderByNum(Ix);
+			CallBackData*		 pCBData		= new CallBackData(readerName, this);
 
 			fCallback = (void (*)(long,unsigned long,void *))&cardEventCallback;
 
-			m_callBackHandles[readerName] = readerContext.SetEventCallback(fCallback,pCBData);
+			m_callBackHandles[readerName] = readerContext.SetEventCallback(fCallback, pCBData);
 			m_callBackData[readerName]	  = pCBData;
 		}
 	}
@@ -4488,5 +4624,30 @@ void CardDataLoader::LoadCertificateData()
 }
 
 
+void QTreeCertItem::init(PTEID_Certificate &cert) {
+	this->cert = &cert;
+	m_Issuer = QString::fromUtf8(cert.getIssuerName());
+	m_Owner = QString::fromUtf8(cert.getOwnerName());
+	m_ValidityBegin = QString::fromUtf8(cert.getValidityBegin());
+	m_ValidityEnd = QString::fromUtf8(cert.getValidityEnd());
+	m_KeyLen = QString::number(cert.getKeyLength());
+	m_Label = QString::fromUtf8(cert.getLabel());
 
+	connect(&certStatusWatcher, SIGNAL(finished()), this, SLOT(handleFutureCertStatus()));
+}
 
+void QTreeCertItem::handleFutureCertStatus() {
+	//emit certStatusReady(certStatusWatcher.result());
+
+	PTEID_CertifStatus status = certStatusWatcher.result();
+	qDebug() << "item::emit cert status";
+	qDebug() << getOwner() << ": " << status;
+
+	emit certStatusReady(status);
+}
+
+void QTreeCertItem::askCertStatus() {
+	qDebug() << "item::askCertStatus()";
+	QFuture<PTEID_CertifStatus> future = QtConcurrent::run(this->cert, &PTEID_Certificate::getStatus);
+	certStatusWatcher.setFuture(future);
+}
