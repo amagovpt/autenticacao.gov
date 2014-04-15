@@ -35,6 +35,8 @@
 namespace eIDMW
 {
 
+ const void *memmem(const void *haystack, size_t n, const void *needle, size_t m);
+
 //Implementation of some utility functions over POSIX and Win32
 char * Basename(char *absolute_path);
 int Truncate(const char *path);

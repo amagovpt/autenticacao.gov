@@ -65,15 +65,15 @@ namespace eIDMW
 		CByteArray &Sign(const char ** paths, unsigned int n_paths);
 		CByteArray HashFile(const char *file_path);
 		
-		int HashSignedInfoNode(DOMDocument *doc, XMLByte *outbuf);
-		int HashSignedPropertiesNode(DOMDocument *doc, XMLByte *outbuf);
+		int HashSignedInfoNode(XERCES_NS DOMDocument *doc, XMLByte *outbuf);
+		int HashSignedPropertiesNode(XERCES_NS DOMDocument *doc, XMLByte *outbuf);
 		DOMNode * addSignatureProperties(DSIGSignature *sig, XMLCh *sig_id, CByteArray &cert_data);
-		bool AddSignatureTimestamp(DOMDocument *dom);
-		bool appendTimestamp(DOMDocument * doc, DOMNode *parent, const char * tag_name, std::string to_timestamp);
-		bool AddRevocationInfo(DOMDocument * dom);
-		bool AddArchiveTimestamp(DOMDocument *dom);
-		bool AddSigAndRefsTimestamp(DOMDocument *dom);
-		bool addCompleteCertificateRefs(DOMDocument *dom);
+		bool AddSignatureTimestamp(XERCES_NS DOMDocument *dom);
+		bool appendTimestamp(XERCES_NS DOMDocument * doc, DOMNode *parent, const char * tag_name, std::string to_timestamp);
+		bool AddRevocationInfo(XERCES_NS DOMDocument * dom);
+		bool AddArchiveTimestamp(XERCES_NS DOMDocument *dom);
+		bool AddSigAndRefsTimestamp(XERCES_NS DOMDocument *dom);
+		bool addCompleteCertificateRefs(XERCES_NS DOMDocument *dom);
 
 		CByteArray *WriteToByteArray(XERCES_NS DOMDocument *doc); 
 
