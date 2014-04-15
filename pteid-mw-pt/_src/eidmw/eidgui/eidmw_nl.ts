@@ -28,9 +28,40 @@
 	<translation>Alterar Pin de Autenticação e OTP</translation>
 </message>
 <message>
+    <source>Address Change</source>
+    <translation>Mudança de Morada</translation>
+</message>
+<message>
+    <source>Error connecting to the Address Change server</source>
+    <translation>A morada foi alterada com sucesso.</translation>
+</message>
+
+    <message>
+    <source>Address Changed successfully.</source>
+    <translation>A morada foi alterada com sucesso.</translation>
+    </message>
+    <message>
+        <source>Error connecting to the Address Change server.\nPlease check if your Internet connection is functional</source>
+        <translation>Erro de ligação ao servidor para mudança de morada.\nPor favor verifique se a sua ligação à Internet está funcional</translation>
+    </message>
+<message>
+    <source>Unexpected error in the Address Change operation</source>
+    <translation>Erro inesperado na mudança de morada</translation>
+</message>
+
+<message>
+    <source>Undefined error in Address Change operation.</source>
+    <translation>....</translation>
+</message>
+<message>
+    <source>Changing Address in card...</source>
+    <translation>Mudando a morada no Cartão...</translation>
+</message>
+        
+<message>
 	<source>Attention: your current authentication PIN will be requested twice in two different dialog boxes.</source>
 	<translation>Atenção: o seu actual PIN de autenticação vai ser requerido duas vezes neste processo.</translation>
-	</message>
+</message>
 
 	<message>
 	<source>Sorry, this operation is unsupported on this reader</source>

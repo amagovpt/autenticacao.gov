@@ -52,7 +52,7 @@ class QT_QTSINGLEAPPLICATION_EXPORT QtSingleApplication : public QApplication
 public:
     QtSingleApplication(const QString &id, int &argc, char **argv, Type = GuiClient);
 #ifdef Q_WS_X11
-    QtSingleApplication(Display* dpy, const QString &id, int argc, char **argv, Qt::HANDLE visual = 0, Qt::HANDLE colormap = 0);
+    QtSingleApplication(Display* dpy, const QString &id, int &argc, char **argv, Qt::HANDLE visual = 0, Qt::HANDLE colormap = 0);
 #endif
     ~QtSingleApplication();
 

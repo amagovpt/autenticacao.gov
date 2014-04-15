@@ -138,16 +138,18 @@ HEADERS += CardInformation.h \
 					 dlgsignature.h \
 					 PDFSignWindow.h \
 					 FreeSelectionDialog.h \
+					 ChangeAddressDialog.h \
 					 ../_Builds/pteidversions.h \
 					 ../dialogs/dialogs.h 
            
-FORMS += dlgAbout.ui dlgOptions.ui mainwnd.ui picturepopup.ui dlgPrint.ui dlgSignature.ui dlgVerifySignature.ui PDFSignWindow.ui FreeSelectionDialog.ui
+FORMS += dlgAbout.ui dlgOptions.ui mainwnd.ui picturepopup.ui dlgPrint.ui dlgSignature.ui dlgVerifySignature.ui PDFSignWindow.ui FreeSelectionDialog.ui ChangeAddressDialog.ui
 
 SOURCES += CardInformation.cpp \
            dlgAbout.cpp \
            dlgOptions.cpp \
            httpwindow.cpp \
            AutoUpdates.cpp \
+           ChangeAddressDialog.cpp \
            main.cpp \
            mainwnd.cpp \
 					 dlgprint.cpp \

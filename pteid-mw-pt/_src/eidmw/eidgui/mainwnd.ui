@@ -1172,6 +1172,25 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
          <bool>true</bool>
         </property>
        </widget>
+      <widget class="QPushButton" name="btnAddress_Change">
+        <property name="styleSheet">
+         <string notr="true">color: rgb(108, 108, 108);
+          font: 75 12pt &quot;Arial&quot;;
+          background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
+        </string>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>500</x>
+          <y>375</y>
+          <width>200</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Address Confirmation</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="page_Certificates">
        <property name="styleSheet">

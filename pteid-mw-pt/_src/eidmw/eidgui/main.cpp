@@ -39,7 +39,7 @@
 class MyApplication : public QtSingleApplication
 {
 public:
-	MyApplication( const char* name, int argc, char ** argv ) :
+	MyApplication( const char* name, int &argc, char ** argv ) :
 	  QtSingleApplication( name, argc, argv )
 	  {
 	  }

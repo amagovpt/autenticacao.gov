@@ -31,6 +31,14 @@
 #include "mylistview.h"
 
 
+enum XadesLevel
+{
+    XADES_B,
+    XADES_T,
+    XADES_A
+};
+
+
 class dlgSignature : public QDialog
 {
     Q_OBJECT
@@ -53,11 +61,11 @@ private:
     MyListView *view;
     QProgressDialog *pdialog;
     QFutureWatcher<void> FutureWatcher;
-    bool success;
-
+    long error_code;
+    XadesLevel getSelectedXadesLevel();
     void SignListView (QStringList list);
-    void runsign(const char ** paths, unsigned int n_paths, const char *output_path, bool timestamp);
-    void run_multiple_sign(const char**, unsigned int, const char*, bool);
+    void runsign(const char ** paths, unsigned int n_paths, const char *output_path, XadesLevel level);
+    void run_multiple_sign(const char**, unsigned int, const char*, XadesLevel);
     void ShowErrorMsgBox();
     void ShowSuccessMsgBox();
 

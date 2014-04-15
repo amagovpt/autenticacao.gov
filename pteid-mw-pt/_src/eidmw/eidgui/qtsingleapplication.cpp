@@ -150,7 +150,7 @@ QtSingleApplication::QtSingleApplication(const QString &id, int &argc, char **ar
 
     This is available only on X11.
 */
-QtSingleApplication::QtSingleApplication(Display* dpy, const QString &id, int argc, char **argv,
+QtSingleApplication::QtSingleApplication(Display* dpy, const QString &id, int &argc, char **argv,
                                          Qt::HANDLE visual, Qt::HANDLE colormap)
     : QApplication(dpy, argc, argv, visual, colormap)
 {

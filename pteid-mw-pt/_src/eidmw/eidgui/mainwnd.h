@@ -243,10 +243,15 @@ public:
 	static bool ImportCertificates( QString const& readerName );
 	static bool RemoveCertificates( const char* readerName );
 	static bool RemoveCertificates( QString const& readerName );
+	static void address_change_callback(void *, int);
 	GUISettings&	getSettings( void )
 	{
 		return m_Settings;
 	}
+
+signals:
+	void addressProgressChanged(int value);
+	void addressChangeFinished(long return_code);
 
 
 private slots:
@@ -268,7 +273,10 @@ private slots:
 	void setLanguageEn( void );
 	void setLanguageNl( void );
 	void restoreWindow( void );
+	void setAddressProgress(int value);
+	void showChangeAddressDialog(long code);
 	void messageRespond( const QString& message);
+	void showJavaLaunchError(QProcess::ProcessError error);
 
 	void showCertStatusSideinfo(PTEID_CertifStatus certStatus);
 	void showCertStatusAuth();
@@ -292,6 +300,7 @@ private slots:
 	void on_btnCert_Details_clicked( void );
 	void on_btnCert_Register_clicked( void );
 	void on_treePIN_itemSelectionChanged ( void );
+	void on_btnAddress_Change_clicked(void);
 
 	void on_btnSelectTab_Identity_clicked ( void );
 	void on_btnSelectTab_Identity_Extra_clicked ( void );
@@ -311,6 +320,7 @@ private slots:
 	void on_btnShortcut_UnivSign_clicked( void );
 	void on_btnShortcut_PdfSign_clicked( void );
 	void on_btnShortcut_VerifSign_clicked( void );
+	// void on_btnShortcut_LaunchJava_clicked();
 
 //SUBMENUS Toolbar
 	void hide_submenus( void );
@@ -318,6 +328,7 @@ private slots:
 	void quit_application();
 	void show_window_parameters();
 	void show_window_about();
+	
 
 	void updateReaderList( void );
 	void customEvent( QEvent * event );
@@ -331,6 +342,7 @@ protected:
 
 	void showNormal( void );
 	void showNoReaderMsg( void );
+	// void launchJavaProcess(QString &application_jar, QString &classpath);
 
 
 	// SystemTray
@@ -349,6 +361,7 @@ protected:
 	QTranslator			m_translator;
 
 	QProgressDialog *m_progress;
+	QProgressDialog *m_progress_addr;
 	QFutureWatcher<void> FutureWatcher;
 
 	QFutureWatcher<PTEID_CertifStatus> watcherCertStatusAuth;
@@ -365,6 +378,8 @@ private:
 	void loadCardDataAddress ();
 	bool loadCardDataPersoData ();
 	void loadCardDataCertificates ();
+	void setup_addressChange_progress_bar();
+	void doChangeAddress(const char *process, const char *secret_code);
 
 	// Refresh Data
 	void showTabs( void );
@@ -380,6 +395,9 @@ private:
 	void refreshTabCertificates( void );
 	void refreshTabCardPin( void );
 	//void refreshTabInfo( void );
+
+	//TESTING
+	void change_address_dummy(QString &process, QString &secret_code);
 
 	void Show_Splash( void );
 	void Show_Identity_Card(PTEID_EIDCard& Card);
@@ -461,7 +479,7 @@ private:
 	tCallBackHandles		m_callBackHandles;
 	tCallBackData			m_callBackData;
 	QString					m_CurrReaderName;		//!< the current reader we're using
-	PTEID_ReaderContext*		m_virtReaderContext;	//!< virtual reader context we're using
+	PTEID_ReaderContext*		 m_virtReaderContext;
 	bool					m_UseKeyPad;
 	GUISettings&			m_Settings;				//!< settings of the app
 	QTimer*					m_timerReaderList;

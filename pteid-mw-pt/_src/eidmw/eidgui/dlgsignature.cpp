@@ -59,6 +59,10 @@ dlgSignature::dlgSignature( QWidget* parent, CardInformation& CI_Data)
 		list_model = new QStringListModel();
 		ui.listView->setModel(list_model);
 
+		//Set XADES-BES as preselected level
+
+		ui.radioButton_xades_b->setChecked(true);
+
 		int thiswidth = this->width();
 		int thisheight = this->height();
 
@@ -79,9 +83,20 @@ dlgSignature::~dlgSignature()
 
 void dlgSignature::ShowErrorMsgBox()
 {
-
+	QString msg;
 	QString caption  = tr("Error");
-        QString msg = tr("Error Generating Signature!");
+	switch(this->error_code)
+	{
+		case EIDMW_TIMESTAMP_ERROR:
+        msg = tr("Error obtaining timestamp");
+        break;
+
+        case EIDMW_ERR_PIN_CANCEL:
+        case EIDMW_ERR_TIMEOUT:
+        default:
+        msg = tr("Error generating Signature!");
+    }
+
   	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
   	msgBoxp.exec();
 }
@@ -91,7 +106,7 @@ void dlgSignature::ShowSuccessMsgBox()
 
 		QString caption  = tr("File Signature (XAdES)");
         QString msg = tr("Signature(s) succesfully generated");
-		QMessageBox msgBoxp(QMessageBox::Information, caption, msg, 0, this);
+		QMessageBox msgBoxp(QMessageBox::Critical, caption, msg, 0, this);
   		msgBoxp.exec();
 
 
@@ -135,6 +150,16 @@ void dlgSignature::SignListView (QStringList list)
 	//signal right click
 	//view->setContextMenuPolicy(Qt::CustomContextMenu);
 	//connect (ui.listView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ShowContextMenu(const QPoint&)));
+}
+
+XadesLevel dlgSignature::getSelectedXadesLevel()
+{
+	if (ui.radioButton_xades_b->isChecked())
+		return XADES_B;
+	else if (ui.radioButton_xades_t->isChecked())
+		return XADES_T;
+	else if (ui.radioButton_xades_a->isChecked())
+		return XADES_A;
 }
 
 
@@ -206,8 +231,10 @@ void dlgSignature::on_pbSign_clicked ( void )
 	connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
 
 	//Get the Xades-T checkbox value
-	QCheckBox *xades_t = ui.checkbox_timestamp;
-	bool is_xades_t = xades_t->checkState() == Qt::Checked;
+	// QCheckBox *xades_t = ui.checkbox_timestamp;
+	// bool is_xades_t = xades_t->checkState() == Qt::Checked;
+
+	XadesLevel level = getSelectedXadesLevel();
 
 
 #ifdef WIN32		
@@ -222,16 +249,16 @@ void dlgSignature::on_pbSign_clicked ( void )
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Save to file %s", output_file);
 	if (individual_sigs)
 		future = 
-			QtConcurrent::run(this, &dlgSignature::run_multiple_sign, files_to_sign, n_files, output_file, is_xades_t);
+			QtConcurrent::run(this, &dlgSignature::run_multiple_sign, files_to_sign, n_files, output_file, level);
 		
 	else
 		future = 
-			QtConcurrent::run(this, &dlgSignature::runsign, files_to_sign, n_files, output_file, is_xades_t);
+			QtConcurrent::run(this, &dlgSignature::runsign, files_to_sign, n_files, output_file, level);
 	this->FutureWatcher.setFuture(future);
 
 	pdialog->exec();
 
-	if (this->success)
+	if (this->error_code == 0)
 		ShowSuccessMsgBox();
 	else
 		ShowErrorMsgBox();
@@ -244,66 +271,49 @@ void dlgSignature::on_pbSign_clicked ( void )
 }
 
 
-void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char *output_path, bool timestamp)
+void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char *output_path, XadesLevel level)
 {
 
     try
     {
 	    PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
 	    PTEID_ByteArray SignXades;
-	    if (timestamp)
+	    if (level == XADES_T)
 		    SignXades = Card->SignXadesT(paths, n_paths, output_path);
-	    else
+	    else if (level == XADES_B)
 		    SignXades = Card->SignXades(paths, n_paths, output_path);
-		this->success = true;
+		else if (level == XADES_A)
+			SignXades = Card->SignXadesA(paths, n_paths, output_path);
+		this->error_code = 0;
 
     }
-
     catch (PTEID_Exception &e)
     	{
-		this->success = false;
-    		switch(e.GetError())
-		{
-    		case EIDMW_ERR_PIN_CANCEL:
-    			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PIN introduction - CANCELED!");
-    			break;
-    		case EIDMW_ERR_TIMEOUT:
-    			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PIN introduction - TIMEOUT!");
-    			break;
-    		default:
-    			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "GENERAL EXCEPTION CAUGHT!");
-    		}
+		this->error_code = e.GetError();
+    		
     	}
     return;
 }
 
 
-void dlgSignature::run_multiple_sign(const char ** paths, unsigned int n_paths, const char *output_path, bool timestamp)
+void dlgSignature::run_multiple_sign(const char ** paths, unsigned int n_paths, const char *output_path, XadesLevel level)
 {
 
-    try
-    {
-        
-	    PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+	try
+	{
+
+		PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+	    /* TODO: reimplement with support for XADES-A
 	    if (timestamp)
 		    Card->SignXadesTIndividual(paths, n_paths, output_path);
 	    else
 		    Card->SignXadesIndividual(paths, n_paths, output_path);
-		this->success = true;
-    }
-    catch (PTEID_Exception &e)
-        	{
-				this->success = false;
-        		switch(e.GetError()){
-        		case EIDMW_ERR_PIN_CANCEL:
-        			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PIN introduction - CANCELED!");
-        			break;
-        		case EIDMW_ERR_TIMEOUT:
-        			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PIN introduction - TIMEOUT!");
-        			break;
-        		default:
-        			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "GENERAL EXCEPTION CAUGHT!");
-        		}
-        	}
-    return;
+		    */
+		this->error_code = 0;
+	}
+	catch (PTEID_Exception &e)
+	{
+		this->error_code = e.GetError();
+	}
+	return;
 }

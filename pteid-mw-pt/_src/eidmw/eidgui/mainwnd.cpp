@@ -26,6 +26,7 @@
 #include <QEvent>
 #include <QPixmap>
 #include <QImage>
+#include <QProcess>
 #include <stdlib.h>
 #ifndef _WIN32
 //This has to be explicitly included in gcc4.7
@@ -40,6 +41,7 @@
 #include "dlgAbout.h"
 #include "dlgprint.h"
 #include "dlgverifysignature.h"
+#include "ChangeAddressDialog.h"
 #include "PDFSignWindow.h"
 #include "dlgsignature.h"
 #include "dlgOptions.h"
@@ -423,6 +425,174 @@ void MainWnd::on_btnShortcut_VerifSign_clicked()
 	actionVerifySignature_eID_triggered();
 }
 
+/*
+void MainWnd::on_btnShortcut_LaunchJava_clicked()
+{
+	launchJavaProcess();
+}
+*/
+
+/*
+// Change Address functionality triggered by a button in the Address tab
+*/
+
+void MainWnd::address_change_callback(void *instance, int value)
+{
+	MainWnd * window = (MainWnd*) (instance);
+	window->addressProgressChanged(value);
+}
+
+void MainWnd::setAddressProgress(int value)
+{
+	if (m_progress_addr)
+		m_progress_addr->setValue(value);
+}
+
+void MainWnd::showChangeAddressDialog(long code)
+{
+
+	QString error_msg;
+	QString caption  = tr("Address Change");
+	QMessageBox::Icon icon = QMessageBox::NoIcon;
+	
+	switch(code)
+	{
+		case 0:
+			error_msg = tr("Address Changed successfully.");
+			icon = QMessageBox::Information;
+			break;
+		case EIDMW_SAM_CONNECTION_ERROR:
+			error_msg = tr("Error connecting to the Address Change server.\n"
+				"Please check if your Internet connection is functional");
+			icon = QMessageBox::Critical;
+			break;
+		case EIDMW_SAM_PROTOCOL_ERROR:
+			error_msg = tr("Error in the Address Change operation. Please make sure you insert the correct process number and secret code.");
+			icon = QMessageBox::Critical;
+			break;
+		default:
+			error_msg = tr("Undefined error in Address Change operation.");
+			icon = QMessageBox::Critical;
+			break;
+
+	}
+
+	QMessageBox msgBoxp(icon, caption, error_msg, 0, this);
+  	msgBoxp.exec();
+
+}
+
+void MainWnd::doChangeAddress(const char *process, const char *secret_code)
+{
+	PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
+
+    PTEID_EIDCard& Card = ReaderContext.getEIDCard();
+    try
+    {
+    Card.ChangeAddress((char *)secret_code, (char*)process, MainWnd::address_change_callback, (void*)this);
+
+	}
+	catch(PTEID_Exception & exception)
+	{
+		qDebug() << "Caught exception in eidlib ChangeAddress()... closing progressBar";
+		this->addressProgressChanged(100);
+		this->addressChangeFinished(exception.GetError());
+		return;
+	}
+
+	this->addressChangeFinished(0);
+
+}
+
+void MainWnd::on_btnAddress_Change_clicked()
+{
+	
+	ChangeAddressDialog* dlgChangeAddr = new ChangeAddressDialog(this);
+    
+    if (dlgChangeAddr->exec() == QDialog::Rejected)
+    	return;
+
+    //Remove whitespace the start and the end that the user may have 
+    //typed by mistake
+    QString process = dlgChangeAddr->getProcess().trimmed();
+    QString secret_code = dlgChangeAddr->getSecretCode().trimmed();
+
+    setup_addressChange_progress_bar();
+   	connect(this, SIGNAL(addressProgressChanged(int)),
+   	 this, SLOT(setAddressProgress(int)));
+
+   	connect(this, SIGNAL(addressChangeFinished(long)),
+   	 this, SLOT(showChangeAddressDialog(long)));
+
+   	QtConcurrent::run(this, &MainWnd::doChangeAddress, strdup(process.toUtf8().constData()),
+    	strdup(secret_code.toUtf8().constData()));
+   	m_progress_addr->open();
+
+}
+
+void MainWnd::showJavaLaunchError(QProcess::ProcessError error)
+{
+
+	if (error == QProcess::FailedToStart)
+	{
+		QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning,
+			"TITLE", "Error launching Java application! Make sure you have a working JRE installed.",
+			QMessageBox::Ok, this);
+		msgBox->setModal(true);
+		msgBox->show();
+	}
+
+}
+
+/*
+void MainWnd::launchJavaProcess(QString &application_jar, QString &classpath)
+{
+
+#ifdef __APPLE__
+//TODO
+//Call /usr/libexec/java_home to find JRE dir
+
+#elif WIN32
+	QString program = "javaw";
+	
+#else
+	 QString program = "java";
+	 QStringList arguments;
+	 arguments <<
+     arguments << "-jar" << "/home/agrr/Downloads/pdfvole_20110411_bin/pdfvole_20110411.jar";
+#endif
+	 QObject *parent = this;
+	 arguments << "-jar" << application_jar;
+
+	 if (classpath.length() > 0)
+		 arguments << "-cp" << classpath;
+
+	 QProcess *myProcess = new QProcess(parent);
+	 connect(myProcess, SIGNAL(error(QProcess::ProcessError)),
+			 this, SLOT(showJavaLaunchError(QProcess::ProcessError)));
+
+	 myProcess->start(program, arguments);
+	 
+}
+*/
+
+void MainWnd::setup_addressChange_progress_bar()
+{
+	m_progress_addr = new QProgressDialog(this);
+	m_progress_addr->setWindowModality(Qt::WindowModal);
+	m_progress_addr->setWindowTitle(QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"));
+	m_progress_addr->setLabelText(tr("Changing Address in card..."));
+	m_progress_addr->setWindowFlags(m_progress_addr->windowFlags() ^ Qt::WindowMinimizeButtonHint ^ Qt::WindowCloseButtonHint ^ Qt::CustomizeWindowHint);
+	//m_progress_addr->setFixedSize(m_progress_addr->size());
+	//Disable cancel button
+	m_progress_addr->setCancelButton(NULL);
+	m_progress_addr->setMinimum(0);
+	m_progress_addr->setMaximum(100);
+	//Hack to force centered display of the popup dialog when running on "peculiar" window managers
+	//m_progress_addr->move(geometry().center().x(), geometry().center().y());
+
+}
+
 
 //******************************************************
 // Buttons to control tabs
@@ -688,6 +858,7 @@ void MainWnd::cleanupCallbackData()
 //*****************************************************
 void MainWnd::stopAllEventCallbacks( void )
 {
+
 	for (tCallBackHandles::iterator it = m_callBackHandles.begin()
 			; it != m_callBackHandles.end()
 			; it++
@@ -1396,11 +1567,11 @@ void MainWnd::on_treeCert_currentItemChanged(QTreeWidgetItem *current, QTreeWidg
 	{
 		syncTreeItemWithSideinfo(dynamic_cast<QTreeCertItem *>(current));
 	}
+
 }
 
 void MainWnd::syncTreeItemWithSideinfo(QTreeCertItem *item)
 {
-	qDebug() << "syncTreeItemWithSideInfo()";
 
 	if (!m_CI_Data.isDataLoaded())
 		return;
@@ -1595,8 +1766,8 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
 				//------------------------------------
 				MainWnd::RemoveCertificates(pCallBackData->getReaderName() );
 			}
-			PopupEvent* event = new PopupEvent(pCallBackData->getReaderName(), PopupEvent::ET_CARD_REMOVED);
-			QCoreApplication::postEvent(pCallBackData->getMainWnd(), event);
+			PopupEvent* event = new PopupEvent(pCallBackData->getReaderName(),PopupEvent::ET_CARD_REMOVED);
+			QCoreApplication::postEvent(pCallBackData->getMainWnd(),event);
 
 			g_runningCallback--;
 			return;
@@ -1612,8 +1783,8 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
 			// main thread.
 			//------------------------------------
 
-			PopupEvent* event = new PopupEvent(pCallBackData->getReaderName(), PopupEvent::ET_CARD_CHANGED);
-			QCoreApplication::postEvent(pCallBackData->getMainWnd(), event);
+			PopupEvent* event = new PopupEvent(pCallBackData->getReaderName(),PopupEvent::ET_CARD_CHANGED);
+			QCoreApplication::postEvent(pCallBackData->getMainWnd(),event);
 		}
 	}
 	catch (PTEID_ExBadTransaction& e)
@@ -1757,7 +1928,7 @@ void MainWnd::loadCardData( void )
 					try
 					{
 						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-						if (Card.isTestCard() && !Card.getAllowTestCard())
+						if (Card.isTestCard()&&!Card.getAllowTestCard())
 						{
 							if (askAllowTestCard())
 							{
@@ -1804,7 +1975,7 @@ void MainWnd::loadCardData( void )
 			QString strCaption(tr("Reload eID"));
 			strCaption = strCaption.remove(QChar('&'));
 			QString strMessage(tr("No card found"));
-			m_ui.statusBar->showMessage(strCaption+":"+strMessage, m_STATUS_MSG_TIME);
+			m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
 		}
 		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
 		{
@@ -1874,9 +2045,8 @@ void MainWnd::loadCardData( void )
 //*****************************************************
 void MainWnd::loadCardDataAddress( void )
 {
-	if (!m_CI_Data.isDataLoaded())
-		return;
-
+    if (!m_CI_Data.isDataLoaded())
+        return;
 	//----------------------------------------------------------------
 	// if we load a new card, clear the certificate contexts we kept
 	//----------------------------------------------------------------
@@ -2326,7 +2496,6 @@ void MainWnd::loadCardDataCertificates( void )
 		ShowPTEIDError( e.GetError(), msg );
 	}
 }
-
 //*****************************************************
 // Test PIN clicked
 //*****************************************************
@@ -3057,6 +3226,7 @@ void MainWnd::fillCertificateList( void )
 	bool noIssuer = false;
 
 	PTEID_Certificates* certificates = m_CI_Data.m_CertifInfo.getCertificates();
+
 	if (!certificates)
 		return;
 
@@ -3127,15 +3297,6 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 	}
 }
 
-/*
-PTEID_CertifStatus MainWnd::checkCertStatus(PTEID_Certificate *cert)
-{
-	qDebug() << cert->getLabel();
-	sleep(5);
-
-	return cert->getStatus();
-}
-*/
 
 void MainWnd::LoadDataAddress(PTEID_EIDCard& Card)
 {
@@ -3160,11 +3321,11 @@ void MainWnd::LoadDataPersoData(PTEID_EIDCard& Card)
 	setEnabledCertifButtons(false);
 	m_ui.btnPersoDataSave->setEnabled(true);
 	m_TypeCard = Card.getType();
-
 	CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName);
 	QFuture<void> future = QtConcurrent::run(loader, &CardDataLoader::LoadPersoData);
 	this->FutureWatcher.setFuture(future);
 	m_progress->exec();
+	
 }
 
 void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
@@ -3180,6 +3341,7 @@ void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 
 	clearTabCertificates();
 	fillCertificateList();
+	
 }
 
 #define TYPE_PINTREE_ITEM 0
@@ -3226,6 +3388,7 @@ void MainWnd::loadPinData(PTEID_EIDCard& Card){
 	m_pinsInfo[PTEID_Pin::ADDR_PIN] = new PinInfo(pinAddr.getId(), pinAddr.getLabel(), pinAddr.getTriesLeft());
 }
 
+
 QString MainWnd::getFinalLinkTarget(QString baseName)
 {
 	QFileInfo info(baseName);
@@ -3238,249 +3401,6 @@ QString MainWnd::getFinalLinkTarget(QString baseName)
 	return baseName;
 }
 
-//**************************************************
-// fill the software info table
-//**************************************************
-//void MainWnd::fillSoftwareInfo( void )
-//{
-	/*
-	QStringList libPaths = QProcess::systemEnvironment();
-	QStringList searchPaths;
-	QMap<QString,QString> softwareInfo;
-
-#ifdef WIN32
-
-	//--------------------------------
-	// search paths are:
-	// 1. path of executable
-	// 2. current directory
-	// 3. windows system directory
-	// 4. windows directory
-	// 5. PATH
-	//--------------------------------
-
-	//--------------------------------
-	// 1. exe path
-	//--------------------------------
-	searchPaths.push_back(QCoreApplication::applicationDirPath());
-
-	//--------------------------------
-	// 2. current path
-	//--------------------------------
-	searchPaths.push_back(QDir::currentPath());
-
-	//--------------------------------
-	// 3. system path
-	//--------------------------------
-	char sysDir[MAX_PATH];
-	QString systemPath = GetSystemDirectory(sysDir,MAX_PATH);
-	searchPaths.push_back(sysDir);
-
-	//--------------------------------
-	// 4. system path
-	//--------------------------------
-	char winDir[MAX_PATH];
-	GetWindowsDirectory(winDir,MAX_PATH);
-	searchPaths.push_back(winDir);
-
-	//--------------------------------
-	// 5. PATH variable
-	//--------------------------------
-	int idx = -1;
-	QRegExp envPATH("^PATH=.+");
-
-	if ( (idx=libPaths.indexOf(envPATH))>0)
-	{
-		QString strPATH = libPaths.at(idx);
-		strPATH = strPATH.mid(strPATH.indexOf("=")+1);
-		QStringList subPaths;
-		subPaths = strPATH.split(";");
-		foreach(QString p, subPaths)
-		{
-			searchPaths.push_back(p);
-		}
-	}
-
-	foreach (QString path, searchPaths)
-	{
-		for ( size_t idx=0; idx<sizeof(fileList)/sizeof(char*); idx++)
-		{
-			if (softwareInfo.end()==softwareInfo.find(fileList[idx]))
-			{
-				QFileInfo fileInfo(QDir::toNativeSeparators(path+"/"+fileList[idx]));
-				if (fileInfo.isFile())
-				{
-					CFileVersionInfo VerInfo;
-					if(VerInfo.Open(fileInfo.filePath().toLatin1()))
-					{
-						char version[256];
-						//VerInfo.QueryStringValue(VI_STR_PRODUCTVERSION, version);
-						VerInfo.QueryStringValue(VI_STR_FILEVERSION, version);
-						softwareInfo[QString(fileList[idx])] = QString(version);
-					}
-				}
-			}
-		}
-	}
-#elif defined __APPLE__
-	//--------------------------------
-	// search paths are:
-	// 1. DYLD_LIBRARY_PATH
-	// 2. /usr/local/lib    !!! assumes we're installing in /usr/local/lib !!!
-	//--------------------------------
-	//--------------------------------
-	// 1. DYLD_LIBRARY_PATH variable
-	//--------------------------------
-	int idx = -1;
-	QRegExp envPATH("^DYLD_LIBRARY_PATH=.+");
-	if ( (idx=libPaths.indexOf(envPATH))>0)
-	{
-		QString strPATH = libPaths.at(idx);
-		strPATH = strPATH.mid(strPATH.indexOf("=")+1);
-
-		QStringList subPaths;
-		subPaths = strPATH.split(":");
-		foreach(QString p, subPaths)
-		{
-			searchPaths.push_back(p);
-		}
-	}
-	//--------------------------------
-	// 2. /usr/local/lib
-	//--------------------------------
-	QString exePath = QCoreApplication::applicationDirPath();
-	searchPaths.push_back("/usr/local/lib");
-
-	foreach (QString path, searchPaths)
-	{
-		for ( size_t idx=0; idx<sizeof(fileList)/sizeof(char*); idx++)
-		{
-			if (softwareInfo.end()==softwareInfo.find(fileList[idx]))
-			{
-				QString thisFile(fileList[idx]);
-				//thisFile += ".*.*.*.dylib";
-				//--------------------------------
-				// we take the base filename and will follow the symbolic links until the last
-				//--------------------------------
-				thisFile += ".dylib";
-				QDir fileInfo(path,thisFile);
-				//QStringList theFiles = fileInfo.entryList();
-				QFileInfoList theFiles = fileInfo.entryInfoList();
-
-				if (theFiles.size()>0)
-				{
-					QString version;
-					QString baseName(theFiles[0].absoluteFilePath());
-					QString caption;
-					caption ="debug_before_getFinalLinkTarget";
-					baseName = getFinalLinkTarget(baseName);
-					caption = "debug_after_getFinalLinkTarget";
-
-					//--------------------------------
-					// abcdefg.x.y.z.dylib
-					// +-----+             == basename
-					// therefore the x.y.z length can be calculated as:
-					//    startpoint: baseName().size()+1  ( +1 for the dot after the basename)
-					//    length: fileName().size()
-					//            - (baseName().size()+1)   ( +1 for the dot after the basename)
-					//            - ".dylib".size()
-					//--------------------------------
-					QFileInfo info(baseName);
-
-					version = info.fileName();
-					version = version.mid(info.baseName().size()+1,version.size()-(info.baseName().size()+1)-QString(".dylib").size());
-
-					softwareInfo[thisFile]=QString(version);
-				}
-			}
-		}
-	}
-#else
-// Linux
-	//--------------------------------
-	// search paths are:
-	// 1. LD_LIBRARY_PATH
-	// 2. paths in file /etc/ld.so.conf
-	//    The problem with this is that this file can include other .conf files
-	//    This becomes too complicated for its purpose here, so we omit this.
-	// 3. ../lib
-	//--------------------------------
-	//--------------------------------
-	// 1. LD_LIBRARY_PATH variable
-	//--------------------------------
-	int idx = -1;
-	QRegExp envPATH("^LD_LIBRARY_PATH=.+");
-	if ( (idx=libPaths.indexOf(envPATH))>0)
-	{
-		QString strPATH = libPaths.at(idx);
-		strPATH = strPATH.mid(strPATH.indexOf("=")+1);
-
-		//printf("Splitting: %s\n",strPATH.toLatin1().data());
-
-		QStringList subPaths;
-		subPaths = strPATH.split(":");
-		foreach(QString p, subPaths)
-		{
-			searchPaths.push_back(p);
-		}
-	}
-	//--------------------------------
-	// 3. ../lib (relative to the exe path
-	//--------------------------------
-	QString exePath = QCoreApplication::applicationDirPath();
-	searchPaths.push_back(exePath+"/../lib");
-
-	foreach (QString path, searchPaths)
-	{
-		for ( size_t idx=0; idx<sizeof(fileList)/sizeof(char*); idx++)
-		{
-			if (softwareInfo.end()==softwareInfo.find(fileList[idx]))
-			{
-				QFileInfo fileInfo(path+"/"+fileList[idx]);
-				if (fileInfo.isFile())
-				{
-					QString thisFile;
-					thisFile = fileList[idx];
-					thisFile += ".?.?.?" ;
-					QDir thisDir(path,thisFile);
-					QStringList allFiles=thisDir.entryList();
-					foreach(QString p,allFiles)
-					{
-						QString version = p.mid(p.indexOf(".so.")+4);
-						softwareInfo[QString(fileList[idx])] = QString(version);
-					}
-				}
-			}
-		}
-	}
-
-#endif
-
-	m_ui.tblInfo->setRowCount( softwareInfo.size() );
-	m_ui.tblInfo->setColumnCount( 2 );
-
-	QTableWidgetItem*	newItem = NULL;
-	int					RowNr = 0;
-	int					ColNr = 0;
-
-	Qt::ItemFlags flags;
-	flags &= !Qt::ItemIsEditable;
-
-	for ( QMap<QString,QString>::iterator itData=softwareInfo.begin()
-		; itData != softwareInfo.end()
-		; itData++, ColNr=0, RowNr++
-		)
-	{
-		newItem = new QTableWidgetItem( itData.key() );
-		newItem->setFlags(flags);
-		m_ui.tblInfo->setItem( RowNr, ColNr++, newItem );
-		newItem = new QTableWidgetItem( itData.value() );
-		newItem->setFlags(flags);
-		m_ui.tblInfo->setItem( RowNr, ColNr, newItem );
-	}
-
-	 */
-//}
 
 //**************************************************
 // clear button clicked
@@ -3497,7 +3417,6 @@ void MainWnd::on_actionClear_triggered()
 	clearGuiContent();
 
 }
-
 //*****************************************************
 // Clear the content of the GUI
 //*****************************************************
@@ -3521,6 +3440,7 @@ void MainWnd::clearGuiContent( void )
 //*****************************************************
 void MainWnd::refreshTabIdentity( void )
 {
+
 	m_ui.lblIdentity_ImgPerson->setPixmap(m_imgPicture);
 
 	m_ui.lblIdentity_ImgPerson->show();
@@ -3979,12 +3899,6 @@ void MainWnd::refreshTabCardPin( void )
 	}
 }
 
-//*****************************************************
-// refresh the tab with the software info
-//*****************************************************
-//void MainWnd::refreshTabInfo( void )
-//{
-//}
 
 //**************************************************
 // menu items to change the language
@@ -4505,7 +4419,7 @@ void MainWnd::on_actionE_xit_triggered(void)
 //**************************************************
 void MainWnd::setEventCallbacks( void )
 {
-    //----------------------------------------
+	//----------------------------------------
 	// for all the readers, create a callback such we can know
 	// afterwards, which reader called us
 	//----------------------------------------
