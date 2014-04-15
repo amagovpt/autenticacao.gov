@@ -1,11 +1,10 @@
 <RCC>
     <qresource prefix="/images">
-        <file>Images/Background_IDBack.jpg</file>
-        <file>Images/Background_IDFront.jpg</file>
         <file>Images/Icons/Chip.png</file>
         <file>Images/Icons/Clear.png</file>
         <file>Images/Icons/Exit.png</file>
         <file>Images/Icons/ICO_CARD_EID_PLAIN_16x16.png</file>
+		<file>Images/Icons/pteid.ico</file>
         <file>Images/Icons/Open.png</file>
         <file>Images/Icons/Options.png</file>
         <file>Images/Icons/Print.png</file>
