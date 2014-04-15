@@ -4,8 +4,8 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<?include ..\..\..\svn_revision.wxs ?>
 
-	<?define var.OfficialProductVersion =2.1.2?>
-	<?define var.ProductVersion =2.1.$(var.RevisionNumber)?>
+	<?define var.OfficialProductVersion =2.2.0?>
+	<?define var.ProductVersion =2.2.$(var.RevisionNumber)?>
 	<?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
 	<?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
@@ -78,7 +78,7 @@
 		<?endif?>
 
 		<WixVariable Id="WixUILicenseRtf" Value="..\..\..\misc\licenses_files\License_en.rtf" />
-		<WixVariable Id="WixUIBannerBmp" Value="..\..\..\misc\Wix_MW35\bannrbmp.bmp" />
+		<WixVariable Id="WixUIBannerBmp" Value="..\..\..\misc\Wix_MW35\new_banner.bmp" />
 		<WixVariable Id="WixUIDialogBmp" Value="..\..\..\misc\Wix_MW35\dlgbmp.bmp" />
 
 		<Condition Message="!(loc.MinOs)">
@@ -508,8 +508,8 @@
 				</Component>
 
 				<Component Win64="no" Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F8}" SharedDllRefCount="yes">
-					<File Id="libeay32.dll" Name="libeay32.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\libeay32.dll" />
-					<File Id="ssleay32.dll" Name="ssleay32.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\ssleay32.dll" />
+					<File Id="libeay32.dll" Name="libeay32_098_25.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\libeay32_098_25.dll" />
+					<File Id="ssleay32.dll" Name="ssleay32_098_25.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\ssleay32_098_25.dll" />
 				</Component>
 
 				<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
@@ -890,6 +890,14 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 
 			<Binary Id="MarkHidden" SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>
 
+		<CustomAction Id="CleanMinidriverKeys"
+			BinaryKey="CleanMdrvKeys"
+			ExeCommand="clean_mdrv_keys.exe"
+			Impersonate="no"
+			Return="ignore"
+			Execute="deferred"/>
+		<Binary Id="CleanMdrvKeys" SourceFile="..\..\..\_Binaries35\x64\Release\clean_mdrv_keys.exe"/>
+
 			<CustomAction Id="LaunchApplication"
 						  FileKey="pteidgui.exe"
 						  ExeCommand=""
@@ -1045,11 +1053,12 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
       <Custom Action="ForceCleanup" Before="PteidCleanup">CLEANUP_FORCE=1</Custom>
       <Custom Action="NotForceCleanup" Before="PteidCleanup"><![CDATA[CLEANUP_FORCE<>1 OR NOT CLEANUP_FORCE]]></Custom>
      -->
-				<Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
-				<Custom Action="MinidriverManualInstall" After="InstallFiles"> NOT Installed and VersionNT = 600</Custom>
+	<Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
+	<Custom Action="CleanMinidriverKeys" After="RemoveRegistryValues">NOT Installed</Custom>
+	<Custom Action="MinidriverManualInstall" After="InstallFiles"> NOT Installed and VersionNT = 600</Custom>
 
-				<ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>
-			</InstallExecuteSequence>
+		<ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>
+	</InstallExecuteSequence>
 
 		</Product>
 </Wix>
