@@ -94,7 +94,7 @@
       ]]>
     </Condition>
 
-    <Media Id="1" Cabinet="Middleware.cab" EmbedCab="yes" />
+    <Media Id="1" Cabinet="Middleware.cab" EmbedCab="yes" CompressionLevel="high"/>
 
     <Icon Id="pteid.ico" SourceFile="..\..\..\eidgui\pteid.ico"/>
 
