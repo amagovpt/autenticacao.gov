@@ -92,9 +92,9 @@
 
 		<Media Id="1" Cabinet="Middleware.cab" EmbedCab="yes" />
 
-		<Icon Id="eid.ico" SourceFile="..\..\..\eidgui\eid.ico"/>
+		<Icon Id="pteid.ico" SourceFile="..\..\..\eidgui\pteid.ico"/>
 
-		<Property Id="ARPPRODUCTICON" Value="eid.ico" />
+		<Property Id="ARPPRODUCTICON" Value="pteid.ico" />
 		<Property Id="ARPURLINFOABOUT" Value="http://www.cartaodecidadao.pt"/>
 
 		<Property Id="ALLUSERS" Value="1" />
@@ -439,7 +439,7 @@
 				</Component>
 
 				<Component Id="Icon" Guid="{5B657BAD-8CFC-4E42-AF8C-13338C50D784}" SharedDllRefCount="yes">
-					<File Id="eid.ico" Name="eid.ico" KeyPath="yes" Source="..\..\..\eidgui\eid.ico" />
+					<File Id="assinatura.ico" Name="assinatura.ico" KeyPath="yes" Source="..\..\..\misc\assinatura.ico" />
 				</Component>
 
 				<Component Id="OutlookTool" Guid="{F36A543C-CB17-4D91-BF0C-2EAEFEC3CB3A}">
@@ -703,6 +703,29 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 					</RegistryKey>
 				</Component>
 
+				<Component Id="RegistryXadesFileType" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA5}">
+					<RegistryKey Root="HKLM"
+							Key="SOFTWARE\Classes\.ccsigned"
+								 Action="createAndRemoveOnUninstall">
+						<RegistryValue Type="string" Value="PteidASICSignature"/>
+					</RegistryKey>
+					<RegistryKey Root="HKLM"
+							Key="SOFTWARE\Classes\PteidASICSignature"
+								 Action="createAndRemoveOnUninstall">
+						<RegistryKey
+							Key="shell\Open\command"
+								 Action="createAndRemoveOnUninstall">
+							<!-- TODO: When we have the proper application associate here-->
+							<RegistryValue Type="string" Value="C:\Windows\System32\notepad.exe"/>
+						</RegistryKey>
+						<RegistryKey Key="DefaultIcon"  Action="createAndRemoveOnUninstall">
+							<RegistryValue Type="string" Value="[ProgramFiles64Folder]Portugal Identity Card\assinatura.ico"/>
+						</RegistryKey>
+					<RegistryValue Type="string" Value="Cartão de Cidadão Digital Signature"/>
+				</RegistryKey>
+					
+			</Component>
+
 				<Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA3}">
 					<RegistryKey Root="HKLM"
 						Key="SOFTWARE\PTEID"
@@ -836,6 +859,7 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 
 				<!-- Registry -->
 				<ComponentRef Id="RegistryPteidSystem"/>
+				<ComponentRef Id="RegistryXadesFileType"/>
 
 				<Feature Id="GUI"
 						  Title="!(loc.PteidGui)"
