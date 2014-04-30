@@ -9,6 +9,7 @@ set BUILDPATH=%~dp0
 
 :: Paths to compiled drivers
 set BINPATH_32=%~dp0..\Build\Win32\VC9\Release
+set BINPATH_32D=%~dp0..\Build\Win32\VC9\Debug
 
 :: Path to output/signed files
 md %BUILDPATH%\Release
@@ -19,15 +20,15 @@ copy %IMG_PATH%\pteid.ico %BUILDPATH%\Release\
 copy %IMG_PATH%\pteid.ico %BUILDPATH%\Debug\
 
 :: Inf file
-copy pteidmdrv.inf %BUILDPATH%\Release
-copy pteidmdrv.inf %BUILDPATH%\Debug
+copy %BUILDPATH%\pteidmdrv.inf %BUILDPATH%\Release
+copy %BUILDPATH%\pteidmdrv.inf %BUILDPATH%\Debug
 
 :: copy drivers. We use the same files for 32 and 64 bit.
 copy %BINPATH_32%\pteidmdrv.dll %BUILDPATH%\Release\pteidmdrv32.dll
 copy %BINPATH_32%\pteidmdrv.dll %BUILDPATH%\Release\pteidmdrv64.dll
 
-copy %BINPATH_32%\pteidmdrv.dll %BUILDPATH%\Debug\pteidmdrv32.dll
-copy %BINPATH_32%\pteidmdrv.dll %BUILDPATH%\Debug\pteidmdrv64.dll
+copy %BINPATH_32D%\pteidmdrv.dll %BUILDPATH%\Debug\pteidmdrv32.dll
+copy %BINPATH_32D%\pteidmdrv.dll %BUILDPATH%\Debug\pteidmdrv64.dll
 
 :: Create catalog
 %INF2CAT_PATH%\inf2cat.exe /driver:%BUILDPATH%\Release\ /os:XP_X86,XP_X64,Vista_X86,Vista_X64,7_X86,7_X64
@@ -42,5 +43,5 @@ copy %BINPATH_32%\pteidmdrv.dll %BUILDPATH%\Debug\pteidmdrv64.dll
 :: Sign the catalog with the official Cartao de Cidadao certificate
 ::%SIGNTOOL_PATH%\SignTool.exe sign /v /s %CERTIFICATESTORE% /n "%CERTIFICATENAME%"  /t http://timestamp.verisign.com/scripts/timestamp.dll %BUILDPATH%\Release\pteidmdrv.cat
 %SIGNTOOL_PATH%\SignTool.exe sign /v /sha1 0c526195081d0ec73e3a697f03a17160190a976f /t http://timestamp.verisign.com/scripts/timestamp.dll %BUILDPATH%\Release\pteidmdrv.cat
-%SIGNTOOL_PATH%\SignTool.exe sign /v /sha1 0c526195081d0ec73e3a697f03a17160190a976f /t http://timestamp.verisign.com/scripts/timestamp.dll %BUILDPATH%\Debug\pteidmdrv.cat
+::%SIGNTOOL_PATH%\SignTool.exe sign /v /sha1 0c526195081d0ec73e3a697f03a17160190a976f /t http://timestamp.verisign.com/scripts/timestamp.dll %BUILDPATH%\Debug\pteidmdrv.cat
 

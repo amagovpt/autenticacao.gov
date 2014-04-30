@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="javac..."
-				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\javac.exe&quot; -verbose -d class ../eidlibJava_Wrapper\GeneratedFiles\*.java&#x0D;&#x0A;"
+				CommandLine="&quot;%PTEID_DIR_JDK%\bin\javac.exe&quot; -verbose -d class ..\eidlibJava_Wrapper\GeneratedFiles\*.java"
 				Outputs="$(InputName).class"
 			/>
 			<Tool
@@ -65,6 +65,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
+				GenerateManifest="false"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -91,7 +92,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Creating jar file..."
-				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid35$(ProjectName).jar -C class .&#x0D;&#x0A;"
+				CommandLine="&quot;%PTEID_DIR_JDK%\bin\jar.exe&quot; cvf  ../jar/pteid$(ProjectName).jar -C class pt&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -107,7 +108,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="javac..."
-				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\javac.exe&quot; -verbose -d class ../eidlibJava_Wrapper\GeneratedFiles\*.java&#x0D;&#x0A;"
+				CommandLine="&quot;%PTEID_DIR_JDK%\bin\javac.exe&quot; -verbose -d class ..\eidlibJava_Wrapper\GeneratedFiles\*.java"
 				Outputs="$(InputName).class"
 			/>
 			<Tool
@@ -169,7 +170,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Creating jar file..."
-				CommandLine="call ..\SetPathJdk142.bat&#x0D;&#x0A;&quot;%PTEID_DIR_JDK_142%\bin\jar.exe&quot; cvf  ../jar/pteid35$(ProjectName).jar -C class .&#x0D;&#x0A;"
+				CommandLine="&quot;%PTEID_DIR_JDK%\bin\jar.exe&quot; cvf  ../jar/pteid$(ProjectName).jar -C class pt"
 			/>
 		</Configuration>
 		<Configuration
@@ -239,7 +240,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="&quot;%PTEID_DIR_JDK%\bin\jar.exe&quot; cvf  ../jar/pteid$(ProjectName).jar -C class pt&#x0D;&#x0A;call ..\_DocsInternal\API\doSDK_java.bat&#x0D;&#x0A;"
+				Description="Creating jar file..."
+				CommandLine="&quot;%PTEID_DIR_JDK%\bin\jar.exe&quot; cvf  ../jar/pteid$(ProjectName).jar -C class pt&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -316,7 +318,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="&quot;%PTEID_DIR_JDK%\bin\jar.exe&quot; cvf  ../jar/pteid$(ProjectName).jar -C class pt&#x0D;&#x0A;call ..\_DocsInternal\API\doSDK_java.bat&#x0D;&#x0A;"
+				Description="Creating jar file..."
+				CommandLine="&quot;%PTEID_DIR_JDK%\bin\jar.exe&quot; cvf  ../jar/pteid$(ProjectName).jar -C class pt"
 			/>
 		</Configuration>
 	</Configurations>

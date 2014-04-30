@@ -22,8 +22,8 @@ copy %IMG_PATH%\pteid.ico %BUILDPATH%\Release\
 copy %IMG_PATH%\pteid.ico %BUILDPATH%\Debug\
 
 :: Inf file
-copy pteidmdrv.inf %BUILDPATH%\Release
-copy pteidmdrv.inf %BUILDPATH%\Debug
+copy %BUILDPATH%\pteidmdrv.inf %BUILDPATH%\Release
+copy %BUILDPATH%\pteidmdrv.inf %BUILDPATH%\Debug
 
 :: copy drivers.
 copy %BINPATH_32%\pteidmdrv.dll %BUILDPATH%\Release\pteidmdrv32.dll
@@ -45,5 +45,5 @@ copy %BINPATH_64D%\pteidmdrv64.dll %BUILDPATH%\Debug\pteidmdrv64.dll
 :: Sign the catalog with the official Cartao de Cidadao certificate
 ::%SIGNTOOL_PATH%\SignTool.exe sign /v /s %CERTIFICATESTORE% /n "%CERTIFICATENAME%"  /t http://timestamp.verisign.com/scripts/timestamp.dll %BUILDPATH%\Release\pteidmdrv.cat
 %SIGNTOOL_PATH%\SignTool.exe sign /v /sha1 0c526195081d0ec73e3a697f03a17160190a976f /t http://timestamp.verisign.com/scripts/timestamp.dll %BUILDPATH%\Release\pteidmdrv.cat
-%SIGNTOOL_PATH%\SignTool.exe sign /v /sha1 0c526195081d0ec73e3a697f03a17160190a976f /t http://timestamp.verisign.com/scripts/timestamp.dll %BUILDPATH%\Debug\pteidmdrv.cat
+::%SIGNTOOL_PATH%\SignTool.exe sign /v /sha1 0c526195081d0ec73e3a697f03a17160190a976f /t http://timestamp.verisign.com/scripts/timestamp.dll %BUILDPATH%\Debug\pteidmdrv.cat
 

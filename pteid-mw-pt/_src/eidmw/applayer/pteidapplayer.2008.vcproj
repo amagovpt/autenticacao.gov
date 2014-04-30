@@ -67,7 +67,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="wsock32.lib Shlwapi.lib libeay32.lib ssleay32.lib xerces-c_3.lib libcurl.lib freeimage.lib pteid-poppler.lib xsec_1_6.lib pteidDlgsWin32.lib pteidcardlayer.lib pteidcommon.lib"
+				AdditionalDependencies="wsock32.lib Shlwapi.lib libeay32.lib ssleay32.lib xerces-c_3D.lib libcurl.lib freeimage.lib pteid-poppler.lib xsec_1_6.lib pteidDlgsWin32.lib pteidcardlayer.lib pteidcommon.lib"
 				OutputFile="..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)\pteid$(ProjectName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)&quot;;&quot;$(PTEID_DIR_CURL)\lib&quot;;&quot;$(PTEID_DIR_XERCES_31)\lib&quot;;&quot;$(PTEID_DIR_OPENSSL_098)\lib&quot;"

@@ -44,13 +44,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../applayer;../common;../eidlib;../cardlayer"
-				PreprocessorDefinitions="PTEID_35;WIN32;_DEBUG;_WINDOWS;EIDMW_EIDLIB_WRAPPER"
+				AdditionalIncludeDirectories="..\common;..\dialogs;..\cardlayer;..\applayer;..\eidlib;&quot;$(PTEID_DIR_OPENSSL_098)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
+				PreprocessorDefinitions="PTEID_35;WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_WRAPPER"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -67,7 +66,7 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				UseLibraryDependencyInputs="false"
-				AdditionalDependencies="pteid35applayerD.lib pteid35commonD.lib"
+				AdditionalDependencies="pteidcommon.lib pteidDlgsWin32.lib pteidapplayer.lib"
 				OutputFile="..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)\pteid$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
@@ -127,13 +126,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../applayer;../common;../eidlib;../cardlayer"
-				PreprocessorDefinitions="PTEID_35;WIN32;_DEBUG;_WINDOWS;EIDMW_EIDLIB_WRAPPER"
+				AdditionalIncludeDirectories="..\common;..\dialogs;..\cardlayer;..\applayer;..\eidlib;&quot;$(PTEID_DIR_OPENSSL_098_X64)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
+				PreprocessorDefinitions="PTEID_35;WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_WRAPPER"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -150,7 +148,7 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				UseLibraryDependencyInputs="false"
-				AdditionalDependencies="pteid35applayerD.lib pteid35commonD.lib"
+				AdditionalDependencies="pteidcommon.lib pteidDlgsWin32.lib pteidapplayer.lib"
 				OutputFile="..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)\pteid$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
@@ -208,11 +206,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\common;..\dialogs;..\cardlayer;..\eidlib;..\applayer;&quot;$(PTEID_DIR_OPENSSL_098)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
-				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_WRAPPER"
+				AdditionalIncludeDirectories="..\common;..\dialogs;..\cardlayer;..\applayer;..\eidlib;&quot;$(PTEID_DIR_OPENSSL_098)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
+				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_WRAPPER;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -227,7 +224,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="pteidapplayer.lib pteidcommon.lib pteidDlgsWin32.lib pteidlibCpp.lib"
+				AdditionalDependencies="pteidcommon.lib pteidDlgsWin32.lib pteidapplayer.lib"
 				OutputFile="..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)\pteid$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
@@ -282,11 +279,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\common;..\dialogs;..\cardlayer;..\eidlib;..\applayer;&quot;$(PTEID_DIR_OPENSSL_098_X64)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
-				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_WRAPPER"
+				AdditionalIncludeDirectories="..\common;..\dialogs;..\cardlayer;..\applayer;..\eidlib;&quot;$(PTEID_DIR_OPENSSL_098_X64)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
+				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_WRAPPER;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -301,7 +297,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="pteidapplayer.lib pteidcommon.lib pteidDlgsWin32.lib pteidlibCpp.lib"
+				AdditionalDependencies="pteidcommon.lib pteidDlgsWin32.lib pteidapplayer.lib"
 				OutputFile="..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)\pteid$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
@@ -413,8 +409,8 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="call ..\SetPathSwig.bat&#x0D;&#x0A;&quot;%PTEID_DIR_SWIG%\swig.exe&quot; -c++ -csharp -namespace be.portugal.eid -dllimport pteid35libCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -outdir -DSWIG_CSHARP_NO_STRING_HELPER  .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-					AdditionalDependencies="eidlib.h;eidlibException.h"
+					CommandLine="$(PTEID_DIR_SWIG)\swig.exe -c++ -csharp -namespace pt.portugal.eid -dllimport pteidlibCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					AdditionalDependencies=""
 					Outputs=".\GeneratedFiles\eidlibCS_Wrapper.cpp"
 				/>
 			</FileConfiguration>
@@ -423,8 +419,8 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="call ..\SetPathSwig.bat&#x0D;&#x0A;&quot;%PTEID_DIR_SWIG%\swig.exe&quot; -c++ -csharp -namespace be.portugal.eid -dllimport pteid35libCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -outdir -DSWIG_CSHARP_NO_STRING_HELPER  .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-					AdditionalDependencies="eidlib.h;eidlibException.h"
+					CommandLine="$(PTEID_DIR_SWIG)\swig.exe -c++ -csharp -namespace pt.portugal.eid -dllimport pteidlibCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					AdditionalDependencies=""
 					Outputs=".\GeneratedFiles\eidlibCS_Wrapper.cpp"
 				/>
 			</FileConfiguration>
@@ -434,7 +430,7 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					CommandLine="$(PTEID_DIR_SWIG)\swig.exe -c++ -csharp -namespace pt.portugal.eid -dllimport pteidlibCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-					AdditionalDependencies="eidlib.h;eidlibException.h"
+					AdditionalDependencies=""
 					Outputs=".\GeneratedFiles\eidlibCS_Wrapper.cpp"
 				/>
 			</FileConfiguration>
@@ -443,8 +439,8 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(PTEID_DIR_SWIG)\swig.exe -c++ -csharp -namespace be.portugal.eid -dllimport pteid35libCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-					AdditionalDependencies="eidlib.h;eidlibException.h"
+					CommandLine="$(PTEID_DIR_SWIG)\swig.exe -c++ -csharp -namespace pt.portugal.eid -dllimport pteidlibCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					AdditionalDependencies=""
 					Outputs=".\GeneratedFiles\eidlibCS_Wrapper.cpp"
 				/>
 			</FileConfiguration>
