@@ -92,7 +92,7 @@
 
 		<Media Id="1" Cabinet="Middleware.cab" EmbedCab="yes" CompressionLevel="high"/>
 
-		<Icon Id="pteid.ico" SourceFile="..\..\..\eidgui\pteid.ico"/>
+		<Icon Id="pteid.ico" SourceFile="..\..\..\eidgui\Images\Icons\pteid.ico"/>
 
 		<Property Id="ARPPRODUCTICON" Value="pteid.ico" />
 		<Property Id="ARPURLINFOABOUT" Value="http://www.cartaodecidadao.pt"/>
@@ -445,6 +445,13 @@
 				<Component Id="OutlookTool" Guid="{F36A543C-CB17-4D91-BF0C-2EAEFEC3CB3A}">
 					<File Id="pteidoutlooksnc.exe" Name="pteidoutlooksnc.exe" KeyPath="yes" Source="..\..\..\misc\setup_win\pteidoutlooksnc.exe" />
 				</Component>
+
+				<!-- 
+				<Component Id="DSSApp" Guid="{CDA14D17-04E8-4f4b-BEE1-771A0DDC2558}">
+					<File Id="dss_standalone.exe" Name="dss-standalone.exe" KeyPath="yes" Source="..\..\..\_Binaries35\dss-standalone.exe" />
+					<File Id="dss_standalone_app_3.0.3.jar" Name="dss-standalone-app-3.0.3.jar" KeyPath="no" Source="..\..\..\_Binaries35\dss-standalone-app-3.0.3.jar" />
+							</Component>
+				-->
 
 				<Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
 					<File Id="pteidgui.exe" Name="pteidgui.exe" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\pteidgui.exe" />
@@ -826,6 +833,7 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 				<ComponentRef Id="DirectoryCache"/>
 				<ComponentRef Id="License"/>
 				<ComponentRef Id="LogDir"/>
+				<!-- <ComponentRef Id="DSSApp"/> -->
 				<ComponentRef Id="Extensions"/>
 				<ComponentRef Id="FireFoxRoot"/>
 				<ComponentRef Id="XPIRoot"/>

@@ -96,7 +96,7 @@
 
     <Media Id="1" Cabinet="Middleware.cab" EmbedCab="yes" CompressionLevel="high"/>
 
-    <Icon Id="pteid.ico" SourceFile="..\..\..\eidgui\pteid.ico"/>
+    <Icon Id="pteid.ico" SourceFile="..\..\..\eidgui\Images\Icons\pteid.ico"/>
 
     <Property Id="ARPPRODUCTICON" Value="pteid.ico" />
     <Property Id="ARPURLINFOABOUT" Value="http://www.cartaodecidadao.pt"/>
