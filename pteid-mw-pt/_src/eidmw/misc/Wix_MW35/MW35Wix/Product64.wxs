@@ -47,34 +47,43 @@
       />
 		</Upgrade>
 
-		<?ifndef env.PTEID_DIR_QT_334?>
-		<?define var.PTEID_DIR_QT_334=..\..\..\..\ThirdParty\Qt\3.3.4?>
-		<?else?>
-		<?define var.PTEID_DIR_QT_334=$(env.PTEID_DIR_QT_334)?>
-		<?endif?>
-
-		<?ifndef env.PTEID_DIR_QT_450_DYNAMIC?>
-		<?define var.PTEID_DIR_QT_450_DYNAMIC=..\..\..\..\ThirdParty\Qt\4.5.0?>
-		<?else?>
-		<?define var.PTEID_DIR_QT_450_DYNAMIC=$(env.PTEID_DIR_QT_450_DYNAMIC)?>
-		<?endif?>
-
 		<?ifndef env.PTEID_DIR_MSM?>
-		<?define var.PTEID_DIR_MSM=..\..\..\..\ThirdParty\wix\Merge Modules?>
+	     	<?error PTEID_DIR_MSM not defined ?>
 		<?else?>
-		<?define var.PTEID_DIR_MSM=$(env.PTEID_DIR_MSM)?>
+			<?define var.PTEID_DIR_MSM=$(env.PTEID_DIR_MSM)?>
 		<?endif?>
 
-		<?ifndef env.PTEID_DIR_OPENSSL_098G?>
-		<?define var.PTEID_DIR_OPENSSL_098G=..\..\..\..\ThirdParty\openssl.0.9.8g?>
+	    <!-- Choose the target runtime to use: -->
+	    <!-- hack: Checking the solution file that was loaded with the visual studio -->
+	    <!-- $(var.SolutionName: 
+	       {
+	        PteidEasyBuild      (visual studio 2005) 
+	        PteidEasyBuild.2008 (visual studio 2008)
+	       } 
+	    -->
+	    <?if $(var.SolutionName) = PteidEasyBuild ?>
+	      <?define var.PTEID_TARGET_RUNTIME=VCR8 ?>
+	    <?elseif $(var.SolutionName) = PteidEasyBuild.2008 ?>
+	      <?define var.PTEID_TARGET_RUNTIME=VCR9 ?>
 		<?else?>
-		<?define var.PTEID_DIR_OPENSSL_098G=$(env.PTEID_DIR_OPENSSL_098G)?>
+	      <?error Can't determine the Visual studio runtime to use. ?>
 		<?endif?>
 
-		<?ifndef env.PTEID_DIR_XERCES_310?>
-		<?define var.PTEID_DIR_XERCES_310=..\..\..\..\ThirdParty\Xerces\Xerces-3.1.0?>
-		<?else?>
-		<?define var.PTEID_DIR_XERCES_310=$(env.PTEID_DIR_XERCES_310)?>
+    	<!-- Look for compiled components and libs in: -->
+	    <?if $(var.PTEID_TARGET_RUNTIME) = VCR8 ?>
+	      <!-- In the future it should all be using this path format!
+	      <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\VC8\Release\ ?>
+	      <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC8\Release\ ?>
+	      <?define var.PTEID_BUILD_FOLDER_AnyCPU=..\..\..\_Binaries35\AnyCPU\VC8\Release\ ?>
+	      -->
+	      <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Release\ ?>
+	      <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\Release\ ?>
+	      <!-- just using for c# dll for now (java here would also be useful). -->
+	      <?define var.PTEID_BUILD_FOLDER_AnyCPU=..\..\..\_Binaries35\Release ?>
+	    <?elseif $(var.PTEID_TARGET_RUNTIME) = VCR9 ?>
+	      <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\VC9\Release\ ?>
+	      <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC9\Release\ ?>
+	      <?define var.PTEID_BUILD_FOLDER_AnyCPU=..\..\..\_Binaries35\AnyCPU\VC9\Release\ ?>
 		<?endif?>
 
 		<WixVariable Id="WixUILicenseRtf" Value="..\..\..\misc\licenses_files\License_en.rtf" />
@@ -177,8 +186,18 @@
 			<Directory Id="SystemFolder"></Directory>
 
 			
-				<Merge Id="VCRT" SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC80_CRT_x86_x64.msm" Language="0" DiskId="1" />
+	      <?if $(var.PTEID_TARGET_RUNTIME) = VCR8 ?>
+		        <!-- VC8 runtime -->
+		        <?define var.VCRT_TITLE="VC++ 8.0 runtime" ?>
+				<Merge Id="VCRT"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC80_CRT_x86_x64.msm" Language="0" DiskId="1" />
 				<Merge Id="VCRT_POLICY" SourceFile="$(var.PTEID_DIR_MSM)\policy_8_0_Microsoft_VC80_CRT_x86_x64.msm" Language="0" DiskId="1" />
+	      <?elseif $(var.PTEID_TARGET_RUNTIME) = VCR9 ?>
+		        <!-- VC9 runtime -->
+		        <?define var.VCRT_TITLE="VC++ 9.0 runtime" ?>
+		        <Merge Id="VCRT"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC90_CRT_x86_x64.msm" Language="0" DiskId="1" />
+		        <Merge Id="VCRT_POLICY" SourceFile="$(var.PTEID_DIR_MSM)\policy_9_0_Microsoft_VC90_CRT_x86_x64.msm" Language="0" DiskId="1" />
+	      <?endif?>
+      
 			</Directory>
 
 			<DirectoryRef Id="EIDSTORE">
@@ -193,26 +212,26 @@
 		
 		<DirectoryRef Id="CERTSDIR">
 			<Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AC6}">
-				<File Id="CartaodeCidadao001.der" Name="CartaodeCidadao001.der" KeyPath="yes" Source="..\..\certs\CartaodeCidadao001.der" />
-				<File Id="CartaodeCidadao002.der" Name="CartaodeCidadao002.der" KeyPath="no" Source="..\..\certs\CartaodeCidadao002.der" />
-				<File Id="ECRaizEstado_novo_assinado_GTE.der" Name="ECRaizEstado_novo_assinado_GTE.der" KeyPath="no" Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" />
-				<File Id="GTEGlobalRoot.der" Name="GTEGlobalRoot.der" KeyPath="no" Source="..\..\certs\GTEGlobalRoot.der" />
-				<File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der"/>
-				<File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0002.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0002.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0002.der"/>
-				<File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0003.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0003.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0003.der"/>
-				<File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0004.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0004.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0004.der"/>
-				<File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0005.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0005.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0005.der"/>
-				<File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der"/>
-				<File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der"/>
-				<File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der"/>
-				<File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der"/>
-				<File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0004.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0004.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0004.der"/>
-				<File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0005.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0005.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0005.der"/>
-				<File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der"/>
-				<File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0007.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0007.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0007.der"/>
-				<File Id="EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.der" Name="EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.der" KeyPath="no" Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.der"/>
-				<File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0007.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0007.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0007.der"/>
-				<File Id="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0008.der" Name="EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0008.der" KeyPath="no" Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0008.der"/>
+		        <File Source="..\..\certs\CartaodeCidadao001.der" KeyPath="yes" />
+		        <File Source="..\..\certs\CartaodeCidadao002.der" />
+		        <File Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" />
+		        <File Source="..\..\certs\GTEGlobalRoot.der" />
+		        <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der" />
+		        <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0002.der" />
+		        <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0003.der" />
+		        <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0004.der" />
+		        <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0005.der" />
+		        <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der" />
+		        <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0007.der" />
+		        <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0008.der" />
+		        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der" />
+		        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der" />
+		        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der" />
+		        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0004.der" />
+		        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0005.der" />
+		        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der" />
+		        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0007.der" />
+		        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.der" />
 			</Component>
 		</DirectoryRef>
 
@@ -439,11 +458,11 @@
 				</Component>
 
 				<Component Id="Icon" Guid="{5B657BAD-8CFC-4E42-AF8C-13338C50D784}" SharedDllRefCount="yes">
-					<File Id="assinatura.ico" Name="assinatura.ico" KeyPath="yes" Source="..\..\..\misc\assinatura.ico" />
+          			<File Source="..\..\..\misc\assinatura.ico" KeyPath="yes" />
 				</Component>
 
 				<Component Id="OutlookTool" Guid="{F36A543C-CB17-4D91-BF0C-2EAEFEC3CB3A}">
-					<File Id="pteidoutlooksnc.exe" Name="pteidoutlooksnc.exe" KeyPath="yes" Source="..\..\..\misc\setup_win\pteidoutlooksnc.exe" />
+          			<File Source="..\..\..\misc\setup_win\pteidoutlooksnc.exe" KeyPath="yes" />
 				</Component>
 
 				<!-- 
@@ -454,37 +473,35 @@
 				-->
 
 				<Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
-					<File Id="pteidgui.exe" Name="pteidgui.exe" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\pteidgui.exe" />
-					<File Id="pteidlibCpp.dll" Name="pteidlibCpp.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteidlibCpp.dll" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidgui.exe" KeyPath="yes" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCpp.dll" />
 				</Component>
 
 				<Component Id="GuiLang" Guid="{6B03ED1B-DF24-4CE6-A70C-476AF4C0941B}" SharedDllRefCount="yes">
-					<File Id="eidmw_en.qm" Name="eidmw_en.qm" KeyPath="yes" Source="..\..\..\eidgui\eidmw_en.qm" />
-					<File Id="eidmw_nl.qm" Name="eidmw_nl.qm" KeyPath="no" Source="..\..\..\eidgui\eidmw_nl.qm" />
-					<File Id="eidmw_fr.qm" Name="eidmw_fr.qm" KeyPath="no" Source="..\..\..\eidgui\eidmw_fr.qm" />
-					<File Id="eidmw_de.qm" Name="eidmw_de.qm" KeyPath="no" Source="..\..\..\eidgui\eidmw_de.qm" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)eidmw_en.qm" KeyPath="yes" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)eidmw_nl.qm" />
 				</Component>
 
 
 				<!--Cairo and its dependencies: needed for the PDF export function -->
 				<Component Id="Cairo" Guid="{DF770DAC-0151-49ea-890A-6E47C664F74E}" SharedDllRefCount="yes">
-					<File Id="libcairo2.dll" Name="libcairo-2.dll" KeyPath="yes" Source="..\..\..\..\ThirdParty\cairo\bin\libcairo-2.dll" ></File>
-					<File Id="libfreetype6.dll" Name="libfreetype-6.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\libfreetype-6.dll" ></File>
-					<File Id="libpng12.dll" Name="libpng14-14.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\libpng14-14.dll" ></File>
-					<File Id="libfontconfig1.dll" Name="libfontconfig-1.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\libfontconfig-1.dll" ></File>
-					<File Id="libexpat1.dll" Name="libexpat-1.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\libexpat-1.dll" ></File>
-					<File Id="zlib1.dll" Name="zlib1.dll" KeyPath="no" Source="..\..\..\..\ThirdParty\cairo\bin\zlib1.dll" ></File>
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)libcairo-2.dll" KeyPath="yes" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)libfreetype-6.dll" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)libpng14-14.dll" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)libfontconfig-1.dll" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)libexpat-1.dll" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)zlib1.dll" />
 				</Component>
 
 				<Component Id="Qt" Guid="{AF5AF018-EE70-4EA9-98BA-9C2947F19060}" SharedDllRefCount="yes">
-					<File Id="QtCore4.dll" Name="QtCore4.dll" KeyPath="yes" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\bin\QtCore4.dll" />
-					<File Id="QtGui4.dll" Name="QtGui4.dll" KeyPath="no" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\bin\QtGui4.dll" />
-					<File Id="QtNetwork4.dll" Name="QtNetwork4.dll" KeyPath="no" Source="$(var.PTEID_DIR_QT_450_DYNAMIC)\bin\QtNetwork4.dll" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)QtCore4.dll" KeyPath="yes" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)QtGui4.dll" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)QtNetwork4.dll" />
 				</Component>
 
 				<Component Id="License" Guid="{C00AF621-E882-4805-BA9C-B90AA5DBBCB6}" SharedDllRefCount="yes">
-					<File Id="License_en.rtf" Name="License_en.rtf" KeyPath="yes" Source="..\..\..\misc\licenses_files\License_en.rtf" />
-					<File Id="THIRDPARTY_LICENSES.txt" Name="THIRDPARTY-LICENSES.txt" KeyPath="no" Source="..\..\..\misc\licenses_files\THIRDPARTY-LICENSES.txt" />
+			          <File Source="..\..\..\misc\licenses_files\License_en.rtf" KeyPath="yes" />
+			          <File Source="..\..\..\misc\licenses_files\THIRDPARTY-LICENSES.txt" />
 				</Component>
 
 			</DirectoryRef>
@@ -508,15 +525,16 @@
 			<DirectoryRef Id="SystemFolder">
 
 				<Component Win64="no" Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
-					<File Id="pteidapplayer.dll" Name="pteidapplayer.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\pteidapplayer.dll" />
-					<File Id="pteidcardlayer.dll" Name="pteidcardlayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\pteidcardlayer.dll" />
-					<File Id="pteidcommon.dll" Name="pteidcommon.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\pteidcommon.dll" />
-					<File Id="pteidDlgsWin32.dll" Name="pteidDlgsWin32.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\pteidDlgsWin32.dll" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
 				</Component>
 
 				<Component Win64="no" Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F8}" SharedDllRefCount="yes">
-					<File Id="libeay32.dll" Name="libeay32_098_25.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\libeay32_098_25.dll" />
-					<File Id="ssleay32.dll" Name="ssleay32_098_25.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\ssleay32_098_25.dll" />
+					  <!-- TODO: REFIX openssl path conflict with system -->
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)libeay32.dll" KeyPath="yes"/>
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)ssleay32.dll" />
 				</Component>
 
 				<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
@@ -526,30 +544,29 @@
 	  -->
 
 				<Component Win64="no" Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
-					<File Id="xercesc_3_1.dll" Name="xerces-c_3_1.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\xerces-c_3_1.dll" />
+          			<File Source="$(var.PTEID_BUILD_FOLDER_X86)xerces-c_3_1.dll" KeyPath="yes"/>
 				</Component>
 
 				<!--Our Build of LibCurl - custom build options to remove unneeded features-->
 				<Component Win64="no" Id="Curl" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
-					<File Id="libcurl.dll" Name="libcurl.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\libcurl.dll" ></File>
+          			<File Source="$(var.PTEID_BUILD_FOLDER_X86)libcurl.dll" KeyPath="no" />
 				</Component>
 
 				<Component Win64="no" Id="CSP" Guid="{54153442-D4CE-4DE6-9321-1BAC5DE4C725}" SharedDllRefCount="yes">
-					<File Id="beidCSP.dll" Name="beidCSP.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\beidcsp.dll" />
-					<File Id="beidCSPlib.dll" Name="beidCSPlib.dll" KeyPath="no" Source="..\..\..\_Binaries35\release\beidCSPlib.dll" />
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)beidCSP.dll" KeyPath="yes"/>
+			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)beidCSPlib.dll" />
 				</Component>
 
 				<Component Win64="no" Id="FreeImage" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F64" SharedDllRefCount="yes">
-					<File Id="FreeImage.dll" Name="FreeImage.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\FreeImage.dll" />
+         			 <File Source="$(var.PTEID_BUILD_FOLDER_X86)FreeImage.dll" KeyPath="yes" />
 				</Component>
 
 				<Component Win64="no" Id="XMLSecurity" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F65" SharedDllRefCount="yes">
-					<File Id="xsec_1_6.dll" Name="xsec_1_6.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\xsec_1_6.dll" />
+          			<File Source="$(var.PTEID_BUILD_FOLDER_X86)xsec_1_6.dll" KeyPath="yes" />
 				</Component>
 
 				<Component Win64="no" Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
-					<File Id="pteidpkcs11.dll" Name="pteidpkcs11.dll" KeyPath="yes" Source="..\..\..\_Binaries35\release\pteidpkcs11.dll" />
-
+          			<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidpkcs11.dll" KeyPath="yes" />
 				</Component>
 
 			</DirectoryRef>
@@ -557,57 +574,58 @@
 			<DirectoryRef Id="System64Folder">
 
 				<Component Id="Runtime35_64" Guid="{8FE1C7FB-F06A-40db-8454-88D9E8BDD626}" SharedDllRefCount="yes" Win64="yes">
-					<File Id="pteidcardlayer_64.dll" Name="pteidcardlayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteidcardlayer.dll" />
-					<File Id="pteidcommon_64.dll" Name="pteidcommon.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteidcommon.dll" />
-					<File Id="pteidapplayer_64.dll" Name="pteidapplayer.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteidapplayer.dll" />
-					<File Id="pteidDlgsWin32_64.dll" Name="pteidDlgsWin32.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteidDlgsWin32.dll" />
+			          <File Id="pteidapplayer_64.dll"  Source="$(var.PTEID_BUILD_FOLDER_X64)pteidapplayer.dll" KeyPath="yes" />
+			          <File Id="pteidcardlayer_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcardlayer.dll" />
+			          <File Id="pteidcommon_64.dll"    Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
+			          <File Id="pteidDlgsWin32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
 				</Component>
 
 				<Component Id="pkcs11_64" Guid="{3C4751D6-D92C-40ab-8FA5-3A1DF1D927EA}" SharedDllRefCount="yes" Win64="yes">
-					<File Id="pteidpkcs11_64.dll" Name="pteidpkcs11.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\pteidpkcs11.dll" />
-					<File Id="PortugalIdentityCardPKCS11_64.dll" Name="Portugal Identity Card PKCS11.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\Portugal Identity Card PKCS11.dll" />
+			          <File Id="pteidpkcs11_64.dll"                Source="$(var.PTEID_BUILD_FOLDER_X64)pteidpkcs11.dll" KeyPath="yes" />
+			          <File Id="PortugalIdentityCardPKCS11_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)Portugal Identity Card PKCS11.dll" />
 				</Component>
 
 				<Component Id="FreeImage_64" Guid="C3CAF347-FBA3-4d65-A23F-C6357541DAB2" SharedDllRefCount="yes">
-					<File Id="FreeImage_64.dll" Name="FreeImage.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\FreeImage.dll" />
+          			<File Id="FreeImage_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)FreeImage.dll" KeyPath="yes" />
 				</Component>
 
 				<Component Id="XMLSecurity_64" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F66" SharedDllRefCount="yes">
-					<File Id="xsec_1_6_64.dll" Name="xsec_1_6.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\xsec_1_6.dll" />
+          			<File Id="xsec_1_6_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)xsec_1_6.dll" KeyPath="yes" />
 				</Component>
 
 				<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
 				<Component Id="Poppler_64" Guid="{54E15AA8-F4A5-42e8-9D38-3B151223B003}">
-					<File Id="pteid_poppler_64.dll" Name="pteid-poppler.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\pteid-poppler.dll" ></File>
+          			<File Source="$(var.PTEID_BUILD_FOLDER_X64)pteid-poppler.dll" KeyPath="no" />
 				</Component>
 
 				<Component Id="Runtime35ThirdPartyOpenSSL_64" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
-					<File Id="libeay32_64.dll" Name="libeay32_098_25.dll" KeyPath="yes" Source="$(var.PTEID_DIR_OPENSSL_098G)\bin\libeay32_098_25.dll" />
-					<File Id="ssleay32_64.dll" Name="ssleay32_098_25.dll" KeyPath="no" Source="$(var.PTEID_DIR_OPENSSL_098G)\bin\ssleay32_098_25.dll" />
+					  <!-- TODO: REFIX openssl path conflict with system -->
+			          <File Id="libeay32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)libeay32.dll" KeyPath="yes"/>
+			          <File Id="ssleay32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)ssleay32.dll" />
 				</Component>
 
 				<Component Id="Runtime35ThirdPartyXerces_64" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FF}" SharedDllRefCount="yes">
-					<File Id="xercesc_3_1_64.dll" Name="xerces-c_3_1.dll" KeyPath="yes" Source="$(var.PTEID_DIR_XERCES_310)\bin\xerces-c_3_1.dll" />
+         			 <File Id="xercesc_3_1_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)xerces-c_3_1.dll" KeyPath="yes"/>
 				</Component>
 
 				<!--Our Build of LibCurl - custom build options to remove unneeded features-->
 				<Component Id="Curl_64" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFB}" SharedDllRefCount="yes">
-					<File Id="libcurl_64.dll" Name="libcurl.dll" KeyPath="no" Source="..\..\..\_Binaries35\x64\Release\libcurl.dll" ></File>
+          			<File Id="libcurl_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)libcurl.dll" KeyPath="no" />
 				</Component>
 
 			</DirectoryRef>
 
 			<DirectoryRef Id="JAVA_SDK">
 				<Component Id="Java_SDK_Component" Guid="{8B0D8006-DB84-4986-A8D7-AC5F84F4AEF8}" >
-					<File Id="pteidlibJavaWrapper.dll" Name="pteidlibJava_Wrapper.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\pteidlibJava_Wrapper.dll" />
-					<File Id="pteidlibJava.jar" Name="pteidlibJava.jar" KeyPath="no" Source="..\..\..\jar\pteidlibJava.jar" />
+		          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibJava_Wrapper.dll" KeyPath="yes"/>
+		          <File Source="..\..\..\jar\pteidlibJava.jar" />
 				</Component>
 			</DirectoryRef>
 
 			<DirectoryRef Id="CSHARP_SDK">
 				<Component Id="CSharp_SDK_Component" Guid="{67F8BF67-A48C-4711-9AB7-CAC056FA6C35}">
-					<File Id="pteidlibCSWrapper.dll" Name="pteidlibCS_Wrapper.dll" KeyPath="yes" Source="..\..\..\_Binaries35\x64\Release\pteidlibCS_Wrapper.dll" />
-					<File Id="pteidlibCS.dll" Name="pteidlibCS.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteidlibCS.dll" />
+		          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" KeyPath="yes"/>
+		          <File Source="$(var.PTEID_BUILD_FOLDER_AnyCPU)pteidlibCS.dll" />
 				</Component>
 			</DirectoryRef>
 
@@ -817,7 +835,7 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 					 Level="1"
              >
 
-				<Feature Id="VCRedist" Title="VC++ 8.0 runtime" AllowAdvertise="no" Display="hidden" Level="1">
+				<Feature Id="VCRedist" Title="$(var.VCRT_TITLE)" AllowAdvertise="no" Display="hidden" Level="1">
 					<MergeRef Id="VCRT" />
 					<MergeRef Id="VCRT_POLICY" />
 				</Feature>
@@ -920,7 +938,13 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 				</Feature>
 			</Feature>
 
-			<Binary Id="MarkHidden" SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>
+	    <?if $(var.PTEID_TARGET_RUNTIME) = VCR8 ?>
+		  <Binary Id="MarkHidden"    SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>
+	      <Binary Id="CleanMdrvKeys" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_mdrv_keys.exe" />
+	    <?elseif $(var.PTEID_TARGET_RUNTIME) = VCR9 ?>
+	      <Binary Id="MarkHidden"    SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Build\x64\VC9\Release\MarkHidden.exe" />
+	      <Binary Id="CleanMdrvKeys" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_mdrv_keys.exe" />
+	    <?endif?>
 
 		<CustomAction Id="CleanMinidriverKeys"
 			BinaryKey="CleanMdrvKeys"
@@ -928,7 +952,6 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 			Impersonate="no"
 			Return="ignore"
 			Execute="deferred"/>
-		<Binary Id="CleanMdrvKeys" SourceFile="..\..\..\_Binaries35\x64\Release\clean_mdrv_keys.exe"/>
 
 			<CustomAction Id="LaunchApplication"
 						  FileKey="pteidgui.exe"
