@@ -86,7 +86,6 @@ PDFSignWindow::~PDFSignWindow()
 
 	delete list_model;
 	delete m_selection_dialog;
-
 }
 
 void PDFSignWindow::on_tableWidget_currentCellChanged(int row, int column, 
@@ -330,6 +329,8 @@ void PDFSignWindow::on_button_sign_clicked()
 
 	if (model->rowCount() > 1)
 	{
+		//TODO: The batch signing is all very hackish with validations missing
+		// and this awkward API...
 		m_pdf_sig = new PTEID_PDFSignature();
 		for (int i = 0; i < model->rowCount(); i++)
 		{
@@ -392,6 +393,8 @@ void PDFSignWindow::on_button_sign_clicked()
 	}
 	else			
 		ShowErrorMsgBox(tr("Error Generating Signature!"));
+
+	disposePDFSignatures();
 
 	this->close();
 
@@ -520,6 +523,16 @@ void PDFSignWindow::highlightSectors(QString &csv_sectors)
 
 }
 
+void PDFSignWindow::disposePDFSignatures()
+{
+	for (int i = 0; i < pdf_sigs.size(); ++i) {
+		delete pdf_sigs.at(i);
+	}
+
+	pdf_sigs.clear();
+
+}
+
 void PDFSignWindow::addFileToListView(QStringList &str)
 {
 	if (str.isEmpty())
@@ -528,7 +541,7 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	current_input_path = str.at(0);
 
 	m_pdf_sig = new PTEID_PDFSignature(strdup(getPlatformNativeString(current_input_path)));
-	
+	pdf_sigs.push_back(m_pdf_sig);
 	
 	int tmp_count = m_pdf_sig->getPageCount();
 

@@ -66,6 +66,9 @@ namespace eIDMW
 		//Free the strdup'ed strings from batchAddFile
 		for (int i = 0; i != m_files_to_sign.size(); i++)
 			free(m_files_to_sign.at(i));
+
+		if (m_doc != NULL)
+			delete m_doc;
 	}
 
 	void PDFSignature::batchAddFile(char *file_path)

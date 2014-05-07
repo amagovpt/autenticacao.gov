@@ -22,6 +22,7 @@
 #ifndef PDFSIGNWINDOW_H_
 
 #include <QDialog>
+#include <QVector>
 #include <QDropEvent>
 #include "ui_PDFSignWindow.h"
 #include "CardInformation.h"
@@ -77,6 +78,7 @@ class PDFSignWindow : public QDialog
 	    void ShowSuccessMsgBox();
 	    void ShowSectorErrorMessage();
 	    void ShowErrorMsgBox(QString message);
+		void disposePDFSignatures();
 
 
 	    Ui_PDFSignWindow ui;
@@ -93,6 +95,7 @@ class PDFSignWindow : public QDialog
 	    FreeSelectionDialog *m_selection_dialog;
 
 	    QFutureWatcher<void> FutureWatcher;
+		QVector<PTEID_PDFSignature *> pdf_sigs;
 	    PTEID_PDFSignature *m_pdf_sig;
 	
 	    //Number of pages of currently loaded document
