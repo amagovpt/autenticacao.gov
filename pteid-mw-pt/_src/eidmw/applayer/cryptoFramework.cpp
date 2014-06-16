@@ -28,10 +28,10 @@
 #include "MiscUtil.h"
 #include "Thread.h"
 
-//#include "openssl/evp.h"
-//#include "openssl/x509.h"
-//#include "openssl/x509v3.h"
-//#include <openssl/err.h> 
+#include <openssl/evp.h>
+#include <openssl/x509.h>
+#include <openssl/x509v3.h>
+#include <openssl/err.h>
 #include "xercesc/util/Base64.hpp"
 #include "xercesc/util/XMLString.hpp"
 
