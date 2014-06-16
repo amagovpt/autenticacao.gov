@@ -120,13 +120,16 @@ public:
   void setIncrementalSignature(bool);
 
   void prepareSignature(PDFRectangle *rect, const char * name, Ref *first_page_ref, const char *location,
-       const char * civil_number, const char *reason, unsigned long, int page, int sig_sector);
+       const char * civil_number, const char *reason, unsigned long, int page, int sig_sector, unsigned char *img_data, unsigned long img_length);
   Ref addFontDict(const char *basefont, const char *name);
-  Ref addImageXObject(int width, int height, unsigned char *data, int length_in_bytes);
+  Ref addImageXObject(int width, int height, unsigned char *data, unsigned long length_in_bytes);
+
   Ref newXObject(char *plain_text_stream,
-	 int height, int width, bool needs_font, bool needs_image);
+	 int height, int width, bool needs_font, bool needs_image, unsigned char *img_data = NULL, unsigned long img_length = 0);
+
   void addSignatureAppearance(Object *signature_field, const char* name, const char *civil_number,
-	char *date_str,	const char* location, const char* reason, int rect_x, int rect_y);
+	     char *date_str,	const char* location, const char* reason, int rect_x, int rect_y,
+       unsigned char *img_data, unsigned long img_length);
   void addSignatureAppearance(Object *parent, int, int);
   void closeSignature(const char *signature_contents, unsigned long len);
 

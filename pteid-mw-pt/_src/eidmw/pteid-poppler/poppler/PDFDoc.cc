@@ -394,6 +394,12 @@ GBool PDFDoc::checkFooter() {
   str->setPos(pos);
   return gTrue;
 }
+
+void PDFDoc::addCustomSignatureImage(unsigned char *image_data, unsigned long image_length)
+{
+  m_image_data_jpeg = image_data;
+  m_image_length = image_length;
+}
   
 // Check for a PDF header on this stream.  Skip past some garbage
 // if necessary.
@@ -701,11 +707,11 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 	{
 	   Ref first_page = getPageRef(page);
 	   getCatalog()->prepareSignature(rect, name, &first_page, location,
-			   civil_number, reason, this->fileSize, page, sector);
+			   civil_number, reason, this->fileSize, page, sector, m_image_data_jpeg, m_image_length);
 	}
 	else
 	   getCatalog()->prepareSignature(rect, name, NULL, location,
-			   civil_number, reason, this->fileSize, page, sector);
+			   civil_number, reason, this->fileSize, page, sector, m_image_data_jpeg, m_image_length);
 	
 	//Add enough space for the placeholder string
 	MemOutStream mem_stream(this->fileSize + 20000); 

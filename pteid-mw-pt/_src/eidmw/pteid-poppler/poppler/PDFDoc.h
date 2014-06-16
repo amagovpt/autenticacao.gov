@@ -173,6 +173,8 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
   POPPLER_API void prepareSignature(bool incremental, PDFRectangle *rect, const char * name, 
 		  const char *civil_number, const char *location,
 		  const char *reason, int page, int sector);
+  POPPLER_API void addCustomSignatureImage(unsigned char *image_data, unsigned long image_length);
+  
   POPPLER_API char* getOccupiedSectors(int page);
 
   POPPLER_API void closeSignature(const char *signature_contents);
@@ -288,9 +290,14 @@ private:
   FILE *file;
   unsigned long m_sig_offset;
   unsigned int m_byterange_padding;
+
+  unsigned char * m_image_data_jpeg;
+  unsigned long m_image_length;
   //Internal buffer that will store the final signed Document
   unsigned char * preparedSig;
   unsigned int preparedSigLength;
+
+  //Insert a
 
   GBool signature_mode;
   BaseStream *str;

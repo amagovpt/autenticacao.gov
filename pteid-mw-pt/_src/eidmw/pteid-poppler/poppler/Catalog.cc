@@ -254,7 +254,8 @@ fallback:
 //TODO: Too long, split this into 2 functions at least
 void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *firstPageRef,
 	       	const char *location, const char *civil_number,
-		const char *reason, unsigned long filesize, int page, int sig_sector) 
+		const char *reason, unsigned long filesize, int page, int sig_sector,
+		unsigned char *img_data, unsigned long img_length) 
 {
 
 	Object signature_field;
@@ -306,7 +307,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 					getBigRandom())));
 
 	addSignatureAppearance(&signature_field, name, civil_number, date_outstr,
-		 location, reason, r2-r0 - 1, r3-r1 -1);
+		 location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length);
 
 	memset(date_outstr, 0, sizeof(date_outstr));
 
@@ -545,7 +546,8 @@ GBool Catalog::addSigRefToPage(Ref * refPage, Object* sig_ref)
 * For the N2 layer it adds the needed fonts and image.
 *
 */
-Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool needs_font, bool needs_image)
+Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool needs_font, bool needs_image, 
+	unsigned char *img_data, unsigned long img_length)
 {
 	Object * appearance_obj = new Object();
 	Object obj1, obj2, font_dict, ref_to_dict, ref_to_dict2, 
@@ -588,9 +590,24 @@ Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool nee
 
 	if (needs_image)
 	{
-		//Get the Cartao de Cidadao logo already encoded as JPEG
-		Ref image_background = addImageXObject(cc_logo_bitmap_width, cc_logo_bitmap_height, cc_logo_bitmap_compressed,
-				sizeof(cc_logo_bitmap_compressed));
+		unsigned char *data = NULL; 
+		unsigned long data_length = 0;
+
+		//Use a custom image
+		if (img_data != NULL)
+		{
+			data = img_data;
+			data_length = img_length;
+		}
+		else //Use the CC Official logo encoded as JPEG from a static array 
+		{
+			data = CC_LOGO_BITMAP_COMPRESSED;
+			data_length = sizeof(CC_LOGO_BITMAP_COMPRESSED);
+		}
+
+		//TODO: the image size is for now equal to the CC logo, it will probably change in the future...
+		Ref image_background = addImageXObject(CC_LOGO_BITMAP_WIDTH, CC_LOGO_BITMAP_HEIGHT, data,
+			data_length);
 
 		ref_to_dict.initRef(image_background.num, image_background.gen);
 		Object image_dict;
@@ -598,7 +615,6 @@ Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool nee
 		image_dict.dictAdd(copyString("Im0"), &ref_to_dict);
 
 		resources.dictAdd(copyString("XObject"), &image_dict);
-
 	}
 
 	appearance_obj->dictAdd(copyString("Resources"), &resources);
@@ -644,7 +660,7 @@ Ref Catalog::addFontDict(const char *baseFontName, const char *font_name)
 	return ref_to_appearance;
 }
 
-Ref Catalog::addImageXObject(int width, int height, unsigned char *data, int length_in_bytes)
+Ref Catalog::addImageXObject(int width, int height, unsigned char *data, unsigned long length_in_bytes)
 {
 
 	Object * image_obj = new Object();
@@ -657,7 +673,7 @@ Ref Catalog::addImageXObject(int width, int height, unsigned char *data, int len
 	image_obj->dictAdd(copyString("BitsPerComponent"), obj1.initInt(8));
 	image_obj->dictAdd(copyString("Width"), obj1.initInt(width));
 	image_obj->dictAdd(copyString("Height"), obj1.initInt(height));
-	//We're adding a bitmap compressed with jpeg, which is what DCTDecode means
+	//DCTDecode means we're adding a bitmap compressed with JPEG
 	image_obj->dictAdd(copyString("Filter"), obj2.initName("DCTDecode"));
 	image_obj->dictAdd(copyString("Length"), obj1.initInt(length_in_bytes));
 
@@ -796,7 +812,8 @@ GooString *formatMultilineString(char *content, double available_space, double f
 }
 
 void Catalog::addSignatureAppearance(Object *signature_field, const char *name, const char *civil_number,
-	char * date_str, const char* location, const char* reason, int rect_x, int rect_y)
+	char * date_str, const char* location, const char* reason, int rect_x, int rect_y,
+	unsigned char *img_data, unsigned long img_length)
 {
 	Object ap_dict, appearance_obj, obj1, obj2, obj3,
 	       ref_to_dict, ref_to_dict2, ref_to_n2, ref_to_n0, font_dict, xobject_layers;
@@ -877,7 +894,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	procset.initArray(xref);
 	resources.initDict(xref);
 	/* Obsolete according to the spec since PDF 1.4 ?? */
-        procset.arrayAdd(obj1.initName("PDF"));
+    procset.arrayAdd(obj1.initName("PDF"));
 	procset.arrayAdd(obj1.initName("Text"));
 	procset.arrayAdd(obj1.initName("ImageB"));
 	procset.arrayAdd(obj1.initName("ImageC"));
@@ -885,7 +902,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	resources.dictAdd(copyString("ProcSet"), &procset);
 
 	xobject_layers.initDict(xref);
-	Ref n2_layer = newXObject(n2_commands->getCString(), rect_x, rect_y, true, true);
+	Ref n2_layer = newXObject(n2_commands->getCString(), rect_x, rect_y, true, true, img_data, img_length);
 	ref_to_n2.initRef(n2_layer.num, n2_layer.gen);
 	xobject_layers.dictAdd(copyString("n2"), &ref_to_n2);
 
