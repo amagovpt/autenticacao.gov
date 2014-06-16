@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>421</width>
-    <height>671</height>
+    <height>751</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,7 +25,7 @@
      <x>10</x>
      <y>0</y>
      <width>410</width>
-     <height>671</height>
+     <height>731</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -81,8 +81,8 @@
      <rect>
       <x>10</x>
       <y>310</y>
-      <width>381</width>
-      <height>321</height>
+      <width>240</width>
+      <height>290</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="vertical_bottom">
@@ -332,7 +332,7 @@
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>625</y>
+      <y>700</y>
       <width>91</width>
       <height>27</height>
      </rect>
@@ -361,7 +361,7 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>625</y>
+      <y>700</y>
       <width>91</width>
       <height>27</height>
      </rect>
@@ -440,6 +440,41 @@
       </layout>
      </item>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="pushButton_imgChooser">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>630</y>
+      <width>150</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>Choose custom image</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_selectedimg">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>550</y>
+      <width>185</width>
+      <height>93</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
   </widget>
  </widget>

@@ -22,7 +22,6 @@
 #ifndef PDFSIGNWINDOW_H_
 
 #include <QDialog>
-#include <QVector>
 #include <QDropEvent>
 #include "ui_PDFSignWindow.h"
 #include "CardInformation.h"
@@ -46,6 +45,7 @@ class PDFSignWindow : public QDialog
 	    void on_button_sign_clicked();
 	    void on_button_cancel_clicked();
 	    void on_pushButton_freeselection_clicked();
+	    void on_pushButton_imgChooser_clicked();
 	    void on_checkBox_location_toggled(bool);
 	    void on_checkBox_reason_toggled(bool);
 	    void on_visible_checkBox_toggled(bool);
@@ -78,7 +78,6 @@ class PDFSignWindow : public QDialog
 	    void ShowSuccessMsgBox();
 	    void ShowSectorErrorMessage();
 	    void ShowErrorMsgBox(QString message);
-		void disposePDFSignatures();
 
 
 	    Ui_PDFSignWindow ui;
@@ -89,13 +88,12 @@ class PDFSignWindow : public QDialog
 
 	    bool card_present;
 
-    	    CardInformation const& m_CI_Data;
+    	CardInformation const& m_CI_Data;
 	    QAbstractItemModel *list_model;
 	    QProgressDialog *pdialog;
 	    FreeSelectionDialog *m_selection_dialog;
 
 	    QFutureWatcher<void> FutureWatcher;
-		QVector<PTEID_PDFSignature *> pdf_sigs;
 	    PTEID_PDFSignature *m_pdf_sig;
 	
 	    //Number of pages of currently loaded document
@@ -103,6 +101,8 @@ class PDFSignWindow : public QDialog
 
 	    QString current_input_path;
 	    QBrush m_default_background;
+	    QImage m_scaled_image;
+	    QByteArray m_jpeg_scaled_data;
 
 	    int m_selected_sector;
 

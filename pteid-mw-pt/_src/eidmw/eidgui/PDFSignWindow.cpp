@@ -86,6 +86,8 @@ PDFSignWindow::~PDFSignWindow()
 
 	delete list_model;
 	delete m_selection_dialog;
+	// if (m_pdf_sig)
+	// 	delete m_pdf_sig;
 }
 
 void PDFSignWindow::on_tableWidget_currentCellChanged(int row, int column, 
@@ -208,6 +210,7 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 	ui.label_choose_sector->setEnabled(checked);
 	ui.label_selectedsector->setEnabled(checked);
 	ui.pushButton_freeselection->setEnabled(checked);
+	ui.pushButton_imgChooser->setEnabled(checked);
 
 	ui.tableWidget->setEnabled(checked);
 
@@ -221,6 +224,23 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 		sig_coord_y = -1;
 		m_selected_sector = 0;    
 	}
+}
+
+void PDFSignWindow::on_pushButton_imgChooser_clicked()
+{
+	QString defaultopenfilepath = QDir::homePath();
+	QString image_file = QFileDialog::getOpenFileName(this, tr("Select File(s)"),
+			defaultopenfilepath, "Images (*.png *.jpg)");
+
+	QImage original_image(image_file);
+	Qt::TransformationMode mode = Qt::SmoothTransformation;
+
+	m_scaled_image = original_image.scaled(234, 42, Qt::IgnoreAspectRatio, 
+			mode);
+
+	ui.label_selectedimg->setPixmap(QPixmap::fromImage(original_image));
+	//Adjust the label to the size of the image, don't use with the user-selected pixmap
+	// ui.label_selectedimg->adjustSize();
 }
 
 void PDFSignWindow::ShowSuccessMsgBox()
@@ -331,6 +351,8 @@ void PDFSignWindow::on_button_sign_clicked()
 	{
 		//TODO: The batch signing is all very hackish with validations missing
 		// and this awkward API...
+		//First we need to free the first instance that was created unless we want to leak the file handle...
+		delete m_pdf_sig;
 		m_pdf_sig = new PTEID_PDFSignature();
 		for (int i = 0; i < model->rowCount(); i++)
 		{
@@ -355,6 +377,28 @@ void PDFSignWindow::on_button_sign_clicked()
 
 	if (ui.timestamp_checkBox->isChecked())
 		m_pdf_sig->enableTimestamp();
+
+	//Generate a scaled JPEG and pass the byte array to the Signature class
+	if (!m_scaled_image.isNull())
+	{
+
+		QBuffer buffer(&m_jpeg_scaled_data);
+		buffer.open(QIODevice::WriteOnly);
+		m_scaled_image.save(&buffer, "JPG");
+		// fprintf(stderr, "setting CustomImage with data= 0x%p: %ld\n", ba.data(), ba.size());
+
+		/* Write out the data file */
+		FILE *hello = fopen("/tmp/scaled_image.jpg", "wb");
+		size_t ret = fwrite(m_jpeg_scaled_data.data(), sizeof(char), m_jpeg_scaled_data.size(), hello);
+
+		if (ret != m_jpeg_scaled_data.size())
+			fprintf(stderr, "Error writing output file!");
+
+		fclose(hello);
+
+		m_pdf_sig->setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
+
+	}
 
 	if (savefilepath.isNull() || savefilepath.isEmpty())
 		return;
@@ -393,8 +437,6 @@ void PDFSignWindow::on_button_sign_clicked()
 	}
 	else			
 		ShowErrorMsgBox(tr("Error Generating Signature!"));
-
-	disposePDFSignatures();
 
 	this->close();
 
@@ -523,16 +565,6 @@ void PDFSignWindow::highlightSectors(QString &csv_sectors)
 
 }
 
-void PDFSignWindow::disposePDFSignatures()
-{
-	for (int i = 0; i < pdf_sigs.size(); ++i) {
-		delete pdf_sigs.at(i);
-	}
-
-	pdf_sigs.clear();
-
-}
-
 void PDFSignWindow::addFileToListView(QStringList &str)
 {
 	if (str.isEmpty())
@@ -541,7 +573,7 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	current_input_path = str.at(0);
 
 	m_pdf_sig = new PTEID_PDFSignature(strdup(getPlatformNativeString(current_input_path)));
-	pdf_sigs.push_back(m_pdf_sig);
+	
 	
 	int tmp_count = m_pdf_sig->getPageCount();
 

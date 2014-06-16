@@ -144,6 +144,8 @@ HEADERS += CardInformation.h \
            
 FORMS += dlgAbout.ui dlgOptions.ui mainwnd.ui picturepopup.ui dlgPrint.ui dlgSignature.ui dlgVerifySignature.ui PDFSignWindow.ui FreeSelectionDialog.ui ChangeAddressDialog.ui
 
+RESOURCES = eidgui.qrc 
+
 SOURCES += CardInformation.cpp \
            dlgAbout.cpp \
            dlgOptions.cpp \
@@ -164,6 +166,5 @@ SOURCES += CardInformation.cpp \
 unix:!macx: SOURCES += qtsingleapplication_x11.cpp
 macx: SOURCES += qtsingleapplication_mac.cpp	
 
-RESOURCES += eidgui.qrc 
-    #         qtconf.qrc
+
 
