@@ -310,6 +310,11 @@ void PTEID_PDFSignature::enableTimestamp()
 
 }
 
+void PTEID_PDFSignature::setCustomImage(unsigned char *image_data, unsigned long img_length)
+{
+	mp_signature->setCustomImage(image_data, img_length);
+}
+
 char *PTEID_PDFSignature::getOccupiedSectors(int page)
 {
 	if (page < 1)

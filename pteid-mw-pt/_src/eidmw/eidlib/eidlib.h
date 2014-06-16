@@ -824,6 +824,7 @@ class PTEID_PDFSignature
 		PTEIDSDK_API int getPageCount();
 		PTEIDSDK_API void enableTimestamp();
 		PTEIDSDK_API char *getOccupiedSectors(int page);
+		PTEIDSDK_API void setCustomImage(unsigned char *image_data, unsigned long image_length);
 
 	private:
 	//The applayer object that actually implements the signature
