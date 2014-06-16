@@ -13,6 +13,14 @@ namespace eIDMW
 
 	class CReader;
 
+	typedef struct
+	{
+		unsigned char * img_data;
+		unsigned long img_length;
+		int img_height;
+		int img_width;
+	} Pixmap;
+
 	class PDFSignature
 	{
 	public:
@@ -33,7 +41,7 @@ namespace eIDMW
 		//General interface to signing in single file-mode or batch-mode
 		EIDMW_APL_API int signFiles(const char *location, const char *reason,
 			const char *outfile_path);
-
+		EIDMW_APL_API void setCustomImage(unsigned char *img_data, unsigned long img_length);
 
 	private:
 
@@ -59,6 +67,8 @@ namespace eIDMW
 		bool m_batch_mode;
 		bool m_timestamp;
 		std::vector<char *> m_files_to_sign;
+		Pixmap my_custom_image;
+		
 
 	};
 

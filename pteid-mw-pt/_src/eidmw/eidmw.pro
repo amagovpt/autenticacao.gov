@@ -6,7 +6,7 @@ include(_Builds/eidcommon.mak)
 TEMPLATE = subdirs
 
 SUBDIRS += FreeImagePTEiD
-SUBDIRS += xml-security-c-1.6.1
+SUBDIRS += xml-security-c-1.7.2
 SUBDIRS += pteid-poppler
 
 

@@ -28,6 +28,10 @@
 #include "MiscUtil.h"
 #include "Thread.h"
 
+//#include "openssl/evp.h"
+//#include "openssl/x509.h"
+//#include "openssl/x509v3.h"
+//#include <openssl/err.h> 
 #include "xercesc/util/Base64.hpp"
 #include "xercesc/util/XMLString.hpp"
 
@@ -1006,8 +1010,8 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 
 	OCSP_request_add1_nonce(pRequest, 0, -1);
 
-	//fprintf(stderr, "DEBUG: OCSP connecting to host %s port: %s IsSSL? %d\n",
-	//	pszHost, pszPort, iSSL);
+	fprintf(stderr, "DEBUG: OCSP connecting to host %s port: %s IsSSL? %d\n",
+		pszHost, pszPort, iSSL);
 		/* establish a connection to the OCSP responder */
 	pBio = Connect(pszHost, atoi(pszPort),iSSL,&pSSLCtx);
 	

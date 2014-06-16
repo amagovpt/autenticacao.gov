@@ -38,6 +38,7 @@ namespace eIDMW
 		m_civil_number = NULL;
 		m_citizen_fullname = NULL;
 		m_batch_mode = true;
+		my_custom_image.img_data = NULL;
 
 	}
 
@@ -56,6 +57,16 @@ namespace eIDMW
 		m_timestamp = false;
 		m_doc = new PDFDoc(new GooString(pdf_file_path));
 	
+	}
+
+	void PDFSignature::setCustomImage(unsigned char *img_data, unsigned long img_length)
+	{
+
+		this->my_custom_image.img_data = img_data;
+		this->my_custom_image.img_length = img_length;
+		// this->my_custom_image.img_height = img_height;
+		// this->my_custom_image.img_width = img_width;
+
 	}
 
 	PDFSignature::~PDFSignature()
@@ -323,6 +334,9 @@ namespace eIDMW
 		   getCitizenData();
 
 		bool incremental = doc->isSigned() || doc->isReaderEnabled();
+
+		if (this->my_custom_image.img_data != NULL)
+			doc->addCustomSignatureImage(my_custom_image.img_data, my_custom_image.img_length);
 
 		doc->prepareSignature(incremental, &sig_location, m_citizen_fullname, m_civil_number,
 			location, reason, m_page, m_sector);

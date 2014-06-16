@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="applayer"
 	ProjectGUID="{DC41E34B-8251-41DE-8065-D56B022F5755}"
 	RootNamespace="pteidapplayer"
@@ -236,7 +236,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="wsock32.lib Shlwapi.lib pteidDlgsWin32.lib pteidcardlayer.lib pteidcommon.lib libeay32_098_25.lib ssleay32_098_25.lib xerces-c_3.lib freeimage.lib xsec_1.lib libcurl.lib pteid-poppler.lib"
+				AdditionalDependencies="wsock32.lib Shlwapi.lib pteidDlgsWin32.lib pteidcardlayer.lib pteidcommon.lib libeay32.lib ssleay32.lib xerces-c_3.lib freeimage.lib xsec_1.lib libcurl.lib pteid-poppler.lib"
 				OutputFile="..\_Binaries35\$(ConfigurationName)\pteid$(ProjectName).dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="false"
@@ -409,15 +409,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cJSON.c"
-				>
-			</File>
-			<File
 				RelativePath=".\cmp_asn1.c"
-				>
-			</File>
-			<File
-				RelativePath=".\CRLFetcher.cpp"
 				>
 			</File>
 			<File
@@ -437,10 +429,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\OCSP.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\PDFSignature.cpp"
 				>
 			</File>
@@ -450,10 +438,6 @@
 			</File>
 			<File
 				RelativePath=".\PhotoPteid.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SAM.cpp"
 				>
 			</File>
 			<File

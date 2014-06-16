@@ -25,7 +25,9 @@
 #include <memory>
 
 #include "ByteArray.h"
+#include "openssl/evp.h"
 #include "cryptoFramework.h"
+#include "Mutex.h"
 #include "APLReader.h"
 
 namespace eIDMW

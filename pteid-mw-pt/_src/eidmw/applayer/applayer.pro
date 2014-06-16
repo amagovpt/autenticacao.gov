@@ -56,7 +56,7 @@ isEmpty(EMULATE_CARDLAYER) {
 }
 
 DEPENDPATH += .
-INCLUDEPATH += . ../common ../cardlayer ../eidlib ../dialogs ../FreeImagePTEiD/Source ../xml-security-c-1.6.1
+INCLUDEPATH += . ../common ../cardlayer ../eidlib ../dialogs ../FreeImagePTEiD/Source ../xml-security-c-1.7.2
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 INCLUDEPATH += ../pteid-poppler/
 DEFINES += APPLAYER_EXPORTS
@@ -144,5 +144,5 @@ contains(PKG_NAME,pteid): SOURCES +=  CardPteid.cpp     \
            			     APLCardPteid.cpp  \
 	   			     cryptoFwkPteid.cpp
 
-QMAKE_PRE_LINK=cp --no-dereference ../xml-security-c-1.6.1/xsec/.libs/libxml-security-c.so* ../lib		     
-macx: QMAKE_PRE_LINK=cp -f -R -p ../xml-security-c-1.6.1/xsec/.libs/libxml-security-c.*dylib ../lib
+QMAKE_PRE_LINK=cp --no-dereference ../xml-security-c-1.7.2/xsec/.libs/libxml-security-c.so* ../lib		     
+macx: QMAKE_PRE_LINK=cp -f -R -p ../xml-security-c-1.7.2/xsec/.libs/libxml-security-c.*dylib ../lib
