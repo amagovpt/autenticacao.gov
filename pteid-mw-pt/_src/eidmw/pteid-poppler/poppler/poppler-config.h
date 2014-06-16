@@ -35,7 +35,7 @@
    #define POPPLER_API __declspec(dllimport)
 #endif
 #else
-#define POPPLER_API
+#define POPPLER_API __attribute__ ((visibility ("default")))
 #endif
 
 /* Use fixedpoint. */
