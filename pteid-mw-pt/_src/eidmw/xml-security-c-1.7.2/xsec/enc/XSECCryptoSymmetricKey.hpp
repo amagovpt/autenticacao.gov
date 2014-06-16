@@ -185,7 +185,7 @@ public :
 							 SymmetricKeyMode mode = MODE_CBC,
 							 const unsigned char* iv = NULL,
                              const unsigned char* tag = NULL,
-                             unsigned int taglen = NULL) = 0;
+                             unsigned int taglen = 0) = 0;
 
 	/**
 	 * \brief Continue a decrypt operation using this key.
