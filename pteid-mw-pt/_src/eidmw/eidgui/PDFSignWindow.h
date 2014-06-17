@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
  * PTeID Middleware Project.
- * Copyright (C) 2012 Caixa Mágica Software.
+ * Copyright (C) 2012-2014 Caixa Mágica Software.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -46,6 +46,7 @@ class PDFSignWindow : public QDialog
 	    void on_button_cancel_clicked();
 	    void on_pushButton_freeselection_clicked();
 	    void on_pushButton_imgChooser_clicked();
+	    void on_pushButton_switchOrientation_clicked();
 	    void on_checkBox_location_toggled(bool);
 	    void on_checkBox_reason_toggled(bool);
 	    void on_visible_checkBox_toggled(bool);
@@ -76,17 +77,19 @@ class PDFSignWindow : public QDialog
 	    void addFileToListView(QStringList &str);
 	    void run_sign(int page, QString& savefile, char *location, char *reason);
 	    void ShowSuccessMsgBox();
+	    void switchOrientation();
 	    void ShowSectorErrorMessage();
 	    void ShowErrorMsgBox(QString message);
 
 
 	    Ui_PDFSignWindow ui;
-	    static const int table_lines = 6;
-	    static const int table_columns = 3;
+	    int table_lines;
+	    int table_columns;
 	    double sig_coord_x;
 	    double sig_coord_y;
 
 	    bool card_present;
+	    bool horizontal_page;
 
     	CardInformation const& m_CI_Data;
 	    QAbstractItemModel *list_model;

@@ -1671,16 +1671,29 @@ Please specify .xml, .csv or .eid</source>
 <context>
     <name>PDFSignWindow</name>
      <message>
-        <source>&lt;html&gt;Choose the page sector where you &lt;br&gt; want your signature to appear.&lt;br&gt;The grey sectors are already filled&lt;br&gt;with other signatures.&lt;/html&gt;</source>
-	     <translation>&lt;html&gt;Escolha a área da página onde pretende &lt;br&gt;colocar a assinatura &lt;br&gt;As áreas cinzentas já estão ocupadas&lt;br&gt;com outras assinaturas&lt;/html&gt;</translation>
+        <source>Choose the page sector where you want your signature to appear.\nThe grey sectors are already filled with other signatures.</source>
+   <translation>Escolha a área da página onde pretende colocar a assinatura.\nAs áreas cinzentas já estão ocupadas com outras assinaturas.</translation>
      </message>
+
      <message>
         <source>Selected sector: </source>
         <translation>Área Seleccionada: </translation>
+     </message>
+     <message>
+        <source>Change page orientation</source>
+        <translation>Mudar orientação de página</translation>
 </message>
 <message>
-	<source>Signature Position: </source>
-	<translation>Posição da assinatura: </translation>
+        <source>Horizontal page</source>
+        <translation>Página horizontal</translation>
+</message>
+<message>
+        <source>Vertical page</source>
+        <translation>Página vertical</translation>
+</message>
+<message>
+	<source>Signature Position:\n</source>
+	<translation>Posição da assinatura:\n</translation>
 </message>
      <message>
         <source>some of the timestamps could not be applied</source>

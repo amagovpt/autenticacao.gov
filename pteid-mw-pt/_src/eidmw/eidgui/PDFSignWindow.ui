@@ -24,7 +24,7 @@
     <rect>
      <x>10</x>
      <y>0</y>
-     <width>410</width>
+     <width>420</width>
      <height>731</height>
     </rect>
    </property>
@@ -81,11 +81,11 @@
      <rect>
       <x>10</x>
       <y>310</y>
-      <width>240</width>
+      <width>400</width>
       <height>290</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="vertical_bottom">
+    <layout class="QVBoxLayout" name="vertical_layout1">
      <property name="spacing">
       <number>0</number>
      </property>
@@ -114,6 +114,12 @@
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="sizeConstraint">
+        <enum>QLayout::SetMinimumSize</enum>
+       </property>
        <item>
         <widget class="QRadioButton" name="radioButton_choosepage">
          <property name="enabled">
@@ -122,27 +128,11 @@
          <property name="text">
           <string>Choose Page...</string>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_page">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Page</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -157,17 +147,39 @@
          <property name="maximum">
           <number>999999</number>
          </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
         </widget>
        </item>
       </layout>
      </item>
      <item>
+        <spacer name="vSpacer1">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>100</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+     <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0">
        <property name="spacing">
-        <number>5</number>
+        <number>0</number>
        </property>
        <property name="sizeConstraint">
-        <enum>QLayout::SetMaximumSize</enum>
+        <enum>QLayout::SetMinimumSize</enum>
        </property>
        <property name="topMargin">
         <number>0</number>
@@ -178,7 +190,7 @@
           <bool>false</bool>
          </property>
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -186,26 +198,16 @@
          <property name="text">
           <string/>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
+          <property name="maximumSize">
           <size>
-           <width>20</width>
-           <height>20</height>
+           <width>190</width>
+           <height>155</height>
           </size>
          </property>
-        </spacer>
+         <property name="alignment">
+          <set>Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QTableWidget" name="tableWidget">
@@ -221,7 +223,7 @@
          <property name="maximumSize">
           <size>
            <width>80</width>
-           <height>120</height>
+           <height>155</height>
           </size>
          </property>
          <property name="baseSize">
@@ -441,6 +443,32 @@
      </item>
     </layout>
    </widget>
+   <widget class="QPushButton" name="pushButton_switchOrientation">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>285</x>
+      <y>510</y>
+      <width>32</width>
+      <height>32</height>
+     </rect>
+    </property>
+     <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="styleSheet">
+          <string notr="true">border: none;margin: 0px;padding: 0px;</string>
+    </property>
+    <property name="text">
+     <string></string>
+    </property>
+   </widget>
+
    <widget class="QPushButton" name="pushButton_imgChooser">
     <property name="enabled">
      <bool>false</bool>
@@ -467,7 +495,7 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>550</y>
+      <y>580</y>
       <width>185</width>
       <height>93</height>
      </rect>

@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
  * PTeID Middleware Project.
- * Copyright (C) 2012 Caixa Mágica Software.
+ * Copyright (C) 2012-2014 Caixa Mágica Software.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -43,25 +43,49 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	int i=0, j=0;
 
 	ui.label_choose_sector->setText(tr(
-	"<html>Choose the page sector where you <br> want your signature to appear."
-	"<br>The grey sectors are already filled<br>with other signatures."
-	"</html>"));
+	"Choose the page sector where you want your signature to appear.\n"
+	"The grey sectors are already filled with other signatures."));
+	ui.label_choose_sector->setWordWrap(true);
+
+	// ui.pushButton_switchOrientation->setText(tr("Horizontal page"));
+
+	QPixmap pixmap(":/images/Images/Icons/icon_rotate.png");
+	QIcon ButtonIcon(pixmap);
+	ui.pushButton_switchOrientation->setIcon(ButtonIcon);
+	ui.pushButton_switchOrientation->setIconSize(pixmap.rect().size());
 
 	//DEBUG
 	ui.label_selectedsector->setWordWrap(true);	
 
 	m_pdf_sig = NULL;
 	m_selection_dialog = NULL;
+	table_lines = 6;
+	table_columns = 3;
 	sig_coord_x = -1, sig_coord_y = -1;
 	success = SIG_ERROR;
+	horizontal_page = false;
 	ui.spinBox_page->setValue(1);
 	list_model = new QStringListModel();
 	ui.pdf_listview->setModel(list_model);
 	ui.pdf_listview->enableNotify();
+
+	int items = ui.horizontalLayout->count();
+
+	for (int i = 0; i!= items; i++)
+	{
+		ui.horizontalLayout->itemAt(i)->setAlignment(Qt::AlignLeft);
+	}
+
+	items = ui.vertical_layout1->count();
+
+	for (int i = 0; i!= items; i++)
+	{
+		ui.vertical_layout1->itemAt(i)->setAlignment(Qt::AlignTop);
+	}
 	
 	int cell_number = 1;	
 
-	for (i = 0; i < table_lines; i++) 
+	for (i = 0; i < table_lines; i++)
 	{
 		for (j = 0; j < table_columns; j++)
 		{
@@ -76,8 +100,51 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	//save the default background to use in clearAllSectors()
 	m_default_background = ui.tableWidget->item(0,0)->background();
 	this->setFixedSize(this->width(), this->height());
+}
+
+void PDFSignWindow::switchOrientation()
+{
+	int i=0, j=0;
+	int columnCount = ui.tableWidget->rowCount();
+	int rowCount =    ui.tableWidget->columnCount();
+	// if (horizontal_page)
+	// {
+	// 	horizontal_page = false;
+	// 	ui.pushButton_switchOrientation->setText(tr("Horizontal page"));
+
+	// }
+	// else
+	// {
+	// 	horizontal_page = true;
+	// 	ui.pushButton_switchOrientation->setText(tr("Vertical page"));
+	// }
+
+	//Update class members: it affects updateSector()
+	table_lines = rowCount;
+	table_columns = columnCount;
+
+	QSize previous_size = ui.tableWidget->maximumSize();
+	QSize new_size(previous_size.height(), previous_size.width());
+	ui.tableWidget->setRowCount(rowCount);
+	ui.tableWidget->setColumnCount(columnCount);
+
+	int cell_number = 1;
+
+	for (i = 0; i < rowCount; i++) 
+	{
+		for (j = 0; j < columnCount; j++)
+		{
+			QTableWidgetItem * it = new QTableWidgetItem(
+					QString::number(cell_number++));
+			//Set flags because the default values allow editing
+			it->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+			ui.tableWidget->setItem(i, j, it);
+		}
+	}
 
 
+ 	//Change the maximum size to make the new cells visible
+	ui.tableWidget->setMaximumSize(new_size);
 }
 
 
@@ -100,6 +167,11 @@ void PDFSignWindow::on_tableWidget_currentCellChanged(int row, int column,
 	sig_coord_x = -1;
 	sig_coord_y = -1;
 
+}
+
+void PDFSignWindow::on_pushButton_switchOrientation_clicked()
+{
+	switchOrientation();
 }
 
 //Launch the Free Selection Dialog
@@ -152,7 +224,7 @@ void PDFSignWindow::update_sector(double x_pos, double y_pos)
 	//Dont show fraction digits
 	stream.setRealNumberPrecision(1);
 	stream.setRealNumberNotation(QTextStream::FixedNotation);
-	stream << tr("Signature Position: ") << x_pos*209.916 <<
+	stream << tr("Signature Position:\n") << x_pos*209.916 <<
 		" mm Horizontal, " << y_pos*297.0576 << " mm Vertical";
 	ui.label_selectedsector->setText(result);
 }
@@ -206,11 +278,12 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 		ui.spinBox_page->setEnabled(false);
 	}
 
-	ui.label_page->setEnabled(checked);
+	// ui.label_page->setEnabled(checked);
 	ui.label_choose_sector->setEnabled(checked);
 	ui.label_selectedsector->setEnabled(checked);
 	ui.pushButton_freeselection->setEnabled(checked);
 	ui.pushButton_imgChooser->setEnabled(checked);
+	ui.pushButton_switchOrientation->setEnabled(checked);
 
 	ui.tableWidget->setEnabled(checked);
 
@@ -387,7 +460,7 @@ void PDFSignWindow::on_button_sign_clicked()
 		m_scaled_image.save(&buffer, "JPG");
 		// fprintf(stderr, "setting CustomImage with data= 0x%p: %ld\n", ba.data(), ba.size());
 
-		/* Write out the data file */
+		/* TODO: remove this Write out the data file */
 		FILE *hello = fopen("/tmp/scaled_image.jpg", "wb");
 		size_t ret = fwrite(m_jpeg_scaled_data.data(), sizeof(char), m_jpeg_scaled_data.size(), hello);
 
