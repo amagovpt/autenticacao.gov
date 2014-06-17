@@ -354,7 +354,7 @@ XMLCh *createSignedPropertiesURI()
 
     }
 
-	void appendCertRef(DOMDocument *doc, CByteArray &cert_data, X509* cert, DOMNode* parent)
+	void appendCertRef(XERCES_NS DOMDocument *doc, CByteArray &cert_data, X509* cert, DOMNode* parent)
 	{
 		safeBuffer str;
 		unsigned char cert_digest[SHA256_LEN];
@@ -568,7 +568,7 @@ XMLCh* XadesSignature::createURI(const char *path)
 	return XMLString::transcode(uri.c_str());
 }
 
-int XadesSignature::HashSignedInfoNode(DOMDocument *doc, XMLByte *hash_buf)
+int XadesSignature::HashSignedInfoNode(XERCES_NS DOMDocument *doc, XMLByte *hash_buf)
 {
 	CByteArray *partial_xml_file = WriteToByteArray(doc);
 
@@ -585,7 +585,7 @@ int XadesSignature::HashSignedInfoNode(DOMDocument *doc, XMLByte *hash_buf)
       
     MemBufInputSource source((XMLByte*)partial_xml_file->GetBytes(), partial_xml_file->Size(), "temp");
     parser->parse(source);
-    DOMDocument *new_dom = parser->getDocument();
+    XERCES_NS DOMDocument *new_dom = parser->getDocument();
 
 	DOMNodeList *dom_nodes = new_dom->getElementsByTagNameNS(XMLString::transcode(DSIG_NAMESPACE),
 	 XMLString::transcode("SignedInfo"));
@@ -622,7 +622,7 @@ int XadesSignature::HashSignedInfoNode(DOMDocument *doc, XMLByte *hash_buf)
 }
 
 
-int XadesSignature::HashSignedPropertiesNode(DOMDocument *doc, XMLByte *hash_buf)
+int XadesSignature::HashSignedPropertiesNode(XERCES_NS DOMDocument *doc, XMLByte *hash_buf)
 {
 	CByteArray *partial_xml_file = WriteToByteArray(doc);
 
@@ -639,7 +639,7 @@ int XadesSignature::HashSignedPropertiesNode(DOMDocument *doc, XMLByte *hash_buf
       
     MemBufInputSource source((XMLByte*)partial_xml_file->GetBytes(), partial_xml_file->Size(), "temp");
     parser->parse(source);
-    DOMDocument *new_dom = parser->getDocument();
+    XERCES_NS DOMDocument *new_dom = parser->getDocument();
 
 	DOMNodeList *dom_nodes = new_dom->getElementsByTagNameNS(XMLString::transcode(XADES_NAMESPACE),
 	 XMLString::transcode("SignedProperties"));
@@ -790,7 +790,7 @@ CByteArray ParseTimestampTokenFromTSReply(CByteArray &ts_reply) {
 * 	Add Revocation Info for all certificates in the chain up 
 *	to EC Raiz Estado which is trusted in the Portuguese TSL
 */
-bool XadesSignature::AddRevocationInfo(DOMDocument * dom)
+bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
 {
 	safeBuffer str;
 	CByteArray ocsp_token;
@@ -875,11 +875,12 @@ bool XadesSignature::AddRevocationInfo(DOMDocument * dom)
 	revocation_node->appendChild(ocsp_values_node);
 	revocation_node->appendChild(crl_values_node);
 	
+	return true;
 }
 
 // Mandatory for XAdES-A signature. Applying a Timestamp to these references
 // protects all the CA certificates against later key compromise or algorithm obsolescence
-bool XadesSignature::addCompleteCertificateRefs(DOMDocument *dom)
+bool XadesSignature::addCompleteCertificateRefs(XERCES_NS DOMDocument *dom)
 {
 	DOMNode * node_unsigned_props = NULL;
 	safeBuffer str;
@@ -916,10 +917,10 @@ bool XadesSignature::addCompleteCertificateRefs(DOMDocument *dom)
 			dom->createElementNS(XMLString::transcode(XADES_NAMESPACE), str.rawXMLChBuffer());
 
 	node_unsigned_props->appendChild(complete_revocation_refs_node);
-
+	return true;
 }
 
-DOMNode *findDOMNodeHelper(DOMDocument *dom, const char *ns, const char *tagname)
+DOMNode *findDOMNodeHelper(XERCES_NS DOMDocument *dom, const char *ns, const char *tagname)
 {
 	DOMNode * node;
 	DOMNodeList* nodes1 = dom->getElementsByTagNameNS(XMLString::transcode(ns),
@@ -934,7 +935,7 @@ DOMNode *findDOMNodeHelper(DOMDocument *dom, const char *ns, const char *tagname
 	return node;
 }
 
-std::string canonicalNode(DOMNode *node, DOMDocument *doc)
+std::string canonicalNode(DOMNode *node, XERCES_NS DOMDocument *doc)
 {
 	XSECC14n20010315 canonicalizer(doc, node);
     canonicalizer.setCommentsProcessing(false);
@@ -954,7 +955,7 @@ std::string canonicalNode(DOMNode *node, DOMDocument *doc)
 
 // This TS applies to the concatenation of the following elements
 //(ds:SignatureValue, [SignatureTimeStamp+, CompleteCertificateRefs, CompleteRevocationRefs]).
-bool XadesSignature::AddSigAndRefsTimestamp(DOMDocument *doc)
+bool XadesSignature::AddSigAndRefsTimestamp(XERCES_NS DOMDocument *doc)
 {
 	std::string digest_input;
 	CByteArray *partial_xml_file = WriteToByteArray(doc);
@@ -972,7 +973,7 @@ bool XadesSignature::AddSigAndRefsTimestamp(DOMDocument *doc)
       
     MemBufInputSource source((XMLByte*)partial_xml_file->GetBytes(), partial_xml_file->Size(), "temp");
     parser->parse(source);
-    DOMDocument *new_dom = parser->getDocument();
+    XERCES_NS DOMDocument *new_dom = parser->getDocument();
 
 	DOMNode *node_unsigned_props = findDOMNodeHelper(doc, XADES_NAMESPACE, "UnsignedSignatureProperties");
 	if (node_unsigned_props == NULL)
@@ -997,7 +998,7 @@ bool XadesSignature::AddSigAndRefsTimestamp(DOMDocument *doc)
 // Mandatory Property for a XAdES-A signature form
 // The algorithm to calculate the TS Input data is described in page 58 of ETSI TS 101 903
 // [ds:References+, ds:SignedInfo, ds:SignatureValue, ds:KeyInfo, xades:UnsignedSignatureProperties+]
-bool XadesSignature::AddArchiveTimestamp(DOMDocument *dom)
+bool XadesSignature::AddArchiveTimestamp(XERCES_NS DOMDocument *dom)
 {
 	std::string digest_input;
 
@@ -1018,7 +1019,7 @@ bool XadesSignature::AddArchiveTimestamp(DOMDocument *dom)
       
     MemBufInputSource source((XMLByte*)partial_xml_file->GetBytes(), partial_xml_file->Size(), "temp");
     parser->parse(source);
-    DOMDocument *new_dom = parser->getDocument();
+    XERCES_NS DOMDocument *new_dom = parser->getDocument();
 
 
 	DOMNode *node_unsigned_props = findDOMNodeHelper(new_dom, XADES_NAMESPACE, "UnsignedSignatureProperties");
@@ -1045,7 +1046,7 @@ bool XadesSignature::AddArchiveTimestamp(DOMDocument *dom)
 	return appendTimestamp(dom, node_unsigned_props_orig, "ArchiveTimeStamp", digest_input);	
 }
 
-bool XadesSignature::appendTimestamp(DOMDocument * dom, DOMNode *parent, const char * tag_name, std::string to_timestamp)
+bool XadesSignature::appendTimestamp(XERCES_NS DOMDocument * dom, DOMNode *parent, const char * tag_name, std::string to_timestamp)
 {
 	unsigned char signature_hash[SHA256_LEN];
 	TSAClient tsa;
@@ -1112,7 +1113,7 @@ bool XadesSignature::appendTimestamp(DOMDocument * dom, DOMNode *parent, const c
 }
 
 
-bool XadesSignature::AddSignatureTimestamp(DOMDocument *dom)
+bool XadesSignature::AddSignatureTimestamp(XERCES_NS DOMDocument *dom)
 {
 	
 	DOMNode *node_signature, *node_unsigned_props;
@@ -1160,7 +1161,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
         DOMImplementation *impl = 
 		DOMImplementationRegistry::getDOMImplementation(MAKE_UNICODE_STRING("Core"));
 	
-	//XERCES_NS DOMDocument *doc = impl->createDocument(MAKE_UNICODE_STRING(ASIC_NAMESPACE), MAKE_UNICODE_STRING("asic:XAdESSignatures"), NULL);
+	//XERCES_NS XERCES_NS DOMDocument *doc = impl->createDocument(MAKE_UNICODE_STRING(ASIC_NAMESPACE), MAKE_UNICODE_STRING("asic:XAdESSignatures"), NULL);
 	XERCES_NS DOMDocument *doc = impl->createDocument(NULL, MAKE_UNICODE_STRING("Document"), NULL);
 	DOMElement *rootElem = doc->getDocumentElement();
 

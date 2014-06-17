@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="applayer"
 	ProjectGUID="{DC41E34B-8251-41DE-8065-D56B022F5755}"
 	RootNamespace="pteidapplayer"
@@ -409,7 +409,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cJSON.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cmp_asn1.c"
+				>
+			</File>
+			<File
+				RelativePath=".\CRLFetcher.cpp"
 				>
 			</File>
 			<File
@@ -429,6 +437,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OCSP.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\PDFSignature.cpp"
 				>
 			</File>
@@ -438,6 +450,10 @@
 			</File>
 			<File
 				RelativePath=".\PhotoPteid.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SAM.cpp"
 				>
 			</File>
 			<File
