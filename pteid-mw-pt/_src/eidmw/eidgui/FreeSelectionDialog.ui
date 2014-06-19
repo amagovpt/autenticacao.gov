@@ -2,37 +2,15 @@
 <ui version="4.0">
  <class>FreeSelectionDialog</class>
  <widget class="QDialog" name="Dialog">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>394</width>
-    <height>530</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>PDF Signature - Free Positioning</string>
   </property>
-  <widget class="QLineEdit" name="text_edit_x">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>460</y>
-     <width>50</width>
-     <height>25</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="text_edit_y">
-   <property name="geometry">
-    <rect>
-     <x>320</x>
-     <y>460</y>
-     <width>50</width>
-     <height>25</height>
-    </rect>
-   </property>
-  </widget>
+   <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+      </sizepolicy>
+  </property>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
@@ -43,36 +21,36 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="label_x">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
      <y>470</y>
-     <width>141</width>
+     <width>165</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Horizontal position</string>
+    <string>Horizontal position: </string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    <set>Qt::AlignLeft</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="label_y">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>180</x>
      <y>470</y>
-     <width>101</width>
+     <width>165</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Vertical position</string>
+    <string>Vertical position: </string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    <set>Qt::AlignLeft</set>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_ok">

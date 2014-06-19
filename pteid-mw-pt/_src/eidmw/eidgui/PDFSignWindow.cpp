@@ -63,7 +63,7 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	table_columns = 3;
 	sig_coord_x = -1, sig_coord_y = -1;
 	success = SIG_ERROR;
-	horizontal_page = false;
+	horizontal_page_flag = false;
 	ui.spinBox_page->setValue(1);
 	list_model = new QStringListModel();
 	ui.pdf_listview->setModel(list_model);
@@ -107,17 +107,9 @@ void PDFSignWindow::switchOrientation()
 	int i=0, j=0;
 	int columnCount = ui.tableWidget->rowCount();
 	int rowCount =    ui.tableWidget->columnCount();
-	// if (horizontal_page)
-	// {
-	// 	horizontal_page = false;
-	// 	ui.pushButton_switchOrientation->setText(tr("Horizontal page"));
-
-	// }
-	// else
-	// {
-	// 	horizontal_page = true;
-	// 	ui.pushButton_switchOrientation->setText(tr("Vertical page"));
-	// }
+	
+	//Invert the flag value
+	horizontal_page_flag = !horizontal_page_flag;
 
 	//Update class members: it affects updateSector()
 	table_lines = rowCount;
@@ -178,7 +170,7 @@ void PDFSignWindow::on_pushButton_switchOrientation_clicked()
 void PDFSignWindow::on_pushButton_freeselection_clicked()
 {
 	if (!m_selection_dialog)
-		m_selection_dialog = new FreeSelectionDialog(this);
+		m_selection_dialog = new FreeSelectionDialog(this, horizontal_page_flag);
 	m_selection_dialog->exec();
 	m_selection_dialog->getValues(&sig_coord_x, &sig_coord_y);
 

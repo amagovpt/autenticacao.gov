@@ -89,7 +89,7 @@ class PDFSignWindow : public QDialog
 	    double sig_coord_y;
 
 	    bool card_present;
-	    bool horizontal_page;
+	    bool horizontal_page_flag;
 
     	CardInformation const& m_CI_Data;
 	    QAbstractItemModel *list_model;

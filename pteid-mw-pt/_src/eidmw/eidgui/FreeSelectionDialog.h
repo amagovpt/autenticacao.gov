@@ -17,15 +17,17 @@ class FreeSelectionDialog : public QDialog
 	void on_pushButton_ok_clicked();
 
 	public:
-		FreeSelectionDialog (QWidget *parent);
+		FreeSelectionDialog (QWidget *parent, bool landscape_mode);
 		void setPosition(QPointF new_pos);
 		//This is intended to be called after the dialog is closed
 		void getValues(double *x, double *y);
 
 	private:
-		void changeRectanglePos();
+		void resetRectanglePos();
+		void drawBackgroundGrid(QGraphicsScene *);
 		Ui_FreeSelectionDialog ui;
 		QGraphicsScene * my_scene;
+		bool m_landscape_mode;
 		double rx, ry;
 
 };
