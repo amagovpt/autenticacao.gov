@@ -55,6 +55,7 @@ class PDFSignWindow : public QDialog
 	    void on_radioButton_lastpage_toggled(bool);
 	    void on_spinBox_page_valueChanged(int);
 	    void on_tableWidget_currentCellChanged(int row, int column, int prev_row, int prev_column);
+	    void on_FreeSelectionDialog_closed();
 
 
 	public:
@@ -71,6 +72,7 @@ class PDFSignWindow : public QDialog
 	private:
 	    void update_sector(int row, int column);
 	    void update_sector(double x_pos, double y_pos);
+	    void clear_sig_position();
 	    bool validateSelectedSector();
 	    void highlightSectors(QString &csv_sectors);
 	    void clearAllSectors();

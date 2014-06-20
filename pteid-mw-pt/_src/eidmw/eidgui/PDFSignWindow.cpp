@@ -163,7 +163,26 @@ void PDFSignWindow::on_tableWidget_currentCellChanged(int row, int column,
 
 void PDFSignWindow::on_pushButton_switchOrientation_clicked()
 {
+	/*
+	Clear previous position because we assume it's no longer valid after switching
+	orientation  
+	*/
+	if (m_selection_dialog)
+	{
+		// m_selection_dialog->done(QDialog::Accepted);
+		delete m_selection_dialog;
+		m_selection_dialog = NULL;
+	}
+	clear_sig_position();
+
 	switchOrientation();
+}
+
+void PDFSignWindow::on_FreeSelectionDialog_closed()
+{
+	m_selection_dialog->getValues(&sig_coord_x, &sig_coord_y);
+
+	update_sector(sig_coord_x, sig_coord_y);
 }
 
 //Launch the Free Selection Dialog
@@ -171,11 +190,9 @@ void PDFSignWindow::on_pushButton_freeselection_clicked()
 {
 	if (!m_selection_dialog)
 		m_selection_dialog = new FreeSelectionDialog(this, horizontal_page_flag);
-	m_selection_dialog->exec();
-	m_selection_dialog->getValues(&sig_coord_x, &sig_coord_y);
-
-	update_sector(sig_coord_x, sig_coord_y);
-
+	m_selection_dialog->open();
+	connect(m_selection_dialog, SIGNAL(accepted()), this, SLOT(on_FreeSelectionDialog_closed()));
+	
 }
 
 //Event received from myListView
@@ -216,9 +233,14 @@ void PDFSignWindow::update_sector(double x_pos, double y_pos)
 	//Dont show fraction digits
 	stream.setRealNumberPrecision(1);
 	stream.setRealNumberNotation(QTextStream::FixedNotation);
-	stream << tr("Signature Position:\n") << x_pos*209.916 <<
-		" mm Horizontal, " << y_pos*297.0576 << " mm Vertical";
+	stream << tr("Signature Position:\n") << x_pos <<
+		" mm Horizontal, " << y_pos << " mm Vertical";
 	ui.label_selectedsector->setText(result);
+}
+
+void PDFSignWindow::clear_sig_position()
+{
+	ui.label_selectedsector->setText("");
 }
 
 void PDFSignWindow::on_button_cancel_clicked()

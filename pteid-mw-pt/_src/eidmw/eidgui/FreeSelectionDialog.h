@@ -2,9 +2,6 @@
 #include <QDialog>
 #include "ui_FreeSelectionDialog.h"
 
-static double scene_height = 421;
-static double scene_width = 297;
-
 class FreeSelectionDialog : public QDialog
 {
 	Q_OBJECT
@@ -25,9 +22,13 @@ class FreeSelectionDialog : public QDialog
 	private:
 		void resetRectanglePos();
 		void drawBackgroundGrid(QGraphicsScene *);
+		double convertX();
+		double convertY();
+
 		Ui_FreeSelectionDialog ui;
 		QGraphicsScene * my_scene;
 		bool m_landscape_mode;
+
 		double rx, ry;
 
 };
