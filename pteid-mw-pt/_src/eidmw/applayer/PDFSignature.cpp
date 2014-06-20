@@ -55,6 +55,7 @@ namespace eIDMW
 		m_citizen_fullname = NULL;
 		m_batch_mode = false;
 		m_timestamp = false;
+		my_custom_image.img_data = NULL;
 		m_doc = new PDFDoc(new GooString(pdf_file_path));
 	
 	}

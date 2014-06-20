@@ -123,6 +123,8 @@ void PDFDoc::init()
   secHdlr = NULL;
   pageCache = NULL;
   signature_mode = gFalse;
+  m_image_data_jpeg = NULL;
+  m_image_length = 0;
 }
 
 PDFDoc::PDFDoc()
