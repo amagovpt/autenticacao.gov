@@ -78,7 +78,7 @@ bool DSIG_EXPORT ASN2DSASig(const unsigned char * input, unsigned char * r, unsi
 //           Calculate correct OIDs for an RSA sig
 // --------------------------------------------------------------------------------
 
-unsigned char * getRSASigOID(hashMethod hm, int &oidLen);
+DSIG_EXPORT unsigned char * getRSASigOID(hashMethod hm, int &oidLen);
 
 #endif /* XSECCRYPTOUTILS_INCLUDE */
 

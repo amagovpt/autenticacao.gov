@@ -443,6 +443,10 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\DlgsWin32.rc"
+				>
+			</File>
+			<File
 				RelativePath=".\Images\ICO_BELPIC.ico"
 				>
 			</File>

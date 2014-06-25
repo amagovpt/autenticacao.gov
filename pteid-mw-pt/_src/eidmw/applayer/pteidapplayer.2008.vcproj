@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\common;..\dialogs;..\eidlib;&quot;..\pteid-poppler&quot;;..\cardlayer;..\FreeImagePTEiD\Source;&quot;..\xml-security-c-1.6.1&quot;;&quot;$(PTEID_DIR_CURL)\include&quot;;&quot;$(PTEID_DIR_XERCES_31)\include&quot;;&quot;$(PTEID_DIR_OPENSSL_098)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
+				AdditionalIncludeDirectories="..\common;..\dialogs;..\eidlib;&quot;..\pteid-poppler&quot;;..\cardlayer;..\FreeImagePTEiD\Source;&quot;..\xml-security-c-1.7.2&quot;;&quot;$(PTEID_DIR_CURL)\include&quot;;&quot;$(PTEID_DIR_XERCES_31)\include&quot;;&quot;$(PTEID_DIR_OPENSSL_098)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
 				PreprocessorDefinitions="PTEID_35;WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -100,6 +100,85 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)"
+			IntermediateDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)\obj"
+			ConfigurationType="2"
+			CharacterSet="1"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..\common;..\dialogs;..\eidlib;&quot;..\pteid-poppler&quot;;..\cardlayer;..\FreeImagePTEiD\Source;&quot;..\xml-security-c-1.7.2&quot;;&quot;$(PTEID_DIR_CURL)\include&quot;;&quot;$(PTEID_DIR_XERCES_31)\include&quot;;&quot;$(PTEID_DIR_OPENSSL_098)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
+				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="PTEID_35;_UNICODE;UNICODE"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				AdditionalDependencies="wsock32.lib Shlwapi.lib libeay32.lib ssleay32.lib xerces-c_3.lib libcurl.lib freeimage.lib pteid-poppler.lib xsec_1_6.lib pteidcommon.lib pteidDlgsWin32.lib pteidcardlayer.lib"
+				OutputFile="..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)\pteid$(ProjectName).dll"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)&quot;;&quot;$(PTEID_DIR_CURL)\lib&quot;;&quot;$(PTEID_DIR_XERCES_31)\lib&quot;;&quot;$(PTEID_DIR_OPENSSL_098)\lib&quot;"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Debug|x64"
 			OutputDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)"
 			IntermediateDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)\obj"
@@ -125,7 +204,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\common;..\dialogs;..\eidlib;&quot;..\pteid-poppler&quot;;..\cardlayer;..\FreeImagePTEiD\Source;&quot;..\xml-security-c-1.6.1&quot;;&quot;$(PTEID_DIR_CURL_X64)\include&quot;;&quot;$(PTEID_DIR_XERCES_31_X64)\include&quot;;&quot;$(PTEID_DIR_OPENSSL_098_X64)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
+				AdditionalIncludeDirectories="..\common;..\dialogs;..\eidlib;&quot;..\pteid-poppler&quot;;..\cardlayer;..\FreeImagePTEiD\Source;&quot;..\xml-security-c-1.7.2&quot;;&quot;$(PTEID_DIR_CURL_X64)\include&quot;;&quot;$(PTEID_DIR_XERCES_31_X64)\include&quot;;&quot;$(PTEID_DIR_OPENSSL_098_X64)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
 				PreprocessorDefinitions="PTEID_35;WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -181,85 +260,6 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)"
-			IntermediateDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)\obj"
-			ConfigurationType="2"
-			CharacterSet="1"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\common;..\dialogs;..\eidlib;&quot;..\pteid-poppler&quot;;..\cardlayer;..\FreeImagePTEiD\Source;&quot;..\xml-security-c-1.6.1&quot;;&quot;$(PTEID_DIR_CURL)\include&quot;;&quot;$(PTEID_DIR_XERCES_31)\include&quot;;&quot;$(PTEID_DIR_OPENSSL_098)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
-				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS"
-				RuntimeLibrary="2"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="PTEID_35;_UNICODE;UNICODE"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				LinkLibraryDependencies="false"
-				AdditionalDependencies="wsock32.lib Shlwapi.lib libeay32.lib ssleay32.lib xerces-c_3.lib libcurl.lib freeimage.lib pteid-poppler.lib xsec_1_6.lib pteidcommon.lib pteidDlgsWin32.lib pteidcardlayer.lib"
-				OutputFile="..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)\pteid$(ProjectName).dll"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)&quot;;&quot;$(PTEID_DIR_CURL)\lib&quot;;&quot;$(PTEID_DIR_XERCES_31)\lib&quot;;&quot;$(PTEID_DIR_OPENSSL_098)\lib&quot;"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
 			Name="Release|x64"
 			OutputDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)"
 			IntermediateDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)\obj"
@@ -285,7 +285,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\common;..\dialogs;..\eidlib;&quot;..\pteid-poppler&quot;;..\cardlayer;..\FreeImagePTEiD\Source;&quot;..\xml-security-c-1.6.1&quot;;&quot;$(PTEID_DIR_CURL_X64)\include&quot;;&quot;$(PTEID_DIR_XERCES_31_X64)\include&quot;;&quot;$(PTEID_DIR_OPENSSL_098_X64)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
+				AdditionalIncludeDirectories="..\common;..\dialogs;..\eidlib;&quot;..\pteid-poppler&quot;;..\cardlayer;..\FreeImagePTEiD\Source;&quot;..\xml-security-c-1.7.2&quot;;&quot;$(PTEID_DIR_CURL_X64)\include&quot;;&quot;$(PTEID_DIR_XERCES_31_X64)\include&quot;;&quot;$(PTEID_DIR_OPENSSL_098_X64)\include&quot;;&quot;$(PTEID_DIR_PLATFORMSDK)\include&quot;"
 				PreprocessorDefinitions="PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"

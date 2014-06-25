@@ -24,12 +24,22 @@
 
 #include <memory>
 #include <string>
+#include "Mutex.h"
+
+// Mutex.h includes windows.h and that conflicts with the openssl defines
+#if defined(__WINCRYPT_H__)
+#undef X509_NAME
+#undef X509_EXTENSIONS
+#undef X509_CERT_PAIR
+#undef PKCS7_ISSUER_AND_SERIAL
+#undef OCSP_REQUEST
+#undef OCSP_RESPONSE
+#endif
+
 #include "openssl/evp.h"
 #include "openssl/ocsp.h"
 #include "openssl/ssl.h"
 #include "openssl/bio.h"
-
-#include "Mutex.h"
 
 namespace eIDMW
 {
