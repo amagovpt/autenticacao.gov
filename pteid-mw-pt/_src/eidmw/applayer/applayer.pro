@@ -116,9 +116,6 @@ SOURCES += \
 	sign-pkcs7.cpp \
 	cJSON.c \
 	CRLFetcher.cpp \
-	cmp_asn1.c \
-	tsp_asn1.c \
-	tsproto.c \
 	PDFSignature.cpp \
 	SAM.cpp \
 	OCSP.cpp \

@@ -10,8 +10,7 @@
 #include "ByteArray.h"
 #include "APLCard.h"
 #include "TsaClient.h"
-//ASN.1 definitions for timestamp tokens
-#include "tsp.h"
+
 #include "CardPteidDef.h"
 #include "static_pteid_certs.h"
 #include "cryptoFwkPteid.h"
@@ -27,6 +26,7 @@
 #include <openssl/pkcs7.h>
 #include <openssl/asn1.h>
 #include <openssl/sha.h>
+#include <openssl/ts.h>
 
 #define SHA1_LEN 20
 #define SHA256_LEN 32
@@ -229,17 +229,17 @@ typedef unsigned int
 
 /*
  * Appends the TSP TimestampToken to the existing PKCS7 signature as an unsigned attribute
- * The parsing function is provided by source code borrowed from OpenEvidence project
- * http://www.openevidence.org/
- */
+ *
+*/
+
 int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_len)
 {
 
-	TSP_TIME_STAMP_RESP *tsp = d2i_TSP_TIME_STAMP_RESP(NULL, (const unsigned char**)&token, token_len);
+	TS_RESP *tsp = d2i_TS_RESP(NULL, (const unsigned char**)&token, token_len);
 
 	if (tsp != NULL)
 	{
-		PKCS7* token = tsp->timeStampToken;
+		PKCS7* token = tsp->token;
 
 		int p7_len = i2d_PKCS7(token, NULL); 
 		unsigned char *p7_der = (unsigned char *)OPENSSL_malloc(p7_len); 
@@ -269,6 +269,106 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 	return 0;
 
 }
+
+
+
+/*
+typedef struct ESS_issuer_serial
+	{
+	STACK_OF(GENERAL_NAME)	*issuer;
+	ASN1_INTEGER		*serial;
+	} ESS_ISSUER_SERIAL;
+}
+
+*/
+void add_signingCertificate(PKCS7_SIGNER_INFO *si, X509 *x509, unsigned char * cert_data, unsigned long cert_len)
+{
+	ASN1_STRING *seq = NULL;
+	unsigned char cert_sha256_sum[SHA256_LEN];
+	unsigned char *p, *pp = NULL;
+	int len;
+	int signed_string_nid = -1;
+	ESS_SIGNING_CERT *sc = NULL;
+	ESS_CERT_ID *cid;
+
+	GENERAL_NAME * name = NULL;
+
+	SHA256_Wrapper(cert_data, cert_len, cert_sha256_sum);
+
+	/* Create the SigningCertificateV2 attribute. */
+
+	if (!(sc = ESS_SIGNING_CERT_new()))
+		goto end;
+
+	/* Adding the signing certificate id. */
+	if (!(cid = ESS_CERT_ID_new())) 
+		goto end;
+	if (!ASN1_OCTET_STRING_set(cid->hash, cert_sha256_sum,
+		sizeof(cert_sha256_sum)))
+		goto end;
+
+	//Add Issuer and Serial Number
+
+	if (!(cid->issuer_serial = ESS_ISSUER_SERIAL_new()))
+		goto end; 
+                /* Creating general name from the certificate issuer. */
+	if (!(name = GENERAL_NAME_new())) 
+		goto end; 
+		name->type = GEN_DIRNAME;
+	if (!(name->d.dirn = X509_NAME_dup(x509->cert_info->issuer))) 
+		goto end; 
+	if (!sk_GENERAL_NAME_push(cid->issuer_serial->issuer, name))
+		goto end; 
+
+	cid->issuer_serial->serial = X509_get_serialNumber(x509);
+
+	if (!sk_ESS_CERT_ID_push(sc->cert_ids, cid))
+		goto end;
+
+	/* Add SigningCertificateV2 signed attribute to the signer info. */
+
+	len = i2d_ESS_SIGNING_CERT(sc, NULL);
+	if (!(pp = (unsigned char *) OPENSSL_malloc(len))) goto end;
+
+	p = pp;
+	i2d_ESS_SIGNING_CERT(sc, &p);
+	if (!(seq = ASN1_STRING_new()) || !ASN1_STRING_set(seq, pp, len))
+		goto end;
+
+	OPENSSL_free(pp); pp = NULL;
+
+	signed_string_nid = OBJ_create("1.2.840.113549.1.9.16.2.47",
+		"id-aa-signingCertificateV2",
+		"id-aa-signingCertificateV2");
+
+	PKCS7_add_signed_attribute(si, signed_string_nid, V_ASN1_SEQUENCE, seq);
+	return;
+
+	end:
+	MWLOG(LEV_ERROR, MOD_APL, L"Failed to add SigningCertificateV2 attribute.\n");
+}
+
+void WriteToFile(const char *path, const unsigned char *content, int len)
+{
+    	FILE *f=NULL;
+    	fprintf(stderr, "Writing buffer %p with length=%d\n", content, len);
+
+        f = fopen(path, "wb");
+
+        if(f)
+        {
+                size_t len = fwrite(content, sizeof(char), len, f);
+
+                int ret = 0;
+                if ((ret=ferror(f) != 0)) 
+                {
+                	fprintf(stderr, "Error code: 0x%04x\n", ret);
+                }
+                fclose(f);
+        }
+
+ }
+
 
 
 /*
@@ -308,6 +408,9 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	OpenSSL_add_all_algorithms();
 
 	card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
+
+	//Trim the padding zero bytes which are useless and affect the certificate digest computation
+	certData.TrimRight(0);
 
 	BIO *in = BIO_new_mem_buf(certData.GetBytes(), certData.Size());
 	unsigned char * cert_data = certData.GetBytes();
@@ -359,6 +462,9 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 
 	PKCS7_set_detached(p7, 1);
 
+	//DEBUG
+	// WriteToFile("/tmp/signed_content.bin", data, data_len);
+
 	my_hash(data, data_len, out);
 	
 	/* Add the signing time and digest authenticated attributes */
@@ -370,11 +476,18 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	PKCS7_add1_attrib_digest(signer_info, out, hash_size); 
 	free(out);
 	
+	//Add signing-certificate v2 attribute according to the specification ETSI TS 103 172 v2.1.1 - section 6.3.1 
+	add_signingCertificate(signer_info, x509, certData.GetBytes(), certData.Size());
+
 	if (!timestamp)
 		add_signed_time(signer_info);
 
 	auth_attr_len = ASN1_item_i2d((ASN1_VALUE *)signer_info->auth_attr, &attr_buf,
 				                                ASN1_ITEM_rptr(PKCS7_ATTR_SIGN));
+
+	//DEBUG
+	//WriteToFile("/tmp/hash_input.bin", attr_buf, auth_attr_len);
+
 	my_hash((unsigned char *)attr_buf, auth_attr_len, attr_digest);
 	attr_hash = CByteArray((const unsigned char *)attr_digest, hash_size);
 	free(attr_digest);
@@ -412,8 +525,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 		}
 
 	}
-
-
+	
 	if (timestamp_token && tsp_token_len > 0)
 	{
 		return_code = append_tsp_token(signer_info, timestamp_token, tsp_token_len);
