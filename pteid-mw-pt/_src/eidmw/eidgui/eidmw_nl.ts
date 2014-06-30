@@ -889,70 +889,6 @@ Please specify .xml, .csv or .eid</source>
         <translation type="unfinished">Alteração de PIN falhou</translation>
     </message>
     <message>
-        <source>txt_ECard_1</source>
-        <translation>E Kaart</translation>
-    </message>
-    <message>
-        <source>txt_ECard_2</source>
-        <translation>Carte E</translation>
-    </message>
-    <message>
-        <source>txt_ECard_3</source>
-        <translation>E Karte</translation>
-    </message>
-    <message>
-        <source>txt_ECard_4</source>
-        <translation>E Card</translation>
-    </message>
-    <message>
-        <source>txt_ECard_plus_1</source>
-        <translation>E+ Kaart</translation>
-    </message>
-    <message>
-        <source>txt_ECard_plus_2</source>
-        <translation>Carte E+</translation>
-    </message>
-    <message>
-        <source>txt_ECard_plus_3</source>
-        <translation>E+ Karte</translation>
-    </message>
-    <message>
-        <source>txt_ECard_plus_4</source>
-        <translation>E+ Card</translation>
-    </message>
-    <message>
-        <source>txt_FCard_1</source>
-        <translation>F Kaart</translation>
-    </message>
-    <message>
-        <source>txt_FCard_2</source>
-        <translation>Carte F</translation>
-    </message>
-    <message>
-        <source>txt_FCard_3</source>
-        <translation>F Karte</translation>
-    </message>
-    <message>
-        <source>txt_FCard_4</source>
-        <translation>F Card</translation>
-    </message>
-    <message>
-        <source>txt_FCard_plus_1</source>
-        <translation>F+ Kaart</translation>
-    </message>
-    <message>
-        <source>txt_FCard_plus_2</source>
-        <translation>Carte F+</translation>
-    </message>
-    <message>
-        <source>txt_FCard_plus_3</source>
-        <translation>F+ Karte</translation>
-    </message>
-    <message>
-        <source>txt_FCard_plus_4</source>
-        <translation>F+ Card</translation>
-    </message>
-    <message>
         <source>Belgian eID Runtime</source>
         <translation>Belgische eID Runtime</translation>
     </message>
@@ -1088,7 +1024,7 @@ Please specify .xml, .csv or .eid</source>
     </message>
     <message>
         <source>Revoked</source>
-        <translation>Ingetrokken</translation>
+        <translation>Revogado</translation>
     </message>
     <message>
         <source>Opmerkingen&lt;br&gt;&lt;i&gt;Remarks&lt;/i&gt;</source>
@@ -1097,14 +1033,6 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <source>Not available</source>
         <translation>Não disponível</translation>
-    </message>
-    <message>
-        <source>Developed by the Belgian Government</source>
-        <translation>Ontwikkeld door de Belgische overheid</translation>
-    </message>
-    <message>
-        <source>eID bin Files (*.eid);;eID XML files (*.xml);;eID CSV files (*.csv)</source>
-        <translation>eID bin bestanden (*.eid);;eID XML bestanden (*.xml);;eID CSV bestanden (*.csv)</translation>
     </message>
     <message>
         <source>OCSP Status</source>
@@ -1401,34 +1329,6 @@ Please specify .xml, .csv or .eid</source>
 </context>
 <context>
     <name>dlgPrint</name>
-    <message>
-        <source>Card number</source>
-        <translation>Kaart nummer</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Naam</translation>
-    </message>
-    <message>
-        <source>First Names</source>
-        <translation>Voornamen</translation>
-    </message>
-    <message>
-        <source>Nationality</source>
-        <translation>Nationaliteit</translation>
-    </message>
-    <message>
-        <source>Sex</source>
-        <translation>Geslacht</translation>
-    </message>
-    <message>
-        <source>Birth date</source>
-        <translation>Geboortedatum</translation>
-    </message>
-    <message>
-        <source>Birth place</source>
-        <translation>Geboorteplaats</translation>
-    </message>
     <message>
         <source>Additional Indications</source>
         <translation>Informações Adicionais</translation>
