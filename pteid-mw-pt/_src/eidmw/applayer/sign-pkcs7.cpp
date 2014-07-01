@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <fstream>
 #include <iostream>
@@ -348,23 +349,23 @@ void add_signingCertificate(PKCS7_SIGNER_INFO *si, X509 *x509, unsigned char * c
 	MWLOG(LEV_ERROR, MOD_APL, L"Failed to add SigningCertificateV2 attribute.\n");
 }
 
-void WriteToFile(const char *path, const unsigned char *content, int len)
+void WriteToFile(const char *path, const unsigned char *content, size_t len)
 {
     	FILE *f=NULL;
-    	fprintf(stderr, "Writing buffer %p with length=%d\n", content, len);
+    	fprintf(stderr, "Writing buffer %p with length=%lu\n", content, len);
 
         f = fopen(path, "wb");
 
-        if(f)
+        if (f)
         {
-                size_t len = fwrite(content, sizeof(char), len, f);
+        	int fd = fileno(f);
+            size_t retlen = write(fd, content, len);
 
-                int ret = 0;
-                if ((ret=ferror(f) != 0)) 
-                {
-                	fprintf(stderr, "Error code: 0x%04x\n", ret);
-                }
-                fclose(f);
+            if (retlen != len)
+            {
+                fprintf(stderr, "WriteToFile failed! Errno: %d\n", errno);
+            }
+            fclose(f);
         }
 
  }
@@ -463,7 +464,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	PKCS7_set_detached(p7, 1);
 
 	//DEBUG
-	// WriteToFile("/tmp/signed_content.bin", data, data_len);
+	WriteToFile("/home/agrr/signed_content.bin", data, data_len);
 
 	my_hash(data, data_len, out);
 	
@@ -477,7 +478,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	free(out);
 	
 	//Add signing-certificate v2 attribute according to the specification ETSI TS 103 172 v2.1.1 - section 6.3.1 
-	add_signingCertificate(signer_info, x509, certData.GetBytes(), certData.Size());
+	// add_signingCertificate(signer_info, x509, certData.GetBytes(), certData.Size());
 
 	if (!timestamp)
 		add_signed_time(signer_info);
