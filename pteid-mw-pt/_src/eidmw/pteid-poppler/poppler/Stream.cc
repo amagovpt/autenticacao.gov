@@ -355,23 +355,26 @@ void MemOutStream::put(char c) {
 
 void MemOutStream::printf(const char *format, ...)
 {
-
   va_list argptr;
   va_start (argptr, format);
-  //fprintf(stderr, "\tbuffer ptr=%08X, remaining buffer=%d\n",(unsigned int)(buffer+used), buffer_size-used);
+
   unsigned int ret = vsnprintf((char *)buffer+used, buffer_size-used, format, argptr);
+  va_end (argptr);
   if (ret >= buffer_size-used)
   {
-	  //Buffer is full need to reallocate to twice the size
-	buffer = (unsigned char *)grealloc(buffer, buffer_size*2);
-	buffer_size *=2;
-  	//fprintf(stderr, "Realloc\tbuffer ptr=%08X, remaining buffer=%d\n", (long)(buffer+used), buffer_size-used);
-  	ret = vsnprintf((char *)buffer+used, buffer_size-used, format, argptr);
-
+    /* It's mandatory to start another traversal of the va_list because vsnprintf calls va_arg()
+     * so calling it again right away would return undefined values as there would be no more arguments
+     * More info at the stdarg(3) manpage ... */
+    va_start (argptr, format);
+    //Buffer is full need to reallocate to twice the size
+    buffer = (unsigned char *)grealloc(buffer, buffer_size*2);
+    buffer_size *=2;
+    ret = vsnprintf((char *)buffer+used, buffer_size-used, format, argptr);
+    va_end (argptr);
   }
-  used += ret;
-  va_end (argptr);
 
+  used += ret;
+  
 }
 
 //------------------------------------------------------------------------
