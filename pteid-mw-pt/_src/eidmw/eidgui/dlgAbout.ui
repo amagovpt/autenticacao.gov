@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>421</width>
-    <height>347</height>
+    <width>435</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -37,8 +37,8 @@
   <widget class="QPushButton" name="btnOK">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>320</y>
+     <x>320</x>
+     <y>360</y>
      <width>85</width>
      <height>27</height>
     </rect>
@@ -162,7 +162,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>240</y>
+     <y>220</y>
      <width>371</width>
      <height>22</height>
     </rect>
@@ -188,7 +188,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>270</y>
+     <y>250</y>
      <width>381</width>
      <height>22</height>
     </rect>
@@ -201,7 +201,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>290</y>
+     <y>280</y>
      <width>371</width>
      <height>22</height>
     </rect>
@@ -219,6 +219,22 @@
      <height>22</height>
     </rect>
    </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_qren">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>320</y>
+     <width>341</width>
+     <height>31</height>
+    </rect>
+   </property>
+    <property name="pixmap">
+     <pixmap resource="eidgui.qrc">:/images/Images/logo_cor400.png</pixmap>
+    </property>
    <property name="text">
     <string/>
    </property>
