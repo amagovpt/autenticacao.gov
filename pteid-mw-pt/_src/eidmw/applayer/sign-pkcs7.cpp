@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include <fstream>
 #include <iostream>
@@ -349,6 +349,7 @@ void add_signingCertificate(PKCS7_SIGNER_INFO *si, X509 *x509, unsigned char * c
 	MWLOG(LEV_ERROR, MOD_APL, L"Failed to add SigningCertificateV2 attribute.\n");
 }
 
+/*
 void WriteToFile(const char *path, const unsigned char *content, size_t len)
 {
     	FILE *f=NULL;
@@ -369,7 +370,7 @@ void WriteToFile(const char *path, const unsigned char *content, size_t len)
         }
 
  }
-
+ */
 
 
 /*
@@ -463,9 +464,6 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 
 	PKCS7_set_detached(p7, 1);
 
-	//DEBUG
-	WriteToFile("/home/agrr/signed_content.bin", data, data_len);
-
 	my_hash(data, data_len, out);
 	
 	/* Add the signing time and digest authenticated attributes */
@@ -478,16 +476,13 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	free(out);
 	
 	//Add signing-certificate v2 attribute according to the specification ETSI TS 103 172 v2.1.1 - section 6.3.1 
-	// add_signingCertificate(signer_info, x509, certData.GetBytes(), certData.Size());
+	add_signingCertificate(signer_info, x509, certData.GetBytes(), certData.Size());
 
 	if (!timestamp)
 		add_signed_time(signer_info);
 
 	auth_attr_len = ASN1_item_i2d((ASN1_VALUE *)signer_info->auth_attr, &attr_buf,
 				                                ASN1_ITEM_rptr(PKCS7_ATTR_SIGN));
-
-	//DEBUG
-	//WriteToFile("/tmp/hash_input.bin", attr_buf, auth_attr_len);
 
 	my_hash((unsigned char *)attr_buf, auth_attr_len, attr_digest);
 	attr_hash = CByteArray((const unsigned char *)attr_digest, hash_size);
