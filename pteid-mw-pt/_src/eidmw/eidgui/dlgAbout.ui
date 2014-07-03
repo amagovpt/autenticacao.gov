@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>435</width>
-    <height>400</height>
+    <width>433</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -37,8 +37,8 @@
   <widget class="QPushButton" name="btnOK">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>360</y>
+     <x>300</x>
+     <y>450</y>
      <width>85</width>
      <height>27</height>
     </rect>
@@ -115,32 +115,32 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>421</width>
+     <width>433</width>
      <height>91</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(255, 255, 255);</string>
    </property>
-   <widget class="QLabel" name="lblIcon">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>0</y>
-      <width>361</width>
-      <height>79</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap resource="eidgui.qrc">:/images/Images/a-z_identiteitskaart_logo.png</pixmap>
-    </property>
-   </widget>
+  </widget>
+  <widget class="QLabel" name="lbl_logocc">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>0</y>
+     <width>361</width>
+     <height>79</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="eidgui.qrc">:/images/Images/a-z_identiteitskaart_logo.png</pixmap>
+   </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
@@ -223,13 +223,14 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_qren">
+
+<widget class="QLabel" name="label_qren">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>0</x>
      <y>320</y>
-     <width>341</width>
-     <height>31</height>
+     <width>433</width>
+     <height>103</height>
     </rect>
    </property>
     <property name="pixmap">
@@ -238,7 +239,7 @@
    <property name="text">
     <string/>
    </property>
-  </widget>
+</widget>
  </widget>
  <resources>
   <include location="eidgui.qrc"/>
