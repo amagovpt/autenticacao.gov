@@ -402,14 +402,12 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	local_acroForm.dictLookup("Fields", &fields_array);
 	if (fields_array.isArray())
 	{
-		fprintf(stderr, "Fields array found adding signature field\n");
 		Object fields_ref;
 		local_acroForm.dictLookupNF("Fields", &fields_ref);
 		fields_array.arrayAdd(&ref_to_sig);
 
 		if (fields_ref.isRef())
 		{
-			fprintf(stderr, "Fields array is an indirect object...\n");
 			xref->setModifiedObject(&fields_array, fields_ref.getRef());
 
 		}
