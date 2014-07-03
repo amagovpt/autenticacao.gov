@@ -359,7 +359,9 @@ namespace eIDMW
 		if (final_ret != errNone)
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 
-		delete doc;
+		delete m_doc;
+		m_doc = NULL;
+
 		delete outputName;
 
 		return rc;
