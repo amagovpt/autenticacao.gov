@@ -1,518 +1,463 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PDFSignWindow</class>
- <widget class="QDialog" name="PDFSignWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>421</width>
-    <height>751</height>
-   </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="windowTitle">
-   <string>PDF Signature</string>
-  </property>
-  <widget class="QWidget" name="centralwidget" native="true">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>0</y>
-     <width>420</width>
-     <height>731</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <widget class="QPushButton" name="button_addfile">
+  <class>PDFSignWindow</class>
+  <widget class="QDialog" name="PDFSignWindow">
     <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>120</y>
-      <width>156</width>
-      <height>27</height>
-     </rect>
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>421</width>
+        <height>755</height>
+      </rect>
     </property>
     <property name="sizePolicy">
-     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+      </sizepolicy>
     </property>
-    <property name="text">
-     <string>Add Files...</string>
+    <property name="windowTitle">
+      <string>PDF Signature</string>
     </property>
-   </widget>
-   <widget class="MyListView" name="pdf_listview">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>30</y>
-      <width>371</width>
-      <height>81</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>341</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PDF Files to sign</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>310</y>
-      <width>400</width>
-      <height>290</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="vertical_layout1">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="sizeConstraint">
-      <enum>QLayout::SetMinimumSize</enum>
-     </property>
-     <item>
-      <widget class="QRadioButton" name="radioButton_firstpage">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>First Page</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton_lastpage">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Last Page</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-         <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="sizeConstraint">
-        <enum>QLayout::SetMinimumSize</enum>
-       </property>
-       <item>
-        <widget class="QRadioButton" name="radioButton_choosepage">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Choose Page...</string>
-         </property>
-          <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="spinBox_page">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>999999</number>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-        <spacer name="vSpacer1">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>100</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="sizeConstraint">
-        <enum>QLayout::SetMinimumSize</enum>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label_choose_sector">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-          <property name="maximumSize">
-          <size>
-           <width>190</width>
-           <height>155</height>
-          </size>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeft|Qt::AlignTop</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTableWidget" name="tableWidget">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>80</width>
-           <height>155</height>
-          </size>
-         </property>
-         <property name="baseSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">font-size: 8pt</string>
-         </property>
-         <property name="verticalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="gridStyle">
-          <enum>Qt::DashLine</enum>
-         </property>
-         <property name="rowCount">
-          <number>6</number>
-         </property>
-         <property name="columnCount">
-          <number>3</number>
-         </property>
-         <attribute name="horizontalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="horizontalHeaderCascadingSectionResizes">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>26</number>
-         </attribute>
-         <attribute name="horizontalHeaderMinimumSectionSize">
-          <number>10</number>
-         </attribute>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderDefaultSectionSize">
-          <number>20</number>
-         </attribute>
-         <attribute name="verticalHeaderMinimumSectionSize">
-          <number>10</number>
-         </attribute>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <column/>
-         <column/>
-         <column/>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_selectedsector">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
+    <widget class="QWidget" name="centralwidget" native="true">
+      <property name="geometry">
+        <rect>
+          <x>10</x>
+          <y>0</y>
+          <width>420</width>
+          <height>750</height>
+        </rect>
+      </property>
+      <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Selected sector : 1</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-       </property>
+      </property>
+      <widget class="QPushButton" name="button_addfile">
+        <property name="geometry">
+          <rect>
+            <x>220</x>
+            <y>120</y>
+            <width>156</width>
+            <height>27</height>
+          </rect>
+        </property>
+        <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+          </sizepolicy>
+        </property>
+        <property name="text">
+          <string>Add Files...</string>
+        </property>
       </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_freeselection">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Free Positioning</string>
-       </property>
+      <widget class="MyListView" name="pdf_listview">
+        <property name="geometry">
+          <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>371</width>
+            <height>81</height>
+          </rect>
+        </property>
       </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QPushButton" name="button_cancel">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>300</x>
-      <y>700</y>
-      <width>91</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Cancel</string>
-    </property>
-   </widget>
-   <widget class="Line" name="line">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>150</y>
-      <width>381</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="button_sign">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>700</y>
-      <width>91</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Sign</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>180</y>
-      <width>381</width>
-      <height>121</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="vertical_top">
-     <item>
-      <layout class="QFormLayout" name="formLayout">
-       <property name="fieldGrowthPolicy">
-        <enum>QFormLayout::ExpandingFieldsGrow</enum>
-       </property>
-       <property name="labelAlignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-       <property name="formAlignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="checkBox_reason">
-         <property name="text">
-          <string>Reason:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="reason_textbox">
-         <property name="enabled">
+      <widget class="QLabel" name="label_3">
+        <property name="geometry">
+          <rect>
+            <x>10</x>
+            <y>10</y>
+            <width>341</width>
+            <height>16</height>
+          </rect>
+        </property>
+        <property name="text">
+          <string>PDF Files to sign</string>
+        </property>
+      </widget>
+      <widget class="QWidget" name="verticalLayoutWidget">
+        <property name="geometry">
+          <rect>
+            <x>10</x>
+            <y>310</y>
+            <width>400</width>
+            <height>353</height>
+          </rect>
+        </property>
+        <layout class="QVBoxLayout" name="vertical_layout1">
+          <property name="spacing">
+            <number>0</number>
+          </property>
+          <property name="sizeConstraint">
+            <enum>QLayout::SetMinimumSize</enum>
+          </property>
+          <item>
+            <widget class="QTabWidget" name="tabWidget">
+              <property name="currentIndex">
+                <number>0</number>
+              </property>
+              <widget class="QWidget" name="tab1">
+                <attribute name="title">
+                  <string>Página</string>
+                </attribute>
+                <widget class="QWidget" name="verticalLayoutWidget_2">
+                  <property name="geometry">
+                    <rect>
+                      <x>10</x>
+                      <y>10</y>
+                      <width>211</width>
+                      <height>101</height>
+                    </rect>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout">
+                    <item>
+                      <widget class="QRadioButton" name="radioButton_firstpage">
+                        <property name="enabled">
+                          <bool>false</bool>
+                        </property>
+                        <property name="text">
+                          <string>First Page</string>
+                        </property>
+                      </widget>
+                    </item>
+                    <item>
+                      <layout class="QHBoxLayout" name="horizontalLayout_3">
+                        <item>
+                          <widget class="QRadioButton" name="radioButton_choosepage">
+                            <property name="enabled">
+                              <bool>false</bool>
+                            </property>
+                            <property name="sizePolicy">
+                              <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                              </sizepolicy>
+                            </property>
+                            <property name="text">
+                              <string>Choose Page...</string>
+                            </property>
+                          </widget>
+                        </item>
+                        <item>
+                          <widget class="QSpinBox" name="spinBox_page">
+                            <property name="enabled">
+                              <bool>false</bool>
+                            </property>
+                            <property name="sizePolicy">
+                              <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                              </sizepolicy>
+                            </property>
+                            <property name="minimum">
+                              <number>1</number>
+                            </property>
+                            <property name="maximum">
+                              <number>999999</number>
+                            </property>
+                          </widget>
+                        </item>
+                      </layout>
+                    </item>
+                    <item>
+                      <widget class="QRadioButton" name="radioButton_lastpage">
+                        <property name="enabled">
+                          <bool>false</bool>
+                        </property>
+                        <property name="text">
+                          <string>Last Page</string>
+                        </property>
+                      </widget>
+                    </item>
+                    <item>
+                      <widget class="QPushButton" name="pushButton_imgChooser">
+                        <property name="enabled">
+                          <bool>false</bool>
+                        </property>
+                        <property name="geometry">
+                          <rect>
+                            <x>10</x>
+                            <y>630</y>
+                            <width>150</width>
+                            <height>27</height>
+                          </rect>
+                        </property>
+                        <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                          </sizepolicy>
+                        </property>
+                        <property name="text">
+                          <string>Choose custom image</string>
+                        </property>
+                      </widget>
+                    </item>
+                    <item>
+                      <widget class="QLabel" name="label_selectedimg">
+                        <property name="geometry">
+                          <rect>
+                            <x>200</x>
+                            <y>580</y>
+                            <width>185</width>
+                            <height>93</height>
+                          </rect>
+                        </property>
+                        <property name="text">
+                          <string/>
+                        </property>
+                      </widget>
+                    </item>
+                  </layout>
+                </widget>
+              </widget>
+              <widget class="QWidget" name="tab_2">
+                <attribute name="title">
+                  <string>Localização</string>
+                </attribute>
+                <layout class="QVBoxLayout" name="verticalLayout">
+                  <item>
+                    <widget class="QGraphicsView" name="scene_view">
+                      <property name="sizePolicy">
+                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <widget class="QLabel" name="label_x">
+                      <property name="sizePolicy">
+                        <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="text">
+                        <string>Horizontal position: </string>
+                      </property>
+                      <property name="alignment">
+                        <set>Qt::AlignLeading</set>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <widget class="QLabel" name="label_y">
+                      <property name="sizePolicy">
+                        <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="text">
+                        <string>Vertical position: </string>
+                      </property>
+                      <property name="alignment">
+                        <set>Qt::AlignLeading</set>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <widget class="QPushButton" name="pushButton_freeselect">
+                      <property name="sizePolicy">
+                        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                          <horstretch>4</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="text">
+                        <string>Free Selection</string>
+                      </property>
+                    </widget>
+                  </item>
+                </layout>
+              </widget>
+            </widget>
+          </item>
+          <item>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+              <property name="spacing">
+                <number>0</number>
+              </property>
+              <property name="sizeConstraint">
+                <enum>QLayout::SetMinimumSize</enum>
+              </property>
+            </layout>
+          </item>
+          <item>
+            <spacer name="vSpacer1">
+              <property name="orientation">
+                <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+                <size>
+                  <width>100</width>
+                  <height>10</height>
+                </size>
+              </property>
+            </spacer>
+          </item>
+          <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0">
+              <property name="spacing">
+                <number>0</number>
+              </property>
+              <property name="sizeConstraint">
+                <enum>QLayout::SetMinimumSize</enum>
+              </property>
+              <property name="topMargin">
+                <number>0</number>
+              </property>
+            </layout>
+          </item>
+          <item>
+            <widget class="QPushButton" name="pushButton_freeselection">
+              <property name="enabled">
+                <bool>false</bool>
+              </property>
+              <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                </sizepolicy>
+              </property>
+              <property name="text">
+                <string>Free Positioning</string>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </widget>
+      <widget class="QPushButton" name="button_cancel">
+        <property name="enabled">
+          <bool>true</bool>
+        </property>
+        <property name="geometry">
+          <rect>
+            <x>300</x>
+            <y>700</y>
+            <width>91</width>
+            <height>27</height>
+          </rect>
+        </property>
+        <property name="text">
+          <string>Cancel</string>
+        </property>
+      </widget>
+      <widget class="Line" name="line">
+        <property name="geometry">
+          <rect>
+            <x>10</x>
+            <y>150</y>
+            <width>381</width>
+            <height>20</height>
+          </rect>
+        </property>
+        <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+        </property>
+      </widget>
+      <widget class="QPushButton" name="button_sign">
+        <property name="enabled">
           <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="checkBox_location">
-         <property name="text">
-          <string>Location:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="location_textbox">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QCheckBox" name="timestamp_checkBox">
-         <property name="text">
-          <string>Add Timestamp</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="visible_checkBox">
-         <property name="text">
-          <string>Visible Signature?</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QPushButton" name="pushButton_switchOrientation">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>285</x>
-      <y>510</y>
-      <width>32</width>
-      <height>32</height>
-     </rect>
-    </property>
-     <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="styleSheet">
-          <string notr="true">border: none;margin: 0px;padding: 0px;</string>
-    </property>
-    <property name="text">
-     <string></string>
-    </property>
-   </widget>
-
-   <widget class="QPushButton" name="pushButton_imgChooser">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>630</y>
-      <width>150</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="text">
-     <string>Choose custom image</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_selectedimg">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>580</y>
-      <width>185</width>
-      <height>93</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
+        </property>
+        <property name="geometry">
+          <rect>
+            <x>200</x>
+            <y>700</y>
+            <width>91</width>
+            <height>27</height>
+          </rect>
+        </property>
+        <property name="text">
+          <string>Sign</string>
+        </property>
+      </widget>
+      <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+          <rect>
+            <x>10</x>
+            <y>180</y>
+            <width>381</width>
+            <height>121</height>
+          </rect>
+        </property>
+        <layout class="QVBoxLayout" name="vertical_top">
+          <item>
+            <layout class="QFormLayout" name="formLayout">
+              <property name="fieldGrowthPolicy">
+                <enum>QFormLayout::ExpandingFieldsGrow</enum>
+              </property>
+              <property name="labelAlignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+              <property name="formAlignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+              <item row="0" column="0">
+                <widget class="QCheckBox" name="checkBox_reason">
+                  <property name="text">
+                    <string>Reason:</string>
+                  </property>
+                </widget>
+              </item>
+              <item row="0" column="1">
+                <widget class="QLineEdit" name="reason_textbox">
+                  <property name="enabled">
+                    <bool>false</bool>
+                  </property>
+                </widget>
+              </item>
+              <item row="1" column="0">
+                <widget class="QCheckBox" name="checkBox_location">
+                  <property name="text">
+                    <string>Location:</string>
+                  </property>
+                </widget>
+              </item>
+              <item row="1" column="1">
+                <widget class="QLineEdit" name="location_textbox">
+                  <property name="enabled">
+                    <bool>false</bool>
+                  </property>
+                </widget>
+              </item>
+            </layout>
+          </item>
+          <item>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+                <widget class="QCheckBox" name="timestamp_checkBox">
+                  <property name="text">
+                    <string>Add Timestamp</string>
+                  </property>
+                </widget>
+              </item>
+              <item>
+                <widget class="QCheckBox" name="visible_checkBox">
+                  <property name="text">
+                    <string>Visible Signature?</string>
+                  </property>
+                </widget>
+              </item>
+            </layout>
+          </item>
+        </layout>
+      </widget>
+    </widget>
   </widget>
- </widget>
- <customwidgets>
-  <customwidget>
-   <class>MyListView</class>
-   <extends>QListView</extends>
-   <header>mylistview.h</header>
-  </customwidget>
- </customwidgets>
- <resources/>
- <connections/>
+  <customwidgets>
+    <customwidget>
+      <class>MyListView</class>
+      <extends>QListView</extends>
+      <header>mylistview.h</header>
+    </customwidget>
+  </customwidgets>
+  <resources/>
+  <connections/>
 </ui>
