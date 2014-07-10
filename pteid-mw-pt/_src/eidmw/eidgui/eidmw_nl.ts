@@ -1611,6 +1611,29 @@ Please specify .xml, .csv or .eid</source>
 	<source>PDF Signature</source> 
 	<translation>Assinatura de ficheiros PDF</translation>
 </message>
+
+    <message>
+        <source>Horizontal position: %1</source>
+        <translation>Na horizontal</translation>
+    </message>
+    <message>
+        <source>Vertical position: %1</source>
+        <translation>Na vertical</translation>
+    </message>
+    <message>
+        <source>PDF Signature - Free Positioning</source>
+        <translation>Assinatura de PDF - Posicionamento preciso</translation>
+
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation>Limpar</translation>
+    </message>
+    <message>
+        <source>A4 Page</source>
+        <translation>Página A4</translation>
+    </message>
+
 <message>
 	<source>Free Positioning</source> 
 	<translation>Posicionamento preciso</translation>
@@ -1701,6 +1724,10 @@ Escolha outra por favor.</translation>
 <message>
 	<source>Page</source>
 	<translation>Página</translation>
+</message>
+<message>
+	<source>Location</source>
+	<translation>Localização</translation>
 </message>
 <message>
 	<source>Signing PDF file(s)...</source>
