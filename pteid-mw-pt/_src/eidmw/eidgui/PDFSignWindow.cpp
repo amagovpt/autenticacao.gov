@@ -675,7 +675,7 @@ void PDFSignWindow::on_radioButton_lastpage_toggled(bool value)
 {
 	if (value && m_pdf_sig)
 	{
-		// clearAllSectors();
+         clearAllSectors();
          QString sectors =
             QString::fromAscii(m_pdf_sig->getOccupiedSectors(m_current_page_number));
          highlightSectors(sectors);
@@ -688,10 +688,10 @@ void PDFSignWindow::on_spinBox_page_valueChanged(int new_value)
 	//Check if there is at least 1 PDF chosen
 	if (!m_pdf_sig)
 		return;
-	// clearAllSectors();
+     clearAllSectors();
 
-	// QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(new_value));
-	// highlightSectors(sectors);
+     QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(new_value));
+     highlightSectors(sectors);
 
 }
 
@@ -741,7 +741,27 @@ void MyGraphicsScene::setOccupiedSector(int s)
     }
 }
 
-void MyGraphicsScene::resetRectangles(QPointF selected_pos)
+void MyGraphicsScene::clearAllRectangles()
+{
+    QList<QGraphicsItem *> scene_items = this->items();
+
+    int i = 0;
+
+    while (i!= scene_items.size())
+    {
+        QGraphicsItem *item = scene_items.at(i);
+        //Find the rectangle object
+        if (item->type() == SelectableRectType)
+        {
+            SelectableRectangle *rect = qgraphicsitem_cast<SelectableRectangle*>(scene_items.at(i));
+            rect->resetColor();
+        }
+
+        i++;
+    }
+}
+
+void MyGraphicsScene::selectNewRectangle(QPointF selected_pos)
 {
  	QList<QGraphicsItem *> scene_items = this->items();
 
@@ -897,7 +917,7 @@ void SelectableRectangle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
         return;
 
 	m_brush = QBrush(Qt::black);
-	my_scene->resetRectangles(pos());
+    my_scene->selectNewRectangle(pos());
 	update();
 }
 
@@ -941,6 +961,10 @@ void PDFSignWindow::setPosition(QPointF new_pos)
 {
     this->rx = new_pos.rx()-margin;
 	this->ry = new_pos.ry()-margin;
+
+    //Actual coordinates passed to SignPDF() expressed as a fraction
+    sig_coord_x = this->rx/g_scene_width;
+    sig_coord_y = this->ry/g_scene_height;
 
      ui.label_x->setText(tr("Horizontal position: %1")
         .arg(QString::number(convertX(), 'f', 1)));
@@ -1104,20 +1128,14 @@ void PDFSignWindow::addSquares(MyGraphicsScene * scene)
 
 }
 
-/*
+
 void PDFSignWindow::clearAllSectors()
 {
 
-	for(int i = 0 ;i < table_lines; i++ ) 
-	{
-		for (int j = 0; j < table_columns; j++)
-		{
-		ui.tableWidget->item(i, j)->setBackground(m_default_background);
-		}
-	}
+     my_scene->clearAllRectangles();
 
 }
-*/
+
 
 /*
 bool PDFSignWindow::validateSelectedSector()

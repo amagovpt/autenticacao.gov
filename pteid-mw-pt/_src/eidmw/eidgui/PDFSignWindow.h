@@ -53,8 +53,9 @@ public:
         parent = my_parent;
     }
 
-	void resetRectangles(QPointF pos);
+    void selectNewRectangle(QPointF pos);
     void setOccupiedSector(int s);
+    void clearAllRectangles();
     void switchFreeSelectMode() { free_select = !free_select; }
 
     bool isFreeSelectMode() { return free_select; }
@@ -162,7 +163,7 @@ class PDFSignWindow : public QDialog
 	    void clear_sig_position();
 	    // bool validateSelectedSector();
         void highlightSectors(QString &csv_sectors);
-	    // void clearAllSectors();
+        void clearAllSectors();
 	    void addFileToListView(QStringList &str);
 	    void run_sign(int page, QString& savefile, char *location, char *reason);
 	    void ShowSuccessMsgBox();
