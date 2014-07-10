@@ -32,7 +32,7 @@ namespace eIDMW
 		EIDMW_APL_API void batchAddFile(char *file_path);
 		EIDMW_APL_API void enableTimestamp();
 
-		EIDMW_APL_API void setVisible(unsigned int page, int sector);
+		EIDMW_APL_API void setVisible(unsigned int page, int sector, bool is_landscape);
 		EIDMW_APL_API void setVisibleCoordinates(unsigned int page, double coord_x, double coord_y);
 		EIDMW_APL_API char *getOccupiedSectors(int page);
 		EIDMW_APL_API int getPageCount();
@@ -41,13 +41,15 @@ namespace eIDMW
 		//General interface to signing in single file-mode or batch-mode
 		EIDMW_APL_API int signFiles(const char *location, const char *reason,
 			const char *outfile_path);
+        EIDMW_APL_API bool isLandscapeFormat();
 		EIDMW_APL_API void setCustomImage(unsigned char *img_data, unsigned long img_length);
 
 	private:
 
 		void getCitizenData();
 		std::string generateFinalPath(const char *output_dir, const char *path);
-		PDFRectangle getSignatureRectangle(double, double);
+		PDFRectangle computeSigLocationFromSector(double, double, int);
+		PDFRectangle computeSigLocationFromSectorLandscape(double, double, int);
 		int signSingleFile(const char *location, const char *reason,
 			const char *outfile_path);
 
@@ -55,15 +57,16 @@ namespace eIDMW
 		PDFDoc *m_doc;
 
 		const char * m_pdf_file_path;
-		static const double sig_height;
+		static const double sig_height = 90.0;
 		static const int lr_margin = 30;
-		static const double tb_margin;
+		static const double tb_margin = 40.0;
 
 		char *m_civil_number;
 		char *m_citizen_fullname;
 		unsigned int m_page, m_sector;
 		double location_x, location_y;
 		bool m_visible;
+		bool m_isLandscape;
 		bool m_batch_mode;
 		bool m_timestamp;
 		std::vector<char *> m_files_to_sign;

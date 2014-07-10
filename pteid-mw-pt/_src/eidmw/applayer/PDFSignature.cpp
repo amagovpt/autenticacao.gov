@@ -23,8 +23,8 @@
 namespace eIDMW
 {
 
-	const double PDFSignature::sig_height = 90;
-	const double PDFSignature::tb_margin = 40.0;
+	// const double PDFSignature::sig_height = 90;
+	// const double PDFSignature::tb_margin = 40.0;
 
 	PDFSignature::PDFSignature()
 	{
@@ -94,11 +94,12 @@ namespace eIDMW
 		m_timestamp = true;
 	}
 
-	void PDFSignature::setVisible(unsigned int page_number, int sector_number)
+	void PDFSignature::setVisible(unsigned int page_number, int sector_number, bool is_landscape)
 	{
 		m_visible = true;
 		m_page = page_number;
 		m_sector = sector_number;
+		m_isLandscape = is_landscape;
 
 	}
 	
@@ -111,41 +112,108 @@ namespace eIDMW
 
 	}
 
-	PDFRectangle PDFSignature::getSignatureRectangle(double page_height, double page_width)
+	bool PDFSignature::isLandscapeFormat()
 	{
-		// Add padding, adjust to subtly tweak the location 
-		// The units for x_pad, y_pad, sig_height and sig_width are postscript
-		// points (1 px == 0.75 points)
+		if (m_doc)
+        {
+            if (!m_doc->isOk())
+                return false;
+
+            Page *p = m_doc->getPage(m_page);
+            PDFRectangle *p_media = p->getMediaBox();
+
+            double height = p_media->y2, width = p_media->x2;
+
+            return width > height;
+		}
+		return false;
+
+	}
+
+
+	PDFRectangle PDFSignature::computeSigLocationFromSectorLandscape(double page_height, double page_width, int sector)
+	{
 		PDFRectangle sig_rect;
 		double vert_align = 16; //Add this to vertically center inside each cell
+		//Number of columns for portrait layout
+		int columns = 4.0;
 
-		double sig_width = (page_width - lr_margin*2) / 3.0;
+		double sig_width = (page_width - lr_margin*2) / columns;
 		
 		//Add left margin
 		sig_rect.x1 = lr_margin;
 		sig_rect.x2 = lr_margin;
 
-		if (m_sector < 1 || m_sector > 18)
-			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-18]\n", 
-					m_sector);
+		if (sector < 1 || sector > 20)
+			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-20]\n", 
+					sector);
 		
-		if (m_sector < 16)
+		if (sector < 17)
 		{
-			int line = m_sector / 3 + 1;
-			if (m_sector % 3 == 0)
-			   line = m_sector / 3;
+			int line = sector / 4 + 1;
+			if (sector % 4 == 0)
+			   line = sector / 3;
 
 			sig_rect.y1 += (page_height - 2*tb_margin) * (6-line) / 6.0;
 			sig_rect.y2 += (page_height - 2*tb_margin) * (6-line) / 6.0;
 		}
 
-		if (m_sector % 3 == 2 )
+		int column = (sector-1) % 4;
+
+		sig_rect.x1 += (column * sig_width);
+		sig_rect.x2 += (column * sig_width);
+		
+		sig_rect.y1 += tb_margin + vert_align;
+
+		//Define height and width of the rectangle
+		sig_rect.x2 += sig_width;
+		sig_rect.y2 += sig_height + tb_margin + vert_align;
+
+		
+		fprintf(stderr, "DEBUG: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
+
+		return sig_rect;
+	}
+	
+
+	PDFRectangle PDFSignature::computeSigLocationFromSector(double page_height, double page_width, int sector)
+	{
+		fprintf(stderr, "computeSigLocationFromSector called with sector=%d\n", sector);
+		// Add padding, adjust to subtly tweak the location
+		// The units for x_pad, y_pad, sig_height and sig_width are postscript
+		// points (1 px == 0.75 points)
+		PDFRectangle sig_rect;
+		double vert_align = 16; //Add this to vertically center inside each cell
+		//Number of columns for portrait layout
+		int columns = 3.0;
+
+		double sig_width = (page_width - lr_margin*2) / columns;
+		
+		//Add left margin
+		sig_rect.x1 = lr_margin;
+		sig_rect.x2 = lr_margin;
+
+		if (sector < 1 || sector > 18)
+			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-18]\n", 
+					sector);
+		
+		if (sector < 16)
+		{
+			int line = sector / 3 + 1;
+			if (sector % 3 == 0)
+			   line = sector / 3;
+
+			sig_rect.y1 += (page_height - 2*tb_margin) * (6-line) / 6.0;
+			sig_rect.y2 += (page_height - 2*tb_margin) * (6-line) / 6.0;
+		}
+
+		if (sector % 3 == 2 )
 		{
 			sig_rect.x1 += sig_width;
 			sig_rect.x2 += sig_width;
 		}
 
-		if (m_sector % 3 == 0 )
+		if (sector % 3 == 0 )
 		{
 			sig_rect.x1 += sig_width * 2.0;
 			sig_rect.x2 += sig_width * 2.0;
@@ -310,7 +378,12 @@ namespace eIDMW
 		{
 			//Sig Location by sector
 			if (location_x == -1)
-				sig_location = getSignatureRectangle(height, width);
+			{
+				if (m_isLandscape)
+					sig_location = computeSigLocationFromSectorLandscape(height, width, m_sector);
+				else
+					sig_location = computeSigLocationFromSector(height, width, m_sector);
+			}
 			else
 			{
 			    double sig_width = (width - lr_margin*2) / 3.0;

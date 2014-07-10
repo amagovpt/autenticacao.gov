@@ -239,7 +239,7 @@ long PTEID_SmartCard::readFile(const char *fileID, PTEID_ByteArray &in,PTEID_Pin
 }
 
 
-int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, const char *location, const char *reason,
+int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
 			const char *outfile_path)
 {
 	PDFSignature *pdf_sig = NULL;
@@ -253,7 +253,7 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_s
 	pdf_sig = sig_handler.mp_signature; 
 
 	if (page_sector != 0 && page != 0)
-		pdf_sig->setVisible(page, page_sector);
+		pdf_sig->setVisible(page, page_sector, is_landscape);
 
 	rc = pcard->SignPDF(pdf_sig, location, reason, outfile_path);
 
@@ -302,6 +302,11 @@ void PTEID_PDFSignature::addToBatchSigning(char *input_path)
 {
 	mp_signature->batchAddFile(input_path);
 
+}
+
+bool PTEID_PDFSignature::isLandscapeFormat()
+{
+	return mp_signature->isLandscapeFormat();
 }
 
 void PTEID_PDFSignature::enableTimestamp()

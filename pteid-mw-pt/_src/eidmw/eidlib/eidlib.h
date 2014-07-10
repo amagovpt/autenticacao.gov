@@ -823,6 +823,7 @@ class PTEID_PDFSignature
 		PTEIDSDK_API void addToBatchSigning(char *input_path);
 		PTEIDSDK_API int getPageCount();
 		PTEIDSDK_API void enableTimestamp();
+		PTEIDSDK_API bool isLandscapeFormat();
 		PTEIDSDK_API char *getOccupiedSectors(int page);
 		PTEIDSDK_API void setCustomImage(unsigned char *image_data, unsigned long image_length);
 
@@ -909,7 +910,7 @@ public:
 	     PTEIDSDK_API void SignXadesTIndividual(const char * const* paths, unsigned int n_paths, const char *output_path); /** Store the Xades-T signature in individual zip containers  */
 		
 	     //PDF Signature with location by page sector (the portrait A4 page is split into 18 cells: 6 lines and 3 columns)
-	     PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, const char *location, const char *reason,
+	     PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
 			const char *outfile_path);
 
 	     //PDF Signature with location by precise location (in postscript points) the coordinate system has its origin in the top left corner 
