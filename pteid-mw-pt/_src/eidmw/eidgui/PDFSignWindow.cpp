@@ -334,6 +334,11 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 	ui.radioButton_lastpage->setEnabled(checked);
 	ui.radioButton_choosepage->setEnabled(checked);
 
+    //Pre-select first page option
+    if (!ui.radioButton_choosepage->isChecked() && !ui.radioButton_firstpage->isChecked()
+            && !ui.radioButton_lastpage->isChecked())
+        ui.radioButton_firstpage->click();
+
 	bool choose_b = ui.radioButton_choosepage->isChecked();
 
 	if (checked) {
