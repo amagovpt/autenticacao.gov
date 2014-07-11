@@ -533,15 +533,6 @@ void PDFSignWindow::on_button_sign_clicked()
 		m_scaled_image.save(&buffer, "JPG");
 		// fprintf(stderr, "setting CustomImage with data= 0x%p: %ld\n", ba.data(), ba.size());
 
-		/* TODO: remove this Write out the data file */
-		FILE *hello = fopen("/tmp/scaled_image.jpg", "wb");
-		size_t ret = fwrite(m_jpeg_scaled_data.data(), sizeof(char), m_jpeg_scaled_data.size(), hello);
-
-		if (ret != m_jpeg_scaled_data.size())
-			fprintf(stderr, "Error writing output file!");
-
-		fclose(hello);
-
 		m_pdf_sig->setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
 
 	}
@@ -973,9 +964,6 @@ void PDFSignWindow::setPosition(QPointF new_pos)
 
      ui.label_x->setText(tr("Horizontal position: %1")
         .arg(QString::number(convertX(), 'f', 1)));
-
-//	ui.label_x->setText("Horizontal position: %1");
-//	ui.label_y->setText("Vertical position: %1");
 	
      ui.label_y->setText(tr("Vertical Position: %2")
         .arg(QString::number(convertY(), 'f', 1)));
@@ -990,16 +978,6 @@ void PDFSignWindow::setSelectedSector(int sector)
     ui.label_y->setText("");
 }
 
-/*
-void FreeSelectionDialog::on_pushButton_reset_clicked()
-{
-
-	ui.label_x->setText(tr("Horizontal position: 0.0"));
-	ui.label_y->setText(tr("Vertical position: 0.0"));
-	resetRectanglePos();
-
-}
-*/
 
 void PDFSignWindow::on_pushButton_ok_clicked()
 {
@@ -1054,7 +1032,7 @@ void PDFSignWindow::on_pushButton_freeselect_clicked()
 
 void PDFSignWindow::getValues(double *x, double *y)
 {
-       *x = convertX();
+    *x = convertX();
        *y = convertY();
 }
 
