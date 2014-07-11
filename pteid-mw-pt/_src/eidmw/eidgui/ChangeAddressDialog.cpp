@@ -9,6 +9,7 @@ ChangeAddressDialog::ChangeAddressDialog(QWidget* parent)
 	//Set icon
 	const QIcon Ico = QIcon( ":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png" );
 	this->setWindowIcon( Ico );
+    this->setFixedSize(this->width(), this->height());
 	//QDialogButtonBox buttonBox = ;	
 	connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
