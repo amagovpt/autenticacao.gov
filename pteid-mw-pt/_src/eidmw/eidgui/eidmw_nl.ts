@@ -15,9 +15,17 @@
         <source>PDF Signature</source>
         <translation>Assinatura de PDF</translation>
      </message>
-      <message>
-        <source>Universal Signature</source>
-        <translation>Assinatura Universal</translation>
+     <message>
+     <source>Universal Signature</source>
+     <translation>Assinatura Universal</translation>
+     </message>
+     <message>
+     <source>Authentication Certificate:</source>
+     <translation>Certificado de Autenticação:</translation>
+     </message>
+     <message>
+     <source>Signature Certificate:</source>
+     <translation>Certificado de Assinatura:</translation>
      </message>
      <message>
         <source>The certificates could not be validated, the certification path is not complete</source>

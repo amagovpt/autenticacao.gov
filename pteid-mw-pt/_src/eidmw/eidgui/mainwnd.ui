@@ -57,7 +57,7 @@
        <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_Wellcome"/>
       <widget class="QWidget" name="page_Identity">
@@ -502,27 +502,37 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
        <widget class="QLabel" name="label_12">
         <property name="geometry">
          <rect>
-          <x>660</x>
+          <x>650</x>
           <y>70</y>
-          <width>131</width>
+          <width>141</width>
           <height>21</height>
          </rect>
         </property>
+        <property name="styleSheet">
+         <string notr="true">
+          font: 9pt &quot;Arial&quot;;
+        </string>
+        </property>
         <property name="text">
-         <string>Cert Signature:</string>
+         <string>Signature Certificate:</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_13">
         <property name="geometry">
          <rect>
-          <x>660</x>
+          <x>650</x>
           <y>20</y>
-          <width>141</width>
+          <width>151</width>
           <height>21</height>
          </rect>
         </property>
         <property name="text">
-         <string>Cert Authentication:</string>
+         <string>Authentication Certificate:</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          font: 9pt &quot;Arial&quot;;
+        </string>
         </property>
        </widget>
       </widget>
@@ -1172,13 +1182,7 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
          <bool>true</bool>
         </property>
        </widget>
-      <widget class="QPushButton" name="btnAddress_Change">
-        <property name="styleSheet">
-         <string notr="true">color: rgb(108, 108, 108);
-          font: 75 12pt &quot;Arial&quot;;
-          background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
-        </string>
-        </property>
+       <widget class="QPushButton" name="btnAddress_Change">
         <property name="geometry">
          <rect>
           <x>500</x>
@@ -1186,6 +1190,12 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
           <width>200</width>
           <height>41</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(108, 108, 108);
+          font: 75 12pt &quot;Arial&quot;;
+          background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
+        </string>
         </property>
         <property name="text">
          <string>Address Confirmation</string>
