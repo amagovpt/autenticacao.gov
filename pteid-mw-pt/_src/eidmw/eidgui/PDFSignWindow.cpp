@@ -55,14 +55,6 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	ui.label_choose_sector->setWordWrap(true);
 	*/
 
-	// ui.pushButton_switchOrientation->setText(tr("Horizontal page"));
-
-	// TODO: think where we should place this button if at all...
-	// QPixmap pixmap(":/images/Images/Icons/icon_rotate.png");
-	// QIcon ButtonIcon(pixmap);
-	// ui.pushButton_switchOrientation->setIcon(ButtonIcon);
-	// ui.pushButton_switchOrientation->setIconSize(pixmap.rect().size());
-
 	//DEBUG
 	//ui.label_selectedsector->setWordWrap(true);	
 
@@ -100,21 +92,6 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	}
 
 	ui.verticalLayout->setContentsMargins(15,15,15,15);
-	
-	/*
-	int cell_number = 1;	
-
-	for (i = 0; i < table_lines; i++)
-	{
-		for (j = 0; j < table_columns; j++)
-		{
-			QTableWidgetItem * it = new QTableWidgetItem(
-					QString::number(cell_number++));
-			//Set flags because the default values allow editing
-			it->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-			ui.tableWidget->setItem(i, j, it);
-		}
-	} */
 
 	//save the default background to use in clearAllSectors()
 	// m_default_background = ui.tableWidget->item(0,0)->background();
