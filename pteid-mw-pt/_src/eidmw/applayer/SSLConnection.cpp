@@ -598,7 +598,7 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 	cJSON *json = NULL;
 	char *endpoint = NULL;
 	DHParamsResponse *server_params = new DHParamsResponse();
-	char *dh_params_template = "{\"DHParams\":{ \"secretCode\" : \"%s\", \"process\" : \"%s\", \"P\": \"%s\", \"Q\": \"%s\", \"G\":\"%s\", \"cvc_ca_public_key\": \"%s\",\"card_auth_public_key\": \"%s\", \"certificateChain\": \"%s\", \"version\": %d, \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
+    char *dh_params_template = "{\"DHParams\":{ \"secretCode\" : \"%s\", \"process\" : \"%s\", \"P\": \"%s\", \"Q\": \"%s\", \"G\":\"%s\", \"cvc_ca_public_key\": \"%s\",\"card_auth_public_key\": \"%s\", \"certificateChain\": \"%s\", \"version\": %d, \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
 
 	char *dh_params_template2 = "{\"DHParams\":{ \"secretCode\" : \"%s\", \"process\" : \"%s\", \"cvc_ca_public_key\": \"%s\",\"card_auth_public_key\": \"%s\", \"certificateChain\": \"%s\", \"serialNumber\": \"%s\", \"version\": %d, \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
 	char * post_dhparams = (char *) malloc(5*1024);
@@ -610,13 +610,13 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 			secretCode, process, p->dh_p, p->dh_q, p->dh_g, p->cvc_ca_public_key,
 			p->card_auth_public_key, p->certificateChain, p->version);
 
-		endpoint = "/changeaddress";
+        endpoint = ENDPOINT_07;
 	}
 	else
 	{
 		sprintf(post_dhparams, dh_params_template2,
 			secretCode, process, p->cvc_ca_public_key, p->card_auth_public_key, p->certificateChain, serialNumber, p->version);
-		endpoint = "/changeaddress101";
+        endpoint = ENDPOINT_101;
 	}
 
 	snprintf(request_headers, sizeof(request_headers),	
