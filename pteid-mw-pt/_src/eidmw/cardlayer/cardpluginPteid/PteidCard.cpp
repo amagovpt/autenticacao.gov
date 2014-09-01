@@ -820,7 +820,11 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
     	// PSO: Hash GEMSAFE
     	oResp1 = SendAPDU(0x2A, 0x90, 0xA0, oData1);
     	// PSO: Compute Digital Signature GEMSAFE
-		oResp = SendAPDU(0x2A, 0x9E, 0x9A, 0x80);
+    	// Length of expected signature: for pteid it's either 128 or 256 bytes
+    	// If expected length is 256 it can be encoded as 0 following ISO 7816-4 Section 5.1
+
+        unsigned char len_byte = key.ulKeyLenBytes == 256 ? 0 : key.ulKeyLenBytes;
+		oResp = SendAPDU(0x2A, 0x9E, 0x9A, len_byte);
     } else {
     	// PSO:Hash IAS - does CDS
     	oResp = SendAPDU(0x88, 0x02, 0x00, oData);

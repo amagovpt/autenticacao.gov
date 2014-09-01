@@ -98,7 +98,6 @@
 
 #define SHA1_LEN 20
 #define SHA256_LEN 32
-#define PTEID_SIGNATURE_LENGTH 128
 
 XERCES_CPP_NAMESPACE_USE
 
@@ -1247,14 +1246,14 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 			throw;
 		}
 
-		sig->signExternal((XMLByte *)(rsa_signature.GetBytes()), PTEID_SIGNATURE_LENGTH); //RSA Signature with modlength=1024 bits	
+		sig->signExternal((XMLByte *)(rsa_signature.GetBytes()), rsa_signature.Size()); //RSA Signature with modlength=1024 bits	
 
 		//XAdES-T level
 		if (m_do_timestamping || m_do_long_term_validation)
 		{
 			AddSignatureTimestamp(sig->getParentDocument());
 		}
-		
+		 
 		//XAdES-A level stuff
 		if (m_do_long_term_validation)
 		{
