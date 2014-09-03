@@ -23,8 +23,8 @@
 namespace eIDMW
 {
 
-	// const double PDFSignature::sig_height = 90;
-	// const double PDFSignature::tb_margin = 40.0;
+	const double PDFSignature::sig_height = 90;
+	const double PDFSignature::tb_margin = 40.0;
 
 	PDFSignature::PDFSignature()
 	{

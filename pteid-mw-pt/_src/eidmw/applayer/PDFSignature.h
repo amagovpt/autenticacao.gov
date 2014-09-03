@@ -57,9 +57,9 @@ namespace eIDMW
 		PDFDoc *m_doc;
 
 		const char * m_pdf_file_path;
-		static const double sig_height = 90.0;
+		static const double sig_height;
 		static const int lr_margin = 30;
-		static const double tb_margin = 40.0;
+		static const double tb_margin;
 
 		char *m_civil_number;
 		char *m_citizen_fullname;
