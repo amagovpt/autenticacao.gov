@@ -279,8 +279,7 @@ private slots:
 	void showJavaLaunchError(QProcess::ProcessError error);
 
 	void showCertStatusSideinfo(PTEID_CertifStatus certStatus);
-	void showCertStatusAuth();
-	void showCertStatusSign();
+
 	void getCertStatusText(PTEID_CertifStatus certStatus, QString& strCertStatus);
 	//PTEID_CertifStatus checkCertStatus(PTEID_Certificate *cert);
 

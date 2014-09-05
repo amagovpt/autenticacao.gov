@@ -218,9 +218,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	connect(&this->FutureWatcher, SIGNAL(finished()), m_progress, SLOT(cancel()));
 
-	connect(&this->watcherCertStatusAuth, SIGNAL(finished()), this, SLOT(showCertStatusAuth()));
-	connect(&this->watcherCertStatusSign, SIGNAL(finished()), this, SLOT(showCertStatusSign()));
-
 	//------------------------------------
 	//
 	// set the window Icon (as it appears in the left corner of the window)
@@ -1629,24 +1626,6 @@ void MainWnd::showCertStatusSideinfo(PTEID_CertifStatus certStatus)
 
 	m_ui.txtCert_RevStatus->setText(treeItemStatus);
 	m_ui.txtCert_RevStatus->setAccessibleName(treeItemStatus);
-}
-
-void MainWnd::showCertStatusAuth()
-{
-	QString msgResultStatus;
-	getCertStatusText(watcherCertStatusAuth.result(), msgResultStatus);
-
-	m_ui.txtIdentity_CertStatusAuth->setText(msgResultStatus);
-	m_ui.txtIdentity_CertStatusAuth->setAccessibleName(msgResultStatus);
-}
-
-void MainWnd::showCertStatusSign()
-{
-    QString msgResultStatus;
-    getCertStatusText(watcherCertStatusSign.result(), msgResultStatus);
-
-    m_ui.txtIdentity_CertStatusSign->setText(msgResultStatus);
-    m_ui.txtIdentity_CertStatusSign->setAccessibleName(msgResultStatus);
 }
 
 void MainWnd::getCertStatusText(PTEID_CertifStatus certStatus, QString &strCertStatus)
@@ -3272,21 +3251,6 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 		this->FutureWatcher.setFuture(future);
 		m_progress->exec();
 
-		// progress->exec() blocks until the data we want is loaded
-		PTEID_Certificates *certs = m_CI_Data.m_CertifInfo.getCertificates();
-
-		if (certs)
-		{
-			QFuture<PTEID_CertifStatus> futureCertStatusAuth = QtConcurrent::run(&certs->getAuthentication(), &PTEID_Certificate::getStatus);
-			QFuture<PTEID_CertifStatus> futureCertStatusSign = QtConcurrent::run(&certs->getSignature(), &PTEID_Certificate::getStatus);
-
-			//QFuture<PTEID_CertifStatus> futureCertStatusAuth = QtConcurrent::run(this, &MainWnd::checkCertStatus, &certs->getAuthentication());
-			//QFuture<PTEID_CertifStatus> futureCertStatusSign = QtConcurrent::run(this, &MainWnd::checkCertStatus, &certs->getSignature());
-
-			watcherCertStatusAuth.setFuture(futureCertStatusAuth);
-			watcherCertStatusSign.setFuture(futureCertStatusSign);
-		}
-
 		//Load the picture in PNG format
 		imgPicture = QImage();
 
@@ -3476,9 +3440,6 @@ void MainWnd::refreshTabIdentity( void )
 	m_ui.txtIdentity_Parents_Mother->setAccessibleName( QString::fromUtf8(PersonFields[MOTHER].toStdString().c_str()) );
 	m_ui.txtIdentity_AccidentalIndications->setText( QString::fromUtf8(PersonFields[ACCIDENTALINDICATIONS].toStdString().c_str()) );
 	m_ui.txtIdentity_AccidentalIndications->setAccessibleName( QString::fromUtf8(PersonFields[ACCIDENTALINDICATIONS].toStdString().c_str()) );
-
-	m_ui.txtIdentity_CertStatusAuth->setText(tr("Checking..."));
-	m_ui.txtIdentity_CertStatusSign->setText(tr("Checking..."));
 }
 
 //*****************************************************
