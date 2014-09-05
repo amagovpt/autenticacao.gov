@@ -91,7 +91,7 @@
 	</Target>
 	-->
   <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir)\sign_msi.bat</PostBuildEvent>
+    <PostBuildEvent>$(SolutionDir)\sign_msi_x64.bat</PostBuildEvent>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
