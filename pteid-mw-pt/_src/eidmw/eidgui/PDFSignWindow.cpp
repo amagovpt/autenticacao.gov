@@ -70,14 +70,7 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	ui.pdf_listview->setModel(list_model);
 	ui.pdf_listview->enableNotify();
 
-	int items = ui.horizontalLayout->count();
-
-	for (int i = 0; i!= items; i++)
-	{
-		ui.horizontalLayout->itemAt(i)->setAlignment(Qt::AlignLeft);
-	}
-
-	items = ui.horizontalLayout_3->count();
+	int items = ui.horizontalLayout_3->count();
 
 	for (int i = 0; i!= items; i++)
 	{
@@ -942,7 +935,7 @@ void PDFSignWindow::setPosition(QPointF new_pos)
      ui.label_x->setText(tr("Horizontal position: %1")
         .arg(QString::number(convertX(), 'f', 1)));
 	
-     ui.label_y->setText(tr("Vertical Position: %2")
+     ui.label_y->setText(tr("Vertical position: %1")
         .arg(QString::number(convertY(), 'f', 1)));
 
 }

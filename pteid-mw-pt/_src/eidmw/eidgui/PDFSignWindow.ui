@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>435</width>
-    <height>800</height>
+    <height>820</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,7 +25,7 @@
      <x>8</x>
      <y>0</y>
      <width>420</width>
-     <height>795</height>
+     <height>815</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -189,7 +189,7 @@
           <item>
            <widget class="QLabel" name="label_selectedimg">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+             <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -266,16 +266,6 @@
        </widget>
       </widget>
      </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="sizeConstraint">
-        <enum>QLayout::SetMinimumSize</enum>
-       </property>
-      </layout>
-     </item>
     </layout>
    </widget>
    <widget class="QPushButton" name="button_cancel">
@@ -329,7 +319,7 @@
       <x>10</x>
       <y>180</y>
       <width>381</width>
-      <height>121</height>
+      <height>128</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="vertical_top">
