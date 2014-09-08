@@ -1584,9 +1584,15 @@ Please specify .xml, .csv or .eid</source>
      </message>
 
      <message>
-        <source>Selected sector: </source>
-        <translation>Área Seleccionada: </translation>
+        <source>Selected sector: %1</source>
+        <translation>Área Seleccionada: %1</translation>
      </message>
+
+     <message>
+        <source>Choose custom image</source>
+        <translation>Imagem personalizada</translation>
+     </message>
+
      <message>
         <source>Change page orientation</source>
         <translation>Mudar orientação de página</translation>
@@ -1622,11 +1628,11 @@ Please specify .xml, .csv or .eid</source>
 
     <message>
         <source>Horizontal position: %1</source>
-        <translation>Na horizontal</translation>
+        <translation>Na horizontal: %1</translation>
     </message>
     <message>
         <source>Vertical position: %1</source>
-        <translation>Na vertical</translation>
+        <translation>Na vertical: %1</translation>
     </message>
     <message>
         <source>PDF Signature - Free Positioning</source>
