@@ -76,6 +76,22 @@ enum ItemTypes {
 		
 };
 
+class ImageCanvas : public QWidget
+{
+	Q_OBJECT
+public:
+	ImageCanvas(QWidget *parent): QWidget(parent) 
+	{   }
+	QImage drawToImage();
+	void setCustomPixmap(QPixmap pixmap) { user_pixmap = pixmap; }
+
+protected:
+	void paintEvent(QPaintEvent *);
+
+	QPixmap user_pixmap;
+
+};
+
 class SelectableRectangle: public QGraphicsItem
 {
 	public:
@@ -126,7 +142,7 @@ class PDFSignWindow : public QDialog
 	    void on_button_addfile_clicked();
 	    void on_button_sign_clicked();
 	    void on_button_cancel_clicked();
-	    // void on_pushButton_freeselection_clicked();
+
 	    void on_pushButton_imgChooser_clicked();
 	    // void on_pushButton_switchOrientation_clicked();
 	    void on_checkBox_location_toggled(bool);
@@ -138,7 +154,6 @@ class PDFSignWindow : public QDialog
 	    void on_spinBox_page_valueChanged(int);
 
 	    // Location Tab Stuff
-	    void on_pushButton_ok_clicked();
 		void on_pushButton_freeselect_clicked();
 //	    void on_tableWidget_currentCellChanged(int row, int column, int prev_row, int prev_column);
 	    // void on_FreeSelectionDialog_closed();
@@ -198,7 +213,7 @@ class PDFSignWindow : public QDialog
 
 	    QString current_input_path;
 	    QBrush m_default_background;
-	    QImage m_scaled_image;
+	    QImage m_custom_image;
 	    QByteArray m_jpeg_scaled_data;
 
 	    int m_selected_sector;
@@ -214,6 +229,8 @@ class PDFSignWindow : public QDialog
 
 		MyGraphicsScene * my_scene;
 		QGraphicsItem *my_rectangle;
+
+		ImageCanvas *image_canvas;
 		bool m_landscape_mode;
 
 		double rx, ry;

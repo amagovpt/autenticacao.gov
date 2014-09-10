@@ -18,6 +18,7 @@
         <file>Images/Icons/reader_question.png</file>
         <file>Images/Icons/Help.png</file>
         <file>Images/Icons/icon_rotate.png</file>
+        <file>Images/Icons/pteid_signature_small.png</file>
         <file>Images/a-z_identiteitskaart_logo.png</file>
         <file>Images/Page_background_Identity.png</file>
         <file>Images/bg-Blue.png</file>
@@ -47,6 +48,7 @@
         <file>Images/tab-backgrounds/bg_additional_data2.png</file>
         <file>Images/backgrounds/bg_toolbarMenu.png</file>
         <file>Images/backgrounds/bg_toolbarMenu2.png</file>
+        <file>Images/backgrounds/signature_image_default.png</file>
         <file>Images/submenu_backgrounds/bg_selected_menu_card.png</file>
         <file>Images/submenu_backgrounds/bg_selected_menu_tools.png</file>
         <file>Images/submenu_backgrounds/bg_selected_menu_language.png</file>

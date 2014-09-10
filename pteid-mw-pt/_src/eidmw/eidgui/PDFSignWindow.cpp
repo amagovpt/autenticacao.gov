@@ -77,19 +77,28 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 		ui.horizontalLayout_3->itemAt(i)->setAlignment(Qt::AlignLeft);
 	}
 
-	items = ui.verticalLayout->count();
 
-	for (int i = 0; i!= items; i++)
-	{
-		ui.verticalLayout->itemAt(i)->setAlignment(Qt::AlignTop);
-	}
 
 	ui.verticalLayout->setContentsMargins(15,15,15,15);
 
 	//save the default background to use in clearAllSectors()
 	// m_default_background = ui.tableWidget->item(0,0)->background();
+	// ui.label_selectedimg->setPixmap(QPixmap( ":/images/Images/backgrounds/signature_image_default.png"));
+	image_canvas = new ImageCanvas(ui.tab1);
+	image_canvas->setFixedSize(420, 200);
+	ui.verticalLayout->addWidget(image_canvas);
+	// image_canvas->setLayout(ui.verticalLayout);
+	//image_canvas->show();
 
-	this->setFixedSize(this->width(), this->height());
+	items = ui.verticalLayout->count();
+
+	for (int i = 0; i!= items; i++)
+	{
+		ui.verticalLayout->itemAt(i)->setAlignment(Qt::AlignTop);
+		// qDebug() << "Setting Alignment of verticalLayout " << endl;
+	}
+
+	this->setFixedSize(this->width(), this->height());	
 }
 
 #define ROWCOUNT_LANDSCAPE 5
@@ -160,6 +169,8 @@ PDFSignWindow::~PDFSignWindow()
 }
 
 
+
+
 /*
 void PDFSignWindow::on_tableWidget_currentCellChanged(int row, int column, 
 		int prev_row, int prev_column)
@@ -201,16 +212,6 @@ void PDFSignWindow::on_FreeSelectionDialog_closed()
 }
 */
 
-/*Launch the Free Selection Dialog
-void PDFSignWindow::on_pushButton_freeselection_clicked()
-{
-	if (!m_selection_dialog)
-		m_selection_dialog = new FreeSelectionDialog(this, horizontal_page_flag);
-	m_selection_dialog->open();
-	connect(m_selection_dialog, SIGNAL(accepted()), this, SLOT(on_FreeSelectionDialog_closed()));
-	
-}
-*/
 
 //Event received from myListView
 void PDFSignWindow::customEvent(QEvent *ev)
@@ -229,6 +230,79 @@ void PDFSignWindow::disableSignButton()
 
 	ui.button_sign->setEnabled(false);
 	this->card_present = false;
+}
+
+
+QImage ImageCanvas::drawToImage()
+{
+	const int spacing = 10;
+	const int img_width = 234;
+	const int img_height = 42;
+	
+	QImage output_img(img_width, img_height, QImage::Format_RGB32);
+	//We need to fill the white background because the user-selected image may be too narrow for the predefined width
+	output_img.fill(Qt::white);
+
+	QPainter painter(&output_img);
+
+	QPixmap pixmap2(":/images/Images/Icons/pteid_signature_small.png");
+	// QPixmap pixmap2_scaled = pixmap2.scaledToHeight(img_height, Qt::SmoothTransformation);
+
+	//Scale height if needed
+	QPixmap scaled = user_pixmap.height() > img_height ? user_pixmap.scaledToHeight(img_height,
+	 	Qt::SmoothTransformation) :
+			user_pixmap;
+
+	int remaining_width = img_width - pixmap2.width() - spacing;
+
+	//Scale width if needed
+	if (scaled.width() > remaining_width)
+	{
+		scaled = scaled.scaledToWidth(remaining_width, Qt::SmoothTransformation);
+	}
+	
+    
+   	painter.drawPixmap(0, 0, scaled);
+
+   	painter.drawPixmap(scaled.width() + spacing, 0, pixmap2_scaled);
+
+   	return output_img;
+}
+
+void ImageCanvas::paintEvent(QPaintEvent *)
+{
+	const int spacing = 10;
+	const int img1_width = 160;
+	const int img_height = 120;
+	QPainter painter(this);
+	
+	QPixmap pixmap2(":/images/Images/Icons/pteid_signature_small.png");
+
+	painter.setFont(QFont("Arial", 10));
+	
+	if (pixmap2.isNull())
+	{
+        qDebug() << "pixmap2 not loaded! ";
+        return;
+    }
+
+	if ( !user_pixmap.isNull()) 
+	{
+		QPixmap scaled = user_pixmap.height() > img_height ? user_pixmap.scaledToHeight(img_height, Qt::SmoothTransformation):
+		   user_pixmap;
+    
+    	painter.drawPixmap(0, 0, scaled);
+
+    }
+    else
+    {
+    	QPixmap photo_icon("/home/agrr/Pictures/photo.jpg");
+    	painter.drawPixmap(10, 0, photo_icon);
+    	painter.drawText(QRectF(10, photo_icon.height()+5, 80, 60), tr("Your chosen image"));
+    }
+
+    painter.drawPixmap(img1_width + spacing, 0, pixmap2);
+
 }
 
 /*
@@ -322,6 +396,7 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 	// ui.label_selectedsector->setEnabled(checked);
 	// ui.pushButton_freeselection->setEnabled(checked);
 	ui.pushButton_imgChooser->setEnabled(checked);
+	ui.pushButton_freeselect->setEnabled(checked);
 	// ui.pushButton_switchOrientation->setEnabled(checked);
 
 	// ui.tableWidget->setEnabled(checked);
@@ -345,15 +420,13 @@ void PDFSignWindow::on_pushButton_imgChooser_clicked()
 	QString image_file = QFileDialog::getOpenFileName(this, tr("Select File(s)"),
 			defaultopenfilepath, "Images (*.png *.jpg)");
 
-	QImage original_image(image_file);
-	Qt::TransformationMode mode = Qt::SmoothTransformation;
+	m_custom_image = QImage(image_file);
 
-	m_scaled_image = original_image.scaled(234, 42, Qt::IgnoreAspectRatio, 
-			mode);
-
-	ui.label_selectedimg->setPixmap(QPixmap::fromImage(original_image));
+	//ui.label_selectedimg->setPixmap(QPixmap::fromImage(original_image));
 	//Adjust the label to the size of the image, don't use with the user-selected pixmap
-	ui.label_selectedimg->adjustSize();
+	//ui.label_selectedimg->adjustSize();
+	this->image_canvas->setCustomPixmap(QPixmap::fromImage(m_custom_image));
+	// ui.image_canvas->setCustomPixmap(QPixmap::fromImage(original_image));
 }
 
 void PDFSignWindow::ShowSuccessMsgBox()
@@ -433,6 +506,7 @@ void PDFSignWindow::on_button_sign_clicked()
 	//Read Page
 	if (ui.visible_checkBox->isChecked())
 	{
+
 		if (ui.radioButton_firstpage->isChecked())
 			selected_page = 1;
 		else if (ui.radioButton_lastpage->isChecked())
@@ -495,12 +569,12 @@ void PDFSignWindow::on_button_sign_clicked()
 		m_pdf_sig->enableTimestamp();
 
 	//Generate a scaled JPEG and pass the byte array to the Signature class
-	if (!m_scaled_image.isNull())
+	if (!m_custom_image.isNull())
 	{
 
 		QBuffer buffer(&m_jpeg_scaled_data);
 		buffer.open(QIODevice::WriteOnly);
-		m_scaled_image.save(&buffer, "JPG");
+		image_canvas->drawToImage().save(&buffer, "JPG");
 		// fprintf(stderr, "setting CustomImage with data= 0x%p: %ld\n", ba.data(), ba.size());
 
 		m_pdf_sig->setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
@@ -946,13 +1020,6 @@ void PDFSignWindow::setSelectedSector(int sector)
     m_selected_sector = sector;
     ui.label_x->setText(tr("Selected sector: %1").arg(QString::number(sector)));
     ui.label_y->setText("");
-}
-
-
-void PDFSignWindow::on_pushButton_ok_clicked()
-{
-	this->done(QDialog::Accepted);
-
 }
 
 void PDFSignWindow::on_pushButton_freeselect_clicked()

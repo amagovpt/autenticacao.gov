@@ -82,7 +82,7 @@
       <x>10</x>
       <y>310</y>
       <width>400</width>
-      <height>353</height>
+      <height>491</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="vertical_layout_tab1">
@@ -91,6 +91,18 @@
      </property>
      <item>
       <widget class="QTabWidget" name="tabWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>380</height>
+        </size>
+       </property>
        <property name="currentIndex">
         <number>0</number>
        </property>
@@ -104,10 +116,13 @@
            <x>0</x>
            <y>0</y>
            <width>400</width>
-           <height>300</height>
+           <height>421</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetDefaultConstraint</enum>
+          </property>
           <item>
            <widget class="QRadioButton" name="radioButton_firstpage">
             <property name="enabled">
@@ -186,20 +201,7 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QLabel" name="label_selectedimg">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-         </layout>
+        </layout>
         </widget>
        </widget>
        <widget class="QWidget" name="tab_2">
@@ -257,6 +259,9 @@
              <verstretch>1</verstretch>
             </sizepolicy>
            </property>
+            <property name="enabled">
+              <bool>false</bool>
+            </property>
            <property name="text">
             <string>Free Selection</string>
            </property>
