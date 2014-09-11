@@ -186,6 +186,13 @@
            </widget>
           </item>
           <item>
+          <widget class="Line" name="line2">
+            <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+          </property>
+        </widget>
+        </item>
+          <item>
            <widget class="QPushButton" name="pushButton_imgChooser">
             <property name="enabled">
              <bool>false</bool>

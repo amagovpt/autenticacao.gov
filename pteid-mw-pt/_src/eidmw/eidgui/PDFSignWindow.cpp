@@ -264,7 +264,7 @@ QImage ImageCanvas::drawToImage()
     
    	painter.drawPixmap(0, 0, scaled);
 
-   	painter.drawPixmap(scaled.width() + spacing, 0, pixmap2_scaled);
+   	painter.drawPixmap(scaled.width() + spacing, 0, pixmap2);
 
    	return output_img;
 }
@@ -276,7 +276,7 @@ void ImageCanvas::paintEvent(QPaintEvent *)
 	const int img_height = 120;
 	QPainter painter(this);
 	
-	QPixmap pixmap2(":/images/Images/Icons/pteid_signature_small.png");
+	QPixmap pixmap2(":/images/Images/Icons/pteid_signature_large.png");
 
 	painter.setFont(QFont("Arial", 10));
 	
@@ -297,8 +297,9 @@ void ImageCanvas::paintEvent(QPaintEvent *)
     else
     {
     	QPixmap photo_icon("/home/agrr/Pictures/photo.jpg");
-    	painter.drawPixmap(10, 0, photo_icon);
-    	painter.drawText(QRectF(10, photo_icon.height()+5, 80, 60), tr("Your chosen image"));
+    	int x_pos = img1_width / 2.0 - photo_icon.width() / 2;
+    	painter.drawPixmap(x_pos, 0, photo_icon);
+    	painter.drawText(QRectF(x_pos, photo_icon.height()+5, 80, 60), tr("Your chosen image"));
     }
 
     painter.drawPixmap(img1_width + spacing, 0, pixmap2);
@@ -574,7 +575,9 @@ void PDFSignWindow::on_button_sign_clicked()
 
 		QBuffer buffer(&m_jpeg_scaled_data);
 		buffer.open(QIODevice::WriteOnly);
-		image_canvas->drawToImage().save(&buffer, "JPG");
+
+		//Save the generated image as high-quality JPEG data
+		image_canvas->drawToImage().save(&buffer, "JPG", 100);
 		// fprintf(stderr, "setting CustomImage with data= 0x%p: %ld\n", ba.data(), ba.size());
 
 		m_pdf_sig->setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
