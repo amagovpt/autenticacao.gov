@@ -201,6 +201,22 @@
             </property>
            </widget>
           </item>
+          <item>
+          <widget class="QLabel" name="label_signature_preview">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Preview of the signature image</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading</set>
+           </property>
+          </widget>
+          </item>
         </layout>
         </widget>
        </widget>
