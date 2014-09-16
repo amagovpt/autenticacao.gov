@@ -219,8 +219,10 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 
 	if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
 		sam_helper.getDHParams(&dh_params);
-	//else
-	//	serialNumber = sam_helper.getSerialNumberIAS101();
+	else
+	{
+		throw CMWEXCEPTION(EIDMW_SAM_UNSUPPORTED_CARD);
+	}
 
 	SSLConnection conn(ADDRESS_CHANGE_SERVER);
 

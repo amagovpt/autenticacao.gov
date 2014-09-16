@@ -464,6 +464,10 @@ void MainWnd::showChangeAddressDialog(long code)
 				"Please check if your Internet connection is functional");
 			icon = QMessageBox::Critical;
 			break;
+		case EIDMW_SAM_UNSUPPORTED_CARD:
+			error_msg = tr("Unfortunately the Address Change operation is unsupported for this card.");
+			icon = QMessageBox::Critical;
+			break;
 		case EIDMW_SAM_PROTOCOL_ERROR:
 			error_msg = tr("Error in the Address Change operation. Please make sure you insert the correct process number and secret code.");
 			icon = QMessageBox::Critical;
