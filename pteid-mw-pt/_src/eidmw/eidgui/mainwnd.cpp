@@ -509,6 +509,21 @@ void MainWnd::doChangeAddress(const char *process, const char *secret_code)
 void MainWnd::on_btnAddress_Change_clicked()
 {
 	
+	PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
+
+    PTEID_EIDCard& Card = ReaderContext.getEIDCard();
+	QString caption  = tr("Address Change");
+
+	if (Card.getType() == PTEID_CARDTYPE_IAS101)
+	{
+		QString error_msg = tr("Unfortunately the Address Change operation is unsupported for this card");
+		QMessageBox::Icon icon = QMessageBox::Critical;
+		QMessageBox msgBoxp(icon, caption, error_msg, 0, this);
+  		msgBoxp.exec();
+		return;
+	}
+	
+	
 	ChangeAddressDialog* dlgChangeAddr = new ChangeAddressDialog(this);
     
     if (dlgChangeAddr->exec() == QDialog::Rejected)

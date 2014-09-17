@@ -32,6 +32,10 @@
         <translation>Os certificados não foram validados, o caminho de certificação não está completo</translation>
 </message>
 <message>
+        <source>Unfortunately the Address Change operation is unsupported for this card</source>
+        <translation>A operação de Mudança de Morada não é suportada neste cartão</translation>
+</message>
+<message>
 	<source>Change Authentication and OTP PIN</source>
 	<translation>Alterar Pin de Autenticação e OTP</translation>
 </message>
