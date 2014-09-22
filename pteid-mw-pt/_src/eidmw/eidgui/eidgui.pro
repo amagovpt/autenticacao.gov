@@ -102,10 +102,9 @@ INCLUDEPATH += . ../dialogs ../eidlib ../_Builds ../common
 INCLUDEPATH += /usr/include/cairo
 
 LIBS += -L../lib  \
-        -l$${EIDLIB} \
-	-l$${COMMONLIB} \
-	-l$${APPLAYERLIB} \
-        -lfreeimagePTEiD
+	-Wl,-rpath-link,../lib \
+    -l$${EIDLIB} \
+	-l$${COMMONLIB}
 
 LIBS += -lcairo
 
