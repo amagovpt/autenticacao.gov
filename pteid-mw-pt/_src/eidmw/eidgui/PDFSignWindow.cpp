@@ -77,16 +77,14 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 		ui.horizontalLayout_3->itemAt(i)->setAlignment(Qt::AlignLeft);
 	}
 
-
-
 	ui.verticalLayout->setContentsMargins(15,15,15,15);
 
 	//save the default background to use in clearAllSectors()
 	// m_default_background = ui.tableWidget->item(0,0)->background();
 	// ui.label_selectedimg->setPixmap(QPixmap( ":/images/Images/backgrounds/signature_image_default.png"));
-	image_canvas = new ImageCanvas(ui.tab1);
+	image_canvas = new ImageCanvas(ui.tab3);
 	image_canvas->setFixedSize(420, 200);
-	ui.verticalLayout->addWidget(image_canvas);
+	ui.verticalLayout_4->addWidget(image_canvas);
 	// image_canvas->setLayout(ui.verticalLayout);
 	//image_canvas->show();
 
@@ -95,6 +93,16 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	for (int i = 0; i!= items; i++)
 	{
 		ui.verticalLayout->itemAt(i)->setAlignment(Qt::AlignTop);
+		// qDebug() << "Setting Alignment of verticalLayout " << endl;
+	}
+
+	ui.verticalLayout1->setSpacing(5);
+
+	items = ui.verticalLayout_4->count();
+
+	for (int i = 0; i!= items; i++)
+	{
+		ui.verticalLayout_4->itemAt(i)->setAlignment(Qt::AlignTop);
 		// qDebug() << "Setting Alignment of verticalLayout " << endl;
 	}
 
