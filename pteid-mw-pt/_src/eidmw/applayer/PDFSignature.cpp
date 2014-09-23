@@ -124,8 +124,16 @@ namespace eIDMW
 
             double height = p_media->y2, width = p_media->x2;
 
+            //Take into account page rotation
+            if (p->getRotate() == 90)
+            {
+            	height = p_media->x2;
+            	width = p_media->y2;	
+            }
+
             return width > height;
 		}
+		
 		return false;
 
 	}
