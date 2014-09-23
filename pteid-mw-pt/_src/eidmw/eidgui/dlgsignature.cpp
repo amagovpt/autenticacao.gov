@@ -106,9 +106,8 @@ void dlgSignature::ShowSuccessMsgBox()
 
 		QString caption  = tr("File Signature (XAdES)");
         QString msg = tr("Signature(s) succesfully generated");
-		QMessageBox msgBoxp(QMessageBox::Critical, caption, msg, 0, this);
+		QMessageBox msgBoxp(QMessageBox::Information, caption, msg, 0, this);
   		msgBoxp.exec();
-
 
 }
 
