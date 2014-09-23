@@ -447,8 +447,8 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 
 	add_certificate(p7, certData2);
 	
-	cc01 = CByteArray(PTEID_CERTS[18].cert_data, PTEID_CERTS[18].cert_len);
-	cc02 = CByteArray(PTEID_CERTS[19].cert_data, PTEID_CERTS[19].cert_len);
+	cc01 = CByteArray(PTEID_CERTS[20].cert_data, PTEID_CERTS[20].cert_len);
+	cc02 = CByteArray(PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len);
 
 
 	// Add issuer of Signature SubCA
@@ -460,7 +460,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 		MWLOG(LEV_ERROR, MOD_APL, L"Couldn't find issuer for certificate SIGNATURE_SUBCA.The validation will be broken!");
 
 	// Add ECRaizEstado certificate
-	add_certificate(p7, PTEID_CERTS[17].cert_data, PTEID_CERTS[17].cert_len);
+	add_certificate(p7, PTEID_CERTS[19].cert_data, PTEID_CERTS[19].cert_len);
 
 	PKCS7_set_detached(p7, 1);
 
