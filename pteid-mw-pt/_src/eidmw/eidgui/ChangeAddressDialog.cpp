@@ -13,6 +13,7 @@ ChangeAddressDialog::ChangeAddressDialog(QWidget* parent)
 	//QDialogButtonBox buttonBox = ;	
 	connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
 }
 
