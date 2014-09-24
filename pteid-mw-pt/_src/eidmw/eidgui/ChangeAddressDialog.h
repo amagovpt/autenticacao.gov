@@ -42,6 +42,10 @@ public:
     QString getSecretCode();
     QString getProcess();
 
+private slots:
+	void on_lineEdit_process_textEdited(const QString& text);
+	void on_lineEdit_secretCode_textEdited(const QString& text);
+
 private:
 	Ui_ChangeAddressDialog ui;
 

@@ -31,3 +31,21 @@ QString ChangeAddressDialog::getProcess()
 	return ui.lineEdit_process->text();
 	
 }
+
+void ChangeAddressDialog::on_lineEdit_secretCode_textEdited(QString &text)
+{
+
+ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(
+	ui.lineEdit_process->text().size() > 0 && text.size() > 0);
+	
+
+}
+
+void ChangeAddressDialog::on_lineEdit_process_textEdited(QString &text)
+{
+
+ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(
+	ui.lineEdit_secretCode->text().size() > 0 && text.size() > 0);
+	
+
+}
