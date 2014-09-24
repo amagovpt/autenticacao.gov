@@ -399,17 +399,23 @@ char *generateFinalPath(const char *output_dir, const char *path)
 
 void APL_Card::SignXadesIndividual(const char ** paths, unsigned int n_paths, const char *output_dir)
 {
-	SignIndividual(paths, n_paths, output_dir, false);
+	SignIndividual(paths, n_paths, output_dir, false, false);
 }
 
 void APL_Card::SignXadesTIndividual(const char ** paths, unsigned int n_paths, const char *output_dir)
 {
-	SignIndividual(paths, n_paths, output_dir, true);
+	SignIndividual(paths, n_paths, output_dir, true, false);
 }
+
+void APL_Card::SignXadesAIndividual(const char ** paths, unsigned int n_paths, const char *output_dir)
+{
+	SignIndividual(paths, n_paths, output_dir, false, true);
+}
+
 
 // Implementation of the PIN-caching version of SignXades()
 // It signs each input file seperately and creates a .zip container for each
-void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const char *output_dir, bool timestamp)
+void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const char *output_dir, bool timestamp, bool xades_a)
 {
 
 	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
@@ -418,6 +424,8 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 	XadesSignature sig(this);
 	if (timestamp)
 		sig.enableTimestamp();
+	else if (xades_a)
+		sig.enableLongTermValidation();
 
     const char **files_to_sign = new const char*[1];
 

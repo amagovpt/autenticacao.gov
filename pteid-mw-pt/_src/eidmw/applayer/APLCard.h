@@ -175,7 +175,7 @@ protected:
 
 	virtual bool isCardForbidden()=0;
 
-	void SignIndividual(const char**, unsigned int, const char*, bool);
+	void SignIndividual(const char**, unsigned int, const char*, bool, bool);
 
 	static APL_CryptoFwk *m_cryptoFwk;			/**< Pointer to the crypto framework */
 	APL_ReaderContext *m_reader;				/**< Pointer to CAL reader (came from constructor) */	
