@@ -1,4 +1,5 @@
 #include "ChangeAddressDialog.h"
+#include <QPushButton>
 
 
 ChangeAddressDialog::ChangeAddressDialog(QWidget* parent)
@@ -33,16 +34,16 @@ QString ChangeAddressDialog::getProcess()
 	
 }
 
-void ChangeAddressDialog::on_lineEdit_secretCode_textEdited(QString &text)
+void ChangeAddressDialog::on_lineEdit_secretCode_textEdited(const QString &text)
 {
 
-ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(
+	ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(
 	ui.lineEdit_process->text().size() > 0 && text.size() > 0);
 	
 
 }
 
-void ChangeAddressDialog::on_lineEdit_process_textEdited(QString &text)
+void ChangeAddressDialog::on_lineEdit_process_textEdited(const QString &text)
 {
 
 ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(
