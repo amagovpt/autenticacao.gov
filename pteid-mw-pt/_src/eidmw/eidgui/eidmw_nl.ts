@@ -43,9 +43,15 @@
     <source>Address Change</source>
     <translation>Mudança de Morada</translation>
 </message>
+
+<message>
+    <source>Address Confirmation</source>
+    <translation>Confirmação de Morada</translation>
+</message>
+
 <message>
     <source>Error connecting to the Address Change server</source>
-    <translation>A morada foi alterada com sucesso.</translation>
+    <translation>Erro de ligação ao servidor para mudança de morada</translation>
 </message>
 
     <message>
@@ -61,10 +67,6 @@
     <translation>Erro inesperado na mudança de morada</translation>
 </message>
 
-<message>
-    <source>Undefined error in Address Change operation.</source>
-    <translation>....</translation>
-</message>
 <message>
     <source>Changing Address in card...</source>
     <translation>Mudando a morada no Cartão...</translation>
@@ -1200,6 +1202,10 @@ Please specify .xml, .csv or .eid</source>
         <translation>Versão</translation>
     </message>
     <message>
+        <source>About</source>
+        <translation>Acerca de</translation>
+    </message>
+    <message>
         <source>For information or support about this software please visit</source>
         <translation>Caso tenha dificuldades na utilização desta aplicação consulte</translation>
     </message>
@@ -1452,6 +1458,22 @@ Please specify .xml, .csv or .eid</source>
         <translation>Adicionar Ficheiros</translation>
     </message>
     <message>
+        <source>Basic Signature (XAdES-BES)</source>
+        <translation>Assinatura Básica (XAdES-BES)</translation>
+    </message>
+     <message>
+        <source>With Long-Term Validation (XAdES-A)</source>
+        <translation>Com Validação a Longo Termo (XAdES-A)</translation>
+    </message>
+     <message>
+        <source>With Timestamp (XAdES-T)</source>
+        <translation>Incluir Selo Temporal (XAdES-T)</translation>
+    </message>
+    <message> 
+        <source>Signature Level</source>
+        <translation>Nível de assinatura</translation>
+    </message>
+    <message>
         <source>Files to Sign</source>
         <translation>Ficheiros a Assinar</translation>
     </message>
@@ -1476,8 +1498,12 @@ Please specify .xml, .csv or .eid</source>
         <translation>Erro</translation>
     </message>
     <message>
-        <source>Error Generating Signature!</source>
-        <translation>Erro ao Gerar Assinatura!</translation>
+        <source>Error generating Signature!</source>
+        <translation>Erro ao gerar Assinatura!</translation>
+    </message>
+    <message>
+        <source>Error obtaining timestamp</source>
+        <translation>Erro ao gerar Assinatura!</translation>
     </message>
     <message>
         <source>Select File(s)</source>
@@ -1578,6 +1604,30 @@ Please specify .xml, .csv or .eid</source>
         <source>The timestamp appended to the signature is invalid</source>
 	<translation>Não foi possível validar o selo temporal</translation>
     </message>
+
+</context>
+
+<context>
+ <name>ChangeAddressDialog</name>   
+ <message>
+    <source>Address Change</source>
+    <translation>Alteração de Morada</translation>
+</message>
+
+<message>
+    <source>Please insert your process number and secret code you received by mail.</source>
+    <translation>Por favor insira o número de processo e o código secreto recebido pelo correio.</translation>
+</message>
+
+<message>
+    <source>Process Number</source>
+    <translation>Nº de Processo de Alteração de Morada</translation>
+</message>
+
+<message>
+    <source>Address Confirmation Code</source>
+    <translation>Código de Confirmação de Morada</translation>
+</message>
 
 </context>
 <context>
