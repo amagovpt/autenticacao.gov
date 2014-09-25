@@ -706,8 +706,8 @@ void XadesSignature::addCertificateChain(DSIGKeyInfoX509 *keyInfo)
 
 	mp_signature_ca_cert = addCertificateToKeyInfo(cert1, keyInfo);
 
-	cc01 = CByteArray(PTEID_CERTS[18].cert_data, PTEID_CERTS[18].cert_len);
-	cc02 = CByteArray(PTEID_CERTS[19].cert_data, PTEID_CERTS[19].cert_len);
+	cc01 = CByteArray(PTEID_CERTS[20].cert_data, PTEID_CERTS[20].cert_len);
+	cc02 = CByteArray(PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len);
 
 	// Add issuer of Signature SubCA
 	if (fwk->isIssuer(cert1, cc01))
@@ -724,7 +724,7 @@ void XadesSignature::addCertificateChain(DSIGKeyInfoX509 *keyInfo)
 		MWLOG(LEV_ERROR, MOD_APL, L"Couldn't find issuer for certificate SIGNATURE_SUBCA.The validation will be broken!");
 
 	// Add ECRaizEstado certificate
-	ec_raiz_estado = CByteArray(PTEID_CERTS[17].cert_data, PTEID_CERTS[17].cert_len);
+	ec_raiz_estado = CByteArray(PTEID_CERTS[19].cert_data, PTEID_CERTS[19].cert_len);
 	m_cert_bas.push_back(ec_raiz_estado);
 	addCertificateToKeyInfo(ec_raiz_estado, keyInfo);
 }
