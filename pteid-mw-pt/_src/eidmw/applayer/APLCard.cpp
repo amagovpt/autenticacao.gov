@@ -221,8 +221,9 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 		sam_helper.getDHParams(&dh_params);
 	else
 	{
-		throw CMWEXCEPTION(EIDMW_SAM_UNSUPPORTED_CARD);
+	//	throw CMWEXCEPTION(EIDMW_SAM_UNSUPPORTED_CARD);
 	}
+
 
 	SSLConnection conn(ADDRESS_CHANGE_SERVER);
 
@@ -421,16 +422,16 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
-	XadesSignature sig(this);
-	if (timestamp)
-		sig.enableTimestamp();
-	else if (xades_a)
-		sig.enableLongTermValidation();
-
     const char **files_to_sign = new const char*[1];
 
 	for (unsigned int i=0; i!= n_paths; i++)
 	{
+		XadesSignature sig(this);
+		if (timestamp)
+			sig.enableTimestamp();
+		else if (xades_a)
+			sig.enableLongTermValidation();
+
 		CByteArray * ts_data = NULL;
 
 		files_to_sign[0] = paths[i];
