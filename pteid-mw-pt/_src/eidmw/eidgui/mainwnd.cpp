@@ -460,20 +460,16 @@ void MainWnd::showChangeAddressDialog(long code)
 			icon = QMessageBox::Information;
 			break;
 		case EIDMW_SAM_CONNECTION_ERROR:
+			icon = QMessageBox::Critical;
 			error_msg = tr("Error connecting to the Address Change server.\n"
 				"Please check if your Internet connection is functional");
-			icon = QMessageBox::Critical;
-			break;
-		case EIDMW_SAM_UNSUPPORTED_CARD:
-			error_msg = tr("Unfortunately the Address Change operation is unsupported for this card.");
-			icon = QMessageBox::Critical;
 			break;
 		case EIDMW_SAM_PROTOCOL_ERROR:
 			error_msg = tr("Error in the Address Change operation. Please make sure you insert the correct process number and secret code.");
 			icon = QMessageBox::Critical;
 			break;
 		default:
-			error_msg = tr("Undefined error in Address Change operation.");
+			error_msg = tr("Unexpected error in the Address Change operation");
 			icon = QMessageBox::Critical;
 			break;
 
@@ -599,7 +595,7 @@ void MainWnd::setup_addressChange_progress_bar()
 	m_progress_addr->setWindowModality(Qt::WindowModal);
 	m_progress_addr->setWindowTitle(QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"));
 	m_progress_addr->setLabelText(tr("Changing Address in card..."));
-	m_progress_addr->setWindowFlags(m_progress_addr->windowFlags() ^ Qt::WindowMinimizeButtonHint ^ Qt::WindowCloseButtonHint ^ Qt::CustomizeWindowHint);
+	m_progress_addr->setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint);
 	//m_progress_addr->setFixedSize(m_progress_addr->size());
 	//Disable cancel button
 	m_progress_addr->setCancelButton(NULL);
