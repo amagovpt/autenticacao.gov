@@ -63,6 +63,8 @@ dlgSignature::dlgSignature( QWidget* parent, CardInformation& CI_Data)
 
 		ui.radioButton_xades_b->setChecked(true);
 
+		error_code = 0;
+
 		int thiswidth = this->width();
 		int thisheight = this->height();
 
@@ -71,7 +73,7 @@ dlgSignature::dlgSignature( QWidget* parent, CardInformation& CI_Data)
 			this->resize(thiswidth,height-20); //make sure the window fits
 		}
 		
-
+		this->setFixedSize(this->width(), this->height());
 	}
 
 }
@@ -273,25 +275,25 @@ void dlgSignature::on_pbSign_clicked ( void )
 void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char *output_path, XadesLevel level)
 {
 
-    try
-    {
-	    PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
-	    PTEID_ByteArray SignXades;
-	    if (level == XADES_T)
-		    SignXades = Card->SignXadesT(paths, n_paths, output_path);
-	    else if (level == XADES_B)
-		    SignXades = Card->SignXades(paths, n_paths, output_path);
+	try
+	{
+		PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+		PTEID_ByteArray SignXades;
+		if (level == XADES_T)
+			SignXades = Card->SignXadesT(paths, n_paths, output_path);
+		else if (level == XADES_B)
+			SignXades = Card->SignXades(paths, n_paths, output_path);
 		else if (level == XADES_A)
 			SignXades = Card->SignXadesA(paths, n_paths, output_path);
 		this->error_code = 0;
 
-    }
-    catch (PTEID_Exception &e)
-    	{
+	}
+	catch (PTEID_Exception &e)
+	{
 		this->error_code = e.GetError();
-    		
-    	}
-    return;
+
+	}
+	return;
 }
 
 
@@ -300,14 +302,14 @@ void dlgSignature::run_multiple_sign(const char ** paths, unsigned int n_paths, 
 
 	try
 	{
-
 		PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
-	    /* TODO: reimplement with support for XADES-A
-	    if (timestamp)
-		    Card->SignXadesTIndividual(paths, n_paths, output_path);
-	    else
-		    Card->SignXadesIndividual(paths, n_paths, output_path);
-		    */
+
+		if (level == XADES_T)
+			Card->SignXadesTIndividual(paths, n_paths, output_path);
+		else if (level == XADES_B)
+			Card->SignXadesIndividual(paths, n_paths, output_path);
+		else if (level == XADES_A)
+			Card->SignXadesAIndividual(paths, n_paths, output_path);
 		this->error_code = 0;
 	}
 	catch (PTEID_Exception &e)
