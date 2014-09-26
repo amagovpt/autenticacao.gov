@@ -222,8 +222,8 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	//
 	// set the window Icon (as it appears in the left corner of the window)
 	//------------------------------------
-//	const QIcon Ico = QIcon( ":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png" );
-    const QIcon Ico = QIcon( ":/images/Images/Icons/pteid.ico" );
+    const QIcon Ico = QIcon( ":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png" );
+    //const QIcon Ico = QIcon( ":/images/Images/Icons/pteid.ico" );
 	this->setWindowIcon( Ico );
 
 	m_pPrinter	= new QPrinter();
@@ -448,6 +448,8 @@ void MainWnd::setAddressProgress(int value)
 
 void MainWnd::showChangeAddressDialog(long code)
 {
+	//It shouldn't be needed but, oh well...
+	m_progress_addr->hide();
 
 	QString error_msg;
 	QString caption  = tr("Address Change");
@@ -459,7 +461,8 @@ void MainWnd::showChangeAddressDialog(long code)
 			error_msg = tr("Address Changed successfully.");
 			icon = QMessageBox::Information;
 			break;
-		case EIDMW_SAM_CONNECTION_ERROR:
+		//The error code for connection error is common between SAM and OTP
+		case EIDMW_OTP_CONNECTION_ERROR:
 			icon = QMessageBox::Critical;
 			error_msg = tr("Error connecting to the Address Change server.\n"
 				"Please check if your Internet connection is functional");
