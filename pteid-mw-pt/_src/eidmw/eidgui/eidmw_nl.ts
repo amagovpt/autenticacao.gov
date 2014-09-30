@@ -82,6 +82,11 @@
 	<translation>Pedimos desculpa, mas esta operação não é suportada neste leitor de cartões</translation>
 </message>
 
+<message>
+	<source>Error in the Address Change operation. Please make sure you insert the correct process number and secret code.</source>
+	<translation>Erro na operação de mudança de morada. Verifique por favor se inseriu correctamente o número de processo e código de confirmação.</translation>
+</message>
+
 	<message>
 	<source>Verification of your current PIN failed</source>
 	<translation>O PIN actual está incorrecto.</translation>
