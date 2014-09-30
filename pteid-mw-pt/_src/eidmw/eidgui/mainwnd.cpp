@@ -454,7 +454,6 @@ void MainWnd::showChangeAddressDialog(long code)
 	QString error_msg;
 	QString caption  = tr("Address Change");
 	QMessageBox::Icon icon = QMessageBox::NoIcon;
-	
 	switch(code)
 	{
 		case 0:
@@ -535,10 +534,10 @@ void MainWnd::on_btnAddress_Change_clicked()
 
     setup_addressChange_progress_bar();
    	connect(this, SIGNAL(addressProgressChanged(int)),
-   	 this, SLOT(setAddressProgress(int)));
+   	 this, SLOT(setAddressProgress(int)), Qt::UniqueConnection);
 
    	connect(this, SIGNAL(addressChangeFinished(long)),
-   	 this, SLOT(showChangeAddressDialog(long)));
+   	 this, SLOT(showChangeAddressDialog(long)), Qt::UniqueConnection);
 
    	QtConcurrent::run(this, &MainWnd::doChangeAddress, strdup(process.toUtf8().constData()),
     	strdup(secret_code.toUtf8().constData()));
