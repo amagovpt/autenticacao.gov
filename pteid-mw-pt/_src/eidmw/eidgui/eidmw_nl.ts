@@ -27,6 +27,17 @@
      <source>Signature Certificate:</source>
      <translation>Certificado de Assinatura:</translation>
      </message>
+	 
+	 <message>
+        <source>Error returned by the OTP server. Please make sure you have a valid authentication certificate</source>
+		<translation>Erro na ligação ao servidor de OTP. Por favor verifique que tem o certificado de autenticação válido</translation>
+	 </message>
+	 
+	 <message>
+        <source>Error in the Address Change operation. Please make sure you have a valid authentication certificate</source>
+		<translation>Erro na operação de mudança de morada. Por favor verifique que tem o certificado de autenticação válido</translation>
+	 </message>
+	 
      <message>
         <source>The certificates could not be validated, the certification path is not complete</source>
         <translation>Os certificados não foram validados, o caminho de certificação não está completo</translation>

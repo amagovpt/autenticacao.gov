@@ -127,7 +127,7 @@ void SSLConnection::loadCertChain(X509_STORE *store)
 		else
 		{
 			if(X509_STORE_add_cert(store, pCert) == 0)
-				MWLOG(LEV_ERROR, MOD_APL, L"XadesSignature::ValidateCert: error adding certificate #%d\n",  i);
+				MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection::loadCertChain: error adding certificate #%d\n",  i);
 		}
 	
 	}
@@ -917,15 +917,22 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     	}
     	if (r == -1)
     	{
-    		if (SSL_get_error(ssl, r) == SSL_ERROR_WANT_READ)
+			int error_code = SSL_get_error(ssl, r);
+    		if (error_code == SSL_ERROR_WANT_READ)
     		{
     			fprintf(stderr, "SSL_ERROR_WANT_READ\n!");
     			continue;
     		}
-    		else
+			else if (error_code == SSL_ERROR_SSL)
+			{
+				MWLOG(LEV_ERROR, MOD_APL, L"Aborted SSL Connection in read_chunked_reply() with error string %s", 
+					ERR_error_string(ERR_get_error(), NULL));
+
+				throw CMWEXCEPTION(EIDMW_SSL_PROTOCOL_ERROR);
+			}
+			else
     			fprintf(stderr, "???\n");
     	}
-
     	else if (r == 0) {
 
     		translate_ssl_error(ssl, r);
@@ -960,22 +967,31 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned in
 		    strcpy(buffer_tmp, buffer);
 		    content_length = parseContentLength(buffer_tmp);
 	    }
-	    if (r == -1)
-	    {
-		if (SSL_get_error(ssl, r) == SSL_ERROR_WANT_READ)
+		if (r == -1)
 		{
-			fprintf(stderr, "SSL_ERROR_WANT_READ\n!");
-			continue;
+			int error_code = SSL_get_error(ssl, r);
+
+			if (error_code == SSL_ERROR_WANT_READ)
+			{
+				fprintf(stderr, "SSL_ERROR_WANT_READ\n!");
+				continue;
+			}
+			else if (error_code == SSL_ERROR_SSL)
+			{
+				MWLOG(LEV_ERROR, MOD_APL, L"Aborted SSL Connection with error string %s", 
+					ERR_error_string(ERR_get_error(), NULL));
+
+				throw CMWEXCEPTION(EIDMW_SSL_PROTOCOL_ERROR);
+			}
+			else
+				fprintf(stderr, "???\n");
 		}
-		else
-			fprintf(stderr, "???\n");
-	    }
 
-	    else if (r == 0) {
+		else if (r == 0) {
 
-		    translate_ssl_error(ssl, r);
+			translate_ssl_error(ssl, r);
 
-	    }
+		}
 	    else
 		    bytes_read += r;
     }

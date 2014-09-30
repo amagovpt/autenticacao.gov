@@ -453,6 +453,7 @@ void MainWnd::showChangeAddressDialog(long code)
 
 	QString error_msg;
 	QString caption  = tr("Address Change");
+	PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code %8x", code);
 	QMessageBox::Icon icon = QMessageBox::NoIcon;
 	switch(code)
 	{
@@ -468,6 +469,10 @@ void MainWnd::showChangeAddressDialog(long code)
 			break;
 		case EIDMW_SAM_PROTOCOL_ERROR:
 			error_msg = tr("Error in the Address Change operation. Please make sure you insert the correct process number and secret code.");
+			icon = QMessageBox::Critical;
+			break;
+		case EIDMW_SSL_PROTOCOL_ERROR:
+			error_msg = tr("Error in the Address Change operation. Please make sure you have a valid authentication certificate");
 			icon = QMessageBox::Critical;
 			break;
 		default:
@@ -2979,6 +2984,12 @@ void MainWnd::ChangeAuthPin(PTEID_ReaderContext &ReaderContext, unsigned int pin
 			break;
 			case EIDMW_OTP_CERTIFICATE_ERROR:
 			msg = tr("Error connecting to the OTP Server. Your authentication certificate was rejected");
+			break;
+
+			case EIDMW_SSL_PROTOCOL_ERROR:
+			msg = tr("Error returned by the OTP server. Please make sure you have a valid authentication certificate");
+			break;
+
 			case EIDMW_OTP_UNKNOWN_ERROR:
 			msg = tr("Error connecting to the OTP Server.");
 			break;
