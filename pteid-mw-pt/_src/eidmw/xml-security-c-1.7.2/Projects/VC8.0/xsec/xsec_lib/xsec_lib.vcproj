@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="xsec_lib"
 	ProjectGUID="{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}"
 	RootNamespace="xsec_lib"
@@ -112,8 +112,8 @@
 			CharacterSet="2"
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
-			/>
+                Name="VCPreBuildEventTool"
+            />
 			<Tool
 				Name="VCCustomBuildTool"
 			/>
@@ -215,12 +215,12 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="../../../..;&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;&quot;$(PTEID_DIR_XERCES_310)\include&quot;"
+				AdditionalIncludeDirectories="../../../.."
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_LIB_EXPORTS;PROJ_CANON;PROJ_DSIG"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				RuntimeTypeInfo="true"
+				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough=""
 				WarningLevel="3"
@@ -238,10 +238,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="xerces-c_3.lib crypt32.lib libeay32_101_8.lib"
-				OutputFile="$(SolutionDir)\..\_Binaries35\$(ConfigurationName)\xsec_1_6.dll"
+				AdditionalDependencies="xerces-c_3.lib crypt32.lib libeay32.lib Xalan-C_1.lib"
+				OutputFile="$(OutDir)/xsec_1_6.dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;C:\Users\a\Downloads\xerces-c-3.1.1\lib;$(PTEID_DIR_OPENSSL_098G)\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -303,12 +302,12 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="../../../..;&quot;$(PTEID_DIR_OPENSSL_098G)\include&quot;;&quot;$(PTEID_DIR_XERCES_310)\include&quot;"
+				AdditionalIncludeDirectories="../../../.."
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_LIB_EXPORTS;PROJ_CANON;PROJ_DSIG"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				RuntimeTypeInfo="true"
+				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough=""
 				WarningLevel="3"
@@ -326,10 +325,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="xerces-c_3.lib crypt32.lib libeay32_101_8.lib"
-				OutputFile="..\_Binaries35\$(PlatformName)\$(ConfigurationName)\xsec_1_7.dll"
+				AdditionalDependencies="xerces-c_3.lib crypt32.lib libeay32.lib Xalan-C_1.lib"
+				OutputFile="$(OutDir)/xsec_1_6.dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(PTEID_DIR_OPENSSL_098G)\lib&quot;;&quot;$(PTEID_DIR_XERCES_310)\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -760,18 +758,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoDEREncoded.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoExt.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoExt.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoList.cpp"
 				>
 			</File>
@@ -827,6 +813,14 @@
 				RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoX509.hpp"
 				>
 			</File>
+            <File
+                RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoExt.cpp"
+                >
+            </File>
+            <File
+                RelativePath="..\..\..\..\xsec\dsig\DSIGKeyInfoExt.hpp"
+                >
+            </File>
 			<File
 				RelativePath="..\..\..\..\xsec\dsig\DSIGObject.cpp"
 				>
@@ -993,10 +987,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\xsec\enc\XSECCryptoKeyEC.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\..\xsec\enc\XSECCryptoKeyHMAC.hpp"
 				>
 			</File>
@@ -1004,10 +994,14 @@
 				RelativePath="..\..\..\..\xsec\enc\XSECCryptoKeyRSA.hpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\..\..\xsec\enc\XSECCryptoProvider.cpp"
-				>
-			</File>
+            <File
+                RelativePath="..\..\..\..\xsec\enc\XSECCryptoKeyEC.hpp"
+                >
+            </File>
+            <File
+                RelativePath="..\..\..\..\xsec\enc\XSECCryptoProvider.cpp"
+                >
+            </File>
 			<File
 				RelativePath="..\..\..\..\xsec\enc\XSECCryptoProvider.hpp"
 				>
@@ -1080,14 +1074,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyEC.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyEC.hpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyHMAC.cpp"
 					>
 				</File>
@@ -1103,6 +1089,14 @@
 					RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyRSA.hpp"
 					>
 				</File>
+                <File
+                    RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyEC.cpp"
+                    >
+                </File>
+                <File
+                    RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyEC.hpp"
+                    >
+                </File>
 				<File
 					RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoProvider.cpp"
 					>

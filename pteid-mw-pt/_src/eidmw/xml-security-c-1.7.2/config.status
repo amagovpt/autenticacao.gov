@@ -437,11 +437,11 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/agrr/Downloads/xml-security-c-1.7.2'
+ac_pwd='/home/agrr/pteid-mw/xml-security-c-1.7.2'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 MKDIR_P='/bin/mkdir -p'
-AWK='mawk'
+AWK='gawk'
 test -n "$AWK" || AWK=awk
 # The default lists apply if the user does not specify any file.
 ac_need_defaults=:
@@ -572,7 +572,7 @@ FGREP='/bin/grep -F'
 LD='/usr/bin/ld -m elf_x86_64'
 NM='/usr/bin/nm -B'
 LN_S='ln -s'
-max_cmd_len='1572864'
+max_cmd_len='3458764513820540925'
 ac_objext='o'
 exeext=''
 lt_unset='unset'
@@ -675,7 +675,7 @@ finish_cmds='PATH="\$PATH:/sbin" ldconfig -n $libdir'
 finish_eval=''
 hardcode_into_libs='yes'
 sys_lib_search_path_spec='/usr/lib/gcc/x86_64-linux-gnu/4.8 /usr/lib/x86_64-linux-gnu /usr/lib /lib/x86_64-linux-gnu /lib '
-sys_lib_dlsearch_path_spec='/lib /usr/lib /usr/lib/i386-linux-gnu/mesa /lib/i386-linux-gnu /usr/lib/i386-linux-gnu /lib/i686-linux-gnu /usr/lib/i686-linux-gnu /usr/local/lib /usr/lib /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/mesa-egl /usr/lib/x86_64-linux-gnu/mesa /lib32 /usr/lib32 /libx32 /usr/libx32 '
+sys_lib_dlsearch_path_spec='/lib /usr/lib /usr/lib/x86_64-linux-gnu/libfakeroot /lib/i386-linux-gnu /usr/lib/i386-linux-gnu /lib/i686-linux-gnu /usr/lib/i686-linux-gnu /usr/local/lib /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/mesa-egl /usr/lib/fglrx /usr/lib32/fglrx /usr/lib/x86_64-linux-gnu/mir/clientplatform/mesa /lib32 /usr/lib32 /usr/local/lib '
 hardcode_action='immediate'
 enable_dlopen='unknown'
 enable_dlopen_self='unknown'
@@ -943,17 +943,17 @@ S["am__tar"]="$${TAR-tar} chof - \"$$tardir\""
 S["AMTAR"]="$${TAR-tar}"
 S["am__leading_dot"]="."
 S["SET_MAKE"]=""
-S["AWK"]="mawk"
+S["AWK"]="gawk"
 S["mkdir_p"]="$(MKDIR_P)"
 S["MKDIR_P"]="/bin/mkdir -p"
 S["INSTALL_STRIP_PROGRAM"]="$(install_sh) -c -s"
 S["STRIP"]="strip"
-S["install_sh"]="${SHELL} /home/agrr/Downloads/xml-security-c-1.7.2/build-aux/install-sh"
-S["MAKEINFO"]="${SHELL} /home/agrr/Downloads/xml-security-c-1.7.2/build-aux/missing --run makeinfo"
-S["AUTOHEADER"]="${SHELL} /home/agrr/Downloads/xml-security-c-1.7.2/build-aux/missing --run autoheader"
-S["AUTOMAKE"]="${SHELL} /home/agrr/Downloads/xml-security-c-1.7.2/build-aux/missing --run automake-1.12"
-S["AUTOCONF"]="${SHELL} /home/agrr/Downloads/xml-security-c-1.7.2/build-aux/missing --run autoconf"
-S["ACLOCAL"]="${SHELL} /home/agrr/Downloads/xml-security-c-1.7.2/build-aux/missing --run aclocal-1.12"
+S["install_sh"]="${SHELL} /home/agrr/pteid-mw/xml-security-c-1.7.2/build-aux/install-sh"
+S["MAKEINFO"]="${SHELL} /home/agrr/pteid-mw/xml-security-c-1.7.2/build-aux/missing --run makeinfo"
+S["AUTOHEADER"]="${SHELL} /home/agrr/pteid-mw/xml-security-c-1.7.2/build-aux/missing --run autoheader"
+S["AUTOMAKE"]="${SHELL} /home/agrr/pteid-mw/xml-security-c-1.7.2/build-aux/missing --run automake-1.12"
+S["AUTOCONF"]="${SHELL} /home/agrr/pteid-mw/xml-security-c-1.7.2/build-aux/missing --run autoconf"
+S["ACLOCAL"]="${SHELL} /home/agrr/pteid-mw/xml-security-c-1.7.2/build-aux/missing --run aclocal-1.12"
 S["VERSION"]="1.7.2"
 S["PACKAGE"]="xml-security-c"
 S["CYGPATH_W"]="echo"
