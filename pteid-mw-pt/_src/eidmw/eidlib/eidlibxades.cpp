@@ -121,6 +121,18 @@ PTEID_ByteArray PTEID_EIDCard::SignXadesT(const char *const * path, unsigned int
 	return out;
 }
 
+void PTEID_EIDCard::SignXadesAIndividual(const char *const * path, unsigned int n_paths, const char *output_path)
+{
+	BEGIN_TRY_CATCH
+
+	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
+
+	pcard->SignXadesAIndividual((const char **)path, n_paths, output_path);
+
+	END_TRY_CATCH
+
+}
+
 PTEID_ByteArray PTEID_EIDCard::SignXadesA(const char *const * path, unsigned int n_paths, const char *output_path)
 {
 

@@ -908,6 +908,7 @@ public:
 	     
 	     PTEIDSDK_API void SignXadesIndividual(const char * const* paths, unsigned int n_paths, const char *output_path); /** Store the XAdes signature in individual zip containers  */
 	     PTEIDSDK_API void SignXadesTIndividual(const char * const* paths, unsigned int n_paths, const char *output_path); /** Store the Xades-T signature in individual zip containers  */
+		 PTEIDSDK_API void SignXadesAIndividual(const char * const* paths, unsigned int n_paths, const char *output_path);
 		
 	     //PDF Signature with location by page sector (the portrait A4 page is split into 18 cells: 6 lines and 3 columns)
 	     PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
