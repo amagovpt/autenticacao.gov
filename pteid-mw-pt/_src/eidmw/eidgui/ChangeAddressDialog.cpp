@@ -1,5 +1,8 @@
 #include "ChangeAddressDialog.h"
 #include <QPushButton>
+#include <QString>
+#include "eidlib.h"
+#include "eidlibdefines.h"
 
 
 ChangeAddressDialog::ChangeAddressDialog(QWidget* parent)
@@ -15,6 +18,9 @@ ChangeAddressDialog::ChangeAddressDialog(QWidget* parent)
 	connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 	ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+
+	connect(ui.lineEdit_secretCode, SIGNAL(textEdited(QString)), this, SLOT(secretCode_textEdited(QString)));
+	connect(ui.lineEdit_process, SIGNAL(textEdited(QString)), this, SLOT(process_textEdited(QString)));
 
 }
 
@@ -34,20 +40,19 @@ QString ChangeAddressDialog::getProcess()
 	
 }
 
-void ChangeAddressDialog::on_lineEdit_secretCode_textEdited(const QString &text)
+void ChangeAddressDialog::secretCode_textEdited(QString text)
 {
 
-	ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(
+
+ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(
 	ui.lineEdit_process->text().size() > 0 && text.size() > 0);
 	
-
 }
 
-void ChangeAddressDialog::on_lineEdit_process_textEdited(const QString &text)
+void ChangeAddressDialog::process_textEdited(QString text)
 {
 
 ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(
 	ui.lineEdit_secretCode->text().size() > 0 && text.size() > 0);
 	
-
 }

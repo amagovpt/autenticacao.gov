@@ -30,21 +30,15 @@ class ChangeAddressDialog : public QDialog
 {
     Q_OBJECT
 
-/*
-private slots:
-    void on_pbOK_clicked (void);
-
-*/
-
 public:
     ChangeAddressDialog(QWidget* parent);
     ~ChangeAddressDialog();
     QString getSecretCode();
     QString getProcess();
 
-private slots:
-	void on_lineEdit_process_textEdited(const QString& text);
-	void on_lineEdit_secretCode_textEdited(const QString& text);
+public slots:
+	void process_textEdited(QString text);
+	void secretCode_textEdited(QString text);
 
 private:
 	Ui_ChangeAddressDialog ui;
