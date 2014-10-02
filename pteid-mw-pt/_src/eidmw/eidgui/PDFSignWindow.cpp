@@ -93,7 +93,6 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	for (int i = 0; i!= items; i++)
 	{
 		ui.verticalLayout->itemAt(i)->setAlignment(Qt::AlignTop);
-		// qDebug() << "Setting Alignment of verticalLayout " << endl;
 	}
 
 	ui.verticalLayout1->setSpacing(5);
@@ -103,7 +102,14 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	for (int i = 0; i!= items; i++)
 	{
 		ui.verticalLayout_4->itemAt(i)->setAlignment(Qt::AlignTop);
-		// qDebug() << "Setting Alignment of verticalLayout " << endl;
+	}
+
+	items = ui.verticalLayout1->count();
+
+	for (int i = 0; i!= items; i++)
+	{
+		ui.verticalLayout1->itemAt(i)->setAlignment(Qt::AlignTop);
+
 	}
 
 	this->setFixedSize(this->width(), this->height());	
