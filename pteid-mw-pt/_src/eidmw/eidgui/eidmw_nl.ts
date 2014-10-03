@@ -1519,7 +1519,7 @@ Please specify .xml, .csv or .eid</source>
     </message>
     <message>
         <source>Error obtaining timestamp</source>
-        <translation>Erro ao gerar Assinatura!</translation>
+        <translation>Erro na obtenção de selo temporal</translation>
     </message>
     <message>
         <source>Select File(s)</source>
