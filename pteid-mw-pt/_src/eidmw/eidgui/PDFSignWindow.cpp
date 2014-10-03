@@ -30,6 +30,7 @@
 #include <QCursor>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
+#include <QFileInfo>
 
 #include <eidlib.h>
 #include "PDFSignWindow.h"
@@ -592,7 +593,7 @@ void PDFSignWindow::on_button_sign_clicked()
 
 		//Save the generated image as high-quality JPEG data
 		image_canvas->drawToImage().save(&buffer, "JPG", 100);
-		// fprintf(stderr, "setting CustomImage with data= 0x%p: %ld\n", ba.data(), ba.size());
+		// fprintf(stderr, "setting CustomImage with data= 0x%p: %d bytes\n", m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
 
 		m_pdf_sig->setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
 
@@ -1218,7 +1219,8 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 
 	if (tmp_count < 1)
 	{
-		ShowErrorMsgBox(tr("Unsupported or corrupted file!"));
+		QFileInfo fi(current_input_path);
+		ShowErrorMsgBox(tr("Unsupported or damaged PDF file: ") + fi.fileName());
 		m_pdf_sig = NULL;
 		return;
 	}

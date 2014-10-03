@@ -1672,6 +1672,10 @@ Please specify .xml, .csv or .eid</source>
         <translation>Página horizontal</translation>
 </message>
 <message>
+        <source>Unsupported or damaged PDF file: </source>
+        <translation>Ficheiro PDF não suportado ou danificado: </translation>
+</message>
+<message>
         <source>Vertical page</source>
         <translation>Página vertical</translation>
 </message>
