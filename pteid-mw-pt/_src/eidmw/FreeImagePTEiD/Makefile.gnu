@@ -16,10 +16,12 @@ LIBRARIES = -lstdc++
 
 MODULES = $(SRCS:.c=.o)
 MODULES := $(MODULES:.cpp=.o)
-CFLAGS ?= -O3 -fPIC -fexceptions -fvisibility=hidden -DNO_LCMS
-CFLAGS += $(INCLUDE)
-CXXFLAGS ?= -O3 -fPIC -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy
-CXXFLAGS += $(INCLUDE)
+CFLAGS ?= -O3 -fPIC
+override CFLAGS += -fexceptions -fvisibility=hidden -DNO_LCMS
+override CFLAGS += $(INCLUDE)
+CXXFLAGS ?= -O3 -fPIC
+override CXXFLAGS += -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy
+override CXXFLAGS += $(INCLUDE)
 
 ifeq ($(shell sh -c 'uname -m 2>/dev/null || echo not'),x86_64)
 	CFLAGS += -fPIC
@@ -57,7 +59,7 @@ FreeImage: $(SHAREDLIB)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(SHAREDLIB): $(MODULES)
-	$(CC) -s -shared -Wl,-soname,$(VERLIBNAME) $(LDFLAGS) -o $@ $(MODULES) $(LIBRARIES)
+	$(CXX) -shared -Wl,-soname,$(VERLIBNAME) -Wl,-z,defs $(LDFLAGS) -o $@ $(MODULES) $(CXXFLAGS) $(LIBRARIES)
 
 install:
 	install -d $(INCDIR) $(INSTALLDIR)
