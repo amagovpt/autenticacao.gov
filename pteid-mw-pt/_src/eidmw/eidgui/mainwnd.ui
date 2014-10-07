@@ -440,8 +440,11 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
           <height>41</height>
          </rect>
         </property>
+          <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="styleSheet">
-         <string notr="true">color: rgb(108, 108, 108);
+         <string notr="true">color: rgb(211, 211, 211);
 font: 75 12pt &quot;Arial&quot;;
 background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
         </property>
@@ -2226,7 +2229,7 @@ font: 10pt &quot;Arial&quot;;</string>
      </property>
      <property name="styleSheet">
       <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
+color: rgb(211, 211, 211);
 font: 10pt &quot;Arial&quot;;</string>
      </property>
      <property name="text">
