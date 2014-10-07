@@ -2624,9 +2624,9 @@ void MainWnd::actionPDFSignature_triggered()
 //*****************************************************
 void MainWnd::actionVerifySignature_eID_triggered()
 {
-    dlgVerifySignature* dlgversig = new dlgVerifySignature( this);
-    dlgversig->exec();
-    delete dlgversig;
+    // dlgVerifySignature* dlgversig = new dlgVerifySignature( this);
+    // dlgversig->exec();
+    // delete dlgversig;
 }
 
 //*****************************************************
