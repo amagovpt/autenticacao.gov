@@ -52,7 +52,7 @@
     <rect>
      <x>20</x>
      <y>100</y>
-     <width>349</width>
+     <width>400</width>
      <height>22</height>
     </rect>
    </property>
@@ -83,7 +83,7 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>400</width>
+     <width>410</width>
      <height>21</height>
     </size>
    </property>
@@ -152,7 +152,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>&lt;a href=&quot;http://cartaodecidadao.pt&quot;&gt; http://cartaodecidadao.pt</string>
+    <string>&lt;a href=&quot;http://www.cartaodecidadao.pt&quot;&gt; http://www.cartaodecidadao.pt</string>
    </property>
    <property name="openExternalLinks">
     <bool>true</bool>
