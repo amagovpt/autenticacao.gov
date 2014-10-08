@@ -3,7 +3,7 @@
 
 ###### version nr of the complete package (real version)
 REL_MAJ=2
-REL_MIN=2
+REL_MIN=3
 REL_REV=0
 
 
