@@ -670,9 +670,9 @@ void MainWnd::on_btn_menu_tools_clicked()
 	m_ui.wdg_submenu_tools->setVisible(true);
 	//If defined language is portuguese, then the dialog needs to be larger
 	if (m_Settings.getGuiLanguageCode() == GenPur::LANG_NL)
-		m_ui.wdg_submenu_tools->setGeometry(127,4,155,110);
+		m_ui.wdg_submenu_tools->setGeometry(127,4,155,71);
 	else
-		m_ui.wdg_submenu_tools->setGeometry(127,4,145,110);
+		m_ui.wdg_submenu_tools->setGeometry(127,4,145,71);
 
 }
 

@@ -404,6 +404,9 @@
           <height>41</height>
          </rect>
         </property>
+         <property name="visible">
+           <bool>false</bool>
+         </property>
         <property name="styleSheet">
          <string notr="true">color: rgb(108, 108, 108);
 font: 75 12pt &quot;Arial&quot;;
@@ -416,7 +419,7 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
        <widget class="QPushButton" name="btnShortcut_PdfSign">
         <property name="geometry">
          <rect>
-          <x>610</x>
+          <x>430</x>
           <y>310</y>
           <width>171</width>
           <height>41</height>
@@ -443,6 +446,9 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
           <property name="enabled">
          <bool>false</bool>
         </property>
+         <property name="visible">
+           <bool>false</bool>
+         </property>
         <property name="styleSheet">
          <string notr="true">color: rgb(211, 211, 211);
 font: 75 12pt &quot;Arial&quot;;
@@ -2159,7 +2165,7 @@ font: 10pt &quot;Arial&quot;;</string>
       <x>150</x>
       <y>760</y>
       <width>151</width>
-      <height>111</height>
+      <height>71</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -2217,6 +2223,9 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="text">
       <string>Universal Signature</string>
      </property>
+      <property name="visible">
+        <bool>false</bool>
+      </property>
     </widget>
     <widget class="QLabel" name="lbl_menuTools_VerifySignature">
      <property name="geometry">
@@ -2227,6 +2236,9 @@ font: 10pt &quot;Arial&quot;;</string>
        <height>17</height>
       </rect>
      </property>
+      <property name="visible">
+        <bool>false</bool>
+      </property>
      <property name="styleSheet">
       <string notr="true">background-image: url(:/images/Images/alpha.png);
 color: rgb(211, 211, 211);
@@ -2276,7 +2288,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>25</x>
-       <y>65</y>
+       <y>45</y>
        <width>131</width>
        <height>17</height>
       </rect>
