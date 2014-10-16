@@ -823,6 +823,7 @@ class PTEID_PDFSignature
 		PTEIDSDK_API void addToBatchSigning(char *input_path);
 		PTEIDSDK_API int getPageCount();
 		PTEIDSDK_API void enableTimestamp();
+		PTEIDSDK_API void enableSmallSignatureFormat();
 		PTEIDSDK_API bool isLandscapeFormat();
 		PTEIDSDK_API char *getOccupiedSectors(int page);
 		PTEIDSDK_API void setCustomImage(unsigned char *image_data, unsigned long image_length);

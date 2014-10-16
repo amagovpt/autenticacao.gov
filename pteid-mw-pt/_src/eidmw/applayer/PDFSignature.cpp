@@ -38,6 +38,8 @@ namespace eIDMW
 		m_civil_number = NULL;
 		m_citizen_fullname = NULL;
 		m_batch_mode = true;
+		m_timestamp = false;
+		m_small_signature = false;
 		my_custom_image.img_data = NULL;
 
 	}
@@ -55,6 +57,7 @@ namespace eIDMW
 		m_citizen_fullname = NULL;
 		m_batch_mode = false;
 		m_timestamp = false;
+		m_small_signature = false;
 		my_custom_image.img_data = NULL;
 		m_doc = new PDFDoc(new GooString(pdf_file_path));
 	
@@ -92,6 +95,11 @@ namespace eIDMW
 	void PDFSignature::enableTimestamp()
 	{
 		m_timestamp = true;
+	}
+
+	void PDFSignature::enableSmallSignature()
+	{
+		m_small_signature = true;
 	}
 
 	void PDFSignature::setVisible(unsigned int page_number, int sector_number, bool is_landscape)

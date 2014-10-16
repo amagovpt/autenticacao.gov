@@ -250,7 +250,7 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_s
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
 
 	//Accessing PTEID_PDFSignature private parts because we're friends :)
-	pdf_sig = sig_handler.mp_signature; 
+	pdf_sig = sig_handler.mp_signature;
 
 	if (page_sector != 0 && page != 0)
 		pdf_sig->setVisible(page, page_sector, is_landscape);
@@ -318,6 +318,11 @@ void PTEID_PDFSignature::enableTimestamp()
 void PTEID_PDFSignature::setCustomImage(unsigned char *image_data, unsigned long img_length)
 {
 	mp_signature->setCustomImage(image_data, img_length);
+}
+
+void PTEID_PDFSignature::enableSmallSignatureFormat()
+{
+	mp_signature->enableSmallSignature();
 }
 
 char *PTEID_PDFSignature::getOccupiedSectors(int page)

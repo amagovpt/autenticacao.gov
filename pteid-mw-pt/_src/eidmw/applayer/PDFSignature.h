@@ -43,6 +43,7 @@ namespace eIDMW
 			const char *outfile_path);
         EIDMW_APL_API bool isLandscapeFormat();
 		EIDMW_APL_API void setCustomImage(unsigned char *img_data, unsigned long img_length);
+		EIDMW_APL_API void enableSmallSignature();
 
 	private:
 
@@ -69,6 +70,7 @@ namespace eIDMW
 		bool m_isLandscape;
 		bool m_batch_mode;
 		bool m_timestamp;
+		bool m_small_signature;
 		std::vector<char *> m_files_to_sign;
 		Pixmap my_custom_image;
 		
