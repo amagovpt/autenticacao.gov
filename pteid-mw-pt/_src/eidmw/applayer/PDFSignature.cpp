@@ -153,6 +153,9 @@ namespace eIDMW
 		double vert_align = 16; //Add this to vertically center inside each cell
 		//Number of columns for portrait layout
 		int columns = 4.0;
+		double signature_height = m_small_signature ? sig_height / 2.0 : sig_height;
+		int MAX_SECTOR = m_small_signature ? 40 : 20;
+		const double n_lines = MAX_SECTOR / 4.0;
 
 		double sig_width = (page_width - lr_margin*2) / columns;
 		
@@ -160,18 +163,18 @@ namespace eIDMW
 		sig_rect.x1 = lr_margin;
 		sig_rect.x2 = lr_margin;
 
-		if (sector < 1 || sector > 20)
-			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-20]\n", 
-					sector);
+		if (sector < 1 || sector > MAX_SECTOR)
+			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-%d]\n", 
+					sector, MAX_SECTOR);
 		
-		if (sector < 17)
+		if (sector < MAX_SECTOR - 3)
 		{
 			int line = sector / 4 + 1;
 			if (sector % 4 == 0)
-			   line = sector / 3;
+			   line = sector / 4;
 
-			sig_rect.y1 += (page_height - 2*tb_margin) * (6-line) / 6.0;
-			sig_rect.y2 += (page_height - 2*tb_margin) * (6-line) / 6.0;
+			sig_rect.y1 += (page_height - 2*tb_margin) * (n_lines-line) / n_lines;
+			sig_rect.y2 += (page_height - 2*tb_margin) * (n_lines-line) / n_lines;
 		}
 
 		int column = (sector-1) % 4;
@@ -183,7 +186,7 @@ namespace eIDMW
 
 		//Define height and width of the rectangle
 		sig_rect.x2 += sig_width;
-		sig_rect.y2 += sig_height + tb_margin + vert_align;
+		sig_rect.y2 += signature_height + tb_margin + vert_align;
 
 		
 		fprintf(stderr, "DEBUG: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
@@ -194,7 +197,11 @@ namespace eIDMW
 
 	PDFRectangle PDFSignature::computeSigLocationFromSector(double page_height, double page_width, int sector)
 	{
-		fprintf(stderr, "computeSigLocationFromSector called with sector=%d\n", sector);
+		fprintf(stderr, "computeSigLocationFromSector called with sector=%d and m_small_signature = %d\n ",
+		   sector, m_small_signature);
+		int MAX_SECTOR = m_small_signature ? 36 : 18;
+		double signature_height = m_small_signature ? sig_height / 2.0 : sig_height;
+		const double n_lines = MAX_SECTOR / 3.0;
 		// Add padding, adjust to subtly tweak the location
 		// The units for x_pad, y_pad, sig_height and sig_width are postscript
 		// points (1 px == 0.75 points)
@@ -209,18 +216,18 @@ namespace eIDMW
 		sig_rect.x1 = lr_margin;
 		sig_rect.x2 = lr_margin;
 
-		if (sector < 1 || sector > 18)
-			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-18]\n", 
-					sector);
+		if (sector < 1 || sector > MAX_SECTOR)
+			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-%d]\n", 
+					sector, MAX_SECTOR);
 		
-		if (sector < 16)
+		if (sector < MAX_SECTOR -2)
 		{
 			int line = sector / 3 + 1;
 			if (sector % 3 == 0)
 			   line = sector / 3;
 
-			sig_rect.y1 += (page_height - 2*tb_margin) * (6-line) / 6.0;
-			sig_rect.y2 += (page_height - 2*tb_margin) * (6-line) / 6.0;
+			sig_rect.y1 += (page_height - 2*tb_margin) * (n_lines-line) / n_lines;
+			sig_rect.y2 += (page_height - 2*tb_margin) * (n_lines-line) / n_lines;
 		}
 
 		if (sector % 3 == 2 )
@@ -239,9 +246,9 @@ namespace eIDMW
 
 		//Define height and width of the rectangle
 		sig_rect.x2 += sig_width;
-		sig_rect.y2 += sig_height + tb_margin + vert_align;
+		sig_rect.y2 += signature_height + tb_margin + vert_align;
 		
-
+		fprintf(stderr, "DEBUG: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
 		return sig_rect;
 	}
 
