@@ -230,6 +230,8 @@ private:
   Ref m_sig_ref;
   Object *m_sig_dict;
   bool incremental_update;
+  bool small_signature_format;
+
   int numPages;			// number of pages
   int pagesSize;		// size of pages array
   Object dests;			// named destination dictionary

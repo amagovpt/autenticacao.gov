@@ -290,10 +290,12 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	//Visible Signature location 
 	if (rect)
 	{
+		//XXX: crappy logic to determine if we have small signature format 
+		small_signature_format = (rect->y2 - rect->y1) < 90.0;
 				
 		r0=rect->x1;
-	       	r1=rect->y1;
-	       	r2=rect->x2; 
+		r1=rect->y1;
+		r2=rect->x2; 
 		r3=rect->y2;
 	}
 	obj4.arrayAdd (obj2.initReal(r0));
@@ -612,6 +614,12 @@ Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool nee
 		image_dict.initDict(xref);
 		image_dict.dictAdd(copyString("Im0"), &ref_to_dict);
 
+		Ref image_background2 = addImageXObject(CC_WATERMARK_WIDTH, CC_WATERMARK_HEIGHT, CC_WATERMARK_BITMAP,
+			sizeof(CC_WATERMARK_BITMAP));
+
+		ref_to_dict.initRef(image_background2.num, image_background2.gen);
+		image_dict.dictAdd(copyString("Im1"), &ref_to_dict);
+
 		resources.dictAdd(copyString("XObject"), &image_dict);
 	}
 
@@ -816,6 +824,14 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	Object ap_dict, appearance_obj, obj1, obj2, obj3,
 	       ref_to_dict, ref_to_dict2, ref_to_n2, ref_to_n0, font_dict, xobject_layers;
 
+	std::string commands_template;
+
+	//Small signature formats only includes one image: Im1
+	if (small_signature_format)
+		commands_template = "q\r\n40.5 0 0 31.5 0 0 cm\r\n/Im1 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
+	else
+		commands_template = "q\r\n40.5 0 0 31.5 0 43 cm\r\n/Im1 Do\r\nQ\r\nq\r\n138.0 0 0 30.0 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
+
 	initBuiltinFontTables();
 	
 	const char appearance_command1[] = 
@@ -825,11 +841,10 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	const float font_size = 8;
 	//Start with Italics font
 	GooString *n2_commands = new GooString(
-           GooString::format("q\r\n175.5 0 0 31.5 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n",
-			rect_y - 10, (int)font_size));
+           GooString::format(commands_template.c_str(), rect_y - 10, (int)font_size));
 	
 
-	if (reason != NULL && strlen(reason) > 0)
+	if (!small_signature_format && reason != NULL && strlen(reason) > 0)
 	{
 		GooString *abc = new GooString(utf8_to_latin1(reason));
 		n2_commands->append(formatMultilineString(abc->getCString(), rect_x, font_size, MYRIAD_ITALIC, 2));
@@ -874,7 +889,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	n2_commands->append(GooString::format("0 -10 Td\r\n(Data: {0:s}) Tj\r\n",
 		date_str));
 
-	if (location != NULL && strlen(location) > 0)
+	if (!small_signature_format && location != NULL && strlen(location) > 0)
 	{
 		n2_commands->append("0 -10 Td\r\n");
 		GooString * tmp_location = GooString::format("Localiza\xE7\xE3o: {0:s}",
