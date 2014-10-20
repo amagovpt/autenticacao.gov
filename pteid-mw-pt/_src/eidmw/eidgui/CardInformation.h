@@ -650,7 +650,7 @@ public:
 	//----------------------------------------------
 	// get reference to all fields
 	//----------------------------------------------
-	tFieldMap& getFields( void )
+	const tFieldMap getFields( void ) const
 	{
 		return m_Fields;
 	}

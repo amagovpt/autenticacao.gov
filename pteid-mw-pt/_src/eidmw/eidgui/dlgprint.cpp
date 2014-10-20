@@ -532,7 +532,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, int format, const char *filepat
 
 	cr = createPage(format, true, filepath, NULL);
 
-	tFieldMap& PersonFields = CI_Data.m_PersonInfo.getFields();
+	const tFieldMap PersonFields = CI_Data.m_PersonInfo.getFields();
 	tFieldMap& CardFields = CI_Data.m_CardInfo.getFields();
 
 	//////////////////////////////ID FIELDS///////////////////////////

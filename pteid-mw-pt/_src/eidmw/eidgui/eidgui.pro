@@ -138,7 +138,7 @@ HEADERS += CardInformation.h \
 					 PDFSignWindow.h \
 					 ChangeAddressDialog.h \
 					 ../_Builds/pteidversions.h \
-					 ../dialogs/dialogs.h 
+					 ../dialogs/dialogs.h
            
 FORMS += dlgAbout.ui dlgOptions.ui mainwnd.ui picturepopup.ui dlgPrint.ui dlgSignature.ui dlgVerifySignature.ui PDFSignWindow.ui ChangeAddressDialog.ui
 

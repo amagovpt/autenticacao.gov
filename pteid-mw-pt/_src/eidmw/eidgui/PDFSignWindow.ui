@@ -76,14 +76,13 @@
      <string>PDF Files to sign</string>
     </property>
    </widget>
-   
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>220</y>
       <width>381</width>
-      <height>128</height>
+      <height>150</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="vertical_top">
@@ -144,6 +143,17 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="smallsig_checkBox">
+         <property name="text">
+          <string>Small signature?</string>
+         </property>
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+
       </layout>
      </item>
     </layout>
@@ -158,8 +168,8 @@
      </rect>
     </property>
     <property name="styleSheet">
-         <string notr="true">font: bold;</string>
-        </property>
+     <string notr="true">font: bold;</string>
+    </property>
     <property name="text">
      <string>Sign</string>
     </property>
@@ -183,7 +193,7 @@
     <rect>
      <x>440</x>
      <y>10</y>
-     <width>400</width>
+     <width>420</width>
      <height>491</height>
     </rect>
    </property>
@@ -206,7 +216,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab1">
        <attribute name="title">
@@ -364,12 +374,11 @@
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>400</width>
+          <width>535</width>
           <height>321</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">
-
          <item>
           <widget class="QLabel" name="label_signature_preview">
            <property name="sizePolicy">
@@ -387,7 +396,44 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_imgChooser">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QPushButton" name="pushButton_imgChooser">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Choose custom image</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Maximum image dimensions: (185x41 px)</string>
+             </property>
+     
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_resetImage">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -398,7 +444,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Choose custom image</string>
+            <string>Reset image</string>
            </property>
           </widget>
          </item>

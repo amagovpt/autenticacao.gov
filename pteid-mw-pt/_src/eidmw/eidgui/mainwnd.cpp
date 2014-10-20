@@ -3438,7 +3438,7 @@ void MainWnd::refreshTabIdentity( void )
 
 	m_ui.lblIdentity_ImgPerson->show();
 
-	tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
+	const tFieldMap PersonFields = m_CI_Data.m_PersonInfo.getFields();
 
 	m_ui.txtIdentity_Name->setText		 ( QString::fromUtf8(PersonFields[NAME].toStdString().c_str()) );
 	m_ui.txtIdentity_Name->setAccessibleName ( QString::fromUtf8(PersonFields[NAME].toStdString().c_str()) );
@@ -3477,7 +3477,7 @@ void MainWnd::refreshTabIdentityExtra()
 {
 	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
 
-	tFieldMap& PersonFields = m_CI_Data.m_PersonInfo.getFields();
+	const tFieldMap PersonFields = m_CI_Data.m_PersonInfo.getFields();
 
 	m_ui.txtIdentityExtra_TaxNo->setText	( QString::fromUtf8(PersonFields[TAXNO].toStdString().c_str()) );
 	m_ui.txtIdentityExtra_TaxNo->setAccessibleName	( QString::fromUtf8(PersonFields[TAXNO].toStdString().c_str()) );
