@@ -36,7 +36,6 @@ enum ErrorCode
 
 /* Forward declaration */
 class FreeSelectionDialog;
-class Rectangle;
 
 
 class MyGraphicsScene : public QGraphicsScene
@@ -145,10 +144,10 @@ class SelectableRectangle: public QGraphicsItem
 
 };
 
-class Rectangle : public QGraphicsItem
+class DraggableRectangle : public QGraphicsItem
 {
 	public:
-		Rectangle(MyGraphicsScene *parent, double max_y, double max_x, double rect_h, double rect_w): my_scene(parent), 
+		DraggableRectangle(MyGraphicsScene *parent, double max_y, double max_x, double rect_h, double rect_w): my_scene(parent), 
 		m_max_x(max_x), m_max_y(max_y), m_rect_w(rect_w), m_rect_h(rect_h)
 	{
     		setFlag(QGraphicsItem::ItemIsMovable);
@@ -276,7 +275,7 @@ class PDFSignWindow : public QDialog
 		double convertY();
 
 		MyGraphicsScene * my_scene;
-		Rectangle *my_rectangle;
+		DraggableRectangle *my_rectangle;
 
 		ImageCanvas *image_canvas;
 		bool m_landscape_mode;

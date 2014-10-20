@@ -826,7 +826,7 @@ void MyGraphicsScene::drawBackground(QPainter * painter, const QRectF & rect )
 }
 */
 
-void Rectangle::paint(QPainter *painter,
+void DraggableRectangle::paint(QPainter *painter,
 		const QStyleOptionGraphicsItem *, QWidget *)
 {
 	painter->setPen(Qt::black);
@@ -834,17 +834,17 @@ void Rectangle::paint(QPainter *painter,
 	painter->drawRect(0, 0, m_rect_w, m_rect_h);
 }
 
-void Rectangle::makeItSmaller()
+void DraggableRectangle::makeItSmaller()
 {
 	m_rect_h /= 2;
 }
 
-void Rectangle::makeItLarger()
+void DraggableRectangle::makeItLarger()
 {
 	m_rect_h *= 2;
 }
 
-QRectF Rectangle::boundingRect() const
+QRectF DraggableRectangle::boundingRect() const
 {
 	return QRectF(0, 0, m_rect_w+1, m_rect_h+1);
 }
@@ -852,27 +852,27 @@ QRectF Rectangle::boundingRect() const
 
 /* Change mouse cursor to indicate draggable rectangle
  */
-void Rectangle::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
+void DraggableRectangle::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
 {
 	//setCursor(Qt::OpenHandCursor);
 	QApplication::setOverrideCursor(QCursor(Qt::OpenHandCursor));
 	update();
 }
 
-void Rectangle::hoverLeaveEvent(QGraphicsSceneHoverEvent * event)
+void DraggableRectangle::hoverLeaveEvent(QGraphicsSceneHoverEvent * event)
 {
 	QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
 	update();
 }
 
-void Rectangle::mousePressEvent (QGraphicsSceneMouseEvent * event)
+void DraggableRectangle::mousePressEvent (QGraphicsSceneMouseEvent * event)
 {
 
 	QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
 
 }
 
-void Rectangle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
+void DraggableRectangle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
 
 	QPointF tmp = scenePos();
@@ -1123,7 +1123,7 @@ void PDFSignWindow::addSquares()
 
         }
 
-        my_rectangle = new Rectangle(my_scene, scene_height, scene_width, 30, 50);
+        my_rectangle = new DraggableRectangle(my_scene, scene_height, scene_width, 30, 50);
         my_scene->addItem(my_rectangle);
         my_rectangle->hide();
 
