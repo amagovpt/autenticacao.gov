@@ -3,6 +3,7 @@
 #include <QCoreApplication>
 #include "mylistview.h"
 #include <iostream>
+#include <cstdio>
 
 
 MyListView::MyListView(QWidget *parent): 
@@ -51,6 +52,9 @@ void MyListView::removeSelected()
 
   // Store the last selected row, which is the first in the list
   int last_row = selection.first().bottom();
+
+  //PDFSignWindow needs to be notified of the item removed to update another widget
+  emit itemRemoved(last_row);
 
   foreach (const QItemSelectionRange& range, selection) {
 	  rows_removed += range.height();

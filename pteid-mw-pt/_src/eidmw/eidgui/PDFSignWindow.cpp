@@ -119,7 +119,8 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 
 	}
 
-	this->setFixedSize(this->width(), this->height());	
+	this->setFixedSize(this->width(), this->height());
+	connect(ui.pdf_listview, SIGNAL(itemRemoved(int)), this, SLOT(updateMaxPage(int)));	
 }
 
 
@@ -409,15 +410,17 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 		ui.spinBox_page->setEnabled(false);
 	}
 
-	// ui.label_page->setEnabled(checked);
-	// ui.label_choose_sector->setEnabled(checked);
-	// ui.label_selectedsector->setEnabled(checked);
-	// ui.pushButton_freeselection->setEnabled(checked);
 	ui.pushButton_imgChooser->setEnabled(checked);
 	ui.pushButton_resetImage->setEnabled(checked);
 	ui.pushButton_freeselect->setEnabled(checked);
 	ui.smallsig_checkBox->setEnabled(checked);
 
+	if (!checked && my_rectangle)
+	{
+		my_rectangle->hide();
+		clearAllSectors();
+	}
+		
 }
 
 void PDFSignWindow::on_pushButton_imgChooser_clicked()
@@ -533,11 +536,12 @@ void PDFSignWindow::on_button_sign_clicked()
 		//First we need to free the first instance that was created unless we want to leak the file handle...
 		delete m_pdf_sig;
 		m_pdf_sig = new PTEID_PDFSignature();
+
 		for (int i = 0; i < model->rowCount(); i++)
 		{
 			QString tmp = model->data(model->index(i, 0), 0).toString();
 			char *final = strdup(getPlatformNativeString(tmp));
-			m_pdf_sig->addToBatchSigning(final);
+			m_pdf_sig->addToBatchSigning(final, ui.radioButton_lastpage->isChecked());
 
 		}
 
@@ -1155,6 +1159,13 @@ void PDFSignWindow::highlightSectors(QString &csv_sectors)
 
 }
 
+void PDFSignWindow::updateMaxPage(int removed_index)
+{
+	page_numbers.removeAt(removed_index);
+	ui.spinBox_page->setMaximum(*std::min_element(page_numbers.begin(), page_numbers.end()));
+
+}
+
 
 void PDFSignWindow::addFileToListView(QStringList &str)
 {
@@ -1167,6 +1178,7 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	
 	
 	int tmp_count = m_pdf_sig->getPageCount();
+	
 
 	if (tmp_count < 1)
 	{
@@ -1175,28 +1187,35 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 		m_pdf_sig = NULL;
 		return;
 	}
+
+	page_numbers.append(tmp_count);
 	m_current_page_number = tmp_count;
     m_landscape_mode = m_pdf_sig->isLandscapeFormat();
 
-    qDebug() << "Landscape format? " << m_landscape_mode;
+    // qDebug() << "Landscape format? " << m_landscape_mode;
 
 	for(int i=0; i != str.size(); i++)
 	{
-
+		QString tmp = str.at(i);
 		list_model->insertRows(list_model->rowCount(), 1);
-		list_model->setData(list_model->index(list_model->rowCount()-1, 0), str.at(i));
+		list_model->setData(list_model->index(list_model->rowCount()-1, 0), tmp);
+		if (i > 0)
+		{
+			int page_n = m_pdf_sig->getOtherPageCount(strdup(getPlatformNativeString(tmp)));
+			page_numbers.append(tmp_count);
+		}
 
 	}
 
 	//Set the spinbox with the appropriate max value
-	ui.spinBox_page->setMaximum(m_current_page_number);
+	ui.spinBox_page->setMaximum(*std::min_element(page_numbers.begin(), page_numbers.end()));
 
 	// QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(1));
 	// highlightSectors(sectors);
 
 	if (list_model->rowCount() > 1)
 	{
-		// clearAllSectors();
+		clearAllSectors();
 	}
 
 	//Enable sign button now that we have data and a card inserted

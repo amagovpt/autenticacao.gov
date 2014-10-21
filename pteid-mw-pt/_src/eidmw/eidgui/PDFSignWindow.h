@@ -196,6 +196,8 @@ class PDFSignWindow : public QDialog
 	    void on_reason_textbox_textEdited(QString text);
 	    void on_location_textbox_textEdited(QString text);
 
+	    void updateMaxPage(int removed_index);
+
 	    // Location Tab Stuff
 		void on_pushButton_freeselect_clicked();
 //	    void on_tableWidget_currentCellChanged(int row, int column, int prev_row, int prev_column);
@@ -254,6 +256,7 @@ class PDFSignWindow : public QDialog
 
 	    QFutureWatcher<void> FutureWatcher;
 	    PTEID_PDFSignature *m_pdf_sig;
+	    QList<int> page_numbers;
 	
 	    //Number of pages of currently loaded document
 	    int m_current_page_number;

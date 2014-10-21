@@ -23,8 +23,14 @@ class MyListView : public QListView
     void removeSelected(); 
     void enableNotify();
 
+    signals:
+    
+    void itemRemoved(int index);
+
     private:
     bool notify;
+
+
 
 
 };

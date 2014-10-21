@@ -80,15 +80,15 @@ namespace eIDMW
 
 		//Free the strdup'ed strings from batchAddFile
 		for (int i = 0; i != m_files_to_sign.size(); i++)
-			free(m_files_to_sign.at(i));
+			free(m_files_to_sign.at(i).first);
 
 		if (m_doc != NULL)
 			delete m_doc;
 	}
 
-	void PDFSignature::batchAddFile(char *file_path)
+	void PDFSignature::batchAddFile(char *file_path, bool last_page)
 	{
-		m_files_to_sign.push_back(strdup(file_path));
+		m_files_to_sign.push_back(std::make_pair(strdup(file_path), last_page));
 
 	}
 
@@ -335,10 +335,14 @@ namespace eIDMW
 		{
 			 for (unsigned int i = 0; i < m_files_to_sign.size(); i++)
 			 {
-				 char *current_file = m_files_to_sign.at(i);
+				 char *current_file = m_files_to_sign.at(i).first;
 				 std::string f = generateFinalPath(outfile_path,
 						 current_file);
+
 				 m_doc = new PDFDoc(new GooString(current_file));
+				 //Set page as the last
+				 if (m_files_to_sign.at(i).second)
+				 	m_page = m_doc->getNumPages();
 
 				rc += signSingleFile(location, reason, f.c_str());
 				if (i == 0)
@@ -350,6 +354,26 @@ namespace eIDMW
 
 		return rc;
 
+	}
+
+	int PDFSignature::getOtherPageCount(const char *input_path)
+	{
+		GooString filename(input_path);
+		PDFDoc doc(new GooString(input_path));
+
+		if (!doc.isOk())
+		{
+			fprintf(stderr, "getOtherPageCount(): Probably broken PDF...\n");
+			return -1;
+		}
+		if (doc.isEncrypted())
+		{
+			fprintf(stderr,
+				"getOtherPageCount(): Encrypted PDFs are unsupported at the moment\n");
+			return -1;
+		}
+
+		return doc.getNumPages();
 	}
 
 

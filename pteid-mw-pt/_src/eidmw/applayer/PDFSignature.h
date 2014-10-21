@@ -3,6 +3,7 @@
 
 #include "Export.h"
 #include <vector>
+#include <utility>
 
 class PDFRectangle;
 class PDFDoc;
@@ -29,13 +30,14 @@ namespace eIDMW
 		EIDMW_APL_API ~PDFSignature();
 		
 		//Batch Operations (with PIN caching)
-		EIDMW_APL_API void batchAddFile(char *file_path);
+		EIDMW_APL_API void batchAddFile(char *file_path, bool last_page);
 		EIDMW_APL_API void enableTimestamp();
 
 		EIDMW_APL_API void setVisible(unsigned int page, int sector, bool is_landscape);
 		EIDMW_APL_API void setVisibleCoordinates(unsigned int page, double coord_x, double coord_y);
 		EIDMW_APL_API char *getOccupiedSectors(int page);
 		EIDMW_APL_API int getPageCount();
+		EIDMW_APL_API int getOtherPageCount(const char *input_path);
 		void setCard(APL_Card *card) { m_card = card; };
 		
 		//General interface to signing in single file-mode or batch-mode
@@ -71,7 +73,7 @@ namespace eIDMW
 		bool m_batch_mode;
 		bool m_timestamp;
 		bool m_small_signature;
-		std::vector<char *> m_files_to_sign;
+		std::vector< std::pair<char *, bool> > m_files_to_sign;
 		Pixmap my_custom_image;
 		
 

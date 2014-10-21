@@ -300,8 +300,13 @@ PTEID_PDFSignature::~PTEID_PDFSignature()
 
 void PTEID_PDFSignature::addToBatchSigning(char *input_path)
 {
-	mp_signature->batchAddFile(input_path);
+	mp_signature->batchAddFile(input_path, false);
 
+}
+
+void PTEID_PDFSignature::addToBatchSigning(char *input_path, bool last_page)
+{
+	mp_signature->batchAddFile(input_path, last_page);
 }
 
 bool PTEID_PDFSignature::isLandscapeFormat()
@@ -336,6 +341,11 @@ char *PTEID_PDFSignature::getOccupiedSectors(int page)
 int PTEID_PDFSignature::getPageCount()
 {
 	return mp_signature->getPageCount();
+}
+
+int PTEID_PDFSignature::getOtherPageCount(const char *input_path)
+{
+	return mp_signature->getOtherPageCount(input_path);
 }
 
 bool PTEID_SmartCard::writeFile(const char *fileID,const PTEID_ByteArray &baOut,PTEID_Pin *pin,const char *csPinCode)

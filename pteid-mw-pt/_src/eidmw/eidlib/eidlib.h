@@ -821,7 +821,9 @@ class PTEID_PDFSignature
 		PTEIDSDK_API ~PTEID_PDFSignature();
 
 		PTEIDSDK_API void addToBatchSigning(char *input_path);
+		PTEIDSDK_API void addToBatchSigning(char *input_path, bool last_page);
 		PTEIDSDK_API int getPageCount();
+		PTEIDSDK_API int getOtherPageCount(const char *input_path);
 		PTEIDSDK_API void enableTimestamp();
 		PTEIDSDK_API void enableSmallSignatureFormat();
 		PTEIDSDK_API bool isLandscapeFormat();
