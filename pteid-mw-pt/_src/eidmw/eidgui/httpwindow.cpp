@@ -20,6 +20,7 @@
  **************************************************************************** */
 
 #include <iostream>
+#include <algorithm>
 
 #include <QtGui>
 #include <QtNetwork>
@@ -294,18 +295,22 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
 
 #else
 
+    //Normalize distro string to lowercase
+    std::transform(distro.begin(), distro.end(), distro.begin(), ::tolower);
+
 	std::cout << "pkgpath " << pkgpath << " distro " << distro << std::endl;
-	if (distro == "debian")
+    
+	if (distro == "debian" || distro == "ubuntu" || distro == "caixamagica")
 	{
 	  	execl ("/usr/bin/software-center", "software-center", pkgpath.c_str(), NULL);
 	}
 
-	if (distro == "fedora")
+	else if (distro == "fedora")
 	{
 	  	execl ("/usr/bin/gpk-install-local-file", "gpk-install-local-file", pkgpath.c_str(), NULL);
 	}
 
-	if (distro == "suse")
+	else if (distro == "suse")
 	{
 	    	execl ("/usr/bin/gpk-install-local-file", "gpk-install-local-file", pkgpath.c_str(), NULL);
 	}
