@@ -22,9 +22,7 @@ target.path = $${INSTALL_DIR_BIN}
 ## the translation files included in the set
 ## of files to install
 translations.path = $${INSTALL_DIR_BIN}
-translations.files += eidmw_de.qm \
-	    	eidmw_en.qm \
-	        eidmw_fr.qm \
+translations.files += eidmw_en.qm \
 	        eidmw_nl.qm 
 
 INSTALLS += target translations
@@ -64,12 +62,6 @@ DESTDIR = ../bin
 FINALDIR=$${DESTDIR}
 macx: FINALDIR=$${DESTDIR}/$${EIDGUI}.app/Contents/MacOS/
 
-translation_de.depends = eidmw_de.qm
-translation_de.target = $${FINALDIR}/eidmw_de.qm
-translation_de.commands = ! [ -d $${FINALDIR} ] && mkdir -p $${FINALDIR}; \
-                           cp $$translation_de.depends $$translation_de.target
-
-QMAKE_EXTRA_TARGETS += translation_de
 
 translation_en.depends = eidmw_en.qm
 translation_en.target = $${FINALDIR}/eidmw_en.qm
@@ -77,11 +69,6 @@ translation_en.commands = ! [ -d $${FINALDIR} ] && mkdir -p $${FINALDIR}; \
                           cp $$translation_en.depends $$translation_en.target
 QMAKE_EXTRA_TARGETS += translation_en
 
-translation_fr.depends = eidmw_fr.qm
-translation_fr.target = $${FINALDIR}/eidmw_fr.qm
-translation_fr.commands = ! [ -d $${FINALDIR} ] && mkdir -p $${FINALDIR}; \
-                          cp $$translation_fr.depends $$translation_fr.target
-QMAKE_EXTRA_TARGETS += translation_fr
 
 translation_nl.depends = eidmw_nl.qm
 translation_nl.target = $${FINALDIR}/eidmw_nl.qm
@@ -90,9 +77,7 @@ translation_nl.commands = ! [ -d $${FINALDIR} ] && mkdir -p $${FINALDIR}; \
 QMAKE_EXTRA_TARGETS += translation_nl
 
 
-PRE_TARGETDEPS += $${translation_de.target} \
-		$${translation_en.target} \
-		$${translation_fr.target} \
+PRE_TARGETDEPS += $${translation_en.target} \
 		$${translation_nl.target} 
 
 ## --------------------------------------------------------------------------------------------------------
