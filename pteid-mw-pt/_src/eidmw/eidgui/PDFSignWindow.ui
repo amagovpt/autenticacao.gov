@@ -141,6 +141,9 @@
          <property name="text">
           <string>Visible Signature?</string>
          </property>
+         <property name="enabled">
+            <bool>false</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -173,6 +176,9 @@
     <property name="text">
      <string>Sign</string>
     </property>
+     <property name="enabled">
+       <bool>false</bool>
+     </property>
    </widget>
    <widget class="QPushButton" name="button_cancel">
     <property name="geometry">

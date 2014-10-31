@@ -80,23 +80,28 @@ class ImageCanvas : public QWidget
 {
 	Q_OBJECT
 public:
-	ImageCanvas(QWidget *parent): QWidget(parent) 
-	{  small_sig_format = false; }
+	ImageCanvas(QWidget *parent): QWidget(parent), small_sig_format(false), previewVisible(false) 
+	{
+		initDateString();
+	}
 	QImage drawToImage();
 
 	void setSmallSignature(bool isEnabled) { small_sig_format = isEnabled; }
-
+	void setPreviewEnabled(bool value) { previewVisible = value; this->update(); }
 	void setCitizenName(QString name) { citizen_name = name; }
 	void setCitizenNIC(QString nic) { citizen_nic = nic; }
 	void setLocation(QString loc) { sig_location = loc; }
 	void setReason(QString reason) { sig_reason = reason; }
 	void setCustomPixmap(QPixmap pixmap) { user_pixmap = pixmap; }
+	
 
 protected:
 	void paintEvent(QPaintEvent *);
+	void initDateString();
 
 	QPixmap user_pixmap;
-	QString citizen_name, citizen_nic, sig_location, sig_reason;
+	QString date_str, citizen_name, citizen_nic, sig_location, sig_reason;
+	bool previewVisible;
 	bool small_sig_format;
 
 };

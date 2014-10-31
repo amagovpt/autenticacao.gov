@@ -31,10 +31,10 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QFileInfo>
+#include <QDateTime>
 
 #include <eidlib.h>
 #include "PDFSignWindow.h"
-//#include "FreeSelectionDialog.h"
 #include "mylistview.h"
 
 using namespace eIDMW;
@@ -44,17 +44,18 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 {
 
 	ui.setupUi(this);
+	
+	Qt::WindowFlags flags = windowFlags();
+	flags ^= Qt::WindowMaximizeButtonHint;
+	//Remove the Context Help Window button
+	flags = flags & (~Qt::WindowContextHelpButtonHint);
+	setWindowFlags( flags );
+
 	//Set icon
 	const QIcon Ico = QIcon(":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png");
+
 	this->setWindowIcon(Ico);
 	int i=0, j=0;
-
-/*
-	ui.label_choose_sector->setText(tr(
-	"Choose the page sector where you want your signature to appear.\n"
-	"The grey sectors are already filled with other signatures."));
-	ui.label_choose_sector->setWordWrap(true);
-	*/
 
 	//DEBUG
 	//ui.label_selectedsector->setWordWrap(true);	
@@ -175,6 +176,14 @@ void PDFSignWindow::disableSignButton()
 }
 
 
+void ImageCanvas::initDateString()
+{
+	QDateTime now = QDateTime::currentDateTime();
+
+	this->date_str = now.toString("yyyy.MM.dd hh:mm:ss");
+
+}
+
 QImage ImageCanvas::drawToImage()
 {
 	// const int spacing = 10;
@@ -200,7 +209,7 @@ QImage ImageCanvas::drawToImage()
 	// if (scaled.width() > img_width)
 	// {
 	// 	scaled = scaled.scaledToWidth(img_width, Qt::SmoothTransformation);
-	// } 
+	// }
     
    	painter.drawPixmap(0, 0, scaled);
 
@@ -213,6 +222,9 @@ void ImageCanvas::paintEvent(QPaintEvent *)
 	const int line_spacing = 5;
 	int line_count = 0;
 	int current_y_pos = 5;
+
+	if (!this->previewVisible)
+		return;
 
 	QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing);
@@ -266,12 +278,12 @@ void ImageCanvas::paintEvent(QPaintEvent *)
 
 	
 	current_y_pos += line_height + line_spacing;
-	painter.drawText(5, current_y_pos, "Date: 06 de Outubro de 2014 11:20:22");
+	painter.drawText(5, current_y_pos, "Data: " + this->date_str);
 
 	if (!small_sig_format && !sig_location.isEmpty())
 	{
 		current_y_pos += line_height + line_spacing;
-		painter.drawText(5, current_y_pos, "Location: " + sig_location);
+		painter.drawText(5, current_y_pos, "Local: " + sig_location);
 	}
 
 	
@@ -420,6 +432,8 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 		my_rectangle->hide();
 		clearAllSectors();
 	}
+
+	this->image_canvas->setPreviewEnabled(checked);
 		
 }
 
@@ -432,7 +446,10 @@ void PDFSignWindow::on_pushButton_imgChooser_clicked()
 	m_custom_image = QImage(image_file);
 
 	if (!m_custom_image.isNull())
+	{
 		this->image_canvas->setCustomPixmap(QPixmap::fromImage(m_custom_image));
+		this->image_canvas->update();
+	}
 	// ui.image_canvas->setCustomPixmap(QPixmap::fromImage(original_image));
 }
 
@@ -531,8 +548,6 @@ void PDFSignWindow::on_button_sign_clicked()
 
 	if (model->rowCount() > 1)
 	{
-		//TODO: The batch signing is all very hackish with validations missing
-		// and this awkward API...
 		//First we need to free the first instance that was created unless we want to leak the file handle...
 		delete m_pdf_sig;
 		m_pdf_sig = new PTEID_PDFSignature();
@@ -1220,7 +1235,10 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 
 	//Enable sign button now that we have data and a card inserted
 	if (!str.isEmpty() && this->card_present)
+	{
 		ui.button_sign->setEnabled(true);
+		ui.visible_checkBox->setEnabled(true);
+	}
 
 	if (!my_scene)
     	buildLocationTab();
