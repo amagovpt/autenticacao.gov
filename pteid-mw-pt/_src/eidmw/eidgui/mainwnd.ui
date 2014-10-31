@@ -395,69 +395,66 @@
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QPushButton" name="btnShortcut_UnivSign">
-        <property name="geometry">
-         <rect>
-          <x>430</x>
-          <y>310</y>
-          <width>171</width>
-          <height>41</height>
-         </rect>
-        </property>
-         <property name="visible">
-           <bool>false</bool>
-         </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(108, 108, 108);
-font: 75 12pt &quot;Arial&quot;;
-background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
-        </property>
-        <property name="text">
-         <string>Universal Signature</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="btnShortcut_PdfSign">
-        <property name="geometry">
-         <rect>
-          <x>430</x>
-          <y>310</y>
-          <width>171</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(108, 108, 108);
-font: 75 12pt &quot;Arial&quot;;
-background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
-        </property>
-        <property name="text">
-         <string>PDF Signature</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="btnShortcut_VerifSign">
-        <property name="geometry">
-         <rect>
-          <x>430</x>
-          <y>360</y>
-          <width>351</width>
-          <height>41</height>
-         </rect>
-        </property>
-          <property name="enabled">
-         <bool>false</bool>
-        </property>
-         <property name="visible">
-           <bool>false</bool>
-         </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(211, 211, 211);
-font: 75 12pt &quot;Arial&quot;;
-background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
-        </property>
-        <property name="text">
-         <string>Verify Signature</string>
-        </property>
-       </widget>
+        <widget class="QPushButton" name="btnShortcut_UnivSign">
+          <property name="geometry">
+            <rect>
+              <x>430</x>
+              <y>310</y>
+              <width>171</width>
+              <height>41</height>
+            </rect>
+          </property>
+          <property name="styleSheet">
+            <string notr="true">
+              color: rgb(108, 108, 108);
+              font: 75 12pt &quot;Arial&quot;;
+              background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
+            </string>
+          </property>
+          <property name="text">
+            <string>Universal Signature</string>
+          </property>
+        </widget>
+        <widget class="QPushButton" name="btnShortcut_PdfSign">
+          <property name="geometry">
+            <rect>
+              <x>610</x>
+              <y>310</y>
+              <width>171</width>
+              <height>41</height>
+            </rect>
+          </property>
+          <property name="styleSheet">
+            <string notr="true">
+              color: rgb(108, 108, 108);
+              font: 75 12pt &quot;Arial&quot;;
+              background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
+            </string>
+          </property>
+          <property name="text">
+            <string>PDF Signature</string>
+          </property>
+        </widget>
+        <widget class="QPushButton" name="btnShortcut_VerifSign">
+          <property name="geometry">
+            <rect>
+              <x>430</x>
+              <y>360</y>
+              <width>351</width>
+              <height>41</height>
+            </rect>
+          </property>
+          <property name="styleSheet">
+            <string notr="true">
+              color: rgb(108, 108, 108);
+              font: 75 12pt &quot;Arial&quot;;
+              background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
+            </string>
+          </property>
+          <property name="text">
+            <string>Verify Signature</string>
+          </property>
+        </widget>
 
       </widget>
       <widget class="QWidget" name="page_IdentityExtra">
@@ -2224,7 +2221,7 @@ font: 10pt &quot;Arial&quot;;</string>
       <string>Universal Signature</string>
      </property>
       <property name="visible">
-        <bool>false</bool>
+        <bool>true</bool>
       </property>
     </widget>
     <widget class="QLabel" name="lbl_menuTools_VerifySignature">
@@ -2237,11 +2234,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
       <property name="visible">
-        <bool>false</bool>
+        <bool>true</bool>
       </property>
      <property name="styleSheet">
       <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(211, 211, 211);
+color: rgb(108, 108, 108);
 font: 10pt &quot;Arial&quot;;</string>
      </property>
      <property name="text">
@@ -2288,7 +2285,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>25</x>
-       <y>45</y>
+       <y>65</y>
        <width>131</width>
        <height>17</height>
       </rect>

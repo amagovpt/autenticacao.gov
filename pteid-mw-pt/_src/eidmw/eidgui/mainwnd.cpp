@@ -556,7 +556,7 @@ void MainWnd::showJavaLaunchError(QProcess::ProcessError error)
 	if (error == QProcess::FailedToStart)
 	{
 		QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning,
-			"TITLE", "Error launching Java application! Make sure you have a working JRE installed.",
+			QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"), "Error launching Java application! Make sure you have a working JRE installed.",
 			QMessageBox::Ok, this);
 		msgBox->setModal(true);
 		msgBox->show();
@@ -564,22 +564,55 @@ void MainWnd::showJavaLaunchError(QProcess::ProcessError error)
 
 }
 
-/*
-void MainWnd::launchJavaProcess(QString &application_jar, QString &classpath)
+#ifdef _WIN32
+QString MainWnd::findJavaHomeOnWindows()
 {
+	QVariant current_version;
+	const QString CURRENT_VERSION_KEY("CurrentVersion");
+    QSettings javaSetting("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Runtime Environment", QSettings::NativeFormat);
+	current_version = javaSetting.value(CURRENT_VERSION_KEY);
+
+	if (current_version == QVariant())
+	{
+		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Couldn't find first Java registry key...");	
+
+		//Check WoW32Node values
+		QSettings javaSetting2("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment", QSettings::NativeFormat);
+		current_version = javaSetting2.value(CURRENT_VERSION_KEY);
+		if (current_version == QVariant())
+		{
+			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Couldn't find second Java registry key, Java is not installed!");
+
+			return QString();
+		}
+		else
+			return javaSetting2.value(current_version.toString() + "/JavaHome").toString();
+	}
+
+	return javaSetting.value(current_version.toString() + "/JavaHome").toString();
+	
+}
+#endif
+
+void MainWnd::launchJavaProcess(const QString &application_jar, const QString &classpath)
+{
+	QStringList arguments;
 
 #ifdef __APPLE__
 //TODO
 //Call /usr/libexec/java_home to find JRE dir
 
 #elif WIN32
-	QString program = "javaw";
-	
+	QString java_home = findJavaHomeOnWindows();
+	if (java_home.isEmpty())
+	{
+		showJavaLaunchError(QProcess::FailedToStart);
+		return;
+	}
+
+	QString program = java_home + "\\bin\\javaw";
 #else
 	 QString program = "java";
-	 QStringList arguments;
-	 arguments <<
-     arguments << "-jar" << "/home/agrr/Downloads/pdfvole_20110411_bin/pdfvole_20110411.jar";
 #endif
 	 QObject *parent = this;
 	 arguments << "-jar" << application_jar;
@@ -594,7 +627,6 @@ void MainWnd::launchJavaProcess(QString &application_jar, QString &classpath)
 	 myProcess->start(program, arguments);
 	 
 }
-*/
 
 void MainWnd::setup_addressChange_progress_bar()
 {
@@ -670,9 +702,9 @@ void MainWnd::on_btn_menu_tools_clicked()
 	m_ui.wdg_submenu_tools->setVisible(true);
 	//If defined language is portuguese, then the dialog needs to be larger
 	if (m_Settings.getGuiLanguageCode() == GenPur::LANG_NL)
-		m_ui.wdg_submenu_tools->setGeometry(127,4,155,71);
+		m_ui.wdg_submenu_tools->setGeometry(127,4,155,110);
 	else
-		m_ui.wdg_submenu_tools->setGeometry(127,4,145,71);
+		m_ui.wdg_submenu_tools->setGeometry(127,4,145,110);
 
 }
 
@@ -2619,11 +2651,14 @@ void MainWnd::actionPDFSignature_triggered()
 
 }
 
+
 //*****************************************************
 // VerifySignature clicked
 //*****************************************************
 void MainWnd::actionVerifySignature_eID_triggered()
 {
+
+	launchJavaProcess( m_Settings.getExePath()+ "/dss-standalone-app-3.0.3.jar", "");
     // dlgVerifySignature* dlgversig = new dlgVerifySignature( this);
     // dlgversig->exec();
     // delete dlgversig;

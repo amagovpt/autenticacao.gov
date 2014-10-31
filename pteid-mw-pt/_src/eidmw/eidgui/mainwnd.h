@@ -341,7 +341,7 @@ protected:
 
 	void showNormal( void );
 	void showNoReaderMsg( void );
-	// void launchJavaProcess(QString &application_jar, QString &classpath);
+	void launchJavaProcess(const QString &application_jar, const QString &classpath);
 
 
 	// SystemTray
@@ -441,6 +441,7 @@ private:
 #ifdef WIN32
 	static BOOL UseMinidriver( void );
 	static bool ProviderNameCorrect (PCCERT_CONTEXT pCertContext );
+	QString findJavaHomeOnWindows();
 #endif
 	void showCertImportMessage(bool bImported);
 	bool saveCardDataToFile(QString const& fileName, PTEID_EIDCard& card );
