@@ -135,6 +135,7 @@
         <source>Reading card data...</source>
         <translation>A ler os dados do cartão...</translation>
     </message>
+
      <message>
         <source>Time for entering PIN expired (30 seconds)</source>
         <translation>O tempo para introdução do PIN expirou (30 segundos)</translation>
@@ -1659,6 +1660,41 @@ Please specify .xml, .csv or .eid</source>
      </message>
 
      <message>
+        <source>Free Selection</source>
+        <translation>Posicionamento livre</translation>
+    </message>
+
+     <message>
+        <source>Show sectors</source>
+        <translation>Mostrar Sectores</translation>
+    </message>
+
+     <message>
+        <source>Small signature?</source>
+        <translation>Assinatura reduzida?</translation>
+     </message>
+
+    <message>
+        <source>Reset image</source>
+        <translation>Imagem por omissão</translation>
+     </message>
+
+     <message>
+        <source>Signature preview</source>
+        <translation>Visualização da assinatura</translation>
+     </message>
+
+     <message>
+        <source>Maximum image dimensions: (185x41 px)</source>
+        <translation>Dimensões máximas da imagem: (185x41 px)</translation>
+     </message>
+
+     <message>
+        <source>Preview of the signature image</source>
+        <translation>Visualização do selo de assinatura</translation>
+    </message>
+
+     <message>
         <source>Choose custom image</source>
         <translation>Imagem personalizada</translation>
      </message>
@@ -1708,6 +1744,16 @@ Please specify .xml, .csv or .eid</source>
         <source>Vertical position: %1</source>
         <translation>Na vertical: %1</translation>
     </message>
+    
+    <message>
+        <source>Horizontal position: </source>
+        <translation>Na horizontal: </translation>
+    </message>
+    <message>
+        <source>Vertical position: %1</source>
+        <translation>Na vertical: %1</translation>
+    </message>
+
     <message>
         <source>PDF Signature - Free Positioning</source>
         <translation>Assinatura de PDF - Posicionamento preciso</translation>

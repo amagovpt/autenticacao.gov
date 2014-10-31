@@ -73,14 +73,14 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	ui.pdf_listview->setModel(list_model);
 	ui.pdf_listview->enableNotify();
 
-	int items = ui.horizontalLayout_3->count();
+	// int items = ui.horizontalLayout_3->count();
 
-	for (int i = 0; i!= items; i++)
-	{
-		ui.horizontalLayout_3->itemAt(i)->setAlignment(Qt::AlignLeft);
-	}
+	// for (int i = 0; i!= items; i++)
+	// {
+	// 	ui.horizontalLayout_3->itemAt(i)->setAlignment(Qt::AlignLeft);
+	// }
 
-	ui.verticalLayout->setContentsMargins(15,15,15,15);
+	// ui.verticalLayout->setContentsMargins(15,15,15,15);
 
 	//save the default background to use in clearAllSectors()
 	// m_default_background = ui.tableWidget->item(0,0)->background();
@@ -94,18 +94,18 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	// image_canvas->setLayout(ui.verticalLayout);
 	//image_canvas->show();
 
-	items = ui.verticalLayout->count();
+	// items = ui.verticalLayout->count();
 
-	for (int i = 0; i!= items; i++)
-	{
-		ui.verticalLayout->itemAt(i)->setAlignment(Qt::AlignTop);
-	}
+	// for (int i = 0; i!= items; i++)
+	// {
+	// 	ui.verticalLayout->itemAt(i)->setAlignment(Qt::AlignTop);
+	// }
 
 	ui.verticalLayout1->setSpacing(5);	
 
-	ui.verticalLayout_2->setSpacing(10);
+	// ui.verticalLayout_2->setSpacing(10);
 
-	items = ui.verticalLayout_4->count();
+	int items = ui.verticalLayout_4->count();
 
 	for (int i = 0; i!= items; i++)
 	{
@@ -1093,8 +1093,8 @@ void PDFSignWindow::addSquares()
     double scene_height = ui.scene_view->height()-2*margin;
     double scene_width = ui.scene_view->width()-2*margin;
 
-    qDebug() << "scene_height: " << scene_height;
-    qDebug() << "scene_width: " << scene_width;
+    // qDebug() << "scene_height: " << scene_height;
+    // qDebug() << "scene_width: " << scene_width;
 
     int h_lines = 0, v_lines = 0;
 

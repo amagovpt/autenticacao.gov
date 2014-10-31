@@ -82,7 +82,7 @@
       <x>10</x>
       <y>220</y>
       <width>381</width>
-      <height>150</height>
+      <height>248</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="vertical_top">
@@ -138,34 +138,72 @@
        </item>
        <item>
         <widget class="QCheckBox" name="visible_checkBox">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Visible Signature?</string>
-         </property>
-         <property name="enabled">
-            <bool>false</bool>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="smallsig_checkBox">
-         <property name="text">
-          <string>Small signature?</string>
-         </property>
          <property name="enabled">
           <bool>false</bool>
          </property>
+         <property name="text">
+          <string>Small signature?</string>
+         </property>
         </widget>
        </item>
-
+       <item>
+        <widget class="QRadioButton" name="radioButton_firstpage">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>First Page</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton_choosepage">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Choose Page...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton_lastpage">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Last Page</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
    </widget>
    <widget class="QPushButton" name="button_sign">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>455</y>
+      <y>470</y>
       <width>171</width>
       <height>40</height>
      </rect>
@@ -176,21 +214,43 @@
     <property name="text">
      <string>Sign</string>
     </property>
-     <property name="enabled">
-       <bool>false</bool>
-     </property>
    </widget>
    <widget class="QPushButton" name="button_cancel">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>455</y>
+      <y>470</y>
       <width>171</width>
       <height>40</height>
      </rect>
     </property>
     <property name="text">
      <string>Cancel</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_page">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>410</y>
+      <width>75</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>999999</number>
     </property>
    </widget>
   </widget>
@@ -222,90 +282,8 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
-      <widget class="QWidget" name="tab1">
-       <attribute name="title">
-        <string>Page</string>
-       </attribute>
-       <widget class="QWidget" name="verticalLayoutWidget_2">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>400</width>
-          <height>130</height>
-         </rect>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetMinimumSize</enum>
-         </property>
-         <item>
-          <widget class="QRadioButton" name="radioButton_firstpage">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>First Page</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <property name="sizeConstraint">
-            <enum>QLayout::SetMinimumSize</enum>
-           </property>
-           <item>
-            <widget class="QRadioButton" name="radioButton_choosepage">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Choose Page...</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSpinBox" name="spinBox_page">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>999999</number>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="radioButton_lastpage">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Last Page</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
         <string>Location</string>
@@ -330,7 +308,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Horizontal position: </string>
+           <string/>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading</set>
@@ -346,7 +324,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Vertical position: </string>
+           <string/>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading</set>
@@ -430,7 +408,6 @@
              <property name="text">
               <string>Maximum image dimensions: (185x41 px)</string>
              </property>
-     
              <property name="wordWrap">
               <bool>true</bool>
              </property>
