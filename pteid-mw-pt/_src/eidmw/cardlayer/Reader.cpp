@@ -190,10 +190,11 @@ bool CReader::Connect()
 	if (m_poCard != NULL)
 	{
 		m_oPKCS15.SetCard(m_poCard);
+		m_oPinpad->Init(m_poCard->m_hCard);
 		if (m_oPinpad->UsePinpad())
 		{
 			MWLOG(LEV_DEBUG, MOD_CAL, L"Using Pinpad reader.");
-			m_poCard->setPinpadHandler(m_oPinpad->getPinpadHandler(m_poCard->m_hCard));
+			m_poCard->setPinpadHandler(m_oPinpad->getPinpadHandler());
 
 		}
 		else

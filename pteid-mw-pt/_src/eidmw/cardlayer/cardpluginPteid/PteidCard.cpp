@@ -1039,6 +1039,8 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
         return dontCache;
     case 244: // EF05 (Address)
         return dontCache;
+	case 252:  //PrkD 
+		return dontCache;
     case 241: // EF02 (ID)
     case 245: // EF06 (SOD)
         return simpleCache;

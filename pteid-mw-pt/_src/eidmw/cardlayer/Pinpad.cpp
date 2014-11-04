@@ -41,23 +41,29 @@ CPinpad::CPinpad(CContext *poContext,
 }
 
 //Factory method for Pinpad Implementations, detection is based on reader name
-GenericPinpad *CPinpad::getPinpadHandler(SCARDHANDLE hCard)
+GenericPinpad *CPinpad::getPinpadHandler()
 {
 	GenericPinpad * pinpad_handler = NULL; 
 
 	if (strstr(m_csReader.c_str(), "GemPC Pinpad") != NULL || 
         strstr(m_csReader.c_str(), "GemPCPinpad") != NULL)
-		pinpad_handler = new GemPcPinpad(m_poContext, hCard, m_csReader);
+		pinpad_handler = new GemPcPinpad(m_poContext, m_hCard, m_csReader);
 
 	else if (strstr(m_csReader.c_str(), "ACR83U") != NULL)
-		pinpad_handler = new ACR83Pinpad(m_poContext, hCard, m_csReader); 
+		pinpad_handler = new ACR83Pinpad(m_poContext, m_hCard, m_csReader); 
 
 	else 
-		pinpad_handler = new GenericPinpad(m_poContext, hCard, m_csReader);
+		pinpad_handler = new GenericPinpad(m_poContext, m_hCard, m_csReader);
 
 	return pinpad_handler;	
 
 }
+
+void CPinpad::Init(SCARDHANDLE hCard)
+{
+	 m_hCard = hCard;
+}
+
 
 bool CPinpad::UsePinpad()
 {
@@ -74,36 +80,14 @@ CByteArray CPinpad::PinpadControl(unsigned long ulControl, const CByteArray & oC
 	bool bCloseDlg = bShowDlg;
 	CByteArray oResp;
 
-        // Try if we can connect to the card via a normal SCardConnect()
-        SCARDHANDLE hCard = 0;
-        try 
-        {
-                hCard = m_poContext->m_oPCSC.Connect(m_csReader);
-                if (hCard == 0){
-                        goto done;
-                }
-        }
-        catch(CMWException &e)
-        {
-                if (e.GetError() == (long)EIDMW_ERR_NO_CARD)
-                        goto done;
-                if (e.GetError() != (long)EIDMW_ERR_CANT_CONNECT && e.GetError() != (long)EIDMW_ERR_CARD_COMM)
-                        throw;
-                hCard = 0;
-        }
-
-
 	try
 	{
-			oResp = m_poContext->m_oPCSC.Control(hCard, ulControl, oCmd);
+		oResp = m_poContext->m_oPCSC.Control(m_hCard, ulControl, oCmd);
 	}
 	catch (...)
 	{
 		throw ;
-	}
-
-	m_poContext->m_oPCSC.Disconnect(hCard, DISCONNECT_LEAVE_CARD);
-	
+	}	
 done:
 	return oResp;
 }

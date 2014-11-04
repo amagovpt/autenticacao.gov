@@ -46,7 +46,8 @@ public:
 			 const std::string & csReader);
 
     bool UsePinpad();
-    GenericPinpad *getPinpadHandler(SCARDHANDLE hCard);
+	void Init(SCARDHANDLE hCard);
+    GenericPinpad *getPinpadHandler();
 
 protected:
 	CByteArray PinpadControl(unsigned long ulControl, const CByteArray & oCmd,
@@ -55,7 +56,7 @@ protected:
 	void GetFeatureList();
 
 	CContext *m_poContext;
-    	SCARDHANDLE m_hCard;
+    SCARDHANDLE m_hCard;
 	std::string m_csReader;
 
 	bool m_bCanVerifyUnlock;  // Can do operations with 1 PIN
