@@ -34,6 +34,7 @@ DEFINES += EIDMW_CMN_EXPORT
 unix:!macx: DEFINES += USING_DL_OPEN
 
 macx: LIBS += -Wl,-framework -Wl,Carbon
+macx: CONFIG += x86
 
 PROJECT_DIR = common
 

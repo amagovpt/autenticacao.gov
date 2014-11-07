@@ -32,8 +32,10 @@ INCLUDEPATH += . ../../common
 ## we need the following compiler flag to be able to use
 ## the include file 'language.h' which is in CP1252 encoding
 ##
-QMAKE_CXXFLAGS+=-finput-charset=cp1252
 QMAKE_CXXFLAGS+=-fno-strict-aliasing
+
+#Support Fat binaries on Mac with both x86 and x86_64 architectures
+macx: CONFIG += x86
 
 ## destination directory for the compiler
 DESTDIR = ../../lib

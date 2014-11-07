@@ -28,7 +28,7 @@ QMAKE_CFLAGS += -fno-strict-aliasing
 ### on mac, swig does not work yet, therefore, the file 'eidlibJava_wrapper.cpp' is taken
 ### as it is retrieved from SVN
 ###
-unix:!macx: {
+unix: {
 PREPROCESS_FILES=../eidlib/eidlib.i
 preprocess.name = execute swig to generate java and c++ wrapper
 preprocess.input = PREPROCESS_FILES
@@ -66,7 +66,7 @@ DEFINES += EIDMW_EIDLIB_EXPORTS
 
 # Input
 
-macx: SOURCES += GeneratedFiles/eidlibJava_Wrapper.cpp
+#macx: SOURCES += GeneratedFiles/eidlibJava_Wrapper.cpp
 SOURCES += ../eidlib/eidlibCard.cpp
 SOURCES += ../eidlib/eidlibCrypto.cpp
 SOURCES += ../eidlib/eidlibDoc.cpp

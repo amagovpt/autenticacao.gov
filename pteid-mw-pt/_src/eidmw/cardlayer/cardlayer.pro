@@ -40,6 +40,8 @@ DEFINES += EIDMW_CAL_EXPORT \
            CARDPLUGIN_IN_CAL CAL_PTEID
 unix:!macx:  DEFINES += __UNIX__
 #macx:  DEFINES += __OLD_PCSC_API__
+#Support Fat binaries on Mac with both x86 and x86_64 architectures
+macx: CONFIG += x86
 
 
 # Input

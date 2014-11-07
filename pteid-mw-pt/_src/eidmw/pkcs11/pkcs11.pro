@@ -25,6 +25,9 @@ DEPENDPATH += .
 LIBS += -L../lib -l$${COMMONLIB} -l$${CARDLAYERLIB} -l$${DLGLIB}
 macx: LIBS += -Wl,-framework -Wl,PCSC
 
+#Support Fat binaries on Mac with both x86 and x86_64 architectures
+macx: CONFIG += x86
+
 ##macx: USE_PRIVACYFB =
 
 isEmpty(EMULATE_CARDLAYER) {

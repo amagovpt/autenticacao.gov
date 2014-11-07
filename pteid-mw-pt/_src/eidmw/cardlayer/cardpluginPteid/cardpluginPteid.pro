@@ -35,6 +35,8 @@ unix:!macx: QMAKE_CXXFLAGS += -fPIC
 
 DEFINES += EIDMW_CAL_EXPORT
 unix:!macx:  DEFINES += __UNIX__
+#Support Fat binaries on Mac with both x86 and x86_64 architectures
+macx: CONFIG += x86
 
 # Input
 HEADERS += PteidCard.h \

@@ -29,6 +29,7 @@ DESTDIR = ../lib
 DEFINED += APPLAYER_EXPORTS
 
 LIBS += -L../lib \
+	     -L/usr/local/Cellar/openssl/1.0.1i/lib \
 	    -l$${COMMONLIB} \
 	    -lcrypto -lssl \
 	    -lxerces-c \
@@ -42,8 +43,8 @@ macx: LIBS += -lxml-security-c
 macx: LIBS += -Wl,-framework -Wl,CoreFoundation
 macx: LIBS += -Wl,-framework -Wl,SystemConfiguration
 macx: LIBS += -Wl,-framework -Wl,CoreServices
-macx: INCLUDEPATH += /usr/local/include/
-macx: INCLUDEPATH += /System/Library/Frameworks/CoreServices.framework/Frameworks/CFNetwork.framework/Headers
+macx: INCLUDEPATH += /usr/local/Cellar/openssl/1.0.1i/include/ /usr/local/include/
+macx: INCLUDEPATH += /System/Library/Frameworks/CFNetwork.framework/Headers
 
 isEmpty(EMULATE_CARDLAYER) {
 

@@ -87,9 +87,10 @@ INCLUDEPATH += . ../dialogs ../eidlib ../_Builds ../common
 INCLUDEPATH += /usr/include/cairo
 
 LIBS += -L../lib  \
-	-Wl,-rpath-link,../lib \
     -l$${EIDLIB} \
 	-l$${COMMONLIB}
+
+unix:!macx: LIBS += -Wl,-rpath-link,../lib
 
 LIBS += -lcairo
 
