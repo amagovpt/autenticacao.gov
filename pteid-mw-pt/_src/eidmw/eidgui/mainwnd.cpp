@@ -601,7 +601,7 @@ void MainWnd::launchJavaProcess(const QString &application_jar, const QString &c
 #ifdef __APPLE__
 //TODO
 //Call /usr/libexec/java_home to find JRE dir
-
+	 QString program = "java";
 #elif WIN32
 	QString java_home = findJavaHomeOnWindows();
 	if (java_home.isEmpty())
