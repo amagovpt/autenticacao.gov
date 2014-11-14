@@ -126,7 +126,10 @@ public:
 
     virtual void setPinpadHandler(GenericPinpad * pinpad)
     {
+/* For SCAP we need a version of cardlayer which performs insecure VERIFY Pins with pinpad readers  */
+#ifndef PTEID_SCAP
 	m_poPinpad = pinpad;
+#endif
 
     }
 

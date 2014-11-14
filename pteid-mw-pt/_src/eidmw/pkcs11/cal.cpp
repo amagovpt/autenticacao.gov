@@ -38,6 +38,7 @@ using namespace eIDMW;
 
 CCardLayer *oCardLayer;
 CReadersInfo *oReadersInfo;
+int g_PINCache = 0;
 
 extern "C" {
 extern unsigned int   gRefCount;
@@ -64,7 +65,6 @@ try
    }
 catch (CMWException e)
    {
-     printf ("FOI AQUI CCLAYER\n");
    return(cal_translate_error(WHERE, e.GetError()));
    }
 catch (...) 
@@ -88,22 +88,45 @@ return(ret);
 #define WHERE "cal_close()"
 int cal_close()
 {
-int ret = 0;
+   int ret = 0;
+#ifdef PTEID_SCAP
+   if (g_PINCache)
+   {
 
-//Reference count countdown, clean if 0
-//if (--gRefCount > 0)
-//   return (0);
+      P11_SLOT *pSlot = NULL;
+      
+      //XXX: hardcoded to slot 0
+      pSlot = p11_get_slot(0);
+      if (pSlot == NULL)
+      {
+         log_trace(WHERE, "E: Invalid slot 0");
+         return (CKR_SLOT_ID_INVALID);
+      }
+      std::string szReader = pSlot->name;
 
-if (oCardLayer)
-   delete(oCardLayer);
-if (oReadersInfo)
-   delete(oReadersInfo);
+      try
+      {
+         CReader &oReader = oCardLayer->getReader(szReader);
 
-oCardLayer = NULL;
-oReadersInfo   = NULL;
+         oReader.setSSO(false);
+      }
+      catch (CMWException e)
+      {
 
-return (ret);
+      }
+   }
+#endif
+   if (oCardLayer)
+      delete(oCardLayer);
+   if (oReadersInfo)
+      delete(oReadersInfo);
+
+   oCardLayer = NULL;
+   oReadersInfo = NULL;
+
+   return (ret);
 }
+
 #undef WHERE
 
 
@@ -963,6 +986,19 @@ if (*l_out < 128)
 try
    {
    CReader &oReader = oCardLayer->getReader(szReader);
+
+#ifdef PTEID_SCAP
+   if (g_PINCache)
+   {
+      oReader.setSSO(true);
+   }
+   //Auth PIN caching for the purpose of making the SCAP application work properly
+   if (pSignData->id == 0x45 && !g_PINCache)
+   {
+      g_PINCache = 1;
+   }
+#endif
+
    tPrivKey key = oReader.GetPrivKeyByID(pSignData->id);
 
    switch(pSignData->mechanism)
