@@ -26,6 +26,7 @@
 #include <QEvent>
 #include <QPixmap>
 #include <QImage>
+#include <QFileInfo>
 #include <QProcess>
 #include <stdlib.h>
 #ifndef _WIN32
@@ -424,13 +425,6 @@ void MainWnd::on_btnShortcut_VerifSign_clicked()
 }
 
 /*
-void MainWnd::on_btnShortcut_LaunchJava_clicked()
-{
-	launchJavaProcess();
-}
-*/
-
-/*
 // Change Address functionality triggered by a button in the Address tab
 */
 
@@ -612,19 +606,24 @@ void MainWnd::launchJavaProcess(const QString &application_jar, const QString &c
 
 	QString program = java_home + "\\bin\\javaw";
 #else
-	 QString program = "java";
+	QString program = "java";
 #endif
-	 QObject *parent = this;
-	 arguments << "-jar" << application_jar;
+	QObject *parent = this;
+	arguments << "-jar" << application_jar;
 
-	 if (classpath.length() > 0)
-		 arguments << "-cp" << classpath;
+	if (classpath.length() > 0)
+		arguments << "-cp" << classpath;
 
-	 QProcess *myProcess = new QProcess(parent);
-	 connect(myProcess, SIGNAL(error(QProcess::ProcessError)),
+	QProcess *myProcess = new QProcess(parent);
+	myProcess->setProcessChannelMode(QProcess::MergedChannels);
+	QFileInfo fileinfo(application_jar);
+
+	//Set working directory to where the jar file is located
+	myProcess->setWorkingDirectory(fileinfo.dir().absolutePath());
+	connect(myProcess, SIGNAL(error(QProcess::ProcessError)),
 			 this, SLOT(showJavaLaunchError(QProcess::ProcessError)));
 
-	 myProcess->start(program, arguments);
+	myProcess->start(program, arguments);
 	 
 }
 
@@ -2658,10 +2657,12 @@ void MainWnd::actionPDFSignature_triggered()
 void MainWnd::actionVerifySignature_eID_triggered()
 {
 
-	launchJavaProcess( m_Settings.getExePath()+ "/dss-standalone-app-3.0.3.jar", "");
-    // dlgVerifySignature* dlgversig = new dlgVerifySignature( this);
-    // dlgversig->exec();
-    // delete dlgversig;
+	launchJavaProcess(m_Settings.getExePath() + "/dss-standalone-app-3.0.3.jar", "");
+}
+
+void MainWnd::on_btnShortcut_SCAP_clicked()
+{
+	launchJavaProcess(m_Settings.getExePath() + "/SCAP/SCAP-Signature-runnable.jar", "");
 }
 
 //*****************************************************

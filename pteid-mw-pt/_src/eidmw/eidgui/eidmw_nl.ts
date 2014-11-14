@@ -27,6 +27,11 @@
      <source>Signature Certificate:</source>
      <translation>Certificado de Assinatura:</translation>
      </message>
+
+     <message>
+        <source>SCAP Signature</source>
+        <translation>Assinatura na qualidade</translation>
+     </message>
 	 
 	 <message>
         <source>Error returned by the OTP server. Please make sure you have a valid authentication certificate</source>

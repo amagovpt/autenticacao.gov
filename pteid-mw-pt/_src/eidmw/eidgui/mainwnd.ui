@@ -435,11 +435,31 @@
             <string>PDF Signature</string>
           </property>
         </widget>
-        <widget class="QPushButton" name="btnShortcut_VerifSign">
+         <widget class="QPushButton" name="btnShortcut_SCAP">
           <property name="geometry">
             <rect>
               <x>430</x>
               <y>360</y>
+              <width>351</width>
+              <height>41</height>
+            </rect>
+          </property>
+          <property name="styleSheet">
+            <string notr="true">
+              color: rgb(108, 108, 108);
+              font: 75 12pt &quot;Arial&quot;;
+              background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
+            </string>
+          </property>
+          <property name="text">
+            <string>SCAP Signature</string>
+          </property>
+        </widget>
+        <widget class="QPushButton" name="btnShortcut_VerifSign">
+          <property name="geometry">
+            <rect>
+              <x>430</x>
+              <y>410</y>
               <width>351</width>
               <height>41</height>
             </rect>
