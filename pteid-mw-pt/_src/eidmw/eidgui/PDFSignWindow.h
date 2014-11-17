@@ -218,7 +218,7 @@ class PDFSignWindow : public QDialog
 	    void disableSignButton();
 	    void setPosition(QPointF new_pos);
         void setSelectedSector(int sector);
-	    PDFSignWindow(QWidget * parent, CardInformation &ci);
+	    PDFSignWindow(QWidget * parent, int selected_reader, CardInformation &ci);
 	    ~PDFSignWindow();
 
 
@@ -228,6 +228,8 @@ class PDFSignWindow : public QDialog
 	    void clear_sig_position();
 	    QString composeCitizenFullName();
 	    QString getCitizenNIC();
+		PTEID_EIDCard &getNewCard();
+
 	    
 	    // bool validateSelectedSector();
 	    void invertSelectionMode();
@@ -253,6 +255,7 @@ class PDFSignWindow : public QDialog
 	    bool card_present;
 	    bool horizontal_page_flag;
 	    bool m_small_signature;
+		int m_selected_reader;
 
     	CardInformation const& m_CI_Data;
 	    QAbstractItemModel *list_model;

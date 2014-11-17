@@ -2634,7 +2634,7 @@ void MainWnd::actionPDFSignature_triggered()
 	if(m_CI_Data.isDataLoaded())
 	{
 
- 		m_pdf_signature_dialog = new PDFSignWindow(this, m_CI_Data);
+		m_pdf_signature_dialog = new PDFSignWindow(this, m_Settings.getSelectedReader(), m_CI_Data);
  		m_pdf_signature_dialog->exec();
  		delete m_pdf_signature_dialog;
 		m_pdf_signature_dialog = NULL;

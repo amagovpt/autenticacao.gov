@@ -34,13 +34,14 @@
 #include <QDateTime>
 
 #include <eidlib.h>
+#include "eiderrors.h"
 #include "PDFSignWindow.h"
 #include "mylistview.h"
 
 using namespace eIDMW;
 
-PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
-	: m_CI_Data(CI_Data), m_selected_sector(0), card_present(true), my_scene(NULL)
+PDFSignWindow::PDFSignWindow(QWidget* parent, int selected_reader, CardInformation& CI_Data)
+	: m_CI_Data(CI_Data), m_selected_reader(selected_reader), m_selected_sector(0), card_present(true), my_scene(NULL)
 {
 
 	ui.setupUi(this);
@@ -61,7 +62,7 @@ PDFSignWindow::PDFSignWindow( QWidget* parent, CardInformation& CI_Data)
 	//ui.label_selectedsector->setWordWrap(true);	
 
 	m_pdf_sig = NULL;
-	//m_selection_dialog = NULL;
+
 	table_lines = 6;
 	table_columns = 3;
 	sig_coord_x = -1, sig_coord_y = -1;
@@ -149,7 +150,7 @@ PDFSignWindow::~PDFSignWindow()
 {
 
 	delete list_model;
-	// delete m_selection_dialog;
+
 	// if (m_pdf_sig)
 	// 	delete m_pdf_sig;
 }
@@ -479,39 +480,89 @@ void PDFSignWindow::ShowErrorMsgBox(QString msg)
   	msgBoxp.exec();
 }
 
+PTEID_EIDCard& PDFSignWindow::getNewCard()
+{
+		unsigned long	ReaderStartIdx = m_selected_reader;
+		bool			bRefresh	   = false;
+		unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
+		unsigned long	ReaderIdx	   = 0;
+
+		if (ReaderStartIdx!=(unsigned long)-1)
+		{
+			ReaderEndIdx = ReaderStartIdx+1;
+		}
+		else
+		{
+			ReaderStartIdx=0;
+		}
+
+		for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx; ReaderIdx++)
+		{
+			PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
+			if (ReaderContext.isCardPresent())
+			{
+					try
+					{
+						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
+						return Card;
+						
+					}
+					catch (PTEID_ExCardBadType const& e) {
+
+					}
+			}
+		}
+
+}
+
 void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
 	       	char *location, char *reason)
 {
 
 	PTEID_EIDCard* card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
 	int sign_rc = 0;
+	bool keepTrying = true;
 	char * save_path = strdup(getPlatformNativeString(savefilepath));
-	try
+
+	do
 	{
-		//printf("@PDFSignWindow::run_sign:\n");
-		//printf("x=%f, y=%f\n", sig_coord_x, sig_coord_y);
-		//printf("selected_page=%d, selected_sector=%d\n", selected_page, m_selected_sector);
+		try
+		{
+			//printf("@PDFSignWindow::run_sign:\n");
+			//printf("x=%f, y=%f\n", sig_coord_x, sig_coord_y);
+			//printf("selected_page=%d, selected_sector=%d\n", selected_page, m_selected_sector);
 
-		if (sig_coord_x != -1 && sig_coord_y != -1)
-			sign_rc = card->SignPDF(*m_pdf_sig, selected_page,
-			sig_coord_x, sig_coord_y, location, reason, save_path);
-		else
-			sign_rc = card->SignPDF(*m_pdf_sig, selected_page,
-                m_selected_sector, m_landscape_mode, location, reason, save_path);
+			if (sig_coord_x != -1 && sig_coord_y != -1)
+				sign_rc = card->SignPDF(*m_pdf_sig, selected_page,
+				sig_coord_x, sig_coord_y, location, reason, save_path);
+			else
+				sign_rc = card->SignPDF(*m_pdf_sig, selected_page,
+				m_selected_sector, m_landscape_mode, location, reason, save_path);
+			
+			keepTrying = false;
+			if (sign_rc == 0)
+				this->success = SIG_SUCCESS;
+			else
+				this->success = TS_WARNING;
 
-		if (sign_rc == 0)
-			this->success = SIG_SUCCESS;
-		else
-			this->success = TS_WARNING;
+		}
+		catch (PTEID_Exception &e)
+		{
+			this->success = SIG_ERROR;
+			PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Caught exception in signPDF() method. Error code: 0x%08x\n", 
+				(unsigned int)e.GetError());
 
+			if (e.GetError() == EIDMW_ERR_CARD_RESET)
+			{
+				PTEID_EIDCard &new_card = getNewCard();
+				card = &new_card;
+
+			}
+			else
+				keepTrying = false;
+		}
 	}
-
-	catch (PTEID_Exception &e)
-	{
-		this->success = SIG_ERROR;
-		fprintf(stderr, "Caught exception in some SDK method. Error code: 0x%08x\n", 
-			(unsigned int)e.GetError());
-	}
+	while(keepTrying);
 
 	free(save_path);
 
@@ -1228,11 +1279,6 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	// QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(1));
 	// highlightSectors(sectors);
 
-	if (list_model->rowCount() > 1)
-	{
-		clearAllSectors();
-	}
-
 	//Enable sign button now that we have data and a card inserted
 	if (!str.isEmpty() && this->card_present)
 	{
@@ -1242,5 +1288,10 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 
 	if (!my_scene)
     	buildLocationTab();
+
+	if (list_model->rowCount() > 1)
+	{
+		clearAllSectors();
+	}
 
 }

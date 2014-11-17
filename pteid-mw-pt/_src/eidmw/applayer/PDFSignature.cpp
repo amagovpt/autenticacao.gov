@@ -463,7 +463,24 @@ namespace eIDMW
 			location, reason, m_page, m_sector);
 		unsigned long len = doc->getSigByteArray(&to_sign, incremental);
 
-		int rc = pteid_sign_pkcs7(m_card, to_sign, len, m_timestamp, &signature_contents);
+		int rc = 0;
+		try
+		{
+			rc = pteid_sign_pkcs7(m_card, to_sign, len, m_timestamp, &signature_contents);
+		}
+		catch(CMWException e)
+		{
+			//Throw away the changed PDFDoc object because we might retry the signature 
+			//and this document is "half-signed"...
+			if (e.GetError() == EIDMW_ERR_CARD_RESET)
+			{
+				delete m_doc;
+				if (!m_batch_mode)
+					m_doc = new PDFDoc(new GooString(m_pdf_file_path));
+
+			}
+			throw;
+		}
 
 		if (to_sign)
 			free(to_sign);
