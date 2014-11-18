@@ -1,2 +1,0 @@
-C:\Documents and Settings\Administrator\Desktop\eid-inwork\eid-mw\_src\eidmw\misc\Wix_MW35\MW35Wix\bin\Release\nl-nl\PteidMW35-Basic-nl.wixpdb
-C:\Documents and Settings\Administrator\Desktop\pteid-mw-win\_src\eidmw\misc\Wix_MW35\MW35Wix\bin\Release\nl-nl\PteidMW35-Basic-nl.wixpdb
