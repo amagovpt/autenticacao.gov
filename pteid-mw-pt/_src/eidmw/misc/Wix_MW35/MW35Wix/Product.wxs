@@ -4,8 +4,8 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <?include ..\..\..\svn_revision.wxs ?>
 
-  <?define var.OfficialProductVersion =2.2.0?>
-  <?define var.ProductVersion = 2.2.$(var.RevisionNumber)?>
+  <?define var.OfficialProductVersion =2.3.0?>
+  <?define var.ProductVersion = 2.3.$(var.RevisionNumber)?>
   <?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
   <?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
@@ -52,6 +52,8 @@
     <?else?>
       <?define var.PTEID_DIR_MSM=$(env.PTEID_DIR_MSM)?>
     <?endif?>
+
+    <?define var.PTEID_QT_IMAGEFORMATS=$(env.PTEID_DIR_QT_4)\plugins\imageformats\?>
 
     <!-- Choose the target runtime to use: -->
     <!-- hack: Checking the solution file that was loaded with the visual studio -->
@@ -127,7 +129,10 @@
       <Directory Id="ProgramFilesFolder">
         <Directory Id="APPLICATIONROOTFOLDER" Name="Portugal Identity Card">
 
-          <!-- <Directory Id="IMAGEFORMATS" Name="imageformats" /> -->
+          <Directory Id="IMAGEFORMATS" Name="imageformats" />
+          <Directory Id="SCAP" Name="SCAP">
+            <Directory Id="CERTS_SCAP_DIR" Name="certificates"/>
+          </Directory>
           <Directory Id="EIDSTORE" Name="eidstore">
             <Directory Id="CERTSDIR" Name="certs"/>
             <Directory Id="CRLDIR" Name="crl">
@@ -238,6 +243,7 @@
         <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0006.der" />
         <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0007.der" />
         <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0008.der" />
+        <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0009.der" />
         <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der" />
         <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der" />
         <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der" />
@@ -246,8 +252,41 @@
         <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0006.der" />
         <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0007.der" />
         <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.der" />
+        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0009.der" />
       </Component>
     </DirectoryRef>
+
+    <DirectoryRef Id="SCAP">
+      <Component Id="scap" Guid="{BFA2692F-44F0-4d76-8950-5FF9E0D117F4}">
+        <File Source="..\..\scap\SCAP-Signature-runnable.jar" KeyPath="yes" />
+        <File Source="..\..\scap\config.properties" />
+        <File Source="..\..\scap\truststore.jks" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="CERTS_SCAP_DIR">
+      <Component Id="CertsScap" Guid="{750F471B-6A83-4118-A0AF-2A138B770AF6}">
+        <File Source="..\..\scap\certificates\Teste Cartao de Cidadao 001.cer" />
+        <File Source="..\..\scap\certificates\Teste Cartao de Cidadao 002.cer" />
+        <File Source="..\..\scap\certificates\Teste Cartao_de_Cidadao_raiz_002.cer" />
+        <File Source="..\..\scap\certificates\Teste Cartao_de_Cidadao_raiz_002_2.cer" />
+        <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0001.cer" />
+        <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0002.cer" />
+        <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0003.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0004.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0005.cer" />
+        <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0001.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0002.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0003.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0004.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0005.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0007.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0008.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC_de_Autenticacao_do_Cartao_de_Cidadao_0007.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.cer"/>
+      </Component>
+    </DirectoryRef>
+
 
     <DirectoryRef Id="CRLDIR">
       <Component Id="CrlDir" Guid="{5731B322-17EE-4d08-90A5-9DB53F53EC29}">
@@ -313,6 +352,13 @@
         <File Id="chrome.manifest" Name="chrome.manifest" KeyPath="no" Source="..\..\..\xpi\src\chrome.manifest" />
         <File Id="icon.png.root" Name="icon.png" KeyPath="no" Source="..\..\..\xpi\src\icon.png" />
         <File Id="install_xpi.rdf" Name="install.rdf" KeyPath="no" Source="..\..\..\xpi\src\install.rdf" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="IMAGEFORMATS">
+      <Component Id="ImagePlugins" Guid="{4C51AE55-0475-44f3-8870-5C150F33635F}">
+        <File Source="$(var.PTEID_QT_IMAGEFORMATS)\qico4.dll" KeyPath="yes"/>
+        <File Source="$(var.PTEID_QT_IMAGEFORMATS)\qjpeg4.dll"/>
       </Component>
     </DirectoryRef>
 
@@ -471,6 +517,10 @@
         <Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[ProgramFilesFolder]Portugal Identity Card"/>
       </Component>
 
+      <Component Id="DSSApp" Guid="{CDA14D17-04E8-4f4b-BEE1-771A0DDC2558}">
+        <File Id="dss_standalone_app_3.0.3.jar" Name="dss-standalone-app-3.0.3.jar" KeyPath="yes" Source="$(var.PTEID_BUILD_FOLDER_X64)\dss-standalone-app-3.0.3.jar" />
+      </Component>
+
       <Component Id="Icon" Guid="{5B657BAD-8CFC-4E42-AF8C-13338C50D784}" SharedDllRefCount="yes">
         <File Source="..\..\..\eidgui\eid.ico" KeyPath="yes" />
       </Component>
@@ -483,6 +533,11 @@
       <Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidgui.exe" KeyPath="yes" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCpp.dll" />
+      </Component>
+
+      <Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)libeay32.dll" KeyPath="yes"/>
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)ssleay32.dll" />
       </Component>
 
       <Component Id="GuiLang" Guid="{6B03ED1B-DF24-4CE6-A70C-476AF4C0941B}" SharedDllRefCount="yes">
@@ -536,12 +591,6 @@
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
       </Component>
 
-      <Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
-		<!-- TODO: REFIX openssl path conflict with system -->
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)libeay32.dll" KeyPath="yes"/>
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)ssleay32.dll" />
-      </Component>
-
       <Component Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)xerces-c_3_1.dll" KeyPath="yes"/>
       </Component>
@@ -575,7 +624,6 @@
 
       <Component Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidpkcs11.dll" KeyPath="yes" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Portugal Identity Card PKCS11.dll" />
       </Component>
 
     </DirectoryRef>
@@ -646,6 +694,7 @@
         </RegistryKey>
       </Component>
 
+      <!-- 
 	<Component Id="RegistryXadesFileType" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA5}">
 			<RegistryKey Root="HKLM"
 					Key="SOFTWARE\Classes\.ccsigned"
@@ -658,7 +707,7 @@
 				<RegistryKey
 					Key="shell\Open\command"
 						 Action="createAndRemoveOnUninstall">
-					<!-- TODO: When we have the proper application associate here-->
+				
 					<RegistryValue Type="string" Value="C:\Windows\System32\notepad.exe"/>
 				</RegistryKey>
 				<RegistryKey Key="DefaultIcon"  Action="createAndRemoveOnUninstall">
@@ -668,6 +717,7 @@
 			</RegistryKey>
 
 	</Component>
+      -->
 
       <Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA3}">
         <RegistryKey Root="HKLM"
@@ -765,6 +815,8 @@
       <ComponentRef Id="Certs"/>
       <ComponentRef Id="CrlDir"/>
       <ComponentRef Id="HttpDir"/>
+      <ComponentRef Id="DSSApp"/>
+      <ComponentRef Id="ImagePlugins"/>
       <ComponentRef Id="CrlEidPortugalBe"/>
       <ComponentRef Id="DirectoryCache"/>
       <ComponentRef Id="License"/>
@@ -790,6 +842,8 @@
 
       <!-- System32 -->
       <ComponentRef Id="Runtime35"/>
+      <ComponentRef Id="scap"/>
+      <ComponentRef Id="CertsScap"/>
       <ComponentRef Id="Runtime35ThirdPartyOpenSSL"/>
       <ComponentRef Id="Runtime35ThirdPartyXerces"/>
      
@@ -798,7 +852,7 @@
 
       <!-- Registry -->
       <ComponentRef Id="RegistryPteidSystem"/>
-	  <ComponentRef Id="RegistryXadesFileType"/>
+	    <!-- <ComponentRef Id="RegistryXadesFileType"/> -->
 
       <Feature Id="GUI"
                 Title="!(loc.PteidGui)"
