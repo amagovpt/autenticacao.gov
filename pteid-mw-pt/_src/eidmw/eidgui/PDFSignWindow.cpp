@@ -34,7 +34,7 @@
 #include <QDateTime>
 
 #include <eidlib.h>
-#include "eiderrors.h"
+#include "eidErrors.h"
 #include "PDFSignWindow.h"
 #include "mylistview.h"
 
