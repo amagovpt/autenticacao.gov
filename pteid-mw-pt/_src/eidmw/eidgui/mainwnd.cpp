@@ -190,7 +190,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	m_ui.setupUi(this);
 
-
 	if (m_Settings.getGuiLanguageCode() == GenPur::LANG_NL)
 		setLanguageNl();
 	else
@@ -613,6 +612,10 @@ void MainWnd::launchJavaProcess(const QString &application_jar, const QString &c
 
 	if (classpath.length() > 0)
 		arguments << "-cp" << classpath;
+
+	QString language = m_Settings.getGuiLanguageString() == "nl" ? QString("pt") : m_Settings.getGuiLanguageString();
+	//Add language code as args[0]
+	arguments << language;
 
 	QProcess *myProcess = new QProcess(parent);
 	myProcess->setProcessChannelMode(QProcess::MergedChannels);
