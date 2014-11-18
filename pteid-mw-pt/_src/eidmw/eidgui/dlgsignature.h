@@ -50,7 +50,7 @@ private slots:
     //void ShowContextMenu(const QPoint& pos);
 
 public:
-    dlgSignature(QWidget* parent , CardInformation& CI_Data);
+    dlgSignature(QWidget* parent, int selected_reader, CardInformation& CI_Data);
     ~dlgSignature();
 
 private:
@@ -62,8 +62,10 @@ private:
     QProgressDialog *pdialog;
     QFutureWatcher<void> FutureWatcher;
     long error_code;
+	int m_selected_reader;
     XadesLevel getSelectedXadesLevel();
     void SignListView (QStringList list);
+	PTEID_EIDCard& getNewCard();
     void runsign(const char ** paths, unsigned int n_paths, const char *output_path, XadesLevel level);
     void run_multiple_sign(const char**, unsigned int, const char*, XadesLevel);
     void ShowErrorMsgBox();

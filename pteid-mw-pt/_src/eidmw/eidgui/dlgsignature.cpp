@@ -39,9 +39,10 @@
 using namespace eIDMW;
 
 
-dlgSignature::dlgSignature( QWidget* parent, CardInformation& CI_Data)
+dlgSignature::dlgSignature( QWidget* parent, int selected_reader, CardInformation& CI_Data)
     : QDialog(parent)
     , m_CI_Data(CI_Data)
+	, m_selected_reader(selected_reader)
     , m_CurrReaderName("")
 {
 	if (CI_Data.isDataLoaded())
@@ -274,26 +275,77 @@ void dlgSignature::on_pbSign_clicked ( void )
 
 void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char *output_path, XadesLevel level)
 {
-
-	try
+	bool keepTrying = true;
+	PTEID_EIDCard* card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+	PTEID_ByteArray SignXades;
+	do
 	{
-		PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
-		PTEID_ByteArray SignXades;
-		if (level == XADES_T)
-			SignXades = Card->SignXadesT(paths, n_paths, output_path);
-		else if (level == XADES_B)
-			SignXades = Card->SignXades(paths, n_paths, output_path);
-		else if (level == XADES_A)
-			SignXades = Card->SignXadesA(paths, n_paths, output_path);
-		this->error_code = 0;
+		try
+		{
 
-	}
-	catch (PTEID_Exception &e)
-	{
-		this->error_code = e.GetError();
+			if (level == XADES_T)
+				SignXades = card->SignXadesT(paths, n_paths, output_path);
+			else if (level == XADES_B)
+				SignXades = card->SignXades(paths, n_paths, output_path);
+			else if (level == XADES_A)
+				SignXades = card->SignXadesA(paths, n_paths, output_path);
+			
+			this->error_code = 0;
+			keepTrying = false;
 
+		}
+		catch (PTEID_Exception &e)
+		{
+			this->error_code = e.GetError();
+			PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Caught exception in SignXades*() method. Error code: 0x%08x\n", 
+				(unsigned int)e.GetError());
+
+			if (e.GetError() == EIDMW_ERR_CARD_RESET)
+			{
+				PTEID_EIDCard &new_card = getNewCard();
+				card = &new_card;
+
+			}
+			else
+				keepTrying = false;
+		}
 	}
+	while(keepTrying);
 	return;
+}
+
+PTEID_EIDCard& dlgSignature::getNewCard()
+{
+		unsigned long	ReaderStartIdx = m_selected_reader;
+		bool			bRefresh	   = false;
+		unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
+		unsigned long	ReaderIdx	   = 0;
+
+		if (ReaderStartIdx!=(unsigned long)-1)
+		{
+			ReaderEndIdx = ReaderStartIdx+1;
+		}
+		else
+		{
+			ReaderStartIdx=0;
+		}
+
+		for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx; ReaderIdx++)
+		{
+			PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
+			if (ReaderContext.isCardPresent())
+			{
+					try
+					{
+						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
+						return Card;
+						
+					}
+					catch (PTEID_ExCardBadType const& e) {
+
+					}
+			}
+		}
 }
 
 

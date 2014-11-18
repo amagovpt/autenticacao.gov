@@ -2583,14 +2583,14 @@ void MainWnd::show_window_parameters(){
 		this->showNormal(); // Otherwise the application will end if the options dialog gets closed
 	}
 
-	dlgOptions* dlg = new dlgOptions( m_Settings, this );
-	dlg->setShowToolbar( m_Settings.getShowToolbar() );
-	dlg->setShowPicture( m_Settings.getShowPicture() );
-	dlg->setShowNotification( m_Settings.getShowNotification() );
+	dlgOptions* dlg = new dlgOptions(m_Settings, this);
+	dlg->setShowToolbar(m_Settings.getShowToolbar());
+	dlg->setShowPicture(m_Settings.getShowPicture());
+	dlg->setShowNotification(m_Settings.getShowNotification());
 
 	m_ui.actionOptions->setEnabled(false);
 
-	if( dlg->exec() )
+	if(dlg->exec())
 	{
 		m_ui.actionShow_Toolbar->setChecked( m_Settings.getShowToolbar() );
 
@@ -2615,7 +2615,7 @@ void MainWnd::actionSignature_eID_triggered()
 	QString cardTypeText = GetCardTypeText(CardFields[CARD_TYPE]);
 	if(m_CI_Data.isDataLoaded())
 	{
-		dlgSignature* dlgsig = new dlgSignature( this, m_CI_Data);
+		dlgSignature* dlgsig = new dlgSignature(this, m_Settings.getSelectedReader(), m_CI_Data);
 		dlgsig->exec();
 		delete dlgsig;
 	} else {
