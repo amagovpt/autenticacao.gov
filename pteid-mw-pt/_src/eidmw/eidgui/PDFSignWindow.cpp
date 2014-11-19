@@ -32,6 +32,8 @@
 #include <QGraphicsItem>
 #include <QFileInfo>
 #include <QDateTime>
+//For std::min_element()
+#include <algorithm>
 
 #include <eidlib.h>
 #include "eidErrors.h"
