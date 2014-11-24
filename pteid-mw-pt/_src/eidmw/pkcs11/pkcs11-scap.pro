@@ -24,7 +24,7 @@ CONFIG -= warn_on qt
 DESTDIR = ../lib
 OBJECTS_DIR = scap-obj
 DEPENDPATH += .
-LIBS += -L../lib -l$${COMMONLIB} -lpteid-cardlayer-scap -l$${DLGLIB}
+LIBS += -L../lib -l$${COMMONLIB} -lpteid-scap-cardlayer -l$${DLGLIB}
 macx: LIBS += -Wl,-framework -Wl,PCSC
 
 #Support Fat binaries on Mac with both x86 and x86_64 architectures
