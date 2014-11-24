@@ -6,7 +6,7 @@
 include(../_Builds/eidcommon.mak)
 
 TEMPLATE = lib
-TARGET = pteid-cardlayer-scap
+TARGET = pteid-scap-cardlayer
 VERSION = $${CARDLAYERLIB_MAJ}.$${CARDLAYERLIB_MIN}.$${CARDLAYERLIB_REV}
 
 message("Compile $$TARGET")
