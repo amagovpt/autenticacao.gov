@@ -725,6 +725,7 @@ void APL_Certifs::foundCertificate(const char *SubDir, const char *File, void *p
 
 	cert = new CByteArray(buf,bufsize);
 	certifs->addCert(*cert, APL_CERTIF_TYPE_UNKNOWN, false);
+	fclose(m_stream);
 	return;
 
 	err:
