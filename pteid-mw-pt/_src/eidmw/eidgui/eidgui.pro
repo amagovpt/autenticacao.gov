@@ -95,6 +95,7 @@ unix:!macx: LIBS += -Wl,-rpath-link,../lib
 LIBS += -lcairo
 
 macx: LIBS += -framework Foundation
+macx: QMAKE_INFO_PLIST = eidgui-info.plist
 
 isEmpty(EMULATE_CARDLAYER) {
   LIBS +=	-l$${CARDLAYERLIB} 
