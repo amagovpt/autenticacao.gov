@@ -402,8 +402,6 @@ void MainWnd::hide_submenus()
 	m_ui.wdg_submenu_help->setVisible(false);
 }
 
-
-
 //******************************************************^M
 // Buttons to control Shortcuts 
 //******************************************************^M
@@ -592,9 +590,10 @@ void MainWnd::launchJavaProcess(const QString &application_jar, const QString &c
 	QStringList arguments;
 
 #ifdef __APPLE__
-//TODO
-//Call /usr/libexec/java_home to find JRE dir
-	 QString program = "java";
+
+	//Using the current Oracle JRE this is always the path to the JRE dir
+	QString program = "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/" +
+					  "java";
 #elif WIN32
 	QString java_home = findJavaHomeOnWindows();
 	if (java_home.isEmpty())
@@ -605,6 +604,7 @@ void MainWnd::launchJavaProcess(const QString &application_jar, const QString &c
 
 	QString program = java_home + "\\bin\\javaw";
 #else
+	//On Linux there's always a java binary in the PATH at least using proper packages...
 	QString program = "java";
 #endif
 	QObject *parent = this;
@@ -2659,13 +2659,24 @@ void MainWnd::actionPDFSignature_triggered()
 //*****************************************************
 void MainWnd::actionVerifySignature_eID_triggered()
 {
+	QString DSS_JAR("/DSS/dss-standalone-app-3.0.3.jar");
 
-	launchJavaProcess(m_Settings.getExePath() + "/dss-standalone-app-3.0.3.jar", "");
+#ifdef __APPLE__
+	launchJavaProcess("/usr/local/bin/" + DSS_JAR, "");
+#else
+	launchJavaProcess(m_Settings.getExePath() + DSS_JAR , "");
+#endif	
 }
 
 void MainWnd::on_btnShortcut_SCAP_clicked()
 {
-	launchJavaProcess(m_Settings.getExePath() + "/SCAP/SCAP-Signature-runnable.jar", "");
+	QString SCAP_JAR("/SCAP/SCAP-Signature-runnable.jar");
+
+#ifdef __APPLE__
+	launchJavaProcess("/usr/local/bin/" + SCAP_JAR, "");
+#else
+	launchJavaProcess(m_Settings.getExePath() + SCAP_JAR, "");
+#endif	
 }
 
 //*****************************************************
