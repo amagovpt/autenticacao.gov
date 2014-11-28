@@ -17,17 +17,17 @@ SUBDIRS += common \
 	dialogs/dialogsQT \
 	dialogs/dialogsQTsrv
 
-## this project is not needed under mac	
-
-SUBDIRS += cardlayer
+SUBDIRS += cardlayer/cardlayer.pro \
+		   cardlayer/cardlayer-scap.pro	
 
 ## build this plugin only if we are building for Portugal
 contains(PKG_NAME,pteid): SUBDIRS += cardlayer/cardpluginPteid
 
-SUBDIRS +=	pkcs11 \
+SUBDIRS +=	pkcs11/pkcs11.pro \
+			pkcs11/pkcs11-scap.pro \
 	        applayer \
 	        eidlib \
-		eidlibJava_Wrapper
+		    eidlibJava_Wrapper
 
 applayer.depends = pteid-poppler		
 
