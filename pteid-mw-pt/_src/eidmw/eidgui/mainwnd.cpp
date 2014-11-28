@@ -592,7 +592,7 @@ void MainWnd::launchJavaProcess(const QString &application_jar, const QString &c
 #ifdef __APPLE__
 
 	//Using the current Oracle JRE this is always the path to the JRE dir
-	QString program = "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/" +
+	QString program = QString("/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/") +
 					  "java";
 #elif WIN32
 	QString java_home = findJavaHomeOnWindows();
