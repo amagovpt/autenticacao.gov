@@ -342,7 +342,7 @@ protected:
 
 	void showNormal( void );
 	void showNoReaderMsg( void );
-	void launchJavaProcess(const QString &application_jar, const QString &classpath);
+	void launchJavaProcess(const QString &application_jar, const QString jvm_args, const QString &classpath);
 
 
 	// SystemTray
