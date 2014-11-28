@@ -2665,7 +2665,7 @@ void MainWnd::actionVerifySignature_eID_triggered()
 	QString DSS_JAR("/DSS/dss-standalone-app-3.0.3.jar");
 
 #ifdef __APPLE__
-	launchJavaProcess("/usr/local/bin/" + DSS_JAR, "-Xdock:name=\"Validação de assinatura\"",  "");
+	launchJavaProcess("/usr/local/bin/" + DSS_JAR, QString::fromUtf8("-Xdock:name=Validação de assinatura"),  "");
 #else
 	launchJavaProcess(m_Settings.getExePath() + DSS_JAR , "", "");
 #endif	
@@ -2676,7 +2676,7 @@ void MainWnd::on_btnShortcut_SCAP_clicked()
 	QString SCAP_JAR("/SCAP/SCAP-Signature-runnable.jar");
 
 #ifdef __APPLE__
-	launchJavaProcess("/usr/local/bin/" + SCAP_JAR, "-Xdock:name=\"Assinatura na qualidade\"", "");
+	launchJavaProcess("/usr/local/bin/" + SCAP_JAR, "-Xdock:name=Assinatura na qualidade", "");
 #else
 	launchJavaProcess(m_Settings.getExePath() + SCAP_JAR, "", "");
 #endif
