@@ -28,6 +28,7 @@
 				 InstallerVersion="300"
 				 Keywords="Portugal e-ID Middleware Installer"
 				 Platform="x64"
+         Comments="Portuguese eID Middleware 2.3.0 SVN Revision $(var.RevisionNumber)"
 				 Manufacturer="Portuguese Government"
 				 Compressed="yes"
 				 InstallPrivileges="elevated"
@@ -161,6 +162,7 @@
 				<Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
 				<Directory Id="APPLICATIONROOTFOLDER" Name="Portugal Identity Card">
 					<Directory Id="IMAGEFORMATS" Name="imageformats" />
+          <Directory Id="DSS" Name="DSS"/>
           <Directory Id="SCAP" Name="SCAP">
             <Directory Id="CERTS_SCAP_DIR" Name="certificates"/>
           </Directory>
@@ -191,8 +193,7 @@
 			</Directory>
 
 			<Directory Id="SystemFolder"></Directory>
-
-			
+      
 	      <?if $(var.PTEID_TARGET_RUNTIME) = VCR8 ?>
 		        <!-- VC8 runtime -->
 		        <?define var.VCRT_TITLE="VC++ 8.0 runtime" ?>
@@ -222,6 +223,14 @@
         <File Source="..\..\scap\SCAP-Signature-runnable.jar" KeyPath="yes" />
         <File Source="..\..\scap\config.properties" />
         <File Source="..\..\scap\truststore.jks" />
+      </Component>
+    </DirectoryRef>
+
+
+    <DirectoryRef Id="DSS">
+      <Component Id="DSSApp" Guid="{CDA14D17-04E8-4f4b-BEE1-771A0DDC2558}">
+        <File Id="dss_standalone.exe" Name="dss-standalone.exe" KeyPath="yes" Source="..\..\..\misc\DSS\dss-standalone.exe" />
+        <File Id="config_dss.properties" Name="config.properties" Source="..\..\..\misc\DSS\config.properties" />
       </Component>
     </DirectoryRef>
 
@@ -513,10 +522,6 @@
           			<File Source="..\..\..\misc\setup_win\pteidoutlooksnc.exe" KeyPath="yes" />
 				</Component>
 
-				<Component Id="DSSApp" Guid="{CDA14D17-04E8-4f4b-BEE1-771A0DDC2558}">
-					<File Id="dss_standalone_app_3.0.3.jar" Name="dss-standalone-app-3.0.3.jar" KeyPath="no" Source="$(var.PTEID_BUILD_FOLDER_X64)\dss-standalone-app-3.0.3.jar" />
-							</Component>
-
 				<Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidgui.exe" KeyPath="yes" />
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCpp.dll" />
@@ -777,13 +782,11 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 						<RegistryValue Type="string" Value="PteidASICSignature"/>
 					</RegistryKey>
 					<RegistryKey Root="HKLM"
-							Key="SOFTWARE\Classes\PteidASICSignature"
-								 Action="createAndRemoveOnUninstall">
+							Key="SOFTWARE\Classes\PteidASICSignature" Action="createAndRemoveOnUninstall">
 						<RegistryKey
 							Key="shell\Open\command"
 								 Action="createAndRemoveOnUninstall">
-							<!-- TODO: When we have the proper application associate here-->
-							<RegistryValue Type="string" Value="C:\Windows\System32\notepad.exe"/>
+							<RegistryValue Type="string" Value="C:\Program Files\Portugal Identity Card\DSS\dss-standalone.exe pt &quot;%1&quot;"/>
 						</RegistryKey>
 						<RegistryKey Key="DefaultIcon"  Action="createAndRemoveOnUninstall">
 							<RegistryValue Type="string" Value="[ProgramFiles64Folder]Portugal Identity Card\assinatura.ico"/>

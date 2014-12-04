@@ -28,6 +28,7 @@
              InstallerVersion="300"
              Keywords="Portugal e-ID Middleware Installer"
              Platform="x86"
+             Comments="Portuguese eID Middleware 2.3.0 SVN Revision $(var.RevisionNumber)"
              Manufacturer="Portuguese Government"
              Compressed="yes"
              InstallPrivileges="elevated"
@@ -518,7 +519,8 @@
       </Component>
 
       <Component Id="DSSApp" Guid="{CDA14D17-04E8-4f4b-BEE1-771A0DDC2558}">
-        <File Id="dss_standalone_app_3.0.3.jar" Name="dss-standalone-app-3.0.3.jar" KeyPath="yes" Source="$(var.PTEID_BUILD_FOLDER_X64)\dss-standalone-app-3.0.3.jar" />
+        <File Id="dss_standalone.exe" Name="dss-standalone.exe" KeyPath="yes" Source="..\..\..\misc\DSS\dss-standalone.exe" />
+        <File Id="config_dss.properties" Name="config.properties" Source="..\..\..\misc\DSS\config.properties" />
       </Component>
 
       <Component Id="Icon" Guid="{5B657BAD-8CFC-4E42-AF8C-13338C50D784}" SharedDllRefCount="yes">
@@ -694,7 +696,6 @@
         </RegistryKey>
       </Component>
 
-      <!-- 
 	<Component Id="RegistryXadesFileType" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA5}">
 			<RegistryKey Root="HKLM"
 					Key="SOFTWARE\Classes\.ccsigned"
@@ -708,7 +709,7 @@
 					Key="shell\Open\command"
 						 Action="createAndRemoveOnUninstall">
 				
-					<RegistryValue Type="string" Value="C:\Windows\System32\notepad.exe"/>
+				<RegistryValue Type="string" Value="C:\Program Files\Portugal Identity Card\DSS\dss-standalone.exe pt &quot;%1&quot;"/>
 				</RegistryKey>
 				<RegistryKey Key="DefaultIcon"  Action="createAndRemoveOnUninstall">
 					<RegistryValue Type="string" Value="[ProgramFilesFolder]Portugal Identity Card\assinatura.ico"/>
@@ -717,7 +718,6 @@
 			</RegistryKey>
 
 	</Component>
-      -->
 
       <Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA3}">
         <RegistryKey Root="HKLM"
@@ -852,7 +852,7 @@
 
       <!-- Registry -->
       <ComponentRef Id="RegistryPteidSystem"/>
-	    <!-- <ComponentRef Id="RegistryXadesFileType"/> -->
+	    <ComponentRef Id="RegistryXadesFileType"/>
 
       <Feature Id="GUI"
                 Title="!(loc.PteidGui)"
