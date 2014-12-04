@@ -52,7 +52,7 @@ typedef enum {
 
 DEFINE_LANG_STR(Yes) = {L"&Yes", L"&Sim", L"&Oui", L"&Ja"};
 DEFINE_LANG_STR(No) = {L"&No", L"&Nao", L"&Non", L"&Nein"};
-DEFINE_LANG_STR(Ok) = {L"&Ok", L"&Ok", L"O&k", L"&Ok"};
+DEFINE_LANG_STR(Ok) = {L"&OK", L"&OK", L"O&k", L"&Ok"};
 DEFINE_LANG_STR(Cancel) = {L"&Cancel", L"&Cancelar", L"&Annuler", L"&Abbrechen"};
 DEFINE_LANG_STR(CancelNo) = {L"&Cancel (No)", L"&Cancelar (Nao)", L"&Annuler", L"&Abbrechen (Nein)"};
 DEFINE_LANG_STR(Pin) = {L"PIN", L"PIN", L"PIN", L"PIN"};

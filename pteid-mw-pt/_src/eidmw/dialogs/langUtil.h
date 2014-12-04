@@ -24,6 +24,7 @@
 
 #pragma once
 #ifdef _WIN32
+#include <windows.h>
 #include "language_latin1.h"
 #else
 #include "language.h"
@@ -57,6 +58,33 @@ private:
 	static tLanguage   ms_Lang;
 
 };
+
+#ifdef _WIN32
+	static HFONT GetSystemFont()
+	{
+		BOOL fResult;
+		HFONT TextFont;
+		NONCLIENTMETRICS nc;
+		nc.cbSize = sizeof(NONCLIENTMETRICS);
+		
+		//Get the default system font taking into account theme and resolutions, etc...
+		fResult = SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS), &nc, 0);
+		
+		if( fResult )     
+		{
+			LOGFONT lf = nc.lfMessageFont;
+
+			TextFont = CreateFont(lf.lfHeight, lf.lfWidth, 
+				lf.lfEscapement, lf.lfOrientation, lf.lfWeight, 
+				lf.lfItalic, lf.lfUnderline, lf.lfStrikeOut, lf.lfCharSet, 
+				lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality, 
+				lf.lfPitchAndFamily, lf.lfFaceName); 
+		}
+
+		return TextFont;
+
+	};
+#endif
 
 }
 #endif //__LANGUTIL_H__

@@ -67,10 +67,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP1) );
 		CreateBitapMask( ImagePIN, ImagePIN_Mask );
 
-		TextFont = CreateFont( 16, 0, 0, 0, FW_DONTCARE, 0, 0, 0,
-				DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-				DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Arial" );
-
+		TextFont = GetSystemFont();
 
 		SendMessage( Parent, WM_SETFONT, (WPARAM)TextFont, 0 );
 

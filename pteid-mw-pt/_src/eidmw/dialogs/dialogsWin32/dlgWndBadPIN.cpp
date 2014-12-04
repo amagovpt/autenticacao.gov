@@ -89,9 +89,7 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 		RECT clientRect;
 		GetClientRect( m_hWnd, &clientRect );
 
-		TextFont = CreateFont( 16, 0, 0, 0, FW_DONTCARE, 0, 0, 0,
-				DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-				DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"MS Shell Dlg" );
+		TextFont = GetSystemFont();
 
 		if( RemainingTries == 0 )
 		{
