@@ -2664,11 +2664,24 @@ void MainWnd::actionVerifySignature_eID_triggered()
 {
 	QString DSS_JAR("/DSS/dss-standalone-app-3.0.3.jar");
 
-#ifdef __APPLE__
+	//Launch the exe wrapper on Windows, we need it for the file association
+#ifdef _WIN32
+	QStringList arguments;
+	QObject *parent = this;
+
+	QString language = m_Settings.getGuiLanguageString() == "nl" ? QString("pt") : m_Settings.getGuiLanguageString();
+	//Add language code as args[0]
+	arguments << language;
+
+	QProcess *myProcess = new QProcess(parent);
+	myProcess->setProcessChannelMode(QProcess::MergedChannels);
+
+	myProcess->start(m_Settings.getExePath()+"/DSS/dss-standalone.exe", arguments);
+#elif __APPLE__
 	launchJavaProcess("/usr/local/bin/" + DSS_JAR, QString::fromUtf8("-Xdock:name=Validação de assinatura"),  "");
 #else
 	launchJavaProcess(m_Settings.getExePath() + DSS_JAR , "", "");
-#endif	
+#endif
 }
 
 void MainWnd::on_btnShortcut_SCAP_clicked()
