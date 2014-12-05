@@ -206,7 +206,7 @@ void dlgSignature::on_pbSign_clicked ( void )
 	QString savefilepath;
 	QString nativedafaultpath;
 	if (!individual_sigs)
-		defaultsavefilepath.append("/xadessign.zip");
+		defaultsavefilepath.append("/xadessign.ccsigned");
 	nativedafaultpath = QDir::toNativeSeparators(defaultsavefilepath);
 	if (individual_sigs)
 	{
@@ -217,7 +217,7 @@ void dlgSignature::on_pbSign_clicked ( void )
 	}
 	else
 		savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), 
-				nativedafaultpath, tr("Zip files 'XAdES' (*.zip)"));
+				nativedafaultpath, tr("XAdES Signatures (*.ccsigned)"));
 
 	if (savefilepath.isNull() || savefilepath.isEmpty())
 		return;

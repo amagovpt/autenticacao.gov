@@ -1419,15 +1419,15 @@ Please specify .xml, .csv or .eid</source>
         <translation>Guardar ficheiro de assinatura</translation>
     </message>
     <message>
-        <source>Zip files &apos;XAdES&apos; (*.zip)</source>
-        <translation>Ficheiros Zip &apos;XAdES&apos; (*.zip)</translation>
+        <source>XAdES Signatures (*.ccsigned)</source>
+        <translation>Assinaturas XAdES (*.ccsigned)</translation>
     </message>
     <message>
-        <source>Save Pdf File</source>
+        <source>Save PDF File</source>
         <translation>Guardar ficheiro PDF</translation>
     </message>
     <message>
-        <source>Pdf Files (*.pdf)</source>
+        <source>PDF Files (*.pdf)</source>
         <translation>Ficheiros PDF (*.pdf)</translation>
     </message>
     <message>
