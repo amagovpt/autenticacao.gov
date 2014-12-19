@@ -86,15 +86,12 @@ PRE_TARGETDEPS += $${translation_en.target} \
 
 DEPENDPATH += . ../dialogs 
 INCLUDEPATH += . ../dialogs ../eidlib ../_Builds ../common
-INCLUDEPATH += /usr/include/cairo
 
 LIBS += -L../lib  \
     -l$${EIDLIB} \
 	-l$${COMMONLIB}
 
 unix:!macx: LIBS += -Wl,-rpath-link,../lib
-
-LIBS += -lcairo
 
 macx: LIBS += -framework Foundation
 
