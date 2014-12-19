@@ -57,13 +57,14 @@ private:
     QByteArray image;
     QFutureWatcher<void> FutureWatcher;
     QProgressDialog *pdialog;
+    double pos_x, pos_y;
 
     bool addressPINRequest_triggered(CardInformation& CI_Data);
     void ShowErrorMsgBox();	 
     void ShowSuccessMsgBox();	 
     const char * persodata_triggered();
-    bool drawpdf(CardInformation& CI_Data, int format, const char *filepath);
-    cairo_t *createPage(int format, bool firstPage, const char *filepath, cairo_t *crt);
+    bool drawpdf(CardInformation& CI_Data, const char *filepath);
+    // cairo_t *createPage(int format, bool firstPage, const char *filepath, cairo_t *crt);
 };
 
 #endif

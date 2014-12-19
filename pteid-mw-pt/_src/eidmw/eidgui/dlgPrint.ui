@@ -48,7 +48,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Additional Indications</string>
+       <string>Additional Information</string>
       </property>
      </widget>
      <widget class="QLabel" name="labelHeader">
@@ -83,7 +83,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Basic Indications</string>
+       <string>Basic Information</string>
       </property>
      </widget>
      <widget class="QCheckBox" name="chboxAddress">

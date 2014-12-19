@@ -1370,7 +1370,7 @@ Please specify .xml, .csv or .eid</source>
 <context>
     <name>dlgPrint</name>
     <message>
-        <source>Additional Indications</source>
+        <source>Additional Information</source>
         <translation>Informações Adicionais</translation>
     </message>
     <message>
@@ -1379,8 +1379,8 @@ Please specify .xml, .csv or .eid</source>
         <translation type="unfinished">Selecione os campos pretendidos:</translation>
     </message>
     <message>
-        <source>Basic Indications</source>
-        <translation>Indicações Básicas</translation>
+        <source>Basic Information</source>
+        <translation>Informações Básicas</translation>
     </message>
     <message>
         <source>Address</source>
@@ -1390,10 +1390,197 @@ Please specify .xml, .csv or .eid</source>
         <source>Personal Notes</source>
         <translation>Notas pessoais</translation>
     </message>
-    <message>
+
+      <message>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
+    
+    <message>
+        <source>PERSONAL DATA</source>
+        <translation>DADOS PESSOAIS</translation>
+    </message>
+    <message>
+        <source>BASIC INFORMATION</source>
+        <translation>INFORMAÇÕES BÁSICAS</translation>
+    </message>
+    <message>
+        <source>Given Name(s)</source>
+        <translation>Nome(s)</translation>
+    </message>
+    <message>
+        <source>Surname(s)</source>
+        <translation>Apelido(s)</translation>
+    </message>
+
+    <message>
+        <source>Gender</source>
+        <translation>Sexo</translation>
+    </message>
+
+    <message>
+        <source>Height</source>
+        <translation>Altura</translation>
+    </message>
+
+      <message>
+        <source>Date of birth</source>
+        <translation>Data de Nascimento</translation>
+    </message>
+
+     <message>
+        <source>Document Number</source>
+        <translation>Número de documento</translation>
+    </message>
+
+     <message>
+        <source>Validity Date</source>
+        <translation>Data de validade</translation>
+    </message>
+
+     <message>
+        <source>Country</source>
+        <translation>País</translation>
+    </message>
+
+     <message>
+        <source>Father</source>
+        <translation>Pai</translation>
+    </message>
+
+     <message>
+        <source>Mother</source>
+        <translation>Mãe</translation>
+    </message>
+
+     <message>
+        <source>Notes</source>
+        <translation>Indicações Eventuais</translation>
+    </message>
+
+    <message>
+        <source>ADDITIONAL INFORMATION</source>
+        <translation>INFORMAÇÕES ADICIONAIS</translation>
+    </message>
+
+    <message>
+        <source>VAT identification no.</source>
+        <translation>Nº Identificação Fiscal</translation>
+    </message>
+
+    <message>
+        <source>Social Security no.</source>
+        <translation>Nº Segurança Social</translation>
+    </message>
+
+    <message>
+        <source>National Health System no.</source>
+        <translation>Nº Utente de Saúde</translation>
+    </message>
+
+     <message>
+        <source>Card Version</source>
+        <translation>Versão do Cartão</translation>
+    </message>
+
+     <message>
+        <source>Delivery Date</source>
+        <translation>Data de emissão</translation>
+    </message>
+
+     <message>
+        <source>Delivery Entity</source>
+        <translation>Entidade Emissora</translation>
+    </message>
+     <message>
+        <source>Delivery Location</source>
+        <translation>Local de pedido</translation>
+    </message>
+     <message>
+        <source>Document type</source>
+        <translation>Tipo de documento</translation>
+    </message>
+     <message>
+        <source>Card State</source>
+        <translation>Estado do cartão</translation>
+    </message>
+     <message>
+        <source>District</source>
+        <translation>Distrito Nacional</translation>
+    </message>
+     <message>
+        <source>Municipality</source>
+        <translation>Concelho</translation>
+    </message>
+     <message>
+        <source>Civil Parish</source>
+        <translation>Freguesia</translation>
+    </message>
+     <message>
+        <source>Ab. street type</source>
+        <translation>Abr. tipo de Via</translation>
+    </message>
+
+    <message>
+        <source>Street Type</source>
+        <translation>Tipo de Via</translation>
+    </message>
+    <message>
+        <source>Street Name</source>
+        <translation>Nome da Via</translation>
+    </message>
+    <message>
+        <source>Ab. Building Type</source>
+        <translation>Abr. Tipo de Edifício</translation>
+    </message>
+    <message>
+        <source>Building Type</source>
+        <translation>Tipo de Edifício</translation>
+    </message>
+    <message>
+        <source>House/building no.</source>
+        <translation>Nº da porta</translation>
+    </message>
+    <message>
+        <source>Floor</source>
+        <translation>Andar</translation>
+    </message>
+    <message>
+        <source>Side</source>
+        <translation>Lado</translation>
+    </message>
+    <message>
+        <source>Place</source>
+        <translation>Lugar</translation>
+    </message>
+    <message>
+        <source>Zip Code 4</source>
+        <translation>Cod. Postal 4</translation>
+    </message>
+    <message>
+        <source>Zip Code 3</source>
+        <translation>Cod. Postal 3</translation>
+    </message>
+    <message>
+        <source>Postal Locality</source>
+        <translation>Localidade Postal</translation>
+    </message>
+
+    <message>
+        <source>Locality</source>
+        <translation>Localidade</translation>
+    </message>
+
+     <message>
+        <source>PERSONAL NOTES</source>
+        <translation>NOTAS PESSOAIS</translation>
+    </message>
+
+     <message>
+        <source>ADDRESS</source>
+        <translation>MORADA</translation>
+    </message>
+
     <message>
         <source>Print...</source>
         <translation>Imprimir...</translation>
@@ -1419,7 +1606,7 @@ Please specify .xml, .csv or .eid</source>
         <translation>Guardar ficheiro de assinatura</translation>
     </message>
     <message>
-        <source>XAdES Signatures (*.ccsigned)</source>
+        <source>Signature Files 'XAdES' (*.ccsigned)</source>
         <translation>Assinaturas XAdES (*.ccsigned)</translation>
     </message>
     <message>
@@ -1446,10 +1633,9 @@ Please specify .xml, .csv or .eid</source>
         <source>PIN verification failed</source>
         <translation>O PIN introduzido está errado!</translation>
     </message>
-	   <message>
+	<message>
         <source>Export / Print</source>
 		<translation>Exportar/Imprimir</translation>
-
     </message>
 	<message>
 	<source>PDF file successfully generated</source>
