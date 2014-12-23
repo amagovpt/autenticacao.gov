@@ -396,10 +396,10 @@ void drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name
 
     painter.setPen(blue_pen);
     painter.drawText(QPointF(pos_x, pos_y), name);
-    pos_y += 10;
+    pos_y += 7;
 
     painter.drawLine(QPointF(pos_x, pos_y), QPointF(pos_x+line_length, pos_y));
-    pos_y += 20;
+    pos_y += 15;
     painter.setPen(black_pen);
     painter.drawText(QPointF(pos_x, pos_y), value);
 }
@@ -459,14 +459,17 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 	const tFieldMap PersonFields = CI_Data.m_PersonInfo.getFields();
 	tFieldMap& CardFields = CI_Data.m_CardInfo.getFields();
 
-	QPrinter printer(QPrinter::ScreenResolution);
+	QPrinter printer;
+	printer.setResolution(96);
     printer.setPaperSize(QPrinter::A4);
+
+	//QMessageBox msgBoxp(QMessageBox::NoIcon, "Resolution", "= " + QString::number(printer.resolution()), 0, this);
+  	//msgBoxp.exec();
 
     if (strlen(filepath) > 0)
     	printer.setOutputFileName(filepath);
     //Add custom fonts
 
-    //TODO: change this to pteidgui resources
     QFontDatabase::addApplicationFont("/home/agrr/Downloads/din-fonts/din-light.ttf");
     QFontDatabase::addApplicationFont("/home/agrr/Downloads/din-fonts/din-medium.ttf");
 
@@ -475,31 +478,33 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
     //Start drawing
     pos_x = 0, pos_y = 0;
     QPainter painter(&printer);
+	//painter.scale(1.1, 1.1);
 
     //Font setup
     QFont din_font("DIN Medium");
-    din_font.setPointSize(16);
-//
-//    Include header as png pixmap
+    din_font.setPixelSize(18);
+
+//  Include header as png pixmap
     QPixmap header = loadHeader();
     painter.drawPixmap(QPointF(pos_x, pos_y), header);
 
-//    //Alternative using the QtSVG module, not enabled for now because the rendering is far from perfect
-//    QSvgRenderer renderer(QString("/home/agrr/Desktop/cc-logo.svg"));
-//    std::cout << renderer.defaultSize().width() << "x" << renderer.defaultSize().height() << std::endl;
+//  //Alternative using the QtSVG module, not enabled for now because the rendering is far from perfect
+    //QSvgRenderer renderer(QString("D:\\home\\agrr\\Desktop\\cc-logo.svg"));
+	//QSvgRenderer renderer(QString("C:\\Users\\agrr\\Desktop\\GMC_logo.svg"));
+    //std::cout << renderer.defaultSize().width() << "x" << renderer.defaultSize().height() << std::endl;
 
-//    renderer.render(&painter, QRect(pos_x, pos_y, 407, 107));
-//    painter.end();
-//    return 0;
+	//renderer.render(&painter, QRect(pos_x, pos_y, 504, 132));
+	//renderer.render(&painter, QRect(pos_x, pos_y, 250, 120));
 
-    pos_y += header.height()+30;
+	pos_y += header.height()+25;
+	//pos_y += 110+30;
 
     //Change text color
     black_pen = painter.pen();
     blue_pen = painter.pen();
 
-    const int COLUMN_WIDTH = 250;
-    const int LINE_HEIGHT = 55;
+    const int COLUMN_WIDTH = 220;
+    const int LINE_HEIGHT = 45;
 
     // new_pen.setItalic(true);
     blue_pen.setColor(QColor(78, 138, 190));
@@ -509,8 +514,8 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
     painter.drawText(QPointF(pos_x, pos_y), tr("PERSONAL DATA"));
 
-    pos_y += 25;
-    int circle_radius = 7.5;
+    pos_y += 15;
+    int circle_radius = 6;
 
     //Draw 4 blue circles
     painter.setBrush(QColor(78, 138, 190));
@@ -521,7 +526,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
     painter.setPen(black_pen);
     //Reset font
-    din_font.setPointSize(12);
+    din_font.setPixelSize(10);
     din_font.setBold(false);
     painter.setFont(din_font);
 
@@ -536,15 +541,14 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 		QPixmap pixmap_photo;
 		pixmap_photo.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
 		
-		const int img_height = 160;
+		const int img_height = 200;
     	
         //Scale height if needed
     	QPixmap scaled = pixmap_photo.scaledToHeight(img_height, Qt::SmoothTransformation);
 
-    	painter.drawPixmap(QPointF(pos_x + 500, pos_y-10), scaled);
+    	painter.drawPixmap(QPointF(pos_x + 500, pos_y-80), scaled);
 
-    	pos_y += 75;
-
+    	pos_y += 50;
 
 	    drawSingleField(painter, pos_x, pos_y, tr("Given Name(s)"), getUtf8String(PersonFields[GIVENNAME]), true);
 
@@ -556,15 +560,13 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
 	    drawSingleField(painter, pos_x, pos_y, tr("Gender"), PersonFields[SEX]);
 	    drawSingleField(painter, pos_x + COLUMN_WIDTH, pos_y, tr("Height"), PersonFields[HEIGHT]);
+		drawSingleField(painter, pos_x + COLUMN_WIDTH*2, pos_y, tr("Date of birth"), PersonFields[BIRTHDATE]);
 
 	    pos_y += LINE_HEIGHT;
-
-	    drawSingleField(painter, pos_x, pos_y, tr("Date of birth"), PersonFields[BIRTHDATE]);
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Document Number"), PersonFields[DOCUMENTNUMBER]);
-
-	    pos_y += LINE_HEIGHT;
-	    drawSingleField(painter, pos_x, pos_y, tr("Validity Date"), CardFields[CARD_VALIDUNTIL]);
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Country"), PersonFields[COUNTRY]);
+	    
+	    drawSingleField(painter, pos_x, pos_y, tr("Document Number"), PersonFields[DOCUMENTNUMBER]);
+	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Validity Date"), CardFields[CARD_VALIDUNTIL]);
+	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Country"), PersonFields[COUNTRY]);
 
 	    pos_y += LINE_HEIGHT;
 	    drawSingleField(painter, pos_x, pos_y, tr("Father"), getUtf8String(PersonFields[FATHER]), true);
@@ -575,43 +577,33 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
 	    drawSingleField(painter, pos_x, pos_y, tr("Notes"), getUtf8String(PersonFields[ACCIDENTALINDICATIONS]), true);
 
-	    pos_y += 80;
+	    pos_y += 50;
 	}
     
 	//////////////////////////////IDExtra FIELDS///////////////////////////
     if (ui.chboxIDExtra->isChecked())
 	{
 		drawSectionHeader(painter, pos_x, pos_y, tr("ADDITIONAL INFORMATION"));
-	    pos_y += 75;
+	    pos_y += 50;
 
 	    drawSingleField(painter, pos_x, pos_y, tr("VAT identification no."), PersonFields[TAXNO]);
 	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Social Security no."), PersonFields[SOCIALSECURITYNO]);
+		drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("National Health System no."), PersonFields[HEALTHNO]);
 	    pos_y += LINE_HEIGHT;
 
-	    drawSingleField(painter, pos_x, pos_y, tr("National Health System no."), PersonFields[HEALTHNO]);
-
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Card Version"), PersonFields[CARDVERSION]);
-
+	    drawSingleField(painter, pos_x, pos_y, tr("Card Version"), PersonFields[CARDVERSION]);
+		drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Delivery Date"), CardFields[CARD_VALIDFROM]);
+	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Delivery Entity"), getUtf8String(PersonFields[ISSUINGENTITY]));
 	    pos_y += LINE_HEIGHT;
 
-	    drawSingleField(painter, pos_x, pos_y, tr("Delivery Date"), CardFields[CARD_VALIDFROM]);
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Delivery Entity"), getUtf8String(PersonFields[ISSUINGENTITY]));
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Delivery Location"), getUtf8String(PersonFields[LOCALOFREQUEST]));
-	    pos_y += LINE_HEIGHT;
-
-	    drawSingleField(painter, pos_x, pos_y, tr("Document type"), getUtf8String(PersonFields[DOCUMENTTYPE]));
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Card State"), getUtf8String(PersonFields[VALIDATION]));
-
-	    pos_y += LINE_HEIGHT;
 	    
-	}
-
-	if (ui.chboxAddress->isChecked() || ui.chboxPersoData->isChecked())
-	{
-		 //Force a page-break before Address Fields or PersoData
-    	printer.newPage();
-    	pos_x = 0;
-    	pos_y = 0;
+	    drawSingleField(painter, pos_x, pos_y, tr("Delivery Location"), getUtf8String(PersonFields[LOCALOFREQUEST]));
+	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Document type"), getUtf8String(PersonFields[DOCUMENTTYPE]));
+	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Card State"), getUtf8String(PersonFields[VALIDATION]));
+		
+		//XXX: espacamento extra curto para ver se conseguimos apenas 1 pagina...
+	    pos_y += 50;
+	    
 	}
 
 	//////////////////////////////Address FIELDS///////////////////////////
@@ -625,7 +617,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
 		drawSectionHeader(painter, pos_x, pos_y, tr("ADDRESS"));
 
-    	pos_y += 75;
+    	pos_y += 50;
 
     	drawSingleField(painter, pos_x, pos_y, tr("District"), getUtf8String(AddressFields[ADDRESS_DISTRICT]));
     	drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Municipality"), getUtf8String(AddressFields[ADDRESS_MUNICIPALITY]));
@@ -663,25 +655,24 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
 	if (ui.chboxPersoData->isChecked())
 	{
-		const char *notes = persodata_triggered();
-        QString perso_data = QString::fromUtf8(notes);
+        QString perso_data;
 
-		drawSectionHeader(painter, pos_x, pos_y, tr("PERSONAL NOTES"));
+        const char *notes = persodata_triggered();
+        perso_data = QString::fromUtf8(notes);
 
-    	pos_y += 75;
-		painter.drawText(QRectF(pos_x, pos_y, 700, 700), Qt::TextWordWrap, perso_data);		
+        if (perso_data.size() > 0)
+        {
+            //Force a page-break before PersoData
+            printer.newPage();
+            pos_x = 0;
+            pos_y = 0;
+
+            drawSectionHeader(painter, pos_x, pos_y, tr("PERSONAL NOTES"));
+
+            pos_y += 75;
+            painter.drawText(QRectF(pos_x, pos_y, 700, 700), Qt::TextWordWrap, perso_data);		
+        }
 	}
-
-/*
-	if (format == PDF)
-	{
-		// cairo_show_page(cr);
-	} else {
-		// cairo_surface_write_to_png_stream (cairo_get_target(cr), write_png_stream_to_Qimage,&image);
-		imageList.append(QImage::fromData(image));
-		image.clear();
-	}
-	*/
 
 	//Finish drawing/printing
 	painter.end();
