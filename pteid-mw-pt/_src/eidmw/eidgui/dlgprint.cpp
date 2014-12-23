@@ -463,15 +463,12 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 	printer.setResolution(96);
     printer.setPaperSize(QPrinter::A4);
 
-	//QMessageBox msgBoxp(QMessageBox::NoIcon, "Resolution", "= " + QString::number(printer.resolution()), 0, this);
-  	//msgBoxp.exec();
-
     if (strlen(filepath) > 0)
     	printer.setOutputFileName(filepath);
-    //Add custom fonts
 
-    QFontDatabase::addApplicationFont("/home/agrr/Downloads/din-fonts/din-light.ttf");
-    QFontDatabase::addApplicationFont("/home/agrr/Downloads/din-fonts/din-medium.ttf");
+    //Add custom fonts
+	QFontDatabase::addApplicationFont(":/images/Images/din-light.ttf");
+	QFontDatabase::addApplicationFont(":/images/Images/din-medium.ttf");
 
 	//////////////////////////////ID FIELDS///////////////////////////
 	
