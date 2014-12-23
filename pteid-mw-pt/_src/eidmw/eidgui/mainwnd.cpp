@@ -222,8 +222,8 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	//
 	// set the window Icon (as it appears in the left corner of the window)
 	//------------------------------------
-    const QIcon Ico = QIcon( ":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png" );
-    //const QIcon Ico = QIcon( ":/images/Images/Icons/pteid.ico" );
+    //const QIcon Ico = QIcon( ":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png" );
+    const QIcon Ico = QIcon( ":/images/Images/Icons/pteid.ico" );
 	this->setWindowIcon( Ico );
 
 	m_pPrinter	= new QPrinter();
