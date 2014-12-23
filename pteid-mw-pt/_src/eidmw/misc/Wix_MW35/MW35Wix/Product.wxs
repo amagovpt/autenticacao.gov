@@ -543,11 +543,11 @@
       </Component>
 
       <Component Id="GuiLang" Guid="{6B03ED1B-DF24-4CE6-A70C-476AF4C0941B}" SharedDllRefCount="yes">
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)eidmw_en.qm" KeyPath="yes" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)eidmw_nl.qm" />
+        <File Source="..\..\..\eidgui\eidmw_en.qm" KeyPath="yes" />
+        <File Source="..\..\..\eidgui\eidmw_nl.qm" />
        </Component>
 
-      <!--Cairo and its dependencies: needed for the PDF export function -->
+      <!-- Cairo and its dependencies: needed for the PDF export function 
       <Component Id="Cairo" Guid="{DF770DAC-0151-49ea-890A-6E47C664F74E}" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)libcairo-2.dll" KeyPath="yes" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)freetype6.dll" />
@@ -556,6 +556,7 @@
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)libexpat-1.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)zlib1.dll" />
       </Component>
+      -->
 
 
       <Component Id="Qt" Guid="{AF5AF018-EE70-4EA9-98BA-9C2947F19060}" SharedDllRefCount="yes">
@@ -865,7 +866,7 @@
         <ComponentRef Id="Curl"/>
         <ComponentRef Id="Poppler"/>
         <ComponentRef Id="XMLSecurity"/>
-        <ComponentRef Id="Cairo"/>
+        <!-- <ComponentRef Id="Cairo"/> -->
         <ComponentRef Id="Java_SDK_Component"/>
         <ComponentRef Id="CSharp_SDK_Component"/>
 

@@ -7,7 +7,7 @@
   <String Id="PteidRuntime" Overridable="yes">Middleware do Cartão de Cidadão Português 2.0</String>
   <String Id="PteidRuntimeDesc" Overridable="yes">Este módulo é necessário para utilizar o Cartão de Cidadão.</String>
   <String Id="PteidGui" Overridable="yes">Aplicação Utilitária</String>
-  <String Id="PteidGuiDescr" Overridable="yes">Lê e mostra todo o conteúdo do Cartão de Cidadão</String>
+  <String Id="PteidGuiDescr" Overridable="yes">Acesso aos dados de identificação do Cidadão e assinatura electrónica</String>
   <String Id="CSP" Overridable="yes">Cryptographic Service Provider</String>
   <String Id="CSPDescr" Overridable="yes">Este módulo fornece serviços criptográficos às aplcações que usam a Windows CryptoAPI no Windows XP</String>
   <String Id="Minidriver" Overridable="yes">Smart Card Minidriver</String>
