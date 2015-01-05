@@ -2678,7 +2678,8 @@ void MainWnd::actionVerifySignature_eID_triggered()
 
 	myProcess->start(m_Settings.getExePath()+"/DSS/dss-standalone.exe", arguments);
 #elif __APPLE__
-	launchJavaProcess("/usr/local/bin/" + DSS_JAR, QString::fromUtf8("-Xdock:name=Validação de assinatura"),  "");
+	launchJavaProcess(QString::fromUtf8("/Applications/Validacao de assinaturas.app/Contents/Java/") + DSS_JAR,
+			 QString::fromUtf8("-Xdock:name=Validação de assinatura"),  "");
 #else
 	launchJavaProcess(m_Settings.getExePath() + DSS_JAR , "", "");
 #endif
