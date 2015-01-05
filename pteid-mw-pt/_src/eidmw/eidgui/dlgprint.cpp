@@ -475,7 +475,9 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
     //Start drawing
     pos_x = 0, pos_y = 0;
     QPainter painter(&printer);
-	//painter.scale(1.1, 1.1);
+#ifdef __APPLE__
+    painter.scale(0.8, 0.8);
+#endif
 
     //Font setup
     QFont din_font("DIN Medium");
