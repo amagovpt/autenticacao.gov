@@ -2662,7 +2662,7 @@ void MainWnd::actionPDFSignature_triggered()
 //*****************************************************
 void MainWnd::actionVerifySignature_eID_triggered()
 {
-	QString DSS_JAR("/DSS/dss-standalone-app-3.0.3.jar");
+	QString DSS_JAR("dss-standalone-app-3.0.3.jar");
 
 	//Launch the exe wrapper on Windows, we need it for the file association
 #ifdef _WIN32
@@ -2681,7 +2681,7 @@ void MainWnd::actionVerifySignature_eID_triggered()
 	launchJavaProcess(QString::fromUtf8("/Applications/Validacao de assinaturas.app/Contents/Java/") + DSS_JAR,
 			 QString::fromUtf8("-Xdock:name=Validação de assinatura"),  "");
 #else
-	launchJavaProcess(m_Settings.getExePath() + DSS_JAR , "", "");
+	launchJavaProcess(m_Settings.getExePath() + "/DSS/" + DSS_JAR , "", "");
 #endif
 }
 
