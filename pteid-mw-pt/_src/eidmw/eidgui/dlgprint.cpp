@@ -435,6 +435,18 @@ QString getUtf8String(const QString &in)
 	return QString::fromUtf8(in.toStdString().c_str());
 }
 
+void addFonts()
+{
+#ifdef __APPLE__
+    QString resource_dir = QCoreApplication::applicationDirPath() + "/../Resources/";
+    QFontDatabase::addApplicationFont(resource_dir + "din-light.ttf");
+    QFontDatabase::addApplicationFont(resource_dir + "din-medium.ttf");
+#else
+    QFontDatabase::addApplicationFont(":/images/Images/din-light.ttf");
+    QFontDatabase::addApplicationFont(":/images/Images/din-medium.ttf");
+#endif    
+}
+
 
 bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 {
@@ -467,10 +479,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
     	printer.setOutputFileName(filepath);
 
     //Add custom fonts
-	QFontDatabase::addApplicationFont(":/images/Images/din-light.ttf");
-	QFontDatabase::addApplicationFont(":/images/Images/din-medium.ttf");
-
-	//////////////////////////////ID FIELDS///////////////////////////
+	addFonts();
 	
     //Start drawing
     pos_x = 0, pos_y = 0;
@@ -579,7 +588,6 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 	    pos_y += 50;
 	}
     
-	//////////////////////////////IDExtra FIELDS///////////////////////////
     if (ui.chboxIDExtra->isChecked())
 	{
 		drawSectionHeader(painter, pos_x, pos_y, tr("ADDITIONAL INFORMATION"));
@@ -605,7 +613,6 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 	    
 	}
 
-	//////////////////////////////Address FIELDS///////////////////////////
 	if (ui.chboxAddress->isChecked())
 	{
 		bool res = addressPINRequest_triggered(CI_Data);
