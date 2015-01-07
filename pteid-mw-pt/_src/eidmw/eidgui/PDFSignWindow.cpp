@@ -236,7 +236,12 @@ void ImageCanvas::paintEvent(QPaintEvent *)
 	QPixmap default_icon(":/images/Images/Icons/pteid_signature_banner.jpg");
 
 	QFont current_font = painter.font();
+#ifdef __APPLE__
+	current_font.setPointSize(10);
+#else
 	current_font.setPointSize(9);
+#endif
+
 	painter.setFont(current_font);
 	
 	int line_height = fontMetrics().height();
