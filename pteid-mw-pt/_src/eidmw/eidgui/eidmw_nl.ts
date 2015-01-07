@@ -1522,7 +1522,7 @@ Please specify .xml, .csv or .eid</source>
     </message>
 
     <message>
-        <source>Street Type</source>
+        <source>Street type</source>
         <translation>Tipo de Via</translation>
     </message>
     <message>
