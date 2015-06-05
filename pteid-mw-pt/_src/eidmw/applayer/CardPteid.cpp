@@ -90,7 +90,7 @@ bool APL_EidFile_Trace::MapFields()
     if (Validation.ToString() == "01")
     	m_Validation = "O Cartão de Cidadão encontra-se activo";
     else
-    	m_Validation = "O Cartão de Cidadão não encontra-se activo";
+    	m_Validation = "O Cartão de Cidadão encontra-se inactivo";
 
 
     isCardActive = (pteidngtraceBuffer.GetByte(0) == PTEIDNG_ACTIVE_CARD);
