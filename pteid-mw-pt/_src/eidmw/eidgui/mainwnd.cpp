@@ -3537,6 +3537,21 @@ void MainWnd::refreshTabIdentity( void )
 	m_ui.txtIdentity_AccidentalIndications->setAccessibleName( QString::fromUtf8(PersonFields[ACCIDENTALINDICATIONS].toStdString().c_str()) );
 }
 
+QString MainWnd::translateCardValidation(QString &card_validation)
+{
+	if (m_Settings.getGuiLanguageString() == "en")
+	{
+		if (card_validation.contains("inactivo"))
+			return "The Citizen Card is inactive.";
+		else 
+			return "The Citizen Card is active.";
+
+	}
+	else
+		return card_validation;
+
+}
+
 //*****************************************************
 // refresh the tab with the ID extra info (card back side)
 //*****************************************************
@@ -3561,8 +3576,9 @@ void MainWnd::refreshTabIdentityExtra()
 
 	m_ui.txtIdentityExtra_LocalofRequest->setText( QString::fromUtf8(PersonFields[LOCALOFREQUEST].toStdString().c_str()) );
 	m_ui.txtIdentityExtra_LocalofRequest->setAccessibleName	( QString::fromUtf8(PersonFields[LOCALOFREQUEST].toStdString().c_str()) );
-
-	m_ui.txtIdentityExtra_Validate->setText ( QString::fromUtf8(PersonFields[VALIDATION].toStdString().c_str()) );
+	//Hackish translation
+	QString card_validation = translateCardValidation(QString::fromUtf8(PersonFields[VALIDATION].toStdString().c_str()));
+	m_ui.txtIdentityExtra_Validate->setText (card_validation);
 	m_ui.txtIdentityExtra_Validate->setAccessibleName ( QString::fromUtf8(PersonFields[VALIDATION].toStdString().c_str()));
 
 	m_ui.txtIdentityExtra_ValidFrom->setText( QString::fromUtf8(CardFields[CARD_VALIDFROM].toStdString().c_str()));

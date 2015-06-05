@@ -394,6 +394,8 @@ private:
 	void refreshTabPersoData( void );
 	void refreshTabCertificates( void );
 	void refreshTabCardPin( void );
+
+	QString translateCardValidation(QString &card_validation);
 	//void refreshTabInfo( void );
 
 	//TESTING
