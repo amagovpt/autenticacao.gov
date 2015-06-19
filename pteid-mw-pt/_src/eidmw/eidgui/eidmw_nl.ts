@@ -227,7 +227,7 @@
     </message>
     <message>
         <source>Updates</source>
-        <translation>Actualizações</translation>
+        <translation>Atualizações</translation>
     </message>
     <message>
         <source>About</source>
@@ -1155,11 +1155,11 @@ Please specify .xml, .csv or .eid</source>
 	<name>HttpWindow</name>
 	<message>
         <source>Auto-Update</source>
-        <translation>Actualização automática</translation>
+        <translation>Atualização automática</translation>
     </message>
 	<message>
         <source>There are updates available press Install do perform the updates.</source>
-        <translation>Existem Actualizações Disponíves. Clique em Instalar para prosseguir.</translation>
+        <translation>Existem atualizações disponíves. Clique em Instalar para prosseguir.</translation>
     </message>
     <message>
         <source>Unable to download the update please check your Network Connection.</source>
@@ -1186,7 +1186,7 @@ Please specify .xml, .csv or .eid</source>
 	<name>AutoUpdates</name>
 	<message>
 		<source>Auto-update</source>
-		<translation>Actualizações Automáticas</translation>
+		<translation>Atualizações Automáticas</translation>
 	</message>
 	<message>
 		<source>Yes</source>
@@ -1202,15 +1202,15 @@ Please specify .xml, .csv or .eid</source>
 	</message>
 	<message>
 		<source>Your Linux distribution is not supported by Auto-updates</source>
-		<source>A sua distribuição não é suportada pelas Actualizações Automáticas</source>
+		<source>A sua distribuição não é suportada pelas Atualizações Automáticas</source>
 	</message>
 	<message>
 		<source>Do you want to check for updates?</source>
-		<translation>Deseja verificar se existem actualizações disponíveis?</translation>
+		<translation>Deseja verificar se existem atualizações disponíveis?</translation>
 	</message>
 <message>
 	<source>No updates available at the moment</source>
-	<translation>Não existem Actualizações de momento</translation>
+	<translation>Não existem atualizações de momento</translation>
 </message>
 </context>
 <context>
