@@ -497,26 +497,29 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
     painter.drawPixmap(QPointF(pos_x, pos_y), header);
 
 //  //Alternative using the QtSVG module, not enabled for now because the rendering is far from perfect
-    //QSvgRenderer renderer(QString("D:\\home\\agrr\\Desktop\\cc-logo.svg"));
 	//QSvgRenderer renderer(QString("C:\\Users\\agrr\\Desktop\\GMC_logo.svg"));
     //std::cout << renderer.defaultSize().width() << "x" << renderer.defaultSize().height() << std::endl;
 
 	//renderer.render(&painter, QRect(pos_x, pos_y, 504, 132));
 	//renderer.render(&painter, QRect(pos_x, pos_y, 250, 120));
 
-	pos_y += header.height()+25;
-	//pos_y += 110+30;
+	pos_y += header.height() + 15;
+	black_pen = painter.pen();
+
+	blue_pen.setColor(QColor(78, 138, 190));
+    painter.setPen(blue_pen);
+	
+	int line_length = 487;
+	//Horizontal separator below the CC logo
+	painter.drawLine(QPointF(pos_x, pos_y), QPointF(pos_x+line_length, pos_y));
+	pos_y += 25;
 
     //Change text color
-    black_pen = painter.pen();
     blue_pen = painter.pen();
 
     const int COLUMN_WIDTH = 220;
     const int LINE_HEIGHT = 45;
-
-    // new_pen.setItalic(true);
-    blue_pen.setColor(QColor(78, 138, 190));
-    painter.setPen(blue_pen);
+    
 //    din_font.setBold(true);
     painter.setFont(din_font);
 
@@ -610,7 +613,6 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 		
 		//XXX: espacamento extra curto para ver se conseguimos apenas 1 pagina...
 	    pos_y += 50;
-	    
 	}
 
 	if (ui.chboxAddress->isChecked())
@@ -656,7 +658,6 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 	    drawSingleField(painter, pos_x, pos_y, tr("Locality"), getUtf8String(AddressFields[ADDRESS_LOCALITY]));
 
 	    pos_y += 80;
-		
 	}
 
 	if (ui.chboxPersoData->isChecked())
