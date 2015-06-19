@@ -678,8 +678,8 @@ Do you want to accept it?
         </translation>
     </message>
     <message>
-        <source>Unknown card type</source>
-        <translation type="unfinished">Tipo de cartão desconhecido</translation>
+        <source>Card read error or unknown card type</source>
+        <translation>Erro de leitura ou tipo de cartão desconhecido</translation>
     </message>
     <message>
         <source>Index out of range</source>

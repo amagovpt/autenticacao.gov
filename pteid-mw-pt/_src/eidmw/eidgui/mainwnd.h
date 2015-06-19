@@ -318,8 +318,8 @@ private slots:
 //SHORTCUT BUTTONS
 	void on_btnShortcut_UnivSign_clicked( void );
 	void on_btnShortcut_PdfSign_clicked( void );
-	void on_btnShortcut_VerifSign_clicked( void );
-	void on_btnShortcut_SCAP_clicked( void );
+	//void on_btnShortcut_VerifSign_clicked( void );
+	//void on_btnShortcut_SCAP_clicked( void );
 	// void on_btnShortcut_LaunchJava_clicked();
 
 //SUBMENUS Toolbar

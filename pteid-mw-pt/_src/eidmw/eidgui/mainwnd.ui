@@ -442,6 +442,7 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
          <bool>false</bool>
         </property>
        </widget>
+        <!-- 
        <widget class="QPushButton" name="btnShortcut_SCAP">
         <property name="geometry">
          <rect>
@@ -461,6 +462,8 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);         
          <string>SCAP Signature</string>
         </property>
        </widget>
+       -->
+        <!-- 
        <widget class="QPushButton" name="btnShortcut_VerifSign">
         <property name="geometry">
          <rect>
@@ -480,6 +483,7 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);         
          <string>Verify Signature</string>
         </property>
        </widget>
+       -->
       </widget>
       <widget class="QWidget" name="page_IdentityExtra">
        <property name="styleSheet">

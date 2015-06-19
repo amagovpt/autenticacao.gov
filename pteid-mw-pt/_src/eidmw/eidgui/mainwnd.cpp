@@ -416,10 +416,11 @@ void MainWnd::on_btnShortcut_PdfSign_clicked()
 	actionPDFSignature_triggered();
 }
 
-void MainWnd::on_btnShortcut_VerifSign_clicked()
-{
-	actionVerifySignature_eID_triggered();
-}
+
+//void MainWnd::on_btnShortcut_VerifSign_clicked()
+//{
+//	actionVerifySignature_eID_triggered();
+//}
 
 /*
 // Change Address functionality triggered by a button in the Address tab
@@ -2015,10 +2016,15 @@ void MainWnd::loadCardData( void )
 			strCaption = strCaption.remove(QChar('&'));
 			QString strMessage(tr("No card found"));
 			m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
+
+			QString caption  = tr("Warning");
+	  		QString msg = tr("Please insert your card on the smart card reader");
+	  		QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
+	  		msgBoxp.exec();
 		}
 		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
 		{
-			QString msg(tr("Unknown card type"));
+			QString msg(tr("Card read error or unknown card type"));
 			ShowPTEIDError( 0, msg );
 			clearGuiContent();
 		}
@@ -2172,7 +2178,7 @@ void MainWnd::loadCardDataAddress( void )
 		}
 		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
 		{
-			QString msg(tr("Unknown card type"));
+			QString msg(tr("Card read error or unknown card type"));
 			ShowPTEIDError( 0, msg );
 			clearGuiContent();
 		}
@@ -2323,7 +2329,7 @@ bool MainWnd::loadCardDataPersoData( void )
 		}
 		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
 		{
-			QString msg(tr("Unknown card type"));
+			QString msg(tr("Card read error or unknown card type"));
 			ShowPTEIDError( 0, msg );
 			clearGuiContent();
 		}
@@ -2476,7 +2482,7 @@ void MainWnd::loadCardDataCertificates( void )
 		}
 		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
 		{
-			QString msg(tr("Unknown card type"));
+			QString msg(tr("Card read error or unknown card type"));
 			ShowPTEIDError( 0, msg );
 			clearGuiContent();
 		}
@@ -2685,16 +2691,16 @@ void MainWnd::actionVerifySignature_eID_triggered()
 #endif
 }
 
-void MainWnd::on_btnShortcut_SCAP_clicked()
-{
-	QString SCAP_JAR("/SCAP/SCAP-Signature-runnable.jar");
-
-#ifdef __APPLE__
-	launchJavaProcess("/usr/local/bin/" + SCAP_JAR, "-Xdock:name=Assinatura na qualidade", "");
-#else
-	launchJavaProcess(m_Settings.getExePath() + SCAP_JAR, "", "");
-#endif
-}
+//void MainWnd::on_btnShortcut_SCAP_clicked()
+//{
+//	QString SCAP_JAR("/SCAP/SCAP-Signature-runnable.jar");
+//
+//#ifdef __APPLE__
+//	launchJavaProcess("/usr/local/bin/" + SCAP_JAR, "-Xdock:name=Assinatura na qualidade", "");
+//#else
+//	launchJavaProcess(m_Settings.getExePath() + SCAP_JAR, "", "");
+//#endif
+//}
 
 //*****************************************************
 // Print clicked
@@ -4269,14 +4275,19 @@ void MainWnd::customEvent( QEvent* pEvent )
 						//------------------------------------
 						// register certificates when needed
 						//------------------------------------
+						/*
 						if (m_Settings.getRegCert())
 						{
+							//XXX: Move this from here
+							/*
 							bool bImported = ImportCertificates(cardReader);
 							if (!isHidden())
 							{
 								showCertImportMessage(bImported);
 							}
+						
 						}
+						*/
 						if (isHidden())
 						{
 							break;
@@ -4301,7 +4312,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 					case PTEID_CARDTYPE_UNKNOWN:
 					{
 						clearGuiContent();
-						QString msg(tr("Unknown card type"));
+						QString msg(tr("Card read error or unknown card type"));
 						ShowPTEIDError( 0, msg );
 					}
 					default:
@@ -4582,6 +4593,17 @@ void CardDataLoader::Load()
 	this->information.LoadData(card, readerName);
 	if (this->mwnd)
 		this->mwnd->loadPinData(this->card);
+
+	//Import certificates after loading data in the same thread
+	if (this->mwnd->m_Settings.getRegCert())
+	{
+		bool bImported = MainWnd::ImportCertificates(this->mwnd->m_CurrReaderName);
+
+		if (!this->mwnd->isHidden())
+		{
+			this->mwnd->showCertImportMessage(bImported);
+		}
+	}
 }
 
 void CardDataLoader::LoadPersoData()
