@@ -717,7 +717,7 @@ void MainWnd::on_btn_menu_tools_clicked()
 void MainWnd::on_btn_menu_settings_clicked()
 {
 	m_ui.wdg_submenu_settings->setVisible(true);
-	m_ui.wdg_submenu_settings->setGeometry(254,4,126,75);
+	m_ui.wdg_submenu_settings->setGeometry(260,4,151,75);
 }
 
 void MainWnd::on_btn_menu_language_clicked()
@@ -732,7 +732,7 @@ void MainWnd::on_btn_menu_language_clicked()
 void MainWnd::on_btn_menu_help_clicked()
 {
 	m_ui.wdg_submenu_help->setVisible(true);
-	m_ui.wdg_submenu_help->setGeometry(381,4,165,110);
+	m_ui.wdg_submenu_help->setGeometry(410,4,165,110);
 }
 
 
@@ -3583,7 +3583,8 @@ void MainWnd::refreshTabIdentityExtra()
 	m_ui.txtIdentityExtra_LocalofRequest->setText( QString::fromUtf8(PersonFields[LOCALOFREQUEST].toStdString().c_str()) );
 	m_ui.txtIdentityExtra_LocalofRequest->setAccessibleName	( QString::fromUtf8(PersonFields[LOCALOFREQUEST].toStdString().c_str()) );
 	//Hackish translation
-	QString card_validation = translateCardValidation(QString::fromUtf8(PersonFields[VALIDATION].toStdString().c_str()));
+	QString card_validation = QString::fromUtf8(PersonFields[VALIDATION].toStdString().c_str());
+	card_validation = translateCardValidation(card_validation);
 	m_ui.txtIdentityExtra_Validate->setText (card_validation);
 	m_ui.txtIdentityExtra_Validate->setAccessibleName ( QString::fromUtf8(PersonFields[VALIDATION].toStdString().c_str()));
 
