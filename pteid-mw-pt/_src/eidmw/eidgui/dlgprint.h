@@ -25,7 +25,6 @@
 #include <QDialog>
 #include "genpur.h"
 #include "CardInformation.h"
-#include <cairo/cairo.h>
 
 class dlgPrint : public QDialog
 {
@@ -64,7 +63,6 @@ private:
     void ShowSuccessMsgBox();	 
     const char * persodata_triggered();
     bool drawpdf(CardInformation& CI_Data, const char *filepath);
-    // cairo_t *createPage(int format, bool firstPage, const char *filepath, cairo_t *crt);
 };
 
 #endif
