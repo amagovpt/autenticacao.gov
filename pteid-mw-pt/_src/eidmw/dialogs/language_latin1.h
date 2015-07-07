@@ -121,7 +121,7 @@ DEFINE_LANG_STR(UnknownApplication) = {L"??? Unknown application ???", L"??? Apl
 DEFINE_LANG_STR(PathOfTheApplication) = {L"PATH of the application :", L"Caminho para a aplicacao :", L"EMPLACEMENT de l'application :", L"PFAD der Anwendung :"};
 //DEFINE_LANG_STR(EnterOldNewVerify) = {L"Please enter your old PIN, followed by your new PIN and then enter your new PIN once more for verification purposes.", L"Geef eerst uw oude PIN in, nadien uw nieuwe PIN, en ten slotte ter controle nogmaals uw nieuwe PIN.", L"Veillez d'abord introduire votre ancien code PIN et ensuite votre nouveau code PIN. Pour terminer, veuillez r�introduire votre nouveau code PIN � des fins de v�rification.", L"Geben Sie zun�chst Ihre alte PIN ein, dann Ihre neue PIN und abschlie�end zur Kontrolle noch einmal Ihre neue PIN."};
 DEFINE_LANG_STR(EnterOldNewVerify) = {L"1) Enter your old PIN and press 'OK'. \n2) Enter your new PIN and press 'OK'.\n3) Enter your new PIN again and press 'OK'.",
-																			L"1) Introduza o seu PIN actual e clique em 'OK'. \n2) Introduza o seu novo PIN e clique em 'OK'.\n3) Introduza novamente o seu novo PIN e clique em 'OK'.",
+																			L"1) Introduza o seu PIN atual e clique em 'OK'. \n2) Introduza o seu novo PIN e clique em 'OK'.\n3) Introduza novamente o seu novo PIN e clique em 'OK'.",
 																			L"1) Ins�rez votre ancien code PIN et appuyez sur ��OK��.\n2) Ins�rez votre nouveau code PIN et appuyez sur ��OK��.\n3) Ins�rez une nouvelle fois votre nouveau code PIN et appuyez sur ��OK��.",
 																			L"1) Geben Sie Ihre alte PIN ein und dr�cken Sie 'OK'.\n2) Geben Sie Ihre neue PIN ein und dr�cken Sie 'OK'.\n3) Geben Sie Ihre neue PIN erneut ein und dr�cken Sie 'OK'."};
 
