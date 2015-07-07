@@ -238,17 +238,17 @@ PTEID_Certificate &PTEID_Certificate::getIssuer()
 		//if(!pIssuer)
 		//{
 			APL_Certif *aplIssuer=pimpl->getIssuer();
-			if(aplIssuer)
+			if (aplIssuer == pimpl)
+			{
+				throw PTEID_ExCertNoIssuer();
+			}
+			else
 			{
 				out = new PTEID_Certificate(m_context,aplIssuer);
 				if(out)
 					m_objects[INCLUDE_OBJECT_CERTISSUER]=out;
 				else
 					throw PTEID_ExUnknown();
-			}
-			else
-			{
-				throw PTEID_ExCertNoIssuer();
 			}
 		//}
 	}
