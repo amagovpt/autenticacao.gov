@@ -277,7 +277,44 @@ void ImageCanvas::paintEvent(QPaintEvent *)
 	QFont my_font = painter.font();
 	my_font.setBold(true);
 	painter.setFont(my_font);
-	painter.drawText(bounding_rect.width()+ 5, current_y_pos, citizen_name);
+	
+	QRect citizen_name_rect = fontMetrics().boundingRect(citizen_name);
+	
+	int available_width = this->width()-40 - bounding_rect.width()-5;
+
+	//Check if 2 lines are needed for longer names
+	if (citizen_name_rect.width() > available_width)
+	{
+		//Add words one by one until we run out of space
+		QStringList words = citizen_name.split(" ");
+		QString tmp, first_line, second_line;
+		for (int i = 0; i < words.size(); ++i)
+		{
+			if (i > 0)
+				tmp += " ";
+			QString new_string = tmp + words.at(i);
+			if (fontMetrics().boundingRect(new_string).width() > available_width)
+			{
+				first_line = tmp;
+				second_line = QStringList(words.mid(i)).join(" ");
+				break;
+			}
+			else
+			{
+				tmp = new_string;
+			}
+
+		}
+		painter.drawText(bounding_rect.width()+ 5, current_y_pos, first_line);
+
+		current_y_pos += line_height + line_spacing;
+		painter.drawText(5, current_y_pos, second_line);
+	}
+	else
+	{
+		painter.drawText(bounding_rect.width()+ 5, current_y_pos, citizen_name);
+	}
+
 	my_font.setBold(false);
 	painter.setFont(my_font);
 
