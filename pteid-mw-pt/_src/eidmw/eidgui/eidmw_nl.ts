@@ -15,6 +15,10 @@
         <source>PDF Signature</source>
         <translation>Assinatura de PDF</translation>
      </message>
+	 <message>
+		<source>Error launching Java application! Make sure you have a working JRE installed.</source>
+		<translation>Erro ao executar aplicação Java! Verifique se o seu sistema tem o software Java instalado.</translation>
+	 </message>
      <message>
      <source>Universal Signature</source>
      <translation>Assinatura Universal</translation>
@@ -74,6 +78,7 @@
     <source>Address Changed successfully.</source>
     <translation>A morada foi alterada com sucesso.</translation>
     </message>
+
     <message>
         <source>Error connecting to the Address Change server.\nPlease check if your Internet connection is functional</source>
         <translation>Erro de ligação ao servidor para mudança de morada.\nPor favor verifique se a sua ligação à Internet está funcional</translation>
@@ -90,7 +95,7 @@
         
 <message>
 	<source>Attention: your current authentication PIN will be requested twice in two different dialog boxes.</source>
-	<translation>Atenção: o seu actual PIN de autenticação vai ser requerido duas vezes neste processo.</translation>
+	<translation>Atenção: o seu atual PIN de autenticação vai ser requerido duas vezes neste processo.</translation>
 </message>
 
 	<message>
@@ -105,7 +110,7 @@
 
 	<message>
 	<source>Verification of your current PIN failed</source>
-	<translation>O PIN actual está incorrecto.</translation>
+	<translation>O PIN atual está incorrecto.</translation>
 </message>
 <message>
 	<source>Error connecting to the OTP Server. Please check your internet connection.</source>
@@ -297,14 +302,7 @@
         <source>Name</source>
         <translation>Nome</translation>
     </message>
-    <message utf8="true">
-        <source>Belgische verblijfstitel - Titre de séjour belge</source>
-        <translation>Belgische verblijfstitel - Titre de séjour belge</translation>
-    </message>
-    <message>
-        <source>Belgischer Aufenthaltstitel - Belgian residence permit</source>
-        <translation>Belgischer Aufenthaltstitel - Belgian residence permit</translation>
-    </message>
+ 
     <message>
         <source>Sis</source>
         <translation>SIS</translation>
@@ -902,43 +900,27 @@ Please specify .xml, .csv or .eid</source>
     </message>
     <message>
         <source>Deleting former certificate</source>
-        <translation type="unfinished">Verwijderen oud certificaat</translation>
+        <translation>Apagar antigo certificado</translation>
     </message>
     <message>
         <source>Error deleting former certificate</source>
-        <translation type="unfinished">Fout opgetreden bij het verwijderen van het oud certificaat</translation>
+        <translation>Erro ao apagar antigo certificado</translation>
     </message>
     <message>
         <source>PIN verification passed</source>
-        <translation type="unfinished">PIN introduzido correctamente</translation>
+        <translation>PIN introduzido corretamente</translation>
     </message>
     <message>
         <source>PIN verification failed</source>
-        <translation type="unfinished">O PIN introduzido está errado!</translation>
+        <translation>O PIN introduzido está errado!</translation>
     </message>
     <message>
         <source>PIN change passed</source>
-        <translation type="unfinished">Alteração de PIN efectuada</translation>
+        <translation>Alteração de PIN efetuada</translation>
     </message>
     <message>
         <source>PIN change failed</source>
-        <translation type="unfinished">Alteração de PIN falhou</translation>
-    </message>
-    <message>
-        <source>Belgian eID Runtime</source>
-        <translation>Belgische eID Runtime</translation>
-    </message>
-    <message>
-        <source>Done</source>
-        <translation>Gedaan</translation>
-    </message>
-    <message>
-        <source>Failed</source>
-        <translation>Mislukt</translation>
-    </message>
-    <message>
-        <source>Error opening file</source>
-        <translation>Fout bij het openen van bestand</translation>
+        <translation>Alteração de PIN falhou</translation>
     </message>
     <message>
         <source>Error writing file</source>
@@ -1078,25 +1060,10 @@ Please specify .xml, .csv or .eid</source>
         <source>OCSP check</source>
         <translation>OCSP check</translation>
     </message>
-    <message>
-        <source>Not allowed yet by user</source>
-        <translation type="unfinished">Niet toegestaan door de gebruiker</translation>
-    </message>
-    <message>
-        <source>OCSP not checked</source>
-        <translation>OCSP niet geverifieerd</translation>
-    </message>
+
     <message>
         <source>Good</source>
         <translation>Goed</translation>
-    </message>
-    <message>
-        <source>Card inserted:</source>
-        <translation>Kaart ingestoken:</translation>
-    </message>
-    <message>
-        <source>Checking certificate OCSP status</source>
-        <translation>Nagaan van de OCSP status van het certificaat</translation>
     </message>
     <message>
         <source>Card reader: </source>
