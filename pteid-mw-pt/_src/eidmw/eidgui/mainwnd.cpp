@@ -1275,6 +1275,7 @@ bool MainWnd::ImportSelectedCertificate( void )
 			{
 				if(StoreUserCerts (Card, pCertContext, KeyUsageBits, (*item->getCert()), m_CurrReaderName.toLatin1().data()))
 				{
+					PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Successfully stored UserCert with subject: %s", item->getCert()->getOwnerName());
 
 					//now store each time the issuer until we're done
 					// an exception is thrown when there is no issuer
@@ -1289,6 +1290,7 @@ bool MainWnd::ImportSelectedCertificate( void )
 
 							pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, certData.GetBytes(), certData.Size());
 							StoreAuthorityCerts (pCertContext, KeyUsageBits, m_CurrReaderName.toLatin1().data());
+							PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Successfully stored CA Cert with subject: %s", issuer->getOwnerName());
 							currCert	 = issuer;
 						}
 						catch (PTEID_ExCertNoIssuer& e)
