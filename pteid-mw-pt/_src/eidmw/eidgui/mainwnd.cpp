@@ -417,10 +417,10 @@ void MainWnd::on_btnShortcut_PdfSign_clicked()
 }
 
 
-//void MainWnd::on_btnShortcut_VerifSign_clicked()
-//{
-//	actionVerifySignature_eID_triggered();
-//}
+void MainWnd::on_btnShortcut_VerifSign_clicked()
+{
+	actionVerifySignature_eID_triggered();
+}
 
 /*
 // Change Address functionality triggered by a button in the Address tab
@@ -548,7 +548,7 @@ void MainWnd::showJavaLaunchError(QProcess::ProcessError error)
 	if (error == QProcess::FailedToStart)
 	{
 		QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning,
-			QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"), "Error launching Java application! Make sure you have a working JRE installed.",
+			QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"), tr("Error launching Java application! Make sure you have a working JRE installed."),
 			QMessageBox::Ok, this);
 		msgBox->setModal(true);
 		msgBox->show();
