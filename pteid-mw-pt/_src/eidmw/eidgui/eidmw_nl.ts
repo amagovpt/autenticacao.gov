@@ -1818,6 +1818,11 @@ Please specify .xml, .csv or .eid</source>
      </message>
 
      <message>
+        <source>You must choose a location for visible signature!</source>
+        <translation>É obrigatório escolher uma localização para a assinatura visível!</translation>
+     </message>
+
+     <message>
         <source>Free Selection</source>
         <translation>Posicionamento livre</translation>
     </message>

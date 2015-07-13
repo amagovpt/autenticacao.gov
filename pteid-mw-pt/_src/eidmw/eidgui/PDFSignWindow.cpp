@@ -622,6 +622,12 @@ void PDFSignWindow::on_button_sign_clicked()
 	//Read Page
 	if (ui.visible_checkBox->isChecked())
 	{
+		//Validate if any location was chosen
+		if (sig_coord_x == -1 && m_selected_sector == 0)
+		{
+			ShowErrorMsgBox(tr("You must choose a location for visible signature!"));
+			return;
+		}
 
 		if (ui.radioButton_firstpage->isChecked())
 			selected_page = 1;
