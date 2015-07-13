@@ -421,7 +421,28 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);         
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QPushButton" name="btnShortcut_PdfSign">
+        <widget class="QPushButton" name="btnShortcut_VerifSign">
+            <property name="geometry">
+             <rect>
+              <x>430</x>
+              <y>360</y>
+              <width>362</width>
+              <height>41</height>
+            </rect>
+          </property>
+              <property name="styleSheet">
+            <string notr="true">
+              color: rgb(108, 108, 108);
+              font: 75 12pt Arial;
+              background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
+            </string>
+            
+          </property>
+              <property name="text">
+              <string>Verify Signature</string>
+          </property>
+            </widget>
+        <widget class="QPushButton" name="btnShortcut_PdfSign">
         <property name="geometry">
          <rect>
           <x>620</x>
