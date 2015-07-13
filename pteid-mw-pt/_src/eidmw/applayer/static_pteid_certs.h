@@ -15,7 +15,7 @@ struct CERT_S
 
 #define CERT_S_ENTRY(certname) {&certname[0], sizeof(certname)}
 
-#define CERTS_N 23
+#define CERTS_N 26
 
 extern CERT_S PTEID_CERTS[];
 
