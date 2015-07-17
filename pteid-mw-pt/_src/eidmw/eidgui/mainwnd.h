@@ -449,7 +449,6 @@ private:
 	bool saveCardDataToFile(QString const& fileName, PTEID_EIDCard& card );
 	void setEnabledPinButtons( bool bEnabled );
 	void setEnabledCertifButtons( bool bEnabled );
-	QString GetCardTypeText(QString const& cardType);
 	void clearTabCertificates( void );
 	void clearTabAddress( void );
 	void clearTabPins( void );

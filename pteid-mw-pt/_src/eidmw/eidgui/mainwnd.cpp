@@ -416,7 +416,6 @@ void MainWnd::on_btnShortcut_PdfSign_clicked()
 	actionPDFSignature_triggered();
 }
 
-
 void MainWnd::on_btnShortcut_VerifSign_clicked()
 {
 	actionVerifySignature_eID_triggered();
@@ -2626,7 +2625,6 @@ void MainWnd::on_actionOptions_triggered(void)
 void MainWnd::actionSignature_eID_triggered()
 {
 	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
-	QString cardTypeText = GetCardTypeText(CardFields[CARD_TYPE]);
 	if(m_CI_Data.isDataLoaded())
 	{
 		dlgSignature* dlgsig = new dlgSignature(this, m_Settings.getSelectedReader(), m_CI_Data);
@@ -2643,7 +2641,6 @@ void MainWnd::actionSignature_eID_triggered()
 void MainWnd::actionPDFSignature_triggered()
 {
 	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
-	QString cardTypeText = GetCardTypeText(CardFields[CARD_TYPE]);
 
 	if(m_CI_Data.isDataLoaded())
 	{
@@ -2710,10 +2707,10 @@ void MainWnd::actionVerifySignature_eID_triggered()
 void MainWnd::on_actionPrint_eID_triggered()
 {
 	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
-	QString cardTypeText = GetCardTypeText(CardFields[CARD_TYPE]);
+	
 	if(m_CI_Data.isDataLoaded())
 	{
-	  	dlgPrint* dlg = new dlgPrint( this, m_CI_Data, m_Language, cardTypeText);
+	  	dlgPrint* dlg = new dlgPrint( this, m_CI_Data, m_Language);
 		dlg->exec();
 		delete dlg;
 	} else {
@@ -3749,45 +3746,8 @@ void MainWnd::refreshTabPersoData( void )
 
 	connect(m_ui.btnPersoDataSave, SIGNAL(clicked()), this, SLOT( PersoDataSaveButtonClicked()));
 }
-//*****************************************************
-// get the text for the type of card 
-//*****************************************************
-QString MainWnd::GetCardTypeText(QString const& cardType)
-{
-	QString strCardType;
-	int iDocType = cardType.toInt();
-	switch (iDocType)
-	{
-	case 11:
-		strCardType	= tr("A. Bewijs van inschrijving in het vreemdelingenregister - Tijdelijk verblijf");
-		break;
-	case 12:
-		strCardType	= tr("B. Bewijs van inschrijving in het vreemdelingenregister");
-		break;
-	case 13:
-		strCardType	= tr("C. Identiteitskaart voor vreemdeling");
-		break;
-	case 14:
-		strCardType	= tr("D. EG - langdurig ingezetene");
-		break;
-	case 15:
-		strCardType	= tr("E. Verklaring van inschrijving");
-		break;
-	case 16:
-		strCardType	= tr("E+. Verklaring van inschrijving");
-		break;
-	case 17:
-		strCardType	= tr("F. Verblijfskaart van een familielid van een burger van de Unie");
-		break;
-	case 18:
-		strCardType	= tr("F+. Verblijfskaart van een familielid van een burger van de Unie");
-		break;
-	default:
-		strCardType = tr("Unknown");
-		break;
-	}
-	return strCardType;
-}
+
+
 QString MainWnd::getSpecialOrganizationText( QString const& code)
 {
 	QString trSpecialOrganization;
@@ -4529,10 +4489,9 @@ void MainWnd::ShowPTEIDError( unsigned long ErrCode, QString const& msg )
 		return;
 	}
 	QString strCaption(tr("Error"));
-	QString strMessage;
-	strMessage = strMessage.setNum(ErrCode,16);
-	strMessage += ": ";
-	strMessage += msg;
+	QString strMessage(msg);
+	//strMessage = strMessage.setNum(ErrCode,16);
+	//strMessage += ": ";
 	QMessageBox::warning( this, strCaption,  strMessage, QMessageBox::Ok );
 }
 

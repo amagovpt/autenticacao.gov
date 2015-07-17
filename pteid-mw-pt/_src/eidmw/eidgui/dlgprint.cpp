@@ -35,7 +35,7 @@
 using namespace eIDMW;
 
 
-dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUAGE lng, QString const& cardTypeText) 
+dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUAGE lng) 
 : QDialog(parent)
 , m_CI_Data(CI_Data)
 , m_CurrReaderName("")
