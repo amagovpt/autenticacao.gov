@@ -215,7 +215,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_progress->setMinimum(0);
 	m_progress->setMaximum(0);
 
-
+	connect(m_ui.btnPersoDataSave, SIGNAL(clicked()), this, SLOT(PersoDataSaveButtonClicked()));
 	connect(&this->FutureWatcher, SIGNAL(finished()), m_progress, SLOT(cancel()));
 
 	//------------------------------------
@@ -2913,7 +2913,7 @@ void MainWnd::on_actionPINRequest_triggered()
 			PTEID_Pin &pin = ReaderContext.getEIDCard().getPins().getPinByPinRef(pinRef);
 
 			unsigned long triesLeft = -1;
-			bool bResult   = pin.verifyPin("",triesLeft);
+			bool bResult = pin.verifyPin("",triesLeft);
 
 			if (!bResult && -1 == triesLeft)
 				return;
@@ -2932,6 +2932,10 @@ void MainWnd::on_actionPINRequest_triggered()
 				msg = tr("PIN verification failed");
 				msg += "\n";
 				msg += status;
+				
+				//Reset the user notes flag
+				if (pinRef == PTEID_Pin::AUTH_PIN)
+					pinNotes = 1;
 			}
 
 			m_ui.txtPIN_Status->setText(status);
@@ -3095,6 +3099,8 @@ void MainWnd::ChangeAuthPin(PTEID_ReaderContext &ReaderContext, unsigned int pin
 	    return;
 
 	}
+
+	pinNotes = 1;
 	QString msg_tmp(tr("PIN change passed"));
 	QMessageBox::information( this, dialog_title, msg_tmp, QMessageBox::Ok );
 
@@ -3439,7 +3445,8 @@ void MainWnd::fillPinList()
 	m_ui.treePIN->setCurrentItem (m_ui.treePIN->topLevelItem(0));
 }
 
-void MainWnd::loadPinData(PTEID_EIDCard& Card){
+void MainWnd::loadPinData(PTEID_EIDCard& Card)
+{
 
 	PTEID_Pins& Pins = Card.getPins();
 
@@ -3743,8 +3750,6 @@ void MainWnd::refreshTabPersoData( void )
 	m_ui.txtPersoData->clear();
 	m_ui.txtPersoData->insertPlainText (QString::fromUtf8(PersoDataFields[PERSODATA_INFO].toStdString().c_str()));
 
-
-	connect(m_ui.btnPersoDataSave, SIGNAL(clicked()), this, SLOT( PersoDataSaveButtonClicked()));
 }
 
 
@@ -4263,6 +4268,8 @@ void MainWnd::customEvent( QEvent* pEvent )
 						{
 							m_CI_Data.Reset(); 
 							loadCardData();
+							//Clear the Auth PIN verification flag
+							pinNotes = 1;
 						}
 
 
