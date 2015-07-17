@@ -646,7 +646,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
 	    drawSingleField(painter, pos_x, pos_y, tr("Floor"), getUtf8String(AddressFields[ADDRESS_FLOOR]));
 	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Side"), AddressFields[ADDRESS_SIDE]);
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Place"), AddressFields[ADDRESS_PLACE]);
+	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Place"), getUtf8String(AddressFields[ADDRESS_PLACE]));
 	    pos_y += LINE_HEIGHT;
 
 	    drawSingleField(painter, pos_x, pos_y, tr("Zip Code 4"), AddressFields[ADDRESS_ZIP4]);
