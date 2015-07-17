@@ -947,6 +947,10 @@ Please specify .xml, .csv or .eid</source>
         <translation>Leitor de cartões alterado</translation>
     </message>
     <message>
+        <source>Checking...</source>
+        <translation>A verificar...</translation>
+    </message>
+    <message>
         <source>Bad transaction</source>
         <translation>Bad transaction</translation>
     </message>
