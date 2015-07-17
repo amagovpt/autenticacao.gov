@@ -108,6 +108,7 @@ QString HttpWindow::GetReleaseNotes()
         return "Get Release Notes failed";
 
     QTextStream in(&file);
+    in.setCodec("UTF-8");
 
     while (!in.atEnd())
     {
