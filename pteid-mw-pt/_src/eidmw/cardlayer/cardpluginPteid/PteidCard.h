@@ -52,6 +52,35 @@ typedef enum {
 	UNKNOWN_DF,
 } tBelpicDF;
 
+
+//Workaround needed for Windows 8 and later
+class KeepAliveThread : public CThread
+{
+public:
+
+	KeepAliveThread(CPCSC *poPCSC, SCARDHANDLE & card)
+	{
+		m_hCard = card;
+		m_poPCSC = poPCSC;
+	}
+
+	void Run() {
+		while(1)
+		{
+			CThread::SleepMillisecs(1000);
+			m_poPCSC->Status(m_hCard);
+
+			if (m_bStopRequest)
+				break;
+		}
+	}
+
+private:
+	CPCSC *m_poPCSC;
+	SCARDHANDLE m_hCard;
+
+};
+
 class CPteidCard : public CPkiCard
 {
 public:
