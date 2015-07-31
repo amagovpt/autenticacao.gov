@@ -661,15 +661,16 @@ X509 * XadesSignature::addCertificateToKeyInfo(CByteArray &cert, DSIGKeyInfoX509
 void XadesSignature::addCertificateChain(DSIGKeyInfoX509 *keyInfo)
 {
 	APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
-	CByteArray cert1, cc01, cc02, ec_raiz_estado;
+	CByteArray cert1, cc01, cc02, cc03, ec_raiz_estado;
 
 	mp_card->readFile(PTEID_FILE_CERT_ROOT_SIGN, cert1);
 	m_cert_bas.push_back(cert1);
 
 	mp_signature_ca_cert = addCertificateToKeyInfo(cert1, keyInfo);
 
-	cc01 = CByteArray(PTEID_CERTS[20].cert_data, PTEID_CERTS[20].cert_len);
-	cc02 = CByteArray(PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len);
+	cc01 = CByteArray(PTEID_CERTS[22].cert_data, PTEID_CERTS[22].cert_len);
+	cc02 = CByteArray(PTEID_CERTS[23].cert_data, PTEID_CERTS[23].cert_len);
+	cc03 = CByteArray(PTEID_CERTS[24].cert_data, PTEID_CERTS[24].cert_len);
 
 	// Add issuer of Signature SubCA
 	if (fwk->isIssuer(cert1, cc01))
@@ -682,11 +683,16 @@ void XadesSignature::addCertificateChain(DSIGKeyInfoX509 *keyInfo)
 		addCertificateToKeyInfo(cc02, keyInfo);
 		m_cert_bas.push_back(cc02);
 	}
+	else if (fwk->isIssuer(cert1, cc03))
+	{
+		addCertificateToKeyInfo(cc03, keyInfo);
+		m_cert_bas.push_back(cc03);
+	}
 	else 
 		MWLOG(LEV_ERROR, MOD_APL, L"Couldn't find issuer for certificate SIGNATURE_SUBCA.The validation will be broken!");
 
 	// Add ECRaizEstado certificate
-	ec_raiz_estado = CByteArray(PTEID_CERTS[19].cert_data, PTEID_CERTS[19].cert_len);
+	ec_raiz_estado = CByteArray(PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len);
 	m_cert_bas.push_back(ec_raiz_estado);
 	addCertificateToKeyInfo(ec_raiz_estado, keyInfo);
 }

@@ -385,7 +385,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	X509 *x509;
 	PKCS7 *p7;
 	PKCS7_SIGNER_INFO *signer_info;
-	CByteArray hash, attr_hash, signature, certData, certData2, cc01, cc02, tsresp;
+	CByteArray hash, attr_hash, signature, certData, certData2, cc01, cc02, cc03, tsresp;
 	char * signature_hex_string = NULL;
 	unsigned char *attr_buf = NULL;
 	unsigned char *timestamp_token = NULL;
@@ -447,20 +447,23 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 
 	add_certificate(p7, certData2);
 	
-	cc01 = CByteArray(PTEID_CERTS[20].cert_data, PTEID_CERTS[20].cert_len);
-	cc02 = CByteArray(PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len);
-
+	//CartaodeCidadao Root CA certificates as of July 2015 (https://pki.cartaodecidadao.pt/publico/certificado/cc_ec_cidadao/)
+	cc01 = CByteArray(PTEID_CERTS[22].cert_data, PTEID_CERTS[22].cert_len);
+	cc02 = CByteArray(PTEID_CERTS[23].cert_data, PTEID_CERTS[23].cert_len);
+	cc03 = CByteArray(PTEID_CERTS[24].cert_data, PTEID_CERTS[24].cert_len);
 
 	// Add issuer of Signature SubCA
 	if (fwk->isIssuer(certData2, cc01))
 		add_certificate(p7, cc01);
 	else if (fwk->isIssuer(certData2, cc02))
 		add_certificate(p7, cc02);
+	else if (fwk->isIssuer(certData2, cc03))
+		add_certificate(p7, cc03);
 	else 
 		MWLOG(LEV_ERROR, MOD_APL, L"Couldn't find issuer for certificate SIGNATURE_SUBCA.The validation will be broken!");
 
 	// Add ECRaizEstado certificate
-	add_certificate(p7, PTEID_CERTS[19].cert_data, PTEID_CERTS[19].cert_len);
+	add_certificate(p7, PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len);
 
 	PKCS7_set_detached(p7, 1);
 
