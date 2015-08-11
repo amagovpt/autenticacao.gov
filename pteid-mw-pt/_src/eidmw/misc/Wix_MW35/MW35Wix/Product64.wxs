@@ -162,10 +162,12 @@
 				<Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
 				<Directory Id="APPLICATIONROOTFOLDER" Name="Portugal Identity Card">
 					<Directory Id="IMAGEFORMATS" Name="imageformats" />
+          
           <Directory Id="DSS" Name="DSS"/>
-          <Directory Id="SCAP" Name="SCAP">
+          <!-- <Directory Id="SCAP" Name="SCAP">
             <Directory Id="CERTS_SCAP_DIR" Name="certificates"/>
           </Directory>
+          -->
             <Directory Id="EIDSTORE" Name="eidstore">
 						<Directory Id="CERTSDIR" Name="certs"/>
 						<Directory Id="CRLDIR" Name="crl">
@@ -218,13 +220,6 @@
 				</Component>
 			</DirectoryRef>
 
-    <DirectoryRef Id="SCAP">
-      <Component Id="scap" Guid="{BFA2692F-44F0-4d76-8950-5FF9E0D117F4}">
-        <File Source="..\..\scap\SCAP-Signature-runnable.jar" KeyPath="yes" />
-        <File Source="..\..\scap\config.properties" />
-        <File Source="..\..\scap\truststore.jks" />
-      </Component>
-    </DirectoryRef>
 
 
     <DirectoryRef Id="DSS">
@@ -233,7 +228,16 @@
         <File Id="config_dss.properties" Name="config.properties" Source="..\..\..\misc\DSS\config.properties" />
       </Component>
     </DirectoryRef>
-
+    
+    <!--
+    <DirectoryRef Id="SCAP">
+      <Component Id="scap" Guid="{BFA2692F-44F0-4d76-8950-5FF9E0D117F4}">
+        <File Source="..\..\scap\SCAP-Signature-runnable.jar" KeyPath="yes" />
+        <File Source="..\..\scap\config.properties" />
+        <File Source="..\..\scap\truststore.jks" />
+      </Component>
+    </DirectoryRef>
+    
     <DirectoryRef Id="CERTS_SCAP_DIR">
           <Component Id="CertsScap" Guid="{750F471B-6A83-4118-A0AF-2A138B770AF6}">
             <File Source="..\..\scap\certificates\Teste Cartao de Cidadao 001.cer" />
@@ -256,7 +260,7 @@
             <File Source="..\..\scap\certificates\Teste EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.cer"/>
           </Component>
     </DirectoryRef>
- 
+ -->
     <DirectoryRef Id="IMAGEFORMATS">
       <Component Id="ImagePlugins" Guid="{750F471B-6A83-4118-A0AF-2A138B770AC6}">
         <File Source="$(var.PTEID_QT_IMAGEFORMATS)\qico4.dll" KeyPath="yes"/>
@@ -269,6 +273,7 @@
 			<Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AD6}">
 		        <File Source="..\..\certs\CartaodeCidadao001.der" KeyPath="yes" />
 		        <File Source="..\..\certs\CartaodeCidadao002.der" />
+            <File Source="..\..\certs\CartaodeCidadao003.der" />
 		        <File Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" />
 		        <File Source="..\..\certs\GTEGlobalRoot.der" />
 		        <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0001.der" />
@@ -280,6 +285,7 @@
 		        <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0007.der" />
 		        <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0008.der" />
             <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0009.der" />
+            <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0010.der" />
 		        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der" />
 		        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der" />
 		        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der" />
@@ -289,6 +295,7 @@
 		        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0007.der" />
 		        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.der" />
             <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0009.der" />
+            <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0010.der" />
 			</Component>
 		</DirectoryRef>
 
@@ -899,6 +906,8 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 				<ComponentRef Id="License"/>
 				<ComponentRef Id="LogDir"/>
 				<ComponentRef Id="DSSApp"/>
+        <!-- <ComponentRef Id="scap"/> -->
+        <!-- <ComponentRef Id="CertsScap"/> -->
 				<ComponentRef Id="Extensions"/>
 				<ComponentRef Id="FireFoxRoot"/>
 				<ComponentRef Id="XPIRoot"/>
@@ -921,8 +930,6 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 				<!-- System32 -->
 
 				<ComponentRef Id="Runtime35"/>
-        <ComponentRef Id="scap"/>
-        <ComponentRef Id="CertsScap"/>
 				<ComponentRef Id="Runtime35_64"/>
 				<ComponentRef Id="Runtime35ThirdPartyOpenSSL"/>
 		<!-- 		<ComponentRef Id="Runtime35ThirdPartyOpenSSL_64"/> -->
