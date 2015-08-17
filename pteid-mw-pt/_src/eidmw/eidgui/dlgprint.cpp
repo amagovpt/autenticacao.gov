@@ -105,12 +105,22 @@ void CenterParent(QWidget* parent, QWidget* child)
 	child->move(centerparent);
 }
 
-bool SignXades_wrapper(PTEID_EIDCard * card, const char ** files_to_sign, QString &outputsign)
-{
+/* For filenames we need to maintain latin-1 or UTF-8 native encoding */
+//This macro's argument is a QString
+#ifdef _WIN32
+#define getPlatformNativeString(s) s.toStdString().c_str()
+#else
+#define getPlatformNativeString(s) s.toUtf8().constData()
+#endif
 
+bool SignPDF_wrapper(PTEID_EIDCard * card, const char * file_to_sign, QString &outputsign)
+{
+	PTEID_PDFSignature pdf_sig_handler(file_to_sign);
+	char * output_path = strdup(getPlatformNativeString(outputsign));
 	try
 	{
-		card->SignXades(files_to_sign, 1, QStringToCString(outputsign));
+		
+		card->SignPDF(pdf_sig_handler, 0, 0, false, "", "", output_path);
 	}
 	catch(...)
 	{
@@ -129,19 +139,19 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
     defaultfilepath = QDir::homePath();
     try
     {
-        if (ui.chboxSignature->isChecked())  {
+        if (ui.chboxSignature->isChecked())  
+		{
             QString pdffiletmp;
             QString signfilepath;
-            QString outputsign;
+            QString output_path;
             QString nativepdftmp;
-            PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
-            PTEID_ByteArray SignXades;
+            PTEID_EIDCard*	card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
 
             signfilepath = QDir::homePath();
-            signfilepath.append("/CartaoCidadao.ccsigned");
-            outputsign = QFileDialog::getSaveFileName(this, tr("Save Signature File"), signfilepath, tr("Signature Files 'XAdES' (*.ccsigned)"));
+            signfilepath.append("/CartaoCidadao_signed.pdf");
+            output_path = QFileDialog::getSaveFileName(this, tr("Save signed PDF file"), signfilepath, tr("PDF Files (*.pdf)"));
 
-            if (outputsign.isNull() || outputsign.isEmpty())
+            if (output_path.isNull() || output_path.isEmpty())
             	return;
 
             pdffiletmp = QDir::tempPath();
@@ -149,23 +159,20 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
             nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
 
-            char * cpychar = QStringToCString(nativepdftmp);
+            char * cpychar = strdup(getPlatformNativeString(nativepdftmp));
             drawpdf(cdata, cpychar);
 
-            const char **files_to_sign = new const char*[1];
+		    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PDF File to Sign: %s", cpychar);
 
-		    files_to_sign[0] = cpychar;
-
-		    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Pdf File to Sign: %s", files_to_sign[0]);
-
-		    QFuture<bool> new_thread = QtConcurrent::run(SignXades_wrapper, Card, files_to_sign, outputsign);
+		    QFuture<bool> new_thread = QtConcurrent::run(SignPDF_wrapper, card, cpychar, output_path);
 		    this->FutureWatcher.setFuture(new_thread);
 
 		    pdialog->exec();
 		    res = new_thread.result();
 
         }
-        else {
+        else 
+		{
             QString nativepdfpath;
 
             defaultfilepath.append("/CartaoCidadao.pdf");
@@ -180,9 +187,9 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
             res = drawpdf(cdata, QStringToCString(nativepdfpath));
         }
-    }	catch (PTEID_Exception &e) {
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "GeneratePdf failed");
-        QString msg(tr("General exception"));
+    }	
+	catch (PTEID_Exception &e) {
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "GeneratePDF failed");
     }
 
     if (res)
@@ -450,7 +457,6 @@ void addFonts()
 
 bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 {
-	int w, h;
 
 	pdialog = new QProgressDialog();
 #ifdef _WIN32

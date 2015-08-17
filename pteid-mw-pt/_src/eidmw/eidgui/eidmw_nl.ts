@@ -1561,8 +1561,8 @@ Please specify .xml, .csv or .eid</source>
         <translation>Gerar PDF...</translation>
     </message>
     <message>
-        <source>Digital Signature (XAdES)</source>
-        <translation>Assinatura Digital (XAdES)</translation>
+        <source>Signed PDF document</source>
+        <translation>Documento PDF assinado</translation>
     </message>
     <message>
         <source>Options:</source>
@@ -1583,6 +1583,10 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <source>Save PDF File</source>
         <translation>Guardar ficheiro PDF</translation>
+    </message>
+	 <message>
+        <source>Save signed PDF file</source>
+        <translation>Guardar ficheiro PDF assinado</translation>
     </message>
     <message>
         <source>PDF Files (*.pdf)</source>
