@@ -185,7 +185,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Digital Signature (XAdES)</string>
+       <string>Signed PDF document</string>
       </property>
      </widget>
      <widget class="QLabel" name="labelHeader_Options">
