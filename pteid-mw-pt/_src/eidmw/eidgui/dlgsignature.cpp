@@ -183,8 +183,7 @@ void dlgSignature::on_pbSign_clicked ( void )
 	const char **files_to_sign = new const char*[listsize];
 	char *output_file;
 
-	QCheckBox *signatures_checkbox = ui.checkbox_singlefiles;
-	bool individual_sigs = signatures_checkbox->checkState() == Qt::Checked;
+	bool individual_sigs = listsize > 1;
 
 	for (n_files = 0; n_files < listsize; n_files++)
 	{
