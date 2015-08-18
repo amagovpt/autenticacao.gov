@@ -24,7 +24,7 @@
 using namespace eIDMW;
 
 dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent ) 
-	: QDialog(parent)
+	: QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
 	, m_Settings(settings)
 {	
 	ui.setupUi(this); 

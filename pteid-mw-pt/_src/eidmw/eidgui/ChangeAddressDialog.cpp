@@ -6,7 +6,7 @@
 
 
 ChangeAddressDialog::ChangeAddressDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
 {
 
 	ui.setupUi(this);

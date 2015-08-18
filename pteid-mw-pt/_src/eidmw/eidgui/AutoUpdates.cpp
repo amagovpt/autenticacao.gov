@@ -70,7 +70,7 @@ int release;
 
 
 AutoUpdates::AutoUpdates(QWidget *parent)
-: QDialog(parent)
+: QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
 {
 	QString ddtitle = tr("Auto-update");
 	statusLabel = new QLabel(tr("Do you want to check for updates?"));

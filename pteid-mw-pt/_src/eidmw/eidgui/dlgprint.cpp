@@ -36,7 +36,7 @@ using namespace eIDMW;
 
 
 dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUAGE lng) 
-: QDialog(parent)
+: QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
 , m_CI_Data(CI_Data)
 , m_CurrReaderName("")
 {	

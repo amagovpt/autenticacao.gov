@@ -43,7 +43,7 @@ std::string getdistro;
 QString fileName;
 
 HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
-: QDialog(parent)
+: QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
 {
     urli = uri;
     getdistro = distro;

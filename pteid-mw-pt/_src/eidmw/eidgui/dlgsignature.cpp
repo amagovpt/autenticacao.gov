@@ -40,7 +40,7 @@ using namespace eIDMW;
 
 
 dlgSignature::dlgSignature( QWidget* parent, int selected_reader, CardInformation& CI_Data)
-    : QDialog(parent)
+    : QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
     , m_CI_Data(CI_Data)
 	, m_selected_reader(selected_reader)
     , m_CurrReaderName("")
