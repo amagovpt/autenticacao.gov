@@ -160,8 +160,8 @@ XadesLevel dlgSignature::getSelectedXadesLevel()
 		return XADES_B;
 	else if (ui.radioButton_xades_t->isChecked())
 		return XADES_T;
-	else if (ui.radioButton_xades_a->isChecked())
-		return XADES_A;
+	//else if (ui.radioButton_xades_a->isChecked())
+	//	return XADES_A;
 }
 
 
@@ -286,8 +286,8 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
 				SignXades = card->SignXadesT(paths, n_paths, output_path);
 			else if (level == XADES_B)
 				SignXades = card->SignXades(paths, n_paths, output_path);
-			else if (level == XADES_A)
-				SignXades = card->SignXadesA(paths, n_paths, output_path);
+			//else if (level == XADES_A)
+			//	SignXades = card->SignXadesA(paths, n_paths, output_path);
 			
 			this->error_code = 0;
 			keepTrying = false;
