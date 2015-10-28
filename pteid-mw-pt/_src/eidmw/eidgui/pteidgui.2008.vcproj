@@ -238,7 +238,7 @@
 				BufferSecurityCheck="false"
 				WarningLevel="3"
 				SuppressStartupBanner="false"
-				DebugInformationFormat="0"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -254,7 +254,7 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="Cryptui.lib Crypt32.lib qtmain.lib QtGui4.lib QtCore4.lib QtNetwork4.lib cairo.lib pteidcommon.lib pteidDlgsWin32.lib pteidlibCpp.lib"
+				AdditionalDependencies="Cryptui.lib Crypt32.lib qtmain.lib QtGui4.lib QtCore4.lib QtNetwork4.lib pteidcommon.lib pteidDlgsWin32.lib pteidlibCpp.lib"
 				OutputFile="..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)\pteid$(ProjectName).exe"
 				SuppressStartupBanner="false"
 				AdditionalLibraryDirectories="&quot;..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)&quot;;&quot;$(PTEID_DIR_CAIRO)\lib&quot;;&quot;$(PTEID_DIR_QT_4)\lib&quot;"
@@ -329,7 +329,7 @@
 				BufferSecurityCheck="false"
 				WarningLevel="3"
 				SuppressStartupBanner="false"
-				DebugInformationFormat="0"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -345,12 +345,12 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
 				LinkLibraryDependencies="false"
-				AdditionalDependencies="Cryptui.lib Crypt32.lib qtmain.lib QtGui4.lib QtCore4.lib QtNetwork4.lib cairo.lib pteidcommon.lib pteidDlgsWin32.lib pteidlibCpp.lib"
+				AdditionalDependencies="Cryptui.lib Crypt32.lib qtmain.lib QtGui4.lib QtCore4.lib QtSvg4.lib QtNetwork4.lib pteidcommon.lib pteidDlgsWin32.lib pteidlibCpp.lib"
 				OutputFile="..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)\pteid$(ProjectName).exe"
 				SuppressStartupBanner="false"
 				AdditionalLibraryDirectories="&quot;..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)&quot;;&quot;$(PTEID_DIR_CAIRO_X64)\lib&quot;;&quot;$(PTEID_DIR_QT_4_X64)\lib&quot;"
 				GenerateManifest="true"
-				GenerateDebugInformation="false"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile=""
 				SubSystem="2"
 				RandomizedBaseAddress="1"
@@ -421,10 +421,6 @@
 			</File>
 			<File
 				RelativePath=".\dlgverifysignature.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\FreeSelectionDialog.cpp"
 				>
 			</File>
 			<File
@@ -1169,10 +1165,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\generatedfiles\ui_FreeSelectionDialog.h"
-				>
-			</File>
-			<File
 				RelativePath=".\generatedfiles\ui_mainwnd.h"
 				>
 			</File>
@@ -1595,26 +1587,6 @@
 				</File>
 				<File
 					RelativePath=".\GeneratedFiles\Release\moc_dlgverifysignature.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|x64"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\GeneratedFiles\Release\moc_FreeSelectionDialog.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -2366,6 +2338,10 @@
 			</File>
 			<File
 				RelativePath="Images\Icons\Print.png"
+				>
+			</File>
+			<File
+				RelativePath=".\pteidgui.rc"
 				>
 			</File>
 			<File
