@@ -507,12 +507,13 @@ EIDMW_CMN_API int fprintf_s(FILE *stream, const char *format, ...)
 
 	if (r != -1 && csTmp != NULL)
 	{
-		r = fprintf(stream, csTmp);
+		r = fprintf(stream, "%s", csTmp);
 		free(csTmp);
 	}
 
 	return r;
 }
+
 
 EIDMW_CMN_API int vfprintf_s(FILE *stream, const char *format, va_list argptr)
 {
@@ -523,11 +524,12 @@ EIDMW_CMN_API int vfprintf_s(FILE *stream, const char *format, va_list argptr)
 
 	if (r != -1 && csTmp != NULL)
 	{
-		r = fprintf(stream, csTmp);
+		r = fprintf(stream, "%s", csTmp);
 		free(csTmp);
 	}
 
-	return r;}
+	return r;
+}
 
 #endif
 
