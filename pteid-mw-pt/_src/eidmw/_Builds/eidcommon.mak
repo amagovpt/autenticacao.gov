@@ -21,6 +21,7 @@ isEmpty(PREFIX_DIR){
 }
 
 DEFINES += 'EIDMW_PREFIX=$${PREFIX_DIR}'
+QMAKE_CXXFLAGS += '-std=c++98'
 
 ## preset the BIN install directory depending on the given prefix
 ## preset the LIB install directory relative to the bin directory
