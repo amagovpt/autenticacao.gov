@@ -145,14 +145,7 @@ if($distro eq "gentoo")
 }
 else
 {
-	if ($distro eq "fedora")
- 	{
-		$javac_link = "/usr/lib/jvm/java-1.6.0-openjdk/bin/javac";
-	}
-	else
-	{
 	$javac_link = `which javac`;
-	}
 }
 
 chomp($javac_link);
