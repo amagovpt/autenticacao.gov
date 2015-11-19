@@ -3,28 +3,28 @@
 
 :: Compiled / external libs x86
 ::==============================
-@set PTEID_DIR_QT_4=C:\Qt\4.8.4\x86\vs2008
-@set PTEID_DIR_OPENSSL_098=C:\OpenSSL\0.9.8y\x86\vc9
-@set PTEID_DIR_XERCES_31=%PTEID_LIBS_PATH%\xerces\3.1.1\x86\vc9
-@set PTEID_DIR_CAIRO=%PTEID_LIBS_PATH%\gtk+-bundle\2.22.1\x86\vc9
-@set PTEID_DIR_CURL=%PTEID_LIBS_PATH%\libcurl\7.30.0\x86\vc9
+@set PTEID_DIR_QT_4=C:\Qt\4.8.4_win32
+@set PTEID_DIR_OPENSSL_098=C:\OpenSSL-Win32\
+@set PTEID_DIR_XERCES_31=C:\Users\agrr\Downloads\xerces-c-3.1.1-x86-windows-vc-9.0
+@set PTEID_DIR_CAIRO=C:\Users\agrr\Downloads\gtk+-bundle_2.22.1-20101227_win32
+@set PTEID_DIR_CURL=C:\Users\agrr\Downloads\libcurl-vc9-x86-release-dll-ipv6-sspi-spnego-winssl
 
 :: Compiled / external libs x64
 ::==============================
-@set PTEID_DIR_QT_4_X64=C:\Qt\4.8.4\x64\vs2008
-@set PTEID_DIR_OPENSSL_098_X64=C:\OpenSSL\0.9.8y\x64\vc9
-@set PTEID_DIR_XERCES_31_X64=%PTEID_LIBS_PATH%\xerces\3.1.1\x64\vc9
-@set PTEID_DIR_CAIRO_X64=%PTEID_LIBS_PATH%\gtk+-bundle\2.22.1\x64\vc9
-@set PTEID_DIR_CURL_X64=%PTEID_LIBS_PATH%\libcurl\7.30.0\x64\vc9
+@set PTEID_DIR_QT_4_X64=C:\Qt\4.8.4_x64
+@set PTEID_DIR_OPENSSL_098_X64=C:\OpenSSL-Win64\
+@set PTEID_DIR_XERCES_31_X64=C:\Users\agrr\Downloads\xerces-c-3.1.1-x86_64-windows-vc-9.0
+@set PTEID_DIR_CAIRO_X64=C:\Users\agrr\Downloads\gtk+-bundle_2.22.1-20101229_win64
+@set PTEID_DIR_CURL_X64=C:\Users\agrr\Downloads\libcurl-vc9-x64-release-dll-ipv6-sspi-spnego-winssl
 
 :: Tools
 ::======
 @set PTEID_DIR_7ZIP=C:\Program Files\7-Zip
-@set PTEID_DIR_PLATFORMSDK=C:\Program Files\Microsoft SDKs\Windows\v7.0
+@set PTEID_DIR_PLATFORMSDK=C:\Program Files (x86)\Windows Kits\8.1
 @set PTEID_DIR_VS=C:\Program Files (x86)\Microsoft Visual Studio 9.0
 @set PTEID_DIR_DOXYGEN=C:\Program Files\doxygen
-@set PTEID_DIR_SWIG=C:\Swig\2.0.9
-@set PTEID_DIR_JDK=C:\Program Files\Java\jdk1.6.0_45
+@set PTEID_DIR_SWIG=C:\Users\agrr\Downloads\swigwin-2.0.12
+@set PTEID_DIR_JDK=C:\Program Files\Java\jdk1.8.0_05
 @set PTEID_DIR_WIX=%WIX%
 @set PTEID_DIR_MSM=C:\Program Files (x86)\Common Files\Merge Modules
 @set PTEID_DRIVERS_DDK=C:\WinDDK\7600.16385.1

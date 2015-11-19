@@ -14,12 +14,12 @@
 
 :: Check Doxygen
 :: =============
-@call "%CHECKS%\PathDoxygen.bat"
-@if %ERRORLEVEL%==0 goto find_doxygen
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_DOXYGEN
-@goto end
-:find_doxygen
-@echo [INFO] Using PTEID_DIR_DOXYGEN=%PTEID_DIR_DOXYGEN%
+::@call "%CHECKS%\PathDoxygen.bat"
+::@if %ERRORLEVEL%==0 goto find_doxygen
+::@echo [TIP] Use set_path.bat script to define PTEID_DIR_DOXYGEN
+::@goto end
+:::find_doxygen
+::@echo [INFO] Using PTEID_DIR_DOXYGEN=%PTEID_DIR_DOXYGEN%
 
 :: Check Swig
 :: ==========
@@ -190,7 +190,7 @@
 
 :debug
 @echo [INFO] Opening Visual Studio solution: "%SOLUTION%"
-@"%PTEID_DIR_VS%\Common7\IDE\devenv.exe" "%SOLUTION%"
+@"%PTEID_DIR_VS%\Common7\IDE\devenv.exe"  /log "C:\Users\agrr\VS_Log.txt" "%SOLUTION%"
 @goto end
 
 :end

@@ -1,5 +1,5 @@
 @echo [INFO] Input PTEID_DIR_PLATFORMSDK=%PTEID_DIR_PLATFORMSDK%
-@set FILE_TO_FIND="bin\msitran.exe" "bin\msidb.exe" "Include\newdev.h"
+@set FILE_TO_FIND="bin\x86\msitran.exe"
 @echo [INFO] Looking for files: %FILE_TO_FIND%
 
 @set FILE_NOT_FOUND=
