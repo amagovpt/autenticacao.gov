@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<strings>
+<DocumentName lang="en">Document Name</DocumentName>
+<DocumentName lang="pt">Nome do Documento</DocumentName>
+<Params lang="en">Validation Parameters</Params>
+<Params lang="pt">Parâmetros de Validação</Params>
+<TrustedCert lang="en">Trusted Certificate:</TrustedCert>
+<TrustedCert lang="en">Certificado Confiável:</TrustedCert>
+<QualifiedCert lang="en">Qualified Certificate:</QualifiedCert>
+<QualifiedCert lang="pt">Certificado Qualificado:</QualifiedCert>
+<Timestamp lang="en">Timestamp:</Timestamp>
+<Timestamp lang="pt">Selo Temporal:</Timestamp>
+<LTV lang="en">Long-Term Validation:</LTV>
+<LTV lang="pt">Validação a longo prazo:</LTV>
+<Signedby lang="en">Signed By:</Signedby>
+<Signedby lang="pt">Assinado Por:</Signedby>
+<SigningTime lang="en">On claimed time:</SigningTime>
+<SigningTime lang="pt">Assinatura efectuada em:</SigningTime>
+<ConnectionWarning lang="en">Couldn't validate signing certificate, please check your internet connection</ConnectionWarning>
+<ConnectionWarning lang="pt">Não foi possível validar o(s) certificado(s), por favor verifique a sua ligação à Internet</ConnectionWarning>
+<ValidationPolicy lang="en">QES AdESQC TL based</ValidationPolicy>
+<ValidationPolicy lang="pt">A TRADUZIR...</ValidationPolicy>
+<ValidationPolicyDesc lang="en">Validate electronic signatures and indicates whether they are Advanced electronic Signatures (AdES), AdES supported by a
+Qualified Certificate (AdES/QC) or a Qualified electronic Signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State
+Trusted Lists (this includes signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).</ValidationPolicyDesc>
+<ValidationPolicyDesc lang="pt">A TRADUZIR...</ValidationPolicyDesc>
+
+</strings>
