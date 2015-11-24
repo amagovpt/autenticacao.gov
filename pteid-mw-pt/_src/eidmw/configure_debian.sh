@@ -9,4 +9,4 @@ then
 	JAVAINCPATH=${JAVACPATH%/*}
 	JAVAINCPATH=$JAVAINCPATH/../include
 fi
-./configure --lib+=-L${QT4PATH}/lib/ --include+=${QT4PATH}/include/Qt --include+=${JAVAINCPATH} --include+=${JAVAINCPATH}/linux  BUILD_SDK=1
+./configure --lib+=-L${QT4PATH}/lib/ --lib+=-L/usr/lib/x86_64-linux-gnu/ --include+=${QT4PATH}/include/Qt --include+=${JAVAINCPATH} --include+=${JAVAINCPATH}/linux  BUILD_SDK=1
