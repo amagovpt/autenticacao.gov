@@ -248,26 +248,6 @@ void init_openssl() {
 
 }
 
-char *FormatOtpParameters (OTPParams *otp)
-{
-	char *params = (char *)malloc(1000);
-
-	sprintf (params, "{\r\n\t\"PinPafUpdate\" :\r\n\t{\r\n\t\t\"pin\" : \"%s\",\r\n\t\t\"pan\" : \"%s\",\r\n\t\t\"panseqnumber\" : \"%s\",\r\n\t\t\"cdol1\" : \"%s\",\r\n\t\t\"atc\" : \"%s\",\r\n\t\t\"arqc\" : \"%s\",\r\n\t\t\"counter\" : %s,\r\n\t\t\"pintrycounter\" : %x\r\n\t}\r\n}\r\n", otp->pin, otp->pan, otp->pan_seq_nr, otp->cdol1, otp->atc, otp->arqc, otp->counter, otp->pin_try_counter);
-	
-	return params;
-}
-
-char *FormatResetSCParameters(OTPParams* otp)
-{
-
-	char *params = (char *)malloc(1000);
-
-	sprintf(params, "{\"OnlineTransactionParameters\" : {\"pan\":\"%s\",\"panseqnumber\":\"%s\",\"cdol1\":\"%s\",\"atc\":\"%s\",\"arqc\":\"%s\",\"counter\":%s\r\n}}", otp->pan, otp->pan_seq_nr, otp->cdol1, otp->atc, otp->arqc, otp->counter);
-
-	return params;
-
-}
-
 /**
  * Close an encrypted connection gracefully
  */
@@ -353,43 +333,6 @@ char *parseToken(char * server_response, const char * token)
 
 
 #define REPLY_BUFSIZE 100000
-/*
- * The return value of this method will be the cookie set by the server
- * if the connection is successfull
- */
-char * SSLConnection::do_OTP_1stpost()
-{
-	char * cookie = NULL;
-	int ret_channel = 0;
-	char * request_headers = (char *) calloc(1000, sizeof(char));
-
-	snprintf(request_headers, 1000,	
-    "POST /CAPPINChange/connect HTTP/1.1\r\nHost: %s\r\nKeep-Alive: 300\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Length: 16\r\n\r\n",
-    	m_otp_host);
-    	char * request_body = "{\"Connect\" : {}}";
-	char * server_response = (char *) malloc(REPLY_BUFSIZE);
-
-	ret_channel = write_to_stream(m_ssl_connection, request_headers);
-//	fprintf(stderr, "Wrote to channel: %d bytes\n", ret_channel);
-	ret_channel = write_to_stream(m_ssl_connection, request_body);
-//	fprintf(stderr, "Wrote to channel: %d bytes\n", ret_channel);
-
-	//Read response
-	unsigned int ret = read_from_stream(m_ssl_connection, server_response, REPLY_BUFSIZE);
-
-//	fprintf(stderr, "Server reply: \n%s\n", server_response);
-
-	if (ret > 0)
-	{
-		cookie = parseCookie(server_response);
-		if (cookie == NULL)
-			//Catch renegotiation errors (e.g. using test cards)
-			throw CMWEXCEPTION(translate_openssl_error(ERR_get_error()));
-	}
-
-	return cookie;
-
-}
 
 
 char * SSLConnection::do_SAM_mutualAuthentication_IAS101(char *challenge)
@@ -663,58 +606,6 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 		server_params->cv_ifd_aut = child->valuestring;
 
 	return server_params;
-
-}
-
-char * SSLConnection::do_OTP_2ndpost(char *cookie, OTPParams *params)
-{
-	char * otp_params = FormatOtpParameters(params);
-	//fprintf(stderr, "%s\n", otp_params);
-	char * server_response = "";
-	server_response = Post(cookie, "/CAPPINChange/sendParameters", otp_params);
-	//Build the full request
-	return parseToken(server_response, "\"apdu\":\"");
-
-}
-
-
-void SSLConnection::do_OTP_3rdpost(char *cookie, const char *changepin_card_response)
-{
-
-	char * server_response = NULL;
-	char * request_body = (char *) calloc(200, sizeof(char));
-	char * body_template = "{ \"PinChangeUnlockResponse\" : { \"apdu\" : \"%s\" } }";
-	snprintf (request_body, 200, body_template, 
-			changepin_card_response);
-
-	server_response = Post(cookie, "/CAPPINChange/sendChangePINResponse", request_body);
-	//TODO: We should at least check for an HTTP 200 return code
-
-}
-
-
-char * SSLConnection::do_OTP_4thpost(char *cookie, OTPParams *params)
-{
-
-	char * otp_params = FormatResetSCParameters(params);
-
-	char * server_response = Post(cookie, "/CAPPINChange/sendResetScriptCounterParameters", otp_params);
-
-	return parseToken(server_response, "\"cdol2\":\"");
-
-}
-
-void SSLConnection::do_OTP_5thpost(char *cookie, const char *reset_scriptcounter_response)
-{
-
-	char * server_response = NULL;
-	char * request_body = (char *) calloc(200, sizeof(char));
-	char * body_template = "{ \"ResetScriptCounterResponse\" : { \"apdu\" : \"%s\" } }";
-	snprintf (request_body, 200, body_template, reset_scriptcounter_response);
-
-	server_response = Post(cookie, "/CAPPINChange/resetScriptCounterResponse", request_body);
-	//TODO: We should at least check for an HTTP 200 return code but we currently
-	//dont because the server is erroneously returning error 500
 
 }
 

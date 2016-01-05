@@ -30,7 +30,6 @@
 #include "SigContainer.h"
 #include "PDFSignature.h"
 #include "MiscUtil.h"
-#include "EMV-Cap-Helper.h"
 #include "SSLConnection.h"
 
 #include <time.h>

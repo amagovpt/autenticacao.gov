@@ -9,7 +9,6 @@
 #include "APLCard.h"
 #include "APLReader.h"
 #include "SAM.h"
-#include "EMV-Cap-Helper.h"
 #include "Export.h"
 
 namespace eIDMW
@@ -51,15 +50,6 @@ class SSLConnection
 		bool do_SAM_4thpost(StartWriteResponse &resp);
 
 		char * do_SAM_mutualAuthentication_IAS101(char *challenge);
-		
-		/* The following functions implement the communication protocol with the OTP server */
-		char * do_OTP_1stpost();
-
-		//Returns encrypted EMV-CAP changePin APDU
-		char * do_OTP_2ndpost(char * cookie, OTPParams *params);
-		void do_OTP_3rdpost(char *cookie, const char *change_pin_response);
-		char * do_OTP_4thpost(char *cookie, OTPParams *params);
-		void do_OTP_5thpost(char *cookie, const char *reset_scriptcounter_response);
 
 	private:
 		void ReadUserCert();
