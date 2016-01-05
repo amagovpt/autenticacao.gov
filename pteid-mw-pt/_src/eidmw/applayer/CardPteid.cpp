@@ -201,7 +201,7 @@ tCardFileStatus APL_EidFile_ID::VerifyFile()
 
 	MapFieldsInternal();
 
-	if (m_SODCheck){
+	if (m_SODCheck) {
 		CByteArray pkData;
 		CByteArray idData;
 		CByteArray picData;

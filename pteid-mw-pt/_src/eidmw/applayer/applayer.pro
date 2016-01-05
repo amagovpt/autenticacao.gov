@@ -88,7 +88,6 @@ HEADERS += \
 	TSAClient.h \
 	SODParser.h \ 
 	cJSON.h \
-        EMV-Cap-Helper.h \
 	SigVerifier.h \
  	SSLConnection.h \	 
 
@@ -119,8 +118,7 @@ SOURCES += \
 	CRLFetcher.cpp \
 	PDFSignature.cpp \
 	SAM.cpp \
-	OCSP.cpp \
-	EMV-Cap-Helper.cpp \
+	OCSP.cpp
 
 # Disable annoying and mostly useless gcc warning
 QMAKE_CXXFLAGS += -Wno-write-strings

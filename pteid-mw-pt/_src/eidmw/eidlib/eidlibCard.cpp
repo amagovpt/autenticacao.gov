@@ -1136,6 +1136,7 @@ bool PTEID_EIDCard::isActive(){
 	return out;
 }
 
+/*
 bool PTEID_EIDCard::ChangeCapPin(const char *new_pin){
 	bool out = false;
 
@@ -1149,6 +1150,7 @@ bool PTEID_EIDCard::ChangeCapPin(const char *new_pin){
 
 	return out;
 }
+*/
 
 bool PTEID_EIDCard::ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data)
 {
@@ -1174,6 +1176,8 @@ bool testPIN(const char* pin){
 	return true;
 }
 
+
+/*
 bool PTEID_EIDCard::ChangeCapPinCompLayer(const char *old_pin, const char *new_pin, unsigned long &ulRemaining){
 	bool out = false;
 	bool validPins = false;
@@ -1223,6 +1227,7 @@ bool PTEID_EIDCard::ChangeCapPinCompLayer(const char *old_pin, const char *new_p
 
 	return out;
 }
+*/
 
 
 void PTEID_EIDCard::doSODCheck(bool check){
@@ -1875,6 +1880,7 @@ PTEIDSDK_API long PTEID_SendAPDU(const unsigned char *ucRequest, unsigned long u
 	return 0;
 }
 
+/*
 PTEIDSDK_API long PTEID_CAP_ChangeCapPin(const char *csServer, const unsigned char *ucServerCaCert,	unsigned long ulServerCaCertLen, tProxyInfo *proxyInfo,	const char *pszOldPin, const char *pszNewPin, long *triesLeft){
 
 	PTEID_EIDCard& card = readerContext->getEIDCard();
@@ -1883,20 +1889,20 @@ PTEIDSDK_API long PTEID_CAP_ChangeCapPin(const char *csServer, const unsigned ch
 	return ret ? 0 : -1;
 }
 
-/* not implemented */
+
 PTEIDSDK_API tCapPinChangeState PTEID_CAP_GetCapPinChangeProgress(){
 	return CAP_INITIALISING;
 }
 
-/* not implemented */
+
 PTEIDSDK_API void PTEID_CAP_SetCapPinChangeCallback(void(_USERENTRY * callback)(tCapPinChangeState state)){
 	return;
 }
 
-/* not implemented */
 PTEIDSDK_API void PTEID_CAP_CancelCapPinChange(){
 	return;
 }
+*/
 
 
 }
