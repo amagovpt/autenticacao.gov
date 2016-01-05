@@ -3003,6 +3003,8 @@ void MainWnd::on_actionPINChange_triggered()
 
 			if (bResult){
 				msg = tr("PIN change passed");
+				if (pinRef == 0x81 || pinRef == 0x01)
+					pinNotes = 1;
 			} else {
 				msg = tr("PIN change failed");
 				msg += "\n";
