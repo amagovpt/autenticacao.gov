@@ -593,7 +593,9 @@ public:
 	{
 		bool bRetVal = false;
 		unsigned int fatherlen, motherlen;
-		//m_imgPicture=QPixmap("IDFace.jpg");
+		
+		//Enable SOD checking
+		Card.doSODCheck(true);
 
 		PTEID_EId& pteid_eid = Card.getID();
 
@@ -631,14 +633,13 @@ public:
 
 		m_Fields[MOTHER] = mother;
 
-		//m_Fields[PARENTS]					= m_Fields[FATHER] + " * " + m_Fields[MOTHER];
-
 		m_Fields[LOCALOFREQUEST]			= pteid_eid.getLocalofRequest();
 		m_Fields[VALIDATION]				= pteid_eid.getValidation();
 		m_Fields[MRZ1]						= pteid_eid.getMRZ1();
 		m_Fields[MRZ2]						= pteid_eid.getMRZ2();
 		m_Fields[MRZ3]						= pteid_eid.getMRZ3();
 		m_Fields[ACCIDENTALINDICATIONS]		= pteid_eid.getAccidentalIndications();
+
 
         //m_RelativesInfo.RetrieveData(Card);
 		m_PersonExtraInfo.RetrieveData(Card);

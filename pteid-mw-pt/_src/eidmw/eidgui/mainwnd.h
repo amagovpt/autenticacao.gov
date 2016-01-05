@@ -332,6 +332,7 @@ private slots:
 	void updateReaderList( void );
 	void customEvent( QEvent * event );
 	void changeEvent( QEvent *event );
+	void setErrorSOD() { error_sod = true ;}
 
 protected:
 	// Window Events
@@ -482,6 +483,7 @@ private:
 	QString					m_CurrReaderName;		//!< the current reader we're using
 	PTEID_ReaderContext*		 m_virtReaderContext;
 	bool					m_UseKeyPad;
+	bool                    error_sod;
 	GUISettings&			m_Settings;				//!< settings of the app
 	QTimer*					m_timerReaderList;
 	QMutex					m_mutex;				//!< mutex to be used when multiple cards are inserted simultaneously

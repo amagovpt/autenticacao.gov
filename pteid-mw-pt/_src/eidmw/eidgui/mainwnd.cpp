@@ -170,6 +170,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 , m_CurrReaderName("")
 , m_virtReaderContext(NULL)
 , m_UseKeyPad(false)
+, error_sod(false)
 , m_Settings(settings)
 , m_timerReaderList(NULL)
 , m_pdf_signature_dialog(NULL)
@@ -1969,18 +1970,7 @@ void MainWnd::loadCardData( void )
 					try
 					{
 						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-						if (Card.isTestCard()&&!Card.getAllowTestCard())
-						{
-							if (askAllowTestCard())
-							{
-								Card.setAllowTestCard(true);
-							}
-							else
-							{
-								on_actionClear_triggered();
-								break;
-							}
-						}
+						
 						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
 						m_CurrReaderName = readerName;
 
@@ -2011,7 +2001,7 @@ void MainWnd::loadCardData( void )
 			}
 			enablePrintMenu();
 		}
-		if (!m_CI_Data.isDataLoaded() || !bCardPresent)
+		if (!bCardPresent)
 		{
 			QString strCaption(tr("Reload eID"));
 			strCaption = strCaption.remove(QChar('&'));
@@ -2970,6 +2960,7 @@ void MainWnd::on_actionPINRequest_triggered()
 	return;
 }
 
+/*
 void MainWnd::ChangeAuthPin(PTEID_ReaderContext &ReaderContext, unsigned int pin_ref)
 {
 
@@ -3106,6 +3097,7 @@ void MainWnd::ChangeAuthPin(PTEID_ReaderContext &ReaderContext, unsigned int pin
 
 
 }
+*/
 
 //*****************************************************
 // PIN change button clicked
@@ -3130,11 +3122,7 @@ void MainWnd::on_actionPINChange_triggered()
 				return;
 
 			unsigned int pinRef = item->data(0,Qt::UserRole).value<uint>();
-			if (pinRef == 0x01 || pinRef == 0x81)
-			{
-				ChangeAuthPin(ReaderContext, pinRef);
-				return;
-			}
+
 			PTEID_Pin &pin = ReaderContext.getEIDCard().getPins().getPinByPinRef(pinRef);
 
 			unsigned long triesLeft = -1;
@@ -3360,11 +3348,23 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 		//Load the picture in PNG format
 		imgPicture = QImage();
 
-		imgPicture.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
-		imgPicturescaled = imgPicture.scaled(150, 190);
-		m_imgPicture = QPixmap::fromImage(imgPicturescaled);
+		if (error_sod)
+		{
+			QString title = tr("SOD validation");
+			QString msg = tr("SOD validation failed: card data consistency is compromised!");
+			QMessageBox msgBoxcc(QMessageBox::Warning, title, msg, 0, this);
+			msgBoxcc.setModal(true);
+			msgBoxcc.exec();
+		}
+		else
+		{
 
-		fillPinList();
+			imgPicture.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
+			imgPicturescaled = imgPicture.scaled(150, 190);
+			m_imgPicture = QPixmap::fromImage(imgPicturescaled);
+			fillPinList();
+		}
+
 	}
 }
 
@@ -4559,7 +4559,21 @@ bool MainWnd::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
 
 void CardDataLoader::Load()
 {
+	try
+	{
 	this->information.LoadData(card, readerName);
+
+	}
+	
+	catch (PTEID_Exception &e)
+	{
+
+		this->mwnd->setErrorSOD();
+
+		qDebug() << "Caught exception in RetrieveData()..." << e.GetError();
+		return;
+	}
+	
 	if (this->mwnd)
 		this->mwnd->loadPinData(this->card);
 
