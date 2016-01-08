@@ -878,7 +878,7 @@ tCardFileStatus APL_EidFile_Address::VerifyFile()
 
 		if (m_SODCheck){
 			CByteArray addrData;
-			PackAddressData(addrData, isNationalAddress());
+			PackAddressData(addrData, m_AddressType != m_FOREIGN);
 
 			if (!m_cryptoFwk->VerifyHashSha256(addrData,pcard->getFileSod()->getAddressHash()))
 				throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS);
