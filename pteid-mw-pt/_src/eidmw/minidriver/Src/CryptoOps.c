@@ -234,7 +234,7 @@ DWORD WINAPI   CardSignData
 	if ( ( pInfo->dwSigningFlags & CARD_BUFFER_SIZE_ONLY ) == CARD_BUFFER_SIZE_ONLY)
 	{
 		LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_BUFFER_SIZE_ONLY");
-
+		//TODO: hardcoded signature length
 		pInfo->cbSignedData = 128;
 		CLEANUP(SCARD_S_SUCCESS);
 	}
@@ -473,7 +473,7 @@ DWORD WINAPI   CardQueryKeySizes
 
 	pKeySizes->dwMinimumBitlen     = 1024;
 	pKeySizes->dwDefaultBitlen     = 1024;
-	pKeySizes->dwMaximumBitlen     = 1024;
+	pKeySizes->dwMaximumBitlen     = 2048;
 	pKeySizes->dwIncrementalBitlen = 0;
 
 cleanup:

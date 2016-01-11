@@ -90,6 +90,15 @@ extern DWORD PteidSignData
 				DWORD *pcbSignature, 
 				PBYTE *ppbSignature
 			);
+
+extern DWORD PteidReadPrKDF(PCARD_DATA pCardData,
+							DWORD *out_len,
+							PBYTE *data);
+
+extern DWORD PteidParsePrKDF(PCARD_DATA pCardData, 
+							 DWORD *cbStream, 
+							 BYTE *pbStream,
+							 WORD *cbKeySize);
 extern DWORD PteidSignDataGemsafe 
 			(
 				PCARD_DATA  pCardData, 
@@ -144,10 +153,11 @@ extern DWORD   PteidDeAuthenticate
                ); 
 
 extern DWORD   PteidMSE
-               (
-                  PCARD_DATA     pCardData,
-                  BYTE          dwRole
-               ) ;
+				(
+						PCARD_DATA   pCardData, 
+			     BYTE      key_id,
+				 BYTE is_sha256
+				 ); 
 
 extern DWORD   PteidChangePIN
                (

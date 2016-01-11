@@ -27,6 +27,7 @@
 #include "cache.h"
 
 #include <commctrl.h>
+#include "winerror.h"
 /****************************************************************************************************/
 
 #define CHALLENGE_DATA_SIZE         16
@@ -1069,6 +1070,193 @@ cleanup:
 }
 #undef WHERE
 
+#define WHERE "PteidParsePrKDF"
+DWORD PteidParsePrKDF(PCARD_DATA pCardData, DWORD *cbStream, BYTE *pbStream, WORD *cbKeySize)
+{
+   DWORD dwReturn  = 0;
+   DWORD dwCounter = 0;
+   DWORD dwInc = 0;
+	*cbKeySize = 0;
+
+   LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
+   LogTrace(LOGTYPE_INFO, WHERE, "Contents of PrKDF:");	
+   LogDump(*cbStream, pbStream);
+	/********************/
+   /* Check Parameters */
+   /********************/
+   if ( pCardData == NULL )
+   {
+      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
+      CLEANUP(SCARD_E_INVALID_PARAMETER);
+   }
+   if ( pbStream == NULL )
+   {
+      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [ppbStream]");
+      CLEANUP(SCARD_E_INVALID_PARAMETER);
+   }
+	 if ( cbStream == NULL )
+     {
+      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [cbStream]");
+      CLEANUP(SCARD_E_INVALID_PARAMETER);
+	 }
+
+	 if(pbStream[dwCounter] == 0x30) //0x30 means sequence
+	 {
+		 LogTrace(LOGTYPE_TRACE, WHERE, "sequence [0x30]");
+		 dwCounter++; //jump to sequence length
+		 LogTrace(LOGTYPE_TRACE, WHERE, "sequence length [0x%.2X]",pbStream[dwCounter]);
+		 dwInc = pbStream[dwCounter];
+		 dwCounter += dwInc; //add length (to jump over sequence)
+		 if( dwCounter < (*cbStream))
+		 {
+			 //the last 2 bytes are the key size
+			 *cbKeySize = (pbStream[dwCounter-1])*256;
+			 *cbKeySize += (pbStream[dwCounter]);
+			 LogTrace(LOGTYPE_INFO, WHERE, "rsa key size is %d",*cbKeySize);
+		 }
+		 else
+		 {
+			 LogTrace(LOGTYPE_ERROR, WHERE, "*cbStream = %d dwCounter = %d",*cbStream,dwCounter);
+			 LogDump(*cbStream,pbStream);
+			 CLEANUP(0x00FEFE);		 
+		 }
+	 }
+	 else
+	 {
+		 LogTrace(LOGTYPE_ERROR, WHERE, "Expected 0x30 instead of ox%.2x",pbStream[dwCounter]);
+		 LogDump(*cbStream,pbStream);
+		 CLEANUP(0x00FEFE);		 
+	 }
+
+cleanup:
+	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
+	return(dwReturn);
+}
+#undef WHERE
+
+#define WHERE "PteidReadPrKDF"
+DWORD PteidReadPrKDF(PCARD_DATA pCardData, DWORD *out_len, PBYTE *data)
+{
+   DWORD dwReturn = 0;	
+   unsigned char recvbuf[1024];
+   int recvlen = sizeof(recvbuf);
+   unsigned char Cmd[128];
+   DWORD dwCounter = 0;
+   unsigned int uiCmdLg = 0;
+   BYTE          SW1, SW2;
+   SCARD_IO_REQUEST        ioSendPci = {1, sizeof(SCARD_IO_REQUEST)};
+   SCARD_IO_REQUEST        ioRecvPci = {1, sizeof(SCARD_IO_REQUEST)};
+
+   /***************/
+   /* Select File */
+   /***************/
+   Cmd [0] = 0x00;
+   Cmd [1] = 0xA4; /* SELECT COMMAND */
+   Cmd [2] = 0x00;
+   Cmd [3] = 0x0C;
+   Cmd [4] = 0x02; 
+   Cmd [5] = 0x3F; //5F, (EF, 0C), ReadBinary(), (02, CertID)  
+   Cmd [6] = 0x00;
+   uiCmdLg = 7;
+
+   dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            Cmd, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+                            &recvlen);
+
+   Cmd[5] = 0x5F;
+
+   dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            Cmd, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+                            &recvlen);
+
+	
+    //Obtain the file FCI template
+    Cmd[3] = 0x00;
+    Cmd[5] = 0xEF;
+    Cmd[6] = 0x0D;
+
+    dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            Cmd, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+                            &recvlen);
+   
+   SW1 = recvbuf[recvlen-2];
+   SW2 = recvbuf[recvlen-1];
+   if (SW1 != 0x61)
+   {
+
+   }
+
+   Cmd[0] = 0x00;
+   Cmd[1] = 0xC0; /* GET RESPONSE command */
+   Cmd[2] = 0x00;
+   Cmd[3] = 0x00;
+   Cmd[4] = SW2;
+
+   uiCmdLg = 5;
+   //Make all the buffer available to the next SCardTransmit call
+   recvlen = sizeof(recvbuf);
+
+   dwReturn = SCardTransmit(pCardData->hScard, 
+                            &ioSendPci, 
+                            Cmd, 
+                            uiCmdLg, 
+                            &ioRecvPci, 
+                            recvbuf, 
+                            &recvlen);
+
+   if (dwReturn != SCARD_S_SUCCESS)
+   {
+	  LogTrace(LOGTYPE_ERROR, WHERE, "Error reading PrkDF file metadata. Error code: [0x%02X]", dwReturn);
+      CLEANUP(dwReturn);
+   }
+
+   while(dwCounter < recvlen-3)
+   {
+	   //Parse the sequence 82 02 XX XX where XX XX is the file size in bytes
+	  if (recvbuf[dwCounter] == 0x81 && recvbuf[dwCounter+1] == 0x02)
+	  {
+         *out_len = recvbuf[dwCounter+2] * 256 + recvbuf[dwCounter+3];
+		 LogTrace(LOGTYPE_TRACE, WHERE, "out_len parsed from FCI is %d", *out_len);
+		 break;
+	  }
+	  dwCounter++;
+   }
+	
+   //We need to parse the PrkD File to get the private key length which is also the signature length
+   dwReturn = PteidReadFile(pCardData, 0, out_len, recvbuf);
+   
+   LogTrace(LOGTYPE_TRACE, WHERE, "out_len returned is %d", *out_len);
+ 
+   if (dwReturn != SCARD_S_SUCCESS)
+   {
+	  LogTrace(LOGTYPE_ERROR, WHERE, "Error reading PrkDF file. Error code: [0x%02X]", dwReturn);
+      CLEANUP(dwReturn);
+   }
+   *data = (PBYTE) pCardData->pfnCspAlloc(*out_len);
+
+   memcpy(*data, recvbuf, *out_len);
+
+   LogDump(*out_len, data);
+
+cleanup:
+   return (dwReturn);
+
+}
+#undef WHERE
+
+
 #define WHERE "PteidSignDataGemsafe"
 DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature)
 {
@@ -1088,7 +1276,12 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    unsigned int            i          = 0;
    unsigned int            cbHdrHash  = 0;
    const unsigned char     *pbHdrHash = NULL;
+         
    BYTE is_sha256 = cbToBeSigned == 32;
+   DWORD out_len = 0;
+
+   //LogTrace(LOGTYPE_INFO, WHERE, "PteidParsePrKDF returned: %d", keysize);
+   memset(recvbuf, 0, out_len);
 
    dwReturn = PteidMSE(pCardData, pin_id, is_sha256);
 
@@ -1138,8 +1331,8 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    Cmd [0] = 0x00;
    Cmd [1] = 0x2A;   /* PSO: Compute Digital Signature COMMAND */
    Cmd [2] = 0x9E;
-   Cmd [3] = 0x9A; 
-   Cmd [4] = 0x80;  /* Length of expected signature */
+   Cmd [3] = 0x9A;
+   Cmd [4] = g_keySize == 2048 ? 0x00 : 0x80;  /* Length of expected signature */
    
    uiCmdLg = 5;
 
@@ -1165,13 +1358,13 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    LogTrace(LOGTYPE_INFO, WHERE, "Return: APDU PSO CDS");
    LogDump (recvlen, (char *)recvbuf);
 
-   if ( (recvlen - 2) != 0x80 )
+   if ( (recvlen - 2) != 0x80 && (recvlen - 2) != 0x100 )
    {
       LogTrace(LOGTYPE_ERROR, WHERE, "Invalid length received: [0x%02X][0x%02X]", recvlen - 2, 0x80);
       CLEANUP(SCARD_E_UNEXPECTED);
    }
 
-   *pcbSignature = 0x80;
+   *pcbSignature = g_keySize == 2048 ? 0x100 : 0x80;
 
    /* Allocate memory for the target buffer */
    *ppbSignature = pCardData->pfnCspAlloc(*pcbSignature); //pfnCspAlloc é o Memory allocator fornecido pelo CSP

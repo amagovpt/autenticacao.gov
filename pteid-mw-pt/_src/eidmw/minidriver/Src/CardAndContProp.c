@@ -348,7 +348,7 @@ DWORD CardGetKeysizes(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD p
    KeySizes.dwVersion            = CARD_KEY_SIZES_CURRENT_VERSION;
    KeySizes.dwMinimumBitlen      = 1024;
    KeySizes.dwDefaultBitlen      = 1024;
-   KeySizes.dwMaximumBitlen      = 1024;
+   KeySizes.dwMaximumBitlen      = 2048;
    KeySizes.dwIncrementalBitlen  = 0;
 
    memcpy (pbData, &KeySizes, sizeof(KeySizes));
