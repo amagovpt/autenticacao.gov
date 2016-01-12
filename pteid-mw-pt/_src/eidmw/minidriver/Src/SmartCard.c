@@ -1248,8 +1248,6 @@ DWORD PteidReadPrKDF(PCARD_DATA pCardData, DWORD *out_len, PBYTE *data)
 
    memcpy(*data, recvbuf, *out_len);
 
-   LogDump(*out_len, data);
-
 cleanup:
    return (dwReturn);
 
