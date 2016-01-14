@@ -490,26 +490,7 @@ namespace pt.portugal.eid
         
         return ret;
     }
-    
-    public static long CAP_ChangeCapPin(String server_unused, byte[] bytes, PTEID_Proxy_Info ptdp, String string1, String string2){
-        uint ul = 0;
-        try {
-            if (idCard.ChangeCapPinCompLayer(string1, string2, ref ul))
-                return ul;
-        } catch (PTEID_Exception ex) {
-        	//TODO:
-        }
-        return -1;
-    }
-
-    public static int CAP_GetCapPinChangeProgress(){
-        return 0;
-    }
-
-    public static void CAP_CancelCapPinChange(){
-        return;
-    }
-
+  
    private static String findReaderNameWithCard(){
 	long nrReaders  = readerSet.readerCount();
         

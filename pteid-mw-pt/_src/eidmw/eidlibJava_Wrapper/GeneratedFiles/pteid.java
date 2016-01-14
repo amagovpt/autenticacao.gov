@@ -513,31 +513,7 @@ public class pteid {
         
         return ret;
     }
-    
-    
-    public static long CAP_ChangeCapPin(String string, byte[] bytes, PTEID_Proxy_Info ptdp, String string1, String string2){
-        PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
-        
-        try {
-            
-            if (idCard.ChangeCapPinCompLayer(string1, string2, ul))
-                return ul.m_long;
-            
-        } catch (PTEID_Exception ex) {
-        //TODO:
-        }
-        
-        return -1;
-    }
-    
-
-    public static int CAP_GetCapPinChangeProgress(){
-        return 0;
-    }
-
-    public static void CAP_CancelCapPinChange(){
-        return;
-    }
+      
 
    private static String findReaderNameWithCard() throws Exception{
 	long nrReaders  = readerSet.readerCount();
