@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <fstream>
 #include <functional>
+#include <vector>
 #include <iostream>
 #include <iterator>
 #include <locale>
@@ -41,13 +42,29 @@ namespace eIDMW
 
   std::wstring utilStringWiden(const std::string& in, const std::locale& locale)
   {
+#ifndef WIN32
     std::wstring out(in.size(), 0);
 
     for(std::string::size_type i = 0; in.size() > i; ++i)
       out[i] = std::use_facet<std::ctype<wchar_t> >(locale).widen(in[i]);
     return out;
+#else
+	int required_size = MultiByteToWideChar(CP_UTF8, 0, in.c_str(), (int)in.size(),
+      NULL, 0);
+
+    if(required_size == 0)
+		return std::wstring();
+
+    std::vector<wchar_t> buf(++required_size);
+
+    ::MultiByteToWideChar(CP_UTF8, 0,in.c_str(), (int)in.size(),
+       &buf[0], required_size);
+
+    return std::wstring(&buf[0]);
+#endif
 
   }
+
 
   std::string utilStringNarrow(const std::wstring& in, const std::locale& locale)
   {
