@@ -646,13 +646,13 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 /**
  * Connect to a host using an encrypted stream
  */
-SSL* SSLConnection::connect_encrypted(char* host_and_port) 
+SSL* SSLConnection::connect_encrypted(char* host_and_port)
 {
 
     BIO* bio = NULL;
 
     /* Set up the SSL pointers */
-    SSL_CTX *ctx = SSL_CTX_new(SSLv3_client_method());
+    SSL_CTX *ctx = SSL_CTX_new(TLSv1_1_client_method());
 
     SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
 
