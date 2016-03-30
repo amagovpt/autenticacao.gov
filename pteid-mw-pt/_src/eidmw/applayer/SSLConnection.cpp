@@ -673,6 +673,11 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
     SSL_CTX_set_options(ctx, SSL_OP_NO_TICKET | SSL_OP_NO_SSLv2);
     SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
 
+    X509_VERIFY_PARAM *vpm = SSL_CTX_get0_param(ctx);
+
+    //Verify hostname in the server-provided certificate
+    X509_VERIFY_PARAM_set1_host(vpm, m_otp_host, 0);
+
     bio = BIO_new_connect(host_and_port);
     if (BIO_do_connect(bio) <= 0) {
 	    fprintf(stderr, "Error connecting to OTP server\n");
