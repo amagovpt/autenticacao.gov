@@ -656,6 +656,8 @@ public:
 
     PTEIDSDK_API virtual PTEID_ByteArray Sign(const PTEID_ByteArray& data, bool signatureKey=false);
 
+    PTEIDSDK_API virtual PTEID_ByteArray SignSHA256(const PTEID_ByteArray& data, bool signatureKey=false);
+
  	/**
 	 * Read a File from the card.
 	 * @param fileID is the path of the file

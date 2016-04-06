@@ -112,7 +112,7 @@ PTEID_ByteArray PTEID_Card::Sign(const PTEID_ByteArray& data, bool signatureKey)
 
 	BEGIN_TRY_CATCH
 
-		APL_Card *pcard=static_cast<APL_Card *>(m_impl);
+	APL_Card *pcard=static_cast<APL_Card *>(m_impl);
 
 	CByteArray cData(data.GetBytes(),data.Size());
 	CByteArray result=pcard->Sign(cData, signatureKey);
@@ -120,7 +120,24 @@ PTEID_ByteArray PTEID_Card::Sign(const PTEID_ByteArray& data, bool signatureKey)
 
 	END_TRY_CATCH
 
-		return out;
+	return out;
+}
+
+PTEID_ByteArray PTEID_Card::SignSHA256(const PTEID_ByteArray& data, bool signatureKey)
+{
+	PTEID_ByteArray out;
+
+	BEGIN_TRY_CATCH
+
+	APL_Card *pcard=static_cast<APL_Card *>(m_impl);
+
+	CByteArray cData(data.GetBytes(),data.Size());
+	CByteArray result = pcard->SignSHA256(cData, signatureKey);
+	out.Append(result.GetBytes(),result.Size());
+
+	END_TRY_CATCH
+
+	return out;
 }
 
 PTEID_ByteArray PTEID_Card::readFile(const char *fileID, unsigned long  ulOffset, unsigned long  ulMaxLength)
