@@ -28,6 +28,7 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 #include <openssl/bn.h>
+#include <openssl/opensslv.h>
 
 #ifdef WIN32
 #define snprintf _snprintf
@@ -673,10 +674,14 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
     SSL_CTX_set_options(ctx, SSL_OP_NO_TICKET | SSL_OP_NO_SSLv2);
     SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
 
-    X509_VERIFY_PARAM *vpm = SSL_CTX_get0_param(ctx);
+//Version check for openssl >= 1.0.2 functions as described here: 
+// https://www.openssl.org/docs/manmaster/ssl/SSL_set1_param.html
 
+#if OPENSSL_VERSION_NUMBER >= 0x10002000L
+    X509_VERIFY_PARAM *vpm = SSL_CTX_get0_param(ctx);
     //Verify hostname in the server-provided certificate
     X509_VERIFY_PARAM_set1_host(vpm, m_otp_host, 0);
+#endif
 
     bio = BIO_new_connect(host_and_port);
     if (BIO_do_connect(bio) <= 0) {
