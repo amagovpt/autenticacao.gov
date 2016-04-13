@@ -2,32 +2,9 @@
 
 OSDEF=__NONE__
 
-ver=`sw_vers -productVersion`
-
-if [[ $ver > "10.7.0" || $ver = "10.7.0" ]]
-then
-	OSDEF=osx10_7
-else 	if [[ $ver > "10.6.0" || $ver = "10.6.0" ]]
-	then
-		OSDEF=osx10_6
-else	if [[ $ver > "10.5.0" || $ver = "10.5.0" ]]
-	then
-		OSDEF=osx10_5
-
-	else 	if [[ $ver > "10.4.0" || $ver = "10.4.0" ]]
-		then
-			OSDEF=osx10_4
-		else
-			echo "[Error] OSX version: $ver < 10.4.0"
-			exit -1
-		fi
-	fi
-	fi
-fi
-
 #if [ ! "$QTBASEDIR" ]
 #then
-        QTBASEDIR=/Library/Frameworks
+        QTBASEDIR=/usr/local/Cellar/qt/4.8.7/lib/
 #fi
 #echo "[Info ] Checking $QTBASEDIR"
 
