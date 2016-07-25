@@ -497,6 +497,7 @@ void MainWnd::doChangeAddress(const char *process, const char *secret_code)
 		return;
 	}
 
+	//TODO: UI issue - we need to call refreshTabAddress() after the address is successfully changed...
 	this->addressChangeFinished(0);
 
 }
