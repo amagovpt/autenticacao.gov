@@ -441,7 +441,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 				sMessage = GETSTRING_DLG(ChangeYourPin);
 				sMessage += L" \"";
 				if( wcslen(csPinName)!=0 )
-					sMessage += csPinName;
+					sMessage += PINName;
 				else
 					sMessage += GETSTRING_DLG(Pin);
 				sMessage += L"\" ";
@@ -460,7 +460,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 				sMessage = GETSTRING_DLG(ChangeYourPuk);
 				sMessage += L" \"";
 				if( wcslen(csPinName)!=0 )
-					sMessage += csPinName;
+					sMessage += PINName;
 				else
 					sMessage += GETSTRING_DLG(Pin);
 				sMessage += L"\" ";

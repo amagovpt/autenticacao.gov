@@ -57,9 +57,9 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 	DrawError = false;
 
 	std::wstring tmpTitle = L"";
-	if(wcscmp(L"nl",langchange.c_str())==0)
+	/*if(wcscmp(L"nl",langchange.c_str())==0)
 		tmpTitle += (L"Renovar o código PIN");
-	else
+	else*/
 		tmpTitle += GETSTRING_DLG(RenewingPinCode);
 
 	m_ulPinMaxLen = pinInfo1.ulMaxLen;
@@ -200,14 +200,8 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 				210, clientRect.bottom - 116, clientRect.right/2 - 100, 22,
 				m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
 
-			wstring confirm;
-			if(wcscmp(L"nl",langchange.c_str())==0)
-				confirm = (L"Confirmar novo PIN");
-			else
-				confirm = (L"Confirm new PIN");
-
 			HWND hStaticText3 = CreateWindow( 
-				L"STATIC", confirm.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
+				L"STATIC", GETSTRING_DLG(ConfirmNewPin), WS_CHILD | WS_VISIBLE | SS_LEFT,
 				210, clientRect.bottom - 86, clientRect.right/2 - 100, 22, 
 				m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
 
