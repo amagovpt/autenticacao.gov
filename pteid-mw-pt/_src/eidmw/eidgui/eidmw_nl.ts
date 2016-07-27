@@ -15,6 +15,10 @@
         <source>PDF Signature</source>
         <translation>Assinatura de PDF</translation>
      </message>
+     <message>
+        <source>SCAP Signature</source>
+        <translation>Assinatura SCAP</translation>
+     </message>
 	 <message>
 		<source>Error launching Java application! Make sure you have a working JRE installed.</source>
 		<translation>Erro ao executar aplicação Java! Verifique se o seu sistema tem o software Java instalado.</translation>
@@ -30,11 +34,6 @@
      <message>
      <source>Signature Certificate:</source>
      <translation>Certificado de Assinatura:</translation>
-     </message>
-
-     <message>
-        <source>SCAP Signature</source>
-        <translation>Assinatura na qualidade</translation>
      </message>
 	 
 	 <message>

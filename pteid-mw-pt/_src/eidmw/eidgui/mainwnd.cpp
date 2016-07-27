@@ -422,6 +422,10 @@ void MainWnd::on_btnShortcut_VerifSign_clicked()
 	actionVerifySignature_eID_triggered();
 }
 
+void MainWnd::on_btnShortcut_SCAPSign_clicked(){
+	actionSCAPSignature_triggered();
+}
+
 /*
 // Change Address functionality triggered by a button in the Address tab
 */
@@ -2681,16 +2685,18 @@ void MainWnd::actionVerifySignature_eID_triggered()
 #endif
 }
 
-//void MainWnd::on_btnShortcut_SCAP_clicked()
-//{
-//	QString SCAP_JAR("/SCAP/SCAP-Signature-runnable.jar");
-//
-//#ifdef __APPLE__
-//	launchJavaProcess("/usr/local/bin/" + SCAP_JAR, "-Xdock:name=Assinatura na qualidade", "");
-//#else
-//	launchJavaProcess(m_Settings.getExePath() + SCAP_JAR, "", "");
-//#endif
-//}
+//*****************************************************
+// SCAPSignature clicked
+//*****************************************************
+void MainWnd::actionSCAPSignature_triggered() {
+	QString SCAP_JAR("/SCAP/SCAP-Signature-runnable.jar");
+
+	#ifdef __APPLE__
+		launchJavaProcess("/usr/local/bin" + SCAP_JAR, "-Xdock:name=Assinatura na qualidade", "");
+	#else
+		launchJavaProcess(m_Settings.getExePath() + SCAP_JAR, "-Djava.library.path=/usr/local/lib", "");
+	#endif
+}
 
 //*****************************************************
 // Print clicked

@@ -261,6 +261,7 @@ private slots:
 	void actionSignature_eID_triggered( void );
 	void actionPDFSignature_triggered( void );
 	void actionVerifySignature_eID_triggered( void );
+	void actionSCAPSignature_triggered( void );
 	void on_actionPrinter_Settings_triggered( void );
 	void on_actionPINRequest_triggered( void );
 	void on_actionPINChange_triggered( void );
@@ -319,7 +320,7 @@ private slots:
 	void on_btnShortcut_UnivSign_clicked( void );
 	void on_btnShortcut_PdfSign_clicked( void );
 	void on_btnShortcut_VerifSign_clicked( void );
-	//void on_btnShortcut_SCAP_clicked( void );
+	void on_btnShortcut_SCAPSign_clicked( void );
 
 //SUBMENUS Toolbar
 	void hide_submenus( void );
