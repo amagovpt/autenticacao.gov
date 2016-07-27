@@ -2180,6 +2180,27 @@ font: 10pt &quot;Arial&quot;;</string>
             <string>Verify Signature</string>
           </property>
         </widget>
+        <widget class="QLabel" name="lbl_menuTools_SCAPSignature">
+          <property name="geometry">
+            <rect>
+              <x>25</x>
+              <y>125</y>
+              <width>131</width>
+              <height>17</height>
+            </rect>
+          </property>
+          <property name="visible">
+            <bool>true</bool>
+          </property>
+          <property name="styleSheet">
+            <string notr="true">background-image: url(:/images/Images/alpha.png);
+color: rgb(108, 108, 108);
+font: 10pt &quot;Arial&quot;;</string>
+          </property>
+          <property name="text">
+            <string>SCAP Signature</string>
+          </property>
+        </widget>
         <widget class="QLabel" name="lbl_menuCard_Read_8">
           <property name="geometry">
             <rect>
