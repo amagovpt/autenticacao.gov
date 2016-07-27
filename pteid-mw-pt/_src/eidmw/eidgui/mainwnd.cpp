@@ -3422,12 +3422,12 @@ void MainWnd::refreshTabIdentity( void )
 
 QString MainWnd::translateCardValidation(QString &card_validation)
 {
-	if (m_Settings.getGuiLanguageString() == "en")
+	if (m_Settings.getGuiLanguageString() == "en" && card_validation.length() != 0)
 	{
 		if (card_validation.contains("inactivo"))
-			return "The Citizen Card is inactive.";
+			return "The Citizen Card is inactive";
 		else 
-			return "The Citizen Card is active.";
+			return "The Citizen Card is active";
 
 	}
 	else
