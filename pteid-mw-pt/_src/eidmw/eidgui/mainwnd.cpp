@@ -300,6 +300,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_ui.lbl_menuTools_Signature->installEventFilter(this);
 	m_ui.lbl_menuTools_PDFSignature->installEventFilter(this);
 	m_ui.lbl_menuTools_VerifySignature->installEventFilter(this);
+	m_ui.lbl_menuTools_SCAPSignature->installEventFilter(this);
 	
 	m_ui.lbl_menuSettings_Parameters->installEventFilter(this);
 	
@@ -359,6 +360,12 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 		{
 			hide_submenus();
 			actionVerifySignature_eID_triggered();
+		}
+
+		if (object == m_ui.lbl_menuTools_SCAPSignature )
+		{
+			hide_submenus();
+			actionSCAPSignature_triggered();
 		}
 
 		if (object == m_ui.lbl_menuSettings_Parameters )
@@ -713,9 +720,9 @@ void MainWnd::on_btn_menu_tools_clicked()
 	m_ui.wdg_submenu_tools->setVisible(true);
 	//If defined language is portuguese, then the dialog needs to be larger
 	if (m_Settings.getGuiLanguageCode() == GenPur::LANG_NL)
-		m_ui.wdg_submenu_tools->setGeometry(127,4,155,110);
+		m_ui.wdg_submenu_tools->setGeometry(127,4,155,130);
 	else
-		m_ui.wdg_submenu_tools->setGeometry(127,4,145,110);
+		m_ui.wdg_submenu_tools->setGeometry(127,4,145,130);
 
 }
 

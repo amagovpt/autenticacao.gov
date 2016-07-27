@@ -2097,7 +2097,7 @@ font: 10pt &quot;Arial&quot;;</string>
             <x>150</x>
             <y>760</y>
             <width>151</width>
-            <height>71</height>
+            <height>71</height> 
           </rect>
         </property>
         <property name="styleSheet">
@@ -2180,11 +2180,29 @@ font: 10pt &quot;Arial&quot;;</string>
             <string>Verify Signature</string>
           </property>
         </widget>
+        <widget class="QLabel" name="lbl_menuTools_SCAPSignature_bullet">
+          <property name="geometry">
+            <rect>
+              <x>10</x>
+              <y>105</y>
+              <width>16</width>
+              <height>17</height>
+            </rect>
+          </property>
+          <property name="styleSheet">
+            <string notr="true">background-image: url(:/images/Images/alpha.png);
+color: rgb(108, 108, 108);
+font: 10pt &quot;Arial&quot;;</string>
+          </property>
+          <property name="text">
+            <string>»</string>
+          </property>
+        </widget>
         <widget class="QLabel" name="lbl_menuTools_SCAPSignature">
           <property name="geometry">
             <rect>
               <x>25</x>
-              <y>125</y>
+              <y>105</y>
               <width>131</width>
               <height>17</height>
             </rect>
