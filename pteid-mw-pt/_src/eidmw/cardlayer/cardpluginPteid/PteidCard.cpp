@@ -37,7 +37,7 @@ static const tFileInfo PREFS_FILE_INFO_V1 = {-1, -1, 1};
 static const tFileInfo PREFS_FILE_INFO_V2 = {-1, -1, 0x85};
 
 /* martinho - the id must not be changed */
-static const unsigned long PTEIDNG_ACTIVATION_CODE_ID = 4;
+static const unsigned long PTEIDNG_ACTIVATION_CODE_ID = 0x87;
 /* martinho - ANY_ID_BIGGER_THAN_6 will be the ulID in the tPin struct 1-6 are already taken */
 static const unsigned long ANY_ID_BIGGER_THAN_6 = 7;
 /* martinho - some meaningful label */
@@ -385,6 +385,7 @@ CByteArray CPteidCard::RootCAPubKey(){
 
 bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate){
 	unsigned char padChar;
+	CByteArray tracefile_data;
 
 	switch (GetType()){
 		case CARD_PTEID_IAS101:
@@ -408,14 +409,15 @@ bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate){
 	if (BCDDate.Size() != BCDSIZE)
 		return false;
 
-	CByteArray oResp;
-	CByteArray data(BCDDate);
-	data.Append(0);
-	data.Append(1); // data = day month year 0 1   -- 6 bytes written to 3F000003 trace file
+	tracefile_data.Append(BCDDate);
+	tracefile_data.Append(0x00);
+	tracefile_data.Append(0x01); // data = day month year 0 1   -- 6 bytes written to 3F000003 trace file
 
-	WriteFile(TRACEFILE,0,data);
+	WriteFile(TRACEFILE,0, tracefile_data);
+	
 	while (ulRemaining > 0) // block puk
 		PinCmd(PIN_OP_VERIFY, activationPin, "1000", "", ulRemaining, NULL);
+		
 
 	return true;
 }
