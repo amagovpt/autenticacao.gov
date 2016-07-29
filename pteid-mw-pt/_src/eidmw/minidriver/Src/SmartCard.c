@@ -1274,6 +1274,14 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    unsigned int            i          = 0;
    unsigned int            cbHdrHash  = 0;
    const unsigned char     *pbHdrHash = NULL;
+
+   static const unsigned char SHA1_AID[] = {
+       0x30, 0x21,
+           0x30, 0x09,
+               0x06, 0x05, 0x2b, 0x0e, 0x03, 0x02, 0x1a,
+           0x05, 0x00,
+           0x04, 0x14
+   };
          
    BYTE is_sha256 = cbToBeSigned == 32;
    DWORD out_len = 0;
@@ -1288,16 +1296,39 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
 	CLEANUP(dwReturn);
    }
 
+   if (cbToBeSigned == 20)
+   {
+	  LogTrace(LOGTYPE_INFO, WHERE, "Using SHA1_AID as header...");
+      cbHdrHash = sizeof(SHA1_AID);
+      pbHdrHash = SHA1_AID;
+	/*
+	  Cmd [4] = (BYTE)(cbToBeSigned + cbHdrHash);
+      memcpy(Cmd + 5, pbHdrHash, cbHdrHash);
+      memcpy(Cmd + 5 + cbHdrHash, pbToBeSigned, cbToBeSigned);
+      uiCmdLg = 5 + cbHdrHash + cbToBeSigned;
+	  */
+   }
+
    /* Sign Command for GEMSAFE*/
    Cmd [0] = 0x00;
    Cmd [1] = 0x2A;   /* PSO: Hash COMMAND */
    Cmd [2] = 0x90;
    Cmd [3] = 0xA0; 
-   Cmd [4] = cbToBeSigned+2; // The value of cbToBeSigned should always fit a single byte so this cast is safe 
+   Cmd [4] = cbToBeSigned == 20 ? (BYTE)(cbToBeSigned + cbHdrHash) + 2 :  cbToBeSigned+2; // The value of cbToBeSigned should always fit a single byte so this cast is safe 
    Cmd [5] = 0x90;
-   Cmd [6] = (BYTE)(cbToBeSigned);
-   memcpy(Cmd + 7, pbToBeSigned, cbToBeSigned);
-   uiCmdLg = 7 + cbToBeSigned;
+   Cmd [6] = cbToBeSigned == 20 ? (BYTE)(cbToBeSigned + cbHdrHash) : (BYTE)(cbToBeSigned);
+   
+   if (cbToBeSigned == 20)
+   {	
+	  memcpy(Cmd + 7, pbHdrHash, cbHdrHash);
+      memcpy(Cmd + 7 + cbHdrHash, pbToBeSigned, cbToBeSigned);
+      uiCmdLg = 7 + cbHdrHash + cbToBeSigned;
+   }
+   else
+   {
+	  memcpy(Cmd + 7, pbToBeSigned, cbToBeSigned);
+	  uiCmdLg = 7 + cbToBeSigned;
+   }
    
 #ifdef _DEBUG
    LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", cbHdrHash + cbToBeSigned, (char *)&Cmd[5]);

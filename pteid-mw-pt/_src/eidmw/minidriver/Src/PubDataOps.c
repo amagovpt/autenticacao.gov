@@ -338,7 +338,8 @@ DWORD WINAPI   CardReadFile
 					CLEANUP(SCARD_E_UNEXPECTED);
 				}
 			}
-			if ( _stricmp("msroots", pszFileName) == 0)					/* /mscp/msroots */
+			
+			if ( _stricmp("msroots", pszFileName) == 0)					// /mscp/msroots
 			{
 				FileFound++;
 				dwReturn = PteidCreateMSRoots(pCardData, pcbData, ppbData);
@@ -618,7 +619,8 @@ DWORD WINAPI   CardGetFileInfo
 					CLEANUP(SCARD_E_UNEXPECTED);
 				}
 			}
-			if ( _stricmp("msroots", pszFileName) == 0)					/* /mscp/msroots */
+
+			if ( _stricmp("msroots", pszFileName) == 0)					// /mscp/msroots
 			{
 				FileFound++;
 				dwReturn = PteidCreateMSRoots(pCardData, &(pCardFileInfo->cbFileSize), NULL);

@@ -72,7 +72,7 @@ BYTE translateCertType(DWORD dwCertSpec)
 		return 0x08;
 
 	case CERT_CA:
-		return 0x11;
+		return 0x0F;
 		
 	case CERT_ROOTCA:
 		return 0x10;
