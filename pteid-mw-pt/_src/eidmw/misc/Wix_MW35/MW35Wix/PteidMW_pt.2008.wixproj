@@ -60,9 +60,8 @@
 	</Target>
 	-->
   <PropertyGroup>
-    <PostBuildEvent>set SIGNTOOL_PATH=$(PTEID_DRIVERS_DDK)\bin\x86
-
-%SIGNTOOL_PATH%\SignTool.exe sign /v /sha1 0c526195081d0ec73e3a697f03a17160190a976f /t http://timestamp.verisign.com/scripts/timestamp.dll !(TargetPath)</PostBuildEvent>
-    <PreBuildEvent>$(ProjectDir)..\..\..\minidriver\makemsi\sign_minidriver_32.cmd</PreBuildEvent>
+    <PostBuildEvent>set SIGNTOOL_PATH=$(PTEID_DRIVERS_DDK)\bin\x86</PostBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>
