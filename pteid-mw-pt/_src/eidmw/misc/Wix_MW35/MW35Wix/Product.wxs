@@ -4,8 +4,8 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <?include ..\..\..\svn_revision.wxs ?>
 
-  <?define var.OfficialProductVersion =2.3.0?>
-  <?define var.ProductVersion = 2.3.$(var.RevisionNumber)?>
+  <?define var.OfficialProductVersion =2.4.0?>
+  <?define var.ProductVersion = 2.4.$(var.RevisionNumber)?>
   <?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
   <?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
@@ -133,10 +133,11 @@
           <Directory Id="IMAGEFORMATS" Name="imageformats" />
           <Directory Id="DSS" Name="DSS"/>
 
-          <!--  <Directory Id="SCAP" Name="SCAP">
+          <Directory Id="SCAP" Name="SCAP">
             <Directory Id="CERTS_SCAP_DIR" Name="certificates"/>
+            <Directory Id="SCAP_SYSWOW" Name="syswow"/>
           </Directory>
-          -->
+         
           <Directory Id="EIDSTORE" Name="eidstore">
             <Directory Id="CERTSDIR" Name="certs"/>
             <Directory Id="CRLDIR" Name="crl">
@@ -229,7 +230,7 @@
 
     <DirectoryRef Id="JAVA_SDK">
       <Component Id="Java_SDK_Component" Guid="{8B0D8006-DB84-4986-A8D7-AC5F84F4AEF8}" >
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibJava_Wrapper.dll" KeyPath="yes"/>
+        <File Id="javaWrapper1" Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibJava_Wrapper.dll" KeyPath="yes"/>
         <File Source="..\..\..\jar\pteidlibJava.jar" />
       </Component>
     </DirectoryRef>
@@ -271,18 +272,24 @@
       </Component>
     </DirectoryRef>
 
-    <!-- 
     <DirectoryRef Id="SCAP">
       <Component Id="scap" Guid="{BFA2692F-44F0-4d76-8950-5FF9E0D117F4}">
         <File Source="..\..\scap\SCAP-Signature-runnable.jar" KeyPath="yes" />
         <File Source="..\..\scap\config.properties" />
-        <File Source="..\..\scap\truststore.jks" />
+        <File Source="..\..\scap\logging.properties" />
+        <File Source="..\..\scap\libcurl4.dll" />
       </Component>
     </DirectoryRef>
-    -->
 
-
-<!--  
+    <DirectoryRef Id="SCAP_SYSWOW">
+      <Component Id="scapSyswow" Guid="{BFA2692F-44F0-4d76-8950-5FF9E0D237F4}">
+        <File Id="libeay31B" Source="..\..\scap\syswow\libeay32.dll" />
+        <File Id="javaWrapper2" Source="..\..\scap\syswow\pteidlibJava_Wrapper.dll" />
+        <File Id="ssleay32B" Source="..\..\scap\syswow\ssleay32.dll" />
+        <File Id="popplerA" Source="..\..\scap\syswow\pteid-poppler.dll"/>
+      </Component>
+    </DirectoryRef>
+    
     <DirectoryRef Id="CERTS_SCAP_DIR">
       <Component Id="CertsScap" Guid="{750F471B-6A83-4118-A0AF-2A138B770AF6}">
         <File Source="..\..\scap\certificates\Teste Cartao de Cidadao 001.cer" />
@@ -305,7 +312,6 @@
         <File Source="..\..\scap\certificates\Teste EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.cer"/>
       </Component>
     </DirectoryRef>
--->
 
     <DirectoryRef Id="CRLDIR">
       <Component Id="CrlDir" Guid="{5731B322-17EE-4d08-90A5-9DB53F53EC29}">
@@ -551,8 +557,8 @@
       </Component>
 
       <Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)libeay32.dll" KeyPath="yes"/>
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)ssleay32.dll" />
+        <File Id="libeay32A" Source="$(var.PTEID_BUILD_FOLDER_X86)libeay32.dll" KeyPath="yes"/>
+        <File Id="ssleay32A" Source="$(var.PTEID_BUILD_FOLDER_X86)ssleay32.dll" />
       </Component>
 
       <Component Id="GuiLang" Guid="{6B03ED1B-DF24-4CE6-A70C-476AF4C0941B}" SharedDllRefCount="yes">
@@ -833,8 +839,9 @@
       <ComponentRef Id="HttpDir"/>
       
       <ComponentRef Id="DSSApp"/>
-      <!-- <ComponentRef Id="scap"/> -->
-      <!-- <ComponentRef Id="CertsScap"/> -->
+      <ComponentRef Id="scap"/> 
+      <ComponentRef Id="CertsScap"/>
+      <ComponentRef Id="scapSyswow"/>
       <ComponentRef Id="ImagePlugins"/>
       <ComponentRef Id="CrlEidPortugalBe"/>
       <ComponentRef Id="DirectoryCache"/>

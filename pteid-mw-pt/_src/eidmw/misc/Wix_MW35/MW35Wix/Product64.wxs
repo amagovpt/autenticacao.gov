@@ -4,8 +4,8 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<?include ..\..\..\svn_revision.wxs ?>
 
-	<?define var.OfficialProductVersion =2.3.0?>
-	<?define var.ProductVersion =2.3.$(var.RevisionNumber)?>
+	<?define var.OfficialProductVersion =2.4.0?>
+	<?define var.ProductVersion =2.4.$(var.RevisionNumber)?>
 	<?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
 	<?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
@@ -164,10 +164,11 @@
 					<Directory Id="IMAGEFORMATS" Name="imageformats" />
           
           <Directory Id="DSS" Name="DSS"/>
-          <!-- <Directory Id="SCAP" Name="SCAP">
+          <Directory Id="SCAP" Name="SCAP">
             <Directory Id="CERTS_SCAP_DIR" Name="certificates"/>
+            <Directory Id="SCAP_SYSWOW" Name="syswow"/>
+            <Directory Id="SCAP_AMD64" Name="amd64"/>
           </Directory>
-          -->
             <Directory Id="EIDSTORE" Name="eidstore">
 						<Directory Id="CERTSDIR" Name="certs"/>
 						<Directory Id="CRLDIR" Name="crl">
@@ -228,39 +229,55 @@
         <File Id="config_dss.properties" Name="config.properties" Source="..\..\..\misc\DSS\config.properties" />
       </Component>
     </DirectoryRef>
-    
-    <!--
+
+
     <DirectoryRef Id="SCAP">
       <Component Id="scap" Guid="{BFA2692F-44F0-4d76-8950-5FF9E0D117F4}">
         <File Source="..\..\scap\SCAP-Signature-runnable.jar" KeyPath="yes" />
         <File Source="..\..\scap\config.properties" />
-        <File Source="..\..\scap\truststore.jks" />
+        <File Source="..\..\scap\logging.properties" />
+        <File Id="libcurl4A" Source="..\..\scap\libcurl4.dll" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="SCAP_AMD64">
+      <Component Id="scapAmd64" Guid="{BFA2692F-44F0-4d76-1250-5FF9E0D117F4}">
+        <File Source="..\..\scap\amd64\libcurl4.dll" />        
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="SCAP_SYSWOW">
+      <Component Id="scapSyswow" Guid="{BFA2692F-44F0-4d76-8950-5FF9E0D237F4}">
+        <File Id="libeay31B" Source="..\..\scap\syswow\libeay32.dll" />
+        <File Id="javaWrapper2" Source="..\..\scap\syswow\pteidlibJava_Wrapper.dll" />
+        <File Id="ssleay32B" Source="..\..\scap\syswow\ssleay32.dll" />
+        <File Id="popplerA" Source="..\..\scap\syswow\pteid-poppler.dll"/>
       </Component>
     </DirectoryRef>
     
     <DirectoryRef Id="CERTS_SCAP_DIR">
-          <Component Id="CertsScap" Guid="{750F471B-6A83-4118-A0AF-2A138B770AF6}">
-            <File Source="..\..\scap\certificates\Teste Cartao de Cidadao 001.cer" />
-            <File Source="..\..\scap\certificates\Teste Cartao de Cidadao 002.cer" />
-            <File Source="..\..\scap\certificates\Teste Cartao_de_Cidadao_raiz_002.cer" />
-            <File Source="..\..\scap\certificates\Teste Cartao_de_Cidadao_raiz_002_2.cer" />
-            <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0001.cer" />
-            <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0002.cer" />
-            <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0003.cer"/>
-            <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0004.cer"/>
-            <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0005.cer" />
-            <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0001.cer"/>
-            <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0002.cer"/>
-            <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0003.cer"/>
-            <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0004.cer"/>
-            <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0005.cer"/>
-            <File Source="..\..\scap\certificates\Teste EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0007.cer"/>
-            <File Source="..\..\scap\certificates\Teste EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0008.cer"/>
-            <File Source="..\..\scap\certificates\Teste EC_de_Autenticacao_do_Cartao_de_Cidadao_0007.cer"/>
-            <File Source="..\..\scap\certificates\Teste EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.cer"/>
-          </Component>
+      <Component Id="CertsScap" Guid="{750F471B-6A83-4118-A0AF-2A138B770AF6}">
+        <File Source="..\..\scap\certificates\Teste Cartao de Cidadao 001.cer" />
+        <File Source="..\..\scap\certificates\Teste Cartao de Cidadao 002.cer" />
+        <File Source="..\..\scap\certificates\Teste Cartao_de_Cidadao_raiz_002.cer" />
+        <File Source="..\..\scap\certificates\Teste Cartao_de_Cidadao_raiz_002_2.cer" />
+        <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0001.cer" />
+        <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0002.cer" />
+        <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0003.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0004.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0005.cer" />
+        <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0001.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0002.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0003.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0004.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC de Autenticacao do Cartao de Cidadao 0005.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0007.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0008.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC_de_Autenticacao_do_Cartao_de_Cidadao_0007.cer"/>
+        <File Source="..\..\scap\certificates\Teste EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.cer"/>
+      </Component>
     </DirectoryRef>
- -->
+    
     <DirectoryRef Id="IMAGEFORMATS">
       <Component Id="ImagePlugins" Guid="{750F471B-6A83-4118-A0AF-2A138B770AC6}">
         <File Source="$(var.PTEID_QT_IMAGEFORMATS)\qico4.dll" KeyPath="yes"/>
@@ -906,8 +923,10 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 				<ComponentRef Id="License"/>
 				<ComponentRef Id="LogDir"/>
 				<ComponentRef Id="DSSApp"/>
-        <!-- <ComponentRef Id="scap"/> -->
-        <!-- <ComponentRef Id="CertsScap"/> -->
+        <ComponentRef Id="scap"/>
+        <ComponentRef Id="CertsScap"/>
+        <ComponentRef Id="scapAmd64"/>
+        <ComponentRef Id="scapSyswow"/>
 				<ComponentRef Id="Extensions"/>
 				<ComponentRef Id="FireFoxRoot"/>
 				<ComponentRef Id="XPIRoot"/>
