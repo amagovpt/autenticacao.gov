@@ -8,7 +8,7 @@ Class=SmartCard
 ClassGuid={990A2BD7-E738-46c7-B26F-1CF8FB9F1391}
 Provider=%AMA%
 CatalogFile=pteidmdrv.cat
-DriverVer=12/08/2009,4.0.0.2
+DriverVer=26/07/2016,4.0.0.3
 
 [Manufacturer]
 %AMA%=Fedict,NTamd64,NTamd64.6.1,NTx86,NTx86.6.1
@@ -17,25 +17,29 @@ DriverVer=12/08/2009,4.0.0.2
 %FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_80318065b0831100c883009000
 %FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_d000540131
 %FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_d000540132
-%FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_80318065B08311C0A983009000	
+%FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_80318065B08311C0A983009000
+%FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_80318065b0850300ef120fff829000
 
 [Fedict.NTx86]
 %FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_80318065b0831100c883009000
 %FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_d000540131
 %FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_d000540132
 %FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_80318065B08311C0A983009000
+%FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_80318065b0850300ef120fff829000
 
 [Fedict.NTamd64.6.1]
 %FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_80318065b0831100c883009000
 %FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_d000540131
 %FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_d000540132
 %FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_80318065B08311C0A983009000	
+%FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_80318065b0850300ef120fff829000
 
 [Fedict.NTx86.6.1]
 %FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_80318065b0831100c883009000
 %FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_d000540131
 %FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_d000540132
 %FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_80318065B08311C0A983009000
+%FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_80318065b0850300ef120fff829000
 
 [DefaultInstall]
 CopyFiles=x86_CopyFiles
