@@ -1,0 +1,19 @@
+list.txt
+Teste Cartao de Cidadao 001.cer
+Teste Cartao de Cidadao 002.cer
+Teste Cartao_de_Cidadao_raiz_002.cer
+Teste Cartao_de_Cidadao_raiz_002_2.cer
+Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0001.cer
+Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0002.cer
+Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0003.cer
+Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0004.cer
+Teste EC de Assinatura Digital Qualificada do Cartao de Cidadao 0005.cer
+Teste EC de Autenticacao do Cartao de Cidadao 0001.cer
+Teste EC de Autenticacao do Cartao de Cidadao 0002.cer
+Teste EC de Autenticacao do Cartao de Cidadao 0003.cer
+Teste EC de Autenticacao do Cartao de Cidadao 0004.cer
+Teste EC de Autenticacao do Cartao de Cidadao 0005.cer
+Teste EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0007.cer
+Teste EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0008.cer
+Teste EC_de_Autenticacao_do_Cartao_de_Cidadao_0007.cer
+Teste EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.cer
