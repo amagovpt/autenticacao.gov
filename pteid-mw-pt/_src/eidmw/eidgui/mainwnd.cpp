@@ -1152,12 +1152,11 @@ bool MainWnd::ImportCertificates( const char* readerName )
 		return false;
 	}
 
-	#ifdef WIN32
-	//Register the 2 higher-level CA Certs from disk files
+	//Register the higher-level CA Cert from disk file
 	ImportCertFromDisk(L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\ECRaizEstado_novo_assinado_GTE.der");
 	ImportCertFromDisk(L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\CartaodeCidadao001.der");
 	ImportCertFromDisk(L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\CartaodeCidadao002.der");
-	#endif
+	ImportCertFromDisk(L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\CartaodeCidadao003.der");
 
 	try
 	{
@@ -2684,6 +2683,8 @@ void MainWnd::actionVerifySignature_eID_triggered()
 	myProcess->setProcessChannelMode(QProcess::MergedChannels);
 
 	myProcess->start(m_Settings.getExePath()+"/DSS/dss-standalone.exe", arguments);
+
+	//launchJavaProcess(m_Settings.getExePath() + "/DSS/" + DSS_JAR, "", "");
 #elif __APPLE__
 	launchJavaProcess(QString::fromUtf8("/Applications/Validacao de assinaturas.app/Contents/Java/") + DSS_JAR,
 			 QString::fromUtf8("-Xdock:name=Validação de assinatura"),  "");
@@ -2698,8 +2699,10 @@ void MainWnd::actionVerifySignature_eID_triggered()
 void MainWnd::actionSCAPSignature_triggered() {
 	QString SCAP_JAR("/SCAP/SCAP-Signature-runnable.jar");
 
-	#ifdef __APPLE__
-		launchJavaProcess("/usr/local/bin" + SCAP_JAR, "-Xdock:name=Assinatura na qualidade", "");
+	#ifdef _WIN32
+		launchJavaProcess(m_Settings.getExePath() + SCAP_JAR, "", "");
+	#elif __APPLE__
+		launchJavaProcess("/usr/local/bin" + SCAP_JAR, "-Xdock:name=Assinatura na qualidade", "");	
 	#else
 		launchJavaProcess(m_Settings.getExePath() + SCAP_JAR, "-Djava.library.path=/usr/local/lib", "");
 	#endif
