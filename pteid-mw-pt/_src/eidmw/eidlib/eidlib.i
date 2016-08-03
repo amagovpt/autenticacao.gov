@@ -23,7 +23,13 @@
 #elif SWIGJAVA
  	%module pteidlibJava_Wrapper
 #elif SWIGPYTHON
-    %module pteid
+   %module pteid
+
+   %typemap(python,out) unsigned char *
+   {
+        $result = PyBytes_FromStringAndSize( (const char *)$1, arg1->Size());
+   }
+
 #elif SWIGPERL
     %module Pteid
 #elif SWIGPHP

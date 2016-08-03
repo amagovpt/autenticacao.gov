@@ -930,14 +930,14 @@ public:
 	      * because the two PINs are the same from the user's perspective 
 	      * 
 	      */
-	     PTEIDSDK_API bool ChangeCapPin(const char *new_pin);
+	     //PTEIDSDK_API bool ChangeCapPin(const char *new_pin);
 
 	     typedef void (*t_address_change_callback)(void *, int);
 
 	     PTEIDSDK_API bool ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data);
 
 	     /* helper method for the compatibility layer */
-	     PTEIDSDK_API bool ChangeCapPinCompLayer(const char *old_pin, const char *new_pin,unsigned long &ulRemaining);
+	     //PTEIDSDK_API bool ChangeCapPinCompLayer(const char *old_pin, const char *new_pin,unsigned long &ulRemaining);
 
 
 
@@ -1608,7 +1608,7 @@ private:
   *********************************************************************************/
 PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const char *format, ...);
 
-#if !defined SWIGJAVA && !defined SWIGCSHARP
+#if !defined SWIG
 
 /******************************************************************************//**
   * Compatibility layer
