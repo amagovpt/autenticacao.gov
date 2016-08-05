@@ -248,11 +248,14 @@ DWORD WINAPI   CardReadFile
 					LogTrace(LOGTYPE_ERROR, WHERE, "Error CardGetProperty for [CP_CARD_SERIAL_NO]: 0x08X", dwReturn);
 					CLEANUP(dwReturn);
 				}
+				/* We dont need to convert it to ASCII
 				for (i=0; i < 16; i++) {
 					sprintf(szSerialNumber + 2*i*sizeof(char),
 						"%02X", pbSerialNumber[i]);
 				}
-				szSerialNumber[32] = '\0';
+				*/
+				sprintf(szSerialNumber, "%s", pbSerialNumber);
+				szSerialNumber[16] = '\0';
 
 				/* Cleanup CMR first */
 				memset(&cmr, '\0', sizeof(cmr));

@@ -1347,7 +1347,7 @@ typedef struct _CARD_DATA
 
     PVOID                               pvVendorSpecific;
 
-    // These members are initialized by the card module
+    // These members are initialized by the card moduleF
 
     PFN_CARD_DELETE_CONTEXT             pfnCardDeleteContext;
     PFN_CARD_QUERY_CAPABILITIES         pfnCardQueryCapabilities;

@@ -94,6 +94,11 @@ DWORD WINAPI   CardAcquireContext
    int                     iAtr        = 0;
    int                     iCardCnt    = 0;
    int                     iLgCnt      = 0;
+   char readerName[256];
+   DWORD readername_len = sizeof(readerName);
+   DWORD protocol = 0;
+   BYTE bAtr[32];
+   DWORD cByte = 32;
 
    LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
@@ -127,6 +132,10 @@ DWORD WINAPI   CardAcquireContext
       LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData->pbAtr]");
       CLEANUP(SCARD_E_INVALID_PARAMETER);
    }
+	
+   LogTrace(LOGTYPE_INFO, WHERE, "ATR input value: ");
+   LogDump(pCardData->cbAtr, pCardData->pbAtr);
+
    for ( iAtr = 0 ; iAtr < SUPPORTED_CARDS ; iAtr++ )
    {
       if ( pCardData->cbAtr == CardAtr[iAtr].cbAtr )
@@ -193,6 +202,31 @@ DWORD WINAPI   CardAcquireContext
       CLEANUP(SCARD_E_INVALID_HANDLE);
    }
 
+   /*
+	 IN SCARDHANDLE hCard,
+    OUT LPWSTR szReaderName,
+    IN OUT LPDWORD pcchReaderLen,
+    OUT LPDWORD pdwState,
+    OUT LPDWORD pdwProtocol,
+    OUT LPBYTE pbAtr,
+    IN OUT LPDWORD pcbAtrLen);
+
+   */
+   
+   SCardStatus(pCardData->hScard, readerName, &readername_len,
+	   NULL, &protocol, &bAtr, &cByte);
+	
+   //Store active protocol
+   switch(protocol)
+   {
+   case SCARD_PROTOCOL_T0:
+	   g_pioSendPci = SCARD_PCI_T0;
+	   break;
+   case SCARD_PROTOCOL_T1:
+	   g_pioSendPci = SCARD_PCI_T1;
+	   break;
+   }
+   
    LogTrace(LOGTYPE_INFO, WHERE, "Context, handle:[0x%02X][0x%02X]", pCardData->hSCardCtx, pCardData->hScard);
 
    /********************************/

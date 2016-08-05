@@ -244,6 +244,13 @@ DWORD WINAPI   CardSignData
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pInfo->aiHashAlg][0x%X]",pInfo->aiHashAlg);
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
+	
+	//SHAMD5 Hash used by SSLv3 should be the largest supported hash
+	if (pInfo->cbData > 36)
+	{
+		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter (Hash Size): %d", pInfo->cbData);
+		CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
+	}
 
 	switch(pInfo->aiHashAlg)
 	{
