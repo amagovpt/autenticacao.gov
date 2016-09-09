@@ -409,7 +409,7 @@
                   <string notr="true">
           color: rgb(108, 108, 108);
           font: 75 12pt Arial;
-          background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          
+          background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
          </string>
                 </property>
                 <property name="text">
@@ -477,7 +477,7 @@
                   <string notr="true">
           color: rgb(108, 108, 108);
           font: 75 12pt Arial;
-          background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          
+          background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
          </string>
                 </property>
                 <property name="text">
@@ -1154,7 +1154,7 @@ font: 75 12pt Arial;
 background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          </string>
                 </property>
                 <property name="text">
-                  <string>Address Confirmation</string>
+                  <string>Address Modification</string>
                 </property>
               </widget>
             </widget>
@@ -2097,7 +2097,7 @@ font: 10pt &quot;Arial&quot;;</string>
             <x>150</x>
             <y>760</y>
             <width>151</width>
-            <height>71</height> 
+            <height>71</height>
           </rect>
         </property>
         <property name="styleSheet">

@@ -35,17 +35,17 @@
      <source>Signature Certificate:</source>
      <translation>Certificado de Assinatura:</translation>
      </message>
-	 
+
 	 <message>
         <source>Error returned by the OTP server. Please make sure you have a valid authentication certificate</source>
 		<translation>Erro na ligação ao servidor de OTP. Por favor verifique que tem o certificado de autenticação válido</translation>
 	 </message>
-	 
+
 	 <message>
         <source>Error in the Address Change operation. Please make sure you have a valid authentication certificate</source>
 		<translation>Erro na operação de mudança de morada. Por favor verifique que tem o certificado de autenticação válido</translation>
 	 </message>
-	 
+
      <message>
         <source>The certificates could not be validated, the certification path is not complete</source>
         <translation>Os certificados não foram validados, o caminho de certificação não está completo</translation>
@@ -64,8 +64,8 @@
 </message>
 
 <message>
-    <source>Address Confirmation</source>
-    <translation>Confirmação de Morada</translation>
+    <source>Address Modification</source>
+    <translation>Alteração da Morada</translation>
 </message>
 
 <message>
@@ -91,7 +91,7 @@
     <source>Changing Address in card...</source>
     <translation>Mudando a morada no Cartão...</translation>
 </message>
-        
+
 <message>
 	<source>Attention: your current authentication PIN will be requested twice in two different dialog boxes.</source>
 	<translation>Atenção: o seu atual PIN de autenticação vai ser requerido duas vezes neste processo.</translation>
@@ -241,7 +241,7 @@
         <source>Online Documentation</source>
         <translation>Documentação on-line</translation>
     </message>
-    
+
     <message>
         <source>   Card</source>
         <translation>      Cartão</translation>
@@ -274,13 +274,13 @@
         <source>Help</source>
         <translation>Ajuda</translation>
     </message>
-    
+
     <message>
         <source>Change language</source>
         <comment>to english</comment>
         <translation>Change the interface language to english</translation>
     </message>
-    
+
     <message>
         <source>Kaartnr. / &lt;i&gt;Card No&lt;/i&gt;</source>
         <translation>Num. Cartão / &lt;i&gt;Card No&lt;/i&gt;</translation>
@@ -301,7 +301,7 @@
         <source>Name</source>
         <translation>Nome</translation>
     </message>
- 
+
     <message>
         <source>Sis</source>
         <translation>SIS</translation>
@@ -458,7 +458,7 @@
         <source>Printer Settings</source>
         <translation>Definições de Impressão</translation>
     </message>
- 
+
     <message>
         <source>&amp;English</source>
         <translation type="unfinished">&amp;English</translation>
@@ -671,7 +671,7 @@ Do you want to accept it?</source>
         <translation type="unfinished">The Root Certificate is not correct.
 This may be a test card.
 
-Do you want to accept it?        
+Do you want to accept it?
         </translation>
     </message>
     <message>
@@ -1365,7 +1365,7 @@ Please specify .xml, .csv or .eid</source>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
-    
+
     <message>
         <source>PERSONAL DATA</source>
         <translation>DADOS PESSOAIS</translation>
@@ -1619,7 +1619,7 @@ Please specify .xml, .csv or .eid</source>
 	<source>Error Generating PDF File!</source>
 		<translation>Erro ao gerar ficheiro PDF!</translation>
 	</message>
-	
+
     <message>
         <source>No card present</source>
         <translation>Cartão não encontrado</translation>
@@ -1651,7 +1651,7 @@ Please specify .xml, .csv or .eid</source>
         <source>With Timestamp (XAdES-T)</source>
         <translation>Incluir Selo Temporal (XAdES-T)</translation>
     </message>
-    <message> 
+    <message>
         <source>Signature Level</source>
         <translation>Nível de assinatura</translation>
     </message>
@@ -1790,7 +1790,7 @@ Please specify .xml, .csv or .eid</source>
 </context>
 
 <context>
- <name>ChangeAddressDialog</name>   
+ <name>ChangeAddressDialog</name>
  <message>
     <source>Address Change</source>
     <translation>Alteração de Morada</translation>
@@ -1902,7 +1902,7 @@ Please specify .xml, .csv or .eid</source>
 	<translation>Ficheiro(s) assinados com sucesso mas </translation>
 </message>
 <message>
-	<source>PDF Signature</source> 
+	<source>PDF Signature</source>
 	<translation>Assinatura de ficheiros PDF</translation>
 </message>
 
@@ -1914,7 +1914,7 @@ Please specify .xml, .csv or .eid</source>
         <source>Vertical position: %1</source>
         <translation>Na vertical: %1</translation>
     </message>
-    
+
     <message>
         <source>Horizontal position: </source>
         <translation>Na horizontal: </translation>
@@ -1939,25 +1939,25 @@ Please specify .xml, .csv or .eid</source>
     </message>
 
 <message>
-	<source>Free Positioning</source> 
+	<source>Free Positioning</source>
 	<translation>Posicionamento preciso</translation>
 </message>
 <message>
 	<source>Add Timestamp</source>
 	<translation>Adicionar selo temporal</translation>
 </message>
-<message>   
-	<source>Error</source> 
+<message>
+	<source>Error</source>
 	<translation>Erro</translation>
 </message>
-<message>   
+<message>
         <source>The selected sector is already filled!
 Please choose another one.</source>
 	<translation>A área que seleccionou para a assinatura já está ocupada!
 Escolha outra por favor.</translation>
 </message>
-<message>   
-	<source>Visible Signature?</source> 
+<message>
+	<source>Visible Signature?</source>
 	<translation>Assinatura Visível?</translation>
 </message>
 <message>
@@ -2017,7 +2017,7 @@ Escolha outra por favor.</translation>
 	<source>PDF Documents (*.pdf)</source>
 	<translation>Ficheiros PDF (*.pdf)</translation>
 </message>
-<message> 
+<message>
 	<source>Add Files...</source>
 	<translation>Adicionar Ficheiros...</translation>
 </message>
