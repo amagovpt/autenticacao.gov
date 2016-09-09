@@ -1054,8 +1054,9 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
         return dontCache;
 	case 252:  //PrkD 
 		return dontCache;
+	case 245: // EF06 (SOD)
+        return dontCache;
     case 241: // EF02 (ID)
-    case 245: // EF06 (SOD)
         return simpleCache;
 #ifdef CAL_EMULATION  // the EF(ID#RN) of the emulated test cards have the same serial nr
     case 0x4031: // EF(ID#RN)
