@@ -132,6 +132,7 @@ enum PTEID_Param
 	PTEID_PARAM_GENERAL_INSTALL_SDK_DIR,		//string, directory of the sdk eid software; �c:/Program Files/pteid/�
 	PTEID_PARAM_GENERAL_CACHEDIR,		//string, cache directory for card-file;
 	PTEID_PARAM_GENERAL_LANGUAGE,		//string, user language: fr, nl, en, de, �
+	PTEID_PARAM_GENERAL_SAM_SERVER,
 
 	//LOGGING
 	PTEID_PARAM_LOGGING_DIRNAME,			//string, location of the log-file; $home/pteid/	Full path with volume name.

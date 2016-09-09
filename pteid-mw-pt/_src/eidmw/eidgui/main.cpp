@@ -93,16 +93,6 @@ int main(int argc, char *argv[])
 
 	int iRetValue = 0;
 
-	if (argc == 2 && strcmp(argv[1],"/startup")==0)
-	{
-		PTEID_Config StartupParam(PTEID_PARAM_GUITOOL_STARTWIN);
-		if(!StartupParam.getLong())
-		{
-			PTEID_ReleaseSDK();
-			return 0;
-		}
-	}
-
 	MyApplication instance("eidgui", argc, argv);
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Waking up other instance");
 	if (instance.sendMessage("Wake up!"))
@@ -125,6 +115,11 @@ int main(int argc, char *argv[])
 	instance.initialize();
 
 	PTEID_InitSDK();
+	if (argc == 2 && strcmp(argv[1], "-test") == 0)
+	{
+		PTEID_Config sam_server(PTEID_PARAM_GENERAL_SAM_SERVER);
+		sam_server.setString("pki.teste.cartaodecidadao.pt:443");
+	}
 
 	GUISettings settings;
 	QString     appPath = QCoreApplication::applicationDirPath();
