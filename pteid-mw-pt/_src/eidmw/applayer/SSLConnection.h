@@ -21,19 +21,13 @@ namespace eIDMW
 int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 	                unsigned char *sigret, unsigned int *siglen, const RSA * rsa);
 
-enum SSLConnectionTarget
-{
-	OTP_SERVER,
-	ADDRESS_CHANGE_SERVER
-};
-
 class SSLConnection
 {
 	public:
 
-		EIDMW_APL_API SSLConnection(SSLConnectionTarget target_server)
+		EIDMW_APL_API SSLConnection()
 		{
-		InitConnection(target_server);
+		InitConnection();
 		};
 		EIDMW_APL_API ~SSLConnection() 
 		{
@@ -60,7 +54,7 @@ class SSLConnection
 		unsigned int read_from_stream(SSL* bio, char* buffer, unsigned int length);
 		void read_chunked_reply(SSL *bio, char* buffer, unsigned int length);
 		SSL *connect_encrypted(char *host_and_port);
-		bool InitConnection(SSLConnectionTarget target);
+		bool InitConnection();
 		void CloseConnection();
 		void loadUserCert(SSL_CTX *ctx);
 		void loadCertChain(X509_STORE *store);
@@ -71,7 +65,7 @@ class SSLConnection
 		//BIO *m_bio;
 		SSL * m_ssl_connection;
 		//Hostname of our OTP server
-		char * m_otp_host;
+		char * m_host;
 		//APL_Card card_handle;
 
 

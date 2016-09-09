@@ -1,7 +1,7 @@
 /* ****************************************************************************
  *
  *  PTeID Middleware Project.
- *  Copyright(C) 2014
+ *  Copyright(C) 2014 - 2016
  *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *  Card interaction necessary for the Change Address Operation
  *  mainly Diffie-Hellman key agreement and mutual authentication with CVC certificates
@@ -16,6 +16,7 @@
 #include <iostream>
 #include <openssl/rsa.h>
 #include <openssl/bn.h>
+#include <openssl/err.h>
 #include <openssl/pkcs7.h>
 
 namespace eIDMW
@@ -43,8 +44,9 @@ void binToHex(const unsigned char *in, size_t in_len, char *out, size_t out_len)
 char * SAM::_getDH_Param(char specific_byte, unsigned long offset)
 {
 		char * hex_param = NULL;
+		// 00 CB 00 FF 0A A6 03 83 01 32 7F 49 02 87 00 00 
 		unsigned char apdu_dh[] = {0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xA6, 0x03, 0x83, 0x01, 0x32, 0x7F, 0x49, 0x02,
-		 0x00, 0x00};
+		 0x00, 0x00, 0x00};
 
 		apdu_dh[13] = specific_byte;
 
@@ -74,10 +76,12 @@ char * SAM::_getCVCPublicKey()
 	EVP_PKEY *evp_key = EVP_PKEY_new();
 
 	unsigned char apdu_cvc_pubkey_mod[] = {0x00, 0xCB, 0x00,
-	0xFF, 0x0A, 0xB6, 0x03, 0x83, 0x01, 0x44, 0x7F, 0x49, 0x02, 0x81, 0x00};
+	0xFF, 0x0A, 0xB6, 0x03, 0x83, 0x01, 0x44, 0x7F, 0x49, 0x02, 0x81, 0x00, 0x00};
+
+	//00 CB 00 FF 0A B6 03 83 01 44 7F 49 02 81 00 00 
 
 	unsigned  char apdu_cvc_pubkey_exponent[] = {0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03,
-	0x83, 0x01, 0x44, 0x7F, 0x49, 0x02, 0x82, 0x00};
+	0x83, 0x01, 0x44, 0x7F, 0x49, 0x02, 0x82, 0x00, 0x00};
 
 	CByteArray cvc_modulus = m_card->getCalReader()->SendAPDU(
 		CByteArray(apdu_cvc_pubkey_mod, sizeof(apdu_cvc_pubkey_mod)));
@@ -88,6 +92,10 @@ char * SAM::_getCVCPublicKey()
 	//Remove SW12 bytes from the responses
 	cvc_modulus.Chop(2);
 	cvc_exponent.Chop(2);
+
+	//Save it to reuse later in getPK_IFD_AUT()
+	m_ca_cvc_modulus = cvc_modulus.GetBytes(offset_mod, 128);
+	m_ca_cvc_exponent = cvc_exponent.GetBytes(offset_exp, 3);
 
 	std::cerr << "DEBUG: _getCVCPublicKey(): modulus len=" << cvc_modulus.Size() << std::endl;
 	std::cerr << "DEBUG: _getCVCPublicKey(): exp len=" << cvc_exponent.Size() << std::endl;
@@ -215,13 +223,14 @@ bool SAM::sendKIFD(char *kifd)
 	return true;	
 }
 
+//CB 00 FF 04 A6 02 91 00 00}
 char *SAM::getKICC()
 {
 	char *kicc_hex = NULL;
 	const int KICC_LEN = 128;
 	const int KICC_HEX_LEN = 128*2 +1;
 	const int KICC_OFFSET = 6;
-	unsigned char apdu_kicc[] = {0x00, 0xCB, 0x00, 0xFF, 0x04, 0xA6, 0x02, 0x91, 0x00};
+	unsigned char apdu_kicc[] = {0x00, 0xCB, 0x00, 0xFF, 0x04, 0xA6, 0x02, 0x91, 0x00, 0x00};
 
 	CByteArray kicc_ba = m_card->getCalReader()->SendAPDU(CByteArray(apdu_kicc, sizeof(apdu_kicc)));
 	if (!checkResultSW12(kicc_ba))
@@ -273,23 +282,106 @@ bool SAM::verifyCert_CV_IFD(char * cv_cert)
 }
 
 
+char * SAM::getPK_IFD_AUT(char * cvc_cert)
+{
+	unsigned char decrypted_data[128];
+	unsigned char signature[128];
+
+	//Parse byteArray from hex-encoded string
+	CByteArray cv_cert_ba(std::string(cvc_cert), true);
+
+	//Get the raw bytes
+	unsigned char * cvc_bytes = cv_cert_ba.GetBytes();
+
+	if (m_ca_cvc_modulus.Size() == 0 || m_ca_cvc_exponent.Size() == 0)
+	{
+		fprintf(stderr, "This should be called after getCVCPublicKey() so that the CA public key gets read!");
+		return NULL;
+	}
+
+	//Init OpenSSL: In this context initialization is already performed
+	//OpenSSL_add_all_algorithms();
+	//ERR_load_crypto_strings();
+
+	//FILE *fp = fopen(argv[1], "r");
+	//FILE * output_file = fopen("recovered_signature.bin", "w");
+
+	//5F37 is the ASN1 tag for the CVC Signature
+	const char * needle = "\x5F\x37\x81\x80";
+	const char * ptr = strstr((const char *)cvc_bytes, needle);
+
+	if (!ptr)
+	{
+		fprintf(stderr, "Signature tag not found, broken CVC!\n");
+		return NULL;
+	}
+	memcpy(signature, ptr+4, sizeof(signature));
+
+    //Build CVC CA public key     
+    RSA * pubkey = RSA_new();
+    pubkey->n = BN_bin2bn(m_ca_cvc_modulus.GetBytes(), 128, NULL); // BN_hex2bn(&pubkey->n, ca_mod);
+    pubkey->e = BN_bin2bn(m_ca_cvc_exponent.GetBytes(), 3, NULL); // BN_hex2bn(&pubkey->n, ca_mod);
+
+    if (pubkey->n == NULL || pubkey->e == NULL)
+    {
+    	fprintf(stderr, "Failed to parse bignums into public key struct!\n" );
+    	return NULL;
+    }
+
+    int ret = RSA_public_decrypt(sizeof(signature), signature, decrypted_data, pubkey, RSA_NO_PADDING);
+
+    if (ret == -1)
+    {
+      	fprintf(stderr, "Error decrypting CVC signature: %ld\n", ERR_get_error());
+      	return NULL;
+    }
+
+    char CHR[8];
+
+    //These 12 bytes are used to identify the PK.IFD.AUT. Its value is:
+	//Filler (0–4 bytes) || SN.IFD (8–12 bytes)
+    const int chr_offset = 10+4;
+    memcpy(CHR, decrypted_data+chr_offset, sizeof(CHR));
+
+    char * chr_string = (char *) malloc(sizeof(CHR)*2+1);
+
+    binToHex((const unsigned char *)CHR, sizeof(CHR), chr_string, 8*2+1);
+
+    fprintf(stderr, "Certificate Holder reference (IFD): %s\n", chr_string);
+
+    return chr_string;
+
+}
+
+
 /*
-The parameter external_auth indicates the Security environment that's going to be used in the MSE SET command
-TODO: This should be parameterized to be reused in both cards scenarios
+The parameter CHR indicates the IFD serial used in the MSE SET command
 */
-char *SAM::generateChallenge()
+char *SAM::generateChallenge(char * chr_string)
 {
 	char *challenge = NULL;
+	if (!chr_string || strlen(chr_string) == 0)
+	{
+		fprintf(stderr, "SAM::generateChallenge(): Invalid or empty CHR param\n");
+		return NULL;
+	}
+
+	CByteArray chr_ba(std::string(chr_string), true);
 	//MSE SET External auth or Mutual Auth
 
 	// This includes the terminal SN associated with the server CVC cert
-	//unsigned char ba1_test[] = {0x00, 0x22, 0x41 ,0xA4 ,0x0D ,0x95 ,0x01 ,0x80 ,0x83 ,0x08 ,0x04 ,0x06 ,0x02 ,0x02 ,0x00 ,0x04 ,0x03 ,0x07};
-	unsigned char ba1_production[] = {0x00, 0x22, 0x41 ,0xA4 ,0x0D ,0x95 ,0x01, 0x80, 0x83, 0x08, 0x02, 0x06, 0x00, 0x07, 0x01, 0x07, 0x08, 0x08};
+	unsigned char mse_set_external_auth[] = {0x00, 0x22, 0x41, 0xA4, 0x0D, 0x95, 0x01, 0x80, 0x83, 0x08};
+	
+	//We dont need to hardcode the IFD.SN value because we parse it from the certificate
+	//unsigned char ba1_test[] = {0x00, 0x22, 0x41 ,0xA4 ,0x0D ,0x95 ,0x01 ,0x80 ,0x83 ,0x08, 0x00 ,0x00 ,0x00, 0x00, 0x00 , 0x00 ,0x00, 0x03};
+	//unsigned char ba1_production[] = {0x00, 0x22, 0x41 ,0xA4 ,0x0D ,0x95 ,0x01, 0x80, 0x83, 0x08, 0x02, 0x06, 0x00, 0x07, 0x01, 0x07, 0x08, 0x08};
+	CByteArray apdu1 = CByteArray(mse_set_external_auth, sizeof(mse_set_external_auth));
+	apdu1.Append(chr_ba);
+
+	m_card->getCalReader()->SendAPDU(apdu1);
 
 	//GET CHALLENGE
 	unsigned char ba2[] = {0x80, 0x84, 0x00, 0x00, 0x08};
-
-	m_card->getCalReader()->SendAPDU(CByteArray(ba1_production, sizeof(ba1_production)));
 
 	CByteArray resp = m_card->getCalReader()->SendAPDU(CByteArray(ba2, sizeof(ba2)));
 
@@ -300,7 +392,6 @@ char *SAM::generateChallenge()
 	binToHex(resp.GetBytes(), 8, challenge, resp.Size()*2 +1);
 
 	return challenge;
-
 }
 
 std::vector<char *> SAM::sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_array)

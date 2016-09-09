@@ -52,8 +52,10 @@ public:
 	bool sendKIFD(char *kifd);
 	char *getKICC();
 	bool verifyCert_CV_IFD(char * cv_cert);
-	char *generateChallenge();
+	char *generateChallenge(char * CHR);
+
 	char *getSerialNumberIAS101();
+	char * getPK_IFD_AUT(char * cvc_cert);
 	char *sendPrebuiltAPDU(char *apdu_string);
 	std::vector<char *> sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_array);
 
@@ -63,6 +65,9 @@ private:
 	char *_getCardAuthPublicKey();
 	char * _getSODCert();
     APL_Card *m_card;
+
+    CByteArray m_ca_cvc_exponent;
+    CByteArray m_ca_cvc_modulus;
 };
 
 

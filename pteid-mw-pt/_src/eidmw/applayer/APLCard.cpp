@@ -220,11 +220,10 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 		sam_helper.getDHParams(&dh_params);
 	else
 	{
-	//	throw CMWEXCEPTION(EIDMW_SAM_UNSUPPORTED_CARD);
+	    throw CMWEXCEPTION(EIDMW_SAM_UNSUPPORTED_CARD);
 	}
 
-
-	SSLConnection conn(ADDRESS_CHANGE_SERVER);
+	SSLConnection conn;
 
 	callback(callback_data, 10);
 
@@ -248,7 +247,9 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 		throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);	
 	}
 
-	char *challenge = sam_helper.generateChallenge();
+	char * CHR = sam_helper.getPK_IFD_AUT(p1->cv_ifd_aut);
+
+	char *challenge = sam_helper.generateChallenge(CHR);
 
 	callback(callback_data, 30);
 
@@ -267,6 +268,8 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 		}
 		if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
 		{
+			//DEBUG: try to send a wrongly encrypted APDU
+			//sam_helper.sendPrebuiltAPDU("0C2241A41587090107B2DA83BEE3EF718E08AB4E417A1302C612");
 			resp_mse = sam_helper.sendPrebuiltAPDU(resp_2ndpost->set_se_command);
 
 			resp_internal_auth = sam_helper.sendPrebuiltAPDU(resp_2ndpost->internal_auth);
@@ -286,8 +289,11 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 			StartWriteResponse start_write_resp = {address_response, sod_response};
 
 			callback(callback_data, 90);
-			//Report the results to the server for verification purposes
-			conn.do_SAM_4thpost(start_write_resp);
+
+			// Report the results to the server for verification purposes, 
+			// we only consider the Address Change successful if the server returns its "ACK"
+			if (!conn.do_SAM_4thpost(start_write_resp))
+				throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
 
 			callback(callback_data, 100);
 

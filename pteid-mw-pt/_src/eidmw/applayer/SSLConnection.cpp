@@ -384,6 +384,8 @@ SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *k
 
 	char *challenge_params = (char *) malloc(5*1024);
 
+	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_2ndpost()");
+
 	if (kicc != NULL)
 	{
 		sprintf(challenge_params, challenge_format, challenge, kicc);
@@ -470,8 +472,10 @@ char *build_json_object_sam(StartWriteResponse &resp)
 
 bool SSLConnection::do_SAM_4thpost(StartWriteResponse &resp)
 {
-
+	cJSON *json = NULL;
 	char *json_request = build_json_object_sam(resp);
+
+	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_4thpost()");
 
 	fprintf(stderr, "POSTing JSON %s\n", json_request);
 
@@ -480,7 +484,31 @@ bool SSLConnection::do_SAM_4thpost(StartWriteResponse &resp)
 
 	fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
 
-	return true;
+	char *body = skipHTTPHeaders(server_response);
+
+	json=cJSON_Parse(body);
+	if (!json)
+	{
+		fprintf(stderr, "SSLConnection::do_SAM_4thpost - JSON parsing error before: [%s]\n", cJSON_GetErrorPtr()); 
+		return false;
+	}
+	else
+	{
+		cJSON *my_json = json->child;
+
+		cJSON *obj_error_status = cJSON_GetObjectItem(my_json, "ErrorStatus");
+		cJSON * error_code = cJSON_GetObjectItem(obj_error_status, "code");
+
+		if (error_code->type == cJSON_Number)
+		{
+			int error_value = error_code->valueint;
+			MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection::do_SAM_4thpost - Server returned error code: %d\n", error_value);
+			return error_value == 0;
+		}
+		else
+			return false;
+
+	}
 
 }
 
@@ -492,13 +520,15 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 	StartWriteResponse * resp = new StartWriteResponse();
 	const char *start_write_format = "{\"StartWriteRequest\":{ \"SetSEResponse\" : [\"%s\"], \"InternalAuthenticateResponse\" : [\"%s\"], \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
 
+	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_3rdpost()");
+
 	snprintf(post_body, sizeof(post_body), start_write_format, mse_resp, internal_auth_resp);
 	fprintf(stderr, "POSTing JSON %s\n", post_body);
 
 	char *server_response = Post(this->m_session_cookie,
 	  "/changeaddress/startWrite", post_body, true);
 
-	//fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
+	fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
 
 	char *body = skipHTTPHeaders(server_response);
 
@@ -563,9 +593,11 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 		endpoint = "/changeaddress101";
 	}
 
+	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_1stpost()");
+
 	snprintf(request_headers, sizeof(request_headers),	
     "POST %s/sendDHParams HTTP/1.1\r\nHost: %s\r\nKeep-Alive: 300\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Length: %lu\r\n\r\n",
-    	endpoint, m_otp_host, strlen(post_dhparams));
+    	endpoint, m_host, strlen(post_dhparams));
 
 	char * server_response = (char *) malloc(REPLY_BUFSIZE);
 
@@ -619,7 +651,7 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 	char * request_headers = (char *) calloc(1000, sizeof(char));
 
 	//Build the full request
-	snprintf (request_headers, 1000, request_template, url_path, m_otp_host,
+	snprintf (request_headers, 1000, request_template, url_path, m_host,
 			cookie, strlen(body));
 
 //	fprintf(stderr, "DEBUG: Sending POST Headers: \n%s\n", request_headers);
@@ -630,7 +662,9 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 	ret_channel = write_to_stream(m_ssl_connection, body);
 
 	//Read response
-	if (chunked_expected)
+	//TODO: header and content reading should be split so we can dynamically decide if it uses chunked encoding or not
+	//TODO: get rid of this ugly hack
+	if (chunked_expected && strstr(m_host, "teste") == NULL)
 		read_chunked_reply(m_ssl_connection, server_response, REPLY_BUFSIZE);
 	else
 		read_from_stream(m_ssl_connection, server_response, REPLY_BUFSIZE);
@@ -680,7 +714,7 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
 #if OPENSSL_VERSION_NUMBER >= 0x10002000L
     X509_VERIFY_PARAM *vpm = SSL_CTX_get0_param(ctx);
     //Verify hostname in the server-provided certificate
-    X509_VERIFY_PARAM_set1_host(vpm, m_otp_host, 0);
+    X509_VERIFY_PARAM_set1_host(vpm, m_host, 0);
 #endif
 
     bio = BIO_new_connect(host_and_port);
@@ -924,21 +958,19 @@ unsigned int SSLConnection::write_to_stream(SSL* ssl, char* request_string) {
 /**
  * Main SSL demonstration code entry point
  */
-bool SSLConnection::InitConnection(SSLConnectionTarget target)
+bool SSLConnection::InitConnection()
 {
 
-    APL_Config otp_server(CConfig::EIDMW_CONFIG_PARAM_GENERAL_OTP_SERVER);
     APL_Config sam_server(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER);
 
-    std::string server_str = target == OTP_SERVER ? 
-    	otp_server.getString() : sam_server.getString();
+    std::string server_str = sam_server.getString();
 
     char * host_and_port = (char *)server_str.c_str();
 
     //Split hostname and port
-    m_otp_host = (char *)malloc(strlen(host_and_port)+1);
-    strcpy(m_otp_host, host_and_port);
-    char * delim = strchr(m_otp_host, ':');
+    m_host = (char *)malloc(strlen(host_and_port)+1);
+    strcpy(m_host, host_and_port);
+    char * delim = strchr(m_host, ':');
     *delim = '\0';
 
     /* initialise the OpenSSL library */
