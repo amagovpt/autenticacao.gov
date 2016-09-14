@@ -1,1 +1,1 @@
-./configure --lib+=-L/usr/bin/../lib/ --lib+=-L/usr/lib/x86_64-linux-gnu/ --include+=/usr/bin/../include/Qt --include+=/usr/lib/jvm/java-6-sun/bin/../include --include+=/usr/lib/jvm/java-6-sun/bin/../include/linux BUILD_SDK=1 
+./configure --lib+=-L/usr/bin/../lib/ --lib+=-L/usr/lib/x86_64-linux-gnu/ --include+=/usr/bin/../include/Qt --include+= --include+=/linux BUILD_SDK=1 

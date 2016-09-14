@@ -1352,6 +1352,7 @@ public:
 	PTEIDSDK_API PTEID_PinUsage getUsageCode();	/**< Get the usage code of the pin */
 	PTEIDSDK_API unsigned long getFlags();		/**< Get the flags of the pin */
 	PTEIDSDK_API const char *getLabel();			/**< Get the label of the pin */
+	PTEIDSDK_API const char *getLabelById( unsigned long id );/**< Get the label of the pin by Id */
 	PTEIDSDK_API bool unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft);
 
 	PTEIDSDK_API const PTEID_ByteArray &getSignature();	/**< Return the signature of the pin */

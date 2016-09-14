@@ -437,7 +437,7 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/luiz_lemos/projs/CartaoCidadao/middleware-off/pteid-mw-pt/_src/eidmw/xml-security-c-1.7.2'
+ac_pwd='/home/luiz_lemos/projs/CartaoCidadao/_src/eidmw/xml-security-c-1.7.2'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 MKDIR_P='/bin/mkdir -p'
@@ -675,7 +675,7 @@ finish_cmds='PATH="\$PATH:/sbin" ldconfig -n $libdir'
 finish_eval=''
 hardcode_into_libs='yes'
 sys_lib_search_path_spec='/usr/lib/gcc/x86_64-linux-gnu/5 /usr/lib/x86_64-linux-gnu /usr/lib /lib/x86_64-linux-gnu /lib '
-sys_lib_dlsearch_path_spec='/lib /usr/lib /usr/lib/x86_64-linux-gnu/libfakeroot /usr/local/lib /var/lib/snapd/lib/gl /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/mesa-egl /usr/lib/x86_64-linux-gnu/mesa '
+sys_lib_dlsearch_path_spec='/lib /usr/lib /usr/lib/x86_64-linux-gnu/libfakeroot /usr/local/lib /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/mesa-egl /usr/lib/x86_64-linux-gnu/mesa '
 hardcode_action='immediate'
 enable_dlopen='unknown'
 enable_dlopen_self='unknown'
@@ -948,12 +948,12 @@ S["mkdir_p"]="$(MKDIR_P)"
 S["MKDIR_P"]="/bin/mkdir -p"
 S["INSTALL_STRIP_PROGRAM"]="$(install_sh) -c -s"
 S["STRIP"]="strip"
-S["install_sh"]="${SHELL} /home/luiz_lemos/projs/CartaoCidadao/middleware-off/pteid-mw-pt/_src/eidmw/xml-security-c-1.7.2/build-aux/install-sh"
-S["MAKEINFO"]="${SHELL} /home/luiz_lemos/projs/CartaoCidadao/middleware-off/pteid-mw-pt/_src/eidmw/xml-security-c-1.7.2/build-aux/missing --run makeinfo"
-S["AUTOHEADER"]="${SHELL} /home/luiz_lemos/projs/CartaoCidadao/middleware-off/pteid-mw-pt/_src/eidmw/xml-security-c-1.7.2/build-aux/missing --run autoheader"
-S["AUTOMAKE"]="${SHELL} /home/luiz_lemos/projs/CartaoCidadao/middleware-off/pteid-mw-pt/_src/eidmw/xml-security-c-1.7.2/build-aux/missing --run automake-1.12"
-S["AUTOCONF"]="${SHELL} /home/luiz_lemos/projs/CartaoCidadao/middleware-off/pteid-mw-pt/_src/eidmw/xml-security-c-1.7.2/build-aux/missing --run autoconf"
-S["ACLOCAL"]="${SHELL} /home/luiz_lemos/projs/CartaoCidadao/middleware-off/pteid-mw-pt/_src/eidmw/xml-security-c-1.7.2/build-aux/missing --run aclocal-1.12"
+S["install_sh"]="${SHELL} /home/luiz_lemos/projs/CartaoCidadao/_src/eidmw/xml-security-c-1.7.2/build-aux/install-sh"
+S["MAKEINFO"]="${SHELL} /home/luiz_lemos/projs/CartaoCidadao/_src/eidmw/xml-security-c-1.7.2/build-aux/missing --run makeinfo"
+S["AUTOHEADER"]="${SHELL} /home/luiz_lemos/projs/CartaoCidadao/_src/eidmw/xml-security-c-1.7.2/build-aux/missing --run autoheader"
+S["AUTOMAKE"]="${SHELL} /home/luiz_lemos/projs/CartaoCidadao/_src/eidmw/xml-security-c-1.7.2/build-aux/missing --run automake-1.12"
+S["AUTOCONF"]="${SHELL} /home/luiz_lemos/projs/CartaoCidadao/_src/eidmw/xml-security-c-1.7.2/build-aux/missing --run autoconf"
+S["ACLOCAL"]="${SHELL} /home/luiz_lemos/projs/CartaoCidadao/_src/eidmw/xml-security-c-1.7.2/build-aux/missing --run aclocal-1.12"
 S["VERSION"]="1.7.2"
 S["PACKAGE"]="xml-security-c"
 S["CYGPATH_W"]="echo"

@@ -877,6 +877,20 @@ const char *PTEID_Pin::getLabel()
 	return out;
 }
 
+const char *PTEID_Pin::getLabelById( unsigned long id )
+{
+	const char *out;
+    static const char* pinLabels[] = { "Unknown", "Authentication PIN", "Signature PIN", "Address PIN" };
+
+    if ( ( id >= 1 ) && ( id <= 3 ) ){
+        out = pinLabels[id];
+    } else{
+        out = pinLabels[0];
+    }/* if ( ( id >= 1 ) && ( id <= 3 ) ) */
+
+	return out;
+}
+
 bool PTEID_Pin::verifyPin()
 {
 	bool out = false;

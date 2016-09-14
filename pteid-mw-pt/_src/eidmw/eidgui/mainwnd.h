@@ -56,11 +56,11 @@ public:
 	QString pin_name;
 	unsigned long triesLeft;
 	QString pin_id;
+	const char *pin_name_str;
 
 	PinInfo() {};
 	PinInfo(unsigned long id, const char *pin_name, long tLeft):
-	  pin_name(QString::fromUtf8(pin_name)), pin_id(QString::number(id)), triesLeft(tLeft)
-	  { };
+	  pin_name_str(pin_name), pin_name(QString::fromUtf8(pin_name)), pin_id(QString::number(id)), triesLeft(tLeft) {}; /*llemos*/
 };
 
 //***********************************************
@@ -392,9 +392,11 @@ private:
 	void refreshTabIdentityExtra( void );
 	void refreshTabAddress( void );
 	void clearAddressData( void );
+	void refreshTabPinCodes( void );                /*llemos*/
 	void refreshTabPersoData( void );
 	void refreshTabCertificates( void );
 	void refreshTabCardPin( void );
+    void setTabCardPin( QTreeWidgetItem *item );    /*llemos*/
 
 	QString translateCardValidation(QString &card_validation);
 	//void refreshTabInfo( void );

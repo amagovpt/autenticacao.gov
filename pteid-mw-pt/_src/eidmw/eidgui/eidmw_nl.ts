@@ -414,6 +414,20 @@
         <source>Change PIN</source>
         <translation>Modificar PIN</translation>
     </message>
+
+    <message>
+        <source>Authentication PIN</source>
+        <translation>PIN da Autenticação</translation>
+    </message>
+    <message>
+        <source>Signature PIN</source>
+        <translation>PIN da Assinatura</translation>
+    </message>
+    <message>
+        <source>Address PIN</source>
+        <translation>PIN da Morada</translation>
+    </message>
+
     <message>
         <source>&amp;Info</source>
         <translation>&amp;Info</translation>

@@ -739,6 +739,8 @@ void MainWnd::on_btn_menu_language_clicked()
 		setLanguageEn();
 	else
 		setLanguageNl();
+
+    refreshTabPinCodes(); /*llemos*/
 }
 
 void MainWnd::on_btn_menu_help_clicked()
@@ -1752,6 +1754,8 @@ void MainWnd::on_treePIN_itemClicked(QTreeWidgetItem* item, int column)
 
 	int index = m_ui.treePIN->indexOfTopLevelItem(item);
 
+	if ( index < 0 ) return;
+
 	PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 	if (!ReaderContext.isCardPresent())
 		return;
@@ -1766,24 +1770,17 @@ void MainWnd::on_treePIN_itemClicked(QTreeWidgetItem* item, int column)
 
 	PTEID_Pin& pin = Pins.getPinByPinRef(_pinRef);
 	delete m_pinsInfo[_pinRef]; // doesn't make sense, but this way the quick fix can be removed with no harm
-	m_pinsInfo[_pinRef] = new PinInfo(pin.getId(), pin.getLabel(), pin.getTriesLeft());
+	unsigned long pinId = pin.getId();
+	m_pinsInfo[_pinRef] = new PinInfo( pinId, pin.getLabelById(pinId), pin.getTriesLeft() ); /*llemos*/
+
 	/* END - the pin information have to be always sinchronized */
 
 
 	unsigned int pinRef = item->data(0,Qt::UserRole).value<uint>();
 	PinInfo* pinfo = m_pinsInfo.find(pinRef)->second;
 
-	QString status;
-	if (1 == pinfo->triesLeft)
-		status = tr("%1 try remaining").arg(pinfo->triesLeft);
-	else
-		status = tr("%1 tries remaining").arg(pinfo->triesLeft);
-	m_ui.txtPIN_Name->setText(pinfo->pin_name);
-	m_ui.txtPIN_Name->setAccessibleName(pinfo->pin_name);
-	m_ui.txtPIN_ID->setText(pinfo->pin_id);
-	m_ui.txtPIN_ID->setAccessibleName(pinfo->pin_id);
-	m_ui.txtPIN_Status->setText(status);
-	m_ui.txtPIN_Status->setAccessibleName(status);
+    setTabCardPin( item );/*llemos*/
+
 	setEnabledPinButtons(pinfo->triesLeft > 0);
 }
 
@@ -3306,17 +3303,17 @@ void MainWnd::fillPinList()
 	clearTabPins();
 
 	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, m_pinsInfo[PTEID_Pin::AUTH_PIN]->pin_name);
+	pinTreeItem->setText(COLUMN_PIN_NAME, tr(m_pinsInfo[PTEID_Pin::AUTH_PIN]->pin_name_str) ); /*llemos*/
 	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
 	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::AUTH_PIN));
 
 	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, m_pinsInfo[PTEID_Pin::SIGN_PIN]->pin_name);
+	pinTreeItem->setText(COLUMN_PIN_NAME, tr(m_pinsInfo[PTEID_Pin::SIGN_PIN]->pin_name_str) ); /*llemos*/
 	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
 	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::SIGN_PIN));
 
 	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, m_pinsInfo[PTEID_Pin::ADDR_PIN]->pin_name);
+	pinTreeItem->setText(COLUMN_PIN_NAME, tr(m_pinsInfo[PTEID_Pin::ADDR_PIN]->pin_name_str) );/*llemos*/
 	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
 	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::ADDR_PIN));
 
@@ -3328,17 +3325,20 @@ void MainWnd::fillPinList()
 
 void MainWnd::loadPinData(PTEID_EIDCard& Card)
 {
-
+	unsigned long pinId;
 	PTEID_Pins& Pins = Card.getPins();
 
 	PTEID_Pin& pinAuth = Pins.getPinByPinRef(PTEID_Pin::AUTH_PIN);
-	m_pinsInfo[PTEID_Pin::AUTH_PIN] = new PinInfo(pinAuth.getId(), pinAuth.getLabel(), pinAuth.getTriesLeft());
+	pinId = pinAuth.getId();
+	m_pinsInfo[PTEID_Pin::AUTH_PIN] = new PinInfo(pinId, pinAuth.getLabelById(pinId), pinAuth.getTriesLeft());/*llemos*/
 
 	PTEID_Pin& pinSign = Pins.getPinByPinRef(PTEID_Pin::SIGN_PIN);
-	m_pinsInfo[PTEID_Pin::SIGN_PIN] = new PinInfo(pinSign.getId(), pinSign.getLabel(), pinSign.getTriesLeft());
+	pinId = pinSign.getId();
+	m_pinsInfo[PTEID_Pin::SIGN_PIN] = new PinInfo(pinId, pinSign.getLabelById(pinId), pinSign.getTriesLeft());/*llemos*/
 
 	PTEID_Pin& pinAddr = Pins.getPinByPinRef(PTEID_Pin::ADDR_PIN);
-	m_pinsInfo[PTEID_Pin::ADDR_PIN] = new PinInfo(pinAddr.getId(), pinAddr.getLabel(), pinAddr.getTriesLeft());
+	pinId = pinAddr.getId();
+	m_pinsInfo[PTEID_Pin::ADDR_PIN] = new PinInfo(pinId, pinAddr.getLabelById(pinId), pinAddr.getTriesLeft());/*llemos*/
 }
 
 
@@ -3616,6 +3616,23 @@ void MainWnd::PersoDataSaveButtonClicked( void )
 }
 
 //*****************************************************
+// refresh the tab with PinCodes Data
+//*****************************************************
+void MainWnd::refreshTabPinCodes( void )
+{
+    if (!m_CI_Data.isDataLoaded()) return;
+
+    int index = m_ui.treePIN->indexOfTopLevelItem(m_ui.treePIN->currentItem());
+
+	fillPinList();/*llemos*/
+
+	if ( index != -1 ){
+        m_ui.treePIN->topLevelItem(index)->setSelected(true);
+        m_ui.treePIN->setCurrentItem (m_ui.treePIN->topLevelItem(index));
+	}
+}
+
+//*****************************************************
 // refresh the tab with the PTeid Personal Data
 //*****************************************************
 void MainWnd::refreshTabPersoData( void )
@@ -3771,6 +3788,35 @@ void MainWnd::refreshTabCertificates( void )
 	}*/
 
 }
+//*****************************************************
+// set the tab with the PIN info
+//*****************************************************
+void MainWnd::setTabCardPin( QTreeWidgetItem *item )
+{
+    if ( item == NULL ) return;
+
+    unsigned int pinRef = item->data(0,Qt::UserRole).value<uint>();
+	PinInfo* pinfo = m_pinsInfo.find(pinRef)->second;
+    /*unsigned long triesLeft = m_pinsInfo[pinRef]->triesLeft;*/
+
+	QString status;
+	if (1 == pinfo->triesLeft)
+		status = tr("%1 try remaining").arg(pinfo->triesLeft);
+	else
+		status = tr("%1 tries remaining").arg(pinfo->triesLeft);
+
+    QString pin_name;
+    pin_name = tr(pinfo->pin_name_str);
+
+	m_ui.txtPIN_Name->setText( pin_name );
+	m_ui.txtPIN_Name->setAccessibleName( pin_name );
+
+	m_ui.txtPIN_ID->setText(pinfo->pin_id);
+	m_ui.txtPIN_ID->setAccessibleName(pinfo->pin_id);
+
+	m_ui.txtPIN_Status->setText(status);
+	m_ui.txtPIN_Status->setAccessibleName(status);
+}
 
 //*****************************************************
 // refresh the tab with the PIN info
@@ -3786,24 +3832,8 @@ void MainWnd::refreshTabCardPin( void )
 			{
 			case PTEID_CARDTYPE_IAS07:
 			case PTEID_CARDTYPE_IAS101:
-                {
-                	QTreeWidgetItem *item = m_ui.treePIN->currentItem();
-
-                	unsigned int pinRef = item->data(0,Qt::UserRole).value<uint>();
-                	unsigned long triesLeft = m_pinsInfo[pinRef]->triesLeft;
-
-                	QString status;
-                	if (1 == m_pinsInfo.find(pinRef)->second->triesLeft)
-                		status = tr("%1 try remaining").arg(m_pinsInfo.find(pinRef)->second->triesLeft);
-                	else
-                		status = tr("%1 tries remaining").arg(m_pinsInfo.find(pinRef)->second->triesLeft);
-                	m_ui.txtPIN_Name->setText(m_pinsInfo.find(pinRef)->second->pin_name);
-                	m_ui.txtPIN_Name->setAccessibleName(m_pinsInfo.find(pinRef)->second->pin_name);
-                	m_ui.txtPIN_ID->setText(m_pinsInfo.find(pinRef)->second->pin_id);
-                	m_ui.txtPIN_ID->setAccessibleName(m_pinsInfo.find(pinRef)->second->pin_id);
-                	m_ui.txtPIN_Status->setText(status);
-                	m_ui.txtPIN_Status->setAccessibleName(status);
-                }
+                setTabCardPin( m_ui.treePIN->currentItem() );
+                break;
 			default:
 				break;
 			}
