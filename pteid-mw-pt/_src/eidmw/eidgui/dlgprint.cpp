@@ -55,6 +55,7 @@ dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUA
 
 		int thiswidth = this->width();
 		int thisheight = this->height();
+		this->sections_to_print = 0;
 
 		if (thisheight > height)
 		{
@@ -553,6 +554,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 	{
 
    		drawSectionHeader(painter, pos_x, pos_y, tr("BASIC INFORMATION"));
+   		sections_to_print++;
 
     	//Image
 		QPixmap pixmap_photo;
@@ -600,6 +602,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
     if (ui.chboxIDExtra->isChecked())
 	{
 		drawSectionHeader(painter, pos_x, pos_y, tr("ADDITIONAL INFORMATION"));
+		sections_to_print++;
 	    pos_y += 50;
 
 	    drawSingleField(painter, pos_x, pos_y, tr("VAT identification no."), PersonFields[TAXNO]);
@@ -630,6 +633,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 		tFieldMap& AddressFields = CI_Data.m_AddressInfo.getFields();
 
 		drawSectionHeader(painter, pos_x, pos_y, tr("ADDRESS"));
+		sections_to_print++;
 
     	pos_y += 50;
 
@@ -675,10 +679,14 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
         if (perso_data.size() > 0)
         {
-            //Force a page-break before PersoData
-            printer.newPage();
+            //Force a page-break before PersoData only if we're drawing all the sections
+            if (sections_to_print == 3)
+            {
+            	printer.newPage();
+                pos_y = 0;
+            }
             pos_x = 0;
-            pos_y = 0;
+          
 
             drawSectionHeader(painter, pos_x, pos_y, tr("PERSONAL NOTES"));
 

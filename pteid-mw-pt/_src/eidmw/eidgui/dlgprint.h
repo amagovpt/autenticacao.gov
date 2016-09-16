@@ -56,6 +56,7 @@ private:
     QByteArray image;
     QFutureWatcher<void> FutureWatcher;
     QProgressDialog *pdialog;
+    int sections_to_print;
     double pos_x, pos_y;
 
     bool addressPINRequest_triggered(CardInformation& CI_Data);
