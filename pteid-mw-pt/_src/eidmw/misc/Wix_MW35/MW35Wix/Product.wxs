@@ -28,7 +28,7 @@
              InstallerVersion="300"
              Keywords="Portugal e-ID Middleware Installer"
              Platform="x86"
-             Comments="Portuguese eID Middleware 2.3.0 SVN Revision $(var.RevisionNumber)"
+             Comments="Portuguese eID Middleware 2.4.0 SVN Revision $(var.RevisionNumber)"
              Manufacturer="Portuguese Government"
              Compressed="yes"
              InstallPrivileges="elevated"
@@ -259,6 +259,7 @@
         <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0008.der" />
         <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0009.der" />
         <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0010.der" />
+        <File Source="..\..\certs\EC_de_Assinatura_Digital_Qualificada_do_Cartao_de_Cidadao_0011.der" />
         <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0001.der" />
         <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0002.der" />
         <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0003.der" />
@@ -269,6 +270,7 @@
         <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.der" />
         <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0009.der" />
         <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0010.der" />
+        <File Source="..\..\certs\EC_de_Autenticacao_do_Cartao_de_Cidadao_0011.der" />
       </Component>
     </DirectoryRef>
 
