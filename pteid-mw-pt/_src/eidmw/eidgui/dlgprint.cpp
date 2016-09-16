@@ -480,6 +480,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
 	QPrinter printer;
 	printer.setResolution(96);
+	printer.setColorMode(QPrinter::Color);
     printer.setPaperSize(QPrinter::A4);
 
     if (strlen(filepath) > 0)
