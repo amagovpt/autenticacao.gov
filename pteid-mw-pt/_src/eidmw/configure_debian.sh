@@ -4,7 +4,7 @@ QT4PATH=${QT4PATH}/..
 #JAVACPATH=`which javac 2> /dev/null`
 
 # Try to dynamic get javac version
-JAVACPATH=readlink -f `which javac` 
+#JAVACPATH=`readlink -f \`which javac\`` 
 
 JAVACPATH=/usr/lib/jvm/java-6-sun/bin/javac
 JAVAC=`echo $JAVACPATH | wc -l`
