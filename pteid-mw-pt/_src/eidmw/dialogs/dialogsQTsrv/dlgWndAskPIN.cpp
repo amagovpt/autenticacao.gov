@@ -96,8 +96,8 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 		ui.lblHeader->setText( Header );
 		ui.lblHeader->setAccessibleName( Header );
 	}
-	if( pinInfo.ulFlags & PIN_FLAG_DIGITS )
-
+	
+	//Max Length of PINs for PTEID cards as currently defined by INCM personalization
 	ui.txtPIN->setMaxLength( 8 );
 }
 

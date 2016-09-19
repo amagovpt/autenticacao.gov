@@ -62,11 +62,10 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 	else*/
 		tmpTitle += GETSTRING_DLG(RenewingPinCode);
 
-	m_ulPinMaxLen = pinInfo1.ulMaxLen;
-	m_ulPin1MinLen = pinInfo1.ulMinLen;
-	m_ulPin1MaxLen = pinInfo1.ulMaxLen;
-	m_ulPin2MinLen = pinInfo2.ulMinLen;
-	m_ulPin2MaxLen = pinInfo2.ulMaxLen;
+	m_ulPinMaxLen = 8;
+	m_ulPin1MinLen = 4;
+	m_ulPin1MaxLen = 8;
+	
 	
 	szHeader = const_cast<wchar_t *>(Header.c_str());
 	szPIN = PINName.c_str();
@@ -181,13 +180,13 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 				L"EDIT", L"", dwStyle, 
 				clientRect.right/2 + 110, clientRect.bottom - 120, 80, 26, 
 				m_hWnd, (HMENU)IDC_EDIT_PIN2, m_hInstance, NULL );
-			SendMessage( hTextEdit2, EM_LIMITTEXT, m_ulPin2MaxLen, 0 );
+			SendMessage( hTextEdit2, EM_LIMITTEXT, m_ulPin1MaxLen, 0 );
 
 			HWND hTextEdit3 = CreateWindowEx( WS_EX_CLIENTEDGE,
 				L"EDIT", L"", dwStyle, 
 				clientRect.right/2 + 110, clientRect.bottom - 90, 80, 26, 
 				m_hWnd, (HMENU)IDC_EDIT_PIN3, m_hInstance, NULL );
-			SendMessage( hTextEdit3, EM_LIMITTEXT, m_ulPin2MaxLen, 0 );
+			SendMessage( hTextEdit3, EM_LIMITTEXT, m_ulPin1MaxLen, 0 );
 
 
 			HWND hStaticText1 = CreateWindow( 
@@ -300,7 +299,7 @@ LRESULT dlgWndAskPINs::ProcecEvent
 						if( m_UseKeypad )
 						{
 							unsigned int len = (unsigned int)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN1 ), WM_GETTEXTLENGTH, 0, 0 );
-							unsigned int iTmp = m_UK_InputField ? m_ulPin2MinLen : m_ulPin1MinLen;
+							unsigned int iTmp = m_ulPin1MinLen;
 							EnableWindow( GetDlgItem( m_hWnd, IDOK ), ( iTmp <= len ) );
 						}
 						else
@@ -317,7 +316,7 @@ LRESULT dlgWndAskPINs::ProcecEvent
 					if( EN_CHANGE == HIWORD(wParam) )
 					{
 						unsigned int len = (unsigned int)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN2 ), WM_GETTEXTLENGTH, 0, 0 );
-						InputField2_OK = len >= m_ulPin2MinLen;
+						InputField2_OK = len >= m_ulPin1MinLen;
 						EnableWindow( GetDlgItem( m_hWnd, IDOK ), ( InputField1_OK && InputField2_OK && InputField3_OK ) );
 					}
 					return TRUE;
@@ -327,7 +326,7 @@ LRESULT dlgWndAskPINs::ProcecEvent
 					if( EN_CHANGE == HIWORD(wParam) )
 					{
 						unsigned int len = (unsigned int)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN3 ), WM_GETTEXTLENGTH, 0, 0 );
-						InputField3_OK = len >= m_ulPin2MinLen;
+						InputField3_OK = len >= m_ulPin1MinLen;
 						EnableWindow( GetDlgItem( m_hWnd, IDOK ), ( InputField1_OK && InputField2_OK && InputField3_OK ) );
 					}
 					return TRUE;

@@ -70,8 +70,9 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 	*/
 		tmpTitle.append(PINName);
 
-	m_ulPinMinLen = pinInfo.ulMinLen;
-	m_ulPinMaxLen = pinInfo.ulMaxLen;
+	//Max Length of PINs for PTEID cards as currently defined by INCM personalization
+	m_ulPinMinLen = 4;
+	m_ulPinMaxLen = 8;
 
 	szHeader = Header.c_str();
 	szPIN = PINName.c_str();

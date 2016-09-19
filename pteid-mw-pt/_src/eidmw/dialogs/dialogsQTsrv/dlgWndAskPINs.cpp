@@ -71,102 +71,45 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 
 	QString Title;
 
-	//if( DApplic == DLG_APP_BELPIC )
-	//{
+	
 		this->setWindowIcon( QIcon( ":/Resources/ICO_CARD_EID_PLAIN_16x16.png" ) );
-	//	Title+= QString::fromWCharArray(GETSTRING_DLG(Belpic));
-	//	Title+= ": ";
-	//}
-	Title+= QString::fromWCharArray(GETSTRING_DLG(RenewingPinCode));
-	this->setWindowTitle( Title );
+	
+		Title+= QString::fromWCharArray(GETSTRING_DLG(RenewingPinCode));
+		this->setWindowTitle( Title );
 
-    	ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
-    	ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
-    	ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
-    	ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
+		ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
+		ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
+		ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
+		ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
 
-    	ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
-    	ui.lblOldPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
-	ui.lblNewPIN1->setText( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
-	ui.lblNewPIN1->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
-    	ui.lblNewPIN2->setText( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
-    	ui.lblNewPIN2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
+		ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
+		ui.lblOldPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
+		ui.lblNewPIN1->setText( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
+		ui.lblNewPIN1->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
+		ui.lblNewPIN2->setText( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
+		ui.lblNewPIN2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
 
-	ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
-	ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
-	ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
-	ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
+		ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
+		ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
+		ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
+		ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
 
-    //ui.lblIcon->setPixmap( QPixmap( ":/Resources/ICO_CARD_PIN_128x128.png" ) );
-
-	if( m_UseKeypad = UseKeypad )
-	{
-		QList<QToolButton *> allTBT = ui.fraPIN_Keypad->findChildren<QToolButton *>();
-		for (int i = 0; i < allTBT.size(); ++i) 
-		{
-			allTBT.at(i)->setMinimumSize( KP_BTN_SIZE, KP_BTN_SIZE );
-			allTBT.at(i)->setIconSize( QSize( KP_BTN_SIZE,KP_BTN_SIZE ) );
-			allTBT.at(i)->setAutoRaise( true );
-		}
-
-		ui.tbtNUM_1->setIcon( QIcon( ":/Resources/KeyPadButton1.png" ) );
-		ui.tbtNUM_2->setIcon( QIcon( ":/Resources/KeyPadButton2.png" ) );
-		ui.tbtNUM_3->setIcon( QIcon( ":/Resources/KeyPadButton3.png" ) );
-		ui.tbtNUM_4->setIcon( QIcon( ":/Resources/KeyPadButton4.png" ) );
-		ui.tbtNUM_5->setIcon( QIcon( ":/Resources/KeyPadButton5.png" ) );
-		ui.tbtNUM_6->setIcon( QIcon( ":/Resources/KeyPadButton6.png" ) );
-		ui.tbtNUM_7->setIcon( QIcon( ":/Resources/KeyPadButton7.png" ) );
-		ui.tbtNUM_8->setIcon( QIcon( ":/Resources/KeyPadButton8.png" ) );
-		ui.tbtNUM_9->setIcon( QIcon( ":/Resources/KeyPadButton9.png" ) );
-		ui.tbtNUM_0->setIcon( QIcon( ":/Resources/KeyPadButton0.png" ) );
-		ui.tbtClear->setIcon( QIcon( ":/Resources/KeyPadButtonCE.png" ) );
-
-        //ui.fraPIN_Normal->setVisible( false );
-		connect( ui.btnOk, SIGNAL( clicked() ), this, SLOT( NextField() ) );
-		m_ulPinMaxLen=m_ulPin1MaxLen;
-		if( pinInfo1.ulFlags & PIN_FLAG_DIGITS )
-			ui.txtPIN_Keypad->setValidator(m_Pin1Validator);
-		else
-			ui.txtPIN_Keypad->setMaxLength( m_ulPin1MaxLen );
-
-
-		if( !PINName.isEmpty() )
-		{
-            ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYour)) + " " + PINName + " " + QString::fromWCharArray(GETSTRING_DLG(Code)) );
-            ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYour)) + " " + PINName + " " + QString::fromWCharArray(GETSTRING_DLG(Code)) );
-		}
-	}
-	else
-	{
 		ui.fraPIN_Keypad->setVisible( false );
 		connect( ui.btnOk, SIGNAL( clicked() ), this, SLOT( FinalCheck() ) );
 
 		if( !Header.isEmpty() )
 		{
-            ui.lblHeader->setText( Header );
-            ui.lblHeader->setAccessibleName( Header );
+			ui.lblHeader->setText( Header );
+			ui.lblHeader->setAccessibleName( Header );
 		}
-	}
 
-    //ui.lblError->setVisible( false );
-	OldPIN_OK = NewPIN1_OK = NewPIN2_OK = false;
+		OldPIN_OK = NewPIN1_OK = NewPIN2_OK = false;
 
+	    //Max Length of PINs for PTEID cards as currently defined by INCM personalization
+		ui.txtOldPIN->setMaxLength(8);
 
-	if( pinInfo1.ulFlags & PIN_FLAG_DIGITS )
-		ui.txtOldPIN->setValidator(m_Pin1Validator);
-	else
-		ui.txtOldPIN->setMaxLength( m_ulPin1MaxLen );
-
-	if( pinInfo2.ulFlags & PIN_FLAG_DIGITS )
-	{
-		ui.txtNewPIN1->setValidator(m_Pin2Validator);
-		ui.txtNewPIN2->setValidator(m_Pin2Validator);
-	}
-	else
-	{
-		ui.txtNewPIN1->setMaxLength( m_ulPin2MaxLen );
-		ui.txtNewPIN2->setMaxLength( m_ulPin2MaxLen );
-	}
+		ui.txtNewPIN1->setMaxLength(8);
+		ui.txtNewPIN2->setMaxLength(8);
 
 }
 
