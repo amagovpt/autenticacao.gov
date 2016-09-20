@@ -1,3 +1,13 @@
+/* ****************************************************************************
+ *
+ *  PTeID Middleware Project.
+ *  Copyright (C) 2012-2016
+ *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+ *  Signature container for XAdES signature file and associated signed file(s) - 
+ *  It should be compliant with the ASIC specification TS 102 918 - 
+ *  http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.01.01_60/ts_102918v010101p.pdf
+ */
+
 #include <fstream>
 #include <cstring>
 #ifndef _WIN32
@@ -195,7 +205,7 @@ static const char *SIGCONTAINER_README=
 
 		if (!status)
 		{
-			MWLOG (LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed for README.txt");
+			MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed for README.txt");
 		}
 	}
 
