@@ -1,7 +1,7 @@
 /* ****************************************************************************
  *
  *  PTeID Middleware Project.
- *  Copyright(C) 2014 - 2016
+ *  Copyright (C) 2014 - 2016
  *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *  Card interaction necessary for the Change Address Operation
  *  mainly Diffie-Hellman key agreement and mutual authentication with CVC certificates
@@ -10,6 +10,7 @@
 #include "APLCard.h"
 #include "APLCardPteid.h"
 #include "Reader.h"
+#include "Log.h"
 #include "SAM.h"
 #include <string>
 #include <cstring>
@@ -97,8 +98,8 @@ char * SAM::_getCVCPublicKey()
 	m_ca_cvc_modulus = cvc_modulus.GetBytes(offset_mod, 128);
 	m_ca_cvc_exponent = cvc_exponent.GetBytes(offset_exp, 3);
 
-	std::cerr << "DEBUG: _getCVCPublicKey(): modulus len=" << cvc_modulus.Size() << std::endl;
-	std::cerr << "DEBUG: _getCVCPublicKey(): exp len=" << cvc_exponent.Size() << std::endl;
+	//std::cerr << "DEBUG: _getCVCPublicKey(): modulus len=" << cvc_modulus.Size() << std::endl;
+	//std::cerr << "DEBUG: _getCVCPublicKey(): exp len=" << cvc_exponent.Size() << std::endl;
 
 	unsigned char * mod_bytes = cvc_modulus.GetBytes();
 	unsigned char * exp_bytes = cvc_exponent.GetBytes();
@@ -216,7 +217,7 @@ bool SAM::sendKIFD(char *kifd)
 
 	if (!checkResultSW12(resp))
 	{
-		fprintf(stderr, "SendKIFD() failed!\n");
+		MWLOG(LEV_ERROR, MOD_APL, L"SendKIFD() failed!\n");
 		return false;
 	}
 
@@ -235,7 +236,7 @@ char *SAM::getKICC()
 	CByteArray kicc_ba = m_card->getCalReader()->SendAPDU(CByteArray(apdu_kicc, sizeof(apdu_kicc)));
 	if (!checkResultSW12(kicc_ba))
 	{
-		fprintf(stderr, "SendKIFD() failed!\n");
+		MWLOG(LEV_ERROR, MOD_APL, L"Get KICC() failed!\n");
 		return NULL;
 	}
 	kicc_ba.Chop(2);
@@ -256,7 +257,7 @@ bool SAM::verifyCert_CV_IFD(char * cv_cert)
 
 	if (cv_cert == NULL || strlen(cv_cert) == 0)
 	{
-		fprintf(stderr, "Invalid cv_cert in SAM::VerifyCert_CV_IFD()!\n");
+		fprintf(stderr, "Invalid cv_cert in SAM::VerifyCert_CV_IFD()!");
 		return false;
 	}
 
@@ -264,7 +265,7 @@ bool SAM::verifyCert_CV_IFD(char * cv_cert)
 
 	if (!checkResultSW12(resp))
 	{
-		fprintf(stderr, "VerifyCert_CV_IFD() p1 failed!\n");
+		MWLOG(LEV_ERROR, MOD_APL, L"MSE SET for VerifyCert_CV_IFD() failed!");
 		return false;
 	}
 
@@ -274,7 +275,7 @@ bool SAM::verifyCert_CV_IFD(char * cv_cert)
 	resp = m_card->getCalReader()->SendAPDU(apdu_pso_verify);
 	if (!checkResultSW12(resp))
 	{
-		fprintf(stderr, "VerifyCert_CV_IFD() p2 failed!\n");
+		MWLOG(LEV_ERROR, MOD_APL, L"VerifyCert_CV_IFD() failed!");
 		return false;
 	}
 	
@@ -295,16 +296,9 @@ char * SAM::getPK_IFD_AUT(char * cvc_cert)
 
 	if (m_ca_cvc_modulus.Size() == 0 || m_ca_cvc_exponent.Size() == 0)
 	{
-		fprintf(stderr, "This should be called after getCVCPublicKey() so that the CA public key gets read!");
+		MWLOG(LEV_ERROR, MOD_APL, L"This should be called after getCVCPublicKey() so that the CA public key is retrieved!");
 		return NULL;
 	}
-
-	//Init OpenSSL: In this context initialization is already performed
-	//OpenSSL_add_all_algorithms();
-	//ERR_load_crypto_strings();
-
-	//FILE *fp = fopen(argv[1], "r");
-	//FILE * output_file = fopen("recovered_signature.bin", "w");
 
 	//5F37 is the ASN1 tag for the CVC Signature
 	const char * needle = "\x5F\x37\x81\x80";
@@ -312,7 +306,7 @@ char * SAM::getPK_IFD_AUT(char * cvc_cert)
 
 	if (!ptr)
 	{
-		fprintf(stderr, "Signature tag not found, broken CVC!\n");
+		MWLOG(LEV_ERROR, MOD_APL, L"Signature tag not found, broken CVC!");
 		return NULL;
 	}
 	memcpy(signature, ptr+4, sizeof(signature));
@@ -324,7 +318,7 @@ char * SAM::getPK_IFD_AUT(char * cvc_cert)
 
     if (pubkey->n == NULL || pubkey->e == NULL)
     {
-    	fprintf(stderr, "Failed to parse bignums into public key struct!\n" );
+    	MWLOG(LEV_ERROR, MOD_APL, L"Failed to parse bignums into public key struct!" );
     	return NULL;
     }
 
@@ -332,7 +326,7 @@ char * SAM::getPK_IFD_AUT(char * cvc_cert)
 
     if (ret == -1)
     {
-      	fprintf(stderr, "Error decrypting CVC signature: %ld\n", ERR_get_error());
+      	MWLOG(LEV_ERROR, MOD_APL, L"Error decrypting CVC signature: %ld\n", ERR_get_error());
       	return NULL;
     }
 
@@ -347,7 +341,7 @@ char * SAM::getPK_IFD_AUT(char * cvc_cert)
 
     binToHex((const unsigned char *)CHR, sizeof(CHR), chr_string, 8*2+1);
 
-    fprintf(stderr, "Certificate Holder reference (IFD): %s\n", chr_string);
+    //fprintf(stderr, "Certificate Holder reference (IFD): %s\n", chr_string);
 
     return chr_string;
 
@@ -373,6 +367,7 @@ char *SAM::generateChallenge(char * chr_string)
 	unsigned char mse_set_external_auth[] = {0x00, 0x22, 0x41, 0xA4, 0x0D, 0x95, 0x01, 0x80, 0x83, 0x08};
 	
 	//We dont need to hardcode the IFD.SN value because we parse it from the certificate
+	//These are values that were used in test and prod environments
 	//unsigned char ba1_test[] = {0x00, 0x22, 0x41 ,0xA4 ,0x0D ,0x95 ,0x01 ,0x80 ,0x83 ,0x08, 0x00 ,0x00 ,0x00, 0x00, 0x00 , 0x00 ,0x00, 0x03};
 	//unsigned char ba1_production[] = {0x00, 0x22, 0x41 ,0xA4 ,0x0D ,0x95 ,0x01, 0x80, 0x83, 0x08, 0x02, 0x06, 0x00, 0x07, 0x01, 0x07, 0x08, 0x08};
 	CByteArray apdu1 = CByteArray(mse_set_external_auth, sizeof(mse_set_external_auth));
@@ -397,11 +392,13 @@ char *SAM::generateChallenge(char * chr_string)
 std::vector<char *> SAM::sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_array)
 {
 	int i = 0;
+	MWLOG(LEV_DEBUG, MOD_APL, L"SAM::sendSequenceOfPrebuiltAPDUs()");
 	std::vector <char *> responses;
+
 	while(i != apdu_array.size())
 	{
 		char * tmp = sendPrebuiltAPDU(apdu_array.at(i));
-		fprintf(stderr, "APDU %d -> result: %s\n", i, tmp);
+		MWLOG(LEV_DEBUG, MOD_APL, L"APDU %s -> Result: %s", apdu_array.at(i), tmp);
 		responses.push_back(tmp);
 		i++;
 	}
@@ -412,8 +409,11 @@ char *SAM::sendPrebuiltAPDU(char *apdu_string)
 {
 	char *resp_string = NULL;
 
-	CByteArray mse_ba(std::string(apdu_string), true);
-	CByteArray resp = m_card->getCalReader()->SendAPDU(mse_ba);
+	CByteArray apdu_ba(std::string(apdu_string), true);
+
+	//This is the Le=00 needed to actually get the card response with T=1 cards
+	apdu_ba.Append(0x00);
+	CByteArray resp = m_card->getCalReader()->SendAPDU(apdu_ba);
 
 	resp_string = (char *)malloc(resp.Size()*2 +1);
 
@@ -429,7 +429,7 @@ bool SAM::verifySignedChallenge(char *signed_challenge)
 
 	if (signed_challenge == NULL || strlen(signed_challenge) == 0)
 	{
-		fprintf(stderr, "Invalid signed_challenge in SAM::verifySignedChallenge()!\n");
+		MWLOG(LEV_ERROR, MOD_APL, L"Invalid signed_challenge in SAM::verifySignedChallenge()!");
 		return false;
 	}
 

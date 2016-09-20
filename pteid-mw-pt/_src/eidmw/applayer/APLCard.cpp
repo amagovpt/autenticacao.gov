@@ -31,6 +31,7 @@
 #include "PDFSignature.h"
 #include "MiscUtil.h"
 #include "SSLConnection.h"
+#include "Log.h"
 
 #include <time.h>
 #include <sys/types.h>
@@ -120,6 +121,7 @@ CByteArray APL_Card::sendAPDU(const CByteArray& cmd)
 	return out;
 }
 
+/*
 CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey)
 {
 	if(m_reader->isVirtualReader()) //Virtual Reader
@@ -139,8 +141,9 @@ CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey)
 
 	return out;
 }
+*/
 
-CByteArray APL_Card::SignSHA256(const CByteArray & oData, bool signatureKey)
+CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey, bool use_sha256)
 {
 	CByteArray out;
 	BEGIN_CAL_OPERATION(m_reader)
@@ -150,6 +153,8 @@ CByteArray APL_Card::SignSHA256(const CByteArray & oData, bool signatureKey)
 		signing_key = m_reader->getCalReader()->GetPrivKeyByID(0x46); 
 	else
 		signing_key = m_reader->getCalReader()->GetPrivKeyByID(0x45);
+
+	unsigned long algoID = use_sha256 ? SIGN_ALGO_SHA256_RSA_PKCS : SIGN_ALGO_RSA_PKCS;
 
 	out = m_reader->getCalReader()->Sign(signing_key, SIGN_ALGO_SHA256_RSA_PKCS, oData);
 	END_CAL_OPERATION(m_reader)
@@ -263,13 +268,11 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 
 		if (!ret_signed_ch)
 		{
-			fprintf(stderr, "EXTERNAL AUTHENTICATE command failed! Aborting operation.\n");
+			MWLOG(LEV_ERROR, MOD_APL, L"EXTERNAL AUTHENTICATE command failed! Aborting Address Change!");
 			throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
 		}
 		if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
 		{
-			//DEBUG: try to send a wrongly encrypted APDU
-			//sam_helper.sendPrebuiltAPDU("0C2241A41587090107B2DA83BEE3EF718E08AB4E417A1302C612");
 			resp_mse = sam_helper.sendPrebuiltAPDU(resp_2ndpost->set_se_command);
 
 			resp_internal_auth = sam_helper.sendPrebuiltAPDU(resp_2ndpost->internal_auth);
@@ -281,9 +284,9 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 
 		if (r1 != NULL)
 		{
-			fprintf(stderr, "DEBUG: writing new address...\n");
+			//fprintf(stderr, "DEBUG: writing new address...\n");
 			std::vector<char *> address_response = sam_helper.sendSequenceOfPrebuiltAPDUs(r1->apdu_write_address);
-			fprintf(stderr, "DEBUG: writing new SOD...\n");
+			//fprintf(stderr, "DEBUG: writing new SOD...\n");
 			std::vector<char *> sod_response = sam_helper.sendSequenceOfPrebuiltAPDUs(r1->apdu_write_sod);
 
 			StartWriteResponse start_write_resp = {address_response, sod_response};
@@ -498,7 +501,7 @@ APL_CardFile_Info *APL_SmartCard::getFileInfo()
 {
 	if(!m_fileinfo)
 	{
-		CAutoMutex autoMutex(&m_Mutex);		//We lock for unly one instanciation
+		CAutoMutex autoMutex(&m_Mutex);		    //We lock for unly one instanciation
 		if (!m_fileinfo)						//We test again to be sure it isn't instanciated between the first if and the lock
 		{
 			m_fileinfo=new APL_CardFile_Info(this);

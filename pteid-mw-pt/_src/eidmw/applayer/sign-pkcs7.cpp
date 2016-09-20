@@ -83,7 +83,6 @@ CByteArray PteidSign(APL_Card *card, CByteArray &to_sign, bool use_sha256)
 	output = card->Sign(to_sign_padded, true);
 
 	return output;
-
 }
 
 

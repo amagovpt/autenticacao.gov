@@ -1,13 +1,10 @@
 /**
-******************************************************************************
 *
 **  PTeID Middleware Project.
 **  Copyright (C) 2011-2012
 **  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
 **
 **  XAdES and XAdES-T signature generator and validator 
-**
-**
 **
 */
 
@@ -1206,7 +1203,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		
 		try
 		{
-			rsa_signature = mp_card->SignSHA256(CByteArray(toFill, SHA256_LEN), true);
+			rsa_signature = mp_card->Sign(CByteArray(toFill, SHA256_LEN), true, true);
 		}
 		catch(...)
 		{
