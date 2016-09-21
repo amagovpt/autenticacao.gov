@@ -1,6 +1,7 @@
 #include <curl/curl.h>
 
 #include "CRLFetcher.h"
+#include "APLConfig.h"
 #include "Util.h"
 #include "Log.h"
 
@@ -23,6 +24,10 @@ namespace eIDMW
 		CURL *curl;
 		CURLcode res;
 		char error_buf[CURL_ERROR_SIZE];
+		
+		//Get Proxy configuration
+		APL_Config proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
+		APL_Config proxy_port(CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT);
 
 		if (strlen(url) == 0 || strstr(url, "http") != url)
 		{
@@ -55,6 +60,14 @@ namespace eIDMW
 			curl_easy_setopt(curl, CURLOPT_URL, url);
 
 			curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
+
+			if (proxy_host.getString() != NULL && strlen(proxy_host.getString()) > 0)
+			{
+				//Set Proxy options for request
+				curl_easy_setopt(curl, CURLOPT_PROXY, proxy_host.getString());
+				curl_easy_setopt(curl, CURLOPT_PROXYPORT, proxy_port.getLong());
+				curl_easy_setopt(curl, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+			}
 
 			curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buf);
 

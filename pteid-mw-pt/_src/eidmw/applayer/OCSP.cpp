@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "APLConfig.h"
 #include "ByteArray.h"
 #include "static_pteid_certs.h"
 
@@ -24,7 +25,26 @@ CByteArray sendOCSPRequest(X509 *cert, X509* issuer, char *ocsp_url)
 {
 	OCSP_CERTID *id;
 	char *host, *port, *path;
-	int is_ssl = 0; 
+	int is_ssl = 0;
+	BIO * ocsp_bio = NULL;
+
+	APL_Config proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
+	APL_Config proxy_port(CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT);
+
+	//TODO: We assume that if proxy_host has a value proxy_port also does which may not be true!!
+	if (proxy_host.getString() != NULL && strlen(proxy_host.getString()) > 0)
+	{
+		ocsp_bio = BIO_new_connect(proxy_host.getString());
+		BIO_set_conn_port(ocsp_bio, proxy_port.getLong());
+		path = ocsp_url;
+	}
+	else
+	{
+		OCSP_parse_url(ocsp_url, &host, &port, &path, &is_ssl);
+		ocsp_bio = BIO_new_connect(host);
+		BIO_set_conn_port(ocsp_bio, port);
+
+	}
 
 	OCSP_REQUEST *pRequest = OCSP_REQUEST_new();
 
@@ -36,11 +56,7 @@ CByteArray sendOCSPRequest(X509 *cert, X509* issuer, char *ocsp_url)
 	OCSP_request_add1_nonce(pRequest, 0, -1);
 
 	//Parse url into host, port and path
-	OCSP_parse_url(ocsp_url, &host, &port, &path, &is_ssl);
-
-	BIO * ocsp_bio = BIO_new_connect(host);
-
-	BIO_set_conn_port(ocsp_bio, port);
+	
 
 	//TODO: we should introduce a network timeout to properly handle OCSP server downtime
 	if (BIO_do_connect(ocsp_bio) <= 0)
