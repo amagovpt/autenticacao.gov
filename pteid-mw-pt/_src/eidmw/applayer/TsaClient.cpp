@@ -91,6 +91,12 @@ namespace eIDMW
 
 		//Get Timestamping server URL from config
 		APL_Config tsa_url(CConfig::EIDMW_CONFIG_PARAM_XSIGN_TSAURL);
+		
+		//Get Proxy configuration
+		APL_Config proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
+		APL_Config proxy_port(CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT);
+
+
 		const char * TSA_URL = tsa_url.getString();
 
 		if (data_len == SHA256_LEN)
@@ -128,6 +134,14 @@ namespace eIDMW
 			curl_easy_setopt(curl, CURLOPT_URL, TSA_URL);
 
 			curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
+
+			if (proxy_host.getString() != NULL && strlen(proxy_host.getString()) > 0)
+			{
+				//Set Proxy options for request
+				curl_easy_setopt(curl, CURLOPT_PROXY, proxy_host.getString());
+				curl_easy_setopt(curl, CURLOPT_PROXYPORT, proxy_port.getLong());
+				curl_easy_setopt(curl, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+			}
 
 			/* Now specify the POST data */ 
 			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, ts_request);

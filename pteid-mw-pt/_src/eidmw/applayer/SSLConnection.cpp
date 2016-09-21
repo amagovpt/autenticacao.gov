@@ -678,6 +678,54 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 
 }
 
+BIO * connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_host, char *ssl_host_andport)
+{
+		char tmpbuf[10*1024];
+        char connect_request[1024];
+        char proxy_host_str[512];
+
+		BIO * cbio = BIO_new(BIO_s_connect());
+		int len = 0;
+
+		const char * user_agent = "User-Agent: Portugal e-ID Middleware 2.4";
+        const char * no_cache = "Pragma: no-cache";
+        const char * no_content = "Content-Length: 0";
+        const char * keepAlive = "Proxy-Connection: Keep-Alive";
+
+		MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: Connecting to proxy Host: %s Port: %ld", 
+			proxy_host, proxy_port);
+
+		snprintf(proxy_host_str, sizeof(proxy_host_str), "%s:%ld", proxy_host, proxy_port);
+		//TODO: the BIO_connect, BIO_read, BIO_write calls are blocking (we may need to have a timeout mechanism...)
+		BIO_set_conn_hostname(cbio, proxy_host_str);
+
+        if (BIO_do_connect(cbio) <= 0) {
+               MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection: TCP connection to proxy server failed!");
+               return NULL;
+        }
+
+        //TODO: For proxy Auth add: Proxy-Authorization: basic base64(USER:PASS)
+	    snprintf(connect_request, sizeof(connect_request), "CONNECT %s HTTP/1.1\r\n Host: %s\r\n%s\r\n%s\r\n%s\r\n%s\r\n\r\n",
+            ssl_host_andport, ssl_host, user_agent, no_cache, no_content, keepAlive);
+
+	    BIO_puts(cbio, connect_request);
+
+        len = BIO_read(cbio, tmpbuf, sizeof(tmpbuf));
+        tmpbuf[len] = '\0';
+
+        MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: CONNECT reply: %s", tmpbuf);
+
+        //Add Log with the proxy response to the CONNECT request
+        //BIO_write(out, tmpbuf, len);
+        if (strstr(tmpbuf, "200 Connection established") == NULL)
+        {
+          MWLOG(LEV_DEBUG, MOD_APL, L"Error connecting to proxy!");
+          return NULL;
+        }
+
+        return cbio;
+}
+
 /**
  * Connect to a host using an encrypted stream
  */
@@ -690,7 +738,6 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
     SSL_CTX *ctx = SSL_CTX_new(TLSv1_1_client_method());
 
     SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
-
 
     //NOTE: to get more debug output from the SSL layer uncomment this
     //SSL_CTX_set_info_callback(ctx, eIDMW::get_ssl_state_callback);
@@ -717,11 +764,25 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
     X509_VERIFY_PARAM_set1_host(vpm, m_host, 0);
 #endif
 
-    bio = BIO_new_connect(host_and_port);
-    if (BIO_do_connect(bio) <= 0) {
-	    fprintf(stderr, "Error connecting to OTP server\n");
-	    ERR_print_errors_fp(stderr);
-    }
+    //Get Proxy configuration
+	APL_Config proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
+	APL_Config proxy_port(CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT);
+
+	//TODO: We assume that if proxy_host has a value proxy_port also does which may not be true!!
+	if (proxy_host.getString() != NULL && strlen(proxy_host.getString()) > 0)
+	{
+		
+		bio = connectToProxyServer(proxy_host.getString(), proxy_port.getLong(), m_host, host_and_port);
+	}
+	else
+	{
+    	bio = BIO_new_connect(host_and_port);
+    	if (BIO_do_connect(bio) <= 0) {
+	 	   fprintf(stderr, "Error connecting to SAM server\n");
+	    	ERR_print_errors_fp(stderr);
+    	}
+	}
+
     SSL *ssl_handle = SSL_new(ctx);
     SSL_set_bio (ssl_handle, bio, bio);
 
