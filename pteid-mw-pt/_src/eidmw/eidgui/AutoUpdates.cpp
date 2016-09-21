@@ -37,6 +37,7 @@
 #include <stdio.h>
 #include "verinfo.h"
 #include <QSysInfo>
+#include <QNetworkProxy>
 #else
 #include "pteidversions.h"
 #endif
@@ -116,6 +117,23 @@ void AutoUpdates::cancelDownload()
 }
 void AutoUpdates::startRequest(QUrl url)
 {
+	eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_HOST);
+	eIDMW::PTEID_Config config2(eIDMW::PTEID_PARAM_PROXY_PORT);
+
+    std::string proxy_host = config.getString();
+    long proxy_port = config2.getLong();
+
+	if (!proxy_host.empty())
+	{
+		proxy.setType(QNetworkProxy::HttpProxy);
+		proxy.setHostName(QString::fromStdString(proxy_host));
+		proxy.setPort(proxy_port);
+
+		//proxy.setUser("username");
+		//proxy.setPassword("password");
+		QNetworkProxy::setApplicationProxy(proxy);
+	}
+
 	reply = qnam.get(QNetworkRequest(url));
 	connect(reply, SIGNAL(finished()),
 			this, SLOT(httpFinished()));

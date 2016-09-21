@@ -25,6 +25,7 @@
 #include <QDialog>
 #include <QtGui>
 #include <QNetworkAccessManager>
+#include <QNetworkProxy>
 #include <QUrl>
 #include <iostream>
 #include <QString>
@@ -71,6 +72,7 @@ private:
     	QProgressDialog *progressDialog;
 
 	QUrl url;
+	QNetworkProxy proxy;
 	QNetworkAccessManager qnam;
 	QNetworkReply *reply;
 	QFile *file;
