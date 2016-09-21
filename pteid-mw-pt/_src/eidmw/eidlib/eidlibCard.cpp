@@ -132,7 +132,7 @@ PTEID_ByteArray PTEID_Card::SignSHA256(const PTEID_ByteArray& data, bool signatu
 	APL_Card *pcard=static_cast<APL_Card *>(m_impl);
 
 	CByteArray cData(data.GetBytes(),data.Size());
-	CByteArray result = pcard->SignSHA256(cData, signatureKey);
+	CByteArray result = pcard->Sign(cData, signatureKey, true);
 	out.Append(result.GetBytes(),result.Size());
 
 	END_TRY_CATCH
