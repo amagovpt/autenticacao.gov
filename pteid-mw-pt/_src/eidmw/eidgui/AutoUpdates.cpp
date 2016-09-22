@@ -292,6 +292,15 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	QStringList list1 = ver.split(",");
 	
 	QStringList list2 = QString(filedata.c_str()).split(",");
+
+	if (list2.size() < 3)
+	{
+		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", 
+			"AutoUpdates::VerifyUpdates: Wrong data returned from server or Proxy HTML error!");
+		
+		this->close();
+		return false;
+	}
 	
 	//Parse local version into PteidVersion
 	PteidVersion local_version;
@@ -317,7 +326,8 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
         archver = VerifyOS("arch", false);
         ChooseVersion(distrover, archver);
         return true;
-	} else {
+	} 
+	else {
 
 		QMessageBox msgBoxnoupdates(QMessageBox::Information, tr("Auto-update"),
 			       	tr("No updates available at the moment"), 0, this);
