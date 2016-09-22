@@ -151,6 +151,8 @@ enum PTEID_Param
 	//PROXY
 	PTEID_PARAM_PROXY_HOST,				//string;
 	PTEID_PARAM_PROXY_PORT,				//number
+	PTEID_PARAM_PROXY_USERNAME,			//string;
+	PTEID_PARAM_PROXY_PWD,				//string;
 	PTEID_PARAM_PROXY_PACFILE,			//string
 
 	//SECURITY

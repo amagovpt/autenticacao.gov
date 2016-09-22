@@ -169,6 +169,8 @@ replace $install by string in install parameter
 #define EIDMW_CNF_SECTION_PROXY         L"proxy"                    //section with the proxy parameters
 #define EIDMW_CNF_PROXY_HOST            L"proxy_host"               //string; 
 #define EIDMW_CNF_PROXY_PORT            L"proxy_port"               //number
+#define EIDMW_CNF_PROXY_USERNAME        L"proxy_username"           //string
+#define EIDMW_CNF_PROXY_PASSWORD        L"proxy_password"           //string
 #define EIDMW_CNF_PROXY_PACFILE         L"proxy_pacfile"            //string; 
 #define EIDMW_CNF_PROXY_CONNECT_TIMEOUT  L"connect_timeout"          //number
 
@@ -309,6 +311,8 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_PROXY_HOST;
     static const struct Param_Num EIDMW_CONFIG_PARAM_PROXY_PORT;
     static const struct Param_Str EIDMW_CONFIG_PARAM_PROXY_PACFILE;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_PROXY_USERNAME;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_PROXY_PWD;
     static const struct Param_Num EIDMW_CONFIG_PARAM_PROXY_CONNECT_TIMEOUT;
 
     //SECURITY

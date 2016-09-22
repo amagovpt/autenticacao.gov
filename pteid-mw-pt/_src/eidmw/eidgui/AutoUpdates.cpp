@@ -115,22 +115,31 @@ void AutoUpdates::cancelDownload()
 	httpRequestAborted = true;
 	reply->abort();
 }
+
 void AutoUpdates::startRequest(QUrl url)
 {
 	eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_HOST);
 	eIDMW::PTEID_Config config2(eIDMW::PTEID_PARAM_PROXY_PORT);
+	eIDMW::PTEID_Config config_username(eIDMW::PTEID_PARAM_PROXY_USERNAME);
+	eIDMW::PTEID_Config config_pwd(eIDMW::PTEID_PARAM_PROXY_PWD);
 
     std::string proxy_host = config.getString();
+    std::string proxy_username = config_username.getString();
+    std::string proxy_pwd = config_pwd.getString();
     long proxy_port = config2.getLong();
 
-	if (!proxy_host.empty())
+	if (!proxy_host.empty() && !proxy_pwd.empty())
 	{
 		proxy.setType(QNetworkProxy::HttpProxy);
 		proxy.setHostName(QString::fromStdString(proxy_host));
 		proxy.setPort(proxy_port);
 
-		//proxy.setUser("username");
-		//proxy.setPassword("password");
+		if (!proxy_username.empty())
+		{
+			proxy.setUser(QString::fromStdString(proxy_username));
+			proxy.setPassword(QString::fromStdString(proxy_pwd));
+		}
+		
 		QNetworkProxy::setApplicationProxy(proxy);
 	}
 

@@ -842,6 +842,11 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);			break;
 	case PTEID_PARAM_PROXY_PORT:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT);			break;
+	case PTEID_PARAM_PROXY_USERNAME:
+		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_PROXY_USERNAME);		break;
+	case PTEID_PARAM_PROXY_PWD:
+		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_PROXY_PWD);		    break;
+
 	case PTEID_PARAM_PROXY_PACFILE: 
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_PROXY_PACFILE);		break;
 	case PTEID_PARAM_PROXY_CONNECT_TIMEOUT:
