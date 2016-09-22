@@ -14,6 +14,7 @@
 #include "eidErrors.h"
 #include "APLConfig.h"
 #include "Log.h"
+#include "MiscUtil.h"
 #include "static_pteid_certs.h"
 #include "CardPteidDef.h"
 #include "cJSON.h"
@@ -220,7 +221,6 @@ void translate_ssl_error(SSL *ssl, int error_code)
 	fprintf(stderr, "Complete error stack: \n");
 	ERR_print_errors_fp(stderr);
 
-
 }
 
 
@@ -331,7 +331,6 @@ char *parseToken(char * server_response, const char * token)
 	return change_pin_apdu;
 
 }
-
 
 #define REPLY_BUFSIZE 100000
 
@@ -678,11 +677,12 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 
 }
 
-BIO * connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_host, char *ssl_host_andport)
+BIO * connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_host, char *proxy_user, char * proxy_pwd, char *ssl_host_andport)
 {
 		char tmpbuf[10*1024];
         char connect_request[1024];
         char proxy_host_str[512];
+        int ret = 0;
 
 		BIO * cbio = BIO_new(BIO_s_connect());
 		int len = 0;
@@ -704,9 +704,26 @@ BIO * connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_h
                return NULL;
         }
 
-        //TODO: For proxy Auth add: Proxy-Authorization: basic base64(USER:PASS)
-	    snprintf(connect_request, sizeof(connect_request), "CONNECT %s HTTP/1.1\r\n Host: %s\r\n%s\r\n%s\r\n%s\r\n%s\r\n\r\n",
-            ssl_host_andport, ssl_host, user_agent, no_cache, no_content, keepAlive);
+        //For proxy auth Basic
+        if (proxy_user != NULL && proxy_pwd != NULL)
+        {
+        	std::string proxy_cleartext = std::string(proxy_user) + ":" + proxy_pwd;
+        	const char *proxy_auth_header = "Proxy-Authorization: basic ";
+
+        	char *auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), proxy_cleartext.size());
+
+        	ret = snprintf(connect_request, sizeof(connect_request), "CONNECT %s HTTP/1.1\r\n Host: %s\r\n%s%s\r\n%s\r\n%s\r\n%s\r\n%s\r\n\r\n",
+        		ssl_host_andport, ssl_host, proxy_auth_header, auth_token, user_agent, no_cache, no_content, keepAlive);
+
+        	fprintf(stderr, "DEBUG: snprintf ret=%d\n", ret);
+        }	
+        else
+        {
+
+	    	ret = snprintf(connect_request, sizeof(connect_request), "CONNECT %s HTTP/1.1\r\n Host: %s\r\n%s\r\n%s\r\n%s\r\n%s\r\n\r\n",
+            	ssl_host_andport, ssl_host, user_agent, no_cache, no_content, keepAlive);
+	    	fprintf(stderr, "DEBUG: snprintf ret=%d\n", ret);
+		}
 
 	    BIO_puts(cbio, connect_request);
 
@@ -767,12 +784,23 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
     //Get Proxy configuration
 	APL_Config proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
 	APL_Config proxy_port(CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT);
+	APL_Config proxy_user(CConfig::EIDMW_CONFIG_PARAM_PROXY_USERNAME);
+	APL_Config proxy_pwd(CConfig::EIDMW_CONFIG_PARAM_PROXY_PWD);
 
 	//TODO: We assume that if proxy_host has a value proxy_port also does which may not be true!!
 	if (proxy_host.getString() != NULL && strlen(proxy_host.getString()) > 0)
 	{
+		char * proxy_user_value = NULL;
+		char * proxy_pwd_value = NULL;
+
+		if (proxy_user.getString() != NULL && strlen(proxy_user.getString()) > 0)
+		{
+			proxy_user_value = (char *)proxy_user.getString();
+			proxy_pwd_value = (char *)proxy_pwd.getString();
+		}
 		
-		bio = connectToProxyServer(proxy_host.getString(), proxy_port.getLong(), m_host, host_and_port);
+		bio = connectToProxyServer(proxy_host.getString(), proxy_port.getLong(), 
+			   m_host, proxy_user_value, proxy_pwd_value, host_and_port);
 	}
 	else
 	{

@@ -262,7 +262,8 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 	}
 	else
 	{
-		MWLOG(LEV_ERROR, MOD_APL, L"Error decoding timestamp token!\n");
+		MWLOG(LEV_ERROR, MOD_APL, 
+			L"Error decoding timestamp token! The TSA is returning bogus data or we have proxy issues and we are getting HTML messages here\n");
 		return 1;
 	}
 

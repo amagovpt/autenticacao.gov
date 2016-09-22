@@ -46,6 +46,8 @@ char * utf8_to_latin1(char * in);
 
 void replace_lastdot_inplace(char *in);
 
+char *Base64Encode(const unsigned char *input, long length);
+
 //Common type between 2/3 different cpp files
 typedef struct _hashed_file_
 {

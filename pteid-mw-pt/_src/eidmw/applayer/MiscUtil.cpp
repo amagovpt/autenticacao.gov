@@ -30,6 +30,9 @@
 
 #include <cstdio>
 #include <cstring>
+#include <openssl/bio.h>
+#include <openssl/evp.h>
+#include <openssl/buffer.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -151,6 +154,31 @@ void replace_lastdot_inplace(char* str_in)
 	// Don't replace '.' if its a UNIX dotfile
 	if (last_dot != NULL && *(last_dot-1) != '/')
 		*last_dot = '_';
+}
+
+/*
+Base64 encode binary-data: it can be used also for C-style strings if we ignore the 0x0 terminator
+*/
+
+char *Base64Encode(const unsigned char *input, long length)
+{
+	BIO *bmem, *b64;
+	BUF_MEM *bptr;
+
+	b64 = BIO_new(BIO_f_base64());
+	bmem = BIO_new(BIO_s_mem());
+	b64 = BIO_push(b64, bmem);
+	BIO_write(b64, input, length);
+	BIO_flush(b64);
+	BIO_get_mem_ptr(b64, &bptr);
+
+	char *buff = (char *)malloc(bptr->length);
+	memcpy(buff, bptr->data, bptr->length-1);
+	buff[bptr->length-1] = 0;
+
+	BIO_free_all(b64);
+
+	return buff;
 }
 
 

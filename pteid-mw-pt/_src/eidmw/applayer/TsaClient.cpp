@@ -95,6 +95,8 @@ namespace eIDMW
 		//Get Proxy configuration
 		APL_Config proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
 		APL_Config proxy_port(CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT);
+		APL_Config proxy_user(CConfig::EIDMW_CONFIG_PARAM_PROXY_USERNAME);
+		APL_Config proxy_pwd(CConfig::EIDMW_CONFIG_PARAM_PROXY_PWD);
 
 
 		const char * TSA_URL = tsa_url.getString();
@@ -140,6 +142,15 @@ namespace eIDMW
 				//Set Proxy options for request
 				curl_easy_setopt(curl, CURLOPT_PROXY, proxy_host.getString());
 				curl_easy_setopt(curl, CURLOPT_PROXYPORT, proxy_port.getLong());
+				
+				const char * proxy_user_value = proxy_user.getString();
+
+				if (proxy_user_value != NULL && strlen(proxy_user_value) > 0)
+				{
+					curl_easy_setopt(curl, CURLOPT_PROXYUSERNAME, proxy_user_value);
+					curl_easy_setopt(curl, CURLOPT_PROXYPASSWORD, proxy_pwd.getString());
+				}
+
 				curl_easy_setopt(curl, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
 			}
 
