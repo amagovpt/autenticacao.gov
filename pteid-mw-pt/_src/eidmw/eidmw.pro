@@ -34,16 +34,6 @@ applayer.depends = pteid-poppler
 !isEmpty(BUILD_SDK) {
 SUBDIRS +=  cardlayerTool
 }
-	        
-
-!isEmpty(BUILD_TESTS) {
-SUBDIRS += commonTest \
-	   cardlayerEmulation \
-	   applayerEmulation \
-	   applayerTest \
-	   eidlibTest \
-	   cardlayerTool
-}
 
 SUBDIRS += eidgui
 

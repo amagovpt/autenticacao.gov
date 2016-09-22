@@ -787,6 +787,9 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
     bool bOK = false;
     m_ucCLA = 0x00;
 
+    MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::SignInternal called with algoID=%02x and data length=%d", 
+    	algo, oData.Size());
+
     if (pPin != NULL)
     {
     unsigned long ulRemaining = 0;
