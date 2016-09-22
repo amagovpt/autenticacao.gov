@@ -117,7 +117,6 @@ HEADERS += CardInformation.h \
 					 picturepopup.h \
 					 qtsingleapplication.h \
 					 dlgprint.h \
-					 dlgverifysignature.h \
 					 mylistview.h \
 					 dlgsignature.h \
 					 PDFSignWindow.h \
@@ -130,21 +129,20 @@ FORMS += dlgAbout.ui dlgOptions.ui mainwnd.ui picturepopup.ui dlgPrint.ui dlgSig
 RESOURCES = eidgui.qrc 
 
 SOURCES += CardInformation.cpp \
-           dlgAbout.cpp \
-           dlgOptions.cpp \
-           httpwindow.cpp \
-           AutoUpdates.cpp \
-           ChangeAddressDialog.cpp \
-           main.cpp \
-           mainwnd.cpp \
-		   dlgprint.cpp \
-		   dlgverifysignature.cpp \
-		   dlgsignature.cpp \
-			picturepopup.cpp \
-			qtsingleapplication.cpp \
-					 PDFSignWindow.cpp \
-					 mylistview.cpp \
-					 genpur.cpp
+	   dlgAbout.cpp \
+	   dlgOptions.cpp \
+	   httpwindow.cpp \
+	   AutoUpdates.cpp \
+	   ChangeAddressDialog.cpp \
+	   main.cpp \
+	   mainwnd.cpp \
+	   dlgprint.cpp \
+	   dlgsignature.cpp \
+	   picturepopup.cpp \
+	   qtsingleapplication.cpp \
+	   PDFSignWindow.cpp \
+	   mylistview.cpp \
+	   genpur.cpp
 unix:!macx: SOURCES += qtsingleapplication_x11.cpp
 macx: SOURCES += qtsingleapplication_mac.cpp	
 

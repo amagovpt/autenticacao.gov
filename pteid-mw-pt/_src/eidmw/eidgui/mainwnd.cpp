@@ -2,6 +2,7 @@
 
  * eID Middleware Project.
  * Copyright (C) 2008-2010 FedICT.
+ * Copyright (C) 2012-2016 Caixa Mágica Software 
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -41,7 +42,6 @@
 #include "mainwnd.h"
 #include "dlgAbout.h"
 #include "dlgprint.h"
-#include "dlgverifysignature.h"
 #include "ChangeAddressDialog.h"
 #include "PDFSignWindow.h"
 #include "dlgsignature.h"
@@ -251,8 +251,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	enableFileMenu();
 	enablePrintMenu();
-
-	m_ui.actionShow_Toolbar->setChecked( m_Settings.getShowToolbar() );
 
 	setEnabledCertifButtons( false );
 	setEnabledPinButtons( false );
@@ -2595,7 +2593,6 @@ void MainWnd::show_window_parameters(){
 	}
 
 	dlgOptions* dlg = new dlgOptions(m_Settings, this);
-	dlg->setShowToolbar(m_Settings.getShowToolbar());
 	dlg->setShowPicture(m_Settings.getShowPicture());
 	dlg->setShowNotification(m_Settings.getShowNotification());
 
@@ -2603,7 +2600,6 @@ void MainWnd::show_window_parameters(){
 
 	if(dlg->exec())
 	{
-		m_ui.actionShow_Toolbar->setChecked( m_Settings.getShowToolbar() );
 
 		if( !m_ui.txtIdentity_Name->text().isEmpty() )
 			m_ui.lblIdentity_ImgPerson->setPixmap( m_imgPicture );
