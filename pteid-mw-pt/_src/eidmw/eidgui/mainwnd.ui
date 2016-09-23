@@ -2665,17 +2665,6 @@ font: 10pt &quot;Arial&quot;;</string>
         <string>&amp;About</string>
       </property>
     </action>
-    <action name="actionShow_Toolbar">
-      <property name="checkable">
-        <bool>true</bool>
-      </property>
-      <property name="checked">
-        <bool>true</bool>
-      </property>
-      <property name="text">
-        <string>&amp;Show Toolbar</string>
-      </property>
-    </action>
     <action name="actionPINRequest">
       <property name="text">
         <string>Test PIN</string>

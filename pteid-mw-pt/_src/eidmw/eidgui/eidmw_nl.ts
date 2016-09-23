@@ -1334,6 +1334,43 @@ Please specify .xml, .csv or .eid</source>
         <source>Mandatory</source>
         <translation>Obrigatório</translation>
     </message>
+
+    <message>
+        <source>Network Settings</source>
+        <translation>Configurações de rede</translation>
+    </message>
+    
+    <message>
+        <source>Use Proxy Server</source>
+        <translation>Utilizar servidor Proxy</translation>
+    </message>
+    
+    <message>
+        <source>Host</source>
+        <translation>Endereço</translation>
+    </message>
+    
+    <message>
+        <source>Port</source>
+        <translation>Porto</translation>
+    </message>
+
+    <message>
+        <source>Use Proxy Authentication</source>
+        <translation>Utilizar autenticação no Proxy</translation>
+    </message>
+
+    <message>
+        <source>Username</source>
+        <translation>Utilizador</translation>
+    </message>
+
+    <message>
+        <source>Password</source>
+        <translation>Palavra-passe</translation>
+    </message>
+    
+
     <message>
         <source>OCSP</source>
         <translation>OCSP</translation>

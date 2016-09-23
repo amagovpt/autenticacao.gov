@@ -528,7 +528,6 @@ void MainWnd::on_btnAddress_Change_clicked()
 		return;
 	}
 	
-	
 	ChangeAddressDialog* dlgChangeAddr = new ChangeAddressDialog(this);
     
     if (dlgChangeAddr->exec() == QDialog::Rejected)
@@ -2586,7 +2585,7 @@ void MainWnd::on_actionAbout_triggered( void )
 //*****************************************************
 // Options clicked
 //*****************************************************
-void MainWnd::show_window_parameters(){
+void MainWnd::show_window_parameters() {
 	if( this->isHidden() )
 	{
 		this->showNormal(); // Otherwise the application will end if the options dialog gets closed
@@ -2598,10 +2597,10 @@ void MainWnd::show_window_parameters(){
 
 	m_ui.actionOptions->setEnabled(false);
 
-	if(dlg->exec())
+	if (dlg->exec())
 	{
 
-		if( !m_ui.txtIdentity_Name->text().isEmpty() )
+		if ( !m_ui.txtIdentity_Name->text().isEmpty())
 			m_ui.lblIdentity_ImgPerson->setPixmap( m_imgPicture );
 	}
 	delete dlg;

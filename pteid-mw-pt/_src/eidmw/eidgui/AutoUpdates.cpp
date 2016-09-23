@@ -128,7 +128,7 @@ void AutoUpdates::startRequest(QUrl url)
     std::string proxy_pwd = config_pwd.getString();
     long proxy_port = config2.getLong();
 
-	if (!proxy_host.empty() && !proxy_pwd.empty())
+	if (!proxy_host.empty() && proxy_port != 0)
 	{
 		proxy.setType(QNetworkProxy::HttpProxy);
 		proxy.setHostName(QString::fromStdString(proxy_host));
@@ -142,6 +142,8 @@ void AutoUpdates::startRequest(QUrl url)
 		
 		QNetworkProxy::setApplicationProxy(proxy);
 	}
+	else
+		printf("DEBUG: Proxy Host is empty!\n");
 
 	reply = qnam.get(QNetworkRequest(url));
 	connect(reply, SIGNAL(finished()),
