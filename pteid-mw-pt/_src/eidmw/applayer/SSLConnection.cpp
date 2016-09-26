@@ -381,21 +381,21 @@ SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *k
 	const char *challenge_format = "{\"Challenge\":{ \"challenge\" : \"%s\", \"kicc\" : \"%s\", \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
 	const char *challenge_format2 = "{\"Challenge\":{ \"challenge\" : \"%s\", \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
 
-	char *challenge_params = (char *) malloc(5*1024);
+	char *challenge_params = NULL;
 
 	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_2ndpost()");
 
-	if (kicc != NULL)
-	{
-		sprintf(challenge_params, challenge_format, challenge, kicc);
-		endpoint = ENDPOINT_07;
-	}
-	else
-	{
-		sprintf(challenge_params, challenge_format2, challenge);
-		endpoint = ENDPOINT_101;
-	}
+#ifdef _WIN32
+	int buf_len = _scprintf(challenge_format, challenge, kicc);
+	challenge_params = (char *) malloc(buf_len + 1);
+#else
+	//TODO: use snprintf to retrieve the needed buffer space
+	challenge_params = (char *) malloc(5*1024);
+#endif
 
+	sprintf(challenge_params, challenge_format, challenge, kicc);
+	endpoint = ENDPOINT_07;
+	
 	fprintf(stderr, "POSTing JSON %s\n", challenge_params);
 	char *server_response = Post(this->m_session_cookie, endpoint, challenge_params);
 
@@ -515,13 +515,20 @@ bool SSLConnection::do_SAM_4thpost(StartWriteResponse &resp)
 StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *internal_auth_resp)
 {
 	cJSON *json = NULL;
-	char post_body[1024];
+	char *post_body = NULL;
+	int buf_len = 1024;
 	StartWriteResponse * resp = new StartWriteResponse();
 	const char *start_write_format = "{\"StartWriteRequest\":{ \"SetSEResponse\" : [\"%s\"], \"InternalAuthenticateResponse\" : [\"%s\"], \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
 
 	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_3rdpost()");
 
-	snprintf(post_body, sizeof(post_body), start_write_format, mse_resp, internal_auth_resp);
+#ifdef _WIN32
+	buf_len = _scprintf(start_write_format, mse_resp, internal_auth_resp) + 1;
+#endif
+
+	post_body = (char *) malloc(buf_len);
+
+	snprintf(post_body, buf_len, start_write_format, mse_resp, internal_auth_resp);
 	fprintf(stderr, "POSTing JSON %s\n", post_body);
 
 	char *server_response = Post(this->m_session_cookie,
@@ -574,22 +581,26 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 	char *dh_params_template = "{\"DHParams\":{ \"secretCode\" : \"%s\", \"process\" : \"%s\", \"P\": \"%s\", \"Q\": \"%s\", \"G\":\"%s\", \"cvc_ca_public_key\": \"%s\",\"card_auth_public_key\": \"%s\", \"certificateChain\": \"%s\", \"version\": %d, \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
 
 	char *dh_params_template2 = "{\"DHParams\":{ \"secretCode\" : \"%s\", \"process\" : \"%s\", \"cvc_ca_public_key\": \"%s\",\"card_auth_public_key\": \"%s\", \"certificateChain\": \"%s\", \"serialNumber\": \"%s\", \"version\": %d, \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
-	char * post_dhparams = (char *) malloc(5*1024);
+	char * post_dhparams = NULL; 
 	char request_headers[1000];
 
 	if (serialNumber == NULL)
 	{
+#ifdef _WIN32
+		//we need to use this instead of the _snprintf() with first param as NULL
+		int buf_len = _scprintf(dh_params_template,secretCode, process, p->dh_p, p->dh_q, p->dh_g, p->cvc_ca_public_key,
+			p->card_auth_public_key, p->certificateChain, p->version);
+		post_dhparams = (char *) malloc(buf_len +2);
+#else
+		//TODO: use snprintf to determine needed allocation;
+		post_dhparams = (char *) malloc(5*1024);
+
+#endif
 		sprintf(post_dhparams, dh_params_template,
 			secretCode, process, p->dh_p, p->dh_q, p->dh_g, p->cvc_ca_public_key,
 			p->card_auth_public_key, p->certificateChain, p->version);
 
 		endpoint = "/changeaddress";
-	}
-	else
-	{
-		sprintf(post_dhparams, dh_params_template2,
-			secretCode, process, p->cvc_ca_public_key, p->card_auth_public_key, p->certificateChain, serialNumber, p->version);
-		endpoint = "/changeaddress101";
 	}
 
 	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_1stpost()");
