@@ -3,6 +3,7 @@
  *
  */
 
+#include "APLConfig.h"
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
 #include <openssl/bio.h>
@@ -11,7 +12,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "APLConfig.h"
 #include "ByteArray.h"
 #include "static_pteid_certs.h"
 
