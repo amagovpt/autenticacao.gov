@@ -49,9 +49,13 @@ namespace eIDMW
 		curl_global_init(CURL_GLOBAL_NOTHING);
 #endif
 		curl = curl_easy_init();
-
-		if (curl)
+		
+		if (curl == NULL)
 		{
+			MWLOG(LEV_ERROR, MOD_APL, L"curl_easy_init() failed!");
+			return CByteArray();
+		}
+		
 			struct curl_slist *headers= NULL;
 
 			headers = curl_slist_append(headers, "User-Agent: PTeID Middleware v2");
@@ -97,7 +101,6 @@ namespace eIDMW
 			curl_slist_free_all(headers);
 
 			return received_data;
-		}
 
 	}
 
