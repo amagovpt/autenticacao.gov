@@ -1259,6 +1259,14 @@ Please specify .xml, .csv or .eid</source>
         <translation>Leitura automática do cartão</translation>
     </message>
     <message>
+        <source>Proxy Authentication details are incomplete!</source>
+        <translation>Dados de autenticação no proxy estão incompletos!</translation>
+    </message>
+    <message>
+        <source>Proxy host is missing!</source>
+        <translation>Endereço do proxy em falta!</translation>
+    </message>
+    <message>
       	<source>Show picture on startup</source>
     	<translation>Mostrar fotografia ao iniciar</translation>
     </message>

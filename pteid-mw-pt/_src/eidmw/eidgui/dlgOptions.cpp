@@ -20,6 +20,7 @@
 #include "dlgOptions.h"
 #include "eidlib.h"
 #include "Settings.h"
+#include <QMessageBox>
 
 using namespace eIDMW;
 
@@ -138,6 +139,14 @@ bool dlgOptions::getProxyAuth()
 //Enable or disable the proxy-related elements when the main checkbox is used
 void dlgOptions::on_checkBox_proxy_toggled(bool checked)
 {
+	if (!checked)
+	{
+		ui.lineEdit_proxyHost->setText("");
+		ui.lineEdit_proxyUser->setText("");
+		ui.lineEdit_proxyPwd->setText("");
+
+	}
+
 	ui.lineEdit_proxyHost->setEnabled(checked);
 	ui.lineEdit_proxyHost->setEnabled(checked);
 	ui.spinBox->setEnabled(checked);
@@ -155,6 +164,26 @@ void dlgOptions::on_checkBox_proxyAuth_toggled(bool checked)
 
 void dlgOptions::on_okButton_clicked()
 {
+	//If proxy is disabled then clean existing values
+	if (!ui.checkBox_proxy->isChecked())
+	{
+		m_Settings.setProxyHost(QString());
+		m_Settings.setProxyPort(0);
+		m_Settings.setProxyUsername(QString());
+		m_Settings.setProxyPwd(QString());
+	}
+
+	if (ui.checkBox_proxy->isChecked() && getProxyHost().isEmpty())
+	{
+		QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning,
+			QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"), tr("Proxy host is missing!"),
+			QMessageBox::Ok, this);
+
+			msgBox->setModal(true);
+			msgBox->show();
+			return;
+	}
+
 	if (!getProxyHost().isEmpty())
 	{
 		m_Settings.setProxyHost(getProxyHost());
@@ -166,6 +195,19 @@ void dlgOptions::on_okButton_clicked()
 			m_Settings.setProxyUsername(ui.lineEdit_proxyUser->text());
 			m_Settings.setProxyPwd(ui.lineEdit_proxyPwd->text());
 		}
+
+		if (ui.checkBox_proxyAuth->isChecked() && (ui.lineEdit_proxyUser->text().isEmpty() ||
+				ui.lineEdit_proxyPwd->text().isEmpty()))
+		{
+			QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning,
+			QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"), tr("Proxy Authentication details are incomplete!"),
+			QMessageBox::Ok, this);
+
+			msgBox->setModal(true);
+			msgBox->show();
+			return;
+		}
+
 	}
 
 	this->close();
