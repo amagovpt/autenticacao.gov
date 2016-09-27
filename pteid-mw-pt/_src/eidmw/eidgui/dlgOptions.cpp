@@ -78,6 +78,10 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 	
 	pos.translate(0, -90);
 	ui.groupBox_proxy->setGeometry(pos);
+
+	QRect pos_ok = ui.okButton->geometry();
+	pos.translate(0, -90);
+	ui.okButton->setGeometry(pos_ok);
 //#endif
 #endif
 
@@ -106,6 +110,8 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 	ui.chbRemoveCert->hide();
 	ui.groupBox->hide();
 #endif
+
+	this->setFixedSize(this->width(), this->height());
 }
 
 dlgOptions::~dlgOptions()

@@ -237,7 +237,7 @@
       <x>90</x>
       <y>50</y>
       <width>171</width>
-      <height>31</height>
+      <height>25</height>
      </rect>
     </property>
    </widget>
@@ -317,8 +317,8 @@
      <rect>
       <x>110</x>
       <y>150</y>
-      <width>171</width>
-      <height>31</height>
+      <width>160</width>
+      <height>25</height>
      </rect>
     </property>
    </widget>
@@ -340,8 +340,8 @@
      <rect>
       <x>110</x>
       <y>190</y>
-      <width>171</width>
-      <height>31</height>
+      <width>160</width>
+      <height>25</height>
      </rect>
     </property>
     <property name="echoMode">
