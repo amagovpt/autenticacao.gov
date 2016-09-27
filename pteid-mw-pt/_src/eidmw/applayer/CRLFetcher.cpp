@@ -2,6 +2,7 @@
 
 #include "CRLFetcher.h"
 #include "APLConfig.h"
+#include "MiscUtil.h"
 #include "Util.h"
 #include "Log.h"
 
@@ -58,7 +59,7 @@ namespace eIDMW
 		
 			struct curl_slist *headers= NULL;
 
-			headers = curl_slist_append(headers, "User-Agent: PTeID Middleware v2");
+			headers = curl_slist_append(headers, PTEID_USER_AGENT);
 			headers = curl_slist_append(headers, "Accept: application/x-pkcs7-crl");
 
 			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);

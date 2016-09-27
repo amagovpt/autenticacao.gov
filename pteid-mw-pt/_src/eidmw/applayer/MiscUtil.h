@@ -35,6 +35,9 @@
 namespace eIDMW
 {
 
+#define PTEID_USER_AGENT "User-Agent: PTeID Middleware v2"
+#define PTEID_USER_AGENT_VALUE "PTeID Middleware v2"
+
  const void *memmem(const void *haystack, size_t n, const void *needle, size_t m);
 
 //Implementation of some utility functions over POSIX and Win32

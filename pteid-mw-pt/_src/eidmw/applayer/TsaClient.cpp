@@ -2,6 +2,8 @@
 //cURL for Timestamping
 #include <curl/curl.h>
 #include "APLConfig.h"
+#include "MiscUtil.h"
+
 #include "Util.h"
 #include "Log.h"
 #include "TsaClient.h"
@@ -127,7 +129,7 @@ namespace eIDMW
 
 			headers = curl_slist_append(headers, "Content-Type: application/timestamp-request");
 			headers = curl_slist_append(headers, "Content-Transfer-Encoding: binary");
-			headers = curl_slist_append(headers, "User-Agent: PTeID Middleware v2");
+			headers = curl_slist_append(headers, PTEID_USER_AGENT);
 
 			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 

@@ -698,7 +698,7 @@ BIO * connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_h
 		BIO * cbio = BIO_new(BIO_s_connect());
 		int len = 0;
 
-		const char * user_agent = "User-Agent: Portugal e-ID Middleware 2.4";
+		const char * user_agent = PTEID_USER_AGENT;
         const char * no_cache = "Pragma: no-cache";
         const char * no_content = "Content-Length: 0";
         const char * keepAlive = "Proxy-Connection: Keep-Alive";
@@ -783,14 +783,10 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
     SSL_CTX_set_options(ctx, SSL_OP_NO_TICKET | SSL_OP_NO_SSLv2);
     SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
 
-//Version check for openssl >= 1.0.2 functions as described here: 
-// https://www.openssl.org/docs/manmaster/ssl/SSL_set1_param.html
-
-#if OPENSSL_VERSION_NUMBER >= 0x10002000L
+    //This needs OpenSSL 1.0.2
     X509_VERIFY_PARAM *vpm = SSL_CTX_get0_param(ctx);
     //Verify hostname in the server-provided certificate
     X509_VERIFY_PARAM_set1_host(vpm, m_host, 0);
-#endif
 
     //Get Proxy configuration
 	APL_Config proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);

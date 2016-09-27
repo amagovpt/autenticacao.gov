@@ -966,18 +966,32 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	BIO *pBio = 0;
-	int iSSL=0;
+	int iSSL = 0;
+	int rv = 0;
     char *pszHost = 0;
     char *pszPath = 0;
     char *pszPort = 0;
+
+    const char * proxy_user_value = NULL;
     SSL_CTX  *pSSLCtx = 0;
+    OCSP_REQ_CTX *ctx;
     OCSP_REQUEST  *pRequest = 0;
     OCSP_BASICRESP *pBasic = NULL;
     bool  bConnect = false;
+    bool useProxy = false;
     ASN1_GENERALIZEDTIME  *producedAt, *thisUpdate, *nextUpdate;
 	int iStatus=-1;
 	FWK_CertifStatus eStatus=FWK_CERTIF_STATUS_UNCHECK;
 	int iReason;
+
+	APL_Config proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
+	APL_Config proxy_user(CConfig::EIDMW_CONFIG_PARAM_PROXY_USERNAME);
+	APL_Config proxy_pwd(CConfig::EIDMW_CONFIG_PARAM_PROXY_PWD);
+
+	if (proxy_host.getString() != NULL && strlen(proxy_host.getString()) > 0)
+	{
+		useProxy = true;
+	}
 
 	//We parse the URL
 	char *uri=new char[strlen(pUrlResponder)+1];
@@ -991,8 +1005,6 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 		eStatus=FWK_CERTIF_STATUS_ERROR;
 		goto cleanup;
 	}
-
-	if(uri) delete[] uri;
 
 	//We create the request
     if (!(pRequest = OCSP_REQUEST_new())) 
@@ -1012,8 +1024,9 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 
 	fprintf(stderr, "DEBUG: OCSP connecting to host %s port: %s IsSSL? %d\n",
 		pszHost, pszPort, iSSL);
-		/* establish a connection to the OCSP responder */
-	pBio = Connect(pszHost, atoi(pszPort),iSSL,&pSSLCtx);
+
+	/* establish a connection to the OCSP responder using proxy according to the Config */
+	pBio = Connect(pszHost, atoi(pszPort), iSSL, &pSSLCtx);
 	
 	if (pBio == NULL)
 	{
@@ -1023,8 +1036,56 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 
 	else
 	{
+
+		/*
+		
+    SCOPE(OCSP_REQ_CTX, rctx, OCSP_sendreq_new(connection.get(), const_cast<char*>(url.c_str()), 0, -1));
+    if(!rctx)
+        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
+
+    if(!OCSP_REQ_CTX_add1_header(rctx.get(), "Host", const_cast<char*>(hostname.c_str())))
+        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
+
+    if(!auth.empty() && !OCSP_REQ_CTX_add1_header(rctx.get(), "Proxy-Authorization", const_cast<char*>(auth.c_str())))
+        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
+    if(!OCSP_REQ_CTX_add1_header(rctx.get(), "User-Agent", user_agent.c_str()))
+        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
+
+    if(!OCSP_REQ_CTX_set1_req(rctx.get(), req))
+        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
+
+    if(!OCSP_sendreq_nbio(&resp, rctx.get()))
+        THROW_OPENSSLEXCEPTION("Failed to send OCSP request.");
+
+
+		*/
+
+		//TODO: Test this with and without proxy ...
+		ctx = OCSP_sendreq_new(pBio, useProxy ? uri : pszPath, NULL, -1);
+
+		proxy_user_value = proxy_user.getString();
+
+		if (proxy_user_value != NULL && strlen(proxy_user_value) > 0)
+		{
+			fprintf(stderr, "OCSP: Adding proxy auth header!\n");
+			std::string proxy_cleartext = std::string(proxy_user_value) + ":" + proxy_pwd.getString();
+
+	        char *auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), proxy_cleartext.size());
+	        std::string header_value = std::string("basic ") + auth_token;
+	        OCSP_REQ_CTX_add1_header(ctx, "Proxy-Authorization", header_value.c_str());
+		}
+
+		OCSP_REQ_CTX_add1_header(ctx, "User-Agent", PTEID_USER_AGENT_VALUE);
+
+		OCSP_REQ_CTX_set1_req(ctx, pRequest);
+
+		do {
+        	rv = OCSP_sendreq_nbio(pResponse, ctx);
+    	}
+    	while ((rv == -1) && BIO_should_retry(pBio));
+
 		/* send the request and get a response */
-		if( NULL == (*pResponse = OCSP_sendreq_bio(pBio, pszPath, pRequest)))
+		if( NULL == *pResponse)
 		{
 			eStatus=FWK_CERTIF_STATUS_ERROR;
 			goto cleanup;
@@ -1054,7 +1115,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 				algorithm=EVP_sha1();
 
 			//Get the Data of the response
-			long lLen=i2d_OCSP_RESPDATA(pBasic->tbsResponseData,NULL); //Get the length for the buffer
+			long lLen = i2d_OCSP_RESPDATA(pBasic->tbsResponseData,NULL); //Get the length for the buffer
 			if(lLen <= 0)
 			{
 				eStatus=FWK_CERTIF_STATUS_ERROR;
@@ -1130,6 +1191,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 	}
 
 cleanup:
+	if(uri) delete[] uri;
     if (pBio) BIO_free_all(pBio);
     if (pszHost) OPENSSL_free(pszHost);
     if (pszPort) OPENSSL_free(pszPort);

@@ -3,6 +3,7 @@
  *  PTeID Middleware Project.
  *  Copyright (C) 2014 - 2016
  *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+ *
  *  Card interaction necessary for the Change Address Operation
  *  mainly Diffie-Hellman key agreement and mutual authentication with CVC certificates
  **/
