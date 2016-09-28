@@ -49,27 +49,6 @@ public:
 #define CARD_VALIDFROM		"card_validfrom"
 #define CARD_VALIDUNTIL		"card_validuntil"
 
-/*
-enum eCARD_SUBTYPE
-{
-	  NON_EUROPEAN_A = 11
-	, NON_EUROPEAN_B		// 12
-	, NON_EUROPEAN_C		// 13
-	, NON_EUROPEAN_D		// 14
-	, EUROPEAN_E			// 15
-	, EUROPEAN_E_PLUS		// 16
-	, EUROPEAN_F			// 17
-	, EUROPEAN_F_PLUS		// 18
-	, EUROPEAN_UNKNOWN		// 19
-};
-*/
-/*
-enum eCARD_BASETYPE
-{
-	  BASETYPE_BELGIUM = 1
-};
-*/
-
 	//----------------------------------------------
 	// ctor
 	//----------------------------------------------
