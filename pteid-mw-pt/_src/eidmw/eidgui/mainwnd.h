@@ -334,6 +334,7 @@ private slots:
 	void updateReaderList( void );
 	void customEvent( QEvent * event );
 	void changeEvent( QEvent *event );
+	void hideJavaAppButtons();
 	void setErrorSOD() { error_sod = true ;}
 
 protected:

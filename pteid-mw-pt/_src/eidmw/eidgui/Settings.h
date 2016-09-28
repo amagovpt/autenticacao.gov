@@ -320,6 +320,12 @@ public:
 			m_proxy_pwd = pwd;
 
 		}
+
+		{
+			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SHOW_JAVA_APPS);
+			m_showJavaApps = config.getLong() == 1;
+		
+		}
 	}
 	//------------------------------------------------------
 	// dtor
@@ -446,16 +452,24 @@ public:
 		}
 		return m_bRegCert;
 	}
+
+	bool areJavaAppsEnabled()
+	{
+		return m_showJavaApps;
+	}
+
 	void setRegCert( bool bRegCert )
 	{
 		m_bRegCert = bRegCert;
 		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_REGCERTIF);
 		config.setLong(m_bRegCert);
 	}
+
 	bool getRemoveCertSetting( void )
 	{
 		return m_bRemoveCert;
 	}
+
 	bool getRemoveCert( void )
 	{
 		if (!m_bAutoCardReading)
@@ -579,6 +593,7 @@ private:
 	bool	m_bAutoStartup;			//!< start the app when windows starts (T/F)
 	bool	m_bRegCert;				//!< register certificates on insert (T/F)
 	bool	m_bRemoveCert;			//!< remove certificates on close (T/F)
+	bool 	m_showJavaApps;     // wether we should show the SCAP/DSS buttons...
 	QString m_strExePath;			//!< path to the executable
 	unsigned long		m_SelectedReader;		//!< selected reader (-1=none)
 
