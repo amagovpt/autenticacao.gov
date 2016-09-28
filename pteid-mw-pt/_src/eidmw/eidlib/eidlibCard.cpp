@@ -1555,7 +1555,7 @@ PTEIDSDK_API long PTEID_GetAddr(PTEID_ADDR *AddrData){
 
 PTEIDSDK_API long PTEID_GetPic(PTEID_PIC *PicData){
 
-	if (readerContext!=NULL){
+	if (readerContext!=NULL) {
 
 		PTEID_Photo &photoOjb = readerContext->getEIDCard().getID().getPhotoObj();
 
@@ -1578,19 +1578,22 @@ PTEIDSDK_API long PTEID_GetPic(PTEID_PIC *PicData){
 }
 
 PTEIDSDK_API long PTEID_GetCertificates(PTEID_Certifs *Certifs){
-	if (readerContext!=NULL){
+	if (readerContext!=NULL) {
 		PTEID_Certificates &certificates = readerContext->getEIDCard().getCertificates();
 		PTEID_ByteArray ba;
+		int i = 0;
 		memset(Certifs, 0, sizeof(PTEID_Certifs));
 
-		for (int i=0 ; i< certificates.countAll(); i++){
+		for ( ; i< certificates.countAll(); i++) {
+			if (i == PTEID_MAX_CERT_NUMBER)
+				break;
 			PTEID_Certificate &cert = certificates.getCert(i);
 			cert.getFormattedData(ba);
 			memcpy(Certifs->certificates[i].certif, ba.GetBytes(),(PTEID_MAX_CERT_LEN >= ba.Size()) ? ba.Size() : PTEID_MAX_CERT_LEN);
 			Certifs->certificates[i].certifLength = (PTEID_MAX_CERT_LEN >= ba.Size()) ? ba.Size() : PTEID_MAX_CERT_LEN;
 			strncpy(Certifs->certificates[i].certifLabel, cert.getLabel(), (PTEID_MAX_CERT_LABEL_LEN >= strlen(cert.getLabel()) ? strlen(cert.getLabel()) : PTEID_MAX_CERT_LABEL_LEN-1));
 		}
-		Certifs->certificatesLength = certificates.countAll();
+		Certifs->certificatesLength = i;
 	}
 
 	return 0;
