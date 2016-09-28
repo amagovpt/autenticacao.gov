@@ -810,6 +810,7 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 						<RegistryKey Key="general" Action="createAndRemoveOnUninstall">
 							<RegistryValue Type="string" Name="language" Value="nl"/>
 							<RegistryValue Type="string" Name="install_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
+							<RegistryValue Type="integer" Name="show_java_apps" Value="0"/>
 						</RegistryKey>
 
 						<RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
