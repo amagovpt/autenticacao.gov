@@ -133,6 +133,7 @@ enum PTEID_Param
 	PTEID_PARAM_GENERAL_CACHEDIR,		//string, cache directory for card-file;
 	PTEID_PARAM_GENERAL_LANGUAGE,		//string, user language: fr, nl, en, de, �
 	PTEID_PARAM_GENERAL_SAM_SERVER,
+	PTEID_PARAM_GENERAL_SHOW_JAVA_APPS,
 
 	//LOGGING
 	PTEID_PARAM_LOGGING_DIRNAME,			//string, location of the log-file; $home/pteid/	Full path with volume name.

@@ -101,5 +101,6 @@ namespace eIDMW
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_URL      =       {EIDMW_CNF_SECTION_AUTOUPDATES, EIDMW_CNF_AUTOUPDATES_URL,          L""};
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER      =       {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_SAM_SERVER, L"pki.cartaodecidadao.pt:443"};
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_OTP_SERVER      =       {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_OTP_SERVER, L"otp.cartaodecidadao.pt:443"};
+  const struct CConfig::Param_Num CConfig::EIDMW_CONFIG_PARAM_GENERAL_SHOW_JAVA_APPS          =       {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_SHOW_JAVA_APPS, 1};
 
 } // namespace eidMW
