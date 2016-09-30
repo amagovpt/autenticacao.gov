@@ -28,6 +28,10 @@
      <translation>Assinatura Universal</translation>
      </message>
      <message>
+     <source>&amp;Options</source>
+     <translation>&amp;Opções</translation>
+     </message>
+     <message>
      <source>Authentication Certificate:</source>
      <translation>Certificado de Autenticação:</translation>
      </message>

@@ -976,17 +976,7 @@ void MainWnd::enablePrintMenu( void )
 {
 	bool bEnable = false;
 	if (m_CI_Data.isDataLoaded())
-	{
-		/*
-		switch(m_CI_Data.m_CardInfo.getType())
-		{
-		case PTEID_CARDTYPE_IAS07:
-		case PTEID_CARDTYPE_IAS101:
-		default:
-			break;
-		}
-		*/
-	}
+
 	m_ui.actionPrint_eID->setEnabled(bEnable);
 	m_ui.actionPrinter_Settings->setEnabled(bEnable);;
 }
@@ -1716,7 +1706,7 @@ void MainWnd::showCertStatusSideinfo(PTEID_CertifStatus certStatus)
 void MainWnd::getCertStatusText(PTEID_CertifStatus certStatus, QString &strCertStatus)
 {
 	//Currently eidlib only gives us 3 status from the enum:
-	// Valid, Revoked and Unknown for all other erros/problems
+	// Valid, Revoked and Unknown for all other problems
 	switch(certStatus)
 	{
 	case PTEID_CERTIF_STATUS_REVOKED:
@@ -3789,11 +3779,12 @@ void MainWnd::refreshTabCertificates( void )
 	//qDebug() << "# seleteced: " << m_ui.treeCert->selectedItems().size();
 	//qDebug() << "find 'Signature': " << m_ui.treeCert->findItems ( QString("Signature"), Qt::MatchContains|Qt::MatchRecursive );
 
-    // este pedaço de codigo parece nao estar a fazer nada.
+    /* TODO Rever este comentario
+    // vasco.dias: este bloco de código parece nao estar a fazer nada.
     // no fillCertificateList que corre antes disto dentro do loadCardCertificates
     // o cert de root ´e selected, logo os selected items sao 1 sendo o root o selecionado.
     // o findItems para tentar selecionar o cert com o nome "Signature" retorna vazio
-    // pk n existe nehum item na tree com esse texto.
+    // porque não existe nenhum item na tree com esse texto.
 
 	//QList<QTreeWidgetItem *> selectedItems = m_ui.treeCert->selectedItems();
 	/*if(selectedItems.size() == 0)
