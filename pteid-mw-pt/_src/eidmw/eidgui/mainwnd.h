@@ -335,7 +335,8 @@ private slots:
 	void customEvent( QEvent * event );
 	void changeEvent( QEvent *event );
 	void hideJavaAppButtons();
-	void setErrorSOD() { error_sod = true ;}
+	void clearErrorSOD() { error_sod = false; }
+	void setErrorSOD() { error_sod = true; }
 
 protected:
 	// Window Events
@@ -430,7 +431,7 @@ private:
 	void writeSettings( void );
 	void readSettings( void );
 	GenPur::UI_LANGUAGE LoadTranslationFile( GenPur::UI_LANGUAGE NewLanguage );
-	void ShowPTEIDError( unsigned long ErrCode, QString const& msg="" );
+	void ShowPTEIDError(QString const& msg="" );
 	void enableFileMenu( void );
 	void enableFileSave( bool bEnabled );
 	void enablePrintMenu( void );

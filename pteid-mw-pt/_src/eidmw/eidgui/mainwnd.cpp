@@ -1646,7 +1646,6 @@ void MainWnd::on_btnCert_Details_clicked( void )
 //*****************************************************
 void MainWnd::on_treeCert_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
-	qDebug() << "\ntree_currentItemChanged() " << previous << "-> " << current;
 	if (current)
 	{
 		syncTreeItemWithSideinfo(dynamic_cast<QTreeCertItem *>(current));
@@ -2035,7 +2034,7 @@ void MainWnd::loadCardData( void )
 		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
 		{
 			QString msg(tr("Card read error or unknown card type"));
-			ShowPTEIDError( 0, msg );
+			ShowPTEIDError(msg );
 			clearGuiContent();
 		}
 		enableFileMenu();
@@ -2043,54 +2042,54 @@ void MainWnd::loadCardData( void )
 	catch (PTEID_ExParamRange e)
 	{
 		QString msg(tr("Index out of range"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCardBadType e) 
 	{
 		QString msg(tr("Bad card type"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExNoCardPresent e)
 	{
 		QString msg(tr("No card present"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCardChanged e)
 	{
 		QString msg(tr("Card changed"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 		m_CI_Data.Reset();
 		loadCardData();
 	}
 	catch (PTEID_ExReaderSetChanged e)
 	{
 		QString msg(tr("Readers changed"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExBadTransaction& e)
 	{
 		QString msg(tr("Bad transaction"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExNotAllowByUser& e)
 	{
 		QString msg(tr("Not allowed by user"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExUserMustAnswer& e)
 	{
 		QString msg(tr("Not allowed yet by user"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCertNoRoot& e)
 	{
 		QString msg(tr("No root certificate found"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_Exception e)
 	{
 		QString msg(tr("Error loading card data"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 }
 
@@ -2189,7 +2188,7 @@ void MainWnd::loadCardDataAddress( void )
 		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
 		{
 			QString msg(tr("Card read error or unknown card type"));
-			ShowPTEIDError( 0, msg );
+			ShowPTEIDError(msg );
 			clearGuiContent();
 		}
 		enableFileMenu();
@@ -2197,54 +2196,67 @@ void MainWnd::loadCardDataAddress( void )
 	catch (PTEID_ExParamRange e)
 	{
 		QString msg(tr("Index out of range"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCardBadType e)
 	{
 		QString msg(tr("Bad card type"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExNoCardPresent e)
 	{
 		QString msg(tr("No card present"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCardChanged e)
 	{
 		QString msg(tr("Card changed"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 		m_CI_Data.Reset();
 		loadCardData();
 	}
 	catch (PTEID_ExReaderSetChanged e)
 	{
 		QString msg(tr("Readers changed"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExBadTransaction& e)
 	{
 		QString msg(tr("Bad transaction"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExNotAllowByUser& e)
 	{
 		QString msg(tr("Not allowed by user"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExUserMustAnswer& e)
 	{
 		QString msg(tr("Not allowed yet by user"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCertNoRoot& e)
 	{
 		QString msg(tr("No root certificate found"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_Exception e)
 	{
-		QString msg(tr("Error loading card data"));
-		ShowPTEIDError( e.GetError(), msg );
+		QString msg;
+		//Check for SOD-related error codes - check for values between the first and last SOD error code
+		long errorCode = e.GetError();
+
+		if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && 
+			errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN)
+		{
+			msg = tr("SOD validation failed: card data consistency is compromised!");
+		}
+		else
+		{
+			msg = tr("Error loading card data");
+		}
+
+		ShowPTEIDError( msg );
 	}
 }
 
@@ -2340,7 +2352,7 @@ bool MainWnd::loadCardDataPersoData( void )
 		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
 		{
 			QString msg(tr("Card read error or unknown card type"));
-			ShowPTEIDError( 0, msg );
+			ShowPTEIDError(msg );
 			clearGuiContent();
 		}
 		enableFileMenu();
@@ -2348,54 +2360,54 @@ bool MainWnd::loadCardDataPersoData( void )
 	catch (PTEID_ExParamRange e)
 	{
 		QString msg(tr("Index out of range"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCardBadType e)
 	{
 		QString msg(tr("Bad card type"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExNoCardPresent e)
 	{
 		QString msg(tr("No card present"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCardChanged e)
 	{
 		QString msg(tr("Card changed"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
         m_CI_Data.Reset();
 		loadCardData();
 	}
 	catch (PTEID_ExReaderSetChanged e)
 	{
 		QString msg(tr("Readers changed"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExBadTransaction& e)
 	{
 		QString msg(tr("Bad transaction"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExNotAllowByUser& e)
 	{
 		QString msg(tr("Not allowed by user"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExUserMustAnswer& e)
 	{
 		QString msg(tr("Not allowed yet by user"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCertNoRoot& e)
 	{
 		QString msg(tr("No root certificate found"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_Exception e)
 	{
 		QString msg(tr("Error loading card data"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	return true;
 }
@@ -2493,7 +2505,7 @@ void MainWnd::loadCardDataCertificates( void )
 		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
 		{
 			QString msg(tr("Card read error or unknown card type"));
-			ShowPTEIDError( 0, msg );
+			ShowPTEIDError( msg );
 			clearGuiContent();
 		}
 		enableFileMenu();
@@ -2501,54 +2513,54 @@ void MainWnd::loadCardDataCertificates( void )
 	catch (PTEID_ExParamRange e)
 	{
 		QString msg(tr("Index out of range"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCardBadType e)
 	{
 		QString msg(tr("Bad card type"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExNoCardPresent e)
 	{
 		QString msg(tr("No card present"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCardChanged e)
 	{
 		QString msg(tr("Card changed"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 		m_CI_Data.Reset();
 		loadCardData();
 	}
 	catch (PTEID_ExReaderSetChanged e)
 	{
 		QString msg(tr("Readers changed"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExBadTransaction& e)
 	{
 		QString msg(tr("Bad transaction"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExNotAllowByUser& e)
 	{
 		QString msg(tr("Not allowed by user"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExUserMustAnswer& e)
 	{
 		QString msg(tr("Not allowed yet by user"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCertNoRoot& e)
 	{
 		QString msg(tr("No root certificate found"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (PTEID_Exception e)
 	{
 		QString msg(tr("Error loading card data"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 }
 //*****************************************************
@@ -2810,12 +2822,12 @@ void MainWnd::authPINRequest_triggered()
 		default:
 			msg = tr("General exception");
 		}
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (...)
 	{
 		QString msg(tr("Unknown exception"));
-		ShowPTEIDError( 0, msg );
+		ShowPTEIDError(msg );
 	}
 	return;
 }
@@ -2889,14 +2901,14 @@ bool MainWnd::addressPINRequest_triggered()
 		default:
 			msg = tr("General exception");
 		}
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 
 		return false;
 	}
 	catch (...)
 	{
 		QString msg(tr("Unknown exception"));
-		ShowPTEIDError( 0, msg );
+		ShowPTEIDError( msg );
 		return false;
 	}
 }
@@ -2973,12 +2985,12 @@ void MainWnd::on_actionPINRequest_triggered()
 		default:
 			msg = tr("General exception");
 		}
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (...)
 	{
 		QString msg(tr("Unknown exception"));
-		ShowPTEIDError( 0, msg );
+		ShowPTEIDError( msg );
 	}
 	return;
 }
@@ -3056,12 +3068,12 @@ void MainWnd::on_actionPINChange_triggered()
 		default:
 			msg = tr("General exception");
 		}
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (...)
 	{
 		QString msg(tr("Unknown exception"));
-		ShowPTEIDError( 0, msg );
+		ShowPTEIDError( msg );
 	}
 }
 
@@ -3261,7 +3273,10 @@ void MainWnd::LoadDataAddress(PTEID_EIDCard& Card)
 	setEnabledPinButtons(false);
 	setEnabledCertifButtons(false);
 	m_TypeCard = Card.getType();
+
 	m_CI_Data.LoadDataAddress(Card, m_CurrReaderName);
+
+	
 
 	if(!m_CI_Data.isDataLoaded())
 	{
@@ -4203,7 +4218,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 					{
 						clearGuiContent();
 						QString msg(tr("Card read error or unknown card type"));
-						ShowPTEIDError( 0, msg );
+						ShowPTEIDError( msg );
 					}
 					default:
 						break;
@@ -4355,12 +4370,12 @@ void MainWnd::quit_application(){
 	catch (PTEID_Exception &e)
 	{
 		QString msg(tr("General exception"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 	catch (...)
 	{
 		QString msg(tr("Unknown exception"));
-		ShowPTEIDError( 0, msg );
+		ShowPTEIDError( msg );
 	}
 }
 
@@ -4401,7 +4416,7 @@ void MainWnd::setEventCallbacks( void )
 	catch(PTEID_Exception& e)
 	{
 		QString msg(tr("setEventCallbacks"));
-		ShowPTEIDError( e.GetError(), msg );
+		ShowPTEIDError( msg );
 	}
 
 }
@@ -4409,7 +4424,7 @@ void MainWnd::setEventCallbacks( void )
 //**************************************************
 // display a messagebox with the error code
 //**************************************************
-void MainWnd::ShowPTEIDError( unsigned long ErrCode, QString const& msg )
+void MainWnd::ShowPTEIDError( QString const& msg )
 {
 	if (isHidden())
 	{
@@ -4417,8 +4432,6 @@ void MainWnd::ShowPTEIDError( unsigned long ErrCode, QString const& msg )
 	}
 	QString strCaption(tr("Error"));
 	QString strMessage(msg);
-	//strMessage = strMessage.setNum(ErrCode,16);
-	//strMessage += ": ";
 	QMessageBox::warning( this, strCaption,  strMessage, QMessageBox::Ok );
 }
 
@@ -4479,9 +4492,10 @@ bool MainWnd::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
 
 void CardDataLoader::Load()
 {
+	this->mwnd->clearErrorSOD();
 	try
 	{
-	this->information.LoadData(card, readerName);
+		this->information.LoadData(card, readerName);
 
 	}
 	
