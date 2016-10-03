@@ -1730,7 +1730,7 @@ PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszN
 			return 0;
 
 		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
-		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
+		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++) {
 			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
 			if (pin.getPinRef() == PinId){
 				pin.unlockPin(pszPuk, pszNewPin,tleft);
@@ -1771,7 +1771,7 @@ PTEIDSDK_API long PTEID_ReadFile(unsigned char *file,int filelen,unsigned char *
 		PTEID_ByteArray in;
 		PTEID_Pin*	pin = NULL;
 
-		if (PinId != PTEID_NO_PIN_NEEDED){
+		if (PinId != PTEID_NO_PIN_NEEDED) {
 			PTEID_Pins &pins = readerContext->getEIDCard().getPins();
 			for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
 				pin	= &(pins.getPinByNumber(pinIdx));
@@ -1785,7 +1785,6 @@ PTEIDSDK_API long PTEID_ReadFile(unsigned char *file,int filelen,unsigned char *
 		card.readFile(filePath.ToString(false).c_str(),in, pin,"");
 
 		CByteArray cb(in.GetBytes(), in.Size());
-		cb.TrimRight(0);
 
 		*outlen = (*outlen>cb.Size() ? cb.Size() : *outlen);
 		memcpy(out, cb.GetBytes(),*outlen);
