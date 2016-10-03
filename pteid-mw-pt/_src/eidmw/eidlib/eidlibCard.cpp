@@ -1612,8 +1612,11 @@ PTEIDSDK_API long PTEID_VerifyPIN(unsigned char PinId,	char *Pin, long *triesLef
 		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
 		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
 			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
-			if (pin.getPinRef() == PinId){
-				ret = pin.verifyPin("",tleft);
+			if (pin.getPinRef() == PinId) {
+				if (Pin != NULL)
+					ret = pin.verifyPin(Pin, tleft, false);
+				else
+					ret = pin.verifyPin("", tleft);
 				//martinho: verify pin is not working properly for readers without pinpad at this moment,
 				//this is a workaround
 				*triesLeft = pin.getTriesLeft();
