@@ -1599,18 +1599,22 @@ PTEIDSDK_API long PTEID_GetCertificates(PTEID_Certifs *Certifs){
 	return 0;
 }
 
+//Error codes inherited from Pteid Middleware V1: documented in CC_Technical_Reference_1.61
+
+#define SC_ERROR_AUTH_METHOD_BLOCKED -1212
+#define SC_ERROR_PIN_CODE_INCORRECT -1214
 
 PTEIDSDK_API long PTEID_VerifyPIN(unsigned char PinId,	char *Pin, long *triesLeft){
 	unsigned long id;
 	unsigned long tleft=-1;
 	bool ret;
 
-	if (readerContext!=NULL){
+	if (readerContext!=NULL) {
 		if (PinId != 1 && PinId != 129 && PinId != 130 && PinId != 131)
 			return 0;
 
 		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
-		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
+		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++) {
 			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
 			if (pin.getPinRef() == PinId) {
 				if (Pin != NULL)
@@ -1623,7 +1627,11 @@ PTEIDSDK_API long PTEID_VerifyPIN(unsigned char PinId,	char *Pin, long *triesLef
 
 				if (ret)
 					return 0;
-				return -1;
+				else if (*triesLeft == 0)
+					return SC_ERROR_AUTH_METHOD_BLOCKED;
+				else 
+					return SC_ERROR_PIN_CODE_INCORRECT;
+
 			}
 		}
 	}
