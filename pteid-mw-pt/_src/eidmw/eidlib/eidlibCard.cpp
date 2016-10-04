@@ -1454,41 +1454,71 @@ PTEIDSDK_API tCompCardType PTEID_GetCardType(){
 }
 
 
+
+//Error codes inherited from Pteid Middleware V1: documented in CC_Technical_Reference_1.61
+
+
+
+#define SC_ERROR_AUTH_METHOD_BLOCKED -1212
+#define SC_ERROR_PIN_CODE_INCORRECT -1214
+#define SC_ERROR_INTERNAL -1400
+#define SC_ERROR_OBJECT_NOT_VALID -1406
+
+
 PTEIDSDK_API long PTEID_GetID(PTEID_ID *IDData){
 
-	if (readerContext!=NULL){
-		PTEID_EId &id = readerContext->getEIDCard().getID();
+	if (readerContext!=NULL) {
+		try 
+		{
+			PTEID_EId &id = readerContext->getEIDCard().getID();
 
-		memset(IDData, '\0', sizeof(PTEID_ID));
+			memset(IDData, '\0', sizeof(PTEID_ID));
 
-		IDData->version = 0;
-		strncpy(IDData->deliveryEntity, id.getIssuingEntity(),PTEID_MAX_DELIVERY_ENTITY_LEN-1);
-		strncpy(IDData->country, id.getCountry(), PTEID_MAX_COUNTRY_LEN-1);
-		strncpy(IDData->documentType, id.getDocumentType(), PTEID_MAX_DOCUMENT_TYPE_LEN-1);
-		strncpy(IDData->cardNumber, id.getDocumentNumber(), PTEID_MAX_CARDNUMBER_LEN-1);
-		strncpy(IDData->cardNumberPAN, id.getDocumentPAN(), PTEID_MAX_CARDNUMBER_PAN_LEN-1);
-		strncpy(IDData->cardVersion, id.getDocumentVersion(), PTEID_MAX_CARDVERSION_LEN-1);
-		strncpy(IDData->deliveryDate, id.getValidityBeginDate(), PTEID_MAX_DATE_LEN-1);
-		strncpy(IDData->locale, id.getLocalofRequest(), PTEID_MAX_LOCALE_LEN-1);
-		strncpy(IDData->validityDate, id.getValidityEndDate(), PTEID_MAX_DATE_LEN-1);
-		strncpy(IDData->name, id.getSurname(), PTEID_MAX_NAME_LEN-1);
-		strncpy(IDData->firstname, id.getGivenName(), PTEID_MAX_NAME_LEN-1);
-		strncpy(IDData->sex, id.getGender(), PTEID_MAX_SEX_LEN-1);
-		strncpy(IDData->nationality, id.getNationality(), PTEID_MAX_NATIONALITY_LEN-1);
-		strncpy(IDData->birthDate, id.getDateOfBirth(), PTEID_MAX_DATE_LEN-1);
-		strncpy(IDData->height, id.getHeight(), PTEID_MAX_HEIGHT_LEN-1);
-		strncpy(IDData->numBI, id.getCivilianIdNumber(), PTEID_MAX_NUMBI_LEN-1);
-		strncpy(IDData->nameFather, id.getSurnameFather(), PTEID_MAX_NAME_LEN-1);
-		strncpy(IDData->firstnameFather, id.getGivenNameFather(), PTEID_MAX_NAME_LEN-1);
-		strncpy(IDData->nameMother, id.getSurnameMother(), PTEID_MAX_NAME_LEN-1);
-		strncpy(IDData->firstnameMother, id.getGivenNameMother(), PTEID_MAX_NAME_LEN-1);
-		strncpy(IDData->numNIF, id.getTaxNo(), PTEID_MAX_NUMNIF_LEN-1);
-		strncpy(IDData->numSS, id.getSocialSecurityNumber(), PTEID_MAX_NUMSS_LEN-1);
-		strncpy(IDData->numSNS, id.getHealthNumber(), PTEID_MAX_NUMSNS_LEN-1);
-		strncpy(IDData->notes, id.getAccidentalIndications(),PTEID_MAX_INDICATIONEV_LEN-1);
-		strncpy(IDData->mrz1, id.getMRZ1(), PTEID_MAX_MRZ_LEN-1);
-		strncpy(IDData->mrz2, id.getMRZ2(), PTEID_MAX_MRZ_LEN-1);
-		strncpy(IDData->mrz3, id.getMRZ3(), PTEID_MAX_MRZ_LEN-1);
+			IDData->version = 0;
+			strncpy(IDData->deliveryEntity, id.getIssuingEntity(),PTEID_MAX_DELIVERY_ENTITY_LEN-1);
+			strncpy(IDData->country, id.getCountry(), PTEID_MAX_COUNTRY_LEN-1);
+			strncpy(IDData->documentType, id.getDocumentType(), PTEID_MAX_DOCUMENT_TYPE_LEN-1);
+			strncpy(IDData->cardNumber, id.getDocumentNumber(), PTEID_MAX_CARDNUMBER_LEN-1);
+			strncpy(IDData->cardNumberPAN, id.getDocumentPAN(), PTEID_MAX_CARDNUMBER_PAN_LEN-1);
+			strncpy(IDData->cardVersion, id.getDocumentVersion(), PTEID_MAX_CARDVERSION_LEN-1);
+			strncpy(IDData->deliveryDate, id.getValidityBeginDate(), PTEID_MAX_DATE_LEN-1);
+			strncpy(IDData->locale, id.getLocalofRequest(), PTEID_MAX_LOCALE_LEN-1);
+			strncpy(IDData->validityDate, id.getValidityEndDate(), PTEID_MAX_DATE_LEN-1);
+			strncpy(IDData->name, id.getSurname(), PTEID_MAX_NAME_LEN-1);
+			strncpy(IDData->firstname, id.getGivenName(), PTEID_MAX_NAME_LEN-1);
+			strncpy(IDData->sex, id.getGender(), PTEID_MAX_SEX_LEN-1);
+			strncpy(IDData->nationality, id.getNationality(), PTEID_MAX_NATIONALITY_LEN-1);
+			strncpy(IDData->birthDate, id.getDateOfBirth(), PTEID_MAX_DATE_LEN-1);
+			strncpy(IDData->height, id.getHeight(), PTEID_MAX_HEIGHT_LEN-1);
+			strncpy(IDData->numBI, id.getCivilianIdNumber(), PTEID_MAX_NUMBI_LEN-1);
+			strncpy(IDData->nameFather, id.getSurnameFather(), PTEID_MAX_NAME_LEN-1);
+			strncpy(IDData->firstnameFather, id.getGivenNameFather(), PTEID_MAX_NAME_LEN-1);
+			strncpy(IDData->nameMother, id.getSurnameMother(), PTEID_MAX_NAME_LEN-1);
+			strncpy(IDData->firstnameMother, id.getGivenNameMother(), PTEID_MAX_NAME_LEN-1);
+			strncpy(IDData->numNIF, id.getTaxNo(), PTEID_MAX_NUMNIF_LEN-1);
+			strncpy(IDData->numSS, id.getSocialSecurityNumber(), PTEID_MAX_NUMSS_LEN-1);
+			strncpy(IDData->numSNS, id.getHealthNumber(), PTEID_MAX_NUMSNS_LEN-1);
+			strncpy(IDData->notes, id.getAccidentalIndications(),PTEID_MAX_INDICATIONEV_LEN-1);
+			strncpy(IDData->mrz1, id.getMRZ1(), PTEID_MAX_MRZ_LEN-1);
+			strncpy(IDData->mrz2, id.getMRZ2(), PTEID_MAX_MRZ_LEN-1);
+			strncpy(IDData->mrz3, id.getMRZ3(), PTEID_MAX_MRZ_LEN-1);
+		}
+		catch (PTEID_Exception &ex)
+		{
+			long errorCode = ex.GetError();
+
+			if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && 
+				errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN)
+			{
+				return SC_ERROR_OBJECT_NOT_VALID;
+			}
+			else
+			{ 
+				return SC_ERROR_INTERNAL;
+			}
+
+		
+		}
 	}
 
 	return 0;
@@ -1599,10 +1629,6 @@ PTEIDSDK_API long PTEID_GetCertificates(PTEID_Certifs *Certifs){
 	return 0;
 }
 
-//Error codes inherited from Pteid Middleware V1: documented in CC_Technical_Reference_1.61
-
-#define SC_ERROR_AUTH_METHOD_BLOCKED -1212
-#define SC_ERROR_PIN_CODE_INCORRECT -1214
 
 PTEIDSDK_API long PTEID_VerifyPIN(unsigned char PinId,	char *Pin, long *triesLeft){
 	unsigned long id;
@@ -1722,7 +1748,7 @@ PTEIDSDK_API long PTEID_ReadSOD(unsigned char *out, unsigned long *outlen) {
 
 		temp = card.getSod().getData();
 		CByteArray cb((unsigned char*)temp.GetBytes(), temp.Size());
-
+		cb.TrimRight(0);
 		memset(out,0,*outlen);
 		if (cb.Size() < *outlen)
 			*outlen = cb.Size();
