@@ -1623,6 +1623,8 @@ PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const
 #define COMP_LAYER_NATIONAL_ADDRESS "N"
 #define COMP_LAYER_FOREIGN_ADDRESS "I"
 
+//Sizes of ID file data fields
+
 #define PTEID_DELIVERY_ENTITY_LEN               40
 #define PTEID_COUNTRY_LEN                       80
 #define PTEID_DOCUMENT_TYPE_LEN                 34
@@ -1660,6 +1662,8 @@ PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const
 #define PTEID_MAX_NUMSNS_LEN                        PTEID_NUMSNS_LEN+2
 #define PTEID_MAX_INDICATIONEV_LEN                  PTEID_INDICATIONEV_LEN+2
 #define PTEID_MAX_MRZ_LEN                           PTEID_MRZ_LEN+2
+
+ //Sizes of Address file data fields
 
 #define PTEID_ADDR_TYPE_LEN                     2
 #define PTEID_ADDR_COUNTRY_LEN                  4
