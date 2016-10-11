@@ -652,6 +652,9 @@ CByteArray CPkiCard::MakePinCmd(tPinOperation operation, const tPin & Pin)
     case PIN_OP_CHANGE:
         oCmd.Append(0x24);
         break;
+    case PIN_OP_RESET:
+    	oCmd.Append(0x2C);
+    	break;
     default:
         throw CMWEXCEPTION(EIDMW_ERR_PIN_OPERATION);
     }

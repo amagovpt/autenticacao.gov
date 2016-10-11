@@ -56,10 +56,12 @@ public:
     virtual CByteArray RootCAPubKey() = 0;
     virtual bool Activate(const char *pinCode, CByteArray &BCDDate) = 0;
     virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft) = 0;
+    
     virtual bool PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
         unsigned long & ulRemaining, const tPrivKey *pKey = NULL,
         bool bShowDlg=true);
+
     virtual bool PinCmdIAS(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
         unsigned long & ulRemaining, const tPrivKey *pKey = NULL,

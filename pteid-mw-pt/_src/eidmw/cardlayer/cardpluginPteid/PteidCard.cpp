@@ -429,14 +429,14 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 
 	try
 	{
-		if (m_cardType == CARD_PTEID_IAS101){
-			if (PinCmd(PIN_OP_VERIFY, *puk, pszPuk, "", ulRemaining, NULL)) //martinho - verify puk
-				bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", triesLeft, NULL); // martinho - reset pin
-		} else if (m_cardType == CARD_PTEID_IAS07){
-			// need a gemsafe card!
-			//bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", *triesLeft, NULL); // martinho - reset pin
-			bOK = false;
-		}	
+		if (m_cardType == CARD_PTEID_IAS101) {
+			if (PinCmd(PIN_OP_VERIFY, *puk, pszPuk, "", ulRemaining, NULL))      // Verify PUK
+				bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", triesLeft, NULL); // Reset PIN
+		} 
+		else if (m_cardType == CARD_PTEID_IAS07) {
+
+			bOK = PinCmd(PIN_OP_RESET, pin, pszPuk, pszNewPin, triesLeft, NULL); 
+		}
 	}
 	catch(...)
 	{
