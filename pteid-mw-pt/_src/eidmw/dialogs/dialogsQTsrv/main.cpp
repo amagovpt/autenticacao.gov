@@ -22,12 +22,8 @@
 #include <QPushButton>
 #include <QMessageBox>
 
-#include "sys/ipc.h"
-#include "sys/shm.h"
-
-#include <openssl/rand.h>
-#include <openssl/rc4.h>
-#define RC4_KEY_LEN       16
+#include <sys/ipc.h>
+#include <sys/shm.h>
 
 #include <signal.h>
 
