@@ -1949,7 +1949,7 @@ PTEIDSDK_API long PTEID_GetCVCRoot(PTEID_RSAPublicKey *pCVCRootKey){
 }
 
 PTEIDSDK_API long PTEID_SendAPDU(const unsigned char *ucRequest, unsigned long ulRequestLen, unsigned char *ucResponse, unsigned long *ulResponseLen){
-	if (readerContext!=NULL){
+	if (readerContext != NULL){
 		PTEID_EIDCard &card = readerContext->getEIDCard();
 		PTEID_ByteArray sApdu(ucRequest,ulRequestLen);
 		PTEID_ByteArray resp;
@@ -1965,9 +1965,23 @@ PTEIDSDK_API long PTEID_SendAPDU(const unsigned char *ucRequest, unsigned long u
 
 PTEIDSDK_API int PTEID_IsPinpad() {
 	
-	if (readerContext!=NULL) {
-
+	if (readerContext != NULL) {
+		return readerContext->isPinpad() ? 1 : 0;
 	}
+
+	return false;
+}
+
+//TODO: not even sure what this should check in the reader ...
+PTEIDSDK_API int PTEID_IsEMVCAP() {
+	return 0;
+}
+
+//TODO
+PTEIDSDK_API long PTEID_WriteFile_inOffset(unsigned char *file,int filelen, unsigned char *in,
+	     unsigned long inOffset,unsigned long inlen, unsigned char PinId)
+{
+	return 0;
 }
 
 
