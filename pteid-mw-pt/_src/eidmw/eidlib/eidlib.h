@@ -546,6 +546,8 @@ public:
 	  */
     PTEIDSDK_API bool isCardPresent();
 
+    PTEIDSDK_API bool isPinpad();
+
 	/**
 	  * Release the card.
 	  *
@@ -2063,6 +2065,18 @@ PTEIDSDK_API long PTEID_WriteFile(
 	unsigned char PinId		/**< in: the ID of the Authentication PIN, see the PTEID_Pins struct */
 );
 
+
+//TODO
+PTEIDSDK_API long PTEID_WriteFile_inOffset(
+	unsigned char *file,	/**< in: a byte array containing the file path,
+								e.g. {0x3F, 0x00, 0x5F, 0x00, 0xEF, 0x02} for the ID file */
+	int filelen,			/**< in: file length */
+	unsigned char *in,		/**< in: the data to be written to the file */
+	unsigned long inOffset, /**< in: the offset of the data to be written to the file */
+	unsigned long inlen,	/**< in: length of the data to be written */
+	unsigned char PinId		/**< in: the ID of the Authentication PIN, see the PTEID_Pins struct */
+);
+
 /**
  * Get the activation status of the card.
  */
@@ -2197,6 +2211,16 @@ PTEIDSDK_API void PTEID_CAP_SetCapPinChangeCallback(void(_USERENTRY * callback)(
  * Allows the library user to cancel a running Change CAP PIN operation.
  */
 PTEIDSDK_API void PTEID_CAP_CancelCapPinChange();
+
+/**
+ * Return true if the connected reader is a pinpad.
+ */
+PTEIDSDK_API int PTEID_IsPinpad();
+
+/**
+ * Return true if the connected reader is an EMV-CAP compliant pinpad.
+ */
+PTEIDSDK_API int PTEID_IsEMVCAP();
 
 
 #endif // !defined SWIGJAVA && !defined SWIGCSHARP

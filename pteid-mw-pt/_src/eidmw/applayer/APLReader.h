@@ -335,6 +335,11 @@ public:
 	EIDMW_APL_API bool isCardChanged(unsigned long &ulOldId);
 
 	/**
+	* Check if this is a Pinpad reader
+	*/
+	EIDMW_APL_API bool isPinpad();
+
+	/**
 	  * Return the internal card id of the current connected card (0 if no card is present)
 	  */    
 	EIDMW_APL_API unsigned long getCardId();

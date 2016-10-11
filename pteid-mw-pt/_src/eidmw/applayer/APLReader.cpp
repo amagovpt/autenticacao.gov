@@ -311,6 +311,11 @@ APL_CardType APL_ReaderContext::getPhysicalCardType()
 	return ret;
 }
 
+bool APL_ReaderContext::isPinpad()
+{
+	return m_calreader->IsPinpadReader();
+}
+
 bool APL_ReaderContext::connectCard()
 {
 	CAutoMutex autoMutex(&m_newcardmutex);

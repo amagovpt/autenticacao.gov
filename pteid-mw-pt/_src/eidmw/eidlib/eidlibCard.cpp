@@ -1528,57 +1528,79 @@ PTEIDSDK_API long PTEID_GetAddr(PTEID_ADDR *AddrData){
 	int pin_id;
 	unsigned long remaining_tries;
 
-	if (readerContext!=NULL){
+	if (readerContext!=NULL) 
+	{
 
-		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
-		for (unsigned long PinIdx=0; PinIdx < pins.count(); PinIdx++){
-				PTEID_Pin&	Pin	= pins.getPinByNumber(PinIdx);
-				if (strstr(Pin.getLabel(), "PIN da Morada")){
-					if (!Pin.verifyPin("",remaining_tries))
-						return -1;
-					break;
-				}
-		}
-
-		PTEID_Address &addr = readerContext->getEIDCard().getAddr();
-
-		memset(AddrData, '\0', sizeof(PTEID_ADDR));
-
-		AddrData->version = 0;
-		strncpy(AddrData->country, addr.getCountryCode(), PTEID_MAX_ADDR_COUNTRY_LEN-1);
-		strncpy(AddrData->numMor, addr.getGeneratedAddressCode(), PTEID_MAX_NUMMOR_LEN-1);
-
-		if (addr.isNationalAddress())
+		try
 		{
-			strncpy(AddrData->addrType, COMP_LAYER_NATIONAL_ADDRESS, PTEID_MAX_ADDR_TYPE_LEN-1);
-			strncpy(AddrData->district, addr.getDistrictCode(), PTEID_MAX_DISTRICT_LEN-1);
-			strncpy(AddrData->districtDesc, addr.getDistrict(), PTEID_MAX_DISTRICT_DESC_LEN-1);
-			strncpy(AddrData->municipality, addr.getMunicipalityCode(), PTEID_MAX_DISTRICT_CON_LEN-1);
-			strncpy(AddrData->municipalityDesc, addr.getMunicipality(), PTEID_MAX_DISTRICT_CON_DESC_LEN-1);
-			strncpy(AddrData->freguesia, addr.getCivilParishCode(), PTEID_MAX_DISTRICT_FREG_LEN-1);
-			strncpy(AddrData->freguesiaDesc, addr.getCivilParish(), PTEID_MAX_DISTRICT_FREG_DESC_LEN-1);
-			strncpy(AddrData->streettypeAbbr, addr.getAbbrStreetType(), PTEID_MAX_ROAD_ABBR_LEN-1);
-			strncpy(AddrData->streettype, addr.getStreetType(), PTEID_MAX_ROAD_LEN-1);
-			strncpy(AddrData->street, addr.getStreetName(), PTEID_MAX_ROAD_DESIG_LEN-1);
-			strncpy(AddrData->buildingAbbr, addr.getAbbrBuildingType(), PTEID_MAX_HOUSE_ABBR_LEN-1);
-			strncpy(AddrData->building, addr.getBuildingType(), PTEID_MAX_HOUSE_LEN-1);
-			strncpy(AddrData->door, addr.getDoorNo(), PTEID_MAX_NUMDOOR_LEN-1);
-			strncpy(AddrData->floor, addr.getFloor(), PTEID_MAX_FLOOR_LEN-1);
-			strncpy(AddrData->side, addr.getSide(), PTEID_MAX_SIDE_LEN-1);
-			strncpy(AddrData->place, addr.getPlace(), PTEID_MAX_PLACE_LEN-1);
-			strncpy(AddrData->locality, addr.getLocality(), PTEID_MAX_LOCALITY_LEN-1);
-			strncpy(AddrData->cp4, addr.getZip4(), PTEID_MAX_CP4_LEN-1);
-			strncpy(AddrData->cp3, addr.getZip3(), PTEID_MAX_CP3_LEN-1);
-			strncpy(AddrData->postal, addr.getPostalLocality(), PTEID_MAX_POSTAL_LEN-1);
-		} else {
-			strncpy(AddrData->addrType, COMP_LAYER_FOREIGN_ADDRESS, PTEID_MAX_ADDR_TYPE_LEN-1);
-			strncpy(AddrData->countryDescF, addr.getForeignCountry(), PTEID_MAX_ADDR_COUNTRYF_DESC_LEN-1);
-			strncpy(AddrData->addressF, addr.getForeignAddress(), PTEID_MAX_ADDRF_LEN-1);
-			strncpy(AddrData->cityF, addr.getForeignCity(), PTEID_MAX_CITYF_LEN-1);
-			strncpy(AddrData->regioF, addr.getForeignRegion(), PTEID_MAX_REGIOF_LEN-1);
-			strncpy(AddrData->localityF, addr.getForeignLocality(), PTEID_MAX_LOCALITYF_LEN-1);
-			strncpy(AddrData->postalF, addr.getForeignPostalCode(), PTEID_MAX_POSTALF_LEN-1);
+
+			PTEID_Pins &pins = readerContext->getEIDCard().getPins();
+			for (unsigned long PinIdx=0; PinIdx < pins.count(); PinIdx++){
+					PTEID_Pin&	Pin	= pins.getPinByNumber(PinIdx);
+					if (strstr(Pin.getLabel(), "PIN da Morada")){
+						if (!Pin.verifyPin("",remaining_tries))
+							return -1;
+						break;
+					}
+			}
+
+			PTEID_Address &addr = readerContext->getEIDCard().getAddr();
+
+			memset(AddrData, '\0', sizeof(PTEID_ADDR));
+
+			AddrData->version = 0;
+			strncpy(AddrData->country, addr.getCountryCode(), PTEID_MAX_ADDR_COUNTRY_LEN-1);
+			strncpy(AddrData->numMor, addr.getGeneratedAddressCode(), PTEID_MAX_NUMMOR_LEN-1);
+
+			if (addr.isNationalAddress())
+			{
+				strncpy(AddrData->addrType, COMP_LAYER_NATIONAL_ADDRESS, PTEID_MAX_ADDR_TYPE_LEN-1);
+				strncpy(AddrData->district, addr.getDistrictCode(), PTEID_MAX_DISTRICT_LEN-1);
+				strncpy(AddrData->districtDesc, addr.getDistrict(), PTEID_MAX_DISTRICT_DESC_LEN-1);
+				strncpy(AddrData->municipality, addr.getMunicipalityCode(), PTEID_MAX_DISTRICT_CON_LEN-1);
+				strncpy(AddrData->municipalityDesc, addr.getMunicipality(), PTEID_MAX_DISTRICT_CON_DESC_LEN-1);
+				strncpy(AddrData->freguesia, addr.getCivilParishCode(), PTEID_MAX_DISTRICT_FREG_LEN-1);
+				strncpy(AddrData->freguesiaDesc, addr.getCivilParish(), PTEID_MAX_DISTRICT_FREG_DESC_LEN-1);
+				strncpy(AddrData->streettypeAbbr, addr.getAbbrStreetType(), PTEID_MAX_ROAD_ABBR_LEN-1);
+				strncpy(AddrData->streettype, addr.getStreetType(), PTEID_MAX_ROAD_LEN-1);
+				strncpy(AddrData->street, addr.getStreetName(), PTEID_MAX_ROAD_DESIG_LEN-1);
+				strncpy(AddrData->buildingAbbr, addr.getAbbrBuildingType(), PTEID_MAX_HOUSE_ABBR_LEN-1);
+				strncpy(AddrData->building, addr.getBuildingType(), PTEID_MAX_HOUSE_LEN-1);
+				strncpy(AddrData->door, addr.getDoorNo(), PTEID_MAX_NUMDOOR_LEN-1);
+				strncpy(AddrData->floor, addr.getFloor(), PTEID_MAX_FLOOR_LEN-1);
+				strncpy(AddrData->side, addr.getSide(), PTEID_MAX_SIDE_LEN-1);
+				strncpy(AddrData->place, addr.getPlace(), PTEID_MAX_PLACE_LEN-1);
+				strncpy(AddrData->locality, addr.getLocality(), PTEID_MAX_LOCALITY_LEN-1);
+				strncpy(AddrData->cp4, addr.getZip4(), PTEID_MAX_CP4_LEN-1);
+				strncpy(AddrData->cp3, addr.getZip3(), PTEID_MAX_CP3_LEN-1);
+				strncpy(AddrData->postal, addr.getPostalLocality(), PTEID_MAX_POSTAL_LEN-1);
+			}
+			else {
+				strncpy(AddrData->addrType, COMP_LAYER_FOREIGN_ADDRESS, PTEID_MAX_ADDR_TYPE_LEN-1);
+				strncpy(AddrData->countryDescF, addr.getForeignCountry(), PTEID_MAX_ADDR_COUNTRYF_DESC_LEN-1);
+				strncpy(AddrData->addressF, addr.getForeignAddress(), PTEID_MAX_ADDRF_LEN-1);
+				strncpy(AddrData->cityF, addr.getForeignCity(), PTEID_MAX_CITYF_LEN-1);
+				strncpy(AddrData->regioF, addr.getForeignRegion(), PTEID_MAX_REGIOF_LEN-1);
+				strncpy(AddrData->localityF, addr.getForeignLocality(), PTEID_MAX_LOCALITYF_LEN-1);
+				strncpy(AddrData->postalF, addr.getForeignPostalCode(), PTEID_MAX_POSTALF_LEN-1);
+			}
 		}
+		catch (PTEID_Exception &ex)
+		{
+			long errorCode = ex.GetError();
+
+			if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && 
+				errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN)
+			{
+				return SC_ERROR_OBJECT_NOT_VALID;
+			}
+			else
+			{ 
+				return SC_ERROR_INTERNAL;
+			}
+		
+		}
+
 	}
 	return 0;
 }
@@ -1885,6 +1907,11 @@ PTEIDSDK_API long PTEID_SetSODChecking(int bDoCheck){
 
 PTEIDSDK_API long PTEID_SetSODCAs(PTEID_Certifs *Certifs){
 	if (readerContext!=NULL){
+
+		//TODO: if called with NULL this should revert to use the default SOD CAs
+		if (Certifs == NULL)
+			return 0;
+
 		for(int i=0;i<Certifs->certificatesLength;i++){
 			PTEID_ByteArray *pba = new PTEID_ByteArray(Certifs->certificates[i].certif,Certifs->certificates[i].certifLength);
 			readerContext->getEIDCard().getCertificates().addCertificate(*pba);
@@ -1935,6 +1962,14 @@ PTEIDSDK_API long PTEID_SendAPDU(const unsigned char *ucRequest, unsigned long u
 
 	return 0;
 }
+
+PTEIDSDK_API int PTEID_IsPinpad() {
+	
+	if (readerContext!=NULL) {
+
+	}
+}
+
 
 /*
 PTEIDSDK_API long PTEID_CAP_ChangeCapPin(const char *csServer, const unsigned char *ucServerCaCert,	unsigned long ulServerCaCertLen, tProxyInfo *proxyInfo,	const char *pszOldPin, const char *pszNewPin, long *triesLeft){

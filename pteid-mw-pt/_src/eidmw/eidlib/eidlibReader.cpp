@@ -772,6 +772,20 @@ void PTEID_ReaderContext::EndTransaction()
 	END_TRY_CATCH
 }
 
+bool PTEID_ReaderContext::isPinpad()
+{
+	bool out = false;
+	BEGIN_TRY_CATCH
+
+	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
+	out = pimpl->isPinpad();
+	
+	END_TRY_CATCH
+
+	return out;
+
+}
+
 bool PTEID_ReaderContext::isVirtualReader()
 {
 	bool out = false;
