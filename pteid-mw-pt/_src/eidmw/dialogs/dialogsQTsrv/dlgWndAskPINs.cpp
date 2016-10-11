@@ -34,7 +34,7 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 
     if(PINName.contains("Assinatura", Qt::CaseInsensitive))
         this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin.png);");
-    else
+    else if (!PINName.contains("PUK"))
         this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin.png);");
 
 	//this->resize( 350, 280 );
@@ -73,16 +73,29 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 
 	
 		this->setWindowIcon( QIcon( ":/Resources/ICO_CARD_EID_PLAIN_16x16.png" ) );
-	
-		Title+= QString::fromWCharArray(GETSTRING_DLG(RenewingPinCode));
+
+		if (PINName.contains("PUK"))
+		{
+			Title+= QString::fromWCharArray(GETSTRING_DLG(Unblock));
+		}
+		else
+		{
+			Title+= QString::fromWCharArray(GETSTRING_DLG(RenewingPinCode));
+		}
+		
+
 		this->setWindowTitle( Title );
 
 		ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
 		ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
+		
 		ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
 		ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
 
-		ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
+		if (PINName.contains("PUK"))
+			ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(Puk)) );
+		else
+			ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
 		ui.lblOldPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
 		ui.lblNewPIN1->setText( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
 		ui.lblNewPIN1->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
@@ -99,7 +112,7 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 
 		if( !Header.isEmpty() )
 		{
-			ui.lblHeader->setText( Header );
+			ui.lblHeader->setText("Para desbloquear o PIN tera de saber qual o respectivo codigo de desbloqueio");
 			ui.lblHeader->setAccessibleName( Header );
 		}
 

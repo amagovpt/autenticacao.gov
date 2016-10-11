@@ -435,7 +435,14 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 		} 
 		else if (m_cardType == CARD_PTEID_IAS07) {
 
-			bOK = PinCmd(PIN_OP_RESET, pin, pszPuk, pszNewPin, triesLeft, NULL); 
+			std::string pin_str;
+			if (pszNewPin != NULL)
+				pin_str = pszNewPin;
+
+			std::string puk_str;
+			if (pszPuk != NULL)
+				puk_str = pszPuk;
+			bOK = PinCmd(PIN_OP_RESET, pin, puk_str, pin_str, triesLeft, NULL); 
 		}
 	}
 	catch(...)
@@ -564,18 +571,18 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 	else
 	{
 #endif	
-	std::wstring wideLabel = utilStringWiden(Pin.csLabel);
-	if (operation != PIN_OP_CHANGE)
-	{
-		ret = DlgAskPin(pinOperation,
-			usage, wideLabel.c_str(), pinInfo, wsPin1,PIN_MAX_LENGTH+1);
-	}
-	else
-	{
-		ret = DlgAskPins(pinOperation, usage, wideLabel.c_str(),
-			pinInfo, wsPin1,PIN_MAX_LENGTH+1, 
-			pinInfo, wsPin2,PIN_MAX_LENGTH+1);
-	}
+		std::wstring wideLabel = utilStringWiden(Pin.csLabel);
+		if (operation == PIN_OP_VERIFY)
+		{
+			ret = DlgAskPin(pinOperation,
+				usage, wideLabel.c_str(), pinInfo, wsPin1,PIN_MAX_LENGTH+1);
+		}
+		else
+		{
+			ret = DlgAskPins(pinOperation, usage, wideLabel.c_str(),
+				pinInfo, wsPin1,PIN_MAX_LENGTH+1, 
+				pinInfo, wsPin2,PIN_MAX_LENGTH+1);
+		}
 #ifdef __linux__	
 
 	}
@@ -585,7 +592,7 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 	if (ret == DLG_OK)
 	{
 		csPin1 = utilStringNarrow(wsPin1);
-		if (operation == PIN_OP_CHANGE)
+		if (operation == PIN_OP_CHANGE || operation == PIN_OP_RESET)
 			csPin2 = utilStringNarrow(wsPin2);
 	}
 	else if (ret == DLG_CANCEL)

@@ -135,6 +135,7 @@ int main(int argc, char *argv[])
 
 			SharedMem oShMemory;
 			oShMemory.Attach( sizeof(DlgAskPINArguments), readableFilePath.c_str(),(void **) &oData);
+			MWLOG(LEV_ERROR, MOD_DLG, L"Running DLG_ASK_PIN with args: operation=> %d usage=> %d\n", oData->operation, oData->usage);
 
 			// do something
 			dlgWndAskPIN *dlg = NULL;
@@ -253,6 +254,7 @@ int main(int argc, char *argv[])
 			DlgAskPINsArguments *oData = NULL;
 			SharedMem oShMemory;
 			oShMemory.Attach( sizeof(DlgAskPINsArguments), readableFilePath.c_str(),(void **) &oData);
+			MWLOG(LEV_ERROR, MOD_DLG, L"Running DLG_ASK_PINS with args: operation=> %d usage=> %d\n", oData->operation, oData->usage);
 
 			dlgWndAskPINs *dlg = NULL;
 			try 
@@ -275,14 +277,21 @@ int main(int argc, char *argv[])
 						}
 						break;
 					case DLG_PIN_OP_UNBLOCK_CHANGE:
-						if( oData->usage == DLG_PIN_UNKNOWN )
-						{
-							PINName = QString::fromWCharArray(oData->pinName);
-						}
-						else
-						{
+						Header = GETQSTRING_DLG(PleaseEnterYourPuk);
+						Header += ", ";
+						Header = GETQSTRING_DLG(ToUnblock);
+						Header += " ";
+						Header = GETQSTRING_DLG(Your);
+						Header += " \"";
+					
+					//	if( oData->usage == DLG_PIN_UNKNOWN )
+					//	{
+				    //			PINName = QString::fromWCharArray(oData->pinName);
+					//	}
+					//	else
+					//	{
 							PINName = GETQSTRING_DLG(Puk);
-						}
+					//	}
 						break;
 					default:
 						oData->returnValue = DLG_BAD_PARAM;
@@ -311,7 +320,13 @@ int main(int argc, char *argv[])
                 }
 
 				Header += " ";
-				QString tr_pin = translatePinName(PINName);
+				QString tr_pin;
+
+				if (oData->operation == DLG_PIN_OP_UNBLOCK_CHANGE)
+					tr_pin = QString("PUK"); 
+				else
+					tr_pin = translatePinName(PINName);
+
 				dlg = new dlgWndAskPINs(oData->pin1Info, 
 						oData->pin2Info, 
 						Header, 
@@ -654,7 +669,11 @@ int main(int argc, char *argv[])
 								qsMessage += "\n";
 								break;
 							case DLG_PIN_OP_UNBLOCK_CHANGE:
-								qsMessage = GETQSTRING_DLG(ChangeYourPuk);
+								qsMessage = GETQSTRING_DLG(PleaseEnterYourPuk);
+								qsMessage += ", ";
+								qsMessage = GETQSTRING_DLG(ToUnblock);
+								qsMessage += " ";
+								qsMessage = GETQSTRING_DLG(Your);
 								qsMessage += " \"";
 								if( !qsPinName.isEmpty() )
 								{

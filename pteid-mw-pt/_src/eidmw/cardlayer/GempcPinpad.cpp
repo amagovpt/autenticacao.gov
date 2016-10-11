@@ -179,7 +179,8 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation,
 
 			return PinpadControl((unsigned long)ioctl2, b2, operation,
 				ucPinType, pin.csLabel, bShowDlg);
-		} else if (operation == PIN_OP_RESET)
+		} 
+		else if (operation == PIN_OP_RESET)
 		{
 			ioctl2 = CM_IOCTL_MODIFY_PIN;
 			pin_struct = &pin_change;

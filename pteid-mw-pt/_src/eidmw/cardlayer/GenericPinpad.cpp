@@ -256,6 +256,7 @@ bool GenericPinpad::ShowDlg(unsigned char pinpadOperation, unsigned char ucPinty
 	const std::string & csPinLabel, const std::string & csReader,
 	unsigned long *pulDlgHandle)
 {
+	fprintf(stderr, "DEBUG: ShowDlg(): PinpadOperation: %02x\n", pinpadOperation);
 	const char *csMesg = "";
 	DlgPinUsage dlgUsage = DLG_PIN_UNKNOWN;
 	switch(ucPintype)
@@ -270,6 +271,7 @@ bool GenericPinpad::ShowDlg(unsigned char pinpadOperation, unsigned char ucPinty
 	{
 		case EIDMW_PP_OP_VERIFY: dlgOperation = DLG_PIN_OP_VERIFY; break;
 		case EIDMW_PP_OP_CHANGE: dlgOperation = DLG_PIN_OP_CHANGE; break;
+		case EIDMW_PP_OP_UNBLOCK_CHANGE: dlgOperation = DLG_PIN_OP_UNBLOCK_CHANGE; break;
 		default: throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	}
 	std::wstring wideReader = utilStringWiden(csReader);	
@@ -373,7 +375,7 @@ unsigned char GenericPinpad::PinOperation2Lib(tPinOperation operation)
 	{
 	case PIN_OP_VERIFY: return EIDMW_PP_OP_VERIFY;
 	case PIN_OP_CHANGE: return EIDMW_PP_OP_CHANGE;
-	case PIN_OP_RESET:	return EIDMW_PP_OP_CHANGE;
+	case PIN_OP_RESET:	return EIDMW_PP_OP_UNBLOCK_CHANGE;
 	// Add others when needed
 	default: throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	}

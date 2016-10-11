@@ -228,6 +228,7 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
 ;
 
 bad_pin:
+	fprintf(stderr, "DEBUG PinCmd: bAskPin: %d, bUsePinpad: %d, operation:%d\n", bAskPIN, bUsePinpad, operation);
     // If no Pin(s) provided and it's no Pinpad reader -> ask Pins
     if (bAskPIN && !bUsePinpad)
 	{
@@ -633,8 +634,13 @@ DlgPinOperation CPkiCard::PinOperation2Dlg(tPinOperation operation)
 {
 	switch(operation)
 	{
-	case PIN_OP_CHANGE: return DLG_PIN_OP_CHANGE;
-	default: return DLG_PIN_OP_VERIFY;
+		case PIN_OP_CHANGE:
+		 return DLG_PIN_OP_CHANGE;
+		 //We ignore the RESET with no change case for now
+		case PIN_OP_RESET:
+		 return DLG_PIN_OP_UNBLOCK_CHANGE;
+		default: 
+			return DLG_PIN_OP_VERIFY;
 	}
 }
 
