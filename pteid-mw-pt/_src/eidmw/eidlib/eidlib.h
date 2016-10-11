@@ -973,37 +973,6 @@ friend PTEID_Card &PTEID_ReaderContext::getCard();				/**< For internal use : Th
 };
 
 
-class SignatureVerifier;
-
-class PTEID_SigVerifier
-{
-	
-	/** Validates an XML-DSIG or XAdES signature
- 	*
- 	*  This method is intended to validate XADES signatures produced with PTEID_EIDCard::SignXades() method
- 	*  even though any conforming signature should work
-	*
- 	*  Implementation note: External references in the <SignedInfo> element are not checked
- 	*
- 	*  @param IN signature is a byte array containing the UTF-8 representation of an XML document
- 	*/
-
-	public:
-	
-	PTEIDSDK_API PTEID_SigVerifier(const char * container_path);
-	PTEIDSDK_API ~PTEID_SigVerifier();
-
-	PTEIDSDK_API int Verify();
-	PTEIDSDK_API char * GetSigner();
-	PTEIDSDK_API char *GetTimestampString();
-	PTEIDSDK_API long long GetUnixTimestamp();
-      	//PTEIDSDK_API getTimestamp() //TODO: Create a custom class struct that expresses the timestamp in all its glorious detail
-	
-	private:
-	SignatureVerifier *m_impl;
-
-};
-
 class APL_XmlUserRequestedInfo;
 /******************************************************************************//**
   * This class will contain information about the data to be returned in the xml file.
@@ -2221,6 +2190,36 @@ PTEIDSDK_API int PTEID_IsPinpad();
  * Return true if the connected reader is an EMV-CAP compliant pinpad.
  */
 PTEIDSDK_API int PTEID_IsEMVCAP();
+
+
+/**
+* CVC authentication functions
+*/
+/**
+ * Start a CVC authentication with the card.
+ * The resuling challenge should be signed with the private key corresponding
+ * to the CVC certificate (raw RSA signature) and provided in the
+ * PTEID_CVC_Authenticate() function.
+ */
+PTEIDSDK_API long PTEID_CVC_Init(
+    const unsigned char *pucCert,	/**< in: the CVC as a byte array */
+    int iCertLen,					/**< in: the length of ucCert */
+    unsigned char *pucChallenge,	/**< out: the challenge to be signed by the CVC private key */
+    int iChallengeLen				/**< in: the length reserved for ucChallenge, must be 128 */
+);
+
+/**
+ * Finish the CVC authentication with the card, to be called
+ *   after a PTEID_CVC_Init()
+ * Parameters:
+ *   ucSignedChallenge:  (IN)  the challenge that was signed by the private key corresponding to the CVC
+ *   iSignedChallengeLen (IN)  the length of ucSignedChallenge, must be 128
+ */
+PTEIDSDK_API long PTEID_CVC_Authenticate(
+    unsigned char *pucSignedChallenge,	/**< in: the challenge that was signed by the
+											private key corresponding to the CVC */
+    int iSignedChallengeLen				/**< in: the length of ucSignedChallenge, must be 128 */
+);
 
 
 #endif // !defined SWIGJAVA && !defined SWIGCSHARP

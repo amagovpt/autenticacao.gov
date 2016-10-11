@@ -1784,7 +1784,7 @@ PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszN
 	unsigned long id;
 	unsigned long tleft;
 
-	if (readerContext!=NULL){
+	if (readerContext!=NULL) {
 		if (PinId != 1 && PinId != 129 && PinId != 130 && PinId != 131)
 			return 0;
 
@@ -1974,16 +1974,23 @@ PTEIDSDK_API int PTEID_IsPinpad() {
 
 //TODO: not even sure what this should check in the reader ...
 PTEIDSDK_API int PTEID_IsEMVCAP() {
-	return 0;
+	return PTEID_OK;
 }
+
+PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,					
+    unsigned char *pucChallenge, int iChallengeLen) {
+		//TODO: THis should implement all the Mutual Auth Process and generate the input to the Signature thats sent in the 
+	    //EXTERNAL AUTHENTICATE command (the one that is signed by the CVC private key)
+
+		return PTEID_OK;
+	}
 
 //TODO
 PTEIDSDK_API long PTEID_WriteFile_inOffset(unsigned char *file,int filelen, unsigned char *in,
 	     unsigned long inOffset,unsigned long inlen, unsigned char PinId)
 {
-	return 0;
+	return PTEID_OK;
 }
-
 
 /*
 PTEIDSDK_API long PTEID_CAP_ChangeCapPin(const char *csServer, const unsigned char *ucServerCaCert,	unsigned long ulServerCaCertLen, tProxyInfo *proxyInfo,	const char *pszOldPin, const char *pszNewPin, long *triesLeft){
