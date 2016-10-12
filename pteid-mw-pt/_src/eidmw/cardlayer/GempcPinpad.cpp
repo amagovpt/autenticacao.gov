@@ -40,7 +40,7 @@ void GemPcPinpad::fillVerifyControlStruct(PP_VERIFY_CCID * pin_verify)
 void GemPcPinpad::fillModifyControlStruct(PP_CHANGE_CCID * pin_change, int include_verify)
 {
 
-	pin_change -> bTimerOut = 0x1E; 
+	pin_change -> bTimerOut = 0x1E;                                         
 	pin_change -> bTimerOut2 = 0x1E;   //30 seconds timeout
 	pin_change -> bmFormatString = 0x02;
 	pin_change -> bmPINBlockString = 0x00;
@@ -63,6 +63,7 @@ void GemPcPinpad::fillModifyControlStruct(PP_CHANGE_CCID * pin_change, int inclu
 	pin_change -> bTeoPrologue[2] = 0x00;
 
 } //sizeof() == 24
+
 
 DWORD GemPcPinpad::loadStrings(SCARDHANDLE hCard, unsigned char ucPinType)
 {
