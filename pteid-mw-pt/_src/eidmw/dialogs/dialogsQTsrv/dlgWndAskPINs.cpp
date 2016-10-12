@@ -30,12 +30,12 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 {
 	ui.setupUi(this);
 
-	setFixedSize(416, 258);
+	setFixedSize(this->width(), this->height());
 
     if(PINName.contains("Assinatura", Qt::CaseInsensitive))
-        this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin.png);");
+        this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin_2.png);");
     else if (!PINName.contains("PUK"))
-        this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin.png);");
+        this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin_2.png);");
 
 	//this->resize( 350, 280 );
 	m_UK_InputField = 0;
@@ -112,7 +112,7 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 
 		if( !Header.isEmpty() )
 		{
-			ui.lblHeader->setText("Para desbloquear o PIN tera de saber qual o respectivo codigo de desbloqueio");
+			ui.lblHeader->setText(Header);
 			ui.lblHeader->setAccessibleName( Header );
 		}
 
@@ -231,56 +231,6 @@ void dlgWndAskPINs::FinalCheck()
 			ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(RetryEnterYourNewPinCode)) );
 		}
 	}
-}
-
-void dlgWndAskPINs::on_tbtNUM_0_clicked()
-{
-	if( (unsigned) ui.txtPIN_Keypad->text().size() < m_ulPinMaxLen ) ui.txtPIN_Keypad->setText( ui.txtPIN_Keypad->text() +"0" ); 
-}
-
-void dlgWndAskPINs::on_tbtNUM_1_clicked()
-{
-	if( (unsigned) ui.txtPIN_Keypad->text().size() < m_ulPinMaxLen ) ui.txtPIN_Keypad->setText( ui.txtPIN_Keypad->text() +"1" ); 
-}
-
-void dlgWndAskPINs::on_tbtNUM_2_clicked()
-{
-	if( (unsigned) ui.txtPIN_Keypad->text().size() < m_ulPinMaxLen ) ui.txtPIN_Keypad->setText( ui.txtPIN_Keypad->text() +"2" ); 
-}
-
-void dlgWndAskPINs::on_tbtNUM_3_clicked()
-{
-	if( (unsigned) ui.txtPIN_Keypad->text().size() < m_ulPinMaxLen ) ui.txtPIN_Keypad->setText( ui.txtPIN_Keypad->text() +"3" ); 
-}
-
-void dlgWndAskPINs::on_tbtNUM_4_clicked()
-{
-	if( (unsigned) ui.txtPIN_Keypad->text().size() < m_ulPinMaxLen ) ui.txtPIN_Keypad->setText( ui.txtPIN_Keypad->text() +"4" ); 
-}
-
-void dlgWndAskPINs::on_tbtNUM_5_clicked()
-{
-	if( (unsigned) ui.txtPIN_Keypad->text().size() < m_ulPinMaxLen ) ui.txtPIN_Keypad->setText( ui.txtPIN_Keypad->text() +"5" ); 
-}
-
-void dlgWndAskPINs::on_tbtNUM_6_clicked()
-{
-	if( (unsigned) ui.txtPIN_Keypad->text().size() < m_ulPinMaxLen ) ui.txtPIN_Keypad->setText( ui.txtPIN_Keypad->text() +"6" ); 
-}
-
-void dlgWndAskPINs::on_tbtNUM_7_clicked()
-{
-	if( (unsigned) ui.txtPIN_Keypad->text().size() < m_ulPinMaxLen ) ui.txtPIN_Keypad->setText( ui.txtPIN_Keypad->text() +"7" ); 
-}
-
-void dlgWndAskPINs::on_tbtNUM_8_clicked()
-{
-	if( (unsigned) ui.txtPIN_Keypad->text().size() < m_ulPinMaxLen ) ui.txtPIN_Keypad->setText( ui.txtPIN_Keypad->text() +"8" ); 
-}
-
-void dlgWndAskPINs::on_tbtNUM_9_clicked()
-{
-	if( (unsigned) ui.txtPIN_Keypad->text().size() < m_ulPinMaxLen ) ui.txtPIN_Keypad->setText( ui.txtPIN_Keypad->text() +"9" ); 
 }
 
 void dlgWndAskPINs::on_tbtClear_clicked()

@@ -320,12 +320,18 @@ int main(int argc, char *argv[])
                 }
 
 				Header += " ";
+
 				QString tr_pin;
 
 				if (oData->operation == DLG_PIN_OP_UNBLOCK_CHANGE)
+				{
+					Header = GETQSTRING_DLG(UnlockDialogHeader);
 					tr_pin = QString("PUK"); 
+				}
 				else
+				{
 					tr_pin = translatePinName(PINName);
+				}
 
 				dlg = new dlgWndAskPINs(oData->pin1Info, 
 						oData->pin2Info, 
