@@ -1463,6 +1463,7 @@ PTEIDSDK_API tCompCardType PTEID_GetCardType(){
 #define SC_ERROR_PIN_CODE_INCORRECT -1214
 #define SC_ERROR_INTERNAL -1400
 #define SC_ERROR_OBJECT_NOT_VALID -1406
+#define SC_ERROR_PIN_CODE_INCORRECT -1214
 
 
 PTEIDSDK_API long PTEID_GetID(PTEID_ID *IDData){
@@ -1788,17 +1789,25 @@ PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszN
 		if (PinId != 1 && PinId != 129 && PinId != 130 && PinId != 131)
 			return 0;
 
-		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
-		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++) {
-			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
-			if (pin.getPinRef() == PinId){
-				pin.unlockPin(pszPuk, pszNewPin,tleft);
-				*triesLeft = tleft;
+		try
+		{
+			PTEID_Pins &pins = readerContext->getEIDCard().getPins();
+			for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++) {
+				PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
+				if (pin.getPinRef() == PinId) {
+					bool ret = pin.unlockPin(pszPuk, pszNewPin,tleft);
+					*triesLeft = tleft;
+					return ret ? PTEID_OK: SC_ERROR_PIN_CODE_INCORRECT;
+				}
 			}
+		}
+		catch(PTEID_Exception &ex)
+		{
+			return PTEID_E_NOT_INITIALIZED;
 		}
 	}
 
-	return 0;
+	
 }
 
 PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft, unsigned long ulFlags){
@@ -1810,13 +1819,22 @@ PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *
 }
 
 PTEIDSDK_API long PTEID_SelectADF(unsigned char *adf, long adflen){
-	if (readerContext!=NULL){
-		PTEID_EIDCard &card = readerContext->getEIDCard();
-		unsigned char ap[4] = {0x00, 0xA4, 0x00, 0x0C};
-		PTEID_ByteArray apdu(ap,(unsigned long)(sizeof(ap)/sizeof(unsigned char)));
-		apdu.Append((unsigned char*)&adflen,sizeof(unsigned char));
-		apdu.Append(adf,(unsigned long) adflen);
-		card.sendAPDU(apdu);
+	
+	if (readerContext!=NULL) {
+
+		try {
+
+			PTEID_EIDCard &card = readerContext->getEIDCard();
+			unsigned char ap[4] = {0x00, 0xA4, 0x00, 0x0C};
+			PTEID_ByteArray apdu(ap,(unsigned long)(sizeof(ap)/sizeof(unsigned char)));
+			apdu.Append((unsigned char*)&adflen,sizeof(unsigned char));
+			apdu.Append(adf,(unsigned long) adflen);
+			card.sendAPDU(apdu);
+			}
+		catch(PTEID_Exception &ex)
+		{
+			return PTEID_E_NOT_INITIALIZED;
+		}
 	}
 
 	return 0;
@@ -1966,10 +1984,18 @@ PTEIDSDK_API long PTEID_SendAPDU(const unsigned char *ucRequest, unsigned long u
 PTEIDSDK_API int PTEID_IsPinpad() {
 	
 	if (readerContext != NULL) {
-		return readerContext->isPinpad() ? 1 : 0;
+		try
+		{
+			return readerContext->isPinpad() ? 1 : 0;
+		}
+		catch (PTEID_Exception &e)
+		{
+			return 0;
+		}
+
 	}
 
-	return false;
+	return 0;
 }
 
 //TODO: not even sure what this should check in the reader ...
