@@ -78,6 +78,7 @@ DEFINE_LANG_STR(PrivacyFilter) = {L"Privacy Filter", L"Filtro de privacidade", L
 DEFINE_LANG_STR(EnterYour) = {L"Enter your", L"Introduza o seu", L"Entrez votre", L"Geben Sie Ihre"};
 DEFINE_LANG_STR(ForVerification) = {L"for verification", L"voor verificatie", L"pour vï¿½rification", L"zwecks Bestï¿½tigung"};
 DEFINE_LANG_STR(ToUnblock) = {L"to unblock", L"para desbloquear", L"pour dï¿½bloquer", L"um freizugeben"};
+DEFINE_LANG_STR(UnlockDialogHeader) = {L"To unlock your PIN code you must know the matching PUK code", L"Para desbloquear o PIN terá de saber qual o respectivo código de desbloqueio"};
 DEFINE_LANG_STR(Code) = {L"code", L"código", L"code", L"Kennzahl"};
 DEFINE_LANG_STR(AndSigning) = {L"and signing", L"e assinar", L"et signature", L"und Unterschrift"};
 DEFINE_LANG_STR(AndSign) = {L"and sign", L"e assinar", L"et signer", L"und unterschreiben"};
