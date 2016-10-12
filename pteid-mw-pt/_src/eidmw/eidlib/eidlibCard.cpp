@@ -1401,6 +1401,10 @@ PTEIDSDK_API long PTEID_Init(char *ReaderName){
 			readerContext = &ReaderSet.getReaderByName(ReaderName);
 
 		PTEID_EIDCard &card = readerContext->getEIDCard();
+		
+		//Init the compatibility method with PT language
+		PTEID_Config config(PTEID_PARAM_GENERAL_LANGUAGE);
+		config.setString("nl");
 	}
 	catch(PTEID_ExCardBadType &ex)
 	{
@@ -1806,7 +1810,8 @@ PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszN
 			return PTEID_E_NOT_INITIALIZED;
 		}
 	}
-
+	
+	return PTEID_E_NOT_INITIALIZED;
 	
 }
 
