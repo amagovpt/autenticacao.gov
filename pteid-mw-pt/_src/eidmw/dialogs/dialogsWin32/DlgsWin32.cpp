@@ -222,8 +222,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 	{
 		std::wstring PINName;
 		std::wstring Header;
-		Header = GETSTRING_DLG(EnterYour);
-		Header += L" ";
+		
 		switch( operation )
 		{
 		case DLG_PIN_OP_CHANGE:
@@ -236,20 +235,23 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 			}
 			else
 				PINName = csPinName;
+			Header = GETSTRING_DLG(EnterYour);
+			Header += L" ";
+			Header += PINName;
+			Header += L" ";
 			break;
 		case DLG_PIN_OP_UNBLOCK_CHANGE:
 			if( usage == DLG_PIN_UNKNOWN )
 				PINName = csPinName;
 			else
 				PINName = GETSTRING_DLG(Puk);
+			Header += GETSTRING_DLG(UnlockDialogHeader);
 			break;
 		default:
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskPins() returns DLG_BAD_PARAM");
 			return DLG_BAD_PARAM;
 			break;
 		}
-		Header += PINName;
-		Header += L" ";
 
 		dlg = new dlgWndAskPINs( pin1Info, pin2Info, Header, translatePinName(PINName), DlgGetKeyPad() );
 		if( dlg->exec() )
@@ -457,21 +459,20 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 				sMessage += L"\n";
 				break;
 			case DLG_PIN_OP_UNBLOCK_CHANGE:
-				sMessage = GETSTRING_DLG(ChangeYourPuk);
-				sMessage += L" \"";
-				if( wcslen(csPinName)!=0 )
-					sMessage += PINName;
-				else
-					sMessage += GETSTRING_DLG(Pin);
-				sMessage += L"\" ";
-				sMessage += GETSTRING_DLG(OnTheReader);
+				sMessage = L"\n";
+				sMessage += GETSTRING_DLG(UnlockDialogHeader);
+						
+				//sMessage += L"\" ";
+				//sMessage += GETSTRING_DLG(OnTheReader);
+				/*
 				if(wcslen(csReader)!=0)
 				{
 					sMessage += L" \"";
 					sMessage += csReader;
 					sMessage += L"\"";
 				}
-				sMessage += L"\n";
+				*/
+				
 				break;
 			default:
 				MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgDisplayPinpadInfo() returns DLG_BAD_PARAM");
@@ -479,11 +480,22 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 				break;
 			}
 		}
+		//Small hack for the PIN unlock dialog :)
+		std::wstring pin_name_label;
+		if (operation == DLG_PIN_OP_UNBLOCK_CHANGE)
+		{
+		 pin_name_label +=  GETSTRING_DLG(UnblockPinHeader);
+		 pin_name_label	+= L" ";
+		 pin_name_label += csPinName;
+		}
+		else {
+			pin_name_label += translatePinName(PINName);
+		}
 
 		//QString buf = "dlg num: " + QString().setNum( dlgPinPadInfoCollectorIndex );
 		dlgPinPadInfoCollectorIndex++;
 		dlgModal = new dlgWndPinpadInfo( dlgPinPadInfoCollectorIndex, usage,
-			operation, csReader, translatePinName(PINName), sMessage);
+			operation, csReader, pin_name_label, sMessage);
 
 		dlgModal->show();
 		dlgModal->ProcecEvent(WM_PAINT,NULL,NULL);
