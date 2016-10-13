@@ -13,7 +13,4 @@ public class PTEID_Certif {
     public byte[] certif;
     public String certifLabel;
 
-    protected PTEID_Certif() {
-
-    }
 }
