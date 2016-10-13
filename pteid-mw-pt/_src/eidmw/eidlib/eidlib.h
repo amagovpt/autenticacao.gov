@@ -1980,6 +1980,9 @@ PTEIDSDK_API long PTEID_UnblockPIN(
 	long *triesLeft			/**< out: the remaining PUK tries */
 );
 
+
+#define UNBLOCK_FLAG_NEW_PIN    1
+#define UNBLOCK_FLAG_PUK_MERGE  2   // Only on pinpad readers
 /**
  * Extended Unblock PIN functionality.
  * E.g. calling PTEID_UnblockPIN_Ext() with ulFlags = UNBLOCK_FLAG_NEW_PIN
