@@ -37,17 +37,15 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 
 	QString Title="";
 
-	//if( DApplic == DLG_APP_BELPIC )
-	//{
-		this->setWindowIcon( QIcon( ":/Resources/ICO_CARD_EID_PLAIN_16x16.png" ) );
-	//	Title+=QString::fromWCharArray(GETSTRING_DLG(Belpic));
-	//	Title+=": ";
-	//}
+	this->setWindowIcon( QIcon(":/Resources/ICO_CARD_EID_PLAIN_16x16.png") );
+
 
     if (operation == DLG_PIN_OP_CHANGE)
         Title+= QString::fromWCharArray(GETSTRING_DLG(ChangeYourPin));
     else if (operation == DLG_PIN_OP_VERIFY)
-	Title+=QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPin));
+		Title+=QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPin));
+	else if (operation == DLG_PIN_OP_UNBLOCK_CHANGE)
+		Title += QString::fromWCharArray(GETSTRING_DLG(Unblock));
     else
         Title+=QString::fromWCharArray(GETSTRING_DLG(PinpadInfo));
 
@@ -60,13 +58,25 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 	parent->setWindowTitle( Title );
 
 	QString tmpHeader;
-	tmpHeader = PINName;
+	
+	tmpHeader += PINName;
 
     ui.label_2->setText( tmpHeader );
     ui.label_2->setAccessibleName( tmpHeader );
     ui.label->wordWrap();
-    ui.label->setText(QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader)));
-    ui.label->setAccessibleName(QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader)));
+
+    QString label;
+    if (operation == DLG_PIN_OP_UNBLOCK_CHANGE)
+    {
+    	label = QString::fromWCharArray(GETSTRING_DLG(UnlockDialogHeader));
+    }
+    else
+    {
+    	label = QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader));
+    }
+
+    ui.label->setText(label);
+    ui.label->setAccessibleName(label);
 	m_ulHandle = ulHandle;
 }
 
