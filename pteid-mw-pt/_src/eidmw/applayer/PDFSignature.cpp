@@ -423,6 +423,8 @@ namespace eIDMW
 
 		if (m_visible)
 		{
+			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Location_x: %f, location_y: %f",
+				 location_x, location_y);
 			//Sig Location by sector
 			if (location_x == -1)
 			{
@@ -498,6 +500,7 @@ namespace eIDMW
 
 		delete m_doc;
 		m_doc = NULL;
+		free((void *)signature_contents);
 
 		delete outputName;
 

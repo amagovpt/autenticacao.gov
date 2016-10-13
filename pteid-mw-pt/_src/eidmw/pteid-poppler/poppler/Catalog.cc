@@ -443,6 +443,8 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	else if(!incremental_update)
 		xref->setModifiedObject(&catDict, catalog_ref);
 
+	gfree(placeholder);
+
 
 }
 
@@ -504,6 +506,8 @@ void Catalog::closeSignature(const char * signature_contents, unsigned long len)
 	m_sig_dict->dictSet(copyString("Contents"), obj.initString(sig_content));
 
 	xref->setModifiedObject(m_sig_dict, m_sig_ref);
+
+	gfree(padded_string);
 }
 
 GBool Catalog::addSigRefToPage(Ref * refPage, Object* sig_ref)
