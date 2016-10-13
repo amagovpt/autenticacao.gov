@@ -258,7 +258,7 @@ bool GenericPinpad::ShowDlg(unsigned char pinpadOperation, unsigned char ucPinty
 	const std::string & csPinLabel, const std::string & csReader,
 	unsigned long *pulDlgHandle)
 {
-	fprintf(stderr, "DEBUG: ShowDlg(): PinpadOperation: %02x\n", pinpadOperation);
+	
 	const char *csMesg = "";
 	DlgPinUsage dlgUsage = DLG_PIN_UNKNOWN;
 	switch(ucPintype)

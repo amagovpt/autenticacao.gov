@@ -220,15 +220,25 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
 	std::string csReadPin1, csReadPin2;
 	const std::string *pcsPin1 = &csPin1;
 	const std::string *pcsPin2 = &csPin2;
+
 	// martinho: usually each party have half of the puk (current puk size = 8) [puk ulMinLen = 8, ulMaxLen = 12]
-		// martinho: condition to puk merge: csPin1 size < current puk size. the condition Pin.ulPinRef & 0x10 is a way to identify puks.
-	bool bPukMerge = (Pin.ulPinRef & 0x10) && !csPin1.empty() && csPin1.length() < Pin.ulMinLen;
-	bool bAskPIN = csPin1.empty();
+	// martinho: condition to puk merge: csPin1 size < current puk size. the condition Pin.ulPinRef & 0x10 is a way to identify puks.
+	bool bPukMerge = operation == PIN_OP_RESET && csPin1.length() == Pin.ulMinLen; //(Pin.ulPinRef & 0x10) && !csPin1.empty() && csPin1.length() < Pin.ulMinLen;
+	bool bAskPIN = true;
+
+	if (operation == PIN_OP_VERIFY && !csPin1.empty())
+		bAskPIN = false;
+	if (operation == PIN_OP_CHANGE && !csPin1.empty())
+		bAskPIN = false;
+	//Ask for PIN in RESET also in the PUK merge case
+	if (operation == PIN_OP_RESET && csPin1.length() > Pin.ulMinLen)
+		bAskPIN = false;
+
 	bool bUsePinpad = bAskPIN ? m_poPinpad != NULL : false;
-;
 
 bad_pin:
-	fprintf(stderr, "DEBUG PinCmd: bAskPin: %d, bUsePinpad: %d, operation:%d\n", bAskPIN, bUsePinpad, operation);
+	//fprintf(stderr, "DEBUG PinCmd: bUsePinpad:%d, bPukMerge: %d\n", bUsePinpad, bPukMerge);
+
     // If no Pin(s) provided and it's no Pinpad reader -> ask Pins
     if (bAskPIN && !bUsePinpad)
 	{
@@ -260,7 +270,7 @@ bad_pin:
 		}
 
 		// Send the command
-		if (csPin1.empty() && bUsePinpad)
+		if (bUsePinpad)
 			oResp = m_poPinpad->PinCmd(operation, Pin,
 			PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg);
 		else
