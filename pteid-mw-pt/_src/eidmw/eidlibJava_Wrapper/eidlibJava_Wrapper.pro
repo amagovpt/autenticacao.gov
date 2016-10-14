@@ -41,7 +41,7 @@ preprocess.variable_out+=SOURCES
 ###
 ### As a postbuild step, compile the generated .java files and jar them to a jar file
 ###
-unix:QMAKE_POST_LINK = javac -verbose -d ../eidlibJava/class ./GeneratedFiles/*.java; jar cvf ../jar/$${EIDLIBJAR} -C ../eidlibJava/class pt/gov/cartaodecidadao/
+unix:QMAKE_POST_LINK = javac -d ../eidlibJava/class ./GeneratedFiles/*.java && jar cf ../jar/$${EIDLIBJAR} -C ../eidlibJava/class pt/gov/cartaodecidadao/
 
 ## destination directory
 DESTDIR = ../lib

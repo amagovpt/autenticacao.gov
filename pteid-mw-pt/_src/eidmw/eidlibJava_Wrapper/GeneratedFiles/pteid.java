@@ -487,7 +487,9 @@ public class pteid {
                 key.modulus = new byte[(int) rootCAKey.getCardAuthKeyModulus().Size()];
                 System.arraycopy(rootCAKey.getCardAuthKeyExponent().GetBytes(), 0, key.exponent, 0, key.exponent.length);
                 System.arraycopy(rootCAKey.getCardAuthKeyModulus().GetBytes(), 0, key.modulus, 0, key.modulus.length);
-            } catch (Exception ex) {
+            } 
+            catch (PTEID_Exception ex) {
+                System.err.println("Erro no GetCVCRoot: "+ex.GetError());
                 throw new PteidException();
             }
         }

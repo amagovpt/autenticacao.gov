@@ -14,7 +14,6 @@ public class PTEID_RSAPublicKey {
     public byte[] exponent;
 
     public PTEID_RSAPublicKey() {
-        //compiled code
-        throw new RuntimeException("Compiled Code");
+        
     }
 }
