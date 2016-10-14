@@ -354,12 +354,12 @@ CByteArray CPteidCard::RootCAPubKey(){
 		break;
 		case CARD_PTEID_IAS07:
 		{
-			CByteArray getModule("B6038301447F490281008E",true);
+			CByteArray getModule("B6038301447F490281008E00",true);
 			CByteArray oRespModule = SendAPDU(0xCB, 0x00, 0xFF, getModule);
 			getSW12(oRespModule, 0x9000);
 			oRespModule.Chop(2); //martinho: remove the returning code 0x9000
 
-			CByteArray getExponent("B6038301447F4902820010",true);
+			CByteArray getExponent("B6038301447F490282001000",true);
 			CByteArray oRespExponent = SendAPDU(0xCB, 0x00, 0xFF, getExponent);
 			getSW12(oRespExponent, 0x9000);
 			oRespExponent.Chop(2); //martinho: remove the returning code 0x9000
