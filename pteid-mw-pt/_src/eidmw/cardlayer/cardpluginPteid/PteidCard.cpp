@@ -354,13 +354,19 @@ CByteArray CPteidCard::RootCAPubKey(){
 		break;
 		case CARD_PTEID_IAS07:
 		{
-			CByteArray getModule("B6038301447F490281008E00",true);
-			CByteArray oRespModule = SendAPDU(0xCB, 0x00, 0xFF, getModule);
+			unsigned char apdu_cvc_pubkey_mod[] = {0x00, 0xCB, 0x00,
+			0xFF, 0x0A, 0xB6, 0x03, 0x83, 0x01, 0x44, 0x7F, 0x49, 0x02, 0x81, 0x00, 0x00};
+
+			unsigned  char apdu_cvc_pubkey_exponent[] = {0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03,
+				0x83, 0x01, 0x44, 0x7F, 0x49, 0x02, 0x82, 0x00, 0x00};
+
+			CByteArray getModule(apdu_cvc_pubkey_mod, sizeof(apdu_cvc_pubkey_mod));
+			CByteArray oRespModule = SendAPDU(getModule);
 			getSW12(oRespModule, 0x9000);
 			oRespModule.Chop(2); //martinho: remove the returning code 0x9000
 
-			CByteArray getExponent("B6038301447F490282001000",true);
-			CByteArray oRespExponent = SendAPDU(0xCB, 0x00, 0xFF, getExponent);
+			CByteArray getExponent(apdu_cvc_pubkey_exponent, sizeof(apdu_cvc_pubkey_exponent));
+			CByteArray oRespExponent = SendAPDU(getExponent);
 			getSW12(oRespExponent, 0x9000);
 			oRespExponent.Chop(2); //martinho: remove the returning code 0x9000
 
