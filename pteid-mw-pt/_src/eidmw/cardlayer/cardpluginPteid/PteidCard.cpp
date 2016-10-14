@@ -19,9 +19,6 @@
 **************************************************************************** */
 #include "PteidCard.h"
 #include "../common/Log.h"
-#ifdef __APPLE__
-#include "UnknownCard.h"
-#endif
 
 #ifdef __GNUC__
 #include <termios.h>
@@ -87,7 +84,7 @@ static CByteArray ReadInternal(CPCSC *poPCSC, SCARDHANDLE hCard, unsigned long u
 
 	//oData.Chop(2); // remove SW12
 
-	MWLOG(LEV_INFO, MOD_CAL, L"   Read %d bytes from the PT eid-ng GemSafe card", oData.Size());
+	MWLOG(LEV_INFO, MOD_CAL, L"   Read %d bytes from the PTeid GemSafe card", oData.Size());
 	return oData;
 
 }
@@ -105,7 +102,7 @@ static CByteArray ReadInternalIAS(CPCSC *poPCSC, SCARDHANDLE hCard, unsigned lon
 
 	//oData.Chop(2); // remove SW12
 
-	MWLOG(LEV_INFO, MOD_CAL, L"   Read %d bytes from the PT eid-ng IAS card", oData.Size());
+	MWLOG(LEV_INFO, MOD_CAL, L"   Read %d bytes from the PTeid IAS card", oData.Size());
 	return oData;
 }
 
@@ -349,7 +346,7 @@ CByteArray CPteidCard::RootCAPubKey(){
 			CByteArray getData("4D04FFA00180",true);
 			oResp = SendAPDU(0xCB, 0x3F, 0xFF, getData);
 			getSW12(oResp, 0x9000);
-			oResp.Chop(2); //martinho: remove the returning code 0x9000
+			oResp.Chop(2); ////remove the SW12 bytes
 		}
 		break;
 		case CARD_PTEID_IAS07:
@@ -363,14 +360,13 @@ CByteArray CPteidCard::RootCAPubKey(){
 			CByteArray getModule(apdu_cvc_pubkey_mod, sizeof(apdu_cvc_pubkey_mod));
 			CByteArray oRespModule = SendAPDU(getModule);
 			getSW12(oRespModule, 0x9000);
-			oRespModule.Chop(2); //martinho: remove the returning code 0x9000
+			oRespModule.Chop(2); //remove the SW12 bytes
 
 			CByteArray getExponent(apdu_cvc_pubkey_exponent, sizeof(apdu_cvc_pubkey_exponent));
 			CByteArray oRespExponent = SendAPDU(getExponent);
 			getSW12(oRespExponent, 0x9000);
-			oRespExponent.Chop(2); //martinho: remove the returning code 0x9000
+			oRespExponent.Chop(2); //remove the SW12 bytes
 
-			//martinho: hmmm ok..
 			oResp.Append(oRespModule);
 			oResp.Append(oRespExponent);
 		}
@@ -380,9 +376,9 @@ CByteArray CPteidCard::RootCAPubKey(){
 			break;
 		}
 	}
-	catch(...)
+	catch(CMWException e)
 	{
-		MWLOG(LEV_ERROR, MOD_CAL, L"Error in RootCAPubKey");
+		MWLOG(LEV_ERROR, MOD_CAL, L"Error in RootCAPubKey: Specific error code: %08x", e.GetError());
 		throw;
 	}
 	return oResp;
@@ -451,9 +447,9 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 			bOK = PinCmd(PIN_OP_RESET, pin, puk_str, pin_str, triesLeft, NULL); 
 		}
 	}
-	catch(...)
+	catch(CMWException e)
 	{
-		MWLOG(LEV_ERROR, MOD_CAL, L"Error in RootCAPubKey");
+		MWLOG(LEV_ERROR, MOD_CAL, L"Error in unlockPIN: Specific error code: %08x", e.GetError());
 		throw;
 	}
 
