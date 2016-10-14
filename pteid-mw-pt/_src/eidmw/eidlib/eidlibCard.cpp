@@ -2023,13 +2023,15 @@ PTEIDSDK_API long PTEID_WriteFile_inOffset(unsigned char *file,int filelen, unsi
 	return PTEID_OK;
 }
 
-/*
 PTEIDSDK_API long PTEID_CAP_ChangeCapPin(const char *csServer, const unsigned char *ucServerCaCert,	unsigned long ulServerCaCertLen, tProxyInfo *proxyInfo,	const char *pszOldPin, const char *pszNewPin, long *triesLeft){
-
+#if 0
 	PTEID_EIDCard& card = readerContext->getEIDCard();
 	bool ret = card.ChangeCapPinCompLayer(pszOldPin, pszNewPin, (unsigned long int&)*triesLeft);
 
 	return ret ? 0 : -1;
+#else
+        return PTEID_OK;
+#endif
 }
 
 
@@ -2045,7 +2047,7 @@ PTEIDSDK_API void PTEID_CAP_SetCapPinChangeCallback(void(_USERENTRY * callback)(
 PTEIDSDK_API void PTEID_CAP_CancelCapPinChange(){
 	return;
 }
-*/
+
 
 
 }
