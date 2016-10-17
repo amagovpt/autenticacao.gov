@@ -211,7 +211,7 @@
     </message>
     <message>
         <source>Export / Print</source>
-        <translation>Exportar PDF</translation>
+        <translation>Imprimir</translation>
     </message>
     <message>
         <source>Exit</source>
@@ -1351,17 +1351,17 @@ Please specify .xml, .csv or .eid</source>
         <source>Network Settings</source>
         <translation>Configurações de rede</translation>
     </message>
-    
+
     <message>
         <source>Use Proxy Server</source>
         <translation>Utilizar servidor Proxy</translation>
     </message>
-    
+
     <message>
         <source>Host</source>
         <translation>Endereço</translation>
     </message>
-    
+
     <message>
         <source>Port</source>
         <translation>Porto</translation>
@@ -1381,7 +1381,7 @@ Please specify .xml, .csv or .eid</source>
         <source>Password</source>
         <translation>Palavra-passe</translation>
     </message>
-    
+
 
     <message>
         <source>OCSP</source>

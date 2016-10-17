@@ -35,11 +35,11 @@
 using namespace eIDMW;
 
 
-dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUAGE lng) 
+dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUAGE lng)
 : QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
 , m_CI_Data(CI_Data)
 , m_CurrReaderName("")
-{	
+{
     if (CI_Data.isDataLoaded())
     {
     	PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
@@ -83,25 +83,25 @@ char *QStringToCString(QString &string)
 	return cpychar;
 }
 
-void CenterParent(QWidget* parent, QWidget* child) 
+void CenterParent(QWidget* parent, QWidget* child)
 {
-	QPoint centerparent(             
-			parent->x() + ((parent->frameGeometry().width() - child->frameGeometry().width()) /2),             
-			parent->y() + ((parent->frameGeometry().height() - child->frameGeometry().height()) /2));      
+	QPoint centerparent(
+			parent->x() + ((parent->frameGeometry().width() - child->frameGeometry().width()) /2),
+			parent->y() + ((parent->frameGeometry().height() - child->frameGeometry().height()) /2));
 
-	QDesktopWidget * pDesktop = QApplication::desktop();     
-	QRect sgRect = pDesktop->screenGeometry(pDesktop->screenNumber(parent));     
-	QRect childFrame = child->frameGeometry(); 
+	QDesktopWidget * pDesktop = QApplication::desktop();
+	QRect sgRect = pDesktop->screenGeometry(pDesktop->screenNumber(parent));
+	QRect childFrame = child->frameGeometry();
 
-	if(centerparent.x() < sgRect.left())         
-		centerparent.setX(sgRect.left());     
-	else if((centerparent.x() + childFrame.width()) > sgRect.right()) 
-		centerparent.setX(sgRect.right() - childFrame.width()); 
+	if(centerparent.x() < sgRect.left())
+		centerparent.setX(sgRect.left());
+	else if((centerparent.x() + childFrame.width()) > sgRect.right())
+		centerparent.setX(sgRect.right() - childFrame.width());
 
-	if(centerparent.y() < sgRect.top()) 
-		centerparent.setY(sgRect.top());     
-	else if((centerparent.y() + childFrame.height()) > sgRect.bottom()) 
-		centerparent.setY(sgRect.bottom() - childFrame.height()); 
+	if(centerparent.y() < sgRect.top())
+		centerparent.setY(sgRect.top());
+	else if((centerparent.y() + childFrame.height()) > sgRect.bottom())
+		centerparent.setY(sgRect.bottom() - childFrame.height());
 
 	child->move(centerparent);
 }
@@ -120,7 +120,7 @@ bool SignPDF_wrapper(PTEID_EIDCard * card, const char * file_to_sign, QString &o
 	char * output_path = strdup(getPlatformNativeString(outputsign));
 	try
 	{
-		
+
 		card->SignPDF(pdf_sig_handler, 0, 0, false, "", "", output_path);
 	}
 	catch(...)
@@ -135,12 +135,12 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
     CardInformation cdata = m_CI_Data;
     QString pdffilepath;
     QString defaultfilepath;
-    bool res = false;	
+    bool res = false;
 
     defaultfilepath = QDir::homePath();
     try
     {
-        if (ui.chboxSignature->isChecked())  
+        if (ui.chboxSignature->isChecked())
 		{
             QString pdffiletmp;
             QString signfilepath;
@@ -172,7 +172,7 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 		    res = new_thread.result();
 
         }
-        else 
+        else
 		{
             QString nativepdfpath;
 
@@ -188,15 +188,15 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
             res = drawpdf(cdata, QStringToCString(nativepdfpath));
         }
-    }	
+    }
 	catch (PTEID_Exception &e) {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "GeneratePDF failed");
     }
 
     if (res)
 	    ShowSuccessMsgBox();
-    else 
-	    ShowErrorMsgBox();	
+    else
+	    ShowErrorMsgBox();
     this->close();
 
 }
@@ -210,9 +210,9 @@ void dlgPrint::on_pbPrint_clicked()
 
 	bool res = drawpdf(cdata, "");
     	if (!res)
-	{ 
+	{
 	    ShowErrorMsgBox();
-	    return;	
+	    return;
 	}
 	QPrinter printer;
 	QPrintDialog *dlg = new QPrintDialog(&printer,0);
@@ -317,7 +317,7 @@ const char * dlgPrint::persodata_triggered()
 }
 
 //The argument needs to be a PTEID_Pin * because
-// this class has no copy construtor which is needed for the QtConcurrent operation 
+// this class has no copy construtor which is needed for the QtConcurrent operation
 bool verifyPin_wrapper(PTEID_Pin *pin)
 {
 
@@ -329,8 +329,8 @@ bool verifyPin_wrapper(PTEID_Pin *pin)
 		res = pin->verifyPin( csPin, triesLeft, true);
 	}
 	catch(PTEID_Exception &e)
-	{ 
-		res = false;  
+	{
+		res = false;
 	}
 
 	return res;
@@ -370,7 +370,7 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 		bool bResult = new_thread.result();
 
 		QString msg = bResult ? tr("PIN verification passed") : tr("PIN verification failed");
-		
+
 		if (!bResult)
 		{
 			QMessageBox::information(this, caption,  msg, QMessageBox::Ok );
@@ -452,7 +452,7 @@ void addFonts()
 #else
     QFontDatabase::addApplicationFont(":/images/Images/din-light.ttf");
     QFontDatabase::addApplicationFont(":/images/Images/din-medium.ttf");
-#endif    
+#endif
 }
 
 
@@ -488,7 +488,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
     //Add custom fonts
 	addFonts();
-	
+
     //Start drawing
     pos_x = 0, pos_y = 0;
     QPainter painter(&printer);
@@ -516,7 +516,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
 	blue_pen.setColor(QColor(78, 138, 190));
     painter.setPen(blue_pen);
-	
+
 	int line_length = 487;
 	//Horizontal separator below the CC logo
 	painter.drawLine(QPointF(pos_x, pos_y), QPointF(pos_x+line_length, pos_y));
@@ -527,7 +527,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
     const int COLUMN_WIDTH = 220;
     const int LINE_HEIGHT = 45;
-    
+
 //    din_font.setBold(true);
     painter.setFont(din_font);
 
@@ -560,9 +560,9 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
     	//Image
 		QPixmap pixmap_photo;
 		pixmap_photo.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
-		
+
 		const int img_height = 200;
-    	
+
         //Scale height if needed
     	QPixmap scaled = pixmap_photo.scaledToHeight(img_height, Qt::SmoothTransformation);
 
@@ -583,7 +583,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 		drawSingleField(painter, pos_x + COLUMN_WIDTH*2, pos_y, tr("Date of birth"), PersonFields[BIRTHDATE]);
 
 	    pos_y += LINE_HEIGHT;
-	    
+
 	    drawSingleField(painter, pos_x, pos_y, tr("Document Number"), PersonFields[DOCUMENTNUMBER]);
 	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Validity Date"), CardFields[CARD_VALIDUNTIL]);
 	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Country"), PersonFields[COUNTRY]);
@@ -599,7 +599,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
 	    pos_y += 50;
 	}
-    
+
     if (ui.chboxIDExtra->isChecked())
 	{
 		drawSectionHeader(painter, pos_x, pos_y, tr("ADDITIONAL INFORMATION"));
@@ -616,11 +616,13 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Delivery Entity"), getUtf8String(PersonFields[ISSUINGENTITY]));
 	    pos_y += LINE_HEIGHT;
 
-	    
-	    drawSingleField(painter, pos_x, pos_y, tr("Delivery Location"), getUtf8String(PersonFields[LOCALOFREQUEST]));
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Document type"), getUtf8String(PersonFields[DOCUMENTTYPE]));
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Card State"), getUtf8String(PersonFields[VALIDATION]));
-		
+        /* LL - Change columns order - No overlap text */
+	    drawSingleField(painter, pos_x, pos_y, tr("Card State"), getUtf8String(PersonFields[VALIDATION]));
+	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Document type"), getUtf8String(PersonFields[DOCUMENTTYPE]));
+	    pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Delivery Location"), getUtf8String(PersonFields[LOCALOFREQUEST]));
+
 		//XXX: espacamento extra curto para ver se conseguimos apenas 1 pagina...
 	    pos_y += 50;
 	}
@@ -687,12 +689,12 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
                 pos_y = 0;
             }
             pos_x = 0;
-          
+
 
             drawSectionHeader(painter, pos_x, pos_y, tr("PERSONAL NOTES"));
 
             pos_y += 75;
-            painter.drawText(QRectF(pos_x, pos_y, 700, 700), Qt::TextWordWrap, perso_data);		
+            painter.drawText(QRectF(pos_x, pos_y, 700, 700), Qt::TextWordWrap, perso_data);
         }
 	}
 
@@ -718,7 +720,7 @@ void dlgPrint::on_btnPDF_clicked( void )
 		printer.setOutputFormat(QPrinter::PdfFormat);
 		printer.setOutputFileName(fileName);
 		ui.paperview->document()->print(&printer);
-	} 
+	}
 	done(0);
 }
 */
