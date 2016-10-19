@@ -20,6 +20,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <openssl/err.h>
+
 #include "CardPteid.h"
 #include "TLVBuffer.h"
 #include "Util.h"
@@ -1363,6 +1365,19 @@ APL_EidFile_Sod::~APL_EidFile_Sod()
 {
 }
 
+char * parseSubjectFromCert(X509 * cert)
+{
+
+       X509_NAME * subject_struct = X509_get_subject_name(cert);	
+
+       int space_needed = X509_NAME_get_text_by_NID(subject_struct, NID_commonName, NULL, 0) +1;
+       char *subject = (char *)malloc(space_needed);
+
+       X509_NAME_get_text_by_NID(subject_struct, NID_commonName, subject, space_needed);
+
+       return subject;
+}
+
 tCardFileStatus APL_EidFile_Sod::VerifyFile()
 {
 	tCardFileStatus filestatus = CARDFILESTATUS_ERROR_SIGNATURE;
@@ -1398,11 +1413,12 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 		const unsigned char *p = pcard->getCertificates()->getCert(i,false)->getData().GetBytes();
 		pX509 = d2i_X509(&pX509, &p, pcard->getCertificates()->getCert(i,false)->getData().Size());
 		X509_STORE_add_cert(store, pX509);
+		printf("%d. Adding certificate CN: %s\n", i, parseSubjectFromCert(pX509));
 	}
 	BIO *Out = BIO_new(BIO_s_mem());
 
 	verifySOD = PKCS7_verify(p7,pSigners,store,NULL,Out,0)==1;
-	if (verifySOD){
+	if (verifySOD) {
 		unsigned char *p;
 		long size;
 		size = BIO_get_mem_data(Out, &p);
@@ -1410,6 +1426,12 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 
 		m_isVerified = true;
 		filestatus = CARDFILESTATUS_OK;
+	}
+	else
+	{
+		//Log specific OpenSSL error
+		MWLOG(LEV_ERROR, MOD_APL, L"EidFile_Sod::VerifyFile Error validating SOD signature: %s",
+			ERR_error_string(ERR_get_error(), NULL));
 	}
 
 	X509_STORE_free(store);

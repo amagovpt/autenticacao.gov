@@ -48,13 +48,18 @@ public:
 
 	bool getDHParams(DHParams *otp_struct);
 	bool verifyCVCCertificate(const char *cvc_certificate_hex);
+	
 	bool verifySignedChallenge(char *signed_challenge);
+	bool verifySignedChallenge(CByteArray &signed_challenge);
 	bool sendKIFD(char *kifd);
 	char *getKICC();
 	bool verifyCert_CV_IFD(char * cv_cert);
+	bool verifyCert_CV_IFD(CByteArray &cv_cert);
 	char *generateChallenge(char * CHR);
 
 	char *getSerialNumberIAS101();
+	
+	char * getPK_IFD_AUT(CByteArray &cvc_cert);
 	char * getPK_IFD_AUT(char * cvc_cert);
 	char *sendPrebuiltAPDU(char *apdu_string);
 	std::vector<char *> sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_array);

@@ -370,6 +370,38 @@ XMLCh *createSignedPropertiesURI()
 		n_CertIssuerSerial->appendChild(n_CertSerialNumber);
 	}
 
+
+	void XadesSignature::addCardSignature(unsigned char *signature, unsigned int siglen, DOMDocument *doc) 
+	{
+
+		char * base64Sig = Base64Encode(signature, siglen);
+		DOMNode *signatureValueNode = NULL;
+
+		DOMNodeList* nodes1 = doc->getElementsByTagNameNS(XMLString::transcode(DSIG_NAMESPACE),
+	 		XMLString::transcode("SignatureValue"));
+
+		signatureValueNode = nodes1->item(0);
+
+		// Now we have the signature - place it in the DOM structures
+
+		DOMNode *tmpElt = signatureValueNode->getFirstChild();
+
+		while (tmpElt != NULL && tmpElt->getNodeType() != DOMNode::TEXT_NODE)
+			tmpElt = tmpElt->getNextSibling();
+
+		if (tmpElt == NULL) {
+			// Need to create the underlying TEXT_NODE
+			//DOMDocument * doc = signatureValueNode->getOwnerDocument();
+			tmpElt = doc->createTextNode(MAKE_UNICODE_STRING((char *) base64Sig));
+			signatureValueNode->appendChild(tmpElt);
+		}
+		else {
+			tmpElt->setNodeValue(MAKE_UNICODE_STRING((char *) base64Sig));
+
+		}
+
+	}
+
 	DOMNode *XadesSignature::addSignatureProperties(DSIGSignature *sig, XMLCh *sig_id, CByteArray &signing_cert_data) 
 	{
 		std::basic_string<XMLCh> props_target;
@@ -1084,6 +1116,40 @@ bool XadesSignature::AddSignatureTimestamp(XERCES_NS DOMDocument *dom)
    return appendTimestamp(dom, node_unsigned_props, "SignatureTimeStamp", c14n);
 }
 
+void XadesSignature::setReferenceHash(XMLByte *hash, unsigned int hash_len, int ref_index, DOMDocument *doc)
+{
+	DOMNode * node_digest_value = NULL;
+	char * base64Hash = Base64Encode(hash, hash_len);
+
+	DOMNodeList* nodes1 = doc->getElementsByTagNameNS(XMLString::transcode(DSIG_NAMESPACE),
+	 XMLString::transcode("DigestValue"));
+
+	if ((node_digest_value = nodes1->item(ref_index)) != NULL)
+	{
+		fprintf(stderr, "setReferenceHash: SUCCESS adding reference hash!\n");
+
+		// Now find the correct text node to re-set
+
+		DOMNode *tmpElt = node_digest_value;
+
+		tmpElt = node_digest_value->getFirstChild();
+
+		while (tmpElt != NULL && tmpElt->getNodeType() != DOMNode::TEXT_NODE)
+			tmpElt = tmpElt->getNextSibling();
+
+		if (tmpElt == NULL) {
+			// Need to create the underlying TEXT_NODE
+			//DOMDocument *doc = mp_referenceNode->getOwnerDocument();
+			tmpElt = doc->createTextNode(MAKE_UNICODE_STRING((char *) base64Hash));
+			node_digest_value->appendChild(tmpElt);
+		}
+		else {
+			tmpElt->setNodeValue(MAKE_UNICODE_STRING((char *) base64Hash));
+		}
+	}
+
+}
+
 CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 {
 	XSECProvider prov;
@@ -1132,6 +1198,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		rootElem->appendChild(sigNode);
 		rootElem->appendChild(doc->createTextNode(MAKE_UNICODE_STRING("\n")));
 
+		int references_count = 0;
 		for (unsigned int i = 0; i != n_paths ; i++)
 		{
 			const char * path = paths[i];
@@ -1141,7 +1208,9 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 			sha1_hash = HashFile(path);
 
 			//Fill the hash value as base64-encoded string
-			ref->setExternalHash(sha1_hash.GetBytes());
+			//ref->setExternalHash(sha1_hash.GetBytes());
+			setReferenceHash(sha1_hash.GetBytes(), sha1_hash.Size(), references_count, doc);
+			references_count++;
 		}
 		CByteArray certData;
 	    mp_card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
@@ -1154,7 +1223,9 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 
 		DSIGReference * ref_signed_props = sig->createReference(createSignedPropertiesURI(), HASH_SHA256);
 		ref_signed_props->setType(XMLString::transcode("http://uri.etsi.org/01903/v1.1.1#SignedProperties"));
-		ref_signed_props->setExternalHash(sha1_hash_signed_props);
+
+		setReferenceHash(sha1_hash_signed_props, SHA256_LEN, references_count, doc);
+		//ref_signed_props->setExternalHash(sha1_hash_signed_props);
 		ref_signed_props->appendCanonicalizationTransform(
 			XMLString::transcode("http://www.w3.org/2001/10/xml-exc-c14n#"));
 
@@ -1191,7 +1262,8 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 			throw;
 		}
 
-		sig->signExternal((XMLByte *)(rsa_signature.GetBytes()), rsa_signature.Size()); //RSA Signature with modlength=1024 bits	
+		//RSA Signature with length=1024/2048 bits
+		addCardSignature(rsa_signature.GetBytes(), rsa_signature.Size(), doc); 
 
 		//XAdES-T level
 		if (m_do_timestamping || m_do_long_term_validation)

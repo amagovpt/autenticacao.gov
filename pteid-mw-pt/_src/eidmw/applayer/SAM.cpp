@@ -252,13 +252,28 @@ char *SAM::getKICC()
 
 bool SAM::verifyCert_CV_IFD(char * cv_cert)
 {
+	
+	if (cv_cert == NULL || strlen(cv_cert) == 0)
+	{
+		fprintf(stderr, "Invalid cv_cert in SAM::VerifyCert_CV_IFD(1)!");
+		return false;
+	}
+
+	CByteArray cvcert_ba(std::string(cv_cert), true);
+
+	return verifyCert_CV_IFD(cvcert_ba);
+}
+
+
+bool SAM::verifyCert_CV_IFD(CByteArray &cv_cert)
+{
 	unsigned char ba_apdu_pso_verify[] = {0x00, 0x2A, 0x00, 0xBE, 0xD1};
 	unsigned char apdu_se_verify_cert[] = {0x00, 0x22, 0x41, 0xB6, 0x06, 0x83, 0x01, 0x44, 0x95, 0x01, 0x80};
 	CByteArray apdu_pso_verify(ba_apdu_pso_verify, sizeof(ba_apdu_pso_verify));
 
-	if (cv_cert == NULL || strlen(cv_cert) == 0)
+	if (cv_cert.Size() == 0)
 	{
-		fprintf(stderr, "Invalid cv_cert in SAM::VerifyCert_CV_IFD()!");
+		fprintf(stderr, "Invalid cv_cert in SAM::VerifyCert_CV_IFD(2)!");
 		return false;
 	}
 
@@ -270,8 +285,7 @@ bool SAM::verifyCert_CV_IFD(char * cv_cert)
 		return false;
 	}
 
-	CByteArray cvcert_ba(std::string(cv_cert), true);
-	apdu_pso_verify.Append(cvcert_ba);
+	apdu_pso_verify.Append(cv_cert);
 
 	resp = m_card->getCalReader()->SendAPDU(apdu_pso_verify);
 	if (!checkResultSW12(resp))
@@ -283,17 +297,13 @@ bool SAM::verifyCert_CV_IFD(char * cv_cert)
 	return true;
 }
 
-
-char * SAM::getPK_IFD_AUT(char * cvc_cert)
+char *SAM::getPK_IFD_AUT(CByteArray &cvc_cert)
 {
 	unsigned char decrypted_data[128];
 	unsigned char signature[128];
 
-	//Parse byteArray from hex-encoded string
-	CByteArray cv_cert_ba(std::string(cvc_cert), true);
-
 	//Get the raw bytes
-	unsigned char * cvc_bytes = cv_cert_ba.GetBytes();
+	unsigned char * cvc_bytes = cvc_cert.GetBytes();
 
 	if (m_ca_cvc_modulus.Size() == 0 || m_ca_cvc_exponent.Size() == 0)
 	{
@@ -345,7 +355,22 @@ char * SAM::getPK_IFD_AUT(char * cvc_cert)
     //fprintf(stderr, "Certificate Holder reference (IFD): %s\n", chr_string);
 
     return chr_string;
+}
 
+
+char * SAM::getPK_IFD_AUT(char * cvc_cert)
+{
+	
+	if (cvc_cert != NULL && strlen(cvc_cert) > 0)
+	{
+
+		//Parse byteArray from hex-encoded string
+		CByteArray cv_cert_ba(std::string(cvc_cert), true);
+
+		return getPK_IFD_AUT(cv_cert_ba);
+	}
+	else
+		return "";
 }
 
 
@@ -423,11 +448,22 @@ char *SAM::sendPrebuiltAPDU(char *apdu_string)
 	return resp_string;
 }
 
-bool SAM::verifySignedChallenge(char *signed_challenge)
+bool SAM::verifySignedChallenge(CByteArray &signed_challenge)
 {
+
 	unsigned char external_authenticate[] = {0x80, 0x82, 0x00, 0x00, 0x88};
 	CByteArray ba1(external_authenticate, sizeof(external_authenticate));
 
+	ba1.Append(signed_challenge);
+
+	CByteArray resp = m_card->getCalReader()->SendAPDU(ba1);
+
+	return checkResultSW12(resp);
+
+}
+
+bool SAM::verifySignedChallenge(char *signed_challenge)
+{
 	if (signed_challenge == NULL || strlen(signed_challenge) == 0)
 	{
 		MWLOG(LEV_ERROR, MOD_APL, L"Invalid signed_challenge in SAM::verifySignedChallenge()!");
@@ -435,11 +471,8 @@ bool SAM::verifySignedChallenge(char *signed_challenge)
 	}
 
 	CByteArray signed_ba(std::string(signed_challenge), true);
-	ba1.Append(signed_ba);
-
-	CByteArray resp = m_card->getCalReader()->SendAPDU(ba1);
-
-	return checkResultSW12(resp);
+	
+	return verifySignedChallenge(signed_ba);
 }
 
 /* Fetch all the parameters needed from the card */

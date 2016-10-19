@@ -64,6 +64,9 @@ namespace eIDMW
 
 		CByteArray &Sign(const char ** paths, unsigned int n_paths);
 		CByteArray HashFile(const char *file_path);
+
+		void addCardSignature(unsigned char *signature, unsigned int siglen, DOMDocument *doc);
+		void setReferenceHash(XMLByte *hash, unsigned int hash_len, int ref_index, DOMDocument *doc);
 		
 		int HashSignedInfoNode(XERCES_NS DOMDocument *doc, XMLByte *outbuf);
 		int HashSignedPropertiesNode(XERCES_NS DOMDocument *doc, XMLByte *outbuf);
