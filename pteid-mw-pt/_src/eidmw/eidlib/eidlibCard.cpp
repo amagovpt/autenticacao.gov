@@ -2068,7 +2068,6 @@ PTEIDSDK_API long PTEID_CVC_Authenticate(unsigned char *pucSignedChallenge, int 
 	return PTEID_E_NOT_INITIALIZED;
 }
 
-/*
 
 PTEIDSDK_API long PTEID_CAP_ChangeCapPin(const char *csServer, const unsigned char *ucServerCaCert,	unsigned long ulServerCaCertLen, tProxyInfo *proxyInfo,	const char *pszOldPin, const char *pszNewPin, long *triesLeft){
 #if 0
