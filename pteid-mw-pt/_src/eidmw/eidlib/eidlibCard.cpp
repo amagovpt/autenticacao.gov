@@ -32,6 +32,7 @@
 #include "ByteArray.h"
 #include "CardPteid.h"
 #include "PDFSignature.h"
+#include "SecurityContext.h"
 #include "dialogs.h"
 #include "Util.h"
 #include <sstream>
@@ -1282,7 +1283,7 @@ bool PTEID_EIDCard::writePersonalNotes(const PTEID_ByteArray &out,PTEID_Pin *pin
 	return persoNotesDirty;
 }
 
-const char *PTEID_EIDCard::readPersonalNotes(){
+const char *PTEID_EIDCard::readPersonalNotes() {
 	char *out = NULL;
 	BEGIN_TRY_CATCH
 
@@ -1390,6 +1391,10 @@ void PTEID_XmlUserRequestedInfo::add(XMLUserData xmlUData){
 ----------------------------- pteid compatibility layer ---------------------------------
 *****************************************************************************************/
 PTEID_ReaderContext* readerContext = NULL;
+
+//This object should be initialized by calling PTEID_CVC_Init() and freed after a CVC_WriteFile() or CVC_ReadFile() operation
+//It will hold all the keys and other values necessary for Secure Messaging operations
+SecurityContext *securityContext = NULL;
 
 // MARTINHO OK
 PTEIDSDK_API long PTEID_Init(char *ReaderName){
@@ -2014,13 +2019,56 @@ PTEIDSDK_API int PTEID_IsEMVCAP() {
 	return PTEID_OK;
 }
 
-PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,					
-    unsigned char *pucChallenge, int iChallengeLen) {
-		//TODO: THis should implement all the Mutual Auth Process and generate the input to the Signature thats sent in the 
-	    //EXTERNAL AUTHENTICATE command (the one that is signed by the CVC private key)
 
+//This should implement all the Mutual Auth Process and generate the input to the Signature thats sent in the 
+//EXTERNAL AUTHENTICATE command (the one that is signed by the CVC private key)
+PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,					
+    unsigned char *pucChallenge, int iChallengeLen) 
+{		
+
+	if (readerContext != NULL) {
+
+		PTEID_EIDCard &card = readerContext->getEIDCard();
+
+		//Accessing PTEID_EIDCard internal object, hope he doesn't mind :)
+		APL_Card *card_impl = static_cast<APL_Card *>(card.m_impl);
+		securityContext = new SecurityContext(card_impl);
+		
+		CByteArray cvc_certificate(pucCert, iCertLen);
+		securityContext->verifyCVCCertificate(cvc_certificate);
+
+		CByteArray signature_input = securityContext->getExternalAuthenticateChallenge();
+
+		if (iChallengeLen < signature_input.Size())
+		{
+			//No space in supplied buffer: return error
+			return PTEID_E_BAD_PARAM;
+		}
+		memcpy(pucChallenge, signature_input.GetBytes(), signature_input.Size());
 		return PTEID_OK;
 	}
+
+	return PTEID_E_NOT_INITIALIZED;
+	
+}
+
+PTEIDSDK_API long PTEID_CVC_Authenticate(unsigned char *pucSignedChallenge, int iSignedChallengeLen)
+{
+	if (securityContext != NULL) {
+		CByteArray signed_challenge(pucSignedChallenge, iSignedChallengeLen);
+
+		bool ret = securityContext->verifySignedChallenge(signed_challenge);
+
+		if (ret)
+			return PTEID_OK;
+		else
+			return PTEID_E_INTERNAL;
+	}
+
+	return PTEID_E_NOT_INITIALIZED;
+}
+
+/*
 
 PTEIDSDK_API long PTEID_CAP_ChangeCapPin(const char *csServer, const unsigned char *ucServerCaCert,	unsigned long ulServerCaCertLen, tProxyInfo *proxyInfo,	const char *pszOldPin, const char *pszNewPin, long *triesLeft){
 #if 0

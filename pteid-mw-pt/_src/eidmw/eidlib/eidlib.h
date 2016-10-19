@@ -843,6 +843,8 @@ class PTEID_PDFSignature
 
 };
 
+class SecurityContext;
+
 /******************************************************************************//**
   * This class represents a Portugal EID card.
   * To get such an object you have to ask it from the ReaderContext.
@@ -971,6 +973,7 @@ private:
 	bool persoNotesDirty;
 
 friend PTEID_Card &PTEID_ReaderContext::getCard();				/**< For internal use : This method must access protected constructor */
+friend long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen, unsigned char *pucChallenge,	int iChallengeLen);
 };
 
 
@@ -2222,6 +2225,26 @@ PTEIDSDK_API long PTEID_CVC_Authenticate(
     unsigned char *pucSignedChallenge,	/**< in: the challenge that was signed by the
 											private key corresponding to the CVC */
     int iSignedChallengeLen				/**< in: the length of ucSignedChallenge, must be 128 */
+);
+
+PTEIDSDK_API long PTEID_CVC_WriteFile(
+	unsigned char *file,		/**< in: the path of the file to read (e.g. {0x3F, 0x00, 0x5F, 0x00, 0xEF, 0x05} */
+	int filelen,				/**< in: the length file path (e.g. 6) */
+	unsigned long ulFileOffset,	/**< in: at which offset in the file to start writing */
+    const unsigned char *in,	/**< in: the file contents */
+    unsigned long inlen,		/**< in: the number of bytes to write */
+    unsigned long ulMode		/**< in: set to CVC_WRITE_MODE_PAD to pad the file with zeros if
+									(ulFileOffset + inlen) is less then the file length */
+);
+
+/**
+ * Read the address file over a 'CVC channel' and put the contents
+ * into a PTEID_ADDR struct.
+ * A successfull PTEID_CVC_Init() and PTEID_CVC_Authenticate()
+ * must have been done before.
+ */
+PTEIDSDK_API long PTEID_CVC_GetAddr(
+	PTEID_ADDR *AddrData	/**< out: the address of a PTEID_ADDR struct */
 );
 
 

@@ -547,18 +547,6 @@ return $jnicall;
 
 %typemap(javain) const unsigned char* "$javainput"
 
-%ignore eIDMW::PTEID_SigVerifier::VerifySignature(const char *container, char * error_buffer, unsigned long *error_size);
-
-%typemap(javaout) bool eIDMW::PTEID_SigVerifier::VerifySignature(const char *container, char * error_buffer, unsigned long &error_size)
-{
-
-	  long		error_size_internal  = pteidlibJava_WrapperJNI.new_ulongp();
-	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_SigVerifier_VerifySignature(container, error_buffer, error_size_internal);
-	  
-	  error_size.m_long = pteidlibJava_WrapperJNI.ulongp_value(error_size_internal);
-	  pteidlibJava_WrapperJNI.delete_ulongp(error_size_internal);
-	  return retval;
-}
 
 %typemap(in) const char * const * (jint size) {
 
