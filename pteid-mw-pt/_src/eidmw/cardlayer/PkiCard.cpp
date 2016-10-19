@@ -68,7 +68,7 @@ bool CPkiCard::ShouldSelectApplet(unsigned char ins, unsigned long ulSW12)
 bool CPkiCard::SelectApplet()
 {
 	// Don't do anything by default
-	// Subclasses that implement this functionality should set the 
+	// Subclasses that implement this functionality should set the
 	// m_selectAppletMode to TRY_SELECT_APPLET
 	return false;
 }
@@ -104,15 +104,15 @@ CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,
 	CAutoLock autolock(this);
 
     tFileInfo fileInfo = SelectFile(csPath, true);
-	
+
     // Loop until we've read ulMaxLen bytes or until EOF (End Of File)
     bool bEOF = false;
     for (unsigned long i = 0; i < ulMaxLen && !bEOF; i += MAX_APDU_READ_LEN)
     {
         unsigned long ulLen = ulMaxLen - i <= MAX_APDU_READ_LEN ?
 	    ulMaxLen - i : 0;
-	
-	
+
+
         CByteArray oResp = ReadBinary(ulOffset + i, ulLen);
 
 
@@ -158,6 +158,10 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
     const unsigned char *pucData = oDatan.GetBytes();
     unsigned long ulDataLen = oDatan.Size();
 
+    /* LL - total size execeeds PERSODATAFILESIZE */
+    if ( ( ulDataLen + ulOffset) > PERSODATAFILESIZE ) return;
+
+/*
     if(ulDataLen == 0)
     {
         CByteArray oDataVoid;
@@ -166,20 +170,25 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
 
     }
     SendAPDU(0x0E, 0x00, 0x02, 0x00);
+*/
     bool bEOF = false;
 
-    for (unsigned long i = 0; i < PERSODATAFILESIZE && !bEOF && ulDataLen != 0; i += MAX_APDU_WRITE_LEN)
-    {
-        unsigned long ulLen = ulDataLen - i ;
-        if (ulLen > MAX_APDU_WRITE_LEN)
-            ulLen = MAX_APDU_WRITE_LEN;
+    unsigned long ulLen = ulDataLen;
+    unsigned long ulSendLen = 0;
 
-        CByteArray oResp = UpdateBinary(ulOffset + i, CByteArray(pucData + i, ulLen));
-        unsigned long ulSW12 = getSW12(oResp);
+    for ( unsigned long ulTotalSentLen = 0
+            ; ( ulTotalSentLen <= PERSODATAFILESIZE ) && ( !bEOF ) && ( ulLen > 0 )
+            ; ulTotalSentLen += ulSendLen ){
+        ulSendLen = ( ulLen > MAX_APDU_WRITE_LEN ) ? MAX_APDU_WRITE_LEN : ulLen;
+        unsigned long pos = ulOffset + ulTotalSentLen;
 
-        if (ulSW12 == 0x9000 || (i != 0 && ulSW12 == 0x6B00))
+        CByteArray oResp = UpdateBinary( pos, CByteArray( pucData + ulTotalSentLen, ulSendLen ) );
+        unsigned long ulSW12 = getSW12( oResp );
+
+        if ( ( ulSW12 == 0x9000 )
+            || ( ( ulTotalSentLen > 0 ) && ( ulSW12 == 0x6B00 ) ) )
         {
-            oDatan.Chop(2);
+            /*oDatan.Chop(2);*/
         }
         else if (ulSW12 == 0x6982)
             throw CNotAuthenticatedException(EIDMW_ERR_NOT_AUTHENTICATED, fileInfo.lReadPINRef);
@@ -189,13 +198,15 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
             throw CMWEXCEPTION(EIDMW_ERR_NOT_ACTIVATED);
         //EOF for Gemsafe cards
         else if (ulSW12 == 0x6282)
-            bEOF = false;
+            bEOF = false; /* false */
         //Avoid problems with IAS cards (file not found)
         else if (ulSW12 == 0x6D80)
             bEOF = false;
         //Comment to Avoid problems with IAS cards
         //else
             //throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
+
+        ulLen -= ulSendLen;
     }
 
     MWLOG(LEV_INFO, MOD_CAL, L"Written file %ls to card", utilStringWiden(csPath).c_str());
@@ -524,7 +535,7 @@ try_again:
         CByteArray oResp = SendAPDU(0x84, 0x00, 0x00, 0x08);
 		if (ShouldSelectApplet(0x84, getSW12(oResp)))
 		    /*{
-			// First try to select 
+			// First try to select
 			if (SelectApplet())
 			{
 				m_selectAppletMode = ALW_SELECT_APPLET;
@@ -544,7 +555,7 @@ tFileInfo CPkiCard::SelectFile(const std::string & csPath, bool bReturnFileInfo)
 {
 	CByteArray oResp;
     tFileInfo xFileInfo = {0};
-    
+
 	unsigned long ulPathLen = (unsigned long) csPath.size();
     if (ulPathLen % 4 != 0 || ulPathLen == 0)
         throw CMWEXCEPTION(EIDMW_ERR_BAD_PATH);
@@ -630,11 +641,11 @@ CByteArray CPkiCard::UpdateBinary(unsigned long ulOffset, const CByteArray & oDa
     // Update Binary
     CByteArray oDataVoid;
 
-    if (ulOffset == 0)
+    /*if (ulOffset == 0)
     {
         oDataVoid.Append(clearbinary, sizeof(clearbinary));
         SendAPDU(0xD6, 0x00, 0x00, oDataVoid);
-    }
+    }*/
 
     return SendAPDU(0xD6, (unsigned char) (ulOffset / 256),
                     (unsigned char) (ulOffset % 256), oData);
@@ -649,7 +660,7 @@ DlgPinOperation CPkiCard::PinOperation2Dlg(tPinOperation operation)
 		 //We ignore the RESET with no change case for now
 		case PIN_OP_RESET:
 		 return DLG_PIN_OP_UNBLOCK_CHANGE;
-		default: 
+		default:
 			return DLG_PIN_OP_VERIFY;
 	}
 }

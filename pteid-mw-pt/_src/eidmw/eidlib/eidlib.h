@@ -753,8 +753,9 @@ public:
 	 * @param out contents the bytes to write
 	 * @param pin is the pin to ask for writing
 	 * @param csPinCode is the code of the pin (it will be asked if needed and not set)
+	 * @param inOffset is the offset of the data to be written to the file
 	 */
-	PTEIDSDK_API virtual bool writeFile(const char *fileID,const PTEID_ByteArray &out,PTEID_Pin *pin=NULL,const char *csPinCode="");
+	PTEIDSDK_API virtual bool writeFile(const char *fileID,const PTEID_ByteArray &out, PTEID_Pin *pin=NULL,const char *csPinCode="",unsigned long inOffset=0);
 
  	/**
 	 * Return the number of pin on the card.
@@ -2038,7 +2039,6 @@ PTEIDSDK_API long PTEID_WriteFile(
 );
 
 
-//TODO
 PTEIDSDK_API long PTEID_WriteFile_inOffset(
 	unsigned char *file,	/**< in: a byte array containing the file path,
 								e.g. {0x3F, 0x00, 0x5F, 0x00, 0xEF, 0x02} for the ID file */

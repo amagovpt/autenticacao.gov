@@ -564,7 +564,7 @@ unsigned long APL_SmartCard::readFile(const char *fileID, CByteArray &in,APL_Pin
 	return readFile(fileID,in,0UL,0UL);
 }
 
-bool APL_SmartCard::writeFile(const char *fileID,const CByteArray &out,APL_Pin *pin,const char *csPinCode)
+bool APL_SmartCard::writeFile(const char *fileID, const CByteArray &out, APL_Pin *pin, const char *csPinCode, unsigned long ulOffset)
 {
 	unsigned long lRemaining=0;
 
@@ -572,7 +572,7 @@ bool APL_SmartCard::writeFile(const char *fileID,const CByteArray &out,APL_Pin *
 		if(csPinCode != NULL)
 			pin->verifyPin(csPinCode,lRemaining);
 
-	return APL_Card::writeFile(fileID,out);
+	return APL_Card::writeFile(fileID, out, ulOffset);
 }
 
 unsigned long APL_SmartCard::pinCount() 

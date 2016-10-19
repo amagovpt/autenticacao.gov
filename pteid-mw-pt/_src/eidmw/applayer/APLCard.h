@@ -237,8 +237,9 @@ public:
 	  * @param out : the content of the file
 	  * @param pin : is the pin to verify before writing (if null the code will be asked)
 	  * @param csPinCode : is the pin code (if empty the code will be asked)
+	  * @param ulOffset: is the offset of the data to be written to the file
 	  */
-	EIDMW_APL_API virtual bool writeFile(const char *fileID,const CByteArray &out,APL_Pin *pin=NULL,const char *csPinCode="");
+	EIDMW_APL_API virtual bool writeFile(const char *fileID, const CByteArray &out, APL_Pin *pin=NULL, const char *csPinCode="", unsigned long ulOffset=0);
 
 	/**
 	  * Return the number of pin on the card

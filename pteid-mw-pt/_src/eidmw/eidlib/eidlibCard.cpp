@@ -365,7 +365,7 @@ int PTEID_PDFSignature::getOtherPageCount(const char *input_path)
 	return mp_signature->getOtherPageCount(input_path);
 }
 
-bool PTEID_SmartCard::writeFile(const char *fileID,const PTEID_ByteArray &baOut,PTEID_Pin *pin,const char *csPinCode)
+bool PTEID_SmartCard::writeFile(const char *fileID,const PTEID_ByteArray &baOut,PTEID_Pin *pin,const char *csPinCode, unsigned long ulOffset)
 {
 	bool out = false;	
 
@@ -380,7 +380,7 @@ bool PTEID_SmartCard::writeFile(const char *fileID,const PTEID_ByteArray &baOut,
 	if(pin)
 		pimplPin=pcard->getPins()->getPinByNumber(pin->getIndex());
 
-	out=pcard->writeFile(fileID,bytearray,pimplPin,csPinCode);
+	out=pcard->writeFile(fileID,bytearray,pimplPin,csPinCode,ulOffset);
 	
 	END_TRY_CATCH
 
@@ -1876,6 +1876,12 @@ PTEIDSDK_API long PTEID_ReadFile(unsigned char *file,int filelen,unsigned char *
 }
 
 PTEIDSDK_API long PTEID_WriteFile(unsigned char *file, int filelen,	unsigned char *in, unsigned long inlen,	unsigned char PinId){
+	return PTEID_WriteFile_inOffset( file, filelen, in, 0/* inOffset */, inlen, PinId );
+}
+
+PTEIDSDK_API long PTEID_WriteFile_inOffset(unsigned char *file, int filelen, unsigned char *in,
+	     unsigned long inOffset, unsigned long inlen, unsigned char PinId)
+{
 	if (readerContext!=NULL && (PinId == 1 || PinId == 129)){
 		PTEID_EIDCard &card = readerContext->getEIDCard();
 		CByteArray temp;
@@ -1894,7 +1900,7 @@ PTEIDSDK_API long PTEID_WriteFile(unsigned char *file, int filelen,	unsigned cha
 
 		out.Append(in,inlen);
 		temp.Append(file,filelen);
-		if (card.writeFile(temp.ToString(false).c_str(),out, pin,""))
+		if (card.writeFile(temp.ToString(false).c_str(),out, pin,"", inOffset))
 			return 0;
 		return -1;
 	}
@@ -2015,13 +2021,6 @@ PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,
 
 		return PTEID_OK;
 	}
-
-//TODO
-PTEIDSDK_API long PTEID_WriteFile_inOffset(unsigned char *file,int filelen, unsigned char *in,
-	     unsigned long inOffset,unsigned long inlen, unsigned char PinId)
-{
-	return PTEID_OK;
-}
 
 PTEIDSDK_API long PTEID_CAP_ChangeCapPin(const char *csServer, const unsigned char *ucServerCaCert,	unsigned long ulServerCaCertLen, tProxyInfo *proxyInfo,	const char *pszOldPin, const char *pszNewPin, long *triesLeft){
 #if 0
