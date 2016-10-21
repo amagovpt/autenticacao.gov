@@ -89,6 +89,7 @@ HEADERS += \
 	SecurityContext.h  \
 	APLPublicKey.h \
     SigContainer.h \
+	ScapSSLConnection.h \
 	XadesSignature.h \
 	TSAClient.h \
 	SODParser.h \ 
@@ -115,6 +116,7 @@ SOURCES += \
 	PhotoPteid.cpp \
 	APLPublicKey.cpp \
 	SigContainer.cpp \
+	ScapSSLConnection.cpp \
 	XadesSignature.cpp \
 	SODParser.cpp \
 	SSLConnection.cpp \

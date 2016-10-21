@@ -237,7 +237,7 @@ void print_ssl_error(char* message, FILE* out) {
 /**
  * Initialise OpenSSL
  */
-void init_openssl() {
+void SSLConnection::init_openssl() {
 
     OpenSSL_add_all_algorithms();
     /* call the standard SSL init functions */
@@ -331,8 +331,6 @@ char *parseToken(char * server_response, const char * token)
 	return change_pin_apdu;
 
 }
-
-#define REPLY_BUFSIZE 100000
 
 
 char * SSLConnection::do_SAM_mutualAuthentication_IAS101(char *challenge)
@@ -688,7 +686,7 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 
 }
 
-BIO * connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_host, char *proxy_user, char * proxy_pwd, char *ssl_host_andport)
+BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_host, char *proxy_user, char * proxy_pwd, char *ssl_host_andport)
 {
 		char tmpbuf[10*1024];
         char connect_request[1024];
@@ -763,7 +761,7 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
     BIO* bio = NULL;
 
     /* Set up the SSL pointers */
-    SSL_CTX *ctx = SSL_CTX_new(TLSv1_1_client_method());
+    SSL_CTX *ctx = SSL_CTX_new(TLSv1_client_method());
 
     SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
 
@@ -846,7 +844,7 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port)
     if (ret_connect != 1)
     {
 	//translate_ssl_error(ssl_handle, ret_connect);
-	//fprintf(stderr, "Error returned by SSL_connect (cause): %s\n", ERR_error_string(ERR_get_error(), NULL));
+	fprintf(stderr, "Error returned by SSL_connect (cause): %s\n", ERR_error_string(ERR_get_error(), NULL));
 	MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection: error establishing connection");
 
 	throw CMWEXCEPTION(translate_openssl_error(ERR_get_error()));

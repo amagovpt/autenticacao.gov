@@ -21,6 +21,8 @@ namespace eIDMW
 int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 	                unsigned char *sigret, unsigned int *siglen, const RSA * rsa);
 
+#define REPLY_BUFSIZE 100000
+
 class SSLConnection
 {
 	public:
@@ -45,8 +47,9 @@ class SSLConnection
 
 		char * do_SAM_mutualAuthentication_IAS101(char *challenge);
 
-	private:
+	protected:
 		void ReadUserCert();
+		static void init_openssl();
 		//Generic POST routine that actually writes and reads from the SSL connection
 		char * Post(char *cookie, char *url_path, char *body, bool chunked_expected=false);
 
@@ -56,6 +59,7 @@ class SSLConnection
 		SSL *connect_encrypted(char *host_and_port);
 		bool InitConnection();
 		void CloseConnection();
+		BIO * connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_host, char *proxy_user, char * proxy_pwd, char *ssl_host_andport);
 		void loadUserCert(SSL_CTX *ctx);
 		void loadCertChain(X509_STORE *store);
 
