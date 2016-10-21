@@ -843,6 +843,21 @@ class PTEID_PDFSignature
 
 };
 
+
+//Fwd declaration
+class ScapSSLConnection;
+
+class PTEID_ScapConnection
+{
+	public:
+		PTEIDSDK_API PTEID_ScapConnection(char *host);
+		PTEIDSDK_API ~PTEID_ScapConnection();
+		PTEIDSDK_API char *postSoapRequest(char *endpoint, char *soapAction, char *soapBody);
+
+	private:	
+		ScapSSLConnection *m_connection;
+};
+
 class SecurityContext;
 
 /******************************************************************************//**

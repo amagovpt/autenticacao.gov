@@ -17,6 +17,7 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
+#include "ScapSSLConnection.h"
 #include "eidlib.h"
 
 #include "eidlibException.h"
@@ -280,6 +281,7 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_s
 	return rc;
 }
 
+
 int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
 			const char *outfile_path)
 
@@ -299,6 +301,21 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coo
 
 	return rc;
 
+}
+
+PTEID_ScapConnection::PTEID_ScapConnection(char *host)
+{
+	m_connection = new ScapSSLConnection(host);	
+}
+
+PTEID_ScapConnection::~PTEID_ScapConnection()
+{
+	delete m_connection;
+}
+
+char * PTEID_ScapConnection::postSoapRequest(char *endpoint, char *soapAction, char *soapBody)
+{
+	return m_connection->postSoapRequest(endpoint, soapAction, soapBody);
 }
 
 PTEID_PDFSignature::PTEID_PDFSignature()
