@@ -371,7 +371,7 @@ XMLCh *createSignedPropertiesURI()
 	}
 
 
-	void XadesSignature::addCardSignature(unsigned char *signature, unsigned int siglen, DOMDocument *doc) 
+	void XadesSignature::addCardSignature(unsigned char *signature, unsigned int siglen, XERCES_NS DOMDocument *doc) 
 	{
 
 		char * base64Sig = Base64Encode(signature, siglen);
@@ -1116,7 +1116,7 @@ bool XadesSignature::AddSignatureTimestamp(XERCES_NS DOMDocument *dom)
    return appendTimestamp(dom, node_unsigned_props, "SignatureTimeStamp", c14n);
 }
 
-void XadesSignature::setReferenceHash(XMLByte *hash, unsigned int hash_len, int ref_index, DOMDocument *doc)
+void XadesSignature::setReferenceHash(XMLByte *hash, unsigned int hash_len, int ref_index, XERCES_NS DOMDocument *doc)
 {
 	DOMNode * node_digest_value = NULL;
 	char * base64Hash = Base64Encode(hash, hash_len);

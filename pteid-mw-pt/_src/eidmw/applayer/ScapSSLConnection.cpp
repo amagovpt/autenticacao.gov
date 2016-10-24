@@ -3,6 +3,10 @@
 #include "ScapSSLConnection.h"
 #include "Log.h"
 
+#ifdef WIN32
+#define snprintf _snprintf
+#endif
+
 
 namespace eIDMW
 {

@@ -17,7 +17,6 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
-#include "ScapSSLConnection.h"
 #include "eidlib.h"
 
 #include "eidlibException.h"
@@ -32,6 +31,7 @@
 #include "PhotoPteid.h"
 #include "ByteArray.h"
 #include "CardPteid.h"
+#include "ScapSSLConnection.h"
 #include "PDFSignature.h"
 #include "SecurityContext.h"
 #include "dialogs.h"

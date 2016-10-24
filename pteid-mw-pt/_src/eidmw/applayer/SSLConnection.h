@@ -4,7 +4,6 @@
 #include <openssl/evp.h>
 #include <openssl/rsa.h>
 #include <openssl/ssl.h>
-#include <curl/curl.h>
 
 #include "APLCard.h"
 #include "APLReader.h"

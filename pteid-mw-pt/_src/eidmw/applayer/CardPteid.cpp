@@ -20,7 +20,7 @@
 #include <iostream>
 #include <fstream>
 
-#include <openssl/err.h>
+//#include <openssl/err.h>
 
 #include "CardPteid.h"
 #include "TLVBuffer.h"
@@ -1365,6 +1365,7 @@ APL_EidFile_Sod::~APL_EidFile_Sod()
 {
 }
 
+/*
 char * parseSubjectFromCert(X509 * cert)
 {
 
@@ -1377,6 +1378,7 @@ char * parseSubjectFromCert(X509 * cert)
 
        return subject;
 }
+*/
 
 tCardFileStatus APL_EidFile_Sod::VerifyFile()
 {
@@ -1413,7 +1415,7 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 		const unsigned char *p = pcard->getCertificates()->getCert(i,false)->getData().GetBytes();
 		pX509 = d2i_X509(&pX509, &p, pcard->getCertificates()->getCert(i,false)->getData().Size());
 		X509_STORE_add_cert(store, pX509);
-		printf("%d. Adding certificate CN: %s\n", i, parseSubjectFromCert(pX509));
+		//printf("%d. Adding certificate CN: %s\n", i, parseSubjectFromCert(pX509));
 	}
 	BIO *Out = BIO_new(BIO_s_mem());
 
@@ -1430,8 +1432,8 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	else
 	{
 		//Log specific OpenSSL error
-		MWLOG(LEV_ERROR, MOD_APL, L"EidFile_Sod::VerifyFile Error validating SOD signature: %s",
-			ERR_error_string(ERR_get_error(), NULL));
+		MWLOG(LEV_ERROR, MOD_APL, L"EidFile_Sod::VerifyFile Error validating SOD signature");
+			
 	}
 
 	X509_STORE_free(store);

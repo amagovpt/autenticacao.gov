@@ -9,11 +9,11 @@ namespace eIDMW
 class ScapSSLConnection: public SSLConnection
 {
 	public:
-		ScapSSLConnection() { };
-		ScapSSLConnection(char *host);
-		~ScapSSLConnection() { /* CloseConnection(); */ }
+		EIDMW_APL_API ScapSSLConnection() { };
+		EIDMW_APL_API ScapSSLConnection(char *host);
+		EIDMW_APL_API ~ScapSSLConnection() { /* CloseConnection(); */ }
 
-		char * postSoapRequest(char *endpoint, char *soapAction, char *soapBody);
+		EIDMW_APL_API char * postSoapRequest(char *endpoint, char *soapAction, char *soapBody);
 
 };
 

@@ -988,7 +988,8 @@ private:
 	bool persoNotesDirty;
 
 friend PTEID_Card &PTEID_ReaderContext::getCard();				/**< For internal use : This method must access protected constructor */
-friend long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen, unsigned char *pucChallenge,	int iChallengeLen);
+friend PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen, unsigned char *pucChallenge,	int iChallengeLen);
+
 };
 
 
