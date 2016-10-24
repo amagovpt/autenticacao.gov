@@ -57,11 +57,10 @@ public:
 	QString pin_name;
 	unsigned long triesLeft;
 	QString pin_id;
-	const char *pin_name_str;
 
 	PinInfo() {};
 	PinInfo(unsigned long id, const char *pin_name, long tLeft):
-	  pin_name_str(pin_name), pin_name(QString::fromUtf8(pin_name)), pin_id(QString::number(id)), triesLeft(tLeft) {}; /*llemos*/
+	  pin_name(QString::fromUtf8(pin_name)), pin_id(QString::number(id)), triesLeft(tLeft) {}; /*llemos*/
 };
 
 //***********************************************
@@ -113,7 +112,7 @@ public:
 //***********************************************
 // QuitEvent
 // This class is used as event to notify that the
-// application has to close t down because the 
+// application has to close t down because the
 // application session ends (logoff or shutdown)
 //***********************************************
 class QuitEvent : public QEvent
@@ -309,13 +308,15 @@ private slots:
 	void on_btnSelectTab_Certificates_clicked ( void );
 	void on_btnSelectTab_PinCodes_clicked ( void );
 	void on_btnSelectTab_Notes_clicked ( void );
-	
+
 //TOOLBAR MENUS
 	void on_btn_menu_card_clicked( void );
 	void on_btn_menu_tools_clicked( void );
 	void on_btn_menu_settings_clicked( void );
 	void on_btn_menu_language_clicked( void );
 	void on_btn_menu_help_clicked( void );
+
+	void on_btnIdentityExtra_linkToCert_clicked( void );
 
 //SHORTCUT BUTTONS
 	void on_btnShortcut_UnivSign_clicked( void );
@@ -329,7 +330,7 @@ private slots:
 	void quit_application();
 	void show_window_parameters();
 	void show_window_about();
-	
+
 
 	void updateReaderList( void );
 	void customEvent( QEvent * event );
@@ -401,7 +402,7 @@ private:
 	void refreshTabCardPin( void );
     void setTabCardPin( QTreeWidgetItem *item );    /*llemos*/
 
-	QString translateCardValidation(QString &card_validation);
+	QString translateText(QString &qStr);
 	//void refreshTabInfo( void );
 
 	//TESTING
@@ -467,7 +468,7 @@ private:
 	QString getDuplicataText( void );
 	QString getFamilyMemberText( void );
 	void createTrayMenu();
-	QString getFinalLinkTarget(QString baseName);	
+	QString getFinalLinkTarget(QString baseName);
 	void cleanupCallbackData();
 
 	void connectTreeCertItems(void);
@@ -497,7 +498,7 @@ private:
 
 	bool					m_ShowBalloon;			//!< To avoid the message eID still running when the gui start minimize
 	QMessageBox*			m_msgBox;
-	
+
 public:
 	static tCertPerReader			m_certContexts;			//!< certificate contexts of each reader
 

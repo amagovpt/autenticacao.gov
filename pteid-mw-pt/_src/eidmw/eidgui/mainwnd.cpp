@@ -2,7 +2,7 @@
 
  * eID Middleware Project.
  * Copyright (C) 2008-2010 FedICT.
- * Copyright (C) 2012-2016 Caixa Mágica Software 
+ * Copyright (C) 2012-2016 Caixa Mágica Software
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -92,7 +92,7 @@ void ImportCertFromDisk(void *cert_path)
 		NULL,
 		(const void **)&pCertCtx) != 0)
 	{
-		
+
 		HCERTSTORE hCertStore = CertOpenSystemStoreA (NULL, "CA");
 
 		if (hCertStore != NULL)
@@ -123,7 +123,6 @@ void ImportCertFromDisk(void *cert_path)
 
 
 #endif
-
 
 void MainWnd::createTrayMenu()
 {
@@ -160,7 +159,7 @@ tCertPerReader	MainWnd::m_certContexts;		//!< certificate contexts per reader
 //*****************************************************
 // Constructor
 //*****************************************************
-MainWnd::MainWnd( GUISettings& settings, QWidget *parent ) 
+MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 : QMainWindow(parent)
 , m_Zoom(ZOOM_SMALL)
 , m_pPrinter(NULL)
@@ -277,7 +276,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	{
 		m_timerReaderList = new QTimer(this);
 		connect(m_timerReaderList, SIGNAL(timeout()), this, SLOT(updateReaderList()));
-		m_timerReaderList->start(TIMERREADERLIST); 
+		m_timerReaderList->start(TIMERREADERLIST);
 	}
 
 	//------------------------------------
@@ -291,7 +290,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 		state ^= Qt::WindowMinimized;
 		setWindowState( state );
 	}
-	else 
+	else
 	{
 		showNoReaderMsg();
 	}
@@ -299,18 +298,18 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_ui.lbl_menuCard_Read->installEventFilter(this);
 	m_ui.lbl_menuCard_Pdf->installEventFilter(this);
 	m_ui.lbl_menuCard_Quit->installEventFilter(this);
-	
+
 	m_ui.lbl_menuTools_Signature->installEventFilter(this);
 	m_ui.lbl_menuTools_PDFSignature->installEventFilter(this);
 	m_ui.lbl_menuTools_VerifySignature->installEventFilter(this);
 	m_ui.lbl_menuTools_SCAPSignature->installEventFilter(this);
-	
+
 	m_ui.lbl_menuSettings_Parameters->installEventFilter(this);
-	
+
 	m_ui.lbl_menuHelp_about->installEventFilter(this);
 	m_ui.lbl_menuHelp_updates->installEventFilter(this);
 	m_ui.lbl_menuHelp_documentation->installEventFilter(this);
-	
+
 	m_ui.wdg_submenu_card->installEventFilter(this);
 	m_ui.wdg_submenu_tools->installEventFilter(this);
 	m_ui.wdg_submenu_settings->installEventFilter(this);;
@@ -376,7 +375,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			hide_submenus();
 			show_window_parameters();
 		}
-		
+
 		if (object == m_ui.lbl_menuHelp_updates )
 		{
 			hide_submenus();
@@ -393,7 +392,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			QDesktopServices::openUrl(QUrl("http://svn.gov.pt/projects/ccidadao/repository/middleware-offline/trunk/docs/Manual_de_Utilizacao.pdf"));
 		}
 	}
-	
+
 	if (event->type() == QEvent::Leave)
 	{
 		if (object == m_ui.wdg_submenu_card || object == m_ui.wdg_submenu_tools || object == m_ui.wdg_submenu_settings || object == m_ui.wdg_submenu_help )
@@ -414,7 +413,7 @@ void MainWnd::hide_submenus()
 }
 
 //******************************************************^M
-// Buttons to control Shortcuts 
+// Buttons to control Shortcuts
 //******************************************************^M
 
 void MainWnd::on_btnShortcut_UnivSign_clicked()
@@ -524,7 +523,7 @@ void MainWnd::doChangeAddress(const char *process, const char *secret_code)
 
 void MainWnd::on_btnAddress_Change_clicked()
 {
-	
+
 	PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 
     PTEID_EIDCard& Card = ReaderContext.getEIDCard();
@@ -538,13 +537,13 @@ void MainWnd::on_btnAddress_Change_clicked()
   		msgBoxp.exec();
 		return;
 	}
-	
+
 	ChangeAddressDialog* dlgChangeAddr = new ChangeAddressDialog(this);
-    
+
     if (dlgChangeAddr->exec() == QDialog::Rejected)
     	return;
 
-    //Remove whitespace the start and the end that the user may have 
+    //Remove whitespace the start and the end that the user may have
     //typed by mistake
     QString process = dlgChangeAddr->getProcess().trimmed();
     QString secret_code = dlgChangeAddr->getSecretCode().trimmed();
@@ -586,7 +585,7 @@ QString MainWnd::findJavaHomeOnWindows()
 
 	if (current_version == QVariant())
 	{
-		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Couldn't find first Java registry key...");	
+		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Couldn't find first Java registry key...");
 
 		//Check WoW32Node values
 		QSettings javaSetting2("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment", QSettings::NativeFormat);
@@ -602,7 +601,7 @@ QString MainWnd::findJavaHomeOnWindows()
 	}
 
 	return javaSetting.value(current_version.toString() + "/JavaHome").toString();
-	
+
 }
 #endif
 
@@ -651,7 +650,7 @@ void MainWnd::launchJavaProcess(const QString &application_jar, const QString jv
 			 this, SLOT(showJavaLaunchError(QProcess::ProcessError)));
 
 	myProcess->start(program, arguments);
-	 
+
 }
 
 void MainWnd::setup_addressChange_progress_bar()
@@ -711,7 +710,10 @@ void MainWnd::on_btnSelectTab_Notes_clicked()
 		refreshTabPersoData();
 }
 
-
+void MainWnd::on_btnIdentityExtra_linkToCert_clicked()
+{
+    on_btnSelectTab_Certificates_clicked();
+}
 
 void MainWnd::on_btn_menu_card_clicked()
 {
@@ -848,14 +850,14 @@ void MainWnd::updateReaderList( void )
 		{
 			setEventCallbacks();
 		}
-		setCorrespondingTrayIcon(NULL);		
+		setCorrespondingTrayIcon(NULL);
 	}
 	catch(...)
 	{
 		stopAllEventCallbacks();
 		ReaderSet.releaseReaders();
 		m_CI_Data.Reset();
-		setCorrespondingTrayIcon(NULL);		
+		setCorrespondingTrayIcon(NULL);
 	}
 }
 
@@ -1049,7 +1051,7 @@ void MainWnd::closeEvent( QCloseEvent *event)
 //*****************************************************
 void MainWnd::iconActivated( QSystemTrayIcon::ActivationReason reason )
 {
-	switch (reason) 
+	switch (reason)
 	{
 	case QSystemTrayIcon::Trigger:
 		break;
@@ -1188,12 +1190,12 @@ bool MainWnd::ImportCertificates( const char* readerName )
 				CertGetIntendedKeyUsage(X509_ASN_ENCODING, pCertContext->pCertInfo, &KeyUsageBits, 1);
 
 				// ----------------------------------------------------
-				// Only store the context of the certificates with usages for an end-user 
+				// Only store the context of the certificates with usages for an end-user
 				// i.e. no CA or root certificates
 				// ----------------------------------------------------
 				if((KeyUsageBits & CERT_KEY_CERT_SIGN_KEY_USAGE) == CERT_KEY_CERT_SIGN_KEY_USAGE)
 				{
-					if(StoreAuthorityCerts (pCertContext, KeyUsageBits, readerName))                     
+					if(StoreAuthorityCerts (pCertContext, KeyUsageBits, readerName))
 					{
 						bImported = true;
 					}
@@ -1339,7 +1341,7 @@ bool MainWnd::StoreAuthorityCerts(PCCERT_CONTEXT pCertContext, unsigned char Key
 	bool			bRet		 = false;
 	HCERTSTORE		hMemoryStore = NULL;   // memory store handle
 	PCCERT_CONTEXT  pDesiredCert = NULL;
-	
+
 	if ( 0 == memcmp ( pCertContext->pCertInfo->Issuer.pbData
 			, pCertContext->pCertInfo->Subject.pbData
 			, pCertContext->pCertInfo->Subject.cbData
@@ -1399,7 +1401,7 @@ bool MainWnd::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, 
 	if ( NULL != hMyStore )
 	{
 		// ----------------------------------------------------
-		// look if we already have a certificate with the same 
+		// look if we already have a certificate with the same
 		// subject (contains name and NNR) in the store
 		// If the certificate is not found --> NULL
 		// ----------------------------------------------------
@@ -1408,14 +1410,14 @@ bool MainWnd::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, 
 			if( NULL != (pDesiredCert = CertFindCertificateInStore(hMyStore, X509_ASN_ENCODING, 0, CERT_FIND_SUBJECT_NAME, &(pCertContext->pCertInfo->Subject) , pPrevCert)))
 			{
 				// ----------------------------------------------------
-				// If the certificates are identical and function 
+				// If the certificates are identical and function
 				// succeeds, the return value is nonzero, or TRUE.
 				// ----------------------------------------------------
 				if(NULL == CertCompareCertificate(X509_ASN_ENCODING,pCertContext->pCertInfo,pDesiredCert->pCertInfo) ||
 						!ProviderNameCorrect(pDesiredCert) )
 				{
 					// ----------------------------------------------------
-					// certificates are not identical, but have the same 
+					// certificates are not identical, but have the same
 					// subject (contains name and NNR),
 					// so we remove the one that was already in the store
 					// ----------------------------------------------------
@@ -1450,11 +1452,11 @@ bool MainWnd::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, 
 
 		// ----------------------------------------------------
 		// Initialize the CRYPT_KEY_PROV_INFO data structure.
-		// Note: pwszContainerName and pwszProvName can be set to NULL 
+		// Note: pwszContainerName and pwszProvName can be set to NULL
 		// to use the default container and provider.
 		// ----------------------------------------------------
 		CRYPT_KEY_PROV_INFO* pCryptKeyProvInfo	= new CRYPT_KEY_PROV_INFO;
-		unsigned long		 dwPropId			= CERT_KEY_PROV_INFO_PROP_ID; 
+		unsigned long		 dwPropId			= CERT_KEY_PROV_INFO_PROP_ID;
 
 		// ----------------------------------------------------
 		// Get the serial number
@@ -1626,7 +1628,7 @@ void MainWnd::on_btnCert_Details_clicked( void )
 		BOOL bChange		= FALSE;
 		CryptUIDlgViewCertificate(&tCert, &bChange);
 		CertFreeCertificateContext (tCert.pCertContext);
-	} 
+	}
 #endif
 }
 
@@ -1846,7 +1848,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
 	{
 		int x=0;
 		x++;
-		// we catch ALL exceptions. This is because otherwise the thread throwing the exception stops		
+		// we catch ALL exceptions. This is because otherwise the thread throwing the exception stops
 	}
 
 	g_runningCallback--;
@@ -1909,7 +1911,7 @@ bool MainWnd::askAllowTestCard( void )
 	//----------------------------------------------------------------
 
 	if ( !m_mutex.tryLock () )
-	{	
+	{
 		return false;
 	}
 	bool    bAllowTestCard = false;
@@ -1978,7 +1980,7 @@ void MainWnd::loadCardData( void )
 					try
 					{
 						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-						
+
 						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
 						m_CurrReaderName = readerName;
 
@@ -2034,7 +2036,7 @@ void MainWnd::loadCardData( void )
 		QString msg(tr("Index out of range"));
 		ShowPTEIDError( msg );
 	}
-	catch (PTEID_ExCardBadType e) 
+	catch (PTEID_ExCardBadType e)
 	{
 		QString msg(tr("Bad card type"));
 		ShowPTEIDError( msg );
@@ -2236,7 +2238,7 @@ void MainWnd::loadCardDataAddress( void )
 		//Check for SOD-related error codes - check for values between the first and last SOD error code
 		long errorCode = e.GetError();
 
-		if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && 
+		if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE &&
 			errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN)
 		{
 			msg = tr("SOD validation failed: card data consistency is compromised!");
@@ -2328,7 +2330,7 @@ bool MainWnd::loadCardDataPersoData( void )
 			else
 			{
 				clearGuiContent();
-				
+
 			}
 			enablePrintMenu();
 		}
@@ -2407,7 +2409,7 @@ bool MainWnd::loadCardDataPersoData( void )
 //*****************************************************
 void MainWnd::loadCardDataCertificates( void )
 {
-  
+
 	//----------------------------------------------------------------
 	// if we load a new card, clear the certificate contexts we kept
 	//----------------------------------------------------------------
@@ -2710,7 +2712,7 @@ void MainWnd::actionSCAPSignature_triggered() {
 	#ifdef _WIN32
 		launchJavaProcess(m_Settings.getExePath() + SCAP_JAR, "", "");
 	#elif __APPLE__
-		launchJavaProcess("/usr/local/bin" + SCAP_JAR, "-Xdock:name=Assinatura na qualidade", "");	
+		launchJavaProcess("/usr/local/bin" + SCAP_JAR, "-Xdock:name=Assinatura na qualidade", "");
 	#else
 		launchJavaProcess(m_Settings.getExePath() + SCAP_JAR, "-Djava.library.path=/usr/local/lib", "");
 	#endif
@@ -2722,7 +2724,7 @@ void MainWnd::actionSCAPSignature_triggered() {
 void MainWnd::on_actionPrint_eID_triggered()
 {
 	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
-	
+
 	if(m_CI_Data.isDataLoaded())
 	{
 	  	dlgPrint* dlg = new dlgPrint( this, m_CI_Data, m_Language);
@@ -2947,7 +2949,7 @@ void MainWnd::on_actionPINRequest_triggered()
 				msg = tr("PIN verification failed");
 				msg += "\n";
 				msg += status;
-				
+
 				//Reset the user notes flag
 				if (pinRef == PTEID_Pin::AUTH_PIN)
 					pinNotes = 1;
@@ -3068,7 +3070,7 @@ void MainWnd::on_actionPINChange_triggered()
 }
 
 //******************************************************
-// Show the tabs 
+// Show the tabs
 //******************************************************
 void MainWnd::showTabs()
 {
@@ -3079,7 +3081,7 @@ void MainWnd::showTabs()
 		return;
 	}
 
-	switch (m_TypeCard) 
+	switch (m_TypeCard)
 	{
 	case PTEID_CARDTYPE_IAS07:
 	case PTEID_CARDTYPE_IAS101:
@@ -3266,7 +3268,7 @@ void MainWnd::LoadDataAddress(PTEID_EIDCard& Card)
 
 	m_CI_Data.LoadDataAddress(Card, m_CurrReaderName);
 
-	
+
 
 	if(!m_CI_Data.isDataLoaded())
 	{
@@ -3288,7 +3290,7 @@ void MainWnd::LoadDataPersoData(PTEID_EIDCard& Card)
 	QFuture<void> future = QtConcurrent::run(loader, &CardDataLoader::LoadPersoData);
 	this->FutureWatcher.setFuture(future);
 	m_progress->exec();
-	
+
 }
 
 void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
@@ -3304,7 +3306,7 @@ void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 
 	clearTabCertificates();
 	fillCertificateList();
-	
+
 }
 
 #define TYPE_PINTREE_ITEM 0
@@ -3317,17 +3319,20 @@ void MainWnd::fillPinList()
 	clearTabPins();
 
 	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, tr(m_pinsInfo[PTEID_Pin::AUTH_PIN]->pin_name_str) ); /*llemos*/
+	pinTreeItem->setText(COLUMN_PIN_NAME, translateText( m_pinsInfo[PTEID_Pin::AUTH_PIN]->pin_name ) ); /*llemos*/
+
 	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
 	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::AUTH_PIN));
 
 	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, tr(m_pinsInfo[PTEID_Pin::SIGN_PIN]->pin_name_str) ); /*llemos*/
+	pinTreeItem->setText(COLUMN_PIN_NAME, translateText( m_pinsInfo[PTEID_Pin::SIGN_PIN]->pin_name ) ); /*llemos*/
+
 	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
 	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::SIGN_PIN));
 
 	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, tr(m_pinsInfo[PTEID_Pin::ADDR_PIN]->pin_name_str) );/*llemos*/
+	pinTreeItem->setText(COLUMN_PIN_NAME, translateText( m_pinsInfo[PTEID_Pin::ADDR_PIN]->pin_name ) ); /*llemos*/
+
 	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
 	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::ADDR_PIN));
 
@@ -3444,20 +3449,10 @@ void MainWnd::refreshTabIdentity( void )
 	m_ui.txtIdentity_AccidentalIndications->setAccessibleName( QString::fromUtf8(PersonFields[ACCIDENTALINDICATIONS].toStdString().c_str()) );
 }
 
-QString MainWnd::translateCardValidation(QString &card_validation)
+QString MainWnd::translateText(QString &qStr)
 {
-	if (m_Settings.getGuiLanguageString() == "en" && card_validation.length() != 0)
-	{
-		if (card_validation.contains("inactivo"))
-			return "The Citizen Card is inactive";
-		else 
-			return "The Citizen Card is active";
-
-	}
-	else
-		return card_validation;
-
-}
+    return tr( qStr.toUtf8().constData() );
+}/* translateText() */
 
 //*****************************************************
 // refresh the tab with the ID extra info (card back side)
@@ -3485,9 +3480,22 @@ void MainWnd::refreshTabIdentityExtra()
 	m_ui.txtIdentityExtra_LocalofRequest->setAccessibleName	( QString::fromUtf8(PersonFields[LOCALOFREQUEST].toStdString().c_str()) );
 	//Hackish translation
 	QString card_validation = QString::fromUtf8(PersonFields[VALIDATION].toStdString().c_str());
-	card_validation = translateCardValidation(card_validation);
+	card_validation = translateText(card_validation);
 	m_ui.txtIdentityExtra_Validate->setText (card_validation);
-	m_ui.txtIdentityExtra_Validate->setAccessibleName ( QString::fromUtf8(PersonFields[VALIDATION].toStdString().c_str()));
+	m_ui.txtIdentityExtra_Validate->setAccessibleName ( card_validation );
+
+	if ( PersonFields[LINK_TO_CERT] != "" ){
+        QString linkStr = QString::fromUtf8(PersonFields[LINK_TO_CERT].toStdString().c_str());
+        linkStr = translateText( linkStr );
+
+        linkStr.replace( ",", ",\n" );
+
+        m_ui.btnIdentityExtra_linkToCert->setText( linkStr );
+        m_ui.btnIdentityExtra_linkToCert->setAccessibleName ( linkStr );
+        m_ui.btnIdentityExtra_linkToCert->setVisible(true);
+    } else{
+        m_ui.btnIdentityExtra_linkToCert->setVisible(false);
+    }/* if ( PersonFields[LINK_TO_CERT] != "" ) */
 
 	m_ui.txtIdentityExtra_ValidFrom->setText( QString::fromUtf8(CardFields[CARD_VALIDFROM].toStdString().c_str()));
 	m_ui.txtIdentityExtra_ValidFrom->setAccessibleName( QString::fromUtf8(CardFields[CARD_VALIDFROM].toStdString().c_str()));
@@ -3713,7 +3721,7 @@ void MainWnd::clearTabCertificates( void )
 // clear the tab with the PIN info
 //*****************************************************
 void MainWnd::clearTabAddress( void )
-{ 
+{
 	m_ui.txtAddress_Municipality->setText            ( "" );
 	m_ui.txtAddress_Municipality->setAccessibleName ( "" );
 	m_ui.txtAddress_District->setText                       ( "" );
@@ -3821,7 +3829,7 @@ void MainWnd::setTabCardPin( QTreeWidgetItem *item )
 		status = tr("%1 tries remaining").arg(pinfo->triesLeft);
 
     QString pin_name;
-    pin_name = tr(pinfo->pin_name_str);
+    pin_name = translateText( pinfo->pin_name );
 
 	m_ui.txtPIN_Name->setText( pin_name );
 	m_ui.txtPIN_Name->setAccessibleName( pin_name );
@@ -3862,9 +3870,9 @@ void MainWnd::refreshTabCardPin( void )
 // Each menu item has its associated function. To make Qt to
 // change the language, just load another translation file.
 // This load will generate an event of type QEvent::LanguageChange.
-// To capture the event, the function 'changeEvent(QEvent *event)' has to be 
-// implemented and the event type has to be checked. If it is a change 
-// of language, just call the function 'translateUi()' (that is generated 
+// To capture the event, the function 'changeEvent(QEvent *event)' has to be
+// implemented and the event type has to be checked. If it is a change
+// of language, just call the function 'translateUi()' (that is generated
 // automatically by Qt) and that's it.
 //**************************************************
 
@@ -3874,7 +3882,7 @@ void MainWnd::refreshTabCardPin( void )
 void MainWnd::setLanguageEn( void )
 {
 	setLanguage(GenPur::LANG_EN);
-	
+
 	QPixmap pixmap(":/images/Images/flags/pt32.png");
 	QIcon ButtonIcon(pixmap);
 	m_ui.btn_menu_language->setIcon(ButtonIcon);
@@ -3888,7 +3896,7 @@ void MainWnd::setLanguageEn( void )
 void MainWnd::setLanguageNl( void )
 {
 	setLanguage(GenPur::LANG_NL);
-	
+
 	QPixmap pixmap(":/images/Images/flags/uk32.png");
 	QIcon ButtonIcon(pixmap);
 	m_ui.btn_menu_language->setIcon(ButtonIcon);
@@ -4058,7 +4066,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 		}
 	}
 	else
-#endif 
+#endif
 		if( pEvent->type() == QEvent::User )
 		{
 			try
@@ -4179,7 +4187,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 							{
 								showCertImportMessage(bImported);
 							}
-						
+
 						}
 						*/
 						if (isHidden())
@@ -4192,7 +4200,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 						//------------------------------------------------
 						if ( m_Settings.getAutoCardReading() )
 						{
-							m_CI_Data.Reset(); 
+							m_CI_Data.Reset();
 							loadCardData();
 							//Clear the Auth PIN verification flag
 							pinNotes = 1;
@@ -4280,12 +4288,12 @@ void MainWnd::doPicturePopup( PTEID_Card& card )
 // function on the UI and the interface will be set accordingly.
 // Important to know is that the function 'retranslateUi()' seems to reset
 // properties of the LineEdit-fields. e.g.: the background transparency is reset
-// and the font size. Therefore, we have to initialize all the tabs and set the 
+// and the font size. Therefore, we have to initialize all the tabs and set the
 // zoom factor again.
 //**************************************************
 void MainWnd::changeEvent(QEvent *event)
 {
-	if (event->type() == QEvent::LanguageChange) 
+	if (event->type() == QEvent::LanguageChange)
 	{
 		m_ui.retranslateUi(this);
 		//initAllTabs();
@@ -4305,10 +4313,10 @@ void MainWnd::changeEvent(QEvent *event)
 		createTrayMenu();
 		m_ui.lblIdentity_ImgPerson->setPixmap( m_imgPicture );
 
-	} 
+	}
 	else if (event->type() == QEvent::WindowStateChange )
 	{
-		QWindowStateChangeEvent* ev = (QWindowStateChangeEvent*)event;	
+		QWindowStateChangeEvent* ev = (QWindowStateChangeEvent*)event;
 		if (ev->oldState()== Qt::WindowNoState)
 		{
 
@@ -4451,7 +4459,7 @@ BOOL MainWnd::UseMinidriver( void )
 //**************************************************
 bool MainWnd::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
 {
-	unsigned long dwPropId= CERT_KEY_PROV_INFO_PROP_ID; 
+	unsigned long dwPropId= CERT_KEY_PROV_INFO_PROP_ID;
 	DWORD cbData = 0;
 	CRYPT_KEY_PROV_INFO * pCryptKeyProvInfo;
 
@@ -4489,7 +4497,7 @@ void CardDataLoader::Load()
 		this->information.LoadData(card, readerName);
 
 	}
-	
+
 	catch (PTEID_Exception &e)
 	{
 
@@ -4498,7 +4506,7 @@ void CardDataLoader::Load()
 		qDebug() << "Caught exception in RetrieveData()..." << e.GetError();
 		return;
 	}
-	
+
 	if (this->mwnd)
 		this->mwnd->loadPinData(this->card);
 

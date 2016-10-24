@@ -63,7 +63,7 @@ public:
 	}
 
 	//----------------------------------------------
-	// Retrieve the card specific data 
+	// Retrieve the card specific data
 	//----------------------------------------------
 	bool RetrieveData(PTEID_EIDCard& Card)
 	{
@@ -179,7 +179,7 @@ public:
 		bool		bRetVal = false;
 		//TODO marker set
 		PTEID_Address&	pteid_eid = Card.getAddr();
-		
+
 		/*m_Fields[ADDRESS_STREET]			=  pteid_eid.getStreet());
 		m_Fields[ADDRESS_ZIPCODE]			=  pteid_eid.getZipCode());
 		m_Fields[ADDRESS_COUNTRY]			=  pteid_eid.getCountry());*/
@@ -232,7 +232,7 @@ private:
 class RelativesInfo
 {
 public:
-//#define 
+//#define
 	//----------------------------------------------
 	// ctor
 	//----------------------------------------------
@@ -534,6 +534,7 @@ public:
 #define MRZ2				"MRZ2"
 #define MRZ3				"MRZ3"
 #define ACCIDENTALINDICATIONS "ACCIDENTALINDICATIONS"
+#define LINK_TO_CERT        "LINK_TO_CERT"
 
 
 #define INITIALS		"initials"
@@ -565,6 +566,16 @@ public:
 		m_PersoDataInfo.Reset();
 	}
 
+	bool isExpiredDate( const char *in_strDate ){
+        if ( in_strDate == NULL ) return false;
+
+        QDate qDate = QDate::fromString( in_strDate, "dd MM yyyy" );
+        QDate curDate = QDate::currentDate();
+
+        if ( curDate > qDate ) return true;
+        return false;
+    }/* isExpiredDate() */
+
 	//----------------------------------------------
 	// retrieve data from EID card
 	//----------------------------------------------
@@ -572,7 +583,7 @@ public:
 	{
 		bool bRetVal = false;
 		unsigned int fatherlen, motherlen;
-		
+
 		//Enable SOD checking
 		Card.doSODCheck(true);
 
@@ -613,7 +624,21 @@ public:
 		m_Fields[MOTHER] = mother;
 
 		m_Fields[LOCALOFREQUEST]			= pteid_eid.getLocalofRequest();
-		m_Fields[VALIDATION]				= pteid_eid.getValidation();
+
+		if ( !Card.isActive() ){
+           m_Fields[VALIDATION]	= "The Citizen Card is not active";
+            m_Fields[LINK_TO_CERT] = "";
+		} else{
+            bool bIsExpired = isExpiredDate( pteid_eid.getValidityEndDate() );
+            if ( bIsExpired ){
+                m_Fields[VALIDATION] = "The Citizen Card is expired";
+                m_Fields[LINK_TO_CERT] = "";
+            } else{
+                m_Fields[VALIDATION] = "The Citizen Card has been activated";
+                m_Fields[LINK_TO_CERT] = "To verify that the card is not suspended or revoked,you should validate the certificates on the Certificates tab";
+            }/* !if ( bIsExpired ) */
+		}/* if ( !Card.isActive() ) */
+
 		m_Fields[MRZ1]						= pteid_eid.getMRZ1();
 		m_Fields[MRZ2]						= pteid_eid.getMRZ2();
 		m_Fields[MRZ3]						= pteid_eid.getMRZ3();

@@ -1138,6 +1138,22 @@ Please specify .xml, .csv or .eid</source>
         <source>setEventCallbacks</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>The Citizen Card is not active</source>
+        <translation>O cartão de Cidadão não se encontra ativo</translation>
+    </message>
+    <message>
+        <source>The Citizen Card has been activated</source>
+        <translation>O Cartão de Cidadão foi ativado</translation>
+    </message>
+    <message>
+        <source>To verify that the card is not suspended or revoked,you should validate the certificates on the Certificates tab</source>
+        <translation>Para verificar se o cartão não está suspenso ou revogado,deverá validar os certificados no separador Certificados</translation>
+    </message>
+    <message>
+        <source>The Citizen Card is expired</source>
+        <translation>O Cartão de Cidadão encontra-se expirado</translation>
+    </message>
 </context>
 <context>
 	<name>HttpWindow</name>
