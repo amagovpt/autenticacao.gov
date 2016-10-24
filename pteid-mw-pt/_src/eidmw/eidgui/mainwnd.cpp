@@ -3493,6 +3493,7 @@ void MainWnd::refreshTabIdentityExtra()
         m_ui.btnIdentityExtra_linkToCert->setText( linkStr );
         m_ui.btnIdentityExtra_linkToCert->setAccessibleName ( linkStr );
         m_ui.btnIdentityExtra_linkToCert->setVisible(true);
+        m_ui.btnIdentityExtra_linkToCert->resize(m_ui.btnIdentityExtra_linkToCert->sizeHint());
     } else{
         m_ui.btnIdentityExtra_linkToCert->setVisible(false);
     }/* if ( PersonFields[LINK_TO_CERT] != "" ) */
