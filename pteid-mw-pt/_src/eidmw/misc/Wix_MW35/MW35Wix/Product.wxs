@@ -611,7 +611,7 @@
       <Component Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
-        <File Id="pteid_scap_cardlayer.dll" Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-scap-cardlayer.dll" />
+        <!-- <File Id="pteid_scap_cardlayer.dll" Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-scap-cardlayer.dll" /> -->
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
       </Component>
@@ -644,7 +644,7 @@
 
       <Component Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidpkcs11.dll" KeyPath="yes" />
-        <File Id="pteid_scap_pkcs11_dll" Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-scap-pkcs11.dll" />
+        <!-- <File Id="pteid_scap_pkcs11_dll" Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-scap-pkcs11.dll" /> -->
       </Component>
 
     </DirectoryRef>
@@ -743,7 +743,7 @@
             <RegistryValue Type="integer" Name="show_picture" Value="0"/>
             <RegistryValue Type="integer" Name="show_notification" Value="1"/>
             <RegistryValue Type="integer" Name="automatic_cardreading" Value="1"/>
-            <RegistryValue Type="integer" Name="cardreader" Value="-1"/>
+            <RegistryValue Type="integer" Name="cardreader" Value="0"/>
             <RegistryValue Type="integer" Name="registrate_certificate" Value="1"/>
           </RegistryKey>
         </RegistryKey>

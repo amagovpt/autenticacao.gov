@@ -609,7 +609,7 @@
 
 				<Component Win64="no" Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
-			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-scap-cardlayer.dll" />
+          <!--      <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-scap-cardlayer.dll" /> -->
                 <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
@@ -642,7 +642,7 @@
 
 				<Component Win64="no" Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
           			<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidpkcs11.dll" KeyPath="yes" />
-                <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-scap-pkcs11.dll" />
+          <!-- <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-scap-pkcs11.dll" /> -->
 				</Component>
 
 			</DirectoryRef>
@@ -659,7 +659,7 @@
 
 				<Component Id="pkcs11_64" Guid="{3C4751D6-D92C-40ab-8FA5-3A1DF1D927EA}" SharedDllRefCount="yes" Win64="yes">
 			          <File Id="pteidpkcs11_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidpkcs11.dll" KeyPath="yes" />
-          <File Id="pteid_scap_pkcs11_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteid-scap-pkcs11.dll"/>
+          <!--    <File Id="pteid_scap_pkcs11_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteid-scap-pkcs11.dll"/> -->
 				</Component>
 
 				<Component Id="FreeImage_64" Guid="C3CAF347-FBA3-4d65-A23F-C6357541DAB2" SharedDllRefCount="yes">
@@ -819,12 +819,12 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 
 						<RegistryKey Key="configuretool" Action="createAndRemoveOnUninstall">
 							<RegistryValue Type="integer" Name="start_with_windows" Value="1"/>
-							<RegistryValue Type="integer" Name="start_minimized" Value="1"/>
+							<RegistryValue Type="integer" Name="start_minimized" Value="0"/>
 							<RegistryValue Type="integer" Name="show_toolbar" Value="1"/>
 							<RegistryValue Type="integer" Name="show_picture" Value="0"/>
 							<RegistryValue Type="integer" Name="show_notification" Value="1"/>
 							<RegistryValue Type="integer" Name="automatic_cardreading" Value="1"/>
-							<RegistryValue Type="integer" Name="cardreader" Value="-1"/>
+							<RegistryValue Type="integer" Name="cardreader" Value="0"/>
 							<RegistryValue Type="integer" Name="registrate_certificate" Value="1"/>
 						</RegistryKey>
 					</RegistryKey>
