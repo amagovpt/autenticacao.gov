@@ -16,6 +16,7 @@ public class pteid {
     private static PTEID_EIDCard idCard = null;
     
     private static int PTEID_ADDRESS_PIN = 131;
+    private static int PTEID_AUTH_PIN = 129;
     private static int PTEID_PIN_COUNT  = 3;
     
     public static final int CARD_TYPE_ERR = 0;
@@ -394,7 +395,7 @@ public class pteid {
                     PTEID_Pins pins = idCard.getPins();
                     for (long pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                         pin = (pins.getPinByNumber(pinIdx));
-                        if (pin.getPinRef() == PTEID_ADDRESS_PIN)
+                        if (pin.getPinRef() == PTEID_AUTH_PIN)
                             break;
                     }
                 }
