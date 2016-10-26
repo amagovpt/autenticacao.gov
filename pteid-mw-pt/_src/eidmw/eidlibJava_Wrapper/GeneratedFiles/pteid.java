@@ -10,66 +10,66 @@ package pt.gov.cartaodecidadao;;
  * @author ruim
  */
 public class pteid {
-    
+
     private static PTEID_ReaderContext readerContext = null;
     private static PTEID_ReaderSet readerSet = null;
     private static PTEID_EIDCard idCard = null;
-    
+
     private static int PTEID_ADDRESS_PIN = 131;
     private static int PTEID_AUTH_PIN = 129;
     private static int PTEID_PIN_COUNT  = 3;
-    
+
     public static final int CARD_TYPE_ERR = 0;
     public static final int CARD_TYPE_IAS07 = 1;
     public static final int CARD_TYPE_IAS101 = 2;
-    
+
     protected static final char[] Hexhars = {
         '0', '1', '2', '3', '4', '5',
         '6', '7', '8', '9', 'A', 'B',
         'C', 'D', 'E', 'F'
     };
-    
-    
-    
+
+
+
    private static String ashex(byte[] b){
        String st = "";
-       
+
        for(int i=0; i<b.length;i++){
           int temp = b[i] & 0x000000FF;
           st +=Hexhars[(temp >> 4)];
           st +=Hexhars[(temp & 0xf)];
        }
-       
+
        return st;
    }
-   
-   
+
+
     private static int trimStart(byte[] array) {
         int trimmedSize = array.length - 1;
-        
-        while (array[trimmedSize] == 0) 
+
+        while (array[trimmedSize] == 0)
             trimmedSize--;
 
         return trimmedSize;
     }
 
-   
+
    public static void Init(String readerName) throws PteidException{
         try {
             PTEID_ReaderSet.initSDK();
             readerSet = PTEID_ReaderSet.instance();
             if (readerName == null || readerName.isEmpty())
                 readerContext = readerSet.getReaderByNum(0);
-            else 
+            else
                 readerContext = readerSet.getReaderByName(readerName);
-            
+
             idCard = readerContext.getEIDCard();
         } catch (Exception ex) {
             throw new PteidException();
         }
    }
-  
-   
+
+
    public static void Exit(int value) throws PteidException{
         try {
             PTEID_ReaderSet.releaseSDK();
@@ -77,28 +77,28 @@ public class pteid {
             throw new PteidException();
         }
    }
-   
-   
+
+
    public static int GetCardType() throws PteidException{
         try {
             PTEID_CardType cardType = readerContext.getCardType();
-            
+
             return cardType.swigValue();
         } catch (Exception ex) {
             throw new PteidException();
         }
    }
-   
-   
-   public static PTEID_ID GetID() throws PteidException{ 
+
+
+   public static PTEID_ID GetID() throws PteidException{
        try {
             return new PTEID_ID(idCard.getID());
         } catch (Exception ex) {
             throw new PteidException();
         }
    }
-   
-   
+
+
     public static PTEID_ADDR GetAddr() throws PteidException {
         try {
             PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
@@ -118,11 +118,11 @@ public class pteid {
             throw new PteidException();
         }
     }
-    
-    
+
+
     public static PTEID_PIC GetPic() throws PteidException{
         PTEID_PIC pic = null;
-        
+
         try {
             pic = new PTEID_PIC();
             pic.cbeff = new byte[(int)idCard.getID().getPhotoObj().getphotoCbeff().Size()];
@@ -139,15 +139,15 @@ public class pteid {
         } catch (Exception ex) {
             throw new PteidException();
         }
-        
+
         return pic;
     }
-    
+
 
     public static PTEID_Certif[] GetCertificates() throws PteidException {
         PTEID_Certif[] certs = null;
         PTEID_ByteArray ba = new PTEID_ByteArray();
-        
+
         try {
             PTEID_Certificates certificates = idCard.getCertificates();
             certs = new PTEID_Certif[(int)certificates.countAll()];
@@ -164,16 +164,16 @@ public class pteid {
 
         return certs;
     }
-    
-    
-    
+
+
+
     public static int VerifyPIN(byte b, String string) throws PteidException {
         PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
         int triesLeft =  0;
-        
+
         // martinho: artista
         long pinId = b & 0x00000000000000FF;
-            
+
         if (readerContext != null) {
             if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131) {
                 return 0;
@@ -196,8 +196,8 @@ public class pteid {
         }
         return triesLeft;
     }
-    
-    
+
+
     public static int ChangePIN(byte b, String oldPin, String newPin) throws PteidException {
         PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
         int triesLeft = 0;
@@ -216,21 +216,21 @@ public class pteid {
                     if (pin.getPinRef() == pinId)
                         if (pin.changePin(oldPin, newPin, ul, pin.getLabel(),true)) {
                             triesLeft = pin.getTriesLeft();
-                            return 0;
-                        } 
+                            break;
+                        }
                 }
             } catch (Exception ex) {
                 throw new PteidException();
             }
         }
-        return 0;
+        return triesLeft;
     }
-   
-    
+
+
     public static PTEIDPin[] GetPINs() throws PteidException {
         PTEIDPin[] pinArray = null;
         int currentId;
-        
+
         if (readerContext != null) {
             try {
                 PTEID_Pins pins = idCard.getPins();
@@ -257,8 +257,8 @@ public class pteid {
 
         return pinArray;
     }
-    
-    
+
+
     public static PTEID_TokenInfo GetTokenInfo() throws PteidException {
         PTEID_TokenInfo token = null;
 
@@ -273,8 +273,8 @@ public class pteid {
 
         return token;
     }
-    
-    
+
+
     public static byte[] ReadSOD() throws PteidException {
         byte[] sod = null;
         byte[] trimmable;
@@ -282,9 +282,9 @@ public class pteid {
         if (readerContext != null) {
             try {
                 PTEID_ByteArray pba = idCard.getSod().getData();
-               
+
                 int trimmedSize = trimStart(pba.GetBytes());
-                
+
                 sod = new byte[trimmedSize];
                 System.arraycopy(pba.GetBytes(), 0, sod, 0, sod.length);
             } catch (Exception ex) {
@@ -293,17 +293,17 @@ public class pteid {
         }
         return sod;
     }
-    
-    
+
+
     public static int UnblockPIN(byte b, String puk, String newPin) throws PteidException{
         PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
 
 		// martinho: artista
         long pinId = b & 0x00000000000000FF;
-        
+
         if (readerContext!=null){
             try {
-            
+
 		if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131)
 			return 0;
 
@@ -321,13 +321,13 @@ public class pteid {
 
 	return (int)ul.m_long;
     }
-    
-    
+
+
     public static int UnblockPIN_Ext(byte b, String string, String string1, int i) throws PteidException{
     	return UnblockPIN(b,string, string1);
     }
-    
-    
+
+
     public static void SelectADF(byte[] bytes) throws PteidException {
         if (readerContext != null) {
             try {
@@ -344,14 +344,14 @@ public class pteid {
             }
         }
     }
-    
-    
+
+
     public static byte[] ReadFile(byte[] bytes, byte b) throws PteidException {
         PTEID_ByteArray pb = new PTEID_ByteArray();
         byte[] retArray = null;
         byte[] temp;
         PTEID_Pin pin = null;
-        
+
         // martinho: artista
         long pinId = b & 0x00000000000000FF;
 
@@ -368,9 +368,9 @@ public class pteid {
                 }
 
                 idCard.readFile(ashex(bytes), pb, pin);
-                  
+
                 int trimmedSize = trimStart(pb.GetBytes());
-               
+
                 retArray = new byte[trimmedSize];
                 System.arraycopy(pb.GetBytes(), 0, retArray, 0, retArray.length);
             } catch (Exception ex) {
@@ -379,12 +379,12 @@ public class pteid {
         }
         return retArray;
     }
-    
-    
+
+
     public static void WriteFile(byte[] file, byte[] data, byte bpin) throws PteidException{
         PTEID_ByteArray pb = new PTEID_ByteArray(data,data.length);
         PTEID_Pin pin = null;
-        
+
         // martinho: artista
         long pinId = bpin & 0x00000000000000FF;
 
@@ -401,13 +401,13 @@ public class pteid {
                 }
 
                 idCard.writeFile(ashex(file),pb,pin);
-                
+
             } catch (Exception ex) {
                 throw new PteidException();
             }
         }
     }
-    
+
     public static int IsActivated() throws PteidException {
         if (readerContext != null) {
             try {
@@ -418,8 +418,8 @@ public class pteid {
         }
         return 0;
     }
-    
-    
+
+
     public static void Activate(String actPin, byte[] bytes, int i) throws PteidException {
         PTEID_ByteArray pb = new PTEID_ByteArray(bytes, bytes.length);
         if (readerContext != null) {
@@ -430,8 +430,8 @@ public class pteid {
             }
         }
     }
-    
-    
+
+
     public static void SetSODChecking(boolean bln) throws PteidException {
         if (readerContext != null) {
             try {
@@ -455,8 +455,8 @@ public class pteid {
             }
         }
     }
-    
-    
+
+
     public static PTEID_RSAPublicKey GetCardAuthenticationKey() throws PteidException {
         PTEID_RSAPublicKey key = null;
 
@@ -472,11 +472,11 @@ public class pteid {
                 throw new PteidException();
             }
         }
-        
+
         return key;
     }
-    
-    
+
+
     public static PTEID_RSAPublicKey GetCVCRoot() throws PteidException {
         PTEID_RSAPublicKey key = null;
 
@@ -488,17 +488,17 @@ public class pteid {
                 key.modulus = new byte[(int) rootCAKey.getCardAuthKeyModulus().Size()];
                 System.arraycopy(rootCAKey.getCardAuthKeyExponent().GetBytes(), 0, key.exponent, 0, key.exponent.length);
                 System.arraycopy(rootCAKey.getCardAuthKeyModulus().GetBytes(), 0, key.modulus, 0, key.modulus.length);
-            } 
+            }
             catch (PTEID_Exception ex) {
                 System.err.println("Erro no GetCVCRoot: "+ex.GetError());
                 throw new PteidException();
             }
         }
-        
+
         return key;
     }
-    
-    
+
+
     public static byte[] SendAPDU(byte[] bytes) {
         byte[] ret = null;
         if (readerContext != null) {
@@ -513,18 +513,18 @@ public class pteid {
             } catch (Exception ex) {
             }
         }
-        
+
         return ret;
     }
-      
+
 
    private static String findReaderNameWithCard() throws Exception{
 	long nrReaders  = readerSet.readerCount();
-        
+
 	for ( int readerIdx=0; readerIdx<nrReaders; readerIdx++)
             if (readerContext.isCardPresent())
                 return readerSet.getReaderName(readerIdx);
-	
+
         return null;
-   } 
+   }
 }
