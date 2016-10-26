@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{99AB14F6-976E-4FEA-A07D-78479B55163A}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -211,9 +211,6 @@
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ReaderSet.cs">
       <Link>GeneratedFiles\PTEID_ReaderSet.cs</Link>
-    </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SigVerifier.cs">
-      <Link>GeneratedFiles\PTEID_SigVerifier.cs</Link>
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SmartCard.cs">
       <Link>GeneratedFiles\PTEID_SmartCard.cs</Link>
