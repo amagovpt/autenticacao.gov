@@ -385,10 +385,10 @@ public class pteid {
 
 
     public static void WriteFile(byte[] file, byte[] data, byte bpin) throws PteidException{
-        WriteFileInOffset( file, data, bpin, 0/*offset*/);
+        WriteFileInOffset( file, data, bpin, 0/*inOffset*/);
     }
 
-    public static void WriteFileInOffset(byte[] file, byte[] data, byte bpin, int offset) throws PteidException{
+    public static void WriteFileInOffset(byte[] file, byte[] data, byte bpin, int inOffset) throws PteidException{
         PTEID_ByteArray pb = new PTEID_ByteArray(data,data.length);
         PTEID_Pin pin = null;
 
@@ -407,7 +407,7 @@ public class pteid {
                     }
                 }
 
-                idCard.writeFile(ashex(file),pb,pin, "", offset);
+                idCard.writeFile(ashex(file),pb,pin, "", inOffset);
 
             } catch (Exception ex) {
                 throw new PteidException();

@@ -57,7 +57,7 @@
        <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_Wellcome"/>
       <widget class="QWidget" name="page_Identity">
@@ -2144,7 +2144,7 @@ font: 10pt &quot;Arial&quot;;</string>
       <x>150</x>
       <y>760</y>
       <width>151</width>
-      <height>71</height>
+      <height>131</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -2189,7 +2189,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      <property name="geometry">
       <rect>
        <x>25</x>
-       <y>45</y>
+       <y>65</y>
        <width>131</width>
        <height>17</height>
       </rect>
@@ -2306,7 +2306,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>25</x>
-       <y>65</y>
+       <y>45</y>
        <width>131</width>
        <height>17</height>
       </rect>

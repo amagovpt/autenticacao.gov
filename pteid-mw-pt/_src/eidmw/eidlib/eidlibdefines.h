@@ -134,6 +134,7 @@ enum PTEID_Param
 	PTEID_PARAM_GENERAL_LANGUAGE,		//string, user language: fr, nl, en, de, �
 	PTEID_PARAM_GENERAL_SAM_SERVER,
 	PTEID_PARAM_GENERAL_SHOW_JAVA_APPS,
+	PTEID_PARAM_GENERAL_SHOW_UNIV_PDF,
 
 	//LOGGING
 	PTEID_PARAM_LOGGING_DIRNAME,			//string, location of the log-file; $home/pteid/	Full path with volume name.

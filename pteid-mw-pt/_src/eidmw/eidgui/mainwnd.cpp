@@ -202,10 +202,15 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	flags ^= Qt::WindowMaximizeButtonHint;
 	setWindowFlags( flags );
 
-
 	// Hide SCAP and other ugly buttons
-	if (!m_Settings.areJavaAppsEnabled())
+	if (!m_Settings.areJavaAppsEnabled()){
 		hideJavaAppButtons();
+	}
+
+	// Hide Universal PDF button
+    if (!m_Settings.areUnivPdfEnabled() ){
+        hideUniversalSigButton();
+    }
 
 	/*** Setup progress Bar ***/
 	m_progress = new QProgressDialog(this);
@@ -440,6 +445,9 @@ void MainWnd::hideJavaAppButtons() {
 	m_ui.btnShortcut_VerifSign->hide();
 }
 
+void MainWnd::hideUniversalSigButton() {
+	m_ui.btnShortcut_UnivSign->hide();
+}
 
 /*
 // Change Address functionality triggered by a button in the Address tab
@@ -728,7 +736,26 @@ void MainWnd::on_btn_menu_card_clicked()
 void MainWnd::on_btn_menu_tools_clicked()
 {
 	//Trick to hide the Java tools shortcuts in this overlay menu
-	int tools_height = m_Settings.areJavaAppsEnabled() ? 130: 85;
+	int tools_height = 68;
+	if ( m_Settings.areUnivPdfEnabled() ){
+        tools_height += 20;
+        if ( m_Settings.areJavaAppsEnabled() ) tools_height += 43;
+	} else{
+        if ( m_Settings.areJavaAppsEnabled() ){
+            m_ui.lbl_menuTools_Signature->setVisible(false);
+
+            int x = m_ui.lbl_menuTools_PDFSignature->x();
+            int y;
+
+            y = m_ui.lbl_menuTools_PDFSignature->y() + 20;
+            m_ui.lbl_menuTools_VerifySignature->move( x, y);
+
+            y += 20;
+            m_ui.lbl_menuTools_SCAPSignature->move( x, y);
+            tools_height += 43;
+        }
+	}
+
 	m_ui.wdg_submenu_tools->setVisible(true);
 
 	//If defined language is portuguese, then the dialog needs to be larger

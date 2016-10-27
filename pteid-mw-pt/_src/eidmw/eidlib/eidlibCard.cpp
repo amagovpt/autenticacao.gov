@@ -85,7 +85,7 @@ PTEID_CardType PTEID_Card::getType()
 
 	APL_Card *pcard=static_cast<APL_Card *>(m_impl);
 	out = ConvertCardType(pcard->getType());
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -170,7 +170,7 @@ bool PTEID_Card::writeFile(const char *fileID,const PTEID_ByteArray& oData,unsig
 
 	CByteArray bytearray(oData.GetBytes(),oData.Size());
 	out = pcard->writeFile(fileID,bytearray,ulOffset);
-	
+
 	END_TRY_CATCH
 	return out;
 }
@@ -206,7 +206,7 @@ void PTEID_SmartCard::selectApplication(const PTEID_ByteArray &applicationId)
 	CByteArray bytearray(applicationId.GetBytes(),applicationId.Size());
 
 	pcard->selectApplication(bytearray);
-	
+
 	END_TRY_CATCH
 }
 
@@ -228,7 +228,7 @@ PTEID_ByteArray PTEID_SmartCard::sendAPDU(const PTEID_ByteArray& cmd,PTEID_Pin *
 	CByteArray result=pcard->sendAPDU(apdu,pimplPin,csPinCode);
 
 	out.Append(result.GetBytes(),result.Size());
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -236,7 +236,7 @@ PTEID_ByteArray PTEID_SmartCard::sendAPDU(const PTEID_ByteArray& cmd,PTEID_Pin *
 
 long PTEID_SmartCard::readFile(const char *fileID, PTEID_ByteArray &in,PTEID_Pin *pin,const char *csPinCode)
 {
-	long out = 0;	
+	long out = 0;
 
 	BEGIN_TRY_CATCH
 
@@ -251,7 +251,7 @@ long PTEID_SmartCard::readFile(const char *fileID, PTEID_ByteArray &in,PTEID_Pin
 
 	out=pcard->readFile(fileID,bytearray,pimplPin,csPinCode);
 	in=bytearray;
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -287,16 +287,16 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coo
 
 {
 	int rc = 0;
-	
+
 	BEGIN_TRY_CATCH
 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
 
-	PDFSignature *pdf_sig = sig_handler.mp_signature; 
+	PDFSignature *pdf_sig = sig_handler.mp_signature;
 	pdf_sig->setVisibleCoordinates(page, coord_x, coord_y);
 
 	rc = pcard->SignPDF(pdf_sig, location, reason, outfile_path);
-	
+
 	END_TRY_CATCH
 
 	return rc;
@@ -305,7 +305,7 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coo
 
 PTEID_ScapConnection::PTEID_ScapConnection(char *host)
 {
-	m_connection = new ScapSSLConnection(host);	
+	m_connection = new ScapSSLConnection(host);
 }
 
 PTEID_ScapConnection::~PTEID_ScapConnection()
@@ -385,7 +385,7 @@ int PTEID_PDFSignature::getOtherPageCount(const char *input_path)
 
 bool PTEID_SmartCard::writeFile(const char *fileID,const PTEID_ByteArray &baOut,PTEID_Pin *pin,const char *csPinCode, unsigned long ulOffset)
 {
-	bool out = false;	
+	bool out = false;
 
 	BEGIN_TRY_CATCH
 
@@ -399,21 +399,21 @@ bool PTEID_SmartCard::writeFile(const char *fileID,const PTEID_ByteArray &baOut,
 		pimplPin=pcard->getPins()->getPinByNumber(pin->getIndex());
 
 	out=pcard->writeFile(fileID,bytearray,pimplPin,csPinCode,ulOffset);
-	
+
 	END_TRY_CATCH
 
 	return out;
 }
 
-unsigned long PTEID_SmartCard::pinCount() 
-{ 
+unsigned long PTEID_SmartCard::pinCount()
+{
 	unsigned long out = 0;
 
 	BEGIN_TRY_CATCH
 
 	APL_SmartCard *pcard=static_cast<APL_SmartCard *>(m_impl);
 	out = pcard->pinCount();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -458,9 +458,9 @@ unsigned long PTEID_SmartCard::certificateCount()
 
 	APL_SmartCard *pcard=static_cast<APL_SmartCard *>(m_impl);
 	out = pcard->certificateCount();
-	
+
 	END_TRY_CATCH
-	
+
 	return out;
 }
 
@@ -524,7 +524,7 @@ const PTEID_ByteArray& PTEID_SmartCard::getChallenge(bool bForceNewInit)
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
@@ -571,7 +571,7 @@ bool PTEID_SmartCard::verifyChallengeResponse(const PTEID_ByteArray &challenge, 
 	CByteArray baResponse(response.GetBytes(),response.Size());
 
 	out = pcard->verifyChallengeResponse(baChallenge,baResponse);
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -593,15 +593,15 @@ bool PTEID_EIDCard::isApplicationAllowed()
 {
 	bool out = true;
 
-	try														
+	try
 	{
 		out = APL_EIDCard::isApplicationAllowed();
 	}
 	catch(CMWException &e)
-	{									
-		e.GetError();				    
-		throw PTEID_Exception::THROWException(e);	
-	}				
+	{
+		e.GetError();
+		throw PTEID_Exception::THROWException(e);
+	}
 
 	return out;
 }
@@ -614,7 +614,7 @@ bool PTEID_EIDCard::isTestCard()
 
 	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
 	out = pcard->isTestCard();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -628,7 +628,7 @@ bool PTEID_EIDCard::getAllowTestCard()
 
 	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
 	out =  pcard->getAllowTestCard();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -640,7 +640,7 @@ void PTEID_EIDCard::setAllowTestCard(bool allow)
 
 	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
 	pcard->setAllowTestCard(allow);
-	
+
 	END_TRY_CATCH
 }
 
@@ -710,7 +710,7 @@ PTEID_EId& PTEID_EIDCard::getID()
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
@@ -770,7 +770,7 @@ PTEID_Sod& PTEID_EIDCard::getSod()
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
@@ -800,7 +800,7 @@ PTEID_CardVersionInfo& PTEID_EIDCard::getVersionInfo()
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
@@ -832,7 +832,7 @@ PTEID_Certificate &PTEID_EIDCard::getSignature()
 }
 
 const PTEID_ByteArray& PTEID_EIDCard::getRawData(PTEID_RawDataType type)
-{	
+{
 	switch(type)
 	{
 	case PTEID_RAWDATA_ID:
@@ -886,7 +886,7 @@ const PTEID_ByteArray& PTEID_EIDCard::getRawData_Id()
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
@@ -916,7 +916,7 @@ const PTEID_ByteArray& PTEID_EIDCard::getRawData_IdSig()
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
@@ -976,7 +976,7 @@ const PTEID_ByteArray& PTEID_EIDCard::getRawData_Addr()
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
@@ -1006,7 +1006,7 @@ const PTEID_ByteArray& PTEID_EIDCard::getRawData_AddrSig()
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
@@ -1036,7 +1036,7 @@ const PTEID_ByteArray& PTEID_EIDCard::getRawData_Sod()
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
@@ -1066,7 +1066,7 @@ const PTEID_ByteArray& PTEID_EIDCard::getRawData_CardInfo()
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
@@ -1096,7 +1096,7 @@ const PTEID_ByteArray& PTEID_EIDCard::getRawData_TokenInfo()
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
@@ -1180,7 +1180,7 @@ bool PTEID_EIDCard::ChangeCapPin(const char *new_pin){
 	APL_EIDCard *pcard = static_cast<APL_EIDCard *>(m_impl);
 
 	out = pcard->ChangeCapPin(new_pin);
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -1196,7 +1196,7 @@ bool PTEID_EIDCard::ChangeAddress(char *secretCode, char *process, t_address_cha
 	APL_EIDCard *pcard = static_cast<APL_EIDCard *>(m_impl);
 
 	out = pcard->ChangeAddress(secretCode, process, callback, callback_data);
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -1340,7 +1340,7 @@ const PTEID_ByteArray& PTEID_EIDCard::getRawData_Challenge()
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
@@ -1370,7 +1370,7 @@ const PTEID_ByteArray& PTEID_EIDCard::getRawData_Response()
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
@@ -1423,7 +1423,7 @@ PTEIDSDK_API long PTEID_Init(char *ReaderName){
 			readerContext = &ReaderSet.getReaderByName(ReaderName);
 
 		PTEID_EIDCard &card = readerContext->getEIDCard();
-		
+
 		//Init the compatibility method with PT language
 		PTEID_Config config(PTEID_PARAM_GENERAL_LANGUAGE);
 		config.setString("nl");
@@ -1495,7 +1495,7 @@ PTEIDSDK_API tCompCardType PTEID_GetCardType(){
 PTEIDSDK_API long PTEID_GetID(PTEID_ID *IDData){
 
 	if (readerContext!=NULL) {
-		try 
+		try
 		{
 			PTEID_EId &id = readerContext->getEIDCard().getID();
 
@@ -1534,17 +1534,17 @@ PTEIDSDK_API long PTEID_GetID(PTEID_ID *IDData){
 		{
 			long errorCode = ex.GetError();
 
-			if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && 
+			if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE &&
 				errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN)
 			{
 				return SC_ERROR_OBJECT_NOT_VALID;
 			}
 			else
-			{ 
+			{
 				return SC_ERROR_INTERNAL;
 			}
 
-		
+
 		}
 	}
 
@@ -1555,7 +1555,7 @@ PTEIDSDK_API long PTEID_GetAddr(PTEID_ADDR *AddrData){
 	int pin_id;
 	unsigned long remaining_tries;
 
-	if (readerContext!=NULL) 
+	if (readerContext!=NULL)
 	{
 
 		try
@@ -1616,16 +1616,16 @@ PTEIDSDK_API long PTEID_GetAddr(PTEID_ADDR *AddrData){
 		{
 			long errorCode = ex.GetError();
 
-			if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && 
+			if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE &&
 				errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN)
 			{
 				return SC_ERROR_OBJECT_NOT_VALID;
 			}
 			else
-			{ 
+			{
 				return SC_ERROR_INTERNAL;
 			}
-		
+
 		}
 
 	}
@@ -1688,26 +1688,32 @@ PTEIDSDK_API long PTEID_VerifyPIN(unsigned char PinId,	char *Pin, long *triesLef
 		if (PinId != 1 && PinId != 129 && PinId != 130 && PinId != 131)
 			return 0;
 
-		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
-		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++) {
-			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
-			if (pin.getPinRef() == PinId) {
-				if (Pin != NULL)
-					ret = pin.verifyPin(Pin, tleft, false);
-				else
-					ret = pin.verifyPin("", tleft);
-				//martinho: verify pin is not working properly for readers without pinpad at this moment,
-				//this is a workaround
-				*triesLeft = pin.getTriesLeft();
+        try{
+            PTEID_Pins &pins = readerContext->getEIDCard().getPins();
+            for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++) {
+                PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
+                if (pin.getPinRef() == PinId) {
+                    if (Pin != NULL)
+                        ret = pin.verifyPin(Pin, tleft, false);
+                    else
+                        ret = pin.verifyPin("", tleft);
+                    //martinho: verify pin is not working properly for readers without pinpad at this moment,
+                    //this is a workaround
+                    *triesLeft = pin.getTriesLeft();
 
-				if (ret)
-					return 0;
-				else if (*triesLeft == 0)
-					return SC_ERROR_AUTH_METHOD_BLOCKED;
-				else 
-					return SC_ERROR_PIN_CODE_INCORRECT;
+                    if (ret)
+                        return 0;
+                    else if (*triesLeft == 0)
+                        return SC_ERROR_AUTH_METHOD_BLOCKED;
+                    else
+                        return SC_ERROR_PIN_CODE_INCORRECT;
 
-			}
+                }
+            }
+		}
+		catch(PTEID_Exception &ex)
+		{
+			return SC_ERROR_AUTH_METHOD_BLOCKED;
 		}
 	}
 
@@ -1832,9 +1838,9 @@ PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszN
 			return PTEID_E_NOT_INITIALIZED;
 		}
 	}
-	
+
 	return PTEID_E_NOT_INITIALIZED;
-	
+
 }
 
 PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft, unsigned long ulFlags){
@@ -1846,7 +1852,7 @@ PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *
 }
 
 PTEIDSDK_API long PTEID_SelectADF(unsigned char *adf, long adflen){
-	
+
 	if (readerContext!=NULL) {
 
 		try {
@@ -2015,7 +2021,7 @@ PTEIDSDK_API long PTEID_SendAPDU(const unsigned char *ucRequest, unsigned long u
 }
 
 PTEIDSDK_API int PTEID_IsPinpad() {
-	
+
 	if (readerContext != NULL) {
 		try
 		{
@@ -2037,11 +2043,11 @@ PTEIDSDK_API int PTEID_IsEMVCAP() {
 }
 
 
-//This should implement all the Mutual Auth Process and generate the input to the Signature thats sent in the 
+//This should implement all the Mutual Auth Process and generate the input to the Signature thats sent in the
 //EXTERNAL AUTHENTICATE command (the one that is signed by the CVC private key)
-PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,					
-    unsigned char *pucChallenge, int iChallengeLen) 
-{		
+PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,
+    unsigned char *pucChallenge, int iChallengeLen)
+{
 
 	if (readerContext != NULL) {
 
@@ -2050,7 +2056,7 @@ PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,
 		//Accessing PTEID_EIDCard internal object, hope he doesn't mind :)
 		APL_Card *card_impl = static_cast<APL_Card *>(card.m_impl);
 		securityContext = new SecurityContext(card_impl);
-		
+
 		CByteArray cvc_certificate(pucCert, iCertLen);
 		securityContext->verifyCVCCertificate(cvc_certificate);
 
@@ -2066,7 +2072,7 @@ PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,
 	}
 
 	return PTEID_E_NOT_INITIALIZED;
-	
+
 }
 
 PTEIDSDK_API long PTEID_CVC_Authenticate(unsigned char *pucSignedChallenge, int iSignedChallengeLen)

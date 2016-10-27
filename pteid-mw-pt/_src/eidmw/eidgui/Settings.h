@@ -323,8 +323,13 @@ public:
 
 		{
 			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SHOW_JAVA_APPS);
-			m_showJavaApps = config.getLong() == 1;
-		
+			m_showJavaApps = config.getLong() == 0;
+
+		}
+
+		{
+			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SHOW_UNIV_PDF);
+			m_showUnivPdf = config.getLong() == 0;
 		}
 	}
 	//------------------------------------------------------
@@ -365,7 +370,7 @@ public:
 		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTMINI);
 		config.setLong(m_bStartMinimized);
 	}
-	
+
 	bool getShowPicture( void )
 	{
 		return m_bShowPicture;
@@ -409,12 +414,12 @@ public:
 #ifdef WIN32
 		QSettings sLM("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
 		bool bLMExist = sLM.value("pteid").toString()!="";
-			
+
 #endif
 
 		if (m_bAutoStartup)
 		{
-			
+
 			QString filePath = QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
 #ifdef WIN32
 			QSettings s("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
@@ -422,7 +427,7 @@ public:
 				s.remove("pteid"); //if the HKEY_LOCAL_MACHINE exist, we never need the HKEY_CURRENT_USER
 			else
 				s.setValue("pteid" , filePath );
-			
+
 #endif
 #ifdef __APPLE__
 //            QProcess::execute("sudo defaults write com.apple.loginwindow LoginHook" + m_strExePath);
@@ -456,6 +461,11 @@ public:
 	bool areJavaAppsEnabled()
 	{
 		return m_showJavaApps;
+	}
+
+	bool areUnivPdfEnabled()
+	{
+		return m_showUnivPdf;
 	}
 
 	void setRegCert( bool bRegCert )
@@ -524,7 +534,7 @@ public:
 		return m_DefSavePath;
 	}
 
-	void setProxyHost(QString const& proxy_host) 
+	void setProxyHost(QString const& proxy_host)
 	{
 		m_proxy_host = proxy_host;
 
@@ -533,11 +543,11 @@ public:
 	}
 
 	QString getProxyHost()
-	{ 
-		return m_proxy_host; 
+	{
+		return m_proxy_host;
 	}
 
-	void setProxyUsername(QString const& proxy_user) 
+	void setProxyUsername(QString const& proxy_user)
 	{
 		m_proxy_username = proxy_user;
 
@@ -554,12 +564,12 @@ public:
 	}
 
 	QString getProxyUsername()
-	{ 
-		return m_proxy_username; 
+	{
+		return m_proxy_username;
 	}
 
 	QString getProxyPwd()
-	{ 
+	{
 		return m_proxy_pwd;
 	}
 
@@ -593,13 +603,14 @@ private:
 	bool	m_bAutoStartup;			//!< start the app when windows starts (T/F)
 	bool	m_bRegCert;				//!< register certificates on insert (T/F)
 	bool	m_bRemoveCert;			//!< remove certificates on close (T/F)
-	bool 	m_showJavaApps;     // wether we should show the SCAP/DSS buttons...
+	bool 	m_showJavaApps;         // wether we should show the SCAP/DSS buttons...
+	bool    m_showUnivPdf;          // Universal Signature button
 	QString m_strExePath;			//!< path to the executable
 	unsigned long		m_SelectedReader;		//!< selected reader (-1=none)
 
 	QString	m_GUIVersion;			//!! Full version of the GUI
 	QString	m_DefSavePath;			//!< default save path for eid,xml,tlv files
-	
+
 };
 
 #endif // SETTINGS_H

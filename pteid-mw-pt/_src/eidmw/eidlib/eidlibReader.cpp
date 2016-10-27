@@ -50,7 +50,7 @@ namespace eIDMW
 /*****************************************************************************************
 ------------------------------------ PTEID_Object ---------------------------------------
 *****************************************************************************************/
-PTEID_Object::PTEID_Object(const SDK_Context *context,void *impl) 
+PTEID_Object::PTEID_Object(const SDK_Context *context,void *impl)
 {
 	//m_mutex=NULL;
 	m_context=NULL;
@@ -58,7 +58,7 @@ PTEID_Object::PTEID_Object(const SDK_Context *context,void *impl)
 	Init(context,impl);
 }
 
-PTEID_Object::~PTEID_Object() 
+PTEID_Object::~PTEID_Object()
 {
 	Release();
 
@@ -75,7 +75,7 @@ PTEID_Object::~PTEID_Object()
 	}
 }
 
-void PTEID_Object::Init(const SDK_Context *context,void *impl) 
+void PTEID_Object::Init(const SDK_Context *context,void *impl)
 {
 	m_impl=impl;
 	m_delimpl=false;
@@ -103,14 +103,14 @@ void PTEID_Object::Init(const SDK_Context *context,void *impl)
 void PTEID_Object::Release()
 {
 	std::map<unsigned long,PTEID_Object *>::const_iterator itr;
-	
+
 	itr = m_objects.begin();
 	while(itr!=m_objects.end())
 	{
 		delete itr->second;
 		m_objects.erase(itr->first);
 		itr = m_objects.begin();
-	} 
+	}
 }
 
 void PTEID_Object::checkContextStillOk() const
@@ -240,7 +240,7 @@ void PTEID_Object::delObject(void *impl)
 {
 	//Delete the object with m_impl=impl  (and remove it from the map)
 	PTEID_Object *obj=NULL;
-	
+
 	std::map<unsigned long,PTEID_Object *>::const_iterator itr;
 	for(itr=m_objects.begin();itr!=m_objects.end();itr++)
 	{
@@ -259,12 +259,12 @@ void PTEID_Object::delObject(void *impl)
 class PTEID_CheckRelease
 {
 public:
-	PTEID_CheckRelease() 
+	PTEID_CheckRelease()
 	{
 		m_ReleaseOk=true;
 	}
 
-	~PTEID_CheckRelease() 
+	~PTEID_CheckRelease()
 	{
 		if(!m_ReleaseOk)
 		{
@@ -500,7 +500,7 @@ bool PTEID_ReaderSet::flushCache()
 	BEGIN_TRY_CATCH
 
 	out = AppLayer.flushCache();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -600,7 +600,7 @@ bool PTEID_ReaderContext::isCardPresent()
 
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	out = pimpl->isCardPresent();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -614,7 +614,7 @@ const char *PTEID_ReaderContext::getName()
 
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	out = pimpl->getName();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -628,7 +628,7 @@ PTEID_CardType PTEID_ReaderContext::getCardType()
 
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	out = ConvertCardType(pimpl->getCardType());
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -640,7 +640,7 @@ void PTEID_ReaderContext::releaseCard(bool bAllReference)
 
 	if(bAllReference)
 		Release();
-		
+
 	END_TRY_CATCH
 }
 
@@ -652,7 +652,7 @@ bool PTEID_ReaderContext::isCardChanged(unsigned long &ulOldId)
 
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	out = pimpl->isCardChanged(ulOldId);
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -736,7 +736,7 @@ unsigned long PTEID_ReaderContext::SetEventCallback(void (* callback)(long lRet,
 
  	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	out = pimpl->SetEventCallback(callback,pvRef);
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -748,7 +748,7 @@ void PTEID_ReaderContext::StopEventCallback(unsigned long ulHandle)
 
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	pimpl->StopEventCallback(ulHandle);
-	
+
 	END_TRY_CATCH
 }
 
@@ -758,7 +758,7 @@ void PTEID_ReaderContext::BeginTransaction()
 
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	pimpl->BeginTransaction();
-	
+
 	END_TRY_CATCH
 }
 
@@ -768,7 +768,7 @@ void PTEID_ReaderContext::EndTransaction()
 
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	pimpl->EndTransaction();
-	
+
 	END_TRY_CATCH
 }
 
@@ -779,7 +779,7 @@ bool PTEID_ReaderContext::isPinpad()
 
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	out = pimpl->isPinpad();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -794,7 +794,7 @@ bool PTEID_ReaderContext::isVirtualReader()
 
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	out = pimpl->isVirtualReader();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -828,6 +828,8 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER);		break;
 	case PTEID_PARAM_GENERAL_SHOW_JAVA_APPS:
 		m_impl = new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SHOW_JAVA_APPS);      break;
+	case PTEID_PARAM_GENERAL_SHOW_UNIV_PDF:
+		m_impl = new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SHOW_UNIV_PDF);      break;
 
 	//LOGGING
 	case PTEID_PARAM_LOGGING_DIRNAME:
@@ -854,7 +856,7 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_CERTCACHE_WAITDELAY);	break;
 
 	//PROXY
-	case PTEID_PARAM_PROXY_HOST: 
+	case PTEID_PARAM_PROXY_HOST:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);			break;
 	case PTEID_PARAM_PROXY_PORT:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT);			break;
@@ -863,7 +865,7 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 	case PTEID_PARAM_PROXY_PWD:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_PROXY_PWD);		    break;
 
-	case PTEID_PARAM_PROXY_PACFILE: 
+	case PTEID_PARAM_PROXY_PACFILE:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_PROXY_PACFILE);		break;
 	case PTEID_PARAM_PROXY_CONNECT_TIMEOUT:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_PROXY_CONNECT_TIMEOUT);break;
@@ -887,7 +889,7 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_VIRTUALKBD);		break;
 	case PTEID_PARAM_GUITOOL_AUTOCARDREAD:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_AUTOCARDREAD);	break;
-	case PTEID_PARAM_GUITOOL_CARDREADNUMB:	
+	case PTEID_PARAM_GUITOOL_CARDREADNUMB:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_CARDREADNUMB);	break;
 	case PTEID_PARAM_GUITOOL_REGCERTIF:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_REGCERTIF);		break;
@@ -897,7 +899,7 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_FILESAVE);		break;
 
 	//XSIGN
-	case PTEID_PARAM_XSIGN_TSAURL: 
+	case PTEID_PARAM_XSIGN_TSAURL:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_XSIGN_TSAURL);			break;
 	case PTEID_PARAM_XSIGN_ONLINE:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_XSIGN_ONLINE);			break;

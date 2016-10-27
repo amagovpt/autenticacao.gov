@@ -336,6 +336,7 @@ private slots:
 	void customEvent( QEvent * event );
 	void changeEvent( QEvent *event );
 	void hideJavaAppButtons();
+	void hideUniversalSigButton();
 	void clearErrorSOD() { error_sod = false; }
 	void setErrorSOD() { error_sod = true; }
 
