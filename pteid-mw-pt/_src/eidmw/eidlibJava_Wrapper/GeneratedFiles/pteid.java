@@ -47,10 +47,10 @@ public class pteid {
     private static int trimStart(byte[] array) {
         int trimmedSize = array.length - 1;
 
-        while (array[trimmedSize] == 0)
+        while( (trimmedSize>=0) && ( array[trimmedSize] == 0 ) )
             trimmedSize--;
 
-        return trimmedSize;
+        return (trimmedSize+1);
     }
 
 
@@ -362,7 +362,7 @@ public class pteid {
                     PTEID_Pins pins = idCard.getPins();
                     for (long pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                         pin = (pins.getPinByNumber(pinIdx));
-                        if (pin.getPinRef() == PTEID_ADDRESS_PIN)
+                        if (pin.getPinRef() == pinId )
                             break;
                     }
                 }
@@ -370,10 +370,13 @@ public class pteid {
                 idCard.readFile(ashex(bytes), pb, pin);
 
                 int trimmedSize = trimStart(pb.GetBytes());
+                if ( ( trimmedSize == 0 ) && ( pb.Size() > 0 ) ) trimmedSize = (int)pb.Size();
 
                 retArray = new byte[trimmedSize];
+
                 System.arraycopy(pb.GetBytes(), 0, retArray, 0, retArray.length);
             } catch (Exception ex) {
+                System.err.println("Erro no ReadFile: " + ex.getMessage() );
                 throw new PteidException();
             }
         }
@@ -382,6 +385,10 @@ public class pteid {
 
 
     public static void WriteFile(byte[] file, byte[] data, byte bpin) throws PteidException{
+        WriteFileInOffset( file, data, bpin, 0/*offset*/);
+    }
+
+    public static void WriteFileInOffset(byte[] file, byte[] data, byte bpin, int offset) throws PteidException{
         PTEID_ByteArray pb = new PTEID_ByteArray(data,data.length);
         PTEID_Pin pin = null;
 
@@ -395,12 +402,12 @@ public class pteid {
                     PTEID_Pins pins = idCard.getPins();
                     for (long pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                         pin = (pins.getPinByNumber(pinIdx));
-                        if (pin.getPinRef() == PTEID_AUTH_PIN)
+                        if (pin.getPinRef() == pinId)
                             break;
                     }
                 }
 
-                idCard.writeFile(ashex(file),pb,pin);
+                idCard.writeFile(ashex(file),pb,pin, "", offset);
 
             } catch (Exception ex) {
                 throw new PteidException();
@@ -515,6 +522,19 @@ public class pteid {
         }
 
         return ret;
+    }
+
+
+    public static long CAP_ChangeCapPin(String paramString1, byte[] paramArrayOfByte, PTEID_Proxy_Info paramPTEID_Proxy_Info, String paramString2, String paramString3){
+        return 0;
+    }
+
+    public static int CAP_GetCapPinChangeProgress(){
+        return 0;
+    }
+
+    public static void CAP_CancelCapPinChange(){
+        return;
     }
 
 
