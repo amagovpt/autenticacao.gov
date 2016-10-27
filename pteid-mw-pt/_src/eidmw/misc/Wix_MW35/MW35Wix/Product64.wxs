@@ -165,9 +165,9 @@
           
           <Directory Id="DSS" Name="DSS"/>
           <Directory Id="SCAP" Name="SCAP">
-            <Directory Id="CERTS_SCAP_DIR" Name="certificates"/>
-            <Directory Id="SCAP_SYSWOW" Name="syswow"/>
-            <Directory Id="SCAP_AMD64" Name="amd64"/>
+            <!--  <Directory Id="CERTS_SCAP_DIR" Name="certificates"/> -->
+            <!--  <Directory Id="SCAP_SYSWOW" Name="syswow"/> -->
+            <!--  <Directory Id="SCAP_AMD64" Name="amd64"/> -->
           </Directory>
             <Directory Id="EIDSTORE" Name="eidstore">
 						<Directory Id="CERTSDIR" Name="certs"/>
@@ -221,8 +221,6 @@
 				</Component>
 			</DirectoryRef>
 
-
-
     <DirectoryRef Id="DSS">
       <Component Id="DSSApp" Guid="{CDA14D17-04E8-4f4b-BEE1-771A0DDC2558}">
         <File Id="dss_standalone.exe" Name="dss-standalone.exe" KeyPath="yes" Source="..\..\..\misc\DSS\dss-standalone.exe" />
@@ -230,22 +228,30 @@
       </Component>
     </DirectoryRef>
 
-
+    <!-- 
     <DirectoryRef Id="SCAP">
       <Component Id="scap" Guid="{BFA2692F-44F0-4d76-8950-5FF9E0D117F4}">
+         <File Source="$(var.PTEID_BUILD_FOLDER_X64)\AttributeWindow.exe" KeyPath="yes" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X64)\AttributeWindow_pt.qm" />
+        
         <File Source="..\..\scap\SCAP-Signature-runnable.jar" KeyPath="yes" />
         <File Source="..\..\scap\config.properties" />
         <File Source="..\..\scap\logging.properties" />
         <File Id="libcurl4A" Source="..\..\scap\libcurl4.dll" />
+        
       </Component>
     </DirectoryRef>
+    -->
 
+    <!-- 
     <DirectoryRef Id="SCAP_AMD64">
       <Component Id="scapAmd64" Guid="{BFA2692F-44F0-4d76-1250-5FF9E0D117F4}">
         <File Source="..\..\scap\amd64\libcurl4.dll" />        
       </Component>
     </DirectoryRef>
+    -->
 
+<!-- 
     <DirectoryRef Id="SCAP_SYSWOW">
       <Component Id="scapSyswow" Guid="{BFA2692F-44F0-4d76-8950-5FF9E0D237F4}">
         <File Id="libeay31B" Source="..\..\scap\syswow\libeay32.dll" />
@@ -254,7 +260,7 @@
         <File Id="popplerA" Source="..\..\scap\syswow\pteid-poppler.dll"/>
       </Component>
     </DirectoryRef>
-    
+ 
     <DirectoryRef Id="CERTS_SCAP_DIR">
       <Component Id="CertsScap" Guid="{750F471B-6A83-4118-A0AF-2A138B770AF6}">
         <File Source="..\..\scap\certificates\Teste Cartao de Cidadao 001.cer" />
@@ -277,8 +283,9 @@
         <File Source="..\..\scap\certificates\Teste EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.cer"/>
       </Component>
     </DirectoryRef>
-    
-    <DirectoryRef Id="IMAGEFORMATS">
+    -->
+
+      <DirectoryRef Id="IMAGEFORMATS">
       <Component Id="ImagePlugins" Guid="{750F471B-6A83-4118-A0AF-2A138B770AC6}">
         <File Source="$(var.PTEID_QT_IMAGEFORMATS)\qico4.dll" KeyPath="yes"/>
         <File Source="$(var.PTEID_QT_IMAGEFORMATS)\qjpeg4.dll"/>
@@ -551,6 +558,8 @@
 				<Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidgui.exe" KeyPath="yes" />
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCpp.dll" />
+          <File Source="$(var.PTEID_BUILD_FOLDER_X64)\AttributeWindow.exe" />
+          <File Source="$(var.PTEID_BUILD_FOLDER_X64)\AttributeWindow_pt.qm" />
 				</Component>
 
 
@@ -893,10 +902,7 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 				<ComponentRef Id="License"/>
 				<ComponentRef Id="LogDir"/>
 				<ComponentRef Id="DSSApp"/>
-        <ComponentRef Id="scap"/>
-        <ComponentRef Id="CertsScap"/>
-        <ComponentRef Id="scapAmd64"/>
-        <ComponentRef Id="scapSyswow"/>
+                
 				<ComponentRef Id="Extensions"/>
 				<ComponentRef Id="FireFoxRoot"/>
 				<ComponentRef Id="XPIRoot"/>
@@ -1023,86 +1029,7 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 							Execute="deferred"
 							Return="asyncNoWait"
 					/>
-
-			<!-- 
-    <CustomAction Id="StopGui"
-                  BinaryKey="KILLPROCESS"
-                  ExeCommand="pteidgui.exe"
-                  Impersonate="no"
-                  Return="ignore"
-                  Execute="deferred"
-                 />
-
-    <CustomAction Id="StopGui35"
-              BinaryKey="KILLPROCESS"
-              ExeCommand="pteidgui.exe"
-              Impersonate="no"
-              Return="ignore"
-              Execute="deferred"
-                  />
-    
-    <CustomAction Id="StopGui35_Remove"
-              BinaryKey="KILLPROCESS"
-              ExeCommand="pteidgui.exe"
-              Impersonate="no"
-              Return="ignore"
-              Execute="deferred"
-                  />
-
-    <CustomAction Id="StopSysTray"
-              BinaryKey="KILLPROCESS"
-              ExeCommand="pteidsystemtray.exe"
-              Impersonate="no"
-              Return="ignore"
-              Execute="deferred"
-                 />
-    
-    <CustomAction Id="StopXSign"
-                  BinaryKey="KILLPROCESS"
-                  ExeCommand="xsign.exe"
-                  Impersonate="no"
-                  Return="ignore"
-                  Execute="deferred"
-                 />
-    
-    <CustomAction Id="StopXSign35"
-                  BinaryKey="KILLPROCESS"
-                  ExeCommand="pteidxsign.exe"
-                  Impersonate="no"
-                  Return="ignore"
-                  Execute="deferred"
-                  />
-
-    <CustomAction Id="StopXSign35_Remove"
-              BinaryKey="KILLPROCESS"
-              ExeCommand="pteidxsign.exe"
-              Impersonate="no"
-              Return="ignore"
-              Execute="deferred"
-                  />
-
-    <Binary Id="KILLPROCESS" SourceFile="..\..\..\misc\Wix_MW35\Kill_Process\Release\Kill_Process.exe"/>
--->
-			<!--     <Binary Id="MarkHidden" SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>   
-           <Binary Id="PTEID_CLEANUP" SourceFile="..\..\..\misc\Wix_MW35\pteidcleanup\Release\pteidcleanup.exe"/>
-	-->
-
-
-			<!--
-    Cleanup parameters supported:
-    - Avoid to run the cleanup process              =>  CLEANUP_NO=1
-    - Force de cleanup to kill all locking process  =>  CLEANUP_FORCE=1
-    - Define a specific log file                    =>  CLEANUP_LOG=<FileName>
--->
-			<CustomAction Id="ForceCleanup" Property="ForceCleanup" Value="-f " />
-			<CustomAction Id="NotForceCleanup" Property="ForceCleanup" Value="" />
-
-			<CustomAction Id="LogCleanup" Property="LogCleanup" Value="-l &quot;[CLEANUP_LOG]&quot; " />
-			<CustomAction Id="NotLogCleanup" Property="LogCleanup" Value="" />
-
-			<CustomAction Id="IsQuietMode" Property="QuietMode" Value="-q " />
-			<CustomAction Id="NotIsQuietMode" Property="QuietMode" Value="" />
-
+			
 			<CustomAction Id="IsPrivileged" Error="!(loc.AdminNeeded)" />
 			<CustomAction Id="PreventDowngrading" Error="!(loc.NoDowngrade)" />
 			<Property Id="RUNDLLPATH" Value="C:\Windows\System32\rundll32.exe"> </Property>
@@ -1129,26 +1056,7 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 				<Custom Action="SetARPINSTALLLOCATION" After="InstallValidate"></Custom>
 
 				<Custom Action="IsPrivileged" Before="LaunchConditions">Not Privileged</Custom>
-				<!---
-      <Custom Action="StopGui"         Before="InstallFiles">1</Custom>
-      <Custom Action="StopGui35"       Before="InstallFiles">1</Custom>
-      <Custom Action="StopSysTray"     Before="InstallFiles">1</Custom>
-      <Custom Action="StopXSign"       Before="InstallFiles">1</Custom>
-      <Custom Action="StopXSign35"     Before="InstallFiles">1</Custom>
-
-      <Custom Action="StopGui35_Remove"       Before="RemoveFiles">1</Custom>
-      <Custom Action="StopXSign35_Remove"     Before="RemoveFiles">1</Custom>
--->
-				<!---
-      <Custom Action="IsQuietMode" Before="PteidCleanup"><![CDATA[UILevel<5 OR NOT UILevel]]></Custom>
-      <Custom Action="NotIsQuietMode" Before="PteidCleanup"><![CDATA[UILevel>=5]]></Custom>
-
-      <Custom Action="LogCleanup" Before="PteidCleanup">CLEANUP_LOG</Custom>
-      <Custom Action="NotLogCleanup" Before="PteidCleanup">NOT CLEANUP_LOG</Custom>
-     
-      <Custom Action="ForceCleanup" Before="PteidCleanup">CLEANUP_FORCE=1</Custom>
-      <Custom Action="NotForceCleanup" Before="PteidCleanup"><![CDATA[CLEANUP_FORCE<>1 OR NOT CLEANUP_FORCE]]></Custom>
-     -->
+		
 	<Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
 	<Custom Action="CleanMinidriverKeys" After="RemoveRegistryValues">NOT Installed</Custom>
 	<Custom Action="MinidriverManualInstall" After="InstallFiles"> NOT Installed and VersionNT = 600</Custom>

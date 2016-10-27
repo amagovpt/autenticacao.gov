@@ -134,8 +134,8 @@
           <Directory Id="DSS" Name="DSS"/>
 
           <Directory Id="SCAP" Name="SCAP">
-            <Directory Id="CERTS_SCAP_DIR" Name="certificates"/>
-            <Directory Id="SCAP_SYSWOW" Name="syswow"/>
+           <!-- <Directory Id="CERTS_SCAP_DIR" Name="certificates"/> -->
+          <!--  <Directory Id="SCAP_SYSWOW" Name="syswow"/> -->
           </Directory>
          
           <Directory Id="EIDSTORE" Name="eidstore">
@@ -274,15 +274,19 @@
       </Component>
     </DirectoryRef>
 
+    <!-- 
     <DirectoryRef Id="SCAP">
       <Component Id="scap" Guid="{BFA2692F-44F0-4d76-8950-5FF9E0D117F4}">
+
         <File Source="..\..\scap\SCAP-Signature-runnable.jar" KeyPath="yes" />
         <File Source="..\..\scap\config.properties" />
         <File Source="..\..\scap\logging.properties" />
         <File Source="..\..\scap\libcurl4.dll" />
       </Component>
     </DirectoryRef>
+    -->
 
+    <!-- 
     <DirectoryRef Id="SCAP_SYSWOW">
       <Component Id="scapSyswow" Guid="{BFA2692F-44F0-4d76-8950-5FF9E0D237F4}">
         <File Id="libeay31B" Source="..\..\scap\syswow\libeay32.dll" />
@@ -291,6 +295,7 @@
         <File Id="popplerA" Source="..\..\scap\syswow\pteid-poppler.dll"/>
       </Component>
     </DirectoryRef>
+    
     
     <DirectoryRef Id="CERTS_SCAP_DIR">
       <Component Id="CertsScap" Guid="{750F471B-6A83-4118-A0AF-2A138B770AF6}">
@@ -314,6 +319,7 @@
         <File Source="..\..\scap\certificates\Teste EC_de_Autenticacao_do_Cartao_de_Cidadao_0008.cer"/>
       </Component>
     </DirectoryRef>
+    -->
 
     <DirectoryRef Id="CRLDIR">
       <Component Id="CrlDir" Guid="{5731B322-17EE-4d08-90A5-9DB53F53EC29}">
@@ -556,6 +562,10 @@
       <Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidgui.exe" KeyPath="yes" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCpp.dll" />
+        
+        <!-- SCAP v2 has a dependency on pteidlibCpp.dll so its practical to include it here -->
+        <File Source="..\..\scap-v2\AttributeWindow.exe" KeyPath="yes" />
+        <File Source="..\..\scap-v2\SCAP-signature_pt.qm" />
       </Component>
 
       <Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
@@ -920,43 +930,7 @@
               Return="ignore"
               Execute="deferred"
               />
-
-    <!-- 
-    <CustomAction Id="StopGui"
-                  BinaryKey="KILLPROCESS"
-                  ExeCommand="pteidgui.exe"
-                  Impersonate="no"
-                  Return="ignore"
-                  Execute="deferred"
-                 />
-
-    <CustomAction Id="StopGui35"
-              BinaryKey="KILLPROCESS"
-              ExeCommand="pteidgui.exe"
-              Impersonate="no"
-              Return="ignore"
-              Execute="deferred"
-                  />
-    
-    <CustomAction Id="StopGui35_Remove"
-              BinaryKey="KILLPROCESS"
-              ExeCommand="pteidgui.exe"
-              Impersonate="no"
-              Return="ignore"
-              Execute="deferred"
-                  />
-
-    <CustomAction Id="StopSysTray"
-              BinaryKey="KILLPROCESS"
-              ExeCommand="pteidsystemtray.exe"
-              Impersonate="no"
-              Return="ignore"
-              Execute="deferred"
-                 />
-    
-    <Binary Id="KILLPROCESS" SourceFile="..\..\..\misc\Wix_MW35\Kill_Process\Release\Kill_Process.exe"/>
--->
-    
+ 
     <?if $(var.PTEID_TARGET_RUNTIME) = VCR8 ?>
       <Binary Id="MarkHidden" SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>
       <Binary Id="CleanMdrvKeys" SourceFile="$(var.PTEID_BUILD_FOLDER_X86)clean_mdrv_keys.exe"/>
@@ -964,21 +938,6 @@
       <Binary Id="MarkHidden"    SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Build\Win32\VC9\Release\MarkHidden.exe" />
       <Binary Id="CleanMdrvKeys" SourceFile="$(var.PTEID_BUILD_FOLDER_X86)clean_mdrv_keys.exe" />
     <?endif?>
-
-    <!--
-    Cleanup parameters supported:
-    - Avoid to run the cleanup process              =>  CLEANUP_NO=1
-    - Force de cleanup to kill all locking process  =>  CLEANUP_FORCE=1
-    - Define a specific log file                    =>  CLEANUP_LOG=<FileName>
--->
-    <CustomAction Id="ForceCleanup" Property="ForceCleanup" Value="-f " />
-    <CustomAction Id="NotForceCleanup" Property="ForceCleanup" Value="" />
-
-    <CustomAction Id="LogCleanup" Property="LogCleanup" Value="-l &quot;[CLEANUP_LOG]&quot; " />
-    <CustomAction Id="NotLogCleanup" Property="LogCleanup" Value="" />
-
-    <CustomAction Id="IsQuietMode" Property="QuietMode" Value="-q " />
-	<CustomAction Id="NotIsQuietMode" Property="QuietMode" Value="" />
 
     <CustomAction Id="IsPrivileged" Error="!(loc.AdminNeeded)" />
     <CustomAction Id="PreventDowngrading" Error="!(loc.NoDowngrade)" />
@@ -994,17 +953,6 @@
       <Custom Action="SetARPINSTALLLOCATION" After="InstallValidate"></Custom>
 
       <Custom Action="IsPrivileged" Before="LaunchConditions">Not Privileged</Custom>
-      <!---
-      <Custom Action="StopGui"         Before="InstallFiles">1</Custom>
-      <Custom Action="StopGui35"       Before="InstallFiles">1</Custom>
-      <Custom Action="StopSysTray"     Before="InstallFiles">1</Custom>
-      <Custom Action="StopXSign"       Before="InstallFiles">1</Custom>
-      <Custom Action="StopXSign35"     Before="InstallFiles">1</Custom>
-
-      <Custom Action="StopGui35_Remove"       Before="RemoveFiles">1</Custom>
-      <Custom Action="StopXSign35_Remove"     Before="RemoveFiles">1</Custom>
--->
-
       <Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
 
 	  <Custom Action="CleanMinidriverKeys" After="RemoveRegistryValues">NOT Installed</Custom>
