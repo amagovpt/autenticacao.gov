@@ -2722,8 +2722,8 @@ void MainWnd::actionSCAPSignature_triggered() {
 		QObject *parent = this;
 		QProcess *myProcess = new QProcess(parent);
 		myProcess->setProcessChannelMode(QProcess::MergedChannels);
-
-		myProcess->start(m_Settings.getExePath() + SCAP_EXE, NULL);
+		//TODO: Tested only in Windows: test in Linux
+		myProcess->start("\"" + m_Settings.getExePath()+SCAP_EXE + "\"", NULL);
 }
 
 //*****************************************************
