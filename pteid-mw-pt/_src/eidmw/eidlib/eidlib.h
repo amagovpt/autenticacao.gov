@@ -850,7 +850,7 @@ class ScapSSLConnection;
 class PTEID_ScapConnection
 {
 	public:
-		PTEIDSDK_API PTEID_ScapConnection(char *host);
+		PTEIDSDK_API PTEID_ScapConnection(char *host, char *port);
 		PTEIDSDK_API ~PTEID_ScapConnection();
 		PTEIDSDK_API char *postSoapRequest(char *endpoint, char *soapAction, char *soapBody);
 
