@@ -3,6 +3,7 @@
  * eID Middleware Project.
  * Copyright (C) 2008-2010 FedICT.
  * Copyright (C) 2012-2016 Caixa Mágica Software
+ * Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -567,7 +568,8 @@ void MainWnd::on_btnAddress_Change_clicked()
 
 void MainWnd::showJavaLaunchError(QProcess::ProcessError error)
 {
-
+	fprintf(stderr, "showJavaLaunchError: %d\n", (int)error);
+	
 	if (error == QProcess::FailedToStart)
 	{
 		QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning,
@@ -2712,7 +2714,7 @@ void MainWnd::actionVerifySignature_eID_triggered()
 // SCAPSignature clicked
 //*****************************************************
 void MainWnd::actionSCAPSignature_triggered() {
-	QString SCAP_EXE("/SCAP-Signature");
+	QString SCAP_EXE("/ScapSignature");
 
 	#ifdef _WIN32
 		SCAP_EXE += ".exe";
