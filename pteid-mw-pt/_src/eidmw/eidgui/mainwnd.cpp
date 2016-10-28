@@ -2712,15 +2712,16 @@ void MainWnd::actionVerifySignature_eID_triggered()
 // SCAPSignature clicked
 //*****************************************************
 void MainWnd::actionSCAPSignature_triggered() {
-	QString SCAP_JAR("/SCAP/SCAP-Signature-runnable.jar");
+	QString SCAP_EXE("/SCAP-Signature");
 
 	#ifdef _WIN32
-		launchJavaProcess(m_Settings.getExePath() + SCAP_JAR, "", "");
-	#elif __APPLE__
-		launchJavaProcess("/usr/local/bin" + SCAP_JAR, "-Xdock:name=Assinatura na qualidade", "");
-	#else
-		launchJavaProcess(m_Settings.getExePath() + SCAP_JAR, "-Djava.library.path=/usr/local/lib", "");
+		SCAP_EXE += ".exe";
 	#endif
+		QObject *parent = this;
+		QProcess *myProcess = new QProcess(parent);
+		myProcess->setProcessChannelMode(QProcess::MergedChannels);
+
+		myProcess->start(m_Settings.getExePath() + SCAP_EXE, NULL);
 }
 
 //*****************************************************
