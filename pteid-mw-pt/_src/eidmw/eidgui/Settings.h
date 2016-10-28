@@ -323,7 +323,7 @@ public:
 
 		{
 			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SHOW_JAVA_APPS);
-			m_showJavaApps = config.getLong() == 0;
+			m_showJavaApps = config.getLong() == 1;
 
 		}
 	}
