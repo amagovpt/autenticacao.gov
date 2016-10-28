@@ -15,7 +15,7 @@ namespace eIDMW
 	ScapSSLConnection::ScapSSLConnection(char * host, char *port)
 	{
 
-		std::string host_and_port = std::string(host) + port;
+		std::string host_and_port = std::string(host) +":"+ port;
 
 		/* initialise the OpenSSL library */
     	init_openssl();
