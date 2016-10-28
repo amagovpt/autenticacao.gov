@@ -564,7 +564,7 @@
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCpp.dll" />
         
         <!-- SCAP v2 has a dependency on pteidlibCpp.dll so its practical to include it here -->
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)\ScapSignature.exe" KeyPath="yes" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)\ScapSignature.exe" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)\ScapSignature_pt.qm" />
       </Component>
 
@@ -818,9 +818,9 @@
       <ComponentRef Id="HttpDir"/>
       
       <ComponentRef Id="DSSApp"/>
-      <ComponentRef Id="scap"/> 
-      <ComponentRef Id="CertsScap"/>
-      <ComponentRef Id="scapSyswow"/>
+      <!-- <ComponentRef Id="scap"/> -->
+      <!-- <ComponentRef Id="CertsScap"/> -->
+      <!-- <ComponentRef Id="scapSyswow"/> -->
       <ComponentRef Id="ImagePlugins"/>
       <ComponentRef Id="CrlEidPortugalBe"/>
       <ComponentRef Id="DirectoryCache"/>
