@@ -139,6 +139,8 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GENERAL_BUILDNBR		L"build_number"			//Number of the installed build
 #define EIDMW_CNF_GENERAL_OTP_SERVER    L"otp_server"
 #define EIDMW_CNF_GENERAL_SAM_SERVER    L"sam_server"
+#define EIDMW_CNF_GENERAL_SCAP_HOST     L"scap_host"
+#define EIDMW_CNF_GENERAL_SCAP_PORT     L"scap_port"
 #define EIDMW_CNF_GENERAL_SHOW_JAVA_APPS L"show_java_apps"
 
 #define EIDMW_CNF_SECTION_LOGGING       L"logging"              //section with the logging parameters
@@ -282,7 +284,8 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_OTP_SERVER;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_SHOW_JAVA_APPS;
-    static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_SHOW_UNIV_PDF;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_HOST;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_PORT;
 
     //LOGGING
     static const struct Param_Str EIDMW_CONFIG_PARAM_LOGGING_DIRNAME;
