@@ -49,8 +49,8 @@ namespace eIDMW
 		snprintf (request_headers, HEADERS_BUFSIZE, request_template, endpoint, m_host, soapAction,
 			soapRequest.size());
 
-		fprintf(stderr, "DEBUG: Sending POST Headers: \n%s\n", request_headers);
-		fprintf(stderr, "DEBUG: Sending POST body: \n%s\n", soapRequest.c_str());
+		//fprintf(stderr, "DEBUG: Sending POST Headers: \n%s\n", request_headers);
+		//fprintf(stderr, "DEBUG: Sending POST body: \n%s\n", soapRequest.c_str());
 		ret_channel = write_to_stream(m_ssl_connection, request_headers);
 
 		ret_channel = write_to_stream(m_ssl_connection, (char *)soapRequest.c_str());
@@ -58,7 +58,7 @@ namespace eIDMW
 		//Read response
 		int bytes_read = read_from_stream(m_ssl_connection, server_response, REPLY_BUFSIZE);
 
-		fprintf(stderr, "Server reply (size=%d): \n%s\n", bytes_read, server_response);
+		//fprintf(stderr, "DEBUG: Server reply (size=%d): \n%s\n", bytes_read, server_response);
 
 		return server_response;
 	}
