@@ -140,7 +140,6 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GENERAL_OTP_SERVER    L"otp_server"
 #define EIDMW_CNF_GENERAL_SAM_SERVER    L"sam_server"
 #define EIDMW_CNF_GENERAL_SHOW_JAVA_APPS L"show_java_apps"
-#define EIDMW_CNF_GENERAL_SHOW_UNIV_PDF L"show_univ_pdf"
 
 #define EIDMW_CNF_SECTION_LOGGING       L"logging"              //section with the logging parameters
 #define EIDMW_CNF_LOGGING_DIRNAME       L"log_dirname"          //string, location of the log-file; $home/pteid/	Full path with volume name.

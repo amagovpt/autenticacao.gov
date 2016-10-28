@@ -326,11 +326,6 @@ public:
 			m_showJavaApps = config.getLong() == 0;
 
 		}
-
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SHOW_UNIV_PDF);
-			m_showUnivPdf = config.getLong() == 0;
-		}
 	}
 	//------------------------------------------------------
 	// dtor
@@ -461,11 +456,6 @@ public:
 	bool areJavaAppsEnabled()
 	{
 		return m_showJavaApps;
-	}
-
-	bool areUnivPdfEnabled()
-	{
-		return m_showUnivPdf;
 	}
 
 	void setRegCert( bool bRegCert )
@@ -603,8 +593,7 @@ private:
 	bool	m_bAutoStartup;			//!< start the app when windows starts (T/F)
 	bool	m_bRegCert;				//!< register certificates on insert (T/F)
 	bool	m_bRemoveCert;			//!< remove certificates on close (T/F)
-	bool 	m_showJavaApps;         // wether we should show the SCAP/DSS buttons...
-	bool    m_showUnivPdf;          // Universal Signature button
+	bool 	m_showJavaApps;     // wether we should show the SCAP/DSS buttons...
 	QString m_strExePath;			//!< path to the executable
 	unsigned long		m_SelectedReader;		//!< selected reader (-1=none)
 
