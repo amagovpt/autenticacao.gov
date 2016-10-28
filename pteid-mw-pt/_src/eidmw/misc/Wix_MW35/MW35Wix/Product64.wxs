@@ -558,8 +558,8 @@
 				<Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidgui.exe" KeyPath="yes" />
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCpp.dll" />
-          <File Source="$(var.PTEID_BUILD_FOLDER_X64)\AttributeWindow.exe" />
-          <File Source="$(var.PTEID_BUILD_FOLDER_X64)\AttributeWindow_pt.qm" />
+          <File Source="$(var.PTEID_BUILD_FOLDER_X64)\ScapSignature.exe" />
+          <File Source="$(var.PTEID_BUILD_FOLDER_X64)\ScapSignature_pt.qm" />
 				</Component>
 
 

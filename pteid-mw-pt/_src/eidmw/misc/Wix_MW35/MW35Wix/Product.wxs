@@ -564,8 +564,8 @@
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCpp.dll" />
         
         <!-- SCAP v2 has a dependency on pteidlibCpp.dll so its practical to include it here -->
-        <File Source="..\..\scap-v2\AttributeWindow.exe" KeyPath="yes" />
-        <File Source="..\..\scap-v2\SCAP-signature_pt.qm" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)\ScapSignature.exe" KeyPath="yes" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)\ScapSignature_pt.qm" />
       </Component>
 
       <Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
