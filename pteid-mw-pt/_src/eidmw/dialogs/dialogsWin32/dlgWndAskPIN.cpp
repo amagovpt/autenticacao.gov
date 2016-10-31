@@ -68,7 +68,6 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 	}
 	else
 	*/
-		tmpTitle.append(PINName);
 
 	//Max Length of PINs for PTEID cards as currently defined by INCM personalization
 	m_ulPinMinLen = 4;
@@ -165,7 +164,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 
 		HWND hStaticText = CreateWindow( 
 			L"STATIC", szPIN, WS_CHILD | WS_VISIBLE | SS_LEFT, 
-			pinLeft, pinTop - 125 , 126, 16, 
+			pinLeft, pinTop - 125 , 172, 26, 
 			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
 
 		SendMessage( hStaticText, WM_SETFONT, (WPARAM)TextFont, 0 );
@@ -331,7 +330,7 @@ LRESULT dlgWndAskPIN::ProcecEvent
 		case WM_PAINT:
 		{
 			//MWLOG(LEV_DEBUG, MOD_DLG, L" dlgWndAskPIN : WM_PAINT");
-			m_hDC = BeginPaint( m_hWnd, &ps );
+			m_hDC = BeginPaint ( m_hWnd, &ps );
 
 			HDC hdcMem;
 
