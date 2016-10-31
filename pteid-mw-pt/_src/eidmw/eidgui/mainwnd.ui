@@ -74,9 +74,6 @@
           <height>20</height>
          </rect>
         </property>
-        <property name="font">
-         <font/>
-        </property>
         <property name="styleSheet">
          <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
         </property>
@@ -98,9 +95,6 @@
           <width>376</width>
           <height>20</height>
          </rect>
-        </property>
-        <property name="font">
-         <font/>
         </property>
         <property name="styleSheet">
          <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
@@ -142,9 +136,6 @@
           <width>53</width>
           <height>20</height>
          </rect>
-        </property>
-        <property name="font">
-         <font/>
         </property>
         <property name="styleSheet">
          <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
@@ -190,9 +181,6 @@
           <height>20</height>
          </rect>
         </property>
-        <property name="font">
-         <font/>
-        </property>
         <property name="styleSheet">
          <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
         </property>
@@ -211,9 +199,6 @@
           <width>101</width>
           <height>20</height>
          </rect>
-        </property>
-        <property name="font">
-         <font/>
         </property>
         <property name="styleSheet">
          <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
@@ -307,9 +292,6 @@
           <width>140</width>
           <height>20</height>
          </rect>
-        </property>
-        <property name="font">
-         <font/>
         </property>
         <property name="styleSheet">
          <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
@@ -408,7 +390,7 @@
         <property name="styleSheet">
          <string notr="true">
           color: rgb(108, 108, 108);
-          font: 75 12pt Arial;
+          font: 75 15px Arial;
           background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
          </string>
         </property>
@@ -434,7 +416,7 @@
         <property name="styleSheet">
          <string notr="true">
               color: rgb(108, 108, 108);
-              font: 75 12pt Arial;
+              font: 75 15px Arial;
               background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
             </string>
         </property>
@@ -454,7 +436,7 @@
         <property name="styleSheet">
          <string notr="true">
           color: rgb(108, 108, 108);
-          font: 75 12pt Arial;
+          font: 75 15px Arial;
           background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
         </property>
         <property name="text">
@@ -476,7 +458,7 @@
         <property name="styleSheet">
          <string notr="true">
           color: rgb(108, 108, 108);
-          font: 75 12pt Arial;
+          font: 75 15px Arial;
           background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
          </string>
         </property>
@@ -1198,7 +1180,7 @@ text-align: left top;</string>
         <property name="styleSheet">
          <string notr="true">
 color: rgb(108, 108, 108);
-font: 75 12pt Arial;
+font: 75 15px Arial;
 background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          </string>
         </property>
         <property name="text">
@@ -1343,19 +1325,10 @@ image: url(:/images/Images/bg-Light-Blue.png);</string>
           <height>30</height>
          </rect>
         </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-          <pointsize>12</pointsize>
-          <weight>9</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-         </font>
-        </property>
         <property name="styleSheet">
          <string notr="true">
 color: rgb(108, 108, 108);
-font: 75 12pt Arial;
+font: 75 15px Arial;
 background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          </string>
         </property>
         <property name="text">
@@ -1371,19 +1344,10 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);         
           <height>31</height>
          </rect>
         </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-          <pointsize>12</pointsize>
-          <weight>9</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-         </font>
-        </property>
         <property name="styleSheet">
          <string notr="true">
 color: rgb(108, 108, 108);
-font: 75 12pt Arial;
+font: 75 15px Arial;
 background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          </string>
         </property>
         <property name="text">
@@ -1505,19 +1469,10 @@ image: url(:/images/Images/bg-Light-Blue.png);</string>
           <height>31</height>
          </rect>
         </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-          <pointsize>12</pointsize>
-          <weight>9</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-         </font>
-        </property>
         <property name="styleSheet">
          <string notr="true">
 color: rgb(108, 108, 108);
-font: 75 12pt Arial;
+font: 75 15px Arial;
 background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          </string>
         </property>
         <property name="text">
@@ -1536,18 +1491,9 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);         
           <height>31</height>
          </rect>
         </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-          <pointsize>12</pointsize>
-          <weight>9</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-         </font>
-        </property>
         <property name="styleSheet">
          <string notr="true">color: rgb(108, 108, 108);
-font: 75 12pt Arial;
+font: 75 15px Arial;
 background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          </string>
         </property>
         <property name="text">
@@ -1597,7 +1543,7 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);         
         <property name="styleSheet">
          <string notr="true">
 color: rgb(108, 108, 108);
-font: 75 12pt Arial;
+font: 75 15px Arial;
 background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);   </string>
         </property>
         <property name="text">
@@ -1616,7 +1562,7 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);   </stri
         <property name="styleSheet">
          <string notr="true">background-image: url(:/images/Images/alpha.png);
 color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+font: 12px &quot;Arial&quot;;</string>
         </property>
         <property name="text">
          <string>Bytes available:</string>
@@ -1678,18 +1624,9 @@ font: 10pt &quot;Arial&quot;;</string>
        <height>43</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-       <pointsize>12</pointsize>
-       <weight>9</weight>
-       <italic>false</italic>
-       <bold>false</bold>
-      </font>
-     </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(108, 108, 108);
-font: 75 12pt &quot;Arial&quot;;
+font: 75 15px &quot;Arial&quot;;
 background-image: url(:/images/Images/alpha.png);</string>
      </property>
      <property name="text">
@@ -1710,7 +1647,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(108, 108, 108);
-font: 75 12pt &quot;Arial&quot;;
+font: 75 15px &quot;Arial&quot;;
 background-image: url(:/images/Images/alpha.png);</string>
      </property>
      <property name="text">
@@ -1731,7 +1668,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(108, 108, 108);
-font: 75 12pt &quot;Arial&quot;;
+font: 75 15px &quot;Arial&quot;;
 background-image: url(:/images/Images/alpha.png);</string>
      </property>
      <property name="text">
@@ -1752,7 +1689,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(108, 108, 108);
-font: 75 12pt &quot;Arial&quot;;
+font: 75 15px &quot;Arial&quot;;
 background-image: url(:/images/Images/alpha.png);</string>
      </property>
      <property name="text">
@@ -1773,7 +1710,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(108, 108, 108);
-font: 75 12pt &quot;Arial&quot;;
+font: 75 15px &quot;Arial&quot;;
 background-image: url(:/images/Images/alpha.png);</string>
      </property>
      <property name="text">
@@ -1794,7 +1731,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(108, 108, 108);
-font: 75 12pt &quot;Arial&quot;;
+font: 75 15px &quot;Arial&quot;;
 background-image: url(:/images/Images/alpha.png);</string>
      </property>
      <property name="text">
@@ -1833,8 +1770,10 @@ background-image: url(:/images/Images/alpha.png);</string>
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/buttons/btn_card.png);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/buttons/btn_card.png);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>   Card</string>
@@ -1859,8 +1798,10 @@ font: 10pt &quot;Arial&quot;;</string>
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/buttons/btn_tools.png);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/buttons/btn_tools.png);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>   Services</string>
@@ -1888,8 +1829,10 @@ font: 10pt &quot;Arial&quot;;</string>
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/buttons/btn_tools.png);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/buttons/btn_tools.png);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>   Settings</string>
@@ -1914,8 +1857,10 @@ font: 10pt &quot;Arial&quot;;</string>
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/buttons/btn_help.png);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/buttons/btn_help.png);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>  Help</string>
@@ -1996,9 +1941,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>Card</string>
@@ -2014,9 +1961,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>Read Card</string>
@@ -2032,9 +1981,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>Exit</string>
@@ -2067,9 +2018,11 @@ background-image: url(:/images/Images/alpha.png);</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>Export / Print</string>
@@ -2085,9 +2038,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>»</string>
@@ -2103,9 +2058,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>»</string>
@@ -2121,9 +2078,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>»</string>
@@ -2160,9 +2119,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>Services</string>
@@ -2198,9 +2159,11 @@ background-image: url(:/images/Images/alpha.png);</string>
       <bool>true</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>Universal Signature</string>
@@ -2219,9 +2182,11 @@ font: 10pt &quot;Arial&quot;;</string>
       <bool>true</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>Verify Signature</string>
@@ -2237,9 +2202,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>»</string>
@@ -2258,9 +2225,11 @@ font: 10pt &quot;Arial&quot;;</string>
       <bool>true</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>SCAP Signature</string>
@@ -2276,9 +2245,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>»</string>
@@ -2294,9 +2265,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>»</string>
@@ -2312,9 +2285,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>PDF Signature</string>
@@ -2330,9 +2305,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>»</string>
@@ -2361,9 +2338,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>Help</string>
@@ -2379,9 +2358,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>About</string>
@@ -2414,9 +2395,11 @@ background-image: url(:/images/Images/alpha.png);</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>Updates</string>
@@ -2432,9 +2415,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>Online Documentation</string>
@@ -2450,9 +2435,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>»</string>
@@ -2468,9 +2455,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>»</string>
@@ -2486,9 +2475,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>»</string>
@@ -2517,9 +2508,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>Settings</string>
@@ -2535,9 +2528,11 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>Parameters</string>
@@ -2570,9 +2565,11 @@ background-image: url(:/images/Images/alpha.png);</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/Images/alpha.png);
-color: rgb(108, 108, 108);
-font: 10pt &quot;Arial&quot;;</string>
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
      </property>
      <property name="text">
       <string>»</string>
