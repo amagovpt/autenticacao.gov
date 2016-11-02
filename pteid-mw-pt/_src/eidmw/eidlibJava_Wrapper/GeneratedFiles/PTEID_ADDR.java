@@ -14,36 +14,36 @@ import java.util.logging.Logger;
 public class PTEID_ADDR {
 
     public short version;
-    public String addrType;
-    public String country;
-    public String district;
-    public String districtDesc;
-    public String municipality;
-    public String municipalityDesc;
-    public String freguesia;
-    public String freguesiaDesc;
-    public String streettypeAbbr;
-    public String streettype;
-    public String street;
-    public String buildingAbbr;
-    public String building;
-    public String door;
-    public String floor;
-    public String side;
-    public String place;
-    public String locality;
-    public String cp4;
-    public String cp3;
-    public String postal;
-    public String numMor;
-    public String countryDescF;
-    public String addressF;
-    public String cityF;
-    public String regioF;
-    public String localityF;
-    public String postalF;
-    public String numMorF;
-    
+    public String addrType = "";
+    public String country = "";
+    public String district = "";
+    public String districtDesc = "";
+    public String municipality = "";
+    public String municipalityDesc = "";
+    public String freguesia = "";
+    public String freguesiaDesc = "";
+    public String streettypeAbbr = "";
+    public String streettype = "";
+    public String street = "";
+    public String buildingAbbr = "";
+    public String building = "";
+    public String door = "";
+    public String floor = "";
+    public String side = "";
+    public String place = "";
+    public String locality = "";
+    public String cp4 = "";
+    public String cp3 = "";
+    public String postal = "";
+    public String numMor = "";
+    public String countryDescF = "";
+    public String addressF = "";
+    public String cityF = "";
+    public String regioF = "";
+    public String localityF = "";
+    public String postalF = "";
+    public String numMorF = "";
+
     protected PTEID_ADDR(PTEID_Address addr){
         try {
             version = 0;

@@ -47,8 +47,9 @@ public class pteid {
     private static int trimStart(byte[] array) {
         int trimmedSize = array.length - 1;
 
-        while( (trimmedSize>=0) && ( array[trimmedSize] == 0 ) )
-            trimmedSize--;
+        /*while( (trimmedSize>=0) && ( array[trimmedSize] == 0 ) )
+            trimmedSize--;*/
+
 
         return (trimmedSize+1);
     }

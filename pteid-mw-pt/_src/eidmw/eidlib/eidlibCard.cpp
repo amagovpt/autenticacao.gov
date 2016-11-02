@@ -1803,7 +1803,7 @@ PTEIDSDK_API long PTEID_ReadSOD(unsigned char *out, unsigned long *outlen) {
 
 		temp = card.getSod().getData();
 		CByteArray cb((unsigned char*)temp.GetBytes(), temp.Size());
-		cb.TrimRight(0);
+		/*cb.TrimRight(0);*/
 		memset(out,0,*outlen);
 		if (cb.Size() < *outlen)
 			*outlen = cb.Size();
