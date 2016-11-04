@@ -1577,7 +1577,6 @@ PTEIDSDK_API long PTEID_GetAddr(PTEID_ADDR *AddrData){
 
 			AddrData->version = 0;
 			strncpy(AddrData->country, addr.getCountryCode(), PTEID_MAX_ADDR_COUNTRY_LEN-1);
-			strncpy(AddrData->numMor, addr.getGeneratedAddressCode(), PTEID_MAX_NUMMOR_LEN-1);
 
 			if (addr.isNationalAddress())
 			{
@@ -1601,6 +1600,7 @@ PTEIDSDK_API long PTEID_GetAddr(PTEID_ADDR *AddrData){
 				strncpy(AddrData->cp4, addr.getZip4(), PTEID_MAX_CP4_LEN-1);
 				strncpy(AddrData->cp3, addr.getZip3(), PTEID_MAX_CP3_LEN-1);
 				strncpy(AddrData->postal, addr.getPostalLocality(), PTEID_MAX_POSTAL_LEN-1);
+                strncpy(AddrData->numMor, addr.getGeneratedAddressCode(), PTEID_MAX_NUMMOR_LEN-1);
 			}
 			else {
 				strncpy(AddrData->addrType, COMP_LAYER_FOREIGN_ADDRESS, PTEID_MAX_ADDR_TYPE_LEN-1);
@@ -1610,6 +1610,7 @@ PTEIDSDK_API long PTEID_GetAddr(PTEID_ADDR *AddrData){
 				strncpy(AddrData->regioF, addr.getForeignRegion(), PTEID_MAX_REGIOF_LEN-1);
 				strncpy(AddrData->localityF, addr.getForeignLocality(), PTEID_MAX_LOCALITYF_LEN-1);
 				strncpy(AddrData->postalF, addr.getForeignPostalCode(), PTEID_MAX_POSTALF_LEN-1);
+                strncpy(AddrData->numMorF, addr.getGeneratedAddressCode(), PTEID_MAX_NUMMOR_LEN-1);
 			}
 		}
 		catch (PTEID_Exception &ex)
