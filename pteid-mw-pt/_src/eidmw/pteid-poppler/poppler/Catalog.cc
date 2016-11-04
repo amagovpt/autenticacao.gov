@@ -440,7 +440,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 
 	}
 
-	else if(!incremental_update)
+	else
 		xref->setModifiedObject(&catDict, catalog_ref);
 
 	gfree(placeholder);
