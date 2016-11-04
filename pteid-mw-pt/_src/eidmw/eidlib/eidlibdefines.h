@@ -159,7 +159,6 @@ enum PTEID_Param
 	PTEID_PARAM_PROXY_PACFILE,			//string
 
 	//SECURITY
-	PTEID_PARAM_SECURITY_SINGLESIGNON,	//number; 0=no, 1=yes; If yes, the PIN is requested by the driver and asked only once with multiple applications.
 
 	//GUITOOL
 	PTEID_PARAM_GUITOOL_STARTWIN,		//number; 0=no(default), 1=yes

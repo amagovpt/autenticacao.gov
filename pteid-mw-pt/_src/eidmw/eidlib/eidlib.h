@@ -1439,14 +1439,6 @@ public:
 	  */
 	PTEIDSDK_API PTEID_Certificate &getCert(unsigned long ulIndexAll);
 
-	PTEIDSDK_API const char *getExternalCertData(int cert);
-	PTEIDSDK_API int getExternalCertDataSize(int cert);
-	PTEIDSDK_API const char *getExternalCertSubject(int cert);
-	PTEIDSDK_API const char *getExternalCertIssuer(int cert);
-	PTEIDSDK_API const char *getExternalCertNotBefore(int cert);
-	PTEIDSDK_API const char *getExternalCertNotAfter(int cert);
-	PTEIDSDK_API unsigned long getExternalCertKeylenght(int cert);
-
 	/**
 	  * Return the certificate by type.
 	  */

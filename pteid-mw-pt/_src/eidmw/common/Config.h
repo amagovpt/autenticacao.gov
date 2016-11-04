@@ -178,7 +178,6 @@ replace $install by string in install parameter
 #define EIDMW_CNF_PROXY_CONNECT_TIMEOUT  L"connect_timeout"          //number
 
 #define EIDMW_CNF_SECTION_SECURITY      L"security"                 //section with the security parameters
-#define EIDMW_CNF_SECURITY_SINGLESIGNON L"single_signon"            //number; 0=no, 1=yes; If yes, the PIN is requested by the driver and asked only once with multiple applications.
 
 #define EIDMW_CNF_SECTION_GUITOOL       L"configuretool"            //section with the configure tool parameters
 #define EIDMW_CNF_GUITOOL_STARTWIN      L"start_with_windows"       //number; 0=no(default), 1=yes

@@ -431,7 +431,7 @@ unsigned long PTEID_Certificates::countAll()
 	BEGIN_TRY_CATCH
 
 	APL_Certifs *pimpl=static_cast<APL_Certifs *>(m_impl);
-	out = pimpl->countAll(true);
+	out = pimpl->countAll();
 	
 	END_TRY_CATCH
 
@@ -477,7 +477,7 @@ PTEID_Certificate &PTEID_Certificates::getCert(unsigned long ulIndex)
 
 	APL_Certifs *pimpl=static_cast<APL_Certifs *>(m_impl);
 
-	APL_Certif *pAplCert=pimpl->getCert(ulIndex,true);
+	APL_Certif *pAplCert=pimpl->getCert(ulIndex);
 
 	out = dynamic_cast<PTEID_Certificate *>(getObject(pAplCert));
 	
@@ -501,103 +501,6 @@ PTEID_Certificate &PTEID_Certificates::getCert(unsigned long ulIndex)
 	return *out;
 }
 
-const char *PTEID_Certificates::getExternalCertData(int cert)
-{
-	const unsigned char *out;
-	const char *nout;
-	BEGIN_TRY_CATCH
-
-	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = pimpl->ExternalCertData(cert);
-
-	nout = (const char *)out;
-	END_TRY_CATCH
-
-	return nout;
-}
-
-int PTEID_Certificates::getExternalCertDataSize(int cert)
-{
-	int out;
-	BEGIN_TRY_CATCH
-
-	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = pimpl->ExternalCertDataSize(cert);
-
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_Certificates::getExternalCertSubject(int cert)
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = pimpl->ExternalCertSubject(cert);
-
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_Certificates::getExternalCertIssuer(int cert)
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = pimpl->ExternalCertIssuer(cert);
-
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_Certificates::getExternalCertNotBefore(int cert)
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = pimpl->ExternalCertNotBefore(cert);
-
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_Certificates::getExternalCertNotAfter(int cert)
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = pimpl->ExternalCertNotAfter(cert);
-
-	END_TRY_CATCH
-
-	return out;
-}
-
-unsigned long PTEID_Certificates::getExternalCertKeylenght(int cert)
-{
-	unsigned long out;
-
-	BEGIN_TRY_CATCH
-
-	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-	out = pimpl->ExternalCertKeylenght(cert);
-
-	END_TRY_CATCH
-
-	return out;
-}
 
 PTEID_Certificate &PTEID_Certificates::getCert(PTEID_CertifType type)
 {
@@ -609,7 +512,7 @@ PTEID_Certificate &PTEID_Certificates::getCert(PTEID_CertifType type)
 
 	unsigned long idxObject;
 	APL_CertifType aplType;
-	bool bOnlyVisible=true;
+	
  	switch(type)
 	{
 		case PTEID_CERTIF_TYPE_ROOT:
@@ -645,7 +548,7 @@ PTEID_Certificate &PTEID_Certificates::getCert(PTEID_CertifType type)
 		//proot=dynamic_cast<PTEID_Certificate *>(getObject(idxObject));
 		//if(!proot)
 		//{
-			out = new PTEID_Certificate(m_context,pimpl->getCert(aplType,ANY_INDEX,bOnlyVisible));
+			out = new PTEID_Certificate(m_context,pimpl->getCert(aplType, ANY_INDEX));
 			if(out)
 				m_objects[idxObject]=out;
 			else
