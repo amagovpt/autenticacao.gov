@@ -1410,10 +1410,10 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	X509_STORE *store = X509_STORE_new();
 
 	// martinho: load all certificates, let openssl do the job and find the needed ones...
-	for (int i = 0; i<pcard->getCertificates()->countAll(true);i++){
+	for (int i = 0; i<pcard->getCertificates()->countAll(); i++){
 		X509 *pX509 = NULL;
-		const unsigned char *p = pcard->getCertificates()->getCert(i,false)->getData().GetBytes();
-		pX509 = d2i_X509(&pX509, &p, pcard->getCertificates()->getCert(i,false)->getData().Size());
+		const unsigned char *p = pcard->getCertificates()->getCert(i)->getData().GetBytes();
+		pX509 = d2i_X509(&pX509, &p, pcard->getCertificates()->getCert(i)->getData().Size());
 		X509_STORE_add_cert(store, pX509);
 		//printf("%d. Adding certificate CN: %s\n", i, parseSubjectFromCert(pX509));
 	}

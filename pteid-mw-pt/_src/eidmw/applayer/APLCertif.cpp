@@ -95,12 +95,42 @@ APL_Certifs::APL_Certifs(APL_SmartCard *card)
 
 	loadCard();
 	loadFromFile();
+
+	initMyCerts();
+
 }
 
 APL_Certifs::APL_Certifs()
 {
 	init(NULL);
 	loadFromFile();
+}
+
+void APL_Certifs::initMyCerts()
+{
+	//Fill a seperate cert vector that only contains the chain relevant for the current card
+
+	my_certifs.push_back(getAuthentication());
+	my_certifs.push_back(getSignature());
+	my_certifs.push_back(getAuthenticationSubCA());
+	APL_Certif * cert = getSignatureSubCA();
+	my_certifs.push_back(cert);
+
+	APL_Certif * issuer = findIssuer(cert);
+
+	if (issuer != NULL)
+	{
+		my_certifs.push_back(issuer);
+	}
+
+	APL_Certif * new_issuer = NULL;
+
+	while((new_issuer = findIssuer(issuer)) != issuer)
+	{
+		my_certifs.push_back(new_issuer);
+		issuer = new_issuer;
+	}
+	
 }
 
 void APL_Certifs::init(APL_SmartCard *card){
@@ -131,6 +161,7 @@ bool APL_Certifs::isAllowed()
 	return true;
 }
 
+
 CByteArray APL_Certifs::getXML(bool bNoHeader)
 {
 /*
@@ -146,13 +177,13 @@ CByteArray APL_Certifs::getXML(bool bNoHeader)
 		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
 	xml+="<certificates count=\"";
-	sprintf_s(buffer,sizeof(buffer),"%ld",countAll(true));
+	sprintf_s(buffer,sizeof(buffer),"%ld",countAll());
 
 	xml+=buffer;
 	xml+="\">\n";
-	for(unsigned long i=0;i<countAll(true);i++)
+	for(unsigned long i=0; i < countAll();i++)
 	{
-		xml+=getCert(i,true)->getXML(true);
+		xml+=getCert(i)->getXML(true);
 	}
 	xml+="</certificates>\n";
 
@@ -167,12 +198,12 @@ certificatescount;certificate1;certificate2;...
 	char buffer[50];
 	CByteArray csv;
 
-	sprintf_s(buffer,sizeof(buffer),"%ld",countAll(true));
+	sprintf_s(buffer,sizeof(buffer),"%ld",countAll());
 	csv+=buffer;
 	csv+=CSV_SEPARATOR;
-	for(unsigned long i=0;i<countAll(true);i++)
+	for(unsigned long i=0;i<countAll();i++)
 	{
-		csv+=getCert(i,true)->getCSV();
+		csv+=getCert(i)->getCSV();
 	}
 
 	return csv;
@@ -184,13 +215,13 @@ CByteArray APL_Certifs::getTLV()
 	CTLVBuffer tlvNested;
 
 	CByteArray baCount;
-	baCount.AppendLong(countAll(true));
+	baCount.AppendLong(countAll());
 	tlvNested.SetTagData(0x00,baCount.GetBytes(),baCount.Size());	//Tag 0x00 contain the number of certificates
 	
 	unsigned char j=1;
-	for(unsigned long i=0;i<countAll(true);i++)
+	for(unsigned long i=0;i<countAll();i++)
 	{
-		APL_Certif *cert=getCert(i,true);
+		APL_Certif *cert=getCert(i);
 		CByteArray baCert=cert->getTLV();
 		tlvNested.SetTagData(j++,baCert.GetBytes(),baCert.Size());
 	}
@@ -224,8 +255,10 @@ unsigned long APL_Certifs::countFromCard()
 	return m_card->certificateCount();
 }
 
-unsigned long APL_Certifs::countAll(bool bOnlyVisible)
+unsigned long APL_Certifs::countAll()
 {
+
+	/*
 	if(bOnlyVisible)
 	{
 		unsigned long count=0;
@@ -245,6 +278,9 @@ unsigned long APL_Certifs::countAll(bool bOnlyVisible)
 	{
 		return (unsigned long)m_certifs.size();
 	}
+	*/
+
+	return my_certifs.size();
 }
 
 APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex)
@@ -447,8 +483,12 @@ APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file,APL_CertifType t
 	}
 }
 
-APL_Certif *APL_Certifs::getCert(unsigned long ulIndex, bool bOnlyVisible)
+
+//TODO: test
+APL_Certif *APL_Certifs::getCert(unsigned long ulIndex)
 {
+
+	/*
 	APL_Certif *cert=NULL;
 	unsigned long ulCount=0;
 
@@ -477,6 +517,12 @@ APL_Certif *APL_Certifs::getCert(unsigned long ulIndex, bool bOnlyVisible)
 	}
 
 	throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
+	*/
+
+	if (ulIndex >= my_certifs.size())
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
+
+	return my_certifs[ulIndex];
 }
 
 APL_Certif *APL_Certifs::getCertUniqueId(unsigned long ulUniqueId)
@@ -491,7 +537,7 @@ APL_Certif *APL_Certifs::getCertUniqueId(unsigned long ulUniqueId)
 
 }
 
-unsigned long APL_Certifs::countCert(APL_CertifType type,bool bOnlyVisible)
+unsigned long APL_Certifs::countCert(APL_CertifType type)
 {
 	unsigned long count=0;
 	std::map<unsigned long ,APL_Certif *>::const_iterator itr;
@@ -500,14 +546,15 @@ unsigned long APL_Certifs::countCert(APL_CertifType type,bool bOnlyVisible)
 	for(itr=m_certifs.begin();itr!=m_certifs.end();itr++)
 	{
 		cert=itr->second;
-		if((!bOnlyVisible || !cert->isHidden()) && cert->isType(type))
+
+		if(cert->isType(type))
 			count++;
 	}
 
 	return count;
 }
 
-APL_Certif *APL_Certifs::getCert(APL_CertifType type,unsigned long ulIndex,bool bOnlyVisible)
+APL_Certif *APL_Certifs::getCert(APL_CertifType type, unsigned long ulIndex)
 {
 	APL_Certif *cert=NULL;
 	unsigned long ulCount=0;
@@ -518,18 +565,18 @@ APL_Certif *APL_Certifs::getCert(APL_CertifType type,unsigned long ulIndex,bool 
 	for(itrOrder=m_certifsOrder.begin();itrOrder!=m_certifsOrder.end();itrOrder++)
 	{
 		itrCert = m_certifs.find(*itrOrder);
-		if(itrCert==m_certifs.end())
+		if (itrCert==m_certifs.end())
 		{
 			//The certif is not in the map
-			//Should not happend
+			//Should not happen
 			throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE); 
 		}
 
 		cert=itrCert->second;
 
-		if((!bOnlyVisible || !cert->isHidden()) && cert->isType(type))
+		if (cert->isType(type))
 		{
-			//If no index we return the first root from the card
+			//If no index we return the first certificate that matches
 			if(ulIndex==ANY_INDEX)
 			{
 				if(cert->isFromCard())
@@ -545,19 +592,19 @@ APL_Certif *APL_Certifs::getCert(APL_CertifType type,unsigned long ulIndex,bool 
 		}
 	}
 
-	if(type==APL_CERTIF_TYPE_ROOT)
+	if (type == APL_CERTIF_TYPE_ROOT)
 		throw CMWEXCEPTION(EIDMW_ERR_CERT_NOROOT);
 
 	throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
 
 }
 
-unsigned long APL_Certifs::countRoot(bool bOnlyVisible)
+unsigned long APL_Certifs::countRoot()
 {
 	return countCert(APL_CERTIF_TYPE_ROOT);
 }
 
-APL_Certif *APL_Certifs::getRoot(unsigned long ulIndex,bool bOnlyVisible)
+APL_Certif *APL_Certifs::getRoot(unsigned long ulIndex)
 {
 	try
 	{
@@ -572,32 +619,37 @@ APL_Certif *APL_Certifs::getRoot(unsigned long ulIndex,bool bOnlyVisible)
 	}
 }
 
-unsigned long APL_Certifs::countAuthentication(bool bOnlyVisible)
+unsigned long APL_Certifs::countAuthentication()
 {
 	return countCert(APL_CERTIF_TYPE_AUTHENTICATION);
 }
 
-APL_Certif *APL_Certifs::getAuthentication(unsigned long ulIndex,bool bOnlyVisible)
+APL_Certif *APL_Certifs::getAuthentication(unsigned long ulIndex)
 {
 	return getCert(APL_CERTIF_TYPE_AUTHENTICATION);
 }
 
-unsigned long APL_Certifs::countSignature(bool bOnlyVisible)
+unsigned long APL_Certifs::countSignature()
 {
 	return countCert(APL_CERTIF_TYPE_SIGNATURE);
 }
 
-APL_Certif *APL_Certifs::getSignature(unsigned long ulIndex,bool bOnlyVisible)
+APL_Certif *APL_Certifs::getSignature(unsigned long ulIndex)
 {
 	return getCert(APL_CERTIF_TYPE_SIGNATURE);
 }
 
-unsigned long APL_Certifs::countCA(bool bOnlyVisible)
+unsigned long APL_Certifs::countCA()
 {
 	return countCert(APL_CERTIF_TYPE_ROOT_AUTH);
 }
 
-APL_Certif *APL_Certifs::getCA(unsigned long ulIndex,bool bOnlyVisible)
+APL_Certif *APL_Certifs::getSignatureSubCA()
+{
+	return getCert(APL_CERTIF_TYPE_ROOT_SIGN);
+}
+
+APL_Certif *APL_Certifs::getAuthenticationSubCA()
 {
 	return getCert(APL_CERTIF_TYPE_ROOT_AUTH);
 }
@@ -1229,7 +1281,7 @@ APL_CertifType APL_Certif::getType()
 		}
 		else
 		{
-			switch(m_certP15.ulID)
+			switch(m_certP15.ulID)   //From File EF0C: we are using CertIDs: 45, 46, 51, 52, 50 (Auth, Signature, Signature SubCA, Authentication SubCA, RootCA)
 			{
 			case 69:
 				m_type=APL_CERTIF_TYPE_AUTHENTICATION;
@@ -1238,13 +1290,13 @@ APL_CertifType APL_Certif::getType()
 				m_type=APL_CERTIF_TYPE_SIGNATURE;
 				break;
 			case 81:
-				m_type=APL_CERTIF_TYPE_ROOT_AUTH;
+				m_type=APL_CERTIF_TYPE_ROOT_SIGN;
 				break;
 			case 82:
-				m_type=APL_CERTIF_TYPE_ROOT;
+				m_type=APL_CERTIF_TYPE_ROOT_AUTH;
 				break;
 			case 80:
-				m_type=APL_CERTIF_TYPE_ROOT_SIGN;
+				m_type=APL_CERTIF_TYPE_ROOT;
 				break;
 			}
 		}
@@ -1581,213 +1633,7 @@ APL_Certifs *APL_Certif::getCertificates()
 	return m_store;
 }
 
-const char *APL_Certif::x509TimeConversion (ASN1_TIME *atime)
-{
-    struct tm r;
-    int cnt;
-    time_t res;
-	const unsigned int buf_size = 256;
-    char *to_buf = (char *)malloc(buf_size);
-    
-    ASN1_GENERALIZEDTIME* agtime;
-        
-    agtime = ASN1_TIME_to_generalizedtime(atime, NULL);
-        
-    memset(&r, '\0', sizeof(struct tm));
-    cnt = sscanf((char*)agtime->data, "%04d%02d%02d",
-		 &r.tm_year, &r.tm_mon, &r.tm_mday);
-    ASN1_TIME_free(agtime);
-    
-    r.tm_mon--;
-    r.tm_year -= 1900;
-  
-    res = mktime(&r);
-    if ((time_t)-1 != res) {
-	struct tm ltm;
-	localtime_r(&res, &ltm);
-	// Use the ISO 8601 timestamp format
-	strftime(to_buf, buf_size, "%d/%m/%Y", &ltm);
-	return(to_buf);
-    }
-    free (to_buf);
-    return("Date not available");
-}
 
-X509 *APL_Certif::ExternalCert(int certnr)
-{
-	FILE *m_stream;
-	X509 *x509;
-#ifdef WIN32
-	errno_t werr;
-#endif
-
-	APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
-	std::string	m_cachedirpath = conf_dir.getString();
-
-	CPathUtil::checkDir (m_cachedirpath.c_str());
-	std::string contents = m_cachedirpath;
-
-	switch (certnr)
-	{
-	case 1:
-#ifdef WIN32
-		contents.append("\\eidstore\\certs\\GTEGlobalRoot.der");
-		if ((werr = fopen_s(&m_stream, contents.c_str(), "rb")) != 0)
-			goto err;
-#else
-		if ((m_stream = fopen("/usr/local/share/certs/GTEGlobalRoot.der", "r")) == NULL)
-			goto err;
-#endif
-		break;
-	case 2:
-#ifdef WIN32
-		contents.append("\\eidstore\\certs\\ECRaizEstado_novo_assinado_GTE.der");
-		if ((werr = fopen_s(&m_stream, contents.c_str(), "rb")) != 0)
-			goto err;
-#else
-		if ((m_stream = fopen("/usr/local/share/certs/ECRaizEstado_novo_assinado_GTE.der", "r")) == NULL)
-			goto err;
-#endif
-		break;
-	case 3:
-#ifdef WIN32
-		contents.append("\\eidstore\\certs\\CartaodeCidadao001.der");
-		if ((werr = fopen_s(&m_stream, contents.c_str(), "rb")) != 0)
-			goto err;
-#else
-		if ((m_stream = fopen("/usr/local/share/certs/CartaodeCidadao001.der", "r")) == NULL)
-			goto err;
-#endif
-		break;
-	default:
-		break;
-	}
-
-	//PEM format
-	//X509* x509 = PEM_read_X509(m_stream, NULL, NULL, NULL);
-	//DER format
-	x509 = d2i_X509_fp(m_stream, NULL);
-	fclose(m_stream);
-	certnr = 0;
-
-	return x509;
-
-err:
-	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certif::ExternalCert: file %s not found ", contents.c_str());
-	return NULL;
-}
-
-const unsigned char *APL_Certif::ExternalCertData(int certnr)
-{
-	X509 *cert;
-	unsigned char *rdata = NULL;
-	int len;
-
-	if ((cert = ExternalCert(certnr)) == NULL)
-		return NULL;
-
-	len = i2d_X509 (cert, &rdata);
-
-	if (len < 0)
-		return NULL;
-
-	return rdata;
-}
-
-int APL_Certif::ExternalCertDataSize(int certnr)
-{
-	X509 *cert;
-	unsigned char *rdata = NULL;
-	int len;
-
-	if ((cert = ExternalCert(certnr)) == NULL)
-		return 0;
-
-	len = i2d_X509 (cert, &rdata);
-
-	if (len < 0)
-		return 0;
-
-	return len;
-}
-
-const char *APL_Certif::ExternalCertSubject(int certnr)
-{
-	//Subject name
-	X509 *cert;
-	const int BUFSIZE = 800;
-
-	if ((cert = ExternalCert(certnr)) == NULL)
-		return NULL;
-
-	char * subject = (char *)malloc(BUFSIZE*sizeof(unsigned char));
-
-	X509_NAME_get_text_by_NID(X509_get_subject_name(cert), NID_commonName, subject, BUFSIZE);
-
-	return subject;
-}
-
-const char *APL_Certif::ExternalCertIssuer(int certnr)
-{
-	// issuer name
-	const int BUFSIZE = 800;
-	char * issuer = (char *)malloc(BUFSIZE*sizeof(unsigned char));
-	X509 *cert;
-
-	if ((cert = ExternalCert(certnr)) == NULL)
-	{
-		free(issuer);
-		return NULL;
-	}
-
-	X509_NAME_get_text_by_NID(X509_get_issuer_name(cert), NID_commonName, issuer, BUFSIZE);
-	
-
-	return issuer;
-}
-
-unsigned long APL_Certif::ExternalCertKeylenght(int certnr)
-{
-	// Keylength
-	X509 *cert;
-	unsigned long keylen;
-
-	if ((cert = ExternalCert(certnr)) == NULL)
-		return 0;
-
-	EVP_PKEY *pKey = X509_get_pubkey(cert);
-	keylen = EVP_PKEY_bits(pKey);
-
-	return keylen;
-}
-
-const char* APL_Certif::ExternalCertNotBefore(int certnr)
-{
-	//notbefore
-	const char* result;
-	X509 *cert;
-
-	if ((cert = ExternalCert(certnr)) == NULL)
-		return NULL;
-
-	result = x509TimeConversion(X509_get_notBefore(cert));
-	
-	return result;
-}
-
-const char* APL_Certif::ExternalCertNotAfter(int certnr)
-{
-	// Not after
-	const char* result;
-	X509 *cert;
-
-	if ((cert = ExternalCert(certnr)) == NULL)
-		return NULL;
-
-	result = x509TimeConversion(X509_get_notAfter(cert));
-
-	return result;
-}
 const char *APL_Certif::getSerialNumber()
 {
 	initInfo();
