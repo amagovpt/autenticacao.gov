@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="cardlayer"
 	ProjectGUID="{C7DE2B79-F890-4ACB-804A-BDD14E1A9CAE}"
 	RootNamespace="pteidcardlayer"
@@ -562,6 +562,10 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+			<File
+				RelativePath=".\pteidcardlayer.rc"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
