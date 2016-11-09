@@ -320,9 +320,6 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_PROXY_PWD;
     static const struct Param_Num EIDMW_CONFIG_PARAM_PROXY_CONNECT_TIMEOUT;
 
-    //SECURITY
-    static const struct Param_Num EIDMW_CONFIG_PARAM_SECURITY_SINGLESIGNON;
-
     //GUI
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_STARTWIN;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_STARTMINI;
