@@ -20,7 +20,7 @@
 #include <iostream>
 #include <fstream>
 
-//#include <openssl/err.h>
+#include <openssl/err.h>
 
 #include "CardPteid.h"
 #include "TLVBuffer.h"
@@ -829,6 +829,7 @@ void APL_EidFile_Address::PackAddressData(CByteArray &cb, bool isNational){
 		cb.Append((unsigned char*)m_PostalLocality.c_str(),m_PostalLocality.length());
 		cb.Append((unsigned char*)m_Generated_Address_Code.c_str(),m_Generated_Address_Code.length());
 	} else {
+		cb.Append((unsigned char*)m_CountryCode.c_str(), m_CountryCode.length());
 		cb.Append((unsigned char*)m_Foreign_Country.c_str(),m_Foreign_Country.length());
 		cb.Append((unsigned char*)m_Foreign_Generic_Address.c_str(),m_Foreign_Generic_Address.length());
 		cb.Append((unsigned char*)m_Foreign_City.c_str(),m_Foreign_City.length());
@@ -1380,6 +1381,7 @@ char * parseSubjectFromCert(X509 * cert)
 }
 */
 
+
 tCardFileStatus APL_EidFile_Sod::VerifyFile()
 {
 	tCardFileStatus filestatus = CARDFILESTATUS_ERROR_SIGNATURE;
@@ -1405,21 +1407,28 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 
 	p7 = d2i_PKCS7(NULL, (const unsigned char **)&temp, len);
 
-	STACK_OF(X509) *pSigners = PKCS7_get0_signers(p7, NULL, 0);
+	//STACK_OF(X509) *pSigners = PKCS7_get0_signers(p7, NULL, 0);
 
 	X509_STORE *store = X509_STORE_new();
 
+	// Load only the SOD relevant root certificates
+
 	// martinho: load all certificates, let openssl do the job and find the needed ones...
-	for (int i = 0; i<pcard->getCertificates()->countAll(); i++){
+	for (int i = 0; i<pcard->getCertificates()->countSODCAs(); i++){
+		APL_Certif * sod_ca = pcard->getCertificates()->getSODCA(i);
 		X509 *pX509 = NULL;
-		const unsigned char *p = pcard->getCertificates()->getCert(i)->getData().GetBytes();
-		pX509 = d2i_X509(&pX509, &p, pcard->getCertificates()->getCert(i)->getData().Size());
+		const unsigned char *p = sod_ca->getData().GetBytes();
+
+		pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
 		X509_STORE_add_cert(store, pX509);
-		//printf("%d. Adding certificate CN: %s\n", i, parseSubjectFromCert(pX509));
+		printf("%d. Adding certificate Label: %s\n", i, sod_ca->getLabel());
+		printf("%d. Adding certificate Subject CN: %s\n", i, sod_ca->getOwnerName());
 	}
+	
 	BIO *Out = BIO_new(BIO_s_mem());
 
-	verifySOD = PKCS7_verify(p7,pSigners,store,NULL,Out,0)==1;
+	//verifySOD = PKCS7_verify(p7,pSigners,store,NULL,Out,0)==1;
+	verifySOD = PKCS7_verify(p7, NULL,store,NULL,Out,0)==1;
 	if (verifySOD) {
 		unsigned char *p;
 		long size;
@@ -1432,12 +1441,12 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	else
 	{
 		//Log specific OpenSSL error
-		MWLOG(LEV_ERROR, MOD_APL, L"EidFile_Sod::VerifyFile Error validating SOD signature");
+		MWLOG(LEV_ERROR, MOD_APL, L"EidFile_Sod::VerifyFile Error validating SOD signature. PKCS7_verify() error code= %08x", ERR_get_error());
 			
 	}
 
 	X509_STORE_free(store);
-	sk_X509_free(pSigners);
+	//sk_X509_free(pSigners);
 	BIO_free_all(Out);
 	PKCS7_free(p7);
 

@@ -97,6 +97,8 @@ APL_Certifs::APL_Certifs(APL_SmartCard *card)
 	loadFromFile();
 
 	initMyCerts();
+	initSODCAs();
+	defaultSODCertifs = true;
 
 }
 
@@ -131,6 +133,81 @@ void APL_Certifs::initMyCerts()
 		issuer = new_issuer;
 	}
 	
+}
+
+//This should select the certificates which are part of the chain for SOD signatures for production cards
+
+void APL_Certifs::initSODCAs()
+{
+	APL_Certif *cert=NULL;
+	unsigned long ulCount=0;
+
+	defaultSODCertifs = true;
+
+	std::vector<unsigned long>::const_iterator itrOrder;
+	std::map<unsigned long, APL_Certif *>::const_iterator itrCert;
+
+	for(itrOrder=m_certifsOrder.begin();itrOrder!=m_certifsOrder.end();itrOrder++)
+	{
+		itrCert = m_certifs.find(*itrOrder);
+		if(itrCert==m_certifs.end())
+		{
+			//The certif is not in the map
+			//Should not happend
+			throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE); 
+		}
+
+		cert = itrCert->second;
+
+		//Select Cartao de Cidadao PKI roots
+		if (strcmp(cert->getIssuerName(), "ECRaizEstado")==0)
+		{
+			m_sod_cas.push_back(cert);
+			MWLOG(LEV_DEBUG, MOD_APL, L"initSODCAs(): Adding certificate %s", cert->getOwnerName());
+
+		}
+		//Select ECRaizEstado and Baltimore CyberTrust
+		if (strcmp(cert->getOwnerName(), "ECRaizEstado") == 0 ||
+		         strcmp(cert->getOwnerName(), "Baltimore CyberTrust Root") == 0)
+		{
+			m_sod_cas.push_back(cert);
+			MWLOG(LEV_DEBUG, MOD_APL, L"initSODCAs(): Adding certificate %s", cert->getOwnerName());
+
+		}
+	}
+}
+
+void APL_Certifs::clearSODCAs()
+{
+	MWLOG(LEV_DEBUG, MOD_APL, L"resetSODCAs() called");
+	m_sod_cas = std::vector<APL_Certif *>();
+}
+
+
+void APL_Certifs::addToSODCAs(const CByteArray &cert_ba)
+{
+	if (defaultSODCertifs)
+	{
+		clearSODCAs();
+		defaultSODCertifs = false;
+	}
+
+	APL_Certif * cert = new APL_Certif(this, cert_ba, APL_CERTIF_TYPE_ROOT, false);
+	MWLOG(LEV_DEBUG, MOD_APL, L"addToSODCAs(): Adding certificate %s", cert->getOwnerName());
+	m_sod_cas.push_back(cert);
+}
+
+unsigned long APL_Certifs::countSODCAs()
+{
+	return m_sod_cas.size();
+}
+
+APL_Certif * APL_Certifs::getSODCA(int index)
+{
+	if (index >= m_sod_cas.size())
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
+
+	return m_sod_cas[index];
 }
 
 void APL_Certifs::init(APL_SmartCard *card){

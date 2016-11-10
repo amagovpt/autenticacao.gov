@@ -200,6 +200,22 @@ public:
 	EIDMW_APL_API APL_Certif *getRoot(unsigned long ulIndex=ANY_INDEX);
 
 	/**
+	  *	 Methods related to SOD CA certificates
+	 
+	  */
+
+	EIDMW_APL_API void initSODCAs();
+
+	EIDMW_APL_API void clearSODCAs();
+
+	EIDMW_APL_API void addToSODCAs(const CByteArray &cert);
+
+
+	unsigned long countSODCAs();
+
+	APL_Certif * getSODCA(int index);
+
+	/**
 	  * Return the number of authentication certificates in the store
 	  */
 	EIDMW_APL_API unsigned long countAuthentication();
@@ -334,6 +350,9 @@ private:
 	  *
 	  * The index is the certificate unique ID
 	  */
+	bool defaultSODCertifs;
+
+	std::vector <APL_Certif *> m_sod_cas;
 	std::map<unsigned long,APL_Certif *> m_certifs;
 	std::vector<unsigned long> m_certifsOrder;
 	std::vector<APL_Certif *> my_certifs;
@@ -595,6 +614,7 @@ private:
 friend APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex);				/**< This method must access protected constructor */
 friend APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file,APL_CertifType type,bool bOnCard,bool bHidden,unsigned long ulIndex,const CByteArray *cert,const CByteArray *cert_tlv_struct);	/**< This method must access protected constructor */
 friend APL_Certif *APL_Certifs::addCert(const CByteArray &cert,APL_CertifType type,bool bHidden);		/**< This method must access protected constructor */
+friend void APL_Certifs::addToSODCAs(const CByteArray &cert);
 };
 
 class APL_CrlDownloadingCache;
