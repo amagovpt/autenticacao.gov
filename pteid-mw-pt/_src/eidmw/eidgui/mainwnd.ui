@@ -765,8 +765,7 @@ text-align: left top;</string>
       </widget>
       <widget class="QWidget" name="page_Address">
        <property name="styleSheet">
-        <string notr="true">background-image: url(:/images/Images/tab-backgrounds/bg_address.png);
-</string>
+        <string notr="true"></string>
        </property>
        <widget class="QLineEdit" name="txtAddress_District">
         <property name="geometry">
