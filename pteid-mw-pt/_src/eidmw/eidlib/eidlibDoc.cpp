@@ -1832,35 +1832,5 @@ const PTEID_ByteArray& PTEID_Sod::getData()
 
 	return *out;
 }
-
-const PTEID_ByteArray& PTEID_Sod::getHash()
-{
-	PTEID_ByteArray out;
-
-	/*BEGIN_TRY_CATCH
-
-	APL_SodEid *psod=static_cast<APL_SodEid *>(m_impl);
-
-	out = dynamic_cast<PTEID_ByteArray *>(getObject(INCLUDE_OBJECT_SODEID_HASH));
-
-	if(!out)
-	{
-		CAutoMutex autoMutex(m_mutex);
-
-		pbytearray=dynamic_cast<PTEID_ByteArray *>(getObject(INCLUDE_OBJECT_PICTUREEID_HASH));
-		if(!pbytearray)
-		{
-	    		out = new PTEID_ByteArray(m_context,psod->getHash());
-			if(out)
-				m_objects[INCLUDE_OBJECT_SODEID_HASH]=out;
-			else
-				throw PTEID_ExUnknown();
-		}
-	}
-	
-	END_TRY_CATCH
-	*/
-	return out;
-}
 	
 }

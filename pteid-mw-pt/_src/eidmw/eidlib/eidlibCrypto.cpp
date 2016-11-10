@@ -469,6 +469,31 @@ PTEID_Certificate &PTEID_Certificates::getCertFromCard(unsigned long ulIndex)
 	return *out;
 }
 
+void PTEID_Certificates::addToSODCAs(PTEID_ByteArray &cert)
+{
+	BEGIN_TRY_CATCH
+
+	APL_Certifs *pimpl=static_cast<APL_Certifs *>(m_impl);
+
+	CByteArray cert_ba(cert.GetBytes(), cert.Size());
+	pimpl->addToSODCAs(cert_ba);
+	
+	END_TRY_CATCH
+}
+
+void PTEID_Certificates::resetSODCAs()
+{
+
+	BEGIN_TRY_CATCH
+
+	APL_Certifs *pimpl=static_cast<APL_Certifs *>(m_impl);
+	pimpl->clearSODCAs();
+	pimpl->initSODCAs();
+	
+	END_TRY_CATCH
+
+}
+
 PTEID_Certificate &PTEID_Certificates::getCert(unsigned long ulIndex)
 {
 	PTEID_Certificate *out = NULL;

@@ -1144,7 +1144,6 @@ public:
 	PTEIDSDK_API virtual ~PTEID_Sod();				/**< Destructor */
 
 	PTEIDSDK_API const PTEID_ByteArray& getData();		/**< Return the sod itself */
-	PTEIDSDK_API const PTEID_ByteArray& getHash();		/**< Return the hash of the sod */
 
 private:
 	PTEID_Sod(const PTEID_Sod& doc);				/**< Copy not allowed - not implemented */
@@ -1453,6 +1452,10 @@ public:
 	  * Add a new certificate to the store.
 	  */
 	PTEIDSDK_API PTEID_Certificate &addCertificate(PTEID_ByteArray &cert);
+
+	PTEIDSDK_API void addToSODCAs(PTEID_ByteArray &cert);
+
+	PTEIDSDK_API void resetSODCAs();
 
 
 private:

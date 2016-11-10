@@ -748,33 +748,34 @@ PTEID_Address& PTEID_EIDCard::getAddr()
 
 PTEID_Sod& PTEID_EIDCard::getSod()
 {
-	PTEID_Sod *out = NULL;
+       PTEID_Sod *out = NULL;
 
-	BEGIN_TRY_CATCH
+       BEGIN_TRY_CATCH
 
-	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
+       APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
 
-	out = dynamic_cast<PTEID_Sod *>(getObject(INCLUDE_OBJECT_SODID));
+       out = dynamic_cast<PTEID_Sod *>(getObject(INCLUDE_OBJECT_SODID));
 
-	if(!out)
-	{
-		//CAutoMutex autoMutex(m_mutex);
+       if(!out)
+       {
+               //CAutoMutex autoMutex(m_mutex);
 
-		//ppicture=dynamic_cast<PTEID_Picture *>(getObject(INCLUDE_OBJECT_PICTUREEID));
-		//if(!ppicture)
-		//{
-			out = new PTEID_Sod(m_context,&pcard->getSod());
-			if(out)
-				m_objects[INCLUDE_OBJECT_SODID]=out;
-			else
-				throw PTEID_ExUnknown();
-		//}
-	}
+               //ppicture=dynamic_cast<PTEID_Picture *>(getObject(INCLUDE_OBJECT_PICTUREEID));
+               //if(!ppicture)
+               //{
+                       out = new PTEID_Sod(m_context,&pcard->getSod());
+                       if(out)
+                               m_objects[INCLUDE_OBJECT_SODID]=out;
+                       else
+                               throw PTEID_ExUnknown();
+               //}
+       }
 
-	END_TRY_CATCH
+       END_TRY_CATCH
 
-	return *out;
+       return *out;
 }
+
 
 PTEID_CardVersionInfo& PTEID_EIDCard::getVersionInfo()
 {
@@ -1956,28 +1957,35 @@ PTEIDSDK_API long PTEID_Activate(char *pszPin, unsigned char *pucDate, unsigned 
 	return 0;
 }
 
-PTEIDSDK_API long PTEID_SetSODChecking(int bDoCheck){
+PTEIDSDK_API long PTEID_SetSODChecking(int bDoCheck) {
 	if (readerContext!=NULL)
 		readerContext->getEIDCard().doSODCheck(bDoCheck!=0);
 
 	return 0;
 }
 
-PTEIDSDK_API long PTEID_SetSODCAs(PTEID_Certifs *Certifs){
-	if (readerContext!=NULL){
+PTEIDSDK_API long PTEID_SetSODCAs(PTEID_Certifs *Certifs) {
+	if (readerContext!=NULL) {
 
-		//TODO: if called with NULL this should revert to use the default SOD CAs
+		PTEID_Certificates & _certifs = readerContext->getEIDCard().getCertificates();
+
+		//if called with Certifs = NULL revert to use the default SOD CAs
 		if (Certifs == NULL)
-			return 0;
+		{
+			_certifs.resetSODCAs();
+			return PTEID_OK;
 
-		for(int i=0;i<Certifs->certificatesLength;i++){
+		}
+
+		for (int i=0; i < Certifs->certificatesLength; i++) {
 			PTEID_ByteArray *pba = new PTEID_ByteArray(Certifs->certificates[i].certif,Certifs->certificates[i].certifLength);
-			readerContext->getEIDCard().getCertificates().addCertificate(*pba);
+			_certifs.addToSODCAs(*pba);
 			delete pba;
 		}
+		return PTEID_OK;
 	}
 
-	return 0;
+	return PTEID_E_NOT_INITIALIZED;
 }
 
 PTEIDSDK_API long PTEID_GetCardAuthenticationKey(PTEID_RSAPublicKey *pCardAuthPubKey){
