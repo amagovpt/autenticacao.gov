@@ -2,6 +2,7 @@
 #include <openssl/engine.h>
 #include <openssl/rand.h>
 #include <openssl/evp.h>
+#include <openssl/bn.h>
 
 #include "APLCard.h"
 #include "SecurityContext.h"
@@ -40,8 +41,11 @@ namespace eIDMW
 			//Copy only the 16 msbytes
 			memcpy(mac_key, sha1_digest, SESSION_KEY_SIZE);
 
+			this->mac_key = CByteArray(mac_key, SESSION_KEY_SIZE);
+
 			//Reuse the hashing context
 			EVP_MD_CTX_init(cmd_ctx);
+			EVP_DigestInit(cmd_ctx, EVP_sha1());
 			EVP_DigestUpdate(cmd_ctx, m_kicc_ifd.GetBytes(), m_kicc_ifd.Size());
 			EVP_DigestUpdate(cmd_ctx, suffix_enc, sizeof(suffix_enc));
 			EVP_DigestFinal(cmd_ctx, sha1_digest, &md_len);
@@ -49,37 +53,41 @@ namespace eIDMW
 			//Copy only the 16 msbytes
 			memcpy(enc_key, sha1_digest, SESSION_KEY_SIZE);
 
+			this->encryption_key = CByteArray(enc_key, SESSION_KEY_SIZE);
 
 		}
 	}
-
-	/*TODO
 
 	void SecurityContext::computeInitialSSC(CByteArray &rnd_icc, CByteArray &rnd_ifd)
 	{
 		//4 LSB RND.ICC || 4 LSB RND.IFD
 		CByteArray ssc_bytes(rnd_icc.GetBytes()+4, 4);
 		ssc_bytes.Append(rnd_ifd.GetBytes()+4, 4);
-		BN *ssc_bn = BN_bin2bn(ssc_bytes.GetBytes(), ssc_bytes.Size(), NULL);
+		BIGNUM *ssc_bn = BN_bin2bn(ssc_bytes.GetBytes(), ssc_bytes.Size(), NULL);
 
-		long ssc = BN_get_word();
+		long ssc = BN_get_word(ssc_bn);
 		this->m_ssc = ssc;
 	}
 
-	*/
 
-/*  Adapted from the OpenPACE implementation
-*	
+/*  
 *	Input data must be a multiple of the block size: 8
 */
 
-/* ISO 9797-1 algorithm 3 retail mac without any padding:
-	The Input is assumed to be a multiple of 8-bytes
+/* ISO 9797-1 algorithm 3 retail mac without any padding
  */
 CByteArray 
-retail_mac_des(CByteArray &key, CByteArray &in)
+retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 {
+	unsigned char ssc_block[] = {0,0,0,0,0,0,0,0};
+	CByteArray in;
 	std::cout << "in.Size(): " << in.Size() << std::endl;
+
+	//SSC is an 8-byte counter that serves as the first block of the MAC input
+	for (int i = 0; i < sizeof(ssc_block); i++)
+       ssc_block[i] = (0xFF & ssc >> (7 - i) * 8);
+    in.Append(ssc_block, sizeof(ssc_block));
+    in.Append(mac_input);
 
 	unsigned char *complete_buf = (unsigned char *) malloc(in.Size());
 
@@ -162,31 +170,182 @@ retail_mac_des(CByteArray &key, CByteArray &in)
     EVP_CipherFinal_ex(ctx, last_block_final, &outlen);
 
     EVP_CIPHER_CTX_free(ctx);
+    free(complete_buf);
 
     return CByteArray(last_block_final, len);
 
 err:
-/*
-    if (block)
-        BUF_MEM_free(block);
-    if (c_tmp)
-        BUF_MEM_free(c_tmp);
-    if (d_tmp)
-        BUF_MEM_free(d_tmp);
-        */
     if (ctx)
         EVP_CIPHER_CTX_free(ctx);
 
     return CByteArray();
 }
 
-/*
 
-	bool SecurityContext::internalAuthenticate()
-	{
+	CByteArray encrypt_data_3des(CByteArray &key, CByteArray &in)
+	{	
+		CByteArray cipher_text;
+		unsigned char * out = (unsigned char * ) malloc(in.Size());
+		EVP_CIPHER_CTX * ctx = NULL;
+		int len = 0;
+
+		if (key.Size() == 0)
+	    {
+	    	fprintf(stderr, "retail_mac_des(): Empty key!\n");
+	    	return CByteArray();
+	    }
+
+	    ctx = EVP_CIPHER_CTX_new();
+	    if (!ctx)
+	        goto err;
+
+	    //Null as the 5th param means that IV is empty
+	    if (!EVP_CipherInit_ex(ctx, EVP_des_ede_cbc(), NULL,
+	            (unsigned char *) key.GetBytes(), NULL, 1) ||
+	            	!EVP_CIPHER_CTX_set_padding(ctx, 0))
+	        goto err;
+
+	    if (EVP_EncryptUpdate(ctx, out, &len, in.GetBytes(), in.Size()) == 0) {
+	        fprintf(stderr, "Error in encrypt_data_3des() !\n");
+	    }
+
+	    if (len != in.Size())
+	    {
+	    	fprintf(stderr, "Encryption error: len < in.size()\n");	
+	    }
+
+	    return CByteArray(out, len);
+
+
+	    err:
+	    	return CByteArray();
 
 	}
-*/
+
+	CByteArray paddedByteArray(CByteArray &input)
+	{
+		 int padLen = 8 - input.Size() % 8;
+		 const int paddedContentLen = input.Size()+padLen;
+     	 unsigned char * paddedContent = (unsigned char *) malloc(paddedContentLen);
+
+     	 memcpy(paddedContent, input.GetBytes(), input.Size());
+
+     	 if (paddedContentLen > input.Size())
+       		paddedContent[input.Size()] = 0x80;
+
+   		return CByteArray(paddedContent, paddedContentLen); 
+	}
+
+
+	bool checkSW12(CByteArray &result)
+	{
+		unsigned long ulRespLen = result.Size();
+		unsigned int ulSW12 = (unsigned int)(256 * result.GetByte(ulRespLen - 2) + result.GetByte(ulRespLen - 1));
+
+		return ulSW12 == 0x9000;
+	}
+
+	#define MAC_LEN 8
+
+	CByteArray SecurityContext::buildSecureAPDU(CByteArray &plaintext_apdu)
+	{
+		CByteArray final_apdu;
+		const unsigned char Tcg = 0x87;
+		const unsigned char Tcc = 0x8e;
+		const unsigned char paddingIndicator = 0x01;
+		//Example of Encrypted INTERNAL AUTH APDU
+		//8c 88 00 00 1d 87 11 010156bdbb34981e26497009df84a85811 [8e 08 15 a3 27 8f cc d5 24 6e]
+		//Structure of encrypted APDU: XC INS P1-P2 Lc Tcg Lcg PI,CG Tcc Lcc MAC
+		//Tcg = 0x87
+		//Tcc = 0x8E
+		//PI = 01 (In IAS Classic Applet V3, this is always 01h to indicate that padding is as defined in ISO/IEC 7816-4,
+		//That is one byte of 80h followed by as many bytes of 00h as necessary to make the data a multiple of eight bytes)
+		//Command Header= XC INS P1-P2
+		//Input data for MAC: CH || PB || Tcg || Lcg || PI,CG || PB
+		//PB: padding 80h, 00h,...00h until the input data becomes a multiple of eight bytes
+		CByteArray command_header(plaintext_apdu.GetBytes(0, 4));
+
+		CByteArray input_data(plaintext_apdu.GetBytes(5, plaintext_apdu.Size()-5));
+		CByteArray paddedInput = paddedByteArray(input_data);
+
+		CByteArray cryptogram = encrypt_data_3des(this->encryption_key, paddedInput);
+		//LCg = Len(Cg) + Len(PI = 1) 
+		int lcg = cryptogram.Size() +1;
+		CByteArray inputForMac = paddedByteArray(command_header);
+
+		CByteArray paddedCryptogram;
+		paddedCryptogram.Append(Tcg);
+		//This is safe because Lcg will be always lower than 
+		paddedCryptogram.Append((unsigned char)lcg);
+		paddedCryptogram.Append(paddingIndicator);
+		paddedCryptogram.Append(cryptogram);
+
+		paddedCryptogram = paddedByteArray(paddedCryptogram);
+
+		CByteArray mac = retail_mac_des(mac_key, paddedCryptogram, m_ssc);
+
+		//Build final APDU including Cryptogram and MAC
+		int lc_final = MAC_LEN +2 + cryptogram.Size() + 3; // CG + Tcg + Lcg + PI
+		final_apdu.Append(command_header);
+		final_apdu.Append((unsigned char)lc_final);
+		final_apdu.Append(Tcg);
+		final_apdu.Append((unsigned char)lcg);
+		final_apdu.Append(paddingIndicator);
+		final_apdu.Append(cryptogram);
+		final_apdu.Append(Tcc);
+		final_apdu.Append(MAC_LEN); //Lcc
+		final_apdu.Append(mac);
+
+		return final_apdu;
+	}
+
+	//8c 88 00 00 1d 87 11 01 01 56 bdbb34981e26497009df84a85811 8e08 15 a3 27 8f cc d5 24 6e
+
+
+	//TODO: Debug this the first encrypted APDU is wrong ATM...
+	bool SecurityContext::internalAuthenticate()
+	{
+		//Example of encrypted MSE SET Internal Auth:
+		// 0c 22 41 a4 15 87 09 01 be 99 3f dd 3f 1d 9c 59 8e 08 ec 5c bc 76 3a 4d 83 73
+		char mse_internal_auth[] = {0x0C, 0x22, 0x41, 0xA4, 0x06, 0x84, 0x01, 0x77, 0x95, 0x01, 0x80};
+		CByteArray mseInternal(mse_internal_auth);
+
+		CByteArray secure_apdu = buildSecureAPDU(mseInternal);
+
+		CByteArray resp = m_card->sendAPDU(secure_apdu);
+
+		if (!checkSW12(resp))
+		{
+			MWLOG(LEV_ERROR, MOD_APL, L"MSE_internal_auth failed!");
+			return false;
+		}
+
+		unsigned char tRnd[8];
+		char internal_auth_apdu[] = {0x8C, 0x88, 0x00, 0x00, 0x08};
+		CByteArray internalAuth(internal_auth_apdu, sizeof(internal_auth_apdu));
+
+		if (RAND_bytes(tRnd, sizeof(tRnd)) == 0) {
+
+            fprintf(stderr, "Error obtaining PRND2 bytes of random from OpenSSL\n");
+            return false;
+        }
+
+        internalAuth.Append(tRnd, 8);
+        internalAuth.Append(0x88);
+
+        CByteArray secure_apdu2 = buildSecureAPDU(internalAuth);
+
+        resp = m_card->sendAPDU(secure_apdu2);
+
+		if (!checkSW12(resp))
+		{
+			MWLOG(LEV_ERROR, MOD_APL, L"DH_generate_key failed!");
+			return false;
+		}
+        //sendAPDU(secure_apdu);
+
+        return true;
+	}
 
 
 	/*
@@ -264,6 +423,7 @@ err:
 
 		return CByteArray(challenge, sizeof(challenge));
 	}
+
 
 	void SecurityContext::initMuthualAuthProcess()
 	{
@@ -367,8 +527,13 @@ err:
 		externalAuthInput.Append(signed_challenge);
 
 		this->deriveSessionKeys();
+		//Initial value of MCC
+		this->m_ssc = 1;
 
-		return sam_helper->verifySignedChallenge(externalAuthInput);
+		bool resp = sam_helper->verifySignedChallenge(externalAuthInput);
+		internalAuthenticate();
+
+		return resp;
 	}
 
 	bool SecurityContext::verifyCVCCertificate(CByteArray ifd_cvc)

@@ -43,6 +43,15 @@ void binToHex(const unsigned char *in, size_t in_len, char *out, size_t out_len)
         *pos = '\0';
 }
 
+
+bool checkResultSW12(CByteArray &result)
+{
+	unsigned long ulRespLen = result.Size();
+	unsigned int ulSW12 = (unsigned int)(256 * result.GetByte(ulRespLen - 2) + result.GetByte(ulRespLen - 1));
+
+	return ulSW12 == 0x9000;
+}
+
 char * SAM::_getDH_Param(char specific_byte, unsigned long offset)
 {
 		char * hex_param = NULL;
@@ -193,14 +202,6 @@ char *SAM::getSerialNumberIAS101()
 	binToHex(serial_ba.GetBytes(), serial_ba.Size(), serial, serial_ba.Size()*2+1);
 
 	return serial;
-}
-
-bool checkResultSW12(CByteArray &result)
-{
-	unsigned long ulRespLen = result.Size();
-	unsigned int ulSW12 = (unsigned int)(256 * result.GetByte(ulRespLen - 2) + result.GetByte(ulRespLen - 1));
-
-	return ulSW12 == 0x9000;
 }
 
 

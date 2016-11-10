@@ -142,37 +142,51 @@ void APL_Certifs::initSODCAs()
 	APL_Certif *cert=NULL;
 	unsigned long ulCount=0;
 
+	APL_Config sam_server(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER);
+
 	defaultSODCertifs = true;
 
-	std::vector<unsigned long>::const_iterator itrOrder;
-	std::map<unsigned long, APL_Certif *>::const_iterator itrCert;
 
-	for(itrOrder=m_certifsOrder.begin();itrOrder!=m_certifsOrder.end();itrOrder++)
+	//For test cards we just need the self-signed root cert present in the card
+	if (strstr(sam_server.getString(), "teste") != NULL) {
+		cert = getRoot();
+		m_sod_cas.push_back(cert);
+		MWLOG(LEV_DEBUG, MOD_APL, L"initSODCAs(): Adding test Root certificate %s", cert->getOwnerName());
+
+	}
+	else
 	{
-		itrCert = m_certifs.find(*itrOrder);
-		if(itrCert==m_certifs.end())
+
+		std::vector<unsigned long>::const_iterator itrOrder;
+		std::map<unsigned long, APL_Certif *>::const_iterator itrCert;
+
+		for(itrOrder=m_certifsOrder.begin();itrOrder!=m_certifsOrder.end();itrOrder++)
 		{
-			//The certif is not in the map
-			//Should not happend
-			throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE); 
-		}
+			itrCert = m_certifs.find(*itrOrder);
+			if(itrCert==m_certifs.end())
+			{
+				//The certif is not in the map
+				//Should not happend
+				throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE); 
+			}
 
-		cert = itrCert->second;
+			cert = itrCert->second;
 
-		//Select Cartao de Cidadao PKI roots
-		if (strcmp(cert->getIssuerName(), "ECRaizEstado")==0)
-		{
-			m_sod_cas.push_back(cert);
-			MWLOG(LEV_DEBUG, MOD_APL, L"initSODCAs(): Adding certificate %s", cert->getOwnerName());
+			//Select Cartao de Cidadao PKI roots
+			if (strcmp(cert->getIssuerName(), "ECRaizEstado")==0)
+			{
+				m_sod_cas.push_back(cert);
+				MWLOG(LEV_DEBUG, MOD_APL, L"initSODCAs(): Adding certificate %s", cert->getOwnerName());
 
-		}
-		//Select ECRaizEstado and Baltimore CyberTrust
-		if (strcmp(cert->getOwnerName(), "ECRaizEstado") == 0 ||
-		         strcmp(cert->getOwnerName(), "Baltimore CyberTrust Root") == 0)
-		{
-			m_sod_cas.push_back(cert);
-			MWLOG(LEV_DEBUG, MOD_APL, L"initSODCAs(): Adding certificate %s", cert->getOwnerName());
+			}
+			//Select ECRaizEstado and Baltimore CyberTrust
+			if (strcmp(cert->getOwnerName(), "ECRaizEstado") == 0 ||
+			         strcmp(cert->getOwnerName(), "Baltimore CyberTrust Root") == 0)
+			{
+				m_sod_cas.push_back(cert);
+				MWLOG(LEV_DEBUG, MOD_APL, L"initSODCAs(): Adding certificate %s", cert->getOwnerName());
 
+			}
 		}
 	}
 }

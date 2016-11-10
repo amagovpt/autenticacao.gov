@@ -40,7 +40,10 @@ namespace eIDMW
 		private:
 
 			void initMuthualAuthProcess();
+			bool internalAuthenticate();
 			void deriveSessionKeys();
+			CByteArray buildSecureAPDU(CByteArray &plaintext_apdu);
+
 			void computeInitialSSC(CByteArray &rnd_icc, CByteArray &rnd_ifd);
 
 			APL_Card *m_card;

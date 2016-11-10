@@ -40,6 +40,7 @@ struct SignedChallengeResponse
 	char *set_se_command;
 };
 
+
 class SAM
 {
 

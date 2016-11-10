@@ -58,7 +58,7 @@ namespace eIDMW
 		//Read response
 		int bytes_read = read_from_stream(m_ssl_connection, server_response, REPLY_BUFSIZE);
 
-		//fprintf(stderr, "DEBUG: Server reply (size=%d): \n%s\n", bytes_read, server_response);
+		fprintf(stderr, "DEBUG: Server reply (size=%d): \n%s\n", bytes_read, server_response);
 
 		return server_response;
 	}
