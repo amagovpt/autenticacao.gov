@@ -148,6 +148,13 @@ public:
 #define ADDRESS_ZIP3			"address_zip3"
 #define ADDRESS_POSTALLOCALITY	"address_postallocality"
 
+#define FOREIGN_COUNTRY "foreign_country"
+#define FOREIGN_ADDRESS "foreign_address"
+#define FOREIGN_CITY "foreign_city"
+#define FOREIGN_REGION "foreign_region"
+#define FOREIGN_LOCALITY "foreign_locality"
+#define FOREIGN_POSTALCODE "foreign_postalcode"
+
 	PTEID_Card*              m_pCard;
 	//----------------------------------------------
 	// ctor
@@ -180,25 +187,39 @@ public:
 		//TODO marker set
 		PTEID_Address&	pteid_eid = Card.getAddr();
 
-		/*m_Fields[ADDRESS_STREET]			=  pteid_eid.getStreet());
-		m_Fields[ADDRESS_ZIPCODE]			=  pteid_eid.getZipCode());
-		m_Fields[ADDRESS_COUNTRY]			=  pteid_eid.getCountry());*/
-		m_Fields[ADDRESS_DISTRICT]			=  pteid_eid.getDistrict();
-		m_Fields[ADDRESS_MUNICIPALITY] 		=  pteid_eid.getMunicipality();
-		m_Fields[ADDRESS_CIVILPARISH]  		=  pteid_eid.getCivilParish();
-		m_Fields[ADDRESS_ABBRSTREETTYPE]  	=  pteid_eid.getAbbrStreetType();
-		m_Fields[ADDRESS_STREETTYPE]  		=  pteid_eid.getStreetType();
-		m_Fields[ADDRESS_STREETNAME]   		=  pteid_eid.getStreetName();
-		m_Fields[ADDRESS_ABBRBUILDINGTYPE] 	=  pteid_eid.getAbbrBuildingType();
-		m_Fields[ADDRESS_BUILDINGTYPE] 		=  pteid_eid.getBuildingType();
-		m_Fields[ADDRESS_DOORNO] 			=  pteid_eid.getDoorNo();
-		m_Fields[ADDRESS_FLOOR] 			=  pteid_eid.getFloor();
-		m_Fields[ADDRESS_SIDE] 				=  pteid_eid.getSide();
-		m_Fields[ADDRESS_PLACE] 			=  pteid_eid.getPlace();
-		m_Fields[ADDRESS_LOCALITY] 			=  pteid_eid.getLocality();
-		m_Fields[ADDRESS_ZIP4] 				=  pteid_eid.getZip4();
-		m_Fields[ADDRESS_ZIP3] 				=  pteid_eid.getZip3();
-		m_Fields[ADDRESS_POSTALLOCALITY]	=  pteid_eid.getPostalLocality();
+		if (!pteid_eid.isNationalAddress())
+		{
+			m_foreign = true;
+
+			m_Fields[FOREIGN_COUNTRY] = pteid_eid.getForeignCountry();
+			m_Fields[FOREIGN_ADDRESS] = pteid_eid.getForeignAddress();
+			m_Fields[FOREIGN_CITY] = pteid_eid.getForeignCity();
+			m_Fields[FOREIGN_REGION] = pteid_eid.getForeignRegion();
+			m_Fields[FOREIGN_LOCALITY] = pteid_eid.getForeignLocality();
+			m_Fields[FOREIGN_POSTALCODE] = pteid_eid.getForeignPostalCode();
+		}
+		else
+		{
+			m_foreign = false;
+
+			m_Fields[ADDRESS_DISTRICT]			=  pteid_eid.getDistrict();
+			m_Fields[ADDRESS_MUNICIPALITY] 		=  pteid_eid.getMunicipality();
+			m_Fields[ADDRESS_CIVILPARISH]  		=  pteid_eid.getCivilParish();
+			m_Fields[ADDRESS_ABBRSTREETTYPE]  	=  pteid_eid.getAbbrStreetType();
+			m_Fields[ADDRESS_STREETTYPE]  		=  pteid_eid.getStreetType();
+			m_Fields[ADDRESS_STREETNAME]   		=  pteid_eid.getStreetName();
+			m_Fields[ADDRESS_ABBRBUILDINGTYPE] 	=  pteid_eid.getAbbrBuildingType();
+			m_Fields[ADDRESS_BUILDINGTYPE] 		=  pteid_eid.getBuildingType();
+			m_Fields[ADDRESS_DOORNO] 			=  pteid_eid.getDoorNo();
+			m_Fields[ADDRESS_FLOOR] 			=  pteid_eid.getFloor();
+			m_Fields[ADDRESS_SIDE] 				=  pteid_eid.getSide();
+			m_Fields[ADDRESS_PLACE] 			=  pteid_eid.getPlace();
+			m_Fields[ADDRESS_LOCALITY] 			=  pteid_eid.getLocality();
+			m_Fields[ADDRESS_ZIP4] 				=  pteid_eid.getZip4();
+			m_Fields[ADDRESS_ZIP3] 				=  pteid_eid.getZip3();
+			m_Fields[ADDRESS_POSTALLOCALITY]	=  pteid_eid.getPostalLocality();
+
+		}
 
 // 		qDebug() << "AddressInfo::RetrieveData()";
 // 		for (tFieldMap::iterator it=m_Fields.begin(); it!=m_Fields.end(); it++)
@@ -218,67 +239,15 @@ public:
 		return m_Fields;
 	}
 
+	bool isForeign() { return m_foreign; };
+
 	bool isDataLoaded() {return (m_pCard!=NULL);}
 
 private:
 	tFieldMap m_Fields;
+	bool m_foreign;
 };
 
-//**************************************************
-// Person relatives information
-// This class contains all the persons relatives specific data
-//**************************************************
-/*
-class RelativesInfo
-{
-public:
-//#define
-	//----------------------------------------------
-	// ctor
-	//----------------------------------------------
-	RelativesInfo( void )
-	{
-	}
-
-	//----------------------------------------------
-	// dtor
-	//----------------------------------------------
-	virtual ~RelativesInfo( void )
-	{
-	}
-
-	//----------------------------------------------
-	// Reset to default values
-	//----------------------------------------------
-	void Reset( void )
-	{
-		m_Fields.clear();
-	}
-
-	//----------------------------------------------
-	// retrieve data from EID card
-	//----------------------------------------------
-	bool RetrieveData( PTEID_EIDCard& Card )
-	{
-		Card.getType();
-		bool bRetVal = false;
-
-		bRetVal = true;
-		return bRetVal;
-	}
-
-	//----------------------------------------------
-	// get reference to all fields
-	//----------------------------------------------
-	tFieldMap& getFields( void )
-	{
-		return m_Fields;
-	}
-
-private:
-	tFieldMap m_Fields;
-};
-*/
 
 //**************************************************
 // Person extra information
@@ -744,38 +713,6 @@ public:
 		return m_pCertificates;
 	}
 
-    /*QList<PTEID_Certificate *>& getMainCertificates()
-    {
-        if (m_MainCertifs.empty())
-        {
-            m_MainCertifs.append(&m_pCertificates->getAuthentication());
-            m_MainCertifs.append(&m_pCertificates->getSignature());
-        }
-
-        return m_MainCertifs;
-    }*/
-
-/*
-    // Just load the two essential certificates (sign & auth) and
-    // avoid the overhead of loading every cert we now.
-    bool RetrieveDataSimpleCertificates( PTEID_EIDCard& card )
-    {
-        m_pSignatureCert = &card.getSignature();
-        m_pAuthenticationCert = &card.getAuthentication();
-
-        return true;
-    }
-
-    PTEID_Certificate* getSignatureCert ( void )
-    {
-        return m_pSignatureCert;
-    }
-
-    PTEID_Certificate* getAuthenticationCert ( void )
-    {
-        return m_pAuthenticationCert;
-    }
-*/
 private:
 	PTEID_Certificates* m_pCertificates;
 	//QList<PTEID_Certificate *> m_MainCertifs;
