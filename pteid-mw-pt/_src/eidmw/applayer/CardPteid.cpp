@@ -17,10 +17,6 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
-#include <iostream>
-#include <fstream>
-
-#include <openssl/err.h>
 
 #include "CardPteid.h"
 #include "TLVBuffer.h"
@@ -34,9 +30,16 @@
 #include "APLConfig.h"
 #include "PhotoPteid.h"
 #include "APLPublicKey.h"
+#include "Log.h"
 #include "SODParser.h"
 
-#include "Log.h"
+#include <openssl/err.h>
+#include <iostream>
+#include <fstream>
+
+
+
+
 
 using namespace std;
 
