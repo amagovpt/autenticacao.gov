@@ -114,7 +114,7 @@
 		<Property Id="ALLUSERS" Value="1" />
 
 		<Property Id="OLDMIDDLEWAREINSTALLED">
-			<RegistrySearch Id="OldMiddlewareInstalled_search" Name="Version" Type="raw" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{89266692-369C-4B31-BA95-DA601180FB03}"/>
+			<RegistrySearch Id="OldMiddlewareInstalled_search" Name="Version" Type="raw" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4411E1E1-E262-4861-8A1A-A8552C846840}"/>
 		</Property>
 
 		<Condition Message="!(loc.OldMiddlewareErrorMsg)" >
