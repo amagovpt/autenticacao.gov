@@ -81,6 +81,9 @@ public:
 
 int main(int argc, char *argv[])
 {
+	bool test_mode = false;
+	const char * default_sam_server = NULL;
+
 #ifdef MEMORY_LEAKS_CHECK
 	#ifdef WIN32
 		_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
@@ -115,9 +118,12 @@ int main(int argc, char *argv[])
 	instance.initialize();
 
 	PTEID_InitSDK();
+	PTEID_Config sam_server(PTEID_PARAM_GENERAL_SAM_SERVER);
+
 	if (argc == 2 && strcmp(argv[1], "-test") == 0)
 	{
-		PTEID_Config sam_server(PTEID_PARAM_GENERAL_SAM_SERVER);
+		test_mode = true;
+		default_sam_server = sam_server.getString();
 		sam_server.setString("pki.teste.cartaodecidadao.pt:443");
 	}
 
@@ -154,6 +160,11 @@ int main(int argc, char *argv[])
 	instance.setActivationWindow ( &widget );
 
 	iRetValue = instance.exec();
+
+	if (test_mode)
+	{
+		sam_server.setString(default_sam_server);
+	}
 
 	PTEID_ReleaseSDK();
 
