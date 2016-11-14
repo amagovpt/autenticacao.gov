@@ -256,9 +256,9 @@
    <widget class="QPushButton" name="button_clearFiles">
     <property name="geometry">
      <rect>
-      <x>91</x>
+      <x>61</x>
       <y>185</y>
-      <width>121</width>
+      <width>151</width>
       <height>27</height>
      </rect>
     </property>
