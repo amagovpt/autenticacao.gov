@@ -35,6 +35,9 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 
 	if (!settings.getProxyHost().isEmpty())
 	{
+		ui.label_proxyhost->setEnabled(true);
+		ui.label_proxyPort->setEnabled(true);
+
 		ui.lineEdit_proxyHost->setText(settings.getProxyHost());
 		if (settings.getProxyPort() > 0)
 		{
@@ -49,6 +52,9 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 		if (!settings.getProxyUsername().isEmpty())
 		{
 			ui.checkBox_proxyAuth->setChecked(true);
+			ui.label_proxyUser->setEnabled(true);
+			ui.label_proxyPwd->setEnabled(true);
+
 			ui.lineEdit_proxyUser->setText(settings.getProxyUsername());
 			ui.lineEdit_proxyPwd->setText(settings.getProxyPwd());
 		}
@@ -60,6 +66,10 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 	}
 	else
 	{
+		ui.label_proxyhost->setEnabled(false);
+		ui.label_proxyPort->setEnabled(false);
+		ui.label_proxyUser->setEnabled(false);
+		ui.label_proxyPwd->setEnabled(false);
 		ui.lineEdit_proxyHost->setEnabled(false);
 		ui.spinBox->setEnabled(false);
 		ui.checkBox_proxyAuth->setEnabled(false);	
@@ -68,6 +78,9 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 #ifndef WIN32 
 //#ifndef __APPLE__
 	ui.chbWinAutoStart->hide();
+
+	//Resize the Startup groupBox to avoid border overlap: only visible in MacOS
+	ui.groupBox_startup->resize(ui.groupBox_startup->width(), ui.groupBox_startup->height()-40);
 
 	//TODO: test these translations in OSX and Windows
 	QRect pos_1 = ui.groupBox_notifications->geometry();
@@ -159,6 +172,19 @@ void dlgOptions::on_checkBox_proxy_toggled(bool checked)
 	ui.checkBox_proxyAuth->setEnabled(checked);
 	ui.lineEdit_proxyUser->setEnabled(checked);
 	ui.lineEdit_proxyPwd->setEnabled(checked);
+	ui.label_proxyhost->setEnabled(checked);
+	ui.label_proxyPort->setEnabled(checked);
+
+	if (!checked)
+	{
+		ui.label_proxyUser->setEnabled(false);
+		ui.label_proxyPwd->setEnabled(false);
+	}
+	else if (checked && ui.checkBox_proxyAuth->isChecked())
+	{
+		ui.label_proxyUser->setEnabled(true);
+		ui.label_proxyPwd->setEnabled(true);
+	}
 }
 
 void dlgOptions::on_checkBox_proxyAuth_toggled(bool checked)
@@ -166,6 +192,8 @@ void dlgOptions::on_checkBox_proxyAuth_toggled(bool checked)
 	
 	ui.lineEdit_proxyUser->setEnabled(checked);
 	ui.lineEdit_proxyPwd->setEnabled(checked);
+	ui.label_proxyUser->setEnabled(checked);
+	ui.label_proxyPwd->setEnabled(checked);
 }
 
 void dlgOptions::on_okButton_clicked()
