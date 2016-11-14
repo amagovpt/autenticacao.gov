@@ -94,6 +94,7 @@ PDFSignWindow::PDFSignWindow(QWidget* parent, int selected_reader, CardInformati
 
 	image_canvas->setFixedSize(420, 200);
 	ui.verticalLayout_4->addWidget(image_canvas);
+	ui.button_clearFiles->setEnabled(false);
 	// image_canvas->setLayout(ui.verticalLayout);
 	//image_canvas->show();
 
@@ -1169,14 +1170,20 @@ void PDFSignWindow::on_button_clearFiles_clicked()
 {
 	list_model->removeRows(0, list_model->rowCount());
 
-	//TODO: Revert the actions triggered by add File
 	if (m_pdf_sig != NULL)
+	{
 		delete m_pdf_sig;
+		m_pdf_sig = NULL;
+	}
 
 	ui.button_sign->setEnabled(false);
 	ui.visible_checkBox->setEnabled(false);
+	ui.scene_view->setEnabled(false);
 
+	if (my_rectangle)
+		my_rectangle->hide();
 
+	clearAllSectors();
 }
 
 
@@ -1354,6 +1361,7 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	{
 		ui.button_sign->setEnabled(true);
 		ui.visible_checkBox->setEnabled(true);
+		ui.button_clearFiles->setEnabled(true);
 	}
 
 	if (!my_scene)
