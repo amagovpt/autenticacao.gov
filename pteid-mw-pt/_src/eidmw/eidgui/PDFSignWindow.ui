@@ -253,6 +253,19 @@
      <number>999999</number>
     </property>
    </widget>
+   <widget class="QPushButton" name="button_clearFiles">
+    <property name="geometry">
+     <rect>
+      <x>91</x>
+      <y>185</y>
+      <width>121</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Remove files</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">

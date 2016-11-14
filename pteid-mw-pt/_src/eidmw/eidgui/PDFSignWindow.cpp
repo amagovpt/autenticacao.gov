@@ -453,6 +453,8 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 	ui.radioButton_firstpage->setEnabled(checked);
 	ui.radioButton_lastpage->setEnabled(checked);
 	ui.radioButton_choosepage->setEnabled(checked);
+	
+	ui.scene_view->setEnabled(checked);
 
     //Pre-select first page option
     if (!ui.radioButton_choosepage->isChecked() && !ui.radioButton_firstpage->isChecked()
@@ -468,12 +470,13 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 	}
 
 	ui.pushButton_imgChooser->setEnabled(checked);
-	ui.pushButton_resetImage->setEnabled(checked);
+	//ui.pushButton_resetImage->setEnabled(checked);
 	ui.pushButton_freeselect->setEnabled(checked);
 	ui.smallsig_checkBox->setEnabled(checked);
 
 	if (!checked && my_rectangle)
 	{
+
 		my_rectangle->hide();
 		clearAllSectors();
 	}
@@ -494,8 +497,9 @@ void PDFSignWindow::on_pushButton_imgChooser_clicked()
 	{
 		this->image_canvas->setCustomPixmap(QPixmap::fromImage(m_custom_image));
 		this->image_canvas->update();
+		//This button is only useful when we load a custom image
+		ui.pushButton_resetImage->setEnabled(true);
 	}
-	// ui.image_canvas->setCustomPixmap(QPixmap::fromImage(original_image));
 }
 
 void PDFSignWindow::on_pushButton_resetImage_clicked()
@@ -801,10 +805,11 @@ void PDFSignWindow::buildLocationTab()
     addSquares();
     
     my_scene->setParent(this);
-    // fprintf(stderr, "FreeSelectionDialog Width: %d, Height: %d\n", ui.widget->width(), ui.widget->height());
 
-    //Add room for margins, the textboxes and buttons below the widget
-    // this->setFixedSize(ui.widget->width() + 50, ui.widget->height() + 70);
+    //Disable the location sectors at build: it can be enabled by the visible sig checkbox
+    view->setEnabled(false);
+
+    // fprintf(stderr, "FreeSelectionDialog Width: %d, Height: %d\n", ui.widget->width(), ui.widget->height());
 
 }
 
@@ -1159,6 +1164,21 @@ void PDFSignWindow::invertSelectionMode()
         }
 
 }
+
+void PDFSignWindow::on_button_clearFiles_clicked()
+{
+	list_model->removeRows(0, list_model->rowCount());
+
+	//TODO: Revert the actions triggered by add File
+	if (m_pdf_sig != NULL)
+		delete m_pdf_sig;
+
+	ui.button_sign->setEnabled(false);
+	ui.visible_checkBox->setEnabled(false);
+
+
+}
+
 
 void PDFSignWindow::getValues(double *x, double *y)
 {

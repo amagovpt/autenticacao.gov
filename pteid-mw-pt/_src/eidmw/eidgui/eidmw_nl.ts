@@ -1900,7 +1900,13 @@ Please specify .xml, .csv or .eid</source>
 
      <message>
         <source>Selected sector: %1</source>
+     
         <translation>Área Seleccionada: %1</translation>
+     </message>
+
+     <message>
+           <source>Remove files</source>
+           <translation>Remover ficheiros</translation>
      </message>
 
      <message>

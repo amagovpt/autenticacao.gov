@@ -186,6 +186,7 @@ class PDFSignWindow : public QDialog
 	    void on_button_addfile_clicked();
 	    void on_button_sign_clicked();
 	    void on_button_cancel_clicked();
+	    void on_button_clearFiles_clicked();
 
 	    void on_pushButton_imgChooser_clicked();
 	    void on_pushButton_resetImage_clicked();
