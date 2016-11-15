@@ -254,7 +254,8 @@ void SSLConnection::init_openssl() {
  */
 void SSLConnection::CloseConnection() {
 
-    SSL_free(m_ssl_connection);
+	if (m_ssl_connection != NULL)
+    	SSL_free(m_ssl_connection);
 
 }
 
@@ -755,13 +756,16 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
 /**
  * Connect to a host using an encrypted stream
  */
-SSL* SSLConnection::connect_encrypted(char* host_and_port)
+SSL* SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
 {
 
     BIO* bio = NULL;
 
     /* Set up the SSL pointers */
-    SSL_CTX *ctx = SSL_CTX_new(TLSv1_client_method());
+
+    /* The insecure mode is used now for SCAP server only */
+    
+    SSL_CTX *ctx = insecure ? SSL_CTX_new(TLSv1_client_method()) : SSL_CTX_new(TLSv1_1_client_method());
 
     SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
 
@@ -1052,8 +1056,7 @@ unsigned int SSLConnection::write_to_stream(SSL* ssl, char* request_string) {
 /**
  * Main SSL demonstration code entry point
  */
-bool SSLConnection::InitConnection()
-{
+bool SSLConnection::InitSAMConnection() {
 
     APL_Config sam_server(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER);
 
@@ -1066,6 +1069,8 @@ bool SSLConnection::InitConnection()
     strcpy(m_host, host_and_port);
     char * delim = strchr(m_host, ':');
     *delim = '\0';
+
+    MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: connecting to SAM server: %s", host_and_port);
 
     /* initialise the OpenSSL library */
     init_openssl();

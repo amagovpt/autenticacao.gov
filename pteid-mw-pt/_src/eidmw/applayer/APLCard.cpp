@@ -229,6 +229,7 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 	}
 
 	SSLConnection conn;
+	conn.InitSAMConnection();
 
 	callback(callback_data, 10);
 

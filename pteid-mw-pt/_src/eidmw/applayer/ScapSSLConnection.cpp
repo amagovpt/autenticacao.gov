@@ -14,15 +14,16 @@ namespace eIDMW
 
 	ScapSSLConnection::ScapSSLConnection(char * host, char *port)
 	{
-
+		bool insecure = true;
 		std::string host_and_port = std::string(host) +":"+ port;
 
 		/* initialise the OpenSSL library */
     	init_openssl();
     	m_host = host;
-    	//m_endpoint = endpoint;
 
-    	if ((m_ssl_connection = connect_encrypted((char *)host_and_port.c_str())) == NULL)
+    	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: connecting to SCAP server: %s", host_and_port.c_str());
+
+    	if ((m_ssl_connection = connect_encrypted((char *)host_and_port.c_str(), insecure)) == NULL)
     	{
     		fprintf(stderr, "ScapSSLConnection: error returned by connect_encrypted!\n");
     	}
@@ -30,7 +31,6 @@ namespace eIDMW
 	}
 
 	#define HEADERS_BUFSIZE 1000
-
 
 	char * ScapSSLConnection::postSoapRequest(char *endpoint, char *soapAction, char *soapBody)
 	{
@@ -62,6 +62,5 @@ namespace eIDMW
 
 		return server_response;
 	}
-
 
 }

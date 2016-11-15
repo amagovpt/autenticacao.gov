@@ -1457,7 +1457,7 @@ BIO *APL_CryptoFwk::Connect(char *pszHost, int iPort, int iSSL, SSL_CTX **ppSSLC
 		if (iSSL) 
 		{
 			OpenSSL_add_all_algorithms();
-			SSL_CTX *pSSLCtx = SSL_CTX_new(SSLv23_client_method());
+			SSL_CTX *pSSLCtx = SSL_CTX_new(TLSv1_1_client_method());
 	    
 			if (!(pConnect = BIO_new_ssl_connect(pSSLCtx))) 
 				return NULL;
