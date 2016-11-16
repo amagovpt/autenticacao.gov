@@ -4,17 +4,26 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+include(../_Builds/eidcommon.mak)
+
+QT       += core gui
+TARGET = ScapSignature
+TEMPLATE = app
+
+message("Compile $$TARGET")
+
+target.path = $${INSTALL_DIR_BIN}
 
 CODECFORTR = UTF-8
 CODECFORSRC = UTF-8
 
 TRANSLATIONS = scapsignature_pt.ts
 
-TARGET = ScapSignature
-TEMPLATE = app
+translations.path = $${INSTALL_DIR_BIN}
+translations.files += scapsignature_pt.qm
+
+INSTALLS += target translations
 
 INCLUDEPATH += ../common \
 	       ../eidlib \	
