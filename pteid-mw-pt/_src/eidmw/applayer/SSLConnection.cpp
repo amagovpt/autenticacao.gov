@@ -899,11 +899,11 @@ long parseLong(char *str)
 	return val;
 }
 
-void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buffer_len)
+void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buffer_len, bool headersAlreadyRead)
 {
 	int r;
 	bool final_chunk_read = false;
-	unsigned int bytes_read = 0;
+	unsigned int bytes_read = headersAlreadyRead ? strlen(buffer) : 0;
 	long chunk_length = 0;
 	do
     {	

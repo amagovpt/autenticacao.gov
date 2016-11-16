@@ -57,7 +57,7 @@ class SSLConnection
 
 		unsigned int write_to_stream(SSL* bio, char* req_string);
 		unsigned int read_from_stream(SSL* bio, char* buffer, unsigned int length);
-		void read_chunked_reply(SSL *bio, char* buffer, unsigned int length);
+		void read_chunked_reply(SSL *bio, char* buffer, unsigned int length, bool headersAlreadyRead=false);
 
 		//Connect to the specified host and port, optionally using the deprecated TLSv1 protocol for compatibility with some servers
 		SSL *connect_encrypted(char *host_and_port, bool insecure=false);

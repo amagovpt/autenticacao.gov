@@ -167,6 +167,7 @@ void APL_Certifs::initSODCAs()
 			{
 				//The certif is not in the map
 				//Should not happend
+				fprintf(stderr, "Exception in initSODCAs() !\n" );
 				throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE); 
 			}
 
@@ -213,6 +214,7 @@ void APL_Certifs::addToSODCAs(const CByteArray &cert_ba)
 
 unsigned long APL_Certifs::countSODCAs()
 {
+	fprintf(stderr, "DEBUG: countSODCAs returns %d\n", m_sod_cas.size());
 	return m_sod_cas.size();
 }
 
