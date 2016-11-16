@@ -35,6 +35,7 @@ SUBDIRS +=  cardlayerTool
 }
 
 SUBDIRS += eidgui
+SUBDIRS += scap-client-v2
 
 ## the subdirs have to be built in the given order
 CONFIG += ordered
