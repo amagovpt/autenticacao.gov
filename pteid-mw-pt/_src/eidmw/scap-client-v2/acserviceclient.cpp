@@ -87,10 +87,26 @@ std::vector<ACService::ns2__AttributesType *> ACServiceClient::reqAttributeSuppl
 
             // Remove request answer headers
             std::string replyString = scapResult;
+
             int initialPos = replyString.find("<AttributeResponse");
-            std::string endString = "</AttributeResponse>";\
+            std::string endString = "</AttributeResponse>";
+
             int finalPos = replyString.find(endString) + endString.length();
             replyString = replyString.substr(initialPos, finalPos - initialPos);
+
+            char *reply_ptr = (char *) replyString.c_str();
+
+            //Remove some strange CRLF that sometimes come up in the XML reply
+            char * pos = strstr(reply_ptr, "\r\n");
+            std::string replyFinal;
+            if (pos != NULL)
+            {
+                int offset = pos - reply_ptr;
+                replyFinal.append(reply_ptr, offset);
+                replyFinal.append(pos+2, strlen(reply_ptr) - offset - 2);
+            }
+            else
+                replyFinal += replyString;
 
             // Save to cache
             QString s_scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
@@ -102,16 +118,15 @@ std::vector<ACService::ns2__AttributesType *> ACServiceClient::reqAttributeSuppl
             std::cout << "Creating cache file on location: " << fileLocation.toStdString() << std::endl;
             QFile cacheFile(fileLocation);
             if( cacheFile.open(QIODevice::WriteOnly) ) {
-                cacheFile.write(replyString.c_str(), replyString.length());
+                cacheFile.write(replyFinal.c_str(), replyFinal.length());
             }
             else
             {
                 std::cerr << "Couldn't save attribute result to cache. Error: " << cacheFile.errorString().toStdString() << std::endl;
             }
 
-
             // Convert string to istream
-            std::istringstream replyStream(replyString);
+            std::istringstream replyStream(replyFinal);
             std::istream * istream = &replyStream;
 
             // Create soap request with generated body content.
@@ -125,9 +140,10 @@ std::vector<ACService::ns2__AttributesType *> ACServiceClient::reqAttributeSuppl
             ACService::ns2__AttributeResponseType attr_response;
             long ret = soap_read_ns2__AttributeResponseType(soap2, &attr_response);
 
+
             std::cerr << "Got response from converting XML to object. Size: "<< attr_response.AttributeResponseValues.size()  << std::endl;
 
-            if(ret != 0){
+            if(ret != 0) {
                 std::cerr << "Error reading AttributeResponseType" << std::endl;
                 return result;
             }
@@ -196,7 +212,11 @@ ACService::ns3__AttributeType * ACServiceClient::getAttributeType(QString parent
                     QString cId(objType->union_ObjectType.ns3__Attribute->MainAttribute->AttributeID.c_str());
                     if (cId.compare(childID) == 0)
                     {
-                        return objType->union_ObjectType.ns3__Attribute;
+                         ACService::ns3__AttributeType * attr = objType->union_ObjectType.ns3__Attribute;
+                         //"Fix" the AttributeSupplier (ID and Name): they can have different values in SCAP and the actual entity Attribute
+                         attr->AttributeSupplier->Id = parent->ATTRSupplier->Id;
+                         attr->AttributeSupplier->Name = parent->ATTRSupplier->Name;
+                         return attr;
                     }
                 }
             }
@@ -204,6 +224,7 @@ ACService::ns3__AttributeType * ACServiceClient::getAttributeType(QString parent
     }
     return NULL;
 }
+
 
 std::vector<ACService::ns2__AttributesType *> ACServiceClient::loadAttributesFromCache()
 {
@@ -247,15 +268,17 @@ std::vector<ACService::ns2__AttributesType *> ACServiceClient::loadAttributesFro
 
             std::cout << "Got response from converting XML to object. Size: "<< attr_response.AttributeResponseValues.size()  << std::endl;
 
-            if(ret != 0){
+            if (ret != 0) {
                 std::cerr << "Error reading AttributeResponseType" << std::endl;
                 return attributesType;
             }
             attributesType = attr_response.AttributeResponseValues;
+            
         }
     }
     catch(...){
         std::cerr << "Error ocurred while loading attributes from cache";
     }
+
     return attributesType;
 }

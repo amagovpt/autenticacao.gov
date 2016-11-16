@@ -38,7 +38,9 @@ void AttributeSuppliers::showSuppliers(){
 
         for (uint i = 0; i!=m_suppliersList.size(); i++)
         {
-			QString name = QString::fromUtf8(m_suppliersList[i]->Name.c_str());
+			      QString name = QString::fromUtf8(m_suppliersList[i]->Name.c_str());
+            std::cout << "Attr Supplier ID: " << m_suppliersList[i]->Id << std::endl;
+
             QString url = m_suppliersList[i]->Id.c_str();
 
             if(url.contains("SCAP", Qt::CaseSensitive)){

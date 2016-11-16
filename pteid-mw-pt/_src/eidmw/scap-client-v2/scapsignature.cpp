@@ -1647,7 +1647,7 @@ void ScapSignature::updateSelectedAttributes(){
            QTreeWidgetItem *childItem = topLevel->child(child);
 
            // See if user checked item
-           if(childItem->checkState(0))
+           if (childItem->checkState(0))
            {
                std::cout << "Child name: " << childItem->text(0).toStdString() << std::endl;
                QString parentID = topLevel->data(0, Qt::UserRole).toString();
