@@ -1,0 +1,127 @@
+  <?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="PDFSignature" targetNamespace="http://www.cartaodecidadao.pt/ccc/sccc/services/PDFSignature" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.cartaodecidadao.pt/ccc/sccc/services/PDFSignature" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://www.cartaodecidadao.pt/ccc/sccc/services/PDFSignature" xmlns:tns="http://www.cartaodecidadao.pt/ccc/sccc/services/PDFSignature" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:complexType name="SignRequest">
+<xs:sequence>
+<xs:element name="ProcessId" type="xs:string"/>
+<xs:element name="PersonalData" type="tns:PersonalDataType"/>
+<xs:element name="AttributeList" type="tns:AttributeListType"/>
+<xs:element name="SignatureFieldName" type="xs:string"/>
+<xs:element name="SignDocument" type="xs:base64Binary"/>
+<xs:element minOccurs="0" name="LTV" type="xs:int"/>
+<xs:element name="Page" type="xs:int"/>
+<xs:element name="X" type="xs:int"/>
+<xs:element name="Y" type="xs:int"/>
+<xs:element name="Orientation" type="tns:SignatureOrientationEnumType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="PersonalDataType">
+<xs:sequence>
+<xs:element name="Name" type="xs:string"/>
+<xs:element name="NIC" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="AttributeListType">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="Attribute" type="tns:AttributeType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="AttributeType">
+<xs:sequence>
+<xs:element name="AttributeSupplier" type="tns:AttributeSupplierType"/>
+<xs:element name="MainAttribute" type="tns:MainAttributeType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="AttributeSupplierType">
+<xs:sequence>
+<xs:element name="Id" type="xs:anyURI"/>
+<xs:element name="Name" type="xs:string"/>
+<xs:element minOccurs="0" name="Type" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="MainAttributeType">
+<xs:sequence>
+<xs:element name="AttributeID" type="xs:string"/>
+<xs:element minOccurs="0" name="Description" type="xs:string"/>
+<xs:element minOccurs="0" name="LegalActList" type="tns:LegalActListType"/>
+<xs:element minOccurs="0" name="SubAttributeList" type="tns:SubAttributeListType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="LegalActListType">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="LegalAct" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="SubAttributeListType">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="SubAttribute" type="tns:SubAttributeType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="SubAttributeType">
+<xs:sequence>
+<xs:element name="AttributeID" type="xs:string"/>
+<xs:element minOccurs="0" name="Description" type="xs:string"/>
+<xs:element minOccurs="0" name="Value" type="xs:string"/>
+<xs:element minOccurs="0" name="LegalActList" type="tns:LegalActListType"/>
+<xs:element minOccurs="0" name="Type" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="SignResponse">
+<xs:sequence>
+<xs:element name="ProcessId" type="xs:string"/>
+<xs:element name="Status" type="tns:Status"/>
+<xs:element minOccurs="0" name="SignedDocument" type="xs:base64Binary"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Status">
+<xs:sequence>
+<xs:element name="Code" type="xs:string"/>
+<xs:element name="Message" type="xs:string"/>
+<xs:element minOccurs="0" name="Field" type="xs:string"/>
+<xs:element minOccurs="0" name="FieldValue" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:simpleType name="SignatureOrientationEnumType">
+<xs:restriction base="xs:string">
+<xs:enumeration value="LANDSCAPE"/>
+<xs:enumeration value="PORTRAIT"/>
+</xs:restriction>
+</xs:simpleType>
+<xs:element name="SignRequest" nillable="true" type="tns:SignRequest"/>
+<xs:element name="SignResponse" nillable="true" type="tns:SignResponse"/>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="SignResponse">
+    <wsdl:part element="tns:SignResponse" name="SignResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="Sign">
+    <wsdl:part element="tns:SignRequest" name="SignRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="PDFSignature">
+    <wsdl:operation name="Sign">
+      <wsdl:input message="tns:Sign" name="Sign">
+    </wsdl:input>
+      <wsdl:output message="tns:SignResponse" name="SignResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PDFSignatureSoapBinding" type="tns:PDFSignature">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Sign">
+      <soap:operation soapAction="http://www.cartaodecidadao.pt/services/ccc/PDFSignature/Operations/Sign" style="document"/>
+      <wsdl:input name="Sign">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="SignResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PDFSignature">
+    <wsdl:port binding="tns:PDFSignatureSoapBinding" name="PDFSignaturePort">
+      <soap:address location="https://preprod.scap.autenticacao.gov.pt/PADES/PDFSignature"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

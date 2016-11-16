@@ -1,0 +1,1264 @@
+Initializing for input from socket=-1/fd=0
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+Free ID hashtable
+Free pointer hashtable
+../stdsoap2.cpp(10144): malloc(480) = 0x111be50
+Free ID hashtable
+Read 7779 bytes from socket=-1/fd=0
+Read count=7779 (+7779)
+../stdsoap2.cpp(11761): malloc(53) = 0x111c2a0
+Enlarging look-aside buffer to append data, size=0
+New look-aside buffer size=256
+../stdsoap2.cpp(11561): malloc(256) = 0x111c310
+../stdsoap2.cpp(11820): malloc(256) = 0x111c450
+../stdsoap2.cpp(2945): malloc(32) = 0x111c590
+Push namespace binding (level=0) ''='http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeClientService'
+Push OK ('' matches 'ns2' in namespace table)
+../stdsoap2.cpp(11761): malloc(57) = 0x111c5f0
+../stdsoap2.cpp(11820): malloc(256) = 0x111c670
+../stdsoap2.cpp(2945): malloc(35) = 0x111c7b0
+Push namespace binding (level=0) 'ns2'='http://www.cartaodecidadao.pt/ccc/commons/messages/Attribute'
+Push OK ('ns2' matches 'ns3' in namespace table)
+../stdsoap2.cpp(11761): malloc(57) = 0x111c810
+../stdsoap2.cpp(11820): malloc(256) = 0x111c890
+../stdsoap2.cpp(2945): malloc(35) = 0x111c9d0
+Push namespace binding (level=0) 'ns3'='http://www.w3.org/2000/09/xmldsig#'
+Push OK ('ns3' matches 'ds' in namespace table)
+../stdsoap2.cpp(11761): malloc(57) = 0x111ca30
+../stdsoap2.cpp(11820): malloc(256) = 0x111cab0
+../stdsoap2.cpp(2945): malloc(69) = 0x111cbf0
+Push namespace binding (level=0) 'ns4'='http://uri.etsi.org/01903/v1.3.2#'
+Push NOT OK: no match found for 'http://uri.etsi.org/01903/v1.3.2#' in namespace mapping table (added to stack anyway)
+../stdsoap2.cpp(11761): malloc(57) = 0x111fb30
+../stdsoap2.cpp(11820): malloc(256) = 0x111fb80
+../stdsoap2.cpp(2945): malloc(90) = 0x111fcc0
+Push namespace binding (level=0) 'ns5'='http://www.cartaodecidadao.pt/ccc/commons/messages/SVG'
+Push NOT OK: no match found for 'http://www.cartaodecidadao.pt/ccc/commons/messages/SVG' in namespace mapping table (added to stack anyway)
+Begin tag found (level=1) 'AttributeResponse'=''
+Enter id='' type=112 location=0x7ffd720af240 size=80
+Tags and (default) namespaces match: 'ProcessId' 'ns2:ProcessId'
+Begin tag found (level=2) 'ProcessId'='ns2:ProcessId'
+Enter id='' type=130 location=0x7ffd720af248 size=32
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(56) = 0x111fd60
+End tag found (level=2) 'ProcessId'='ns2:ProcessId'
+Tags and (default) namespaces match: 'AttributeResponseValues' 'ns2:AttributeResponseValues'
+Begin tag found (level=2) 'AttributeResponseValues'='ns2:AttributeResponseValues'
+Reverting to last element 'AttributeResponseValues' (level=1)
+Tags and (default) namespaces match: 'AttributeResponseValues' 'ns2:AttributeResponseValues'
+Begin tag found (level=2) 'AttributeResponseValues'='ns2:AttributeResponseValues'
+Reverting to last element 'AttributeResponseValues' (level=1)
+soap_instantiate_ns2__AttributesType(0x7ffd720af410, -1, , )
+Instantiated ns2__AttributesType location=0x111fe00 n=-1
+../stdsoap2.cpp(8510): malloc(32) = 0x111fe30
+Tags and (default) namespaces match: 'AttributeResponseValues' 'ns2:AttributeResponseValues'
+Begin tag found (level=2) 'AttributeResponseValues'='ns2:AttributeResponseValues'
+Enter id='' type=115 location=0x111fe00 size=40
+Tags and (default) namespaces match: 'ATTRSupplier' 'ns2:ATTRSupplier'
+Begin tag found (level=3) 'ATTRSupplier'='ns2:ATTRSupplier'
+Reverting to last element 'ATTRSupplier' (level=2)
+soap_instantiate_ns3__AttributeSupplierType(0x7ffd720af410, -1, , )
+Instantiated ns3__AttributeSupplierType location=0x111fe90 n=-1
+../stdsoap2.cpp(8510): malloc(32) = 0x111fef0
+Tags and (default) namespaces match: 'ATTRSupplier' 'ns2:ATTRSupplier'
+Begin tag found (level=3) 'ATTRSupplier'='ns2:ATTRSupplier'
+Enter id='' type=121 location=0x111fe90 size=80
+Tags and (default) namespaces match: 'ns2:Id' 'ns3:Id'
+Begin tag found (level=4) 'ns2:Id'='ns3:Id'
+Enter id='' type=106 location=0x111fe98 size=32
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(56) = 0x111ff50
+End tag found (level=4) 'ns2:Id'='ns3:Id'
+Tags and (default) namespaces match: 'ns2:Name' 'ns3:Name'
+Begin tag found (level=4) 'ns2:Name'='ns3:Name'
+Enter id='' type=131 location=0x111feb8 size=32
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(32) = 0x111fff0
+End tag found (level=4) 'ns2:Name'='ns3:Name'
+End tag found (level=3) 'ATTRSupplier'='ns2:ATTRSupplier'
+Tags and (default) namespaces match: 'ResponseResult' 'ns2:ResponseResult'
+Begin tag found (level=3) 'ResponseResult'='ns2:ResponseResult'
+Reverting to last element 'ResponseResult' (level=2)
+soap_instantiate_ns2__ResponseResult(0x7ffd720af410, -1, , )
+Instantiated ns2__ResponseResult location=0x1120050 n=-1
+../stdsoap2.cpp(8510): malloc(32) = 0x11200b0
+Tags and (default) namespaces match: 'ResponseResult' 'ns2:ResponseResult'
+Begin tag found (level=3) 'ResponseResult'='ns2:ResponseResult'
+Enter id='' type=119 location=0x1120050 size=88
+Tags and (default) namespaces match: 'ResultCode' 'ns2:ResultCode'
+Begin tag found (level=4) 'ResultCode'='ns2:ResultCode'
+Enter id='' type=105 location=0x1120058 size=32
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(24) = 0x1120110
+End tag found (level=4) 'ResultCode'='ns2:ResultCode'
+End tag found (level=3) 'ResponseResult'='ns2:ResponseResult'
+Tags and (default) namespaces match: 'SignedAttributes' 'ns2:SignedAttributes'
+Begin tag found (level=3) 'SignedAttributes'='ns2:SignedAttributes'
+Reverting to last element 'SignedAttributes' (level=2)
+soap_instantiate_ns2__SignedAttributesType(0x7ffd720af410, -1, , )
+Instantiated ns2__SignedAttributesType location=0x1120160 n=-1
+../stdsoap2.cpp(8510): malloc(32) = 0x1120190
+Tags and (default) namespaces match: 'SignedAttributes' 'ns2:SignedAttributes'
+Begin tag found (level=3) 'SignedAttributes'='ns2:SignedAttributes'
+Enter id='' type=117 location=0x1120160 size=40
+../stdsoap2.cpp(11761): malloc(50) = 0x11201f0
+../stdsoap2.cpp(11820): malloc(256) = 0x1120260
+Tags and (default) namespaces match: 'ns2:SignatureAttribute' 'ns3:SignatureAttribute'
+Begin tag found (level=4) 'ns2:SignatureAttribute'='ns3:SignatureAttribute'
+Reverting to last element 'ns2:SignatureAttribute' (level=3)
+Tags and (default) namespaces match: 'ns2:SignatureAttribute' 'ns3:SignatureAttribute'
+Begin tag found (level=4) 'ns2:SignatureAttribute'='ns3:SignatureAttribute'
+Enter id='' type=8 location=0x7ffd720aef90 size=32
+Tags match: 'Id' 'Id'
+../stdsoap2.cpp(8193): malloc(32) = 0x11203a0
+Tags and (default) namespaces match: 'ns3:SignedInfo' 'ds:SignedInfo'
+Begin tag found (level=5) 'ns3:SignedInfo'='ds:SignedInfo'
+Reverting to last element 'ns3:SignedInfo' (level=4)
+Tags and (default) namespaces match: 'ns3:SignedInfo' 'ds:SignedInfo'
+Begin tag found (level=5) 'ns3:SignedInfo'='ds:SignedInfo'
+Enter id='' type=9 location=(nil) size=40
+../stdsoap2.cpp(8193): malloc(64) = 0x1120400
+Tags match: 'Id' 'Id'
+../stdsoap2.cpp(11761): malloc(57) = 0x1120480
+../stdsoap2.cpp(11820): malloc(256) = 0x1120500
+Tags and (default) namespaces match: 'ns3:CanonicalizationMethod' 'ds:CanonicalizationMethod'
+Begin tag found (level=5) 'ns3:CanonicalizationMethod'='ds:CanonicalizationMethod'
+Reverting to last element 'ns3:CanonicalizationMethod' (level=5)
+Tags and (default) namespaces match: 'ns3:CanonicalizationMethod' 'ds:CanonicalizationMethod'
+Begin tag found (level=5) 'ns3:CanonicalizationMethod'='ds:CanonicalizationMethod'
+Enter id='' type=14 location=(nil) size=16
+../stdsoap2.cpp(8193): malloc(40) = 0x1120640
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x11206a0
+Tags and (default) namespaces match: 'ns3:SignatureMethod' 'ds:SignatureMethod'
+Begin tag found (level=5) 'ns3:SignatureMethod'='ds:SignatureMethod'
+Reverting to last element 'ns3:SignatureMethod' (level=5)
+Tags and (default) namespaces match: 'ns3:SignatureMethod' 'ds:SignatureMethod'
+Begin tag found (level=5) 'ns3:SignatureMethod'='ds:SignatureMethod'
+Enter id='' type=15 location=(nil) size=16
+../stdsoap2.cpp(8193): malloc(40) = 0x1120720
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x1120780
+../stdsoap2.cpp(11761): malloc(51) = 0x1120800
+../stdsoap2.cpp(11820): malloc(256) = 0x1120870
+Tags and (default) namespaces match: 'ns3:Reference' 'ds:Reference'
+Begin tag found (level=6) 'ns3:Reference'='ds:Reference'
+New block sequence (prev=(nil))
+../stdsoap2.cpp(2343): malloc(24) = 0x11209b0
+../stdsoap2.cpp(2365): malloc(24) = 0x1120a00
+Push block 0x1120a00 of 8 bytes (8 bytes total)
+Reverting to last element 'ns3:Reference' (level=5)
+Tags and (default) namespaces match: 'ns3:Reference' 'ds:Reference'
+Begin tag found (level=6) 'ns3:Reference'='ds:Reference'
+Reverting to last element 'ns3:Reference' (level=5)
+Tags and (default) namespaces match: 'ns3:Reference' 'ds:Reference'
+Begin tag found (level=6) 'ns3:Reference'='ds:Reference'
+Enter id='' type=16 location=(nil) size=48
+../stdsoap2.cpp(8193): malloc(72) = 0x1120a50
+Tags match: 'Id' 'Id'
+Tags match: 'URI' 'URI'
+../stdsoap2.cpp(8193): malloc(24) = 0x1120ad0
+Tags and (default) namespaces match: 'ns3:Transforms' 'ds:Transforms'
+Begin tag found (level=7) 'ns3:Transforms'='ds:Transforms'
+Reverting to last element 'ns3:Transforms' (level=6)
+Tags and (default) namespaces match: 'ns3:Transforms' 'ds:Transforms'
+Begin tag found (level=7) 'ns3:Transforms'='ds:Transforms'
+Enter id='' type=17 location=(nil) size=16
+../stdsoap2.cpp(8193): malloc(40) = 0x1120b20
+Tags and (default) namespaces match: 'ns3:Transform' 'ds:Transform'
+Begin tag found (level=7) 'ns3:Transform'='ds:Transform'
+New block sequence (prev=0x11209b0)
+../stdsoap2.cpp(2343): malloc(24) = 0x1120b80
+../stdsoap2.cpp(2365): malloc(40) = 0x1120bd0
+Push block 0x1120bd0 of 24 bytes (24 bytes total)
+Reverting to last element 'ns3:Transform' (level=7)
+Tags and (default) namespaces match: 'ns3:Transform' 'ds:Transform'
+Begin tag found (level=7) 'ns3:Transform'='ds:Transform'
+Enter id='' type=19 location=0x1120be0 size=24
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x1120c30
+soap_instantiate_ds__TransformType(0x7ffd720af410, 1, , )
+Instantiated struct ds__TransformType location=0x1120cb0 n=1
+../stdsoap2.cpp(8510): malloc(32) = 0x1120cd0
+First block 0x1120be0
+Next block 0x10, deleting current block
+../stdsoap2.cpp(2663): free(0x1120bd0)
+End tag found (level=7) 'ns3:Transforms'='ds:Transforms'
+Tags and (default) namespaces match: 'ns3:DigestMethod' 'ds:DigestMethod'
+Begin tag found (level=6) 'ns3:DigestMethod'='ds:DigestMethod'
+Reverting to last element 'ns3:DigestMethod' (level=6)
+Tags and (default) namespaces match: 'ns3:DigestMethod' 'ds:DigestMethod'
+Begin tag found (level=6) 'ns3:DigestMethod'='ds:DigestMethod'
+Enter id='' type=22 location=(nil) size=8
+../stdsoap2.cpp(8193): malloc(32) = 0x1120bd0
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x1120d60
+Tags and (default) namespaces match: 'ns3:DigestValue' 'ds:DigestValue'
+Begin tag found (level=7) 'ns3:DigestValue'='ds:DigestValue'
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(64) = 0x1120de0
+Enter id='' type=4 location=0x1120de0 size=8
+End tag found (level=7) 'ns3:DigestValue'='ds:DigestValue'
+End tag found (level=6) 'ns3:Reference'='ds:Reference'
+../stdsoap2.cpp(8193): malloc(32) = 0x1120e60
+Save all blocks in contiguous memory space of 8 bytes (0x1120a00->0x1120e60)
+First block 0x1120a10
+Copy 8 bytes from 0x1120a10 to 0x1120e60
+Next block 0x10, deleting current block
+../stdsoap2.cpp(2663): free(0x1120a00)
+End of block sequence, free all remaining blocks
+../stdsoap2.cpp(2711): free(0x11209b0)
+Restored previous block sequence
+End tag found (level=5) 'ns3:SignedInfo'='ds:SignedInfo'
+Tags and (default) namespaces match: 'ns3:SignatureValue' 'ds:SignatureValue'
+Begin tag found (level=5) 'ns3:SignatureValue'='ds:SignatureValue'
+Reading string content, flag=1
+Enlarging look-aside buffer to append data, size=256
+New look-aside buffer size=512
+../stdsoap2.cpp(11561): malloc(512) = 0x1120ec0
+../stdsoap2.cpp(11569): free(0x111c310)
+../stdsoap2.cpp(8193): malloc(368) = 0x1121100
+Enter id='' type=4 location=0x1121100 size=8
+End tag found (level=5) 'ns3:SignatureValue'='ds:SignatureValue'
+Tags and (default) namespaces match: 'ns3:KeyInfo' 'ds:KeyInfo'
+Begin tag found (level=5) 'ns3:KeyInfo'='ds:KeyInfo'
+Reverting to last element 'ns3:KeyInfo' (level=4)
+Tags and (default) namespaces match: 'ns3:KeyInfo' 'ds:KeyInfo'
+Begin tag found (level=5) 'ns3:KeyInfo'='ds:KeyInfo'
+Enter id='' type=11 location=(nil) size=48
+../stdsoap2.cpp(8193): malloc(72) = 0x111c340
+Tags match: 'Id' 'Id'
+../stdsoap2.cpp(8193): malloc(32) = 0x111c3c0
+Tags and (default) namespaces match: 'ns3:X509Data' 'ds:X509Data'
+Begin tag found (level=6) 'ns3:X509Data'='ds:X509Data'
+Reverting to last element 'ns3:X509Data' (level=5)
+Tags and (default) namespaces match: 'ns3:X509Data' 'ds:X509Data'
+Begin tag found (level=6) 'ns3:X509Data'='ds:X509Data'
+Enter id='' type=37 location=(nil) size=40
+../stdsoap2.cpp(8193): malloc(64) = 0x1121280
+Tags and (default) namespaces match: 'ns3:X509Certificate' 'ds:X509Certificate'
+Begin tag found (level=7) 'ns3:X509Certificate'='ds:X509Certificate'
+Reading string content, flag=1
+Enlarging look-aside buffer to append data, size=512
+New look-aside buffer size=1024
+../stdsoap2.cpp(11561): malloc(1024) = 0x1121300
+../stdsoap2.cpp(11569): free(0x1120ec0)
+../stdsoap2.cpp(8193): malloc(1008) = 0x1121740
+Enter id='' type=4 location=0x1121740 size=8
+End tag found (level=7) 'ns3:X509Certificate'='ds:X509Certificate'
+End tag found (level=6) 'ns3:X509Data'='ds:X509Data'
+End tag found (level=5) 'ns3:KeyInfo'='ds:KeyInfo'
+Unexpected element 'ns3:Object' in input (level = 4, 1)
+Tags 'ns3:Object' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns3:Object'
+Unexpected element 'ns2:Attribute' in input (level = 5, 1)
+Tags 'ns2:Attribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Attribute'
+Unexpected element 'ns2:AttributeSupplier' in input (level = 6, 1)
+Tags 'ns2:AttributeSupplier' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeSupplier'
+Unexpected element 'ns2:Id' in input (level = 7, 1)
+Tags 'ns2:Id' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Id'
+End tag found (level=8) 'ns2:Id'=''
+Unexpected element 'ns2:Name' in input (level = 7, 1)
+Tags 'ns2:Name' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Name'
+End tag found (level=8) 'ns2:Name'=''
+End tag found (level=7) 'ns2:AttributeSupplier'=''
+Unexpected element 'ns2:Date' in input (level = 6, 1)
+Tags 'ns2:Date' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Date'
+End tag found (level=7) 'ns2:Date'=''
+Unexpected element 'ns2:Validity' in input (level = 6, 1)
+Tags 'ns2:Validity' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Validity'
+End tag found (level=7) 'ns2:Validity'=''
+Unexpected element 'ns2:PersonalData' in input (level = 6, 1)
+Tags 'ns2:PersonalData' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:PersonalData'
+Unexpected element 'ns2:Name' in input (level = 7, 1)
+Tags 'ns2:Name' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Name'
+End tag found (level=8) 'ns2:Name'=''
+Unexpected element 'ns2:NIC' in input (level = 7, 1)
+Tags 'ns2:NIC' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:NIC'
+End tag found (level=8) 'ns2:NIC'=''
+End tag found (level=7) 'ns2:PersonalData'=''
+Unexpected element 'ns2:MainAttribute' in input (level = 6, 1)
+Tags 'ns2:MainAttribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:MainAttribute'
+Unexpected element 'ns2:AttributeID' in input (level = 7, 1)
+Tags 'ns2:AttributeID' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeID'
+End tag found (level=8) 'ns2:AttributeID'=''
+Unexpected element 'ns2:Description' in input (level = 7, 1)
+Tags 'ns2:Description' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Description'
+End tag found (level=8) 'ns2:Description'=''
+Unexpected element 'ns2:LegalActList' in input (level = 7, 1)
+Tags 'ns2:LegalActList' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:LegalActList'
+Unexpected element 'ns2:LegalAct' in input (level = 8, 1)
+Tags 'ns2:LegalAct' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:LegalAct'
+End tag found (level=9) 'ns2:LegalAct'=''
+End tag found (level=8) 'ns2:LegalActList'=''
+Unexpected element 'ns2:SubAttributeList' in input (level = 7, 1)
+Tags 'ns2:SubAttributeList' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:SubAttributeList'
+Unexpected element 'ns2:SubAttribute' in input (level = 8, 1)
+Tags 'ns2:SubAttribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:SubAttribute'
+Unexpected element 'ns2:AttributeID' in input (level = 9, 1)
+Tags 'ns2:AttributeID' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeID'
+End tag found (level=10) 'ns2:AttributeID'=''
+Unexpected element 'ns2:Description' in input (level = 9, 1)
+Tags 'ns2:Description' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Description'
+End tag found (level=10) 'ns2:Description'=''
+Unexpected element 'ns2:Value' in input (level = 9, 1)
+Tags 'ns2:Value' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Value'
+End tag found (level=10) 'ns2:Value'=''
+End tag found (level=9) 'ns2:SubAttribute'=''
+Unexpected element 'ns2:SubAttribute' in input (level = 8, 1)
+Tags 'ns2:SubAttribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:SubAttribute'
+Unexpected element 'ns2:AttributeID' in input (level = 9, 1)
+Tags 'ns2:AttributeID' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeID'
+End tag found (level=10) 'ns2:AttributeID'=''
+Unexpected element 'ns2:Description' in input (level = 9, 1)
+Tags 'ns2:Description' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Description'
+End tag found (level=10) 'ns2:Description'=''
+Unexpected element 'ns2:Value' in input (level = 9, 1)
+Tags 'ns2:Value' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Value'
+End tag found (level=10) 'ns2:Value'=''
+End tag found (level=9) 'ns2:SubAttribute'=''
+End tag found (level=8) 'ns2:SubAttributeList'=''
+End tag found (level=7) 'ns2:MainAttribute'=''
+End tag found (level=6) 'ns2:Attribute'=''
+End tag found (level=5) 'ns3:Object'=''
+End tag found (level=4) 'ns2:SignatureAttribute'='ns3:SignatureAttribute'
+Tags and (default) namespaces match: 'ns2:SignatureAttribute' 'ns3:SignatureAttribute'
+Begin tag found (level=4) 'ns2:SignatureAttribute'='ns3:SignatureAttribute'
+Reverting to last element 'ns2:SignatureAttribute' (level=3)
+Tags and (default) namespaces match: 'ns2:SignatureAttribute' 'ns3:SignatureAttribute'
+Begin tag found (level=4) 'ns2:SignatureAttribute'='ns3:SignatureAttribute'
+Enter id='' type=8 location=0x7ffd720aef90 size=32
+Tags match: 'Id' 'Id'
+../stdsoap2.cpp(8193): malloc(32) = 0x1120f20
+Tags and (default) namespaces match: 'ns3:SignedInfo' 'ds:SignedInfo'
+Begin tag found (level=5) 'ns3:SignedInfo'='ds:SignedInfo'
+Reverting to last element 'ns3:SignedInfo' (level=4)
+Tags and (default) namespaces match: 'ns3:SignedInfo' 'ds:SignedInfo'
+Begin tag found (level=5) 'ns3:SignedInfo'='ds:SignedInfo'
+Enter id='' type=9 location=(nil) size=40
+../stdsoap2.cpp(8193): malloc(64) = 0x1120f80
+Tags match: 'Id' 'Id'
+Tags and (default) namespaces match: 'ns3:CanonicalizationMethod' 'ds:CanonicalizationMethod'
+Begin tag found (level=5) 'ns3:CanonicalizationMethod'='ds:CanonicalizationMethod'
+Reverting to last element 'ns3:CanonicalizationMethod' (level=5)
+Tags and (default) namespaces match: 'ns3:CanonicalizationMethod' 'ds:CanonicalizationMethod'
+Begin tag found (level=5) 'ns3:CanonicalizationMethod'='ds:CanonicalizationMethod'
+Enter id='' type=14 location=(nil) size=16
+../stdsoap2.cpp(8193): malloc(40) = 0x1121000
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x1121060
+Tags and (default) namespaces match: 'ns3:SignatureMethod' 'ds:SignatureMethod'
+Begin tag found (level=5) 'ns3:SignatureMethod'='ds:SignatureMethod'
+Reverting to last element 'ns3:SignatureMethod' (level=5)
+Tags and (default) namespaces match: 'ns3:SignatureMethod' 'ds:SignatureMethod'
+Begin tag found (level=5) 'ns3:SignatureMethod'='ds:SignatureMethod'
+Enter id='' type=15 location=(nil) size=16
+../stdsoap2.cpp(8193): malloc(40) = 0x1121b70
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x1121bd0
+Tags and (default) namespaces match: 'ns3:Reference' 'ds:Reference'
+Begin tag found (level=6) 'ns3:Reference'='ds:Reference'
+New block sequence (prev=0x1120b80)
+../stdsoap2.cpp(2343): malloc(24) = 0x11209b0
+../stdsoap2.cpp(2365): malloc(24) = 0x1120a00
+Push block 0x1120a00 of 8 bytes (8 bytes total)
+Reverting to last element 'ns3:Reference' (level=5)
+Tags and (default) namespaces match: 'ns3:Reference' 'ds:Reference'
+Begin tag found (level=6) 'ns3:Reference'='ds:Reference'
+Reverting to last element 'ns3:Reference' (level=5)
+Tags and (default) namespaces match: 'ns3:Reference' 'ds:Reference'
+Begin tag found (level=6) 'ns3:Reference'='ds:Reference'
+Enter id='' type=16 location=(nil) size=48
+../stdsoap2.cpp(8193): malloc(72) = 0x1121cb0
+Tags match: 'Id' 'Id'
+Tags match: 'URI' 'URI'
+../stdsoap2.cpp(8193): malloc(24) = 0x11210b0
+Tags and (default) namespaces match: 'ns3:Transforms' 'ds:Transforms'
+Begin tag found (level=7) 'ns3:Transforms'='ds:Transforms'
+Reverting to last element 'ns3:Transforms' (level=6)
+Tags and (default) namespaces match: 'ns3:Transforms' 'ds:Transforms'
+Begin tag found (level=7) 'ns3:Transforms'='ds:Transforms'
+Enter id='' type=17 location=(nil) size=16
+../stdsoap2.cpp(8193): malloc(40) = 0x1121d60
+Tags and (default) namespaces match: 'ns3:Transform' 'ds:Transform'
+Begin tag found (level=7) 'ns3:Transform'='ds:Transform'
+New block sequence (prev=0x11209b0)
+../stdsoap2.cpp(2343): malloc(24) = 0x1121dc0
+../stdsoap2.cpp(2365): malloc(40) = 0x1121e10
+Push block 0x1121e10 of 24 bytes (24 bytes total)
+Reverting to last element 'ns3:Transform' (level=7)
+Tags and (default) namespaces match: 'ns3:Transform' 'ds:Transform'
+Begin tag found (level=7) 'ns3:Transform'='ds:Transform'
+Enter id='' type=19 location=0x1121e20 size=24
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x1121e70
+soap_instantiate_ds__TransformType(0x7ffd720af410, 1, , )
+Instantiated struct ds__TransformType location=0x1121ef0 n=1
+../stdsoap2.cpp(8510): malloc(32) = 0x1121f10
+First block 0x1121e20
+Next block 0x10, deleting current block
+../stdsoap2.cpp(2663): free(0x1121e10)
+End tag found (level=7) 'ns3:Transforms'='ds:Transforms'
+Tags and (default) namespaces match: 'ns3:DigestMethod' 'ds:DigestMethod'
+Begin tag found (level=6) 'ns3:DigestMethod'='ds:DigestMethod'
+Reverting to last element 'ns3:DigestMethod' (level=6)
+Tags and (default) namespaces match: 'ns3:DigestMethod' 'ds:DigestMethod'
+Begin tag found (level=6) 'ns3:DigestMethod'='ds:DigestMethod'
+Enter id='' type=22 location=(nil) size=8
+../stdsoap2.cpp(8193): malloc(32) = 0x1121e10
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x1121fa0
+Tags and (default) namespaces match: 'ns3:DigestValue' 'ds:DigestValue'
+Begin tag found (level=7) 'ns3:DigestValue'='ds:DigestValue'
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(64) = 0x1122020
+Enter id='' type=4 location=0x1122020 size=8
+End tag found (level=7) 'ns3:DigestValue'='ds:DigestValue'
+End tag found (level=6) 'ns3:Reference'='ds:Reference'
+../stdsoap2.cpp(8193): malloc(32) = 0x11220a0
+Save all blocks in contiguous memory space of 8 bytes (0x1120a00->0x11220a0)
+First block 0x1120a10
+Copy 8 bytes from 0x1120a10 to 0x11220a0
+Next block 0x10, deleting current block
+../stdsoap2.cpp(2663): free(0x1120a00)
+End of block sequence, free all remaining blocks
+../stdsoap2.cpp(2711): free(0x11209b0)
+Restored previous block sequence
+End tag found (level=5) 'ns3:SignedInfo'='ds:SignedInfo'
+Tags and (default) namespaces match: 'ns3:SignatureValue' 'ds:SignatureValue'
+Begin tag found (level=5) 'ns3:SignatureValue'='ds:SignatureValue'
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(368) = 0x1122100
+Enter id='' type=4 location=0x1122100 size=8
+End tag found (level=5) 'ns3:SignatureValue'='ds:SignatureValue'
+Tags and (default) namespaces match: 'ns3:KeyInfo' 'ds:KeyInfo'
+Begin tag found (level=5) 'ns3:KeyInfo'='ds:KeyInfo'
+Reverting to last element 'ns3:KeyInfo' (level=4)
+Tags and (default) namespaces match: 'ns3:KeyInfo' 'ds:KeyInfo'
+Begin tag found (level=5) 'ns3:KeyInfo'='ds:KeyInfo'
+Enter id='' type=11 location=(nil) size=48
+../stdsoap2.cpp(8193): malloc(72) = 0x11222b0
+Tags match: 'Id' 'Id'
+../stdsoap2.cpp(8193): malloc(32) = 0x1122330
+Tags and (default) namespaces match: 'ns3:X509Data' 'ds:X509Data'
+Begin tag found (level=6) 'ns3:X509Data'='ds:X509Data'
+Reverting to last element 'ns3:X509Data' (level=5)
+Tags and (default) namespaces match: 'ns3:X509Data' 'ds:X509Data'
+Begin tag found (level=6) 'ns3:X509Data'='ds:X509Data'
+Enter id='' type=37 location=(nil) size=40
+../stdsoap2.cpp(8193): malloc(64) = 0x1122390
+Tags and (default) namespaces match: 'ns3:X509Certificate' 'ds:X509Certificate'
+Begin tag found (level=7) 'ns3:X509Certificate'='ds:X509Certificate'
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(1008) = 0x1122410
+Enter id='' type=4 location=0x1122410 size=8
+End tag found (level=7) 'ns3:X509Certificate'='ds:X509Certificate'
+End tag found (level=6) 'ns3:X509Data'='ds:X509Data'
+End tag found (level=5) 'ns3:KeyInfo'='ds:KeyInfo'
+Unexpected element 'ns3:Object' in input (level = 4, 1)
+Tags 'ns3:Object' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns3:Object'
+Unexpected element 'ns2:Attribute' in input (level = 5, 1)
+Tags 'ns2:Attribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Attribute'
+Unexpected element 'ns2:AttributeSupplier' in input (level = 6, 1)
+Tags 'ns2:AttributeSupplier' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeSupplier'
+Unexpected element 'ns2:Id' in input (level = 7, 1)
+Tags 'ns2:Id' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Id'
+End tag found (level=8) 'ns2:Id'=''
+Unexpected element 'ns2:Name' in input (level = 7, 1)
+Tags 'ns2:Name' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Name'
+End tag found (level=8) 'ns2:Name'=''
+End tag found (level=7) 'ns2:AttributeSupplier'=''
+Unexpected element 'ns2:Date' in input (level = 6, 1)
+Tags 'ns2:Date' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Date'
+End tag found (level=7) 'ns2:Date'=''
+Unexpected element 'ns2:Validity' in input (level = 6, 1)
+Tags 'ns2:Validity' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Validity'
+End tag found (level=7) 'ns2:Validity'=''
+Unexpected element 'ns2:PersonalData' in input (level = 6, 1)
+Tags 'ns2:PersonalData' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:PersonalData'
+Unexpected element 'ns2:Name' in input (level = 7, 1)
+Tags 'ns2:Name' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Name'
+End tag found (level=8) 'ns2:Name'=''
+Unexpected element 'ns2:NIC' in input (level = 7, 1)
+Tags 'ns2:NIC' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:NIC'
+End tag found (level=8) 'ns2:NIC'=''
+End tag found (level=7) 'ns2:PersonalData'=''
+Unexpected element 'ns2:MainAttribute' in input (level = 6, 1)
+Tags 'ns2:MainAttribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:MainAttribute'
+Unexpected element 'ns2:AttributeID' in input (level = 7, 1)
+Tags 'ns2:AttributeID' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeID'
+End tag found (level=8) 'ns2:AttributeID'=''
+Unexpected element 'ns2:Description' in input (level = 7, 1)
+Tags 'ns2:Description' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Description'
+End tag found (level=8) 'ns2:Description'=''
+Unexpected element 'ns2:LegalActList' in input (level = 7, 1)
+Tags 'ns2:LegalActList' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:LegalActList'
+Unexpected element 'ns2:LegalAct' in input (level = 8, 1)
+Tags 'ns2:LegalAct' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:LegalAct'
+End tag found (level=9) 'ns2:LegalAct'=''
+End tag found (level=8) 'ns2:LegalActList'=''
+Unexpected element 'ns2:SubAttributeList' in input (level = 7, 1)
+Tags 'ns2:SubAttributeList' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:SubAttributeList'
+Unexpected element 'ns2:SubAttribute' in input (level = 8, 1)
+Tags 'ns2:SubAttribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:SubAttribute'
+Unexpected element 'ns2:AttributeID' in input (level = 9, 1)
+Tags 'ns2:AttributeID' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeID'
+End tag found (level=10) 'ns2:AttributeID'=''
+Unexpected element 'ns2:Description' in input (level = 9, 1)
+Tags 'ns2:Description' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Description'
+End tag found (level=10) 'ns2:Description'=''
+Unexpected element 'ns2:Value' in input (level = 9, 1)
+Tags 'ns2:Value' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Value'
+End tag found (level=10) 'ns2:Value'=''
+End tag found (level=9) 'ns2:SubAttribute'=''
+Unexpected element 'ns2:SubAttribute' in input (level = 8, 1)
+Tags 'ns2:SubAttribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:SubAttribute'
+Unexpected element 'ns2:AttributeID' in input (level = 9, 1)
+Tags 'ns2:AttributeID' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeID'
+End tag found (level=10) 'ns2:AttributeID'=''
+Unexpected element 'ns2:Description' in input (level = 9, 1)
+Tags 'ns2:Description' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Description'
+End tag found (level=10) 'ns2:Description'=''
+Unexpected element 'ns2:Value' in input (level = 9, 1)
+Tags 'ns2:Value' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Value'
+End tag found (level=10) 'ns2:Value'=''
+End tag found (level=9) 'ns2:SubAttribute'=''
+End tag found (level=8) 'ns2:SubAttributeList'=''
+End tag found (level=7) 'ns2:MainAttribute'=''
+End tag found (level=6) 'ns2:Attribute'=''
+End tag found (level=5) 'ns3:Object'=''
+End tag found (level=4) 'ns2:SignatureAttribute'='ns3:SignatureAttribute'
+Container capacity increased: updating pointers
+End tag found (level=3) 'SignedAttributes'='ns2:SignedAttributes'
+End tag found (level=2) 'AttributeResponseValues'='ns2:AttributeResponseValues'
+End tag found (level=1) 'AttributeResponse'=''
+End of receive message ok
+Resolving forwarded refs
+Resolution phase
+Resolution done
+Free namespace stack
+../stdsoap2.cpp(9231): free(0x111fcc0)
+../stdsoap2.cpp(9231): free(0x111cbf0)
+../stdsoap2.cpp(9231): free(0x111c9d0)
+../stdsoap2.cpp(9231): free(0x111c7b0)
+../stdsoap2.cpp(9231): free(0x111c590)
+Done with context
+Free namespace stack
+Free any remaining temp blocks
+End of block sequence, free all remaining blocks
+../stdsoap2.cpp(2711): free(0x1121dc0)
+Restored previous block sequence
+End of block sequence, free all remaining blocks
+../stdsoap2.cpp(2711): free(0x1120b80)
+Free attribute storage
+../stdsoap2.cpp(9186): free(0x111c450)
+../stdsoap2.cpp(9187): free(0x111c2a0)
+../stdsoap2.cpp(9186): free(0x111c670)
+../stdsoap2.cpp(9187): free(0x111c5f0)
+../stdsoap2.cpp(9186): free(0x111c890)
+../stdsoap2.cpp(9187): free(0x111c810)
+../stdsoap2.cpp(9186): free(0x111cab0)
+../stdsoap2.cpp(9187): free(0x111ca30)
+../stdsoap2.cpp(9186): free(0x111fb80)
+../stdsoap2.cpp(9187): free(0x111fb30)
+../stdsoap2.cpp(9186): free(0x1120260)
+../stdsoap2.cpp(9187): free(0x11201f0)
+../stdsoap2.cpp(9186): free(0x1120500)
+../stdsoap2.cpp(9187): free(0x1120480)
+../stdsoap2.cpp(9186): free(0x1120870)
+../stdsoap2.cpp(9187): free(0x1120800)
+../stdsoap2.cpp(9192): free(0x1121300)
+../stdsoap2.cpp(9205): free(0x111be50)
+Free ID hashtable
+Free pointer hashtable
+../stdsoap2.cpp(5713): free(0x1121f10)
+../stdsoap2.cpp(5713): free(0x1120cd0)
+../stdsoap2.cpp(5713): free(0x1120190)
+../stdsoap2.cpp(5713): free(0x11200b0)
+../stdsoap2.cpp(5713): free(0x111fef0)
+../stdsoap2.cpp(5713): free(0x111fe30)
+Free logfiles
+../stdsoap2.cpp(5872): free(0x1118c20)
+../stdsoap2.cpp(5872): free(0x1118c70)
+../stdsoap2.cpp(5872): free(0x1118cc0)
+Initializing for input from socket=-1/fd=0
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+Free ID hashtable
+Free pointer hashtable
+../stdsoap2.cpp(10144): malloc(480) = 0x1248e50
+Free ID hashtable
+Read 7777 bytes from socket=-1/fd=0
+Read count=7777 (+7777)
+../stdsoap2.cpp(11761): malloc(53) = 0x12492a0
+Enlarging look-aside buffer to append data, size=0
+New look-aside buffer size=256
+../stdsoap2.cpp(11561): malloc(256) = 0x1249310
+../stdsoap2.cpp(11820): malloc(256) = 0x1249450
+../stdsoap2.cpp(2945): malloc(32) = 0x1249590
+Push namespace binding (level=0) ''='http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeClientService'
+Push OK ('' matches 'ns2' in namespace table)
+../stdsoap2.cpp(11761): malloc(57) = 0x12495f0
+../stdsoap2.cpp(11820): malloc(256) = 0x1249670
+../stdsoap2.cpp(2945): malloc(35) = 0x12497b0
+Push namespace binding (level=0) 'ns2'='http://www.cartaodecidadao.pt/ccc/commons/messages/Attribute'
+Push OK ('ns2' matches 'ns3' in namespace table)
+../stdsoap2.cpp(11761): malloc(57) = 0x1249810
+../stdsoap2.cpp(11820): malloc(256) = 0x1249890
+../stdsoap2.cpp(2945): malloc(35) = 0x12499d0
+Push namespace binding (level=0) 'ns3'='http://www.w3.org/2000/09/xmldsig#'
+Push OK ('ns3' matches 'ds' in namespace table)
+../stdsoap2.cpp(11761): malloc(57) = 0x1249a30
+../stdsoap2.cpp(11820): malloc(256) = 0x1249ab0
+../stdsoap2.cpp(2945): malloc(69) = 0x1249bf0
+Push namespace binding (level=0) 'ns4'='http://uri.etsi.org/01903/v1.3.2#'
+Push NOT OK: no match found for 'http://uri.etsi.org/01903/v1.3.2#' in namespace mapping table (added to stack anyway)
+../stdsoap2.cpp(11761): malloc(57) = 0x124cb30
+../stdsoap2.cpp(11820): malloc(256) = 0x124cb80
+../stdsoap2.cpp(2945): malloc(90) = 0x124ccc0
+Push namespace binding (level=0) 'ns5'='http://www.cartaodecidadao.pt/ccc/commons/messages/SVG'
+Push NOT OK: no match found for 'http://www.cartaodecidadao.pt/ccc/commons/messages/SVG' in namespace mapping table (added to stack anyway)
+Begin tag found (level=1) 'AttributeResponse'=''
+Enter id='' type=112 location=0x7ffc635008a0 size=80
+Tags and (default) namespaces match: 'ProcessId' 'ns2:ProcessId'
+Begin tag found (level=2) 'ProcessId'='ns2:ProcessId'
+Enter id='' type=130 location=0x7ffc635008a8 size=32
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(56) = 0x124cd60
+End tag found (level=2) 'ProcessId'='ns2:ProcessId'
+Tags and (default) namespaces match: 'AttributeResponseValues' 'ns2:AttributeResponseValues'
+Begin tag found (level=2) 'AttributeResponseValues'='ns2:AttributeResponseValues'
+Reverting to last element 'AttributeResponseValues' (level=1)
+Tags and (default) namespaces match: 'AttributeResponseValues' 'ns2:AttributeResponseValues'
+Begin tag found (level=2) 'AttributeResponseValues'='ns2:AttributeResponseValues'
+Reverting to last element 'AttributeResponseValues' (level=1)
+soap_instantiate_ns2__AttributesType(0x7ffc63500a70, -1, , )
+Instantiated ns2__AttributesType location=0x124ce00 n=-1
+../stdsoap2.cpp(8510): malloc(32) = 0x124ce30
+Tags and (default) namespaces match: 'AttributeResponseValues' 'ns2:AttributeResponseValues'
+Begin tag found (level=2) 'AttributeResponseValues'='ns2:AttributeResponseValues'
+Enter id='' type=115 location=0x124ce00 size=40
+Tags and (default) namespaces match: 'ATTRSupplier' 'ns2:ATTRSupplier'
+Begin tag found (level=3) 'ATTRSupplier'='ns2:ATTRSupplier'
+Reverting to last element 'ATTRSupplier' (level=2)
+soap_instantiate_ns3__AttributeSupplierType(0x7ffc63500a70, -1, , )
+Instantiated ns3__AttributeSupplierType location=0x124ce90 n=-1
+../stdsoap2.cpp(8510): malloc(32) = 0x124cef0
+Tags and (default) namespaces match: 'ATTRSupplier' 'ns2:ATTRSupplier'
+Begin tag found (level=3) 'ATTRSupplier'='ns2:ATTRSupplier'
+Enter id='' type=121 location=0x124ce90 size=80
+Tags and (default) namespaces match: 'ns2:Id' 'ns3:Id'
+Begin tag found (level=4) 'ns2:Id'='ns3:Id'
+Enter id='' type=106 location=0x124ce98 size=32
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(56) = 0x124cf50
+End tag found (level=4) 'ns2:Id'='ns3:Id'
+Tags and (default) namespaces match: 'ns2:Name' 'ns3:Name'
+Begin tag found (level=4) 'ns2:Name'='ns3:Name'
+Enter id='' type=131 location=0x124ceb8 size=32
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(32) = 0x124cff0
+End tag found (level=4) 'ns2:Name'='ns3:Name'
+End tag found (level=3) 'ATTRSupplier'='ns2:ATTRSupplier'
+Tags and (default) namespaces match: 'ResponseResult' 'ns2:ResponseResult'
+Begin tag found (level=3) 'ResponseResult'='ns2:ResponseResult'
+Reverting to last element 'ResponseResult' (level=2)
+soap_instantiate_ns2__ResponseResult(0x7ffc63500a70, -1, , )
+Instantiated ns2__ResponseResult location=0x124d050 n=-1
+../stdsoap2.cpp(8510): malloc(32) = 0x124d0b0
+Tags and (default) namespaces match: 'ResponseResult' 'ns2:ResponseResult'
+Begin tag found (level=3) 'ResponseResult'='ns2:ResponseResult'
+Enter id='' type=119 location=0x124d050 size=88
+Tags and (default) namespaces match: 'ResultCode' 'ns2:ResultCode'
+Begin tag found (level=4) 'ResultCode'='ns2:ResultCode'
+Enter id='' type=105 location=0x124d058 size=32
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(24) = 0x124d110
+End tag found (level=4) 'ResultCode'='ns2:ResultCode'
+End tag found (level=3) 'ResponseResult'='ns2:ResponseResult'
+Tags and (default) namespaces match: 'SignedAttributes' 'ns2:SignedAttributes'
+Begin tag found (level=3) 'SignedAttributes'='ns2:SignedAttributes'
+Reverting to last element 'SignedAttributes' (level=2)
+soap_instantiate_ns2__SignedAttributesType(0x7ffc63500a70, -1, , )
+Instantiated ns2__SignedAttributesType location=0x124d160 n=-1
+../stdsoap2.cpp(8510): malloc(32) = 0x124d190
+Tags and (default) namespaces match: 'SignedAttributes' 'ns2:SignedAttributes'
+Begin tag found (level=3) 'SignedAttributes'='ns2:SignedAttributes'
+Enter id='' type=117 location=0x124d160 size=40
+../stdsoap2.cpp(11761): malloc(50) = 0x124d1f0
+../stdsoap2.cpp(11820): malloc(256) = 0x124d260
+Tags and (default) namespaces match: 'ns2:SignatureAttribute' 'ns3:SignatureAttribute'
+Begin tag found (level=4) 'ns2:SignatureAttribute'='ns3:SignatureAttribute'
+Reverting to last element 'ns2:SignatureAttribute' (level=3)
+Tags and (default) namespaces match: 'ns2:SignatureAttribute' 'ns3:SignatureAttribute'
+Begin tag found (level=4) 'ns2:SignatureAttribute'='ns3:SignatureAttribute'
+Enter id='' type=8 location=0x7ffc635005f0 size=32
+Tags match: 'Id' 'Id'
+../stdsoap2.cpp(8193): malloc(32) = 0x124d3a0
+Tags and (default) namespaces match: 'ns3:SignedInfo' 'ds:SignedInfo'
+Begin tag found (level=5) 'ns3:SignedInfo'='ds:SignedInfo'
+Reverting to last element 'ns3:SignedInfo' (level=4)
+Tags and (default) namespaces match: 'ns3:SignedInfo' 'ds:SignedInfo'
+Begin tag found (level=5) 'ns3:SignedInfo'='ds:SignedInfo'
+Enter id='' type=9 location=(nil) size=40
+../stdsoap2.cpp(8193): malloc(64) = 0x124d400
+Tags match: 'Id' 'Id'
+../stdsoap2.cpp(11761): malloc(57) = 0x124d480
+../stdsoap2.cpp(11820): malloc(256) = 0x124d500
+Tags and (default) namespaces match: 'ns3:CanonicalizationMethod' 'ds:CanonicalizationMethod'
+Begin tag found (level=5) 'ns3:CanonicalizationMethod'='ds:CanonicalizationMethod'
+Reverting to last element 'ns3:CanonicalizationMethod' (level=5)
+Tags and (default) namespaces match: 'ns3:CanonicalizationMethod' 'ds:CanonicalizationMethod'
+Begin tag found (level=5) 'ns3:CanonicalizationMethod'='ds:CanonicalizationMethod'
+Enter id='' type=14 location=(nil) size=16
+../stdsoap2.cpp(8193): malloc(40) = 0x124d640
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x124d6a0
+Tags and (default) namespaces match: 'ns3:SignatureMethod' 'ds:SignatureMethod'
+Begin tag found (level=5) 'ns3:SignatureMethod'='ds:SignatureMethod'
+Reverting to last element 'ns3:SignatureMethod' (level=5)
+Tags and (default) namespaces match: 'ns3:SignatureMethod' 'ds:SignatureMethod'
+Begin tag found (level=5) 'ns3:SignatureMethod'='ds:SignatureMethod'
+Enter id='' type=15 location=(nil) size=16
+../stdsoap2.cpp(8193): malloc(40) = 0x124d720
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x124d780
+../stdsoap2.cpp(11761): malloc(51) = 0x124d800
+../stdsoap2.cpp(11820): malloc(256) = 0x124d870
+Tags and (default) namespaces match: 'ns3:Reference' 'ds:Reference'
+Begin tag found (level=6) 'ns3:Reference'='ds:Reference'
+New block sequence (prev=(nil))
+../stdsoap2.cpp(2343): malloc(24) = 0x124d9b0
+../stdsoap2.cpp(2365): malloc(24) = 0x124da00
+Push block 0x124da00 of 8 bytes (8 bytes total)
+Reverting to last element 'ns3:Reference' (level=5)
+Tags and (default) namespaces match: 'ns3:Reference' 'ds:Reference'
+Begin tag found (level=6) 'ns3:Reference'='ds:Reference'
+Reverting to last element 'ns3:Reference' (level=5)
+Tags and (default) namespaces match: 'ns3:Reference' 'ds:Reference'
+Begin tag found (level=6) 'ns3:Reference'='ds:Reference'
+Enter id='' type=16 location=(nil) size=48
+../stdsoap2.cpp(8193): malloc(72) = 0x124da50
+Tags match: 'Id' 'Id'
+Tags match: 'URI' 'URI'
+../stdsoap2.cpp(8193): malloc(24) = 0x124dad0
+Tags and (default) namespaces match: 'ns3:Transforms' 'ds:Transforms'
+Begin tag found (level=7) 'ns3:Transforms'='ds:Transforms'
+Reverting to last element 'ns3:Transforms' (level=6)
+Tags and (default) namespaces match: 'ns3:Transforms' 'ds:Transforms'
+Begin tag found (level=7) 'ns3:Transforms'='ds:Transforms'
+Enter id='' type=17 location=(nil) size=16
+../stdsoap2.cpp(8193): malloc(40) = 0x124db20
+Tags and (default) namespaces match: 'ns3:Transform' 'ds:Transform'
+Begin tag found (level=7) 'ns3:Transform'='ds:Transform'
+New block sequence (prev=0x124d9b0)
+../stdsoap2.cpp(2343): malloc(24) = 0x124db80
+../stdsoap2.cpp(2365): malloc(40) = 0x124dbd0
+Push block 0x124dbd0 of 24 bytes (24 bytes total)
+Reverting to last element 'ns3:Transform' (level=7)
+Tags and (default) namespaces match: 'ns3:Transform' 'ds:Transform'
+Begin tag found (level=7) 'ns3:Transform'='ds:Transform'
+Enter id='' type=19 location=0x124dbe0 size=24
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x124dc30
+soap_instantiate_ds__TransformType(0x7ffc63500a70, 1, , )
+Instantiated struct ds__TransformType location=0x124dcb0 n=1
+../stdsoap2.cpp(8510): malloc(32) = 0x124dcd0
+First block 0x124dbe0
+Next block 0x10, deleting current block
+../stdsoap2.cpp(2663): free(0x124dbd0)
+End tag found (level=7) 'ns3:Transforms'='ds:Transforms'
+Tags and (default) namespaces match: 'ns3:DigestMethod' 'ds:DigestMethod'
+Begin tag found (level=6) 'ns3:DigestMethod'='ds:DigestMethod'
+Reverting to last element 'ns3:DigestMethod' (level=6)
+Tags and (default) namespaces match: 'ns3:DigestMethod' 'ds:DigestMethod'
+Begin tag found (level=6) 'ns3:DigestMethod'='ds:DigestMethod'
+Enter id='' type=22 location=(nil) size=8
+../stdsoap2.cpp(8193): malloc(32) = 0x124dbd0
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x124dd60
+Tags and (default) namespaces match: 'ns3:DigestValue' 'ds:DigestValue'
+Begin tag found (level=7) 'ns3:DigestValue'='ds:DigestValue'
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(64) = 0x124dde0
+Enter id='' type=4 location=0x124dde0 size=8
+End tag found (level=7) 'ns3:DigestValue'='ds:DigestValue'
+End tag found (level=6) 'ns3:Reference'='ds:Reference'
+../stdsoap2.cpp(8193): malloc(32) = 0x124de60
+Save all blocks in contiguous memory space of 8 bytes (0x124da00->0x124de60)
+First block 0x124da10
+Copy 8 bytes from 0x124da10 to 0x124de60
+Next block 0x10, deleting current block
+../stdsoap2.cpp(2663): free(0x124da00)
+End of block sequence, free all remaining blocks
+../stdsoap2.cpp(2711): free(0x124d9b0)
+Restored previous block sequence
+End tag found (level=5) 'ns3:SignedInfo'='ds:SignedInfo'
+Tags and (default) namespaces match: 'ns3:SignatureValue' 'ds:SignatureValue'
+Begin tag found (level=5) 'ns3:SignatureValue'='ds:SignatureValue'
+Reading string content, flag=1
+Enlarging look-aside buffer to append data, size=256
+New look-aside buffer size=512
+../stdsoap2.cpp(11561): malloc(512) = 0x124dec0
+../stdsoap2.cpp(11569): free(0x1249310)
+../stdsoap2.cpp(8193): malloc(368) = 0x124e100
+Enter id='' type=4 location=0x124e100 size=8
+End tag found (level=5) 'ns3:SignatureValue'='ds:SignatureValue'
+Tags and (default) namespaces match: 'ns3:KeyInfo' 'ds:KeyInfo'
+Begin tag found (level=5) 'ns3:KeyInfo'='ds:KeyInfo'
+Reverting to last element 'ns3:KeyInfo' (level=4)
+Tags and (default) namespaces match: 'ns3:KeyInfo' 'ds:KeyInfo'
+Begin tag found (level=5) 'ns3:KeyInfo'='ds:KeyInfo'
+Enter id='' type=11 location=(nil) size=48
+../stdsoap2.cpp(8193): malloc(72) = 0x1249340
+Tags match: 'Id' 'Id'
+../stdsoap2.cpp(8193): malloc(32) = 0x12493c0
+Tags and (default) namespaces match: 'ns3:X509Data' 'ds:X509Data'
+Begin tag found (level=6) 'ns3:X509Data'='ds:X509Data'
+Reverting to last element 'ns3:X509Data' (level=5)
+Tags and (default) namespaces match: 'ns3:X509Data' 'ds:X509Data'
+Begin tag found (level=6) 'ns3:X509Data'='ds:X509Data'
+Enter id='' type=37 location=(nil) size=40
+../stdsoap2.cpp(8193): malloc(64) = 0x124e280
+Tags and (default) namespaces match: 'ns3:X509Certificate' 'ds:X509Certificate'
+Begin tag found (level=7) 'ns3:X509Certificate'='ds:X509Certificate'
+Reading string content, flag=1
+Enlarging look-aside buffer to append data, size=512
+New look-aside buffer size=1024
+../stdsoap2.cpp(11561): malloc(1024) = 0x124e300
+../stdsoap2.cpp(11569): free(0x124dec0)
+../stdsoap2.cpp(8193): malloc(1008) = 0x124e740
+Enter id='' type=4 location=0x124e740 size=8
+End tag found (level=7) 'ns3:X509Certificate'='ds:X509Certificate'
+End tag found (level=6) 'ns3:X509Data'='ds:X509Data'
+End tag found (level=5) 'ns3:KeyInfo'='ds:KeyInfo'
+Unexpected element 'ns3:Object' in input (level = 4, 1)
+Tags 'ns3:Object' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns3:Object'
+Unexpected element 'ns2:Attribute' in input (level = 5, 1)
+Tags 'ns2:Attribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Attribute'
+Unexpected element 'ns2:AttributeSupplier' in input (level = 6, 1)
+Tags 'ns2:AttributeSupplier' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeSupplier'
+Unexpected element 'ns2:Id' in input (level = 7, 1)
+Tags 'ns2:Id' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Id'
+End tag found (level=8) 'ns2:Id'=''
+Unexpected element 'ns2:Name' in input (level = 7, 1)
+Tags 'ns2:Name' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Name'
+End tag found (level=8) 'ns2:Name'=''
+End tag found (level=7) 'ns2:AttributeSupplier'=''
+Unexpected element 'ns2:Date' in input (level = 6, 1)
+Tags 'ns2:Date' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Date'
+End tag found (level=7) 'ns2:Date'=''
+Unexpected element 'ns2:Validity' in input (level = 6, 1)
+Tags 'ns2:Validity' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Validity'
+End tag found (level=7) 'ns2:Validity'=''
+Unexpected element 'ns2:PersonalData' in input (level = 6, 1)
+Tags 'ns2:PersonalData' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:PersonalData'
+Unexpected element 'ns2:Name' in input (level = 7, 1)
+Tags 'ns2:Name' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Name'
+End tag found (level=8) 'ns2:Name'=''
+Unexpected element 'ns2:NIC' in input (level = 7, 1)
+Tags 'ns2:NIC' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:NIC'
+End tag found (level=8) 'ns2:NIC'=''
+End tag found (level=7) 'ns2:PersonalData'=''
+Unexpected element 'ns2:MainAttribute' in input (level = 6, 1)
+Tags 'ns2:MainAttribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:MainAttribute'
+Unexpected element 'ns2:AttributeID' in input (level = 7, 1)
+Tags 'ns2:AttributeID' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeID'
+End tag found (level=8) 'ns2:AttributeID'=''
+Unexpected element 'ns2:Description' in input (level = 7, 1)
+Tags 'ns2:Description' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Description'
+End tag found (level=8) 'ns2:Description'=''
+Unexpected element 'ns2:LegalActList' in input (level = 7, 1)
+Tags 'ns2:LegalActList' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:LegalActList'
+Unexpected element 'ns2:LegalAct' in input (level = 8, 1)
+Tags 'ns2:LegalAct' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:LegalAct'
+End tag found (level=9) 'ns2:LegalAct'=''
+End tag found (level=8) 'ns2:LegalActList'=''
+Unexpected element 'ns2:SubAttributeList' in input (level = 7, 1)
+Tags 'ns2:SubAttributeList' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:SubAttributeList'
+Unexpected element 'ns2:SubAttribute' in input (level = 8, 1)
+Tags 'ns2:SubAttribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:SubAttribute'
+Unexpected element 'ns2:AttributeID' in input (level = 9, 1)
+Tags 'ns2:AttributeID' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeID'
+End tag found (level=10) 'ns2:AttributeID'=''
+Unexpected element 'ns2:Description' in input (level = 9, 1)
+Tags 'ns2:Description' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Description'
+End tag found (level=10) 'ns2:Description'=''
+Unexpected element 'ns2:Value' in input (level = 9, 1)
+Tags 'ns2:Value' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Value'
+End tag found (level=10) 'ns2:Value'=''
+End tag found (level=9) 'ns2:SubAttribute'=''
+Unexpected element 'ns2:SubAttribute' in input (level = 8, 1)
+Tags 'ns2:SubAttribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:SubAttribute'
+Unexpected element 'ns2:AttributeID' in input (level = 9, 1)
+Tags 'ns2:AttributeID' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeID'
+End tag found (level=10) 'ns2:AttributeID'=''
+Unexpected element 'ns2:Description' in input (level = 9, 1)
+Tags 'ns2:Description' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Description'
+End tag found (level=10) 'ns2:Description'=''
+Unexpected element 'ns2:Value' in input (level = 9, 1)
+Tags 'ns2:Value' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Value'
+End tag found (level=10) 'ns2:Value'=''
+End tag found (level=9) 'ns2:SubAttribute'=''
+End tag found (level=8) 'ns2:SubAttributeList'=''
+End tag found (level=7) 'ns2:MainAttribute'=''
+End tag found (level=6) 'ns2:Attribute'=''
+End tag found (level=5) 'ns3:Object'=''
+End tag found (level=4) 'ns2:SignatureAttribute'='ns3:SignatureAttribute'
+Tags and (default) namespaces match: 'ns2:SignatureAttribute' 'ns3:SignatureAttribute'
+Begin tag found (level=4) 'ns2:SignatureAttribute'='ns3:SignatureAttribute'
+Reverting to last element 'ns2:SignatureAttribute' (level=3)
+Tags and (default) namespaces match: 'ns2:SignatureAttribute' 'ns3:SignatureAttribute'
+Begin tag found (level=4) 'ns2:SignatureAttribute'='ns3:SignatureAttribute'
+Enter id='' type=8 location=0x7ffc635005f0 size=32
+Tags match: 'Id' 'Id'
+../stdsoap2.cpp(8193): malloc(32) = 0x124df20
+Tags and (default) namespaces match: 'ns3:SignedInfo' 'ds:SignedInfo'
+Begin tag found (level=5) 'ns3:SignedInfo'='ds:SignedInfo'
+Reverting to last element 'ns3:SignedInfo' (level=4)
+Tags and (default) namespaces match: 'ns3:SignedInfo' 'ds:SignedInfo'
+Begin tag found (level=5) 'ns3:SignedInfo'='ds:SignedInfo'
+Enter id='' type=9 location=(nil) size=40
+../stdsoap2.cpp(8193): malloc(64) = 0x124df80
+Tags match: 'Id' 'Id'
+Tags and (default) namespaces match: 'ns3:CanonicalizationMethod' 'ds:CanonicalizationMethod'
+Begin tag found (level=5) 'ns3:CanonicalizationMethod'='ds:CanonicalizationMethod'
+Reverting to last element 'ns3:CanonicalizationMethod' (level=5)
+Tags and (default) namespaces match: 'ns3:CanonicalizationMethod' 'ds:CanonicalizationMethod'
+Begin tag found (level=5) 'ns3:CanonicalizationMethod'='ds:CanonicalizationMethod'
+Enter id='' type=14 location=(nil) size=16
+../stdsoap2.cpp(8193): malloc(40) = 0x124e000
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x124e060
+Tags and (default) namespaces match: 'ns3:SignatureMethod' 'ds:SignatureMethod'
+Begin tag found (level=5) 'ns3:SignatureMethod'='ds:SignatureMethod'
+Reverting to last element 'ns3:SignatureMethod' (level=5)
+Tags and (default) namespaces match: 'ns3:SignatureMethod' 'ds:SignatureMethod'
+Begin tag found (level=5) 'ns3:SignatureMethod'='ds:SignatureMethod'
+Enter id='' type=15 location=(nil) size=16
+../stdsoap2.cpp(8193): malloc(40) = 0x124eb70
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x124ebd0
+Tags and (default) namespaces match: 'ns3:Reference' 'ds:Reference'
+Begin tag found (level=6) 'ns3:Reference'='ds:Reference'
+New block sequence (prev=0x124db80)
+../stdsoap2.cpp(2343): malloc(24) = 0x124d9b0
+../stdsoap2.cpp(2365): malloc(24) = 0x124da00
+Push block 0x124da00 of 8 bytes (8 bytes total)
+Reverting to last element 'ns3:Reference' (level=5)
+Tags and (default) namespaces match: 'ns3:Reference' 'ds:Reference'
+Begin tag found (level=6) 'ns3:Reference'='ds:Reference'
+Reverting to last element 'ns3:Reference' (level=5)
+Tags and (default) namespaces match: 'ns3:Reference' 'ds:Reference'
+Begin tag found (level=6) 'ns3:Reference'='ds:Reference'
+Enter id='' type=16 location=(nil) size=48
+../stdsoap2.cpp(8193): malloc(72) = 0x124ecb0
+Tags match: 'Id' 'Id'
+Tags match: 'URI' 'URI'
+../stdsoap2.cpp(8193): malloc(24) = 0x124e0b0
+Tags and (default) namespaces match: 'ns3:Transforms' 'ds:Transforms'
+Begin tag found (level=7) 'ns3:Transforms'='ds:Transforms'
+Reverting to last element 'ns3:Transforms' (level=6)
+Tags and (default) namespaces match: 'ns3:Transforms' 'ds:Transforms'
+Begin tag found (level=7) 'ns3:Transforms'='ds:Transforms'
+Enter id='' type=17 location=(nil) size=16
+../stdsoap2.cpp(8193): malloc(40) = 0x124ed60
+Tags and (default) namespaces match: 'ns3:Transform' 'ds:Transform'
+Begin tag found (level=7) 'ns3:Transform'='ds:Transform'
+New block sequence (prev=0x124d9b0)
+../stdsoap2.cpp(2343): malloc(24) = 0x124edc0
+../stdsoap2.cpp(2365): malloc(40) = 0x124ee10
+Push block 0x124ee10 of 24 bytes (24 bytes total)
+Reverting to last element 'ns3:Transform' (level=7)
+Tags and (default) namespaces match: 'ns3:Transform' 'ds:Transform'
+Begin tag found (level=7) 'ns3:Transform'='ds:Transform'
+Enter id='' type=19 location=0x124ee20 size=24
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x124ee70
+soap_instantiate_ds__TransformType(0x7ffc63500a70, 1, , )
+Instantiated struct ds__TransformType location=0x124eef0 n=1
+../stdsoap2.cpp(8510): malloc(32) = 0x124ef10
+First block 0x124ee20
+Next block 0x10, deleting current block
+../stdsoap2.cpp(2663): free(0x124ee10)
+End tag found (level=7) 'ns3:Transforms'='ds:Transforms'
+Tags and (default) namespaces match: 'ns3:DigestMethod' 'ds:DigestMethod'
+Begin tag found (level=6) 'ns3:DigestMethod'='ds:DigestMethod'
+Reverting to last element 'ns3:DigestMethod' (level=6)
+Tags and (default) namespaces match: 'ns3:DigestMethod' 'ds:DigestMethod'
+Begin tag found (level=6) 'ns3:DigestMethod'='ds:DigestMethod'
+Enter id='' type=22 location=(nil) size=8
+../stdsoap2.cpp(8193): malloc(32) = 0x124ee10
+Tags match: 'Algorithm' 'Algorithm'
+../stdsoap2.cpp(8193): malloc(64) = 0x124efa0
+Tags and (default) namespaces match: 'ns3:DigestValue' 'ds:DigestValue'
+Begin tag found (level=7) 'ns3:DigestValue'='ds:DigestValue'
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(64) = 0x124f020
+Enter id='' type=4 location=0x124f020 size=8
+End tag found (level=7) 'ns3:DigestValue'='ds:DigestValue'
+End tag found (level=6) 'ns3:Reference'='ds:Reference'
+../stdsoap2.cpp(8193): malloc(32) = 0x124f0a0
+Save all blocks in contiguous memory space of 8 bytes (0x124da00->0x124f0a0)
+First block 0x124da10
+Copy 8 bytes from 0x124da10 to 0x124f0a0
+Next block 0x10, deleting current block
+../stdsoap2.cpp(2663): free(0x124da00)
+End of block sequence, free all remaining blocks
+../stdsoap2.cpp(2711): free(0x124d9b0)
+Restored previous block sequence
+End tag found (level=5) 'ns3:SignedInfo'='ds:SignedInfo'
+Tags and (default) namespaces match: 'ns3:SignatureValue' 'ds:SignatureValue'
+Begin tag found (level=5) 'ns3:SignatureValue'='ds:SignatureValue'
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(368) = 0x124f100
+Enter id='' type=4 location=0x124f100 size=8
+End tag found (level=5) 'ns3:SignatureValue'='ds:SignatureValue'
+Tags and (default) namespaces match: 'ns3:KeyInfo' 'ds:KeyInfo'
+Begin tag found (level=5) 'ns3:KeyInfo'='ds:KeyInfo'
+Reverting to last element 'ns3:KeyInfo' (level=4)
+Tags and (default) namespaces match: 'ns3:KeyInfo' 'ds:KeyInfo'
+Begin tag found (level=5) 'ns3:KeyInfo'='ds:KeyInfo'
+Enter id='' type=11 location=(nil) size=48
+../stdsoap2.cpp(8193): malloc(72) = 0x124f2b0
+Tags match: 'Id' 'Id'
+../stdsoap2.cpp(8193): malloc(32) = 0x124f330
+Tags and (default) namespaces match: 'ns3:X509Data' 'ds:X509Data'
+Begin tag found (level=6) 'ns3:X509Data'='ds:X509Data'
+Reverting to last element 'ns3:X509Data' (level=5)
+Tags and (default) namespaces match: 'ns3:X509Data' 'ds:X509Data'
+Begin tag found (level=6) 'ns3:X509Data'='ds:X509Data'
+Enter id='' type=37 location=(nil) size=40
+../stdsoap2.cpp(8193): malloc(64) = 0x124f390
+Tags and (default) namespaces match: 'ns3:X509Certificate' 'ds:X509Certificate'
+Begin tag found (level=7) 'ns3:X509Certificate'='ds:X509Certificate'
+Reading string content, flag=1
+../stdsoap2.cpp(8193): malloc(1008) = 0x124f410
+Enter id='' type=4 location=0x124f410 size=8
+End tag found (level=7) 'ns3:X509Certificate'='ds:X509Certificate'
+End tag found (level=6) 'ns3:X509Data'='ds:X509Data'
+End tag found (level=5) 'ns3:KeyInfo'='ds:KeyInfo'
+Unexpected element 'ns3:Object' in input (level = 4, 1)
+Tags 'ns3:Object' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns3:Object'
+Unexpected element 'ns2:Attribute' in input (level = 5, 1)
+Tags 'ns2:Attribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Attribute'
+Unexpected element 'ns2:AttributeSupplier' in input (level = 6, 1)
+Tags 'ns2:AttributeSupplier' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeSupplier'
+Unexpected element 'ns2:Id' in input (level = 7, 1)
+Tags 'ns2:Id' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Id'
+End tag found (level=8) 'ns2:Id'=''
+Unexpected element 'ns2:Name' in input (level = 7, 1)
+Tags 'ns2:Name' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Name'
+End tag found (level=8) 'ns2:Name'=''
+End tag found (level=7) 'ns2:AttributeSupplier'=''
+Unexpected element 'ns2:Date' in input (level = 6, 1)
+Tags 'ns2:Date' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Date'
+End tag found (level=7) 'ns2:Date'=''
+Unexpected element 'ns2:Validity' in input (level = 6, 1)
+Tags 'ns2:Validity' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Validity'
+End tag found (level=7) 'ns2:Validity'=''
+Unexpected element 'ns2:PersonalData' in input (level = 6, 1)
+Tags 'ns2:PersonalData' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:PersonalData'
+Unexpected element 'ns2:Name' in input (level = 7, 1)
+Tags 'ns2:Name' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Name'
+End tag found (level=8) 'ns2:Name'=''
+Unexpected element 'ns2:NIC' in input (level = 7, 1)
+Tags 'ns2:NIC' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:NIC'
+End tag found (level=8) 'ns2:NIC'=''
+End tag found (level=7) 'ns2:PersonalData'=''
+Unexpected element 'ns2:MainAttribute' in input (level = 6, 1)
+Tags 'ns2:MainAttribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:MainAttribute'
+Unexpected element 'ns2:AttributeID' in input (level = 7, 1)
+Tags 'ns2:AttributeID' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeID'
+End tag found (level=8) 'ns2:AttributeID'=''
+Unexpected element 'ns2:Description' in input (level = 7, 1)
+Tags 'ns2:Description' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Description'
+End tag found (level=8) 'ns2:Description'=''
+Unexpected element 'ns2:LegalActList' in input (level = 7, 1)
+Tags 'ns2:LegalActList' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:LegalActList'
+Unexpected element 'ns2:LegalAct' in input (level = 8, 1)
+Tags 'ns2:LegalAct' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:LegalAct'
+End tag found (level=9) 'ns2:LegalAct'=''
+End tag found (level=8) 'ns2:LegalActList'=''
+Unexpected element 'ns2:SubAttributeList' in input (level = 7, 1)
+Tags 'ns2:SubAttributeList' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:SubAttributeList'
+Unexpected element 'ns2:SubAttribute' in input (level = 8, 1)
+Tags 'ns2:SubAttribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:SubAttribute'
+Unexpected element 'ns2:AttributeID' in input (level = 9, 1)
+Tags 'ns2:AttributeID' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeID'
+End tag found (level=10) 'ns2:AttributeID'=''
+Unexpected element 'ns2:Description' in input (level = 9, 1)
+Tags 'ns2:Description' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Description'
+End tag found (level=10) 'ns2:Description'=''
+Unexpected element 'ns2:Value' in input (level = 9, 1)
+Tags 'ns2:Value' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Value'
+End tag found (level=10) 'ns2:Value'=''
+End tag found (level=9) 'ns2:SubAttribute'=''
+Unexpected element 'ns2:SubAttribute' in input (level = 8, 1)
+Tags 'ns2:SubAttribute' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:SubAttribute'
+Unexpected element 'ns2:AttributeID' in input (level = 9, 1)
+Tags 'ns2:AttributeID' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:AttributeID'
+End tag found (level=10) 'ns2:AttributeID'=''
+Unexpected element 'ns2:Description' in input (level = 9, 1)
+Tags 'ns2:Description' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Description'
+End tag found (level=10) 'ns2:Description'=''
+Unexpected element 'ns2:Value' in input (level = 9, 1)
+Tags 'ns2:Value' and 'SOAP-ENV:' match but namespaces differ
+IGNORING element 'ns2:Value'
+End tag found (level=10) 'ns2:Value'=''
+End tag found (level=9) 'ns2:SubAttribute'=''
+End tag found (level=8) 'ns2:SubAttributeList'=''
+End tag found (level=7) 'ns2:MainAttribute'=''
+End tag found (level=6) 'ns2:Attribute'=''
+End tag found (level=5) 'ns3:Object'=''
+End tag found (level=4) 'ns2:SignatureAttribute'='ns3:SignatureAttribute'
+Container capacity increased: updating pointers
+End tag found (level=3) 'SignedAttributes'='ns2:SignedAttributes'
+End tag found (level=2) 'AttributeResponseValues'='ns2:AttributeResponseValues'
+End tag found (level=1) 'AttributeResponse'=''
+End of receive message ok
+Resolving forwarded refs
+Resolution phase
+Resolution done
+Free namespace stack
+../stdsoap2.cpp(9231): free(0x124ccc0)
+../stdsoap2.cpp(9231): free(0x1249bf0)
+../stdsoap2.cpp(9231): free(0x12499d0)
+../stdsoap2.cpp(9231): free(0x12497b0)
+../stdsoap2.cpp(9231): free(0x1249590)
+Done with context
+Free namespace stack
+Free any remaining temp blocks
+End of block sequence, free all remaining blocks
+../stdsoap2.cpp(2711): free(0x124edc0)
+Restored previous block sequence
+End of block sequence, free all remaining blocks
+../stdsoap2.cpp(2711): free(0x124db80)
+Free attribute storage
+../stdsoap2.cpp(9186): free(0x1249450)
+../stdsoap2.cpp(9187): free(0x12492a0)
+../stdsoap2.cpp(9186): free(0x1249670)
+../stdsoap2.cpp(9187): free(0x12495f0)
+../stdsoap2.cpp(9186): free(0x1249890)
+../stdsoap2.cpp(9187): free(0x1249810)
+../stdsoap2.cpp(9186): free(0x1249ab0)
+../stdsoap2.cpp(9187): free(0x1249a30)
+../stdsoap2.cpp(9186): free(0x124cb80)
+../stdsoap2.cpp(9187): free(0x124cb30)
+../stdsoap2.cpp(9186): free(0x124d260)
+../stdsoap2.cpp(9187): free(0x124d1f0)
+../stdsoap2.cpp(9186): free(0x124d500)
+../stdsoap2.cpp(9187): free(0x124d480)
+../stdsoap2.cpp(9186): free(0x124d870)
+../stdsoap2.cpp(9187): free(0x124d800)
+../stdsoap2.cpp(9192): free(0x124e300)
+../stdsoap2.cpp(9205): free(0x1248e50)
+Free ID hashtable
+Free pointer hashtable
+../stdsoap2.cpp(5713): free(0x124ef10)
+../stdsoap2.cpp(5713): free(0x124dcd0)
+../stdsoap2.cpp(5713): free(0x124d190)
+../stdsoap2.cpp(5713): free(0x124d0b0)
+../stdsoap2.cpp(5713): free(0x124cef0)
+../stdsoap2.cpp(5713): free(0x124ce30)
+Free logfiles
+../stdsoap2.cpp(5872): free(0x1245c20)
+../stdsoap2.cpp(5872): free(0x1245c70)
+../stdsoap2.cpp(5872): free(0x1245cc0)
