@@ -8,6 +8,7 @@
 #include <QString>
 #include <vector>
 
+#include "eidlibdefines.h"
 
 #include "settings.h"
 #include "treeiteminfo.h"
@@ -84,6 +85,8 @@ std::vector<ACService::ns2__AttributesType *> ACServiceClient::reqAttributeSuppl
 
             eIDMW::PTEID_ScapConnection scap(scapAddr, scapPort);
             char * scapResult = scap.postSoapRequest(c_endpoint, c_soapAction, soapBody);
+
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "ACService returned: %S", scapResult);    
 
             // Remove request answer headers
             std::string replyString = scapResult;

@@ -8,6 +8,8 @@
 
 #include "settings.h"
 
+#include "eidlibdefines.h"
+
 #include "PDFSignature/PDFSignatureH.h"
 #include "PDFSignature/PDFSignatureSoapBindingProxy.h"
 #include "PDFSignature/PDFSignatureSoapBinding.nsmap"
@@ -130,18 +132,22 @@ bool PDFSignatureClient::signPDF(QString finalfilepath, QString filepath, QStrin
             if (rc == SOAP_FAULT)
             {
                 fault = proxy.soap_fault();
+                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "PDF Service returned SOAP Fault: set a breakpoint after the call to see details");
                 fprintf(stderr, "SOAP Fault! "/*, fault->faultstring*/);
             }
             else
             {
                 fprintf(stderr, "Error in proxy.Sign(): Error code: %d\n", rc);
+                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "PDF Service returned HTTP error %d", rc);
             }
             return false;
         }
         std::string respCode = resp.Status->Code;
+
         if( respCode.compare("00") != 0 )
         {
 
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "PDF Service application-level error Code: %d Message: %S", respCode, resp.Status->Message);
             std::cerr << "Service error code " << respCode << ". Service returned Message: " << resp.Status->Message << std::endl;
             return false;
         }
@@ -151,7 +157,8 @@ bool PDFSignatureClient::signPDF(QString finalfilepath, QString filepath, QStrin
         // Save PDF to final destination
         PDFSignature::xsd__base64Binary *signedDoc = resp.SignedDocument;
         QFile signedDocFile(finalfilepath);
-        if(!signedDocFile.open(QIODevice::ReadWrite))
+
+        if (!signedDocFile.open(QIODevice::ReadWrite))
         {
             fprintf(stderr, "Could not write on selected destination");
             return false;
