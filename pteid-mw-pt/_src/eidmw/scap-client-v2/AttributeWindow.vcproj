@@ -403,8 +403,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Rcc&apos;ing logo.qrc..."
-						CommandLine="C:\Qt\4.8.4_win32\bin\rcc.exe -name &quot;$(InputName)&quot; -no-compress &quot;.\$(InputName).qrc&quot; -o .\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						Outputs=".\GeneratedFiles\qrc_$(InputName).cpp"
+						CommandLine="C:\Qt\4.8.4_win32\bin\rcc.exe -name &quot;$(InputName)&quot; -no-compress &quot;.\$(InputName).qrc&quot; -o .\Release\qrc_$(InputName).cpp&#x0D;&#x0A;"
+						Outputs=".\Release\qrc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -413,9 +413,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="RCC logo.qrc"
-						CommandLine="C:\Qt\4.8.4_x64\bin\rcc.exe -name logo logo.qrc -o release\qrc_logo.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.8.4_x64\bin\rcc.exe -name logo logo.qrc -o x64\release\qrc_logo.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.8.4_x64\bin\rcc.exe;Images\pteid.ico;logo.qrc"
-						Outputs="release\qrc_logo.cpp"
+						Outputs="x64\release\qrc_logo.cpp"
 					/>
 				</FileConfiguration>
 			</File>
@@ -885,24 +885,17 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath="debug\qrc_logo.cpp"
-				>
+			<File RelativePath="release\qrc_logo.cpp">
 				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
+					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
-					/>
+						Name="VCCLCompilerTool"/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
+			</File>
+			<File RelativePath="x64\release\qrc_logo.cpp">
+				<FileConfiguration Name="Release|x64">
+					<Tool 
+					   Name="VCCLCompilerTool"/>
 				</FileConfiguration>
 			</File>
 			<File
