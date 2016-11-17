@@ -888,8 +888,8 @@ long parseLong(char *str)
 	}
 
 	if (endptr == str) {
-	fprintf(stderr, "No digits were found\n");
-	return -1;
+		fprintf(stderr, "No digits were found\n");
+		return -1;
 	}
 
 	//Further characters after number
@@ -904,10 +904,12 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
 	int r;
 	bool final_chunk_read = false;
 	unsigned int bytes_read = headersAlreadyRead ? strlen(buffer) : 0;
-	long chunk_length = 0;
+	unsigned long chunk_bytesToRead = 0;
+	bool is_chunk_length = false;
 	do
     {	
-    	chunk_length = 0;
+    	is_chunk_length = false;
+
 	    // We're using blocking IO so SSL_Write either succeeds completely or not...
     	r = SSL_read(ssl, buffer+bytes_read, buffer_len-bytes_read);
     	//Read the chunk length
@@ -922,7 +924,7 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     		}
     		else
     		{
-
+    			//Search for a chunk-length token in the format Chunk-length (hex) CRLF
     			char * buffer_tmp = (char*)calloc(r+1, 1);
     			memcpy(buffer_tmp, buffer+bytes_read, r);
     			buffer_tmp[r] = '\0';
@@ -931,11 +933,12 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     			if (endline)
     				*endline = '\0';
     			long val = parseLong(buffer_tmp);
-    			if (val != -1)
+    			if (val != -1 && chunk_bytesToRead == 0)
     			{
     				fprintf(stderr, "DEBUG: Parsed chunk length= %ld\n", val);
     				*(buffer+bytes_read) = 0;
-    				chunk_length = val;
+    				chunk_bytesToRead = val;
+    				is_chunk_length = true;
     			}
 
     		}
@@ -971,9 +974,12 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     		translate_ssl_error(ssl, r);
 
     	}
-    	//Only include the data if this string is not a chunk-length token
-    	else if (chunk_length == 0)
+    	//Only include the data if this string is NOT a chunk-length token or a CRLF after the previous chunk
+    	else if (!is_chunk_length && chunk_bytesToRead > 0)
+    	{
+    		chunk_bytesToRead -= r;
     		bytes_read += r;
+    	}
     }
     while(bytes_read == 0 || !final_chunk_read);
 
