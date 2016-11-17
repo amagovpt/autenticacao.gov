@@ -94,20 +94,6 @@ std::vector<ACService::ns2__AttributesType *> ACServiceClient::reqAttributeSuppl
             int finalPos = replyString.find(endString) + endString.length();
             replyString = replyString.substr(initialPos, finalPos - initialPos);
 
-            char *reply_ptr = (char *) replyString.c_str();
-
-            //Remove some strange CRLF that sometimes come up in the XML reply
-            char * pos = strstr(reply_ptr, "\r\n");
-            std::string replyFinal;
-            if (pos != NULL)
-            {
-                int offset = pos - reply_ptr;
-                replyFinal.append(reply_ptr, offset);
-                replyFinal.append(pos+2, strlen(reply_ptr) - offset - 2);
-            }
-            else
-                replyFinal += replyString;
-
             // Save to cache
             QString s_scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
             QDir scapCacheDir;
@@ -118,7 +104,7 @@ std::vector<ACService::ns2__AttributesType *> ACServiceClient::reqAttributeSuppl
             std::cout << "Creating cache file on location: " << fileLocation.toStdString() << std::endl;
             QFile cacheFile(fileLocation);
             if( cacheFile.open(QIODevice::WriteOnly) ) {
-                cacheFile.write(replyFinal.c_str(), replyFinal.length());
+                cacheFile.write(replyString.c_str(), replyString.length());
             }
             else
             {
@@ -126,7 +112,7 @@ std::vector<ACService::ns2__AttributesType *> ACServiceClient::reqAttributeSuppl
             }
 
             // Convert string to istream
-            std::istringstream replyStream(replyFinal);
+            std::istringstream replyStream(replyString);
             std::istream * istream = &replyStream;
 
             // Create soap request with generated body content.
