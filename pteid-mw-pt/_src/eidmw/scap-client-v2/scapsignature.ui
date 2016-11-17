@@ -43,7 +43,7 @@
      <property name="geometry">
       <rect>
        <x>250</x>
-       <y>84</y>
+       <y>70</y>
        <width>191</width>
        <height>27</height>
       </rect>
@@ -64,7 +64,7 @@
        <x>10</x>
        <y>30</y>
        <width>431</width>
-       <height>51</height>
+       <height>31</height>
       </rect>
      </property>
     </widget>
@@ -88,9 +88,9 @@
      <property name="geometry">
       <rect>
        <x>270</x>
-       <y>470</y>
+       <y>479</y>
        <width>171</width>
-       <height>40</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -104,9 +104,9 @@
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>470</y>
+       <y>479</y>
        <width>151</width>
-       <height>40</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
@@ -130,9 +130,9 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>140</y>
+       <y>120</y>
        <width>431</width>
-       <height>111</height>
+       <height>131</height>
       </rect>
      </property>
      <attribute name="headerVisible">
@@ -148,7 +148,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>120</y>
+       <y>100</y>
        <width>431</width>
        <height>21</height>
       </rect>
