@@ -589,20 +589,6 @@ PTEID_EIDCard::~PTEID_EIDCard()
 {
 }
 
-bool PTEID_EIDCard::isTestCard()
-{
-	bool out = true;
-
-	BEGIN_TRY_CATCH
-
-	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
-	out = pcard->isTestCard();
-
-	END_TRY_CATCH
-
-	return out;
-}
-
 PTEID_XMLDoc& PTEID_EIDCard::getDocument(PTEID_DocumentType type)
 {
 	switch(type)

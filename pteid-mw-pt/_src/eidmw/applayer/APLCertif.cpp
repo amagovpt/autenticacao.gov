@@ -961,14 +961,6 @@ void APL_Certifs::resetTests()
 	}
 }
 
-bool APL_Certifs::getAllowTestCard()
-{	
-	if(!m_card)
-		return true;
-
-	return m_card->getAllowTestCard();
-}
-
 APL_SmartCard *APL_Certifs::getCard()
 {
 	return m_card;

@@ -58,10 +58,6 @@ APL_Card::~APL_Card()
 {
 }
 
-bool APL_Card::isVirtualCard() const
-{
-	return m_reader->isVirtualReader();
-}
 
 CReader *APL_Card::getCalReader() const
 {
@@ -85,8 +81,6 @@ void APL_Card::CalUnlock()
 
 unsigned long APL_Card::readFile(const char *csPath, CByteArray &oData, unsigned long  ulOffset, unsigned long  ulMaxLength)
 {
-	if(m_reader->isVirtualReader())
-		return m_reader->getSuperParser()->readData(csPath,oData);
 
 	BEGIN_CAL_OPERATION(m_reader)
 	oData = m_reader->getCalReader()->ReadFile(csPath,ulOffset,(ulMaxLength==0 ? FULL_FILE : ulMaxLength));
@@ -97,8 +91,6 @@ unsigned long APL_Card::readFile(const char *csPath, CByteArray &oData, unsigned
 
 bool APL_Card::writeFile(const char *csPath, const CByteArray& oData,unsigned long ulOffset)
 {
-	if(m_reader->isVirtualReader()) //Virtual Reader
-		return false;
 
 	BEGIN_CAL_OPERATION(m_reader)
 	m_reader->getCalReader()->WriteFile(csPath,ulOffset,oData);
@@ -109,8 +101,6 @@ bool APL_Card::writeFile(const char *csPath, const CByteArray& oData,unsigned lo
 
 CByteArray APL_Card::sendAPDU(const CByteArray& cmd)
 {
-	if(m_reader->isVirtualReader()) //Virtual Reader
-		return CByteArray();
 
 	CByteArray out;
 
@@ -514,32 +504,23 @@ APL_CardFile_Info *APL_SmartCard::getFileInfo()
 
 void APL_SmartCard::getInfo(CByteArray &info)
 {
-	if(m_reader->isVirtualReader()) //Virtual Reader
-	{
-		m_reader->getSuperParser()->readData(PTEID_FILE_CARDINFO,info);
-	}
-	else
-	{
-		BEGIN_CAL_OPERATION(m_reader)
+	
+	BEGIN_CAL_OPERATION(m_reader)
 		info=m_reader->getCalReader()->GetInfo();
-		END_CAL_OPERATION(m_reader)
-	}
+	END_CAL_OPERATION(m_reader)
+	
 }
 
 void APL_SmartCard::selectApplication(const CByteArray &applicationId) const
 {
-	if(m_reader->isVirtualReader()) //Virtual Reader
-		return;
-
+	
 	BEGIN_CAL_OPERATION(m_reader)
-	m_reader->getCalReader()->SelectApplication(applicationId);
+		m_reader->getCalReader()->SelectApplication(applicationId);
 	END_CAL_OPERATION(m_reader)
 }
 
 CByteArray APL_SmartCard::sendAPDU(const CByteArray& cmd,APL_Pin *pin,const char *csPinCode)
 {
-	if(m_reader->isVirtualReader()) //Virtual Reader
-		return CByteArray();
 
 	unsigned long lRemaining=0;
 	if(pin)
@@ -578,8 +559,6 @@ bool APL_SmartCard::writeFile(const char *fileID, const CByteArray &out, APL_Pin
 
 unsigned long APL_SmartCard::pinCount() 
 { 
-	if(m_reader->isVirtualReader()) //Virtual Reader
-		return 0;
 
 	if(m_pinCount==COUNT_UNDEF)
 	{
@@ -629,8 +608,6 @@ tPin APL_SmartCard::getPin(unsigned long ulIndex)
 
 unsigned long APL_SmartCard::pinStatus(const tPin &Pin)
 {	
-	if(m_reader->isVirtualReader()) //Virtual Reader
-		return 0;
 
 	unsigned long out=0;
 
@@ -645,8 +622,6 @@ bool APL_SmartCard::pinCmd(tPinOperation operation, const tPin &Pin,
 		const char *csPin1In, const char *csPin2In,
 		unsigned long &ulRemaining, bool bShowDlg)
 {
-	if(m_reader->isVirtualReader()) //Virtual Reader
-		return false;
 
 	bool ret=false;
 
@@ -667,9 +642,6 @@ bool APL_SmartCard::pinCmd(tPinOperation operation, const tPin &Pin,
 
 unsigned long APL_SmartCard::certificateCount()
 {
-	if(m_reader->isVirtualReader()) //Virtual Reader
-		return 0;
-
 	if(m_certificateCount==COUNT_UNDEF)
 	{
 		BEGIN_CAL_OPERATION(m_reader)
@@ -713,24 +685,8 @@ tCert APL_SmartCard::getP15Cert(unsigned long ulIndex)
 	return out;
 }
 
-bool APL_SmartCard::isTestCard()
-{
-	return false;
-}
 
-bool APL_SmartCard::getAllowTestCard()
-{
-
-	return true;
-}
-
-void APL_SmartCard::setAllowTestCard(bool allow)
-{
-	m_allowTestAnswer=allow;
-
-	m_allowTestAsked=true;
-}
-
+//TODO: see if we can eliminate these ChallengeResponse methods
 void APL_SmartCard::initChallengeResponse()
 {
 	CAutoMutex autoMutex(&m_Mutex);		//We lock for unly one instanciation
@@ -748,24 +704,16 @@ void APL_SmartCard::initChallengeResponse()
 	}
 	m_challengeResponse->ClearContents();
 
-	if(m_reader->isVirtualReader()) //Virtual Reader
+	//The challenge MUST NOT COME from the card
+	//*m_challenge=m_calreader->GetRandom(CHALLENGE_LEN);
+	unsigned char byte;
+	for(int i=0;i<CHALLENGE_LEN;i++)
 	{
-		m_reader->getSuperParser()->readData(PTEID_FILE_CHALLENGE,*m_challenge);
-		m_reader->getSuperParser()->readData(PTEID_FILE_CHALLENGE_RESPONSE,*m_challengeResponse);
+		byte=(unsigned char)((double)0x100*(double)rand()/(double)RAND_MAX);
+		m_challenge->Append(byte);
 	}
-	else
-	{
-		//The challenge MUST NOT COME from the card
-		//*m_challenge=m_calreader->GetRandom(CHALLENGE_LEN);
-		unsigned char byte;
-		for(int i=0;i<CHALLENGE_LEN;i++)
-		{
-			byte=(unsigned char)((double)0x100*(double)rand()/(double)RAND_MAX);
-			m_challenge->Append(byte);
-		}
 
-		*m_challengeResponse=getChallengeResponse(*m_challenge);
-	}
+	*m_challengeResponse=getChallengeResponse(*m_challenge);
 }
 
 const CByteArray &APL_SmartCard::getChallenge(bool bForceNewInit)
@@ -801,8 +749,6 @@ CByteArray APL_SmartCard::getChallengeResponse(const CByteArray &challenge) cons
 
 bool APL_SmartCard::verifyChallengeResponse(const CByteArray &challenge, const CByteArray &response) const
 {
-	if(m_reader->isVirtualReader())
-		return false;
 
 	CByteArray newResponse=getChallengeResponse(challenge);
 	return newResponse.Equals(response);

@@ -77,12 +77,6 @@ public:
 	EIDMW_APL_API virtual APL_CardType getType() const;
 
 	/**
-	  * Return true this is a test card.
-	  * This is a test card if one of the certificate is a test one
-	  */
-	EIDMW_APL_API virtual bool isTestCard();
-
-	/**
 	  * Read a file on the card 
 	  *
 	  * @param csPath is the path of the file to be read
@@ -181,19 +175,7 @@ protected:
 	//MARTINHO: APL_EIDCard(APL_ReaderContext *reader);
 	APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType);
 
-	virtual bool initVirtualReader();
-	virtual bool isCardForbidden();
 
-	/**
-	  * Read a file from a virtual reader
-	  *
-	  * @param fileID : is the name/path of the file
-	  * @param in : will return the content of the file
-	  */
-	static unsigned long readVirtualFileRAW(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx);
-	static unsigned long readVirtualFileTLV(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx);
-	static unsigned long readVirtualFileCSV(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx);
-	static unsigned long readVirtualFileXML(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx);
 
 private:
 	APL_EIDCard(const APL_EIDCard& card);				/**< Copy not allowed - not implemented */

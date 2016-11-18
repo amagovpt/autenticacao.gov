@@ -42,12 +42,9 @@ APL_Pins::APL_Pins(APL_SmartCard *card)
 {
 	m_card=card;
 
-	if(!m_card->isVirtualCard())
-	{
-		unsigned long ulCount=m_card->pinCount();
-		for(unsigned long i=0;i<ulCount;i++)
-			addPin(i,NULL);
-	}
+	unsigned long ulCount=m_card->pinCount();
+	for(unsigned long i=0;i<ulCount;i++)
+		addPin(i,NULL);
 }
 
 APL_Pins::~APL_Pins()
@@ -616,38 +613,35 @@ unsigned long APL_Pin::getId()
 
 PinUsage APL_Pin::getUsageCode()
 {
-	if(!m_card->isVirtualCard())
-	{
+
 		BEGIN_CAL_OPERATION(m_card)
 		m_usagecode = m_card->getCalReader()->GetPinUsage(m_pinP15);
 		END_CAL_OPERATION(m_card)
-	}
+	
 
 	return m_usagecode;
 }
 
 long APL_Pin::getTriesLeft()
 {
-	if(!m_card->isVirtualCard())
+	
+	unsigned long status=PIN_STATUS_UNKNOWN;
+
+	try
 	{
-		unsigned long status=PIN_STATUS_UNKNOWN;
-
-		try
-		{
-			status=m_card->pinStatus(m_pinP15);
-		}
-		catch(CMWException & e)
-		{
-			unsigned long err = e.GetError();
-			if (err != EIDMW_ERR_NOT_SUPPORTED)
-				throw e;
- 		}
-
-		if(status==PIN_STATUS_UNKNOWN)
-			m_triesleft=-1;
-		else
-			m_triesleft=status;
+		status=m_card->pinStatus(m_pinP15);
 	}
+	catch(CMWException & e)
+	{
+		unsigned long err = e.GetError();
+		if (err != EIDMW_ERR_NOT_SUPPORTED)
+			throw e;
+		}
+
+	if(status==PIN_STATUS_UNKNOWN)
+		m_triesleft=-1;
+	else
+		m_triesleft=status;
 
 	return m_triesleft;
 }

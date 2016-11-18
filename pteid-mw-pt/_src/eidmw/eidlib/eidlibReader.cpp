@@ -516,59 +516,6 @@ PTEID_ReaderContext::PTEID_ReaderContext(const SDK_Context *context,APL_ReaderCo
 	m_context->mutex=new CMutex;
 }
 
-PTEID_ReaderContext::PTEID_ReaderContext(PTEID_FileType fileType,const char *fileName)
-	:PTEID_Object(NULL,new APL_ReaderContext(ConvertFileType(fileType),fileName))
-{
-	m_cardid=0;
-	m_delimpl=true;
-
-	m_context->mutex=new CMutex;
-}
-
-PTEID_ReaderContext::PTEID_ReaderContext(PTEID_FileType fileType,const PTEID_ByteArray &data):PTEID_Object(NULL,NULL)
-{
-	m_cardid=0;
-	m_delimpl=true;
-
-	m_context->mutex=new CMutex;
-
-	BEGIN_TRY_CATCH
-
-	CByteArray apl_data(data.GetBytes(),data.Size());
-
-	m_impl=new APL_ReaderContext(ConvertFileType(fileType),apl_data);
-
-	END_TRY_CATCH
-}
-
-PTEID_ReaderContext::PTEID_ReaderContext(const PTEID_RawData_Eid &data):PTEID_Object(NULL,NULL)
-{
-	m_cardid=0;
-	m_delimpl=true;
-
-	m_context->mutex=new CMutex;
-
-	BEGIN_TRY_CATCH
-
-	APL_RawData_Eid *pData=new APL_RawData_Eid;
-	pData->version=1;
-	pData->idData.Append(data.idData.GetBytes(),data.idData.Size());
-	pData->idSigData.Append(data.idSigData.GetBytes(),data.idSigData.Size());
-	pData->addrData.Append(data.addrData.GetBytes(),data.addrData.Size());
-	pData->addrSigData.Append(data.addrSigData.GetBytes(),data.addrSigData.Size());
-	pData->sodData.Append(data.sodData.GetBytes(),data.sodData.Size());
-	pData->cardData.Append(data.cardData.GetBytes(),data.cardData.Size());
-	pData->tokenInfo.Append(data.tokenInfo.GetBytes(),data.tokenInfo.Size());
-	pData->certRN.Append(data.certRN.GetBytes(),data.certRN.Size());
-	pData->challenge.Append(data.challenge.GetBytes(),data.challenge.Size());
-	pData->response.Append(data.response.GetBytes(),data.response.Size());
-
-	m_impl=new APL_ReaderContext(*pData);
-
-	delete pData;
-
-	END_TRY_CATCH
-}
 
 PTEID_ReaderContext::~PTEID_ReaderContext()
 {
@@ -784,20 +731,6 @@ bool PTEID_ReaderContext::isPinpad()
 
 	return out;
 
-}
-
-bool PTEID_ReaderContext::isVirtualReader()
-{
-	bool out = false;
-
-	BEGIN_TRY_CATCH
-
-	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
-	out = pimpl->isVirtualReader();
-
-	END_TRY_CATCH
-
-	return out;
 }
 
 /*****************************************************************************************

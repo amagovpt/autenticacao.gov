@@ -288,11 +288,6 @@ public:
 	  */
 	EIDMW_APL_API APL_Certif *findCrlIssuer(const CByteArray &crldata);
 
-	/**
-	  * Return true if test cards are allowed
-	  */
-	EIDMW_APL_API bool getAllowTestCard();
-
 
 	void resetFlags();	/**< Reset flags (issuer, root and test) in the certifactes from the store */
 

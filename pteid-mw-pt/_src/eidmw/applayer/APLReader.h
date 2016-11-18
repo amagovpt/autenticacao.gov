@@ -43,14 +43,6 @@ enum APL_CardType
 	APL_CARDTYPE_PTEID_IAS101
 };
 
-enum APL_SaveFileType
-{
-	APL_SAVEFILETYPE_UNKNOWN=0,
-	APL_SAVEFILETYPE_RAWDATA,
-	APL_SAVEFILETYPE_TLV,
-	APL_SAVEFILETYPE_XML,
-	APL_SAVEFILETYPE_CSV
-};
 
 struct APL_RawData_Eid
 {
@@ -272,8 +264,6 @@ class CReader;
 class APL_Card;
 class APL_EIDCard;
 
-class APL_SuperParser;
-
 /******************************************************************************//**
   * Class that represent a reader
   * Contain a CReader from the CardLayer
@@ -283,17 +273,6 @@ class APL_SuperParser;
 class APL_ReaderContext
 {
 public:
-	/**
-	  * Construct using a fileType and fileName
-	  *		No reader are connected (m_reader=NULL)
-	  */
-	EIDMW_APL_API APL_ReaderContext(APL_SaveFileType fileType,const char *fileName);
-
-	/**
-	  * Construct using a fileType and its content
-	  *		No reader are connected (m_reader=NULL)
-	  */
-	EIDMW_APL_API APL_ReaderContext(APL_SaveFileType fileType,const CByteArray &data);
 
 	/**
 	  * Construct using Raw data for Eid
@@ -377,8 +356,6 @@ public:
 	  */
 	EIDMW_APL_API void StopEventCallback(unsigned long ulHandle) const;
 
-	EIDMW_APL_API bool isVirtualReader() const;			/**< Return true if this is a virtual reader */
-
 	EIDMW_APL_API void BeginTransaction();				/**< Begin a transaction */
 	EIDMW_APL_API void EndTransaction();				/**< End the transaction */
 
@@ -396,7 +373,6 @@ public:
 	  * Give access to the Super Parser
 	  * NOT FOR EXPORT
 	  */
-	APL_SuperParser *getSuperParser() const;
 
 private:	
 	/**
@@ -408,9 +384,6 @@ private:
 	APL_ReaderContext(const APL_ReaderContext &reader);				/**< Copy not allowed - not implemented */
 	APL_ReaderContext &operator=(const APL_ReaderContext &reader);	/**< Copy not allowed - not implemented */
 
-	void connectVirtualCard();	/**< Connect the virtual card to the reader */
-
-	APL_CardType getVirtualCardType();	/**< Parse the file to get the card type */
 	APL_CardType getPhysicalCardType(); /**< Ask the card type to the CAL */
 	
 	bool m_cal_lock;			/**< Running an atomic cal lock */
@@ -428,9 +401,6 @@ private:
 	std::string m_name;		/**< The name of the reader */
 	unsigned long m_cardid;	/**< Incremented for each new connected card */
 
-	bool m_virtual;					/**< Virtual reader */
-	APL_SuperParser *m_parser;		/**< Super parser */
-
 friend APL_ReaderContext &CAppLayer::getReader(const char *readerName); /**< This method must access protected constructor */
 };
 
@@ -438,68 +408,6 @@ friend APL_ReaderContext &CAppLayer::getReader(const char *readerName); /**< Thi
 class TLVParser;
 class CSVParser;
 class EIDMW_EIDMemParser;
-
-/******************************************************************************//**
-  * Util class for parsing files (CSV, TLV, XML)
-  *********************************************************************************/
-class APL_SuperParser
-{
-public:
-
-	APL_SuperParser(const char *fileName, APL_SaveFileType fileType);
-	APL_SuperParser(const CByteArray &data, APL_SaveFileType fileType);
-	APL_SuperParser(const APL_RawData_Eid &data);
-
-	virtual ~APL_SuperParser();
-
-	void initReadFunction(
-		unsigned long (*fctReadDataRAW)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx),
-		unsigned long (*fctReadDataTLV)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx),
-		unsigned long (*fctReadDataCSV)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx),
-		unsigned long (*fctReadDataXML)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx)
-		);
-
-	APL_CardType getCardType();
-	APL_SaveFileType getFileType();
-	unsigned long getVersion();
-	const char *getFileName();
-
-	APL_RawData_Eid *getRawDataEid();
-
-	unsigned long readData(const char *fileID, CByteArray &in,unsigned long idx=0);
-
-	unsigned long readDataXml(CByteArray &in, const char *tag);							/**< Read data with xml parser */
-	unsigned long readDataXml(CByteArray &in, const char *tag, unsigned long idx);		/**< Read data with xml parser */
-	unsigned long readDataTlv(CByteArray &in, unsigned char tag);						/**< Read data with tlv parser */	
-	unsigned long readDataTlv(CByteArray &in, unsigned char tag, unsigned char subtag);/**< Read data with tlv parser */	
-	unsigned long readDataCsv(CByteArray &in, unsigned long tag);						/**< Read data with csv parser */
-	unsigned long readDataCsv(CByteArray &in, unsigned long count, unsigned long first, unsigned long step, unsigned long idx);/**< Read data with csv parser */
-
-	unsigned long countDataXml(const char *tag);	/**< Return the number of value for this tag */
-
-private:
-	bool loadFile();	/**< Load the file into m_fileData (return true for success) */
-	bool parse();		/**< Parse m_fileData (return true for success) */
-
-
-	unsigned long (*m_fctReadDataRAW)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx);
-	unsigned long (*m_fctReadDataTLV)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx);
-	unsigned long (*m_fctReadDataCSV)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx);
-	unsigned long (*m_fctReadDataXML)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx);
-
-	APL_SaveFileType m_fileType;			/**< External file type */
-	unsigned long m_version;				/**< The version of the file */
-	std::string m_fileName;					/**< External file name */
-	APL_CardType m_cardType;				/**< The type of the card in the file */
-
-	CByteArray *m_fileData;					/**< The content of the file */
-
-	TLVParser			*m_parserTlv;		/**< TLV parser */
-	CSVParser			*m_parserCsv;		/**< CSV parser */
-	EIDMW_EIDMemParser	*m_parserXml;		/**< XML parser */
-
-	APL_RawData_Eid *m_rawdata_eid;
-};
 
 }
 

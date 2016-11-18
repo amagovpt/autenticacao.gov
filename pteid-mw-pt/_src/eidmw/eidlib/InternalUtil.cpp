@@ -103,24 +103,6 @@ APL_HashAlgo ConvertHashAlgo(PTEID_HashAlgo eAlgo)
 	}
 }
 
-APL_SaveFileType ConvertFileType(PTEID_FileType fileType)
-{
-	switch(fileType)
-	{ 
-	case PTEID_FILETYPE_TLV:
-		return APL_SAVEFILETYPE_TLV;
-
-	case PTEID_FILETYPE_CSV:
-		return APL_SAVEFILETYPE_CSV;
-
-	case PTEID_FILETYPE_XML:
-		return APL_SAVEFILETYPE_XML;
-
-	default:
-		return APL_SAVEFILETYPE_UNKNOWN;
-	}
-}
-
 tLOG_Level ConvertLogLevel(PTEID_LogLevel level)
 {
 	switch(level)

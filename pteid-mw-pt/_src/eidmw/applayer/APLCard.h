@@ -150,8 +150,6 @@ public:
 	  */
     EIDMW_APL_API virtual bool writeFile(const char *csPath, const CByteArray& oData,unsigned long ulOffset=0);
 
-	EIDMW_APL_API virtual bool isVirtualCard() const;
-
 	void CalLock();							/**< Lock the reader for exclusive atomic access */
 	void CalUnlock();						/**< Unlock the reader */
 
@@ -161,8 +159,6 @@ public:
 	  */
 	CReader *getCalReader() const;
 
-	virtual bool initVirtualReader()=0;
-
 protected:
 	/**
 	  * Constructor
@@ -170,9 +166,6 @@ protected:
 	  * @param reader is the reader from the card layer (CAL) in which the card is plugged
 	  */
 	APL_Card(APL_ReaderContext *reader);
-
-
-	virtual bool isCardForbidden()=0;
 
 	void SignIndividual(const char**, unsigned int, const char*, bool, bool);
 
@@ -284,21 +277,6 @@ public:
 	  * Return structure containing the PKCS15 object from the CAL
 	  */
 	EIDMW_APL_API virtual tCert getP15Cert(unsigned long ulIndex);
-
-	/**
-	  * Return true this is a test card
-	  */
-	EIDMW_APL_API virtual bool isTestCard();
-
-	/**
-	  * Return true if test card are allowed
-	  */
-	EIDMW_APL_API virtual bool getAllowTestCard();
-
-	/**
-	  * Set the flag to allow the test cards
-	  */
-	EIDMW_APL_API virtual void setAllowTestCard(bool allow);
 
 	/**
 	  * Return the challenge

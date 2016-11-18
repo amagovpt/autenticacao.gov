@@ -85,7 +85,7 @@ public:
 	  *
 	  * Create a new line with status = CSC_STATUS_NONE
 	  */
-	APL_CscLine(unsigned long ulUniqueID,CSC_Validation validationType,bool bAllowTestRoot);
+	APL_CscLine(unsigned long ulUniqueID,CSC_Validation validationType);
 
 	/**
 	  * Constructor

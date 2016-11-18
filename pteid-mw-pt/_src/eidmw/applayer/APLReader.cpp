@@ -63,68 +63,6 @@ APL_ReaderContext::APL_ReaderContext(const char *readerName)
 	m_cal_lock=false;
 	m_transaction_lock=false;
 
-	m_virtual=false;
-	m_parser=NULL;
-
-}
-
-APL_ReaderContext::APL_ReaderContext(APL_SaveFileType fileType, const char *fileName)
-{
-	m_calreader=NULL;
-	m_card=NULL;
-	m_cardid=0;
-
-	m_cal_lock=false;
-	m_transaction_lock=false;
-
-	m_virtual=true;
-
-	m_status=CARD_NOT_PRESENT;
-
-	m_parser=new APL_SuperParser(fileName,fileType);
-
-	connectVirtualCard();
-}
-
-APL_ReaderContext::APL_ReaderContext(APL_SaveFileType fileType, const CByteArray &data)
-{
-	m_calreader=NULL;
-	m_card=NULL;
-	m_cardid=0;
-
-	m_cal_lock=false;
-	m_transaction_lock=false;
-
-	m_virtual=true;
-
-	m_status=CARD_NOT_PRESENT;
-
-	if(fileType==APL_SAVEFILETYPE_TLV
-		|| fileType==APL_SAVEFILETYPE_XML
-		|| fileType==APL_SAVEFILETYPE_CSV)
-	{
-		m_parser=new APL_SuperParser(data,fileType);
-
-		connectVirtualCard();
-	}
-}
-
-APL_ReaderContext::APL_ReaderContext(const APL_RawData_Eid &data)
-{
-	m_calreader=NULL;
-	m_card=NULL;
-	m_cardid=0;
-
-	m_cal_lock=false;
-	m_transaction_lock=false;
-
-	m_virtual=true;
-
-	m_status=CARD_NOT_PRESENT;
-
-	m_parser=new APL_SuperParser(data);
-
-	connectVirtualCard();
 }
 
 APL_ReaderContext::~APL_ReaderContext()
@@ -144,41 +82,14 @@ APL_ReaderContext::~APL_ReaderContext()
 		delete m_card;
 		m_card=NULL;
 	}	
-	if(m_parser)
-	{
-		delete m_parser;
-		m_parser=NULL;
-	}
-}
-
-void APL_ReaderContext::connectVirtualCard()
-{
-	if(m_parser->getCardType()!=APL_CARDTYPE_UNKNOWN)
-	{
-		m_status=CARD_INSERTED;
-
-		if(!connectCard())
-		{
-			m_status=CARD_NOT_PRESENT;
-			return;
-		}
-
-		m_status=CARD_STILL_PRESENT;
-	}
 }
 
 const char *APL_ReaderContext::getName()
 {
 	if(m_name.empty())
 	{
-		if(isVirtualReader())
-		{
-			m_name=m_parser->getFileName();
-		}
-		else
-		{
-			m_name=m_calreader->GetReaderName();
-		}
+	
+		m_name=m_calreader->GetReaderName();		
 	}
 
 	return m_name.c_str();
@@ -234,14 +145,6 @@ APL_CardType APL_ReaderContext::getCardType()
 		return m_card->getType();
 	else
 		return APL_CARDTYPE_UNKNOWN;
-}
-
-APL_CardType APL_ReaderContext::getVirtualCardType()
-{
-	if(!m_parser)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-	return m_parser->getCardType();
 }
 
 APL_CardType APL_ReaderContext::getPhysicalCardType()
@@ -320,20 +223,17 @@ bool APL_ReaderContext::connectCard()
 {
 	CAutoMutex autoMutex(&m_newcardmutex);
 
-	if(!isVirtualReader())	//Virtual reader
+	try
 	{
-		try
-		{
-			m_status=m_calreader->Status(true);
-		}
-		catch(CMWException &e)
-		{
-			unsigned long err = e.GetError();
-			if(err==EIDMW_ERR_CANT_CONNECT)
-				m_status=CARD_INSERTED;
+		m_status=m_calreader->Status(true);
+	}
+	catch(CMWException &e)
+	{
+		unsigned long err = e.GetError();
+		if(err==EIDMW_ERR_CANT_CONNECT)
+			m_status=CARD_INSERTED;
 
-			throw e;
-		}
+		throw e;
 	}
 
 	//If there is no card, we delete the pointer and we quit
@@ -361,15 +261,12 @@ bool APL_ReaderContext::connectCard()
 		}
 	}
 
-	//The card has changed => we increment the id to make isCardChanged return true (even if the card is unknown or test not allow)
+	//The card has changed => we increment the id to make isCardChanged return true (even if the card is unknown)
 	m_cardid++;
 
 	APL_CardType cardType=APL_CARDTYPE_UNKNOWN;
-
-	if(isVirtualReader())
-		cardType=getVirtualCardType();
-	else
-		cardType=getPhysicalCardType();
+	
+	cardType=getPhysicalCardType();
 
 	switch(cardType)
 	{
@@ -378,21 +275,6 @@ bool APL_ReaderContext::connectCard()
 		m_card = new APL_EIDCard(this, cardType);
 		break;
 	default:
-		return false;
-	}
-
-	if(isVirtualReader() && !m_card->initVirtualReader())
-	{
-		delete m_card;
-		m_card = NULL;
-		return false;
-	}
-
-	//If the card is forbidden
-	if(m_card->isCardForbidden())
-	{
-		delete m_card;
-		m_card = NULL;
 		return false;
 	}
 
@@ -418,16 +300,11 @@ APL_EIDCard *APL_ReaderContext::getEIDCard()
 
 unsigned long APL_ReaderContext::SetEventCallback(void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef) const
 {
-	if(isVirtualReader())	//Virtual reader
-		return 0;
-
 	return m_calreader->SetEventCallback(callback,pvRef);
 }
 
 void APL_ReaderContext::StopEventCallback(unsigned long ulHandle) const
 {
-	if(isVirtualReader())	//Virtual reader
-		return;
 
 	m_calreader->StopEventCallback(ulHandle);
 }
@@ -444,9 +321,7 @@ void APL_ReaderContext::BeginTransaction()
 	try
 	{
 		connectCard();
-
-		if(!isVirtualReader())
-			m_calreader->Lock();
+		m_calreader->Lock();
 	}
 	catch(...)
 	{
@@ -463,8 +338,7 @@ void APL_ReaderContext::EndTransaction()
 
 	try
 	{
-		if(!isVirtualReader())
-			m_calreader->Unlock();
+		m_calreader->Unlock();
 	}
 	catch(...)
 	{
@@ -521,20 +395,11 @@ void APL_ReaderContext::CalUnlock()
 	m_cal_mutex.Unlock();
 }
 
-bool APL_ReaderContext::isVirtualReader() const
-{
-	return m_virtual;
-}
-
 CReader *APL_ReaderContext::getCalReader() const
 {
 	return m_calreader;
 }
 
-APL_SuperParser *APL_ReaderContext::getSuperParser() const
-{
-	return m_parser;
-}
 
 /*****************************************************************************************
 ------------------------------------ CheckRelease ---------------------------------------
@@ -960,501 +825,6 @@ const char *CAppLayer::getReaderName(unsigned long ulIndex)
 bool CAppLayer::flushCache() const
 {
 	return getCardLayer()->DeleteFromCache("");
-}
-
-/*****************************************************************************************
------------------------------------- APL_SuperParser ---------------------------------------
-*****************************************************************************************/
-APL_SuperParser::APL_SuperParser(const char *fileName, APL_SaveFileType fileType)
-{
-	m_cardType=APL_CARDTYPE_UNKNOWN;
-
-	m_fileType=fileType;
-	m_fileName=fileName;
-
-	m_fileData=NULL;
-
-	m_parserTlv=NULL;
-	m_parserCsv=NULL;
-	m_parserXml=NULL;
-
-	m_rawdata_eid=NULL;
-
-	m_fctReadDataRAW=NULL;
-	m_fctReadDataTLV=NULL;
-	m_fctReadDataCSV=NULL;
-	m_fctReadDataXML=NULL;
-
-	loadFile();
-
-	try
-	{
-		parse();
-	}
-	catch (CMWException &e)
-	{
-		unsigned long err = e.GetError();	//to avoid Warning
-		err = err;
-	}
-
-	if(m_fileData)
-	{
-		delete m_fileData;
-		m_fileData=NULL;
-	}
-}
-
-APL_SuperParser::APL_SuperParser(const CByteArray &data, APL_SaveFileType fileType)
-{
-	m_cardType=APL_CARDTYPE_UNKNOWN;
-
-	m_fileType=fileType;
-	m_fileName="Raw file";
-
-	m_fileData=NULL;
-
-	m_parserTlv=NULL;
-	m_parserCsv=NULL;
-	m_parserXml=NULL;
-
-	m_rawdata_eid=NULL;
-
-	m_fctReadDataRAW=NULL;
-	m_fctReadDataTLV=NULL;
-	m_fctReadDataCSV=NULL;
-	m_fctReadDataXML=NULL;
-
-	m_fileData=new CByteArray;
-	*m_fileData=data;
-
-	try
-	{
-		parse();
-	}
-	catch (CMWException &e)
-	{
-		unsigned long err = e.GetError();	//to avoid Warning
-		err = err;
-	}
-
-	if(m_fileData)
-	{
-		delete m_fileData;
-		m_fileData=NULL;
-	}
-}
-
-APL_SuperParser::APL_SuperParser(const APL_RawData_Eid &data)
-{
-	m_cardType=APL_CARDTYPE_UNKNOWN;
-
-	m_fileType=APL_SAVEFILETYPE_RAWDATA;
-	m_fileName="Raw data";
-
-	m_fileData=NULL;
-
-	m_parserTlv=NULL;
-	m_parserCsv=NULL;
-	m_parserXml=NULL;
-
-	m_rawdata_eid=NULL;
-
-	m_fctReadDataRAW=NULL;
-	m_fctReadDataTLV=NULL;
-	m_fctReadDataCSV=NULL;
-	m_fctReadDataXML=NULL;
-
-	m_rawdata_eid= new APL_RawData_Eid(data);
-
-	m_version=m_rawdata_eid->version;
-
-	long lDocType=-1;
-	try
-	{
-		CTLVBuffer oTLVBuffer;
-		oTLVBuffer.ParseTLV(m_rawdata_eid->idData.GetBytes(), m_rawdata_eid->idData.Size());
-		oTLVBuffer.FillLongData(PTEID_FIELD_TAG_ID_DocumentType, &lDocType);
-	}
-	catch(CMWException &e)
-	{
-		unsigned long err = e.GetError();	//to avoid Warning
-		err = err;
-		return;
-	}
-		// MARTINHO: one type had to be chosen
-       	m_cardType=APL_CARDTYPE_PTEID_IAS101;
-
-}
-
-APL_SuperParser::~APL_SuperParser()
-{
-	if(m_fileData)
-	{
-		delete m_fileData;
-		m_fileData=NULL;
-	}
-	if(m_parserTlv)
-	{
-		delete m_parserTlv;
-		m_parserTlv=NULL;
-	}
-	if(m_parserCsv)
-	{
-		delete m_parserCsv;
-		m_parserCsv=NULL;
-	}
-	if(m_parserXml)
-	{
-		delete m_parserXml;
-		m_parserXml=NULL;
-	}
-	
-	if(m_rawdata_eid)
-	{
-		delete m_rawdata_eid;
-		m_rawdata_eid=NULL;
-	}
-}
-
-bool APL_SuperParser::loadFile()
-{
-	if ( APL_SAVEFILETYPE_UNKNOWN==m_fileType)
-	{
-		const char* pExt = strrchr(m_fileName.c_str(),'.');
-		if (!pExt 
-			|| strlen(pExt)<4
-			)
-		{
-			return false;
-		}
-
-		if ( 0 == strcmp(pExt, ".xml") )
-		{
-			m_fileType = APL_SAVEFILETYPE_XML;
-		}
-		else if( 0 == strcmp(pExt, ".csv") )
-		{
-			m_fileType = APL_SAVEFILETYPE_CSV;
-		}
-		else if( (0 == strcmp(pExt, ".eid")) || (0 == strcmp(pExt, ".tlv")) )
-		{
-			m_fileType = APL_SAVEFILETYPE_TLV;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	//--------------------------------
-	// If the file does not exist, this is similar as as no card is inserted
-	// so throw the same exception.
-	//--------------------------------
-	if (!CPathUtil::existFile(m_fileName.c_str()))
-		throw CMWEXCEPTION(EIDMW_ERR_FILE_NOT_FOUND);
-
-	FILE *f;
-	int err=0;
-    size_t size = 0;
-    size_t sizeread = 0;
-
-#ifdef WIN32
-	err = fopen_s(&f, m_fileName.c_str(), "rb");
-#else
-	f = fopen(m_fileName.c_str(), "rb");
-	if (f == NULL) err=errno;		
-#endif
-	if (err != 0 && err != EACCES && err != ENOENT ) 
-		throw CMWEXCEPTION(EIDMW_ERROR_IO);
-
-	if(!m_fileData)
-		m_fileData=new CByteArray;
-
-	m_fileData->ClearContents();
-
-#ifdef WIN32
-    struct _stat buf = {0};
-    if(0 == _fstat(_fileno(f), &buf))
-#else
-	struct stat buf = {0};
-    if(0 == fstat(fileno(f), &buf))
-#endif
-    {
-		size=0;
-        unsigned char *pBuffer = (unsigned char *)malloc(buf.st_size);
-		while(size < (size_t) buf.st_size)
-		{
-			if( 0== (sizeread = fread(pBuffer, sizeof(unsigned char), buf.st_size, f)))
-				break;
-
-			m_fileData->Append(pBuffer,(long)sizeread);
-			size+=sizeread;
-		}
-        if(size != (size_t)buf.st_size)
-		{
-			free(pBuffer);
-			throw CMWEXCEPTION(EIDMW_ERROR_IO);
-		}
- 		free(pBuffer);
-   }
-
-	fclose(f);
-
-	return true;
-}
-
-bool APL_SuperParser::parse()
-{
-	char *type=NULL;
-
-	switch(m_fileType)
-	{
-	case APL_SAVEFILETYPE_TLV:
-	{
-		if(m_parserTlv)
-		{
-			delete m_parserTlv;
-			m_parserTlv=NULL;
-		}
-		m_parserTlv = new TLVParser;
-		m_parserTlv->ParseFileTLV(m_fileData->GetBytes(), m_fileData->Size());
-		CTLV *tlv=m_parserTlv->GetTagData(PTEID_TLV_TAG_CARDTYPE);
-		if(tlv==NULL)
-		{
-			type=new char[sizeof(CARDTYPE_NAME_PTEID_EID)+1];
-			strcpy_s(type,sizeof(CARDTYPE_NAME_PTEID_EID)+1,CARDTYPE_NAME_PTEID_EID);	//Old file doesn't contain PTEID_TLV_TAG_CARDTYPE
-		}
-		else
-		{
-			type=new char[tlv->GetLength()+1];
-			strncpy_s(type,tlv->GetLength()+1,(char*)tlv->GetData(),tlv->GetLength());
-		}
-
-		tlv=m_parserTlv->GetTagData(PTEID_TLV_TAG_VERSION);
-		if(tlv==NULL)
-			return false;
-
-		CByteArray baVersion(tlv->GetData(),tlv->GetLength());
-
-		m_version=(unsigned long)baVersion.GetByte(0);
-		break;
-	}
-	case APL_SAVEFILETYPE_CSV:
-	{
-		if(m_parserCsv)
-		{
-			delete m_parserCsv;
-			m_parserCsv=NULL;
-		}
-		m_parserCsv = new CSVParser(*m_fileData,CSV_SEPARATOR);
-		const CByteArray &baCardType=m_parserCsv->getData(PTEID_CSV_TAG_CARDTYPE);
-		type=new char[baCardType.Size()+1];
-		strncpy_s(type,baCardType.Size()+1,(char*)baCardType.GetBytes(),baCardType.Size());
-
-		char *stop;
-		const CByteArray &baVersion=m_parserCsv->getData(PTEID_CSV_TAG_VERSION);
-		m_version=strtoul((char*)baVersion.GetBytes(),&stop,10);
-
-		break;
-	}
-	case APL_SAVEFILETYPE_XML:
-	{
-		if(m_parserXml)
-		{
-			delete m_parserXml;
-			m_parserXml=NULL;
-		}
-		m_parserXml=new EIDMW_EIDMemParser((char *)m_fileData->GetBytes(),m_fileData->Size());
-		if(m_parserXml->parse())
-		{
-			m_cardType=m_parserXml->getDataCardType();
-			wchar_t *stop;
-			m_version=wcstoul(m_parserXml->getDocVersion(),&stop,10);
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-		break;
-	}
-	default:
-		return false;
-	}
-
-	if(strcmp(type,CARDTYPE_NAME_PTEID_EID)==0)
-		// MARTINHO one type had to be chosen
-		m_cardType=APL_CARDTYPE_PTEID_IAS101;
-
-	if(type)
-		delete[] type;
-
-	if(m_cardType==APL_CARDTYPE_UNKNOWN)
-		return false;
-
-	return true;
-}
-
-APL_CardType APL_SuperParser::getCardType()
-{
-	return m_cardType;
-}
-
-unsigned long APL_SuperParser::getVersion()
-{
-	return m_version;
-}
-
-const char *APL_SuperParser::getFileName()
-{
-	return m_fileName.c_str();
-}
-
-APL_SaveFileType APL_SuperParser::getFileType()
-{
-	return m_fileType;
-}
-
-APL_RawData_Eid *APL_SuperParser::getRawDataEid()
-{
-	return m_rawdata_eid;
-}
-
-void APL_SuperParser::initReadFunction(
-			unsigned long (*fctReadDataRAW)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx),
-			unsigned long (*fctReadDataTLV)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx),
-			unsigned long (*fctReadDataCSV)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx),
-			unsigned long (*fctReadDataXML)(APL_SuperParser *parser,const char *fileID, CByteArray &in,unsigned long idx))
-{
-	m_fctReadDataRAW=fctReadDataRAW;
-	m_fctReadDataTLV=fctReadDataTLV;
-	m_fctReadDataCSV=fctReadDataCSV;
-	m_fctReadDataXML=fctReadDataXML;
-}
-
-unsigned long APL_SuperParser::readData(const char *fileID, CByteArray &in,unsigned long idx)
-{
-	switch(m_fileType)
-	{
-	case APL_SAVEFILETYPE_RAWDATA:
-			//MARTINHO: one type had to be chosen
-	    	if(((m_cardType==APL_CARDTYPE_PTEID_IAS101) && !m_rawdata_eid) || m_cardType==APL_CARDTYPE_UNKNOWN)
-			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-		if(!m_fctReadDataRAW)
-			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-		return m_fctReadDataRAW(this,fileID,in,idx);
-
-	case APL_SAVEFILETYPE_TLV:
-		if(!m_parserTlv)
-			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-		if(!m_fctReadDataTLV)
-			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-		return m_fctReadDataTLV(this,fileID,in,idx);
-
-	case APL_SAVEFILETYPE_CSV:
-		if(!m_parserCsv)
-			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-		if(!m_fctReadDataCSV)
-			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-		return m_fctReadDataCSV(this,fileID,in,idx);
-
-	case APL_SAVEFILETYPE_XML:
-		if(!m_parserXml)
-			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-		if(!m_fctReadDataXML)
-			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-		return m_fctReadDataXML(this,fileID,in,idx);
-	case APL_SAVEFILETYPE_UNKNOWN:
-	default:
-		break;
-	}
-
-	throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-}
-
-unsigned long APL_SuperParser::readDataXml(CByteArray &in, const char *tag)
-{
-	return readDataXml(in, tag, 0);
-}
-
-unsigned long APL_SuperParser::readDataXml(CByteArray &in, const char *tag,unsigned long idx)
-{
-	if(!m_parserXml)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-	if(idx<m_parserXml->getDataSize(tag))
-		in=*m_parserXml->getData(tag,idx);
-
-	return in.Size();
-}
-
-unsigned long APL_SuperParser::countDataXml(const char *tag)
-{
-	if(!m_parserXml)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-	return (unsigned long)m_parserXml->getDataSize(tag);
-}
-
-unsigned long APL_SuperParser::readDataTlv(CByteArray &in, unsigned char tag)
-{
-	if(!m_parserTlv)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-	CTLV *tlv=m_parserTlv->GetTagData(tag);
-	if(tlv==NULL)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-	in.ClearContents();
-	in.Append(tlv->GetData(),tlv->GetLength());
-
-	return in.Size();
-}
-
-unsigned long APL_SuperParser::readDataTlv(CByteArray &in, unsigned char tag, unsigned char subtag)
-{
-	if(!m_parserTlv)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-	in.ClearContents();
-
-	CTLV *tlv=m_parserTlv->GetSubTagData(tag,subtag);
-	if(tlv)
-		in.Append(tlv->GetData(),tlv->GetLength());
-
-	return in.Size();
-}
-
-unsigned long APL_SuperParser::readDataCsv(CByteArray &in, unsigned long tag)
-{
-	if(!m_parserCsv)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-	in=m_parserCsv->getData(tag);
-
-	return in.Size();
-}
-
-unsigned long APL_SuperParser::readDataCsv(CByteArray &in, unsigned long count, unsigned long first, unsigned long step, unsigned long idx)
-{
-	if(!m_parserCsv)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-	char *stop;
-	CByteArray baCount=m_parserCsv->getData(count);
-	unsigned long ulCount=strtoul((char*)baCount.GetBytes(),&stop,10);
-	if(idx<ulCount)
-		in=m_parserCsv->getData(first+(idx)*step);
-
-	return in.Size();
 }
 
 APL_CardType ConvertCardType(tCardType cardType)

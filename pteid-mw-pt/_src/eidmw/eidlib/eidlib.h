@@ -520,19 +520,6 @@ public:
 	  * Construct using a fileType and fileName.
 	  *		No physical reader are connected (m_reader=NULL)
 	  */
-	PTEIDSDK_API PTEID_ReaderContext(PTEID_FileType fileType,const char *fileName);
-
-	/**
-	  * Construct using a fileType and its content (for compatibility with SetRawFile).
-	  *		No physical reader are connected (m_reader=NULL)
-	  */
-	PTEIDSDK_API PTEID_ReaderContext(PTEID_FileType fileType,const PTEID_ByteArray &data);
-
-	/**
-	  * Construct using Raw data for Eid.
-	  *		No physical reader are connected (m_reader=NULL)
-	  */
-	PTEIDSDK_API PTEID_ReaderContext(const PTEID_RawData_Eid &data);
 
 	PTEIDSDK_API virtual ~PTEID_ReaderContext();	/**< Destructor */
 
@@ -605,8 +592,6 @@ public:
 
 	PTEIDSDK_API void BeginTransaction();								/**< Begin a transaction with the reader */
 	PTEIDSDK_API void EndTransaction();								/**< End the transaction */
-
-	PTEIDSDK_API bool isVirtualReader();								/**< Return true if this is a virtual reader (create from a file) */
 
 private:
 	PTEID_ReaderContext(const PTEID_ReaderContext& reader);				/**< Copy not allowed - not implemented */
@@ -869,10 +854,6 @@ class PTEID_EIDCard : public PTEID_SmartCard
 public:
 	PTEIDSDK_API virtual ~PTEID_EIDCard();						/**< Destructor */
 
- 	/**
-	  * Return true this is a test card.
-	  */
-	PTEIDSDK_API virtual bool isTestCard();
 
 	/**
 	 * Return a document from the card.

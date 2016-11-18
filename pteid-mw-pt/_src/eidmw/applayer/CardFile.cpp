@@ -141,29 +141,15 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 
 	m_status=CARDFILESTATUS_UNREAD;
 
-	m_testCardAllowed=false;
 }
 
 APL_CardFile::~APL_CardFile()
 {
 }
 
-tCardFileStatus APL_CardFile::getStatus(bool bForceRead,const bool *pbNewAllowTest) 
+tCardFileStatus APL_CardFile::getStatus(bool bForceRead) 
 { 
-	/*if(pbNewAllowTest && m_testCardAllowed!=*pbNewAllowTest)
-	{
-		m_status=CARDFILESTATUS_UNREAD;
-		m_testCardAllowed=*pbNewAllowTest;
-	}
-
-	if(pbNewAllowBadDate && m_badDateAllowed!=*pbNewAllowBadDate)
-	{
-		m_status=CARDFILESTATUS_UNREAD;
-		m_badDateAllowed=*pbNewAllowBadDate;
-	}*/
-
-	//if(bForceRead && m_status==CARDFILESTATUS_UNREAD)
-		LoadData(bForceRead);
+	LoadData(bForceRead);
 
 	return m_status; 
 }

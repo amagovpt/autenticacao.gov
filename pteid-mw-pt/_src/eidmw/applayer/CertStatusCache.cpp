@@ -89,11 +89,11 @@ APL_CscLine::APL_CscLine(const char *lineIn)
 	}
 }
 
-APL_CscLine::APL_CscLine(unsigned long ulUniqueID,CSC_Validation validationType,bool bAllowTestRoot)
+APL_CscLine::APL_CscLine(unsigned long ulUniqueID,CSC_Validation validationType)
 {
 	m_ulUniqueID=ulUniqueID;
-	m_ulFlags=	validationType 
-				+ (bAllowTestRoot?1:0) * CSC_VALIDATION_FLAG_TESTROOT;
+	m_ulFlags =	validationType;
+				
 	m_Status=CSC_STATUS_NONE;
 	m_Validity=""; 
 }
@@ -208,7 +208,7 @@ CSC_Status APL_CertStatusCache::getCertStatus(unsigned long ulUniqueID,const CSC
 
 	CSC_Status status;
 
-	APL_CscLine line(ulUniqueID,validationType,certStore->getAllowTestCard());
+	APL_CscLine line(ulUniqueID,validationType);
 	unsigned long ulFlags=line.getFlags();
 
 	//Check if the certificate is in the cache and the status still valid
