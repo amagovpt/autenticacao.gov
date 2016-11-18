@@ -415,6 +415,12 @@ namespace eIDMW
 		//Force the parsing of the Page Tree structure to get the pagerefs loaded in Catalog object
 		Page *p = doc->getPage(m_page);
 
+		if (p == NULL)
+		{
+			fprintf(stderr, "Failed to get page from PDFDoc object\n");
+			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+		}
+
 		//By the spec, the visible/writable area can be cropped by the CropBox, BleedBox, etc...
 		//We're assuming the most common case of MediaBox matching the visible area
 		PDFRectangle *p_media = p->getMediaBox();
@@ -446,9 +452,6 @@ namespace eIDMW
 			}
 
 		}
-
-		if (p == NULL)
-			fprintf(stderr, "Failed to read page MediaBox\n");
 
 		unsigned char *to_sign;
 		
