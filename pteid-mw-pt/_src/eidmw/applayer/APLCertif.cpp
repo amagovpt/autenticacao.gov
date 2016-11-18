@@ -214,7 +214,7 @@ void APL_Certifs::addToSODCAs(const CByteArray &cert_ba)
 
 unsigned long APL_Certifs::countSODCAs()
 {
-	fprintf(stderr, "DEBUG: countSODCAs returns %d\n", m_sod_cas.size());
+	fprintf(stderr, "DEBUG: countSODCAs returns %lu\n", m_sod_cas.size());
 	return m_sod_cas.size();
 }
 
@@ -873,7 +873,10 @@ void APL_Certifs::foundCertificate(const char *SubDir, const char *File, void *p
 	fclose(m_stream);
 	return;
 
-	err:
+err:
+	if (m_stream)
+		fclose(m_stream);
+
 	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certifs::foundCertificate: problem with file %ls ", utilStringWiden(string(path)).c_str());
 }
 
