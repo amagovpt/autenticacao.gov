@@ -164,13 +164,10 @@ unsigned long APL_Pins::count(bool bFromCard)
 
 APL_Pin *APL_Pins::getPinByNumber(unsigned long ulIndex)
 {
-	if(ulIndex<0)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
 	std::map<unsigned long,APL_Pin *>::const_iterator itr;
 
 	itr = m_pins.find(ulIndex);
-	if(itr!=m_pins.end())
+	if (itr!=m_pins.end())
 		return m_pins[ulIndex];
 
 	throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
