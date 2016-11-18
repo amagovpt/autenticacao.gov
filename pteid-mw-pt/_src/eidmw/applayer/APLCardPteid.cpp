@@ -40,7 +40,6 @@ namespace eIDMW
 /*****************************************************************************************
 ---------------------------------------- APL_EIDCard -----------------------------------------
 *****************************************************************************************/
-APL_AccessWarningLevel APL_EIDCard::m_lWarningLevel=APL_ACCESSWARNINGLEVEL_TO_ASK;
 
 APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType):APL_SmartCard(reader)
 {
@@ -851,23 +850,6 @@ bool APL_EIDCard::isTestCard()
 
 unsigned long APL_EIDCard::readFile(const char *csPath, CByteArray &oData, unsigned long  ulOffset, unsigned long  ulMaxLength)
 {
-	if(!m_reader->isVirtualReader())
-	{
-		bool bWarning=false;
-		for(long i=0;_pteid_files_to_warn[i]!=NULL;i++)
-		{
-			if(strcmp(csPath,_pteid_files_to_warn[i])==0)
-			{
-				bWarning=true;
-				break;
-			}
-		}
-
-		if(bWarning)
-		{
-			askWarningLevel();
-		}
-	}
 
 	return APL_SmartCard::readFile(csPath,oData,ulOffset,ulMaxLength);
 }
@@ -1164,43 +1146,6 @@ const CByteArray& APL_EIDCard::getRawData_Response()
 	return getChallengeResponse();
 }
 
-void APL_EIDCard::askWarningLevel()
-{
-	// Fix this: This modification hides the accept window.
-	// Application will access to the card always without user interaction
-	setWarningLevel(APL_ACCESSWARNINGLEVEL_ACCEPTED);
-}
-
-void APL_EIDCard::setWarningLevel(APL_AccessWarningLevel lWarningLevel)
-{
-	//APL_ACCESSWARNINGLEVEL_BEING_ASKED is an internal status that could not be set from outside
-	if(lWarningLevel!=APL_ACCESSWARNINGLEVEL_REFUSED 
-		&& lWarningLevel!=APL_ACCESSWARNINGLEVEL_TO_ASK
-		&& lWarningLevel!=APL_ACCESSWARNINGLEVEL_ACCEPTED)
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-
-	m_lWarningLevel=lWarningLevel;
-}
-
-APL_AccessWarningLevel APL_EIDCard::getWarningLevel()
-{
-	return m_lWarningLevel;
-}
-
-bool APL_EIDCard::isApplicationAllowed()
-{
-	try
-	{
-		askWarningLevel();
-	}
-	catch(CMWException &e)
-	{
-		e=e;
-	}
-
-	return (m_lWarningLevel==1);
-}
-
 const char *APL_EIDCard::getTokenSerialNumber(){
 	if (!m_tokenSerial){
 
@@ -1296,25 +1241,6 @@ APL_CCXML_Doc::APL_CCXML_Doc(APL_EIDCard *card, APL_XmlUserRequestedInfo&  xmlUs
 
 APL_CCXML_Doc::~APL_CCXML_Doc()
 {
-}
-
-bool APL_CCXML_Doc::isAllowed()
-{
-	try
-	{
-		if(m_card->getFileID()->getStatus(true)==CARDFILESTATUS_OK
-			//&& m_card->getFileAddress()->getStatus(true)==CARDFILESTATUS_OK
-			&& m_card->getFileSod()->getStatus(true)==CARDFILESTATUS_OK)
-			return true;
-	}
-	catch(CMWException& e)
-	{
-		if (e.GetError() == EIDMW_ERR_NOT_ALLOW_BY_USER)
-			return false;
-		else
-			throw;
-	}
-	return false;
 }
 
 CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
@@ -1477,23 +1403,6 @@ APL_DocEId::~APL_DocEId()
 {
 }
 
-bool APL_DocEId::isAllowed()
-{
-	try
-	{
-		if(m_card->getFileID()->getStatus(true)==CARDFILESTATUS_OK
-			&& m_card->getFileAddress()->getStatus(true)==CARDFILESTATUS_OK)
-			return true;
-	}
-	catch(CMWException& e)
-	{
-		if (e.GetError() == EIDMW_ERR_NOT_ALLOW_BY_USER)
-			return false;
-		else
-			throw;
-	}
-	return false;
-}
 
 CByteArray APL_DocEId::getXML(bool bNoHeader, APL_XmlUserRequestedInfo &xmlUInfo){
 
@@ -1948,22 +1857,6 @@ APL_PersonalNotesEId::~APL_PersonalNotesEId()
 {
 }
 
-bool APL_PersonalNotesEId::isAllowed()
-{
-	try
-	{
-		if(m_card->getFilePersoData()->getStatus(true)==CARDFILESTATUS_OK)
-			return true;
-	}
-	catch(CMWException& e)
-	{
-		if (e.GetError() == EIDMW_ERR_NOT_ALLOW_BY_USER)
-			return false;
-		else
-			throw;
-	}
-	return false;
-}
 
 CByteArray APL_PersonalNotesEId::getXML(bool bNoHeader, APL_XmlUserRequestedInfo &xmlUInfo){
 	CByteArray ca;
@@ -2026,22 +1919,6 @@ APL_AddrEId::~APL_AddrEId()
 {
 }
 
-bool APL_AddrEId::isAllowed()
-{
-	try
-	{
-		if(m_card->getFileAddress()->getStatus(true)==CARDFILESTATUS_OK)
-			return true;
-	}
-	catch(CMWException& e)
-	{
-		if (e.GetError() == EIDMW_ERR_NOT_ALLOW_BY_USER)
-			return false;
-		else
-			throw;
-	}
-	return false;
-}
 
 CByteArray APL_AddrEId::getXML(bool bNoHeader, APL_XmlUserRequestedInfo &xmlUInfo){
 	CByteArray ca;
@@ -2339,24 +2216,6 @@ APL_SodEid::~APL_SodEid()
 {
 }
 
-bool APL_SodEid::isAllowed()
-{
-	try
-	{
-		if(m_card->getFileSod()->getStatus(true)==CARDFILESTATUS_OK
-			&& m_card->getFileID()->getStatus(true)==CARDFILESTATUS_OK)
-			return true;
-	}
-	catch(CMWException& e)
-	{
-		if (e.GetError() == EIDMW_ERR_NOT_ALLOW_BY_USER)
-			return false;
-		else
-			throw;
-	}
-	return false;
-}
-
 CByteArray APL_SodEid::getXML(bool bNoHeader)
 {
 /*
@@ -2445,11 +2304,6 @@ APL_DocVersionInfo::APL_DocVersionInfo(APL_EIDCard *card)
 
 APL_DocVersionInfo::~APL_DocVersionInfo()
 {
-}
-
-bool APL_DocVersionInfo::isAllowed()
-{
-	return true;
 }
 
 CByteArray APL_DocVersionInfo::getXML(bool bNoHeader)

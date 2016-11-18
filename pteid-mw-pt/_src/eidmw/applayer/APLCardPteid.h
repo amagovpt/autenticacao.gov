@@ -56,14 +56,6 @@ class APL_DocVersionInfo;
 class APL_XmlUserRequestedInfo;
 class APL_PersonalNotesEId;
 
-enum APL_AccessWarningLevel
-{
-	APL_ACCESSWARNINGLEVEL_BEING_ASKED=-2,
-	APL_ACCESSWARNINGLEVEL_REFUSED=-1,
-	APL_ACCESSWARNINGLEVEL_TO_ASK=0,
-	APL_ACCESSWARNINGLEVEL_ACCEPTED=1,
-};
-
 /******************************************************************************//**
   * Class that represent a PTEID card
   *
@@ -149,8 +141,6 @@ public:
 
 	EIDMW_APL_API const CByteArray &getCardInfoSignature();			/**< Return the signature of the card info */
 
-	EIDMW_APL_API static bool isApplicationAllowed();					/**< Return true if the user allow the application */
-
  	/** 
 	 * Return rawdata from the card
 	 */
@@ -182,11 +172,6 @@ public:
 	APLPublicKey *getRootCAPubKey();						/**< Get the CVC CA public key that this card uses to verify the CVC key (NOT EXPORTED)*/
 	EIDMW_APL_API bool isActive();
 	EIDMW_APL_API bool Activate(const char *pinCode, CByteArray &BCDDate);						/**< Activate the pteid card (NOT EXPORTED)*/
-
-
-	static void askWarningLevel();
-	static void setWarningLevel(APL_AccessWarningLevel lWarningLevel);
-	static APL_AccessWarningLevel getWarningLevel();
 
 protected:
 	/**
@@ -241,8 +226,6 @@ private:
 
 	bool m_sodCheck;
 
-	static APL_AccessWarningLevel m_lWarningLevel;
-
 friend bool APL_ReaderContext::connectCard();	/**< This method must access protected constructor */
 };
 
@@ -259,8 +242,6 @@ public:
 	  * Destructor
 	  */
 	EIDMW_APL_API virtual ~APL_CCXML_Doc();
-
-	EIDMW_APL_API virtual bool isAllowed();							/**< The document is allowed*/
 
 	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
 
@@ -297,8 +278,6 @@ public:
 	  * Destructor
 	  */
 	EIDMW_APL_API virtual ~APL_DocEId();
-
-	EIDMW_APL_API virtual bool isAllowed();							/**< The document is allowed*/
 
 	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
 	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
@@ -380,8 +359,6 @@ public:
 	  */
 	EIDMW_APL_API virtual ~APL_AddrEId();
 
-	EIDMW_APL_API virtual bool isAllowed();							/**< The document is allowed*/
-
 	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
 	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
 	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
@@ -443,8 +420,6 @@ friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader); /* this method accesses
 class APL_PersonalNotesEId : public APL_XMLDoc{
 public:
 	EIDMW_APL_API virtual ~APL_PersonalNotesEId();
-
-	EIDMW_APL_API virtual bool isAllowed();							/**< The document is allowed*/
 
 	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
 	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
@@ -519,8 +494,6 @@ public:
 	  */
 	EIDMW_APL_API virtual ~APL_SodEid();
 
-	EIDMW_APL_API virtual bool isAllowed();							/**< The document is allowed*/
-
 	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
 	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
 	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
@@ -555,8 +528,6 @@ public:
 	  * Destructor
 	  */
 	EIDMW_APL_API virtual ~APL_DocVersionInfo();
-
-	EIDMW_APL_API virtual bool isAllowed();							/**< The document is allowed*/
 
 	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
 	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */

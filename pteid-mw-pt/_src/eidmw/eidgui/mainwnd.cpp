@@ -2137,18 +2137,7 @@ void MainWnd::loadCardDataAddress( void )
 					try
 					{
 						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-						if (Card.isTestCard()&&!Card.getAllowTestCard())
-						{
-							if (askAllowTestCard())
-							{
-								Card.setAllowTestCard(true);
-							}
-							else
-							{
-								on_actionClear_triggered();
-								break;
-							}
-						}
+					
 						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
 						m_CurrReaderName = readerName;
 						Show_Address_Card(Card);
@@ -2304,18 +2293,7 @@ bool MainWnd::loadCardDataPersoData( void )
 					try
 					{
 						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-						if (Card.isTestCard()&&!Card.getAllowTestCard())
-						{
-							if (askAllowTestCard())
-							{
-								Card.setAllowTestCard(true);
-							}
-							else
-							{
-								on_actionClear_triggered();
-								break;
-							}
-						}
+						
 						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
 						m_CurrReaderName = readerName;
 						Show_PersoData_Card(Card);
@@ -2454,18 +2432,7 @@ void MainWnd::loadCardDataCertificates( void )
 					try
 					{
 						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-						if (Card.isTestCard()&&!Card.getAllowTestCard())
-						{
-							if (askAllowTestCard())
-							{
-								Card.setAllowTestCard(true);
-							}
-							else
-							{
-								on_actionClear_triggered();
-								break;
-							}
-						}
+						
 						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
 						m_CurrReaderName = readerName;
 						Show_Certificates_Card(Card);
@@ -3091,22 +3058,17 @@ void MainWnd::showTabs()
 
 	switch (m_TypeCard)
 	{
-	case PTEID_CARDTYPE_IAS07:
-	case PTEID_CARDTYPE_IAS101:
+		case PTEID_CARDTYPE_IAS07:
+		case PTEID_CARDTYPE_IAS101:
 
-		if(PTEID_EIDCard::isApplicationAllowed())
-		{
 			refreshTabIdentity();
 			refreshTabIdentityExtra();
-		}
+			refreshTabCardPin();
 
-		refreshTabCardPin();
-		//refreshTabInfo();
+			break;
 
-		break;
-
-	default:
-		break;
+		default:
+			break;
 	}
 
 	setLanguage();
@@ -3382,21 +3344,6 @@ QString MainWnd::getFinalLinkTarget(QString baseName)
 }
 
 
-//**************************************************
-// clear button clicked
-// - back to the main screen
-// - clear the data of the loaded card
-// - make sure virtual reader is cleared
-// - current reader name reset
-//**************************************************
-void MainWnd::on_actionClear_triggered()
-{
-	QString msg = tr("Clear");
-	msg.remove(QChar('&'));
-	m_ui.statusBar->showMessage(msg,m_STATUS_MSG_TIME);
-	clearGuiContent();
-
-}
 //*****************************************************
 // Clear the content of the GUI
 //*****************************************************
@@ -4310,20 +4257,7 @@ void MainWnd::doPicturePopup( PTEID_Card& card )
         return;
     }
 
-    //------------------------------------------------
-    // To show the picture we must:
-    // - keep the status if test cards were allowed or not
-    // - allways allow a testcard
-    // - load the picture for the popup
-    // - reset the allowTestCard like the user has set it
-    //------------------------------------------------
     PTEID_EIDCard& eidCard		 = static_cast<PTEID_EIDCard&>(card);
-    bool		  bAllowTestCard = eidCard.getAllowTestCard();
-
-    if (!bAllowTestCard)
-    {
-        eidCard.setAllowTestCard(true);
-    }
 
     QImage myImage, myImagescaled;
     QPixmap				  pixMap;
@@ -4337,7 +4271,6 @@ void MainWnd::doPicturePopup( PTEID_Card& card )
         m_Pop->setPixmap(pixMap);
         m_Pop->popUp();
     }
-    eidCard.setAllowTestCard(bAllowTestCard);
 }
 
 //**************************************************

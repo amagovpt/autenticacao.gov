@@ -439,14 +439,6 @@ static const unsigned long _pteid_root_certs_size[] =
 	sizeof(_pteid_root_cert)
 };
 
-static const char *const _pteid_files_to_warn[] = 
-{
-	PTEID_FILE_ID,			
-	PTEID_FILE_ADDRESS,		
-	PTEID_FILE_SOD,
-	NULL
-};
-
 }
 
 #endif //__CARDPTEIDDEF_H__

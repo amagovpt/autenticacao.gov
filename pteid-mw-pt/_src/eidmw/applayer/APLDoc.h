@@ -49,11 +49,6 @@ public:
 	EIDMW_APL_API virtual ~APL_XMLDoc()=0;
 
 	/**
-	  * The document is allowed
-	  */
-	EIDMW_APL_API virtual bool isAllowed()=0;
-
-	/**
 	  * Return the XML document
 	  */
 	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false)=0;

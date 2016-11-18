@@ -416,21 +416,6 @@ PTEID_XMLDoc::~PTEID_XMLDoc()
 	}
 }
 
-bool PTEID_XMLDoc::isAllowed()
-{
-	bool out;
-
-	BEGIN_TRY_CATCH
-
-	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-
-	out=pimpl->isAllowed();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
 PTEID_ByteArray PTEID_XMLDoc::getXML()
 {
 	PTEID_ByteArray out;

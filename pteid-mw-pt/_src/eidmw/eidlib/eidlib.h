@@ -870,24 +870,9 @@ public:
 	PTEIDSDK_API virtual ~PTEID_EIDCard();						/**< Destructor */
 
  	/**
-	  * Return true if the user allow the application.
-	  */
-	PTEIDSDK_API static bool isApplicationAllowed();
-
- 	/**
 	  * Return true this is a test card.
 	  */
 	PTEIDSDK_API virtual bool isTestCard();
-
-	/**
-	  * Return true if test card are allowed.
-	  */
-	PTEIDSDK_API virtual bool getAllowTestCard();
-
-	/**
-	  * Set the flag to allow the test cards.
-	  */
-	PTEIDSDK_API virtual void setAllowTestCard(bool allow);
 
 	/**
 	 * Return a document from the card.
@@ -1024,8 +1009,6 @@ class PTEID_XMLDoc : public PTEID_Object
 {
 public:
 	PTEIDSDK_API virtual ~PTEID_XMLDoc()=0;				/**< Destructor */
-
-	PTEIDSDK_API virtual bool isAllowed();						/**< The document is allowed */
 
 	PTEIDSDK_API virtual PTEID_ByteArray getXML();			/**< Return the document in an XML format */
 	PTEIDSDK_API virtual PTEID_ByteArray getCSV();			/**< Return the document in an CSV format */

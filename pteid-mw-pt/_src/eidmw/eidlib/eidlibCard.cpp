@@ -589,23 +589,6 @@ PTEID_EIDCard::~PTEID_EIDCard()
 {
 }
 
-bool PTEID_EIDCard::isApplicationAllowed()
-{
-	bool out = true;
-
-	try
-	{
-		out = APL_EIDCard::isApplicationAllowed();
-	}
-	catch(CMWException &e)
-	{
-		e.GetError();
-		throw PTEID_Exception::THROWException(e);
-	}
-
-	return out;
-}
-
 bool PTEID_EIDCard::isTestCard()
 {
 	bool out = true;
@@ -618,30 +601,6 @@ bool PTEID_EIDCard::isTestCard()
 	END_TRY_CATCH
 
 	return out;
-}
-
-bool PTEID_EIDCard::getAllowTestCard()
-{
-	bool out = false;
-
-	BEGIN_TRY_CATCH
-
-	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
-	out =  pcard->getAllowTestCard();
-
-	END_TRY_CATCH
-
-	return out;
-}
-
-void PTEID_EIDCard::setAllowTestCard(bool allow)
-{
-	BEGIN_TRY_CATCH
-
-	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
-	pcard->setAllowTestCard(allow);
-
-	END_TRY_CATCH
 }
 
 PTEID_XMLDoc& PTEID_EIDCard::getDocument(PTEID_DocumentType type)

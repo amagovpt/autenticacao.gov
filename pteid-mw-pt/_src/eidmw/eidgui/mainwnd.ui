@@ -2631,15 +2631,6 @@ background-image: url(:/images/Images/alpha.png);</string>
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionClear">
-   <property name="icon">
-    <iconset resource="eidgui.qrc">
-     <normaloff>:/images/Images/Icons/Clear.png</normaloff>:/images/Images/Icons/Clear.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Clear</string>
-   </property>
-  </action>
   <action name="actionPrint_eID">
    <property name="icon">
     <iconset resource="eidgui.qrc">
