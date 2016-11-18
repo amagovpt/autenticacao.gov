@@ -39,7 +39,7 @@ namespace eIDMW
 	{
 		public:
 
-		XadesSignature(APL_Card *card): mp_card(card), mp_cert(NULL), m_digest_state(NULL), m_do_timestamping(false), m_do_long_term_validation(false) 
+		XadesSignature(APL_Card *card): m_do_timestamping(false), m_do_long_term_validation(false), mp_cert(NULL), m_digest_state(NULL), mp_card(card)
 		{ };
 		
 		~XadesSignature()
@@ -88,7 +88,7 @@ namespace eIDMW
 		void addTimestampNode(XERCES_NS DOMNode *node, unsigned char *timestamp);
 		XMLCh* createURI(const char *path);
 
-		X509 * mp_cert, *mp_signature_ca_cert;
+		X509 * mp_cert;
 		std::vector<X509 *> m_certs;
 		std::vector<CByteArray> m_cert_bas;
 

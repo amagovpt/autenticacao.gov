@@ -695,7 +695,7 @@ void XadesSignature::addCertificateChain(DSIGKeyInfoX509 *keyInfo)
 	mp_card->readFile(PTEID_FILE_CERT_ROOT_SIGN, cert1);
 	m_cert_bas.push_back(cert1);
 
-	mp_signature_ca_cert = addCertificateToKeyInfo(cert1, keyInfo);
+	addCertificateToKeyInfo(cert1, keyInfo);
 
 	cc01 = CByteArray(PTEID_CERTS[22].cert_data, PTEID_CERTS[22].cert_len);
 	cc02 = CByteArray(PTEID_CERTS[23].cert_data, PTEID_CERTS[23].cert_len);
