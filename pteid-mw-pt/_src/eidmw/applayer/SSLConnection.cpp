@@ -45,8 +45,9 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 	APL_Card *card = AppLayer.getReader().getCard();
 
 	if (card == NULL) {
-	       	fprintf(stderr, "rsa_sign(): Failed to get card from global aplayer object\n"); 
-       	}
+	    fprintf(stderr, "rsa_sign(): Failed to get card from global aplayer object\n");
+	    return 0;
+    }
 
 	if (type != NID_md5_sha1)
 	{
