@@ -816,6 +816,7 @@ bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
 				ocsp_node->appendChild(dom->createTextNode(ocsp_base64));
 				ocsp_values_node->appendChild(ocsp_node);
 			}
+			free(ocsp_url);
 		}
 		//Try to download a CRL if the cert doesnt point to a OCSP responder
 		//or if it failed to provide a valid response
