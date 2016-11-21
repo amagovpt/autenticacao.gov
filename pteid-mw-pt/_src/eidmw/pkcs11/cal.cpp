@@ -38,7 +38,6 @@ using namespace eIDMW;
 
 CCardLayer *oCardLayer;
 CReadersInfo *oReadersInfo;
-int g_PINCache = 0;
 
 extern "C" {
 extern unsigned int   gRefCount;
@@ -70,7 +69,7 @@ catch (CMWException e)
 catch (...) 
    {
 	lRet = -1;
-	log_trace(WHERE, "E: unkown exception thrown");
+	log_trace(WHERE, "E: unknown exception thrown");
    return (CKR_FUNCTION_FAILED);
 	}
 
@@ -89,33 +88,7 @@ return(ret);
 int cal_close()
 {
    int ret = 0;
-#ifdef PTEID_SCAP
-   if (g_PINCache)
-   {
 
-      P11_SLOT *pSlot = NULL;
-      
-      //XXX: hardcoded to slot 0
-      pSlot = p11_get_slot(0);
-      if (pSlot == NULL)
-      {
-         log_trace(WHERE, "E: Invalid slot 0");
-         return (CKR_SLOT_ID_INVALID);
-      }
-      std::string szReader = pSlot->name;
-
-      try
-      {
-         CReader &oReader = oCardLayer->getReader(szReader);
-
-         oReader.setSSO(false);
-      }
-      catch (CMWException e)
-      {
-
-      }
-   }
-#endif
    if (oCardLayer)
       delete(oCardLayer);
    if (oReadersInfo)
@@ -984,20 +957,8 @@ if (*l_out < 128)
    return(CKR_BUFFER_TOO_SMALL);
 
 try
-   {
+{
    CReader &oReader = oCardLayer->getReader(szReader);
-
-#ifdef PTEID_SCAP
-   if (g_PINCache)
-   {
-      oReader.setSSO(true);
-   }
-   //Auth PIN caching for the purpose of making the SCAP application work properly
-   if (pSignData->id == 0x45 && !g_PINCache)
-   {
-      g_PINCache = 1;
-   }
-#endif
 
    tPrivKey key = oReader.GetPrivKeyByID(pSignData->id);
 
@@ -1031,17 +992,17 @@ try
    }
 
    oDataOut = oReader.Sign(key, algo, oData);
-   }
+}
 catch (CMWException &e)
-   {
+{
    return(cal_translate_error(WHERE, e.GetError()));
-   }
+}
 catch (...) 
-   {
+{
 	lRet = -1;
-	log_trace(WHERE, "E: unkown exception thrown");
+	log_trace(WHERE, "E: unknown exception thrown");
    return (CKR_FUNCTION_FAILED);
-	}
+}
 
 *l_out = oDataOut.Size();
 memcpy(out, oDataOut.GetBytes(), *l_out);
