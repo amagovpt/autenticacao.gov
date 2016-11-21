@@ -94,7 +94,6 @@ HEADERS += \
 	TSAClient.h \
 	SODParser.h \ 
 	cJSON.h \
-	SigVerifier.h \
  	SSLConnection.h \	 
 
 
@@ -123,7 +122,6 @@ SOURCES += \
 	TSAClient.cpp \
 	static_pteid_certs.cpp \
 	SecurityContext.cpp \
-	SigVerifier.cpp \
 	sign-pkcs7.cpp \
 	cJSON.c \
 	CRLFetcher.cpp \
