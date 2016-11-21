@@ -158,9 +158,6 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
     const unsigned char *pucData = oDatan.GetBytes();
     unsigned long ulDataLen = oDatan.Size();
 
-    /* LL - total size execeeds PERSODATAFILESIZE */
-    if ( ( ulDataLen + ulOffset) > PERSODATAFILESIZE ) return;
-
 /*
     if(ulDataLen == 0)
     {
