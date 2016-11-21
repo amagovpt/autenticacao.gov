@@ -475,8 +475,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	PKCS7_add_signed_attribute(signer_info, NID_pkcs9_contentType, V_ASN1_OBJECT,
 			OBJ_nid2obj(NID_pkcs7_data));
 	   
-	PKCS7_add1_attrib_digest(signer_info, out, hash_size); 
-	free(out);
+	PKCS7_add1_attrib_digest(signer_info, out, hash_size);
 	
 	//Add signing-certificate v2 attribute according to the specification ETSI TS 103 172 v2.1.1 - section 6.3.1 
 	add_signingCertificate(signer_info, x509, certData.GetBytes(), certData.Size());
@@ -489,7 +488,6 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 
 	my_hash((unsigned char *)attr_buf, auth_attr_len, attr_digest);
 	attr_hash = CByteArray((const unsigned char *)attr_digest, hash_size);
-	free(attr_digest);
 
 	signature = PteidSign(card, attr_hash, use_sha256);
 
@@ -523,6 +521,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 			tsp_token_len = tsresp.Size();
 		}
 
+		free(digest_tp);
 	}
 	
 	if (timestamp_token && tsp_token_len > 0)
@@ -539,13 +538,23 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	i2d_PKCS7(p7, &p);
 
 	signature_hex_string = BinaryToHexString(buf2, len);
-	
+
+	OPENSSL_free(buf2);
+	X509_free(x509);
 	PKCS7_free(p7);
+	free(out);
+	free(attr_digest);
 
 	*signature_contents = signature_hex_string;
 
 	return return_code;
+
 err:
+	X509_free(x509);
+	PKCS7_free(p7);
+	free(attr_digest);
+	free(out);
+
 	ERR_load_crypto_strings();
 	ERR_print_errors_fp(stderr);
 	return 2;
