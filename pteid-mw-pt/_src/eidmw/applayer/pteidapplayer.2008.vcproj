@@ -446,10 +446,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SigVerifier.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\SODParser.cpp"
 				>
 			</File>
@@ -613,10 +609,6 @@
 			</File>
 			<File
 				RelativePath=".\sign-pkcs7.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SigVerifier.h"
 				>
 			</File>
 			<File
