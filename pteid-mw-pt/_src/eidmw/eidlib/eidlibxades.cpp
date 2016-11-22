@@ -7,7 +7,6 @@
 #include "eidErrors.h"
 
 #include "APLCard.h"
-#include "SigVerifier.h"
 #include "ByteArray.h"
 
 namespace eIDMW
