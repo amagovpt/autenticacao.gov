@@ -332,9 +332,11 @@ bool CPCSC::Status(SCARDHANDLE hCard)
 	return SCARD_S_SUCCESS == lRet;
 }
 
-CByteArray CPCSC::Transmit(SCARDHANDLE hCard, const CByteArray &oCmdAPDU, long *plRetVal,
+CByteArray CPCSC::Transmit(SCARDHANDLE hCard, const CByteArray &inputAPDU, long *plRetVal,
 	void *pSendPci, void *pRecvPci)
 {
+	CByteArray oCmdAPDU(inputAPDU);
+
 	unsigned char tucRecv[APDU_BUF_LEN];
 	memset(tucRecv,0,sizeof(tucRecv));
 	DWORD dwRecvLen = sizeof(tucRecv);
@@ -349,6 +351,15 @@ CByteArray CPCSC::Transmit(SCARDHANDLE hCard, const CByteArray &oCmdAPDU, long *
 	//printf ("      SCardTransmit(%ls) \n", oCmdAPDU.ToWString(true, true, 0, ulLen).c_str() );
 
 	MWLOG(LEV_DEBUG, MOD_CAL, L"      SCardTransmit(%ls)", oCmdAPDU.ToWString(true, true, 0, ulLen).c_str() );
+
+	// On Windows we can't send APDUs with Le byte on T=0 cards so the implemented change to support T=1 is not backwards-compatible !!
+	if (m_ioSendPci.dwProtocol == SCARD_PROTOCOL_T0)
+	{
+		if (oCmdAPDU.GetByte(4) == oCmdAPDU.Size()-6)
+		{
+			oCmdAPDU.Chop(1);
+		}
+	}
 
 	// Very strange: sometimes an SCardTransmit() returns a communications
 	// error or a SW12 = 6D 00 error.
