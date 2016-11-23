@@ -355,7 +355,7 @@ CByteArray CPCSC::Transmit(SCARDHANDLE hCard, const CByteArray &inputAPDU, long 
 	// On Windows we can't send APDUs with Le byte on T=0 cards so the implemented change to support T=1 is not backwards-compatible !!
 	if (m_ioSendPci.dwProtocol == SCARD_PROTOCOL_T0)
 	{
-		if (oCmdAPDU.GetByte(4) == oCmdAPDU.Size()-6)
+		if (oCmdAPDU.Size() > 4 && oCmdAPDU.GetByte(4) == oCmdAPDU.Size()-6)
 		{
 			oCmdAPDU.Chop(1);
 		}
