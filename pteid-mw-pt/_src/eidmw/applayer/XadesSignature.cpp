@@ -274,26 +274,23 @@ namespace eIDMW
 #define SIGNED_PROPS_ID "S0-SignedProperties"
 
 
-XMLCh *generateNodeID()
+std::basic_string<XMLCh> generateNodeID()
 {
-	std::basic_string<XMLCh> *id_buffer = new std::basic_string<XMLCh>();
-	id_buffer->append(XMLString::transcode("xades-"));
-	id_buffer->append(generateId(20));
+	std::basic_string<XMLCh> id_buffer;
+	id_buffer.append(XMLString::transcode("xades-"));
+	id_buffer.append(generateId(20));
 
-	return (XMLCh*)id_buffer->c_str();
+	return id_buffer;
 }
 
-XMLCh *createSignedPropertiesURI()
+std::basic_string<XMLCh> createSignedPropertiesURI()
 {
-	std::basic_string<XMLCh> *id_buffer = new std::basic_string<XMLCh>();
-	id_buffer->append(XMLString::transcode("#"));
-	id_buffer->append(XMLString::transcode(SIGNED_PROPS_ID));
+	std::basic_string<XMLCh> id_buffer;
+	id_buffer.append(XMLString::transcode("#"));
+	id_buffer.append(XMLString::transcode(SIGNED_PROPS_ID));
 
-	return (XMLCh*)id_buffer->c_str();	
+	return id_buffer;	
 }
-
-
-
 	
     char *getUtcTime()
     {
@@ -400,6 +397,8 @@ XMLCh *createSignedPropertiesURI()
 
 		}
 
+		free(base64Sig);
+
 	}
 
 	DOMNode *XadesSignature::addSignatureProperties(DSIGSignature *sig, XMLCh *sig_id, CByteArray &signing_cert_data) 
@@ -417,8 +416,6 @@ XMLCh *createSignedPropertiesURI()
 		
 		XERCES_NS DOMDocument *doc = sig->getParentDocument();
 		DSIGObject * obj1 = sig->appendObject();
-		
-		//obj1->setId(MAKE_UNICODE_STRING("Signature_PteID_Timestamp"));
 	
 		makeQName(str, prefix, "QualifyingProperties");
 		DOMNode * n1 = CREATE_DOM_NODE;
@@ -458,8 +455,9 @@ XMLCh *createSignedPropertiesURI()
 	
 		obj1->appendChild(n1);
 
-		return n1;
+		free(utcTime);
 
+		return n1;
 	}
 
 
@@ -584,7 +582,8 @@ int XadesSignature::HashSignedInfoNode(XERCES_NS DOMDocument *doc, XMLByte *hash
 	DOMNode *node = dom_nodes->item(0);
 	if (!node)
 	{
-		fprintf(stderr, "Failed to find SignedInfo node!\n");
+		delete partial_xml_file;
+		fprintf(stderr, "HashSignedInfoNode(): Failed to find SignedInfo node!\n");
 		return 0;
 	}
 
@@ -638,7 +637,8 @@ int XadesSignature::HashSignedPropertiesNode(XERCES_NS DOMDocument *doc, XMLByte
 	DOMNode *node = dom_nodes->item(0);
 	if (!node)
 	{
-		fprintf(stderr, "Failed to find SignedProperties node!\n");
+		fprintf(stderr, "HashSignedPropertiesNode(): Failed to find SignedProperties node!\n");
+		delete partial_xml_file;
 		return 0;
 	}
 
@@ -664,7 +664,7 @@ int XadesSignature::HashSignedPropertiesNode(XERCES_NS DOMDocument *doc, XMLByte
     return SHA256_LEN;
 }
 
-X509 * XadesSignature::addCertificateToKeyInfo(CByteArray &cert, DSIGKeyInfoX509 *keyInfo)
+void XadesSignature::addCertificateToKeyInfo(CByteArray &cert, DSIGKeyInfoX509 *keyInfo)
 {
 	OpenSSLCryptoX509 * ssl_cert = NULL;
 	
@@ -675,16 +675,16 @@ X509 * XadesSignature::addCertificateToKeyInfo(CByteArray &cert, DSIGKeyInfoX509
 	if (cert_ca_sign == NULL)
 	{
 		MWLOG(LEV_ERROR, MOD_APL, L"loadCert() Error decoding certificate data (CA Sign)");
-		return NULL;
+		return;
 	}
+
 	m_certs.push_back(cert_ca_sign);
 
 	ssl_cert = new OpenSSLCryptoX509(cert_ca_sign);
 
 	keyInfo->appendX509Certificate(ssl_cert->getDEREncodingSB().sbStrToXMLCh());
 
-	return cert_ca_sign;
-
+	delete ssl_cert;
 }
 
 void XadesSignature::addCertificateChain(DSIGKeyInfoX509 *keyInfo)
@@ -815,6 +815,8 @@ bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
 				XMLCh * ocsp_base64 = XMLString::transcode(base64_str);
 				ocsp_node->appendChild(dom->createTextNode(ocsp_base64));
 				ocsp_values_node->appendChild(ocsp_node);
+
+				free(base64_str);
 			}
 			free(ocsp_url);
 		}
@@ -842,6 +844,8 @@ bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
 				dom->createElementNS(XMLString::transcode(XADES_NAMESPACE), str.rawXMLChBuffer());
 				crl_node->appendChild(dom->createTextNode(XMLString::transcode(base64_str)));
 				crl_values_node->appendChild(crl_node);
+				free(base64_str);
+				free(crl_url);
 
 			}
 
@@ -954,7 +958,10 @@ bool XadesSignature::AddSigAndRefsTimestamp(XERCES_NS DOMDocument *doc)
 
 	DOMNode *node_unsigned_props = findDOMNodeHelper(doc, XADES_NAMESPACE, "UnsignedSignatureProperties");
 	if (node_unsigned_props == NULL)
+	{
+		delete partial_xml_file;
 		return false;
+	}
 
 	DOMNode * signature_node = findDOMNodeHelper(new_dom, DSIG_NAMESPACE, "SignatureValue");
 	digest_input += canonicalNode(signature_node, new_dom);
@@ -968,6 +975,7 @@ bool XadesSignature::AddSigAndRefsTimestamp(XERCES_NS DOMDocument *doc)
 	digest_input += canonicalNode(complete_revoc_node, new_dom);
 
 	//fprintf(stderr, "SigRefsTimestamp:\n%s\n", digest_input.c_str());
+	delete partial_xml_file;
 
 	return appendTimestamp(doc, node_unsigned_props, "SigAndRefsTimeStamp", digest_input);
 }
@@ -1001,7 +1009,10 @@ bool XadesSignature::AddArchiveTimestamp(XERCES_NS DOMDocument *dom)
 
 	DOMNode *node_unsigned_props = findDOMNodeHelper(new_dom, XADES_NAMESPACE, "UnsignedSignatureProperties");
 	if (node_unsigned_props == NULL)
+	{
+		delete partial_xml_file;
 		return false;
+	}
 
 	//Concatenation of all the signed files which always come before SignedProperties in SignedInfo element
 
@@ -1028,6 +1039,8 @@ bool XadesSignature::appendTimestamp(XERCES_NS DOMDocument * dom, DOMNode *paren
 	unsigned char signature_hash[SHA256_LEN];
 	TSAClient tsa;
 	safeBuffer str;
+	std::basic_string<XMLCh> ts_id1 = generateNodeID();
+	std::basic_string<XMLCh> ts_id2 = generateNodeID();
 
 
 	if (strcmp(tag_name, "ArchiveTimeStamp") == 0)
@@ -1075,16 +1088,19 @@ bool XadesSignature::appendTimestamp(XERCES_NS DOMDocument * dom, DOMNode *paren
 		DOMElement * ts_token_node = 
 			dom->createElementNS(XMLString::transcode(XADES_NAMESPACE), str.rawXMLChBuffer());
 
-		XMLCh *ts_id = generateNodeID();
-		ts_token_node->setAttribute(s_Id, ts_id);
+		//XMLCh *ts_id = (XMLCh*)generateNodeID().c_str();
+		ts_token_node->setAttribute(s_Id, (XMLCh*)ts_id1.c_str());
 		ts_token_node->appendChild(dom->createTextNode(ts_base64));
 
-		XMLCh *ts_id2 = generateNodeID();
-		ts_node->setAttribute(s_Id, ts_id2);
+		//XMLCh *ts_id2 = (XMLCh*)generateNodeID().c_str();
+		ts_node->setAttribute(s_Id, (XMLCh*)ts_id2.c_str());
 		ts_node->appendChild(c14n_node);
 
 		ts_node->appendChild(ts_token_node);
 		parent->appendChild(ts_node);
+
+		free(base64_str);
+
 		return true;
 	}
 }
@@ -1149,22 +1165,27 @@ void XadesSignature::setReferenceHash(XMLByte *hash, unsigned int hash_len, int 
 		}
 	}
 
+	free(base64Hash);
 }
 
 CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 {
+	bool xerces_exception = false;
 	XSECProvider prov;
 	DSIGSignature *sig;
 	DOMElement *sigNode;
 	OpenSSLCryptoX509 *ssl_cert = NULL;
 	DSIGKeyInfoX509 * keyInfoX509 = NULL;
 	EVP_PKEY *pub_key = NULL;
-	XMLCh * signature_id = NULL;
+	//XMLCh * signature_id = NULL;
+	CByteArray * emptyBa = new CByteArray();
 
 	CByteArray sha1_hash;
 	CByteArray rsa_signature;
 
 	XMLByte sha1_hash_signed_props[SHA256_LEN];
+	std::basic_string<XMLCh> signature_id = generateNodeID();
+
 
 	XMLByte toFill[SHA256_LEN* sizeof(XMLByte)]; //SHA-1 Hash prepended with Algorithm ID as by PKCS#1 standard
 	// unsigned char signature_hash[SHA1_LEN];
@@ -1191,8 +1212,8 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		sigNode = sig->createBlankSignature(doc, CANON_C14NE_NOC, SIGNATURE_RSA, HASH_SHA256);
 
 		//Add Id attribute to signature
-		signature_id = generateNodeID();
-		sigNode->setAttribute(s_Id, signature_id);
+		//signature_id = (XMLCh*)generateNodeID().c_str();
+		sigNode->setAttribute(s_Id, (XMLCh*)signature_id.c_str());
 
 		// Insert the signature DOM nodes into the doc
 		rootElem->appendChild(doc->createTextNode(MAKE_UNICODE_STRING("\n")));
@@ -1218,11 +1239,11 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	    loadSignerCert(certData, pub_key);
 	    certData.TrimRight(0);
 
-		addSignatureProperties(sig, signature_id, certData);
+		addSignatureProperties(sig, (XMLCh*)signature_id.c_str(), certData);
 		
 		HashSignedPropertiesNode(sig->getParentDocument(), sha1_hash_signed_props);
 
-		DSIGReference * ref_signed_props = sig->createReference(createSignedPropertiesURI(), HASH_SHA256);
+		DSIGReference * ref_signed_props = sig->createReference(createSignedPropertiesURI().c_str(), HASH_SHA256);
 		ref_signed_props->setType(XMLString::transcode("http://uri.etsi.org/01903/v1.1.1#SignedProperties"));
 
 		setReferenceHash(sha1_hash_signed_props, SHA256_LEN, references_count, doc);
@@ -1260,6 +1281,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		catch(...)
 		{
 			MWLOG(LEV_ERROR, MOD_APL, L"APLCard::SignSHA256() failed, can't generate XADES signature");
+			delete ssl_cert;
 			throw;
 		}
 
@@ -1290,16 +1312,25 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	{
 		MWLOG(LEV_ERROR, MOD_APL, L"An error occurred in XSec Crypto Functions. Message: %s\n",
 		 e.getMsg());
+		xerces_exception = true;
 
 	}
 	catch (XSECException &e)
 	{
 		MWLOG(LEV_ERROR, MOD_APL, L"An error occured during a signature load. Message: %s\n",
 		 e.getMsg());
-		
+		xerces_exception = true;
+		throw;
 	}
+	delete ssl_cert;
 
-	return *WriteToByteArray(doc); 
+	if (xerces_exception)
+		return *emptyBa;
+
+	CByteArray * xml_output = WriteToByteArray(doc); 
+	doc->release();
+
+	return *xml_output;
 }
 
 CByteArray &XadesSignature::SignXades(const char ** paths, unsigned int n_paths)

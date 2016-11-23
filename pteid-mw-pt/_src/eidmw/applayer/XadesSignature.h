@@ -44,8 +44,9 @@ namespace eIDMW
 		
 		~XadesSignature()
 		{
-			if (mp_cert != NULL)
-				X509_free(mp_cert);
+			
+			for (int i = 0; i != m_certs.size(); i++)
+				X509_free(m_certs[i]);
 		};
 
 		CByteArray &SignXades(const char ** paths, unsigned int n_paths);
@@ -82,7 +83,7 @@ namespace eIDMW
 
 		//Utility methods for signature
 		void addCertificateChain(DSIGKeyInfoX509 *keyInfo);
-		X509 * addCertificateToKeyInfo(CByteArray &cert, DSIGKeyInfoX509 *keyInfo);
+		void addCertificateToKeyInfo(CByteArray &cert, DSIGKeyInfoX509 *keyInfo);
 		void loadSignerCert(CByteArray &ba, EVP_PKEY *pub_key);
 		int appendOID(XMLByte *toFill);
 		void addTimestampNode(XERCES_NS DOMNode *node, unsigned char *timestamp);
