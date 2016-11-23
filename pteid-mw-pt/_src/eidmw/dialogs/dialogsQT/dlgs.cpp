@@ -361,7 +361,7 @@ DLGS_EXPORT void eIDMW::DlgCloseAllPinpadInfo()
 }
 
 
-
+/*
 DLGS_EXPORT DlgRet eIDMW::DlgDisplayModal(DlgIcon icon,
 			DlgMessageID messageID, const wchar_t *csMesg,
 			unsigned char ulButtons, unsigned char ulEnterButton,
@@ -382,7 +382,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayModal(DlgIcon icon,
     oData->icon = icon;
     if(wcslen(csMesg)==0)
     {
-	std::wstring translatedMessage(CLang::GetMessageFromID(messageID));
+      	std::wstring translatedMessage(CLang::GetMessageFromID(messageID));
         wcscpy_s(oData->mesg,sizeof(oData->mesg)/sizeof(wchar_t),translatedMessage.c_str());
     }
     else
@@ -414,6 +414,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayModal(DlgIcon icon,
   }
   return lRet;
 }
+*/
 
 
 

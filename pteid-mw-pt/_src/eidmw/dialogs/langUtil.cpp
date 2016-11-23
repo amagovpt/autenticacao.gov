@@ -118,64 +118,6 @@ void CLang::SetLangL(unsigned long lang)
 	}
 }
 
-std::wstring CLang::GetMessageFromID(DlgMessageID messageID)
-{
-	std::wstring csMessage=L"";
-
-	switch( messageID )
-		{
-		case DLG_MESSAGE_TESTCARD:
-			csMessage+=GETSTRING_DLG(TheRootCertificateIsNotCorrect);
-			csMessage+=L"\n";
-			csMessage+=GETSTRING_DLG(ThisMayBeATestCard);
-			csMessage+=L"\n\n";
-			csMessage+=GETSTRING_DLG(DoYouWantToAcceptIt);
-			break;
-		case DLG_MESSAGE_ENTER_CORRECT_CARD:
-			csMessage+=GETSTRING_DLG(PleaseEnterTheCorrectEidCard);
-			break;
-		case DLG_MESSAGE_USER_WARNING:
-		{
-			wchar_t fullpath[PATH_LENGHT];
-			wcscpy_s(fullpath,PATH_LENGHT,L"");
-
-			const wchar_t *exename=NULL;
-
-			GetProcessName(fullpath,PATH_LENGHT);
-
-			if(wcslen(fullpath)==0)
-			{
-				wcscpy_s(fullpath,PATH_LENGHT,GETSTRING_DLG(UnknownApplication));
-				exename=fullpath;
-			}
-			else
-			{
-#ifdef WIN32
-				exename=wcsrchr(fullpath,'\\');
-#else
-				exename=wcsrchr(fullpath,'/');
-#endif			
-				if(exename==NULL)
-					exename=L"???";
-				else
-					exename++;
-			}
-
-			csMessage+=GETSTRING_DLG(TheFollowingApplication1IsTrying);
-			csMessage.replace(csMessage.find(L"%1"),2,exename);
-			csMessage+=L"\n\n\n\n\n";
-			csMessage+=GETSTRING_DLG(PathOfTheApplication);
-			csMessage+=L"\n\n";
-			csMessage+=fullpath;
-		}
-			break;
-		case DLG_MESSAGE_NONE:
-		default:
-			break;
-		}
-	return csMessage;
-}
-
 void CLang::Init()
 {
 	std::wstring lang = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);

@@ -537,44 +537,6 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo( unsigned long ulHandle )
 	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgClosePinpadInfo() returns");
 }
 
-DLGS_EXPORT DlgRet eIDMW::DlgDisplayModal(DlgIcon icon,
-			DlgMessageID messageID, const wchar_t *csMesg,
-			unsigned char ulButtons,unsigned char ulEnterButton,
-			unsigned char ulCancelButton)
-{
-	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgDisplayModal() called");
-
-	CLang::ResetInit();				// Reset language to take into account last change
-
-	dlgWndModal *dlg = NULL;
-	try
-	{
-		std::wstring csMessage;
-		if(wcslen(csMesg)==0)
-			csMessage=CLang::GetMessageFromID(messageID);
-		else
-			csMessage=csMesg;
-
-		dlg = new dlgWndModal( icon, csMessage, ulButtons, ulEnterButton, ulCancelButton );
-		dlg->exec();
-		eIDMW::DlgRet dlgResult = dlg->dlgResult;
-		//csPin = dlg->PinResult;
-		
-		delete dlg;
-		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgDisplayModal() returns %ld",dlgResult);
-		return dlgResult;
-	}
-	catch( ... )
-	{
-		if( dlg )
-			delete dlg;
-		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgDisplayModal() returns DLG_ERR");
-		return DLG_ERR;
-	}
-	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgDisplayModal() returns DLG_CANCEL");
-	return DLG_CANCEL;
-}
-
 DLGS_EXPORT DlgRet eIDMW::DlgAskAccess(
 	const wchar_t *csAppPath, const wchar_t *csReaderName,
 	DlgPFOperation ulOperation, int *piForAllOperations)

@@ -233,11 +233,13 @@ DLGS_EXPORT void DlgClosePinpadInfo(unsigned long ulHandle);
  * Returns: DLG_BAD_PARAM or DLG_ERR in case of an error,
  *          or otherwise the return code that corresponds
  *          to the button that was clicked.
- */
+
 DLGS_EXPORT DlgRet DlgDisplayModal(DlgIcon icon,
 	DlgMessageID messageID, const wchar_t *csMesg,
 	unsigned char ulButtons, unsigned char ulEnterButton, 
 	unsigned char ulCancelButton);
+
+*/	
 
 /************************************************************************************
  * Privacy filter dialogs
@@ -295,6 +297,7 @@ struct DlgAskPINArguments {
    DlgRet returnValue;
  } ;
 
+/*
  struct DlgDisplayModalArguments {
    DlgIcon icon;
    wchar_t mesg[500];
@@ -303,6 +306,7 @@ struct DlgAskPINArguments {
    unsigned char CancelButton;
    DlgRet returnValue;
  } ;
+ */
 
  struct DlgAskAccessArguments {
    wchar_t appPath[100];

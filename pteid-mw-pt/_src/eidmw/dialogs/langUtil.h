@@ -44,8 +44,6 @@ public:
 	static void SetLangW(const wchar_t *lang);
 	static void SetLangL(unsigned long lang);
 	static void ResetInit()				{ ms_InitOk=false; }
-	static std::wstring GetMessageFromID(DlgMessageID messageID);
-
 	//static const wchar_t *GetString(const wchar_t *stringRef);
 
 private:

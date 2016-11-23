@@ -51,7 +51,6 @@ int            Test(void);
 
 EIDMW_CMN_API char *bin2AsciiHex(const unsigned char * pData, unsigned long ulLen);
 
-EIDMW_CMN_API void GetProcessName(wchar_t *wBuffer,unsigned long ulLen);
 }
 
 #ifndef WIN32
