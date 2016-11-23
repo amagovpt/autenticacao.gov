@@ -255,26 +255,6 @@ struct DlgAskPINArguments {
    DlgRet returnValue;
  } ;
 
-/*
- struct DlgDisplayModalArguments {
-   DlgIcon icon;
-   wchar_t mesg[500];
-   unsigned char buttons;
-   unsigned char EnterButton;
-   unsigned char CancelButton;
-   DlgRet returnValue;
- } ;
- */
-
- struct DlgAskAccessArguments {
-   wchar_t appPath[100];
-   wchar_t readerName[100];
-   DlgPFOperation operation;
-   long long forAllOperations;
-   DlgRet returnValue;
- };
-
-
  struct DlgDisplayPinpadInfoArguments {
    DlgPinOperation operation;
    wchar_t reader[100];
