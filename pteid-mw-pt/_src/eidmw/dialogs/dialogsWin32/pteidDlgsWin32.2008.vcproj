@@ -303,7 +303,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="pteidcommon.lib psapi.lib"
+				AdditionalDependencies="pteidcommon.lib psapi.lib comctl32.lib"
 				OutputFile="..\..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)\pteid$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;..\..\_Binaries35\$(PlatformName)\VC9\$(ConfigurationName)&quot;"
@@ -351,10 +351,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\dlgWndAskAccess.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\dlgWndAskPIN.cpp"
 				>
 			</File>
@@ -368,10 +364,6 @@
 			</File>
 			<File
 				RelativePath=".\dlgWndBase.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\dlgWndModal.cpp"
 				>
 			</File>
 			<File

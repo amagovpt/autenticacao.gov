@@ -217,48 +217,6 @@ DLGS_EXPORT void DlgClosePinpadInfo(unsigned long ulHandle);
  DLGS_EXPORT void DlgCloseAllPinpadInfo();
 #endif
 
-/************************************************************************************
- * Generic dialogs
- ************************************************************************************/
-
-/**
- * Display a message and a/some button(s).
- * This dialog is modal.
- * - icon: specifies which icon to display
- * - ulMessageID: specifies the message to be displayed
- * - csMesg: should only be used if ulMessageID is unknown
- * - ulButtons: specifies which button(s) to show
- * - ulEnterButtons: specifies which button is the default one for Enter (0 mean none)
- * - ulCancelButtons: specifies which button is the default one for Cancel (0 mean none)
- * Returns: DLG_BAD_PARAM or DLG_ERR in case of an error,
- *          or otherwise the return code that corresponds
- *          to the button that was clicked.
-
-DLGS_EXPORT DlgRet DlgDisplayModal(DlgIcon icon,
-	DlgMessageID messageID, const wchar_t *csMesg,
-	unsigned char ulButtons, unsigned char ulEnterButton, 
-	unsigned char ulCancelButton);
-
-*/	
-
-/************************************************************************************
- * Privacy filter dialogs
- ************************************************************************************/
-
-/**
- * Ask the user if a certain application (with path 'csAppPath') is allowed
- * to perform a certain operation ('ulOperation') on the card in a certain
- * reader (with name 'csReaderName').
- * The user can answer with 4 buttons: Yes, Cancel (no), Allways, Never;
- * and additionally click a checkbox so that the same answer is valid for
- * all operations (so the user won't be bothered again).
- * - piForAllOperations: [OUT] 1 if the checkbox was checked, 0 otherwise.
- */
-DLGS_EXPORT DlgRet DlgAskAccess(const wchar_t *csAppPath, 
-	const wchar_t *csReaderName,
-	DlgPFOperation ulOperation, int *piForAllOperations);
-
-
 
 #ifndef WIN32
 /************************************************************************************
