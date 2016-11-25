@@ -328,6 +328,9 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 
 		if (object == m_ui.lbl_menuCard_Read )
 		{
+			/* Fix more than 1 loadCardData reading */
+			if ( !m_mutex_ReadCard.tryLock() ) return false;
+
 			hide_submenus();
 
 			pinactivate = 1;
@@ -335,6 +338,9 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			certdatastatus = 1;
 
 			m_CI_Data.Reset();
+
+			/* Allow new card data reading */
+			m_mutex_ReadCard.unlock();
 			loadCardData();
 		}
 
@@ -1950,6 +1956,9 @@ void MainWnd::releaseVirtualReader( void )
 //*****************************************************
 void MainWnd::loadCardData( void )
 {
+	/* Fix more than 1 loadCardData reading */
+	if ( !m_mutex_ReadCard.tryLock () ) return;
+
 	//----------------------------------------------------------------
 	// if we load a new card, clear the certificate contexts we kept
 	//----------------------------------------------------------------
@@ -2058,6 +2067,9 @@ void MainWnd::loadCardData( void )
 		QString msg(tr("Card changed"));
 		ShowPTEIDError( msg );
 		m_CI_Data.Reset();
+
+		/* Allow new card data reading */
+		m_mutex_ReadCard.unlock();
 		loadCardData();
 	}
 	catch (PTEID_ExReaderSetChanged e)
@@ -2090,6 +2102,9 @@ void MainWnd::loadCardData( void )
 		QString msg(tr("Error loading card data"));
 		ShowPTEIDError( msg );
 	}
+
+	/* Unlock mutex to allow new card data reading */
+	m_mutex_ReadCard.unlock();
 }
 
 
@@ -4208,7 +4223,15 @@ void MainWnd::customEvent( QEvent* pEvent )
 						//------------------------------------------------
 						if ( m_Settings.getAutoCardReading() )
 						{
+							/* Fix more than 1 loadCardData reading */
+							if ( !m_mutex_ReadCard.tryLock() ){
+								pEvent->accept();
+								return;
+							}
 							m_CI_Data.Reset();
+
+							/* Allow new card data reading */
+							m_mutex_ReadCard.unlock();
 							loadCardData();
 							//Clear the Auth PIN verification flag
 							pinNotes = 1;

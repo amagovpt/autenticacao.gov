@@ -378,6 +378,7 @@ protected:
 
 private:
 #define TRANSLATION_FILE_PREFIX	"eidmw_"
+	QMutex	m_mutex_ReadCard; //!< mutex to avoid more than 1 simultaneous readings
 
 	void loadCardData( void );
 	void loadCardDataAddress ();
