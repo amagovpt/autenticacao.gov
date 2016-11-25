@@ -346,7 +346,6 @@ SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *k
 
 	SignedChallengeResponse *result = new SignedChallengeResponse();
 	const char *challenge_format = "{\"Challenge\":{ \"challenge\" : \"%s\", \"kicc\" : \"%s\", \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
-	const char *challenge_format2 = "{\"Challenge\":{ \"challenge\" : \"%s\", \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
 
 	char *challenge_params = NULL;
 
@@ -363,17 +362,20 @@ SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *k
 	sprintf(challenge_params, challenge_format, challenge, kicc);
 	endpoint = ENDPOINT_07;
 	
-	fprintf(stderr, "POSTing JSON %s\n", challenge_params);
+	//fprintf(stderr, "POSTing JSON %s\n", challenge_params);
 	char *server_response = Post(this->m_session_cookie, endpoint, challenge_params);
 
+	free(challenge_params);
 	char *body = skipHTTPHeaders(server_response);
-	fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
+	//fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
+
+	free(server_response);
 
 	json = cJSON_Parse(body);
 	if (!json)
 	{
 		fprintf(stderr, "JSON parsing error before: [%s]\n", cJSON_GetErrorPtr());
-		return NULL;
+		goto err;
 	}
 	else
 	{
@@ -382,29 +384,32 @@ SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *k
 		if (!child)
 		{
 			fprintf(stderr, "DEBUG: JSON does not contain signedChallenge element!\n");
-			return NULL;
+			goto err;
 		}
 		result->signed_challenge = strdup(child->valuestring);
 		cJSON *elem = cJSON_GetObjectItem(my_json, "InternalAuthenticateCommand");
 		if (!elem)
 		{
-			 if (strcmp(endpoint, ENDPOINT_07) == 0)
-				fprintf(stderr, "DEBUG: JSON does not contain InternalAuthenticateCommand element!\n");
+			fprintf(stderr, "DEBUG: JSON does not contain InternalAuthenticateCommand element!\n");
 		}
 		else
 			result->internal_auth = strdup(elem->child->valuestring);
 		cJSON *elem2 = cJSON_GetObjectItem(my_json, "SetSECommand");
+
 		if (!elem2)
 		{
-			if (strcmp(endpoint, ENDPOINT_07) == 0)
-				fprintf(stderr, "DEBUG: JSON does not contain SetSECommand element!\n");
+			fprintf(stderr, "DEBUG: JSON does not contain SetSECommand element!\n");
 		}
 		else
 			result->set_se_command = strdup(elem2->child->valuestring);
 
+		cJSON_Delete(json);
 		return result;
 	}
 
+err:
+	delete result;
+	cJSON_Delete(json);
 	return NULL;
 }
 
@@ -421,10 +426,10 @@ char *build_json_object_sam(StartWriteResponse &resp)
 	cJSON_AddNumberToObject(error_status, "code", 0);
 	cJSON_AddStringToObject(error_status, "description", "OK");
 
-	for (int i=0; i!= resp.apdu_write_address.size(); i++)
+	for (unsigned int i=0; i!= resp.apdu_write_address.size(); i++)
 		cJSON_AddItemToArray(arr1, cJSON_CreateString(resp.apdu_write_address.at(i)));
 
-	for (int i=0; i!= resp.apdu_write_sod.size(); i++)
+	for (unsigned int i=0; i!= resp.apdu_write_sod.size(); i++)
 		cJSON_AddItemToArray(arr2, cJSON_CreateString(resp.apdu_write_sod.at(i)));
 
 	cJSON_AddItemToObject(root, "WriteAddressResponse", arr1);
@@ -432,7 +437,10 @@ char *build_json_object_sam(StartWriteResponse &resp)
 	cJSON_AddItemToObject(root, "ErrorStatus", error_status);
 
 	cJSON_AddItemToObject(real_root, "WriteResults", root);
-	return cJSON_Print(real_root);
+	char * json_string = cJSON_Print(real_root);
+	cJSON_Delete(real_root);
+
+	return json_string;
 }
 
 
@@ -443,19 +451,24 @@ bool SSLConnection::do_SAM_4thpost(StartWriteResponse &resp)
 
 	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_4thpost()");
 
-	fprintf(stderr, "POSTing JSON %s\n", json_request);
+	//fprintf(stderr, "POSTing JSON %s\n", json_request);
 
 	char *server_response = Post(this->m_session_cookie,
 	  "/changeaddress/followUpWrite", json_request);
 
-	fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
+	//fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
+
+	free(json_request);
 
 	char *body = skipHTTPHeaders(server_response);
 
 	json=cJSON_Parse(body);
+
+	free(server_response);
+
 	if (!json)
 	{
-		fprintf(stderr, "SSLConnection::do_SAM_4thpost - JSON parsing error before: [%s]\n", cJSON_GetErrorPtr()); 
+		fprintf(stderr, "SSLConnection::do_SAM_4thpost - JSON parsing error before: [%s]\n", cJSON_GetErrorPtr());
 		return false;
 	}
 	else
@@ -469,10 +482,15 @@ bool SSLConnection::do_SAM_4thpost(StartWriteResponse &resp)
 		{
 			int error_value = error_code->valueint;
 			MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection::do_SAM_4thpost - Server returned error code: %d\n", error_value);
+			cJSON_Delete(json);
 			return error_value == 0;
 		}
 		else
+		{
+			cJSON_Delete(json);
 			return false;
+
+		}
 
 	}
 
@@ -482,8 +500,9 @@ bool SSLConnection::do_SAM_4thpost(StartWriteResponse &resp)
 StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *internal_auth_resp)
 {
 	cJSON *json = NULL;
-	char *post_body = NULL;
-	int buf_len = 1024;
+	const int buf_len = 1024;
+	char post_body[buf_len];
+
 	StartWriteResponse * resp = new StartWriteResponse();
 	const char *start_write_format = "{\"StartWriteRequest\":{ \"SetSEResponse\" : [\"%s\"], \"InternalAuthenticateResponse\" : [\"%s\"], \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
 
@@ -493,15 +512,13 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 	buf_len = _scprintf(start_write_format, mse_resp, internal_auth_resp) + 1;
 #endif
 
-	post_body = (char *) malloc(buf_len);
-
 	snprintf(post_body, buf_len, start_write_format, mse_resp, internal_auth_resp);
-	fprintf(stderr, "POSTing JSON %s\n", post_body);
+	//fprintf(stderr, "POSTing JSON %s\n", post_body);
 
 	char *server_response = Post(this->m_session_cookie,
 	  "/changeaddress/startWrite", post_body, true);
 
-	fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
+	//fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
 
 	char *body = skipHTTPHeaders(server_response);
 
@@ -509,7 +526,7 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 	if (!json)
 	{
 		fprintf(stderr, "JSON parsing error before: [%s]\n", cJSON_GetErrorPtr()); 
-		return NULL;
+		goto err;
 	}
 	else
 	{
@@ -521,7 +538,7 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 		if (!array_address)
 		{
 			fprintf(stderr, "No WriteAddressCommand was returned!");
-			return NULL;
+			goto err;
 		}
 		int n_address = cJSON_GetArraySize(array_address);
 
@@ -534,8 +551,15 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 		for (i=0; i!= n_sod; i++)
 			resp->apdu_write_sod.push_back(strdup(cJSON_GetArrayItem(array_sod, i)->valuestring));
 
+		cJSON_Delete(json);
+		delete server_response;
 		return resp;
 	}
+
+err:
+	delete resp;
+	delete server_response;
+	cJSON_Delete(json);
 	return NULL;
 }
 
@@ -547,7 +571,6 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 	DHParamsResponse *server_params = new DHParamsResponse();
 	char *dh_params_template = "{\"DHParams\":{ \"secretCode\" : \"%s\", \"process\" : \"%s\", \"P\": \"%s\", \"Q\": \"%s\", \"G\":\"%s\", \"cvc_ca_public_key\": \"%s\",\"card_auth_public_key\": \"%s\", \"certificateChain\": \"%s\", \"version\": %d, \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
 
-	char *dh_params_template2 = "{\"DHParams\":{ \"secretCode\" : \"%s\", \"process\" : \"%s\", \"cvc_ca_public_key\": \"%s\",\"card_auth_public_key\": \"%s\", \"certificateChain\": \"%s\", \"serialNumber\": \"%s\", \"version\": %d, \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
 	char * post_dhparams = NULL; 
 	char request_headers[1000];
 
@@ -576,7 +599,7 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
     "POST %s/sendDHParams HTTP/1.1\r\nHost: %s\r\nKeep-Alive: 300\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Length: %lu\r\n\r\n",
     	endpoint, m_host, strlen(post_dhparams));
 
-	char * server_response = (char *) malloc(REPLY_BUFSIZE);
+	char * server_response = (char *) calloc(REPLY_BUFSIZE, sizeof(char));
 
 	fprintf(stderr, "POSTing JSON %s\n", post_dhparams);
 
@@ -594,8 +617,14 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 	{
 		m_session_cookie = parseCookie(server_response);
 		if (m_session_cookie == NULL)
+		{
+			delete server_params;
+			free(post_dhparams);
+			free(server_response);
+
 			//Catch renegotiation errors (e.g. using test cards)
 			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+		}
 	}
 
 	char *body = skipHTTPHeaders(server_response);
@@ -605,15 +634,21 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 	if (my_json == NULL)
 	{
 		fprintf(stderr, "DEBUG: Server returned malformed JSON data: %s\n", body);
+		free(server_response);
+		free(post_dhparams);
 		return server_params;
 	}
 
 	cJSON *child = cJSON_GetObjectItem(my_json, "kifd");
 	if (child)
-		server_params->kifd = child->valuestring;
+		server_params->kifd = strdup(child->valuestring);
 	child = cJSON_GetObjectItem(my_json, "c_cv_ifd_aut");
 	if (child)
-		server_params->cv_ifd_aut = child->valuestring;
+		server_params->cv_ifd_aut = strdup(child->valuestring);
+
+	free(server_response);
+	free(post_dhparams);
+	cJSON_Delete(json);
 
 	return server_params;
 
@@ -624,11 +659,11 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 	int ret_channel = 0;
 
 	char * request_template= "POST %s HTTP/1.1\r\nHost: %s\r\nKeep-Alive: 300\r\nContent-Type: text/plain; charset=UTF-8\r\nCookie: %s\r\nContent-Length: %d\r\n\r\n";
-	char * server_response = (char *) malloc(REPLY_BUFSIZE);
-	char * request_headers = (char *) calloc(1000, sizeof(char));
+	char * server_response = (char *) calloc(REPLY_BUFSIZE, sizeof(char));
+	char request_headers[1000];
 
 	//Build the full request
-	snprintf (request_headers, 1000, request_template, url_path, m_host,
+	snprintf (request_headers, sizeof(request_headers), request_template, url_path, m_host,
 			cookie, strlen(body));
 
 //	fprintf(stderr, "DEBUG: Sending POST Headers: \n%s\n", request_headers);
@@ -640,7 +675,7 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 
 	//Read response
 	//TODO: header and content reading should be split so we can dynamically decide if it uses chunked encoding or not
-	//TODO: get rid of this ugly hack
+	//XXX: get rid of this ugly hack
 	if (chunked_expected && strstr(m_host, "teste") == NULL)
 		read_chunked_reply(m_ssl_connection, server_response, REPLY_BUFSIZE);
 	else
@@ -657,6 +692,7 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 
 BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_host, char *proxy_user, char * proxy_pwd, char *ssl_host_andport)
 {
+		
 		char tmpbuf[10*1024];
         char connect_request[1024];
         char proxy_host_str[512];
@@ -688,12 +724,13 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
         	std::string proxy_cleartext = std::string(proxy_user) + ":" + proxy_pwd;
         	const char *proxy_auth_header = "Proxy-Authorization: basic ";
 
-        	char *auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), proxy_cleartext.size());
+        	char * auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), proxy_cleartext.size());
 
         	ret = snprintf(connect_request, sizeof(connect_request), "CONNECT %s HTTP/1.1\r\n Host: %s\r\n%s%s\r\n%s\r\n%s\r\n%s\r\n%s\r\n\r\n",
         		ssl_host_andport, ssl_host, proxy_auth_header, auth_token, user_agent, no_cache, no_content, keepAlive);
 
         	fprintf(stderr, "DEBUG: snprintf ret=%d\n", ret);
+        	free(auth_token);
         }	
         else
         {
