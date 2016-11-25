@@ -1103,7 +1103,8 @@ PTEID_PublicKey& PTEID_EIDCard::getRootCAPubKey()
 	return *out;
 }
 
-bool PTEID_EIDCard::isActive(){
+bool PTEID_EIDCard::isActive() 
+{
 	bool out = false;
 
 	BEGIN_TRY_CATCH
@@ -1133,19 +1134,16 @@ bool PTEID_EIDCard::ChangeCapPin(const char *new_pin){
 }
 */
 
-bool PTEID_EIDCard::ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data)
+void PTEID_EIDCard::ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data)
 {
-	bool out = false;
 
 	BEGIN_TRY_CATCH
 
 	APL_EIDCard *pcard = static_cast<APL_EIDCard *>(m_impl);
 
-	out = pcard->ChangeAddress(secretCode, process, callback, callback_data);
+	pcard->ChangeAddress(secretCode, process, callback, callback_data);
 
 	END_TRY_CATCH
-
-	return out;
 }
 
 bool testPIN(const char* pin){

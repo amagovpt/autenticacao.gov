@@ -920,7 +920,7 @@ public:
 
 	     typedef void (*t_address_change_callback)(void *, int);
 
-	     PTEIDSDK_API bool ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data);
+	     PTEIDSDK_API void ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data);
 
 	     /* helper method for the compatibility layer */
 	     //PTEIDSDK_API bool ChangeCapPinCompLayer(const char *old_pin, const char *new_pin,unsigned long &ulRemaining);
