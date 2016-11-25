@@ -350,7 +350,6 @@ public class pteid {
     public static byte[] ReadFile(byte[] bytes, byte b) throws PteidException {
         PTEID_ByteArray pb = new PTEID_ByteArray();
         byte[] retArray = null;
-        byte[] temp;
         PTEID_Pin pin = null;
 
         // martinho: artista
@@ -454,10 +453,16 @@ public class pteid {
     public static void SetSODCAs(PTEID_Certif[] pteidcs) throws PteidException {
         if (readerContext != null) {
             try {
-                for (PTEID_Certif pcert : pteidcs) {
-                    PTEID_ByteArray pba = new PTEID_ByteArray(pcert.certif, pcert.certif.length);
-                    readerContext.getEIDCard().getCertificates().addCertificate(pba);
-                }
+                if (null == pteidcs){
+                    readerContext.getEIDCard().getCertificates().resetSODCAs();
+                    return;
+                }/* if (null == pteidcs) */
+
+                for(PTEID_Certif pcert : pteidcs)
+                {
+					PTEID_ByteArray pba = new PTEID_ByteArray(pcert.certif, pcert.certif.length);
+                    readerContext.getEIDCard().getCertificates().addToSODCAs(pba);
+                }				
             } catch (Exception ex) {
                 throw new PteidException();
             }

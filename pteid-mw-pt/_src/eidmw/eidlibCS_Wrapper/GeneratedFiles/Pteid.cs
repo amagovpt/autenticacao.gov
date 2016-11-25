@@ -10,6 +10,7 @@ namespace pt.portugal.eid
     private static PTEID_EIDCard idCard = null;
     
     private static readonly int PTEID_ADDRESS_PIN = 131;
+    private static readonly int PTEID_AUTH_PIN = 129;
     private static readonly int PTEID_PIN_COUNT  = 3;
     
     public static readonly int CARD_TYPE_ERR = 0;
@@ -40,10 +41,9 @@ namespace pt.portugal.eid
     private static int trimStart(byte[] array) {
         int trimmedSize = array.Length - 1;
         
-        while (array[trimmedSize] == 0) 
-            trimmedSize--;
-
-        return trimmedSize;
+        /*while( (trimmedSize>=0) && ( array[trimmedSize] == 0 ) )
+            trimmedSize--;*/
+        return (trimmedSize + 1);
     }
 
    
@@ -160,7 +160,7 @@ namespace pt.portugal.eid
     
     
     
-    public static int VerifyPIN(byte pinId, String str){
+    public static int VerifyPIN(byte pinId, String strPin){
         uint ul = 0;
         int triesLeft =  0;
             
@@ -173,9 +173,17 @@ namespace pt.portugal.eid
                 for (uint pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                     PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getPinRef() == pinId) {
-                        pin.verifyPin("", ref ul,true);
+                        if (strPin != "")
+                        {
+                            pin.verifyPin(strPin, ref ul, false);
+                        }
+                        else
+                        {
+                            pin.verifyPin("", ref ul, true);
+                        }
                         //martinho: verify pin is not working properly for readers without pinpad at this moment,
                         //this is a workaround
+
                         triesLeft = pin.getTriesLeft();
                     }
                 }
@@ -203,14 +211,14 @@ namespace pt.portugal.eid
                     if (pin.getPinRef() == pinId)
                         if (pin.changePin(oldPin, newPin, ref ul, pin.getLabel(),true)) {
                             triesLeft = pin.getTriesLeft();
-                            return 0;
+                            break;
                         } 
                 }
             } catch (Exception ex) {
                 throw new PteidException(0);
             }
         }
-        return 0;
+        return triesLeft;
     }
    
     
@@ -341,7 +349,7 @@ namespace pt.portugal.eid
                     PTEID_Pins pins = idCard.getPins();
                     for (uint pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                         pin = (pins.getPinByNumber(pinIdx));
-                        if (pin.getPinRef() == PTEID_ADDRESS_PIN)
+                        if (pin.getPinRef() == pinId )
                             break;
                     }
                 }
@@ -349,41 +357,52 @@ namespace pt.portugal.eid
                 idCard.readFile(ashex(bytes), pb, pin);
                   
                 int trimmedSize = trimStart(pb.GetBytes());
+                if ((trimmedSize == 0) && (pb.Size() > 0)) trimmedSize = (int)pb.Size();
                
                 retArray = new byte[trimmedSize];
                 Array.Copy(pb.GetBytes(), 0, retArray, 0, retArray.Length);
             } catch (Exception ex) {
+                Console.WriteLine("Erro no ReadFile: " + ex.ToString());
                 throw new PteidException(0);
             }
         }
         return retArray;
     }
     
-    
     public static void WriteFile(byte[] file, byte[] data, byte pinId){
+        WriteFileInOffset(file, data, pinId, 0 /* inOffset */);
+    }
+
+    public static void WriteFileInOffset(byte[] file, byte[] data, byte pinId, int offset)
+    {
         PTEID_ByteArray pb = new PTEID_ByteArray(data, (uint)data.Length);
         PTEID_Pin pin = null;
 
-        if (readerContext != null) {
-            try {
-
-                if (pinId != 0) {
+        if (readerContext != null)
+        {
+            try
+            {
+                if (pinId != 0)
+                {
                     PTEID_Pins pins = idCard.getPins();
-                    for (uint pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
+                    for (uint pinIdx = 0; pinIdx < pins.count(); pinIdx++)
+                    {
                         pin = (pins.getPinByNumber(pinIdx));
-                        if (pin.getPinRef() == PTEID_ADDRESS_PIN)
+                        if (pin.getPinRef() == pinId)
                             break;
                     }
                 }
 
-                idCard.writeFile(ashex(file),pb,pin);
-                
-            } catch (Exception ex) {
+                bool ret = idCard.writeFile(ashex(file), pb, pin, "", (uint)offset);
+
+            }
+            catch (Exception ex)
+            {
                 throw new PteidException(0);
             }
         }
     }
-    
+
     public static int IsActivated(){
         if (readerContext != null) {
             try {
@@ -418,20 +437,31 @@ namespace pt.portugal.eid
         }
     }
 
+    public static void SetSODCAs(PTEID_Certif[] pteidcs)
+    {
+        if (readerContext != null)
+        {
+            try
+            {
+                if (null == pteidcs){
+                    readerContext.getEIDCard().getCertificates().resetSODCAs();
+                    return;
+                }/* if (null == pteidcs) */
 
-    public static void SetSODCAs(PTEID_Certif[] pteidcs){
-        if (readerContext != null) {
-            try {
-                foreach (PTEID_Certif pcert in  pteidcs) {
+                foreach (PTEID_Certif pcert in pteidcs)
+                {
                     PTEID_ByteArray pba = new PTEID_ByteArray(pcert.certif, (uint)pcert.certif.Length);
-                    readerContext.getEIDCard().getCertificates().addCertificate(pba);
+                    readerContext.getEIDCard().getCertificates().addToSODCAs(pba);
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine("Erro no SetSODCAs: " + ex.ToString());
+                Console.WriteLine("Exception information (SetSODCAs): {0}", ex);
                 throw new PteidException(0);
             }
         }
     }
-    
     
     public static PTEID_RSAPublicKey GetCardAuthenticationKey(){
         PTEID_RSAPublicKey key = null;
@@ -465,6 +495,7 @@ namespace pt.portugal.eid
                 Array.Copy(rootCAKey.getCardAuthKeyExponent().GetBytes(), 0, key.exponent, 0, key.exponent.Length);
                 Array.Copy(rootCAKey.getCardAuthKeyModulus().GetBytes(), 0, key.modulus, 0, key.modulus.Length);
             } catch (Exception ex) {
+                Console.WriteLine("Erro no GetCVCRoot: " + ex.ToString()); 
                 throw new PteidException(0);
             }
         }
@@ -490,7 +521,25 @@ namespace pt.portugal.eid
         
         return ret;
     }
-  
+
+    public static int IsPinpad()
+    {
+        if (readerContext != null)
+        {
+            try
+            {
+                return (readerContext.isPinpad() ? 1 : 0);
+            }
+            catch (Exception ex)
+            {
+                throw new PteidException(0);
+            }
+        }
+        return 0;
+    }
+
+
+
    private static String findReaderNameWithCard(){
 	long nrReaders  = readerSet.readerCount();
         
@@ -499,7 +548,7 @@ namespace pt.portugal.eid
                 return readerSet.getReaderName(readerIdx);
 	
         return null;
-   } 
+   }
 }
 
 }
