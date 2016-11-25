@@ -128,11 +128,6 @@ public:
 	static std::string getFullPathFromUri(const char *rootPath, const char *uri);
 
 	/**
-	  * Return the uri of the file on internet
-	  */
-	static std::string getUri(const char *relativePath);
-
-	/**
 	  * Return basename of file ater removing its extension if it exists
 	  */    
 	static std::string remove_ext_from_basename(const char *base);

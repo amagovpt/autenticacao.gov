@@ -37,7 +37,7 @@ namespace eIDMW
 		int ret_channel = 0;
 		char * request_template= "POST %s HTTP/1.1\r\nHost: %s\r\nContent-Type: application/soap+xml; charset=utf-8\r\nSOAPAction: %s\r\nContent-Length: %d\r\n\r\n";
 		char * server_response = (char *) malloc(REPLY_BUFSIZE);
-		char * request_headers = (char *) calloc(HEADERS_BUFSIZE, sizeof(char));
+		char request_headers[HEADERS_BUFSIZE];
 
 		std::string soapRequest = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">";
 		soapRequest +=  "<soapenv:Body>";

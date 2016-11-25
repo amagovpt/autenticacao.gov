@@ -335,40 +335,7 @@ char *parseToken(char * server_response, const char * token)
 }
 
 
-char * SSLConnection::do_SAM_mutualAuthentication_IAS101(char *challenge)
-{
-	const char * endpoint = "/changeaddress101/mutualAuthentication";
-	const char *mutual_format = 
-	"{\"MutualAuthenticateInit\":{ \"challenge\" : \"%s\", \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } }";
-	char *challenge_params = (char *) malloc(1024);
-
-	sprintf(challenge_params, mutual_format, challenge);
-
-	fprintf(stderr, "POSTing JSON %s\n", challenge_params);
-	char *server_response = Post(this->m_session_cookie, (char *)endpoint, challenge_params);
-
-	char *body = skipHTTPHeaders(server_response);
-
-	fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
-
-	cJSON *json = cJSON_Parse(body);
-	if (!json)
-	{
-		fprintf(stderr, "JSON parsing error before: [%s]\n", cJSON_GetErrorPtr());
-		return NULL;
-	}
-	else
-	{
-		cJSON *my_json = json->child;
-		cJSON *child = cJSON_GetObjectItem(my_json, "MutualAuthenticateCommand");	
-		return strdup(child->child->valuestring);
-	}
-
-	return NULL;
-}
-
 #define ENDPOINT_07 "/changeaddress/signChallenge"
-#define ENDPOINT_101 "/changeaddress101/signChallenge"
 
 //TODO: we need to make sure what MSE set commands we need to send before each GET RANDOM on IAS 0.7
 

@@ -574,42 +574,6 @@ std::string CPathUtil::getRelativePath(const char *uri)
 	return file;
 }
 
-std::string CPathUtil::getUri(const char *relativePath)
-{
-	std::string uri;
-	
-	char *buffer = new char[strlen(relativePath)+1];
-#ifdef WIN32
-	strcpy_s(buffer,strlen(relativePath)+1,relativePath);
-#else
-	strcpy(buffer,relativePath);
-#endif
-
-#ifdef WIN32
-	char *pStr=strstr(buffer,"\\");
-#else
-	char *pStr=strstr(buffer,"/");
-#endif
-
-	if(pStr && pStr!=buffer)
-	{
-		*pStr='\0';
-		uri+=buffer;			//The first relative directory is the protocole name
-
-		uri+="://";
-
-		pStr++;
-
-#ifdef WIN32
-		for(char *pStr2=pStr;*pStr2!=0;pStr2++)
-			if(*pStr2=='\\') *pStr2='/';
-#endif
-		uri+=pStr;
-	}
-
-	return uri;
-}
-
 std::string CPathUtil::remove_ext_from_basename(const char *base)
 {
 	std::string base_name = base; 

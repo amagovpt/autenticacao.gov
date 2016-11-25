@@ -125,7 +125,7 @@ public:
 	
 	typedef void (* t_callback_addr) (void*, int);
 
-	EIDMW_APL_API bool ChangeAddress(char *secret_code, char *process, t_callback_addr, void *);
+	EIDMW_APL_API void ChangeAddress(char *secret_code, char *process, t_callback_addr, void *);
 
 	EIDMW_APL_API bool ChangeCapPin(const char * new_pin);
 

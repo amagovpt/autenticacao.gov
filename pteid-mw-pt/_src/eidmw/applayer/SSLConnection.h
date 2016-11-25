@@ -47,8 +47,6 @@ class SSLConnection
 		StartWriteResponse *do_SAM_3rdpost(char * mse_resp, char *internal_auth_resp);
 		bool do_SAM_4thpost(StartWriteResponse &resp);
 
-		char * do_SAM_mutualAuthentication_IAS101(char *challenge);
-
 	protected:
 		void ReadUserCert();
 		static void init_openssl();

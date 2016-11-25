@@ -202,12 +202,13 @@ typedef void (* t_callback_addr) (void*, int);
 	depending on the version of the smart card applet, IAS 0.7 or IAS 1.01.
 	Technical specification: the confidential document "Change Address Technical Solution" by Zetes version 5.3
 */
-bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr callback, void* callback_data)
+void APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr callback, void* callback_data)
 {
 	char * kicc = NULL;
 	SAM sam_helper(this);
+	StartWriteResponse * resp3 = NULL;
 	char *serialNumber = NULL;
-	char *resp_internal_auth = NULL , *resp_mse = NULL;
+	char *resp_internal_auth = NULL, *resp_mse = NULL;
 	
 	DHParams dh_params;
 
@@ -229,17 +230,20 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 
 	if (p1->cv_ifd_aut == NULL)
 	{
+		delete p1;
 		throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
 	}
 
 	if (p1->kifd != NULL)
 		sam_helper.sendKIFD(p1->kifd);
 
-	if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
-		kicc = sam_helper.getKICC();
+	kicc = sam_helper.getKICC();
 
 	if ( !sam_helper.verifyCert_CV_IFD(p1->cv_ifd_aut))
 	{
+		delete p1;
+		free(kicc);
+
 		throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);	
 	}
 
@@ -262,23 +266,25 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 			MWLOG(LEV_ERROR, MOD_APL, L"EXTERNAL AUTHENTICATE command failed! Aborting Address Change!");
 			throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
 		}
-		if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
-		{
-			resp_mse = sam_helper.sendPrebuiltAPDU(resp_2ndpost->set_se_command);
 
-			resp_internal_auth = sam_helper.sendPrebuiltAPDU(resp_2ndpost->internal_auth);
-		}
+		resp_mse = sam_helper.sendPrebuiltAPDU(resp_2ndpost->set_se_command);
 
-		StartWriteResponse * r1 = conn.do_SAM_3rdpost(resp_mse, resp_internal_auth);
+		resp_internal_auth = sam_helper.sendPrebuiltAPDU(resp_2ndpost->internal_auth);
+
+		StartWriteResponse * resp3 = conn.do_SAM_3rdpost(resp_mse, resp_internal_auth);
 
 		callback(callback_data, 60);
 
-		if (r1 != NULL)
+		if (resp3 == NULL)
+		{
+			goto err;
+		}
+		else
 		{
 			//fprintf(stderr, "DEBUG: writing new address...\n");
-			std::vector<char *> address_response = sam_helper.sendSequenceOfPrebuiltAPDUs(r1->apdu_write_address);
+			std::vector<char *> address_response = sam_helper.sendSequenceOfPrebuiltAPDUs(resp3->apdu_write_address);
 			//fprintf(stderr, "DEBUG: writing new SOD...\n");
-			std::vector<char *> sod_response = sam_helper.sendSequenceOfPrebuiltAPDUs(r1->apdu_write_sod);
+			std::vector<char *> sod_response = sam_helper.sendSequenceOfPrebuiltAPDUs(resp3->apdu_write_sod);
 
 			StartWriteResponse start_write_resp = {address_response, sod_response};
 
@@ -291,13 +297,25 @@ bool APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 
 			callback(callback_data, 100);
 
-			return true;
+			delete resp3;
+			delete resp_2ndpost;
+			free(challenge);
+			free(CHR);
+			free(resp_mse);
+			free(resp_internal_auth);
+			return;
 		}
-		else
-			return false;
 	}
 
-	return false;
+err:
+	delete resp3;
+	delete resp_2ndpost;
+	free(challenge);
+	free(CHR);
+	free(resp_mse);
+	free(resp_internal_auth);
+
+	throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
 }
 
 
@@ -350,7 +368,7 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
-    const char **files_to_sign = new const char*[1];
+    const char *files_to_sign[1];
 
 	for (unsigned int i=0; i!= n_paths; i++)
 	{
