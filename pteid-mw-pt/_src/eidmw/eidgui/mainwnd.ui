@@ -1829,7 +1829,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">
-        background-image: url(:/images/Images/buttons/btn_tools.png);
+        background-image: url(:/images/Images/buttons/btn_settings.png);
         font: 12px &quot;Arial&quot;;
       </string>
      </property>
@@ -2495,12 +2495,12 @@ background-image: url(:/images/Images/alpha.png);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-image: url(:/images/Images/submenu_backgrounds/bg_selected_menu_tools.png);</string>
+     <string notr="true">background-image: url(:/images/Images/submenu_backgrounds/bg_selected_menu_settings.png);</string>
     </property>
     <widget class="QLabel" name="lbl_menuSettings">
      <property name="geometry">
       <rect>
-       <x>45</x>
+       <x>50</x>
        <y>16</y>
        <width>71</width>
        <height>17</height>
@@ -2521,7 +2521,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      <property name="geometry">
       <rect>
        <x>31</x>
-       <y>45</y>
+       <y>53</y>
        <width>81</width>
        <height>17</height>
       </rect>
@@ -2541,7 +2541,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>32</y>
+       <y>40</y>
        <width>105</width>
        <height>16</height>
       </rect>
@@ -2558,7 +2558,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      <property name="geometry">
       <rect>
        <x>16</x>
-       <y>45</y>
+       <y>53</y>
        <width>16</width>
        <height>17</height>
       </rect>

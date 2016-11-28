@@ -37,6 +37,7 @@
         <file>Images/buttons/btn_help.png</file>
         <file>Images/buttons/btn_card.png</file>
         <file>Images/buttons/btn_arrow.png</file>
+	<file>Images/buttons/btn_settings.png</file>
         <file>Images/additional_data.png</file>
         <file>Images/application_print_PDF.png</file>
         <file>Images/application_print_PDF_pg_2.png</file>
@@ -59,6 +60,7 @@
         <file>Images/submenu_backgrounds/bg_selected_menu_tools.png</file>
         <file>Images/submenu_backgrounds/bg_selected_menu_language.png</file>
         <file>Images/submenu_backgrounds/bg_selected_menu_help.png</file>
+        <file>Images/submenu_backgrounds/bg_selected_menu_settings.png</file>
         <file>Images/menu_separator.png</file>
         <file>Images/sub_menu_separator.png</file>
         <file>Images/flags/pt32.png</file>
