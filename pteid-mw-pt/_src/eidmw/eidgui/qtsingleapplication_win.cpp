@@ -20,7 +20,7 @@
 ****************************************************************************/
 #include "qtsingleapplication.h"
 #include <qt_windows.h>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class QtSingletonSysPrivate : public QWidget
 {

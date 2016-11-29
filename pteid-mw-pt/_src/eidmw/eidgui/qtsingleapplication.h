@@ -21,8 +21,12 @@
 #ifndef QTSINGLEAPPLICATION_H
 #define QTSINGLEAPPLICATION_H
 
-#include <QtGui/QApplication>
-#ifdef Q_WS_MAC
+#ifdef Q_OS_LINUX
+#include <X11/Xlib.h>
+#endif
+
+#include <QApplication>
+#ifdef Q_OS_MAC
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
@@ -30,7 +34,7 @@ class QtSingletonPrivate;
 class QtSingletonSysPrivate;
 class QWidget;
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 #  if !defined(QT_QTSINGLEAPPLICATION_EXPORT) && !defined(QT_QTSINGLEAPPLICATION_IMPORT)
 #    define QT_QTSINGLEAPPLICATION_EXPORT
 #  elif defined(QT_QTSINGLEAPPLICATION_IMPORT)
@@ -50,8 +54,8 @@ class QT_QTSINGLEAPPLICATION_EXPORT QtSingleApplication : public QApplication
 {
     Q_OBJECT
 public:
-    QtSingleApplication(const QString &id, int &argc, char **argv, Type = GuiClient);
-#ifdef Q_WS_X11
+    QtSingleApplication(const QString &id, int &argc, char **argv);
+#ifdef Q_OS_LINUX
     QtSingleApplication(Display* dpy, const QString &id, int &argc, char **argv, Qt::HANDLE visual = 0, Qt::HANDLE colormap = 0);
 #endif
     ~QtSingleApplication();
@@ -64,7 +68,7 @@ public:
     QWidget* activationWindow() const;
 
 protected:
-#if defined(Q_WS_X11)
+#if defined(Q_OS_LINUX)
     bool x11EventFilter(XEvent *msg);
 #endif
 
@@ -77,7 +81,7 @@ Q_SIGNALS:
 
 private:
     friend class QtSingletonSysPrivate;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     friend CFDataRef MyCallBack(CFMessagePortRef, SInt32, CFDataRef, void *);
 #endif
     QtSingletonPrivate *d;

@@ -27,6 +27,11 @@
 #include <QStyleOption>
 #include <QPen>
 #include <QFontDatabase>
+#include <QPrintDialog>
+#include <QProgressDialog>
+#include <QDesktopWidget>
+#include <QFileDialog>
+#include <QtConcurrent>
 
 #include "dlgprint.h"
 #include "eidlib.h"

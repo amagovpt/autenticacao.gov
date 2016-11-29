@@ -23,6 +23,7 @@
 
 #include "ui_dlgPrint.h"
 #include <QDialog>
+#include <QProgressDialog> 
 #include "genpur.h"
 #include "CardInformation.h"
 

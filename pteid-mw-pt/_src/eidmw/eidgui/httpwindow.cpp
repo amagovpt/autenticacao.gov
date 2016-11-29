@@ -17,6 +17,7 @@
  * http://www.gnu.org/licenses/.
  *
  * Author: Luis Medinas <luis.medinas@caixamagica.pt>
+ * Author: Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  **************************************************************************** */
 
 #include <iostream>
@@ -24,6 +25,9 @@
 
 #include <QtGui>
 #include <QtNetwork>
+#include <QDialogButtonBox> 
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include "httpwindow.h"
 #include "eidlib.h"

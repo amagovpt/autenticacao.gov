@@ -21,6 +21,13 @@
 
 #include <QtGui>
 #include <QtNetwork>
+#include <QProgressDialog>
+#include <QPushButton>
+#include <QMessageBox>
+#include <QDialogButtonBox>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QLabel>
 
 #include <fstream>
 #include <sstream>

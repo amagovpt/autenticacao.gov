@@ -26,6 +26,7 @@
 
 #include "ui_dlgSignature.h"
 #include <QDialog>
+#include <QProgressDialog>
 #include "genpur.h"
 #include "CardInformation.h"
 #include "mylistview.h"

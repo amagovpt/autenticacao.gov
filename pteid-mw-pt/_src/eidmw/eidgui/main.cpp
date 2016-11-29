@@ -24,9 +24,9 @@
 #endif
 
 #include <iostream>
-#include "qtsingleapplication.h"
 
 #include "Settings.h"
+//#include "qtsingleapplication.h"
 #include "mainwnd.h"
 
 #ifdef MEMORY_LEAKS_CHECK
@@ -36,6 +36,8 @@
 	#endif
 #endif
 
+
+/*
 class MyApplication : public QtSingleApplication
 {
 public:
@@ -78,6 +80,7 @@ public:
 #endif
 };
 
+*/
 
 int main(int argc, char *argv[])
 {
@@ -96,7 +99,9 @@ int main(int argc, char *argv[])
 
 	int iRetValue = 0;
 
-	MyApplication instance("eidgui", argc, argv);
+	QApplication instance(argc, argv);
+
+	/*
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Waking up other instance");
 	if (instance.sendMessage("Wake up!"))
 	{
@@ -116,6 +121,7 @@ int main(int argc, char *argv[])
 
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Wake up did not respond");
 	instance.initialize();
+	*/
 
 	PTEID_InitSDK();
 	PTEID_Config sam_server(PTEID_PARAM_GENERAL_SAM_SERVER);
@@ -139,10 +145,10 @@ int main(int argc, char *argv[])
 	// main application. In this way, the 'wake up' message emitted by each starting instance
 	// will make the running instance to restore.
 	//-------------------------------------------------
-	QObject::connect(&instance, SIGNAL(messageReceived(const QString&)),
-		&widget, SLOT(messageRespond(const QString&)));
+	//QObject::connect(&instance, SIGNAL(messageReceived(const QString&)),
+	//	&widget, SLOT(messageRespond(const QString&)));
 
-	
+	/*
 #ifndef __MACH__	
 	if ( (argc >= 2) && (strcmp(argv[1],"/startup")!=0) && (argv[1] != NULL) )
 	{
@@ -152,12 +158,13 @@ int main(int argc, char *argv[])
 		instance.sendMessage( (const QString)openFile );
 	}
 #endif
+*/
 	if (!settings.getStartMinimized())
 	{
 		widget.show();
 	}
 
-	instance.setActivationWindow ( &widget );
+	//instance.setActivationWindow ( &widget );
 
 	iRetValue = instance.exec();
 

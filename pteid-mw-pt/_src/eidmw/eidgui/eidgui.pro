@@ -12,6 +12,12 @@ VERSION = $${EIDGUI_MAJ}.$${EIDGUI_MIN}.$${EIDGUI_REV}
 macx: ICON = appicon.icns
 
 QT += network
+QT += widgets
+
+## For QPrinter class
+QT += printsupport
+QT += concurrent
+
 
 message("Compile $$TARGET")
 
@@ -115,7 +121,7 @@ HEADERS += CardInformation.h \
 					 Settings.h \
 					 genpur.h \
 					 picturepopup.h \
-					 qtsingleapplication.h \
+#					 qtsingleapplication.h \
 					 dlgprint.h \
 					 mylistview.h \
 					 dlgsignature.h \
@@ -139,12 +145,12 @@ SOURCES += CardInformation.cpp \
 	   dlgprint.cpp \
 	   dlgsignature.cpp \
 	   picturepopup.cpp \
-	   qtsingleapplication.cpp \
+#	   qtsingleapplication.cpp \
 	   PDFSignWindow.cpp \
 	   mylistview.cpp \
 	   genpur.cpp
-unix:!macx: SOURCES += qtsingleapplication_x11.cpp
-macx: SOURCES += qtsingleapplication_mac.cpp	
+#unix:!macx: SOURCES += qtsingleapplication_x11.cpp
+#macx: SOURCES += qtsingleapplication_mac.cpp	
 
 
 

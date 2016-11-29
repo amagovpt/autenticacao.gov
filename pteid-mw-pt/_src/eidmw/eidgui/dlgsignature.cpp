@@ -23,6 +23,11 @@
 
 #include <QListView>
 #include <QFileInfo>
+#include <QFileDialog>
+#include <QtConcurrent>
+#include <QtConcurrent>
+#include <QDesktopWidget>
+#include <QProgressDialog>
 #include <QDir>
 
 #include <fstream>

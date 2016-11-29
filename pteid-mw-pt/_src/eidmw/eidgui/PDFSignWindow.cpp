@@ -22,6 +22,8 @@
 #include <QListView>
 #include <QComboBox>
 #include <QFileDialog>
+#include <QMessageBox>
+#include <QtConcurrent>
 #include <QProgressDialog>
 #include <QTextStream>
 #include <QPainter>
@@ -819,7 +821,7 @@ void PDFSignWindow::on_radioButton_firstpage_toggled(bool value)
 	if (value && m_pdf_sig)
 	{
 		// clearAllSectors();
-         QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(1));
+         QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(1));
          highlightSectors(sectors);
 
 	}
@@ -832,7 +834,7 @@ void PDFSignWindow::on_radioButton_lastpage_toggled(bool value)
 	{
          clearAllSectors();
          QString sectors =
-            QString::fromAscii(m_pdf_sig->getOccupiedSectors(m_current_page_number));
+            QString::fromLatin1(m_pdf_sig->getOccupiedSectors(m_current_page_number));
          highlightSectors(sectors);
 	}
 
@@ -845,7 +847,7 @@ void PDFSignWindow::on_spinBox_page_valueChanged(int new_value)
 		return;
      clearAllSectors();
 
-     QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(new_value));
+     QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(new_value));
      highlightSectors(sectors);
 
 }
@@ -921,7 +923,7 @@ void MyGraphicsScene::selectNewRectangle(QPointF selected_pos)
  	QList<QGraphicsItem *> scene_items = this->items();
 
 	int i = 0;
-    QGraphicsItem *it = this->itemAt(selected_pos);
+    QGraphicsItem *it = this->itemAt(selected_pos, QTransform());
     ((PDFSignWindow*)parent)->setSelectedSector(((SelectableRectangle *)it)->getSectorNumber());
 	while (i!= scene_items.size())
 	{
@@ -1353,7 +1355,7 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	//Set the spinbox with the appropriate max value
 	ui.spinBox_page->setMaximum(*std::min_element(page_numbers.begin(), page_numbers.end()));
 
-	// QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(1));
+	// QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(1));
 	// highlightSectors(sectors);
 
 	//Enable sign button now that we have data and a card inserted

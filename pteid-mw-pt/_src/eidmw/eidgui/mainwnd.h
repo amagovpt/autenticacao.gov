@@ -23,8 +23,14 @@
 #define MAINWND_H
 
 #include <map>
+ 
 #include <QtGui>
+#include <QPrinter>
+#include <QMessageBox>
 #include <QFutureWatcher>
+#include <QProgressDialog>
+#include <QSystemTrayIcon>
+
 #ifdef WIN32
 #include <windows.h>
 #include <Wincrypt.h>

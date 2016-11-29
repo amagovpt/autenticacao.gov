@@ -19,13 +19,12 @@
 **
 ****************************************************************************/
 #include "qtsingleapplication.h"
-#include <QtGui/QWidget>
+#include <QWidget>
 
-#include <QtGui/QApplication>
-#include <QtGui/QImage>
-#include <QtGui/QLabel>
-#include <QtGui/QPixmap>
-#include <QtGui>
+#include <QApplication>
+#include <QImage>
+#include <QLabel>
+#include <QPixmap>
 
 
 class QtSingletonPrivate
@@ -118,10 +117,10 @@ public:
     \warning On X11 type can not be QApplication::Tty.
 
 */
-QtSingleApplication::QtSingleApplication(const QString &id, int &argc, char **argv, Type type)
-    : QApplication(argc, argv, type)
+QtSingleApplication::QtSingleApplication(const QString &id, int &argc, char **argv)
+    : QApplication(argc, argv)
 {
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     Q_ASSERT_X(type != Tty, "QtSingleApplication::QtSingleApplication",
                "QApplication::Tty cannot be used with QtSingleApplication on X11");
 #endif
@@ -132,7 +131,7 @@ QtSingleApplication::QtSingleApplication(const QString &id, int &argc, char **ar
     sysInit();
 }
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 
 /*!
     Creates a QtSingleApplication object, given an already open display
@@ -161,7 +160,7 @@ QtSingleApplication::QtSingleApplication(Display* dpy, const QString &id, int &a
     sysInit();
 }
 
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 
 
 /*!

@@ -19,19 +19,19 @@
 **
 ****************************************************************************/
 #include "qtsingleapplication.h"
-#include <QtGui/QWidget>
-#include <QtCore/QByteArray>
-#include <QtCore/QString>
-#include <QtCore/QList>
-#include <QtGui/QDesktopWidget>
-#include <QtGui/QApplication>
-#include <QtCore/QDebug>
+#include <QWidget>
+#include <QByteArray>
+#include <QString>
+#include <QList>
+#include <QDesktopWidget>
+#include <QApplication>
+#include <QDebug>
 #include <unistd.h>
 #include <pwd.h>
 #include <sys/types.h>
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
-#include <QtGui/QX11Info>
+#include <QX11Info>
 
 
 class QtSingletonListener : public QWidget
@@ -100,7 +100,7 @@ bool QtSingletonSysPrivate::getProperty(char** data, unsigned long* nitems,
                                  win,
                                  sel,
                                  0L, length,
-                                 False,
+                                 false,
                                  typ,
                                  &actualType,
                                  &actualFormat,
@@ -109,7 +109,7 @@ bool QtSingletonSysPrivate::getProperty(char** data, unsigned long* nitems,
                                  reinterpret_cast<unsigned char **>(data));
         if (ret == Success && actualType == typ && *nitems > 0) {
             if (bafter == 0)
-                return TRUE;
+                return true;
             else {
                 if (actualFormat == 8)
                     length += (bafter / 4) + 1;
@@ -121,12 +121,12 @@ bool QtSingletonSysPrivate::getProperty(char** data, unsigned long* nitems,
         } else {
             if (*nitems > 0 && *data != 0)
                 XFree(*data);
-            return FALSE;
+            return false;
         }
         if (*nitems > 0 && *data != 0)
             XFree(*data);
     }
-    return FALSE;
+    return false;
 }
 
 void QtSingletonSysPrivate::findWindows(QList<Window> &windows)
@@ -236,13 +236,13 @@ void QtSingleApplication::initialize(bool activate)
     QByteArray login = sysd->toXPCS(id()+sysd->login());
     sysd->selAtom = XInternAtom(QX11Info::display(),
 				login,
-				False);
+				false);
     sysd->typAtom = XInternAtom(QX11Info::display(),
 				"_QTSINGLEAPPLICATION",
-				False);
+				false);
     sysd->listenAtom = XInternAtom(QX11Info::display(),
                                    login+"_LISTENER",
-                                   False);
+                                   false);
 
     if (sysd->selAtom != None) {
 	sysd->listener = new QtSingletonListener(sysd->listenAtom);
@@ -265,14 +265,14 @@ bool QtSingleApplication::isRunning() const
     QByteArray login = sysd->toXPCS(id()+sysd->login());
     Atom tmp = XInternAtom(QX11Info::display(),
 			   login,
-			   True);
+			   true);
 
     if (tmp != None) {
 	WId wid = XGetSelectionOwner(QX11Info::display(),
 				     tmp);
 	return (wid != None);
     }
-    return FALSE;
+    return false;
 }
 
 bool QtSingleApplication::sendMessage(const QString &message, int)
@@ -280,20 +280,20 @@ bool QtSingleApplication::sendMessage(const QString &message, int)
     QByteArray login = sysd->toXPCS(id()+sysd->login());
     Atom sel = XInternAtom(QX11Info::display(),
                            login,
-                           True);
+                           true);
     if (sel == None)
-        return FALSE;
+        return false;
     WId wid = XGetSelectionOwner(QX11Info::display(), sel);
     if (wid != None) {
 	Atom typ = XInternAtom(QX11Info::display(),
 				"_QTSINGLEAPPLICATION",
-				True);
+				true);
         if (typ != None) {
             sysd->sendMessageTo(wid, sel, typ, message);
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -319,7 +319,7 @@ bool QtSingleApplication::x11EventFilter(XEvent *msg)
                                        CurrentTime);
                     if (XGetSelectionOwner(QX11Info::display(), sysd->selAtom) == lid)
                         sysd->owner = true;
-                    return TRUE;
+                    return true;
                 }
                 char* data = 0;
                 unsigned long nitems = 0;
@@ -330,7 +330,7 @@ bool QtSingleApplication::x11EventFilter(XEvent *msg)
                         XFree(data);
                     emit messageReceived(str);
 
-                    return TRUE;
+                    return true;
                 }
                 if (data)
                     XFree(data);

@@ -23,8 +23,11 @@
 #include <sstream>
 #include <QThread>
 #include <QtGui>
+#include <QMenu>
 #include <QFileDialog>
 #include <QApplication>
+#include <QPrintDialog>
+#include <QtConcurrent>
 #include <QEvent>
 #include <QPixmap>
 #include <QImage>
@@ -32,7 +35,7 @@
 #include <QProcess>
 #include <stdlib.h>
 #ifndef _WIN32
-//This has to be explicitly included in gcc4.7
+
 #include <unistd.h>
 #endif
 #include <time.h>
@@ -4115,7 +4118,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 					setEnabledCertifButtons(false);
 					enableFileSave(false);
 
-					m_imgPicture = NULL;
+					m_imgPicture = QPixmap();
 					m_pinsInfo.clear();
 					m_CI_Data.Reset();
 

@@ -23,6 +23,8 @@
 
 #include <QDialog>
 #include <QDropEvent>
+#include <QGraphicsItem>
+#include <QProgressDialog>
 #include "ui_PDFSignWindow.h"
 #include "CardInformation.h"
 
