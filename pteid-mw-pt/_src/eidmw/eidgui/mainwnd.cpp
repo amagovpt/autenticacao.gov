@@ -228,6 +228,11 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	connect(m_ui.btnPersoDataSave, SIGNAL(clicked()), this, SLOT(PersoDataSaveButtonClicked()));
 	connect(&this->FutureWatcher, SIGNAL(finished()), m_progress, SLOT(cancel()));
 
+	//Workaround for the QT5 behaviour of QProgressDialog: now it displays itself even before show() or exec() was called:
+	// Accoring to the bugtracker we shouldn't be reusing the QProgressDialog for multiple long operations
+	// https://bugreports.qt.io/browse/QTBUG-47042
+	m_progress->reset();
+
 	//------------------------------------
 	//
 	// set the window Icon (as it appears in the left corner of the window)
