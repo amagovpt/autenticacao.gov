@@ -382,8 +382,8 @@ void WriteToFile(const char *path, const unsigned char *content, size_t len)
 int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_len,
 	    bool timestamp, const char ** signature_contents)
 {
-	X509 *x509;
-	PKCS7 *p7;
+	X509 *x509 = NULL;
+	PKCS7 *p7 = NULL;
 	PKCS7_SIGNER_INFO *signer_info;
 	CByteArray hash, attr_hash, signature, certData, certData2, cc01, cc02, cc03, tsresp;
 	char * signature_hex_string = NULL;
