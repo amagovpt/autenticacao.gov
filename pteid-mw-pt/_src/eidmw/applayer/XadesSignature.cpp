@@ -210,16 +210,6 @@ namespace eIDMW
 		return CByteArray(md_value, SHA256_LEN);
 	}
 
-	int XadesSignature::appendOID(XMLByte *toFill)
-	{
-
-		int oidLen;
-		unsigned char * oid = getRSASigOID(HASH_SHA256, oidLen);
-		memcpy(toFill, oid, oidLen);
-		return oidLen;
-
-	}
-
 	static XMLCh s_Id[] = {
 
 	chLatin_I,
@@ -1199,7 +1189,6 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 
 
 	memset(toFill, 0x2f, SHA256_LEN);
-	//oidlen = appendOID(toFill);
 
 	try {
 		
