@@ -68,8 +68,6 @@ SOURCES =		\
 #	FontInfo.cc		\
 #	UnicodeTypeTable.cc	\
 #	CharCodeToUnicode.cc	\
-#	Function.cc		\
-#	FontEncodingTables.cc	\
 
 GOO_SRC = $(wildcard ../goo/*cc)
 FOFI_SRC = $(wildcard ../fofi/*.cc)
