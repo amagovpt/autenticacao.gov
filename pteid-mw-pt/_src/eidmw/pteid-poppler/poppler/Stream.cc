@@ -2333,7 +2333,8 @@ GBool CCITTFaxStream::isBinary(GBool last) {
 
 // clip [-256,511] --> [0,255]
 #define dctClipOffset 256
-static Guchar dctClip[768];
+#define dctClipLength 768
+static Guchar dctClip[dctClipLength];
 static int dctClipInit = 0;
 
 // zig zag decode map
@@ -3289,7 +3290,12 @@ void DCTStream::transformDataUnit(Gushort *quantTable,
 
   // convert to 8-bit integers
   for (i = 0; i < 64; ++i) {
-    dataOut[i] = dctClip[dctClipOffset + 128 + ((dataIn[i] + 8) >> 4)];
+    const int ix = dctClipOffset + 128 + ((dataIn[i] + 8) >> 4);
+    if (unlikely(ix < 0 || ix >= dctClipLength)) {
+      dataOut[i] = 0;
+    } else {
+      dataOut[i] = dctClip[ix];
+    }
   }
 }
 
