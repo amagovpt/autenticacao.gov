@@ -189,6 +189,7 @@ Catalog::~Catalog() {
   delete form;
   delete optContent;
   delete viewerPrefs;
+  delete m_sig_dict;
   metadata.free();
   structTreeRoot.free();
   outline.free();
