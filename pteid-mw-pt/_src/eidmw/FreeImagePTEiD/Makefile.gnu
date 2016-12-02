@@ -16,10 +16,10 @@ LIBRARIES = -lstdc++
 
 MODULES = $(SRCS:.c=.o)
 MODULES := $(MODULES:.cpp=.o)
-CFLAGS ?= -O3 -g -fPIC
+CFLAGS ?= -O3 -fPIC
 override CFLAGS += -fexceptions -fvisibility=hidden -DNO_LCMS
 override CFLAGS += $(INCLUDE)
-CXXFLAGS ?= -O0 -g -fPIC
+CXXFLAGS ?= -O3 -fPIC
 override CXXFLAGS += -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy
 override CXXFLAGS += $(INCLUDE)
 
