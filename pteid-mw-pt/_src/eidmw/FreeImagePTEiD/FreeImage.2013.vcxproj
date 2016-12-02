@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>FreeImage</ProjectName>
-    <ProjectGuid>{B39ED2B3-D53A-4077-B957-930979A3577D}</ProjectGuid>
+    <ProjectGuid>{9CF14E97-F045-4A1F-951A-445CA1316338}</ProjectGuid>
     <RootNamespace>FreeImage</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -140,13 +140,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies />
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).exe</OutputFile>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir Dist\x32
-copy $(OutDir)$(TargetName).dll Dist\x32
-copy $(OutDir)$(TargetName).lib Dist\x32
-copy Source\FreeImage.h Dist\x32
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -195,13 +193,11 @@ copy Source\FreeImage.h Dist\x32
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies />
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).exe</OutputFile>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir Dist\x64
-copy $(OutDir)$(TargetName).dll Dist\x64
-copy $(OutDir)$(TargetName).lib Dist\x64
-copy Source\FreeImage.h Dist\x64
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -316,7 +312,6 @@ copy Source\FreeImage.h Dist\x64
     <ClCompile Include="Source\FreeImage\PluginJ2K.cpp" />
     <ClCompile Include="Source\FreeImage\PluginJP2.cpp" />
     <ClCompile Include="Source\FreeImage\PluginPNG.cpp" />
-    <ClCompile Include="Source\FreeImage\TIFFLogLuv.cpp" />
     <ClCompile Include="Source\FreeImage\Conversion.cpp" />
     <ClCompile Include="Source\FreeImage\Conversion16_555.cpp" />
     <ClCompile Include="Source\FreeImage\Conversion16_565.cpp" />
@@ -342,10 +337,8 @@ copy Source\FreeImage.h Dist\x64
     <ClCompile Include="Source\FreeImage\CacheFile.cpp" />
     <ClCompile Include="Source\FreeImage\MultiPage.cpp" />
     <ClCompile Include="Source\FreeImage\ZLibInterface.cpp" />
-    <ClCompile Include="Source\Metadata\Exif.cpp" />
     <ClCompile Include="Source\Metadata\FIRational.cpp" />
     <ClCompile Include="Source\Metadata\FreeImageTag.cpp" />
-    <ClCompile Include="Source\Metadata\IPTC.cpp" />
     <ClCompile Include="Source\Metadata\TagConversion.cpp" />
     <ClCompile Include="Source\Metadata\TagLib.cpp" />
     <ClCompile Include="Source\FreeImageToolkit\Background.cpp" />
@@ -356,7 +349,6 @@ copy Source\FreeImage.h Dist\x64
     <ClCompile Include="Source\FreeImageToolkit\CopyPaste.cpp" />
     <ClCompile Include="Source\FreeImageToolkit\Display.cpp" />
     <ClCompile Include="Source\FreeImageToolkit\Flip.cpp" />
-    <ClCompile Include="Source\FreeImageToolkit\JPEGTransform.cpp" />
     <ClCompile Include="Source\FreeImageToolkit\MultigridPoissonSolver.cpp" />
     <ClCompile Include="Source\FreeImageToolkit\Rescale.cpp" />
     <ClCompile Include="Source\FreeImageToolkit\Resize.cpp" />
@@ -385,36 +377,12 @@ copy Source\FreeImage.h Dist\x64
     <Text Include="Whatsnew.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Source\LibJPEG\LibJPEG.2013.vcxproj">
-      <Project>{5e1d4e5f-e10c-4ba3-b663-f33014fd21d9}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Source\LibJXR\LibJXR.2013.vcxproj">
-      <Project>{244455e0-5f25-4451-9540-f317883e52a8}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="Source\LibOpenJPEG\LibOpenJPEG.2013.vcxproj">
       <Project>{e3536c28-a7f1-4b53-8e52-7d2232f9e098}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="Source\LibPNG\LibPNG.2013.vcxproj">
       <Project>{7db10b50-ce00-4d7a-b322-6824f05d2fcb}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Source\LibRawLite\LibRawLite.2013.vcxproj">
-      <Project>{07f662c1-1323-42ab-b6af-fbfd34a7437a}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Source\LibTIFF4\LibTIFF4.2013.vcxproj">
-      <Project>{ec085cbd-e9c3-477f-9a97-cb9d5da30e27}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Source\LibWebP\LibWebP.2013.vcxproj">
-      <Project>{097d9f6c-fd0e-4cbc-9676-009012aaeca8}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Source\OpenEXR\OpenEXR.2013.vcxproj">
-      <Project>{17a4874b-0606-4687-90b6-f91f8cb3b8af}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="Source\ZLib\ZLib.2013.vcxproj">
