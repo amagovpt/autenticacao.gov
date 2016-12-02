@@ -3,7 +3,7 @@
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
-/* @(#) $Id: uncompr.c,v 1.7 2010/04/21 20:36:23 drolon Exp $ */
+/* @(#) $Id: uncompr.c,v 1.10 2013/05/10 17:22:52 drolon Exp $ */
 
 #define ZLIB_INTERNAL
 #include "zlib.h"
@@ -30,7 +30,7 @@ int ZEXPORT uncompress (dest, destLen, source, sourceLen)
     z_stream stream;
     int err;
 
-    stream.next_in = (Bytef*)source;
+    stream.next_in = (z_const Bytef *)source;
     stream.avail_in = (uInt)sourceLen;
     /* Check for source > 64K on 16-bit machine: */
     if ((uLong)stream.avail_in != sourceLen) return Z_BUF_ERROR;

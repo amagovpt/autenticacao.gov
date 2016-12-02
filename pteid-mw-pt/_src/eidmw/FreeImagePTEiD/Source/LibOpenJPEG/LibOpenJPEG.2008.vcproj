@@ -20,8 +20,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)"
-			IntermediateDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)\obj"
+			OutputDirectory=".\Release"
+			IntermediateDirectory=".\Release"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -56,7 +56,10 @@
 				BufferSecurityCheck="false"
 				EnableFunctionLevelLinking="false"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=""
+				PrecompiledHeaderFile=".\Release/LibOpenJPEG.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -73,7 +76,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\$(ProjectName).lib"
+				OutputFile=".\Release\LibOpenJPEG.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -94,8 +97,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)"
-			IntermediateDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)\obj"
+			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -131,7 +134,10 @@
 				BufferSecurityCheck="false"
 				EnableFunctionLevelLinking="false"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=""
+				PrecompiledHeaderFile=".\Release/LibOpenJPEG.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -148,7 +154,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\$(ProjectName).lib"
+				OutputFile=".\Release\LibOpenJPEG.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -169,8 +175,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)"
-			IntermediateDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)\obj"
+			OutputDirectory=".\Debug"
+			IntermediateDirectory=".\Debug"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -202,8 +208,12 @@
 				StructMemberAlignment="0"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/LibOpenJPEG.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -219,7 +229,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\$(ProjectName).lib"
+				OutputFile=".\Debug\LibOpenJPEG.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -240,8 +250,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)"
-			IntermediateDirectory="$(ProjectDir)Build\$(PlatformName)\VC9\$(ConfigurationName)\obj"
+			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -273,8 +283,13 @@
 				RuntimeLibrary="1"
 				StructMemberAlignment="0"
 				UsePrecompiledHeader="0"
+				PrecompiledHeaderFile=".\Debug/LibOpenJPEG.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -290,7 +305,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\$(ProjectName).lib"
+				OutputFile=".\Debug\LibOpenJPEG.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -486,6 +501,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\function_list.c"
+				>
+			</File>
+			<File
 				RelativePath="image.c"
 				>
 				<FileConfiguration
@@ -526,6 +545,10 @@
 						BasicRuntimeChecks="3"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\invert.c"
+				>
 			</File>
 			<File
 				RelativePath="j2k.c"
@@ -570,91 +593,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="j2k_lib.c"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="jp2.c"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="jpt.c"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -820,6 +759,10 @@
 						BasicRuntimeChecks="3"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\opj_clock.c"
+				>
 			</File>
 			<File
 				RelativePath="pi.c"
@@ -1079,59 +1022,59 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="bio.h"
+				RelativePath=".\bio.h"
 				>
 			</File>
 			<File
-				RelativePath="cio.h"
+				RelativePath=".\cio.h"
 				>
 			</File>
 			<File
-				RelativePath="dwt.h"
+				RelativePath=".\dwt.h"
 				>
 			</File>
 			<File
-				RelativePath="event.h"
+				RelativePath=".\event.h"
 				>
 			</File>
 			<File
-				RelativePath="fix.h"
+				RelativePath=".\function_list.h"
 				>
 			</File>
 			<File
-				RelativePath="image.h"
+				RelativePath=".\image.h"
 				>
 			</File>
 			<File
-				RelativePath="int.h"
+				RelativePath=".\indexbox_manager.h"
 				>
 			</File>
 			<File
-				RelativePath="j2k.h"
+				RelativePath=".\invert.h"
 				>
 			</File>
 			<File
-				RelativePath="j2k_lib.h"
+				RelativePath=".\j2k.h"
 				>
 			</File>
 			<File
-				RelativePath="jp2.h"
+				RelativePath=".\jp2.h"
 				>
 			</File>
 			<File
-				RelativePath="jpt.h"
+				RelativePath=".\mct.h"
 				>
 			</File>
 			<File
-				RelativePath="mct.h"
+				RelativePath=".\mqc.h"
 				>
 			</File>
 			<File
-				RelativePath="mqc.h"
+				RelativePath=".\openjpeg.h"
 				>
 			</File>
 			<File
-				RelativePath="openjpeg.h"
+				RelativePath=".\opj_clock.h"
 				>
 			</File>
 			<File
@@ -1139,7 +1082,19 @@
 				>
 			</File>
 			<File
-				RelativePath="opj_includes.h"
+				RelativePath=".\opj_config_private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\opj_includes.h"
+				>
+			</File>
+			<File
+				RelativePath=".\opj_intmath.h"
+				>
+			</File>
+			<File
+				RelativePath=".\opj_inttypes.h"
 				>
 			</File>
 			<File
@@ -1147,27 +1102,35 @@
 				>
 			</File>
 			<File
-				RelativePath="pi.h"
+				RelativePath=".\opj_stdint.h"
 				>
 			</File>
 			<File
-				RelativePath="raw.h"
+				RelativePath=".\pi.h"
 				>
 			</File>
 			<File
-				RelativePath="t1.h"
+				RelativePath=".\raw.h"
 				>
 			</File>
 			<File
-				RelativePath="t2.h"
+				RelativePath=".\t1.h"
 				>
 			</File>
 			<File
-				RelativePath="tcd.h"
+				RelativePath=".\t1_luts.h"
 				>
 			</File>
 			<File
-				RelativePath="tgt.h"
+				RelativePath=".\t2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\tcd.h"
+				>
+			</File>
+			<File
+				RelativePath=".\tgt.h"
 				>
 			</File>
 		</Filter>

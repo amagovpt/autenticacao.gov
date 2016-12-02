@@ -166,7 +166,7 @@ target only makes sense, if the DLL has been built before.
 
 Since there is neither a common system wide 'include' nor a 'lib'
 directory available under Windows, the FreeImage header file
-FreeImagePTEiD.h as well as both the static library and the DLL import
+FreeImage.h as well as both the static library and the DLL import
 library FreeImage.lib just remain in the 'Dist' folder.
 
 The following procedure creates the FreeImage dynamic link library

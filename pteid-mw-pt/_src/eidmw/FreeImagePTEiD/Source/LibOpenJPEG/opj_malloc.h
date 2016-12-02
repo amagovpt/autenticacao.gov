@@ -48,7 +48,12 @@ Allocate an uninitialized memory block
 #ifdef ALLOC_PERF_OPT
 void * OPJ_CALLCONV opj_malloc(size_t size);
 #else
+/* prevent assertion on overflow for MSVC */
+#ifdef _MSC_VER
+#define opj_malloc(size) ((size_t)(size) >= (size_t)-0x100 ? NULL : malloc(size))
+#else
 #define opj_malloc(size) malloc(size)
+#endif
 #endif
 
 /**
@@ -60,7 +65,12 @@ Allocate a memory block with elements initialized to 0
 #ifdef ALLOC_PERF_OPT
 void * OPJ_CALLCONV opj_calloc(size_t _NumOfElements, size_t _SizeOfElements);
 #else
+/* prevent assertion on overflow for MSVC */
+#ifdef _MSC_VER
+#define opj_calloc(num, size) ((size_t)(num) != 0 && (size_t)(num) >= (size_t)-0x100 / (size_t)(size) ? NULL : calloc(num, size))
+#else
 #define opj_calloc(num, size) calloc(num, size)
+#endif
 #endif
 
 /**
@@ -83,8 +93,10 @@ Allocate memory aligned to a 16 byte boundry
 #else /* Not _WIN32 */
 	#if defined(__sun)
 		#define HAVE_MEMALIGN
+  #elif defined(__FreeBSD__)
+    #define HAVE_POSIX_MEMALIGN
 	/* Linux x86_64 and OSX always align allocations to 16 bytes */
-	#elif !defined(__amd64__) && !defined(__APPLE__)	
+	#elif !defined(__amd64__) && !defined(__APPLE__) && !defined(_AIX)
 		#define HAVE_MEMALIGN
 		#include <malloc.h>			
 	#endif
@@ -137,7 +149,12 @@ Reallocate memory blocks.
 #ifdef ALLOC_PERF_OPT
 void * OPJ_CALLCONV opj_realloc(void * m, size_t s);
 #else
+/* prevent assertion on overflow for MSVC */
+#ifdef _MSC_VER
+#define opj_realloc(m, s) ((size_t)(s) >= (size_t)-0x100 ? NULL : realloc(m, s))
+#else
 #define opj_realloc(m, s) realloc(m, s)
+#endif
 #endif
 
 /**
