@@ -31,12 +31,15 @@ DESCRIPTION:
 
 /////////////////////////////////////////////////////////////////////////////
 
+/*
 #ifndef	_INC_SHLWAPI
 	#include < Shlwapi.h >
 #endif
 #pragma comment( lib, "shlwapi.lib" )
+*/
 #ifndef VER_H
-	#include < WinVer.h >
+	#include <Windows.h>
+	#include <WinVer.h>
 #endif
 #pragma comment( lib, "Version.lib " )
 
@@ -46,6 +49,7 @@ DESCRIPTION:
 
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+/*
 #ifndef DLLVER_MAJOR_MASK
 
 	typedef struct _DLLVERSIONINFO2
@@ -56,6 +60,7 @@ DESCRIPTION:
 	} DLLVERSIONINFO2;
 
 #endif // DLLVER_MAJOR_MASK
+*/
 
 #ifndef MAKEDLLVERULL
 	#define MAKEDLLVERULL( major, minor, build, qfe )\

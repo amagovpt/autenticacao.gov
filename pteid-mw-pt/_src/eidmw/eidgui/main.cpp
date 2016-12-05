@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 #endif
 
 	int iRetValue = 0;
-
+	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QApplication instance(argc, argv);
 
 	/*

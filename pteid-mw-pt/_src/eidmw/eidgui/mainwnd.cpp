@@ -694,6 +694,7 @@ void MainWnd::setup_addressChange_progress_bar()
 	m_progress_addr->setCancelButton(NULL);
 	m_progress_addr->setMinimum(0);
 	m_progress_addr->setMaximum(100);
+	m_progress_addr->reset();
 	//Hack to force centered display of the popup dialog when running on "peculiar" window managers
 	//m_progress_addr->move(geometry().center().x(), geometry().center().y());
 
@@ -1653,7 +1654,7 @@ void MainWnd::on_btnCert_Details_clicked( void )
 
 		CRYPTUI_VIEWCERTIFICATE_STRUCT tCert = {0};
 		tCert.dwSize		= sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
-		tCert.hwndParent	= this->winId();
+		tCert.hwndParent	= (HWND) this->winId();
 		tCert.dwFlags		= CRYPTUI_DISABLE_EDITPROPERTIES;
 		tCert.pCertContext	= CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, certData.GetBytes(), certData.Size());
 		BOOL bChange		= FALSE;

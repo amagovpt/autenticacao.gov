@@ -302,7 +302,7 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	{
 		VerInfo.QueryStringValue(VI_STR_FILEVERSION, version);
 	}
-	QString ver = QString::fromAscii(version);
+	QString ver = QString::fromLatin1(version);
 
 #else
 
@@ -360,8 +360,7 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 bool AutoUpdates::FileExists(const char *filename)
 {
 	std::ifstream ifile(filename);
-	ifile.close();
-	return ifile;
+	return ifile.is_open();
 }
 
 std::string AutoUpdates::VerifyOS(std::string param, bool runscript)

@@ -237,6 +237,7 @@ void dlgSignature::on_pbSign_clicked ( void )
 	pdialog->setMinimum(0);
 	pdialog->setMaximum(0);
 	connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
+	pdialog->reset();
 
 	//Get the Xades-T checkbox value
 	// QCheckBox *xades_t = ui.checkbox_timestamp;

@@ -484,6 +484,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 	pdialog->setMinimum(0);
 	pdialog->setMaximum(0);
 	connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
+	pdialog->reset();
 
 	const tFieldMap PersonFields = CI_Data.m_PersonInfo.getFields();
 	tFieldMap& CardFields = CI_Data.m_CardInfo.getFields();

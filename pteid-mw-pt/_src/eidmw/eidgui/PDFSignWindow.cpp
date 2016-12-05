@@ -733,6 +733,7 @@ void PDFSignWindow::on_button_sign_clicked()
 			&PDFSignWindow::run_sign, selected_page, savefilepath, location, reason);
 
 	this->FutureWatcher.setFuture(future);
+	pdialog->reset();
 	pdialog->exec();
 
 	if (this->success == SIG_SUCCESS)
