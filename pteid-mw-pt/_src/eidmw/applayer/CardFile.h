@@ -215,7 +215,6 @@ private:
 	virtual void EmptyFields();				/**< Empty all fields */
 	void doSODCheck(bool check) {}
 
-	//std::string m_SerialNumber;				/**< The Serial Number of the card */
 	std::string m_ComponentCode;			/**< The Component Code of the card */
 	std::string m_OsNumber;					/**< The Os Number of the card */
 	std::string m_OsVersion;				/**< The Os Version of the card */

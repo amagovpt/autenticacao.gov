@@ -354,7 +354,6 @@ bool APL_CardFile_Info::MapFields()
 	//SerialNumber
 	baBuffer=m_data.GetBytes(0,16);
 	sTemp=baBuffer.ToString(false);
-	//m_SerialNumber=sTemp;
 
 	sprintf_s(buffer,sizeof(buffer),"%02X", m_data.GetByte(16));
 	m_ComponentCode = buffer;
@@ -399,14 +398,6 @@ bool APL_CardFile_Info::MapFields()
 	m_AppletLifeCicle = buffer;
 
 	return true;
-}
-
-const char *APL_CardFile_Info::getSerialNumber()
-{
-	if(ShowData())
-		//return m_SerialNumber.c_str();
-
-	return "";
 }
 
 const char *APL_CardFile_Info::getComponentCode()
