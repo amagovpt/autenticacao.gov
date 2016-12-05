@@ -412,6 +412,8 @@ public:
 		PTEID_ByteArray & p = pteid_eid.getPhotoObj().getphoto();
 		m_pPictureData = QByteArray((const char *)p.GetBytes(),p.Size());
 		bRetVal = true;
+
+		delete(&p);
 		return bRetVal;
 	}
 
@@ -617,6 +619,9 @@ public:
         //m_RelativesInfo.RetrieveData(Card);
 		m_PersonExtraInfo.RetrieveData(Card);
 		m_BiometricInfo.RetrieveData(Card);
+
+		delete[] father;
+		delete[] mother;
 
 		return bRetVal;
 	}

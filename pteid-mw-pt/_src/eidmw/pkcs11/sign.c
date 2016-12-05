@@ -37,7 +37,7 @@ CK_RV C_DigestInit(CK_SESSION_HANDLE hSession,   /* the session's handle */
 
    ret = p11_lock();
    if (ret != CKR_OK)
-          return ret;
+          return ((CK_RV)ret);
 
    log_trace(WHERE, "S: C_DigestInit()");
 
@@ -79,7 +79,7 @@ CK_RV C_DigestInit(CK_SESSION_HANDLE hSession,   /* the session's handle */
 
 cleanup:
    p11_unlock();
-   return ret;
+   return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -99,7 +99,7 @@ CK_RV C_Digest(CK_SESSION_HANDLE hSession,     /* the session's handle */
 
    ret = p11_lock();
    if (ret != CKR_OK)
-          return ret;
+          return ((CK_RV)ret);
 
    log_trace(WHERE, "S: C_Digest()");
 
@@ -166,7 +166,7 @@ CK_RV C_Digest(CK_SESSION_HANDLE hSession,     /* the session's handle */
 cleanup:
    p11_unlock();
 
-return ret;
+return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -183,7 +183,7 @@ CK_RV C_DigestUpdate(CK_SESSION_HANDLE hSession,  /* the session's handle */
 
    ret = p11_lock();
    if (ret != CKR_OK)
-          return ret;
+          return ((CK_RV)ret);
 
    log_trace(WHERE, "S: C_DigestUpdate()");
 
@@ -221,7 +221,7 @@ CK_RV C_DigestUpdate(CK_SESSION_HANDLE hSession,  /* the session's handle */
 cleanup:
    p11_unlock();
 
-return ret;
+return ((CK_RV)ret);
 }
 #undef WHERE 
 
@@ -248,7 +248,7 @@ CK_RV C_DigestFinal(CK_SESSION_HANDLE hSession,     /* the session's handle */
 
    ret = p11_lock();
    if (ret != CKR_OK)
-          return ret;
+          return ((CK_RV)ret);
 
    log_trace(WHERE, "S: C_DigestFinal()");
 
@@ -306,7 +306,7 @@ CK_RV C_DigestFinal(CK_SESSION_HANDLE hSession,     /* the session's handle */
 cleanup:
    p11_unlock();
 
-return ret;
+return ((CK_RV)ret);
 }
 #undef WHERE 
 
@@ -333,7 +333,7 @@ CK_RV C_SignInit(CK_SESSION_HANDLE hSession,    /* the session's handle */
 
    ret = p11_lock();
    if (ret != CKR_OK)
-      return ret;
+      return ((CK_RV)ret);
 
    log_trace(WHERE, "S: C_SignInit()");
 
@@ -446,8 +446,8 @@ CK_RV C_SignInit(CK_SESSION_HANDLE hSession,    /* the session's handle */
 
    pSignData->mechanism = pMechanism->mechanism;
    pSignData->hKey = hKey;
-   pSignData->l_sign = (*pmodsize+7)/8;
-   pSignData->id = *pid;
+   if ( pmodsize != NULL )pSignData->l_sign = (*pmodsize+7)/8;
+   if ( pid != NULL ) pSignData->id = *pid;
 
    if (ihash)
       {
@@ -464,7 +464,7 @@ CK_RV C_SignInit(CK_SESSION_HANDLE hSession,    /* the session's handle */
 cleanup:       
    p11_unlock();
 
-return ret;
+return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -486,7 +486,7 @@ CK_RV C_Sign(CK_SESSION_HANDLE hSession,        /* the session's handle */
 
    ret = p11_lock();
    if (ret != CKR_OK)
-          return ret;
+          return ((CK_RV)ret);
 
    log_trace(WHERE, "S: C_Sign()");
 
@@ -583,7 +583,7 @@ cleanup:
    if (pDigest)
       free(pDigest);
    p11_unlock();
-return ret;
+return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -599,7 +599,7 @@ CK_RV C_SignUpdate(CK_SESSION_HANDLE hSession,  /* the session's handle */
 
    ret = p11_lock();
    if (ret != CKR_OK)
-          return ret;
+          return ((CK_RV)ret);
 
    log_trace(WHERE, "S: C_SignUpdate()");
 
@@ -659,7 +659,7 @@ CK_RV C_SignUpdate(CK_SESSION_HANDLE hSession,  /* the session's handle */
 cleanup:
 
    p11_unlock();
-return ret;
+return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -678,7 +678,7 @@ CK_RV C_SignFinal(CK_SESSION_HANDLE hSession,        /* the session's handle */
 
    ret = p11_lock();
    if (ret != CKR_OK)
-          return ret;
+          return ((CK_RV)ret);
 
    log_trace(WHERE, "S: C_SignFinal()");
 
@@ -752,7 +752,7 @@ cleanup:
 
    p11_unlock();
 
-return ret;
+return ((CK_RV)ret);
 }
 #undef WHERE
 

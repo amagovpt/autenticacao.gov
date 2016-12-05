@@ -391,9 +391,11 @@ namespace eIDMW
 		outputName = new GooString(outfile_path);
 		
 		if (!doc->isOk()) {
-			delete doc;
 			fprintf(stderr, "Poppler returned error loading PDF document %s\n", 
 					doc->getFileName()->getCString());
+
+			delete doc;
+			delete outputName;
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}
 

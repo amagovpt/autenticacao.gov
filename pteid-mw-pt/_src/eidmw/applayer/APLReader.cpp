@@ -81,15 +81,15 @@ APL_ReaderContext::~APL_ReaderContext()
 	{
 		delete m_card;
 		m_card=NULL;
-	}	
+	}
 }
 
 const char *APL_ReaderContext::getName()
 {
 	if(m_name.empty())
 	{
-	
-		m_name=m_calreader->GetReaderName();		
+
+		m_name=m_calreader->GetReaderName();
 	}
 
 	return m_name.c_str();
@@ -99,8 +99,8 @@ bool APL_ReaderContext::isCardPresent()
 {
 	connectCard();
 
-	if(m_status==CARD_STILL_PRESENT 
-		|| m_status==CARD_INSERTED 
+	if(m_status==CARD_STILL_PRESENT
+		|| m_status==CARD_INSERTED
 		|| m_status==CARD_OTHER)
 		return true;
 
@@ -123,8 +123,8 @@ unsigned long APL_ReaderContext::getCardId()
 	//if(!isCardPresent())		//Make too many connection to the card
 	//	return 0;
 
-	if(m_status==CARD_STILL_PRESENT 
-		|| m_status==CARD_INSERTED 
+	if(m_status==CARD_STILL_PRESENT
+		|| m_status==CARD_INSERTED
 		|| m_status==CARD_OTHER)
 		return m_cardid;
 
@@ -134,10 +134,10 @@ unsigned long APL_ReaderContext::getCardId()
 APL_CardType APL_ReaderContext::getCardType()
 {
 	if(!m_card)					//Unless, make too many connection to the card
-		connectCard();					
+		connectCard();
 
-	if(m_status!=CARD_STILL_PRESENT 
-		&& m_status!=CARD_INSERTED 
+	if(m_status!=CARD_STILL_PRESENT
+		&& m_status!=CARD_INSERTED
 		&& m_status!=CARD_OTHER)
 		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
 
@@ -167,7 +167,7 @@ APL_CardType APL_ReaderContext::getPhysicalCardType()
 		unsigned long err = e.GetError();
 		if(err!=EIDMW_ERR_NO_CARD)
 			throw e;
-		
+
 		return ret;
 	}
 	CalUnlock();
@@ -183,7 +183,7 @@ APL_CardType APL_ReaderContext::getPhysicalCardType()
 		//Don't need to read anything from the start yet...
 		try
 		{
-	
+
 			CByteArray file2 = m_calreader->ReadFile(PTEID_FILE_ID, 182, 17,true);
 			stringstream serial;
 			serial << file2.GetBytes();
@@ -201,7 +201,7 @@ APL_CardType APL_ReaderContext::getPhysicalCardType()
 			return ret;
 		}
 		CalUnlock();
-		
+
        		ret=ConvertCardType(CalCarType);
 
 		break;
@@ -265,7 +265,7 @@ bool APL_ReaderContext::connectCard()
 	m_cardid++;
 
 	APL_CardType cardType=APL_CARDTYPE_UNKNOWN;
-	
+
 	cardType=getPhysicalCardType();
 
 	switch(cardType)
@@ -294,7 +294,7 @@ APL_EIDCard *APL_ReaderContext::getEIDCard()
 
 	if(m_card != NULL && m_card->getType()!=APL_CARDTYPE_UNKNOWN)
 		return dynamic_cast<APL_EIDCard *>(m_card);
-	
+
 	return NULL;
 }
 
@@ -407,12 +407,12 @@ CReader *APL_ReaderContext::getCalReader() const
 class APL_CheckRelease
 {
 public:
-	APL_CheckRelease() 
+	APL_CheckRelease()
 	{
 		m_ReleaseOk=true;
 	}
 
-	~APL_CheckRelease() 
+	~APL_CheckRelease()
 	{
 		if(!m_ReleaseOk)
 		{
@@ -444,7 +444,7 @@ CAppLayer::CAppLayer()
 	m_certStatusCache=NULL;
 
 	m_askfortestcard=false;
-	
+
 	updateVersion();
 
 	startAllServices();
@@ -506,12 +506,12 @@ void CAppLayer::releaseReaders()
 	{
 		delete m_physicalReaders[m_physicalReaders.size()-1];
 		m_physicalReaders.pop_back();
-	} 
+	}
 
 	readerListRelease();
 }
 
-void CAppLayer::startAllServices() 
+void CAppLayer::startAllServices()
 {
 	MWLOG(LEV_INFO, MOD_APL, L"Start all applayer services");
 	//First start the card layer
@@ -530,7 +530,7 @@ void CAppLayer::startAllServices()
 
 }
 
-void CAppLayer::stopAllServices() 
+void CAppLayer::stopAllServices()
 {
 	//stopping is made in the opposite order then starting
 	MWLOG(LEV_INFO, MOD_APL, L"Stop all applayer services");
@@ -585,6 +585,7 @@ void CAppLayer::readerListInit(bool bForceRefresh)
 					info = new CReadersInfo();
 					*info=m_Cal->ListReaders();
 					nbrReader=info->ReaderCount();
+					delete info;
 				}
 				catch(...)
 				{
@@ -622,10 +623,10 @@ void CAppLayer::updateVersion()
 {
 	try
 	{
-		APL_Config conf_BuildNbr(CConfig::EIDMW_CONFIG_PARAM_GENERAL_BUILDNBR);     
+		APL_Config conf_BuildNbr(CConfig::EIDMW_CONFIG_PARAM_GENERAL_BUILDNBR);
 		conf_BuildNbr.ChangeLookupBehaviour(APL_Config::USER_ONLY);
 		long build = conf_BuildNbr.getLong();
-		
+
 		conf_BuildNbr.setLong(SVN_REVISION);
 	}
 	catch(...) //If the update failed, we will try next time
@@ -639,7 +640,7 @@ CCardLayer *CAppLayer::getCardLayer() const
 	if(!m_Cal)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
-	return m_Cal; 
+	return m_Cal;
 }
 
 //Return a reference to the crypto framework
@@ -648,7 +649,7 @@ APL_CryptoFwkPteid *CAppLayer::getCryptoFwk() const
 	if(!m_cryptoFwk)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
-	return m_cryptoFwk; 
+	return m_cryptoFwk;
 }
 
 //Return a reference to the crl service
@@ -657,7 +658,7 @@ APL_CertStatusCache *CAppLayer::getCertStatusCache() const
 	if(!m_certStatusCache)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
-	return m_certStatusCache; 
+	return m_certStatusCache;
 }
 
 bool CAppLayer::isReadersChanged() const
@@ -719,7 +720,7 @@ APL_ReaderContext &CAppLayer::getReader(const char *readerName)
 			find = true;
 			break;
 		}
-	} 
+	}
 
 	if(find)
 	{
@@ -727,7 +728,7 @@ APL_ReaderContext &CAppLayer::getReader(const char *readerName)
 	}
 	else
 	{
-		//The CAL does not check the name 
+		//The CAL does not check the name
 		//so we have to throw an exception if the name is not in the reader list
 		const char * const *list = readerList();
 		for(unsigned long i=0;list[i]!=NULL;i++)

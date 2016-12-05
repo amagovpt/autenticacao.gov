@@ -80,7 +80,7 @@ XERCES_CPP_NAMESPACE_USE
 #define secretKey	"secret"
 #define sleepTime	30
 
-typedef queue<char *>	charQueueType; 
+typedef queue<char *>	charQueueType;
 
 XSECProvider			* g_provider;
 
@@ -123,7 +123,7 @@ void outputDoc (DOMImplementation *impl, DOMDocument * doc) {
 
     theOutput->setEncoding(MAKE_UNICODE_STRING("UTF-8"));
     theOutput->setByteStream(formatTarget);
-    
+
     theSerializer->write(doc, theOutput);
 #else
     DOMWriter         *theSerializer = ((DOMImplementationLS*)impl)->createDOMWriter();
@@ -161,7 +161,7 @@ void addDocToQueue (DOMImplementation *impl, DOMDocument * doc) {
 
     theOutput->setEncoding(MAKE_UNICODE_STRING("UTF-8"));
     theOutput->setByteStream(formatTarget);
-    
+
     theSerializer->write(doc, theOutput);
 #else
 	DOMWriter         *theSerializer = ((DOMImplementationLS*)impl)->createDOMWriter();
@@ -203,8 +203,8 @@ DOMText *createDocSkeleton(DOMImplementation *impl, char * tid) {
 	//g_providerMutex.lock();
 	DOMDocument *doc = impl->createDocument(
                 0,
-                MAKE_UNICODE_STRING("Document"),             
-                NULL);  
+                MAKE_UNICODE_STRING("Document"),
+                NULL);
 	//g_providerMutex.unlock();
 
     DOMElement *rootElem = doc->getDocumentElement();
@@ -253,7 +253,7 @@ DWORD WINAPI doSignThread (LPVOID Param) {
 	myId = g_initSignCount++;
 	g_initMutex.unlock();
 
-	g_signCount[myId] = 0;	
+	g_signCount[myId] = 0;
 
 	// Sign
 	while (g_completed == false) {
@@ -289,21 +289,21 @@ DWORD WINAPI doSignThread (LPVOID Param) {
 		sig->sign();
 
 		g_provider->releaseSignature(sig);
-		
+
 		// Serialise and add to verify queue
 
 		addDocToQueue(impl, myDoc);
 
 		myDoc->release();
-	
+
 		// Tell the control thread what we have done
-		g_signCount[myId] += 1;	
+		g_signCount[myId] += 1;
 
 		// Sleep for a while
 		Sleep (sleepTime + (rand() % sleepTime));
-	
+
 	}
-		
+
 	msg << "Ending signing thread - " << theThreadID << endl << '\0';
 	cerr << msg.str();
 
@@ -334,7 +334,7 @@ DWORD WINAPI doVerifyThread (LPVOID Param) {
 	const DWORD		theThreadID = GetCurrentThreadId();
 
 	// Find my ID
-	
+
 	g_initMutex.lock();
 	myId = g_initVerifyCount++;
 	g_initMutex.unlock();
@@ -343,13 +343,13 @@ DWORD WINAPI doVerifyThread (LPVOID Param) {
 
 	// Create a parser
 	XercesDOMParser * parser = new XercesDOMParser;
-	
+
 	parser->setDoNamespaces(true);
 	parser->setCreateEntityReferenceNodes(true);
 
 	// Wait for a semaphore event to tell us that there is a buffer to validate
 
-	WaitForSingleObject( 
+	WaitForSingleObject(
 		g_toVerifyQueueSemaphore ,   // handle to semaphore
 		INFINITE);
 
@@ -365,13 +365,13 @@ DWORD WINAPI doVerifyThread (LPVOID Param) {
 		ReleaseSemaphore(g_toSignQueueSemaphore, 1, NULL);
 
 		// Now parse and validate the signature
-		MemBufInputSource* memIS = new MemBufInputSource ((const XMLByte*) buf, 
-															(unsigned int) strlen(buf), 
+		MemBufInputSource* memIS = new MemBufInputSource ((const XMLByte*) buf,
+															(unsigned int) strlen(buf),
 															"XSECMem");
 
 		parser->parse(*memIS);
 
-		delete(memIS);
+		delete memIS;
 
 		myDoc = parser->adoptDocument();
 
@@ -422,10 +422,10 @@ DWORD WINAPI doVerifyThread (LPVOID Param) {
 		Sleep (sleepTime + (rand() % sleepTime));
 
 		// Wait for another object
-		WaitForSingleObject( 
+		WaitForSingleObject(
 			g_toVerifyQueueSemaphore ,   // handle to semaphore
-			INFINITE);	
-	
+			INFINITE);
+
 	}
 
 	msg << "Ending validate thread : " << theThreadID << endl << '\0';
@@ -451,7 +451,7 @@ DWORD WINAPI doControlThread (LPVOID Param) {
 
 	// Quick and dirty
 	cin.peek();
-	
+
 	// Signal all other threads
 	g_completed = true;
 	ReleaseSemaphore(g_toVerifyQueueSemaphore, 5, NULL);
@@ -491,7 +491,7 @@ DWORD WINAPI doOutputThread (LPVOID Param) {
 		cerr << endl << "Total: " << total << endl;
 		cerr << "Ops/Sec: " << total - lastSignTotal << endl << endl;
 		lastSignTotal = total;
-		
+
 		cerr << "Verify Threads" << endl;
 		cerr << "--------------" << endl << endl;
 		total = 0;
@@ -507,7 +507,7 @@ DWORD WINAPI doOutputThread (LPVOID Param) {
 		lastVerifyTotal = total;
 		cerr << "Total Errors : " << g_errors << endl;
 		cerr << "Buffers in Queue : " << (unsigned int) g_toVerifyQueue.size() << endl;
-		
+
 		// Go to sleep for a second
 
 		Sleep(1000);
@@ -527,7 +527,7 @@ void runThreads(DOMImplementation * impl, int nThreads) {
 	// Set up the worker queue
 	g_toVerifyQueueSemaphore = CreateSemaphore(NULL, 0, 20, "verifyQueue");
 	g_toSignQueueSemaphore = CreateSemaphore(NULL, 20, 20, "signQueue");
-	
+
 	// Ensure nobody stops too soon
 	g_completed = false;
 
@@ -544,14 +544,14 @@ void runThreads(DOMImplementation * impl, int nThreads) {
 
 	hThreads.reserve(nThreads);
 
-	i = 0;	
+	i = 0;
 
 	for (; i < nThreads; ++i)
 	{
 		DWORD  threadID;
 
 		const HANDLE	hThread = CreateThread(
-				0, 
+				0,
 				4096,							// Stack size for thread.
 				doSignThread,					// pointer to thread function
 				reinterpret_cast<LPVOID>(impl),	// argument for new thread
@@ -568,7 +568,7 @@ void runThreads(DOMImplementation * impl, int nThreads) {
 		DWORD  threadID;
 
 		const HANDLE	hThread = CreateThread(
-				0, 
+				0,
 				4096,							// Stack size for thread.
 				doVerifyThread,					// pointer to thread function
 				reinterpret_cast<LPVOID>(impl),	// argument for new thread
@@ -584,7 +584,7 @@ void runThreads(DOMImplementation * impl, int nThreads) {
 	DWORD  threadID;
 
 	const HANDLE	hThread = CreateThread(
-			0, 
+			0,
 			4096,							// Stack size for thread.
 			doControlThread,				// pointer to thread function
 			reinterpret_cast<LPVOID>(impl),	// argument for new thread
@@ -599,7 +599,7 @@ void runThreads(DOMImplementation * impl, int nThreads) {
 
 
 	const HANDLE h2Thread = CreateThread(
-			0, 
+			0,
 			4096,							// Stack size for thread.
 			doOutputThread,					// pointer to thread function
 			reinterpret_cast<LPVOID>(impl),	// argument for new thread
@@ -618,7 +618,7 @@ void runThreads(DOMImplementation * impl, int nThreads) {
 	}
 
 	// Clear out the unverified buffers
-	
+
 	while (g_toVerifyQueue.size() != 0) {
 		char * buf = g_toVerifyQueue.front();
 		g_toVerifyQueue.pop();

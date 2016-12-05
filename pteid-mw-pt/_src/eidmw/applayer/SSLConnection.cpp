@@ -41,7 +41,7 @@ namespace eIDMW
 int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 		unsigned char *sigret, unsigned int *siglen, const RSA * rsa)
 {
-	
+
 	APL_Card *card = AppLayer.getReader().getCard();
 
 	if (card == NULL) {
@@ -61,7 +61,7 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 	try
 	{
 		//Sign with Authentication Key
-		signed_data = card->Sign(to_sign, false); 
+		signed_data = card->Sign(to_sign, false);
 	}
 	catch (CMWException &e)
 	{
@@ -69,7 +69,7 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 		fprintf(stderr, "Exception in card.sign() %s:%lu\n",e.GetFile().c_str(), e.GetLine());
 		return 0;
 	}
-	
+
 
 	if (signed_data.Size() > 0)
 	{
@@ -96,7 +96,7 @@ void SSLConnection::loadUserCert(SSL_CTX *ctx)
 
 	//X509 * cert = d2i_X509(NULL, &p, user_cert.Size());
 
-	//if (cert != NULL) 
+	//if (cert != NULL)
 	//	SSL_CTX_use_certificate(ctx, cert);
 	int ret = SSL_CTX_use_certificate_ASN1(ctx, user_cert.Size(), user_cert.GetBytes());
 
@@ -118,7 +118,7 @@ void SSLConnection::loadCertChain(X509_STORE *store)
 	{
 		X509 *pCert = NULL;
 		unsigned char *cert_data = PTEID_CERTS[i].cert_data;
-	        pCert = d2i_X509(&pCert, (const unsigned char **)&cert_data, 
+	        pCert = d2i_X509(&pCert, (const unsigned char **)&cert_data,
 			PTEID_CERTS[i].cert_len);
 
 		if (pCert == NULL)
@@ -132,7 +132,7 @@ void SSLConnection::loadCertChain(X509_STORE *store)
 			if(X509_STORE_add_cert(store, pCert) == 0)
 				MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection::loadCertChain: error adding certificate #%d\n",  i);
 		}
-	
+
 	}
 
 
@@ -176,7 +176,7 @@ void get_ssl_state_callback(const SSL *s, int where, int ret)
 }
 
 
-//Translate the string via specific OpenSSL error codes 
+//Translate the string via specific OpenSSL error codes
 //is not feasible AFAICT
 unsigned int translate_openssl_error(unsigned int error)
 {
@@ -189,7 +189,7 @@ unsigned int translate_openssl_error(unsigned int error)
 
 	else if (strstr(error_string, "certificate verify failed") != NULL)
 		return EIDMW_OTP_CERTIFICATE_ERROR;
-	else 
+	else
 		return EIDMW_OTP_UNKNOWN_ERROR;
 
 }
@@ -324,7 +324,7 @@ char *parseToken(char * server_response, const char * token)
 	}
 	char * start_apdu = substr + strlen(token);
 	char * end_apdu = strchr(start_apdu, '"');
-	
+
 	size_t apdu_len = end_apdu - start_apdu;
 
 	char * change_pin_apdu = (char *) malloc(apdu_len+1);
@@ -361,7 +361,7 @@ SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *k
 
 	sprintf(challenge_params, challenge_format, challenge, kicc);
 	endpoint = ENDPOINT_07;
-	
+
 	//fprintf(stderr, "POSTing JSON %s\n", challenge_params);
 	char *server_response = Post(this->m_session_cookie, endpoint, challenge_params);
 
@@ -417,7 +417,7 @@ err:
 char *build_json_object_sam(StartWriteResponse &resp)
 {
 	cJSON *root, *real_root, *arr1, *arr2, *error_status;
-	root=cJSON_CreateObject();	
+	root=cJSON_CreateObject();
 	real_root=cJSON_CreateObject();
 	error_status = cJSON_CreateObject();
 
@@ -525,7 +525,7 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 	json=cJSON_Parse(body);
 	if (!json)
 	{
-		fprintf(stderr, "JSON parsing error before: [%s]\n", cJSON_GetErrorPtr()); 
+		fprintf(stderr, "JSON parsing error before: [%s]\n", cJSON_GetErrorPtr());
 		goto err;
 	}
 	else
@@ -552,13 +552,13 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 			resp->apdu_write_sod.push_back(strdup(cJSON_GetArrayItem(array_sod, i)->valuestring));
 
 		cJSON_Delete(json);
-		delete server_response;
+		free(server_response);
 		return resp;
 	}
 
 err:
 	delete resp;
-	delete server_response;
+	free(server_response );
 	cJSON_Delete(json);
 	return NULL;
 }
@@ -571,7 +571,7 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 	DHParamsResponse *server_params = new DHParamsResponse();
 	char *dh_params_template = "{\"DHParams\":{ \"secretCode\" : \"%s\", \"process\" : \"%s\", \"P\": \"%s\", \"Q\": \"%s\", \"G\":\"%s\", \"cvc_ca_public_key\": \"%s\",\"card_auth_public_key\": \"%s\", \"certificateChain\": \"%s\", \"version\": %d, \"ErrorStatus\": { \"code\":0, \"description\":\"OK\" } } } ";
 
-	char * post_dhparams = NULL; 
+	char * post_dhparams = NULL;
 	char request_headers[1000];
 
 	if (serialNumber == NULL)
@@ -595,7 +595,7 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 
 	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_1stpost()");
 
-	snprintf(request_headers, sizeof(request_headers),	
+	snprintf(request_headers, sizeof(request_headers),
     "POST %s/sendDHParams HTTP/1.1\r\nHost: %s\r\nKeep-Alive: 300\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Length: %lu\r\n\r\n",
     	endpoint, m_host, strlen(post_dhparams));
 
@@ -692,7 +692,7 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 
 BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_host, char *proxy_user, char * proxy_pwd, char *ssl_host_andport)
 {
-		
+
 		char tmpbuf[10*1024];
         char connect_request[1024];
         char proxy_host_str[512];
@@ -706,7 +706,7 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
         const char * no_content = "Content-Length: 0";
         const char * keepAlive = "Proxy-Connection: Keep-Alive";
 
-		MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: Connecting to proxy Host: %s Port: %ld", 
+		MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: Connecting to proxy Host: %s Port: %ld",
 			proxy_host, proxy_port);
 
 		snprintf(proxy_host_str, sizeof(proxy_host_str), "%s:%ld", proxy_host, proxy_port);
@@ -731,7 +731,7 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
 
         	fprintf(stderr, "DEBUG: snprintf ret=%d\n", ret);
         	free(auth_token);
-        }	
+        }
         else
         {
 
@@ -769,7 +769,7 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
     /* Set up the SSL pointers */
 
     /* The insecure mode is used now for SCAP server only */
-    
+
     SSL_CTX *ctx = insecure ? SSL_CTX_new(TLSv1_client_method()) : SSL_CTX_new(TLSv1_1_client_method());
 
     SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
@@ -786,7 +786,7 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
     if(!(SSL_CTX_load_verify_locations(ctx,
 			NULL, "/etc/ssl/certs")))
 	fprintf(stderr, "Can't read CA list\n");
-	
+
     SSL_CTX_set_options(ctx, SSL_OP_NO_TICKET | SSL_OP_NO_SSLv2);
     SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
 
@@ -812,8 +812,8 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
 			proxy_user_value = (char *)proxy_user.getString();
 			proxy_pwd_value = (char *)proxy_pwd.getString();
 		}
-		
-		bio = connectToProxyServer(proxy_host.getString(), proxy_port.getLong(), 
+
+		bio = connectToProxyServer(proxy_host.getString(), proxy_port.getLong(),
 			   m_host, proxy_user_value, proxy_pwd_value, host_and_port);
 	}
 	else
@@ -832,7 +832,7 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
 
     rsa->flags |= RSA_FLAG_SIGN_VER;
 
-    RSA_METHOD *current_method = (RSA_METHOD *)RSA_PKCS1_SSLeay(); 
+    RSA_METHOD *current_method = (RSA_METHOD *)RSA_PKCS1_SSLeay();
     current_method->rsa_sign = eIDMW::rsa_sign;
     current_method->flags |= RSA_FLAG_SIGN_VER;
     current_method->flags |= RSA_METHOD_FLAG_NO_CHECK;
@@ -868,7 +868,7 @@ int validate_hex_number(char *str)
         while(str[i])
         {
                 if (!isxdigit(str[i++]))
-                        return 0;    
+                        return 0;
         }
 
         return 1;
@@ -899,7 +899,7 @@ long parseLong(char *str)
 
 	//Further characters after number
 	if (*endptr != '\0')
-		return -1; 
+		return -1;
 
 	return val;
 }
@@ -912,7 +912,7 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
 	unsigned long chunk_bytesToRead = 0;
 	bool is_chunk_length = false;
 	do
-    {	
+    {
     	is_chunk_length = false;
 
 	    // We're using blocking IO so SSL_Write either succeeds completely or not...
@@ -946,6 +946,8 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     				is_chunk_length = true;
     			}
 
+				free(buffer_tmp);
+
     		}
     	}
     	if (r > 0 && bytes_read == 0)
@@ -955,6 +957,7 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     		if (!strstr(buffer, "Transfer-Encoding: chunked"))
     			fprintf(stderr, "DEBUG: Unexpected server reply: HTTP response is not chunked!\n");
 
+			free(buffer_tmp);
     	}
     	if (r == -1)
     	{
@@ -966,7 +969,7 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     		}
 			else if (error_code == SSL_ERROR_SSL)
 			{
-				MWLOG(LEV_ERROR, MOD_APL, L"Aborted SSL Connection in read_chunked_reply() with error string %s", 
+				MWLOG(LEV_ERROR, MOD_APL, L"Aborted SSL Connection in read_chunked_reply() with error string %s",
 					ERR_error_string(ERR_get_error(), NULL));
 
 				throw CMWEXCEPTION(EIDMW_SSL_PROTOCOL_ERROR);
@@ -1005,11 +1008,12 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned in
 	    r = SSL_read(ssl, buffer+bytes_read, buffer_length-bytes_read);
 	    if (r > 0 && bytes_read == 0)
 	    {
-		   
+
 		    header_len = r;
 		    char * buffer_tmp = (char*)calloc(strlen(buffer)+1, 1);
 		    strcpy(buffer_tmp, buffer);
 		    content_length = parseContentLength(buffer_tmp);
+			free(buffer_tmp);
 	    }
 		if (r == -1)
 		{
@@ -1022,7 +1026,7 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned in
 			}
 			else if (error_code == SSL_ERROR_SSL)
 			{
-				MWLOG(LEV_ERROR, MOD_APL, L"Aborted SSL Connection with error string %s", 
+				MWLOG(LEV_ERROR, MOD_APL, L"Aborted SSL Connection with error string %s",
 					ERR_error_string(ERR_get_error(), NULL));
 
 				throw CMWEXCEPTION(EIDMW_SSL_PROTOCOL_ERROR);

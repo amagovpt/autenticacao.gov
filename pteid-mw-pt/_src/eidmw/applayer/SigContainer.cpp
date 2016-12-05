@@ -3,8 +3,8 @@
  *  PTeID Middleware Project.
  *  Copyright (C) 2012-2016
  *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
- *  Signature container for XAdES signature file and associated signed file(s) - 
- *  It should be compliant with the ASIC specification TS 102 918 - 
+ *  Signature container for XAdES signature file and associated signed file(s) -
+ *  It should be compliant with the ASIC specification TS 102 918 -
  *  http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.01.01_60/ts_102918v010101p.pdf
  */
 
@@ -37,7 +37,7 @@
 namespace eIDMW
 {
 
-static const char *SIGCONTAINER_README= 
+static const char *SIGCONTAINER_README=
 "############################################################" NL
 "LEIA-ME" NL
 "" NL
@@ -103,6 +103,7 @@ static const char *SIGCONTAINER_README=
 		}
 
 		ba->Append ((const unsigned char *)p, uncompressed_size);
+		zip_archive.m_pFree(zip_archive.m_pAlloc_opaque, p);
 
 		return *ba;
 	}
@@ -128,7 +129,7 @@ static const char *SIGCONTAINER_README=
 		file.close();
 		return in;
 	}
-	
+
 	CByteArray& Container::ExtractSignature()
 	{
 		return ExtractFile(SIG_INTERNAL_PATH);
@@ -160,7 +161,7 @@ static const char *SIGCONTAINER_README=
 				mz_zip_reader_end(&zip_archive);
 				continue;
 			}
-			// Exclude from signed file checking the Signature itself 
+			// Exclude from signed file checking the Signature itself
 			// and the README file that gets added to all signed containers
 			// and the "workaround timestamp response" file
 			if (strstr(file_stat.m_filename, "META-INF") == 0
@@ -179,7 +180,7 @@ static const char *SIGCONTAINER_README=
 				SHA1((unsigned char *)p, uncomp_size, out);
 				ba->Append(out, 20);
 				tHashedFile *t = new tHashedFile();
-				
+
 				t->hash = ba;
 				t->URI = new std::string(file_stat.m_filename);
 				hashes[c] = t;
@@ -189,12 +190,12 @@ static const char *SIGCONTAINER_README=
 				free(p);
 			}
 		}
-		hashes[c] = NULL;	
+		hashes[c] = NULL;
 		*pn_files = n_files-1;
 		return hashes;
 	}
 
-	
+
 	void AddReadMe(const char *output_file)
 	{
 
@@ -237,10 +238,10 @@ static const char *SIGCONTAINER_README=
 		char *zip_entry_name= NULL;
 #ifdef WIN32
 		char *utf8_filename;
-#endif		
+#endif
 		mz_bool status;
 
-		MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() called with output_file = %s\n",output_file); 
+		MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() called with output_file = %s\n",output_file);
 
 		//Try to delete the output file first...
 		if (unlink(output_file) == 0)
@@ -253,8 +254,8 @@ static const char *SIGCONTAINER_README=
 
 		// Append the referenced files to the zip file
 		for (unsigned int  i = 0; i < num_paths; i++)
-		{   
-			absolute_path = paths[i]; 	
+		{
+			absolute_path = paths[i];
 			ptr_content = readFile(absolute_path, &file_size);
 			MWLOG(LEV_DEBUG, MOD_APL, L"Compressing %d bytes from file %s\n", file_size, absolute_path);
 
@@ -270,14 +271,14 @@ static const char *SIGCONTAINER_README=
 
 			status = mz_zip_add_mem_to_archive_file_in_place(output_file, zip_entry_name, ptr_content,
 					file_size, "", (unsigned short)0, MZ_BEST_COMPRESSION);
+
+			free(ptr_content);
 			if (!status)
 			{
 				MWLOG (LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed with argument %s",
 						zip_entry_name);
 				return;
 			}
-
-			free(ptr_content);
 		}
 
 		//Add the signature file to the container
@@ -285,12 +286,12 @@ static const char *SIGCONTAINER_README=
 		status = mz_zip_add_mem_to_archive_file_in_place(output_file, SIG_INTERNAL_PATH, sig.GetBytes(),
 				sig.Size(), "", (unsigned short)0, MZ_BEST_COMPRESSION);
 		if (!status)
-		{   
+		{
 			MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed for the signature file");
 			return ;
 		}
 
-		//Add a README file to the container 
+		//Add a README file to the container
 		AddReadMe(output_file);
 
 	}

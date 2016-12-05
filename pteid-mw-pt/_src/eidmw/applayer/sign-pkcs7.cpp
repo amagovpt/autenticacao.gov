@@ -61,7 +61,7 @@ CByteArray PteidSign(APL_Card *card, CByteArray &to_sign, bool use_sha256)
 	CByteArray output;
 
 	unsigned char sha1OID[] = {
-		0x30, 0x21, 0x30, 0x09, 0x06, 0x05, 0x2B, 0x0E, 
+		0x30, 0x21, 0x30, 0x09, 0x06, 0x05, 0x2B, 0x0E,
 		0x03, 0x02, 0x1A, 0x05, 0x00, 0x04, 0x14
 	};
 
@@ -70,10 +70,10 @@ CByteArray PteidSign(APL_Card *card, CByteArray &to_sign, bool use_sha256)
 		0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01,
 		0x05, 0x00, 0x04, 0x20 };
 
-	
+
 	//Add PKCS1-v1_5 padding (according to http://tools.ietf.org/html/rfc3447#section-9.2)
 	CByteArray to_sign_padded;
-	if (use_sha256)	
+	if (use_sha256)
 		to_sign_padded.Append(sha256OID, sizeof(sha256OID));
 	else
 		to_sign_padded.Append(sha1OID, sizeof(sha1OID));
@@ -99,7 +99,7 @@ unsigned char *dump_signature(PKCS7 * sig_struct, int *length)
 	if (signer_info != NULL)
 	{
 		PKCS7_SIGNER_INFO * s = sk_PKCS7_SIGNER_INFO_value(signer_info, 0);
-		ASN1_OCTET_STRING *signature = s->enc_digest; 
+		ASN1_OCTET_STRING *signature = s->enc_digest;
 		int len = i2d_ASN1_OCTET_STRING(signature, NULL);
 		*length = len;
 		buf = (unsigned char *)malloc(len);
@@ -108,7 +108,7 @@ unsigned char *dump_signature(PKCS7 * sig_struct, int *length)
 
 
 	}
-	
+
 	return buf;
 }
 
@@ -133,7 +133,7 @@ void add_cert_from_file(PKCS7 *p7, const char *path)
 #if OPENSSL_VERSION_NUMBER < 0x10000000L
 int PKCS7_add1_attrib_digest (PKCS7_SIGNER_INFO *si,
 		const unsigned char *md, int mdlen)
-{ 
+{
 	ASN1_OCTET_STRING *os;
 	os = ASN1_OCTET_STRING_new();
 	if (!os)
@@ -141,10 +141,10 @@ int PKCS7_add1_attrib_digest (PKCS7_SIGNER_INFO *si,
 	if (!ASN1_STRING_set(os, md, mdlen)
 			|| !PKCS7_add_signed_attribute(si, NID_pkcs9_messageDigest,
 				V_ASN1_OCTET_STRING, os))
-	{   
+	{
 		ASN1_OCTET_STRING_free(os);
 		return 0;
-	}   
+	}
 	return 1;
 }
 #endif
@@ -198,7 +198,7 @@ void add_certificate(PKCS7 *p7, CByteArray &cert)
 	X509 *x509 = d2i_X509(NULL, (const unsigned char**)&cert_data, cert.Size());
 	if (x509 == NULL)
 		goto err;
-	
+
 	PKCS7_add_certificate(p7, x509);
 
 	return;
@@ -213,7 +213,7 @@ void add_certificate(PKCS7 *p7, unsigned char * cert_data,
 	X509 *x509 = d2i_X509(NULL, (const unsigned char**)&cert_data, data_size);
 	if (x509 == NULL)
 		goto err;
-	
+
 	PKCS7_add_certificate(p7, x509);
 
 	return;
@@ -223,7 +223,7 @@ void add_certificate(PKCS7 *p7, unsigned char * cert_data,
 }
 
 
-typedef unsigned int 
+typedef unsigned int
     (*HashFunc)(unsigned char *data, unsigned long data_len, unsigned char *digest);
 
 
@@ -241,9 +241,9 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 	{
 		PKCS7* token = tsp->token;
 
-		int p7_len = i2d_PKCS7(token, NULL); 
-		unsigned char *p7_der = (unsigned char *)OPENSSL_malloc(p7_len); 
-		unsigned char *p = p7_der; 
+		int p7_len = i2d_PKCS7(token, NULL);
+		unsigned char *p7_der = (unsigned char *)OPENSSL_malloc(p7_len);
+		unsigned char *p = p7_der;
 		i2d_PKCS7(token, &p);
 
 		if (!PKCS7_type_is_signed(token))
@@ -262,7 +262,7 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 	}
 	else
 	{
-		MWLOG(LEV_ERROR, MOD_APL, 
+		MWLOG(LEV_ERROR, MOD_APL,
 			L"Error decoding timestamp token! The TSA is returning bogus data or we have proxy issues and we are getting HTML messages here\n");
 		return 1;
 	}
@@ -302,7 +302,7 @@ void add_signingCertificate(PKCS7_SIGNER_INFO *si, X509 *x509, unsigned char * c
 		goto end;
 
 	/* Adding the signing certificate id. */
-	if (!(cid = ESS_CERT_ID_new())) 
+	if (!(cid = ESS_CERT_ID_new()))
 		goto end;
 	if (!ASN1_OCTET_STRING_set(cid->hash, cert_sha256_sum,
 		sizeof(cert_sha256_sum)))
@@ -311,15 +311,15 @@ void add_signingCertificate(PKCS7_SIGNER_INFO *si, X509 *x509, unsigned char * c
 	//Add Issuer and Serial Number
 
 	if (!(cid->issuer_serial = ESS_ISSUER_SERIAL_new()))
-		goto end; 
+		goto end;
                 /* Creating general name from the certificate issuer. */
-	if (!(name = GENERAL_NAME_new())) 
-		goto end; 
+	if (!(name = GENERAL_NAME_new()))
+		goto end;
 		name->type = GEN_DIRNAME;
-	if (!(name->d.dirn = X509_NAME_dup(x509->cert_info->issuer))) 
-		goto end; 
+	if (!(name->d.dirn = X509_NAME_dup(x509->cert_info->issuer)))
+		goto end;
 	if (!sk_GENERAL_NAME_push(cid->issuer_serial->issuer, name))
-		goto end; 
+		goto end;
 
 	cid->issuer_serial->serial = X509_get_serialNumber(x509);
 
@@ -394,12 +394,12 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	int auth_attr_len = 0;
 	unsigned int len = 0;
 	APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
-	
+
 
 	/* Use stronger SHA-256 Hash with IAS 1.01 applet, SHA-1 otherwise */
 	bool use_sha256 = card->getType() == APL_CARDTYPE_PTEID_IAS101;
 	int hash_size = use_sha256 ?  SHA256_LEN : SHA1_LEN;
-	
+
 	//Function pointer to the correct hash function
 	HashFunc my_hash = use_sha256 ? &SHA256_Wrapper : &SHA1_Wrapper;
 
@@ -430,11 +430,11 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 
 	p7 = PKCS7_new();
 	PKCS7_set_type(p7, NID_pkcs7_signed);
-	 
+
 	if (!PKCS7_content_new(p7, NID_pkcs7_data))
 		goto err;
 
-	signer_info = PKCS7_add_signature(p7, x509, X509_get_pubkey(x509), 
+	signer_info = PKCS7_add_signature(p7, x509, X509_get_pubkey(x509),
 		use_sha256 ? EVP_sha256(): EVP_sha1());
 
 	if (signer_info == NULL) goto err;
@@ -446,7 +446,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	card->readFile(PTEID_FILE_CERT_ROOT_SIGN, certData2);
 
 	add_certificate(p7, certData2);
-	
+
 	//CartaodeCidadao Root CA certificates as of July 2015 (https://pki.cartaodecidadao.pt/publico/certificado/cc_ec_cidadao/)
 	cc01 = CByteArray(PTEID_CERTS[22].cert_data, PTEID_CERTS[22].cert_len);
 	cc02 = CByteArray(PTEID_CERTS[23].cert_data, PTEID_CERTS[23].cert_len);
@@ -459,7 +459,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 		add_certificate(p7, cc02);
 	else if (fwk->isIssuer(certData2, cc03))
 		add_certificate(p7, cc03);
-	else 
+	else
 		MWLOG(LEV_ERROR, MOD_APL, L"Couldn't find issuer for certificate SIGNATURE_SUBCA.The validation will be broken!");
 
 	// Add ECRaizEstado certificate
@@ -468,16 +468,16 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	PKCS7_set_detached(p7, 1);
 
 	my_hash(data, data_len, out);
-	
+
 	/* Add the signing time and digest authenticated attributes */
 	//With authenticated attributes
-	
+
 	PKCS7_add_signed_attribute(signer_info, NID_pkcs9_contentType, V_ASN1_OBJECT,
 			OBJ_nid2obj(NID_pkcs7_data));
-	   
+
 	PKCS7_add1_attrib_digest(signer_info, out, hash_size);
-	
-	//Add signing-certificate v2 attribute according to the specification ETSI TS 103 172 v2.1.1 - section 6.3.1 
+
+	//Add signing-certificate v2 attribute according to the specification ETSI TS 103 172 v2.1.1 - section 6.3.1
 	add_signingCertificate(signer_info, x509, certData.GetBytes(), certData.Size());
 
 	if (!timestamp)
@@ -513,7 +513,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 		{
 			MWLOG(LEV_ERROR, MOD_APL, L"PKCS7 Sign: Timestamp Error - response is empty\n");
 			return_code = 1;
-		
+
 		}
 		else
 		{
@@ -523,7 +523,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 
 		free(digest_tp);
 	}
-	
+
 	if (timestamp_token && tsp_token_len > 0)
 	{
 		return_code = append_tsp_token(signer_info, timestamp_token, tsp_token_len);
@@ -532,9 +532,9 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 
 	unsigned char *buf2, *p;
 
-	len = i2d_PKCS7(p7, NULL); 
-	buf2 = (unsigned char *)OPENSSL_malloc(len); 
-	p = buf2; 
+	len = i2d_PKCS7(p7, NULL);
+	buf2 = (unsigned char *)OPENSSL_malloc(len);
+	p = buf2;
 	i2d_PKCS7(p7, &p);
 
 	signature_hex_string = BinaryToHexString(buf2, len);
@@ -550,8 +550,8 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	return return_code;
 
 err:
-	X509_free(x509);
-	PKCS7_free(p7);
+	if (x509 != NULL) X509_free(x509);
+	if (p7 != NULL) PKCS7_free(p7);
 	free(attr_digest);
 	free(out);
 

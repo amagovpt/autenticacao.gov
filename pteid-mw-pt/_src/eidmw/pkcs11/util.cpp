@@ -46,7 +46,7 @@ void memwash(char *p_in, unsigned int len)
 void strcpy_n(unsigned char *to, const char *from, size_t n, char padding)
 {
    size_t c = strlen(from) > n ? n : (int) strlen(from);
-        
+
    memset((char*) to, padding, n);
    memcpy((char*) to, from, c);  //do not copy 0 char
 }
@@ -64,7 +64,7 @@ int ret = CKR_OK;
 if (_lock)
    return CKR_OK;
 
-// No CK_C_INITIALIZE_ARGS pointer, no locking 
+// No CK_C_INITIALIZE_ARGS pointer, no locking
 if (!args)
    return CKR_OK;
 
@@ -98,13 +98,13 @@ if (args->flags & CKF_OS_LOCKING_OK)
       //g_Mutex = new CMutex();
       //if (g_Mutex == NULL)
       //   ret = CKR_CANT_LOCK;
-   } 
+   }
 #undef CreateMutex
-else if (args->CreateMutex && args->DestroyMutex && args->LockMutex && args->UnlockMutex) 
+else if (args->CreateMutex && args->DestroyMutex && args->LockMutex && args->UnlockMutex)
    {
    ret = args->CreateMutex(&_lock);
    if (ret == CKR_OK)
-      _locking = args;  
+      _locking = args;
    }
 #define CreateMutex CreateMutexW
 
@@ -117,16 +117,16 @@ CK_RV p11_lock()
 //              return CKR_CRYPTOKI_NOT_INITIALIZED;
 if (!_lock)
   return CKR_OK;
-if (_locking)  
+if (_locking)
   {
-  while (_locking->LockMutex(_lock) != CKR_OK)       
+  while (_locking->LockMutex(_lock) != CKR_OK)
      ;
   }
 else
   {
   g_mutex.Lock();
   }
-return CKR_OK;
+return ((CK_RV)CKR_OK);
 }
 
 static void __p11_unlock(void *lock)
@@ -165,7 +165,7 @@ if (!(tempLock = _lock))
 _lock = NULL;
 
 /* Now unlock. On SMP machines the synchronization
-* primitives should take care of flushing cleanup 
+* primitives should take care of flushing cleanup
 * all changed data to RAM */
 __p11_unlock(tempLock);
 

@@ -66,7 +66,7 @@ catch (CMWException e)
    {
    return(cal_translate_error(WHERE, e.GetError()));
    }
-catch (...) 
+catch (...)
    {
 	lRet = -1;
 	log_trace(WHERE, "E: unknown exception thrown");
@@ -90,9 +90,9 @@ int cal_close()
    int ret = 0;
 
    if (oCardLayer)
-      delete(oCardLayer);
+      delete oCardLayer;
    if (oReadersInfo)
-      delete(oReadersInfo);
+      delete oReadersInfo;
 
    oCardLayer = NULL;
    oReadersInfo = NULL;
@@ -131,7 +131,7 @@ catch (CMWException e)
      printf ("nReaders = oReadersInfo->ReaderCount");
    return(cal_translate_error(WHERE, e.GetError()));
    }
-catch (...) 
+catch (...)
    {
 	lRet = -1;
 	log_trace(WHERE, "E: unkown exception thrown");
@@ -205,7 +205,7 @@ try
    size_t snlen = serialNrLen - snoffset > 16 ? 16 : serialNrLen - snoffset;
    //printf("off = %d, len = %d\n", snoffset, snlen);
    strcpy_n(pInfo->serialNumber, oSerialNr.c_str() + snoffset, snlen, ' ');
-   strcpy_n(pInfo->label, oReader.GetCardLabel().c_str(), 32, ' '); 
+   strcpy_n(pInfo->label, oReader.GetCardLabel().c_str(), 32, ' ');
    if(oReader.IsPinpadReader())
       pInfo->flags = CKF_PROTECTED_AUTHENTICATION_PATH;
    }
@@ -214,7 +214,7 @@ catch (CMWException e)
      printf ("oCardLayer->getReader");
    return(cal_translate_error(WHERE, e.GetError()));
    }
-catch (...) 
+catch (...)
    {
 	lRet = -1;
 	log_trace(WHERE, "E: unkown exception thrown");
@@ -251,7 +251,7 @@ pInfo->flags |= CKF_PROTECTED_AUTHENTICATION_PATH | CKF_TOKEN_INITIALIZED | CKF_
 
 cleanup:
 
-return (ret);
+return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -293,7 +293,7 @@ catch (CMWException e)
      printf ("oCardLayer->getReader\n");
    return(cal_translate_error(WHERE, e.GetError()));
    }
-catch (...) 
+catch (...)
    {
 	lRet = -1;
 	log_trace(WHERE, "E: unkown exception thrown");
@@ -315,32 +315,32 @@ if (pMechanismList == NULL)
    }
 
 /* hash algos */
-if (n++ <= *pulCount)  
+if (n++ <= *pulCount)
    pMechanismList[n-1] = CKM_MD5;
 else
    return (CKR_BUFFER_TOO_SMALL);
 
-if (n++ <= *pulCount)  
+if (n++ <= *pulCount)
    pMechanismList[n-1] = CKM_SHA_1;
 else
    return (CKR_BUFFER_TOO_SMALL);
 
-if (n++ <= *pulCount)  
+if (n++ <= *pulCount)
    pMechanismList[n-1] = CKM_SHA256;
 else
    return (CKR_BUFFER_TOO_SMALL);
 
-if (n++ <= *pulCount)  
+if (n++ <= *pulCount)
    pMechanismList[n-1] = CKM_SHA384;
 else
    return (CKR_BUFFER_TOO_SMALL);
 
-if (n++ <= *pulCount)  
-   pMechanismList[n-1] = CKM_SHA512; 
+if (n++ <= *pulCount)
+   pMechanismList[n-1] = CKM_SHA512;
 else
    return (CKR_BUFFER_TOO_SMALL);
 
-if (n++ <= *pulCount)  
+if (n++ <= *pulCount)
    pMechanismList[n-1] = CKM_RIPEMD160;
 else
    return (CKR_BUFFER_TOO_SMALL);
@@ -348,49 +348,49 @@ else
 /* sign algos */
 if (algos & SIGN_ALGO_RSA_PKCS)
    {
-   if (n++ <= *pulCount)  
+   if (n++ <= *pulCount)
       pMechanismList[n-1] = CKM_RSA_PKCS;
    else
       return (CKR_BUFFER_TOO_SMALL);
    }
 if (algos & SIGN_ALGO_MD5_RSA_PKCS)
    {
-   if (n++ <= *pulCount)  
+   if (n++ <= *pulCount)
       pMechanismList[n-1] = CKM_MD5_RSA_PKCS;
    else
       return (CKR_BUFFER_TOO_SMALL);
    }
 if (algos & SIGN_ALGO_SHA1_RSA_PKCS)
    {
-   if (n++ <= *pulCount)  
+   if (n++ <= *pulCount)
       pMechanismList[n-1] = CKM_SHA1_RSA_PKCS;
    else
       return (CKR_BUFFER_TOO_SMALL);
    }
 if (algos & SIGN_ALGO_SHA256_RSA_PKCS)
    {
-   if (n++ <= *pulCount)  
+   if (n++ <= *pulCount)
       pMechanismList[n-1] = CKM_SHA256_RSA_PKCS;
    else
       return (CKR_BUFFER_TOO_SMALL);
    }
 if (algos & SIGN_ALGO_SHA384_RSA_PKCS)
    {
-   if (n++ <= *pulCount)  
+   if (n++ <= *pulCount)
       pMechanismList[n-1] = CKM_SHA384_RSA_PKCS;
    else
       return (CKR_BUFFER_TOO_SMALL);
    }
 if (algos & SIGN_ALGO_SHA512_RSA_PKCS)
    {
-   if (n++ <= *pulCount)  
+   if (n++ <= *pulCount)
       pMechanismList[n-1] = CKM_SHA512_RSA_PKCS;
    else
       return (CKR_BUFFER_TOO_SMALL);
    }
 if (algos & SIGN_ALGO_RIPEMD160_RSA_PKCS)
    {
-   if (n++ <= *pulCount)  
+   if (n++ <= *pulCount)
       pMechanismList[n-1] = CKM_RIPEMD160_RSA_PKCS;
    else
       return (CKR_BUFFER_TOO_SMALL);
@@ -410,7 +410,7 @@ P11_MECHANISM_INFO table[] = CAL_MECHANISM_TABLE;
 P11_MECHANISM_INFO *info = NULL;
 int i;
 
-if (pInfo == NULL_PTR) 
+if (pInfo == NULL_PTR)
    {
    ret = CKR_ARGUMENTS_BAD;
    goto cleanup;
@@ -502,7 +502,7 @@ if (pSlot->connect < 1)
 	printf ("pSlot->name;");
       return(cal_translate_error(WHERE, e.GetError()));
       }
-   catch (...) 
+   catch (...)
       {
 	   lRet = -1;
       return (CKR_FUNCTION_FAILED);
@@ -539,7 +539,7 @@ CK_CERTIFICATE_TYPE certType = CKC_X_509;
 //printf("::::: CREATING INIT OBJECTS!!! :::::\n");
 
 //this function will initialize objects as they are valid for the token
-//this function does not read the actual values but enables an application to 
+//this function does not read the actual values but enables an application to
 //search for an attribute
 //attributes are only read from the token as needed and thereafter they are cached
 //they remain valid as long as the connection with the smartcard remains valid
@@ -566,11 +566,11 @@ try
       /***************/
       tPrivKey key = oReader.GetPrivKey(i);
       id = (CK_ULONG) key.ulID;
-//      sprintf_s(clabel,sizeof(clabel), "Private Key %d (%s)", i+1, key.csLabel.c_str()); 
-      sprintf_s(clabel,sizeof(clabel), "%s", key.csLabel.c_str()); 
+//      sprintf_s(clabel,sizeof(clabel), "Private Key %d (%s)", i+1, key.csLabel.c_str());
+      sprintf_s(clabel,sizeof(clabel), "%s", key.csLabel.c_str());
 
       ret = p11_add_slot_object(pSlot, PRV_KEY, sizeof(PRV_KEY)/sizeof(CK_ATTRIBUTE), CK_TRUE, CKO_PRIVATE_KEY, id, CK_TRUE, &hObject);
-      if (ret) 
+      if (ret)
          goto cleanup;
 
       //put some other attribute items allready so the key can be used for signing
@@ -589,7 +589,7 @@ try
          ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_SIGN, (CK_VOID_PTR) &btrue, sizeof(btrue));
          if (ret) goto cleanup;
          }
-     
+
       //TODO error in cal, size is in bits allready
       modsize = key.ulKeyLenBytes  * 8;
       ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_MODULUS_BITS, (CK_VOID_PTR) &modsize, sizeof(CK_ULONG));
@@ -603,11 +603,11 @@ try
       /**************************************************/
       ret = p11_add_slot_object(pSlot, PUB_KEY, sizeof(PUB_KEY)/sizeof(CK_ATTRIBUTE), CK_TRUE, CKO_PUBLIC_KEY, id, CK_FALSE, &hObject);
       if (ret) goto cleanup;
-      
+
       pObject = p11_get_slot_object(pSlot, hObject);
 
-//      sprintf_s(clabel,sizeof(clabel), "Public Key %d (%s)", i+1, key.csLabel.c_str()); 
-      sprintf_s(clabel,sizeof(clabel), "%s", key.csLabel.c_str()); 
+//      sprintf_s(clabel,sizeof(clabel), "Public Key %d (%s)", i+1, key.csLabel.c_str());
+      sprintf_s(clabel,sizeof(clabel), "%s", key.csLabel.c_str());
       ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_LABEL, (CK_VOID_PTR) clabel, (CK_ULONG)strlen(clabel));
       if (ret) goto cleanup;
       ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_KEY_TYPE, (CK_VOID_PTR) &keytype, sizeof(CK_KEY_TYPE));
@@ -620,11 +620,11 @@ try
    for (i=0; i < oReader.CertCount(); i++)
       {
       id = (CK_ULONG) oReader.GetCert(i).ulID;
-//      sprintf_s(clabel,sizeof(clabel), "Certificate %d (%s)", i+1, oReader.GetCert(i).csLabel.c_str()); 
-      sprintf_s(clabel,sizeof(clabel), "%s", oReader.GetCert(i).csLabel.c_str()); 
+//      sprintf_s(clabel,sizeof(clabel), "Certificate %d (%s)", i+1, oReader.GetCert(i).csLabel.c_str());
+      sprintf_s(clabel,sizeof(clabel), "%s", oReader.GetCert(i).csLabel.c_str());
 
       ret = p11_add_slot_object(pSlot, CERTIFICATE, sizeof(CERTIFICATE)/sizeof(CK_ATTRIBUTE), CK_TRUE, CKO_CERTIFICATE, id, CK_FALSE, &hObject);
-      if (ret) 
+      if (ret)
          goto cleanup;
       pObject = p11_get_slot_object(pSlot, hObject);
 
@@ -639,7 +639,7 @@ catch (CMWException e)
      printf ("cal.cpp\n");
    return(cal_translate_error(WHERE, e.GetError()));
    }
-catch (...) 
+catch (...)
    {
 	lRet = -1;
 	log_trace(WHERE, "E: unkown exception thrown");
@@ -677,7 +677,7 @@ std::string szReader = pSlot->name;
 memset(cpin, 0, sizeof(cpin));
 if (pin && (l_pin < sizeof(cpin)))
    memcpy(cpin, pin, l_pin);
-   
+
 std::string csPin = cpin;
 unsigned long ulRemaining = 0;
 unsigned long ulPinIdx = 0;
@@ -698,7 +698,7 @@ catch (CMWException e)
    {
    return(cal_translate_error(WHERE, e.GetError()));
    }
-catch (...) 
+catch (...)
    {
 	lRet = -1;
 	log_trace(WHERE, "E: unkown exception thrown");
@@ -907,7 +907,7 @@ catch (CMWException e)
    {
    return(cal_translate_error(WHERE, e.GetError()));
    }
-catch (...) 
+catch (...)
    {
 	lRet = -1;
 	log_trace(WHERE, "E: unkown exception thrown");
@@ -977,12 +977,12 @@ try
       case CKM_SHA512_RSA_PKCS:        algo = SIGN_ALGO_SHA512_RSA_PKCS;     break;
       case CKM_RIPEMD160:
       case CKM_RIPEMD160_RSA_PKCS:     algo = SIGN_ALGO_RIPEMD160_RSA_PKCS;  break;
-      default: 
+      default:
          ret = CKR_MECHANISM_INVALID;
-         goto cleanup;            
+         goto cleanup;
       }
 
-   if (algo == SIGN_ALGO_RSA_PKCS && l_in == 51 
+   if (algo == SIGN_ALGO_RSA_PKCS && l_in == 51
 		  && oReader.GetCardType() == CARD_PTEID_IAS07)
    {
 	//Strip away the PKCS-1 padding (first 19 bytes)
@@ -997,7 +997,7 @@ catch (CMWException &e)
 {
    return(cal_translate_error(WHERE, e.GetError()));
 }
-catch (...) 
+catch (...)
 {
 	lRet = -1;
 	log_trace(WHERE, "E: unknown exception thrown");
@@ -1064,7 +1064,7 @@ catch (CMWException e)
    {
    return(cal_translate_error(WHERE, e.GetError()));
    }
-catch (...) 
+catch (...)
    {
 	lRet = -1;
 	log_trace(WHERE, "E: unkown exception thrown");
@@ -1094,9 +1094,9 @@ if (pSlot == NULL)
    return (CKR_SLOT_ID_INVALID);
    }
 
-try 
+try
    {
-   std::string reader = pSlot->name;   
+   std::string reader = pSlot->name;
 	CReader &oReader = oCardLayer->getReader(reader);
    status = cal_map_status(oReader.Status(true));
 
@@ -1134,13 +1134,13 @@ catch (CMWException e)
    {
    return(cal_translate_error(WHERE, e.GetError()));
    }
-catch (...) 
+catch (...)
    {
 	lRet = -1;
 	log_trace(WHERE, "E: unkown exception thrown");
    return (CKR_SESSION_HANDLE_INVALID);
 	}
-return ((int)status);   
+return ((int)status);
 }
 #undef WHERE
 
@@ -1155,7 +1155,7 @@ bool calevent = false;
 int first = 1;
 P11_SLOT *pSlot = NULL;
 
-try 
+try
   {
   if (block)
     {
@@ -1206,7 +1206,7 @@ catch (CMWException e)
    {
    CLEANUP(cal_translate_error(WHERE, e.GetError()));
    }
-catch (...) 
+catch (...)
    {
    lRet = -1;
    log_trace(WHERE, "E: unkown exception thrown");
@@ -1246,9 +1246,9 @@ switch(err)
    {
    case EIDMW_OK:                            return(0);                    break;
    /** A function parameter has an unexpected value (general) */
-   case EIDMW_ERR_PARAM_BAD:                 return(CKR_FUNCTION_FAILED);  break;//return(CKR_ARGUMENTS_BAD);                                                
+   case EIDMW_ERR_PARAM_BAD:                 return(CKR_FUNCTION_FAILED);  break;//return(CKR_ARGUMENTS_BAD);
    /** A function parameter exceeded the allowed range */
-   case EIDMW_ERR_PARAM_RANGE:               return(CKR_FUNCTION_FAILED);  break;//return(CKR_ARGUMENTS_BAD);                                                
+   case EIDMW_ERR_PARAM_RANGE:               return(CKR_FUNCTION_FAILED);  break;//return(CKR_ARGUMENTS_BAD);
    /** Bad file path (invalid characters, length no multiple of 4) */
    case EIDMW_ERR_BAD_PATH:                  return(CKR_FUNCTION_FAILED);  break;
    /** Unknown/unsupported algorithm */
@@ -1258,7 +1258,7 @@ switch(err)
    /** PIN not allowed for this card (invalid characters, too short/long) */
    case EIDMW_ERR_PIN_FORMAT:                return(CKR_FUNCTION_FAILED);  break;
 
-   // Card errors                                                                                                                                            
+   // Card errors
    /** Generic card error */
    case EIDMW_ERR_CARD:                      return(CKR_DEVICE_ERROR);     break;
    /** Not Authenticated (no PIN specified) */
@@ -1282,7 +1282,7 @@ switch(err)
    /** Card not activated */
    case EIDMW_ERR_NOT_ACTIVATED:             return(CKR_DEVICE_ERROR);     break;
 
-   // Reader errors                                                                                                                                          
+   // Reader errors
    /** Error communicating with the card */
    case EIDMW_ERR_CARD_COMM:                 return(CKR_DEVICE_ERROR);     break;
    /** No reader has been found */
@@ -1292,7 +1292,7 @@ switch(err)
    /** A card is present but we can't connect in a normal way (e.g. SIS card) */
    case EIDMW_ERR_CANT_CONNECT:              return(CKR_DEVICE_ERROR);     break;
 
-   // Internal errors (caused by the middleware)                                                                                                             
+   // Internal errors (caused by the middleware)
    /** An internal limit has been reached */
    case EIDMW_ERR_LIMIT:                     return(CKR_DEVICE_ERROR);     break;
    /** An internal check failed */
@@ -1315,7 +1315,7 @@ switch(err)
    case EIDMW_CONF:                          return(CKR_GENERAL_ERROR);     break;
 
 
-   // User errors/events                                                                                                                                     
+   // User errors/events
    /** User pressed Cancel in PIN dialog */
    case EIDMW_ERR_PIN_CANCEL:                return(CKR_FUNCTION_CANCELED); break;
    /** Pinpad timeout */
@@ -1325,12 +1325,12 @@ switch(err)
    /** A PIN with invalid length or format was entered */
    case EIDMW_WRONG_PIN_FORMAT:              return(CKR_FUNCTION_FAILED);  break;
 
-   // Parser errors                                                                                                                                          
+   // Parser errors
    /** Could not find expected elements in parsed ASN.1 vector */
    case EIDMW_WRONG_ASN1_FORMAT:             return(CKR_FUNCTION_FAILED);  break;
 
-   // I/O errors                                                                                                                                             
-   // errors modelled on the definitions in errno.h                                                                                                          
+   // I/O errors
+   // errors modelled on the definitions in errno.h
    /** File could not be opened */
    case EIDMW_FILE_NOT_OPENED:               return(CKR_FUNCTION_FAILED);  break;
    /** Search permission is denied for a component of the path prefix of path. */
@@ -1354,7 +1354,7 @@ switch(err)
    /** Call of the Logger after destruct time */
    case EIDMW_ERR_LOGGER_APPLEAVING:         return(CKR_FUNCTION_FAILED);  break;
 
-   // SDK error                                                                                                                                              
+   // SDK error
    /** The document type is unknown for this card */
    case EIDMW_ERR_DOCTYPE_UNKNOWN:           return(CKR_FUNCTION_FAILED);  break;
    /** The card type asked doesn't correspond with the real card type */
@@ -1366,7 +1366,7 @@ switch(err)
    /** No release of SDK object has been done before closing the application */
    case EIDMW_ERR_RELEASE_NEEDED:            return(CKR_FUNCTION_FAILED);  break;
 
-   // Errors in system calls                                                                                                     
+   // Errors in system calls
    /** a system call returned an error */
    case EIDMW_ERR_SYSTEM:                    return(CKR_GENERAL_ERROR);  break;
    /** a signal function returned an error */

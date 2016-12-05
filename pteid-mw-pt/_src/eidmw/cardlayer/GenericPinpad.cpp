@@ -28,7 +28,7 @@
 
 namespace eIDMW
 {
-	
+
 
 	GenericPinpad::GenericPinpad(CContext *poContext, SCARDHANDLE hCard,
 			const std::string & csReader): m_poContext(poContext), m_csReader(csReader), m_hCard(hCard)
@@ -50,7 +50,7 @@ namespace eIDMW
 		// READER FIX:
 		// The SPR532 reader wants this value to be as for BCD
 		const char *csReader = m_csReader.c_str();
-		if ( (m_usReaderFirmVers != 0x0000) && (m_usReaderFirmVers < 0x0506) && 
+		if ( (m_usReaderFirmVers != 0x0000) && (m_usReaderFirmVers < 0x0506) &&
 			(strstr(csReader, "SPRx32 USB") != NULL) )
 		{
 			return 0x00 | 0x00 | 0x00 | 0x01;
@@ -63,14 +63,14 @@ namespace eIDMW
 bool GenericPinpad::IsGemsafe(CByteArray &atr)
 {
 
-	char * GemsafeATRs[] = 
+	char * GemsafeATRs[] =
 	{
 	    "\x3B\x7D\x95\x00\x00\x80\x31\x80\x65\xb0\x83\x11\x00\xc8\x83\x00\x90\x00",
 	    "\x3B\x7D\x95\x00\x00\x80\x31\x80\x65\xb0\x83\x11\x00\xa9\x83\x00\x90\x00",
 	    "\x3B\x7D\x95\x00\x00\x80\x31\x80\x65\xb0\x83\x11\x00\xc8\x83\x00",
 	    "\x3B\x7D\x95\x00\x00\x80\x31\x80\x65\xB0\x83\x11\xC0\xA9\x83\x00\x90\x00",
 	    "\x3B\xFF\x96\x00\x00\x81\x31\x80\x43\x80\x31\x80\x65\xB0\x85\x03\x00\xEF\x12\x0F\xFF\x82\x90\x00\x67",
-	    "\x3B\x7D\x95\x00\x00\x80\x31\x80\x65\xb0\x83\x11\x00\xa9\x83\x00" 
+	    "\x3B\x7D\x95\x00\x00\x80\x31\x80\x65\xb0\x83\x11\x00\xa9\x83\x00"
 
 	};
 	int i = 0;
@@ -97,7 +97,7 @@ unsigned char GenericPinpad::ToPinBlockString(const tPin & pin)
 	case PIN_ENC_BCD:
 		return (unsigned char ) pin.ulStoredLen;
 	case PIN_ENC_GP:
-		return 0x40 | (unsigned char ) (pin.ulStoredLen - 1);
+		return ( ((unsigned char)(0x40)) | ((unsigned char ) (pin.ulStoredLen - 1)));
 	}
 	return (unsigned char ) pin.ulStoredLen;
 }
@@ -216,7 +216,7 @@ CByteArray GenericPinpad::PinCmd2(tPinOperation operation,
 	EIDMW_PP_CHANGE_CCID xChangeCmd;
 	unsigned long ulChangeCmdLen;
 	//Gemsafe and IAS need different parameters for VERIFY control interaction
-	bool includes_verify = oAPDU.Size() == 21; 
+	bool includes_verify = oAPDU.Size() == 21;
 
 	memset(&xChangeCmd, 0, sizeof(xChangeCmd));
 	xChangeCmd.bTimerOut = 30;
@@ -258,7 +258,7 @@ bool GenericPinpad::ShowDlg(unsigned char pinpadOperation, unsigned char ucPinty
 	const std::string & csPinLabel, const std::string & csReader,
 	unsigned long *pulDlgHandle)
 {
-	
+
 	const char *csMesg = "";
 	DlgPinUsage dlgUsage = DLG_PIN_UNKNOWN;
 	switch(ucPintype)
@@ -276,7 +276,7 @@ bool GenericPinpad::ShowDlg(unsigned char pinpadOperation, unsigned char ucPinty
 		case EIDMW_PP_OP_UNBLOCK_CHANGE: dlgOperation = DLG_PIN_OP_UNBLOCK_CHANGE; break;
 		default: throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	}
-	std::wstring wideReader = utilStringWiden(csReader);	
+	std::wstring wideReader = utilStringWiden(csReader);
 	std::wstring widePinLabel = utilStringWiden(csPinLabel);
 	std::wstring wideMesg = utilStringWiden(csMesg);
 	return EIDMW_OK == DlgDisplayPinpadInfo(dlgOperation,

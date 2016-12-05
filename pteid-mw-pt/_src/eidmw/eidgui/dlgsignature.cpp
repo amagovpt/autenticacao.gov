@@ -223,8 +223,10 @@ void dlgSignature::on_pbSign_clicked ( void )
 		savefilepath = QFileDialog::getSaveFileName(this, tr("Save File"), 
 				nativedafaultpath, tr("XAdES Signatures (*.ccsigned)"));
 
-	if (savefilepath.isNull() || savefilepath.isEmpty())
+	if (savefilepath.isNull() || savefilepath.isEmpty()) {
+		delete[] files_to_sign;
 		return;
+	}
 
 	QString native_path = QDir::toNativeSeparators(savefilepath);
 
@@ -349,6 +351,7 @@ PTEID_EIDCard& dlgSignature::getNewCard()
 
 					}
 			}
+			delete(&ReaderContext);
 		}
 }
 

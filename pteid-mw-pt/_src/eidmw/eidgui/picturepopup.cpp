@@ -68,19 +68,19 @@ PicturePopup::~PicturePopup()
 	if(m_pTimerAppear)
 	{
 		m_pTimerAppear->stop();
-		delete(m_pTimerAppear);
+		delete m_pTimerAppear;
 		m_pTimerAppear = NULL;
 	}
 	if(m_pTimerDisappear)
 	{
 		m_pTimerDisappear->stop();
-		delete(m_pTimerDisappear);
+		delete m_pTimerDisappear;
 		m_pTimerDisappear = NULL;
 	}
 	if(m_pTimerWait)
 	{
 		m_pTimerWait->stop();
-		delete(m_pTimerWait);
+		delete m_pTimerWait;
 		m_pTimerWait = NULL;
 	}
 }
@@ -103,7 +103,7 @@ void PicturePopup::popUp(  const QString & strCaption
 	unsigned int nDesktopWidth  = 0;
 	unsigned int nScreenWidth   = 0;
 	unsigned int nScreenHeight  = 0;
-	
+
 	QRect rcDesktop;
 	QRect rcScreen;
 	m_strCaption	= strCaption;

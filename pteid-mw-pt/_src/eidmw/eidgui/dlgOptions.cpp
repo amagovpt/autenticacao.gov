@@ -24,11 +24,11 @@
 
 using namespace eIDMW;
 
-dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent ) 
+dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 	: QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
 	, m_Settings(settings)
-{	
-	ui.setupUi(this); 
+{
+	ui.setupUi(this);
 	ui.chbAutoCardReading->setChecked( settings.getAutoCardReading() );
 	ui.chbWinAutoStart->setChecked( settings.getAutoStartup() );
 
@@ -72,10 +72,10 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 		ui.label_proxyPwd->setEnabled(false);
 		ui.lineEdit_proxyHost->setEnabled(false);
 		ui.spinBox->setEnabled(false);
-		ui.checkBox_proxyAuth->setEnabled(false);	
+		ui.checkBox_proxyAuth->setEnabled(false);
 	}
 
-#ifndef WIN32 
+#ifndef WIN32
 //#ifndef __APPLE__
 	ui.chbWinAutoStart->hide();
 
@@ -88,7 +88,7 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 	ui.groupBox_notifications->setGeometry(pos_1);
 
 	QRect pos = ui.groupBox_proxy->geometry();
-	
+
 	pos.translate(0, -90);
 	ui.groupBox_proxy->setGeometry(pos);
 
@@ -128,7 +128,7 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 }
 
 dlgOptions::~dlgOptions()
-{	
+{
 }
 
 void dlgOptions::on_chbShowPicture_toggled( bool bChecked )
@@ -189,7 +189,7 @@ void dlgOptions::on_checkBox_proxy_toggled(bool checked)
 
 void dlgOptions::on_checkBox_proxyAuth_toggled(bool checked)
 {
-	
+
 	ui.lineEdit_proxyUser->setEnabled(checked);
 	ui.lineEdit_proxyPwd->setEnabled(checked);
 	ui.label_proxyUser->setEnabled(checked);
@@ -215,6 +215,7 @@ void dlgOptions::on_okButton_clicked()
 
 			msgBox->setModal(true);
 			msgBox->show();
+			delete msgBox;
 			return;
 	}
 
@@ -223,7 +224,7 @@ void dlgOptions::on_okButton_clicked()
 		m_Settings.setProxyHost(getProxyHost());
 		m_Settings.setProxyPort(getProxyPort());
 
-		if (!ui.lineEdit_proxyUser->text().isEmpty() && 
+		if (!ui.lineEdit_proxyUser->text().isEmpty() &&
 			!ui.lineEdit_proxyPwd->text().isEmpty())
 		{
 			m_Settings.setProxyUsername(ui.lineEdit_proxyUser->text());
@@ -239,6 +240,7 @@ void dlgOptions::on_okButton_clicked()
 
 			msgBox->setModal(true);
 			msgBox->show();
+			delete msgBox;
 			return;
 		}
 

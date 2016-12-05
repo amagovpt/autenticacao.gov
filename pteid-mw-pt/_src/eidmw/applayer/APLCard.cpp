@@ -122,7 +122,7 @@ CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey)
 	tPrivKey signing_key;
     //Private key IDs can be found with pkcs15-tool --list-keys from OpenSC package
 	if (signatureKey)
-		signing_key = m_reader->getCalReader()->GetPrivKeyByID(0x46); 
+		signing_key = m_reader->getCalReader()->GetPrivKeyByID(0x46);
 	else
 		signing_key = m_reader->getCalReader()->GetPrivKeyByID(0x45);
 
@@ -140,7 +140,7 @@ CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey, bool use_
 	tPrivKey signing_key;
     //Private key IDs can be found with pkcs15-tool --list-keys from OpenSC package
 	if (signatureKey)
-		signing_key = m_reader->getCalReader()->GetPrivKeyByID(0x46); 
+		signing_key = m_reader->getCalReader()->GetPrivKeyByID(0x46);
 	else
 		signing_key = m_reader->getCalReader()->GetPrivKeyByID(0x45);
 
@@ -157,7 +157,7 @@ bool checkExistingFiles(const char **files, unsigned int n_paths)
 {
 	for(unsigned int i=0; i != n_paths; i++)
 	{
-		if (!CPathUtil::existFile(files[i]))	
+		if (!CPathUtil::existFile(files[i]))
 			return false;
 	}
 
@@ -182,7 +182,7 @@ CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const
 {
 	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-	
+
 	XadesSignature sig(this);
 
 	CByteArray &signature = sig.SignXades(paths, n_paths);
@@ -198,7 +198,7 @@ typedef void (* t_callback_addr) (void*, int);
 
 /*
 	Implements the address change protocol as implemented by the Portuguese State hosted website
-	It conditionally executes some card interactions and sends different parameters to the server 
+	It conditionally executes some card interactions and sends different parameters to the server
 	depending on the version of the smart card applet, IAS 0.7 or IAS 1.01.
 	Technical specification: the confidential document "Change Address Technical Solution" by Zetes version 5.3
 */
@@ -209,7 +209,7 @@ void APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 	StartWriteResponse * resp3 = NULL;
 	char *serialNumber = NULL;
 	char *resp_internal_auth = NULL, *resp_mse = NULL;
-	
+
 	DHParams dh_params;
 
 	if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
@@ -225,7 +225,7 @@ void APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 	callback(callback_data, 10);
 
 	DHParamsResponse *p1 = conn.do_SAM_1stpost(&dh_params, secret_code, process, serialNumber);
-	
+
 	callback(callback_data, 25);
 
 	if (p1->cv_ifd_aut == NULL)
@@ -244,7 +244,7 @@ void APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 		delete p1;
 		free(kicc);
 
-		throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);	
+		throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
 	}
 
 	char * CHR = sam_helper.getPK_IFD_AUT(p1->cv_ifd_aut);
@@ -290,7 +290,7 @@ void APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 
 			callback(callback_data, 90);
 
-			// Report the results to the server for verification purposes, 
+			// Report the results to the server for verification purposes,
 			// we only consider the Address Change successful if the server returns its "ACK"
 			if (!conn.do_SAM_4thpost(start_write_resp))
 				throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
@@ -382,12 +382,12 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 
 		files_to_sign[0] = paths[i];
 		CByteArray &signature = sig.SignXades(files_to_sign, 1);
-		
+
 		const char *output_file = generateFinalPath(output_dir, paths[i]);
 		StoreSignatureToDisk (signature, files_to_sign, 1, output_file);
 		delete []output_file;
 
-		//Set SSO on after first iteration to avoid more PinCmd() user interaction for the remaining 
+		//Set SSO on after first iteration to avoid more PinCmd() user interaction for the remaining
 		// iterations
 		if (i==0)
 			getCalReader()->setSSO(true);
@@ -402,10 +402,10 @@ CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, cons
 {
 	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-	
+
 	XadesSignature sig(this);
 	sig.enableTimestamp();
-	
+
 	CByteArray &signature = sig.SignXades(paths, n_paths);
 
 	//Write zip container signature and referenced files in zip container
@@ -421,7 +421,7 @@ CByteArray &APL_Card::SignXadesA(const char ** paths, unsigned int n_paths, cons
 
 	XadesSignature sig(this);
 	sig.enableLongTermValidation();
-	
+
 	CByteArray &signature = sig.SignXades(paths, n_paths);
 
 	//Write zip container signature and referenced files in zip container
@@ -452,7 +452,7 @@ APL_SmartCard::APL_SmartCard(APL_ReaderContext *reader):APL_Card(reader)
 	m_certs=NULL;
 	m_fileinfo=NULL;
 
-	APL_Config conf_allowTest(CConfig::EIDMW_CONFIG_PARAM_CERTVALID_ALLOWTESTC);     
+	APL_Config conf_allowTest(CConfig::EIDMW_CONFIG_PARAM_CERTVALID_ALLOWTESTC);
 	m_allowTestParam = conf_allowTest.getLong()?true:false;
 
 	m_allowTestAsked=false;
@@ -522,16 +522,16 @@ APL_CardFile_Info *APL_SmartCard::getFileInfo()
 
 void APL_SmartCard::getInfo(CByteArray &info)
 {
-	
+
 	BEGIN_CAL_OPERATION(m_reader)
 		info=m_reader->getCalReader()->GetInfo();
 	END_CAL_OPERATION(m_reader)
-	
+
 }
 
 void APL_SmartCard::selectApplication(const CByteArray &applicationId) const
 {
-	
+
 	BEGIN_CAL_OPERATION(m_reader)
 		m_reader->getCalReader()->SelectApplication(applicationId);
 	END_CAL_OPERATION(m_reader)
@@ -575,8 +575,8 @@ bool APL_SmartCard::writeFile(const char *fileID, const CByteArray &out, APL_Pin
 	return APL_Card::writeFile(fileID, out, ulOffset);
 }
 
-unsigned long APL_SmartCard::pinCount() 
-{ 
+unsigned long APL_SmartCard::pinCount()
+{
 
 	if(m_pinCount==COUNT_UNDEF)
 	{
@@ -611,10 +611,10 @@ APL_Pins *APL_SmartCard::getPins()
 
 tPin APL_SmartCard::getPin(unsigned long ulIndex)
 {
-	
+
 	if(ulIndex<0 || ulIndex>=pinCount())
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-	
+
 	tPin out;
 
 	BEGIN_CAL_OPERATION(m_reader)
@@ -625,7 +625,7 @@ tPin APL_SmartCard::getPin(unsigned long ulIndex)
 }
 
 unsigned long APL_SmartCard::pinStatus(const tPin &Pin)
-{	
+{
 
 	unsigned long out=0;
 
@@ -682,6 +682,7 @@ APL_Certifs *APL_SmartCard::getCertificates()
 			{
 				APL_Certif *cert=NULL;
 				cert=m_certs->getCertFromCard(ulIndex);
+				delete cert;
 			}
 		}
 	}

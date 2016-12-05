@@ -130,8 +130,10 @@ bool SignPDF_wrapper(PTEID_EIDCard * card, const char * file_to_sign, QString &o
 	}
 	catch(...)
 	{
+		free(output_path);
 		return false;
 	}
+	free(output_path);
 	return true;
 }
 
@@ -175,7 +177,7 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
 		    pdialog->exec();
 		    res = new_thread.result();
-
+			free(cpychar);
         }
         else
 		{
@@ -191,7 +193,9 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
             nativepdfpath = QDir::toNativeSeparators(pdffilepath);
 
-            res = drawpdf(cdata, QStringToCString(nativepdfpath));
+			char *nativepdfpathCString = QStringToCString(nativepdfpath);
+            res = drawpdf(cdata, nativepdfpathCString);
+			delete[] nativepdfpathCString;
         }
     }
 	catch (PTEID_Exception &e) {
@@ -348,6 +352,7 @@ void dlgPrint::ShowSuccessMsgBox()
 	QString msg = tr("PDF file successfully generated");
 	QMessageBox *msgBoxp = new QMessageBox(QMessageBox::Information, caption, msg, 0, this);
 	msgBoxp->exec();
+	delete msgBoxp;
 }
 
 void dlgPrint::ShowErrorMsgBox()

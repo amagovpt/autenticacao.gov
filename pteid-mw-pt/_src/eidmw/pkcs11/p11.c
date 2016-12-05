@@ -190,7 +190,7 @@ for (i=0; (i < nSessions) && (pSession = &gpSessions[i]) ;i++)
 
 cleanup:
 
-return (ret);
+return ((CK_RV)ret);
 }
 #undef WHERE
 

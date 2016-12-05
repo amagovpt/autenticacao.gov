@@ -4,7 +4,7 @@
 **  Copyright (C) 2011-2012
 **  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
 **
-**  XAdES and XAdES-T signature generator and validator 
+**  XAdES and XAdES-T signature generator and validator
 **
 */
 
@@ -111,12 +111,12 @@ namespace eIDMW
 	{
 
 		std::ifstream file(file_path, std::ios::binary|std::ios::ate);
-		char * in; 
+		char * in;
 		unsigned char out[SHA1_LEN];
 
-		int size = -1; 
+		int size = -1;
 		if (file.is_open())
-		{   
+		{
 			size = file.tellg();
 			in = new char [size];
 			file.seekg (0, std::ios::beg);
@@ -126,7 +126,7 @@ namespace eIDMW
 
 		//Special-case empty files
 		if (size == 0)
-		{   
+		{
 			in = new char[SHA1_LEN];
 
 		}
@@ -150,7 +150,7 @@ namespace eIDMW
 
 	//Implemented in sign-pkcs7.cpp should be moved to a common file though
 	unsigned int SHA256_Wrapper(unsigned char *data, unsigned long data_len, unsigned char *digest);
-	
+
 	CByteArray XadesSignature::HashFile(const char *filename)
 	{
 		const int BUFSIZE = 4*1024;
@@ -279,9 +279,9 @@ std::basic_string<XMLCh> createSignedPropertiesURI()
 	id_buffer.append(XMLString::transcode("#"));
 	id_buffer.append(XMLString::transcode(SIGNED_PROPS_ID));
 
-	return id_buffer;	
+	return id_buffer;
 }
-	
+
     char *getUtcTime()
     {
     	char * date_outstr = (char*)malloc(100);
@@ -337,7 +337,7 @@ std::basic_string<XMLCh> createSignedPropertiesURI()
 		//Add SigningCertificate Element containing digest, serial and issuer
 		std::string issuer = x509_name_toString(X509_get_issuer_name(cert));
 		std::string serial = x509_getSerial(cert);
-		
+
 		XMLCh *CertDigest = EncodeToBase64XMLCh(cert_digest, SHA256_LEN);
 
 		((DOMElement *)n_CertDigestMeth)->setAttribute(XMLString::transcode("Algorithm"),
@@ -358,7 +358,7 @@ std::basic_string<XMLCh> createSignedPropertiesURI()
 	}
 
 
-	void XadesSignature::addCardSignature(unsigned char *signature, unsigned int siglen, XERCES_NS DOMDocument *doc) 
+	void XadesSignature::addCardSignature(unsigned char *signature, unsigned int siglen, XERCES_NS DOMDocument *doc)
 	{
 
 		char * base64Sig = Base64Encode(signature, siglen);
@@ -391,11 +391,11 @@ std::basic_string<XMLCh> createSignedPropertiesURI()
 
 	}
 
-	DOMNode *XadesSignature::addSignatureProperties(DSIGSignature *sig, XMLCh *sig_id, CByteArray &signing_cert_data) 
+	DOMNode *XadesSignature::addSignatureProperties(DSIGSignature *sig, XMLCh *sig_id, CByteArray &signing_cert_data)
 	{
 		std::basic_string<XMLCh> props_target;
 		char *utcTime = getUtcTime();
-	
+
 		props_target.append(XMLString::transcode("#"));
 		props_target.append(sig_id);
 
@@ -403,10 +403,10 @@ std::basic_string<XMLCh> createSignedPropertiesURI()
 		XMLCh *prefix = XMLString::transcode("etsi");
 		XMLCh *prefix_ds = XMLString::transcode("");
 		safeBuffer str;
-		
+
 		XERCES_NS DOMDocument *doc = sig->getParentDocument();
 		DSIGObject * obj1 = sig->appendObject();
-	
+
 		makeQName(str, prefix, "QualifyingProperties");
 		DOMNode * n1 = CREATE_DOM_NODE;
 
@@ -421,7 +421,7 @@ std::basic_string<XMLCh> createSignedPropertiesURI()
 		makeQName(str, prefix, "SignedProperties");
 		DOMNode * n4 = CREATE_DOM_NODE;
 		((DOMElement *)n4)->setAttribute(s_Id, XMLString::transcode(SIGNED_PROPS_ID));
-		
+
 		makeQName(str, prefix, "SignedSignatureProperties");
 		DOMNode * n_signSigProps = CREATE_DOM_NODE
 		makeQName(str, prefix, "SigningTime");
@@ -439,10 +439,10 @@ std::basic_string<XMLCh> createSignedPropertiesURI()
 		n4->appendChild(n_signSigProps);
 		n_signSigProps->appendChild(n_signingTime);
 		n_signSigProps->appendChild(n_signSigningCert);
-		
+
 
 		n2->appendChild(n3);
-	
+
 		obj1->appendChild(n1);
 
 		free(utcTime);
@@ -477,8 +477,8 @@ std::basic_string<XMLCh> createSignedPropertiesURI()
 	{
 		CByteArray * ba_out = new CByteArray();
 		XMLCh tempStr[3] = {chLatin_L, chLatin_S, chNull};
-		DOMImplementation *impl = 
-			            DOMImplementationRegistry::getDOMImplementation(tempStr); 
+		DOMImplementation *impl =
+			            DOMImplementationRegistry::getDOMImplementation(tempStr);
 
 		// construct the DOMWriter
 	        DOMLSSerializer   *theSerializer = ((DOMImplementationLS*)impl)->createLSSerializer();
@@ -506,7 +506,7 @@ void XadesSignature::loadSignerCert(CByteArray &data, EVP_PKEY *pub_key)
 {
 
 	unsigned char * data_cert = data.GetBytes();
-	//OpenSSL call	
+	//OpenSSL call
 	mp_cert = d2i_X509(NULL, (const unsigned char**)(&data_cert), data.Size());
 	m_certs.push_back(mp_cert);
 
@@ -555,12 +555,12 @@ int XadesSignature::HashSignedInfoNode(XERCES_NS DOMDocument *doc, XMLByte *hash
     parser->setValidationScheme(XercesDOMParser::Val_Always);
     parser->setDoSchema(true);
     parser->setCreateEntityReferenceNodes(false);
-    
+
     // Parse and return a copy of the Xerces DOM tree.
 	// Save to file and parse it again, to make XML Canonicalization work
     // correctly as expected by the Canonical XML 1.0 specification.
     // Hope, the next Canonical XML specification fixes the white spaces preserving "bug".
-      
+
     MemBufInputSource source((XMLByte*)partial_xml_file->GetBytes(), partial_xml_file->Size(), "temp");
     parser->parse(source);
     XERCES_NS DOMDocument *new_dom = parser->getDocument();
@@ -610,12 +610,12 @@ int XadesSignature::HashSignedPropertiesNode(XERCES_NS DOMDocument *doc, XMLByte
     parser->setValidationScheme(XercesDOMParser::Val_Always);
     parser->setDoSchema(true);
     parser->setCreateEntityReferenceNodes(false);
-    
+
     // Parse and return a copy of the Xerces DOM tree.
 	// Save to file and parse it again, to make XML Canonicalization work
     // correctly as expected by the Canonical XML 1.0 specification.
     // Hope, the next Canonical XML specification fixes the white spaces preserving "bug".
-      
+
     MemBufInputSource source((XMLByte*)partial_xml_file->GetBytes(), partial_xml_file->Size(), "temp");
     parser->parse(source);
     XERCES_NS DOMDocument *new_dom = parser->getDocument();
@@ -657,9 +657,9 @@ int XadesSignature::HashSignedPropertiesNode(XERCES_NS DOMDocument *doc, XMLByte
 void XadesSignature::addCertificateToKeyInfo(CByteArray &cert, DSIGKeyInfoX509 *keyInfo)
 {
 	OpenSSLCryptoX509 * ssl_cert = NULL;
-	
+
 	unsigned char * data_cert = cert.GetBytes();
-	
+
 	X509 *cert_ca_sign = d2i_X509(NULL, (const unsigned char**)(&data_cert), cert.Size());
 
 	if (cert_ca_sign == NULL)
@@ -707,7 +707,7 @@ void XadesSignature::addCertificateChain(DSIGKeyInfoX509 *keyInfo)
 		addCertificateToKeyInfo(cc03, keyInfo);
 		m_cert_bas.push_back(cc03);
 	}
-	else 
+	else
 		MWLOG(LEV_ERROR, MOD_APL, L"Couldn't find issuer for certificate SIGNATURE_SUBCA.The validation will be broken!");
 
 	// Add ECRaizEstado certificate
@@ -718,13 +718,13 @@ void XadesSignature::addCertificateChain(DSIGKeyInfoX509 *keyInfo)
 
 
 /*
-	Parse a timestamp token from a full TS Reply accounting for different elements appearing in the 
+	Parse a timestamp token from a full TS Reply accounting for different elements appearing in the
 	top-level SEQUENCE before the signedData Object as we've seen using various Timestamp servers
 */
 CByteArray ParseTimestampTokenFromTSReply(CByteArray &ts_reply) {
 
 	//This is the ASN.1 encoding of the Object Identifier for PKCS7 SignedData 1.2.840.113549.1.7.2
-	const char * signedData_raw_oid = "\x06\x09\x2A\x86\x48\x86\xF7\x0D\x01\x07\x02";     
+	const char * signedData_raw_oid = "\x06\x09\x2A\x86\x48\x86\xF7\x0D\x01\x07\x02";
 	unsigned char *array_start = ts_reply.GetBytes();
 
 	unsigned char * needle = (unsigned char *)memmem(array_start, ts_reply.Size(), signedData_raw_oid,
@@ -753,7 +753,7 @@ CByteArray ParseTimestampTokenFromTSReply(CByteArray &ts_reply) {
 }
 
 /*
-* 	Add Revocation Info for all certificates in the chain up 
+* 	Add Revocation Info for all certificates in the chain up
 *	to EC Raiz Estado which is trusted in the Portuguese TSL
 */
 bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
@@ -774,15 +774,15 @@ bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
 		return false;
 	}
 	makeQName(str, prefix_xades, "RevocationValues");
-	DOMElement * revocation_node = 
+	DOMElement * revocation_node =
 	dom->createElementNS(XMLString::transcode(XADES_NAMESPACE), str.rawXMLChBuffer());
 
 	makeQName(str, prefix_xades, "OCSPValues");
-	DOMElement * ocsp_values_node = 
+	DOMElement * ocsp_values_node =
 	dom->createElementNS(XMLString::transcode(XADES_NAMESPACE), str.rawXMLChBuffer());
 
 	makeQName(str, prefix_xades, "CRLValues");
-	DOMElement * crl_values_node = 
+	DOMElement * crl_values_node =
 	dom->createElementNS(XMLString::transcode(XADES_NAMESPACE), str.rawXMLChBuffer());
 
 	for (int i = 0; i != m_certs.size()-1; i++)
@@ -799,7 +799,7 @@ bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
 
 				char *base64_str = Base64Encode(ocsp_token.GetBytes(), ocsp_token.Size());
 				makeQName(str, prefix_xades, "EncapsulatedOCSPValue");
-				DOMElement * ocsp_node = 
+				DOMElement * ocsp_node =
 				dom->createElementNS(XMLString::transcode(XADES_NAMESPACE), str.rawXMLChBuffer());
 
 				XMLCh * ocsp_base64 = XMLString::transcode(base64_str);
@@ -830,7 +830,7 @@ bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
 
 				char *base64_str = Base64Encode(crl_data.GetBytes(), crl_data.Size());
 				makeQName(str, prefix_xades, "EncapsulatedCRLValue");
-				DOMElement * crl_node = 
+				DOMElement * crl_node =
 				dom->createElementNS(XMLString::transcode(XADES_NAMESPACE), str.rawXMLChBuffer());
 				crl_node->appendChild(dom->createTextNode(XMLString::transcode(base64_str)));
 				crl_values_node->appendChild(crl_node);
@@ -845,7 +845,7 @@ bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
 	node_unsigned_props->appendChild(revocation_node);
 	revocation_node->appendChild(ocsp_values_node);
 	revocation_node->appendChild(crl_values_node);
-	
+
 	return true;
 }
 
@@ -867,10 +867,10 @@ bool XadesSignature::addCompleteCertificateRefs(XERCES_NS DOMDocument *dom)
 	}
 
 	makeQName(str, prefix_xades, "CompleteCertificateRefs");
-	DOMElement * complete_cert_refs_node = 
+	DOMElement * complete_cert_refs_node =
 			dom->createElementNS(XMLString::transcode(XADES_NAMESPACE), str.rawXMLChBuffer());
 	makeQName(str, prefix_xades, "CertRefs");
-	DOMElement * cert_refs_node = 
+	DOMElement * cert_refs_node =
 			dom->createElementNS(XMLString::transcode(XADES_NAMESPACE), str.rawXMLChBuffer());
 
 	for (int i = 1; i!= m_certs.size(); i++)
@@ -884,7 +884,7 @@ bool XadesSignature::addCompleteCertificateRefs(XERCES_NS DOMDocument *dom)
 
 	//TODO: maybe add some content to this later??
 	makeQName(str, prefix_xades, "CompleteRevocationRefs");
-	DOMElement * complete_revocation_refs_node = 
+	DOMElement * complete_revocation_refs_node =
 			dom->createElementNS(XMLString::transcode(XADES_NAMESPACE), str.rawXMLChBuffer());
 
 	node_unsigned_props->appendChild(complete_revocation_refs_node);
@@ -936,12 +936,12 @@ bool XadesSignature::AddSigAndRefsTimestamp(XERCES_NS DOMDocument *doc)
     parser->setValidationScheme(XercesDOMParser::Val_Always);
     parser->setDoSchema(true);
     parser->setCreateEntityReferenceNodes(false);
-    
+
     // Parse and return a copy of the Xerces DOM tree.
 	// Save to file and parse it again, to make XML Canonicalization work
     // correctly as expected by the Canonical XML 1.0 specification.
     // Hope, the next Canonical XML specification fixes the white spaces preserving "bug".
-      
+
     MemBufInputSource source((XMLByte*)partial_xml_file->GetBytes(), partial_xml_file->Size(), "temp");
     parser->parse(source);
     XERCES_NS DOMDocument *new_dom = parser->getDocument();
@@ -986,12 +986,12 @@ bool XadesSignature::AddArchiveTimestamp(XERCES_NS DOMDocument *dom)
     parser->setValidationScheme(XercesDOMParser::Val_Always);
     parser->setDoSchema(true);
     parser->setCreateEntityReferenceNodes(false);
-    
+
     // Parse and return a copy of the Xerces DOM tree.
 	// Save to file and parse it again, to make XML Canonicalization work
     // correctly as expected by the Canonical XML 1.0 specification.
     // Hope, the next Canonical XML specification fixes the white spaces preserving "bug".
-      
+
     MemBufInputSource source((XMLByte*)partial_xml_file->GetBytes(), partial_xml_file->Size(), "temp");
     parser->parse(source);
     XERCES_NS DOMDocument *new_dom = parser->getDocument();
@@ -1021,7 +1021,7 @@ bool XadesSignature::AddArchiveTimestamp(XERCES_NS DOMDocument *dom)
 	}
 
 	//TODO: change ns to xades 1.4.1
-	return appendTimestamp(dom, node_unsigned_props_orig, "ArchiveTimeStamp", digest_input);	
+	return appendTimestamp(dom, node_unsigned_props_orig, "ArchiveTimeStamp", digest_input);
 }
 
 bool XadesSignature::appendTimestamp(XERCES_NS DOMDocument * dom, DOMNode *parent, const char * tag_name, std::string to_timestamp)
@@ -1048,7 +1048,7 @@ bool XadesSignature::appendTimestamp(XERCES_NS DOMDocument * dom, DOMNode *paren
 	CByteArray raw_response = tsa.getResponse();
 	//Try to get rid of the PKIStatusInfo integer from the ASN1 response!
 	mp_timestamp_data = ParseTimestampTokenFromTSReply(raw_response);
-	
+
 	if (mp_timestamp_data.Size() == 0)
 	{
 		MWLOG(LEV_ERROR, MOD_APL,
@@ -1063,19 +1063,19 @@ bool XadesSignature::appendTimestamp(XERCES_NS DOMDocument * dom, DOMNode *paren
 		XMLCh * ts_base64 = XMLString::transcode(base64_str);
 
 		makeQName(str, prefix_xades, tag_name);
-		DOMElement * ts_node = 
+		DOMElement * ts_node =
 			dom->createElementNS(XMLString::transcode(XADES_NAMESPACE), str.rawXMLChBuffer());
 
 		//We need to specify this because otherwise the timestamp validation can go wrong with different namespace handling
 		makeQName(str, prefix_dsig, "CanonicalizationMethod");
-		DOMElement * c14n_node = 
+		DOMElement * c14n_node =
 			dom->createElementNS(XMLString::transcode(DSIG_NAMESPACE), str.rawXMLChBuffer());
 		c14n_node->setAttribute(
-				XMLString::transcode("Algorithm"), 
+				XMLString::transcode("Algorithm"),
 				XMLString::transcode("http://www.w3.org/2001/10/xml-exc-c14n#"));
 
 		makeQName(str, prefix_xades, "EncapsulatedTimeStamp");
-		DOMElement * ts_token_node = 
+		DOMElement * ts_token_node =
 			dom->createElementNS(XMLString::transcode(XADES_NAMESPACE), str.rawXMLChBuffer());
 
 		//XMLCh *ts_id = (XMLCh*)generateNodeID().c_str();
@@ -1098,7 +1098,7 @@ bool XadesSignature::appendTimestamp(XERCES_NS DOMDocument * dom, DOMNode *paren
 
 bool XadesSignature::AddSignatureTimestamp(XERCES_NS DOMDocument *dom)
 {
-	
+
 	DOMNode *node_signature, *node_unsigned_props;
 
 	DOMNodeList* nodes1 = dom->getElementsByTagNameNS(XMLString::transcode(XADES_NAMESPACE),
@@ -1180,9 +1180,9 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	XMLByte toFill[SHA256_LEN* sizeof(XMLByte)]; //SHA-1 Hash prepended with Algorithm ID as by PKCS#1 standard
 	// unsigned char signature_hash[SHA1_LEN];
 
-        DOMImplementation *impl = 
+        DOMImplementation *impl =
 		DOMImplementationRegistry::getDOMImplementation(MAKE_UNICODE_STRING("Core"));
-	
+
 	//XERCES_NS XERCES_NS DOMDocument *doc = impl->createDocument(MAKE_UNICODE_STRING(ASIC_NAMESPACE), MAKE_UNICODE_STRING("asic:XAdESSignatures"), NULL);
 	XERCES_NS DOMDocument *doc = impl->createDocument(NULL, MAKE_UNICODE_STRING("Document"), NULL);
 	DOMElement *rootElem = doc->getDocumentElement();
@@ -1191,7 +1191,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	memset(toFill, 0x2f, SHA256_LEN);
 
 	try {
-		
+
 		// Create a signature object
 
 		sig = prov.newSignature();
@@ -1229,7 +1229,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	    certData.TrimRight(0);
 
 		addSignatureProperties(sig, (XMLCh*)signature_id.c_str(), certData);
-		
+
 		HashSignedPropertiesNode(sig->getParentDocument(), sha1_hash_signed_props);
 
 		DSIGReference * ref_signed_props = sig->createReference(createSignedPropertiesURI().c_str(), HASH_SHA256);
@@ -1249,9 +1249,9 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		}
 		catch (const XMLException &e)
 		{
-			MWLOG(LEV_ERROR, MOD_APL, L"Exception in calculateSignedInfoHash(), message: %S - %s", 
+			MWLOG(LEV_ERROR, MOD_APL, L"Exception in calculateSignedInfoHash(), message: %S - %s",
 				XMLString::transcode(e.getType()), XMLString::transcode(e.getMessage()));
-		
+
 		}
 
 		keyInfoX509 = sig->appendX509Data();
@@ -1262,7 +1262,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 
 		//Append to KeyInfo element all the needed CA certificates
 		addCertificateChain(keyInfoX509);
-		
+
 		try
 		{
 			rsa_signature = mp_card->Sign(CByteArray(toFill, SHA256_LEN), true, true);
@@ -1275,14 +1275,14 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		}
 
 		//RSA Signature with length=1024/2048 bits
-		addCardSignature(rsa_signature.GetBytes(), rsa_signature.Size(), doc); 
+		addCardSignature(rsa_signature.GetBytes(), rsa_signature.Size(), doc);
 
 		//XAdES-T level
 		if (m_do_timestamping || m_do_long_term_validation)
 		{
 			AddSignatureTimestamp(sig->getParentDocument());
 		}
-		 
+
 		//XAdES-A level stuff
 		if (m_do_long_term_validation)
 		{
@@ -1316,9 +1316,11 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	if (xerces_exception)
 		return *emptyBa;
 
-	CByteArray * xml_output = WriteToByteArray(doc); 
+	CByteArray * xml_output = WriteToByteArray(doc);
 	doc->release();
 
+
+    delete emptyBa;
 	return *xml_output;
 }
 

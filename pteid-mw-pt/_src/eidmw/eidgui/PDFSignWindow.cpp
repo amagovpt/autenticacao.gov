@@ -562,6 +562,7 @@ PTEID_EIDCard& PDFSignWindow::getNewCard()
 
 					}
 			}
+			delete (&ReaderContext);
 		}
 
 }
@@ -664,8 +665,10 @@ void PDFSignWindow::on_button_sign_clicked()
 		{
 			QString tmp = model->data(model->index(i, 0), 0).toString();
 			char *final = strdup(getPlatformNativeString(tmp));
-			m_pdf_sig->addToBatchSigning(final, ui.radioButton_lastpage->isChecked());
-
+			if (final != NULL) {
+				m_pdf_sig->addToBatchSigning(final, ui.radioButton_lastpage->isChecked());
+				free(final);
+			}
 		}
 
 		savefilepath = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
@@ -744,7 +747,8 @@ void PDFSignWindow::on_button_sign_clicked()
 		ShowErrorMsgBox(tr("Error Generating Signature!"));
 
 	this->close();
-
+	if ( location != NULL ) free(location);
+	if ( reason!= NULL ) free(reason);
 }
 
 void PDFSignWindow::on_button_addfile_clicked()
@@ -1269,7 +1273,7 @@ void PDFSignWindow::addSquares()
             s1->setPos(QPointF(i*scene_width/v_lines +margin, j*scene_height/h_lines +margin ));
 
             count++;
-
+			delete s1;
         }
 
         my_rectangle = new DraggableRectangle(my_scene, scene_height, scene_width, 30, 50);
@@ -1346,8 +1350,12 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 		list_model->setData(list_model->index(list_model->rowCount()-1, 0), tmp);
 		if (i > 0)
 		{
-			int page_n = m_pdf_sig->getOtherPageCount(strdup(getPlatformNativeString(tmp)));
-			page_numbers.append(tmp_count);
+			char *dupStr = strdup(getPlatformNativeString(tmp));
+			if (dupStr != NULL) {
+				int page_n = m_pdf_sig->getOtherPageCount(dupStr);
+				page_numbers.append(tmp_count);
+				free(dupStr);
+			}
 		}
 
 	}

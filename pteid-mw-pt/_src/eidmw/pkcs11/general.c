@@ -17,7 +17,7 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
-//--module C:\develop\proj\eidmw\eidmw\_Binaries\Debug\pteidpkcs11.dll -t -l 
+//--module C:\develop\proj\eidmw\eidmw\_Binaries\Debug\pteidpkcs11.dll -t -l
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -59,29 +59,32 @@ CK_RV C_Initialize(CK_VOID_PTR pReserved)
 	int ret = CKR_OK;
 	char sep;
 	const char *temp;
-	const char *env_vr, *tmpvar;
+	const char *env_vr;
+	char *tmpvar;
 	char *log_path;
 	CK_C_INITIALIZE_ARGS_PTR p_args;
+	int isDup = 0;
 
 #ifdef WIN32
 	env_vr = "APPDATA";
     sep = '\\';
-#else    
+#else
    env_vr = "HOME";
    sep = '/';
-#endif   
+#endif
 
    temp = getenv(env_vr);
    if (temp != NULL) {
        tmpvar = _strdup(temp);
+	   isDup = 1;
    }
-   if (tmpvar == NULL) 
+   if (tmpvar == NULL)
    {
 #ifndef WIN32
 	tmpvar = "/tmp";
 #else
 	tmpvar = "C:\\Temp";
-#endif			
+#endif
    }
 
    log_path = (char *)malloc(strlen(tmpvar)+20);
@@ -113,7 +116,11 @@ CK_RV C_Initialize(CK_VOID_PTR pReserved)
       log_trace(WHERE, "S: =============================");
       }
   log_trace(WHERE, "I: leave, ret = %i",ret);
-   return ret;
+
+   /*if (isDup != 0){
+      if (tmpvar != NULL) free(tmpvar);
+   }*/
+   return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -190,7 +197,7 @@ CK_RV C_GetInfo(CK_INFO_PTR pInfo)
    cleanup:
    log_trace(WHERE, "I: leave, ret = %i",ret);
    return ret;
-}       
+}
 #undef WHERE
 
 
@@ -225,7 +232,7 @@ CK_RV C_GetSlotList(CK_BBOOL       tokenPresent,  /* only slots with token prese
 P11_SLOT *pSlot;
 CK_RV ret = CKR_OK;
 int h;
-CK_ULONG c = 0; 
+CK_ULONG c = 0;
 static int l=0;
 
 //printf("==== WAS I CALLED?\n");
@@ -251,7 +258,7 @@ if (pulCount == NULL_PTR)
    ret = CKR_ARGUMENTS_BAD;
    goto cleanup;
    }
-   
+
 //init slots allready done
 //update info on tokens in slot, could be removed if thread keeps track of these token states
 //BUG in Adobe Acrobat reader: adobe asks for slots with pSlotList = NULL, so only nr of slots will be returned. This is ok.
@@ -264,7 +271,7 @@ for (h=0; h < p11_get_nreaders(); h++)
 	   log_trace(WHERE, "I: h=%i",h);
    pSlot = p11_get_slot(h);
 
-   if (l < LOG_MAX_REC) 
+   if (l < LOG_MAX_REC)
       log_trace(WHERE, "I: slot[%d]: %s", h, pSlot->name);
 
    if (tokenPresent == CK_TRUE)
@@ -293,14 +300,14 @@ for (h=0; h < p11_get_nreaders(); h++)
       }
    } //end for
 
-//if more slots are found than can be returned in slotlist, return buffer too smal 
+//if more slots are found than can be returned in slotlist, return buffer too smal
 if ((c > *pulCount) && (pSlotList != NULL_PTR) )
    ret = CKR_BUFFER_TOO_SMALL;
 
 //number of slots should always be returned.
 *pulCount = c;
 //printf("There are %d slots\n",c);
-cleanup:   
+cleanup:
 log_trace(WHERE, "I: p11_unlock()");
    p11_unlock();
    log_trace(WHERE, "I: leave, ret = %i",ret);
@@ -312,7 +319,7 @@ return ret;
 
 #define WHERE "C_GetSlotInfo()"
 CK_RV C_GetSlotInfo(CK_SLOT_ID slotID, CK_SLOT_INFO_PTR pInfo)
-{         
+{
    CK_RV ret;
    P11_SLOT *slot;
    static int l=0;
@@ -331,15 +338,15 @@ CK_RV C_GetSlotInfo(CK_SLOT_ID slotID, CK_SLOT_INFO_PTR pInfo)
       return ret;
    }
 
-   if (++l < LOG_MAX_REC)  
+   if (++l < LOG_MAX_REC)
       log_trace(WHERE, "S: C_GetSlotInfo(slot %d)", slotID);
 
-   if (pInfo == NULL_PTR) 
+   if (pInfo == NULL_PTR)
       {
       log_trace(WHERE, "E: pInfo = NULL");
       CLEANUP(CKR_ARGUMENTS_BAD);
       }
- 
+
    slot = p11_get_slot(slotID);
    if (slot == NULL)
       {
@@ -389,7 +396,7 @@ if (!g_init)
    }
 
    log_trace(WHERE, "S: C_GetTokenInfo(slot %d)", slotID);
-   if (pInfo == NULL_PTR) 
+   if (pInfo == NULL_PTR)
       {
       log_trace(WHERE, "E: pInfo = NULL");
       CLEANUP(CKR_ARGUMENTS_BAD);
@@ -402,7 +409,7 @@ if (!g_init)
       goto cleanup;
       }
 
-cleanup:        
+cleanup:
    p11_unlock();
    log_trace(WHERE, "I: leave, ret = %i",ret);
    return ret;
@@ -480,7 +487,7 @@ if (ret != CKR_OK)
    goto cleanup;
    }
 
-cleanup:        
+cleanup:
    p11_unlock();
    log_trace(WHERE, "I: leave, ret = %i",ret);
    return ret;

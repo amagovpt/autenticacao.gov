@@ -46,9 +46,9 @@ switch(pMechanism->mechanism)
    case CKM_SHA512_RSA_PKCS:        algo = ALGO_SHA512;     *size=64; break;
    case CKM_RIPEMD160:
    case CKM_RIPEMD160_RSA_PKCS:     algo = ALGO_RIPEMD160;  *size=20; break;
-   default: 
+   default:
       ret = CKR_MECHANISM_INVALID;
-      goto cleanup;            
+      goto cleanup;
    }
 
 oHash->Init(algo);
@@ -93,7 +93,7 @@ memcpy(p, data.GetBytes(), data.Size());
 
 *l = data.Size();
 
-delete(oHash);
+delete oHash;
 
 return (ret);
 }

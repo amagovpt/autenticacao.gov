@@ -29,7 +29,7 @@
  *
  */
 
-#include <xsec/framework/XSECDefs.hpp> 
+#include <xsec/framework/XSECDefs.hpp>
 
 #include <cassert>
 
@@ -140,21 +140,21 @@ bool    g_haveAES = true;
 unsigned char createdDocRefs [9][20] = {
 	{ 0x51, 0x3c, 0xb5, 0xdf, 0xb9, 0x1e, 0x9d, 0xaf, 0xd4, 0x4a,
 	  0x95, 0x79, 0xf1, 0xd6, 0x54, 0xe, 0xb0, 0xb0, 0x29, 0xe3, },
-	{ 0x51, 0x3c, 0xb5, 0xdf, 0xb9, 0x1e, 0x9d, 0xaf, 0xd4, 0x4a, 
+	{ 0x51, 0x3c, 0xb5, 0xdf, 0xb9, 0x1e, 0x9d, 0xaf, 0xd4, 0x4a,
 	  0x95, 0x79, 0xf1, 0xd6, 0x54, 0xe, 0xb0, 0xb0, 0x29, 0xe3, },
-	{ 0x52, 0x74, 0xc3, 0xe4, 0xc5, 0xf7, 0x20, 0xb0, 0xd9, 0x52, 
+	{ 0x52, 0x74, 0xc3, 0xe4, 0xc5, 0xf7, 0x20, 0xb0, 0xd9, 0x52,
 	  0xdb, 0xb3, 0xee, 0x46, 0x66, 0x8f, 0xe1, 0xb6, 0x30, 0x9d, },
-	{ 0x5a, 0x14, 0x9c, 0x5a, 0x40, 0x34, 0x51, 0x4f, 0xef, 0x1d, 
+	{ 0x5a, 0x14, 0x9c, 0x5a, 0x40, 0x34, 0x51, 0x4f, 0xef, 0x1d,
 	  0x85, 0x44, 0xc7, 0x2a, 0xd3, 0xd2, 0x2, 0xed, 0x67, 0xb4, },
-	{ 0x88, 0xd1, 0x65, 0xed, 0x2a, 0xe7, 0xc0, 0xbd, 0xea, 0x3e, 
+	{ 0x88, 0xd1, 0x65, 0xed, 0x2a, 0xe7, 0xc0, 0xbd, 0xea, 0x3e,
 	  0xe6, 0xf3, 0xd4, 0x8c, 0xf7, 0xdd, 0xc8, 0x85, 0xa9, 0x6d, },
-	{ 0x52, 0x74, 0xc3, 0xe4, 0xc5, 0xf7, 0x20, 0xb0, 0xd9, 0x52, 
+	{ 0x52, 0x74, 0xc3, 0xe4, 0xc5, 0xf7, 0x20, 0xb0, 0xd9, 0x52,
 	  0xdb, 0xb3, 0xee, 0x46, 0x66, 0x8f, 0xe1, 0xb6, 0x30, 0x9d, },
-	{ 0x52, 0x74, 0xc3, 0xe4, 0xc5, 0xf7, 0x20, 0xb0, 0xd9, 0x52, 
+	{ 0x52, 0x74, 0xc3, 0xe4, 0xc5, 0xf7, 0x20, 0xb0, 0xd9, 0x52,
 	  0xdb, 0xb3, 0xee, 0x46, 0x66, 0x8f, 0xe1, 0xb6, 0x30, 0x9d, },
 	{ 0x69, 0xBA, 0xF1, 0x53, 0x7D, 0x81, 0x78, 0xCA, 0xCA, 0x60,
   	  0x3B, 0x2F, 0x55, 0x9C, 0x8E, 0x5F, 0xEB, 0x35, 0x38, 0x25, },
-  	{ 0x51, 0x3c, 0xb5, 0xdf, 0xb9, 0x1e, 0x9d, 0xaf, 0xd4, 0x4a, 
+  	{ 0x51, 0x3c, 0xb5, 0xdf, 0xb9, 0x1e, 0x9d, 0xaf, 0xd4, 0x4a,
 	  0x95, 0x79, 0xf1, 0xd6, 0x54, 0xe, 0xb0, 0xb0, 0x29, 0xe3, }
 
 };
@@ -165,20 +165,20 @@ unsigned char longShaRefs [4][64] = {
 	  0xe8, 0x64, 0x2d, 0xc4, 0x7c, 0x8c, 0x1e, 0x48, 0x74, 0xf0,
 	  0x48, 0x63, 0x1b, 0xea, 0x57, 0xec, 0x96, 0xa6, },
 	{ 0x75, 0xec, 0xba, 0x51, 0xda, 0xb7, 0x42, 0x16, 0x34, 0x2d,
-	  0xd7, 0x4e, 0x6a, 0x33, 0xb6, 0xb3, 0xe3, 0x2d, 0x28, 0xf6, 
-	  0x7b, 0x87, 0x21, 0xfd, 0xd2, 0x2e, 0x50, 0xb9, 0x55, 0x81, 
+	  0xd7, 0x4e, 0x6a, 0x33, 0xb6, 0xb3, 0xe3, 0x2d, 0x28, 0xf6,
+	  0x7b, 0x87, 0x21, 0xfd, 0xd2, 0x2e, 0x50, 0xb9, 0x55, 0x81,
 	  0x23, 0x06, },
-	{ 0x99, 0x25, 0x92, 0xa3, 0xa9, 0x44, 0x12, 0x4d, 0xa1, 0x86, 
-	  0x3f, 0x81, 0xd3, 0xa7, 0x37, 0x61, 0xff, 0x86, 0x9f, 0x02, 
-	  0x16, 0x48, 0x16, 0xa0, 0xec, 0x7c, 0xd5, 0x33, 0x30, 0xeb, 
+	{ 0x99, 0x25, 0x92, 0xa3, 0xa9, 0x44, 0x12, 0x4d, 0xa1, 0x86,
+	  0x3f, 0x81, 0xd3, 0xa7, 0x37, 0x61, 0xff, 0x86, 0x9f, 0x02,
+	  0x16, 0x48, 0x16, 0xa0, 0xec, 0x7c, 0xd5, 0x33, 0x30, 0xeb,
 	  0xb2, 0x9f, 0x93, 0xb9, 0x4a, 0x32, 0x20, 0x2e, 0x8a, 0xfd,
       0xa6, 0x6e, 0x67, 0x1d, 0x96, 0xcd, 0xf1, 0xcb, },
-	{ 0xf8, 0xf5, 0xf3, 0xb6, 0xab, 0x7c, 0x25, 0x52, 0x06, 0x23, 
-	  0x2c, 0x9f, 0x4e, 0x25, 0x0f, 0x16, 0x58, 0xf3, 0xc6, 0xdc, 
-	  0xb4, 0x85, 0x04, 0x3d, 0x9f, 0xee, 0x7d, 0x5d, 0x73, 0x86, 
+	{ 0xf8, 0xf5, 0xf3, 0xb6, 0xab, 0x7c, 0x25, 0x52, 0x06, 0x23,
+	  0x2c, 0x9f, 0x4e, 0x25, 0x0f, 0x16, 0x58, 0xf3, 0xc6, 0xdc,
+	  0xb4, 0x85, 0x04, 0x3d, 0x9f, 0xee, 0x7d, 0x5d, 0x73, 0x86,
 	  0xe3, 0xd4, 0x3a, 0xe0, 0xd5, 0x8a, 0xec, 0x7f, 0xd4, 0x63,
-      0x4f, 0x9a, 0xcf, 0xfa, 0x15, 0xdb, 0x0f, 0xe5, 0x09, 0x6b, 
-	  0xf1, 0xa1, 0x36, 0x05, 0x42, 0x69, 0x49, 0xc3, 0x9e, 0x8c, 
+      0x4f, 0x9a, 0xcf, 0xfa, 0x15, 0xdb, 0x0f, 0xe5, 0x09, 0x6b,
+	  0xf1, 0xa1, 0x36, 0x05, 0x42, 0x69, 0x49, 0xc3, 0x9e, 0x8c,
 	  0x99, 0xa6, 0x75, 0xae, },
 };
 
@@ -397,7 +397,7 @@ DOMDocument * createTestDoc(DOMImplementation * impl) {
 				NULL);// DOMDocumentType());  // document type object (DTD).
 
 	DOMElement *rootElem = doc->getDocumentElement();
-	rootElem->setAttributeNS(DSIGConstants::s_unicodeStrURIXMLNS, 
+	rootElem->setAttributeNS(DSIGConstants::s_unicodeStrURIXMLNS,
 		MAKE_UNICODE_STRING("xmlns:foo"), MAKE_UNICODE_STRING("http://www.foo.org"));
 
 	DOMElement  * prodElem = doc->createElement(MAKE_UNICODE_STRING("product"));
@@ -460,7 +460,7 @@ void outputDoc(DOMImplementation * impl, DOMDocument * doc) {
 #else
 	theSerializer->writeNode(formatTarget, *doc);
 #endif
-	
+
 	cout << endl;
 
 	cerr << endl;
@@ -489,11 +489,11 @@ bool reValidateSig(DOMImplementation *impl, DOMDocument * inDoc, XSECCryptoKey *
         // Get the config so we can set up pretty printing
         DOMConfiguration *dc = theSerializer->getDomConfig();
         dc->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, false);
-        
+
         // Now create an output object to format to UTF-8
         DOMLSOutput *theOutput = ((DOMImplementationLS*)impl)->createLSOutput();
         Janitor<DOMLSOutput> j_theOutput(theOutput);
-        
+
         theOutput->setEncoding(MAKE_UNICODE_STRING("UTF-8"));
         theOutput->setByteStream(formatTarget);
 
@@ -526,18 +526,18 @@ bool reValidateSig(DOMImplementation *impl, DOMDocument * inDoc, XSECCryptoKey *
 		 */
 
 		XercesDOMParser parser;
-		
+
 		parser.setDoNamespaces(true);
 		parser.setCreateEntityReferenceNodes(true);
 
-		MemBufInputSource* memIS = new MemBufInputSource ((const XMLByte*) mbuf, 
+		MemBufInputSource* memIS = new MemBufInputSource ((const XMLByte*) mbuf,
 																len, "XSECMem");
 
 		parser.parse(*memIS);
 		DOMDocument * doc = parser.adoptDocument();
 
 
-		delete(memIS);
+		delete memIS;
 		delete[] mbuf;
 
 		/*
@@ -564,8 +564,8 @@ bool reValidateSig(DOMImplementation *impl, DOMDocument * inDoc, XSECCryptoKey *
 		cerr << ce << endl;
 		delete ce;
 		exit(1);
-		
-	}	
+
+	}
 	catch (XSECCryptoException &e)
 	{
 		cerr << "A cryptographic error occured during signature processing\n   Message: "
@@ -580,15 +580,15 @@ bool reValidateSig(DOMImplementation *impl, DOMDocument * inDoc, XSECCryptoKey *
 
 
 void unitTestEnvelopingSignature(DOMImplementation * impl) {
-	
+
 	// This tests an enveloping signature as the root node
 
 	cerr << "Creating enveloping signature ... ";
-	
+
 	try {
-		
+
 		// Create a document
-    
+
 		DOMDocument * doc = impl->createDocument();
 
 		// Create the signature
@@ -596,12 +596,12 @@ void unitTestEnvelopingSignature(DOMImplementation * impl) {
 		XSECProvider prov;
 		DSIGSignature *sig;
 		DOMElement *sigNode;
-		
+
 		sig = prov.newSignature();
 		sig->setDSIGNSPrefix(MAKE_UNICODE_STRING("ds"));
 		sig->setPrettyPrint(true);
 
-		sigNode = sig->createBlankSignature(doc, 
+		sigNode = sig->createBlankSignature(doc,
 			DSIGConstants::s_unicodeStrURIC14N_COM,
 			DSIGConstants::s_unicodeStrURIHMAC_SHA1);
 
@@ -616,7 +616,7 @@ void unitTestEnvelopingSignature(DOMImplementation * impl) {
 		obj->appendChild(txt);
 
 		// Add a Reference
-		sig->createReference(MAKE_UNICODE_STRING("#ObjectId"), 
+		sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
 			DSIGConstants::s_unicodeStrURISHA1);
 
 		// Get a key
@@ -665,7 +665,7 @@ void unitTestEnvelopingSignature(DOMImplementation * impl) {
 		txt->setNodeValue(MAKE_UNICODE_STRING("A test string"));
 		outputDoc(impl, doc);
 		doc->release();
-		
+
 
 	}
 
@@ -676,8 +676,8 @@ void unitTestEnvelopingSignature(DOMImplementation * impl) {
 		cerr << ce << endl;
 		delete ce;
 		exit(1);
-		
-	}	
+
+	}
 	catch (XSECCryptoException &e)
 	{
 		cerr << "A cryptographic error occured during signature processing\n   Message: "
@@ -689,15 +689,15 @@ void unitTestEnvelopingSignature(DOMImplementation * impl) {
 }
 
 void unitTestBase64NodeSignature(DOMImplementation * impl) {
-	
+
 	// This tests a normal signature with a reference to a Base64 element
 
 	cerr << "Creating a base64 Element reference ... ";
-	
+
 	try {
-		
+
 		// Create a document
-    
+
 		DOMDocument * doc = impl->createDocument();
 
 		// Create the signature
@@ -705,14 +705,14 @@ void unitTestBase64NodeSignature(DOMImplementation * impl) {
 		XSECProvider prov;
 		DSIGSignature *sig;
 		DOMElement *sigNode;
-		
+
 		sig = prov.newSignature();
 		sig->setDSIGNSPrefix(MAKE_UNICODE_STRING("ds"));
 		sig->setPrettyPrint(true);
 #if defined (XSEC_XERCES_HAS_SETIDATTRIBUTE)
 		sig->setIdByAttributeName(false);		// Do not search by name
 #endif
-		sigNode = sig->createBlankSignature(doc, 
+		sigNode = sig->createBlankSignature(doc,
 			DSIGConstants::s_unicodeStrURIC14N_COM,
 			DSIGConstants::s_unicodeStrURIHMAC_SHA1);
 
@@ -778,7 +778,7 @@ void unitTestBase64NodeSignature(DOMImplementation * impl) {
 		txt->setNodeValue(MAKE_UNICODE_STRING("QSB0ZXN0IHN0cmluZw=="));
 		outputDoc(impl, doc);
 		doc->release();
-		
+
 
 	}
 
@@ -789,8 +789,8 @@ void unitTestBase64NodeSignature(DOMImplementation * impl) {
 		cerr << ce << endl;
 		delete ce;
 		exit(1);
-		
-	}	
+
+	}
 	catch (XSECCryptoException &e)
 	{
 		cerr << "A cryptographic error occured during signature processing\n   Message: "
@@ -803,15 +803,15 @@ void unitTestBase64NodeSignature(DOMImplementation * impl) {
 
 
 void unitTestLongSHA(DOMImplementation * impl) {
-	
+
 	// This tests an enveloping signature as the root node, using SHA224/256/384/512
 
 	cerr << "Creating long SHA references using SHA512 HMAC... ";
-	
+
 	try {
-		
+
 		// Create a document
-    
+
 		DOMDocument * doc = impl->createDocument();
 
 		// Create the signature
@@ -820,12 +820,12 @@ void unitTestLongSHA(DOMImplementation * impl) {
 		DSIGSignature *sig;
 		DOMElement *sigNode;
 		DSIGReference *ref[4];
-		
+
 		sig = prov.newSignature();
 		sig->setDSIGNSPrefix(MAKE_UNICODE_STRING("ds"));
 		sig->setPrettyPrint(true);
 
-		sigNode = sig->createBlankSignature(doc, 
+		sigNode = sig->createBlankSignature(doc,
 			DSIGConstants::s_unicodeStrURIC14N_COM,
 			DSIGConstants::s_unicodeStrURIHMAC_SHA512);
 
@@ -842,11 +842,11 @@ void unitTestLongSHA(DOMImplementation * impl) {
 		// Add a Reference
 		if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA224)) {
 			cerr << "224 ... ";
-			ref[0] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"), 
+			ref[0] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
 				DSIGConstants::s_unicodeStrURISHA224);
 		}
 		cerr << "256 ... ";
-		ref[1] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"), 
+		ref[1] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
 			DSIGConstants::s_unicodeStrURISHA256);
 		cerr << "384 ... ";
 		ref[2] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
@@ -940,7 +940,7 @@ void unitTestLongSHA(DOMImplementation * impl) {
 					}
 					exit (1);
 				}
-			
+
 			}
 			cerr << "Good.\n";
 
@@ -948,7 +948,7 @@ void unitTestLongSHA(DOMImplementation * impl) {
 
 		outputDoc(impl, doc);
 		doc->release();
-		
+
 
 	}
 
@@ -959,8 +959,8 @@ void unitTestLongSHA(DOMImplementation * impl) {
 		cerr << ce << endl;
 		delete ce;
 		exit(1);
-		
-	}	
+
+	}
 	catch (XSECCryptoException &e)
 	{
 		cerr << "A cryptographic error occured during signature processing\n   Message: "
@@ -975,9 +975,9 @@ void unitTestRSASig(DOMImplementation * impl, XSECCryptoKeyRSA * k, const XMLCh 
 	// Given a specific RSA key and particular algorithm URI, sign and validate a document
 
 	try {
-		
+
 		// Create a document
-    
+
 		DOMDocument * doc = impl->createDocument();
 
 		// Create the signature
@@ -986,12 +986,12 @@ void unitTestRSASig(DOMImplementation * impl, XSECCryptoKeyRSA * k, const XMLCh 
 		DSIGSignature *sig;
 		DOMElement *sigNode;
 		DSIGReference *ref[4];
-		
+
 		sig = prov.newSignature();
 		sig->setDSIGNSPrefix(MAKE_UNICODE_STRING("ds"));
 		sig->setPrettyPrint(true);
 
-		sigNode = sig->createBlankSignature(doc, 
+		sigNode = sig->createBlankSignature(doc,
 			DSIGConstants::s_unicodeStrURIC14N_COM,
 			AlgURI);
 
@@ -1006,7 +1006,7 @@ void unitTestRSASig(DOMImplementation * impl, XSECCryptoKeyRSA * k, const XMLCh 
 		obj->appendChild(txt);
 
 		// Add a Reference
-		ref[0] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"), 
+		ref[0] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
 			DSIGConstants::s_unicodeStrURISHA1);
 
 		// Get a key
@@ -1060,11 +1060,11 @@ void unitTestRSASig(DOMImplementation * impl, XSECCryptoKeyRSA * k, const XMLCh 
 #endif
 #endif
 
-		cerr << "\n";	
+		cerr << "\n";
 
 		outputDoc(impl, doc);
 		doc->release();
-		
+
 
 	}
 
@@ -1075,8 +1075,8 @@ void unitTestRSASig(DOMImplementation * impl, XSECCryptoKeyRSA * k, const XMLCh 
 		cerr << ce << endl;
 		delete ce;
 		exit(1);
-		
-	}	
+
+	}
 	catch (XSECCryptoException &e)
 	{
 		cerr << "A cryptographic error occured during signature processing\n   Message: "
@@ -1113,7 +1113,7 @@ void unitTestRSA(DOMImplementation * impl) {
 		// Use the internal key
 		WinCAPICryptoProvider *cp = (WinCAPICryptoProvider *) (XSECPlatformUtils::g_cryptoProvider);
 		HCRYPTPROV p = cp->getApacheKeyStore();
-			
+
 		rsaKey = new WinCAPICryptoKeyRSA(p, AT_KEYEXCHANGE, true);
 	}
 
@@ -1130,25 +1130,25 @@ void unitTestRSA(DOMImplementation * impl) {
 		// Use a bog standard key size
 		rsaParams.keySizeInBits = 1024;
 		rsaParams.pe = 65537;
-		
+
 		// We need somewhere to temporarily store a generated key
 		slot = PK11_GetInternalKeySlot();
-		if (!slot) { 
+		if (!slot) {
 			cerr << "Error generating key - can't get NSS slot\n";
 			exit (1);
 		}
-		
+
 		// Do the generate
 		prvKey = PK11_GenerateKeyPair(slot, CKM_RSA_PKCS_KEY_PAIR_GEN, &rsaParams,
 			&pubKey, PR_FALSE, PR_TRUE, 0);
-		
+
 		if (!prvKey) {
 			if (slot)
 				PK11_FreeSlot(slot);
 			cerr << "Error generating key within NSS\n";
 			exit (1);
 		}
-		
+
 		// Now use the key!
 		rsaKey = new NSSCryptoKeyRSA(pubKey, prvKey);
 
@@ -1173,8 +1173,8 @@ void unitTestRSA(DOMImplementation * impl) {
 
 	cerr << "Unit testing RSA-MD5 signature ... ";
 	unitTestRSASig(impl, rsaKey, DSIGConstants::s_unicodeStrURIRSA_MD5);
-	
-		
+
+
 }
 void unitTestSignature(DOMImplementation * impl) {
 
@@ -1203,9 +1203,9 @@ void unitTestSignature(DOMImplementation * impl) {
 void testSignature(DOMImplementation *impl) {
 
 	cerr << "Creating a known doc and signing (HMAC-SHA1)" << endl;
-	
+
 	// Create a document
-    
+
 	DOMDocument * doc = createTestDoc(impl);
 
 	// Check signature functions
@@ -1217,16 +1217,16 @@ void testSignature(DOMImplementation *impl) {
 	int refCount;
 
 	try {
-		
+
 		/*
 		 * Now we have a document, create a signature for it.
 		 */
-		
+
 		sig = prov.newSignature();
 		sig->setDSIGNSPrefix(MAKE_UNICODE_STRING("ds"));
 		sig->setPrettyPrint(true);
 
-		sigNode = sig->createBlankSignature(doc, 
+		sigNode = sig->createBlankSignature(doc,
 			DSIGConstants::s_unicodeStrURIC14N_COM,
 			DSIGConstants::s_unicodeStrURIHMAC_SHA1);
 		DOMElement * rootElem = doc->getDocumentElement();
@@ -1299,7 +1299,7 @@ void testSignature(DOMImplementation *impl) {
 
 		ref[8] = sig->createReference(MAKE_UNICODE_STRING(""),
 			DSIGConstants::s_unicodeStrURISHA1);
-		/*		ref[5]->appendXPathTransform("ancestor-or-self::dsig:Signature", 
+		/*		ref[5]->appendXPathTransform("ancestor-or-self::dsig:Signature",
 				"xmlns:dsig=http://www.w3.org/2000/09/xmldsig#"); */
 
 		DSIGTransformXPath * x = ref[8]->appendXPathTransform("count(ancestor-or-self::dsig:Signature | \
@@ -1310,7 +1310,7 @@ count(ancestor-or-self::dsig:Signature)");
 		refCount = 9;
 
 #endif
-	
+
 		/*
 		 * Sign the document, using an HMAC algorithm and the key "secret"
 		 */
@@ -1368,7 +1368,7 @@ count(ancestor-or-self::dsig:Signature)");
 					cerr << "Bad at location " << j << endl;
 					exit (1);
 				}
-			
+
 			}
 			cerr << "Good.\n";
 
@@ -1425,11 +1425,11 @@ count(ancestor-or-self::dsig:Signature)");
         // Get the config so we can set up pretty printing
         DOMConfiguration *dc = theSerializer->getDomConfig();
         dc->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, false);
-        
+
         // Now create an output object to format to UTF-8
         DOMLSOutput *theOutput = ((DOMImplementationLS*)impl)->createLSOutput();
         Janitor<DOMLSOutput> j_theOutput(theOutput);
-        
+
         theOutput->setEncoding(MAKE_UNICODE_STRING("UTF-8"));
         theOutput->setByteStream(formatTarget);
 
@@ -1467,18 +1467,18 @@ count(ancestor-or-self::dsig:Signature)");
 		 */
 
 		XercesDOMParser parser;
-		
+
 		parser.setDoNamespaces(true);
 		parser.setCreateEntityReferenceNodes(true);
 
-		MemBufInputSource* memIS = new MemBufInputSource ((const XMLByte*) mbuf, 
+		MemBufInputSource* memIS = new MemBufInputSource ((const XMLByte*) mbuf,
 																len, "XSECMem");
 
 		parser.parse(*memIS);
 		doc = parser.adoptDocument();
 
 
-		delete(memIS);
+		delete memIS;
 		delete[] mbuf;
 
 		cerr << "done\nValidating signature ...";
@@ -1523,7 +1523,7 @@ count(ancestor-or-self::dsig:Signature)");
 				}
 			}
 			if (kil->item(i)->getKeyInfoType() == DSIGKeyInfo::KEYINFO_PGPDATA) {
-				
+
 				cerr << "Validating PGPData read back OK ... ";
 
 				DSIGKeyInfoPGPData * p = (DSIGKeyInfoPGPData *)kil->item(i);
@@ -1538,7 +1538,7 @@ count(ancestor-or-self::dsig:Signature)");
 				cerr << "yes\n";
 			}
 			if (kil->item(i)->getKeyInfoType() == DSIGKeyInfo::KEYINFO_SPKIDATA) {
-				
+
 				cerr << "Validating SPKIData read back OK ... ";
 
 				DSIGKeyInfoSPKIData * s = (DSIGKeyInfoSPKIData *)kil->item(i);
@@ -1558,7 +1558,7 @@ count(ancestor-or-self::dsig:Signature)");
 				cerr << "yes\n";
 			}
 			if (kil->item(i)->getKeyInfoType() == DSIGKeyInfo::KEYINFO_MGMTDATA) {
-				
+
 				cerr << "Validating MgmtData read back OK ... ";
 
 				DSIGKeyInfoMgmtData * m = (DSIGKeyInfoMgmtData *)kil->item(i);
@@ -1581,8 +1581,8 @@ count(ancestor-or-self::dsig:Signature)");
 		cerr << ce << endl;
 		delete ce;
 		exit(1);
-		
-	}	
+
+	}
 	catch (XSECCryptoException &e)
 	{
 		cerr << "A cryptographic error occured during signature processing\n   Message: "
@@ -1620,7 +1620,7 @@ void unitTestCipherReference(DOMImplementation * impl) {
 
 		cerr << "Creating CipherReference ... ";
 
-		XENCEncryptedData * xenc = 
+		XENCEncryptedData * xenc =
 			cipher->createEncryptedData(XENCCipherData::REFERENCE_TYPE, DSIGConstants::s_unicodeStrURIAES128_CBC, MAKE_UNICODE_STRING("#CipherText"));
 
 		rootElem->appendChild(xenc->getElement());
@@ -1687,8 +1687,8 @@ void unitTestCipherReference(DOMImplementation * impl) {
 		cerr << ce << endl;
 		delete ce;
 		exit(1);
-		
-	}	
+
+	}
 	catch (XSECCryptoException &e)
 	{
 		cerr << "failed\n";
@@ -1709,9 +1709,9 @@ void unitTestElementContentEncrypt(DOMImplementation *impl, XSECCryptoKey * key,
 		cerr << "Encrypting Element Content ... ";
 	else
 		cerr << "Encrypting Element ... ";
-	
+
 	// Create a document
-    
+
 	DOMDocument * doc = createTestDoc(impl);
 	DOMNode * categoryNode = findNode(doc, MAKE_UNICODE_STRING("category"));
 	if (categoryNode == NULL) {
@@ -1727,7 +1727,7 @@ void unitTestElementContentEncrypt(DOMImplementation *impl, XSECCryptoKey * key,
 	XENCCipher * cipher;
 
 	try {
-		
+
 		/*
 		 * Now we have a document, find the data node.
 		 */
@@ -1739,7 +1739,7 @@ void unitTestElementContentEncrypt(DOMImplementation *impl, XSECCryptoKey * key,
 		// Set a key
 
 		cipher->setKey(key->clone());
-	
+
 		// Now encrypt!
 		if (doElementContent)
 			cipher->encryptElementContent(doc->getDocumentElement(), em);
@@ -1757,9 +1757,9 @@ void unitTestElementContentEncrypt(DOMImplementation *impl, XSECCryptoKey * key,
 		}
 		else
 			cerr << "yes" << endl;
-		
+
 		outputDoc(impl, doc);
-		
+
 		if (doElementContent)
 			cerr << "Decrypting Element content ... ";
 		else
@@ -1797,8 +1797,8 @@ void unitTestElementContentEncrypt(DOMImplementation *impl, XSECCryptoKey * key,
 		cerr << ce << endl;
 		delete ce;
 		exit(1);
-		
-	}	
+
+	}
 	catch (XSECCryptoException &e)
 	{
 		cerr << "A cryptographic error occured during encryption processing\n   Message: "
@@ -1811,11 +1811,11 @@ void unitTestElementContentEncrypt(DOMImplementation *impl, XSECCryptoKey * key,
 }
 
 void unitTestSmallElement(DOMImplementation *impl) {
-	
+
 	cerr << "Encrypt small input... ";
 
 	// Create a document
-    
+
 	DOMDocument * doc = createTestDoc(impl);
 	DOMElement * productNode = (DOMElement *) findNode(doc, MAKE_UNICODE_STRING("product"));
 	if (productNode == NULL) {
@@ -1835,7 +1835,7 @@ void unitTestSmallElement(DOMImplementation *impl) {
 	XENCCipher * cipher;
 
 	try {
-		
+
 		/*
 		 * Now we have a document, find the data node.
 		 */
@@ -1845,12 +1845,12 @@ void unitTestSmallElement(DOMImplementation *impl) {
 		cipher->setPrettyPrint(true);
 
 		// Set a key
-		XSECCryptoSymmetricKey * ks = 
+		XSECCryptoSymmetricKey * ks =
 			XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_3DES_192);
 		ks->setKey((unsigned char *) s_keyStr, 24);
 
 		cipher->setKey(ks->clone());
-	
+
 		// Now encrypt!
 		cipher->encryptElementContent(productNode, ENCRYPT_3DES_CBC);
 
@@ -1869,9 +1869,9 @@ void unitTestSmallElement(DOMImplementation *impl) {
 		}
 		else
 			cerr << "yes" << endl;
-		
+
 		outputDoc(impl, doc);
-		
+
 		cerr << "Decrypting Element content ... ";
 
 		// OK - Now we try to decrypt
@@ -1906,8 +1906,8 @@ void unitTestSmallElement(DOMImplementation *impl) {
 		cerr << ce << endl;
 		delete ce;
 		exit(1);
-		
-	}	
+
+	}
 	catch (XSECCryptoException &e)
 	{
 		cerr << "A cryptographic error occured during encryption processing\n   Message: "
@@ -1935,7 +1935,7 @@ void unitTestKeyEncrypt(DOMImplementation *impl, XSECCryptoKey * k, encryptionMe
 	XENCCipher * cipher;
 
 	try {
-		
+
 		// Encrypt a dummy key
 
 		cerr << "encrypt ... ";
@@ -1971,7 +1971,7 @@ void unitTestKeyEncrypt(DOMImplementation *impl, XSECCryptoKey * k, encryptionMe
 			cerr << "different = failed!" << endl;
 			exit(2);
 		}
-		
+
 		cerr << "decrypt from DOM ... ";
 		// Decrypt from DOM
 		DOMNode * keyNode = findXENCNode(doc, "EncryptedKey");
@@ -2001,8 +2001,8 @@ void unitTestKeyEncrypt(DOMImplementation *impl, XSECCryptoKey * k, encryptionMe
 		cerr << ce << endl;
 		delete ce;
 		exit(1);
-		
-	}	
+
+	}
 	catch (XSECCryptoException &e)
 	{
 		cerr << "failed\n";
@@ -2056,7 +2056,7 @@ void unitTestEncrypt(DOMImplementation *impl) {
 			// Use the internal key
 			WinCAPICryptoProvider *cp = (WinCAPICryptoProvider *) (XSECPlatformUtils::g_cryptoProvider);
 			HCRYPTPROV p = cp->getApacheKeyStore();
-			
+
 			WinCAPICryptoKeyRSA * rsaKey = new WinCAPICryptoKeyRSA(p, AT_KEYEXCHANGE, true);
 			unitTestKeyEncrypt(impl, rsaKey, ENCRYPT_RSA_15);
 
@@ -2078,10 +2078,10 @@ void unitTestEncrypt(DOMImplementation *impl) {
 			// Use a bog standard key size
 			rsaParams.keySizeInBits = 1024;
 			rsaParams.pe = 65537;
-  
+
 			// We need somewhere to temporarily store a generated key
 		    slot = PK11_GetInternalKeySlot();
-			if (!slot) { 
+			if (!slot) {
 				cerr << "Error generating key - can't get NSS slot\n";
 				exit (1);
 			}
@@ -2101,12 +2101,12 @@ void unitTestEncrypt(DOMImplementation *impl) {
 			NSSCryptoKeyRSA * rsaKey = new NSSCryptoKeyRSA(pubKey, prvKey);
 			unitTestKeyEncrypt(impl, rsaKey, ENCRYPT_RSA_15);
 
-			if (slot) 
+			if (slot)
 				// Actual keys will be deleted by the provider
 				PK11_FreeSlot(slot);
-			
+
 			cerr << "RSA OAEP key wrap skipped - not yet supported in NSS crypto provider\n";
-			
+
 		}
 #endif
 
@@ -2117,32 +2117,32 @@ void unitTestEncrypt(DOMImplementation *impl) {
 
 			ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_128);
 			ks->setKey((unsigned char *) s_keyStr, 16);
-		
+
 			unitTestKeyEncrypt(impl, ks, ENCRYPT_KW_AES128);
 
 			cerr << "AES 192 key wrap... ";
 
 			ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_192);
 			ks->setKey((unsigned char *) s_keyStr, 24);
-		
+
 			unitTestKeyEncrypt(impl, ks, ENCRYPT_KW_AES192);
 
 			cerr << "AES 256 key wrap... ";
 
 			ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_256);
 			ks->setKey((unsigned char *) s_keyStr, 32);
-		
+
 			unitTestKeyEncrypt(impl, ks, ENCRYPT_KW_AES256);
 		}
 
-		else 
+		else
 			cerr << "Skipped AES key wrap tests" << endl;
 
 		cerr << "Triple DES key wrap... ";
 
 		ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_3DES_192);
 		ks->setKey((unsigned char *) s_keyStr, 24);
-		
+
 		unitTestKeyEncrypt(impl, ks, ENCRYPT_KW_3DES);
 
 		// Now do Element encrypts
@@ -2213,9 +2213,9 @@ void unitTestEncrypt(DOMImplementation *impl) {
 void testEncrypt(DOMImplementation *impl) {
 
 	cerr << "Creating a known doc encrypting a portion of it" << endl;
-	
+
 	// Create a document
-    
+
 	DOMDocument * doc = createTestDoc(impl);
 	DOMNode * categoryNode = findNode(doc, MAKE_UNICODE_STRING("category"));
 	if (categoryNode == NULL) {
@@ -2231,7 +2231,7 @@ void testEncrypt(DOMImplementation *impl) {
 	XENCCipher * cipher;
 
 	try {
-		
+
 		/*
 		 * Now we have a document, find the data node.
 		 */
@@ -2243,7 +2243,7 @@ void testEncrypt(DOMImplementation *impl) {
 
 			cerr << "Unable to obtain enough random bytes from Crypto Provider" << endl;
 			exit(1);
-		
+
 		}
 
 		cipher = prov.newCipher(doc);
@@ -2252,11 +2252,11 @@ void testEncrypt(DOMImplementation *impl) {
 
 		// Set a key
 
-		XSECCryptoSymmetricKey * k = 
+		XSECCryptoSymmetricKey * k =
 			XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_3DES_192);
 		k->setKey((unsigned char *) randomBuffer, 24);
 		cipher->setKey(k);
-	
+
 		// Now encrypt!
 		cerr << "Performing 3DES encryption on <category> element ... ";
 		cipher->encryptElement((DOMElement *) categoryNode, ENCRYPT_3DES_CBC);
@@ -2302,7 +2302,7 @@ void testEncrypt(DOMImplementation *impl) {
 			kek->setKey((unsigned char *) s_keyStr, 24);
 
 		}
-		
+
 		cipher->setKEK(kek);
 
 		XENCEncryptedKey * encryptedKey;
@@ -2328,13 +2328,13 @@ void testEncrypt(DOMImplementation *impl) {
 		XENCCipher * cipher2 = prov.newCipher(doc);
 
 		XSECCryptoSymmetricKey * k2;
-		
+
 		if (g_haveAES) {
 
 			k2 = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_128);
 			k2->setKey((unsigned char *) s_keyStr, 16);
 		}
-		
+
 		else {
 			k2 = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_3DES_192);
 			k2->setKey((unsigned char *) s_keyStr, 24);
@@ -2380,7 +2380,7 @@ void testEncrypt(DOMImplementation *impl) {
 
 				DSIGKeyInfoName *n = (DSIGKeyInfoName *) (kil->item(i));
 				if (!strEquals(n->getKeyName(), s_tstKeyName)) {
-					
+
 					cerr << "no!" << endl;
 					exit (1);
 				}
@@ -2411,7 +2411,7 @@ void testEncrypt(DOMImplementation *impl) {
 
 					foundCCN = true;
 				}
-				
+
 				if (strEquals(xek->getRecipient(), s_tstRecipient)) {
 
 					foundRecipient = true;
@@ -2455,8 +2455,8 @@ void testEncrypt(DOMImplementation *impl) {
 		cerr << ce << endl;
 		delete ce;
 		exit(1);
-		
-	}	
+
+	}
 	catch (XSECCryptoException &e)
 	{
 		cerr << "A cryptographic error occured during signature processing\n   Message: "
@@ -2478,9 +2478,9 @@ void testXKMS(DOMImplementation *impl) {
 	// This is really a place holder
 
 	cerr << "Making POST call to server ...  " << endl;
-	
+
 	// Create a document
-    
+
 	DOMDocument * doc = createTestDoc(impl);
 	DOMNode * categoryNode = findNode(doc, MAKE_UNICODE_STRING("category"));
 
@@ -2493,7 +2493,7 @@ void testXKMS(DOMImplementation *impl) {
 	doc->release();
 }
 #endif
-	
+
 // --------------------------------------------------------------------------------
 //           Print usage instructions
 // --------------------------------------------------------------------------------
@@ -2535,9 +2535,9 @@ int main(int argc, char **argv) {
 	/* We output a version number to overcome a "feature" in Microsoft's memory
 	   leak detection */
 
-	cerr << "DSIG Info - Using Apache XML-Security-C Library v" << 
+	cerr << "DSIG Info - Using Apache XML-Security-C Library v" <<
         XSEC_VERSION_MAJOR <<
-		"." << XSEC_VERSION_MEDIUM << "." << XSEC_VERSION_MINOR << 
+		"." << XSEC_VERSION_MEDIUM << "." << XSEC_VERSION_MINOR <<
         " (" << _XSEC_VERSION_FULL << ")\n";
 
 	// Check parameters
@@ -2676,7 +2676,7 @@ int main(int argc, char **argv) {
 		// Setup for building documents
 
 		XMLCh tempStr[100];
-		XMLString::transcode("Core", tempStr, 99);    
+		XMLString::transcode("Core", tempStr, 99);
 		DOMImplementation *impl = DOMImplementationRegistry::getDOMImplementation(tempStr);
 
 		// Output some info
@@ -2773,7 +2773,7 @@ int main(int argc, char **argv) {
 	    _CrtMemDumpStatistics( &s3 );
 	}
 
-	// Now turn off memory leak checking and end as there are some 
+	// Now turn off memory leak checking and end as there are some
 	// Globals that are allocated that get seen as leaks (Xalan?)
 
 	int dbgFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);

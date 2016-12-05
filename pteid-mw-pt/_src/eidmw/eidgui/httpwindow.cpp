@@ -87,7 +87,9 @@ HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
     setWindowTitle(tr("Auto-Update"));
 
     //statusLabel = new QLabel(tr("There are updates available press Install do perform the updates."));
-
+	delete mainLayout;
+	delete topLayout;
+	delete textEditor;
 }
 
 HttpWindow::~HttpWindow()
@@ -271,8 +273,8 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
 #ifdef WIN32
 	STARTUPINFO si;
     PROCESS_INFORMATION pi;
-	ZeroMemory(&si,sizeof(si)); 
-	si.cb = sizeof(si); 
+	ZeroMemory(&si,sizeof(si));
+	si.cb = sizeof(si);
 
 	std::string winpath;
     winpath.append("C:\\Windows\\system32\\msiexec.exe /i");
@@ -295,7 +297,7 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
     std::transform(distro.begin(), distro.end(), distro.begin(), ::tolower);
 
 	std::cout << "pkgpath " << pkgpath << " distro " << distro << std::endl;
-    
+
 	if (distro == "debian" || distro == "ubuntu" || distro == "caixamagica")
 	{
 	  	execl ("/usr/bin/software-center", "software-center", pkgpath.c_str(), NULL);

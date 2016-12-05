@@ -53,7 +53,7 @@ log_trace(WHERE, "I: enter");
    if (ret != CKR_OK)
 {
 	log_trace(WHERE, "I: leave, p11_lock failed with %i",ret);
-   return ret;
+   return ((CK_RV)ret);
 }
 
    log_trace(WHERE, "S: C_OpenSession (slot %d)", slotID);
@@ -139,7 +139,7 @@ ret = p11_lock();
 if (ret != CKR_OK)
 {
 	log_trace(WHERE, "I: leave, p11_lock failed with %i",ret);
-   return ret;
+   return ((CK_RV)ret);
 }
 
 log_trace(WHERE, "S: C_CloseSession (session %d)", hSession);
@@ -187,7 +187,7 @@ pSession->pfNotify = NULL;
 cleanup:
    p11_unlock();
    log_trace(WHERE, "I: leave, ret = %i",ret);
-   return ret;
+   return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -203,7 +203,7 @@ log_trace(WHERE, "I: enter");
 if (ret != CKR_OK)
 {
 	log_trace(WHERE, "I: leave, p11_lock failed with %i",ret);
-   return ret;
+   return ((CK_RV)ret);
 }
 
    log_trace(WHERE, "S: C_CloseAllSessions(slot %d)", slotID);
@@ -212,7 +212,7 @@ if (ret != CKR_OK)
 
    p11_unlock();
    log_trace(WHERE, "I: leave, ret = %i",ret);
-   return ret;
+   return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -241,9 +241,11 @@ int isAcroread()
 		   )
    {
 	   fprintf(stderr, "We're being called by acroread!!\n");
+	   free(buf);
 	   return 1;
 
    }
+   free(buf);
    return 0;
 
 }
@@ -263,7 +265,7 @@ CK_RV C_GetSessionInfo(CK_SESSION_HANDLE hSession,  /* the session's handle */
    if (ret != CKR_OK)
    {
 	   log_trace(WHERE, "I: leave, p11_lock failed with %i",ret);
-	   return ret;
+	   return ((CK_RV)ret);
    }
 
    log_trace(WHERE, "S: C_GetSessionInfo(session %d)", hSession);
@@ -318,7 +320,7 @@ CK_RV C_GetSessionInfo(CK_SESSION_HANDLE hSession,  /* the session's handle */
 cleanup:
    p11_unlock();
    log_trace(WHERE, "I: leave, ret = %i",ret);
-   return ret;
+   return ((CK_RV)ret);
 }
 #undef WHERE 
 
@@ -370,7 +372,7 @@ if (ret != CKR_OK)
 	log_trace(WHERE, "I: leave, p11_lock failed with %i",ret);
 	//printf("LOCK failled!\n");
    	//printf("\n********************\n");
-   return ret;
+   return ((CK_RV)ret);
 }
 
 if (isAcroread())
@@ -439,7 +441,7 @@ cleanup:
    	//printf("RET = %d\n",ret);
 	//printf("\n********************\n");
 	
-   return ret;
+   return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -456,7 +458,7 @@ ret = p11_lock();
 if (ret != CKR_OK)
 {
 	log_trace(WHERE, "I: leave, p11_lock failed with %i",ret);
-   return ret;
+   return ((CK_RV)ret);
 } 
 
 log_trace(WHERE, "S: Logout (session %d)", hSession);
@@ -493,7 +495,7 @@ else
 cleanup:
    p11_unlock();
    log_trace(WHERE, "I: leave, ret = %i",ret);
-   return ret;
+   return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -525,7 +527,7 @@ log_trace(WHERE, "I: enter");
 if (ret != CKR_OK)
 {
 	log_trace(WHERE, "I: leave, p11_lock failed with %i",ret);
-   return ret;
+   return ((CK_RV)ret);
 }
 
    log_trace(WHERE, "S: C_SetPIN(session %d)", hSession);
@@ -541,6 +543,6 @@ if (ret != CKR_OK)
 cleanup:
    p11_unlock();
    log_trace(WHERE, "I: leave, ret = %i",ret);
-   return ret;
+   return ((CK_RV)ret);
 }
 #undef WHERE

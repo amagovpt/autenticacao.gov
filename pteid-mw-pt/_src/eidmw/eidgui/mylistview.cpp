@@ -71,8 +71,11 @@ void MyListView::removeSelected()
 	  selectionModel()->select(QItemSelection(new_index, model()->index(new_row, model()->columnCount()-1)),
 			  QItemSelectionModel::Select);
 	  // Update keyboard selected row, if it's not the first row
-	  if (new_row != 0)
-		  keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier));
+	  if (new_row != 0) {
+		  QKeyEvent *keyEvent = new QKeyEvent(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier);
+		  keyPressEvent(keyEvent);
+		  delete (keyEvent);
+	  }
   }
   else
   {
@@ -97,7 +100,7 @@ void MyListView::removeSelected()
 	  //We have to deliver the event to the Window/dialog class
 	  //which is the grandparent because we have the centralwidget in between
 	  QCoreApplication::sendEvent(parentWidget()->parentWidget(), delete_event);
-
+	  delete delete_event;
   }
 
 }

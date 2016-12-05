@@ -108,6 +108,8 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
     if (key.Size() == 0)
     {
     	fprintf(stderr, "retail_mac_des(): Empty key!\n");
+		free(outbuf);
+		free(complete_buf);
     	return CByteArray();
     }
     //DES BlockSize
@@ -372,6 +374,8 @@ err:
 		if (cRnd == NULL || strlen(cRnd) == 0)
 		{
 			fprintf(stderr, "Couldn't generate CRnd random bytes, aborting!\n");
+			if (cRnd != NULL) free(cRnd);
+			free(snIFD);
 			return CByteArray();
 		}
 
@@ -499,6 +503,7 @@ err:
 		m_kicc = CByteArray(kicc_str, true);
 		//int BN_hex2bn(BIGNUM **a, const char *str); 
 		int rc = BN_hex2bn(&kicc, kicc_str);
+		free(kicc_str);
 
 		if (rc == 0)
 		{

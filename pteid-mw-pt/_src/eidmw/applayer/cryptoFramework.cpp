@@ -1073,6 +1073,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 	        char *auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), proxy_cleartext.size());
 	        std::string header_value = std::string("basic ") + auth_token;
 	        OCSP_REQ_CTX_add1_header(ctx, "Proxy-Authorization", header_value.c_str());
+			free(auth_token);
 		}
 
 		OCSP_REQ_CTX_add1_header(ctx, "User-Agent", PTEID_USER_AGENT_VALUE);

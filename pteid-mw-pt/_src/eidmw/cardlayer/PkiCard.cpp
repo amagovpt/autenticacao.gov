@@ -212,7 +212,7 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
 unsigned char CPkiCard::PinUsage2Pinpad(const tPin & Pin, const tPrivKey *pKey)
 {
 	//Its hackish but works for IAS and Gemsafe Cards
-	return (char)Pin.ulID;
+	return (unsigned char)Pin.ulID;
 }
 
 bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,

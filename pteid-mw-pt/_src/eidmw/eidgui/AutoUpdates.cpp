@@ -111,6 +111,8 @@ AutoUpdates::AutoUpdates(QWidget *parent)
 	const QIcon app_icon = QIcon(":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png");
 	setWindowIcon(app_icon);
 	setWindowTitle(ddtitle);
+	delete mainLayout;
+	delete topLayout;
 }
 
 AutoUpdates::~AutoUpdates()
@@ -146,7 +148,7 @@ void AutoUpdates::startRequest(QUrl url)
 			proxy.setUser(QString::fromStdString(proxy_username));
 			proxy.setPassword(QString::fromStdString(proxy_pwd));
 		}
-		
+
 		QNetworkProxy::setApplicationProxy(proxy);
 	}
 	else
@@ -255,7 +257,7 @@ void AutoUpdates::httpReadyRead()
 	QByteArray data = reply->readAll();
 	QString qsdata(data);
 	filedata = qsdata.toStdString();
-	
+
 	//Write to file
 	if (file)
 		file->write(data);
@@ -308,18 +310,18 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 #endif
 
 	QStringList list1 = ver.split(",");
-	
+
 	QStringList list2 = QString(filedata.c_str()).split(",");
 
 	if (list2.size() < 3)
 	{
-		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", 
+		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
 			"AutoUpdates::VerifyUpdates: Wrong data returned from server or Proxy HTML error!");
-		
+
 		this->close();
 		return false;
 	}
-	
+
 	//Parse local version into PteidVersion
 	PteidVersion local_version;
 	local_version.major = list1.at(0).toInt();
@@ -344,7 +346,7 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
         archver = VerifyOS("arch", false);
         ChooseVersion(distrover, archver);
         return true;
-	} 
+	}
 	else {
 
 		QMessageBox msgBoxnoupdates(QMessageBox::Information, tr("Auto-update"),
@@ -449,7 +451,7 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		HttpWindow httpWin(downloadurl, distro);
 		httpWin.show();
 		httpWin.exec();
-	}    
+	}
 #elif __APPLE__
     	if (arch == "i386")
     	{
@@ -465,9 +467,9 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
     	}
 #else
 
-	if (distro == "unsupported")  
+	if (distro == "unsupported")
 	{
-	  	QMessageBox msgBoxp(QMessageBox::Warning, tr("Warning"), 
+	  	QMessageBox msgBoxp(QMessageBox::Warning, tr("Warning"),
 			tr("Your Linux distribution is not supported by Auto-updates"), 0, this);
 	  	msgBoxp.exec();
 	}

@@ -99,7 +99,7 @@ CK_ULONG len = 0;
 
 ret = p11_lock();
 if (ret != CKR_OK)
-   return ret;
+   return ((CK_RV)ret);
 
 log_trace(WHERE, "S: C_GetAttributeValue(hObject=%d)",hObject);
 
@@ -190,7 +190,7 @@ if (ulCount != 0)
 
 cleanup:
     p11_unlock();
-    return ret;
+    return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -222,7 +222,7 @@ CK_RV C_FindObjectsInit(CK_SESSION_HANDLE hSession,   /* the session's handle */
 
    ret = p11_lock();
    if (ret != CKR_OK)
-      return ret;
+      return ((CK_RV)ret);
 
    log_trace(WHERE, "S: C_FindObjectsInit(session %d)", hSession);
    if (ulCount == 0)
@@ -314,7 +314,7 @@ ret = CKR_OK;
 
 cleanup:
    p11_unlock();
-   return ret;
+   return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -348,7 +348,7 @@ PKCS15 defines existance of attributes that should be readable from token
 
    ret = p11_lock();
    if (ret != CKR_OK)
-      return ret;
+      return ((CK_RV)ret);
 
    log_trace(WHERE, "S: C_FindObjects(session %d)", hSession);
 
@@ -485,7 +485,7 @@ ret = CKR_OK;
 
 cleanup: 
    p11_unlock();
-   return ret;
+   return ((CK_RV)ret);
 }
 #undef WHERE
 
@@ -502,7 +502,7 @@ CK_RV C_FindObjectsFinal(CK_SESSION_HANDLE hSession) /* the session's handle */
 
    ret = p11_lock();
    if (ret != CKR_OK)
-      return ret;
+      return ((CK_RV)ret);
 
    log_trace(WHERE, "S: C_FindObjectsFinal(session %d)", hSession);
 
@@ -551,7 +551,7 @@ ret = CKR_OK;
 
 cleanup:
    p11_unlock();
-   return ret;
+   return ((CK_RV)ret);
 }
 #undef WHERE
 

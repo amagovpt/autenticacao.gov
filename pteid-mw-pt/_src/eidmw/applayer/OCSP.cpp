@@ -27,7 +27,7 @@ namespace eIDMW
 X509_STORE * setupStore()
 {
 	X509_STORE *store = X509_STORE_new();
-	
+
 	X509 *pCert = NULL;
 	unsigned char * cert_data = NULL;
 	char *parsing_error = NULL;
@@ -36,7 +36,7 @@ X509_STORE * setupStore()
 	{
 		pCert = NULL;
 		cert_data = PTEID_CERTS[i].cert_data;
-	    pCert = d2i_X509(&pCert, (const unsigned char **)&cert_data, 
+	    pCert = d2i_X509(&pCert, (const unsigned char **)&cert_data,
 			PTEID_CERTS[i].cert_len);
 
 		if (pCert == NULL)
@@ -50,7 +50,7 @@ X509_STORE * setupStore()
 			if(X509_STORE_add_cert(store, pCert) == 0)
 				fprintf(stderr, "OCSP: error adding certificate #%d\n",  i);
 		}
-	
+
 	}
 	return store;
 }
@@ -75,7 +75,7 @@ bool VerifyResponse(OCSP_REQUEST * req, OCSP_RESPONSE *resp)
 		else
 		{
 			fprintf(stderr, "Nonce Verify error\n");
-			return false; 
+			return false;
 		}
 	}
 	X509_STORE * store = setupStore();
@@ -154,6 +154,7 @@ CByteArray sendOCSPRequest(X509 *cert, X509* issuer, char *ocsp_url)
 
         char *auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), proxy_cleartext.size());
         OCSP_REQ_CTX_add1_header(ctx, "Proxy-Authorization", auth_token);
+		free(auth_token);
 	}
 
 	if (!OCSP_REQ_CTX_set1_req(ctx, pRequest))
@@ -161,7 +162,7 @@ CByteArray sendOCSPRequest(X509 *cert, X509* issuer, char *ocsp_url)
 
 	OCSP_RESPONSE * resp = NULL;
 	/*
-	* Adapted from the OCSP_sendreq_bio() implementation just to use our custom OCSP_CONTEXT so we can add the 
+	* Adapted from the OCSP_sendreq_bio() implementation just to use our custom OCSP_CONTEXT so we can add the
 	Authorization header if needed
 	*/
 	int rv = 0;
@@ -197,5 +198,5 @@ CByteArray sendOCSPRequest(X509 *cert, X509* issuer, char *ocsp_url)
 }
 
 
-            
+
 }

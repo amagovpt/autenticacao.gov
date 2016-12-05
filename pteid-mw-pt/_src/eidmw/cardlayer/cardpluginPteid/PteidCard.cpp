@@ -46,7 +46,7 @@ static const unsigned long BCDSIZE = 4;
 /* martinho - trace file*/
 static const string TRACEFILE = "3F000003";
 
-unsigned long ulVersion;	
+unsigned long ulVersion;
 
 // If we want to 'hardcode' this plugin internally in the CAL, this function
 // can't be present because it's the same for all plugins
@@ -60,7 +60,7 @@ CCard *GetCardInstance(unsigned long ulVersion, const char *csReader,
 
 static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard)
 {
-	long lRetVal = 0; 
+	long lRetVal = 0;
 	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
 	CByteArray oCmd(40);
 	oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
@@ -123,7 +123,7 @@ CCard *PTeidCardGetVersion (unsigned long ulVersion, const char *csReader,
 
 	poContext->m_oPCSC.EndTransaction(hCard);
 
-	if (bIsPtgemCard) 
+	if (bIsPtgemCard)
 	{
 		ulVersion = 1;
 		poContext->m_oPCSC.EndTransaction(hCard);
@@ -137,7 +137,7 @@ CCard *PTeidCardGetVersion (unsigned long ulVersion, const char *csReader,
 	}
 
 	poContext->m_oPCSC.EndTransaction(hCard);
-	
+
 	return poCard;
 }
 
@@ -307,7 +307,7 @@ std::string CPteidCard::GetPinpadPrefix()
 
 unsigned long CPteidCard::PinStatus(const tPin & Pin)
 {
-	long ulSW12 = 0;
+	unsigned long ulSW12 = 0;
 
 	try
 	{
@@ -321,7 +321,7 @@ unsigned long CPteidCard::PinStatus(const tPin & Pin)
 		if (ulSW12 == 0x9000)
 			return 3; //Maximum Try Counter for PteID Cards
 
-		return ulSW12 % 16;
+		return (ulSW12 % 16);
 	}
 	catch(...)
 	{
@@ -418,10 +418,10 @@ bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate){
 	tracefile_data.Append(0x01); // data = day month year 0 1   -- 6 bytes written to 3F000003 trace file
 
 	WriteFile(TRACEFILE,0, tracefile_data);
-	
+
 	while (ulRemaining > 0) // block puk
 		PinCmd(PIN_OP_VERIFY, activationPin, "1000", "", ulRemaining, NULL);
-		
+
 
 	return true;
 }
@@ -436,7 +436,7 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 		if (m_cardType == CARD_PTEID_IAS101) {
 			if (PinCmd(PIN_OP_VERIFY, *puk, pszPuk, "", ulRemaining, NULL))      // Verify PUK
 				bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", triesLeft, NULL); // Reset PIN
-		} 
+		}
 		else if (m_cardType == CARD_PTEID_IAS07) {
 
 			std::string pin_str;
@@ -446,7 +446,7 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 			std::string puk_str;
 			if (pszPuk != NULL)
 				puk_str = pszPuk;
-			bOK = PinCmd(PIN_OP_RESET, pin, puk_str, pin_str, triesLeft, NULL); 
+			bOK = PinCmd(PIN_OP_RESET, pin, puk_str, pin_str, triesLeft, NULL);
 		}
 	}
 	catch(CMWException e)
@@ -475,11 +475,11 @@ DlgPinUsage CPteidCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)
 
 #ifdef __linux__
 
-/* 
+/*
  * Alternative Console PIN UI for Linux systems with no X server
  *
  */
-int consoleAskForPin(tPinOperation operation, const tPin &Pin, 
+int consoleAskForPin(tPinOperation operation, const tPin &Pin,
 								char *sPin1, char* sPin2)
 {
 
@@ -513,7 +513,7 @@ int consoleAskForPin(tPinOperation operation, const tPin &Pin,
 
     if (operation == PIN_OP_CHANGE)
     {
-	    memset(password, 0, sizeof(password)); 
+	    memset(password, 0, sizeof(password));
 	    printf("New PIN: ");
 	    if (tcsetattr(fileno(stdin), TCSANOW, &nflags) != 0) {
 		    perror("tcsetattr");
@@ -570,11 +570,14 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 		csPin1 = std::string(sPin1);
 		csPin2 = std::string(sPin2);
 
+		delete[] sPin1;
+		delete[] sPin2;
+
 		return;
 	}
 	else
 	{
-#endif	
+#endif
 		std::wstring wideLabel = utilStringWiden(Pin.csLabel);
 		if (operation == PIN_OP_VERIFY)
 		{
@@ -584,10 +587,10 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 		else
 		{
 			ret = DlgAskPins(pinOperation, usage, wideLabel.c_str(),
-				pinInfo, wsPin1,PIN_MAX_LENGTH+1, 
+				pinInfo, wsPin1,PIN_MAX_LENGTH+1,
 				pinInfo, wsPin2,PIN_MAX_LENGTH+1);
 		}
-#ifdef __linux__	
+#ifdef __linux__
 
 	}
 #endif
@@ -798,7 +801,7 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
     bool bOK = false;
     m_ucCLA = 0x00;
 
-    MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::SignInternal called with algoID=%02x and data length=%d", 
+    MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::SignInternal called with algoID=%02x and data length=%d",
     	algo, oData.Size());
 
     if (pPin != NULL)
@@ -831,14 +834,14 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
         if (!bOK)
 		throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
     }
-	
+
     SetSecurityEnv(key, algo, oData.Size());
 
     CByteArray oData1;
-   
+
 	oData1.Append(0x90); //SHA-1 Hash as Input
 	oData1.Append(oData.Size());
-    
+
     oData1.Append(oData);
 
     CByteArray oResp, oResp1;
@@ -861,7 +864,7 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
     MWLOG(LEV_INFO, MOD_CAL, L"Resp oResp PSO is: 0x%2X", ulSW12);
     if (ulSW12 != 0x9000)
     	throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
-	
+
     // Remove SW1-SW2 from the response
     oResp.Chop(2);
 
@@ -950,7 +953,7 @@ CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFile
 			CByteArray oPath(ulPathLen);
 			oPath.Append(Hex2Byte(csPath, ulOffset));
 			oPath.Append(Hex2Byte(csPath, ulOffset + 1));
-			
+
 			CByteArray oResp = SendAPDU(0xA4, 0x00, 0x0C, oPath);
 			unsigned long ulSW12 = getSW12(oResp);
 			if ((ulSW12 == 0x6A82 || ulSW12 == 0x6A86) && m_selectAppletMode == TRY_SELECT_APPLET)
@@ -981,7 +984,7 @@ CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFile
 		  cout << "Think what to do" << endl;
 		}
 		CByteArray oResp;
-		if (ulVersion == 1) 
+		if (ulVersion == 1)
 		{
 		    oResp = SendAPDU(0xA4, 0x80, 0x00, oAID);
 		} else {
@@ -994,7 +997,7 @@ CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFile
 			if (SelectApplet())
 			{
 				m_selectAppletMode = ALW_SELECT_APPLET;
-				if (ulVersion == 1) 
+				if (ulVersion == 1)
 				{
 				    oResp = SendAPDU(0xA4, 0x80, 0x00, oAID);
 			        } else {
@@ -1013,7 +1016,7 @@ CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFile
 			oPath.Append(Hex2Byte(csPath, ulOffset / 2));
 			oPath.Append(Hex2Byte(csPath, ulOffset / 2 + 1));
 
-			if (ulVersion == 1) 
+			if (ulVersion == 1)
 			{
 			    CByteArray oResp = SendAPDU(0xA4, 0x00, 0x00, oPath);
 			} else {
@@ -1066,7 +1069,7 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
         return dontCache;
     case 244: // EF05 (Address)
         return dontCache;
-	case 252:  //PrkD 
+	case 252:  //PrkD
 		return dontCache;
 	case 245: // EF06 (SOD)
         return dontCache;
