@@ -17,63 +17,6 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
-/**
-\page ClassOverview  Overview of the all classes
-
-<PRE>
-
-       Public API (CardLayer.h, ReadersIngo.h Reader.h, P15Objects.h CardLayerConst.h)
-
-                             PKCS15
-
-                          Card
-                          |  |  Cache
-                          |  |
-                   AsymCard  SISCard
-                       |
-                  BelpicCard
-                                         P15Objects
-
-               Dlg            PCSC
-
-
---------------- objects
-
-CReader
-    -> tPin, tPrivKey, tCert
-    -> CReadersInfo
-
-    -> CCardLayer
-        -> CContext
-                -> CPCSC
-                -> CDlg
-                -> CPinpad
-
-        -> CCard 
-                -> CSISCard
-                -> CAsymCard
-                        -> CPteidCard
-                                -> CPKCS15
-                                        -> CCache
-
- 
-
-</PRE>
-
-
-\section UserList Who does what:
-
- Claudia: Linux, CL (of Ivo de CL)
- Dirk: PF
- Stef Hoeben: CL, build env.
- Christophe: dialogs, GUI
- Mark Geerts: SDK
- Vital Schonkeren/Geert Vanmuylem: pkcs11, minidriver
- Chris Verachtert: XAdES lib + app
- Ivo Pieck: Config, SIS
-
-*/
-
 
 #pragma once
 
