@@ -532,7 +532,7 @@ void MainWnd::doChangeAddress(const char *process, const char *secret_code)
 		qDebug() << "Caught exception in eidlib ChangeAddress()... closing progressBar";
 		this->addressProgressChanged(100);
 		this->addressChangeFinished(exception.GetError());
-		delete(&ReaderContext);
+		//LL delete(&ReaderContext);
 		return;
 	}
 
@@ -556,7 +556,7 @@ void MainWnd::on_btnAddress_Change_clicked()
 		QMessageBox msgBoxp(icon, caption, error_msg, 0, this);
   		msgBoxp.exec();
 
-		delete(&ReaderContext);
+		//LL delete(&ReaderContext);
 		return;
 	}
 
@@ -983,7 +983,7 @@ void MainWnd::stopAllEventCallbacks( void )
 		PTEID_ReaderContext& readerContext = ReaderSet.getReaderByName(it.key().toLatin1());
 		unsigned long handle = it.value();
 		readerContext.StopEventCallback(handle);
-		delete(&readerContext);
+		//LL delete(&readerContext);
 	}
 	m_callBackHandles.clear();
 	cleanupCallbackData();
@@ -1721,7 +1721,7 @@ void MainWnd::syncTreeItemWithSideinfo(QTreeCertItem *item)
 		m_ui.btnCert_Register->setEnabled(true);
 		m_ui.btnCert_Details->setEnabled(true);
 	}
-	delete(&ReaderContext);
+	//LL delete(&ReaderContext);
 }
 
 //*****************************************************
@@ -1793,7 +1793,7 @@ void MainWnd::on_treePIN_itemClicked(QTreeWidgetItem* item, int column)
 
 	PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 	if (!ReaderContext.isCardPresent()) {
-		delete(&ReaderContext);
+		//LL delete(&ReaderContext);
 		return;
 	}
 
@@ -1857,7 +1857,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
 			QCoreApplication::postEvent(pCallBackData->getMainWnd(),event);
 
 			g_runningCallback--;
-			delete(&readerContext);
+			//LL delete(&readerContext);
 			return;
 		}
 		//------------------------------------
@@ -2049,7 +2049,7 @@ void MainWnd::loadCardData( void )
 				}
 			}
 			enablePrintMenu();
-			delete(&ReaderContext);
+			//LL delete(&ReaderContext);
 		}
 		if (!bCardPresent)
 		{
@@ -2204,7 +2204,7 @@ void MainWnd::loadCardDataAddress( void )
 				}
 			}
 			enablePrintMenu();
-			delete(&ReaderContext);
+			//LL delete(&ReaderContext);
 		}
 		if (!m_CI_Data.isDataLoaded() || !bCardPresent)
 		{
@@ -2358,7 +2358,7 @@ bool MainWnd::loadCardDataPersoData( void )
 
 			}
 			enablePrintMenu();
-			delete(&ReaderContext);
+			//LL delete(&ReaderContext);
 		}
 		if (!m_CI_Data.isDataLoaded() || !bCardPresent)
 		{
@@ -2501,7 +2501,7 @@ void MainWnd::loadCardDataCertificates( void )
 				}
 			}
 			enablePrintMenu();
-			delete(&ReaderContext);
+			//LL delete(&ReaderContext);
 		}
 		if (!m_CI_Data.isDataLoaded() || !bCardPresent)
 		{
@@ -2818,7 +2818,7 @@ void MainWnd::authPINRequest_triggered()
 		if (!msg.isEmpty())
 			QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
 
-		delete(&ReaderContext);
+		//LL delete(&ReaderContext);
 	}
 	catch (PTEID_Exception &e)
 	{
@@ -2897,7 +2897,7 @@ bool MainWnd::addressPINRequest_triggered()
 
 		if (!msg.isEmpty())
 			QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-		delete(&ReaderContext);
+		//LL delete(&ReaderContext);
 		return pinactivate == 0;
 	}
 	catch (PTEID_Exception &e)
@@ -2983,7 +2983,7 @@ void MainWnd::on_actionPINRequest_triggered()
 			msg = tr("No card present");
 
 		QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-        delete(&ReaderContext);
+		//LL delete(&ReaderContext);
 	}
 	catch (PTEID_Exception &e)
 	{
@@ -3067,7 +3067,7 @@ void MainWnd::on_actionPINChange_triggered()
 			msg = tr("No card present");
 
 		QMessageBox::information( this, caption,  msg, QMessageBox::Ok );
-		delete(&ReaderContext);
+		//LL delete(&ReaderContext);
 	}
 	catch (PTEID_Exception &e)
 	{
@@ -3235,7 +3235,7 @@ void MainWnd::fillCertificateList( void )
 		msgBoxcc.exec();
 	}
 
-	delete certificates;
+	//LL delete certificates;
 }
 
 //**************************************************
@@ -3360,7 +3360,7 @@ void MainWnd::fillPinList()
 
 	m_ui.treePIN->topLevelItem(0)->setSelected(true);
 	m_ui.treePIN->setCurrentItem (m_ui.treePIN->topLevelItem(0));
-	delete pinTreeItem;
+	//LL delete pinTreeItem;
 }
 
 void MainWnd::loadPinData(PTEID_EIDCard& Card)
@@ -3691,7 +3691,7 @@ void MainWnd::PersoDataSaveButtonClicked( void )
             QMessageBox::information( this, tr("Personal Notes"),  tr("Personal notes successfully written!"), QMessageBox::Ok );
 
         }
-		delete(&ReaderContext);
+		//LL delete(&ReaderContext);
     } catch (PTEID_Exception& e) {
         QMessageBox::critical(this, tr("Personal Notes"), tr("Error writing personal notes!"), QMessageBox::Ok );
     }
@@ -3921,7 +3921,7 @@ void MainWnd::refreshTabCardPin( void )
 				break;
 			}
 		}
-		delete(&ReaderContext);
+		//LL delete(&ReaderContext);
 	}
 }
 
@@ -4041,7 +4041,7 @@ void MainWnd::setCorrespondingTrayIcon( PopupEvent* pPopupEvent )
 					}
 					nrReaders = ReaderSet.readerCount();	// stop looping
 				}
-				delete(&readerContext);
+				//LL delete(&readerContext);
 			}
 		}
 		else
@@ -4061,7 +4061,7 @@ void MainWnd::setCorrespondingTrayIcon( PopupEvent* pPopupEvent )
 				{
 					TrayIco = QIcon( ":/images/Images/Icons/reader_card.png" );
 				}
-				delete(&readerContext);
+				//LL delete(&readerContext);
 			}
 			else
 			{
@@ -4087,7 +4087,7 @@ void MainWnd::setCorrespondingTrayIcon( PopupEvent* pPopupEvent )
 					}
 					nrReaders = ReaderSet.readerCount();	// stop looping
 				}
-				delete(&readerContext);
+				//LL delete(&readerContext);
 			}
 		}
 		else
@@ -4098,7 +4098,7 @@ void MainWnd::setCorrespondingTrayIcon( PopupEvent* pPopupEvent )
 			{
 				TrayIco = QIcon( ":/images/Images/Icons/reader_card.png" );
 			}
-			delete(&readerContext);
+			//LL delete(&readerContext);
 		}
 	}
 	m_pTrayIcon->setIcon(TrayIco);
@@ -4210,7 +4210,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 					if (!readerContext.isCardPresent())
 					{
 						pEvent->accept();
-						delete(&readerContext);
+						//LL delete(&readerContext);
 						return;
 					}
 
@@ -4470,7 +4470,7 @@ void MainWnd::setEventCallbacks( void )
 
 			m_callBackHandles[readerName] = readerContext.SetEventCallback(fCallback, pCBData);
 			m_callBackData[readerName]	  = pCBData;
-			delete(&readerContext);
+			//LL delete(&readerContext);
 		}
 	}
 	catch(PTEID_Exception& e)

@@ -215,7 +215,7 @@ void dlgOptions::on_okButton_clicked()
 
 			msgBox->setModal(true);
 			msgBox->show();
-			delete msgBox;
+			delete msgBox;//LL
 			return;
 	}
 
@@ -240,7 +240,7 @@ void dlgOptions::on_okButton_clicked()
 
 			msgBox->setModal(true);
 			msgBox->show();
-			delete msgBox;
+			delete msgBox;//LL
 			return;
 		}
 

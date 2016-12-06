@@ -562,7 +562,7 @@ PTEID_EIDCard& PDFSignWindow::getNewCard()
 
 					}
 			}
-			delete (&ReaderContext);
+			//LL delete (&ReaderContext);
 		}
 
 }

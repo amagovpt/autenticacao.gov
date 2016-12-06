@@ -25,7 +25,7 @@
 
 #include <QtGui>
 #include <QtNetwork>
-#include <QDialogButtonBox> 
+#include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
@@ -87,9 +87,9 @@ HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
     setWindowTitle(tr("Auto-Update"));
 
     //statusLabel = new QLabel(tr("There are updates available press Install do perform the updates."));
-	delete mainLayout;
-	delete topLayout;
-	delete textEditor;
+	delete mainLayout;//LL
+	delete topLayout;//LL
+	delete textEditor;//LL
 }
 
 HttpWindow::~HttpWindow()

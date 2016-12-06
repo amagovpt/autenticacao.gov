@@ -413,7 +413,7 @@ public:
 		m_pPictureData = QByteArray((const char *)p.GetBytes(),p.Size());
 		bRetVal = true;
 
-		delete(&p);
+		delete(&p);//LL
 		return bRetVal;
 	}
 
@@ -620,8 +620,8 @@ public:
 		m_PersonExtraInfo.RetrieveData(Card);
 		m_BiometricInfo.RetrieveData(Card);
 
-		delete[] father;
-		delete[] mother;
+		delete[] father;//LL
+		delete[] mother;//LL
 
 		return bRetVal;
 	}

@@ -100,7 +100,7 @@ void MyListView::removeSelected()
 	  //We have to deliver the event to the Window/dialog class
 	  //which is the grandparent because we have the centralwidget in between
 	  QCoreApplication::sendEvent(parentWidget()->parentWidget(), delete_event);
-	  delete delete_event;
+	  //LL delete delete_event;
   }
 
 }

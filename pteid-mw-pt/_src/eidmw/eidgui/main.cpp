@@ -98,8 +98,11 @@ int main(int argc, char *argv[])
 #endif
 
 	int iRetValue = 0;
+#ifdef WIN32
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 	QApplication instance(argc, argv);
+
 
 	/*
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Waking up other instance");

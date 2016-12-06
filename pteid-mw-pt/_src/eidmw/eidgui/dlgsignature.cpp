@@ -352,7 +352,7 @@ PTEID_EIDCard& dlgSignature::getNewCard()
 
 					}
 			}
-			delete(&ReaderContext);
+			//LL delete(&ReaderContext);
 		}
 }
 
