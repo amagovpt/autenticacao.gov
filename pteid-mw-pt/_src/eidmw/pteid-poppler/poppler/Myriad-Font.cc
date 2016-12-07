@@ -13752,6 +13752,7 @@ Object createFontDescriptor(XRef * xref, MyriadFontType ft)
 	font_descriptor.dictAdd(copyString("FontFile3"),
 			obj_attr.initRef(ref_to_font.num, ref_to_font.gen));
 
+  delete aStream;
 
 	return font_descriptor;
 }

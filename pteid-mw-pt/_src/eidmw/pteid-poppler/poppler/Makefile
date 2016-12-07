@@ -1,4 +1,4 @@
-CFLAGS= -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -g
+CFLAGS= -fno-omit-frame-pointer --std=c++98 -fPIC -O3 -I.. -I../goo/ -g
 
 BASENAME=libpteid-poppler
 
