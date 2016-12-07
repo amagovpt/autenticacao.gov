@@ -93,7 +93,7 @@ memcpy(p, data.GetBytes(), data.Size());
 
 *l = data.Size();
 
-delete oHash;
+delete(oHash);
 
 return (ret);
 }

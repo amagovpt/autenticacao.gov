@@ -54,7 +54,7 @@ void PTEID_EIDCard::SignXadesTIndividual(const char *const * path, unsigned int 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
 
 	pcard->SignXadesTIndividual((const char **)path, n_paths, output_path);
-	delete pcard;
+	//LL delete pcard;
 
 	END_TRY_CATCH
 
@@ -84,7 +84,7 @@ void PTEID_EIDCard::SignXadesAIndividual(const char *const * path, unsigned int 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
 
 	pcard->SignXadesAIndividual((const char **)path, n_paths, output_path);
-	delete pcard;
+	//LL delete pcard;
 
 	END_TRY_CATCH
 

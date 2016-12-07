@@ -1320,7 +1320,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	doc->release();
 
 
-    delete emptyBa;
+    delete emptyBa;//LL
 	return *xml_output;
 }
 

@@ -585,7 +585,7 @@ void CAppLayer::readerListInit(bool bForceRefresh)
 					info = new CReadersInfo();
 					*info=m_Cal->ListReaders();
 					nbrReader=info->ReaderCount();
-					delete info;
+					//delete info;//LL
 				}
 				catch(...)
 				{

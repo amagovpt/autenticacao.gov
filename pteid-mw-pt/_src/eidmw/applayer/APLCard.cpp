@@ -682,7 +682,7 @@ APL_Certifs *APL_SmartCard::getCertificates()
 			{
 				APL_Certif *cert=NULL;
 				cert=m_certs->getCertFromCard(ulIndex);
-				delete cert;
+				//LL delete cert;
 			}
 		}
 	}

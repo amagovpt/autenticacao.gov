@@ -339,7 +339,7 @@ int DSIG_EXPORT CalculateXKMSKEK(unsigned char * input, int inputLen, unsigned c
 		Janitor<XSECCryptoHash> j_h(h);
 
 		h->setKey(k);
-		delete k;
+		delete(k);
 
 		// Now hash next round of data
 		h->hash((unsigned char *) sb.rawBuffer(), l);

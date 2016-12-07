@@ -90,9 +90,9 @@ int cal_close()
    int ret = 0;
 
    if (oCardLayer)
-      delete oCardLayer;
+      delete(oCardLayer);
    if (oReadersInfo)
-      delete oReadersInfo;
+      delete(oReadersInfo);
 
    oCardLayer = NULL;
    oReadersInfo = NULL;

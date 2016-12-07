@@ -371,7 +371,7 @@ DWORD WINAPI doVerifyThread (LPVOID Param) {
 
 		parser->parse(*memIS);
 
-		delete memIS;
+		delete(memIS);
 
 		myDoc = parser->adoptDocument();
 

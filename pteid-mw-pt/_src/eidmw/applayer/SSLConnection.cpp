@@ -552,13 +552,13 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 			resp->apdu_write_sod.push_back(strdup(cJSON_GetArrayItem(array_sod, i)->valuestring));
 
 		cJSON_Delete(json);
-		free(server_response);
+		delete server_response;
 		return resp;
 	}
 
 err:
 	delete resp;
-	free(server_response );
+	delete server_response;
 	cJSON_Delete(json);
 	return NULL;
 }
@@ -946,7 +946,7 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     				is_chunk_length = true;
     			}
 
-				free(buffer_tmp);
+				free(buffer_tmp);//LL
 
     		}
     	}
@@ -957,7 +957,7 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     		if (!strstr(buffer, "Transfer-Encoding: chunked"))
     			fprintf(stderr, "DEBUG: Unexpected server reply: HTTP response is not chunked!\n");
 
-			free(buffer_tmp);
+			free(buffer_tmp);//LL
     	}
     	if (r == -1)
     	{
@@ -1013,7 +1013,7 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned in
 		    char * buffer_tmp = (char*)calloc(strlen(buffer)+1, 1);
 		    strcpy(buffer_tmp, buffer);
 		    content_length = parseContentLength(buffer_tmp);
-			free(buffer_tmp);
+			free(buffer_tmp);//LL
 	    }
 		if (r == -1)
 		{

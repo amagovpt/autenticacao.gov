@@ -59,8 +59,7 @@ CK_RV C_Initialize(CK_VOID_PTR pReserved)
 	int ret = CKR_OK;
 	char sep;
 	const char *temp;
-	const char *env_vr;
-	char *tmpvar;
+	const char *env_vr, *tmpvar;
 	char *log_path;
 	CK_C_INITIALIZE_ARGS_PTR p_args;
 	int isDup = 0;

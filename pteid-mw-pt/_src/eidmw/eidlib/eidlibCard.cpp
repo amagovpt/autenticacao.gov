@@ -1596,8 +1596,8 @@ PTEIDSDK_API long PTEID_GetPic(PTEID_PIC *PicData){
 		memcpy(PicData->facialinfo, scratch.GetBytes(), (PTEID_MAX_FACINFO_LEN >= scratch.Size()) ? scratch.Size(): PTEID_MAX_FACINFO_LEN);
 		scratch = photoOjb.getphotoImageinfo();
 		memcpy(PicData->imageinfo, scratch.GetBytes(), (PTEID_MAX_IMAGEINFO_LEN>= scratch.Size()) ? scratch.Size(): PTEID_MAX_IMAGEINFO_LEN);
-		delete (&scratch);
-		delete (&photoOjb);
+		//LL delete (&scratch);
+		//LL delete (&photoOjb);
 	}
 
 	return 0;
@@ -1618,7 +1618,6 @@ PTEIDSDK_API long PTEID_GetCertificates(PTEID_Certifs *Certifs){
 			memcpy(Certifs->certificates[i].certif, ba.GetBytes(),(PTEID_MAX_CERT_LEN >= ba.Size()) ? ba.Size() : PTEID_MAX_CERT_LEN);
 			Certifs->certificates[i].certifLength = (PTEID_MAX_CERT_LEN >= ba.Size()) ? ba.Size() : PTEID_MAX_CERT_LEN;
 			strncpy(Certifs->certificates[i].certifLabel, cert.getLabel(), (PTEID_MAX_CERT_LABEL_LEN >= strlen(cert.getLabel()) ? strlen(cert.getLabel()) : PTEID_MAX_CERT_LABEL_LEN-1));
-
 		}
 		Certifs->certificatesLength = i;
 	}
@@ -1942,7 +1941,7 @@ PTEIDSDK_API long PTEID_GetCardAuthenticationKey(PTEID_RSAPublicKey *pCardAuthPu
 		pCardAuthPubKey->modulusLength = cardKey.getCardAuthKeyModulus().Size();
 		memcpy(pCardAuthPubKey->exponent, cardKey.getCardAuthKeyExponent().GetBytes(), cardKey.getCardAuthKeyExponent().Size());
 		pCardAuthPubKey->exponentLength = cardKey.getCardAuthKeyExponent().Size();
-		delete (&cardKey);
+		//LL delete (&cardKey);
 	}
 
 	return 0;
@@ -1956,7 +1955,7 @@ PTEIDSDK_API long PTEID_GetCVCRoot(PTEID_RSAPublicKey *pCVCRootKey){
 		pCVCRootKey->modulusLength = rootCAKey.getCardAuthKeyModulus().Size();
 		memcpy(pCVCRootKey->exponent, rootCAKey.getCardAuthKeyExponent().GetBytes(), rootCAKey.getCardAuthKeyExponent().Size());
 		pCVCRootKey->exponentLength = rootCAKey.getCardAuthKeyExponent().Size();
-		delete (&rootCAKey);
+		//LL delete (&rootCAKey);
 	}
 
 	return 0;

@@ -537,7 +537,7 @@ bool reValidateSig(DOMImplementation *impl, DOMDocument * inDoc, XSECCryptoKey *
 		DOMDocument * doc = parser.adoptDocument();
 
 
-		delete memIS;
+		delete(memIS);
 		delete[] mbuf;
 
 		/*

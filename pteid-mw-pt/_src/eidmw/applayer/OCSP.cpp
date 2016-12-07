@@ -154,7 +154,7 @@ CByteArray sendOCSPRequest(X509 *cert, X509* issuer, char *ocsp_url)
 
         char *auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), proxy_cleartext.size());
         OCSP_REQ_CTX_add1_header(ctx, "Proxy-Authorization", auth_token);
-		free(auth_token);
+		free(auth_token);//LL
 	}
 
 	if (!OCSP_REQ_CTX_set1_req(ctx, pRequest))

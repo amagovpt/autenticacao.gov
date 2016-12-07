@@ -68,12 +68,12 @@ private:
 
 		void clear()
 		{
-			if(m_baHash) 
-			{	
+			if(m_baHash)
+			{
 				delete m_baHash;
 				m_baHash=NULL;
 			}
-			if(m_crl) 
+			if(m_crl)
 			{
 				X509_CRL_free(m_crl);
 				m_crl=NULL;
@@ -120,7 +120,7 @@ private:
 		CByteArray *m_baHash;
 		X509_CRL *m_crl;
 		std::string m_timeStamp;
-	}; 
+	};
 
 public:
 	CrlMemoryCache()
@@ -170,10 +170,10 @@ public:
 		const unsigned char *pTempBuffer = crl.GetBytes();
 
 		#if (OPENSSL_VERSION_NUMBER > 0x009070ffL)
-		  pX509CRL = d2i_X509_CRL(&pX509CRL,&pTempBuffer,crl.Size()); 
-		#else   
+		  pX509CRL = d2i_X509_CRL(&pX509CRL,&pTempBuffer,crl.Size());
+		#else
 		  unsigned char* pTempBuffer_nonconst = const_cast<unsigned char*> (pTempBuffer);
-		  pX509CRL = d2i_X509_CRL(&pX509CRL,&pTempBuffer_nonconst,crl.Size()); 
+		  pX509CRL = d2i_X509_CRL(&pX509CRL,&pTempBuffer_nonconst,crl.Size());
 		#endif
 
 		MWLOG(LEV_DEBUG, MOD_SSL, L" ---> OpenSSL structure created");
@@ -318,7 +318,7 @@ bool APL_CryptoFwk::isSelfIssuer(const CByteArray &cert)
 	if ( ! d2i_X509_Wrapper(&pX509, pucCert,cert.Size() ) )
 	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
-	
+
 	//FIRST CHECK IF THE ISUER NAME IS THE SAME AS THE OWNER (SUBJECT)
 	if(X509_name_cmp(X509_get_issuer_name(pX509),X509_get_subject_name(pX509))==0)
 	{
@@ -342,10 +342,10 @@ bool APL_CryptoFwk::isCrlValid(const CByteArray &crl,const CByteArray &issuer)
 	//Convert crl into pX509_Crl
 	if ( NULL == (pX509_Crl=getX509CRL(crl)) )
 	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-        
+
 	//Convert issuer into pX509_Issuer
 	pucIssuer=issuer.GetBytes();
-	
+
 	if ( ! d2i_X509_Wrapper(&pX509_Issuer, pucIssuer,issuer.Size() ) )
 	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
@@ -370,10 +370,10 @@ bool APL_CryptoFwk::isCrlIssuer(const CByteArray &crl,const CByteArray &issuer)
 	//Convert crl into pX509_Crl
 	if ( NULL == (pX509_Crl=getX509CRL(crl)) )
 	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-        
+
 	//Convert issuer into pX509_Issuer
 	pucIssuer=issuer.GetBytes();
-	
+
 	if ( ! d2i_X509_Wrapper(&pX509_Issuer, pucIssuer,issuer.Size() ) )
 	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
@@ -392,7 +392,7 @@ bool APL_CryptoFwk::isCrlIssuer(X509_CRL *pX509_Crl,X509 *pX509_Issuer)
 	//Convert crl into pX509_Crl
 	if ( pX509_Crl==NULL || pX509_Issuer==NULL )
 	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-        
+
 	//FIRST CHECK IF THE ISUER NAME IS THE SAME AS THE OWNER (SUBJECT)
 	if(X509_name_cmp(X509_CRL_get_issuer(pX509_Crl),X509_get_subject_name(pX509_Issuer))==0)
 	{
@@ -416,10 +416,10 @@ bool APL_CryptoFwk::isIssuer(const CByteArray &cert,const CByteArray &issuer)
 
 	if ( ! d2i_X509_Wrapper(&pX509_Cert, pucCert,cert.Size() ) )
 	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-        
+
 	//Convert issuer into pX509_Issuer
 	pucIssuer=issuer.GetBytes();
-	
+
 	if ( ! d2i_X509_Wrapper(&pX509_Issuer, pucIssuer,issuer.Size() ) )
 	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
@@ -632,7 +632,7 @@ bool APL_CryptoFwk::VerifySignature(const CByteArray &data, const CByteArray &si
     unsigned char* signatureBytes = const_cast<unsigned char*> (pucSign);
 	ret=EVP_VerifyFinal(&cmd_ctx, signatureBytes, signature.Size(), pKey);
 #endif
-	
+
 
 	EVP_MD_CTX_cleanup(&cmd_ctx);
  	//Free openSSL object
@@ -665,7 +665,7 @@ FWK_CertifStatus APL_CryptoFwk::CRLValidation(const CByteArray &cert,const CByte
 
 	if ( ! d2i_X509_Wrapper(&pX509, pucCert,cert.Size() ) )
 	  goto cleanup;
-	
+
 	//Convert bytearray into X509_CRL
 	if (NULL == (pX509Crl=getX509CRL(crl)))
 	{
@@ -676,7 +676,7 @@ FWK_CertifStatus APL_CryptoFwk::CRLValidation(const CByteArray &cert,const CByte
     pRevokeds = X509_CRL_get_REVOKED(pX509Crl);
     if(pRevokeds)
 	{
-		for(int i = 0; i < sk_X509_REVOKED_num(pRevokeds); i++) 
+		for(int i = 0; i < sk_X509_REVOKED_num(pRevokeds); i++)
 		{
 			X509_REVOKED *pRevoked = sk_X509_REVOKED_value(pRevokeds, i);
 			if(M_ASN1_INTEGER_cmp(X509_get_serialNumber(pX509),pRevoked->serialNumber)==0)
@@ -696,7 +696,7 @@ cleanup:
 	//Free openSSL object
     if(pX509) X509_free(pX509);
 
-	return eStatus; 
+	return eStatus;
 }
 
 FWK_CertifStatus APL_CryptoFwk::OCSPValidation(const CByteArray &cert, const CByteArray &issuer, CByteArray *pResponse)
@@ -729,7 +729,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const CByteArray &cert, const CB
 		eStatus=FWK_CERTIF_STATUS_ERROR;
 		goto cleanup;
 	}
-        
+
 	try
 	{
 		eStatus=GetOCSPResponse(pX509_Cert,pX509_Issuer,&pOcspResponse);
@@ -757,7 +757,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const CByteArray &cert, const CB
 		else
 		{
 			eStatus=FWK_CERTIF_STATUS_ERROR;
-		}	
+		}
 	}
 
 	//Free openSSL object
@@ -809,7 +809,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,const 
     case FWK_ALGO_SHA1:
 		nid = EVP_MD_type(EVP_sha1());
 		break;
-	}	
+	}
 
 	if (!(astype = ASN1_TYPE_new()))
 	{
@@ -817,7 +817,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,const 
 		goto cleanup;
 	}
 
-	astype->type=V_ASN1_NULL; 
+	astype->type=V_ASN1_NULL;
 
 	if (!(hashAlgorithm = X509_ALGOR_new()))
 	{
@@ -863,7 +863,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,const 
 	if (certid. serialNumber->Size() <= sizeof(tucTmp))
 		memcpy(tucTmp, certid. serialNumber->GetBytes(), certid. serialNumber->Size());
 	ASN1_OCTET_STRING_set(serialNumber,tucTmp,certid.serialNumber->Size());
-	
+
 	if (!(pCertID = OCSP_CERTID_new()))
 	{
 		eStatus=FWK_CERTIF_STATUS_ERROR;
@@ -877,7 +877,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,const 
 
 	try
 	{
-		eStatus=GetOCSPResponse(pUrlResponder,pCertID,&pOcspResponse,pX509_Issuer); 
+		eStatus=GetOCSPResponse(pUrlResponder,pCertID,&pOcspResponse,pX509_Issuer);
 		if(eStatus!=FWK_CERTIF_STATUS_CONNECT && eStatus!=FWK_CERTIF_STATUS_ERROR)
 			bResponseOk=true;
 	}
@@ -902,7 +902,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,const 
 		else
 		{
 			eStatus=FWK_CERTIF_STATUS_ERROR;
-		}	
+		}
 	}
 
 cleanup:
@@ -918,7 +918,7 @@ cleanup:
 	return eStatus;
 }
 
-FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Issuer, OCSP_RESPONSE **pResponse) 
+FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Issuer, OCSP_RESPONSE **pResponse)
 {
 	if(pX509_Cert==NULL || pX509_Issuer==NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
@@ -952,7 +952,7 @@ cleanup:
     return eStatus;
 }
 
-FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_CERTID *pCertID, OCSP_RESPONSE **pResponse,X509 *pX509_Issuer) 
+FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_CERTID *pCertID, OCSP_RESPONSE **pResponse,X509 *pX509_Issuer)
 {
 	//The pointer should not be NULL
     if(pUrlResponder == NULL)
@@ -1000,19 +1000,19 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 #else
 	strcpy(uri,pUrlResponder);
 #endif
-	if (!ParseUrl(uri, &pszHost, &pszPort, &pszPath, &iSSL)) 
+	if (!ParseUrl(uri, &pszHost, &pszPort, &pszPath, &iSSL))
 	{
 		eStatus=FWK_CERTIF_STATUS_ERROR;
 		goto cleanup;
 	}
 
 	//We create the request
-    if (!(pRequest = OCSP_REQUEST_new())) 
+    if (!(pRequest = OCSP_REQUEST_new()))
 	{
 		eStatus=FWK_CERTIF_STATUS_ERROR;
 		goto cleanup;
 	}
-   
+
 	//We add the CertID
     if (!OCSP_request_add0_id(pRequest, pCertID))
 	{
@@ -1027,7 +1027,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 
 	/* establish a connection to the OCSP responder using proxy according to the Config */
 	pBio = Connect(pszHost, atoi(pszPort), iSSL, &pSSLCtx);
-	
+
 	if (pBio == NULL)
 	{
 
@@ -1038,7 +1038,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 	{
 
 		/*
-		
+
     SCOPE(OCSP_REQ_CTX, rctx, OCSP_sendreq_new(connection.get(), const_cast<char*>(url.c_str()), 0, -1));
     if(!rctx)
         THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
@@ -1073,7 +1073,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 	        char *auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), proxy_cleartext.size());
 	        std::string header_value = std::string("basic ") + auth_token;
 	        OCSP_REQ_CTX_add1_header(ctx, "Proxy-Authorization", header_value.c_str());
-			free(auth_token);
+			free(auth_token);//LL
 		}
 
 		OCSP_REQ_CTX_add1_header(ctx, "User-Agent", PTEID_USER_AGENT_VALUE);
@@ -1093,12 +1093,12 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 		}
 
 		int ResponseStatus = OCSP_response_status(*pResponse);
-		if (ResponseStatus != OCSP_RESPONSE_STATUS_SUCCESSFUL) 
+		if (ResponseStatus != OCSP_RESPONSE_STATUS_SUCCESSFUL)
 		{
 			eStatus=FWK_CERTIF_STATUS_ERROR;
 			goto cleanup;
 		}
-	  
+
 	    if (!(pBasic = OCSP_response_get1_basic(*pResponse)))
 		{
 			eStatus=FWK_CERTIF_STATUS_ERROR;
@@ -1108,10 +1108,10 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 		if(pX509_Issuer)
 		{
 			//Get the algorithm
-			const EVP_MD *algorithm; 
+			const EVP_MD *algorithm;
 			int i=OBJ_obj2nid(pBasic->signatureAlgorithm->algorithm);
 			const char *algoName=OBJ_nid2sn(i);
-			algorithm=EVP_get_digestbyname(algoName); 
+			algorithm=EVP_get_digestbyname(algoName);
 			if(algorithm==NULL)
 				algorithm=EVP_sha1();
 
@@ -1142,8 +1142,8 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 				X509 *pX509 = NULL;
 				bool bFound = false;
 
-				//Loop through the X509's 
-				for(int i = 0; i < sk_X509_num(pX509s); i++) 
+				//Loop through the X509's
+				for(int i = 0; i < sk_X509_num(pX509s); i++)
 				{
 					pX509 = sk_X509_value(pX509s, i);
 					if(pX509 != NULL)
@@ -1233,7 +1233,7 @@ bool APL_CryptoFwk::GetOCSPUrl(const CByteArray &cert, std::string &url)
 	return bOk;
 }
 
-char *APL_CryptoFwk::GetOCSPUrl(X509 *pX509_Cert) 
+char *APL_CryptoFwk::GetOCSPUrl(X509 *pX509_Cert)
 {
     STACK_OF(ACCESS_DESCRIPTION)*pStack = NULL;
     const char *pData = NULL;
@@ -1247,8 +1247,8 @@ char *APL_CryptoFwk::GetOCSPUrl(X509 *pX509_Cert)
 #else
         return strdup("");
 #endif
-	
-	for(int j = 0; j < sk_ACCESS_DESCRIPTION_num(pStack); j++) 
+
+	for(int j = 0; j < sk_ACCESS_DESCRIPTION_num(pStack); j++)
     {
         ACCESS_DESCRIPTION *pAccess = sk_ACCESS_DESCRIPTION_value(pStack, j);
         if(pAccess != NULL && pAccess->method != NULL && OBJ_obj2nid(pAccess->method) == NID_ad_OCSP)
@@ -1256,7 +1256,7 @@ char *APL_CryptoFwk::GetOCSPUrl(X509 *pX509_Cert)
             GENERAL_NAME *pName = pAccess->location;
             if(pName != NULL && pName->type == GEN_URI)
             {
-                pData = (const char *)ASN1_STRING_data(pName->d.uniformResourceIdentifier); 
+                pData = (const char *)ASN1_STRING_data(pName->d.uniformResourceIdentifier);
                 bFound = true;
 				break;
             }
@@ -1303,7 +1303,7 @@ bool APL_CryptoFwk::GetCDPUrl(const CByteArray &cert, std::string &url)
 	return bOk;
 }
 
-char *APL_CryptoFwk::GetCDPUrl(X509 *pX509_Cert) 
+char *APL_CryptoFwk::GetCDPUrl(X509 *pX509_Cert)
 {
     STACK_OF(DIST_POINT)* pStack = NULL;
     const char *pData = NULL;
@@ -1317,8 +1317,8 @@ char *APL_CryptoFwk::GetCDPUrl(X509 *pX509_Cert)
 #else
         return strdup("");
 #endif
-	
-    for(int j = 0; j < sk_DIST_POINT_num(pStack); j++) 
+
+    for(int j = 0; j < sk_DIST_POINT_num(pStack); j++)
     {
         DIST_POINT *pRes = (DIST_POINT *)sk_DIST_POINT_value(pStack, j);
         if(pRes != NULL)
@@ -1326,12 +1326,12 @@ char *APL_CryptoFwk::GetCDPUrl(X509 *pX509_Cert)
             STACK_OF(GENERAL_NAME) *pNames = pRes->distpoint->name.fullname;
             if(pNames)
             {
-                for(int i = 0; i < sk_GENERAL_NAME_num(pNames); i++) 
+                for(int i = 0; i < sk_GENERAL_NAME_num(pNames); i++)
                 {
                     GENERAL_NAME *pName = sk_GENERAL_NAME_value(pNames, i);
                     if(pName != NULL && pName->type == GEN_URI )
                     {
-                        pData = (const char *)ASN1_STRING_data(pName->d.uniformResourceIdentifier); 
+                        pData = (const char *)ASN1_STRING_data(pName->d.uniformResourceIdentifier);
                         bFound = true;
 						break;
                     }
@@ -1340,7 +1340,7 @@ char *APL_CryptoFwk::GetCDPUrl(X509 *pX509_Cert)
 				if(bFound) break;
             }
         }
-    } 
+    }
     sk_DIST_POINT_free(pStack);
 
 	if(!bFound)
@@ -1363,7 +1363,7 @@ bool APL_CryptoFwk::getCertInfo(const CByteArray &cert, tCertifInfo &info, const
 
 	if ( ! d2i_X509_Wrapper(&pX509, pucCert,cert.Size() ) )
 	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-        
+
     char szTemp[128] = {0};
 
 	CByteArray baTemp;
@@ -1438,7 +1438,7 @@ X509_CRL *APL_CryptoFwk::getX509CRL(const CByteArray &crl)
 	return m_CrlMemoryCache->getX509CRL(crl,baHash);
 }
 
-BIO *APL_CryptoFwk::Connect(char *pszHost, int iPort, int iSSL, SSL_CTX **ppSSLCtx) 
+BIO *APL_CryptoFwk::Connect(char *pszHost, int iPort, int iSSL, SSL_CTX **ppSSLCtx)
 {
 
 	BIO * pConnect = NULL;
@@ -1455,15 +1455,15 @@ BIO *APL_CryptoFwk::Connect(char *pszHost, int iPort, int iSSL, SSL_CTX **ppSSLC
 	// if(pConnect==NULL)
 	// 	throw CMWEXCEPTION(EIDMW_ERR_SOCKET_CONNECT);
 
-		if (iSSL) 
+		if (iSSL)
 		{
 			OpenSSL_add_all_algorithms();
 			SSL_CTX *pSSLCtx = SSL_CTX_new(TLSv1_1_client_method());
-	    
-			if (!(pConnect = BIO_new_ssl_connect(pSSLCtx))) 
+
+			if (!(pConnect = BIO_new_ssl_connect(pSSLCtx)))
 				return NULL;
 
-			BIO_set_conn_hostname(pConnect, pszHost);   
+			BIO_set_conn_hostname(pConnect, pszHost);
 		}
 		else
 		{
@@ -1489,13 +1489,13 @@ BIO *APL_CryptoFwk::Connect(char *pszHost, int iPort, int iSSL, SSL_CTX **ppSSLC
 
 void APL_CryptoFwk::resetProxy()
 {
-	APL_Config conf_pac(CConfig::EIDMW_CONFIG_PARAM_PROXY_PACFILE);     
+	APL_Config conf_pac(CConfig::EIDMW_CONFIG_PARAM_PROXY_PACFILE);
 	m_proxy_pac = conf_pac.getString();
 
-	APL_Config conf_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);     
+	APL_Config conf_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
 	m_proxy_host = conf_host.getString();
 
-	APL_Config conf_port(CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT); 
+	APL_Config conf_port(CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT);
 	char buffer[10];
 	sprintf_s(buffer,sizeof(buffer),"%ld",conf_port.getLong());
 	m_proxy_port = buffer;
@@ -1526,12 +1526,12 @@ int APL_CryptoFwk::ParseUrl(char *pszUri, char **pszHost, char **pszPort, char *
 	if(!proxy_host.empty())
     {
         *pszHost = (char *)OPENSSL_malloc(proxy_host.size() + 1);
-        strcpy_s(*pszHost,proxy_host.size() + 1, proxy_host.c_str()); 
+        strcpy_s(*pszHost,proxy_host.size() + 1, proxy_host.c_str());
     }
     if(!proxy_port.empty() && strcmp(proxy_port.c_str(),"0")!=0)
     {
         *pszPort = (char *)OPENSSL_malloc(proxy_port.size() + 1);
-        strcpy_s(*pszPort,proxy_port.size() + 1, proxy_port.c_str()); 
+        strcpy_s(*pszPort,proxy_port.size() + 1, proxy_port.c_str());
     }
 
      if(*pszHost == NULL || *pszPort == NULL)
@@ -1541,7 +1541,7 @@ int APL_CryptoFwk::ParseUrl(char *pszUri, char **pszHost, char **pszPort, char *
      else
      {
         *pszPath = (char *)OPENSSL_malloc(strlen(pszUri) + 1);
-        strcpy_s(*pszPath,strlen(pszUri) + 1, pszUri); 
+        strcpy_s(*pszPath,strlen(pszUri) + 1, pszUri);
 		return 1;
      }
 
@@ -1595,7 +1595,7 @@ bool APL_CryptoFwk::b64Decode(const CByteArray &baIn, CByteArray &baOut)
 
 	//Put the result in baOut
 	baOut.ClearContents();
-	baOut.Append(pOut,(unsigned long)iLenOut);//truncation checked above : 
+	baOut.Append(pOut,(unsigned long)iLenOut);//truncation checked above :
 	//XERCES_CPP_NAMESPACE::XMLString::release((char**)&pOut);
 	delete [] pOut;
 	delete[] pIn;
@@ -1625,7 +1625,7 @@ void APL_CryptoFwk::TimeToString(ASN1_TIME *asn1Time, std::string &strTime, cons
 	{
 		strTime.clear();
 	}
-} 
+}
 
 void APL_CryptoFwk::GeneralTimeToBuffer(ASN1_GENERALIZEDTIME *asn1Time, char* buffer,size_t bufferSize)
 {
@@ -1640,7 +1640,7 @@ void APL_CryptoFwk::GeneralTimeToBuffer(ASN1_GENERALIZEDTIME *asn1Time, char* bu
 
 	for (i=0; i<12; i++)
 	{
-		if ((v[i] > '9') || (v[i] < '0')) 
+		if ((v[i] > '9') || (v[i] < '0'))
 			return;
 	}
 	buffer[0] = v[6];//day
@@ -1666,22 +1666,22 @@ void APL_CryptoFwk::GeneralTimeToString(ASN1_GENERALIZEDTIME *asn1Time, struct t
 	i=asn1Time->length;
 	v=(char *)asn1Time->data;
 
-	if (i < 12) 
+	if (i < 12)
 		return;
 
-	if (v[i-1] == 'Z') 
+	if (v[i-1] == 'Z')
 		gmt=1;
 
 	for (i=0; i<12; i++)
 	{
-		if ((v[i] > '9') || (v[i] < '0')) 
+		if ((v[i] > '9') || (v[i] < '0'))
 			return;
 	}
 
 	timeinfo.tm_year= (v[0]-'0')*1000+(v[1]-'0')*100 + (v[2]-'0')*10+(v[3]-'0');
 	timeinfo.tm_mon= (v[4]-'0')*10+(v[5]-'0')-1;
 
-	if ((timeinfo.tm_mon > 11) || (timeinfo.tm_mon < 0)) 
+	if ((timeinfo.tm_mon > 11) || (timeinfo.tm_mon < 0))
 		return;
 
 	timeinfo.tm_mday= (v[6]-'0')*10+(v[7]-'0');
@@ -1701,26 +1701,26 @@ void APL_CryptoFwk::UtcTimeToString(ASN1_UTCTIME *asn1Time, struct tm &timeinfo)
 	i=asn1Time->length;
 	v=(char *)asn1Time->data;
 
-	if (i < 10) 
+	if (i < 10)
 		return;
 
-	if (v[i-1] == 'Z') 
+	if (v[i-1] == 'Z')
 		gmt=1;
 
 	for (i=0; i<10; i++)
 	{
-		if ((v[i] > '9') || (v[i] < '0')) 
+		if ((v[i] > '9') || (v[i] < '0'))
 			return;
 	}
 
 	timeinfo.tm_year= (v[0]-'0')*10+(v[1]-'0');
 
-	if (timeinfo.tm_year < 50) 
+	if (timeinfo.tm_year < 50)
 		timeinfo.tm_year+=100;
 
 	timeinfo.tm_mon= (v[2]-'0')*10+(v[3]-'0')-1;
 
-	if ((timeinfo.tm_mon > 11) || (timeinfo.tm_mon < 0)) 
+	if ((timeinfo.tm_mon > 11) || (timeinfo.tm_mon < 0))
 		return;
 
 	timeinfo.tm_mday= (v[4]-'0')*10+(v[5]-'0');

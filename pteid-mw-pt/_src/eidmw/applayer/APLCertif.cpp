@@ -813,7 +813,7 @@ void APL_Certifs::loadCard()
 	for(unsigned long i=0;i<countFromCard();i++)
 	{
 		cert=getCertFromCard(i);
-		delete cert;
+		//LL delete cert;
 	}
 
 	resetFlags();
@@ -867,15 +867,15 @@ void APL_Certifs::foundCertificate(const char *SubDir, const char *File, void *p
 	}
 
 	if (fread(buf, sizeof( unsigned char ), bufsize, m_stream) != bufsize){
-        free(buf);
+        free(buf); //LL
 		goto err;
 	}
 
 	cert = new CByteArray(buf,bufsize);
 	certifs->addCert(*cert, APL_CERTIF_TYPE_UNKNOWN, false);
-	delete cert;
+	delete cert; //LL
 
-    free(buf);
+    free(buf);//LL
 	fclose(m_stream);
 	return;
 

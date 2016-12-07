@@ -23,8 +23,8 @@ namespace eIDMW
 		unsigned char mac_key[SESSION_KEY_SIZE];
 		unsigned char enc_key[SESSION_KEY_SIZE];
 
-		unsigned char suffix_mac[] = {0x00, 0x00, 0x00, 0x02}; 
-		unsigned char suffix_enc[] = {0x00, 0x00, 0x00, 0x01}; 
+		unsigned char suffix_mac[] = {0x00, 0x00, 0x00, 0x02};
+		unsigned char suffix_enc[] = {0x00, 0x00, 0x00, 0x01};
 
 		if (m_kicc_ifd.Size() > 0)
 		{
@@ -70,13 +70,13 @@ namespace eIDMW
 	}
 
 
-/*  
+/*
 *	Input data must be a multiple of the block size: 8
 */
 
 /* ISO 9797-1 algorithm 3 retail mac without any padding
  */
-CByteArray 
+CByteArray
 retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 {
 	unsigned char ssc_block[] = {0,0,0,0,0,0,0,0};
@@ -108,8 +108,8 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
     if (key.Size() == 0)
     {
     	fprintf(stderr, "retail_mac_des(): Empty key!\n");
-		free(outbuf);
-		free(complete_buf);
+		free(outbuf);//LL
+		free(complete_buf);//LL
     	return CByteArray();
     }
     //DES BlockSize
@@ -125,7 +125,7 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
             !EVP_CIPHER_CTX_set_padding(ctx, 0))
         goto err;
 
-    
+
     for ( ; i < in.Size() / len; i++)
     {
       if(!EVP_CipherUpdate(ctx, outbuf, &outlen, in.GetBytes()+i*len, len))
@@ -141,7 +141,7 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 
     /* decrypt last block with the rest of the key (key.GetBytes() + len) */
     /* IV is always NULL */
-    
+
     if (!EVP_CipherInit_ex(ctx, EVP_des_cbc(), NULL,
             (unsigned char *) key.GetBytes() + len, NULL, 0) ||
             !EVP_CIPHER_CTX_set_padding(ctx, 0))
@@ -157,7 +157,7 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 
     /* encrypt last block with the first key */
     /* IV is always NULL */
-    
+
     if (!EVP_CipherInit_ex(ctx, EVP_des_cbc(), NULL,
             (unsigned char *) key.GetBytes(), NULL, 1) ||
             !EVP_CIPHER_CTX_set_padding(ctx, 0))
@@ -185,7 +185,7 @@ err:
 
 
 	CByteArray encrypt_data_3des(CByteArray &key, CByteArray &in)
-	{	
+	{
 		CByteArray cipher_text;
 		unsigned char * out = (unsigned char * ) malloc(in.Size());
 		EVP_CIPHER_CTX * ctx = NULL;
@@ -213,7 +213,7 @@ err:
 
 	    if (len != in.Size())
 	    {
-	    	fprintf(stderr, "Encryption error: len < in.size()\n");	
+	    	fprintf(stderr, "Encryption error: len < in.size()\n");
 	    }
 
 	    return CByteArray(out, len);
@@ -235,7 +235,7 @@ err:
      	 if (paddedContentLen > input.Size())
        		paddedContent[input.Size()] = 0x80;
 
-   		return CByteArray(paddedContent, paddedContentLen); 
+   		return CByteArray(paddedContent, paddedContentLen);
 	}
 
 
@@ -271,13 +271,13 @@ err:
 		CByteArray paddedInput = paddedByteArray(input_data);
 
 		CByteArray cryptogram = encrypt_data_3des(this->encryption_key, paddedInput);
-		//LCg = Len(Cg) + Len(PI = 1) 
+		//LCg = Len(Cg) + Len(PI = 1)
 		int lcg = cryptogram.Size() +1;
 		CByteArray inputForMac = paddedByteArray(command_header);
 
 		CByteArray paddedCryptogram;
 		paddedCryptogram.Append(Tcg);
-		//This is safe because Lcg will be always lower than 
+		//This is safe because Lcg will be always lower than
 		paddedCryptogram.Append((unsigned char)lcg);
 		paddedCryptogram.Append(paddingIndicator);
 		paddedCryptogram.Append(cryptogram);
@@ -370,12 +370,12 @@ err:
 
 		char *snIFD = sam_helper->getPK_IFD_AUT(m_ifd_cvc);
 		char *cRnd = sam_helper->generateChallenge(snIFD);
-		
+
 		if (cRnd == NULL || strlen(cRnd) == 0)
 		{
 			fprintf(stderr, "Couldn't generate CRnd random bytes, aborting!\n");
-			if (cRnd != NULL) free(cRnd);
-			free(snIFD);
+			if (cRnd != NULL) free(cRnd);//LL
+			free(snIFD);//LL
 			return CByteArray();
 		}
 
@@ -389,7 +389,7 @@ err:
         if (RAND_status() != 1) {
         	//TODO
         }
-        
+
 
         if (RAND_bytes(prnd2, PRND2_SIZE) == 0) {
 
@@ -408,7 +408,7 @@ err:
 		EVP_DigestUpdate(&cmd_ctx, m_kicc.GetBytes(), m_kicc.Size());
 		EVP_DigestUpdate(&cmd_ctx, dh_params.GetBytes(), dh_params.Size());
 
-    	
+
     	EVP_DigestFinal(&cmd_ctx, sha1_digest, &md_len);
 
     	if (md_len != 20)
@@ -418,7 +418,7 @@ err:
 
     	for (int i=0; i!=PRND2_SIZE; i++)
 		{
-		
+
 			challenge[i+1] = prnd2[i];
 		}
 
@@ -444,7 +444,7 @@ err:
 		BN_hex2bn(&(dh_key->g), dh_params.dh_g);
 
 	/*
-		For some reason DH_check fails for the DH parameters used in CC cards 
+		For some reason DH_check fails for the DH parameters used in CC cards
 		int rc, codes = 0;
 		rc = DH_check(dh_key, &codes);
 
@@ -501,9 +501,9 @@ err:
 
 		char * kicc_str = sam_helper->getKICC();
 		m_kicc = CByteArray(kicc_str, true);
-		//int BN_hex2bn(BIGNUM **a, const char *str); 
+		//int BN_hex2bn(BIGNUM **a, const char *str);
 		int rc = BN_hex2bn(&kicc, kicc_str);
-		free(kicc_str);
+		free(kicc_str);//LL
 
 		if (rc == 0)
 		{
@@ -522,7 +522,7 @@ err:
 
 	bool SecurityContext::writeFile(char *fileID, CByteArray file_content, unsigned int offset)
 	{
-		return true;		
+		return true;
 	}
 
 
@@ -547,7 +547,7 @@ err:
 		m_ifd_cvc = ifd_cvc;
 
 		return sam_helper->verifyCert_CV_IFD(ifd_cvc);
-		
+
 	}
 
 
