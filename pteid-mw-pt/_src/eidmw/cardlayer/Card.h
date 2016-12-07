@@ -101,11 +101,6 @@ public:
 
     virtual CByteArray Sign(const tPrivKey & key, const tPin & Pin,
         unsigned long algo, const CByteArray & oData);
-    virtual CByteArray Sign(const tPrivKey & key, const tPin & Pin,
-        unsigned long algo, CHash & oHash);
-
-	virtual CByteArray Decrypt(const tPrivKey & key, unsigned long algo,
-        const CByteArray & oData);
 
     virtual CByteArray GetRandom(unsigned long ulLen);
 

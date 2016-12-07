@@ -82,6 +82,8 @@ CReader::~CReader(void)
 {
     if (m_poCard != NULL)
         Disconnect(DISCONNECT_LEAVE_CARD);
+
+    delete m_oPinpad;
 }
 
 std::string & CReader::GetReaderName()
@@ -223,7 +225,7 @@ void CReader::Disconnect(tDisconnectMode disconnectMode)
 		// this doesn't hurt except that after a Ctrl-C, m_poCard->Disconnect()
 		// throws us out of this function WITHOUT an exception! So the m_poCard
 		// is not deleted() and set to NULL allthough the next call to this function
-		// it contains rubbisch => CRASH.
+		// it contains rubbish => CRASH.
 		// So we set m_poCard = NULL in advance, and only if an exception is thrown
 		// we assign it the old value.
 		CCard *poTemp = m_poCard;
@@ -491,38 +493,6 @@ CByteArray CReader::Sign(const tPrivKey & key, unsigned long algo,
 	}
 	else
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-}
-
-CByteArray CReader::Sign(const tPrivKey & key, unsigned long algo,
-    CHash & oHash)
-{
-    if (m_poCard == NULL)
-        throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
-
-	unsigned long ulSupportedAlgos = m_poCard->GetSupportedAlgorithms();
-	if ((algo & ulSupportedAlgos & SIGN_ALGO_MD5_RSA_PKCS) ||
-		(algo & ulSupportedAlgos & SIGN_ALGO_SHA1_RSA_PKCS) ||
-		(algo & ulSupportedAlgos & SIGN_ALGO_SHA256_RSA_PKCS) ||
-		(algo & ulSupportedAlgos & SIGN_ALGO_SHA384_RSA_PKCS) ||
-		(algo & ulSupportedAlgos & SIGN_ALGO_SHA512_RSA_PKCS) ||
-		(algo & ulSupportedAlgos & SIGN_ALGO_RIPEMD160_RSA_PKCS))
-	{
-	    return m_poCard->Sign(key, GetPinByID(key.ulAuthID), algo, oHash);
-	}
-	else
-	{
-		CByteArray oHashResult = oHash.GetHash();
-		return Sign(key, algo, oHashResult);
-	}
-}
-
-CByteArray CReader::Decrypt(const tPrivKey & key, unsigned long algo,
-    const CByteArray & oData)
-{
-    if (m_poCard == NULL)
-        throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
-
-    return m_poCard->Decrypt(key, algo, oData);
 }
 
 CByteArray CReader::GetRandom(unsigned long ulLen)

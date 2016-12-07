@@ -139,16 +139,6 @@ public:
 	/* Sign data. If necessary, a PIN will be asked */
     CByteArray Sign(const tPrivKey & key, unsigned long algo,
         const CByteArray & oData);
-	/* Sign data. No call to oHash.GetHash() should be done;
-	 * this way it is possible to support 'partial signing'
-	 * in which the last part of the data to be signed (this
-	 * is kept in the oHash object) is sent to the card to
-	 * finish the hashing. */
-    CByteArray Sign(const tPrivKey & key, unsigned long algo,
-        CHash & oHash);
-
-	CByteArray Decrypt(const tPrivKey & key, unsigned long algo,
-        const CByteArray & oData);
 
     CByteArray GetRandom(unsigned long ulLen);
 

@@ -359,18 +359,6 @@ CByteArray CCard::Sign(const tPrivKey & key, const tPin & Pin,
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 }
 
-CByteArray CCard::Sign(const tPrivKey & key, const tPin & Pin,
-    unsigned long algo, CHash & oHash)
-{
-	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
-}
-
-CByteArray CCard::Decrypt(const tPrivKey & key, unsigned long algo,
-    const CByteArray & oData)
-{
-	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
-}
-
 CByteArray CCard::GetRandom(unsigned long ulLen)
 {
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
