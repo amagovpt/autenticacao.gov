@@ -1274,7 +1274,6 @@ void PDFSignWindow::addSquares()
             s1->setPos(QPointF(i*scene_width/v_lines +margin, j*scene_height/h_lines +margin ));
 
             count++;
-			delete s1;
         }
 
         my_rectangle = new DraggableRectangle(my_scene, scene_height, scene_width, 30, 50);
