@@ -413,7 +413,7 @@ public:
 		m_pPictureData = QByteArray((const char *)p.GetBytes(),p.Size());
 		bRetVal = true;
 
-		delete(&p);//LL
+		//delete(&p);//LL
 		return bRetVal;
 	}
 
