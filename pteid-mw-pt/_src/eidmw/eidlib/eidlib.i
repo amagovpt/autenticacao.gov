@@ -162,7 +162,6 @@
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_FILETYPE_UNKNOWN)	ex = new PTEID_ExFileTypeUnknown();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_CARD_CHANGED)		ex = new PTEID_ExCardChanged();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_READERSET_CHANGED)ex = new PTEID_ExReaderSetChanged();
-			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_NOT_ALLOW_BY_USER)ex = new PTEID_ExNotAllowByUser();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_CERT_NOROOT)		ex = new PTEID_ExCertNoRoot();
 			else															ex = new PTEID_Exception(pteid_excode);
 
@@ -685,9 +684,6 @@ return $jnicall;
 				break;
 			case EIDMW_ERR_NO_READER:
 				classDescription += "/PTEID_ExNoReader";
-				break;
-			case EIDMW_ERR_NOT_ALLOW_BY_USER:
-				classDescription += "/PTEID_ExNotAllowByUser";
 				break;
 			case EIDMW_ERR_UNKNOWN:
 				classDescription += "/PTEID_ExUnknown";
