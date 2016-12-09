@@ -3645,8 +3645,17 @@ void MainWnd::PersoDataSaveButtonClicked( void )
 
         if (pinNotes == 0)
         {
-            const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), TxtPersoDataString.toStdString().size());
-            Card.writePersonalNotes(oData);
+            if ( TxtPersoDataString.toStdString().size() > 0 ){
+                const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), TxtPersoDataString.toStdString().size());
+                Card.writePersonalNotes(oData);
+            }else{
+                unsigned long ulSize = 1000;
+                unsigned char *pucData = (unsigned char *)calloc( ulSize, sizeof(char) );
+
+                const PTEID_ByteArray oData( (const unsigned char *)pucData, ulSize);
+                Card.writePersonalNotes(oData);
+                free(pucData);
+            }/* if ( TxtPersoDataString.toStdString().size() > 0 ) */
             QMessageBox::information( this, tr("Personal Notes"),  tr("Personal notes successfully written!"), QMessageBox::Ok );
 
         }
