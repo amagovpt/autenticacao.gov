@@ -13709,6 +13709,9 @@ Object createFontDescriptor(XRef * xref, MyriadFontType ft)
 		case MYRIAD_BOLD:
 			my_font = &myriad_bold_font_desc;
 			break;
+
+    default:
+      return font_descriptor;
 	}
 
 	font_descriptor.initDict(xref);
