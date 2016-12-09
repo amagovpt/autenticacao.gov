@@ -2106,16 +2106,6 @@ void MainWnd::loadCardData( void )
 		QString msg(tr("Bad transaction"));
 		ShowPTEIDError( msg );
 	}
-	catch (PTEID_ExNotAllowByUser& e)
-	{
-		QString msg(tr("Not allowed by user"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExUserMustAnswer& e)
-	{
-		QString msg(tr("Not allowed yet by user"));
-		ShowPTEIDError( msg );
-	}
 	catch (PTEID_ExCertNoRoot& e)
 	{
 		QString msg(tr("No root certificate found"));
@@ -2251,16 +2241,6 @@ void MainWnd::loadCardDataAddress( void )
 	catch (PTEID_ExBadTransaction& e)
 	{
 		QString msg(tr("Bad transaction"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExNotAllowByUser& e)
-	{
-		QString msg(tr("Not allowed by user"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExUserMustAnswer& e)
-	{
-		QString msg(tr("Not allowed yet by user"));
 		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCertNoRoot& e)
@@ -2407,16 +2387,6 @@ bool MainWnd::loadCardDataPersoData( void )
 		QString msg(tr("Bad transaction"));
 		ShowPTEIDError( msg );
 	}
-	catch (PTEID_ExNotAllowByUser& e)
-	{
-		QString msg(tr("Not allowed by user"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExUserMustAnswer& e)
-	{
-		QString msg(tr("Not allowed yet by user"));
-		ShowPTEIDError( msg );
-	}
 	catch (PTEID_ExCertNoRoot& e)
 	{
 		QString msg(tr("No root certificate found"));
@@ -2548,16 +2518,6 @@ void MainWnd::loadCardDataCertificates( void )
 	catch (PTEID_ExBadTransaction& e)
 	{
 		QString msg(tr("Bad transaction"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExNotAllowByUser& e)
-	{
-		QString msg(tr("Not allowed by user"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExUserMustAnswer& e)
-	{
-		QString msg(tr("Not allowed yet by user"));
 		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExCertNoRoot& e)
@@ -4228,17 +4188,9 @@ void MainWnd::customEvent( QEvent* pEvent )
 					case PTEID_CARDTYPE_IAS07:
 					case PTEID_CARDTYPE_IAS101:
 					{
-						try
-						{
-							PTEID_EIDCard& card = readerContext.getEIDCard();
-							doPicturePopup( card );
+						PTEID_EIDCard& card = readerContext.getEIDCard();
+						doPicturePopup( card );
 
-						}
-						catch (PTEID_ExNotAllowByUser& e)
-						{
-							long err = e.GetError();
-							err = err;
-						}
 						//------------------------------------
 						// register certificates when needed
 						//------------------------------------

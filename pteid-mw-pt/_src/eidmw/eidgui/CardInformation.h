@@ -68,21 +68,13 @@ public:
 	bool RetrieveData(PTEID_EIDCard& Card)
 	{
 		bool bRetVal = false;
-		try
-		{
-			PTEID_EId& pteid_eid	= Card.getID();
+		PTEID_EId& pteid_eid	= Card.getID();
 
-			m_Fields[CARD_TYPE]			=  pteid_eid.getDocumentType();
-			m_Fields[CHIP_NUMBER]		=  pteid_eid.getDocumentPAN();
-			//m_Fields[CARD_PLACEOFISSUE]	=  pteid_eid.getIssuingMunicipality());
-			m_Fields[CARD_VALIDFROM]	=  pteid_eid.getValidityBeginDate();
-			m_Fields[CARD_VALIDUNTIL]	=  pteid_eid.getValidityEndDate();
-		}
-		catch (PTEID_ExNotAllowByUser& e)
-		{
-			e = e;
-			// ok fine, we don't read the personal information if not allowed
-		}
+		m_Fields[CARD_TYPE]			=  pteid_eid.getDocumentType();
+		m_Fields[CHIP_NUMBER]		=  pteid_eid.getDocumentPAN();
+		//m_Fields[CARD_PLACEOFISSUE]	=  pteid_eid.getIssuingMunicipality());
+		m_Fields[CARD_VALIDFROM]	=  pteid_eid.getValidityBeginDate();
+		m_Fields[CARD_VALIDUNTIL]	=  pteid_eid.getValidityEndDate();
 
 // 		qDebug() << "CardInfo::RetrieveData()";
 // 		for (tFieldMap::iterator it=m_Fields.begin(); it!=m_Fields.end(); it++)
@@ -663,23 +655,10 @@ private:
 	bool RetrieveData( PTEID_EIDCard& Card )
 	{
 		bool bRetVal = false;
-		try
-		{
-			bRetVal |= m_CardInfo.RetrieveData(Card);
-			bRetVal |= m_PersonInfo.RetrieveData(Card);
-			bRetVal |= m_CertifInfo.RetrieveData(Card);
+		bRetVal |= m_CardInfo.RetrieveData(Card);
+		bRetVal |= m_PersonInfo.RetrieveData(Card);
+		bRetVal |= m_CertifInfo.RetrieveData(Card);
 
-			//TODO just a marker
-			//bRetVal |= m_AddressInfo.RetrieveData(Card);
-		}
-		catch (PTEID_ExNotAllowByUser& e)
-		{
-			e = e;
-			// ok fine, we don't read the personal information if not allowed
-		}
-
-		//bRetVal |= m_PinsInfo.RetrieveData(pCard);
-		//bRetVal |= m_CertifInfo.RetrieveData(Card);
 		m_pCard = &Card;
 
 		return bRetVal;
@@ -688,18 +667,9 @@ private:
 	bool RetrieveDataAddress (PTEID_EIDCard& Card)
 	{
 		bool bRetVal = false;
-		try
-		{
-			bRetVal |= m_AddressInfo.RetrieveDataAddress(Card);
-		}
-		catch (PTEID_ExNotAllowByUser& e)
-		{
-			e = e;
-			// ok fine, we don't read the personal information if not allowed
-		}
-
-		//bRetVal |= m_PinsInfo.RetrieveData(pCard);
-		//bRetVal |= m_CertifInfo.RetrieveData(Card);
+		
+		bRetVal |= m_AddressInfo.RetrieveDataAddress(Card);		
+		
 		m_pCard = &Card;
 
 		return bRetVal;
@@ -708,15 +678,9 @@ private:
 	bool RetrieveDataPersoData (PTEID_EIDCard& Card)
 	{
 		bool bRetVal = false;
-		try
-		{
-			bRetVal |= m_PersoDataInfo.RetrieveData (Card);
-		}
-		catch (PTEID_ExNotAllowByUser& e)
-		{
-			e = e;
-			// ok fine, we don't read the personal information if not allowed
-		}
+		
+		bRetVal |= m_PersoDataInfo.RetrieveData (Card);
+
 
 		//bRetVal |= m_PinsInfo.RetrieveData(pCard);
 		//bRetVal |= m_CertifInfo.RetrieveDataCertificates(Card);
@@ -728,17 +692,9 @@ private:
 	bool RetrieveDataCertificates (PTEID_EIDCard& Card)
 	{
 		bool bRetVal = false;
-		try
-		{
-			bRetVal |= m_CertifInfo.RetrieveData (Card);
-		}
-		catch (PTEID_ExNotAllowByUser& e)
-		{
-			e = e;
-			// ok fine, we don't read the personal information if not allowed
-		}
+		
+		bRetVal |= m_CertifInfo.RetrieveData (Card);
 
-		//bRetVal |= m_PinsInfo.RetrieveData(pCard);
 		bRetVal |= m_CertifInfo.RetrieveData(Card);
 		m_pCard = &Card;
 
