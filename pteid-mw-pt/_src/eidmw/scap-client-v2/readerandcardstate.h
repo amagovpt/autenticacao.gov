@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QEvent>
-#include "CardInformation.h"
 
 #include "cardevent.h"
 #include <eidlib.h>

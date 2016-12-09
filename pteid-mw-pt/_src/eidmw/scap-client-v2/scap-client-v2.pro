@@ -7,7 +7,9 @@
 
 include(../_Builds/eidcommon.mak)
 
-QT       += core gui
+QT += widgets
+QT += concurrent
+
 TARGET = ScapSignature
 TEMPLATE = app
 
@@ -65,6 +67,7 @@ FORMS    += \
     attributesuppliers.ui \
     scapsignature.ui
 
+!macx: LIBS += -Wl,-R,'../lib'
 LIBS += -L../lib -lcrypto -lpteidlib -lgsoapssl++
 
 RESOURCES += \

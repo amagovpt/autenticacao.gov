@@ -1,6 +1,14 @@
-#include "readerandcardstate.h"
 #include <QThread>
+#include <QCoreApplication>
+
+#include "readerandcardstate.h"
 #include "portablesleep.h"
+#include "eidlib.h"
+#include "eidlibException.h"
+#include <iostream>
+
+
+using namespace eIDMW;
 
 /*
  * ReaderAndCardState

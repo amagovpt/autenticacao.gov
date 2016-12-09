@@ -23,7 +23,7 @@
 #include <QListView>
 #include <QComboBox>
 #include <QFileDialog>
-#include <QProgressbar>
+#include <QProgressBar>
 #include <QMessageBox>
 #include <QtConcurrent>
 #include <QProgressDialog>
@@ -39,7 +39,8 @@
 //For std::min_element()
 #include <algorithm>
 
-#include <eidlib.h>
+#include "eidlib.h"
+#include "eidlibException.h"
 #include "eidErrors.h"
 #include "scapsignature.h"
 #include "mylistview.h"
@@ -54,6 +55,8 @@
 #include "settings.h"
 
 #include <openssl/x509.h>
+
+using namespace eIDMW;
 
 ScapSignature::ScapSignature(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::ScapSignature), m_selected_reader(0), m_selected_sector(0), card_present(true), my_scene(NULL)

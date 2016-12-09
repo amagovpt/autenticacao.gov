@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QTranslator>
+#include <iostream>
 #include "settings.h"
 
 int main(int argc, char *argv[])

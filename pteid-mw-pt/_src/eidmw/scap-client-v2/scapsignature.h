@@ -26,7 +26,8 @@
 #include <QDropEvent>
 #include <QGraphicsItem>
 #include <QProgressDialog>
-#include "CardInformation.h"
+#include <QFutureWatcher>
+#include "eidlib.h"
 #include "ui_scapsignature.h"
 #include "cardevent.h"
 #include <QTreeWidgetItem>
@@ -265,7 +266,7 @@ private:
     //FreeSelectionDialog *m_selection_dialog;
 
     QFutureWatcher<void> FutureWatcher;
-    PTEID_PDFSignature *m_pdf_sig;
+    eIDMW::PTEID_PDFSignature *m_pdf_sig;
     QList<int> page_numbers;
     //Number of pages of currently loaded document
     int m_current_page_number;
