@@ -288,27 +288,6 @@ PTEID_ExNoReader::~PTEID_ExNoReader()
 {
 }
 
-/*****************************************************************************************
----------------------------------------- PTEID_ExNotAllowByUser --------------------------------------
-*****************************************************************************************/
-PTEID_ExNotAllowByUser::PTEID_ExNotAllowByUser():PTEID_Exception(EIDMW_ERR_NOT_ALLOW_BY_USER)
-{
-}
-
-PTEID_ExNotAllowByUser::~PTEID_ExNotAllowByUser()
-{
-}
-
-/*****************************************************************************************
----------------------------------------- PTEID_ExUserMustAnswer --------------------------------------
-*****************************************************************************************/
-PTEID_ExUserMustAnswer::PTEID_ExUserMustAnswer():PTEID_Exception(EIDMW_ERR_USER_MUST_ANSWER)
-{
-}
-
-PTEID_ExUserMustAnswer::~PTEID_ExUserMustAnswer()
-{
-}
 
 /*****************************************************************************************
 ---------------------------- PTEID_ExUnexpectedValue --------------------------------------
