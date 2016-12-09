@@ -82,9 +82,21 @@ void APL_Card::CalUnlock()
 unsigned long APL_Card::readFile(const char *csPath, CByteArray &oData, unsigned long  ulOffset, unsigned long  ulMaxLength)
 {
 
-	BEGIN_CAL_OPERATION(m_reader)
-	oData = m_reader->getCalReader()->ReadFile(csPath,ulOffset,(ulMaxLength==0 ? FULL_FILE : ulMaxLength));
-	END_CAL_OPERATION(m_reader)
+	//BEGIN_CAL_OPERATION(m_reader)
+	m_reader->CalLock();
+	try{
+        oData = m_reader->getCalReader()->ReadFile(csPath,ulOffset,(ulMaxLength==0 ? FULL_FILE : ulMaxLength));
+	} catch(CMWException &e){
+		m_reader->CalUnlock();
+		return 0;
+    } catch(...){
+		m_reader->CalUnlock();
+		throw;
+		return 0;
+	}
+	m_reader->CalUnlock();
+
+	//END_CAL_OPERATION(m_reader)
 
 	return oData.Size();
 }
