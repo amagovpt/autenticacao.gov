@@ -24,6 +24,9 @@ INSTALLS += target
 
 CONFIG -= warn_on
 
+#For Qt5
+QT += widgets
+
 DEPENDPATH += .
 INCLUDEPATH += . ../dialogsQT ../../common
 
