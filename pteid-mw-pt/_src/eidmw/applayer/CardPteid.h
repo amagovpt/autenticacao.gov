@@ -119,17 +119,11 @@ public:
 	const char *getSurname();						/**< Return field Surname */
 	const char *getGender();						/**< Return field Gender */
 	const char *getDateOfBirth();					/**< Return field DateOfBirth */
-	const char *getLocationOfBirth();				/**< Return field LocationOfBirth */
 	const char *getNationality();					/**< Return field Nationality */
-	const char *getDuplicata();						/**< Return field Duplicata */
-	const char *getSpecialOrganization();			/**< Return field SpecialOrganization */
-	const char *getMemberOfFamily();				/**< Return field MemberOfFamily */
-	const char *getLogicalNumber();					/**< Return field LogicalNumber */
 	const char *getDocumentPAN();					/**< Return field DocumentPAN */
 	const char *getValidityBeginDate();				/**< Return field ValidityBeginDate */
 	const char *getValidityEndDate();				/**< Return field ValidityEndDate */
 	const char *getLocalofRequest();				/**< Return field LocalofRequest */
-	const char *getSpecialStatus();					/**< Return field SpecialStatus */
 	/*New status for PTeid-ng */
 	const char *getHeight();						/**< Return field Height */
 	const char *getDocumentNumber();				/**< Return field DocumentNumber */
@@ -199,17 +193,11 @@ private:
 	std::string m_Surname;									/**< Field Surname */
 	std::string m_Gender;									/**< Field Gender */
 	std::string m_DateOfBirth;								/**< Field DateOfBirth */
-	std::string m_LocationOfBirth;							/**< Field LocationOfBirth */
 	std::string m_Nationality;								/**< Field Nationality */
 	std::string m_CivilianIdNumber;							/**< Field NationalNumber */
-	std::string m_Duplicata;								/**< Field Duplicata */
-	std::string m_SpecialOrganization;						/**< Field SpecialOrganization */
-	std::string m_MemberOfFamily;							/**< Field MemberOfFamily */
-	std::string m_LogicalNumber;							/**< Field LogicalNumber */
 	std::string m_ValidityBeginDate;						/**< Field ValidityBeginDate */
 	std::string m_ValidityEndDate;							/**< Field ValidityEndDate */
 	std::string m_LocalofRequest;							/**< Field IssuingMunicipality */
-	std::string m_SpecialStatus;							/**< Field SpecialStatus */
 	std::string m_Height;									/**< Field Height */
 	std::string m_ChipNumber;								/**< Field ChipNumber */
 	std::string m_DocumentNumber;							/**< Field DocumentNumber */

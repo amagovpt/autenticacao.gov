@@ -401,11 +401,6 @@ PTEID_Certificates::PTEID_Certificates(const SDK_Context *context,APL_Certifs *i
 {
 }
 
-PTEID_Certificates::PTEID_Certificates():PTEID_Crypto(NULL,new APL_Certifs())
-{
-	m_delimpl=true;
-}
-
 PTEID_Certificates::~PTEID_Certificates()
 {
 }
@@ -814,7 +809,7 @@ const char *PTEID_Pin::getLabelById( unsigned long id )
         out = pinLabels[id];
     } else{
         out = pinLabels[0];
-    }/* if ( ( id >= 1 ) && ( id <= 3 ) ) */
+    }
 
 	return out;
 }
@@ -878,36 +873,6 @@ bool PTEID_Pin::changePin()
 	END_TRY_CATCH
 
 	return out;
-}
-
-const PTEID_ByteArray &PTEID_Pin::getSignature()
-{
-	PTEID_ByteArray *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_Pin *pimpl=static_cast<APL_Pin *>(m_impl);
-
-	out = dynamic_cast<PTEID_ByteArray *>(getObject(INCLUDE_OBJECT_PINSIGN));
-
-	if(!out)
-	{
-		//CAutoMutex autoMutex(m_mutex);
-
-		//pbytearray=dynamic_cast<PTEID_ByteArray *>(getObject(INCLUDE_OBJECT_PINSIGN));
-		//if(!pbytearray)
-		//{
-			out = new PTEID_ByteArray(m_context,pimpl->getSignature());
-			if(out)
-				m_objects[INCLUDE_OBJECT_PINSIGN]=out;
-			else
-				throw PTEID_ExUnknown();
-		//}
-	}
-	
-	END_TRY_CATCH
-
-	return *out;
 }
 /*****************************************************************************************
 ---------------------------------------- PTEID_Pins -------------------------------------------

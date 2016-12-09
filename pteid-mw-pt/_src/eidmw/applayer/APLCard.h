@@ -67,8 +67,6 @@ enum APL_RawDataType
 	APL_RAWDATA_SOD,
 	APL_RAWDATA_CARD_INFO,
 	APL_RAWDATA_TOKEN_INFO,
-	APL_RAWDATA_CHALLENGE,
-	APL_RAWDATA_RESPONSE,
 	APL_RAWDATA_PERSO_DATA
 };
 
@@ -277,23 +275,6 @@ public:
 	  * Return structure containing the PKCS15 object from the CAL
 	  */
 	EIDMW_APL_API virtual tCert getP15Cert(unsigned long ulIndex);
-
-	/**
-	  * Return the challenge
-	  *
-	  * @param bForceNewInit force a new initialization of the couple challenge/response
-	  */
-	EIDMW_APL_API virtual const CByteArray &getChallenge(bool bForceNewInit = false);
-	EIDMW_APL_API virtual const CByteArray &getChallengeResponse();		/**< Return the response to the challenge */
-
-	/**
-	  * Return true if the response of the card to the given challenge is the same as the response expected
-	  * For virtual card (from file), always return false
-	  *
-	  * @param challenge is the challenge to check
-	  * @param response is the response expected from the card
-	  */
-	EIDMW_APL_API virtual bool verifyChallengeResponse(const CByteArray &challenge, const CByteArray &response) const;
 	
 	APL_CardFile_Info *getFileInfo();		/**< Return a pointer to the pseudo file info */
 
@@ -308,9 +289,6 @@ protected:
 	  */
 	APL_SmartCard(APL_ReaderContext *reader);
 
-	virtual void initChallengeResponse();	/**< Initialize Challenge/Response */
-	virtual CByteArray getChallengeResponse(const CByteArray &challenge) const;	/**< Return the response to the specified challenge */
-
 	APL_Pins *m_pins;				/**< Pointer to the collection of pins */
 	APL_Certifs *m_certs;			/**< Pointer to the certificate store */
 		
@@ -323,8 +301,6 @@ protected:
 	unsigned long m_certificateCount;
 	unsigned long m_pinCount;
 
-	CByteArray *m_challenge;
-	CByteArray *m_challengeResponse;
 	APLPublicKey *m_RootCAPubKey;
 	std::string *m_tokenSerial;
 	std::string *m_tokenLabel;

@@ -45,8 +45,7 @@ typedef enum
 {
     PIN_OP_VERIFY,
     PIN_OP_CHANGE,
-    PIN_OP_RESET,
-    PIN_OP_LOGOFF,
+    PIN_OP_RESET
 } tPinOperation;
 
 const unsigned long SIGN_ALGO_RSA_RAW = 0x01;

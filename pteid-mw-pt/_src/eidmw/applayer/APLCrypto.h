@@ -150,8 +150,6 @@ public:
 	EIDMW_APL_API PinUsage getUsageCode();		/**< Return Usage code from the CAL */
 	EIDMW_APL_API unsigned long getFlags();		/**< Return P15 Flags */
 	EIDMW_APL_API const char *getLabel();		/**< Return P15 Label */
-
-	EIDMW_APL_API const CByteArray &getSignature();		/**< Return the pin signature */
 	
 	/**
 	  * Call the CAL for verifying the pin

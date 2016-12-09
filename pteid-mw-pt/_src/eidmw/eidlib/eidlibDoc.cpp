@@ -795,36 +795,6 @@ const char *PTEID_CardVersionInfo::getElectricalPersonalisationInterface()
 	return out;
 }
 
-const PTEID_ByteArray &PTEID_CardVersionInfo::getSignature()
-{
-	PTEID_ByteArray *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
-
-	out = dynamic_cast<PTEID_ByteArray *>(getObject(INCLUDE_OBJECT_INFOEID_SIGN));
-
-	if(!out)
-	{
-		//CAutoMutex autoMutex(m_mutex);
-
-		//pbytearray=dynamic_cast<PTEID_ByteArray *>(getObject(INCLUDE_OBJECT_INFOEID_SIGN));
-		//if(!pbytearray)
-		//{
-			out = new PTEID_ByteArray(m_context,pimpl->getSignature());
-			if(out)
-				m_objects[INCLUDE_OBJECT_INFOEID_SIGN]=out;
-			else
-				throw PTEID_ExUnknown();
-		//}
-	}
-	
-	END_TRY_CATCH
-
-	return *out;
-}
-
 /*****************************************************************************************
 ---------------------------------------- PTEID_EId ---------------------------------------------
 *****************************************************************************************/
@@ -934,20 +904,6 @@ const char *PTEID_EId::getDateOfBirth()
 	return out;
 }
 
-const char *PTEID_EId::getLocationOfBirth()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getLocationOfBirth();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
 const char *PTEID_EId::getNationality()
 {
 	const char *out = NULL;
@@ -956,62 +912,6 @@ const char *PTEID_EId::getNationality()
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
 	out = pimpl->getNationality();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_EId::getDuplicata()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getDuplicata();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_EId::getSpecialOrganization()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getSpecialOrganization();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_EId::getMemberOfFamily()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getMemberOfFamily();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_EId::getLogicalNumber()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getLogicalNumber();
 	
 	END_TRY_CATCH
 
@@ -1054,20 +954,6 @@ const char *PTEID_EId::getValidityEndDate()
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
 	out = pimpl->getValidityEndDate();
-	
-	END_TRY_CATCH
-
-	return out;
-}
-
-const char *PTEID_EId::getSpecialStatus()
-{
-	const char *out = NULL;
-
-	BEGIN_TRY_CATCH
-
-	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
-	out = pimpl->getSpecialStatus();
 	
 	END_TRY_CATCH
 

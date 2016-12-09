@@ -44,30 +44,6 @@ enum PTEID_CardType
 	PTEID_CARDTYPE_IAS101
 };
 
-enum PTEID_DocumentType
-{
-	PTEID_DOCTYPE_ID=0,			/**< ID document : usefull to get value by field */
-	PTEID_DOCTYPE_ADDRESS,		/**< Address document : usefull to get value by field */
-	PTEID_DOCTYPE_SOD,			/**< sod document (if available) */
-	PTEID_DOCTYPE_INFO,			/**< info on the card (if available) */
-	PTEID_DOCTYPE_PINS,			/**< pins containert (if available) */
-	PTEID_DOCTYPE_CERTIFICATES	/**< certificates containert (if available) */
-};
-
-enum PTEID_RawDataType
-{
-	PTEID_RAWDATA_ID=0,
-	PTEID_RAWDATA_ID_SIG,
-	PTEID_RAWDATA_TRACE,
-	PTEID_RAWDATA_ADDR,
-	PTEID_RAWDATA_ADDR_SIG,
-	PTEID_RAWDATA_SOD,
-	PTEID_RAWDATA_CARD_INFO,
-	PTEID_RAWDATA_TOKEN_INFO,
-	PTEID_RAWDATA_CHALLENGE,
-	PTEID_RAWDATA_RESPONSE,
-	PTEID_RAWDATA_PERSO_DATA
-};
 
 enum PTEID_PinUsage
 {
@@ -75,18 +51,6 @@ enum PTEID_PinUsage
 	PTEID_PIN_USG_AUTH,
 	PTEID_PIN_USG_SIGN,
 	PTEID_PIN_USG_ADDRESS,
-};
-
-enum PTEID_ValidationProcess
-{
-	PTEID_VALIDATION_PROCESS_NONE=0
-};
-
-enum PTEID_ValidationLevel
-{
-	PTEID_VALIDATION_LEVEL_NONE=0,
-	PTEID_VALIDATION_LEVEL_OPTIONAL,
-	PTEID_VALIDATION_LEVEL_MANDATORY
 };
 
 enum PTEID_CertifStatus

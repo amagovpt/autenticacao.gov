@@ -223,7 +223,6 @@ void APL_EidFile_ID::EmptyFields()
 {
 	m_DocumentVersion.clear();
 	m_Country.clear();
-	m_LogicalNumber.clear();
 	m_ChipNumber.clear();
 	m_ValidityBeginDate.clear();
 	m_ValidityEndDate.clear();
@@ -232,11 +231,9 @@ void APL_EidFile_ID::EmptyFields()
 	m_Surname.clear();
 	m_GivenName.clear();
 	m_Nationality.clear();
-	m_LocationOfBirth.clear();
 	m_DateOfBirth.clear();
 	m_Gender.clear();
 	m_DocumentType.clear();
-	m_SpecialStatus.clear();
 	m_HealthNo.clear();
 	m_DocumentNumber.clear();
 	m_TaxNo.clear();
@@ -247,7 +244,7 @@ void APL_EidFile_ID::EmptyFields()
 	m_SurnameFather.clear();
 	m_GivenNameMother.clear();
 	m_SurnameMother.clear();
-	if (m_photo){
+	if (m_photo) {
 		delete m_photo;
 		m_photo = NULL;
 	}
@@ -504,14 +501,6 @@ const char *APL_EidFile_ID::getDateOfBirth()
 	return "";
 }
 
-const char *APL_EidFile_ID::getLocationOfBirth()
-{
-	if(ShowData())
-		return m_LocationOfBirth.c_str();
-
-	return "";
-}
-
 const char *APL_EidFile_ID::getNationality()
 {
 	if(ShowData())
@@ -520,37 +509,6 @@ const char *APL_EidFile_ID::getNationality()
 	return "";
 }
 
-const char *APL_EidFile_ID::getDuplicata()
-{
-	if(ShowData())
-		return m_Duplicata.c_str();
-
-	return "";
-}
-
-const char *APL_EidFile_ID::getSpecialOrganization()
-{
-	if(ShowData())
-		return m_SpecialOrganization.c_str();
-
-	return "";
-}
-
-const char *APL_EidFile_ID::getMemberOfFamily()
-{
-	if(ShowData())
-		return m_MemberOfFamily.c_str();
-
-	return "";
-}
-
-const char *APL_EidFile_ID::getLogicalNumber()
-{
-	if(ShowData())
-		return m_LogicalNumber.c_str();
-
-	return "";
-}
 
 const char *APL_EidFile_ID::getDocumentPAN()
 {
@@ -572,14 +530,6 @@ const char *APL_EidFile_ID::getValidityEndDate()
 {
 	if(ShowData())
 		return m_ValidityEndDate.c_str();
-
-	return "";
-}
-
-const char *APL_EidFile_ID::getSpecialStatus()
-{
-	if(ShowData())
-		return m_SpecialStatus.c_str();
 
 	return "";
 }

@@ -1605,8 +1605,8 @@ bool APL_CryptoFwk::b64Decode(const CByteArray &baIn, CByteArray &baOut)
 
 void APL_CryptoFwk::TimeToString(ASN1_TIME *asn1Time, std::string &strTime, const char *dateFormat)
 {
-    struct tm timeinfo;
-	char buffer [50];
+        struct tm timeinfo = {0};
+        char buffer [50];
 
 	try
 	{

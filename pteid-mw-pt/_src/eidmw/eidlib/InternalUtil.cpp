@@ -124,18 +124,4 @@ tLOG_Level ConvertLogLevel(PTEID_LogLevel level)
 	}
 }
 
-APL_ValidationLevel ConvertValidationLevel(PTEID_ValidationLevel eLevel)
-{
-	switch(eLevel)
-	{ 
-	case PTEID_VALIDATION_LEVEL_OPTIONAL:
-		return APL_VALIDATION_LEVEL_OPTIONAL;
-
-	case PTEID_VALIDATION_LEVEL_MANDATORY:
-		return APL_VALIDATION_LEVEL_MANDATORY;
-
-	default:
-		return APL_VALIDATION_LEVEL_NONE;
-	}
-}
 }

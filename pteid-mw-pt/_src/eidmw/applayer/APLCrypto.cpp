@@ -656,28 +656,6 @@ const char *APL_Pin::getLabel()
 	return m_pinP15.csLabel.c_str();
 }
 
-const CByteArray &APL_Pin::getSignature()
-{
-	if(!m_signature)
-	{
-		CAutoMutex autoMutex(&m_Mutex);		//We lock for unly one instanciation
-		if(!m_signature)
-		{
-			CByteArray result;
-			CByteArray param(1);
-			param.Append((unsigned char) m_pinP15.ulPinRef);
-
-			BEGIN_CAL_OPERATION(m_card)
-			result = m_card->getCalReader()->Ctrl(CTRL_PTEID_GETSIGNEDPINSTATUS,param);
-			END_CAL_OPERATION(m_card)
-
-			m_signature=new CByteArray(result.GetBytes(1,128));
-		}
-	}
-
-	return *m_signature;
-}
-
 bool APL_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg)
 {
 

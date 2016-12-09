@@ -101,7 +101,7 @@ CByteArray sendOCSPRequest(X509 *cert, X509* issuer, char *ocsp_url)
 {
 	OCSP_CERTID *id;
 	OCSP_REQ_CTX *ctx = NULL;
-	char *host, *port, *path;
+	char *host = "", *port, *path;
 	int is_ssl = 0;
 	BIO * ocsp_bio = NULL;
 
@@ -113,7 +113,8 @@ CByteArray sendOCSPRequest(X509 *cert, X509* issuer, char *ocsp_url)
 	//TODO: We assume that if proxy_host has a value proxy_port also does which may not be true!!
 	if (proxy_host.getString() != NULL && strlen(proxy_host.getString()) > 0)
 	{
-		ocsp_bio = BIO_new_connect(proxy_host.getString());
+		host = (char *)proxy_host.getString();
+		ocsp_bio = BIO_new_connect(host);
 		BIO_set_conn_port(ocsp_bio, proxy_port.getLong());
 		path = ocsp_url;
 	}

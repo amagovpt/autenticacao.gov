@@ -459,12 +459,6 @@ CByteArray CCard::SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned cha
     return SendAPDU(oAPDU);
 }
 
-
-CByteArray CCard::Ctrl(long ctrl, const CByteArray & oCmdData)
-{
-	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
-}
-
 CP15Correction* CCard::GetP15Correction()
 {
 	return NULL;

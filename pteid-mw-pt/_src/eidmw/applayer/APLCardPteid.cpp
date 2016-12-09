@@ -501,29 +501,6 @@ APL_DocVersionInfo& APL_EIDCard::getDocInfo()
 	return *m_docinfo;
 }
 
-const CByteArray &APL_EIDCard::getCardInfoSignature()
-{
-	if(!m_cardinfosign)
-	{
-	
-		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
-		if(!m_cardinfosign)
-		{
-			CByteArray param;
-			CByteArray result;
-
-			BEGIN_CAL_OPERATION(m_reader)
-			result = m_reader->getCalReader()->Ctrl(CTRL_PTEID_GETSIGNEDCARDDATA,param);
-			END_CAL_OPERATION(m_reader)
-
-			m_cardinfosign=new CByteArray(result.GetBytes(28,128));
-		}
-	
-	}
-
-	return *m_cardinfosign;
-
-}
 const CByteArray& APL_EIDCard::getRawData(APL_RawDataType type)
 {
 	switch(type)
@@ -544,10 +521,6 @@ const CByteArray& APL_EIDCard::getRawData(APL_RawDataType type)
 		return getRawData_CardInfo();
 	case APL_RAWDATA_TOKEN_INFO:
 		return getRawData_TokenInfo();
-	case APL_RAWDATA_CHALLENGE:
-		return getRawData_Challenge();
-	case APL_RAWDATA_RESPONSE:
-		return getRawData_Response();
 	case APL_RAWDATA_PERSO_DATA:
 		return getRawData_PersoData();
 	default:
@@ -600,15 +573,6 @@ const CByteArray& APL_EIDCard::getRawData_PersoData()
 	return getFilePersoData()->getData();
 }
 
-const CByteArray& APL_EIDCard::getRawData_Challenge()
-{
-	return getChallenge();
-}
-
-const CByteArray& APL_EIDCard::getRawData_Response()
-{
-	return getChallengeResponse();
-}
 
 const char *APL_EIDCard::getTokenSerialNumber(){
 	if (!m_tokenSerial){
@@ -1069,22 +1033,12 @@ version;type;name;surname;gender;date_of_birth;location_of_birth;nobility;nation
 	csv+=CSV_SEPARATOR;
 	csv+=getDateOfBirth();
 	csv+=CSV_SEPARATOR;
-	csv+=getLocationOfBirth();
 	csv+=CSV_SEPARATOR;
 	csv+=getNationality();
 	csv+=CSV_SEPARATOR;
 	csv+=getCivilianIdNumber();
 	csv+=CSV_SEPARATOR;
-	csv+=getDuplicata();
-	csv+=CSV_SEPARATOR;
-	csv+=getSpecialOrganization();
-	csv+=CSV_SEPARATOR;
-	csv+=getMemberOfFamily();
-	csv+=CSV_SEPARATOR;
-	csv+=getSpecialStatus();
-	csv+=CSV_SEPARATOR;
-	csv+=getLogicalNumber();
-	csv+=CSV_SEPARATOR;
+	
 	csv+=getDocumentPAN();
 	csv+=CSV_SEPARATOR;
 	csv+=getValidityBeginDate();
@@ -1092,7 +1046,6 @@ version;type;name;surname;gender;date_of_birth;location_of_birth;nobility;nation
 	csv+=getValidityEndDate();
 	csv+=CSV_SEPARATOR;
 
-	// MARTINHO: fica aqui para n ficar esquecido também, provavelmente nem o CSV vai ser utilizado.
 	csv+=getMRZ1();
 	csv+=CSV_SEPARATOR;
 	csv+=getMRZ2();
@@ -1169,34 +1122,9 @@ const char *APL_DocEId::getDateOfBirth()
 	return m_card->getFileID()->getDateOfBirth();
 }
 
-const char *APL_DocEId::getLocationOfBirth()
-{
-	return m_card->getFileID()->getLocationOfBirth();
-}
-
 const char *APL_DocEId::getNationality()
 {
 	return m_card->getFileID()->getNationality();
-}
-
-const char *APL_DocEId::getDuplicata()
-{
-	return m_card->getFileID()->getDuplicata();
-}
-
-const char *APL_DocEId::getSpecialOrganization()
-{
-	return m_card->getFileID()->getSpecialOrganization();
-}
-
-const char *APL_DocEId::getMemberOfFamily()
-{
-	return m_card->getFileID()->getMemberOfFamily();
-}
-
-const char *APL_DocEId::getLogicalNumber()
-{
-	return m_card->getFileID()->getLogicalNumber();
 }
 
 const char *APL_DocEId::getDocumentPAN()
@@ -1214,15 +1142,9 @@ const char *APL_DocEId::getValidityEndDate()
 	return m_card->getFileID()->getValidityEndDate();
 }
 
-const char *APL_DocEId::getSpecialStatus()
-{
-	return m_card->getFileID()->getSpecialStatus();
-}
-
 const char *APL_DocEId::getHeight()
 {
 	return m_card->getFileID()->getHeight();
-
 }
 
 const char *APL_DocEId::getDocumentNumber()
@@ -2012,10 +1934,5 @@ const char *APL_DocVersionInfo::getElectricalPersonalisation()
 const char *APL_DocVersionInfo::getElectricalPersonalisationInterface()
 {
 	return m_card->getFileTokenInfo()->getElectricalPersonalisationInterface();
-}
-
-const CByteArray &APL_DocVersionInfo::getSignature()
-{
-	return m_card->getCardInfoSignature();
 }
 }

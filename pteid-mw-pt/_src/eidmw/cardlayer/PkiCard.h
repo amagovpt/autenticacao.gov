@@ -66,14 +66,11 @@ public:
         const std::string & csPin1, const std::string & csPin2,
         unsigned long & ulRemaining, const tPrivKey *pKey = NULL,
         bool bShowDlg=true);
-	virtual bool LogOff(const tPin & Pin);
 
     virtual CByteArray Sign(const tPrivKey & key, const tPin & Pin,
         unsigned long algo, const CByteArray & oData);
 
     virtual CByteArray GetRandom(unsigned long ulLen);
-
-    virtual CByteArray Ctrl(long ctrl, const CByteArray & oCmdData) = 0;
 
 protected:
 

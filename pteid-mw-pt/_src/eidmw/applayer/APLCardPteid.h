@@ -133,8 +133,6 @@ public:
 	  */
 	EIDMW_APL_API APL_DocVersionInfo& getDocInfo();	
 
-	EIDMW_APL_API const CByteArray &getCardInfoSignature();			/**< Return the signature of the card info */
-
  	/** 
 	 * Return rawdata from the card
 	 */
@@ -148,8 +146,6 @@ public:
  	EIDMW_APL_API const CByteArray& getRawData_Sod();			/**< Get the Sod RawData */
  	EIDMW_APL_API const CByteArray& getRawData_CardInfo();		/**< Get the Card Info RawData */
  	EIDMW_APL_API const CByteArray& getRawData_TokenInfo();		/**< Get the Token Info RawData */
- 	EIDMW_APL_API const CByteArray& getRawData_Challenge();		/**< Get the challenge RawData */
- 	EIDMW_APL_API const CByteArray& getRawData_Response();		/**< Get the response RawData */
  	EIDMW_APL_API const CByteArray& getRawData_PersoData();		/**< Get the response RawData */
  	EIDMW_APL_API void doSODCheck(bool check);
 
@@ -249,7 +245,7 @@ friend APL_CCXML_Doc& APL_EIDCard::getXmlCCDoc(APL_XmlUserRequestedInfo& userReq
   * Class that represent the document ID on a PTEID card
   *
   * This class show id informations to APL_EIDCard user
-  * (These informations comes from the ID file)
+  * (This information comes from the ID file)
   *
   * To get APL_DocEId object, we have to ask it from APL_EIDCard 
   *********************************************************************************/
@@ -272,17 +268,11 @@ public:
 	EIDMW_APL_API const char *getSurname();				/**< Return field Surname from the ID file */
 	EIDMW_APL_API const char *getGender();				/**< Return field Gender from the ID file */
 	EIDMW_APL_API const char *getDateOfBirth();			/**< Return field DateOfBirth from the ID file */
-	EIDMW_APL_API const char *getLocationOfBirth();		/**< Return field LocationOfBirth from the ID file */
 	EIDMW_APL_API const char *getNationality();			/**< Return field Nationality from the ID file */
-	EIDMW_APL_API const char *getDuplicata();			/**< Return field Duplicata from the ID file */
-	EIDMW_APL_API const char *getSpecialOrganization();	/**< Return field SpecialOrganization from the ID file */
-	EIDMW_APL_API const char *getMemberOfFamily();		/**< Return field MemberOfFamily from the ID file */
-	EIDMW_APL_API const char *getLogicalNumber();		/**< Return field LogicalNumber from the ID file */
 	EIDMW_APL_API const char *getDocumentPAN();			/**< Return field Document PAN from the ID file */
 	EIDMW_APL_API const char *getValidityBeginDate();	/**< Return field ValidityBeginDate from the ID file */
 	EIDMW_APL_API const char *getValidityEndDate();		/**< Return field ValidityEndDate from the ID file */
 	EIDMW_APL_API const char *getLocalofRequest();		/**< Return field LocalofRequest from the ID file */
-	EIDMW_APL_API const char *getSpecialStatus();		/**< Return field SpecialStatus from the ID file */
 	/*New status for PTeid-ng */
 	EIDMW_APL_API const char *getHeight();				/**< Return field Height */
 	EIDMW_APL_API const char *getDocumentNumber();		/**< Return field DocumentNumber */

@@ -219,10 +219,6 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
         unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg)
 {
-	// No standard for Logoff, so each card has to implement
-	// it's own command here.
-	if (operation == PIN_OP_LOGOFF)
-		return LogOff(Pin);
 
 	bool bRet = false;
 	std::string csReadPin1, csReadPin2;
@@ -328,10 +324,6 @@ bool CPkiCard::PinCmdIAS(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
         unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg)
 {
-	// No standard for Logoff, so each card has to implement
-	// it's own command here.
-	if (operation == PIN_OP_LOGOFF )
-		return LogOff(Pin);
 
 	bool bRet = false;
 	std::string csReadPin1, csReadPin2;
@@ -481,12 +473,6 @@ bad_pin:
 	}
 
 	return bRet;
-}
-
-
-bool CPkiCard::LogOff(const tPin & Pin)
-{
-	return false;
 }
 
 CByteArray CPkiCard::Sign(const tPrivKey & key, const tPin & Pin,

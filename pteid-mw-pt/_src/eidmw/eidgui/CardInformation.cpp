@@ -35,7 +35,6 @@ void CardInformation::Reset()
 {
 	m_CardInfo.Reset();
 	m_PersonInfo.Reset();
-	m_MiscInfo.Reset();
 	m_AddressInfo.Reset();
 	m_PersoDataInfo.Reset();
 	m_pCard = NULL;

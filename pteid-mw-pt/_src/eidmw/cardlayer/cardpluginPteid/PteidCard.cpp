@@ -2,8 +2,7 @@
 
  * eID Middleware Project.
  * Copyright (C) 2008-2009 FedICT.
- * Copyright (C) 2012-2016
- *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+ * Copyright (C) 2012-2016 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -633,17 +632,6 @@ bool CPteidCard::PinCmd(tPinOperation operation, const tPin & Pin,
 	return pincheck;
 }
 
-bool CPteidCard::LogOff(const tPin & Pin)
-{
-    m_ucCLA = 0x80;
-	// No PIN has to be specified
-    CByteArray oResp = SendAPDU(0xE6, 0x00, 0x00, 0);
-    m_ucCLA = 0x00;
-
-	getSW12(oResp, 0x9000);
-
-	return true;
-}
 
 unsigned long CPteidCard::GetSupportedAlgorithms()
 {
@@ -651,91 +639,6 @@ unsigned long CPteidCard::GetSupportedAlgorithms()
 		SIGN_ALGO_RSA_PKCS | SIGN_ALGO_SHA1_RSA_PKCS;
 
 	return ulAlgos;
-}
-
-CByteArray CPteidCard::Ctrl(long ctrl, const CByteArray & oCmdData)
-{
-
-    CAutoLock oAutoLock(this);
-
-    switch(ctrl)
-    {
-    case CTRL_PTEID_GETCARDDATA:
-        return m_oCardData;
-    case CTRL_PTEID_GETSIGNEDCARDDATA:
-		if (m_ucAppletVersion < 0x20)
-			throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
-		else
-		{
-			if (m_selectAppletMode == ALW_SELECT_APPLET)
-				SelectApplet();
-			m_ucCLA = 0x80;
-			CByteArray oRet = SendAPDU(0xE4, 0x02, 0x00, 0x9C);
-			m_ucCLA = 0;
-			getSW12(oRet, 0x9000);
-			oRet.Chop(2);
-			return oRet;
-		}
-    case CTRL_PTEID_GETSIGNEDPINSTATUS:
-		// oCmdData must contain:
-		// - the pin reference (1 byte)
-		if (m_ucAppletVersion < 0x20)
-			throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
-		else
-		{
-			if (m_selectAppletMode == ALW_SELECT_APPLET)
-				SelectApplet();
-			unsigned char ucPinRef = oCmdData.GetByte(0);
-			m_ucCLA = 0x80;
-			CByteArray oRet = SendAPDU(0xEA, 0x02, ucPinRef, 0x81);
-			m_ucCLA = 0;
-			if (ShouldSelectApplet(0xEA, getSW12(oRet)))
-			{
-				if (SelectApplet())
-				{
-					m_selectAppletMode = ALW_SELECT_APPLET;
-					m_ucCLA = 0x80;
-					CByteArray oRet = SendAPDU(0xEA, 0x02, ucPinRef, 0x81);
-					m_ucCLA = 0;
-				}
-			}
-			getSW12(oRet, 0x9000);
-			oRet.Chop(2);
-			return oRet;
-		}
-	case CTRL_PTEID_INTERNAL_AUTH:
-		// oCmdData must contain:
-		// - the key reference (1 byte)
-		// - the challenge to be signed (20 bytes)
-		if (oCmdData.Size() != 36)
-		    throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
-		else
-		{
-		    //if (m_selectAppletMode == ALW_SELECT_APPLET)
-		    //SelectApplet();
-			//unsigned char ucKeyRef = oCmdData.GetByte(0);
-			CByteArray oData;
-			oData.Append(0x08);
-			oData.Append(oCmdData);
-			oData.Append(0x88);
-			m_ucCLA = 0x8C;
-			CByteArray oRet = SendAPDU(0x88, 0x00, 0x00, oData);
-			/*if (ShouldSelectApplet(0x88, getSW12(oRet)))
-			{
-				if (SelectApplet())
-				{
-					m_selectAppletMode = ALW_SELECT_APPLET;
-					CByteArray oRet = SendAPDU(0x88, 0x02, ucKeyRef, oData);
-				}
-				}*/
-			getSW12(oRet, 0x9000);
-			oRet.Chop(2);
-			return oRet;
-			}
-    default:
-        MWLOG(LEV_WARN, MOD_CAL, L"Ctrl(): Unknown CRTL code %d (0x%0x) specified", ctrl, ctrl);
-		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
-    }
 }
 
 CP15Correction* CPteidCard::GetP15Correction()

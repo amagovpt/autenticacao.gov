@@ -623,18 +623,6 @@ public:
 	PTEIDSDK_API virtual PTEID_CardType getType();
 
  	/**
-	 * Return a document from the card.
-	 * Throw PTEID_ExDocTypeUnknown exception if the document doesn't exist for this card.
-	 */
-	PTEIDSDK_API virtual PTEID_XMLDoc& getDocument(PTEID_DocumentType type)=0;
-
- 	/**
-	 * Return a raw data from the card.
-	 * Throw PTEID_ExFileTypeUnknown exception if the document doesn't exist for this card.
-	 */
-	PTEIDSDK_API virtual const PTEID_ByteArray& getRawData(PTEID_RawDataType type)=0;
-
- 	/**
 	 * Send an APDU command to the card and get the result.
 	 * @param cmd is the apdu command
 	 * @return a PTEID_ByteArray containing the result
@@ -762,27 +750,6 @@ public:
 	 */
 	PTEIDSDK_API virtual PTEID_Certificates& getCertificates();
 
-	/**
-	  * Return the challenge.
-	  *
-	  * @param bForceNewInit force a new initialization of the couple challenge/response
-	  */
-	PTEIDSDK_API virtual const PTEID_ByteArray &getChallenge(bool bForceNewInit = false);
-
-	/**
-	  * Return the response to the challenge.
-	  */
-	PTEIDSDK_API virtual const PTEID_ByteArray &getChallengeResponse();
-
-	/**
-	  * Return true if the response of the card to the given challenge is the same as the response expected.
-	  * For virtual card (from file), always return false.
-	  *
-	  * @param challenge is the challenge to check
-	  * @param response is the response expected from the card
-	  */
-	PTEIDSDK_API virtual bool verifyChallengeResponse(const PTEID_ByteArray &challenge, const PTEID_ByteArray &response) const;
-
 protected:
 	PTEID_SmartCard(const SDK_Context *context,APL_Card *impl);	/**< For internal use : Constructor */
 
@@ -855,12 +822,6 @@ public:
 	PTEIDSDK_API virtual ~PTEID_EIDCard();						/**< Destructor */
 
 
-	/**
-	 * Return a document from the card.
-	 * Throw PTEID_ExDocTypeUnknown exception if the document doesn't exist for this card.
-	 */
-	PTEIDSDK_API virtual PTEID_XMLDoc& getDocument(PTEID_DocumentType type);
-
 	PTEIDSDK_API PTEID_CCXML_Doc& getXmlCCDoc(PTEID_XmlUserRequestedInfo& userRequestedInfo);
 	PTEIDSDK_API PTEID_EId& getID();							/**< Get the id document */
 	PTEIDSDK_API PTEID_Address& getAddr();					/**< Get the Address document */
@@ -924,26 +885,6 @@ public:
 
 	     /* helper method for the compatibility layer */
 	     //PTEIDSDK_API bool ChangeCapPinCompLayer(const char *old_pin, const char *new_pin,unsigned long &ulRemaining);
-
-
-
-	/**
-	 * Return a raw data from the card.
-	 * Throw PTEID_ExFileTypeUnknown exception if the document doesn't exist for this card.
-	 */
-	PTEIDSDK_API virtual const PTEID_ByteArray& getRawData(PTEID_RawDataType type);
-
- 	PTEIDSDK_API const PTEID_ByteArray& getRawData_Id();				/**< Get the Id RawData */
- 	PTEIDSDK_API const PTEID_ByteArray& getRawData_IdSig();			/**< Get the IdSig RawData */
- 	PTEIDSDK_API const PTEID_ByteArray& getRawData_Trace();			/**< Get the Trace RawData */
- 	PTEIDSDK_API const PTEID_ByteArray& getRawData_Addr();			/**< Get the Addr RawData */
- 	PTEIDSDK_API const PTEID_ByteArray& getRawData_AddrSig();			/**< Get the AddrSig RawData */
- 	PTEIDSDK_API const PTEID_ByteArray& getRawData_Sod();				/**< Get the Sod RawData */
- 	PTEIDSDK_API const PTEID_ByteArray& getRawData_CardInfo();		/**< Get the Card Info RawData */
- 	PTEIDSDK_API const PTEID_ByteArray& getRawData_TokenInfo();		/**< Get the Token Info RawData */
- 	PTEIDSDK_API const PTEID_ByteArray& getRawData_Challenge();		/**< Get the challenge RawData */
- 	PTEIDSDK_API const PTEID_ByteArray& getRawData_Response();		/**< Get the response RawData */
- 	PTEIDSDK_API const PTEID_ByteArray& getRawData_PersoData();		/**< Get the response RawData */
 
 protected:
 	PTEID_EIDCard(const SDK_Context *context,APL_Card *impl);		/**< For internal use : Constructor */
@@ -1062,7 +1003,7 @@ class APL_DocVersionInfo;
 
 /******************************************************************************//**
   * Class for the info document.
-  * You can get such an object from PTEID_EIDCard::getVersionInfo() (or getDocument).
+  * You can get such an object from PTEID_EIDCard::getVersionInfo().
   *********************************************************************************/
 class PTEID_CardVersionInfo : public PTEID_XMLDoc
 {
@@ -1085,7 +1026,6 @@ public:
 	PTEIDSDK_API const char *getGraphicalPersonalisation();			/**< Return field GraphicalPersonalisation from the Info file */
 	PTEIDSDK_API const char *getElectricalPersonalisation();			/**< Return field ElectricalPersonalisation from the TokenInfo file */
 	PTEIDSDK_API const char *getElectricalPersonalisationInterface();	/**< Return field ElectricalPersonalisationInterface from the TokenInfo file */
-	PTEIDSDK_API const PTEID_ByteArray &getSignature();		/**< Return the signature of the card info */
 
 private:
 	PTEID_CardVersionInfo(const PTEID_CardVersionInfo& doc);				/**< Copy not allowed - not implemented */
@@ -1100,7 +1040,7 @@ class APL_SodEid;
 
 /******************************************************************************//**
   * Class for the sod document on a EID Card.
-  * You can get such an object from PTEID_EIDCard::getSod()	(or getDocument).
+  * You can get such an object from PTEID_EIDCard::getSod().
   *********************************************************************************/
 class PTEID_Sod : public PTEID_Biometric
 {
@@ -1122,7 +1062,7 @@ class APL_DocEId;
 
 /******************************************************************************//**
   * Class for the id document on a EID Card.
-  * You can get such an object from PTEID_EIDCard::getID()	(or getDocument).
+  * You can get such an object from PTEID_EIDCard::getID().
   *********************************************************************************/
 class PTEID_EId : public PTEID_XMLDoc
 {
@@ -1136,16 +1076,10 @@ public:
 	PTEIDSDK_API const char *getSurname();					/**< Return Surname field */
 	PTEIDSDK_API const char *getGender();					/**< Return Gender field */
 	PTEIDSDK_API const char *getDateOfBirth();				/**< Return Date Of Birth field */
-	PTEIDSDK_API const char *getLocationOfBirth();			/**< Return Location Of Birth field */
 	PTEIDSDK_API const char *getNationality();				/**< Return Nationality field */
-	PTEIDSDK_API const char *getDuplicata();				/**< Return Duplicata field */
-	PTEIDSDK_API const char *getSpecialOrganization();		/**< Return Special Organization field */
-	PTEIDSDK_API const char *getMemberOfFamily();			/**< Return Member Of Family field */
-	PTEIDSDK_API const char *getLogicalNumber();			/**< Return Logical Number field */
 	PTEIDSDK_API const char *getDocumentPAN();				/**< Return Document PAN field */
 	PTEIDSDK_API const char *getValidityBeginDate();		/**< Return Validity Begin Date field */
 	PTEIDSDK_API const char *getValidityEndDate();			/**< Return Validity End Date field */
-	PTEIDSDK_API const char *getSpecialStatus();			/**< Return Special Status field */
 	PTEIDSDK_API const char *getHeight();					/**< Return field Height */
 	PTEIDSDK_API const char *getDocumentNumber();			/**< Return field DocumentNumber */
 	PTEIDSDK_API const char *getCivilianIdNumber();			/**< Return field CivlianIdNumber */
@@ -1180,7 +1114,7 @@ class APL_AddrEId;
 
 /******************************************************************************//**
   * Class for the Address document on a EID Card.
-  * You can get such an object from PTEID_EIDCard::getAddr()	(or getDocument).
+  * You can get such an object from PTEID_EIDCard::getAddr().
   *********************************************************************************/
 class PTEID_Address : public PTEID_XMLDoc
 {
@@ -1309,14 +1243,10 @@ public:
 	PTEIDSDK_API const char *getLabelById( unsigned long id );/**< Get the label of the pin by Id */
 	PTEIDSDK_API bool unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft);
 
-	PTEIDSDK_API const PTEID_ByteArray &getSignature();	/**< Return the signature of the pin */
-
 	/**
-	  * Return the remaining tries for giving the good pin.
+	  * Return the remaining tries for entering the correct pin.
 	  *
-	  * This opperation is not supported by all card.
 	  *
-	  * @return -1 if not supported
 	  * @return the number of remaining tries in the other case
 	  */
 	PTEIDSDK_API long getTriesLeft();
@@ -1376,12 +1306,6 @@ class APL_Certifs;
 class PTEID_Certificates : public PTEID_Crypto
 {
 public:
-	/**
-	  * Create an PTEID_Certificates store without any link to a card.
-	  * This store is not link to any Card, so some methods could not be used.
-	  * These methods throw PTEID_ExBadUsage exception.
-	  */
-	PTEIDSDK_API PTEID_Certificates();
 
 	PTEIDSDK_API virtual ~PTEID_Certificates();					/**< Destructor */
 

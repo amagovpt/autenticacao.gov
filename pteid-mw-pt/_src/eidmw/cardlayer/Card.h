@@ -114,8 +114,6 @@ public:
             const CByteArray & oData);
     virtual CByteArray SendAPDU(const CByteArray & oCmdAPDU);
 
-    virtual CByteArray Ctrl(long ctrl, const CByteArray & oCmdData);
-
     /* retrieve the correction class for PINs, certificates and private keys */
     virtual CP15Correction* GetP15Correction();
 

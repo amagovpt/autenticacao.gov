@@ -47,7 +47,7 @@ namespace eIDMW
 typedef enum {
 	BELPIC_DF,
 	IAS_DF,
-	GEMSAFE,DF,
+	GEMSAFE_DF,
 	ID_DF,
 	UNKNOWN_DF,
 } tBelpicDF;
@@ -106,11 +106,8 @@ public:
     virtual CByteArray RootCAPubKey();
     virtual bool Activate(const char *pinCode, CByteArray &BCDDate);
     virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft);
-	virtual bool LogOff(const tPin & Pin);
 
 	virtual unsigned long GetSupportedAlgorithms();
-
-    virtual CByteArray Ctrl(long ctrl, const CByteArray & oCmdData);
 
     virtual CP15Correction* GetP15Correction();
 

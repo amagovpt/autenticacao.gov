@@ -458,8 +458,6 @@ APL_SmartCard::APL_SmartCard(APL_ReaderContext *reader):APL_Card(reader)
 	m_allowTestAsked=false;
 	m_allowTestAnswer=false;
 
-	m_challenge=NULL;
-	m_challengeResponse=NULL;
 	m_RootCAPubKey = NULL;
 
 	m_certificateCount=COUNT_UNDEF;
@@ -485,19 +483,7 @@ APL_SmartCard::~APL_SmartCard()
 		delete m_fileinfo;
 		m_fileinfo=NULL;
 	}
-
-	if(m_challenge)
-	{
-		delete m_challenge;
-		m_challenge=NULL;
-	}
-
-	if(m_challengeResponse)
-	{
-		delete m_challengeResponse;
-		m_challengeResponse=NULL;
-	}
-
+	
 	if (m_RootCAPubKey)
 	{
 		delete m_RootCAPubKey;
@@ -702,75 +688,6 @@ tCert APL_SmartCard::getP15Cert(unsigned long ulIndex)
 	END_CAL_OPERATION(m_reader)
 
 	return out;
-}
-
-
-//TODO: see if we can eliminate these ChallengeResponse methods
-void APL_SmartCard::initChallengeResponse()
-{
-	CAutoMutex autoMutex(&m_Mutex);		//We lock for unly one instanciation
-
-	if(!m_challenge)
-	{
-		m_challenge=new CByteArray(CHALLENGE_LEN);
-		srand((int)clock());
-	}
-	m_challenge->ClearContents();
-
-	if(!m_challengeResponse)
-	{
-		m_challengeResponse=new CByteArray;
-	}
-	m_challengeResponse->ClearContents();
-
-	//The challenge MUST NOT COME from the card
-	//*m_challenge=m_calreader->GetRandom(CHALLENGE_LEN);
-	unsigned char byte;
-	for(int i=0;i<CHALLENGE_LEN;i++)
-	{
-		byte=(unsigned char)((double)0x100*(double)rand()/(double)RAND_MAX);
-		m_challenge->Append(byte);
-	}
-
-	*m_challengeResponse=getChallengeResponse(*m_challenge);
-}
-
-const CByteArray &APL_SmartCard::getChallenge(bool bForceNewInit)
-{
-	if(!m_challenge || bForceNewInit)
-		initChallengeResponse();
-
-	return *m_challenge;
-}
-
-const CByteArray &APL_SmartCard::getChallengeResponse()
-{
-	if(!m_challengeResponse)
-		initChallengeResponse();
-
-	return *m_challengeResponse;
-}
-
-CByteArray APL_SmartCard::getChallengeResponse(const CByteArray &challenge) const
-{
-	CByteArray request;
-	request.Append(0x81);
-	request.Append(challenge);
-
-	CByteArray out;
-
-	BEGIN_CAL_OPERATION(m_reader)
-	out = m_reader->getCalReader()->Ctrl(CTRL_PTEID_INTERNAL_AUTH,request);
-	END_CAL_OPERATION(m_reader)
-
-	return out;
-}
-
-bool APL_SmartCard::verifyChallengeResponse(const CByteArray &challenge, const CByteArray &response) const
-{
-
-	CByteArray newResponse=getChallengeResponse(challenge);
-	return newResponse.Equals(response);
 }
 
 }

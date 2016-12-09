@@ -511,14 +511,6 @@ CByteArray CReader::SendAPDU(const CByteArray & oCmdAPDU)
     return m_poCard->SendAPDU(oCmdAPDU);
 }
 
-CByteArray CReader::Ctrl(long ctrl, const CByteArray & oCmdData)
-{
-    if (m_poCard == NULL)
-        throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
-
-    return m_poCard->Ctrl(ctrl, oCmdData);
-}
-
 unsigned long CReader::PinCount()
 {
     if (m_poCard == NULL)

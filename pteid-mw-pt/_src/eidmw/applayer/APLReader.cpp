@@ -532,7 +532,7 @@ void CAppLayer::startAllServices()
 
 void CAppLayer::stopAllServices()
 {
-	//stopping is made in the opposite order then starting
+	//Stopping is made in the opposite order then starting
 	MWLOG(LEV_INFO, MOD_APL, L"Stop all applayer services");
 
 	if(m_cryptoFwk)
@@ -541,8 +541,9 @@ void CAppLayer::stopAllServices()
 		m_cryptoFwk=NULL;
 	}
 
+	delete m_certStatusCache;
 	releaseReaders();
-
+	
 	if(m_Cal)
 	{
 		//m_Cal->ForceRelease();  //No need => cause trouble
@@ -570,7 +571,7 @@ void CAppLayer::readerListRelease()
 
 void CAppLayer::readerListInit(bool bForceRefresh)
 {
-
+	CReadersInfo readersInfo;
 	if(bForceRefresh || m_readerCount==COUNT_UNDEF)
 	{
 		if(isReadersChanged())
@@ -578,14 +579,11 @@ void CAppLayer::readerListInit(bool bForceRefresh)
 			CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instantiation
 			if(isReadersChanged())
 			{
-				CReadersInfo *info=NULL;
 				unsigned long nbrReader=0;
 				try
 				{
-					info = new CReadersInfo();
-					*info=m_Cal->ListReaders();
-					nbrReader=info->ReaderCount();
-					//delete info;//LL
+				    readersInfo = m_Cal->ListReaders();
+                                    nbrReader = readersInfo.ReaderCount();
 				}
 				catch(...)
 				{
@@ -600,8 +598,8 @@ void CAppLayer::readerListInit(bool bForceRefresh)
 
 				for(i=0;i<nbrReader;i++)
 				{
-					m_readerList[i] = new char [info->ReaderName(i).size()+1];
-					strcpy_s(m_readerList[i],info->ReaderName(i).size()+1,info->ReaderName(i).c_str());
+					m_readerList[i] = new char [readersInfo.ReaderName(i).size()+1];
+                                        strcpy_s(m_readerList[i], readersInfo.ReaderName(i).size()+1, readersInfo.ReaderName(i).c_str());
 				}
 
 				//The last element must be NULL the make loop easy
@@ -611,8 +609,6 @@ void CAppLayer::readerListInit(bool bForceRefresh)
 
 				m_contextid++;
 
-				if(info)
-					delete info;
 			}
 		}
 	}
