@@ -23,6 +23,9 @@
 #include <QListView>
 #include <QComboBox>
 #include <QFileDialog>
+#include <QProgressbar>
+#include <QMessageBox>
+#include <QtConcurrent>
 #include <QProgressDialog>
 #include <QTextStream>
 #include <QPainter>
@@ -101,7 +104,7 @@ ScapSignature::ScapSignature(QWidget* parent)
     ui->statusBar->addWidget(statusProgressBar,1);
 
     ui->attributesList->header()->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    ui->attributesList->header()->setResizeMode(0, QHeaderView::ResizeToContents);
+    ui->attributesList->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     ui->attributesList->header()->setStretchLastSection(false);
 
     initReaderAndCard();
@@ -918,7 +921,7 @@ void ScapSignature::on_radioButton_firstpage_toggled(bool value)
     if (value && m_pdf_sig)
     {
         // clearAllSrectors();
-         QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(1));
+         QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(1));
          highlightSectors(sectors);
 
     }
@@ -931,7 +934,7 @@ void ScapSignature::on_radioButton_lastpage_toggled(bool value)
     {
          clearAllSectors();
          QString sectors =
-            QString::fromAscii(m_pdf_sig->getOccupiedSectors(m_current_page_number));
+			 QString::fromLatin1(m_pdf_sig->getOccupiedSectors(m_current_page_number));
          highlightSectors(sectors);
     }
 
@@ -944,7 +947,7 @@ void ScapSignature::on_spinBox_page_valueChanged(int new_value)
         return;
      clearAllSectors();
 
-     QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(new_value));
+	 QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(new_value));
      highlightSectors(sectors);
 
 }
@@ -1020,7 +1023,7 @@ void MyGraphicsScene::selectNewRectangle(QPointF selected_pos)
     QList<QGraphicsItem *> scene_items = this->items();
 
     int i = 0;
-    QGraphicsItem *it = this->itemAt(selected_pos);
+	QGraphicsItem *it = this->itemAt(selected_pos, QTransform());
     ((ScapSignature*)parent)->setSelectedSector(((SelectableRectangle *)it)->getSectorNumber());
     while (i!= scene_items.size())
     {
@@ -1426,7 +1429,7 @@ void ScapSignature::addFileToListView(QStringList &str)
     //if (!my_scene)
         buildLocationTab();
 
-    QString sectors = QString::fromAscii(m_pdf_sig->getOccupiedSectors(1));
+    QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(1));
     highlightSectors(sectors);
 
     //Enable sign button now that we have data and a card inserted

@@ -24,6 +24,8 @@
 
 #include <QDialog>
 #include <QDropEvent>
+#include <QGraphicsItem>
+#include <QProgressDialog>
 #include "CardInformation.h"
 #include "ui_scapsignature.h"
 #include "cardevent.h"

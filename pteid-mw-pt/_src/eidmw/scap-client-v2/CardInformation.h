@@ -74,7 +74,6 @@ public:
 
 			m_Fields[CARD_TYPE]			=  pteid_eid.getDocumentType();
 			m_Fields[CHIP_NUMBER]		=  pteid_eid.getDocumentPAN();
-			m_Fields[CARD_NUMBER]		=  pteid_eid.getLogicalNumber();
 			//m_Fields[CARD_PLACEOFISSUE]	=  pteid_eid.getIssuingMunicipality());
 			m_Fields[CARD_VALIDFROM]	=  pteid_eid.getValidityBeginDate();
 			m_Fields[CARD_VALIDUNTIL]	=  pteid_eid.getValidityEndDate();
@@ -320,14 +319,6 @@ public:
 		bool	  bRetVal  = false;
 		PTEID_EId& pteid_eid = Card.getID();
 
-		m_Fields[SPECIALSTATUS] = pteid_eid.getSpecialStatus();
-
-// 		qDebug() << "PersonExtraInfo::RetrieveData()";
-// 		for (tFieldMap::iterator it=m_Fields.begin(); it!=m_Fields.end(); it++)
-// 		{
-// 			qDebug() << "[" << it.key() << "] = " << "Value: " << it.value();
-// 		}
-
 		return bRetVal;
 	}
 
@@ -345,64 +336,6 @@ private:
 	tFieldMap m_Fields;
 };
 
-//**************************************************
-// Miscellaneous information
-// This class contains all card miscellaneous data
-//**************************************************
-class MiscInfo
-{
-public:
-#define DUPLICATA			"duplicata"
-#define SPECIALORGANIZATION "special organization"
-//#define MEMBEROFFAMILY		"member of family"
-	//----------------------------------------------
-	// ctor
-	//----------------------------------------------
-	MiscInfo( void )
-	{
-	}
-
-	//----------------------------------------------
-	// dtor
-	//----------------------------------------------
-	virtual ~MiscInfo( void )
-	{
-	}
-
-	//----------------------------------------------
-	// Reset to default values
-	//----------------------------------------------
-	void Reset( void )
-	{
-		m_Fields.clear();
-	}
-
-	//----------------------------------------------
-	// Retrieve data from EID card
-	//----------------------------------------------
-	bool RetrieveData( PTEID_EIDCard& Card )
-	{
-		bool	  bRetVal  = false;
-		PTEID_EId& pteid_eid = Card.getID();
-
-		m_Fields[DUPLICATA]			  = pteid_eid.getDuplicata();
-		m_Fields[SPECIALORGANIZATION] = pteid_eid.getSpecialOrganization();
-		//m_Fields[MEMBEROFFAMILY]	  = pteid_eid.getMemberOfFamily();
-
-		bRetVal = true;
-		return bRetVal;
-	}
-
-	//----------------------------------------------
-	// get reference to all fields
-	//----------------------------------------------
-	tFieldMap& getFields( void )
-	{
-		return m_Fields;
-	}
-private:
-	tFieldMap m_Fields;
-};
 
 //**************************************************
 // Person biometric information
@@ -830,7 +763,6 @@ private:
 		{
 			bRetVal |= m_CardInfo.RetrieveData(Card);
 			bRetVal |= m_PersonInfo.RetrieveData(Card);
-			bRetVal |= m_MiscInfo.RetrieveData(Card);
 			bRetVal |= m_CertifInfo.RetrieveData(Card);
 
 			//TODO just a marker
@@ -912,7 +844,6 @@ private:
 public:
 	CardInfo		m_CardInfo;				//!< card specific data
 	PersonInfo		m_PersonInfo;			//!< person info
-	MiscInfo		m_MiscInfo;				//!< miscellaneous info
 	AddressInfo		m_AddressInfo;			//!< Address info
 	PersoDataInfo	m_PersoDataInfo;		//!< info on the PersoData
 

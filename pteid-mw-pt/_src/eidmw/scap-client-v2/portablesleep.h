@@ -2,9 +2,10 @@
 #define __PORTABLE_SLEEP_H__
 
 #ifdef _WIN32
-#  include <windows.h>
+#define _WINSOCKAPI_
+#include <windows.h>
 #else
-#  include <unistd.h>
+#include <unistd.h>
 #endif
 
 class PortableSleep
