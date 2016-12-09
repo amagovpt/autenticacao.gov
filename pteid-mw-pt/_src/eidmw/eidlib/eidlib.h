@@ -361,23 +361,6 @@ private:
 #define PTEID_E_FILE_NOT_FOUND				11 /* Attempt to read a file has failed. */
 #define PTEID_E_USER_CANCELLED				12 /* An operation was cancelled by the user. */
 
-
-struct PTEID_RawData_Eid
-{
-    PTEID_ByteArray idData;
-    PTEID_ByteArray idSigData;
-    PTEID_ByteArray addrData;
-    PTEID_ByteArray addrSigData;
-    PTEID_ByteArray sodData;
-    PTEID_ByteArray cardData;
-    PTEID_ByteArray tokenInfo;
-    PTEID_ByteArray certRN;
-    PTEID_ByteArray challenge;
-    PTEID_ByteArray response;
-    PTEID_ByteArray persoData;
-    PTEID_ByteArray trace;
-};
-
 /**
   * This define give an easy access to singleton (no declaration/instantiation is needed).
   *
@@ -895,7 +878,7 @@ private:
 	bool persoNotesDirty;
 
 friend PTEID_Card &PTEID_ReaderContext::getCard();				/**< For internal use : This method must access protected constructor */
-friend PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen, unsigned char *pucChallenge,	int iChallengeLen);
+friend long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen, unsigned char *pucChallenge,	int iChallengeLen);
 
 };
 

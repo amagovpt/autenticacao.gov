@@ -862,9 +862,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") getPins			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") certificateCount	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getCertificates	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getChallenge		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getChallengeResponse		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") verifyChallengeResponse	JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_EIDCard
@@ -873,24 +870,11 @@ return $jnicall;
 %javaexception("PTEID_Exception") isTestCard			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getAllowTestCard		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") setAllowTestCard		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getDocument			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getXMLCCDoc			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getID					JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getAddr				JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getPicture			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getVersionInfo		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData_Id			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData_IdSig		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData_Addr		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData_AddrSig	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData_Picture	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData_CardInfo	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData_TokenInfo	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData_Challenge	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData_Response	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData_PersoData	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getRawData_Trace		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") SignXades		        JAVA_CODE_THROW
 %javaexception("PTEID_Exception") SignXadesT		    JAVA_CODE_THROW
 %javaexception("PTEID_Exception") SignPDF               JAVA_CODE_THROW
@@ -899,8 +883,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") doSODCheck			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getRootCAPubKey		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") readPersonalNotes		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") ChangeCapPin          JAVA_CODE_THROW
-%javaexception("PTEID_Exception") ChangeCapPinCompLayer JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_CCXML_Doc ccxml
