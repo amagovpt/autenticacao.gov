@@ -79,8 +79,6 @@ PTEID_Exception PTEID_Exception::THROWException(CMWException &e)
 		throw PTEID_ExReaderSetChanged();
 	case EIDMW_ERR_NO_READER:
 		throw PTEID_ExNoReader();
-	case EIDMW_ERR_NOT_ALLOW_BY_USER:
-		throw PTEID_ExNotAllowByUser();
 	case EIDMW_SOD_UNEXPECTED_VALUE:
 	case EIDMW_SOD_UNEXPECTED_ASN1_TAG:
 	case EIDMW_SOD_UNEXPECTED_ALGO_OID:

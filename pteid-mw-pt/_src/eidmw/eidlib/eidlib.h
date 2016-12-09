@@ -878,7 +878,7 @@ private:
 	bool persoNotesDirty;
 
 friend PTEID_Card &PTEID_ReaderContext::getCard();				/**< For internal use : This method must access protected constructor */
-friend long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen, unsigned char *pucChallenge,	int iChallengeLen);
+friend PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen, unsigned char *pucChallenge, int iChallengeLen);
 
 };
 
@@ -2089,12 +2089,14 @@ PTEIDSDK_API int PTEID_IsEMVCAP();
  * to the CVC certificate (raw RSA signature) and provided in the
  * PTEID_CVC_Authenticate() function.
  */
+
 PTEIDSDK_API long PTEID_CVC_Init(
     const unsigned char *pucCert,	/**< in: the CVC as a byte array */
     int iCertLen,					/**< in: the length of ucCert */
     unsigned char *pucChallenge,	/**< out: the challenge to be signed by the CVC private key */
     int iChallengeLen				/**< in: the length reserved for ucChallenge, must be 128 */
 );
+
 
 /**
  * Finish the CVC authentication with the card, to be called
