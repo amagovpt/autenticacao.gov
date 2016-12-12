@@ -531,6 +531,7 @@ int consoleAskForPin(tPinOperation operation, const tPin &Pin,
 	    strcpy(sPin2, password);
     }
 
+    return 0;
 }
 
 bool detectXorgRunning()
@@ -564,10 +565,13 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 	{
 		char *sPin1 = new char[PIN_MAX_LENGTH +1];
 		char *sPin2 = new char[PIN_MAX_LENGTH +1];
-		consoleAskForPin(operation, Pin, sPin1, sPin2);
+		int error = consoleAskForPin(operation, Pin, sPin1, sPin2);
 
-		csPin1 = std::string(sPin1);
-		csPin2 = std::string(sPin2);
+		if (error == 0)
+		{
+			csPin1 = std::string(sPin1);
+			csPin2 = std::string(sPin2);
+		}
 
 		delete[] sPin1;
 		delete[] sPin2;
@@ -993,4 +997,7 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
     case 256: // EF11 (CERT ROOT CA)
         return certCache;
     }
+
+    //Should not happen...
+    return dontCache;
 }

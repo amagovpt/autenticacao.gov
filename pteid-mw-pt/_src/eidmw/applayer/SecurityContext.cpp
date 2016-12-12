@@ -108,9 +108,7 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
     if (key.Size() == 0)
     {
     	fprintf(stderr, "retail_mac_des(): Empty key!\n");
-		free(outbuf);//LL
-		free(complete_buf);//LL
-    	return CByteArray();
+    	goto err;
     }
     //DES BlockSize
     //check(key->length >= 2*len, "Key too short");
@@ -118,6 +116,7 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
     ctx = EVP_CIPHER_CTX_new();
     if (!ctx)
         goto err;
+
     EVP_CIPHER_CTX_init(ctx);
 
     if (!EVP_CipherInit_ex(ctx, EVP_des_cbc(), NULL,
@@ -130,8 +129,7 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
     {
       if(!EVP_CipherUpdate(ctx, outbuf, &outlen, in.GetBytes()+i*len, len))
       {
-            /* Error */
-            return 0;
+            goto err;
       }
       memcpy(complete_buf + i*len, outbuf, len);
     }
@@ -149,8 +147,7 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 
     if(!EVP_CipherUpdate(ctx, last_block, &outlen, complete_buf + in.Size()-len , len))
     {
-            /* Error */
-            return 0;
+            goto err;
     }
 
     EVP_CipherFinal_ex(ctx, last_block, &outlen);
@@ -165,20 +162,22 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 
     if(!EVP_CipherUpdate(ctx, last_block_final, &outlen, last_block, len))
     {
-            /* Error */
-            return 0;
+        goto err;
     }
 
     EVP_CipherFinal_ex(ctx, last_block_final, &outlen);
 
     EVP_CIPHER_CTX_free(ctx);
     free(complete_buf);
+    free(outbuf);
 
     return CByteArray(last_block_final, len);
 
 err:
     if (ctx)
         EVP_CIPHER_CTX_free(ctx);
+    free(complete_buf);
+    free(outbuf);
 
     return CByteArray();
 }
@@ -219,23 +218,24 @@ err:
 	    return CByteArray(out, len);
 
 
-	    err:
-	    	return CByteArray();
-
+	err:
+		free(out);
+	    return CByteArray();
 	}
 
 	CByteArray paddedByteArray(CByteArray &input)
 	{
-		 int padLen = 8 - input.Size() % 8;
-		 const int paddedContentLen = input.Size()+padLen;
-     	 unsigned char * paddedContent = (unsigned char *) malloc(paddedContentLen);
+		int padLen = 8 - input.Size() % 8;
+		const int paddedContentLen = input.Size()+padLen;
+		CByteArray paddedContent(paddedContentLen);
+     	 //unsigned char * paddedContent = (unsigned char *) malloc(paddedContentLen);
 
-     	 memcpy(paddedContent, input.GetBytes(), input.Size());
+     	memcpy(paddedContent.GetBytes(), input.GetBytes(), input.Size());
 
-     	 if (paddedContentLen > input.Size())
-       		paddedContent[input.Size()] = 0x80;
+     	if (paddedContentLen > input.Size())
+       		paddedContent.SetByte(input.Size(), 0x80);
 
-   		return CByteArray(paddedContent, paddedContentLen);
+   		return paddedContent;
 	}
 
 
@@ -394,6 +394,8 @@ err:
         if (RAND_bytes(prnd2, PRND2_SIZE) == 0) {
 
             fprintf(stderr, "Error obtaining PRND2 bytes of random from OpenSSL\n");
+            free(cRnd);
+            free(snIFD);
             return CByteArray();
         }
 
@@ -424,6 +426,9 @@ err:
 
 		for (int i=0; i!=20; i++)
 			challenge[i+107] = sha1_digest[i];
+
+		free(cRnd);
+        free(snIFD);
 
 		return CByteArray(challenge, sizeof(challenge));
 	}
