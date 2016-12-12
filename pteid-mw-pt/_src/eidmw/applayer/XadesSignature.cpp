@@ -808,8 +808,9 @@ bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
 
 				free(base64_str);
 			}
-			free(ocsp_url);
+			
 		}
+		free(ocsp_url);
 		//Try to download a CRL if the cert doesnt point to a OCSP responder
 		//or if it failed to provide a valid response
 		if (!try_ocsp || ocsp_token.Size() == 0)
@@ -835,10 +836,10 @@ bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
 				crl_node->appendChild(dom->createTextNode(XMLString::transcode(base64_str)));
 				crl_values_node->appendChild(crl_node);
 				free(base64_str);
-				free(crl_url);
+				
 
 			}
-
+			free(crl_url);
 		}
 	}
 
@@ -1020,7 +1021,8 @@ bool XadesSignature::AddArchiveTimestamp(XERCES_NS DOMDocument *dom)
 		i++;
 	}
 
-	//TODO: change ns to xades 1.4.1
+	delete partial_xml_file;
+
 	return appendTimestamp(dom, node_unsigned_props_orig, "ArchiveTimeStamp", digest_input);
 }
 

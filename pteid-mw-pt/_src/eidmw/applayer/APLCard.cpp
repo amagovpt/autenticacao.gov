@@ -403,6 +403,8 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 		// iterations
 		if (i==0)
 			getCalReader()->setSSO(true);
+
+		delete &signature;
 	}
 
 	getCalReader()->setSSO(false);

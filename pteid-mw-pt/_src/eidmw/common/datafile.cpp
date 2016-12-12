@@ -804,12 +804,13 @@ bool CDataFile::CreateSection(t_Str szSection, t_Str szComment, KeyList Keys)
 	pSection->szName = szSection;
 	for (k_pos = Keys.begin(); k_pos != Keys.end(); k_pos++)
 	{
-		t_Key* pKey = new t_Key;
-		pKey->szComment = (*k_pos).szComment;
-		pKey->szKey = (*k_pos).szKey;
-		pKey->szValue = (*k_pos).szValue;
+		t_Key pKey;
+    
+		pKey.szComment = (*k_pos).szComment;
+		pKey.szKey = (*k_pos).szKey;
+		pKey.szValue = (*k_pos).szValue;
 
-		pSection->Keys.push_back(*pKey);
+		pSection->Keys.push_back(pKey);
 	}
 
 	m_Sections.push_back(*pSection);

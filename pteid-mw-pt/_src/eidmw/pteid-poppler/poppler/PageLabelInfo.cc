@@ -19,6 +19,7 @@
 #include <assert.h>
 
 #include "PageLabelInfo.h"
+#include "Error.h"
 
 /* http://mathworld.wolfram.com/RomanNumerals.html */
 
@@ -78,6 +79,11 @@ static void toRoman(int number, GooString *str, GBool uppercase) {
   int divisor;
   int i, j, k;
   const char *wh;
+
+  if (number >= 4000) {
+   error(errUnimplemented, -1, "Conversion to roman numberals of numbers >= 4000 not implemented");
+    return;
+  }
 
   if (uppercase)
     wh = uppercaseNumerals;

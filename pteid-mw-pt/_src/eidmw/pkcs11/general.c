@@ -58,8 +58,8 @@ CK_RV C_Initialize(CK_VOID_PTR pReserved)
 {
 	int ret = CKR_OK;
 	char sep;
-	const char *temp;
-	const char *env_vr, *tmpvar;
+	const char *temp = NULL;
+	const char *env_vr = NULL, *tmpvar = NULL;
 	char *log_path;
 	CK_C_INITIALIZE_ARGS_PTR p_args;
 	int isDup = 0;
@@ -114,11 +114,12 @@ CK_RV C_Initialize(CK_VOID_PTR pReserved)
       log_trace(WHERE, "S: Initialize this PKCS11 Module");
       log_trace(WHERE, "S: =============================");
       }
-  log_trace(WHERE, "I: leave, ret = %i",ret);
+   log_trace(WHERE, "I: leave, ret = %i",ret);
 
-   /*if (isDup != 0){
-      if (tmpvar != NULL) free(tmpvar);
-   }*/
+   if (isDup > 0) {
+      free((char *)tmpvar);
+   }
+
    return ((CK_RV)ret);
 }
 #undef WHERE

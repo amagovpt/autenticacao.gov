@@ -71,6 +71,7 @@ PTEID_ByteArray PTEID_EIDCard::SignXadesT(const char *const * path, unsigned int
 
 	CByteArray &ca = pcard->SignXadesT((const char **)path, n_paths, output_path);
 	out.Append(ca.GetBytes(), ca.Size());
+	delete (&ca);
 
 	END_TRY_CATCH
 
@@ -101,6 +102,7 @@ PTEID_ByteArray PTEID_EIDCard::SignXadesA(const char *const * path, unsigned int
 
 	CByteArray &ca = pcard->SignXadesA((const char **)path, n_paths, output_path);
 	out.Append(ca.GetBytes(), ca.Size());
+	delete (&ca);
 
 	END_TRY_CATCH
 

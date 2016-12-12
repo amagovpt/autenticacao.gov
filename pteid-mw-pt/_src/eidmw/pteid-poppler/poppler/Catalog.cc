@@ -942,7 +942,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 		n2_commands->append("0 -10 Td\r\n");
 		char * location_latin1 = utf8_to_latin1(location);
 		GooString * tmp_location = GooString::format("Localiza\xE7\xE3o: {0:s}",
-					utf8_to_latin1(location));
+					location_latin1);
 
 		GooString * multiline2 = formatMultilineString(tmp_location->getCString(), 
 					rect_x, font_size, MYRIAD_REGULAR, 1); 
