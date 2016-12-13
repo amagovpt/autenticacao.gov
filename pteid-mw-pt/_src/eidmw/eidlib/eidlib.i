@@ -40,6 +40,11 @@
 		TODO
 #endif
 
+
+%newobject eIDMW::PTEID_PDFSignature::getOccupiedSectors(int page);
+%newobject eIDMW::PTEID_ScapConnection::postSoapRequest(char *endpoint, char *soapAction, char *soapBody);
+%newobject eIDMW::PTEID_EIDCard::readPersonalNotes();
+
 %{
 #include "eidlib.h"
 #include "eidlibException.h"
@@ -555,14 +560,19 @@ return $jnicall;
     /* make a copy of each string */
     for (i = 0; i<size; i++) {
         jstring j_string = (jstring)jenv->GetObjectArrayElement($input, i);
-        const char * c_string = jenv->GetStringUTFChars( j_string, 0);
-        $1[i] = (char*) malloc((strlen(c_string)+1)*sizeof(char));
-        strcpy($1[i], c_string);
-        jenv->ReleaseStringUTFChars(j_string, c_string);
+        $1[i] = (char *) jenv->GetStringUTFChars( j_string, 0);
         jenv->DeleteLocalRef(j_string);
     }
     $1[i] = 0;
 
+}
+
+%typemap(freearg) const char * const * (jint size) {
+	//Free the individual strings and then the array of pointers
+   for (int i = 0; $1[i] != 0; i++) {
+   	free($1[i]);
+   }
+   free($1);
 }
 
 //------------------------------------------------
