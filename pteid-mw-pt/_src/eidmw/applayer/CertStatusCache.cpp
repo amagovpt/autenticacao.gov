@@ -340,10 +340,6 @@ CSC_Status APL_CertStatusCache::checkCertValidation(unsigned long ulUniqueID,uns
 	APL_Certif *cert=certStore->getCertUniqueId(ulUniqueID);
 
 	bool bRoot=cert->isRoot();
-	bool bTest=cert->isTest();
-
-	if(bTest && !APL_CscLine::allowTestRoot(ulFlags))
-		return CSC_STATUS_TEST;
 
 	//If this is not a root
 	if (bRoot)
