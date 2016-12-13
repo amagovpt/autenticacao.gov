@@ -1311,8 +1311,9 @@ void PDFSignWindow::highlightSectors(QString &csv_sectors)
 void PDFSignWindow::updateMaxPage(int removed_index)
 {
 	page_numbers.removeAt(removed_index);
-	ui.spinBox_page->setMaximum(*std::min_element(page_numbers.begin(), page_numbers.end()));
-
+	
+	if (page_numbers.size() > 0)
+		ui.spinBox_page->setMaximum(*std::min_element(page_numbers.begin(), page_numbers.end()));
 }
 
 
