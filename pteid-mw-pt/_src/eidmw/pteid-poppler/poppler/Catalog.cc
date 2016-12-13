@@ -111,6 +111,7 @@ Catalog::Catalog(PDFDoc *docA) {
   attrsList = NULL;
   kidsIdxList = NULL;
   lastCachedPage = 0;
+  m_sig_dict = NULL;
 
 
   xref->getCatalog(&catDict);
