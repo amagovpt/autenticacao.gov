@@ -679,7 +679,8 @@ void MainWnd::launchJavaProcess(const QString &application_jar, const QString jv
 			 this, SLOT(showJavaLaunchError(QProcess::ProcessError)));
 
 	myProcess->start(program, arguments);
-	delete myProcess;
+	
+	//delete myProcess;
 }
 
 void MainWnd::setup_addressChange_progress_bar()
@@ -2652,24 +2653,19 @@ void MainWnd::actionPDFSignature_triggered()
 //*****************************************************
 // VerifySignature clicked
 //*****************************************************
-void MainWnd::actionVerifySignature_eID_triggered()
+void MainWnd::actionVerifySignature_eID_triggered()  
 {
-	QString DSS_JAR("dss-standalone-app-3.0.3.jar");
+	QString DSS_JAR("dss-standalone-app-3.0.4.jar");
 
 	//Launch the exe wrapper on Windows, we need it for the file association
 #ifdef _WIN32
 	QStringList arguments;
-	QObject *parent = this;
 
 	QString language = m_Settings.getGuiLanguageString() == "nl" ? QString("pt") : m_Settings.getGuiLanguageString();
 	//Add language code as args[0]
 	arguments << language;
 
-	QProcess *myProcess = new QProcess(parent);
-	myProcess->setProcessChannelMode(QProcess::MergedChannels);
-
-	myProcess->start(m_Settings.getExePath()+"/DSS/dss-standalone.exe", arguments);
-
+	QProcess::startDetached(m_Settings.getExePath()+"/DSS/dss-standalone.exe", arguments);
 	//launchJavaProcess(m_Settings.getExePath() + "/DSS/" + DSS_JAR, "", "");
 #elif __APPLE__
 	launchJavaProcess(QString::fromUtf8("/Applications/Validacao de assinaturas.app/Contents/Java/") + DSS_JAR,
@@ -2682,18 +2678,18 @@ void MainWnd::actionVerifySignature_eID_triggered()
 //*****************************************************
 // SCAPSignature clicked
 //*****************************************************
-void MainWnd::actionSCAPSignature_triggered() {
+void MainWnd::actionSCAPSignature_triggered() 
+{
 	QString SCAP_EXE("/ScapSignature");
 
 	#ifdef _WIN32
 		SCAP_EXE += ".exe";
 	#endif
-		QObject *parent = this;
-		QProcess *myProcess = new QProcess(parent);
-		myProcess->setProcessChannelMode(QProcess::MergedChannels);
+		QStringList args;
+		qint64 child_pid = 0;
 		//TODO: Tested only in Windows: test in Linux
-		myProcess->start("\"" + m_Settings.getExePath()+SCAP_EXE + "\"", NULL);
-		delete myProcess;
+		QProcess::startDetached(m_Settings.getExePath()+SCAP_EXE, args);
+
 }
 
 //*****************************************************
