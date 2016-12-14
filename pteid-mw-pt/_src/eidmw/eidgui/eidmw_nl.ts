@@ -1940,8 +1940,8 @@ Please specify .xml, .csv or .eid</source>
      </message>
 
      <message>
-        <source>Maximum image dimensions: (185x41 px)</source>
-        <translation>Dimensões máximas da imagem: (185x41 px)</translation>
+        <source>Maximum image dimension: 185x41 px</source>
+        <translation>Dimensão máxima da imagem: 185x41 px</translation>
      </message>
 
      <message>

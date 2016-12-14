@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>890</width>
+    <width>921</width>
     <height>534</height>
    </rect>
   </property>
@@ -24,7 +24,7 @@
     <rect>
      <x>10</x>
      <y>0</y>
-     <width>841</width>
+     <width>911</width>
      <height>675</height>
     </rect>
    </property>
@@ -275,13 +275,22 @@
      <string>Remove files</string>
     </property>
    </widget>
+   <zorder>button_addfile</zorder>
+   <zorder>pdf_listview</zorder>
+   <zorder>label_3</zorder>
+   <zorder>layoutWidget</zorder>
+   <zorder>button_sign</zorder>
+   <zorder>button_cancel</zorder>
+   <zorder>spinBox_page</zorder>
+   <zorder>button_clearFiles</zorder>
+   <zorder>verticalLayoutWidget_3</zorder>
   </widget>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
      <x>440</x>
      <y>10</y>
-     <width>420</width>
+     <width>471</width>
      <height>491</height>
     </rect>
    </property>
@@ -304,7 +313,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -420,20 +429,15 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Maximum image dimensions: (185x41 px)</string>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>Maximum image dimension: 185x41 px</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </item>
@@ -455,6 +459,8 @@
          </item>
         </layout>
        </widget>
+       <zorder>verticalLayoutWidget_3</zorder>
+       <zorder></zorder>
       </widget>
      </widget>
     </item>
