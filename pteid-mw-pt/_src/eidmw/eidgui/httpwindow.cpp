@@ -64,7 +64,7 @@ HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
     buttonBox->addButton(cancelButton, QDialogButtonBox::ActionRole);
     buttonBox->addButton(downloadButton, QDialogButtonBox::RejectRole);
 
-    QTextEdit *textEditor = new QTextEdit();
+    textEditor = new QTextEdit();
     textEditor->setText(GetReleaseNotes());
     textEditor->setReadOnly(true);
 
@@ -74,9 +74,9 @@ HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
     connect(downloadButton, SIGNAL(clicked()), this, SLOT(downloadFile()));
 
-    QHBoxLayout *topLayout = new QHBoxLayout;
+    topLayout = new QHBoxLayout();
+    mainLayout = new QVBoxLayout();
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addLayout(topLayout);
     mainLayout->addWidget(statusLabel);
     mainLayout->addWidget(textEditor);
@@ -85,15 +85,15 @@ HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
 	const QIcon app_icon = QIcon(":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png");
 	setWindowIcon(app_icon);
     setWindowTitle(tr("Auto-Update"));
-
-    //statusLabel = new QLabel(tr("There are updates available press Install do perform the updates."));
-	delete mainLayout;//LL
-	delete topLayout;//LL
-	delete textEditor;//LL
+	
 }
 
 HttpWindow::~HttpWindow()
 {
+    
+    delete textEditor;
+    delete topLayout;
+    delete mainLayout;
 }
 
 QString HttpWindow::GetReleaseNotes()
@@ -104,8 +104,6 @@ QString HttpWindow::GetReleaseNotes()
 
     QString rnpath = QDir::tempPath();
     rnpath.append("/version.txt");
-
-
 
     QString s = QDir::toNativeSeparators(rnpath);
 

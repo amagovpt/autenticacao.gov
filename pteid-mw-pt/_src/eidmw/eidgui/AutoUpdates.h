@@ -24,6 +24,8 @@
 
 #include <QDialog>
 #include <QtGui>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
 #include <QUrl>
@@ -75,6 +77,9 @@ private:
 	QNetworkProxy proxy;
 	QNetworkAccessManager qnam;
 	QNetworkReply *reply;
+	QHBoxLayout *topLayout;
+	QVBoxLayout *mainLayout;
+	
 	QFile *file;
 	int httpGetId;
 	bool httpRequestAborted;

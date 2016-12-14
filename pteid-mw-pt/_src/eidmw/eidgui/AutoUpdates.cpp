@@ -100,9 +100,10 @@ AutoUpdates::AutoUpdates(QWidget *parent)
 	connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
 	connect(downloadButton, SIGNAL(clicked()), this, SLOT(downloadFile()));
 
-	QHBoxLayout *topLayout = new QHBoxLayout;
+	topLayout = new QHBoxLayout();
 
-	QVBoxLayout *mainLayout = new QVBoxLayout;
+	mainLayout = new QVBoxLayout();
+
 	mainLayout->addLayout(topLayout);
 	mainLayout->addWidget(statusLabel);
 	mainLayout->addWidget(buttonBox);
@@ -111,12 +112,18 @@ AutoUpdates::AutoUpdates(QWidget *parent)
 	const QIcon app_icon = QIcon(":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png");
 	setWindowIcon(app_icon);
 	setWindowTitle(ddtitle);
-	delete mainLayout;
-	delete topLayout;
+	
 }
 
 AutoUpdates::~AutoUpdates()
 {
+	delete cancelButton;
+	delete downloadButton;
+	delete buttonBox;
+	delete statusLabel;
+	
+	delete topLayout;
+	delete mainLayout;
 }
 
 void AutoUpdates::cancelDownload()

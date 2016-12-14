@@ -23,6 +23,9 @@
 
 #include <QDialog>
 #include <QtGui>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QTextEdit>
 #include <QNetworkAccessManager>
 #include <QUrl>
 #include <iostream>
@@ -62,6 +65,9 @@ private:
 	QPushButton *downloadButton;
 	QPushButton *cancelButton;
 	QDialogButtonBox *buttonBox;
+	QVBoxLayout *mainLayout;
+	QHBoxLayout *topLayout;
+	QTextEdit *textEditor;
 
 	QUrl url;
 	QNetworkAccessManager qnam;
