@@ -208,8 +208,9 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 
 	// Hide SCAP and other ugly buttons
 	if (!m_Settings.areJavaAppsEnabled()){
-		hideJavaAppButtons();
-		hideUniversalSigButton();
+        //m_ui.btnShortcut_SCAPSign->hide();
+        m_ui.btnShortcut_VerifSign->hide();
+		m_ui.btnShortcut_UnivSign->hide();
 	}
 
 	/*** Setup progress Bar ***/
@@ -451,6 +452,7 @@ void MainWnd::on_btnShortcut_SCAPSign_clicked(){
 	actionSCAPSignature_triggered();
 }
 
+/*
 void MainWnd::hideJavaAppButtons() {
 	m_ui.btnShortcut_SCAPSign->hide();
 	m_ui.btnShortcut_VerifSign->hide();
@@ -459,6 +461,7 @@ void MainWnd::hideJavaAppButtons() {
 void MainWnd::hideUniversalSigButton() {
 	m_ui.btnShortcut_UnivSign->hide();
 }
+*/
 
 /*
 // Change Address functionality triggered by a button in the Address tab
@@ -679,7 +682,7 @@ void MainWnd::launchJavaProcess(const QString &application_jar, const QString jv
 			 this, SLOT(showJavaLaunchError(QProcess::ProcessError)));
 
 	myProcess->start(program, arguments);
-	
+
 	//delete myProcess;
 }
 
@@ -759,15 +762,15 @@ void MainWnd::on_btn_menu_card_clicked()
 void MainWnd::on_btn_menu_tools_clicked()
 {
 	//Trick to hide the Java tools shortcuts in this overlay menu
-	//int tools_height = m_Settings.areJavaAppsEnabled() ? 130: 85;
-	int tools_height = m_Settings.areJavaAppsEnabled() ? 130: 65;
+	int tools_height = m_Settings.areJavaAppsEnabled() ? 130: 85;
+	//int tools_height = m_Settings.areJavaAppsEnabled() ? 130: 65;
 	m_ui.wdg_submenu_tools->setVisible(true);
 
 	//If defined language is portuguese, then the dialog needs to be larger
 	if (m_Settings.getGuiLanguageCode() == GenPur::LANG_NL)
-		m_ui.wdg_submenu_tools->setGeometry(127,4,155, tools_height);
+		m_ui.wdg_submenu_tools->setGeometry(127,4,175, tools_height);
 	else
-		m_ui.wdg_submenu_tools->setGeometry(127,4,145, tools_height);
+		m_ui.wdg_submenu_tools->setGeometry(127,4,150, tools_height);
 
 }
 
@@ -2653,7 +2656,7 @@ void MainWnd::actionPDFSignature_triggered()
 //*****************************************************
 // VerifySignature clicked
 //*****************************************************
-void MainWnd::actionVerifySignature_eID_triggered()  
+void MainWnd::actionVerifySignature_eID_triggered()
 {
 	QString DSS_JAR("dss-standalone-app-3.0.4.jar");
 
@@ -2678,7 +2681,7 @@ void MainWnd::actionVerifySignature_eID_triggered()
 //*****************************************************
 // SCAPSignature clicked
 //*****************************************************
-void MainWnd::actionSCAPSignature_triggered() 
+void MainWnd::actionSCAPSignature_triggered()
 {
 	QString SCAP_EXE("/ScapSignature");
 

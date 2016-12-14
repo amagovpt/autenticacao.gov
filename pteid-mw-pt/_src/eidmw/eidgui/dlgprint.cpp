@@ -41,7 +41,7 @@ using namespace eIDMW;
 
 
 dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUAGE lng)
-: QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
+: QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
 , m_CI_Data(CI_Data)
 , m_CurrReaderName("")
 {
@@ -50,6 +50,7 @@ dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUA
     	PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
     	ui.setupUi(this);
 		setFixedSize(420, 245);
+
 		const QIcon Ico = QIcon( ":/images/Images/Icons/Print.png" );
 		this->setWindowIcon( Ico );
 

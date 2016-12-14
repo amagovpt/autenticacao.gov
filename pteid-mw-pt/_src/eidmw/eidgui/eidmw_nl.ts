@@ -16,8 +16,8 @@
         <translation>Assinatura de PDF</translation>
      </message>
      <message>
-        <source>SCAP Signature</source>
-        <translation>Assinatura SCAP</translation>
+        <source>Professional signature</source>
+        <translation>Assinatura de Profissionais</translation>
      </message>
 	 <message>
 		<source>Error launching Java application! Make sure you have a working JRE installed.</source>
@@ -1900,7 +1900,7 @@ Please specify .xml, .csv or .eid</source>
 
      <message>
         <source>Selected sector: %1</source>
-     
+
         <translation>Área Seleccionada: %1</translation>
      </message>
 

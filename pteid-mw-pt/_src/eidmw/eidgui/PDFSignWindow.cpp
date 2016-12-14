@@ -1185,6 +1185,11 @@ void PDFSignWindow::on_button_clearFiles_clicked()
 
 	ui.button_sign->setEnabled(false);
 	ui.visible_checkBox->setEnabled(false);
+
+	ui.timestamp_checkBox->setEnabled(false);
+	ui.checkBox_location->setEnabled(false);
+	ui.checkBox_reason->setEnabled(false);
+
 	ui.scene_view->setEnabled(false);
 
 	if (my_rectangle)
@@ -1372,6 +1377,11 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	{
 		ui.button_sign->setEnabled(true);
 		ui.visible_checkBox->setEnabled(true);
+
+        ui.timestamp_checkBox->setEnabled(true);
+        ui.checkBox_location->setEnabled(true);
+        ui.checkBox_reason->setEnabled(true);
+
 		ui.button_clearFiles->setEnabled(true);
 	}
 

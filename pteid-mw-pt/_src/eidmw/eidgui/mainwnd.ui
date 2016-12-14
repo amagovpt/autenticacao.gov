@@ -381,9 +381,9 @@
        <widget class="QPushButton" name="btnShortcut_UnivSign">
         <property name="geometry">
          <rect>
-          <x>430</x>
-          <y>310</y>
-          <width>181</width>
+          <x>620</x>
+          <y>360</y>
+          <width>171</width>
           <height>41</height>
          </rect>
         </property>
@@ -407,9 +407,9 @@
        <widget class="QPushButton" name="btnShortcut_VerifSign">
         <property name="geometry">
          <rect>
-          <x>430</x>
+          <x>420</x>
           <y>360</y>
-          <width>181</width>
+          <width>191</width>
           <height>41</height>
          </rect>
         </property>
@@ -449,9 +449,9 @@
        <widget class="QPushButton" name="btnShortcut_SCAPSign">
         <property name="geometry">
          <rect>
-          <x>620</x>
-          <y>360</y>
-          <width>171</width>
+          <x>420</x>
+          <y>310</y>
+          <width>191</width>
           <height>41</height>
          </rect>
         </property>
@@ -463,7 +463,7 @@
          </string>
         </property>
         <property name="text">
-         <string>SCAP Signature</string>
+         <string>Professional signature</string>
         </property>
         <property name="checkable">
          <bool>false</bool>
@@ -765,7 +765,7 @@ text-align: left top;</string>
       </widget>
       <widget class="QWidget" name="page_Address">
        <property name="styleSheet">
-        <string notr="true"></string>
+        <string notr="true"/>
        </property>
        <widget class="QLineEdit" name="txtAddress_District">
         <property name="geometry">
@@ -2101,9 +2101,12 @@ background-image: url(:/images/Images/alpha.png);</string>
      <rect>
       <x>150</x>
       <y>760</y>
-      <width>151</width>
+      <width>221</width>
       <height>131</height>
      </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">background-image: url(:/images/Images/submenu_backgrounds/bg_selected_menu_tools.png);</string>
@@ -2149,7 +2152,7 @@ background-image: url(:/images/Images/alpha.png);</string>
      <property name="geometry">
       <rect>
        <x>25</x>
-       <y>65</y>
+       <y>105</y>
        <width>131</width>
        <height>17</height>
       </rect>
@@ -2215,8 +2218,8 @@ background-image: url(:/images/Images/alpha.png);</string>
      <property name="geometry">
       <rect>
        <x>25</x>
-       <y>105</y>
-       <width>131</width>
+       <y>65</y>
+       <width>148</width>
        <height>17</height>
       </rect>
      </property>
@@ -2231,7 +2234,7 @@ background-image: url(:/images/Images/alpha.png);</string>
       </string>
      </property>
      <property name="text">
-      <string>SCAP Signature</string>
+      <string>Professional signature</string>
      </property>
     </widget>
     <widget class="QLabel" name="lbl_menuCard_Read_8">

@@ -28,7 +28,7 @@ using namespace eIDMW;
 
 
 dlgAbout::dlgAbout(QString const& version, QWidget *parent)
-		: QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
+		: QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
 	this->setFixedSize(this->width(), this->height());

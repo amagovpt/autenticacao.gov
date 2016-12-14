@@ -23,7 +23,7 @@
 #define MAINWND_H
 
 #include <map>
- 
+
 #include <QtGui>
 #include <QPrinter>
 #include <QMessageBox>
@@ -340,8 +340,8 @@ private slots:
 	void updateReaderList( void );
 	void customEvent( QEvent * event );
 	void changeEvent( QEvent *event );
-	void hideJavaAppButtons();
-	void hideUniversalSigButton();
+/*	void hideJavaAppButtons();
+	void hideUniversalSigButton();*/
 	void clearErrorSOD() { error_sod = false; }
 	void setErrorSOD() { error_sod = true; }
 
