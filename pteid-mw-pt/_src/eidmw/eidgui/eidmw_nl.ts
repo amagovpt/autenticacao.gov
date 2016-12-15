@@ -1905,6 +1905,11 @@ Please specify .xml, .csv or .eid</source>
      </message>
 
      <message>
+        <source>The signed PDF filename must be different from the original!</source>
+        <translation>É obrigatório escolher um nome diferente para o ficheiro PDF assinado!</translation>
+     </message>
+
+     <message>
            <source>Remove files</source>
            <translation>Remover ficheiros</translation>
      </message>

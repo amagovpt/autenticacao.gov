@@ -707,6 +707,12 @@ void PDFSignWindow::on_button_sign_clicked()
 		m_pdf_sig->setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
 
 	}
+	//Avoid overwriting the original PDF, it doesn't work currently in Windows
+	if (savefilepath == current_input_path)
+	{
+		ShowErrorMsgBox(tr("The signed PDF filename must be different from the original!"));
+		return;
+	}
 
 	if (savefilepath.isNull() || savefilepath.isEmpty())
 		return;
