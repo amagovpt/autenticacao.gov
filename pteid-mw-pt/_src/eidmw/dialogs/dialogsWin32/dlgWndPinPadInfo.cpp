@@ -59,7 +59,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 	}
 	
 
-	if( CreateWnd( tmpTitle.c_str() , 420, 280, 0, Parent ) )
+	if (CreateWnd(tmpTitle.c_str(), 420, 280, IDI_APPICON, Parent))
 	{
 		if( PinPusage == DLG_PIN_SIGN )
 			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP2) );

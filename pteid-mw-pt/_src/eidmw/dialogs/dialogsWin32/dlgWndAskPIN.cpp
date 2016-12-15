@@ -25,6 +25,7 @@
 #include "../langUtil.h"
 #include "Log.h"
 #include "Config.h"
+#include "resource.h"
 
 #define IDC_STATIC 0
 #define IDB_OK 1
@@ -80,7 +81,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 	if( m_UseKeypad )
 		Height = 480;
 
-	if( CreateWnd( tmpTitle.c_str() , 420, Height, 0, Parent ) )
+	if( CreateWnd( tmpTitle.c_str() , 420, Height, IDI_APPICON, Parent ) )
 	{
 		RECT clientRect;
 		GetClientRect( m_hWnd, &clientRect );

@@ -5,6 +5,7 @@
 #define BASE_VERSION2                   0
 #define BASE_VERSION1                   1
 #define BASE_VERSION3                   1
+#define IDI_APPICON                     105
 #define IDB_PIN                         106
 #define IDB_ICO_INFO                    107
 #define IDB_ICO_NOK                     108

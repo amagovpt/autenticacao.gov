@@ -78,7 +78,7 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 	if( m_UseKeypad )
 		Height = 430;
 
-	if( CreateWnd( tmpTitle.c_str() , 420, Height, 0, Parent ) )
+	if (CreateWnd(tmpTitle.c_str(), 420, Height, IDI_APPICON, Parent))
 	{
 		RECT clientRect;
 		GetClientRect( m_hWnd, &clientRect );

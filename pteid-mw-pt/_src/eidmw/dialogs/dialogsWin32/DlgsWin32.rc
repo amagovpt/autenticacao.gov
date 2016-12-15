@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #define APSTUDIO_READONLY_SYMBOLS
 
-#include "afxres.h"
+#include "windows.h"
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
@@ -141,7 +141,7 @@ IDB_KP_CE               BITMAP                  "Images\\KeyPadButtonCE.bmp"
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_BELPIC              ICON                    "images\\ICO_BELPIC.ico"
+IDI_APPICON              ICON                    "images\\eid.ico"
 #endif    // English (U.K.) resources
 /////////////////////////////////////////////////////////////////////////////
 

@@ -84,7 +84,7 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 		szBody = GETSTRING_DLG(TryAgainOrCancel);
 	}
 
-	if( CreateWnd( tmpTitle.c_str() , 280, 230, 0,  Parent ) )
+	if (CreateWnd(tmpTitle.c_str(), 280, 230, IDI_APPICON, Parent))
 	{
 		RECT clientRect;
 		GetClientRect( m_hWnd, &clientRect );
