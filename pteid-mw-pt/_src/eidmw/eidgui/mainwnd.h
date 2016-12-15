@@ -430,6 +430,7 @@ private:
 	void LoadDataMC(PTEID_MemoryCard& Card);
 	void on_actionUpdates_triggered( void );
 
+	void ProgressExec();
 	void InitLanguageMenu( void );
 	void setLanguage( void );
 	void setLanguage( GenPur::UI_LANGUAGE language );
