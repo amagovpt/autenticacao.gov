@@ -259,6 +259,8 @@ signals:
 	void addressProgressChanged(int value);
 	void addressChangeFinished(long return_code);
 
+public slots:
+	void messageRespond();
 
 private slots:
 	void on_actionAbout_triggered( void );
@@ -281,7 +283,7 @@ private slots:
 	void restoreWindow( void );
 	void setAddressProgress(int value);
 	void showChangeAddressDialog(long code);
-	void messageRespond( const QString& message);
+	
 	void showJavaLaunchError(QProcess::ProcessError error);
 
 	void showCertStatusSideinfo(PTEID_CertifStatus certStatus);
@@ -289,7 +291,7 @@ private slots:
 	void getCertStatusText(PTEID_CertifStatus certStatus, QString& strCertStatus);
 	//PTEID_CertifStatus checkCertStatus(PTEID_Certificate *cert);
 
-	// eventFilter to Catch actions from "personalized toolbar"
+	// eventFilter to Catch events from "personalized toolbar"
 	bool eventFilter(QObject *,QEvent *);
 
 	// SystemTray

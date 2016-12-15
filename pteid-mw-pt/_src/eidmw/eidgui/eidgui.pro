@@ -44,11 +44,8 @@ CONFIG += config qt thread create_prl link_prl console
 
 ##LIBS += -L$$[QT_INSTALL_PLUGINS]/imageformats -ljasper
 
-###
-### Accept cp1252 encoded source files
-### 
-###
-#QMAKE_CXXFLAGS+=-finput-charset=cp1252
+#We need to override this because SingleApplication needs some C++11 feature
+QMAKE_CXXFLAGS += '-std=c++11'
 
 ###
 ### make sure the RPATH is set to where the Qt libs will be installed
@@ -121,9 +118,10 @@ HEADERS += CardInformation.h \
 					 Settings.h \
 					 genpur.h \
 					 picturepopup.h \
-#					 qtsingleapplication.h \
 					 dlgprint.h \
 					 mylistview.h \
+					 singleapplication.h \	
+					 singleapplication_p.h \
 					 dlgsignature.h \
 					 PDFSignWindow.h \
 					 ChangeAddressDialog.h \
@@ -133,6 +131,7 @@ HEADERS += CardInformation.h \
 FORMS += dlgAbout.ui dlgOptions.ui mainwnd.ui picturepopup.ui dlgPrint.ui dlgSignature.ui dlgVerifySignature.ui PDFSignWindow.ui ChangeAddressDialog.ui
 
 RESOURCES = eidgui.qrc 
+DEFINES += QAPPLICATION_CLASS=QApplication
 
 SOURCES += CardInformation.cpp \
 	   dlgAbout.cpp \
@@ -144,13 +143,10 @@ SOURCES += CardInformation.cpp \
 	   mainwnd.cpp \
 	   dlgprint.cpp \
 	   dlgsignature.cpp \
+	   singleapplication.cpp \
 	   picturepopup.cpp \
-#	   qtsingleapplication.cpp \
 	   PDFSignWindow.cpp \
 	   mylistview.cpp \
 	   genpur.cpp
-#unix:!macx: SOURCES += qtsingleapplication_x11.cpp
-#macx: SOURCES += qtsingleapplication_mac.cpp	
-
 
 

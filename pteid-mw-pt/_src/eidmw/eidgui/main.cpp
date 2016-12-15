@@ -25,8 +25,10 @@
 
 #include <iostream>
 
+#include <QApplication>
+
 #include "Settings.h"
-//#include "qtsingleapplication.h"
+#include "singleapplication.h"
 #include "mainwnd.h"
 
 #ifdef MEMORY_LEAKS_CHECK
@@ -101,8 +103,8 @@ int main(int argc, char *argv[])
 #ifdef WIN32
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
-	QApplication instance(argc, argv);
-
+	//QApplication instance(argc, argv);
+	SingleApplication app(argc, argv);
 
 	/*
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Waking up other instance");
@@ -148,8 +150,12 @@ int main(int argc, char *argv[])
 	// main application. In this way, the 'wake up' message emitted by each starting instance
 	// will make the running instance to restore.
 	//-------------------------------------------------
-	//QObject::connect(&instance, SIGNAL(messageReceived(const QString&)),
-	//	&widget, SLOT(messageRespond(const QString&)));
+	QObject::connect(
+        &app,
+        &SingleApplication::instanceStarted,
+        &widget,
+        &MainWnd::messageRespond);
+
 
 	/*
 #ifndef __MACH__	
@@ -169,7 +175,7 @@ int main(int argc, char *argv[])
 
 	//instance.setActivationWindow ( &widget );
 
-	iRetValue = instance.exec();
+	iRetValue = app.exec();
 
 	if (test_mode)
 	{

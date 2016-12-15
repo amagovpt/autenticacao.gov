@@ -832,17 +832,15 @@ void MainWnd::showNormal( void )
 	QMainWindow::showNormal();
 }
 
-//*****************************************************
-// Respond to other instance
-//*****************************************************
-void MainWnd::messageRespond( const QString& message)
+/******************************************************************
+// Respond to other instance of the pteidgui process: this way we can raise the
+// existing window
+********************************************************************/
+void MainWnd::messageRespond()
 {
-	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "messageRespond - Receive message = %s",message.toLatin1().data());
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "messageRespond - Received message from another pteidgui instance: restoring the Window");
 
-	if(message.compare("Restore Windows")==0)
-	{
-		restoreWindow();
-	}
+	restoreWindow();
 }
 
 //*****************************************************
