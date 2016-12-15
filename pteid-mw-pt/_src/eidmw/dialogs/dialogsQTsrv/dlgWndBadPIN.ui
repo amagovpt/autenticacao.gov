@@ -25,9 +25,9 @@
    <widget class="QLabel" name="lblHeader">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>90</x>
       <y>30</y>
-      <width>311</width>
+      <width>341</width>
       <height>41</height>
      </rect>
     </property>
