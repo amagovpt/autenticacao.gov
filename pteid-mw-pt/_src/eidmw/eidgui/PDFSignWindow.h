@@ -42,7 +42,7 @@ class FreeSelectionDialog;
 
 class MyGraphicsScene : public QGraphicsScene
 {
-	
+
 public:
 	MyGraphicsScene(QString background_string): QGraphicsScene()
 	{
@@ -56,14 +56,14 @@ public:
     }
 
     void selectNewRectangle(QPointF pos);
-    void setOccupiedSector(int s);
+    void setOccupiedSector(int s, Qt::GlobalColor color );
     void clearAllRectangles();
     void switchFreeSelectMode() { free_select = !free_select; }
 
     bool isFreeSelectMode() { return free_select; }
 	//override to draw the text in background
 	//void drawBackground (QPainter * painter, const QRectF & rect );
-	
+
 
 private:
 
@@ -75,14 +75,14 @@ private:
 
 enum ItemTypes {
 		SelectableRectType = QGraphicsItem::UserType+5,
-		
+
 };
 
 class ImageCanvas : public QWidget
 {
 	Q_OBJECT
 public:
-	ImageCanvas(QWidget *parent): QWidget(parent), small_sig_format(false), previewVisible(false) 
+	ImageCanvas(QWidget *parent): QWidget(parent), small_sig_format(false), previewVisible(false)
 	{
 		initDateString();
 	}
@@ -95,7 +95,7 @@ public:
 	void setLocation(QString loc) { sig_location = loc; }
 	void setReason(QString reason) { sig_reason = reason; }
 	void setCustomPixmap(QPixmap pixmap) { user_pixmap = pixmap; }
-	
+
 
 protected:
 	void paintEvent(QPaintEvent *);
@@ -124,13 +124,14 @@ class SelectableRectangle: public QGraphicsItem
         is_sector_filled = false;
 
         };
+        void setSectorIsFilled( bool bVal ) { is_sector_filled = bVal; }
         bool isSectorFilled() { return is_sector_filled; }
         int getSectorNumber() { return m_sector_number; }
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 		void mouseReleaseEvent (QGraphicsSceneMouseEvent * event);
 		void mousePressEvent (QGraphicsSceneMouseEvent * event);
 		void resetColor();
-        void setSectorFilled();
+        void setSectorFilled( Qt::GlobalColor color );
 
         void switchSelectionMode() {
             dont_select_mode = !dont_select_mode;
@@ -154,7 +155,7 @@ class SelectableRectangle: public QGraphicsItem
 class DraggableRectangle : public QGraphicsItem
 {
 	public:
-		DraggableRectangle(MyGraphicsScene *parent, double max_y, double max_x, double rect_h, double rect_w): my_scene(parent), 
+		DraggableRectangle(MyGraphicsScene *parent, double max_y, double max_x, double rect_h, double rect_w): my_scene(parent),
 		m_max_x(max_x), m_max_y(max_y), m_rect_w(rect_w), m_rect_h(rect_h)
 	{
     		setFlag(QGraphicsItem::ItemIsMovable);
@@ -171,6 +172,7 @@ class DraggableRectangle : public QGraphicsItem
 		void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
 		void makeItSmaller();
 		void makeItLarger();
+		void setToPos( QPointF newPos );
 
 		QRectF boundingRect() const;
 
@@ -233,7 +235,7 @@ class PDFSignWindow : public QDialog
 	    QString getCitizenNIC();
 		PTEID_EIDCard &getNewCard();
 
-	    
+
 	    // bool validateSelectedSector();
 	    void invertSelectionMode();
         void highlightSectors(QString &csv_sectors);
@@ -259,6 +261,7 @@ class PDFSignWindow : public QDialog
 	    bool horizontal_page_flag;
 	    bool m_small_signature;
 		int m_selected_reader;
+        bool isInitializedScene;
 
     	CardInformation const& m_CI_Data;
 	    QAbstractItemModel *list_model;
@@ -268,7 +271,7 @@ class PDFSignWindow : public QDialog
 	    QFutureWatcher<void> FutureWatcher;
 	    PTEID_PDFSignature *m_pdf_sig;
 	    QList<int> page_numbers;
-	
+
 	    //Number of pages of currently loaded document
 	    int m_current_page_number;
 
@@ -285,8 +288,9 @@ class PDFSignWindow : public QDialog
 		void addSquares();
 
 		double convertX();
-
 		double convertY();
+		double getMaxX();
+		double getMaxY();
 
 		MyGraphicsScene * my_scene;
 		DraggableRectangle *my_rectangle;
