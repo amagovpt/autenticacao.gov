@@ -1,6 +1,7 @@
 #include <QListView>
 #include <QKeyEvent>
 #include <QCoreApplication>
+#include <QAbstractItemView>
 #include "mylistview.h"
 #include <iostream>
 #include <cstdio>
@@ -9,7 +10,8 @@
 MyListView::MyListView(QWidget *parent): 
 	QListView(parent)
 {
-notify = false;
+	notify = false;
+	setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 
