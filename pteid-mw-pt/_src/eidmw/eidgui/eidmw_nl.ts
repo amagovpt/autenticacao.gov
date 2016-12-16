@@ -178,7 +178,7 @@
         <translation>Cartão de Cidadão</translation>
     </message>
 	<message>
-	    <source>Portuguese Citizen Card Management</source>
+	    <source>Portuguese Citizen Card</source>
 		<translation>Cartão de Cidadão</translation>
 	</message>
     <message>
