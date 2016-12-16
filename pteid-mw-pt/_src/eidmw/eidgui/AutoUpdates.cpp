@@ -99,6 +99,7 @@ AutoUpdates::AutoUpdates(QWidget *parent)
 	connect(progressDialog, SIGNAL(canceled()), this, SLOT(cancelDownload()));
 	connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
 	connect(downloadButton, SIGNAL(clicked()), this, SLOT(downloadFile()));
+	progressDialog->reset();
 
 	topLayout = new QHBoxLayout();
 
