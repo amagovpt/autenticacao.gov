@@ -923,7 +923,6 @@ void ScapSignature::on_radioButton_firstpage_toggled(bool value)
 {
     if (value && m_pdf_sig)
     {
-        // clearAllSrectors();
          QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(1));
          highlightSectors(sectors);
 
@@ -935,7 +934,6 @@ void ScapSignature::on_radioButton_lastpage_toggled(bool value)
 {
     if (value && m_pdf_sig)
     {
-         clearAllSectors();
          QString sectors =
 			 QString::fromLatin1(m_pdf_sig->getOccupiedSectors(m_current_page_number));
          highlightSectors(sectors);
