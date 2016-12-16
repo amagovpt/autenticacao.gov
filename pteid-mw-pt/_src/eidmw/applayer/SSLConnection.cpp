@@ -508,10 +508,6 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 
 	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_3rdpost()");
 
-#ifdef _WIN32
-	buf_len = _scprintf(start_write_format, mse_resp, internal_auth_resp) + 1;
-#endif
-
 	snprintf(post_body, buf_len, start_write_format, mse_resp, internal_auth_resp);
 	//fprintf(stderr, "POSTing JSON %s\n", post_body);
 
