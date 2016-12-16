@@ -799,8 +799,8 @@ void PDFSignWindow::on_button_addfile_clicked()
 
 	addFileToListView(fileselect);
 
-	// To force update scene and rectangles
-	on_visible_checkBox_toggled(ui.visible_checkBox->isChecked() ? true : false );
+	if (my_scene!= NULL)
+		on_visible_checkBox_toggled(ui.visible_checkBox->isChecked() ? true : false );
 }
 
 double g_scene_height;
