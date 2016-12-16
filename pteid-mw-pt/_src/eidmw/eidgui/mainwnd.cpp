@@ -347,6 +347,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			pinactivate = 1;
 			pinNotes = 1;
 			certdatastatus = 1;
+			persodatastatus = 1;
 
 			m_CI_Data.Reset();
 
