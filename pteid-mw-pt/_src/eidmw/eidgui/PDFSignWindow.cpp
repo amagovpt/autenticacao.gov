@@ -1333,39 +1333,78 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	if (str.isEmpty())
 		return;
 
-	current_input_path = str.at(0);
-
-	m_pdf_sig = new PTEID_PDFSignature(strdup(getPlatformNativeString(current_input_path)));
-
-
-	int tmp_count = m_pdf_sig->getPageCount();
-
-
-	if (tmp_count < 1)
+	//Remove duplicates in all the selected files
+	for (int i = 0; i < list_model->rowCount(); i++)
 	{
-		QFileInfo fi(current_input_path);
-		ShowErrorMsgBox(tr("Unsupported or damaged PDF file: ") + fi.fileName());
-		m_pdf_sig = NULL;
-		return;
+		QString tmp = list_model->data(list_model->index(i, 0), 0).toString();
+		str.removeAll(tmp);
 	}
 
+	//Check again because we may have removed all elements of the input list
+	if (str.isEmpty())
+		return;
+
+	m_pdf_sig = NULL;
+
+	int j = 0;
+	int tmp_count = 0;
+
+	while (!m_pdf_sig && j < str.size())
+	{
+		current_input_path = str.at(j);
+		m_pdf_sig = new PTEID_PDFSignature(strdup(getPlatformNativeString(current_input_path)));
+		tmp_count = m_pdf_sig->getPageCount();
+
+		if (tmp_count < 1)
+		{
+			delete m_pdf_sig;
+			m_pdf_sig = NULL;
+
+			QFileInfo fi(current_input_path);
+			ShowErrorMsgBox(tr("Unsupported or damaged PDF file: ") + fi.fileName());
+			if (str.size() == 1)
+				return;
+		}
+		j++;
+	}
+
+	//All the files were broken
+	if (!m_pdf_sig)
+		return;
+
+	list_model->insertRows(list_model->rowCount(), 1);
+	list_model->setData(list_model->index(list_model->rowCount()-1, 0), current_input_path);
+	
 	page_numbers.append(tmp_count);
 	m_current_page_number = tmp_count;
     m_landscape_mode = m_pdf_sig->isLandscapeFormat();
 
-    // qDebug() << "Landscape format? " << m_landscape_mode;
-
-	for(int i=0; i != str.size(); i++)
+    int page_n = 0;
+	for (int i = j; i < str.size(); i++)
 	{
 		QString tmp = str.at(i);
-		list_model->insertRows(list_model->rowCount(), 1);
-		list_model->setData(list_model->index(list_model->rowCount()-1, 0), tmp);
+		
+		//The first file was already checked using getPageCount()
 		if (i > 0)
 		{
 			char *dupStr = strdup(getPlatformNativeString(tmp));
 			if (dupStr != NULL) {
-				int page_n = m_pdf_sig->getOtherPageCount(dupStr);
-				page_numbers.append(tmp_count);
+				page_n = m_pdf_sig->getOtherPageCount(dupStr);
+
+				//Check for invalid file or unsupported PDF
+				if (page_n < 1)
+				{
+					ShowErrorMsgBox(tr("Unsupported or damaged PDF file: ") + tmp);
+
+					free(dupStr);
+					continue;
+				}
+				else
+				{
+					list_model->insertRows(list_model->rowCount(), 1);
+					list_model->setData(list_model->index(list_model->rowCount()-1, 0), tmp);
+					page_numbers.append(page_n);
+				}
 				free(dupStr);
 			}
 		}
