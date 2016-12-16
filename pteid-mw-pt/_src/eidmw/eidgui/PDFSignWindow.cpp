@@ -612,7 +612,7 @@ void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
 			//printf("x=%f, y=%f\n", sig_coord_x, sig_coord_y);
 			//printf("selected_page=%d, selected_sector=%d\n", selected_page, m_selected_sector);
 
-			if (sig_coord_x != -1 && sig_coord_y != -1)
+			if ( my_scene->isFreeSelectMode() )
 				sign_rc = card->SignPDF(*m_pdf_sig, selected_page,
 				sig_coord_x, sig_coord_y, location, reason, save_path);
 			else
