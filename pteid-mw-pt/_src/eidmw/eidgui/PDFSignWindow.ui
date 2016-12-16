@@ -275,15 +275,6 @@
      <string>Remove files</string>
     </property>
    </widget>
-   <zorder>button_addfile</zorder>
-   <zorder>pdf_listview</zorder>
-   <zorder>label_3</zorder>
-   <zorder>layoutWidget</zorder>
-   <zorder>button_sign</zorder>
-   <zorder>button_cancel</zorder>
-   <zorder>spinBox_page</zorder>
-   <zorder>button_clearFiles</zorder>
-   <zorder>verticalLayoutWidget_3</zorder>
   </widget>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
@@ -313,7 +304,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -459,8 +450,6 @@
          </item>
         </layout>
        </widget>
-       <zorder>verticalLayoutWidget_3</zorder>
-       <zorder></zorder>
       </widget>
      </widget>
     </item>

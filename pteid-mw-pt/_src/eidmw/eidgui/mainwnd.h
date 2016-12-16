@@ -283,7 +283,7 @@ private slots:
 	void restoreWindow( void );
 	void setAddressProgress(int value);
 	void showChangeAddressDialog(long code);
-	
+
 	void showJavaLaunchError(QProcess::ProcessError error);
 
 	void showCertStatusSideinfo(PTEID_CertifStatus certStatus);
@@ -410,6 +410,7 @@ private:
 	void refreshTabCertificates( void );
 	void refreshTabCardPin( void );
     void setTabCardPin( QTreeWidgetItem *item );    /*llemos*/
+    void enableTabPersoData( bool isEnabled );
 
 	QString translateText(QString &qStr);
 	//void refreshTabInfo( void );

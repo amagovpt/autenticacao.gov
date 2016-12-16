@@ -343,6 +343,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			if ( !m_mutex_ReadCard.tryLock() ) return false;
 
 			hide_submenus();
+			refreshTabPersoData();
 
 			pinactivate = 1;
 			pinNotes = 1;
@@ -3670,6 +3671,13 @@ void MainWnd::refreshTabPinCodes( void )
 	}
 }
 
+void MainWnd::enableTabPersoData( bool isEnabled )
+{
+    m_ui.txtPersoData->setEnabled(isEnabled);
+    m_ui.txtPersoDataCount->setEnabled(isEnabled);
+    m_ui.btnPersoDataSave->setEnabled(isEnabled);
+}
+
 //*****************************************************
 // refresh the tab with the PTeid Personal Data
 //*****************************************************
@@ -4115,6 +4123,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 					refreshTabIdentity();
 					refreshTabIdentityExtra();
 					refreshTabPersoData();
+					enableTabPersoData(false);
 					refreshTabCardPin();
 					refreshTabCertificates();
 
@@ -4163,6 +4172,8 @@ void MainWnd::customEvent( QEvent* pEvent )
 						pEvent->accept();
 						return;
 					}
+
+					enableTabPersoData(true);
 
 					//----------------------------------------------------------
 					// This custom event is arrived since a card is changed in a reader

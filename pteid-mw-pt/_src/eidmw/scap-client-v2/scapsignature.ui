@@ -42,9 +42,9 @@
     <widget class="QPushButton" name="button_addfile">
      <property name="geometry">
       <rect>
-       <x>250</x>
+       <x>270</x>
        <y>70</y>
-       <width>191</width>
+       <width>156</width>
        <height>27</height>
       </rect>
      </property>
@@ -87,10 +87,10 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>479</y>
-       <width>171</width>
-       <height>31</height>
+       <x>217</x>
+       <y>470</y>
+       <width>81</width>
+       <height>27</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -103,10 +103,10 @@
     <widget class="QPushButton" name="button_cancel">
      <property name="geometry">
       <rect>
-       <x>110</x>
-       <y>479</y>
-       <width>151</width>
-       <height>31</height>
+       <x>121</x>
+       <y>470</y>
+       <width>81</width>
+       <height>27</height>
       </rect>
      </property>
      <property name="text">
@@ -163,9 +163,9 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>250</x>
+       <x>270</x>
        <y>254</y>
-       <width>191</width>
+       <width>156</width>
        <height>27</height>
       </rect>
      </property>
@@ -322,7 +322,7 @@
       <rect>
        <x>470</x>
        <y>459</y>
-       <width>191</width>
+       <width>94</width>
        <height>27</height>
       </rect>
      </property>
@@ -331,12 +331,6 @@
        <horstretch>0</horstretch>
        <verstretch>1</verstretch>
       </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>191</width>
-       <height>27</height>
-      </size>
      </property>
      <property name="layoutDirection">
       <enum>Qt::LeftToRight</enum>
