@@ -454,6 +454,11 @@ QString getUtf8String(const QString &in)
 	return QString::fromUtf8(in.toStdString().c_str());
 }
 
+QString dlgPrint::getTranslated(const QString &str)
+{
+	return tr(str.toUtf8().constData());
+}
+
 void addFonts()
 {
 #ifdef __APPLE__
@@ -629,13 +634,12 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 	    pos_y += LINE_HEIGHT;
 
         /* LL - Change columns order - No overlap text */
-	    drawSingleField(painter, pos_x, pos_y, tr("Card State"), getUtf8String(PersonFields[VALIDATION]));
+	    drawSingleField(painter, pos_x, pos_y, tr("Card State"), getTranslated(PersonFields[VALIDATION]));
 	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Document type"), getUtf8String(PersonFields[DOCUMENTTYPE]));
 	    pos_y += LINE_HEIGHT;
 
         drawSingleField(painter, pos_x, pos_y, tr("Delivery Location"), getUtf8String(PersonFields[LOCALOFREQUEST]));
 
-		//XXX: espacamento extra curto para ver se conseguimos apenas 1 pagina...
 	    pos_y += 50;
 	}
 

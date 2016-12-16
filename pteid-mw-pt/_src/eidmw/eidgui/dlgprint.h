@@ -62,6 +62,7 @@ private:
 
     bool addressPINRequest_triggered(CardInformation& CI_Data);
     void ShowErrorMsgBox();	 
+    QString getTranslated(const QString &str);
     void ShowSuccessMsgBox();	 
     const char * persodata_triggered();
     bool drawpdf(CardInformation& CI_Data, const char *filepath);

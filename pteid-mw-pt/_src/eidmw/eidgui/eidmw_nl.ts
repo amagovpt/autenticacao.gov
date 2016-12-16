@@ -1439,7 +1439,10 @@ Please specify .xml, .csv or .eid</source>
         <source>Personal Notes</source>
         <translation>Notas pessoais</translation>
     </message>
-
+     <message>
+        <source>The Citizen Card has been activated</source>
+        <translation>O Cartão de Cidadão foi ativado</translation>
+    </message>
       <message>
         <source>Cancel</source>
         <translation>Cancelar</translation>
