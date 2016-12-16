@@ -258,9 +258,6 @@
 /** The reader set has been changed */
 #define EIDMW_ERR_READERSET_CHANGED		0xe1d00b08
 
-/** User did not allow to read the card */
-#define EIDMW_ERR_NOT_ALLOW_BY_USER		0xe1d00b09
-
 /** This Certificate has no CDP */
 #define EIDMW_ERR_CERT_NOCRL			0xe1d00b0A
 
