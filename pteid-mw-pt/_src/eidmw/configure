@@ -95,7 +95,7 @@ $options{"--prefix"} = ["destination directory for the binaries",
 			"PREFIX_DIR"];
 $options{"--include"} = ["include path",
 			 1,
-			 "/usr/include/PCSC /usr/include/qt4/QtCore /usr/include/Qt /usr/include",
+			 "/usr/include/PCSC /usr/include/i386-linux-gnu/qt5 /usr/include/x86_64-linux-gnu/qt5/",
 			 "INCLUDEPATH"];
 
 #############################################################
@@ -250,9 +250,9 @@ $dependencies{$pcscliteName} = ["--lib",
 #############################################################
 ## qt4
 #############################################################
-$dependencies{"qglobal.h"} =  ["--include",
-			       "could not find %s in: %s\nPlease specify the location " .
-			       "of the file with the option %s\n\n"];
+#$dependencies{"qglobal.h"} =  ["--include",
+#			       "could not find %s in: %s\nPlease specify the location " .
+#			       "of the file with the option %s\n\n"];
 
 #############################################################
 ## xerces-c
@@ -280,7 +280,7 @@ if ( $^O =~ m/linux/ )
 ## qt4-devel
 ## could also check for the existence of /usr/lib/libQtCore.so
 #############################################################
-my $QtName = "libQtGui.so";
+my $QtName = "libQt5Gui.so";
 $QtName = "QtGui" unless($^O =~ m/linux/);
 $dependencies{"$QtName"} = ["--lib",
 				"could not find %s in: %s\nPlease specify the location " .
