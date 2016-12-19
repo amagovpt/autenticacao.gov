@@ -169,7 +169,13 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
             nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
 
             char * cpychar = strdup(getPlatformNativeString(nativepdftmp));
-            drawpdf(cdata, cpychar);
+            bool res = drawpdf(cdata, cpychar);
+
+            if (!res)
+            {
+            	free(cpychar);
+            	return;
+            }
 
 		    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PDF File to Sign: %s", cpychar);
 
