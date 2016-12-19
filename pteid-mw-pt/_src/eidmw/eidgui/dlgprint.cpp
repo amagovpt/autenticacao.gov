@@ -647,7 +647,16 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 	{
 		bool res = addressPINRequest_triggered(CI_Data);
 		if (!res)
+		{
+			//Delete partial PDF file
+			painter.end();
+			bool ret = QFile::remove(QString(filepath));
+			if (!ret)
+			{
+				PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Failed to delete partial PDF file: %s", filepath);
+			}
 			return false;
+		}
 
 		tFieldMap& AddressFields = CI_Data.m_AddressInfo.getFields();
 
