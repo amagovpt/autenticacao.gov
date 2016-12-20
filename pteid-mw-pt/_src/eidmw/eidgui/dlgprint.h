@@ -23,7 +23,7 @@
 
 #include "ui_dlgPrint.h"
 #include <QDialog>
-#include <QProgressDialog> 
+#include <QProgressDialog>
 #include "genpur.h"
 #include "CardInformation.h"
 
@@ -61,9 +61,9 @@ private:
     double pos_x, pos_y;
 
     bool addressPINRequest_triggered(CardInformation& CI_Data);
-    void ShowErrorMsgBox();	 
+    void ShowErrorMsgBox();
     QString getTranslated(const QString &str);
-    void ShowSuccessMsgBox();	 
+    void ShowSuccessMsgBox();
     const char * persodata_triggered();
     bool drawpdf(CardInformation& CI_Data, const char *filepath);
 };

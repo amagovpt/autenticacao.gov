@@ -208,6 +208,16 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>chboxID</tabstop>
+  <tabstop>chboxIDExtra</tabstop>
+  <tabstop>chboxAddress</tabstop>
+  <tabstop>chboxPersoData</tabstop>
+  <tabstop>chboxSignature</tabstop>
+  <tabstop>pbCancel</tabstop>
+  <tabstop>pbPrint</tabstop>
+  <tabstop>pbGeneratePdf</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
