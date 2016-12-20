@@ -1,4 +1,4 @@
-CFLAGS= -fno-omit-frame-pointer --std=c++98 -fPIC -O3 -I.. -I../goo/ -g
+
 
 BASENAME=libpteid-poppler
 
@@ -7,8 +7,10 @@ BASENAME=libpteid-poppler
 ifeq ($(shell uname), Darwin)
 	LIB_FILENAME=$(BASENAME).dylib
 	LDFLAGS += -liconv
+	CFLAGS= -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -g
 else
 	LIB_FILENAME=$(BASENAME).so
+	CFLAGS= -fno-omit-frame-pointer --std=c++98 -fPIC -O3 -I.. -I../goo/ -g
 endif
 
 SOURCES =		\
