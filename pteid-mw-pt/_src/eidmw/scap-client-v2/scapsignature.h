@@ -234,6 +234,7 @@ private:
     void reloadPdfSig();
     void computeSigLocationFromSectorLandscape(int sector);
     void computeSigLocationFromSector(int sector);
+    void clearScapSign();
 
     // Card related Functions
     void initReaderAndCard();

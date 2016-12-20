@@ -442,7 +442,7 @@ const char * getSubjectSerialNumber(const PTEID_ByteArray &certificate)
     const unsigned char *data = certificate.GetBytes();
 
     X509 *x509 = d2i_X509(NULL, &data, certificate.Size());
-    
+
 
     int bytes_req = X509_NAME_get_text_by_NID(X509_get_subject_name(x509), NID_serialNumber, NULL, 0) +1;
 
@@ -808,30 +808,34 @@ void ScapSignature::on_button_sign_clicked()
 // IN MB
 const int MAX_FILE_SIZE = 15;
 
+void ScapSignature::clearScapSign(){
+    ui->button_addfile->setText(tr("&Add File"));
+    page_numbers.clear();
+    m_current_page_number = 0;
+    m_landscape_mode = false;
+
+    ui->button_sign->setEnabled(false);
+    ui->pushButton_freeselect->setEnabled(false);
+
+    ui->radioButton_firstpage->setEnabled(false);
+    ui->radioButton_lastpage->setEnabled(false);
+    ui->radioButton_choosepage->setEnabled(false);
+    ui->spinBox_page->setEnabled(false);
+
+    ui->pushButton_freeselect->setText(tr("Free Selection"));
+    ui->label_x->setText("");
+    ui->label_y->setText("");
+
+    my_scene->clear();
+    ui->scene_view->setFixedSize(default_scene_width, default_scene_height);
+}
+
 void ScapSignature::on_button_addfile_clicked()
 {
     if(list_model->rowCount() > 0){
         ui->button_addfile->setText(tr("&Add File"));
         list_model->removeRows( 0, list_model->rowCount() );
-        page_numbers.clear();
-        m_current_page_number = 0;
-        m_landscape_mode = false;
-
-        ui->button_sign->setEnabled(false);
-        ui->pushButton_freeselect->setEnabled(false);
-
-        ui->radioButton_firstpage->setEnabled(false);
-        ui->radioButton_lastpage->setEnabled(false);
-        ui->radioButton_choosepage->setEnabled(false);
-        ui->spinBox_page->setEnabled(false);
-
-        ui->pushButton_freeselect->setText(tr("Free Selection"));
-        ui->label_x->setText("");
-        ui->label_y->setText("");
-
-        my_scene->clear();
-        ui->scene_view->setFixedSize(default_scene_width, default_scene_height);
-
+        clearScapSign();
     }else{
         QStringList fileselect;
         QString selectedFile;
@@ -1363,8 +1367,10 @@ void ScapSignature::highlightSectors(QString &csv_sectors)
 void ScapSignature::updateMaxPage(int removed_index)
 {
     page_numbers.removeAt(removed_index);
-    ui->spinBox_page->setMaximum(*std::min_element(page_numbers.begin(), page_numbers.end()));
+    if (page_numbers.size() > 0)
+        ui->spinBox_page->setMaximum(*std::min_element(page_numbers.begin(), page_numbers.end()));
 
+    clearScapSign();
 }
 
 void ScapSignature::reloadPdfSig(){
