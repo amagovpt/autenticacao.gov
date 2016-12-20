@@ -409,6 +409,8 @@ if ($configOptionIdxEnd != -1)
     $qmakeOptions .= "\"CONFIG-=debug\"";
 }
 	$qmakeOptions .= " -spec macx-g++42";
+
+=pod
 #############################################################
 ## for MAC OSX 10.4 the following parameter has to be set:
 ##    CONFIG+=osx10_4
@@ -440,7 +442,11 @@ if ($configOptionIdxEnd != -1)
 		exit -1;
 	        #print STDOUT "OS version:" . $osxVer . "<" . "10.4.0\n"
 	}
+=cut
+
 }
+
+
 #print STDERR $qmakeOptions;
 
 #############################################################
