@@ -30,7 +30,7 @@ class dlgOptions : public QDialog
     Q_OBJECT
 
 private slots:
-	
+
 	void on_chbShowPicture_toggled( bool bChecked );
 	void on_chbAutoCardReading_toggled( bool bChecked );
 	void on_chbWinAutoStart_toggled( bool bChecked );
@@ -55,6 +55,8 @@ public:
 	QString getProxyHost();
 	int getProxyPort();
 	bool getProxyAuth();
+    void checkBox_proxy_EnableGroup(bool checked);
+    void checkBox_proxyAuth_EnableGroup(bool checked);
 
 private:
     Ui_dlgOptions ui;

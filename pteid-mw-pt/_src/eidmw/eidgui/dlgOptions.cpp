@@ -32,47 +32,25 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 	ui.chbAutoCardReading->setChecked( settings.getAutoCardReading() );
 	ui.chbWinAutoStart->setChecked( settings.getAutoStartup() );
 
-
-	if (!settings.getProxyHost().isEmpty())
-	{
-		ui.label_proxyhost->setEnabled(true);
-		ui.label_proxyPort->setEnabled(true);
-
+	if (!settings.getProxyHost().isEmpty()){
 		ui.lineEdit_proxyHost->setText(settings.getProxyHost());
-		if (settings.getProxyPort() > 0)
-		{
+		if (settings.getProxyPort() > 0){
 			ui.spinBox->setValue(settings.getProxyPort());
 		}
 		ui.checkBox_proxy->setChecked(true);
 
-		ui.checkBox_proxyAuth->setEnabled(true);
-		ui.lineEdit_proxyHost->setEnabled(true);
-		ui.spinBox->setEnabled(true);
-
-		if (!settings.getProxyUsername().isEmpty())
-		{
-			ui.checkBox_proxyAuth->setChecked(true);
-			ui.label_proxyUser->setEnabled(true);
-			ui.label_proxyPwd->setEnabled(true);
-
+        bool proxyAuth_Checked = false;
+    	if (!settings.getProxyUsername().isEmpty()){
 			ui.lineEdit_proxyUser->setText(settings.getProxyUsername());
 			ui.lineEdit_proxyPwd->setText(settings.getProxyPwd());
+
+            proxyAuth_Checked = true;
 		}
-		else
-		{
-			ui.lineEdit_proxyUser->setEnabled(false);
-			ui.lineEdit_proxyPwd->setEnabled(false);
-		}
-	}
-	else
-	{
-		ui.label_proxyhost->setEnabled(false);
-		ui.label_proxyPort->setEnabled(false);
-		ui.label_proxyUser->setEnabled(false);
-		ui.label_proxyPwd->setEnabled(false);
-		ui.lineEdit_proxyHost->setEnabled(false);
-		ui.spinBox->setEnabled(false);
-		ui.checkBox_proxyAuth->setEnabled(false);
+        checkBox_proxyAuth_EnableGroup(proxyAuth_Checked);
+		ui.checkBox_proxyAuth->setChecked( proxyAuth_Checked );
+	} else{
+        on_checkBox_proxy_toggled(false);
+        on_checkBox_proxyAuth_toggled(false);
 	}
 
 #ifndef WIN32
@@ -155,46 +133,46 @@ bool dlgOptions::getProxyAuth()
 	return ui.checkBox_proxyAuth->isChecked();
 }
 
+void dlgOptions::checkBox_proxy_EnableGroup(bool checked){
+    ui.label_proxyhost->setEnabled(checked);
+	ui.lineEdit_proxyHost->setEnabled(checked);
+
+	ui.label_proxyPort->setEnabled(checked);
+	ui.spinBox->setEnabled(checked);
+}/* checkBox_proxy_EnableGroup() */
+
 //Enable or disable the proxy-related elements when the main checkbox is used
 void dlgOptions::on_checkBox_proxy_toggled(bool checked)
 {
-	if (!checked)
-	{
+	if ( !checked ){
 		ui.lineEdit_proxyHost->setText("");
-		ui.lineEdit_proxyUser->setText("");
-		ui.lineEdit_proxyPwd->setText("");
+	}/* if ( !checked ) */
 
-	}
+	checkBox_proxy_EnableGroup( checked );
+    ui.checkBox_proxyAuth->setEnabled(checked);
 
-	ui.lineEdit_proxyHost->setEnabled(checked);
-	ui.lineEdit_proxyHost->setEnabled(checked);
-	ui.spinBox->setEnabled(checked);
-	ui.checkBox_proxyAuth->setEnabled(checked);
-	ui.lineEdit_proxyUser->setEnabled(checked);
-	ui.lineEdit_proxyPwd->setEnabled(checked);
-	ui.label_proxyhost->setEnabled(checked);
-	ui.label_proxyPort->setEnabled(checked);
-
-	if (!checked)
-	{
-		ui.label_proxyUser->setEnabled(false);
-		ui.label_proxyPwd->setEnabled(false);
-	}
-	else if (checked && ui.checkBox_proxyAuth->isChecked())
-	{
-		ui.label_proxyUser->setEnabled(true);
-		ui.label_proxyPwd->setEnabled(true);
-	}
+    if ( ( checked && getProxyAuth() ) || (!checked) ){
+        checkBox_proxyAuth_EnableGroup( checked );
+    }/* if (...) */
 }
+
+void dlgOptions::checkBox_proxyAuth_EnableGroup(bool checked){
+	ui.lineEdit_proxyUser->setEnabled(checked);
+    ui.label_proxyUser->setEnabled(checked);
+
+	ui.lineEdit_proxyPwd->setEnabled(checked);
+    ui.label_proxyPwd->setEnabled(checked);
+}/* checkBox_proxyAuth_EnableGroup() */
 
 void dlgOptions::on_checkBox_proxyAuth_toggled(bool checked)
 {
+	if (!checked){
+		ui.lineEdit_proxyUser->setText("");
+		ui.lineEdit_proxyPwd->setText("");
+	}
 
-	ui.lineEdit_proxyUser->setEnabled(checked);
-	ui.lineEdit_proxyPwd->setEnabled(checked);
-	ui.label_proxyUser->setEnabled(checked);
-	ui.label_proxyPwd->setEnabled(checked);
-}
+    checkBox_proxyAuth_EnableGroup( checked );
+}/* on_checkBox_proxyAuth_toggled() */
 
 void dlgOptions::on_okButton_clicked()
 {
@@ -207,6 +185,12 @@ void dlgOptions::on_okButton_clicked()
 		m_Settings.setProxyPwd(QString());
 	}
 
+	if (!ui.checkBox_proxyAuth->isChecked())
+	{
+		m_Settings.setProxyUsername(QString());
+		m_Settings.setProxyPwd(QString());
+	}
+
 	if (ui.checkBox_proxy->isChecked() && getProxyHost().isEmpty())
 	{
 		QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning,
@@ -215,7 +199,6 @@ void dlgOptions::on_okButton_clicked()
 
 			msgBox->setModal(true);
 			msgBox->show();
-			delete msgBox;//LL
 			return;
 	}
 
@@ -240,7 +223,6 @@ void dlgOptions::on_okButton_clicked()
 
 			msgBox->setModal(true);
 			msgBox->show();
-			delete msgBox;//LL
 			return;
 		}
 
