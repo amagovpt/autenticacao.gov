@@ -831,7 +831,7 @@ void PDFSignWindow::buildLocationTab()
     this->rx = 0;
     this->ry = 0;
 
-    // scene->setSceneRect(0, 0, real_scene_width, real_scene_height);
+    scene->setSceneRect(0, 0, g_scene_width, g_scene_height);
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
     my_scene = scene;
