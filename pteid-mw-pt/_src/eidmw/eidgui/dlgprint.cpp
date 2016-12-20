@@ -127,7 +127,7 @@ bool SignPDF_wrapper(PTEID_EIDCard * card, const char * file_to_sign, QString &o
 	try
 	{
 
-		card->SignPDF(pdf_sig_handler, 1, 1, false, "", "", output_path);
+		card->SignPDF(pdf_sig_handler, 0, 0, false, "", "", output_path);
 	}
 	catch(...)
 	{
