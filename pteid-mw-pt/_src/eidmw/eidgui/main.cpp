@@ -105,6 +105,7 @@ int main(int argc, char *argv[])
 #endif
 	//QApplication instance(argc, argv);
 	SingleApplication app(argc, argv);
+	qDebug("qApplication::self=%p", app.instance());
 
 	/*
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Waking up other instance");
