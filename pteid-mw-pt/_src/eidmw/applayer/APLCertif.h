@@ -26,11 +26,6 @@
 #include <map>
 
 
-#include "openssl/evp.h"
-#include "openssl/ocsp.h"
-#include "openssl/ssl.h"
-#include "openssl/bio.h"
-
 #include "Export.h"
 #include "P15Objects.h"
 #include "ByteArray.h"

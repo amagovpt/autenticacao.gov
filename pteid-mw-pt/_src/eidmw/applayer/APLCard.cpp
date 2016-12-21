@@ -612,7 +612,7 @@ APL_Pins *APL_SmartCard::getPins()
 tPin APL_SmartCard::getPin(unsigned long ulIndex)
 {
 
-	if(ulIndex<0 || ulIndex>=pinCount())
+	if (ulIndex >= pinCount())
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	tPin out;
@@ -692,7 +692,7 @@ APL_Certifs *APL_SmartCard::getCertificates()
 
 tCert APL_SmartCard::getP15Cert(unsigned long ulIndex)
 {
-	if(ulIndex<0 || ulIndex>=certificateCount())
+	if (ulIndex>=certificateCount())
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	tCert out;

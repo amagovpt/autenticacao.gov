@@ -381,7 +381,7 @@ APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex)
 	if(!m_card)
 		throw CMWEXCEPTION(EIDMW_ERR_BAD_USAGE);
 
-	if(ulIndex<0 || ulIndex>=countFromCard())
+	if(ulIndex >= countFromCard())
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
 
 	std::map<unsigned long ,APL_Certif *>::const_iterator itr;
