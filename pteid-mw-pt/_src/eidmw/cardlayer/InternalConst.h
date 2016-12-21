@@ -31,9 +31,9 @@ const static unsigned long READERS_BUF_LEN = 600;
 
 typedef struct
 {
-    unsigned long lFileLen;      // -1 means 'unknown'
-    unsigned long lReadPINRef;   // -1 means 'no PIN needed' or 'unknown'
-    unsigned long lWritePINRef;  // -1 means 'no PIN needed' or 'unknown'
+    unsigned long lFileLen;
+    unsigned long lReadPINRef;   // 0 means 'no PIN needed' or 'unknown'
+    unsigned long lWritePINRef;  // 0 means 'no PIN needed' or 'unknown'
 } tFileInfo;
 
 #ifdef __APPLE__

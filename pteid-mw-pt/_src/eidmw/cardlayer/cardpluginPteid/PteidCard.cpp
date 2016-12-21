@@ -30,9 +30,9 @@ using namespace eIDMW;
 static const unsigned char IAS_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x01, 0x02};
 static const unsigned char GEMSAFE_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
 
-static const tFileInfo DEFAULT_FILE_INFO = {-1, -1, -1};
-static const tFileInfo PREFS_FILE_INFO_V1 = {-1, -1, 1};
-static const tFileInfo PREFS_FILE_INFO_V2 = {-1, -1, 0x85};
+static const tFileInfo DEFAULT_FILE_INFO = {0, 0, 0};
+static const tFileInfo PREFS_FILE_INFO_V1 = {0, 0, 0};
+static const tFileInfo PREFS_FILE_INFO_V2 = {0, 0, 0x85};
 
 /* martinho - the id must not be changed */
 static const unsigned long PTEIDNG_ACTIVATION_CODE_ID = 0x87;
