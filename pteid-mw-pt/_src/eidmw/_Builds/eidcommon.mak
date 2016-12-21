@@ -21,7 +21,6 @@ isEmpty(PREFIX_DIR){
 }
 
 DEFINES += 'EIDMW_PREFIX=$${PREFIX_DIR}'
-QMAKE_CXXFLAGS += '-std=c++98'
 
 ## preset the BIN install directory depending on the given prefix
 ## preset the LIB install directory relative to the bin directory
@@ -34,6 +33,8 @@ isEmpty(JDK_INCLUDE_DIR){
   unix:!macx: JDK_INCLUDE_DIR += /usr/local/j2sdk1.4.2_17/include
   unix:!macx: JDK_INCLUDE_DIR += /usr/local/j2sdk1.4.2_17/include/linux
 }
+
+CONFIG += c++11
 
 ## link to relative path
 LINK_RELATIVE_PATH = ../lib
