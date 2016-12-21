@@ -3276,7 +3276,7 @@ void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 	CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName);
 	QFuture<void> future = QtConcurrent::run(loader, &CardDataLoader::LoadCertificateData);
 	this->FutureWatcher.setFuture(future);
-	ProgressExec();
+	if(!m_CI_Data.isDataLoaded()) ProgressExec();
 
 	clearTabCertificates();
 	fillCertificateList();
@@ -3811,7 +3811,7 @@ void MainWnd::refreshTabCertificates( void )
 	//qDebug() << "# seleteced: " << m_ui.treeCert->selectedItems().size();
 	//qDebug() << "find 'Signature': " << m_ui.treeCert->findItems ( QString("Signature"), Qt::MatchContains|Qt::MatchRecursive );
 
-    /* TODO Rever este comentario
+    /* TODO Rever este comentario */
     // vasco.dias: este bloco de código parece nao estar a fazer nada.
     // no fillCertificateList que corre antes disto dentro do loadCardCertificates
     // o cert de root ´e selected, logo os selected items sao 1 sendo o root o selecionado.
