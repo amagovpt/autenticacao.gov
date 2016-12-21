@@ -114,7 +114,7 @@ bool StartsWith(const char *csData, const char *csSearch)
 // only the highest 128 characters can/will be converted
 // The UTF8 version is for simplicity divided per 3 bytes.
 //--------------------------------------------
-static char IBM850_to_utf8[]=
+static unsigned char IBM850_to_utf8[]=
 {
 	(unsigned char) 0xc3,(unsigned char) 0x87,(unsigned char) 0x00,		// (unsigned char) 0x80
 	(unsigned char) 0xc3,(unsigned char) 0xbc,(unsigned char) 0x00,

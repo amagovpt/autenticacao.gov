@@ -26,13 +26,14 @@
 #include <unistd.h>
 #include <netinet/in.h>
 #include <sys/ioctl.h>
+#include <sys/socket.h>
 #include <errno.h>
 #ifndef SOCKET_ERROR
 #define SOCKET_ERROR -1
 #endif
 #endif
 
-using namespace std;
+//using namespace std;
 
 namespace eIDMW
 {
@@ -67,7 +68,7 @@ CSocketServer::CSocketServer(int port, int connections, e_socketType type) throw
 #endif
 	  }
 
-	if (bind(m_socket, (sockaddr *)&address, sizeof(sockaddr_in) ) == SOCKET_ERROR)
+	if (::bind(m_socket, (sockaddr *)&address, sizeof(sockaddr_in) ) == SOCKET_ERROR)
 	{
 #ifdef WIN32
 		closesocket(m_socket);
