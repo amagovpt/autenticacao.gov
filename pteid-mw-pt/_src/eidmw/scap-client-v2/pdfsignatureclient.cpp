@@ -147,7 +147,8 @@ bool PDFSignatureClient::signPDF(QString finalfilepath, QString filepath, QStrin
         if( respCode.compare("00") != 0 )
         {
 
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "PDF Service application-level error Code: %d Message: %S", respCode, resp.Status->Message);
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "PDF Service application-level error Code: %s Message: %S", respCode.c_str(), 
+			resp.Status->Message.c_str());
             std::cerr << "Service error code " << respCode << ". Service returned Message: " << resp.Status->Message << std::endl;
             return false;
         }
