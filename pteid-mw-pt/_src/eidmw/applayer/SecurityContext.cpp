@@ -309,8 +309,8 @@ err:
 	{
 		//Example of encrypted MSE SET Internal Auth:
 		// 0c 22 41 a4 15 87 09 01 be 99 3f dd 3f 1d 9c 59 8e 08 ec 5c bc 76 3a 4d 83 73
-		char mse_internal_auth[] = {0x0C, 0x22, 0x41, 0xA4, 0x06, 0x84, 0x01, 0x77, 0x95, 0x01, 0x80};
-		CByteArray mseInternal(mse_internal_auth);
+		unsigned char mse_internal_auth[] = {0x0C, 0x22, 0x41, 0xA4, 0x06, 0x84, 0x01, 0x77, 0x95, 0x01, 0x80};
+		CByteArray mseInternal(mse_internal_auth, sizeof(mse_internal_auth));
 
 		CByteArray secure_apdu = buildSecureAPDU(mseInternal);
 
@@ -323,7 +323,7 @@ err:
 		}
 
 		unsigned char tRnd[8];
-		char internal_auth_apdu[] = {0x8C, 0x88, 0x00, 0x00, 0x08};
+		unsigned char internal_auth_apdu[] = {0x8C, 0x88, 0x00, 0x00, 0x08};
 		CByteArray internalAuth(internal_auth_apdu, sizeof(internal_auth_apdu));
 
 		if (RAND_bytes(tRnd, sizeof(tRnd)) == 0) {
