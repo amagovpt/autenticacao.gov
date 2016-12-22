@@ -7,6 +7,15 @@
 
 int main(int argc, char *argv[])
 {
+
+#ifdef __APPLE__
+    /*
+       In MacOS we deploy the QT plugins in a specific location which is common 
+       to all the QT applications (pteidgui, ScapSignature, pteiddialogs)
+    */
+    QCoreApplication::addLibraryPath(QString("/usr/local/Frameworks"));
+#endif
+
     QApplication a(argc, argv);
 
     QCoreApplication::setApplicationName("PTEID");
@@ -15,7 +24,7 @@ int main(int argc, char *argv[])
     QString lang = scapSettings.getPTEIDLanguage();
 
     QTranslator translator;
-    if(lang.compare("nl") == 0){
+    if(lang.compare("nl") == 0) {
         // Loads Portuguese versions
         bool ret = translator.load("scapsignature_pt");
         std::cout << "Loaded Portuguese version sucessfully: " << ret << std::endl;

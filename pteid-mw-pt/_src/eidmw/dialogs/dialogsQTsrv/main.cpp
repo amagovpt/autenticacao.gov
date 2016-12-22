@@ -126,6 +126,12 @@ int main(int argc, char *argv[])
 		int iFunctionIndex = atoi(argv[1]);
 		std::string readableFilePath = argv[2];
 
+		#ifdef __APPLE__	
+		// In MacOS we deploy the QT plugins in a specific location which is common 
+		// to all the QT applications (pteidgui, ScapSignature, pteiddialogs)
+		QCoreApplication::addLibraryPath(QString("/usr/local/Frameworks"));
+		#endif
+
 		if(iFunctionIndex == DLG_ASK_PIN) 
 		{
 			QApplication a(argc, argv);

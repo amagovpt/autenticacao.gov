@@ -39,51 +39,6 @@
 #endif
 
 
-/*
-class MyApplication : public QtSingleApplication
-{
-public:
-	MyApplication( const char* name, int &argc, char ** argv ) :
-	  QtSingleApplication( name, argc, argv )
-	  {
-	  }
-#ifdef WIN32
-	  //--------------------------------------------
-	  // install an event filter and post a message to the application
-	  // that it should shut down
-	  //--------------------------------------------
-	  bool winEventFilter(MSG * msg, long * retVal)
-	  {
-		  if (msg->message == WM_QUERYENDSESSION )
-		  {
-			  QuitEvent* quitEvent = new QuitEvent(msg->message);
-			  QCoreApplication::postEvent((MainWnd*)activationWindow(),quitEvent);
-			  *retVal = true;	//--> indicate that app can be closed
-			  return true;		//--> do not let Qt handle the message
-		  }
-		  return false;
-	  }
-#elif __MACH__
-    bool event(QEvent *event)
-    {
-		QString openFile = "Open File";
-        switch (event->type()) {
-			case QEvent::FileOpen:
-				//loadFile(static_cast<QFileOpenEvent *>(event)->file());  
-				openFile.append(static_cast<QFileOpenEvent *>(event)->file()); 
-				sendMessage( (const QString)openFile );
-				sendMessage("Restore Windows");
-				return true;
-			default:
-				return QApplication::event(event);
-        }
-    }
-	
-#endif
-};
-
-*/
-
 int main(int argc, char *argv[])
 {
 	bool test_mode = false;
@@ -103,31 +58,16 @@ int main(int argc, char *argv[])
 #ifdef WIN32
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
-	//QApplication instance(argc, argv);
+
+#ifdef __APPLE__
+	
+	//In MacOS we deploy the QT plugins in a specific location which is common 
+	// to all the QT applications (pteidgui, ScapSignature, pteiddialogs)
+	QCoreApplication::addLibraryPath(QString("/usr/local/Frameworks"));
+#endif
+
 	SingleApplication app(argc, argv);
 	qDebug("qApplication::self=%p", app.instance());
-
-	/*
-	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Waking up other instance");
-	if (instance.sendMessage("Wake up!"))
-	{
-		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Wake up responding OK");
-		instance.sendMessage("Restore Windows");
-#ifndef __MACH__
-		if ( (argc >= 2) && (strcmp(argv[1],"/startup")!=0) && (argv[1] != NULL) )
-		{
-			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "argc = %i argv[1] = %s",argc,argv[1]);
-			QString openFile = "Open File";
-			openFile.append(argv[1]);
-			instance.sendMessage (openFile);
-		}
-#endif
-		return 0;
-	}
-
-	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Wake up did not respond");
-	instance.initialize();
-	*/
 
 	PTEID_InitSDK();
 	PTEID_Config sam_server(PTEID_PARAM_GENERAL_SAM_SERVER);
@@ -157,24 +97,10 @@ int main(int argc, char *argv[])
         &widget,
         &MainWnd::messageRespond);
 
-
-	/*
-#ifndef __MACH__	
-	if ( (argc >= 2) && (strcmp(argv[1],"/startup")!=0) && (argv[1] != NULL) )
-	{
-		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "argc = %i argv[1] = %s",argc,argv[1]);
-		QString openFile = "Open File";
-		openFile.append(argv[1]);
-		instance.sendMessage( (const QString)openFile );
-	}
-#endif
-*/
 	if (!settings.getStartMinimized())
 	{
 		widget.show();
 	}
-
-	//instance.setActivationWindow ( &widget );
 
 	iRetValue = app.exec();
 
