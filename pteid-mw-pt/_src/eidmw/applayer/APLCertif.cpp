@@ -114,21 +114,35 @@ void APL_Certifs::initMyCerts()
 
 	my_certifs.push_back(getAuthentication());
 	my_certifs.push_back(getSignature());
-	my_certifs.push_back(getAuthenticationSubCA());
 	APL_Certif * cert = getSignatureSubCA();
 	my_certifs.push_back(cert);
+	my_certifs.push_back(getAuthenticationSubCA());
 
+        // Add Cert with 'Cartão de Cidadão 00x', where x: 1, 2, 3
+        std::vector<unsigned long>::const_iterator itrOrder;
+        std::map<unsigned long, APL_Certif *>::const_iterator itrCert;
+        for(itrOrder=m_certifsOrder.begin();itrOrder!=m_certifsOrder.end();itrOrder++)
+        {
+            itrCert = m_certifs.find(*itrOrder);
+            if( itrCert == m_certifs.end() ){
+                //The certif is not in the map
+                //Should not happend
+                fprintf(stderr, "Exception in initSODCAs() !\n" );
+                throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
+            }/* if( itrCert == m_certifs.end() ) */
+
+            cert = itrCert->second;
+            if ( strcmp( cert->getIssuerName(), "ECRaizEstado" ) == 0 ){
+                my_certifs.push_back(cert);
+            }/* if ( strcmp( cert->getIssuerName(), "ECRaizEstado" ) == 0 ) */
+        }
+       
 	APL_Certif * issuer = findIssuer(cert);
-
-	if (issuer != NULL)
-	{
-		my_certifs.push_back(issuer);
-	}
-
 	APL_Certif * new_issuer = NULL;
 
 	while((new_issuer = findIssuer(issuer)) != issuer)
 	{
+                printf("while((new_issuer = findIssuer(issuer)) != issuer)\n");
 		my_certifs.push_back(new_issuer);
 		issuer = new_issuer;
 	}
