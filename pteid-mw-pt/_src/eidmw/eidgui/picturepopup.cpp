@@ -51,7 +51,7 @@ PicturePopup::PicturePopup(QWidget *parent)
 
     setFrameStyle( WinPanel | Raised );
     setAlignment( Qt::AlignCenter );
-    setScaledContents(true);
+    setScaledContents(false);
     m_pTimerAppear = new QTimer(this);
     connect(m_pTimerAppear, SIGNAL(timeout()), this, SLOT(OnTimerAppear()));
     m_pTimerDisappear = new QTimer(this);
