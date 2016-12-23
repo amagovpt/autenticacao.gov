@@ -3202,9 +3202,6 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 		this->FutureWatcher.setFuture(future);
 		ProgressExec();
 
-		//Load the picture in PNG format
-		imgPicture = QImage();
-
 		if (error_sod)
 		{
 			QString title = tr("SOD validation");
@@ -3215,10 +3212,13 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 		}
 		else
 		{
-
-			imgPicture.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
-			imgPicturescaled = imgPicture.scaled(150, 190);
-			m_imgPicture = QPixmap::fromImage(imgPicturescaled);
+			//Load the picture in PNG format
+			QPixmap pixmap_photo;
+			const int display_height = 190;
+			pixmap_photo.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
+			
+			QPixmap imgPicturescaled = pixmap_photo.scaledToHeight(display_height, Qt::SmoothTransformation);
+			m_imgPicture = imgPicturescaled;
 			fillPinList();
 		}
 
@@ -3233,8 +3233,6 @@ void MainWnd::LoadDataAddress(PTEID_EIDCard& Card)
 	m_TypeCard = Card.getType();
 
 	m_CI_Data.LoadDataAddress(Card, m_CurrReaderName);
-
-
 
 	if(!m_CI_Data.isDataLoaded())
 	{
@@ -4286,7 +4284,9 @@ void MainWnd::doPicturePopup( PTEID_Card& card )
 
     if (pixMap.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData, "PNG"))
     {
-        pixMap = pixMap.scaledToWidth(150);
+
+		const int display_width = 150;		
+        pixMap = pixMap.scaledToWidth(display_width, Qt::SmoothTransformation);
         m_Pop->setPixmap(pixMap);
         m_Pop->popUp();
     }

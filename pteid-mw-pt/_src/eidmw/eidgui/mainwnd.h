@@ -363,11 +363,7 @@ protected:
 	QAction*			m_pMaximizeAction;
 	QAction*			m_pRestoreAction;
 
-	QPixmap				m_imgBackground_Front;
-	QPixmap				m_imgBackground_Back;
 	QPixmap				m_imgPicture;
-	QImage				imgPicture;
-	QImage				imgPicturescaled;
 	QPixmap				m_imgSex;
 	QSystemTrayIcon*	m_pTrayIcon;
 	QMenu*				m_pTrayIconMenu;
