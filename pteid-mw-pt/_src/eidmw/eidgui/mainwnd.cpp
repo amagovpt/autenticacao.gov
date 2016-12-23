@@ -3214,7 +3214,7 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 		{
 			//Load the picture in PNG format
 			QPixmap pixmap_photo;
-			const int display_height = 190;
+			const int display_height = 269;
 			pixmap_photo.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
 			
 			QPixmap imgPicturescaled = pixmap_photo.scaledToHeight(display_height, Qt::SmoothTransformation);
