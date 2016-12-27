@@ -482,6 +482,7 @@ private:
 	void syncTreeItemWithSideinfo(QTreeCertItem *item);
 	void fillCertTree( PTEID_Certificate *cert, short level, QTreeCertItem* item );
 	QTreeCertItem* buildTree(PTEID_Certificate &cert, bool &bEx);
+	void getReaderIndexes( unsigned long *p_ReaderStartIdx, unsigned long *p_ReaderEndIdx, bool bRefresh = false );
 
 	eZOOMSTATUS				m_Zoom;
 	QPrinter*				m_pPrinter;				//!< the 'Selected' Printer

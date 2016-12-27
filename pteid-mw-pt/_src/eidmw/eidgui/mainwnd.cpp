@@ -820,8 +820,8 @@ void MainWnd::showNoReaderMsg( void )
 		{
 			m_msgBox =  new QMessageBox(QMessageBox::Warning,strCaption,strMessage,QMessageBox::Ok,this);
 			m_msgBox->setModal(true);
-			m_msgBox->show();
 		}
+		m_msgBox->show();
 	}
 }
 
@@ -880,6 +880,11 @@ void MainWnd::updateReaderList( void )
 			stopAllEventCallbacks();
 			ReaderSet.releaseReaders();
 			m_CI_Data.Reset();
+
+                    if ( 0 == ReaderSet.readerCount() ){
+                        clearGuiContent();
+                        showNoReaderMsg();
+                      }
 		}
 		if ( 0 == m_callBackHandles.size() )
 		{
@@ -1974,6 +1979,23 @@ void MainWnd::releaseVirtualReader( void )
 	}
 }
 
+void MainWnd::getReaderIndexes( unsigned long *p_Selected, unsigned long *p_Count, bool bRefresh ){
+    unsigned long Selected = m_Settings.getSelectedReader();
+    unsigned long Count   = ReaderSet.readerCount( bRefresh );
+
+    if ( ( 0 == Count ) || ( ((unsigned long)-1) == Count ) ){
+        Count = 0;
+    } else{
+        // Count > 0
+        if ( ( ((unsigned long)-1) == Selected ) || ( Selected == Count ) ){
+            Selected = Count - 1;
+        } /*if ( ( ((unsigned long)-1) == Selected ) || ( Selected == Count ) ) */
+    }
+
+    if ( p_Selected != NULL ) *p_Selected = Selected;
+    if ( p_Count    != NULL ) *p_Count = Count;
+}/* getReaderIndexes() */
+
 //*****************************************************
 // load the card data
 //*****************************************************
@@ -1987,87 +2009,84 @@ void MainWnd::loadCardData( void )
 	//----------------------------------------------------------------
 	try
 	{
-		unsigned long	ReaderStartIdx = m_Settings.getSelectedReader();
-		bool			bRefresh	   = false;
-		unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
-		unsigned long	ReaderIdx	   = 0;
+		unsigned long ReaderStartIdx = -1, ReaderEndIdx = -1;
+		unsigned long ReaderIdx	= 0;
 
-		if (ReaderStartIdx!=(unsigned long)-1)
-		{
-			ReaderEndIdx = ReaderStartIdx+1;
-		}
-		else
-		{
-			ReaderStartIdx=0;
-		}
+        getReaderIndexes( &ReaderStartIdx, &ReaderEndIdx, true );
 
-		bool bCardPresent = false;
-		PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
-		for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
-		{
-			PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
-			if (ReaderContext.isCardPresent())
-			{
-				bCardPresent = true;
-				PTEID_CardType CardType = ReaderContext.getCardType();
-				lastFoundCardType = CardType;
-				switch (CardType)
-				{
-				case PTEID_CARDTYPE_IAS07:
-				case PTEID_CARDTYPE_IAS101:
-				{
-					try
-					{
-						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
+        if ( ReaderEndIdx == 0 ){
+            clearGuiContent();
+            showNoReaderMsg();
+        } else{
+            bool bCardPresent = false;
+            PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
+            for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
+            {
+                PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
+                if (ReaderContext.isCardPresent())
+                {
+                    bCardPresent = true;
+                    PTEID_CardType CardType = ReaderContext.getCardType();
+                    lastFoundCardType = CardType;
+                    switch (CardType)
+                    {
+                    case PTEID_CARDTYPE_IAS07:
+                    case PTEID_CARDTYPE_IAS101:
+                    {
+                        try
+                        {
+                            PTEID_EIDCard& Card = ReaderContext.getEIDCard();
 
-						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-						m_CurrReaderName = readerName;
+                            const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+                            m_CurrReaderName = readerName;
 
-						Show_Identity_Card(Card);
+                            Show_Identity_Card(Card);
 
-						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-					}
-					catch (PTEID_ExCardBadType const& e)
-					{
-						QString errcode;
-                        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed %s", e.GetError());
-						errcode = errcode.setNum(e.GetError());
-					}
-				}
-				break;
-				case PTEID_CARDTYPE_UNKNOWN:
-				default:
-					break;
-				}
-			}
-			else
-			{
-				clearGuiContent();
-				if (lastFoundCardType != PTEID_CARDTYPE_UNKNOWN)
-				{
-					clearGuiContent();
-				}
-			}
-			enablePrintMenu();
-		}
-		if (!bCardPresent)
-		{
-			QString strCaption(tr("Reload eID"));
-			strCaption = strCaption.remove(QChar('&'));
-			QString strMessage(tr("No card found"));
-			m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
+                            ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
+                        }
+                        catch (PTEID_ExCardBadType const& e)
+                        {
+                            QString errcode;
+                            PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed %s", e.GetError());
+                            errcode = errcode.setNum(e.GetError());
+                        }
+                    }
+                    break;
+                    case PTEID_CARDTYPE_UNKNOWN:
+                    default:
+                        break;
+                    }
+                }
+                else
+                {
+                    clearGuiContent();
+                    if (lastFoundCardType != PTEID_CARDTYPE_UNKNOWN)
+                    {
+                        clearGuiContent();
+                    }
+                }
+                enablePrintMenu();
+            }
+            if (!bCardPresent)
+            {
+                QString strCaption(tr("Reload eID"));
+                strCaption = strCaption.remove(QChar('&'));
+                QString strMessage(tr("No card found"));
+                m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
 
-			QString caption  = tr("Warning");
-	  		QString msg = tr("Please insert your card on the smart card reader");
-	  		QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
-	  		msgBoxp.exec();
-		}
-		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
-		{
-			QString msg(tr("Card read error or unknown card type"));
-			ShowPTEIDError(msg );
-			clearGuiContent();
-		}
+                QString caption  = tr("Warning");
+                QString msg = tr("Please insert your card on the smart card reader");
+                QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
+                msgBoxp.exec();
+            }
+            else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
+            {
+                QString msg(tr("Card read error or unknown card type"));
+                ShowPTEIDError(msg );
+                clearGuiContent();
+            }
+        }
+
 		enableFileMenu();
 	}
 	catch (PTEID_ExParamRange e)
@@ -2133,81 +2152,77 @@ void MainWnd::loadCardDataAddress( void )
 	//----------------------------------------------------------------
 	try
 	{
-		unsigned long	ReaderStartIdx = m_Settings.getSelectedReader();
-		bool			bRefresh	   = false;
-		unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
-		unsigned long	ReaderIdx	   = 0;
+		unsigned long ReaderStartIdx = -1, ReaderEndIdx = -1;
+		unsigned long ReaderIdx	= 0;
 
-		if (ReaderStartIdx!=(unsigned long)-1)
-		{
-			ReaderEndIdx = ReaderStartIdx+1;
-		}
-		else
-		{
-			ReaderStartIdx=0;
-		}
+        getReaderIndexes( &ReaderStartIdx, &ReaderEndIdx, true );
 
-		bool bCardPresent = false;
-		PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
-		for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
-		{
-			PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
-			if (ReaderContext.isCardPresent())
-			{
-				bCardPresent = true;
-				PTEID_CardType CardType = ReaderContext.getCardType();
-				lastFoundCardType = CardType;
-				switch (CardType)
-				{
-				case PTEID_CARDTYPE_IAS07:
-				case PTEID_CARDTYPE_IAS101:
-				{
-					try
-					{
-						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
+        if ( ReaderEndIdx == 0 ){
+            clearGuiContent();
+            showNoReaderMsg();
+        } else{
+            bool bCardPresent = false;
+            PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
+            for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
+            {
+                PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
+                if (ReaderContext.isCardPresent())
+                {
+                    bCardPresent = true;
+                    PTEID_CardType CardType = ReaderContext.getCardType();
+                    lastFoundCardType = CardType;
+                    switch (CardType)
+                    {
+                    case PTEID_CARDTYPE_IAS07:
+                    case PTEID_CARDTYPE_IAS101:
+                    {
+                        try
+                        {
+                            PTEID_EIDCard& Card = ReaderContext.getEIDCard();
 
-						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-						m_CurrReaderName = readerName;
-						Show_Address_Card(Card);
+                            const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+                            m_CurrReaderName = readerName;
+                            Show_Address_Card(Card);
 
-						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-					}
-					catch (PTEID_ExCardBadType const& e)
-					{
-						QString errcode;
-						errcode = errcode.setNum(e.GetError());
-					}
-				}
-				break;
-				case PTEID_CARDTYPE_UNKNOWN:
-				default:
-					break;
-				}
-			}
-			else
-			{
-				clearGuiContent();
-				if (lastFoundCardType != PTEID_CARDTYPE_UNKNOWN)
-				{
-					clearGuiContent();
-				}
-			}
-			enablePrintMenu();
-		}
-		if (!m_CI_Data.isDataLoaded() || !bCardPresent)
-		{
-			QString strCaption(tr("Reload eID"));
-			strCaption = strCaption.remove(QChar('&'));
-			QString strMessage(tr("No card found"));
-			m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
-		}
-		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
-		{
-			QString msg(tr("Card read error or unknown card type"));
-			ShowPTEIDError(msg );
-			clearGuiContent();
-		}
-		enableFileMenu();
+                            ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
+                        }
+                        catch (PTEID_ExCardBadType const& e)
+                        {
+                            QString errcode;
+                            errcode = errcode.setNum(e.GetError());
+                        }
+                    }
+                    break;
+                    case PTEID_CARDTYPE_UNKNOWN:
+                    default:
+                        break;
+                    }
+                }
+                else
+                {
+                    clearGuiContent();
+                    if (lastFoundCardType != PTEID_CARDTYPE_UNKNOWN)
+                    {
+                        clearGuiContent();
+                    }
+                }
+                enablePrintMenu();
+            }
+            if (!m_CI_Data.isDataLoaded() || !bCardPresent)
+            {
+                QString strCaption(tr("Reload eID"));
+                strCaption = strCaption.remove(QChar('&'));
+                QString strMessage(tr("No card found"));
+                m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
+            }
+            else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
+            {
+                QString msg(tr("Card read error or unknown card type"));
+                ShowPTEIDError(msg );
+                clearGuiContent();
+            }
+        }
+        enableFileMenu();
 	}
 	catch (PTEID_ExParamRange e)
 	{
@@ -2279,77 +2294,73 @@ bool MainWnd::loadCardDataPersoData( void )
 	//----------------------------------------------------------------
 	try
 	{
-		unsigned long	ReaderStartIdx = m_Settings.getSelectedReader();
-		bool			bRefresh	   = false;
-		unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
-		unsigned long	ReaderIdx	   = 0;
+		unsigned long ReaderStartIdx = -1, ReaderEndIdx = -1;
+		unsigned long ReaderIdx	= 0;
 
-		if (ReaderStartIdx!=(unsigned long)-1)
-		{
-			ReaderEndIdx = ReaderStartIdx+1;
-		}
-		else
-		{
-			ReaderStartIdx=0;
-		}
+        getReaderIndexes( &ReaderStartIdx, &ReaderEndIdx, true );
 
-		bool bCardPresent = false;
-		PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
-		for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
-		{
-			PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
-			if (ReaderContext.isCardPresent())
-			{
-				bCardPresent = true;
-				PTEID_CardType CardType = ReaderContext.getCardType();
-				lastFoundCardType = CardType;
-				switch (CardType)
-				{
-				case PTEID_CARDTYPE_IAS07:
-				case PTEID_CARDTYPE_IAS101:
-				{
-					try
-					{
-						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
+        if ( ReaderEndIdx == 0 ){
+            clearGuiContent();
+            showNoReaderMsg();
+        } else{
+            bool bCardPresent = false;
+            PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
+            for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
+            {
+                PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
+                if (ReaderContext.isCardPresent())
+                {
+                    bCardPresent = true;
+                    PTEID_CardType CardType = ReaderContext.getCardType();
+                    lastFoundCardType = CardType;
+                    switch (CardType)
+                    {
+                    case PTEID_CARDTYPE_IAS07:
+                    case PTEID_CARDTYPE_IAS101:
+                    {
+                        try
+                        {
+                            PTEID_EIDCard& Card = ReaderContext.getEIDCard();
 
-						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-						m_CurrReaderName = readerName;
-						Show_PersoData_Card(Card);
+                            const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+                            m_CurrReaderName = readerName;
+                            Show_PersoData_Card(Card);
 
-						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-					}
-					catch (PTEID_ExCardBadType const& e)
-					{
-						QString errcode;
-						errcode = errcode.setNum(e.GetError());
-					}
-				}
-				break;
-				case PTEID_CARDTYPE_UNKNOWN:
-				default:
-					break;
-				}
-			}
-			else
-			{
-				clearGuiContent();
+                            ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
+                        }
+                        catch (PTEID_ExCardBadType const& e)
+                        {
+                            QString errcode;
+                            errcode = errcode.setNum(e.GetError());
+                        }
+                    }
+                    break;
+                    case PTEID_CARDTYPE_UNKNOWN:
+                    default:
+                        break;
+                    }
+                }
+                else
+                {
+                    clearGuiContent();
 
-			}
-			enablePrintMenu();
-		}
-		if (!m_CI_Data.isDataLoaded() || !bCardPresent)
-		{
-			QString strCaption(tr("Reload eID"));
-			strCaption = strCaption.remove(QChar('&'));
-			QString strMessage(tr("No card found"));
-			m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
-		}
-		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
-		{
-			QString msg(tr("Card read error or unknown card type"));
-			ShowPTEIDError(msg );
-			clearGuiContent();
-		}
+                }
+                enablePrintMenu();
+            }
+            if (!m_CI_Data.isDataLoaded() || !bCardPresent)
+            {
+                QString strCaption(tr("Reload eID"));
+                strCaption = strCaption.remove(QChar('&'));
+                QString strMessage(tr("No card found"));
+                m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
+            }
+            else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
+            {
+                QString msg(tr("Card read error or unknown card type"));
+                ShowPTEIDError(msg );
+                clearGuiContent();
+            }
+        }
 		enableFileMenu();
 	}
 	catch (PTEID_ExParamRange e)
@@ -2408,80 +2419,76 @@ void MainWnd::loadCardDataCertificates( void )
 	//----------------------------------------------------------------
 	try
 	{
-		unsigned long	ReaderStartIdx = m_Settings.getSelectedReader();
-		bool			bRefresh	   = false;
-		unsigned long	ReaderEndIdx   = ReaderSet.readerCount(bRefresh);
-		unsigned long	ReaderIdx	   = 0;
+		unsigned long ReaderStartIdx = -1, ReaderEndIdx = -1;
+		unsigned long ReaderIdx	= 0;
 
-		if (ReaderStartIdx!=(unsigned long)-1)
-		{
-			ReaderEndIdx = ReaderStartIdx+1;
-		}
-		else
-		{
-			ReaderStartIdx=0;
-		}
+        getReaderIndexes( &ReaderStartIdx, &ReaderEndIdx, true );
 
-		bool bCardPresent = false;
-		PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
-		for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
-		{
-			PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
-			if (ReaderContext.isCardPresent())
-			{
-				bCardPresent = true;
-				PTEID_CardType CardType = ReaderContext.getCardType();
-				lastFoundCardType = CardType;
-				switch (CardType)
-				{
-				case PTEID_CARDTYPE_IAS07:
-				case PTEID_CARDTYPE_IAS101:
-				{
-					try
-					{
-						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
+        if ( ReaderEndIdx == 0 ){
+            clearGuiContent();
+            showNoReaderMsg();
+        } else{
+            bool bCardPresent = false;
+            PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
+            for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
+            {
+                PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
+                if (ReaderContext.isCardPresent())
+                {
+                    bCardPresent = true;
+                    PTEID_CardType CardType = ReaderContext.getCardType();
+                    lastFoundCardType = CardType;
+                    switch (CardType)
+                    {
+                    case PTEID_CARDTYPE_IAS07:
+                    case PTEID_CARDTYPE_IAS101:
+                    {
+                        try
+                        {
+                            PTEID_EIDCard& Card = ReaderContext.getEIDCard();
 
-						const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-						m_CurrReaderName = readerName;
-						Show_Certificates_Card(Card);
+                            const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+                            m_CurrReaderName = readerName;
+                            Show_Certificates_Card(Card);
 
-						ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-					}
-					catch (PTEID_ExCardBadType const& e)
-					{
-						QString errcode;
-						errcode = errcode.setNum(e.GetError());
-					}
-				}
-				break;
-				case PTEID_CARDTYPE_UNKNOWN:
-				default:
-					break;
-				}
-			}
-			else
-			{
-				clearGuiContent();
-				if (lastFoundCardType != PTEID_CARDTYPE_UNKNOWN)
-				{
-					clearGuiContent();
-				}
-			}
-			enablePrintMenu();
-		}
-		if (!m_CI_Data.isDataLoaded() || !bCardPresent)
-		{
-			QString strCaption(tr("Reload eID"));
-			strCaption = strCaption.remove(QChar('&'));
-			QString strMessage(tr("No card found"));
-			m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
-		}
-		else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
-		{
-			QString msg(tr("Card read error or unknown card type"));
-			ShowPTEIDError( msg );
-			clearGuiContent();
-		}
+                            ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
+                        }
+                        catch (PTEID_ExCardBadType const& e)
+                        {
+                            QString errcode;
+                            errcode = errcode.setNum(e.GetError());
+                        }
+                    }
+                    break;
+                    case PTEID_CARDTYPE_UNKNOWN:
+                    default:
+                        break;
+                    }
+                }
+                else
+                {
+                    clearGuiContent();
+                    if (lastFoundCardType != PTEID_CARDTYPE_UNKNOWN)
+                    {
+                        clearGuiContent();
+                    }
+                }
+                enablePrintMenu();
+            }
+            if (!m_CI_Data.isDataLoaded() || !bCardPresent)
+            {
+                QString strCaption(tr("Reload eID"));
+                strCaption = strCaption.remove(QChar('&'));
+                QString strMessage(tr("No card found"));
+                m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
+            }
+            else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
+            {
+                QString msg(tr("Card read error or unknown card type"));
+                ShowPTEIDError( msg );
+                clearGuiContent();
+            }
+        }
 		enableFileMenu();
 	}
 	catch (PTEID_ExParamRange e)
@@ -3216,7 +3223,7 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 			QPixmap pixmap_photo;
 			const int display_height = 269;
 			pixmap_photo.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData);
-			
+
 			QPixmap imgPicturescaled = pixmap_photo.scaledToHeight(display_height, Qt::SmoothTransformation);
 			m_imgPicture = imgPicturescaled;
 			fillPinList();
@@ -4285,7 +4292,7 @@ void MainWnd::doPicturePopup( PTEID_Card& card )
     if (pixMap.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData, "PNG"))
     {
 
-		const int display_width = 150;		
+		const int display_width = 150;
         pixMap = pixMap.scaledToWidth(display_width, Qt::SmoothTransformation);
         m_Pop->setPixmap(pixMap);
         m_Pop->popUp();
