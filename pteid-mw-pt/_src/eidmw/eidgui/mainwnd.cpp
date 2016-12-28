@@ -213,6 +213,8 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 		m_ui.btnShortcut_UnivSign->hide();
 	}
 
+	isLinkToCertClicked = false;
+
 	/*** Setup progress Bar ***/
 	m_progress = new QProgressDialog(this);
 	m_progress->setWindowModality(Qt::WindowModal);
@@ -730,6 +732,7 @@ void MainWnd::on_btnSelectTab_Address_clicked()
 void MainWnd::on_btnSelectTab_Certificates_clicked()
 {
 	m_ui.stackedWidget->setCurrentIndex(4);
+	m_ui.treeCert->setFocus( Qt::OtherFocusReason );
 	if (certdatastatus == 1)
 		refreshTabCertificates();
 }
@@ -748,7 +751,14 @@ void MainWnd::on_btnSelectTab_Notes_clicked()
 
 void MainWnd::on_btnIdentityExtra_linkToCert_clicked()
 {
+    isLinkToCertClicked = true;
+    unsigned int saved_certdatastatus = certdatastatus;
+    certdatastatus = 1;
+
     on_btnSelectTab_Certificates_clicked();
+
+    isLinkToCertClicked = false;
+    certdatastatus = saved_certdatastatus;
 }
 
 void MainWnd::on_btn_menu_card_clicked()
@@ -2408,6 +2418,32 @@ bool MainWnd::loadCardDataPersoData( void )
 	return true;
 }
 
+void MainWnd::SetValidCertificate(){
+
+	QTreeWidgetItemIterator it(m_ui.treeCert);
+	while (*it){
+		QTreeCertItem *item = dynamic_cast<QTreeCertItem *>(*it);
+
+        if ( 0 == item->childCount() ){
+            QDate currentDate = QDate::currentDate();
+            QDate ValidityBegin = QDate::fromString( item->getValidityBegin()
+                                                    ,"dd/MM/yyyy");
+            QDate ValidityEnd = QDate::fromString( item->getValidityEnd()
+                                                    ,"dd/MM/yyyy");
+
+            if ( ( currentDate >= ValidityBegin )
+                && ( currentDate <= ValidityEnd   ) ){
+
+                m_ui.treeCert->setCurrentItem( item );
+                //m_ui.treeCert->setFocus( Qt::OtherFocusReason );
+                break;
+            }/* if ( ( currentDate >= ValidityBegin ) ... ) */
+        }/* if ( 0 == item->childCount() ) */
+
+		++it;
+	}/* while (*it) */
+}/* MainWnd::SetValidCertificate() */
+
 //*****************************************************
 // load the card data
 //*****************************************************
@@ -3179,6 +3215,9 @@ void MainWnd::fillCertificateList( void )
 	{
 		m_ui.treeCert->setCurrentItem(m_ui.treeCert->topLevelItem(0));
 	}
+
+    //m_ui.treeCert->setFocus( Qt::OtherFocusReason );
+    if ( isLinkToCertClicked ) SetValidCertificate();
 
 	if (noIssuer)
 	{
