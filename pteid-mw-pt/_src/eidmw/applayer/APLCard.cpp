@@ -275,6 +275,9 @@ void APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 
 		if (!ret_signed_ch)
 		{
+            delete resp_2ndpost;
+            free(challenge);
+            free(CHR);
 			MWLOG(LEV_ERROR, MOD_APL, L"EXTERNAL AUTHENTICATE command failed! Aborting Address Change!");
 			throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
 		}
@@ -304,8 +307,12 @@ void APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 
 			// Report the results to the server for verification purposes,
 			// we only consider the Address Change successful if the server returns its "ACK"
-			if (!conn.do_SAM_4thpost(start_write_resp))
+			if (!conn.do_SAM_4thpost(start_write_resp)){
+                delete resp3;
+                free(resp_mse);
+                free(resp_internal_auth);
 				throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
+			}
 
 			callback(callback_data, 100);
 
@@ -322,6 +329,8 @@ void APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 err:
 	delete resp3;
 	delete resp_2ndpost;
+    delete p1;
+    free(kicc);
 	free(challenge);
 	free(CHR);
 	free(resp_mse);
@@ -497,7 +506,7 @@ APL_SmartCard::~APL_SmartCard()
 		delete m_fileinfo;
 		m_fileinfo=NULL;
 	}
-	
+
 	if (m_RootCAPubKey)
 	{
 		delete m_RootCAPubKey;
@@ -682,7 +691,6 @@ APL_Certifs *APL_SmartCard::getCertificates()
 			{
 				APL_Certif *cert=NULL;
 				cert=m_certs->getCertFromCard(ulIndex);
-				//LL delete cert;
 			}
 		}
 	}

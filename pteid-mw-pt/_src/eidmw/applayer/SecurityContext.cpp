@@ -193,7 +193,7 @@ err:
 		if (key.Size() == 0)
 	    {
 	    	fprintf(stderr, "retail_mac_des(): Empty key!\n");
-	    	return CByteArray();
+            goto err;
 	    }
 
 	    ctx = EVP_CIPHER_CTX_new();
@@ -215,7 +215,9 @@ err:
 	    	fprintf(stderr, "Encryption error: len < in.size()\n");
 	    }
 
-	    return CByteArray(out, len);
+	    cipher_text = CByteArray((const unsigned char*)out, (unsigned long)len);
+		free(out);
+	    return cipher_text;
 
 
 	err:

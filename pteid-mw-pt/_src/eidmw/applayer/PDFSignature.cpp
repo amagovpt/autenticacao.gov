@@ -46,7 +46,7 @@ namespace eIDMW
 
 	PDFSignature::PDFSignature(const char *pdf_file_path): m_pdf_file_path(pdf_file_path)
 	{
-	
+
 		m_visible = false;
 		m_page = 1;
 		m_sector = 0;
@@ -60,7 +60,7 @@ namespace eIDMW
 		m_small_signature = false;
 		my_custom_image.img_data = NULL;
 		m_doc = new PDFDoc(new GooString(pdf_file_path));
-	
+
 	}
 
 	void PDFSignature::setCustomImage(unsigned char *img_data, unsigned long img_length)
@@ -110,7 +110,7 @@ namespace eIDMW
 		m_isLandscape = is_landscape;
 
 	}
-	
+
 	void PDFSignature::setVisibleCoordinates(unsigned int page, double coord_x, double coord_y)
 	{
 	   m_visible = true;
@@ -136,12 +136,12 @@ namespace eIDMW
             if (p->getRotate() == 90)
             {
             	height = p_media->x2;
-            	width = p_media->y2;	
+            	width = p_media->y2;
             }
 
             return width > height;
 		}
-		
+
 		return false;
 
 	}
@@ -158,15 +158,15 @@ namespace eIDMW
 		const double n_lines = MAX_SECTOR / 4.0;
 
 		double sig_width = (page_width - lr_margin*2) / columns;
-		
+
 		//Add left margin
 		sig_rect.x1 = lr_margin;
 		sig_rect.x2 = lr_margin;
 
 		if (sector < 1 || sector > MAX_SECTOR)
-			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-%d]\n", 
+			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-%d]\n",
 					sector, MAX_SECTOR);
-		
+
 		if (sector < MAX_SECTOR - 3)
 		{
 			int line = sector / 4 + 1;
@@ -181,19 +181,19 @@ namespace eIDMW
 
 		sig_rect.x1 += (column * sig_width);
 		sig_rect.x2 += (column * sig_width);
-		
+
 		sig_rect.y1 += tb_margin + vert_align;
 
 		//Define height and width of the rectangle
 		sig_rect.x2 += sig_width;
 		sig_rect.y2 += signature_height + tb_margin + vert_align;
 
-		
+
 		fprintf(stderr, "DEBUG: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
 
 		return sig_rect;
 	}
-	
+
 
 	PDFRectangle PDFSignature::computeSigLocationFromSector(double page_height, double page_width, int sector)
 	{
@@ -211,15 +211,15 @@ namespace eIDMW
 		int columns = 3.0;
 
 		double sig_width = (page_width - lr_margin*2) / columns;
-		
+
 		//Add left margin
 		sig_rect.x1 = lr_margin;
 		sig_rect.x2 = lr_margin;
 
 		if (sector < 1 || sector > MAX_SECTOR)
-			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-%d]\n", 
+			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-%d]\n",
 					sector, MAX_SECTOR);
-		
+
 		if (sector < MAX_SECTOR -2)
 		{
 			int line = sector / 3 + 1;
@@ -241,13 +241,13 @@ namespace eIDMW
 			sig_rect.x1 += sig_width * 2.0;
 			sig_rect.x2 += sig_width * 2.0;
 		}
-		
+
 		sig_rect.y1 += tb_margin + vert_align;
 
 		//Define height and width of the rectangle
 		sig_rect.x2 += sig_width;
 		sig_rect.y2 += signature_height + tb_margin + vert_align;
-		
+
 		fprintf(stderr, "DEBUG: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
 		return sig_rect;
 	}
@@ -282,7 +282,7 @@ namespace eIDMW
 
 	int PDFSignature::getPageCount()
 	{
-		if (!m_doc->isOk()) 
+		if (!m_doc->isOk())
 		{
 			fprintf(stderr, "getPageCount(): Probably broken PDF...\n");
 			return -1;
@@ -300,7 +300,7 @@ namespace eIDMW
 	char* PDFSignature::getOccupiedSectors(int page)
 	{
 		if (m_doc)
-			return m_doc->getOccupiedSectors(page);	
+			return m_doc->getOccupiedSectors(page);
 		else
 			return "";
 	}
@@ -314,9 +314,9 @@ namespace eIDMW
 	{
 		char * pdf_filename = Basename((char*)path);
 		std::string clean_filename = CPathUtil::remove_ext_from_basename(pdf_filename);
-		
+
 		std::string final_path = string(output_dir) + PATH_SEP + clean_filename + "_signed.pdf";
-		
+
 		return final_path;
 	}
 
@@ -380,7 +380,7 @@ namespace eIDMW
 	int PDFSignature::signSingleFile(const char *location,
 		const char *reason, const char *outfile_path)
 	{
-		
+
 		PDFDoc *doc = m_doc;
 		//The class ctor initializes it to (0,0,0,0)
 		//so we can use this for invisible sig
@@ -389,9 +389,9 @@ namespace eIDMW
 
 		GooString *outputName;
 		outputName = new GooString(outfile_path);
-		
+
 		if (!doc->isOk()) {
-			fprintf(stderr, "Poppler returned error loading PDF document %s\n", 
+			fprintf(stderr, "Poppler returned error loading PDF document %s\n",
 					doc->getFileName()->getCString());
 
 			delete doc;
@@ -403,6 +403,7 @@ namespace eIDMW
 		{
 			fprintf(stderr, "Encrypted PDF: This is in the TODO List\n");
 			//TODO: Add proper error code(s)
+			delete outputName;
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}
 
@@ -446,9 +447,9 @@ namespace eIDMW
 			    double sig_width = (width - lr_margin*2) / 3.0;
 			    double actual_sig_height =  m_small_signature ? sig_height / 2.0 : sig_height;
 			    sig_location.x1 = lr_margin+ (width-lr_margin*2)*location_x;
-			    
+
 			    //Coordinates from the GUI are inverted => (1- location_y)
-			    sig_location.y1 = tb_margin + (height-tb_margin*2) *(1.0-location_y)- actual_sig_height;  
+			    sig_location.y1 = tb_margin + (height-tb_margin*2) *(1.0-location_y)- actual_sig_height;
 			    sig_location.x2 = sig_location.x1 + sig_width;
 			    sig_location.y2 = sig_location.y1 + actual_sig_height;
 			}
@@ -456,7 +457,7 @@ namespace eIDMW
 		}
 
 		unsigned char *to_sign;
-		
+
 		//Civil number and name should be only read once
 		if (m_civil_number == NULL)
 		   getCitizenData();
@@ -477,7 +478,7 @@ namespace eIDMW
 		}
 		catch(CMWException e)
 		{
-			//Throw away the changed PDFDoc object because we might retry the signature 
+			//Throw away the changed PDFDoc object because we might retry the signature
 			//and this document is "half-signed"...
 			if (e.GetError() == EIDMW_ERR_CARD_RESET)
 			{

@@ -632,6 +632,7 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 		fprintf(stderr, "DEBUG: Server returned malformed JSON data: %s\n", body);
 		free(server_response);
 		free(post_dhparams);
+        cJSON_Delete(json);
 		return server_params;
 	}
 

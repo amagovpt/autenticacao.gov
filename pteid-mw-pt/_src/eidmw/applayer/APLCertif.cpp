@@ -136,7 +136,7 @@ void APL_Certifs::initMyCerts()
                 my_certifs.push_back(cert);
             }/* if ( strcmp( cert->getIssuerName(), "ECRaizEstado" ) == 0 ) */
         }
-       
+
 	APL_Certif * issuer = findIssuer(cert);
 	APL_Certif * new_issuer = NULL;
 
@@ -827,7 +827,6 @@ void APL_Certifs::loadCard()
 	for(unsigned long i=0;i<countFromCard();i++)
 	{
 		cert=getCertFromCard(i);
-		//LL delete cert;
 	}
 
 	resetFlags();

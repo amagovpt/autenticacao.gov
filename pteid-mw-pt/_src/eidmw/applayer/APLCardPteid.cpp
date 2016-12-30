@@ -577,9 +577,17 @@ const CByteArray& APL_EIDCard::getRawData_PersoData()
 const char *APL_EIDCard::getTokenSerialNumber(){
 	if (!m_tokenSerial){
 
-		BEGIN_CAL_OPERATION(m_reader)
-		m_tokenSerial = new string (m_reader->getCalReader()->GetSerialNr());
-		END_CAL_OPERATION(m_reader)
+		//BEGIN_CAL_OPERATION(m_reader)
+        m_reader->CalLock();
+        try{
+            m_tokenSerial = new string (m_reader->getCalReader()->GetSerialNr());
+        } catch(...){
+            m_reader->CalUnlock();
+            delete m_tokenSerial;
+            throw;
+        }
+        m_reader->CalUnlock();
+		//END_CAL_OPERATION(m_reader)
 	}
 	return m_tokenSerial->c_str();
 }
@@ -587,9 +595,17 @@ const char *APL_EIDCard::getTokenSerialNumber(){
 const char *APL_EIDCard::getTokenLabel(){
 	if (!m_tokenLabel){
 
-		BEGIN_CAL_OPERATION(m_reader)
-					m_tokenLabel = new string (m_reader->getCalReader()->GetCardLabel());
-		END_CAL_OPERATION(m_reader)
+		//BEGIN_CAL_OPERATION(m_reader)
+        m_reader->CalLock();
+        try{
+            m_tokenLabel = new string (m_reader->getCalReader()->GetCardLabel());
+        } catch(...){
+            m_reader->CalUnlock();
+            delete m_tokenLabel;
+            throw;
+        }
+        m_reader->CalUnlock();
+		//END_CAL_OPERATION(m_reader)
 	}
 	return m_tokenLabel->c_str();
 }
@@ -1038,7 +1054,7 @@ version;type;name;surname;gender;date_of_birth;location_of_birth;nobility;nation
 	csv+=CSV_SEPARATOR;
 	csv+=getCivilianIdNumber();
 	csv+=CSV_SEPARATOR;
-	
+
 	csv+=getDocumentPAN();
 	csv+=CSV_SEPARATOR;
 	csv+=getValidityBeginDate();
@@ -1594,7 +1610,7 @@ const char *APL_AddrEId::getForeignPostalCode()
 ---------------------------------------- APL_SodEid -----------------------------------------
 *****************************************************************************************/
 APL_SodEid::APL_SodEid(APL_EIDCard *card)
-{	
+{
 	m_card=card;
 }
 
@@ -1715,7 +1731,7 @@ CByteArray APL_DocVersionInfo::getXML(bool bNoHeader)
 			<file_datainfo encoding="base64">
 			</file_datainfo>
 			<file_tokeninfo encoding="base64">
-			</file_tokeninfo>			
+			</file_tokeninfo>
 		</files>
 	</scard>
 */
