@@ -27,9 +27,9 @@ translations.files += scapsignature_pt.qm
 
 INSTALLS += target translations
 
-INCLUDEPATH += ../common \
-	       ../eidlib \	
-             ASService
+INCLUDEPATH += . ../common ../eidlib ASService
+
+DEFINES += WITH_OPENSSL
 
 SOURCES += main.cpp\
         mylistview.cpp \
@@ -43,6 +43,7 @@ SOURCES += main.cpp\
     PDFSignature/PDFSignatureSoapBindingProxy.cpp \
     PDFSignature/PDFSignatureC.cpp \
     pdfsignatureclient.cpp \
+    stdsoap2.cpp \
     scapsignature.cpp
 
 HEADERS  += \
@@ -68,7 +69,7 @@ FORMS    += \
     scapsignature.ui
 
 !macx: LIBS += -Wl,-R,'../lib'
-LIBS += -L../lib -lcrypto -lpteidlib -lgsoapssl++
+LIBS += -L../lib -lcrypto -lpteidlib -lssl
 
 RESOURCES += \
     logo.qrc
