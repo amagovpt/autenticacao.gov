@@ -338,7 +338,7 @@ ppi_from_ppm(png_uint_32 ppm)
    png_fixed_point result;
    if (ppm <= PNG_UINT_31_MAX && png_muldiv(&result, (png_int_32)ppm, 127,
        5000) != 0)
-      return result;
+      return ((png_uint_32)result);
 
    /* Overflow. */
    return 0;

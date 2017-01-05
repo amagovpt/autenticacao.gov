@@ -64,10 +64,15 @@ try
    }
 catch (CMWException e)
    {
+   if ( oCardLayer ) delete oCardLayer;
+   if ( oReadersInfo ) delete oReadersInfo;
    return(cal_translate_error(WHERE, e.GetError()));
    }
 catch (...)
    {
+   if ( oCardLayer ) delete oCardLayer;
+   if ( oReadersInfo ) delete oReadersInfo;
+
 	lRet = -1;
 	log_trace(WHERE, "E: unknown exception thrown");
    return (CKR_FUNCTION_FAILED);

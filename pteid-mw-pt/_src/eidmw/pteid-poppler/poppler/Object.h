@@ -352,7 +352,7 @@ inline char *Object::streamGetLine(char *buf, int size)
   { OBJECT_TYPE_CHECK(objStream); return stream->getLine(buf, size); }
 
 inline Guint Object::streamGetPos()
-  { OBJECT_TYPE_CHECK(objStream); return stream->getPos(); }
+  { OBJECT_TYPE_CHECK(objStream); return ((Guint)stream->getPos()); }
 
 inline void Object::streamSetPos(Guint pos, int dir)
   { OBJECT_TYPE_CHECK(objStream); stream->setPos(pos, dir); }

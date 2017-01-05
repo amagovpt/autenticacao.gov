@@ -750,10 +750,10 @@ png_convert_to_rfc1123(png_structrp png_ptr, png_const_timep ptime)
          png_warning(png_ptr, "Ignoring invalid time value");
 
       else
-         return png_ptr->time_buffer;
+         return ((png_const_charp)png_ptr->time_buffer);
    }
 
-   return NULL;
+   return ((png_const_charp)NULL);
 }
 #     endif
 #  endif /* TIME_RFC1123 */
@@ -768,12 +768,12 @@ png_get_copyright(png_const_structrp png_ptr)
    return PNG_STRING_COPYRIGHT
 #else
 #  ifdef __STDC__
-   return PNG_STRING_NEWLINE \
+   return ((png_const_charp)(PNG_STRING_NEWLINE \
      "libpng version 1.6.16 - December 22, 2014" PNG_STRING_NEWLINE \
      "Copyright (c) 1998-2014 Glenn Randers-Pehrson" PNG_STRING_NEWLINE \
      "Copyright (c) 1996-1997 Andreas Dilger" PNG_STRING_NEWLINE \
      "Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc." \
-     PNG_STRING_NEWLINE;
+     PNG_STRING_NEWLINE));
 #  else
       return "libpng version 1.6.16 - December 22, 2014\
       Copyright (c) 1998-2014 Glenn Randers-Pehrson\
@@ -803,7 +803,7 @@ png_get_header_ver(png_const_structrp png_ptr)
 {
    /* Version of *.h files used when building libpng */
    PNG_UNUSED(png_ptr)  /* Silence compiler warning about unused png_ptr */
-   return PNG_LIBPNG_VER_STRING;
+   return ((png_const_charp)PNG_LIBPNG_VER_STRING);
 }
 
 png_const_charp PNGAPI
@@ -812,11 +812,11 @@ png_get_header_version(png_const_structrp png_ptr)
    /* Returns longer string containing both version and date */
    PNG_UNUSED(png_ptr)  /* Silence compiler warning about unused png_ptr */
 #ifdef __STDC__
-   return PNG_HEADER_VERSION_STRING
+   return ((png_const_charp)PNG_HEADER_VERSION_STRING
 #  ifndef PNG_READ_SUPPORTED
    "     (NO READ SUPPORT)"
 #  endif
-   PNG_STRING_NEWLINE;
+   PNG_STRING_NEWLINE);
 #else
    return PNG_HEADER_VERSION_STRING;
 #endif
@@ -2339,7 +2339,7 @@ png_compare_ICC_profile_with_sRGB(png_const_structrp png_ptr,
           * Fall through to "no match".
           */
          png_chunk_report(png_ptr, "Not recognizing known sRGB profile that"
-             " has been edited", 
+             " has been edited",
              PNG_CHUNK_WARNING);
          break;
 # endif

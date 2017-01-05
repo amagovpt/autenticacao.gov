@@ -4430,7 +4430,7 @@ unsigned char MyriadFonts::myriad_regular_compressed[] =
   0x2E,0xDA,0xB3,0xC3,0x65,0xCC,0xBA,0x38,0x2B,0xD7,0x61,0x17,0x82,0x23,
   0xAB,0x57,0xCD,0x35,0x1E,0xD8,0xC3,0x71,0x5E,0x6B,0xEF,0x94,0x90,0x4C,
   0xF6,0xF0,0x84,0xF9,0x85,0x73,0x2B,0x5B,0x45,0x79,0x8C,0x7F,0x03,0x09,
-  0xB4,0xD1,0xBA 
+  0xB4,0xD1,0xBA
 };
 
 
@@ -13761,7 +13761,7 @@ Object createFontDescriptor(XRef * xref, MyriadFontType ft)
 }
 
 
-int MYRIAD_REGULAR_WIDTHS[] = 
+int MYRIAD_REGULAR_WIDTHS[] =
 {
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 212, 230, 337, 497, 513, 792, 605, 188, 284, 284, 415, 596, 207, 307, 207, 343, 513, 513, 513, 513, 513, 513, 513, 513, 513, 513, 207, 207, 596, 596, 596, 406, 737, 612, 542, 580, 666, 492, 487, 646, 652, 239, 370, 542, 472, 804, 658, 689, 532, 689, 538, 493, 497, 647, 558, 846, 571, 541, 553, 284, 341, 284, 596, 500, 300, 482, 569, 448, 564, 501, 292, 559, 555, 234, 243, 469, 236, 834, 555, 549, 569, 563, 327, 396, 331, 551, 481, 736, 463, 471, 428, 284, 239, 284, 596, 0, 513, 0, 207, 513, 356, 1000, 500, 500, 300, 1156, 493, 255, 894, 0, 553, 0, 0, 207, 207, 354, 354, 282, 500, 1000, 300, 619, 396, 255, 863, 0, 428, 541, 212, 230, 513, 513, 513, 513, 239, 519, 300, 677, 346, 419, 596, 291, 419, 300, 318, 596, 311, 305, 300, 553, 512, 207, 300, 244, 355, 419, 759, 759, 759, 406, 612, 612, 612, 612, 612, 612, 788, 585, 492, 492, 492, 492, 239, 239, 239, 239, 671, 658, 689, 689, 689, 689, 689, 596, 689, 647, 647, 647, 647, 541, 531, 548, 482, 482, 482, 482, 482, 482, 773, 447, 501, 501, 501, 501, 234, 234, 234, 234, 541, 555, 549, 549, 549, 549, 549, 596, 549, 551, 551, 551, 551, 471, 569, 471
 };
@@ -13837,10 +13837,12 @@ Object createMyriadDict(XRef *xref, MyriadFontType ft)
 	font_dict.dictAdd(copyString("BaseFont"), obj_tmp.initName(my_base_font));
 	font_dict.dictAdd(copyString("FirstChar"), obj_tmp.initInt(0));
 	font_dict.dictAdd(copyString("LastChar"), obj_tmp.initInt(255));
-	
+
 	widths.initArray(xref);
-	for (int i=0; i!= 256; i++)
-		widths.arrayAdd(obj_tmp.initInt(*(myriad_widths + i)));
+	if ( myriad_widths !=NULL ){
+        for (int i=0; i!= 256; i++)
+            widths.arrayAdd(obj_tmp.initInt(*(myriad_widths + i)));
+	}/* if ( myriad_widths !=NULL ) */
 
 	font_dict.dictAdd(copyString("Widths"), &widths);
 

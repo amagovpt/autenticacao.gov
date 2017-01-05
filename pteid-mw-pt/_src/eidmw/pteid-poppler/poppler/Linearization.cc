@@ -58,7 +58,7 @@ Guint Linearization::getLength()
   int length;
   if (linDict.getDict()->lookupInt("L", NULL, &length) &&
       length > 0) {
-    return length;
+    return ((Guint)length);
   } else {
     error(errSyntaxWarning, -1, "Length in linearization table is invalid");
     return 0;
@@ -83,7 +83,7 @@ Guint Linearization::getHintsOffset()
   obj2.free();
   obj1.free();
 
-  return hintsOffset;
+  return ((Guint)hintsOffset);
 }
 
 Guint Linearization::getHintsLength()
@@ -104,7 +104,7 @@ Guint Linearization::getHintsLength()
   obj2.free();
   obj1.free();
 
-  return hintsLength;
+  return ((Guint)hintsLength);
 }
 
 Guint Linearization::getHintsOffset2()
@@ -126,7 +126,7 @@ Guint Linearization::getHintsOffset2()
   obj2.free();
   obj1.free();
 
-  return hintsOffset2;
+  return ((Guint)hintsOffset2);
 }
 
 Guint Linearization::getHintsLength2()
@@ -148,7 +148,7 @@ Guint Linearization::getHintsLength2()
   obj2.free();
   obj1.free();
 
-  return hintsLength2;
+  return ((Guint)hintsLength2);
 }
 
 int Linearization::getObjectNumberFirst()
@@ -170,7 +170,7 @@ Guint Linearization::getEndFirst()
   if (linDict.isDict() &&
       linDict.getDict()->lookupInt("E", NULL, &pageEndFirst) &&
       pageEndFirst > 0) {
-    return pageEndFirst;
+    return ((Guint)pageEndFirst);
   } else {
     error(errSyntaxWarning, -1, "First page end offset in linearization table is invalid");
     return 0;
@@ -196,7 +196,7 @@ Guint Linearization::getMainXRefEntriesOffset()
   if (linDict.isDict() &&
       linDict.getDict()->lookupInt("T", NULL, &mainXRefEntriesOffset) &&
       mainXRefEntriesOffset > 0) {
-    return mainXRefEntriesOffset;
+    return ((Guint)mainXRefEntriesOffset);
   } else {
     error(errSyntaxWarning, -1, "Main Xref offset in linearization table is invalid");
     return 0;

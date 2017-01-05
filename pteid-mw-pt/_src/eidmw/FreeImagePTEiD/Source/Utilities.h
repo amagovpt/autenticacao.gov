@@ -30,7 +30,7 @@
 // ==========================================================
 
 #include <math.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <memory.h>
 #include <stdio.h>
 #include <string.h>
@@ -69,14 +69,14 @@ extern "C" {
 #endif
 
 /**
-Allocate a FIBITMAP with possibly no pixel data 
+Allocate a FIBITMAP with possibly no pixel data
 (i.e. only header data and some or all metadata)
 @param header_only If TRUE, allocate a 'header only' FIBITMAP, otherwise allocate a full FIBITMAP
 @param type Image type
 @param width Image width
 @param height Image height
 @param bpp Number of bits per pixel
-@param red_mask Image red mask 
+@param red_mask Image red mask
 @param green_mask Image green mask
 @param blue_mask Image blue mask
 @return Returns the allocated FIBITMAP
@@ -85,13 +85,13 @@ Allocate a FIBITMAP with possibly no pixel data
 DLL_API FIBITMAP * DLL_CALLCONV FreeImage_AllocateHeaderT(BOOL header_only, FREE_IMAGE_TYPE type, int width, int height, int bpp FI_DEFAULT(8), unsigned red_mask FI_DEFAULT(0), unsigned green_mask FI_DEFAULT(0), unsigned blue_mask FI_DEFAULT(0));
 
 /**
-Allocate a FIBITMAP of type FIT_BITMAP, with possibly no pixel data 
+Allocate a FIBITMAP of type FIT_BITMAP, with possibly no pixel data
 (i.e. only header data and some or all metadata)
 @param header_only If TRUE, allocate a 'header only' FIBITMAP, otherwise allocate a full FIBITMAP
 @param width Image width
 @param height Image height
 @param bpp Number of bits per pixel
-@param red_mask Image red mask 
+@param red_mask Image red mask
 @param green_mask Image green mask
 @param blue_mask Image blue mask
 @return Returns the allocated FIBITMAP
@@ -107,7 +107,7 @@ Allocate a FIBITMAP with no pixel data and wrap a user provided pixel buffer
 @param width Image width
 @param height Image height
 @param bpp Number of bits per pixel
-@param red_mask Image red mask 
+@param red_mask Image red mask
 @param green_mask Image green mask
 @param blue_mask Image blue mask
 @return Returns the allocated FIBITMAP
@@ -175,7 +175,7 @@ template <class T> T MIN(const T &a, const T &b) {
 	return (a < b) ? a: b;
 }
 
-/// INPLACESWAP adopted from codeguru.com 
+/// INPLACESWAP adopted from codeguru.com
 template <class T> void INPLACESWAP(T& a, T& b) {
 	a ^= b; b ^= a; a ^= b;
 }
@@ -188,11 +188,11 @@ template <class T> T CLAMP(const T &value, const T &min_value, const T &max_valu
 /** This procedure computes minimum min and maximum max
  of n numbers using only (3n/2) - 2 comparisons.
  min = L[i1] and max = L[i2].
- ref: Aho A.V., Hopcroft J.E., Ullman J.D., 
- The design and analysis of computer algorithms, 
+ ref: Aho A.V., Hopcroft J.E., Ullman J.D.,
+ The design and analysis of computer algorithms,
  Addison-Wesley, Reading, 1974.
 */
-template <class T> void 
+template <class T> void
 MAXMIN(const T* L, long n, T& max, T& min) {
 	long i1, i2, i, j;
 	T x1, x2;
@@ -228,8 +228,8 @@ i2a(unsigned i, char *a, unsigned r) {
 	return a+1;
 }
 
-/** 
- Transforms integer i into an ascii string and stores the result in a; 
+/**
+ Transforms integer i into an ascii string and stores the result in a;
  string is encoded in the base indicated by r.
  @param i Number to be converted
  @param a String result
@@ -288,7 +288,7 @@ CalculatePitch(unsigned line) {
 inline unsigned
 CalculateUsedPaletteEntries(unsigned bit_count) {
 	if ((bit_count >= 1) && (bit_count <= 8))
-		return 1 << bit_count;
+		return ((unsigned)1 << bit_count);
 
 	return 0;
 }
@@ -306,7 +306,7 @@ Fast generic assign (faster than for loop)
 @param src Source pixel
 @param bytesperpixel # of bytes per pixel
 */
-inline void 
+inline void
 AssignPixel(BYTE* dst, const BYTE* src, unsigned bytesperpixel) {
 	switch (bytesperpixel) {
 		case 1:	// FIT_BITMAP (8-bit)
@@ -328,43 +328,43 @@ AssignPixel(BYTE* dst, const BYTE* src, unsigned bytesperpixel) {
 
 		case 6: // FIT_RGB16 (3 x 16-bit)
 			*(reinterpret_cast<DWORD*>(dst)) = *(reinterpret_cast<const DWORD*> (src));
-			*(reinterpret_cast<WORD*>(dst + 4)) = *(reinterpret_cast<const WORD*> (src + 4));	
+			*(reinterpret_cast<WORD*>(dst + 4)) = *(reinterpret_cast<const WORD*> (src + 4));
 			break;
 
 		// the rest can be speeded up with int64
-			
+
 		case 8: // FIT_RGBA16 (4 x 16-bit)
 			*(reinterpret_cast<DWORD*>(dst)) = *(reinterpret_cast<const DWORD*> (src));
-			*(reinterpret_cast<DWORD*>(dst + 4)) = *(reinterpret_cast<const DWORD*> (src + 4));	
+			*(reinterpret_cast<DWORD*>(dst + 4)) = *(reinterpret_cast<const DWORD*> (src + 4));
 			break;
-		
+
 		case 12: // FIT_RGBF (3 x 32-bit IEEE floating point)
 			*(reinterpret_cast<float*>(dst)) = *(reinterpret_cast<const float*> (src));
 			*(reinterpret_cast<float*>(dst + 4)) = *(reinterpret_cast<const float*> (src + 4));
 			*(reinterpret_cast<float*>(dst + 8)) = *(reinterpret_cast<const float*> (src + 8));
 			break;
-		
+
 		case 16: // FIT_RGBAF (4 x 32-bit IEEE floating point)
 			*(reinterpret_cast<float*>(dst)) = *(reinterpret_cast<const float*> (src));
 			*(reinterpret_cast<float*>(dst + 4)) = *(reinterpret_cast<const float*> (src + 4));
 			*(reinterpret_cast<float*>(dst + 8)) = *(reinterpret_cast<const float*> (src + 8));
 			*(reinterpret_cast<float*>(dst + 12)) = *(reinterpret_cast<const float*> (src + 12));
 			break;
-			
+
 		default:
 			assert(FALSE);
 	}
 }
 
 /**
-Swap red and blue channels in a 24- or 32-bit dib. 
+Swap red and blue channels in a 24- or 32-bit dib.
 @return Returns TRUE if successful, returns FALSE otherwise
 @see See definition in Conversion.cpp
 */
 BOOL SwapRedBlue32(FIBITMAP* dib);
 
 /**
-Inplace convert CMYK to RGBA.(8- and 16-bit). 
+Inplace convert CMYK to RGBA.(8- and 16-bit).
 Alpha is filled with the first extra channel if any or white otherwise.
 @return Returns TRUE if successful, returns FALSE otherwise
 @see See definition in Conversion.cpp
@@ -396,61 +396,61 @@ void RotateExif(FIBITMAP **dib);
 //   Big Endian / Little Endian utility functions
 // ==========================================================
 
-inline WORD 
-__SwapUInt16(WORD arg) { 
-#if defined(_MSC_VER) && _MSC_VER >= 1310 
-	return _byteswap_ushort(arg); 
-#elif defined(__i386__) && defined(__GNUC__) 
-	__asm__("xchgb %b0, %h0" : "+q" (arg)); 
-	return arg; 
-#elif defined(__ppc__) && defined(__GNUC__) 
-	WORD result; 
-	__asm__("lhbrx %0,0,%1" : "=r" (result) : "r" (&arg), "m" (arg)); 
-	return result; 
-#else 
-	// swap bytes 
+inline WORD
+__SwapUInt16(WORD arg) {
+#if defined(_MSC_VER) && _MSC_VER >= 1310
+	return _byteswap_ushort(arg);
+#elif defined(__i386__) && defined(__GNUC__)
+	__asm__("xchgb %b0, %h0" : "+q" (arg));
+	return arg;
+#elif defined(__ppc__) && defined(__GNUC__)
 	WORD result;
-	result = ((arg << 8) & 0xFF00) | ((arg >> 8) & 0x00FF); 
-	return result; 
-#endif 
-} 
- 
-inline DWORD 
-__SwapUInt32(DWORD arg) { 
-#if defined(_MSC_VER) && _MSC_VER >= 1310 
-	return _byteswap_ulong(arg); 
-#elif defined(__i386__) && defined(__GNUC__) 
-	__asm__("bswap %0" : "+r" (arg)); 
-	return arg; 
-#elif defined(__ppc__) && defined(__GNUC__) 
-	DWORD result; 
-	__asm__("lwbrx %0,0,%1" : "=r" (result) : "r" (&arg), "m" (arg)); 
-	return result; 
-#else 
+	__asm__("lhbrx %0,0,%1" : "=r" (result) : "r" (&arg), "m" (arg));
+	return result;
+#else
+	// swap bytes
+	WORD result;
+	result = ((arg << 8) & 0xFF00) | ((arg >> 8) & 0x00FF);
+	return result;
+#endif
+}
+
+inline DWORD
+__SwapUInt32(DWORD arg) {
+#if defined(_MSC_VER) && _MSC_VER >= 1310
+	return _byteswap_ulong(arg);
+#elif defined(__i386__) && defined(__GNUC__)
+	__asm__("bswap %0" : "+r" (arg));
+	return arg;
+#elif defined(__ppc__) && defined(__GNUC__)
+	DWORD result;
+	__asm__("lwbrx %0,0,%1" : "=r" (result) : "r" (&arg), "m" (arg));
+	return result;
+#else
 	// swap words then bytes
-	DWORD result; 
-	result = ((arg & 0x000000FF) << 24) | ((arg & 0x0000FF00) << 8) | ((arg >> 8) & 0x0000FF00) | ((arg >> 24) & 0x000000FF); 
-	return result; 
-#endif 
-} 
- 
+	DWORD result;
+	result = ((arg & 0x000000FF) << 24) | ((arg & 0x0000FF00) << 8) | ((arg >> 8) & 0x0000FF00) | ((arg >> 24) & 0x000000FF);
+	return result;
+#endif
+}
+
 /**
 for later use ...
-inline uint64_t 
-SwapInt64(uint64_t arg) { 
-#if defined(_MSC_VER) && _MSC_VER >= 1310 
-	return _byteswap_uint64(arg); 
-#else 
-	union Swap { 
-		uint64_t sv; 
-		uint32_t ul[2]; 
-	} tmp, result; 
-	tmp.sv = arg; 
-	result.ul[0] = SwapInt32(tmp.ul[1]);  
-	result.ul[1] = SwapInt32(tmp.ul[0]); 
-	return result.sv; 
-#endif 
-} 
+inline uint64_t
+SwapInt64(uint64_t arg) {
+#if defined(_MSC_VER) && _MSC_VER >= 1310
+	return _byteswap_uint64(arg);
+#else
+	union Swap {
+		uint64_t sv;
+		uint32_t ul[2];
+	} tmp, result;
+	tmp.sv = arg;
+	result.ul[0] = SwapInt32(tmp.ul[1]);
+	result.ul[1] = SwapInt32(tmp.ul[0]);
+	return result.sv;
+#endif
+}
 */
 
 inline void
@@ -468,11 +468,11 @@ SwapLong(DWORD *lp) {
 // ==========================================================
 
 /**
-Extract the luminance channel L from a RGBF image. 
-Luminance is calculated from the sRGB model using a D65 white point, using the Rec.709 formula : 
+Extract the luminance channel L from a RGBF image.
+Luminance is calculated from the sRGB model using a D65 white point, using the Rec.709 formula :
 L = ( 0.2126 * r ) + ( 0.7152 * g ) + ( 0.0722 * b )
-Reference : 
-A Standard Default Color Space for the Internet - sRGB. 
+Reference :
+A Standard Default Color Space for the Internet - sRGB.
 [online] http://www.w3.org/Graphics/Color/sRGB
 */
 #define LUMA_REC709(r, g, b)	(0.2126F * r + 0.7152F * g + 0.0722F * b)

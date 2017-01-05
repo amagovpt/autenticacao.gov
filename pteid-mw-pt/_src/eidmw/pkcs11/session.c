@@ -122,7 +122,7 @@ log_trace(WHERE, "I: enter");
 cleanup:
    p11_unlock();
    log_trace(WHERE, "I: leave, ret = %i",ret);
-   return ret;
+   return ((CK_RV)ret);
 }
 #undef WHERE
 

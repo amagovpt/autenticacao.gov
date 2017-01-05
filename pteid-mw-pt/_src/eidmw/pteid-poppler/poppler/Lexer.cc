@@ -139,7 +139,7 @@ int Lexer::getChar(GBool comesFromLook) {
 }
 
 int Lexer::lookChar() {
-  
+
   if (LOOK_VALUE_NOT_CACHED != lookCharLastValueCached) {
     return lookCharLastValueCached;
   }
@@ -373,7 +373,7 @@ Object *Lexer::getObj(Object *obj, int objNum) {
 	    s->append(tokBuf, tokBufSize);
 	  p = tokBuf;
 	  n = 0;
-	  
+
 	  // we are growing see if the document is not malformed and we are growing too much
 	  if (objNum > 0 && xref != NULL)
 	  {
@@ -445,15 +445,17 @@ Object *Lexer::getObj(Object *obj, int objNum) {
 	*p = c;
 	s = new GooString(tokBuf, n);
       } else {
-	s->append((char)c);
+	if ( s != NULL ) s->append((char)c);
       }
     }
     if (n < tokBufSize) {
       *p = '\0';
       obj->initName(tokBuf);
     } else {
-      obj->initName(s->getCString());
-      delete s;
+      if ( s != NULL ){
+          obj->initName(s->getCString());
+          delete s;
+      }
     }
     break;
 

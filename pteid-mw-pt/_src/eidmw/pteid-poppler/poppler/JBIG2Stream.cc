@@ -1371,7 +1371,7 @@ void JBIG2Stream::readSegments() {
       goto eofError2;
     }
 
-    // keep track of the start of the segment data 
+    // keep track of the start of the segment data
     segDataPos = curStr->getPos();
 
     // check for missing page information segment
@@ -1458,7 +1458,7 @@ void JBIG2Stream::readSegments() {
       break;
     }
 
-    // Make sure the segment handler read all of the bytes in the 
+    // Make sure the segment handler read all of the bytes in the
     // segment data, unless this segment is marked as having an
     // unknown length (section 7.2.7 of the JBIG2 Final Committee Draft)
 
@@ -1469,34 +1469,34 @@ void JBIG2Stream::readSegments() {
 
 	// If we didn't read all of the bytes in the segment data,
 	// indicate an error, and throw away the rest of the data.
-	
+
 	// v.3.1.01.13 of the LuraTech PDF Compressor Server will
 	// sometimes generate an extraneous NULL byte at the end of
 	// arithmetic-coded symbol dictionary segments when numNewSyms
 	// == 0.  Segments like this often occur for blank pages.
-	
+
 	error(errSyntaxError, curStr->getPos(), "{0:lld} extraneous byte{1:s} after segment",
 	      segExtraBytes, (segExtraBytes > 1) ? "s" : "");
-	
+
 	// Burn through the remaining bytes -- inefficient, but
 	// hopefully we're not doing this much
-	
+
 	int trash;
 	for (int i = segExtraBytes; i > 0; i--) {
 	  readByte(&trash);
 	}
-	
+
       } else if (segExtraBytes < 0) {
-	
-	// If we read more bytes than we should have, according to the 
+
+	// If we read more bytes than we should have, according to the
 	// segment length field, note an error.
-	
+
 	error(errSyntaxError, curStr->getPos(), "Previous segment handler read too many bytes");
-	
+
       }
 
     }
-    
+
     gfree(refSegs);
   }
 
@@ -1776,7 +1776,7 @@ GBool JBIG2Stream::readSymbolDictSeg(Guint segNum, Guint length,
 
       // using a collective bitmap, so don't read a bitmap here
       if (huff && !refAgg) {
-	symWidths[i] = symWidth;
+	if ( symWidths != NULL ) symWidths[i] = symWidth;
 	totalWidth += symWidth;
 
       // refinement/aggregate coding
@@ -1861,10 +1861,12 @@ GBool JBIG2Stream::readSymbolDictSeg(Guint segNum, Guint length,
 				       bmSize);
       }
       x = 0;
-      for (; j < i; ++j) {
-	bitmaps[numInputSyms + j] =
-	    collBitmap->getSlice(x, 0, symWidths[j], symHeight);
-	x += symWidths[j];
+      if ( symWidths != NULL ){
+          for (; j < i; ++j) {
+        bitmaps[numInputSyms + j] =
+            collBitmap->getSlice(x, 0, symWidths[j], symHeight);
+        x += symWidths[j];
+          }
       }
       delete collBitmap;
     }
@@ -2181,31 +2183,35 @@ void JBIG2Stream::readTextRegionSeg(Guint segNum, GBool imm,
     huffDecoder->buildTable(runLengthTab, 35);
     symCodeTab = (JBIG2HuffmanTable *)gmallocn(numSyms + 1,
 					       sizeof(JBIG2HuffmanTable));
-    for (i = 0; i < numSyms; ++i) {
-      symCodeTab[i].val = i;
-      symCodeTab[i].rangeLen = 0;
-    }
-    i = 0;
-    while (i < numSyms) {
-      huffDecoder->decodeInt(&j, runLengthTab);
-      if (j > 0x200) {
-	for (j -= 0x200; j && i < numSyms; --j) {
-	  symCodeTab[i++].prefixLen = 0;
-	}
-      } else if (j > 0x100) {
-	for (j -= 0x100; j && i < numSyms; --j) {
-	  symCodeTab[i].prefixLen = symCodeTab[i-1].prefixLen;
-	  ++i;
-	}
-      } else {
-	symCodeTab[i++].prefixLen = j;
-      }
-    }
-    symCodeTab[numSyms].prefixLen = 0;
-    symCodeTab[numSyms].rangeLen = jbig2HuffmanEOT;
-    huffDecoder->buildTable(symCodeTab, numSyms);
-    huffDecoder->reset();
-
+    if ( symCodeTab != NULL ){
+        for (i = 0; i < numSyms; ++i) {
+          symCodeTab[i].val = i;
+          symCodeTab[i].rangeLen = 0;
+        }
+        i = 0;
+        while (i < numSyms) {
+          huffDecoder->decodeInt(&j, runLengthTab);
+          if (j > 0x200) {
+        for (j -= 0x200; j && i < numSyms; --j) {
+          symCodeTab[i++].prefixLen = 0;
+        }
+          } else if (j > 0x100) {
+        for (j -= 0x100; j && i < numSyms; --j) {
+          symCodeTab[i].prefixLen = symCodeTab[i-1].prefixLen;
+          ++i;
+        }
+          } else {
+        symCodeTab[i++].prefixLen = j;
+          }
+        }
+        symCodeTab[numSyms].prefixLen = 0;
+        symCodeTab[numSyms].rangeLen = jbig2HuffmanEOT;
+        huffDecoder->buildTable(symCodeTab, numSyms);
+        huffDecoder->reset();
+    } else{
+        resetIntStats(symCodeLen);
+        arithDecoder->start();
+    }/* !if ( symCodeTab != NULL ) */
   // set up the arithmetic decoder
   } else {
     symCodeTab = NULL;
@@ -2389,7 +2395,7 @@ JBIG2Bitmap *JBIG2Stream::readTextRegion(GBool huff, GBool refine,
 	    decodeSuccess = decodeSuccess && arithDecoder->decodeInt(&rdx, iardxStats);
 	    decodeSuccess = decodeSuccess && arithDecoder->decodeInt(&rdy, iardyStats);
 	  }
-	  
+
 	  if (decodeSuccess && syms[symID])
 	  {
 	    refDX = ((rdw >= 0) ? rdw : rdw - 1) / 2 + rdx;
@@ -2446,7 +2452,7 @@ JBIG2Bitmap *JBIG2Stream::readTextRegion(GBool huff, GBool refine,
 	    s += bw;
 	  }
 	  if (ri) {
-	    delete symbolBitmap;
+	    if ( symbolBitmap ) delete symbolBitmap;
 	  }
 	} else {
 	  // NULL symbolBitmap only happens on error
@@ -2664,7 +2670,7 @@ void JBIG2Stream::readHalftoneRegionSeg(Guint segNum, GBool imm,
     xx = gridX + m * stepY;
     yy = gridY + m * stepX;
     for (n = 0; n < gridW; ++n) {
-      if (!(enableSkip && skipBitmap->getPixel(n, m))) {
+      if (!(enableSkip && skipBitmap && skipBitmap->getPixel(n, m))) {
 	patternBitmap = patternDict->getBitmap(grayImg[i]);
 	bitmap->combine(patternBitmap, xx >> 8, yy >> 8, combOp);
       }
@@ -3882,7 +3888,7 @@ void JBIG2Stream::readPageInfoSeg(Guint length) {
     pageBitmap = NULL;
     return;
   }
-  
+
   // default pixel value
   if (pageDefPixel) {
     pageBitmap->clearToOne();

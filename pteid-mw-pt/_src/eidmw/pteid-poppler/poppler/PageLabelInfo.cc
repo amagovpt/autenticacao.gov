@@ -118,7 +118,7 @@ static void toRoman(int number, GooString *str, GBool uppercase) {
        str->append(wh[2 * k + 0]);
       }
     }
-       
+
     divisor = divisor / 10;
   }
 }
@@ -325,6 +325,8 @@ GBool PageLabelInfo::indexToLabel(int index, GooString *label)
 
   if (i == intervals.getLength())
     return gFalse;
+
+  if ( interval == NULL ) return gFalse;
 
   number = index - base + interval->first;
   switch (interval->style) {

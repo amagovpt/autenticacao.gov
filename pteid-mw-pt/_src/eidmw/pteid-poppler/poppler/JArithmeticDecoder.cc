@@ -102,7 +102,7 @@ inline Guint JArithmeticDecoder::readByte() {
     }
   }
   ++nBytesRead;
-  return (Guint)str->getChar() & 0xff;
+  return (Guint)(str->getChar() & 0xff);
 }
 
 JArithmeticDecoder::~JArithmeticDecoder() {

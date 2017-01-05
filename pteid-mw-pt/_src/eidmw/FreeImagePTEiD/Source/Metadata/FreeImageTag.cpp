@@ -19,7 +19,7 @@
 // Use at your own risk!
 // ==========================================================
 
-#ifdef _MSC_VER 
+#ifdef _MSC_VER
 #pragma warning (disable : 4786) // identifier was truncated to 'number' characters
 #endif
 
@@ -31,7 +31,7 @@
 // FITAG header definition
 // --------------------------------------------------------------------------
 
-FI_STRUCT (FITAGHEADER) { 
+FI_STRUCT (FITAGHEADER) {
 	char *key;			// tag field name
 	char *description;	// tag description
 	WORD id;			// tag ID
@@ -45,12 +45,12 @@ FI_STRUCT (FITAGHEADER) {
 // FITAG creation / destruction
 // --------------------------------------------------------------------------
 
-FITAG * DLL_CALLCONV 
+FITAG * DLL_CALLCONV
 FreeImage_CreateTag() {
 	FITAG *tag = (FITAG *)malloc(sizeof(FITAG));
 
 	if (tag != NULL) {
-		unsigned tag_size = sizeof(FITAGHEADER); 
+		unsigned tag_size = sizeof(FITAGHEADER);
 		tag->data = (BYTE *)malloc(tag_size * sizeof(BYTE));
 		if (tag->data != NULL) {
 			memset(tag->data, 0, tag_size);
@@ -62,14 +62,14 @@ FreeImage_CreateTag() {
 	return NULL;
 }
 
-void DLL_CALLCONV 
+void DLL_CALLCONV
 FreeImage_DeleteTag(FITAG *tag) {
-	if (NULL != tag) {	
+	if (NULL != tag) {
 		if (NULL != tag->data) {
 			FITAGHEADER *tag_header = (FITAGHEADER *)tag->data;
 			// delete tag members
-			free(tag_header->key); 
-			free(tag_header->description); 
+			free(tag_header->key);
+			free(tag_header->description);
 			free(tag_header->value);
 			// delete the tag
 			free(tag->data);
@@ -79,7 +79,7 @@ FreeImage_DeleteTag(FITAG *tag) {
 	}
 }
 
-FITAG * DLL_CALLCONV 
+FITAG * DLL_CALLCONV
 FreeImage_CloneTag(FITAG *tag) {
 	if(!tag) return NULL;
 
@@ -148,42 +148,42 @@ FreeImage_CloneTag(FITAG *tag) {
 // FITAG getters / setters
 // --------------------------------------------------------------------------
 
-const char * DLL_CALLCONV 
+const char * DLL_CALLCONV
 FreeImage_GetTagKey(FITAG *tag) {
 	return tag ? ((FITAGHEADER *)tag->data)->key : 0;
 }
 
-const char * DLL_CALLCONV 
+const char * DLL_CALLCONV
 FreeImage_GetTagDescription(FITAG *tag) {
 	return tag ? ((FITAGHEADER *)tag->data)->description : 0;
 }
 
-WORD DLL_CALLCONV 
+WORD DLL_CALLCONV
 FreeImage_GetTagID(FITAG *tag) {
-	return tag ? ((FITAGHEADER *)tag->data)->id : 0;
+	return ((WORD)(tag ? ((FITAGHEADER *)tag->data)->id : 0));
 }
 
-FREE_IMAGE_MDTYPE DLL_CALLCONV 
+FREE_IMAGE_MDTYPE DLL_CALLCONV
 FreeImage_GetTagType(FITAG *tag) {
 	return tag ? (FREE_IMAGE_MDTYPE)(((FITAGHEADER *)tag->data)->type) : FIDT_NOTYPE;
 }
 
-DWORD DLL_CALLCONV 
+DWORD DLL_CALLCONV
 FreeImage_GetTagCount(FITAG *tag) {
 	return tag ? ((FITAGHEADER *)tag->data)->count : 0;
 }
 
-DWORD DLL_CALLCONV 
+DWORD DLL_CALLCONV
 FreeImage_GetTagLength(FITAG *tag) {
 	return tag ? ((FITAGHEADER *)tag->data)->length : 0;
 }
 
-const void *DLL_CALLCONV 
+const void *DLL_CALLCONV
 FreeImage_GetTagValue(FITAG *tag) {
 	return tag ? ((FITAGHEADER *)tag->data)->value : 0;
 }
 
-BOOL DLL_CALLCONV 
+BOOL DLL_CALLCONV
 FreeImage_SetTagKey(FITAG *tag, const char *key) {
 	if(tag && key) {
 		FITAGHEADER *tag_header = (FITAGHEADER *)tag->data;
@@ -195,7 +195,7 @@ FreeImage_SetTagKey(FITAG *tag, const char *key) {
 	return FALSE;
 }
 
-BOOL DLL_CALLCONV 
+BOOL DLL_CALLCONV
 FreeImage_SetTagDescription(FITAG *tag, const char *description) {
 	if(tag && description) {
 		FITAGHEADER *tag_header = (FITAGHEADER *)tag->data;
@@ -207,7 +207,7 @@ FreeImage_SetTagDescription(FITAG *tag, const char *description) {
 	return FALSE;
 }
 
-BOOL DLL_CALLCONV 
+BOOL DLL_CALLCONV
 FreeImage_SetTagID(FITAG *tag, WORD id) {
 	if(tag) {
 		FITAGHEADER *tag_header = (FITAGHEADER *)tag->data;
@@ -217,7 +217,7 @@ FreeImage_SetTagID(FITAG *tag, WORD id) {
 	return FALSE;
 }
 
-BOOL DLL_CALLCONV 
+BOOL DLL_CALLCONV
 FreeImage_SetTagType(FITAG *tag, FREE_IMAGE_MDTYPE type) {
 	if(tag) {
 		FITAGHEADER *tag_header = (FITAGHEADER *)tag->data;
@@ -227,7 +227,7 @@ FreeImage_SetTagType(FITAG *tag, FREE_IMAGE_MDTYPE type) {
 	return FALSE;
 }
 
-BOOL DLL_CALLCONV 
+BOOL DLL_CALLCONV
 FreeImage_SetTagCount(FITAG *tag, DWORD count) {
 	if(tag) {
 		FITAGHEADER *tag_header = (FITAGHEADER *)tag->data;
@@ -237,7 +237,7 @@ FreeImage_SetTagCount(FITAG *tag, DWORD count) {
 	return FALSE;
 }
 
-BOOL DLL_CALLCONV 
+BOOL DLL_CALLCONV
 FreeImage_SetTagLength(FITAG *tag, DWORD length) {
 	if(tag) {
 		FITAGHEADER *tag_header = (FITAGHEADER *)tag->data;
@@ -247,7 +247,7 @@ FreeImage_SetTagLength(FITAG *tag, DWORD length) {
 	return FALSE;
 }
 
-BOOL DLL_CALLCONV 
+BOOL DLL_CALLCONV
 FreeImage_SetTagValue(FITAG *tag, const void *value) {
 	if(tag && value) {
 		FITAGHEADER *tag_header = (FITAGHEADER *)tag->data;
@@ -295,26 +295,26 @@ FreeImage_SetTagValue(FITAG *tag, const void *value) {
 // FITAG internal helper functions
 // --------------------------------------------------------------------------
 
-unsigned 
+unsigned
 FreeImage_TagDataWidth(FREE_IMAGE_MDTYPE type) {
-	static const unsigned format_bytes[] = { 
-		0, // FIDT_NOTYPE	= 0,	// placeholder 
-		1, // FIDT_BYTE		= 1,	// 8-bit unsigned integer 
-		1, // FIDT_ASCII	= 2,	// 8-bit bytes w/ last byte null 
-		2, // FIDT_SHORT	= 3,	// 16-bit unsigned integer 
-		4, // FIDT_LONG		= 4,	// 32-bit unsigned integer 
-		8, // FIDT_RATIONAL	= 5,	// 64-bit unsigned fraction 
-		1, // FIDT_SBYTE	= 6,	// 8-bit signed integer 
-		1, // FIDT_UNDEFINED= 7,	// 8-bit untyped data 
-		2, // FIDT_SSHORT	= 8,	// 16-bit signed integer 
-		4, // FIDT_SLONG	= 9,	// 32-bit signed integer 
-		8, // FIDT_SRATIONAL= 10,	// 64-bit signed fraction 
-		4, // FIDT_FLOAT	= 11,	// 32-bit IEEE floating point 
-		8, // FIDT_DOUBLE	= 12,	// 64-bit IEEE floating point 
-		4, // FIDT_IFD		= 13,	// 32-bit unsigned integer (offset) 
-		4, // FIDT_PALETTE	= 14	// 32-bit RGBQUAD 
+	static const unsigned format_bytes[] = {
+		0, // FIDT_NOTYPE	= 0,	// placeholder
+		1, // FIDT_BYTE		= 1,	// 8-bit unsigned integer
+		1, // FIDT_ASCII	= 2,	// 8-bit bytes w/ last byte null
+		2, // FIDT_SHORT	= 3,	// 16-bit unsigned integer
+		4, // FIDT_LONG		= 4,	// 32-bit unsigned integer
+		8, // FIDT_RATIONAL	= 5,	// 64-bit unsigned fraction
+		1, // FIDT_SBYTE	= 6,	// 8-bit signed integer
+		1, // FIDT_UNDEFINED= 7,	// 8-bit untyped data
+		2, // FIDT_SSHORT	= 8,	// 16-bit signed integer
+		4, // FIDT_SLONG	= 9,	// 32-bit signed integer
+		8, // FIDT_SRATIONAL= 10,	// 64-bit signed fraction
+		4, // FIDT_FLOAT	= 11,	// 32-bit IEEE floating point
+		8, // FIDT_DOUBLE	= 12,	// 64-bit IEEE floating point
+		4, // FIDT_IFD		= 13,	// 32-bit unsigned integer (offset)
+		4, // FIDT_PALETTE	= 14	// 32-bit RGBQUAD
 		0, // placeholder (15)
-		8, // FIDT_LONG8	= 16,	// 64-bit unsigned integer 
+		8, // FIDT_LONG8	= 16,	// 64-bit unsigned integer
 		8, // FIDT_SLONG8	= 17,	// 64-bit signed integer
 		8  // FIDT_IFD8		= 18	// 64-bit unsigned integer (offset)
 	};
@@ -323,7 +323,7 @@ FreeImage_TagDataWidth(FREE_IMAGE_MDTYPE type) {
 		  format_bytes[type] : 0;
 }
 
-size_t 
+size_t
 FreeImage_GetTagMemorySize(FITAG *tag) {
 	size_t size = 0;
 	if (tag) {
