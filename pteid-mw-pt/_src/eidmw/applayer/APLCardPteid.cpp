@@ -665,12 +665,10 @@ void APL_EIDCard::doSODCheck(bool check){
 	if (m_FileID)
 		m_FileID->doSODCheck(check);
 
-	if (check){
-		if (!m_FileSod){
-			m_FileSod = getFileSod();
-			m_FileSod->doSODCheck(check);
-		}
-	}
+    if (!m_FileSod){
+        m_FileSod = getFileSod();
+        m_FileSod->doSODCheck(check);
+    }
 }
 
 
