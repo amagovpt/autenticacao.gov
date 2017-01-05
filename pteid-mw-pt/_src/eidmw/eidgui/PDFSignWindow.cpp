@@ -1149,8 +1149,13 @@ double PDFSignWindow::convertY()
 /* Coordinate conversion */
 void PDFSignWindow::setPosition(QPointF new_pos)
 {
+	//HACK: this is the rectangle height which would be a correctly scaled representation 
+	//of the real signature area
+	//Probably not accurate for small signature format...
+	double scaled_rectangle_height = m_landscape_mode ? 35.37 : 33.46;
+	
 	/* Check border limits */
-	if ( new_pos.rx() < margin ){
+	if ( new_pos.rx() < margin ) {
         this->rx = 0;
 	} else if ( new_pos.rx() > getMaxX() ){
         this->rx = getMaxX();
@@ -1168,7 +1173,10 @@ void PDFSignWindow::setPosition(QPointF new_pos)
 
     //Actual coordinates passed to SignPDF() expressed as a fraction
     sig_coord_x = this->rx/g_scene_width;
-    sig_coord_y = this->ry/g_scene_height;
+
+    //printf("eidgui: DEBUG: this->ry: %f\n", this->ry);
+    //Vertical coordinate needs the rectangle height offset because new_pos contains the top-left corner
+    sig_coord_y = (this->ry + scaled_rectangle_height) / (g_scene_height - 2*margin);
 
      ui.label_x->setText(tr("Horizontal position: %1")
         .arg(QString::number(convertX(), 'f', 1)));
@@ -1300,9 +1308,6 @@ void PDFSignWindow::addSquares()
     double scene_height = ui.scene_view->height()-2*margin;
     double scene_width = ui.scene_view->width()-2*margin;
 
-    // qDebug() << "scene_height: " << scene_height;
-    // qDebug() << "scene_width: " << scene_width;
-
     int h_lines = 0, v_lines = 0;
 
     if (m_landscape_mode)
@@ -1349,6 +1354,9 @@ void PDFSignWindow::addSquares()
         }
 
         my_rectangle = new DraggableRectangle(my_scene, scene_height, scene_width, scene_height/h_lines, scene_width/v_lines);
+        //If the rectangle should be correctly scaled it would be like this:
+        //my_rectangle = new DraggableRectangle(my_scene, scene_height, scene_width, 30, 50);
+
         my_rectangle->setToPos(QPointF(0, 0));
         my_scene->addItem(my_rectangle);
         my_rectangle->hide();
