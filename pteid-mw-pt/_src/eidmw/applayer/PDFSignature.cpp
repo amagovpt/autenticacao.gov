@@ -446,10 +446,13 @@ namespace eIDMW
 			{
 			    double sig_width = (width - lr_margin*2) / 3.0;
 			    double actual_sig_height =  m_small_signature ? sig_height / 2.0 : sig_height;
-			    sig_location.x1 = lr_margin+ (width-lr_margin*2)*location_x;
+			    //sig_location.x1 = lr_margin+ (width-lr_margin*2)*location_x;
+			    sig_location.x1 = (width)*location_x;
 
 			    //Coordinates from the GUI are inverted => (1- location_y)
-			    sig_location.y1 = tb_margin + (height-tb_margin*2) *(1.0-location_y)- actual_sig_height;
+			    //sig_location.y1 = tb_margin + (height-tb_margin*2) *(1.0-location_y)- actual_sig_height;
+			    sig_location.y1 = (height) *(1.0-location_y);
+
 			    sig_location.x2 = sig_location.x1 + sig_width;
 			    sig_location.y2 = sig_location.y1 + actual_sig_height;
 			}
