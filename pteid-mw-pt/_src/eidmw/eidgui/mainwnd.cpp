@@ -593,6 +593,7 @@ void MainWnd::on_btnAddress_Change_clicked()
    	m_progress_addr->open();
 	free(secret_codeUtf8);
 	free(processUtf8);
+	delete dlgChangeAddr;
 }
 
 void MainWnd::showJavaLaunchError(QProcess::ProcessError error)

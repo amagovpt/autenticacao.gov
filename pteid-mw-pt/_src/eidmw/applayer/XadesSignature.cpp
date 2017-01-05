@@ -826,6 +826,7 @@ bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
 				{
 					MWLOG(LEV_WARN, MOD_APL,
 						L"XadesSignature: failed to fetch CRL for certificate! Revocation data in Xades-A will be incomplete...");
+                    free(crl_url);
 					continue;
 				}
 
@@ -836,10 +837,10 @@ bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
 				crl_node->appendChild(dom->createTextNode(XMLString::transcode(base64_str)));
 				crl_values_node->appendChild(crl_node);
 				free(base64_str);
-				
+
 
 			}
-			free(crl_url);
+			if (crl_url != NULL) free(crl_url);
 		}
 	}
 
@@ -1311,6 +1312,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		MWLOG(LEV_ERROR, MOD_APL, L"An error occured during a signature load. Message: %s\n",
 		 e.getMsg());
 		xerces_exception = true;
+        delete emptyBa;
 		throw;
 	}
 	delete ssl_cert;
@@ -1322,7 +1324,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	doc->release();
 
 
-    delete emptyBa;//LL
+    delete emptyBa;
 	return *xml_output;
 }
 

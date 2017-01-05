@@ -97,7 +97,9 @@ unsigned char GenericPinpad::ToPinBlockString(const tPin & pin)
 	case PIN_ENC_BCD:
 		return (unsigned char ) pin.ulStoredLen;
 	case PIN_ENC_GP:
-		return ( ((unsigned char)(0x40)) | ((unsigned char ) (pin.ulStoredLen - 1)));
+		unsigned char ulStoredLen = (unsigned char)(pin.ulStoredLen - 1);
+		ulStoredLen |= 0x40;
+		return ulStoredLen;
 	}
 	return (unsigned char ) pin.ulStoredLen;
 }
