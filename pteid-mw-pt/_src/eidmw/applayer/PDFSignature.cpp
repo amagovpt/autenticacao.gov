@@ -189,7 +189,7 @@ namespace eIDMW
 		sig_rect.y2 += signature_height + tb_margin + vert_align;
 
 
-		fprintf(stderr, "DEBUG: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
+		fprintf(stderr, "computeSigLocationFromSectorLandscape: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
 
 		return sig_rect;
 	}
@@ -248,7 +248,7 @@ namespace eIDMW
 		sig_rect.x2 += sig_width;
 		sig_rect.y2 += signature_height + tb_margin + vert_align;
 
-		fprintf(stderr, "DEBUG: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
+		fprintf(stderr, "computeSigLocationFromSector: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
 		return sig_rect;
 	}
 
@@ -430,6 +430,14 @@ namespace eIDMW
 
 		double height = p_media->y2, width = p_media->x2;
 
+		//Fix dimensions for the /Rotate case
+		if (m_isLandscape && height > width)
+		{
+			double dim1 = height;
+			height = width;
+			width = dim1;
+		}
+
 		if (m_visible)
 		{
 			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Location_x: %f, location_y: %f",
@@ -444,7 +452,8 @@ namespace eIDMW
 			}
 			else
 			{
-			    double sig_width = (width - lr_margin*2) / 3.0;
+				//2 different ways to calculate the same value: sig_width
+			    double sig_width = width > height ? (height -lr_margin*2) / 3.0 : (width - lr_margin*2) / 3.0;
 			    double actual_sig_height =  m_small_signature ? sig_height / 2.0 : sig_height;
 			    //sig_location.x1 = lr_margin+ (width-lr_margin*2)*location_x;
 			    sig_location.x1 = (width)*location_x;
@@ -457,6 +466,15 @@ namespace eIDMW
 			    sig_location.y2 = sig_location.y1 + actual_sig_height;
 			}
 
+		}
+		fprintf(stderr, "Signature rectangle before rotation (if needed) (%f, %f, %f, %f)\n", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+
+		if (p->getRotate() == 90)
+		{
+			//Apply Rotation of R: R' = [-y2, x1, -y1, x2]
+			sig_location = PDFRectangle(height-sig_location.y2, sig_location.x1,
+			              height-sig_location.y1, sig_location.x2);
+			fprintf(stderr, "Rotating rectangle to (%f, %f, %f, %f)\n", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
 		}
 
 		unsigned char *to_sign;

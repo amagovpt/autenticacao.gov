@@ -313,8 +313,17 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	signature_field.dictAdd(copyString("T"), obj2.initString(GooString::format("Signature{0:ud}", 
 					getBigRandom())));
 
+	Page *page_obj = getPage(page);
+
+	bool rotate_signature = false;
+
+	if (page_obj->getRotate() == 90)
+	{
+		rotate_signature = true;
+	}
+
 	addSignatureAppearance(&signature_field, name, civil_number, date_outstr,
-		 location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length);
+		 location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature);
 
 	memset(date_outstr, 0, sizeof(date_outstr));
 
@@ -855,10 +864,18 @@ GooString *formatMultilineString(char *content, double available_space, double f
 
 void Catalog::addSignatureAppearance(Object *signature_field, const char *name, const char *civil_number,
 	char * date_str, const char* location, const char* reason, int rect_x, int rect_y,
-	unsigned char *img_data, unsigned long img_length)
+	unsigned char *img_data, unsigned long img_length, bool rotate_signature)
 {
 	Object ap_dict, appearance_obj, obj1, obj2, obj3,
 	       ref_to_dict, ref_to_dict2, ref_to_n2, ref_to_n0, font_dict, xobject_layers;
+
+	GooString ap_command_toplevel;
+
+	if (rotate_signature)
+	{
+		ap_command_toplevel.appendf("0 1 -1 0 {0:d} 0 cm \r\n", rect_x);
+
+	}
 
 	std::string commands_template;
 
@@ -866,24 +883,26 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	if (small_signature_format)
 		commands_template = "q\r\n40.5 0 0 31.5 0 0 cm\r\n/Im1 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
 	else
-		commands_template = "q\r\n40.5 0 0 31.5 0 43 cm\r\n/Im1 Do\r\nQ\r\nq\r\n138.0 0 0 30.0 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
+		commands_template = "q\r\n40.5 0 0 31.5 0 43 cm\r\n/Im1 Do\r\nQ\r\nq\r\n139.29 0 0 30.87 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
+		//commands_template = "q\r\n/Im1 Do\r\nQ\r\nq\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
 
 	initBuiltinFontTables();
 	
-	const char appearance_command1[] = 
-		"q 1 0 0 1 0 0 cm /n0 Do Q\r\nq 1 0 0 1 0 0 cm /n2 Do Q\r\n";
-	
+	//const char appearance_command1[] = 
+	ap_command_toplevel.append("q 1 0 0 1 0 0 cm /n0 Do Q\r\nq 1 0 0 1 0 0 cm /n2 Do Q\r\n");
+		
 	char n0_commands[] = "% DSBlank\n";
 	const float font_size = 8;
+	int rect_width = rotate_signature ? rect_y : rect_x;
+	int rect_height = rotate_signature ? rect_x : rect_y;
 	
 	//Start with Italics font
-	GooString *n2_commands = GooString::format(commands_template.c_str(), rect_y - 10, (int)font_size);
-	
+	GooString *n2_commands = GooString::format(commands_template.c_str(), rect_height - 10, (int)font_size);
 
 	if (!small_signature_format && reason != NULL && strlen(reason) > 0)
 	{
 		char * reason_latin1 = utf8_to_latin1(reason);
-		GooString * multiline = formatMultilineString(reason_latin1, rect_x, font_size, MYRIAD_ITALIC, 2);
+		GooString * multiline = formatMultilineString(reason_latin1, rect_width, font_size, MYRIAD_ITALIC, 2);
 		n2_commands->append(multiline);
 
 		free(reason_latin1);
@@ -907,7 +926,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	//The parameter 5 in lines is intended to allow as much lines as needed to the name field	
 	char * name_latin1 = utf8_to_latin1(name);
 	GooString *name_str = formatMultilineString(name_latin1, 
-					rect_x, font_size, MYRIAD_BOLD, 5, rect_x - assinado_por_length);
+					rect_width, font_size, MYRIAD_BOLD, 5, rect_width - assinado_por_length);
 	n2_commands->append(name_str);
 
 	int lines = 0;
@@ -946,7 +965,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 					location_latin1);
 
 		GooString * multiline2 = formatMultilineString(tmp_location->getCString(), 
-					rect_x, font_size, MYRIAD_REGULAR, 1); 
+					rect_width, font_size, MYRIAD_REGULAR, 1); 
 		n2_commands->append(multiline2);
 
 		delete multiline2;
@@ -971,7 +990,8 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	resources.dictAdd(copyString("ProcSet"), &procset);
 
 	xobject_layers.initDict(xref);
-	Ref n2_layer = newXObject(n2_commands->getCString(), rect_x, rect_y, true, true, img_data, img_length);
+	Ref n2_layer = newXObject(n2_commands->getCString(), rotate_signature ? rect_y : rect_x, rotate_signature ? rect_x : rect_y,
+	 true, true, img_data, img_length);
 	ref_to_n2.initRef(n2_layer.num, n2_layer.gen);
 	xobject_layers.dictAdd(copyString("n2"), &ref_to_n2);
 
@@ -994,12 +1014,12 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	obj1.arrayAdd(obj2.initReal(rect_y));
 	appearance_obj.dictAdd(copyString("BBox"), &obj1);
 	appearance_obj.dictAdd(copyString("Length"), 
-			obj1.initInt(strlen(appearance_command1)));
+			obj1.initInt(ap_command_toplevel.getLength()));
 
 	//appearance_obj.dictAdd(copyString("Filter"), obj1.initName("FlateDecode"));
 
-	MemStream *mStream = new MemStream(strdup(appearance_command1), 0,
-			sizeof(appearance_command1), &appearance_obj);
+	MemStream *mStream = new MemStream(strdup(ap_command_toplevel.getCString()), 0,
+			ap_command_toplevel.getLength(), &appearance_obj);
 
 	mStream->setNeedFree(gTrue);
 	Object aStream;
