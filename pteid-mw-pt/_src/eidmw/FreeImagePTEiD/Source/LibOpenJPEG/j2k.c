@@ -8185,8 +8185,10 @@ opj_codestream_index_t* opj_j2k_create_cstr_index(void)
         cstr_index->marknum = 0;
         cstr_index->marker = (opj_marker_info_t*)
                         opj_calloc(cstr_index->maxmarknum, sizeof(opj_marker_info_t));
-        if (!cstr_index-> marker)
-                return NULL;
+        if (!cstr_index-> marker){
+            opj_free( cstr_index );
+            return NULL;
+        }
 
         cstr_index->tile_index = NULL;
 
@@ -9300,6 +9302,7 @@ static OPJ_BOOL opj_j2k_decode_one_tile (       opj_j2k_t *p_j2k,
                         /* move into the codestream to the the first SOT (FIXME or not move?)*/
                         if (!(opj_stream_read_seek(p_stream, p_j2k->cstr_index->main_head_end + 2, p_manager) ) ) {
                                 opj_event_msg(p_manager, EVT_ERROR, "Problem with seek function\n");
+                                opj_free(l_current_data);
                                 return OPJ_FALSE;
                         }
                         break;
@@ -9537,6 +9540,7 @@ OPJ_BOOL opj_j2k_encode(opj_j2k_t * p_j2k,
                 opj_j2k_get_tile_data(p_j2k->m_tcd,l_current_data);
 
                 if (! opj_j2k_post_write_tile (p_j2k,l_current_data,l_current_tile_size,p_stream,p_manager)) {
+                        opj_free(l_current_data);
                         return OPJ_FALSE;
                 }
         }

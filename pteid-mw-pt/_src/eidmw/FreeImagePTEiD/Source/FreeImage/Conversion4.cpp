@@ -240,6 +240,8 @@ FreeImage_ConvertTo4Bits(FIBITMAP *dib) {
 				return new_dib;
 			}
 		}
+
+        FreeImage_Unload( new_dib );
 	}
 
 	return FreeImage_Clone(dib);

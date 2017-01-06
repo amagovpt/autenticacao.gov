@@ -118,11 +118,14 @@ CacheFile::allocateBlock() {
 	}
 
 	m_page_cache_mem.push_front(block);
-	m_page_map[block->nr] = m_page_cache_mem.begin();
+
+	int nr = block->nr;
+	m_page_map[nr] = m_page_cache_mem.begin();
 
 	cleanupMemCache();
 
-	return block->nr;
+	delete block;
+	return nr;
 }
 
 Block *

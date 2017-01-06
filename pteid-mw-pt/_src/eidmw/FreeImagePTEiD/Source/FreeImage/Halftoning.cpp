@@ -274,6 +274,7 @@ static FIBITMAP* OrderedClusteredDot(FIBITMAP *dib, int order) {
 			matrix = &cluster8[0];
 			break;
 		default:
+            FreeImage_Unload( new_dib );
 			return NULL;
 	}
 

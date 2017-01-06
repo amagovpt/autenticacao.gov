@@ -192,7 +192,9 @@ FreeImage_ConvertTo24Bits(FIBITMAP *dib) {
 				return new_dib;
 			}
 		}
-	
+
+        FreeImage_Unload( new_dib );
+
 	} else if(image_type == FIT_RGB16) {
 		FIBITMAP *new_dib = FreeImage_Allocate(width, height, 24, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK);
 		if(new_dib == NULL) {
