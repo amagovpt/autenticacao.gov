@@ -47,10 +47,10 @@ unix:!macx: {
 }
 
 ## Specific libs for the wrapper
-LIBS += -lpython3.3m
+LIBS += -lpython3.5m
 
 ## Specific includes so the wraper compiles
-INCLUDEPATH += /usr/include/python3.3m /usr/include/x86_64-linux-gnu/python3.3m
+INCLUDEPATH += /usr/include/python3.5m /usr/include/x86_64-linux-gnu/python3.5m
 
 ## destination directory
 DESTDIR = ./GeneratedModule
