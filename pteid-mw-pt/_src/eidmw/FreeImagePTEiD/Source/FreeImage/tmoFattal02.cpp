@@ -26,17 +26,17 @@
 // ----------------------------------------------------------
 // Gradient domain HDR compression
 // Reference:
-// [1] R. Fattal, D. Lischinski, and M.Werman, 
+// [1] R. Fattal, D. Lischinski, and M.Werman,
 // Gradient domain high dynamic range compression,
-// ACM Transactions on Graphics, special issue on Proc. of ACM SIGGRAPH 2002, 
+// ACM Transactions on Graphics, special issue on Proc. of ACM SIGGRAPH 2002,
 // San Antonio, Texas, vol. 21(3), pp. 257-266, 2002.
 // ----------------------------------------------------------
 
 static const float EPSILON = 1e-4F;
 
 /**
-Performs a 5 by 5 gaussian filtering using two 1D convolutions, 
-followed by a subsampling by 2. 
+Performs a 5 by 5 gaussian filtering using two 1D convolutions,
+followed by a subsampling by 2.
 @param dib Input image
 @return Returns a blurred image of size SIZE(dib)/2
 @see GaussianPyramid
@@ -85,7 +85,7 @@ static FIBITMAP* GaussianLevel5x5(FIBITMAP *dib) {
 		src_pixel = (float*)FreeImage_GetBits(h_dib);
 		dst_pixel = (float*)FreeImage_GetBits(v_dib);
 
-		for(unsigned x = 0; x < width; x++) {		
+		for(unsigned x = 0; x < width; x++) {
 			// work on column x
 			for(unsigned y = 2; y < height - 2; y++) {
 				const unsigned index = y*pitch + x;
@@ -118,9 +118,9 @@ static FIBITMAP* GaussianLevel5x5(FIBITMAP *dib) {
 }
 
 /**
-Compute a Gaussian pyramid using the specified number of levels. 
+Compute a Gaussian pyramid using the specified number of levels.
 @param H Original bitmap
-@param pyramid Resulting pyramid array 
+@param pyramid Resulting pyramid array
 @param nlevels Number of resolution levels
 @return Returns TRUE if successful, returns FALSE otherwise
 */
@@ -147,8 +147,8 @@ static BOOL GaussianPyramid(FIBITMAP *H, FIBITMAP **pyramid, int nlevels) {
 }
 
 /**
-Compute the gradient magnitude of an input image H using central differences, 
-and returns the average gradient. 
+Compute the gradient magnitude of an input image H using central differences,
+and returns the average gradient.
 @param H Input image
 @param avgGrad [out] Average gradient
 @param k Level number
@@ -167,12 +167,12 @@ static FIBITMAP* GradientLevel(FIBITMAP *H, float *avgGrad, int k) {
 
 		G = FreeImage_AllocateT(image_type, width, height);
 		if(!G) throw(1);
-		
+
 		const unsigned pitch = FreeImage_GetPitch(H) / sizeof(float);
-		
+
 		const float divider = (float)(1 << (k + 1));
 		float average = 0;
-		
+
 		float *src_pixel = (float*)FreeImage_GetBits(H);
 		float *dst_pixel = (float*)FreeImage_GetBits(G);
 
@@ -181,7 +181,7 @@ static FIBITMAP* GradientLevel(FIBITMAP *H, float *avgGrad, int k) {
 			const unsigned s = (y+1 == height ? y : y+1);
 			for(unsigned x = 0; x < width; x++) {
 				const unsigned w = (x == 0 ? 0 : x-1);
-				const unsigned e = (x+1 == width ? x : x+1);		
+				const unsigned e = (x+1 == width ? x : x+1);
 				// central difference
 				const float gx = (src_pixel[y*pitch+e] - src_pixel[y*pitch+w]) / divider; // [Hk(x+1, y) - Hk(x-1, y)] / 2**(k+1)
 				const float gy = (src_pixel[s*pitch+x] - src_pixel[n*pitch+x]) / divider; // [Hk(x, y+1) - Hk(x, y-1)] / 2**(k+1)
@@ -193,7 +193,7 @@ static FIBITMAP* GradientLevel(FIBITMAP *H, float *avgGrad, int k) {
 			// next line
 			dst_pixel += pitch;
 		}
-		
+
 		*avgGrad = average / (width * height);
 
 		return G;
@@ -259,15 +259,15 @@ static FIBITMAP* PhiMatrix(FIBITMAP **gradients, float *avgGrad, int nlevels, fl
 			const unsigned pitch = FreeImage_GetPitch(Gk) / sizeof(float);
 
 			// parameter alpha is 0.1 times the average gradient magnitude
-			// also, note the factor of 2**k in the denominator; 
-			// that is there to correct for the fact that an average gradient avgGrad(H) over 2**k pixels 
-			// in the original image will appear as a gradient grad(Hk) = 2**k*avgGrad(H) over a single pixel in Hk. 
+			// also, note the factor of 2**k in the denominator;
+			// that is there to correct for the fact that an average gradient avgGrad(H) over 2**k pixels
+			// in the original image will appear as a gradient grad(Hk) = 2**k*avgGrad(H) over a single pixel in Hk.
 			float ALPHA =  alpha * avgGrad[k] * (float)((int)1 << k);
 			if(ALPHA == 0) ALPHA = EPSILON;
 
 			phi[k] = FreeImage_AllocateT(FIT_FLOAT, width, height);
 			if(!phi[k]) throw(1);
-			
+
 			src_pixel = (float*)FreeImage_GetBits(Gk);
 			dst_pixel = (float*)FreeImage_GetBits(phi[k]);
 			for(unsigned y = 0; y < height; y++) {
@@ -327,8 +327,8 @@ static FIBITMAP* PhiMatrix(FIBITMAP **gradients, float *avgGrad, int nlevels, fl
 }
 
 /**
-Compute gradients in x and y directions, attenuate them with the attenuation matrix, 
-then compute the divergence div G from the attenuated gradient. 
+Compute gradients in x and y directions, attenuate them with the attenuation matrix,
+then compute the divergence div G from the attenuated gradient.
 @param H Normalized luminance
 @param PHI Attenuation matrix
 @return Returns the divergence matrix if successful, returns NULL otherwise
@@ -348,9 +348,9 @@ static FIBITMAP* Divergence(FIBITMAP *H, FIBITMAP *PHI) {
 		if(!Gx) throw(1);
 		Gy = FreeImage_AllocateT(image_type, width, height);
 		if(!Gy) throw(1);
-		
+
 		const unsigned pitch = FreeImage_GetPitch(H) / sizeof(float);
-		
+
 		// perform gradient attenuation
 
 		phi = (float*)FreeImage_GetBits(PHI);
@@ -360,7 +360,7 @@ static FIBITMAP* Divergence(FIBITMAP *H, FIBITMAP *PHI) {
 
 		for(unsigned y = 0; y < height; y++) {
 			const unsigned s = (y+1 == height ? y : y+1);
-			for(unsigned x = 0; x < width; x++) {				
+			for(unsigned x = 0; x < width; x++) {
 				const unsigned e = (x+1 == width ? x : x+1);
 				// forward difference
 				const unsigned index = y*pitch + x;
@@ -378,13 +378,13 @@ static FIBITMAP* Divergence(FIBITMAP *H, FIBITMAP *PHI) {
 
 		divG = FreeImage_AllocateT(image_type, width, height);
 		if(!divG) throw(1);
-		
+
 		gx  = (float*)FreeImage_GetBits(Gx);
 		gy  = (float*)FreeImage_GetBits(Gy);
 		divg = (float*)FreeImage_GetBits(divG);
 
 		for(unsigned y = 0; y < height; y++) {
-			for(unsigned x = 0; x < width; x++) {				
+			for(unsigned x = 0; x < width; x++) {
 				// backward difference approximation
 				// divG = Gx(x, y) - Gx(x-1, y) + Gy(x, y) - Gy(x, y-1)
 				const unsigned index = y*pitch + x;
@@ -394,7 +394,7 @@ static FIBITMAP* Divergence(FIBITMAP *H, FIBITMAP *PHI) {
 			}
 		}
 
-		// no longer needed ... 
+		// no longer needed ...
 		FreeImage_Unload(Gx);
 		FreeImage_Unload(Gy);
 
@@ -410,8 +410,8 @@ static FIBITMAP* Divergence(FIBITMAP *H, FIBITMAP *PHI) {
 }
 
 /**
-Given the luminance channel, find max & min luminance values, 
-normalize to range 0..100 and take the logarithm. 
+Given the luminance channel, find max & min luminance values,
+normalize to range 0..100 and take the logarithm.
 @param Y Image luminance
 @return Returns the normalized luminance H if successful, returns NULL otherwise
 */
@@ -441,7 +441,10 @@ static FIBITMAP* LogLuminance(FIBITMAP *Y) {
 			// next line
 			bits += pitch;
 		}
-		if(maxLum == minLum) throw(1);
+		if(maxLum == minLum){
+            FreeImage_Unload(H);
+            throw(1);
+		}
 
 		// normalize to range 0..100 and take the logarithm
 		const float scale = 100.F / (maxLum - minLum);
@@ -465,7 +468,7 @@ static FIBITMAP* LogLuminance(FIBITMAP *Y) {
 }
 
 /**
-Given a normalized luminance, perform exponentiation and recover the log compressed image 
+Given a normalized luminance, perform exponentiation and recover the log compressed image
 @param Y Input/Output luminance image
 */
 static void ExpLuminance(FIBITMAP *Y) {
@@ -510,7 +513,7 @@ static FIBITMAP* tmoFattal02(FIBITMAP *Y, float alpha, float beta) {
 		// get the normalized luminance
 		FIBITMAP *H = LogLuminance(Y);
 		if(!H) throw(1);
-		
+
 		// get the number of levels for the pyramid
 		const unsigned width = FreeImage_GetWidth(H);
 		const unsigned height = FreeImage_GetHeight(H);
@@ -522,10 +525,16 @@ static FIBITMAP* tmoFattal02(FIBITMAP *Y, float alpha, float beta) {
 
 		// create the Gaussian pyramid
 		pyramid = (FIBITMAP**)malloc(nlevels * sizeof(FIBITMAP*));
-		if(!pyramid) throw(1);
+		if(!pyramid){
+            FreeImage_Unload(H); H = NULL;
+            throw(1);
+		}
 		memset(pyramid, 0, nlevels * sizeof(FIBITMAP*));
 
-		if(!GaussianPyramid(H, pyramid, nlevels)) throw(1);
+		if(!GaussianPyramid(H, pyramid, nlevels)){
+            free(pyramid); pyramid = NULL;
+            FreeImage_Unload(H); H = NULL;
+		} throw(1);
 
 		// calculate gradient magnitude and its average value on each pyramid level
 		gradients = (FIBITMAP**)malloc(nlevels * sizeof(FIBITMAP*));
@@ -553,10 +562,13 @@ static FIBITMAP* tmoFattal02(FIBITMAP *Y, float alpha, float beta) {
 		free(gradients); gradients = NULL;
 		free(avgGrad); avgGrad = NULL;
 
-		// compute gradients in x and y directions, attenuate them with the attenuation matrix, 
-		// then compute the divergence div G from the attenuated gradient. 
+		// compute gradients in x and y directions, attenuate them with the attenuation matrix,
+		// then compute the divergence div G from the attenuated gradient.
 		divG = Divergence(H, phy);
-		if(!divG) throw(1);
+		if(!divG){
+            FreeImage_Unload(H); H = NULL;
+            throw(1);
+		}
 
 		// H & phy no longer needed
 		FreeImage_Unload(H); H = NULL;
@@ -607,8 +619,8 @@ Apply the Gradient Domain High Dynamic Range Compression to a RGBF image and con
 @param attenuation Atenuation factor (beta parameter in the paper) in [0.8..0.9]
 @return Returns a 24-bit RGB image if successful, returns NULL otherwise
 */
-FIBITMAP* DLL_CALLCONV 
-FreeImage_TmoFattal02(FIBITMAP *dib, double color_saturation, double attenuation) {	
+FIBITMAP* DLL_CALLCONV
+FreeImage_TmoFattal02(FIBITMAP *dib, double color_saturation, double attenuation) {
 	const float alpha = 0.1F;									// parameter alpha = 0.1
 	const float beta = (float)MAX(0.8, MIN(0.9, attenuation));	// parameter beta = [0.8..0.9]
 	const float s = (float)MAX(0.4, MIN(0.6, color_saturation));// exponent s controls color saturation = [0.4..0.6]
@@ -677,7 +689,7 @@ FreeImage_TmoFattal02(FIBITMAP *dib, double color_saturation, double attenuation
 
 		// copy metadata from src to dst
 		FreeImage_CloneMetadata(dst, dib);
-		
+
 		return dst;
 
 	} catch(int) {

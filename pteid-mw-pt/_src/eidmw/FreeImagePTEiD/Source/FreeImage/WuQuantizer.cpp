@@ -7,16 +7,16 @@
 // Univ. of Western Ontario
 // London, Ontario N6A 5B7
 // wu@csd.uwo.ca
-// 
+//
 // Algorithm: Greedy orthogonal bipartition of RGB space for variance
 // 	   minimization aided by inclusion-exclusion tricks.
 // 	   For speed no nearest neighbor search is done. Slightly
 // 	   better performance can be expected by more sophisticated
 // 	   but more expensive versions.
-// 
+//
 // The author thanks Tom Lane at Tom_Lane@G.GP.CS.CMU.EDU for much of
 // additional documentation and a cure to a previous bug.
-// 
+//
 // Free to distribute, comments and suggestions are appreciated.
 ///////////////////////////////////////////////////////////////////////
 
@@ -98,7 +98,7 @@ WuQuantizer::~WuQuantizer() {
 // NB: these must start out 0!
 
 // Build 3-D color histogram of counts, r/g/b, c^2
-void 
+void
 WuQuantizer::Hist3D(LONG *vwt, LONG *vmr, LONG *vmg, LONG *vmb, float *m2, int ReserveSize, RGBQUAD *ReservePalette) {
 	int ind = 0;
 	int inr, ing, inb, table[256];
@@ -181,7 +181,7 @@ WuQuantizer::Hist3D(LONG *vwt, LONG *vmr, LONG *vmg, LONG *vmb, float *m2, int R
 // the sums of the above quantities over any desired box.
 
 // Compute cumulative moments
-void 
+void
 WuQuantizer::M3D(LONG *vwt, LONG *vmr, LONG *vmg, LONG *vmb, float *m2) {
 	unsigned ind1, ind2;
 	BYTE i, r, g, b;
@@ -197,11 +197,11 @@ WuQuantizer::M3D(LONG *vwt, LONG *vmr, LONG *vmg, LONG *vmb, float *m2) {
 		for(g = 1; g <= 32; g++) {
 			line2 = 0;
 			line = line_r = line_g = line_b = 0;
-			for(b = 1; b <= 32; b++) {			 
+			for(b = 1; b <= 32; b++) {
 				ind1 = INDEX(r, g, b); // [r][g][b]
 				line += vwt[ind1];
-				line_r += vmr[ind1]; 
-				line_g += vmg[ind1]; 
+				line_r += vmr[ind1];
+				line_g += vmg[ind1];
 				line_b += vmb[ind1];
 				line2 += m2[ind1];
 				area[b] += line;
@@ -221,9 +221,9 @@ WuQuantizer::M3D(LONG *vwt, LONG *vmr, LONG *vmg, LONG *vmb, float *m2) {
 }
 
 // Compute sum over a box of any given statistic
-LONG 
+LONG
 WuQuantizer::Vol( Box *cube, LONG *mmt ) {
-    return( mmt[INDEX(cube->r1, cube->g1, cube->b1)] 
+    return( mmt[INDEX(cube->r1, cube->g1, cube->b1)]
 		  - mmt[INDEX(cube->r1, cube->g1, cube->b0)]
 		  - mmt[INDEX(cube->r1, cube->g0, cube->b1)]
 		  + mmt[INDEX(cube->r1, cube->g0, cube->b0)]
@@ -242,7 +242,7 @@ WuQuantizer::Vol( Box *cube, LONG *mmt ) {
 // Compute part of Vol(cube, mmt) that doesn't depend on r1, g1, or b1
 // (depending on dir)
 
-LONG 
+LONG
 WuQuantizer::Bottom(Box *cube, BYTE dir, LONG *mmt) {
     switch(dir)
 	{
@@ -273,18 +273,18 @@ WuQuantizer::Bottom(Box *cube, BYTE dir, LONG *mmt) {
 // Compute remainder of Vol(cube, mmt), substituting pos for
 // r1, g1, or b1 (depending on dir)
 
-LONG 
+LONG
 WuQuantizer::Top(Box *cube, BYTE dir, int pos, LONG *mmt) {
     switch(dir)
 	{
 		case FI_RGBA_RED:
-			return( mmt[INDEX(pos, cube->g1, cube->b1)] 
+			return( mmt[INDEX(pos, cube->g1, cube->b1)]
 				   -mmt[INDEX(pos, cube->g1, cube->b0)]
 				   -mmt[INDEX(pos, cube->g0, cube->b1)]
 				   +mmt[INDEX(pos, cube->g0, cube->b0)] );
 			break;
 		case FI_RGBA_GREEN:
-			return( mmt[INDEX(cube->r1, pos, cube->b1)] 
+			return( mmt[INDEX(cube->r1, pos, cube->b1)]
 				   -mmt[INDEX(cube->r1, pos, cube->b0)]
 				   -mmt[INDEX(cube->r0, pos, cube->b1)]
 				   +mmt[INDEX(cube->r0, pos, cube->b0)] );
@@ -300,15 +300,15 @@ WuQuantizer::Top(Box *cube, BYTE dir, int pos, LONG *mmt) {
 	return 0;
 }
 
-// Compute the weighted variance of a box 
-// NB: as with the raw statistics, this is really the variance * ImageSize 
+// Compute the weighted variance of a box
+// NB: as with the raw statistics, this is really the variance * ImageSize
 
 float
 WuQuantizer::Var(Box *cube) {
-    float dr = (float) Vol(cube, mr); 
-    float dg = (float) Vol(cube, mg); 
+    float dr = (float) Vol(cube, mr);
+    float dg = (float) Vol(cube, mg);
     float db = (float) Vol(cube, mb);
-    float xx =  gm2[INDEX(cube->r1, cube->g1, cube->b1)] 
+    float xx =  gm2[INDEX(cube->r1, cube->g1, cube->b1)]
 			-gm2[INDEX(cube->r1, cube->g1, cube->b0)]
 			 -gm2[INDEX(cube->r1, cube->g0, cube->b1)]
 			 +gm2[INDEX(cube->r1, cube->g0, cube->b0)]
@@ -317,7 +317,7 @@ WuQuantizer::Var(Box *cube) {
 			 +gm2[INDEX(cube->r0, cube->g0, cube->b1)]
 			 -gm2[INDEX(cube->r0, cube->g0, cube->b0)];
 
-    return (xx - (dr*dr+dg*dg+db*db)/(float)Vol(cube,wt));    
+    return (xx - (dr*dr+dg*dg+db*db)/(float)Vol(cube,wt));
 }
 
 // We want to minimize the sum of the variances of two subboxes.
@@ -385,8 +385,8 @@ WuQuantizer::Cut(Box *set1, Box *set2) {
     LONG whole_b = Vol(set1, mb);
     LONG whole_w = Vol(set1, wt);
 
-    float maxr = Maximize(set1, FI_RGBA_RED, set1->r0+1, set1->r1, &cutr, whole_r, whole_g, whole_b, whole_w);    
-	float maxg = Maximize(set1, FI_RGBA_GREEN, set1->g0+1, set1->g1, &cutg, whole_r, whole_g, whole_b, whole_w);    
+    float maxr = Maximize(set1, FI_RGBA_RED, set1->r0+1, set1->r1, &cutr, whole_r, whole_g, whole_b, whole_w);
+	float maxg = Maximize(set1, FI_RGBA_GREEN, set1->g0+1, set1->g1, &cutg, whole_r, whole_g, whole_b, whole_w);
 	float maxb = Maximize(set1, FI_RGBA_BLUE, set1->b0+1, set1->b1, &cutb, whole_r, whole_g, whole_b, whole_w);
 
     if ((maxr >= maxg) && (maxr >= maxb)) {
@@ -454,7 +454,7 @@ WuQuantizer::Quantize(int PaletteSize, int ReserveSize, RGBQUAD *ReservePalette)
 		LONG i, weight;
 		int k;
 		float vv[MAXCOLOR], temp;
-		
+
 		// Compute 3D histogram
 
 		Hist3D(wt, mr, mg, mb, gm2, ReserveSize, ReservePalette);
@@ -516,6 +516,7 @@ WuQuantizer::Quantize(int PaletteSize, int ReserveSize, RGBQUAD *ReservePalette)
 
 		tag = (BYTE*) malloc(SIZE_3D * sizeof(BYTE));
 		if (tag == NULL) {
+            FreeImage_Unload(new_dib);
 			throw FI_MSG_ERROR_MEMORY;
 		}
 		memset(tag, 0, SIZE_3D * sizeof(BYTE));
@@ -531,7 +532,7 @@ WuQuantizer::Quantize(int PaletteSize, int ReserveSize, RGBQUAD *ReservePalette)
 			} else {
 				// Error: bogus box 'k'
 
-				new_pal[k].rgbRed = new_pal[k].rgbGreen = new_pal[k].rgbBlue = 0;		
+				new_pal[k].rgbRed = new_pal[k].rgbGreen = new_pal[k].rgbBlue = 0;
 			}
 		}
 

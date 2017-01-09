@@ -311,8 +311,14 @@ FreeImage_OpenMultiBitmap(FREE_IMAGE_FORMAT fif, const char *filename, BOOL crea
 				}
 				// return the multibitmap
 				// std::bad_alloc won't be thrown from here on
-				header.release(); // now owned by bitmap
-				io.release();	  // now owned by bitmap
+
+
+				MULTIBITMAPHEADER *pHeader = header.release(); // now owned by bitmap
+				FreeImageIO *p_io = io.release();	  // now owned by bitmap
+
+				delete pHeader;
+				delete p_io;
+
 				return bitmap.release(); // now owned by caller
 			}
 		}
@@ -372,8 +378,13 @@ FreeImage_OpenMultiBitmapFromHandle(FREE_IMAGE_FORMAT fif, FreeImageIO *io, fi_h
 							header->m_cachefile = cache_file.release();
 						}
 					}
-					tmp_io.release();
-					header.release();
+
+					FreeImageIO *p_tmp_io = tmp_io.release();
+					MULTIBITMAPHEADER *pHeader = header.release();
+
+					delete p_tmp_io;
+					delete pHeader;
+
 					return bitmap.release();
 				}
 			}
