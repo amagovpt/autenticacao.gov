@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
- * eIDMW::PTEID Middleware Project.
- * Copyright (C) 2012-2014 Caixa Mágica Software.
+ * PTEID Middleware Project.
+ * Copyright (C) 2012-2016 Caixa Mágica Software.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -115,7 +115,8 @@ ScapSignature::ScapSignature(QWidget* parent)
     connect(this, SIGNAL(loadedProfessionalAttributes()), this, SLOT(loadProfessionalAttributes()));
 }
 
-void ScapSignature::initReaderAndCard(){
+void ScapSignature::initReaderAndCard() 
+{
     eIDMW::PTEID_InitSDK();
 
     //Show initial status
@@ -1491,6 +1492,13 @@ void ScapSignature::on_btn_reloadAatributes_clicked()
     pdialog->exec();
 
     std::cout << "Number of loaded attribute suppliers: " << m_suppliersList.size() << std::endl << std::flush;
+
+    if (m_suppliersList.size() == 0)
+    {
+        QMessageBox msgBoxp(QMessageBox::Warning, tr("Warning"), tr("Error loading entities"), 0, this);
+        msgBoxp.exec();
+        return;
+    }
 
     // Show AttributeSuppliers passing the list of received suppliers
     AttributeSuppliers attrSpl(m_suppliersList);

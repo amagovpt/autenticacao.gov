@@ -107,6 +107,10 @@
         <translation type="obsolete">Assinatura SCAP - Assinatura na qualidade com atributos profissionais</translation>
     </message>
     <message>
+        <source>Error loading entities</source>
+        <translation>Erro no carregamento de entidades</translation>
+    </message>
+    <message>
         <location filename="scapsignature.ui" line="20"/>
         <source>Sign using professional roles</source>
         <translation>Assinatura na qualidade com atributos profissionais</translation>
@@ -332,7 +336,6 @@
         <translation>Não foram encontrados atributos das entidades:</translation>
     </message>
     <message>
-        <location filename="scapsignature.cpp" line="1592"/>
         <source>Warning</source>
         <translation>Aviso</translation>
     </message>
