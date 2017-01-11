@@ -1530,6 +1530,11 @@ void ScapSignature::getAttributeSuppliers()
 	soap * sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
 	//TODO: this disables server certificate verification !!
 	soap_ssl_client_context(sp, SOAP_SSL_NO_AUTHENTICATION, NULL, NULL, NULL, NULL, NULL);
+    
+    //Define appropriate network timeouts
+    sp->recv_timeout = 20;
+    sp->send_timeout = 20;
+    sp->connect_timeout = 20;
 
     ns2__AttributeSupplierResponseType suppliers_resp;
 

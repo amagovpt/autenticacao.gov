@@ -26,7 +26,8 @@ const char * ac_endpoint = "/DSS/ACService";
 
 std::vector<ACService::ns2__AttributesType *> ACServiceClient::reqAttributeSupplierListType(std::vector<ns3__AttributeSupplierType *> attributeSupplierTypeVec){
     std::vector<ACService::ns2__AttributesType *> result;
-    try{
+    try
+    {
 
         eIDMW::PTEID_ReaderContext& readerContext = eIDMW::ReaderSet.getReader();
 
@@ -83,6 +84,8 @@ std::vector<ACService::ns2__AttributesType *> ACServiceClient::reqAttributeSuppl
             char * c_endpoint = strdup(ac_endpoint);
             char * c_soapAction = strdup(soapAction);
 
+            //TODO: the PTEID_ScapConnection class does not implement a network timeout because it uses OpenSSL blocking IO mode
+            //To implement connection timeout it should be done like this: http://stackoverflow.com/a/16035100/9906
             eIDMW::PTEID_ScapConnection scap(scapAddr, scapPort);
             char * scapResult = scap.postSoapRequest(c_endpoint, c_soapAction, soapBody);
 

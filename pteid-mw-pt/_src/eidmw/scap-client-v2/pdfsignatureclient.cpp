@@ -2,8 +2,8 @@
 
 #include "treeiteminfo.h"
 
-#include "qfileinfo.h";
-#include "qfile.h";
+#include "qfileinfo.h"
+#include "qfile.h"
 #include <string.h>
 
 #include "settings.h"
@@ -27,10 +27,16 @@ PDFSignatureClient::PDFSignatureClient()
 const char * processId = "10001";
 const char * pdf_endpoint = "/PADES/PDFSignature";
 
-bool PDFSignatureClient::signPDF(QString finalfilepath, QString filepath, QString citizenName, QString citizenId, int ltv,PDFSignatureInfo signatureInfo, std::vector<ACService::ns3__AttributeType *> &attributeTypeList){
+bool PDFSignatureClient::signPDF(QString finalfilepath, QString filepath, QString citizenName, QString citizenId, int ltv, PDFSignatureInfo signatureInfo, std::vector<ACService::ns3__AttributeType *> &attributeTypeList) {
     const SOAP_ENV__Fault * fault = NULL;
 
     soap * sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
+
+    //Define appropriate network timeouts
+    sp->recv_timeout = 20;
+    sp->send_timeout = 20;
+    sp->connect_timeout = 20;
+
     soap_set_namespaces(sp, namespacesPDFSignature);
 
 	//TODO: this disables server certificate verification !!
@@ -49,7 +55,8 @@ bool PDFSignatureClient::signPDF(QString finalfilepath, QString filepath, QStrin
     // Get PDF File
     QFile file(filepath);
 
-    if (!file.open(QIODevice::ReadOnly)) return false; // Error opening file
+    if (!file.open(QIODevice::ReadOnly))
+        return false; // Error opening file
 
     // Finds signature position
     static const char needleValues[] = { 0x2F, 0x54, 0x20, 0x28 };
@@ -85,7 +92,6 @@ bool PDFSignatureClient::signPDF(QString finalfilepath, QString filepath, QStrin
         return false;
     }
     QString signatureField(fileByteArray.mid(indexOfNeedle, endOfNeedle-indexOfNeedle));
-    std::cout << "Could find signature field: " << signatureField.toStdString() << std::endl;
 
 
     // Gets PDF Base 64
@@ -102,11 +108,10 @@ bool PDFSignatureClient::signPDF(QString finalfilepath, QString filepath, QStrin
 
     // Get Attributes selected on Tree
     std::vector<PDFSignature::ns1__AttributeType *> attributes;
-    for(uint pos = 0; pos < attributeTypeList.size(); pos++)
+    for (uint pos = 0; pos < attributeTypeList.size(); pos++)
     {
         ACService::ns3__AttributeType * acAttributeType = attributeTypeList.at(pos);
-        PDFSignature::ns1__AttributeSupplierType * supplier = PDFSignature::soap_new_set_ns1__AttributeSupplierType(
-                            sp, acAttributeType->AttributeSupplier->Id, acAttributeType->AttributeSupplier->Name, NULL);
+
         PDFSignature::ns1__AttributeType * convertedAttribute = convertAttributeType(acAttributeType, sp);
         attributes.push_back(convertedAttribute);
     }
@@ -118,7 +123,8 @@ bool PDFSignatureClient::signPDF(QString finalfilepath, QString filepath, QStrin
             signatureInfo.isPortrait() ? PDFSignature::ns1__SignatureOrientationEnumType__PORTRAIT : PDFSignature::ns1__SignatureOrientationEnumType__LANDSCAPE;
 
     // Request Sign PDF
-    try{
+    try
+    {
         PDFSignature::ns1__SignRequest * signRequest = PDFSignature::soap_new_set_ns1__SignRequest(sp, processId, personalData, attributeList,
                         signatureField.toStdString(), *base64PDF, &ltv, signatureInfo.getSelectedPage(), signatureInfo.getX(), signatureInfo.getY(), orientationType);
 
@@ -172,7 +178,10 @@ bool PDFSignatureClient::signPDF(QString finalfilepath, QString filepath, QStrin
     }
     catch(...)
     {
-        fprintf(stderr, "Error in ns1__SignResponse. PDF File not saved");
+        const char * error_msg = "Exception thrown in ns1__SignResponse. Signed PDF File not written";
+        fputs(error_msg, stderr);
+
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "%S", error_msg);
         return false;
     }
 
