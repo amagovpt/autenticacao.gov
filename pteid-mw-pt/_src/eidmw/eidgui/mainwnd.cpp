@@ -219,7 +219,14 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_progress = new QProgressDialog(this);
 	m_progress->setWindowModality(Qt::WindowModal);
 	m_progress->setWindowTitle(QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"));
-	m_progress->setWindowFlags(m_progress->windowFlags() ^ Qt::WindowMinimizeButtonHint ^ Qt::WindowCloseButtonHint ^ Qt::CustomizeWindowHint);
+
+	//Set windows flags
+	flags = m_progress->windowFlags();
+	flags &= (~Qt::WindowMinMaxButtonsHint);// remove Min & Max Buttons
+	flags &= (~Qt::WindowCloseButtonHint);  // remove close Button
+	m_progress->setWindowFlags( flags );
+
+	//Set fixed size window
 	m_progress->setFixedSize(m_progress->size());
 
 	//Disable cancel button
