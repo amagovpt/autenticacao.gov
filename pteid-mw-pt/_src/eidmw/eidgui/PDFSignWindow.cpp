@@ -759,6 +759,19 @@ void PDFSignWindow::on_button_sign_clicked()
 	pdialog->setWindowModality(Qt::WindowModal);
 	pdialog->setWindowTitle(tr("PDF Signature"));
 	pdialog->setLabelText(tr("Signing PDF file(s)..."));
+
+	//Set windows flags
+	Qt::WindowFlags flags = pdialog->windowFlags();
+	flags &= (~Qt::WindowMinMaxButtonsHint);// remove Min & Max Buttons
+	flags &= (~Qt::WindowCloseButtonHint);  // remove close Button
+	pdialog->setWindowFlags( flags );
+
+	//Set fixed size window
+    pdialog->setFixedSize(pdialog->size());
+
+    //Set icon
+    pdialog->setWindowIcon( QIcon(":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png") );
+
 	pdialog->setMinimum(0);
 	pdialog->setMaximum(0);
 	connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));

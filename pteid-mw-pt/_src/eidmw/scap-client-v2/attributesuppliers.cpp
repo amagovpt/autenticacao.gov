@@ -20,6 +20,9 @@ AttributeSuppliers::AttributeSuppliers(std::vector<ns3__AttributeSupplierType *>
 {
     ui->setupUi(this);
 
+    //Set icon
+    this->setWindowIcon(QIcon(":/appicon/Images/pteid.ico"));
+
     std::cout << "Number of suppliers::: " << m_suppliersList.size() << std::endl << std::flush;
     showSuppliers();
 }
