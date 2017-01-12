@@ -326,6 +326,11 @@ public:
 			m_showJavaApps = config.getLong() == 1;
 
 		}
+
+		{
+			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CACHEDIR);
+			QString m_pteid_cachedir = config.getString();
+		}
 	}
 	//------------------------------------------------------
 	// dtor
@@ -576,6 +581,18 @@ public:
 		config.setLong(proxy_port);
 	}
 
+	QString getPteidCachedir(){
+        return m_pteid_cachedir;
+	}
+
+	void setPteidCachedir(QString const& pteid_cachedir)
+	{
+		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CACHEDIR);
+		config.setString(pteid_cachedir.toUtf8());
+
+		m_pteid_cachedir = pteid_cachedir;
+	}
+
 
 private:
 	//Proxy Settings
@@ -583,6 +600,7 @@ private:
 	long m_proxy_port;
 	QString m_proxy_username;
 	QString m_proxy_pwd;
+	QString m_pteid_cachedir;
 
 
 	QString	m_GuiLanguage;			//!< the GUI language

@@ -95,6 +95,7 @@ enum PTEID_Param
 	PTEID_PARAM_GENERAL_INSTALL_PRO_DIR,		//string, directory of the pro eid software; �c:/Program Files/pteid/�
 	PTEID_PARAM_GENERAL_INSTALL_SDK_DIR,		//string, directory of the sdk eid software; �c:/Program Files/pteid/�
 	PTEID_PARAM_GENERAL_CACHEDIR,		//string, cache directory for card-file;
+	PTEID_PARAM_GENERAL_PTEID_CACHEDIR,
 	PTEID_PARAM_GENERAL_LANGUAGE,		//string, user language: fr, nl, en, de, �
 	PTEID_PARAM_GENERAL_SAM_SERVER,
 	PTEID_PARAM_GENERAL_SCAP_HOST,

@@ -211,11 +211,11 @@ void CCache::DiskStoreFile(const std::string & csName,
 std::string CCache::GetCacheDir(bool bAddSlash)
 {
 	std::string csCacheDir;
-	
+
 	char *pHomeDir;
 	size_t len;
 	errno_t err = _dupenv_s( &pHomeDir, &len, "APPDATA" );
-	if ( err ) 
+	if ( err )
 	{
 		pHomeDir = (char*)malloc(1);
 		pHomeDir[0]=0;
@@ -234,7 +234,7 @@ std::string CCache::GetCacheDir(bool bAddSlash)
 	}
 	free( pHomeDir );
 
-	
+
 	DWORD dwError = 0;
 	DWORD dwAttr = GetFileAttributesA(csCacheDir.c_str());
 	if(dwAttr == INVALID_FILE_ATTRIBUTES) dwError = GetLastError();
@@ -299,11 +299,6 @@ std::string CCache::GetCacheDir(bool bAddSlash)
 
 	//We fist check the config
 	csCacheDir = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR).c_str());
-	if(csCacheDir.empty())
-	{
-		csCacheDir = getenv("HOME");
-		csCacheDir += "/.pteid-ng";
-	}
 
 	struct stat buffer;
 	if ( stat(csCacheDir.c_str(),&buffer))
@@ -364,8 +359,7 @@ bool CCache::Delete(const std::string & strName)
 			}
 
 			closedir(pDir);
-		} 
-		
+		}
 	}
 
 	return bDeleted;
