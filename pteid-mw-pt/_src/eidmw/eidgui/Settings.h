@@ -176,6 +176,7 @@ public:
 		, m_bRemoveCert(false)
 		, m_strExePath("")
 		, m_SelectedReader(-1)
+		, m_test_mode(false)
 
 	{
 		//----------------------------------------------------------
@@ -593,6 +594,15 @@ public:
 		m_pteid_cachedir = pteid_cachedir;
 	}
 
+	/* Test Mode */
+    bool getTestMode()	{
+        return m_test_mode;
+    }
+
+    void setTestMode( bool test_mode )	{
+        m_test_mode = test_mode;
+    }
+
 
 private:
 	//Proxy Settings
@@ -601,6 +611,7 @@ private:
 	QString m_proxy_username;
 	QString m_proxy_pwd;
 	QString m_pteid_cachedir;
+	bool m_test_mode;
 
 
 	QString	m_GuiLanguage;			//!< the GUI language

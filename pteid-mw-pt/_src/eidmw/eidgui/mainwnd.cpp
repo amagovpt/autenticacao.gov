@@ -213,6 +213,11 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 		m_ui.btnShortcut_UnivSign->hide();
 	}
 
+	// Test mode
+	if (!m_Settings.getTestMode() ){
+        m_ui.lbl_testmode->hide();
+	}/* if (!m_Settings.getTestMode() ) */
+
 	isLinkToCertClicked = false;
 
 	/*** Setup progress Bar ***/

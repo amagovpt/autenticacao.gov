@@ -1912,11 +1912,45 @@ background-image: url(:/images/Images/alpha.png);</string>
       <bool>true</bool>
      </property>
     </widget>
+    <widget class="QLabel" name="lbl_testmode">
+     <property name="geometry">
+      <rect>
+       <x>630</x>
+       <y>-2</y>
+       <width>81</width>
+       <height>58</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>-1</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="visible">
+      <bool>true</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-image: url(:/images/Images/alpha.png);
+color: rgb(0, 0, 255);
+font: 12px &quot;Arial&quot;;
+text-align: center;
+      </string>
+     </property>
+     <property name="text">
+      <string>Test Mode</string>
+     </property>
+    </widget>
     <zorder>btn_menu_help</zorder>
     <zorder>btn_menu_settings</zorder>
     <zorder>btn_menu_tools</zorder>
     <zorder>btn_menu_card</zorder>
     <zorder>btn_menu_language</zorder>
+    <zorder>lbl_menuSettings_Parameters_2</zorder>
+    <zorder>lbl_testmode</zorder>
    </widget>
    <widget class="QWidget" name="wdg_submenu_card" native="true">
     <property name="geometry">

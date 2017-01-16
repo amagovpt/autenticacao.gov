@@ -278,6 +278,10 @@
         <source>Help</source>
         <translation>Ajuda</translation>
     </message>
+    <message>
+        <source>Test Mode</source>
+        <translation>Modo de Teste</translation>
+    </message>
 
     <message>
         <source>Change language</source>

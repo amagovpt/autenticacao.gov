@@ -60,8 +60,8 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef __APPLE__
-	
-	//In MacOS we deploy the QT plugins in a specific location which is common 
+
+	//In MacOS we deploy the QT plugins in a specific location which is common
 	// to all the QT applications (pteidgui, ScapSignature, pteiddialogs)
 	QCoreApplication::addLibraryPath(QString("/usr/local/Frameworks"));
 #endif
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 	GUISettings settings;
 	QString     appPath = QCoreApplication::applicationDirPath();
 	settings.setExePath(appPath);
-
+	settings.setTestMode( test_mode );
 
 	MainWnd widget(settings);
 
