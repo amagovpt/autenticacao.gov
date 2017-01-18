@@ -225,7 +225,7 @@ void APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 	DHParams dh_params;
 
 	if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
-		sam_helper.getDHParams(&dh_params);
+		sam_helper.getDHParams(&dh_params, true);
 	else
 	{
 	    throw CMWEXCEPTION(EIDMW_SAM_UNSUPPORTED_CARD);

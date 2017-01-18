@@ -47,7 +47,7 @@ class SAM
 public:
 	SAM(APL_Card *card);
 
-	bool getDHParams(DHParams *otp_struct);
+	bool getDHParams(DHParams *otp_struct, bool getAllParams = false);
 	bool verifyCVCCertificate(const char *cvc_certificate_hex);
 	
 	bool verifySignedChallenge(char *signed_challenge);
@@ -67,8 +67,8 @@ public:
 
 private:
 	char * _getDH_Param(char specific_byte, unsigned long offset);
-	char *_getCVCPublicKey();
-	char *_getCardAuthPublicKey();
+	char * _getCVCPublicKey();
+	char * _getCardAuthPublicKey();
 	char * _getSODCert();
     APL_Card *m_card;
 

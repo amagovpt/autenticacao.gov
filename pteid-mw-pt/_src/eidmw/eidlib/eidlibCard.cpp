@@ -1583,6 +1583,35 @@ PTEIDSDK_API long PTEID_CVC_Authenticate(unsigned char *pucSignedChallenge, int 
 }
 
 
+PTEIDSDK_API long PTEID_CVC_GetAddr(PTEID_ADDR *AddrData)
+{
+	//TODO
+	if (securityContext != NULL) {
+
+		
+		return PTEID_OK;
+	}
+
+	return PTEID_E_NOT_INITIALIZED;
+}
+
+
+PTEIDSDK_API long PTEID_CVC_ReadFile(unsigned char *file, int filelen, unsigned char *out, unsigned long *outlen)
+{
+	if (securityContext != NULL) {
+		CByteArray file_contents = securityContext->readFile(file, filelen, *outlen);
+
+		memcpy(out, file_contents.GetBytes(), file_contents.Size());
+		*outlen = file_contents.Size();
+
+		return PTEID_OK;
+	}
+
+	return PTEID_E_NOT_INITIALIZED;
+}
+
+
+
 PTEIDSDK_API long PTEID_CAP_ChangeCapPin(const char *csServer, const unsigned char *ucServerCaCert,	unsigned long ulServerCaCertLen, tProxyInfo *proxyInfo,	const char *pszOldPin, const char *pszNewPin, long *triesLeft){
 #if 0
 	PTEID_EIDCard& card = readerContext->getEIDCard();

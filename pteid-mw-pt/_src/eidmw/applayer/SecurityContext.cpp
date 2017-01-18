@@ -1,13 +1,17 @@
 #include <openssl/dh.h>
 #include <openssl/engine.h>
 #include <openssl/rand.h>
-#include <openssl/evp.h>
+#include <openssl/des.h>
 #include <openssl/bn.h>
 
 #include "APLCard.h"
 #include "SecurityContext.h"
 #include "Log.h"
 
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <cmath>
 
 namespace eIDMW
 {
@@ -16,7 +20,6 @@ namespace eIDMW
 	#define SESSION_KEY_SIZE 16
 
 
-	//TODO: Untested!
 	void SecurityContext::deriveSessionKeys()
 	{
 		unsigned char sha1_digest[20];
@@ -41,10 +44,13 @@ namespace eIDMW
 			//Copy only the 16 msbytes
 			memcpy(mac_key, sha1_digest, SESSION_KEY_SIZE);
 
+			memset(sha1_digest, 0, sizeof(sha1_digest));
+
 			this->mac_key = CByteArray(mac_key, SESSION_KEY_SIZE);
 
 			//Reuse the hashing context
-			EVP_MD_CTX_init(cmd_ctx);
+			cmd_ctx = EVP_MD_CTX_create();
+
 			EVP_DigestInit(cmd_ctx, EVP_sha1());
 			EVP_DigestUpdate(cmd_ctx, m_kicc_ifd.GetBytes(), m_kicc_ifd.Size());
 			EVP_DigestUpdate(cmd_ctx, suffix_enc, sizeof(suffix_enc));
@@ -56,20 +62,35 @@ namespace eIDMW
 			this->encryption_key = CByteArray(enc_key, SESSION_KEY_SIZE);
 
 		}
+		else
+		{
+			fprintf(stderr, "deriveSessionKeys(): KICC/KIFD is not initialized! can't compute session keys.\n");
+		}
 	}
 
-	void SecurityContext::computeInitialSSC(CByteArray &rnd_icc, CByteArray &rnd_ifd)
+	void SecurityContext::computeInitialSSC()
 	{
 		//4 LSB RND.ICC || 4 LSB RND.IFD
-		CByteArray ssc_bytes(rnd_icc.GetBytes()+4, 4);
-		ssc_bytes.Append(rnd_ifd.GetBytes()+4, 4);
+		CByteArray ssc_bytes(m_RNDICC.GetBytes(4, 4));
+		ssc_bytes.Append(m_RNDIFD.GetBytes(4, 4));
+
 		BIGNUM *ssc_bn = BN_bin2bn(ssc_bytes.GetBytes(), ssc_bytes.Size(), NULL);
 
 		long ssc = BN_get_word(ssc_bn);
 		this->m_ssc = ssc;
 	}
+	
+	std::string byteArrayToString(CByteArray &ba)
+	{
+		std::string str_ba = ba.ToString(false, false, 0, 0xFFFFFFFF);
 
+		str_ba.erase( std::remove(str_ba.begin(), str_ba.end(), '\t'), str_ba.end()); 
+		str_ba.erase( std::remove(str_ba.begin(), str_ba.end(), '\n'), str_ba.end());
 
+		return str_ba;
+	}
+
+#define MAC_KEYSIZE 8
 /*
 *	Input data must be a multiple of the block size: 8
 */
@@ -79,120 +100,74 @@ namespace eIDMW
 CByteArray
 retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 {
+	CByteArray macInputWithSSC;
+	CByteArray secondKey = key.GetBytes(MAC_KEYSIZE, MAC_KEYSIZE);
+
 	unsigned char ssc_block[] = {0,0,0,0,0,0,0,0};
+	unsigned char xx[MAC_KEYSIZE];
+    unsigned char des_out[MAC_KEYSIZE];
+    unsigned char *msg = NULL;
+    des_key_schedule ks_a;
+    des_key_schedule ks_b;
+    int i, j;
+
+    int offset = 0;
+
 	CByteArray in;
-	std::cout << "in.Size(): " << in.Size() << std::endl;
+	//std::cerr << "DEBUG: retail_mac_des: mac_input.Size(): " << mac_input.Size() << std::endl;
+	std::cerr << "mac_input: " << byteArrayToString(mac_input) << std::endl;
+	//std::cerr << "Using MAC key: " << key.ToString(false, true, 0, 0xFFFFFFFF) << std::endl;
 
 	//SSC is an 8-byte counter that serves as the first block of the MAC input
 	for (int i = 0; i < sizeof(ssc_block); i++)
        ssc_block[i] = (0xFF & ssc >> (7 - i) * 8);
-    in.Append(ssc_block, sizeof(ssc_block));
-    in.Append(mac_input);
 
-	unsigned char *complete_buf = (unsigned char *) malloc(in.Size());
+	  //unsigned char output[8];
+   	macInputWithSSC.Append(ssc_block, sizeof(ssc_block));
+   	macInputWithSSC.Append(mac_input);
 
-	size_t len = EVP_CIPHER_block_size(EVP_des_cbc());
+   	msg = macInputWithSSC.GetBytes();
+   
+    memset(des_out, 0, sizeof(des_out));
 
-	unsigned char *outbuf = (unsigned char *) malloc(8 + len);
+  /* prepare des key using first 8 bytes of key */
+    DES_set_key_unchecked((const_DES_cblock*) key.GetBytes(), &ks_a);
+  /* prepare des key using second 8 bytes of key */
+    DES_set_key_unchecked((const_DES_cblock*) secondKey.GetBytes(), &ks_b);
 
-	unsigned char last_block[8];
-	unsigned char last_block_final[8];
+  for (j=0; j < (macInputWithSSC.Size() / MAC_KEYSIZE); j++) {
+      //fprintf(stderr, "Running DES_ENCRYPT iteration: %d\n", j);
+    for (i=0; i < MAC_KEYSIZE; i++)
+      xx[i] = msg[i+j*MAC_KEYSIZE]^des_out[i];
 
-	memset(last_block, 0, sizeof(last_block));
-	memset(last_block_final, 0, sizeof(last_block_final));
-	int outlen = 0;
-	int i = 0;
+    DES_ecb_encrypt((const_DES_cblock *)xx, (DES_cblock *)des_out, &ks_a, 1);  
+  }
 
-    EVP_CIPHER_CTX * ctx = NULL;
+  memcpy(xx, des_out, MAC_KEYSIZE);
+  DES_ecb_encrypt((const_DES_cblock *)xx, (DES_cblock *)des_out, &ks_b, 0);
 
-    if (key.Size() == 0)
-    {
-    	fprintf(stderr, "retail_mac_des(): Empty key!\n");
-    	goto err;
-    }
-    //DES BlockSize
-    //check(key->length >= 2*len, "Key too short");
+  memcpy(xx, des_out, MAC_KEYSIZE);
+  DES_ecb_encrypt((const_DES_cblock *)xx, (DES_cblock *)des_out, &ks_a, 1);
 
-    ctx = EVP_CIPHER_CTX_new();
-    if (!ctx)
-        goto err;
+  CByteArray result(des_out, MAC_KEYSIZE);
+  //fprintf(stderr, "DEBUG: retail_mac_des(): %s", byteArrayToString());
+  std::cerr << "retail_mac_des result: " << byteArrayToString(result) << std::endl;
 
-    EVP_CIPHER_CTX_init(ctx);
-
-    if (!EVP_CipherInit_ex(ctx, EVP_des_cbc(), NULL,
-            (unsigned char *) key.GetBytes(), NULL, 1) ||
-            !EVP_CIPHER_CTX_set_padding(ctx, 0))
-        goto err;
-
-
-    for ( ; i < in.Size() / len; i++)
-    {
-      if(!EVP_CipherUpdate(ctx, outbuf, &outlen, in.GetBytes()+i*len, len))
-      {
-            goto err;
-      }
-      memcpy(complete_buf + i*len, outbuf, len);
-    }
-
-    EVP_CipherFinal_ex(ctx, outbuf, &outlen);
-    //memcpy(complete_buf + i*len, outbuf, len);
-
-    /* decrypt last block with the rest of the key (key.GetBytes() + len) */
-    /* IV is always NULL */
-
-    if (!EVP_CipherInit_ex(ctx, EVP_des_cbc(), NULL,
-            (unsigned char *) key.GetBytes() + len, NULL, 0) ||
-            !EVP_CIPHER_CTX_set_padding(ctx, 0))
-        goto err;
-
-    if(!EVP_CipherUpdate(ctx, last_block, &outlen, complete_buf + in.Size()-len , len))
-    {
-            goto err;
-    }
-
-    EVP_CipherFinal_ex(ctx, last_block, &outlen);
-
-    /* encrypt last block with the first key */
-    /* IV is always NULL */
-
-    if (!EVP_CipherInit_ex(ctx, EVP_des_cbc(), NULL,
-            (unsigned char *) key.GetBytes(), NULL, 1) ||
-            !EVP_CIPHER_CTX_set_padding(ctx, 0))
-        goto err;
-
-    if(!EVP_CipherUpdate(ctx, last_block_final, &outlen, last_block, len))
-    {
-        goto err;
-    }
-
-    EVP_CipherFinal_ex(ctx, last_block_final, &outlen);
-
-    EVP_CIPHER_CTX_free(ctx);
-    free(complete_buf);
-    free(outbuf);
-
-    return CByteArray(last_block_final, len);
-
-err:
-    if (ctx)
-        EVP_CIPHER_CTX_free(ctx);
-    free(complete_buf);
-    free(outbuf);
-
-    return CByteArray();
+  return result;
 }
-
-
-	CByteArray encrypt_data_3des(CByteArray &key, CByteArray &in)
+	
+	CByteArray decrypt_data_3des(CByteArray &key, CByteArray &in)
 	{
-		CByteArray cipher_text;
+		CByteArray plain_text;
 		unsigned char * out = (unsigned char * ) malloc(in.Size());
 		EVP_CIPHER_CTX * ctx = NULL;
 		int len = 0;
 
+		//std::cerr << "Using encryption key: " << key.ToString(false, true, 0, 0xFFFFFFFF) << std::endl;
+
 		if (key.Size() == 0)
 	    {
-	    	fprintf(stderr, "retail_mac_des(): Empty key!\n");
+	    	fprintf(stderr, "decrypt_data_3des(): Empty key!\n");
             goto err;
 	    }
 
@@ -201,6 +176,53 @@ err:
 	        goto err;
 
 	    //Null as the 5th param means that IV is empty
+	    // 0 as last param means decryption
+	    if (!EVP_CipherInit_ex(ctx, EVP_des_ede_cbc(), NULL,
+	            (unsigned char *) key.GetBytes(), NULL, 0) ||
+	            	!EVP_CIPHER_CTX_set_padding(ctx, 0))
+	        goto err;
+
+	    if (EVP_DecryptUpdate(ctx, out, &len, in.GetBytes(), in.Size()) == 0) {
+	        fprintf(stderr, "Error in decrypt_data_3des() !\n");
+	    }
+
+	    if (len != in.Size())
+	    {
+	    	fprintf(stderr, "Encryption error: len < in.size()\n");
+	    }
+
+	    plain_text = CByteArray((const unsigned char*)out, (unsigned long)len);
+		free(out);
+	    return plain_text;
+
+
+	err:
+		free(out);
+	    return CByteArray();
+	}
+
+	CByteArray encrypt_data_3des(CByteArray &key, CByteArray &in)
+	{
+		CByteArray cipher_text;
+		unsigned char * out = (unsigned char * ) malloc(in.Size());
+		EVP_CIPHER_CTX * ctx = NULL;
+		int len = 0;
+
+		std::cerr << "Using encryption key: " << key.ToString(false, true, 0, 0xFFFFFFFF) << std::endl;
+		std::cerr << "encrypt_data_3des() input: " << in.ToString(false, true, 0, 0xFFFFFFFF) << std::endl;
+
+		if (key.Size() == 0)
+	    {
+	    	fprintf(stderr, "encrypt_data_3des(): Empty key!\n");
+            goto err;
+	    }
+
+	    ctx = EVP_CIPHER_CTX_new();
+	    if (!ctx)
+	        goto err;
+
+	    //Null as the 5th param means that IV is empty
+	    // 1 as last param means encryption
 	    if (!EVP_CipherInit_ex(ctx, EVP_des_ede_cbc(), NULL,
 	            (unsigned char *) key.GetBytes(), NULL, 1) ||
 	            	!EVP_CIPHER_CTX_set_padding(ctx, 0))
@@ -228,16 +250,17 @@ err:
 	CByteArray paddedByteArray(CByteArray &input)
 	{
 		int padLen = 8 - input.Size() % 8;
-		const int paddedContentLen = input.Size()+padLen;
-		CByteArray paddedContent(paddedContentLen);
-     	 //unsigned char * paddedContent = (unsigned char *) malloc(paddedContentLen);
 
-     	memcpy(paddedContent.GetBytes(), input.GetBytes(), input.Size());
 
-     	if (paddedContentLen > input.Size())
-       		paddedContent.SetByte(input.Size(), 0x80);
+		CByteArray paddedContent;
+		paddedContent.Append(input);
+		paddedContent.Append(0x80);
 
-   		return paddedContent;
+       	    //Padlen - 1 because one byte was already spent with 0x80 
+		for (int i=0; i < padLen -1; i++)
+			paddedContent.Append(0x00);
+
+		return paddedContent;
 	}
 
 
@@ -250,12 +273,16 @@ err:
 	}
 
 	#define MAC_LEN 8
+	/*
+		Encrypt and add MAC to the input APDU
+	*/
 
 	CByteArray SecurityContext::buildSecureAPDU(CByteArray &plaintext_apdu)
 	{
 		CByteArray final_apdu;
 		const unsigned char Tcg = 0x87;
 		const unsigned char Tcc = 0x8e;
+		const unsigned char Tle = 0x97;
 		const unsigned char paddingIndicator = 0x01;
 		//Example of Encrypted INTERNAL AUTH APDU
 		//8c 88 00 00 1d 87 11 010156bdbb34981e26497009df84a85811 [8e 08 15 a3 27 8f cc d5 24 6e]
@@ -267,40 +294,207 @@ err:
 		//Command Header= XC INS P1-P2
 		//Input data for MAC: CH || PB || Tcg || Lcg || PI,CG || PB
 		//PB: padding 80h, 00h,...00h until the input data becomes a multiple of eight bytes
-		CByteArray command_header(plaintext_apdu.GetBytes(0, 4));
+		
 
-		CByteArray input_data(plaintext_apdu.GetBytes(5, plaintext_apdu.Size()-5));
-		CByteArray paddedInput = paddedByteArray(input_data);
+		//Contains data
+		if (plaintext_apdu.Size() > 5)
+		{
 
-		CByteArray cryptogram = encrypt_data_3des(this->encryption_key, paddedInput);
-		//LCg = Len(Cg) + Len(PI = 1)
-		int lcg = cryptogram.Size() +1;
-		CByteArray inputForMac = paddedByteArray(command_header);
+			CByteArray command_header(plaintext_apdu.GetBytes(0, 4));
 
-		CByteArray paddedCryptogram;
-		paddedCryptogram.Append(Tcg);
-		//This is safe because Lcg will be always lower than
-		paddedCryptogram.Append((unsigned char)lcg);
-		paddedCryptogram.Append(paddingIndicator);
-		paddedCryptogram.Append(cryptogram);
+			CByteArray input_data(plaintext_apdu.GetBytes(5, plaintext_apdu.Size()-5));
+			CByteArray paddedInput = paddedByteArray(input_data);
 
-		paddedCryptogram = paddedByteArray(paddedCryptogram);
+			CByteArray cryptogram = encrypt_data_3des(this->encryption_key, paddedInput);
+			//LCg = Len(Cg) + Len(PI = 1)
+			int lcg = cryptogram.Size() +1;
+			CByteArray inputForMac = paddedByteArray(command_header);
 
-		CByteArray mac = retail_mac_des(mac_key, paddedCryptogram, m_ssc);
+			CByteArray paddedCryptogram;
+			paddedCryptogram.Append(Tcg);
+			//This is safe because Lcg will be always lower than
+			paddedCryptogram.Append((unsigned char)lcg);
+			paddedCryptogram.Append(paddingIndicator);
+			paddedCryptogram.Append(cryptogram);
 
-		//Build final APDU including Cryptogram and MAC
-		int lc_final = MAC_LEN +2 + cryptogram.Size() + 3; // CG + Tcg + Lcg + PI
-		final_apdu.Append(command_header);
-		final_apdu.Append((unsigned char)lc_final);
-		final_apdu.Append(Tcg);
-		final_apdu.Append((unsigned char)lcg);
-		final_apdu.Append(paddingIndicator);
-		final_apdu.Append(cryptogram);
-		final_apdu.Append(Tcc);
-		final_apdu.Append(MAC_LEN); //Lcc
-		final_apdu.Append(mac);
+			paddedCryptogram = paddedByteArray(paddedCryptogram);
 
-		return final_apdu;
+			//Padded Command Header + Padded [Tcg Lcg PI,CG]
+			inputForMac.Append(paddedCryptogram);
+
+			//Pre-increment SSC
+			m_ssc++;
+
+			CByteArray mac = retail_mac_des(this->mac_key, inputForMac, m_ssc);
+
+			//Build final APDU including Cryptogram and MAC
+			int lc_final = MAC_LEN +2 + cryptogram.Size() + 3; // CG + Tcg + Lcg + PI
+			final_apdu.Append(command_header);
+			final_apdu.Append((unsigned char)lc_final);
+			final_apdu.Append(Tcg);
+			final_apdu.Append((unsigned char)lcg);
+			final_apdu.Append(paddingIndicator);
+			final_apdu.Append(cryptogram);
+			final_apdu.Append(Tcc);
+			final_apdu.Append(MAC_LEN); //Lcc
+			final_apdu.Append(mac);
+
+			return final_apdu;
+		}
+		else
+		{
+
+			// For commands sending no data the format should be
+			// XC INS P1 P2 Lc Tle 01 Le Tcc Lcc MAC
+			CByteArray TlvLe;
+			CByteArray command_header(plaintext_apdu.GetBytes(0, 4));
+			int le = plaintext_apdu.GetByte(4);
+			CByteArray inputForMac = paddedByteArray(command_header);
+
+			TlvLe.Append(Tle);
+			TlvLe.Append(0x01);
+			TlvLe.Append(le);
+
+			inputForMac.Append(paddedByteArray(TlvLe));
+
+			//Pre-increment SSC
+			m_ssc++;
+
+			CByteArray mac = retail_mac_des(this->mac_key, inputForMac, m_ssc);
+
+			int lc_final = MAC_LEN + 2 + TlvLe.Size();
+			final_apdu.Append(command_header);
+			final_apdu.Append((unsigned char)lc_final);
+			final_apdu.Append(TlvLe);
+			final_apdu.Append(Tcc);
+			final_apdu.Append(MAC_LEN); //Lcc
+			final_apdu.Append(mac);
+
+			return final_apdu;
+
+		}
+	}
+
+
+	bool SecurityContext::checkMacInResponseAPDU(CByteArray &resp)
+	{
+		CByteArray receivedMac;
+		CByteArray paddedInput;
+
+		/*
+		//Example response APDU: 99 02 90 00 8E 08 7B 7C 04 51 1E FA 71 59  (14-10)
+		//Another example with data: 87 19 01 BD AB AC 33 7B 94 70 79 E0 FC 60 49 5B 3A B5 7B 20 48 0F B5 A5 75 DC 56 8E 08 E3 CB 42 64 9E 2D 79 26
+		                             81 81 E6 30 82 07 BF 30 82 06 A7 A0 03 02 01 02 02 08 34 E5 38 4F C9 B2 3F 73 30 0D 06 09 2A 86 48 86 F7 0D 01 01 0B 05 
+			Deal with 2 different formats of response APDUs: with just SW12 or also with data 
+		*/
+		if (resp.GetByte(0) == 0x99)
+		{
+			receivedMac = (resp.GetBytes(6, 8));
+			CByteArray inputForMac = resp.GetBytes(0, 4);
+			paddedInput = paddedByteArray(inputForMac);
+
+		}
+		else if (resp.GetByte(0) == 0x87 || resp.GetByte(0) == 0x81)
+		{
+			resp.Chop(2);
+			int mac_offset = resp.Size() - 8;
+			int lcg = resp.GetByte(1) == 0x81 ? resp.GetByte(2): resp.GetByte(1);
+			CByteArray inputForMac = resp.GetByte(1) == 0x81 ? resp.GetBytes(0, lcg+3) : resp.GetBytes(0, lcg+2);
+			receivedMac = (resp.GetBytes(mac_offset, 8));
+			paddedInput = paddedByteArray(inputForMac);
+		}
+
+		//Pre-increment SSC
+		m_ssc++;
+
+		CByteArray mac = retail_mac_des(this->mac_key, paddedInput, m_ssc);
+		return mac.Equals(receivedMac);
+	}
+
+	#define SIG_LEN 128
+	bool SecurityContext::validateInternalAuth(CByteArray &resp)
+	{
+		unsigned char computed_digest[20];
+
+		unsigned char inputToSignature[SIG_LEN];
+		memset(inputToSignature, 0, sizeof(inputToSignature));
+
+		//We need to skip the Padding indicator '01' at offset 3
+		CByteArray cryptogram(resp.GetBytes(4, resp.GetByte(2)-1));
+
+		if (!checkMacInResponseAPDU(resp))
+		{
+			fprintf(stderr, "[validateInternalAuth] MAC mismatch in response APDU!\n");
+		}
+
+		CByteArray internalAuth_resp = decrypt_data_3des(this->encryption_key, cryptogram);
+
+		std::cerr << "internalAuth_resp " << byteArrayToString(internalAuth_resp) << std::endl;
+		
+		const unsigned char * iccAuthBytes = pkIccAuth.GetBytes();
+
+		EVP_PKEY * pkey = d2i_PUBKEY(NULL, &iccAuthBytes, pkIccAuth.Size());
+		if (!pkey)
+		{
+			MWLOG(LEV_ERROR, MOD_APL, L"[validateInternalAuth] failed to decode card public key");
+			return false;
+		}
+
+		RSA* rsa_key = EVP_PKEY_get1_RSA(pkey);
+
+		//8-byte offset because Internal Auth Resp = SN.ICC + Signature
+		CByteArray signature = internalAuth_resp.GetBytes(8, SIG_LEN);
+		CByteArray snICC = internalAuth_resp.GetBytes(0, 8);
+		
+		int ret = RSA_public_decrypt(signature.Size(), signature.GetBytes(),
+           inputToSignature, rsa_key, RSA_NO_PADDING);
+
+		if (ret == -1)
+		{
+			fprintf(stderr, "Error validating Internal Auth signature: %s\n",
+				ERR_error_string(ERR_get_error(), NULL));
+			return false;
+		}
+
+        if (inputToSignature[0] != 0x6A || inputToSignature[127] != 0xBC)
+        {
+        	fprintf(stderr, "[validateInternalAuth] Start or End padding byte incorrect\n");
+        	return false;
+        }
+
+        //Verify hash C = SHA-1 [PRND1 || KICC || SN.ICC || TRnd || KIFD || DH.Params]
+
+        EVP_MD_CTX cmd_ctx;
+		unsigned int md_len = 0;
+		const int prnd1_len = 106;
+
+		const unsigned char *prnd1 = inputToSignature + 1;
+		const unsigned char *c_hash = inputToSignature + 1 + prnd1_len;
+		
+
+		CByteArray dh_params(this->dh_g);
+		dh_params.Append(this->dh_p);
+		dh_params.Append(this->dh_q);
+
+		EVP_DigestInit(&cmd_ctx, EVP_sha1());
+		EVP_DigestUpdate(&cmd_ctx, prnd1, prnd1_len);
+		EVP_DigestUpdate(&cmd_ctx, m_kicc.GetBytes(), m_kicc.Size());
+		EVP_DigestUpdate(&cmd_ctx, snICC.GetBytes(), snICC.Size());
+		EVP_DigestUpdate(&cmd_ctx, m_RNDIFD.GetBytes(), m_RNDIFD.Size());
+		EVP_DigestUpdate(&cmd_ctx, m_kifd.GetBytes(), m_kifd.Size());
+		EVP_DigestUpdate(&cmd_ctx, dh_params.GetBytes(), dh_params.Size());
+
+
+    	EVP_DigestFinal(&cmd_ctx, computed_digest, &md_len);
+
+    	if (md_len != 20)
+    	{
+    		fprintf(stderr, "Should be SHA-1 hash, Abort!\n");
+    		return false;
+    	}
+
+    	//Check the calculated hash against the one returned by the card
+		return memcmp(computed_digest, c_hash, 20) == 0;
 	}
 
 	//8c 88 00 00 1d 87 11 01 01 56 bdbb34981e26497009df84a85811 8e08 15 a3 27 8f cc d5 24 6e
@@ -311,6 +505,9 @@ err:
 	{
 		//Example of encrypted MSE SET Internal Auth:
 		// 0c 22 41 a4 15 87 09 01 be 99 3f dd 3f 1d 9c 59 8e 08 ec 5c bc 76 3a 4d 83 73
+		// 0C 22 41 A4 15 87 09 01 47 57 A8 AE D2 C4 CC 26 8E 08 46 48 02 75 3B 79 88 03
+
+		// 0C 22 41 A4 15 87 09 01 09 43 CD 5C DD 83 3F D2 8E 08 81 AA DB 77 0A A7 5D E5
 		unsigned char mse_internal_auth[] = {0x0C, 0x22, 0x41, 0xA4, 0x06, 0x84, 0x01, 0x77, 0x95, 0x01, 0x80};
 		CByteArray mseInternal(mse_internal_auth, sizeof(mse_internal_auth));
 
@@ -324,6 +521,11 @@ err:
 			return false;
 		}
 
+		if (!checkMacInResponseAPDU(resp))
+		{
+			fprintf(stderr, "[mseInternal] MAC mismatch in response APDU!\n");
+		}
+
 		unsigned char tRnd[8];
 		unsigned char internal_auth_apdu[] = {0x8C, 0x88, 0x00, 0x00, 0x08};
 		CByteArray internalAuth(internal_auth_apdu, sizeof(internal_auth_apdu));
@@ -333,9 +535,11 @@ err:
             fprintf(stderr, "Error obtaining PRND2 bytes of random from OpenSSL\n");
             return false;
         }
+        //Save this to reuse in computing the new SSC value after Internal Auth
+        m_RNDIFD = CByteArray(tRnd, 8);
 
         internalAuth.Append(tRnd, 8);
-        internalAuth.Append(0x88);
+        //internalAuth.Append(0x88);
 
         CByteArray secure_apdu2 = buildSecureAPDU(internalAuth);
 
@@ -343,13 +547,22 @@ err:
 
 		if (!checkSW12(resp))
 		{
-			MWLOG(LEV_ERROR, MOD_APL, L"DH_generate_key failed!");
+			MWLOG(LEV_ERROR, MOD_APL, L"internalAuthenticate() failed!");
 			return false;
 		}
-        //sendAPDU(secure_apdu);
+
+		if (!validateInternalAuth(resp))
+		{
+			MWLOG(LEV_ERROR, MOD_APL, L"validateInternalAuth failed!");
+			return false;
+		}
+
+		computeInitialSSC();
+		fprintf(stderr, "[internalAuthenticate] Finished INTERNAL AUTHENTICATE. Updated value of SSC to %lu\n", this->m_ssc);
 
         return true;
 	}
+
 
 
 	/*
@@ -375,15 +588,17 @@ err:
 
 		if (cRnd == NULL || strlen(cRnd) == 0)
 		{
-			fprintf(stderr, "Couldn't generate CRnd random bytes, aborting!\n");
-			if (cRnd != NULL) free(cRnd);//LL
-			free(snIFD);//LL
+			fprintf(stderr, "Couldn't get CRnd random bytes from the card, aborting!\n");
+			
+			free(cRnd);
+			free(snIFD);
 			return CByteArray();
 		}
 
 		CByteArray crnd_bytes(std::string(cRnd), true);
 		CByteArray sn_ifd_bytes(std::string(snIFD), true);
 		m_snIFD = sn_ifd_bytes;
+		m_RNDICC = crnd_bytes;
 
 		challenge[0] = 0x6A;
 		challenge[127] = 0xBC;
@@ -435,53 +650,27 @@ err:
 		return CByteArray(challenge, sizeof(challenge));
 	}
 
+	static const char rnd_seed[] = "string to make the random number generator think it has entropy";
 
 	void SecurityContext::initMuthualAuthProcess()
 	{
 		DHParams dh_params;
+
+		//Before generating DH keys, init the RNG
+		RAND_seed(rnd_seed, sizeof(rnd_seed));
+
 		sam_helper->getDHParams(&dh_params);
 		this->dh_p = CByteArray(std::string(dh_params.dh_p), true);
 		this->dh_g = CByteArray(std::string(dh_params.dh_g), true);
 		this->dh_q = CByteArray(std::string(dh_params.dh_q), true);
 
-		DH * dh = DH_new();
-
 		DH * dh_key = DH_new();
 		BN_hex2bn(&(dh_key->p), dh_params.dh_p);
 		BN_hex2bn(&(dh_key->g), dh_params.dh_g);
 
-	/*
-		For some reason DH_check fails for the DH parameters used in CC cards
-		int rc, codes = 0;
-		rc = DH_check(dh_key, &codes);
+		//Store the card auth key for later
+		this->pkIccAuth = CByteArray(std::string(dh_params.card_auth_public_key), true);
 
-		if (rc != 1)
-		{
-			printf("DH_check could not be performed! ABORT\n");
-		}
-
-		if(BN_is_word(dh_key->g, DH_GENERATOR_2))
-		{
-	    	long residue = BN_mod_word(dh_key->p, 24);
-	    	if(residue == 11 || residue == 23) {
-	        	codes &= ~DH_NOT_SUITABLE_GENERATOR;
-	    		}
-		}
-
-	if (codes & DH_UNABLE_TO_CHECK_GENERATOR)
-	    printf("DH_check: failed to test generator\n");
-
-	if (codes & DH_NOT_SUITABLE_GENERATOR)
-	    printf("DH_check: g is not a suitable generator\n");
-
-	if (codes & DH_CHECK_P_NOT_PRIME)
-	    printf("DH_check: p is not prime\n");
-
-	if (codes & DH_CHECK_P_NOT_SAFE_PRIME)
-	    printf("DH_check: p is not a safe prime\n");
-	*/
-
-	/* Generate the public and private key pair */
 		if (DH_generate_key(dh_key) != 1)
 		{
 			MWLOG(LEV_ERROR, MOD_APL, L"DH_generate_key failed!");
@@ -502,7 +691,6 @@ err:
 	 		return;
 	 	}
 
-
 		/* Receive the public key from the peer. In this example we're just hard coding a value */
 		BIGNUM *kicc = NULL;
 
@@ -512,23 +700,125 @@ err:
 		int rc = BN_hex2bn(&kicc, kicc_str);
 		free(kicc_str);//LL
 
-		if (rc == 0)
-		{
-			//TODO
-		}
-
+		fprintf(stderr, "DEBUG: [initMuthualAuthProcess] BN_hex2bn(kicc) returned: %d\n", rc);
+		
 	    //DH_compute_key() computes the shared secret from the private DH value in dh and the other party's public value in pub_key and stores it in
         //key. key must point to DH_size(dh) bytes of memory.
         unsigned int shared_secret_len = DH_size(dh_key);
 		unsigned char * kicc_ifd = (unsigned char *) OPENSSL_malloc(shared_secret_len);
-		DH_compute_key(kicc_ifd, kicc, dh_key);
+		rc = DH_compute_key(kicc_ifd, kicc, dh_key);
+
+		fprintf(stderr, "DEBUG: [initMuthualAuthProcess] DH_compute_key returned: %d\n", rc);
 
 		m_kicc_ifd = CByteArray(kicc_ifd, shared_secret_len);
+
+		//std::cerr << "KICC/KIFD " << byteArrayToString(m_kicc_ifd) << std::endl;
 
 	}
 
 	bool SecurityContext::writeFile(char *fileID, CByteArray file_content, unsigned int offset)
 	{
+		if (fileID == NULL || strlen(fileID) < 2)
+		{
+			MWLOG(LEV_ERROR, MOD_APL, L"SecurityContext::writeFile: invalid fileID!");
+			return false;
+		}
+
+		/*
+		std::string fileName(fileID);
+		if (!selectFile(fileName))
+		{
+			return false;
+		}
+		*/
+		return true;
+	}
+
+	CByteArray SecurityContext::readBinary(unsigned long bytesToRead)
+	{
+
+		//TODO: Implement the rest of the file read commands and pack the data in a single ByteArray 
+		//The blocksize is 230 because of the overhead secure messaging response APDUs
+		const double blockSize = 230.0;
+		unsigned long bytesRead = 0;
+
+		unsigned char read_binary[] = {0x0C, 0xB0, 0x00, 0x00, 0xE6};
+		CByteArray readBinaryAPDU(read_binary, sizeof(read_binary));
+		CByteArray fileContents;
+
+		int iterations = ceil((double)bytesToRead / blockSize);
+
+		for (int i=0; i!=iterations; i++)
+		{
+			//Set the file offset in P1-P2
+			readBinaryAPDU.SetByte(0xFF & bytesRead >> 8, 2);
+			readBinaryAPDU.SetByte(0xFF & bytesRead,      3);
+
+			//Last iteration: we will read less than a complete block
+			if (i == iterations-1)
+			{
+				readBinaryAPDU.SetByte(bytesToRead-bytesRead, 4);
+			}
+
+			CByteArray secure_apdu = buildSecureAPDU(readBinaryAPDU);
+
+	        CByteArray resp = m_card->sendAPDU(secure_apdu);
+
+			if (!checkSW12(resp))
+			{
+				MWLOG(LEV_ERROR, MOD_APL, L"[SecurityContext::readBinary] card returned error!");
+				break;
+			}
+			if (!checkMacInResponseAPDU(resp))
+			{
+				fprintf(stderr, "[readFile] MAC mismatch in response APDU!\n");
+				break;
+			}
+
+			//Data is not encrypted Tpv = 81
+			if (resp.GetByte(0) == 0x81)
+			{
+				CByteArray fileData = resp.GetBytes(3, resp.GetByte(2));
+				fileContents.Append(fileData);
+			}
+			else
+			{
+				CByteArray cryptogram(resp.GetBytes(4, resp.GetByte(2)-1));
+
+				//Decrypt a block of the file data
+				CByteArray fileData = decrypt_data_3des(this->encryption_key, cryptogram);
+				fileContents.Append(fileData);
+			}
+
+			bytesRead += blockSize;
+		}
+
+		return fileContents;
+	}
+
+	bool SecurityContext::selectFile(CByteArray &fileID)
+	{
+		//TODO: for now we're just testing the next APDU after finishing mutual authentication
+		unsigned char select_file[] = {0x0C, 0xA4, 0x00, 0x00, 0x02};
+		CByteArray selectFileAPDU(select_file, sizeof(select_file));
+		selectFileAPDU.Append(fileID);
+
+		CByteArray secure_apdu = buildSecureAPDU(selectFileAPDU);
+
+        CByteArray resp = m_card->sendAPDU(secure_apdu);
+
+		if (!checkSW12(resp))
+		{
+			MWLOG(LEV_ERROR, MOD_APL, L"selectFile() failed!");
+			return false;
+		}
+
+		if (!checkMacInResponseAPDU(resp))
+		{
+			fprintf(stderr, "[selectFile] MAC mismatch in response APDU!\n");
+			return false;
+		}
+
 		return true;
 	}
 
@@ -543,9 +833,25 @@ err:
 		this->m_ssc = 1;
 
 		bool resp = sam_helper->verifySignedChallenge(externalAuthInput);
-		internalAuthenticate();
+		resp = internalAuthenticate();
+
+		//TODO: just testing, this should be moved to CVC_Read()/CVC_writeFile
+		//selectFile("EF05");
+		//readBinary();
 
 		return resp;
+	}
+
+	//Example of value for 3F 00 5F 00 EF 07
+	CByteArray SecurityContext::readFile(unsigned char *file, int filelen, unsigned long bytesToRead)
+	{
+		for (int i=0; i!= filelen / 2; i++)
+		{
+			CByteArray fileToSelect(file+i*2, 2);
+			selectFile(fileToSelect);
+		}
+
+		return readBinary(bytesToRead);
 	}
 
 	bool SecurityContext::verifyCVCCertificate(CByteArray ifd_cvc)
@@ -556,6 +862,5 @@ err:
 		return sam_helper->verifyCert_CV_IFD(ifd_cvc);
 
 	}
-
 
 }

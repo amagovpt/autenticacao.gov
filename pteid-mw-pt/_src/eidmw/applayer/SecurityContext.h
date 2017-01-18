@@ -33,6 +33,7 @@ namespace eIDMW
 			 */
 			EIDMW_APL_API CByteArray getExternalAuthenticateChallenge();
 			EIDMW_APL_API bool verifySignedChallenge(CByteArray signed_challenge);
+			EIDMW_APL_API CByteArray readFile(unsigned char *file, int filelen,  unsigned long bytesToRead);
 
 			EIDMW_APL_API bool writeFile(char *fileID, CByteArray file_content, unsigned int offset);
 
@@ -43,8 +44,12 @@ namespace eIDMW
 			bool internalAuthenticate();
 			void deriveSessionKeys();
 			CByteArray buildSecureAPDU(CByteArray &plaintext_apdu);
+			bool checkMacInResponseAPDU(CByteArray &resp);
+			bool validateInternalAuth(CByteArray &resp);
+			bool selectFile(CByteArray &fileID);
+			CByteArray readBinary(unsigned long bytesToRead);
 
-			void computeInitialSSC(CByteArray &rnd_icc, CByteArray &rnd_ifd);
+			void computeInitialSSC();
 
 			APL_Card *m_card;
 
@@ -57,12 +62,15 @@ namespace eIDMW
 			//Shared secret
 			CByteArray m_kicc_ifd;
 
+
 			//Send Sequence Counter (used in MAC and encryption as IV)
 			long m_ssc;
-			
-
+				
+			CByteArray m_RNDICC;
+			CByteArray m_RNDIFD;
 			CByteArray m_kicc;
 			CByteArray m_kifd;
+			CByteArray pkIccAuth;
 			SAM * sam_helper;
 
 			//Value extracted from ifd_cvc certificate

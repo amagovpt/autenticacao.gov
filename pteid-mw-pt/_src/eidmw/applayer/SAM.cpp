@@ -479,17 +479,21 @@ bool SAM::verifySignedChallenge(char *signed_challenge)
 }
 
 /* Fetch all the parameters needed from the card */
-bool SAM::getDHParams(DHParams *dh_struct)
+bool SAM::getDHParams(DHParams *dh_struct, bool getAllParams)
 {
 
 	dh_struct->dh_g = _getDH_Param(0x88, 12);
 	dh_struct->dh_p = _getDH_Param(0x86, 12);
 	dh_struct->dh_q = _getDH_Param(0x87, 10);
-
 	dh_struct->cvc_ca_public_key = _getCVCPublicKey();
 	dh_struct->card_auth_public_key = _getCardAuthPublicKey();
-	dh_struct->certificateChain = _getSODCert();
-	dh_struct->version = m_card->getType() == APL_CARDTYPE_PTEID_IAS07 ? 1 : 2;
+	
+	if (getAllParams)
+	{
+		
+		dh_struct->certificateChain = _getSODCert();
+		dh_struct->version = m_card->getType() == APL_CARDTYPE_PTEID_IAS07 ? 1 : 2;
+	}
 
 	return true;
 }
