@@ -31,7 +31,7 @@
 dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString & Header, QString & PINName, bool UseKeypad, QWidget *parent, Type_WndGeometry *pParentWndGeometry ) : dlgWndBase(parent)
 {
 	ui.setupUi(this);
-	//setFixedSize(416,270);
+	
 
 	if( pinInfo.ulFlags & PIN_FLAG_DIGITS )
 	{
@@ -100,6 +100,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 	
 	//Max Length of PINs for PTEID cards as currently defined by INCM personalization
 	ui.txtPIN->setMaxLength( 8 );
+	setFixedSize(this->width(), this->height());
 
     Type_WndGeometry WndGeometry;
 	if ( getWndCenterPos( pParentWndGeometry
