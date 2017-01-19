@@ -46,8 +46,8 @@ namespace eIDMW
 			CByteArray buildSecureAPDU(CByteArray &plaintext_apdu);
 			bool checkMacInResponseAPDU(CByteArray &resp);
 			bool validateInternalAuth(CByteArray &resp);
-			bool selectFile(CByteArray &fileID);
-			CByteArray readBinary(unsigned long bytesToRead);
+			bool selectFile(CByteArray &fileID, unsigned int *fileSize);
+			CByteArray readBinary(unsigned long bytesToRead, unsigned int fileSize);
 
 			void computeInitialSSC();
 

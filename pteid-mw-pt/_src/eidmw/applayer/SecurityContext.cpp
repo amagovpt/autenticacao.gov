@@ -111,11 +111,9 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
     des_key_schedule ks_b;
     int i, j;
 
-    int offset = 0;
-
 	CByteArray in;
 	//std::cerr << "DEBUG: retail_mac_des: mac_input.Size(): " << mac_input.Size() << std::endl;
-	std::cerr << "mac_input: " << byteArrayToString(mac_input) << std::endl;
+	//std::cerr << "mac_input: " << byteArrayToString(mac_input) << std::endl;
 	//std::cerr << "Using MAC key: " << key.ToString(false, true, 0, 0xFFFFFFFF) << std::endl;
 
 	//SSC is an 8-byte counter that serves as the first block of the MAC input
@@ -130,9 +128,8 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
    
     memset(des_out, 0, sizeof(des_out));
 
-  /* prepare des key using first 8 bytes of key */
+   
     DES_set_key_unchecked((const_DES_cblock*) key.GetBytes(), &ks_a);
-  /* prepare des key using second 8 bytes of key */
     DES_set_key_unchecked((const_DES_cblock*) secondKey.GetBytes(), &ks_b);
 
   for (j=0; j < (macInputWithSSC.Size() / MAC_KEYSIZE); j++) {
@@ -151,7 +148,7 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 
   CByteArray result(des_out, MAC_KEYSIZE);
   //fprintf(stderr, "DEBUG: retail_mac_des(): %s", byteArrayToString());
-  std::cerr << "retail_mac_des result: " << byteArrayToString(result) << std::endl;
+  //std::cerr << "retail_mac_des result: " << byteArrayToString(result) << std::endl;
 
   return result;
 }
@@ -208,8 +205,8 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 		EVP_CIPHER_CTX * ctx = NULL;
 		int len = 0;
 
-		std::cerr << "Using encryption key: " << key.ToString(false, true, 0, 0xFFFFFFFF) << std::endl;
-		std::cerr << "encrypt_data_3des() input: " << in.ToString(false, true, 0, 0xFFFFFFFF) << std::endl;
+		//std::cerr << "Using encryption key: " << key.ToString(false, true, 0, 0xFFFFFFFF) << std::endl;
+		//std::cerr << "encrypt_data_3des() input: " << in.ToString(false, true, 0, 0xFFFFFFFF) << std::endl;
 
 		if (key.Size() == 0)
 	    {
@@ -273,10 +270,10 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 	}
 
 	#define MAC_LEN 8
+
 	/*
 		Encrypt and add MAC to the input APDU
 	*/
-
 	CByteArray SecurityContext::buildSecureAPDU(CByteArray &plaintext_apdu)
 	{
 		CByteArray final_apdu;
@@ -429,7 +426,7 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 
 		CByteArray internalAuth_resp = decrypt_data_3des(this->encryption_key, cryptogram);
 
-		std::cerr << "internalAuth_resp " << byteArrayToString(internalAuth_resp) << std::endl;
+		//std::cerr << "internalAuth_resp " << byteArrayToString(internalAuth_resp) << std::endl;
 		
 		const unsigned char * iccAuthBytes = pkIccAuth.GetBytes();
 
@@ -734,21 +731,23 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 		return true;
 	}
 
-	CByteArray SecurityContext::readBinary(unsigned long bytesToRead)
+	//TODO: throw exception on error
+	CByteArray SecurityContext::readBinary(unsigned long bytesToRead, unsigned int fileSize)
 	{
 
-		//TODO: Implement the rest of the file read commands and pack the data in a single ByteArray 
 		//The blocksize is 230 because of the overhead secure messaging response APDUs
 		const double blockSize = 230.0;
 		unsigned long bytesRead = 0;
 
 		unsigned char read_binary[] = {0x0C, 0xB0, 0x00, 0x00, 0xE6};
+		double bytes_to_read = bytesToRead < fileSize ? bytesToRead : fileSize;
+
 		CByteArray readBinaryAPDU(read_binary, sizeof(read_binary));
 		CByteArray fileContents;
 
-		int iterations = ceil((double)bytesToRead / blockSize);
+		int iterations = ceil(bytes_to_read / blockSize);
 
-		for (int i=0; i!=iterations; i++)
+		for (int i=0; i != iterations; i++)
 		{
 			//Set the file offset in P1-P2
 			readBinaryAPDU.SetByte(0xFF & bytesRead >> 8, 2);
@@ -757,7 +756,7 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 			//Last iteration: we will read less than a complete block
 			if (i == iterations-1)
 			{
-				readBinaryAPDU.SetByte(bytesToRead-bytesRead, 4);
+				readBinaryAPDU.SetByte(bytes_to_read-bytesRead, 4);
 			}
 
 			CByteArray secure_apdu = buildSecureAPDU(readBinaryAPDU);
@@ -766,7 +765,8 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 
 			if (!checkSW12(resp))
 			{
-				MWLOG(LEV_ERROR, MOD_APL, L"[SecurityContext::readBinary] card returned error!");
+				unsigned long sw12 = 256 * resp.GetByte(resp.Size() - 2) + resp.GetByte(resp.Size() - 1);
+				MWLOG(LEV_ERROR, MOD_APL, L"[SecurityContext::readBinary iteration %d] card returned error: %04x!", i, sw12);
 				break;
 			}
 			if (!checkMacInResponseAPDU(resp))
@@ -778,7 +778,8 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 			//Data is not encrypted Tpv = 81
 			if (resp.GetByte(0) == 0x81)
 			{
-				CByteArray fileData = resp.GetBytes(3, resp.GetByte(2));
+				int lpv = resp.GetByte(1) == 0x81 ? resp.GetByte(2): resp.GetByte(1);
+				CByteArray fileData = resp.GetByte(1) == 0x81 ? resp.GetBytes(3, lpv): resp.GetBytes(2, lpv);
 				fileContents.Append(fileData);
 			}
 			else
@@ -788,6 +789,10 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 				//Decrypt a block of the file data
 				CByteArray fileData = decrypt_data_3des(this->encryption_key, cryptogram);
 				fileContents.Append(fileData);
+				if (i == iterations-1)
+				{
+					fprintf(stderr, "fileData returned %lu bytes\n", fileData.Size());
+				}
 			}
 
 			bytesRead += blockSize;
@@ -796,7 +801,7 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 		return fileContents;
 	}
 
-	bool SecurityContext::selectFile(CByteArray &fileID)
+	bool SecurityContext::selectFile(CByteArray &fileID, unsigned int *fileSize)
 	{
 		//TODO: for now we're just testing the next APDU after finishing mutual authentication
 		unsigned char select_file[] = {0x0C, 0xA4, 0x00, 0x00, 0x02};
@@ -819,6 +824,13 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 			return false;
 		}
 
+		CByteArray cryptogram(resp.GetBytes(3, resp.GetByte(1)-1));
+
+		//Decrypt the SELECT File data (FCI template)
+		CByteArray fciData = decrypt_data_3des(this->encryption_key, cryptogram);
+		//std::cerr << "selectFile: FCI data: " << byteArrayToString(fciData) << std::endl;
+
+		*fileSize = (fciData.GetByte(1) << 8) + fciData.GetByte(2);
 		return true;
 	}
 
@@ -829,29 +841,27 @@ retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
 		externalAuthInput.Append(signed_challenge);
 
 		this->deriveSessionKeys();
-		//Initial value of MCC
+
+		//Initial value of SCC
 		this->m_ssc = 1;
 
 		bool resp = sam_helper->verifySignedChallenge(externalAuthInput);
 		resp = internalAuthenticate();
 
-		//TODO: just testing, this should be moved to CVC_Read()/CVC_writeFile
-		//selectFile("EF05");
-		//readBinary();
-
 		return resp;
 	}
 
-	//Example of value for 3F 00 5F 00 EF 07
 	CByteArray SecurityContext::readFile(unsigned char *file, int filelen, unsigned long bytesToRead)
 	{
+		unsigned int fileSize = 0;
 		for (int i=0; i!= filelen / 2; i++)
 		{
 			CByteArray fileToSelect(file+i*2, 2);
-			selectFile(fileToSelect);
+			selectFile(fileToSelect, &fileSize);
 		}
 
-		return readBinary(bytesToRead);
+		//fprintf(stderr, "SecurityContext::readFile: parsed file length=%d\n", fileSize);
+		return readBinary(bytesToRead, fileSize);
 	}
 
 	bool SecurityContext::verifyCVCCertificate(CByteArray ifd_cvc)
