@@ -91,12 +91,12 @@ enum PTEID_FileType
 enum PTEID_Param
 {
 	//GENERAL
-	PTEID_PARAM_GENERAL_INSTALLDIR,		//string, directory of the basic eid software; �c:/Program Files/pteid/�
-	PTEID_PARAM_GENERAL_INSTALL_PRO_DIR,		//string, directory of the pro eid software; �c:/Program Files/pteid/�
-	PTEID_PARAM_GENERAL_INSTALL_SDK_DIR,		//string, directory of the sdk eid software; �c:/Program Files/pteid/�
+	PTEID_PARAM_GENERAL_INSTALLDIR,		//string, directory of the basic eid software;
+	PTEID_PARAM_GENERAL_INSTALL_PRO_DIR,		//string, directory of the pro eid software; 
+	PTEID_PARAM_GENERAL_INSTALL_SDK_DIR,		//string, directory of the sdk eid software;
 	PTEID_PARAM_GENERAL_CACHEDIR,		//string, cache directory for card-file;
 	PTEID_PARAM_GENERAL_PTEID_CACHEDIR,
-	PTEID_PARAM_GENERAL_LANGUAGE,		//string, user language: fr, nl, en, de, �
+	PTEID_PARAM_GENERAL_LANGUAGE,		//string, user language: en, pt
 	PTEID_PARAM_GENERAL_SAM_SERVER,
 	PTEID_PARAM_GENERAL_SCAP_HOST,
 	PTEID_PARAM_GENERAL_SCAP_PORT,
@@ -128,7 +128,7 @@ enum PTEID_Param
 	//GUITOOL
 	PTEID_PARAM_GUITOOL_STARTWIN,		//number; 0=no(default), 1=yes
 	PTEID_PARAM_GUITOOL_STARTMINI,		//number; 0=no(default), 1=yes
-	PTEID_PARAM_GUITOOL_SHOWPIC,			//number; 0=no(default), 1=yes
+	PTEID_PARAM_GUITOOL_SHOWPIC,		//number; 0=no(default), 1=yes
 	PTEID_PARAM_GUITOOL_SHOWTBAR,		//number; 0=no, 1=yes
 	PTEID_PARAM_GUITOOL_VIRTUALKBD,		//number; 0=no, 1=yes
 	PTEID_PARAM_GUITOOL_AUTOCARDREAD,	//number; 0=no, 1=yes(default)

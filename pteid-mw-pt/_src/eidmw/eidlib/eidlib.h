@@ -1341,7 +1341,7 @@ friend PTEID_Certificates& PTEID_SmartCard::getCertificates();		/**< For interna
 class APL_Certif;
 
 /******************************************************************************//**
-  * Class that represent one certificate.
+  * Class that represents one certificate.
   *********************************************************************************/
 class PTEID_Certificate : public PTEID_Crypto
 {
@@ -1425,7 +1425,7 @@ friend PTEID_Certificate &PTEID_Certificates::addCertificate(PTEID_ByteArray &ce
 
 class APL_Config;
 
-/******************************************************************************//**
+/**********************************************************************************
   * Class to access the config parameters.
   *********************************************************************************/
 class PTEID_Config : public PTEID_Object
@@ -1614,7 +1614,7 @@ typedef enum {
 	COMP_CARD_TYPE_ERR = 0, // Something went wrong, or unknown card type
 	COMP_CARD_TYPE_IAS07,   // IAS 0.7 card
 	COMP_CARD_TYPE_IAS101,  // IAS 1.01 card
-}tCompCardType;
+} tCompCardType;
 
 typedef struct
 {
@@ -2085,7 +2085,7 @@ PTEIDSDK_API int PTEID_IsEMVCAP();
 */
 /**
  * Start a CVC authentication with the card.
- * The resuling challenge should be signed with the private key corresponding
+ * The resulting challenge should be signed with the private key corresponding
  * to the CVC certificate (raw RSA signature) and provided in the
  * PTEID_CVC_Authenticate() function.
  */
@@ -2101,9 +2101,7 @@ PTEIDSDK_API long PTEID_CVC_Init(
 /**
  * Finish the CVC authentication with the card, to be called
  *   after a PTEID_CVC_Init()
- * Parameters:
- *   ucSignedChallenge:  (IN)  the challenge that was signed by the private key corresponding to the CVC
- *   iSignedChallengeLen (IN)  the length of ucSignedChallenge, must be 128
+ *
  */
 PTEIDSDK_API long PTEID_CVC_Authenticate(
     unsigned char *pucSignedChallenge,	/**< in: the challenge that was signed by the
@@ -2111,6 +2109,12 @@ PTEIDSDK_API long PTEID_CVC_Authenticate(
     int iSignedChallengeLen				/**< in: the length of ucSignedChallenge, must be 128 */
 );
 
+#define CVC_WRITE_MODE_PAD    1
+/**
+ * Write to a file on the card over a 'CVC channel'.
+ * A successfull PTEID_CVC_Init() and PTEID_CVC_Authenticate()
+ * must have been done before.
+ */
 PTEIDSDK_API long PTEID_CVC_WriteFile(
 	unsigned char *file,		/**< in: the path of the file to read (e.g. {0x3F, 0x00, 0x5F, 0x00, 0xEF, 0x05} */
 	int filelen,				/**< in: the length file path (e.g. 6) */
@@ -2144,23 +2148,6 @@ PTEIDSDK_API long PTEID_CVC_ReadFile(
 	int filelen,			/**< in: the length file path (e.g. 6) */
     unsigned char *out,		/**< out: the buffer to contain the file contents */
     unsigned long *outlen	/**< out the number of bytes to read/the number of byte read. */
-);
-
-#define CVC_WRITE_MODE_PAD    1
-
-/**
- * Write to a file on the card over a 'CVC channel'.
- * A successfull PTEID_CVC_Init() and PTEID_CVC_Authenticate()
- * must have been done before.
- */
-PTEIDSDK_API long PTEID_CVC_WriteFile(
-	unsigned char *file,		/**< in: the path of the file to read (e.g. {0x3F, 0x00, 0x5F, 0x00, 0xEF, 0x05} */
-	int filelen,				/**< in: the length file path (e.g. 6) */
-	unsigned long ulFileOffset,	/**< in: at which offset in the file to start writing */
-    const unsigned char *in,	/**< in: the file contents */
-    unsigned long inlen,		/**< in: the number of bytes to write */
-    unsigned long ulMode		/**< in: set to CVC_WRITE_MODE_PAD to pad the file with zeros if
-									(ulFileOffset + inlen) is less then the file length */
 );
 
 
