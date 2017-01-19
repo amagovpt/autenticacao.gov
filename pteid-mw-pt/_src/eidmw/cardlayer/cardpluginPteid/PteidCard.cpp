@@ -547,7 +547,7 @@ bool detectXorgRunning()
 #endif
 
 void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
-        std::string & csPin1, std::string & csPin2,	const tPrivKey *pKey)
+        std::string & csPin1, std::string & csPin2,	const tPrivKey *pKey, void *wndGeometry)
 {
 
 	// Convert params
@@ -585,13 +585,13 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 		if (operation == PIN_OP_VERIFY)
 		{
 			ret = DlgAskPin(pinOperation,
-				usage, wideLabel.c_str(), pinInfo, wsPin1,PIN_MAX_LENGTH+1);
+				usage, wideLabel.c_str(), pinInfo, wsPin1,PIN_MAX_LENGTH+1, wndGeometry );
 		}
 		else
 		{
 			ret = DlgAskPins(pinOperation, usage, wideLabel.c_str(),
 				pinInfo, wsPin1,PIN_MAX_LENGTH+1,
-				pinInfo, wsPin2,PIN_MAX_LENGTH+1);
+				pinInfo, wsPin2,PIN_MAX_LENGTH+1, wndGeometry );
 		}
 #ifdef __linux__
 
@@ -616,7 +616,7 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 
 bool CPteidCard::PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg)
+        unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg, void *wndGeometry )
 {
 	bool pincheck;
     tPin pteidPin = Pin;
@@ -628,9 +628,11 @@ bool CPteidCard::PinCmd(tPinOperation operation, const tPin & Pin,
 	//pteidPtrqin.encoding = PIN_ENC_BCD;
 	pteidPin.encoding = PIN_ENC_ASCII; //PT uses ASCII only for PIN
 	if (m_AppletVersion == 1 ) {
-		pincheck = CPkiCard::PinCmd(operation, pteidPin, csPin1, csPin2, ulRemaining, pKey,bShowDlg);
+		pincheck = CPkiCard::PinCmd(operation, pteidPin, csPin1, csPin2
+                                , ulRemaining, pKey,bShowDlg, wndGeometry);
 	} else {
-		pincheck = CPkiCard::PinCmdIAS(operation, pteidPin, csPin1, csPin2, ulRemaining, pKey,bShowDlg);
+		pincheck = CPkiCard::PinCmdIAS(operation, pteidPin, csPin1, csPin2
+                                    , ulRemaining, pKey,bShowDlg, wndGeometry);
 	}
 
 	return pincheck;

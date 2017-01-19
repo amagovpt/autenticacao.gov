@@ -151,7 +151,7 @@ const unsigned long DLG_LANG_PT = 0x0816;
  */
 DLGS_EXPORT DlgRet DlgAskPin(DlgPinOperation operation,
 	DlgPinUsage usage, const wchar_t *csPinName,
-	DlgPinInfo pinInfo, wchar_t *csPin, unsigned long ulPinBufferLen);
+	DlgPinInfo pinInfo, wchar_t *csPin, unsigned long ulPinBufferLen, void *wndGeometry = 0 );
 
 /**
  * Ask for 2 PINs, the 2nd PIN should be asked twice for confirmation
@@ -169,18 +169,18 @@ DLGS_EXPORT DlgRet DlgAskPin(DlgPinOperation operation,
 DLGS_EXPORT DlgRet DlgAskPins(DlgPinOperation operation,
 	DlgPinUsage usage, const wchar_t *csPinName,
 	DlgPinInfo pin1Info, wchar_t *csPin1, unsigned long ulPin1BufferLen,
-	DlgPinInfo pin2Info, wchar_t *csPin2, unsigned long ulPin2BufferLen);
+	DlgPinInfo pin2Info, wchar_t *csPin2, unsigned long ulPin2BufferLen, void *wndGeometry = 0 );
 
 /**
  * Display a message, e.g. "Bad PIN, x remaining attempts" or "PIN blocked".
- * - ulRemainingTries: the remaining PIN tries: if 
+ * - ulRemainingTries: the remaining PIN tries: if
  * Returns: DLG_OK if the OK button was pressed,
  *          DLG_CANCEL if the Cancel button was pressed,
  *          DLG_RETRY if the Retry button was pressed
  *          DLG_BAD_PARAM or DLG_ERR otherwise
  */
 DLGS_EXPORT DlgRet DlgBadPin(DlgPinUsage usage, const wchar_t *csPinName,
-	unsigned long ulRemainingTries);
+	unsigned long ulRemainingTries, void *wndGeometry = 0 );
 
 /************************************************************************************
  * Pin pad dialogs
@@ -203,7 +203,7 @@ DLGS_EXPORT DlgRet DlgBadPin(DlgPinUsage usage, const wchar_t *csPinName,
 DLGS_EXPORT DlgRet DlgDisplayPinpadInfo(DlgPinOperation operation,
 	const wchar_t *csReader, DlgPinUsage usage, const wchar_t *csPinName,
 	const wchar_t *csMessage,
-	unsigned long *pulHandle);
+	unsigned long *pulHandle, void *wndGeometry = 0 );
 
 /**
 * Close the pinpad info dialog 
@@ -272,12 +272,26 @@ struct DlgAskPINArguments {
    pid_t tRunningProcess;
  };
 
+ struct WndGeometry{
+    int x;
+    int y;
+    int width;
+    int height;
+};
+typedef struct WndGeometry Type_WndGeometry;
+
  void InitializeRand();
  std::string RandomFileName();
  std::string CreateRandomFile();
  void DeleteFile(const char *csFilename);
- void CallQTServer(const DlgFunctionIndex index,
-		     const char *csFilename);
+ void CallQTServer(    const DlgFunctionIndex index
+                    ,  const char *csFilename
+                    , void *wndGeometry = 0 );
+
+DLGS_EXPORT bool getWndCenterPos( Type_WndGeometry *pWndGeometry
+                                , int desktop_width, int desktop_height
+                                , int wnd_width, int wnd_height
+                                , Type_WndGeometry *outWndGeometry );
 
 #pragma pack(pop)   /* restore original alignment from stack */
 #endif

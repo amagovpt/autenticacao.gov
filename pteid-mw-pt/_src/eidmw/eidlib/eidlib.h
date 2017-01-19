@@ -1249,7 +1249,7 @@ public:
 	  *
 	  * @return true if success and false if failed
 	  */
-	PTEIDSDK_API bool verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg=true);
+	PTEIDSDK_API bool verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg=true, void *wndGeometry = 0 );
 
 	/**
 	  * Ask the card to change the pin.
@@ -1269,7 +1269,7 @@ public:
 	  *
 	  * @return true if success and false if failed
 	  */
-	PTEIDSDK_API bool changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg=true);
+	PTEIDSDK_API bool changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg=true, void *wndGeometry = 0 );
 
 private:
 	PTEID_Pin(const PTEID_Pin& pin);									/**< Copy not allowed - not implemented */

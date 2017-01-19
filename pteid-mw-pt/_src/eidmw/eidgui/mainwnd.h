@@ -49,6 +49,10 @@ typedef const void *PCX509CERT;
 #include "eidlibException.h"
 #include "picturepopup.h"
 
+#if !defined(WIN32)
+#include "dialogs.h"
+#endif /* !defined(WIN32) */
+
 using namespace eIDMW;
 
 
@@ -484,7 +488,13 @@ private:
 	QTreeCertItem* buildTree(PTEID_Certificate &cert, bool &bEx);
 	void SetValidCertificate();
 	void getReaderIndexes( unsigned long *p_ReaderStartIdx, unsigned long *p_ReaderEndIdx, bool bRefresh = false );
+#if !defined(WIN32)
+	void setWndGeometry( const QRect &wndGeometry );
+#endif /* !defined(WIN32) */
 
+#if !defined(WIN32)
+    Type_WndGeometry        m_WndGeometry;
+#endif /* !defined(WIN32) */
 	eZOOMSTATUS				m_Zoom;
 	QPrinter*				m_pPrinter;				//!< the 'Selected' Printer
 	Ui_MainWnd				m_ui;

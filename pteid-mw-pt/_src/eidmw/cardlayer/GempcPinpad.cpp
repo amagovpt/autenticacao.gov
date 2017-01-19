@@ -129,7 +129,7 @@ DWORD GemPcPinpad::loadStrings(SCARDHANDLE hCard, unsigned char ucPinType)
 CByteArray GemPcPinpad::PinCmd(tPinOperation operation,
 		const tPin & pin, unsigned char ucPinType,
         const CByteArray & oAPDU, unsigned long & ulRemaining,
-        bool bShowDlg)
+        bool bShowDlg, void *wndGeometry )
 {
 
 	PP_VERIFY_CCID pin_verify;
@@ -162,7 +162,7 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation,
 			CByteArray b1((const unsigned char *)pin_struct, (unsigned long)length);
 
 			return PinpadControl((unsigned long)ioctl2, b1, operation,
-				ucPinType, pin.csLabel, bShowDlg);
+                                ucPinType, pin.csLabel, bShowDlg, wndGeometry );
 		}
 		else if (operation == PIN_OP_CHANGE)
 		{
@@ -179,8 +179,8 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation,
 			CByteArray b2((const unsigned char *)pin_struct, (unsigned long)length);
 
 			return PinpadControl((unsigned long)ioctl2, b2, operation,
-				ucPinType, pin.csLabel, bShowDlg);
-		} 
+                                ucPinType, pin.csLabel, bShowDlg, wndGeometry );
+		}
 		else if (operation == PIN_OP_RESET)
 		{
 			ioctl2 = CM_IOCTL_MODIFY_PIN;
@@ -196,7 +196,7 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation,
 			CByteArray b2((const unsigned char *)pin_struct, (unsigned long)length);
 
 			return PinpadControl((unsigned long)ioctl2, b2, operation,
-					ucPinType, pin.csLabel, bShowDlg);
+                                ucPinType, pin.csLabel, bShowDlg, wndGeometry );
 		}
 }
 

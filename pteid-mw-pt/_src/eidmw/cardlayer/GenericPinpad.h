@@ -58,14 +58,14 @@ public:
    virtual CByteArray PinCmd(tPinOperation operation,
 		const tPin & pin, unsigned char ucPinType,
         const CByteArray & oAPDU, unsigned long & ulRemaining,
-        bool bShowDlg = true);
+        bool bShowDlg = true, void *wndGeometry = 0 );
 
    unsigned int m_fully_built;
 
 protected:
 	CByteArray PinpadControl(unsigned long ulControl, const CByteArray & oCmd,
 		tPinOperation operation, unsigned char ucPintype,
-		const std::string & csPinLabel,	bool bShowDlg);
+		const std::string & csPinLabel,	bool bShowDlg, void *wndGeometry = 0 );
 
 	void GetFeatureList();
 
@@ -73,7 +73,7 @@ protected:
 
 	bool ShowDlg(unsigned char pinpadOperation, unsigned char ucPintype,
 		const std::string & csPinLabel, const std::string & csReader,
-		unsigned long *pulDlgHandle);
+		unsigned long *pulDlgHandle, void *wndGeometry = 0);
 	/** To close the dialog opened by PinCmd() */
 	void CloseDlg(unsigned long ulDlgHandle);
 
@@ -89,13 +89,13 @@ protected:
 	virtual CByteArray PinCmd1(tPinOperation operation,
 			const tPin & pin, unsigned char ucPinType,
 			const CByteArray & oAPDU, unsigned long & ulRemaining,
-			bool bShowDlg = true);
+			bool bShowDlg = true, void *wndGeometry = 0 );
 
 	// For PIN change and unblock with PIN change (2 PINs needed)
 	virtual CByteArray PinCmd2(tPinOperation operation,
 			const tPin & pin, unsigned char ucPinType,
 			const CByteArray & oAPDU, unsigned long & ulRemaining,
-			bool bShowDlg = true);
+			bool bShowDlg = true, void *wndGeometry = 0 );
 
 	CContext *m_poContext;
 	SCARDHANDLE m_hCard;

@@ -830,21 +830,21 @@ bool PTEID_Pin::verifyPin()
 	return out;
 }
 
-bool PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg)
+bool PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg, void *wndGeometry )
 {
 	bool out = false;
 
 	BEGIN_TRY_CATCH
 
 	APL_Pin *pimpl=static_cast<APL_Pin *>(m_impl);
-	out = pimpl->verifyPin(csPin,ulRemaining,bShowDlg);
+	out = pimpl->verifyPin(csPin,ulRemaining,bShowDlg, wndGeometry );
 	
 	END_TRY_CATCH
 
 	return out;
 }
 
-bool PTEID_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg)
+bool PTEID_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg, void *wndGeometry)
 {
 
 	bool out = false;
@@ -852,7 +852,7 @@ bool PTEID_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &u
 	BEGIN_TRY_CATCH
 
 	APL_Pin *pimpl=static_cast<APL_Pin *>(m_impl);
-	out = pimpl->changePin(csPin1,csPin2,ulRemaining, PinName, bShowDlg);
+	out = pimpl->changePin(csPin1,csPin2,ulRemaining, PinName, bShowDlg, wndGeometry );
 	
 	END_TRY_CATCH
 

@@ -136,14 +136,14 @@ unsigned char GenericPinpad::GetMaxPinLen(const tPin & pin)
 CByteArray GenericPinpad::PinCmd(tPinOperation operation,
 	const tPin & pin, unsigned char ucPinType,
     const CByteArray & oAPDU, unsigned long & ulRemaining,
-    bool bShowDlg)
+    bool bShowDlg, void *wndGeometry )
 {
 
 	CByteArray oResp;
 	if (operation == PIN_OP_VERIFY)
-		oResp = PinCmd1(operation, pin, ucPinType, oAPDU, ulRemaining,bShowDlg);
+		oResp = PinCmd1(operation, pin, ucPinType, oAPDU, ulRemaining,bShowDlg, wndGeometry );
 	else
-		oResp = PinCmd2(operation, pin, ucPinType, oAPDU, ulRemaining,bShowDlg);
+		oResp = PinCmd2(operation, pin, ucPinType, oAPDU, ulRemaining,bShowDlg, wndGeometry );
 
 	if (oResp.Size() != 2)
 	{
@@ -173,7 +173,7 @@ CByteArray GenericPinpad::PinCmd(tPinOperation operation,
 CByteArray GenericPinpad::PinCmd1(tPinOperation operation,
 	const tPin & pin, unsigned char ucPinType,
     const CByteArray & oAPDU, unsigned long & ulRemaining,
-    bool bShowDlg)
+    bool bShowDlg, void *wndGeometry )
 {
 	EIDMW_PP_VERIFY_CCID xVerifyCmd;
 	unsigned long ulVerifyCmdLen;
@@ -198,14 +198,14 @@ CByteArray GenericPinpad::PinCmd1(tPinOperation operation,
 	if (m_ioctlVerifyDirect)
 	{
 		return PinpadControl(m_ioctlVerifyDirect, oCmd, operation,
-			ucPinType, pin.csLabel, bShowDlg);
+			ucPinType, pin.csLabel, bShowDlg, wndGeometry );
 	}
 	else
 	{
 		PinpadControl(m_ioctlVerifyStart, oCmd, operation,
 			ucPinType, pin.csLabel, false);
 		return PinpadControl(m_ioctlVerifyFinish, CByteArray(), operation,
-			ucPinType, "", bShowDlg);
+			ucPinType, "", bShowDlg, wndGeometry );
 	}
 }
 
@@ -213,7 +213,7 @@ CByteArray GenericPinpad::PinCmd1(tPinOperation operation,
 CByteArray GenericPinpad::PinCmd2(tPinOperation operation,
 	const tPin & pin, unsigned char ucPinType,
     const CByteArray & oAPDU, unsigned long & ulRemaining,
-    bool bShowDlg)
+    bool bShowDlg, void *wndGeometry )
 {
 	EIDMW_PP_CHANGE_CCID xChangeCmd;
 	unsigned long ulChangeCmdLen;
@@ -245,20 +245,20 @@ CByteArray GenericPinpad::PinCmd2(tPinOperation operation,
 	if (m_ioctlChangeDirect)
 	{
 		return PinpadControl(m_ioctlChangeDirect, oCmd, operation,
-			ucPinType, pin.csLabel, bShowDlg);
+                            ucPinType, pin.csLabel, bShowDlg, wndGeometry );
 	}
 	else
 	{
 		PinpadControl(m_ioctlChangeStart, oCmd, operation,
 			ucPinType, pin.csLabel, false);
 		return PinpadControl(m_ioctlChangeFinish, CByteArray(), operation,
-			ucPinType, "", bShowDlg);
+			ucPinType, "", bShowDlg, wndGeometry );
 	}
 }
 
 bool GenericPinpad::ShowDlg(unsigned char pinpadOperation, unsigned char ucPintype,
 	const std::string & csPinLabel, const std::string & csReader,
-	unsigned long *pulDlgHandle)
+	unsigned long *pulDlgHandle, void *wndGeometry)
 {
 
 	const char *csMesg = "";
@@ -283,7 +283,7 @@ bool GenericPinpad::ShowDlg(unsigned char pinpadOperation, unsigned char ucPinty
 	std::wstring wideMesg = utilStringWiden(csMesg);
 	return EIDMW_OK == DlgDisplayPinpadInfo(dlgOperation,
 			wideReader.c_str(), dlgUsage,
-			widePinLabel.c_str(), wideMesg.c_str(), pulDlgHandle);
+			widePinLabel.c_str(), wideMesg.c_str(), pulDlgHandle, wndGeometry );
 }
 
 void GenericPinpad::CloseDlg(unsigned long ulDlgHandle)
@@ -292,15 +292,19 @@ void GenericPinpad::CloseDlg(unsigned long ulDlgHandle)
 }
 CByteArray GenericPinpad::PinpadControl(unsigned long ulControl, const CByteArray & oCmd,
 	tPinOperation operation, unsigned char ucPintype,
-	const std::string & csPinLabel,	bool bShowDlg)
+	const std::string & csPinLabel,	bool bShowDlg, void *wndGeometry )
 {
 	unsigned char pinpadOperation = PinOperation2Lib(operation);
 
 	unsigned long ulDlgHandle;
 	bool bCloseDlg = bShowDlg;
-	if (bShowDlg)
-		bCloseDlg = ShowDlg(pinpadOperation,
-		ucPintype, csPinLabel, m_csReader, &ulDlgHandle);
+	if (bShowDlg){
+		bCloseDlg = ShowDlg(pinpadOperation
+                            , ucPintype, csPinLabel
+                            , m_csReader
+                            , &ulDlgHandle
+                            , wndGeometry );
+    }
 
 	CByteArray oResp;
 	try

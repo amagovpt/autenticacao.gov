@@ -39,7 +39,7 @@ class dlgWndAskPINs : public dlgWndBase
 	Q_OBJECT
 
 public:
-	dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString & Header, QString & PINName, bool UseKeypad, QWidget *parent = 0 );
+	dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString & Header, QString & PINName, bool UseKeypad, QWidget *parent = 0, Type_WndGeometry *pParentWndGeometry = 0 );
 	~dlgWndAskPINs();
 
 	std::wstring getPIN1(){ return QString(ui.txtOldPIN->text()).toStdWString(); };

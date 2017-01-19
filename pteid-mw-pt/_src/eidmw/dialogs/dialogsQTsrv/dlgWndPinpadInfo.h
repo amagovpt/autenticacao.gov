@@ -34,9 +34,9 @@ class dlgWndPinpadInfo : public QWidget
 	Q_OBJECT
 
 public:
-	dlgWndPinpadInfo( unsigned long ulHandle, 
-		DlgPinOperation operation, const QString & Reader, 
-		const QString &PINName, const QString & Message, QWidget *parent = 0 );
+	dlgWndPinpadInfo( unsigned long ulHandle,
+		DlgPinOperation operation, const QString & Reader,
+		const QString &PINName, const QString & Message, QWidget *parent = 0, Type_WndGeometry *pParentWndGeometry = 0 );
 	~dlgWndPinpadInfo();
 
 protected:

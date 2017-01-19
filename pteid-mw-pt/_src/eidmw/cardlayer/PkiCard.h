@@ -60,12 +60,12 @@ public:
     virtual bool PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
         unsigned long & ulRemaining, const tPrivKey *pKey = NULL,
-        bool bShowDlg=true);
+        bool bShowDlg=true, void *wndGeometry = 0 );
 
     virtual bool PinCmdIAS(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
         unsigned long & ulRemaining, const tPrivKey *pKey = NULL,
-        bool bShowDlg=true);
+        bool bShowDlg=true, void *wndGeometry = 0 );
 
     virtual CByteArray Sign(const tPrivKey & key, const tPin & Pin,
         unsigned long algo, const CByteArray & oData);
@@ -88,10 +88,10 @@ protected:
 	virtual unsigned char PinUsage2Pinpad(const tPin & Pin, const tPrivKey *pKey);
 	virtual DlgPinOperation PinOperation2Dlg(tPinOperation operation);
     virtual void showPinDialog(tPinOperation operation, const tPin & Pin,
-        std::string & csPin1, std::string & csPin2, const tPrivKey *pKey) = 0;
+        std::string & csPin1, std::string & csPin2, const tPrivKey *pKey, void *wndGeometry = 0 ) = 0;
 
     virtual CByteArray MakePinCmd(tPinOperation operation, const tPin & Pin);
-    virtual CByteArray MakePinCmdIAS(tPinOperation operation, const tPin & Pin);
+    virtual CByteArray MakePinCmdIAS(tPinOperation operation, const tPin & Pin, void *wndGeometry = 0 );
     virtual CByteArray MakePinBuf(const tPin & Pin, const std::string & csPin, bool bEmptyPin, bool bPukMerge);
 
     virtual void SetSecurityEnv(const tPrivKey & key, unsigned long algo,

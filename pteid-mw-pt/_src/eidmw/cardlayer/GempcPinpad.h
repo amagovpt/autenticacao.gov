@@ -47,7 +47,7 @@ public:
     virtual CByteArray PinCmd(tPinOperation operation,
 		const tPin & pin, unsigned char ucPinType,
         const CByteArray & oAPDU, unsigned long & ulRemaining,
-        bool bShowDlg = true);
+        bool bShowDlg = true, void *wndGeometry = 0 );
 
 private:
 	void fillVerifyControlStruct(PP_VERIFY_CCID * pin_verify);

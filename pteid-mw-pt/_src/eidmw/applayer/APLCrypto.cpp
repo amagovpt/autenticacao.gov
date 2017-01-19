@@ -656,17 +656,17 @@ const char *APL_Pin::getLabel()
 	return m_pinP15.csLabel.c_str();
 }
 
-bool APL_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg)
+bool APL_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg, void *wndGeometry )
 {
 
-	return m_card->pinCmd(PIN_OP_VERIFY,m_pinP15,csPin,"",ulRemaining,bShowDlg);
+	return m_card->pinCmd(PIN_OP_VERIFY,m_pinP15,csPin,"",ulRemaining,bShowDlg, wndGeometry );
 
 }
 
-bool APL_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg)
+bool APL_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg, void *wndGeometry )
 {
 
-	return m_card->pinCmd(PIN_OP_CHANGE,m_pinP15,csPin1,csPin2,ulRemaining, bShowDlg);
+	return m_card->pinCmd(PIN_OP_CHANGE,m_pinP15,csPin1,csPin2,ulRemaining, bShowDlg, wndGeometry );
 }
 
 

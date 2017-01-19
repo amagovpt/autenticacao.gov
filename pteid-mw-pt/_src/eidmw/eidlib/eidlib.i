@@ -1395,6 +1395,7 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 	  return retval;
 }
 
+%ignore eIDMW::PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg, void *wndGeometry );
 %ignore eIDMW::PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining);
 
 // --------------------------------------
@@ -1426,6 +1427,7 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 	  return retval;
 }
 
+%ignore eIDMW::PTEID_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg, void *wndGeometry );
 %ignore eIDMW::PTEID_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName);
 
 

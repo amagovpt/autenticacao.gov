@@ -20,10 +20,11 @@
 
 #include "dlgWndPinpadInfo.h"
 #include "../langUtil.h"
+#include <QDesktopWidget>
 
 dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
-		DlgPinOperation operation, const QString & Reader,  
-		const QString &PINName, const QString & Message, QWidget *parent )
+		DlgPinOperation operation, const QString & Reader,
+		const QString &PINName, const QString & Message, QWidget *parent, Type_WndGeometry *pParentWndGeometry )
 
 	: QWidget(parent)
 {
@@ -56,6 +57,14 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 	}
 
 	parent->setWindowTitle( Title );
+
+    Type_WndGeometry WndGeometry;
+    if ( getWndCenterPos( pParentWndGeometry
+                        , QApplication::desktop()->width(), QApplication::desktop()->height()
+                        , this->width(), this->height()
+                        , &WndGeometry ) ){
+        parent->move( WndGeometry.x, WndGeometry.y );
+    }/* if ( getWndCenterPos( pParentWndGeometry, ... ) ) */
 
 	QString tmpHeader;
 	

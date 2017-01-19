@@ -126,6 +126,14 @@ int main(int argc, char *argv[])
 		int iFunctionIndex = atoi(argv[1]);
 		std::string readableFilePath = argv[2];
 
+        Type_WndGeometry parentWndGeometry;
+		if (argc > 5 ){
+            parentWndGeometry.x = atoi(argv[3]);
+            parentWndGeometry.y = atoi(argv[4]);
+            parentWndGeometry.width = atoi(argv[5]);
+            parentWndGeometry.height = atoi(argv[6]);
+		}/* if (argc > 5 ) */
+
 		#ifdef __APPLE__	
 		// In MacOS we deploy the QT plugins in a specific location which is common 
 		// to all the QT applications (pteidgui, ScapSignature, pteiddialogs)
@@ -223,12 +231,13 @@ int main(int argc, char *argv[])
 						break;
 				}
 	
-				dlg = new dlgWndAskPIN( 
-									   oData->pinInfo, 
-									   oData->usage, 
-									   Header, 
-									   PINName, 
-									   DlgGetKeyPad() );
+				dlg = new dlgWndAskPIN(
+									   oData->pinInfo,
+									   oData->usage,
+									   Header,
+									   PINName,
+									   DlgGetKeyPad(),
+                                       0, &parentWndGeometry );
 				int retVal = dlg->exec();
 				if( retVal == QDialog::Accepted ) 
 				{
@@ -339,11 +348,12 @@ int main(int argc, char *argv[])
 					tr_pin = translatePinName(PINName);
 				}
 
-				dlg = new dlgWndAskPINs(oData->pin1Info, 
-						oData->pin2Info, 
-						Header, 
-						tr_pin, 
-						DlgGetKeyPad());
+				dlg = new dlgWndAskPINs(oData->pin1Info,
+						oData->pin2Info,
+						Header,
+						tr_pin,
+						DlgGetKeyPad(),
+						0, &parentWndGeometry );
 				if( dlg->exec() ) 
 				{
 				        wcscpy_s(oData->pin1, sizeof(oData->pin1)/sizeof(wchar_t), dlg->getPIN1().c_str());
@@ -410,7 +420,7 @@ int main(int argc, char *argv[])
                 if( wcsstr(oData->pinName,L"PIN da Autentica") != 0 )
                     PINName=QString::fromUtf8("PIN da Autentica\xc3\xa7\xc3\xa3o");
 		    QString tr_pin = translatePinName(PINName);
-				dlg = new dlgWndBadPIN(tr_pin, oData->ulRemainingTries);
+				dlg = new dlgWndBadPIN(tr_pin, oData->ulRemainingTries, 0, &parentWndGeometry );
 				if( dlg->exec() ) 
 				{
 					delete dlg;
@@ -456,13 +466,22 @@ int main(int argc, char *argv[])
 			
 			SharedMem oShMemory;
 			
-			if(argc == 3 )
+			if ( ( argc == 3 ) || ( argc == 7 ) )
 			{
 				MWLOG(LEV_DEBUG, MOD_DLG,L"  %s called with DLG_DISPLAY_PINPAD_INFO",argv[0]);
 				
 				char csCommand[100];
-				sprintf(csCommand,"%s %s %s child",argv[0], argv[1], argv[2]);
-				
+				sprintf(csCommand,"%s %s %s",argv[0], argv[1], argv[2]);
+                int len;
+				if ( argc == 7 ){
+                    len = strlen( csCommand );
+                    sprintf(  &csCommand[len]
+                            , " %s %s %s %s"
+                            , argv[3], argv[4], argv[5], argv[6] );
+                }
+                len = strlen( csCommand );
+                sprintf(  &csCommand[len], " child" );
+
 				// spawn a child process
 				signal(SIGCHLD,SIG_IGN);
 				pid_t pid = fork();
@@ -726,14 +745,15 @@ int main(int argc, char *argv[])
 					oShMemory.Detach((void *)oInfoData);
 					SharedMem::Delete(oShMemory.getID());
 
-					dlgInfo = new dlgWndPinpadInfo( 
-												   infoCollectorIndex, 
-												   operation, 
-												   qsReader, 
-												   translatePinName(PINName), 
+					dlgInfo = new dlgWndPinpadInfo(
+												   infoCollectorIndex,
+												   operation,
+												   qsReader,
+												   translatePinName(PINName),
 												   qsMessage,
-												   dlg);
-		
+												   dlg,
+												   &parentWndGeometry );
+
 					MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : dlgWndPinpadInfo created", argv[0]);
 					dlg->show();
                    			dlg->raise();

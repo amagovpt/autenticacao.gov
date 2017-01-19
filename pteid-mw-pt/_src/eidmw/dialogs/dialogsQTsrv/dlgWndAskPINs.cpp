@@ -20,13 +20,14 @@
 
 #include "dlgWndAskPINs.h"
 #include "../langUtil.h"
+#include <QDesktopWidget>
 
 #include <iostream>
 #include <stdio.h>
 
 #define KP_BTN_SIZE 48
 
-dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString & Header, QString & PINName, bool UseKeypad, QWidget *parent ) : dlgWndBase(parent)
+dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString & Header, QString & PINName, bool UseKeypad, QWidget *parent, Type_WndGeometry *pParentWndGeometry ) : dlgWndBase(parent)
 {
 	ui.setupUi(this);
 
@@ -71,59 +72,66 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 
 	QString Title;
 
-	
-		this->setWindowIcon( QIcon( ":/Resources/ICO_CARD_EID_PLAIN_16x16.png" ) );
 
-		if (PINName.contains("PUK"))
-		{
-			Title+= QString::fromWCharArray(GETSTRING_DLG(Unblock));
-		}
-		else
-		{
-			Title+= QString::fromWCharArray(GETSTRING_DLG(RenewingPinCode));
-		}
-		
+    this->setWindowIcon( QIcon( ":/Resources/ICO_CARD_EID_PLAIN_16x16.png" ) );
 
-		this->setWindowTitle( Title );
+    if (PINName.contains("PUK"))
+    {
+        Title+= QString::fromWCharArray(GETSTRING_DLG(Unblock));
+    }
+    else
+    {
+        Title+= QString::fromWCharArray(GETSTRING_DLG(RenewingPinCode));
+    }
 
-		ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
-		ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
-		
-		ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
-		ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
 
-		if (PINName.contains("PUK"))
-			ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(Puk)) );
-		else
-			ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
-		ui.lblOldPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
-		ui.lblNewPIN1->setText( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
-		ui.lblNewPIN1->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
-		ui.lblNewPIN2->setText( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
-		ui.lblNewPIN2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
+    this->setWindowTitle( Title );
 
-		ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
-		ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
-		ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
-		ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
+    ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
+    ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
 
-		ui.fraPIN_Keypad->setVisible( false );
-		connect( ui.btnOk, SIGNAL( clicked() ), this, SLOT( FinalCheck() ) );
+    ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
+    ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
 
-		if( !Header.isEmpty() )
-		{
-			ui.lblHeader->setText(Header);
-			ui.lblHeader->setAccessibleName( Header );
-		}
+    if (PINName.contains("PUK"))
+        ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(Puk)) );
+    else
+        ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
+    ui.lblOldPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
+    ui.lblNewPIN1->setText( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
+    ui.lblNewPIN1->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
+    ui.lblNewPIN2->setText( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
+    ui.lblNewPIN2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
 
-		OldPIN_OK = NewPIN1_OK = NewPIN2_OK = false;
+    ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
+    ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
+    ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
+    ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
 
-	    //Max Length of PINs for PTEID cards as currently defined by INCM personalization
-		ui.txtOldPIN->setMaxLength(8);
+    ui.fraPIN_Keypad->setVisible( false );
+    connect( ui.btnOk, SIGNAL( clicked() ), this, SLOT( FinalCheck() ) );
 
-		ui.txtNewPIN1->setMaxLength(8);
-		ui.txtNewPIN2->setMaxLength(8);
+    if( !Header.isEmpty() )
+    {
+        ui.lblHeader->setText(Header);
+        ui.lblHeader->setAccessibleName( Header );
+    }
 
+    OldPIN_OK = NewPIN1_OK = NewPIN2_OK = false;
+
+    //Max Length of PINs for PTEID cards as currently defined by INCM personalization
+    ui.txtOldPIN->setMaxLength(8);
+
+    ui.txtNewPIN1->setMaxLength(8);
+    ui.txtNewPIN2->setMaxLength(8);
+
+    Type_WndGeometry WndGeometry;
+    if ( getWndCenterPos( pParentWndGeometry
+                        , QApplication::desktop()->width(), QApplication::desktop()->height()
+                        , this->width(), this->height()
+                        , &WndGeometry ) ){
+        this->move( WndGeometry.x, WndGeometry.y );
+    }/* if ( getWndCenterPos( pParentWndGeometry, ... ) ) */
 }
 
 dlgWndAskPINs::~dlgWndAskPINs()

@@ -217,7 +217,7 @@ unsigned char CPkiCard::PinUsage2Pinpad(const tPin & Pin, const tPrivKey *pKey)
 
 bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg)
+        unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg, void *wndGeometry )
 {
 
 	bool bRet = false;
@@ -246,7 +246,7 @@ bad_pin:
     // If no Pin(s) provided and it's no Pinpad reader -> ask Pins
     if (bAskPIN && !bUsePinpad)
 	{
-        showPinDialog(operation, Pin, csReadPin1, csReadPin2, pKey);
+        showPinDialog(operation, Pin, csReadPin1, csReadPin2, pKey, wndGeometry );
 		pcsPin1 = &csReadPin1;
 		pcsPin2 = &csReadPin2;
 	}
@@ -276,8 +276,8 @@ bad_pin:
 		// Send the command
 		if (bUsePinpad)
 			oResp = m_poPinpad->PinCmd(operation, Pin,
-			PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg);
-		else
+                                        PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg, wndGeometry );
+        	else
 			oResp = SendAPDU(oAPDU);
 	}
 
@@ -305,7 +305,7 @@ bad_pin:
 	else if (bAskPIN && !bRet)
 	{
 		DlgPinUsage usage = PinUsage2Dlg(Pin, pKey);
-		DlgRet dlgret = DlgBadPin(usage, utilStringWiden(Pin.csLabel).c_str(), ulRemaining);
+		DlgRet dlgret = DlgBadPin(usage, utilStringWiden(Pin.csLabel).c_str(), ulRemaining, wndGeometry );
 		if (0 != ulRemaining && DLG_RETRY == dlgret)
 			goto bad_pin;
 	}
@@ -322,7 +322,7 @@ bad_pin:
 
 bool CPkiCard::PinCmdIAS(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg)
+        unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg, void *wndGeometry)
 {
 
 	bool bRet = false;
@@ -339,7 +339,7 @@ bad_pin:
     // If no Pin(s) provided and it's no Pinpad reader -> ask Pins
     if (bAskPIN && !bUsePinpad)
 	{
-        showPinDialog(operation, Pin, csReadPin1, csReadPin2, pKey);
+        showPinDialog(operation, Pin, csReadPin1, csReadPin2, pKey, wndGeometry);
 		pcsPin1 = &csReadPin1;
 		pcsPin2 = &csReadPin2;
 	}
@@ -402,17 +402,23 @@ bad_pin:
 
 			if (operation == PIN_OP_CHANGE)
 			{
-				oResp = m_poPinpad->PinCmd(PIN_OP_VERIFY, Pin,
-						PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg);
+				oResp = m_poPinpad->PinCmd(PIN_OP_VERIFY, Pin
+                                            , PinUsage2Pinpad(Pin, pKey), oAPDU
+                                            , ulRemaining
+                                            , bShowDlg, wndGeometry );
 
 				unsigned long ulSW12 = getSW12(oResp);
 				if (ulSW12 == 0x9000)
-					oResp =	m_poPinpad->PinCmd(operation, Pin,
-							PinUsage2Pinpad(Pin, pKey), oAPDUCHANGE, ulRemaining, bShowDlg);
+					oResp =	m_poPinpad->PinCmd(operation, Pin
+                                                , PinUsage2Pinpad(Pin, pKey)
+                                                , oAPDUCHANGE, ulRemaining
+                                                , bShowDlg, wndGeometry );
 			}
 			else
-				oResp = m_poPinpad->PinCmd(operation, Pin,
-						PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg);
+				oResp = m_poPinpad->PinCmd(operation, Pin
+                                            , PinUsage2Pinpad(Pin, pKey)
+                                            , oAPDU, ulRemaining
+                                            , bShowDlg, wndGeometry );
 
 		} else {
 			switch(operation){
@@ -455,7 +461,7 @@ bad_pin:
 	else if (bAskPIN && !bRet)
 	{
 		DlgPinUsage usage = PinUsage2Dlg(Pin, pKey);
-		DlgRet dlgret = DlgBadPin(usage, utilStringWiden(Pin.csLabel).c_str(), ulRemaining);
+		DlgRet dlgret = DlgBadPin(usage, utilStringWiden(Pin.csLabel).c_str(), ulRemaining, wndGeometry );
 		if (0 != ulRemaining && DLG_RETRY == dlgret)
 			goto bad_pin;
 	}
@@ -667,7 +673,7 @@ CByteArray CPkiCard::MakePinCmd(tPinOperation operation, const tPin & Pin)
     return oCmd;
 }
 
-CByteArray CPkiCard::MakePinCmdIAS(tPinOperation operation, const tPin & Pin)
+CByteArray CPkiCard::MakePinCmdIAS(tPinOperation operation, const tPin & Pin, void *wndGeometry )
 {
     CByteArray oCmd(5 + 32);
 

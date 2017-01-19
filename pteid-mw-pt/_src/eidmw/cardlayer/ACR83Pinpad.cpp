@@ -69,7 +69,7 @@ void ACR83Pinpad::fillModifyControlStruct(PP_CHANGE_CCID * pin_change)
 CByteArray ACR83Pinpad::PinCmd(tPinOperation operation,
 		const tPin & pin, unsigned char ucPinType,
         const CByteArray & oAPDU, unsigned long & ulRemaining,
-        bool bShowDlg)
+        bool bShowDlg, void *wndGeometry )
 {
 
     PP_VERIFY_CCID pin_verify;
@@ -97,7 +97,7 @@ CByteArray ACR83Pinpad::PinCmd(tPinOperation operation,
 		CByteArray b1((const unsigned char *)pin_struct, (unsigned long)length);
 
 		return PinpadControl((unsigned long)ioctl2, b1, operation,
-				ucPinType, pin.csLabel, bShowDlg);
+                                ucPinType, pin.csLabel, bShowDlg, wndGeometry );
 
 	}
 	else if (operation == PIN_OP_CHANGE)
@@ -125,7 +125,7 @@ CByteArray ACR83Pinpad::PinCmd(tPinOperation operation,
 		MWLOG(LEV_DEBUG, MOD_CAL, L"Struct: %S", b2.ToString(true, false, 0, -1).c_str());
 
 		return PinpadControl((unsigned long)ioctl2, b2, operation,
-				ucPinType, pin.csLabel, bShowDlg);
+                            ucPinType, pin.csLabel, bShowDlg, wndGeometry );
 	}
 	else if (operation == PIN_OP_RESET)
 	{
@@ -150,7 +150,7 @@ CByteArray ACR83Pinpad::PinCmd(tPinOperation operation,
 		CByteArray b2((const unsigned char *)pin_struct, (unsigned long)length);
 
 		return PinpadControl((unsigned long)ioctl2, b2, operation,
-				ucPinType, pin.csLabel, bShowDlg);
+                            ucPinType, pin.csLabel, bShowDlg, wndGeometry );
 	}
 }
 

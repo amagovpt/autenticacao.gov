@@ -39,7 +39,7 @@
 #include "Config.h"
 
 using namespace eIDMW;
- 
+
 std::map< unsigned long, DlgRunningProc* > dlgPinPadInfoCollector;
 unsigned long dlgPinPadInfoCollectorIndex = 0;
 
@@ -53,11 +53,11 @@ static bool g_bSystemCallsFail = false;
 	*       DIALOGS
 	************************/
 
-//TODO: Add Keypad possibility in DlgAskPin(s)                                      
+//TODO: Add Keypad possibility in DlgAskPin(s)
 DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
      DlgPinUsage usage, const wchar_t *wsPinName,
-     DlgPinInfo pinInfo, wchar_t *wsPin, unsigned long ulPinBufferLen)
-{ 
+     DlgPinInfo pinInfo, wchar_t *wsPin, unsigned long ulPinBufferLen, void *wndGeometry)
+{
   DlgRet lRet = DLG_CANCEL;
 
   DlgAskPINArguments* oData;
@@ -68,18 +68,18 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
     csReadableFilePath = CreateRandomFile();
 
     // creating the shared memory segment
-    // attach oData 
+    // attach oData
     oShMemory.Attach(sizeof(DlgAskPINArguments),csReadableFilePath.c_str(),(void **)&oData);
-  
-    // collect the arguments into the struct placed 
+
+    // collect the arguments into the struct placed
     // on the shared memory segment
     oData->operation = operation;
     oData->usage = usage;
     wcscpy_s(oData->pinName, sizeof(oData->pinName)/sizeof(wchar_t), wsPinName);
     oData->pinInfo = pinInfo;
     wcscpy_s(oData->pin, sizeof(oData->pin)/sizeof(wchar_t), wsPin);
-    
-    CallQTServer(DLG_ASK_PIN,csReadableFilePath.c_str());
+
+    CallQTServer(DLG_ASK_PIN,csReadableFilePath.c_str(), wndGeometry );
     lRet = oData->returnValue;
 
     if(lRet == DLG_OK) {
@@ -88,7 +88,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 
     // detach from the segment
     oShMemory.Detach(oData);
-  
+
     // delete the random file
     DeleteFile(csReadableFilePath.c_str());
   }
@@ -96,12 +96,12 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 
     // detach from the segment
     oShMemory.Detach(oData);
-  
+
     // delete the random file
     DeleteFile(csReadableFilePath.c_str());
 
     return DLG_ERR;
-    
+
   }
   return lRet;
 }
@@ -111,7 +111,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
       DlgPinUsage usage, const wchar_t *wsPinName,
       DlgPinInfo pin1Info, wchar_t *wsPin1, unsigned long ulPin1BufferLen,
-      DlgPinInfo pin2Info, wchar_t *wsPin2, unsigned long ulPin2BufferLen)
+      DlgPinInfo pin2Info, wchar_t *wsPin2, unsigned long ulPin2BufferLen, void *wndGeometry )
 {
 
   DlgRet lRet = DLG_CANCEL;
@@ -119,15 +119,15 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
   DlgAskPINsArguments* oData;
   SharedMem oShMemory;
   std::string csReadableFilePath;
-  
+
   try {
     csReadableFilePath = CreateRandomFile();
 
     // creating the shared memory segment
-    // attach oData 
+    // attach oData
     oShMemory.Attach(sizeof(DlgAskPINsArguments),csReadableFilePath.c_str(),(void**)&oData);
-  
-    // collect the arguments into the struct placed 
+
+    // collect the arguments into the struct placed
     // on the shared memory segment
     oData->operation = operation;
     oData->usage = usage;
@@ -136,8 +136,8 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
     oData->pin2Info = pin2Info;
     wcscpy_s(oData->pin1,sizeof(oData->pin1)/sizeof(wchar_t),wsPin1);
     wcscpy_s(oData->pin2,sizeof(oData->pin2)/sizeof(wchar_t),wsPin2);
-    
-    CallQTServer(DLG_ASK_PINS,csReadableFilePath.c_str());
+
+    CallQTServer(DLG_ASK_PINS,csReadableFilePath.c_str(), wndGeometry );
     lRet = oData->returnValue;
 
     if(lRet == DLG_OK) {
@@ -166,7 +166,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 
 DLGS_EXPORT DlgRet eIDMW::DlgBadPin(
       DlgPinUsage usage, const wchar_t *wsPinName,
-			unsigned long ulRemainingTries)
+			unsigned long ulRemainingTries, void *wndGeometry )
 {
   DlgRet lRet = DLG_CANCEL;
 
@@ -175,21 +175,21 @@ DLGS_EXPORT DlgRet eIDMW::DlgBadPin(
   std::string csReadableFilePath;
 
   try {
-    
+
     csReadableFilePath = CreateRandomFile();
 
     // creating the shared memory segment
-    // attach oData 
+    // attach oData
 
     oShMemory.Attach(sizeof(DlgBadPinArguments),csReadableFilePath.c_str(),(void**)&oData);
-  
-    // collect the arguments into the struct placed 
+
+    // collect the arguments into the struct placed
     // on the shared memory segment
     oData->usage = usage;
     wcscpy_s(oData->pinName,sizeof(oData->pinName)/sizeof(wchar_t),wsPinName);
     oData->ulRemainingTries = ulRemainingTries;
-    
-    CallQTServer(DLG_BAD_PIN,csReadableFilePath.c_str());
+
+    CallQTServer(DLG_BAD_PIN,csReadableFilePath.c_str(), wndGeometry );
     lRet = oData->returnValue;
 
     // detach from the segment
@@ -213,7 +213,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgBadPin(
 DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
       const wchar_t *wsReader, DlgPinUsage usage, const wchar_t *wsPinName,
       const wchar_t *wsMessage,
-			unsigned long *pulHandle)
+			unsigned long *pulHandle, void *wndGeometry )
 {
   DlgRet lRet = DLG_CANCEL;
 
@@ -227,7 +227,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 
     oShMemory.Attach(sizeof(DlgDisplayPinpadInfoArguments),csReadableFilePath.c_str(),(void**)&oData);
 
-    // collect the arguments into the struct placed 
+    // collect the arguments into the struct placed
     // on the shared memory segment
 
     oData->operation = operation;
@@ -237,14 +237,14 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
     wcscpy_s(oData->message,sizeof(oData->message)/sizeof(wchar_t),wsMessage);
     oData->infoCollectorIndex = ++dlgPinPadInfoCollectorIndex;
 
-    CallQTServer(DLG_DISPLAY_PINPAD_INFO,csReadableFilePath.c_str());
+    CallQTServer(DLG_DISPLAY_PINPAD_INFO,csReadableFilePath.c_str(), wndGeometry );
     lRet = oData->returnValue;
 
     if (lRet != DLG_OK) {
       throw CMWEXCEPTION(EIDMW_ERR_SYSTEM);
     }
 
-    // for the killing need to store: 
+    // for the killing need to store:
     // - the shared memory area to be released (unique with the filename?)
     // - the child process ID
     // - the handle (because the user will use it)
@@ -252,7 +252,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
     DlgRunningProc *ptRunningProc = new DlgRunningProc();
     ptRunningProc->iSharedMemSegmentID = oShMemory.getID();
     ptRunningProc->csRandomFilename = csReadableFilePath;
-  
+
     ptRunningProc->tRunningProcess = oData->tRunningProcess;
 
     dlgPinPadInfoCollector[dlgPinPadInfoCollectorIndex] = ptRunningProc;
@@ -267,13 +267,13 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 
     // delete the random file
     DeleteFile(csReadableFilePath.c_str());
-	  
+
 	  MWLOG(LEV_ERROR, MOD_DLG,L"  eIDMW::DlgDisplayPinpadInfo failed");
 
     return DLG_ERR;
   }
   return lRet;
-  
+
 }
 
 
@@ -281,7 +281,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 DLGS_EXPORT void eIDMW::DlgClosePinpadInfo( unsigned long ulHandle )
 {
   // check if we have this handle
-  std::map < unsigned long,DlgRunningProc* >::iterator pIt = 
+  std::map < unsigned long,DlgRunningProc* >::iterator pIt =
     dlgPinPadInfoCollector.find(ulHandle);
 
   if( pIt != dlgPinPadInfoCollector.end()){
@@ -295,14 +295,14 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo( unsigned long ulHandle )
 
       if( kill(pIt->second->tRunningProcess, SIGINT) ) {
 
-	MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgClosePinpadInfo sent signal SIGINT to proc %d : %s ", 
+	MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgClosePinpadInfo sent signal SIGINT to proc %d : %s ",
 	      pIt->second->tRunningProcess, strerror(errno) );
 
 	throw CMWEXCEPTION(EIDMW_ERR_SIGNAL);
       }
 
     } else {
-      MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgClosePinpadInfo sent signal 0 to proc %d : %s ", 
+      MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgClosePinpadInfo sent signal 0 to proc %d : %s ",
 	    pIt->second->tRunningProcess, strerror(errno) );
       throw CMWEXCEPTION(EIDMW_ERR_SIGNAL);
     }
@@ -327,23 +327,23 @@ DLGS_EXPORT void eIDMW::DlgCloseAllPinpadInfo()
 {
 
   // check if we have this handle
-  for(std::map < unsigned long,DlgRunningProc* >::iterator pIt = 
+  for(std::map < unsigned long,DlgRunningProc* >::iterator pIt =
 	dlgPinPadInfoCollector.begin(); pIt != dlgPinPadInfoCollector.end(); ++pIt){
 
     // check if the process is still running
     // and send SIGTERM if so
     if( ! kill(pIt->second->tRunningProcess,0) ){
-      
+
       MWLOG(LEV_INFO, MOD_DLG,L"  eIDMW::DlgCloseAllPinpadInfo :  sending kill signal to process %d\n",
 	    pIt->second->tRunningProcess);
 
       if( kill(pIt->second->tRunningProcess, SIGINT) ) {
-	MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseAllPinpadInfo sent signal SIGINT to proc %d : %s ", 
+	MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseAllPinpadInfo sent signal SIGINT to proc %d : %s ",
 	      pIt->second->tRunningProcess, strerror(errno) );
 	throw CMWEXCEPTION(EIDMW_ERR_SIGNAL);
       }
     } else {
-      MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseAllPinpadInfo sent signal 0 to proc %d : %s ", 
+      MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseAllPinpadInfo sent signal 0 to proc %d : %s ",
 	    pIt->second->tRunningProcess, strerror(errno) );
       throw CMWEXCEPTION(EIDMW_ERR_SIGNAL);
     }
@@ -356,7 +356,7 @@ DLGS_EXPORT void eIDMW::DlgCloseAllPinpadInfo()
 
     // memory is cleaned up in the child process
   }
-    // delete the map 
+    // delete the map
   dlgPinPadInfoCollector.clear();
 }
 
@@ -390,7 +390,7 @@ std::string eIDMW::RandomFileName(){
 
 
 std::string eIDMW::CreateRandomFile(){
-  
+
   std::string csFilePath = RandomFileName();
   // create this file
   char csCommand[100];
@@ -403,11 +403,11 @@ std::string eIDMW::CreateRandomFile(){
     if (test) {
 	fclose(test);
 	g_bSystemCallsFail = true;
-	MWLOG(LEV_WARN, MOD_DLG, L"  eIDMW::CreateRandomFile %s : %s (%d)", 
+	MWLOG(LEV_WARN, MOD_DLG, L"  eIDMW::CreateRandomFile %s : %s (%d)",
 	  csFilePath.c_str(), strerror(errno), errno );
-    } 
+    }
     else {
-	MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CreateRandomFile %s : %s (%d)", 
+	MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CreateRandomFile %s : %s (%d)",
 	  csFilePath.c_str(), strerror(errno), errno );
 	throw CMWEXCEPTION(EIDMW_ERR_SYSTEM);
     }
@@ -420,23 +420,77 @@ void eIDMW::DeleteFile(const char *csFilename){
   sprintf(csCommand," [ -e %s ] && rm %s",csFilename,csFilename);
   if(system(csCommand) != 0) {
     MWLOG(g_bSystemCallsFail ? LEV_WARN : LEV_ERROR,
-	MOD_DLG, L"  eIDMW::DeleteFile %s : %s ", 
+	MOD_DLG, L"  eIDMW::DeleteFile %s : %s ",
 	  csFilename, strerror(errno) );
     //throw CMWEXCEPTION(EIDMW_ERR_SYSTEM);
   }
 }
 
 void eIDMW::CallQTServer(const DlgFunctionIndex index,
-			   const char *csFilename){
-  char csCommand[100];
-  sprintf(csCommand,"%s/%s %i %s ", "/usr/local/bin", csServerName.c_str(),index,csFilename);
+			   const char *csFilename, void *wndGeometry ){
+  char csCommand[150];
+  Type_WndGeometry *pWndGeometry = (Type_WndGeometry *)wndGeometry;
+
+  sprintf(csCommand,"%s/%s %i %s", "/usr/local/bin", csServerName.c_str(),index,csFilename );
+
+  if  ( ( pWndGeometry != NULL )
+        && ( pWndGeometry->x >= 0 ) && ( pWndGeometry->y >= 0 )
+        && ( pWndGeometry->width >= 0 ) && ( pWndGeometry->height >= 0 ) ){
+        int len = strlen( csCommand );
+        sprintf(  &csCommand[len]
+                , " %i %i %i %i"
+                , pWndGeometry->x
+                , pWndGeometry->y
+                , pWndGeometry->width
+                , pWndGeometry->height  );
+  }/*  if  ( ( pWndGeometry != NULL ) && ... ) */
+
   int code = system(csCommand);
   if(code != 0) {
     MWLOG(g_bSystemCallsFail ? LEV_WARN : LEV_ERROR,
-	MOD_DLG, L"  eIDMW::CallQTServer %i %s : %s ", 
+	MOD_DLG, L"  eIDMW::CallQTServer %i %s : %s ",
 	  index, csFilename, strerror(errno) );
     if (!g_bSystemCallsFail)
 	throw CMWEXCEPTION(EIDMW_ERR_SYSTEM);
   }
   return;
 }
+
+bool eIDMW::getWndCenterPos( Type_WndGeometry *pWndGeometry
+                            , int desktop_width, int desktop_height
+                            , int wnd_width, int wnd_height
+                            , Type_WndGeometry *outWndGeometry ){
+    if ( outWndGeometry != NULL ){
+        memset( outWndGeometry, -1, sizeof(Type_WndGeometry) );
+    }/* if ( outWndGeometry != NULL ) */
+
+    /*printf( "eIDMW::getWndCenterPos - pWndGeometry: %ld\n", pWndGeometry );*/
+
+    if ( pWndGeometry == NULL ) return false;
+
+    /*printf( "eIDMW::getWndCenterPos - desktop_width: %ld, desktop_height: %ld"
+            , desktop_width, desktop_height );
+
+    printf( "eIDMW::getWndCenterPos - wnd_width: %ld, wnd_height: %ld\n"
+            , wnd_width, wnd_height );
+    */
+
+    if ( ( desktop_width < 0 ) || ( desktop_height < 0 ) ) return false;
+    if ( ( wnd_width < 0 ) || ( wnd_height < 0 ) ) return false;
+
+    if ( outWndGeometry == NULL ) return false;
+
+    outWndGeometry->x = pWndGeometry->x + ( ( pWndGeometry->width - wnd_width ) / 2 );
+    outWndGeometry->y = pWndGeometry->y + ( ( pWndGeometry->height - wnd_height ) / 2 );
+
+    /*printf( "eIDMW::getWndCenterPos - x: %ld, y: %ld\n"
+            , outWndGeometry->x, outWndGeometry->y );
+            */
+
+    if ( outWndGeometry->x < 0 ) return false;
+    if ( outWndGeometry->y < 0 ) return false;
+    if ( outWndGeometry->x > desktop_width  ) return false;
+    if ( outWndGeometry->y > desktop_height ) return false;
+
+    return true;
+}/* getWndCenterPos() */

@@ -131,7 +131,7 @@ public:
 
     bool PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, bool bShowDlg=true);
+        unsigned long & ulRemaining, bool bShowDlg=true, void *wndGeometry = 0 );
 
 	/** Returns the OR-ing of all supported crypto algorithms */
 	unsigned long GetSupportedAlgorithms();

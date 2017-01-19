@@ -74,7 +74,7 @@ bool CPinpad::UsePinpad()
 
 CByteArray CPinpad::PinpadControl(unsigned long ulControl, const CByteArray & oCmd,
 	tPinOperation operation, unsigned char ucPintype,
-	const std::string & csPinLabel,	bool bShowDlg)
+	const std::string & csPinLabel,	bool bShowDlg, void *wndGeometry )
 {
 
 	bool bCloseDlg = bShowDlg;

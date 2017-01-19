@@ -647,7 +647,7 @@ unsigned long APL_SmartCard::pinStatus(const tPin &Pin)
 
 bool APL_SmartCard::pinCmd(tPinOperation operation, const tPin &Pin,
 		const char *csPin1In, const char *csPin2In,
-		unsigned long &ulRemaining, bool bShowDlg)
+		unsigned long &ulRemaining, bool bShowDlg, void *wndGeometry )
 {
 
 	bool ret=false;
@@ -661,7 +661,7 @@ bool APL_SmartCard::pinCmd(tPinOperation operation, const tPin &Pin,
 		csPin2="";
 
 	BEGIN_CAL_OPERATION(m_reader)
-	ret=m_reader->getCalReader()->PinCmd(operation,Pin,csPin1,csPin2,ulRemaining,bShowDlg);
+	ret=m_reader->getCalReader()->PinCmd(operation,Pin,csPin1,csPin2,ulRemaining,bShowDlg, wndGeometry );
 	END_CAL_OPERATION(m_reader)
 
 	return ret;

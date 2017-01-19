@@ -20,11 +20,12 @@
 
 #include "dlgWndBadPIN.h"
 #include "../langUtil.h"
+#include <QDesktopWidget>
 
 #include <iostream>
 using namespace std;
 
-dlgWndBadPIN::dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWidget *parent ) : dlgWndBase(parent)
+dlgWndBadPIN::dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWidget *parent, Type_WndGeometry *pParentWndGeometry ) : dlgWndBase(parent)
 {
 	ui.setupUi(this);
 
@@ -84,6 +85,14 @@ dlgWndBadPIN::dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWi
 
 	ui.lblCenter->setText(sCenter);
 	ui.lblCenter->setAccessibleName(sCenter);
+
+        Type_WndGeometry WndGeometry;
+        if ( getWndCenterPos( pParentWndGeometry
+                        , QApplication::desktop()->width(), QApplication::desktop()->height()
+                        , this->width(), this->height()
+                        , &WndGeometry ) ){
+            this->move( WndGeometry.x, WndGeometry.y );
+        }/* if ( getWndCenterPos( pParentWndGeometry, ... ) ) */
 }
 
 dlgWndBadPIN::~dlgWndBadPIN()

@@ -419,12 +419,13 @@ bool CReader::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, co
 
 bool CReader::PinCmd(tPinOperation operation, const tPin & Pin,
     const std::string & csPin1, const std::string & csPin2,
-    unsigned long & ulRemaining, bool bShowDlg)
+    unsigned long & ulRemaining, bool bShowDlg, void *wndGeometry )
 {
     if (m_poCard == NULL)
         throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
 
-    return m_poCard->PinCmd(operation, Pin, csPin1, csPin2, ulRemaining, NULL, bShowDlg);
+    return m_poCard->PinCmd(operation, Pin, csPin1, csPin2
+                            , ulRemaining, NULL, bShowDlg, wndGeometry );
 }
 
 unsigned long CReader::GetSupportedAlgorithms()

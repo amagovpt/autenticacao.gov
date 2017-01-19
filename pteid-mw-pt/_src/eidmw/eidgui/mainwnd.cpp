@@ -187,6 +187,10 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	//------------------------------------
 	qApp->installTranslator(&m_translator);
 
+#if !defined(WIN32)
+    memset( &m_WndGeometry, -1, sizeof(m_WndGeometry) );
+#endif /* !defined(WIN32) */
+
 	GenPur::UI_LANGUAGE CurrLng   = m_Settings.getGuiLanguageCode();
 	GenPur::UI_LANGUAGE LoadedLng = LoadTranslationFile(CurrLng);
 
@@ -2770,6 +2774,18 @@ void MainWnd::on_actionPrinter_Settings_triggered()
 	delete pPrintDialog;
 }
 
+#if !defined(WIN32)
+//*****************************************************
+// Set main window geometry
+//*****************************************************
+void MainWnd::setWndGeometry( const QRect &wndGeometry ){
+    m_WndGeometry.x = wndGeometry.x();
+    m_WndGeometry.y = wndGeometry.y();
+    m_WndGeometry.width = wndGeometry.width();
+    m_WndGeometry.height = wndGeometry.height();
+}
+#endif /* !defined(WIN32) */
+
 //*****************************************************
 // Authentication Pin request
 //*****************************************************
@@ -2798,7 +2814,12 @@ void MainWnd::authPINRequest_triggered()
 			}
 
 			unsigned long triesLeft = -1;
-			bool bResult   = pin.verifyPin("",triesLeft);
+#if !defined(WIN32)
+            setWndGeometry( this->geometry() );
+			bool bResult   = pin.verifyPin("",triesLeft, true, &m_WndGeometry );
+#else
+			bool bResult   = pin.verifyPin("",triesLeft );
+#endif /* !defined(WIN32) */
 
 			if (!bResult && -1 == triesLeft)
 				return;
@@ -2876,7 +2897,12 @@ bool MainWnd::addressPINRequest_triggered()
 			}
 
 			unsigned long triesLeft = -1;
-			bool bResult   = pin.verifyPin("",triesLeft);
+#if !defined(WIN32)
+            setWndGeometry( this->geometry() );
+			bool bResult   = pin.verifyPin("",triesLeft, true, &m_WndGeometry );
+#else
+			bool bResult   = pin.verifyPin("",triesLeft );
+#endif /* !defined(WIN32) */
 
 			if (!bResult && -1 == triesLeft)
 				return false;
@@ -2956,7 +2982,13 @@ void MainWnd::on_actionPINRequest_triggered()
 			PTEID_Pin &pin = ReaderContext.getEIDCard().getPins().getPinByPinRef(pinRef);
 
 			unsigned long triesLeft = -1;
-			bool bResult = pin.verifyPin("",triesLeft);
+
+#if !defined(WIN32)
+            setWndGeometry( this->geometry() );
+			bool bResult = pin.verifyPin("",triesLeft, true, &m_WndGeometry );
+#else
+			bool bResult = pin.verifyPin("",triesLeft );
+#endif /* !defined(WIN32) */
 
 			if (!bResult && -1 == triesLeft)
 				return;
@@ -3041,7 +3073,12 @@ void MainWnd::on_actionPINChange_triggered()
 			PTEID_Pin &pin = ReaderContext.getEIDCard().getPins().getPinByPinRef(pinRef);
 
 			unsigned long triesLeft = -1;
-			bool bResult = pin.changePin("","",triesLeft, pin.getLabel());
+#if !defined(WIN32)
+            setWndGeometry( this->geometry() );
+			bool bResult = pin.changePin("","",triesLeft, pin.getLabel(), true, &m_WndGeometry );
+#else
+			bool bResult = pin.changePin("","",triesLeft, pin.getLabel() );
+#endif /* !defined(WIN32) */
 
 			if (!bResult && -1 == triesLeft)
 				return;

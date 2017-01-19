@@ -52,7 +52,7 @@ public:
 protected:
 	CByteArray PinpadControl(unsigned long ulControl, const CByteArray & oCmd,
 		tPinOperation operation, unsigned char ucPintype,
-		const std::string & csPinLabel,	bool bShowDlg);
+		const std::string & csPinLabel,	bool bShowDlg, void *wndGeometry = 0 );
 	void GetFeatureList();
 
 	CContext *m_poContext;
