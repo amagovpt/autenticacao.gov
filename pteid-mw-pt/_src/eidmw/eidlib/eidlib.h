@@ -1648,39 +1648,44 @@ typedef struct
     char mrz3[PTEID_MAX_MRZ_LEN];
 } PTEID_ID;
 
+// The structs below need packing with 1-byte alignment
+#pragma pack(push, 1)
+
 typedef struct
 {
     short version;
-    char addrType[PTEID_MAX_ADDR_TYPE_LEN];
-    char country[PTEID_MAX_ADDR_COUNTRY_LEN];
-    char district[PTEID_MAX_DISTRICT_LEN];
-    char districtDesc[PTEID_MAX_DISTRICT_DESC_LEN];
-    char municipality[PTEID_MAX_DISTRICT_CON_LEN];
-    char municipalityDesc[PTEID_MAX_DISTRICT_CON_DESC_LEN];
-    char freguesia[PTEID_MAX_DISTRICT_FREG_LEN];
-    char freguesiaDesc[PTEID_MAX_DISTRICT_FREG_DESC_LEN];
-    char streettypeAbbr[PTEID_MAX_ROAD_ABBR_LEN];
-    char streettype[PTEID_MAX_ROAD_LEN];
-    char street[PTEID_MAX_ROAD_DESIG_LEN];
-    char buildingAbbr[PTEID_MAX_HOUSE_ABBR_LEN];
-    char building[PTEID_MAX_HOUSE_LEN];
-    char door[PTEID_MAX_NUMDOOR_LEN];
-    char floor[PTEID_MAX_FLOOR_LEN];
-    char side[PTEID_MAX_SIDE_LEN];
-    char place[PTEID_MAX_PLACE_LEN];
-    char locality[PTEID_MAX_LOCALITY_LEN];
-    char cp4[PTEID_MAX_CP4_LEN];
-    char cp3[PTEID_MAX_CP3_LEN];
-    char postal[PTEID_MAX_POSTAL_LEN];
-    char numMor[PTEID_MAX_NUMMOR_LEN];
-    char countryDescF[PTEID_MAX_ADDR_COUNTRYF_DESC_LEN];
-    char addressF[PTEID_MAX_ADDRF_LEN];
-    char cityF[PTEID_MAX_CITYF_LEN];
-    char regioF[PTEID_MAX_REGIOF_LEN];
-    char localityF[PTEID_MAX_LOCALITYF_LEN];
-    char postalF[PTEID_MAX_POSTALF_LEN];
-    char numMorF[PTEID_MAX_NUMMORF_LEN];
+    char addrType[PTEID_ADDR_TYPE_LEN];
+    char country[PTEID_ADDR_COUNTRY_LEN];
+    char district[PTEID_DISTRICT_LEN];
+    char districtDesc[PTEID_DISTRICT_DESC_LEN];
+    char municipality[PTEID_DISTRICT_CON_LEN];
+    char municipalityDesc[PTEID_DISTRICT_CON_DESC_LEN];
+    char freguesia[PTEID_DISTRICT_FREG_LEN];
+    char freguesiaDesc[PTEID_DISTRICT_FREG_DESC_LEN];
+    char streettypeAbbr[PTEID_ROAD_ABBR_LEN];
+    char streettype[PTEID_ROAD_LEN];
+    char street[PTEID_ROAD_DESIG_LEN];
+    char buildingAbbr[PTEID_HOUSE_ABBR_LEN];
+    char building[PTEID_HOUSE_LEN];
+    char door[PTEID_NUMDOOR_LEN];
+    char floor[PTEID_FLOOR_LEN];
+    char side[PTEID_SIDE_LEN];
+    char place[PTEID_PLACE_LEN];
+    char locality[PTEID_LOCALITY_LEN];
+    char cp4[PTEID_CP4_LEN];
+    char cp3[PTEID_CP3_LEN];
+    char postal[PTEID_POSTAL_LEN];
+    char numMor[PTEID_NUMMOR_LEN];
+    char countryDescF[PTEID_ADDR_COUNTRYF_DESC_LEN];
+    char addressF[PTEID_ADDRF_LEN];
+    char cityF[PTEID_CITYF_LEN];
+    char regioF[PTEID_REGIOF_LEN];
+    char localityF[PTEID_LOCALITYF_LEN];
+    char postalF[PTEID_POSTALF_LEN];
+    char numMorF[PTEID_NUMMORF_LEN];
 } PTEID_ADDR;
+
+#pragma pack(pop)
 
 typedef struct
 {

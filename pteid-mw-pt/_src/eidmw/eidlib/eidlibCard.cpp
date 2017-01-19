@@ -962,8 +962,6 @@ PTEIDSDK_API tCompCardType PTEID_GetCardType(){
 
 //Error codes inherited from Pteid Middleware V1: documented in CC_Technical_Reference_1.61
 
-
-
 #define SC_ERROR_AUTH_METHOD_BLOCKED -1212
 #define SC_ERROR_PIN_CODE_INCORRECT -1214
 #define SC_ERROR_INTERNAL -1400
@@ -1083,6 +1081,7 @@ PTEIDSDK_API long PTEID_GetAddr(PTEID_ADDR *AddrData){
 			}
 			else {
 				strncpy(AddrData->addrType, COMP_LAYER_FOREIGN_ADDRESS, PTEID_MAX_ADDR_TYPE_LEN-1);
+				strncpy(AddrData->country, addr.getCountryCode(), PTEID_MAX_ADDR_COUNTRY_LEN-1);
 				strncpy(AddrData->countryDescF, addr.getForeignCountry(), PTEID_MAX_ADDR_COUNTRYF_DESC_LEN-1);
 				strncpy(AddrData->addressF, addr.getForeignAddress(), PTEID_MAX_ADDRF_LEN-1);
 				strncpy(AddrData->cityF, addr.getForeignCity(), PTEID_MAX_CITYF_LEN-1);
@@ -1528,14 +1527,14 @@ PTEIDSDK_API int PTEID_IsPinpad() {
 	return 0;
 }
 
-//TODO: not even sure what this should check in the reader ...
+// Not even sure what this should check in the reader, this function is available here only for backwards compat
 PTEIDSDK_API int PTEID_IsEMVCAP() {
 	return PTEID_OK;
 }
 
 
-//This should implement all the Mutual Auth Process and generate the input to the Signature thats sent in the
-//EXTERNAL AUTHENTICATE command (the one that is signed by the CVC private key)
+//This should implement all the Mutual Auth Process and generate the input to the Signature that's sent in the
+//EXTERNAL AUTHENTICATE command
 PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,
     unsigned char *pucChallenge, int iChallengeLen)
 {
@@ -1585,9 +1584,39 @@ PTEIDSDK_API long PTEID_CVC_Authenticate(unsigned char *pucSignedChallenge, int 
 
 PTEIDSDK_API long PTEID_CVC_GetAddr(PTEID_ADDR *AddrData)
 {
-	//TODO
+	unsigned char addressFile[] = {0x3F, 0x00, 0x5F, 0x00, 0xEF, 0x05};
+	unsigned char fileBuffer[1200];
+	unsigned int offset = 0;
+	unsigned long outLen = sizeof(fileBuffer);
+
 	if (securityContext != NULL) {
 
+		memset(fileBuffer, 0, outLen);
+
+		if (PTEID_CVC_ReadFile(addressFile, sizeof(addressFile), fileBuffer, &outLen) != PTEID_OK)
+		{
+			return PTEID_E_INTERNAL;
+		}
+
+		AddrData->version = 0;
+		//Evil cast but this should work because we have the struct 1-byte aligned
+		char * ptr = (char *)AddrData;
+
+		if (fileBuffer[0] == 'N')
+		{
+			//Skip the manually filled version field
+			memcpy(ptr + 2, fileBuffer, outLen);
+		}
+		else {
+			//Buffer size for the Foreign address specific fields
+			size_t foreign_addr_len = 812;
+			//Manually write first 2 fields
+			strncpy(AddrData->addrType, (const char *)fileBuffer, PTEID_ADDR_TYPE_LEN);
+			strncpy(AddrData->country, (const char *)fileBuffer + PTEID_ADDR_TYPE_LEN, PTEID_ADDR_COUNTRY_LEN);
+
+			ptr = (char *)&(AddrData->countryDescF);
+			memcpy(ptr, fileBuffer+6, foreign_addr_len);
+		}
 		
 		return PTEID_OK;
 	}
@@ -1608,6 +1637,15 @@ PTEIDSDK_API long PTEID_CVC_ReadFile(unsigned char *file, int filelen, unsigned 
 	}
 
 	return PTEID_E_NOT_INITIALIZED;
+}
+
+
+//This is not implemented on purpose: this function is available here only for backwards compat
+PTEIDSDK_API long PTEID_CVC_WriteFile(unsigned char *file, int filelen, unsigned long ulFileOffset, 
+	const unsigned char *in, unsigned long inlen, unsigned long ulMode)
+{
+
+	return PTEID_OK;
 }
 
 
