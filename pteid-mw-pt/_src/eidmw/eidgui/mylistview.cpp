@@ -98,11 +98,10 @@ void MyListView::removeSelected()
 
   if (notify && model()->rowCount() == 0)
   {
-	  QEvent * delete_event =  new MyDeleteEvent();
+	  MyDeleteEvent delete_event;
 	  //We have to deliver the event to the Window/dialog class
 	  //which is the grandparent because we have the centralwidget in between
-	  QCoreApplication::sendEvent(parentWidget()->parentWidget(), delete_event);
-	  //LL delete delete_event;
+	  QCoreApplication::sendEvent(parentWidget()->parentWidget(), &delete_event);
   }
 
 }
