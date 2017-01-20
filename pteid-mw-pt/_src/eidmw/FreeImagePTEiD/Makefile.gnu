@@ -4,9 +4,9 @@
 include Makefile.srcs
 
 # General configuration variables:
-DESTDIR ?= /
-INCDIR ?= $(DESTDIR)/usr/local/include
-INSTALLDIR ?= $(DESTDIR)/usr/local/lib
+INSTALL_ROOT ?= /
+INCDIR ?= $(INSTALL_ROOT)/usr/local/include
+INSTALLDIR ?= $(INSTALL_ROOT)/usr/local/lib
 TEMPDIR ?= ../lib
 
 # Converts cr/lf to just lf
@@ -63,7 +63,6 @@ $(SHAREDLIB): $(MODULES)
 
 install:
 	install -d $(INCDIR) $(INSTALLDIR)
-	install -m 644 -o root -g root $(HEADER) $(INCDIR)
 	install -m 755 -o root -g root $(SHAREDLIB) $(INSTALLDIR)
 	ln -sf $(SHAREDLIB) $(INSTALLDIR)/$(VERLIBNAME)
 	ln -sf $(VERLIBNAME) $(INSTALLDIR)/$(LIBNAME)
