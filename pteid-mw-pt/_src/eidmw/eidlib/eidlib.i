@@ -531,7 +531,10 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 %typemap(jtype)        const unsigned char* "byte[]" 
 %typemap(jstype)       const unsigned char* "byte[]" 
 %typemap(jstype) 	   const char * const * "String[]" 
+%include "various.i"
+%apply char **STRING_ARRAY { char ** }
 //%typemap(jtype) 	   const char * const * "void *" 
+
 %typemap(out)          const unsigned char* 
 {
 	$result = jenv->NewByteArray(arg1->Size());
@@ -552,12 +555,13 @@ return $jnicall;
 %typemap(javain) const unsigned char* "$javainput"
 
 
+/*
 %typemap(in) const char * const * (jint size) {
 
-    int i = 0;
+  int i = 0;
     size = jenv->GetArrayLength($input);
     $1 = (char **) malloc((size+1)*sizeof(char *));
-    /* make a copy of each string */
+    // make a copy of each string
     for (i = 0; i<size; i++) {
         jstring j_string = (jstring)jenv->GetObjectArrayElement($input, i);
         $1[i] = (char *) jenv->GetStringUTFChars( j_string, 0);
@@ -574,6 +578,7 @@ return $jnicall;
    }
    free($1);
 }
+*/
 
 //------------------------------------------------
 // This allows a C++ function to return a 'const char * const *' as a Java String array
@@ -614,16 +619,17 @@ return $jnicall;
 }
 
 /* These 3 typemaps tell SWIG what JNI and Java types to use for the 'const char * const *' */
-%typemap(jni) const char * const * "jobjectArray"
-%typemap(jtype) const char * const * "String[]"
-%typemap(jstype) const char * const * "String[]"
+//%typemap(jni) const char * const * "jobjectArray"
+//%typemap(jtype) const char * const * "String[]"
+//%typemap(jstype) const char * const * "String[]"
 
 /* These 2 typemaps handle the conversion of the jtype to jstype typemap type
-   and vice versa for the 'const char * const *' */
+   and vice versa for the 'const char * const *' 
 %typemap(javain) const char * const * "$javainput"
 %typemap(javaout) const char * const * {
     return $jnicall;
   }
+*/
   
 ///////////////////////////////////////// Exception /////////////////////////////////////////////
 
@@ -798,6 +804,41 @@ return $jnicall;
 }
 %enddef
 
+%define JAVA_CODE_THROW_ReleaseMemory
+{
+		try {
+			$action
+			while(WrapperCppDataContainer.size()>0)
+			{
+			  delete WrapperCppDataContainer.back();
+			  WrapperCppDataContainer.pop_back();
+			}
+		}
+		catch (eIDMW::PTEID_Exception& e) 
+		{
+		 
+    		for (int i=0; i < size3; i++)
+ 				delete[] arg3[i];
+    		delete[] arg3;
+
+			long err = e.GetError();
+			CustomExceptionHelper::throwJavaException(err,jenv);
+			return $null;
+		}
+		catch (std::exception& e)
+		{
+			for (int i=0; i<size3; i++)
+ 				delete[] arg3[i];
+    		
+    		delete[] arg3;
+			std::string err = e.what();
+			jclass clazz = jenv->FindClass("java/lang/Exception");
+			jenv->ThrowNew(clazz, err.c_str());
+			return $null;
+		}
+}
+%enddef
+
 //------------------------------------------------------------
 // from here on, the functions are processed that possibly generate an
 // exception.
@@ -881,11 +922,11 @@ return $jnicall;
 %javaexception("PTEID_Exception") getAddr				JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getPicture			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getVersionInfo		JAVA_CODE_THROW
-%javaexception("PTEID_Exception") SignXades		        JAVA_CODE_THROW
-%javaexception("PTEID_Exception") SignXadesT		    JAVA_CODE_THROW
+%javaexception("PTEID_Exception") SignXades		        JAVA_CODE_THROW_ReleaseMemory
+%javaexception("PTEID_Exception") SignXadesT		    JAVA_CODE_THROW_ReleaseMemory
 %javaexception("PTEID_Exception") SignPDF               JAVA_CODE_THROW
-%javaexception("PTEID_Exception") SignXadesIndividual	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") SignXadesTIndividual	JAVA_CODE_THROW
+%javaexception("PTEID_Exception") SignXadesIndividual	JAVA_CODE_THROW_ReleaseMemory
+%javaexception("PTEID_Exception") SignXadesTIndividual	JAVA_CODE_THROW_ReleaseMemory
 %javaexception("PTEID_Exception") doSODCheck			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getRootCAPubKey		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") readPersonalNotes		JAVA_CODE_THROW

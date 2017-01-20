@@ -14,7 +14,7 @@ namespace eIDMW
 
 
 
-PTEID_ByteArray PTEID_EIDCard::SignXades(const char * const* paths, unsigned int n_paths, const char *output_path)
+PTEID_ByteArray PTEID_EIDCard::SignXades(const char *output_path, const char * const* paths, unsigned int n_paths)
 {
 
 	PTEID_ByteArray out;
@@ -33,7 +33,7 @@ PTEID_ByteArray PTEID_EIDCard::SignXades(const char * const* paths, unsigned int
 }
 
 
-void PTEID_EIDCard::SignXadesIndividual(const char *const * path, unsigned int n_paths, const char *output_path)
+void PTEID_EIDCard::SignXadesIndividual(const char *output_path, const char *const * path, unsigned int n_paths)
 {
 
 	BEGIN_TRY_CATCH
@@ -46,7 +46,7 @@ void PTEID_EIDCard::SignXadesIndividual(const char *const * path, unsigned int n
 
 }
 
-void PTEID_EIDCard::SignXadesTIndividual(const char *const * path, unsigned int n_paths, const char *output_path)
+void PTEID_EIDCard::SignXadesTIndividual(const char *output_path, const char *const * path, unsigned int n_paths)
 {
 
 	BEGIN_TRY_CATCH
@@ -60,7 +60,7 @@ void PTEID_EIDCard::SignXadesTIndividual(const char *const * path, unsigned int 
 
 }
 
-PTEID_ByteArray PTEID_EIDCard::SignXadesT(const char *const * path, unsigned int n_paths, const char *output_path)
+PTEID_ByteArray PTEID_EIDCard::SignXadesT(const char *output_path, const char *const * path, unsigned int n_paths)
 {
 
 	PTEID_ByteArray out;
@@ -78,7 +78,7 @@ PTEID_ByteArray PTEID_EIDCard::SignXadesT(const char *const * path, unsigned int
 	return out;
 }
 
-void PTEID_EIDCard::SignXadesAIndividual(const char *const * path, unsigned int n_paths, const char *output_path)
+void PTEID_EIDCard::SignXadesAIndividual(const char *output_path, const char *const * path, unsigned int n_paths)
 {
 	BEGIN_TRY_CATCH
 
@@ -91,7 +91,7 @@ void PTEID_EIDCard::SignXadesAIndividual(const char *const * path, unsigned int 
 
 }
 
-PTEID_ByteArray PTEID_EIDCard::SignXadesA(const char *const * path, unsigned int n_paths, const char *output_path)
+PTEID_ByteArray PTEID_EIDCard::SignXadesA(const char *output_path, const char *const * path, unsigned int n_paths)
 {
 
 	PTEID_ByteArray out;

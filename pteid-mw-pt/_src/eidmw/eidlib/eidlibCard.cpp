@@ -1540,25 +1540,31 @@ PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,
 {
 
 	if (readerContext != NULL) {
+		try {
 
-		PTEID_EIDCard &card = readerContext->getEIDCard();
+			PTEID_EIDCard &card = readerContext->getEIDCard();
 
-		//Accessing PTEID_EIDCard internal object, hope he doesn't mind :)
-		APL_Card *card_impl = static_cast<APL_Card *>(card.m_impl);
-		securityContext = new SecurityContext(card_impl);
+			//Accessing PTEID_EIDCard internal object, hope he doesn't mind :)
+			APL_Card *card_impl = static_cast<APL_Card *>(card.m_impl);
+			securityContext = new SecurityContext(card_impl);
 
-		CByteArray cvc_certificate(pucCert, iCertLen);
-		securityContext->verifyCVCCertificate(cvc_certificate);
+			CByteArray cvc_certificate(pucCert, iCertLen);
+			securityContext->verifyCVCCertificate(cvc_certificate);
 
-		CByteArray signature_input = securityContext->getExternalAuthenticateChallenge();
+			CByteArray signature_input = securityContext->getExternalAuthenticateChallenge();
 
-		if (iChallengeLen < signature_input.Size())
-		{
-			//No space in supplied buffer: return error
-			return PTEID_E_BAD_PARAM;
+			if (iChallengeLen < signature_input.Size())
+			{
+				//No space in supplied buffer: return error
+				return PTEID_E_BAD_PARAM;
+			}
+			memcpy(pucChallenge, signature_input.GetBytes(), signature_input.Size());
+			return PTEID_OK;
 		}
-		memcpy(pucChallenge, signature_input.GetBytes(), signature_input.Size());
-		return PTEID_OK;
+		catch (CMWException &e)
+		{
+			return PTEID_E_INTERNAL;
+		}
 	}
 
 	return PTEID_E_NOT_INITIALIZED;
@@ -1568,14 +1574,21 @@ PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,
 PTEIDSDK_API long PTEID_CVC_Authenticate(unsigned char *pucSignedChallenge, int iSignedChallengeLen)
 {
 	if (securityContext != NULL) {
-		CByteArray signed_challenge(pucSignedChallenge, iSignedChallengeLen);
+		try {
 
-		bool ret = securityContext->verifySignedChallenge(signed_challenge);
+			CByteArray signed_challenge(pucSignedChallenge, iSignedChallengeLen);
 
-		if (ret)
-			return PTEID_OK;
-		else
+			bool ret = securityContext->verifySignedChallenge(signed_challenge);
+
+			if (ret)
+				return PTEID_OK;
+			else
+				return PTEID_E_INTERNAL;
+		}
+		catch (CMWException &e)
+		{
 			return PTEID_E_INTERNAL;
+		}
 	}
 
 	return PTEID_E_NOT_INITIALIZED;
@@ -1599,7 +1612,8 @@ PTEIDSDK_API long PTEID_CVC_GetAddr(PTEID_ADDR *AddrData)
 		}
 
 		AddrData->version = 0;
-		//Evil cast but this should work because we have the struct 1-byte aligned
+
+		//Evil cast but this should work because the PTEID_ADDR struct is 1-byte aligned
 		char * ptr = (char *)AddrData;
 
 		if (fileBuffer[0] == 'N')
@@ -1627,8 +1641,17 @@ PTEIDSDK_API long PTEID_CVC_GetAddr(PTEID_ADDR *AddrData)
 
 PTEIDSDK_API long PTEID_CVC_ReadFile(unsigned char *file, int filelen, unsigned char *out, unsigned long *outlen)
 {
+	CByteArray file_contents;
+	
 	if (securityContext != NULL) {
-		CByteArray file_contents = securityContext->readFile(file, filelen, *outlen);
+		try
+		{
+			file_contents = securityContext->readFile(file, filelen, *outlen);
+		}
+		catch (CMWException &e)
+		{
+			return PTEID_E_INTERNAL;
+		}
 
 		memcpy(out, file_contents.GetBytes(), file_contents.Size());
 		*outlen = file_contents.Size();
