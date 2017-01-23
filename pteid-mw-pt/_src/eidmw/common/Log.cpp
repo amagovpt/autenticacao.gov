@@ -130,6 +130,30 @@ bool MWLOG(tLevel level, tModule mod, const wchar_t *format, ...)
 	return true;
 }
 
+bool MWLOG(tLevel level, tModule mod, const char *format, ...)
+{
+	try
+	{
+		CLog &log=MapModule(mod);
+
+		va_list args;
+		va_start(args, format);
+
+		log.write(MapLevel(level),format,args);
+
+		va_end(args);
+	}
+	catch(CMWException &e)
+	{
+		if(e.GetError()!=(long)EIDMW_ERR_LOGGER_APPLEAVING)
+			throw e;
+
+		return false;
+	}
+
+	return true;
+}
+
 // MWLOG(tLevel level, tModule mod, CMWEXCEPTION theException)
 bool MWLOG(tLevel level, tModule mod, CMWException theException)
 {

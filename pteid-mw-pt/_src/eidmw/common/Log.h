@@ -68,6 +68,8 @@ typedef enum {
  */
 EIDMW_CMN_API bool MWLOG(tLevel level, tModule mod, const wchar_t *format, ...);
 
+EIDMW_CMN_API bool MWLOG(tLevel level, tModule mod, const char *format, ...);
+
 /**
  * Log.
  * Example:
