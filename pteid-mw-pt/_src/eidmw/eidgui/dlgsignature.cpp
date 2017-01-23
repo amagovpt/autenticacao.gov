@@ -291,11 +291,9 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
 		{
 
 			if (level == XADES_T)
-				SignXades = card->SignXadesT(paths, n_paths, output_path);
+				SignXades = card->SignXadesT(output_path, paths, n_paths);
 			else if (level == XADES_B)
-				SignXades = card->SignXades(paths, n_paths, output_path);
-			//else if (level == XADES_A)
-			//	SignXades = card->SignXadesA(paths, n_paths, output_path);
+				SignXades = card->SignXades(output_path, paths, n_paths);
 			
 			this->error_code = 0;
 			keepTrying = false;
@@ -365,11 +363,11 @@ void dlgSignature::run_multiple_sign(const char ** paths, unsigned int n_paths, 
 		PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
 
 		if (level == XADES_T)
-			Card->SignXadesTIndividual(paths, n_paths, output_path);
+			Card->SignXadesTIndividual(output_path, paths, n_paths);
 		else if (level == XADES_B)
-			Card->SignXadesIndividual(paths, n_paths, output_path);
+			Card->SignXadesIndividual(output_path, paths, n_paths);
 		else if (level == XADES_A)
-			Card->SignXadesAIndividual(paths, n_paths, output_path);
+			Card->SignXadesAIndividual(output_path, paths, n_paths);
 		this->error_code = 0;
 	}
 	catch (PTEID_Exception &e)
