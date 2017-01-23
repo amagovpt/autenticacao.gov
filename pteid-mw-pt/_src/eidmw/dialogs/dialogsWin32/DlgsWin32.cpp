@@ -102,7 +102,7 @@ std::wstring translatePinName(std::wstring &PinName)
 //TODO: Add Keypad possibility in DlgAskPin(s)     
 DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			DlgPinUsage usage, const wchar_t *csPinName,
-			DlgPinInfo pinInfo, wchar_t *csPin, unsigned long ulPinBufferLen)
+			DlgPinInfo pinInfo, wchar_t *csPin, unsigned long ulPinBufferLen, void *wndGeometry)
 {
 	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgAskPin() called with arguments usage: %d, PinName: %s, Operation:%d",
 		usage, csPinName,operation);
@@ -208,7 +208,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 			DlgPinUsage usage, const wchar_t *csPinName,
 			DlgPinInfo pin1Info, wchar_t *csPin1, unsigned long ulPin1BufferLen,
-			DlgPinInfo pin2Info, wchar_t *csPin2, unsigned long ulPin2BufferLen)
+			DlgPinInfo pin2Info, wchar_t *csPin2, unsigned long ulPin2BufferLen, void *wndGeometry )
 {
 	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgAskPins() called");
 
@@ -277,7 +277,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 
 DLGS_EXPORT DlgRet eIDMW::DlgBadPin(
 			DlgPinUsage usage, const wchar_t *csPinName,
-			unsigned long ulRemainingTries)
+			unsigned long ulRemainingTries, void *wndGeometry)
 {
 	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgBadPin() called");
 
@@ -331,7 +331,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgBadPin(
 DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 			const wchar_t *csReader, DlgPinUsage usage, const wchar_t *csPinName,
 			const wchar_t *csMessage,
-			unsigned long *pulHandle)
+			unsigned long *pulHandle, void *wndGeometry)
 {
 	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgDisplayPinpadInfo() called");
 
