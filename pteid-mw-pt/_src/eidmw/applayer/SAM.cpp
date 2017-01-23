@@ -427,7 +427,7 @@ std::vector<char *> SAM::sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_a
 	while(i != apdu_array.size())
 	{
 		char * tmp = sendPrebuiltAPDU(apdu_array.at(i));
-		MWLOG(LEV_DEBUG, MOD_APL, L"APDU %s -> Result: %s", apdu_array.at(i), tmp);
+		MWLOG(LEV_DEBUG, MOD_APL, "APDU %s -> Result: %s", apdu_array.at(i), tmp);
 		responses.push_back(tmp);
 		i++;
 	}

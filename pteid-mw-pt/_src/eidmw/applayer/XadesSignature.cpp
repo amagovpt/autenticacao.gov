@@ -1218,7 +1218,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 			const char * path = paths[i];
 			//Create a reference to the external file
 			DSIGReference * ref = sig->createReference(createURI(path), HASH_SHA256);
-			MWLOG(LEV_DEBUG, MOD_APL, L"SignXades(): Hashing file %s", path);
+			MWLOG(LEV_DEBUG, MOD_APL, "SignXades(): Hashing file %s", path);
 			sha1_hash = HashFile(path);
 
 			//Fill the hash value as base64-encoded string
@@ -1252,8 +1252,8 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		}
 		catch (const XMLException &e)
 		{
-			MWLOG(LEV_ERROR, MOD_APL, L"Exception in calculateSignedInfoHash(), message: %S - %s",
-				XMLString::transcode(e.getType()), XMLString::transcode(e.getMessage()));
+			MWLOG(LEV_ERROR, MOD_APL, "Exception in calculateSignedInfoHash(), error message: %s",
+				XMLString::transcode(e.getMessage()));
 
 		}
 

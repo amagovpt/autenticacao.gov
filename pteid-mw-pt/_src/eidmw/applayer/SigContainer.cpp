@@ -79,7 +79,7 @@ static const char *SIGCONTAINER_README=
 	  memset(&zip_archive, 0, sizeof(zip_archive));
 	  mz_bool status = mz_zip_reader_init_file(&zip_archive, zip_path, 0);
 	  if (!status)
-	     MWLOG(LEV_ERROR, MOD_APL, L"Error in mz_zip_reader_init_file!\n");
+	     MWLOG(LEV_ERROR, MOD_APL, L"Error in mz_zip_reader_init_file!");
 
 	}
 
@@ -98,7 +98,7 @@ static const char *SIGCONTAINER_README=
 		p = mz_zip_reader_extract_file_to_heap(&zip_archive, entry, &uncompressed_size, 0);
 		if (!p)
 		{
-			MWLOG(LEV_ERROR, MOD_APL, L"Error in ExtractFile() %s\n", entry);
+			MWLOG(LEV_ERROR, MOD_APL, "Error in ExtractFile() %s", entry);
 			return *ba;
 		}
 
@@ -122,7 +122,7 @@ static const char *SIGCONTAINER_README=
 		}
 		else
 		{
-			MWLOG(LEV_ERROR, MOD_APL, L"SigContainer::readFile() Error opening file %s\n", path);
+			MWLOG(LEV_ERROR, MOD_APL, "SigContainer::readFile() Error opening file %s", path);
 			return NULL;
 		}
 
@@ -225,7 +225,7 @@ static const char *SIGCONTAINER_README=
 
 		if (!status)
 		{
-			MWLOG (LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed for mimetype");
+			MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed for mimetype");
 		}
 	}
 
@@ -241,11 +241,11 @@ static const char *SIGCONTAINER_README=
 #endif
 		mz_bool status;
 
-		MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() called with output_file = %s\n",output_file);
+		MWLOG(LEV_DEBUG, MOD_APL, "StoreSignatureToDisk() called with output_file = %s\n",output_file);
 
 		//Try to delete the output file first...
 		if (unlink(output_file) == 0)
-		    MWLOG(LEV_DEBUG, MOD_APL, L"StoreSignatureToDisk() overwriting output file %s\n",output_file);
+		    MWLOG(LEV_DEBUG, MOD_APL, "StoreSignatureToDisk() overwriting output file %s\n",output_file);
 
 		//Add a mimetype file as defined in the ASIC standard ETSI TS 102 918
 		//It needs to be stored first in the archive and uncompressed so it can be used as a kind of magic number
@@ -257,7 +257,7 @@ static const char *SIGCONTAINER_README=
 		{
 			absolute_path = paths[i];
 			ptr_content = readFile(absolute_path, &file_size);
-			MWLOG(LEV_DEBUG, MOD_APL, L"Compressing %d bytes from file %s\n", file_size, absolute_path);
+			MWLOG(LEV_DEBUG, MOD_APL, "Compressing %d bytes from file %s", file_size, absolute_path);
 
 			zip_entry_name = Basename((char *)absolute_path);
 
@@ -266,7 +266,7 @@ static const char *SIGCONTAINER_README=
 			utf8_filename = new char[strlen(zip_entry_name)*2];
 			latin1_to_utf8((unsigned char *)zip_entry_name, (unsigned char *)utf8_filename);
 			zip_entry_name = utf8_filename;
-			MWLOG (LEV_DEBUG, MOD_APL, L"Compressing filename (after conversion): %s\n", zip_entry_name);
+			MWLOG (LEV_DEBUG, MOD_APL, "Compressing filename (after conversion): %s", zip_entry_name);
 #endif
 
 			status = mz_zip_add_mem_to_archive_file_in_place(output_file, zip_entry_name, ptr_content,
@@ -275,7 +275,7 @@ static const char *SIGCONTAINER_README=
 			free(ptr_content);//LL
 			if (!status)
 			{
-				MWLOG (LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed with argument %s",
+				MWLOG (LEV_ERROR, MOD_APL, "mz_zip_add_mem_to_archive_file_in_place failed with argument %s",
 						zip_entry_name);
 				return;
 			}

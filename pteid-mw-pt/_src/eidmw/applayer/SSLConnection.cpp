@@ -1,7 +1,7 @@
 /* ****************************************************************************
  *
  *  PTeID Middleware Project.
- *  Copyright (C) 2011-2014
+ *  Copyright (C) 2011 - 2016
  *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *
  *  HTTPS Client with Client Certificate Authentication for PT-eID Middleware
@@ -703,7 +703,7 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
         const char * no_content = "Content-Length: 0";
         const char * keepAlive = "Proxy-Connection: Keep-Alive";
 
-		MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: Connecting to proxy Host: %s Port: %ld",
+		MWLOG(LEV_DEBUG, MOD_APL, "SSLConnection: Connecting to proxy Host: %s Port: %ld",
 			proxy_host, proxy_port);
 
 		snprintf(proxy_host_str, sizeof(proxy_host_str), "%s:%ld", proxy_host, proxy_port);
@@ -742,7 +742,7 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
         len = BIO_read(cbio, tmpbuf, sizeof(tmpbuf));
         tmpbuf[len] = '\0';
 
-        MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: CONNECT reply: %s", tmpbuf);
+        MWLOG(LEV_DEBUG, MOD_APL, "SSLConnection: CONNECT reply: %s", tmpbuf);
 
         //Add Log with the proxy response to the CONNECT request
         //BIO_write(out, tmpbuf, len);
@@ -1082,7 +1082,7 @@ bool SSLConnection::InitSAMConnection() {
     char * delim = strchr(m_host, ':');
     *delim = '\0';
 
-    MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: connecting to SAM server: %s", host_and_port);
+    MWLOG(LEV_DEBUG, MOD_APL, "SSLConnection: connecting to SAM server: %s", host_and_port);
 
     /* initialise the OpenSSL library */
     init_openssl();

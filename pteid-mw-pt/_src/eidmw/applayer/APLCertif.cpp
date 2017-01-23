@@ -1574,33 +1574,7 @@ APL_CertifStatus APL_Certif::getStatus()
 {
 	APL_ValidationLevel crl=APL_VALIDATION_LEVEL_NONE;
 	APL_ValidationLevel ocsp=APL_VALIDATION_LEVEL_MANDATORY;
-	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certif::getStatus for cert: %s", this->getOwnerName());
-
-
-/*
-
-	APL_Config conf_crl(CConfig::EIDMW_CONFIG_PARAM_CERTVALID_CRL);
-	switch(conf_crl.getLong())
-	{
-	case 1:
-		crl=APL_VALIDATION_LEVEL_OPTIONAL;
-		break;
-	case 2:
-		crl=APL_VALIDATION_LEVEL_MANDATORY;
-		break;
-	}
-
-	APL_Config conf_ocsp(CConfig::EIDMW_CONFIG_PARAM_CERTVALID_OCSP);
-	switch(conf_ocsp.getLong())
-	{
-	case 1:
-		ocsp=APL_VALIDATION_LEVEL_OPTIONAL;
-		break;
-	case 2:
-		ocsp=APL_VALIDATION_LEVEL_MANDATORY;
-		break;
-	}
-*/
+	MWLOG(LEV_DEBUG, MOD_APL, "APL_Certif::getStatus for cert: %s", this->getOwnerName());
 
 	return getStatus(crl, ocsp);
 }
@@ -1658,7 +1632,7 @@ APL_OcspResponse *APL_Certif::getOcspResponse()
 
 APL_CertifStatus APL_Certif::validationCRL()
 {
-	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certif::validationCRL() for certificate %s", this->getOwnerName());
+	MWLOG(LEV_DEBUG, MOD_APL, "APL_Certif::validationCRL() for certificate %s", this->getOwnerName());
 	APL_Crl *crl=getCRL();
 
 	//If there is no crl (ex. root), validation is ok
@@ -1904,7 +1878,7 @@ const char *APL_Crl::getIssuerName()
 *****************************************************************************************/
 APL_OcspResponse::APL_OcspResponse(const char *uri,APL_Certif *certif)
 {
-	MWLOG(LEV_DEBUG, MOD_APL, L"OCSPResponse ctor for URI: %s", uri);
+	MWLOG(LEV_DEBUG, MOD_APL, "OCSPResponse ctor for URI: %s", uri);
 	m_cryptoFwk=AppLayer.getCryptoFwk();
 
 	m_uri=uri;

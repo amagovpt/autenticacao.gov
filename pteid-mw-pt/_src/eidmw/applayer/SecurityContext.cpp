@@ -693,7 +693,7 @@ namespace eIDMW
 	 	if(!sam_helper->sendKIFD(kifd))
 	 	{
 
-	 		MWLOG(LEV_ERROR, MOD_APL, L"SendKIFD() failed, possible error in DH code!\n");
+	 		MWLOG(LEV_ERROR, MOD_APL, L"SendKIFD() failed, possible error in DH code!");
 	 		throw CMWEXCEPTION(EIDMW_ERR_CVC_GENERIC_ERROR);
 	 	}
 
@@ -706,7 +706,7 @@ namespace eIDMW
 		int rc = BN_hex2bn(&kicc, kicc_str);
 		free(kicc_str);//LL
 
-		MWLOG(LEV_DEBUG, MOD_APL, L"[initMuthualAuthProcess] BN_hex2bn(kicc) returned: %d\n", rc);
+		MWLOG(LEV_DEBUG, MOD_APL, L"[initMuthualAuthProcess] BN_hex2bn(kicc) returned: %d", rc);
 		
 	    //DH_compute_key() computes the shared secret from the private DH value in dh and the other party's public value in pub_key and stores it in
         //key. key must point to DH_size(dh) bytes of memory.
@@ -714,7 +714,7 @@ namespace eIDMW
 		unsigned char * kicc_ifd = (unsigned char *) OPENSSL_malloc(shared_secret_len);
 		rc = DH_compute_key(kicc_ifd, kicc, dh_key);
 
-		MWLOG(LEV_DEBUG, MOD_APL, L"[initMuthualAuthProcess] DH_compute_key returned: %d\n", rc);
+		MWLOG(LEV_DEBUG, MOD_APL, L"[initMuthualAuthProcess] DH_compute_key returned: %d", rc);
 
 		m_kicc_ifd = CByteArray(kicc_ifd, shared_secret_len);
 
@@ -860,7 +860,7 @@ namespace eIDMW
 			selectFile(fileToSelect, &fileSize);
 		}
 
-		MWLOG(LEV_DEBUG, MOD_APL, L"SecurityContext::readFile: parsed file length=%d\n", fileSize);
+		MWLOG(LEV_DEBUG, MOD_APL, L"SecurityContext::readFile: parsed file length=%d", fileSize);
 		return readBinary(bytesToRead, fileSize);
 	}
 
