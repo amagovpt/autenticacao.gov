@@ -142,7 +142,7 @@ void APL_Certifs::initMyCerts()
 
 	while((new_issuer = findIssuer(issuer)) != issuer)
 	{
-                printf("while((new_issuer = findIssuer(issuer)) != issuer)\n");
+        
 		my_certifs.push_back(new_issuer);
 		issuer = new_issuer;
 	}
@@ -181,7 +181,7 @@ void APL_Certifs::initSODCAs()
 			{
 				//The certif is not in the map
 				//Should not happend
-				fprintf(stderr, "Exception in initSODCAs() !\n" );
+				MWLOG(LEV_ERROR, MOD_APL, L"Exception in initSODCAs(): certificate not found!\n" );
 				throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
 			}
 
@@ -228,7 +228,7 @@ void APL_Certifs::addToSODCAs(const CByteArray &cert_ba)
 
 unsigned long APL_Certifs::countSODCAs()
 {
-	fprintf(stderr, "DEBUG: countSODCAs returns %lu\n", m_sod_cas.size());
+	MWLOG(LEV_DEBUG, MOD_APL, L"DEBUG: countSODCAs returns %lu", m_sod_cas.size());
 	return m_sod_cas.size();
 }
 

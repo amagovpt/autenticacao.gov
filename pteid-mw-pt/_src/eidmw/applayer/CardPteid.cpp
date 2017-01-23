@@ -1348,8 +1348,8 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 
 		pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
 		X509_STORE_add_cert(store, pX509);
-		printf("%d. Adding certificate Label: %s\n", i, sod_ca->getLabel());
-		printf("%d. Adding certificate Subject CN: %s\n", i, sod_ca->getOwnerName());
+		MWLOG(LEV_DEBUG, MOD_APL, L"%d Adding certificate Label: %s\n", i, sod_ca->getLabel());
+		MWLOG(LEV_DEBUG, MOD_APL, L"%d. Adding certificate Subject CN: %s\n", i, sod_ca->getOwnerName());
 	}
 	
 	BIO *Out = BIO_new(BIO_s_mem());
@@ -1367,8 +1367,9 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	}
 	else
 	{
+		char * validation_error = ERR_error_string(ERR_get_error(), NULL);
 		//Log specific OpenSSL error
-		MWLOG(LEV_ERROR, MOD_APL, L"EidFile_Sod::VerifyFile Error validating SOD signature. PKCS7_verify() error code= %08x", ERR_get_error());
+		MWLOG(LEV_ERROR, MOD_APL, L"EidFile_Sod:: Error validating SOD signature. OpenSSL error: %s", validation_error);
 			
 	}
 
@@ -1477,22 +1478,6 @@ tCardFileStatus APL_EidFile_PersoData::VerifyFile()
 {
 	if(!m_card)
 		return CARDFILESTATUS_ERROR;
-
-	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
-	/*
-	//The hash for the photo is in the ID file
-	//const CByteArray &hash=pcard->getFileID()->getPhotoHash();
-	const CByteArray &hash=pcard->getFileID()->getData();
-
-	//If the status of the ID file is not OK, the hash is not valid.
-	//The id status is return
-	tCardFileStatus idstatus=pcard->getFileID()->getStatus();
-	if(idstatus!=CARDFILESTATUS_OK)
-		return idstatus;
-
-	//We check if the hash correspond to the photo
-	if(!m_cryptoFwk->VerifyHashSha1(m_data,hash))
-		return CARDFILESTATUS_ERROR_HASH;*/
 
 	return CARDFILESTATUS_OK;
 }
