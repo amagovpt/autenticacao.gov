@@ -1081,6 +1081,8 @@ return $jnicall;
 %javaexception("PTEID_Exception") getAuthentication	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") addCertificate	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getCert			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") addToSODCAs		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") resetSODCAs		JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_Certificate
