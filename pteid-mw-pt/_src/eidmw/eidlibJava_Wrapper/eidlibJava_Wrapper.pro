@@ -58,16 +58,15 @@ LIBS += -L../lib  \
 		-l$${COMMONLIB} \
 		-l$${DLGLIB} \
 		-l$${CARDLAYERLIB} \
-		-l$${APPLAYERLIB} \
-		-l$${EIDLIB}
+		-l$${APPLAYERLIB}
 
 macx: INCLUDEPATH += /System/Library/Frameworks/JavaVM.framework/Headers/
 macx: LIB += -Wl,-framework -Wl,Java
 
 DEPENDPATH += .
-INCLUDEPATH += . ../applayer ../dialogs ../common ../cardlayer ../eidlib /usr/lib/jvm/java-6-openjdk/include /usr/lib/jvm/java-6-openjdk/include/linux /usr/lib/jvm/java-8-openjdk-amd64/include /usr/lib/jvm/java-8-openjdk-amd64/include/linux
+INCLUDEPATH += . ../applayer ../dialogs ../common ../cardlayer ../eidlib /usr/lib/jvm/java-8-openjdk-amd64/include /usr/lib/jvm/java-8-openjdk-amd64/include/linux
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
-#INCLUDEPATH += $${JDK_INCLUDE_DIR}
+
 DEFINES += EIDMW_EIDLIB_EXPORTS
 
 # Input
