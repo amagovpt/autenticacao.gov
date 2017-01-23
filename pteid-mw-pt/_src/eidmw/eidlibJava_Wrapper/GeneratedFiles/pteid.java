@@ -268,6 +268,7 @@ public class pteid {
                 PTEID_CardVersionInfo info = idCard.getVersionInfo();
                 token = new PTEID_TokenInfo(info.getTokenLabel(), info.getSerialNumber());
             } catch (Exception ex) {
+                ex.printStackTrace();
                 throw new PteidException();
             }
         }
@@ -289,6 +290,7 @@ public class pteid {
                 sod = new byte[trimmedSize];
                 System.arraycopy(pba.GetBytes(), 0, sod, 0, sod.length);
             } catch (Exception ex) {
+                ex.printStackTrace();
                 throw new PteidException();
             }
         }
@@ -464,6 +466,7 @@ public class pteid {
                     readerContext.getEIDCard().getCertificates().addToSODCAs(pba);
                 }				
             } catch (Exception ex) {
+                ex.printStackTrace();
                 throw new PteidException();
             }
         }
@@ -503,7 +506,7 @@ public class pteid {
                 System.arraycopy(rootCAKey.getCardAuthKeyModulus().GetBytes(), 0, key.modulus, 0, key.modulus.length);
             }
             catch (PTEID_Exception ex) {
-                System.err.println("Erro no GetCVCRoot: "+ex.GetError());
+                System.err.println("Error in GetCVCRoot(): "+ex.GetError());
                 throw new PteidException();
             }
         }
@@ -512,7 +515,7 @@ public class pteid {
     }
 
 
-    public static byte[] SendAPDU(byte[] bytes) {
+    public static byte[] SendAPDU(byte[] bytes) throws PteidException {
         byte[] ret = null;
         if (readerContext != null) {
             try {
@@ -524,9 +527,50 @@ public class pteid {
                 ret = new byte[(int) resp.Size()];
                 System.arraycopy(resp.GetBytes(), 0, ret, 0, ret.length);
             } catch (Exception ex) {
+                throw new PteidException();
             }
         }
 
+        return ret;
+    }
+
+    public static byte[] CVC_Init(byte[] cert) throws PteidException
+    {
+        byte[] ret = null;
+
+        PTEID_ByteArray cvc = new PTEID_ByteArray(cert, cert.length);
+        //Make the Exception retro-compatible
+        try
+        {
+
+            PTEID_ByteArray ba = pteidlibJava_Wrapper.PTEID_CVC_Init(cvc);
+            ret = new byte[(int) ba.Size()];
+        }
+        catch (Exception ex) {
+                System.err.println("Error in CVC_Init: " + ex.getMessage());
+                throw new PteidException();
+        }
+        
+
+        return ret;
+    }
+
+    public static byte[] CVC_ReadFile(byte[] fileID) throws PteidException
+    {
+        byte[] ret = null;
+
+        PTEID_ByteArray ba_fileID = new PTEID_ByteArray(fileID, fileID.length);
+        //Make the Exception retro-compatible
+        try
+        {
+
+            PTEID_ByteArray ba = pteidlibJava_Wrapper.PTEID_CVC_Init(ba_fileID);
+            ret = new byte[(int) ba.Size()];
+        }
+        catch (Exception ex) {
+            System.err.println("Error in CVC_ReadFile: "+ex.getMessage());
+            throw new PteidException();
+        }
         return ret;
     }
 
