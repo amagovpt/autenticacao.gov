@@ -2149,7 +2149,7 @@ PTEIDSDK_API long PTEID_CVC_GetAddr(
  * contents then the files contents are returned without error.
  */
 PTEIDSDK_API long PTEID_CVC_ReadFile(
-	unsigned char *file,	/**< in: the path of the file to read (e.g. {0x3F, 0x00, 0x5F, 0x00, 0xEF, 0x05} */
+	const unsigned char *file,	/**< in: the path of the file to read (e.g. {0x3F, 0x00, 0x5F, 0x00, 0xEF, 0x05} */
 	int filelen,			/**< in: the length file path (e.g. 6) */
     unsigned char *out,		/**< out: the buffer to contain the file contents */
     unsigned long *outlen	/**< out the number of bytes to read/the number of byte read. */
@@ -2157,6 +2157,10 @@ PTEIDSDK_API long PTEID_CVC_ReadFile(
 
 
 #endif // !defined SWIGJAVA && !defined SWIGCSHARP
+
+PTEIDSDK_API PTEID_ByteArray PTEID_CVC_Init(PTEID_ByteArray cvc_cert);
+
+PTEIDSDK_API PTEID_ByteArray PTEID_CVC_ReadFile(PTEID_ByteArray fileID);
 }
 
 #endif //__PTEIDLIB_H__
