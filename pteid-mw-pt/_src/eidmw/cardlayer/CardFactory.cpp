@@ -142,7 +142,7 @@ CCard * CardConnect(const std::string &csReader,
 #ifdef CAL_PTEID
 		if (poCard == NULL) {
 		  StartsWith(csReader.c_str(), "G");
-	 	  MWLOG(LEV_DEBUG, MOD_CAL, L"Using Reader: %s", csReader.c_str());
+	 	  MWLOG(LEV_DEBUG, MOD_CAL, "Using Reader: %s", csReader.c_str());
 		  poCard = PTeidCardGetVersion(PLUGIN_VERSION, strReader, hCard, poContext, poPinpad);
 		}
 
