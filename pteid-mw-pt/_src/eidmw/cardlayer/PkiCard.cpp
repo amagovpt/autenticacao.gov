@@ -285,7 +285,11 @@ bad_pin:
     if (ulSW12 == 0x9000){
         bRet = true;
         ulRemaining = 3;
-    } else if (ulSW12 == 0x6984)
+    }
+    //2 different return codes for PIN blocked
+    else if (ulSW12 == 0x6983)
+    	ulRemaining = 0;
+    else if (ulSW12 == 0x6984)
         ulRemaining = 0;
     //Special case for the GemPC Pinpad Reader
     else if (operation == PIN_OP_VERIFY && ulSW12 == 0x6402)
