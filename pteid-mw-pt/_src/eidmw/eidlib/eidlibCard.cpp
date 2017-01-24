@@ -804,7 +804,7 @@ bool PTEID_EIDCard::ChangeCapPinCompLayer(const char *old_pin, const char *new_p
 */
 
 
-void PTEID_EIDCard::doSODCheck(bool check){
+void PTEID_EIDCard::doSODCheck(bool check) {
 
 	BEGIN_TRY_CATCH
 
@@ -814,14 +814,14 @@ void PTEID_EIDCard::doSODCheck(bool check){
 	END_TRY_CATCH
 }
 
-bool PTEID_EIDCard::Activate(const char *pinCode, PTEID_ByteArray &BCDDate){
+bool PTEID_EIDCard::Activate(const char *pinCode, PTEID_ByteArray &BCDDate, bool blockActivationPIN){
 	bool out = false;
 	CByteArray cBCDDate = CByteArray(BCDDate.GetBytes(),BCDDate.Size());
 
 	BEGIN_TRY_CATCH
 
 	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
-	out =  pcard->Activate(pinCode,cBCDDate);
+	out =  pcard->Activate(pinCode, cBCDDate, blockActivationPIN);
 
 	END_TRY_CATCH
 
@@ -1425,11 +1425,19 @@ PTEIDSDK_API long PTEID_IsActivated(unsigned long *pulStatus){
 
 PTEIDSDK_API long PTEID_Activate(char *pszPin, unsigned char *pucDate, unsigned long ulMode){
 	long retval = 0;
-	if (readerContext!=NULL){
-		PTEID_ByteArray bcd(pucDate,BCD_DATE_LEN);
-		if (readerContext->getEIDCard().Activate(pszPin,bcd))
-			return 0;
-		return -1;
+	if (readerContext!=NULL) {
+		try
+		{
+		
+			PTEID_ByteArray bcd(pucDate, BCD_DATE_LEN);
+			if (readerContext->getEIDCard().Activate(pszPin,bcd, ulMode == MODE_ACTIVATE_BLOCK_PIN))
+				return 0;
+			return -1;
+		}
+		catch(PTEID_Exception &ex)
+		{
+			return PTEID_E_INTERNAL;
+		}
 	}
 
 	return 0;
@@ -1596,6 +1604,14 @@ PTEIDSDK_API PTEID_ByteArray PTEID_CVC_ReadFile(PTEID_ByteArray fileID)
 		throw PTEID_Exception(ret);
 	}
 	return PTEID_ByteArray(buffer, outlen);
+}
+
+PTEIDSDK_API void PTEID_CVC_Authenticate(PTEID_ByteArray signedChallenge)
+{
+	long ret = PTEID_CVC_Authenticate((unsigned char *)signedChallenge.GetBytes(), signedChallenge.Size());
+
+	if (ret != PTEID_OK)
+		throw PTEID_Exception(ret);
 }
 
 PTEIDSDK_API long PTEID_CVC_Authenticate(unsigned char *pucSignedChallenge, int iSignedChallengeLen)

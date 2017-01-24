@@ -54,7 +54,7 @@ public:
 
     virtual unsigned long PinStatus(const tPin & Pin) = 0;
     virtual CByteArray RootCAPubKey() = 0;
-    virtual bool Activate(const char *pinCode, CByteArray &BCDDate) = 0;
+    virtual bool Activate(const char *pinCode, CByteArray &BCDDate,bool blockActivationPIN) = 0;
     virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft) = 0;
     
     virtual bool PinCmd(tPinOperation operation, const tPin & Pin,

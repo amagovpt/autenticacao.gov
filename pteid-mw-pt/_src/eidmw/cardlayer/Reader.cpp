@@ -402,11 +402,11 @@ CByteArray CReader::RootCAPubKey(){
     return m_poCard->RootCAPubKey();
 }
 
-bool CReader::Activate(const char *pinCode, CByteArray &BCDDate){
+bool CReader::Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN){
     if (m_poCard == NULL)
         throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
 
-    return m_poCard->Activate(pinCode,BCDDate);
+    return m_poCard->Activate(pinCode, 	BCDDate, blockActivationPIN);
 }
 
 bool CReader::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft){

@@ -647,11 +647,11 @@ bool APL_EIDCard::isActive()
 	return getFileTrace()->isActive();
 }
 
-bool APL_EIDCard::Activate(const char *pinCode, CByteArray &BCDDate){
+bool APL_EIDCard::Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN){
 	bool out = false;
 
 	BEGIN_CAL_OPERATION(m_reader)
-	out = m_reader->getCalReader()->Activate(pinCode,BCDDate);
+	out = m_reader->getCalReader()->Activate(pinCode,BCDDate, blockActivationPIN);
 	END_CAL_OPERATION(m_reader)
 
 	return out;

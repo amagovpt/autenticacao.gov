@@ -327,7 +327,7 @@ CByteArray CCard::RootCAPubKey(){
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 }
 
-bool CCard::Activate(const char *pinCode, CByteArray &BCDDate){
+bool CCard::Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN) {
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 }
 

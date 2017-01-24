@@ -822,7 +822,7 @@ public:
 	PTEIDSDK_API PTEID_PublicKey& getRootCAPubKey();		/**< Get the CVC CA public key that this card uses to verify the CVC key */
 	PTEIDSDK_API bool isActive();
 	PTEIDSDK_API void doSODCheck(bool check);			/**< enable/disable the checking of the data against the sod*/
-	PTEIDSDK_API bool Activate(const char *pinCode, PTEID_ByteArray &BCDDate); 	/**< Activate the pteid card */
+	PTEIDSDK_API bool Activate(const char *pinCode, PTEID_ByteArray &BCDDate, bool blockActivationPIN); 	/**< Activate the pteid card */
 
 
 	    /** Produce Xades Signature of Arbitrary Contents (from memory or local files)
@@ -1955,7 +1955,7 @@ PTEIDSDK_API long PTEID_Activate(
 	unsigned char *pucDate,	/**< in: the current date in DD MM YY YY format in BCD format (4 bytes),
 									e.g. {0x17 0x11 0x20 0x06} for the 17th of Nov. 2006) */
 	unsigned long ulMode	/**<in: mode: MODE_ACTIVATE_BLOCK_PIN to block the Activation PIN,
-									or to 0 otherwise (this should only to be used for testing). */
+									or to 0 otherwise (this should only be used for testing). */
 );
 
 /**
@@ -2159,6 +2159,8 @@ PTEIDSDK_API long PTEID_CVC_ReadFile(
 #endif // !defined SWIGJAVA && !defined SWIGCSHARP
 
 PTEIDSDK_API PTEID_ByteArray PTEID_CVC_Init(PTEID_ByteArray cvc_cert);
+
+PTEIDSDK_API void PTEID_CVC_Authenticate(PTEID_ByteArray cvc_cert);
 
 PTEIDSDK_API PTEID_ByteArray PTEID_CVC_ReadFile(PTEID_ByteArray fileID);
 }

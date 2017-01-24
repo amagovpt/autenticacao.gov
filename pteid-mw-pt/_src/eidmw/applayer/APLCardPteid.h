@@ -161,7 +161,7 @@ public:
 	const char *getTokenLabel();					/**< Return the token label (pkcs15 parse) (NOT EXPORTED) */
 	APLPublicKey *getRootCAPubKey();						/**< Get the CVC CA public key that this card uses to verify the CVC key (NOT EXPORTED)*/
 	EIDMW_APL_API bool isActive();
-	EIDMW_APL_API bool Activate(const char *pinCode, CByteArray &BCDDate);						/**< Activate the pteid card (NOT EXPORTED)*/
+	EIDMW_APL_API bool Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN);						/**< Activate the pteid card */
 
 protected:
 	/**

@@ -125,7 +125,7 @@ public:
      * this card uses to verify the CVC key; */
     CByteArray RootCAPubKey();
 
-    bool Activate(const char *pinCode, CByteArray &BCDDate);
+    bool Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN);
 
     bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft);
 

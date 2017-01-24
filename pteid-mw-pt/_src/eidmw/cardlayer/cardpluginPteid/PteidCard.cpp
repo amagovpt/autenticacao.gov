@@ -386,7 +386,7 @@ CByteArray CPteidCard::RootCAPubKey(){
 }
 
 
-bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate){
+bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN) {
 	unsigned char padChar;
 	CByteArray tracefile_data;
 
@@ -416,11 +416,15 @@ bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate){
 	tracefile_data.Append(0x00);
 	tracefile_data.Append(0x01); // data = day month year 0 1   -- 6 bytes written to 3F000003 trace file
 
-	WriteFile(TRACEFILE,0, tracefile_data);
+	WriteFile(TRACEFILE, 0, tracefile_data);
 
-	while (ulRemaining > 0) // block puk
-		PinCmd(PIN_OP_VERIFY, activationPin, "1000", "", ulRemaining, NULL);
-
+	// Block the Activation PIN so that the operation can be performed only once per card
+	// 1000 is always invalid PIN because the valid ones have 6 digits
+	if (blockActivationPIN)
+	{
+		while (ulRemaining > 0) 
+			PinCmd(PIN_OP_VERIFY, activationPin, "1000", "", ulRemaining, NULL);
+	}
 
 	return true;
 }
