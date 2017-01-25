@@ -13,6 +13,8 @@ QT += concurrent
 TARGET = ScapSignature
 TEMPLATE = app
 
+CONFIG += c++11
+
 message("Compile $$TARGET")
 
 target.path = $${INSTALL_DIR_BIN}
@@ -28,6 +30,7 @@ translations.files += scapsignature_pt.qm
 INSTALLS += target translations
 
 INCLUDEPATH += . ../common ../eidlib ASService
+macx:INCLUDEPATH += /usr/local/include
 
 DEFINES += WITH_OPENSSL
 
@@ -43,8 +46,9 @@ SOURCES += main.cpp\
     PDFSignature/PDFSignatureSoapBindingProxy.cpp \
     PDFSignature/PDFSignatureC.cpp \
     pdfsignatureclient.cpp \
-    stdsoap2.cpp \
     scapsignature.cpp
+
+!macx:SOURCES += stdsoap2.cpp
 
 HEADERS  += \
     mylistview.h \
@@ -69,7 +73,10 @@ FORMS    += \
     scapsignature.ui
 
 !macx: LIBS += -Wl,-R,'../lib'
-LIBS += -L../lib -lcrypto -lpteidlib -lssl
+LIBS += -L../lib -lz -lssl -lcrypto -lpteidlib
+macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2j/lib/ /usr/local/lib/libgsoapssl++.a
+!macx: LIBS += -lgsoapssl++
+
 
 RESOURCES += \
     logo.qrc
