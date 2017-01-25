@@ -549,7 +549,7 @@ void MainWnd::doChangeAddress(const char *process, const char *secret_code)
     PTEID_EIDCard& Card = ReaderContext.getEIDCard();
     try
     {
-    Card.ChangeAddress((char *)secret_code, (char*)process, MainWnd::address_change_callback, (void*)this);
+        Card.ChangeAddress((char *)secret_code, (char*)process, MainWnd::address_change_callback, (void*)this);
 
 	}
 	catch(PTEID_Exception & exception)
@@ -557,10 +557,15 @@ void MainWnd::doChangeAddress(const char *process, const char *secret_code)
 		qDebug() << "Caught exception in eidlib ChangeAddress()... closing progressBar";
 		this->addressProgressChanged(100);
 		this->addressChangeFinished(exception.GetError());
+
+		free((char *)process);
+		free((char *)secret_code);
 		return;
 	}
 
 	//TODO: UI issue - we need to call refreshTabAddress() after the address is successfully changed...
+	free((char *)process);
+	free((char *)secret_code);
 	this->addressChangeFinished(0);
 
 }
@@ -604,11 +609,10 @@ void MainWnd::on_btnAddress_Change_clicked()
 
 	char *processUtf8 = strdup(process.toUtf8().constData());
 	char *secret_codeUtf8 = strdup(secret_code.toUtf8().constData());
-   	QtConcurrent::run(this, &MainWnd::doChangeAddress
-					, processUtf8, secret_codeUtf8);
+   	QtConcurrent::run(this, &MainWnd::doChangeAddress,
+					  processUtf8, secret_codeUtf8);
    	m_progress_addr->open();
-	free(secret_codeUtf8);
-	free(processUtf8);
+	
 	delete dlgChangeAddr;
 }
 
