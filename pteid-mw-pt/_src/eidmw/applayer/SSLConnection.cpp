@@ -671,12 +671,15 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 	ret_channel = write_to_stream(m_ssl_connection, body);
 
 	//Read response
-	//TODO: header and content reading should be split so we can dynamically decide if it uses chunked encoding or not
-	//XXX: get rid of this ugly hack
-	if (chunked_expected && strstr(m_host, "teste") == NULL)
-		read_chunked_reply(m_ssl_connection, server_response, REPLY_BUFSIZE);
-	else
-		read_from_stream(m_ssl_connection, server_response, REPLY_BUFSIZE);
+	read_from_stream(m_ssl_connection, server_response, REPLY_BUFSIZE);
+
+	//Hack for chunked replies
+	if (strstr(server_response, "chunked") != NULL)
+	{
+		fprintf(stderr, "SSLConnection:POST() reply is chunked, trying read_chunked_reply()\n");
+		read_chunked_reply(m_ssl_connection, server_response, REPLY_BUFSIZE, true);
+
+	}
 
 //	if (ret == 0)
 //	   ERR_print_errors_fp(stderr); //Connection aborted by server
