@@ -16,6 +16,9 @@ namespace pt.portugal.eid
     public static readonly int CARD_TYPE_ERR = 0;
     public static readonly int CARD_TYPE_IAS07 = 1;
     public static readonly int CARD_TYPE_IAS101 = 2;
+
+    //Flag used in the Activate method
+    private static readonly int MODE_ACTIVATE_BLOCK_PIN = 1;
     
     protected static readonly char[] Hexhars = {
         '0', '1', '2', '3', '4', '5',
@@ -415,11 +418,12 @@ namespace pt.portugal.eid
     }
     
     
-    public static void Activate(String actPin, byte[] bytes, int i){
+    public static void Activate(String actPin, byte[] bytes, int activateMode) {
         PTEID_ByteArray pb = new PTEID_ByteArray(bytes, (uint)bytes.Length);
         if (readerContext != null) {
             try {
-                idCard.Activate(actPin, pb);
+		bool mode = activateMode == MODE_ACTIVATE_BLOCK_PIN;
+                idCard.Activate(actPin, pb, mode);
             } catch (Exception ex) {
                 throw new PteidException(0);
             }
