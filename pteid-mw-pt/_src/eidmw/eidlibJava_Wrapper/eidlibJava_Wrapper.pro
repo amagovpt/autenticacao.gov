@@ -65,6 +65,7 @@ macx: LIB += -Wl,-framework -Wl,Java
 
 DEPENDPATH += .
 INCLUDEPATH += . ../applayer ../dialogs ../common ../cardlayer ../eidlib /usr/lib/jvm/java-8-openjdk-amd64/include /usr/lib/jvm/java-8-openjdk-amd64/include/linux
+macx:INCLUDEPATH += /usr/local/include
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 
 DEFINES += EIDMW_EIDLIB_EXPORTS
@@ -78,6 +79,7 @@ SOURCES += ../eidlib/eidlibDoc.cpp
 SOURCES += ../eidlib/eidlibException.cpp
 SOURCES += ../eidlib/eidlibReader.cpp
 SOURCES += ../eidlib/InternalUtil.cpp
+SOURCES += ../eidlib/eidlibxades.cpp
 
 
 
