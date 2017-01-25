@@ -272,9 +272,7 @@ void dlgSignature::on_pbSign_clicked ( void )
 	else
 		ShowErrorMsgBox();
 
-	delete []files_to_sign;
 	delete []cpychar;
-	delete []output_file;
 
 	this->close();
 }
@@ -374,5 +372,7 @@ void dlgSignature::run_multiple_sign(const char ** paths, unsigned int n_paths, 
 	{
 		this->error_code = e.GetError();
 	}
+	delete [] paths;
+	delete output_path;
 	return;
 }

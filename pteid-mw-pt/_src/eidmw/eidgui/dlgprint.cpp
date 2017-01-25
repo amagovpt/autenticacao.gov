@@ -132,9 +132,11 @@ bool SignPDF_wrapper(PTEID_EIDCard * card, const char * file_to_sign, QString &o
 	catch(...)
 	{
 		free(output_path);
+        free((char *)file_to_sign);
 		return false;
 	}
 	free(output_path);
+    free((char *)file_to_sign);
 	return true;
 }
 
@@ -184,7 +186,7 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
 		    pdialog->exec();
 		    res = new_thread.result();
-			free(cpychar);
+			
         }
         else
 		{
