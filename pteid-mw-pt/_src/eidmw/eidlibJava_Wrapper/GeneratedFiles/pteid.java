@@ -22,6 +22,8 @@ public class pteid {
     public static final int CARD_TYPE_ERR = 0;
     public static final int CARD_TYPE_IAS07 = 1;
     public static final int CARD_TYPE_IAS101 = 2;
+    
+    private static final int MODE_ACTIVATE_BLOCK_PIN = 1;
 
     protected static final char[] Hexhars = {
         '0', '1', '2', '3', '4', '5',
@@ -429,11 +431,12 @@ public class pteid {
     }
 
 
-    public static void Activate(String actPin, byte[] bytes, int i) throws PteidException {
+    public static void Activate(String actPin, byte[] bytes, int activateMode) throws PteidException {
         PTEID_ByteArray pb = new PTEID_ByteArray(bytes, bytes.length);
         if (readerContext != null) {
             try {
-                idCard.Activate(actPin, pb);
+		boolean mode = activateMode == MODE_ACTIVATE_BLOCK_PIN;
+                idCard.Activate(actPin, pb, mode);
             } catch (Exception ex) {
                 throw new PteidException();
             }
@@ -542,15 +545,13 @@ public class pteid {
         //Make the Exception retro-compatible
         try
         {
-
             PTEID_ByteArray ba = pteidlibJava_Wrapper.PTEID_CVC_Init(cvc);
             ret = new byte[(int) ba.Size()];
         }
         catch (Exception ex) {
                 System.err.println("Error in CVC_Init: " + ex.getMessage());
                 throw new PteidException();
-        }
-        
+        }   
 
         return ret;
     }
@@ -563,7 +564,6 @@ public class pteid {
         //Make the Exception retro-compatible
         try
         {
-
             PTEID_ByteArray ba = pteidlibJava_Wrapper.PTEID_CVC_Init(ba_fileID);
             ret = new byte[(int) ba.Size()];
         }
