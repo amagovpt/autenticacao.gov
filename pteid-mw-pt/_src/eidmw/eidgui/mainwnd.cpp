@@ -4307,10 +4307,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 						{
 							break;
 						}
-						//------------------------------------------------
-						// first load the data if necessary, because this will check the test cards as well
-						// and will ask if test cards are allowed
-						//------------------------------------------------
+						
 						if ( m_Settings.getAutoCardReading() )
 						{
 							/* Fix more than 1 loadCardData reading */
