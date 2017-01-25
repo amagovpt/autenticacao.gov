@@ -33,6 +33,8 @@ DEFINES += EIDMW_CMN_EXPORT
 ## About !macx see _Builds/pteidcommon.mak.max
 unix:!macx: DEFINES += USING_DL_OPEN
 
+unix:!macx: LIBS += -ldl -pthread
+
 macx: LIBS += -Wl,-framework -Wl,Carbon
 macx: CONFIG += x86
 
