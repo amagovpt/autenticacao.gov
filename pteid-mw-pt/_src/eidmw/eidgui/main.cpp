@@ -24,6 +24,7 @@
 #endif
 
 #include <iostream>
+#include <cstring>
 
 #include <QApplication>
 
@@ -75,7 +76,7 @@ int main(int argc, char *argv[])
 	if (argc == 2 && strcmp(argv[1], "-test") == 0)
 	{
 		test_mode = true;
-		default_sam_server = sam_server.getString();
+		default_sam_server = strdup(sam_server.getString());
 		sam_server.setString("pki.teste.cartaodecidadao.pt:443");
 	}
 
@@ -107,6 +108,7 @@ int main(int argc, char *argv[])
 	if (test_mode)
 	{
 		sam_server.setString(default_sam_server);
+		free((char *)default_sam_server);
 	}
 
 	PTEID_ReleaseSDK();
