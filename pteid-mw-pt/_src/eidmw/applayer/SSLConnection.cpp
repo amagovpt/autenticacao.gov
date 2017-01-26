@@ -135,6 +135,26 @@ void SSLConnection::loadCertChain(X509_STORE *store)
 
 	}
 
+}
+
+void SSLConnection::loadCertChain(X509_STORE *store, CByteArray &cert_data_ba)
+{
+	X509 *pCert = NULL;
+	unsigned char * cert_data = cert_data_ba.GetBytes();
+	
+	pCert = d2i_X509(&pCert, (const unsigned char **)&cert_data,
+			cert_data_ba.Size());
+
+	if (pCert == NULL)
+	{
+		MWLOG(LEV_ERROR, MOD_APL, L"Error loading CA auth certificate for SSL handshake!");
+		ERR_print_errors_fp(stderr);
+	}
+	else
+	{
+		if(X509_STORE_add_cert(store, pCert) == 0)
+			MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection::loadCertChainFromCard: error adding certificate");
+	}
 
 }
 
@@ -781,7 +801,22 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
 
     X509_STORE *store = SSL_CTX_get_cert_store(ctx);
 
-    loadCertChain(store);
+    if (strstr(host_and_port, "teste") != NULL)
+    {
+    	APL_Card *card = AppLayer.getReader().getCard();
+		CByteArray ca_cert;
+
+		card->readFile(PTEID_FILE_CERT_ROOT_AUTH, ca_cert);
+		loadCertChain(store, ca_cert);
+
+		card->readFile(PTEID_FILE_CERT_ROOT, ca_cert);
+		loadCertChain(store, ca_cert);
+
+		//TODO: maybe load just the Multicert Test Root certificate
+		loadCertChain(store);
+    }
+    else
+		loadCertChain(store);
 
     if(!(SSL_CTX_load_verify_locations(ctx,
 			NULL, "/etc/ssl/certs")))

@@ -64,6 +64,7 @@ class SSLConnection
 		BIO * connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_host, char *proxy_user, char * proxy_pwd, char *ssl_host_andport);
 		void loadUserCert(SSL_CTX *ctx);
 		void loadCertChain(X509_STORE *store);
+		void loadCertChain(X509_STORE *store, CByteArray &cert_data);
 
 		char *m_session_cookie;
 
