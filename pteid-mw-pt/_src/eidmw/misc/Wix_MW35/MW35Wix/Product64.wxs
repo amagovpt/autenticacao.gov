@@ -513,7 +513,7 @@
 				</Component>
 
 				<Component Id="OutlookTool" Guid="{F36A543C-CB17-4D91-BF0C-2EAEFEC3CB3A}">
-          			<File Source="..\..\..\misc\setup_win\pteidoutlooksnc.exe" KeyPath="yes" />
+          			<File Source="pteidoutlooksnc.exe" KeyPath="yes" />
 				</Component>
 
 				<Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
