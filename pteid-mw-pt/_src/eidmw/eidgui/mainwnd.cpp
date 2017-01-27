@@ -1767,7 +1767,6 @@ void MainWnd::syncTreeItemWithSideinfo(QTreeCertItem *item)
 //*****************************************************
 void MainWnd::showCertStatusSideinfo(PTEID_CertifStatus certStatus)
 {
-	qDebug() << "showCertStatusSideinfo()";
 
 	QString treeItemStatus;
 	getCertStatusText(certStatus, treeItemStatus);

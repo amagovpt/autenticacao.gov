@@ -42,7 +42,7 @@
 #endif
 
 std::string urli;
-//std::string dtitle ("Cartão de Cidadão");
+
 std::string getdistro;
 QString fileName;
 
@@ -282,7 +282,7 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
     winpath.append(s.toStdString());
     winpath.append(" /L*v ");
     winpath.append(QDir::tempPath().toStdString());
-    winpath.append("\PTeID-MSI.log");
+    winpath.append("\\Pteid-MSI.log");
 	CreateProcess(NULL, LPTSTR(winpath.c_str()), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
 	exit(0);
 
