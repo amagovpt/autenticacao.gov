@@ -20,6 +20,7 @@
 
 #include <time.h>
 #include <fstream>
+#include <algorithm>
 
 #include "openssl/evp.h"
 #include "openssl/x509.h"
@@ -127,7 +128,7 @@ void APL_Certifs::initMyCerts()
             if( itrCert == m_certifs.end() ){
                 //The certif is not in the map
                 //Should not happend
-                fprintf(stderr, "Exception in initSODCAs() !\n" );
+                MWLOG(LEV_ERROR, MOD_APL, L"Exception in initMyCerts(): certificate not found!" );
                 throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
             }/* if( itrCert == m_certifs.end() ) */
 
@@ -468,6 +469,9 @@ APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex)
 
 }
 
+/* This is used to add certificate from file. If the same certificate was already loaded from the card, we store the new one 
+	in m_certifs instead, we need this so that initSODCAs() picks up all the certificates in eidstore 
+ */
 APL_Certif *APL_Certifs::addCert(const CByteArray &certIn,APL_CertifType type,bool bHidden)
 {
 
@@ -475,41 +479,18 @@ APL_Certif *APL_Certifs::addCert(const CByteArray &certIn,APL_CertifType type,bo
 
 	unsigned long ulUniqueId=m_cryptoFwk->GetCertUniqueID(certIn);
 
-	itr = m_certifs.find(ulUniqueId);
-	if(itr!=m_certifs.end())
-	{
-		if(m_certifs[ulUniqueId]->m_hidden && !bHidden)
-			m_certifs[ulUniqueId]->m_hidden=bHidden;
-
-		if(m_certifs[ulUniqueId]->m_type==APL_CERTIF_TYPE_UNKNOWN)
-			m_certifs[ulUniqueId]->m_type=type;
-
-		//We put the added cert at the end of order list
-		std::vector<unsigned long>::iterator itrOrder;
-		for(itrOrder=m_certifsOrder.begin();itrOrder!=m_certifsOrder.end();itrOrder++)
-		{
-			if(ulUniqueId==(*itrOrder))
-			{
-				m_certifsOrder.erase(itrOrder);
-				m_certifsOrder.push_back(ulUniqueId);
-				break;
-			}
-		}
-
-		return m_certifs[ulUniqueId];
-	}
-
 	{
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for unly one instanciation
 
-		itr = m_certifs.find(ulUniqueId);
-		if(itr!=m_certifs.end())
-			return m_certifs[ulUniqueId];
-
 		APL_Certif *cert=NULL;
 		cert = new APL_Certif(this,certIn,type,bHidden);
-		m_certifs[ulUniqueId]=cert;
-		m_certifsOrder.push_back(ulUniqueId);
+		m_certifs[ulUniqueId] = cert;
+
+		std::vector<unsigned long>::iterator itrOrder;
+		//Check for duplicate
+		itrOrder = std::find(m_certifsOrder.begin(), m_certifsOrder.end(), ulUniqueId);
+  		if (itrOrder == m_certifsOrder.end())
+			m_certifsOrder.push_back(ulUniqueId);
 
 		resetFlags();
 

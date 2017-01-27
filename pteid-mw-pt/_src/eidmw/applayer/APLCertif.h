@@ -24,7 +24,7 @@
 
 #include <string>
 #include <map>
-
+#include <vector>
 
 #include "Export.h"
 #include "P15Objects.h"
