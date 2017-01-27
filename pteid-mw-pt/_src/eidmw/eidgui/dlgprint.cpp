@@ -670,35 +670,55 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 
     	pos_y += 50;
 
-    	drawSingleField(painter, pos_x, pos_y, tr("District"), getUtf8String(AddressFields[ADDRESS_DISTRICT]));
-    	drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Municipality"), getUtf8String(AddressFields[ADDRESS_MUNICIPALITY]));
-    	drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Civil Parish"), getUtf8String(AddressFields[ADDRESS_CIVILPARISH]));
+        if (CI_Data.m_AddressInfo.isForeign())
+        {
+            /* Foreign Address*/
+            drawSingleField(painter, pos_x, pos_y, tr("Country"), getUtf8String(AddressFields[FOREIGN_COUNTRY]));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Region"),  getUtf8String(AddressFields[FOREIGN_REGION]));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("City"),  getUtf8String(AddressFields[FOREIGN_CITY]));
 
- 	    pos_y += LINE_HEIGHT;
+            pos_y += LINE_HEIGHT;
 
-    	drawSingleField(painter, pos_x, pos_y, tr("Ab. street type"), AddressFields[ADDRESS_ABBRSTREETTYPE]);
-    	drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Street type"), AddressFields[ADDRESS_STREETTYPE]);
-    	drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Street Name"), getUtf8String(AddressFields[ADDRESS_STREETNAME]));
+            drawSingleField(painter, pos_x, pos_y, tr("Locality"), getUtf8String(AddressFields[FOREIGN_LOCALITY]));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Zip Code"),  getUtf8String(AddressFields[FOREIGN_POSTALCODE]));
 
-	    pos_y += LINE_HEIGHT;
+            pos_y += LINE_HEIGHT;
 
-	    drawSingleField(painter, pos_x, pos_y, tr("Ab. Building Type"), AddressFields[ADDRESS_ABBRBUILDINGTYPE]);
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Building Type"), getUtf8String(AddressFields[ADDRESS_BUILDINGTYPE]));
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("House/building no."), getUtf8String(AddressFields[ADDRESS_DOORNO]));
-	    pos_y += LINE_HEIGHT;
+            drawSingleField(painter, pos_x, pos_y, tr("Address"), getUtf8String(AddressFields[FOREIGN_ADDRESS]));
+        }
+        else
+        {
 
-	    drawSingleField(painter, pos_x, pos_y, tr("Floor"), getUtf8String(AddressFields[ADDRESS_FLOOR]));
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Side"), AddressFields[ADDRESS_SIDE]);
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Place"), getUtf8String(AddressFields[ADDRESS_PLACE]));
-	    pos_y += LINE_HEIGHT;
+        	drawSingleField(painter, pos_x, pos_y, tr("District"), getUtf8String(AddressFields[ADDRESS_DISTRICT]));
+        	drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Municipality"), getUtf8String(AddressFields[ADDRESS_MUNICIPALITY]));
+        	drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Civil Parish"), getUtf8String(AddressFields[ADDRESS_CIVILPARISH]));
 
-	    drawSingleField(painter, pos_x, pos_y, tr("Zip Code 4"), AddressFields[ADDRESS_ZIP4]);
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Zip Code 3"), AddressFields[ADDRESS_ZIP3]);
-	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Postal Locality"), getUtf8String(AddressFields[ADDRESS_POSTALLOCALITY]));
+     	    pos_y += LINE_HEIGHT;
 
-	    pos_y += LINE_HEIGHT;
+        	drawSingleField(painter, pos_x, pos_y, tr("Ab. street type"), AddressFields[ADDRESS_ABBRSTREETTYPE]);
+        	drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Street type"), AddressFields[ADDRESS_STREETTYPE]);
+        	drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Street Name"), getUtf8String(AddressFields[ADDRESS_STREETNAME]));
 
-	    drawSingleField(painter, pos_x, pos_y, tr("Locality"), getUtf8String(AddressFields[ADDRESS_LOCALITY]));
+    	    pos_y += LINE_HEIGHT;
+
+    	    drawSingleField(painter, pos_x, pos_y, tr("Ab. Building Type"), AddressFields[ADDRESS_ABBRBUILDINGTYPE]);
+    	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Building Type"), getUtf8String(AddressFields[ADDRESS_BUILDINGTYPE]));
+    	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("House/building no."), getUtf8String(AddressFields[ADDRESS_DOORNO]));
+    	    pos_y += LINE_HEIGHT;
+
+    	    drawSingleField(painter, pos_x, pos_y, tr("Floor"), getUtf8String(AddressFields[ADDRESS_FLOOR]));
+    	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Side"), AddressFields[ADDRESS_SIDE]);
+    	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Place"), getUtf8String(AddressFields[ADDRESS_PLACE]));
+    	    pos_y += LINE_HEIGHT;
+
+    	    drawSingleField(painter, pos_x, pos_y, tr("Zip Code 4"), AddressFields[ADDRESS_ZIP4]);
+    	    drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Zip Code 3"), AddressFields[ADDRESS_ZIP3]);
+    	    drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Postal Locality"), getUtf8String(AddressFields[ADDRESS_POSTALLOCALITY]));
+
+    	    pos_y += LINE_HEIGHT;
+
+    	    drawSingleField(painter, pos_x, pos_y, tr("Locality"), getUtf8String(AddressFields[ADDRESS_LOCALITY]));
+        }
 
 	    pos_y += 80;
 	}

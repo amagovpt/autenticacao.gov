@@ -1499,6 +1499,31 @@ Please specify .xml, .csv or .eid</source>
         <translation>País</translation>
     </message>
 
+    <message>
+        <source>Region</source>
+        <translation>Região</translation>
+    </message>
+
+    <message>
+        <source>City</source>
+        <translation>Cidade</translation>
+    </message>
+
+    <message>
+        <source>Address</source>
+        <translation>Morada</translation>
+    </message>
+
+    <message>
+        <source>Locality</source>
+        <translation>Localidade</translation>
+    </message>
+
+    <message>
+        <source>Zip Code</source>
+        <translation>Código Postal</translation>
+    </message>
+
      <message>
         <source>Father</source>
         <translation>Pai</translation>
