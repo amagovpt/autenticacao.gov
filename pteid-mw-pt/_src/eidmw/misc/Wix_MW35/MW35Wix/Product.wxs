@@ -25,7 +25,7 @@
            UpgradeCode="$(var.UpgradeCode)">
 
     <Package Id="$(var.PackageCode)"
-             InstallerVersion="300"
+             InstallerVersion="405"
              Keywords="Portugal e-ID Middleware Installer"
              Platform="x86"
              Comments="Portuguese eID Middleware 2.4.0 SVN Revision $(var.RevisionNumber)"
@@ -55,6 +55,7 @@
     <?endif?>
 
     <?define var.PTEID_QT_IMAGEFORMATS=$(env.PTEID_DIR_QT_4)\plugins\imageformats\?>
+    <?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_4)\plugins\printsupport\?>
 
     <!-- Choose the target runtime to use: -->
     <!-- hack: Checking the solution file that was loaded with the visual studio -->
@@ -137,7 +138,10 @@
            <!-- <Directory Id="CERTS_SCAP_DIR" Name="certificates"/> -->
           <!--  <Directory Id="SCAP_SYSWOW" Name="syswow"/> -->
           </Directory>
-         
+
+          <Directory Id="QT5PLATFORMS" Name="platforms"/>
+          <Directory Id="QT5PRINTSUPPORT" Name="printsupport"/>
+          
           <Directory Id="EIDSTORE" Name="eidstore">
             <Directory Id="CERTSDIR" Name="certs"/>
             <Directory Id="CRLDIR" Name="crl">
@@ -153,6 +157,7 @@
             <Directory Id="CSHARP_SDK" Name="CSharp"/>
           </Directory>
         </Directory>
+        <!-- 
         <Directory Id="FIREFOXROOTFOLDER" Name="Mozilla Firefox">
           <Directory Id="FIREFOXEXTENSIONS" Name="extensions">
             <Directory Id="XPIROOTFOLDER" Name="portugaleid@eid.portugal.pt">
@@ -177,11 +182,12 @@
                 <Directory Id="CERTINSTALLPREFERENCESFOLDER" Name="preferences"/>
               </Directory>
 
-
             </Directory>
           </Directory>
+          
 
         </Directory>
+        -->
         <Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
 
       </Directory>
@@ -202,11 +208,9 @@
         <Merge Id="VCRT_POLICY" SourceFile="$(var.PTEID_DIR_MSM)\policy_8_0_Microsoft_VC80_CRT_x86.msm" Language="0" DiskId="1" />
       <?elseif $(var.PTEID_TARGET_RUNTIME) = VCR9 ?>
         <!-- VC9 runtime -->
-        <?define var.VCRT_TITLE="VC++ 9.0 runtime" ?>
-        <Merge Id="VCRT"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC90_CRT_x86.msm" Language="0" DiskId="1" />
-        <Merge Id="VCRT_POLICY" SourceFile="$(var.PTEID_DIR_MSM)\policy_9_0_Microsoft_VC90_CRT_x86.msm" Language="0" DiskId="1" />
+        <?define var.VCRT_TITLE="VC++ 12.0 runtime" ?>
+        <Merge Id="VCRT" SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC120_CRT_x86.msm" Language="0" DiskId="1" />
       <?endif?>
-
 
     </Directory>
 
@@ -220,11 +224,31 @@
       </Component>
     </DirectoryRef>
 
+    <DirectoryRef Id="QT5PLATFORMS">
+      <Component Id="qt5PlatformDll" Guid="{C65667C8-D72C-4CD4-BF7F-1D2DAC5B0BDA}">
+        <File Id="qwindows.dll" Name="qwindows.dll" KeyPath="yes" Source="$(var.PTEID_BUILD_FOLDER_X86)\qwindows.dll" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="QT5PRINTSUPPORT">
+      <Component Id="qt5WindowsPrintSupport" Guid="{9A3C252B-2AE6-40CC-B6DE-C09C31E53304}">
+        <File Id="windowsprintersupport.dll" Name="windowsprintersupport.dll" KeyPath="yes" Source="$(var.PTEID_QT_PRINTSUPPORT)\windowsprintersupport.dll" />
+      </Component>
+    </DirectoryRef>
 
     <DirectoryRef Id="DSS">
       <Component Id="DSSApp" Guid="{CDA14D17-04E8-4f4b-BEE1-771A0DDC2558}">
-        <File Id="dss_standalone.exe" Name="dss-standalone.exe" KeyPath="yes" Source="..\..\..\misc\DSS\dss-standalone.exe" />
+         <File Id="dss_standalone.exe" Name="dss-standalone.exe" KeyPath="yes" Source="..\..\..\misc\DSS\dss-standalone.exe" />
         <File Id="config_dss.properties" Name="config.properties" Source="..\..\..\misc\DSS\config.properties" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="SDK">
+      <Component Id="Cpp_SDK_component" Guid="{CDA14D17-04E8-4F4B-BEE1-771A0DDC3578}">
+        <File Id="pteidlibCpp.lib" KeyPath="yes" Name="pteidlibCpp.lib" Source="$(var.PTEID_BUILD_FOLDER_X86)\pteidlibCpp.lib"/>
+        <File Id="eidlib.h" Name="eidlib.h" Source="..\..\eidlib\eidlib.h"/>
+        <File Id="eidlibdefines.h" Name="eidlibdefines.h" Source="..\..\eidlib\eidlibdefines.h"/>
+        <File Id="eidlibException.h" Name="eidlibException.h" Source="..\..\eidlib\eidlibException.h"/>
       </Component>
     </DirectoryRef>
 
@@ -361,6 +385,7 @@
       </Component>
     </DirectoryRef>
 
+    <!-- 
     <DirectoryRef Id="FIREFOXEXTENSIONS">
       <Component Id="Extensions" Guid="{DBEFB6AD-3282-4625-8257-2CF7EA4E7264}">
         <CreateFolder>
@@ -387,14 +412,16 @@
         <File Id="install_xpi.rdf" Name="install.rdf" KeyPath="no" Source="..\..\..\xpi\src\install.rdf" />
       </Component>
     </DirectoryRef>
+    -->
 
     <DirectoryRef Id="IMAGEFORMATS">
       <Component Id="ImagePlugins" Guid="{4C51AE55-0475-44f3-8870-5C150F33635F}">
-        <File Source="$(var.PTEID_QT_IMAGEFORMATS)\qico4.dll" KeyPath="yes"/>
-        <File Source="$(var.PTEID_QT_IMAGEFORMATS)\qjpeg4.dll"/>
+        <File Source="$(var.PTEID_QT_IMAGEFORMATS)\qjpeg.dll" KeyPath="yes"/>
+        <File Source="$(var.PTEID_QT_IMAGEFORMATS)\qico.dll"/>
       </Component>
     </DirectoryRef>
-
+    
+    <!--
     <DirectoryRef Id="XPICONTENTFOLDER">
       <Component Id="XPIContent" Guid="{DC052180-264F-4ace-ACF1-FC482715EB86}" KeyPath="no">
         <CreateFolder>
@@ -522,7 +549,8 @@
         <File Id="firefoxcck.js" Name="firefox-cck.js" KeyPath="yes" Source="..\..\..\ffpteidcertinstall\xpi\defaults\preferences\firefox-cck.js"></File>
       </Component>
     </DirectoryRef>
-
+    -->
+    
     <DirectoryRef Id="MINIDRIVERROOTFOLDER">
       <Component Id="pteidmdrv" Guid="2bdf2bb0-4f7a-4ed6-a3d4-abcbe212fa14" >
         <File Id="pteidmdrv.inf" Name="pteidmdrv.inf" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.inf" KeyPath="yes" DiskId="1" />
@@ -578,22 +606,20 @@
         <File Source="..\..\..\eidgui\eidmw_nl.qm" />
        </Component>
 
-      <!-- Cairo and its dependencies: needed for the PDF export function 
-      <Component Id="Cairo" Guid="{DF770DAC-0151-49ea-890A-6E47C664F74E}" SharedDllRefCount="yes">
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)libcairo-2.dll" KeyPath="yes" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)freetype6.dll" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)libpng14-14.dll" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)libfontconfig-1.dll" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)libexpat-1.dll" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)zlib1.dll" />
-      </Component>
-      -->
-
 
       <Component Id="Qt" Guid="{AF5AF018-EE70-4EA9-98BA-9C2947F19060}" SharedDllRefCount="yes">
+        <!-- QT4
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)QtCore4.dll" KeyPath="yes" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)QtGui4.dll" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)QtNetwork4.dll" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)QtNetwork4.dll" />  -->
+        <!-- QT5  -->
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Core.dll" KeyPath="yes" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Gui.dll" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Network.dll" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Widgets.dll" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Concurrent.dll" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5PrintSupport.dll" />
+        
       </Component>
 
       <Component Id="License" Guid="{C00AF621-E882-4805-BA9C-B90AA5DBBCB6}" SharedDllRefCount="yes">
@@ -649,7 +675,7 @@
       </Component>
 
       <Component Id="XMLSecurity" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F65" SharedDllRefCount="yes">
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)xsec_1_6.dll" KeyPath="yes" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)xsec_1_7.dll" KeyPath="yes" />
       </Component>
 
       <Component Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
@@ -667,6 +693,7 @@
         <!--<ServiceControl Id="StartSCardSvrService" Name="SCardSvr" Start="install" />-->
       </Component>
 
+      <!--
       <Component Id="REGISTERXPI" Guid="{946B85B6-99CC-4893-8A42-E7EC6FFE0D87}">
         <RegistryKey Root="HKLM"
                      Key="SOFTWARE\Mozilla\Firefox\Extensions"
@@ -674,6 +701,7 @@
           <RegistryValue Type="string" Name="portugaleid@eid.portugal.be" Value="C:\Program Files\Mozilla Firefox\extensions\portugaleid@eid.portugal.be" KeyPath="yes"/>
         </RegistryKey>
       </Component>
+      -->
 
       <Component Id="REGISTERMINIDRIVER" Guid="{B9980C19-883E-49f9-BDD2-AB3D75187C8F}">
         <RegistryKey Root="HKLM"
@@ -806,7 +834,6 @@
 
       <Feature Id="VCRedist" Title="$(var.VCRT_TITLE)" AllowAdvertise="no" Display="hidden" Level="1">
         <MergeRef Id="VCRT" />
-        <MergeRef Id="VCRT_POLICY" />
       </Feature>
 
       <!-- Program Files -->
@@ -826,6 +853,8 @@
       <ComponentRef Id="DirectoryCache"/>
       <ComponentRef Id="License"/>
       <ComponentRef Id="LogDir"/>
+      
+     <!-- 
       <ComponentRef Id="Extensions"/>
       <ComponentRef Id="FireFoxRoot"/>
       <ComponentRef Id="XPIRoot"/>
@@ -844,7 +873,7 @@
       <ComponentRef Id="pteidcertinstallcomponents"/>
       <ComponentRef Id="pteidcertinstallmodules"/>
       <ComponentRef Id="pteidcertinstallpreferences"/>
-
+      -->
       <!-- System32 -->
       <ComponentRef Id="Runtime35"/>
       <ComponentRef Id="Runtime35ThirdPartyOpenSSL"/>
@@ -864,11 +893,15 @@
                 >
         <ComponentRef Id="GUI"/>
         <ComponentRef Id="Qt"/>
+        <ComponentRef Id="qt5PlatformDll"/>
+        <ComponentRef Id="qt5WindowsPrintSupport"/>
+        
         <ComponentRef Id="FreeImage"/>
         <ComponentRef Id="Curl"/>
         <ComponentRef Id="Poppler"/>
         <ComponentRef Id="XMLSecurity"/>
-        <!-- <ComponentRef Id="Cairo"/> -->
+        
+        <ComponentRef Id="Cpp_SDK_component"/>
         <ComponentRef Id="Java_SDK_Component"/>
         <ComponentRef Id="CSharp_SDK_Component"/>
 
@@ -883,7 +916,7 @@
                 Level="1">
         <ComponentRef Id="SCardSvrService"/>
         <ComponentRef Id="pkcs11"/>
-        <ComponentRef Id="REGISTERXPI"/>
+        <!-- <ComponentRef Id="REGISTERXPI"/>-->
         <!--<ComponentRef Id="pkcs11_cfg"/>
         <ComponentRef Id="pkcs11_register" />-->
         <ComponentRef Id="OutlookTool" />
