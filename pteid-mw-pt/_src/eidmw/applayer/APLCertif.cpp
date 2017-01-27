@@ -177,7 +177,7 @@ void APL_Certifs::initSODCAs()
 		cert = itrCert->second;
 
 		//Prod: Select Cartao de Cidadao PKI roots
-		if (!testMode && (strcmp(cert->getIssuerName(), "ECRaizEstado")==0 || 
+		if (!testMode && !cert->isFromCard() && (strcmp(cert->getIssuerName(), "ECRaizEstado")==0 || 
 			strcmp(cert->getOwnerName(), "ECRaizEstado") == 0 ||
 			strcmp(cert->getOwnerName(), "Baltimore CyberTrust Root") == 0))
 		{
@@ -185,8 +185,8 @@ void APL_Certifs::initSODCAs()
 			MWLOG(LEV_DEBUG, MOD_APL, L"initSODCAs(): Adding certificate for PROD card: %s", cert->getOwnerName());
 
 		}
-		//Add certificate if it is self signed: it should be enough to pick up the test root certs
-		else if (testMode && cert->isRoot())
+		//Add certificate if it is self signed and NOT from card: it should be enough to pick up the test root certs available on file
+		else if (testMode && !cert->isFromCard() && cert->isRoot())
 		{
 			m_sod_cas.push_back(cert);
 			MWLOG(LEV_DEBUG, MOD_APL, L"initSODCAs(): Adding certificate for test card: %s Valid from: %s to: %s", 
@@ -1641,7 +1641,7 @@ APL_CertifStatus APL_Certif::validationOCSP()
 {
 	APL_OcspResponse *ocsp=getOcspResponse();
 
-	//This cert does not contain an OCPS URL
+	//This cert does not contain an OCSP URL
 	if(!ocsp)
 		return APL_CERTIF_STATUS_UNKNOWN;
 
@@ -1680,7 +1680,7 @@ void APL_Certif::initInfo()
 
 	if(!m_info)
 	{
-		CAutoMutex autoMutex(&m_Mutex);		//We lock for unly one instanciation
+		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
 		if(!m_info)
 			m_info=new tCertifInfo;
 	}
