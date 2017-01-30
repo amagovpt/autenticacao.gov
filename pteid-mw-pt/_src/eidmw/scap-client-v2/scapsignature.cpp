@@ -1513,7 +1513,7 @@ void ScapSignature::on_btn_reloadAatributes_clicked()
         pdialog->setWindowTitle(tr("Attribute Suppliers"));
         pdialog->setLabelText(tr("Loading attributes from selected suppliers..."));
 
-        std::cout << "Selected suppliers: " << attrSpl.m_selectedSuppliersList.size() << std::endl;
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Selected suppliers: %d", attrSpl.m_selectedSuppliersList.size());
 
         connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
         future = QtConcurrent::run(this,&ScapSignature::loadProfessionalAttributes, attrSpl.m_selectedSuppliersList);
@@ -1551,8 +1551,10 @@ void ScapSignature::getAttributeSuppliers()
     int ret = suppliers_proxy.AttributeSuppliers(suppliers_resp);
     if (ret != SOAP_OK)
     {
-        std::cout << "GetSuppliers: Error in AttributeSuppliers: " << ret << std::endl;
-		std::cout << "SOAP detail: " << suppliers_proxy.soap->fault->detail << std::endl;
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Error in getAttributeSuppliers: %d", ret);
+        
+        if (suppliers_proxy.soap->fault != NULL)
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SOAP Fault detail: %s", suppliers_proxy.soap->fault->detail);
     }
     m_suppliersList = suppliers_resp.AttributeSupplier;
 }
