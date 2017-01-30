@@ -297,7 +297,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 #ifndef WIN32
 	m_ui.btnCert_Details->hide();
 	m_ui.btnCert_Register->hide();
-
 #endif
 
 	//----------------------------------
@@ -957,8 +956,14 @@ void MainWnd::setEnabledPinButtons( bool bEnabled )
 //*****************************************************
 void MainWnd::setEnabledCertifButtons( bool bEnabled )
 {
-	m_ui.btnCert_Register->setEnabled(bEnabled);
+#ifdef WIN32
+	if ( bEnabled ){
+		m_ui.btnCert_Register->show();
+	} else{
+		m_ui.btnCert_Register->hide();
+	}/* if ( bEnabled ) */
 	m_ui.btnCert_Details->setEnabled(bEnabled);
+#endif /* WIN32 */
 }
 //*****************************************************
 // dtor
@@ -1745,21 +1750,23 @@ void MainWnd::syncTreeItemWithSideinfo(QTreeCertItem *item)
 	// ask for the cert status
 	item->askCertStatus();
 
+#ifdef WIN32
 	if(!ReaderContext.isCardPresent())
 	{
-		m_ui.btnCert_Register->setEnabled(false);
+		m_ui.btnCert_Register->hide();
 		m_ui.btnCert_Details->setEnabled(false);
 	}
 	else if ( 0 < item->childCount())
 	{
-		m_ui.btnCert_Register->setEnabled(false);
+		m_ui.btnCert_Register->hide();
 		m_ui.btnCert_Details->setEnabled(true);
 	}
 	else
 	{
-		m_ui.btnCert_Register->setEnabled(true);
+		m_ui.btnCert_Register->show();
 		m_ui.btnCert_Details->setEnabled(true);
 	}
+#endif /* #ifdef WIN32 */
 }
 
 //*****************************************************
