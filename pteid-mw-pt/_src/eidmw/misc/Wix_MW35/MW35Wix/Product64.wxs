@@ -651,9 +651,9 @@
     <DirectoryRef Id="SDK">
       <Component Id="Cpp_SDK_component" Guid="{CDA14D17-04E8-4F4B-BEE1-771A0DDC3578}">
         <File Id="pteidlibCpp.lib" KeyPath="yes" Name="pteidlibCpp.lib" Source="$(var.PTEID_BUILD_FOLDER_X64)\pteidlibCpp.lib"/>
-        <File Id="eidlib.h" Name="eidlib.h" Source="..\..\eidlib\eidlib.h"/>
-        <File Id="eidlibdefines.h" Name="eidlibdefines.h" Source="..\..\eidlib\eidlibdefines.h"/>
-        <File Id="eidlibException.h" Name="eidlibException.h" Source="..\..\eidlib\eidlibException.h"/>
+        <File Id="eidlib.h" Name="eidlib.h" Source="..\..\..\eidlib\eidlib.h"/>
+        <File Id="eidlibdefines.h" Name="eidlibdefines.h" Source="..\..\..\eidlib\eidlibdefines.h"/>
+        <File Id="eidlibException.h" Name="eidlibException.h" Source="..\..\..\eidlib\eidlibException.h"/>
       </Component>
     </DirectoryRef>
 
