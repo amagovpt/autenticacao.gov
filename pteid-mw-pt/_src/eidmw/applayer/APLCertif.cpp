@@ -183,14 +183,14 @@ void APL_Certifs::initSODCAs()
 			strcmp(cert->getOwnerName(), "Baltimore CyberTrust Root") == 0))
 		{
 			m_sod_cas.push_back(cert);
-			MWLOG(LEV_DEBUG, MOD_APL, L"initSODCAs(): Adding certificate for PROD card: %s", cert->getOwnerName());
+			MWLOG(LEV_DEBUG, MOD_APL, "initSODCAs(): Adding certificate for PROD card: %s", cert->getOwnerName());
 
 		}
 		//Add certificate if it is self signed and NOT from card: it should be enough to pick up the test root certs available on file
 		else if (testMode && !cert->isFromCard() && cert->isRoot())
 		{
 			m_sod_cas.push_back(cert);
-			MWLOG(LEV_DEBUG, MOD_APL, L"initSODCAs(): Adding certificate for test card: %s Valid from: %s to: %s", 
+			MWLOG(LEV_DEBUG, MOD_APL, "initSODCAs(): Adding certificate for test card: %s Valid from: %s to: %s", 
 				cert->getOwnerName(), cert->getValidityBegin(), cert->getValidityEnd());
 
 		}
@@ -213,7 +213,7 @@ void APL_Certifs::addToSODCAs(const CByteArray &cert_ba)
 	}
 
 	APL_Certif * cert = new APL_Certif(this, cert_ba, APL_CERTIF_TYPE_ROOT, false);
-	MWLOG(LEV_DEBUG, MOD_APL, L"addToSODCAs(): Adding certificate %s", cert->getOwnerName());
+	MWLOG(LEV_DEBUG, MOD_APL, "addToSODCAs(): Adding certificate %s", cert->getOwnerName());
 	m_sod_cas.push_back(cert);
 }
 

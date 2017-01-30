@@ -392,6 +392,8 @@ void getProxySystemWide(const wchar_t *host_default, long port_default, const wc
 	if(!hLibrary)
 		return;
 
+	MWLOG(LEV_DEBUG, MOD_APL, "getProxySystemWide() was called for %s", pac != NULL ? "pacfile" : "host/port");
+
  	FCTDEF_WinHttpDetectAutoProxyConfigUrl			WinHttpDetectAutoProxyConfigUrl			= (FCTDEF_WinHttpDetectAutoProxyConfigUrl)			GetProcAddress(hLibrary, "WinHttpDetectAutoProxyConfigUrl"); 
 	FCTDEF_WinHttpGetIEProxyConfigForCurrentUser	WinHttpGetIEProxyConfigForCurrentUser	= (FCTDEF_WinHttpGetIEProxyConfigForCurrentUser)	GetProcAddress(hLibrary, "WinHttpGetIEProxyConfigForCurrentUser"); 
     
