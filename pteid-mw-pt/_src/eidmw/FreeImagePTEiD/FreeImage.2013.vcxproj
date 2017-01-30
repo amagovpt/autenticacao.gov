@@ -72,13 +72,13 @@
     <_ProjectFileVersion>12.0.21005.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>.\$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>.\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>.\$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>.\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
@@ -140,7 +140,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies />
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).exe</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -193,7 +193,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies />
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).exe</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -331,9 +331,7 @@ copy Source\FreeImage.h Dist\x64
     <ClCompile Include="Source\FreeImage\tmoReinhard05.cpp" />
     <ClCompile Include="Source\FreeImage\ToneMapping.cpp" />
     <ClCompile Include="Source\FreeImage\NNQuantizer.cpp" />
-    <ClCompile Include="Source\FreeImage\WuQuantizer.cpp" />
-    <ClCompile Include="Source\DeprecationManager\Deprecated.cpp" />
-    <ClCompile Include="Source\DeprecationManager\DeprecationMgr.cpp" />
+    <ClCompile Include="Source\FreeImage\WuQuantizer.cpp" /> 
     <ClCompile Include="Source\FreeImage\CacheFile.cpp" />
     <ClCompile Include="Source\FreeImage\MultiPage.cpp" />
     <ClCompile Include="Source\FreeImage\ZLibInterface.cpp" />
@@ -344,7 +342,6 @@ copy Source\FreeImage.h Dist\x64
     <ClCompile Include="Source\FreeImageToolkit\Background.cpp" />
     <ClCompile Include="Source\FreeImageToolkit\BSplineRotate.cpp" />
     <ClCompile Include="Source\FreeImageToolkit\Channels.cpp" />
-    <ClCompile Include="Source\FreeImageToolkit\ClassicRotate.cpp" />
     <ClCompile Include="Source\FreeImageToolkit\Colors.cpp" />
     <ClCompile Include="Source\FreeImageToolkit\CopyPaste.cpp" />
     <ClCompile Include="Source\FreeImageToolkit\Display.cpp" />
