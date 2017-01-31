@@ -1427,6 +1427,14 @@ Please specify .xml, .csv or .eid</source>
         <translation>Informações Adicionais</translation>
     </message>
     <message>
+        <source>Error in PDF export: Address PIN is blocked</source>
+        <translation>Erro na exportação de PDF: PIN da morada bloqueado</translation>
+    </message>
+    <message>
+        <source>Error in PDF export: Signature PIN is blocked</source>
+        <translation>Erro na exportação de PDF: PIN de assinatura bloqueado</translation>
+    </message>
+    <message>
         <source>Select the fields you want to include:</source>
         <oldsource>Select the needed fields:</oldsource>
         <translation type="unfinished">Selecione os campos pretendidos:</translation>

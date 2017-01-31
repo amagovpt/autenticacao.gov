@@ -144,19 +144,37 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 {
     CardInformation cdata = m_CI_Data;
     QString pdffilepath;
+    QString caption  = tr("Export / Print");
     QString defaultfilepath;
     bool res = false;
 
     defaultfilepath = QDir::homePath();
     try
     {
+        PTEID_EIDCard*  card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+        PTEID_Pin&      addressPIN = card->getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
+        PTEID_Pin&      signaturePIN = card->getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
+
+        if (ui.chboxAddress->isChecked() && addressPIN.getTriesLeft() == 0)
+        {
+            QMessageBox msgBoxp(QMessageBox::Critical, caption, tr("Error in PDF export: Address PIN is blocked"), 0, this);
+            msgBoxp.exec();
+            return;
+        }
+        
         if (ui.chboxSignature->isChecked())
 		{
             QString pdffiletmp;
             QString signfilepath;
             QString output_path;
             QString nativepdftmp;
-            PTEID_EIDCard*	card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
+
+            if (signaturePIN.getTriesLeft() == 0)
+            {
+                QMessageBox msgBoxp(QMessageBox::Critical, caption, tr("Error in PDF export: Signature PIN is blocked"), 0, this);
+                msgBoxp.exec();
+                return;
+            }
 
             signfilepath = QDir::homePath();
             signfilepath.append("/CartaoCidadao_signed.pdf");
