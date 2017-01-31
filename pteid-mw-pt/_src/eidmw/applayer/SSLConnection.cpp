@@ -1,7 +1,7 @@
 /* ****************************************************************************
  *
  *  PTeID Middleware Project.
- *  Copyright (C) 2011 - 2016
+ *  Copyright (C) 2011 - 2017
  *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *
  *  HTTPS Client with Client Certificate Authentication for PT-eID Middleware
@@ -357,8 +357,6 @@ char *parseToken(char * server_response, const char * token)
 
 #define ENDPOINT_07 "/changeaddress/signChallenge"
 
-//TODO: we need to make sure what MSE set commands we need to send before each GET RANDOM on IAS 0.7
-
 SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *kicc)
 {
 	cJSON *json = NULL;
@@ -382,12 +380,13 @@ SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *k
 	sprintf(challenge_params, challenge_format, challenge, kicc);
 	endpoint = ENDPOINT_07;
 
-	//fprintf(stderr, "POSTing JSON %s\n", challenge_params);
+	MWLOG(LEV_DEBUG, MOD_APL, "POSTing request: %s", challenge_params);
 	char *server_response = Post(this->m_session_cookie, endpoint, challenge_params);
 
 	free(challenge_params);
 	char *body = skipHTTPHeaders(server_response);
-	//fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
+
+	MWLOG(LEV_DEBUG, MOD_APL, "do_SAM_2ndpost server response: %s", server_response);
 
 	free(server_response);
 
@@ -471,12 +470,12 @@ bool SSLConnection::do_SAM_4thpost(StartWriteResponse &resp)
 
 	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_4thpost()");
 
-	//fprintf(stderr, "POSTing JSON %s\n", json_request);
+	MWLOG(LEV_DEBUG, MOD_APL, "POSTing request: %s", json_request);
 
 	char *server_response = Post(this->m_session_cookie,
 	  "/changeaddress/followUpWrite", json_request);
 
-	//fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
+	MWLOG(LEV_DEBUG, MOD_APL, "do_SAM_4thpost: server response: %s", server_response);
 
 	free(json_request);
 
@@ -529,12 +528,12 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_3rdpost()");
 
 	snprintf(post_body, buf_len, start_write_format, mse_resp, internal_auth_resp);
-	//fprintf(stderr, "POSTing JSON %s\n", post_body);
 
+	MWLOG(LEV_DEBUG, MOD_APL, "POSTing request: %s", post_body);
 	char *server_response = Post(this->m_session_cookie,
 	  "/changeaddress/startWrite", post_body, true);
 
-	//fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
+	MWLOG(LEV_DEBUG, MOD_APL, "do_SAM_3rdpost server response: %s", server_response);
 
 	char *body = skipHTTPHeaders(server_response);
 
@@ -617,20 +616,20 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 
 	char * server_response = (char *) calloc(REPLY_BUFSIZE, sizeof(char));
 
-	fprintf(stderr, "POSTing JSON %s\n", post_dhparams);
+	MWLOG(LEV_DEBUG, MOD_APL, "do_SAM_1stpost: POSTing request: %s", post_dhparams);
 
 	ret_channel = write_to_stream(m_ssl_connection, request_headers);
-	fprintf(stderr, "Wrote to channel: %d bytes\n", ret_channel);
+	//fprintf(stderr, "Wrote to channel: %d bytes\n", ret_channel);
 	ret_channel = write_to_stream(m_ssl_connection, post_dhparams);
-	fprintf(stderr, "Wrote to channel: %d bytes\n", ret_channel);
+	//fprintf(stderr, "Wrote to channel: %d bytes\n", ret_channel);
 
 	//Read response
 	unsigned int ret = read_from_stream(m_ssl_connection, server_response, REPLY_BUFSIZE);
-
-	fprintf(stderr, "DEBUG: Server reply: \n%s\n", server_response);
+	
 
 	if (ret > 0)
 	{
+		MWLOG(LEV_DEBUG, MOD_APL, "do_SAM_1stpost: Server reply: %s", server_response);
 		m_session_cookie = parseCookie(server_response);
 		if (m_session_cookie == NULL)
 		{

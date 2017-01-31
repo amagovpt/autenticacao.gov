@@ -2,6 +2,8 @@
 
  * eID Middleware Project.
  * Copyright (C) 2008-2009 FedICT.
+ * Copyright (C) 2014-2016
+ *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
