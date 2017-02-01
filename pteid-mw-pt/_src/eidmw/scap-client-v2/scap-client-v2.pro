@@ -75,7 +75,6 @@ FORMS    += \
 !macx: LIBS += -Wl,-R,'../lib'
 LIBS += -L../lib -lz -lssl -lcrypto -lpteidlib
 macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2j/lib/ /usr/local/lib/libgsoapssl++.a
-!macx: LIBS += -lgsoapssl++
 
 
 RESOURCES += \
