@@ -158,6 +158,9 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
     const unsigned char *pucData = oDatan.GetBytes();
     unsigned long ulDataLen = oDatan.Size();
 
+    if ( ulDataLen > PERSODATAFILESIZE )
+        throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
+
 /*
     if(ulDataLen == 0)
     {

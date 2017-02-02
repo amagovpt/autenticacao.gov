@@ -611,7 +611,7 @@ void MainWnd::on_btnAddress_Change_clicked()
    	QtConcurrent::run(this, &MainWnd::doChangeAddress,
 					  processUtf8, secret_codeUtf8);
    	m_progress_addr->open();
-	
+
 	delete dlgChangeAddr;
 }
 
@@ -3711,16 +3711,16 @@ void MainWnd::updatetext()
 	int totalct;
 
 	QString TxtPersoDataString = m_ui.txtPersoData->toPlainText().toUtf8();
-	strnr = TxtPersoDataString.count();
+	strnr = TxtPersoDataString.toStdString().size() + 1; // '\0' should be considered as a byte
 
-	totalct = 1000-strnr;
+	totalct = 1000 - strnr;
 
 	QString TotalBytes = QString::number(totalct);
 	TotalBytes.append(" / 1000");
 	m_ui.txtPersoDataCount->setText(TotalBytes);
 
-	if (TxtPersoDataString.count()>1000)
-		m_ui.txtPersoData->textCursor().deletePreviousChar();
+	if ( strnr > 1000)
+        m_ui.txtPersoData->textCursor().deletePreviousChar();
 }
 
 void MainWnd::PersoDataSaveButtonClicked( void )
@@ -3740,7 +3740,7 @@ void MainWnd::PersoDataSaveButtonClicked( void )
         if (pinNotes == 0)
         {
             if ( TxtPersoDataString.toStdString().size() > 0 ){
-                const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), TxtPersoDataString.toStdString().size());
+                const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), (TxtPersoDataString.toStdString().size() + 1) );
                 Card.writePersonalNotes(oData);
             }else{
                 unsigned long ulSize = 1000;
@@ -4317,7 +4317,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 						{
 							break;
 						}
-						
+
 						if ( m_Settings.getAutoCardReading() )
 						{
 							/* Fix more than 1 loadCardData reading */
