@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 #############################################################
-# Configuration script for the Electronic ID Middleware	    #
+# Configuration script for pteid Middleware	            #
 #							    #
 # This script is supposed to:				    #
 #  							    #
@@ -248,37 +248,15 @@ $dependencies{$pcscliteName} = ["--lib",
 				"could not find %s in: %s\nPlease specify the location " .
 				"of the library with the option %s\n\n"];
 #############################################################
-## qt4
+## qt5
 #############################################################
 #$dependencies{"qglobal.h"} =  ["--include",
 #			       "could not find %s in: %s\nPlease specify the location " .
 #			       "of the file with the option %s\n\n"];
 
-#############################################################
-## xerces-c
-## in case of linux (fedora9) add the default inclide/lib path
-#############################################################
-if ( $^O =~ m/linux/ )
-{
-	if( $distro eq "fedora")
-	{
-		my $xerces_include = $options{"--include"}->[2] . " " . "/usr/include/xercesc-2.7.0";
-		$options{"--include"}->[2] = $xerces_include;
-	
-		$dependencies{"xercesc/sax2/SAX2XMLReader.hpp"} =  ["--include",
-				       "could not find %s in: %s\nPlease specify the location " .
-				       "of the file with the option %s\n\n"];
-
-		my $XercesName = "libxerces-c.so";
-		$dependencies{"$XercesName"} =  ["--lib",
-			       "could not find %s in: %s\nPlease specify the location " .
-			       "of the file with the option %s\n\n"];
-	}
-}
 
 #############################################################
-## qt4-devel
-## could also check for the existence of /usr/lib/libQtCore.so
+## qt5-devel
 #############################################################
 my $QtName = "libQt5Gui.so";
 $QtName = "QtGui" unless($^O =~ m/linux/);
@@ -289,7 +267,7 @@ $dependencies{"$QtName"} = ["--lib",
 #############################################################
 ## qmake
 #############################################################
-$dependencies{"qmake"} = ["--path",
+$dependencies{"qmake-qt5"} = ["--path",
 			"could not find %s in: %s\nPlease specify the location " .
 			"of the library with the option %s\n\n"];
 
@@ -319,22 +297,16 @@ $dependencies{"g++"} = ["--path",
 ## Check QT versions
 ##
 #############################################################
-my $QtVerX = 4;
-my $QtVerY = 5;
+my $QtVerX = 5;
+my $QtVerY = 0;
 my $QtVerZ = 0;
 my $qmakeVerI = 10000 * $QtVerX + 100 * $QtVerY + $QtVerZ;
 
-my $qmakeVer = `qmake -v`;
-my $qmakeCmd = "qmake";
+my $qmakeVer = `qmake-qt5 -v`;
+my $qmakeCmd = "qmake-qt5";
 eval {
 	print "trying qmake...";
-	$qmakeVer = `qmake -v`;
-};
-if ($@) {
-	print "trying qmake-qt4...";
-	$qmakeCmd = "qmake-qt4";
-	$qmakeVer = `qmake-qt4 -v`;
-die;
+	$qmakeVer = `qmake-qt5 -v`;
 };
 
 # get the version nr from the version string
@@ -351,11 +323,6 @@ if ($qmakeVerII < $qmakeVerI)
 	exit -1;
 }
 
-
-#my $Cmd = substr($options{"--lib"}->[2],2) . "/" . $QtName . ".*.*.*";
-#my $QtGuiVer = `ls $Cmd`;
-
-#$QtGuiVer =~ m/$QtVerX\.[$QtVerY-9]\.[$QtVerZ-9]/ or die "$QtName version found at " . substr($options{"--lib"}->[2],2) . " must be higher than: $QtVerX.$QtVerY.$QtVerZ. Use --lib+=-L<path_to_qt_lib>\n";
 
 #############################################################
 ##
@@ -392,58 +359,23 @@ if ($^O =~ m/linux/)
 }
 else
 {
-## Mac qmake fix: for a release build you have to add "CONFIG -= debug",
-## otherwise the version numbers will be _after_ the ".dylib"
+	## Mac qmake fix: for a release build you have to add "CONFIG -= debug",
+	## otherwise the version numbers will be _after_ the ".dylib"
 
-my $configOptionIdx=rindex($qmakeOptions, "CONFIG");
-my $configOptionIdxEnd=rindex($qmakeOptions, "release");
+	my $configOptionIdx=rindex($qmakeOptions, "CONFIG");
+	my $configOptionIdxEnd=rindex($qmakeOptions, "release");
 
-if ($configOptionIdxEnd != -1)
-{
-    $configOptionIdxEnd = $configOptionIdxEnd + 7;
-    my $rest1 = substr($qmakeOptions,0,$configOptionIdx-1);
-    my $rest2 = substr($qmakeOptions,$configOptionIdxEnd+1,length($qmakeOptions)-$configOptionIdxEnd);
+	if ($configOptionIdxEnd != -1)
+	{
+	    $configOptionIdxEnd = $configOptionIdxEnd + 7;
+	    my $rest1 = substr($qmakeOptions,0,$configOptionIdx-1);
+	    my $rest2 = substr($qmakeOptions,$configOptionIdxEnd+1,length($qmakeOptions)-$configOptionIdxEnd);
 
-    $qmakeOptions = $rest1 . $rest2;
-    #substr($qmakeOptions,$configOptionIdx,($configOptionIdxEnd-$configOptionIdx))="";
-    $qmakeOptions .= "\"CONFIG-=debug\"";
-}
+	    $qmakeOptions = $rest1 . $rest2;
+	    #substr($qmakeOptions,$configOptionIdx,($configOptionIdxEnd-$configOptionIdx))="";
+	    $qmakeOptions .= "\"CONFIG-=debug\"";
+	}
 	$qmakeOptions .= " -spec macx-g++42";
-
-=pod
-#############################################################
-## for MAC OSX 10.4 the following parameter has to be set:
-##    CONFIG+=osx10_4
-## for MAC OSX 10.5 this parameter should be set to osx10_5
-## for MAC OSX 10.6 or higher, this parameter should be set to osx10_6
-#############################################################
-#get the OS version and determine if the CONFIG parameter has to be set
-	my $osxVer = `sw_vers -productVersion`;
-	chomp($osxVer);
-
-	if ( $osxVer ge "10.6.0" )
-	{
-        	#print STDOUT "OS version:" . $osxVer . ">=" . "10.6.0\n"
-		$qmakeOptions .= " \"CONFIG+=osx10_6\"";
-	}
-	elsif ( $osxVer ge "10.5.0" )
-	{
-        	#print STDOUT "OS version:" . $osxVer . ">=" . "10.5.0\n"
-		$qmakeOptions .= " \"CONFIG+=osx10_5\"";
-	}
-	elsif ( $osxVer ge "10.4.0" )
-	{
-	        #print STDOUT "OS version:" . $osxVer . ">=" . "10.4.0\n"
-		$qmakeOptions .= " \"CONFIG+=osx10_4\"";
-	}
-	else
-	{	
-		print STDERR "Error: OSX version must be > 10.4\n\n";
-		exit -1;
-	        #print STDOUT "OS version:" . $osxVer . "<" . "10.4.0\n"
-	}
-=cut
-
 }
 
 
