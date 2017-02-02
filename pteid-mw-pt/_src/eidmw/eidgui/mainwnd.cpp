@@ -744,9 +744,9 @@ void MainWnd::on_btnSelectTab_Identity_Extra_clicked()
 
 void MainWnd::on_btnSelectTab_Address_clicked()
 {
-	m_ui.stackedWidget->setCurrentIndex(3);
 	if (addressdatastatus == 1)
 		refreshTabAddress();
+	m_ui.stackedWidget->setCurrentIndex(3);
 }
 
 void MainWnd::on_btnSelectTab_Certificates_clicked()
