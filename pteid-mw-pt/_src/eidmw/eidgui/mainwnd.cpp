@@ -2051,6 +2051,9 @@ void MainWnd::loadCardData( void )
 
         getReaderIndexes( &ReaderStartIdx, &ReaderEndIdx, true );
 
+        //We can safely clear previous data because we have successfully locked
+        m_CI_Data.Reset();
+
         if ( ReaderEndIdx == 0 ){
             clearGuiContent();
             showNoReaderMsg();
@@ -4382,7 +4385,6 @@ void MainWnd::doPicturePopup( PTEID_Card& card )
     QImage myImage, myImagescaled;
     QPixmap				  pixMap;
 
-    m_CI_Data.Reset();
     loadCardData();
 
     if (pixMap.loadFromData(m_CI_Data.m_PersonInfo.m_BiometricInfo.m_pPictureData, "PNG"))
