@@ -141,10 +141,18 @@ QString PDFSignWindow::composeCitizenFullName()
 
 }
 
+QString documentNumberToNIC(const QString &doc_number)
+{
+	int last_space = doc_number.lastIndexOf(' ');
+	return doc_number.left(last_space);
+}
+
 QString PDFSignWindow::getCitizenNIC()
 {
 	const tFieldMap PersonFields = m_CI_Data.m_PersonInfo.getFields();
-	return QString::fromUtf8(PersonFields[DOCUMENTNUMBER].toStdString().c_str());
+	const QString doc_number = PersonFields[DOCUMENTNUMBER];
+
+	return documentNumberToNIC(doc_number);
 }
 
 #define ROWCOUNT_LANDSCAPE 5
