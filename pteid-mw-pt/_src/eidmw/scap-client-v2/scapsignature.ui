@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -271,7 +271,7 @@
        <x>9</x>
        <y>290</y>
        <width>381</width>
-       <height>103</height>
+       <height>104</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_signaturePage">
@@ -352,9 +352,9 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>470</x>
-       <y>459</y>
-       <width>111</width>
+       <x>475</x>
+       <y>460</y>
+       <width>151</width>
        <height>27</height>
       </rect>
      </property>
@@ -368,7 +368,7 @@
       <enum>Qt::LeftToRight</enum>
      </property>
      <property name="text">
-      <string>Free Selection</string>
+      <string>Posicionamento livre</string>
      </property>
     </widget>
    </widget>
