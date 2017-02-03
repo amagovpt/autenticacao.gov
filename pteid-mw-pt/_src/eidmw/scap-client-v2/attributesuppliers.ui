@@ -35,7 +35,7 @@
    <string>Choose your attribute suppliers</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resource.qrc">
+   <iconset>
     <normaloff>:/logo/appicon/pteid.ico</normaloff>:/logo/appicon/pteid.ico</iconset>
   </property>
   <property name="modal">
@@ -64,7 +64,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Ok</string>
+    <string>OK</string>
    </property>
   </widget>
   <widget class="QTreeWidget" name="suppliersList">
