@@ -488,7 +488,7 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 	ui.pushButton_freeselect->setEnabled(checked);
 	ui.smallsig_checkBox->setEnabled(checked);
 
-	if ( !checked ){
+	if ( !checked ) {
         ui.label_x->setText("");
         ui.label_y->setText("");
 
@@ -497,7 +497,8 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
         } else{
             clearAllSectors();
         }
-	} else{
+	} 
+	else{
         int sector;
         if ( !isInitializedScene ){
             QPointF pointF = QPointF(0, 0);

@@ -403,7 +403,7 @@ private:
 
 	void refreshTabIdentity( void );
 	void refreshTabIdentityExtra( void );
-	void refreshTabAddress( void );
+	bool refreshTabAddress( void );
 	void clearAddressData( void );
 	void refreshTabPinCodes( void );                /*llemos*/
 	void refreshTabPersoData( void );

@@ -743,9 +743,13 @@ void MainWnd::on_btnSelectTab_Identity_Extra_clicked()
 
 void MainWnd::on_btnSelectTab_Address_clicked()
 {
+	bool addressLoaded = true;
+
 	if (addressdatastatus == 1)
-		refreshTabAddress();
-	m_ui.stackedWidget->setCurrentIndex(3);
+		addressLoaded = refreshTabAddress();
+
+	if (addressLoaded)
+		m_ui.stackedWidget->setCurrentIndex(3);
 }
 
 void MainWnd::on_btnSelectTab_Certificates_clicked()
@@ -3603,15 +3607,15 @@ void MainWnd::clearAddressData(void){
 //*****************************************************
 // refresh the tab with the PTeid Address
 //*****************************************************
-void MainWnd::refreshTabAddress( void )
+bool MainWnd::refreshTabAddress( void )
 {
     if (!m_CI_Data.isDataLoaded())
-        return;
+        return false;
 
 	if (pinactivate == 1)
 	{
 		if (!addressPINRequest_triggered())
-			return;
+			return false;
 	}
 
 	loadCardDataAddress();
@@ -3704,6 +3708,7 @@ void MainWnd::refreshTabAddress( void )
 	}
 
 	addressdatastatus = 0;
+	return true;
 }
 
 // Set Max of 1000Bytes for personalNotes Field
