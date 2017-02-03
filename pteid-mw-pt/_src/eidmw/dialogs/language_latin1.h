@@ -85,6 +85,7 @@ DEFINE_LANG_STR(Code) = {L"code", L"código", L"code", L"Kennzahl"};
 DEFINE_LANG_STR(AndSigning) = {L"and signing", L"e assinar", L"et signature", L"und Unterschrift"};
 DEFINE_LANG_STR(AndSign) = {L"and sign", L"e assinar", L"et signer", L"und unterschreiben"};
 DEFINE_LANG_STR(RenewingPinCode) = {L"Change PIN code", L"Alterar código PIN", L"Changement de code", L"PIN-Kennzahl erneuern"};
+DEFINE_LANG_STR(VerifyingPinCode) = { L"Verify PIN code", L"Verificar código PIN", L"Vérifier le code PIN", L"PIN-Code überprüfen" };
 DEFINE_LANG_STR(CurrentPin) = {L"Current PIN", L"PIN Atual", L"Code actuel", L"Aktuelle PIN"};
 DEFINE_LANG_STR(NewPin) = {L"New PIN", L"Novo PIN", L"Nouveau", L"Neue PIN"};
 DEFINE_LANG_STR(ConfirmNewPin) = {L"Confirm new PIN", L"Confirmar novo PIN", L"Confimez", L"Neue PIN bestï¿½tigen"};

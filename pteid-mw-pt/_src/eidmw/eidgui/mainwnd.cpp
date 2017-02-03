@@ -230,21 +230,20 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_progress->setWindowTitle(QString::fromUtf8("Cart\xc3\xa3o de Cidad\xc3\xa3o"));
 
 	//Set windows flags
-	flags = m_progress->windowFlags();
-	flags &= (~Qt::WindowMinMaxButtonsHint);// remove Min & Max Buttons
-	flags &= (~Qt::WindowCloseButtonHint);  // remove close Button
-	m_progress->setWindowFlags( flags );
+	m_progress->setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint );
+	m_progress->setValue(0);
 
 	//Set fixed size window
-	m_progress->setFixedSize(m_progress->size());
+	//m_progress->setFixedSize(m_progress->size());
 
 	//Disable cancel button
     m_progress->setCancelButtonText(tr("Cancel"));
 	m_progress->setCancelButton(NULL);
 
 	//Configuring dialog as a "doing-stuff-type" progressBar
-	m_progress->setMinimum(0);
-	m_progress->setMaximum(0);
+	/*m_progress->setMinimum(0);
+	m_progress->setMaximum(0);*/
+	m_progress->setRange(0, 0);
 
 	connect(m_ui.btnPersoDataSave, SIGNAL(clicked()), this, SLOT(PersoDataSaveButtonClicked()));
 	connect(&this->FutureWatcher, SIGNAL(finished()), m_progress, SLOT(cancel()));
@@ -3359,7 +3358,7 @@ void MainWnd::ProgressExec(){
 	QString labelText = tr("Reading card data...");
 	m_progress->setLabelText((const QString)labelText);
 	m_progress->adjustSize();
-        m_progress->exec();
+    m_progress->exec();
 }/* MainWnd::ProgressExec() */
 
 void MainWnd::LoadDataPersoData(PTEID_EIDCard& Card)

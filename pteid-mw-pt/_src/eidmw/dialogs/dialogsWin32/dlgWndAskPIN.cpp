@@ -49,12 +49,14 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 
 	std::wstring tmpTitle = L"";
 
-	if( PinPusage == DLG_PIN_SIGN )
+	/*if( PinPusage == DLG_PIN_SIGN )
 		tmpTitle += GETSTRING_DLG(SigningWith);
 	else
 		tmpTitle += GETSTRING_DLG(Asking);
 
-	tmpTitle += L" ";
+	tmpTitle += L" ";*/
+
+	tmpTitle += GETSTRING_DLG(VerifyingPinCode);
 
 	/*
 	//Change to pt once fixed the language issues.
