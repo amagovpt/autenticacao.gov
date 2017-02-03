@@ -23,6 +23,12 @@
    <iconset>
     <normaloff>pteid.ico</normaloff>pteid.ico</iconset>
   </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">text-align:center</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="centralwidgets" native="true">
     <property name="geometry">
@@ -346,31 +352,6 @@
       </item>
      </layout>
     </widget>
-    <widget class="QPushButton" name="pushButton_freeselect">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>475</x>
-       <y>460</y>
-       <width>151</width>
-       <height>27</height>
-      </rect>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
-       <horstretch>0</horstretch>
-       <verstretch>1</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="layoutDirection">
-      <enum>Qt::LeftToRight</enum>
-     </property>
-     <property name="text">
-      <string>Posicionamento livre</string>
-     </property>
-    </widget>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
@@ -405,6 +386,28 @@
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_freeselect">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">text-align:center</string>
+       </property>
+       <property name="text">
+        <string>Free Selection</string>
        </property>
       </widget>
      </item>

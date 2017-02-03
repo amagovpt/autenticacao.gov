@@ -214,7 +214,7 @@
         <location filename="scapsignature.cpp" line="791"/>
         <location filename="scapsignature.cpp" line="1204"/>
         <source>Free Selection</source>
-        <translation>Posicionamento livre  </translation>
+        <translation>Posicionamento livre</translation>
     </message>
     <message>
         <location filename="scapsignature.ui" line="434"/>
