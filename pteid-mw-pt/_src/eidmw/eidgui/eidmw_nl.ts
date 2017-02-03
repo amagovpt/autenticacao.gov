@@ -1934,8 +1934,12 @@ Please specify .xml, .csv or .eid</source>
 <context>
     <name>PDFSignWindow</name>
      <message>
-        <source>Choose the page sector where you want your signature to appear.\nThe grey sectors are already filled with other signatures.</source>
-   <translation>Escolha a área da página onde pretende colocar a assinatura.\nAs áreas cinzentas já estão ocupadas com outras assinaturas.</translation>
+        <source>Choose the page sector where you want your signature to appear.</source>
+   <translation>Escolha a área da página onde pretende colocar a assinatura.</translation>
+     </message>
+     <message>
+        <source>The grey sectors are already filled with other signatures.</source>
+        <translation>As áreas cinzentas já estão ocupadas com outras assinaturas.</translation>
      </message>
 
      <message>

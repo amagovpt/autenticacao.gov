@@ -857,8 +857,8 @@ void PDFSignWindow::buildLocationTab()
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    view->setToolTip(tr("Choose the page sector where you want your signature to appear.\n"
-                "The grey sectors are already filled with other signatures."));
+    view->setToolTip(tr("Choose the page sector where you want your signature to appear.") + QString("\n") +
+                tr("The grey sectors are already filled with other signatures."));
     // view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     addSquares();
