@@ -148,6 +148,7 @@ public:
     void mouseReleaseEvent (QGraphicsSceneMouseEvent * event);
     void mousePressEvent (QGraphicsSceneMouseEvent * event);
     void resetColor();
+    QColor getColor() { return m_brush.color(); }
     void setSectorFilled();
 
     void switchSelectionMode() {
@@ -270,7 +271,9 @@ private:
     eIDMW::PTEID_PDFSignature *m_pdf_sig;
     QList<int> page_numbers;
     //Number of pages of currently loaded document
+    int m_pageCount;
     int m_current_page_number;
+
     QString current_input_path;
     QBrush m_default_background;
     QImage m_custom_image;

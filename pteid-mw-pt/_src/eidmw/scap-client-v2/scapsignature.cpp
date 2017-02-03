@@ -703,13 +703,7 @@ void ScapSignature::on_button_sign_clicked()
 //        ShowErrorMsgBox(tr("You must choose a location for visible signature!"));
 //        return;
 //    }
-
-    if (ui->radioButton_firstpage->isChecked())
-        selected_page = 1;
-    else if (ui->radioButton_lastpage->isChecked())
-        selected_page = ui->spinBox_page->maximum();
-    else
-        selected_page = ui->spinBox_page->value();
+    selected_page = m_current_page_number;
 
     QStringListModel *model = dynamic_cast<QStringListModel *>(list_model);
     if (model->rowCount() == 0)
@@ -812,7 +806,7 @@ const int MAX_FILE_SIZE = 15;
 void ScapSignature::clearScapSign(){
     ui->button_addfile->setText(tr("&Add File"));
     page_numbers.clear();
-    m_current_page_number = 0;
+    m_pageCount = 0;
     m_landscape_mode = false;
 
     ui->button_sign->setEnabled(false);
@@ -928,6 +922,7 @@ void ScapSignature::on_radioButton_firstpage_toggled(bool value)
 {
     if (value && m_pdf_sig)
     {
+         m_current_page_number = 1;
          QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(1));
          highlightSectors(sectors);
 
@@ -939,8 +934,9 @@ void ScapSignature::on_radioButton_lastpage_toggled(bool value)
 {
     if (value && m_pdf_sig)
     {
+        m_current_page_number = m_pageCount;
          QString sectors =
-			 QString::fromLatin1(m_pdf_sig->getOccupiedSectors(m_current_page_number));
+			 QString::fromLatin1(m_pdf_sig->getOccupiedSectors(m_pageCount));
          highlightSectors(sectors);
     }
 
@@ -952,7 +948,7 @@ void ScapSignature::on_spinBox_page_valueChanged(int new_value)
     if (!m_pdf_sig)
         return;
      clearAllSectors();
-
+     m_current_page_number = new_value;
 	 QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(new_value));
      highlightSectors(sectors);
 
@@ -1228,6 +1224,7 @@ void ScapSignature::on_pushButton_freeselect_clicked()
         ui->pushButton_freeselect->setText(tr("Free Selection"));
         if (my_rectangle)
             my_rectangle->hide();
+       
     }
     else
     {
@@ -1239,25 +1236,33 @@ void ScapSignature::on_pushButton_freeselect_clicked()
     my_scene->switchFreeSelectMode();
 
     invertSelectionMode();
+
+    //Re-apply the grey highlight
+    if (!my_scene->isFreeSelectMode())
+    {
+         QString sectors =
+            QString::fromLatin1(m_pdf_sig->getOccupiedSectors(m_current_page_number));
+        highlightSectors(sectors);
+    }
 }
 
 void ScapSignature::invertSelectionMode()
 {
        //Invert mode on the SelectableRectangles
         QList<QGraphicsItem *> scene_items = my_scene->items();
-        int i = 0;
-        while (i!= scene_items.size())
+
+        for (int i=0; i!= scene_items.size(); i++)
         {
             QGraphicsItem *item = scene_items.at(i);
             //Find the rectangle object
             if (item->type() == SelectableRectType)
             {
                 SelectableRectangle *rect = qgraphicsitem_cast<SelectableRectangle*>(scene_items.at(i));
+
                 rect->switchSelectionMode();
                 rect->resetColor();
             }
 
-            i++;
         }
 
 }
@@ -1413,7 +1418,7 @@ void ScapSignature::addFileToListView(QStringList &str)
     }
 
     page_numbers.append(tmp_count);
-    m_current_page_number = tmp_count;
+    m_pageCount = tmp_count;
     m_landscape_mode = m_pdf_sig->isLandscapeFormat();
 
     // qDebug() << "Landscape format? " << m_landscape_mode;
