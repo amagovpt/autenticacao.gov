@@ -57,7 +57,7 @@ public:
 
     void selectNewRectangle(QPointF pos);
     void setOccupiedSector(int s, Qt::GlobalColor color );
-    void clearAllRectangles();
+    void clearAllRectangles(bool dontClearGreySectors=false);
     void switchFreeSelectMode() { free_select = !free_select; }
 
     bool isFreeSelectMode() { return free_select; }
@@ -130,6 +130,7 @@ class SelectableRectangle: public QGraphicsItem
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 		void mouseReleaseEvent (QGraphicsSceneMouseEvent * event);
 		void mousePressEvent (QGraphicsSceneMouseEvent * event);
+		QColor getColor() { return m_brush.color(); }
 		void resetColor();
         void setSectorFilled( Qt::GlobalColor color );
 
@@ -273,6 +274,7 @@ class PDFSignWindow : public QDialog
 	    QList<int> page_numbers;
 
 	    //Number of pages of currently loaded document
+	    int m_pageCount;
 	    int m_current_page_number;
 
 	    QString current_input_path;

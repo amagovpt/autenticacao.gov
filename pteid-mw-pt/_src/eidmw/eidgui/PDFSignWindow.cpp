@@ -517,7 +517,7 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
         if ( my_scene->isFreeSelectMode() ){
             my_rectangle->show();
         } else{
-            my_scene->setOccupiedSector(sector, Qt::black );
+            //my_scene->setOccupiedSector(sector, Qt::black );
         }
 	}/* !if ( !checked ) */
 
@@ -674,13 +674,7 @@ void PDFSignWindow::on_button_sign_clicked()
 			return;
 		}
 
-		if (ui.radioButton_firstpage->isChecked())
-			selected_page = 1;
-		else if (ui.radioButton_lastpage->isChecked())
-			selected_page = ui.spinBox_page->maximum();
-		else
-			selected_page = ui.spinBox_page->value();
-
+		selected_page = m_current_page_number;
 	}
 
 	QStringListModel *model = dynamic_cast<QStringListModel *>(list_model);
@@ -883,8 +877,9 @@ void PDFSignWindow::on_radioButton_firstpage_toggled(bool value)
 	if (value && m_pdf_sig)
 	{
 		// clearAllSectors();
-         QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(1));
-         highlightSectors(sectors);
+		m_current_page_number = 1;
+        QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(1));
+        highlightSectors(sectors);
 
 	}
 
@@ -895,6 +890,8 @@ void PDFSignWindow::on_radioButton_lastpage_toggled(bool value)
 	if (value && m_pdf_sig)
 	{
          clearAllSectors();
+         m_current_page_number = m_pageCount;
+
          QString sectors =
             QString::fromLatin1(m_pdf_sig->getOccupiedSectors(m_current_page_number));
          highlightSectors(sectors);
@@ -907,10 +904,12 @@ void PDFSignWindow::on_spinBox_page_valueChanged(int new_value)
 	//Check if there is at least 1 PDF chosen
 	if (!m_pdf_sig)
 		return;
-     clearAllSectors();
 
-     QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(new_value));
-     highlightSectors(sectors);
+	m_current_page_number = new_value;
+    clearAllSectors();
+
+    QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(new_value));
+    highlightSectors(sectors);
 
 }
 
@@ -960,24 +959,22 @@ void MyGraphicsScene::setOccupiedSector(int s, Qt::GlobalColor color )
     }
 }
 
-void MyGraphicsScene::clearAllRectangles()
+void MyGraphicsScene::clearAllRectangles(bool dontClearGreySectors)
 {
     QList<QGraphicsItem *> scene_items = this->items();
 
-    int i = 0;
-
-    while (i!= scene_items.size())
+    for(int i = 0; i!= scene_items.size(); i++)
     {
         QGraphicsItem *item = scene_items.at(i);
         //Find the rectangle object
         if (item->type() == SelectableRectType)
         {
             SelectableRectangle *rect = qgraphicsitem_cast<SelectableRectangle*>(scene_items.at(i));
+            if (dontClearGreySectors && rect->getColor() == Qt::darkGray)
+            	continue;
             rect->resetColor();
             rect->setSectorIsFilled(false);
         }
-
-        i++;
     }
 }
 
@@ -1119,7 +1116,7 @@ void SelectableRectangle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
     if (dont_select_mode || is_sector_filled)
         return;
 
-    my_scene->clearAllRectangles();
+    my_scene->clearAllRectangles(true);
 
 	m_brush = QBrush(Qt::black);
     my_scene->selectNewRectangle(pos());
@@ -1241,9 +1238,13 @@ void PDFSignWindow::on_pushButton_freeselect_clicked()
 
     invertSelectionMode();
 
-    if (!my_scene->isFreeSelectMode()){
+    if (!my_scene->isFreeSelectMode()) {
         my_scene->setOccupiedSector(m_selected_sector, Qt::black );
+        QString sectors =
+            QString::fromLatin1(m_pdf_sig->getOccupiedSectors(m_current_page_number));
+         highlightSectors(sectors);
     }
+    
 }
 
 
@@ -1468,7 +1469,7 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	list_model->setData(list_model->index(list_model->rowCount()-1, 0), current_input_path);
 
 	page_numbers.append(tmp_count);
-	m_current_page_number = tmp_count;
+	m_pageCount = tmp_count;
     m_landscape_mode = m_pdf_sig->isLandscapeFormat();
 
     int page_n = 0;
