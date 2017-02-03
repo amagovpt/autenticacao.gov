@@ -28,7 +28,9 @@ class SSLConnection
 
 		EIDMW_APL_API SSLConnection()
 		{
-		
+			m_ssl_connection = NULL;
+			m_host = NULL;
+			m_session_cookie = NULL;
 		};
 
 		EIDMW_APL_API ~SSLConnection() 
@@ -68,8 +70,6 @@ class SSLConnection
 
 		char *m_session_cookie;
 
-		RSA *current_private_key;
-		//BIO *m_bio;
 		SSL * m_ssl_connection;
 		//Hostname of our OTP server
 		char * m_host;

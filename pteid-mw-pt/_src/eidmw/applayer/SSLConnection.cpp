@@ -859,8 +859,8 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
     	}
 	}
 
-    SSL *ssl_handle = SSL_new(ctx);
-    SSL_set_bio (ssl_handle, bio, bio);
+    m_ssl_connection = SSL_new(ctx);
+    SSL_set_bio (m_ssl_connection, bio, bio);
 
     RSA *rsa = RSA_new();
 
@@ -873,27 +873,23 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
 
     RSA_set_method(rsa, current_method);
 
-    if (SSL_use_RSAPrivateKey(ssl_handle, rsa) != 1)
+    if (SSL_use_RSAPrivateKey(m_ssl_connection, rsa) != 1)
     {
         fprintf(stderr, "SSL_CTX_use_RSAPrivateKey failed!");
         return NULL;
     }
 
+    SSL_set_connect_state(m_ssl_connection);
 
-    SSL_set_connect_state(ssl_handle);
-
-    int ret_connect = SSL_connect(ssl_handle);
+    int ret_connect = SSL_connect(m_ssl_connection);
 
     if (ret_connect != 1)
     {
-	//translate_ssl_error(ssl_handle, ret_connect);
-	fprintf(stderr, "Error returned by SSL_connect (cause): %s\n", ERR_error_string(ERR_get_error(), NULL));
-	MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection: error establishing connection");
+		MWLOG(LEV_ERROR, MOD_APL, "SSLConnection: error establishing connection. Detail: %s", ERR_error_string(ERR_get_error(), NULL));
 
-	throw CMWEXCEPTION(translate_openssl_error(ERR_get_error()));
+		throw CMWEXCEPTION(translate_openssl_error(ERR_get_error()));
     }
 
-    return ssl_handle;
 }
 
 int validate_hex_number(char *str)
@@ -1124,7 +1120,9 @@ bool SSLConnection::InitSAMConnection() {
     /* initialise the OpenSSL library */
     init_openssl();
 
-    if ((m_ssl_connection = connect_encrypted(host_and_port)) == NULL)
+    connect_encrypted(host_and_port);
+
+    if (m_ssl_connection == NULL)
             return false;
 
     return true;
