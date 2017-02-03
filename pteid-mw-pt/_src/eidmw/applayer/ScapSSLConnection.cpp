@@ -23,9 +23,11 @@ namespace eIDMW
 
     	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: connecting to SCAP server: %s", host_and_port.c_str());
 
-    	if ((m_ssl_connection = connect_encrypted((char *)host_and_port.c_str(), insecure)) == NULL)
-    	{
-    		fprintf(stderr, "ScapSSLConnection: error returned by connect_encrypted!\n");
+    	connect_encrypted((char *)host_and_port.c_str(), insecure);
+
+    	if (m_ssl_connection == NULL)
+        {
+        	MWLOG(LEV_ERROR, MOD_APL, "Error connecting to SCAP SSL Server!", host_and_port.c_str());
     	}
             
 	}
