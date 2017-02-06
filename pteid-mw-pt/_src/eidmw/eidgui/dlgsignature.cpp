@@ -303,6 +303,9 @@ void dlgSignature::runsign(const char ** paths, unsigned int n_paths, const char
 		}
 	}
 	while(keepTrying);
+
+	delete[] paths;
+	delete output_path;
 	return;
 }
 
