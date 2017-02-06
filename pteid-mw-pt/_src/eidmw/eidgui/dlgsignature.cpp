@@ -242,21 +242,13 @@ void dlgSignature::on_pbSign_clicked ( void )
 
 	XadesLevel level = getSelectedXadesLevel();
 
+	output_file = new char[native_path.size() + 1];
+	strcpy(output_file, getPlatformNativeString(native_path));
 
-#ifdef WIN32		
-	size_t len_2 = strlen(native_path.toStdString().c_str());
-	output_file = new char[len_2+1];
-	strcpy(output_file,(char*)native_path.toStdString().c_str());
-#else
-	int outp_len = native_path.size(); 
-	output_file =  new char[outp_len*2];
-	strncpy(output_file, native_path.toUtf8().constData(), outp_len*2);
-#endif	    
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Save to file %s", output_file);
 	if (individual_sigs)
 		future = 
 			QtConcurrent::run(this, &dlgSignature::run_multiple_sign, files_to_sign, n_files, output_file, level);
-		
 	else
 		future = 
 			QtConcurrent::run(this, &dlgSignature::runsign, files_to_sign, n_files, output_file, level);
