@@ -40,6 +40,7 @@
 #include "mainwnd.h"
 
 #include "eidErrors.h"
+#include "dlgUtils.h"
 
 using namespace eIDMW;
 
@@ -196,11 +197,7 @@ void dlgSignature::on_pbSign_clicked ( void )
 		QString s = QDir::toNativeSeparators(strlist.at(n_files));
 
 		cpychar = new char[listtotalLength+1];
-#ifdef WIN32		
-		strcpy(cpychar, s.toStdString().c_str());
-#else		
-		strcpy(cpychar, s.toUtf8().constData());
-#endif		
+		strcpy(cpychar, getPlatformNativeString(s) );
 		files_to_sign[n_files] = cpychar;
 		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "File to Sign: %s", files_to_sign[n_files]);
 	}

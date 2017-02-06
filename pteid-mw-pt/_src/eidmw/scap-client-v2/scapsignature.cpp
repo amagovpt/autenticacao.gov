@@ -53,6 +53,7 @@
 #include "acserviceclient.h"
 #include "pdfsignatureclient.h"
 #include "settings.h"
+#include "dlgUtils.h"
 
 #include <openssl/x509.h>
 
@@ -402,15 +403,6 @@ void ScapSignature::on_button_cancel_clicked()
     this->close();
 
 }
-
-
-/* For filenames we need to maintain latin-1 or UTF-8 native encoding */
-//This macro's argument is a QString
-#ifdef _WIN32
-#define getPlatformNativeString(s) s.toStdString().c_str()
-#else
-#define getPlatformNativeString(s) s.toUtf8().constData()
-#endif
 
 void ScapSignature::on_radioButton_choosepage_toggled(bool checked)
 {

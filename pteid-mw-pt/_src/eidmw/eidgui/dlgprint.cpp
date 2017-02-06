@@ -36,6 +36,7 @@
 #include "dlgprint.h"
 #include "eidlib.h"
 #include "mainwnd.h"
+#include "dlgUtils.h"
 
 using namespace eIDMW;
 
@@ -80,12 +81,8 @@ dlgPrint::~dlgPrint()
 char *QStringToCString(QString &string)
 {
 
-            char * cpychar = new char[string.length()*2];
-#ifdef WIN32
-            strcpy(cpychar, string.toStdString().c_str());
-#else
-            strcpy(cpychar, string.toUtf8().constData());
-#endif
+    char * cpychar = new char[string.length()*2];
+    strcpy(cpychar, getPlatformNativeString(string));
 	return cpychar;
 }
 
@@ -111,14 +108,6 @@ void CenterParent(QWidget* parent, QWidget* child)
 
 	child->move(centerparent);
 }
-
-/* For filenames we need to maintain latin-1 or UTF-8 native encoding */
-//This macro's argument is a QString
-#ifdef _WIN32
-#define getPlatformNativeString(s) s.toStdString().c_str()
-#else
-#define getPlatformNativeString(s) s.toUtf8().constData()
-#endif
 
 bool SignPDF_wrapper(PTEID_EIDCard * card, const char * file_to_sign, QString &outputsign)
 {

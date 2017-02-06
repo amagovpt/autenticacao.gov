@@ -41,6 +41,7 @@
 #include "eidErrors.h"
 #include "PDFSignWindow.h"
 #include "mylistview.h"
+#include "dlgUtils.h"
 
 using namespace eIDMW;
 
@@ -378,16 +379,6 @@ void PDFSignWindow::on_button_cancel_clicked()
 	this->close();
 
 }
-
-
-/* For filenames we need to maintain latin-1 or UTF-8 native encoding */
-//This macro's argument is a QString
-#ifdef _WIN32
-#define getPlatformNativeString(s) s.toStdString().c_str()
-#else
-#define getPlatformNativeString(s) s.toUtf8().constData()
-#endif
-
 
 void PDFSignWindow::on_checkBox_reason_toggled(bool checked)
 {
