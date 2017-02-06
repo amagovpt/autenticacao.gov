@@ -12,7 +12,7 @@
   </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-    <horstretch>0</horstretch>
+    <horstretch>1</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
@@ -358,8 +358,8 @@
      <rect>
       <x>480</x>
       <y>60</y>
-      <width>391</width>
-      <height>431</height>
+      <width>467</width>
+      <height>441</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="vertical_layout_tab1">
@@ -390,28 +390,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_freeselect">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">text-align:center</string>
-       </property>
-       <property name="text">
-        <string>Free Selection</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QLabel" name="label_y">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
@@ -424,6 +402,28 @@
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_freeselect">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">text-align:center</string>
+       </property>
+       <property name="text">
+        <string>Free Selection</string>
        </property>
       </widget>
      </item>
