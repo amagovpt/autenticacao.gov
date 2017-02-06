@@ -177,18 +177,14 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
             nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
 
-            char * cpychar = strdup(getPlatformNativeString(nativepdftmp));
-            res = drawpdf(cdata, cpychar);
+			res = drawpdf(cdata, nativepdftmp);
 
             if (!res)
             {
-            	free(cpychar);
             	return;
             }
 
-		    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PDF File to Sign: %s", cpychar);
-
-		    QFuture<bool> new_thread = QtConcurrent::run(SignPDF_wrapper, card, cpychar, output_path);
+			QFuture<bool> new_thread = QtConcurrent::run(SignPDF_wrapper, card, QStringToCString(nativepdftmp), output_path);
 		    this->FutureWatcher.setFuture(new_thread);
 
 		    pdialog->exec();
@@ -485,7 +481,6 @@ void addFonts()
 }
 
 
-//bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 bool dlgPrint::drawpdf(CardInformation& CI_Data, QString filepath)
 {
 
