@@ -209,9 +209,7 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
             nativepdfpath = QDir::toNativeSeparators(pdffilepath);
 
-			char *nativepdfpathCString = QStringToCString(nativepdfpath);
-            res = drawpdf(cdata, nativepdfpathCString);
-			delete[] nativepdfpathCString;
+			res = drawpdf(cdata, nativepdfpath);
         }
     }
 	catch (PTEID_Exception &e) {
@@ -487,7 +485,8 @@ void addFonts()
 }
 
 
-bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
+//bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
+bool dlgPrint::drawpdf(CardInformation& CI_Data, QString filepath)
 {
 
 	pdialog = new QProgressDialog();
@@ -515,7 +514,8 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, const char *filepath)
 	printer.setColorMode(QPrinter::Color);
     printer.setPaperSize(QPrinter::A4);
 
-    if (strlen(filepath) > 0)
+    //if (strlen(filepath) > 0)
+	if ( filepath.size() > 0)
     	printer.setOutputFileName(filepath);
 
     //Add custom fonts

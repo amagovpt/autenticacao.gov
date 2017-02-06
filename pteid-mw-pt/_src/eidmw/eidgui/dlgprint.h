@@ -65,7 +65,7 @@ private:
     QString getTranslated(const QString &str);
     void ShowSuccessMsgBox();
     const char * persodata_triggered();
-    bool drawpdf(CardInformation& CI_Data, const char *filepath);
+    bool drawpdf(CardInformation& CI_Data, QString filepath);
 };
 
 #endif
