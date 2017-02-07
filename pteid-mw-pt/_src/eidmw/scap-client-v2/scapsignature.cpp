@@ -530,7 +530,7 @@ void ScapSignature::run_sign(int selected_page, QString &savefilepath)
     }
     reloadPdfSig();
     free(temp_save_path);
-    delete citizenId;
+    free((char *)citizenId);
 }
 
 // A4 values for portrait
