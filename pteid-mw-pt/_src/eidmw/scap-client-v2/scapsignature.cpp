@@ -452,7 +452,6 @@ const char * getSubjectSerialNumber(const PTEID_ByteArray &certificate)
 void ScapSignature::run_sign(int selected_page, QString &savefilepath)
 {
     // Sets user selected file save path
-    char *final_save_path = strdup(getPlatformNativeString(savefilepath));
     const char* citizenId;
     // Creates a temporary file
     QTemporaryFile tempFile;
@@ -510,8 +509,8 @@ void ScapSignature::run_sign(int selected_page, QString &savefilepath)
             if (sign_rc == 0)
             {
                 this->success = SIG_SUCCESS;
-                bool successfull = PDFSignatureClient::signPDF(QString(final_save_path), QString(temp_save_path), QString(citizenName),
-                                            QString(citizenId), ltv.toInt(), PDFSignatureInfo(selected_page, sig_coord_x, sig_coord_y, m_landscape_mode), m_selected_attributesType);
+                bool successfull = PDFSignatureClient::signPDF(savefilepath, QString(temp_save_path), QString(citizenName),
+                    QString(citizenId), ltv.toInt(), PDFSignatureInfo(selected_page, sig_coord_x, sig_coord_y, m_landscape_mode), m_selected_attributesType);
                 if(!successfull)
                     this->success = SIG_ERROR;
 
@@ -530,7 +529,6 @@ void ScapSignature::run_sign(int selected_page, QString &savefilepath)
         this->success = SIG_ERROR;
     }
     reloadPdfSig();
-    free(final_save_path);
     free(temp_save_path);
     delete citizenId;
 }
