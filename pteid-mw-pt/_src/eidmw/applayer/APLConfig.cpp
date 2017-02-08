@@ -64,15 +64,6 @@
 							IN  WINHTTP_AUTOPROXY_OPTIONS * pAutoProxyOptions,
 							OUT WINHTTP_PROXY_INFO *        pProxyInfo  
 						);
-
-	//#include "pacparser.h"
-	typedef char *( *FCTDEF_pacparser_just_find_proxy )
-						(
-							const char *pacfile,
-							const char *url,
-							const char *host
-                        );
-
 #endif
 
 #ifdef __APPLE__
@@ -520,7 +511,6 @@ bool GetProxyFromPac(const char *csPacFile,const char *csUrl, std::string *proxy
 
 	std::wstring wsPacFile = utilStringWiden(csPacFile);
 
-
 	HINTERNET WinHttpSession = WinHttpOpen(L"PTEID MiddleWare",
 											WINHTTP_ACCESS_TYPE_NO_PROXY, 
 											WINHTTP_NO_PROXY_NAME, 
@@ -528,8 +518,6 @@ bool GetProxyFromPac(const char *csPacFile,const char *csUrl, std::string *proxy
 											0);
      
 	 //csPacFile must contain http or https uri (like L"http://127.0.0.1/proxy.pac")
-	 //		WinHttpGetProxyForUrl fails with error ERROR_WINHTTP_UNRECOGNIZED_SCHEME if 
-	 //         csPacFile look like L"file://c:/proxy.pac"
 
      WINHTTP_AUTOPROXY_OPTIONS  ProxyOptions;
      ProxyOptions.dwFlags					= WINHTTP_AUTOPROXY_CONFIG_URL;
@@ -554,46 +542,8 @@ bool GetProxyFromPac(const char *csPacFile,const char *csUrl, std::string *proxy
 	 else
 	 {
 		unsigned long WinHttpErr = GetLastError();
-
-		HMODULE hLibraryPacParser=LoadLibrary(L"pacparser.dll");
-
-		//If the pac parser is available and the pacfile protocol is file, then we try to parse it ourself
-		if(hLibraryPacParser && strncmp(csPacFile,"file://", 7)==0)
-		{
- 			FCTDEF_pacparser_just_find_proxy			pacparser_just_find_proxy				= (FCTDEF_pacparser_just_find_proxy)				GetProcAddress(hLibraryPacParser, "pacparser_just_find_proxy"); 
-			
-			std::string sLocalFile = &csPacFile[7];
-
-			//The host parameter is the host part of the url (and not the IP of the callers)
-			//We can prove it by making a pac file return the host parameter.
-			//Here is a test PAC file sample :
-			//
-			//function FindProxyForURL(url, host)
-			//{
-			//	var out="PROXY ";
-			//	out=out.concat(host);
-
-			//	return out.concat(":4485");
-			//}
-
-			std::string sHost = getHostFromUrl(csUrl);
-
-			char *settings=pacparser_just_find_proxy(sLocalFile.c_str(),csUrl,sHost.c_str());
-			if(settings) 
-			{
-				getHostAndPortFromSettings(settings,proxy_host,proxy_port);
-
-				bReturn=true;
-
-				//free(settings);
-			}
-		}
-		else
-		{
-			MWLOG(LEV_ERROR, MOD_APL, L"Fails to retrieve proxy info from pac file (%ls). WinHttpGetProxyForUrl Error=%d",wsPacFile.c_str(),WinHttpErr);
-		}
-
-		if(hLibraryPacParser)	FreeLibrary(hLibraryPacParser);
+	
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to retrieve proxy info from pac file (%s). WinHttpGetProxyForUrl Error=%d", csPacFile, WinHttpErr);
 	 }
 
      WinHttpCloseHandle(WinHttpSession);
