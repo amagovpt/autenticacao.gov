@@ -1,5 +1,5 @@
 #include "pdfsignatureclient.h"
-#include "ScapSignature.h"
+#include "scapsignature.h"
 
 #include "treeiteminfo.h"
 
