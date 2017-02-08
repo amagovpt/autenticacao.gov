@@ -1466,7 +1466,11 @@ private:
   *********************************************************************************/
 PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const char *format, ...);
 
+
 #if !defined SWIG
+
+/* Function to get System Proxy to access supplied host */
+PTEIDSDK_API void PTEID_GetProxyFromPac(const char *pacFile, const char *url, std::string *proxy_host, std::string *proxy_port);
 
 /******************************************************************************//**
   * Compatibility layer
