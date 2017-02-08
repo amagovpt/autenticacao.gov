@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
  * PTEID Middleware Project.
- * Copyright (C) 2012-2016 Caixa Mágica Software.
+ * Copyright (C) 2012-2017 Caixa Mágica Software.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -509,7 +509,7 @@ void ScapSignature::run_sign(int selected_page, QString &savefilepath)
             if (sign_rc == 0)
             {
                 this->success = SIG_SUCCESS;
-                bool successfull = PDFSignatureClient::signPDF(savefilepath, QString(temp_save_path), QString(citizenName),
+                bool successfull = PDFSignatureClient::signPDF(m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
                     QString(citizenId), ltv.toInt(), PDFSignatureInfo(selected_page, sig_coord_x, sig_coord_y, m_landscape_mode), m_selected_attributesType);
                 if(!successfull)
                     this->success = SIG_ERROR;
@@ -1469,6 +1469,55 @@ void ScapSignature::on_btn_advancedOptions_clicked()
     ui->advancedOptionsLayout->setVisible(!ui->advancedOptionsLayout->isVisible());
 }
 
+
+ProxyInfo::ProxyInfo()
+{
+	eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_HOST);
+	eIDMW::PTEID_Config config2(eIDMW::PTEID_PARAM_PROXY_PORT);
+	eIDMW::PTEID_Config config_username(eIDMW::PTEID_PARAM_PROXY_USERNAME);
+	eIDMW::PTEID_Config config_pwd(eIDMW::PTEID_PARAM_PROXY_PWD);
+	eIDMW::PTEID_Config pacfile(eIDMW::PTEID_PARAM_PROXY_PACFILE);
+
+	std::string proxy_host = config.getString();
+	std::string proxy_username = config_username.getString();
+	std::string proxy_pwd = config_pwd.getString();
+	long proxy_port = config2.getLong();
+	const char * pacfile_url = pacfile.getString();
+
+	if (pacfile_url != NULL && strlen(pacfile_url) > 0)
+	{
+		system_proxy = true;
+		m_pac_url = QString(pacfile_url);
+	}
+
+	if (!proxy_host.empty() && proxy_port != 0)
+	{
+		
+		m_proxy_host = QString::fromStdString(proxy_host);
+		m_proxy_port = QString::number(proxy_port);
+
+		if (!proxy_username.empty())
+		{
+			m_proxy_user = QString::fromStdString(proxy_username);
+			m_proxy_pwd = QString::fromStdString(proxy_pwd);
+		}
+
+	}
+}
+
+void ProxyInfo::getProxyForHost(std::string urlToFetch, std::string * proxy_host, long *proxy_port)
+{
+	if (!system_proxy)
+		return;
+	std::string proxy_port_str;
+
+	PTEID_GetProxyFromPac(m_pac_url.toUtf8().constData(), urlToFetch.c_str(), proxy_host, &proxy_port_str);
+
+	if (proxy_host->size() > 0 && proxy_port_str.size() > 0)
+		*proxy_port = atol(proxy_port_str.c_str());
+
+}
+
 void ScapSignature::on_btn_reloadAatributes_clicked()
 {
     //Single File Signature case
@@ -1522,26 +1571,56 @@ const char * as_endpoint = "/DSS/ASService";
 
 void ScapSignature::getAttributeSuppliers()
 {
+	
 	soap * sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
 	//TODO: this disables server certificate verification !!
 	soap_ssl_client_context(sp, SOAP_SSL_NO_AUTHENTICATION, NULL, NULL, NULL, NULL, NULL);
+
+	// Get Endpoint from settings
+	ScapSettings settings;
+	std::string port = settings.getScapServerPort().toStdString();
+	std::string sup_endpoint = std::string("https://") + settings.getScapServerHost().toStdString() + ":" + port + as_endpoint;
     
     //Define appropriate network timeouts
     sp->recv_timeout = 20;
     sp->send_timeout = 20;
     sp->connect_timeout = 20;
 
+	std::string proxy_host;
+	long proxy_port;
+	//Proxy support using the gsoap BindingProxy
+	if (m_proxyInfo.isSystemProxy())
+	{
+		m_proxyInfo.getProxyForHost(sup_endpoint, &proxy_host, &proxy_port);
+		if (proxy_host.size() > 0)
+		{
+			sp->proxy_host = proxy_host.c_str();
+			sp->proxy_port = proxy_port;
+			
+			eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Using System Proxy: host=%s, port=%ld", sp->proxy_host, sp->proxy_port);
+		}
+	}
+	else if (m_proxyInfo.getProxyHost().size() > 0)
+	{
+		sp->proxy_host = m_proxyInfo.getProxyHost().toUtf8().constData();
+		sp->proxy_port = m_proxyInfo.getProxyPort().toLong();
+		eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Using Manual Proxy: host=%s, port=%ld", sp->proxy_host, sp->proxy_port);
+
+		if (m_proxyInfo.getProxyUser().size() > 0)
+		{
+			sp->proxy_userid = m_proxyInfo.getProxyUser().toUtf8().constData();
+			sp->proxy_passwd = m_proxyInfo.getProxyPwd().toUtf8().constData();
+		}
+	}
+
     ns2__AttributeSupplierResponseType suppliers_resp;
 
-    // Get Endpoint from settings
-    ScapSettings settings;
-    std::string sup_endpoint = QString("https://" + settings.getScapServerHost() + ":" + settings.getScapServerPort().append(as_endpoint)).toStdString();
     const char * c_sup_endpoint = sup_endpoint.c_str();
 
     AttributeSupplierBindingProxy suppliers_proxy(sp);
     suppliers_proxy.soap_endpoint = c_sup_endpoint;
 
-    std::cout << "Attributes Supplier endpoint: " << c_sup_endpoint << std::endl;
+    std::cout << "Attributes Supplier endpoint: " << sup_endpoint << std::endl;
 
     int ret = suppliers_proxy.AttributeSuppliers(suppliers_resp);
     if (ret != SOAP_OK)

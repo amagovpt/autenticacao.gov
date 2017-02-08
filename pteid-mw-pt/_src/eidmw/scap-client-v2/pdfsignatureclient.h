@@ -7,6 +7,7 @@
 
 class SelectedTreeInfo;
 class soap;
+class ProxyInfo;
 
 namespace ACService{
     class ns2__AttributesType;
@@ -42,7 +43,7 @@ class PDFSignatureClient
 public:
     PDFSignatureClient();
 
-    static bool signPDF(QString, QString, QString, QString, int, PDFSignatureInfo, std::vector<ACService::ns3__AttributeType *> &);
+    static bool signPDF(ProxyInfo, QString, QString, QString, QString, int, PDFSignatureInfo, std::vector<ACService::ns3__AttributeType *> &);
 };
 
 #endif // PDFSIGNATURECLIENT_H

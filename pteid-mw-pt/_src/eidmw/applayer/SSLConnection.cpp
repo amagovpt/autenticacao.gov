@@ -20,9 +20,10 @@
 #include "cJSON.h"
 
 /* Standard headers */
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <string>
 
 /* OpenSSL headers */
 #include <openssl/bio.h>
@@ -780,10 +781,17 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
 /**
  * Connect to a host using an encrypted stream
  */
-SSL* SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
+void SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
 {
 
     BIO* bio = NULL;
+	char * proxy_user_value = NULL;
+	char * proxy_pwd_value = NULL;
+	const char *proxy_host = NULL;
+	std::string pac_proxy_host;
+	std::string pac_proxy_port;
+		
+	long proxy_port = 0;
 
     /* Set up the SSL pointers */
 
@@ -830,25 +838,42 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
     X509_VERIFY_PARAM_set1_host(vpm, m_host, 0);
 
     //Get Proxy configuration
-	APL_Config proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
-	APL_Config proxy_port(CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT);
+	APL_Config config_proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
+	APL_Config config_proxy_port(CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT);
 	APL_Config proxy_user(CConfig::EIDMW_CONFIG_PARAM_PROXY_USERNAME);
 	APL_Config proxy_pwd(CConfig::EIDMW_CONFIG_PARAM_PROXY_PWD);
-
-	//TODO: We assume that if proxy_host has a value proxy_port also does which may not be true!!
-	if (proxy_host.getString() != NULL && strlen(proxy_host.getString()) > 0)
+	
+#ifdef WIN32
+	//Get system proxy configuration
+	APL_Config conf_pac(CConfig::EIDMW_CONFIG_PARAM_PROXY_PACFILE);
+	const char * proxy_pac = conf_pac.getString();
+	std::string SAM_URL = std::string("https://") + m_host;
+	if (proxy_pac != NULL && strlen(proxy_pac) > 0)
 	{
-		char * proxy_user_value = NULL;
-		char * proxy_pwd_value = NULL;
+		MWLOG(LEV_DEBUG, MOD_APL, "SSLConnection using Proxy PAC: %s to URL: %s", proxy_pac, SAM_URL.c_str());
+		GetProxyFromPac(proxy_pac, SAM_URL.c_str(), &pac_proxy_host, &pac_proxy_port);
+		proxy_host = pac_proxy_host.c_str();
+		proxy_port = atol(pac_proxy_port.c_str());
+	}
+#endif
 
+	if (config_proxy_host.getString() != NULL && strlen(config_proxy_host.getString()) > 0 && config_proxy_port.getLong() != 0)
+	{
+		
 		if (proxy_user.getString() != NULL && strlen(proxy_user.getString()) > 0)
 		{
 			proxy_user_value = (char *)proxy_user.getString();
 			proxy_pwd_value = (char *)proxy_pwd.getString();
 		}
+		proxy_host = config_proxy_host.getString();
+		proxy_port = config_proxy_port.getLong();
+				
+	}
 
-		bio = connectToProxyServer(proxy_host.getString(), proxy_port.getLong(),
-			   m_host, proxy_user_value, proxy_pwd_value, host_and_port);
+	if (proxy_host != NULL && strlen(proxy_host) > 0)
+	{
+		bio = connectToProxyServer(proxy_host, proxy_port,
+			m_host, proxy_user_value, proxy_pwd_value, host_and_port);
 	}
 	else
 	{
@@ -876,7 +901,7 @@ SSL* SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
     if (SSL_use_RSAPrivateKey(m_ssl_connection, rsa) != 1)
     {
         fprintf(stderr, "SSL_CTX_use_RSAPrivateKey failed!");
-        return NULL;
+        return;
     }
 
     SSL_set_connect_state(m_ssl_connection);
@@ -1056,7 +1081,7 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned in
 			}
 			else if (error_code == SSL_ERROR_SSL)
 			{
-				MWLOG(LEV_ERROR, MOD_APL, L"Aborted SSL Connection with error string %s",
+				MWLOG(LEV_ERROR, MOD_APL, "Aborted SSL Connection with error string %s",
 					ERR_error_string(ERR_get_error(), NULL));
 
 				throw CMWEXCEPTION(EIDMW_SSL_PROTOCOL_ERROR);

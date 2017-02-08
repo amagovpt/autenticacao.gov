@@ -60,7 +60,7 @@ class SSLConnection
 		void read_chunked_reply(SSL *bio, char* buffer, unsigned int length, bool headersAlreadyRead=false);
 
 		//Connect to the specified host and port, optionally using the deprecated TLSv1 protocol for compatibility with some servers
-		SSL *connect_encrypted(char *host_and_port, bool insecure=false);
+		void connect_encrypted(char *host_and_port, bool insecure=false);
 		bool InitConnection();
 		void CloseConnection();
 		BIO * connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_host, char *proxy_user, char * proxy_pwd, char *ssl_host_andport);

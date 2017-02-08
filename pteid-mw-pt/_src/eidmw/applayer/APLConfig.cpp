@@ -408,18 +408,19 @@ void getProxySystemWide(const wchar_t *host_default, long port_default, const wc
 			LPWSTR lpszPacUrl=NULL;
 			LPWSTR lpszAutoDetectUrl=NULL;
 
-			//If autodetect is checked, we try to get the pacfile with WinHttpDetectAutoProxyConfigUrl
-			if (proxyConfig.fAutoDetect)
+			
+			if (proxyConfig.lpszAutoConfigUrl != NULL)
 			{
+				lpszPacUrl = proxyConfig.lpszAutoConfigUrl;
+			}
+			else if (proxyConfig.fAutoDetect)
+			{
+				//If autodetect is checked, we try to get the pacfile with WinHttpDetectAutoProxyConfigUrl
 				if(WinHttpDetectAutoProxyConfigUrl(WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A, &lpszAutoDetectUrl))
 				{
 					if (lpszAutoDetectUrl != NULL)
 						lpszPacUrl=lpszAutoDetectUrl;
 				}
-			}
-			else if (proxyConfig.lpszAutoConfigUrl != NULL)
-			{
-				lpszPacUrl=proxyConfig.lpszAutoConfigUrl;
 			}
 
 			//If there is a pac file, host and port keep their default value
@@ -508,6 +509,7 @@ bool GetProxyFromPac(const char *csPacFile,const char *csUrl, std::string *proxy
 	proxy_port->clear();
 
 #ifdef WIN32
+	MWLOG(LEV_DEBUG, MOD_APL, "GetProxyFromPac() was called for URL: %s, PAC URL: %s", csUrl, csPacFile);
 	HMODULE hLibraryWinHttp=LoadLibrary(L"winhttp.dll");
 	if(!hLibraryWinHttp)
 		return bReturn;
@@ -517,6 +519,7 @@ bool GetProxyFromPac(const char *csPacFile,const char *csUrl, std::string *proxy
  	FCTDEF_WinHttpGetProxyForUrl					WinHttpGetProxyForUrl					= (FCTDEF_WinHttpGetProxyForUrl)					GetProcAddress(hLibraryWinHttp, "WinHttpGetProxyForUrl"); 
 
 	std::wstring wsPacFile = utilStringWiden(csPacFile);
+
 
 	HINTERNET WinHttpSession = WinHttpOpen(L"PTEID MiddleWare",
 											WINHTTP_ACCESS_TYPE_NO_PROXY, 

@@ -84,7 +84,7 @@ private:
 	bool m_numtype;
 };
 
-bool GetProxyFromPac(const char *csPacFile,const char *csUrl, std::string *proxy_host, std::string *proxy_port);
+EIDMW_APL_API bool GetProxyFromPac(const char *csPacFile, const char *csUrl, std::string *proxy_host, std::string *proxy_port);
 
 }
 

@@ -113,6 +113,9 @@ AutoUpdates::AutoUpdates(QWidget *parent)
 	const QIcon app_icon = QIcon(":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png");
 	setWindowIcon(app_icon);
 	setWindowTitle(ddtitle);
+
+	//Before trying any request configure the proxy autoconfig
+	QNetworkProxyFactory::setUseSystemConfiguration(true);
 	
 }
 

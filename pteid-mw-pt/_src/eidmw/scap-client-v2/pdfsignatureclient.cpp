@@ -1,4 +1,5 @@
 #include "pdfsignatureclient.h"
+#include "ScapSignature.h"
 
 #include "treeiteminfo.h"
 
@@ -27,7 +28,7 @@ PDFSignatureClient::PDFSignatureClient()
 const char * processId = "10001";
 const char * pdf_endpoint = "/PADES/PDFSignature";
 
-bool PDFSignatureClient::signPDF(QString finalfilepath, QString filepath, QString citizenName, QString citizenId, int ltv, PDFSignatureInfo signatureInfo, std::vector<ACService::ns3__AttributeType *> &attributeTypeList) {
+bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QString filepath, QString citizenName, QString citizenId, int ltv, PDFSignatureInfo signatureInfo, std::vector<ACService::ns3__AttributeType *> &attributeTypeList) {
     const SOAP_ENV__Fault * fault = NULL;
 
     soap * sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
@@ -46,7 +47,35 @@ bool PDFSignatureClient::signPDF(QString finalfilepath, QString filepath, QStrin
 
     // Get endpoint from settings
     ScapSettings settings;
-    std::string s_endpoint = QString("https://" + settings.getScapServerHost() + ":" + settings.getScapServerPort().append(pdf_endpoint)).toStdString();
+	std::string s_endpoint = QString("https://" + settings.getScapServerHost() + ":" + settings.getScapServerPort().append(pdf_endpoint)).toStdString();
+
+	std::string proxy_host;
+	long proxy_port;
+	//Proxy support using the gsoap BindingProxy
+	if (proxyInfo.isSystemProxy())
+	{
+		proxyInfo.getProxyForHost(s_endpoint, &proxy_host, &proxy_port);
+		if (proxy_host.size() > 0)
+		{
+			sp->proxy_host = proxy_host.c_str();
+			sp->proxy_port = proxy_port;
+
+			eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "signPDF: Using System Proxy: host=%s, port=%ld", sp->proxy_host, sp->proxy_port);
+		}
+	}
+	else if (proxyInfo.getProxyHost().size() > 0)
+	{
+		sp->proxy_host = proxyInfo.getProxyHost().toUtf8().constData();
+		sp->proxy_port = proxyInfo.getProxyPort().toLong();
+		eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "signPDF: Using Manual Proxy: host=%s, port=%ld", sp->proxy_host, sp->proxy_port);
+
+		if (proxyInfo.getProxyUser().size() > 0)
+		{
+			sp->proxy_userid = proxyInfo.getProxyUser().toUtf8().constData();
+			sp->proxy_passwd = proxyInfo.getProxyPwd().toUtf8().constData();
+		}
+	}
+
     const char * c_endpoint = s_endpoint.c_str();
     proxy.soap_endpoint = c_endpoint;
 

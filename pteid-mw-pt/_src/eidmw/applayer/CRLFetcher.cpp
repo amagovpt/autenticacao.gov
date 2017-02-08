@@ -1,5 +1,7 @@
 #include <curl/curl.h>
 
+#include <cstdlib>
+#include <string>
 #include "CRLFetcher.h"
 #include "APLConfig.h"
 #include "MiscUtil.h"
@@ -25,6 +27,8 @@ namespace eIDMW
 		CURL *curl;
 		CURLcode res;
 		char error_buf[CURL_ERROR_SIZE];
+		std::string pac_proxy_host;
+		std::string pac_proxy_port;
 		
 		//Get Proxy configuration
 		APL_Config proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
@@ -38,7 +42,19 @@ namespace eIDMW
 			return received_data;
 		}
 
-		MWLOG(LEV_DEBUG, MOD_APL, L"Downloading CRL: %ls",utilStringWiden(url).c_str());
+#ifdef WIN32
+		//Get system proxy configuration
+		APL_Config conf_pac(CConfig::EIDMW_CONFIG_PARAM_PROXY_PACFILE);
+		const char * proxy_pac = conf_pac.getString();
+		if (proxy_pac != NULL && strlen(proxy_pac) > 0)
+		{
+			MWLOG(LEV_DEBUG, MOD_APL, "timestamp_data using Proxy PAC");
+			GetProxyFromPac(proxy_pac, url, &pac_proxy_host, &pac_proxy_port);
+			MWLOG(LEV_DEBUG, MOD_APL, "timestamp_data using Proxy host: %s port: %s", pac_proxy_host.c_str(), pac_proxy_port.c_str());
+		}
+#endif
+
+		MWLOG(LEV_DEBUG, MOD_APL, "Downloading CRL: %s", url);
 
 		//Make sure the static array receiving the network reply 
 		// is zero'd out before each request
@@ -68,6 +84,12 @@ namespace eIDMW
 
 			curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
 
+			if (pac_proxy_host.size() > 0 && pac_proxy_port.size() > 0)
+			{
+				curl_easy_setopt(curl, CURLOPT_PROXY, pac_proxy_host.c_str());
+				curl_easy_setopt(curl, CURLOPT_PROXYPORT, atol(pac_proxy_port.c_str()));
+				curl_easy_setopt(curl, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+			}
 			if (proxy_host.getString() != NULL && strlen(proxy_host.getString()) > 0)
 			{
 				//Set Proxy options for request
@@ -87,7 +109,6 @@ namespace eIDMW
 
 			curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buf);
 
-			//curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp_out);
 			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &curl_write_data);
 
 			/* Perform the request, res will get the return code */ 
