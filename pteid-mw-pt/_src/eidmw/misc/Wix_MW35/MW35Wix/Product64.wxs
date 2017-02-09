@@ -117,8 +117,12 @@
 			<RegistrySearch Id="OldMiddlewareInstalled_search" Name="Version" Type="raw" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4411E1E1-E262-4861-8A1A-A8552C846840}"/>
 		</Property>
 
+		<Property Id="OLDMIDDLEWAREINSTALLED2">
+			<RegistrySearch Id="OldMiddlewareInstalled_search" Name="Version" Type="raw" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4411E1E1-E262-4861-8A1A-A8552C846840}_is1"/>
+		</Property>
+
 		<Condition Message="!(loc.OldMiddlewareErrorMsg)" >
-			<![CDATA[Installed OR NOT OLDMIDDLEWAREINSTALLED]]>
+			<![CDATA[Installed OR NOT OLDMIDDLEWAREINSTALLED OR NOT OLDMIDDLEWAREINSTALLED2]]>
 		</Condition>
 
 		<Directory Id="TARGETDIR" Name="SourceDir">
