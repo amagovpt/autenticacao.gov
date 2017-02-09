@@ -413,22 +413,14 @@ public:
 		config.setLong(m_bAutoStartup);
 
 #ifdef WIN32
-		QSettings sLM("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-		bool bLMExist = sLM.value("pteid").toString()!="";
-
+		QSettings s("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
 #endif
 
 		if (m_bAutoStartup)
 		{
-
-			QString filePath = QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
 #ifdef WIN32
-			QSettings s("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-			if(bLMExist)
-				s.remove("pteid"); //if the HKEY_LOCAL_MACHINE exist, we never need the HKEY_CURRENT_USER
-			else
-				s.setValue("pteid" , filePath );
-
+			QString filePath = QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+			s.setValue("pteid", filePath);
 #endif
 #ifdef __APPLE__
 //            QProcess::execute("sudo defaults write com.apple.loginwindow LoginHook" + m_strExePath);
@@ -437,7 +429,6 @@ public:
 		else
 		{
 #ifdef WIN32
-			QSettings s("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
 			s.remove("pteid");
 #endif
 #ifdef __APPLE__
