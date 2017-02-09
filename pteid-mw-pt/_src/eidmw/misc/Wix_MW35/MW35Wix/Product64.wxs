@@ -783,7 +783,7 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 						</RegistryKey>
 					</RegistryKey>
 
-					<RegistryKey Root="HKLM"
+					<RegistryKey Root="HKCU"
 								Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
 						<RegistryValue  Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteidgui.exe&quot;"/>
 					</RegistryKey>
