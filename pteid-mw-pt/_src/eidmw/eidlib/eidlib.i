@@ -51,7 +51,7 @@
 %}
 
 //Define to avoid swig to create definition for NOEXPORT_PTEIDSDK methods
-#define PTEIDSDK_API 
+#define PTEIDSDK_API
 #define NOEXPORT_PTEIDSDK SLASH(/)
 #define SLASH(s) /##s
 
@@ -71,6 +71,12 @@
 ***                            FILE : eidlibException.h                              ***
 ****************************************************************************************/
 
+/***************************************************************************************
+***                            FILE : CardPteidAddr.h                                ***
+****************************************************************************************/
+
+%include "../applayer/CardPteidAddr.h"		//This file contains only define... It doesn't need any typemap
+
 #ifdef SWIGCSHARP	/********************** C# SPECIFICS *************************/
 
 %typemap(csbase) 	eIDMW::PTEID_Exception "System.ApplicationException";
@@ -82,7 +88,7 @@
 
 #elif SWIGPYTHON
 
-#elif SWIGPERL  
+#elif SWIGPERL
 
 #elif SWIGPHP
 
@@ -105,11 +111,11 @@
 
 ///////////////////////////////////////// Exception /////////////////////////////////////////////
 %exception {
-	try 
+	try
 	{
 		$action
     }
-    catch (eIDMW::PTEID_Exception& e) 
+    catch (eIDMW::PTEID_Exception& e)
 	{
 		SWIG_CSharpSetPendingExceptionCustom(e.GetError());
 		return $null;
@@ -124,21 +130,21 @@
 	CSharpExceptionCallback_t customExceptionCallback = NULL;
 
 	extern "C" SWIGEXPORT
-	void SWIGSTDCALL CustomExceptionRegisterCallback(CSharpExceptionCallback_t customCallback) 
+	void SWIGSTDCALL CustomExceptionRegisterCallback(CSharpExceptionCallback_t customCallback)
 	{
 		customExceptionCallback = customCallback;
 	}
 
 	// Note that SWIG detects any method calls named starting with
 	// SWIG_CSharpSetPendingException for warning 845
-	static void SWIG_CSharpSetPendingExceptionCustom(long code) 
+	static void SWIG_CSharpSetPendingExceptionCustom(long code)
 	{
 		customExceptionCallback(code);
 	}
 %}
 
 %pragma(csharp) imclasscode=%{
-	class CustomExceptionHelper 
+	class CustomExceptionHelper
 	{
 		// C# delegate for the C/C++ customExceptionCallback
 		public delegate void CustomExceptionDelegate(Int32 pteid_excode);
@@ -147,12 +153,12 @@
 		[DllImport("$dllimport", EntryPoint="CustomExceptionRegisterCallback")]
 		public static extern void CustomExceptionRegisterCallback(CustomExceptionDelegate customCallback);
 
-		static void SetPendingCustomException(Int32 pteid_excode) 
-		{ 
+		static void SetPendingCustomException(Int32 pteid_excode)
+		{
 			PTEID_Exception ex;
 
 				 if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_PARAM_RANGE)		ex = new PTEID_ExParamRange();
-			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_BAD_USAGE)		ex = new PTEID_ExBadUsage();	
+			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_BAD_USAGE)		ex = new PTEID_ExBadUsage();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_NOT_SUPPORTED)	ex = new PTEID_ExCmdNotSupported();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_NO_CARD)			ex = new PTEID_ExNoCardPresent();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_CMD_NOT_ALLOWED)	ex = new PTEID_ExCmdNotAllowed();
@@ -173,7 +179,7 @@
 			SWIGPendingException.Set(ex);
 		}
 
-		static CustomExceptionHelper() 
+		static CustomExceptionHelper()
 		{
 			CustomExceptionRegisterCallback(customDelegate);
 		}
@@ -186,31 +192,31 @@
 %enddef
 
 ///////////////////////////////////////// ByteArray /////////////////////////////////////////////
-%typemap(ctype) 				unsigned char * "unsigned char *" 
-%typemap(imtype,out="IntPtr") 	unsigned char * "byte[]" 
-%typemap(cstype) 				unsigned char * "byte[]" 
-%typemap(in) 					unsigned char * %{ $1 = $input; %} 
-%typemap(out) 					unsigned char * %{ $result = $1; %} 
-%typemap(csin) 					unsigned char * "$csinput" 
-%typemap(csin) 					const char * const *  "$csinput" 
+%typemap(ctype) 				unsigned char * "unsigned char *"
+%typemap(imtype,out="IntPtr") 	unsigned char * "byte[]"
+%typemap(cstype) 				unsigned char * "byte[]"
+%typemap(in) 					unsigned char * %{ $1 = $input; %}
+%typemap(out) 					unsigned char * %{ $result = $1; %}
+%typemap(csin) 					unsigned char * "$csinput"
+%typemap(csin) 					const char * const *  "$csinput"
 
-%typemap(csout, excode=CSHARP_CODE_THROW) unsigned char * 
-{ 
+%typemap(csout, excode=CSHARP_CODE_THROW) unsigned char *
+{
 	byte[] rslt = new byte[Size()];
 	IntPtr pt = $imcall;
 	$excode
 	Marshal.Copy(pt, rslt, 0,(int) Size());
-	return rslt; 
+	return rslt;
 }
 
 ///////////////////////////////////////// PTEID_LOG /////////////////////////////////////////////
 %typemap(ctype) (const char *format,...) "char *"
 
 ///////////////////////////////////////// unsigned long & /////////////////////////////////////////////
-%typemap(ctype) 				unsigned long & "unsigned long *" 
-%typemap(imtype) 				unsigned long & "ref uint" 
-%typemap(cstype) 				unsigned long & "ref uint" 
-%typemap(csin) 					unsigned long & "ref $csinput" 
+%typemap(ctype) 				unsigned long & "unsigned long *"
+%typemap(imtype) 				unsigned long & "ref uint"
+%typemap(cstype) 				unsigned long & "ref uint"
+%typemap(csin) 					unsigned long & "ref $csinput"
 
 
 //////////////////////////////////////////////// const char * ////////////////////////////////////////////////
@@ -227,7 +233,7 @@ static SWIG_CSharpStringHelperCallback SWIG_csharp_string_callback = NULL;
 #ifdef __cplusplus
 extern "C" SWIGEXPORT
 #endif
-void SWIGSTDCALL SWIG_RegisterStringCallback(SWIG_CSharpStringHelperCallback callback) 
+void SWIGSTDCALL SWIG_RegisterStringCallback(SWIG_CSharpStringHelperCallback callback)
 {
   SWIG_csharp_string_callback = callback;
 }
@@ -235,7 +241,7 @@ void SWIGSTDCALL SWIG_RegisterStringCallback(SWIG_CSharpStringHelperCallback cal
 
 %pragma(csharp) imclasscode=%{
  protected class SWIGStringHelper {
-      
+
     public delegate string SWIGStringDelegate(IntPtr message);
     static SWIGStringDelegate stringDelegate = new SWIGStringDelegate(FromUTF8);
 
@@ -260,7 +266,7 @@ void SWIGSTDCALL SWIG_RegisterStringCallback(SWIG_CSharpStringHelperCallback cal
         string result = new string(charData);
         return result;
     }
-    
+
     static SWIGStringHelper() {
 		SWIG_RegisterStringCallback(stringDelegate);
     }
@@ -277,7 +283,7 @@ static CUSTOM_CSharpStringArrayHelperCallback CUSTOM_CSharpStringArrayCallback =
 #ifdef __cplusplus
 extern "C" SWIGEXPORT
 #endif
-void SWIGSTDCALL CUSTOM_RegisterStringArrayCallback(CUSTOM_CSharpStringArrayHelperCallback callback) 
+void SWIGSTDCALL CUSTOM_RegisterStringArrayCallback(CUSTOM_CSharpStringArrayHelperCallback callback)
 {
   CUSTOM_CSharpStringArrayCallback = callback;
 }
@@ -288,7 +294,7 @@ void SWIGSTDCALL CUSTOM_RegisterStringArrayCallback(CUSTOM_CSharpStringArrayHelp
 //This will contain the result of the function that return a char**
 static public string[] custom_StringArrayResult;
 
-protected class CUSTOM_StringArrayHelper 
+protected class CUSTOM_StringArrayHelper
 {
 	public delegate void CUSTOM_StringArrayDelegate(IntPtr p, Int32 size);
 	static CUSTOM_StringArrayDelegate stringArrayDelegate = new CUSTOM_StringArrayDelegate(FillStringArrayResult);
@@ -296,7 +302,7 @@ protected class CUSTOM_StringArrayHelper
 	[DllImport("$dllimport", EntryPoint="CUSTOM_RegisterStringArrayCallback")]
 	public static extern void CUSTOM_RegisterStringArrayCallback(CUSTOM_StringArrayDelegate stringArrayDelegate);
 
-	static void FillStringArrayResult(IntPtr ap, Int32 size) 
+	static void FillStringArrayResult(IntPtr ap, Int32 size)
 	{
 		IntPtr[] p = new IntPtr[size];
 		Marshal.Copy(ap, p, 0, size);
@@ -308,7 +314,7 @@ protected class CUSTOM_StringArrayHelper
 		}
 	}
 
-	static CUSTOM_StringArrayHelper() 
+	static CUSTOM_StringArrayHelper()
 	{
 		CUSTOM_RegisterStringArrayCallback(stringArrayDelegate);
 	}
@@ -320,25 +326,25 @@ static protected CUSTOM_StringArrayHelper custom_StringArrayHelper = new CUSTOM_
 %typemap(imtype, out="IntPtr", inattributes="[MarshalAs(UnmanagedType.LPArray)]") const char * const *  "string[]"
 %typemap(ctype)		           const char ** "const char * const *"
 %typemap(ctype) 					const char * const *  "const char * const *"
-%typemap(cstype) 					const char * const * "string[]" 
-%typemap(out) 						const char * const * 
+%typemap(cstype) 					const char * const * "string[]"
+%typemap(out) 						const char * const *
 {
 	long size=0;
 	for(char **p=$1;*p!=NULL;p++)
 		size++;
 
-	$result = (const char *const*)CUSTOM_CSharpStringArrayCallback((void *)$1, size); 
-} 
+	$result = (const char *const*)CUSTOM_CSharpStringArrayCallback((void *)$1, size);
+}
 
 //%typemap(in) 					const char * const * %{ $1 = $input; %}
 
 
-%typemap(csout, excode=CSHARP_CODE_THROW) const char * const * 
-{ 
+%typemap(csout, excode=CSHARP_CODE_THROW) const char * const *
+{
 	IntPtr p = $imcall;
 	$excode
 	string[] rslt = $imclassname.custom_StringArrayResult;
-	return rslt; 
+	return rslt;
 }
 
 
@@ -351,7 +357,7 @@ typedef void (SWIGSTDCALL* CUSTOM_CSharpSetEventHelperCallback)(long, unsigned l
 static CUSTOM_CSharpSetEventHelperCallback CUSTOM_CSharpSetEventCallback = NULL;
 
 extern "C" SWIGEXPORT
-void SWIGSTDCALL CUSTOM_RegisterSetEventCallback(CUSTOM_CSharpSetEventHelperCallback callback) 
+void SWIGSTDCALL CUSTOM_RegisterSetEventCallback(CUSTOM_CSharpSetEventHelperCallback callback)
 {
   CUSTOM_CSharpSetEventCallback = callback;
 }
@@ -367,16 +373,16 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 //------------------------------------------------------------
 //Change the call to the C++ PTEID_ReaderContext::SetEventCallback
 //------------------------------------------------------------
-%typemap(ctype)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "long" 
-%typemap(in)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "" 
+%typemap(ctype)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "long"
+%typemap(in)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) ""
 %feature("except")	eIDMW::PTEID_ReaderContext::SetEventCallback(void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef)
 {
-    try 
+    try
     {
 	  //Always register the SetEventCallback_WrapperCpp function
       result = (unsigned long)(arg1)->SetEventCallback(&SetEventCallback_WrapperCpp,(void*)arg3);
     }
-    catch (eIDMW::PTEID_Exception& e) 
+    catch (eIDMW::PTEID_Exception& e)
     {
       SWIG_CSharpSetPendingExceptionCustom(e.GetError());
       return 0;
@@ -400,7 +406,7 @@ public delegate void PTEID_SetEventDelegate(Int32 lRet, uint ulState, IntPtr pvR
 //------------------------------------------------------------
 %pragma(csharp) imclasscode=
 %{
-internal class CUSTOM_SetEventHelper 
+internal class CUSTOM_SetEventHelper
 {
 	internal delegate void Internal_SetEventDelegate(Int32 lRet, uint ulState, IntPtr pvRef);
 	static Internal_SetEventDelegate setEventDelegate = new Internal_SetEventDelegate(Internal_SetEventCallback);
@@ -418,7 +424,7 @@ internal class CUSTOM_SetEventHelper
 	[DllImport("$dllimport", EntryPoint="CUSTOM_RegisterSetEventCallback")]
 	internal static extern void CUSTOM_RegisterSetEventCallback(Internal_SetEventDelegate setEventDelegate);
 
-	static void Internal_SetEventCallback(Int32 lRet, uint ulState, IntPtr pvRef) 
+	static void Internal_SetEventCallback(Int32 lRet, uint ulState, IntPtr pvRef)
 	{
 		//Call the proper delegate with ptrRef
 		int lRef=pvRef.ToInt32();
@@ -430,7 +436,7 @@ internal class CUSTOM_SetEventHelper
 		}
 	}
 
-	static CUSTOM_SetEventHelper() 
+	static CUSTOM_SetEventHelper()
 	{
 		CUSTOM_RegisterSetEventCallback(setEventDelegate);
 	}
@@ -442,21 +448,21 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 //------------------------------------------------------------
 //Define the type for intermediate function
 //------------------------------------------------------------
-%typemap(imtype) 	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "Int32" 
-%typemap(imtype) 	void *pvRef "IntPtr" 
+%typemap(imtype) 	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "Int32"
+%typemap(imtype) 	void *pvRef "IntPtr"
 
 //------------------------------------------------------------
 //Overload the C# PTEID_ReaderContext::SetEventCallback
 //------------------------------------------------------------
-%typemap(cstype)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "PTEID_SetEventDelegate" 
-%typemap(cstype)	void *pvRef "IntPtr" 
+%typemap(cstype)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "PTEID_SetEventDelegate"
+%typemap(cstype)	void *pvRef "IntPtr"
 %typemap(csin)		void (* callback)(long lRet, unsigned long ulState, void *pvRef) ""		//Not used but avoid generated SWIGTYPE extra files
 %typemap(csin)		void *pvRef ""	                                                        //idem
 
 %warnfilter(844) eIDMW::PTEID_ReaderContext::SetEventCallback;
-%typemap(csout) unsigned long eIDMW::PTEID_ReaderContext::SetEventCallback(void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef) 
-{ 
-	$modulePINVOKE.CUSTOM_SetEventHelper.countRef++;	
+%typemap(csout) unsigned long eIDMW::PTEID_ReaderContext::SetEventCallback(void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef)
+{
+	$modulePINVOKE.CUSTOM_SetEventHelper.countRef++;
 	IntPtr ptrCount = new IntPtr(pteidlib_dotNetPINVOKE.CUSTOM_SetEventHelper.countRef);
 
 	//We add the references to the hash table
@@ -468,7 +474,7 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 
 	//We call the SetEvent with the internal reference (countRef)
 	uint ulRslt = $modulePINVOKE.PTEID_ReaderContext_SetEventCallback(swigCPtr, 0, ptrCount);
-	if ($modulePINVOKE.SWIGPendingException.Pending) 
+	if ($modulePINVOKE.SWIGPendingException.Pending)
 	{
 		$modulePINVOKE.CUSTOM_SetEventHelper.delegateRefs.Remove(callbackRef);
 		throw $modulePINVOKE.SWIGPendingException.Retrieve();
@@ -478,18 +484,18 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 		callbackRef.handleRef = ulRslt;
 	}
 
-	return ulRslt; 
+	return ulRslt;
 }
 
 //------------------------------------------------------------
 //Overload the C# PTEID_ReaderContext::StopEventCallback
 //------------------------------------------------------------
-%typemap(csout, excode=CSHARP_CODE_THROW) void StopEventCallback(unsigned long ulHandle) 
-{ 
+%typemap(csout, excode=CSHARP_CODE_THROW) void StopEventCallback(unsigned long ulHandle)
+{
 	$imcall;
 	$excode
-	
-	//Remove ulHandle from delegateRefs 
+
+	//Remove ulHandle from delegateRefs
 	foreach($modulePINVOKE.CUSTOM_SetEventHelper.delegateRef callbackRef in $modulePINVOKE.CUSTOM_SetEventHelper.delegateRefs.Values )
     {
       if(callbackRef.handleRef==ulHandle)
@@ -497,7 +503,7 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
           $modulePINVOKE.CUSTOM_SetEventHelper.delegateRefs.Remove(callbackRef);
           break;
       }
-    }	
+    }
 }
 ///////////////////////////////////////// PTEID_Card &PTEID_ReaderContext::getCard() /////////////////////////////////////////////
 %warnfilter(844) eIDMW::PTEID_ReaderContext::getCard;
@@ -527,30 +533,30 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 #elif SWIGJAVA	/********************** JAVA SPECIFICS ***********************/
 
 ///////////////////////////////////////// ByteArray /////////////////////////////////////////////
-%typemap(jni)          const unsigned char* "jbyteArray"                    
-%typemap(jtype)        const unsigned char* "byte[]" 
-%typemap(jstype)       const unsigned char* "byte[]" 
-%typemap(jstype) 	   const char * const * "String[]" 
+%typemap(jni)          const unsigned char* "jbyteArray"
+%typemap(jtype)        const unsigned char* "byte[]"
+%typemap(jstype)       const unsigned char* "byte[]"
+%typemap(jstype) 	   const char * const * "String[]"
 %include "various.i"
 %apply char **STRING_ARRAY { char ** }
-//%typemap(jtype) 	   const char * const * "void *" 
+//%typemap(jtype) 	   const char * const * "void *"
 
-%typemap(out)          const unsigned char* 
+%typemap(out)          const unsigned char*
 {
 	$result = jenv->NewByteArray(arg1->Size());
 	jenv->SetByteArrayRegion($result,0,arg1->Size(),(const jbyte*) $1);
 }
 
-%typemap(javaout)	const unsigned char* 
+%typemap(javaout)	const unsigned char*
 {
 return $jnicall;
 }
 
-%typemap(in)           const unsigned char* 
+%typemap(in)           const unsigned char*
 {
 	jint size = jenv->GetArrayLength($input);
 	$1 = (unsigned char*) jenv->GetByteArrayElements($input,0);
-} 
+}
 
 %typemap(javain) const unsigned char* "$javainput"
 
@@ -596,11 +602,11 @@ return $jnicall;
 	// Count the nr of elements returned from C++. This is allowed her since
 	// the last element is assumed to be NULL.
 	//------------------------------------------
-    while ($1[len]) 
+    while ($1[len])
     {
-		len++;    
+		len++;
 	}
-	
+
 	//------------------------------------------
 	// create a java array of strings
 	//------------------------------------------
@@ -610,7 +616,7 @@ return $jnicall;
 	//------------------------------------------
 	// for each element returned from C++
 	//------------------------------------------
-    for (i=0; i<len; i++) 
+    for (i=0; i<len; i++)
     {
       temp_string = jenv->NewStringUTF(*result++);
       jenv->SetObjectArrayElement(jresult, i, temp_string);
@@ -624,13 +630,13 @@ return $jnicall;
 //%typemap(jstype) const char * const * "String[]"
 
 /* These 2 typemaps handle the conversion of the jtype to jstype typemap type
-   and vice versa for the 'const char * const *' 
+   and vice versa for the 'const char * const *'
 %typemap(javain) const char * const * "$javainput"
 %typemap(javaout) const char * const * {
     return $jnicall;
   }
 */
-  
+
 ///////////////////////////////////////// Exception /////////////////////////////////////////////
 
 //------------------------------------------------------------
@@ -642,11 +648,11 @@ return $jnicall;
 //------------------------------------------------------------
 %{
 	#include "eidErrors.h"
-	class CustomExceptionHelper 
+	class CustomExceptionHelper
 	{
 	public:
-		static void throwJavaException( unsigned long err, JNIEnv* jenv ) 
-		{ 
+		static void throwJavaException( unsigned long err, JNIEnv* jenv )
+		{
 			jclass		clazz;
 			jmethodID	methodID;
 			std::string classDescription = "pt/gov/cartaodecidadao";
@@ -655,13 +661,13 @@ return $jnicall;
 			{
 			case EIDMW_ERR_RELEASE_NEEDED:
 				classDescription += "/PTEID_ExReleaseNeeded";
-				break;			
+				break;
 			case EIDMW_ERR_DOCTYPE_UNKNOWN:
 				classDescription += "/PTEID_ExDocTypeUnknown";
-				break;			
+				break;
 			case EIDMW_ERR_FILETYPE_UNKNOWN:
 				classDescription += "/PTEID_ExFileTypeUnknown";
-				break;			
+				break;
 			case EIDMW_ERR_PARAM_RANGE:
 				classDescription += "/PTEID_ExParamRange";
 				break;
@@ -704,19 +710,19 @@ return $jnicall;
 			case EIDMW_ERR_UNKNOWN:
 				classDescription += "/PTEID_ExUnknown";
 				break;
-			case EIDMW_SOD_UNEXPECTED_VALUE:	
-			case EIDMW_SOD_UNEXPECTED_ASN1_TAG:      			
-			case EIDMW_SOD_UNEXPECTED_ALGO_OID:				
-			case EIDMW_SOD_ERR_HASH_NO_MATCH_ID:				
-			case EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS:			
-			case EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE:			
-			case EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY:		
+			case EIDMW_SOD_UNEXPECTED_VALUE:
+			case EIDMW_SOD_UNEXPECTED_ASN1_TAG:
+			case EIDMW_SOD_UNEXPECTED_ALGO_OID:
+			case EIDMW_SOD_ERR_HASH_NO_MATCH_ID:
+			case EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS:
+			case EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE:
+			case EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY:
 			case EIDMW_SOD_ERR_VERIFY_SOD_SIGN:
 				classDescription += "/PTEID_ExSOD";
 				clazz = jenv->FindClass(classDescription.c_str());
 				if (clazz)
 				{
-					methodID   = jenv->GetMethodID(clazz, "<init>", "(I)V"); 
+					methodID   = jenv->GetMethodID(clazz, "<init>", "(I)V");
 					if(methodID)
 					{
 						jthrowable  exc   = static_cast<jthrowable>(jenv->NewObject(clazz, methodID, err));
@@ -724,14 +730,14 @@ return $jnicall;
 					}
 				}
 				return;
-				break;			
+				break;
 			case EIDMW_ERR_CARD:
 			default:
 				classDescription += "/PTEID_Exception";
 				clazz = jenv->FindClass(classDescription.c_str());
 				if (clazz)
 				{
-					methodID   = jenv->GetMethodID(clazz, "<init>", "(I)V"); 
+					methodID   = jenv->GetMethodID(clazz, "<init>", "(I)V");
 					if(methodID)
 					{
 						jthrowable  exc   = static_cast<jthrowable>(jenv->NewObject(clazz, methodID, err));
@@ -744,7 +750,7 @@ return $jnicall;
 			clazz = jenv->FindClass(classDescription.c_str());
 			if (clazz)
 			{
-				methodID   = jenv->GetMethodID(clazz, "<init>", "()V"); 
+				methodID   = jenv->GetMethodID(clazz, "<init>", "()V");
 				if(methodID)
 				{
 					jthrowable  exc   = static_cast<jthrowable>(jenv->NewObject(clazz, methodID));
@@ -763,7 +769,7 @@ return $jnicall;
 		try {
 			$action
 			}
-		catch (eIDMW::PTEID_Exception& e) 
+		catch (eIDMW::PTEID_Exception& e)
 		{
 			long err = e.GetError();
 			CustomExceptionHelper::throwJavaException(err,jenv);
@@ -788,7 +794,7 @@ return $jnicall;
 			  WrapperCppDataContainer.pop_back();
 			}
 		}
-		catch (eIDMW::PTEID_Exception& e) 
+		catch (eIDMW::PTEID_Exception& e)
 		{
 			long err = e.GetError();
 			CustomExceptionHelper::throwJavaException(err,jenv);
@@ -814,9 +820,9 @@ return $jnicall;
 			  WrapperCppDataContainer.pop_back();
 			}
 		}
-		catch (eIDMW::PTEID_Exception& e) 
+		catch (eIDMW::PTEID_Exception& e)
 		{
-		 
+
     		for (int i=0; i < size3; i++)
  				delete[] arg3[i];
     		delete[] arg3;
@@ -829,7 +835,7 @@ return $jnicall;
 		{
 			for (int i=0; i<size3; i++)
  				delete[] arg3[i];
-    		
+
     		delete[] arg3;
 			std::string err = e.what();
 			jclass clazz = jenv->FindClass("java/lang/Exception");
@@ -1141,33 +1147,33 @@ return $jnicall;
 %javaexception("PTEID_Exception") getPostalLocality	   JAVA_CODE_THROW
 
 ///////////////////////////////////////// SetEventCallback /////////////////////////////////////////////
-%typemap(ctype)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "long" 
-%typemap(in)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "" 
+%typemap(ctype)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "long"
+%typemap(in)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) ""
 
 //------------------------------------------------------------
 // Define the function in the C++ wrapper that will call the C++ DLL
 // function 'SetEventCallback'
-// This function is called by the Java side and will call on its turn the eidlib 
+// This function is called by the Java side and will call on its turn the eidlib
 // interface function.
 // The JVM pointer has to be kept for use in the callback function.
 //------------------------------------------------------------
 %feature("except")	eIDMW::PTEID_ReaderContext::SetEventCallback(void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef)
 {
-    try 
+    try
     {
 		JavaVM *jvm;
 		jenv->GetJavaVM(&jvm);		// recover the JVM pointer
-		
+
 		SetEventCallback_WrapperCppData* callbackData = new SetEventCallback_WrapperCppData(jvm,(long int)arg3);
 		WrapperCppDataContainer.push_back(callbackData);
-		
-		//------------------------------------------------------		
+
+		//------------------------------------------------------
 		// set the C++ callback function with the callbackData.
-		//------------------------------------------------------		
+		//------------------------------------------------------
 		result = (unsigned long)(arg1)->SetEventCallback(&SetEventCallback_WrapperCpp,(void*)callbackData);
 		callbackData->m_handle = result;	// keep the handle. it is used to find the correct object for the delete (see: StopEventCallback)
     }
-    catch (eIDMW::PTEID_Exception& e) 
+    catch (eIDMW::PTEID_Exception& e)
     {
 		long err = e.GetError();
 		CustomExceptionHelper::throwJavaException(err,jenv);
@@ -1185,14 +1191,14 @@ return $jnicall;
 //------------------------------------------------------------
 // Define the function in the C++ wrapper that will call the C++ DLL
 // function 'StopEventCallback'
-// This function is called by the Java side and will call the eidlib 
+// This function is called by the Java side and will call the eidlib
 // function.
 // Since the SetEventCallback(...) has allocated memory, we have to
 // deallocate the data here.
 //------------------------------------------------------------
 %feature("except")	eIDMW::PTEID_ReaderContext::StopEventCallback(unsigned long ulHandle)
 {
-    try 
+    try
     {
 		(arg1)->StopEventCallback(arg2);	// call the eidlib method to stop the event with this handle
 		for(size_t idx = 0
@@ -1211,7 +1217,7 @@ return $jnicall;
 			}
 		}
     }
-    catch (eIDMW::PTEID_Exception& e) 
+    catch (eIDMW::PTEID_Exception& e)
     {
 		long err = e.GetError();
 		CustomExceptionHelper::throwJavaException(err,jenv);
@@ -1230,8 +1236,8 @@ return $jnicall;
 //------------------------------------------------------------
 //Define the type for intermediate function
 //------------------------------------------------------------
-%typemap(imtype) 	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "long" 
-%typemap(imtype) 	void *pvRef "long" 
+%typemap(imtype) 	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "long"
+%typemap(imtype) 	void *pvRef "long"
 
 //------------------------------------------------------------
 //Overload the Java PTEID_ReaderContext::SetEventCallback
@@ -1239,8 +1245,8 @@ return $jnicall;
 // - an interface of type Callback which will simulate the callback
 // - an object that contains callback data of any kind
 //------------------------------------------------------------
-%typemap(jstype)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "Callback" 
-%typemap(jstype)	void *pvRef "Object" 
+%typemap(jstype)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "Callback"
+%typemap(jstype)	void *pvRef "Object"
 %typemap(javain)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) ""		//Not used but avoid generated SWIGTYPE extra files
 %typemap(javain)	void *pvRef ""															//idem
 
@@ -1254,7 +1260,7 @@ return $jnicall;
 // Generate an import statement for PTEID_ReaderContext.java
 // needed to access the map
 //------------------------------------------------------------
-%typemap(javaimports) eIDMW::PTEID_ReaderContext "import java.util.*;" 
+%typemap(javaimports) eIDMW::PTEID_ReaderContext "import java.util.*;"
 
 //------------------------------------------------------------
 // in the Java class eIDMW::PTEID_ReaderContext, add some members
@@ -1264,7 +1270,7 @@ return $jnicall;
 %{
 	private static int		m_counter = 0;							// static counter to keep the nr of SetEventCallback we've done
 	private static HashMap	m_CallbackContainer = new HashMap();	// static map to keep the data for each callback
-	
+
 	//------------------------------------------------------------
 	// this function is called from C++ wrapper side as callback function.
 	// It will receive the key in the map, from which it can recover
@@ -1285,30 +1291,30 @@ return $jnicall;
 //------------------------------------------------------------
 // On the Java interface, overwrite the function SetEventCallBack(...)
 //------------------------------------------------------------
-%typemap(javaout) unsigned long eIDMW::PTEID_ReaderContext::SetEventCallback(void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef) 
-{ 
+%typemap(javaout) unsigned long eIDMW::PTEID_ReaderContext::SetEventCallback(void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef)
+{
 	m_counter++;
 	Integer key = new Integer(m_counter);
 	m_CallbackContainer.put(key, new CallbackHelper(callback, pvRef));
 	long result = pteidlibJava_WrapperJNI.PTEID_ReaderContext_SetEventCallback(swigCPtr, this, 0, m_counter);
-	return result; 
+	return result;
 }
 
 //------------------------------------------------------------
 // On the Java interface, overwrite the function StopEventCallBack(...)
 //------------------------------------------------------------
 %typemap(javaout) void eIDMW::PTEID_ReaderContext::StopEventCallback(unsigned long ulHandle)
-{ 
+{
     pteidlibJava_WrapperJNI.PTEID_ReaderContext_StopEventCallback(swigCPtr, this, ulHandle);
-    
+
 	Set CallbackContainerKeys = m_CallbackContainer.keySet();
 	Iterator itr = CallbackContainerKeys.iterator();
-	
+
 	while (itr.hasNext())
 	{
 		Integer		   key		= (Integer)itr.next();
 		CallbackHelper cbHelper = (CallbackHelper)m_CallbackContainer.get(key);
-		
+
 		if (cbHelper.m_handle == ulHandle)
 		{
 			m_CallbackContainer.remove(key);
@@ -1321,7 +1327,7 @@ return $jnicall;
 //Define the Java callback function into the C++ code
 //------------------------------------------------------------
 %{
- 
+
 //------------------------------------------------------------
 // Callback function declaration on the C++ side. This function will be passed
 // to the setEventCallBack() of the DLL.
@@ -1374,7 +1380,7 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 	// The goal is now to call Java. In this way we patch the callback function
 	// from C++ to Java
 	//------------------------------------------------------------------
-	SetEventCallback_WrapperCppData* callbackData = (SetEventCallback_WrapperCppData*)pvRef;	
+	SetEventCallback_WrapperCppData* callbackData = (SetEventCallback_WrapperCppData*)pvRef;
 
 	JNIEnv* env;
     JavaVM* jvm = callbackData->m_jvm;
@@ -1384,16 +1390,16 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 	if ( res == JNI_EDETACHED )
 	{
 		JavaVMAttachArgs vm_att_args;
-		
+
 		vm_att_args.version = JNI_VERSION_1_2;
 		vm_att_args.name	= NULL;
 		vm_att_args.group	= NULL;
-		
+
 		res = jvm->AttachCurrentThread((void**)&env, &vm_att_args);
 	}
-	
-	jclass		cls = env->FindClass("pt/gov/cartaodecidadao/PTEID_ReaderContext"); 
-	jmethodID	mid = env->GetStaticMethodID(cls, "doJavaCallBack", "(IJJ)V"); 
+
+	jclass		cls = env->FindClass("pt/gov/cartaodecidadao/PTEID_ReaderContext");
+	jmethodID	mid = env->GetStaticMethodID(cls, "doJavaCallBack", "(IJJ)V");
 
 	jvalue args[3];
 	args[0].i = callbackData->m_index;
@@ -1432,7 +1438,7 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 {
 	  long		pRemaining = pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
 	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_Pin_verifyPin(swigCPtr, this, csPin, pRemaining, bShowDlg);
-	  
+
 	  ulRemaining.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
 	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
 	  return retval;
@@ -1464,7 +1470,7 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 {
 	  long		pRemaining	= pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
 	  boolean	retval		= pteidlibJava_WrapperJNI.PTEID_Pin_changePin(swigCPtr, this, csPin1, csPin2, pRemaining, PinName, bShowDlg);
-	  
+
 	  ulRemaining.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
 	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
 	  return retval;
@@ -1506,7 +1512,7 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 {
 	  long		pRemaining = pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
 	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_Pin_unlockPin(swigCPtr, this, pszPuk, pszNewPin, pRemaining);
-	  
+
 	  triesLeft.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
 	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
 	  return retval;
@@ -1519,13 +1525,13 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 {
 	  long		pRemaining = pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
 	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_EIDCard_ChangeCapPinCompLayer(swigCPtr, this, old_pin, new_pin, pRemaining);
-	  
+
 	  ulRemaining.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
 	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
 	  return retval;
 }
 
- 
+
 #elif SWIGPYTHON
 
 #elif SWIGPERL

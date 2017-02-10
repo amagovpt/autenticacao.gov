@@ -45,7 +45,7 @@ PTEID_ByteArray::PTEID_ByteArray():PTEID_Object(NULL,new CByteArray())
 {
 	m_delimpl=true;
 }
-	
+
 PTEID_ByteArray::PTEID_ByteArray(const unsigned char * pucData, unsigned long ulSize):PTEID_Object(NULL,new CByteArray(pucData,ulSize))
 {
 	m_delimpl=true;
@@ -118,6 +118,23 @@ const unsigned char *PTEID_ByteArray::GetBytes() const
 	out = pimpl->GetBytes();
 
 	return out;
+}
+
+const char *PTEID_ByteArray::GetStringAt(unsigned long ulOffset, unsigned long ulLen) const
+{
+    const char *out;
+
+    BEGIN_TRY_CATCH
+
+    CByteArray *pimpl=static_cast<CByteArray *>(m_impl);
+    CByteArray ca = pimpl->GetBytes( ulOffset, ulLen ) ;
+    ca.TrimRight('\0');
+
+    out = (const char *)ca.GetBytes();
+
+    END_TRY_CATCH
+
+    return out;
 }
 
 void PTEID_ByteArray::Append(const unsigned char * pucData, unsigned long ulSize)
@@ -426,7 +443,7 @@ PTEID_ByteArray PTEID_XMLDoc::getXML()
 
 	CByteArray result=pimpl->getXML();
 	out.Append(result.GetBytes(),result.Size());
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -442,7 +459,7 @@ PTEID_ByteArray PTEID_XMLDoc::getCSV()
 
 	CByteArray result=pimpl->getCSV();
 	out.Append(result.GetBytes(),result.Size());
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -458,7 +475,7 @@ PTEID_ByteArray PTEID_XMLDoc::getTLV()
 
 	CByteArray result=pimpl->getTLV();
 	out.Append(result.GetBytes(),result.Size());
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -472,7 +489,7 @@ bool PTEID_XMLDoc::writeXmlToFile(const char * csFilePath)
 
 	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
 	out = pimpl->writeXmlToFile(csFilePath);
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -486,7 +503,7 @@ bool PTEID_XMLDoc::writeCsvToFile(const char * csFilePath)
 
 	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
 	out = pimpl->writeCsvToFile(csFilePath);
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -500,7 +517,7 @@ bool PTEID_XMLDoc::writeTlvToFile(const char * csFilePath)
 
 	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
 	out = pimpl->writeTlvToFile(csFilePath);
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -579,7 +596,7 @@ const char *PTEID_CardVersionInfo::getSerialNumber()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getSerialNumber();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -607,7 +624,7 @@ const char *PTEID_CardVersionInfo::getComponentCode()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getComponentCode();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -621,7 +638,7 @@ const char *PTEID_CardVersionInfo::getOsNumber()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getOsNumber();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -635,7 +652,7 @@ const char *PTEID_CardVersionInfo::getOsVersion()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getOsVersion();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -649,7 +666,7 @@ const char *PTEID_CardVersionInfo::getSoftmaskNumber()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getSoftmaskNumber();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -663,7 +680,7 @@ const char *PTEID_CardVersionInfo::getSoftmaskVersion()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getSoftmaskVersion();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -677,7 +694,7 @@ const char *PTEID_CardVersionInfo::getAppletVersion()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getAppletVersion();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -691,7 +708,7 @@ const char *PTEID_CardVersionInfo::getGlobalOsVersion()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getGlobalOsVersion();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -705,7 +722,7 @@ const char *PTEID_CardVersionInfo::getAppletInterfaceVersion()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getAppletInterfaceVersion();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -719,7 +736,7 @@ const char *PTEID_CardVersionInfo::getPKCS1Support()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getPKCS1Support();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -733,7 +750,7 @@ const char *PTEID_CardVersionInfo::getKeyExchangeVersion()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getKeyExchangeVersion();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -747,7 +764,7 @@ const char *PTEID_CardVersionInfo::getAppletLifeCycle()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getAppletLifeCicle();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -761,7 +778,7 @@ const char *PTEID_CardVersionInfo::getGraphicalPersonalisation()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getGraphicalPersonalisation();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -775,7 +792,7 @@ const char *PTEID_CardVersionInfo::getElectricalPersonalisation()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getElectricalPersonalisation();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -789,7 +806,7 @@ const char *PTEID_CardVersionInfo::getElectricalPersonalisationInterface()
 
 	APL_DocVersionInfo *pimpl=static_cast<APL_DocVersionInfo *>(m_impl);
 	out = pimpl->getElectricalPersonalisationInterface();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -814,7 +831,7 @@ const char *PTEID_EId::getDocumentVersion()
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
 	out = pimpl->getDocumentVersion();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -828,7 +845,7 @@ const char *PTEID_EId::getDocumentType()
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
 	out = pimpl->getDocumentType();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -856,7 +873,7 @@ const char *PTEID_EId::getGivenName()
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
 	out = pimpl->getGivenName();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -870,7 +887,7 @@ const char *PTEID_EId::getSurname()
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
 	out = pimpl->getSurname();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -884,7 +901,7 @@ const char *PTEID_EId::getGender()
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
 	out = pimpl->getGender();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -898,7 +915,7 @@ const char *PTEID_EId::getDateOfBirth()
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
 	out = pimpl->getDateOfBirth();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -912,7 +929,7 @@ const char *PTEID_EId::getNationality()
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
 	out = pimpl->getNationality();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -926,7 +943,7 @@ const char *PTEID_EId::getDocumentPAN()
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
 	out = pimpl->getDocumentPAN();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -940,7 +957,7 @@ const char *PTEID_EId::getValidityBeginDate()
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
 	out = pimpl->getValidityBeginDate();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -954,7 +971,7 @@ const char *PTEID_EId::getValidityEndDate()
 
 	APL_DocEId *pimpl=static_cast<APL_DocEId *>(m_impl);
 	out = pimpl->getValidityEndDate();
-	
+
 	END_TRY_CATCH
 
 	return out;
@@ -1698,10 +1715,10 @@ const PTEID_ByteArray& PTEID_Sod::getData()
 				throw PTEID_ExUnknown();
 		//}
 	}
-	
+
 	END_TRY_CATCH
 
 	return *out;
 }
-	
+
 }

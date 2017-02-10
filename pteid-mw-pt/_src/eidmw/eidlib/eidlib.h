@@ -289,6 +289,11 @@ class PTEID_ByteArray : public PTEID_Object
 		PTEIDSDK_API const unsigned char *GetBytes() const;
 
 		/**
+		 * Get a string from buffer at ulOffset position and with ulLen size.
+		 */
+		const char *GetStringAt(unsigned long ulOffset, unsigned long ulLen) const;
+
+		/**
 		 * Writing the binary content to a file.
 		 */
 		PTEIDSDK_API bool writeToFile(const char * csFilePath);
@@ -789,7 +794,7 @@ class PTEID_ScapConnection
 		PTEIDSDK_API ~PTEID_ScapConnection();
 		PTEIDSDK_API char *postSoapRequest(char *endpoint, char *soapAction, char *soapBody);
 
-	private:	
+	private:
 		ScapSSLConnection *m_connection;
 };
 
@@ -833,23 +838,23 @@ public:
 	    *  These method perform interactive PIN authentication if needed
 	    *
 	    *  @param IN paths is an array of null-terminated strings representing absolute paths in
-	    *  the local filesystem. Those files content (hashed with SHA-1 algorithm) will be the input data for the RSA signature 
-	    *  @param IN n_paths is the number of elements in the paths array 
+	    *  the local filesystem. Those files content (hashed with SHA-1 algorithm) will be the input data for the RSA signature
+	    *  @param IN n_paths is the number of elements in the paths array
 	    */
 	     PTEIDSDK_API PTEID_ByteArray SignXades(const char *output_path, const char * const* paths, unsigned int n_paths); /** Return a Xades signature as a UTF-8 string (supports multiple files)*/
-	     
+
 	     PTEIDSDK_API PTEID_ByteArray SignXadesT(const char *output_path, const char * const* path, unsigned int n_paths); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
 	     PTEIDSDK_API PTEID_ByteArray SignXadesA(const char *output_path, const char * const* path, unsigned int n_paths); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
-	     
+
 	     PTEIDSDK_API void SignXadesIndividual(const char *output_path,  const char * const* paths, unsigned int n_paths); /** Store the XAdes signature in individual zip containers  */
 	     PTEIDSDK_API void SignXadesTIndividual(const char *output_path, const char * const* paths, unsigned int n_paths); /** Store the Xades-T signature in individual zip containers  */
 		 PTEIDSDK_API void SignXadesAIndividual(const char *output_path, const char * const* paths, unsigned int n_paths);
-		
+
 	     //PDF Signature with location by page sector (the portrait A4 page is split into 18 cells: 6 lines and 3 columns)
 	     PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
 			const char *outfile_path);
 
-	     //PDF Signature with location by precise location (in postscript points) the coordinate system has its origin in the top left corner 
+	     //PDF Signature with location by precise location (in postscript points) the coordinate system has its origin in the top left corner
 	     //of the page
 	     PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
 			const char *outfile_path);
@@ -857,8 +862,8 @@ public:
 
 	     /* Change the OTP/EMV-CAP PIN through interaction with the appropriate HTTPS server
 	      * Note: This method SHOULD be always called before any change to the Authentication PIN
-	      * because the two PINs are the same from the user's perspective 
-	      * 
+	      * because the two PINs are the same from the user's perspective
+	      *
 	      */
 	     //PTEIDSDK_API bool ChangeCapPin(const char *new_pin);
 
