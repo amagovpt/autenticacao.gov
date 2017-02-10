@@ -180,6 +180,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 , m_pdf_signature_dialog(NULL)
 , m_STATUS_MSG_TIME(5000)
 , m_ShowBalloon(false)
+, m_addressFieldNeedsReset(false)
 , m_msgBox(NULL)
 {
 	//------------------------------------
@@ -2759,7 +2760,7 @@ void MainWnd::actionSCAPSignature_triggered()
 	#endif
 		QStringList args;
 		qint64 child_pid = 0;
-		//TODO: Tested only in Windows: test in Linux
+
 		QProcess::startDetached(m_Settings.getExePath()+SCAP_EXE, args);
 
 }
@@ -3623,6 +3624,7 @@ bool MainWnd::refreshTabAddress( void )
 
 	tFieldMap& AddressFields = m_CI_Data.m_AddressInfo.getFields();
 
+	const int streetName_offset = 7;
 	if (m_CI_Data.m_AddressInfo.isForeign())
 	{
 		//TODO: Improve this...
@@ -3635,12 +3637,25 @@ bool MainWnd::refreshTabAddress( void )
 		m_ui.txtAddress_StreetType1->setText( QString::fromUtf8(AddressFields[FOREIGN_POSTALCODE].toStdString().c_str()) );
 		m_ui.txtAddress_StreetType2->setText( QString::fromUtf8(AddressFields[FOREIGN_LOCALITY].toStdString().c_str()) );
 
-		QRect geometry = m_ui.txtAddress_StreetName->geometry();
-		//Nasty hack to overcome the non-matching backgrounds and over
-		m_ui.txtAddress_StreetName->move(geometry.x(), geometry.y()+7);
+		if (!m_addressFieldNeedsReset)
+		{
+			QRect geometry = m_ui.txtAddress_StreetName->geometry();
+			//Nasty hack to overcome the non-matching backgrounds and label position
+			QRect geometry2 = m_ui.txtAddress_StreetType1->geometry();
+			m_ui.txtAddress_StreetType1->move(geometry2.x(), geometry2.y()+3);
 
-		//Nasty hack...
-		m_ui.txtAddress_StreetName->setGeometry(geometry.x(), geometry.y()+7, 448, geometry.height());
+			QRect geometry3 = m_ui.txtAddress_StreetName->geometry();
+			m_ui.txtAddress_CivilParish->move(geometry3.x(), geometry3.y()+3);
+
+			geometry3 = m_ui.txtAddress_StreetType2->geometry();
+			m_ui.txtAddress_StreetType2->move(geometry3.x(), geometry3.y()+3);
+
+			m_addressFieldNeedsReset = true;
+
+			//Nasty hack...
+			m_ui.txtAddress_StreetName->setGeometry(geometry.x(), geometry.y()+streetName_offset, 448, geometry.height()-2);
+			
+		}
 
 		m_ui.txtAddress_StreetName->setText( QString::fromUtf8(AddressFields[FOREIGN_ADDRESS].toStdString().c_str()) );
 
@@ -3662,6 +3677,15 @@ bool MainWnd::refreshTabAddress( void )
 	{
 		m_ui.page_Address->setStyleSheet("");
 		m_ui.page_Address->setStyleSheet("background-image: url(:/images/Images/tab-backgrounds/bg_address.png);");
+		unsigned int offset = 0;
+		unsigned int streetname_width = 190;
+
+		if (m_addressFieldNeedsReset)
+		{
+			QRect geometry = m_ui.txtAddress_StreetName->geometry();
+			m_ui.txtAddress_StreetName->setGeometry(geometry.x(), geometry.y()-streetName_offset, streetname_width, geometry.height());
+			m_addressFieldNeedsReset = false;
+		}
 
 		m_ui.txtAddress_Municipality->setText		 ( QString::fromUtf8(AddressFields[ADDRESS_MUNICIPALITY].toStdString().c_str()) );
 		m_ui.txtAddress_Municipality->setAccessibleName ( QString::fromUtf8(AddressFields[ADDRESS_MUNICIPALITY].toStdString().c_str()) );

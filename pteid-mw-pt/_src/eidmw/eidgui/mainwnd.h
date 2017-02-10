@@ -518,6 +518,7 @@ private:
 	bool					m_ShowBalloon;			//!< To avoid the message eID still running when the gui start minimize
 	QMessageBox*			m_msgBox;
 	bool                    isLinkToCertClicked;
+	bool 					m_addressFieldNeedsReset;  //Do we need to reset some label positions after loading a foreign address?
 
 public:
 	static tCertPerReader			m_certContexts;			//!< certificate contexts of each reader
