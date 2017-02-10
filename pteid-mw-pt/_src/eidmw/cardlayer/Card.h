@@ -34,7 +34,6 @@
 #include "../common/Hash.h"
 #include "../common/Util.h"
 #include "GenericPinpad.h"
-#include "P15Correction.h"
 #include "../dialogs/dialogs.h"
 namespace eIDMW
 {
@@ -113,9 +112,6 @@ public:
     virtual CByteArray SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned char ucP2,
             const CByteArray & oData);
     virtual CByteArray SendAPDU(const CByteArray & oCmdAPDU);
-
-    /* retrieve the correction class for PINs, certificates and private keys */
-    virtual CP15Correction* GetP15Correction();
 
     virtual void setPinpadHandler(GenericPinpad * pinpad)
     {

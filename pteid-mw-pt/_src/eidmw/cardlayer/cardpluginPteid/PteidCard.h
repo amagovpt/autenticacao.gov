@@ -21,7 +21,6 @@
 #define __PTEIDCARD_H__
 
 #include "../PkiCard.h"
-#include "PteidP15Correction.h"
 #include "../Card.h"
 
 using namespace eIDMW;
@@ -39,21 +38,11 @@ CCard *PTeidCardGetVersion (unsigned long ulVersion, const char *csReader,
 CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 	SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
 
-//CCard PteidCardSelectPteid();
-
 namespace eIDMW
 {
 
-typedef enum {
-	BELPIC_DF,
-	IAS_DF,
-	GEMSAFE_DF,
-	ID_DF,
-	UNKNOWN_DF,
-} tBelpicDF;
 
-
-//Workaround needed for Windows 8 and later
+//Workaround needed for Windows 8 and later: With the do-nothing call to SCardStatus() in PCSC::Status() we make sure the transaction has activity so that Windows doesn't kill it
 class KeepAliveThread : public CThread
 {
 public:
@@ -67,8 +56,10 @@ public:
 	void Run() {
 		while(1)
 		{
-			CThread::SleepMillisecs(1000);
-			m_poPCSC->Status(m_hCard);
+			CThread::SleepMillisecs(100);
+			//If the card was removed stop this thread
+			if(! m_poPCSC->Status(m_hCard))
+				break;
 
 			if (m_bStopRequest)
 				break;
@@ -107,17 +98,12 @@ public:
     virtual bool Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN);
     virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft);
 
-	virtual unsigned long GetSupportedAlgorithms();
-
-    virtual CP15Correction* GetP15Correction();
+	virtual unsigned long GetSupportedAlgorithms();  
 
 protected:
 	virtual bool ShouldSelectApplet(unsigned char ins, unsigned long ulSW12);
     virtual bool SelectApplet();
-
-	virtual tBelpicDF getDF(const std::string & csPath, unsigned long & ulOffset);
-	virtual tFileInfo SelectFile(const std::string & csPath, bool bReturnFileInfo = false);
-	virtual tFileInfo ParseFileInfo(CByteArray & oFCI);
+		
     virtual CByteArray SelectByPath(const std::string & csPath, bool bReturnFileInfo = false);
 
 	virtual unsigned long Get6CDelay();
@@ -138,10 +124,6 @@ protected:
     unsigned int m_AppletVersion;
 	unsigned long m_ul6CDelay;
 
-	CPteidP15Correction p15correction;
-
-private:
-	void IasSignatureHelper();
 };
 
 }

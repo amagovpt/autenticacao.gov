@@ -30,10 +30,6 @@ using namespace eIDMW;
 static const unsigned char IAS_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x01, 0x02};
 static const unsigned char GEMSAFE_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
 
-static const tFileInfo DEFAULT_FILE_INFO = {0, 0, 0};
-static const tFileInfo PREFS_FILE_INFO_V1 = {0, 0, 0};
-static const tFileInfo PREFS_FILE_INFO_V2 = {0, 0, 0x85};
-
 /* martinho - the id must not be changed */
 static const unsigned long PTEIDNG_ACTIVATION_CODE_ID = 0x87;
 /* martinho - ANY_ID_BIGGER_THAN_6 will be the ulID in the tPin struct 1-6 are already taken */
@@ -270,7 +266,7 @@ CPkiCard(hCard, poContext, poPinpad)
     }
     catch(CMWException e)
     {
-        MWLOG(LEV_CRIT, MOD_CAL, L"Failed to get CardData: 0x%0x", e.GetError());
+        MWLOG(LEV_CRIT, MOD_CAL, "Failed to get CardData: 0x%0x File: %s, Line:%ld", e.GetError(), e.GetFile().c_str(), e.GetLine());
         Disconnect(DISCONNECT_LEAVE_CARD);
     }
     catch(...)
@@ -311,8 +307,8 @@ unsigned long CPteidCard::PinStatus(const tPin & Pin)
 	try
 	{
 
-		if (m_cardType == CARD_PTEID_IAS101)
-			SelectFile((!Pin.csPath.empty()) ? Pin.csPath : "3F005F00"); // martinho pin 1 does not have cspath... why?
+		//if (m_cardType == CARD_PTEID_IAS101)
+		//	SelectFile((!Pin.csPath.empty()) ? Pin.csPath : "3F005F00"); // martinho pin 1 does not have cspath... why?
 
 		CByteArray oResp = SendAPDU(0x20, 0x00, (unsigned char) Pin.ulPinRef, 0);
 		ulSW12 = getSW12(oResp);
@@ -463,7 +459,6 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 
 DlgPinUsage CPteidCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)
 {
-        //printf("++++ Pteid5\n");
 	DlgPinUsage usage = DLG_PIN_UNKNOWN;
 
     if (Pin.ulID == 1)
@@ -651,22 +646,10 @@ unsigned long CPteidCard::GetSupportedAlgorithms()
 	return ulAlgos;
 }
 
-CP15Correction* CPteidCard::GetP15Correction()
-{
-	return &p15correction;
-}
-
-tFileInfo CPteidCard::ParseFileInfo(CByteArray & oFCI)
-{
-	// We should never come here
-	throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-}
-
 
 void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
     unsigned long ulInputLen)
 {
-    //printf("++++ Pteid11\n");
 	// Data = [04 80 <algoref> 84 <keyref>]  (5 bytes)
     CByteArray oDataias, oDatagem;
     unsigned char ucAlgo;
@@ -709,7 +692,6 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
 CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
     const CByteArray & oData, const tPin *pPin)
 {
-    // printf("++++ Pteid12\n");
     CAutoLock autolock(this);
     bool bOK = false;
     m_ucCLA = 0x00;
@@ -786,7 +768,7 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
 
 bool CPteidCard::ShouldSelectApplet(unsigned char ins, unsigned long ulSW12)
 {
-		//printf("++++ Pteid13\n");
+
 	if (m_selectAppletMode != TRY_SELECT_APPLET)
 		return false;
 
@@ -800,28 +782,10 @@ bool CPteidCard::SelectApplet()
 	return PteidCardSelectApplet(m_poContext, m_hCard);
 }
 
-tBelpicDF CPteidCard::getDF(const std::string & csPath, unsigned long & ulOffset)
-{
-    //printf("++++ Pteid14\n");
-	ulOffset = 0;
-	if (csPath.substr(0, 4) == "3F00")
-		ulOffset = 4;
 
-	/*if (ulOffset < csPath.size())
-	{
-		std::string csPartialPath = csPath.substr(ulOffset, 4);
-		if (csPartialPath == "DF00")
-			return BELPIC_DF;
-		if (csPartialPath == "DF01" && m_ucAppletVersion >= 0x20)
-			return ID_DF; // this AID doesn't exist for V1 cards
-	}*/
-
-	return UNKNOWN_DF;
-}
-
+/*
 tFileInfo CPteidCard::SelectFile(const std::string & csPath, bool bReturnFileInfo)
 {
-    //printf("++++ Pteid15 select file: ");
     CPkiCard::SelectFile(csPath, false);
 
     // The EF(Preferences) file can be written using the authentication PIN;
@@ -836,115 +800,47 @@ tFileInfo CPteidCard::SelectFile(const std::string & csPath, bool bReturnFileInf
     else
         return DEFAULT_FILE_INFO;
 }
+*/
 
 /**
- * The Belpic card doesn't support select by path (only
- * select by File ID or by AID) , so we make a loop with
+ * The Pteid card doesn't support select by path (only
+ * select by File ID or by AID), so we perform a loop with
  * 'select by file' commands.
  * E.g. if path = AAAABBBCCC the we do
  *   Select(AAAA)
  *   Select(BBBB)
  *   Select(CCCC)
- * If the the path contains the Belpic DF (DF00) or
- * the ID DF (DF01) then we select by AID without
- * first selected the MF (3F00) even it it's specified
- * because selection by AID always works.
+ *
  */
 CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFileInfo)
 {
-    //printf("++++ Pteid16\n");
 	unsigned long ulOffset = 0;
-	tBelpicDF belpicDF = getDF(csPath, ulOffset);
 
-	if (belpicDF == UNKNOWN_DF)
+
+	// 1. Do a loop of "Select File by file ID" commands
+
+	unsigned long ulPathLen = (unsigned long)csPath.size() / 2;
+	for (ulOffset = 0; ulOffset < ulPathLen; ulOffset += 2)
 	{
-		// 1. Do a loop of "Select File by file ID" commands
+		CByteArray oPath(ulPathLen);
+		oPath.Append(Hex2Byte(csPath, ulOffset));
+		oPath.Append(Hex2Byte(csPath, ulOffset + 1));
 
-		unsigned long ulPathLen = (unsigned long) csPath.size() / 2;
-		for (ulOffset = 0; ulOffset < ulPathLen; ulOffset += 2)
-		{
-			CByteArray oPath(ulPathLen);
-			oPath.Append(Hex2Byte(csPath, ulOffset));
-			oPath.Append(Hex2Byte(csPath, ulOffset + 1));
-
-			CByteArray oResp = SendAPDU(0xA4, 0x00, 0x0C, oPath);
-			unsigned long ulSW12 = getSW12(oResp);
-			if ((ulSW12 == 0x6A82 || ulSW12 == 0x6A86) && m_selectAppletMode == TRY_SELECT_APPLET)
-			{
-				// The file still wasn't found, so let's first try to select the applet
-				/*if (SelectApplet())
-				{
-				m_selectAppletMode = ALW_SELECT_APPLET;*/
-					oResp = SendAPDU(0xA4, 0x00, 0x0C, oPath);
-					//}
-			}
-			getSW12(oResp, 0x9000);
-		}
-	}
-	else
-	{
-		// 2.a Select the BELPIC DF or the ID DF by AID
-
-		CByteArray oAID(20);
-		if (belpicDF == BELPIC_DF) {
-		  	if (ulVersion == 1)
-			{
-			  oAID.Append(GEMSAFE_PTEID_APPLET_AID, sizeof(GEMSAFE_PTEID_APPLET_AID));
-			} else {
-			  oAID.Append(IAS_PTEID_APPLET_AID, sizeof(IAS_PTEID_APPLET_AID));
-			}
-		} else {
-		  cout << "Think what to do" << endl;
-		}
-		CByteArray oResp;
-		if (ulVersion == 1)
-		{
-		    oResp = SendAPDU(0xA4, 0x80, 0x00, oAID);
-		} else {
-		    oResp = SendAPDU(0xA4, 0x04, 0x0C, oAID);
-		}
-		  unsigned long ulSW12 = getSW12(oResp);
+		CByteArray oResp = SendAPDU(0xA4, 0x00, 0x0C, oPath);
+		unsigned long ulSW12 = getSW12(oResp);
 		if ((ulSW12 == 0x6A82 || ulSW12 == 0x6A86) && m_selectAppletMode == TRY_SELECT_APPLET)
 		{
 			// The file still wasn't found, so let's first try to select the applet
-			if (SelectApplet())
+			/*if (SelectApplet())
 			{
-				m_selectAppletMode = ALW_SELECT_APPLET;
-				if (ulVersion == 1)
-				{
-				    oResp = SendAPDU(0xA4, 0x80, 0x00, oAID);
-			        } else {
-				    oResp = SendAPDU(0xA4, 0x04, 0x0C, oAID);
-				}
-			}
+			m_selectAppletMode = ALW_SELECT_APPLET;*/
+			oResp = SendAPDU(0xA4, 0x00, 0x0C, oPath);
+			//}
 		}
 		getSW12(oResp, 0x9000);
-
-		// 2.b Select the file inside the DF, if needed
-
-		ulOffset += 4;
-		if (ulOffset + 4 == csPath.size())
-		{
-			CByteArray oPath(2);
-			oPath.Append(Hex2Byte(csPath, ulOffset / 2));
-			oPath.Append(Hex2Byte(csPath, ulOffset / 2 + 1));
-
-			if (ulVersion == 1)
-			{
-			    CByteArray oResp = SendAPDU(0xA4, 0x00, 0x00, oPath);
-			} else {
-			    CByteArray oResp = SendAPDU(0xA4, 0x02, 0x0C, oPath);
-			}
-			unsigned long ulSW12 = getSW12(oResp);
-			if (ulSW12 != 0x9000)
-				throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
-		}
 	}
 
-	// Normally we should put here the FCI, but since Belpic cards
-	// don't return it, we just return the path that can be used
-	// later on to return the harcoded FCI for that file.
-	return CByteArray((unsigned char *) csPath.c_str(), (unsigned long) csPath.size());
+	return CByteArray((unsigned char *)csPath.c_str(), (unsigned long)csPath.size());
 }
 
 unsigned long CPteidCard::Get6CDelay()

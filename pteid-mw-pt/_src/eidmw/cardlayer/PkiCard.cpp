@@ -543,7 +543,7 @@ tFileInfo CPkiCard::SelectFile(const std::string & csPath, bool bReturnFileInfo)
 {
 	CByteArray oResp;
     tFileInfo xFileInfo = {0};
-
+	
 	unsigned long ulPathLen = (unsigned long) csPath.size();
     if (ulPathLen % 4 != 0 || ulPathLen == 0)
         throw CMWEXCEPTION(EIDMW_ERR_BAD_PATH);
@@ -583,10 +583,7 @@ tFileInfo CPkiCard::SelectFile(const std::string & csPath, bool bReturnFileInfo)
 		}
 	}
 
-    if (bReturnFileInfo)
-        xFileInfo = ParseFileInfo(oResp);
-
-    return xFileInfo;
+	return xFileInfo;
 }
 
 // Only called from SelectFile(), no locking is done here

@@ -80,7 +80,7 @@ protected:
 
 	virtual tFileInfo SelectFile(const std::string & csPath, bool bReturnFileInfo = false);
     virtual CByteArray SelectByPath(const std::string & csPath, bool bReturnFileInfo = false);
-    virtual tFileInfo ParseFileInfo(CByteArray & oFCI) = 0;
+    //virtual tFileInfo ParseFileInfo(CByteArray & oFCI) = 0;
 
     virtual CByteArray ReadBinary(unsigned long ulOffset, unsigned long ulLen);
     virtual CByteArray UpdateBinary(unsigned long ulOffset, const CByteArray & oData);

@@ -459,11 +459,6 @@ CByteArray CCard::SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned cha
     return SendAPDU(oAPDU);
 }
 
-CP15Correction* CCard::GetP15Correction()
-{
-	return NULL;
-}
-
 unsigned long CCard::Get6CDelay()
 {
 	return 0;
