@@ -679,6 +679,14 @@ void PDFSignWindow::on_button_sign_clicked()
 
 	if (model->rowCount() > 1)
 	{
+
+		savefilepath = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+				QDir::toNativeSeparators(defaultsavefilepath),
+				QFileDialog::ShowDirsOnly);
+
+		if (savefilepath.isNull() || savefilepath.isEmpty())
+			return;
+
 		//First we need to free the first instance that was created unless we want to leak the file handle...
 		delete m_pdf_sig;
 		m_pdf_sig = new PTEID_PDFSignature();
@@ -692,10 +700,6 @@ void PDFSignWindow::on_button_sign_clicked()
 				free(final);
 			}
 		}
-
-		savefilepath = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-				QDir::toNativeSeparators(defaultsavefilepath),
-				QFileDialog::ShowDirsOnly);
 
 	}
 	else
