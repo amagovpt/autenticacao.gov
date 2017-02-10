@@ -44,6 +44,7 @@
 #include <shlobj.h>
 #endif
 #include "mainwnd.h"
+#include "svn_revision.h"
 #include "dlgAbout.h"
 #include "dlgprint.h"
 #include "ChangeAddressDialog.h"
@@ -2637,7 +2638,7 @@ void MainWnd::show_window_about(){
 	QString strVersion (PTEID_PRODUCT_VERSION);
 	m_Settings.setGuiVersion(strVersion);
 
-	dlgAbout * dlg = new dlgAbout( m_Settings.getGuiVersion() , this);
+	dlgAbout * dlg = new dlgAbout(m_Settings.getGuiVersion() +" - "+ SVN_REVISION_STR, this);
 	dlg->exec();
 	delete dlg;
 }
