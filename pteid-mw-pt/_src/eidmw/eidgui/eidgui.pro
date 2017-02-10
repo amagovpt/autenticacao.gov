@@ -88,7 +88,7 @@ PRE_TARGETDEPS += $${translation_en.target} \
 ## --------------------------------------------------------------------------------------------------------
 
 DEPENDPATH += . ../dialogs 
-INCLUDEPATH += . ../dialogs ../eidlib ../_Builds ../common
+INCLUDEPATH += . ../dialogs ../eidlib ../_Builds ../common ../
 
 LIBS += -L../lib  \
     -l$${EIDLIB} \
