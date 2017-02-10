@@ -22,7 +22,7 @@ public class pteid {
     public static final int CARD_TYPE_ERR = 0;
     public static final int CARD_TYPE_IAS07 = 1;
     public static final int CARD_TYPE_IAS101 = 2;
-    
+
     private static final int MODE_ACTIVATE_BLOCK_PIN = 1;
 
     protected static final char[] Hexhars = {
@@ -467,7 +467,7 @@ public class pteid {
                 {
 					PTEID_ByteArray pba = new PTEID_ByteArray(pcert.certif, pcert.certif.length);
                     readerContext.getEIDCard().getCertificates().addToSODCAs(pba);
-                }				
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
                 throw new PteidException();
@@ -551,9 +551,40 @@ public class pteid {
         catch (Exception ex) {
                 System.err.println("Error in CVC_Init: " + ex.getMessage());
                 throw new PteidException();
-        }   
+        }
 
         return ret;
+    }
+
+    public static void CVC_Authenticate(byte[] cert) throws PteidException
+    {
+        PTEID_ByteArray cvc = new PTEID_ByteArray(cert, cert.length);
+        //Make the Exception retro-compatible
+        try
+        {
+            pteidlibJava_Wrapper.PTEID_CVC_Authenticate(cvc);
+        } catch (Exception ex) {
+                System.err.println("Error in CVC_Authenticate: " + ex.getMessage());
+                throw new PteidException();
+        }
+    }
+
+    public static PTEID_ADDR CVC_GetAddr() throws PteidException {
+        //PTEID_ADDR addr = null;
+        byte[] fileID={ (byte)0x3F, (byte)0x00, (byte)0x5F, (byte)0x00, (byte)0xEF, (byte)0x05 };
+
+        try {
+            byte[] addressRaw = CVC_ReadFile( fileID );
+
+            return new PTEID_ADDR( addressRaw );
+
+        } catch (PteidException ex) {
+            System.err.println("Error in CVC_GetAddr: " + ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            System.err.println("Error in CVC_GetAddr: " + ex.getMessage());
+            throw new PteidException();
+        }
     }
 
     public static byte[] CVC_ReadFile(byte[] fileID) throws PteidException
@@ -564,7 +595,7 @@ public class pteid {
         //Make the Exception retro-compatible
         try
         {
-            PTEID_ByteArray ba = pteidlibJava_Wrapper.PTEID_CVC_Init(ba_fileID);
+            PTEID_ByteArray ba = pteidlibJava_Wrapper.PTEID_CVC_ReadFile(ba_fileID);
             ret = new byte[(int) ba.Size()];
         }
         catch (Exception ex) {
