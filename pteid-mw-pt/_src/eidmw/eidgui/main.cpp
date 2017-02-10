@@ -79,6 +79,11 @@ int main(int argc, char *argv[])
 		default_sam_server = strdup(sam_server.getString());
 		sam_server.setString("pki.teste.cartaodecidadao.pt:443");
 	}
+	else
+	{
+		//Force production mode
+		sam_server.setString("pki.cartaodecidadao.pt:443");
+	}
 
 	GUISettings settings;
 	QString     appPath = QCoreApplication::applicationDirPath();
