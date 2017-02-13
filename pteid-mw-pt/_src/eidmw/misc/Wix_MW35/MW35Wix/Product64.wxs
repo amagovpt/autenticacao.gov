@@ -118,7 +118,7 @@
 		</Property>
 
 		<Property Id="OLDMIDDLEWAREINSTALLED2">
-			<RegistrySearch Id="OldMiddlewareInstalled_search" Name="Version" Type="raw" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4411E1E1-E262-4861-8A1A-A8552C846840}_is1"/>
+			<RegistrySearch Id="OldMiddlewareInstalled_search2" Name="Version" Type="raw" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4411E1E1-E262-4861-8A1A-A8552C846840}_is1"/>
 		</Property>
 
 		<Condition Message="!(loc.OldMiddlewareErrorMsg)" >
@@ -782,15 +782,16 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 							<RegistryValue Type="integer" Name="registrate_certificate" Value="1"/>
 						</RegistryKey>
 					</RegistryKey>
-
-					<RegistryKey Root="HKCU"
-								Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
-						<RegistryValue  Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteidgui.exe&quot;"/>
-					</RegistryKey>
+					
 				</Component>
 
-			</DirectoryRef>
+        <Component Id="RegisterPteidAutoStart" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA6}">
+          <RegistryKey Root="HKCU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
+            <RegistryValue Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteidgui.exe&quot;"/>
+          </RegistryKey>
+        </Component>
 
+			</DirectoryRef>
 
 			<DirectoryRef Id="ApplicationProgramsFolder">
 				<Component Id="PteidGuiShortcut" Guid="{CBD0F388-EAE5-4FA1-8C38-EC223928FF13}">
@@ -883,6 +884,7 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 
 				<!-- Registry -->
 				<ComponentRef Id="RegistryPteidSystem"/>
+        <ComponentRef Id="RegisterPteidAutoStart"/>
 				<ComponentRef Id="RegistryXadesFileType"/>
 
 				<Feature Id="GUI"
