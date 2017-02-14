@@ -453,10 +453,16 @@ void ScapSignature::run_sign(int selected_page, QString &savefilepath)
 {
     // Sets user selected file save path
     const char* citizenId;
+    
     // Creates a temporary file
     QTemporaryFile tempFile;
 
-    char *temp_save_path = strdup(tempFile.fileTemplate().toStdString().c_str());
+    if (!tempFile.open()) {
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "PDF Signature error: Error creating temporary file");
+        return;
+    }
+
+    char *temp_save_path = strdup(tempFile.fileName().toStdString().c_str());
 
     int sign_rc = 0;
 
@@ -480,11 +486,6 @@ void ScapSignature::run_sign(int selected_page, QString &savefilepath)
 
             citizenId = getSubjectSerialNumber(certs.getAuthentication().getCertData()); //card.getID().getCivilianIdNumber();
 
-
-            if(!tempFile.open()){
-                std::cerr << "PDF Signature error: Error creating temporary file" << std::endl;
-                return;
-            }
 
             std::cout << "Sent PDF Signature landscape mode: " << m_landscape_mode << std::endl;
 
