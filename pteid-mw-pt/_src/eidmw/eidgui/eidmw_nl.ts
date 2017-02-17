@@ -1216,10 +1216,24 @@ Please specify .xml, .csv or .eid</source>
 		<source>Do you want to check for updates?</source>
 		<translation>Deseja verificar se existem atualizações disponíveis?</translation>
 	</message>
-<message>
-	<source>No updates available at the moment</source>
-	<translation>Não existem atualizações de momento</translation>
-</message>
+    <message>
+        <source>Download failed: %1.</source>
+        <translation>A Transferência falhou: %1.</translation>
+    </message>
+    <message>
+        <source>Download failed. Please check your Network Connection.</source>
+        <translation>A transferência falhou. Verifique a sua ligação à internet.</translation>
+    </message>
+
+    <message>
+        <source>Checking for newer versions</source>
+        <translation>A verificar se existem versões posteriores</translation>
+    </message>
+
+    <message>
+        <source>No updates available at the moment</source>
+        <translation>Não existem atualizações de momento</translation>
+    </message>
 </context>
 <context>
     <name>dlgAbout</name>

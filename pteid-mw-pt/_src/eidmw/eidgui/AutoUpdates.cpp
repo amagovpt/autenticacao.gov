@@ -116,7 +116,7 @@ AutoUpdates::AutoUpdates(QWidget *parent)
 
 	//Before trying any request configure the proxy autoconfig
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
-	
+
 }
 
 AutoUpdates::~AutoUpdates()
@@ -125,7 +125,7 @@ AutoUpdates::~AutoUpdates()
 	delete downloadButton;
 	delete buttonBox;
 	delete statusLabel;
-	
+
 	delete topLayout;
 	delete mainLayout;
 }
@@ -182,7 +182,7 @@ void AutoUpdates::downloadFile()
 	QString fileName = fileInfo.fileName();
 	if (fileName.isEmpty())
 	{
-		QMessageBox::information(this, tr("Auto-update"),
+		QMessageBox::critical(this, tr("Auto-update"),
 				tr("Unable to download the update please check your Network Connection.")
 		.arg(fileName).arg(file->errorString()));
 	}
@@ -194,7 +194,7 @@ void AutoUpdates::downloadFile()
 
 	file = new QFile(QString::fromUtf8((tmpfile.c_str())));
 	if (!file->open(QIODevice::WriteOnly)) {
-		QMessageBox::information(this, tr("Auto-update"),
+		QMessageBox::critical(this, tr("Auto-update"),
 				tr("Unable to save the file %1: %2.")
 		.arg(fileName).arg(file->errorString()));
 		delete file;
@@ -203,7 +203,7 @@ void AutoUpdates::downloadFile()
 	}
 
 	progressDialog->setWindowTitle(tr("Auto-update"));
-	progressDialog->setLabelText(tr("Downloading %1.").arg(fileName));
+	progressDialog->setLabelText(tr("Checking for newer versions"));
 	downloadButton->setEnabled(false);
 
 	// schedule the request
@@ -232,10 +232,15 @@ void AutoUpdates::httpFinished()
 	QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
 	if (reply->error()) {
 		file->remove();
-		QMessageBox::information(this, tr("Auto-update"),
-				tr("Download failed: %1.")
-		.arg(reply->errorString()));
+		QMessageBox::critical(this, tr("Auto-update"),
+				tr("Download failed. Please check your Network Connection.") );
+
 		downloadButton->setEnabled(true);
+
+        QString strLog = QString("AutoUpdates:: Download failed: ");
+        strLog += reply->url().toString();
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", strLog.toStdString().c_str() );
+
 	} else if (!redirectionTarget.isNull()) {
 		QUrl newUrl = url.resolved(redirectionTarget.toUrl());
 		if (QMessageBox::question(this, tr("Auto-update"),
