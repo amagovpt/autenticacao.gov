@@ -73,13 +73,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
-    <IntDir>.\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
-    <IntDir>.\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
@@ -121,7 +121,7 @@
       <CompileAs>Default</CompileAs>
       <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
-      <DebugInformationFormat>None</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -239,13 +239,6 @@
       <AdditionalDependencies />
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
-    <PostBuildEvent>
-      <Command>mkdir Dist\x32
-copy $(OutDir)$(TargetName).dll Dist\x32
-copy $(OutDir)$(TargetName).lib Dist\x32
-copy Source\FreeImage.h Dist\x32
-</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
@@ -287,13 +280,6 @@ copy Source\FreeImage.h Dist\x32
       <AdditionalDependencies />
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
-    <PostBuildEvent>
-      <Command>mkdir Dist\x64
-copy $(OutDir)$(TargetName).dll Dist\x64
-copy $(OutDir)$(TargetName).lib Dist\x64
-copy Source\FreeImage.h Dist\x64
-</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\FreeImage\BitmapAccess.cpp" />
@@ -331,7 +317,7 @@ copy Source\FreeImage.h Dist\x64
     <ClCompile Include="Source\FreeImage\tmoReinhard05.cpp" />
     <ClCompile Include="Source\FreeImage\ToneMapping.cpp" />
     <ClCompile Include="Source\FreeImage\NNQuantizer.cpp" />
-    <ClCompile Include="Source\FreeImage\WuQuantizer.cpp" /> 
+    <ClCompile Include="Source\FreeImage\WuQuantizer.cpp" />
     <ClCompile Include="Source\FreeImage\CacheFile.cpp" />
     <ClCompile Include="Source\FreeImage\MultiPage.cpp" />
     <ClCompile Include="Source\FreeImage\ZLibInterface.cpp" />

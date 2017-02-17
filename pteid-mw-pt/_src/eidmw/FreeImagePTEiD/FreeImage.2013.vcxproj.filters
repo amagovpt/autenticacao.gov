@@ -131,12 +131,6 @@
     <ClCompile Include="Source\FreeImage\WuQuantizer.cpp">
       <Filter>Source Files\Quantizers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\DeprecationManager\Deprecated.cpp">
-      <Filter>Source Files\DeprecationMgr</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\DeprecationManager\DeprecationMgr.cpp">
-      <Filter>Source Files\DeprecationMgr</Filter>
-    </ClCompile>
     <ClCompile Include="Source\FreeImage\CacheFile.cpp">
       <Filter>Source Files\MultiPaging</Filter>
     </ClCompile>
@@ -165,9 +159,6 @@
       <Filter>Toolkit Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\FreeImageToolkit\Channels.cpp">
-      <Filter>Toolkit Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\FreeImageToolkit\ClassicRotate.cpp">
       <Filter>Toolkit Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\FreeImageToolkit\Colors.cpp">
