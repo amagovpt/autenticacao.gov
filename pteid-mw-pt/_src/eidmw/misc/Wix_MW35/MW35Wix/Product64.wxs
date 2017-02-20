@@ -576,6 +576,9 @@
           			<File Source="$(var.PTEID_BUILD_FOLDER_X86)libcurl.dll" KeyPath="no" />
 				</Component>
 
+        <Component Win64="no" Id="pteidmdrvsystem32" Guid="{9C571B6F-E4E0-47AF-812D-E51CFA406F67}" Permanent="no">
+          <File Id="system32_pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="yes"/>
+        </Component>
 				
 				<Component Win64="no" Id="FreeImage" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F64" SharedDllRefCount="yes">
          			 <File Source="$(var.PTEID_BUILD_FOLDER_X86)FreeImage.dll" KeyPath="yes" />
@@ -617,6 +620,10 @@
 				<Component Id="Poppler_64" Guid="{54E15AA8-F4A5-42e8-9D38-3B151223B003}">
           			<File Source="$(var.PTEID_BUILD_FOLDER_X64)pteid-poppler.dll" KeyPath="no" />
 				</Component>
+
+        <Component Id="pteidmdrvsystem64" Guid="{BA4FED31-E6E6-4D39-9D3A-3D0F2B572524}" Permanent="no">
+          <File Id="system32_pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" KeyPath="yes" DiskId="1" />
+        </Component>
 
 				<Component Id="Runtime35ThirdPartyXerces_64" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FF}" SharedDllRefCount="yes">
          			 <File Id="xercesc_3_1_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)xerces-c_3_1.dll" KeyPath="yes"/>
@@ -933,6 +940,8 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 					<Feature Id="Install_Minidriver" Level="0" Title="!(loc.Minidriver)" Description="!(loc.MinidriverDescr)">
 						<ComponentRef Id="pteidmdrv"/>
 						<ComponentRef Id="CertPropService"/>
+            <ComponentRef Id="pteidmdrvsystem32"/>
+            <ComponentRef Id="pteidmdrvsystem64"/>
 						<ComponentRef Id="REGISTERMINIDRIVER_64"/>
 						<Condition Level="1">VersionNT >= 600</Condition>
 					</Feature>
