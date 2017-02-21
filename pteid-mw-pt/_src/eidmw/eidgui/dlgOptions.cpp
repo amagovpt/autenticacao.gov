@@ -122,6 +122,7 @@ dlgOptions::~dlgOptions()
 void dlgOptions::on_chbShowPicture_toggled( bool bChecked )
 {
 	m_Settings.setShowPicture( bChecked );
+	if ( bChecked ) ui.chbAutoCardReading->setChecked( bChecked );
 }
 void dlgOptions::on_chbShowNotification_toggled( bool bChecked )
 {
