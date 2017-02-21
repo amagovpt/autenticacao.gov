@@ -164,7 +164,7 @@ namespace eIDMW
 		sig_rect.x2 = lr_margin;
 
 		if (sector < 1 || sector > MAX_SECTOR)
-			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-%d]\n",
+			MWLOG(LEV_ERROR, MOD_APL, "Illegal value for signature page sector: %u Valid values [1-%d]",
 					sector, MAX_SECTOR);
 
 		if (sector < MAX_SECTOR - 3)
@@ -189,7 +189,7 @@ namespace eIDMW
 		sig_rect.y2 += signature_height + tb_margin + vert_align;
 
 
-		fprintf(stderr, "computeSigLocationFromSectorLandscape: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
+		MWLOG(LEV_DEBUG, MOD_APL, "computeSigLocationFromSectorLandscape: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
 
 		return sig_rect;
 	}
@@ -197,8 +197,8 @@ namespace eIDMW
 
 	PDFRectangle PDFSignature::computeSigLocationFromSector(double page_height, double page_width, int sector)
 	{
-		fprintf(stderr, "computeSigLocationFromSector called with sector=%d and m_small_signature = %d\n ",
-		   sector, m_small_signature);
+		MWLOG(LEV_DEBUG, MOD_APL, "computeSigLocationFromSector called with sector=%d and m_small_signature = %d", sector, m_small_signature);
+
 		int MAX_SECTOR = m_small_signature ? 36 : 18;
 		double signature_height = m_small_signature ? sig_height / 2.0 : sig_height;
 		const double n_lines = MAX_SECTOR / 3.0;
@@ -217,7 +217,7 @@ namespace eIDMW
 		sig_rect.x2 = lr_margin;
 
 		if (sector < 1 || sector > MAX_SECTOR)
-			fprintf (stderr, "Illegal value for signature page sector: %u Valid values [1-%d]\n",
+			MWLOG(LEV_ERROR, MOD_APL, "Illegal value for signature page sector: %u Valid values [1-%d]",
 					sector, MAX_SECTOR);
 
 		if (sector < MAX_SECTOR -2)
@@ -248,7 +248,7 @@ namespace eIDMW
 		sig_rect.x2 += sig_width;
 		sig_rect.y2 += signature_height + tb_margin + vert_align;
 
-		fprintf(stderr, "computeSigLocationFromSector: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
+		MWLOG(LEV_DEBUG, MOD_APL, "computeSigLocationFromSector: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
 		return sig_rect;
 	}
 
@@ -467,14 +467,14 @@ namespace eIDMW
 			}
 
 		}
-		fprintf(stderr, "Signature rectangle before rotation (if needed) (%f, %f, %f, %f)\n", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+		MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Signature rectangle before rotation (if needed) (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
 
 		if (p->getRotate() == 90)
 		{
 			//Apply Rotation of R: R' = [-y2, x1, -y1, x2]
 			sig_location = PDFRectangle(height-sig_location.y2, sig_location.x1,
 			              height-sig_location.y1, sig_location.x2);
-			fprintf(stderr, "Rotating rectangle to (%f, %f, %f, %f)\n", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+			MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
 		}
 
 		unsigned char *to_sign;
