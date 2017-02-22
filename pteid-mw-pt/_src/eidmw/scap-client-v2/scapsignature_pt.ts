@@ -380,5 +380,9 @@ The grey sectors are already filled with other signatures.</source>
         <source>Operation canceled by user</source>
         <translation>Operação cancelada pelo utilizador</translation>
     </message>
+     <message>
+        <source>The signed PDF filename must be different from the original!</source>
+        <translation>É obrigatório escolher um nome diferente para o ficheiro PDF assinado!</translation>
+     </message>
 </context>
 </TS>

@@ -463,7 +463,6 @@ void ScapSignature::run_sign(int selected_page, QString &savefilepath)
     }
 
     char *temp_save_path = strdup(tempFile.fileName().toStdString().c_str());
-
     int sign_rc = 0;
 
     try{
@@ -759,6 +758,13 @@ void ScapSignature::on_button_sign_clicked()
     if (savefilepath.isNull() || savefilepath.isEmpty())
         return;
 
+    //Avoid overwriting the original PDF, it doesn't work currently in Windows
+    if (savefilepath == current_input_path)
+    {
+        ShowErrorMsgBox(tr("The signed PDF filename must be different from the original!"));
+        return;
+    }
+
     //Single File Signature case
     pdialog = new QProgressDialog();
     pdialog->setWindowIcon(QIcon(":/appicon/Images/pteid.ico"));
@@ -792,6 +798,7 @@ void ScapSignature::on_button_sign_clicked()
         ShowErrorMsgBox(tr("Signature(s) successfully generated but ")+ sig_detail);
 
     } else if ( this->success == CANCELED_BY_USER ){
+        QFile::remove(savefilepath);
         std::cout << "Operation canceled by user - No PDF Signature generated" << std::endl;
         ShowErrorMsgBox(tr("Operation canceled by user"));
 
