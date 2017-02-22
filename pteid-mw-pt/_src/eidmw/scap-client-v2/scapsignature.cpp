@@ -116,7 +116,7 @@ ScapSignature::ScapSignature(QWidget* parent)
     connect(this, SIGNAL(loadedProfessionalAttributes()), this, SLOT(loadProfessionalAttributes()));
 }
 
-void ScapSignature::initReaderAndCard() 
+void ScapSignature::initReaderAndCard()
 {
     eIDMW::PTEID_InitSDK();
 
@@ -453,7 +453,7 @@ void ScapSignature::run_sign(int selected_page, QString &savefilepath)
 {
     // Sets user selected file save path
     const char* citizenId;
-    
+
     // Creates a temporary file
     QTemporaryFile tempFile;
 
@@ -509,12 +509,18 @@ void ScapSignature::run_sign(int selected_page, QString &savefilepath)
 
             if (sign_rc == 0)
             {
-                this->success = SIG_SUCCESS;
+                this->success = SIG_ERROR;
                 bool successfull = PDFSignatureClient::signPDF(m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
                     QString(citizenId), ltv.toInt(), PDFSignatureInfo(selected_page, sig_coord_x, sig_coord_y, m_landscape_mode), m_selected_attributesType);
-                if(!successfull)
-                    this->success = SIG_ERROR;
 
+                if( successfull ){
+                    if ( this->FutureWatcher.future().isCanceled() ){
+                        QFile::remove(savefilepath);
+                        this->success = CANCELED_BY_USER;
+                    } else{
+                        this->success = SIG_SUCCESS;
+                    }
+                }
             }
             else
                 this->success = TS_WARNING;
@@ -761,30 +767,35 @@ void ScapSignature::on_button_sign_clicked()
     pdialog->setLabelText(tr("Signing PDF file..."));
     pdialog->setMinimum(0);
     pdialog->setMaximum(0);
-    connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
 
-    QFuture<void> future = QtConcurrent::run(this,
-            &ScapSignature::run_sign, selected_page, savefilepath);
+    connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(reset()));
+    connect(pdialog, SIGNAL(canceled()), &this->FutureWatcher, SLOT(cancel()));
 
-    this->FutureWatcher.setFuture(future);
+    // Start the computation.
+    this->FutureWatcher.setFuture( QtConcurrent::run(this
+                                            , &ScapSignature::run_sign
+                                            , selected_page, savefilepath) );
+
+    // Display the dialog
     pdialog->exec();
 
+    this->FutureWatcher.waitForFinished();
 
-    if (this->success == SIG_SUCCESS)
-    {
+    if ( this->success == SIG_SUCCESS ){
         std::cout << "PDF Signature completed successfully." << std::endl;
         ShowSuccessMsgBox();
-    }
-    else if (this->success == TS_WARNING)
-    {
-        std::cout << "PDF Signature finished with timestamp errors." << std::endl;
 
+    } else if ( this->success == TS_WARNING ){
+        std::cout << "PDF Signature finished with timestamp errors." << std::endl;
         QString sig_detail = model->rowCount() > 1 ?  tr("some of the timestamps could not be applied") :
                 tr("the timestamp could not be applied");
         ShowErrorMsgBox(tr("Signature(s) successfully generated but ")+ sig_detail);
-    }
-    else
-    {
+
+    } else if ( this->success == CANCELED_BY_USER ){
+        std::cout << "Operation canceled by user - No PDF Signature generated" << std::endl;
+        ShowErrorMsgBox(tr("Operation canceled by user"));
+
+    } else {
         std::cout << "PDF Signature finished with errors." << std::endl;
         ShowErrorMsgBox(tr("Error Generating Signature"));
     }
@@ -1215,7 +1226,7 @@ void ScapSignature::on_pushButton_freeselect_clicked()
         ui->pushButton_freeselect->setText(tr("Free Selection"));
         if (my_rectangle)
             my_rectangle->hide();
-       
+
     }
     else
     {
@@ -1493,7 +1504,7 @@ ProxyInfo::ProxyInfo()
 
 	if (!proxy_host.empty() && proxy_port != 0)
 	{
-		
+
 		m_proxy_host = QString::fromStdString(proxy_host);
 		m_proxy_port = QString::number(proxy_port);
 
@@ -1572,7 +1583,7 @@ const char * as_endpoint = "/DSS/ASService";
 
 void ScapSignature::getAttributeSuppliers()
 {
-	
+
 	soap * sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
 	//TODO: this disables server certificate verification !!
 	soap_ssl_client_context(sp, SOAP_SSL_NO_AUTHENTICATION, NULL, NULL, NULL, NULL, NULL);
@@ -1581,7 +1592,7 @@ void ScapSignature::getAttributeSuppliers()
 	ScapSettings settings;
 	std::string port = settings.getScapServerPort().toStdString();
 	std::string sup_endpoint = std::string("https://") + settings.getScapServerHost().toStdString() + ":" + port + as_endpoint;
-    
+
     //Define appropriate network timeouts
     sp->recv_timeout = 20;
     sp->send_timeout = 20;
@@ -1597,7 +1608,7 @@ void ScapSignature::getAttributeSuppliers()
 		{
 			sp->proxy_host = proxy_host.c_str();
 			sp->proxy_port = proxy_port;
-			
+
 			eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Using System Proxy: host=%s, port=%ld", sp->proxy_host, sp->proxy_port);
 		}
 	}
@@ -1627,7 +1638,7 @@ void ScapSignature::getAttributeSuppliers()
     if (ret != SOAP_OK)
     {
         eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Error in getAttributeSuppliers: %d", ret);
-        
+
         if (suppliers_proxy.soap->fault != NULL)
             eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SOAP Fault detail: %s", suppliers_proxy.soap->fault->detail);
     }

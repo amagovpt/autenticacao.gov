@@ -376,5 +376,9 @@ The grey sectors are already filled with other signatures.</source>
         <source>Unsupported or damaged PDF file: </source>
         <translation>Ficheiro PDF não suportado ou danificado: </translation>
     </message>
+    <message>
+        <source>Operation canceled by user</source>
+        <translation>Operação cancelada pelo utilizador</translation>
+    </message>
 </context>
 </TS>
