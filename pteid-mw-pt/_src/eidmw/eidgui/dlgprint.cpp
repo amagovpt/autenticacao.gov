@@ -660,7 +660,7 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, QString filepath)
 			bool ret = QFile::remove(QString(filepath));
 			if (!ret)
 			{
-				PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Failed to delete partial PDF file: %s", filepath);
+				PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Failed to delete partial PDF file: %s", filepath.toStdString().c_str());
 			}
 			return false;
 		}
