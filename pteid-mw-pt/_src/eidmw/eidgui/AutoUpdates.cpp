@@ -27,6 +27,9 @@
 #include <QDialogButtonBox>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QRegExp>
+#include <QDebug>
+#include <QFile>
 #include <QLabel>
 
 #include <fstream>
@@ -354,12 +357,9 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	if (compareVersions(local_version, remote_version) > 0)
 	{
 		this->close();
-#ifdef WIN32
-		distrover = VerifyOS("distro", false);
-#else
-		distrover = VerifyOS("distro", true);
-#endif
-        archver = VerifyOS("arch", false);
+
+		distrover = VerifyOS("distro");
+        archver = VerifyOS("arch");
         ChooseVersion(distrover, archver);
         return true;
 	}
@@ -379,63 +379,55 @@ bool AutoUpdates::FileExists(const char *filename)
 	return ifile.is_open();
 }
 
-std::string AutoUpdates::VerifyOS(std::string param, bool runscript)
+
+std::string AutoUpdates::VerifyOS(std::string param)
 {
 	std::string distrostr;
 	std::string archstr;
-#ifdef WIN32
-	//check if it's Windows 32 or 64 bits
-	distrostr = "windows";
-
-	if( QSysInfo::WordSize == 64 )
-		archstr = "x86_64";
-	else
-		archstr = "i386";
-
-#elif __APPLE__
-    //check if it's OSX 32 or 64 bits
-    distrostr = "osx";
+	QRegExp rx;
+	QStringList list;
+	QString content;
 
     if( QSysInfo::WordSize == 64 )
         archstr = "x86_64";
     else
         archstr = "i386";
+
+#ifdef WIN32
+	distrostr = "windows";
+	
+#elif __APPLE__
+    distrostr = "osx";
 #else
 
-	if (runscript)
+    QFile osFile("/etc/os-release");
+	if (!osFile.exists())
 	{
-		int sysret;
-		sysret = system("/usr/local/bin/pteidlinuxversion.pl");
-		if (sysret != 0)
-			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Problem trying to run pteidlinuxversion.pl");
+		qDebug() << "Not Linux or too old distro!";
+		distrostr = "unsupported";
+		goto done; 
 	}
 
-	try
+	if (!osFile.open(QFile::ReadOnly | QFile::Text))
+		goto done; 
+
+	rx = QRegExp("NAME=\"(.*)\"");
+	content = osFile.readAll();
+
+	rx.setMinimal(true);
+
+	rx.indexIn(content);
+
+	list = rx.capturedTexts();
+
+	if (list.size() > 1)
 	{
-		if (FileExists("/tmp/linuxversion"))
-		{
-			std::ifstream linuxversion("/tmp/linuxversion");
-			std::string line;
-
-			while(std::getline(linuxversion, line))
-			{
-				std::stringstream   linestream(line);
-				std::string         value;
-
-				getline(linestream,value, ';');
-				std::istringstream distro(value);
-				distro >> distrostr;
-
-				getline(linestream, value, ';');
-				std::istringstream arch(value);
-				arch >> archstr;
-			}
-		}
-	} catch (...) {
-		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "can't open file /tmp/linuxversion");
+		distrostr = list.at(1).toStdString();
 	}
-
+	
 #endif
+
+done:
 	if (param == "distro")
 		return distrostr;
 	else
@@ -489,7 +481,7 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 	  	msgBoxp.exec();
 	}
 
-    //Name of the deb/rpm the rest of the appends will be distro specific
+    //Name of the deb/rpm will be distro specific
 
 	if (arch == "x86_64")
 	{
