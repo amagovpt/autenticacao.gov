@@ -287,7 +287,8 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
 	exit(0);
 
 #elif __APPLE__
-
+    // This doesn't actually start the package installation it just mounts the dmg
+    // and then the user has to install the .pkg and copy the pteidgui.app
 	execl("/usr/bin/hdiutil", "hdiutil", "attach", pkgpath.c_str(), NULL);
 
 #else

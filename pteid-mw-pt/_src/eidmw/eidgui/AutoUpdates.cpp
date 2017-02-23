@@ -59,8 +59,7 @@ std::string remoteversion = "https://svn.gov.pt/projects/ccidadao/repository/mid
 
 std::string WINDOWS32 = "PteidMW-Basic.msi";
 std::string WINDOWS64 = "PteidMW-Basic-x64.msi";
-std::string OSX32 = "pteidgui.dmg";
-std::string OSX64 = "pteidgui.dmg";
+std::string MAC_OS = "pteidgui.dmg";
 std::string DEBIAN32 = "pteid-mw_debian_i386.deb";
 std::string DEBIAN64 = "pteid-mw_debian_amd64.deb";
 std::string UBUNTU32 = "pteid-mw_ubuntu_i386.deb";
@@ -74,9 +73,9 @@ std::string MANDRIVA64 = "pteid-mw-mandriva.x86_64.rpm";
 
 struct PteidVersion
 {
-int major;
-int minor;
-int release;
+	int major;
+	int minor;
+	int release;
 };
 
 
@@ -460,18 +459,11 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		httpWin.exec();
 	}
 #elif __APPLE__
-    	if (arch == "i386")
-    	{
-            downloadurl.append(OSX32);
-        	HttpWindow httpWin(downloadurl, distro);
-        	httpWin.show();
-        	httpWin.exec();
-    	} else {
-            downloadurl.append(OSX64);
-        	HttpWindow httpWin(downloadurl, distro);
-        	httpWin.show();
-        	httpWin.exec();
-    	}
+    	
+    downloadurl.append(MAC_OS);
+    HttpWindow httpWin(downloadurl, distro);
+    httpWin.show();
+    httpWin.exec();
 #else
 
 	if (distro == "unsupported")
