@@ -32,11 +32,13 @@ unix:LIBS += -l$${DLGLIB}
 !macx:LIBS += -lpcsclite
 
 INCLUDEPATH += . ../common 
+INCLUDEPATH += cardpluginPteid
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 
 QMAKE_CXXFLAGS += -O2
 
 DEFINES += EIDMW_CAL_EXPORT \
+           VERBOSE \
            CARDPLUGIN_IN_CAL CAL_PTEID
 unix:!macx:  DEFINES += __UNIX__
 #macx:  DEFINES += __OLD_PCSC_API__
@@ -68,6 +70,7 @@ HEADERS += \
            pinpad2.h \
 	   GempcPinpad.h \
 	   ACR83Pinpad.h \
+	   cardpluginPteid/PteidCard.h \
            CardReaderInfo.h
 
 SOURCES += \
@@ -89,20 +92,6 @@ SOURCES += \
            ThreadPool.cpp \
 	   GempcPinpad.cpp \
 	   ACR83Pinpad.cpp \
+	   cardpluginPteid/PteidCard.cpp \
            UnknownCard.cpp
 
-
-##
-## Headers and sources specific to a country
-##
-
-## do not define a conditional block with contains(PKG_NAME,pteid)
-## otherwise the script which prepares the tarball will not
-## be able to parse the project file correctly!
-contains(PKG_NAME,pteid): HEADERS += cardpluginPteid/PteidCard.h \
-          			cardpluginPteid/PteidP15Correction.h
-
-contains(PKG_NAME,pteid): SOURCES +=  cardpluginPteid/PteidCard.cpp \
-        	   		cardpluginPteid/PteidP15Correction.cpp 
-
-contains(PKG_NAME,pteid): INCLUDEPATH += cardpluginPteid

@@ -19,7 +19,7 @@
 **************************************************************************** */
 /**
  * Subclasses of this class implement functionality for a specific
- * type of card (e.g. BE eID, PT eID, SIS, ...)
+ * type of card (e.g. PT eID V1, V2,...) 
  * This subclasses can either part of the CAL or be separate libraries
  * ('plugins'), see CardFactory.cpp for more info.
  */
@@ -115,10 +115,7 @@ public:
 
     virtual void setPinpadHandler(GenericPinpad * pinpad)
     {
-/* For SCAP we need a version of cardlayer which performs insecure VERIFY Pins with pinpad readers  */
-#ifndef PTEID_SCAP
 	m_poPinpad = pinpad;
-#endif
 
     }
 
