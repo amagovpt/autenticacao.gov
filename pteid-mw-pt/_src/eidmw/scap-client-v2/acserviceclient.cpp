@@ -89,7 +89,10 @@ std::vector<ACService::ns2__AttributesType *> ACServiceClient::reqAttributeSuppl
             eIDMW::PTEID_ScapConnection scap(scapAddr, scapPort);
             char * scapResult = scap.postSoapRequest(c_endpoint, c_soapAction, soapBody);
 
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "ACService returned: %S", scapResult);    
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR
+                            , "ScapSignature"
+                            , "ACService returned: %s"
+                            , ( scapResult ? scapResult : "Null SCAP result" ) );
 
             // Remove request answer headers
             std::string replyString = scapResult;
@@ -265,7 +268,6 @@ std::vector<ACService::ns2__AttributesType *> ACServiceClient::loadAttributesFro
                 return attributesType;
             }
             attributesType = attr_response.AttributeResponseValues;
-            
         }
     }
     catch(...){

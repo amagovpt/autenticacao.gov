@@ -514,7 +514,6 @@ void ScapSignature::run_sign(int selected_page, QString &savefilepath)
 
                 if( successfull ){
                     if ( this->FutureWatcher.future().isCanceled() ){
-                        QFile::remove(savefilepath);
                         this->success = CANCELED_BY_USER;
                     } else{
                         this->success = SIG_SUCCESS;
@@ -801,6 +800,10 @@ void ScapSignature::on_button_sign_clicked()
         QFile::remove(savefilepath);
         std::cout << "Operation canceled by user - No PDF Signature generated" << std::endl;
         ShowErrorMsgBox(tr("Operation canceled by user"));
+
+        eIDMW::PTEID_LOG( eIDMW::PTEID_LOG_LEVEL_ERROR
+                        , "ScapSignature"
+                        , "Operation canceled by user - No PDF Signature generated");
 
     } else {
         std::cout << "PDF Signature finished with errors." << std::endl;
@@ -1642,13 +1645,22 @@ void ScapSignature::getAttributeSuppliers()
     std::cout << "Attributes Supplier endpoint: " << sup_endpoint << std::endl;
 
     int ret = suppliers_proxy.AttributeSuppliers(suppliers_resp);
-    if (ret != SOAP_OK)
-    {
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Error in getAttributeSuppliers: %d", ret);
+    if (ret != SOAP_OK){
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR
+                        , "ScapSignature"
+                        , "Error in getAttributeSuppliers: %d, suppliers end point: %s, host: %s, port: %s"
+                        , ret
+                        , c_sup_endpoint
+                        , settings.getScapServerHost().toStdString().c_str()
+                        , settings.getScapServerPort().toStdString().c_str() );
 
-        if (suppliers_proxy.soap->fault != NULL)
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SOAP Fault detail: %s", suppliers_proxy.soap->fault->detail);
-    }
+        if ( ( suppliers_proxy.soap->fault != NULL )
+            && ( suppliers_proxy.soap->fault->faultstring != NULL ) ){
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR
+                            , "ScapSignature", "SOAP Fault: %s"
+                            , suppliers_proxy.soap->fault->faultstring );
+        }/* if ( ( suppliers_proxy.soap->fault != NULL ) && ( ... ) ) */
+    }/* if (ret != SOAP_OK) */
     m_suppliersList = suppliers_resp.AttributeSupplier;
 }
 
