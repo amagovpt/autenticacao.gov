@@ -368,7 +368,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			certdatastatus = 1;
 			persodatastatus = 1;
 
-			m_CI_Data.Reset();
+                        /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
 
 			/* Allow new card data reading */
 			m_mutex_ReadCard.unlock();
@@ -2043,6 +2043,8 @@ void MainWnd::getReaderIndexes( unsigned long *p_Selected, unsigned long *p_Coun
 //*****************************************************
 void MainWnd::loadCardData( void )
 {
+    if( m_CI_Data.isDataLoaded() ) return;
+
 	/* Fix more than 1 loadCardData reading */
 	if ( !m_mutex_ReadCard.tryLock () ) return;
 
@@ -2153,7 +2155,7 @@ void MainWnd::loadCardData( void )
 	{
 		QString msg(tr("Card changed"));
 		ShowPTEIDError( msg );
-		m_CI_Data.Reset();
+                /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
 
 		/* Allow new card data reading */
 		m_mutex_ReadCard.unlock();
@@ -2288,7 +2290,7 @@ void MainWnd::loadCardDataAddress( void )
 	{
 		QString msg(tr("Card changed"));
 		ShowPTEIDError( msg );
-		m_CI_Data.Reset();
+                /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
 		loadCardData();
 	}
 	catch (PTEID_ExReaderSetChanged e)
@@ -2427,7 +2429,7 @@ bool MainWnd::loadCardDataPersoData( void )
 	{
 		QString msg(tr("Card changed"));
 		ShowPTEIDError( msg );
-        m_CI_Data.Reset();
+                /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
 		loadCardData();
 	}
 	catch (PTEID_ExReaderSetChanged e)
@@ -2581,7 +2583,7 @@ void MainWnd::loadCardDataCertificates( void )
 	{
 		QString msg(tr("Card changed"));
 		ShowPTEIDError( msg );
-		m_CI_Data.Reset();
+                /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
 		loadCardData();
 	}
 	catch (PTEID_ExReaderSetChanged e)
@@ -3654,7 +3656,7 @@ bool MainWnd::refreshTabAddress( void )
 
 			//Nasty hack...
 			m_ui.txtAddress_StreetName->setGeometry(geometry.x(), geometry.y()+streetName_offset, 448, geometry.height()-2);
-			
+
 		}
 
 		m_ui.txtAddress_StreetName->setText( QString::fromUtf8(AddressFields[FOREIGN_ADDRESS].toStdString().c_str()) );
@@ -4357,7 +4359,9 @@ void MainWnd::customEvent( QEvent* pEvent )
 								pEvent->accept();
 								return;
 							}
-							m_CI_Data.Reset();
+
+                                                        /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
+
 
 							/* Allow new card data reading */
 							m_mutex_ReadCard.unlock();
