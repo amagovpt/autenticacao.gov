@@ -227,6 +227,10 @@ std::wstring GetStringInt(
         dwValDatLen -= 2;
 
     RegCloseKey(hRegKey);
+
+	//Correctly handle empty strings, RegQueryValueEx() returns empty strings as having len=2 for 2 terminating NULL-bytes
+	if (abValueDat[0] == 0)
+		dwValDatLen = 0;
     const std::wstring wsResult((const wchar_t*)abValueDat, (size_t) (dwValDatLen/2));  //convert byte to double byte
     if(bExpand)
         return( ExpandSection(wsResult) );
