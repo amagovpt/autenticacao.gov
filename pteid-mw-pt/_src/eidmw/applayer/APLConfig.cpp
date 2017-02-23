@@ -402,15 +402,44 @@ void getProxySystemWide(const wchar_t *host_default, long port_default, const wc
 			
 			if (proxyConfig.lpszAutoConfigUrl != NULL)
 			{
+				MWLOG(LEV_DEBUG, MOD_APL, "Getting PAC URL (manual configuration)");
 				lpszPacUrl = proxyConfig.lpszAutoConfigUrl;
 			}
 			else if (proxyConfig.fAutoDetect)
 			{
+				MWLOG(LEV_DEBUG, MOD_APL, "Getting PAC URL from WinHttpDetectAutoProxyConfigUrl()");
 				//If autodetect is checked, we try to get the pacfile with WinHttpDetectAutoProxyConfigUrl
-				if(WinHttpDetectAutoProxyConfigUrl(WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A, &lpszAutoDetectUrl))
+				if(WinHttpDetectAutoProxyConfigUrl(WINHTTP_AUTO_DETECT_TYPE_DHCP, &lpszAutoDetectUrl))
 				{
+					
 					if (lpszAutoDetectUrl != NULL)
-						lpszPacUrl=lpszAutoDetectUrl;
+					{
+						lpszPacUrl = lpszAutoDetectUrl;
+						MWLOG(LEV_DEBUG, MOD_APL, L"PAC URL obtained via DHCP: %s", lpszAutoDetectUrl);
+					}
+				}
+				else
+				{
+					unsigned long WinHttpErr = GetLastError();
+
+					MWLOG(LEV_ERROR, MOD_APL, "Failed to retrieve proxy PAC URL (DHCP). WinHttpDetectAutoProxyConfigUrl Error=%d", WinHttpErr);
+				}
+				lpszAutoDetectUrl = NULL;
+
+				if (WinHttpDetectAutoProxyConfigUrl(WINHTTP_AUTO_DETECT_TYPE_DNS_A, &lpszAutoDetectUrl))
+				{
+
+					if (lpszAutoDetectUrl != NULL)
+					{
+						lpszPacUrl = lpszAutoDetectUrl;
+						MWLOG(LEV_DEBUG, MOD_APL, L"PAC URL obtained via DNS: %s", lpszAutoDetectUrl);
+					}
+				}
+				else
+				{
+					unsigned long WinHttpErr = GetLastError();
+
+					MWLOG(LEV_ERROR, MOD_APL, "Failed to retrieve proxy PAC URL (DNS). WinHttpDetectAutoProxyConfigUrl Error=%d", WinHttpErr);
 				}
 			}
 

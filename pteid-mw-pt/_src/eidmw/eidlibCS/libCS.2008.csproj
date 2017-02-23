@@ -1,4 +1,5 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -11,7 +12,7 @@
     <AssemblyName>pteidlibCS</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
+    <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <StartupObject>
@@ -107,9 +108,6 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Crypto.cs">
       <Link>GeneratedFiles\PTEID_Crypto.cs</Link>
     </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_DocumentType.cs">
-      <Link>GeneratedFiles\PTEID_DocumentType.cs</Link>
-    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_EId.cs">
       <Link>GeneratedFiles\PTEID_EId.cs</Link>
     </Compile>
@@ -158,9 +156,6 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExNoReader.cs">
       <Link>GeneratedFiles\PTEID_ExNoReader.cs</Link>
     </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExNotAllowByUser.cs">
-      <Link>GeneratedFiles\PTEID_ExNotAllowByUser.cs</Link>
-    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExParamRange.cs">
       <Link>GeneratedFiles\PTEID_ExParamRange.cs</Link>
     </Compile>
@@ -175,9 +170,6 @@
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExUnknown.cs">
       <Link>GeneratedFiles\PTEID_ExUnknown.cs</Link>
-    </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExUserMustAnswer.cs">
-      <Link>GeneratedFiles\PTEID_ExUserMustAnswer.cs</Link>
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_FileType.cs">
       <Link>GeneratedFiles\PTEID_FileType.cs</Link>
@@ -224,12 +216,6 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_PublicKey.cs">
       <Link>GeneratedFiles\PTEID_PublicKey.cs</Link>
     </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_RawDataType.cs">
-      <Link>GeneratedFiles\PTEID_RawDataType.cs</Link>
-    </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_RawData_Eid.cs">
-      <Link>GeneratedFiles\PTEID_RawData_Eid.cs</Link>
-    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ReaderContext.cs">
       <Link>GeneratedFiles\PTEID_ReaderContext.cs</Link>
     </Compile>
@@ -247,12 +233,6 @@
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_TokenInfo.cs">
       <Link>GeneratedFiles\PTEID_TokenInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ValidationLevel.cs">
-      <Link>GeneratedFiles\PTEID_ValidationLevel.cs</Link>
-    </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ValidationProcess.cs">
-      <Link>GeneratedFiles\PTEID_ValidationProcess.cs</Link>
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_XMLDoc.cs">
       <Link>GeneratedFiles\PTEID_XMLDoc.cs</Link>
