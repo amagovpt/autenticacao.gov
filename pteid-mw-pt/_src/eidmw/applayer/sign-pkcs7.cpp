@@ -403,7 +403,6 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 
 	if (signer_info == NULL) goto err;
 
-	/* we may want to add more */
 	PKCS7_add_certificate(p7,x509);
 
 	//Add Signature CA Cert
@@ -411,7 +410,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 
 	add_certificate(p7, certData2);
 
-	//CartaodeCidadao Root CA certificates as of July 2015 (https://pki.cartaodecidadao.pt/publico/certificado/cc_ec_cidadao/)
+	//Cartao de Cidadao Root CA certificates as of July 2015 (https://pki.cartaodecidadao.pt/publico/certificado/cc_ec_cidadao/)
 	cc01 = CByteArray(PTEID_CERTS[22].cert_data, PTEID_CERTS[22].cert_len);
 	cc02 = CByteArray(PTEID_CERTS[23].cert_data, PTEID_CERTS[23].cert_len);
 	cc03 = CByteArray(PTEID_CERTS[24].cert_data, PTEID_CERTS[24].cert_len);
@@ -467,7 +466,8 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	{
 		TSAClient tsp;
 		unsigned char *digest_tp = (unsigned char *)malloc(SHA256_LEN);
-		//Compute SHA-1 of the signed digest
+
+		//Compute SHA-256 of the signed digest
 		SHA256_Wrapper(signature.GetBytes(), signature.Size(), digest_tp);
 
 		tsp.timestamp_data(digest_tp, SHA256_LEN);
