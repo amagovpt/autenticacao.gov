@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-//#include <unistd.h>
 
 #include <fstream>
 #include <iostream>
@@ -56,31 +55,10 @@ char * BinaryToHexString(unsigned char * argbuf, unsigned int len)
 }
 
 
-CByteArray PteidSign(APL_Card *card, CByteArray &to_sign, bool use_sha256)
+CByteArray PteidSign(APL_Card *card, CByteArray &to_sign)
 {
-	CByteArray output;
-
-	unsigned char sha1OID[] = {
-		0x30, 0x21, 0x30, 0x09, 0x06, 0x05, 0x2B, 0x0E,
-		0x03, 0x02, 0x1A, 0x05, 0x00, 0x04, 0x14
-	};
-
-	unsigned char sha256OID[] = {
-	       	0x30, 0x31, 0x30, 0x0d, 0x06, 0x09,
-		0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01,
-		0x05, 0x00, 0x04, 0x20 };
-
-
-	//Add PKCS1-v1_5 padding (according to http://tools.ietf.org/html/rfc3447#section-9.2)
-	CByteArray to_sign_padded;
-	if (use_sha256)
-		to_sign_padded.Append(sha256OID, sizeof(sha256OID));
-	else
-		to_sign_padded.Append(sha1OID, sizeof(sha1OID));
-
-	to_sign_padded.Append(to_sign);
-
-	output = card->Sign(to_sign_padded, true);
+	//True for the signatureKey and SHA-256 params
+	CByteArray output = card->Sign(to_sign, true, true);
 
 	return output;
 }
@@ -170,7 +148,7 @@ unsigned int SHA256_Wrapper(unsigned char *data, unsigned long data_len, unsigne
 	//Calculate the hash from the data
 	EVP_DigestInit(&cmd_ctx, EVP_sha256());
 	EVP_DigestUpdate(&cmd_ctx, data, data_len);
-        EVP_DigestFinal(&cmd_ctx, digest, &md_len);
+    EVP_DigestFinal(&cmd_ctx, digest, &md_len);
 
 	return md_len;
 
@@ -248,7 +226,7 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 
 		if (!PKCS7_type_is_signed(token))
 		{
-			MWLOG(LEV_ERROR, MOD_APL, L"Error in timestamp token: not signed!\n");
+			MWLOG(LEV_ERROR, MOD_APL, L"Error in timestamp token: not signed!");
 			return 1;
 		}
 
@@ -272,16 +250,6 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 }
 
 
-
-/*
-typedef struct ESS_issuer_serial
-	{
-	STACK_OF(GENERAL_NAME)	*issuer;
-	ASN1_INTEGER		*serial;
-	} ESS_ISSUER_SERIAL;
-}
-
-*/
 void add_signingCertificate(PKCS7_SIGNER_INFO *si, X509 *x509, unsigned char * cert_data, unsigned long cert_len)
 {
 	ASN1_STRING *seq = NULL;
@@ -395,13 +363,10 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	unsigned int len = 0;
 	APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
 
-
-	/* Use stronger SHA-256 Hash with IAS 1.01 applet, SHA-1 otherwise */
-	bool use_sha256 = card->getType() == APL_CARDTYPE_PTEID_IAS101;
-	int hash_size = use_sha256 ?  SHA256_LEN : SHA1_LEN;
+	int hash_size = SHA256_LEN;
 
 	//Function pointer to the correct hash function
-	HashFunc my_hash = use_sha256 ? &SHA256_Wrapper : &SHA1_Wrapper;
+	HashFunc my_hash = &SHA256_Wrapper;
 
 
 	unsigned char *out = (unsigned char *)malloc(hash_size);
@@ -434,8 +399,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	if (!PKCS7_content_new(p7, NID_pkcs7_data))
 		goto err;
 
-	signer_info = PKCS7_add_signature(p7, x509, X509_get_pubkey(x509),
-		use_sha256 ? EVP_sha256(): EVP_sha1());
+	signer_info = PKCS7_add_signature(p7, x509, X509_get_pubkey(x509), EVP_sha256());
 
 	if (signer_info == NULL) goto err;
 
@@ -489,7 +453,7 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	my_hash((unsigned char *)attr_buf, auth_attr_len, attr_digest);
 	attr_hash = CByteArray((const unsigned char *)attr_digest, hash_size);
 
-	signature = PteidSign(card, attr_hash, use_sha256);
+	signature = PteidSign(card, attr_hash);
 
 	if (signature.Size() == 0)
 		goto err;
@@ -502,11 +466,11 @@ int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_l
 	if (timestamp)
 	{
 		TSAClient tsp;
-		unsigned char *digest_tp = (unsigned char *)malloc(SHA1_LEN);
+		unsigned char *digest_tp = (unsigned char *)malloc(SHA256_LEN);
 		//Compute SHA-1 of the signed digest
-		SHA1_Wrapper(signature.GetBytes(), signature.Size(), digest_tp);
+		SHA256_Wrapper(signature.GetBytes(), signature.Size(), digest_tp);
 
-		tsp.timestamp_data(digest_tp, SHA1_LEN);
+		tsp.timestamp_data(digest_tp, SHA256_LEN);
 		tsresp = tsp.getResponse();
 
 		if (tsresp.Size() == 0)
