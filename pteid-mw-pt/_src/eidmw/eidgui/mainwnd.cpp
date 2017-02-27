@@ -824,8 +824,6 @@ void MainWnd::on_btn_menu_language_clicked()
 		setLanguageEn();
 	else
 		setLanguageNl();
-
-    refreshTabPinCodes(); /*llemos*/
 }
 
 void MainWnd::on_btn_menu_help_clicked()
@@ -4452,6 +4450,13 @@ void MainWnd::changeEvent(QEvent *event)
 		{
 			refreshTabCardPin();
 			refreshTabIdentityExtra();
+			refreshTabPinCodes(); /*moved from on_btn_menu_language_clicked() */
+
+			/* Refresh current certificate data */
+			if ( m_ui.treeCert->currentItem() ){
+				syncTreeItemWithSideinfo(
+						dynamic_cast<QTreeCertItem *>(m_ui.treeCert->currentItem()) );
+			}/* if ( m_ui.treeCert->currentItem() ) */
 		}
 		catch (PTEID_ExNoCardPresent& e)
 		{
