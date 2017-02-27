@@ -71,7 +71,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 #endif
 
 bool DlgGetKeyPad()
-{	
+{
 	if(g_UseKeyPad==-1)
 	{
 		g_UseKeyPad = (CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_VIRTUALKBD)?1:0);
@@ -79,6 +79,7 @@ bool DlgGetKeyPad()
     return (g_UseKeyPad==0 ? false: true);
 }
 
+#if 0
 std::wstring translatePinName(std::wstring &PinName)
 {
 	if(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE)
@@ -93,13 +94,57 @@ std::wstring translatePinName(std::wstring &PinName)
 	}
 
 	return PinName;
-
 }
+#endif
+
+QString getPinName( DlgPinUsage usage, const wchar_t *inPinName ){
+    std::wstring PinName;
+
+    switch( usage ){
+        case DLG_PIN_AUTH:
+            PinName = GETSTRING_DLG(AuthenticationPin);
+            break;
+
+        case DLG_PIN_SIGN:
+            PinName = GETSTRING_DLG(SignaturePin);
+            break;
+
+        case DLG_PIN_ADDRESS:
+            PinName = GETSTRING_DLG(AddressPin);
+            break;
+
+        DLG_PIN_UNKNOWN:
+            if ( inPinName == NULL ){
+                PinName = GETSTRING_DLG(UnknownPin);
+            }else{
+                if( wcslen( inPinName ) == 0 ){
+                    PinName = GETSTRING_DLG(UnknownPin);
+                } else{
+                    PinName = inPinName;
+                }/* if( wcslen( inPinName ) == 0 ) */
+            }/* if ( inPinName == NULL ) */
+            break;
+
+        default:
+            if ( inPinName == NULL ){
+                PinName = GETSTRING_DLG(UnknownPin);
+            }else{
+                 if( wcslen( inPinName ) == 0 ){
+                    PinName = GETSTRING_DLG(Pin);
+                } else {
+                    PinName = inPinName;
+                }/* if( wcslen( inPinName ) == 0 ) */
+            }/* if ( inPinName == NULL ) */
+            break;
+    }/* switch( usage ) */
+
+    return PinName;
+}/* getPinName() */
 
 	/************************
 	*       DIALOGS
 	************************/
-//TODO: Add Keypad possibility in DlgAskPin(s)     
+//TODO: Add Keypad possibility in DlgAskPin(s)
 DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			DlgPinUsage usage, const wchar_t *csPinName,
 			DlgPinInfo pinInfo, wchar_t *csPin, unsigned long ulPinBufferLen, void *wndGeometry)
@@ -114,7 +159,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 	try
 	{
 		std::wstring PINName;
-
+#if 0
 		/*if(wcscmp(L"nl",lang1.c_str())==0)
 		{ */
 			if (usage == DLG_PIN_AUTH)
@@ -126,6 +171,9 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 		/*}
 		else
 			PINName = GETSTRING_DLG(Pin); */
+#else
+        PINName = getPinName( usage, csPinName );
+#endif
 
 		std::wstring sMessage;
 		switch( operation )
@@ -134,7 +182,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			switch( usage )
 			{
 			case DLG_PIN_AUTH:
-			
+
 				sMessage += L"\n\n";
 				sMessage += GETSTRING_DLG(PleaseEnterYourPin);
 				sMessage += L", ";
@@ -142,12 +190,12 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 				sMessage += L"\n";
 				break;
 			case DLG_PIN_SIGN:
-					
+
 				sMessage += L"\n\n";
 				sMessage += GETSTRING_DLG(Caution);
 				sMessage += L" ";
 				sMessage += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic);
-				
+
 				break;
 			case DLG_PIN_ADDRESS:
 				sMessage += L"\n\n";
@@ -182,12 +230,13 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 		}
 
 
-		dlg = new dlgWndAskPIN( pinInfo, usage, sMessage, translatePinName(PINName), DlgGetKeyPad() );
+		/*dlg = new dlgWndAskPIN( pinInfo, usage, sMessage, translatePinName(PINName), DlgGetKeyPad() );*/
+		dlg = new dlgWndAskPIN( pinInfo, usage, sMessage, PINName, DlgGetKeyPad() );
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
 			wcscpy_s(csPin,ulPinBufferLen,dlg->PinResult);
-			
+
 			delete dlg;
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskPin() returns DLG_OK");
 			return DLG_OK;
@@ -220,19 +269,26 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 	{
 		std::wstring PINName;
 		std::wstring Header;
-		
+
 		switch( operation )
 		{
 		case DLG_PIN_OP_CHANGE:
+#if 0
 			if( usage == DLG_PIN_AUTH )
 			{
-				if(wcscmp(L"nl",lang1.c_str())==0)
-					PINName = (L"Pin da Autenticação");
+				if(wcscmp(L"nl",lang1.c_str())==0){
+/*					PINName = (L"Pin da Autenticação");*/
+                    PINName = GETSTRING_DLG(AuthenticationPin);
+                }
 				else
 					PINName = csPinName;
 			}
 			else
 				PINName = csPinName;
+#else
+            PINName = getPinName( usage, csPinName );
+#endif
+
 			Header = GETSTRING_DLG(EnterYour);
 			Header += L" ";
 			Header += PINName;
@@ -251,13 +307,14 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 			break;
 		}
 
-		dlg = new dlgWndAskPINs( pin1Info, pin2Info, Header, translatePinName(PINName), DlgGetKeyPad() );
+        dlg = new dlgWndAskPINs( pin1Info, pin2Info, Header, PINName, DlgGetKeyPad() );
+		/*dlg = new dlgWndAskPINs( pin1Info, pin2Info, Header, translatePinName(PINName), DlgGetKeyPad() );*/
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
 			wcscpy_s(csPin1,ulPin1BufferLen,dlg->Pin1Result);
 			wcscpy_s(csPin2,ulPin2BufferLen,dlg->Pin2Result);
-			
+
 			delete dlg;
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskPins() returns DLG_OK");
 			return DLG_OK;
@@ -287,6 +344,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgBadPin(
 	try
 	{
 		std::wstring PINName;
+#if 0
 		switch( usage )
 		{
 		case DLG_PIN_UNKNOWN:
@@ -304,13 +362,21 @@ DLGS_EXPORT DlgRet eIDMW::DlgBadPin(
 				PINName = csPinName;
 			break;
 		}
+#else
+		if ( ( usage == DLG_PIN_UNKNOWN ) && ( wcslen(csPinName)==0 ) ){
+            MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgBadPin() returns DLG_BAD_PARAM");
+            return DLG_BAD_PARAM;
+        }
+        PINName = getPinName( usage, csPinName );
+#endif
 
-		dlg = new dlgWndBadPIN( translatePinName(PINName), ulRemainingTries );
+        dlg = new dlgWndBadPIN( PINName, ulRemainingTries );
+		/*dlg = new dlgWndBadPIN( translatePinName(PINName), ulRemainingTries );*/
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
 			//csPin = dlg->PinResult;
-			
+
 			delete dlg;
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgBadPin() returns %ld",dlgResult);
 			return dlgResult;
@@ -459,7 +525,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 			case DLG_PIN_OP_UNBLOCK_CHANGE:
 				sMessage = L"\n";
 				sMessage += GETSTRING_DLG(UnlockDialogHeader);
-						
+
 				//sMessage += L"\" ";
 				//sMessage += GETSTRING_DLG(OnTheReader);
 				/*
@@ -470,7 +536,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 					sMessage += L"\"";
 				}
 				*/
-				
+
 				break;
 			default:
 				MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgDisplayPinpadInfo() returns DLG_BAD_PARAM");
@@ -487,7 +553,8 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 		 pin_name_label += csPinName;
 		}
 		else {
-			pin_name_label += translatePinName(PINName);
+			/*pin_name_label += translatePinName(PINName);*/
+			pin_name_label = PINName;
 		}
 
 		//QString buf = "dlg num: " + QString().setNum( dlgPinPadInfoCollectorIndex );
@@ -523,7 +590,7 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo( unsigned long ulHandle )
 	TD_WNDPINPAD_MAP::iterator it_WndPinpad_Map = dlgPinPadInfoCollector.find( ulHandle );
 	if( it_WndPinpad_Map != dlgPinPadInfoCollector.end() )
 		dlgModal = (*it_WndPinpad_Map).second;
-	else 
+	else
 		dlgModal = NULL;
 
 	if( dlgModal )
