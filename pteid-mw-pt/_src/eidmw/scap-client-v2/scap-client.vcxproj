@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>ScapSignature</ProjectName>
-    <ProjectGuid>{B3A05E82-1921-3FC3-9B2A-EF964405796D}</ProjectGuid>
+    <ProjectGuid>{F1401618-004A-4816-A3B5-1440A6FDCBD7}</ProjectGuid>
     <Keyword>Qt4VSv1.0</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

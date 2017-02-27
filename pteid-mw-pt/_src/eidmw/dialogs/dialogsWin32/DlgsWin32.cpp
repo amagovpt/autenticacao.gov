@@ -97,7 +97,7 @@ std::wstring translatePinName(std::wstring &PinName)
 }
 #endif
 
-QString getPinName( DlgPinUsage usage, const wchar_t *inPinName ){
+std::wstring getPinName( DlgPinUsage usage, const wchar_t *inPinName ){
     std::wstring PinName;
 
     switch( usage ){
