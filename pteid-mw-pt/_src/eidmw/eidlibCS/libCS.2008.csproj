@@ -249,7 +249,7 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\XMLUserData.cs">
       <Link>GeneratedFiles\XMLUserData.cs</Link>
     </Compile>
-    <Compile Include="Properties35\AssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
