@@ -138,11 +138,6 @@
           <Directory Id="IMAGEFORMATS" Name="imageformats" />
           <Directory Id="DSS" Name="DSS"/>
 
-          <Directory Id="SCAP" Name="SCAP">
-           <!-- <Directory Id="CERTS_SCAP_DIR" Name="certificates"/> -->
-          <!--  <Directory Id="SCAP_SYSWOW" Name="syswow"/> -->
-          </Directory>
-
           <Directory Id="QT5PLATFORMS" Name="platforms"/>
           <Directory Id="QT5PRINTSUPPORT" Name="printsupport"/>
           
@@ -279,7 +274,7 @@
       </Component>
     </DirectoryRef>
 
-    <!-- 
+    <!-- Old SCAP Java Application 
     <DirectoryRef Id="SCAP">
       <Component Id="scap" Guid="{BFA2692F-44F0-4d76-8950-5FF9E0D117F4}">
 
@@ -376,7 +371,7 @@
     </DirectoryRef>
     
     <DirectoryRef Id="MINIDRIVERROOTFOLDER">
-      <Component Id="pteidmdrv" Guid="{23982BC5-F99B-4145-96D3-69409978195F}" >
+      <Component Id="pteidmdrv" Guid="{2BDF2BB0-4F7A-4ED6-A3D4-ABCBE212FA14}" >
         <File Id="pteidmdrv.inf" Name="pteidmdrv.inf" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.inf" KeyPath="yes" DiskId="1" />
         <File Id="pteidmdrv.cat" Name="pteidmdrv.cat" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.cat" KeyPath="no" DiskId="1" />
         <File Id="pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="no" DiskId="1" />
@@ -489,7 +484,7 @@
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-poppler.dll" KeyPath="yes" />
       </Component>
 
-      <Component Id="pteidmdrvsystem32" Guid="{BA4FED31-E6E6-4D39-9D3A-3D0F2B572524}" Permanent="no">
+      <Component Id="pteidmdrvsystem32" Guid="{A8259480-E408-11DE-8A39-0800200C9A66}" Permanent="no">
         <File Id="system32_pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="yes" DiskId="1" />
       </Component>
 
@@ -569,7 +564,7 @@
 
 	</Component>
 
-      <Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA9}">
+      <Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA3}">
         <RegistryKey Root="HKLM"
             Key="SOFTWARE\PTEID"
             Action="createAndRemoveOnUninstall">
