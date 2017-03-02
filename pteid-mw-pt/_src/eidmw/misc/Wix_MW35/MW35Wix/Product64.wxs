@@ -169,18 +169,19 @@
 					<Directory Id="IMAGEFORMATS" Name="imageformats" />
           
           <Directory Id="DSS" Name="DSS"/>
+          <!-- Old SCAP Java Application 
           <Directory Id="SCAP" Name="SCAP">
-            <!--  <Directory Id="CERTS_SCAP_DIR" Name="certificates"/> -->
-            <!--  <Directory Id="SCAP_SYSWOW" Name="syswow"/> -->
-            <!--  <Directory Id="SCAP_AMD64" Name="amd64"/> -->
-          </Directory>
+              <Directory Id="CERTS_SCAP_DIR" Name="certificates"/>
+              <Directory Id="SCAP_SYSWOW" Name="syswow"/> 
+              <Directory Id="SCAP_AMD64" Name="amd64"/> 
+          </Directory> -->
           <Directory Id="QT5PLATFORMS" Name="platforms"/>
           <Directory Id="QT5PRINTSUPPORT" Name="printsupport"/>
           <Directory Id="EIDSTORE" Name="eidstore">
 						<Directory Id="CERTSDIR" Name="certs"/>
 						<Directory Id="CRLDIR" Name="crl">
 							<Directory Id="HTTPDIR" Name="http">
-							<Directory Id="CRLPORTUGAL" Name="crl.eid.portugal.pt"/>
+                <!--	<Directory Id="CRLPORTUGAL" Name="crl.eid.portugal.pt"/> -->
 					 </Directory>
 					</Directory>
 					</Directory>
@@ -850,7 +851,7 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 				<ComponentRef Id="CrlDir"/>
 				<ComponentRef Id="HttpDir"/>
         <ComponentRef Id="ImagePlugins"/>
-				<ComponentRef Id="CrlPortugal"/>
+				<!--<ComponentRef Id="CrlPortugal"/> -->
 				<ComponentRef Id="DirectoryCache"/>
 				<ComponentRef Id="License"/>
 				<ComponentRef Id="LogDir"/>
