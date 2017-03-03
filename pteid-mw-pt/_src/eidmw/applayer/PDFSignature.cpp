@@ -39,6 +39,7 @@ namespace eIDMW
 		m_citizen_fullname = NULL;
 		m_batch_mode = true;
 		m_timestamp = false;
+		m_isLandscape = false;
 		m_small_signature = false;
 		my_custom_image.img_data = NULL;
 
@@ -57,6 +58,7 @@ namespace eIDMW
 		m_citizen_fullname = NULL;
 		m_batch_mode = false;
 		m_timestamp = false;
+		m_isLandscape = false;
 		m_small_signature = false;
 		my_custom_image.img_data = NULL;
 		m_doc = new PDFDoc(new GooString(pdf_file_path));
@@ -440,8 +442,8 @@ namespace eIDMW
 
 		if (m_visible)
 		{
-			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Location_x: %f, location_y: %f",
-				 location_x, location_y);
+			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Page mediaBox: (H: %f W:%f) Location_x: %f, location_y: %f",
+				 height, width, location_x, location_y);
 			//Sig Location by sector
 			if (location_x == -1)
 			{
