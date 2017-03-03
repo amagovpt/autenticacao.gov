@@ -21,7 +21,7 @@ namespace eIDMW
     	init_openssl();
     	m_host = host;
 
-    	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: connecting to SCAP server: %s", host_and_port.c_str());
+    	MWLOG(LEV_DEBUG, MOD_APL, "SSLConnection: connecting to SCAP server: %s", host_and_port.c_str());
 
     	connect_encrypted((char *)host_and_port.c_str(), insecure);
 
