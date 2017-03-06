@@ -9,7 +9,7 @@ ifeq ($(shell uname), Darwin)
 	LDFLAGS += -liconv
 	CFLAGS= -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -g
 else
-	LIB_FILENAME=$(BASENAME).so
+	LIB_FILENAME=$(BASENAME).a
 	CFLAGS= -fno-omit-frame-pointer --std=c++98 -fPIC -O3 -I.. -I../goo/ -g
 endif
 
@@ -82,8 +82,8 @@ FOFI_OBJS := $(subst .cc,.o,$(FOFI_SRC))
 all:    $(LIB_FILENAME)
 
 $(LIB_FILENAME): $(OBJS) $(GOO_OBJS) memmem.o
-	 $(CXX) -shared -o $@ $^ $(LDLIBS) $(LDFLAGS)
-	 cp $(LIB_FILENAME) ../../lib
+	ar rcs $@ $^ 
+	cp $(LIB_FILENAME) ../../lib
 
 ../goo/%.o : ../goo/%.cc
 	$(CXX) -o $@  $(CFLAGS) -c $<

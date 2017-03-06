@@ -34,10 +34,11 @@ LIBS += -L../lib \
 	    -lcrypto -lssl \
 	    -lxerces-c \
 	    -lfreeimagePTEiD \
-	    -lpteid-poppler \
 	    -lcurl
 
 !macx: LIBS += -Wl,-R,'../lib' -lxml-security-c
+!macx: LIBS += ../lib/libpteid-poppler.a
+!macx: LIBS += -Wl,--exclude-libs,ALL 
 
 macx: LIBS += -lxml-security-c
 macx: LIBS += -Wl,-framework -Wl,CoreFoundation
