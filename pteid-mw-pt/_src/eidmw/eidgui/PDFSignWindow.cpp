@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
  * PTeID Middleware Project.
- * Copyright (C) 2012-2014 Caixa Mágica Software.
+ * Copyright (C) 2012-2017 Caixa Mágica Software.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -30,10 +30,12 @@
 #include <QStyleOption>
 #include <QPen>
 #include <QCursor>
+#include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QFileInfo>
 #include <QDateTime>
+#include <QInputDialog>
 //For std::min_element()
 #include <algorithm>
 
@@ -46,7 +48,7 @@
 using namespace eIDMW;
 
 PDFSignWindow::PDFSignWindow(QWidget* parent, int selected_reader, CardInformation& CI_Data)
-	: m_CI_Data(CI_Data), m_selected_reader(selected_reader), m_selected_sector(0), card_present(true), my_scene(NULL)
+	: m_CI_Data(CI_Data), m_selected_reader(selected_reader), card_present(true), m_doc(NULL), my_rectangle(NULL), my_scene(NULL)
 {
 
 	ui.setupUi(this);
@@ -63,13 +65,8 @@ PDFSignWindow::PDFSignWindow(QWidget* parent, int selected_reader, CardInformati
 	this->setWindowIcon(Ico);
 	int i=0, j=0;
 
-	//DEBUG
-	//ui.label_selectedsector->setWordWrap(true);
-
 	m_pdf_sig = NULL;
 
-	table_lines = 6;
-	table_columns = 3;
 	sig_coord_x = -1, sig_coord_y = -1;
 	success = SIG_ERROR;
 	horizontal_page_flag = false;
@@ -97,9 +94,8 @@ PDFSignWindow::PDFSignWindow(QWidget* parent, int selected_reader, CardInformati
 
 	image_canvas->setFixedSize(420, 200);
 	ui.verticalLayout_4->addWidget(image_canvas);
+
 	ui.button_clearFiles->setEnabled(false);
-	// image_canvas->setLayout(ui.verticalLayout);
-	//image_canvas->show();
 
 	// items = ui.verticalLayout->count();
 
@@ -128,7 +124,6 @@ PDFSignWindow::PDFSignWindow(QWidget* parent, int selected_reader, CardInformati
 	}
 
 	this->setFixedSize(this->width(), this->height());
-    isInitializedScene = false;
 	connect(ui.pdf_listview, SIGNAL(itemRemoved(int)), this, SLOT(updateMaxPage(int)));
 }
 
@@ -156,11 +151,6 @@ QString PDFSignWindow::getCitizenNIC()
 	return documentNumberToNIC(doc_number);
 }
 
-#define ROWCOUNT_LANDSCAPE 5
-#define COLUMNCOUNT_LANDSCAPE 4
-#define ROWCOUNT_PORTRAIT 6
-#define COLUMNCOUNT_PORTRAIT 3
-
 PDFSignWindow::~PDFSignWindow()
 {
 
@@ -172,11 +162,24 @@ PDFSignWindow::~PDFSignWindow()
 
 
 
-//Event received from myListView
+//Remove file Event received from MyListView event handlers
 void PDFSignWindow::customEvent(QEvent *ev)
 {
 	if (ev->type() == QEvent::User)
+	{
 		ui.button_sign->setEnabled(false);
+		if (my_scene)
+		{
+			//Clear the background pixmap
+			QPixmap null_pixmap;
+			my_scene->updateBackground(null_pixmap);
+			
+			if (my_rectangle)
+				my_rectangle->hide();
+
+			my_scene->update();
+		}
+	}
 }
 
 void PDFSignWindow::enableSignButton()
@@ -402,14 +405,26 @@ void PDFSignWindow::on_smallsig_checkBox_toggled(bool checked)
 
 	m_small_signature = checked;
 
+	if (checked)
+	{
+		my_rectangle->makeItSmaller();
+		my_scene->update();
+	}
+	else
+	{
+		my_rectangle->makeItLarger();
+		my_scene->update();
+	}
+
+/*
 	if (my_scene)
 	{
 		//Delete and re-add a different number of squares
-		my_scene->clear();
-		addSquares();
+	//	my_scene->clear();
+	//	addSquares();
 
-	/*	if(checked)
-			my_rectangle->makeItSmaller();*/
+		if(checked)
+			my_rectangle->makeItSmaller();
 
 	}
 
@@ -421,18 +436,21 @@ void PDFSignWindow::on_smallsig_checkBox_toggled(bool checked)
 	} else{
         my_scene->setOccupiedSector(m_selected_sector, Qt::black );
 	}
+	*/
 }
 
 void PDFSignWindow::on_checkBox_location_toggled(bool checked)
 {
 
 	ui.location_textbox->setEnabled(checked);
+	
 	// Reflect changes in the signature preview canvas
 	if (!checked)
 		image_canvas->setLocation("");
 	else
 		image_canvas->setLocation(ui.location_textbox->text());
 	image_canvas->update();
+	
 }
 
 void PDFSignWindow::on_reason_textbox_textEdited(QString text)
@@ -470,49 +488,20 @@ void PDFSignWindow::on_visible_checkBox_toggled(bool checked)
 
 	if (checked) {
 		ui.spinBox_page->setEnabled(choose_b);
+		if (my_rectangle != NULL)
+			my_rectangle->show();
 	} else {
 		ui.spinBox_page->setEnabled(false);
+		my_rectangle->hide();
 	}
 
 	ui.pushButton_imgChooser->setEnabled(checked);
 	//ui.pushButton_resetImage->setEnabled(checked);
-	ui.pushButton_freeselect->setEnabled(checked);
 	ui.smallsig_checkBox->setEnabled(checked);
 
-	if ( !checked ) {
-        ui.label_x->setText("");
-        ui.label_y->setText("");
-
-        if ( my_scene->isFreeSelectMode() ){
-            my_rectangle->hide();
-        } else{
-            clearAllSectors();
-        }
-	} 
-	else{
-        int sector;
-        if ( !isInitializedScene ){
-            QPointF pointF = QPointF(0, 0);
-            my_rectangle->setToPos(pointF);
-            my_scene->itemMoved(pointF);
-
-            sector = 1;
-            isInitializedScene = true;
-        }else{
-            sector = m_selected_sector;
-        }
-
-        setPosition(my_rectangle->pos());
-        setSelectedSector(sector);
-
-        if ( my_scene->isFreeSelectMode() ){
-            my_rectangle->show();
-        } else{
-            //my_scene->setOccupiedSector(sector, Qt::black );
-        }
-	}/* !if ( !checked ) */
-
 	this->image_canvas->setPreviewEnabled(checked);
+
+	my_scene->enableOverlayRectangle(!checked);
 
 }
 
@@ -590,7 +579,6 @@ PTEID_EIDCard& PDFSignWindow::getNewCard()
 
 					}
 			}
-			//LL delete (&ReaderContext);
 		}
 
 }
@@ -610,14 +598,9 @@ void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
 		{
 			//printf("@PDFSignWindow::run_sign:\n");
 			//printf("x=%f, y=%f\n", sig_coord_x, sig_coord_y);
-			//printf("selected_page=%d, selected_sector=%d\n", selected_page, m_selected_sector);
 
-			if ( my_scene->isFreeSelectMode() )
-				sign_rc = card->SignPDF(*m_pdf_sig, selected_page,
+			sign_rc = card->SignPDF(*m_pdf_sig, selected_page,
 				sig_coord_x, sig_coord_y, location, reason, save_path);
-			else
-				sign_rc = card->SignPDF(*m_pdf_sig, selected_page,
-				m_selected_sector, m_landscape_mode, location, reason, save_path);
 
 			keepTrying = false;
 			if (sign_rc == 0)
@@ -659,7 +642,7 @@ void PDFSignWindow::on_button_sign_clicked()
 	if (ui.visible_checkBox->isChecked())
 	{
 		//Validate if any location was chosen
-		if (sig_coord_x == -1 && m_selected_sector == 0)
+		if (sig_coord_x == -1)
 		{
 			ShowErrorMsgBox(tr("You must choose a location for visible signature!"));
 			return;
@@ -718,6 +701,7 @@ void PDFSignWindow::on_button_sign_clicked()
 		m_pdf_sig->enableSmallSignatureFormat();
 
 	//Generate a scaled JPEG and pass the byte array to the Signature class
+	
 	if (!m_custom_image.isNull())
 	{
 
@@ -733,6 +717,7 @@ void PDFSignWindow::on_button_sign_clicked()
 		m_pdf_sig->setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
 
 	}
+	
 	//Avoid overwriting the original PDF, it doesn't work currently in Windows
 	if (savefilepath == current_input_path)
 	{
@@ -794,7 +779,7 @@ void PDFSignWindow::on_button_sign_clicked()
 
 	this->close();
 	if ( location != NULL ) free(location);
-	if ( reason!= NULL ) free(reason);
+	if ( reason != NULL ) free(reason);
 }
 
 void PDFSignWindow::on_button_addfile_clicked()
@@ -810,62 +795,99 @@ void PDFSignWindow::on_button_addfile_clicked()
 
 	addFileToListView(fileselect);
 
-	if (my_scene!= NULL)
-		on_visible_checkBox_toggled(ui.visible_checkBox->isChecked() ? true : false );
+/*	if (my_scene!= NULL)
+		on_visible_checkBox_toggled(ui.visible_checkBox->isChecked() ? true : false );*/
 }
 
 double g_scene_height;
 double g_scene_width;
-const int margin = 5;
+
+QPixmap PDFSignWindow::renderPageToImage()
+{
+	// Document starts at page 0 in the poppler-qt5 API
+	Poppler::Page *popplerPage = m_doc->page(m_current_page_number-1);
+
+	//TODO: Test the resolution on Windows
+    const double resX = 45.0;
+    const double resY = 45.0;
+    if (popplerPage == NULL)
+    {
+    	qDebug() << "Failed to get page object: " << m_current_page_number-1;
+    	return QPixmap();
+    }
+
+    QImage image = popplerPage->renderToImage(resX, resY, -1, -1, -1, -1, Poppler::Page::Rotate0);
+    //DEBUG
+    //image.save("/tmp/pteid_preview.png");
+
+    delete popplerPage;
+
+    if (!image.isNull()) {
+    	return QPixmap::fromImage(image);   
+    } else {
+    	qDebug() << "Error rendering PDF page to image!";
+       return QPixmap();
+    }
+    
+}
+
 
 void PDFSignWindow::buildLocationTab()
 {
-    g_scene_height = 370;
-    g_scene_width = 282;
-//  double rect_h = g_scene_height *0.106888361045; //Proportional to current signature height
-//	double rect_w = g_scene_width / 3.0;
+	//These dimensions respect A4 page ratio
+    g_scene_height = 520;
+    g_scene_width = 367.75;    
 
-    MyGraphicsScene *scene = new MyGraphicsScene(tr("A4 Page"));
+    preview_pixmap = renderPageToImage();
+    if (my_scene == NULL)
+    	my_scene = new MyGraphicsScene(preview_pixmap);
+    else
+    	my_scene->updateBackground(preview_pixmap);
 
-    my_rectangle = NULL;
-    // m_landscape_mode = landscape_mode;
+    double rect_h = 0.1 * g_scene_height;
+	double rect_w = g_scene_width / 3.0;
 
     if (m_landscape_mode)
     {
         double tmp = g_scene_width;
         g_scene_width = g_scene_height;
         g_scene_height = tmp;
-
-    	//ui.widget->setMinimumWidth(tmp);
     }
 
     this->rx = 0;
     this->ry = 0;
 
-    scene->setSceneRect(0, 0, g_scene_width, g_scene_height);
-    scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+    my_scene->setSceneRect(0, 0, g_scene_width, g_scene_height);
+    my_scene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
-    my_scene = scene;
     QGraphicsView *view = ui.scene_view;
     view->setFixedSize(g_scene_width, g_scene_height);
-    view->setScene(scene);
+    view->setScene(my_scene);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    view->setToolTip(tr("Choose the page sector where you want your signature to appear.") + QString("\n") +
-                tr("The grey sectors are already filled with other signatures."));
-    // view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-
-    addSquares();
-
     my_scene->setParent(this);
+    if (my_rectangle == NULL)
+    {
+	    my_rectangle = new DraggableRectangle(my_scene, g_scene_height, g_scene_width,
+	     rect_h, rect_w);
+	    my_scene->addItem(my_rectangle);
+	}
+	else
+	{
+		my_rectangle->setMaxLocation(g_scene_width, g_scene_height);
+		my_rectangle->show();
+	}
 
-    //Disable the location sectors at build: it can be enabled by the visible sig checkbox
-    view->setEnabled(false);
+	my_scene->update();
 
-    // fprintf(stderr, "FreeSelectionDialog Width: %d, Height: %d\n", ui.widget->width(), ui.widget->height());
+    //Pre-select visible signature if we added a valid PDF file
+    ui.visible_checkBox->setCheckState(Qt::Checked);
+    view->setEnabled(true);
 
 }
+
+//TODO: Rendering should not be done in event handlers, because it blocks the GUI thread...
 
 void PDFSignWindow::on_radioButton_firstpage_toggled(bool value)
 {
@@ -873,8 +895,13 @@ void PDFSignWindow::on_radioButton_firstpage_toggled(bool value)
 	{
 		// clearAllSectors();
 		m_current_page_number = 1;
-        QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(1));
-        highlightSectors(sectors);
+        //QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(1));
+
+        preview_pixmap = renderPageToImage();
+
+        my_scene->updateBackground(preview_pixmap);
+        my_scene->update();
+        //highlightSectors(sectors);
 
 	}
 
@@ -884,12 +911,16 @@ void PDFSignWindow::on_radioButton_lastpage_toggled(bool value)
 {
 	if (value && m_pdf_sig)
 	{
-         clearAllSectors();
+         //clearAllSectors();
          m_current_page_number = m_pageCount;
+         preview_pixmap = renderPageToImage();
+
+         my_scene->updateBackground(preview_pixmap);
+         my_scene->update();
 
          QString sectors =
             QString::fromLatin1(m_pdf_sig->getOccupiedSectors(m_current_page_number));
-         highlightSectors(sectors);
+         //highlightSectors(sectors);
 	}
 
 }
@@ -901,10 +932,13 @@ void PDFSignWindow::on_spinBox_page_valueChanged(int new_value)
 		return;
 
 	m_current_page_number = new_value;
-    clearAllSectors();
+	preview_pixmap = renderPageToImage();
+	my_scene->updateBackground(preview_pixmap);
+	my_scene->update();
+    // clearAllSectors();
 
     QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(new_value));
-    highlightSectors(sectors);
+    //highlightSectors(sectors);
 
 }
 
@@ -927,6 +961,7 @@ void mapSectorToRC(int sector, int *row, int *column)
 
 }
 
+
 void MyGraphicsScene::itemMoved(QPointF newPos)
 {
 	if (parent)
@@ -934,97 +969,40 @@ void MyGraphicsScene::itemMoved(QPointF newPos)
 
 }
 
-void MyGraphicsScene::setOccupiedSector(int s, Qt::GlobalColor color )
-{
-    QList<QGraphicsItem *> scene_items = this->items();
-
-    int i = 0;
-
-    while (i!= scene_items.size())
-    {
-        QGraphicsItem *item = scene_items.at(i);
-        //Find the rectangle object
-        if (item->type() == SelectableRectType && ((SelectableRectangle *)item)->getSectorNumber() == s)
-        {
-            SelectableRectangle *rect = qgraphicsitem_cast<SelectableRectangle*>(scene_items.at(i));
-            rect->setSectorFilled(color);
-        }
-
-        i++;
-    }
-}
-
-void MyGraphicsScene::clearAllRectangles(bool dontClearGreySectors)
-{
-    QList<QGraphicsItem *> scene_items = this->items();
-
-    for(int i = 0; i!= scene_items.size(); i++)
-    {
-        QGraphicsItem *item = scene_items.at(i);
-        //Find the rectangle object
-        if (item->type() == SelectableRectType)
-        {
-            SelectableRectangle *rect = qgraphicsitem_cast<SelectableRectangle*>(scene_items.at(i));
-            if (dontClearGreySectors && rect->getColor() == Qt::darkGray)
-            	continue;
-            rect->resetColor();
-            rect->setSectorIsFilled(false);
-        }
-    }
-}
-
-void MyGraphicsScene::selectNewRectangle(QPointF selected_pos)
-{
- 	QList<QGraphicsItem *> scene_items = this->items();
-
-	int i = 0;
-    QGraphicsItem *it = this->itemAt(selected_pos, QTransform());
-    ((PDFSignWindow*)parent)->setSelectedSector(((SelectableRectangle *)it)->getSectorNumber());
-	while (i!= scene_items.size())
-	{
-		QGraphicsItem *item = scene_items.at(i);
-		//Find the rectangle object
-        if (item->type() == SelectableRectType && item->pos() != selected_pos &&
-              !((SelectableRectangle *)item)->isSectorFilled())
-		{
-			SelectableRectangle *rect = qgraphicsitem_cast<SelectableRectangle*>(scene_items.at(i));
-			rect->resetColor();
-		}
-
-		i++;
-	}
-}
-
-/* Commented out for now, it could only show up if the selectableRectangles were semi-transparent
-	which would then cause rendering glitches while dragging the grey rectangle
 void MyGraphicsScene::drawBackground(QPainter * painter, const QRectF & rect )
 {
 
-	QFont sansSerifFont("Arial", 26, QFont::Bold);
-	painter->setPen(Qt::lightGray);
-	painter->setFont(sansSerifFont);
-
-	painter->drawText(rect, Qt::AlignCenter, this->background);
+	painter->drawPixmap(0, 0, background);
+	if (m_greyedOut)
+	{
+		//Draw grey rectangle with alpha = 100
+		painter->fillRect(QRect(0, 0, width(), height()), QColor(190, 190, 190, 100));
+	}
 
 }
-*/
+
 
 void DraggableRectangle::paint(QPainter *painter,
 		const QStyleOptionGraphicsItem *, QWidget *)
 {
-	painter->setPen(Qt::lightGray);
-	painter->setBrush(Qt::black);
+	painter->setPen(Qt::black);
+	painter->setPen(Qt::DotLine);
+
 	painter->drawRect(0, 0, m_rect_w, m_rect_h);
+	
+	painter->drawPixmap(0, 0, *current_logo);
 }
 
 void DraggableRectangle::makeItSmaller()
 {
+	current_logo = &logo_pixmap_small;
 	m_rect_h /= 2;
 }
 
 void DraggableRectangle::makeItLarger()
 {
 	m_rect_h *= 2;
+	current_logo = &logo_pixmap;
 }
 
 QRectF DraggableRectangle::boundingRect() const
@@ -1037,7 +1015,6 @@ QRectF DraggableRectangle::boundingRect() const
  */
 void DraggableRectangle::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
 {
-	//setCursor(Qt::OpenHandCursor);
 	QApplication::setOverrideCursor(QCursor(Qt::OpenHandCursor));
 	update();
 }
@@ -1052,21 +1029,21 @@ void DraggableRectangle::mousePressEvent (QGraphicsSceneMouseEvent * event)
 {
 
 	QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
-
 }
+
 
 void DraggableRectangle::setToPos( QPointF newPos )
 {
 	/* Detect out of boundaries mouseEvent
 	and correct them to the nearest valid position **/
-	if (newPos.rx() < margin)
-		newPos.setX(margin);
-	if (newPos.ry() < margin)
-		newPos.setY(margin);
-	if (newPos.rx() >= m_max_x + margin - m_rect_w)
-		newPos.setX(m_max_x + margin-m_rect_w);
-	if (newPos.ry() >= m_max_y + margin - m_rect_h)
-		newPos.setY(m_max_y + margin - m_rect_h);
+	if (newPos.rx() < 0)
+		newPos.setX(0);
+	if (newPos.ry() < 0)
+		newPos.setY(0);
+	if (newPos.rx() >= m_max_x - m_rect_w)
+		newPos.setX(m_max_x -m_rect_w);
+	if (newPos.ry() >= m_max_y - m_rect_h)
+		newPos.setY(m_max_y - m_rect_h);
 
 	setPos(newPos);
 }
@@ -1082,6 +1059,7 @@ void DraggableRectangle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 	QGraphicsItem::mouseReleaseEvent(event);
 }
 
+#ifdef OLD_SIGNATURE_LOCATION
 QRectF SelectableRectangle::boundingRect() const
 {
 	return QRectF(0, 0, m_rect_w, m_rect_h);
@@ -1139,50 +1117,72 @@ void SelectableRectangle::paint(QPainter *painter,
 		painter->drawText(boundingRect(), Qt::AlignCenter, m_string);
 	}
 }
+#endif
 
 double PDFSignWindow::getMaxX(){
-	return ( m_landscape_mode ? 297.0576 : 209.916 );
+	return  g_scene_width;
 }
 
 double PDFSignWindow::getMaxY(){
-	return ( m_landscape_mode ? 209.916 : 297.0576 );
+	
+	return g_scene_height;
 }
 
-double PDFSignWindow::convertX()
+
+void PDFSignWindow::closeDocument()
 {
-	double full_width = getMaxX();
-	return this->rx/g_scene_width * full_width;
+
+    if (!m_doc) {
+        return;
+    }
+
+    delete m_doc;
+    m_doc = 0;
 }
 
-double PDFSignWindow::convertY()
+
+/* Load document with poppler-qt5 for preview */
+void PDFSignWindow::loadDocumentForPreview(const QString &file)
 {
-	double full_height = getMaxY();
-	return this->ry/g_scene_height * full_height;
+	Poppler::Document *newdoc = Poppler::Document::load(file);
+    if (!newdoc) {
+        QMessageBox msgbox(QMessageBox::Critical, tr("Open Error"), tr("Cannot open:\n") + file,
+                           QMessageBox::Ok, this);
+        msgbox.exec();
+        return;
+    }
+
+    //Close a previous document
+    closeDocument();
+
+    m_doc = newdoc;
+
+    m_doc->setRenderHint(Poppler::Document::TextAntialiasing, true);
+    m_doc->setRenderHint(Poppler::Document::Antialiasing, true);
+    m_doc->setRenderBackend(Poppler::Document::RenderBackend::SplashBackend);
 }
 
 /* Coordinate conversion */
 void PDFSignWindow::setPosition(QPointF new_pos)
 {
-	//HACK: this is the rectangle height which would be a correctly scaled representation 
-	//of the real signature area
-	//Probably not accurate for small signature format...
-	double scaled_rectangle_height = m_landscape_mode ? 35.37 : 33.46;
+	
+	double scaled_rectangle_height = m_landscape_mode ? 35.37 : 0.1 * g_scene_height;
 	
 	/* Check border limits */
-	if ( new_pos.rx() < margin ) {
+	if ( new_pos.rx() < 0) {
         this->rx = 0;
 	} else if ( new_pos.rx() > getMaxX() ){
         this->rx = getMaxX();
-	} else{
-        this->rx = new_pos.rx()-margin;
+	} else {
+        this->rx = new_pos.rx();
 	}
 
-	if ( new_pos.ry() < margin ){
+	if ( new_pos.ry() < 0 ) {
         this->ry = 0;
-	} else if ( new_pos.ry() > getMaxY() ){
+	} else if ( new_pos.ry() > getMaxY()) {
         this->ry = getMaxY();
-	} else{
-        this->ry = new_pos.ry()-margin;
+	} else {
+        this->ry = new_pos.ry();
 	}
 
     //Actual coordinates passed to SignPDF() expressed as a fraction
@@ -1190,79 +1190,11 @@ void PDFSignWindow::setPosition(QPointF new_pos)
 
     //printf("eidgui: DEBUG: this->ry: %f\n", this->ry);
     //Vertical coordinate needs the rectangle height offset because new_pos contains the top-left corner
-    sig_coord_y = (this->ry + scaled_rectangle_height) / (g_scene_height - 2*margin);
-
-     ui.label_x->setText(tr("Horizontal position: %1")
-        .arg(QString::number(convertX(), 'f', 1)));
-
-     ui.label_y->setText(tr("Vertical position: %1")
-        .arg(QString::number(convertY(), 'f', 1)));
+    sig_coord_y = (this->ry + scaled_rectangle_height) / (g_scene_height);
+    qDebug() << "New coordinates=  x: " <<sig_coord_x << "y: " << sig_coord_y;
 
 }
 
-
-void PDFSignWindow::setSelectedSector(int sector)
-{
-    m_selected_sector = sector;
-    ui.label_x->setText(tr("Selected sector: %1").arg(QString::number(sector)));
-    ui.label_y->setText("");
-}
-
-void PDFSignWindow::on_pushButton_freeselect_clicked()
-{
-
-    if (my_scene->isFreeSelectMode())
-    {
-        ui.pushButton_freeselect->setText(tr("Free Selection"));
-        if (my_rectangle)
-        	my_rectangle->hide();
-
-            setSelectedSector(m_selected_sector);
-    }
-    else
-    {
-
-        ui.pushButton_freeselect->setText(tr("Show sectors"));
-
-        my_rectangle->show();
-        setPosition(my_rectangle->pos());
-
-    }
-
-    my_scene->switchFreeSelectMode();
-
-    invertSelectionMode();
-
-    if (!my_scene->isFreeSelectMode()) {
-        my_scene->setOccupiedSector(m_selected_sector, Qt::black );
-        QString sectors =
-            QString::fromLatin1(m_pdf_sig->getOccupiedSectors(m_current_page_number));
-         highlightSectors(sectors);
-    }
-    
-}
-
-
-void PDFSignWindow::invertSelectionMode()
-{
-	   //Invert mode on the SelectableRectangles
-        QList<QGraphicsItem *> scene_items = my_scene->items();
-        int i = 0;
-        while (i!= scene_items.size())
-        {
-            QGraphicsItem *item = scene_items.at(i);
-            //Find the rectangle object
-            if (item->type() == SelectableRectType)
-            {
-                SelectableRectangle *rect = qgraphicsitem_cast<SelectableRectangle*>(scene_items.at(i));
-                rect->switchSelectionMode();
-                rect->resetColor();
-            }
-
-            i++;
-        }
-
-}
 
 void PDFSignWindow::on_button_clearFiles_clicked()
 {
@@ -1282,130 +1214,19 @@ void PDFSignWindow::on_button_clearFiles_clicked()
 	ui.checkBox_reason->setEnabled(false);
 
 	ui.scene_view->setEnabled(false);
-
-	if (my_rectangle)
-		my_rectangle->hide();
-
-    isInitializedScene = false;
-
-	clearAllSectors();
-}
-
-
-void PDFSignWindow::getValues(double *x, double *y)
-{
-    *x = convertX();
-       *y = convertY();
-}
-
-void PDFSignWindow::resetRectanglePos()
-{
-
-	QList<QGraphicsItem *> scene_items = my_scene->items();
-
-	QPointF pos;
-	pos.setY(0.0);
-	pos.setX(0.0);
-
-	int i = 0;
-	while (i!= scene_items.size())
+	if (my_scene)
 	{
-		//Find the rectangle object
-		if (scene_items.at(i)->type() == QGraphicsItem::UserType)
-		{
-			scene_items.at(i)->setPos(pos);
-			break;
-		}
-		i++;
+		//Clear the background pixmap
+		QPixmap null_pixmap;
+		my_scene->updateBackground(null_pixmap);
+		
+		if (my_rectangle)
+			my_rectangle->hide();
+
+		my_scene->update();
 	}
-
 }
 
-void PDFSignWindow::addSquares()
-{
-    double scene_height = ui.scene_view->height()-2*margin;
-    double scene_width = ui.scene_view->width()-2*margin;
-
-    int h_lines = 0, v_lines = 0;
-
-    if (m_landscape_mode)
-    {
-        scene_height = ui.scene_view->height()-2*margin;
-        scene_width = ui.scene_view->width()-2*margin;
-
-        if (m_small_signature)
-        {
-        	h_lines = 10; v_lines = 4;
-        }
-        else
-        {
-        	h_lines = 5; v_lines = 4;
-        }
-    }
-    else
-    {
-    	if (m_small_signature)
-    	{
-    		h_lines = 12; v_lines = 3;
-    	}
-    	else
-    	{
-    		h_lines = 6;  v_lines = 3;
-    	}
-    }
-
-    // fprintf(stderr, "DEBUG: g_scene_height: %f, g_scene_width: %f\n", g_scene_height, g_scene_width);
-    // fprintf(stderr, "DEBUG: scene_height: %f, scene_width: %f\n", scene_height, scene_width);
-
-    //Sector number to be displayed at the center of the rectangle
-    int count = 1;
-
-    for (int j= 0; j!= h_lines; j++)
-        for (int i= 0; i!= v_lines; i++)
-        {
-            SelectableRectangle * s1 = new SelectableRectangle(my_scene, scene_height/h_lines, scene_width/v_lines, count);
-
-            my_scene->addItem(s1);
-            s1->setPos(QPointF(i*scene_width/v_lines +margin, j*scene_height/h_lines +margin ));
-
-            count++;
-        }
-
-        my_rectangle = new DraggableRectangle(my_scene, scene_height, scene_width, scene_height/h_lines, scene_width/v_lines);
-        //If the rectangle should be correctly scaled it would be like this:
-        //my_rectangle = new DraggableRectangle(my_scene, scene_height, scene_width, 30, 50);
-
-        my_rectangle->setToPos(QPointF(0, 0));
-        my_scene->addItem(my_rectangle);
-        my_rectangle->hide();
-
-}
-
-
-void PDFSignWindow::clearAllSectors()
-{
-
-     my_scene->clearAllRectangles();
-
-}
-
-
-void PDFSignWindow::highlightSectors(QString &csv_sectors)
-{
-	if (csv_sectors.length() == 0)
-		return;
-
-	QStringList sl = csv_sectors.split(",");
-	QStringListIterator sectors_it(sl);
-
-	while (sectors_it.hasNext())
-	{
-		uint s = sectors_it.next().toUInt();
-        my_scene->setOccupiedSector(s, Qt::darkGray );
-
-	}
-
-}
 
 void PDFSignWindow::updateMaxPage(int removed_index)
 {
@@ -1501,9 +1322,9 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 
 	//Set the spinbox with the appropriate max value
 	ui.spinBox_page->setMaximum(*std::min_element(page_numbers.begin(), page_numbers.end()));
-
-	// QString sectors = QString::fromLatin1(m_pdf_sig->getOccupiedSectors(1));
-	// highlightSectors(sectors);
+	
+	loadDocumentForPreview(current_input_path);
+	m_current_page_number = 1;
 
 	//Enable sign button now that we have data and a card inserted
 	if (!str.isEmpty() && this->card_present)
@@ -1517,13 +1338,7 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 
 		ui.button_clearFiles->setEnabled(true);
 	}
-
-	if (!my_scene)
-    	buildLocationTab();
-
-	if (list_model->rowCount() > 1)
-	{
-		clearAllSectors();
-	}
-
+	
+	
+    buildLocationTab();
 }

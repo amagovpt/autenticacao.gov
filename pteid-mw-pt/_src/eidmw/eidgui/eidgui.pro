@@ -90,9 +90,12 @@ PRE_TARGETDEPS += $${translation_en.target} \
 DEPENDPATH += . ../dialogs 
 INCLUDEPATH += . ../dialogs ../eidlib ../_Builds ../common ../
 
+unix:!macx: INCLUDEPATH += /usr/include/poppler/qt5
+
 LIBS += -L../lib  \
     -l$${EIDLIB} \
-	-l$${COMMONLIB}
+	-l$${COMMONLIB} \
+	-lpoppler-qt5
 
 unix:!macx: LIBS += -Wl,-rpath-link,../lib
 

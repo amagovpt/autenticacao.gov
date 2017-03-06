@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
  * PTeID Middleware Project.
- * Copyright (C) 2012-2014 Caixa Mágica Software.
+ * Copyright (C) 2012-2017 Caixa Mágica Software.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -22,9 +22,14 @@
 #ifndef PDFSIGNWINDOW_H_
 
 #include <QDialog>
-#include <QDropEvent>
+//#include <QDropEvent>
+#include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QProgressDialog>
+
+//For signature preview
+#include <poppler-qt5.h>
+
 #include "ui_PDFSignWindow.h"
 #include "CardInformation.h"
 
@@ -36,42 +41,42 @@ enum ErrorCode
 
 };
 
-/* Forward declaration */
-class FreeSelectionDialog;
-
 
 class MyGraphicsScene : public QGraphicsScene
 {
 
 public:
-	MyGraphicsScene(QString background_string): QGraphicsScene()
+	MyGraphicsScene(QPixmap &background_pixmap): QGraphicsScene()
 	{
-		background = background_string;
-        free_select = false;
+		background = background_pixmap;
+		parent = NULL;
+		m_greyedOut = false;
 	}
+
+	void updateBackground(QPixmap & background_pixmap)
+	{
+		background = background_pixmap;
+	}
+	
 	void itemMoved(QPointF newPos);
+	
     void setParent(QWidget *my_parent)
     {
         parent = my_parent;
     }
 
-    void selectNewRectangle(QPointF pos);
-    void setOccupiedSector(int s, Qt::GlobalColor color );
-    void clearAllRectangles(bool dontClearGreySectors=false);
-    void switchFreeSelectMode() { free_select = !free_select; }
-
-    bool isFreeSelectMode() { return free_select; }
-	//override to draw the text in background
-	//void drawBackground (QPainter * painter, const QRectF & rect );
+    void enableOverlayRectangle(bool enable) { m_greyedOut = enable; }
+	void drawBackground (QPainter * painter, const QRectF & rect );
 
 
 private:
 
 	QWidget *parent;
-	QString background;
-    bool free_select;
+	QPixmap background;
+    bool m_greyedOut;
 
 };
+
 
 enum ItemTypes {
 		SelectableRectType = QGraphicsItem::UserType+5,
@@ -108,63 +113,23 @@ protected:
 
 };
 
-class SelectableRectangle: public QGraphicsItem
-{
-	public:
-        SelectableRectangle(MyGraphicsScene *parent, double rect_h, double rect_w, int sector_number): my_scene(parent), m_rect_w(rect_w), m_rect_h(rect_h)
-        {
-    		//setFlag(QGraphicsItem::ItemIsMovable);
-		//setFlag(QGraphicsItem::ItemSendsGeometryChanges);
-		setFlag(QGraphicsItem::ItemIsSelectable);
-		// setAcceptHoverEvents(true);
-        m_brush = QBrush(QColor (193, 221, 221));
-		dont_select_mode = false;
-        m_sector_number = sector_number;
-        m_string = QString::number(sector_number);
-        is_sector_filled = false;
-
-        };
-        void setSectorIsFilled( bool bVal ) { is_sector_filled = bVal; }
-        bool isSectorFilled() { return is_sector_filled; }
-        int getSectorNumber() { return m_sector_number; }
-		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-		void mouseReleaseEvent (QGraphicsSceneMouseEvent * event);
-		void mousePressEvent (QGraphicsSceneMouseEvent * event);
-		QColor getColor() { return m_brush.color(); }
-		void resetColor();
-        void setSectorFilled( Qt::GlobalColor color );
-
-        void switchSelectionMode() {
-            dont_select_mode = !dont_select_mode;
-
-        };
-
-		QRectF boundingRect() const;
-		int type() const { return SelectableRectType; }
-
-	private:
-		MyGraphicsScene * my_scene;
-        int m_sector_number;
-		double m_rect_h, m_rect_w;
-		QBrush m_brush;
-		QString m_string;
-        bool is_sector_filled;
-		bool dont_select_mode;
-
-};
 
 class DraggableRectangle : public QGraphicsItem
 {
 	public:
 		DraggableRectangle(MyGraphicsScene *parent, double max_y, double max_x, double rect_h, double rect_w): my_scene(parent),
 		m_max_x(max_x), m_max_y(max_y), m_rect_w(rect_w), m_rect_h(rect_h)
-	{
-    		setFlag(QGraphicsItem::ItemIsMovable);
-		//setFlag(QGraphicsItem::ItemSendsGeometryChanges);
-		setFlag(QGraphicsItem::ItemIsSelectable);
-		setAcceptHoverEvents(true);
+		{
+	    	setFlag(QGraphicsItem::ItemIsMovable);
+	    	logo_pixmap = QPixmap(":/images/Images/Icons/pteid_signature_small.png");
+	    	logo_pixmap = logo_pixmap.scaledToHeight(m_rect_h *(3.0/4.0), Qt::SmoothTransformation);
+	    	logo_pixmap_small = logo_pixmap.scaledToHeight(logo_pixmap.height() / 2, Qt::SmoothTransformation);
+	    	current_logo = &logo_pixmap;
 
-	};
+			setFlag(QGraphicsItem::ItemIsSelectable);
+			setAcceptHoverEvents(true);
+
+		};
 
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 		void mouseReleaseEvent (QGraphicsSceneMouseEvent * event);
@@ -173,15 +138,23 @@ class DraggableRectangle : public QGraphicsItem
 		void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
 		void makeItSmaller();
 		void makeItLarger();
+		void setMaxLocation(double max_x, double max_y) 
+		{
+			m_max_x = max_x;
+			m_max_y = max_y;
+		}
 		void setToPos( QPointF newPos );
 
 		QRectF boundingRect() const;
 
 	private:
+		QPixmap *current_logo;
+		QPixmap logo_pixmap, logo_pixmap_small;
 		MyGraphicsScene * my_scene;
 		double m_rect_h, m_rect_w, m_max_x, m_max_y;
 
 };
+
 
 
 class PDFSignWindow : public QDialog
@@ -195,7 +168,6 @@ class PDFSignWindow : public QDialog
 
 	    void on_pushButton_imgChooser_clicked();
 	    void on_pushButton_resetImage_clicked();
-	    // void on_pushButton_switchOrientation_clicked();
 	    void on_checkBox_location_toggled(bool);
 	    void on_checkBox_reason_toggled(bool);
 	    void on_smallsig_checkBox_toggled(bool);
@@ -209,12 +181,6 @@ class PDFSignWindow : public QDialog
 
 	    void updateMaxPage(int removed_index);
 
-	    // Location Tab Stuff
-		void on_pushButton_freeselect_clicked();
-//	    void on_tableWidget_currentCellChanged(int row, int column, int prev_row, int prev_column);
-	    // void on_FreeSelectionDialog_closed();
-
-
 	public:
 	    void customEvent(QEvent *ev);
 	    /*Event Handlers for card inserted/removed events
@@ -223,38 +189,31 @@ class PDFSignWindow : public QDialog
 	    void enableSignButton();
 	    void disableSignButton();
 	    void setPosition(QPointF new_pos);
-        void setSelectedSector(int sector);
 	    PDFSignWindow(QWidget * parent, int selected_reader, CardInformation &ci);
 	    ~PDFSignWindow();
 
 
 	private:
-	    // void update_sector(int row, int column);
-	    // void update_sector(double x_pos, double y_pos);
-	    void clear_sig_position();
+
 	    QString composeCitizenFullName();
 	    QString getCitizenNIC();
 		PTEID_EIDCard &getNewCard();
-
-
-	    // bool validateSelectedSector();
-	    void invertSelectionMode();
-        void highlightSectors(QString &csv_sectors);
-        void clearAllSectors();
+        
 	    void addFileToListView(QStringList &str);
+
+	    //PDF Document preview
+	    void loadDocumentForPreview(const QString &file);
+	    QPixmap renderPageToImage();
+	    void closeDocument();
+
 	    void run_sign(int page, QString& savefile, char *location, char *reason);
 	    void ShowSuccessMsgBox();
-	    //void switchOrientation();
 	    void ShowErrorMsgBox(QString message);
 	    void buildLocationTab();
 
-		//This is intended to be called after the dialog is closed
-		void getValues(double *x, double *y);
-
 
 	    Ui_PDFSignWindow ui;
-	    int table_lines;
-	    int table_columns;
+
 	    double sig_coord_x;
 	    double sig_coord_y;
 
@@ -262,12 +221,10 @@ class PDFSignWindow : public QDialog
 	    bool horizontal_page_flag;
 	    bool m_small_signature;
 		int m_selected_reader;
-        bool isInitializedScene;
 
     	CardInformation const& m_CI_Data;
 	    QAbstractItemModel *list_model;
 	    QProgressDialog *pdialog;
-	    //FreeSelectionDialog *m_selection_dialog;
 
 	    QFutureWatcher<void> FutureWatcher;
 	    PTEID_PDFSignature *m_pdf_sig;
@@ -280,22 +237,18 @@ class PDFSignWindow : public QDialog
 	    QString current_input_path;
 	    QBrush m_default_background;
 	    QImage m_custom_image;
+	    
 	    QByteArray m_jpeg_scaled_data;
 
-	    int m_selected_sector;
-
 	    //Location tab stuff
-	    void resetRectanglePos();
-		void drawBackgroundGrid(QGraphicsScene *);
-		void addSquares();
 
-		double convertX();
-		double convertY();
 		double getMaxX();
 		double getMaxY();
 
 		MyGraphicsScene * my_scene;
+		QPixmap preview_pixmap;
 		DraggableRectangle *my_rectangle;
+		Poppler::Document * m_doc;
 
 		ImageCanvas *image_canvas;
 		bool m_landscape_mode;
