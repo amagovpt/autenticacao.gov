@@ -1348,8 +1348,7 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 
 		pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
 		X509_STORE_add_cert(store, pX509);
-		MWLOG(LEV_DEBUG, MOD_APL, "%d Adding certificate Label: %s\n", i, sod_ca->getLabel());
-		MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s\n", i, sod_ca->getOwnerName());
+		MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
 	}
 	
 	BIO *Out = BIO_new(BIO_s_mem());
