@@ -7,10 +7,10 @@ BASENAME=libpteid-poppler
 ifeq ($(shell uname), Darwin)
 	LIB_FILENAME=$(BASENAME).dylib
 	LDFLAGS += -liconv
-	CFLAGS= -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -g
+	CFLAGS= -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
 else
 	LIB_FILENAME=$(BASENAME).a
-	CFLAGS= -fno-omit-frame-pointer --std=c++98 -fPIC -O3 -I.. -I../goo/ -g
+	CFLAGS= -fno-omit-frame-pointer --std=c++98 -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
 endif
 
 SOURCES =		\

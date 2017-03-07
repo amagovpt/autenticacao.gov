@@ -52,6 +52,8 @@
 #include <sstream>
 #include <string>
 #include <math.h>
+//For MW version string
+#include "pteidversions.h"
 #include "goo/gmem.h"
 #include "Object.h"
 #include "PDFDoc.h"
@@ -264,6 +266,8 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 {
 
 	Object signature_field;
+	Object build_prop;
+	Object build_prop_app;
 	Object *signature_dict = new Object();
 	Object acroform;
 
@@ -356,6 +360,23 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	char * name_latin1 = utf8_to_latin1(name);
 	signature_dict->dictAdd(copyString("Name"), obj1.initString(new GooString(name_latin1)));
 
+	build_prop.initDict(xref);
+	build_prop_app.initDict(xref);
+
+	//Add name and version of the Signature Creation App to the Build_Prop->App Dictionary
+	build_prop_app.dictAdd(copyString("REx"), obj1.initString(
+		new GooString(PTEID_PRODUCT_VERSION"-"SVN_REVISION_STR)));
+	build_prop_app.dictAdd(copyString("Name"), obj1.initName("Portugal eID Middleware"));
+#ifdef _WIN32	
+	build_prop_app.dictAdd(copyString("OS"), obj1.initName("Win"));
+#elif __APPLE__	
+	build_prop_app.dictAdd(copyString("OS"), obj1.initName("MacOS"));
+#else
+	build_prop_app.dictAdd(copyString("OS"), obj1.initName("Linux"));
+#endif
+
+	build_prop.dictAdd(copyString("App"), &build_prop_app);
+
 	free(name_latin1);
 
 	const char *loc = location != NULL ? utf8_to_latin1(location) : "";
@@ -369,6 +390,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	else
 		signature_dict->dictAdd(copyString("M"), obj1.initString(new GooString(date_outstr)));
 
+	signature_dict->dictAdd(copyString("Prop_Build"), &build_prop);
 	signature_dict->dictAdd(copyString("Filter"), obj1.initName("Adobe.PPKLite"));
 
 	m_sig_dict = signature_dict;
