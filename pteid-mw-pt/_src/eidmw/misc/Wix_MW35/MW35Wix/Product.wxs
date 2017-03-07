@@ -409,7 +409,7 @@
       <Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidgui.exe" KeyPath="yes" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCpp.dll" />
-        
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)poppler-qt5.dll" />
         <!-- SCAP v2 has a dependency on pteidlibCpp.dll so its practical to include it here -->
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)\ScapSignature.exe" />
         <File Source="..\..\..\scap-client-v2\scapsignature_pt.qm" />
@@ -436,6 +436,7 @@
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Gui.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Network.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Widgets.dll" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Xml.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Concurrent.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5PrintSupport.dll" />
         

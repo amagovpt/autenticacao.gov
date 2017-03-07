@@ -280,12 +280,6 @@
 				</Component>
 			</DirectoryRef>
 
-			<DirectoryRef Id="CRLPORTUGAL">
-				<Component Id="CrlPortugal" Guid="{26BEC283-40A5-43A8-BC57-351DA9F79B33}" KeyPath="yes">
-					<CreateFolder />
-				</Component>
-			</DirectoryRef>
-
 			<DirectoryRef Id="LOGDIR">
 				<Component Id="LogDir" Guid="{A300DA04-F8DF-4506-B654-1E5EB2782DF3}" KeyPath="yes">
 					<CreateFolder>
@@ -502,6 +496,7 @@
 				<Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidgui.exe" KeyPath="yes" />
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCpp.dll" />
+                <File Source="$(var.PTEID_BUILD_FOLDER_X64)poppler-qt5.dll" />
           <File Source="$(var.PTEID_BUILD_FOLDER_X64)\ScapSignature.exe" />
           <File Source="..\..\..\scap-client-v2\scapsignature_pt.qm" />
 				</Component>
@@ -522,6 +517,7 @@
           <File Source="$(var.PTEID_BUILD_FOLDER_X64)Qt5Gui.dll" />
           <File Source="$(var.PTEID_BUILD_FOLDER_X64)Qt5Network.dll" />
           <File Source="$(var.PTEID_BUILD_FOLDER_X64)Qt5Widgets.dll" />
+          <File Source="$(var.PTEID_BUILD_FOLDER_X64)Qt5Xml.dll" />
           <File Source="$(var.PTEID_BUILD_FOLDER_X64)Qt5Concurrent.dll" />
           <File Source="$(var.PTEID_BUILD_FOLDER_X64)Qt5PrintSupport.dll" />
 				</Component>
