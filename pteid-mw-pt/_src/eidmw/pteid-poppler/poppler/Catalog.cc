@@ -627,22 +627,26 @@ Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool nee
 	{
 		unsigned char *data = NULL; 
 		unsigned long data_length = 0;
+		int img_width = 0;
+		int img_height = 0;
 
 		//Use a custom image
 		if (img_data != NULL)
 		{
 			data = img_data;
 			data_length = img_length;
+			img_width = CUSTOM_IMAGE_BITMAP_WIDTH;
+			img_height = CUSTOM_IMAGE_BITMAP_HEIGHT;
 		}
 		else //Use the CC Official logo encoded as JPEG from a static array 
 		{
 			data = CC_LOGO_BITMAP_COMPRESSED;
 			data_length = sizeof(CC_LOGO_BITMAP_COMPRESSED);
+			img_width = CC_LOGO_BITMAP_WIDTH;
+			img_height = CC_LOGO_BITMAP_HEIGHT;
 		}
 
-		//TODO: the image size is for now equal to the CC logo, it will probably change in the future...
-		Ref image_background = addImageXObject(CC_LOGO_BITMAP_WIDTH, CC_LOGO_BITMAP_HEIGHT, data,
-			data_length);
+		Ref image_background = addImageXObject(img_width, img_height, data,	data_length);
 
 		ref_to_dict.initRef(image_background.num, image_background.gen);
 		Object image_dict;
