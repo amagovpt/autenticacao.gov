@@ -289,7 +289,7 @@
      <x>440</x>
      <y>10</y>
      <width>524</width>
-     <height>552</height>
+     <height>562</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="vertical_layout_tab1">
@@ -319,6 +319,8 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout1">
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_tab1">
+          <item>
          <widget class="QGraphicsView" name="scene_view">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -328,12 +330,15 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>200</width>
+            <width>520</width>
             <height>530</height>
            </size>
           </property>
          </widget>
         </item>
+         </layout>
+        </item>
+        
        </layout>
       </widget>
       <widget class="QWidget" name="tab3">

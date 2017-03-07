@@ -123,6 +123,17 @@ PDFSignWindow::PDFSignWindow(QWidget* parent, int selected_reader, CardInformati
 
 	}
 
+	for (int i = 0; i!= items; i++)
+	{
+		ui.verticalLayout_4->itemAt(i)->setAlignment(Qt::AlignTop);
+	}
+
+	items = ui.horizontalLayout_tab1->count();
+	for (int i = 0; i!= items; i++)
+	{
+		ui.horizontalLayout_tab1->itemAt(i)->setAlignment(Qt::AlignHCenter);
+	}	
+
 	this->setFixedSize(this->width(), this->height());
 	connect(ui.pdf_listview, SIGNAL(itemRemoved(int)), this, SLOT(updateMaxPage(int)));
 }
