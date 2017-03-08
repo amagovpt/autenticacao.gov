@@ -53,18 +53,11 @@ public:
 		m_poPCSC = poPCSC;
 	}
 
-	void Run() {
-		while(1)
-		{
-			CThread::SleepMillisecs(100);
-			//If the card was removed stop this thread
-			if(! m_poPCSC->Status(m_hCard))
-				break;
-
-			if (m_bStopRequest)
-				break;
-		}
+	~KeepAliveThread() { 
+		RequestStop();
 	}
+
+	void Run();
 
 private:
 	CPCSC *m_poPCSC;

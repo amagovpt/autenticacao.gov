@@ -689,6 +689,21 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
 
 }
 
+void KeepAliveThread::Run() {
+	while (1)
+	{
+		CThread::SleepMillisecs(100);
+		//If the card was removed stop this thread
+		if (!m_poPCSC->Status(m_hCard))
+			break;
+
+		if (m_bStopRequest)
+			break;
+	}
+
+	MWLOG(LEV_DEBUG, MOD_CAL, "Stopping KeepAliveThread");
+}
+
 CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
     const CByteArray & oData, const tPin *pPin)
 {
@@ -721,12 +736,11 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
 		eIDMW::KeepAliveThread keepAlive(&(m_poContext->m_oPCSC), m_hCard);
 		keepAlive.Start();
 #endif
+
 		bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
-#ifdef WIN32
-		keepAlive.RequestStop();
-#endif
 	}
-        if (!bOK)
+
+    if (!bOK)
 		throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
     }
 
