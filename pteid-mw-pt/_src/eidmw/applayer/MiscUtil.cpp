@@ -86,7 +86,7 @@ const void *memmem(const void *haystack, size_t n, const void *needle, size_t m)
 		char filename[_MAX_FNAME];
 		char ext[_MAX_EXT];
 		char *basename = (char *)malloc(2*_MAX_FNAME);
-	
+
 		_splitpath(absolute_path, NULL, NULL, filename, ext);
 		strcpy(basename, filename);
 		strcat(basename, ext);
@@ -107,12 +107,12 @@ const void *memmem(const void *haystack, size_t n, const void *needle, size_t m)
 		return result;
 	}
 
-#else	
+#else
 	char * Basename(char *absolute_path)
 	{
 		return basename(absolute_path); //POSIX basename()
 	}
-	
+
 	int Truncate(const char *path)
 	{
 		return truncate(path, 0); //POSIX truncate()
@@ -128,7 +128,7 @@ const void *memmem(const void *haystack, size_t n, const void *needle, size_t m)
 		{
 			if (*in<128)
 				*out++=*in++;
-			else 
+			else
 			{
 				*out++=0xc2+(*in>0xbf);
 				*out++=(*in++&0x3f)+0x80;
@@ -141,7 +141,7 @@ const void *memmem(const void *haystack, size_t n, const void *needle, size_t m)
 
 void replace_lastdot_inplace(char* str_in)
 {
-	// We can only search forward because memrchr and strrchr 
+	// We can only search forward because memrchr and strrchr
 	// are not available on Windows *sigh*
 	char ch = '.';
 	char * pdest = str_in, *last_dot= NULL;
@@ -181,6 +181,27 @@ char *Base64Encode(const unsigned char *input, long length)
 	return buff;
 }
 
+void Base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded, unsigned int &decoded_len)
+{
+
+    BIO *bio, *b64;
+    unsigned int outlen = 0;
+    unsigned char *inbuf = new unsigned char[512];
+    memset(inbuf, 0, 512);
+
+    b64 = BIO_new(BIO_f_base64());
+    BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+
+    bio = BIO_new_mem_buf((void *)array, inlen);
+    bio = BIO_push(b64, bio);
+
+    outlen = BIO_read(bio, inbuf, 512);
+    decoded = inbuf;
+
+    decoded_len = outlen;
+
+    BIO_free_all(bio);
+}
 
 /*****************************************************************************************
 ------------------------------------ CTimestampUtil ---------------------------------------
@@ -298,7 +319,7 @@ bool CPathUtil::existFile(const char *filePath)
 	if(dwAttr == INVALID_FILE_ATTRIBUTES) dwError = GetLastError();
 	if(dwError == ERROR_FILE_NOT_FOUND || dwError == ERROR_PATH_NOT_FOUND)
 	{
-#else		
+#else
 	struct stat buffer;
 	if ( stat(filePath,&buffer))
 	{
@@ -323,7 +344,7 @@ void CPathUtil::checkDir(const char *dirIn)
 	if(dwAttr == INVALID_FILE_ATTRIBUTES) dwError = GetLastError();
 	if(dwError == ERROR_FILE_NOT_FOUND || dwError == ERROR_PATH_NOT_FOUND)
 	{
-#else		
+#else
 	struct stat buffer;
 	if ( stat(dirIn,&buffer))
 	{
@@ -373,11 +394,11 @@ void CPathUtil::checkDir(const char *dirIn)
 #ifdef WIN32
 void CPathUtil::scanDir(const char *Dir,const char *SubDir,const char *Ext,bool &bStopRequest,void *param,void (* callback)(const char *SubDir, const char *File, void *param))
 {
-	WIN32_FIND_DATAA FindFileData; 
+	WIN32_FIND_DATAA FindFileData;
 	std::string path;
 	std::string subdir;
-	HANDLE hFind;				  
-	DWORD a = 0;				  
+	HANDLE hFind;
+	DWORD a = 0;
 
 	path=Dir;
 	path+="\\*.*";
@@ -396,7 +417,7 @@ void CPathUtil::scanDir(const char *Dir,const char *SubDir,const char *Ext,bool 
 			path+=FindFileData.cFileName;
 
             if (FindFileData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
-			{		
+			{
 				subdir=SubDir;
 				if(strlen(SubDir)!=0)
 					subdir+="\\";
@@ -404,7 +425,7 @@ void CPathUtil::scanDir(const char *Dir,const char *SubDir,const char *Ext,bool 
 				scanDir(path.c_str(),subdir.c_str(),Ext,bStopRequest,param,callback);
 			}
             else
-            {	
+            {
 				std::string file=FindFileData.cFileName;
 				std::string ext=".";
 				ext+=Ext;
@@ -419,7 +440,7 @@ void CPathUtil::scanDir(const char *Dir,const char *SubDir,const char *Ext,bool 
 			if(bStopRequest)
 				break;
         }
-        
+
 		//Get next file
         if (!FindNextFileA(hFind, &FindFileData))
             a = GetLastError();
@@ -458,7 +479,7 @@ void CPathUtil::scanDir(const char *Dir,
 	  path = Dir;
 	  path += "/";
 	  path +=  pFile->d_name;
-	  
+
 	  // check file attributes
 	  struct stat buffer;
 	  if ( ! stat(path.c_str(),&buffer) ){
@@ -470,7 +491,7 @@ void CPathUtil::scanDir(const char *Dir,
 
 	      scanDir(path.c_str(),subdir.c_str(),Ext,bStopRequest,param,callback);
 
-	    }  else  {	
+	    }  else  {
 	      // this is a regular file
 	      std::string file = pFile->d_name;
 	      std::string ext = Ext;
@@ -480,7 +501,7 @@ void CPathUtil::scanDir(const char *Dir,
 		{
 		  callback(SubDir,file.c_str(),param);
 		}
-	      
+
 	    }
 	  } else {
 	    // log error
@@ -576,9 +597,9 @@ std::string CPathUtil::getRelativePath(const char *uri)
 
 std::string CPathUtil::remove_ext_from_basename(const char *base)
 {
-	std::string base_name = base; 
+	std::string base_name = base;
 	std::string::size_type ext_at = base_name.rfind('.', base_name.size());
-    
+
 	if (ext_at == std::string::npos)
 	{
 		return base_name; //no extension
@@ -606,7 +627,7 @@ CSVParser::~CSVParser()
 	{
 		delete *itr;
 		//itr=m_vector.erase(itr); // not needed
-	} 
+	}
 
 }
 
@@ -658,13 +679,13 @@ TLVParser::TLVParser():CTLVBuffer()
 TLVParser::~TLVParser()
 {
 	std::map<unsigned char,CTLVBuffer *>::iterator itr;
-	
+
 	itr = m_subfile.begin();
 	for ( ; itr!=m_subfile.end(); itr++)
 	{
 		delete itr->second;
 		//itr=m_subfile.erase(itr); // not needed
-	} 
+	}
 }
 
 CTLV *TLVParser::GetSubTagData(unsigned char ucTag,unsigned char ucSubTag)

@@ -50,16 +50,17 @@ char * utf8_to_latin1(char * in);
 void replace_lastdot_inplace(char *in);
 
 char *Base64Encode(const unsigned char *input, long length);
+void Base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded, unsigned int &decoded_len);
 
 //Common type between 2/3 different cpp files
 typedef struct _hashed_file_
 {
 	CByteArray *hash;
-	std::string *URI;	
+	std::string *URI;
 } tHashedFile;
 
 /******************************************************************************//**
-  * Util class for timestamp features 
+  * Util class for timestamp features
   *********************************************************************************/
 class CTimestampUtil
 {
@@ -77,7 +78,7 @@ public:
 };
 
 /******************************************************************************//**
-  * Util class for path and directory features 
+  * Util class for path and directory features
   *********************************************************************************/
 class CPathUtil
 {
@@ -129,7 +130,7 @@ public:
 
 	/**
 	  * Return basename of file ater removing its extension if it exists
-	  */    
+	  */
 	static std::string remove_ext_from_basename(const char *base);
 };
 

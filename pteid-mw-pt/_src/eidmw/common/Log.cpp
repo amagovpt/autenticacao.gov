@@ -47,7 +47,7 @@ tLOG_Level MapLevel(tLevel levelIn)
 		return LOG_LEVEL_DEBUG;
 	default:
 		return LOG_LEVEL_DEFAULT;
-	} 
+	}
 }
 
 CLog &MapModule(tModule moduleIn)
@@ -56,25 +56,25 @@ CLog &MapModule(tModule moduleIn)
 
     switch(moduleIn)
 	{
-		case MOD_CAL:  
+		case MOD_CAL:
 			group = L"cardlayer";
 			break;
-		case MOD_P11: 
+		case MOD_P11:
 			group = L"pkcs11";
 			break;
-		case MOD_LIB: 
+		case MOD_LIB:
 			group = L"eidlib";
 			break;
-		case MOD_GUI: 
+		case MOD_GUI:
 			group = L"eidgui";
 			break;
-		case MOD_TA:  
+		case MOD_TA:
 			group = L"trayapplet";
 			break;
-		case MOD_DLG: 
+		case MOD_DLG:
 			group = L"dialog";
 			break;
-		case MOD_CSP: 
+		case MOD_CSP:
 			group = L"CSP";
 			break;
 		case MOD_TEST:
@@ -92,10 +92,13 @@ CLog &MapModule(tModule moduleIn)
 		case MOD_SDK:
 			group = L"sdk";
 			break;
-		default: 
+		case MOD_CMD:
+			group = L"CCMovel";
+			break;
+		default:
 			group = L"";
 			break;
-	} 
+	}
 
 	return CLogger::instance().getLogW(group.c_str());
 }
@@ -162,7 +165,7 @@ bool MWLOG(tLevel level, tModule mod, CMWException theException)
 
 	//char buffer[256];
 	//sprintf_s(buffer,sizeof(buffer), "Exception thrown at file = %s, line = %s", theException.GetFile(), theException.GetLine());
-	//return MWLOG(level, mod, "  %s", buffer); 
+	//return MWLOG(level, mod, "  %s", buffer);
 	try
 	{
 		CLog &log=MapModule(mod);
@@ -188,6 +191,6 @@ bool MWLOG(tLevel level, tModule mod, CMWException theException)
 #endif
 
 	return true;
-} 
+}
 
 }

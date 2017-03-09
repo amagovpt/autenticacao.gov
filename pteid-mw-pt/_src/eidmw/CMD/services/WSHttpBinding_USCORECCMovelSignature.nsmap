@@ -1,0 +1,19 @@
+
+#include "soapH.h"
+SOAP_NMAC struct Namespace namespaces[] = {
+        {"SOAP-ENV", "http://www.w3.org/2003/05/soap-envelope", "http://schemas.xmlsoap.org/soap/envelope/", NULL},
+        {"SOAP-ENC", "http://www.w3.org/2003/05/soap-encoding", "http://schemas.xmlsoap.org/soap/encoding/", NULL},
+        {"xsi", "http://www.w3.org/2001/XMLSchema-instance", "http://www.w3.org/*/XMLSchema-instance", NULL},
+        {"xsd", "http://www.w3.org/2001/XMLSchema", "http://www.w3.org/*/XMLSchema", NULL},
+        {"ns3", "http://schemas.datacontract.org/2004/07/Ama.Structures.CCMovelSignature", NULL, NULL},
+        {"wsa", "http://schemas.xmlsoap.org/ws/2004/08/addressing", NULL, NULL},
+        {"tempuri", "http://tempuri.org/", NULL, NULL},
+        {"ns2", "http://Ama.Authentication.Service/", NULL, NULL},
+        {"c14n", "http://www.w3.org/2001/10/xml-exc-c14n#", NULL, NULL},
+        {"wsu", "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd", NULL, NULL},
+        {"xenc", "http://www.w3.org/2001/04/xmlenc#", NULL, NULL},
+        {"wsc", "http://docs.oasis-open.org/ws-sx/ws-secureconversation/200512", NULL, NULL},
+        {"ds", "http://www.w3.org/2000/09/xmldsig#", NULL, NULL},
+        {"wsse", "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd", "http://docs.oasis-open.org/wss/oasis-wss-wssecurity-secext-1.1.xsd", NULL},
+        {NULL, NULL, NULL, NULL}
+    };

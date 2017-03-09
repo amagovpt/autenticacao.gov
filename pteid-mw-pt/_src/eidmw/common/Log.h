@@ -54,10 +54,11 @@ typedef enum {
     MOD_TA ,   // Tray applet
     MOD_DLG,   // Dialog
     MOD_CSP,   // CSP
-    MOD_APL,  // Application layer
-    MOD_SSL,  // Open SSL operation
-    MOD_CRL,  // CRL service
-    MOD_SDK,  // SDK
+    MOD_APL,   // Application layer
+    MOD_SSL,   // Open SSL operation
+    MOD_CRL,   // CRL service
+    MOD_CMD,   // CMD
+    MOD_SDK,   // SDK
     MOD_TEST,  // Unit test
 } tModule;
 

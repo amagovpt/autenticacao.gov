@@ -450,29 +450,6 @@ std::basic_string<XMLCh> createSignedPropertiesURI()
 		return n1;
 	}
 
-
-	void base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded, unsigned int &decoded_len)
-	{
-
-		BIO *bio, *b64;
-		unsigned int outlen = 0;
-		unsigned char *inbuf = new unsigned char[512];
-		memset(inbuf, 0, 512);
-
-		b64 = BIO_new(BIO_f_base64());
-		BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
-
-		bio = BIO_new_mem_buf((void *)array, inlen);
-		bio = BIO_push(b64, bio);
-
-		outlen = BIO_read(bio, inbuf, 512);
-		decoded = inbuf;
-
-		decoded_len = outlen;
-
-		BIO_free_all(bio);
-	}
-
 	CByteArray *XadesSignature::WriteToByteArray(XERCES_NS DOMDocument * doc)
 	{
 		CByteArray * ba_out = new CByteArray();
@@ -808,7 +785,7 @@ bool XadesSignature::AddRevocationInfo(XERCES_NS DOMDocument * dom)
 
 				free(base64_str);
 			}
-			
+
 		}
 		free(ocsp_url);
 		//Try to download a CRL if the cert doesnt point to a OCSP responder
