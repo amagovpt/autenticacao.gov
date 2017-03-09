@@ -422,7 +422,7 @@ void getProxySystemWide(const wchar_t *host_default, long port_default, const wc
 				{
 					unsigned long WinHttpErr = GetLastError();
 
-					MWLOG(LEV_ERROR, MOD_APL, "Failed to retrieve proxy PAC URL (DHCP). WinHttpDetectAutoProxyConfigUrl Error=%d", WinHttpErr);
+					MWLOG(LEV_DEBUG, MOD_APL, "Failed to retrieve proxy PAC URL (DHCP). WinHttpDetectAutoProxyConfigUrl Error=%d", WinHttpErr);
 				}
 				lpszAutoDetectUrl = NULL;
 
@@ -439,7 +439,7 @@ void getProxySystemWide(const wchar_t *host_default, long port_default, const wc
 				{
 					unsigned long WinHttpErr = GetLastError();
 
-					MWLOG(LEV_ERROR, MOD_APL, "Failed to retrieve proxy PAC URL (DNS). WinHttpDetectAutoProxyConfigUrl Error=%d", WinHttpErr);
+					MWLOG(LEV_DEBUG, MOD_APL, "Failed to retrieve proxy PAC URL (DNS). WinHttpDetectAutoProxyConfigUrl Error=%d", WinHttpErr);
 				}
 			}
 
