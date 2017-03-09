@@ -76,6 +76,10 @@ PDFSignWindow::PDFSignWindow(QWidget* parent, int selected_reader, CardInformati
 	ui.pdf_listview->setModel(list_model);
 	ui.pdf_listview->enableNotify();
 
+	//Sensible limits for the signature metadata because it will be displayed in the visible signature limited space
+	ui.reason_textbox->setMaxLength(96);
+	ui.location_textbox->setMaxLength(35);
+
 	// int items = ui.horizontalLayout_3->count();
 
 	// for (int i = 0; i!= items; i++)
@@ -1180,7 +1184,7 @@ void PDFSignWindow::loadDocumentForPreview(const QString &file)
 void PDFSignWindow::setPosition(QPointF new_pos)
 {
 	
-	double scaled_rectangle_height = m_landscape_mode ? 35.37 : 0.1069 * g_scene_height;
+	double scaled_rectangle_height = m_landscape_mode ? 0.16 * g_scene_height : 0.1069 * g_scene_height;
 	
 	/* Check border limits */
 	if ( new_pos.rx() < 0) {
@@ -1219,6 +1223,7 @@ void PDFSignWindow::on_button_clearFiles_clicked()
 		delete m_pdf_sig;
 		m_pdf_sig = NULL;
 	}
+	page_numbers.clear();
 
 	ui.button_sign->setEnabled(false);
 	ui.visible_checkBox->setEnabled(false);
