@@ -173,8 +173,8 @@ PDFSignWindow::~PDFSignWindow()
 
 	closeDocument();
 
-	// if (m_pdf_sig)
-	// 	delete m_pdf_sig;
+	if (m_pdf_sig)
+	 	delete m_pdf_sig;
 }
 
 
@@ -1271,6 +1271,9 @@ void PDFSignWindow::addFileToListView(QStringList &str)
 	//Check again because we may have removed all elements of the input list
 	if (str.isEmpty())
 		return;
+
+	if (m_pdf_sig != NULL)
+		delete m_pdf_sig;
 
 	m_pdf_sig = NULL;
 
