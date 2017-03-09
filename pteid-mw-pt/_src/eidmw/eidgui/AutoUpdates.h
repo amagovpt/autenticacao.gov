@@ -80,6 +80,7 @@ private:
 	QVBoxLayout *mainLayout;
 	
 	QFile *file;
+	QString m_pac_url;
 	int httpGetId;
 	bool httpRequestAborted;
 	std::string filedata;

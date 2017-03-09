@@ -117,7 +117,17 @@ AutoUpdates::AutoUpdates(QWidget *parent)
 	setWindowTitle(ddtitle);
 
 	//Before trying any request configure the proxy autoconfig
-	QNetworkProxyFactory::setUseSystemConfiguration(true);
+	/* XX: it should only require this to use the system proxy but it does not fallback to 
+	//the configured PAC script if there is WPAD config but it is somewhat broken
+	 QNetworkProxyFactory::setUseSystemConfiguration(true); */
+
+	eIDMW::PTEID_Config config_pacfile(eIDMW::PTEID_PARAM_PROXY_PACFILE);
+	const char * pacfile_url = config_pacfile.getString();
+
+	if (pacfile_url != NULL && strlen(pacfile_url) > 0)
+	{
+		m_pac_url = QString(pacfile_url);
+	}
 
 }
 
@@ -152,6 +162,7 @@ void AutoUpdates::startRequest(QUrl url)
 
 	if (!proxy_host.empty() && proxy_port != 0)
 	{
+		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Autoupdates: using manual proxy config");
 		proxy.setType(QNetworkProxy::HttpProxy);
 		proxy.setHostName(QString::fromStdString(proxy_host));
 		proxy.setPort(proxy_port);
@@ -162,6 +173,18 @@ void AutoUpdates::startRequest(QUrl url)
 			proxy.setPassword(QString::fromStdString(proxy_pwd));
 		}
 
+		QNetworkProxy::setApplicationProxy(proxy);
+	}
+	else if (!m_pac_url.isEmpty())
+	{
+		std::string proxy_port_str;
+		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Autoupdates: using system proxy config");
+
+		PTEID_GetProxyFromPac(m_pac_url.toUtf8().constData(), url.toString().toUtf8().constData(), &proxy_host, &proxy_port_str);
+
+		proxy.setType(QNetworkProxy::HttpProxy);
+		proxy.setHostName(QString::fromStdString(proxy_host));
+		proxy.setPort(atol(proxy_port_str.c_str()));
 		QNetworkProxy::setApplicationProxy(proxy);
 	}
 	else
