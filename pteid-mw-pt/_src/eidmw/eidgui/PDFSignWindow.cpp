@@ -863,7 +863,7 @@ void PDFSignWindow::buildLocationTab()
 
     double rect_h = 0.1 * g_scene_height;
 	// This ratio for signature width is based on the following formula: (Page_W - 60) / 3
-	double rect_w = 0.2997 * g_scene_width;
+	double rect_w = 0.29715 * g_scene_width;
 
     if (m_landscape_mode)
     {
