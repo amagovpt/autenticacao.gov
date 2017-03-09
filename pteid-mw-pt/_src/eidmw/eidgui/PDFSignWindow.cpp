@@ -167,6 +167,8 @@ PDFSignWindow::~PDFSignWindow()
 
 	delete list_model;
 
+	closeDocument();
+
 	// if (m_pdf_sig)
 	// 	delete m_pdf_sig;
 }
@@ -623,7 +625,7 @@ void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
 		catch (PTEID_Exception &e)
 		{
 			this->success = SIG_ERROR;
-			PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Caught exception in signPDF() method. Error code: 0x%08x\n",
+			PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Caught exception in signPDF() method. Error code: 0x%08x",
 				(unsigned int)e.GetError());
 
 			if (e.GetError() == EIDMW_ERR_CARD_RESET)
@@ -856,7 +858,8 @@ void PDFSignWindow::buildLocationTab()
     	my_scene->updateBackground(preview_pixmap);
 
     double rect_h = 0.1 * g_scene_height;
-	double rect_w = g_scene_width / 3.0;
+	// This ratio for signature width is based on the following formula: (Page_W - 60) / 3
+	double rect_w = 0.2997 * g_scene_width;
 
     if (m_landscape_mode)
     {
@@ -1177,7 +1180,7 @@ void PDFSignWindow::loadDocumentForPreview(const QString &file)
 void PDFSignWindow::setPosition(QPointF new_pos)
 {
 	
-	double scaled_rectangle_height = m_landscape_mode ? 35.37 : 0.1 * g_scene_height;
+	double scaled_rectangle_height = m_landscape_mode ? 35.37 : 0.1069 * g_scene_height;
 	
 	/* Check border limits */
 	if ( new_pos.rx() < 0) {
