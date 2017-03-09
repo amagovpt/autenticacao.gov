@@ -135,7 +135,8 @@ namespace eIDMW
             double height = p_media->y2, width = p_media->x2;
 
             //Take into account page rotation
-            if (p->getRotate() == 90)
+			int page_rotate = p->getRotate();
+			if (page_rotate == 90 || page_rotate == 270)
             {
             	height = p_media->x2;
             	width = p_media->y2;
@@ -154,7 +155,7 @@ namespace eIDMW
 		PDFRectangle sig_rect;
 		double vert_align = 16; //Add this to vertically center inside each cell
 		//Number of columns for portrait layout
-		int columns = 4.0;
+		int columns = 4;
 		double signature_height = m_small_signature ? sig_height / 2.0 : sig_height;
 		int MAX_SECTOR = m_small_signature ? 40 : 20;
 		const double n_lines = MAX_SECTOR / 4.0;
@@ -210,7 +211,7 @@ namespace eIDMW
 		PDFRectangle sig_rect;
 		double vert_align = 16; //Add this to vertically center inside each cell
 		//Number of columns for portrait layout
-		int columns = 3.0;
+		int columns = 3;
 
 		double sig_width = (page_width - lr_margin*2) / columns;
 
@@ -444,6 +445,8 @@ namespace eIDMW
 		{
 			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Page mediaBox: (H: %f W:%f) Location_x: %f, location_y: %f",
 				 height, width, location_x, location_y);
+
+			
 			//Sig Location by sector
 			if (location_x == -1)
 			{
@@ -454,6 +457,10 @@ namespace eIDMW
 			}
 			else
 			{
+				//"Round down" to a legal value to make sure we don't get partially off-page signatures
+				if (location_y > 1.0)
+					location_y = 1.0;
+
 				//2 different ways to calculate the same value: sig_width
 			    double sig_width = width > height ? (height -lr_margin*2) / 3.0 : (width - lr_margin*2) / 3.0;
 			    double actual_sig_height =  m_small_signature ? sig_height / 2.0 : sig_height;
@@ -471,7 +478,7 @@ namespace eIDMW
 		}
 		MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Signature rectangle before rotation (if needed) (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
 
-		if (p->getRotate() == 90)
+		if (p->getRotate() == 90 || p->getRotate() == 270)
 		{
 			//Apply Rotation of R: R' = [-y2, x1, -y1, x2]
 			sig_location = PDFRectangle(height-sig_location.y2, sig_location.x1,
