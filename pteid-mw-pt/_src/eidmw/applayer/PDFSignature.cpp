@@ -104,13 +104,12 @@ namespace eIDMW
 		m_small_signature = true;
 	}
 
-	void PDFSignature::setVisible(unsigned int page_number, int sector_number, bool is_landscape)
+
+	void PDFSignature::setVisible(unsigned int page_number, int sector_number)
 	{
 		m_visible = true;
 		m_page = page_number;
 		m_sector = sector_number;
-		m_isLandscape = is_landscape;
-
 	}
 
 	void PDFSignature::setVisibleCoordinates(unsigned int page, double coord_x, double coord_y)
@@ -432,6 +431,7 @@ namespace eIDMW
 		PDFRectangle *p_media = p->getMediaBox();
 
 		double height = p_media->y2, width = p_media->x2;
+		m_isLandscape = isLandscapeFormat();
 
 		//Fix dimensions for the /Rotate case
 		if (m_isLandscape && height > width)

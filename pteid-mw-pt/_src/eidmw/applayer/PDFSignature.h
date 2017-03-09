@@ -33,7 +33,7 @@ namespace eIDMW
 		EIDMW_APL_API void batchAddFile(char *file_path, bool last_page);
 		EIDMW_APL_API void enableTimestamp();
 
-		EIDMW_APL_API void setVisible(unsigned int page, int sector, bool is_landscape);
+		EIDMW_APL_API void setVisible(unsigned int page, int sector);
 		EIDMW_APL_API void setVisibleCoordinates(unsigned int page, double coord_x, double coord_y);
 		EIDMW_APL_API char *getOccupiedSectors(int page);
 		EIDMW_APL_API int getPageCount();
