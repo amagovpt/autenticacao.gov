@@ -79,8 +79,6 @@ CMD_client::CMD_client( const char *endpoint
         setProxy( proxy, endpoint );
 
         setEndPoint( endpoint );
-        m_Signature = NULL;
-        m_SignatureLen = 0;
 
         m_fault = NULL;
 
@@ -207,13 +205,33 @@ void CMD_client::setApplicationID( string applicationID ){
     m_applicationID = applicationID;
 }/* CMD_client::setApplicationID() */
 
+/*  *********************************************************
+    ***          CMD_client::getSignature()               ***
+    ********************************************************* */
+CByteArray CMD_client::getSignature(){
+    return m_Signature;
+}/* CMD_client::getSignature() */
+
+/*  *********************************************************
+    ***          CMD_client::setSignature()               ***
+    ********************************************************* */
+void CMD_client::setSignature( CByteArray Signature ){
+    m_Signature = Signature;
+}/* CMD_client::setSignature() */
+
+/*  *********************************************************
+    ***          CMD_client::setSignature()               ***
+    ********************************************************* */
+void CMD_client::setSignature( unsigned char *ptr, unsigned int size ){
+    m_Signature = CByteArray( (const unsigned char *)ptr, (unsigned long)size );
+}/* CMD_client::setSignature() */
 
 /*  *********************************************************
     ***          CMD_client::get_CCMovelSignRequest()     ***
     ********************************************************* */
 _ns2__CCMovelSign * CMD_client::get_CCMovelSignRequest( string in_hash
-                                                        , string in_pin
-                                                        , string in_userId ){
+                                                      , string in_pin
+                                                      , string in_userId ){
     SOAP_ENV__Header *soapHeader = soap_new_SOAP_ENV__Header( getSoap() );
     soapHeader->wsa__To = (char *)getEndPoint();
 
@@ -415,12 +433,6 @@ int CMD_client::ValidateOtp( string in_code ){
         return SOAP_NULL;
     }/* if ( response.ValidateOtpResult->Status->Message == NULL ) */
 
-    m_SignatureLen = 0;
-    if ( m_Signature != NULL ){
-        delete[] m_Signature;
-        m_Signature = NULL;
-    }/* if ( m_Signature != NULL ) */
-
     if ( response.ValidateOtpResult->Signature == NULL ){
         MWLOG( LEV_ERROR, MOD_CMD, "%s - NULL Signature", __FUNCTION__ );
         return SOAP_NULL;
@@ -440,12 +452,8 @@ int CMD_client::ValidateOtp( string in_code ){
         return SOAP_LENGTH;
     }/* if ( response.ValidateOtpResult->Signature->__ptr == NULL ) */
 
-    m_SignatureLen = response.ValidateOtpResult->Signature->__size;
-    m_Signature = new unsigned char[ m_SignatureLen ];
-
-    memcpy( m_Signature
-            , response.ValidateOtpResult->Signature->__ptr
-            , m_SignatureLen );
+    setSignature( response.ValidateOtpResult->Signature->__ptr
+                , response.ValidateOtpResult->Signature->__size );
 
 #if 0
     int MessageLen;
@@ -469,7 +477,8 @@ int CMD_client::ValidateOtp( string in_code ){
     }/* if ( Message != NULL ) */
 #endif // 0
 
-    printCPtr( (char *)m_Signature, m_SignatureLen );
+    printf( "m_Signature + Size(): %d\n", getSignature().Size() );
+    printCPtr( (char *)getSignature().GetBytes(), getSignature().Size() );
 
     return SOAP_OK;
 }/* CMD_client::ValidateOtp() */

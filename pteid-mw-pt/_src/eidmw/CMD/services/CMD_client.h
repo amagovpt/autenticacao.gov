@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include "soapH.h"
+#include "ByteArray.h"
 
 #include "WSHttpBinding_USCORECCMovelSignature.nsmap"
 #include "soapWSHttpBinding_USCORECCMovelSignatureProxy.h"
@@ -42,6 +43,10 @@ class CMD_client
         string getApplicationID();
         void setApplicationID( string applicationID );
 
+        CByteArray getSignature();
+        void setSignature( CByteArray Signature );
+        void setSignature( unsigned char *ptr, unsigned int size );
+
         // CCMovelSign
         int CCMovelSign( string in_hash, string in_pin, string in_userId );
 
@@ -61,9 +66,8 @@ class CMD_client
         string m_pin;
         string m_certificate;
         const char *m_endpoint;
-        unsigned char *m_Signature;
-        int m_SignatureLen;
         const SOAP_ENV__Fault *m_fault;
+        CByteArray m_Signature;
 
         char *getCPtr( string inStr, int *outLen );
         void printCPtr( char *c_str, int c_str_len );

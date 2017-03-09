@@ -348,18 +348,18 @@ CMD_client.o: CMD_client.cpp CMD_client.h \
 		soapH.h \
 		soapStub.h \
 		stdsoap2.h \
+		../../common/ByteArray.h \
+		../../common/Export.h \
 		WSHttpBinding_USCORECCMovelSignature.nsmap \
 		soapWSHttpBinding_USCORECCMovelSignatureProxy.h \
 		../../common/Log.h \
-		../../common/Export.h \
 		../../common/LogBase.h \
 		../../common/Mutex.h \
 		../../common/ThreadDefines.h \
 		../../common/MWException.h \
 		../../applayer/MiscUtil.h \
 		../../common/TLVBuffer.h \
-		../../common/TLV.h \
-		../../common/ByteArray.h
+		../../common/TLV.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o CMD_client.o CMD_client.cpp
 
 ####### Install

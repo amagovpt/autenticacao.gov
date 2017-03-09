@@ -1,5 +1,4 @@
-#all:
-#g++ -g  -DDEBUG -DWITH_OPENSSL -o cmd_client *.cpp -lcrypto -lssl
+## Makefile
 
 .PHONY : clean
 
@@ -9,9 +8,8 @@ LINK  = g++ -g
 QMAKE = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 
 TARGET = CMDtest
-INCPATH = -I. -I./services
+INCPATH = -I. -I./services -I./../common
 LIBPATH = -L./lib
-#LIBS = -lCMD_Services -lcrypto -lssl
 
 LIBS_BASE_SO = crypto ssl
 LIBS_SO = $(addprefix -l,$(LIBS_BASE_SO))
@@ -28,15 +26,12 @@ LIBFILES_USER = $(patsubst %,./lib/lib%.so, $(LIBS_BASE_USER))
 LIBS = $(LIBS_USER) $(LIBS_SO)
 LIBPATH = $(LIBPATH_USER) $(LIBPATH_SO)
 LIBFILES = $(LIBFILES_USER)
-#_ $(LIBFILES_SO)
 
 CXXFLAGS= -fPIC
 CFLAGS = -DDEBUG -DWITH_OPENSSL
-#LFLAGS  = $(LIBPATH) $(LIB) -Wl,-R,'$$ORIGIN/lib'
 LFLAGS  = $(LIBPATH) $(LIBS) -Wl,-R,'$$ORIGIN/lib'
 
 SOURCES = CMDtest.cpp
-#$(shell echo *.cpp)
 HEADERS = $(shell echo *.h)
 OBJECTS = $(SOURCES:.cpp=.o)
 OBJCOMP =cc
@@ -50,9 +45,6 @@ OBJCOMP =cc
 
 .cxx.o:
 	$(CXX) $(CXXFLAGS) -o "$@" "$<" $(INCPATH)
-
-#.cpp.o:
-#$(CXX) -c $(CXXFLAGS) $< $(INCPATH)
 
 all: $(TARGET)
 
