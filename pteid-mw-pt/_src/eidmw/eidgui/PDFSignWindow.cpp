@@ -66,6 +66,7 @@ PDFSignWindow::PDFSignWindow(QWidget* parent, int selected_reader, CardInformati
 	int i=0, j=0;
 
 	m_pdf_sig = NULL;
+	success = NOT_YET_SIGNED;
 
 	sig_coord_x = -1, sig_coord_y = -1;
 	success = SIG_ERROR;
@@ -170,10 +171,11 @@ PDFSignWindow::~PDFSignWindow()
 {
 
 	delete list_model;
-
 	closeDocument();
 
-	if (m_pdf_sig)
+	//TODO: the condition sucess != SIG_ERROR is a workaround for the issue of cancel button not actually canceling the thread
+	//If we free'd the file handle here, the background thread would crash
+	if (m_pdf_sig && (success != SIG_ERROR))
 	 	delete m_pdf_sig;
 }
 

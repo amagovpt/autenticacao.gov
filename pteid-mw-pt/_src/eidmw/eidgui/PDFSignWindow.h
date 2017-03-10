@@ -35,6 +35,7 @@
 
 enum ErrorCode
 {
+	NOT_YET_SIGNED,
 	SIG_SUCCESS
 	,SIG_ERROR
 	,TS_WARNING
