@@ -1052,29 +1052,29 @@ void DraggableRectangle::mousePressEvent (QGraphicsSceneMouseEvent * event)
 }
 
 
-void DraggableRectangle::setToPos( QPointF newPos )
+void DraggableRectangle::setToPos(QPointF *newPos)
 {
 	/* Detect out of boundaries mouseEvent
-	and correct them to the nearest valid position **/
-	if (newPos.rx() < 0)
-		newPos.setX(0);
-	if (newPos.ry() < 0)
-		newPos.setY(0);
-	if (newPos.rx() >= m_max_x - m_rect_w)
-		newPos.setX(m_max_x -m_rect_w);
-	if (newPos.ry() >= m_max_y - m_rect_h)
-		newPos.setY(m_max_y - m_rect_h);
+	and correct the point to the nearest valid position */
+	if (newPos->rx() < 0)
+		newPos->setX(0);
+	if (newPos->ry() < 0)
+		newPos->setY(0);
+	if (newPos->rx() >= m_max_x - m_rect_w)
+		newPos->setX(m_max_x -m_rect_w);
+	if (newPos->ry() >= m_max_y - m_rect_h)
+		newPos->setY(m_max_y - m_rect_h);
 
-	setPos(newPos);
+	setPos(*newPos);
 }
 
 void DraggableRectangle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-	QPointF tmp = scenePos();
-    setToPos( tmp );
+	QPointF sig_location = scenePos();
+	setToPos(&sig_location);
 
-	//Send message to parent
-	my_scene->itemMoved(tmp);
+	//Send message to parent with a corrected position
+	my_scene->itemMoved(sig_location);
 	QApplication::setOverrideCursor(QCursor(Qt::OpenHandCursor));
 	QGraphicsItem::mouseReleaseEvent(event);
 }

@@ -144,7 +144,7 @@ class DraggableRectangle : public QGraphicsItem
 			m_max_x = max_x;
 			m_max_y = max_y;
 		}
-		void setToPos( QPointF newPos );
+		void setToPos( QPointF *newPos );
 
 		QRectF boundingRect() const;
 
