@@ -1971,41 +1971,6 @@ void MainWnd::forgetCertificates( QString const& reader )
 #endif
 }
 
-//*****************************************************
-// Ask if it is a test card
-//*****************************************************
-bool MainWnd::askAllowTestCard( void )
-{
-	//----------------------------------------------------------------
-	// try to lock a mutex.
-	// This is done for the case there are 2 or more cards inserted.
-	// When 2 cards are inserted simultaneously, the card readers will post
-	// each a custom event. The first event coming in will check if it is
-	// a testcard and end up here. The messagebox will pop up and wait for either OK or CANCEL.
-	// In the meantime, the second custum event will be processed by the main messageloop.
-	// As a consequence, the card will also be tested to see if it is a testcard.
-	// That means that we end up here again and a second messagebox is popped up.
-	// To avoid 2 messageboxes to be popped up, we use a mutex.
-	// The first request to allow a testcard will test-and-lock the mutex and popup the messagebox.
-	// The second request will test the mutex, but will be unable to lock the mutex and return.
-	// No second messagebox is popped up
-	//----------------------------------------------------------------
-
-	if ( !m_mutex.tryLock () )
-	{
-		return false;
-	}
-	bool    bAllowTestCard = false;
-	QString strCaption     = tr("Portuguese ID Card Management");
-	QString strMessage     = tr("The Root Certificate is not correct.\nThis may be a test card.\n\nDo you want to accept it?");
-
-	if (QMessageBox::Yes == QMessageBox::warning(this,strCaption,strMessage,QMessageBox::Yes|QMessageBox::No))
-	{
-		bAllowTestCard = true;
-	}
-	m_mutex.unlock();
-	return bAllowTestCard;
-}
 
 //*****************************************************
 // remove the virtual reader

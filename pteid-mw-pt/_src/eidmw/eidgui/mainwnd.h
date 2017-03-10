@@ -453,7 +453,6 @@ private:
 	void fillCertificateList( void );
 	void stopAllEventCallbacks( void );
 	void setEventCallbacks( void );
-	bool askAllowTestCard( void );
 
 	static bool StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits, PTEID_Certificate& cert, const char* readerName);
 	static bool StoreAuthorityCerts(PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits, const char* readerName);
