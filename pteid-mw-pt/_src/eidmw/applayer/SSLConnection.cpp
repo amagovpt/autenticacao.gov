@@ -62,7 +62,7 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 	try
 	{
 		//Sign with Authentication Key
-		signed_data = card->Sign(to_sign, false);
+		signed_data = card->Sign(to_sign, false, false);
 	}
 	catch (CMWException &e)
 	{
