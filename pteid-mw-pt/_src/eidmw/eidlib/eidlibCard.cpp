@@ -258,6 +258,7 @@ long PTEID_SmartCard::readFile(const char *fileID, PTEID_ByteArray &in,PTEID_Pin
 }
 
 
+// is_landscape is unused parameter, we keep it here to ensure backwards-compatibility 
 int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
 			const char *outfile_path)
 {
@@ -272,7 +273,7 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_s
 	pdf_sig = sig_handler.mp_signature;
 
 	if (page_sector != 0 && page != 0)
-		pdf_sig->setVisible(page, page_sector, is_landscape);
+		pdf_sig->setVisible(page, page_sector);
 
 	rc = pcard->SignPDF(pdf_sig, location, reason, outfile_path);
 

@@ -854,8 +854,16 @@ public:
 	     PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
 			const char *outfile_path);
 
-	     //PDF Signature with location by precise location (in postscript points) the coordinate system has its origin in the top left corner
-	     //of the page
+	     /*PDF Signature with location by coordinates (expressed in percentage of page height/width). The coordinate system has its origin in the top left corner
+	     of the page
+		 * @param sig_handler: this defines the input file and some signature options
+		 * @param page: in case of visible signature it defines the page where the signature will appear
+		 * @param coord_x: X coordinate of the signature location (percentage of page width)
+		 * @param coord_y: Y coordinate of the signature location (percentage of page height)
+		 * @param location: Signature metadata field
+		 * @param reason: Signature metadata field
+		 * @param outfile_path: Native Filesystem path of the ouput file
+		 */
 	     PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
 			const char *outfile_path);
 
