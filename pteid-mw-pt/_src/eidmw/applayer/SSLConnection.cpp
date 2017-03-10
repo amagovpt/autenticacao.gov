@@ -910,9 +910,10 @@ void SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
 
     if (ret_connect != 1)
     {
-		MWLOG(LEV_ERROR, MOD_APL, "SSLConnection: error establishing connection. Detail: %s", ERR_error_string(ERR_get_error(), NULL));
+		long openssl_error = ERR_get_error();
+		MWLOG(LEV_ERROR, MOD_APL, "SSLConnection: error establishing connection. Detail: %s", ERR_error_string(openssl_error, NULL));
 
-		throw CMWEXCEPTION(translate_openssl_error(ERR_get_error()));
+		throw CMWEXCEPTION(translate_openssl_error(openssl_error));
     }
 
 }
