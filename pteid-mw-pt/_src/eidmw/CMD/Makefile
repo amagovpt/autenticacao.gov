@@ -7,7 +7,7 @@ CXX  = g++
 LINK  = g++ -g
 QMAKE = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 
-TARGET = CMDtest
+TARGET = CMD_test
 INCPATH = -I. -I./services
 LIBPATH = -L./lib
 
@@ -31,7 +31,7 @@ CXXFLAGS= -fPIC
 CFLAGS = -DDEBUG -DWITH_OPENSSL
 LFLAGS  = $(LIBPATH) $(LIBS) -Wl,-R,'$$ORIGIN/lib'
 
-SOURCES = CMDtest.cpp
+SOURCES = CMD_test.cpp
 HEADERS = $(shell echo *.h)
 OBJECTS = $(SOURCES:.cpp=.o)
 OBJCOMP =cc

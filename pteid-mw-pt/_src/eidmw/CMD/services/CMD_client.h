@@ -61,12 +61,16 @@ class CMD_client
         char *getCPtr( string inStr, int *outLen );
         void printCPtr( char *c_str, int c_str_len );
 
-        xsd__base64Binary *encode_base64Binary( string in_str );
+        xsd__base64Binary *encode_base64( string in_str );
+
         _ns2__CCMovelSign *get_CCMovelSignRequest( string in_hash
                                                 , string in_pin
                                                 , string *in_userId );
+        int checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response );
+
         _ns2__ValidateOtp *get_ValidateOtpRequest( string *in_code
                                                 , string *in_processId );
+        int checkValidateOtpResponse( _ns2__ValidateOtpResponse *response );
 };
 
 }

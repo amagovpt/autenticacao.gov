@@ -36,7 +36,7 @@ int main(){
         return ret;
     }/* if ( ret != SOAP_OK ) */
 
-    printf( "m_Signature + Size(): %d\n", SignatureLen );
+    printf( "Signature size(): %d\n", SignatureLen );
 
     delete Signature;
     delete cmdClient;

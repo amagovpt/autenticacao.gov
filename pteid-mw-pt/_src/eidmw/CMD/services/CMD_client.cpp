@@ -42,7 +42,7 @@ void CMD_client::printCPtr( char *c_str, int c_str_len ){
 /*  *********************************************************
     ***          CMD_client::CMD_client()                 ***
     ********************************************************* */
-xsd__base64Binary *CMD_client::encode_base64Binary( string in_str ){
+xsd__base64Binary *CMD_client::encode_base64( string in_str ){
 
     xsd__base64Binary *encoded = NULL;
     if ( in_str.empty() ){
@@ -62,7 +62,7 @@ xsd__base64Binary *CMD_client::encode_base64Binary( string in_str ){
     }/* if ( encoded == NULL ) */
 
     return encoded;
-}/* CMD_client::encode_base64Binary() */
+}/* CMD_client::encode_base64() */
 
 /*  *********************************************************
     ***          CMD_client::CMD_client()                 ***
@@ -73,15 +73,17 @@ CMD_client::CMD_client( const char *endpoint )
     setSoap( sp );
 
     if ( sp != NULL ){
-        WSHttpBinding_USCORECCMovelSignatureProxy proxy = WSHttpBinding_USCORECCMovelSignatureProxy( getSoap() );
+        WSHttpBinding_USCORECCMovelSignatureProxy proxy
+                    = WSHttpBinding_USCORECCMovelSignatureProxy( getSoap() );
         setProxy( proxy, endpoint );
-
         setEndPoint( endpoint );
-
+        /*
+            Variables initialization
+        */
         m_fault = NULL;
 
         //Don't change this: it serves as authentication for the service
-        setApplicationID( string("264af13f-c287-4703-9add-10a303b951a3") );
+        setApplicationID( string( "264af13f-c287-4703-9add-10a303b951a3" ) );
     }/* if ( sp != NULL ) */
 }/* CMD_client::CMD_client() */
 
@@ -132,7 +134,16 @@ void CMD_client::setSoap( soap *in_soap ){
 }/* CMD_client::setSoap() */
 
 /*  *********************************************************
-    ***          CMD_client::getSoap()                    ***
+    ***          CMD_client::setProxy()                   ***
+    ********************************************************* */
+void CMD_client::setProxy( WSHttpBinding_USCORECCMovelSignatureProxy in_proxy
+                            , const char *endpoint ){
+    m_proxy = in_proxy;
+    m_proxy.soap_endpoint = endpoint;
+}/* CMD_client::setProxy() */
+
+/*  *********************************************************
+    ***          CMD_client::getProxy()                   ***
     ********************************************************* */
 WSHttpBinding_USCORECCMovelSignatureProxy CMD_client::getProxy(){
     return m_proxy;
@@ -151,15 +162,6 @@ void CMD_client::setEndPoint( const char *endpoint ){
 const char *CMD_client::getEndPoint(){
     return m_endpoint;
 }/* CMD_client::getEndPoint() */
-
-/*  *********************************************************
-    ***          CMD_client::setSoap()                    ***
-    ********************************************************* */
-void CMD_client::setProxy( WSHttpBinding_USCORECCMovelSignatureProxy in_proxy
-                            , const char *endpoint ){
-    m_proxy = in_proxy;
-    m_proxy.soap_endpoint = endpoint;
-}/* CMD_client::setProxy() */
 
 /*  *********************************************************
     ***          CMD_client::getProcessID()               ***
@@ -212,9 +214,9 @@ _ns2__CCMovelSign * CMD_client::get_CCMovelSignRequest( string in_hash
     _ns3__SignRequest *soapBody = soap_new_ns3__SignRequest( getSoap() );
 
     soapBody->UserId        = in_userId;
-    soapBody->Pin           = encode_base64Binary( in_pin );
-    soapBody->Hash          = encode_base64Binary( in_hash );
-    soapBody->ApplicationId = encode_base64Binary( getApplicationID() );
+    soapBody->Pin           = encode_base64( in_pin );
+    soapBody->Hash          = encode_base64( in_hash );
+    soapBody->ApplicationId = encode_base64( getApplicationID() );
 
     _ns2__CCMovelSign *send = soap_new_set__ns2__CCMovelSign( getSoap()
                                                             , soapBody );
@@ -224,7 +226,8 @@ _ns2__CCMovelSign * CMD_client::get_CCMovelSignRequest( string in_hash
 /*  *********************************************************
     ***          CMD_client::get_ValidateOtpRequest()     ***
     ********************************************************* */
-_ns2__ValidateOtp *CMD_client::get_ValidateOtpRequest( string *in_code, string *in_processId ){
+_ns2__ValidateOtp *CMD_client::get_ValidateOtpRequest( string *in_code
+                                                    , string *in_processId ){
 
     SOAP_ENV__Header *soapHeader = soap_new_SOAP_ENV__Header( getSoap() );
     soapHeader->wsa__To = (char *)getEndPoint();
@@ -245,11 +248,66 @@ _ns2__ValidateOtp *CMD_client::get_ValidateOtpRequest( string *in_code, string *
 
     soapBody->code          = in_code;
     soapBody->processId     = in_processId;
-    soapBody->applicationId = encode_base64Binary( getApplicationID() );
+    soapBody->applicationId = encode_base64( getApplicationID() );
 
     _ns2__ValidateOtp *send = soapBody;
     return send;
 }/* CMD_client::get_ValidateOtpRequest() */
+
+/*  *********************************************************
+    ***          CMD_client::checkCCMovelSignResponse()   ***
+    ********************************************************* */
+int CMD_client::checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response ){
+    if ( response == NULL ){
+        MWLOG( LEV_ERROR
+                , MOD_CMD
+                , "%s - Null response"
+                , __FUNCTION__ );
+        return SOAP_NULL;
+    }/* if ( response == NULL ) */
+
+    if ( response->CCMovelSignResult == NULL ){
+        MWLOG( LEV_ERROR
+                , MOD_CMD
+                , "%s - Null CCMovelSignResult"
+                , __FUNCTION__ );
+        return SOAP_NULL;
+    }/* if ( response->CCMovelSignResult == NULL ) */
+
+    if ( response->CCMovelSignResult->X509Certificate == NULL ){
+        MWLOG( LEV_ERROR
+                , MOD_CMD
+                , "%s - Null X509Certificate"
+                , __FUNCTION__ );
+        return SOAP_NULL;
+    }/* if ( response->CCMovelSignResult->X509Certificate == NULL ) */
+
+    if ( ( (string)( *response->CCMovelSignResult->X509Certificate ) ).empty() ){
+        MWLOG( LEV_ERROR
+                , MOD_CMD
+                , "%s - Empty certificate"
+                , __FUNCTION__ );
+        return SOAP_NO_DATA;
+    }/* if ( strResp.empty() ) */
+
+    if ( response->CCMovelSignResult->Status == NULL ){
+        MWLOG( LEV_ERROR
+                , MOD_CMD
+                , "%s - Null Status"
+                , __FUNCTION__ );
+        return SOAP_NULL;
+    }/* if ( response->CCMovelSignResult->Status == NULL ) */
+
+    if ( response->CCMovelSignResult->Status->ProcessId == NULL ){
+        MWLOG( LEV_ERROR
+                , MOD_CMD
+                , "%s - Null ProcessId"
+                , __FUNCTION__ );
+        return SOAP_NULL;
+    }/* if ( response->CCMovelSignResult->Status->ProcessId == NULL ) */
+
+    return SOAP_OK;
+}/* checkCCMovelSignResponse() */
 
 /*  *********************************************************
     ***          CMD_client::CCMovelSign()                ***
@@ -277,16 +335,31 @@ int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId
         return SOAP_NO_DATA;
     }/* if ( in_userId.empty() ) */
 
+    /*
+        ProcessID initialization
+    */
+    setProcessID( "" );
+
+    /*
+        Get CCMovelSign request
+    */
     string userId = in_userId;
-    _ns2__CCMovelSign *send = get_CCMovelSignRequest( in_hash, in_pin, &userId );
+    _ns2__CCMovelSign *send = get_CCMovelSignRequest( in_hash, in_pin
+                                                    , &userId );
     if ( send == NULL ){
         MWLOG( LEV_ERROR, MOD_CMD, "NULL send parameters" );
         return SOAP_NULL;
     }/* if ( send == NULL ) */
 
+    /*
+        Call CCMovelSign service
+    */
     _ns2__CCMovelSignResponse response;
     int ret = getProxy().CCMovelSign( getEndPoint(), "", send, response );
 
+    /*
+        Clean pointers before exit
+    */
     if ( send->request != NULL ){
         /* Clean pointers before leaving function */
         if ( send->request->Pin != NULL ){
@@ -305,44 +378,106 @@ int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId
         }/* if ( send->request->ApplicationId != NULL ) */
     }/* if ( send->request != NULL ) */
 
-    /* Handling errors */
+    /*
+        Handling errors
+    */
     if ( ret != SOAP_OK ){
-        MWLOG( LEV_ERROR, MOD_CMD, "Error in CCMovelSign: Error code: %d", ret );
+        if ( ret == SOAP_FAULT ){
+            m_fault = getProxy().soap_fault();
+            MWLOG( LEV_ERROR
+                    , MOD_CMD
+                    , "Error in CCMovelSign() - SOAP Fault! %s"
+                    , m_fault->faultstring );
+        } else{
+            MWLOG( LEV_ERROR, MOD_CMD
+                , "Error in CCMovelSign(): Error code: %d", ret );
+        }/* if ( ret == SOAP_FAULT ) */
         return ret;
     }/* if ( ret != SOAP_OK ) */
 
-    if ( response.CCMovelSignResult == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "Null CCMovelSignResult" );
-        return ret;
-    }/* if ( response.CCMovelSignResult == NULL ) */
+    /*
+        Validate response
+    */
+    ret = checkCCMovelSignResponse( &response ) ;
+    if ( ret != SOAP_OK ) return ret;
 
-    if ( response.CCMovelSignResult->X509Certificate == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "Null X509Certificate" );
-        return SOAP_NULL;
-    }/* if ( response.CCMovelSignResult->X509Certificate == NULL ) */
-
-    if ( ( (string)( *response.CCMovelSignResult->X509Certificate ) ).empty() ){
-        MWLOG( LEV_ERROR, MOD_CMD, "Empty certificate" );
-        return SOAP_NO_DATA;
-    }/* if ( strResp.empty() ) */
-
-    if ( response.CCMovelSignResult->Status == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "Null Status" );
-        return SOAP_NULL;
-    }/* if ( response.CCMovelSignResult->Status == NULL ) */
-
-    if ( response.CCMovelSignResult->Status->ProcessId == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "Null ProcessId" );
-        return SOAP_NULL;
-    }/* if ( response.CCMovelSignResult->Status->ProcessId == NULL ) */
-
+    /*
+        Save ProcessId
+    */
     cout << "ProcessId: " << *response.CCMovelSignResult->Status->ProcessId << endl;
+    setProcessID( *response.CCMovelSignResult->Status->ProcessId );
 
     out_certificate = *response.CCMovelSignResult->X509Certificate;
-    setProcessID( *response.CCMovelSignResult->Status->ProcessId );
 
     return SOAP_OK;
 }/* CMD_client::CCMovelSign(() */
+
+/*  *********************************************************
+    ***          CMD_client::checkValidateOtpResponse()   ***
+    ********************************************************* */
+int CMD_client::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response ){
+    if ( response == NULL ){
+        MWLOG( LEV_ERROR, MOD_CMD, "%s - Null response", __FUNCTION__ );
+        return SOAP_NULL;
+    }/* if ( response == NULL ) */
+
+    if ( response->ValidateOtpResult == NULL ){
+        MWLOG( LEV_ERROR, MOD_CMD
+                , "%s - Null ValidateOtpResult"
+                , __FUNCTION__ );
+        return SOAP_NULL;
+    }/* if ( response->ValidateOtpResult == NULL ) */
+
+    if ( response->ValidateOtpResult->Signature == NULL ){
+        MWLOG( LEV_ERROR, MOD_CMD
+                , "%s - Null Signature"
+                , __FUNCTION__ );
+        return SOAP_NULL;
+    }/* if ( response->ValidateOtpResult->Signature == NULL ) */
+
+    if ( response->ValidateOtpResult->Status == NULL ){
+        MWLOG( LEV_ERROR
+                , MOD_CMD
+                , "%s - Null Status"
+                , __FUNCTION__ );
+        return SOAP_NULL;
+    }/* if ( response->ValidateOtpResult->Status == NULL ) */
+
+    if ( response->ValidateOtpResult->Status->Message == NULL ){
+        MWLOG( LEV_ERROR
+                , MOD_CMD
+                , "%s - Null Status Message"
+                , __FUNCTION__ );
+        return SOAP_NULL;
+    }/* if ( response->ValidateOtpResult->Status->Message == NULL ) */
+
+    if ( response->ValidateOtpResult->Signature == NULL ){
+        MWLOG( LEV_ERROR
+                , MOD_CMD
+                , "%s - NULL Signature"
+                , __FUNCTION__ );
+        return SOAP_NULL;
+    }/* if ( response->ValidateOtpResult->Signature == NULL ) */
+
+    if ( response->ValidateOtpResult->Signature->__ptr == NULL ){
+        MWLOG( LEV_ERROR
+                , MOD_CMD
+                , "%s - NULL Signature pointer"
+                , __FUNCTION__ );
+        return SOAP_NULL;
+    }/* if ( response->ValidateOtpResult->Signature->__ptr == NULL ) */
+
+    if ( response->ValidateOtpResult->Signature->__size < 1 ){
+        MWLOG( LEV_ERROR
+                , MOD_CMD
+                , "%s - Invalide Signature pointer size: %d"
+                , __FUNCTION__
+                , response->ValidateOtpResult->Signature->__size );
+        return SOAP_LENGTH;
+    }/* if ( response->ValidateOtpResult->Signature->__ptr == NULL ) */
+
+    return SOAP_OK;
+}/* CMD_client::checkValidateOtpResponse(() */
 
 /*  *********************************************************
     ***          CMD_client::ValidateOtp()                ***
@@ -363,66 +498,42 @@ int CMD_client::ValidateOtp( string in_code
 
     string code = in_code;
     string processId = getProcessID();
+    /*
+        Get ValidateOtp request
+    */
     _ns2__ValidateOtp *send = get_ValidateOtpRequest( &code, &processId );
-
     if ( send == NULL ){
         MWLOG( LEV_ERROR, MOD_CMD, "%s - NULL send parameters", __FUNCTION__ );
         return SOAP_NULL;
     }/* if ( send == NULL ) */
 
+    /*
+        Call ValidateOtp service
+    */
     _ns2__ValidateOtpResponse response;
     int ret = getProxy().ValidateOtp( getEndPoint(), "", send, response );
-
     if ( ret != SOAP_OK ){
         if ( ret == SOAP_FAULT ){
             m_fault = getProxy().soap_fault();
-            MWLOG( LEV_ERROR, MOD_CMD, "SOAP Fault! %s", m_fault->faultstring );
+            MWLOG( LEV_ERROR, MOD_CMD
+                    , "ValidateOtp(): SOAP Fault! %s"
+                    , m_fault->faultstring );
         } else{
             MWLOG( LEV_ERROR, MOD_CMD
-                , "Error in proxy.ValidateOtp(): Error code: %d", ret );
+                , "ValidateOtp(): Error code: %d", ret );
         }/* if ( ret == SOAP_FAULT ) */
         return ret;
     }/* if ( ret != SOAP_OK ) */
 
-    if ( response.ValidateOtpResult == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "Null ValidateOtpResult" );
-        return ret;
-    }/* if ( response.ValidateOtpResult == NULL ) */
+    /*
+        Validate response
+    */
+    ret = checkValidateOtpResponse( &response ) ;
+    if ( ret != SOAP_OK ) return ret;
 
-    if ( response.ValidateOtpResult->Signature == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "Null Signature" );
-        return SOAP_NULL;
-    }/* if ( response.ValidateOtpResult->Signature == NULL ) */
-
-    if ( response.ValidateOtpResult->Status == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "Null Status" );
-        return SOAP_NULL;
-    }/* if ( response.ValidateOtpResult->Status == NULL ) */
-
-    if ( response.ValidateOtpResult->Status->Message == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "Null Status Message" );
-        return SOAP_NULL;
-    }/* if ( response.ValidateOtpResult->Status->Message == NULL ) */
-
-    if ( response.ValidateOtpResult->Signature == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "%s - NULL Signature", __FUNCTION__ );
-        return SOAP_NULL;
-    }/* if ( response.ValidateOtpResult->Signature == NULL ) */
-
-    if ( response.ValidateOtpResult->Signature->__ptr == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "%s - NULL Signature pointer", __FUNCTION__ );
-        return SOAP_NULL;
-    }/* if ( response.ValidateOtpResult->Signature->__ptr == NULL ) */
-
-    if ( response.ValidateOtpResult->Signature->__size < 1 ){
-        MWLOG( LEV_ERROR
-                , MOD_CMD
-                , "%s - Invalide Signature pointer size: %d"
-                , __FUNCTION__
-                , response.ValidateOtpResult->Signature->__size );
-        return SOAP_LENGTH;
-    }/* if ( response.ValidateOtpResult->Signature->__ptr == NULL ) */
-
+    /*
+        Set signature
+    */
     if ( ( out_Signature != NULL ) && ( out_SignatureLen != NULL ) ){
         *out_Signature = new unsigned char[ response.ValidateOtpResult->Signature->__size ];
         memcpy( *out_Signature
