@@ -8,7 +8,7 @@ LINK  = g++ -g
 QMAKE = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 
 TARGET = CMDtest
-INCPATH = -I. -I./services -I./../common
+INCPATH = -I. -I./services
 LIBPATH = -L./lib
 
 LIBS_BASE_SO = crypto ssl

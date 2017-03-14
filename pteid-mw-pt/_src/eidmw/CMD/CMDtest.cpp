@@ -15,30 +15,31 @@ int main(){
     string in_userId = "+351 914432445";
     string in_hash = "\xde\xb2\x53\x63\xff\x9c\x44\x2b\x67\xcb\xa3\xd9\xc5\xef\x21\x6e\x47\x22\xca\xd5";
     string in_pin = "\x07\x06\x09\x05";
-    string processId;
     string certificate;
     string in_code = "111111";
+    unsigned char *Signature = NULL;
+    unsigned int SignatureLen = 0;
 
-    int ret = cmdClient->CCMovelSign( in_hash, in_pin, in_userId );
+    int ret = cmdClient->CCMovelSign( in_hash, in_pin, in_userId, certificate );
     if ( ret != SOAP_OK ){
         printf( "main() - Error @ CCMovelSign() -> ret: %d\n", ret );
         return ret;
     }/* if ( ret != SOAP_OK ) */
 
-    certificate = cmdClient->getCertificate();
     cout << "The service returned certificate" << endl << certificate << endl << endl;
-
-    processId = cmdClient->getProcessID();
-    cout << "ProcessId: " << processId << endl;
     // End of CCMovelSign
 
     // ValidateOtp
-    ret = cmdClient->ValidateOtp( in_code );
+    ret = cmdClient->ValidateOtp( in_code, &Signature, &SignatureLen );
     if ( ret != SOAP_OK ){
         printf( "main() - Error @ ValidateOtp() -> ret: %d\n", ret );
         return ret;
     }/* if ( ret != SOAP_OK ) */
 
+    printf( "m_Signature + Size(): %d\n", SignatureLen );
+
+    delete Signature;
     delete cmdClient;
+
     return 0;
 }/* main() */

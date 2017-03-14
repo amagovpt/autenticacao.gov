@@ -4,7 +4,6 @@
 
 #include "CMD_client.h"
 #include "Log.h"
-#include "MiscUtil.h"
 
 #define CC_MOVEL_SERVICE_SIGN ( (char *)"http://Ama.Authentication.Service/CCMovelSignature/CCMovelSign" )
 #define CC_MOVEL_SERVICE_VALIDATE_OTP ( (char *)"http://Ama.Authentication.Service/CCMovelSignature/ValidateOtp" )
@@ -68,8 +67,7 @@ xsd__base64Binary *CMD_client::encode_base64Binary( string in_str ){
 /*  *********************************************************
     ***          CMD_client::CMD_client()                 ***
     ********************************************************* */
-CMD_client::CMD_client( const char *endpoint
-                        )
+CMD_client::CMD_client( const char *endpoint )
 {
     soap *sp = soap_new2( SOAP_C_UTFSTRING, SOAP_C_UTFSTRING );
     setSoap( sp );
@@ -178,20 +176,6 @@ void CMD_client::setProcessID( string processID ){
 }/* CMD_client::setProcessID() */
 
 /*  *********************************************************
-    ***          CMD_client::getCertificate()             ***
-    ********************************************************* */
-string CMD_client::getCertificate(){
-    return m_certificate;
-}/* CMD_client::getCertificate() */
-
-/*  *********************************************************
-    ***          CMD_client::CMD_client()                 ***
-    ********************************************************* */
-void CMD_client::setCertificate( string certificate ){
-    m_certificate = certificate;
-}/* CMD_client::setCertificate() */
-
-/*  *********************************************************
     ***          CMD_client::getApplicationID()           ***
     ********************************************************* */
 string CMD_client::getApplicationID(){
@@ -206,32 +190,11 @@ void CMD_client::setApplicationID( string applicationID ){
 }/* CMD_client::setApplicationID() */
 
 /*  *********************************************************
-    ***          CMD_client::getSignature()               ***
-    ********************************************************* */
-CByteArray CMD_client::getSignature(){
-    return m_Signature;
-}/* CMD_client::getSignature() */
-
-/*  *********************************************************
-    ***          CMD_client::setSignature()               ***
-    ********************************************************* */
-void CMD_client::setSignature( CByteArray Signature ){
-    m_Signature = Signature;
-}/* CMD_client::setSignature() */
-
-/*  *********************************************************
-    ***          CMD_client::setSignature()               ***
-    ********************************************************* */
-void CMD_client::setSignature( unsigned char *ptr, unsigned int size ){
-    m_Signature = CByteArray( (const unsigned char *)ptr, (unsigned long)size );
-}/* CMD_client::setSignature() */
-
-/*  *********************************************************
     ***          CMD_client::get_CCMovelSignRequest()     ***
     ********************************************************* */
 _ns2__CCMovelSign * CMD_client::get_CCMovelSignRequest( string in_hash
                                                       , string in_pin
-                                                      , string in_userId ){
+                                                      , string *in_userId ){
     SOAP_ENV__Header *soapHeader = soap_new_SOAP_ENV__Header( getSoap() );
     soapHeader->wsa__To = (char *)getEndPoint();
 
@@ -247,10 +210,10 @@ _ns2__CCMovelSign * CMD_client::get_CCMovelSignRequest( string in_hash
     getSoap()->header = soapHeader;
 
     _ns3__SignRequest *soapBody = soap_new_ns3__SignRequest( getSoap() );
-    soapBody->UserId = &in_userId;
 
-    soapBody->Pin  = encode_base64Binary( in_pin );
-    soapBody->Hash = encode_base64Binary( in_hash );
+    soapBody->UserId        = in_userId;
+    soapBody->Pin           = encode_base64Binary( in_pin );
+    soapBody->Hash          = encode_base64Binary( in_hash );
     soapBody->ApplicationId = encode_base64Binary( getApplicationID() );
 
     _ns2__CCMovelSign *send = soap_new_set__ns2__CCMovelSign( getSoap()
@@ -261,7 +224,7 @@ _ns2__CCMovelSign * CMD_client::get_CCMovelSignRequest( string in_hash
 /*  *********************************************************
     ***          CMD_client::get_ValidateOtpRequest()     ***
     ********************************************************* */
-_ns2__ValidateOtp *CMD_client::get_ValidateOtpRequest( string in_code ){
+_ns2__ValidateOtp *CMD_client::get_ValidateOtpRequest( string *in_code, string *in_processId ){
 
     SOAP_ENV__Header *soapHeader = soap_new_SOAP_ENV__Header( getSoap() );
     soapHeader->wsa__To = (char *)getEndPoint();
@@ -280,8 +243,8 @@ _ns2__ValidateOtp *CMD_client::get_ValidateOtpRequest( string in_code ){
     _ns2__ValidateOtp *soapBody = soap_new__ns2__ValidateOtp( getSoap() );
     if ( soapBody == NULL ) return soapBody;
 
-    soapBody->code = &in_code;
-    soapBody->processId = &m_processID;
+    soapBody->code          = in_code;
+    soapBody->processId     = in_processId;
     soapBody->applicationId = encode_base64Binary( getApplicationID() );
 
     _ns2__ValidateOtp *send = soapBody;
@@ -291,7 +254,8 @@ _ns2__ValidateOtp *CMD_client::get_ValidateOtpRequest( string in_code ){
 /*  *********************************************************
     ***          CMD_client::CCMovelSign()                ***
     ********************************************************* */
-int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId ){
+int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId
+                            , string &out_certificate ){
 
     if ( getSoap() == NULL ){
         MWLOG( LEV_ERROR, MOD_CMD, "%s - Null sp", __FUNCTION__ );
@@ -313,7 +277,8 @@ int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId ){
         return SOAP_NO_DATA;
     }/* if ( in_userId.empty() ) */
 
-    _ns2__CCMovelSign *send = get_CCMovelSignRequest( in_hash, in_pin, in_userId );
+    string userId = in_userId;
+    _ns2__CCMovelSign *send = get_CCMovelSignRequest( in_hash, in_pin, &userId );
     if ( send == NULL ){
         MWLOG( LEV_ERROR, MOD_CMD, "NULL send parameters" );
         return SOAP_NULL;
@@ -371,17 +336,20 @@ int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId ){
         return SOAP_NULL;
     }/* if ( response.CCMovelSignResult->Status->ProcessId == NULL ) */
 
-    setCertificate( *response.CCMovelSignResult->X509Certificate );
+    cout << "ProcessId: " << *response.CCMovelSignResult->Status->ProcessId << endl;
+
+    out_certificate = *response.CCMovelSignResult->X509Certificate;
     setProcessID( *response.CCMovelSignResult->Status->ProcessId );
 
     return SOAP_OK;
 }/* CMD_client::CCMovelSign(() */
 
-
 /*  *********************************************************
     ***          CMD_client::ValidateOtp()                ***
     ********************************************************* */
-int CMD_client::ValidateOtp( string in_code ){
+int CMD_client::ValidateOtp( string in_code
+                            , unsigned char **out_Signature
+                            , unsigned int *out_SignatureLen ){
 
     if ( getSoap() == NULL ){
         MWLOG( LEV_ERROR, MOD_CMD, "Null sp" );
@@ -393,7 +361,10 @@ int CMD_client::ValidateOtp( string in_code ){
         return SOAP_NO_DATA;
     }/* if ( in_code.empty() ) */
 
-    _ns2__ValidateOtp *send = get_ValidateOtpRequest( in_code );
+    string code = in_code;
+    string processId = getProcessID();
+    _ns2__ValidateOtp *send = get_ValidateOtpRequest( &code, &processId );
+
     if ( send == NULL ){
         MWLOG( LEV_ERROR, MOD_CMD, "%s - NULL send parameters", __FUNCTION__ );
         return SOAP_NULL;
@@ -452,33 +423,16 @@ int CMD_client::ValidateOtp( string in_code ){
         return SOAP_LENGTH;
     }/* if ( response.ValidateOtpResult->Signature->__ptr == NULL ) */
 
-    setSignature( response.ValidateOtpResult->Signature->__ptr
+    if ( ( out_Signature != NULL ) && ( out_SignatureLen != NULL ) ){
+        *out_Signature = new unsigned char[ response.ValidateOtpResult->Signature->__size ];
+        memcpy( *out_Signature
+                , response.ValidateOtpResult->Signature->__ptr
                 , response.ValidateOtpResult->Signature->__size );
 
-#if 0
-    int MessageLen;
-    unsigned char *Message = (unsigned char *)getCPtr( *response.ValidateOtpResult->Status->Message
-                                                    , &MessageLen );
+        *out_SignatureLen = response.ValidateOtpResult->Signature->__size;
+    }/* if ( ( out_Signature != NULL ) && ( out_SignatureLen != NULL ) ) */
 
-    int CodeLen;
-    unsigned char *Code = (unsigned char *)getCPtr( *response.ValidateOtpResult->Status->Code
-                                                    , &CodeLen );
-
-    if ( Code != NULL ){
-        printf( "ValidateOtp() - Code: %s\n", Code );
-    } else{
-        printf( "ValidateOtp() - NULL Code\n" );
-    }/* if ( Code != NULL ) */
-
-    if ( Message != NULL ){
-        printf( "ValidateOtp() - Message: %s\n", Message );
-    } else{
-        printf( "ValidateOtp() - NULL Message\n" );
-    }/* if ( Message != NULL ) */
-#endif // 0
-
-    printf( "m_Signature + Size(): %d\n", getSignature().Size() );
-    printCPtr( (char *)getSignature().GetBytes(), getSignature().Size() );
+    cout << "Signature Ok" << endl;
 
     return SOAP_OK;
 }/* CMD_client::ValidateOtp() */
