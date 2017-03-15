@@ -147,12 +147,12 @@
     <rect>
      <x>20</x>
      <y>190</y>
-     <width>241</width>
+     <width>361</width>
      <height>17</height>
     </rect>
    </property>
    <property name="text">
-    <string>&lt;a href=&quot;http://www.cartaodecidadao.pt&quot;&gt; http://www.cartaodecidadao.pt</string>
+    <string>&lt;a href=&quot;https://www.autenticacao.gov.pt/o-cartao-de-cidadao&quot;&gt; https://www.autenticacao.gov.pt/o-cartao-de-cidadao</string>
    </property>
    <property name="openExternalLinks">
     <bool>true</bool>
