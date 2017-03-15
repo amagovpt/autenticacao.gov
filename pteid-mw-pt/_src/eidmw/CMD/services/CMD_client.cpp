@@ -4,16 +4,77 @@
 
 #include "CMD_client.h"
 #include "Log.h"
+#include "MiscUtil.h"
 
 #define CC_MOVEL_SERVICE_SIGN ( (char *)"http://Ama.Authentication.Service/CCMovelSignature/CCMovelSign" )
 #define CC_MOVEL_SERVICE_VALIDATE_OTP ( (char *)"http://Ama.Authentication.Service/CCMovelSignature/ValidateOtp" )
 
+#define STR_BEGIN_CERTIFICATE   "-----BEGIN CERTIFICATE-----"
+#define STR_END_CERTIFICATE     "-----END CERTIFICATE-----"
+#define STR_EMPTY               ""
+
 namespace eIDMW{
 
 /*  *********************************************************
-    ***          CMD_client::getCPtr()                    ***
+    ***          getX509Certificate()                     ***
     ********************************************************* */
-char *CMD_client::getCPtr( string inStr, int *outLen ){
+X509 *getX509Certificate( string inStr ){
+    char *pem = getCPtr( inStr, NULL );
+
+    if ( NULL == pem ){
+        MWLOG( LEV_ERROR, MOD_CMD, "%s - NULL PEM", __FUNCTION__ );
+        return NULL;
+    }/* if ( NULL == pem ) */
+
+    X509 *x509 = PEM_to_X509( pem );
+    delete pem;
+
+    return x509;
+}/* getX509Certificate() */
+
+/*  *********************************************************
+    ***          getX509CertificateStr()                  ***
+    ********************************************************* */
+string getX509CertificateStr( string in_str ){
+    string out_certificate = in_str;
+
+    std::size_t found;
+    found = out_certificate.find( STR_BEGIN_CERTIFICATE );
+    if ( found == std::string::npos ){
+        MWLOG( LEV_ERROR
+            , MOD_CMD
+            , "%s - \"%s\" absent"
+            , __FUNCTION__
+            , STR_BEGIN_CERTIFICATE );
+        return STR_EMPTY;
+    }/* if ( found == std::string::npos ) */
+
+    found += strlen( STR_BEGIN_CERTIFICATE );
+    if ( out_certificate.substr( found, 1 ) != "\n" ){
+        out_certificate.insert( found, "\n" );
+    }/* if ( out_certificate.substr( (found - 1), 1 ) != "\n" ) */
+
+    found = out_certificate.find( STR_END_CERTIFICATE );
+    if ( found == std::string::npos ){
+        MWLOG( LEV_ERROR
+            , MOD_CMD
+            , "%s - \"%s\" absent"
+            , __FUNCTION__
+            , STR_END_CERTIFICATE );
+        return STR_EMPTY;
+    }/* if ( found == std::string::npos ) */
+
+    if ( out_certificate.substr( (found - 1), 1 ) != "\n" ){
+        out_certificate.insert( found, "\n" );
+    }/* if ( out_certificate.substr( (found - 1), 1 ) != "\n" ) */
+
+    return out_certificate;
+}/* getX509CertificateStr() */
+
+/*  *********************************************************
+    ***          getCPtr()                                ***
+    ********************************************************* */
+char *getCPtr( string inStr, int *outLen ){
     char *c_str;
 
     c_str = new char[ inStr.length() + 1];
@@ -22,12 +83,12 @@ char *CMD_client::getCPtr( string inStr, int *outLen ){
     if ( outLen != NULL ) *outLen = strlen( c_str );
 
     return c_str;
-}/* CMD_client::getCPtr() */
+}/* getCPtr() */
 
 /*  *********************************************************
-    ***          CMD_client::printCPtr()                  ***
+    ***          printCPtr()                              ***
     ********************************************************* */
-void CMD_client::printCPtr( char *c_str, int c_str_len ){
+void printCPtr( char *c_str, int c_str_len ){
     if ( c_str == NULL ){
         fprintf(stderr, "CMD_client::printCPtr() - Null data\n" );
         return;
@@ -37,7 +98,7 @@ void CMD_client::printCPtr( char *c_str, int c_str_len ){
         printf( "%x", c_str[i] );
     }
     printf( "\n" );
-}/* CMD_client::printCPtr() */
+}/* printCPtr() */
 
 /*  *********************************************************
     ***          CMD_client::CMD_client()                 ***
@@ -312,8 +373,10 @@ int CMD_client::checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response ){
 /*  *********************************************************
     ***          CMD_client::CCMovelSign()                ***
     ********************************************************* */
+/*int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId
+                            , string &out_certificate ){*/
 int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId
-                            , string &out_certificate ){
+                            , string *out_certificate ){
 
     if ( getSoap() == NULL ){
         MWLOG( LEV_ERROR, MOD_CMD, "%s - Null sp", __FUNCTION__ );
@@ -407,7 +470,48 @@ int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId
     cout << "ProcessId: " << *response.CCMovelSignResult->Status->ProcessId << endl;
     setProcessID( *response.CCMovelSignResult->Status->ProcessId );
 
-    out_certificate = *response.CCMovelSignResult->X509Certificate;
+    /*
+        Process X509Certificate
+    */
+#if 0
+    out_certificate =
+        getX509CertificateStr( *response.CCMovelSignResult->X509Certificate );
+
+    if ( out_certificate.empty() ) return SOAP_PATTERN;
+
+    X509 *x509 = getX509Certificate( out_certificate );
+    if ( x509 != NULL ){
+        printf( "name: %s, ex_pathlen: %d, ex_pcpathlen: %d, ex_flags: %d, ex_kusage: %d, ex_xkusage: %d, ex_nscert: %d\n"
+                , x509->name, x509->ex_pathlen, x509->ex_pcpathlen, x509->ex_flags, x509->ex_kusage, x509->ex_xkusage, x509->ex_nscert );
+    }/* if ( x509 != NULL ) */
+#else
+
+    if ( out_certificate != NULL ){
+#if 1
+        *out_certificate = getX509CertificateStr( *response.CCMovelSignResult->X509Certificate );
+
+        if ( out_certificate->empty() ) return SOAP_PATTERN;
+
+        X509 *x509 = getX509Certificate( *out_certificate );
+        if ( x509 != NULL ){
+            printf( "name: %s, ex_pathlen: %d, ex_pcpathlen: %d, ex_flags: %d, ex_kusage: %d, ex_xkusage: %d, ex_nscert: %d\n"
+                    , x509->name, x509->ex_pathlen, x509->ex_pcpathlen, x509->ex_flags, x509->ex_kusage, x509->ex_xkusage, x509->ex_nscert );
+        }/* if ( x509 != NULL ) */
+#else
+        string strCert = getX509CertificateStr( *response.CCMovelSignResult->X509Certificate );
+        if ( strCert.empty() ) return SOAP_PATTERN;
+
+        X509 *x509 = getX509Certificate( strCert );
+        *out_certificate = *x509;
+        if ( x509 != NULL ){
+            printf( "name: %s, ex_pathlen: %d, ex_pcpathlen: %d, ex_flags: %d, ex_kusage: %d, ex_xkusage: %d, ex_nscert: %d\n"
+                    , x509->name, x509->ex_pathlen, x509->ex_pcpathlen, x509->ex_flags, x509->ex_kusage, x509->ex_xkusage, x509->ex_nscert );
+        }/* if ( x509 != NULL ) */
+#endif
+
+
+    }
+#endif // 0
 
     return SOAP_OK;
 }/* CMD_client::CCMovelSign(() */
@@ -503,7 +607,10 @@ int CMD_client::ValidateOtp( string in_code
     */
     _ns2__ValidateOtp *send = get_ValidateOtpRequest( &code, &processId );
     if ( send == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "%s - NULL send parameters", __FUNCTION__ );
+        MWLOG( LEV_ERROR
+                , MOD_CMD
+                , "%s - NULL send parameters"
+                , __FUNCTION__ );
         return SOAP_NULL;
     }/* if ( send == NULL ) */
 
@@ -516,11 +623,14 @@ int CMD_client::ValidateOtp( string in_code
         if ( ret == SOAP_FAULT ){
             m_fault = getProxy().soap_fault();
             MWLOG( LEV_ERROR, MOD_CMD
-                    , "ValidateOtp(): SOAP Fault! %s"
+                    , "%s - SOAP Fault! %s"
+                    , __FUNCTION__
                     , m_fault->faultstring );
         } else{
             MWLOG( LEV_ERROR, MOD_CMD
-                , "ValidateOtp(): Error code: %d", ret );
+                , "%s - Error code: %d"
+                , __FUNCTION__
+                , ret );
         }/* if ( ret == SOAP_FAULT ) */
         return ret;
     }/* if ( ret != SOAP_OK ) */

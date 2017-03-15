@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DPTEID_35 -DEIDMW_PREFIX=/usr/local -D__UNIX__ -DDEBUG -DWITH_OPENSSL
 CFLAGS        = -m64 -pipe -O2 -fPIC $(DEFINES)
 CXXFLAGS      = -m64 -pipe -fPIC -O2 -std=c++0x -fPIC $(DEFINES)
-INCPATH       = -I. -I. -I../../common -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
+INCPATH       = -I. -I. -I../../common -I../../applayer -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = CMD_Services1.0.0
 DISTDIR = /media/luiz_lemos/Data/projs/CartaoCidadao/_src/eidmw/CMD/services/.tmp/CMD_Services1.0.0
 LINK          = g++
 LFLAGS        = -m64 -Wl,-O1 -shared -Wl,-soname,libCMD_Services.so.1
-LIBS          = $(SUBLIBS) -L../../lib -lpteidcommon 
+LIBS          = $(SUBLIBS) -L../../lib -lpteidcommon -lpteidapplayer 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -355,7 +355,11 @@ CMD_client.o: CMD_client.cpp CMD_client.h \
 		../../common/LogBase.h \
 		../../common/Mutex.h \
 		../../common/ThreadDefines.h \
-		../../common/MWException.h
+		../../common/MWException.h \
+		../../applayer/MiscUtil.h \
+		../../common/TLVBuffer.h \
+		../../common/TLV.h \
+		../../common/ByteArray.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o CMD_client.o CMD_client.cpp
 
 ####### Install

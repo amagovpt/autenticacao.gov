@@ -20,7 +20,9 @@ int main(){
     unsigned char *Signature = NULL;
     unsigned int SignatureLen = 0;
 
-    int ret = cmdClient->CCMovelSign( in_hash, in_pin, in_userId, certificate );
+    X509 x509;
+
+    int ret = cmdClient->CCMovelSign( in_hash, in_pin, in_userId, &certificate );
     if ( ret != SOAP_OK ){
         printf( "main() - Error @ CCMovelSign() -> ret: %d\n", ret );
         return ret;

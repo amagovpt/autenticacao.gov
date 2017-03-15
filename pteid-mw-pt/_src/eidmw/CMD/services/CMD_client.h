@@ -4,6 +4,7 @@
 //STD Library
 #include <iostream>
 #include <string>
+#include <openssl/x509.h>
 #include "soapH.h"
 
 #include "WSHttpBinding_USCORECCMovelSignature.nsmap"
@@ -13,6 +14,9 @@ using namespace std;
 
 namespace eIDMW
 {
+
+char *getCPtr( string inStr, int *outLen );
+void printCPtr( char *c_str, int c_str_len );
 
 class CMD_client
 {
@@ -39,9 +43,16 @@ class CMD_client
         string getApplicationID();
         void setApplicationID( string applicationID );
 
+        // Get certificate
+        //X509 *getCertificateX509( string in_pin, string in_userId );
+
         // CCMovelSign
+        /*int CCMovelSign( string in_hash, string in_pin, string in_userId
+                        , string &out_certificate );*/
         int CCMovelSign( string in_hash, string in_pin, string in_userId
-                        , string &out_certificate );
+                        , string *out_certificate );
+        /*int CCMovelSign( string in_hash, string in_pin, string in_userId
+                            , X509 *out_certificate );*/
 
         // ValidateOtp
         int ValidateOtp( string in_code
@@ -57,9 +68,7 @@ class CMD_client
         string m_processID;
         const char *m_endpoint;
         const SOAP_ENV__Fault *m_fault;
-
-        char *getCPtr( string inStr, int *outLen );
-        void printCPtr( char *c_str, int c_str_len );
+        X509 *m_Certificate;
 
         xsd__base64Binary *encode_base64( string in_str );
 

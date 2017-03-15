@@ -23,8 +23,8 @@ CONFIG -= warn_on qt
 DESTDIR = ../lib
 DEPENDPATH += .
 
-LIBS += -L../../lib -l$${COMMONLIB}
-INCLUDEPATH += . ../../common
+LIBS += -L../../lib -l$${COMMONLIB} -l$${APPLAYERLIB}
+INCLUDEPATH += . ../../common ../../applayer
 
 unix: DEFINES += __UNIX__ DEBUG WITH_OPENSSL
 #Support Fat binaries on Mac with both x86 and x86_64 architectures

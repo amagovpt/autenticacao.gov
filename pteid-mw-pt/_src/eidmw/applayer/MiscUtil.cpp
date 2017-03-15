@@ -33,6 +33,7 @@
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/buffer.h>
+#include <openssl/pem.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -155,6 +156,63 @@ void replace_lastdot_inplace(char* str_in)
 	if (last_dot != NULL && *(last_dot-1) != '/')
 		*last_dot = '_';
 }
+
+/*  *********************************************************
+    ***          X509_to_PEM()                            ***
+    ********************************************************* */
+char *X509_to_PEM( X509 *x509 ){
+
+    BIO *bio = NULL;
+    char *pem = NULL;
+
+    if ( NULL == x509 ){
+        return NULL;
+    }/* if ( NULL == x509 ) */
+
+    bio = BIO_new( BIO_s_mem() );
+    if ( NULL == bio ){
+        return NULL;
+    }/* if ( NULL == bio ) */
+
+    if ( 0 == PEM_write_bio_X509( bio, x509 ) ){
+        BIO_free( bio );
+        return NULL;
+    }/* if ( 0 == PEM_write_bio_X509( bio, x509 ) ) */
+
+    pem = (char *) malloc( bio->num_write + 1 );
+    if ( NULL == pem ){
+        BIO_free(bio);
+        return NULL;
+    }/* if ( NULL == pem ) */
+
+    memset( pem, 0, bio->num_write + 1 );
+    BIO_read( bio, pem, bio->num_write );
+    BIO_free( bio );
+
+    return pem;
+}/* X509_to_PEM() */
+
+/*  *********************************************************
+    ***          PEM_to_X509()                            ***
+    ********************************************************* */
+X509 *PEM_to_X509( char *pem ){
+    X509 *x509 = NULL;
+    BIO *bio = NULL;
+
+    if ( NULL == pem ){
+        return NULL;
+    }/* if ( NULL == pem ) */
+
+    bio = BIO_new_mem_buf(pem, strlen(pem));
+    if ( NULL == bio ){
+        return NULL;
+    }/* if ( NULL == bio ) */
+
+    x509 = PEM_read_bio_X509( bio, NULL, NULL, NULL );
+    BIO_free( bio );
+
+    return x509;
+}/* PEM_to_X509() */
 
 /*
 Base64 encode binary-data: it can be used also for C-style strings if we ignore the 0x0 terminator

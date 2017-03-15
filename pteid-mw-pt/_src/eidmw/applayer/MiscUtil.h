@@ -31,6 +31,7 @@
 #include <map>
 #include <time.h>
 #include "TLVBuffer.h"
+#include <openssl/x509.h>
 
 namespace eIDMW
 {
@@ -48,6 +49,9 @@ void latin1_to_utf8(unsigned char * in, unsigned char *out);
 char * utf8_to_latin1(char * in);
 
 void replace_lastdot_inplace(char *in);
+
+char *X509_to_PEM( X509 *x509 );
+X509 *PEM_to_X509( char *pem );
 
 char *Base64Encode(const unsigned char *input, long length);
 void Base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded, unsigned int &decoded_len);
