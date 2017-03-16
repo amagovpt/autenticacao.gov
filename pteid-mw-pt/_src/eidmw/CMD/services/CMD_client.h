@@ -29,6 +29,9 @@ char logBuf[512];
     #define MWLOG_DEBUG( format, ... )          _LOG_( LEV_DEBUG, MOD_CMD, format, ## __VA_ARGS__ )
 #endif // WIN32
 
+#define ERR_NONE 0
+#define ERR_FAIL -1
+
 using namespace std;
 
 namespace eIDMW
@@ -44,14 +47,10 @@ class CMD_client
         virtual ~CMD_client();
 
         bool init( int recv_timeout, int send_timeout
-                    , int connect_timeout, short mustUnderstand );
+                          , int connect_timeout, short mustUnderstand );
 
         soap *getSoap();
         void setSoap( soap * );
-
-        WSHttpBinding_USCORECCMovelSignatureProxy getProxy();
-        void setProxy( WSHttpBinding_USCORECCMovelSignatureProxy in_proxy
-                        , const char *endpoint );
 
         void setEndPoint( const char *endpoint );
         const char *getEndPoint();
@@ -69,38 +68,53 @@ class CMD_client
         void setUserId( string in_userId );
 
         // Get certificate
-        X509 *getCertificateX509( string in_pin, string in_userId );
+        X509 *getCertificate( string in_pin, string in_userId );
 
         // CCMovelSign
-        int CCMovelSign( string in_hash, char **out_certificate, int *out_certificateLen );
+        bool sendDataToSign( string in_hash );
 
         // ValidateOtp
-        int ValidateOtp( string in_code
-                        , unsigned char **out_Signature
-                        , unsigned int *out_SignatureLen );
+        bool getSignature( string in_code
+                                     , unsigned char **out_Signature
+                                     , unsigned int *out_SignatureLen );
 
     protected:
 
     private:
-        WSHttpBinding_USCORECCMovelSignatureProxy m_proxy;
         soap *m_soap;
         string m_applicationID;
         string m_processID;
         string m_pin;
         string m_userId;
-
         const char *m_endpoint;
-        const SOAP_ENV__Fault *m_fault;
 
         xsd__base64Binary *encode_base64( string in_str );
 
-        _ns2__CCMovelSign *get_CCMovelSignRequest( string in_hash
-                                                , string in_pin
-                                                , string *in_userId );
+        // CCMovelSign
+        bool CCMovelSign( string in_hash
+                        , char **out_certificate
+                        , int *out_certificateLen );
+
+        _ns2__CCMovelSign *get_CCMovelSignRequest( soap *sp
+                                                 , char *endpoint
+                                                 , string in_applicationID
+                                                 , string in_hash
+                                                 , string in_pin
+                                                 , string *in_userId );
+
         int checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response );
 
-        _ns2__ValidateOtp *get_ValidateOtpRequest( string *in_code
-                                                , string *in_processId );
+        // ValidateOtp
+        bool ValidateOtp( string in_code
+                        , unsigned char **out_Signature
+                        , unsigned int *out_SignatureLen );
+
+        _ns2__ValidateOtp *get_ValidateOtpRequest( soap *sp
+                                                 , char *endpoint
+                                                 , string in_applicationID
+                                                 , string *in_code
+                                                 , string *in_processId );
+
         int checkValidateOtpResponse( _ns2__ValidateOtpResponse *response );
 };
 

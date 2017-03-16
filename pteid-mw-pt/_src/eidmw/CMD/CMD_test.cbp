@@ -2,14 +2,14 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="CMD" />
+		<Option title="CMD_test" />
 		<Option makefile_is_custom="1" />
 		<Option execution_dir="." />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/CMD" prefix_auto="1" extension_auto="1" />
+				<Option output="./CMD_test" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -18,6 +18,14 @@
 					<Add directory="../services" />
 					<Add directory="../../common" />
 				</Compiler>
+				<MakeCommands>
+					<Build command="$make -j4 -f $makefile" />
+					<CompileFile command="$make -j4 -f $makefile $file" />
+					<Clean command="$make -j4 -f $makefile clean" />
+					<DistClean command="$make -f $makefile distclean$target" />
+					<AskRebuildNeeded command="$make -j4 -q -f $makefile" />
+					<SilentBuild command="$make -j4 -f $makefile &gt; $(CMD_NULL)" />
+				</MakeCommands>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/CMD" prefix_auto="1" extension_auto="1" />
@@ -36,7 +44,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="CMDtest.cpp" />
+		<Unit filename="CMD_test.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
