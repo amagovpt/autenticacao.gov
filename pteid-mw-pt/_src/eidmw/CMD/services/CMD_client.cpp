@@ -16,68 +16,12 @@
 namespace eIDMW{
 
 /*  *********************************************************
-    ***          getX509Certificate()                     ***
-    ********************************************************* */
-X509 *getX509Certificate( string inStr ){
-    char *pem = getCPtr( inStr, NULL );
-
-    if ( NULL == pem ){
-        MWLOG( LEV_ERROR, MOD_CMD, "%s - NULL PEM", __FUNCTION__ );
-        return NULL;
-    }/* if ( NULL == pem ) */
-
-    X509 *x509 = PEM_to_X509( pem );
-    delete pem;
-
-    return x509;
-}/* getX509Certificate() */
-
-/*  *********************************************************
-    ***          getX509CertificateStr()                  ***
-    ********************************************************* */
-string getX509CertificateStr( string in_str ){
-    string out_certificate = in_str;
-
-    std::size_t found;
-    found = out_certificate.find( STR_BEGIN_CERTIFICATE );
-    if ( found == std::string::npos ){
-        MWLOG( LEV_ERROR
-            , MOD_CMD
-            , "%s - \"%s\" absent"
-            , __FUNCTION__
-            , STR_BEGIN_CERTIFICATE );
-        return STR_EMPTY;
-    }/* if ( found == std::string::npos ) */
-
-    found += strlen( STR_BEGIN_CERTIFICATE );
-    if ( out_certificate.substr( found, 1 ) != "\n" ){
-        out_certificate.insert( found, "\n" );
-    }/* if ( out_certificate.substr( (found - 1), 1 ) != "\n" ) */
-
-    found = out_certificate.find( STR_END_CERTIFICATE );
-    if ( found == std::string::npos ){
-        MWLOG( LEV_ERROR
-            , MOD_CMD
-            , "%s - \"%s\" absent"
-            , __FUNCTION__
-            , STR_END_CERTIFICATE );
-        return STR_EMPTY;
-    }/* if ( found == std::string::npos ) */
-
-    if ( out_certificate.substr( (found - 1), 1 ) != "\n" ){
-        out_certificate.insert( found, "\n" );
-    }/* if ( out_certificate.substr( (found - 1), 1 ) != "\n" ) */
-
-    return out_certificate;
-}/* getX509CertificateStr() */
-
-/*  *********************************************************
     ***          getCPtr()                                ***
     ********************************************************* */
 char *getCPtr( string inStr, int *outLen ){
     char *c_str;
 
-    c_str = new char[ inStr.length() + 1];
+    c_str = (char *)malloc( inStr.length() + 1 );
     strcpy( c_str, inStr.c_str() );
 
     if ( outLen != NULL ) *outLen = strlen( c_str );
@@ -101,13 +45,58 @@ void printCPtr( char *c_str, int c_str_len ){
 }/* printCPtr() */
 
 /*  *********************************************************
+    ***          getX509Certificate()                     ***
+    ********************************************************* */
+X509 *getX509Certificate( string in_certificate ){
+    string certificate = in_certificate;
+
+    if ( certificate.empty() ){
+        MWLOG_ERR( "Empty certificate" );
+        return NULL;
+    }/* if ( certificate.empty() ) */
+
+    std::size_t found;
+    found = certificate.find( STR_BEGIN_CERTIFICATE );
+    if ( found == std::string::npos ){
+        MWLOG_ERR( "\"%s\" absent", STR_BEGIN_CERTIFICATE );
+        return NULL;
+    }/* if ( found == std::string::npos ) */
+
+    found += strlen( STR_BEGIN_CERTIFICATE );
+    if ( certificate.substr( found, 1 ) != "\n" ){
+        certificate.insert( found, "\n" );
+    }/* if ( certificate.substr( (found - 1), 1 ) != "\n" ) */
+
+    found = certificate.find( STR_END_CERTIFICATE );
+    if ( found == std::string::npos ){
+        MWLOG_ERR( "\"%s\" absent", STR_END_CERTIFICATE );
+        return NULL;
+    }/* if ( found == std::string::npos ) */
+
+    if ( certificate.substr( (found - 1), 1 ) != "\n" ){
+        certificate.insert( found, "\n" );
+    }/* if ( certificate.substr( (found - 1), 1 ) != "\n" ) */
+
+    char *pem = getCPtr( certificate, NULL );
+    if ( NULL == pem ){
+        MWLOG_ERR( "Null pem" );
+        return NULL;
+    }/* if ( NULL == pem ) */
+
+    X509 *x509 = PEM_to_X509( pem );
+    free( pem );
+
+    return x509;
+}/* getX509Certificate() */
+
+/*  *********************************************************
     ***          CMD_client::CMD_client()                 ***
     ********************************************************* */
 xsd__base64Binary *CMD_client::encode_base64( string in_str ){
 
     xsd__base64Binary *encoded = NULL;
     if ( in_str.empty() ){
-        MWLOG( LEV_ERROR, MOD_CMD, "%s - Empty in_str", __FUNCTION__ );
+        MWLOG_ERR( "Empty in_str" );
         return NULL;
     }/* if ( in_str.empty() ) */
 
@@ -119,7 +108,7 @@ xsd__base64Binary *CMD_client::encode_base64( string in_str ){
 
     if ( encoded == NULL ){
         /* this is the same pointer as encoded->__ptr */
-        if ( c_ptr != NULL ) delete[] c_ptr;
+        if ( c_ptr != NULL ) free( c_ptr );
     }/* if ( encoded == NULL ) */
 
     return encoded;
@@ -142,6 +131,9 @@ CMD_client::CMD_client( const char *endpoint )
             Variables initialization
         */
         m_fault = NULL;
+
+        setPin( STR_EMPTY );
+        setUserId( STR_EMPTY );
 
         //Don't change this: it serves as authentication for the service
         setApplicationID( string( "264af13f-c287-4703-9add-10a303b951a3" ) );
@@ -253,9 +245,79 @@ void CMD_client::setApplicationID( string applicationID ){
 }/* CMD_client::setApplicationID() */
 
 /*  *********************************************************
+    ***          CMD_client::getPin()                     ***
+    ********************************************************* */
+string CMD_client::getPin(){
+    return m_pin;
+}/* CMD_client::getPin() */
+
+/*  *********************************************************
+    ***          CMD_client::setPin()                     ***
+    ********************************************************* */
+void CMD_client::setPin( string in_pin ){
+    m_pin = in_pin;
+}/* CMD_client::setPin() */
+
+/*  *********************************************************
+    ***          CMD_client::getUserId()                     ***
+    ********************************************************* */
+string CMD_client::getUserId(){
+    return m_userId;
+}/* CMD_client::getUserId() */
+
+/*  *********************************************************
+    ***          CMD_client::setUserId()                  ***
+    ********************************************************* */
+void CMD_client::setUserId( string in_userId ){
+    m_userId = in_userId;
+}/* CMD_client::setUserId() */
+
+/*  *********************************************************
+    ***          CMD_client::getCertificateX509()         ***
+    ********************************************************* */
+X509 *CMD_client::getCertificateX509( string in_pin, string in_userId ){
+
+    if ( in_pin.empty() ){
+        MWLOG_ERR( "Empty PIN" );
+        return NULL;
+    }/* if ( in_pin.empty() ) */
+
+    if ( in_userId.empty() ){
+        MWLOG_ERR( "Empty userId" );
+        return NULL;
+    }/* if ( in_userId.empty() ) */
+
+    // Set variables
+    setPin( in_pin );
+    setUserId( in_userId );
+
+    /*string certificate;*/
+    char *certificate = NULL;
+    int certificateLen = 0;
+    string in_hash = "\xde\xb2\x53\x63\xff\x9c\x44\x2b\x67\xcb\xa3\xd9\xc5\xef\x21\x6e\x47\x22\xca\xd5";
+
+    int ret = CCMovelSign( in_hash, &certificate, &certificateLen );
+    if ( ret != SOAP_OK ){
+        printf( "main() - Error @ CCMovelSign() -> ret: %d\n", ret );
+        return NULL;
+    }/* if ( ret != SOAP_OK ) */
+
+    if ( certificate == NULL ){
+        MWLOG_ERR( "Null certificate" );
+        return NULL;
+    }/* if ( certificate.empty() ) */
+
+    string strCertificate( certificate, certificateLen );
+    X509 *x509 = getX509Certificate( strCertificate );
+    free( certificate );
+
+    return x509;
+}/* CMD_client::getCertificateX509() */
+
+/*  *********************************************************
     ***          CMD_client::get_CCMovelSignRequest()     ***
     ********************************************************* */
-_ns2__CCMovelSign * CMD_client::get_CCMovelSignRequest( string in_hash
+_ns2__CCMovelSign *CMD_client::get_CCMovelSignRequest( string in_hash
                                                       , string in_pin
                                                       , string *in_userId ){
     SOAP_ENV__Header *soapHeader = soap_new_SOAP_ENV__Header( getSoap() );
@@ -320,50 +382,32 @@ _ns2__ValidateOtp *CMD_client::get_ValidateOtpRequest( string *in_code
     ********************************************************* */
 int CMD_client::checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response ){
     if ( response == NULL ){
-        MWLOG( LEV_ERROR
-                , MOD_CMD
-                , "%s - Null response"
-                , __FUNCTION__ );
+        MWLOG_ERR( "Null response" );
         return SOAP_NULL;
     }/* if ( response == NULL ) */
 
     if ( response->CCMovelSignResult == NULL ){
-        MWLOG( LEV_ERROR
-                , MOD_CMD
-                , "%s - Null CCMovelSignResult"
-                , __FUNCTION__ );
+        MWLOG_ERR( "Null CCMovelSignResult" );
         return SOAP_NULL;
     }/* if ( response->CCMovelSignResult == NULL ) */
 
     if ( response->CCMovelSignResult->X509Certificate == NULL ){
-        MWLOG( LEV_ERROR
-                , MOD_CMD
-                , "%s - Null X509Certificate"
-                , __FUNCTION__ );
+        MWLOG_ERR( "Null X509Certificate" );
         return SOAP_NULL;
     }/* if ( response->CCMovelSignResult->X509Certificate == NULL ) */
 
     if ( ( (string)( *response->CCMovelSignResult->X509Certificate ) ).empty() ){
-        MWLOG( LEV_ERROR
-                , MOD_CMD
-                , "%s - Empty certificate"
-                , __FUNCTION__ );
+        MWLOG_ERR( "Empty certificate" );
         return SOAP_NO_DATA;
     }/* if ( strResp.empty() ) */
 
     if ( response->CCMovelSignResult->Status == NULL ){
-        MWLOG( LEV_ERROR
-                , MOD_CMD
-                , "%s - Null Status"
-                , __FUNCTION__ );
+        MWLOG_ERR( "Null Status" );
         return SOAP_NULL;
     }/* if ( response->CCMovelSignResult->Status == NULL ) */
 
     if ( response->CCMovelSignResult->Status->ProcessId == NULL ){
-        MWLOG( LEV_ERROR
-                , MOD_CMD
-                , "%s - Null ProcessId"
-                , __FUNCTION__ );
+        MWLOG_ERR( "Null ProcessId" );
         return SOAP_NULL;
     }/* if ( response->CCMovelSignResult->Status->ProcessId == NULL ) */
 
@@ -373,28 +417,27 @@ int CMD_client::checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response ){
 /*  *********************************************************
     ***          CMD_client::CCMovelSign()                ***
     ********************************************************* */
-/*int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId
-                            , string &out_certificate ){*/
-int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId
-                            , string *out_certificate ){
+int CMD_client::CCMovelSign( string in_hash, char **out_certificate, int *out_certificateLen ){
 
     if ( getSoap() == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "%s - Null sp", __FUNCTION__ );
+        MWLOG_ERR( "Null soap" );
         return SOAP_NULL;
     }/* if ( getSoap() == NULL ) */
 
     if ( in_hash.empty() ){
-        MWLOG( LEV_ERROR, MOD_CMD, "%s - Empty hash", __FUNCTION__ );
+        MWLOG_ERR( "Empty hash" );
         return SOAP_NO_DATA;
     }/* if ( in_hash.empty() ) */
 
+    string in_pin = getPin();
     if ( in_pin.empty() ){
-        MWLOG( LEV_ERROR, MOD_CMD, "%s - Empty pin", __FUNCTION__ );
+        MWLOG_ERR( "Empty pin" );
         return SOAP_NO_DATA;
     }/* if ( in_pin.empty() ) */
 
+    string in_userId = getUserId();
     if ( in_userId.empty() ){
-        MWLOG( LEV_ERROR, MOD_CMD, "%s - Empty userId", __FUNCTION__ );
+        MWLOG_ERR( "Empty userId" );
         return SOAP_NO_DATA;
     }/* if ( in_userId.empty() ) */
 
@@ -406,11 +449,9 @@ int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId
     /*
         Get CCMovelSign request
     */
-    string userId = in_userId;
-    _ns2__CCMovelSign *send = get_CCMovelSignRequest( in_hash, in_pin
-                                                    , &userId );
+    _ns2__CCMovelSign *send = get_CCMovelSignRequest( in_hash, in_pin, &in_userId );
     if ( send == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "NULL send parameters" );
+        MWLOG_ERR( "NULL send parameters" );
         return SOAP_NULL;
     }/* if ( send == NULL ) */
 
@@ -447,13 +488,9 @@ int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId
     if ( ret != SOAP_OK ){
         if ( ret == SOAP_FAULT ){
             m_fault = getProxy().soap_fault();
-            MWLOG( LEV_ERROR
-                    , MOD_CMD
-                    , "Error in CCMovelSign() - SOAP Fault! %s"
-                    , m_fault->faultstring );
+            MWLOG_ERR( "SOAP Fault! %s", m_fault->faultstring );
         } else{
-            MWLOG( LEV_ERROR, MOD_CMD
-                , "Error in CCMovelSign(): Error code: %d", ret );
+            MWLOG_ERR( "Error code: %d", ret );
         }/* if ( ret == SOAP_FAULT ) */
         return ret;
     }/* if ( ret != SOAP_OK ) */
@@ -473,45 +510,10 @@ int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId
     /*
         Process X509Certificate
     */
-#if 0
-    out_certificate =
-        getX509CertificateStr( *response.CCMovelSignResult->X509Certificate );
-
-    if ( out_certificate.empty() ) return SOAP_PATTERN;
-
-    X509 *x509 = getX509Certificate( out_certificate );
-    if ( x509 != NULL ){
-        printf( "name: %s, ex_pathlen: %d, ex_pcpathlen: %d, ex_flags: %d, ex_kusage: %d, ex_xkusage: %d, ex_nscert: %d\n"
-                , x509->name, x509->ex_pathlen, x509->ex_pcpathlen, x509->ex_flags, x509->ex_kusage, x509->ex_xkusage, x509->ex_nscert );
-    }/* if ( x509 != NULL ) */
-#else
-
     if ( out_certificate != NULL ){
-#if 1
-        *out_certificate = getX509CertificateStr( *response.CCMovelSignResult->X509Certificate );
-
-        if ( out_certificate->empty() ) return SOAP_PATTERN;
-
-        X509 *x509 = getX509Certificate( *out_certificate );
-        if ( x509 != NULL ){
-            printf( "name: %s, ex_pathlen: %d, ex_pcpathlen: %d, ex_flags: %d, ex_kusage: %d, ex_xkusage: %d, ex_nscert: %d\n"
-                    , x509->name, x509->ex_pathlen, x509->ex_pcpathlen, x509->ex_flags, x509->ex_kusage, x509->ex_xkusage, x509->ex_nscert );
-        }/* if ( x509 != NULL ) */
-#else
-        string strCert = getX509CertificateStr( *response.CCMovelSignResult->X509Certificate );
-        if ( strCert.empty() ) return SOAP_PATTERN;
-
-        X509 *x509 = getX509Certificate( strCert );
-        *out_certificate = *x509;
-        if ( x509 != NULL ){
-            printf( "name: %s, ex_pathlen: %d, ex_pcpathlen: %d, ex_flags: %d, ex_kusage: %d, ex_xkusage: %d, ex_nscert: %d\n"
-                    , x509->name, x509->ex_pathlen, x509->ex_pcpathlen, x509->ex_flags, x509->ex_kusage, x509->ex_xkusage, x509->ex_nscert );
-        }/* if ( x509 != NULL ) */
-#endif
-
-
-    }
-#endif // 0
+        *out_certificate = getCPtr( *response.CCMovelSignResult->X509Certificate
+                                    , out_certificateLen );
+    }/* if ( out_certificate != NULL ) */
 
     return SOAP_OK;
 }/* CMD_client::CCMovelSign(() */
@@ -521,61 +523,43 @@ int CMD_client::CCMovelSign( string in_hash, string in_pin, string in_userId
     ********************************************************* */
 int CMD_client::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response ){
     if ( response == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "%s - Null response", __FUNCTION__ );
+        MWLOG_ERR( "Null response" );
         return SOAP_NULL;
     }/* if ( response == NULL ) */
 
     if ( response->ValidateOtpResult == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD
-                , "%s - Null ValidateOtpResult"
-                , __FUNCTION__ );
+        MWLOG_ERR( "Null ValidateOtpResult" );
         return SOAP_NULL;
     }/* if ( response->ValidateOtpResult == NULL ) */
 
     if ( response->ValidateOtpResult->Signature == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD
-                , "%s - Null Signature"
-                , __FUNCTION__ );
+        MWLOG_ERR( "Null Signature" );
         return SOAP_NULL;
     }/* if ( response->ValidateOtpResult->Signature == NULL ) */
 
     if ( response->ValidateOtpResult->Status == NULL ){
-        MWLOG( LEV_ERROR
-                , MOD_CMD
-                , "%s - Null Status"
-                , __FUNCTION__ );
+        MWLOG_ERR( "Null Status" );
         return SOAP_NULL;
     }/* if ( response->ValidateOtpResult->Status == NULL ) */
 
     if ( response->ValidateOtpResult->Status->Message == NULL ){
-        MWLOG( LEV_ERROR
-                , MOD_CMD
-                , "%s - Null Status Message"
-                , __FUNCTION__ );
+        MWLOG_ERR( "Null Status Message" );
         return SOAP_NULL;
     }/* if ( response->ValidateOtpResult->Status->Message == NULL ) */
 
     if ( response->ValidateOtpResult->Signature == NULL ){
-        MWLOG( LEV_ERROR
-                , MOD_CMD
-                , "%s - NULL Signature"
-                , __FUNCTION__ );
+        MWLOG_ERR( "Null Signature" );
         return SOAP_NULL;
     }/* if ( response->ValidateOtpResult->Signature == NULL ) */
 
     if ( response->ValidateOtpResult->Signature->__ptr == NULL ){
-        MWLOG( LEV_ERROR
-                , MOD_CMD
-                , "%s - NULL Signature pointer"
-                , __FUNCTION__ );
+        MWLOG_ERR( "Null Signature pointer" );
         return SOAP_NULL;
     }/* if ( response->ValidateOtpResult->Signature->__ptr == NULL ) */
 
     if ( response->ValidateOtpResult->Signature->__size < 1 ){
-        MWLOG( LEV_ERROR
-                , MOD_CMD
-                , "%s - Invalide Signature pointer size: %d"
-                , __FUNCTION__
+        MWLOG_ERR( "Invalide Signature pointer size: %d"
+
                 , response->ValidateOtpResult->Signature->__size );
         return SOAP_LENGTH;
     }/* if ( response->ValidateOtpResult->Signature->__ptr == NULL ) */
@@ -591,12 +575,12 @@ int CMD_client::ValidateOtp( string in_code
                             , unsigned int *out_SignatureLen ){
 
     if ( getSoap() == NULL ){
-        MWLOG( LEV_ERROR, MOD_CMD, "Null sp" );
+        MWLOG_ERR( "Null soap" );
         return SOAP_CLI_FAULT;
     }/* if ( getSoap() == NULL ) */
 
     if ( in_code.empty() ){
-        MWLOG( LEV_ERROR, MOD_CMD, "%s - Empty in_code", __FUNCTION__ );
+        MWLOG_ERR( "Empty code" );
         return SOAP_NO_DATA;
     }/* if ( in_code.empty() ) */
 
@@ -607,10 +591,7 @@ int CMD_client::ValidateOtp( string in_code
     */
     _ns2__ValidateOtp *send = get_ValidateOtpRequest( &code, &processId );
     if ( send == NULL ){
-        MWLOG( LEV_ERROR
-                , MOD_CMD
-                , "%s - NULL send parameters"
-                , __FUNCTION__ );
+        MWLOG_ERR( "Null send parameters" );
         return SOAP_NULL;
     }/* if ( send == NULL ) */
 
@@ -622,15 +603,9 @@ int CMD_client::ValidateOtp( string in_code
     if ( ret != SOAP_OK ){
         if ( ret == SOAP_FAULT ){
             m_fault = getProxy().soap_fault();
-            MWLOG( LEV_ERROR, MOD_CMD
-                    , "%s - SOAP Fault! %s"
-                    , __FUNCTION__
-                    , m_fault->faultstring );
+            MWLOG_ERR( "SOAP Fault! %s", m_fault->faultstring );
         } else{
-            MWLOG( LEV_ERROR, MOD_CMD
-                , "%s - Error code: %d"
-                , __FUNCTION__
-                , ret );
+            MWLOG_ERR( "Error code: %d", ret );
         }/* if ( ret == SOAP_FAULT ) */
         return ret;
     }/* if ( ret != SOAP_OK ) */
@@ -652,8 +627,6 @@ int CMD_client::ValidateOtp( string in_code
 
         *out_SignatureLen = response.ValidateOtpResult->Signature->__size;
     }/* if ( ( out_Signature != NULL ) && ( out_SignatureLen != NULL ) ) */
-
-    cout << "Signature Ok" << endl;
 
     return SOAP_OK;
 }/* CMD_client::ValidateOtp() */

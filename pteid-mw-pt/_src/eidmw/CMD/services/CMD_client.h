@@ -10,6 +10,25 @@
 #include "WSHttpBinding_USCORECCMovelSignature.nsmap"
 #include "soapWSHttpBinding_USCORECCMovelSignatureProxy.h"
 
+char logBuf[512];
+#ifdef WIN32
+    #define _LOG_( level, mod, format, ... )    { sprintf( logBuf, "%s() - ", __FUNCTION__ );               \
+                                                    sprintf( &logBuf[strlen(logBuf)], format, __VA_ARGS__ );\
+                                                    MWLOG( level, mod, logBuf); }
+    #define MWLOG_ERR( format, ...   )          _LOG_( LEV_ERROR, MOD_CMD, format, __VA_ARGS__ )
+    #define MWLOG_WARN( format, ...  )          _LOG_( LEV_WARN , MOD_CMD, format, __VA_ARGS__ )
+    #define MWLOG_INFO( format, ...  )          _LOG_( LEV_INFO , MOD_CMD, format, __VA_ARGS__ )
+    #define MWLOG_DEBUG( format, ... )          _LOG_( LEV_DEBUG, MOD_CMD, format, __VA_ARGS__ )
+#else
+    #define _LOG_( level, mod, format, ... )    { sprintf( logBuf, "%s() - ", __FUNCTION__ );                   \
+                                                    sprintf( &logBuf[strlen(logBuf)], format, ## __VA_ARGS__ ); \
+                                                    MWLOG( level, mod, logBuf); }
+    #define MWLOG_ERR( format, ...   )          _LOG_( LEV_ERROR, MOD_CMD, format, ## __VA_ARGS__ )
+    #define MWLOG_WARN( format, ...  )          _LOG_( LEV_WARN , MOD_CMD, format, ## __VA_ARGS__ )
+    #define MWLOG_INFO( format, ...  )          _LOG_( LEV_INFO , MOD_CMD, format, ## __VA_ARGS__ )
+    #define MWLOG_DEBUG( format, ... )          _LOG_( LEV_DEBUG, MOD_CMD, format, ## __VA_ARGS__ )
+#endif // WIN32
+
 using namespace std;
 
 namespace eIDMW
@@ -43,16 +62,17 @@ class CMD_client
         string getApplicationID();
         void setApplicationID( string applicationID );
 
+        string getPin();
+        void setPin( string in_pin );
+
+        string getUserId();
+        void setUserId( string in_userId );
+
         // Get certificate
-        //X509 *getCertificateX509( string in_pin, string in_userId );
+        X509 *getCertificateX509( string in_pin, string in_userId );
 
         // CCMovelSign
-        /*int CCMovelSign( string in_hash, string in_pin, string in_userId
-                        , string &out_certificate );*/
-        int CCMovelSign( string in_hash, string in_pin, string in_userId
-                        , string *out_certificate );
-        /*int CCMovelSign( string in_hash, string in_pin, string in_userId
-                            , X509 *out_certificate );*/
+        int CCMovelSign( string in_hash, char **out_certificate, int *out_certificateLen );
 
         // ValidateOtp
         int ValidateOtp( string in_code
@@ -66,9 +86,11 @@ class CMD_client
         soap *m_soap;
         string m_applicationID;
         string m_processID;
+        string m_pin;
+        string m_userId;
+
         const char *m_endpoint;
         const SOAP_ENV__Fault *m_fault;
-        X509 *m_Certificate;
 
         xsd__base64Binary *encode_base64( string in_str );
 

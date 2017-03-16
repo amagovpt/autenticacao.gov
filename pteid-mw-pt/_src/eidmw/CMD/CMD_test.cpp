@@ -13,34 +13,58 @@ int main(){
     }/* if ( !cmdClient->init() ) */
 
     string in_userId = "+351 914432445";
-    string in_hash = "\xde\xb2\x53\x63\xff\x9c\x44\x2b\x67\xcb\xa3\xd9\xc5\xef\x21\x6e\x47\x22\xca\xd5";
     string in_pin = "\x07\x06\x09\x05";
-    string certificate;
-    string in_code = "111111";
-    unsigned char *Signature = NULL;
-    unsigned int SignatureLen = 0;
 
-    X509 x509;
+    X509 *certificateX509 = cmdClient->getCertificateX509( in_pin, in_userId );
+    if ( certificateX509 == NULL ){
+        printf( "main() - NULL x509\n" );
+        return SOAP_NULL;
+    }/* if ( certificateX509 == NULL ) */
 
-    int ret = cmdClient->CCMovelSign( in_hash, in_pin, in_userId, &certificate );
+    if ( certificateX509 != NULL ){
+        printf( "name: %s\n", certificateX509->name );
+    }/* if ( certificateX509 != NULL ) */
+
+    /*
+        Calculate hash
+    */
+    string in_hash = "\xde\xb2\x53\x63\xff\x9c\x44\x2b\x67\xcb\xa3\xd9\xc5\xef\x21\x6e\x47\x22\xca\xd5";
+
+    int ret = cmdClient->CCMovelSign( in_hash, NULL, NULL );
     if ( ret != SOAP_OK ){
         printf( "main() - Error @ CCMovelSign() -> ret: %d\n", ret );
         return ret;
     }/* if ( ret != SOAP_OK ) */
 
-    cout << "The service returned certificate" << endl << certificate << endl << endl;
     // End of CCMovelSign
 
+    /*
+        PIN confirmation
+    */
+    string in_code = "111111";
+    unsigned char *signature = NULL;
+    unsigned int signatureLen = 0;
+
     // ValidateOtp
-    ret = cmdClient->ValidateOtp( in_code, &Signature, &SignatureLen );
+    ret = cmdClient->ValidateOtp( in_code, &signature, &signatureLen );
     if ( ret != SOAP_OK ){
         printf( "main() - Error @ ValidateOtp() -> ret: %d\n", ret );
         return ret;
     }/* if ( ret != SOAP_OK ) */
 
-    printf( "Signature size(): %d\n", SignatureLen );
+    if ( signature == NULL ){
+        delete cmdClient;
+        printf( "%s - NULL signature\n", __FUNCTION__ );
+        return -1;
+    }/* if ( signature == NULL ) */
 
-    delete Signature;
+    printf( "Signature size(): %d\nSignature: ", signatureLen );
+    for( int i = 0; i < signatureLen; i++ ){
+        printf( "0x%02x ", *(signature + i) );
+    }/* for( int i ) */
+    printf( "\n" );
+
+    free( signature );
     delete cmdClient;
 
     return 0;
