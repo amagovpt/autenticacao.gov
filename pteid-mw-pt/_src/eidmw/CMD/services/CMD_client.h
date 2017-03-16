@@ -74,9 +74,8 @@ class CMD_client
         bool sendDataToSign( string in_hash );
 
         // ValidateOtp
-        bool getSignature( string in_code
-                                     , unsigned char **out_Signature
-                                     , unsigned int *out_SignatureLen );
+        unsigned char *getSignature( string in_code
+                                    , unsigned int *outSignatureLen );
 
     protected:
 
@@ -105,9 +104,8 @@ class CMD_client
         int checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response );
 
         // ValidateOtp
-        bool ValidateOtp( string in_code
-                        , unsigned char **out_Signature
-                        , unsigned int *out_SignatureLen );
+        unsigned char *ValidateOtp( string in_code
+                                    , unsigned int *outSignatureLen );
 
         _ns2__ValidateOtp *get_ValidateOtpRequest( soap *sp
                                                  , char *endpoint

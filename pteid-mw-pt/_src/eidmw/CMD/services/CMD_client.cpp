@@ -394,16 +394,6 @@ int CMD_client::checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response ){
         return SOAP_NO_DATA;
     }/* if ( strResp.empty() ) */
 
-    if ( response->CCMovelSignResult->Status == NULL ){
-        MWLOG_ERR( "Null Status" );
-        return SOAP_NULL;
-    }/* if ( response->CCMovelSignResult->Status == NULL ) */
-
-    if ( response->CCMovelSignResult->Status->ProcessId == NULL ){
-        MWLOG_ERR( "Null ProcessId" );
-        return SOAP_NULL;
-    }/* if ( response->CCMovelSignResult->Status->ProcessId == NULL ) */
-
     return SOAP_OK;
 }/* checkCCMovelSignResponse() */
 
@@ -563,18 +553,17 @@ int CMD_client::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response ){
 /*  *********************************************************
     ***          CMD_client::ValidateOtp()                ***
     ********************************************************* */
-bool CMD_client::ValidateOtp( string in_code
-                            , unsigned char **out_Signature
-                            , unsigned int *out_SignatureLen ){
+unsigned char *CMD_client::ValidateOtp( string in_code
+                                        , unsigned int *outSignatureLen ){
     soap *sp = getSoap();
     if ( sp == NULL ){
         MWLOG_ERR( "Null soap" );
-        return false;
+        return NULL;
     }/* if ( sp == NULL ) */
 
     if ( in_code.empty() ){
         MWLOG_ERR( "Empty code" );
-        return false;
+        return NULL;
     }/* if ( in_code.empty() ) */
 
     string code = in_code;
@@ -595,7 +584,7 @@ bool CMD_client::ValidateOtp( string in_code
 
     if ( send == NULL ){
         MWLOG_ERR( "Null send parameters" );
-        return false;
+        return NULL;
     }/* if ( send == NULL ) */
 
     /*
@@ -615,28 +604,35 @@ bool CMD_client::ValidateOtp( string in_code
         } else{
             MWLOG_ERR( "Error code: %d", ret );
         }/* if ( ret == SOAP_FAULT ) */
-        return false;
+        return NULL;
     }/* if ( ret != SOAP_OK ) */
 
     /*
         Validate response
     */
     ret = checkValidateOtpResponse( &response ) ;
-    if ( ret != SOAP_OK ) return false;
+    if ( ret != SOAP_OK ) return NULL;
 
     /*
         Set signature
     */
-    if ( ( out_Signature != NULL ) && ( out_SignatureLen != NULL ) ){
-        *out_Signature = (unsigned char*)malloc( response.ValidateOtpResult->Signature->__size );
-        memcpy( *out_Signature
-                , response.ValidateOtpResult->Signature->__ptr
-                , response.ValidateOtpResult->Signature->__size );
+    unsigned char *outSignature =
+        (unsigned char*)malloc( response.ValidateOtpResult->Signature->__size );
 
-        *out_SignatureLen = response.ValidateOtpResult->Signature->__size;
-    }/* if ( ( out_Signature != NULL ) && ( out_SignatureLen != NULL ) ) */
+    if ( outSignature == NULL ){
+        MWLOG_ERR( "Malloc fail!" );
+        return NULL;
+    }/* if ( outSignature == NULL ) */
 
-    return true;
+    memcpy( outSignature
+            , response.ValidateOtpResult->Signature->__ptr
+            , response.ValidateOtpResult->Signature->__size );
+
+    if ( outSignatureLen != NULL ){
+        *outSignatureLen = response.ValidateOtpResult->Signature->__size;
+    }/* if ( outSignatureLen != NULL ) */
+
+    return outSignature;
 }/* CMD_client::ValidateOtp() */
 
 
@@ -656,11 +652,10 @@ bool CMD_client::sendDataToSign( string in_hash ){
 /*  *********************************************************
     ***          CMD_client::getSignature()               ***
     ********************************************************* */
-bool CMD_client::getSignature( string in_code
-                             , unsigned char **out_Signature
-                             , unsigned int *out_SignatureLen ){
+unsigned char *CMD_client::getSignature( string in_code
+                                        , unsigned int *outSignatureLen ){
 
-    return ValidateOtp( in_code, out_Signature, out_SignatureLen );
+    return ValidateOtp( in_code, outSignatureLen );
 }/* CMD_client::getSignature() */
 
 

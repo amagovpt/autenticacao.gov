@@ -52,22 +52,18 @@ int main(){
         PIN confirmation
     */
     string in_code = "111111";
-    unsigned char *signature = NULL;
+    unsigned char *signature;
     unsigned int signatureLen = 0;
 
     // getSignature
     printf( "\n*******************************\n"
               "*** cmdClient->getSignature ***\n"
               "*******************************\n" );
-    bRet = cmdClient->getSignature( in_code, &signature, &signatureLen );
-    if ( !bRet ){
-        printf( "main() - Error @ getSignature()");
-        return ERR_GET_SIGNATURE;
-    }/* if ( !bRet ) */
-
+    signature = cmdClient->getSignature( in_code, &signatureLen );
     if ( signature == NULL ){
         delete cmdClient;
-        printf( "%s - NULL signature\n", __FUNCTION__ );
+
+        printf( "main() - Error @ getSignature()");
         return ERR_GET_SIGNATURE;
     }/* if ( signature == NULL ) */
 
