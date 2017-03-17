@@ -9,25 +9,9 @@
 #define CC_MOVEL_SERVICE_SIGN ( (char *)"http://Ama.Authentication.Service/CCMovelSignature/CCMovelSign" )
 #define CC_MOVEL_SERVICE_VALIDATE_OTP ( (char *)"http://Ama.Authentication.Service/CCMovelSignature/ValidateOtp" )
 
-#define STR_BEGIN_CERTIFICATE   "-----BEGIN CERTIFICATE-----"
-#define STR_END_CERTIFICATE     "-----END CERTIFICATE-----"
 #define STR_EMPTY               ""
 
 namespace eIDMW{
-
-/*  *********************************************************
-    ***          getCPtr()                                ***
-    ********************************************************* */
-char *getCPtr( string inStr, int *outLen ){
-    char *c_str;
-
-    c_str = (char *)malloc( inStr.length() + 1 );
-    strcpy( c_str, inStr.c_str() );
-
-    if ( outLen != NULL ) *outLen = strlen( c_str );
-
-    return c_str;
-}/* getCPtr() */
 
 /*  *********************************************************
     ***          printCPtr()                              ***
@@ -43,51 +27,6 @@ void printCPtr( char *c_str, int c_str_len ){
     }
     printf( "\n" );
 }/* printCPtr() */
-
-/*  *********************************************************
-    ***          getX509Certificate()                     ***
-    ********************************************************* */
-X509 *getX509Certificate( string in_certificate ){
-    string certificate = in_certificate;
-
-    if ( certificate.empty() ){
-        MWLOG_ERR( "Empty certificate" );
-        return NULL;
-    }/* if ( certificate.empty() ) */
-
-    std::size_t found;
-    found = certificate.find( STR_BEGIN_CERTIFICATE );
-    if ( found == std::string::npos ){
-        MWLOG_ERR( "\"%s\" absent", STR_BEGIN_CERTIFICATE );
-        return NULL;
-    }/* if ( found == std::string::npos ) */
-
-    found += strlen( STR_BEGIN_CERTIFICATE );
-    if ( certificate.substr( found, 1 ) != "\n" ){
-        certificate.insert( found, "\n" );
-    }/* if ( certificate.substr( (found - 1), 1 ) != "\n" ) */
-
-    found = certificate.find( STR_END_CERTIFICATE );
-    if ( found == std::string::npos ){
-        MWLOG_ERR( "\"%s\" absent", STR_END_CERTIFICATE );
-        return NULL;
-    }/* if ( found == std::string::npos ) */
-
-    if ( certificate.substr( (found - 1), 1 ) != "\n" ){
-        certificate.insert( found, "\n" );
-    }/* if ( certificate.substr( (found - 1), 1 ) != "\n" ) */
-
-    char *pem = getCPtr( certificate, NULL );
-    if ( NULL == pem ){
-        MWLOG_ERR( "Null pem" );
-        return NULL;
-    }/* if ( NULL == pem ) */
-
-    X509 *x509 = PEM_to_X509( pem );
-    free( pem );
-
-    return x509;
-}/* getX509Certificate() */
 
 /*  *********************************************************
     ***          CMD_client::CMD_client()                 ***
@@ -260,48 +199,6 @@ string CMD_client::getUserId(){
 void CMD_client::setUserId( string in_userId ){
     m_userId = in_userId;
 }/* CMD_client::setUserId() */
-
-/*  *********************************************************
-    ***          CMD_client::getCertificate()             ***
-    ********************************************************* */
-X509 *CMD_client::getCertificate( string in_pin, string in_userId ){
-
-    if ( in_pin.empty() ){
-        MWLOG_ERR( "Empty PIN" );
-        return NULL;
-    }/* if ( in_pin.empty() ) */
-
-    if ( in_userId.empty() ){
-        MWLOG_ERR( "Empty userId" );
-        return NULL;
-    }/* if ( in_userId.empty() ) */
-
-    // Set variables
-    setPin( in_pin );
-    setUserId( in_userId );
-
-    /*string certificate;*/
-    char *certificate = NULL;
-    int certificateLen = 0;
-    string in_hash = "\xde\xb2\x53\x63\xff\x9c\x44\x2b\x67\xcb\xa3\xd9\xc5\xef\x21\x6e\x47\x22\xca\xd5";
-
-    bool bRet = CCMovelSign( in_hash, &certificate, &certificateLen );
-    if ( !bRet ){
-        MWLOG_ERR( "Get certificate failed" );
-        return NULL;
-    }/* if ( !bRet ) */
-
-    if ( certificate == NULL ){
-        MWLOG_ERR( "Null certificate" );
-        return NULL;
-    }/* if ( certificate.empty() ) */
-
-    string strCertificate( certificate, certificateLen );
-    X509 *x509 = getX509Certificate( strCertificate );
-    free( certificate );
-
-    return x509;
-}/* CMD_client::getCertificate() */
 
 /*  *********************************************************
     ***          CMD_client::get_CCMovelSignRequest()     ***
@@ -553,17 +450,18 @@ int CMD_client::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response ){
 /*  *********************************************************
     ***          CMD_client::ValidateOtp()                ***
     ********************************************************* */
-unsigned char *CMD_client::ValidateOtp( string in_code
-                                        , unsigned int *outSignatureLen ){
+bool CMD_client::ValidateOtp( string in_code
+                            , unsigned char **outSignature
+                            , unsigned int *outSignatureLen ){
     soap *sp = getSoap();
     if ( sp == NULL ){
         MWLOG_ERR( "Null soap" );
-        return NULL;
+        return false;
     }/* if ( sp == NULL ) */
 
     if ( in_code.empty() ){
         MWLOG_ERR( "Empty code" );
-        return NULL;
+        return false;
     }/* if ( in_code.empty() ) */
 
     string code = in_code;
@@ -584,7 +482,7 @@ unsigned char *CMD_client::ValidateOtp( string in_code
 
     if ( send == NULL ){
         MWLOG_ERR( "Null send parameters" );
-        return NULL;
+        return false;
     }/* if ( send == NULL ) */
 
     /*
@@ -604,35 +502,35 @@ unsigned char *CMD_client::ValidateOtp( string in_code
         } else{
             MWLOG_ERR( "Error code: %d", ret );
         }/* if ( ret == SOAP_FAULT ) */
-        return NULL;
+        return false;
     }/* if ( ret != SOAP_OK ) */
 
     /*
         Validate response
     */
     ret = checkValidateOtpResponse( &response ) ;
-    if ( ret != SOAP_OK ) return NULL;
+    if ( ret != SOAP_OK ) return false;
 
     /*
         Set signature
     */
-    unsigned char *outSignature =
-        (unsigned char*)malloc( response.ValidateOtpResult->Signature->__size );
+    if ( ( outSignature != NULL ) && ( outSignatureLen != NULL ) ){
+        *outSignature =
+            (unsigned char*)malloc( response.ValidateOtpResult->Signature->__size );
 
-    if ( outSignature == NULL ){
-        MWLOG_ERR( "Malloc fail!" );
-        return NULL;
-    }/* if ( outSignature == NULL ) */
+        if ( outSignature == NULL ){
+            MWLOG_ERR( "Malloc fail!" );
+            return false;
+        }/* if ( outSignature == NULL ) */
 
-    memcpy( outSignature
-            , response.ValidateOtpResult->Signature->__ptr
-            , response.ValidateOtpResult->Signature->__size );
+        memcpy( *outSignature
+                , response.ValidateOtpResult->Signature->__ptr
+                , response.ValidateOtpResult->Signature->__size );
 
-    if ( outSignatureLen != NULL ){
         *outSignatureLen = response.ValidateOtpResult->Signature->__size;
-    }/* if ( outSignatureLen != NULL ) */
+    }/* if ( ( outSignature != NULL ) && ( outSignatureLen != NULL ) ) */
 
-    return outSignature;
+    return true;
 }/* CMD_client::ValidateOtp() */
 
 
@@ -641,6 +539,58 @@ unsigned char *CMD_client::ValidateOtp( string in_code
     **** Functions visible to the outside
     ****
     ************************************************************************************************* */
+/*  *********************************************************
+    ***          CMD_client::getCertificate()             ***
+    ********************************************************* */
+CByteArray CMD_client::getCertificate( string in_pin, string in_userId ){
+    CByteArray empty_certificate;
+
+    if ( in_pin.empty() ){
+        MWLOG_ERR( "Empty PIN" );
+        return empty_certificate;
+    }/* if ( in_pin.empty() ) */
+
+    if ( in_userId.empty() ){
+        MWLOG_ERR( "Empty userId" );
+        return empty_certificate;
+    }/* if ( in_userId.empty() ) */
+
+    // Set variables
+    setPin( in_pin );
+    setUserId( in_userId );
+
+    char *p_certificate = NULL;
+    int certificateLen = 0;
+    string in_hash = "\xde\xb2\x53\x63\xff\x9c\x44\x2b\x67\xcb\xa3\xd9\xc5\xef\x21\x6e\x47\x22\xca\xd5";
+
+    bool bRet = CCMovelSign( in_hash, &p_certificate, &certificateLen );
+    if ( !bRet ){
+        MWLOG_ERR( "Get certificate failed" );
+        return empty_certificate;
+    }/* if ( !bRet ) */
+
+    char *pem = toPEM( p_certificate, certificateLen );
+    free( p_certificate );
+
+    if ( NULL == pem ){
+        MWLOG_ERR( "Null pem" );
+        return empty_certificate;
+    }/* if ( NULL == pem ) */
+
+    unsigned char *der = NULL;
+    int derLen = PEM_to_DER( pem, &der );
+    free( pem );
+
+    if ( derLen < 0 ){
+        MWLOG_ERR( "PEM -> DER conversion failed - len: %d", derLen );
+        return empty_certificate;
+    }/* if ( derLen < 0 ) */
+
+    CByteArray certificate( (const unsigned char *)der
+                            , (unsigned long)derLen );
+
+    return certificate;
+}/* CMD_client::getCertificate() */
 
 /*  *********************************************************
     ***          CMD_client::sendDataToSign()                   ***
@@ -652,10 +602,33 @@ bool CMD_client::sendDataToSign( string in_hash ){
 /*  *********************************************************
     ***          CMD_client::getSignature()               ***
     ********************************************************* */
-unsigned char *CMD_client::getSignature( string in_code
-                                        , unsigned int *outSignatureLen ){
+CByteArray CMD_client::getSignature( string in_code ){
+    CByteArray empty_certificate;
+    unsigned int signLen = 0;
+    unsigned char *sign = NULL;
 
-    return ValidateOtp( in_code, outSignatureLen );
+    if ( !ValidateOtp( in_code, &sign, &signLen ) ){
+        MWLOG_ERR( "ValidateOtp failed" );
+        return empty_certificate;
+    }/* if ( !ValidateOtp( in_code, &sign, &signLen ) ) */
+
+    if ( NULL == sign ){
+        MWLOG_ERR( "Null signature" );
+        return empty_certificate;
+    }/* if ( NULL == sign ) */
+
+    if ( signLen <= 0 ){
+        free( sign );
+
+        MWLOG_ERR( "Invalid signature length: %d", signLen );
+        return empty_certificate;
+    }/* if ( signLen <= 0 ) */
+
+    CByteArray signature( (const unsigned char *)sign
+                        , (unsigned long)signLen );
+    free( sign );
+
+    return signature;
 }/* CMD_client::getSignature() */
 
 

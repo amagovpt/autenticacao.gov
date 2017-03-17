@@ -8,10 +8,10 @@ LINK  = g++ -g
 QMAKE = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 
 TARGET = CMD_test
-INCPATH = -I. -I./services
+INCPATH = -I. -I./services -I./../common -I./../applayer
 LIBPATH = -L./lib
 
-LIBS_BASE_SO = crypto ssl
+LIBS_BASE_SO = crypto ssl pteidcommon pteidapplayer
 LIBS_SO = $(addprefix -l,$(LIBS_BASE_SO))
 LIBPATH_BASE_SO =
 LIBPATH_SO = $(addprefix -L,$(LIBPATH_BASE_SO))

@@ -31,6 +31,18 @@
 #define SHA1_LEN 20
 #define SHA256_LEN 32
 
+#ifdef WIN32
+    #define _TRACE_(to, format, ... )           { fprintf( to, "%s, %s(), %d - ", __FILE__, __FUNCTION__, __LINE__ ); \
+                                                    fprintf( to, format, __VA_ARGS__ ); }
+    #define TRACE_ERR( format, ... )            _TRACE_( stderr, format, __VA_ARGS__ )
+    #define TRACE_OUT( format, ... )            _TRACE_( stdout, format, __VA_ARGS__ )
+#else
+    #define _TRACE_(to, format, ... )           { fprintf( to, "%s, %s(), %d - ", __FILE__, __FUNCTION__, __LINE__ ); \
+                                                    fprintf( to, format, ## __VA_ARGS__ ); }
+    #define TRACE_ERR( format, ... )            _TRACE_( stderr, format, ## __VA_ARGS__ )
+    #define TRACE_OUT( format, ... )            _TRACE_( stdout, format, ## __VA_ARGS__ )
+#endif // WIN32
+
 namespace eIDMW
 {
 
@@ -347,182 +359,440 @@ void WriteToFile(const char *path, const unsigned char *content, size_t len)
  *
  */
 
-int pteid_sign_pkcs7 (APL_Card *card, unsigned char * data, unsigned long data_len,
-	    bool timestamp, const char ** signature_contents)
+int pteid_sign_pkcs7( APL_Card *card
+                    , unsigned char * data, unsigned long data_len
+                    , bool timestamp
+                    , const char ** signature_contents)
 {
-	X509 *x509 = NULL;
-	PKCS7 *p7 = NULL;
-	PKCS7_SIGNER_INFO *signer_info;
-	CByteArray hash, attr_hash, signature, certData, certData2, cc01, cc02, cc03, tsresp;
-	char * signature_hex_string = NULL;
-	unsigned char *attr_buf = NULL;
-	unsigned char *timestamp_token = NULL;
-	int return_code = 0;
-	int tsp_token_len = 0;
-	int auth_attr_len = 0;
-	unsigned int len = 0;
-	APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
+    X509 *x509 = NULL;
+    PKCS7 *p7 = NULL;
+    PKCS7_SIGNER_INFO *signer_info;
+    CByteArray hash, attr_hash, signature, certData, certData2;
+    CByteArray cc01, cc02, cc03, tsresp;
+    char * signature_hex_string = NULL;
+    unsigned char *attr_buf = NULL;
+    unsigned char *timestamp_token = NULL;
+    int return_code = 0;
+    int tsp_token_len = 0;
+    int auth_attr_len = 0;
+    unsigned int len = 0;
+    APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
+    int hash_size = SHA256_LEN;
+    unsigned char *out = NULL;
+    unsigned char *attr_digest = NULL;
+    unsigned char *cert_data = NULL;
+    BIO *in;
 
-	int hash_size = SHA256_LEN;
+    //Function pointer to the correct hash function
+    HashFunc my_hash = &SHA256_Wrapper;
 
-	//Function pointer to the correct hash function
-	HashFunc my_hash = &SHA256_Wrapper;
+    out = (unsigned char *)malloc(hash_size);
+    if ( out == NULL ){
+        MWLOG(LEV_ERROR, MOD_APL, "Malloc() failed: null out!");
+        goto err;
+    }/* if ( out == NULL ) */
 
+    attr_digest = (unsigned char *)malloc(hash_size);
+    if ( attr_digest == NULL ){
+        MWLOG(LEV_ERROR, MOD_APL, "Malloc() failed: null attr_digest!");
+        goto err;
+    }/* if ( attr_digest == NULL ) */
 
-	unsigned char *out = (unsigned char *)malloc(hash_size);
-	unsigned char *attr_digest = (unsigned char *)malloc(hash_size);
+    OpenSSL_add_all_algorithms();
 
-	OpenSSL_add_all_algorithms();
+    /*
+        Get certificate
+    */
+    card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
 
-	card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
+    /*
+        Encode certificate to internal format:
+        Trim the padding zero bytes which are useless
+        and affect the certificate digest computation
+    */
+    certData.TrimRight( 0 );
 
-	//Trim the padding zero bytes which are useless and affect the certificate digest computation
-	certData.TrimRight(0);
+    in = BIO_new_mem_buf( certData.GetBytes(), certData.Size() );
+    cert_data = certData.GetBytes();
 
-	BIO *in = BIO_new_mem_buf(certData.GetBytes(), certData.Size());
-	unsigned char * cert_data = certData.GetBytes();
+    x509 = d2i_X509( NULL, (const unsigned char**)&cert_data, certData.Size() );
+    if ( NULL == x509){
+        MWLOG(LEV_ERROR, MOD_APL, "Error decoding certificate data!");
+        goto err;
+    }/* if ( NULL == x509) */
+    BIO_reset(in);
+    BIO_free(in);
 
-	x509 = d2i_X509(NULL, (const unsigned char**)&cert_data, certData.Size());
+    /*
+        Calculate hash
+    */
+    p7 = PKCS7_new();
+    PKCS7_set_type( p7, NID_pkcs7_signed );
 
-	if (x509 == NULL)
-	{
-		MWLOG(LEV_ERROR, MOD_APL, L"loadCert() Error decoding certificate data!");
-		goto err;
-	}
+    if ( !PKCS7_content_new( p7, NID_pkcs7_data ) ) goto err;
 
-	BIO_reset(in);
-	BIO_free(in);
+    signer_info = PKCS7_add_signature( p7, x509, X509_get_pubkey(x509), EVP_sha256() );
+    if (signer_info == NULL) goto err;
 
-	p7 = PKCS7_new();
-	PKCS7_set_type(p7, NID_pkcs7_signed);
+    PKCS7_add_certificate( p7,x509 );
 
-	if (!PKCS7_content_new(p7, NID_pkcs7_data))
-		goto err;
+    //Add Signature CA Cert
+    card->readFile( PTEID_FILE_CERT_ROOT_SIGN, certData2 );
+    add_certificate( p7, certData2 );
 
-	signer_info = PKCS7_add_signature(p7, x509, X509_get_pubkey(x509), EVP_sha256());
+    /*
+        Cartao de Cidadao Root CA certificates as of July 2015
+        (https://pki.cartaodecidadao.pt/publico/certificado/cc_ec_cidadao/)
+    */
+    cc01 = CByteArray(PTEID_CERTS[22].cert_data, PTEID_CERTS[22].cert_len);
+    cc02 = CByteArray(PTEID_CERTS[23].cert_data, PTEID_CERTS[23].cert_len);
+    cc03 = CByteArray(PTEID_CERTS[24].cert_data, PTEID_CERTS[24].cert_len);
 
-	if (signer_info == NULL) goto err;
+    /*
+        Add issuer of Signature SubCA
+    */
+    if ( fwk->isIssuer( certData2, cc01 ) )
+        add_certificate( p7, cc01 );
+    else if ( fwk->isIssuer( certData2, cc02 ) )
+        add_certificate( p7, cc02 );
+    else if (fwk->isIssuer( certData2, cc03 ) )
+        add_certificate( p7, cc03 );
+    else
+        MWLOG( LEV_ERROR
+                , MOD_APL
+                , "Couldn't find issuer for certificate SIGNATURE_SUBCA.The validation will be broken!");
 
-	PKCS7_add_certificate(p7,x509);
+    /*
+        Add ECRaizEstado certificate
+    */
+    add_certificate( p7, PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len );
+    PKCS7_set_detached( p7, 1 );
+    my_hash( data, data_len, out );
 
-	//Add Signature CA Cert
-	card->readFile(PTEID_FILE_CERT_ROOT_SIGN, certData2);
+    /*
+        Add the signing time and digest authenticated attributes
+        With authenticated attributes
+    */
 
-	add_certificate(p7, certData2);
+    PKCS7_add_signed_attribute( signer_info
+                                , NID_pkcs9_contentType
+                                , V_ASN1_OBJECT
+                                , OBJ_nid2obj( NID_pkcs7_data ) );
 
-	//Cartao de Cidadao Root CA certificates as of July 2015 (https://pki.cartaodecidadao.pt/publico/certificado/cc_ec_cidadao/)
-	cc01 = CByteArray(PTEID_CERTS[22].cert_data, PTEID_CERTS[22].cert_len);
-	cc02 = CByteArray(PTEID_CERTS[23].cert_data, PTEID_CERTS[23].cert_len);
-	cc03 = CByteArray(PTEID_CERTS[24].cert_data, PTEID_CERTS[24].cert_len);
+    PKCS7_add1_attrib_digest( signer_info, out, hash_size );
 
-	// Add issuer of Signature SubCA
-	if (fwk->isIssuer(certData2, cc01))
-		add_certificate(p7, cc01);
-	else if (fwk->isIssuer(certData2, cc02))
-		add_certificate(p7, cc02);
-	else if (fwk->isIssuer(certData2, cc03))
-		add_certificate(p7, cc03);
-	else
-		MWLOG(LEV_ERROR, MOD_APL, L"Couldn't find issuer for certificate SIGNATURE_SUBCA.The validation will be broken!");
+    /*
+        Add signing-certificate v2 attribute according to the specification
+            ETSI TS 103 172 v2.1.1 - section 6.3.1
+        Add_signingCertificate( signer_info
+                                , x509
+                                , certData.GetBytes()
+                                , certData.Size() );
+    */
 
-	// Add ECRaizEstado certificate
-	add_certificate(p7, PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len);
+    if ( !timestamp ) add_signed_time( signer_info );
 
-	PKCS7_set_detached(p7, 1);
+    auth_attr_len = ASN1_item_i2d( (ASN1_VALUE *)signer_info->auth_attr
+                                    , &attr_buf
+                                    , ASN1_ITEM_rptr( PKCS7_ATTR_SIGN ) );
 
-	my_hash(data, data_len, out);
+    my_hash( (unsigned char *)attr_buf, auth_attr_len, attr_digest );
+    attr_hash = CByteArray( (const unsigned char *)attr_digest, hash_size );
 
-	/* Add the signing time and digest authenticated attributes */
-	//With authenticated attributes
+    /*
+        Get signature
+    */
+    signature = PteidSign( card, attr_hash );
+    if ( signature.Size() == 0 ) goto err;
 
-	PKCS7_add_signed_attribute(signer_info, NID_pkcs9_contentType, V_ASN1_OBJECT,
-			OBJ_nid2obj(NID_pkcs7_data));
+    /*
+        Manually fill-in the signedData structure
+    */
+    signer_info->enc_digest = ASN1_OCTET_STRING_new();
+    ASN1_OCTET_STRING_set( signer_info->enc_digest
+                        , (unsigned char*)signature.GetBytes()
+                        , signature.Size() );
 
-	PKCS7_add1_attrib_digest(signer_info, out, hash_size);
+    if ( timestamp ){
+        TSAClient tsp;
+        unsigned char *digest_tp = (unsigned char *)malloc( SHA256_LEN );
 
-	//Add signing-certificate v2 attribute according to the specification ETSI TS 103 172 v2.1.1 - section 6.3.1
-	add_signingCertificate(signer_info, x509, certData.GetBytes(), certData.Size());
+        if ( digest_tp == NULL ){
+            MWLOG(LEV_ERROR, MOD_APL, "Malloc() failed: null digest_tp!");
 
-	if (!timestamp)
-		add_signed_time(signer_info);
+            return_code = 1;
+        } else{
+            /*
+                Compute SHA-256 of the signed digest
+            */
+            SHA256_Wrapper( signature.GetBytes(), signature.Size(), digest_tp );
 
-	auth_attr_len = ASN1_item_i2d((ASN1_VALUE *)signer_info->auth_attr, &attr_buf,
-				                                ASN1_ITEM_rptr(PKCS7_ATTR_SIGN));
+            tsp.timestamp_data( digest_tp, SHA256_LEN );
+            tsresp = tsp.getResponse();
 
-	my_hash((unsigned char *)attr_buf, auth_attr_len, attr_digest);
-	attr_hash = CByteArray((const unsigned char *)attr_digest, hash_size);
+            if ( tsresp.Size() == 0 ){
 
-	signature = PteidSign(card, attr_hash);
+                MWLOG( LEV_ERROR
+                        , MOD_APL
+                        , "PKCS7 Sign: Timestamp Error - response is empty\n" );
+                return_code = 1;
+            } else{
+                timestamp_token = tsresp.GetBytes();
+                tsp_token_len = tsresp.Size();
+            }/* if ( tsresp.Size() == 0 ) */
 
-	if (signature.Size() == 0)
-		goto err;
+            free( digest_tp );
 
-	//Manually fill-in the signedData structure
-	signer_info->enc_digest = ASN1_OCTET_STRING_new();
-	ASN1_OCTET_STRING_set(signer_info->enc_digest, (unsigned char*)signature.GetBytes(),
-			signature.Size());
+        }/* !if ( digest_tp == NULL ) */
+    }/* !if ( timestamp ) */
 
-	if (timestamp)
-	{
-		TSAClient tsp;
-		unsigned char *digest_tp = (unsigned char *)malloc(SHA256_LEN);
+    if ( timestamp_token && tsp_token_len > 0 ){
+        return_code = append_tsp_token( signer_info
+                                        , timestamp_token
+                                        , tsp_token_len );
+    }/* if ( timestamp_token && tsp_token_len > 0 ) */
 
-		//Compute SHA-256 of the signed digest
-		SHA256_Wrapper(signature.GetBytes(), signature.Size(), digest_tp);
+    unsigned char *buf2, *p;
+    len = i2d_PKCS7( p7, NULL );
+    buf2 = (unsigned char *)OPENSSL_malloc( len );
+    p = buf2;
+    i2d_PKCS7( p7, &p );
 
-		tsp.timestamp_data(digest_tp, SHA256_LEN);
-		tsresp = tsp.getResponse();
+    signature_hex_string = BinaryToHexString( buf2, len );
+    OPENSSL_free( buf2 );
+    X509_free( x509 );
+    PKCS7_free( p7 );
+    free( out );
+    free( attr_digest );
 
-		if (tsresp.Size() == 0)
-		{
-			MWLOG(LEV_ERROR, MOD_APL, L"PKCS7 Sign: Timestamp Error - response is empty\n");
-			return_code = 1;
-
-		}
-		else
-		{
-			timestamp_token = tsresp.GetBytes();
-			tsp_token_len = tsresp.Size();
-		}
-
-		free(digest_tp);
-	}
-
-	if (timestamp_token && tsp_token_len > 0)
-	{
-		return_code = append_tsp_token(signer_info, timestamp_token, tsp_token_len);
-
-	}
-
-	unsigned char *buf2, *p;
-
-	len = i2d_PKCS7(p7, NULL);
-	buf2 = (unsigned char *)OPENSSL_malloc(len);
-	p = buf2;
-	i2d_PKCS7(p7, &p);
-
-	signature_hex_string = BinaryToHexString(buf2, len);
-
-	OPENSSL_free(buf2);
-	X509_free(x509);
-	PKCS7_free(p7);
-	free(out);
-	free(attr_digest);
-
-	*signature_contents = signature_hex_string;
-
-	return return_code;
+    *signature_contents = signature_hex_string;
+    return return_code;
 
 err:
-	if (x509 != NULL) X509_free(x509);
-	if (p7 != NULL) PKCS7_free(p7);
-	free(attr_digest);
-	free(out);
+    if ( x509 != NULL ) X509_free( x509 );
+    if ( p7 != NULL ) PKCS7_free( p7 );
+    free( attr_digest );
+    free( out );
 
-	ERR_load_crypto_strings();
-	ERR_print_errors_fp(stderr);
-	return 2;
-}
+    ERR_load_crypto_strings();
+    ERR_print_errors_fp( stderr );
+    return 2;
+}/* pteid_sign_pkcs7() */
+
+/*  *********************************************************
+    ***          hashCalculate_pkcs7()                          ***
+    ********************************************************* */
+CByteArray hashCalculate_pkcs7( unsigned char *data, unsigned long dataLen
+                                , X509 *x509
+                                , PKCS7 *p7
+                                , bool timestamp
+                                , PKCS7_SIGNER_INFO **out_signer_info ){
+    CByteArray outHash;
+    bool isError = false;
+    unsigned char *attr_buf = NULL;
+    int auth_attr_len = 0;
+    unsigned char *attr_digest = NULL;
+    unsigned char *out = NULL;
+//    PKCS7 *p7 = NULL;
+    PKCS7_SIGNER_INFO *signer_info;
+    int certDER_Len;
+    unsigned char *certDER = NULL;
+
+    //Function pointer to the correct hash function
+    HashFunc hash_fn = &SHA256_Wrapper;
+
+    if ( out_signer_info ) *out_signer_info = NULL;
+
+    if ( NULL == p7 ){
+        TRACE_ERR( "Null p7" );
+        isError = true;
+
+        goto err_hashCalculate;
+    }/* if ( NULL == p7 ) */
+
+    if ( NULL == x509 ){
+        TRACE_ERR( "Null x509 certificate" );
+        isError = true;
+
+        goto err_hashCalculate;
+    }/* if ( NULL == x509 ) */
+
+    if ( NULL == data ){
+        TRACE_ERR( "Null data" );
+        isError = true;
+
+        goto err_hashCalculate;
+    }/* if ( NULL == data ) */
+
+    certDER_Len = i2d_X509( x509, &certDER );
+    if ( certDER_Len < 0 ){
+        TRACE_ERR( "Invalid certDER_Len: %d", certDER_Len );
+        isError = true;
+
+        goto err_hashCalculate;
+    }/* if ( certDER_Len < 0 ) */
+
+    out = (unsigned char *)malloc( SHA256_LEN );
+    if ( NULL == out ){
+        TRACE_ERR( "Null out" );
+
+        isError = true;
+        goto err_hashCalculate;
+    }/* if ( NULL == out ) */
+
+    attr_digest = (unsigned char *)malloc( SHA256_LEN );
+    if ( NULL == attr_digest ){
+        TRACE_ERR( "Null attr_digest" );
+        isError = true;
+
+        goto err_hashCalculate;
+    }/* if ( NULL == attr_digest ) */
+
+    OpenSSL_add_all_algorithms();
+
+    //p7 = PKCS7_new();
+    PKCS7_set_type( p7, NID_pkcs7_signed );
+
+    if ( !PKCS7_content_new( p7, NID_pkcs7_data ) ){
+        TRACE_ERR( "PKCS7_content_new failed" );
+        isError = true;
+
+        goto err_hashCalculate;
+    }/* if ( !PKCS7_content_new( p7, NID_pkcs7_data ) ) */
+
+    signer_info = PKCS7_add_signature( p7
+                                    , x509, X509_get_pubkey( x509 )
+                                    , EVP_sha256() );
+
+    if ( signer_info == NULL ){
+        TRACE_ERR( "Null signer_info" );
+        isError = true;
+
+        goto err_hashCalculate;
+    }/* if ( signer_info == NULL ) */
+
+    PKCS7_add_certificate( p7, x509 );
+    PKCS7_set_detached( p7, 1 );
+
+    hash_fn( data, dataLen, out );
+
+    /* Add the signing time and digest authenticated attributes */
+    //With authenticated attributes
+    PKCS7_add_signed_attribute( signer_info
+                                , NID_pkcs9_contentType
+                                , V_ASN1_OBJECT
+                                , OBJ_nid2obj(NID_pkcs7_data) );
+
+    PKCS7_add1_attrib_digest( signer_info
+                            , out
+                            , SHA256_LEN);
+
+    /*
+        Add signing-certificate v2 attribute according to the
+        specification ETSI TS 103 172 v2.1.1 - section 6.3.1
+    */
+    add_signingCertificate(signer_info, x509, certDER, certDER_Len );
+
+    if ( !timestamp ) add_signed_time( signer_info );
+
+    auth_attr_len = ASN1_item_i2d( (ASN1_VALUE *)signer_info->auth_attr
+                                    , &attr_buf
+                                    , ASN1_ITEM_rptr( PKCS7_ATTR_SIGN ) );
+
+    hash_fn( (unsigned char *)attr_buf, auth_attr_len, attr_digest );
+    outHash = CByteArray( (const unsigned char *)attr_digest, SHA256_LEN );
+
+    if ( out_signer_info ) *out_signer_info = signer_info;
+
+err_hashCalculate:
+    //if (p7 != NULL) PKCS7_free(p7);
+    if ( attr_digest != NULL )free( attr_digest );
+    if ( out != NULL ) free(out);
+
+    if ( isError ){
+        ERR_load_crypto_strings();
+        ERR_print_errors_fp(stderr);
+    }/* if ( isError ) */
+
+    return outHash;
+}/* hashCalculate_pkcs7() */
+
+/*  *********************************************************
+    ***          dataSign_pkcs7()                         ***
+    ********************************************************* */
+int dataSign_pkcs7( unsigned char *signature, unsigned int signatureLen
+                    , PKCS7_SIGNER_INFO *signer_info
+                    , PKCS7 *p7
+                    , bool timestamp
+                    , const char **signature_contents ){
+    int return_code = 0;
+    unsigned char *timestamp_token = NULL;
+    int tsp_token_len = 0;
+
+    if ( NULL == signature ){
+        TRACE_ERR( "Null signature" );
+        return 2;
+    }/* if ( NULL == signature ) */
+
+    if ( 0 == signatureLen ){
+        TRACE_ERR( "Zero signatureLen" );
+        return 2;
+    }/* if ( 0 == signatureLen ) */
+
+    if ( NULL == signer_info ){
+        TRACE_ERR( "Null signer_info" );
+        return 2;
+    }/* if ( 0 == signer_info ) */
+
+    if ( NULL == p7 ){
+        TRACE_ERR( "Null p7" );
+        return 2;
+    }/* if ( 0 == p7 ) */
+
+    //Manually fill-in the signedData structure
+    signer_info->enc_digest = ASN1_OCTET_STRING_new();
+    ASN1_OCTET_STRING_set( signer_info->enc_digest, signature, signatureLen );
+
+    if (timestamp){
+        TSAClient tsp;
+        unsigned char *digest_tp = (unsigned char *)malloc( SHA256_LEN );
+        if ( NULL == digest_tp ){
+            TRACE_ERR( "Null digest_tp" );
+            return 2;
+        }/* if ( 0 == digest_tp ) */
+
+        //Compute SHA-256 of the signed digest
+        SHA256_Wrapper( signature, signatureLen, digest_tp );
+
+        tsp.timestamp_data( digest_tp, SHA256_LEN );
+        CByteArray tsresp = tsp.getResponse();
+
+        if (tsresp.Size() == 0){
+            MWLOG( LEV_ERROR, MOD_APL, L"PKCS7 Sign: Timestamp Error - response is empty\n" );
+            return_code = 1;
+        } else{
+            timestamp_token = tsresp.GetBytes();
+            tsp_token_len = tsresp.Size();
+        }/* if (tsresp.Size() == 0) */
+        free( digest_tp );
+    }/* if (timestamp) */
+
+    if ( timestamp_token && tsp_token_len > 0 ){
+        return_code = append_tsp_token( signer_info
+                                        , timestamp_token
+                                        , tsp_token_len );
+    }/* if ( timestamp_token && tsp_token_len > 0 ) */
+
+    unsigned char *buf2, *p;
+    unsigned int len = i2d_PKCS7( p7, NULL );
+    p = buf2 = (unsigned char *)OPENSSL_malloc( len );
+    i2d_PKCS7( p7, &p );
+
+    *signature_contents = BinaryToHexString( buf2, len );
+    OPENSSL_free( buf2 );
+
+    return return_code;
+}/* dataSign_pkcs7() */
 
 }
 

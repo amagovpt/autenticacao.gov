@@ -6,6 +6,7 @@
 #include <string>
 #include <openssl/x509.h>
 #include "soapH.h"
+#include "ByteArray.h"
 
 #include "WSHttpBinding_USCORECCMovelSignature.nsmap"
 #include "soapWSHttpBinding_USCORECCMovelSignatureProxy.h"
@@ -37,7 +38,6 @@ using namespace std;
 namespace eIDMW
 {
 
-char *getCPtr( string inStr, int *outLen );
 void printCPtr( char *c_str, int c_str_len );
 
 class CMD_client
@@ -49,6 +49,16 @@ class CMD_client
         bool init( int recv_timeout, int send_timeout
                           , int connect_timeout, short mustUnderstand );
 
+        // Get certificate
+        CByteArray getCertificate( string in_pin, string in_userId );
+
+        // CCMovelSign
+        bool sendDataToSign( string in_hash );
+
+        // ValidateOtp
+        CByteArray getSignature( string in_code );
+
+    protected:
         soap *getSoap();
         void setSoap( soap * );
 
@@ -67,17 +77,7 @@ class CMD_client
         string getUserId();
         void setUserId( string in_userId );
 
-        // Get certificate
-        X509 *getCertificate( string in_pin, string in_userId );
-
-        // CCMovelSign
-        bool sendDataToSign( string in_hash );
-
-        // ValidateOtp
-        unsigned char *getSignature( string in_code
-                                    , unsigned int *outSignatureLen );
-
-    protected:
+        xsd__base64Binary *encode_base64( string in_str );
 
     private:
         soap *m_soap;
@@ -86,8 +86,6 @@ class CMD_client
         string m_pin;
         string m_userId;
         const char *m_endpoint;
-
-        xsd__base64Binary *encode_base64( string in_str );
 
         // CCMovelSign
         bool CCMovelSign( string in_hash
@@ -104,8 +102,9 @@ class CMD_client
         int checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response );
 
         // ValidateOtp
-        unsigned char *ValidateOtp( string in_code
-                                    , unsigned int *outSignatureLen );
+        bool ValidateOtp( string in_code
+                        , unsigned char **outSignature
+                        , unsigned int *outSignatureLen );
 
         _ns2__ValidateOtp *get_ValidateOtpRequest( soap *sp
                                                  , char *endpoint

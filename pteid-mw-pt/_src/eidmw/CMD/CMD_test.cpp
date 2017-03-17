@@ -1,4 +1,5 @@
 #include "CMD_client.h"
+#include "MiscUtil.h"
 
 #define ENDPOINT_CC_MOVEL_SIGNATURE ( (const char *)"https://dev.cmd.autenticacao.gov.pt/Ama.Authentication.Service/CCMovelSignature.svc" )
 
@@ -23,11 +24,23 @@ int main(){
     printf( "\n*********************************\n"
               "*** cmdClient->getCertificate ***\n"
               "*********************************\n" );
-    X509 *certificateX509 = cmdClient->getCertificate( in_pin, in_userId );
-    if ( certificateX509 == NULL ){
+    CByteArray certificate = cmdClient->getCertificate( in_pin, in_userId );
+    if ( 0 == certificate.Size() ){
+        printf( "main() - ZERO certificate size\n" );
+        return ERR_GET_CERTIFICATE;
+    }/* if ( 0 == certificate.Size() ) */
+
+    printf( "\n**************************\n"
+              "*** certificate Ok ***\n"
+              "**************************\n" );
+
+    X509 *x509 = DER_to_X509( certificate.GetBytes(), certificate.Size() );
+    if ( NULL == x509 ){
         printf( "main() - NULL x509\n" );
         return ERR_GET_CERTIFICATE;
-    }/* if ( certificateX509 == NULL ) */
+    }/* if ( NULL == x509 ) */
+
+    printf( "name: %s\n", x509->name );
 
     printf( "\n**************************\n"
               "*** certificateX509 Ok ***\n"
@@ -52,29 +65,28 @@ int main(){
         PIN confirmation
     */
     string in_code = "111111";
-    unsigned char *signature;
-    unsigned int signatureLen = 0;
 
     // getSignature
     printf( "\n*******************************\n"
               "*** cmdClient->getSignature ***\n"
               "*******************************\n" );
-    signature = cmdClient->getSignature( in_code, &signatureLen );
-    if ( signature == NULL ){
+    CByteArray signature = cmdClient->getSignature( in_code );
+    if ( 0 == signature.Size() ){
         delete cmdClient;
 
         printf( "main() - Error @ getSignature()");
         return ERR_GET_SIGNATURE;
-    }/* if ( signature == NULL ) */
+    }/* if ( 0 == signature.Size() ) */
 
+    unsigned char *sign = signature.GetBytes();
+    unsigned int signLen = signature.Size();
 
-    printf( "Signature size(): %d\nSignature: ", signatureLen );
-    for( int i = 0; i < signatureLen; i++ ){
-        printf( "0x%02x ", *(signature + i) );
+    printf( "Signature size(): %d\nSignature: ", signLen );
+    for( int i = 0; i < signLen; i++ ){
+        printf( "0x%02x ", *(sign + i) );
     }/* for( int i ) */
     printf( "\n" );
 
-    free( signature );
     delete cmdClient;
 
     return ERR_NONE;

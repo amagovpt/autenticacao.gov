@@ -39,7 +39,9 @@ namespace eIDMW
 #define PTEID_USER_AGENT "User-Agent: PTeID Middleware v2"
 #define PTEID_USER_AGENT_VALUE "PTeID Middleware v2"
 
- const void *memmem(const void *haystack, size_t n, const void *needle, size_t m);
+char *getCPtr( std::string inStr, int *outLen );
+
+const void *memmem(const void *haystack, size_t n, const void *needle, size_t m);
 
 //Implementation of some utility functions over POSIX and Win32
 char * Basename(char *absolute_path);
@@ -50,8 +52,14 @@ char * utf8_to_latin1(char * in);
 
 void replace_lastdot_inplace(char *in);
 
+char *toPEM( char *p_certificate, int certificateLen );
 char *X509_to_PEM( X509 *x509 );
 X509 *PEM_to_X509( char *pem );
+
+int X509_to_DER( X509 *x509, unsigned char **der );
+X509 *DER_to_X509( unsigned char *der, int len );
+char *DER_to_PEM( unsigned char *der, int len );
+int PEM_to_DER( char *pem, unsigned char **der );
 
 char *Base64Encode(const unsigned char *input, long length);
 void Base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded, unsigned int &decoded_len);
