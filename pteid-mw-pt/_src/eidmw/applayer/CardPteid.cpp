@@ -1323,9 +1323,8 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 
 	PKCS7 *p7 = NULL;
 	bool verifySOD = false;
-
-	ERR_load_PKCS7_strings();
-	ERR_load_X509_strings();
+	
+	ERR_load_crypto_strings();
 	OpenSSL_add_all_digests();
 
 	const unsigned char *temp = m_data.GetBytes();
