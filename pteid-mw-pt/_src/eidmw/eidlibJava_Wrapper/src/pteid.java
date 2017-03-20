@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 package pteidlib;
-import pt.gov.cartaodecidadao;
+import pt.gov.cartaodecidadao.*;
 
 /**
  *

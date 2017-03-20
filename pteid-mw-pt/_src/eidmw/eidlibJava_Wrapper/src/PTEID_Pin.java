@@ -8,7 +8,7 @@ package pt.gov.cartaodecidadao;
  *
  * @author ruim
  */
-public class PTEIDPin {
+public class PTEID_Pin {
 
     public int pinType;
     public byte id;

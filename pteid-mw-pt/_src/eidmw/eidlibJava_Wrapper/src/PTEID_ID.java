@@ -6,6 +6,7 @@ package pteidlib;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pt.gov.cartaodecidadao.PTEID_EId;
 
 /**
  *
