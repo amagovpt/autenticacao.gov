@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pt.gov.cartaodecidadao;
+package pteidlib;
 
 /**
  *
@@ -19,6 +19,4 @@ public class PTEID_Pin {
     public String shortUsage;
     public String longUsage;
 
-    protected PTEIDPin() {
-    }
 }

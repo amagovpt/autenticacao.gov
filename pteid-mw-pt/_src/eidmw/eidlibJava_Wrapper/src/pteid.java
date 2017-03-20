@@ -107,7 +107,7 @@ public class pteid {
             PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
             PTEID_Pins pins = idCard.getPins();
             for (long i = 0; i < pins.count(); i++) {
-                PTEID_Pin pin = pins.getPinByNumber(i);
+                pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(i);
                 if (pin.getPinRef() == 131) {
                     if (pin.verifyPin("", ul,true)) {
                         return new PTEID_ADDR(idCard.getAddr());
@@ -184,7 +184,7 @@ public class pteid {
             try {
                 PTEID_Pins pins = idCard.getPins();
                 for (long pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
-                    PTEID_Pin pin = pins.getPinByNumber(pinIdx);
+                    pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getPinRef() == pinId) {
                         pin.verifyPin("", ul,true);
                         //martinho: verify pin is not working properly for readers without pinpad at this moment,
@@ -215,7 +215,7 @@ public class pteid {
             try {
                 PTEID_Pins pins = idCard.getPins();
                 for (long pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
-                    PTEID_Pin pin = pins.getPinByNumber(pinIdx);
+                    pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getPinRef() == pinId)
                         if (pin.changePin(oldPin, newPin, ul, pin.getLabel(),true)) {
                             triesLeft = pin.getTriesLeft();
@@ -230,19 +230,19 @@ public class pteid {
     }
 
 
-    public static PTEIDPin[] GetPINs() throws PteidException {
-        PTEIDPin[] pinArray = null;
+    public static PTEID_Pin[] GetPINs() throws PteidException {
+        PTEID_Pin[] pinArray = null;
         int currentId;
 
         if (readerContext != null) {
             try {
                 PTEID_Pins pins = idCard.getPins();
-                pinArray = new PTEIDPin[PTEID_PIN_COUNT];
+                pinArray = new PTEID_Pin[PTEID_PIN_COUNT];
                 for (int pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
-                    PTEID_Pin pin = pins.getPinByNumber(pinIdx);
+                    pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getId() == 1 || pin.getId() == 2 || pin.getId() == 3) {
                         currentId = (int)pin.getId()-1;
-                        pinArray[currentId] = new PTEIDPin();
+                        pinArray[currentId] = new PTEID_Pin();
                         pinArray[currentId].flags = (int) pin.getFlags();
                         pinArray[currentId].usageCode = (int) pin.getId(); // martinho: might not be the intended use, but gives the expected compatible result.
                         pinArray[currentId].pinType = (int) pin.getType();
@@ -314,7 +314,7 @@ public class pteid {
 
 		PTEID_Pins pins = idCard.getPins();
 		for (long pinIdx=0; pinIdx < pins.count(); pinIdx++){
-			PTEID_Pin pin = pins.getPinByNumber(pinIdx);
+			pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
 			if (pin.getPinRef() == pinId){
 				pin.unlockPin(puk, newPin, ul);
 			}
@@ -354,7 +354,7 @@ public class pteid {
     public static byte[] ReadFile(byte[] bytes, byte b) throws PteidException {
         PTEID_ByteArray pb = new PTEID_ByteArray();
         byte[] retArray = null;
-        PTEID_Pin pin = null;
+        pt.gov.cartaodecidadao.PTEID_Pin pin = null;
 
         // martinho: artista
         long pinId = b & 0x00000000000000FF;
@@ -394,7 +394,7 @@ public class pteid {
 
     public static void WriteFileInOffset(byte[] file, byte[] data, byte bpin, int inOffset) throws PteidException{
         PTEID_ByteArray pb = new PTEID_ByteArray(data,data.length);
-        PTEID_Pin pin = null;
+        pt.gov.cartaodecidadao.PTEID_Pin pin = null;
 
         // martinho: artista
         long pinId = bpin & 0x00000000000000FF;
