@@ -51,11 +51,11 @@ OBJECTS_DIR   = ./
 SOURCES       = soapC.cpp \
 		soapWSHttpBinding_USCORECCMovelSignatureProxy.cpp \
 		stdsoap2.cpp \
-		CMD_client.cpp 
+		PDFSignatureClient.cpp 
 OBJECTS       = soapC.o \
 		soapWSHttpBinding_USCORECCMovelSignatureProxy.o \
 		stdsoap2.o \
-		CMD_client.o
+		PDFSignatureClient.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -116,10 +116,10 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		soapStub.h \
 		soapWSHttpBinding_USCORECCMovelSignatureProxy.h \
 		stdsoap2.h \
-		CMD_client.h soapC.cpp \
+		PDFSignatureClient.h soapC.cpp \
 		soapWSHttpBinding_USCORECCMovelSignatureProxy.cpp \
 		stdsoap2.cpp \
-		CMD_client.cpp
+		PDFSignatureClient.cpp
 QMAKE_TARGET  = CMD_Services
 DESTDIR       = ../lib/#avoid trailing-slash linebreak
 TARGET        = libCMD_Services.so.1.0.0
@@ -344,7 +344,7 @@ soapWSHttpBinding_USCORECCMovelSignatureProxy.o: soapWSHttpBinding_USCORECCMovel
 stdsoap2.o: stdsoap2.cpp stdsoap2.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o stdsoap2.o stdsoap2.cpp
 
-CMD_client.o: CMD_client.cpp CMD_client.h \
+PDFSignatureClient.o: PDFSignatureClient.cpp PDFSignatureClient.h \
 		soapH.h \
 		soapStub.h \
 		stdsoap2.h \
@@ -360,7 +360,7 @@ CMD_client.o: CMD_client.cpp CMD_client.h \
 		../../applayer/MiscUtil.h \
 		../../common/TLVBuffer.h \
 		../../common/TLV.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o CMD_client.o CMD_client.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o PDFSignatureClient.o PDFSignatureClient.cpp
 
 ####### Install
 

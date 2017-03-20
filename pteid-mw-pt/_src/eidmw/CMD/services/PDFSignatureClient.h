@@ -40,14 +40,10 @@ namespace eIDMW
 
 void printCPtr( char *c_str, int c_str_len );
 
-class CMD_client
-{
+class PDFSignatureClient{
     public:
-        CMD_client( const char *endpoint = NULL );
-        virtual ~CMD_client();
-
-        bool init( int recv_timeout, int send_timeout
-                          , int connect_timeout, short mustUnderstand );
+        PDFSignatureClient( const char *endpoint = NULL );
+        virtual ~PDFSignatureClient();
 
         // Get certificate
         CByteArray getCertificate( string in_pin, string in_userId );
@@ -86,6 +82,9 @@ class CMD_client
         string m_pin;
         string m_userId;
         const char *m_endpoint;
+
+        bool init( int recv_timeout, int send_timeout
+                          , int connect_timeout, short mustUnderstand );
 
         // CCMovelSign
         bool CCMovelSign( string in_hash
