@@ -2,8 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pt.gov.cartaodecidadao;;
-
+package pteidlib;
+import pt.gov.cartaodecidadao;
 
 /**
  *
