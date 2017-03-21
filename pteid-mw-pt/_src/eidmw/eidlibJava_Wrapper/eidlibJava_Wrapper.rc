@@ -9,7 +9,7 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
+#include "windows.h"
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -86,9 +86,9 @@ BEGIN
             VALUE "FileDescription", "pteidlib Dynamic Link Library for Java"
             VALUE "CompanyName", PTEID_COMPANY_NAME
             VALUE "FileVersion", WIN_SDK_JAVA_VERSION_STRING
-            VALUE "InternalName", "pteidlibJava_Wrapper" 
+            VALUE "InternalName", "pteidlibj" 
             VALUE "LegalCopyright", PTEID_COPYRIGHT
-            VALUE "OriginalFilename", "pteidlibJava_Wrapper.dll"
+            VALUE "OriginalFilename", "pteidlibj.dll"
             VALUE "ProductName", PTEID_PRODUCT_NAME
             VALUE "ProductVersion", PTEID_PRODUCT_VERSION
         END
