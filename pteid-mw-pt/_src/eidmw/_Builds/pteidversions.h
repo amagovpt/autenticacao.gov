@@ -12,7 +12,7 @@
 // To specified in the .rc files
 
 #define PTEID_COMPANY_NAME    	"Portuguese Government"
-#define PTEID_COPYRIGHT    	"Copyright (C) 2010-2016"
+#define PTEID_COPYRIGHT    	"Copyright (C) 2010-2017"
 #define PTEID_PRODUCT_NAME    	"Portugal eID MiddleWare"
 
 
@@ -100,46 +100,11 @@
 #define WIN_GUI_VERSION3          BASE_VERSION3          
 #define WIN_GUI_VERSION4          SVN_REVISION
 
-// cardplugin PTEID
-#define WIN_CPPTEID_VERSION_STRING    BASE_VERSION_STRING SVN_REVISION_STR
-#define WIN_CPPTEID_VERSION1          BASE_VERSION1          
-#define WIN_CPPTEID_VERSION2          BASE_VERSION2          
-#define WIN_CPPTEID_VERSION3          BASE_VERSION3          
-#define WIN_CPPTEID_VERSION4          SVN_REVISION
-
-// cardplugin SIS
-#define WIN_CPSIS_VERSION_STRING    BASE_VERSION_STRING SVN_REVISION_STR
-#define WIN_CPSIS_VERSION1          BASE_VERSION1          
-#define WIN_CPSIS_VERSION2          BASE_VERSION2          
-#define WIN_CPSIS_VERSION3          BASE_VERSION3          
-#define WIN_CPSIS_VERSION4          SVN_REVISION
-
-// cardplugin SIS for ACR38U
-#define WIN_CPSIS_ACR38U_VERSION_STRING    BASE_VERSION_STRING SVN_REVISION_STR
-#define WIN_CPSIS_ACR38U_VERSION1          BASE_VERSION1          
-#define WIN_CPSIS_ACR38U_VERSION2          BASE_VERSION2          
-#define WIN_CPSIS_ACR38U_VERSION3          BASE_VERSION3          
-#define WIN_CPSIS_ACR38U_VERSION4          SVN_REVISION
-
 // PKCS11
 #define WIN_PKCS11_VERSION_STRING    BASE_VERSION_STRING SVN_REVISION_STR
 #define WIN_PKCS11_VERSION1          BASE_VERSION1          
 #define WIN_PKCS11_VERSION2          BASE_VERSION2          
 #define WIN_PKCS11_VERSION3          BASE_VERSION3          
 #define WIN_PKCS11_VERSION4          SVN_REVISION
-
-// XSign
-#define WIN_XSIGN_VERSION_STRING    BASE_VERSION_STRING SVN_REVISION_STR
-#define WIN_XSIGN_VERSION1          BASE_VERSION1
-#define WIN_XSIGN_VERSION2          BASE_VERSION2
-#define WIN_XSIGN_VERSION3          BASE_VERSION3
-#define WIN_XSIGN_VERSION4          SVN_REVISION
-
-// QuickInstaller
-#define WIN_QI_VERSION_STRING    BASE_VERSION_STRING SVN_REVISION_STR
-#define WIN_QI_VERSION1          BASE_VERSION1          
-#define WIN_QI_VERSION2          BASE_VERSION2          
-#define WIN_QI_VERSION3          BASE_VERSION3          
-#define WIN_QI_VERSION4          SVN_REVISION
 
 #endif //__PTEID_VERSION_H__
