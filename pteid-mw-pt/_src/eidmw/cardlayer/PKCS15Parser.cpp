@@ -436,7 +436,6 @@ return(lBits);
 
     return tInfo;
   }
-    
 
   //----------------------------------------------------------------------------------------
 
@@ -454,10 +453,16 @@ return(lBits);
     ASN1_ITEM           xLev3Item;  //
     ASN1_ITEM           xLev4Item;  //
 
+    //Initialize the structs just in case
+    xLev1Item = {0, NULL, 0, 0, NULL, 0};
+    xLev2Item = {0, NULL, 0, 0, NULL, 0};
+    xLev3Item = {0, NULL, 0, 0, NULL, 0};
+    xLev4Item = {0, NULL, 0, 0, NULL, 0};
 
     xLev0Item.p_data = (unsigned char*)contents.GetBytes();
     xLev0Item.l_data = contents.Size();
     pinVector.clear();
+
 //	printf("------ PKCS15Parser AODF\n");
 //	std::cout << "Data: " << xLev0Item.p_data << "\n";
     //decode all Pin's 
