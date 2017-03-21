@@ -36,10 +36,10 @@ HEADERS += \
             soapStub.h \
             soapWSHttpBinding_USCORECCMovelSignatureProxy.h \
             stdsoap2.h \
-            PDFSignatureClient.h
+            CMDServices.h
 
 SOURCES += \
             soapC.cpp \
             soapWSHttpBinding_USCORECCMovelSignatureProxy.cpp \
             stdsoap2.cpp \
-            PDFSignatureClient.cpp
+            CMDServices.cpp

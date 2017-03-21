@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#include "PDFSignatureClient.h"
+#include "CMDServices.h"
 #include "Log.h"
 #include "MiscUtil.h"
 
@@ -25,7 +25,7 @@ namespace eIDMW{
     ********************************************************* */
 void printCPtr( char *c_str, int c_str_len ){
     if ( c_str == NULL ){
-        fprintf(stderr, "PDFSignatureClient::printCPtr() - Null data\n" );
+        fprintf(stderr, "CMDServices::printCPtr() - Null data\n" );
         return;
     }/* if ( c_str == NULL ) */
 
@@ -36,9 +36,9 @@ void printCPtr( char *c_str, int c_str_len ){
 }/* printCPtr() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::PDFSignatureClient()       ***
+    ***    CMDServices::CMDServices()       ***
     ********************************************************* */
-xsd__base64Binary *PDFSignatureClient::encode_base64( string in_str ){
+xsd__base64Binary *CMDServices::encode_base64( string in_str ){
 
     soap *sp = getSoap();
     if ( sp == NULL ){
@@ -64,12 +64,12 @@ xsd__base64Binary *PDFSignatureClient::encode_base64( string in_str ){
     }/* if ( encoded == NULL ) */
 
     return encoded;
-}/* PDFSignatureClient::encode_base64() */
+}/* CMDServices::encode_base64() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::PDFSignatureClient()       ***
+    ***    CMDServices::CMDServices()                     ***
     ********************************************************* */
-PDFSignatureClient::PDFSignatureClient( const char *endpoint ){
+CMDServices::CMDServices( const char *endpoint ){
     if ( !init( SOAP_RECV_TIMEOUT_DEFAULT
               , SOAP_SEND_TIMEOUT_DEFAULT
               , SOAP_CONNECT_TIMEOUT_DEFAULT
@@ -79,23 +79,23 @@ PDFSignatureClient::PDFSignatureClient( const char *endpoint ){
     new_endpoint = ( NULL == endpoint ) ? ENDPOINT_CC_MOVEL_SIGNATURE : endpoint;
 
     setEndPoint( new_endpoint );
-}/* PDFSignatureClient::PDFSignatureClient() */
+}/* CMDServices::CMDServices() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::~PDFSignatureClient()      ***
+    ***    CMDServices::~CMDServices()                    ***
     ********************************************************* */
-PDFSignatureClient::~PDFSignatureClient(){
+CMDServices::~CMDServices(){
     soap *sp = getSoap();
     if ( NULL == sp ) return;
 
     soap_destroy( sp );
     soap_end( sp );
-}/* PDFSignatureClient::~PDFSignatureClient() */
+}/* CMDServices::~CMDServices() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::init()                     ***
+    ***    CMDServices::init()                            ***
     ********************************************************* */
-bool PDFSignatureClient::init( int recv_timeout, int send_timeout
+bool CMDServices::init( int recv_timeout, int send_timeout
                         , int connect_timeout, short mustUnderstand ){
     soap *sp = soap_new2( SOAP_C_UTFSTRING, SOAP_C_UTFSTRING );
     if ( sp == NULL ){
@@ -132,96 +132,96 @@ bool PDFSignatureClient::init( int recv_timeout, int send_timeout
     setSoap( sp );
 
     return true;
-}/* PDFSignatureClient::init() */
+}/* CMDServices::init() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::getSoap()                  ***
+    ***    CMDServices::getSoap()                         ***
     ********************************************************* */
-soap *PDFSignatureClient::getSoap(){
+soap *CMDServices::getSoap(){
     return m_soap;
-}/* PDFSignatureClient::getSoap() */
+}/* CMDServices::getSoap() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::setSoap()                  ***
+    ***    CMDServices::setSoap()                         ***
     ********************************************************* */
-void PDFSignatureClient::setSoap( soap *in_soap ){
+void CMDServices::setSoap( soap *in_soap ){
     m_soap = in_soap;
-}/* PDFSignatureClient::setSoap() */
+}/* CMDServices::setSoap() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::setEndPoint()              ***
+    ***    CMDServices::setEndPoint()                     ***
     ********************************************************* */
-void PDFSignatureClient::setEndPoint( const char *endpoint ){
+void CMDServices::setEndPoint( const char *endpoint ){
     m_endpoint = endpoint;
-}/* PDFSignatureClient::m_endpoint() */
+}/* CMDServices::m_endpoint() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::getEndPoint()              ***
+    ***    CMDServices::getEndPoint()                     ***
     ********************************************************* */
-const char *PDFSignatureClient::getEndPoint(){
+const char *CMDServices::getEndPoint(){
     return m_endpoint;
-}/* PDFSignatureClient::getEndPoint() */
+}/* CMDServices::getEndPoint() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::getProcessID()             ***
+    ***    CMDServices::getProcessID()                    ***
     ********************************************************* */
-string PDFSignatureClient::getProcessID(){
+string CMDServices::getProcessID(){
     return m_processID;
-}/* PDFSignatureClient::getProcessID() */
+}/* CMDServices::getProcessID() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::setProcessID()             ***
+    ***    CMDServices::setProcessID()                    ***
     ********************************************************* */
-void PDFSignatureClient::setProcessID( string processID ){
+void CMDServices::setProcessID( string processID ){
     m_processID = processID;
-}/* PDFSignatureClient::setProcessID() */
+}/* CMDServices::setProcessID() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::getApplicationID()         ***
+    ***    CMDServices::getApplicationID()                ***
     ********************************************************* */
-string PDFSignatureClient::getApplicationID(){
+string CMDServices::getApplicationID(){
     return m_applicationID;
-}/* PDFSignatureClient::getApplicationID() */
+}/* CMDServices::getApplicationID() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::setApplicationID()         ***
+    ***    CMDServices::setApplicationID()                ***
     ********************************************************* */
-void PDFSignatureClient::setApplicationID( string applicationID ){
+void CMDServices::setApplicationID( string applicationID ){
     m_applicationID = applicationID;
-}/* PDFSignatureClient::setApplicationID() */
+}/* CMDServices::setApplicationID() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::getPin()                   ***
+    ***    CMDServices::getPin()                          ***
     ********************************************************* */
-string PDFSignatureClient::getPin(){
+string CMDServices::getPin(){
     return m_pin;
-}/* PDFSignatureClient::getPin() */
+}/* CMDServices::getPin() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::setPin()                   ***
+    ***    CMDServices::setPin()                          ***
     ********************************************************* */
-void PDFSignatureClient::setPin( string in_pin ){
+void CMDServices::setPin( string in_pin ){
     m_pin = in_pin;
-}/* PDFSignatureClient::setPin() */
+}/* CMDServices::setPin() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::getUserId()                ***
+    ***    CMDServices::getUserId()                       ***
     ********************************************************* */
-string PDFSignatureClient::getUserId(){
+string CMDServices::getUserId(){
     return m_userId;
-}/* PDFSignatureClient::getUserId() */
+}/* CMDServices::getUserId() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::setUserId()                ***
+    ***    CMDServices::setUserId()                       ***
     ********************************************************* */
-void PDFSignatureClient::setUserId( string in_userId ){
+void CMDServices::setUserId( string in_userId ){
     m_userId = in_userId;
-}/* PDFSignatureClient::setUserId() */
+}/* CMDServices::setUserId() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::get_CCMovelSignRequest()   ***
+    ***    CMDServices::get_CCMovelSignRequest()          ***
     ********************************************************* */
-_ns2__CCMovelSign *PDFSignatureClient::get_CCMovelSignRequest(  soap *sp
+_ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(  soap *sp
                                                       , char *endpoint
                                                       , string in_applicationID
                                                       , string in_hash
@@ -250,12 +250,12 @@ _ns2__CCMovelSign *PDFSignatureClient::get_CCMovelSignRequest(  soap *sp
 
     _ns2__CCMovelSign *send = soap_new_set__ns2__CCMovelSign( sp, soapBody );
     return send;
-}/* PDFSignatureClient::get_CCMovelSignRequest() */
+}/* CMDServices::get_CCMovelSignRequest() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::get_ValidateOtpRequest()   ***
+    ***    CMDServices::get_ValidateOtpRequest()          ***
     ********************************************************* */
-_ns2__ValidateOtp *PDFSignatureClient::get_ValidateOtpRequest(  soap *sp
+_ns2__ValidateOtp *CMDServices::get_ValidateOtpRequest(  soap *sp
                                                       , char *endpoint
                                                       , string in_applicationID
                                                       , string *in_code
@@ -283,12 +283,12 @@ _ns2__ValidateOtp *PDFSignatureClient::get_ValidateOtpRequest(  soap *sp
 
     _ns2__ValidateOtp *send = soapBody;
     return send;
-}/* PDFSignatureClient::get_ValidateOtpRequest() */
+}/* CMDServices::get_ValidateOtpRequest() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::checkCCMovelSignResponse() ***
+    ***    CMDServices::checkCCMovelSignResponse()        ***
     ********************************************************* */
-int PDFSignatureClient::checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response ){
+int CMDServices::checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response ){
     if ( response == NULL ){
         MWLOG_ERR( "Null response" );
         return SOAP_NULL;
@@ -313,9 +313,9 @@ int PDFSignatureClient::checkCCMovelSignResponse( _ns2__CCMovelSignResponse *res
 }/* checkCCMovelSignResponse() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::CCMovelSign()              ***
+    ***    CMDServices::CCMovelSign()                     ***
     ********************************************************* */
-bool PDFSignatureClient::CCMovelSign( string in_hash, char **out_certificate, int *out_certificateLen ){
+bool CMDServices::CCMovelSign( string in_hash, char **out_certificate, int *out_certificateLen ){
 
     soap *sp = getSoap();
     if ( sp == NULL ){
@@ -429,12 +429,12 @@ bool PDFSignatureClient::CCMovelSign( string in_hash, char **out_certificate, in
     }/* if ( out_certificate != NULL ) */
 
     return true;
-}/* PDFSignatureClient::CCMovelSign(() */
+}/* CMDServices::CCMovelSign(() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::checkValidateOtpResponse() ***
+    ***    CMDServices::checkValidateOtpResponse()        ***
     ********************************************************* */
-int PDFSignatureClient::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response ){
+int CMDServices::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response ){
     if ( response == NULL ){
         MWLOG_ERR( "Null response" );
         return SOAP_NULL;
@@ -463,12 +463,12 @@ int PDFSignatureClient::checkValidateOtpResponse( _ns2__ValidateOtpResponse *res
     }/* if ( response->ValidateOtpResult->Signature->__ptr == NULL ) */
 
     return SOAP_OK;
-}/* PDFSignatureClient::checkValidateOtpResponse(() */
+}/* CMDServices::checkValidateOtpResponse(() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::ValidateOtp()              ***
+    ***    CMDServices::ValidateOtp()                     ***
     ********************************************************* */
-bool PDFSignatureClient::ValidateOtp( string in_code
+bool CMDServices::ValidateOtp( string in_code
                             , unsigned char **outSignature
                             , unsigned int *outSignatureLen ){
     soap *sp = getSoap();
@@ -549,7 +549,7 @@ bool PDFSignatureClient::ValidateOtp( string in_code
     }/* if ( ( outSignature != NULL ) && ( outSignatureLen != NULL ) ) */
 
     return true;
-}/* PDFSignatureClient::ValidateOtp() */
+}/* CMDServices::ValidateOtp() */
 
 
 /*  *************************************************************************************************
@@ -558,9 +558,9 @@ bool PDFSignatureClient::ValidateOtp( string in_code
     ****
     ************************************************************************************************* */
 /*  *********************************************************
-    ***    PDFSignatureClient::getCertificate()           ***
+    ***    CMDServices::getCertificate()                  ***
     ********************************************************* */
-CByteArray PDFSignatureClient::getCertificate( string in_pin, string in_userId ){
+CByteArray CMDServices::getCertificate( string in_pin, string in_userId ){
     CByteArray empty_certificate;
 
     if ( in_pin.empty() ){
@@ -611,19 +611,19 @@ CByteArray PDFSignatureClient::getCertificate( string in_pin, string in_userId )
                             , (unsigned long)derLen );
 
     return certificate;
-}/* PDFSignatureClient::getCertificate() */
+}/* CMDServices::getCertificate() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::sendDataToSign()           ***
+    ***    CMDServices::sendDataToSign()                  ***
     ********************************************************* */
-bool PDFSignatureClient::sendDataToSign( string in_hash ){
+bool CMDServices::sendDataToSign( string in_hash ){
     return CCMovelSign( in_hash, NULL, NULL );
-}/* PDFSignatureClient::sendDataToSign() */
+}/* CMDServices::sendDataToSign() */
 
 /*  *********************************************************
-    ***    PDFSignatureClient::getSignature()             ***
+    ***    CMDServices::getSignature()                    ***
     ********************************************************* */
-CByteArray PDFSignatureClient::getSignature( string in_code ){
+CByteArray CMDServices::getSignature( string in_code ){
     CByteArray empty_certificate;
     unsigned int signLen = 0;
     unsigned char *sign = NULL;
@@ -650,7 +650,7 @@ CByteArray PDFSignatureClient::getSignature( string in_code ){
     free( sign );
 
     return signature;
-}/* PDFSignatureClient::getSignature() */
+}/* CMDServices::getSignature() */
 
 
 }/* namespace */

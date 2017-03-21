@@ -17,7 +17,7 @@ LIBPATH_BASE_SO =
 LIBPATH_SO = $(addprefix -L,$(LIBPATH_BASE_SO))
 LIBFILES_SO = $(patsubst %, lib%.so, $(LIBS_BASE_SO))
 
-LIBS_BASE_USER = CMD_Services
+LIBS_BASE_USER = CMDServices
 LIBS_USER = $(addprefix -l,$(LIBS_BASE_USER))
 LIBPATH_BASE_USER = ./lib
 LIBPATH_USER = $(addprefix -L,$(LIBPATH_BASE_USER))

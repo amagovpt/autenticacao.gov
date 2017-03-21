@@ -1,4 +1,4 @@
-#include "PDFSignatureClient.h"
+#include "CMDServices.h"
 #include "MiscUtil.h"
 
 #define ERR_NONE            0
@@ -10,7 +10,7 @@ using namespace eIDMW;
 using namespace std;
 
 int main(){
-    PDFSignatureClient PDFSignature_cli;
+    CMDServices cmdService;
 
     string in_userId = "+351 914432445";
     string in_pin = "\x07\x06\x09\x05";
@@ -18,7 +18,7 @@ int main(){
     printf( "\n*******************************\n"
               "*** getCertificate          ***\n"
               "*******************************\n" );
-    CByteArray certificate = PDFSignature_cli.getCertificate( in_pin, in_userId );
+    CByteArray certificate = cmdService.getCertificate( in_pin, in_userId );
     if ( 0 == certificate.Size() ){
         printf( "main() - ZERO certificate size\n" );
         return ERR_GET_CERTIFICATE;
@@ -47,7 +47,7 @@ int main(){
     printf( "\n*******************************\n"
               "*** sendDataToSign          ***\n"
               "*******************************\n" );
-    bool bRet = PDFSignature_cli.sendDataToSign( in_hash );
+    bool bRet = cmdService.sendDataToSign( in_hash );
     if ( !bRet ){
         printf( "main() - Error @ sendDataToSign()\n" );
         return ERR_SEND_HASH;
@@ -64,9 +64,9 @@ int main(){
     printf( "\n*******************************\n"
               "*** getSignature            ***\n"
               "*******************************\n" );
-    CByteArray signature = PDFSignature_cli.getSignature( in_code );
+    CByteArray signature = cmdService.getSignature( in_code );
     if ( 0 == signature.Size() ){
-       // delete PDFSignature_cli;
+       // delete cmdService;
 
         printf( "main() - Error @ getSignature()");
         return ERR_GET_SIGNATURE;
@@ -81,7 +81,7 @@ int main(){
     }/* for( int i ) */
     printf( "\n" );
 
-    //delete PDFSignature_cli;
+    //delete cmdService;
 
     return ERR_NONE;
 }/* main() */

@@ -40,10 +40,10 @@ namespace eIDMW
 
 void printCPtr( char *c_str, int c_str_len );
 
-class PDFSignatureClient{
+class CMDServices{
     public:
-        PDFSignatureClient( const char *endpoint = NULL );
-        virtual ~PDFSignatureClient();
+        CMDServices( const char *endpoint = NULL );
+        virtual ~CMDServices();
 
         // Get certificate
         CByteArray getCertificate( string in_pin, string in_userId );
