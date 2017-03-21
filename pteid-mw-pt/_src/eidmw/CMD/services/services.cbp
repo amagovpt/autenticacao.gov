@@ -47,8 +47,8 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="CCMovelSignature.h" />
-		<Unit filename="CMD_client.cpp" />
-		<Unit filename="CMD_client.h" />
+		<Unit filename="CMDServices.cpp" />
+		<Unit filename="CMDServices.h" />
 		<Unit filename="soapC.cpp" />
 		<Unit filename="soapH.h" />
 		<Unit filename="soapStub.h" />
