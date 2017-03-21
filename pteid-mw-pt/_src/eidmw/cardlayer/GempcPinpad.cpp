@@ -115,14 +115,15 @@ DWORD GemPcPinpad::loadStrings(SCARDHANDLE hCard, unsigned char ucPinType)
 	
 	if ( rv == SCARD_S_SUCCESS )
 	{
-		printf("Strings Loaded successfully\n");
+		MWLOG(LEV_DEBUG, MOD_CAL, "GemPcPinpad: Strings Loaded successfully");
 	}
 	else
-		printf("Error in LoadStrings: SCardControl() returned: %08x\n", 
-				(unsigned int)rv);
+	{
+		MWLOG(LEV_ERROR, MOD_CAL, "Error in GemPcPinpad::LoadStrings: SCardControl() returned: %08x\n",
+			(unsigned int)rv);
+	}
 	
 	return rv;
-
 }
 
 
