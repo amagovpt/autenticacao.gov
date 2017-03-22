@@ -133,7 +133,7 @@ CMDSERVICESLIB_MIN=0
 CMDSERVICESLIB_REV=0
 CMDSERVICESLIB_COMPAT_VERSION=1.0
 
-EIDLIBJAR=pteidlibJava.jar
+EIDLIBJAR=pteidlibj.jar
 
 ###################################################################################
 
