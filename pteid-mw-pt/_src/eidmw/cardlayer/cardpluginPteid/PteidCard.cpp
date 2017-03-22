@@ -498,6 +498,7 @@ int consoleAskForPin(tPinOperation operation, const tPin &Pin,
     printf("Please introduce your %s: ", Pin.csLabel.c_str());
     if (fgets(password, sizeof(password), stdin) == NULL)
 	    return EXIT_FAILURE;
+
     //Delete trailing newline
     password[strlen(password)- 1] = 0;
 
@@ -507,7 +508,7 @@ int consoleAskForPin(tPinOperation operation, const tPin &Pin,
 	    return EXIT_FAILURE;
     }
 
-    strcpy(sPin1, password);
+    strncpy(sPin1, password, PIN_MAX_LENGTH);
 
     if (operation == PIN_OP_CHANGE)
     {
@@ -527,7 +528,7 @@ int consoleAskForPin(tPinOperation operation, const tPin &Pin,
 		    perror("tcsetattr");
 		    return EXIT_FAILURE;
 	    }
-	    strcpy(sPin2, password);
+	    strncpy(sPin2, password, PIN_MAX_LENGTH);
     }
 
     return 0;
@@ -552,6 +553,10 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 	// Convert params
 	wchar_t wsPin1[PIN_MAX_LENGTH+1];
 	wchar_t wsPin2[PIN_MAX_LENGTH+1];
+
+	memset(wsPin1, 0, sizeof(wsPin1));
+	memset(wsPin2, 0, sizeof(wsPin1));
+
 	DlgPinOperation pinOperation = PinOperation2Dlg(operation);
 	DlgPinUsage usage = PinUsage2Dlg(Pin, pKey);
 	DlgPinInfo pinInfo = {Pin.ulMinLen, Pin.ulMaxLen, PIN_FLAG_DIGITS};
@@ -562,18 +567,18 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 #ifdef __linux__
 	if (!detectXorgRunning())
 	{
-		char *sPin1 = new char[PIN_MAX_LENGTH +1];
-		char *sPin2 = new char[PIN_MAX_LENGTH +1];
-		int error = consoleAskForPin(operation, Pin, sPin1, sPin2);
+		char sPin1[PIN_MAX_LENGTH +1];
+		char sPin2[PIN_MAX_LENGTH +1];
 
-		if (error == 0)
+		memset(sPin1, 0, sizeof(sPin1));
+		memset(sPin2, 0, sizeof(sPin1));
+		int rc = consoleAskForPin(operation, Pin, sPin1, sPin2);
+
+		if (rc == 0)
 		{
 			csPin1 = std::string(sPin1);
 			csPin2 = std::string(sPin2);
 		}
-
-		delete[] sPin1;
-		delete[] sPin2;
 
 		return;
 	}
