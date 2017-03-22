@@ -38,8 +38,7 @@ INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 QMAKE_CXXFLAGS += -O2
 
 DEFINES += EIDMW_CAL_EXPORT \
-           VERBOSE \
-           CARDPLUGIN_IN_CAL CAL_PTEID
+           CAL_PTEID
 unix:!macx:  DEFINES += __UNIX__
 #macx:  DEFINES += __OLD_PCSC_API__
 #Support Fat binaries on Mac with both x86 and x86_64 architectures
