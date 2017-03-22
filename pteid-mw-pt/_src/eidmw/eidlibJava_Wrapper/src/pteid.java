@@ -1,14 +1,11 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *
+ * Pteidlib compatibility methods
  */
+
 package pteidlib;
 import pt.gov.cartaodecidadao.*;
 
-/**
- *
- * @author ruim
- */
 public class pteid {
 
     private static PTEID_ReaderContext readerContext = null;
@@ -23,9 +20,14 @@ public class pteid {
     public static final int CARD_TYPE_IAS07 = 1;
     public static final int CARD_TYPE_IAS101 = 2;
 
-    private static final int MODE_ACTIVATE_BLOCK_PIN = 1;
+    public static final int PTEID_EXIT_LEAVE_CARD = 0;
+    public static final int PTEID_EXIT_UNPOWER = 2;
 
-    protected static final char[] Hexhars = {
+    public static final int UNBLOCK_FLAG_NEW_PIN = 1;
+    public static final int UNBLOCK_FLAG_PUK_MERGE = 2;
+    public static final int MODE_ACTIVATE_BLOCK_PIN = 1;
+
+    protected static final char[] hexChars = {
         '0', '1', '2', '3', '4', '5',
         '6', '7', '8', '9', 'A', 'B',
         'C', 'D', 'E', 'F'
@@ -38,8 +40,8 @@ public class pteid {
 
        for(int i=0; i<b.length;i++){
           int temp = b[i] & 0x000000FF;
-          st +=Hexhars[(temp >> 4)];
-          st +=Hexhars[(temp & 0xf)];
+          st += hexChars[(temp >> 4)];
+          st += hexChars[(temp & 0xf)];
        }
 
        return st;
@@ -72,8 +74,8 @@ public class pteid {
         }
    }
 
-
-   public static void Exit(int value) throws PteidException{
+   /* TODO: mode parameter is unused. It should reach the call to SCardDisconnect() in cardlayer/PCSC.cpp */
+   public static void Exit(int mode) throws PteidException{
         try {
             PTEID_ReaderSet.releaseSDK();
         } catch (Exception ex) {
@@ -108,7 +110,7 @@ public class pteid {
             PTEID_Pins pins = idCard.getPins();
             for (long i = 0; i < pins.count(); i++) {
                 pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(i);
-                if (pin.getPinRef() == 131) {
+                if (pin.getPinRef() == PTEID_ADDRESS_PIN) {
                     if (pin.verifyPin("", ul,true)) {
                         return new PTEID_ADDR(idCard.getAddr());
                     }
@@ -171,10 +173,9 @@ public class pteid {
 
 
     public static int VerifyPIN(byte b, String string) throws PteidException {
-        PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
-        int triesLeft =  0;
+        PTEID_ulwrapper tries_left = new PTEID_ulwrapper(-1);
 
-        // martinho: artista
+        // Convert byte to long
         long pinId = b & 0x00000000000000FF;
 
         if (readerContext != null) {
@@ -186,27 +187,24 @@ public class pteid {
                 for (long pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                     pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getPinRef() == pinId) {
-                        pin.verifyPin("", ul,true);
-                        //martinho: verify pin is not working properly for readers without pinpad at this moment,
-                        //this is a workaround
-                        triesLeft = pin.getTriesLeft();
+                        pin.verifyPin("", tries_left, true);
                     }
                 }
-                return triesLeft;
+                return (int)(tries_left.m_long);
+
             } catch (Exception ex) {
                 throw new PteidException();
             }
         }
-        return triesLeft;
+        throw new PteidException();
     }
 
 
-    public static int ChangePIN(byte b, String oldPin, String newPin) throws PteidException {
-        PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
-        int triesLeft = 0;
+    public static int ChangePIN(byte pin_id, String oldPin, String newPin) throws PteidException {
+        PTEID_ulwrapper tries_left = new PTEID_ulwrapper(-1);
 
-        // martinho: artista
-        long pinId = b & 0x00000000000000FF;
+        // Convert byte to long
+        long pinId = pin_id & 0x00000000000000FF;
 
         if (readerContext != null) {
             if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131) {
@@ -217,16 +215,13 @@ public class pteid {
                 for (long pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                     pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getPinRef() == pinId)
-                        if (pin.changePin(oldPin, newPin, ul, pin.getLabel(),true)) {
-                            triesLeft = pin.getTriesLeft();
-                            break;
-                        }
-                }
+                       pin.changePin(oldPin, newPin, tries_left, pin.getLabel(), true);
+            }
             } catch (Exception ex) {
                 throw new PteidException();
             }
         }
-        return triesLeft;
+        return (int)(tries_left.m_long);
     }
 
 
@@ -244,7 +239,8 @@ public class pteid {
                         currentId = (int)pin.getId()-1;
                         pinArray[currentId] = new PTEID_Pin();
                         pinArray[currentId].flags = (int) pin.getFlags();
-                        pinArray[currentId].usageCode = (int) pin.getId(); // martinho: might not be the intended use, but gives the expected compatible result.
+                        // rmartinho: might not be the intended use, but gives the expected compatible result.
+                        pinArray[currentId].usageCode = (int) pin.getId(); 
                         pinArray[currentId].pinType = (int) pin.getType();
                         pinArray[currentId].label = pin.getLabel();
                         pinArray[currentId].triesLeft = pin.getTriesLeft();
@@ -300,36 +296,39 @@ public class pteid {
     }
 
 
-    public static int UnblockPIN(byte b, String puk, String newPin) throws PteidException{
-        PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
+    public static int UnblockPIN(byte pin_id, String puk, String newPin) throws PteidException {
+        PTEID_ulwrapper tries_left = new PTEID_ulwrapper(-1);
 
-		// martinho: artista
-        long pinId = b & 0x00000000000000FF;
+    		//Convert byte to long
+            long pinId = pin_id & 0x00000000000000FF;
 
-        if (readerContext!=null){
-            try {
+            if (readerContext!=null){
+                try {
 
-		if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131)
-			return 0;
+                  if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131)
+                   return 0;
 
-		PTEID_Pins pins = idCard.getPins();
-		for (long pinIdx=0; pinIdx < pins.count(); pinIdx++){
-			pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
-			if (pin.getPinRef() == pinId){
-				pin.unlockPin(puk, newPin, ul);
-			}
-		}
-            } catch (Exception ex) {
-                throw new PteidException();
+               PTEID_Pins pins = idCard.getPins();
+               for (long pinIdx=0; pinIdx < pins.count(); pinIdx++){
+
+                   pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
+
+                   if (pin.getPinRef() == pinId) {
+                    pin.unlockPin(puk, newPin, tries_left);
+                }
             }
-	}
+        } catch (Exception ex) {
+            throw new PteidException();
+        }
+        }
 
-	return (int)ul.m_long;
+        return (int)tries_left.m_long;
     }
 
-
-    public static int UnblockPIN_Ext(byte b, String string, String string1, int i) throws PteidException{
-    	return UnblockPIN(b,string, string1);
+    /* TODO: flag not implemented yet: the default behaviour should be UNBLOCK_FLAG_PUK_MERGE | UNBLOCK_FLAG_NEW_PIN
+    */
+    public static int UnblockPIN_Ext(byte pin_id, String puk, String newPin, int flag) throws PteidException{
+    	return UnblockPIN(pin_id, puk, newPin);
     }
 
 
@@ -351,13 +350,13 @@ public class pteid {
     }
 
 
-    public static byte[] ReadFile(byte[] bytes, byte b) throws PteidException {
+    public static byte[] ReadFile(byte[] bytes, byte pin_id) throws PteidException {
         PTEID_ByteArray pb = new PTEID_ByteArray();
         byte[] retArray = null;
         pt.gov.cartaodecidadao.PTEID_Pin pin = null;
 
-        // martinho: artista
-        long pinId = b & 0x00000000000000FF;
+        // Convert byte to long
+        long pinId = pin_id & 0x00000000000000FF;
 
         if (readerContext != null) {
             try {
@@ -388,15 +387,15 @@ public class pteid {
     }
 
 
-    public static void WriteFile(byte[] file, byte[] data, byte bpin) throws PteidException{
+    public static void WriteFile(byte[] file, byte[] data, byte bpin) throws PteidException {
         WriteFileInOffset( file, data, bpin, 0/*inOffset*/);
     }
 
-    public static void WriteFileInOffset(byte[] file, byte[] data, byte bpin, int inOffset) throws PteidException{
+    public static void WriteFileInOffset(byte[] file, byte[] data, byte bpin, int inOffset) throws PteidException {
         PTEID_ByteArray pb = new PTEID_ByteArray(data,data.length);
         pt.gov.cartaodecidadao.PTEID_Pin pin = null;
 
-        // martinho: artista
+        // Convert byte to long
         long pinId = bpin & 0x00000000000000FF;
 
         if (readerContext != null) {
@@ -435,7 +434,7 @@ public class pteid {
         PTEID_ByteArray pb = new PTEID_ByteArray(bytes, bytes.length);
         if (readerContext != null) {
             try {
-		boolean mode = activateMode == MODE_ACTIVATE_BLOCK_PIN;
+		        boolean mode = activateMode == MODE_ACTIVATE_BLOCK_PIN;
                 idCard.Activate(actPin, pb, mode);
             } catch (Exception ex) {
                 throw new PteidException();
@@ -469,7 +468,6 @@ public class pteid {
                     readerContext.getEIDCard().getCertificates().addToSODCAs(pba);
                 }
             } catch (Exception ex) {
-                ex.printStackTrace();
                 throw new PteidException();
             }
         }
@@ -487,8 +485,9 @@ public class pteid {
                 key.modulus = new byte[(int) cardKey.getCardAuthKeyModulus().Size()];
                 System.arraycopy(cardKey.getCardAuthKeyExponent().GetBytes(), 0, key.exponent, 0, key.exponent.length);
                 System.arraycopy(cardKey.getCardAuthKeyModulus().GetBytes(), 0, key.modulus, 0, key.modulus.length);
-            } catch (Exception ex) {
-                throw new PteidException();
+            } 
+            catch (PTEID_Exception ex) {
+                throw new PteidException(ex.GetError());
             }
         }
 
@@ -509,8 +508,8 @@ public class pteid {
                 System.arraycopy(rootCAKey.getCardAuthKeyModulus().GetBytes(), 0, key.modulus, 0, key.modulus.length);
             }
             catch (PTEID_Exception ex) {
-                System.err.println("Error in GetCVCRoot(): "+ex.GetError());
-                throw new PteidException();
+
+                throw new PteidException(ex.GetError());
             }
         }
 
