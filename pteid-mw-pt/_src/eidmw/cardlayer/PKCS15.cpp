@@ -238,6 +238,8 @@ namespace eIDMW
     case ODF:
       ReadFile(&m_xODF,1);
       // parse
+      m_xODF.byteArray.TrimRight();
+      //Trim trailing NUL bytes (the actual ASN.1 content is 48 bytes)
       resultOdf = m_poParser->ParseOdf(m_xODF.byteArray);
       // propagate the path info  
       m_xAODF.path = resultOdf.csAodfPath;
@@ -264,6 +266,8 @@ namespace eIDMW
       case AODF:
           ReadFile(&m_xAODF,2);
           // parse
+          //Trim trailing NUL bytes (the actual ASN.1 content is 168 bytes)
+          m_xAODF.byteArray.TrimRight();
           m_oPins = m_poParser->ParseAodf(m_xAODF.byteArray);
           break;
       case CDF:
