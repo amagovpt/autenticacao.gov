@@ -1,5 +1,8 @@
-#include "CMDServices.h"
-#include "MiscUtil.h"
+//#include "CMDServices.h"
+//#include "MiscUtil.h"
+
+#include "PDFSignatureCli.h"
+
 
 #define ERR_NONE            0
 #define ERR_GET_CERTIFICATE 1
@@ -7,9 +10,11 @@
 #define ERR_GET_SIGNATURE   3
 
 using namespace eIDMW;
-using namespace std;
+//using namespace std;
 
 int main(){
+
+#if 0
     CMDServices cmdService;
 
     string in_userId = "+351 914432445";
@@ -82,6 +87,11 @@ int main(){
     printf( "\n" );
 
     //delete cmdService;
+#else
+    PDFSignatureCli cli;
 
+    printf( "main() - cli\n" );
+
+#endif
     return ERR_NONE;
 }/* main() */

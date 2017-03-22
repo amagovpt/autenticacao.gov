@@ -1,4 +1,5 @@
-
+#ifndef TESTES_H
+#define TESTES_H
 #include "soapH.h"
 SOAP_NMAC struct Namespace namespaces[] = {
         {"SOAP-ENV", "http://www.w3.org/2003/05/soap-envelope", "http://schemas.xmlsoap.org/soap/envelope/", NULL},
@@ -17,3 +18,4 @@ SOAP_NMAC struct Namespace namespaces[] = {
         {"wsse", "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd", "http://docs.oasis-open.org/wss/oasis-wss-wssecurity-secext-1.1.xsd", NULL},
         {NULL, NULL, NULL, NULL}
     };
+#endif

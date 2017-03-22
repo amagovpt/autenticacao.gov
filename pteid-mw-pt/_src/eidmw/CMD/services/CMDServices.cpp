@@ -3,6 +3,9 @@
 #include <string>
 
 #include "CMDServices.h"
+#include "WSHttpBinding_USCORECCMovelSignature.nsmap"
+#include "soapWSHttpBinding_USCORECCMovelSignatureProxy.h"
+
 #include "Log.h"
 #include "MiscUtil.h"
 
@@ -17,6 +20,25 @@
 #define SOAP_CONNECT_TIMEOUT_DEFAULT    20
 #define SOAP_MUST_NO_UNDERSTAND         0
 #define SOAP_MUST_UNDERSTAND            1
+
+char logBuf[512];
+#ifdef WIN32
+    #define _LOG_( level, mod, format, ... )    { sprintf( logBuf, "%s() - ", __FUNCTION__ );               \
+                                                    sprintf( &logBuf[strlen(logBuf)], format, __VA_ARGS__ );\
+                                                    MWLOG( level, mod, logBuf); }
+    #define MWLOG_ERR( format, ...   )          _LOG_( LEV_ERROR, MOD_CMD, format, __VA_ARGS__ )
+    #define MWLOG_WARN( format, ...  )          _LOG_( LEV_WARN , MOD_CMD, format, __VA_ARGS__ )
+    #define MWLOG_INFO( format, ...  )          _LOG_( LEV_INFO , MOD_CMD, format, __VA_ARGS__ )
+    #define MWLOG_DEBUG( format, ... )          _LOG_( LEV_DEBUG, MOD_CMD, format, __VA_ARGS__ )
+#else
+    #define _LOG_( level, mod, format, ... )    { sprintf( logBuf, "%s() - ", __FUNCTION__ );                   \
+                                                    sprintf( &logBuf[strlen(logBuf)], format, ## __VA_ARGS__ ); \
+                                                    MWLOG( level, mod, logBuf); }
+    #define MWLOG_ERR( format, ...   )          _LOG_( LEV_ERROR, MOD_CMD, format, ## __VA_ARGS__ )
+    #define MWLOG_WARN( format, ...  )          _LOG_( LEV_WARN , MOD_CMD, format, ## __VA_ARGS__ )
+    #define MWLOG_INFO( format, ...  )          _LOG_( LEV_INFO , MOD_CMD, format, ## __VA_ARGS__ )
+    #define MWLOG_DEBUG( format, ... )          _LOG_( LEV_DEBUG, MOD_CMD, format, ## __VA_ARGS__ )
+#endif // WIN32
 
 namespace eIDMW{
 

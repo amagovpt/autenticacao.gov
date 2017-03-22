@@ -46,6 +46,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="../PDFSignatureCli.cpp" />
+		<Unit filename="../PDFSignatureCli.h" />
 		<Unit filename="CCMovelSignature.h" />
 		<Unit filename="CMDServices.cpp" />
 		<Unit filename="CMDServices.h" />
