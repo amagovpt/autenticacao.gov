@@ -3903,6 +3903,8 @@ void MainWnd::clearTabPins( void )
 //*****************************************************
 void MainWnd::refreshTabCertificates( void )
 {
+    if (!m_CI_Data.isDataLoaded()) return;
+
 	certdatastatus = 0;
 	loadCardDataCertificates();
 
@@ -4219,7 +4221,8 @@ void MainWnd::customEvent( QEvent* pEvent )
 
 					m_imgPicture = QPixmap();
 					m_pinsInfo.clear();
-					m_CI_Data.Reset();
+					/*m_CI_Data.Reset();*/
+					clearGuiContent();
 
 					refreshTabIdentity();
 					refreshTabIdentityExtra();
