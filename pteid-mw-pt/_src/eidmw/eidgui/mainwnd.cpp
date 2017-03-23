@@ -3645,11 +3645,15 @@ bool MainWnd::refreshTabAddress( void )
 		m_ui.page_Address->setStyleSheet("background-image: url(:/images/Images/tab-backgrounds/bg_address.png);");
 		unsigned int offset = 0;
 		unsigned int streetname_width = 190;
+		unsigned int streetname_height = 3;
 
 		if (m_addressFieldNeedsReset)
 		{
 			QRect geometry = m_ui.txtAddress_StreetName->geometry();
-			m_ui.txtAddress_StreetName->setGeometry(geometry.x(), geometry.y()-streetName_offset, streetname_width, geometry.height());
+			m_ui.txtAddress_StreetName->setGeometry( geometry.x()
+                                                    , geometry.y() -streetName_offset
+                                                    , streetname_width
+                                                    , geometry.height() + streetname_height );
 			m_addressFieldNeedsReset = false;
 		}
 
