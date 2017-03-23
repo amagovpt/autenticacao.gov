@@ -1105,6 +1105,13 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 			goto cleanup;
 		}
 
+		if (OCSP_check_nonce(pRequest, pBasic) <= 0)
+		{
+           MWLOG(LEV_ERROR, MOD_APL, "Incorrect Nonce value in OCSP response! Discarding the obtained information");
+           eStatus = FWK_CERTIF_STATUS_ERROR;
+           goto cleanup;
+    	}
+
 		if(pX509_Issuer)
 		{
 			//Get the algorithm
