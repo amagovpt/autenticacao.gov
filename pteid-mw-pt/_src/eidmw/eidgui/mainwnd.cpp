@@ -572,6 +572,7 @@ void MainWnd::doChangeAddress(const char *process, const char *secret_code)
 
 void MainWnd::on_btnAddress_Change_clicked()
 {
+    if (!m_CI_Data.isDataLoaded()) return;
 
 	PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 
