@@ -7,7 +7,7 @@
 include(../_Builds/eidcommon.mak)
 
 TEMPLATE = lib
-TARGET = $${JAVALIB}
+TARGET = pteidlibj
 VERSION = $${JAVALIB_MAJ}.$${JAVALIB_MIN}.$${JAVALIB_REV}
 
 message("Compile $$TARGET")
