@@ -310,17 +310,14 @@ CSC_Status APL_CertStatusCache::convertStatus(APL_CertifStatus status)
 	case APL_CERTIF_STATUS_VALID_OCSP:
 		return CSC_STATUS_VALID_FULL;
 
-	case APL_CERTIF_STATUS_TEST:
-		return CSC_STATUS_TEST;
-
-	case APL_CERTIF_STATUS_DATE:
-		return CSC_STATUS_DATE;
-
 	case APL_CERTIF_STATUS_CONNECT:
 		return CSC_STATUS_CONNECT;
 
 	case APL_CERTIF_STATUS_ISSUER:
 		return CSC_STATUS_ISSUER;
+
+	case APL_CERTIF_STATUS_SUSPENDED:
+		return CSC_STATUS_SUSPENDED; 
 
 	case APL_CERTIF_STATUS_REVOKED:
 		return CSC_STATUS_REVOKED;
@@ -368,13 +365,12 @@ CSC_Status APL_CertStatusCache::checkCertValidation(unsigned long ulUniqueID,uns
 	certstatus = convertStatus(cert->validationOCSP());
 
 	//In case the OCSP query failed fallback to CRL
-	//TODO: Fallback to CRL under the right conditions
-	if (certstatus != CSC_STATUS_REVOKED && certstatus != CSC_STATUS_VALID_SIGN)
+	if (certstatus != CSC_STATUS_SUSPENDED && certstatus != CSC_STATUS_REVOKED &&
+	      certstatus != CSC_STATUS_VALID_SIGN)
 	{
-		//fprintf(stderr, "DEBUG: falling back to CRL validation for certificate %s: OCSP return code %d\n",
-		//	 cert->getOwnerName(), certstatus);
+		fprintf(stderr, "DEBUG: falling back to CRL validation for certificate %s: OCSP return code %d\n",
+			 cert->getOwnerName(), certstatus);
 		certstatus = convertStatus(cert->validationCRL());
-
 	}
 
 

@@ -982,7 +982,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
     ASN1_GENERALIZEDTIME  *producedAt, *thisUpdate, *nextUpdate;
 	int iStatus=-1;
 	FWK_CertifStatus eStatus=FWK_CERTIF_STATUS_UNCHECK;
-	int iReason;
+	int iReason = 0;
 
 	APL_Config proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
 	APL_Config proxy_user(CConfig::EIDMW_CONFIG_PARAM_PROXY_USERNAME);
@@ -1038,7 +1038,6 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 	{
 
 		/*
-
     SCOPE(OCSP_REQ_CTX, rctx, OCSP_sendreq_new(connection.get(), const_cast<char*>(url.c_str()), 0, -1));
     if(!rctx)
         THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
@@ -1056,8 +1055,6 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 
     if(!OCSP_sendreq_nbio(&resp, rctx.get()))
         THROW_OPENSSLEXCEPTION("Failed to send OCSP request.");
-
-
 		*/
 
 		//TODO: Test this with and without proxy ...
@@ -1193,6 +1190,11 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 				default:
 					eStatus=FWK_CERTIF_STATUS_UNKNOWN;
 					break;
+				}
+				//Check specific revocation reason
+				if (iReason == OCSP_REVOKED_STATUS_CERTIFICATEHOLD)
+				{
+					eStatus = FWK_CERTIF_STATUS_SUSPENDED;
 				}
 			}
 		}
@@ -1476,6 +1478,7 @@ BIO *APL_CryptoFwk::Connect(char *pszHost, int iPort, int iSSL, SSL_CTX **ppSSLC
 		{
 			if (!(pConnect = BIO_new_connect(pszHost)))
 			{
+				//TODO: Remove this errors or log them better
 				ERR_print_errors_fp(stderr);
 				return NULL;
 
@@ -1486,6 +1489,7 @@ BIO *APL_CryptoFwk::Connect(char *pszHost, int iPort, int iSSL, SSL_CTX **ppSSLC
 
 		if ( BIO_do_connect(pConnect) <= 0 )
 		{
+			//TODO: Remove this errors or log them better
 			ERR_print_errors_fp(stderr);
 			return NULL;
 		}

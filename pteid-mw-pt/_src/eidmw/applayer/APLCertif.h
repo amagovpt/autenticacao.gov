@@ -56,8 +56,7 @@ enum APL_CertifStatus
 	APL_CERTIF_STATUS_VALID_CRL,	/**< Valid certificate through CRL process */
 	APL_CERTIF_STATUS_VALID_OCSP,	/**< Valid certificate through OCSP process */
 	APL_CERTIF_STATUS_REVOKED,		/**< Revoked certificate */
-	APL_CERTIF_STATUS_TEST,			/**< Test certificate */
-	APL_CERTIF_STATUS_DATE,			/**< Certificate no more valid */
+	APL_CERTIF_STATUS_SUSPENDED,    /**  Suspended certificate  */
 	APL_CERTIF_STATUS_CONNECT,		/**< Connection problem */
 	APL_CERTIF_STATUS_ISSUER,		/**< An issuer is missing in the chain */
 	APL_CERTIF_STATUS_ERROR,		/**< Error during validation */

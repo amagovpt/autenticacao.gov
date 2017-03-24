@@ -61,29 +61,26 @@ APL_CertifStatus ConvertStatus(FWK_CertifStatus eStatus,APL_ValidationProcess eP
 	//Convert the status out of the Crypto framework into an APL_CertifStatus
 	switch(eStatus)
 	{
-	case FWK_CERTIF_STATUS_TEST:
-		return APL_CERTIF_STATUS_TEST;
+		case FWK_CERTIF_STATUS_REVOKED:
+			return APL_CERTIF_STATUS_REVOKED;
 
-	case FWK_CERTIF_STATUS_DATE:
-		return APL_CERTIF_STATUS_DATE;
+		case FWK_CERTIF_STATUS_UNKNOWN:
+			return APL_CERTIF_STATUS_UNKNOWN;
 
-	case FWK_CERTIF_STATUS_REVOKED:
-		return APL_CERTIF_STATUS_REVOKED;
+		case FWK_CERTIF_STATUS_CONNECT:
+			return APL_CERTIF_STATUS_CONNECT;
 
-	case FWK_CERTIF_STATUS_UNKNOWN:
-		return APL_CERTIF_STATUS_UNKNOWN;
+		case FWK_CERTIF_STATUS_ERROR:
+			return APL_CERTIF_STATUS_ERROR;
 
-	case FWK_CERTIF_STATUS_CONNECT:
-		return APL_CERTIF_STATUS_CONNECT;
+		case FWK_CERTIF_STATUS_VALID:
+		    return APL_CERTIF_STATUS_VALID;
 
-	case FWK_CERTIF_STATUS_ERROR:
-		return APL_CERTIF_STATUS_ERROR;
+		case FWK_CERTIF_STATUS_SUSPENDED:
+			return APL_CERTIF_STATUS_SUSPENDED;
 
-	case FWK_CERTIF_STATUS_VALID:
-	       	return APL_CERTIF_STATUS_VALID;
-
-	default:
-		return APL_CERTIF_STATUS_UNCHECK;
+		default:
+			return APL_CERTIF_STATUS_UNCHECK;
 	}
 }
 
@@ -1562,6 +1559,8 @@ APL_CertifStatus APL_Certif::getStatus(APL_ValidationLevel crl, APL_ValidationLe
 	//If no crl neither ocsp and valid => VALID
 	if (statusOcsp==CSC_STATUS_VALID_SIGN)
 		return APL_CERTIF_STATUS_VALID;
+	else if (statusOcsp == CSC_STATUS_SUSPENDED)
+		return APL_CERTIF_STATUS_SUSPENDED;
 	else if (statusOcsp == CSC_STATUS_REVOKED)
 		return APL_CERTIF_STATUS_REVOKED;
 	else
@@ -1796,6 +1795,8 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload)
 	{
 	case APL_CRL_STATUS_ERROR:
 		return APL_CERTIF_STATUS_ERROR;
+	case APL_CRL_STATUS_CONNECT:
+		return APL_CERTIF_STATUS_CONNECT;
 	case APL_CRL_STATUS_UNKNOWN:
 	case APL_CRL_STATUS_VALID:
 	default:
@@ -1818,6 +1819,7 @@ APL_CrlStatus APL_Crl::getData(CByteArray &data, bool forceDownload)
 	{
 		data=EmptyByteArray;
 		MWLOG(LEV_DEBUG, MOD_APL, L"APL_Crl::getData: Returning an empty array");
+		eRetStatus = APL_CRL_STATUS_CONNECT;
 	}
 	else
 		eRetStatus = APL_CRL_STATUS_VALID;
@@ -1929,10 +1931,9 @@ APL_CertifStatus APL_OcspResponse::getResponse(CByteArray *response)
 	//If we already have a response, we check if the status was acceptable and if it's still valid
 	if(m_response)
 	{
-		if( (m_status==APL_CERTIF_STATUS_VALID_OCSP
+		if ((m_status==APL_CERTIF_STATUS_VALID_OCSP
 			|| m_status==APL_CERTIF_STATUS_REVOKED
-			|| m_status==APL_CERTIF_STATUS_TEST
-			|| m_status==APL_CERTIF_STATUS_DATE)
+			|| m_status==APL_CERTIF_STATUS_SUSPENDED)
 			&& CTimestampUtil::checkTimestamp(m_validity,CSC_VALIDITY_FORMAT))
 		{
 			if(response)

@@ -52,17 +52,18 @@ typedef enum
 
 typedef enum 
 {
-	CSC_STATUS_WAIT=0,		/**< Being validate by another process */
+	CSC_STATUS_WAIT=0,		/**< Being validated by another process */
 	CSC_STATUS_NONE,		/**< No validation yet */
 	CSC_STATUS_VALID_SIGN,	/**< Valid certificate */
 	CSC_STATUS_VALID_FULL,	/**< Valid certificate with CRL or OCSP */
 	CSC_STATUS_TEST,		/**< Valid but test certificate */
 	CSC_STATUS_DATE,		/**< Valid except Date validity */
-	CSC_STATUS_CONNECT,		/**< Connection problem */
+	CSC_STATUS_CONNECT,		/**< Connection problem      */
 	CSC_STATUS_ISSUER,		/**< An issuer is missing in the chain */
-	CSC_STATUS_REVOKED,		/**< Certificate not valid */
+	CSC_STATUS_REVOKED,		/**< Certificate not valid   */
 	CSC_STATUS_UNKNOWN,		/**< Responder return unknow */
-	CSC_STATUS_ERROR		/**< Another error occure */
+	CSC_STATUS_ERROR,		/**< Another error occured   */
+	CSC_STATUS_SUSPENDED    /** Suspended certificate    */
 } CSC_Status;
 
 /******************************************************************************//**

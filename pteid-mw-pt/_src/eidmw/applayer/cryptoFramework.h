@@ -49,11 +49,11 @@ enum FWK_CertifStatus
 	FWK_CERTIF_STATUS_UNCHECK,		/**< Validity uncheck yet */
 	FWK_CERTIF_STATUS_VALID,		/**< Valid certificate */
 	FWK_CERTIF_STATUS_REVOKED,		/**< Revoked certificate */
-	FWK_CERTIF_STATUS_TEST,			/**< Test certificate */
-	FWK_CERTIF_STATUS_DATE,			/**< Certificate no more valid */
 	FWK_CERTIF_STATUS_CONNECT,		/**< Connection problem */
 	FWK_CERTIF_STATUS_ERROR,		/**< Error during validation */
-	FWK_CERTIF_STATUS_UNKNOWN		/**< Certificate unknown by responder */
+	FWK_CERTIF_STATUS_UNKNOWN,		/**< Certificate unknown by responder */
+	FWK_CERTIF_STATUS_SUSPENDED     /* Certificate on hold */
+
 };
 
 struct tCertifInfo
