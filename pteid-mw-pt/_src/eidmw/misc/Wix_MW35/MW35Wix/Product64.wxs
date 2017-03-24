@@ -497,13 +497,13 @@
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidgui.exe" KeyPath="yes" />
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCpp.dll" />
                 <File Source="$(var.PTEID_BUILD_FOLDER_X64)poppler-qt5.dll" />
-          <File Source="$(var.PTEID_BUILD_FOLDER_X64)\ScapSignature.exe" />
+          <File Source="$(var.PTEID_BUILD_FOLDER_X64)\ScapSignature.exe" />\  
           <File Source="..\..\..\scap-client-v2\scapsignature_pt.qm" />
 				</Component>
 
         <Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F8}" SharedDllRefCount="yes">
-          <File Source="$(var.PTEID_BUILD_FOLDER_X64)libeay32.dll" KeyPath="yes"/>
-          <File Source="$(var.PTEID_BUILD_FOLDER_X64)ssleay32.dll" />
+          <File Id="libeay_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)libeay32.dll" KeyPath="yes"/>
+          <File Id="ssleay_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)ssleay32.dll" />
         </Component>
 
 				<Component Id="GuiLang" Guid="{6B03ED1B-DF24-4CE6-A70C-476AF4C0941B}" SharedDllRefCount="yes">
@@ -546,23 +546,24 @@
 
 			</DirectoryRef>
 
-			<!-- We need to ship all the 32-bit DLLs to have working 32-bit versions of the PKCS#11 module -->
+			<!-- We need to ship all the 32-bit DLLs to have working 32-bit versions of the PKCS#11 and pteidlibj module -->
 			<DirectoryRef Id="SystemFolder">
 
 				<Component Win64="no" Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
           <!--      <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-scap-cardlayer.dll" /> -->
+                <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll"/>
                 <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
+                <File Source="$(var.PTEID_BUILD_FOLDER_X86)libeay32.dll" />
+                <File Source="$(var.PTEID_BUILD_FOLDER_X86)ssleay32.dll" />
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
 				</Component>
 
 				<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
-				<!--  <Component Win64="no" Id="Poppler" Guid="{54E15AA8-F4A5-42e8-9D38-3B151223B003}">
-
-        <File Id="pteid_poppler.dll" Name="pteid-poppler.dll" KeyPath="no" Source="..\..\..\_Binaries35\Release\pteid-poppler.dll" ></File>
+			<Component Win64="no" Id="Poppler" Guid="{3C54AC04-E71D-4DC3-9525-21C3BF3BDD9A}">
+        <File Id="pteid_poppler.dll" Name="pteid-poppler.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteid-poppler.dll" ></File>
       </Component>
-	  -->
 
 				<Component Win64="no" Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
           			<File Source="$(var.PTEID_BUILD_FOLDER_X86)xerces-c_3_1.dll" KeyPath="yes"/>
@@ -597,6 +598,7 @@
 				<Component Id="Runtime35_64" Guid="{8FE1C7FB-F06A-40db-8454-88D9E8BDD626}" SharedDllRefCount="yes" Win64="yes">
 			          <File Id="pteidapplayer_64.dll"  Source="$(var.PTEID_BUILD_FOLDER_X64)pteidapplayer.dll" KeyPath="yes" />
 			          <File Id="pteidcardlayer_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcardlayer.dll" />
+                <File Id="pteidlibj_64.dll"      Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibj.dll"/>
 			          <File Id="pteidcommon_64.dll"    Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
 			          <File Id="pteidDlgsWin32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
 				</Component>
@@ -644,8 +646,7 @@
 
 			<DirectoryRef Id="JAVA_SDK">
 				<Component Id="Java_SDK_Component" Guid="{8B0D8006-DB84-4986-A8D7-AC5F84F4AEF8}" >
-		          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibJava_Wrapper.dll" KeyPath="yes"/>
-		          <File Source="..\..\..\jar\pteidlibJava.jar" />
+		          <File Source="..\..\..\jar\pteidlibj.jar" />
 				</Component>
 			</DirectoryRef>
 

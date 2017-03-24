@@ -252,8 +252,7 @@
 
     <DirectoryRef Id="JAVA_SDK">
       <Component Id="Java_SDK_Component" Guid="{8B0D8006-DB84-4986-A8D7-AC5F84F4AEF8}" >
-        <File Id="javaWrapper1" Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibJava_Wrapper.dll" KeyPath="yes"/>
-        <File Source="..\..\..\jar\pteidlibJava.jar" />
+        <File Source="..\..\..\jar\pteidlibj.jar" KeyPath="yes"/>
       </Component>
     </DirectoryRef>
 
@@ -468,6 +467,7 @@
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
       </Component>
 
