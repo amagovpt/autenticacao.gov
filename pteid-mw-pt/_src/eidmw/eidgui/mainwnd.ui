@@ -57,7 +57,7 @@
        <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="page_Wellcome"/>
       <widget class="QWidget" name="page_Identity">
@@ -1319,7 +1319,7 @@ image: url(:/images/Images/bg-Light-Blue.png);</string>
         <property name="geometry">
          <rect>
           <x>410</x>
-          <y>340</y>
+          <y>370</y>
           <width>111</width>
           <height>30</height>
          </rect>
@@ -1338,7 +1338,7 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);         
         <property name="geometry">
          <rect>
           <x>410</x>
-          <y>380</y>
+          <y>410</y>
           <width>111</width>
           <height>31</height>
          </rect>
@@ -1353,20 +1353,17 @@ background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);         
          <string>&amp;Details &gt;&gt;</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtCert_RevStatus">
+       <widget class="QLabel" name="txtCert_RevStatus">
         <property name="geometry">
          <rect>
           <x>410</x>
           <y>310</y>
-          <width>175</width>
-          <height>20</height>
+          <width>370</width>
+          <height>45</height>
          </rect>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/images/Images/bg-Blue.png);</string>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
         </property>
        </widget>
       </widget>
@@ -1949,7 +1946,6 @@ text-align: center;
     <zorder>btn_menu_tools</zorder>
     <zorder>btn_menu_card</zorder>
     <zorder>btn_menu_language</zorder>
-    <zorder>lbl_menuSettings_Parameters_2</zorder>
     <zorder>lbl_testmode</zorder>
    </widget>
    <widget class="QWidget" name="wdg_submenu_card" native="true">

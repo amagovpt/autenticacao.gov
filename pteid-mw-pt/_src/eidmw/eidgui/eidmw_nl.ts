@@ -288,19 +288,6 @@
         <comment>to english</comment>
         <translation>Change the interface language to english</translation>
     </message>
-
-    <message>
-        <source>Kaartnr. / &lt;i&gt;Card No&lt;/i&gt;</source>
-        <translation>Num. Cartão / &lt;i&gt;Card No&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Geldig van - tot / &lt;i&gt;Valid from - until&lt;/i&gt;</source>
-        <translation>Validade / &lt;i&gt;Valid from - until&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Ouders / &lt;i&gt;Parents&lt;/i&gt;</source>
-        <translation>Filiação / &lt;i&gt;Parents&lt;/i&gt;</translation>
-    </message>
     <message>
         <source>Foreigners</source>
         <translation>Estrangeiros</translation>
@@ -542,18 +529,6 @@
         <translation>&amp;Identity Card</translation>
     </message>
     <message>
-        <source>SIS Card</source>
-        <translation>SIS Card</translation>
-    </message>
-    <message>
-        <source>Kids Card</source>
-        <translation>Kids Card</translation>
-    </message>
-    <message>
-        <source>Foreigner Card</source>
-        <translation>Foreigner Card</translation>
-    </message>
-    <message>
         <source>Mi&amp;nimize</source>
         <translation type="unfinished">Minimizar</translation>
     </message>
@@ -646,22 +621,6 @@
         <translation type="unfinished">Desconhecido</translation>
     </message>
     <message>
-        <source>txtCountry_1</source>
-        <translation>BELGIË</translation>
-    </message>
-    <message>
-        <source>txtCountry_2</source>
-        <translation>BELGIQUE</translation>
-    </message>
-    <message>
-        <source>txtCountry_3</source>
-        <translation>BELGIEN</translation>
-    </message>
-    <message>
-        <source>txtCountry_4</source>
-        <translation>BELGIUM</translation>
-    </message>
-    <message>
         <source>txtIdentityCard_3</source>
         <translation>PERSONALAUSWEIS</translation>
     </message>
@@ -676,14 +635,6 @@
     <message>
         <source>txtIdentityCard_4</source>
         <translation>IDENTITY CARD</translation>
-    </message>
-    <message>
-        <source>Naam / &lt;i&gt;Name&lt;/i&gt;</source>
-        <translation>Nome / &lt;i&gt;Name&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Geslacht / &lt;i&gt;Sex&lt;/i&gt; </source>
-        <translation>Género / &lt;i&gt;Sex&lt;/i&gt; </translation>
     </message>
     <message>
         <source>The Root Certificate is not correct.
@@ -766,34 +717,6 @@ Please specify .xml, .csv or .eid</source>
         <translation>Save eID as</translation>
     </message>
     <message>
-        <source>Plaats van afgifte&lt;br&gt;&lt;i&gt;Place of issue&lt;/i&gt;</source>
-        <translation>Place of issue</translation>
-    </message>
-    <message>
-        <source>Straat &lt;br&gt;&lt;i&gt;Street&lt;/i&gt;</source>
-        <translation>Rua &lt;br&gt;&lt;i&gt;Street&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Postcode&lt;br&gt;&lt;i&gt;Postal Code&lt;/i&gt;</source>
-        <translation>Cod. Postal&lt;br&gt;&lt;i&gt;Postal Code&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Gemeente &lt;br&gt; &lt;i&gt;Municipality&lt;/i&gt;</source>
-        <translation>Municipio &lt;br&gt; &lt;i&gt;Municipality&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Land&lt;br&gt;&lt;i&gt;Country&lt;/i&gt;</source>
-        <translation>País&lt;br&gt;&lt;i&gt;Country&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Titel&lt;br&gt;&lt;i&gt;Title&lt;/i&gt;</source>
-        <translation>Titel&lt;br&gt;&lt;i&gt;Title&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Nationaliteit&lt;br&gt;&lt;i&gt;Nationality&lt;/i&gt;</source>
-        <translation>Nacionalidade&lt;br&gt;&lt;i&gt;Nationality&lt;/i&gt;</translation>
-    </message>
-    <message>
         <source>Valid until</source>
         <translation>Válido até</translation>
     </message>
@@ -856,38 +779,6 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <source>Identity E&amp;xtra</source>
         <translation>Outros Dados</translation>
-    </message>
-    <message>
-        <source>A. Bewijs van inschrijving in het vreemdelingenregister - Tijdelijk verblijf</source>
-        <translation type="unfinished">A. Bewijs van inschrijving in het vreemdelingenregister - Tijdelijk verblijf</translation>
-    </message>
-    <message>
-        <source>B. Bewijs van inschrijving in het vreemdelingenregister</source>
-        <translation type="unfinished">B. Bewijs van inschrijving in het vreemdelingenregister</translation>
-    </message>
-    <message>
-        <source>C. Identiteitskaart voor vreemdeling</source>
-        <translation type="unfinished">C. Identiteitskaart voor vreemdeling</translation>
-    </message>
-    <message>
-        <source>D. EG - langdurig ingezetene</source>
-        <translation type="unfinished">D. EG - langdurig ingezetene</translation>
-    </message>
-    <message>
-        <source>E. Verklaring van inschrijving</source>
-        <translation type="unfinished">E. Verklaring van inschrijving</translation>
-    </message>
-    <message>
-        <source>E+. Verklaring van inschrijving</source>
-        <translation type="unfinished">E+. Document ter staving van duurzaam verblijf</translation>
-    </message>
-    <message>
-        <source>F. Verblijfskaart van een familielid van een burger van de Unie</source>
-        <translation type="unfinished">F. Verblijfskaart van een familielid van een burger van de Unie</translation>
-    </message>
-    <message>
-        <source>F+. Verblijfskaart van een familielid van een burger van de Unie</source>
-        <translation type="unfinished">F+. Duurzaam verblijfskaart van een familielid van een burger van de Unie</translation>
     </message>
     <message>
         <source>Card not present</source>
@@ -1070,8 +961,12 @@ Please specify .xml, .csv or .eid</source>
         <translation>Revogado</translation>
     </message>
     <message>
-        <source>Opmerkingen&lt;br&gt;&lt;i&gt;Remarks&lt;/i&gt;</source>
-        <translation>Opmerkingen&lt;br&gt;&lt;i&gt;Remarks&lt;/i&gt;</translation>
+        <source>Inactive or Suspended</source>
+        <translation>Inativo ou Suspenso</translation>
+    </message>
+    <message>
+        <source>Could not validate certificate. Please check your Internet connection</source>
+        <translation>Não é possível obter o estado. Por favor verifique a ligação à Internet</translation>
     </message>
     <message>
         <source>Not available</source>
@@ -1343,10 +1238,6 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <source>Show notification</source>
         <translation>Apresentar notificações</translation>
-    </message>
-    <message>
-        <source>Determins whether the toolbar gets shown or not</source>
-        <translation>Bepaalt of de toolbar zichtbaar is of niet</translation>
     </message>
     <message>
         <source>Show toolbar</source>

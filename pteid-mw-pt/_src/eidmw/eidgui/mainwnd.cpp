@@ -1783,30 +1783,33 @@ void MainWnd::showCertStatusSideinfo(PTEID_CertifStatus certStatus)
 	getCertStatusText(certStatus, treeItemStatus);
 
 	m_ui.txtCert_RevStatus->setText(treeItemStatus);
+	m_ui.txtCert_RevStatus->setWordWrap(true);
 	m_ui.txtCert_RevStatus->setAccessibleName(treeItemStatus);
 }
 
 void MainWnd::getCertStatusText(PTEID_CertifStatus certStatus, QString &strCertStatus)
 {
-	//Currently eidlib only gives us 3 status from the enum:
-	// Valid, Revoked and Unknown for all other problems
+	QString networkError(tr("Could not validate certificate. Please check your Internet connection"));
 	switch(certStatus)
 	{
 	case PTEID_CERTIF_STATUS_REVOKED:
 		strCertStatus = tr("Revoked");
 		break;
-	case PTEID_CERTIF_STATUS_TEST:
-		strCertStatus = tr("Test");
-		break;
-	case PTEID_CERTIF_STATUS_DATE:
-		strCertStatus= tr("Date");
+	case PTEID_CERTIF_STATUS_SUSPENDED:
+		strCertStatus = tr("Inactive or Suspended");
 		break;
 	case PTEID_CERTIF_STATUS_VALID:
 		strCertStatus = tr("Valid");
 		break;
+	//TODO: Handle the network error with a different string such as "cant validate certificate status"
+	case PTEID_CERTIF_STATUS_CONNECT:
+		strCertStatus = networkError;
+		break;
 	case PTEID_CERTIF_STATUS_UNKNOWN:
-	default:
 		strCertStatus = tr("Unknown");
+		break;
+	default:
+		strCertStatus = networkError;
 		break;
 	}
 }
@@ -4675,17 +4678,14 @@ void QTreeCertItem::init(PTEID_Certificate &cert) {
 }
 
 void QTreeCertItem::handleFutureCertStatus() {
-	//emit certStatusReady(certStatusWatcher.result());
 
 	PTEID_CertifStatus status = certStatusWatcher.result();
-	qDebug() << "item::emit cert status";
-	qDebug() << getOwner() << ": " << status;
 
 	emit certStatusReady(status);
 }
 
 void QTreeCertItem::askCertStatus() {
-	qDebug() << "item::askCertStatus()";
+
 	QFuture<PTEID_CertifStatus> future = QtConcurrent::run(this->cert, &PTEID_Certificate::getStatus);
 	certStatusWatcher.setFuture(future);
 }
