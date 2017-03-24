@@ -43,18 +43,16 @@ PTEID_CertifStatus ConvertCertStatus(APL_CertifStatus eStatus)
 	//Convert the APL_CertifStatus into a status for the 'outside world"
 
 	switch(eStatus)
-	{ 
-	case APL_CERTIF_STATUS_TEST:
-		return PTEID_CERTIF_STATUS_TEST;
-
-	case APL_CERTIF_STATUS_DATE:
-		return PTEID_CERTIF_STATUS_DATE;
+	{
 
 	case APL_CERTIF_STATUS_REVOKED:
 		return PTEID_CERTIF_STATUS_REVOKED;
 
 	case APL_CERTIF_STATUS_CONNECT:
 		return PTEID_CERTIF_STATUS_CONNECT;
+
+	case APL_CERTIF_STATUS_SUSPENDED:
+		return PTEID_CERTIF_STATUS_SUSPENDED;
 
 	case APL_CERTIF_STATUS_ISSUER:
 		return PTEID_CERTIF_STATUS_ISSUER;

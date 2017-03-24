@@ -57,8 +57,7 @@ enum PTEID_CertifStatus
 {
 	PTEID_CERTIF_STATUS_UNKNOWN=0,		/**< Validity unknown */
 	PTEID_CERTIF_STATUS_REVOKED,		/**< Revoked certificate */
-	PTEID_CERTIF_STATUS_TEST,		/**< Test certificate */
-	PTEID_CERTIF_STATUS_DATE,		/**< Certificate no more valid */
+	PTEID_CERTIF_STATUS_SUSPENDED,
 	PTEID_CERTIF_STATUS_CONNECT,		/**< Connection problem */
 	PTEID_CERTIF_STATUS_ISSUER,		/**< An issuer is missing in the chain */
 	PTEID_CERTIF_STATUS_ERROR,		/**< Error during validation */
