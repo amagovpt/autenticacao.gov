@@ -258,7 +258,7 @@ long PTEID_SmartCard::readFile(const char *fileID, PTEID_ByteArray &in,PTEID_Pin
 }
 
 
-// is_landscape is unused parameter, we keep it here to ensure backwards-compatibility 
+// is_landscape is unused parameter, we keep it here to ensure backwards-compatibility
 int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
 			const char *outfile_path)
 {
@@ -333,6 +333,10 @@ PTEID_PDFSignature::~PTEID_PDFSignature()
 {
 	delete mp_signature;
 }
+
+PDFSignature *PTEID_PDFSignature::getSignature(){
+    return mp_signature;
+}/* PTEID_PDFSignature::getSignature() */
 
 void PTEID_PDFSignature::addToBatchSigning(char *input_path)
 {
@@ -699,7 +703,7 @@ PTEID_PublicKey& PTEID_EIDCard::getRootCAPubKey()
 	return *out;
 }
 
-bool PTEID_EIDCard::isActive() 
+bool PTEID_EIDCard::isActive()
 {
 	bool out = false;
 
@@ -1429,7 +1433,7 @@ PTEIDSDK_API long PTEID_Activate(char *pszPin, unsigned char *pucDate, unsigned 
 	if (readerContext!=NULL) {
 		try
 		{
-		
+
 			PTEID_ByteArray bcd(pucDate, BCD_DATE_LEN);
 			if (readerContext->getEIDCard().Activate(pszPin,bcd, ulMode == MODE_ACTIVATE_BLOCK_PIN))
 				return 0;
@@ -1675,7 +1679,7 @@ PTEIDSDK_API long PTEID_CVC_GetAddr(PTEID_ADDR *AddrData)
 			ptr = (char *)&(AddrData->countryDescF);
 			memcpy(ptr, fileBuffer+6, foreign_addr_len);
 		}
-		
+
 		return PTEID_OK;
 	}
 
@@ -1686,7 +1690,7 @@ PTEIDSDK_API long PTEID_CVC_GetAddr(PTEID_ADDR *AddrData)
 PTEIDSDK_API long PTEID_CVC_ReadFile(const unsigned char *file, int filelen, unsigned char *out, unsigned long *outlen)
 {
 	CByteArray file_contents;
-	
+
 	if (securityContext != NULL) {
 		try
 		{
@@ -1708,7 +1712,7 @@ PTEIDSDK_API long PTEID_CVC_ReadFile(const unsigned char *file, int filelen, uns
 
 
 //This is not implemented on purpose: this function is available here only for backwards compat
-PTEIDSDK_API long PTEID_CVC_WriteFile(unsigned char *file, int filelen, unsigned long ulFileOffset, 
+PTEIDSDK_API long PTEID_CVC_WriteFile(unsigned char *file, int filelen, unsigned long ulFileOffset,
 	const unsigned char *in, unsigned long inlen, unsigned long ulMode)
 {
 

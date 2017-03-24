@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dlgCmdUserInfo</class>
+ <widget class="QDialog" name="dlgCmdUserInfo">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>345</width>
+    <height>100</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>345</width>
+    <height>100</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>345</width>
+    <height>100</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>User Information</string>
+  </property>
+  <widget class="QLabel" name="lblUserId">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>20</y>
+     <width>64</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>User ID:</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblUserPin">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>60</y>
+     <width>64</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PIN:</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="textbox_UserId">
+   <property name="geometry">
+    <rect>
+     <x>85</x>
+     <y>20</y>
+     <width>125</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="inputMethodHints">
+    <set>Qt::ImhNone</set>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="textbox_Pin">
+   <property name="geometry">
+    <rect>
+     <x>85</x>
+     <y>60</y>
+     <width>55</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="inputMethodHints">
+    <set>Qt::ImhDigitsOnly|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData</set>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::PasswordEchoOnEdit</enum>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="button_Ok">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>20</y>
+     <width>81</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Ok</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="button_Cancel">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>55</y>
+     <width>81</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>textbox_UserId</tabstop>
+  <tabstop>textbox_Pin</tabstop>
+  <tabstop>button_Ok</tabstop>
+  <tabstop>button_Cancel</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

@@ -4,7 +4,6 @@
 #include "poppler/ErrorCodes.h"
 
 #include "sign-pkcs7.h"
-#include "goo/GooString.h"
 #include "PDFSignature.h"
 #include "MWException.h"
 #include "eidErrors.h"
@@ -16,6 +15,7 @@
 
 //For the setSSO calls
 #include "CardLayer.h"
+#include "goo/GooString.h""
 
 #include <openssl/bio.h>
 #include <openssl/x509.h>
@@ -43,6 +43,9 @@ namespace eIDMW
 		m_small_signature = false;
 		my_custom_image.img_data = NULL;
 
+        m_signerInfo = NULL;
+        m_pkcs7 = NULL;
+        m_outputName = NULL;
 	}
 
 	PDFSignature::PDFSignature(const char *pdf_file_path): m_pdf_file_path(pdf_file_path)
@@ -63,6 +66,9 @@ namespace eIDMW
 		my_custom_image.img_data = NULL;
 		m_doc = new PDFDoc(new GooString(pdf_file_path));
 
+        m_signerInfo = NULL;
+        m_pkcs7 = NULL;
+        m_outputName = NULL;
 	}
 
 	void PDFSignature::setCustomImage(unsigned char *img_data, unsigned long img_length)
@@ -120,6 +126,14 @@ namespace eIDMW
 	   location_y = coord_y;
 
 	}
+
+	bool PDFSignature::getBatch_mode(){
+        return m_batch_mode;
+	}/* PDFSignature::getBatch_mode() */
+
+	void PDFSignature::setBatch_mode( bool batch_mode ){
+        m_batch_mode = batch_mode;
+	}/* PDFSignature::setBatch_mode() */
 
 	bool PDFSignature::isLandscapeFormat()
 	{
@@ -446,7 +460,7 @@ namespace eIDMW
 			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Page mediaBox: (H: %f W:%f) Location_x: %f, location_y: %f",
 				 height, width, location_x, location_y);
 
-			
+
 			//Sig Location by sector
 			if (location_x == -1)
 			{
@@ -504,7 +518,21 @@ namespace eIDMW
 		int rc = 0;
 		try
 		{
-			rc = pteid_sign_pkcs7(m_card, to_sign, len, m_timestamp, &signature_contents);
+            m_outputName = outputName;
+
+            /* Get certificate */
+            CByteArray certData = getCertificate();
+            if ( 0 == certData.Size() ){
+                m_card->readFile( PTEID_FILE_CERT_SIGNATURE, certData );
+                /*
+                    Encode certificate to internal format:
+                    Trim the padding zero bytes which are useless
+                    and affect the certificate digest computation
+                */
+                certData.TrimRight( 0 );
+            }/* if ( 0 == certData.Size() ) */
+
+            computeHash( to_sign, len, certData );
 		}
 		catch(CMWException e)
 		{
@@ -520,28 +548,97 @@ namespace eIDMW
 			throw;
 		}
 
-		if (to_sign)
-			free(to_sign);
-		doc->closeSignature(signature_contents);
+		if (to_sign) free(to_sign);
 
-		int final_ret = 0;
-
-		if (incremental)
-			final_ret = doc->saveAs(outputName, writeForceIncremental);
-		else
-			final_ret = doc->saveAs(outputName, writeForceRewrite);
-
-		if (final_ret != errNone)
-			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
-
-		delete m_doc;
-		m_doc = NULL;
-		free((void *)signature_contents);
-
-		delete outputName;
+        if ( 0 == getCertificate().Size() ){
+            /* Get card signature from card */
+            CByteArray signature = PteidSign( m_card, m_hash );
+            rc = PDF_close( signature );
+        }/* if ( 0 == getCertificate().Size() ) */
 
 		return rc;
 
-	}
+	}/* PDFSignature::signSingleFile() */
 
+    /* Certificate */
+    CByteArray PDFSignature::getCertificate(){
+        return m_certificate;
+    }/* PDFSignature::getCertificate() */
+
+    void PDFSignature::setCertificate( CByteArray certificate ){
+        m_certificate = certificate;
+    }/* PDFSignature::setCertificate() */
+
+    /* Hash */
+    CByteArray PDFSignature::getHash(){
+        return m_hash;
+    }/* PDFSignature::getHash() */
+
+    void PDFSignature::setHash( CByteArray in_hash ){
+        m_hash = in_hash;
+    }/* PDFSignature::setHash() */
+
+    void PDFSignature::computeHash( unsigned char *data
+                                , unsigned long dataLen
+                                , CByteArray certData ){
+
+        OpenSSL_add_all_algorithms();
+        if ( m_pkcs7 != NULL ) PKCS7_free( m_pkcs7 );
+
+        /* Calculate hash */
+        m_pkcs7 = PKCS7_new();
+        bool isCardAction = ( getCertificate().Size() == 0 );
+        CByteArray in_hash = computeHash_pkcs7( m_card
+                                                , data, dataLen
+                                                , certData
+                                                , m_timestamp
+                                                , m_pkcs7
+                                                , &m_signerInfo
+                                                , isCardAction );
+        setHash( in_hash );
+    }/* PDFSignature::computeHash() */
+
+    int PDFSignature::PDF_close( CByteArray signature ){
+        const char *signature_contents = NULL;
+
+        if ( NULL == m_doc ){
+            fprintf( stderr, "NULL m_doc\n" );
+
+            if ( m_pkcs7 != NULL ) PKCS7_free( m_pkcs7 );
+            throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+        }/* if ( NULL == m_doc ) */
+
+        bool incremental = m_doc->isSigned() || m_doc->isReaderEnabled();
+
+        int return_code =
+            getSignedData_pkcs7( (unsigned char*)signature.GetBytes()
+                                , signature.Size()
+                                , m_signerInfo
+                                , m_timestamp
+                                , m_pkcs7
+                                , &signature_contents );
+
+        if ( return_code != errNone ) throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+
+        m_doc->closeSignature( signature_contents );
+
+        PDFWriteMode pdfWriteMode =
+            incremental ? writeForceIncremental : writeForceRewrite;
+
+        int final_ret = m_doc->saveAs( m_outputName, pdfWriteMode );
+        if ( final_ret != errNone ) throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+
+        free((void *)signature_contents);
+
+        delete m_outputName;
+        m_outputName = NULL;
+
+        delete m_doc;
+        m_doc = NULL;
+
+        PKCS7_free( m_pkcs7 );
+        m_pkcs7 = NULL;
+
+        return return_code;
+    }/* PDFSignature::PDF_close() */
 }

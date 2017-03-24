@@ -332,121 +332,24 @@ void add_signingCertificate(PKCS7_SIGNER_INFO *si, X509 *x509, unsigned char * c
 	MWLOG(LEV_ERROR, MOD_APL, L"Failed to add SigningCertificateV2 attribute.\n");
 }
 
-/*
-void WriteToFile(const char *path, const unsigned char *content, size_t len)
-{
-    	FILE *f=NULL;
-    	fprintf(stderr, "Writing buffer %p with length=%lu\n", content, len);
-
-        f = fopen(path, "wb");
-
-        if (f)
-        {
-        	int fd = fileno(f);
-            size_t retlen = write(fd, content, len);
-
-            if (retlen != len)
-            {
-                fprintf(stderr, "WriteToFile failed! Errno: %d\n", errno);
-            }
-            fclose(f);
-        }
-
- }
- */
-
-
-/*
- * Returns as hex-encoded string the PKCS7 signature of the input data
- * The data is hashed with SHA-256 or SHA-1 and then signed on PTEID card
- *
- */
-int pteid_sign_pkcs7( APL_Card *card
-                    , unsigned char * data, unsigned long dataLen
-                    , CByteArray certData
-                    , bool timestamp
-                    , const char ** signature_contents )
-{
-    X509 *x509 = NULL;
-    PKCS7 *p7 = NULL;
-    PKCS7_SIGNER_INFO *signer_info = NULL;
-    CByteArray attr_hash, signature;
-    int return_code = 0;
-    bool isError = false;
-
-    if ( 0 == certData.Size() ){
-        MWLOG(LEV_ERROR, MOD_APL, "Empty certData!");
-        isError = true;
-        goto err;
-    }/* if ( 0 == certData.Size() ) */
-
-    OpenSSL_add_all_algorithms();
-
-    x509 = DER_to_X509( certData.GetBytes(), certData.Size() );
-    if ( NULL == x509){
-        MWLOG(LEV_ERROR, MOD_APL, "Error decoding certificate data!");
-        isError = true;
-        goto err;
-    }/* if ( NULL == x509) */
-
-    /* Calculate hash */
-    p7 = PKCS7_new();
-    attr_hash = hashCalculate_pkcs7( card
-                                    , data, dataLen
-                                    , x509
-                                    , timestamp
-                                    , p7, &signer_info );
-    if ( attr_hash.Size() == 0 ){
-        MWLOG(LEV_ERROR, MOD_APL, "Error calculating hash!");
-        isError = true;
-        goto err;
-    }/* if ( attr_hash.Size() == 0 ) */
-
-    /* Get signature */
-    signature = PteidSign( card, attr_hash );
-    if ( signature.Size() == 0 ){
-        MWLOG(LEV_ERROR, MOD_APL, "Error on signature get!");
-        isError = true;
-        goto err;
-    }/* if ( signature.Size() == 0 ) */
-
-    return_code = getSignedData_pkcs7( (unsigned char*)signature.GetBytes()
-                                        , signature.Size()
-                                        , signer_info
-                                        , timestamp
-                                        , p7
-                                        , signature_contents );
-err:
-    if ( x509 != NULL ) X509_free( x509 );
-    if ( p7 != NULL ) PKCS7_free( p7 );
-
-    if ( isError ){
-        ERR_load_crypto_strings();
-        ERR_print_errors_fp( stderr );
-        return_code = 2;
-    }/* if ( isError ) */
-
-    return return_code;
-}/* pteid_sign_pkcs7() */
-
 /*  *********************************************************
-    ***          hashCalculate_pkcs7()                    ***
+    ***          computeHash_pkcs7()                    ***
     ********************************************************* */
-CByteArray hashCalculate_pkcs7( APL_Card *card
+CByteArray computeHash_pkcs7( APL_Card *card
                                 , unsigned char *data, unsigned long dataLen
-                                , X509 *x509
+                                , CByteArray certData
                                 , bool timestamp
                                 , PKCS7 *p7
-                                , PKCS7_SIGNER_INFO **out_signer_info ){
+                                , PKCS7_SIGNER_INFO **out_signer_info
+                                , bool isCardAction ){
     CByteArray outHash;
     bool isError = false;
     unsigned char *attr_buf = NULL;
     int auth_attr_len = 0;
     unsigned char *attr_digest = NULL;
     unsigned char *out = NULL;
-    PKCS7_SIGNER_INFO *signer_info;
-    int certDER_Len;
-    unsigned char *certDER = NULL;
+    PKCS7_SIGNER_INFO *signer_info = NULL;
+    X509 *x509 = NULL;
 
     //Function pointer to the correct hash function
     HashFunc hash_fn = &SHA256_Wrapper;
@@ -460,12 +363,12 @@ CByteArray hashCalculate_pkcs7( APL_Card *card
         goto err_hashCalculate;
     }/* if ( NULL == data ) */
 
-    if ( NULL == x509 ){
-        TRACE_ERR( "Null x509 certificate" );
+    if ( 0 == dataLen ){
+        TRACE_ERR( "Invalid dataLen" );
         isError = true;
 
         goto err_hashCalculate;
-    }/* if ( NULL == x509 ) */
+    }/* if ( 0 == dataLen ) */
 
     if ( NULL == p7 ){
         TRACE_ERR( "Null p7" );
@@ -474,13 +377,12 @@ CByteArray hashCalculate_pkcs7( APL_Card *card
         goto err_hashCalculate;
     }/* if ( NULL == p7 ) */
 
-    certDER_Len = i2d_X509( x509, &certDER );
-    if ( certDER_Len < 0 ){
-        TRACE_ERR( "Invalid certDER_Len: %d", certDER_Len );
+    x509 = DER_to_X509( certData.GetBytes(), certData.Size() );
+    if ( NULL == x509){
+        MWLOG(LEV_ERROR, MOD_APL, "Error decoding certificate data!");
         isError = true;
-
         goto err_hashCalculate;
-    }/* if ( certDER_Len < 0 ) */
+    }/* if ( NULL == x509) */
 
     out = (unsigned char *)malloc( SHA256_LEN );
     if ( NULL == out ){
@@ -497,8 +399,6 @@ CByteArray hashCalculate_pkcs7( APL_Card *card
 
         goto err_hashCalculate;
     }/* if ( NULL == attr_digest ) */
-
-    OpenSSL_add_all_algorithms();
 
     PKCS7_set_type( p7, NID_pkcs7_signed );
 
@@ -522,8 +422,8 @@ CByteArray hashCalculate_pkcs7( APL_Card *card
 
     PKCS7_add_certificate( p7, x509 );
 
-    if ( card != NULL ){
-    printf( "(1) hashCalculate_pkcs7() - if ( card != NULL )\n" );
+    if ( isCardAction ){
+    printf( "(1) computeHash_pkcs7() - if ( card != NULL )\n" );
 
         CByteArray certData, cc01, cc02, cc03;
         APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
@@ -558,9 +458,7 @@ CByteArray hashCalculate_pkcs7( APL_Card *card
             Add ECRaizEstado certificate
         */
         add_certificate( p7, PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len );
-    }/* if ( card != NULL ) */
-
-    printf( "(2) hashCalculate_pkcs7() - if ( card != NULL )\n" );
+    }/* if ( isCardAction ) */
 
     PKCS7_set_detached( p7, 1 );
 
@@ -581,7 +479,9 @@ CByteArray hashCalculate_pkcs7( APL_Card *card
         Add signing-certificate v2 attribute according to the
         specification ETSI TS 103 172 v2.1.1 - section 6.3.1
     */
-    add_signingCertificate(signer_info, x509, certDER, certDER_Len );
+    add_signingCertificate(signer_info
+                            , x509
+                            , certData.GetBytes(), certData.Size() );
 
     if ( !timestamp ) add_signed_time( signer_info );
 
@@ -594,21 +494,18 @@ CByteArray hashCalculate_pkcs7( APL_Card *card
 
     if ( out_signer_info ) *out_signer_info = signer_info;
 
-    printf( "(3) hashCalculate_pkcs7() - if ( card != NULL )\n" );
-
 err_hashCalculate:
+    if ( x509 != NULL ) X509_free( x509 );
     if ( attr_digest != NULL )free( attr_digest );
     if ( out != NULL ) free(out);
 
     if ( isError ){
-        if ( p7 != NULL ) PKCS7_free( p7 );
-
         ERR_load_crypto_strings();
         ERR_print_errors_fp(stderr);
     }/* if ( isError ) */
 
     return outHash;
-}/* hashCalculate_pkcs7() */
+}/* computeHash_pkcs7() */
 
 /*  *********************************************************
     ***          getSignedData_pkcs7()                    ***

@@ -774,6 +774,7 @@ class PTEID_PDFSignature
 		PTEIDSDK_API bool isLandscapeFormat();
 		PTEIDSDK_API char *getOccupiedSectors(int page);
 		PTEIDSDK_API void setCustomImage(unsigned char *image_data, unsigned long image_length);
+		PTEIDSDK_API PDFSignature *getSignature();
 
 	private:
 	//The applayer object that actually implements the signature
