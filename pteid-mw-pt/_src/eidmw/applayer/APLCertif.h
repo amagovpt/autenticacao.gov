@@ -93,6 +93,8 @@ enum APL_HashAlgo {
 class APL_CryptoFwk;
 class APL_CardFile_Certificate;
 class APL_Certif;
+class APL_OcspResponse;
+
 
 /******************************************************************************//**
   * Class that represents a certificates store
@@ -330,7 +332,7 @@ private:
 	 */
 	static void foundCertificate(const char *SubDir, const char *File, void *param);
 
-	APL_SmartCard *m_card;									/**< The smart card from which some certificate comes */
+	APL_SmartCard *m_card;									/**< The smart card from which some certificates come */
 	APL_CryptoFwk *m_cryptoFwk;								/**< Pointer to the crypto framework */
 
 	/**
@@ -356,6 +358,7 @@ class APL_CertStatusCache;
 class APL_OcspResponse;
 class APL_Crl;
 struct tCertifInfo;
+
 
 /******************************************************************************//**
   * Class that represents one certificate
@@ -605,6 +608,7 @@ friend APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file,APL_Certi
 friend APL_Certif *APL_Certifs::addCert(const CByteArray &cert,APL_CertifType type,bool bHidden);		/**< This method must access protected constructor */
 friend void APL_Certifs::addToSODCAs(const CByteArray &cert);
 };
+
 
 class APL_CrlDownloadingCache;
 struct tCrlInfo;

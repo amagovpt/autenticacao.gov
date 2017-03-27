@@ -24,7 +24,9 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 #include "Mutex.h"
+#include "APLCard.h"
 
 // Mutex.h includes windows.h and that conflicts with the openssl defines
 #if defined(__WINCRYPT_H__)
@@ -43,6 +45,8 @@
 
 namespace eIDMW
 {
+
+	class APL_Certif;
 
 enum FWK_CertifStatus
 {
@@ -95,9 +99,8 @@ class CrlMemoryCache;
   * Abstract class for cryptographic features 
   *
   * The goal of this class is to provide facilities to openSSL usage
-  * This is only for internal use, no export is forseen. 
+  * This is only for internal use, no export is foreseen. 
   *
-  * This class must be derived for each set of cryptographic features (ex Pteid)
   *********************************************************************************/
 class APL_CryptoFwk
 {
@@ -287,6 +290,12 @@ public:
 	  */
 	void resetProxy();
 
+
+	void setActiveCard(APL_SmartCard *card) 
+	{
+		m_card = card;
+	}
+
 protected:
 	/**
 	  * Constructor - used within "instance"
@@ -402,6 +411,8 @@ protected:
 	  * - Then verify the signature
 	  */
 	bool isCrlIssuer(X509_CRL *pX509_Crl,X509 *pX509_issuer);
+
+	APL_SmartCard *m_card;
 
 	std::string m_proxy_host;	/**< proxy host */
 	std::string m_proxy_port;	/**< proxy port */

@@ -25,6 +25,8 @@
 #include "Log.h"
 #include "ByteArray.h"
 #include "APLConfig.h"
+#include "APLCardPteid.h"
+
 #include "MiscUtil.h"
 #include "Thread.h"
 
@@ -975,8 +977,10 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
     const char * proxy_user_value = NULL;
     SSL_CTX  *pSSLCtx = 0;
     OCSP_REQ_CTX *ctx;
+    X509_STORE_CTX *verify_ctx = NULL;
     OCSP_REQUEST  *pRequest = 0;
     OCSP_BASICRESP *pBasic = NULL;
+    X509_STORE *store = NULL;
     bool  bConnect = false;
     bool useProxy = false;
     ASN1_GENERALIZEDTIME  *producedAt, *thisUpdate, *nextUpdate;
@@ -1037,26 +1041,6 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 	else
 	{
 
-		/*
-    SCOPE(OCSP_REQ_CTX, rctx, OCSP_sendreq_new(connection.get(), const_cast<char*>(url.c_str()), 0, -1));
-    if(!rctx)
-        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
-
-    if(!OCSP_REQ_CTX_add1_header(rctx.get(), "Host", const_cast<char*>(hostname.c_str())))
-        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
-
-    if(!auth.empty() && !OCSP_REQ_CTX_add1_header(rctx.get(), "Proxy-Authorization", const_cast<char*>(auth.c_str())))
-        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
-    if(!OCSP_REQ_CTX_add1_header(rctx.get(), "User-Agent", user_agent.c_str()))
-        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
-
-    if(!OCSP_REQ_CTX_set1_req(rctx.get(), req))
-        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
-
-    if(!OCSP_sendreq_nbio(&resp, rctx.get()))
-        THROW_OPENSSLEXCEPTION("Failed to send OCSP request.");
-		*/
-
 		//TODO: Test this with and without proxy ...
 		ctx = OCSP_sendreq_new(pBio, useProxy ? uri : pszPath, NULL, -1);
 
@@ -1109,6 +1093,22 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
            goto cleanup;
     	}
 
+    	APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
+    	//Create new store to verify the OCSP responder certificate
+    	store = X509_STORE_new();
+
+    	for (int i = 0; i < pcard->getCertificates()->countSODCAs(); i++) {
+			APL_Certif * sod_ca = pcard->getCertificates()->getSODCA(i);
+			X509 *pX509 = NULL;
+			const unsigned char *p = sod_ca->getData().GetBytes();
+
+			pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
+			X509_STORE_add_cert(store, pX509);
+			//fprintf(stderr, "OCSP: Adding CA %s\n", X509_NAME_oneline(X509_get_subject_name(pX509), 0, 0));
+		}
+
+		verify_ctx = X509_STORE_CTX_new();
+
 		if(pX509_Issuer)
 		{
 			//Get the algorithm
@@ -1137,38 +1137,48 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 			//Get the signature
 			CByteArray baSignature(pBasic->signature->data,pBasic->signature->length);
 
-			//Verify if the signature of the hash is correct
-			if(!VerifySignature(baData,baSignature,pX509_Issuer,algorithm))
-			{
-				//if no we check the certificate in the response to see if has correctly signed the response
-				//and for this certificate we check if the issuer was the one we have
-				STACK_OF(X509) *pX509s = pBasic->certs;
-				X509 *pX509 = NULL;
-				bool bFound = false;
+			//We check the certificate in the response to see if has correctly signed the response
+			//and for this certificate we check if the issuer was the one we have
+			STACK_OF(X509) *pX509s = pBasic->certs;
+			X509 *pX509 = NULL;
+			bool bFound = false;
 
-				//Loop through the X509's
-				for(int i = 0; i < sk_X509_num(pX509s); i++)
+			//Loop through the X509's
+			for(int i = 0; i < sk_X509_num(pX509s); i++)
+			{
+				pX509 = sk_X509_value(pX509s, i);
+				if(pX509 != NULL)
 				{
-					pX509 = sk_X509_value(pX509s, i);
-					if(pX509 != NULL)
+					if(VerifySignature(baData,baSignature,pX509,algorithm))
 					{
-						if(VerifySignature(baData,baSignature,pX509,algorithm))
-						{
-							bFound = true;
-							break;
-						}
+						bFound = true;
+						break;
 					}
 				}
-				if(bFound)
-				{
-					if(!VerifyCertSignature(pX509,pX509_Issuer))
-						eStatus=FWK_CERTIF_STATUS_ERROR;
-				}
-				else
-				{
-					eStatus=FWK_CERTIF_STATUS_ERROR;
-				}
 			}
+			if (bFound)
+			{
+				//Init validation context using the SOD CA certificates as trusted
+				X509_STORE_CTX_init(verify_ctx, store, pX509, NULL);
+				//fprintf(stderr, "OCSP: Next we're going to verify cert: %s\n", X509_NAME_oneline(X509_get_subject_name(pX509), 0, 0));
+				int ret_validation = X509_verify_cert(verify_ctx);
+
+				if (ret_validation < 1)
+				{
+
+					MWLOG(LEV_DEBUG, MOD_APL, "Couldn't validate OCSP certificate using builtin roots. Trying issuer...");
+					//eStatus = FWK_CERTIF_STATUS_ERROR;
+				}
+				// Old validation method
+				if(!VerifyCertSignature(pX509,pX509_Issuer))
+					MWLOG(LEV_DEBUG, MOD_APL, "Couldn't validate OCSP certificate using issuer. This may or may not be serious...");
+				
+			}
+			else
+			{
+				eStatus=FWK_CERTIF_STATUS_ERROR;
+			}
+		
 		}
 
 		if(eStatus!=FWK_CERTIF_STATUS_ERROR)
@@ -1209,6 +1219,11 @@ cleanup:
     if (pRequest) OCSP_REQUEST_free(pRequest);
     if (pSSLCtx) SSL_CTX_free(pSSLCtx);
     if (pBasic) OCSP_BASICRESP_free(pBasic);
+    if (verify_ctx) {
+    	X509_STORE_CTX_cleanup(verify_ctx);
+   		X509_STORE_CTX_free(verify_ctx);
+   	}
+	if (store) X509_STORE_free(store);
 
     return eStatus;
 }

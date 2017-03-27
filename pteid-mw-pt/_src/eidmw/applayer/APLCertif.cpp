@@ -233,6 +233,8 @@ void APL_Certifs::init(APL_SmartCard *card){
 	APL_Config certs_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
 	m_certs_dir = certs_dir.getString();
 	m_cryptoFwk=AppLayer.getCryptoFwk();
+	//Crypto framework needs the card instance to access the CA certs
+	m_cryptoFwk->setActiveCard(card);
 
 	m_card=card;
 	m_certExtension = "der";
@@ -1960,7 +1962,7 @@ APL_CertifStatus APL_OcspResponse::getResponse(CByteArray *response)
 		if(issuer==NULL)
 			issuer=m_certif;
 
-		status=m_cryptoFwk->GetOCSPResponse(m_certif->getData(),issuer->getData(),m_response);
+		status=m_cryptoFwk->GetOCSPResponse(m_certif->getData(), issuer->getData(), m_response);
 	}
 	else
 	{
