@@ -497,7 +497,7 @@
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidgui.exe" KeyPath="yes" />
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCpp.dll" />
                 <File Source="$(var.PTEID_BUILD_FOLDER_X64)poppler-qt5.dll" />
-          <File Source="$(var.PTEID_BUILD_FOLDER_X64)\ScapSignature.exe" />\  
+          <File Source="$(var.PTEID_BUILD_FOLDER_X64)\ScapSignature.exe" />
           <File Source="..\..\..\scap-client-v2\scapsignature_pt.qm" />
 				</Component>
 
@@ -562,7 +562,7 @@
 
 				<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
 			<Component Win64="no" Id="Poppler" Guid="{3C54AC04-E71D-4DC3-9525-21C3BF3BDD9A}">
-        <File Id="pteid_poppler.dll" Name="pteid-poppler.dll" KeyPath="yes" Source="..\..\..\_Binaries35\Release\pteid-poppler.dll" ></File>
+        <File Id="pteid_poppler.dll" Name="pteid-poppler.dll" KeyPath="yes" Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-poppler.dll"/>
       </Component>
 
 				<Component Win64="no" Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
@@ -617,7 +617,7 @@
 
 				<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
 				<Component Id="Poppler_64" Guid="{54E15AA8-F4A5-42e8-9D38-3B151223B003}">
-          			<File Source="$(var.PTEID_BUILD_FOLDER_X64)pteid-poppler.dll" KeyPath="no" />
+          			<File Id="pteid_poppler_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteid-poppler.dll" KeyPath="no" />
 				</Component>
 
         <Component Id="pteidmdrvsystem64" Guid="{BA4FED31-E6E6-4D39-9D3A-3D0F2B572524}" Permanent="no">
@@ -908,7 +908,7 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 					<ComponentRef Id="FreeImage_64"/>
 					<ComponentRef Id="Curl"/>
 					<ComponentRef Id="Curl_64"/>
-
+          <ComponentRef Id="Poppler"/>
 					<ComponentRef Id="Poppler_64"/>
 
 					<ComponentRef Id="XMLSecurity"/>
