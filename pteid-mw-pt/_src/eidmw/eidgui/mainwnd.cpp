@@ -746,7 +746,7 @@ void MainWnd::on_btnSelectTab_Identity_Extra_clicked()
 
 void MainWnd::on_btnSelectTab_Address_clicked()
 {
-	bool addressLoaded = true;
+	bool addressLoaded = false;
 
 	if (addressdatastatus == 1)
 		addressLoaded = refreshTabAddress();
