@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Address Change</string>
+   <string>Address Confirmation</string>
   </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">

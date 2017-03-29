@@ -1183,7 +1183,7 @@ font: 75 15px Arial;
 background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          </string>
         </property>
         <property name="text">
-         <string>Address Modification</string>
+         <string>Address Confirmation</string>
         </property>
        </widget>
       </widget>

@@ -64,12 +64,12 @@
 </message>
 <message>
     <source>Address Change</source>
-    <translation>Mudança de Morada</translation>
+    <translation>Confirmação de Morada</translation>
 </message>
 
 <message>
-    <source>Address Modification</source>
-    <translation>Alteração da Morada</translation>
+    <source>Address Confirmation</source>
+    <translation>Confirmação de Morada</translation>
 </message>
 
 <message>
@@ -78,7 +78,7 @@
 </message>
 
     <message>
-    <source>Address Changed successfully.</source>
+    <source>Address Confirmed successfully.</source>
     <translation>A morada foi alterada com sucesso.</translation>
     </message>
 
@@ -1816,8 +1816,8 @@ Please specify .xml, .csv or .eid</source>
 <context>
  <name>ChangeAddressDialog</name>
  <message>
-    <source>Address Change</source>
-    <translation>Alteração de Morada</translation>
+    <source>Address Confirmation</source>
+    <translation>Confirmação de Morada</translation>
 </message>
 
 <message>

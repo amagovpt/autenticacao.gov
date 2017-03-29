@@ -507,13 +507,13 @@ void MainWnd::showChangeAddressDialog(long code)
 	m_progress_addr->hide();
 
 	QString error_msg;
-	QString caption  = tr("Address Change");
+	QString caption  = tr("Address Confirmation");
 	PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code %8x", code);
 	QMessageBox::Icon icon = QMessageBox::NoIcon;
 	switch(code)
 	{
 		case 0:
-			error_msg = tr("Address Changed successfully.");
+			error_msg = tr("Address Confirmed successfully.");
 			icon = QMessageBox::Information;
 			break;
 		//The error code for connection error is common between SAM and OTP
@@ -577,7 +577,7 @@ void MainWnd::on_btnAddress_Change_clicked()
 	PTEID_ReaderContext &ReaderContext = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
 
     PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-	QString caption  = tr("Address Change");
+	QString caption  = tr("Address Confirmation");
 
 	if (Card.getType() == PTEID_CARDTYPE_IAS101)
 	{
