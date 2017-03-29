@@ -1643,7 +1643,10 @@ Please specify .xml, .csv or .eid</source>
 	<source>Error Generating PDF File!</source>
 		<translation>Erro ao gerar ficheiro PDF!</translation>
 	</message>
-
+    <message>
+    <source>Printing was canceled</source>
+        <translation>A impressão foi cancelada</translation>
+    </message>
     <message>
         <source>No card present</source>
         <translation>Cartão não encontrado</translation>

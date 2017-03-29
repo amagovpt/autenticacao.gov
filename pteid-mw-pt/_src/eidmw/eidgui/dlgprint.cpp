@@ -41,6 +41,30 @@
 using namespace eIDMW;
 
 
+void CenterParent(QWidget* parent, QWidget* child)
+{
+    QPoint centerparent(
+            parent->x() + ((parent->frameGeometry().width() - child->frameGeometry().width()) /2),
+            parent->y() + ((parent->frameGeometry().height() - child->frameGeometry().height()) /2));
+
+    QDesktopWidget * pDesktop = QApplication::desktop();
+    QRect sgRect = pDesktop->screenGeometry(pDesktop->screenNumber(parent));
+    QRect childFrame = child->frameGeometry();
+
+    if(centerparent.x() < sgRect.left())
+        centerparent.setX(sgRect.left());
+    else if((centerparent.x() + childFrame.width()) > sgRect.right())
+        centerparent.setX(sgRect.right() - childFrame.width());
+
+    if(centerparent.y() < sgRect.top())
+        centerparent.setY(sgRect.top());
+    else if((centerparent.y() + childFrame.height()) > sgRect.bottom())
+        centerparent.setY(sgRect.bottom() - childFrame.height());
+
+    child->move(centerparent);
+}
+
+
 dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUAGE lng)
 : QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
 , m_CI_Data(CI_Data)
@@ -69,6 +93,23 @@ dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUA
 			this->resize(thiswidth,height-20); //make sure the window fits
 		}
 
+        pdialog = new QProgressDialog();
+#ifdef _WIN32
+        pdialog->setWindowTitle(tr("Export PDF / Print"));
+#else
+        pdialog->setWindowFlags(Qt::Popup);
+        pdialog->setWindowModality(Qt::WindowModal);
+        // We need to reset geometry because in Linux/Xorg
+        // the progress popup would be positioned at (0, 0)
+        CenterParent(this, pdialog);
+#endif
+
+        pdialog->setCancelButton(NULL);
+        pdialog->setMinimum(0);
+        pdialog->setMaximum(0);
+        connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
+        pdialog->reset();
+
         CI_Data.LoadData(*Card,m_CurrReaderName);
     }
 
@@ -84,29 +125,6 @@ char *QStringToCString(QString &string)
     char * cpychar = new char[string.length()*2];
     strcpy(cpychar, getPlatformNativeString(string));
 	return cpychar;
-}
-
-void CenterParent(QWidget* parent, QWidget* child)
-{
-	QPoint centerparent(
-			parent->x() + ((parent->frameGeometry().width() - child->frameGeometry().width()) /2),
-			parent->y() + ((parent->frameGeometry().height() - child->frameGeometry().height()) /2));
-
-	QDesktopWidget * pDesktop = QApplication::desktop();
-	QRect sgRect = pDesktop->screenGeometry(pDesktop->screenNumber(parent));
-	QRect childFrame = child->frameGeometry();
-
-	if(centerparent.x() < sgRect.left())
-		centerparent.setX(sgRect.left());
-	else if((centerparent.x() + childFrame.width()) > sgRect.right())
-		centerparent.setX(sgRect.right() - childFrame.width());
-
-	if(centerparent.y() < sgRect.top())
-		centerparent.setY(sgRect.top());
-	else if((centerparent.y() + childFrame.height()) > sgRect.bottom())
-		centerparent.setY(sgRect.bottom() - childFrame.height());
-
-	child->move(centerparent);
 }
 
 bool SignPDF_wrapper(PTEID_EIDCard * card, const char * file_to_sign, QString &outputsign)
@@ -135,6 +153,8 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
     QString pdffilepath;
     QString caption  = tr("Export / Print");
     QString defaultfilepath;
+
+    QPrinter pdf_printer;
     bool res = false;
 
     defaultfilepath = QDir::homePath();
@@ -177,7 +197,7 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
             nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
 
-			res = drawpdf(cdata, nativepdftmp);
+			res = drawpdf(cdata, pdf_printer, nativepdftmp);
 
             if (!res)
             {
@@ -205,7 +225,7 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
             nativepdfpath = QDir::toNativeSeparators(pdffilepath);
 
-			res = drawpdf(cdata, nativepdfpath);
+			res = drawpdf(cdata, pdf_printer, nativepdfpath);
         }
     }
 	catch (PTEID_Exception &e) {
@@ -215,7 +235,7 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
     if (res)
 	    ShowSuccessMsgBox();
     else
-	    ShowErrorMsgBox();
+	    ShowErrorMsgBox(Operation::PDF);
     this->close();
 
 }
@@ -224,27 +244,32 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
 
 void dlgPrint::on_pbPrint_clicked()
 {
-	CardInformation cdata = m_CI_Data;
-	imageList.clear();
-
-	bool res = drawpdf(cdata, "");
-    	if (!res)
-	{
-	    ShowErrorMsgBox();
-	    return;
-	}
+    CardInformation cardData = m_CI_Data;
 	QPrinter printer;
-	QPrintDialog *dlg = new QPrintDialog(&printer,0);
-	if(dlg->exec() == QDialog::Accepted) {
-		QListIterator<QImage> i(imageList);
-		while (i.hasNext()){
-			QPainter painter(&printer);
-			painter.drawImage(QPoint(0,0), i.next());
-			painter.end();
-		}
+
+    if (ui.chboxAddress->isChecked())
+    {
+        bool res = addressPINRequest_triggered(cardData);
+        if (!res)
+        {
+            ShowErrorMsgBox(Operation::PRINT);
+            return;
+        }
+    }
+
+	QPrintDialog dlg(&printer, this);
+	
+    if(dlg.exec() == QDialog::Accepted) {
+
+        bool res = drawpdf(cardData, printer, "");
+        if (!res)
+        {
+            ShowErrorMsgBox(Operation::PRINT);
+            return;
+        }
+		
 	}
 
-	delete dlg;
 }
 
 void dlgPrint::on_pbCancel_clicked()
@@ -365,11 +390,11 @@ void dlgPrint::ShowSuccessMsgBox()
 	delete msgBoxp;
 }
 
-void dlgPrint::ShowErrorMsgBox()
+void dlgPrint::ShowErrorMsgBox(Operation op)
 {
 
 	QString caption  = tr("Export / Print");
-    QString msg = tr("Error Generating PDF File!");
+    QString msg = op == Operation::PRINT ? tr("Printing was canceled"): tr("Error Generating PDF File!");
   	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
   	msgBoxp.exec();
 }
@@ -378,7 +403,6 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 {
 	try
 	{
-		QString caption(tr("Identity Card: PIN verification"));
 
 		PTEID_EIDCard*	Card = dynamic_cast<PTEID_EIDCard*>(m_CI_Data.m_pCard);
 		PTEID_Pin&		Pin	= Card->getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
@@ -389,11 +413,8 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 		pdialog->exec();
 		bool bResult = new_thread.result();
 
-		QString msg = bResult ? tr("PIN verification passed") : tr("PIN verification failed");
-
 		if (!bResult)
 		{
-			QMessageBox::information(this, caption,  msg, QMessageBox::Ok );
 			return false;
 		}
 
@@ -401,12 +422,10 @@ bool dlgPrint::addressPINRequest_triggered(CardInformation& CI_Data)
 	}
 	catch (PTEID_Exception &e)
 	{
-		QString msg(tr("General exception"));
 		return false;
 	}
 	catch (...)
 	{
-		QString msg(tr("Unknown exception"));
 		return false;
 	}
 	return true;
@@ -481,30 +500,13 @@ void addFonts()
 }
 
 
-bool dlgPrint::drawpdf(CardInformation& CI_Data, QString filepath)
+bool dlgPrint::drawpdf(CardInformation& CI_Data, QPrinter &printer, QString filepath)
 {
-
-	pdialog = new QProgressDialog();
-#ifdef _WIN32
-	pdialog->setWindowTitle(tr("Export PDF / Print"));
-#else
-	pdialog->setWindowFlags(Qt::Popup);
-	pdialog->setWindowModality(Qt::WindowModal);
-	// We need to reset geometry because in Linux/Xorg
-	// the progress popup would be positioned at (0, 0)
-	CenterParent(this, pdialog);
-#endif
-
-	pdialog->setCancelButton(NULL);
-	pdialog->setMinimum(0);
-	pdialog->setMaximum(0);
-	connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
-	pdialog->reset();
 
 	const tFieldMap PersonFields = CI_Data.m_PersonInfo.getFields();
 	tFieldMap& CardFields = CI_Data.m_CardInfo.getFields();
 
-	QPrinter printer;
+	//QPrinter printer;
 	printer.setResolution(96);
 	printer.setColorMode(QPrinter::Color);
     printer.setPaperSize(QPrinter::A4);
@@ -652,18 +654,23 @@ bool dlgPrint::drawpdf(CardInformation& CI_Data, QString filepath)
 
 	if (ui.chboxAddress->isChecked())
 	{
-		bool res = addressPINRequest_triggered(CI_Data);
-		if (!res)
-		{
-			//Delete partial PDF file
-			painter.end();
-			bool ret = QFile::remove(QString(filepath));
-			if (!ret)
-			{
-				PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Failed to delete partial PDF file: %s", filepath.toStdString().c_str());
-			}
-			return false;
-		}
+        if (filepath.size() > 0)
+        {
+    		bool res = addressPINRequest_triggered(CI_Data);
+    		if (!res)
+    		{
+
+                //Delete partial PDF file
+                painter.end();
+                bool ret = QFile::remove(QString(filepath));
+                if (!ret)
+                {
+                    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Failed to delete partial PDF file: %s", filepath.toStdString().c_str());
+                }
+
+                return false;
+            }
+        }
 
 		tFieldMap& AddressFields = CI_Data.m_AddressInfo.getFields();
 
