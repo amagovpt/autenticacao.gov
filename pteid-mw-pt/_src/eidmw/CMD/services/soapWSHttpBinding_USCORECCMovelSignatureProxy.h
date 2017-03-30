@@ -79,13 +79,17 @@ A commercial use license is available from Genivia Inc., contact@genivia.com
         virtual int CCMovelSign(_ns2__CCMovelSign *ns2__CCMovelSign, _ns2__CCMovelSignResponse &ns2__CCMovelSignResponse)
         { return this->CCMovelSign(NULL, NULL, ns2__CCMovelSign, ns2__CCMovelSignResponse); }
         virtual int CCMovelSign(const char *soap_endpoint, const char *soap_action, _ns2__CCMovelSign *ns2__CCMovelSign, _ns2__CCMovelSignResponse &ns2__CCMovelSignResponse);
-        /// Web service operation 'ValidateOtp' (returns SOAP_OK or error code)
-        virtual int ValidateOtp(_ns2__ValidateOtp *ns2__ValidateOtp, _ns2__ValidateOtpResponse &ns2__ValidateOtpResponse)
-        { return this->ValidateOtp(NULL, NULL, ns2__ValidateOtp, ns2__ValidateOtpResponse); }
-        virtual int ValidateOtp(const char *soap_endpoint, const char *soap_action, _ns2__ValidateOtp *ns2__ValidateOtp, _ns2__ValidateOtpResponse &ns2__ValidateOtpResponse);
         /// Web service operation 'CCMovelValidateSignature' (returns SOAP_OK or error code)
         virtual int CCMovelValidateSignature(_ns2__CCMovelValidateSignature *ns2__CCMovelValidateSignature, _ns2__CCMovelValidateSignatureResponse &ns2__CCMovelValidateSignatureResponse)
         { return this->CCMovelValidateSignature(NULL, NULL, ns2__CCMovelValidateSignature, ns2__CCMovelValidateSignatureResponse); }
         virtual int CCMovelValidateSignature(const char *soap_endpoint, const char *soap_action, _ns2__CCMovelValidateSignature *ns2__CCMovelValidateSignature, _ns2__CCMovelValidateSignatureResponse &ns2__CCMovelValidateSignatureResponse);
+        /// Web service operation 'GetCertificate' (returns SOAP_OK or error code)
+        virtual int GetCertificate(_ns2__GetCertificate *ns2__GetCertificate, _ns2__GetCertificateResponse &ns2__GetCertificateResponse)
+        { return this->GetCertificate(NULL, NULL, ns2__GetCertificate, ns2__GetCertificateResponse); }
+        virtual int GetCertificate(const char *soap_endpoint, const char *soap_action, _ns2__GetCertificate *ns2__GetCertificate, _ns2__GetCertificateResponse &ns2__GetCertificateResponse);
+        /// Web service operation 'ValidateOtp' (returns SOAP_OK or error code)
+        virtual int ValidateOtp(_ns2__ValidateOtp *ns2__ValidateOtp, _ns2__ValidateOtpResponse &ns2__ValidateOtpResponse)
+        { return this->ValidateOtp(NULL, NULL, ns2__ValidateOtp, ns2__ValidateOtpResponse); }
+        virtual int ValidateOtp(const char *soap_endpoint, const char *soap_action, _ns2__ValidateOtp *ns2__ValidateOtp, _ns2__ValidateOtpResponse &ns2__ValidateOtpResponse);
     };
 #endif

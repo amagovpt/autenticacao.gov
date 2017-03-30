@@ -398,6 +398,53 @@ inline int soap_read_bool(struct soap *soap, bool *p)
 	return SOAP_OK;
 }
 #endif
+/* _ns3__SignResponse is a typedef synonym for ns3__SignResponse */
+
+#ifndef SOAP_TYPE__ns3__SignResponse_DEFINED
+#define SOAP_TYPE__ns3__SignResponse_DEFINED
+
+#define soap_default__ns3__SignResponse(soap, a) (a)->ns3__SignResponse::soap_default(soap)
+
+
+#define soap_serialize__ns3__SignResponse(soap, a) (a)->soap_serialize(soap)
+
+
+#define soap__ns3__SignResponse2s soap_ns3__SignResponse2s
+
+
+#define soap_out__ns3__SignResponse soap_out_ns3__SignResponse
+
+
+#define soap_s2_ns3__SignResponse soap_s2ns3__SignResponse
+
+
+#define soap_in__ns3__SignResponse soap_in_ns3__SignResponse
+
+
+#define soap_instantiate__ns3__SignResponse soap_instantiate_ns3__SignResponse
+
+
+#define soap_new__ns3__SignResponse soap_new_ns3__SignResponse
+
+
+#define soap_new_req__ns3__SignResponse soap_new_req_ns3__SignResponse
+
+
+#define soap_new_set__ns3__SignResponse soap_new_set_ns3__SignResponse
+
+
+#define soap_put__ns3__SignResponse soap_put_ns3__SignResponse
+
+
+#define soap_write__ns3__SignResponse soap_write_ns3__SignResponse
+
+
+#define soap_get__ns3__SignResponse soap_get_ns3__SignResponse
+
+
+#define soap_read__ns3__SignResponse soap_read_ns3__SignResponse
+
+#endif
 /* _ns3__ValidationResponse is a typedef synonym for ns3__ValidationResponse */
 
 #ifndef SOAP_TYPE__ns3__ValidationResponse_DEFINED
@@ -492,53 +539,6 @@ inline int soap_read_bool(struct soap *soap, bool *p)
 #define soap_read__ns3__ValidationRequest soap_read_ns3__ValidationRequest
 
 #endif
-/* _ns3__SignResponse is a typedef synonym for ns3__SignResponse */
-
-#ifndef SOAP_TYPE__ns3__SignResponse_DEFINED
-#define SOAP_TYPE__ns3__SignResponse_DEFINED
-
-#define soap_default__ns3__SignResponse(soap, a) (a)->ns3__SignResponse::soap_default(soap)
-
-
-#define soap_serialize__ns3__SignResponse(soap, a) (a)->soap_serialize(soap)
-
-
-#define soap__ns3__SignResponse2s soap_ns3__SignResponse2s
-
-
-#define soap_out__ns3__SignResponse soap_out_ns3__SignResponse
-
-
-#define soap_s2_ns3__SignResponse soap_s2ns3__SignResponse
-
-
-#define soap_in__ns3__SignResponse soap_in_ns3__SignResponse
-
-
-#define soap_instantiate__ns3__SignResponse soap_instantiate_ns3__SignResponse
-
-
-#define soap_new__ns3__SignResponse soap_new_ns3__SignResponse
-
-
-#define soap_new_req__ns3__SignResponse soap_new_req_ns3__SignResponse
-
-
-#define soap_new_set__ns3__SignResponse soap_new_set_ns3__SignResponse
-
-
-#define soap_put__ns3__SignResponse soap_put_ns3__SignResponse
-
-
-#define soap_write__ns3__SignResponse soap_write_ns3__SignResponse
-
-
-#define soap_get__ns3__SignResponse soap_get_ns3__SignResponse
-
-
-#define soap_read__ns3__SignResponse soap_read_ns3__SignResponse
-
-#endif
 /* _ns3__SignStatus is a typedef synonym for ns3__SignStatus */
 
 #ifndef SOAP_TYPE__ns3__SignStatus_DEFINED
@@ -584,53 +584,6 @@ inline int soap_read_bool(struct soap *soap, bool *p)
 
 
 #define soap_read__ns3__SignStatus soap_read_ns3__SignStatus
-
-#endif
-/* _ns3__CCMovelSignResponse is a typedef synonym for ns3__CCMovelSignResponse */
-
-#ifndef SOAP_TYPE__ns3__CCMovelSignResponse_DEFINED
-#define SOAP_TYPE__ns3__CCMovelSignResponse_DEFINED
-
-#define soap_default__ns3__CCMovelSignResponse(soap, a) (a)->ns3__CCMovelSignResponse::soap_default(soap)
-
-
-#define soap_serialize__ns3__CCMovelSignResponse(soap, a) (a)->soap_serialize(soap)
-
-
-#define soap__ns3__CCMovelSignResponse2s soap_ns3__CCMovelSignResponse2s
-
-
-#define soap_out__ns3__CCMovelSignResponse soap_out_ns3__CCMovelSignResponse
-
-
-#define soap_s2_ns3__CCMovelSignResponse soap_s2ns3__CCMovelSignResponse
-
-
-#define soap_in__ns3__CCMovelSignResponse soap_in_ns3__CCMovelSignResponse
-
-
-#define soap_instantiate__ns3__CCMovelSignResponse soap_instantiate_ns3__CCMovelSignResponse
-
-
-#define soap_new__ns3__CCMovelSignResponse soap_new_ns3__CCMovelSignResponse
-
-
-#define soap_new_req__ns3__CCMovelSignResponse soap_new_req_ns3__CCMovelSignResponse
-
-
-#define soap_new_set__ns3__CCMovelSignResponse soap_new_set_ns3__CCMovelSignResponse
-
-
-#define soap_put__ns3__CCMovelSignResponse soap_put_ns3__CCMovelSignResponse
-
-
-#define soap_write__ns3__CCMovelSignResponse soap_write_ns3__CCMovelSignResponse
-
-
-#define soap_get__ns3__CCMovelSignResponse soap_get_ns3__CCMovelSignResponse
-
-
-#define soap_read__ns3__CCMovelSignResponse soap_read_ns3__CCMovelSignResponse
 
 #endif
 /* _ns3__SignRequest is a typedef synonym for ns3__SignRequest */
@@ -725,6 +678,62 @@ SOAP_FMAC3 std::string * SOAP_FMAC4 soap_get_std__string(struct soap*, std::stri
 inline int soap_read_std__string(struct soap *soap, std::string *p)
 {	if (p)
 	{	if (soap_begin_recv(soap) || soap_get_std__string(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+#endif
+
+#ifndef SOAP_TYPE_ns3__SignResponse_DEFINED
+#define SOAP_TYPE_ns3__SignResponse_DEFINED
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns3__SignResponse(struct soap*, const char*, int, const ns3__SignResponse *, const char*);
+SOAP_FMAC3 ns3__SignResponse * SOAP_FMAC4 soap_in_ns3__SignResponse(struct soap*, const char*, ns3__SignResponse *, const char*);
+SOAP_FMAC1 ns3__SignResponse * SOAP_FMAC2 soap_instantiate_ns3__SignResponse(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns3__SignResponse * soap_new_ns3__SignResponse(struct soap *soap, int n = -1)
+{	return soap_instantiate_ns3__SignResponse(soap, n, NULL, NULL, NULL);
+}
+
+inline ns3__SignResponse * soap_new_req_ns3__SignResponse(
+	struct soap *soap,
+	xsd__base64Binary *Signature,
+	ns3__SignStatus *Status)
+{	ns3__SignResponse *_p = soap_new_ns3__SignResponse(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->ns3__SignResponse::Signature = Signature;
+		_p->ns3__SignResponse::Status = Status;
+	}
+	return _p;
+}
+
+inline ns3__SignResponse * soap_new_set_ns3__SignResponse(
+	struct soap *soap,
+	xsd__base64Binary *Signature,
+	ns3__SignStatus *Status)
+{	ns3__SignResponse *_p = soap_new_ns3__SignResponse(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->ns3__SignResponse::Signature = Signature;
+		_p->ns3__SignResponse::Status = Status;
+	}
+	return _p;
+}
+
+inline int soap_write_ns3__SignResponse(struct soap *soap, ns3__SignResponse const *p)
+{	soap_free_temp(soap);
+	if (p)
+	{	if (soap_begin_send(soap) || (p->soap_serialize(soap), 0) || p->soap_put(soap, "ns3:SignResponse", NULL) || soap_end_send(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+SOAP_FMAC3 ns3__SignResponse * SOAP_FMAC4 soap_get_ns3__SignResponse(struct soap*, ns3__SignResponse *, const char*, const char*);
+
+inline int soap_read_ns3__SignResponse(struct soap *soap, ns3__SignResponse *p)
+{	if (p)
+	{	p->soap_default(soap);
+		if (soap_begin_recv(soap) || soap_get_ns3__SignResponse(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
 			return soap->error;
 	}
 	return SOAP_OK;
@@ -847,62 +856,6 @@ inline int soap_read_ns3__ValidationRequest(struct soap *soap, ns3__ValidationRe
 }
 #endif
 
-#ifndef SOAP_TYPE_ns3__SignResponse_DEFINED
-#define SOAP_TYPE_ns3__SignResponse_DEFINED
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns3__SignResponse(struct soap*, const char*, int, const ns3__SignResponse *, const char*);
-SOAP_FMAC3 ns3__SignResponse * SOAP_FMAC4 soap_in_ns3__SignResponse(struct soap*, const char*, ns3__SignResponse *, const char*);
-SOAP_FMAC1 ns3__SignResponse * SOAP_FMAC2 soap_instantiate_ns3__SignResponse(struct soap*, int, const char*, const char*, size_t*);
-
-inline ns3__SignResponse * soap_new_ns3__SignResponse(struct soap *soap, int n = -1)
-{	return soap_instantiate_ns3__SignResponse(soap, n, NULL, NULL, NULL);
-}
-
-inline ns3__SignResponse * soap_new_req_ns3__SignResponse(
-	struct soap *soap,
-	xsd__base64Binary *Signature,
-	ns3__SignStatus *Status)
-{	ns3__SignResponse *_p = soap_new_ns3__SignResponse(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->ns3__SignResponse::Signature = Signature;
-		_p->ns3__SignResponse::Status = Status;
-	}
-	return _p;
-}
-
-inline ns3__SignResponse * soap_new_set_ns3__SignResponse(
-	struct soap *soap,
-	xsd__base64Binary *Signature,
-	ns3__SignStatus *Status)
-{	ns3__SignResponse *_p = soap_new_ns3__SignResponse(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->ns3__SignResponse::Signature = Signature;
-		_p->ns3__SignResponse::Status = Status;
-	}
-	return _p;
-}
-
-inline int soap_write_ns3__SignResponse(struct soap *soap, ns3__SignResponse const *p)
-{	soap_free_temp(soap);
-	if (p)
-	{	if (soap_begin_send(soap) || (p->soap_serialize(soap), 0) || p->soap_put(soap, "ns3:SignResponse", NULL) || soap_end_send(soap))
-			return soap->error;
-	}
-	return SOAP_OK;
-}
-SOAP_FMAC3 ns3__SignResponse * SOAP_FMAC4 soap_get_ns3__SignResponse(struct soap*, ns3__SignResponse *, const char*, const char*);
-
-inline int soap_read_ns3__SignResponse(struct soap *soap, ns3__SignResponse *p)
-{	if (p)
-	{	p->soap_default(soap);
-		if (soap_begin_recv(soap) || soap_get_ns3__SignResponse(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
-			return soap->error;
-	}
-	return SOAP_OK;
-}
-#endif
-
 #ifndef SOAP_TYPE_ns3__SignStatus_DEFINED
 #define SOAP_TYPE_ns3__SignStatus_DEFINED
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns3__SignStatus(struct soap*, const char*, int, const ns3__SignStatus *, const char*);
@@ -971,62 +924,6 @@ inline int soap_read_ns3__SignStatus(struct soap *soap, ns3__SignStatus *p)
 }
 #endif
 
-#ifndef SOAP_TYPE_ns3__CCMovelSignResponse_DEFINED
-#define SOAP_TYPE_ns3__CCMovelSignResponse_DEFINED
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns3__CCMovelSignResponse(struct soap*, const char*, int, const ns3__CCMovelSignResponse *, const char*);
-SOAP_FMAC3 ns3__CCMovelSignResponse * SOAP_FMAC4 soap_in_ns3__CCMovelSignResponse(struct soap*, const char*, ns3__CCMovelSignResponse *, const char*);
-SOAP_FMAC1 ns3__CCMovelSignResponse * SOAP_FMAC2 soap_instantiate_ns3__CCMovelSignResponse(struct soap*, int, const char*, const char*, size_t*);
-
-inline ns3__CCMovelSignResponse * soap_new_ns3__CCMovelSignResponse(struct soap *soap, int n = -1)
-{	return soap_instantiate_ns3__CCMovelSignResponse(soap, n, NULL, NULL, NULL);
-}
-
-inline ns3__CCMovelSignResponse * soap_new_req_ns3__CCMovelSignResponse(
-	struct soap *soap,
-	ns3__SignStatus *Status,
-	std::string *X509Certificate)
-{	ns3__CCMovelSignResponse *_p = soap_new_ns3__CCMovelSignResponse(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->ns3__CCMovelSignResponse::Status = Status;
-		_p->ns3__CCMovelSignResponse::X509Certificate = X509Certificate;
-	}
-	return _p;
-}
-
-inline ns3__CCMovelSignResponse * soap_new_set_ns3__CCMovelSignResponse(
-	struct soap *soap,
-	ns3__SignStatus *Status,
-	std::string *X509Certificate)
-{	ns3__CCMovelSignResponse *_p = soap_new_ns3__CCMovelSignResponse(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->ns3__CCMovelSignResponse::Status = Status;
-		_p->ns3__CCMovelSignResponse::X509Certificate = X509Certificate;
-	}
-	return _p;
-}
-
-inline int soap_write_ns3__CCMovelSignResponse(struct soap *soap, ns3__CCMovelSignResponse const *p)
-{	soap_free_temp(soap);
-	if (p)
-	{	if (soap_begin_send(soap) || (p->soap_serialize(soap), 0) || p->soap_put(soap, "ns3:CCMovelSignResponse", NULL) || soap_end_send(soap))
-			return soap->error;
-	}
-	return SOAP_OK;
-}
-SOAP_FMAC3 ns3__CCMovelSignResponse * SOAP_FMAC4 soap_get_ns3__CCMovelSignResponse(struct soap*, ns3__CCMovelSignResponse *, const char*, const char*);
-
-inline int soap_read_ns3__CCMovelSignResponse(struct soap *soap, ns3__CCMovelSignResponse *p)
-{	if (p)
-	{	p->soap_default(soap);
-		if (soap_begin_recv(soap) || soap_get_ns3__CCMovelSignResponse(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
-			return soap->error;
-	}
-	return SOAP_OK;
-}
-#endif
-
 #ifndef SOAP_TYPE_ns3__SignRequest_DEFINED
 #define SOAP_TYPE_ns3__SignRequest_DEFINED
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns3__SignRequest(struct soap*, const char*, int, const ns3__SignRequest *, const char*);
@@ -1085,106 +982,6 @@ inline int soap_read_ns3__SignRequest(struct soap *soap, ns3__SignRequest *p)
 {	if (p)
 	{	p->soap_default(soap);
 		if (soap_begin_recv(soap) || soap_get_ns3__SignRequest(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
-			return soap->error;
-	}
-	return SOAP_OK;
-}
-#endif
-
-#ifndef SOAP_TYPE__ns2__CCMovelValidateSignatureResponse_DEFINED
-#define SOAP_TYPE__ns2__CCMovelValidateSignatureResponse_DEFINED
-SOAP_FMAC3 int SOAP_FMAC4 soap_out__ns2__CCMovelValidateSignatureResponse(struct soap*, const char*, int, const _ns2__CCMovelValidateSignatureResponse *, const char*);
-SOAP_FMAC3 _ns2__CCMovelValidateSignatureResponse * SOAP_FMAC4 soap_in__ns2__CCMovelValidateSignatureResponse(struct soap*, const char*, _ns2__CCMovelValidateSignatureResponse *, const char*);
-SOAP_FMAC1 _ns2__CCMovelValidateSignatureResponse * SOAP_FMAC2 soap_instantiate__ns2__CCMovelValidateSignatureResponse(struct soap*, int, const char*, const char*, size_t*);
-
-inline _ns2__CCMovelValidateSignatureResponse * soap_new__ns2__CCMovelValidateSignatureResponse(struct soap *soap, int n = -1)
-{	return soap_instantiate__ns2__CCMovelValidateSignatureResponse(soap, n, NULL, NULL, NULL);
-}
-
-inline _ns2__CCMovelValidateSignatureResponse * soap_new_req__ns2__CCMovelValidateSignatureResponse(
-	struct soap *soap)
-{	_ns2__CCMovelValidateSignatureResponse *_p = soap_new__ns2__CCMovelValidateSignatureResponse(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-	}
-	return _p;
-}
-
-inline _ns2__CCMovelValidateSignatureResponse * soap_new_set__ns2__CCMovelValidateSignatureResponse(
-	struct soap *soap,
-	ns3__ValidationResponse *CCMovelValidateSignatureResult)
-{	_ns2__CCMovelValidateSignatureResponse *_p = soap_new__ns2__CCMovelValidateSignatureResponse(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->_ns2__CCMovelValidateSignatureResponse::CCMovelValidateSignatureResult = CCMovelValidateSignatureResult;
-	}
-	return _p;
-}
-
-inline int soap_write__ns2__CCMovelValidateSignatureResponse(struct soap *soap, _ns2__CCMovelValidateSignatureResponse const *p)
-{	soap_free_temp(soap);
-	if (p)
-	{	if (soap_begin_send(soap) || (p->soap_serialize(soap), 0) || p->soap_put(soap, "ns2:CCMovelValidateSignatureResponse", NULL) || soap_end_send(soap))
-			return soap->error;
-	}
-	return SOAP_OK;
-}
-SOAP_FMAC3 _ns2__CCMovelValidateSignatureResponse * SOAP_FMAC4 soap_get__ns2__CCMovelValidateSignatureResponse(struct soap*, _ns2__CCMovelValidateSignatureResponse *, const char*, const char*);
-
-inline int soap_read__ns2__CCMovelValidateSignatureResponse(struct soap *soap, _ns2__CCMovelValidateSignatureResponse *p)
-{	if (p)
-	{	p->soap_default(soap);
-		if (soap_begin_recv(soap) || soap_get__ns2__CCMovelValidateSignatureResponse(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
-			return soap->error;
-	}
-	return SOAP_OK;
-}
-#endif
-
-#ifndef SOAP_TYPE__ns2__CCMovelValidateSignature_DEFINED
-#define SOAP_TYPE__ns2__CCMovelValidateSignature_DEFINED
-SOAP_FMAC3 int SOAP_FMAC4 soap_out__ns2__CCMovelValidateSignature(struct soap*, const char*, int, const _ns2__CCMovelValidateSignature *, const char*);
-SOAP_FMAC3 _ns2__CCMovelValidateSignature * SOAP_FMAC4 soap_in__ns2__CCMovelValidateSignature(struct soap*, const char*, _ns2__CCMovelValidateSignature *, const char*);
-SOAP_FMAC1 _ns2__CCMovelValidateSignature * SOAP_FMAC2 soap_instantiate__ns2__CCMovelValidateSignature(struct soap*, int, const char*, const char*, size_t*);
-
-inline _ns2__CCMovelValidateSignature * soap_new__ns2__CCMovelValidateSignature(struct soap *soap, int n = -1)
-{	return soap_instantiate__ns2__CCMovelValidateSignature(soap, n, NULL, NULL, NULL);
-}
-
-inline _ns2__CCMovelValidateSignature * soap_new_req__ns2__CCMovelValidateSignature(
-	struct soap *soap)
-{	_ns2__CCMovelValidateSignature *_p = soap_new__ns2__CCMovelValidateSignature(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-	}
-	return _p;
-}
-
-inline _ns2__CCMovelValidateSignature * soap_new_set__ns2__CCMovelValidateSignature(
-	struct soap *soap,
-	ns3__ValidationRequest *request)
-{	_ns2__CCMovelValidateSignature *_p = soap_new__ns2__CCMovelValidateSignature(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->_ns2__CCMovelValidateSignature::request = request;
-	}
-	return _p;
-}
-
-inline int soap_write__ns2__CCMovelValidateSignature(struct soap *soap, _ns2__CCMovelValidateSignature const *p)
-{	soap_free_temp(soap);
-	if (p)
-	{	if (soap_begin_send(soap) || (p->soap_serialize(soap), 0) || p->soap_put(soap, "ns2:CCMovelValidateSignature", NULL) || soap_end_send(soap))
-			return soap->error;
-	}
-	return SOAP_OK;
-}
-SOAP_FMAC3 _ns2__CCMovelValidateSignature * SOAP_FMAC4 soap_get__ns2__CCMovelValidateSignature(struct soap*, _ns2__CCMovelValidateSignature *, const char*, const char*);
-
-inline int soap_read__ns2__CCMovelValidateSignature(struct soap *soap, _ns2__CCMovelValidateSignature *p)
-{	if (p)
-	{	p->soap_default(soap);
-		if (soap_begin_recv(soap) || soap_get__ns2__CCMovelValidateSignature(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
 			return soap->error;
 	}
 	return SOAP_OK;
@@ -1295,6 +1092,208 @@ inline int soap_read__ns2__ValidateOtp(struct soap *soap, _ns2__ValidateOtp *p)
 }
 #endif
 
+#ifndef SOAP_TYPE__ns2__GetCertificateResponse_DEFINED
+#define SOAP_TYPE__ns2__GetCertificateResponse_DEFINED
+SOAP_FMAC3 int SOAP_FMAC4 soap_out__ns2__GetCertificateResponse(struct soap*, const char*, int, const _ns2__GetCertificateResponse *, const char*);
+SOAP_FMAC3 _ns2__GetCertificateResponse * SOAP_FMAC4 soap_in__ns2__GetCertificateResponse(struct soap*, const char*, _ns2__GetCertificateResponse *, const char*);
+SOAP_FMAC1 _ns2__GetCertificateResponse * SOAP_FMAC2 soap_instantiate__ns2__GetCertificateResponse(struct soap*, int, const char*, const char*, size_t*);
+
+inline _ns2__GetCertificateResponse * soap_new__ns2__GetCertificateResponse(struct soap *soap, int n = -1)
+{	return soap_instantiate__ns2__GetCertificateResponse(soap, n, NULL, NULL, NULL);
+}
+
+inline _ns2__GetCertificateResponse * soap_new_req__ns2__GetCertificateResponse(
+	struct soap *soap)
+{	_ns2__GetCertificateResponse *_p = soap_new__ns2__GetCertificateResponse(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+	}
+	return _p;
+}
+
+inline _ns2__GetCertificateResponse * soap_new_set__ns2__GetCertificateResponse(
+	struct soap *soap,
+	std::string *GetCertificateResult)
+{	_ns2__GetCertificateResponse *_p = soap_new__ns2__GetCertificateResponse(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->_ns2__GetCertificateResponse::GetCertificateResult = GetCertificateResult;
+	}
+	return _p;
+}
+
+inline int soap_write__ns2__GetCertificateResponse(struct soap *soap, _ns2__GetCertificateResponse const *p)
+{	soap_free_temp(soap);
+	if (p)
+	{	if (soap_begin_send(soap) || (p->soap_serialize(soap), 0) || p->soap_put(soap, "ns2:GetCertificateResponse", NULL) || soap_end_send(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+SOAP_FMAC3 _ns2__GetCertificateResponse * SOAP_FMAC4 soap_get__ns2__GetCertificateResponse(struct soap*, _ns2__GetCertificateResponse *, const char*, const char*);
+
+inline int soap_read__ns2__GetCertificateResponse(struct soap *soap, _ns2__GetCertificateResponse *p)
+{	if (p)
+	{	p->soap_default(soap);
+		if (soap_begin_recv(soap) || soap_get__ns2__GetCertificateResponse(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+#endif
+
+#ifndef SOAP_TYPE__ns2__GetCertificate_DEFINED
+#define SOAP_TYPE__ns2__GetCertificate_DEFINED
+SOAP_FMAC3 int SOAP_FMAC4 soap_out__ns2__GetCertificate(struct soap*, const char*, int, const _ns2__GetCertificate *, const char*);
+SOAP_FMAC3 _ns2__GetCertificate * SOAP_FMAC4 soap_in__ns2__GetCertificate(struct soap*, const char*, _ns2__GetCertificate *, const char*);
+SOAP_FMAC1 _ns2__GetCertificate * SOAP_FMAC2 soap_instantiate__ns2__GetCertificate(struct soap*, int, const char*, const char*, size_t*);
+
+inline _ns2__GetCertificate * soap_new__ns2__GetCertificate(struct soap *soap, int n = -1)
+{	return soap_instantiate__ns2__GetCertificate(soap, n, NULL, NULL, NULL);
+}
+
+inline _ns2__GetCertificate * soap_new_req__ns2__GetCertificate(
+	struct soap *soap)
+{	_ns2__GetCertificate *_p = soap_new__ns2__GetCertificate(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+	}
+	return _p;
+}
+
+inline _ns2__GetCertificate * soap_new_set__ns2__GetCertificate(
+	struct soap *soap,
+	xsd__base64Binary *applicationId,
+	std::string *userId)
+{	_ns2__GetCertificate *_p = soap_new__ns2__GetCertificate(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->_ns2__GetCertificate::applicationId = applicationId;
+		_p->_ns2__GetCertificate::userId = userId;
+	}
+	return _p;
+}
+
+inline int soap_write__ns2__GetCertificate(struct soap *soap, _ns2__GetCertificate const *p)
+{	soap_free_temp(soap);
+	if (p)
+	{	if (soap_begin_send(soap) || (p->soap_serialize(soap), 0) || p->soap_put(soap, "ns2:GetCertificate", NULL) || soap_end_send(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+SOAP_FMAC3 _ns2__GetCertificate * SOAP_FMAC4 soap_get__ns2__GetCertificate(struct soap*, _ns2__GetCertificate *, const char*, const char*);
+
+inline int soap_read__ns2__GetCertificate(struct soap *soap, _ns2__GetCertificate *p)
+{	if (p)
+	{	p->soap_default(soap);
+		if (soap_begin_recv(soap) || soap_get__ns2__GetCertificate(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+#endif
+
+#ifndef SOAP_TYPE__ns2__CCMovelValidateSignatureResponse_DEFINED
+#define SOAP_TYPE__ns2__CCMovelValidateSignatureResponse_DEFINED
+SOAP_FMAC3 int SOAP_FMAC4 soap_out__ns2__CCMovelValidateSignatureResponse(struct soap*, const char*, int, const _ns2__CCMovelValidateSignatureResponse *, const char*);
+SOAP_FMAC3 _ns2__CCMovelValidateSignatureResponse * SOAP_FMAC4 soap_in__ns2__CCMovelValidateSignatureResponse(struct soap*, const char*, _ns2__CCMovelValidateSignatureResponse *, const char*);
+SOAP_FMAC1 _ns2__CCMovelValidateSignatureResponse * SOAP_FMAC2 soap_instantiate__ns2__CCMovelValidateSignatureResponse(struct soap*, int, const char*, const char*, size_t*);
+
+inline _ns2__CCMovelValidateSignatureResponse * soap_new__ns2__CCMovelValidateSignatureResponse(struct soap *soap, int n = -1)
+{	return soap_instantiate__ns2__CCMovelValidateSignatureResponse(soap, n, NULL, NULL, NULL);
+}
+
+inline _ns2__CCMovelValidateSignatureResponse * soap_new_req__ns2__CCMovelValidateSignatureResponse(
+	struct soap *soap)
+{	_ns2__CCMovelValidateSignatureResponse *_p = soap_new__ns2__CCMovelValidateSignatureResponse(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+	}
+	return _p;
+}
+
+inline _ns2__CCMovelValidateSignatureResponse * soap_new_set__ns2__CCMovelValidateSignatureResponse(
+	struct soap *soap,
+	ns3__ValidationResponse *CCMovelValidateSignatureResult)
+{	_ns2__CCMovelValidateSignatureResponse *_p = soap_new__ns2__CCMovelValidateSignatureResponse(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->_ns2__CCMovelValidateSignatureResponse::CCMovelValidateSignatureResult = CCMovelValidateSignatureResult;
+	}
+	return _p;
+}
+
+inline int soap_write__ns2__CCMovelValidateSignatureResponse(struct soap *soap, _ns2__CCMovelValidateSignatureResponse const *p)
+{	soap_free_temp(soap);
+	if (p)
+	{	if (soap_begin_send(soap) || (p->soap_serialize(soap), 0) || p->soap_put(soap, "ns2:CCMovelValidateSignatureResponse", NULL) || soap_end_send(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+SOAP_FMAC3 _ns2__CCMovelValidateSignatureResponse * SOAP_FMAC4 soap_get__ns2__CCMovelValidateSignatureResponse(struct soap*, _ns2__CCMovelValidateSignatureResponse *, const char*, const char*);
+
+inline int soap_read__ns2__CCMovelValidateSignatureResponse(struct soap *soap, _ns2__CCMovelValidateSignatureResponse *p)
+{	if (p)
+	{	p->soap_default(soap);
+		if (soap_begin_recv(soap) || soap_get__ns2__CCMovelValidateSignatureResponse(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+#endif
+
+#ifndef SOAP_TYPE__ns2__CCMovelValidateSignature_DEFINED
+#define SOAP_TYPE__ns2__CCMovelValidateSignature_DEFINED
+SOAP_FMAC3 int SOAP_FMAC4 soap_out__ns2__CCMovelValidateSignature(struct soap*, const char*, int, const _ns2__CCMovelValidateSignature *, const char*);
+SOAP_FMAC3 _ns2__CCMovelValidateSignature * SOAP_FMAC4 soap_in__ns2__CCMovelValidateSignature(struct soap*, const char*, _ns2__CCMovelValidateSignature *, const char*);
+SOAP_FMAC1 _ns2__CCMovelValidateSignature * SOAP_FMAC2 soap_instantiate__ns2__CCMovelValidateSignature(struct soap*, int, const char*, const char*, size_t*);
+
+inline _ns2__CCMovelValidateSignature * soap_new__ns2__CCMovelValidateSignature(struct soap *soap, int n = -1)
+{	return soap_instantiate__ns2__CCMovelValidateSignature(soap, n, NULL, NULL, NULL);
+}
+
+inline _ns2__CCMovelValidateSignature * soap_new_req__ns2__CCMovelValidateSignature(
+	struct soap *soap)
+{	_ns2__CCMovelValidateSignature *_p = soap_new__ns2__CCMovelValidateSignature(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+	}
+	return _p;
+}
+
+inline _ns2__CCMovelValidateSignature * soap_new_set__ns2__CCMovelValidateSignature(
+	struct soap *soap,
+	ns3__ValidationRequest *request)
+{	_ns2__CCMovelValidateSignature *_p = soap_new__ns2__CCMovelValidateSignature(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->_ns2__CCMovelValidateSignature::request = request;
+	}
+	return _p;
+}
+
+inline int soap_write__ns2__CCMovelValidateSignature(struct soap *soap, _ns2__CCMovelValidateSignature const *p)
+{	soap_free_temp(soap);
+	if (p)
+	{	if (soap_begin_send(soap) || (p->soap_serialize(soap), 0) || p->soap_put(soap, "ns2:CCMovelValidateSignature", NULL) || soap_end_send(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+SOAP_FMAC3 _ns2__CCMovelValidateSignature * SOAP_FMAC4 soap_get__ns2__CCMovelValidateSignature(struct soap*, _ns2__CCMovelValidateSignature *, const char*, const char*);
+
+inline int soap_read__ns2__CCMovelValidateSignature(struct soap *soap, _ns2__CCMovelValidateSignature *p)
+{	if (p)
+	{	p->soap_default(soap);
+		if (soap_begin_recv(soap) || soap_get__ns2__CCMovelValidateSignature(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+#endif
+
 #ifndef SOAP_TYPE__ns2__CCMovelSignResponse_DEFINED
 #define SOAP_TYPE__ns2__CCMovelSignResponse_DEFINED
 SOAP_FMAC3 int SOAP_FMAC4 soap_out__ns2__CCMovelSignResponse(struct soap*, const char*, int, const _ns2__CCMovelSignResponse *, const char*);
@@ -1316,7 +1315,7 @@ inline _ns2__CCMovelSignResponse * soap_new_req__ns2__CCMovelSignResponse(
 
 inline _ns2__CCMovelSignResponse * soap_new_set__ns2__CCMovelSignResponse(
 	struct soap *soap,
-	ns3__CCMovelSignResponse *CCMovelSignResult)
+	ns3__SignStatus *CCMovelSignResult)
 {	_ns2__CCMovelSignResponse *_p = soap_new__ns2__CCMovelSignResponse(soap);
 	if (_p)
 	{	_p->soap_default(soap);
@@ -4116,59 +4115,6 @@ inline int soap_read__wsu__Timestamp(struct soap *soap, struct _wsu__Timestamp *
 }
 #endif
 
-#ifndef SOAP_TYPE___tempuri__CCMovelValidateSignature_DEFINED
-#define SOAP_TYPE___tempuri__CCMovelValidateSignature_DEFINED
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tempuri__CCMovelValidateSignature(struct soap*, struct __tempuri__CCMovelValidateSignature *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tempuri__CCMovelValidateSignature(struct soap*, const struct __tempuri__CCMovelValidateSignature *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tempuri__CCMovelValidateSignature(struct soap*, const char*, int, const struct __tempuri__CCMovelValidateSignature *, const char*);
-SOAP_FMAC3 struct __tempuri__CCMovelValidateSignature * SOAP_FMAC4 soap_in___tempuri__CCMovelValidateSignature(struct soap*, const char*, struct __tempuri__CCMovelValidateSignature *, const char*);
-SOAP_FMAC1 struct __tempuri__CCMovelValidateSignature * SOAP_FMAC2 soap_instantiate___tempuri__CCMovelValidateSignature(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct __tempuri__CCMovelValidateSignature * soap_new___tempuri__CCMovelValidateSignature(struct soap *soap, int n = -1)
-{	return soap_instantiate___tempuri__CCMovelValidateSignature(soap, n, NULL, NULL, NULL);
-}
-
-inline struct __tempuri__CCMovelValidateSignature * soap_new_req___tempuri__CCMovelValidateSignature(
-	struct soap *soap)
-{	struct __tempuri__CCMovelValidateSignature *_p = soap_new___tempuri__CCMovelValidateSignature(soap);
-	if (_p)
-	{	soap_default___tempuri__CCMovelValidateSignature(soap, _p);
-	}
-	return _p;
-}
-
-inline struct __tempuri__CCMovelValidateSignature * soap_new_set___tempuri__CCMovelValidateSignature(
-	struct soap *soap,
-	_ns2__CCMovelValidateSignature *ns2__CCMovelValidateSignature)
-{	struct __tempuri__CCMovelValidateSignature *_p = soap_new___tempuri__CCMovelValidateSignature(soap);
-	if (_p)
-	{	soap_default___tempuri__CCMovelValidateSignature(soap, _p);
-		_p->ns2__CCMovelValidateSignature = ns2__CCMovelValidateSignature;
-	}
-	return _p;
-}
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tempuri__CCMovelValidateSignature(struct soap*, const struct __tempuri__CCMovelValidateSignature *, const char*, const char*);
-
-inline int soap_write___tempuri__CCMovelValidateSignature(struct soap *soap, struct __tempuri__CCMovelValidateSignature const *p)
-{	soap_free_temp(soap);
-	if (p)
-	{	if (soap_begin_send(soap) || (soap_serialize___tempuri__CCMovelValidateSignature(soap, p), 0) || soap_put___tempuri__CCMovelValidateSignature(soap, p, "-tempuri:CCMovelValidateSignature", NULL) || soap_end_send(soap))
-			return soap->error;
-	}
-	return SOAP_OK;
-}
-SOAP_FMAC3 struct __tempuri__CCMovelValidateSignature * SOAP_FMAC4 soap_get___tempuri__CCMovelValidateSignature(struct soap*, struct __tempuri__CCMovelValidateSignature *, const char*, const char*);
-
-inline int soap_read___tempuri__CCMovelValidateSignature(struct soap *soap, struct __tempuri__CCMovelValidateSignature *p)
-{	if (p)
-	{	soap_default___tempuri__CCMovelValidateSignature(soap, p);
-		if (soap_begin_recv(soap) || soap_get___tempuri__CCMovelValidateSignature(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
-			return soap->error;
-	}
-	return SOAP_OK;
-}
-#endif
-
 #ifndef SOAP_TYPE___tempuri__ValidateOtp_DEFINED
 #define SOAP_TYPE___tempuri__ValidateOtp_DEFINED
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tempuri__ValidateOtp(struct soap*, struct __tempuri__ValidateOtp *);
@@ -4216,6 +4162,112 @@ inline int soap_read___tempuri__ValidateOtp(struct soap *soap, struct __tempuri_
 {	if (p)
 	{	soap_default___tempuri__ValidateOtp(soap, p);
 		if (soap_begin_recv(soap) || soap_get___tempuri__ValidateOtp(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+#endif
+
+#ifndef SOAP_TYPE___tempuri__GetCertificate_DEFINED
+#define SOAP_TYPE___tempuri__GetCertificate_DEFINED
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tempuri__GetCertificate(struct soap*, struct __tempuri__GetCertificate *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tempuri__GetCertificate(struct soap*, const struct __tempuri__GetCertificate *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tempuri__GetCertificate(struct soap*, const char*, int, const struct __tempuri__GetCertificate *, const char*);
+SOAP_FMAC3 struct __tempuri__GetCertificate * SOAP_FMAC4 soap_in___tempuri__GetCertificate(struct soap*, const char*, struct __tempuri__GetCertificate *, const char*);
+SOAP_FMAC1 struct __tempuri__GetCertificate * SOAP_FMAC2 soap_instantiate___tempuri__GetCertificate(struct soap*, int, const char*, const char*, size_t*);
+
+inline struct __tempuri__GetCertificate * soap_new___tempuri__GetCertificate(struct soap *soap, int n = -1)
+{	return soap_instantiate___tempuri__GetCertificate(soap, n, NULL, NULL, NULL);
+}
+
+inline struct __tempuri__GetCertificate * soap_new_req___tempuri__GetCertificate(
+	struct soap *soap)
+{	struct __tempuri__GetCertificate *_p = soap_new___tempuri__GetCertificate(soap);
+	if (_p)
+	{	soap_default___tempuri__GetCertificate(soap, _p);
+	}
+	return _p;
+}
+
+inline struct __tempuri__GetCertificate * soap_new_set___tempuri__GetCertificate(
+	struct soap *soap,
+	_ns2__GetCertificate *ns2__GetCertificate)
+{	struct __tempuri__GetCertificate *_p = soap_new___tempuri__GetCertificate(soap);
+	if (_p)
+	{	soap_default___tempuri__GetCertificate(soap, _p);
+		_p->ns2__GetCertificate = ns2__GetCertificate;
+	}
+	return _p;
+}
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tempuri__GetCertificate(struct soap*, const struct __tempuri__GetCertificate *, const char*, const char*);
+
+inline int soap_write___tempuri__GetCertificate(struct soap *soap, struct __tempuri__GetCertificate const *p)
+{	soap_free_temp(soap);
+	if (p)
+	{	if (soap_begin_send(soap) || (soap_serialize___tempuri__GetCertificate(soap, p), 0) || soap_put___tempuri__GetCertificate(soap, p, "-tempuri:GetCertificate", NULL) || soap_end_send(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+SOAP_FMAC3 struct __tempuri__GetCertificate * SOAP_FMAC4 soap_get___tempuri__GetCertificate(struct soap*, struct __tempuri__GetCertificate *, const char*, const char*);
+
+inline int soap_read___tempuri__GetCertificate(struct soap *soap, struct __tempuri__GetCertificate *p)
+{	if (p)
+	{	soap_default___tempuri__GetCertificate(soap, p);
+		if (soap_begin_recv(soap) || soap_get___tempuri__GetCertificate(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+#endif
+
+#ifndef SOAP_TYPE___tempuri__CCMovelValidateSignature_DEFINED
+#define SOAP_TYPE___tempuri__CCMovelValidateSignature_DEFINED
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tempuri__CCMovelValidateSignature(struct soap*, struct __tempuri__CCMovelValidateSignature *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tempuri__CCMovelValidateSignature(struct soap*, const struct __tempuri__CCMovelValidateSignature *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tempuri__CCMovelValidateSignature(struct soap*, const char*, int, const struct __tempuri__CCMovelValidateSignature *, const char*);
+SOAP_FMAC3 struct __tempuri__CCMovelValidateSignature * SOAP_FMAC4 soap_in___tempuri__CCMovelValidateSignature(struct soap*, const char*, struct __tempuri__CCMovelValidateSignature *, const char*);
+SOAP_FMAC1 struct __tempuri__CCMovelValidateSignature * SOAP_FMAC2 soap_instantiate___tempuri__CCMovelValidateSignature(struct soap*, int, const char*, const char*, size_t*);
+
+inline struct __tempuri__CCMovelValidateSignature * soap_new___tempuri__CCMovelValidateSignature(struct soap *soap, int n = -1)
+{	return soap_instantiate___tempuri__CCMovelValidateSignature(soap, n, NULL, NULL, NULL);
+}
+
+inline struct __tempuri__CCMovelValidateSignature * soap_new_req___tempuri__CCMovelValidateSignature(
+	struct soap *soap)
+{	struct __tempuri__CCMovelValidateSignature *_p = soap_new___tempuri__CCMovelValidateSignature(soap);
+	if (_p)
+	{	soap_default___tempuri__CCMovelValidateSignature(soap, _p);
+	}
+	return _p;
+}
+
+inline struct __tempuri__CCMovelValidateSignature * soap_new_set___tempuri__CCMovelValidateSignature(
+	struct soap *soap,
+	_ns2__CCMovelValidateSignature *ns2__CCMovelValidateSignature)
+{	struct __tempuri__CCMovelValidateSignature *_p = soap_new___tempuri__CCMovelValidateSignature(soap);
+	if (_p)
+	{	soap_default___tempuri__CCMovelValidateSignature(soap, _p);
+		_p->ns2__CCMovelValidateSignature = ns2__CCMovelValidateSignature;
+	}
+	return _p;
+}
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tempuri__CCMovelValidateSignature(struct soap*, const struct __tempuri__CCMovelValidateSignature *, const char*, const char*);
+
+inline int soap_write___tempuri__CCMovelValidateSignature(struct soap *soap, struct __tempuri__CCMovelValidateSignature const *p)
+{	soap_free_temp(soap);
+	if (p)
+	{	if (soap_begin_send(soap) || (soap_serialize___tempuri__CCMovelValidateSignature(soap, p), 0) || soap_put___tempuri__CCMovelValidateSignature(soap, p, "-tempuri:CCMovelValidateSignature", NULL) || soap_end_send(soap))
+			return soap->error;
+	}
+	return SOAP_OK;
+}
+SOAP_FMAC3 struct __tempuri__CCMovelValidateSignature * SOAP_FMAC4 soap_get___tempuri__CCMovelValidateSignature(struct soap*, struct __tempuri__CCMovelValidateSignature *, const char*, const char*);
+
+inline int soap_read___tempuri__CCMovelValidateSignature(struct soap *soap, struct __tempuri__CCMovelValidateSignature *p)
+{	if (p)
+	{	soap_default___tempuri__CCMovelValidateSignature(soap, p);
+		if (soap_begin_recv(soap) || soap_get___tempuri__CCMovelValidateSignature(soap, p, NULL, NULL) == NULL || soap_end_recv(soap))
 			return soap->error;
 	}
 	return SOAP_OK;
@@ -5558,15 +5610,6 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTo_wsse__Password(struct soap*, struct
 SOAP_FMAC3 struct _wsse__Password ** SOAP_FMAC4 soap_get_PointerTo_wsse__Password(struct soap*, struct _wsse__Password **, const char*, const char*);
 #endif
 
-#ifndef SOAP_TYPE_PointerTo_ns2__CCMovelValidateSignature_DEFINED
-#define SOAP_TYPE_PointerTo_ns2__CCMovelValidateSignature_DEFINED
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTo_ns2__CCMovelValidateSignature(struct soap*, _ns2__CCMovelValidateSignature *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTo_ns2__CCMovelValidateSignature(struct soap*, const char *, int, _ns2__CCMovelValidateSignature *const*, const char *);
-SOAP_FMAC3 _ns2__CCMovelValidateSignature ** SOAP_FMAC4 soap_in_PointerTo_ns2__CCMovelValidateSignature(struct soap*, const char*, _ns2__CCMovelValidateSignature **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTo_ns2__CCMovelValidateSignature(struct soap*, _ns2__CCMovelValidateSignature *const*, const char*, const char*);
-SOAP_FMAC3 _ns2__CCMovelValidateSignature ** SOAP_FMAC4 soap_get_PointerTo_ns2__CCMovelValidateSignature(struct soap*, _ns2__CCMovelValidateSignature **, const char*, const char*);
-#endif
-
 #ifndef SOAP_TYPE_PointerTo_ns2__ValidateOtp_DEFINED
 #define SOAP_TYPE_PointerTo_ns2__ValidateOtp_DEFINED
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTo_ns2__ValidateOtp(struct soap*, _ns2__ValidateOtp *const*);
@@ -5574,6 +5617,24 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTo_ns2__ValidateOtp(struct soap*, cons
 SOAP_FMAC3 _ns2__ValidateOtp ** SOAP_FMAC4 soap_in_PointerTo_ns2__ValidateOtp(struct soap*, const char*, _ns2__ValidateOtp **, const char*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTo_ns2__ValidateOtp(struct soap*, _ns2__ValidateOtp *const*, const char*, const char*);
 SOAP_FMAC3 _ns2__ValidateOtp ** SOAP_FMAC4 soap_get_PointerTo_ns2__ValidateOtp(struct soap*, _ns2__ValidateOtp **, const char*, const char*);
+#endif
+
+#ifndef SOAP_TYPE_PointerTo_ns2__GetCertificate_DEFINED
+#define SOAP_TYPE_PointerTo_ns2__GetCertificate_DEFINED
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTo_ns2__GetCertificate(struct soap*, _ns2__GetCertificate *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTo_ns2__GetCertificate(struct soap*, const char *, int, _ns2__GetCertificate *const*, const char *);
+SOAP_FMAC3 _ns2__GetCertificate ** SOAP_FMAC4 soap_in_PointerTo_ns2__GetCertificate(struct soap*, const char*, _ns2__GetCertificate **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTo_ns2__GetCertificate(struct soap*, _ns2__GetCertificate *const*, const char*, const char*);
+SOAP_FMAC3 _ns2__GetCertificate ** SOAP_FMAC4 soap_get_PointerTo_ns2__GetCertificate(struct soap*, _ns2__GetCertificate **, const char*, const char*);
+#endif
+
+#ifndef SOAP_TYPE_PointerTo_ns2__CCMovelValidateSignature_DEFINED
+#define SOAP_TYPE_PointerTo_ns2__CCMovelValidateSignature_DEFINED
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTo_ns2__CCMovelValidateSignature(struct soap*, _ns2__CCMovelValidateSignature *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTo_ns2__CCMovelValidateSignature(struct soap*, const char *, int, _ns2__CCMovelValidateSignature *const*, const char *);
+SOAP_FMAC3 _ns2__CCMovelValidateSignature ** SOAP_FMAC4 soap_in_PointerTo_ns2__CCMovelValidateSignature(struct soap*, const char*, _ns2__CCMovelValidateSignature **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTo_ns2__CCMovelValidateSignature(struct soap*, _ns2__CCMovelValidateSignature *const*, const char*, const char*);
+SOAP_FMAC3 _ns2__CCMovelValidateSignature ** SOAP_FMAC4 soap_get_PointerTo_ns2__CCMovelValidateSignature(struct soap*, _ns2__CCMovelValidateSignature **, const char*, const char*);
 #endif
 
 #ifndef SOAP_TYPE_PointerTo_ns2__CCMovelSign_DEFINED
@@ -5814,13 +5875,31 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTobool(struct soap*, bool *const*, con
 SOAP_FMAC3 bool ** SOAP_FMAC4 soap_get_PointerTobool(struct soap*, bool **, const char*, const char*);
 #endif
 
-#ifndef SOAP_TYPE_PointerTons3__SignStatus_DEFINED
-#define SOAP_TYPE_PointerTons3__SignStatus_DEFINED
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons3__SignStatus(struct soap*, ns3__SignStatus *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons3__SignStatus(struct soap*, const char *, int, ns3__SignStatus *const*, const char *);
-SOAP_FMAC3 ns3__SignStatus ** SOAP_FMAC4 soap_in_PointerTons3__SignStatus(struct soap*, const char*, ns3__SignStatus **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons3__SignStatus(struct soap*, ns3__SignStatus *const*, const char*, const char*);
-SOAP_FMAC3 ns3__SignStatus ** SOAP_FMAC4 soap_get_PointerTons3__SignStatus(struct soap*, ns3__SignStatus **, const char*, const char*);
+#ifndef SOAP_TYPE_PointerTons3__SignResponse_DEFINED
+#define SOAP_TYPE_PointerTons3__SignResponse_DEFINED
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons3__SignResponse(struct soap*, ns3__SignResponse *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons3__SignResponse(struct soap*, const char *, int, ns3__SignResponse *const*, const char *);
+SOAP_FMAC3 ns3__SignResponse ** SOAP_FMAC4 soap_in_PointerTons3__SignResponse(struct soap*, const char*, ns3__SignResponse **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons3__SignResponse(struct soap*, ns3__SignResponse *const*, const char*, const char*);
+SOAP_FMAC3 ns3__SignResponse ** SOAP_FMAC4 soap_get_PointerTons3__SignResponse(struct soap*, ns3__SignResponse **, const char*, const char*);
+#endif
+
+#ifndef SOAP_TYPE_PointerTostd__string_DEFINED
+#define SOAP_TYPE_PointerTostd__string_DEFINED
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTostd__string(struct soap*, std::string *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTostd__string(struct soap*, const char *, int, std::string *const*, const char *);
+SOAP_FMAC3 std::string ** SOAP_FMAC4 soap_in_PointerTostd__string(struct soap*, const char*, std::string **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTostd__string(struct soap*, std::string *const*, const char*, const char*);
+SOAP_FMAC3 std::string ** SOAP_FMAC4 soap_get_PointerTostd__string(struct soap*, std::string **, const char*, const char*);
+#endif
+
+#ifndef SOAP_TYPE_PointerToxsd__base64Binary_DEFINED
+#define SOAP_TYPE_PointerToxsd__base64Binary_DEFINED
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerToxsd__base64Binary(struct soap*, xsd__base64Binary *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerToxsd__base64Binary(struct soap*, const char *, int, xsd__base64Binary *const*, const char *);
+SOAP_FMAC3 xsd__base64Binary ** SOAP_FMAC4 soap_in_PointerToxsd__base64Binary(struct soap*, const char*, xsd__base64Binary **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerToxsd__base64Binary(struct soap*, xsd__base64Binary *const*, const char*, const char*);
+SOAP_FMAC3 xsd__base64Binary ** SOAP_FMAC4 soap_get_PointerToxsd__base64Binary(struct soap*, xsd__base64Binary **, const char*, const char*);
 #endif
 
 #ifndef SOAP_TYPE_PointerTons3__ValidationResponse_DEFINED
@@ -5841,40 +5920,13 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons3__ValidationRequest(struct soap*,
 SOAP_FMAC3 ns3__ValidationRequest ** SOAP_FMAC4 soap_get_PointerTons3__ValidationRequest(struct soap*, ns3__ValidationRequest **, const char*, const char*);
 #endif
 
-#ifndef SOAP_TYPE_PointerTons3__SignResponse_DEFINED
-#define SOAP_TYPE_PointerTons3__SignResponse_DEFINED
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons3__SignResponse(struct soap*, ns3__SignResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons3__SignResponse(struct soap*, const char *, int, ns3__SignResponse *const*, const char *);
-SOAP_FMAC3 ns3__SignResponse ** SOAP_FMAC4 soap_in_PointerTons3__SignResponse(struct soap*, const char*, ns3__SignResponse **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons3__SignResponse(struct soap*, ns3__SignResponse *const*, const char*, const char*);
-SOAP_FMAC3 ns3__SignResponse ** SOAP_FMAC4 soap_get_PointerTons3__SignResponse(struct soap*, ns3__SignResponse **, const char*, const char*);
-#endif
-
-#ifndef SOAP_TYPE_PointerToxsd__base64Binary_DEFINED
-#define SOAP_TYPE_PointerToxsd__base64Binary_DEFINED
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerToxsd__base64Binary(struct soap*, xsd__base64Binary *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerToxsd__base64Binary(struct soap*, const char *, int, xsd__base64Binary *const*, const char *);
-SOAP_FMAC3 xsd__base64Binary ** SOAP_FMAC4 soap_in_PointerToxsd__base64Binary(struct soap*, const char*, xsd__base64Binary **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerToxsd__base64Binary(struct soap*, xsd__base64Binary *const*, const char*, const char*);
-SOAP_FMAC3 xsd__base64Binary ** SOAP_FMAC4 soap_get_PointerToxsd__base64Binary(struct soap*, xsd__base64Binary **, const char*, const char*);
-#endif
-
-#ifndef SOAP_TYPE_PointerTostd__string_DEFINED
-#define SOAP_TYPE_PointerTostd__string_DEFINED
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTostd__string(struct soap*, std::string *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTostd__string(struct soap*, const char *, int, std::string *const*, const char *);
-SOAP_FMAC3 std::string ** SOAP_FMAC4 soap_in_PointerTostd__string(struct soap*, const char*, std::string **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTostd__string(struct soap*, std::string *const*, const char*, const char*);
-SOAP_FMAC3 std::string ** SOAP_FMAC4 soap_get_PointerTostd__string(struct soap*, std::string **, const char*, const char*);
-#endif
-
-#ifndef SOAP_TYPE_PointerTons3__CCMovelSignResponse_DEFINED
-#define SOAP_TYPE_PointerTons3__CCMovelSignResponse_DEFINED
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons3__CCMovelSignResponse(struct soap*, ns3__CCMovelSignResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons3__CCMovelSignResponse(struct soap*, const char *, int, ns3__CCMovelSignResponse *const*, const char *);
-SOAP_FMAC3 ns3__CCMovelSignResponse ** SOAP_FMAC4 soap_in_PointerTons3__CCMovelSignResponse(struct soap*, const char*, ns3__CCMovelSignResponse **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons3__CCMovelSignResponse(struct soap*, ns3__CCMovelSignResponse *const*, const char*, const char*);
-SOAP_FMAC3 ns3__CCMovelSignResponse ** SOAP_FMAC4 soap_get_PointerTons3__CCMovelSignResponse(struct soap*, ns3__CCMovelSignResponse **, const char*, const char*);
+#ifndef SOAP_TYPE_PointerTons3__SignStatus_DEFINED
+#define SOAP_TYPE_PointerTons3__SignStatus_DEFINED
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons3__SignStatus(struct soap*, ns3__SignStatus *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons3__SignStatus(struct soap*, const char *, int, ns3__SignStatus *const*, const char *);
+SOAP_FMAC3 ns3__SignStatus ** SOAP_FMAC4 soap_in_PointerTons3__SignStatus(struct soap*, const char*, ns3__SignStatus **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons3__SignStatus(struct soap*, ns3__SignStatus *const*, const char*, const char*);
+SOAP_FMAC3 ns3__SignStatus ** SOAP_FMAC4 soap_get_PointerTons3__SignStatus(struct soap*, ns3__SignStatus **, const char*, const char*);
 #endif
 
 #ifndef SOAP_TYPE_PointerTons3__SignRequest_DEFINED

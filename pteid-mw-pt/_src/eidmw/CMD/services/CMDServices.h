@@ -7,16 +7,34 @@
 #include <openssl/x509.h>
 #include "soapH.h"
 #include "ByteArray.h"
+#include "Log.h"
 
 #define ERR_NONE 0
 #define ERR_FAIL -1
 
-using namespace std;
+#ifdef WIN32
+    #define _LOG_( buf, level, mod, format, ... ) { sprintf( buf, "%s() - ", __FUNCTION__ );                \
+                                                    sprintf( &buf[strlen(buf)], format, __VA_ARGS__ );      \
+                                                    MWLOG( level, mod, buf); }
+    #define MWLOG_ERR( buf, format, ...   )     _LOG_( buf, LEV_ERROR, MOD_CMD, format, __VA_ARGS__ )
+    #define MWLOG_WARN( buf, format, ...  )     _LOG_( buf, LEV_WARN , MOD_CMD, format, __VA_ARGS__ )
+    #define MWLOG_INFO( buf, format, ...  )     _LOG_( buf, LEV_INFO , MOD_CMD, format, __VA_ARGS__ )
+    #define MWLOG_DEBUG( buf, format, ... )     _LOG_( buf, LEV_DEBUG, MOD_CMD, format, __VA_ARGS__ )
+#else
+    #define _LOG_( buf, level, mod, format, ... ) { sprintf( buf, "%s() - ", __FUNCTION__ );                \
+                                                    sprintf( &buf[strlen(buf)], format, ## __VA_ARGS__ );   \
+                                                    MWLOG( level, mod, logBuf); }
+    #define MWLOG_ERR( buf, format, ...   )     _LOG_( buf, LEV_ERROR, MOD_CMD, format, ## __VA_ARGS__ )
+    #define MWLOG_WARN( buf, format, ...  )     _LOG_( buf, LEV_WARN , MOD_CMD, format, ## __VA_ARGS__ )
+    #define MWLOG_INFO( buf, format, ...  )     _LOG_( buf, LEV_INFO , MOD_CMD, format, ## __VA_ARGS__ )
+    #define MWLOG_DEBUG( buf, format, ... )     _LOG_( buf, LEV_DEBUG, MOD_CMD, format, ## __VA_ARGS__ )
+#endif // WIN32
 
 namespace eIDMW
 {
 
 void printCPtr( char *c_str, int c_str_len );
+xsd__base64Binary *encode_base64( soap *sp, std::string in_str );
 
 class CMDServices{
     public:
@@ -24,13 +42,13 @@ class CMDServices{
         virtual ~CMDServices();
 
         // Get certificate
-        CByteArray getCertificate( string in_pin, string in_userId );
+        CByteArray getCertificate( std::string in_userId );
 
         // CCMovelSign
-        bool sendDataToSign( string in_hash );
+        bool sendDataToSign( std::string in_hash, std::string in_pin );
 
         // ValidateOtp
-        CByteArray getSignature( string in_code );
+        CByteArray getSignature( std::string in_code );
 
     protected:
         soap *getSoap();
@@ -39,57 +57,59 @@ class CMDServices{
         void setEndPoint( const char *endpoint );
         const char *getEndPoint();
 
-        string getProcessID();
-        void setProcessID( string processID );
+        std::string getProcessID();
+        void setProcessID( std::string processID );
 
-        string getApplicationID();
-        void setApplicationID( string applicationID );
+        std::string getApplicationID();
+        void setApplicationID( std::string applicationID );
 
-        string getPin();
-        void setPin( string in_pin );
-
-        string getUserId();
-        void setUserId( string in_userId );
-
-        xsd__base64Binary *encode_base64( string in_str );
+        std::string getUserId();
+        void setUserId( std::string in_userId );
 
     private:
         soap *m_soap;
-        string m_applicationID;
-        string m_processID;
-        string m_pin;
-        string m_userId;
+        std::string m_applicationID;
+        std::string m_processID;
+        std::string m_pin;
+        std::string m_userId;
         const char *m_endpoint;
 
         bool init( int recv_timeout, int send_timeout
                           , int connect_timeout, short mustUnderstand );
 
         // CCMovelSign
-        bool CCMovelSign( string in_hash
-                        , char **out_certificate
-                        , int *out_certificateLen );
+        bool CCMovelSign( std::string in_hash, std::string in_pin );
 
         _ns2__CCMovelSign *get_CCMovelSignRequest( soap *sp
                                                  , char *endpoint
-                                                 , string in_applicationID
-                                                 , string in_hash
-                                                 , string in_pin
-                                                 , string *in_userId );
+                                                 , std::string in_applicationID
+                                                 , std::string in_hash
+                                                 , std::string in_pin
+                                                 , std::string *in_userId );
 
-        int checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response );
+        bool checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response );
 
         // ValidateOtp
-        bool ValidateOtp( string in_code
+        bool ValidateOtp( std::string in_code
                         , unsigned char **outSignature
                         , unsigned int *outSignatureLen );
 
         _ns2__ValidateOtp *get_ValidateOtpRequest( soap *sp
                                                  , char *endpoint
-                                                 , string in_applicationID
-                                                 , string *in_code
-                                                 , string *in_processId );
+                                                 , std::string in_applicationID
+                                                 , std::string *in_code
+                                                 , std::string *in_processId );
 
-        int checkValidateOtpResponse( _ns2__ValidateOtpResponse *response );
+        bool checkValidateOtpResponse( _ns2__ValidateOtpResponse *response );
+
+        _ns2__GetCertificate *get_GetCertificateRequest(  soap *sp
+                                                , char *endpoint
+                                                , std::string in_applicationID
+                                                , std::string *in_userId );
+
+        bool checkGetCertificateResponse( _ns2__GetCertificateResponse *response );
+        bool GetCertificate( std::string in_userId
+                            , char **out_certificate, int *out_certificateLen );
 };
 
 }

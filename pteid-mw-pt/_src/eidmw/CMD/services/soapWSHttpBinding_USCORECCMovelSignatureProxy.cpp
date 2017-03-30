@@ -226,60 +226,6 @@ int WSHttpBinding_USCORECCMovelSignatureProxy::CCMovelSign(const char *endpoint,
 	return soap_closesock(soap);
 }
 
-int WSHttpBinding_USCORECCMovelSignatureProxy::ValidateOtp(const char *endpoint, const char *soap_action, _ns2__ValidateOtp *ns2__ValidateOtp, _ns2__ValidateOtpResponse &ns2__ValidateOtpResponse)
-{	struct soap *soap = this->soap;
-	struct __tempuri__ValidateOtp soap_tmp___tempuri__ValidateOtp;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (soap_endpoint == NULL)
-		soap_endpoint = "https://dev.cmd.autenticacao.gov.pt/Ama.Authentication.Service/CCMovelSignature.svc";
-	if (soap_action == NULL)
-		soap_action = "http://Ama.Authentication.Service/CCMovelSignature/ValidateOtp";
-	soap_tmp___tempuri__ValidateOtp.ns2__ValidateOtp = ns2__ValidateOtp;
-	soap_begin(soap);
-	soap->encodingStyle = NULL;
-	soap_serializeheader(soap);
-	soap_serialize___tempuri__ValidateOtp(soap, &soap_tmp___tempuri__ValidateOtp);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tempuri__ValidateOtp(soap, &soap_tmp___tempuri__ValidateOtp, "-tempuri:ValidateOtp", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tempuri__ValidateOtp(soap, &soap_tmp___tempuri__ValidateOtp, "-tempuri:ValidateOtp", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!&ns2__ValidateOtpResponse)
-		return soap_closesock(soap);
-	ns2__ValidateOtpResponse.soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	ns2__ValidateOtpResponse.soap_get(soap, "ns2:ValidateOtpResponse", NULL);
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
 int WSHttpBinding_USCORECCMovelSignatureProxy::CCMovelValidateSignature(const char *endpoint, const char *soap_action, _ns2__CCMovelValidateSignature *ns2__CCMovelValidateSignature, _ns2__CCMovelValidateSignatureResponse &ns2__CCMovelValidateSignatureResponse)
 {	struct soap *soap = this->soap;
 	struct __tempuri__CCMovelValidateSignature soap_tmp___tempuri__CCMovelValidateSignature;
@@ -325,6 +271,114 @@ int WSHttpBinding_USCORECCMovelSignatureProxy::CCMovelValidateSignature(const ch
 	 || soap_body_begin_in(soap))
 		return soap_closesock(soap);
 	ns2__CCMovelValidateSignatureResponse.soap_get(soap, "ns2:CCMovelValidateSignatureResponse", NULL);
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int WSHttpBinding_USCORECCMovelSignatureProxy::GetCertificate(const char *endpoint, const char *soap_action, _ns2__GetCertificate *ns2__GetCertificate, _ns2__GetCertificateResponse &ns2__GetCertificateResponse)
+{	struct soap *soap = this->soap;
+	struct __tempuri__GetCertificate soap_tmp___tempuri__GetCertificate;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (soap_endpoint == NULL)
+		soap_endpoint = "https://dev.cmd.autenticacao.gov.pt/Ama.Authentication.Service/CCMovelSignature.svc";
+	if (soap_action == NULL)
+		soap_action = "http://Ama.Authentication.Service/CCMovelSignature/GetCertificate";
+	soap_tmp___tempuri__GetCertificate.ns2__GetCertificate = ns2__GetCertificate;
+	soap_begin(soap);
+	soap->encodingStyle = NULL;
+	soap_serializeheader(soap);
+	soap_serialize___tempuri__GetCertificate(soap, &soap_tmp___tempuri__GetCertificate);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tempuri__GetCertificate(soap, &soap_tmp___tempuri__GetCertificate, "-tempuri:GetCertificate", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tempuri__GetCertificate(soap, &soap_tmp___tempuri__GetCertificate, "-tempuri:GetCertificate", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!&ns2__GetCertificateResponse)
+		return soap_closesock(soap);
+	ns2__GetCertificateResponse.soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	ns2__GetCertificateResponse.soap_get(soap, "ns2:GetCertificateResponse", NULL);
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int WSHttpBinding_USCORECCMovelSignatureProxy::ValidateOtp(const char *endpoint, const char *soap_action, _ns2__ValidateOtp *ns2__ValidateOtp, _ns2__ValidateOtpResponse &ns2__ValidateOtpResponse)
+{	struct soap *soap = this->soap;
+	struct __tempuri__ValidateOtp soap_tmp___tempuri__ValidateOtp;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (soap_endpoint == NULL)
+		soap_endpoint = "https://dev.cmd.autenticacao.gov.pt/Ama.Authentication.Service/CCMovelSignature.svc";
+	if (soap_action == NULL)
+		soap_action = "http://Ama.Authentication.Service/CCMovelSignature/ValidateOtp";
+	soap_tmp___tempuri__ValidateOtp.ns2__ValidateOtp = ns2__ValidateOtp;
+	soap_begin(soap);
+	soap->encodingStyle = NULL;
+	soap_serializeheader(soap);
+	soap_serialize___tempuri__ValidateOtp(soap, &soap_tmp___tempuri__ValidateOtp);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tempuri__ValidateOtp(soap, &soap_tmp___tempuri__ValidateOtp, "-tempuri:ValidateOtp", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tempuri__ValidateOtp(soap, &soap_tmp___tempuri__ValidateOtp, "-tempuri:ValidateOtp", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!&ns2__ValidateOtpResponse)
+		return soap_closesock(soap);
+	ns2__ValidateOtpResponse.soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	ns2__ValidateOtpResponse.soap_get(soap, "ns2:ValidateOtpResponse", NULL);
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)

@@ -1,97 +1,33 @@
-//#include "CMDServices.h"
-//#include "MiscUtil.h"
-
 #include "PDFSignatureCli.h"
-
-
-#define ERR_NONE            0
-#define ERR_GET_CERTIFICATE 1
-#define ERR_SEND_HASH       2
-#define ERR_GET_SIGNATURE   3
+#include "eidErrors.h"
 
 using namespace eIDMW;
-//using namespace std;
 
 int main(){
 
-#if 0
-    CMDServices cmdService;
-
     string in_userId = "+351 914432445";
     string in_pin = "\x07\x06\x09\x05";
-
-    printf( "\n*******************************\n"
-              "*** getCertificate          ***\n"
-              "*******************************\n" );
-    CByteArray certificate = cmdService.getCertificate( in_pin, in_userId );
-    if ( 0 == certificate.Size() ){
-        printf( "main() - ZERO certificate size\n" );
-        return ERR_GET_CERTIFICATE;
-    }/* if ( 0 == certificate.Size() ) */
-
-    printf( "\n*******************************\n"
-              "*** certificate Ok          ***\n"
-              "*******************************\n" );
-
-    X509 *x509 = DER_to_X509( certificate.GetBytes(), certificate.Size() );
-    if ( NULL == x509 ){
-        printf( "main() - NULL x509\n" );
-        return ERR_GET_CERTIFICATE;
-    }/* if ( NULL == x509 ) */
-
-    printf( "name: %s\n", x509->name );
-
-    printf( "\n*******************************\n"
-              "*** certificateX509 Ok      ***\n"
-              "*******************************\n" );
-    /*
-        Calculate hash
-    */
-    string in_hash = "\xde\xb2\x53\x63\xff\x9c\x44\x2b\x67\xcb\xa3\xd9\xc5\xef\x21\x6e\x47\x22\xca\xd5";
-
-    printf( "\n*******************************\n"
-              "*** sendDataToSign          ***\n"
-              "*******************************\n" );
-    bool bRet = cmdService.sendDataToSign( in_hash );
-    if ( !bRet ){
-        printf( "main() - Error @ sendDataToSign()\n" );
-        return ERR_SEND_HASH;
-    }/* if ( !bRet ) */
-
-    // End of CCMovelSign
-
-    /*
-        PIN confirmation
-    */
     string in_code = "111111";
 
-    // getSignature
-    printf( "\n*******************************\n"
-              "*** getSignature            ***\n"
-              "*******************************\n" );
-    CByteArray signature = cmdService.getSignature( in_code );
-    if ( 0 == signature.Size() ){
-       // delete cmdService;
+    const char *location = "LX";
+    const char *reason = "Test";
+    const char *outfile_path = "./CartaoCidadao_signed.pdf";
 
-        printf( "main() - Error @ getSignature()");
-        return ERR_GET_SIGNATURE;
-    }/* if ( 0 == signature.Size() ) */
+    PDFSignature pdf;
+    PDFSignatureCli client( &pdf );
+    int ret;
 
-    unsigned char *sign = signature.GetBytes();
-    unsigned int signLen = signature.Size();
+    ret = client.signOpen( in_userId, in_pin, location, reason, outfile_path );
+    if ( ret != EIDMW_OK ){
+        printf( "%s() - signOpen failed\n", __FUNCTION__ );
+        return -1;
+    }/* if ( ret != EIDMW_OK ) */
 
-    printf( "Signature size(): %d\nSignature: ", signLen );
-    for( int i = 0; i < signLen; i++ ){
-        printf( "0x%02x ", *(sign + i) );
-    }/* for( int i ) */
-    printf( "\n" );
+    ret = client.signClose( in_code );
+    if ( ret != EIDMW_OK ){
+        printf( "%s() - signClose failed\n", __FUNCTION__ );
+        return -1;
+    }/* if ( ret != EIDMW_OK ) */
 
-    //delete cmdService;
-#else
-    PDFSignatureCli cli;
-
-    printf( "main() - cli\n" );
-
-#endif
     return ERR_NONE;
 }/* main() */

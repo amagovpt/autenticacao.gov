@@ -38,7 +38,7 @@ A commercial use license is available from Genivia Inc., contact@genivia.com
 
 /* wsa.h:119 */
 #ifndef SOAP_TYPE_wsa__RelationshipTypeValues
-#define SOAP_TYPE_wsa__RelationshipTypeValues (50)
+#define SOAP_TYPE_wsa__RelationshipTypeValues (49)
 /* wsa:RelationshipTypeValues */
 enum wsa__RelationshipTypeValues {
 	wsa__Reply = 0
@@ -47,7 +47,7 @@ enum wsa__RelationshipTypeValues {
 
 /* wsa.h:127 */
 #ifndef SOAP_TYPE_wsa__FaultSubcodeValues
-#define SOAP_TYPE_wsa__FaultSubcodeValues (51)
+#define SOAP_TYPE_wsa__FaultSubcodeValues (50)
 /* wsa:FaultSubcodeValues */
 enum wsa__FaultSubcodeValues {
 	wsa__InvalidMessageInformationHeader = 0,
@@ -60,7 +60,7 @@ enum wsa__FaultSubcodeValues {
 
 /* wsu.h:66 */
 #ifndef SOAP_TYPE_wsu__tTimestampFault
-#define SOAP_TYPE_wsu__tTimestampFault (92)
+#define SOAP_TYPE_wsu__tTimestampFault (95)
 /* wsu:tTimestampFault */
 enum wsu__tTimestampFault {
 	wsu__MessageExpired = 0
@@ -69,7 +69,7 @@ enum wsu__tTimestampFault {
 
 /* wsse.h:98 */
 #ifndef SOAP_TYPE_wsse__FaultcodeEnum
-#define SOAP_TYPE_wsse__FaultcodeEnum (94)
+#define SOAP_TYPE_wsse__FaultcodeEnum (97)
 /* wsse:FaultcodeEnum */
 enum wsse__FaultcodeEnum {
 	wsse__UnsupportedSecurityToken = 0,
@@ -84,7 +84,7 @@ enum wsse__FaultcodeEnum {
 
 /* wsc.h:62 */
 #ifndef SOAP_TYPE_wsc__FaultCodeType
-#define SOAP_TYPE_wsc__FaultCodeType (167)
+#define SOAP_TYPE_wsc__FaultCodeType (170)
 /* wsc:FaultCodeType */
 enum wsc__FaultCodeType {
 	wsc__BadContextToken = 0,
@@ -111,24 +111,26 @@ enum wsc__FaultCodeType {
 class xsd__base64Binary;	/* CCMovelSignature.h:153 */
 class _ns2__CCMovelSign;	/* CCMovelSignature.h:169 */
 class _ns2__CCMovelSignResponse;	/* CCMovelSignature.h:172 */
-class _ns2__ValidateOtp;	/* CCMovelSignature.h:175 */
-class _ns2__ValidateOtpResponse;	/* CCMovelSignature.h:178 */
-class _ns2__CCMovelValidateSignature;	/* CCMovelSignature.h:181 */
-class _ns2__CCMovelValidateSignatureResponse;	/* CCMovelSignature.h:184 */
-class ns3__SignRequest;	/* CCMovelSignature.h:187 */
-class ns3__CCMovelSignResponse;	/* CCMovelSignature.h:190 */
-class ns3__SignStatus;	/* CCMovelSignature.h:193 */
-class ns3__SignResponse;	/* CCMovelSignature.h:196 */
+class _ns2__CCMovelValidateSignature;	/* CCMovelSignature.h:175 */
+class _ns2__CCMovelValidateSignatureResponse;	/* CCMovelSignature.h:178 */
+class _ns2__GetCertificate;	/* CCMovelSignature.h:181 */
+class _ns2__GetCertificateResponse;	/* CCMovelSignature.h:184 */
+class _ns2__ValidateOtp;	/* CCMovelSignature.h:187 */
+class _ns2__ValidateOtpResponse;	/* CCMovelSignature.h:190 */
+class ns3__SignRequest;	/* CCMovelSignature.h:193 */
+class ns3__SignStatus;	/* CCMovelSignature.h:196 */
 class ns3__ValidationRequest;	/* CCMovelSignature.h:199 */
 class ns3__ValidationResponse;	/* CCMovelSignature.h:202 */
+class ns3__SignResponse;	/* CCMovelSignature.h:205 */
 struct wsa__EndpointReferenceType;	/* wsa.h:94 */
 struct wsa__ReferencePropertiesType;	/* wsa.h:97 */
 struct wsa__ReferenceParametersType;	/* wsa.h:100 */
 struct wsa__ServiceNameType;	/* wsa.h:103 */
 struct wsa__Relationship;	/* wsa.h:106 */
-struct __tempuri__CCMovelSign;	/* CCMovelSignature.h:754 */
-struct __tempuri__ValidateOtp;	/* CCMovelSignature.h:820 */
-struct __tempuri__CCMovelValidateSignature;	/* CCMovelSignature.h:886 */
+struct __tempuri__CCMovelSign;	/* CCMovelSignature.h:778 */
+struct __tempuri__CCMovelValidateSignature;	/* CCMovelSignature.h:844 */
+struct __tempuri__GetCertificate;	/* CCMovelSignature.h:910 */
+struct __tempuri__ValidateOtp;	/* CCMovelSignature.h:976 */
 struct _wsu__Timestamp;	/* wsu.h:76 */
 struct _wsse__UsernameToken;	/* wsse.h:114 */
 struct _wsse__BinarySecurityToken;	/* wsse.h:125 */
@@ -269,8 +271,8 @@ class SOAP_CMAC _ns2__CCMovelSign {
 /* complex XSD type 'ns2:CCMovelSignResponse': */
 class SOAP_CMAC _ns2__CCMovelSignResponse {
       public:
-        /// Optional element 'ns2:CCMovelSignResult' of XSD type 'ns3:CCMovelSignResponse'
-        ns3__CCMovelSignResponse *CCMovelSignResult;
+        /// Optional element 'ns2:CCMovelSignResult' of XSD type 'ns3:SignStatus'
+        ns3__SignStatus *CCMovelSignResult;
         /// Context that manages this object
         struct soap *soap;
       public:
@@ -294,7 +296,7 @@ class SOAP_CMAC _ns2__CCMovelSignResponse {
         /// Constructor with initializations
         _ns2__CCMovelSignResponse()
         {
-          CCMovelSignResult = (ns3__CCMovelSignResponse *)0;
+          CCMovelSignResult = (ns3__SignStatus *)0;
           soap = (struct soap *)0;
         }
         virtual ~_ns2__CCMovelSignResponse() { }
@@ -304,8 +306,171 @@ class SOAP_CMAC _ns2__CCMovelSignResponse {
 #endif
 
 /* CCMovelSignature.h:175 */
+#ifndef SOAP_TYPE__ns2__CCMovelValidateSignature
+#define SOAP_TYPE__ns2__CCMovelValidateSignature (18)
+/* complex XSD type 'ns2:CCMovelValidateSignature': */
+class SOAP_CMAC _ns2__CCMovelValidateSignature {
+      public:
+        /// Optional element 'ns2:request' of XSD type 'ns3:ValidationRequest'
+        ns3__ValidationRequest *request;
+        /// Context that manages this object
+        struct soap *soap;
+      public:
+        /// Return unique type id SOAP_TYPE__ns2__CCMovelValidateSignature
+        virtual int soap_type(void) const { return SOAP_TYPE__ns2__CCMovelValidateSignature; }
+        /// (Re)set members to default values
+        virtual void soap_default(struct soap*);
+        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
+        virtual void soap_serialize(struct soap*) const;
+        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
+        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
+        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+        virtual void *soap_get(struct soap*, const char *tag, const char *type);
+        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
+        virtual void *soap_in(struct soap*, const char *tag, const char *type);
+        /// Return a new object of type _ns2__CCMovelValidateSignature, default initialized and not managed by a soap context
+        virtual _ns2__CCMovelValidateSignature *soap_alloc(void) const { return SOAP_NEW(_ns2__CCMovelValidateSignature); }
+      public:
+        /// Constructor with initializations
+        _ns2__CCMovelValidateSignature()
+        {
+          request = (ns3__ValidationRequest *)0;
+          soap = (struct soap *)0;
+        }
+        virtual ~_ns2__CCMovelValidateSignature() { }
+        /// Friend allocator used by soap_new__ns2__CCMovelValidateSignature(struct soap*, int)
+        friend SOAP_FMAC1 _ns2__CCMovelValidateSignature * SOAP_FMAC2 soap_instantiate__ns2__CCMovelValidateSignature(struct soap*, int, const char*, const char*, size_t*);
+};
+#endif
+
+/* CCMovelSignature.h:178 */
+#ifndef SOAP_TYPE__ns2__CCMovelValidateSignatureResponse
+#define SOAP_TYPE__ns2__CCMovelValidateSignatureResponse (19)
+/* complex XSD type 'ns2:CCMovelValidateSignatureResponse': */
+class SOAP_CMAC _ns2__CCMovelValidateSignatureResponse {
+      public:
+        /// Optional element 'ns2:CCMovelValidateSignatureResult' of XSD type 'ns3:ValidationResponse'
+        ns3__ValidationResponse *CCMovelValidateSignatureResult;
+        /// Context that manages this object
+        struct soap *soap;
+      public:
+        /// Return unique type id SOAP_TYPE__ns2__CCMovelValidateSignatureResponse
+        virtual int soap_type(void) const { return SOAP_TYPE__ns2__CCMovelValidateSignatureResponse; }
+        /// (Re)set members to default values
+        virtual void soap_default(struct soap*);
+        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
+        virtual void soap_serialize(struct soap*) const;
+        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
+        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
+        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+        virtual void *soap_get(struct soap*, const char *tag, const char *type);
+        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
+        virtual void *soap_in(struct soap*, const char *tag, const char *type);
+        /// Return a new object of type _ns2__CCMovelValidateSignatureResponse, default initialized and not managed by a soap context
+        virtual _ns2__CCMovelValidateSignatureResponse *soap_alloc(void) const { return SOAP_NEW(_ns2__CCMovelValidateSignatureResponse); }
+      public:
+        /// Constructor with initializations
+        _ns2__CCMovelValidateSignatureResponse()
+        {
+          CCMovelValidateSignatureResult = (ns3__ValidationResponse *)0;
+          soap = (struct soap *)0;
+        }
+        virtual ~_ns2__CCMovelValidateSignatureResponse() { }
+        /// Friend allocator used by soap_new__ns2__CCMovelValidateSignatureResponse(struct soap*, int)
+        friend SOAP_FMAC1 _ns2__CCMovelValidateSignatureResponse * SOAP_FMAC2 soap_instantiate__ns2__CCMovelValidateSignatureResponse(struct soap*, int, const char*, const char*, size_t*);
+};
+#endif
+
+/* CCMovelSignature.h:181 */
+#ifndef SOAP_TYPE__ns2__GetCertificate
+#define SOAP_TYPE__ns2__GetCertificate (20)
+/* complex XSD type 'ns2:GetCertificate': */
+class SOAP_CMAC _ns2__GetCertificate {
+      public:
+        /// Optional element 'ns2:applicationId' of XSD type 'xsd:base64Binary'
+        xsd__base64Binary *applicationId;
+        /// Optional element 'ns2:userId' of XSD type 'xsd:string'
+        std::string *userId;
+        /// Context that manages this object
+        struct soap *soap;
+      public:
+        /// Return unique type id SOAP_TYPE__ns2__GetCertificate
+        virtual int soap_type(void) const { return SOAP_TYPE__ns2__GetCertificate; }
+        /// (Re)set members to default values
+        virtual void soap_default(struct soap*);
+        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
+        virtual void soap_serialize(struct soap*) const;
+        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
+        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
+        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+        virtual void *soap_get(struct soap*, const char *tag, const char *type);
+        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
+        virtual void *soap_in(struct soap*, const char *tag, const char *type);
+        /// Return a new object of type _ns2__GetCertificate, default initialized and not managed by a soap context
+        virtual _ns2__GetCertificate *soap_alloc(void) const { return SOAP_NEW(_ns2__GetCertificate); }
+      public:
+        /// Constructor with initializations
+        _ns2__GetCertificate()
+        {
+          applicationId = (xsd__base64Binary *)0;
+          userId = (std::string *)0;
+          soap = (struct soap *)0;
+        }
+        virtual ~_ns2__GetCertificate() { }
+        /// Friend allocator used by soap_new__ns2__GetCertificate(struct soap*, int)
+        friend SOAP_FMAC1 _ns2__GetCertificate * SOAP_FMAC2 soap_instantiate__ns2__GetCertificate(struct soap*, int, const char*, const char*, size_t*);
+};
+#endif
+
+/* CCMovelSignature.h:184 */
+#ifndef SOAP_TYPE__ns2__GetCertificateResponse
+#define SOAP_TYPE__ns2__GetCertificateResponse (21)
+/* complex XSD type 'ns2:GetCertificateResponse': */
+class SOAP_CMAC _ns2__GetCertificateResponse {
+      public:
+        /// Optional element 'ns2:GetCertificateResult' of XSD type 'xsd:string'
+        std::string *GetCertificateResult;
+        /// Context that manages this object
+        struct soap *soap;
+      public:
+        /// Return unique type id SOAP_TYPE__ns2__GetCertificateResponse
+        virtual int soap_type(void) const { return SOAP_TYPE__ns2__GetCertificateResponse; }
+        /// (Re)set members to default values
+        virtual void soap_default(struct soap*);
+        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
+        virtual void soap_serialize(struct soap*) const;
+        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
+        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
+        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+        virtual void *soap_get(struct soap*, const char *tag, const char *type);
+        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
+        virtual void *soap_in(struct soap*, const char *tag, const char *type);
+        /// Return a new object of type _ns2__GetCertificateResponse, default initialized and not managed by a soap context
+        virtual _ns2__GetCertificateResponse *soap_alloc(void) const { return SOAP_NEW(_ns2__GetCertificateResponse); }
+      public:
+        /// Constructor with initializations
+        _ns2__GetCertificateResponse()
+        {
+          GetCertificateResult = (std::string *)0;
+          soap = (struct soap *)0;
+        }
+        virtual ~_ns2__GetCertificateResponse() { }
+        /// Friend allocator used by soap_new__ns2__GetCertificateResponse(struct soap*, int)
+        friend SOAP_FMAC1 _ns2__GetCertificateResponse * SOAP_FMAC2 soap_instantiate__ns2__GetCertificateResponse(struct soap*, int, const char*, const char*, size_t*);
+};
+#endif
+
+/* CCMovelSignature.h:187 */
 #ifndef SOAP_TYPE__ns2__ValidateOtp
-#define SOAP_TYPE__ns2__ValidateOtp (18)
+#define SOAP_TYPE__ns2__ValidateOtp (22)
 /* complex XSD type 'ns2:ValidateOtp': */
 class SOAP_CMAC _ns2__ValidateOtp {
       public:
@@ -349,9 +514,9 @@ class SOAP_CMAC _ns2__ValidateOtp {
 };
 #endif
 
-/* CCMovelSignature.h:178 */
+/* CCMovelSignature.h:190 */
 #ifndef SOAP_TYPE__ns2__ValidateOtpResponse
-#define SOAP_TYPE__ns2__ValidateOtpResponse (19)
+#define SOAP_TYPE__ns2__ValidateOtpResponse (23)
 /* complex XSD type 'ns2:ValidateOtpResponse': */
 class SOAP_CMAC _ns2__ValidateOtpResponse {
       public:
@@ -389,89 +554,9 @@ class SOAP_CMAC _ns2__ValidateOtpResponse {
 };
 #endif
 
-/* CCMovelSignature.h:181 */
-#ifndef SOAP_TYPE__ns2__CCMovelValidateSignature
-#define SOAP_TYPE__ns2__CCMovelValidateSignature (20)
-/* complex XSD type 'ns2:CCMovelValidateSignature': */
-class SOAP_CMAC _ns2__CCMovelValidateSignature {
-      public:
-        /// Optional element 'ns2:request' of XSD type 'ns3:ValidationRequest'
-        ns3__ValidationRequest *request;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__CCMovelValidateSignature
-        virtual int soap_type(void) const { return SOAP_TYPE__ns2__CCMovelValidateSignature; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__CCMovelValidateSignature, default initialized and not managed by a soap context
-        virtual _ns2__CCMovelValidateSignature *soap_alloc(void) const { return SOAP_NEW(_ns2__CCMovelValidateSignature); }
-      public:
-        /// Constructor with initializations
-        _ns2__CCMovelValidateSignature()
-        {
-          request = (ns3__ValidationRequest *)0;
-          soap = (struct soap *)0;
-        }
-        virtual ~_ns2__CCMovelValidateSignature() { }
-        /// Friend allocator used by soap_new__ns2__CCMovelValidateSignature(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__CCMovelValidateSignature * SOAP_FMAC2 soap_instantiate__ns2__CCMovelValidateSignature(struct soap*, int, const char*, const char*, size_t*);
-};
-#endif
-
-/* CCMovelSignature.h:184 */
-#ifndef SOAP_TYPE__ns2__CCMovelValidateSignatureResponse
-#define SOAP_TYPE__ns2__CCMovelValidateSignatureResponse (21)
-/* complex XSD type 'ns2:CCMovelValidateSignatureResponse': */
-class SOAP_CMAC _ns2__CCMovelValidateSignatureResponse {
-      public:
-        /// Optional element 'ns2:CCMovelValidateSignatureResult' of XSD type 'ns3:ValidationResponse'
-        ns3__ValidationResponse *CCMovelValidateSignatureResult;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__CCMovelValidateSignatureResponse
-        virtual int soap_type(void) const { return SOAP_TYPE__ns2__CCMovelValidateSignatureResponse; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__CCMovelValidateSignatureResponse, default initialized and not managed by a soap context
-        virtual _ns2__CCMovelValidateSignatureResponse *soap_alloc(void) const { return SOAP_NEW(_ns2__CCMovelValidateSignatureResponse); }
-      public:
-        /// Constructor with initializations
-        _ns2__CCMovelValidateSignatureResponse()
-        {
-          CCMovelValidateSignatureResult = (ns3__ValidationResponse *)0;
-          soap = (struct soap *)0;
-        }
-        virtual ~_ns2__CCMovelValidateSignatureResponse() { }
-        /// Friend allocator used by soap_new__ns2__CCMovelValidateSignatureResponse(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__CCMovelValidateSignatureResponse * SOAP_FMAC2 soap_instantiate__ns2__CCMovelValidateSignatureResponse(struct soap*, int, const char*, const char*, size_t*);
-};
-#endif
-
-/* CCMovelSignature.h:187 */
+/* CCMovelSignature.h:193 */
 #ifndef SOAP_TYPE_ns3__SignRequest
-#define SOAP_TYPE_ns3__SignRequest (22)
+#define SOAP_TYPE_ns3__SignRequest (24)
 /* complex XSD type 'ns3:SignRequest': */
 class SOAP_CMAC ns3__SignRequest {
       public:
@@ -518,52 +603,9 @@ class SOAP_CMAC ns3__SignRequest {
 };
 #endif
 
-/* CCMovelSignature.h:190 */
-#ifndef SOAP_TYPE_ns3__CCMovelSignResponse
-#define SOAP_TYPE_ns3__CCMovelSignResponse (23)
-/* complex XSD type 'ns3:CCMovelSignResponse': */
-class SOAP_CMAC ns3__CCMovelSignResponse {
-      public:
-        /// Required element 'ns3:Status' of XSD type 'ns3:SignStatus'
-        ns3__SignStatus *Status;
-        /// Required element 'ns3:X509Certificate' of XSD type 'xsd:string'
-        std::string *X509Certificate;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE_ns3__CCMovelSignResponse
-        virtual int soap_type(void) const { return SOAP_TYPE_ns3__CCMovelSignResponse; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type ns3__CCMovelSignResponse, default initialized and not managed by a soap context
-        virtual ns3__CCMovelSignResponse *soap_alloc(void) const { return SOAP_NEW(ns3__CCMovelSignResponse); }
-      public:
-        /// Constructor with initializations
-        ns3__CCMovelSignResponse()
-        {
-          Status = (ns3__SignStatus *)0;
-          X509Certificate = (std::string *)0;
-          soap = (struct soap *)0;
-        }
-        virtual ~ns3__CCMovelSignResponse() { }
-        /// Friend allocator used by soap_new_ns3__CCMovelSignResponse(struct soap*, int)
-        friend SOAP_FMAC1 ns3__CCMovelSignResponse * SOAP_FMAC2 soap_instantiate_ns3__CCMovelSignResponse(struct soap*, int, const char*, const char*, size_t*);
-};
-#endif
-
-/* CCMovelSignature.h:193 */
+/* CCMovelSignature.h:196 */
 #ifndef SOAP_TYPE_ns3__SignStatus
-#define SOAP_TYPE_ns3__SignStatus (24)
+#define SOAP_TYPE_ns3__SignStatus (25)
 /* complex XSD type 'ns3:SignStatus': */
 class SOAP_CMAC ns3__SignStatus {
       public:
@@ -610,49 +652,6 @@ class SOAP_CMAC ns3__SignStatus {
         virtual ~ns3__SignStatus() { }
         /// Friend allocator used by soap_new_ns3__SignStatus(struct soap*, int)
         friend SOAP_FMAC1 ns3__SignStatus * SOAP_FMAC2 soap_instantiate_ns3__SignStatus(struct soap*, int, const char*, const char*, size_t*);
-};
-#endif
-
-/* CCMovelSignature.h:196 */
-#ifndef SOAP_TYPE_ns3__SignResponse
-#define SOAP_TYPE_ns3__SignResponse (25)
-/* complex XSD type 'ns3:SignResponse': */
-class SOAP_CMAC ns3__SignResponse {
-      public:
-        /// Required element 'ns3:Signature' of XSD type 'xsd:base64Binary'
-        xsd__base64Binary *Signature;
-        /// Required element 'ns3:Status' of XSD type 'ns3:SignStatus'
-        ns3__SignStatus *Status;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE_ns3__SignResponse
-        virtual int soap_type(void) const { return SOAP_TYPE_ns3__SignResponse; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type ns3__SignResponse, default initialized and not managed by a soap context
-        virtual ns3__SignResponse *soap_alloc(void) const { return SOAP_NEW(ns3__SignResponse); }
-      public:
-        /// Constructor with initializations
-        ns3__SignResponse()
-        {
-          Signature = (xsd__base64Binary *)0;
-          Status = (ns3__SignStatus *)0;
-          soap = (struct soap *)0;
-        }
-        virtual ~ns3__SignResponse() { }
-        /// Friend allocator used by soap_new_ns3__SignResponse(struct soap*, int)
-        friend SOAP_FMAC1 ns3__SignResponse * SOAP_FMAC2 soap_instantiate_ns3__SignResponse(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
@@ -745,9 +744,52 @@ class SOAP_CMAC ns3__ValidationResponse {
 };
 #endif
 
+/* CCMovelSignature.h:205 */
+#ifndef SOAP_TYPE_ns3__SignResponse
+#define SOAP_TYPE_ns3__SignResponse (28)
+/* complex XSD type 'ns3:SignResponse': */
+class SOAP_CMAC ns3__SignResponse {
+      public:
+        /// Required element 'ns3:Signature' of XSD type 'xsd:base64Binary'
+        xsd__base64Binary *Signature;
+        /// Required element 'ns3:Status' of XSD type 'ns3:SignStatus'
+        ns3__SignStatus *Status;
+        /// Context that manages this object
+        struct soap *soap;
+      public:
+        /// Return unique type id SOAP_TYPE_ns3__SignResponse
+        virtual int soap_type(void) const { return SOAP_TYPE_ns3__SignResponse; }
+        /// (Re)set members to default values
+        virtual void soap_default(struct soap*);
+        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
+        virtual void soap_serialize(struct soap*) const;
+        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
+        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
+        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+        virtual void *soap_get(struct soap*, const char *tag, const char *type);
+        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
+        virtual void *soap_in(struct soap*, const char *tag, const char *type);
+        /// Return a new object of type ns3__SignResponse, default initialized and not managed by a soap context
+        virtual ns3__SignResponse *soap_alloc(void) const { return SOAP_NEW(ns3__SignResponse); }
+      public:
+        /// Constructor with initializations
+        ns3__SignResponse()
+        {
+          Signature = (xsd__base64Binary *)0;
+          Status = (ns3__SignStatus *)0;
+          soap = (struct soap *)0;
+        }
+        virtual ~ns3__SignResponse() { }
+        /// Friend allocator used by soap_new_ns3__SignResponse(struct soap*, int)
+        friend SOAP_FMAC1 ns3__SignResponse * SOAP_FMAC2 soap_instantiate_ns3__SignResponse(struct soap*, int, const char*, const char*, size_t*);
+};
+#endif
+
 /* wsa.h:94 */
 #ifndef SOAP_TYPE_wsa__EndpointReferenceType
-#define SOAP_TYPE_wsa__EndpointReferenceType (45)
+#define SOAP_TYPE_wsa__EndpointReferenceType (44)
 /* complex XSD type 'wsa:EndpointReferenceType': */
 struct wsa__EndpointReferenceType {
       public:
@@ -788,7 +830,7 @@ struct wsa__EndpointReferenceType {
 
 /* wsa.h:97 */
 #ifndef SOAP_TYPE_wsa__ReferencePropertiesType
-#define SOAP_TYPE_wsa__ReferencePropertiesType (46)
+#define SOAP_TYPE_wsa__ReferencePropertiesType (45)
 /* complex XSD type 'wsa:ReferencePropertiesType': */
 struct wsa__ReferencePropertiesType {
       public:
@@ -811,7 +853,7 @@ struct wsa__ReferencePropertiesType {
 
 /* wsa.h:100 */
 #ifndef SOAP_TYPE_wsa__ReferenceParametersType
-#define SOAP_TYPE_wsa__ReferenceParametersType (47)
+#define SOAP_TYPE_wsa__ReferenceParametersType (46)
 /* complex XSD type 'wsa:ReferenceParametersType': */
 struct wsa__ReferenceParametersType {
       public:
@@ -834,7 +876,7 @@ struct wsa__ReferenceParametersType {
 
 /* wsa.h:103 */
 #ifndef SOAP_TYPE_wsa__ServiceNameType
-#define SOAP_TYPE_wsa__ServiceNameType (48)
+#define SOAP_TYPE_wsa__ServiceNameType (47)
 /* simple XSD type 'wsa:ServiceNameType': */
 struct wsa__ServiceNameType {
       public:
@@ -861,7 +903,7 @@ struct wsa__ServiceNameType {
 
 /* wsa.h:106 */
 #ifndef SOAP_TYPE_wsa__Relationship
-#define SOAP_TYPE_wsa__Relationship (49)
+#define SOAP_TYPE_wsa__Relationship (48)
 /* simple XSD type 'wsa:Relationship': */
 struct wsa__Relationship {
       public:
@@ -889,7 +931,7 @@ struct wsa__Relationship {
 /* wsa.h:250 */
 #ifndef WITH_NOGLOBAL
 #ifndef SOAP_TYPE_SOAP_ENV__Header
-#define SOAP_TYPE_SOAP_ENV__Header (66)
+#define SOAP_TYPE_SOAP_ENV__Header (65)
 /* SOAP_ENV__Header: */
 struct SOAP_ENV__Header {
       public:
@@ -933,7 +975,7 @@ struct SOAP_ENV__Header {
 /* wsa.h:266 */
 #ifndef WITH_NOGLOBAL
 #ifndef SOAP_TYPE_SOAP_ENV__Detail
-#define SOAP_TYPE_SOAP_ENV__Detail (71)
+#define SOAP_TYPE_SOAP_ENV__Detail (70)
 /* SOAP_ENV__Detail: */
 struct SOAP_ENV__Detail {
       public:
@@ -961,7 +1003,7 @@ struct SOAP_ENV__Detail {
 /* wsa.h:267 */
 #ifndef WITH_NOGLOBAL
 #ifndef SOAP_TYPE_SOAP_ENV__Code
-#define SOAP_TYPE_SOAP_ENV__Code (73)
+#define SOAP_TYPE_SOAP_ENV__Code (72)
 /* Type SOAP_ENV__Code is a recursive data type, (in)directly referencing itself through its (base or derived class) members */
 /* SOAP_ENV__Code: */
 struct SOAP_ENV__Code {
@@ -988,7 +1030,7 @@ struct SOAP_ENV__Code {
 /* wsa.h:268 */
 #ifndef WITH_NOGLOBAL
 #ifndef SOAP_TYPE_SOAP_ENV__Reason
-#define SOAP_TYPE_SOAP_ENV__Reason (75)
+#define SOAP_TYPE_SOAP_ENV__Reason (74)
 /* SOAP_ENV__Reason: */
 struct SOAP_ENV__Reason {
       public:
@@ -1011,7 +1053,7 @@ struct SOAP_ENV__Reason {
 /* wsa.h:273 */
 #ifndef WITH_NOGLOBAL
 #ifndef SOAP_TYPE_SOAP_ENV__Fault
-#define SOAP_TYPE_SOAP_ENV__Fault (79)
+#define SOAP_TYPE_SOAP_ENV__Fault (78)
 /* SOAP_ENV__Fault: */
 struct SOAP_ENV__Fault {
       public:
@@ -1055,9 +1097,9 @@ struct SOAP_ENV__Fault {
 #endif
 #endif
 
-/* CCMovelSignature.h:754 */
+/* CCMovelSignature.h:778 */
 #ifndef SOAP_TYPE___tempuri__CCMovelSign
-#define SOAP_TYPE___tempuri__CCMovelSign (83)
+#define SOAP_TYPE___tempuri__CCMovelSign (82)
 /* Wrapper: */
 struct __tempuri__CCMovelSign {
       public:
@@ -1076,30 +1118,9 @@ struct __tempuri__CCMovelSign {
 };
 #endif
 
-/* CCMovelSignature.h:820 */
-#ifndef SOAP_TYPE___tempuri__ValidateOtp
-#define SOAP_TYPE___tempuri__ValidateOtp (87)
-/* Wrapper: */
-struct __tempuri__ValidateOtp {
-      public:
-        /** Optional element 'ns2:ValidateOtp' of XSD type 'ns2:ValidateOtp' */
-        _ns2__ValidateOtp *ns2__ValidateOtp;
-      public:
-        /** Return unique type id SOAP_TYPE___tempuri__ValidateOtp */
-        int soap_type() const { return SOAP_TYPE___tempuri__ValidateOtp; }
-        /** Constructor with member initializations */
-        __tempuri__ValidateOtp()
-        {
-          ns2__ValidateOtp = (_ns2__ValidateOtp *)0;
-        }
-        /** Friend allocator used by soap_new___tempuri__ValidateOtp(struct soap*, int) */
-        friend SOAP_FMAC1 __tempuri__ValidateOtp * SOAP_FMAC2 soap_instantiate___tempuri__ValidateOtp(struct soap*, int, const char*, const char*, size_t*);
-};
-#endif
-
-/* CCMovelSignature.h:886 */
+/* CCMovelSignature.h:844 */
 #ifndef SOAP_TYPE___tempuri__CCMovelValidateSignature
-#define SOAP_TYPE___tempuri__CCMovelValidateSignature (91)
+#define SOAP_TYPE___tempuri__CCMovelValidateSignature (86)
 /* Wrapper: */
 struct __tempuri__CCMovelValidateSignature {
       public:
@@ -1118,9 +1139,51 @@ struct __tempuri__CCMovelValidateSignature {
 };
 #endif
 
+/* CCMovelSignature.h:910 */
+#ifndef SOAP_TYPE___tempuri__GetCertificate
+#define SOAP_TYPE___tempuri__GetCertificate (90)
+/* Wrapper: */
+struct __tempuri__GetCertificate {
+      public:
+        /** Optional element 'ns2:GetCertificate' of XSD type 'ns2:GetCertificate' */
+        _ns2__GetCertificate *ns2__GetCertificate;
+      public:
+        /** Return unique type id SOAP_TYPE___tempuri__GetCertificate */
+        int soap_type() const { return SOAP_TYPE___tempuri__GetCertificate; }
+        /** Constructor with member initializations */
+        __tempuri__GetCertificate()
+        {
+          ns2__GetCertificate = (_ns2__GetCertificate *)0;
+        }
+        /** Friend allocator used by soap_new___tempuri__GetCertificate(struct soap*, int) */
+        friend SOAP_FMAC1 __tempuri__GetCertificate * SOAP_FMAC2 soap_instantiate___tempuri__GetCertificate(struct soap*, int, const char*, const char*, size_t*);
+};
+#endif
+
+/* CCMovelSignature.h:976 */
+#ifndef SOAP_TYPE___tempuri__ValidateOtp
+#define SOAP_TYPE___tempuri__ValidateOtp (94)
+/* Wrapper: */
+struct __tempuri__ValidateOtp {
+      public:
+        /** Optional element 'ns2:ValidateOtp' of XSD type 'ns2:ValidateOtp' */
+        _ns2__ValidateOtp *ns2__ValidateOtp;
+      public:
+        /** Return unique type id SOAP_TYPE___tempuri__ValidateOtp */
+        int soap_type() const { return SOAP_TYPE___tempuri__ValidateOtp; }
+        /** Constructor with member initializations */
+        __tempuri__ValidateOtp()
+        {
+          ns2__ValidateOtp = (_ns2__ValidateOtp *)0;
+        }
+        /** Friend allocator used by soap_new___tempuri__ValidateOtp(struct soap*, int) */
+        friend SOAP_FMAC1 __tempuri__ValidateOtp * SOAP_FMAC2 soap_instantiate___tempuri__ValidateOtp(struct soap*, int, const char*, const char*, size_t*);
+};
+#endif
+
 /* wsu.h:76 */
 #ifndef SOAP_TYPE__wsu__Timestamp
-#define SOAP_TYPE__wsu__Timestamp (93)
+#define SOAP_TYPE__wsu__Timestamp (96)
 /* complex XSD type 'wsu:Timestamp': */
 struct _wsu__Timestamp {
       public:
@@ -1147,7 +1210,7 @@ struct _wsu__Timestamp {
 
 /* wsse.h:114 */
 #ifndef SOAP_TYPE__wsse__UsernameToken
-#define SOAP_TYPE__wsse__UsernameToken (95)
+#define SOAP_TYPE__wsse__UsernameToken (98)
 /* complex XSD type 'wsse:UsernameToken': */
 struct _wsse__UsernameToken {
       public:
@@ -1180,7 +1243,7 @@ struct _wsse__UsernameToken {
 
 /* wsse.h:125 */
 #ifndef SOAP_TYPE__wsse__BinarySecurityToken
-#define SOAP_TYPE__wsse__BinarySecurityToken (98)
+#define SOAP_TYPE__wsse__BinarySecurityToken (101)
 /* simple XSD type 'wsse:BinarySecurityToken': */
 struct _wsse__BinarySecurityToken {
       public:
@@ -1210,7 +1273,7 @@ struct _wsse__BinarySecurityToken {
 
 /* wsse.h:135 */
 #ifndef SOAP_TYPE__wsse__Reference
-#define SOAP_TYPE__wsse__Reference (99)
+#define SOAP_TYPE__wsse__Reference (102)
 /* complex XSD type 'wsse:Reference': */
 struct _wsse__Reference {
       public:
@@ -1234,7 +1297,7 @@ struct _wsse__Reference {
 
 /* wsse.h:143 */
 #ifndef SOAP_TYPE__wsse__Embedded
-#define SOAP_TYPE__wsse__Embedded (100)
+#define SOAP_TYPE__wsse__Embedded (103)
 /* complex XSD type 'wsse:Embedded': */
 struct _wsse__Embedded {
       public:
@@ -1258,7 +1321,7 @@ struct _wsse__Embedded {
 
 /* wsse.h:152 */
 #ifndef SOAP_TYPE__wsse__KeyIdentifier
-#define SOAP_TYPE__wsse__KeyIdentifier (101)
+#define SOAP_TYPE__wsse__KeyIdentifier (104)
 /* simple XSD type 'wsse:KeyIdentifier': */
 struct _wsse__KeyIdentifier {
       public:
@@ -1288,7 +1351,7 @@ struct _wsse__KeyIdentifier {
 
 /* wsse.h:162 */
 #ifndef SOAP_TYPE__wsse__SecurityTokenReference
-#define SOAP_TYPE__wsse__SecurityTokenReference (102)
+#define SOAP_TYPE__wsse__SecurityTokenReference (105)
 /* complex XSD type 'wsse:SecurityTokenReference': */
 struct _wsse__SecurityTokenReference {
       public:
@@ -1327,7 +1390,7 @@ struct _wsse__SecurityTokenReference {
 
 /* ds.h:47 */
 #ifndef SOAP_TYPE_ds__SignatureType
-#define SOAP_TYPE_ds__SignatureType (108)
+#define SOAP_TYPE_ds__SignatureType (111)
 /* complex XSD type 'ds:SignatureType': */
 struct ds__SignatureType {
       public:
@@ -1357,7 +1420,7 @@ struct ds__SignatureType {
 
 /* c14n.h:24 */
 #ifndef SOAP_TYPE__c14n__InclusiveNamespaces
-#define SOAP_TYPE__c14n__InclusiveNamespaces (118)
+#define SOAP_TYPE__c14n__InclusiveNamespaces (121)
 /* complex XSD type 'c14n:InclusiveNamespaces': */
 struct _c14n__InclusiveNamespaces {
       public:
@@ -1378,7 +1441,7 @@ struct _c14n__InclusiveNamespaces {
 
 /* ds.h:74 */
 #ifndef SOAP_TYPE_ds__TransformType
-#define SOAP_TYPE_ds__TransformType (119)
+#define SOAP_TYPE_ds__TransformType (122)
 /* complex XSD type 'ds:TransformType': */
 struct ds__TransformType {
       public:
@@ -1404,7 +1467,7 @@ struct ds__TransformType {
 
 /* ds.h:49 */
 #ifndef SOAP_TYPE_ds__KeyInfoType
-#define SOAP_TYPE_ds__KeyInfoType (111)
+#define SOAP_TYPE_ds__KeyInfoType (114)
 /* complex XSD type 'ds:KeyInfoType': */
 struct ds__KeyInfoType {
       public:
@@ -1440,7 +1503,7 @@ struct ds__KeyInfoType {
 
 /* ds.h:47 */
 #ifndef SOAP_TYPE_ds__SignedInfoType
-#define SOAP_TYPE_ds__SignedInfoType (109)
+#define SOAP_TYPE_ds__SignedInfoType (112)
 /* complex XSD type 'ds:SignedInfoType': */
 struct ds__SignedInfoType {
       public:
@@ -1472,7 +1535,7 @@ struct ds__SignedInfoType {
 
 /* ds.h:60 */
 #ifndef SOAP_TYPE_ds__CanonicalizationMethodType
-#define SOAP_TYPE_ds__CanonicalizationMethodType (114)
+#define SOAP_TYPE_ds__CanonicalizationMethodType (117)
 /* complex XSD type 'ds:CanonicalizationMethodType': */
 struct ds__CanonicalizationMethodType {
       public:
@@ -1496,7 +1559,7 @@ struct ds__CanonicalizationMethodType {
 
 /* ds.h:63 */
 #ifndef SOAP_TYPE_ds__SignatureMethodType
-#define SOAP_TYPE_ds__SignatureMethodType (115)
+#define SOAP_TYPE_ds__SignatureMethodType (118)
 /* complex XSD type 'ds:SignatureMethodType': */
 struct ds__SignatureMethodType {
       public:
@@ -1520,7 +1583,7 @@ struct ds__SignatureMethodType {
 
 /* ds.h:66 */
 #ifndef SOAP_TYPE_ds__ReferenceType
-#define SOAP_TYPE_ds__ReferenceType (116)
+#define SOAP_TYPE_ds__ReferenceType (119)
 /* complex XSD type 'ds:ReferenceType': */
 struct ds__ReferenceType {
       public:
@@ -1556,7 +1619,7 @@ struct ds__ReferenceType {
 
 /* ds.h:69 */
 #ifndef SOAP_TYPE_ds__TransformsType
-#define SOAP_TYPE_ds__TransformsType (117)
+#define SOAP_TYPE_ds__TransformsType (120)
 /* complex XSD type 'ds:TransformsType': */
 struct ds__TransformsType {
       public:
@@ -1579,7 +1642,7 @@ struct ds__TransformsType {
 
 /* ds.h:80 */
 #ifndef SOAP_TYPE_ds__DigestMethodType
-#define SOAP_TYPE_ds__DigestMethodType (122)
+#define SOAP_TYPE_ds__DigestMethodType (125)
 /* complex XSD type 'ds:DigestMethodType': */
 struct ds__DigestMethodType {
       public:
@@ -1600,7 +1663,7 @@ struct ds__DigestMethodType {
 
 /* ds.h:86 */
 #ifndef SOAP_TYPE_ds__KeyValueType
-#define SOAP_TYPE_ds__KeyValueType (123)
+#define SOAP_TYPE_ds__KeyValueType (126)
 /* complex XSD type 'ds:KeyValueType': */
 struct ds__KeyValueType {
       public:
@@ -1624,7 +1687,7 @@ struct ds__KeyValueType {
 
 /* ds.h:87 */
 #ifndef SOAP_TYPE_ds__RetrievalMethodType
-#define SOAP_TYPE_ds__RetrievalMethodType (125)
+#define SOAP_TYPE_ds__RetrievalMethodType (128)
 /* complex XSD type 'ds:RetrievalMethodType': */
 struct ds__RetrievalMethodType {
       public:
@@ -1651,7 +1714,7 @@ struct ds__RetrievalMethodType {
 
 /* wsse.h:165 */
 #ifndef SOAP_TYPE_ds__X509DataType
-#define SOAP_TYPE_ds__X509DataType (106)
+#define SOAP_TYPE_ds__X509DataType (109)
 /* complex XSD type 'ds:X509DataType': */
 struct ds__X509DataType {
       public:
@@ -1684,7 +1747,7 @@ struct ds__X509DataType {
 
 /* ds.h:103 */
 #ifndef SOAP_TYPE_ds__X509IssuerSerialType
-#define SOAP_TYPE_ds__X509IssuerSerialType (129)
+#define SOAP_TYPE_ds__X509IssuerSerialType (132)
 /* complex XSD type 'ds:X509IssuerSerialType': */
 struct ds__X509IssuerSerialType {
       public:
@@ -1708,7 +1771,7 @@ struct ds__X509IssuerSerialType {
 
 /* ds.h:124 */
 #ifndef SOAP_TYPE_ds__DSAKeyValueType
-#define SOAP_TYPE_ds__DSAKeyValueType (130)
+#define SOAP_TYPE_ds__DSAKeyValueType (133)
 /* complex XSD type 'ds:DSAKeyValueType': */
 struct ds__DSAKeyValueType {
       public:
@@ -1747,7 +1810,7 @@ struct ds__DSAKeyValueType {
 
 /* ds.h:127 */
 #ifndef SOAP_TYPE_ds__RSAKeyValueType
-#define SOAP_TYPE_ds__RSAKeyValueType (131)
+#define SOAP_TYPE_ds__RSAKeyValueType (134)
 /* complex XSD type 'ds:RSAKeyValueType': */
 struct ds__RSAKeyValueType {
       public:
@@ -1771,7 +1834,7 @@ struct ds__RSAKeyValueType {
 
 /* xenc.h:84 */
 #ifndef SOAP_TYPE_xenc__EncryptionPropertyType
-#define SOAP_TYPE_xenc__EncryptionPropertyType (153)
+#define SOAP_TYPE_xenc__EncryptionPropertyType (156)
 /* complex XSD type 'xenc:EncryptionPropertyType': */
 struct xenc__EncryptionPropertyType {
       public:
@@ -1795,7 +1858,7 @@ struct xenc__EncryptionPropertyType {
 
 /* xenc.h:53 */
 #ifndef SOAP_TYPE_xenc__EncryptedType
-#define SOAP_TYPE_xenc__EncryptedType (143)
+#define SOAP_TYPE_xenc__EncryptedType (146)
 /* complex XSD type 'xenc:EncryptedType': */
 struct xenc__EncryptedType {
       public:
@@ -1837,7 +1900,7 @@ struct xenc__EncryptedType {
 
 /* xenc.h:56 */
 #ifndef SOAP_TYPE_xenc__EncryptionMethodType
-#define SOAP_TYPE_xenc__EncryptionMethodType (144)
+#define SOAP_TYPE_xenc__EncryptionMethodType (147)
 /* complex XSD type 'xenc:EncryptionMethodType': */
 struct xenc__EncryptionMethodType {
       public:
@@ -1869,7 +1932,7 @@ struct xenc__EncryptionMethodType {
 
 /* xenc.h:59 */
 #ifndef SOAP_TYPE_xenc__CipherDataType
-#define SOAP_TYPE_xenc__CipherDataType (145)
+#define SOAP_TYPE_xenc__CipherDataType (148)
 /* complex XSD type 'xenc:CipherDataType': */
 struct xenc__CipherDataType {
       public:
@@ -1893,7 +1956,7 @@ struct xenc__CipherDataType {
 
 /* xenc.h:62 */
 #ifndef SOAP_TYPE_xenc__CipherReferenceType
-#define SOAP_TYPE_xenc__CipherReferenceType (146)
+#define SOAP_TYPE_xenc__CipherReferenceType (149)
 /* complex XSD type 'xenc:CipherReferenceType': */
 struct xenc__CipherReferenceType {
       public:
@@ -1917,7 +1980,7 @@ struct xenc__CipherReferenceType {
 
 /* xenc.h:65 */
 #ifndef SOAP_TYPE_xenc__TransformsType
-#define SOAP_TYPE_xenc__TransformsType (147)
+#define SOAP_TYPE_xenc__TransformsType (150)
 /* complex XSD type 'xenc:TransformsType': */
 struct xenc__TransformsType {
       public:
@@ -1937,7 +2000,7 @@ struct xenc__TransformsType {
 
 /* xenc.h:74 */
 #ifndef SOAP_TYPE_xenc__AgreementMethodType
-#define SOAP_TYPE_xenc__AgreementMethodType (150)
+#define SOAP_TYPE_xenc__AgreementMethodType (153)
 /* complex XSD type 'xenc:AgreementMethodType': */
 struct xenc__AgreementMethodType {
       public:
@@ -1969,7 +2032,7 @@ struct xenc__AgreementMethodType {
 
 /* xenc.h:77 */
 #ifndef SOAP_TYPE_xenc__ReferenceType
-#define SOAP_TYPE_xenc__ReferenceType (151)
+#define SOAP_TYPE_xenc__ReferenceType (154)
 /* complex XSD type 'xenc:ReferenceType': */
 struct xenc__ReferenceType {
       public:
@@ -1990,7 +2053,7 @@ struct xenc__ReferenceType {
 
 /* xenc.h:80 */
 #ifndef SOAP_TYPE_xenc__EncryptionPropertiesType
-#define SOAP_TYPE_xenc__EncryptionPropertiesType (152)
+#define SOAP_TYPE_xenc__EncryptionPropertiesType (155)
 /* complex XSD type 'xenc:EncryptionPropertiesType': */
 struct xenc__EncryptionPropertiesType {
       public:
@@ -2016,7 +2079,7 @@ struct xenc__EncryptionPropertiesType {
 
 /* xenc.h:238 */
 #ifndef SOAP_TYPE___xenc__union_ReferenceList
-#define SOAP_TYPE___xenc__union_ReferenceList (162)
+#define SOAP_TYPE___xenc__union_ReferenceList (165)
 /* Wrapper: */
 struct __xenc__union_ReferenceList {
       public:
@@ -2040,7 +2103,7 @@ struct __xenc__union_ReferenceList {
 
 /* xenc.h:89 */
 #ifndef SOAP_TYPE__xenc__ReferenceList
-#define SOAP_TYPE__xenc__ReferenceList (154)
+#define SOAP_TYPE__xenc__ReferenceList (157)
 /* complex XSD type 'xenc:ReferenceList': */
 struct _xenc__ReferenceList {
       public:
@@ -2063,7 +2126,7 @@ struct _xenc__ReferenceList {
 
 /* xenc.h:68 */
 #ifndef SOAP_TYPE_xenc__EncryptedDataType
-#define SOAP_TYPE_xenc__EncryptedDataType (148)
+#define SOAP_TYPE_xenc__EncryptedDataType (151)
 /* complex XSD type 'xenc:EncryptedDataType': */
 struct xenc__EncryptedDataType {
       public:
@@ -2105,7 +2168,7 @@ struct xenc__EncryptedDataType {
 
 /* xenc.h:71 */
 #ifndef SOAP_TYPE_xenc__EncryptedKeyType
-#define SOAP_TYPE_xenc__EncryptedKeyType (149)
+#define SOAP_TYPE_xenc__EncryptedKeyType (152)
 /* complex XSD type 'xenc:EncryptedKeyType': */
 struct xenc__EncryptedKeyType {
       public:
@@ -2156,7 +2219,7 @@ struct xenc__EncryptedKeyType {
 
 /* wsc.h:87 */
 #ifndef SOAP_TYPE_wsc__SecurityContextTokenType
-#define SOAP_TYPE_wsc__SecurityContextTokenType (168)
+#define SOAP_TYPE_wsc__SecurityContextTokenType (171)
 /* complex XSD type 'wsc:SecurityContextTokenType': */
 struct wsc__SecurityContextTokenType {
       public:
@@ -2183,7 +2246,7 @@ struct wsc__SecurityContextTokenType {
 
 /* wsc.h:125 */
 #ifndef SOAP_TYPE__wsc__union_DerivedKeyTokenType
-#define SOAP_TYPE__wsc__union_DerivedKeyTokenType (174)
+#define SOAP_TYPE__wsc__union_DerivedKeyTokenType (177)
 /* union serializable only when used as a member of a struct or class with a union variant selector */
 union _wsc__union_DerivedKeyTokenType
 {
@@ -2196,7 +2259,7 @@ union _wsc__union_DerivedKeyTokenType
 
 /* wsc.h:116 */
 #ifndef SOAP_TYPE___wsc__DerivedKeyTokenType_sequence
-#define SOAP_TYPE___wsc__DerivedKeyTokenType_sequence (172)
+#define SOAP_TYPE___wsc__DerivedKeyTokenType_sequence (175)
 /* Wrapper: */
 struct __wsc__DerivedKeyTokenType_sequence {
       public:
@@ -2221,7 +2284,7 @@ struct __wsc__DerivedKeyTokenType_sequence {
 
 /* wsc.h:109 */
 #ifndef SOAP_TYPE_wsc__DerivedKeyTokenType
-#define SOAP_TYPE_wsc__DerivedKeyTokenType (169)
+#define SOAP_TYPE_wsc__DerivedKeyTokenType (172)
 /* complex XSD type 'wsc:DerivedKeyTokenType': */
 struct wsc__DerivedKeyTokenType {
       public:
@@ -2259,7 +2322,7 @@ struct wsc__DerivedKeyTokenType {
 
 /* wsc.h:113 */
 #ifndef SOAP_TYPE_wsc__PropertiesType
-#define SOAP_TYPE_wsc__PropertiesType (170)
+#define SOAP_TYPE_wsc__PropertiesType (173)
 /* complex XSD type 'wsc:PropertiesType': */
 struct wsc__PropertiesType {
       public:
@@ -2276,7 +2339,7 @@ struct wsc__PropertiesType {
 
 /* wsse.h:177 */
 #ifndef SOAP_TYPE__wsse__Security
-#define SOAP_TYPE__wsse__Security (177)
+#define SOAP_TYPE__wsse__Security (180)
 /* complex XSD type 'wsse:Security': */
 struct _wsse__Security {
       public:
@@ -2321,7 +2384,7 @@ struct _wsse__Security {
 
 /* wsse.h:115 */
 #ifndef SOAP_TYPE__wsse__Password
-#define SOAP_TYPE__wsse__Password (96)
+#define SOAP_TYPE__wsse__Password (99)
 /* simple XSD type 'wsse:Password': */
 struct _wsse__Password {
       public:
@@ -2362,117 +2425,111 @@ typedef char *_QName;
 typedef char *_XML;
 #endif
 
-/* CCMovelSignature.h:567 */
+/* CCMovelSignature.h:592 */
 #ifndef SOAP_TYPE__ns3__SignRequest
 #define SOAP_TYPE__ns3__SignRequest (39)
 typedef ns3__SignRequest _ns3__SignRequest;
 #endif
 
-/* CCMovelSignature.h:570 */
-#ifndef SOAP_TYPE__ns3__CCMovelSignResponse
-#define SOAP_TYPE__ns3__CCMovelSignResponse (40)
-typedef ns3__CCMovelSignResponse _ns3__CCMovelSignResponse;
-#endif
-
-/* CCMovelSignature.h:573 */
+/* CCMovelSignature.h:595 */
 #ifndef SOAP_TYPE__ns3__SignStatus
-#define SOAP_TYPE__ns3__SignStatus (41)
+#define SOAP_TYPE__ns3__SignStatus (40)
 typedef ns3__SignStatus _ns3__SignStatus;
 #endif
 
-/* CCMovelSignature.h:576 */
-#ifndef SOAP_TYPE__ns3__SignResponse
-#define SOAP_TYPE__ns3__SignResponse (42)
-typedef ns3__SignResponse _ns3__SignResponse;
-#endif
-
-/* CCMovelSignature.h:579 */
+/* CCMovelSignature.h:598 */
 #ifndef SOAP_TYPE__ns3__ValidationRequest
-#define SOAP_TYPE__ns3__ValidationRequest (43)
+#define SOAP_TYPE__ns3__ValidationRequest (41)
 typedef ns3__ValidationRequest _ns3__ValidationRequest;
 #endif
 
-/* CCMovelSignature.h:582 */
+/* CCMovelSignature.h:601 */
 #ifndef SOAP_TYPE__ns3__ValidationResponse
-#define SOAP_TYPE__ns3__ValidationResponse (44)
+#define SOAP_TYPE__ns3__ValidationResponse (42)
 typedef ns3__ValidationResponse _ns3__ValidationResponse;
+#endif
+
+/* CCMovelSignature.h:604 */
+#ifndef SOAP_TYPE__ns3__SignResponse
+#define SOAP_TYPE__ns3__SignResponse (43)
+typedef ns3__SignResponse _ns3__SignResponse;
 #endif
 
 /* wsa.h:220 */
 #ifndef SOAP_TYPE__wsa__EndpointReference
-#define SOAP_TYPE__wsa__EndpointReference (57)
+#define SOAP_TYPE__wsa__EndpointReference (56)
 typedef struct wsa__EndpointReferenceType _wsa__EndpointReference;
 #endif
 
 /* wsa.h:223 */
 #ifndef SOAP_TYPE__wsa__MessageID
-#define SOAP_TYPE__wsa__MessageID (58)
+#define SOAP_TYPE__wsa__MessageID (57)
 typedef char *_wsa__MessageID;
 #endif
 
 /* wsa.h:226 */
 #ifndef SOAP_TYPE__wsa__RelatesTo
-#define SOAP_TYPE__wsa__RelatesTo (59)
+#define SOAP_TYPE__wsa__RelatesTo (58)
 typedef struct wsa__Relationship _wsa__RelatesTo;
 #endif
 
 /* wsa.h:229 */
 #ifndef SOAP_TYPE__wsa__To
-#define SOAP_TYPE__wsa__To (60)
+#define SOAP_TYPE__wsa__To (59)
 typedef char *_wsa__To;
 #endif
 
 /* wsa.h:232 */
 #ifndef SOAP_TYPE__wsa__Action
-#define SOAP_TYPE__wsa__Action (61)
+#define SOAP_TYPE__wsa__Action (60)
 typedef char *_wsa__Action;
 #endif
 
 /* wsa.h:235 */
 #ifndef SOAP_TYPE__wsa__From
-#define SOAP_TYPE__wsa__From (62)
+#define SOAP_TYPE__wsa__From (61)
 typedef struct wsa__EndpointReferenceType _wsa__From;
 #endif
 
 /* wsa.h:238 */
 #ifndef SOAP_TYPE__wsa__ReplyTo
-#define SOAP_TYPE__wsa__ReplyTo (63)
+#define SOAP_TYPE__wsa__ReplyTo (62)
 typedef struct wsa__EndpointReferenceType _wsa__ReplyTo;
 #endif
 
 /* wsa.h:241 */
 #ifndef SOAP_TYPE__wsa__FaultTo
-#define SOAP_TYPE__wsa__FaultTo (64)
+#define SOAP_TYPE__wsa__FaultTo (63)
 typedef struct wsa__EndpointReferenceType _wsa__FaultTo;
 #endif
 
 /* wsa.h:244 */
 #ifndef SOAP_TYPE__wsa__ReplyAfter
-#define SOAP_TYPE__wsa__ReplyAfter (65)
+#define SOAP_TYPE__wsa__ReplyAfter (64)
 typedef unsigned int _wsa__ReplyAfter;
 #endif
 
 /* ds.h:51 */
 #ifndef SOAP_TYPE__ds__Signature
-#define SOAP_TYPE__ds__Signature (113)
+#define SOAP_TYPE__ds__Signature (116)
 typedef struct ds__SignatureType _ds__Signature;
 #endif
 
 /* ds.h:77 */
 #ifndef SOAP_TYPE__ds__Transform
-#define SOAP_TYPE__ds__Transform (121)
+#define SOAP_TYPE__ds__Transform (124)
 typedef struct ds__TransformType _ds__Transform;
 #endif
 
 /* ds.h:91 */
 #ifndef SOAP_TYPE__ds__KeyInfo
-#define SOAP_TYPE__ds__KeyInfo (128)
+#define SOAP_TYPE__ds__KeyInfo (131)
 typedef struct ds__KeyInfoType _ds__KeyInfo;
 #endif
 
 /* wsc.h:57 */
 #ifndef SOAP_TYPE_wsc__FaultCodeOpenEnumType
-#define SOAP_TYPE_wsc__FaultCodeOpenEnumType (166)
+#define SOAP_TYPE_wsc__FaultCodeOpenEnumType (169)
 typedef char *wsc__FaultCodeOpenEnumType;
 #endif
 
@@ -2500,7 +2557,7 @@ typedef char *wsc__FaultCodeOpenEnumType;
 
 /* _wsa__ReplyAfter has binding name '_wsa__ReplyAfter' for type '' */
 #ifndef SOAP_TYPE__wsa__ReplyAfter
-#define SOAP_TYPE__wsa__ReplyAfter (65)
+#define SOAP_TYPE__wsa__ReplyAfter (64)
 #endif
 
 /* unsigned int has binding name 'unsignedInt' for type 'xsd:unsignedInt' */
@@ -2510,32 +2567,32 @@ typedef char *wsc__FaultCodeOpenEnumType;
 
 /* ULONG64 has binding name 'ULONG64' for type 'xsd:unsignedLong' */
 #ifndef SOAP_TYPE_ULONG64
-#define SOAP_TYPE_ULONG64 (173)
+#define SOAP_TYPE_ULONG64 (176)
 #endif
 
 /* enum wsc__FaultCodeType has binding name 'wsc__FaultCodeType' for type 'wsc:FaultCodeType' */
 #ifndef SOAP_TYPE_wsc__FaultCodeType
-#define SOAP_TYPE_wsc__FaultCodeType (167)
+#define SOAP_TYPE_wsc__FaultCodeType (170)
 #endif
 
 /* enum wsse__FaultcodeEnum has binding name 'wsse__FaultcodeEnum' for type 'wsse:FaultcodeEnum' */
 #ifndef SOAP_TYPE_wsse__FaultcodeEnum
-#define SOAP_TYPE_wsse__FaultcodeEnum (94)
+#define SOAP_TYPE_wsse__FaultcodeEnum (97)
 #endif
 
 /* enum wsu__tTimestampFault has binding name 'wsu__tTimestampFault' for type 'wsu:tTimestampFault' */
 #ifndef SOAP_TYPE_wsu__tTimestampFault
-#define SOAP_TYPE_wsu__tTimestampFault (92)
+#define SOAP_TYPE_wsu__tTimestampFault (95)
 #endif
 
 /* enum wsa__FaultSubcodeValues has binding name 'wsa__FaultSubcodeValues' for type 'wsa:FaultSubcodeValues' */
 #ifndef SOAP_TYPE_wsa__FaultSubcodeValues
-#define SOAP_TYPE_wsa__FaultSubcodeValues (51)
+#define SOAP_TYPE_wsa__FaultSubcodeValues (50)
 #endif
 
 /* enum wsa__RelationshipTypeValues has binding name 'wsa__RelationshipTypeValues' for type 'wsa:RelationshipTypeValues' */
 #ifndef SOAP_TYPE_wsa__RelationshipTypeValues
-#define SOAP_TYPE_wsa__RelationshipTypeValues (50)
+#define SOAP_TYPE_wsa__RelationshipTypeValues (49)
 #endif
 
 /* bool has binding name 'bool' for type 'xsd:boolean' */
@@ -2543,29 +2600,24 @@ typedef char *wsc__FaultCodeOpenEnumType;
 #define SOAP_TYPE_bool (37)
 #endif
 
+/* _ns3__SignResponse has binding name '_ns3__SignResponse' for type '' */
+#ifndef SOAP_TYPE__ns3__SignResponse
+#define SOAP_TYPE__ns3__SignResponse (43)
+#endif
+
 /* _ns3__ValidationResponse has binding name '_ns3__ValidationResponse' for type '' */
 #ifndef SOAP_TYPE__ns3__ValidationResponse
-#define SOAP_TYPE__ns3__ValidationResponse (44)
+#define SOAP_TYPE__ns3__ValidationResponse (42)
 #endif
 
 /* _ns3__ValidationRequest has binding name '_ns3__ValidationRequest' for type '' */
 #ifndef SOAP_TYPE__ns3__ValidationRequest
-#define SOAP_TYPE__ns3__ValidationRequest (43)
-#endif
-
-/* _ns3__SignResponse has binding name '_ns3__SignResponse' for type '' */
-#ifndef SOAP_TYPE__ns3__SignResponse
-#define SOAP_TYPE__ns3__SignResponse (42)
+#define SOAP_TYPE__ns3__ValidationRequest (41)
 #endif
 
 /* _ns3__SignStatus has binding name '_ns3__SignStatus' for type '' */
 #ifndef SOAP_TYPE__ns3__SignStatus
-#define SOAP_TYPE__ns3__SignStatus (41)
-#endif
-
-/* _ns3__CCMovelSignResponse has binding name '_ns3__CCMovelSignResponse' for type '' */
-#ifndef SOAP_TYPE__ns3__CCMovelSignResponse
-#define SOAP_TYPE__ns3__CCMovelSignResponse (40)
+#define SOAP_TYPE__ns3__SignStatus (40)
 #endif
 
 /* _ns3__SignRequest has binding name '_ns3__SignRequest' for type '' */
@@ -2575,7 +2627,12 @@ typedef char *wsc__FaultCodeOpenEnumType;
 
 /* std::string has binding name 'std__string' for type 'xsd:string' */
 #ifndef SOAP_TYPE_std__string
-#define SOAP_TYPE_std__string (30)
+#define SOAP_TYPE_std__string (34)
+#endif
+
+/* ns3__SignResponse has binding name 'ns3__SignResponse' for type 'ns3:SignResponse' */
+#ifndef SOAP_TYPE_ns3__SignResponse
+#define SOAP_TYPE_ns3__SignResponse (28)
 #endif
 
 /* ns3__ValidationResponse has binding name 'ns3__ValidationResponse' for type 'ns3:ValidationResponse' */
@@ -2588,44 +2645,44 @@ typedef char *wsc__FaultCodeOpenEnumType;
 #define SOAP_TYPE_ns3__ValidationRequest (26)
 #endif
 
-/* ns3__SignResponse has binding name 'ns3__SignResponse' for type 'ns3:SignResponse' */
-#ifndef SOAP_TYPE_ns3__SignResponse
-#define SOAP_TYPE_ns3__SignResponse (25)
-#endif
-
 /* ns3__SignStatus has binding name 'ns3__SignStatus' for type 'ns3:SignStatus' */
 #ifndef SOAP_TYPE_ns3__SignStatus
-#define SOAP_TYPE_ns3__SignStatus (24)
-#endif
-
-/* ns3__CCMovelSignResponse has binding name 'ns3__CCMovelSignResponse' for type 'ns3:CCMovelSignResponse' */
-#ifndef SOAP_TYPE_ns3__CCMovelSignResponse
-#define SOAP_TYPE_ns3__CCMovelSignResponse (23)
+#define SOAP_TYPE_ns3__SignStatus (25)
 #endif
 
 /* ns3__SignRequest has binding name 'ns3__SignRequest' for type 'ns3:SignRequest' */
 #ifndef SOAP_TYPE_ns3__SignRequest
-#define SOAP_TYPE_ns3__SignRequest (22)
-#endif
-
-/* _ns2__CCMovelValidateSignatureResponse has binding name '_ns2__CCMovelValidateSignatureResponse' for type '' */
-#ifndef SOAP_TYPE__ns2__CCMovelValidateSignatureResponse
-#define SOAP_TYPE__ns2__CCMovelValidateSignatureResponse (21)
-#endif
-
-/* _ns2__CCMovelValidateSignature has binding name '_ns2__CCMovelValidateSignature' for type '' */
-#ifndef SOAP_TYPE__ns2__CCMovelValidateSignature
-#define SOAP_TYPE__ns2__CCMovelValidateSignature (20)
+#define SOAP_TYPE_ns3__SignRequest (24)
 #endif
 
 /* _ns2__ValidateOtpResponse has binding name '_ns2__ValidateOtpResponse' for type '' */
 #ifndef SOAP_TYPE__ns2__ValidateOtpResponse
-#define SOAP_TYPE__ns2__ValidateOtpResponse (19)
+#define SOAP_TYPE__ns2__ValidateOtpResponse (23)
 #endif
 
 /* _ns2__ValidateOtp has binding name '_ns2__ValidateOtp' for type '' */
 #ifndef SOAP_TYPE__ns2__ValidateOtp
-#define SOAP_TYPE__ns2__ValidateOtp (18)
+#define SOAP_TYPE__ns2__ValidateOtp (22)
+#endif
+
+/* _ns2__GetCertificateResponse has binding name '_ns2__GetCertificateResponse' for type '' */
+#ifndef SOAP_TYPE__ns2__GetCertificateResponse
+#define SOAP_TYPE__ns2__GetCertificateResponse (21)
+#endif
+
+/* _ns2__GetCertificate has binding name '_ns2__GetCertificate' for type '' */
+#ifndef SOAP_TYPE__ns2__GetCertificate
+#define SOAP_TYPE__ns2__GetCertificate (20)
+#endif
+
+/* _ns2__CCMovelValidateSignatureResponse has binding name '_ns2__CCMovelValidateSignatureResponse' for type '' */
+#ifndef SOAP_TYPE__ns2__CCMovelValidateSignatureResponse
+#define SOAP_TYPE__ns2__CCMovelValidateSignatureResponse (19)
+#endif
+
+/* _ns2__CCMovelValidateSignature has binding name '_ns2__CCMovelValidateSignature' for type '' */
+#ifndef SOAP_TYPE__ns2__CCMovelValidateSignature
+#define SOAP_TYPE__ns2__CCMovelValidateSignature (18)
 #endif
 
 /* _ns2__CCMovelSignResponse has binding name '_ns2__CCMovelSignResponse' for type '' */
@@ -2645,597 +2702,602 @@ typedef char *wsc__FaultCodeOpenEnumType;
 
 /* struct _wsse__Security has binding name '_wsse__Security' for type '' */
 #ifndef SOAP_TYPE__wsse__Security
-#define SOAP_TYPE__wsse__Security (177)
+#define SOAP_TYPE__wsse__Security (180)
 #endif
 
 /* struct wsc__PropertiesType has binding name 'wsc__PropertiesType' for type 'wsc:PropertiesType' */
 #ifndef SOAP_TYPE_wsc__PropertiesType
-#define SOAP_TYPE_wsc__PropertiesType (170)
+#define SOAP_TYPE_wsc__PropertiesType (173)
 #endif
 
 /* struct wsc__DerivedKeyTokenType has binding name 'wsc__DerivedKeyTokenType' for type 'wsc:DerivedKeyTokenType' */
 #ifndef SOAP_TYPE_wsc__DerivedKeyTokenType
-#define SOAP_TYPE_wsc__DerivedKeyTokenType (169)
+#define SOAP_TYPE_wsc__DerivedKeyTokenType (172)
 #endif
 
 /* struct wsc__SecurityContextTokenType has binding name 'wsc__SecurityContextTokenType' for type 'wsc:SecurityContextTokenType' */
 #ifndef SOAP_TYPE_wsc__SecurityContextTokenType
-#define SOAP_TYPE_wsc__SecurityContextTokenType (168)
+#define SOAP_TYPE_wsc__SecurityContextTokenType (171)
 #endif
 
 /* struct _xenc__ReferenceList has binding name '_xenc__ReferenceList' for type '' */
 #ifndef SOAP_TYPE__xenc__ReferenceList
-#define SOAP_TYPE__xenc__ReferenceList (154)
+#define SOAP_TYPE__xenc__ReferenceList (157)
 #endif
 
 /* struct xenc__EncryptionPropertyType has binding name 'xenc__EncryptionPropertyType' for type 'xenc:EncryptionPropertyType' */
 #ifndef SOAP_TYPE_xenc__EncryptionPropertyType
-#define SOAP_TYPE_xenc__EncryptionPropertyType (153)
+#define SOAP_TYPE_xenc__EncryptionPropertyType (156)
 #endif
 
 /* struct xenc__EncryptionPropertiesType has binding name 'xenc__EncryptionPropertiesType' for type 'xenc:EncryptionPropertiesType' */
 #ifndef SOAP_TYPE_xenc__EncryptionPropertiesType
-#define SOAP_TYPE_xenc__EncryptionPropertiesType (152)
+#define SOAP_TYPE_xenc__EncryptionPropertiesType (155)
 #endif
 
 /* struct xenc__ReferenceType has binding name 'xenc__ReferenceType' for type 'xenc:ReferenceType' */
 #ifndef SOAP_TYPE_xenc__ReferenceType
-#define SOAP_TYPE_xenc__ReferenceType (151)
+#define SOAP_TYPE_xenc__ReferenceType (154)
 #endif
 
 /* struct xenc__AgreementMethodType has binding name 'xenc__AgreementMethodType' for type 'xenc:AgreementMethodType' */
 #ifndef SOAP_TYPE_xenc__AgreementMethodType
-#define SOAP_TYPE_xenc__AgreementMethodType (150)
+#define SOAP_TYPE_xenc__AgreementMethodType (153)
 #endif
 
 /* struct xenc__EncryptedKeyType has binding name 'xenc__EncryptedKeyType' for type 'xenc:EncryptedKeyType' */
 #ifndef SOAP_TYPE_xenc__EncryptedKeyType
-#define SOAP_TYPE_xenc__EncryptedKeyType (149)
+#define SOAP_TYPE_xenc__EncryptedKeyType (152)
 #endif
 
 /* struct xenc__EncryptedDataType has binding name 'xenc__EncryptedDataType' for type 'xenc:EncryptedDataType' */
 #ifndef SOAP_TYPE_xenc__EncryptedDataType
-#define SOAP_TYPE_xenc__EncryptedDataType (148)
+#define SOAP_TYPE_xenc__EncryptedDataType (151)
 #endif
 
 /* struct xenc__TransformsType has binding name 'xenc__TransformsType' for type 'xenc:TransformsType' */
 #ifndef SOAP_TYPE_xenc__TransformsType
-#define SOAP_TYPE_xenc__TransformsType (147)
+#define SOAP_TYPE_xenc__TransformsType (150)
 #endif
 
 /* struct xenc__CipherReferenceType has binding name 'xenc__CipherReferenceType' for type 'xenc:CipherReferenceType' */
 #ifndef SOAP_TYPE_xenc__CipherReferenceType
-#define SOAP_TYPE_xenc__CipherReferenceType (146)
+#define SOAP_TYPE_xenc__CipherReferenceType (149)
 #endif
 
 /* struct xenc__CipherDataType has binding name 'xenc__CipherDataType' for type 'xenc:CipherDataType' */
 #ifndef SOAP_TYPE_xenc__CipherDataType
-#define SOAP_TYPE_xenc__CipherDataType (145)
+#define SOAP_TYPE_xenc__CipherDataType (148)
 #endif
 
 /* struct xenc__EncryptionMethodType has binding name 'xenc__EncryptionMethodType' for type 'xenc:EncryptionMethodType' */
 #ifndef SOAP_TYPE_xenc__EncryptionMethodType
-#define SOAP_TYPE_xenc__EncryptionMethodType (144)
+#define SOAP_TYPE_xenc__EncryptionMethodType (147)
 #endif
 
 /* struct xenc__EncryptedType has binding name 'xenc__EncryptedType' for type 'xenc:EncryptedType' */
 #ifndef SOAP_TYPE_xenc__EncryptedType
-#define SOAP_TYPE_xenc__EncryptedType (143)
+#define SOAP_TYPE_xenc__EncryptedType (146)
 #endif
 
 /* struct ds__RSAKeyValueType has binding name 'ds__RSAKeyValueType' for type 'ds:RSAKeyValueType' */
 #ifndef SOAP_TYPE_ds__RSAKeyValueType
-#define SOAP_TYPE_ds__RSAKeyValueType (131)
+#define SOAP_TYPE_ds__RSAKeyValueType (134)
 #endif
 
 /* struct ds__DSAKeyValueType has binding name 'ds__DSAKeyValueType' for type 'ds:DSAKeyValueType' */
 #ifndef SOAP_TYPE_ds__DSAKeyValueType
-#define SOAP_TYPE_ds__DSAKeyValueType (130)
+#define SOAP_TYPE_ds__DSAKeyValueType (133)
 #endif
 
 /* struct ds__X509IssuerSerialType has binding name 'ds__X509IssuerSerialType' for type 'ds:X509IssuerSerialType' */
 #ifndef SOAP_TYPE_ds__X509IssuerSerialType
-#define SOAP_TYPE_ds__X509IssuerSerialType (129)
+#define SOAP_TYPE_ds__X509IssuerSerialType (132)
 #endif
 
 /* _ds__KeyInfo has binding name '_ds__KeyInfo' for type '' */
 #ifndef SOAP_TYPE__ds__KeyInfo
-#define SOAP_TYPE__ds__KeyInfo (128)
+#define SOAP_TYPE__ds__KeyInfo (131)
 #endif
 
 /* struct ds__RetrievalMethodType has binding name 'ds__RetrievalMethodType' for type 'ds:RetrievalMethodType' */
 #ifndef SOAP_TYPE_ds__RetrievalMethodType
-#define SOAP_TYPE_ds__RetrievalMethodType (125)
+#define SOAP_TYPE_ds__RetrievalMethodType (128)
 #endif
 
 /* struct ds__KeyValueType has binding name 'ds__KeyValueType' for type 'ds:KeyValueType' */
 #ifndef SOAP_TYPE_ds__KeyValueType
-#define SOAP_TYPE_ds__KeyValueType (123)
+#define SOAP_TYPE_ds__KeyValueType (126)
 #endif
 
 /* struct ds__DigestMethodType has binding name 'ds__DigestMethodType' for type 'ds:DigestMethodType' */
 #ifndef SOAP_TYPE_ds__DigestMethodType
-#define SOAP_TYPE_ds__DigestMethodType (122)
+#define SOAP_TYPE_ds__DigestMethodType (125)
 #endif
 
 /* _ds__Transform has binding name '_ds__Transform' for type '' */
 #ifndef SOAP_TYPE__ds__Transform
-#define SOAP_TYPE__ds__Transform (121)
+#define SOAP_TYPE__ds__Transform (124)
 #endif
 
 /* struct ds__TransformType has binding name 'ds__TransformType' for type 'ds:TransformType' */
 #ifndef SOAP_TYPE_ds__TransformType
-#define SOAP_TYPE_ds__TransformType (119)
+#define SOAP_TYPE_ds__TransformType (122)
 #endif
 
 /* struct _c14n__InclusiveNamespaces has binding name '_c14n__InclusiveNamespaces' for type '' */
 #ifndef SOAP_TYPE__c14n__InclusiveNamespaces
-#define SOAP_TYPE__c14n__InclusiveNamespaces (118)
+#define SOAP_TYPE__c14n__InclusiveNamespaces (121)
 #endif
 
 /* struct ds__TransformsType has binding name 'ds__TransformsType' for type 'ds:TransformsType' */
 #ifndef SOAP_TYPE_ds__TransformsType
-#define SOAP_TYPE_ds__TransformsType (117)
+#define SOAP_TYPE_ds__TransformsType (120)
 #endif
 
 /* struct ds__ReferenceType has binding name 'ds__ReferenceType' for type 'ds:ReferenceType' */
 #ifndef SOAP_TYPE_ds__ReferenceType
-#define SOAP_TYPE_ds__ReferenceType (116)
+#define SOAP_TYPE_ds__ReferenceType (119)
 #endif
 
 /* struct ds__SignatureMethodType has binding name 'ds__SignatureMethodType' for type 'ds:SignatureMethodType' */
 #ifndef SOAP_TYPE_ds__SignatureMethodType
-#define SOAP_TYPE_ds__SignatureMethodType (115)
+#define SOAP_TYPE_ds__SignatureMethodType (118)
 #endif
 
 /* struct ds__CanonicalizationMethodType has binding name 'ds__CanonicalizationMethodType' for type 'ds:CanonicalizationMethodType' */
 #ifndef SOAP_TYPE_ds__CanonicalizationMethodType
-#define SOAP_TYPE_ds__CanonicalizationMethodType (114)
+#define SOAP_TYPE_ds__CanonicalizationMethodType (117)
 #endif
 
 /* _ds__Signature has binding name '_ds__Signature' for type '' */
 #ifndef SOAP_TYPE__ds__Signature
-#define SOAP_TYPE__ds__Signature (113)
+#define SOAP_TYPE__ds__Signature (116)
 #endif
 
 /* struct ds__KeyInfoType has binding name 'ds__KeyInfoType' for type 'ds:KeyInfoType' */
 #ifndef SOAP_TYPE_ds__KeyInfoType
-#define SOAP_TYPE_ds__KeyInfoType (111)
+#define SOAP_TYPE_ds__KeyInfoType (114)
 #endif
 
 /* struct ds__SignedInfoType has binding name 'ds__SignedInfoType' for type 'ds:SignedInfoType' */
 #ifndef SOAP_TYPE_ds__SignedInfoType
-#define SOAP_TYPE_ds__SignedInfoType (109)
+#define SOAP_TYPE_ds__SignedInfoType (112)
 #endif
 
 /* struct ds__SignatureType has binding name 'ds__SignatureType' for type 'ds:SignatureType' */
 #ifndef SOAP_TYPE_ds__SignatureType
-#define SOAP_TYPE_ds__SignatureType (108)
+#define SOAP_TYPE_ds__SignatureType (111)
 #endif
 
 /* struct ds__X509DataType has binding name 'ds__X509DataType' for type 'ds:X509DataType' */
 #ifndef SOAP_TYPE_ds__X509DataType
-#define SOAP_TYPE_ds__X509DataType (106)
+#define SOAP_TYPE_ds__X509DataType (109)
 #endif
 
 /* struct _wsse__SecurityTokenReference has binding name '_wsse__SecurityTokenReference' for type '' */
 #ifndef SOAP_TYPE__wsse__SecurityTokenReference
-#define SOAP_TYPE__wsse__SecurityTokenReference (102)
+#define SOAP_TYPE__wsse__SecurityTokenReference (105)
 #endif
 
 /* struct _wsse__KeyIdentifier has binding name '_wsse__KeyIdentifier' for type '' */
 #ifndef SOAP_TYPE__wsse__KeyIdentifier
-#define SOAP_TYPE__wsse__KeyIdentifier (101)
+#define SOAP_TYPE__wsse__KeyIdentifier (104)
 #endif
 
 /* struct _wsse__Embedded has binding name '_wsse__Embedded' for type '' */
 #ifndef SOAP_TYPE__wsse__Embedded
-#define SOAP_TYPE__wsse__Embedded (100)
+#define SOAP_TYPE__wsse__Embedded (103)
 #endif
 
 /* struct _wsse__Reference has binding name '_wsse__Reference' for type '' */
 #ifndef SOAP_TYPE__wsse__Reference
-#define SOAP_TYPE__wsse__Reference (99)
+#define SOAP_TYPE__wsse__Reference (102)
 #endif
 
 /* struct _wsse__BinarySecurityToken has binding name '_wsse__BinarySecurityToken' for type '' */
 #ifndef SOAP_TYPE__wsse__BinarySecurityToken
-#define SOAP_TYPE__wsse__BinarySecurityToken (98)
+#define SOAP_TYPE__wsse__BinarySecurityToken (101)
 #endif
 
 /* struct _wsse__Password has binding name '_wsse__Password' for type '' */
 #ifndef SOAP_TYPE__wsse__Password
-#define SOAP_TYPE__wsse__Password (96)
+#define SOAP_TYPE__wsse__Password (99)
 #endif
 
 /* struct _wsse__UsernameToken has binding name '_wsse__UsernameToken' for type '' */
 #ifndef SOAP_TYPE__wsse__UsernameToken
-#define SOAP_TYPE__wsse__UsernameToken (95)
+#define SOAP_TYPE__wsse__UsernameToken (98)
 #endif
 
 /* struct _wsu__Timestamp has binding name '_wsu__Timestamp' for type '' */
 #ifndef SOAP_TYPE__wsu__Timestamp
-#define SOAP_TYPE__wsu__Timestamp (93)
+#define SOAP_TYPE__wsu__Timestamp (96)
 #endif
 
 /* struct SOAP_ENV__Fault has binding name 'SOAP_ENV__Fault' for type '' */
 #ifndef SOAP_TYPE_SOAP_ENV__Fault
-#define SOAP_TYPE_SOAP_ENV__Fault (79)
+#define SOAP_TYPE_SOAP_ENV__Fault (78)
 #endif
 
 /* struct SOAP_ENV__Reason has binding name 'SOAP_ENV__Reason' for type '' */
 #ifndef SOAP_TYPE_SOAP_ENV__Reason
-#define SOAP_TYPE_SOAP_ENV__Reason (75)
+#define SOAP_TYPE_SOAP_ENV__Reason (74)
 #endif
 
 /* struct SOAP_ENV__Code has binding name 'SOAP_ENV__Code' for type '' */
 #ifndef SOAP_TYPE_SOAP_ENV__Code
-#define SOAP_TYPE_SOAP_ENV__Code (73)
+#define SOAP_TYPE_SOAP_ENV__Code (72)
 #endif
 
 /* struct SOAP_ENV__Detail has binding name 'SOAP_ENV__Detail' for type '' */
 #ifndef SOAP_TYPE_SOAP_ENV__Detail
-#define SOAP_TYPE_SOAP_ENV__Detail (71)
+#define SOAP_TYPE_SOAP_ENV__Detail (70)
 #endif
 
 /* struct SOAP_ENV__Header has binding name 'SOAP_ENV__Header' for type '' */
 #ifndef SOAP_TYPE_SOAP_ENV__Header
-#define SOAP_TYPE_SOAP_ENV__Header (66)
+#define SOAP_TYPE_SOAP_ENV__Header (65)
 #endif
 
 /* _wsa__FaultTo has binding name '_wsa__FaultTo' for type '' */
 #ifndef SOAP_TYPE__wsa__FaultTo
-#define SOAP_TYPE__wsa__FaultTo (64)
+#define SOAP_TYPE__wsa__FaultTo (63)
 #endif
 
 /* _wsa__ReplyTo has binding name '_wsa__ReplyTo' for type '' */
 #ifndef SOAP_TYPE__wsa__ReplyTo
-#define SOAP_TYPE__wsa__ReplyTo (63)
+#define SOAP_TYPE__wsa__ReplyTo (62)
 #endif
 
 /* _wsa__From has binding name '_wsa__From' for type '' */
 #ifndef SOAP_TYPE__wsa__From
-#define SOAP_TYPE__wsa__From (62)
+#define SOAP_TYPE__wsa__From (61)
 #endif
 
 /* _wsa__RelatesTo has binding name '_wsa__RelatesTo' for type '' */
 #ifndef SOAP_TYPE__wsa__RelatesTo
-#define SOAP_TYPE__wsa__RelatesTo (59)
+#define SOAP_TYPE__wsa__RelatesTo (58)
 #endif
 
 /* _wsa__EndpointReference has binding name '_wsa__EndpointReference' for type '' */
 #ifndef SOAP_TYPE__wsa__EndpointReference
-#define SOAP_TYPE__wsa__EndpointReference (57)
+#define SOAP_TYPE__wsa__EndpointReference (56)
 #endif
 
 /* struct wsa__Relationship has binding name 'wsa__Relationship' for type 'wsa:Relationship' */
 #ifndef SOAP_TYPE_wsa__Relationship
-#define SOAP_TYPE_wsa__Relationship (49)
+#define SOAP_TYPE_wsa__Relationship (48)
 #endif
 
 /* struct wsa__ServiceNameType has binding name 'wsa__ServiceNameType' for type 'wsa:ServiceNameType' */
 #ifndef SOAP_TYPE_wsa__ServiceNameType
-#define SOAP_TYPE_wsa__ServiceNameType (48)
+#define SOAP_TYPE_wsa__ServiceNameType (47)
 #endif
 
 /* struct wsa__ReferenceParametersType has binding name 'wsa__ReferenceParametersType' for type 'wsa:ReferenceParametersType' */
 #ifndef SOAP_TYPE_wsa__ReferenceParametersType
-#define SOAP_TYPE_wsa__ReferenceParametersType (47)
+#define SOAP_TYPE_wsa__ReferenceParametersType (46)
 #endif
 
 /* struct wsa__ReferencePropertiesType has binding name 'wsa__ReferencePropertiesType' for type 'wsa:ReferencePropertiesType' */
 #ifndef SOAP_TYPE_wsa__ReferencePropertiesType
-#define SOAP_TYPE_wsa__ReferencePropertiesType (46)
+#define SOAP_TYPE_wsa__ReferencePropertiesType (45)
 #endif
 
 /* struct wsa__EndpointReferenceType has binding name 'wsa__EndpointReferenceType' for type 'wsa:EndpointReferenceType' */
 #ifndef SOAP_TYPE_wsa__EndpointReferenceType
-#define SOAP_TYPE_wsa__EndpointReferenceType (45)
+#define SOAP_TYPE_wsa__EndpointReferenceType (44)
 #endif
 
 /* struct _wsse__Security * has binding name 'PointerTo_wsse__Security' for type '' */
 #ifndef SOAP_TYPE_PointerTo_wsse__Security
-#define SOAP_TYPE_PointerTo_wsse__Security (184)
+#define SOAP_TYPE_PointerTo_wsse__Security (187)
 #endif
 
 /* struct ds__SignatureType * has binding name 'PointerTods__SignatureType' for type 'ds:SignatureType' */
 #ifndef SOAP_TYPE_PointerTods__SignatureType
-#define SOAP_TYPE_PointerTods__SignatureType (183)
+#define SOAP_TYPE_PointerTods__SignatureType (186)
 #endif
 
 /* struct wsc__SecurityContextTokenType * has binding name 'PointerTowsc__SecurityContextTokenType' for type 'wsc:SecurityContextTokenType' */
 #ifndef SOAP_TYPE_PointerTowsc__SecurityContextTokenType
-#define SOAP_TYPE_PointerTowsc__SecurityContextTokenType (182)
+#define SOAP_TYPE_PointerTowsc__SecurityContextTokenType (185)
 #endif
 
 /* struct xenc__EncryptedKeyType * has binding name 'PointerToxenc__EncryptedKeyType' for type 'xenc:EncryptedKeyType' */
 #ifndef SOAP_TYPE_PointerToxenc__EncryptedKeyType
-#define SOAP_TYPE_PointerToxenc__EncryptedKeyType (181)
+#define SOAP_TYPE_PointerToxenc__EncryptedKeyType (184)
 #endif
 
 /* struct _wsse__BinarySecurityToken * has binding name 'PointerTo_wsse__BinarySecurityToken' for type '' */
 #ifndef SOAP_TYPE_PointerTo_wsse__BinarySecurityToken
-#define SOAP_TYPE_PointerTo_wsse__BinarySecurityToken (180)
+#define SOAP_TYPE_PointerTo_wsse__BinarySecurityToken (183)
 #endif
 
 /* struct _wsse__UsernameToken * has binding name 'PointerTo_wsse__UsernameToken' for type '' */
 #ifndef SOAP_TYPE_PointerTo_wsse__UsernameToken
-#define SOAP_TYPE_PointerTo_wsse__UsernameToken (179)
+#define SOAP_TYPE_PointerTo_wsse__UsernameToken (182)
 #endif
 
 /* struct _wsu__Timestamp * has binding name 'PointerTo_wsu__Timestamp' for type '' */
 #ifndef SOAP_TYPE_PointerTo_wsu__Timestamp
-#define SOAP_TYPE_PointerTo_wsu__Timestamp (178)
+#define SOAP_TYPE_PointerTo_wsu__Timestamp (181)
 #endif
 
 /* struct __wsc__DerivedKeyTokenType_sequence * has binding name 'PointerTo__wsc__DerivedKeyTokenType_sequence' for type '-wsc:DerivedKeyTokenType-sequence' */
 #ifndef SOAP_TYPE_PointerTo__wsc__DerivedKeyTokenType_sequence
-#define SOAP_TYPE_PointerTo__wsc__DerivedKeyTokenType_sequence (176)
+#define SOAP_TYPE_PointerTo__wsc__DerivedKeyTokenType_sequence (179)
 #endif
 
 /* ULONG64 * has binding name 'PointerToULONG64' for type 'xsd:unsignedLong' */
 #ifndef SOAP_TYPE_PointerToULONG64
-#define SOAP_TYPE_PointerToULONG64 (175)
+#define SOAP_TYPE_PointerToULONG64 (178)
 #endif
 
 /* struct wsc__PropertiesType * has binding name 'PointerTowsc__PropertiesType' for type 'wsc:PropertiesType' */
 #ifndef SOAP_TYPE_PointerTowsc__PropertiesType
-#define SOAP_TYPE_PointerTowsc__PropertiesType (171)
+#define SOAP_TYPE_PointerTowsc__PropertiesType (174)
 #endif
 
 /* wsc__FaultCodeOpenEnumType has binding name 'wsc__FaultCodeOpenEnumType' for type 'wsc:FaultCodeOpenEnumType' */
 #ifndef SOAP_TYPE_wsc__FaultCodeOpenEnumType
-#define SOAP_TYPE_wsc__FaultCodeOpenEnumType (166)
+#define SOAP_TYPE_wsc__FaultCodeOpenEnumType (169)
 #endif
 
 /* struct _xenc__ReferenceList * has binding name 'PointerTo_xenc__ReferenceList' for type '' */
 #ifndef SOAP_TYPE_PointerTo_xenc__ReferenceList
-#define SOAP_TYPE_PointerTo_xenc__ReferenceList (165)
+#define SOAP_TYPE_PointerTo_xenc__ReferenceList (168)
 #endif
 
 /* struct __xenc__union_ReferenceList * has binding name 'PointerTo__xenc__union_ReferenceList' for type '-xenc:union-ReferenceList' */
 #ifndef SOAP_TYPE_PointerTo__xenc__union_ReferenceList
-#define SOAP_TYPE_PointerTo__xenc__union_ReferenceList (164)
+#define SOAP_TYPE_PointerTo__xenc__union_ReferenceList (167)
 #endif
 
 /* struct xenc__ReferenceType * has binding name 'PointerToxenc__ReferenceType' for type 'xenc:ReferenceType' */
 #ifndef SOAP_TYPE_PointerToxenc__ReferenceType
-#define SOAP_TYPE_PointerToxenc__ReferenceType (163)
+#define SOAP_TYPE_PointerToxenc__ReferenceType (166)
 #endif
 
 /* struct xenc__EncryptionPropertyType * has binding name 'PointerToxenc__EncryptionPropertyType' for type 'xenc:EncryptionPropertyType' */
 #ifndef SOAP_TYPE_PointerToxenc__EncryptionPropertyType
-#define SOAP_TYPE_PointerToxenc__EncryptionPropertyType (161)
+#define SOAP_TYPE_PointerToxenc__EncryptionPropertyType (164)
 #endif
 
 /* struct xenc__TransformsType * has binding name 'PointerToxenc__TransformsType' for type 'xenc:TransformsType' */
 #ifndef SOAP_TYPE_PointerToxenc__TransformsType
-#define SOAP_TYPE_PointerToxenc__TransformsType (160)
+#define SOAP_TYPE_PointerToxenc__TransformsType (163)
 #endif
 
 /* struct xenc__CipherReferenceType * has binding name 'PointerToxenc__CipherReferenceType' for type 'xenc:CipherReferenceType' */
 #ifndef SOAP_TYPE_PointerToxenc__CipherReferenceType
-#define SOAP_TYPE_PointerToxenc__CipherReferenceType (159)
+#define SOAP_TYPE_PointerToxenc__CipherReferenceType (162)
 #endif
 
 /* struct xenc__EncryptionPropertiesType * has binding name 'PointerToxenc__EncryptionPropertiesType' for type 'xenc:EncryptionPropertiesType' */
 #ifndef SOAP_TYPE_PointerToxenc__EncryptionPropertiesType
-#define SOAP_TYPE_PointerToxenc__EncryptionPropertiesType (158)
+#define SOAP_TYPE_PointerToxenc__EncryptionPropertiesType (161)
 #endif
 
 /* struct xenc__CipherDataType * has binding name 'PointerToxenc__CipherDataType' for type 'xenc:CipherDataType' */
 #ifndef SOAP_TYPE_PointerToxenc__CipherDataType
-#define SOAP_TYPE_PointerToxenc__CipherDataType (157)
+#define SOAP_TYPE_PointerToxenc__CipherDataType (160)
 #endif
 
 /* struct ds__KeyInfoType * has binding name 'PointerTo_ds__KeyInfo' for type '' */
 #ifndef SOAP_TYPE_PointerTo_ds__KeyInfo
-#define SOAP_TYPE_PointerTo_ds__KeyInfo (156)
+#define SOAP_TYPE_PointerTo_ds__KeyInfo (159)
 #endif
 
 /* struct xenc__EncryptionMethodType * has binding name 'PointerToxenc__EncryptionMethodType' for type 'xenc:EncryptionMethodType' */
 #ifndef SOAP_TYPE_PointerToxenc__EncryptionMethodType
-#define SOAP_TYPE_PointerToxenc__EncryptionMethodType (155)
+#define SOAP_TYPE_PointerToxenc__EncryptionMethodType (158)
 #endif
 
 /* struct ds__X509IssuerSerialType * has binding name 'PointerTods__X509IssuerSerialType' for type 'ds:X509IssuerSerialType' */
 #ifndef SOAP_TYPE_PointerTods__X509IssuerSerialType
-#define SOAP_TYPE_PointerTods__X509IssuerSerialType (142)
+#define SOAP_TYPE_PointerTods__X509IssuerSerialType (145)
 #endif
 
 /* struct ds__RSAKeyValueType * has binding name 'PointerTods__RSAKeyValueType' for type 'ds:RSAKeyValueType' */
 #ifndef SOAP_TYPE_PointerTods__RSAKeyValueType
-#define SOAP_TYPE_PointerTods__RSAKeyValueType (141)
+#define SOAP_TYPE_PointerTods__RSAKeyValueType (144)
 #endif
 
 /* struct ds__DSAKeyValueType * has binding name 'PointerTods__DSAKeyValueType' for type 'ds:DSAKeyValueType' */
 #ifndef SOAP_TYPE_PointerTods__DSAKeyValueType
-#define SOAP_TYPE_PointerTods__DSAKeyValueType (140)
+#define SOAP_TYPE_PointerTods__DSAKeyValueType (143)
 #endif
 
 /* struct ds__TransformType * has binding name 'PointerTods__TransformType' for type 'ds:TransformType' */
 #ifndef SOAP_TYPE_PointerTods__TransformType
-#define SOAP_TYPE_PointerTods__TransformType (139)
+#define SOAP_TYPE_PointerTods__TransformType (142)
 #endif
 
 /* struct ds__DigestMethodType * has binding name 'PointerTods__DigestMethodType' for type 'ds:DigestMethodType' */
 #ifndef SOAP_TYPE_PointerTods__DigestMethodType
-#define SOAP_TYPE_PointerTods__DigestMethodType (138)
+#define SOAP_TYPE_PointerTods__DigestMethodType (141)
 #endif
 
 /* struct ds__TransformsType * has binding name 'PointerTods__TransformsType' for type 'ds:TransformsType' */
 #ifndef SOAP_TYPE_PointerTods__TransformsType
-#define SOAP_TYPE_PointerTods__TransformsType (137)
+#define SOAP_TYPE_PointerTods__TransformsType (140)
 #endif
 
 /* int * has binding name 'PointerToint' for type 'xsd:int' */
 #ifndef SOAP_TYPE_PointerToint
-#define SOAP_TYPE_PointerToint (136)
+#define SOAP_TYPE_PointerToint (139)
 #endif
 
 /* struct ds__ReferenceType ** has binding name 'PointerToPointerTods__ReferenceType' for type 'ds:ReferenceType' */
 #ifndef SOAP_TYPE_PointerToPointerTods__ReferenceType
-#define SOAP_TYPE_PointerToPointerTods__ReferenceType (135)
+#define SOAP_TYPE_PointerToPointerTods__ReferenceType (138)
 #endif
 
 /* struct ds__ReferenceType * has binding name 'PointerTods__ReferenceType' for type 'ds:ReferenceType' */
 #ifndef SOAP_TYPE_PointerTods__ReferenceType
-#define SOAP_TYPE_PointerTods__ReferenceType (134)
+#define SOAP_TYPE_PointerTods__ReferenceType (137)
 #endif
 
 /* struct ds__SignatureMethodType * has binding name 'PointerTods__SignatureMethodType' for type 'ds:SignatureMethodType' */
 #ifndef SOAP_TYPE_PointerTods__SignatureMethodType
-#define SOAP_TYPE_PointerTods__SignatureMethodType (133)
+#define SOAP_TYPE_PointerTods__SignatureMethodType (136)
 #endif
 
 /* struct ds__CanonicalizationMethodType * has binding name 'PointerTods__CanonicalizationMethodType' for type 'ds:CanonicalizationMethodType' */
 #ifndef SOAP_TYPE_PointerTods__CanonicalizationMethodType
-#define SOAP_TYPE_PointerTods__CanonicalizationMethodType (132)
+#define SOAP_TYPE_PointerTods__CanonicalizationMethodType (135)
 #endif
 
 /* struct _wsse__SecurityTokenReference * has binding name 'PointerTo_wsse__SecurityTokenReference' for type '' */
 #ifndef SOAP_TYPE_PointerTo_wsse__SecurityTokenReference
-#define SOAP_TYPE_PointerTo_wsse__SecurityTokenReference (127)
+#define SOAP_TYPE_PointerTo_wsse__SecurityTokenReference (130)
 #endif
 
 /* struct ds__RetrievalMethodType * has binding name 'PointerTods__RetrievalMethodType' for type 'ds:RetrievalMethodType' */
 #ifndef SOAP_TYPE_PointerTods__RetrievalMethodType
-#define SOAP_TYPE_PointerTods__RetrievalMethodType (126)
+#define SOAP_TYPE_PointerTods__RetrievalMethodType (129)
 #endif
 
 /* struct ds__KeyValueType * has binding name 'PointerTods__KeyValueType' for type 'ds:KeyValueType' */
 #ifndef SOAP_TYPE_PointerTods__KeyValueType
-#define SOAP_TYPE_PointerTods__KeyValueType (124)
+#define SOAP_TYPE_PointerTods__KeyValueType (127)
 #endif
 
 /* struct _c14n__InclusiveNamespaces * has binding name 'PointerTo_c14n__InclusiveNamespaces' for type '' */
 #ifndef SOAP_TYPE_PointerTo_c14n__InclusiveNamespaces
-#define SOAP_TYPE_PointerTo_c14n__InclusiveNamespaces (120)
+#define SOAP_TYPE_PointerTo_c14n__InclusiveNamespaces (123)
 #endif
 
 /* struct ds__KeyInfoType * has binding name 'PointerTods__KeyInfoType' for type 'ds:KeyInfoType' */
 #ifndef SOAP_TYPE_PointerTods__KeyInfoType
-#define SOAP_TYPE_PointerTods__KeyInfoType (112)
+#define SOAP_TYPE_PointerTods__KeyInfoType (115)
 #endif
 
 /* struct ds__SignedInfoType * has binding name 'PointerTods__SignedInfoType' for type 'ds:SignedInfoType' */
 #ifndef SOAP_TYPE_PointerTods__SignedInfoType
-#define SOAP_TYPE_PointerTods__SignedInfoType (110)
+#define SOAP_TYPE_PointerTods__SignedInfoType (113)
 #endif
 
 /* struct ds__X509DataType * has binding name 'PointerTods__X509DataType' for type 'ds:X509DataType' */
 #ifndef SOAP_TYPE_PointerTods__X509DataType
-#define SOAP_TYPE_PointerTods__X509DataType (107)
+#define SOAP_TYPE_PointerTods__X509DataType (110)
 #endif
 
 /* struct _wsse__Embedded * has binding name 'PointerTo_wsse__Embedded' for type '' */
 #ifndef SOAP_TYPE_PointerTo_wsse__Embedded
-#define SOAP_TYPE_PointerTo_wsse__Embedded (105)
+#define SOAP_TYPE_PointerTo_wsse__Embedded (108)
 #endif
 
 /* struct _wsse__KeyIdentifier * has binding name 'PointerTo_wsse__KeyIdentifier' for type '' */
 #ifndef SOAP_TYPE_PointerTo_wsse__KeyIdentifier
-#define SOAP_TYPE_PointerTo_wsse__KeyIdentifier (104)
+#define SOAP_TYPE_PointerTo_wsse__KeyIdentifier (107)
 #endif
 
 /* struct _wsse__Reference * has binding name 'PointerTo_wsse__Reference' for type '' */
 #ifndef SOAP_TYPE_PointerTo_wsse__Reference
-#define SOAP_TYPE_PointerTo_wsse__Reference (103)
+#define SOAP_TYPE_PointerTo_wsse__Reference (106)
 #endif
 
 /* struct _wsse__Password * has binding name 'PointerTo_wsse__Password' for type '' */
 #ifndef SOAP_TYPE_PointerTo_wsse__Password
-#define SOAP_TYPE_PointerTo_wsse__Password (97)
-#endif
-
-/* _ns2__CCMovelValidateSignature * has binding name 'PointerTo_ns2__CCMovelValidateSignature' for type '' */
-#ifndef SOAP_TYPE_PointerTo_ns2__CCMovelValidateSignature
-#define SOAP_TYPE_PointerTo_ns2__CCMovelValidateSignature (88)
+#define SOAP_TYPE_PointerTo_wsse__Password (100)
 #endif
 
 /* _ns2__ValidateOtp * has binding name 'PointerTo_ns2__ValidateOtp' for type '' */
 #ifndef SOAP_TYPE_PointerTo_ns2__ValidateOtp
-#define SOAP_TYPE_PointerTo_ns2__ValidateOtp (84)
+#define SOAP_TYPE_PointerTo_ns2__ValidateOtp (91)
+#endif
+
+/* _ns2__GetCertificate * has binding name 'PointerTo_ns2__GetCertificate' for type '' */
+#ifndef SOAP_TYPE_PointerTo_ns2__GetCertificate
+#define SOAP_TYPE_PointerTo_ns2__GetCertificate (87)
+#endif
+
+/* _ns2__CCMovelValidateSignature * has binding name 'PointerTo_ns2__CCMovelValidateSignature' for type '' */
+#ifndef SOAP_TYPE_PointerTo_ns2__CCMovelValidateSignature
+#define SOAP_TYPE_PointerTo_ns2__CCMovelValidateSignature (83)
 #endif
 
 /* _ns2__CCMovelSign * has binding name 'PointerTo_ns2__CCMovelSign' for type '' */
 #ifndef SOAP_TYPE_PointerTo_ns2__CCMovelSign
-#define SOAP_TYPE_PointerTo_ns2__CCMovelSign (80)
+#define SOAP_TYPE_PointerTo_ns2__CCMovelSign (79)
 #endif
 
 /* struct SOAP_ENV__Reason * has binding name 'PointerToSOAP_ENV__Reason' for type '' */
 #ifndef SOAP_TYPE_PointerToSOAP_ENV__Reason
-#define SOAP_TYPE_PointerToSOAP_ENV__Reason (76)
+#define SOAP_TYPE_PointerToSOAP_ENV__Reason (75)
 #endif
 
 /* struct SOAP_ENV__Code * has binding name 'PointerToSOAP_ENV__Code' for type '' */
 #ifndef SOAP_TYPE_PointerToSOAP_ENV__Code
-#define SOAP_TYPE_PointerToSOAP_ENV__Code (74)
+#define SOAP_TYPE_PointerToSOAP_ENV__Code (73)
 #endif
 
 /* struct SOAP_ENV__Detail * has binding name 'PointerToSOAP_ENV__Detail' for type '' */
 #ifndef SOAP_TYPE_PointerToSOAP_ENV__Detail
-#define SOAP_TYPE_PointerToSOAP_ENV__Detail (72)
+#define SOAP_TYPE_PointerToSOAP_ENV__Detail (71)
 #endif
 
 /* struct wsa__EndpointReferenceType * has binding name 'PointerTo_wsa__FaultTo' for type '' */
 #ifndef SOAP_TYPE_PointerTo_wsa__FaultTo
-#define SOAP_TYPE_PointerTo_wsa__FaultTo (70)
+#define SOAP_TYPE_PointerTo_wsa__FaultTo (69)
 #endif
 
 /* struct wsa__EndpointReferenceType * has binding name 'PointerTo_wsa__ReplyTo' for type '' */
 #ifndef SOAP_TYPE_PointerTo_wsa__ReplyTo
-#define SOAP_TYPE_PointerTo_wsa__ReplyTo (69)
+#define SOAP_TYPE_PointerTo_wsa__ReplyTo (68)
 #endif
 
 /* struct wsa__EndpointReferenceType * has binding name 'PointerTo_wsa__From' for type '' */
 #ifndef SOAP_TYPE_PointerTo_wsa__From
-#define SOAP_TYPE_PointerTo_wsa__From (68)
+#define SOAP_TYPE_PointerTo_wsa__From (67)
 #endif
 
 /* struct wsa__Relationship * has binding name 'PointerTo_wsa__RelatesTo' for type '' */
 #ifndef SOAP_TYPE_PointerTo_wsa__RelatesTo
-#define SOAP_TYPE_PointerTo_wsa__RelatesTo (67)
+#define SOAP_TYPE_PointerTo_wsa__RelatesTo (66)
 #endif
 
 /* _wsa__Action has binding name '_wsa__Action' for type '' */
 #ifndef SOAP_TYPE__wsa__Action
-#define SOAP_TYPE__wsa__Action (61)
+#define SOAP_TYPE__wsa__Action (60)
 #endif
 
 /* _wsa__To has binding name '_wsa__To' for type '' */
 #ifndef SOAP_TYPE__wsa__To
-#define SOAP_TYPE__wsa__To (60)
+#define SOAP_TYPE__wsa__To (59)
 #endif
 
 /* _wsa__MessageID has binding name '_wsa__MessageID' for type '' */
 #ifndef SOAP_TYPE__wsa__MessageID
-#define SOAP_TYPE__wsa__MessageID (58)
+#define SOAP_TYPE__wsa__MessageID (57)
 #endif
 
 /* char ** has binding name 'PointerTo_XML' for type '' */
 #ifndef SOAP_TYPE_PointerTo_XML
-#define SOAP_TYPE_PointerTo_XML (56)
+#define SOAP_TYPE_PointerTo_XML (55)
 #endif
 
 /* struct wsa__ServiceNameType * has binding name 'PointerTowsa__ServiceNameType' for type 'wsa:ServiceNameType' */
 #ifndef SOAP_TYPE_PointerTowsa__ServiceNameType
-#define SOAP_TYPE_PointerTowsa__ServiceNameType (55)
+#define SOAP_TYPE_PointerTowsa__ServiceNameType (54)
 #endif
 
 /* char ** has binding name 'PointerTo_QName' for type '' */
 #ifndef SOAP_TYPE_PointerTo_QName
-#define SOAP_TYPE_PointerTo_QName (54)
+#define SOAP_TYPE_PointerTo_QName (53)
 #endif
 
 /* struct wsa__ReferenceParametersType * has binding name 'PointerTowsa__ReferenceParametersType' for type 'wsa:ReferenceParametersType' */
 #ifndef SOAP_TYPE_PointerTowsa__ReferenceParametersType
-#define SOAP_TYPE_PointerTowsa__ReferenceParametersType (53)
+#define SOAP_TYPE_PointerTowsa__ReferenceParametersType (52)
 #endif
 
 /* struct wsa__ReferencePropertiesType * has binding name 'PointerTowsa__ReferencePropertiesType' for type 'wsa:ReferencePropertiesType' */
 #ifndef SOAP_TYPE_PointerTowsa__ReferencePropertiesType
-#define SOAP_TYPE_PointerTowsa__ReferencePropertiesType (52)
+#define SOAP_TYPE_PointerTowsa__ReferencePropertiesType (51)
 #endif
 
 /* bool * has binding name 'PointerTobool' for type 'xsd:boolean' */
@@ -3243,44 +3305,39 @@ typedef char *wsc__FaultCodeOpenEnumType;
 #define SOAP_TYPE_PointerTobool (38)
 #endif
 
-/* ns3__SignStatus * has binding name 'PointerTons3__SignStatus' for type 'ns3:SignStatus' */
-#ifndef SOAP_TYPE_PointerTons3__SignStatus
-#define SOAP_TYPE_PointerTons3__SignStatus (36)
-#endif
-
-/* ns3__ValidationResponse * has binding name 'PointerTons3__ValidationResponse' for type 'ns3:ValidationResponse' */
-#ifndef SOAP_TYPE_PointerTons3__ValidationResponse
-#define SOAP_TYPE_PointerTons3__ValidationResponse (35)
-#endif
-
-/* ns3__ValidationRequest * has binding name 'PointerTons3__ValidationRequest' for type 'ns3:ValidationRequest' */
-#ifndef SOAP_TYPE_PointerTons3__ValidationRequest
-#define SOAP_TYPE_PointerTons3__ValidationRequest (34)
-#endif
-
 /* ns3__SignResponse * has binding name 'PointerTons3__SignResponse' for type 'ns3:SignResponse' */
 #ifndef SOAP_TYPE_PointerTons3__SignResponse
-#define SOAP_TYPE_PointerTons3__SignResponse (33)
-#endif
-
-/* xsd__base64Binary * has binding name 'PointerToxsd__base64Binary' for type 'xsd:base64Binary' */
-#ifndef SOAP_TYPE_PointerToxsd__base64Binary
-#define SOAP_TYPE_PointerToxsd__base64Binary (32)
+#define SOAP_TYPE_PointerTons3__SignResponse (36)
 #endif
 
 /* std::string * has binding name 'PointerTostd__string' for type 'xsd:string' */
 #ifndef SOAP_TYPE_PointerTostd__string
-#define SOAP_TYPE_PointerTostd__string (31)
+#define SOAP_TYPE_PointerTostd__string (35)
 #endif
 
-/* ns3__CCMovelSignResponse * has binding name 'PointerTons3__CCMovelSignResponse' for type 'ns3:CCMovelSignResponse' */
-#ifndef SOAP_TYPE_PointerTons3__CCMovelSignResponse
-#define SOAP_TYPE_PointerTons3__CCMovelSignResponse (29)
+/* xsd__base64Binary * has binding name 'PointerToxsd__base64Binary' for type 'xsd:base64Binary' */
+#ifndef SOAP_TYPE_PointerToxsd__base64Binary
+#define SOAP_TYPE_PointerToxsd__base64Binary (33)
+#endif
+
+/* ns3__ValidationResponse * has binding name 'PointerTons3__ValidationResponse' for type 'ns3:ValidationResponse' */
+#ifndef SOAP_TYPE_PointerTons3__ValidationResponse
+#define SOAP_TYPE_PointerTons3__ValidationResponse (32)
+#endif
+
+/* ns3__ValidationRequest * has binding name 'PointerTons3__ValidationRequest' for type 'ns3:ValidationRequest' */
+#ifndef SOAP_TYPE_PointerTons3__ValidationRequest
+#define SOAP_TYPE_PointerTons3__ValidationRequest (31)
+#endif
+
+/* ns3__SignStatus * has binding name 'PointerTons3__SignStatus' for type 'ns3:SignStatus' */
+#ifndef SOAP_TYPE_PointerTons3__SignStatus
+#define SOAP_TYPE_PointerTons3__SignStatus (30)
 #endif
 
 /* ns3__SignRequest * has binding name 'PointerTons3__SignRequest' for type 'ns3:SignRequest' */
 #ifndef SOAP_TYPE_PointerTons3__SignRequest
-#define SOAP_TYPE_PointerTons3__SignRequest (28)
+#define SOAP_TYPE_PointerTons3__SignRequest (29)
 #endif
 
 /* unsigned char * has binding name 'PointerTounsignedByte' for type 'xsd:unsignedByte' */
