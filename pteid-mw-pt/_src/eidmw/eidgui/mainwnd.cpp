@@ -746,13 +746,16 @@ void MainWnd::on_btnSelectTab_Identity_Extra_clicked()
 
 void MainWnd::on_btnSelectTab_Address_clicked()
 {
-	bool addressLoaded = false;
+	if (m_CI_Data.isDataLoaded())
+	{
+		bool addressLoaded = true;
 
-	if (addressdatastatus == 1)
-		addressLoaded = refreshTabAddress();
+		if (addressdatastatus == 1)
+			addressLoaded = refreshTabAddress();
 
-	if (addressLoaded)
-		m_ui.stackedWidget->setCurrentIndex(3);
+		if (addressLoaded)
+			m_ui.stackedWidget->setCurrentIndex(3);
+	}
 }
 
 void MainWnd::on_btnSelectTab_Certificates_clicked()
