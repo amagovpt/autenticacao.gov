@@ -16,9 +16,12 @@ namespace pt.portugal.eid
     public static readonly int CARD_TYPE_ERR = 0;
     public static readonly int CARD_TYPE_IAS07 = 1;
     public static readonly int CARD_TYPE_IAS101 = 2;
+	
+	public static readonly uint UNBLOCK_FLAG_NEW_PIN = 1;
+    public static readonly uint UNBLOCK_FLAG_PUK_MERGE = 2;
 
     //Flag used in the Activate method
-    private static readonly int MODE_ACTIVATE_BLOCK_PIN = 1;
+    private static readonly uint MODE_ACTIVATE_BLOCK_PIN = 1;
     
     protected static readonly char[] Hexhars = {
         '0', '1', '2', '3', '4', '5',
@@ -292,36 +295,37 @@ namespace pt.portugal.eid
     }
     
     
-    public static int UnblockPIN(byte pinId, String puk, String newPin){
+    public static int UnblockPIN(byte pinId, String puk, String newPin) {
+		return UnblockPIN_Ext(pinId, puk, newPin, UNBLOCK_FLAG_NEW_PIN);
+    }
+    
+    
+	//TODO: error codes are not compatible yet
+    public static int UnblockPIN_Ext(byte pinId, String puk, String newPin, uint flags){
         uint ul = 0;
 
-        if (readerContext!=null){
+        if (readerContext!=null) {
             try {
             
-		if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131)
-			return 0;
+				if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131)
+					return 0;
 
-		PTEID_Pins pins = idCard.getPins();
-		for (uint pinIdx=0; pinIdx < pins.count(); pinIdx++){
-			PTEID_Pin pin = pins.getPinByNumber(pinIdx);
-			if (pin.getPinRef() == pinId){
-				pin.unlockPin(puk, newPin, ref ul);
+				PTEID_Pins pins = idCard.getPins();
+				for (uint pinIdx=0; pinIdx < pins.count(); pinIdx++){
+					PTEID_Pin pin = pins.getPinByNumber(pinIdx);
+					if (pin.getPinRef() == pinId){
+						pin.unlockPin(puk, newPin, ref ul, flags);
+					}
+			}
+			} catch (Exception ex) {
+					throw new PteidException(0);
 			}
 		}
-            } catch (Exception ex) {
-                throw new PteidException(0);
-            }
-	}
 
 	return (int)ul;
     }
-    
-    
-    public static int UnblockPIN_Ext(byte b, String puk, String pin, int i){
-    	return UnblockPIN(b,puk, pin);
-    }
-    
-    
+  
+  
     public static void SelectADF(byte[] bytes){
         if (readerContext != null) {
             try {
