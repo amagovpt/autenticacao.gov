@@ -218,9 +218,12 @@ unsigned char CPkiCard::PinUsage2Pinpad(const tPin & Pin, const tPrivKey *pKey)
 	return (unsigned char)Pin.ulID;
 }
 
+#define UNBLOCK_FLAG_NEW_PIN    1
+#define UNBLOCK_FLAG_PUK_MERGE  2   // Only on pinpad readers
+
 bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg, void *wndGeometry )
+        unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg, void *wndGeometry, unsigned long unblockFlags)
 {
 
 	bool bRet = false;
@@ -228,9 +231,8 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
 	const std::string *pcsPin1 = &csPin1;
 	const std::string *pcsPin2 = &csPin2;
 
-	// martinho: usually each party have half of the puk (current puk size = 8) [puk ulMinLen = 8, ulMaxLen = 12]
-	// martinho: condition to puk merge: csPin1 size < current puk size. the condition Pin.ulPinRef & 0x10 is a way to identify puks.
-	bool bPukMerge = operation == PIN_OP_RESET && csPin1.length() == Pin.ulMinLen; //(Pin.ulPinRef & 0x10) && !csPin1.empty() && csPin1.length() < Pin.ulMinLen;
+	bool bPukMerge = unblockFlags & UNBLOCK_FLAG_PUK_MERGE;
+	bool defineNewPin = unblockFlags & UNBLOCK_FLAG_PUK_MERGE || operation == PIN_OP_CHANGE;
 	bool bAskPIN = true;
 
 	if (operation == PIN_OP_VERIFY && !csPin1.empty())
@@ -238,13 +240,13 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
 	if (operation == PIN_OP_CHANGE && !csPin1.empty())
 		bAskPIN = false;
 	//Ask for PIN in RESET also in the PUK merge case
-	if (operation == PIN_OP_RESET && csPin1.length() > Pin.ulMinLen)
+	if (operation == PIN_OP_RESET && !csPin1.empty() && !bPukMerge)
 		bAskPIN = false;
 
 	bool bUsePinpad = bAskPIN ? m_poPinpad != NULL : false;
 
 bad_pin:
-	//fprintf(stderr, "DEBUG PinCmd: bUsePinpad:%d, bPukMerge: %d\n", bUsePinpad, bPukMerge);
+	//fprintf(stderr, "DEBUG PinCmd: bUsePinpad:%d, bPukMerge: %d defineNewPin=%d\n", bUsePinpad, bPukMerge, defineNewPin);
 
     // If no Pin(s) provided and it's no Pinpad reader -> ask Pins
     if (bAskPIN && !bUsePinpad)
@@ -254,12 +256,23 @@ bad_pin:
 		pcsPin2 = &csReadPin2;
 	}
 
-    CByteArray oPinBuf = MakePinBuf(Pin, *pcsPin1, bUsePinpad, bPukMerge);
-    if (operation != PIN_OP_VERIFY)
-        oPinBuf.Append(MakePinBuf(Pin, *pcsPin2, bUsePinpad, bPukMerge));
+	if (!bUsePinpad && bPukMerge)
+	{
+		//Explicitly merge the 2 halves of the PUK
+		//In the pinpad case the operation is performed by the reader before
+		//generating the final APDU
+		csReadPin1 += csPin1;
+	}
 
-    CByteArray oAPDU = MakePinCmd(operation, Pin); // add CLA, INS, P1, P2
-    oAPDU.Append((unsigned char) oPinBuf.Size());  // add P3
+    CByteArray oPinBuf = MakePinBuf(Pin, *pcsPin1, bUsePinpad, bPukMerge);
+    //There is one case for PIN_OP_RESET where we don't have a new PIN
+    if (defineNewPin)
+        oPinBuf.Append(MakePinBuf(Pin, *pcsPin2, bUsePinpad, false));
+
+    // add CLA, INS, P1, P2 (we only need a special P1 value if Unblocking PIN without defining new PIN)
+    CByteArray oAPDU = MakePinCmd(operation, Pin, operation == PIN_OP_RESET && !defineNewPin); 
+    // add Lc
+    oAPDU.Append((unsigned char) oPinBuf.Size());  
     oAPDU.Append(oPinBuf);
 
 	CByteArray oResp;
@@ -279,13 +292,13 @@ bad_pin:
 		// Send the command
 		if (bUsePinpad)
 			oResp = m_poPinpad->PinCmd(operation, Pin,
-                                        PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg, wndGeometry );
-        	else
+                                        PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg, wndGeometry);
+        else
 			oResp = SendAPDU(oAPDU);
 	}
 
     unsigned long ulSW12 = getSW12(oResp);
-    if (ulSW12 == 0x9000){
+    if (ulSW12 == 0x9000) {
         bRet = true;
         ulRemaining = 3;
     }
@@ -302,8 +315,9 @@ bad_pin:
 	else
 		throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
 
-	//Wrong PIN with no user interaction: return false and don't ask for retries
-	if (!bRet && !bShowDlg)
+	// Wrong PIN with no user interaction: return false and don't ask for retries
+	// For PIN unlock we don't ask for retries
+	if (!bRet && !bShowDlg || operation == PIN_OP_RESET)
 	{
 	    return bRet;
 	}
@@ -650,7 +664,7 @@ DlgPinOperation CPkiCard::PinOperation2Dlg(tPinOperation operation)
 	}
 }
 
-CByteArray CPkiCard::MakePinCmd(tPinOperation operation, const tPin & Pin)
+CByteArray CPkiCard::MakePinCmd(tPinOperation operation, const tPin & Pin, bool specialP1Value)
 {
     CByteArray oCmd(5 + 32);
 
@@ -671,7 +685,11 @@ CByteArray CPkiCard::MakePinCmd(tPinOperation operation, const tPin & Pin)
         throw CMWEXCEPTION(EIDMW_ERR_PIN_OPERATION);
     }
 
-    oCmd.Append(0x00); // P1
+    //Reset retry counter only
+    if (specialP1Value)
+    	oCmd.Append(0x01); // P1
+    else
+    	oCmd.Append(0x00); // P1 (always 0 for Verify and Change, RESET counter and replace PIN)
 
     oCmd.Append((unsigned char) Pin.ulPinRef); // P2
     return oCmd;

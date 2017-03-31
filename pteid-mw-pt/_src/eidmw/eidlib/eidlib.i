@@ -1503,29 +1503,15 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 	  return retval;
 }
 
-//martinho
 //--------------------------------------------------
 // rewrite the function unlockPin(...) on the Java side
 //--------------------------------------------------
-%typemap(javaout) bool eIDMW::PTEID_Pin::unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft)
+%typemap(javaout) bool eIDMW::PTEID_Pin::unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft, unsigned long flags)
 {
 	  long		pRemaining = pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
-	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_Pin_unlockPin(swigCPtr, this, pszPuk, pszNewPin, pRemaining);
+	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_Pin_unlockPin(swigCPtr, this, pszPuk, pszNewPin, pRemaining, flags);
 
 	  triesLeft.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
-	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
-	  return retval;
-}
-
-//--------------------------------------------------
-// rewrite the function ChangeCapPinCompLayer(...) on the Java side
-//--------------------------------------------------
-%typemap(javaout) bool eIDMW::PTEID_EIDCard::ChangeCapPinCompLayer(const char *old_pin, const char *new_pin,unsigned long &ulRemaining)
-{
-	  long		pRemaining = pteidlibJava_WrapperJNI.new_ulongp();				// get a C++ ptr
-	  boolean	retval     = pteidlibJava_WrapperJNI.PTEID_EIDCard_ChangeCapPinCompLayer(swigCPtr, this, old_pin, new_pin, pRemaining);
-
-	  ulRemaining.m_long = pteidlibJava_WrapperJNI.ulongp_value(pRemaining);
 	  pteidlibJava_WrapperJNI.delete_ulongp(pRemaining);
 	  return retval;
 }

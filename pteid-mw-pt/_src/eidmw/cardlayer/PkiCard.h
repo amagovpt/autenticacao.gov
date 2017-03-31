@@ -39,7 +39,6 @@ public:
     virtual ~CPkiCard(void);
 
     virtual tCardType GetType() = 0;
-    virtual CByteArray GetInfo() = 0;
 
     virtual CByteArray GetSerialNrBytes() = 0;
 
@@ -55,12 +54,12 @@ public:
     virtual unsigned long PinStatus(const tPin & Pin) = 0;
     virtual CByteArray RootCAPubKey() = 0;
     virtual bool Activate(const char *pinCode, CByteArray &BCDDate,bool blockActivationPIN) = 0;
-    virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft) = 0;
+    virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft, unsigned long unblockFlags) = 0;
     
     virtual bool PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
         unsigned long & ulRemaining, const tPrivKey *pKey = NULL,
-        bool bShowDlg=true, void *wndGeometry = 0 );
+        bool bShowDlg=true, void *wndGeometry = 0, unsigned long unblockFlags=0);
 
     virtual bool PinCmdIAS(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
@@ -90,7 +89,7 @@ protected:
     virtual void showPinDialog(tPinOperation operation, const tPin & Pin,
         std::string & csPin1, std::string & csPin2, const tPrivKey *pKey, void *wndGeometry = 0 ) = 0;
 
-    virtual CByteArray MakePinCmd(tPinOperation operation, const tPin & Pin);
+    virtual CByteArray MakePinCmd(tPinOperation operation, const tPin & Pin, bool specialP1Value=false);
     virtual CByteArray MakePinCmdIAS(tPinOperation operation, const tPin & Pin, void *wndGeometry = 0 );
     virtual CByteArray MakePinBuf(const tPin & Pin, const std::string & csPin, bool bEmptyPin, bool bPukMerge);
 

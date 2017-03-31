@@ -394,7 +394,7 @@ void dlgPrint::ShowErrorMsgBox(Operation op)
 {
 
 	QString caption  = tr("Export / Print");
-    QString msg = op == Operation::PRINT ? tr("Printing was canceled"): tr("Error Generating PDF File!");
+    QString msg = op == Operation::PRINT ? tr("Printing was canceled!"): tr("Error Generating PDF File!");
   	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
   	msgBoxp.exec();
 }

@@ -264,14 +264,6 @@ tCardType CReader::GetCardType()
     return m_poCard->GetType();
 }
 
-CByteArray CReader::GetInfo()
-{
-    if (m_poCard == NULL)
-        throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
-
-    return m_poCard->GetInfo();
-}
-
 std::string CReader::GetSerialNr()
 {
     if (m_poCard == NULL)
@@ -409,23 +401,23 @@ bool CReader::Activate(const char *pinCode, CByteArray &BCDDate, bool blockActiv
     return m_poCard->Activate(pinCode, 	BCDDate, blockActivationPIN);
 }
 
-bool CReader::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft){
+bool CReader::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft, unsigned long unblockFlags){
 	if (m_poCard == NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
 
-	return m_poCard->unlockPIN(pin, puk, pszPuk, pszNewPin, triesLeft);
+	return m_poCard->unlockPIN(pin, puk, pszPuk, pszNewPin, triesLeft, unblockFlags);
 }
 
 
 bool CReader::PinCmd(tPinOperation operation, const tPin & Pin,
     const std::string & csPin1, const std::string & csPin2,
-    unsigned long & ulRemaining, bool bShowDlg, void *wndGeometry )
+    unsigned long & ulRemaining, bool bShowDlg, void *wndGeometry, unsigned long unblockFlags)
 {
     if (m_poCard == NULL)
         throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
 
-    return m_poCard->PinCmd(operation, Pin, csPin1, csPin2
-                            , ulRemaining, NULL, bShowDlg, wndGeometry );
+    return m_poCard->PinCmd(operation, Pin, csPin1, csPin2,
+           ulRemaining, NULL, bShowDlg, wndGeometry, unblockFlags);
 }
 
 unsigned long CReader::GetSupportedAlgorithms()

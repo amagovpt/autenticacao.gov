@@ -1,10 +1,10 @@
 /*
- *
  * Pteidlib compatibility methods
  */
 
 package pteidlib;
 import pt.gov.cartaodecidadao.*;
+import pt.gov.cartaodecidadao.pteidlibJava_WrapperConstants;
 
 public class pteid {
 
@@ -26,6 +26,10 @@ public class pteid {
     public static final int UNBLOCK_FLAG_NEW_PIN = 1;
     public static final int UNBLOCK_FLAG_PUK_MERGE = 2;
     public static final int MODE_ACTIVATE_BLOCK_PIN = 1;
+
+    private static int SC_ERROR_AUTH_METHOD_BLOCKED = -1212;
+    private static int SC_ERROR_PIN_CODE_INCORRECT = -1214;
+    
 
     protected static final char[] hexChars = {
         '0', '1', '2', '3', '4', '5',
@@ -297,38 +301,46 @@ public class pteid {
 
 
     public static int UnblockPIN(byte pin_id, String puk, String newPin) throws PteidException {
-        PTEID_ulwrapper tries_left = new PTEID_ulwrapper(-1);
+       
+       return UnblockPIN_Ext(pin_id, puk, newPin, UNBLOCK_FLAG_NEW_PIN);
+    }
 
-    		//Convert byte to long
-            long pinId = pin_id & 0x00000000000000FF;
+    public static int UnblockPIN_Ext(byte pin_id, String puk, String newPin, int flags) throws PteidException {
+    	PTEID_ulwrapper tries_left = new PTEID_ulwrapper(-1);
 
-            if (readerContext!=null){
-                try {
+        //Convert byte to long
+        long pinId = pin_id & 0x00000000000000FF;
 
-                  if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131)
-                   return 0;
+        if (readerContext!=null) {
+            try {
 
-               PTEID_Pins pins = idCard.getPins();
-               for (long pinIdx=0; pinIdx < pins.count(); pinIdx++){
+              if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131)
+                 return 0;
 
-                   pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
+            PTEID_Pins pins = idCard.getPins();
+            for (long pinIdx=0; pinIdx < pins.count(); pinIdx++) {
 
-                   if (pin.getPinRef() == pinId) {
-                    pin.unlockPin(puk, newPin, tries_left);
-                }
+                 pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
+
+                 if (pin.getPinRef() == pinId) {
+                    boolean ret = pin.unlockPin(puk, newPin, tries_left, flags);
+
+                    if (!ret)
+                    {
+                        if (tries_left.m_long == 0)
+                            throw new PteidException(SC_ERROR_AUTH_METHOD_BLOCKED);
+                        else
+                            throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
+                    }
+                 }
             }
-        } catch (Exception ex) {
-            throw new PteidException();
-        }
+            } catch (PTEID_Exception ex) {
+                ex.printStackTrace();
+                throw new PteidException(ex.GetError());
+            }
         }
 
         return (int)tries_left.m_long;
-    }
-
-    /* TODO: flag not implemented yet: the default behaviour should be UNBLOCK_FLAG_PUK_MERGE | UNBLOCK_FLAG_NEW_PIN
-    */
-    public static int UnblockPIN_Ext(byte pin_id, String puk, String newPin, int flag) throws PteidException{
-    	return UnblockPIN(pin_id, puk, newPin);
     }
 
 

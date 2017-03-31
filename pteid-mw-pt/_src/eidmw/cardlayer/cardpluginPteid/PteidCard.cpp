@@ -425,13 +425,16 @@ bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate, bool blockAc
 	return true;
 }
 
-bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft){
+bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft, 
+	                       unsigned long unblockFlags) {
 	CByteArray oResp;
 	bool bOK = false;
 	unsigned long ulRemaining;
 
 	try
 	{
+		//This implementation is deprecated because there are no more IAS 1.01 cards
+		//So we don't even use the new flags param...
 		if (m_cardType == CARD_PTEID_IAS101) {
 			if (PinCmd(PIN_OP_VERIFY, *puk, pszPuk, "", ulRemaining, NULL))      // Verify PUK
 				bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", triesLeft, NULL); // Reset PIN
@@ -445,7 +448,8 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 			std::string puk_str;
 			if (pszPuk != NULL)
 				puk_str = pszPuk;
-			bOK = PinCmd(PIN_OP_RESET, pin, puk_str, pin_str, triesLeft, NULL);
+
+			bOK = PinCmd(PIN_OP_RESET, pin, puk_str, pin_str, triesLeft, NULL, true, NULL, unblockFlags);
 		}
 	}
 	catch(CMWException e)
@@ -620,20 +624,18 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 
 bool CPteidCard::PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg, void *wndGeometry )
+        unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg, void *wndGeometry, unsigned long unblockFlags)
 {
 	bool pincheck;
     tPin pteidPin = Pin;
     // There's a path in the EF(AODF) for the PINs, but it's
     // not necessary, so we can save a Select File command
     pteidPin.csPath = "";
-	// Encoding is Global Platform, there is/was no way to encode
-	// this in PKCS15 AODF so it says/said erroneously "BCD encoding".
-	//pteidPtrqin.encoding = PIN_ENC_BCD;
+
 	pteidPin.encoding = PIN_ENC_ASCII; //PT uses ASCII only for PIN
 	if (m_AppletVersion == 1 ) {
 		pincheck = CPkiCard::PinCmd(operation, pteidPin, csPin1, csPin2
-                                , ulRemaining, pKey,bShowDlg, wndGeometry);
+                                , ulRemaining, pKey,bShowDlg, wndGeometry, unblockFlags);
 	} else {
 		pincheck = CPkiCard::PinCmdIAS(operation, pteidPin, csPin1, csPin2
                                     , ulRemaining, pKey,bShowDlg, wndGeometry);

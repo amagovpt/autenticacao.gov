@@ -85,10 +85,6 @@ public:
     bool IsPinpadReader();
 
     tCardType GetCardType();
-    /* Return card-specific info.
-     * E.g. for the BeID card, this will return the result
-	 * of the "Get Card Data" command (unsigned) */
-    CByteArray GetInfo();
 
     std::string GetSerialNr();
     std::string GetCardLabel();
@@ -127,11 +123,11 @@ public:
 
     bool Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN);
 
-    bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft);
+    bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft, unsigned long unblockFlags);
 
     bool PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, bool bShowDlg=true, void *wndGeometry = 0 );
+        unsigned long & ulRemaining, bool bShowDlg=true, void *wndGeometry = 0, unsigned long unblockFlags = 0);
 
 	/** Returns the OR-ing of all supported crypto algorithms */
 	unsigned long GetSupportedAlgorithms();

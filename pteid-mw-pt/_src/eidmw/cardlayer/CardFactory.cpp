@@ -22,36 +22,6 @@
  * (that should free()-ed when no longer used) that can be used
  * to communicate to a specific card.
  *
- * - First the plugins in a specific directory are loaded and
- * tried out, so see if they support that specific card.
- * For the BE eID, this directory is %windir%\System32\pteidcardplugins\
- * on Linux/Mac it is %PREFIX%/lib/pteidcardplugins.
- * - If no plugin for the card can be found, 'harcoded' plugins
- * can be tried (e.g. PteidCard and SISCard for the BE eID middleware).
- *
- * Plugin names and their meaning
- * - Cardplugins should start with "cardplugin" on Windows and
- *   "libcardplugin" on Linux/Mac.
- * - If the name starts with "cardpluginFull" or "libcardpluginFull",
- *   the plugin exports both the GetCardInstance() and ConnectGetCardInstance()
- *   functions. Otherwise, only the GetCardInstance() function should
- *   be exported.
- * - If the name of the plugin contains twice the string "__", then
- *   the string between them is taken to be the start of the PCSC
- *   reader name, and will only be used for that reader.
- * E.g. A plugin called "cardpluginFull_SIS__ACS ACR38U__.dll" will
- * only be used if the reader name starts with "ACS ACR38", and should
- * export the GetCardInstance() and ConnectGetCardInstance() functions.
- *
- * Function exported by the card plugins:
- * - GetCardInstance(): an SCardConnect() has been done and an SCARDHANDLE
- *   is provided in this function. This function should check if the card
- *   is supported, and if so, a pointer to a CCard object is returned, or
- *   NULL otherwise.
- * - FullConnect(): a normal SCardConnect() couldn't be done, so this function
- *   is called with the reader name, and the function can try to connect
- *   in a reader-and/or card specific way. If this succeeds then this function
- *   continues as in the GetCardInstance() function.
  */
 #include "CardFactory.h"
 #include "UnknownCard.h"

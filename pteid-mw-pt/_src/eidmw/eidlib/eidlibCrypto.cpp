@@ -710,14 +710,14 @@ unsigned long PTEID_Pin::getPinRef()
 	return out;
 }
 
-bool PTEID_Pin::unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft)
+bool PTEID_Pin::unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft, unsigned long flags)
 {
 	bool out = false;
 
 	BEGIN_TRY_CATCH
 
 	APL_Pin *pimpl=static_cast<APL_Pin *>(m_impl);
-	out = pimpl->unlockPin(pszPuk, pszNewPin, triesLeft);
+	out = pimpl->unlockPin(pszPuk, pszNewPin, triesLeft, flags);
 
 	END_TRY_CATCH
 

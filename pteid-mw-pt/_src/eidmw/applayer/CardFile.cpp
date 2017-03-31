@@ -288,7 +288,7 @@ void APL_CardFile_Info::ReadFile()
 {
 	//Fill the m_data with the pseudo info file
 	APL_SmartCard *card=dynamic_cast<APL_SmartCard *>(m_card);
-	card->getInfo(m_data);
+	//card->getInfo(m_data);
 }
 
 tCardFileStatus APL_CardFile_Info::VerifyFile()

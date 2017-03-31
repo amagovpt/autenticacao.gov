@@ -194,8 +194,6 @@ public:
 	  */
 	EIDMW_APL_API virtual ~APL_SmartCard()=0;
 
-	EIDMW_APL_API void getInfo(CByteArray &info);		/**< Call the GetInfo from the CAL */
-
 	/**
 	  * Tell the card to select an application on the card
 	  */

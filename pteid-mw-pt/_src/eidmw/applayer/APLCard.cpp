@@ -531,15 +531,6 @@ APL_CardFile_Info *APL_SmartCard::getFileInfo()
 	return m_fileinfo;
 }
 
-void APL_SmartCard::getInfo(CByteArray &info)
-{
-
-	BEGIN_CAL_OPERATION(m_reader)
-		info=m_reader->getCalReader()->GetInfo();
-	END_CAL_OPERATION(m_reader)
-
-}
-
 void APL_SmartCard::selectApplication(const CByteArray &applicationId) const
 {
 

@@ -756,59 +756,6 @@ bool testPIN(const char* pin){
 }
 
 
-/*
-bool PTEID_EIDCard::ChangeCapPinCompLayer(const char *old_pin, const char *new_pin, unsigned long &ulRemaining){
-	bool out = false;
-	bool validPins = false;
-	std::string *oldPin;
-	std::string *newPin;
-	PTEID_Pin &pin = getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
-
-	if (old_pin && strlen(old_pin) > 0)
-		validPins = testPIN(old_pin);
-	if (new_pin && strlen(new_pin) > 0)
-		validPins &= testPIN(new_pin);
-
-	if (!validPins){
-		wchar_t wsPin1[9]; // 8 + \0
-		wchar_t wsPin2[9]; // 8 + \0
-		DlgPinOperation pinOperation = DLG_PIN_OP_CHANGE;
-		DlgPinUsage usage = DLG_PIN_AUTH;
-		DlgPinInfo pinInfo = {4, 8, PIN_FLAG_DIGITS};
-		DlgRet ret;
-		std::wstring wideLabel(utilStringWiden(pin.getLabel()));
-
-		ret = DlgAskPins(DLG_PIN_OP_CHANGE,
-				DLG_PIN_AUTH, wideLabel.c_str(),
-				pinInfo, wsPin1,8+1,
-				pinInfo, wsPin2,8+1);
-
-		if (ret == DLG_OK){
-			oldPin = new string (utilStringNarrow(wsPin1));
-			newPin = new string (utilStringNarrow(wsPin2));
-		} else
-			return false;
-	} else {
- 		oldPin = new string(old_pin);
-		newPin = new string(new_pin);
-	}
-
-	if (ChangeCapPin(newPin->c_str())){
-		if (!pin.changePin(oldPin->c_str(),newPin->c_str(),ulRemaining, pin.getLabel(),false)){
-			ChangeCapPin(oldPin->c_str());
-			out = false;
-		} else {
-			out = true;
-		}
-	}
-	delete oldPin;
-	delete newPin;
-
-	return out;
-}
-*/
-
-
 void PTEID_EIDCard::doSODCheck(bool check) {
 
 	BEGIN_TRY_CATCH
@@ -963,16 +910,12 @@ PTEIDSDK_API tCompCardType PTEID_GetCardType(){
 	return COMP_CARD_TYPE_ERR;
 }
 
-
-
 //Error codes inherited from Pteid Middleware V1: documented in CC_Technical_Reference_1.61
-
 #define SC_ERROR_AUTH_METHOD_BLOCKED -1212
 #define SC_ERROR_PIN_CODE_INCORRECT -1214
 #define SC_ERROR_INTERNAL -1400
 #define SC_ERROR_OBJECT_NOT_VALID -1406
 #define SC_ERROR_PIN_CODE_INCORRECT -1214
-
 
 PTEIDSDK_API long PTEID_GetID(PTEID_ID *IDData){
 
@@ -1312,7 +1255,7 @@ PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszN
 			for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++) {
 				PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
 				if (pin.getPinRef() == PinId) {
-					bool ret = pin.unlockPin(pszPuk, pszNewPin,tleft);
+					bool ret = pin.unlockPin(pszPuk, pszNewPin,tleft, 0);
 					*triesLeft = tleft;
 					return ret ? PTEID_OK: SC_ERROR_PIN_CODE_INCORRECT;
 				}

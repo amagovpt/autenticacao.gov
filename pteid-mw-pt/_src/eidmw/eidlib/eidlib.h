@@ -347,8 +347,8 @@ private:
 };
 
 
-/******************************************************************************//**
-  * These structure are used for compatibility with old C sdk.
+/********************************************************************************
+  * These defines and functions are meant for compatibility with old C sdk.
   *********************************************************************************/
 
 /* General return codes */
@@ -880,9 +880,6 @@ public:
 
 	     PTEIDSDK_API void ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data);
 
-	     /* helper method for the compatibility layer */
-	     //PTEIDSDK_API bool ChangeCapPinCompLayer(const char *old_pin, const char *new_pin,unsigned long &ulRemaining);
-
 protected:
 	PTEID_EIDCard(const SDK_Context *context,APL_Card *impl);		/**< For internal use : Constructor */
 
@@ -1235,10 +1232,10 @@ public:
 	PTEIDSDK_API unsigned long getId();			/**< Get the id of the pin */
 	PTEIDSDK_API unsigned long getPinRef();		/**< Get the pinref value of the pin */
 	PTEIDSDK_API PTEID_PinUsage getUsageCode();	/**< Get the usage code of the pin */
-	PTEIDSDK_API unsigned long getFlags();		/**< Get the flags of the pin */
-	PTEIDSDK_API const char *getLabel();			/**< Get the label of the pin */
-	PTEIDSDK_API const char *getLabelById( unsigned long id );/**< Get the label of the pin by Id */
-	PTEIDSDK_API bool unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft);
+	PTEIDSDK_API unsigned long getFlags();		               /**< Get the flags of the pin */
+	PTEIDSDK_API const char *getLabel();			           /**< Get the label of the pin */
+	PTEIDSDK_API const char *getLabelById( unsigned long id ); /**< Get the label of the pin by Id */
+	PTEIDSDK_API bool unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft, unsigned long flags);
 
 	/**
 	  * Return the remaining tries for entering the correct pin.

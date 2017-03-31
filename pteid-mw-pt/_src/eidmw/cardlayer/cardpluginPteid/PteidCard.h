@@ -81,11 +81,12 @@ public:
 	virtual bool PinCmd(tPinOperation operation, const tPin & Pin,
             const std::string & csPin1, const std::string & csPin2,
             unsigned long & ulRemaining, const tPrivKey *pKey = NULL,
-            bool bShowDlg=true, void *wndGeometry = 0 );
+            bool bShowDlg=true, void *wndGeometry = 0, unsigned long unblockFlags=0 );
     virtual unsigned long PinStatus(const tPin & Pin);
     virtual CByteArray RootCAPubKey();
     virtual bool Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN);
-    virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft);
+    virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft,
+    	unsigned long unblockFlags);
 
 	virtual unsigned long GetSupportedAlgorithms();  
 
