@@ -1427,9 +1427,7 @@ bool MainWnd::StoreAuthorityCerts(PCCERT_CONTEXT pCertContext, unsigned char Key
 
 	if ( 0 == memcmp ( pCertContext->pCertInfo->Issuer.pbData
 			, pCertContext->pCertInfo->Subject.pbData
-			, pCertContext->pCertInfo->Subject.cbData
-	)
-	)
+			, pCertContext->pCertInfo->Subject.cbData))
 	{
 		hMemoryStore = CertOpenSystemStoreA (NULL, "ROOT");
 	}
@@ -1455,10 +1453,15 @@ bool MainWnd::StoreAuthorityCerts(PCCERT_CONTEXT pCertContext, unsigned char Key
 		{
 			CertAddEnhancedKeyUsageIdentifier (pCertContext, szOID_PKIX_KP_EMAIL_PROTECTION);
 			CertAddEnhancedKeyUsageIdentifier (pCertContext, szOID_PKIX_KP_SERVER_AUTH);
-			if(CertAddCertificateContextToStore(hMemoryStore, pCertContext, CERT_STORE_ADD_NEWER, NULL))
+			if (CertAddCertificateContextToStore(hMemoryStore, pCertContext, CERT_STORE_ADD_NEWER, NULL))
 			{
 				m_certContexts[readerName].push_back(pCertContext);
 				bRet = true;
+			}
+			else
+			{
+				if (GetLastError() == ERROR_CANCELLED)
+					PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "User denied registration of root certificate! Certificate chain will be incomplete...");
 			}
 		}
 		CertCloseStore (hMemoryStore, CERT_CLOSE_STORE_FORCE_FLAG);
@@ -1485,7 +1488,7 @@ bool MainWnd::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, 
 	{
 		// ----------------------------------------------------
 		// look if we already have a certificate with the same
-		// subject (contains name and NNR) in the store
+		// subject (contains name and document number) in the store
 		// If the certificate is not found --> NULL
 		// ----------------------------------------------------
 		do
@@ -1501,7 +1504,7 @@ bool MainWnd::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, 
 				{
 					// ----------------------------------------------------
 					// certificates are not identical, but have the same
-					// subject (contains name and NNR),
+					// subject (contains name and document number),
 					// so we remove the one that was already in the store
 					// ----------------------------------------------------
 					if(NULL == CertDeleteCertificateFromStore(pDesiredCert))
@@ -1518,7 +1521,8 @@ bool MainWnd::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, 
 				}
 			}
 			pPrevCert = pDesiredCert;
-		}while (NULL != pDesiredCert);
+		}
+		while (NULL != pDesiredCert);
 
 
 		if( NULL != (pDesiredCert = CertFindCertificateInStore(hMyStore, X509_ASN_ENCODING, 0, CERT_FIND_EXISTING, pCertContext , NULL))
