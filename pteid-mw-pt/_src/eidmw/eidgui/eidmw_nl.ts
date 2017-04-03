@@ -1038,10 +1038,6 @@ Please specify .xml, .csv or .eid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The Citizen Card is not active</source>
-        <translation>O cartão de Cidadão não se encontra ativo</translation>
-    </message>
-    <message>
         <source>The Citizen Card has been activated</source>
         <translation>O Cartão de Cidadão foi ativado</translation>
     </message>
@@ -1359,6 +1355,10 @@ Please specify .xml, .csv or .eid</source>
      <message>
         <source>The Citizen Card has been activated</source>
         <translation>O Cartão de Cidadão foi ativado</translation>
+    </message>
+    <message>
+        <source>The Citizen Card is not active</source>
+        <translation>O cartão de Cidadão não se encontra ativo</translation>
     </message>
       <message>
         <source>Cancel</source>
