@@ -232,7 +232,7 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
 	const std::string *pcsPin2 = &csPin2;
 
 	bool bPukMerge = unblockFlags & UNBLOCK_FLAG_PUK_MERGE;
-	bool defineNewPin = unblockFlags & UNBLOCK_FLAG_PUK_MERGE || operation == PIN_OP_CHANGE;
+	bool defineNewPin = unblockFlags & UNBLOCK_FLAG_NEW_PIN || operation == PIN_OP_CHANGE;
 	bool bAskPIN = true;
 
 	if (operation == PIN_OP_VERIFY && !csPin1.empty())
