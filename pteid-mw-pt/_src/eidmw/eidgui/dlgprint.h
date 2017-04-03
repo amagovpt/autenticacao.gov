@@ -54,9 +54,6 @@ private:
     Ui_dlgPrint ui;
     CardInformation const& m_CI_Data;
     QString					m_CurrReaderName;		//!< the current reader we're using
-    QImage img;
-    QImage *background;
-    QByteArray image;
     QFutureWatcher<void> FutureWatcher;
     QProgressDialog *pdialog;
     int sections_to_print;

@@ -267,7 +267,8 @@ void dlgPrint::on_pbPrint_clicked()
             ShowErrorMsgBox(Operation::PRINT);
             return;
         }
-		
+        
+        this->close();
 	}
 
 }
