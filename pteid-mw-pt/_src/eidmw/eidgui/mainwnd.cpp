@@ -2661,7 +2661,6 @@ void MainWnd::on_actionOptions_triggered(void)
 //*****************************************************
 void MainWnd::actionSignature_eID_triggered()
 {
-	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
 	if(m_CI_Data.isDataLoaded())
 	{
 		dlgSignature* dlgsig = new dlgSignature(this, m_Settings.getSelectedReader(), m_CI_Data);
@@ -2677,7 +2676,6 @@ void MainWnd::actionSignature_eID_triggered()
 
 void MainWnd::actionPDFSignature_triggered()
 {
-	tFieldMap& CardFields = m_CI_Data.m_CardInfo.getFields();
 
 	if(m_CI_Data.isDataLoaded())
 	{
@@ -2735,7 +2733,6 @@ void MainWnd::actionSCAPSignature_triggered()
 		SCAP_EXE += ".exe";
 	#endif
 		QStringList args;
-		qint64 child_pid = 0;
 
 		QProcess::startDetached(m_Settings.getExePath()+SCAP_EXE, args);
 
@@ -3653,7 +3650,6 @@ bool MainWnd::refreshTabAddress( void )
 	{
 		m_ui.page_Address->setStyleSheet("");
 		m_ui.page_Address->setStyleSheet("background-image: url(:/images/Images/tab-backgrounds/bg_address.png);");
-		unsigned int offset = 0;
 		unsigned int streetname_width = 190;
 		unsigned int streetname_height = 3;
 
@@ -3743,9 +3739,7 @@ void MainWnd::PersoDataSaveButtonClicked( void )
 
         PTEID_ReaderContext &ReaderContext  = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
         PTEID_EIDCard	 &Card	= ReaderContext.getEIDCard();
-        PTEID_Pins &Pins	= Card.getPins();
-        PTEID_Pin &Pin	= Pins.getPinByNumber(1);
-
+        
         if (pinNotes == 1)
             authPINRequest_triggered();
 
@@ -3754,14 +3748,15 @@ void MainWnd::PersoDataSaveButtonClicked( void )
             if ( TxtPersoDataString.toStdString().size() > 0 ){
                 const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), (TxtPersoDataString.toStdString().size() + 1) );
                 Card.writePersonalNotes(oData);
-            }else{
+            }
+            else {
                 unsigned long ulSize = 1000;
                 unsigned char *pucData = (unsigned char *)calloc( ulSize, sizeof(char) );
 
                 const PTEID_ByteArray oData( (const unsigned char *)pucData, ulSize);
                 Card.writePersonalNotes(oData);
                 free(pucData);
-            }/* if ( TxtPersoDataString.toStdString().size() > 0 ) */
+            }
             QMessageBox::information( this, tr("Personal Notes"),  tr("Personal notes successfully written!"), QMessageBox::Ok );
 
         }
@@ -4341,7 +4336,7 @@ void MainWnd::customEvent( QEvent* pEvent )
 								return;
 							}
 
-                                                        /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
+                            /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
 
 
 							/* Allow new card data reading */
@@ -4388,13 +4383,10 @@ void MainWnd::doPicturePopup( PTEID_Card& card )
     // just return, we don't show the picture when the card is inserted
     // The setting to show the picture is used for the textballoon
     //------------------------------------------------
-
     if (!m_Settings.getShowPicture())
     {
         return;
     }
-
-    PTEID_EIDCard& eidCard		 = static_cast<PTEID_EIDCard&>(card);
 
     QImage myImage, myImagescaled;
     QPixmap				  pixMap;
