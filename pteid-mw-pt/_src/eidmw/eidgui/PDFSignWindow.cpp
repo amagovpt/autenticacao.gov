@@ -63,7 +63,6 @@ PDFSignWindow::PDFSignWindow(QWidget* parent, int selected_reader, CardInformati
 	const QIcon Ico = QIcon(":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png");
 
 	this->setWindowIcon(Ico);
-	int i=0, j=0;
 
 	m_pdf_sig = NULL;
 	success = NOT_YET_SIGNED;
@@ -80,13 +79,6 @@ PDFSignWindow::PDFSignWindow(QWidget* parent, int selected_reader, CardInformati
 	//Sensible limits for the signature metadata because it will be displayed in the visible signature limited space
 	ui.reason_textbox->setMaxLength(96);
 	ui.location_textbox->setMaxLength(35);
-
-	// int items = ui.horizontalLayout_3->count();
-
-	// for (int i = 0; i!= items; i++)
-	// {
-	// 	ui.horizontalLayout_3->itemAt(i)->setAlignment(Qt::AlignLeft);
-	// }
 
 	// ui.verticalLayout->setContentsMargins(15,15,15,15);
 
@@ -224,7 +216,6 @@ void ImageCanvas::initDateString()
 
 QImage ImageCanvas::drawToImage()
 {
-	// const int spacing = 10;
 	const int img_width = 185;
 	const int img_height = 42;
 
@@ -243,12 +234,6 @@ QImage ImageCanvas::drawToImage()
 	 	Qt::SmoothTransformation) :
 			user_pixmap;
 
-	//Scale width if needed
-	// if (scaled.width() > img_width)
-	// {
-	// 	scaled = scaled.scaledToWidth(img_width, Qt::SmoothTransformation);
-	// }
-
    	painter.drawPixmap(0, 0, scaled);
 
    	return output_img;
@@ -256,9 +241,7 @@ QImage ImageCanvas::drawToImage()
 
 void ImageCanvas::paintEvent(QPaintEvent *)
 {
-	const int spacing = 10;
 	const int line_spacing = 5;
-	int line_count = 0;
 	int current_y_pos = 5;
 
 	if (!this->previewVisible)
@@ -363,7 +346,7 @@ void ImageCanvas::paintEvent(QPaintEvent *)
 	if (!small_sig_format && !sig_location.isEmpty())
 	{
 		current_y_pos += line_height + line_spacing;
-		painter.drawText(5, current_y_pos, "Local: " + sig_location);
+		painter.drawText(5, current_y_pos, QString::fromUtf8("Localização: ") + sig_location);
 	}
 
 
