@@ -29,6 +29,8 @@ public class pteid {
 
     private static int SC_ERROR_AUTH_METHOD_BLOCKED = -1212;
     private static int SC_ERROR_PIN_CODE_INCORRECT = -1214;
+    private static int SC_ERROR_KEYPAD_TIMEOUT = -1108;
+    private static int SC_ERROR_KEYPAD_CANCELLED = -1109;
     
 
     protected static final char[] hexChars = {
@@ -335,8 +337,15 @@ public class pteid {
                  }
             }
             } catch (PTEID_Exception ex) {
-                ex.printStackTrace();
-                throw new PteidException(ex.GetError());
+                if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_TIMEOUT)
+                    throw new PteidException(SC_ERROR_KEYPAD_TIMEOUT);
+                else if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_PIN_CANCEL)
+                    throw new PteidException(SC_ERROR_KEYPAD_CANCELLED);
+                else
+                {
+                    //ex.printStackTrace();
+                    throw new PteidException(ex.GetError());
+                }
             }
         }
 
