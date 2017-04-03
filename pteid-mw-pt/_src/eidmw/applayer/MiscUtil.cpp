@@ -19,6 +19,12 @@
 **************************************************************************** */
 #include "MiscUtil.h"
 
+
+#include <openssl/bio.h>
+#include <openssl/evp.h>
+#include <openssl/buffer.h>
+#include <openssl/pem.h>
+
 #ifdef WIN32
 #include <Windows.h>
 #include <io.h> //For _sopen and _chsize
@@ -30,10 +36,7 @@
 
 #include <cstdio>
 #include <cstring>
-#include <openssl/bio.h>
-#include <openssl/evp.h>
-#include <openssl/buffer.h>
-#include <openssl/pem.h>
+
 
 #include <sys/types.h>
 #include <sys/stat.h>

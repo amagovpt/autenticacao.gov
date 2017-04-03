@@ -3,7 +3,6 @@
 #include "poppler/Page.h"
 #include "poppler/ErrorCodes.h"
 
-#include "sign-pkcs7.h"
 #include "PDFSignature.h"
 #include "MWException.h"
 #include "eidErrors.h"
@@ -15,10 +14,11 @@
 
 //For the setSSO calls
 #include "CardLayer.h"
-#include "goo/GooString.h""
+#include "goo/GooString.h"
 
 #include <openssl/bio.h>
 #include <openssl/x509.h>
+#include "sign-pkcs7.h"
 
 namespace eIDMW
 {

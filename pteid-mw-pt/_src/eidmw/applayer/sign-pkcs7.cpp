@@ -1,4 +1,4 @@
-#include "sign-pkcs7.h"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -20,7 +20,7 @@
 
 /* Conditionally check some features on the OpenSSL API  */
 #include <openssl/opensslv.h>
-
+#include "sign-pkcs7.h"
 #include <openssl/bio.h>
 #include <openssl/x509.h>
 #include <openssl/pem.h>

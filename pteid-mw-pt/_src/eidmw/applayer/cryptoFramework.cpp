@@ -968,6 +968,9 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	BIO *pBio = 0;
+
+	//OCSP connection socket, we will use async io on it
+	int fd;
 	int iSSL = 0;
 	int rv = 0;
     char *pszHost = 0;
@@ -1035,11 +1038,32 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 	if (pBio == NULL)
 	{
 
+		MWLOG(LEV_ERROR, MOD_APL, "GetOCSPResponse: failed to connect to socket!");
 		eStatus=FWK_CERTIF_STATUS_CONNECT;
 	}
-
 	else
 	{
+
+		if (BIO_get_fd(pBio, &fd) < 0) {
+			fprintf(stderr, "Can't get connection fd\n");
+			goto cleanup;
+		}
+
+		/*
+    SCOPE(OCSP_REQ_CTX, rctx, OCSP_sendreq_new(connection.get(), const_cast<char*>(url.c_str()), 0, -1));
+    if(!rctx)
+        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
+
+    if(!OCSP_REQ_CTX_add1_header(rctx.get(), "Host", const_cast<char*>(hostname.c_str())))
+        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
+		    
+
+    if(!OCSP_REQ_CTX_set1_req(rctx.get(), req))
+        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
+
+    if(!OCSP_sendreq_nbio(&resp, rctx.get()))
+        THROW_OPENSSLEXCEPTION("Failed to send OCSP request.");
+		*/
 
 		//TODO: Test this with and without proxy ...
 		ctx = OCSP_sendreq_new(pBio, useProxy ? uri : pszPath, NULL, -1);
@@ -1061,14 +1085,49 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 
 		OCSP_REQ_CTX_set1_req(ctx, pRequest);
 
+		/* Original IO loop
 		do {
         	rv = OCSP_sendreq_nbio(pResponse, ctx);
     	}
     	while ((rv == -1) && BIO_should_retry(pBio));
+		*/
+
+		fd_set confds;
+
+		//Timeout value for the OCSP request
+		struct timeval tv;
+		for (;;) {
+			rv = OCSP_sendreq_nbio(pResponse, ctx);
+			if (rv != -1)
+				break;
+		
+			FD_ZERO(&confds);
+			FD_SET(fd, &confds);
+			tv.tv_usec = 0;
+			//Timeout value in seconds
+			tv.tv_sec = 10;
+			if (BIO_should_read(pBio))
+				rv = select(fd + 1, &confds, NULL, NULL, &tv);
+			else if (BIO_should_write(pBio))
+				rv = select(fd + 1, NULL, &confds, NULL, &tv);
+			else {
+				MWLOG(LEV_ERROR, MOD_APL, "GetOCSPResponse: Unexpected retry condition");
+				goto cleanup;
+			}
+			if (rv == 0) {
+				MWLOG(LEV_ERROR, MOD_APL, "GetOCSPResponse: Timeout on request");
+				break;
+			}
+			if (rv == -1) {
+				MWLOG(LEV_ERROR, MOD_APL, "GetOCSPResponse: Select error");
+				break;
+			}
+		}
 
 		/* send the request and get a response */
 		if( NULL == *pResponse)
 		{
+			MWLOG(LEV_ERROR, MOD_APL, "GetOCSPResponse - Error querying OCSP: %s", ERR_error_string(ERR_get_error(), NULL));
 			eStatus=FWK_CERTIF_STATUS_ERROR;
 			goto cleanup;
 		}
@@ -1501,14 +1560,36 @@ BIO *APL_CryptoFwk::Connect(char *pszHost, int iPort, int iSSL, SSL_CTX **ppSSLC
 		}
 
 		BIO_set_conn_int_port(pConnect, &iPort);
+		//Set BIO as nonblocking
+		BIO_set_nbio(pConnect, 1);
 
-		if ( BIO_do_connect(pConnect) <= 0 )
-		{
-			//TODO: Remove this errors or log them better
-			ERR_print_errors_fp(stderr);
+		int rv = BIO_do_connect(pConnect);
+		int fd;
+		fd_set confds;
+		struct timeval tv;
+
+		if ((rv <= 0) && !BIO_should_retry(pConnect)) {
+			MWLOG(LEV_ERROR, MOD_APL, "OCSP: BIO_do_connect failed!");
 			return NULL;
 		}
 
+		if (BIO_get_fd(pConnect, &fd) < 0) {
+			MWLOG(LEV_ERROR, MOD_APL, "OCSP: Can't get connection fd!");
+			return NULL;
+		}
+
+
+		FD_ZERO(&confds);
+		FD_SET(fd, &confds);
+		tv.tv_usec = 0;
+		//Connect timeout value
+		tv.tv_sec = 10;
+		rv = select(fd + 1, NULL, &confds, NULL, &tv);
+
+		if (rv == 0) {
+			fprintf(stderr, "Timeout on connect\n");
+			return NULL;
+		}
 
     return pConnect;
 }

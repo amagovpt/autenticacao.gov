@@ -1,5 +1,6 @@
 #include <openssl/x509.h>
 #include "APLCard.h"
+#include <openssl/pkcs7.h>
 
 namespace eIDMW
 {
@@ -8,7 +9,7 @@ namespace eIDMW
  * Returns as hex-encoded string the PKCS7 signature of the input binary data
  *
  */
-/*int pteid_sign_pkcs7( APL_Card *card
+/*int pteid_sign_pkcs7( APL_Card *card\\\\\\\\\\\\\\\\\\\\\\																																												
                     , unsigned char * data, unsigned long dataLen
                     , CByteArray certData
                     , bool timestamp

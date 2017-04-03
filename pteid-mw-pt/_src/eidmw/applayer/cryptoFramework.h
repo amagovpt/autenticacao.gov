@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 #include "Mutex.h"
-#include "APLCard.h"
+
 
 // Mutex.h includes windows.h and that conflicts with the openssl defines
 #if defined(__WINCRYPT_H__)
@@ -37,6 +37,7 @@
 #undef OCSP_REQUEST
 #undef OCSP_RESPONSE
 #endif
+#include "APLCard.h"
 
 #include "openssl/evp.h"
 #include "openssl/ocsp.h"
