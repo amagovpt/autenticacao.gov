@@ -139,7 +139,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="eidgui.qrc">:/images/Images/a-z_identiteitskaart_logo.png</pixmap>
+    <pixmap resource="eidgui.qrc">:/images/Images/cc_logo.png</pixmap>
    </property>
   </widget>
   <widget class="QLabel" name="label">
