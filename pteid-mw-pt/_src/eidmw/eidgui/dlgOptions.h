@@ -44,7 +44,7 @@ private slots:
 	void on_okButton_clicked();
 
 public:
-	dlgOptions( GUISettings& settings, QWidget *parent = 0);
+	dlgOptions( GUISettings& settings, QString &currentReaderName, QWidget *parent = 0);
     ~dlgOptions();
 
 	void setShowPicture( bool Checked )	{ ui.chbShowPicture->setChecked( Checked ); };

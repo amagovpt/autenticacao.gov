@@ -571,17 +571,19 @@ PTEID_EIDCard& PDFSignWindow::getNewCard()
 			PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
 			if (ReaderContext.isCardPresent())
 			{
-					try
-					{
-						PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-						return Card;
+				try
+				{
+					PTEID_EIDCard& Card = ReaderContext.getEIDCard();
+					return Card;
 
-					}
-					catch (PTEID_ExCardBadType const& e) {
+				}
+				catch (PTEID_ExCardBadType const& e) {
 
-					}
+				}
 			}
 		}
+
+	//TODO: we should throw an exception in the error case...
 
 }
 

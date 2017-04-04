@@ -2635,7 +2635,7 @@ void MainWnd::show_window_parameters() {
 		this->showNormal(); // Otherwise the application will end if the options dialog gets closed
 	}
 
-	dlgOptions* dlg = new dlgOptions(m_Settings, this);
+	dlgOptions* dlg = new dlgOptions(m_Settings, m_CurrReaderName, this);
 	dlg->setShowPicture(m_Settings.getShowPicture());
 	dlg->setShowNotification(m_Settings.getShowNotification());
 

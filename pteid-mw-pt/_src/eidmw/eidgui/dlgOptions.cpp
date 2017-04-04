@@ -24,7 +24,7 @@
 
 using namespace eIDMW;
 
-dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
+dlgOptions::dlgOptions( GUISettings& settings, QString &currentReaderName, QWidget *parent )
 	: QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
 	, m_Settings(settings)
 {
@@ -85,26 +85,31 @@ dlgOptions::dlgOptions( GUISettings& settings, QWidget *parent )
 	ui.chbRegCert->setEnabled(settings.getAutoCardReading());
 	ui.chbRemoveCert->setEnabled(settings.getAutoCardReading());
 
-        if ( ReaderSet.readerCount() < 1 ){
-            ui.cmbCardReader->addItem(tr("Not specified"));
-        } else{
-            const char* const* ReaderList = ReaderSet.readerList();
-            for (unsigned long Idx=0; Idx<ReaderSet.readerCount(); Idx++)
-        {
-            const char* readerName = ReaderList[Idx];
-            ui.cmbCardReader->addItem(readerName);
+	if ( ReaderSet.readerCount() < 1 ) {
+		ui.cmbCardReader->addItem(tr("Not specified"));
+	}
+	else 
+	{
+		int selected_reader = m_Settings.getSelectedReader();
+		const char* const* ReaderList = ReaderSet.readerList();
+		for (unsigned long Idx=0; Idx < ReaderSet.readerCount(); Idx++)
+		{
+			const char* readerName = ReaderList[Idx];
+			ui.cmbCardReader->addItem(readerName);
+			if (currentReaderName == readerName)
+				selected_reader = Idx;
+		}
+		
+		if ( selected_reader < 0 ) {
+			selected_reader = 0;
+		} else {
+			if (selected_reader >= ReaderSet.readerCount() ){
+				selected_reader = ReaderSet.readerCount() - 1;
+			}
         }
-        int SelectedReader = m_Settings.getSelectedReader();
-        if ( SelectedReader < 0 ){
-            SelectedReader = 0;
-        } else{
-            if ( SelectedReader >= ReaderSet.readerCount() ){
-                SelectedReader = ReaderSet.readerCount() - 1;
-            }
-        }/* !if ( SelectedReader < 0 ) */
 
-        ui.cmbCardReader->setCurrentIndex( SelectedReader );
-	}/* !if ( ReaderSet.readerCount() < 1 ) */
+		ui.cmbCardReader->setCurrentIndex( selected_reader );
+	}
 
 #ifndef WIN32
 	ui.chbRegCert->hide();
@@ -258,7 +263,7 @@ void dlgOptions::on_chbStartMinimized_toggled( bool bChecked )
 }
 void dlgOptions::on_cmbCardReader_activated ( int index )
 {
-	m_Settings.setSelectedReader(index);	// the first item is 'no cardreader' Put then the index to illegal (==-1)
+	m_Settings.setSelectedReader(index);
 }
 void dlgOptions::on_chbRegCert_toggled( bool bChecked )
 {
