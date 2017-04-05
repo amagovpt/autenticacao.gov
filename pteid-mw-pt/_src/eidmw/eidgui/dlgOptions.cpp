@@ -2,6 +2,7 @@
 
  * eID Middleware Project.
  * Copyright (C) 2008-2009 FedICT.
+ * Copyright (C) 2012-2017 Caixa Mágica Software
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -103,12 +104,12 @@ dlgOptions::dlgOptions( GUISettings& settings, QString &currentReaderName, QWidg
 		if ( selected_reader < 0 ) {
 			selected_reader = 0;
 		} else {
-			if (selected_reader >= ReaderSet.readerCount() ){
+			if (selected_reader >= ReaderSet.readerCount()) {
 				selected_reader = ReaderSet.readerCount() - 1;
 			}
         }
 
-		ui.cmbCardReader->setCurrentIndex( selected_reader );
+		ui.cmbCardReader->setCurrentIndex(selected_reader);
 	}
 
 #ifndef WIN32

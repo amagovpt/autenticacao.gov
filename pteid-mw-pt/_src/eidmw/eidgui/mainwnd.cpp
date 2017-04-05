@@ -2,7 +2,7 @@
 
  * eID Middleware Project.
  * Copyright (C) 2008-2010 FedICT.
- * Copyright (C) 2012-2016 Caixa Mágica Software
+ * Copyright (C) 2012-2017 Caixa Mágica Software
  * Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -222,7 +222,7 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	// Test mode
 	if (!m_Settings.getTestMode() ){
         m_ui.lbl_testmode->hide();
-	}/* if (!m_Settings.getTestMode() ) */
+	}
 
 	isLinkToCertClicked = false;
 
@@ -358,10 +358,10 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 		if (object == m_ui.lbl_menuCard_Read )
 		{
 			/* Fix more than 1 loadCardData reading */
-			if ( !m_mutex_ReadCard.tryLock() ) return false;
+			//if ( !m_mutex_ReadCard.tryLock() ) return false;
 
 			hide_submenus();
-			refreshTabPersoData();
+			//refreshTabPersoData();
 
 			pinactivate = 1;
 			pinNotes = 1;
@@ -371,7 +371,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
                         /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
 
 			/* Allow new card data reading */
-			m_mutex_ReadCard.unlock();
+			//m_mutex_ReadCard.unlock();
 			loadCardData();
 		}
 
@@ -773,9 +773,9 @@ void MainWnd::on_btnSelectTab_PinCodes_clicked()
 
 void MainWnd::on_btnSelectTab_Notes_clicked()
 {
-	m_ui.stackedWidget->setCurrentIndex(6);
 	if (persodatastatus == 1)
 		refreshTabPersoData();
+	m_ui.stackedWidget->setCurrentIndex(6);
 }
 
 void MainWnd::on_btnIdentityExtra_linkToCert_clicked()
@@ -968,7 +968,7 @@ void MainWnd::setEnabledCertifButtons( bool bEnabled )
 		m_ui.btnCert_Register->show();
 	} else{
 		m_ui.btnCert_Register->hide();
-	}/* if ( bEnabled ) */
+	}
 	m_ui.btnCert_Details->setEnabled(bEnabled);
 #endif /* WIN32 */
 }
@@ -2001,49 +2001,61 @@ void MainWnd::getReaderIndexes( unsigned long *p_Selected, unsigned long *p_Coun
 
     if ( ( 0 == Count ) || ( ((unsigned long)-1) == Count ) ){
         Count = 0;
-    } else{
+    }
+    else {
         // Count > 0
-        if ( ( ((unsigned long)-1) == Selected ) || ( Selected == Count ) ){
+        if ( ( ((unsigned long)-1) == Selected) || Selected == Count) {
             Selected = Count - 1;
-        } /*if ( ( ((unsigned long)-1) == Selected ) || ( Selected == Count ) ) */
+        }
     }
 
     if ( p_Selected != NULL ) *p_Selected = Selected;
     if ( p_Count    != NULL ) *p_Count = Count;
-}/* getReaderIndexes() */
+}
 
-//*****************************************************
-// load the card data
-//*****************************************************
-void MainWnd::loadCardData( void )
+void MainWnd::showInsertCardMsg()
 {
-    if( m_CI_Data.isDataLoaded() ) return;
+	QString strCaption(tr("Reload eID"));
+	strCaption = strCaption.remove(QChar('&'));
+	QString strMessage(tr("No card found"));
+	m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
 
-	/* Fix more than 1 loadCardData reading */
-	if ( !m_mutex_ReadCard.tryLock () ) return;
+	QString caption  = tr("Warning");
+	QString msg = tr("Please insert your card on the smart card reader");
+	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
+	msgBoxp.exec();
+}
 
-	//----------------------------------------------------------------
-	// if we load a new card, clear the certificate contexts we kept
-	//----------------------------------------------------------------
+
+void MainWnd::getCardForReading(PTEID_EIDCard * &new_card)
+{
 	try
 	{
-		unsigned long ReaderStartIdx = -1, ReaderEndIdx = -1;
-		unsigned long ReaderIdx	= 0;
+		unsigned long ReaderEndIdx = ReaderSet.readerCount();
+		long ReaderIdx= 0;
+		long selected_reader = -1;
 
-        getReaderIndexes( &ReaderStartIdx, &ReaderEndIdx, true );
+        //getReaderIndexes( &ReaderStartIdx, &ReaderEndIdx, true );
 
         //We can safely clear previous data because we have successfully locked
         m_CI_Data.Reset();
 
-        if ( ReaderEndIdx == 0 ){
+        if ( ReaderEndIdx == 0 ) {
             clearGuiContent();
             showNoReaderMsg();
-        } else{
+        } else {
             bool bCardPresent = false;
             PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
-            for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
+            if (m_Settings.getSelectedReader() != -1)
+            {
+            	selected_reader = m_Settings.getSelectedReader(); 
+            	std::cerr << "DEBUG: using selected reader index: " << selected_reader << std::endl;
+            }
+
+            for (ReaderIdx = selected_reader != -1 ? selected_reader: 0; ReaderIdx<ReaderEndIdx; ReaderIdx++)
             {
                 PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
+
                 if (ReaderContext.isCardPresent())
                 {
                     bCardPresent = true;
@@ -2057,11 +2069,10 @@ void MainWnd::loadCardData( void )
                         try
                         {
                             PTEID_EIDCard& Card = ReaderContext.getEIDCard();
+                            new_card = &Card;
 
                             const char* readerName = ReaderSet.getReaderName(ReaderIdx);
                             m_CurrReaderName = readerName;
-
-                            Show_Identity_Card(Card);
 
                             ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
                         }
@@ -2080,25 +2091,18 @@ void MainWnd::loadCardData( void )
                 }
                 else
                 {
-                    clearGuiContent();
-                    if (lastFoundCardType != PTEID_CARDTYPE_UNKNOWN)
-                    {
-                        clearGuiContent();
-                    }
+                    //clearGuiContent();
+                    
                 }
                 enablePrintMenu();
+
+                //Only use selected reader so break out of the loop
+                if (selected_reader != -1)
+                	ReaderIdx=ReaderEndIdx;
             }
             if (!bCardPresent)
             {
-                QString strCaption(tr("Reload eID"));
-                strCaption = strCaption.remove(QChar('&'));
-                QString strMessage(tr("No card found"));
-                m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
-
-                QString caption  = tr("Warning");
-                QString msg = tr("Please insert your card on the smart card reader");
-                QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
-                msgBoxp.exec();
+               showInsertCardMsg();
             }
             else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
             {
@@ -2129,7 +2133,6 @@ void MainWnd::loadCardData( void )
 	{
 		QString msg(tr("Card changed"));
 		ShowPTEIDError( msg );
-                /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
 
 		/* Allow new card data reading */
 		m_mutex_ReadCard.unlock();
@@ -2152,290 +2155,89 @@ void MainWnd::loadCardData( void )
 	}
 	catch (PTEID_Exception e)
 	{
+		qDebug() << "Exception in loadCardData(). Error code: " << e.GetError();
 		QString msg(tr("Error loading card data"));
 		ShowPTEIDError( msg );
 	}
+}
 
+//*****************************************************
+// load the card data
+//*****************************************************
+void MainWnd::loadCardData( void )
+{
+	PTEID_EIDCard * new_card = NULL;
+    //if( m_CI_Data.isDataLoaded() ) return;
+
+	/* Fix more than 1 loadCardData reading */
+	if ( !m_mutex_ReadCard.tryLock () ) 
+		return;
+
+	getCardForReading(new_card);
+
+	if (new_card != NULL)
+	{
+		Show_Identity_Card(*new_card);
+	}
+	else
+	{
+		qDebug() << "loadCardData() Failed to getCardForReading() !";
+	}
+
+unlock:
 	/* Unlock mutex to allow new card data reading */
 	m_mutex_ReadCard.unlock();
 }
 
 
 //*****************************************************
-// load the card data
+// load the card data (Address Tab)
 //*****************************************************
 void MainWnd::loadCardDataAddress( void )
 {
+	PTEID_EIDCard * new_card = NULL;
     if (!m_CI_Data.isDataLoaded())
         return;
-	//----------------------------------------------------------------
-	// if we load a new card, clear the certificate contexts we kept
-	//----------------------------------------------------------------
-	try
-	{
-		unsigned long ReaderStartIdx = -1, ReaderEndIdx = -1;
-		unsigned long ReaderIdx	= 0;
 
-        getReaderIndexes( &ReaderStartIdx, &ReaderEndIdx, true );
+	getCardForReading(new_card);
 
-        if ( ReaderEndIdx == 0 ){
-            clearGuiContent();
-            showNoReaderMsg();
-        } else{
-            bool bCardPresent = false;
-            PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
-            for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
-            {
-                PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
-                if (ReaderContext.isCardPresent())
-                {
-                    bCardPresent = true;
-                    PTEID_CardType CardType = ReaderContext.getCardType();
-                    lastFoundCardType = CardType;
-                    switch (CardType)
-                    {
-                    case PTEID_CARDTYPE_IAS07:
-                    case PTEID_CARDTYPE_IAS101:
-                    {
-                        try
-                        {
-                            PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-
-                            const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-                            m_CurrReaderName = readerName;
-                            Show_Address_Card(Card);
-
-                            ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-                        }
-                        catch (PTEID_ExCardBadType const& e)
-                        {
-                            QString errcode;
-                            errcode = errcode.setNum(e.GetError());
-                        }
-                    }
-                    break;
-                    case PTEID_CARDTYPE_UNKNOWN:
-                    default:
-                        break;
-                    }
-                }
-                else
-                {
-                    clearGuiContent();
-                    if (lastFoundCardType != PTEID_CARDTYPE_UNKNOWN)
-                    {
-                        clearGuiContent();
-                    }
-                }
-                enablePrintMenu();
-            }
-            if (!m_CI_Data.isDataLoaded() || !bCardPresent)
-            {
-                QString strCaption(tr("Reload eID"));
-                strCaption = strCaption.remove(QChar('&'));
-                QString strMessage(tr("No card found"));
-                m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
-            }
-            else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
-            {
-                QString msg(tr("Card read error or unknown card type"));
-                ShowPTEIDError(msg );
-                clearGuiContent();
-            }
-        }
-        enableFileMenu();
-	}
-	catch (PTEID_ExParamRange e)
+	if (new_card != NULL)
 	{
-		QString msg(tr("Index out of range"));
-		ShowPTEIDError( msg );
+		Show_Address_Card(*new_card);
 	}
-	catch (PTEID_ExCardBadType e)
+	else
 	{
-		QString msg(tr("Bad card type"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExNoCardPresent e)
-	{
-		QString msg(tr("No card present"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExCardChanged e)
-	{
-		QString msg(tr("Card changed"));
-		ShowPTEIDError( msg );
-                /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
-		loadCardData();
-	}
-	catch (PTEID_ExReaderSetChanged e)
-	{
-		QString msg(tr("Readers changed"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExBadTransaction& e)
-	{
-		QString msg(tr("Bad transaction"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExCertNoRoot& e)
-	{
-		QString msg(tr("No root certificate found"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_Exception e)
-	{
-		QString msg;
-		//Check for SOD-related error codes - check for values between the first and last SOD error code
-		long errorCode = e.GetError();
-
-		if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE &&
-			errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN)
-		{
-			msg = tr("SOD validation failed: card data consistency is compromised!");
-		}
-		else
-		{
-			msg = tr("Error loading card data");
-		}
-
-		ShowPTEIDError( msg );
+		qDebug() << "loadCardDataAddress: Failed to getCardForReading() !" ;
 	}
 }
 
 //*****************************************************
-// load the card data
+// load the card data (Personal Notes tab)
 //*****************************************************
 bool MainWnd::loadCardDataPersoData( void )
 {
+	PTEID_EIDCard * new_card = NULL;
+
     if (!m_CI_Data.isDataLoaded())
         return false;
 
-	//----------------------------------------------------------------
-	// if we load a new card, clear the certificate contexts we kept
-	//----------------------------------------------------------------
-	try
-	{
-		unsigned long ReaderStartIdx = -1, ReaderEndIdx = -1;
-		unsigned long ReaderIdx	= 0;
+	getCardForReading(new_card);
 
-        getReaderIndexes( &ReaderStartIdx, &ReaderEndIdx, true );
+	if (new_card != NULL)
+	{
+		Show_PersoData_Card(*new_card);
+	}
 
-        if ( ReaderEndIdx == 0 ){
-            clearGuiContent();
-            showNoReaderMsg();
-        } else{
-            bool bCardPresent = false;
-            PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
-            for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
-            {
-                PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
-                if (ReaderContext.isCardPresent())
-                {
-                    bCardPresent = true;
-                    PTEID_CardType CardType = ReaderContext.getCardType();
-                    lastFoundCardType = CardType;
-                    switch (CardType)
-                    {
-                    case PTEID_CARDTYPE_IAS07:
-                    case PTEID_CARDTYPE_IAS101:
-                    {
-                        try
-                        {
-                            PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-
-                            const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-                            m_CurrReaderName = readerName;
-                            Show_PersoData_Card(Card);
-
-                            ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-                        }
-                        catch (PTEID_ExCardBadType const& e)
-                        {
-                            QString errcode;
-                            errcode = errcode.setNum(e.GetError());
-                        }
-                    }
-                    break;
-                    case PTEID_CARDTYPE_UNKNOWN:
-                    default:
-                        break;
-                    }
-                }
-                else
-                {
-                    clearGuiContent();
-
-                }
-                enablePrintMenu();
-            }
-            if (!m_CI_Data.isDataLoaded() || !bCardPresent)
-            {
-                QString strCaption(tr("Reload eID"));
-                strCaption = strCaption.remove(QChar('&'));
-                QString strMessage(tr("No card found"));
-                m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
-            }
-            else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
-            {
-                QString msg(tr("Card read error or unknown card type"));
-                ShowPTEIDError(msg );
-                clearGuiContent();
-            }
-        }
-		enableFileMenu();
-	}
-	catch (PTEID_ExParamRange e)
-	{
-		QString msg(tr("Index out of range"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExCardBadType e)
-	{
-		QString msg(tr("Bad card type"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExNoCardPresent e)
-	{
-		QString msg(tr("No card present"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExCardChanged e)
-	{
-		QString msg(tr("Card changed"));
-		ShowPTEIDError( msg );
-                /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
-		loadCardData();
-	}
-	catch (PTEID_ExReaderSetChanged e)
-	{
-		QString msg(tr("Readers changed"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExBadTransaction& e)
-	{
-		QString msg(tr("Bad transaction"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExCertNoRoot& e)
-	{
-		QString msg(tr("No root certificate found"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_Exception e)
-	{
-		QString msg(tr("Error loading card data"));
-		ShowPTEIDError( msg );
-	}
 	return true;
 }
 
 void MainWnd::SetValidCertificate(){
 
 	QTreeWidgetItemIterator it(m_ui.treeCert);
-	while (*it){
+	while (*it) {
 		QTreeCertItem *item = dynamic_cast<QTreeCertItem *>(*it);
 
-        if ( 0 == item->childCount() ){
+        if ( 0 == item->childCount() ) {
             QDate currentDate = QDate::currentDate();
             QDate ValidityBegin = QDate::fromString( item->getValidityBegin()
                                                     ,"dd/MM/yyyy");
@@ -2443,143 +2245,36 @@ void MainWnd::SetValidCertificate(){
                                                     ,"dd/MM/yyyy");
 
             if ( ( currentDate >= ValidityBegin )
-                && ( currentDate <= ValidityEnd   ) ){
+                && ( currentDate <= ValidityEnd)) {
 
                 m_ui.treeCert->setCurrentItem( item );
                 //m_ui.treeCert->setFocus( Qt::OtherFocusReason );
                 break;
-            }/* if ( ( currentDate >= ValidityBegin ) ... ) */
-        }/* if ( 0 == item->childCount() ) */
+            }
+        }
 
 		++it;
-	}/* while (*it) */
-}/* MainWnd::SetValidCertificate() */
+	}
+}
 
 //*****************************************************
-// load the card data
+// load the card data (Certificates tab)
 //*****************************************************
 void MainWnd::loadCardDataCertificates( void )
 {
 
-	//----------------------------------------------------------------
-	// if we load a new card, clear the certificate contexts we kept
-	//----------------------------------------------------------------
-	try
-	{
-		unsigned long ReaderStartIdx = -1, ReaderEndIdx = -1;
-		unsigned long ReaderIdx	= 0;
+	PTEID_EIDCard * new_card = NULL;
 
-        getReaderIndexes( &ReaderStartIdx, &ReaderEndIdx, true );
+    if (!m_CI_Data.isDataLoaded())
+        return;
 
-        if ( ReaderEndIdx == 0 ){
-            clearGuiContent();
-            showNoReaderMsg();
-        } else{
-            bool bCardPresent = false;
-            PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
-            for (ReaderIdx=ReaderStartIdx; ReaderIdx<ReaderEndIdx;ReaderIdx++)
-            {
-                PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
-                if (ReaderContext.isCardPresent())
-                {
-                    bCardPresent = true;
-                    PTEID_CardType CardType = ReaderContext.getCardType();
-                    lastFoundCardType = CardType;
-                    switch (CardType)
-                    {
-                    case PTEID_CARDTYPE_IAS07:
-                    case PTEID_CARDTYPE_IAS101:
-                    {
-                        try
-                        {
-                            PTEID_EIDCard& Card = ReaderContext.getEIDCard();
+	getCardForReading(new_card);
 
-                            const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-                            m_CurrReaderName = readerName;
-                            Show_Certificates_Card(Card);
+	if (new_card != NULL)
+	{
+		Show_Certificates_Card(*new_card);
+	}
 
-                            ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-                        }
-                        catch (PTEID_ExCardBadType const& e)
-                        {
-                            QString errcode;
-                            errcode = errcode.setNum(e.GetError());
-                        }
-                    }
-                    break;
-                    case PTEID_CARDTYPE_UNKNOWN:
-                    default:
-                        break;
-                    }
-                }
-                else
-                {
-                    clearGuiContent();
-                    if (lastFoundCardType != PTEID_CARDTYPE_UNKNOWN)
-                    {
-                        clearGuiContent();
-                    }
-                }
-                enablePrintMenu();
-            }
-            if (!m_CI_Data.isDataLoaded() || !bCardPresent)
-            {
-                QString strCaption(tr("Reload eID"));
-                strCaption = strCaption.remove(QChar('&'));
-                QString strMessage(tr("No card found"));
-                m_ui.statusBar->showMessage(strCaption+":"+strMessage,m_STATUS_MSG_TIME);
-            }
-            else if (lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
-            {
-                QString msg(tr("Card read error or unknown card type"));
-                ShowPTEIDError( msg );
-                clearGuiContent();
-            }
-        }
-		enableFileMenu();
-	}
-	catch (PTEID_ExParamRange e)
-	{
-		QString msg(tr("Index out of range"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExCardBadType e)
-	{
-		QString msg(tr("Bad card type"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExNoCardPresent e)
-	{
-		QString msg(tr("No card present"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExCardChanged e)
-	{
-		QString msg(tr("Card changed"));
-		ShowPTEIDError( msg );
-                /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
-		loadCardData();
-	}
-	catch (PTEID_ExReaderSetChanged e)
-	{
-		QString msg(tr("Readers changed"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExBadTransaction& e)
-	{
-		QString msg(tr("Bad transaction"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_ExCertNoRoot& e)
-	{
-		QString msg(tr("No root certificate found"));
-		ShowPTEIDError( msg );
-	}
-	catch (PTEID_Exception e)
-	{
-		QString msg(tr("Error loading card data"));
-		ShowPTEIDError( msg );
-	}
 }
 //*****************************************************
 // Test PIN clicked
@@ -3242,7 +2937,10 @@ void MainWnd::fillCertificateList( void )
 	PTEID_Certificates* certificates = m_CI_Data.m_CertifInfo.getCertificates();
 
 	if (!certificates)
+	{
+		fprintf(stderr, "fillCertificateList() could not load certificates!\n");
 		return;
+	}
 
     buildTree(certificates->getCert(PTEID_Certificate::CITIZEN_AUTH), noIssuer);
     buildTree(certificates->getCert(PTEID_Certificate::CITIZEN_SIGN), noIssuer);
@@ -3331,14 +3029,16 @@ void MainWnd::LoadDataAddress(PTEID_EIDCard& Card)
 	}
 }
 
-void MainWnd::ProgressExec(){
+void MainWnd::ProgressExec() {
     if ( NULL == m_progress ) return;
 
 	QString labelText = tr("Reading card data...");
+	m_progress->reset();
 	m_progress->setLabelText((const QString)labelText);
 	m_progress->adjustSize();
+
     m_progress->exec();
-}/* MainWnd::ProgressExec() */
+}
 
 void MainWnd::LoadDataPersoData(PTEID_EIDCard& Card)
 {
@@ -3354,18 +3054,22 @@ void MainWnd::LoadDataPersoData(PTEID_EIDCard& Card)
 
 void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 {
+	fprintf(stderr, "LoadDataCertificates was called\n");
 	setEnabledPinButtons(false);
 	setEnabledCertifButtons(false);
 	m_TypeCard = Card.getType();
 
 	CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName);
+	//loader.LoadCertificateData();
+	
 	QFuture<void> future = QtConcurrent::run(loader, &CardDataLoader::LoadCertificateData);
 	this->FutureWatcher.setFuture(future);
-	if(!m_CI_Data.isDataLoaded()) ProgressExec();
+	//if(!m_CI_Data.isDataLoaded()) 
+	ProgressExec();
+	this->FutureWatcher.waitForFinished();
 
 	clearTabCertificates();
 	fillCertificateList();
-
 }
 
 #define TYPE_PINTREE_ITEM 0
@@ -3374,6 +3078,7 @@ void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 void MainWnd::fillPinList()
 {
 	QTreeWidgetItem* pinTreeItem;
+	fprintf(stderr, "fillPinList was called\n");
 
 	clearTabPins();
 
@@ -4254,6 +3959,13 @@ void MainWnd::customEvent( QEvent* pEvent )
 				if (pPopupEvent->getType() ==  PopupEvent::ET_CARD_CHANGED)
 				{
 					QString	cardReader = pPopupEvent->getReaderName();
+
+					//Check if the card event is in the currently selected reader
+					if (!m_CurrReaderName.isEmpty() && cardReader != m_CurrReaderName)
+					{
+						pEvent->accept();
+						return;
+					}
 
 					//Toggle the Address PIN flag to "false"
 					pinactivate = 1;

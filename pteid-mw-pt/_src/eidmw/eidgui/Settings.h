@@ -253,13 +253,15 @@ public:
 			}
 		}
 		//----------------------------------------------------------
-		// check card reader to use
+		// check card reader to use 
+		// We shouldn't load the selected reader from settings initially
 		//----------------------------------------------------------
-		{
+	/*	{
+
 			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_CARDREADNUMB);
 			long CardReader = config.getLong();
 			setSelectedReader(CardReader);
-		}
+		} */
 		//----------------------------------------------------------
 		// check RegCert
 		//----------------------------------------------------------
