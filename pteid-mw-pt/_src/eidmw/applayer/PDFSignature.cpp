@@ -561,17 +561,12 @@ namespace eIDMW
 
         if (to_sign) free(to_sign);
 
-        printf( "(1) signSingleFile()\n" );
         if ( !isExternalCertificate() ){
-            printf( "(2) signSingleFile() - if !isExternalCertificate\n" );
 
             /* Get card signature from card */
             CByteArray signature = PteidSign( m_card, m_hash );
-            printf( "(2.5) signSingleFile() - if !isExternalCertificate\n" );
             rc = signClose( signature );
-            printf( "(2.6) signSingleFile() - if !isExternalCertificate\n" );
-        }
-        printf( "(3) signSingleFile() - rc: %d\n", rc );
+        }/* if ( !isExternalCertificate() ) */
 
         return rc;
 	}/* PDFSignature::signSingleFile() */

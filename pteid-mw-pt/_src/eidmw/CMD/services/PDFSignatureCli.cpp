@@ -3,8 +3,7 @@
 #include "MiscUtil.h"
 #include "StringOps.h"
 
-#define EXTERNAL_CERTIFICATE
-/*#define CARD_CERTIFICATE*/
+//#define EXTERNAL_CERTIFICATE
 
 #define ERR_NONE                0
 #define ERR_GET_CERTIFICATE     1
@@ -97,6 +96,7 @@ namespace eIDMW{
     ***    PDFSignatureCli::cli_getCertificate()          ***
     ********************************************************* */
     int PDFSignatureCli::cli_getCertificate( std::string in_userId ){
+#if defined(EXTERNAL_CERTIFICATE)
         if ( NULL == m_pdf_handler ){
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
             return ERR_NULL_PDF_HANDLER;
@@ -105,8 +105,6 @@ namespace eIDMW{
         printf( "\n*******************************\n"
                   "*** getCertificate          ***\n"
                   "*******************************\n" );
-
-#if !defined(CARD_CERTIFICATE)
         CByteArray certificate = cmdService.getCertificate( in_userId );
         if ( 0 == certificate.Size() ){
             MWLOG_ERR( logBuf, "getCertificate failed\n" );
@@ -121,16 +119,20 @@ namespace eIDMW{
         if ( isDBG ){
             printData( (char *)"Certificate: ", certificate.GetBytes(), certificate.Size() );
         }/* if ( isDBG ) */
-#endif /* !defined(CARD_CERTIFICATE) */
 
         PDFSignature *pdf = m_pdf_handler->getPdfSignature();
         if ( NULL == pdf ){
             MWLOG_ERR( logBuf, "NULL Pdf\n" );
             return ERR_NULL_PDF;
         }/* if ( NULL == m_pdf ) */
-#if !defined(CARD_CERTIFICATE)
+
+        /* At this moment, it is possible sign only one document.
+            Then, batch mode should be set tio false
+        */
+        pdf->setBatch_mode( false );
+
         pdf->setPdfCertificate( certificate );
-#endif /* !defined(CARD_CERTIFICATE) */
+#endif /* defined(EXTERNAL_CERTIFICATE) */
 
         return ERR_NONE;
     }/* PDFSignatureCli::cli_getCertificate() */
@@ -144,13 +146,13 @@ namespace eIDMW{
             return ERR_NULL_PDF_HANDLER;
         }/* if ( NULL == m_pdf_handler ) */
 
+#if defined(EXTERNAL_CERTIFICATE)
         PDFSignature *pdf = m_pdf_handler->getPdfSignature();
         if ( NULL == pdf ){
             MWLOG_ERR( logBuf, "NULL Pdf\n" );
             return ERR_NULL_PDF;
         }/* if ( NULL == m_pdf ) */
 
-#if !defined(CARD_CERTIFICATE)
         /* Calculate hash */
         CByteArray hashByteArray = pdf->getHash();
         if ( 0 == hashByteArray.Size() ){
@@ -189,7 +191,7 @@ namespace eIDMW{
         printf( "\n*******************************\n"
                   "*** sendDataToSign: OK      ***\n"
                   "*******************************\n" );
-#endif /* !defined(CARD_CERTIFICATE) */
+#endif /* defined(EXTERNAL_CERTIFICATE) */
 
         return ERR_NONE;
     }/* PDFSignatureCli::cli_sendDataToSign() */
@@ -285,7 +287,7 @@ namespace eIDMW{
     ***    PDFSignatureCli::signClose()                   ***
     ********************************************************* */
     int PDFSignatureCli::signClose( std::string in_code ){
-
+#if defined(EXTERNAL_CERTIFICATE)
         if ( NULL == m_card ){
             MWLOG_ERR( logBuf, "NULL card" );
             return ERR_NULL_CARD;
@@ -309,7 +311,7 @@ namespace eIDMW{
         printf( "\n*******************************\n"
                   "*** getSignature: OK        ***\n"
                   "*******************************\n" );
-
+#endif /* defined(EXTERNAL_CERTIFICATE) */
         return ERR_NONE;
     }/* int PDFSignatureCli::signClose() */
 }/* namespace eIDMW */
