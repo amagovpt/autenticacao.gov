@@ -7,11 +7,15 @@ CXX  = g++
 LINK  = g++ -g
 QMAKE = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 
+SERVICES_DIR = ./services
+FILE_PRO = CMDServices.pro
+MAKEFILE = Makefile
+
 TARGET = CMD_test
-INCPATH = -I. -I./services -I./../common -I./../applayer -I./../cardlayer
+INCPATH = -I. -I./services -I./../common -I./../eidlib -I./../applayer -I./../cardlayer
 LIBPATH = -L./lib
 
-LIBS_BASE_SO = crypto ssl pteidcommon pteidapplayer pteidcardlayer
+LIBS_BASE_SO = crypto ssl pteidcommon pteidlib pteidapplayer pteidcardlayer
 LIBS_SO = $(addprefix -l,$(LIBS_BASE_SO))
 LIBPATH_BASE_SO =
 LIBPATH_SO = $(addprefix -L,$(LIBPATH_BASE_SO))
@@ -37,8 +41,8 @@ OBJECTS = $(SOURCES:.cpp=.o)
 OBJCOMP =cc
 
 ./lib/lib%.so:
-	$(QMAKE) /media/luiz_lemos/Data/projs/CartaoCidadao/_src/eidmw/CMD/CMDServices.pro -o Makefile
-	$(MAKE) -f Makefile all
+	cd $(SERVICES_DIR) && $(QMAKE) $(FILE_PRO) -o $(MAKEFILE)
+	cd $(SERVICES_DIR) && $(MAKE) -f $(MAKEFILE) all
 
 .cpp.o:
 	$(CXX) -c $(CXXFLAGS) -o "$@" "$<" $(INCPATH)

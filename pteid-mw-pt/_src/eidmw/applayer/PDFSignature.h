@@ -55,8 +55,9 @@ namespace eIDMW
         void setBatch_mode( bool batch_mode );
 
         /* Certificate */
-        CByteArray getCertificate();
-        void setCertificate( CByteArray certificate );
+        bool isExternalCertificate();
+        CByteArray getPdfCertificate();
+        void setPdfCertificate( CByteArray certificate );
 
         /* Hash */
         CByteArray getHash();
@@ -64,8 +65,8 @@ namespace eIDMW
         void computeHash( unsigned char *data, unsigned long dataLen
                         , CByteArray certData );
 
-        /* PDF_close */
-        int PDF_close( CByteArray signature );
+        /* signClose */
+        int signClose( CByteArray signature );
 
 	private:
 		void getCitizenData();
@@ -100,6 +101,7 @@ namespace eIDMW
 		CByteArray m_hash;
 		PKCS7_SIGNER_INFO *m_signerInfo;
 		GooString *m_outputName;
+		bool m_signStarted;
 	};
 
 }

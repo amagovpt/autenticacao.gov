@@ -774,7 +774,7 @@ class PTEID_PDFSignature
 		PTEIDSDK_API bool isLandscapeFormat();
 		PTEIDSDK_API char *getOccupiedSectors(int page);
 		PTEIDSDK_API void setCustomImage(unsigned char *image_data, unsigned long image_length);
-		PTEIDSDK_API PDFSignature *getSignature();
+		PTEIDSDK_API PDFSignature *getPdfSignature();
 
 	private:
 	//The applayer object that actually implements the signature
@@ -865,9 +865,14 @@ public:
 		 * @param reason: Signature metadata field
 		 * @param outfile_path: Native Filesystem path of the ouput file
 		 */
-	     PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
+	    PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
 			const char *outfile_path);
 
+	    /* PDF Signature close:
+             * @param sig_handler: this defines the input file and some signature options
+             * @param signature: Signature metadata field
+             */
+        PTEIDSDK_API int SignClose( PTEID_PDFSignature &sig_handler, PTEID_ByteArray signature );
 
 	     /* Change the OTP/EMV-CAP PIN through interaction with the appropriate HTTPS server
 	      * Note: This method SHOULD be always called before any change to the Authentication PIN

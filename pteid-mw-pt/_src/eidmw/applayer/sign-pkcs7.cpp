@@ -341,7 +341,7 @@ CByteArray computeHash_pkcs7( APL_Card *card
                                 , bool timestamp
                                 , PKCS7 *p7
                                 , PKCS7_SIGNER_INFO **out_signer_info
-                                , bool isCardAction ){
+                                , bool isExternalCertificate ){
     CByteArray outHash;
     bool isError = false;
     unsigned char *attr_buf = NULL;
@@ -422,9 +422,7 @@ CByteArray computeHash_pkcs7( APL_Card *card
 
     PKCS7_add_certificate( p7, x509 );
 
-    if ( isCardAction ){
-    printf( "(1) computeHash_pkcs7() - if ( card != NULL )\n" );
-
+    if ( !isExternalCertificate ){
         CByteArray certData, cc01, cc02, cc03;
         APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
 
@@ -458,7 +456,7 @@ CByteArray computeHash_pkcs7( APL_Card *card
             Add ECRaizEstado certificate
         */
         add_certificate( p7, PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len );
-    }/* if ( isCardAction ) */
+    }/* if ( !isExternalCertificate ) */
 
     PKCS7_set_detached( p7, 1 );
 

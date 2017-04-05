@@ -82,23 +82,23 @@ class APL_XMLDoc;
   *********************************************************************************/
 class APL_Card
 {
-public: 
+public:
 	/**
 	  * Pur virtual destructor
 	  */
 	EIDMW_APL_API virtual ~APL_Card()=0;
 
-	/** 
+	/**
 	 * Return the type of the card
 	 */
 	EIDMW_APL_API virtual APL_CardType getType() const;
 
- 	/** 
+ 	/**
 	 * Return a document from the card
 	 */
 	EIDMW_APL_API virtual APL_XMLDoc& getDocument(APL_DocumentType type)=0;
 
-  	/** 
+  	/**
 	 * Return rawdata from the card
 	 */
 	EIDMW_APL_API virtual const CByteArray& getRawData(APL_RawDataType type)=0;
@@ -116,11 +116,11 @@ public:
 	EIDMW_APL_API CByteArray &SignXadesA(const char ** path, unsigned int n_paths, const char *output_path);
 
 	EIDMW_APL_API void SignXadesIndividual(const char**, unsigned int, const char*);
-	
+
 	EIDMW_APL_API void SignXadesTIndividual(const char**, unsigned int, const char*);
 
 	EIDMW_APL_API void SignXadesAIndividual(const char**, unsigned int, const char*);
-	
+
 	typedef void (* t_callback_addr) (void*, int);
 
 	EIDMW_APL_API void ChangeAddress(char *secret_code, char *process, t_callback_addr, void *);
@@ -132,19 +132,21 @@ public:
 	EIDMW_APL_API int SignPDF(PDFSignature *pdf_sig,  const char *location,
 	                       const char *reason, const char *outfile_path);
 
+    int SignClose( PDFSignature *pdf_sig, CByteArray signature );
+
 	/**
-	  * Read a file on the card 
+	  * Read a file on the card
 	  *
 	  * @param csPath is the path of the file to be read
-	  * @param bytearray will contain the content of the file 
+	  * @param bytearray will contain the content of the file
 	  */
  	EIDMW_APL_API virtual unsigned long readFile(const char *csPath, CByteArray &oData, unsigned long  ulOffset=0, unsigned long  ulMaxLength=0);
 
 	/**
-	  * Write a file to the card 
+	  * Write a file to the card
 	  *
 	  * @param csPath is the path of the file to be written
-	  * @param oData will contain the content of the file 
+	  * @param oData will contain the content of the file
 	  */
     EIDMW_APL_API virtual bool writeFile(const char *csPath, const CByteArray& oData,unsigned long ulOffset=0);
 
@@ -168,7 +170,7 @@ protected:
 	void SignIndividual(const char**, unsigned int, const char*, bool, bool);
 
 	static APL_CryptoFwk *m_cryptoFwk;			/**< Pointer to the crypto framework */
-	APL_ReaderContext *m_reader;				/**< Pointer to CAL reader (came from constructor) */	
+	APL_ReaderContext *m_reader;				/**< Pointer to CAL reader (came from constructor) */
 
 	CMutex m_Mutex;								/**< Mutex */
 
@@ -202,10 +204,10 @@ public:
     	EIDMW_APL_API virtual CByteArray sendAPDU(const CByteArray& cmd,APL_Pin *pin=NULL,const char *csPinCode="");
 
 	/**
-	  * Read a file on the card 
+	  * Read a file on the card
 	  *
 	  * @param csPath is the path of the file to be read
-	  * @param bytearray will contain the content of the file 
+	  * @param bytearray will contain the content of the file
 	  */
  	EIDMW_APL_API virtual unsigned long readFile(const char *csPath, CByteArray &oData, unsigned long  ulOffset=0, unsigned long  ulMaxLength=0);
 
@@ -273,7 +275,7 @@ public:
 	  * Return structure containing the PKCS15 object from the CAL
 	  */
 	EIDMW_APL_API virtual tCert getP15Cert(unsigned long ulIndex);
-	
+
 	APL_CardFile_Info *getFileInfo();		/**< Return a pointer to the pseudo file info */
 
 	virtual const char *getTokenSerialNumber() = 0;	/**< Return the token serial number (pkcs15 parse) (NOT EXPORTED) */
@@ -289,7 +291,7 @@ protected:
 
 	APL_Pins *m_pins;				/**< Pointer to the collection of pins */
 	APL_Certifs *m_certs;			/**< Pointer to the certificate store */
-		
+
 	APL_CardFile_Info *m_fileinfo;	/**< Pointer to the "pseudo file" Info */
 
 	bool m_allowTestParam;			/**< Allow test card (from config) */

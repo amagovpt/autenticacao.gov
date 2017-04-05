@@ -304,6 +304,21 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coo
 
 }
 
+int PTEID_EIDCard::SignClose( PTEID_PDFSignature &sig_handler, PTEID_ByteArray signature ){
+    int rc = 0;
+
+    BEGIN_TRY_CATCH
+        CByteArray cb( (unsigned char*)signature.GetBytes(), signature.Size() );
+
+        APL_Card *pcard = static_cast<APL_Card *>(m_impl);
+
+        PDFSignature *pdf_sig = sig_handler.mp_signature;
+        rc = pcard->SignClose( pdf_sig, cb );
+    END_TRY_CATCH
+
+    return rc;
+}/* PTEID_EIDCard::SignClose() */
+
 PTEID_ScapConnection::PTEID_ScapConnection(char *host, char *port)
 {
 	m_connection = new ScapSSLConnection(host, port);
@@ -334,9 +349,9 @@ PTEID_PDFSignature::~PTEID_PDFSignature()
 	delete mp_signature;
 }
 
-PDFSignature *PTEID_PDFSignature::getSignature(){
+PDFSignature *PTEID_PDFSignature::getPdfSignature(){
     return mp_signature;
-}/* PTEID_PDFSignature::getSignature() */
+}/* PTEID_PDFSignature::getPdfSignature() */
 
 void PTEID_PDFSignature::addToBatchSigning(char *input_path)
 {
