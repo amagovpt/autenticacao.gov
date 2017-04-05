@@ -387,7 +387,9 @@ PDFSignatureCli.o: PDFSignatureCli.cpp PDFSignatureCli.h \
 		../../applayer/MiscUtil.h \
 		../../common/TLVBuffer.h \
 		../../common/TLV.h \
-		../../common/StringOps.h
+		../../common/StringOps.h \
+		../../applayer/CardPteidDef.h \
+		../../applayer/CardPteidAddr.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o PDFSignatureCli.o PDFSignatureCli.cpp
 
 ####### Install

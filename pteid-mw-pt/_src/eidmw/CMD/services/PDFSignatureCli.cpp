@@ -3,7 +3,10 @@
 #include "MiscUtil.h"
 #include "StringOps.h"
 
-//#define EXTERNAL_CERTIFICATE
+// retirar quando tivermos certificateCA - PTEID_FILE_CERT_ROOT_SIGN
+#include "CardPteidDef.h"
+
+#define EXTERNAL_CERTIFICATE
 
 #define ERR_NONE                0
 #define ERR_GET_CERTIFICATE     1
@@ -15,6 +18,8 @@
 #define ERR_GET_HASH            7
 #define ERR_SIGN_CLOSE          8
 #define ERR_NULL_PDF_HANDLER    9
+#define ERR_INV_CERTIFICATE     10
+#define ERR_INV_CERTIFICATE_CA  11
 
 static char logBuf[512];
 
@@ -96,6 +101,7 @@ namespace eIDMW{
     ***    PDFSignatureCli::cli_getCertificate()          ***
     ********************************************************* */
     int PDFSignatureCli::cli_getCertificate( std::string in_userId ){
+
 #if defined(EXTERNAL_CERTIFICATE)
         if ( NULL == m_pdf_handler ){
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
@@ -115,7 +121,7 @@ namespace eIDMW{
                   "*** getCertificate: OK      ***\n"
                   "*******************************\n" );
 
-        // printData
+        /* printData */
         if ( isDBG ){
             printData( (char *)"Certificate: ", certificate.GetBytes(), certificate.Size() );
         }/* if ( isDBG ) */
@@ -126,12 +132,32 @@ namespace eIDMW{
             return ERR_NULL_PDF;
         }/* if ( NULL == m_pdf ) */
 
+        //TODO - get certificateCA
+        PTEID_ByteArray iData;
+        long out = m_card->readFile( (const char *)PTEID_FILE_CERT_ROOT_SIGN, iData );
+        if ( out < 1 ){
+            MWLOG_ERR( logBuf
+                    , "readFile() fail - certificate CA - read from file, out: %d", out );
+            return ERR_INV_CERTIFICATE_CA;
+        }/* if ( out < 1 ) */
+
+        if ( 0 == iData.Size() ){
+            MWLOG_ERR( logBuf, "Invalid certificate CA - read from file" );
+            return ERR_INV_CERTIFICATE_CA;
+        }/* if ( 0 == iData.Size() ) */
+
+        CByteArray certificateCA( iData.GetBytes(), iData.Size() );
+        if ( 0 == certificateCA.Size() ){
+            MWLOG_ERR( logBuf, "Invalid certificate CA" );
+            return ERR_INV_CERTIFICATE_CA;
+        }/* if ( 0 == certificateCA.Size() ) */
+
         /* At this moment, it is possible sign only one document.
             Then, batch mode should be set tio false
         */
         pdf->setBatch_mode( false );
-
-        pdf->setPdfCertificate( certificate );
+        pdf->setExternCertificate( certificate );
+        pdf->setExternCertificateCA( certificateCA );
 #endif /* defined(EXTERNAL_CERTIFICATE) */
 
         return ERR_NONE;
@@ -141,12 +167,12 @@ namespace eIDMW{
     ***    PDFSignatureCli::cli_sendDataToSign()          ***
     ********************************************************* */
     int PDFSignatureCli::cli_sendDataToSign( std::string in_pin ){
+#if defined(EXTERNAL_CERTIFICATE)
         if ( NULL == m_pdf_handler ){
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
             return ERR_NULL_PDF_HANDLER;
         }/* if ( NULL == m_pdf_handler ) */
 
-#if defined(EXTERNAL_CERTIFICATE)
         PDFSignature *pdf = m_pdf_handler->getPdfSignature();
         if ( NULL == pdf ){
             MWLOG_ERR( logBuf, "NULL Pdf\n" );

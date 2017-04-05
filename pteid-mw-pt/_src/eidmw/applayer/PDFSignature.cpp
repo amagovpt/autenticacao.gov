@@ -49,6 +49,7 @@ namespace eIDMW
         m_pkcs7 = NULL;
         m_outputName = NULL;
         m_signStarted = false;
+        m_isExternalCertificate = false;
 	}
 
 	PDFSignature::PDFSignature(const char *pdf_file_path): m_pdf_file_path(pdf_file_path)
@@ -73,6 +74,7 @@ namespace eIDMW
         m_pkcs7 = NULL;
         m_outputName = NULL;
         m_signStarted = false;
+        m_isExternalCertificate = false;
 	}
 
 	void PDFSignature::setCustomImage(unsigned char *img_data, unsigned long img_length)
@@ -527,22 +529,25 @@ namespace eIDMW
 		{
             m_outputName = outputName;
 
-            /* Get certificate */
-            CByteArray certData;
+            /* Get certificate & certificateCA */
+            CByteArray certificate, certificateCA;
 
             if ( isExternalCertificate() ){
-                certData = getPdfCertificate();
+                certificate = getExternCertificate();
+                certificateCA = getExternCertificateCA();
             } else{
-                m_card->readFile( PTEID_FILE_CERT_SIGNATURE, certData );
+                m_card->readFile( PTEID_FILE_CERT_SIGNATURE, certificate );
+                m_card->readFile( PTEID_FILE_CERT_ROOT_SIGN, certificateCA );
                 /*
                     Encode certificate to internal format:
                     Trim the padding zero bytes which are useless
                     and affect the certificate digest computation
                 */
-                certData.TrimRight( 0 );
+                certificate.TrimRight( 0 );
             }/* !if ( isExternalCertificate() ) */
 
-            computeHash( to_sign, len, certData );
+            computeHash( to_sign, len, certificate, certificateCA );
+
             m_signStarted = true;
 		}
 		catch(CMWException e)
@@ -573,17 +578,34 @@ namespace eIDMW
 
     /* Certificate */
     bool PDFSignature::isExternalCertificate(){
-        /* When size is ZERO, then certificate is get from card */
-        return ( ( 0 == getPdfCertificate().Size() ) ? false : true );
+        return m_isExternalCertificate;
     }/* PDFSignature::isExternalCertificate() */
 
-    CByteArray PDFSignature::getPdfCertificate(){
-        return m_certificate;
-    }/* PDFSignature::getPdfCertificate() */
+    CByteArray PDFSignature::getIsExtCertificate(){
+        return m_isExternalCertificate;
+    }/* PDFSignature::getIsExtCertificate() */
 
-    void PDFSignature::setPdfCertificate( CByteArray certificate ){
-        m_certificate = certificate;
-    }/* PDFSignature::setPdfCertificate() */
+    void PDFSignature::setIsExtCertificate( bool in_IsExternalCertificate ){
+        m_isExternalCertificate = in_IsExternalCertificate;
+    }/* PDFSignature::setIsExtCertificate() */
+
+    CByteArray PDFSignature::getExternCertificate(){
+        return m_externCertificate;
+    }/* PDFSignature::getExternCertificate() */
+
+    void PDFSignature::setExternCertificate( CByteArray certificate ){
+        m_externCertificate = certificate;
+
+        setIsExtCertificate( true );
+    }/* PDFSignature::setExternCertificate() */
+
+    CByteArray PDFSignature::getExternCertificateCA(){
+        return m_externCertificateCA;
+    }/* PDFSignature::getExternCertificateCA() */
+
+    void PDFSignature::setExternCertificateCA( CByteArray certificateCA ){
+        m_externCertificateCA = certificateCA;
+    }/* PDFSignature::setExternCertificateCA() */
 
     /* Hash */
     CByteArray PDFSignature::getHash(){
@@ -594,23 +616,22 @@ namespace eIDMW
         m_hash = in_hash;
     }/* PDFSignature::setHash() */
 
-    void PDFSignature::computeHash( unsigned char *data
-                                , unsigned long dataLen
-                                , CByteArray certData ){
+    void PDFSignature::computeHash( unsigned char *data, unsigned long dataLen
+                                    , CByteArray certificate
+                                    , CByteArray certificateCA ){
 
         OpenSSL_add_all_algorithms();
         if ( m_pkcs7 != NULL ) PKCS7_free( m_pkcs7 );
 
         /* Calculate hash */
         m_pkcs7 = PKCS7_new();
-        //bool isCardAction = ( getPdfCertificate().Size() == 0 );
-        CByteArray in_hash = computeHash_pkcs7( m_card
-                                                , data, dataLen
-                                                , certData
+
+        CByteArray in_hash = computeHash_pkcs7( data, dataLen
+                                                , certificate
+                                                , certificateCA
                                                 , m_timestamp
                                                 , m_pkcs7
-                                                , &m_signerInfo
-                                                , isExternalCertificate() );
+                                                , &m_signerInfo );
         setHash( in_hash );
     }/* PDFSignature::computeHash() */
 

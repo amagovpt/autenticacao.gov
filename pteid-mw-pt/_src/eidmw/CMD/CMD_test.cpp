@@ -2,7 +2,6 @@
 #include "eidlib.h"
 #include "eidErrors.h"
 
-
 #include <iostream>
 #include <iomanip>
 #include <assert.h>
@@ -15,12 +14,16 @@
 #include "eidlibdefines.h"
 #include "eidlibException.h"
 
+#define SIGNATURE_COORDINATES_XY
+//#define SIGNATURE_SECTORS
+
 using namespace std;
 using namespace eIDMW;
 
 int main(){
 #if 1
     const int page = 1;
+    int sector = 3;
     double coord_x = 0.65;
 	double coord_y = 0.22;
 	int ret = 0;
@@ -49,11 +52,20 @@ int main(){
         PTEID_PDFSignature sig_handler( in_file );
 
         PDFSignatureCli client( &card, &sig_handler );
-
+#if defined(SIGNATURE_COORDINATES_XY)
         ret = client.signOpen( in_userId, in_pin
                                 , page
                                 , coord_x, coord_y
                                 , "LISBOA, PT", "Concordo com todo o conteudo - Teste", outfile_path );
+#elif defined(SIGNATURE_SECTORS)
+        ret = client.signOpen( in_userId, in_pin
+                                , page
+                                , sector, false
+                                , "LISBOA, PT", "Concordo com todo o conteudo - Teste", outfile_path );
+#else
+    #error No signature type is defined
+#endif
+
         if ( ret != 0 ){
             cout << "signOpen failed! - ret: " << ret << endl;
             PTEID_ReleaseSDK();

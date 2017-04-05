@@ -54,16 +54,25 @@ namespace eIDMW
         bool getBatch_mode();
         void setBatch_mode( bool batch_mode );
 
-        /* Certificate */
+        /* isCertificate */
         bool isExternalCertificate();
-        CByteArray getPdfCertificate();
-        void setPdfCertificate( CByteArray certificate );
+        CByteArray getIsExtCertificate();
+        void setIsExtCertificate( bool in_IsExternalCertificate );
+
+        /* Certificate */
+        CByteArray getExternCertificate();
+        void setExternCertificate( CByteArray certificate );
+
+        /* Certificate CA */
+        CByteArray getExternCertificateCA();
+        void setExternCertificateCA( CByteArray certificateCA );
 
         /* Hash */
         CByteArray getHash();
         void setHash( CByteArray in_hash );
         void computeHash( unsigned char *data, unsigned long dataLen
-                        , CByteArray certData );
+                        , CByteArray certificate
+                        , CByteArray CA_certificate );
 
         /* signClose */
         int signClose( CByteArray signature );
@@ -96,12 +105,14 @@ namespace eIDMW
 		std::vector< std::pair<char *, bool> > m_files_to_sign;
 		Pixmap my_custom_image;
 
-		PKCS7 *m_pkcs7;
-		CByteArray m_certificate;
-		CByteArray m_hash;
-		PKCS7_SIGNER_INFO *m_signerInfo;
-		GooString *m_outputName;
-		bool m_signStarted;
+        PKCS7 *m_pkcs7;
+        CByteArray m_externCertificate;
+        CByteArray m_externCertificateCA;
+        CByteArray m_hash;
+        PKCS7_SIGNER_INFO *m_signerInfo;
+        GooString *m_outputName;
+        bool m_signStarted;
+        bool m_isExternalCertificate;
 	};
 
 }

@@ -333,15 +333,65 @@ void add_signingCertificate(PKCS7_SIGNER_INFO *si, X509 *x509, unsigned char * c
 }
 
 /*  *********************************************************
+    ***          addCertificateChain()                    ***
+    ********************************************************* */
+void addCertificateChain( PKCS7 *p7, CByteArray CA_certificate ){
+    if ( 0 == CA_certificate.Size() ){
+        TRACE_ERR( "Invalid CA certificate" );
+        return;
+    }/* if ( 0 == CA_certificate.Size() ) */
+
+    APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
+
+    add_certificate( p7, CA_certificate );
+
+    /*
+        Cartao de Cidadao Root CA certificates as of July 2015
+        (https://pki.cartaodecidadao.pt/publico/certificado/cc_ec_cidadao/)
+    */
+    CByteArray cc01, cc02, cc03;
+    cc01 = CByteArray( PTEID_CERTS[22].cert_data, PTEID_CERTS[22].cert_len );
+    cc02 = CByteArray( PTEID_CERTS[23].cert_data, PTEID_CERTS[23].cert_len );
+    cc03 = CByteArray( PTEID_CERTS[24].cert_data, PTEID_CERTS[24].cert_len );
+
+    /* Add issuer of Signature SubCA */
+    if ( fwk->isIssuer( CA_certificate, cc01 ) ){
+        MWLOG( LEV_ERROR, MOD_APL, "Added_certificate - cc01" );
+        printf( "Added_certificate - cc01\n" );
+
+        add_certificate( p7, cc01 );
+    } else if ( fwk->isIssuer( CA_certificate, cc02 ) ){
+        MWLOG( LEV_ERROR, MOD_APL, "Added_certificate - cc02" );
+        printf( "add_certificate - cc02\n" );
+
+        add_certificate( p7, cc02 );
+    } else if (fwk->isIssuer( CA_certificate, cc03 ) ) {
+        MWLOG( LEV_ERROR, MOD_APL, "Added_certificate - cc03" );
+        printf( "add_certificate - cc03\n" );
+
+        add_certificate( p7, cc03 );
+    } else{
+        printf( "add_certificate - NONE\n" );
+
+        MWLOG( LEV_ERROR
+                , MOD_APL
+                , "Couldn't find issuer for certificate SIGNATURE_SUBCA. "
+                , "The validation will be broken!");
+    }/* else */
+
+    /* Add ECRaizEstado certificate */
+    add_certificate( p7, PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len );
+}/* addCertificateChain() */
+
+/*  *********************************************************
     ***          computeHash_pkcs7()                    ***
     ********************************************************* */
-CByteArray computeHash_pkcs7( APL_Card *card
-                                , unsigned char *data, unsigned long dataLen
-                                , CByteArray certData
-                                , bool timestamp
-                                , PKCS7 *p7
-                                , PKCS7_SIGNER_INFO **out_signer_info
-                                , bool isExternalCertificate ){
+CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
+                            , CByteArray certificate
+                            , CByteArray CA_certificate
+                            , bool timestamp
+                            , PKCS7 *p7
+                            , PKCS7_SIGNER_INFO **out_signer_info ){
     CByteArray outHash;
     bool isError = false;
     unsigned char *attr_buf = NULL;
@@ -377,7 +427,7 @@ CByteArray computeHash_pkcs7( APL_Card *card
         goto err_hashCalculate;
     }/* if ( NULL == p7 ) */
 
-    x509 = DER_to_X509( certData.GetBytes(), certData.Size() );
+    x509 = DER_to_X509( certificate.GetBytes(), certificate.Size() );
     if ( NULL == x509){
         MWLOG(LEV_ERROR, MOD_APL, "Error decoding certificate data!");
         isError = true;
@@ -421,43 +471,7 @@ CByteArray computeHash_pkcs7( APL_Card *card
     }/* if ( signer_info == NULL ) */
 
     PKCS7_add_certificate( p7, x509 );
-
-    if ( !isExternalCertificate ){
-        CByteArray certData, cc01, cc02, cc03;
-        APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
-
-        //Add Signature CA Cert
-        card->readFile( PTEID_FILE_CERT_ROOT_SIGN, certData );
-        add_certificate( p7, certData );
-
-        /*
-            Cartao de Cidadao Root CA certificates as of July 2015
-            (https://pki.cartaodecidadao.pt/publico/certificado/cc_ec_cidadao/)
-        */
-        cc01 = CByteArray( PTEID_CERTS[22].cert_data, PTEID_CERTS[22].cert_len );
-        cc02 = CByteArray( PTEID_CERTS[23].cert_data, PTEID_CERTS[23].cert_len );
-        cc03 = CByteArray( PTEID_CERTS[24].cert_data, PTEID_CERTS[24].cert_len );
-
-        /*
-            Add issuer of Signature SubCA
-        */
-        if ( fwk->isIssuer( certData, cc01 ) )
-            add_certificate( p7, cc01 );
-        else if ( fwk->isIssuer( certData, cc02 ) )
-            add_certificate( p7, cc02 );
-        else if (fwk->isIssuer( certData, cc03 ) )
-            add_certificate( p7, cc03 );
-        else
-            MWLOG( LEV_ERROR
-                    , MOD_APL
-                    , "Couldn't find issuer for certificate SIGNATURE_SUBCA.The validation will be broken!");
-
-        /*
-            Add ECRaizEstado certificate
-        */
-        add_certificate( p7, PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len );
-    }/* if ( !isExternalCertificate ) */
-
+    addCertificateChain( p7, CA_certificate );
     PKCS7_set_detached( p7, 1 );
 
     hash_fn( data, dataLen, out );
@@ -479,7 +493,7 @@ CByteArray computeHash_pkcs7( APL_Card *card
     */
     add_signingCertificate(signer_info
                             , x509
-                            , certData.GetBytes(), certData.Size() );
+                            , certificate.GetBytes(), certificate.Size() );
 
     if ( !timestamp ) add_signed_time( signer_info );
 

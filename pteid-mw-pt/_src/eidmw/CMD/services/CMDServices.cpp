@@ -26,21 +26,6 @@ static char logBuf[512];
 namespace eIDMW{
 
 /*  *********************************************************
-    ***          printCPtr()                              ***
-    ********************************************************* */
-void printCPtr( char *c_str, int c_str_len ){
-    if ( c_str == NULL ){
-        fprintf(stderr, "CMDServices::printCPtr() - Null data\n" );
-        return;
-    }/* if ( c_str == NULL ) */
-
-    for(int i = 0; i < c_str_len; i++ ){
-        printf( "%x", c_str[i] );
-    }
-    printf( "\n" );
-}/* printCPtr() */
-
-/*  *********************************************************
     ***    CMDServices::CMDServices()       ***
     ********************************************************* */
 xsd__base64Binary *encode_base64( soap *sp, std::string in_str ){
