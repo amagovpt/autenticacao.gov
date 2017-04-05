@@ -3054,7 +3054,6 @@ void MainWnd::LoadDataPersoData(PTEID_EIDCard& Card)
 
 void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 {
-	fprintf(stderr, "LoadDataCertificates was called\n");
 	setEnabledPinButtons(false);
 	setEnabledCertifButtons(false);
 	m_TypeCard = Card.getType();
@@ -3078,7 +3077,6 @@ void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 void MainWnd::fillPinList()
 {
 	QTreeWidgetItem* pinTreeItem;
-	fprintf(stderr, "fillPinList was called\n");
 
 	clearTabPins();
 
