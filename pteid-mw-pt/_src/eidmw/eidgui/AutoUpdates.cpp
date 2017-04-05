@@ -30,6 +30,7 @@
 #include <QRegExp>
 #include <QDebug>
 #include <QFile>
+#include <QTimer>
 #include <QLabel>
 
 #include <fstream>
@@ -144,8 +145,10 @@ AutoUpdates::~AutoUpdates()
 
 void AutoUpdates::cancelDownload()
 {
+
 	httpRequestAborted = true;
 	reply->abort();
+
 }
 
 void AutoUpdates::startRequest(QUrl url)
@@ -159,6 +162,9 @@ void AutoUpdates::startRequest(QUrl url)
     std::string proxy_username = config_username.getString();
     std::string proxy_pwd = config_pwd.getString();
     long proxy_port = config2.getLong();
+    
+    //10 second timeout
+    int network_timeout = 10000;
 
 	if (!proxy_host.empty() && proxy_port != 0)
 	{
@@ -187,10 +193,11 @@ void AutoUpdates::startRequest(QUrl url)
 		proxy.setPort(atol(proxy_port_str.c_str()));
 		QNetworkProxy::setApplicationProxy(proxy);
 	}
-	else
-		printf("DEBUG: Proxy Host is empty!\n");
 
 	reply = qnam.get(QNetworkRequest(url));
+
+    QTimer::singleShot(network_timeout, this, SLOT(cancelDownload()));
+
 	connect(reply, SIGNAL(finished()),
 			this, SLOT(httpFinished()));
 	connect(reply, SIGNAL(readyRead()),
@@ -238,6 +245,7 @@ void AutoUpdates::downloadFile()
 
 void AutoUpdates::httpFinished()
 {
+
 	if (httpRequestAborted) {
 		if (file) {
 			file->close();
@@ -245,8 +253,14 @@ void AutoUpdates::httpFinished()
 			delete file;
 			file = 0;
 		}
+
+		QMessageBox::critical(this, tr("Auto-update"),
+				tr("Download failed. Please check your Network Connection."));
+
 		reply->deleteLater();
 		progressDialog->hide();
+
+		this->close();
 		return;
 	}
 
@@ -330,10 +344,8 @@ int compareVersions(PteidVersion v1, PteidVersion v2)
 
 bool AutoUpdates::VerifyUpdates(std::string filedata)
 {
-    std::string distrover;
+	std::string distrover;
 	std::string archver;
-
-
 
 #ifdef WIN32
 	QString filename = QCoreApplication::arguments().at(0);

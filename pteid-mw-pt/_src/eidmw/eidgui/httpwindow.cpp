@@ -127,7 +127,10 @@ QString HttpWindow::GetReleaseNotes()
 
 void HttpWindow::startRequest(QUrl url)
 {
+    int network_timeout = 10000;
 	reply = qnam.get(QNetworkRequest(url));
+    QTimer::singleShot(network_timeout, this, SLOT(cancelDownload()));
+
 	connect(reply, SIGNAL(finished()),
 			this, SLOT(httpFinished()));
 	connect(reply, SIGNAL(readyRead()),
@@ -196,6 +199,7 @@ void HttpWindow::httpFinished()
         }
         reply->deleteLater();
         progressDialog->hide();
+        this->close();
         return;
     }
 
