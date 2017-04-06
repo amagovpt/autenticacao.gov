@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Text;
+using pt.portugal.eid;
 
-namespace pt.portugal.eid
+namespace eidpt
 {
     public class Pteid {
     

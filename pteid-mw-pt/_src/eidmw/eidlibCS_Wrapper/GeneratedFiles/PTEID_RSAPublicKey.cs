@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace pt.portugal.eid
+namespace eidpt
 {
-    public class PTEID_RSAPublicKey
+    public class PteidRSAPublicKey
     {
         public byte[] modulus;
         public byte[] exponent;
 
-        internal PTEID_RSAPublicKey()
+        internal PteidRSAPublicKey()
         {
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace pt.portugal.eid
+namespace eidpt
 {
     public class PTEID_Certif
     {

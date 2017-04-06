@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
 
-namespace pt.portugal.eid
+namespace eidpt
 {
-    public class PTEID_TokenInfo
+    public class PteidTokenInfo
     {
 
         private String Label; 

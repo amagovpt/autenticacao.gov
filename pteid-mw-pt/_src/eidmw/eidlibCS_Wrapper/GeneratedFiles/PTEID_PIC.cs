@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
 
-namespace pt.portugal.eid
+namespace eidpt
 {
-    public class PTEID_PIC
+    public class PteidPic
     {
         public short version;
         public byte[] cbeff;
@@ -12,7 +12,7 @@ namespace pt.portugal.eid
         public byte[] imageinfo;
         public byte[] picture;
 
-        internal PTEID_PIC()
+        internal PteidPic()
         {
         }
     }

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Text;
+using pt.portugal.eid;
 
-namespace pt.portugal.eid
+namespace eidpt
 {
-    public class PTEID_ADDR {
+    public class PteidAddr {
 
     private short Version;
     private String AddrType;
@@ -367,7 +368,7 @@ namespace pt.portugal.eid
         }
     }
 
-    internal PTEID_ADDR(PTEID_Address addr)
+    internal PteidAddr(PTEID_Address addr)
     {
         try {
             version = 0;

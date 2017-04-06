@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Text;
 
-namespace pt.portugal.eid
+namespace eidpt
 {
-    public class PTEID_Proxy_Info {
+    public class PteidProxyInfo {
     	
-    	public String Proxy;
-    	public int Port;
-    	public String Username;
-    	public String Password;
+    	public String proxy;
+    	public int port;
+    	public String username;
+    	public String password;
     	
-    	public PTEID_Proxy_Info(){}
+    	public PteidProxyInfo(){}
     }
 } 
    

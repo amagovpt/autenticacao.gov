@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
 
-namespace pt.portugal.eid
+namespace eidpt
 {
-    public class PTEIDPin
+    public class PteidPin
     {
         private int PinType;
         private byte Id;
@@ -104,7 +104,7 @@ namespace pt.portugal.eid
         }
 
 
-        internal PTEIDPin()
+        internal PteidPin()
         {
         }
     }
