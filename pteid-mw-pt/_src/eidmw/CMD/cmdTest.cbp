@@ -2,14 +2,14 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="CMD_test" />
+		<Option title="cmdTest" />
 		<Option makefile_is_custom="1" />
 		<Option execution_dir="." />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="./CMD_test" prefix_auto="1" extension_auto="1" />
+				<Option output="./cmdTest" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -44,7 +44,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="CMD_test.cpp" />
+		<Unit filename="cmdTest.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

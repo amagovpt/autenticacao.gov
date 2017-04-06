@@ -20,10 +20,10 @@ INSTALLS += target
 CONFIG -= warn_on qt
 
 ## destination directory
-DESTDIR = ./../lib
+DESTDIR = ./../../lib
 DEPENDPATH += .
 
-LIBS += -L./../lib -l$${COMMONLIB} -l$${APPLAYERLIB} -l$${CARDLAYERLIB}
+LIBS += -L./../../lib -l$${COMMONLIB} -l$${APPLAYERLIB} -l$${CARDLAYERLIB}
 INCLUDEPATH += . ../../common ../../applayer ../../cardlayer
 
 unix: DEFINES += __UNIX__ DEBUG WITH_OPENSSL
