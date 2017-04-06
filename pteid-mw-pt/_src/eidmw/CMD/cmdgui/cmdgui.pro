@@ -26,8 +26,6 @@ DESTDIR = ../bin
 INCLUDEPATH += . ../services ../../dialogs ../../eidlib ../../_Builds ../../common ../../applayer ../../cardlayer ../../eidgui
 
 unix:!macx: INCLUDEPATH += /usr/include/poppler/qt5
-##LFLAGS += -Wl,-R,'$$ORIGIN/../../lib'
-##LFLAGS += -Wl,-Rxxx
 unix:{
     # suppress the default RPATH if you wish
     QMAKE_LFLAGS_RPATH=

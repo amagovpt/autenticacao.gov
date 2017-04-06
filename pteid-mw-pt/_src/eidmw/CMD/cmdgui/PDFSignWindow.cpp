@@ -120,6 +120,9 @@ PDFSignWindow::PDFSignWindow( QWidget* parent
     }/* for(int i) */
 
     this->setFixedSize( this->width(), this->height() );
+
+    m_client = NULL;
+
     connect( ui.pdf_listview
              , SIGNAL(itemRemoved(int))
              , this
@@ -500,66 +503,33 @@ PTEID_EIDCard& PDFSignWindow::getNewCard(){
     }/* for( ReaderIdx )*/
 } /* PDFSignWindow::getNewCard() */
 
-void PDFSignWindow::run_sign( int selected_page
-                             , QString &savefilepath
-                             , char *location, char *reason ){
-    //PTEID_EIDCard* card = dynamic_cast<PTEID_EIDCard*>( m_CI_Data.m_pCard );
-
-    dlgCmdUserInfo diagCmdUserInfo( this );
-    diagCmdUserInfo.exec();
-    QString userId = diagCmdUserInfo.getUserId();
-    if ( userId.isEmpty() ){
-        PTEID_LOG( PTEID_LOG_LEVEL_ERROR, "eidgui", "Empty user PIN" );
-
-        this->success = SIG_ERROR;
-        return;
-    }/* if ( userId.isEmpty() ) */
-
-    QString userPin = diagCmdUserInfo.getUserPin();
-    if ( userPin.isEmpty() ){
-        PTEID_LOG( PTEID_LOG_LEVEL_ERROR, "eidgui", "Empty user PIN" );
-
-        this->success = SIG_ERROR;
-        return;
-    }/* if ( userPin.isEmpty() ) */
-
+void PDFSignWindow::run_signOpen( int selected_page
+                                , QString &savefilepath
+                                , char *location, char *reason ){
     PTEID_EIDCard &card = getNewCard();
+
+    printf( "getNewCard - OK\n" );
 
     int sign_rc = -1;
     bool keepTrying = true;
     char * save_path = strdup( getPlatformNativeString( savefilepath ) );
 
+    printf( "strdup save_path - OK\n" );
 
+    if ( NULL != m_client ){
+        delete m_client;
+    }
+
+    m_client = new PDFSignatureCli( &card, m_pdf_sig );
 
     do{
         try{
-#if 1
-            printf( "(1) run_sign() - sig_coord_x: %lf, sig_coord_y: %lf\n", sig_coord_x, sig_coord_y );
+            printf( "(1) run_signOpen() - sig_coord_x: %lf, sig_coord_y: %lf\n", sig_coord_x, sig_coord_y );
 
-            PDFSignatureCli client( &card, m_pdf_sig );
-            sign_rc = client.signOpen( userId.toStdString(), userPin.toStdString()
+            sign_rc = m_client->signOpen( m_userId.toStdString(), m_userPin.toStdString()
                                     , selected_page
                                     , sig_coord_x, sig_coord_y
                                     , location, reason, save_path );
-#else
-
-#if 0
-           eIDMW::PDFSignature *pdf_sig = m_pdf_sig->getPdfSignature();
-           if ( pdf_sig != NULL ){
-                printf( "if ( pdf_sig != NULL )\n" );
-                pdf_sig->setBatch_mode( false );
-
-                printf( "Excecuting setVisibleCoordinates()\n" );
-                pdf_sig->setVisibleCoordinates( selected_page, sig_coord_x, sig_coord_y );
-
-                printf( "Executing signFiles()...\n" );
-                sign_rc = pdf_sig->signFiles( location, reason, save_path );
-                printf( "Executed signFiles()!\n" );
-            } else{
-                printf( "ELSE if ( pdf_sig != NULL )\n" );
-            }/* !if ( pdf_sig != NULL ) */
-#endif /*0*/
-#endif /*1*/
 
             keepTrying = false;
             this->success = (sign_rc == 0) ? SIG_SUCCESS : TS_WARNING;
@@ -582,7 +552,46 @@ void PDFSignWindow::run_sign( int selected_page
     } while( keepTrying );
 
     if ( save_path != NULL ) free( save_path );
-}/* PDFSignWindow::run_sign() */
+}/* PDFSignWindow::run_signOpen() */
+
+void PDFSignWindow::run_signClose(){
+    int sign_rc = -1;
+    bool keepTrying = true;
+
+    printf( "strdup save_path - OK\n" );
+
+    if ( NULL == m_client ){
+        PTEID_LOG( PTEID_LOG_LEVEL_ERROR, "eidgui", "Sign was not started!" );
+        this->success = SIG_ERROR;
+        return;
+    }
+
+    do{
+        try{
+            printf( "(1) run_signClose()\n" );
+
+            sign_rc = m_client->signClose( m_receivedCode.toStdString() );
+
+            keepTrying = false;
+            this->success = (sign_rc == 0) ? SIG_SUCCESS : TS_WARNING;
+        } catch ( PTEID_Exception &e ){
+            this->success = SIG_ERROR;
+            PTEID_LOG( PTEID_LOG_LEVEL_ERROR
+                       , "eidgui"
+                       , "Caught exception in signPDF() method. Error code: 0x%08x"
+                       , (unsigned int)e.GetError() );
+
+            if ( e.GetError() == EIDMW_ERR_CARD_RESET ){
+                    //PTEID_EIDCard &new_card = getNewCard();
+                    //card = getNewCard();
+                    //card = new_card;
+
+            } else{
+                keepTrying = false;
+            }/* !if ( e.GetError() == EIDMW_ERR_CARD_RESET ) */
+        }/* !try */
+    } while( keepTrying );
+}/* PDFSignWindow::run_signClose() */
 
 void PDFSignWindow::on_button_sign_clicked(){
 
@@ -737,20 +746,68 @@ void PDFSignWindow::on_button_sign_clicked(){
 
     pdialog->setMinimum( 0 );
     pdialog->setMaximum( 0 );
+
+    dlgCmdUserInfo diagCmdUserInfo( this );
+    diagCmdUserInfo.exec();
+    m_userId = diagCmdUserInfo.getUserId();
+    if ( m_userId.isEmpty() ){
+        PTEID_LOG( PTEID_LOG_LEVEL_ERROR, "eidgui", "Empty user ID" );
+        ShowErrorMsgBox( tr("User ID should NOT be empty!" ) );
+        return;
+    }/* if ( m_userId.isEmpty() ) */
+
+    printf( "diagCmdUserInfo.getUserId() - OK\n" );
+
+    m_userPin = diagCmdUserInfo.getUserPin();
+    if ( m_userPin.isEmpty() ){
+        PTEID_LOG( PTEID_LOG_LEVEL_ERROR, "eidgui", "Empty user PIN" );
+        ShowErrorMsgBox( tr("User PIN should NOT be empty!" ) );
+        return;
+    }/* if ( m_userPin.isEmpty() ) */
+
+    printf( "diagCmdUserInfo.getUserPin() - OK\n" );
+
     connect( &this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel() ) );
 
-    QFuture<void> future = QtConcurrent::run( this
-                                            , &PDFSignWindow::run_sign
+    QFuture<void> future_signOpen = QtConcurrent::run( this
+                                            , &PDFSignWindow::run_signOpen
                                             , selected_page
                                             , savefilepath
                                             , location, reason );
 
-    this->FutureWatcher.setFuture( future );
+    this->FutureWatcher.setFuture( future_signOpen );
 	pdialog->reset();
 	pdialog->exec();
 
     if ( this->success == SIG_SUCCESS ){
-		ShowSuccessMsgBox();
+
+        dlgCmdCode diagCmdCode( this );
+        diagCmdCode.exec();
+        m_receivedCode = diagCmdCode.getReceivedCode();
+        if ( m_receivedCode.isEmpty() ){
+            PTEID_LOG( PTEID_LOG_LEVEL_ERROR, "eidgui", "Empty received Code" );
+            ShowErrorMsgBox( tr("Received Code should NOT be empty!" ) );
+            return;
+        }/* if ( m_receivedCode.isEmpty() ) */
+
+        QFuture<void> future_signClose = QtConcurrent::run( this
+                                                        , &PDFSignWindow::run_signClose );
+
+        this->FutureWatcher.setFuture( future_signClose );
+        pdialog->reset();
+        pdialog->exec();
+
+        if ( SIG_SUCCESS == this->success ){
+            ShowSuccessMsgBox();
+        } else if ( TS_WARNING == this->success ){
+            QString sig_detail = model->rowCount() > 1
+                    ?  tr( "some of the timestamps could not be applied" )
+                    : tr( "the timestamp could not be applied" );
+            ShowErrorMsgBox( tr("Signature(s) successfully generated but " ) + sig_detail );
+        } else{
+                ShowErrorMsgBox(tr("Error Generating Signature!"));
+        }
+
     } else if ( this->success == TS_WARNING ){
         QString sig_detail = model->rowCount() > 1
                 ?  tr( "some of the timestamps could not be applied" )
@@ -760,7 +817,7 @@ void PDFSignWindow::on_button_sign_clicked(){
 		ShowErrorMsgBox(tr("Error Generating Signature!"));
     }/* if ( this->success == SIG_SUCCESS ) */
 
-	this->close();
+    if ( SIG_SUCCESS == this->success ) this->close();
     if ( location != NULL ) free( location );
     if ( reason != NULL ) free( reason );
 

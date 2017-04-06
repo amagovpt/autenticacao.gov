@@ -34,6 +34,7 @@
 #include "ui_PDFSignWindow.h"
 #include "PDFSignature.h"
 #include "CardInformation.h"
+#include "PDFSignatureCli.h"
 
 enum ErrorCode
 {
@@ -192,10 +193,20 @@ class PDFSignWindow : public QDialog{
 	    QPixmap renderPageToImage();
 	    void closeDocument();
 
-        void run_sign( int page, QString& savefile, char *location, char *reason );
+        void run_signOpen( int page
+                        , QString& savefile
+                        , char *location
+                        , char *reason );
+
+        void run_signClose();
+
 	    void ShowSuccessMsgBox();
         void ShowErrorMsgBox( QString message );
 	    void buildLocationTab();
+
+        QString m_receivedCode;
+        QString m_userId;
+        QString m_userPin;
 
 	    Ui_PDFSignWindow ui;
 	    double sig_coord_x;
@@ -237,5 +248,7 @@ class PDFSignWindow : public QDialog{
 
 	    //Success flag for the error messages
 	    ErrorCode success;
+
+        PDFSignatureCli *m_client;
 };
 #endif
