@@ -8,19 +8,6 @@
 
 #define EXTERNAL_CERTIFICATE
 
-#define ERR_NONE                0
-#define ERR_GET_CERTIFICATE     1
-#define ERR_SEND_HASH           2
-#define ERR_GET_SIGNATURE       3
-#define ERR_NULL_CARD           4
-#define ERR_NULL_PDF            5
-#define ERR_SIGN_PDF            6
-#define ERR_GET_HASH            7
-#define ERR_SIGN_CLOSE          8
-#define ERR_NULL_PDF_HANDLER    9
-#define ERR_INV_CERTIFICATE     10
-#define ERR_INV_CERTIFICATE_CA  11
-
 static char logBuf[512];
 
 namespace eIDMW{

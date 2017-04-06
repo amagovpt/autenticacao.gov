@@ -45,6 +45,8 @@ void dlgCmdUserInfo::on_button_Ok_clicked(){
                               , tr("Empty field: UserId")
                               , 0, this);
         m_msgBox.exec();
+
+        ui->textbox_UserId->setFocus();
         return;
     }/* if ( ui->textbox_UserId->text().isEmpty() ) */
 
@@ -54,6 +56,8 @@ void dlgCmdUserInfo::on_button_Ok_clicked(){
                               , tr("Empty field: PIN")
                               , 0, this);
         m_msgBox.exec();
+
+        ui->textbox_Pin->setFocus();
         return;
     }/* if ( ui->textbox_Pin->text().isEmpty() ) */
 

@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>User Information</string>
+   <string>Login</string>
   </property>
   <widget class="QLabel" name="lblUserId">
    <property name="geometry">

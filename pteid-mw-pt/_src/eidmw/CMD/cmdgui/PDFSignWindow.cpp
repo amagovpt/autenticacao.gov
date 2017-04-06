@@ -594,20 +594,6 @@ void PDFSignWindow::run_signClose(){
 }/* PDFSignWindow::run_signClose() */
 
 void PDFSignWindow::on_button_sign_clicked(){
-
-    /*dlgCmdUserInfo diagCmdUserInfo( this );
-    diagCmdUserInfo.exec();
-    QString userId = diagCmdUserInfo.getUserId();
-    QString userPin = diagCmdUserInfo.getUserPin();
-
-    printf( "userId: %s\n", userId.toStdString().c_str() );
-    printf( "userPin: %s\n", userPin.toStdString().c_str() );*/
-
-    /*dlgCmdCode diagCmdCode( this );
-    diagCmdCode.exec();
-    QString receivedCode = diagCmdCode.getReceivedCode();
-    printf( "receivedCode: %s\n", receivedCode.toStdString().c_str() );*/
-
     /*
         *************************************************************************
         *       PDFSignature                                                    *
@@ -726,6 +712,14 @@ void PDFSignWindow::on_button_sign_clicked(){
         reason = strdup( ui.reason_textbox->text().toUtf8().data() );
     }/* if ( ui.reason_textbox->isEnabled() ... ) */
 
+    /* Login information */
+    dlgCmdUserInfo diagCmdUserInfo( this );
+    diagCmdUserInfo.exec();
+
+    /* Get login information */
+    m_userId = diagCmdUserInfo.getUserId();
+    m_userPin = diagCmdUserInfo.getUserPin();
+
 	//Single File Signature case
 	pdialog = new QProgressDialog();
     pdialog->setWindowModality( Qt::WindowModal );
@@ -746,26 +740,6 @@ void PDFSignWindow::on_button_sign_clicked(){
 
     pdialog->setMinimum( 0 );
     pdialog->setMaximum( 0 );
-
-    dlgCmdUserInfo diagCmdUserInfo( this );
-    diagCmdUserInfo.exec();
-    m_userId = diagCmdUserInfo.getUserId();
-    if ( m_userId.isEmpty() ){
-        PTEID_LOG( PTEID_LOG_LEVEL_ERROR, "eidgui", "Empty user ID" );
-        ShowErrorMsgBox( tr("User ID should NOT be empty!" ) );
-        return;
-    }/* if ( m_userId.isEmpty() ) */
-
-    printf( "diagCmdUserInfo.getUserId() - OK\n" );
-
-    m_userPin = diagCmdUserInfo.getUserPin();
-    if ( m_userPin.isEmpty() ){
-        PTEID_LOG( PTEID_LOG_LEVEL_ERROR, "eidgui", "Empty user PIN" );
-        ShowErrorMsgBox( tr("User PIN should NOT be empty!" ) );
-        return;
-    }/* if ( m_userPin.isEmpty() ) */
-
-    printf( "diagCmdUserInfo.getUserPin() - OK\n" );
 
     connect( &this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel() ) );
 

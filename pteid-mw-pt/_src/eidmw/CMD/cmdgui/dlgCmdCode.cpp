@@ -33,6 +33,8 @@ void dlgCmdCode::on_button_Ok_clicked(){
                               , 0
                               , this);
         m_msgBox.exec();
+
+        ui->textbox_RcvdCode->setFocus();
         return;
     }/* if ( ui->textbox_RcvdCode->text().isEmpty() ) */
 

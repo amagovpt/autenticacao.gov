@@ -9,13 +9,11 @@
 #include "ByteArray.h"
 #include "Log.h"
 
-#define ERR_NONE 0
-#define ERR_FAIL -1
-
 #ifdef WIN32
     #define _LOG_( buf, level, mod, format, ... ) { sprintf( buf, "%s() - ", __FUNCTION__ );                \
                                                     sprintf( &buf[strlen(buf)], format, __VA_ARGS__ );      \
-                                                    MWLOG( level, mod, buf); }
+                                                    MWLOG( level, mod, buf);                                \
+                                                    printf( "%s\n", buf ); }
     #define MWLOG_ERR( buf, format, ...   )     _LOG_( buf, LEV_ERROR, MOD_CMD, format, __VA_ARGS__ )
     #define MWLOG_WARN( buf, format, ...  )     _LOG_( buf, LEV_WARN , MOD_CMD, format, __VA_ARGS__ )
     #define MWLOG_INFO( buf, format, ...  )     _LOG_( buf, LEV_INFO , MOD_CMD, format, __VA_ARGS__ )
@@ -23,7 +21,8 @@
 #else
     #define _LOG_( buf, level, mod, format, ... ) { sprintf( buf, "%s() - ", __FUNCTION__ );                \
                                                     sprintf( &buf[strlen(buf)], format, ## __VA_ARGS__ );   \
-                                                    MWLOG( level, mod, logBuf); }
+                                                    MWLOG( level, mod, logBuf);                             \
+                                                    printf( "%s\n", buf ); }
     #define MWLOG_ERR( buf, format, ...   )     _LOG_( buf, LEV_ERROR, MOD_CMD, format, ## __VA_ARGS__ )
     #define MWLOG_WARN( buf, format, ...  )     _LOG_( buf, LEV_WARN , MOD_CMD, format, ## __VA_ARGS__ )
     #define MWLOG_INFO( buf, format, ...  )     _LOG_( buf, LEV_INFO , MOD_CMD, format, ## __VA_ARGS__ )

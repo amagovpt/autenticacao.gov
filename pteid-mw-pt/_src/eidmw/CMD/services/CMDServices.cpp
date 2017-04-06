@@ -59,24 +59,20 @@ xsd__base64Binary *encode_base64( soap *sp, std::string in_str ){
     ***    handleError()                                  ***
     ********************************************************* */
 bool handleError( WSHttpBinding_USCORECCMovelSignatureProxy proxy, int ret ){
-
     if ( ret != SOAP_OK ){
-        if ( ret == SOAP_FAULT ){
-
-            if ( proxy.soap_fault() != NULL ){
-                MWLOG_ERR( logBuf, "SOAP Fault! %s", proxy.soap_fault()->faultstring );
-            } else{
-                MWLOG_ERR( logBuf, "Unknown SOAP Fault!" );
-            }/* if ( fault != NULL ) */
-
+        if ( ( proxy.soap_fault() != NULL )
+            && ( proxy.soap_fault()->faultstring ) ){
+            MWLOG_ERR( logBuf
+                        , "SOAP Fault! %s"
+                        , proxy.soap_fault()->faultstring );
         } else{
-            MWLOG_ERR( logBuf, "Error code: %d", ret );
-        }/* if ( ret == SOAP_FAULT ) */
+            MWLOG_ERR( logBuf, "Unknown SOAP Fault! - ret: %d!", ret );
+        }/* if ( fault != NULL ) */
 
         return false;
-
     }/* if ( ret != SOAP_OK ) */
 
+    MWLOG_INFO( logBuf, "No Error" );
     return true;
 }/* handleError() */
 
