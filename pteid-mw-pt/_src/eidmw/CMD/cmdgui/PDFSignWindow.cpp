@@ -47,6 +47,9 @@
 #include "dlgCmdUserInfo.h"
 #include "dlgCmdCode.h"
 
+#include "PDFSignature.h"
+#include "PDFSignatureCli.h"
+
 using namespace eIDMW;
 
 PDFSignWindow::PDFSignWindow( QWidget* parent
@@ -121,7 +124,22 @@ PDFSignWindow::PDFSignWindow( QWidget* parent
              , SIGNAL(itemRemoved(int))
              , this
              , SLOT(updateMaxPage(int) ) );
+
+    PTEID_InitSDK();
 }/* PDFSignWindow::PDFSignWindow() */
+
+PDFSignWindow::~PDFSignWindow(){
+    PTEID_ReleaseSDK();
+
+    delete list_model;
+    closeDocument();
+
+    /* TODO: the condition sucess != SIG_ERROR is a workaround
+     * for the issue of cancel button not actually canceling the thread
+     * If we free'd the file handle here, the background thread would crash
+     */
+    if (m_pdf_sig && (success != SIG_ERROR)) delete m_pdf_sig;
+}/* PDFSignWindow::~PDFSignWindow() */
 
 QString PDFSignWindow::composeCitizenFullName(){
     const tFieldMap PersonFields = m_CI_Data.m_PersonInfo.getFields();
@@ -141,17 +159,6 @@ QString PDFSignWindow::getCitizenNIC(){
 
     return documentNumberToNIC(doc_number);
 }/* PDFSignWindow::getCitizenNIC() */
-
-PDFSignWindow::~PDFSignWindow(){
-    delete list_model;
-    closeDocument();
-
-    /* TODO: the condition sucess != SIG_ERROR is a workaround
-     * for the issue of cancel button not actually canceling the thread
-     * If we free'd the file handle here, the background thread would crash
-     */
-    if (m_pdf_sig && (success != SIG_ERROR)) delete m_pdf_sig;
-}/* PDFSignWindow::~PDFSignWindow() */
 
 void PDFSignWindow::customEvent( QEvent *ev ){
     if ( ev->type() == QEvent::User ){
@@ -491,31 +498,68 @@ PTEID_EIDCard& PDFSignWindow::getNewCard(){
             }/* catch () */
         }/* if ( ReaderContext.isCardPresent() ) */
     }/* for( ReaderIdx )*/
-}/* EIDCard& PDFSignWindow::getNewCard() */
+} /* PDFSignWindow::getNewCard() */
 
 void PDFSignWindow::run_sign( int selected_page
                              , QString &savefilepath
                              , char *location, char *reason ){
-    PTEID_EIDCard* card = dynamic_cast<PTEID_EIDCard*>( m_CI_Data.m_pCard );
-    int sign_rc = 0;
+    //PTEID_EIDCard* card = dynamic_cast<PTEID_EIDCard*>( m_CI_Data.m_pCard );
+
+    dlgCmdUserInfo diagCmdUserInfo( this );
+    diagCmdUserInfo.exec();
+    QString userId = diagCmdUserInfo.getUserId();
+    if ( userId.isEmpty() ){
+        PTEID_LOG( PTEID_LOG_LEVEL_ERROR, "eidgui", "Empty user PIN" );
+
+        this->success = SIG_ERROR;
+        return;
+    }/* if ( userId.isEmpty() ) */
+
+    QString userPin = diagCmdUserInfo.getUserPin();
+    if ( userPin.isEmpty() ){
+        PTEID_LOG( PTEID_LOG_LEVEL_ERROR, "eidgui", "Empty user PIN" );
+
+        this->success = SIG_ERROR;
+        return;
+    }/* if ( userPin.isEmpty() ) */
+
+    PTEID_EIDCard &card = getNewCard();
+
+    int sign_rc = -1;
     bool keepTrying = true;
     char * save_path = strdup( getPlatformNativeString( savefilepath ) );
+
+
 
     do{
         try{
 #if 1
-            printf( "(1) - run_sign - %p\n", card );
-            sign_rc = card->SignPDF( *m_pdf_sig
-                                     , selected_page
-                                     , sig_coord_x, sig_coord_y
-                                     , location, reason
-                                     , save_path );
-            printf( "(2) - run_sign\n" );
+            printf( "(1) run_sign() - sig_coord_x: %lf, sig_coord_y: %lf\n", sig_coord_x, sig_coord_y );
+
+            PDFSignatureCli client( &card, m_pdf_sig );
+            sign_rc = client.signOpen( userId.toStdString(), userPin.toStdString()
+                                    , selected_page
+                                    , sig_coord_x, sig_coord_y
+                                    , location, reason, save_path );
 #else
-            PDFSignature *pdf_sig = *m_pdf_sig->getSignature();
-            pdf_sig->setVisibleCoordinates( selected_page, sig_coord_x, sig_coord_y );
-            sign_rc = pdf_sig->SignPDF( location, reason, save_path );
-#endif
+
+#if 0
+           eIDMW::PDFSignature *pdf_sig = m_pdf_sig->getPdfSignature();
+           if ( pdf_sig != NULL ){
+                printf( "if ( pdf_sig != NULL )\n" );
+                pdf_sig->setBatch_mode( false );
+
+                printf( "Excecuting setVisibleCoordinates()\n" );
+                pdf_sig->setVisibleCoordinates( selected_page, sig_coord_x, sig_coord_y );
+
+                printf( "Executing signFiles()...\n" );
+                sign_rc = pdf_sig->signFiles( location, reason, save_path );
+                printf( "Executed signFiles()!\n" );
+            } else{
+                printf( "ELSE if ( pdf_sig != NULL )\n" );
+            }/* !if ( pdf_sig != NULL ) */
+#endif /*0*/
+#endif /*1*/
 
             keepTrying = false;
             this->success = (sign_rc == 0) ? SIG_SUCCESS : TS_WARNING;
@@ -527,8 +571,9 @@ void PDFSignWindow::run_sign( int selected_page
                        , (unsigned int)e.GetError() );
 
             if ( e.GetError() == EIDMW_ERR_CARD_RESET ){
-                    PTEID_EIDCard &new_card = getNewCard();
-                    card = &new_card;
+                    //PTEID_EIDCard &new_card = getNewCard();
+                    //card = getNewCard();
+                    //card = new_card;
 
             } else{
                 keepTrying = false;
@@ -536,26 +581,29 @@ void PDFSignWindow::run_sign( int selected_page
         }/* !try */
     } while( keepTrying );
 
-    free( save_path );
+    if ( save_path != NULL ) free( save_path );
 }/* PDFSignWindow::run_sign() */
 
 void PDFSignWindow::on_button_sign_clicked(){
 
-    dlgCmdUserInfo diagCmdUserInfo( this );
+    /*dlgCmdUserInfo diagCmdUserInfo( this );
     diagCmdUserInfo.exec();
     QString userId = diagCmdUserInfo.getUserId();
     QString userPin = diagCmdUserInfo.getUserPin();
 
     printf( "userId: %s\n", userId.toStdString().c_str() );
-    printf( "userPin: %s\n", userPin.toStdString().c_str() );
+    printf( "userPin: %s\n", userPin.toStdString().c_str() );*/
 
-    dlgCmdCode diagCmdCode( this );
+    /*dlgCmdCode diagCmdCode( this );
     diagCmdCode.exec();
     QString receivedCode = diagCmdCode.getReceivedCode();
+    printf( "receivedCode: %s\n", receivedCode.toStdString().c_str() );*/
 
-    printf( "receivedCode: %s\n", receivedCode.toStdString().c_str() );
-
-    return;
+    /*
+        *************************************************************************
+        *       PDFSignature                                                    *
+        *************************************************************************
+    */
 
     //For invisible sigs the implementation we'll
     //need to add a reference to the sigfield in some page so...
@@ -563,6 +611,7 @@ void PDFSignWindow::on_button_sign_clicked(){
     QString savefilepath;
 
     //Read Page
+#if 1
     if ( ui.visible_checkBox->isChecked() ){
         //Validate if any location was chosen
         if ( sig_coord_x == -1 ){
@@ -572,6 +621,24 @@ void PDFSignWindow::on_button_sign_clicked(){
 
         selected_page = m_current_page_number;
     }/* if ( ui.visible_checkBox->isChecked() ) */
+#else
+    QPointF new_pos;
+    if ( my_scene == NULL ){
+        new_pos.setX( -1 );
+        new_pos.setY( -1 );
+    }else{
+        new_pos.setX( my_scene->rx() );
+        new_pos.setY( my_scene->rx() );
+    }
+
+    /*qreal pos_x = ( sig_coord_x < 0 ) ? -1 : sig_coord_x;
+    qreal pos_y = ( sig_coord_y < 0 ) ? -1 : sig_coord_y;
+
+    printf( "(1) on_button_sign_clicked() - pos_x      : %lf, pos_y      : %lf\n", pos_x, pos_y );
+    printf( "(2) on_button_sign_clicked() - sig_coord_x: %lf, sig_coord_y: %lf\n", sig_coord_x, sig_coord_y );
+    QPointF new_pos( pos_x, pos_y );*/
+    setPosition( new_pos );
+#endif //0
 
     QStringListModel *model = dynamic_cast<QStringListModel *>(list_model);
     if ( model->rowCount() == 0 ){
@@ -593,6 +660,8 @@ void PDFSignWindow::on_button_sign_clicked(){
 
         //First we need to free the first instance that was created unless we want to leak the file handle...
         delete m_pdf_sig;
+        printf( "(3) on_button_sign_clicked() - IF ( model->rowCount() > 1 )\n" );
+
         m_pdf_sig = new PTEID_PDFSignature();
 
         for(int i = 0; i < model->rowCount(); i++ ){
@@ -609,6 +678,7 @@ void PDFSignWindow::on_button_sign_clicked(){
                             , tr( "Save File" )
                             , QDir::toNativeSeparators( defaultsavefilepath + "/" + basename + "_signed.pdf" )
                             , tr( "PDF files (*.pdf)" ) );
+        printf( "(4) on_button_sign_clicked() - ELSE ( model->rowCount() > 1 )\n" );
     }/* if ( model->rowCount() > 1 ) */
 
     if ( ui.timestamp_checkBox->isChecked() ) m_pdf_sig->enableTimestamp();
@@ -693,6 +763,7 @@ void PDFSignWindow::on_button_sign_clicked(){
 	this->close();
     if ( location != NULL ) free( location );
     if ( reason != NULL ) free( reason );
+
 }/* PDFSignWindow::on_button_sign_clicked() */
 
 void PDFSignWindow::on_button_addfile_clicked(){
@@ -854,7 +925,9 @@ void mapSectorToRC( int sector, int *row, int *column ){
 }/* mapSectorToRC( int sector, int *row, int *column ) */
 
 void MyGraphicsScene::itemMoved( QPointF newPos ){
-    if ( parent ) ((PDFSignWindow*)parent)->setPosition( newPos );
+    if ( parent ){
+        ((PDFSignWindow*)parent)->setPosition( newPos );
+    }
 }/* MyGraphicsScene::itemMoved() */
 
 void MyGraphicsScene::drawBackground(QPainter * painter, const QRectF & rect ){
@@ -1026,7 +1099,7 @@ void PDFSignWindow::setPosition( QPointF new_pos ){
                     ? 0.16 * g_scene_height
                     : 0.1069 * g_scene_height;
 
-	/* Check border limits */
+    /* Check border limits */
     if ( new_pos.rx() < 0 ){
         this->rx = 0;
 	} else if ( new_pos.rx() > getMaxX() ){
@@ -1112,7 +1185,7 @@ void PDFSignWindow::addFileToListView( QStringList &str ){
         current_input_path = str.at( j );
         m_pdf_sig = new PTEID_PDFSignature( strdup( getPlatformNativeString( current_input_path ) ) );
 
-        printf("while ( !m_pdf_sig && j < str.size() )\n");
+        printf("(1) addFileToListView() - while ( !m_pdf_sig && j < str.size() )\n");
 
 		tmp_count = m_pdf_sig->getPageCount();
 

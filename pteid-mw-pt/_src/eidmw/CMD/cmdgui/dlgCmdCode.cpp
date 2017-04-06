@@ -37,5 +37,7 @@ void dlgCmdCode::on_button_Ok_clicked(){
     }/* if ( ui->textbox_RcvdCode->text().isEmpty() ) */
 
     m_receivedCode = ui->textbox_RcvdCode->text();
+
+    this->hide();
 }/* dlgCmdCode::on_button_Ok_clicked() */
 
