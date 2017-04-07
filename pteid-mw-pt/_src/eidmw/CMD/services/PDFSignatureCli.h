@@ -5,6 +5,9 @@
 #include "cmdServices.h"
 #include "eidlib.h"
 
+#include "cmdErrors.h"
+#define IS_NETWORK_ERROR(error)    IS_SOAP_ERROR(error)
+
 using namespace eIDMW;
 
 namespace eIDMW{

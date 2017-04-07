@@ -118,7 +118,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		soapStub.h \
 		soapWSHttpBinding_USCORECCMovelSignatureProxy.h \
 		stdsoap2.h \
-		CMDServices.h \
+		cmdServices.h \
 		PDFSignatureCli.h soapC.cpp \
 		soapWSHttpBinding_USCORECCMovelSignatureProxy.cpp \
 		stdsoap2.cpp \

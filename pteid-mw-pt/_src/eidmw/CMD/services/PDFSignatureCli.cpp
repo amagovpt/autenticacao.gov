@@ -1,6 +1,5 @@
 #include <algorithm>
 #include "PDFSignatureCli.h"
-#include "cmdErrors.h"
 #include "MiscUtil.h"
 #include "StringOps.h"
 

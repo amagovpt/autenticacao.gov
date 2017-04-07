@@ -38,10 +38,11 @@
 
 enum ErrorCode
 {
-	NOT_YET_SIGNED,
-	SIG_SUCCESS
-	,SIG_ERROR
-	,TS_WARNING
+      NOT_YET_SIGNED
+    , SIG_SUCCESS
+    , SIG_ERROR
+    , TS_WARNING
+    , SIG_NETWORK_ERROR
 };
 
 
@@ -186,7 +187,9 @@ class PDFSignWindow : public QDialog{
 	    QString composeCitizenFullName();
 	    QString getCitizenNIC();
         PTEID_EIDCard &getNewCard();
-	    void addFileToListView(QStringList &str);
+        bool addFileToListView(QStringList &str);
+
+        void handleSignError( int error );
 
 	    //PDF Document preview
         void loadDocumentForPreview( const QString &file );

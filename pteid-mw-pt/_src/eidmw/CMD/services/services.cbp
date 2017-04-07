@@ -47,10 +47,11 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="CCMovelSignature.h" />
-		<Unit filename="CMDServices.cpp" />
-		<Unit filename="CMDServices.h" />
 		<Unit filename="PDFSignatureCli.cpp" />
 		<Unit filename="PDFSignatureCli.h" />
+		<Unit filename="cmdErrors.h" />
+		<Unit filename="cmdServices.cpp" />
+		<Unit filename="cmdServices.h" />
 		<Unit filename="soapC.cpp" />
 		<Unit filename="soapH.h" />
 		<Unit filename="soapStub.h" />

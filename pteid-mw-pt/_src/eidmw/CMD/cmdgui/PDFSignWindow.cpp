@@ -144,6 +144,24 @@ PDFSignWindow::~PDFSignWindow(){
     if (m_pdf_sig && (success != SIG_ERROR)) delete m_pdf_sig;
 }/* PDFSignWindow::~PDFSignWindow() */
 
+void PDFSignWindow::handleSignError( int error ){
+
+    if ( SIG_SUCCESS == error ){
+        ShowSuccessMsgBox();
+
+    } else if ( SIG_NETWORK_ERROR == error ){
+        ShowErrorMsgBox( tr( "Network problems. Please, try later" ) );
+
+    } else if ( SIG_ERROR == error ){
+        ShowErrorMsgBox( tr( "Error Generating Signature!" ) );
+
+    } else{
+        QString strError = QString::number( error );
+        ShowErrorMsgBox( tr( "Unknown error: " ) + strError );
+    }/* if ( this->success == SIG_SUCCESS ) */
+
+}/* PDFSignWindow::handleSignError() */
+
 QString PDFSignWindow::composeCitizenFullName(){
     const tFieldMap PersonFields = m_CI_Data.m_PersonInfo.getFields();
 
@@ -220,20 +238,20 @@ QImage ImageCanvas::drawToImage(){
 }/* ImageCanvas::drawToImage() */
 
 void ImageCanvas::paintEvent( QPaintEvent * ){
-	const int spacing = 10;
-	const int line_spacing = 5;
-	int line_count = 0;
-	int current_y_pos = 5;
+    const int spacing = 10;
+    const int line_spacing = 5;
+    int line_count = 0;
+    int current_y_pos = 5;
 
     if ( !this->previewVisible ) return;
 
-	QPainter painter(this);
+    QPainter painter(this);
     painter.setRenderHint( QPainter::Antialiasing );
 
     QPixmap pixmap2( ":/images/Images/Icons/pteid_signature_watermark.jpg" );
     QPixmap default_icon( ":/images/Images/Icons/pteid_signature_banner.jpg" );
 
-	QFont current_font = painter.font();
+    QFont current_font = painter.font();
 #ifdef __APPLE__
     current_font.setPointSize( 10 );
 #else
@@ -242,39 +260,39 @@ void ImageCanvas::paintEvent( QPaintEvent * ){
 
     painter.setFont( current_font );
 
-	int line_height = fontMetrics().height();
-	current_y_pos = line_height;
+    int line_height = fontMetrics().height();
+    current_y_pos = line_height;
 
     QRectF border_rectangle( 0.0, 0.0, this->width()-40, this->height()-5 );
- 	QPen my_pen = painter.pen();
+    QPen my_pen = painter.pen();
     my_pen.setWidth( 2 );
     painter.setPen( my_pen );
     painter.setBrush( Qt::white );
     painter.drawRoundedRect( border_rectangle, 20.0, 15.0 );
 
     if ( !small_sig_format && !sig_reason.isEmpty() ){
-		QPen new_pen = painter.pen();
-		QPen orig_pen = painter.pen();
-		// new_pen.setItalic(true);
+        QPen new_pen = painter.pen();
+        QPen orig_pen = painter.pen();
+        // new_pen.setItalic(true);
         new_pen.setColor( QColor( 78, 138, 190 ) );
         painter.setPen( new_pen );
-		current_y_pos += line_spacing;
+        current_y_pos += line_spacing;
         painter.drawText( 5, current_y_pos,  sig_reason );
         painter.setPen( orig_pen );
     }/* if ( !small_sig_format && !sig_reason.isEmpty() ) */
 
- 	current_y_pos += line_height + line_spacing;
- 	const QString SIGNED_BY = "Assinado por: ";
+    current_y_pos += line_height + line_spacing;
+    const QString SIGNED_BY = "Assinado por: ";
 
     QRect bounding_rect = painter.boundingRect( 5
                                         , current_y_pos
                                         , 420, 100
                                         , Qt::AlignLeft | Qt::AlignTop, SIGNED_BY );
- 	//Draw background watermark aligned with SIGNED_BY line
+    //Draw background watermark aligned with SIGNED_BY line
     painter.drawPixmap( 5, current_y_pos-fontMetrics().xHeight(), pixmap2 );
     painter.drawText( 5, current_y_pos, SIGNED_BY );
 
-	QFont my_font = painter.font();
+    QFont my_font = painter.font();
     my_font.setBold( true );
     painter.setFont( my_font );
 
@@ -282,27 +300,27 @@ void ImageCanvas::paintEvent( QPaintEvent * ){
 
     int available_width = this->width() - 40 - bounding_rect.width() - 5;
 
-	//Check if 2 lines are needed for longer names
+    //Check if 2 lines are needed for longer names
     if ( citizen_name_rect.width() > available_width ){
-		//Add words one by one until we run out of space
-		QStringList words = citizen_name.split(" ");
-		QString tmp, first_line, second_line;
+        //Add words one by one until we run out of space
+        QStringList words = citizen_name.split(" ");
+        QString tmp, first_line, second_line;
         for( int i = 0; i < words.size(); ++i ){
             if (i > 0) tmp += " ";
 
-			QString new_string = tmp + words.at(i);
+            QString new_string = tmp + words.at(i);
 
             if ( fontMetrics().boundingRect(new_string).width() > available_width ){
-				first_line = tmp;
-				second_line = QStringList(words.mid(i)).join(" ");
-				break;
+                first_line = tmp;
+                second_line = QStringList(words.mid(i)).join(" ");
+                break;
             } else{
-				tmp = new_string;
+                tmp = new_string;
             }/* !if (fontMetrics().boundingRect(new_string).width() > available_width) */
         }/* for (int i = 0) */
         painter.drawText( bounding_rect.width() + 5, current_y_pos, first_line );
 
-		current_y_pos += line_height + line_spacing;
+        current_y_pos += line_height + line_spacing;
         painter.drawText( 5, current_y_pos, second_line );
     } else{
         painter.drawText( bounding_rect.width() + 5, current_y_pos, citizen_name );
@@ -311,21 +329,21 @@ void ImageCanvas::paintEvent( QPaintEvent * ){
     my_font.setBold( false );
     painter.setFont( my_font );
 
-	current_y_pos += line_height + line_spacing;
+    current_y_pos += line_height + line_spacing;
     painter.drawText( 5
                     , current_y_pos
                     , QString::fromUtf8("Num de Identificação Civil: ") + citizen_nic );
 
 
-	current_y_pos += line_height + line_spacing;
+    current_y_pos += line_height + line_spacing;
     painter.drawText( 5, current_y_pos, "Data: " + this->date_str );
 
     if ( !small_sig_format && !sig_location.isEmpty() ){
-		current_y_pos += line_height + line_spacing;
+        current_y_pos += line_height + line_spacing;
         painter.drawText( 5, current_y_pos, "Local: " + sig_location );
     }/* if ( !small_sig_format && !sig_location.isEmpty() ) */
 
-	current_y_pos += line_spacing * 2;
+    current_y_pos += line_spacing * 2;
 
     if ( pixmap2.isNull() ){
         qDebug() << "pixmap2 not loaded! ";
@@ -334,7 +352,7 @@ void ImageCanvas::paintEvent( QPaintEvent * ){
 
     //Dont draw the second image if the signature is small format
     if ( small_sig_format ){
-    	return;
+        return;
     }/* if ( small_sig_format ) */
 
     if ( !user_pixmap.isNull() ){
@@ -508,46 +526,42 @@ void PDFSignWindow::run_signOpen( int selected_page
                                 , char *location, char *reason ){
     PTEID_EIDCard &card = getNewCard();
 
-    printf( "getNewCard - OK\n" );
-
     int sign_rc = -1;
     bool keepTrying = true;
     char * save_path = strdup( getPlatformNativeString( savefilepath ) );
 
-    printf( "strdup save_path - OK\n" );
-
-    if ( NULL != m_client ){
-        delete m_client;
-    }
-
+    if ( NULL != m_client ) delete m_client;
     m_client = new PDFSignatureCli( &card, m_pdf_sig );
 
     do{
         try{
-            printf( "(1) run_signOpen() - sig_coord_x: %lf, sig_coord_y: %lf\n", sig_coord_x, sig_coord_y );
-
-            sign_rc = m_client->signOpen( m_userId.toStdString(), m_userPin.toStdString()
-                                    , selected_page
-                                    , sig_coord_x, sig_coord_y
-                                    , location, reason, save_path );
-
             keepTrying = false;
-            this->success = (sign_rc == 0) ? SIG_SUCCESS : TS_WARNING;
-        } catch ( PTEID_Exception &e ){
-            this->success = SIG_ERROR;
-            PTEID_LOG( PTEID_LOG_LEVEL_ERROR
-                       , "eidgui"
-                       , "Caught exception in signPDF() method. Error code: 0x%08x"
-                       , (unsigned int)e.GetError() );
 
-            if ( e.GetError() == EIDMW_ERR_CARD_RESET ){
-                    //PTEID_EIDCard &new_card = getNewCard();
-                    //card = getNewCard();
-                    //card = new_card;
+            sign_rc = m_client->signOpen( m_userId.toStdString()
+                                        , m_userPin.toStdString()
+                                        , selected_page
+                                        , sig_coord_x, sig_coord_y
+                                        , location, reason, save_path );
+
+            if ( ERR_NONE == sign_rc ){
+                this->success = SIG_SUCCESS;
+
+            } else if ( IS_NETWORK_ERROR(sign_rc) ){
+                this->success = SIG_NETWORK_ERROR;
 
             } else{
-                keepTrying = false;
-            }/* !if ( e.GetError() == EIDMW_ERR_CARD_RESET ) */
+                this->success = SIG_ERROR;
+
+            }/* !if ( ERR_NONE == sign_rc ) */
+
+        } catch ( PTEID_Exception &e ){
+            PTEID_LOG( PTEID_LOG_LEVEL_ERROR
+                       , "eidgui"
+                       , "Exception in signPDF() method. Error code: 0x%08x"
+                       , (unsigned int)e.GetError() );
+
+            this->success = SIG_ERROR;
+            keepTrying = false;
         }/* !try */
     } while( keepTrying );
 
@@ -558,39 +572,43 @@ void PDFSignWindow::run_signClose(){
     int sign_rc = -1;
     bool keepTrying = true;
 
-    printf( "strdup save_path - OK\n" );
-
     if ( NULL == m_client ){
-        PTEID_LOG( PTEID_LOG_LEVEL_ERROR, "eidgui", "Sign was not started!" );
+        PTEID_LOG( PTEID_LOG_LEVEL_ERROR
+                    , "eidgui"
+                   , "SignPDF was NOT started!" );
         this->success = SIG_ERROR;
         return;
     }
 
     do{
         try{
-            printf( "(1) run_signClose()\n" );
+            keepTrying = false;
 
             sign_rc = m_client->signClose( m_receivedCode.toStdString() );
 
-            keepTrying = false;
-            this->success = (sign_rc == 0) ? SIG_SUCCESS : TS_WARNING;
-        } catch ( PTEID_Exception &e ){
-            this->success = SIG_ERROR;
-            PTEID_LOG( PTEID_LOG_LEVEL_ERROR
-                       , "eidgui"
-                       , "Caught exception in signPDF() method. Error code: 0x%08x"
-                       , (unsigned int)e.GetError() );
+            if ( ERR_NONE == sign_rc ){
+                this->success = SIG_SUCCESS;
 
-            if ( e.GetError() == EIDMW_ERR_CARD_RESET ){
-                    //PTEID_EIDCard &new_card = getNewCard();
-                    //card = getNewCard();
-                    //card = new_card;
+            } else if ( IS_NETWORK_ERROR(sign_rc) ){
+                this->success = SIG_NETWORK_ERROR;
 
             } else{
-                keepTrying = false;
-            }/* !if ( e.GetError() == EIDMW_ERR_CARD_RESET ) */
+                this->success = SIG_ERROR;
+
+            }/* !if ( ERR_NONE == sign_rc ) */
+
+        } catch ( PTEID_Exception &e ){
+
+            PTEID_LOG( PTEID_LOG_LEVEL_ERROR
+                       , "eidgui"
+                       , "Exception in signPDF() method. Error code: 0x%08x"
+                       , (unsigned int)e.GetError() );
+
+            this->success = SIG_ERROR;
+            keepTrying = false;
         }/* !try */
     } while( keepTrying );
+
 }/* PDFSignWindow::run_signClose() */
 
 void PDFSignWindow::on_button_sign_clicked(){
@@ -696,12 +714,12 @@ void PDFSignWindow::on_button_sign_clicked(){
     //Avoid overwriting the original PDF, it doesn't work currently in Windows
     if ( savefilepath == current_input_path ){
         ShowErrorMsgBox(tr("The signed PDF filename must be different from the original!"));
-		return;
+        return;
     }/* if ( savefilepath == current_input_path ) */
 
     if ( savefilepath.isNull() || savefilepath.isEmpty() ) return;
 
-	char *reason = NULL, *location = NULL;
+    char *reason = NULL, *location = NULL;
     if ( ui.location_textbox->isEnabled()
             && ui.location_textbox->text().size() > 0 ){
         location = strdup( ui.location_textbox->text().toUtf8().data() );
@@ -720,19 +738,19 @@ void PDFSignWindow::on_button_sign_clicked(){
     m_userId = diagCmdUserInfo.getUserId();
     m_userPin = diagCmdUserInfo.getUserPin();
 
-	//Single File Signature case
-	pdialog = new QProgressDialog();
+    //Single File Signature case
+    pdialog = new QProgressDialog();
     pdialog->setWindowModality( Qt::WindowModal );
     pdialog->setWindowTitle(tr( "PDF Signature" ) );
     pdialog->setLabelText( tr( "Signing PDF file(s)..." ) );
 
-	//Set windows flags
-	Qt::WindowFlags flags = pdialog->windowFlags();
-	flags &= (~Qt::WindowMinMaxButtonsHint);// remove Min & Max Buttons
-	flags &= (~Qt::WindowCloseButtonHint);  // remove close Button
-	pdialog->setWindowFlags( flags );
+    //Set windows flags
+    Qt::WindowFlags flags = pdialog->windowFlags();
+    flags &= (~Qt::WindowMinMaxButtonsHint);// remove Min & Max Buttons
+    flags &= (~Qt::WindowCloseButtonHint);  // remove close Button
+    pdialog->setWindowFlags( flags );
 
-	//Set fixed size window
+    //Set fixed size window
     pdialog->setFixedSize( pdialog->size() );
 
     //Set icon
@@ -750,19 +768,14 @@ void PDFSignWindow::on_button_sign_clicked(){
                                             , location, reason );
 
     this->FutureWatcher.setFuture( future_signOpen );
-	pdialog->reset();
-	pdialog->exec();
+    pdialog->reset();
+    pdialog->exec();
 
     if ( this->success == SIG_SUCCESS ){
 
         dlgCmdCode diagCmdCode( this );
         diagCmdCode.exec();
         m_receivedCode = diagCmdCode.getReceivedCode();
-        if ( m_receivedCode.isEmpty() ){
-            PTEID_LOG( PTEID_LOG_LEVEL_ERROR, "eidgui", "Empty received Code" );
-            ShowErrorMsgBox( tr("Received Code should NOT be empty!" ) );
-            return;
-        }/* if ( m_receivedCode.isEmpty() ) */
 
         QFuture<void> future_signClose = QtConcurrent::run( this
                                                         , &PDFSignWindow::run_signClose );
@@ -771,24 +784,10 @@ void PDFSignWindow::on_button_sign_clicked(){
         pdialog->reset();
         pdialog->exec();
 
-        if ( SIG_SUCCESS == this->success ){
-            ShowSuccessMsgBox();
-        } else if ( TS_WARNING == this->success ){
-            QString sig_detail = model->rowCount() > 1
-                    ?  tr( "some of the timestamps could not be applied" )
-                    : tr( "the timestamp could not be applied" );
-            ShowErrorMsgBox( tr("Signature(s) successfully generated but " ) + sig_detail );
-        } else{
-                ShowErrorMsgBox(tr("Error Generating Signature!"));
-        }
+        handleSignError( this->success );
 
-    } else if ( this->success == TS_WARNING ){
-        QString sig_detail = model->rowCount() > 1
-                ?  tr( "some of the timestamps could not be applied" )
-                : tr( "the timestamp could not be applied" );
-        ShowErrorMsgBox( tr("Signature(s) successfully generated but " ) + sig_detail );
     } else{
-		ShowErrorMsgBox(tr("Error Generating Signature!"));
+        handleSignError( this->success );
     }/* if ( this->success == SIG_SUCCESS ) */
 
     if ( SIG_SUCCESS == this->success ) this->close();
@@ -798,32 +797,34 @@ void PDFSignWindow::on_button_sign_clicked(){
 }/* PDFSignWindow::on_button_sign_clicked() */
 
 void PDFSignWindow::on_button_addfile_clicked(){
-	QStringList fileselect;
-	QString defaultopenfilepath;
+    QStringList fileselect;
+    QString defaultopenfilepath;
 
-	defaultopenfilepath = QDir::homePath();
+    defaultopenfilepath = QDir::homePath();
     fileselect = QFileDialog::getOpenFileNames( this
                                                 , tr( "Select File(s)" )
                                                 , defaultopenfilepath
                                                 , "PDF Documents (*.pdf)" );
-	QCoreApplication::processEvents();
+    QCoreApplication::processEvents();
 
-	addFileToListView(fileselect);
+    if ( addFileToListView(fileselect) ){
+        ui.button_addfile->setEnabled( false );
+    }
 }/* PDFSignWindow::on_button_addfile_clicked() */
 
 double g_scene_height;
 double g_scene_width;
 
 QPixmap PDFSignWindow::renderPageToImage(){
-	// Document starts at page 0 in the poppler-qt5 API
-	Poppler::Page *popplerPage = m_doc->page(m_current_page_number-1);
+    // Document starts at page 0 in the poppler-qt5 API
+    Poppler::Page *popplerPage = m_doc->page(m_current_page_number-1);
 
-	//TODO: Test the resolution on Windows
+    //TODO: Test the resolution on Windows
     const double resX = 45.0;
     const double resY = 45.0;
     if ( popplerPage == NULL ){
-    	qDebug() << "Failed to get page object: " << m_current_page_number-1;
-    	return QPixmap();
+        qDebug() << "Failed to get page object: " << m_current_page_number-1;
+        return QPixmap();
     }/* if ( popplerPage == NULL ) */
 
     QImage image = popplerPage->renderToImage( resX
@@ -833,15 +834,15 @@ QPixmap PDFSignWindow::renderPageToImage(){
     delete popplerPage;
 
     if ( !image.isNull() ){
-    	return QPixmap::fromImage(image);
+        return QPixmap::fromImage(image);
     } else{
-    	qDebug() << "Error rendering PDF page to image!";
+        qDebug() << "Error rendering PDF page to image!";
        return QPixmap();
     }/* if ( !image.isNull() ) */
 }/* PDFSignWindow::renderPageToImage() */
 
 void PDFSignWindow::buildLocationTab(){
-	//These dimensions respect A4 page ratio
+    //These dimensions respect A4 page ratio
     g_scene_height = 520;
     g_scene_width = 367.75;
 
@@ -853,8 +854,8 @@ void PDFSignWindow::buildLocationTab(){
     }/* if ( my_scene == NULL ) */
 
     double rect_h = 0.1 * g_scene_height;
-	// This ratio for signature width is based on the following formula: (Page_W - 60) / 3
-	double rect_w = 0.29715 * g_scene_width;
+    // This ratio for signature width is based on the following formula: (Page_W - 60) / 3
+    double rect_w = 0.29715 * g_scene_width;
 
     if ( m_landscape_mode ){
         double tmp = g_scene_width;
@@ -882,10 +883,10 @@ void PDFSignWindow::buildLocationTab(){
         my_scene->addItem( my_rectangle );
     } else{
         my_rectangle->setMaxLocation( g_scene_width, g_scene_height );
-		my_rectangle->show();
+        my_rectangle->show();
     }/* if ( my_rectangle == NULL ) */
 
-	my_scene->update();
+    my_scene->update();
 
     //Pre-select visible signature if we added a valid PDF file
     ui.visible_checkBox->setCheckState( Qt::Checked );
@@ -896,8 +897,8 @@ void PDFSignWindow::buildLocationTab(){
 
 void PDFSignWindow::on_radioButton_firstpage_toggled( bool value ){
     if ( value && m_pdf_sig ){
-		// clearAllSectors();
-		m_current_page_number = 1;
+        // clearAllSectors();
+        m_current_page_number = 1;
 
         preview_pixmap = renderPageToImage();
 
@@ -921,13 +922,13 @@ void PDFSignWindow::on_radioButton_lastpage_toggled( bool value ){
 }/* PDFSignWindow::on_radioButton_lastpage_toggled() */
 
 void PDFSignWindow::on_spinBox_page_valueChanged( int new_value ){
-	//Check if there is at least 1 PDF chosen
+    //Check if there is at least 1 PDF chosen
     if ( !m_pdf_sig ) return;
 
-	m_current_page_number = new_value;
-	preview_pixmap = renderPageToImage();
+    m_current_page_number = new_value;
+    preview_pixmap = renderPageToImage();
     my_scene->updateBackground( preview_pixmap );
-	my_scene->update();
+    my_scene->update();
     // clearAllSectors();
 
     QString sectors = QString::fromLatin1( m_pdf_sig->getOccupiedSectors( new_value ) );
@@ -936,9 +937,9 @@ void PDFSignWindow::on_spinBox_page_valueChanged( int new_value ){
 void mapSectorToRC( int sector, int *row, int *column ){
     if ( sector < 1 ) return;
 
-	int rem = sector % 3;
+    int rem = sector % 3;
 
-	*row = (sector-1) / 3;
+    *row = (sector-1) / 3;
 
     switch( rem ){
         case 0:
@@ -965,7 +966,7 @@ void MyGraphicsScene::drawBackground(QPainter * painter, const QRectF & rect ){
 
     painter->drawPixmap( 0, 0, background );
     if ( m_greyedOut ){
-		//Draw grey rectangle with alpha = 100
+        //Draw grey rectangle with alpha = 100
         painter->fillRect(QRect( 0, 0, width(), height() )
                           , QColor( 190, 190, 190, 100 ) );
     }/* if ( m_greyedOut ) */
@@ -983,13 +984,13 @@ void DraggableRectangle::paint( QPainter *painter
 }/* DraggableRectangle::paint() */
 
 void DraggableRectangle::makeItSmaller(){
-	current_logo = &logo_pixmap_small;
-	m_rect_h /= 2;
+    current_logo = &logo_pixmap_small;
+    m_rect_h /= 2;
 }/* DraggableRectangle::makeItSmaller() */
 
 void DraggableRectangle::makeItLarger(){
-	m_rect_h *= 2;
-	current_logo = &logo_pixmap;
+    m_rect_h *= 2;
+    current_logo = &logo_pixmap;
 }/* DraggableRectangle::makeItLarger() */
 
 QRectF DraggableRectangle::boundingRect() const{
@@ -999,12 +1000,12 @@ QRectF DraggableRectangle::boundingRect() const{
 /* Change mouse cursor to indicate draggable rectangle */
 void DraggableRectangle::hoverEnterEvent( QGraphicsSceneHoverEvent * event ){
     QApplication::setOverrideCursor( QCursor(Qt::OpenHandCursor) );
-	update();
+    update();
 }/* DraggableRectangle::hoverEnterEvent() */
 
 void DraggableRectangle::hoverLeaveEvent( QGraphicsSceneHoverEvent * event ){
     QApplication::setOverrideCursor( QCursor( Qt::ArrowCursor ) );
-	update();
+    update();
 }/* DraggableRectangle::hoverLeaveEvent() */
 
 void DraggableRectangle::mousePressEvent(QGraphicsSceneMouseEvent * event){
@@ -1013,8 +1014,8 @@ void DraggableRectangle::mousePressEvent(QGraphicsSceneMouseEvent * event){
 }/* DraggableRectangle::mousePressEvent() */
 
 void DraggableRectangle::setToPos( QPointF *newPos ){
-	/* Detect out of boundaries mouseEvent
-	and correct the point to the nearest valid position */
+    /* Detect out of boundaries mouseEvent
+    and correct the point to the nearest valid position */
     if ( newPos->rx() < 0 ) newPos->setX( 0 );
     if ( newPos->ry() < 0 ) newPos->setY( 0 );
     if ( newPos->rx() >= m_max_x - m_rect_w ) newPos->setX( m_max_x - m_rect_w );
@@ -1024,10 +1025,10 @@ void DraggableRectangle::setToPos( QPointF *newPos ){
 }/* DraggableRectangle::setToPos() */
 
 void DraggableRectangle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event){
-	QPointF sig_location = scenePos();
+    QPointF sig_location = scenePos();
     setToPos( &sig_location );
 
-	//Send message to parent with a corrected position
+    //Send message to parent with a corrected position
     my_scene->itemMoved( sig_location );
     QApplication::setOverrideCursor( QCursor( Qt::OpenHandCursor ) );
     QGraphicsItem::mouseReleaseEvent( event );
@@ -1041,7 +1042,7 @@ QRectF SelectableRectangle::boundingRect() const
 
 void SelectableRectangle::resetColor(){
     m_brush = QBrush( QColor( 193, 221, 221 ) );
-	update();
+    update();
 }/* SelectableRectangle::resetColor() */
 
 void SelectableRectangle::setSectorFilled( Qt::GlobalColor color ){
@@ -1061,7 +1062,7 @@ void SelectableRectangle::mouseReleaseEvent( QGraphicsSceneMouseEvent * event ){
 
     m_brush = QBrush( Qt::black );
     my_scene->selectNewRectangle( pos() );
-	update();
+    update();
 }/* SelectableRectangle::mouseReleaseEvent() */
 
 void SelectableRectangle::paint( QPainter *painter
@@ -1075,7 +1076,7 @@ void SelectableRectangle::paint( QPainter *painter
     painter->setBrush( Qt::lightGray );
 
     if ( !dont_select_mode ){
-		//Draw text centered in the rectangle
+        //Draw text centered in the rectangle
         QFont sansSerifFont( "Arial", 16, QFont::Bold );
         painter->setPen( Qt::lightGray );
         painter->setFont( sansSerifFont );
@@ -1086,7 +1087,7 @@ void SelectableRectangle::paint( QPainter *painter
 #endif /* OLD_SIGNATURE_LOCATION */
 
 double PDFSignWindow::getMaxX(){
-	return  g_scene_width;
+    return  g_scene_width;
 }/* PDFSignWindow::getMaxX() */
 
 double PDFSignWindow::getMaxY(){
@@ -1133,17 +1134,17 @@ void PDFSignWindow::setPosition( QPointF new_pos ){
     /* Check border limits */
     if ( new_pos.rx() < 0 ){
         this->rx = 0;
-	} else if ( new_pos.rx() > getMaxX() ){
+    } else if ( new_pos.rx() > getMaxX() ){
         this->rx = getMaxX();
-	} else {
+    } else {
         this->rx = new_pos.rx();
     }/* !if ( new_pos.rx() < 0 ) */
 
     if ( new_pos.ry() < 0 ){
         this->ry = 0;
-	} else if ( new_pos.ry() > getMaxY()) {
+    } else if ( new_pos.ry() > getMaxY()) {
         this->ry = getMaxY();
-	} else {
+    } else {
         this->ry = new_pos.ry();
     }/* !if ( new_pos.ry() < 0 ) */
 
@@ -1160,11 +1161,11 @@ void PDFSignWindow::on_button_clearFiles_clicked(){
     list_model->removeRows( 0, list_model->rowCount() );
 
     if ( m_pdf_sig != NULL ){
-		delete m_pdf_sig;
-		m_pdf_sig = NULL;
+        delete m_pdf_sig;
+        m_pdf_sig = NULL;
     }/* if ( m_pdf_sig != NULL ) */
 
-	page_numbers.clear();
+    page_numbers.clear();
 
     ui.button_sign->setEnabled( false );
     ui.visible_checkBox->setEnabled( false );
@@ -1175,14 +1176,16 @@ void PDFSignWindow::on_button_clearFiles_clicked(){
 
     ui.scene_view->setEnabled( false );
     if ( my_scene ){
-		//Clear the background pixmap
-		QPixmap null_pixmap;
+        //Clear the background pixmap
+        QPixmap null_pixmap;
         my_scene->updateBackground( null_pixmap );
 
         if ( my_rectangle ) my_rectangle->hide();
 
-		my_scene->update();
+        my_scene->update();
     }/* if ( my_scene ) */
+
+    ui.button_addfile->setEnabled( true );
 }/* PDFSignWindow::on_button_clearFiles_clicked() */
 
 void PDFSignWindow::updateMaxPage( int removed_index ){
@@ -1193,24 +1196,33 @@ void PDFSignWindow::updateMaxPage( int removed_index ){
                                                       , page_numbers.end() ) );
 }/* PDFSignWindow::updateMaxPage() */
 
-void PDFSignWindow::addFileToListView( QStringList &str ){
-    if ( str.isEmpty() ) return;
+bool PDFSignWindow::addFileToListView( QStringList &str ){
+    if ( str.isEmpty() ) return false;
 
-	//Remove duplicates in all the selected files
+    if ( str.count() > 1 ){
+        ShowErrorMsgBox( tr("Only one file is allowed!") );
+        return false;
+    }
+
+    if ( list_model->rowCount() >= 1 ){
+        ShowErrorMsgBox( tr("Only one file is allowed!") );
+        return false;
+    }
+
+    //Remove duplicates in all the selected files
     for( int i = 0; i < list_model->rowCount(); i++ ){
         QString tmp = list_model->data( list_model->index(i, 0), 0).toString();
         str.removeAll( tmp );
     }/* for( int i) */
 
-	//Check again because we may have removed all elements of the input list
-    if ( str.isEmpty() ) return;
+    //Check again because we may have removed all elements of the input list
+    if ( str.isEmpty() ) return false;
 
     if ( m_pdf_sig != NULL ) delete m_pdf_sig;
+    m_pdf_sig = NULL;
 
-	m_pdf_sig = NULL;
-
-	int j = 0;
-	int tmp_count = 0;
+    int j = 0;
+    int tmp_count = 0;
 
     while ( !m_pdf_sig && j < str.size() ){
         current_input_path = str.at( j );
@@ -1218,46 +1230,46 @@ void PDFSignWindow::addFileToListView( QStringList &str ){
 
         printf("(1) addFileToListView() - while ( !m_pdf_sig && j < str.size() )\n");
 
-		tmp_count = m_pdf_sig->getPageCount();
+        tmp_count = m_pdf_sig->getPageCount();
 
         if ( tmp_count < 1 ){
-			delete m_pdf_sig;
-			m_pdf_sig = NULL;
+            delete m_pdf_sig;
+            m_pdf_sig = NULL;
 
             QFileInfo fi( current_input_path );
             ShowErrorMsgBox( tr("Unsupported or damaged PDF file: ") + fi.fileName() );
-            if ( str.size() == 1 ) return;
+            if ( str.size() == 1 ) return false;
         }/* if ( tmp_count < 1 ) */
-		j++;
+        j++;
     }/* while ( !m_pdf_sig && j < str.size() ) */
 
-	//All the files were broken
-    if ( !m_pdf_sig ) return;
+    //All the files were broken
+    if ( !m_pdf_sig ) return false;
 
     list_model->insertRows( list_model->rowCount(), 1 );
     list_model->setData( list_model->index( list_model->rowCount()-1, 0 )
                          , current_input_path );
 
     page_numbers.append( tmp_count );
-	m_pageCount = tmp_count;
+    m_pageCount = tmp_count;
     m_landscape_mode = m_pdf_sig->isLandscapeFormat();
 
     int page_n = 0;
     for ( int i = j; i < str.size(); i++ ){
         QString tmp = str.at( i );
 
-		//The first file was already checked using getPageCount()
+        //The first file was already checked using getPageCount()
         if ( i > 0 ){
             char *dupStr = strdup( getPlatformNativeString( tmp ));
             if ( dupStr != NULL ){
                 page_n = m_pdf_sig->getOtherPageCount( dupStr );
 
-				//Check for invalid file or unsupported PDF
+                //Check for invalid file or unsupported PDF
                 if ( page_n < 1 ){
                     ShowErrorMsgBox( tr("Unsupported or damaged PDF file: ") + tmp );
 
                     free( dupStr );
-					continue;
+                    continue;
                 } else{
                     list_model->insertRows( list_model->rowCount(), 1 );
                     list_model->setData( list_model->index(list_model->rowCount()-1, 0 ), tmp );
@@ -1269,14 +1281,14 @@ void PDFSignWindow::addFileToListView( QStringList &str ){
         }/* if ( i > 0 ) */
     }/* for ( int i ) */
 
-	//Set the spinbox with the appropriate max value
+    //Set the spinbox with the appropriate max value
     ui.spinBox_page->setMaximum( *std::min_element( page_numbers.begin()
                                                    , page_numbers.end() ) );
 
     loadDocumentForPreview( current_input_path );
-	m_current_page_number = 1;
+    m_current_page_number = 1;
 
-	//Enable sign button now that we have data and a card inserted
+    //Enable sign button now that we have data and a card inserted
     if ( !str.isEmpty() && this->card_present ){
         ui.button_sign->setEnabled( true );
         ui.visible_checkBox->setEnabled( true );
@@ -1289,4 +1301,6 @@ void PDFSignWindow::addFileToListView( QStringList &str ){
     }/* if ( !str.isEmpty() && this->card_present ) */
 
     buildLocationTab();
+
+    return true;
 }/* PDFSignWindow::addFileToListView() */
