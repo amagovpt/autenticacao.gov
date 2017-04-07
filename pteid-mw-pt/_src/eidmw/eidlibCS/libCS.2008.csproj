@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties35</AppDesignerFolder>
     <RootNamespace>eIDMW</RootNamespace>
-    <AssemblyName>pteidlibCS</AssemblyName>
+    <AssemblyName>pteidlib_dotnet</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -36,7 +36,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RegisterForComInterop>false</RegisterForComInterop>
-    <DocumentationFile>..\_Binaries35\AnyCPU\VC9\Release\pteidlibCS.XML</DocumentationFile>
+    <DocumentationFile>..\_Binaries35\AnyCPU\VC9\Release\pteidlib_dotnet.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
