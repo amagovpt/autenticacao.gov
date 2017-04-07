@@ -90,16 +90,16 @@ namespace eidpt
    }
    
    
-   public static PTEID_ID GetID(){ 
+   public static PteidId GetID(){ 
        try {
-           return new PTEID_ID(idCard.getID());
+           return new PteidId(idCard.getID());
         } catch (Exception ex) {
             throw new PteidException(0);
         }
    }
    
    
-    public static PTEID_ADDR GetAddr(){
+    public static PteidAddr GetAddr(){
         try {
             uint ul = 0;
             PTEID_Pins pins = idCard.getPins();
@@ -107,7 +107,7 @@ namespace eidpt
                 PTEID_Pin pin = pins.getPinByNumber(i);
                 if (pin.getPinRef() == 131) {
                     if (pin.verifyPin("", ref ul,true)) {
-                        return new PTEID_ADDR(idCard.getAddr());
+                        return new PteidAddr(idCard.getAddr());
                     }
                 }
             }
@@ -120,11 +120,11 @@ namespace eidpt
     }
     
     
-    public static PTEID_PIC GetPic(){
-        PTEID_PIC pic = null;
+    public static PteidPic GetPic(){
+        PteidPic pic = null;
         
         try {
-            pic = new PTEID_PIC();
+            pic = new PteidPic();
             pic.cbeff = new byte[(int)idCard.getID().getPhotoObj().getphotoCbeff().Size()];
             Array.Copy(idCard.getID().getPhotoObj().getphotoCbeff().GetBytes(), 0, pic.cbeff, 0, pic.cbeff.Length);
             pic.facialinfo = new byte[(int)idCard.getID().getPhotoObj().getphotoFacialinfo().Size()];
@@ -229,19 +229,19 @@ namespace eidpt
     }
    
     
-    public static PTEIDPin[] GetPINs(){
-        PTEIDPin[] pinArray = null;
+    public static PteidPin[] GetPINs(){
+        PteidPin[] pinArray = null;
         int currentId;
         
         if (readerContext != null) {
             try {
                 PTEID_Pins pins = idCard.getPins();
-                pinArray = new PTEIDPin[PTEID_PIN_COUNT];
+                pinArray = new PteidPin[PTEID_PIN_COUNT];
                 for (uint pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                     PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getId() == 1 || pin.getId() == 2 || pin.getId() == 3) {
                         currentId = (int)pin.getId()-1;
-                        pinArray[currentId] = new PTEIDPin();
+                        pinArray[currentId] = new PteidPin();
                         pinArray[currentId].flags = (int) pin.getFlags();
                         pinArray[currentId].usageCode = (int) pin.getId(); // martinho: might not be the intended use, but gives the expected compatible result.
                         pinArray[currentId].pinType = (int) pin.getType();
@@ -261,13 +261,13 @@ namespace eidpt
     }
     
     
-    public static PTEID_TokenInfo GetTokenInfo(){
-        PTEID_TokenInfo token = null;
+    public static PteidTokenInfo GetTokenInfo(){
+        PteidTokenInfo token = null;
 
         if (readerContext != null) {
             try {
                 PTEID_CardVersionInfo info = idCard.getVersionInfo();
-                token = new PTEID_TokenInfo(info.getTokenLabel(), info.getSerialNumber());
+                token = new PteidTokenInfo(info.getTokenLabel(), info.getSerialNumber());
             } catch (Exception ex) {
                 throw new PteidException(0);
             }
@@ -472,13 +472,13 @@ namespace eidpt
         }
     }
     
-    public static PTEID_RSAPublicKey GetCardAuthenticationKey(){
-        PTEID_RSAPublicKey key = null;
+    public static PteidRSAPublicKey GetCardAuthenticationKey(){
+        PteidRSAPublicKey key = null;
 
         if (readerContext != null) {
             try {
                 PTEID_PublicKey cardKey = idCard.getID().getCardAuthKeyObj();
-                key = new PTEID_RSAPublicKey();
+                key = new PteidRSAPublicKey();
                 key.exponent = new byte[(int) cardKey.getCardAuthKeyExponent().Size()];
                 key.modulus = new byte[(int) cardKey.getCardAuthKeyModulus().Size()];
                 Array.Copy(cardKey.getCardAuthKeyExponent().GetBytes(), 0, key.exponent, 0, key.exponent.Length);
@@ -492,19 +492,18 @@ namespace eidpt
     }
     
     
-    public static PTEID_RSAPublicKey GetCVCRoot(){
-        PTEID_RSAPublicKey key = null;
+    public static PteidRSAPublicKey GetCVCRoot(){
+        PteidRSAPublicKey key = null;
 
         if (readerContext != null) {
             try {
                 PTEID_PublicKey rootCAKey = idCard.getRootCAPubKey();
-                key = new PTEID_RSAPublicKey();
+                key = new PteidRSAPublicKey();
                 key.exponent = new byte[(int) rootCAKey.getCardAuthKeyExponent().Size()];
                 key.modulus = new byte[(int) rootCAKey.getCardAuthKeyModulus().Size()];
                 Array.Copy(rootCAKey.getCardAuthKeyExponent().GetBytes(), 0, key.exponent, 0, key.exponent.Length);
                 Array.Copy(rootCAKey.getCardAuthKeyModulus().GetBytes(), 0, key.modulus, 0, key.modulus.Length);
             } catch (Exception ex) {
-                Console.WriteLine("Erro no GetCVCRoot: " + ex.ToString()); 
                 throw new PteidException(0);
             }
         }

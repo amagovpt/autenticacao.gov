@@ -3,24 +3,20 @@ using System.Text;
 
 namespace eidpt
 {
-    public class PteidException : Exception 
-    {
-        private int m_status;
-        private string m_message;
+	
+	public class PteidException : ApplicationException
+	{
 
-        public PteidException(int i)
-        {
-            m_status = i;
-        }
+	  public PteidException() : base("Generic error")
+	  {
+		
+	  }
+	  
+	  public PteidException(int error_code): base("Error code : " +Convert.ToString(error_code))
+	  {
+		
+	  }
+		
+	}
 
-        public int getStatus()
-        {
-            return m_status;
-        }
-
-        public string getMessage()
-        {
-            return m_message;
-        }
-    }
 }

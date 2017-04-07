@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using pt.portugal.eid;
 
 namespace eidpt
 {
@@ -343,7 +344,7 @@ namespace eidpt
         }
     }
 
-    internal PTEID_ID(PTEID_EId id)
+    internal PteidId(PTEID_EId id)
     {
         try {
             version = 0;

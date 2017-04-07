@@ -33,7 +33,7 @@ namespace eidpt
             }
         }
 
-        internal PTEID_TokenInfo(String label, String serial)
+        internal PteidTokenInfo(String label, String serial)
         {
             this.label = label;
             this.serial = serial;
