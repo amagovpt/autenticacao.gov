@@ -121,6 +121,7 @@ PDFSignWindow::PDFSignWindow( QWidget* parent
 
     this->setFixedSize( this->width(), this->height() );
 
+    /* CMD  PDFSignature client */
     m_client = NULL;
 
     connect( ui.pdf_listview
@@ -128,10 +129,12 @@ PDFSignWindow::PDFSignWindow( QWidget* parent
              , this
              , SLOT(updateMaxPage(int) ) );
 
+    /* Init SDK */
     PTEID_InitSDK();
 }/* PDFSignWindow::PDFSignWindow() */
 
 PDFSignWindow::~PDFSignWindow(){
+    /* Release SDK */
     PTEID_ReleaseSDK();
 
     delete list_model;
@@ -498,10 +501,10 @@ void PDFSignWindow::ShowErrorMsgBox( QString msg ){
 }/* PDFSignWindow::ShowErrorMsgBox() */
 
 PTEID_EIDCard& PDFSignWindow::getNewCard(){
-    unsigned long	ReaderStartIdx = m_selected_reader;
-    bool			bRefresh	   = false;
-    unsigned long	ReaderEndIdx   = ReaderSet.readerCount( bRefresh );
-    unsigned long	ReaderIdx	   = 0;
+    unsigned long ReaderStartIdx = m_selected_reader;
+    bool          bRefresh       = false;
+    unsigned long ReaderEndIdx   = ReaderSet.readerCount( bRefresh );
+    unsigned long ReaderIdx      = 0;
 
     if (ReaderStartIdx!=(unsigned long)-1){
         ReaderEndIdx = ReaderStartIdx + 1;
@@ -536,7 +539,6 @@ void PDFSignWindow::run_signOpen( int selected_page
     do{
         try{
             keepTrying = false;
-
             sign_rc = m_client->signOpen( m_userId.toStdString()
                                         , m_userPin.toStdString()
                                         , selected_page
@@ -583,7 +585,6 @@ void PDFSignWindow::run_signClose(){
     do{
         try{
             keepTrying = false;
-
             sign_rc = m_client->signClose( m_receivedCode.toStdString() );
 
             if ( ERR_NONE == sign_rc ){
@@ -617,63 +618,48 @@ void PDFSignWindow::on_button_sign_clicked(){
         *       PDFSignature                                                    *
         *************************************************************************
     */
-
     //For invisible sigs the implementation we'll
     //need to add a reference to the sigfield in some page so...
     int selected_page = 1;
     QString savefilepath;
 
     //Read Page
-#if 1
     if ( ui.visible_checkBox->isChecked() ){
         //Validate if any location was chosen
         if ( sig_coord_x == -1 ){
-            ShowErrorMsgBox(tr("You must choose a location for visible signature!"));
-            return;
+
+            if ( NULL == my_rectangle ){
+                ShowErrorMsgBox(
+                    tr( "You must choose a location for visible signature!" ) );
+                return;
+            }/* if ( my_rectangle != NULL ) */
+
+            QPointF newPos( my_rectangle->x(), my_rectangle->y() );
+            setPosition( newPos );
         }/* if ( sig_coord_x == -1 ) */
-
-        selected_page = m_current_page_number;
     }/* if ( ui.visible_checkBox->isChecked() ) */
-#else
-    QPointF new_pos;
-    if ( my_scene == NULL ){
-        new_pos.setX( -1 );
-        new_pos.setY( -1 );
-    }else{
-        new_pos.setX( my_scene->rx() );
-        new_pos.setY( my_scene->rx() );
-    }
 
-    /*qreal pos_x = ( sig_coord_x < 0 ) ? -1 : sig_coord_x;
-    qreal pos_y = ( sig_coord_y < 0 ) ? -1 : sig_coord_y;
-
-    printf( "(1) on_button_sign_clicked() - pos_x      : %lf, pos_y      : %lf\n", pos_x, pos_y );
-    printf( "(2) on_button_sign_clicked() - sig_coord_x: %lf, sig_coord_y: %lf\n", sig_coord_x, sig_coord_y );
-    QPointF new_pos( pos_x, pos_y );*/
-    setPosition( new_pos );
-#endif //0
+    selected_page = m_current_page_number;
 
     QStringListModel *model = dynamic_cast<QStringListModel *>(list_model);
     if ( model->rowCount() == 0 ){
        return;
-
     }/* if ( model->rowCount() == 0 ) */
 
     QFileInfo my_file_info( current_input_path );
     QString defaultsavefilepath = my_file_info.dir().absolutePath();
 
+    /* Number of inserted files */
     if ( model->rowCount() > 1 ){
-
         savefilepath = QFileDialog::getExistingDirectory( this
-                                        , tr("Open Directory")
-                                        , QDir::toNativeSeparators( defaultsavefilepath )
-                                        , QFileDialog::ShowDirsOnly );
+                                , tr("Open Directory")
+                                , QDir::toNativeSeparators( defaultsavefilepath )
+                                , QFileDialog::ShowDirsOnly );
 
         if ( savefilepath.isNull() || savefilepath.isEmpty() ) return;
 
         //First we need to free the first instance that was created unless we want to leak the file handle...
         delete m_pdf_sig;
-        printf( "(3) on_button_sign_clicked() - IF ( model->rowCount() > 1 )\n" );
 
         m_pdf_sig = new PTEID_PDFSignature();
 
@@ -691,7 +677,6 @@ void PDFSignWindow::on_button_sign_clicked(){
                             , tr( "Save File" )
                             , QDir::toNativeSeparators( defaultsavefilepath + "/" + basename + "_signed.pdf" )
                             , tr( "PDF files (*.pdf)" ) );
-        printf( "(4) on_button_sign_clicked() - ELSE ( model->rowCount() > 1 )\n" );
     }/* if ( model->rowCount() > 1 ) */
 
     if ( ui.timestamp_checkBox->isChecked() ) m_pdf_sig->enableTimestamp();
@@ -771,7 +756,7 @@ void PDFSignWindow::on_button_sign_clicked(){
     pdialog->reset();
     pdialog->exec();
 
-    if ( this->success == SIG_SUCCESS ){
+    if ( SIG_SUCCESS == this->success ){
 
         dlgCmdCode diagCmdCode( this );
         diagCmdCode.exec();
@@ -788,12 +773,12 @@ void PDFSignWindow::on_button_sign_clicked(){
 
     } else{
         handleSignError( this->success );
-    }/* if ( this->success == SIG_SUCCESS ) */
+    }/* if ( SIG_SUCCESS == this->success ) */
 
     if ( SIG_SUCCESS == this->success ) this->close();
+
     if ( location != NULL ) free( location );
     if ( reason != NULL ) free( reason );
-
 }/* PDFSignWindow::on_button_sign_clicked() */
 
 void PDFSignWindow::on_button_addfile_clicked(){
@@ -1151,7 +1136,6 @@ void PDFSignWindow::setPosition( QPointF new_pos ){
     //Actual coordinates passed to SignPDF() expressed as a fraction
     sig_coord_x = this->rx/g_scene_width;
 
-    //printf("eidgui: DEBUG: this->ry: %f\n", this->ry);
     //Vertical coordinate needs the rectangle height offset because new_pos contains the top-left corner
     sig_coord_y = ( this->ry + scaled_rectangle_height) / g_scene_height;
     qDebug() << "New coordinates=  x: " <<sig_coord_x << "y: " << sig_coord_y;
@@ -1227,8 +1211,6 @@ bool PDFSignWindow::addFileToListView( QStringList &str ){
     while ( !m_pdf_sig && j < str.size() ){
         current_input_path = str.at( j );
         m_pdf_sig = new PTEID_PDFSignature( strdup( getPlatformNativeString( current_input_path ) ) );
-
-        printf("(1) addFileToListView() - while ( !m_pdf_sig && j < str.size() )\n");
 
         tmp_count = m_pdf_sig->getPageCount();
 

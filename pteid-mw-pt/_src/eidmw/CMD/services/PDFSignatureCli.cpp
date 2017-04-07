@@ -27,6 +27,22 @@ namespace eIDMW{
         printf( "\n" );
     }/* printData() */
 
+    std::string toHex( std::string str ){
+        std::string hex;
+
+        const char *p = str.c_str();
+        for( unsigned int i = 0; i < str.size(); i++ ){
+            if ( ( p[i] >= 0x30 ) && ( p[i] <= 0x39 ) ){
+                hex.push_back( p[i] - 0x30 );
+            } else{
+                hex = str;
+                break;
+            }/* !if ( ( p[i] >= 0x30 ) && ( p[i] <= 0x39 ) ) */
+        }/* for( unsigned int i ) */
+
+        return hex;
+    }/* toHex() */
+
     std::string ltrim( std::string& str ){
         size_t pos = str.find_first_not_of(' ');
         if ( string::npos == pos ) return str;
@@ -51,7 +67,8 @@ namespace eIDMW{
         return str.substr( first, ( last-first+1 ) );
     }/* trim() */
 
-    PDFSignatureCli::PDFSignatureCli( PTEID_EIDCard *in_card, PTEID_PDFSignature *in_pdf_handler ){
+    PDFSignatureCli::PDFSignatureCli( PTEID_EIDCard *in_card
+                                    , PTEID_PDFSignature *in_pdf_handler ){
         m_card = in_card;
         m_pdf_handler = in_pdf_handler;
     }/* PDFSignatureCli::PDFSignatureCli() */
@@ -88,12 +105,18 @@ namespace eIDMW{
     ***    PDFSignatureCli::cli_getCertificate()          ***
     ********************************************************* */
     int PDFSignatureCli::cli_getCertificate( std::string in_userId ){
-
 #if defined(EXTERNAL_CERTIFICATE)
         if ( NULL == m_pdf_handler ){
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
             return ERR_NULL_PDF_HANDLER;
         }/* if ( NULL == m_pdf_handler ) */
+
+        /* printData */
+        if ( isDBG ){
+            printData( (char *)"\nUserId: "
+                        , (unsigned char *)in_userId.c_str()
+                        , in_userId.size() );
+        }/* if ( isDBG ) */
 
         printf( "\n*******************************\n"
                   "*** getCertificate          ***\n"
@@ -113,7 +136,9 @@ namespace eIDMW{
 
         /* printData */
         if ( isDBG ){
-            printData( (char *)"Certificate: ", certificate.GetBytes(), certificate.Size() );
+            printData( (char *)"Certificate: "
+                        , certificate.GetBytes()
+                        , certificate.Size() );
         }/* if ( isDBG ) */
 
         PDFSignature *pdf = m_pdf_handler->getPdfSignature();
@@ -124,10 +149,12 @@ namespace eIDMW{
 
         //TODO - get certificateCA
         PTEID_ByteArray iData;
-        long out = m_card->readFile( (const char *)PTEID_FILE_CERT_ROOT_SIGN, iData );
+        long out = m_card->readFile( (const char *)PTEID_FILE_CERT_ROOT_SIGN
+                                    , iData );
         if ( out < 1 ){
             MWLOG_ERR( logBuf
-                    , "readFile() fail - certificate CA - read from file, out: %d", out );
+                    , "readFile() fail - certificate CA - read from file, out: %d"
+                    , out );
             return ERR_INV_CERTIFICATE_CA;
         }/* if ( out < 1 ) */
 
@@ -162,6 +189,26 @@ namespace eIDMW{
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
             return ERR_NULL_PDF_HANDLER;
         }/* if ( NULL == m_pdf_handler ) */
+
+        /* printData */
+        if ( isDBG ){
+            printData( (char *)"\nIN - User Pin: "
+                        , (unsigned char *)in_pin.c_str()
+                        , in_pin.size() );
+        }/* if ( isDBG ) */
+
+        std::string userPin = toHex( in_pin );
+        if ( 0 == userPin.size() ){
+            MWLOG_ERR( logBuf, "Invalid converted PIN\n" );
+            return ERR_INV_USERPIN;
+        }/* if ( 0 == userPin.size() ) */
+
+        /* printData */
+        if ( isDBG ){
+            printData( (char *)"\nUser Pin: "
+                        , (unsigned char *)userPin.c_str()
+                        , userPin.size() );
+        }/* if ( isDBG ) */
 
         PDFSignature *pdf = m_pdf_handler->getPdfSignature();
         if ( NULL == pdf ){
@@ -200,7 +247,7 @@ namespace eIDMW{
                   "*** sendDataToSign          ***\n"
                   "*******************************\n" );
 
-        int ret = cmdService.sendDataToSign( in_hash, in_pin );
+        int ret = cmdService.sendDataToSign( in_hash, userPin );
         if ( ret != ERR_NONE ){
             MWLOG_ERR( logBuf, "main() - Error @ sendDataToSign()\n" );
             return ret;
@@ -285,6 +332,13 @@ namespace eIDMW{
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
             return ERR_NULL_HANDLER;
         }/* if ( NULL == m_pdf_handler ) */
+
+        /* printData */
+        if ( isDBG ){
+            printData( (char *)"\nReceived code: "
+                        , (unsigned char *)in_code.c_str()
+                        , in_code.size() );
+        }/* if ( isDBG ) */
 
         printf( "\n*******************************\n"
                   "*** getSignature            ***\n"

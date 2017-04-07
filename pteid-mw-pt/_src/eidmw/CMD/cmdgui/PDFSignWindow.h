@@ -252,6 +252,7 @@ class PDFSignWindow : public QDialog{
 	    //Success flag for the error messages
 	    ErrorCode success;
 
+	    /* CMD  PDFSignature client */
         PDFSignatureCli *m_client;
 };
 #endif
