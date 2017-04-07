@@ -29,8 +29,7 @@
     #define MWLOG_DEBUG( buf, format, ... )     _LOG_( buf, LEV_DEBUG, MOD_CMD, format, ## __VA_ARGS__ )
 #endif // WIN32
 
-namespace eIDMW
-{
+namespace eIDMW{
 
 void printCPtr( char *c_str, int c_str_len );
 xsd__base64Binary *encode_base64( soap *sp, std::string in_str );
@@ -41,13 +40,14 @@ class CMDServices{
         virtual ~CMDServices();
 
         // Get certificate
-        CByteArray getCertificate( std::string in_userId );
+        int getCertificate( std::string in_userId
+                            , CByteArray& out_certificate );
 
         // CCMovelSign
-        bool sendDataToSign( std::string in_hash, std::string in_pin );
+        int sendDataToSign( std::string in_hash, std::string in_pin );
 
         // ValidateOtp
-        CByteArray getSignature( std::string in_code );
+        int getSignature( std::string in_code, CByteArray& out_signature );
 
     protected:
         soap *getSoap();
@@ -77,7 +77,7 @@ class CMDServices{
                           , int connect_timeout, short mustUnderstand );
 
         // CCMovelSign
-        bool CCMovelSign( std::string in_hash, std::string in_pin );
+        int CCMovelSign( std::string in_hash, std::string in_pin );
 
         _ns2__CCMovelSign *get_CCMovelSignRequest( soap *sp
                                                  , char *endpoint
@@ -86,10 +86,10 @@ class CMDServices{
                                                  , std::string in_pin
                                                  , std::string *in_userId );
 
-        bool checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response );
+        int checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response );
 
         // ValidateOtp
-        bool ValidateOtp( std::string in_code
+        int ValidateOtp( std::string in_code
                         , unsigned char **outSignature
                         , unsigned int *outSignatureLen );
 
@@ -99,15 +99,15 @@ class CMDServices{
                                                  , std::string *in_code
                                                  , std::string *in_processId );
 
-        bool checkValidateOtpResponse( _ns2__ValidateOtpResponse *response );
+        int checkValidateOtpResponse( _ns2__ValidateOtpResponse *response );
 
         _ns2__GetCertificate *get_GetCertificateRequest(  soap *sp
                                                 , char *endpoint
                                                 , std::string in_applicationID
                                                 , std::string *in_userId );
 
-        bool checkGetCertificateResponse( _ns2__GetCertificateResponse *response );
-        bool GetCertificate( std::string in_userId
+        int checkGetCertificateResponse( _ns2__GetCertificateResponse *response );
+        int GetCertificate( std::string in_userId
                             , char **out_certificate, int *out_certificateLen );
 };
 

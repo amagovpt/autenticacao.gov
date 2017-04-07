@@ -1,5 +1,6 @@
 #include <algorithm>
 #include "PDFSignatureCli.h"
+#include "cmdErrors.h"
 #include "MiscUtil.h"
 #include "StringOps.h"
 
@@ -98,7 +99,10 @@ namespace eIDMW{
         printf( "\n*******************************\n"
                   "*** getCertificate          ***\n"
                   "*******************************\n" );
-        CByteArray certificate = cmdService.getCertificate( in_userId );
+        CByteArray certificate;
+        int ret = cmdService.getCertificate( in_userId, certificate );
+        if ( ret != ERR_NONE ) return ret;
+
         if ( 0 == certificate.Size() ){
             MWLOG_ERR( logBuf, "getCertificate failed\n" );
             return ERR_GET_CERTIFICATE;
@@ -196,9 +200,11 @@ namespace eIDMW{
         printf( "\n*******************************\n"
                   "*** sendDataToSign          ***\n"
                   "*******************************\n" );
-        if ( !cmdService.sendDataToSign( in_hash, in_pin ) ){
+
+        int ret = cmdService.sendDataToSign( in_hash, in_pin );
+        if ( ret != ERR_NONE ){
             MWLOG_ERR( logBuf, "main() - Error @ sendDataToSign()\n" );
-            return ERR_SEND_HASH;
+            return ret;
         }/* if ( !cmdService.sendDataToSign() ) */
 
         printf( "\n*******************************\n"
@@ -274,26 +280,25 @@ namespace eIDMW{
 /*  *********************************************************
     ***    PDFSignatureCli::cli_getSignature()            ***
     ********************************************************* */
-    PTEID_ByteArray PDFSignatureCli::cli_getSignature( std::string in_code ){
-        PTEID_ByteArray empty_signature;
-
+    int PDFSignatureCli::cli_getSignature( std::string in_code
+                                        , PTEID_ByteArray &out_sign ){
         if ( NULL == m_pdf_handler ){
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
-            return empty_signature;
+            return ERR_NULL_HANDLER;
         }/* if ( NULL == m_pdf_handler ) */
 
         printf( "\n*******************************\n"
                   "*** getSignature            ***\n"
                   "*******************************\n" );
-        CByteArray cb = cmdService.getSignature( in_code );
-        if ( 0 == cb.Size() ){
-            MWLOG_ERR( logBuf, "Error @ getSignature()\n" );
-            return empty_signature;
-        }/* if ( 0 == cb.Size() ) */
+        CByteArray cb;
+        int ret = cmdService.getSignature( in_code, cb );
+        if ( ret != ERR_NONE ) return ret;
 
-        PTEID_ByteArray signature( (const unsigned char*)cb.GetBytes()
-                                    , cb.Size() );
-        return signature;
+        out_sign.Clear();
+        out_sign.Append( (const unsigned char*)cb.GetBytes()
+                        , cb.Size() );
+
+        return ERR_NONE;
     }/* PDFSignatureCli::cli_getSignature() */
 
 /*  *********************************************************
@@ -306,10 +311,11 @@ namespace eIDMW{
             return ERR_NULL_CARD;
         }/* if ( NULL == m_card ) */
 
-        PTEID_ByteArray signature = cli_getSignature( in_code );
-        if ( 0 == signature.Size() ) return ERR_GET_SIGNATURE;
+        PTEID_ByteArray signature;
+        int ret = cli_getSignature( in_code, signature );
+        if ( ret != ERR_NONE ) return ret;
 
-        int ret = m_card->SignClose( *m_pdf_handler, signature );
+        ret = m_card->SignClose( *m_pdf_handler, signature );
         if ( ret != ERR_NONE ){
             MWLOG_ERR( logBuf, "SignClose failed" );
             return ERR_SIGN_CLOSE;

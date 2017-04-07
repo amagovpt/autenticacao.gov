@@ -51,12 +51,12 @@ OBJECTS_DIR   = ./
 SOURCES       = soapC.cpp \
 		soapWSHttpBinding_USCORECCMovelSignatureProxy.cpp \
 		stdsoap2.cpp \
-		CMDServices.cpp \
+		cmdServices.cpp \
 		PDFSignatureCli.cpp 
 OBJECTS       = soapC.o \
 		soapWSHttpBinding_USCORECCMovelSignatureProxy.o \
 		stdsoap2.o \
-		CMDServices.o \
+		cmdServices.o \
 		PDFSignatureCli.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -122,7 +122,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		PDFSignatureCli.h soapC.cpp \
 		soapWSHttpBinding_USCORECCMovelSignatureProxy.cpp \
 		stdsoap2.cpp \
-		CMDServices.cpp \
+		cmdServices.cpp \
 		PDFSignatureCli.cpp
 QMAKE_TARGET  = cmdServices
 DESTDIR       = ../../lib/#avoid trailing-slash linebreak
@@ -348,7 +348,7 @@ soapWSHttpBinding_USCORECCMovelSignatureProxy.o: soapWSHttpBinding_USCORECCMovel
 stdsoap2.o: stdsoap2.cpp stdsoap2.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o stdsoap2.o stdsoap2.cpp
 
-CMDServices.o: CMDServices.cpp CMDServices.h \
+cmdServices.o: cmdServices.cpp cmdServices.h \
 		soapH.h \
 		soapStub.h \
 		stdsoap2.h \
@@ -359,12 +359,13 @@ CMDServices.o: CMDServices.cpp CMDServices.h \
 		../../common/Mutex.h \
 		../../common/ThreadDefines.h \
 		../../common/MWException.h \
+		cmdErrors.h \
 		WSHttpBinding_USCORECCMovelSignature.nsmap \
 		soapWSHttpBinding_USCORECCMovelSignatureProxy.h \
 		../../applayer/MiscUtil.h \
 		../../common/TLVBuffer.h \
 		../../common/TLV.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o CMDServices.o CMDServices.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cmdServices.o cmdServices.cpp
 
 PDFSignatureCli.o: PDFSignatureCli.cpp PDFSignatureCli.h \
 		../../applayer/PDFSignature.h \
@@ -377,13 +378,14 @@ PDFSignatureCli.o: PDFSignatureCli.cpp PDFSignatureCli.h \
 		../../common/Mutex.h \
 		../../common/ThreadDefines.h \
 		../../applayer/APLPublicKey.h \
-		CMDServices.h \
+		cmdServices.h \
 		soapH.h \
 		soapStub.h \
 		stdsoap2.h \
 		../../common/Log.h \
 		../../common/LogBase.h \
 		../../common/MWException.h \
+		cmdErrors.h \
 		../../applayer/MiscUtil.h \
 		../../common/TLVBuffer.h \
 		../../common/TLV.h \
