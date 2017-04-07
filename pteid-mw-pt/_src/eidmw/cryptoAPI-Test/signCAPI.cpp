@@ -49,10 +49,7 @@ void main(int argc, char** argv)
 	Sign(argv[1], argv[2], argv[3]);
 	
 
-	// The end
-	printf("\n << Press any key to continue >> \n");
-	_getch();
-
+	
 }
 
 #define MAX_SIZE_CERT_NAME 1024
@@ -142,14 +139,8 @@ void Sign(char * SignerName, char * DataFileName, char * SignatureFileName)
 
 	} while ((dwKeySpec & AT_SIGNATURE) != AT_SIGNATURE);
 
-	// Create the hash object.
-	bResult = CryptCreateHash(
-		hCryptProv,
-		CALG_SHA1,
-		0,
-		0,
-		&hHash
-		);
+	// Create the hash object (using SHA-256 algorithm at the moment)
+	bResult = CryptCreateHash(hCryptProv, CALG_SHA_256,	0, 0, &hHash);
 	CheckError(bResult, "CryptCreateHash....... ");
 
 	// Open the file with the content to be signed
@@ -185,8 +176,7 @@ void Sign(char * SignerName, char * DataFileName, char * SignatureFileName)
 
 	// Sign the hash object
 	dwSigLen = 0;
-	bResult = CryptSignHash(
-		hHash,
+	bResult = CryptSignHash(hHash,
 		AT_SIGNATURE,
 		NULL,
 		0,
