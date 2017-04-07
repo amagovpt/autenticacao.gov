@@ -1,4 +1,3 @@
-// Includes
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
@@ -6,6 +5,10 @@
 
 // Defines
 #define CERT_PERSONAL_STORE_NAME  "My"
+
+//Change this to sign with a different card/certificate
+#define SIGNER_NAME L"MANUEL SILVA"
+
 #define MY_TYPE  (PKCS_7_ASN_ENCODING | X509_ASN_ENCODING)
 #define BUFSIZE 1024
 
@@ -108,7 +111,7 @@ void Sign(char * SignerName, char * DataFileName, char * SignatureFileName)
 
 	//char * certSearchString = "C=PT, O=Cart\xC3\xA3o de Cidad\xC3\xA3o, OU=Cidad\xC3\xA3o Portugu\xC3\xAAs, OU=(Teste) Assinatura Qualificada do Cidad\xC3\xA3o, SN=SILVA, GN=MANUEL, serialNumber=BI000006017, CN=MANUEL SILVA";
 
-	printf("SIGNING\n");
+	printf("Signing...\n");
 
 	// Open the certificate store.
 	hStoreHandle = CertOpenStore(CERT_STORE_PROV_SYSTEM, 0, 0, CERT_SYSTEM_STORE_CURRENT_USER, L"My");
@@ -121,7 +124,7 @@ void Sign(char * SignerName, char * DataFileName, char * SignatureFileName)
 		//pSignerCert = FindCertificate(hStoreHandle, certSearchString);
 
 		pSignerCert = CertFindCertificateInStore(hStoreHandle,
-			MY_TYPE, 0,	CERT_FIND_SUBJECT_STR, L"MANUEL SILVA" /* SignerName */, pSignerCert);
+			MY_TYPE, 0,	CERT_FIND_SUBJECT_STR, SIGNER_NAME /* SignerName */, pSignerCert);
 
 		CheckError((BOOL)pSignerCert, "CertFindCertificateInStore....");
 
