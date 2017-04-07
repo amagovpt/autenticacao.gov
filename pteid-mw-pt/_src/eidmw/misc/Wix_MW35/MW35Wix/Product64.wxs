@@ -169,12 +169,6 @@
 					<Directory Id="IMAGEFORMATS" Name="imageformats" />
           
           <Directory Id="DSS" Name="DSS"/>
-          <!-- Old SCAP Java Application 
-          <Directory Id="SCAP" Name="SCAP">
-              <Directory Id="CERTS_SCAP_DIR" Name="certificates"/>
-              <Directory Id="SCAP_SYSWOW" Name="syswow"/> 
-              <Directory Id="SCAP_AMD64" Name="amd64"/> 
-          </Directory> -->
           <Directory Id="QT5PLATFORMS" Name="platforms"/>
           <Directory Id="QT5PRINTSUPPORT" Name="printsupport"/>
           <Directory Id="EIDSTORE" Name="eidstore">
@@ -551,8 +545,8 @@
 
 				<Component Win64="no" Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
-          <!--      <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-scap-cardlayer.dll" /> -->
                 <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll"/>
+                <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCS_Wrapper.dll" />
                 <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
                 <File Source="$(var.PTEID_BUILD_FOLDER_X86)libeay32.dll" />
@@ -588,7 +582,6 @@
 
 				<Component Win64="no" Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
           			<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidpkcs11.dll" KeyPath="yes" />
-          <!-- <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-scap-pkcs11.dll" /> -->
 				</Component>
 
 			</DirectoryRef>
@@ -599,6 +592,7 @@
 			          <File Id="pteidapplayer_64.dll"  Source="$(var.PTEID_BUILD_FOLDER_X64)pteidapplayer.dll" KeyPath="yes" />
 			          <File Id="pteidcardlayer_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcardlayer.dll" />
                 <File Id="pteidlibj_64.dll"      Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibj.dll"/>
+                <File Id="pteidlibCS_Wrapper_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" />
 			          <File Id="pteidcommon_64.dll"    Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
 			          <File Id="pteidDlgsWin32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
 				</Component>
@@ -652,8 +646,7 @@
 
 			<DirectoryRef Id="CSHARP_SDK">
 				<Component Id="CSharp_SDK_Component" Guid="{67F8BF67-A48C-4711-9AB7-CAC056FA6C35}">
-		          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" KeyPath="yes"/>
-		          <File Source="$(var.PTEID_BUILD_FOLDER_AnyCPU)pteidlibCS.dll" />
+		          <File Source="$(var.PTEID_BUILD_FOLDER_AnyCPU)pteidlib_dotnet.dll" KeyPath="yes"/>
 				</Component>
 			</DirectoryRef>
 

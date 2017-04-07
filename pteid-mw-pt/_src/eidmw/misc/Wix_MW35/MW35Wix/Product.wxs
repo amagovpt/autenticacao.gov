@@ -258,8 +258,7 @@
 
     <DirectoryRef Id="CSHARP_SDK">
       <Component Id="CSharp_SDK_Component" Guid="{67F8BF67-A48C-4711-9AB7-CAC056FA6C35}">
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCS_Wrapper.dll" KeyPath="yes"/>
-        <File Source="$(var.PTEID_BUILD_FOLDER_AnyCPU)pteidlibCS.dll" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_AnyCPU)pteidlib_dotnet.dll" KeyPath="yes"/>
       </Component>
     </DirectoryRef>
 
@@ -414,6 +413,7 @@
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCS_Wrapper.dll"/>
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
       </Component>
 
