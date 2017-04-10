@@ -4,14 +4,25 @@ using pt.portugal.eid;
 
 namespace eidpt
 {
+	
+	public enum PteidCardType
+	{
+		TYPE_ERR,
+		TYPE_IAS07,
+		TYPE_IAS101
+	}
+	
+	
     public class Pteid {
     
     private static PTEID_ReaderContext readerContext = null;
     private static PTEID_ReaderSet readerSet = null;
     private static PTEID_EIDCard idCard = null;
+
+    private static readonly int PTEID_AUTH_PIN = 0x81;
+    private static readonly int PTEID_ADDRESS_PIN = 0x82;
+    private static readonly int PTEID_SIGNATURE_PIN = 0x83;
     
-    private static readonly int PTEID_ADDRESS_PIN = 131;
-    private static readonly int PTEID_AUTH_PIN = 129;
     private static readonly int PTEID_PIN_COUNT  = 3;
     
     public static readonly int CARD_TYPE_ERR = 0;
@@ -29,8 +40,6 @@ namespace eidpt
         '6', '7', '8', '9', 'A', 'B',
         'C', 'D', 'E', 'F'
     };
-    
-    
     
    private static String ashex(byte[] b){
        String st = "";
@@ -70,7 +79,7 @@ namespace eidpt
    }
   
    
-   public static void Exit(int value){
+   public static void Exit(int value) {
         try {
             PTEID_ReaderSet.releaseSDK();
         } catch (Exception ex) {
@@ -79,18 +88,25 @@ namespace eidpt
    }
    
    
-   public static int GetCardType(){
+   public static PteidCardType GetCardType() {
         try {
             PTEID_CardType cardType = readerContext.getCardType();
-            
-            return (int)cardType;
-        } catch (Exception ex) {
+			
+			if (cardType == PTEID_CardType.PTEID_CARDTYPE_IAS07)
+				return PteidCardType.TYPE_IAS07;
+			else if (cardType == PTEID_CardType.PTEID_CARDTYPE_IAS101)
+				return PteidCardType.TYPE_IAS101;		
+			else
+				return PteidCardType.TYPE_ERR;
+          
+        }
+		catch (Exception ex) {
             throw new PteidException(0);
         }
    }
    
    
-   public static PteidId GetID(){ 
+   public static PteidId GetID() { 
        try {
            return new PteidId(idCard.getID());
         } catch (Exception ex) {
@@ -99,13 +115,13 @@ namespace eidpt
    }
    
    
-    public static PteidAddr GetAddr(){
+    public static PteidAddr GetAddr() {
         try {
             uint ul = 0;
             PTEID_Pins pins = idCard.getPins();
             for (uint i = 0; i < pins.count(); i++) {
                 PTEID_Pin pin = pins.getPinByNumber(i);
-                if (pin.getPinRef() == 131) {
+                if (pin.getPinRef() == PTEID_ADDRESS_PIN) {
                     if (pin.verifyPin("", ref ul,true)) {
                         return new PteidAddr(idCard.getAddr());
                     }
@@ -144,7 +160,7 @@ namespace eidpt
     }
     
 
-    public static PTEID_Certif[] GetCertificates(){
+    public static PTEID_Certif[] GetCertificates() {
         PTEID_Certif[] certs = null;
         PTEID_ByteArray ba = new PTEID_ByteArray();
         
@@ -167,12 +183,13 @@ namespace eidpt
     
     
     
-    public static int VerifyPIN(byte pinId, String strPin){
+    public static int VerifyPIN(byte pinId, String strPin) {
         uint ul = 0;
         int triesLeft =  0;
             
         if (readerContext != null) {
-            if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131) {
+            //PIN ID = 1 is legacy from IAS 1.01 cards
+            if (pinId != 1 && pinId != PTEID_AUTH_PIN && pinId != PTEID_SIGNATURE_PIN && pinId != PTEID_ADDRESS_PIN) {
                 return 0;
             }
             try {
@@ -188,10 +205,8 @@ namespace eidpt
                         {
                             pin.verifyPin("", ref ul, true);
                         }
-                        //martinho: verify pin is not working properly for readers without pinpad at this moment,
-                        //this is a workaround
 
-                        triesLeft = pin.getTriesLeft();
+                        triesLeft = (int) ul;
                     }
                 }
                 return triesLeft;
@@ -208,7 +223,8 @@ namespace eidpt
         int triesLeft = 0;
 
         if (readerContext != null) {
-            if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131) {
+            if (pinId != 1 && pinId != PTEID_AUTH_PIN && pinId != PTEID_SIGNATURE_PIN && pinId != PTEID_ADDRESS_PIN)
+            {
                 return 0;
             }
             try {
@@ -229,7 +245,7 @@ namespace eidpt
     }
    
     
-    public static PteidPin[] GetPINs(){
+    public static PteidPin[] GetPINs() {
         PteidPin[] pinArray = null;
         int currentId;
         
@@ -261,7 +277,7 @@ namespace eidpt
     }
     
     
-    public static PteidTokenInfo GetTokenInfo(){
+    public static PteidTokenInfo GetTokenInfo() {
         PteidTokenInfo token = null;
 
         if (readerContext != null) {
@@ -277,7 +293,7 @@ namespace eidpt
     }
     
     
-    public static byte[] ReadSOD(){
+    public static byte[] ReadSOD() {
         byte[] sod = null;
 
         if (readerContext != null) {
@@ -302,13 +318,13 @@ namespace eidpt
     
     
 	//TODO: error codes are not compatible yet
-    public static int UnblockPIN_Ext(byte pinId, String puk, String newPin, uint flags){
+    public static int UnblockPIN_Ext(byte pinId, String puk, String newPin, uint flags) {
         uint ul = 0;
 
         if (readerContext!=null) {
             try {
             
-				if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131)
+				if (pinId != 1 && pinId != PTEID_AUTH_PIN && pinId != PTEID_SIGNATURE_PIN && pinId != PTEID_ADDRESS_PIN)
 					return 0;
 
 				PTEID_Pins pins = idCard.getPins();
@@ -327,7 +343,7 @@ namespace eidpt
     }
   
   
-    public static void SelectADF(byte[] bytes){
+    public static void SelectADF(byte[] bytes) {
         if (readerContext != null) {
             try {
                 byte[] ap = {0x00, (byte) 0xA4, 0x00, 0x0C};
@@ -336,8 +352,8 @@ namespace eidpt
                 temp[0] = (byte) bytes.Length;
                 apdu.Append(temp, 1);
                 apdu.Append(bytes, (uint)bytes.Length);
-                PTEID_ByteArray sendAPDU = idCard.sendAPDU(apdu);
-                //verificar se correu tudo bem... ?
+                PTEID_ByteArray apdu_result = idCard.sendAPDU(apdu);
+                //TODO: check return code ?
             } catch (Exception ex) {
                 throw new PteidException(0);
             }
@@ -345,7 +361,7 @@ namespace eidpt
     }
     
     
-    public static byte[] ReadFile(byte[] bytes, byte pinId){
+    public static byte[] ReadFile(byte[] fileID, byte pinId) {
         PTEID_ByteArray pb = new PTEID_ByteArray();
         byte[] retArray = null;
         PTEID_Pin pin = null;
@@ -362,7 +378,7 @@ namespace eidpt
                     }
                 }
 
-                idCard.readFile(ashex(bytes), pb, pin);
+                idCard.readFile(ashex(fileID), pb, pin);
                   
                 int trimmedSize = trimStart(pb.GetBytes());
                 if ((trimmedSize == 0) && (pb.Size() > 0)) trimmedSize = (int)pb.Size();
@@ -377,12 +393,11 @@ namespace eidpt
         return retArray;
     }
     
-    public static void WriteFile(byte[] file, byte[] data, byte pinId){
+    public static void WriteFile(byte[] file, byte[] data, byte pinId) {
         WriteFileInOffset(file, data, pinId, 0 /* inOffset */);
     }
 
-    public static void WriteFileInOffset(byte[] file, byte[] data, byte pinId, int offset)
-    {
+    public static void WriteFileInOffset(byte[] file, byte[] data, byte pinId, int offset)    {
         PTEID_ByteArray pb = new PTEID_ByteArray(data, (uint)data.Length);
         PTEID_Pin pin = null;
 
@@ -411,10 +426,10 @@ namespace eidpt
         }
     }
 
-    public static int IsActivated(){
+    public static uint IsActivated() {
         if (readerContext != null) {
             try {
-                return idCard.isActive() ? 1 : 0;
+                return idCard.isActive() ? (uint)1 : (uint) 0;
             } catch (Exception ex) {
                 throw new PteidException(0);
             }
@@ -436,7 +451,7 @@ namespace eidpt
     }
     
     
-    public static void SetSODChecking(bool bln){
+    public static void SetSODChecking(bool bln) {
         if (readerContext != null) {
             try {
                 readerContext.getEIDCard().doSODCheck(bln);
@@ -446,8 +461,7 @@ namespace eidpt
         }
     }
 
-    public static void SetSODCAs(PTEID_Certif[] pteidcs)
-    {
+    public static void SetSODCAs(PTEID_Certif[] pteidcs)    {
         if (readerContext != null)
         {
             try
@@ -530,8 +544,7 @@ namespace eidpt
         return ret;
     }
 
-    public static int IsPinpad()
-    {
+    public static int IsPinpad()  {
         if (readerContext != null)
         {
             try
@@ -545,7 +558,74 @@ namespace eidpt
         }
         return 0;
     }
+	
+	public static byte[] CVC_Init(byte[] cvc_cert)
+	{
+        byte[] ret = null;
 
+        PTEID_ByteArray cvc = new PTEID_ByteArray(cvc_cert, (uint)cvc_cert.Length);
+        //Make the Exception retro-compatible
+        try
+        {
+            PTEID_ByteArray ba = pteidlib_dotNet.PTEID_CVC_Init(cvc);
+            ret = new byte[(int)ba.Size()];
+            Array.Copy(ba.GetBytes(), ret, ret.Length);
+            
+        }
+        catch (Exception ex)
+        {
+            //Console.WriteLine("Error in CVC_Init: " + ex.getMessage());
+            throw new PteidException();
+        }
+
+        return ret;
+		
+	}
+	
+	public static void CVC_Authenticate(byte[] signedChallenge)
+	{
+        PTEID_ByteArray signed_challenge = new PTEID_ByteArray(signedChallenge, (uint)signedChallenge.Length);
+        try
+        {
+            pteidlib_dotNet.PTEID_CVC_Authenticate(signed_challenge);
+
+        }
+        catch (Exception ex)
+        {
+            //Console.WriteLine("Error in CVC_Init: " + ex.getMessage());
+            throw new PteidException();
+        }
+		
+	}
+	
+	public static byte[] CVC_ReadFile(byte[] fileID)
+	{
+        byte[] ret = null;
+
+        PTEID_ByteArray ba_fileID = new PTEID_ByteArray(fileID, (uint)fileID.Length);
+        //TODO: Make the Exception retro-compatible
+        try
+        {
+            PTEID_ByteArray ba = pteidlib_dotNet.PTEID_CVC_ReadFile(ba_fileID);
+            ret = new byte[(int)ba.Size()];
+            Array.Copy(ba.GetBytes(), ret, ret.Length);
+        }
+        catch (Exception ex)
+        {
+            //Console.WriteLine("Error in CVC_ReadFile: " + ex.getMessage());
+            throw new PteidException();
+        }
+        return ret;
+		
+	}
+	
+	public static PteidAddr CVC_GetAddr(byte[] file)
+	{
+        byte[] address_fileID = { 0x3F, 0x00, 0x5F, 0x00, 0xEF, 0x05 };
+        byte[] address_ba = CVC_ReadFile(address_fileID);
+
+        return new PteidAddr(address_ba);
+	}
 
 
    private static String findReaderNameWithCard(){

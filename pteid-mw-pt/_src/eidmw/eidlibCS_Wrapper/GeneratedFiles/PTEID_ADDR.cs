@@ -37,6 +37,8 @@ namespace eidpt
     private String PostalF;
     private String NumMorF;
 
+    private PTEID_ByteArray m_data;
+
     public short version
     {
         get
@@ -407,6 +409,142 @@ namespace eidpt
         } catch (PTEID_Exception) {
             throw new PteidException(0);
         }
+    }
+
+    internal PteidAddr( byte[] addressRaw ) {
+
+        try {
+            m_data = new PTEID_ByteArray( addressRaw, (uint)addressRaw.Length );
+
+            version = 0;
+            addrType = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_TYPE, (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_TYPE );
+            bool isNationalAddress = addrType == "N";
+
+            country = m_data.GetStringAt( (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_COUNTRY, (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_COUNTRY );
+
+            if ( isNationalAddress ){
+                getAddressFields();
+            }
+            else{
+                getForeignerAddressFields();
+            }
+
+        } catch (Exception ex) {
+            //System.err.println("Error in CVC_GetAddr: " + ex.getMessage());
+        }
+    }
+
+    protected void getAddressFields(){
+        //District Code
+        district = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_DISTRICT
+                                     , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_DISTRICT);
+
+        //District Description
+        districtDesc = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_DISTRICT_DESCRIPTION
+                                         , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_DISTRICT_DESCRIPTION);
+
+        //Municipality Code
+        municipality = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_MUNICIPALITY
+                                         , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_MUNICIPALITY);
+
+        //Municipality Description
+        municipalityDesc = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_MUNICIPALITY_DESCRIPTION
+                                             , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_MUNICIPALITY_DESCRIPTION);
+
+        //CivilParish Code
+        freguesia = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_CIVILPARISH
+                                      , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_CIVILPARISH);
+
+        //CivilParish Description
+        freguesiaDesc = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_CIVILPARISH_DESCRIPTION
+                                          , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_CIVILPARISH_DESCRIPTION);
+
+        //Abbreviated Street Type
+        streettypeAbbr = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_ABBR_STREET_TYPE
+                                           , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_ABBR_STREET_TYPE);
+
+        //Street Type
+        streettype = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_STREET_TYPE
+                                       , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_STREET_TYPE);
+
+        //Street Name
+        street = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_STREETNAME
+                                   , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_STREETNAME);
+
+        //Abbreviated Building Type
+        buildingAbbr = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_ABBR_BUILDING_TYPE
+                                         , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_ABBR_BUILDING_TYPE);
+
+        //Building Type
+        building = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_BUILDING_TYPE
+                                     , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_BUILDING_TYPE);
+
+        //DoorNo
+        door = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_DOORNO
+                                 , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_DOORNO);
+
+        //Floor
+        floor = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_FLOOR
+                                  , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_FLOOR);
+
+        //Side
+        side = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_SIDE
+                                 , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_SIDE);
+
+        //Place
+        place = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_PLACE
+                                  , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_PLACE);
+
+        //Locality
+        locality = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_LOCALITY
+                                     , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_LOCALITY);
+
+        //Zip4
+        cp4 = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_ZIP4
+                                , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_ZIP4);
+
+        //Zip3
+        cp3 = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_ZIP3
+                                , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_ZIP3);
+
+        //Postal Locality
+        postal = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_POSTALLOCALITY
+                                   , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_POSTALLOCALITY);
+
+        //Generated Address Code
+        numMor = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_POS_GENADDRESS_NUM
+                                   , (uint)pteidlib_dotNet.PTEIDNG_FIELD_ADDRESS_LEN_GENADDRESS_NUM);
+    }
+
+    protected void getForeignerAddressFields() {
+        //Foreign Country
+        //Generated Address Code
+        countryDescF = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_COUNTRY_DESCRIPTION
+                                         , (uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_COUNTRY_DESCRIPTION);
+
+        //Foreign Generic Address
+        addressF = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_ADDRESS
+                                     , (uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_ADDRESS);
+
+        //Foreign City
+        cityF = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_CITY
+                                  , (uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_CITY);
+
+        //Foreign Region
+        regioF = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_REGION
+                                   , (uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_REGION);
+
+        //Foreign Locality
+        localityF = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_LOCALITY
+                                      , (uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_LOCALITY);
+
+        //Foreign Postal Code
+        postalF = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_POSTAL_CODE
+                                    , (uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_POSTAL_CODE);
+
+        //Foreign Generated Address Code
+        numMorF = m_data.GetStringAt((uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_POS_GENADDRESS_NUM
+                                    , (uint)pteidlib_dotNet.PTEIDNG_FIELD_FOREIGN_ADDRESS_LEN_GENADDRESS_NUM);
     }
 }
 
