@@ -153,7 +153,7 @@
           <Directory Id="LOGDIR" Name="log"/>
           <Directory Id="SDK" Name="sdk">
             <Directory Id="JAVA_SDK" Name="Java"/>
-            <Directory Id="CSHARP_SDK" Name="CSharp"/>
+            <Directory Id="CSHARP_SDK" Name="dotnet"/>
           </Directory>
         </Directory>
         <!-- 
