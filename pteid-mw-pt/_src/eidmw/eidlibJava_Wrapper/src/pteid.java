@@ -567,7 +567,7 @@ public class pteid {
         {
             PTEID_ByteArray ba = pteidlibJava_Wrapper.PTEID_CVC_Init(cvc);
             ret = new byte[(int) ba.Size()];
-			System.arraycopy(ba.GetBytes(), 0, ret, ret.length);
+			System.arraycopy(ba.GetBytes(), 0, ret, 0,  ret.length);
         }
         catch (Exception ex) {
                 System.err.println("Error in CVC_Init: " + ex.getMessage());
@@ -618,7 +618,7 @@ public class pteid {
         {
             PTEID_ByteArray ba = pteidlibJava_Wrapper.PTEID_CVC_ReadFile(ba_fileID);
             ret = new byte[(int) ba.Size()];
-			System.arraycopy(ba.GetBytes(), 0, ret, ret.length);
+			System.arraycopy(ba.GetBytes(), 0, ret, 0, ret.length);
         }
         catch (Exception ex) {
             System.err.println("Error in CVC_ReadFile: "+ex.getMessage());
