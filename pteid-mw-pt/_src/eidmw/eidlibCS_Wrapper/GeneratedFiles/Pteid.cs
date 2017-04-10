@@ -79,7 +79,7 @@ namespace eidpt
    }
   
    
-   public static void Exit(int value) {
+   public static void Exit(uint value) {
         try {
             PTEID_ReaderSet.releaseSDK();
         } catch (Exception ex) {
@@ -160,15 +160,15 @@ namespace eidpt
     }
     
 
-    public static PTEID_Certif[] GetCertificates() {
-        PTEID_Certif[] certs = null;
+    public static PteidCertif[] GetCertificates() {
+        PteidCertif[] certs = null;
         PTEID_ByteArray ba = new PTEID_ByteArray();
         
         try {
             PTEID_Certificates certificates = idCard.getCertificates();
-            certs = new PTEID_Certif[(int)certificates.countAll()];
-            for(uint i=0;i<certs.Length;i++){
-                certs[i] = new PTEID_Certif();
+            certs = new PteidCertif[(int)certificates.countAll()];
+            for(uint i=0; i<certs.Length; i++){
+                certs[i] = new PteidCertif();
                 certificates.getCert(i).getFormattedData(ba);
                 certs[i].certif = new byte[(int)(ba.Size())];
                 Array.Copy(ba.GetBytes(), 0, certs[i].certif, 0, (int)ba.Size());
@@ -438,7 +438,7 @@ namespace eidpt
     }
     
     
-    public static void Activate(String actPin, byte[] bytes, int activateMode) {
+    public static void Activate(String actPin, byte[] bytes, uint activateMode) {
         PTEID_ByteArray pb = new PTEID_ByteArray(bytes, (uint)bytes.Length);
         if (readerContext != null) {
             try {
@@ -451,27 +451,30 @@ namespace eidpt
     }
     
     
-    public static void SetSODChecking(bool bln) {
+    public static void SetSODChecking(int doCheck) {
         if (readerContext != null) {
             try {
-                readerContext.getEIDCard().doSODCheck(bln);
+                bool mode = doCheck == 1;
+                readerContext.getEIDCard().doSODCheck(mode);
             } catch (Exception ex) {
                 throw new PteidException(0);
             }
         }
     }
 
-    public static void SetSODCAs(PTEID_Certif[] pteidcs)    {
+    public static void SetSODCAs(PteidCertif[] certificates)
+    {
         if (readerContext != null)
         {
             try
             {
-                if (null == pteidcs){
+                if (null == certificates)
+                {
                     readerContext.getEIDCard().getCertificates().resetSODCAs();
                     return;
-                }/* if (null == pteidcs) */
+                }
 
-                foreach (PTEID_Certif pcert in pteidcs)
+                foreach (PteidCertif pcert in certificates)
                 {
                     PTEID_ByteArray pba = new PTEID_ByteArray(pcert.certif, (uint)pcert.certif.Length);
                     readerContext.getEIDCard().getCertificates().addToSODCAs(pba);
@@ -619,7 +622,7 @@ namespace eidpt
 		
 	}
 	
-	public static PteidAddr CVC_GetAddr(byte[] file)
+	public static PteidAddr CVC_GetAddr()
 	{
         byte[] address_fileID = { 0x3F, 0x00, 0x5F, 0x00, 0xEF, 0x05 };
         byte[] address_ba = CVC_ReadFile(address_fileID);

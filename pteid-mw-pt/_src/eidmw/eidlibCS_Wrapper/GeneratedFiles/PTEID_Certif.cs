@@ -3,12 +3,12 @@ using System.Text;
 
 namespace eidpt
 {
-    public class PTEID_Certif
+    public class PteidCertif
     {
         public byte[] certif;
         public String certifLabel;
 
-        public PTEID_Certif()
+        public PteidCertif()
         {
 
         }
