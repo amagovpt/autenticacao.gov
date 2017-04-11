@@ -73,7 +73,8 @@ public class pteid {
                 readerContext = readerSet.getReaderByNum(0);
             else
                 readerContext = readerSet.getReaderByName(readerName);
-
+			
+			 pteidlibJava_Wrapper.setCompatReaderContext(readerContext);
             idCard = readerContext.getEIDCard();
         } catch (Exception ex) {
             throw new PteidException();
