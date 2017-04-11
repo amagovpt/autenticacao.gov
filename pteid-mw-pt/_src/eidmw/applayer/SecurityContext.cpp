@@ -83,14 +83,22 @@ namespace eIDMW
 
 	void SecurityContext::computeInitialSSC()
 	{
+		uint64_t initial_ssc = 0;
+		const int SSC_SIZE = 8;
 		//4 LSB RND.ICC || 4 LSB RND.IFD
 		CByteArray ssc_bytes(m_RNDICC.GetBytes(4, 4));
 		ssc_bytes.Append(m_RNDIFD.GetBytes(4, 4));
+		MWLOG(LEV_DEBUG, MOD_APL, "computeInitialSSC: ssc_bytes= 0x%s", ssc_bytes.ToString(false, true, 0).c_str());
+		const unsigned char *ba = ssc_bytes.GetBytes();
 
-		BIGNUM *ssc_bn = BN_bin2bn(ssc_bytes.GetBytes(), ssc_bytes.Size(), NULL);
+		//Convert to 64-bit long from byte array in big-endian format
+		for (size_t i = 0; i < sizeof(uint64_t); i++)
+		{
+			const uint8_t bit_shifts = (sizeof(uint64_t) - 1 - i) * 8;
+			initial_ssc |= (uint64_t)ba[i] << bit_shifts;
+		}
 
-		long ssc = BN_get_word(ssc_bn);
-		this->m_ssc = ssc;
+		this->m_ssc = initial_ssc;
 	}
 	
 	/* 
@@ -115,7 +123,7 @@ namespace eIDMW
 	/* 'Retail MAC' according to ISO 9797-1 algorithm 3 without any padding
 	 */
 	CByteArray
-	retail_mac_des(CByteArray &key, CByteArray &mac_input, long ssc)
+	retail_mac_des(CByteArray &key, CByteArray &mac_input, uint64_t ssc)
 	{
 		CByteArray macInputWithSSC;
 		CByteArray secondKey = key.GetBytes(MAC_KEYSIZE, MAC_KEYSIZE);
@@ -564,7 +572,7 @@ namespace eIDMW
 		}
 
 		computeInitialSSC();
-		MWLOG(LEV_DEBUG, MOD_APL, L"[internalAuthenticate] Finished INTERNAL AUTHENTICATE. Updated value of SSC to %lu\n", this->m_ssc);
+		MWLOG(LEV_DEBUG, MOD_APL, L"[internalAuthenticate] Finished INTERNAL AUTHENTICATE. Updated value of SSC to %llu\n", this->m_ssc);
 
         return true;
 	}
@@ -609,7 +617,7 @@ namespace eIDMW
 		challenge[127] = 0xBC;
 
         if (RAND_status() != 1) {
-        	//TODO
+			MWLOG(LEV_ERROR, MOD_APL, L"SecurityContext: RNG is not seeded yet!");
         }
 
 

@@ -1,6 +1,7 @@
 #ifndef __SECURITYCONTEXT_H__
 #define __SECURITYCONTEXT_H__
 
+#include <cstdint>
 #include "ByteArray.h"
 #include "APLCard.h"
 #include "SAM.h"
@@ -64,7 +65,8 @@ namespace eIDMW
 
 
 			//Send Sequence Counter (used in MAC and encryption as IV)
-			long m_ssc;
+			//Maybe we could maybe use int64 type
+			uint64_t	m_ssc;
 				
 			CByteArray m_RNDICC;
 			CByteArray m_RNDIFD;
