@@ -63,7 +63,7 @@ namespace eidpt
     }
 
    
-   public static void Init(String readerName){
+   public static void Init(String readerName) {
         try {
             PTEID_ReaderSet.initSDK();
             readerSet = PTEID_ReaderSet.instance();
@@ -71,8 +71,11 @@ namespace eidpt
                 readerContext = readerSet.getReaderByNum(0);
             else 
                 readerContext = readerSet.getReaderByName(readerName);
+
+            pteidlib_dotNet.setCompatReaderContext(readerContext);
             
             idCard = readerContext.getEIDCard();
+
         } catch (Exception ex) {
             throw new PteidException(0);
         }
@@ -483,7 +486,7 @@ namespace eidpt
             catch (Exception ex)
             {
                 //Console.WriteLine("Erro no SetSODCAs: " + ex.ToString());
-                Console.WriteLine("Exception information (SetSODCAs): {0}", ex);
+                //Console.WriteLine("Exception information (SetSODCAs): {0}", ex);
                 throw new PteidException(0);
             }
         }
@@ -575,10 +578,9 @@ namespace eidpt
             Array.Copy(ba.GetBytes(), ret, ret.Length);
             
         }
-        catch (Exception ex)
+        catch (PTEID_Exception ex)
         {
-            //Console.WriteLine("Error in CVC_Init: " + ex.getMessage());
-            throw new PteidException();
+            throw new PteidException(ex.GetError());
         }
 
         return ret;
