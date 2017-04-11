@@ -815,13 +815,13 @@ namespace eIDMW
 
 		if (!checkSW12(resp))
 		{
-			MWLOG(LEV_ERROR, MOD_APL, L"selectFile() failed!");
+			MWLOG(LEV_ERROR, MOD_APL, L"SelectFile under Secure Context failed!");
 			throw CMWEXCEPTION(EIDMW_ERR_CVC_PATH_NOT_FOUND);
 		}
 
 		if (!checkMacInResponseAPDU(resp))
 		{
-			fprintf(stderr, "[selectFile] MAC mismatch in response APDU!\n");
+			fprintf(stderr, "[SelectFile] MAC mismatch in response APDU!\n");
 			throw CMWEXCEPTION(EIDMW_ERR_CVC_GENERIC_ERROR);
 		}
 
