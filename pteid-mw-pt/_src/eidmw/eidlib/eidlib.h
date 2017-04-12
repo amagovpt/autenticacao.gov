@@ -2178,6 +2178,8 @@ PTEIDSDK_API long PTEID_CVC_ReadFile(
 
 #endif // !defined SWIGJAVA && !defined SWIGCSHARP
 
+PTEIDSDK_API void setCompatReaderContext(PTEID_ReaderContext *ctx);
+
 PTEIDSDK_API PTEID_ByteArray PTEID_CVC_Init(PTEID_ByteArray cvc_cert);
 
 PTEIDSDK_API void PTEID_CVC_Authenticate(PTEID_ByteArray cvc_cert);

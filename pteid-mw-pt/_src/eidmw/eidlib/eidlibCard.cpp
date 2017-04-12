@@ -350,8 +350,9 @@ PTEID_PDFSignature::~PTEID_PDFSignature()
 }
 
 PDFSignature *PTEID_PDFSignature::getPdfSignature(){
+
     return mp_signature;
-}/* PTEID_PDFSignature::getPdfSignature() */
+}
 
 void PTEID_PDFSignature::addToBatchSigning(char *input_path)
 {
@@ -895,6 +896,13 @@ PTEIDSDK_API long PTEID_Init(char *ReaderName){
 		return -1;
 	}
 	return 0;
+}
+
+
+//This is needed so that the native PTEID_CVC_* methods can be called without calling PTEID_Init()
+PTEIDSDK_API void setCompatReaderContext(PTEID_ReaderContext *ctx)
+{
+	readerContext = ctx;
 }
 
 // MARTINHO - ver segfault
