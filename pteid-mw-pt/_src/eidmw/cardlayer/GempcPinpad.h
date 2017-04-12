@@ -45,16 +45,15 @@ public:
 	};
 
     virtual CByteArray PinCmd(tPinOperation operation,
-		const tPin & pin, unsigned char ucPinType,
-        const CByteArray & oAPDU, unsigned long & ulRemaining,
-        bool bShowDlg = true, void *wndGeometry = 0 );
+		const tPin & pin, unsigned char ucPinType, 
+		const CByteArray & oAPDU, unsigned long & ulRemaining, void *wndGeometry = 0 );
 
 private:
 	void fillVerifyControlStruct(PP_VERIFY_CCID * pin_verify);
 	void fillModifyControlStruct(PP_CHANGE_CCID * pin_change, int include_verify);
 	unsigned int fillStructIAS(unsigned char* apdu, unsigned char ucPintype, int changePIN);
 	unsigned int fillStructGemsafe(unsigned char * apdu, unsigned char ucPintype, int changePin);
-	DWORD loadStrings(SCARDHANDLE hCard, unsigned char ucPinType);
+	DWORD loadStrings(SCARDHANDLE hCard, unsigned char ucPinType, tPinOperation operation);
 
 };
 

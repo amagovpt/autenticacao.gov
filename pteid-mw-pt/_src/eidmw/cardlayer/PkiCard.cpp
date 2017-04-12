@@ -292,7 +292,7 @@ bad_pin:
 		// Send the command
 		if (bUsePinpad)
 			oResp = m_poPinpad->PinCmd(operation, Pin,
-                                        PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, bShowDlg, wndGeometry);
+                                        PinUsage2Pinpad(Pin, pKey), oAPDU, ulRemaining, wndGeometry);
         else
 			oResp = SendAPDU(oAPDU);
 	}
@@ -426,22 +426,23 @@ bad_pin:
 				oResp = m_poPinpad->PinCmd(PIN_OP_VERIFY, Pin
                                             , PinUsage2Pinpad(Pin, pKey), oAPDU
                                             , ulRemaining
-                                            , bShowDlg, wndGeometry );
+                                            , wndGeometry );
 
 				unsigned long ulSW12 = getSW12(oResp);
 				if (ulSW12 == 0x9000)
 					oResp =	m_poPinpad->PinCmd(operation, Pin
                                                 , PinUsage2Pinpad(Pin, pKey)
                                                 , oAPDUCHANGE, ulRemaining
-                                                , bShowDlg, wndGeometry );
+                                                , wndGeometry );
 			}
 			else
 				oResp = m_poPinpad->PinCmd(operation, Pin
                                             , PinUsage2Pinpad(Pin, pKey)
                                             , oAPDU, ulRemaining
-                                            , bShowDlg, wndGeometry );
+                                            , wndGeometry );
 
-		} else {
+		}
+		else {
 			switch(operation){
 			case PIN_OP_VERIFY:
 			case PIN_OP_RESET:

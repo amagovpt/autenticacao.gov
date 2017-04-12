@@ -135,15 +135,14 @@ unsigned char GenericPinpad::GetMaxPinLen(const tPin & pin)
 
 CByteArray GenericPinpad::PinCmd(tPinOperation operation,
 	const tPin & pin, unsigned char ucPinType,
-    const CByteArray & oAPDU, unsigned long & ulRemaining,
-    bool bShowDlg, void *wndGeometry )
+    const CByteArray & oAPDU, unsigned long & ulRemaining, void *wndGeometry)
 {
 
 	CByteArray oResp;
 	if (operation == PIN_OP_VERIFY)
-		oResp = PinCmd1(operation, pin, ucPinType, oAPDU, ulRemaining,bShowDlg, wndGeometry );
+		oResp = PinCmd1(operation, pin, ucPinType, oAPDU, ulRemaining, wndGeometry );
 	else
-		oResp = PinCmd2(operation, pin, ucPinType, oAPDU, ulRemaining,bShowDlg, wndGeometry );
+		oResp = PinCmd2(operation, pin, ucPinType, oAPDU, ulRemaining, wndGeometry );
 
 	if (oResp.Size() != 2)
 	{
@@ -173,7 +172,7 @@ CByteArray GenericPinpad::PinCmd(tPinOperation operation,
 CByteArray GenericPinpad::PinCmd1(tPinOperation operation,
 	const tPin & pin, unsigned char ucPinType,
     const CByteArray & oAPDU, unsigned long & ulRemaining,
-    bool bShowDlg, void *wndGeometry )
+    void *wndGeometry )
 {
 	EIDMW_PP_VERIFY_CCID xVerifyCmd;
 	unsigned long ulVerifyCmdLen;
@@ -198,14 +197,14 @@ CByteArray GenericPinpad::PinCmd1(tPinOperation operation,
 	if (m_ioctlVerifyDirect)
 	{
 		return PinpadControl(m_ioctlVerifyDirect, oCmd, operation,
-			ucPinType, pin.csLabel, bShowDlg, wndGeometry );
+			ucPinType, pin.csLabel, wndGeometry );
 	}
 	else
 	{
 		PinpadControl(m_ioctlVerifyStart, oCmd, operation,
-			ucPinType, pin.csLabel, false);
+			ucPinType, pin.csLabel);
 		return PinpadControl(m_ioctlVerifyFinish, CByteArray(), operation,
-			ucPinType, "", bShowDlg, wndGeometry );
+			ucPinType, "", wndGeometry );
 	}
 }
 
@@ -213,7 +212,7 @@ CByteArray GenericPinpad::PinCmd1(tPinOperation operation,
 CByteArray GenericPinpad::PinCmd2(tPinOperation operation,
 	const tPin & pin, unsigned char ucPinType,
     const CByteArray & oAPDU, unsigned long & ulRemaining,
-    bool bShowDlg, void *wndGeometry )
+    void *wndGeometry )
 {
 	EIDMW_PP_CHANGE_CCID xChangeCmd;
 	unsigned long ulChangeCmdLen;
@@ -245,14 +244,14 @@ CByteArray GenericPinpad::PinCmd2(tPinOperation operation,
 	if (m_ioctlChangeDirect)
 	{
 		return PinpadControl(m_ioctlChangeDirect, oCmd, operation,
-                            ucPinType, pin.csLabel, bShowDlg, wndGeometry );
+                            ucPinType, pin.csLabel, wndGeometry);
 	}
 	else
 	{
 		PinpadControl(m_ioctlChangeStart, oCmd, operation,
-			ucPinType, pin.csLabel, false);
+			ucPinType, pin.csLabel);
 		return PinpadControl(m_ioctlChangeFinish, CByteArray(), operation,
-			ucPinType, "", bShowDlg, wndGeometry );
+			ucPinType, "", wndGeometry);
 	}
 }
 
@@ -292,19 +291,14 @@ void GenericPinpad::CloseDlg(unsigned long ulDlgHandle)
 }
 CByteArray GenericPinpad::PinpadControl(unsigned long ulControl, const CByteArray & oCmd,
 	tPinOperation operation, unsigned char ucPintype,
-	const std::string & csPinLabel,	bool bShowDlg, void *wndGeometry )
+	const std::string & csPinLabel,	void *wndGeometry )
 {
 	unsigned char pinpadOperation = PinOperation2Lib(operation);
-
+	bool showDlg = ulControl != CCID_IOCTL_GET_FEATURE_REQUEST;
 	unsigned long ulDlgHandle;
-	bool bCloseDlg = bShowDlg;
-	if (bShowDlg){
-		bCloseDlg = ShowDlg(pinpadOperation
-                            , ucPintype, csPinLabel
-                            , m_csReader
-                            , &ulDlgHandle
-                            , wndGeometry );
-    }
+	
+	if (showDlg)
+		ShowDlg(pinpadOperation, ucPintype, csPinLabel, m_csReader, &ulDlgHandle, wndGeometry);
 
 	CByteArray oResp;
 	try
@@ -319,10 +313,11 @@ CByteArray GenericPinpad::PinpadControl(unsigned long ulControl, const CByteArra
 	}
 	catch (...)
 	{
-		CloseDlg(ulDlgHandle);
-		throw ;
+		if(showDlg)
+			CloseDlg(ulDlgHandle);
+		throw;
 	}
-	if (bShowDlg)
+	if (showDlg)
 		CloseDlg(ulDlgHandle);
 
 	return oResp;
@@ -341,7 +336,7 @@ void GenericPinpad::GetFeatureList()
 
 	try {
 		CByteArray oFeatures = PinpadControl(CCID_IOCTL_GET_FEATURE_REQUEST,
-			CByteArray(), PIN_OP_VERIFY, 0, "", false);
+			CByteArray(), PIN_OP_VERIFY, 0, "");
 
 		// Example of a feature list: 06 04 00 31 20 30 07 04 00 31 20 34
 		// Which means:

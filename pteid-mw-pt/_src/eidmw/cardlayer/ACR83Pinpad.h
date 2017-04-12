@@ -45,8 +45,7 @@ public:
 
     virtual CByteArray PinCmd(tPinOperation operation,
 		const tPin & pin, unsigned char ucPinType,
-        const CByteArray & oAPDU, unsigned long & ulRemaining,
-        bool bShowDlg = true, void *wndGeometry = 0 );
+        const CByteArray & oAPDU, unsigned long & ulRemaining, void *wndGeometry = 0 );
 
 private:
 
