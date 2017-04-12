@@ -171,12 +171,7 @@ public:
 
 		const unsigned char *pTempBuffer = crl.GetBytes();
 
-		#if (OPENSSL_VERSION_NUMBER > 0x009070ffL)
-		  pX509CRL = d2i_X509_CRL(&pX509CRL,&pTempBuffer,crl.Size());
-		#else
-		  unsigned char* pTempBuffer_nonconst = const_cast<unsigned char*> (pTempBuffer);
-		  pX509CRL = d2i_X509_CRL(&pX509CRL,&pTempBuffer_nonconst,crl.Size());
-		#endif
+		pX509CRL = d2i_X509_CRL(&pX509CRL,&pTempBuffer,crl.Size());
 
 		MWLOG(LEV_DEBUG, MOD_SSL, L" ---> OpenSSL structure created");
 
@@ -210,13 +205,9 @@ APL_CryptoFwk::~APL_CryptoFwk(void)
 	if(m_CrlMemoryCache) delete m_CrlMemoryCache;
 }
 
-bool d2i_X509_Wrapper(X509** pX509,const unsigned char* pucContent, int iContentSize){
-#if (OPENSSL_VERSION_NUMBER > 0x009070ffL)
+bool d2i_X509_Wrapper(X509** pX509,const unsigned char* pucContent, int iContentSize) {
   *pX509 = d2i_X509(pX509, &pucContent, iContentSize);
-#else
-  unsigned char* pucContent_nonconst = const_cast<unsigned char*> (pucContent);
-  *pX509 = d2i_X509(pX509, &pucContent_nonconst, iContentSize);
-#endif
+
   if(*pX509 == NULL) return false;
 
   return true;
@@ -628,13 +619,7 @@ bool APL_CryptoFwk::VerifySignature(const CByteArray &data, const CByteArray &si
     EVP_VerifyUpdate(&cmd_ctx, data.GetBytes(), data.Size());
 
 	pucSign=signature.GetBytes();
-#if (OPENSSL_VERSION_NUMBER > 0x009070ffL)
-	ret=EVP_VerifyFinal(&cmd_ctx, pucSign, signature.Size(), pKey);
-#else
-    unsigned char* signatureBytes = const_cast<unsigned char*> (pucSign);
-	ret=EVP_VerifyFinal(&cmd_ctx, signatureBytes, signature.Size(), pKey);
-#endif
-
+	ret = EVP_VerifyFinal(&cmd_ctx, pucSign, signature.Size(), pKey);
 
 	EVP_MD_CTX_cleanup(&cmd_ctx);
  	//Free openSSL object
@@ -1029,7 +1014,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,OCSP_C
 
 	OCSP_request_add1_nonce(pRequest, 0, -1);
 
-	fprintf(stderr, "DEBUG: OCSP connecting to host %s port: %s IsSSL? %d\n",
+	MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: OCSP connecting to host %s port: %s IsSSL? %d",
 		pszHost, pszPort, iSSL);
 
 	/* establish a connection to the OCSP responder using proxy according to the Config */
@@ -1525,73 +1510,61 @@ BIO *APL_CryptoFwk::Connect(char *pszHost, int iPort, int iSSL, SSL_CTX **ppSSLC
 {
 
 	BIO * pConnect = NULL;
-	// ThreadConnect thread_connect(pszHost,iPort,iSSL,ppSSLCtx);
-	// thread_connect.Start();
 
-	// APL_Config conf_timeout(CConfig::EIDMW_CONFIG_PARAM_PROXY_CONNECT_TIMEOUT);
-	// long timeout=conf_timeout.getLong();
+	if (iSSL)
+	{
+		OpenSSL_add_all_algorithms();
+		SSL_CTX *pSSLCtx = SSL_CTX_new(TLSv1_1_client_method());
 
-	// if(!thread_connect.WaitTimeout(timeout,1))
-	// 	throw CMWEXCEPTION(EIDMW_ERR_SOCKET_CONNECT);
+		if (!(pConnect = BIO_new_ssl_connect(pSSLCtx)))
+			return NULL;
 
-	// BIO *pConnect = thread_connect.getConnect();
-	// if(pConnect==NULL)
-	// 	throw CMWEXCEPTION(EIDMW_ERR_SOCKET_CONNECT);
-
-		if (iSSL)
+		BIO_set_conn_hostname(pConnect, pszHost);
+	}
+	else
+	{
+		if (!(pConnect = BIO_new_connect(pszHost)))
 		{
-			OpenSSL_add_all_algorithms();
-			SSL_CTX *pSSLCtx = SSL_CTX_new(TLSv1_1_client_method());
-
-			if (!(pConnect = BIO_new_ssl_connect(pSSLCtx)))
-				return NULL;
-
-			BIO_set_conn_hostname(pConnect, pszHost);
-		}
-		else
-		{
-			if (!(pConnect = BIO_new_connect(pszHost)))
-			{
 				//TODO: Remove this errors or log them better
-				ERR_print_errors_fp(stderr);
-				return NULL;
+			ERR_print_errors_fp(stderr);
+			return NULL;
 
-			}
 		}
+	}
 
-		BIO_set_conn_int_port(pConnect, &iPort);
+	BIO_set_conn_int_port(pConnect, &iPort);
 		//Set BIO as nonblocking
-		BIO_set_nbio(pConnect, 1);
+	BIO_set_nbio(pConnect, 1);
 
-		int rv = BIO_do_connect(pConnect);
-		int fd;
-		fd_set confds;
-		struct timeval tv;
+	int rv = BIO_do_connect(pConnect);
+	int fd;
+	fd_set confds;
+	struct timeval tv;
 
-		if ((rv <= 0) && !BIO_should_retry(pConnect)) {
-			MWLOG(LEV_ERROR, MOD_APL, "OCSP: BIO_do_connect failed!");
-			return NULL;
-		}
+	if ((rv <= 0) && !BIO_should_retry(pConnect)) {
+		MWLOG(LEV_ERROR, MOD_APL, "OCSP: BIO_do_connect failed!");
+		return NULL;
+	}
 
-		if (BIO_get_fd(pConnect, &fd) < 0) {
-			MWLOG(LEV_ERROR, MOD_APL, "OCSP: Can't get connection fd!");
-			return NULL;
-		}
+	if (BIO_get_fd(pConnect, &fd) < 0) {
+		MWLOG(LEV_ERROR, MOD_APL, "OCSP: Can't get connection fd!");
+		return NULL;
+	}
 
 
-		FD_ZERO(&confds);
-		FD_SET(fd, &confds);
-		tv.tv_usec = 0;
+	FD_ZERO(&confds);
+	FD_SET(fd, &confds);
+	tv.tv_usec = 0;
 		//Connect timeout value
-		tv.tv_sec = 10;
-		rv = select(fd + 1, NULL, &confds, NULL, &tv);
+	tv.tv_sec = 10;
+	rv = select(fd + 1, NULL, &confds, NULL, &tv);
 
-		if (rv == 0) {
-			fprintf(stderr, "Timeout on connect\n");
-			return NULL;
-		}
+	if (rv == 0) {
+		fprintf(stderr, "Timeout on connect\n");
+		return NULL;
+	}
 
-    return pConnect;
+	return pConnect;
 }
 
 void APL_CryptoFwk::resetProxy()
