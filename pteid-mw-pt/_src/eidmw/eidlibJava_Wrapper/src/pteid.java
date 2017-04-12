@@ -118,16 +118,21 @@ public class pteid {
             for (long i = 0; i < pins.count(); i++) {
                 pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(i);
                 if (pin.getPinRef() == PTEID_ADDRESS_PIN) {
-                    if (pin.verifyPin("", ul,true)) {
+                    if (pin.verifyPin("", ul, false)) {
                         return new PTEID_ADDR(idCard.getAddr());
+                    }
+                    else
+                    {
+                        if (ul.m_long == 0)
+                            throw new PteidException(SC_ERROR_AUTH_METHOD_BLOCKED);
+                        else
+                            throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
                     }
                 }
             }
             throw new PteidException();
-        } catch (PteidException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new PteidException();
+        } catch (PTEID_Exception ex) {
+            throw PteidException(ex.GetError());
         }
     }
 
@@ -179,11 +184,11 @@ public class pteid {
 
 
 
-    public static int VerifyPIN(byte b, String string) throws PteidException {
+    public static int VerifyPIN(byte pin_id, String string) throws PteidException {
         PTEID_ulwrapper tries_left = new PTEID_ulwrapper(-1);
 
         // Convert byte to long
-        long pinId = b & 0x00000000000000FF;
+        long pinId = pin_id & 0x00000000000000FF;
 
         if (readerContext != null) {
             if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131) {
@@ -194,13 +199,28 @@ public class pteid {
                 for (long pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                     pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getPinRef() == pinId) {
-                        pin.verifyPin("", tries_left, true);
+                        boolean rc = pin.verifyPin("", tries_left, false);
+                        if (!rc)
+                        {
+                            if (tries_left.m_long == 0)
+                                throw new PteidException(SC_ERROR_AUTH_METHOD_BLOCKED);
+                            else
+                                throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
+                        }
                     }
                 }
                 return (int)(tries_left.m_long);
-
-            } catch (Exception ex) {
-                throw new PteidException();
+            }
+            catch (PTEID_Exception ex) {
+                if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_TIMEOUT)
+                    throw new PteidException(SC_ERROR_KEYPAD_TIMEOUT);
+                else if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_PIN_CANCEL)
+                    throw new PteidException(SC_ERROR_KEYPAD_CANCELLED);
+                else
+                {
+                    //ex.printStackTrace();
+                    throw new PteidException(ex.GetError());
+                }
             }
         }
         throw new PteidException();
@@ -222,15 +242,27 @@ public class pteid {
                 for (long pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                     pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getPinRef() == pinId)
-                       pin.changePin(oldPin, newPin, tries_left, pin.getLabel(), true);
+                       boolean rc = pin.changePin(oldPin, newPin, tries_left, pin.getLabel(), false);
+                       if (!rc)
+                       {
+                         if (tries_left.m_long == 0)
+                            throw new PteidException(SC_ERROR_AUTH_METHOD_BLOCKED);
+                         else
+                            throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
+                       }
+                }
             }
-            } catch (Exception ex) {
-                throw new PteidException();
+            catch (PTEID_Exception ex) {
+                if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_TIMEOUT)
+                    throw new PteidException(SC_ERROR_KEYPAD_TIMEOUT);
+                else if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_PIN_CANCEL)
+                    throw new PteidException(SC_ERROR_KEYPAD_CANCELLED);
+                else
+                    throw new PteidException(ex.GetError());
             }
         }
         return (int)(tries_left.m_long);
     }
-
 
     public static PTEID_Pin[] GetPINs() throws PteidException {
         PTEID_Pin[] pinArray = null;
