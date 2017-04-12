@@ -132,7 +132,7 @@ public class pteid {
             }
             throw new PteidException();
         } catch (PTEID_Exception ex) {
-            throw PteidException(ex.GetError());
+            throw new PteidException(ex.GetError());
         }
     }
 
@@ -241,7 +241,8 @@ public class pteid {
                 PTEID_Pins pins = idCard.getPins();
                 for (long pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                     pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
-                    if (pin.getPinRef() == pinId)
+                    if (pin.getPinRef() == pinId) {
+
                        boolean rc = pin.changePin(oldPin, newPin, tries_left, pin.getLabel(), false);
                        if (!rc)
                        {
@@ -250,6 +251,7 @@ public class pteid {
                          else
                             throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
                        }
+                   }
                 }
             }
             catch (PTEID_Exception ex) {
@@ -260,8 +262,10 @@ public class pteid {
                 else
                     throw new PteidException(ex.GetError());
             }
+            return (int)(tries_left.m_long);
         }
-        return (int)(tries_left.m_long);
+
+        return -1;
     }
 
     public static PTEID_Pin[] GetPINs() throws PteidException {
