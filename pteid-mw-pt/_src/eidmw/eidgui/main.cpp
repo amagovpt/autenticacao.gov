@@ -68,7 +68,6 @@ int main(int argc, char *argv[])
 #endif
 
 	SingleApplication app(argc, argv);
-	qDebug("qApplication::self=%p", app.instance());
 
 	PTEID_InitSDK();
 	PTEID_Config sam_server(PTEID_PARAM_GENERAL_SAM_SERVER);
