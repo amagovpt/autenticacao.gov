@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * Pteidlib compatibility methods
+ */
+
+using System;
 using System.Text;
 using pt.portugal.eid;
 
@@ -12,7 +16,6 @@ namespace eidpt
 		TYPE_IAS101
 	}
 	
-	
     public class Pteid {
     
     private static PTEID_ReaderContext readerContext = null;
@@ -20,8 +23,8 @@ namespace eidpt
     private static PTEID_EIDCard idCard = null;
 
     private static readonly int PTEID_AUTH_PIN = 0x81;
-    private static readonly int PTEID_ADDRESS_PIN = 0x82;
-    private static readonly int PTEID_SIGNATURE_PIN = 0x83;
+    private static readonly int PTEID_ADDRESS_PIN = 0x83;
+    private static readonly int PTEID_SIGNATURE_PIN = 0x82;
     
     private static readonly int PTEID_PIN_COUNT  = 3;
     
@@ -32,10 +35,15 @@ namespace eidpt
 	public static readonly uint UNBLOCK_FLAG_NEW_PIN = 1;
     public static readonly uint UNBLOCK_FLAG_PUK_MERGE = 2;
 
+    private static readonly int SC_ERROR_AUTH_METHOD_BLOCKED = -1212;
+    private static readonly int SC_ERROR_PIN_CODE_INCORRECT = -1214;
+    private static readonly int SC_ERROR_KEYPAD_TIMEOUT = -1108;
+    private static readonly int SC_ERROR_KEYPAD_CANCELLED = -1109;
+
     //Flag used in the Activate method
     private static readonly uint MODE_ACTIVATE_BLOCK_PIN = 1;
     
-    protected static readonly char[] Hexhars = {
+    protected static readonly char[] hexChars = {
         '0', '1', '2', '3', '4', '5',
         '6', '7', '8', '9', 'A', 'B',
         'C', 'D', 'E', 'F'
@@ -46,8 +54,8 @@ namespace eidpt
        
        for(int i=0; i<b.Length;i++){
           int temp = b[i] & 0x000000FF;
-          st +=Hexhars[(temp >> 4)];
-          st +=Hexhars[(temp & 0xf)];
+          st += hexChars[(temp >> 4)];
+          st += hexChars[(temp & 0xf)];
        }
        
        return st;
@@ -64,29 +72,33 @@ namespace eidpt
 
    
    public static void Init(String readerName) {
-        try {
-            PTEID_ReaderSet.initSDK();
-            readerSet = PTEID_ReaderSet.instance();
-            if (readerName == null || readerName == String.Empty)
-                readerContext = readerSet.getReaderByNum(0);
-            else 
-                readerContext = readerSet.getReaderByName(readerName);
+       try
+       {
+           PTEID_ReaderSet.initSDK();
+           readerSet = PTEID_ReaderSet.instance();
+           if (readerName == null || readerName == String.Empty)
+               readerContext = readerSet.getReaderByNum(0);
+           else
+               readerContext = readerSet.getReaderByName(readerName);
 
-            pteidlib_dotNet.setCompatReaderContext(readerContext);
-            
-            idCard = readerContext.getEIDCard();
+           pteidlib_dotNet.setCompatReaderContext(readerContext);
 
-        } catch (Exception ex) {
-            throw new PteidException(0);
-        }
+           idCard = readerContext.getEIDCard();
+       }
+       catch (PTEID_Exception ex)
+       {
+           throw new PteidException(ex.GetError());
+       }
    }
   
    
    public static void Exit(uint value) {
         try {
             PTEID_ReaderSet.releaseSDK();
-        } catch (Exception ex) {
-            throw new PteidException(0);
+        }
+        catch (PTEID_Exception ex)
+        {
+            throw new PteidException(ex.GetError());
         }
    }
    
@@ -103,8 +115,9 @@ namespace eidpt
 				return PteidCardType.TYPE_ERR;
           
         }
-		catch (Exception ex) {
-            throw new PteidException(0);
+        catch (PTEID_Exception ex)
+        {
+            throw new PteidException(ex.GetError());
         }
    }
    
@@ -112,30 +125,43 @@ namespace eidpt
    public static PteidId GetID() { 
        try {
            return new PteidId(idCard.getID());
-        } catch (Exception ex) {
-            throw new PteidException(0);
+        } catch (PTEID_Exception ex) {
+            throw new PteidException(ex.GetError());
         }
    }
    
    
     public static PteidAddr GetAddr() {
-        try {
+        try
+        {
             uint ul = 0;
             PTEID_Pins pins = idCard.getPins();
-            for (uint i = 0; i < pins.count(); i++) {
+            for (uint i = 0; i < pins.count(); i++)
+            {
                 PTEID_Pin pin = pins.getPinByNumber(i);
-                if (pin.getPinRef() == PTEID_ADDRESS_PIN) {
-                    if (pin.verifyPin("", ref ul,true)) {
+                if (pin.getPinRef() == PTEID_ADDRESS_PIN)
+                {
+                    if (pin.verifyPin("", ref ul, false))
+                    {
                         return new PteidAddr(idCard.getAddr());
+                    }
+                    else
+                    {
+                        if (ul == 0)
+                            throw new PteidException(SC_ERROR_AUTH_METHOD_BLOCKED);
+                        else
+                            throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
                     }
                 }
             }
-        } catch (PteidException ex) {
-            throw ex;
-        } catch (Exception) {
-            throw new PteidException(0);
         }
-        throw new PteidException(0);
+        catch (PTEID_Exception ex)
+        {
+            handleUnderlyingException(ex);
+        }
+
+        //Fix build: should never happen
+        return null;
     }
     
     
@@ -155,8 +181,8 @@ namespace eidpt
             pic.picture = new byte[(int)idCard.getID().getPhotoObj().getphotoRAW().Size()];
             Array.Copy(idCard.getID().getPhotoObj().getphotoRAW().GetBytes(), 0, pic.picture, 0, pic.picture.Length);
             pic.version = 0;
-        } catch (Exception ex) {
-            throw new PteidException(0);
+        } catch (PTEID_Exception ex) {
+            throw new PteidException(ex.GetError());
         }
         
         return pic;
@@ -177,17 +203,27 @@ namespace eidpt
                 Array.Copy(ba.GetBytes(), 0, certs[i].certif, 0, (int)ba.Size());
                 certs[i].certifLabel = certificates.getCert(i).getLabel();
             }
-        } catch (Exception ex) {
-            throw new PteidException(0);
+        }
+        catch (PTEID_Exception ex)
+        {
+            throw new PteidException(ex.GetError());
         }
 
         return certs;
     }
-    
-    
+
+    private static void handleUnderlyingException(PTEID_Exception ex)
+    {
+        if (ex.GetError() == pteidlib_dotNet.EIDMW_ERR_TIMEOUT)
+            throw new PteidException(SC_ERROR_KEYPAD_TIMEOUT);
+        else if (ex.GetError() == pteidlib_dotNet.EIDMW_ERR_PIN_CANCEL)
+            throw new PteidException(SC_ERROR_KEYPAD_CANCELLED);
+        else
+            throw new PteidException(ex.GetError());
+    }
     
     public static int VerifyPIN(byte pinId, String strPin) {
-        uint ul = 0;
+        uint tries_left = 0;
         int triesLeft =  0;
             
         if (readerContext != null) {
@@ -200,21 +236,21 @@ namespace eidpt
                 for (uint pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                     PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getPinRef() == pinId) {
-                        if (strPin != "")
-                        {
-                            pin.verifyPin(strPin, ref ul, false);
-                        }
-                        else
-                        {
-                            pin.verifyPin("", ref ul, true);
-                        }
 
-                        triesLeft = (int) ul;
+                        bool ret = pin.verifyPin(strPin, ref tries_left, false);
+                        if (!ret)
+                        {
+                            if (tries_left == 0)
+                                throw new PteidException(SC_ERROR_AUTH_METHOD_BLOCKED);
+                            else
+                                throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
+                        }
+                        triesLeft = (int) tries_left;
                     }
                 }
                 return triesLeft;
-            } catch (Exception ex) {
-                throw new PteidException(0);
+            } catch (PTEID_Exception ex) {
+                handleUnderlyingException(ex);
             }
         }
         return triesLeft;
@@ -235,13 +271,22 @@ namespace eidpt
                 for (uint pinIdx = 0; pinIdx < pins.count(); pinIdx++) {
                     PTEID_Pin pin = pins.getPinByNumber(pinIdx);
                     if (pin.getPinRef() == pinId)
-                        if (pin.changePin(oldPin, newPin, ref ul, pin.getLabel(),true)) {
-                            triesLeft = pin.getTriesLeft();
-                            break;
-                        } 
+                    {
+                        if (!pin.changePin(oldPin, newPin, ref ul, pin.getLabel(), false))
+                        {
+                            if (ul == 0)
+                                throw new PteidException(SC_ERROR_AUTH_METHOD_BLOCKED);
+                            else
+                                throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
+                        }
+                        triesLeft = (int)ul;
+                        break;
+                    }
+                        
                 }
-            } catch (Exception ex) {
-                throw new PteidException(0);
+            }
+            catch (PTEID_Exception ex)  {
+                handleUnderlyingException(ex);
             }
         }
         return triesLeft;
@@ -271,8 +316,10 @@ namespace eidpt
                         pinArray[currentId].longUsage = null;
                     }
                 }
-            } catch (Exception ex) {
-                throw new PteidException(0);
+            }
+            catch (PTEID_Exception ex)
+            {
+                throw new PteidException(ex.GetError());
             }
         }
 
@@ -287,8 +334,10 @@ namespace eidpt
             try {
                 PTEID_CardVersionInfo info = idCard.getVersionInfo();
                 token = new PteidTokenInfo(info.getTokenLabel(), info.getSerialNumber());
-            } catch (Exception ex) {
-                throw new PteidException(0);
+            }
+            catch (PTEID_Exception ex)
+            {
+                throw new PteidException(ex.GetError());
             }
         }
 
@@ -307,8 +356,10 @@ namespace eidpt
                 
                 sod = new byte[trimmedSize];
                 Array.Copy(pba.GetBytes(), 0, sod, 0, sod.Length);
-            } catch (Exception ex) {
-                throw new PteidException(0);
+            }
+            catch (PTEID_Exception ex)
+            {
+                throw new PteidException(ex.GetError());
             }
         }
         return sod;
@@ -320,29 +371,43 @@ namespace eidpt
     }
     
     
-	//TODO: error codes are not compatible yet
-    public static int UnblockPIN_Ext(byte pinId, String puk, String newPin, uint flags) {
+    public static int UnblockPIN_Ext(byte pinId, String puk, String newPin, uint flags)
+    {
         uint ul = 0;
+        int ret = -1;
 
-        if (readerContext!=null) {
-            try {
-            
-				if (pinId != 1 && pinId != PTEID_AUTH_PIN && pinId != PTEID_SIGNATURE_PIN && pinId != PTEID_ADDRESS_PIN)
-					return 0;
+        if (readerContext != null)
+        {
+            try
+            {
 
-				PTEID_Pins pins = idCard.getPins();
-				for (uint pinIdx=0; pinIdx < pins.count(); pinIdx++){
-					PTEID_Pin pin = pins.getPinByNumber(pinIdx);
-					if (pin.getPinRef() == pinId){
-						pin.unlockPin(puk, newPin, ref ul, flags);
-					}
-			}
-			} catch (Exception ex) {
-					throw new PteidException(0);
-			}
-		}
+                if (pinId != 1 && pinId != PTEID_AUTH_PIN && pinId != PTEID_SIGNATURE_PIN && pinId != PTEID_ADDRESS_PIN)
+                    return 0;
 
-	return (int)ul;
+                PTEID_Pins pins = idCard.getPins();
+                for (uint pinIdx = 0; pinIdx < pins.count(); pinIdx++)
+                {
+                    PTEID_Pin pin = pins.getPinByNumber(pinIdx);
+                    if (pin.getPinRef() == pinId)
+                    {
+                      if (!pin.unlockPin(puk, newPin, ref ul, flags))
+                      {
+                          if (ul == 0)
+                              throw new PteidException(SC_ERROR_AUTH_METHOD_BLOCKED);
+                          else
+                              throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
+                      }
+                      ret = (int)ul;
+                    }
+                }
+            }
+            catch (PTEID_Exception ex)
+            {
+                handleUnderlyingException(ex);
+            }
+        }
+
+        return ret;
     }
   
   
@@ -357,8 +422,10 @@ namespace eidpt
                 apdu.Append(bytes, (uint)bytes.Length);
                 PTEID_ByteArray apdu_result = idCard.sendAPDU(apdu);
                 //TODO: check return code ?
-            } catch (Exception ex) {
-                throw new PteidException(0);
+            }
+            catch (PTEID_Exception ex)
+            {
+                throw new PteidException(ex.GetError());
             }
         }
     }
@@ -388,9 +455,10 @@ namespace eidpt
                
                 retArray = new byte[trimmedSize];
                 Array.Copy(pb.GetBytes(), 0, retArray, 0, retArray.Length);
-            } catch (Exception ex) {
-                Console.WriteLine("Erro no ReadFile: " + ex.ToString());
-                throw new PteidException(0);
+            }
+            catch (PTEID_Exception ex)
+            {
+                handleUnderlyingException(ex);
             }
         }
         return retArray;
@@ -422,9 +490,9 @@ namespace eidpt
                 bool ret = idCard.writeFile(ashex(file), pb, pin, "", (uint)offset);
 
             }
-            catch (Exception ex)
+            catch (PTEID_Exception ex)
             {
-                throw new PteidException(0);
+                handleUnderlyingException(ex);
             }
         }
     }
@@ -433,8 +501,9 @@ namespace eidpt
         if (readerContext != null) {
             try {
                 return idCard.isActive() ? (uint)1 : (uint) 0;
-            } catch (Exception ex) {
-                throw new PteidException(0);
+            }
+            catch (PTEID_Exception ex) {
+                throw new PteidException(ex.GetError());
             }
         }
         return 0;
@@ -445,10 +514,11 @@ namespace eidpt
         PTEID_ByteArray pb = new PTEID_ByteArray(bytes, (uint)bytes.Length);
         if (readerContext != null) {
             try {
-		bool mode = activateMode == MODE_ACTIVATE_BLOCK_PIN;
+		        bool mode = activateMode == MODE_ACTIVATE_BLOCK_PIN;
                 idCard.Activate(actPin, pb, mode);
-            } catch (Exception ex) {
-                throw new PteidException(0);
+            }
+            catch (PTEID_Exception ex) {
+                throw new PteidException(ex.GetError());
             }
         }
     }
@@ -459,8 +529,10 @@ namespace eidpt
             try {
                 bool mode = doCheck == 1;
                 readerContext.getEIDCard().doSODCheck(mode);
-            } catch (Exception ex) {
-                throw new PteidException(0);
+            }
+            catch (PTEID_Exception ex)
+            {
+                throw new PteidException(ex.GetError());
             }
         }
     }
@@ -483,11 +555,9 @@ namespace eidpt
                     readerContext.getEIDCard().getCertificates().addToSODCAs(pba);
                 }
             }
-            catch (Exception ex)
+            catch (PTEID_Exception ex)
             {
-                //Console.WriteLine("Erro no SetSODCAs: " + ex.ToString());
-                //Console.WriteLine("Exception information (SetSODCAs): {0}", ex);
-                throw new PteidException(0);
+                throw new PteidException(ex.GetError());
             }
         }
     }
@@ -503,8 +573,10 @@ namespace eidpt
                 key.modulus = new byte[(int) cardKey.getCardAuthKeyModulus().Size()];
                 Array.Copy(cardKey.getCardAuthKeyExponent().GetBytes(), 0, key.exponent, 0, key.exponent.Length);
                 Array.Copy(cardKey.getCardAuthKeyModulus().GetBytes(), 0, key.modulus, 0, key.modulus.Length);
-            } catch (Exception ex) {
-                throw new PteidException(0);
+            }
+            catch (PTEID_Exception ex)
+            {
+                throw new PteidException(ex.GetError());
             }
         }
         
@@ -523,8 +595,10 @@ namespace eidpt
                 key.modulus = new byte[(int) rootCAKey.getCardAuthKeyModulus().Size()];
                 Array.Copy(rootCAKey.getCardAuthKeyExponent().GetBytes(), 0, key.exponent, 0, key.exponent.Length);
                 Array.Copy(rootCAKey.getCardAuthKeyModulus().GetBytes(), 0, key.modulus, 0, key.modulus.Length);
-            } catch (Exception ex) {
-                throw new PteidException(0);
+            }
+            catch (PTEID_Exception ex)
+            {
+                throw new PteidException(ex.GetError());
             }
         }
         
@@ -543,7 +617,10 @@ namespace eidpt
 
                 ret = new byte[(int) resp.Size()];
                 Array.Copy(resp.GetBytes(), 0, ret, 0, ret.Length);
-            } catch (Exception) {
+            }
+            catch (PTEID_Exception ex)
+            {
+                throw new PteidException(ex.GetError());
             }
         }
         
@@ -557,9 +634,9 @@ namespace eidpt
             {
                 return (readerContext.isPinpad() ? 1 : 0);
             }
-            catch (Exception ex)
+            catch (PTEID_Exception ex)
             {
-                throw new PteidException(0);
+                throw new PteidException(ex.GetError());
             }
         }
         return 0;
@@ -595,12 +672,10 @@ namespace eidpt
             pteidlib_dotNet.PTEID_CVC_Authenticate(signed_challenge);
 
         }
-        catch (Exception ex)
+        catch (PTEID_Exception ex)
         {
-            //Console.WriteLine("Error in CVC_Init: " + ex.getMessage());
-            throw new PteidException();
+            throw new PteidException(ex.GetError());
         }
-		
 	}
 	
 	public static byte[] CVC_ReadFile(byte[] fileID)
@@ -615,10 +690,9 @@ namespace eidpt
             ret = new byte[(int)ba.Size()];
             Array.Copy(ba.GetBytes(), ret, ret.Length);
         }
-        catch (Exception ex)
+        catch (PTEID_Exception ex)
         {
-            //Console.WriteLine("Error in CVC_ReadFile: " + ex.getMessage());
-            throw new PteidException();
+            throw new PteidException(ex.GetError());
         }
         return ret;
 		
