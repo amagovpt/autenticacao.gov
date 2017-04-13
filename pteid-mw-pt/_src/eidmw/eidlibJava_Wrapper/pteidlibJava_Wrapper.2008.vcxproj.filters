@@ -60,4 +60,9 @@
   <ItemGroup>
     <CustomBuild Include="..\eidlib\eidlib.i" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="eidlibJava_Wrapper.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
 </Project>

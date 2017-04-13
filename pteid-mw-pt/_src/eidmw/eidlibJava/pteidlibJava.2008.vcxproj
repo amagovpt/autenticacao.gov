@@ -163,14 +163,13 @@
     </Link>
     <PostBuildEvent>
       <Message>Creating jar file...</Message>
-      <Command>"%25PTEID_DIR_JDK%25\bin\jar.exe" cvf  ../jar/pteid$(ProjectName).jar -C class pt
-</Command>
+      <Command>"%25PTEID_DIR_JDK%25\bin\jar.exe" cvf  ../jar/pteidlibj.jar -C class .</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <CustomBuildStep>
       <Message>javac...</Message>
-      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -verbose -d class ..\eidlibJava_Wrapper\GeneratedFiles\*.java
+      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -verbose -d class ..\eidlibJava_Wrapper\src\*.java ..\eidlibJava_Wrapper\GeneratedFiles\*.java
 </Command>
       <Outputs>$(ProjectName).class;%(Outputs)</Outputs>
     </CustomBuildStep>
@@ -195,7 +194,7 @@
     </Link>
     <PostBuildEvent>
       <Message>Creating jar file...</Message>
-      <Command>"%25PTEID_DIR_JDK%25\bin\jar.exe" cvf  ../jar/pteid$(ProjectName).jar -C class pt</Command>
+      <Command>"%25PTEID_DIR_JDK%25\bin\jar.exe" cvf  ../jar/pteidlibj.jar -C class .</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -163,14 +163,15 @@
     </ProjectReference>
     <Link>
       <AdditionalDependencies>pteidcommon.lib;pteidDlgsWin32.lib;pteidapplayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteidlibj.dll</OutputFile>
       <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y ..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll ..\..\ThirdParty\pteid_sdk\3.5\Java\pteid$(ProjectName).dll</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -192,7 +193,7 @@
     </ProjectReference>
     <Link>
       <AdditionalDependencies>pteidcommon.lib;pteidDlgsWin32.lib;pteidapplayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteidlibj.dll</OutputFile>
       <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -200,7 +201,8 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y ..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll ..\..\ThirdParty\pteid_sdk\3.5\Java\pteid$(ProjectName).dll</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -244,6 +246,9 @@
       <Project>{e27cf8f7-e472-4966-b7d6-448b1427a0d6}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="eidlibJava_Wrapper.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
