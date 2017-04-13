@@ -40,21 +40,14 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 
 	this->setWindowIcon( QIcon(":/Resources/ICO_CARD_EID_PLAIN_16x16.png") );
 
-
     if (operation == DLG_PIN_OP_CHANGE)
         Title+= QString::fromWCharArray(GETSTRING_DLG(ChangeYourPin));
     else if (operation == DLG_PIN_OP_VERIFY)
-		Title+=QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPin));
+		Title+=QString::fromWCharArray(GETSTRING_DLG(VerifyingPinCode));
 	else if (operation == DLG_PIN_OP_UNBLOCK_CHANGE)
-		Title += QString::fromWCharArray(GETSTRING_DLG(Unblock));
+		Title += QString::fromWCharArray(GETSTRING_DLG(UnblockPinHeader));
     else
         Title+=QString::fromWCharArray(GETSTRING_DLG(PinpadInfo));
-
-	if(!Reader.isEmpty())
-	{
-		Title+=" - ";
-		Title+=Reader;
-	}
 
 	parent->setWindowTitle( Title );
 

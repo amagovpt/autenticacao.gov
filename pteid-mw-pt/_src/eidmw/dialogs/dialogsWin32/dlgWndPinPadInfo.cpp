@@ -45,20 +45,26 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 
 	std::wstring tmpTitle = L"";
 
-	tmpTitle += GETSTRING_DLG(PinpadInfo);
+	switch (operation)
+	{
+		case DLG_PIN_OP_VERIFY:
+			tmpTitle += GETSTRING_DLG(VerifyingPinCode);
+			break;
+		case DLG_PIN_OP_CHANGE:
+			tmpTitle += GETSTRING_DLG(RenewingPinCode);
+			break;
+
+		case DLG_PIN_OP_UNBLOCK_CHANGE:
+		case DLG_PIN_OP_UNBLOCK_NO_CHANGE:
+			tmpTitle += GETSTRING_DLG(UnblockPinHeader);
+			break;
+	}
 
 	if (PinPusage == DLG_PIN_AUTH)
 		m_szHeader = _wcsdup( L"Pin da Autenticação" );
 	else
 		m_szHeader = _wcsdup( PinName.c_str() );
-
-	if(!csReader.empty())
-	{
-		tmpTitle += L" - ";
-		tmpTitle += csReader;
-	}
 	
-
 	if (CreateWnd(tmpTitle.c_str(), 420, 280, IDI_APPICON, Parent))
 	{
 		if( PinPusage == DLG_PIN_SIGN )

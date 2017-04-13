@@ -415,12 +415,14 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 				break;
 			case DLG_PIN_OP_UNBLOCK_NO_CHANGE:
 				sMessage = GETSTRING_DLG(PleaseEnterYourPukOnThePinpadReader);
+				/*
 				if(wcslen(csReader)!=0)
 				{
 					sMessage += L" \"";
 					sMessage += csReader;
 					sMessage += L"\"";
 				}
+				*/
 				sMessage += L", ";
 				sMessage = GETSTRING_DLG(ToUnblock);
 				sMessage += L" ";
@@ -434,38 +436,12 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 
 				break;
 			case DLG_PIN_OP_CHANGE:
-				sMessage = GETSTRING_DLG(ChangeYourPin);
-				sMessage += L" \"";
-				if( wcslen(csPinName)!=0 )
-					sMessage += PINName;
-				else
-					sMessage += GETSTRING_DLG(Pin);
-				sMessage += L"\" ";
-				sMessage += GETSTRING_DLG(OnTheReader);
-				if(wcslen(csReader)!=0)
-				{
-					sMessage += L" \"";
-					sMessage += csReader;
-					sMessage += L"\"";
-				}
-				sMessage += L"\n";
 				sMessage += GETSTRING_DLG(EnterOldNewVerify);
 				sMessage += L"\n";
 				break;
 			case DLG_PIN_OP_UNBLOCK_CHANGE:
 				sMessage = L"\n";
-				sMessage += GETSTRING_DLG(UnlockDialogHeader);
-
-				//sMessage += L"\" ";
-				//sMessage += GETSTRING_DLG(OnTheReader);
-				/*
-				if(wcslen(csReader)!=0)
-				{
-					sMessage += L" \"";
-					sMessage += csReader;
-					sMessage += L"\"";
-				}
-				*/
+				sMessage += GETSTRING_DLG(UnlockDialogInstructions);
 
 				break;
 			default:

@@ -123,6 +123,8 @@ DEFINE_LANG_STR(EnterOldNewVerify) = {L"1) Enter your old PIN and press 'OK'. \n
 																			L"1) Introduza o seu PIN atual e clique em 'OK'. \n2) Introduza o seu novo PIN e clique em 'OK'.\n3) Introduza novamente o seu novo PIN e clique em 'OK'.",
 																			L"1) Insï¿½rez votre ancien code PIN et appuyez sur ï¿½ï¿½OKï¿½ï¿½.\n2) Insï¿½rez votre nouveau code PIN et appuyez sur ï¿½ï¿½OKï¿½ï¿½.\n3) Insï¿½rez une nouvelle fois votre nouveau code PIN et appuyez sur ï¿½ï¿½OKï¿½ï¿½.",
 																			L"1) Geben Sie Ihre alte PIN ein und drï¿½cken Sie 'OK'.\n2) Geben Sie Ihre neue PIN ein und drï¿½cken Sie 'OK'.\n3) Geben Sie Ihre neue PIN erneut ein und drï¿½cken Sie 'OK'."};
+DEFINE_LANG_STR(UnlockDialogInstructions) = {L"1) Enter your PUK code and press 'OK'. \n2) Enter your new PIN and press 'OK'.3) Enter your new PIN again and press 'OK'.",
+                                            L"1) Por favor insira o seu código PUK e pressione 'OK' \n2) Introduza o seu novo PIN e pressione 'OK'. \n3) Introduza novamente o seu novo PIN e pressione 'OK'.", L"", L""};																			
 
 #define GETSTRING_DLG(code) LANG_STR_ ## code[CLang::GetLang()]
 #ifndef WIN32
