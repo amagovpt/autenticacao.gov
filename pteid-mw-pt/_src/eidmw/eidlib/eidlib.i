@@ -529,6 +529,7 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 		throw new PTEID_ExDocTypeUnknown();
 	}
 }
+%ignore eIDMW::PTEID_PDFSignature::getPdfSignature();
 #elif SWIGJAVA	/********************** JAVA SPECIFICS ***********************/
 
 ///////////////////////////////////////// ByteArray /////////////////////////////////////////////
@@ -1445,6 +1446,7 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 
 %ignore eIDMW::PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg, void *wndGeometry );
 %ignore eIDMW::PTEID_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining);
+%ignore eIDMW::PTEID_PDFSignature::getPdfSignature();
 
 // --------------------------------------
 // the following should be generated for the method without parameters, but
