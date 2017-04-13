@@ -1265,6 +1265,11 @@ PTEIDSDK_API long PTEID_ReadSOD(unsigned char *out, unsigned long *outlen) {
 }
 
 PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft){
+	
+	return PTEID_UnblockPIN_Ext(PinId, pszPuk, pszNewPin, triesLeft, UNBLOCK_FLAG_NEW_PIN);
+}
+
+PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft, unsigned long ulFlags){
 	unsigned long id;
 	unsigned long tleft;
 
@@ -1278,7 +1283,7 @@ PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszN
 			for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++) {
 				PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
 				if (pin.getPinRef() == PinId) {
-					bool ret = pin.unlockPin(pszPuk, pszNewPin,tleft, 0);
+					bool ret = pin.unlockPin(pszPuk, pszNewPin,tleft, ulFlags);
 					*triesLeft = tleft;
 					return ret ? PTEID_OK: SC_ERROR_PIN_CODE_INCORRECT;
 				}
@@ -1292,14 +1297,6 @@ PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszN
 
 	return PTEID_E_NOT_INITIALIZED;
 
-}
-
-PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft, unsigned long ulFlags){
-	if (readerContext!=NULL){
-		return PTEID_UnblockPIN(PinId,	pszPuk,pszNewPin,triesLeft);
-	}
-
-	return -1;
 }
 
 PTEIDSDK_API long PTEID_SelectADF(unsigned char *adf, long adflen){
