@@ -82,9 +82,6 @@ PDFSignWindow::PDFSignWindow(QWidget* parent, int selected_reader, CardInformati
 
 	// ui.verticalLayout->setContentsMargins(15,15,15,15);
 
-	//save the default background to use in clearAllSectors()
-	// m_default_background = ui.tableWidget->item(0,0)->background();
-	// ui.label_selectedimg->setPixmap(QPixmap( ":/images/Images/backgrounds/signature_image_default.png"));
 	image_canvas = new ImageCanvas(ui.tab3);
 	image_canvas->setCitizenName(composeCitizenFullName());
 	image_canvas->setCitizenNIC(getCitizenNIC());
@@ -418,27 +415,9 @@ void PDFSignWindow::on_smallsig_checkBox_toggled(bool checked)
 		my_scene->update();
 	}
 
-/*
-	if (my_scene)
-	{
-		//Delete and re-add a different number of squares
-	//	my_scene->clear();
-	//	addSquares();
-
-		if(checked)
-			my_rectangle->makeItSmaller();
-
-	}
-
-	//Keep the free selection mode if its the current mode
-	if (my_scene->isFreeSelectMode())
-	{
-		invertSelectionMode();
-		my_rectangle->show();
-	} else{
-        my_scene->setOccupiedSector(m_selected_sector, Qt::black );
-	}
-	*/
+	//when small signature is toggled sig_coord_x and sig_coord_y must be recalculated
+	//The rectangle top-left location didn't change, only its height 
+	setPosition(QPointF(this->rx, this->ry));
 }
 
 void PDFSignWindow::on_checkBox_location_toggled(bool checked)
@@ -1167,16 +1146,20 @@ void PDFSignWindow::loadDocumentForPreview(const QString &file)
     m_doc->setRenderBackend(Poppler::Document::RenderBackend::SplashBackend);
 }
 
-/* Coordinate conversion */
+/*  Coordinate calculation: for SignPDF method we need the coordinates in percenatge of page size
+ */
 void PDFSignWindow::setPosition(QPointF new_pos)
 {
 	
 	double scaled_rectangle_height = m_landscape_mode ? 0.16 * g_scene_height : 0.1069 * g_scene_height;
-	
+	//Small format signature has half the height
+	if (m_small_signature)
+		scaled_rectangle_height *= 0.4;
+
 	/* Check border limits */
 	if ( new_pos.rx() < 0) {
         this->rx = 0;
-	} else if ( new_pos.rx() > getMaxX() ){
+	} else if ( new_pos.rx() > getMaxX()) {
         this->rx = getMaxX();
 	} else {
         this->rx = new_pos.rx();
@@ -1190,7 +1173,6 @@ void PDFSignWindow::setPosition(QPointF new_pos)
         this->ry = new_pos.ry();
 	}
 
-    //Actual coordinates passed to SignPDF() expressed as a fraction
     sig_coord_x = this->rx/g_scene_width;
 
     //printf("eidgui: DEBUG: this->ry: %f\n", this->ry);
