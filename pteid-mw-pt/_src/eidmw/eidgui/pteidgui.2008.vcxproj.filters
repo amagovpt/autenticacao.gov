@@ -106,9 +106,6 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_dlgverifysignature.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_FreeSelectionDialog.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_httpwindow.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -238,9 +235,6 @@
     <CustomBuild Include="dlgsignature.h">
       <Filter>Header Files\with QObject</Filter>
     </CustomBuild>
-    <CustomBuild Include="FreeSelectionDialog.h">
-      <Filter>Header Files\with QObject</Filter>
-    </CustomBuild>
     <CustomBuild Include="httpwindow.h">
       <Filter>Header Files\with QObject</Filter>
     </CustomBuild>
@@ -272,9 +266,6 @@
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="dlgSignature.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="FreeSelectionDialog.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="mainwnd.ui">
