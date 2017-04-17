@@ -391,15 +391,6 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 						sMessage += csReader;
 						sMessage += L"\"";
 					}
-					/*
-					sMessage += L", ";
-					sMessage += GETSTRING_DLG(ToContinueOrClickTheCancelButton);
-					sMessage += L"\n\n";
-					sMessage += GETSTRING_DLG(Warning);
-					sMessage += L" ";
-					sMessage += GETSTRING_DLG(IfYouOnlyWantToLogOnToA);
-					sMessage += L"\n";
-					*/
 					break;
 				default:
 					sMessage = GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader);
