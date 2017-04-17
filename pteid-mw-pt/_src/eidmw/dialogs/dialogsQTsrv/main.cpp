@@ -200,14 +200,6 @@ int main(int argc, char *argv[])
 								Header += " ";
 								Header += GETQSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic);
 								Header += "\n";
-						/*		Header += GETQSTRING_DLG(PleaseEnterYourPin);
-								Header += ", ";
-								Header += GETQSTRING_DLG(ToContinueOrClickTheCancelButton);
-								Header += "\n\n";
-								Header += GETQSTRING_DLG(Warning);
-								Header += " ";
-								Header += GETQSTRING_DLG(IfYouOnlyWantToLogOnToA);
-								Header += "\n"; */
 								break;
 							default:
 								Header = GETQSTRING_DLG(PleaseEnterYourPin);
@@ -560,10 +552,6 @@ int main(int argc, char *argv[])
 										qsMessage += "\n";
 										break;
 									case DLG_PIN_SIGN:
-										qsMessage = GETQSTRING_DLG(Caution);
-										qsMessage += " ";
-										qsMessage += GETQSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic);
-										qsMessage += "\n";
 										qsMessage += GETQSTRING_DLG(PleaseEnterYourPinOnThePinpadReader);
 										if(!qsReader.isEmpty())
 										{
@@ -571,13 +559,6 @@ int main(int argc, char *argv[])
 											qsMessage += qsReader;
 											qsMessage += "\"";
 										}
-										qsMessage += ", ";
-										qsMessage += GETQSTRING_DLG(ToContinueOrClickTheCancelButton);
-										qsMessage += "\n\n";
-										qsMessage += GETQSTRING_DLG(Warning);
-										qsMessage += " ";
-										qsMessage += GETQSTRING_DLG(IfYouOnlyWantToLogOnToA);
-										qsMessage += "\n";
 										break;
 									default:
 										qsMessage = GETQSTRING_DLG(PleaseEnterYourPinOnThePinpadReader);
