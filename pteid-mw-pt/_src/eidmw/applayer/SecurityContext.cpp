@@ -776,7 +776,7 @@ namespace eIDMW
 			{
 				unsigned long sw12 = 256 * resp.GetByte(resp.Size() - 2) + resp.GetByte(resp.Size() - 1);
 				MWLOG(LEV_ERROR, MOD_APL, L"[SecurityContext::readBinary iteration %d] card returned error: %04x", i, sw12);
-				if (sw12 = 0x6982)
+				if (sw12 == 0x6982)
 					throw CMWEXCEPTION(EIDMW_ERR_CVC_PERMISSION_DENIED);
 				else
 					throw CMWEXCEPTION(EIDMW_ERR_CVC_GENERIC_ERROR);
