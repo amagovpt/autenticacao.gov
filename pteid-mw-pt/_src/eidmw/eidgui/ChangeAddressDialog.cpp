@@ -18,6 +18,7 @@ ChangeAddressDialog::ChangeAddressDialog(QWidget* parent)
 	connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 	ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+	ui.formLayout->setLabelAlignment(Qt::AlignLeft);
 
 	connect(ui.lineEdit_secretCode, SIGNAL(textEdited(QString)), this, SLOT(secretCode_textEdited(QString)));
 	connect(ui.lineEdit_process, SIGNAL(textEdited(QString)), this, SLOT(process_textEdited(QString)));
