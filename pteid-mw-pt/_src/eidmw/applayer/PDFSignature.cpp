@@ -24,7 +24,8 @@ namespace eIDMW
 {
 
 	const double PDFSignature::sig_height = 90;
-	const double PDFSignature::tb_margin = 40.0;
+	const double PDFSignature::sig_width = 178;
+	const double PDFSignature::tb_margin = 40;
 
 	PDFSignature::PDFSignature()
 	{
@@ -464,11 +465,10 @@ namespace eIDMW
 			width = dim1;
 		}
 
-                if (m_visible)
+		if (m_visible)
 		{
 			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Page mediaBox: (H: %f W:%f) Location_x: %f, location_y: %f",
 				 height, width, location_x, location_y);
-
 
 			//Sig Location by sector
 			if (location_x == -1)
@@ -484,14 +484,12 @@ namespace eIDMW
 				if (location_y > 1.0)
 					location_y = 1.0;
 
-				//2 different ways to calculate the same value: sig_width
-			    double sig_width = width > height ? (height -lr_margin*2) / 3.0 : (width - lr_margin*2) / 3.0;
+			    double sig_width = PDFSignature::sig_width;
 			    double actual_sig_height =  m_small_signature ? sig_height / 2.0 : sig_height;
 			    //sig_location.x1 = lr_margin+ (width-lr_margin*2)*location_x;
 			    sig_location.x1 = (width)*location_x;
 
 			    //Coordinates from the GUI are inverted => (1- location_y)
-			    //sig_location.y1 = tb_margin + (height-tb_margin*2) *(1.0-location_y)- actual_sig_height;
 			    sig_location.y1 = (height) *(1.0-location_y);
 
 			    sig_location.x2 = sig_location.x1 + sig_width;
