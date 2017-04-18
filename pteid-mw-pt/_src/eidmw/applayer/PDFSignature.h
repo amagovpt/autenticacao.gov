@@ -89,9 +89,14 @@ namespace eIDMW
 		PDFDoc *m_doc;
 
 		const char * m_pdf_file_path;
+
+		// These values are constants because the actual construction of the signature appearance in pteid-poppler assumes
+		// this amount of available space
 		static const double sig_height;
-		static const int lr_margin = 30;
+		static const double sig_width;
 		static const double tb_margin;
+
+		static const int lr_margin = 30;
 
 		char *m_civil_number;
 		char *m_citizen_fullname;
