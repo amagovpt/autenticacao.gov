@@ -3507,32 +3507,7 @@ void MainWnd::refreshTabPersoData( void )
 
 	m_ui.txtPersoData->clear();
 	m_ui.txtPersoData->insertPlainText (QString::fromUtf8(PersoDataFields[PERSODATA_INFO].toStdString().c_str()));
-
 }
-
-
-QString MainWnd::getSpecialOrganizationText( QString const& code)
-{
-	QString trSpecialOrganization;
-	if ( "1" == code)
-	{
-		trSpecialOrganization = tr("SHAPE");
-	}
-	else
-	{
-		trSpecialOrganization = tr("NATO");
-	}
-	return trSpecialOrganization;
-}
-QString MainWnd::getDuplicataText( void )
-{
-	return tr("Duplicate: ");
-}
-QString MainWnd::getFamilyMemberText( void )
-{
-	return tr("Family member");
-}
-
 
 //*****************************************************
 // clear the tab with the certificates

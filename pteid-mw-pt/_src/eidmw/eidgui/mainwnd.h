@@ -475,9 +475,6 @@ private:
 	void doPicturePopup( PTEID_Card& card );
 	void setCorrespondingTrayIcon( PopupEvent* callbackEvent );
 	void clearGuiContent( void );
-	QString getSpecialOrganizationText( QString const& code);
-	QString getDuplicataText( void );
-	QString getFamilyMemberText( void );
 	void createTrayMenu();
 	QString getFinalLinkTarget(QString baseName);
 	void cleanupCallbackData();
