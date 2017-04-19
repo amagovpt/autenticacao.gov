@@ -28,6 +28,14 @@
      <translation>Assinatura Universal</translation>
      </message>
      <message>
+     <source>SOD validation</source>
+     <translation>Validação do SOD</translation>
+     </message>
+     <message>
+     <source>SOD validation failed: card data consistency is compromised!</source>
+     <translation>Consistência da informação do cartão está comprometida!</translation>
+     </message>
+     <message>
      <source>&amp;Options</source>
      <translation>&amp;Opções</translation>
      </message>
