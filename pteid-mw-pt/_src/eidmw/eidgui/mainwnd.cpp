@@ -488,7 +488,6 @@ void MainWnd::hideUniversalSigButton() {
 /*
 // Change Address functionality triggered by a button in the Address tab
 */
-
 void MainWnd::address_change_callback(void *instance, int value)
 {
 	MainWnd * window = (MainWnd*) (instance);
@@ -513,7 +512,7 @@ void MainWnd::showChangeAddressDialog(long code)
 							    " process number and error code ready, and contact the"
 							    " Citizen Card support line on 707 201 122 or e-mail cartaodecidadao@dgrn.mj.pt.");
 
-	PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code %8x", code);
+	PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code 0x%08x", code);
 	QMessageBox::Icon icon = QMessageBox::NoIcon;
 	switch(code)
 	{
@@ -540,16 +539,14 @@ void MainWnd::showChangeAddressDialog(long code)
 		default:
 			if (code > 1100 && code < 3500)
 				sam_error_code = code;
-			error_msg = tr("Unexpected error in the Address Change operation");
+			error_msg = tr("Error in the Address Change operation!");
 			icon = QMessageBox::Critical;
 			break;
-
 	}
 
 	if (sam_error_code > 0)
 	{
-		error_msg += tr("Error code = ") + sam_error_code + "\n";
-
+		error_msg += "\n\n" + tr("Error code = ") + QString::number(sam_error_code) + "\n";
 	}
 	error_msg += "\n\n" + support_string;
 

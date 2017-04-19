@@ -88,8 +88,12 @@
         <translation>Erro de ligação ao servidor para mudança de morada.\nPor favor verifique se a sua ligação à Internet está funcional</translation>
     </message>
     <message>
-        <source>Unexpected error in the Address Change operation</source>
-        <translation>Erro inesperado na mudança de morada</translation>
+        <source>Error in the Address Change operation!</source>
+        <translation>Ocorreu um erro durante a alteração de morada!</translation>
+    </message>
+    <message>
+        <source>Error code = </source>
+        <translation>Código de erro = </translation>
     </message>
     <message>
         <source>Please try again. If this error persists, please have your process number and error code ready, and contact the Citizen Card support line on 707 201 122 or e-mail cartaodecidadao@dgrn.mj.pt.</source>
