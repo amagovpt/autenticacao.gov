@@ -100,6 +100,11 @@
 </message>
 
 <message>
+    <source>Please try again. If this error persists, please have your process number and error code ready, and contact the Citizen Card support line on 707 201 122 or e-mail cartaodecidadao@dgrn.mj.pt.</source>
+    <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 707 201 122 ou do e-mail cartaodecidadao@dgrn.mj.pt.</translation>
+</message>
+
+<message>
     <source>Changing Address in card...</source>
     <translation>Mudando a morada no Cartão...</translation>
 </message>
@@ -1185,7 +1190,7 @@ Please specify .xml, .csv or .eid</source>
     </message>
     <message>
         <source>Startup</source>
-        <translation>Arranque</translation>
+        <translation>Início</translation>
     </message>
     <message>
         <source>determins whether the application should start reading the card from the moment it's detected in the cardreader or not</source>
@@ -1213,7 +1218,7 @@ Please specify .xml, .csv or .eid</source>
     </message>
     <message>
         <source>Activate on Windows startup</source>
-        <translation>Arrancar automaticamente com o Windows</translation>
+        <translation>Iniciar automaticamente com o Windows</translation>
     </message>
     <message>
         <source>Determins whether the main window should stay hidden on startup or not (Tray Icon will stay available)</source>

@@ -368,7 +368,7 @@ bool MainWnd::eventFilter(QObject *object, QEvent *event)
 			certdatastatus = 1;
 			persodatastatus = 1;
 
-                        /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
+            /* m_CI_Data.Reset();   This operation will be done on loadCardData() */
 
 			/* Allow new card data reading */
 			//m_mutex_ReadCard.unlock();
@@ -507,7 +507,12 @@ void MainWnd::showChangeAddressDialog(long code)
 	m_progress_addr->hide();
 
 	QString error_msg;
+	long sam_error_code = 0;
 	QString caption  = tr("Address Confirmation");
+	QString support_string = tr("Please try again. If this error persists, please have your"
+							    " process number and error code ready, and contact the"
+							    " Citizen Card support line on 707 201 122 or e-mail cartaodecidadao@dgrn.mj.pt.");
+
 	PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code %8x", code);
 	QMessageBox::Icon icon = QMessageBox::NoIcon;
 	switch(code)
@@ -522,20 +527,31 @@ void MainWnd::showChangeAddressDialog(long code)
 			error_msg = tr("Error connecting to the Address Change server.\n"
 				"Please check if your Internet connection is functional");
 			break;
+		/*	
 		case EIDMW_SAM_PROTOCOL_ERROR:
 			error_msg = tr("Error in the Address Change operation. Please make sure you insert the correct process number and secret code.");
 			icon = QMessageBox::Critical;
 			break;
+		*/	
 		case EIDMW_SSL_PROTOCOL_ERROR:
 			error_msg = tr("Error in the Address Change operation. Please make sure you have a valid authentication certificate");
 			icon = QMessageBox::Critical;
 			break;
 		default:
+			if (code > 1100 && code < 3500)
+				sam_error_code = code;
 			error_msg = tr("Unexpected error in the Address Change operation");
 			icon = QMessageBox::Critical;
 			break;
 
 	}
+
+	if (sam_error_code > 0)
+	{
+		error_msg += tr("Error code = ") + sam_error_code + "\n";
+
+	}
+	error_msg += "\n\n" + support_string;
 
 	QMessageBox msgBoxp(icon, caption, error_msg, 0, this);
   	msgBoxp.exec();
