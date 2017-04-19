@@ -76,8 +76,12 @@
         <translation>Confirmação de Morada</translation>
     </message>
     <message>
-        <source>Error connecting to the Address Change server</source>
-        <translation>Erro de ligação ao servidor para mudança de morada</translation>
+        <source>Connection Error</source>
+        <translation>Erro na comunicação</translation>
+    </message>
+    <message>
+        <source>Please make sure you are connected to the Internet</source>
+        <translation>Por favor certifique-se que está ligado à internet</translation>
     </message>
     <message>
         <source>Address Confirmed successfully.</source>

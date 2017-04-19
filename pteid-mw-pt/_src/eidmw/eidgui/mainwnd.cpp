@@ -523,8 +523,8 @@ void MainWnd::showChangeAddressDialog(long code)
 		//The error code for connection error is common between SAM and OTP
 		case EIDMW_OTP_CONNECTION_ERROR:
 			icon = QMessageBox::Critical;
-			error_msg = tr("Error connecting to the Address Change server.\n"
-				"Please check if your Internet connection is functional");
+			error_msg = tr("Connection Error") + "\n" +
+				tr("Please make sure you are connected to the Internet");
 			break;
 		/*	
 		case EIDMW_SAM_PROTOCOL_ERROR:
@@ -547,8 +547,9 @@ void MainWnd::showChangeAddressDialog(long code)
 	if (sam_error_code > 0)
 	{
 		error_msg += "\n\n" + tr("Error code = ") + QString::number(sam_error_code) + "\n";
+		error_msg += "\n\n" + support_string;
 	}
-	error_msg += "\n\n" + support_string;
+	
 
 	QMessageBox msgBoxp(icon, caption, error_msg, 0, this);
   	msgBoxp.exec();
