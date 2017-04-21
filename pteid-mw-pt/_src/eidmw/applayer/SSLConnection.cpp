@@ -29,8 +29,7 @@
 #include <openssl/bio.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
-#include <openssl/bn.h>
-#include <openssl/opensslv.h>
+
 
 #ifdef WIN32
 #define snprintf _snprintf
@@ -103,8 +102,8 @@ void SSLConnection::loadUserCert(SSL_CTX *ctx)
 
 	if (ret != 1)
 	{
-		fprintf(stderr, "Error loading auth certificate for SSL handshake!\n");
-		ERR_print_errors_fp(stderr);
+		MWLOG(LEV_ERROR, MOD_APL, "Error loading auth certificate for SSL handshake! Detail: %s",
+			ERR_error_string(ERR_get_error(), NULL));
 	}
 
 }
@@ -130,7 +129,7 @@ void SSLConnection::loadCertChain(X509_STORE *store)
 		}
 		else
 		{
-			if(X509_STORE_add_cert(store, pCert) == 0)
+			if (X509_STORE_add_cert(store, pCert) == 0)
 				MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection::loadCertChain: error adding certificate #%d\n",  i);
 		}
 
@@ -148,8 +147,9 @@ void SSLConnection::loadCertChain(X509_STORE *store, CByteArray &cert_data_ba)
 
 	if (pCert == NULL)
 	{
-		MWLOG(LEV_ERROR, MOD_APL, L"Error loading CA auth certificate for SSL handshake!");
-		ERR_print_errors_fp(stderr);
+		MWLOG(LEV_ERROR, MOD_APL, L"Error loading CA auth certificate for SSL handshake! Detail: %s",
+		      ERR_error_string(ERR_get_error(), NULL));
+
 	}
 	else
 	{
@@ -160,6 +160,7 @@ void SSLConnection::loadCertChain(X509_STORE *store, CByteArray &cert_data_ba)
 }
 
 
+#if 0
 void get_ssl_state_callback(const SSL *s, int where, int ret)
 {
 	const char *str;
@@ -195,6 +196,7 @@ void get_ssl_state_callback(const SSL *s, int where, int ret)
 		}
 	}
 }
+#endif
 
 
 //Translate the string via specific OpenSSL error codes
@@ -352,9 +354,41 @@ char *parseToken(char * server_response, const char * token)
 	strncpy(change_pin_apdu, start_apdu, apdu_len);
 
 	return change_pin_apdu;
-
 }
 
+/*
+	Checks for success or error in the response JSON message and throws MWException containing
+	the server-sent error code
+*/
+void handleErrorCode(cJSON * json_obj, const char *caller_function)
+{
+	cJSON *error_obj = cJSON_GetObjectItem(json_obj, "ErrorStatus");
+	if (error_obj != NULL)
+	{
+		if (error_obj->type == cJSON_Object)
+		{
+			cJSON * errorcode_obj = cJSON_GetObjectItem(error_obj, "code");
+			if (errorcode_obj != NULL)
+			{
+				long error_code = -1;
+				//Error code can be integer or string
+				if (errorcode_obj->type == cJSON_String)
+					error_code = atol(errorcode_obj->valuestring);
+				else if (errorcode_obj->type == cJSON_Number)
+					error_code = errorcode_obj->valueint;
+					
+				if (error_code > 0)
+				{
+					error_obj = cJSON_GetObjectItem(error_obj, "description");
+
+					MWLOG(LEV_ERROR, MOD_APL, "%s: Received non-zero error code: %ld description: %s", 
+						caller_function, error_code, error_obj->valuestring);
+					throw CMWEXCEPTION(error_code);
+				}
+			}
+		}
+	}
+}
 
 #define ENDPOINT_07 "/changeaddress/signChallenge"
 
@@ -400,6 +434,9 @@ SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *k
 	else
 	{
 		cJSON *my_json = json->child;
+
+		handleErrorCode(my_json, __FUNCTION__);
+
 		cJSON *child = cJSON_GetObjectItem(my_json, "signedChallenge");
 		if (!child)
 		{
@@ -547,7 +584,8 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 	else
 	{
 		cJSON *my_json = json->child;
-		int i;
+
+		handleErrorCode(my_json, __FUNCTION__);
 
 		cJSON *array_address = cJSON_GetObjectItem(my_json, "WriteAddressCommand");
 
@@ -558,13 +596,13 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 		}
 		int n_address = cJSON_GetArraySize(array_address);
 
-		for (i=0; i!= n_address; i++)
+		for (int i=0; i!= n_address; i++)
 			resp->apdu_write_address.push_back(strdup(cJSON_GetArrayItem(array_address, i)->valuestring));
 
 		cJSON *array_sod= cJSON_GetObjectItem(my_json, "WriteSODCommand");
 		int n_sod = cJSON_GetArraySize(array_sod);
 
-		for (i=0; i!= n_sod; i++)
+		for (int i=0; i != n_sod; i++)
 			resp->apdu_write_sod.push_back(strdup(cJSON_GetArrayItem(array_sod, i)->valuestring));
 
 		cJSON_Delete(json);
@@ -655,6 +693,8 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
         cJSON_Delete(json);
 		return server_params;
 	}
+
+	handleErrorCode(my_json, __FUNCTION__);
 
 	cJSON *child = cJSON_GetObjectItem(my_json, "kifd");
 	if (child)
