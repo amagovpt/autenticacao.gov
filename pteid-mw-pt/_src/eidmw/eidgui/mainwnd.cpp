@@ -510,7 +510,7 @@ void MainWnd::showChangeAddressDialog(long code)
 	QString caption  = tr("Address Confirmation");
 	QString support_string = tr("Please try again. If this error persists, please have your"
 							    " process number and error code ready, and contact the"
-							    " Citizen Card support line on 707 201 122 or e-mail cartaodecidadao@dgrn.mj.pt.");
+							    " Citizen Card support line at telephone number +351 211 950 500 or e-mail cartaodecidadao@dgrn.mj.pt.");
 
 	PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code 0x%08x", code);
 	QMessageBox::Icon icon = QMessageBox::NoIcon;
