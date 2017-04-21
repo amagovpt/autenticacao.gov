@@ -1,10 +1,8 @@
 
 #include <cstdio>
 #include <cstring>
-
 #include <fstream>
 #include <iostream>
-//#include <iomanip>
 
 #include "MWException.h"
 #include "Log.h"
@@ -95,27 +93,6 @@ unsigned char *dump_signature(PKCS7 * sig_struct, int *length)
 	}
 
 	return buf;
-}
-#endif
-
-// If our version of openssl is older than 1.0
-// we need to provide this
-#if OPENSSL_VERSION_NUMBER < 0x10000000L
-int PKCS7_add1_attrib_digest (PKCS7_SIGNER_INFO *si,
-		const unsigned char *md, int mdlen)
-{
-	ASN1_OCTET_STRING *os;
-	os = ASN1_OCTET_STRING_new();
-	if (!os)
-		return 0;
-	if (!ASN1_STRING_set(os, md, mdlen)
-			|| !PKCS7_add_signed_attribute(si, NID_pkcs9_messageDigest,
-				V_ASN1_OCTET_STRING, os))
-	{
-		ASN1_OCTET_STRING_free(os);
-		return 0;
-	}
-	return 1;
 }
 #endif
 
