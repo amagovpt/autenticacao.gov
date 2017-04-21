@@ -304,9 +304,10 @@ void APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 		}
 		else
 		{
-			//fprintf(stderr, "DEBUG: writing new address...\n");
+			MWLOG(LEV_DEBUG, MOD_APL, L"ChangeAddress: writing new address...");
 			std::vector<char *> address_response = sam_helper.sendSequenceOfPrebuiltAPDUs(resp3->apdu_write_address);
-			//fprintf(stderr, "DEBUG: writing new SOD...\n");
+
+			MWLOG(LEV_DEBUG, MOD_APL, L"ChangeAddress: writing new SOD...");
 			std::vector<char *> sod_response = sam_helper.sendSequenceOfPrebuiltAPDUs(resp3->apdu_write_sod);
 
 			StartWriteResponse start_write_resp = {address_response, sod_response};
@@ -314,7 +315,7 @@ void APL_Card::ChangeAddress(char *secret_code, char *process, t_callback_addr c
 			callback(callback_data, 90);
 
 			// Report the results to the server for verification purposes,
-			// we only consider the Address Change successful if the server returns its "ACK"
+			// We only consider the Address Change successful if the server returns its "ACK"
 			if (!conn.do_SAM_4thpost(start_write_resp)){
                 delete resp3;
                 free(resp_mse);

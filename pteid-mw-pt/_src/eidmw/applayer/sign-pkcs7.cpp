@@ -1,10 +1,10 @@
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 #include <fstream>
 #include <iostream>
-#include <iomanip>
+//#include <iomanip>
 
 #include "MWException.h"
 #include "Log.h"
@@ -17,9 +17,6 @@
 #include "static_pteid_certs.h"
 #include "cryptoFwkPteid.h"
 
-
-/* Conditionally check some features on the OpenSSL API  */
-#include <openssl/opensslv.h>
 #include "sign-pkcs7.h"
 #include <openssl/bio.h>
 #include <openssl/x509.h>
@@ -78,10 +75,8 @@ CByteArray PteidSign(APL_Card *card, CByteArray &to_sign)
 }
 
 
-/*
- * sig_struct: IN param
- * length: OUT param
- */
+#if 0
+/* It can be useful to debug the PKCS7 encoding   */
 unsigned char *dump_signature(PKCS7 * sig_struct, int *length)
 {
 
@@ -97,28 +92,11 @@ unsigned char *dump_signature(PKCS7 * sig_struct, int *length)
 		buf = (unsigned char *)malloc(len);
 		unsigned char *p = buf;
 		i2d_ASN1_OCTET_STRING(signature, &p);
-
-
 	}
 
 	return buf;
 }
-
-
-void add_cert_from_file(PKCS7 *p7, const char *path)
-{
-	BIO *in;
-	X509* x509;
-	if ((in=BIO_new_file(path,"r")) == NULL) goto err;
-	if ((x509=PEM_read_bio_X509(in,NULL,NULL,NULL)) == NULL) goto err;
-
-	PKCS7_add_certificate(p7,x509);
-
-	BIO_free(in);
-	return;
-	err:
-		fprintf(stderr, "Failed to add certificate %s\n", path);
-}
+#endif
 
 // If our version of openssl is older than 1.0
 // we need to provide this
@@ -332,15 +310,12 @@ void add_signingCertificate(PKCS7_SIGNER_INFO *si, X509 *x509, unsigned char * c
 	MWLOG(LEV_ERROR, MOD_APL, L"Failed to add SigningCertificateV2 attribute.\n");
 }
 
-/*  *********************************************************
-    ***          addCertificateChain()                    ***
-    ********************************************************* */
-void addCertificateChain( PKCS7 *p7, CByteArray CA_certificate ){
+void addCertificateChain(PKCS7 *p7, CByteArray CA_certificate) 
+{
     if ( 0 == CA_certificate.Size() ){
         TRACE_ERR( "Invalid CA certificate" );
         return;
-    }/* if ( 0 == CA_certificate.Size() ) */
-
+    }
     APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
 
     add_certificate( p7, CA_certificate );
@@ -356,32 +331,28 @@ void addCertificateChain( PKCS7 *p7, CByteArray CA_certificate ){
 
     /* Add issuer of Signature SubCA */
     if ( fwk->isIssuer( CA_certificate, cc01 ) ){
-        MWLOG( LEV_ERROR, MOD_APL, "Added_certificate - cc01" );
-        printf( "Added_certificate - cc01\n" );
+        MWLOG( LEV_ERROR, MOD_APL, "Added_certificate - cc01");
 
         add_certificate( p7, cc01 );
     } else if ( fwk->isIssuer( CA_certificate, cc02 ) ){
-        MWLOG( LEV_ERROR, MOD_APL, "Added_certificate - cc02" );
-        printf( "add_certificate - cc02\n" );
+        MWLOG( LEV_ERROR, MOD_APL, "Added_certificate - cc02");
 
         add_certificate( p7, cc02 );
     } else if (fwk->isIssuer( CA_certificate, cc03 ) ) {
-        MWLOG( LEV_ERROR, MOD_APL, "Added_certificate - cc03" );
-        printf( "add_certificate - cc03\n" );
-
+        MWLOG( LEV_ERROR, MOD_APL, "Added_certificate - cc03");
         add_certificate( p7, cc03 );
-    } else{
-        printf( "add_certificate - NONE\n" );
+    }
+    else {
 
         MWLOG( LEV_ERROR
                 , MOD_APL
                 , "Couldn't find issuer for certificate SIGNATURE_SUBCA. "
                 , "The validation will be broken!");
-    }/* else */
+    }
 
     /* Add ECRaizEstado certificate */
     add_certificate( p7, PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len );
-}/* addCertificateChain() */
+}
 
 /*  *********************************************************
     ***          computeHash_pkcs7()                    ***
@@ -391,7 +362,7 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
                             , CByteArray CA_certificate
                             , bool timestamp
                             , PKCS7 *p7
-                            , PKCS7_SIGNER_INFO **out_signer_info ){
+                            , PKCS7_SIGNER_INFO **out_signer_info) {
     CByteArray outHash;
     bool isError = false;
     unsigned char *attr_buf = NULL;
@@ -406,33 +377,33 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
 
     if ( out_signer_info ) *out_signer_info = NULL;
 
-    if ( NULL == data ){
+    if ( NULL == data ) {
         TRACE_ERR( "Null data" );
         isError = true;
 
         goto err_hashCalculate;
-    }/* if ( NULL == data ) */
+    }
 
     if ( 0 == dataLen ){
         TRACE_ERR( "Invalid dataLen" );
         isError = true;
 
         goto err_hashCalculate;
-    }/* if ( 0 == dataLen ) */
+    }
 
     if ( NULL == p7 ){
         TRACE_ERR( "Null p7" );
 
         isError = true;
         goto err_hashCalculate;
-    }/* if ( NULL == p7 ) */
+    }
 
     x509 = DER_to_X509( certificate.GetBytes(), certificate.Size() );
     if ( NULL == x509){
         MWLOG(LEV_ERROR, MOD_APL, "Error decoding certificate data!");
         isError = true;
         goto err_hashCalculate;
-    }/* if ( NULL == x509) */
+    }
 
     out = (unsigned char *)malloc( SHA256_LEN );
     if ( NULL == out ){
@@ -440,7 +411,7 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
 
         isError = true;
         goto err_hashCalculate;
-    }/* if ( NULL == out ) */
+    }
 
     attr_digest = (unsigned char *)malloc( SHA256_LEN );
     if ( NULL == attr_digest ){
@@ -448,7 +419,7 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
         isError = true;
 
         goto err_hashCalculate;
-    }/* if ( NULL == attr_digest ) */
+    }
 
     PKCS7_set_type( p7, NID_pkcs7_signed );
 
@@ -457,18 +428,16 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
         isError = true;
 
         goto err_hashCalculate;
-    }/* if ( !PKCS7_content_new( p7, NID_pkcs7_data ) ) */
+    }
 
-    signer_info = PKCS7_add_signature( p7
-                                    , x509, X509_get_pubkey( x509 )
-                                    , EVP_sha256() );
+    signer_info = PKCS7_add_signature(p7, x509, X509_get_pubkey(x509), EVP_sha256());
 
     if ( signer_info == NULL ){
         TRACE_ERR( "Null signer_info" );
         isError = true;
 
         goto err_hashCalculate;
-    }/* if ( signer_info == NULL ) */
+    }
 
     PKCS7_add_certificate( p7, x509 );
     addCertificateChain( p7, CA_certificate );
@@ -507,17 +476,17 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
     if ( out_signer_info ) *out_signer_info = signer_info;
 
 err_hashCalculate:
-    if ( x509 != NULL ) X509_free( x509 );
-    if ( attr_digest != NULL )free( attr_digest );
-    if ( out != NULL ) free(out);
+    if (x509 != NULL) X509_free(x509);
+    if (attr_digest != NULL) free(attr_digest);
+    if (out != NULL) free(out);
 
-    if ( isError ){
+    if (isError) {
         ERR_load_crypto_strings();
         ERR_print_errors_fp(stderr);
-    }/* if ( isError ) */
+    }
 
     return outHash;
-}/* computeHash_pkcs7() */
+}
 
 /*  *********************************************************
     ***          getSignedData_pkcs7()                    ***
@@ -536,22 +505,22 @@ int getSignedData_pkcs7( unsigned char *signature, unsigned int signatureLen
     if ( NULL == signature ){
         TRACE_ERR( "Null signature" );
         return 2;
-    }/* if ( NULL == signature ) */
+    }
 
     if ( 0 == signatureLen ){
         TRACE_ERR( "Zero signatureLen" );
         return 2;
-    }/* if ( 0 == signatureLen ) */
+    }
 
     if ( NULL == signer_info ){
         TRACE_ERR( "Null signer_info" );
         return 2;
-    }/* if ( 0 == signer_info ) */
+    }
 
     if ( NULL == p7 ){
         TRACE_ERR( "Null p7" );
         return 2;
-    }/* if ( 0 == p7 ) */
+    }
 
     //Manually fill-in the signedData structure
     signer_info->enc_digest = ASN1_OCTET_STRING_new();
@@ -563,7 +532,7 @@ int getSignedData_pkcs7( unsigned char *signature, unsigned int signatureLen
         if ( NULL == digest_tp ){
             TRACE_ERR( "Null digest_tp" );
             return 2;
-        }/* if ( 0 == digest_tp ) */
+        }
 
         //Compute SHA-256 of the signed digest
         SHA256_Wrapper( signature, signatureLen, digest_tp );
@@ -577,14 +546,13 @@ int getSignedData_pkcs7( unsigned char *signature, unsigned int signatureLen
         } else{
             timestamp_token = tsresp.GetBytes();
             tsp_token_len = tsresp.Size();
-        }/* if (tsresp.Size() == 0) */
+        }
         free( digest_tp );
-    }/* if (timestamp) */
+    }
 
-    if ( timestamp_token && tsp_token_len > 0 ){
-        return_code = append_tsp_token( signer_info
-                                        , timestamp_token, tsp_token_len );
-    }/* if ( timestamp_token && tsp_token_len > 0 ) */
+    if ( timestamp_token && tsp_token_len > 0 ) {
+        return_code = append_tsp_token(signer_info, timestamp_token, tsp_token_len);
+    }
 
     unsigned char *buf2, *p;
     unsigned int len = i2d_PKCS7( p7, NULL );
@@ -595,7 +563,7 @@ int getSignedData_pkcs7( unsigned char *signature, unsigned int signatureLen
     OPENSSL_free( buf2 );
 
    return return_code;
-}/* getSignedData_pkcs7() */
+}
 
 }
 
