@@ -346,6 +346,9 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	m_ui.wdg_submenu_settings->installEventFilter(this);;
 	m_ui.wdg_submenu_help->installEventFilter(this);
 
+#ifdef __APPLE__
+	QCoreApplication::processEvents();
+#endif
 }
 
 
