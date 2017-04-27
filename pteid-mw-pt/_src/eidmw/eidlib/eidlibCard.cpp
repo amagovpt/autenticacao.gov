@@ -49,6 +49,7 @@
 #define INCLUDE_OBJECT_RESPONSE			8
 #define INCLUDE_OBJECT_CUSTOMDOC		9
 #define INCLUDE_OBJECT_ROOT_CA_PK   	10
+#define INCLUDE_OBJECT_ADDRESS   	    11
 
 #define INCLUDE_OBJECT_RAWDATA_ID			21
 #define INCLUDE_OBJECT_RAWDATA_ID_SIG		22
@@ -586,21 +587,16 @@ PTEID_Address& PTEID_EIDCard::getAddr()
 
 	APL_EIDCard *pcard=static_cast<APL_EIDCard *>(m_impl);
 
-	out=dynamic_cast<PTEID_Address *>(getObject(INCLUDE_OBJECT_DOCEID));
+	out=dynamic_cast<PTEID_Address *>(getObject(INCLUDE_OBJECT_ADDRESS));
 
 	if(!out)
 	{
-		//CAutoMutex autoMutex(m_mutex);
-
-		//pdoc=dynamic_cast<PTEID_EId *>(getObject(INCLUDE_OBJECT_DOCEID));
-		//if(!pdoc)
-		//{
-			out = new PTEID_Address(m_context,&pcard->getAddr());
-			if(out)
-				m_objects[INCLUDE_OBJECT_DOCEID]=out;
-			else
-				throw PTEID_ExUnknown();
-		//}
+		
+		out = new PTEID_Address(m_context,&pcard->getAddr());
+		if(out)
+			m_objects[INCLUDE_OBJECT_ADDRESS]=out;
+		else
+			throw PTEID_ExUnknown();
 	}
 
 	END_TRY_CATCH
