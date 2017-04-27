@@ -43,7 +43,6 @@ class APL_EidFile_Trace;
 class APL_EidFile_ID;
 class APL_EidFile_IDSign;
 class APL_EidFile_Address;
-class APL_EidFile_AddressSign;
 class APL_EidFile_Sod;
 class APL_EidFile_TokenInfo;
 class APL_CardFile_Certificate;
@@ -55,6 +54,8 @@ class APL_SodEid;
 class APL_DocVersionInfo;
 class APL_XmlUserRequestedInfo;
 class APL_PersonalNotesEId;
+
+typedef void (* t_callback_addr) (void*, int);
 
 /******************************************************************************//**
   * Class that represent a PTEID card
@@ -88,6 +89,10 @@ public:
 	  * Return the number of certificate on the card
 	  */
 	EIDMW_APL_API virtual unsigned long certificateCount();
+
+	
+
+	EIDMW_APL_API void ChangeAddress(char *secret_code, char *process, t_callback_addr, void *);
 
 	/** 
 	 * Return a document from the card
@@ -142,7 +147,6 @@ public:
 	EIDMW_APL_API const CByteArray& getRawData_IdSig();			/**< Get the IdSig RawData */
 	EIDMW_APL_API const CByteArray& getRawData_Trace();			/**< Get the IdSig RawData */
  	EIDMW_APL_API const CByteArray& getRawData_Addr();			/**< Get the Addr RawData */
- 	EIDMW_APL_API const CByteArray& getRawData_AddrSig();		/**< Get the AddrSig RawData */
  	EIDMW_APL_API const CByteArray& getRawData_Sod();			/**< Get the Sod RawData */
  	EIDMW_APL_API const CByteArray& getRawData_CardInfo();		/**< Get the Card Info RawData */
  	EIDMW_APL_API const CByteArray& getRawData_TokenInfo();		/**< Get the Token Info RawData */
@@ -153,7 +157,6 @@ public:
 	APL_EidFile_ID *getFileID();					/**< Return a pointer to the file ID (NOT EXPORTED) */
 	APL_EidFile_IDSign *getFileIDSign();			/**< Return a pointer to the file ID signature (NOT EXPORTED) */
 	APL_EidFile_Address *getFileAddress();			/**< Return a pointer to the file Address (NOT EXPORTED) */
-	APL_EidFile_AddressSign *getFileAddressSign();	/**< Return a pointer to the file Address signature (NOT EXPORTED) */
 	APL_EidFile_Sod *getFileSod();				/**< Return a pointer to the file Photo (NOT EXPORTED) */
 	EIDMW_APL_API APL_EidFile_PersoData *getFilePersoData();				/**< Return a pointer to the file PersoData (NOT EXPORTED) */
 	APL_EidFile_TokenInfo *getFileTokenInfo();		/**< Return a pointer to the file Token Info (NOT EXPORTED) */
@@ -176,6 +179,7 @@ protected:
 private:
 	APL_EIDCard(const APL_EIDCard& card);				/**< Copy not allowed - not implemented */
 	APL_EIDCard &operator= (const APL_EIDCard& card);	/**< Copy not allowed - not implemented */
+	void invalidateAddressSOD();
 
 	CByteArray *m_cardinfosign;
 	APL_CardType	m_cardType;
@@ -190,7 +194,6 @@ private:
 	APL_EidFile_ID *m_FileID;							/**< Pointer to the file ID */
 	APL_EidFile_IDSign *m_FileIDSign;					/**< Pointer to the file ID signature */
 	APL_EidFile_Address *m_FileAddress;					/**< Pointer to the file Address */
-	APL_EidFile_AddressSign *m_FileAddressSign;			/**< Pointer to the file Address signature */
 	APL_EidFile_Sod *m_FileSod;							/**< Pointer to the file Sod */
 	APL_EidFile_TokenInfo *m_FileTokenInfo;				/**< Pointer to the file Token Info */
 	APL_EidFile_PersoData *m_FilePersoData;				/**< Pointer to the file Perso Data */

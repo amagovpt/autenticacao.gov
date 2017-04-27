@@ -160,9 +160,6 @@ tCardFileStatus APL_CardFile::LoadData(bool bForceReload)
 {
 	CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instantiation
 
-	std::wstring strPath = utilStringWiden(m_path);
-	const wchar_t *wsPath= strPath.c_str();
-
 	if(m_card!=NULL && (m_status==CARDFILESTATUS_UNREAD || bForceReload))
 	{
 		try
@@ -177,26 +174,26 @@ tCardFileStatus APL_CardFile::LoadData(bool bForceReload)
 			unsigned long err = e.GetError();
 			if (err == EIDMW_ERR_FILE_NOT_FOUND)
 			{
-				MWLOG(LEV_INFO, MOD_APL, L"LoadData: File %ls not found", wsPath);
+				MWLOG(LEV_INFO, MOD_APL, "LoadData: File %s not found", m_path.c_str());
 				m_status=CARDFILESTATUS_ERROR_NOFILE;
 				return m_status;
 			}
 
 			if (err == EIDMW_ERR_CARD_COMM)
 			{
-				MWLOG(LEV_WARN, MOD_APL, L"LoadData: Could not read file : %ls - Error : 0x%x", wsPath,e.GetError());
+				MWLOG(LEV_WARN, MOD_APL, "LoadData: Could not read file : %s - Error : 0x%x", m_path.c_str(),e.GetError());
 				m_status=CARDFILESTATUS_ERROR_NOFILE;
 				return m_status;
 			}
 
 			if (err == EIDMW_ERR_NOT_ACTIVATED)
 			{
-				MWLOG(LEV_WARN, MOD_APL, L"LoadData: Could not read file : %ls - Error : 0x%x", wsPath,e.GetError());
+				MWLOG(LEV_WARN, MOD_APL, "LoadData: Could not read file : %s - Error : 0x%x", m_path.c_str(),e.GetError());
 				m_status=CARDFILESTATUS_ERROR_NOFILE;
 				return m_status;
 			}
 
-			MWLOG(LEV_ERROR, MOD_APL, L"LoadData: Could not read file : %ls - Error : 0x%x", wsPath,e.GetError());
+			MWLOG(LEV_ERROR, MOD_APL, "LoadData: Could not read file : %s - Error : 0x%x", m_path.c_str(),e.GetError());
 			throw e;
 		}
 	}
@@ -216,7 +213,7 @@ tCardFileStatus APL_CardFile::LoadData(bool bForceReload)
 			m_data.ClearContents();
 	}
 
-	//MWLOG(LEV_INFO, MOD_APL, L"LoadData: File : %ls - status : 0x%x", wsPath,m_status);
+	//MWLOG(LEV_INFO, MOD_APL, "LoadData: File : %s - status : 0x%x", m_path.c_str(), m_status);
 
 	return m_status;
 }

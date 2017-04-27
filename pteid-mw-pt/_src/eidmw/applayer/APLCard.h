@@ -60,10 +60,8 @@ enum APL_DocumentType
 enum APL_RawDataType
 {
 	APL_RAWDATA_ID=0,
-	APL_RAWDATA_ID_SIG,
 	APL_RAWDATA_TRACE,
 	APL_RAWDATA_ADDR,
-	APL_RAWDATA_ADDR_SIG,
 	APL_RAWDATA_SOD,
 	APL_RAWDATA_CARD_INFO,
 	APL_RAWDATA_TOKEN_INFO,
@@ -120,10 +118,6 @@ public:
 	EIDMW_APL_API void SignXadesTIndividual(const char**, unsigned int, const char*);
 
 	EIDMW_APL_API void SignXadesAIndividual(const char**, unsigned int, const char*);
-
-	typedef void (* t_callback_addr) (void*, int);
-
-	EIDMW_APL_API void ChangeAddress(char *secret_code, char *process, t_callback_addr, void *);
 
 	EIDMW_APL_API bool ChangeCapPin(const char * new_pin);
 

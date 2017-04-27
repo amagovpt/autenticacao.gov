@@ -706,27 +706,6 @@ void  APL_EidFile_ID::doSODCheck(bool check){
 }
 
 /*****************************************************************************************
----------------------------------------- APL_EidFile_IDSign -----------------------------------------
-*****************************************************************************************/
-APL_EidFile_IDSign::APL_EidFile_IDSign(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_ID_SIGN,NULL)
-{
-}
-
-APL_EidFile_IDSign::~APL_EidFile_IDSign()
-{
-}
-
-/**
-  * No verification here.
-  * This file is needed for other verifications. 
-  * If it is corrupted, these verifications will failed.
-  */
-tCardFileStatus APL_EidFile_IDSign::VerifyFile()
-{
-	return CARDFILESTATUS_OK;
-}
-
-/*****************************************************************************************
 ---------------------------------------- APL_EidFile_Address -----------------------------------------
 *****************************************************************************************/
 const string APL_EidFile_Address::m_NATIONAL = "N";
@@ -1258,27 +1237,6 @@ const char * APL_EidFile_Address::getForeignPostalCode()
 
 void APL_EidFile_Address::doSODCheck(bool check){
 	m_SODCheck = check;
-}
-
-/*****************************************************************************************
----------------------------------------- APL_EidFile_AddressSign -----------------------------------------
-*****************************************************************************************/
-APL_EidFile_AddressSign::APL_EidFile_AddressSign(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_ADDRESS_SIGN,NULL)
-{
-}
-
-APL_EidFile_AddressSign::~APL_EidFile_AddressSign()
-{
-}
-
-/**
-  * No verification here.
-  * This file is needed for other verifications. 
-  * If it is corrupted, these verifications will failed.
-  */
-tCardFileStatus APL_EidFile_AddressSign::VerifyFile()
-{
-	return CARDFILESTATUS_OK;
 }
 
 /*****************************************************************************************

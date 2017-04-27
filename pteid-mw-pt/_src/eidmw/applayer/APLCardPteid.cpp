@@ -25,9 +25,12 @@
 #include "CardPteidDef.h"
 #include "eidErrors.h"
 #include "Util.h"
+#include "Log.h"
 #include "MWException.h"
 #include "CardLayer.h"
 #include "MiscUtil.h"
+#include "SSLConnection.h"
+#include "SAM.h"
 #include "StringOps.h"
 #include "APLConfig.h"
 
@@ -55,7 +58,6 @@ APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType):APL_S
 	m_FileID=NULL;
 	m_FileIDSign=NULL;
 	m_FileAddress=NULL;
-	m_FileAddressSign=NULL;
 	m_FileSod=NULL;
 	m_FilePersoData=NULL;
 	m_FileTokenInfo=NULL;
@@ -129,12 +131,6 @@ APL_EIDCard::~APL_EIDCard()
 	{
 		delete m_FileAddress;
 		m_FileAddress=NULL;
-	}
-
-	if(m_FileAddressSign)
-	{
-		delete m_FileAddressSign;
-		m_FileAddressSign=NULL;
 	}
 
 	if(m_FileSod)
@@ -233,20 +229,6 @@ APL_EidFile_ID *APL_EIDCard::getFileID()
 	return m_FileID;
 }
 
-APL_EidFile_IDSign *APL_EIDCard::getFileIDSign()
-{
-	if(!m_FileIDSign)
-	{
-		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
-		if(!m_FileIDSign)
-		{
-			m_FileIDSign=new APL_EidFile_IDSign(this);
-		}
-	}
-
-	return m_FileIDSign;
-}
-
 APL_EidFile_Address *APL_EIDCard::getFileAddress()
 {
 	if(!m_FileAddress)
@@ -261,18 +243,156 @@ APL_EidFile_Address *APL_EIDCard::getFileAddress()
 	return m_FileAddress;
 }
 
-APL_EidFile_AddressSign *APL_EIDCard::getFileAddressSign()
+
+/*
+	Implements the address change protocol as implemented by the Portuguese State hosted website
+	It conditionally executes some card interactions and sends different parameters to the server
+	depending on the version of the smart card applet, IAS 0.7 or IAS 1.01.
+	Technical specification: the confidential document "Change Address Technical Solution" by Zetes version 5.3
+*/
+void APL_EIDCard::ChangeAddress(char *secret_code, char *process, t_callback_addr callback, void* callback_data)
 {
-	if(!m_FileAddressSign)
+	char * kicc = NULL;
+	SAM sam_helper(this);
+	StartWriteResponse * resp3 = NULL;
+	char *serialNumber = NULL;
+	char *resp_internal_auth = NULL, *resp_mse = NULL;
+
+	DHParams dh_params;
+
+	if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
+		sam_helper.getDHParams(&dh_params, true);
+	else
 	{
-		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
-		if(!m_FileAddressSign)
+	    throw CMWEXCEPTION(EIDMW_SAM_UNSUPPORTED_CARD);
+	}
+
+	SSLConnection conn;
+	conn.InitSAMConnection();
+
+	callback(callback_data, 10);
+
+	DHParamsResponse *p1 = conn.do_SAM_1stpost(&dh_params, secret_code, process, serialNumber);
+
+	callback(callback_data, 25);
+
+	if (p1->cv_ifd_aut == NULL)
+	{
+		delete p1;
+		throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
+	}
+
+	if (p1->kifd != NULL)
+		sam_helper.sendKIFD(p1->kifd);
+
+	kicc = sam_helper.getKICC();
+
+	if ( !sam_helper.verifyCert_CV_IFD(p1->cv_ifd_aut))
+	{
+		delete p1;
+		free(kicc);
+
+		throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
+	}
+
+	char * CHR = sam_helper.getPK_IFD_AUT(p1->cv_ifd_aut);
+
+	char *challenge = sam_helper.generateChallenge(CHR);
+
+	callback(callback_data, 30);
+
+	SignedChallengeResponse * resp_2ndpost = conn.do_SAM_2ndpost(challenge, kicc);
+
+	callback(callback_data, 40);
+
+	if (resp_2ndpost != NULL && resp_2ndpost->signed_challenge != NULL)
+	{
+		bool ret_signed_ch = sam_helper.verifySignedChallenge(resp_2ndpost->signed_challenge);
+
+		if (!ret_signed_ch)
 		{
-			m_FileAddressSign=new APL_EidFile_AddressSign(this);
+            delete resp_2ndpost;
+            free(challenge);
+            free(CHR);
+			MWLOG(LEV_ERROR, MOD_APL, L"EXTERNAL AUTHENTICATE command failed! Aborting Address Change!");
+			throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
+		}
+
+		resp_mse = sam_helper.sendPrebuiltAPDU(resp_2ndpost->set_se_command);
+
+		resp_internal_auth = sam_helper.sendPrebuiltAPDU(resp_2ndpost->internal_auth);
+
+		StartWriteResponse * resp3 = conn.do_SAM_3rdpost(resp_mse, resp_internal_auth);
+
+		callback(callback_data, 60);
+
+		if (resp3 == NULL)
+		{
+			goto err;
+		}
+		else
+		{
+			MWLOG(LEV_DEBUG, MOD_APL, L"ChangeAddress: writing new address...");
+			std::vector<char *> address_response = sam_helper.sendSequenceOfPrebuiltAPDUs(resp3->apdu_write_address);
+
+			MWLOG(LEV_DEBUG, MOD_APL, L"ChangeAddress: writing new SOD...");
+			std::vector<char *> sod_response = sam_helper.sendSequenceOfPrebuiltAPDUs(resp3->apdu_write_sod);
+
+			StartWriteResponse start_write_resp = {address_response, sod_response};
+
+			callback(callback_data, 90);
+
+			// Report the results to the server for verification purposes,
+			// We only consider the Address Change successful if the server returns its "ACK"
+			if (!conn.do_SAM_4thpost(start_write_resp)){
+                delete resp3;
+                free(resp_mse);
+                free(resp_internal_auth);
+				throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
+			}
+
+			callback(callback_data, 100);
+			invalidateAddressSOD();
+
+			delete resp3;
+			delete resp_2ndpost;
+			free(challenge);
+			free(CHR);
+			free(resp_mse);
+			free(resp_internal_auth);
+			return;
 		}
 	}
 
-	return m_FileAddressSign;
+err:
+	delete resp3;
+	delete resp_2ndpost;
+    delete p1;
+    free(kicc);
+	free(challenge);
+	free(CHR);
+	free(resp_mse);
+	free(resp_internal_auth);
+
+	throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
+}
+
+
+/* Discard the current address and SOD file objects after a successful
+   Address Change process
+*/
+void APL_EIDCard::invalidateAddressSOD()
+{
+	if(m_FileSod)
+	{
+		delete m_FileSod;
+		m_FileSod = NULL;
+	}
+	if (m_FileAddress)
+	{
+		delete m_FileAddress;
+		m_FileAddress = NULL;
+	}
 }
 
 APL_EidFile_Sod *APL_EIDCard::getFileSod()
@@ -507,14 +627,10 @@ const CByteArray& APL_EIDCard::getRawData(APL_RawDataType type)
 	{
 	case APL_RAWDATA_ID:
 		return getRawData_Id();
-	case APL_RAWDATA_ID_SIG:
-		return getRawData_IdSig();
 	case APL_RAWDATA_TRACE:
 		return getRawData_Trace();
 	case APL_RAWDATA_ADDR:
 		return getRawData_Addr();
-	case APL_RAWDATA_ADDR_SIG:
-		return getRawData_AddrSig();
 	case APL_RAWDATA_SOD:
 		return getRawData_Sod();
 	case APL_RAWDATA_CARD_INFO:
@@ -538,19 +654,9 @@ const CByteArray& APL_EIDCard::getRawData_Id()
 	return getFileID()->getData();
 }
 
-const CByteArray& APL_EIDCard::getRawData_IdSig()
-{
-	return getFileIDSign()->getData();
-}
-
 const CByteArray& APL_EIDCard::getRawData_Addr()
 {
 	return getFileAddress()->getData();
-}
-
-const CByteArray& APL_EIDCard::getRawData_AddrSig()
-{
-	return getFileAddressSign()->getData();
 }
 
 const CByteArray& APL_EIDCard::getRawData_Sod()
@@ -1030,7 +1136,7 @@ CByteArray APL_DocEId::getCSV()
 version;type;name;surname;gender;date_of_birth;location_of_birth;nobility;nationality;
 	national_nr;special_organization;member_of_family;special_status;logical_nr;chip_nr;
 	date_begin;date_end;issuing_municipality;version;street;zip;municipality;country;
-	file_id;file_id_sign;file_address;file_address_sign;
+	file_id;file_address;
 */
 
 	CByteArray csv;
@@ -1072,9 +1178,6 @@ version;type;name;surname;gender;date_of_birth;location_of_birth;nobility;nation
 	if(m_cryptoFwk->b64Encode(m_card->getFileID()->getData(),baFileB64,false))
 		csv+=baFileB64;
 	csv+=CSV_SEPARATOR;
-	if(m_cryptoFwk->b64Encode(m_card->getFileIDSign()->getData(),baFileB64,false))
-		csv+=baFileB64;
-	csv+=CSV_SEPARATOR;
 
 	return csv;
 }
@@ -1084,7 +1187,6 @@ CByteArray APL_DocEId::getTLV()
 	CTLVBuffer tlv;
 
 	tlv.SetTagData(PTEID_TLV_TAG_FILE_ID,m_card->getFileID()->getData().GetBytes(),m_card->getFileID()->getData().Size());
-	tlv.SetTagData(PTEID_TLV_TAG_FILE_IDSIGN,m_card->getFileIDSign()->getData().GetBytes(),m_card->getFileIDSign()->getData().Size());
 
 	unsigned long ulLen=tlv.GetLengthNeeded();
 	unsigned char *pucData= new unsigned char[ulLen];
@@ -1452,7 +1554,6 @@ CByteArray APL_AddrEId::getTLV()
 	CTLVBuffer tlv;
 
 	tlv.SetTagData(PTEID_TLV_TAG_FILE_ADDR,m_card->getFileAddress()->getData().GetBytes(),m_card->getFileAddress()->getData().Size());
-	tlv.SetTagData(PTEID_TLV_TAG_FILE_ADDRSIGN,m_card->getFileAddressSign()->getData().GetBytes(),m_card->getFileAddressSign()->getData().Size());
 
 	unsigned long ulLen=tlv.GetLengthNeeded();
 	unsigned char *pucData= new unsigned char[ulLen];
