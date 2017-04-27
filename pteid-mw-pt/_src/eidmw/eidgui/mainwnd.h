@@ -424,10 +424,12 @@ private:
 	void Show_Address_Card(PTEID_EIDCard& Card);
 	void Show_PersoData_Card(PTEID_EIDCard& Card);
 	void Show_Certificates_Card(PTEID_EIDCard& Card);
+	void Show_Memory_Card(PTEID_MemoryCard& Card);
 	void LoadDataID(PTEID_EIDCard& Card);
 	void LoadDataAddress(PTEID_EIDCard& Card);
 	void LoadDataPersoData(PTEID_EIDCard& Card);
 	void LoadDataCertificates(PTEID_EIDCard& Card);
+	void LoadDataMC(PTEID_MemoryCard& Card);
 	void on_actionUpdates_triggered( void );
 
 	void ProgressExec();
