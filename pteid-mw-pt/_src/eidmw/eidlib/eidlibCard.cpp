@@ -856,7 +856,6 @@ PTEID_ReaderContext* readerContext = NULL;
 //It will hold all the keys and other values necessary for Secure Messaging operations
 SecurityContext *securityContext = NULL;
 
-// MARTINHO OK
 PTEIDSDK_API long PTEID_Init(char *ReaderName){
 
 	try {
@@ -871,21 +870,21 @@ PTEIDSDK_API long PTEID_Init(char *ReaderName){
 		PTEID_Config config(PTEID_PARAM_GENERAL_LANGUAGE);
 		config.setString("nl");
 	}
-	catch(PTEID_ExCardBadType &ex)
+	catch(PTEID_ExCardBadType &)
 	{
-		std::cout << "This is not an eid card" << std::endl;
+		std::cerr << "No Pteid Card detected!" << std::endl;
 	}
-	catch(PTEID_ExNoCardPresent &ex)
+	catch(PTEID_ExNoCardPresent &)
 	{
 		return -1104;
 	}
-	catch(PTEID_ExNoReader &ex)
+	catch(PTEID_ExNoReader &)
 	{
 		return -1101;
 	}
 	catch(PTEID_Exception &ex)
 	{
-		std::cout << "PTEID_Exception exception " << ex.GetError()<< std::endl;
+		std::cerr << "PTEID_Exception exception " << ex.GetError()<< std::endl;
 	}
 	catch(...)
 	{
@@ -901,7 +900,6 @@ PTEIDSDK_API void setCompatReaderContext(PTEID_ReaderContext *ctx)
 	readerContext = ctx;
 }
 
-// MARTINHO - ver segfault
 PTEIDSDK_API long PTEID_Exit(unsigned long ulMode){
 	readerContext->Release();
 	PTEID_ReleaseSDK();
@@ -910,7 +908,6 @@ PTEIDSDK_API long PTEID_Exit(unsigned long ulMode){
 	return 0;
 }
 
-// MARTINHO OK
 PTEIDSDK_API tCompCardType PTEID_GetCardType(){
 
 	if (readerContext!=NULL){
@@ -995,8 +992,7 @@ PTEIDSDK_API long PTEID_GetID(PTEID_ID *IDData){
 	return 0;
 }
 
-PTEIDSDK_API long PTEID_GetAddr(PTEID_ADDR *AddrData){
-	int pin_id;
+PTEIDSDK_API long PTEID_GetAddr(PTEID_ADDR *AddrData) {
 	unsigned long remaining_tries;
 
 	if (readerContext!=NULL)
@@ -1107,10 +1103,10 @@ PTEIDSDK_API long PTEID_GetCertificates(PTEID_Certifs *Certifs){
 	if (readerContext!=NULL) {
 		PTEID_Certificates &certificates = readerContext->getEIDCard().getCertificates();
 		PTEID_ByteArray ba;
-		int i = 0;
+		unsigned long i = 0;
 		memset(Certifs, 0, sizeof(PTEID_Certifs));
 
-		for ( ; i< certificates.countAll(); i++) {
+		for (; i < certificates.countAll(); i++) {
 			if (i == PTEID_MAX_CERT_NUMBER)
 				break;
 			PTEID_Certificate &cert = certificates.getCert(i);
@@ -1126,8 +1122,7 @@ PTEIDSDK_API long PTEID_GetCertificates(PTEID_Certifs *Certifs){
 }
 
 
-PTEIDSDK_API long PTEID_VerifyPIN(unsigned char PinId,	char *Pin, long *triesLeft){
-	unsigned long id;
+PTEIDSDK_API long PTEID_VerifyPIN(unsigned char PinId,	char *Pin, long *triesLeft) {
 	unsigned long tleft=-1;
 	bool ret;
 
@@ -1158,7 +1153,7 @@ PTEIDSDK_API long PTEID_VerifyPIN(unsigned char PinId,	char *Pin, long *triesLef
                 }
             }
 		}
-		catch(PTEID_Exception &ex)
+		catch(PTEID_Exception &)
 		{
 			return SC_ERROR_AUTH_METHOD_BLOCKED;
 		}
@@ -1265,8 +1260,7 @@ PTEIDSDK_API long PTEID_UnblockPIN(unsigned char PinId,	char *pszPuk, char *pszN
 	return PTEID_UnblockPIN_Ext(PinId, pszPuk, pszNewPin, triesLeft, UNBLOCK_FLAG_NEW_PIN);
 }
 
-PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft, unsigned long ulFlags){
-	unsigned long id;
+PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *pszNewPin, long *triesLeft, unsigned long ulFlags) {
 	unsigned long tleft;
 
 	if (readerContext!=NULL) {
@@ -1285,7 +1279,7 @@ PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *
 				}
 			}
 		}
-		catch(PTEID_Exception &ex)
+		catch(PTEID_Exception &)
 		{
 			return PTEID_E_NOT_INITIALIZED;
 		}
@@ -1308,7 +1302,7 @@ PTEIDSDK_API long PTEID_SelectADF(unsigned char *adf, long adflen){
 			apdu.Append(adf,(unsigned long) adflen);
 			card.sendAPDU(apdu);
 			}
-		catch(PTEID_Exception &ex)
+		catch(PTEID_Exception &)
 		{
 			return PTEID_E_NOT_INITIALIZED;
 		}
@@ -1398,7 +1392,7 @@ PTEIDSDK_API long PTEID_Activate(char *pszPin, unsigned char *pucDate, unsigned 
 				return 0;
 			return -1;
 		}
-		catch(PTEID_Exception &ex)
+		catch(PTEID_Exception &)
 		{
 			return PTEID_E_INTERNAL;
 		}
@@ -1446,7 +1440,6 @@ PTEIDSDK_API long PTEID_GetCardAuthenticationKey(PTEID_RSAPublicKey *pCardAuthPu
 		pCardAuthPubKey->modulusLength = cardKey.getCardAuthKeyModulus().Size();
 		memcpy(pCardAuthPubKey->exponent, cardKey.getCardAuthKeyExponent().GetBytes(), cardKey.getCardAuthKeyExponent().Size());
 		pCardAuthPubKey->exponentLength = cardKey.getCardAuthKeyExponent().Size();
-		//LL delete (&cardKey);
 	}
 
 	return 0;
@@ -1460,7 +1453,6 @@ PTEIDSDK_API long PTEID_GetCVCRoot(PTEID_RSAPublicKey *pCVCRootKey){
 		pCVCRootKey->modulusLength = rootCAKey.getCardAuthKeyModulus().Size();
 		memcpy(pCVCRootKey->exponent, rootCAKey.getCardAuthKeyExponent().GetBytes(), rootCAKey.getCardAuthKeyExponent().Size());
 		pCVCRootKey->exponentLength = rootCAKey.getCardAuthKeyExponent().Size();
-		//LL delete (&rootCAKey);
 	}
 
 	return 0;
@@ -1488,7 +1480,7 @@ PTEIDSDK_API int PTEID_IsPinpad() {
 		{
 			return readerContext->isPinpad() ? 1 : 0;
 		}
-		catch (PTEID_Exception &e)
+		catch (PTEID_Exception &)
 		{
 			return 0;
 		}
@@ -1509,6 +1501,7 @@ PTEIDSDK_API int PTEID_IsEMVCAP() {
 PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,
     unsigned char *pucChallenge, int iChallengeLen)
 {
+	unsigned long buffer_len = iChallengeLen;
 
 	if (readerContext != NULL) {
 		try {
@@ -1524,7 +1517,7 @@ PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,
 
 			CByteArray signature_input = securityContext->getExternalAuthenticateChallenge();
 
-			if (iChallengeLen < signature_input.Size())
+			if (buffer_len < signature_input.Size())
 			{
 				//No space in supplied buffer: return error
 				return PTEID_E_BAD_PARAM;
@@ -1532,7 +1525,7 @@ PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,
 			memcpy(pucChallenge, signature_input.GetBytes(), signature_input.Size());
 			return PTEID_OK;
 		}
-		catch (CMWException &e)
+		catch (CMWException &)
 		{
 			return PTEID_E_INTERNAL;
 		}
@@ -1592,7 +1585,7 @@ PTEIDSDK_API long PTEID_CVC_Authenticate(unsigned char *pucSignedChallenge, int 
 			else
 				return PTEID_E_INTERNAL;
 		}
-		catch (CMWException &e)
+		catch (CMWException &)
 		{
 			return PTEID_E_INTERNAL;
 		}
@@ -1655,7 +1648,7 @@ PTEIDSDK_API long PTEID_CVC_ReadFile(const unsigned char *file, int filelen, uns
 		{
 			file_contents = securityContext->readFile((unsigned char *)file, filelen, *outlen);
 		}
-		catch (CMWException &e)
+		catch (CMWException &)
 		{
 			return PTEID_E_INTERNAL;
 		}
