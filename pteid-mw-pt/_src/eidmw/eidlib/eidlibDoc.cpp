@@ -417,116 +417,9 @@ PTEID_ByteArray& PTEID_PublicKey::getCardAuthKeyExponent() {
 }
 
 /*****************************************************************************************
----------------------------------------- PTEID_XMLDoc -------------------------------------------
-*****************************************************************************************/
-PTEID_XMLDoc::PTEID_XMLDoc(const SDK_Context *context,APL_XMLDoc *impl):PTEID_Object(context,impl)
-{
-}
-
-PTEID_XMLDoc::~PTEID_XMLDoc()
-{
-	if(m_delimpl && m_impl)
-	{
-		APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-		delete pimpl;
-		m_impl=NULL;
-	}
-}
-
-PTEID_ByteArray PTEID_XMLDoc::getXML()
-{
-	PTEID_ByteArray out;
-
-	BEGIN_TRY_CATCH
-
-	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-
-	CByteArray result=pimpl->getXML();
-	out.Append(result.GetBytes(),result.Size());
-
-	END_TRY_CATCH
-
-	return out;
-}
-
-PTEID_ByteArray PTEID_XMLDoc::getCSV()
-{
-	PTEID_ByteArray out;
-
-	BEGIN_TRY_CATCH
-
-	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-
-	CByteArray result=pimpl->getCSV();
-	out.Append(result.GetBytes(),result.Size());
-
-	END_TRY_CATCH
-
-	return out;
-}
-
-PTEID_ByteArray PTEID_XMLDoc::getTLV()
-{
-	PTEID_ByteArray out;
-
-	BEGIN_TRY_CATCH
-
-	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-
-	CByteArray result=pimpl->getTLV();
-	out.Append(result.GetBytes(),result.Size());
-
-	END_TRY_CATCH
-
-	return out;
-}
-
-bool PTEID_XMLDoc::writeXmlToFile(const char * csFilePath)
-{
-	bool out = false;
-
-	BEGIN_TRY_CATCH
-
-	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-	out = pimpl->writeXmlToFile(csFilePath);
-
-	END_TRY_CATCH
-
-	return out;
-}
-
-bool PTEID_XMLDoc::writeCsvToFile(const char * csFilePath)
-{
-	bool out = false;
-
-	BEGIN_TRY_CATCH
-
-	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-	out = pimpl->writeCsvToFile(csFilePath);
-
-	END_TRY_CATCH
-
-	return out;
-}
-
-bool PTEID_XMLDoc::writeTlvToFile(const char * csFilePath)
-{
-	bool out = false;
-
-	BEGIN_TRY_CATCH
-
-	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-	out = pimpl->writeTlvToFile(csFilePath);
-
-	END_TRY_CATCH
-
-	return out;
-}
-
-/*****************************************************************************************
 ---------------------------------------- PTEID_Biometric -------------------------------------------
 *****************************************************************************************/
-PTEID_Biometric::PTEID_Biometric(const SDK_Context *context,APL_Biometric *impl):PTEID_XMLDoc(context,impl)
+PTEID_Biometric::PTEID_Biometric(const SDK_Context *context,APL_Biometric *impl):PTEID_Object(context,impl)
 {
 }
 
@@ -537,7 +430,7 @@ PTEID_Biometric::~PTEID_Biometric()
 /*****************************************************************************************
 ---------------------------------------- PTEID_Crypto -------------------------------------------
 *****************************************************************************************/
-PTEID_Crypto::PTEID_Crypto(const SDK_Context *context,APL_Crypto *impl):PTEID_XMLDoc(context,impl)
+PTEID_Crypto::PTEID_Crypto(const SDK_Context *context,APL_Crypto *impl):PTEID_Object(context,impl)
 {
 }
 
@@ -549,7 +442,7 @@ PTEID_Crypto::~PTEID_Crypto()
 /*****************************************************************************************
 ---------------------------------------- PTEID_CCXML_Doc -------------------------------------------
 *****************************************************************************************/
-PTEID_CCXML_Doc::PTEID_CCXML_Doc(const SDK_Context *context,APL_CCXML_Doc *impl):PTEID_XMLDoc(context,impl)
+PTEID_CCXML_Doc::PTEID_CCXML_Doc(const SDK_Context *context,APL_CCXML_Doc *impl):PTEID_Object(context,impl)
 {
 	xmltemp = NULL;
 }
@@ -580,7 +473,7 @@ const char *PTEID_CCXML_Doc::getCCXML(){
 /*****************************************************************************************
 ---------------------------------------- PTEID_CardVersionInfo --------------------------------------
 *****************************************************************************************/
-PTEID_CardVersionInfo::PTEID_CardVersionInfo(const SDK_Context *context,APL_DocVersionInfo *impl):PTEID_XMLDoc(context,impl)
+PTEID_CardVersionInfo::PTEID_CardVersionInfo(const SDK_Context *context,APL_DocVersionInfo *impl):PTEID_Object(context,impl)
 {
 }
 
@@ -815,7 +708,7 @@ const char *PTEID_CardVersionInfo::getElectricalPersonalisationInterface()
 /*****************************************************************************************
 ---------------------------------------- PTEID_EId ---------------------------------------------
 *****************************************************************************************/
-PTEID_EId::PTEID_EId(const SDK_Context *context,APL_DocEId *impl):PTEID_XMLDoc(context,impl)
+PTEID_EId::PTEID_EId(const SDK_Context *context,APL_DocEId *impl):PTEID_Object(context,impl)
 {
 }
 
@@ -1280,7 +1173,7 @@ const char *PTEID_EId::getValidation()
 /*****************************************************************************************
 ---------------------------------------- PTEID_EIdAdress ---------------------------------------------
 *****************************************************************************************/
-PTEID_Address::PTEID_Address(const SDK_Context *context,APL_AddrEId *impl):PTEID_XMLDoc(context,impl)
+PTEID_Address::PTEID_Address(const SDK_Context *context,APL_AddrEId *impl):PTEID_Object(context,impl)
 {
 }
 

@@ -641,11 +641,6 @@ public:
 	bool LoadDataPersoData    (PTEID_EIDCard& Card, QString const& cardReader );
 	bool LoadDataCertificates (PTEID_EIDCard& Card, QString const& cardReader );
 
-	//----------------------------------------------
-	// Load the data from a memory card
-	//----------------------------------------------
-	bool LoadData(PTEID_MemoryCard& Card, QString const& cardReader);
-
 	bool isDataLoaded() {return (m_pCard!=NULL);} //return m_bDataLoaded;}
 
 private:

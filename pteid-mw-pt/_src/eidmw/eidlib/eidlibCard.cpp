@@ -177,17 +177,6 @@ bool PTEID_Card::writeFile(const char *fileID,const PTEID_ByteArray& oData,unsig
 }
 
 /*****************************************************************************************
----------------------------------------- PTEID_MemoryCard --------------------------------------
-*****************************************************************************************/
-PTEID_MemoryCard::PTEID_MemoryCard(const SDK_Context *context,APL_Card *impl):PTEID_Card(context,impl)
-{
-}
-
-PTEID_MemoryCard::~PTEID_MemoryCard()
-{
-}
-
-/*****************************************************************************************
 ---------------------------------------- PTEID_SmartCard --------------------------------------
 *****************************************************************************************/
 PTEID_SmartCard::PTEID_SmartCard(const SDK_Context *context,APL_Card *impl):PTEID_Card(context,impl)
