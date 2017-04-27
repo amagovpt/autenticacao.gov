@@ -34,9 +34,6 @@
 
 //UNIQUE INDEX FOR RETRIEVING OBJECT
 
-//INCLUDE IN ReaderSet
-//#define	INCLUDE_OBJECT_FIRSTREADER			1
-
 //INCLUDE IN ReaderContext
 #define INCLUDE_OBJECT_CARD					1
 
@@ -927,13 +924,6 @@ void PTEID_Config::setLong(long lValue)
 	}
 }
 
-/******************************************************************************//**
-  * Function for Logging
-  *********************************************************************************/
-#ifdef WIN32
-#pragma managed(push, off) //To avoid warning C4793
-#endif
-
 void PTEID_GetProxyFromPac(const char *pacFile, const char *url, std::string *proxy_host, std::string *proxy_port)
 {
 #ifdef WIN32
@@ -942,6 +932,7 @@ void PTEID_GetProxyFromPac(const char *pacFile, const char *url, std::string *pr
 	//This method is only implemented for Windows, no pacfile support on Linux and Mac
 #endif
 }
+
 
 void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const char *format, ...)
 {
@@ -962,7 +953,4 @@ void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const char *format
 	}
 
 }
-#ifdef WIN32
-#pragma managed(pop)
-#endif
 }
