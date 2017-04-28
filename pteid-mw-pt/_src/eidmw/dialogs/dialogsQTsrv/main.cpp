@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
 
 			SharedMem oShMemory;
 			oShMemory.Attach( sizeof(DlgAskPINArguments), readableFilePath.c_str(),(void **) &oData);
-			MWLOG(LEV_ERROR, MOD_DLG, L"Running DLG_ASK_PIN with args: operation=> %d usage=> %d\n", oData->operation, oData->usage);
+			MWLOG(LEV_DEBUG, MOD_DLG, L"Running DLG_ASK_PIN with args: operation=> %d usage=> %d\n", oData->operation, oData->usage);
 
 			// do something
 			dlgWndAskPIN *dlg = NULL;
