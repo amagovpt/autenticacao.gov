@@ -873,9 +873,11 @@ void SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
     SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
 
     //This needs OpenSSL 1.0.2
-    X509_VERIFY_PARAM *vpm = SSL_CTX_get0_param(ctx);
-    //Verify hostname in the server-provided certificate
-    X509_VERIFY_PARAM_set1_host(vpm, m_host, 0);
+#if (OPENSSL_VERSION_NUMBER >= 0x10002000L)
+	X509_VERIFY_PARAM *vpm = SSL_CTX_get0_param(ctx);
+	//Verify hostname in the server-provided certificate
+	X509_VERIFY_PARAM_set1_host(vpm, m_host, 0);
+#endif
 
     //Get Proxy configuration
 	APL_Config config_proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
