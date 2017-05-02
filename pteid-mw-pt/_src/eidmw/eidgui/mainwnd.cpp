@@ -557,6 +557,19 @@ void MainWnd::showChangeAddressDialog(long code)
 	QMessageBox msgBoxp(icon, caption, error_msg, 0, this);
   	msgBoxp.exec();
 
+	//Reload card information in case of successful address change
+	if (code == 0)
+	{
+
+		pinactivate = 1;
+		pinNotes = 1;
+		addressdatastatus = 1;
+		certdatastatus = 1;
+		persodatastatus = 1;
+
+		loadCardData();
+	}
+
 }
 
 void MainWnd::doChangeAddress(const char *process, const char *secret_code)
