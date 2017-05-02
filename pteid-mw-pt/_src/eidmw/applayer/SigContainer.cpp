@@ -103,7 +103,7 @@ static const char *SIGCONTAINER_README=
 		}
 
 		ba->Append ((const unsigned char *)p, uncompressed_size);
-		zip_archive.m_pFree(zip_archive.m_pAlloc_opaque, p);//LL
+		zip_archive.m_pFree(zip_archive.m_pAlloc_opaque, p);
 
 		return *ba;
 	}
@@ -272,7 +272,7 @@ static const char *SIGCONTAINER_README=
 			status = mz_zip_add_mem_to_archive_file_in_place(output_file, zip_entry_name, ptr_content,
 					file_size, "", (unsigned short)0, MZ_BEST_COMPRESSION);
 
-			free(ptr_content);//LL
+			free(ptr_content);
 			if (!status)
 			{
 				MWLOG (LEV_ERROR, MOD_APL, "mz_zip_add_mem_to_archive_file_in_place failed with argument %s",

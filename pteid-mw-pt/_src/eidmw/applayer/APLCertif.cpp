@@ -850,15 +850,15 @@ void APL_Certifs::foundCertificate(const char *SubDir, const char *File, void *p
 	}
 
 	if (fread(buf, sizeof( unsigned char ), bufsize, m_stream) != bufsize){
-        free(buf); //LL
+        free(buf);
 		goto err;
 	}
 
 	cert = new CByteArray(buf,bufsize);
 	certifs->addCert(*cert, APL_CERTIF_TYPE_UNKNOWN, false);
-	delete cert; //LL
+	delete cert;
 
-    free(buf);//LL
+    free(buf);
 	fclose(m_stream);
 	return;
 

@@ -712,7 +712,7 @@ namespace eIDMW
 		m_kicc = CByteArray(kicc_str, true);
 		//int BN_hex2bn(BIGNUM **a, const char *str);
 		int rc = BN_hex2bn(&kicc, kicc_str);
-		free(kicc_str);//LL
+		free(kicc_str);
 
 		MWLOG(LEV_DEBUG, MOD_APL, L"[initMuthualAuthProcess] BN_hex2bn(kicc) returned: %d", rc);
 		

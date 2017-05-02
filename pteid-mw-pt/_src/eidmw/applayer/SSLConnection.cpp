@@ -1021,7 +1021,7 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     		if (memcmp(buffer+bytes_read, "\x30\x0d\x0a\x0d\x0a", 5) == 0)
     		{
     			final_chunk_read = true;
-    			fprintf(stderr, "DEBUG: Final chunk read. Ending read_chunked_reply() loop!\n");
+    			//fprintf(stderr, "DEBUG: Final chunk read. Ending read_chunked_reply() loop!\n");
     			//Discard the final chunk
     			*(buffer+bytes_read) = 0;
     		}
@@ -1038,13 +1038,13 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     			long val = parseLong(buffer_tmp);
     			if (val != -1 && chunk_bytesToRead == 0)
     			{
-    				fprintf(stderr, "DEBUG: Parsed chunk length= %ld\n", val);
+    				//fprintf(stderr, "DEBUG: Parsed chunk length= %ld\n", val);
     				*(buffer+bytes_read) = 0;
     				chunk_bytesToRead = val;
     				is_chunk_length = true;
     			}
 
-				free(buffer_tmp);//LL
+				free(buffer_tmp);
 
     		}
     	}
@@ -1055,7 +1055,7 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     		if (!strstr(buffer, "Transfer-Encoding: chunked"))
     			fprintf(stderr, "DEBUG: Unexpected server reply: HTTP response is not chunked!\n");
 
-			free(buffer_tmp);//LL
+			free(buffer_tmp);
     	}
     	if (r == -1)
     	{
@@ -1111,7 +1111,7 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned in
 		    char * buffer_tmp = (char*)calloc(strlen(buffer)+1, 1);
 		    strcpy(buffer_tmp, buffer);
 		    content_length = parseContentLength(buffer_tmp);
-			free(buffer_tmp);//LL
+			free(buffer_tmp);
 	    }
 		if (r == -1)
 		{
@@ -1167,7 +1167,7 @@ unsigned int SSLConnection::write_to_stream(SSL* ssl, char* request_string) {
 }
 
 /**
- * Main SSL demonstration code entry point
+ * Perform TLS handshake to the SAM server: it may throw CMWException on connection error
  */
 bool SSLConnection::InitSAMConnection() {
 
