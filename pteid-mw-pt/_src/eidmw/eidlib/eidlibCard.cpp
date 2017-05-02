@@ -1092,8 +1092,6 @@ PTEIDSDK_API long PTEID_GetPic(PTEID_PIC *PicData){
 		memcpy(PicData->facialinfo, scratch.GetBytes(), (PTEID_MAX_FACINFO_LEN >= scratch.Size()) ? scratch.Size(): PTEID_MAX_FACINFO_LEN);
 		scratch = photoOjb.getphotoImageinfo();
 		memcpy(PicData->imageinfo, scratch.GetBytes(), (PTEID_MAX_IMAGEINFO_LEN>= scratch.Size()) ? scratch.Size(): PTEID_MAX_IMAGEINFO_LEN);
-		//LL delete (&scratch);
-		//LL delete (&photoOjb);
 	}
 
 	return 0;
