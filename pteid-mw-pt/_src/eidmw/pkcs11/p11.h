@@ -48,13 +48,6 @@ extern "C" {
 //max digest size, we don't check the max size among available mechanisms in token, so digest can be done token unrelated.
 #define MAX_DIGEST_SIZE       64
 
-#define CARD_TYPE_PTEID				1
-#define CARD_TYPE_TELESEC			2
-#define CARD_TYPE_TELESEC_30	   3
-#define CARD_TYPE_GEMPLUS			100
-
-#define CARD_TYPE_NOTSUPPORTED		   -100
-
 #define CARD_FUNCTION_NOT_IMPLEMENTED  -101
 #define CARD_FUNCTION_NOT_SUPPORTED		-102
 
@@ -83,27 +76,6 @@ extern "C" {
 #define P11_EVENT_NONE              0
 #define P11_EVENT_INSERT            1
 #define P11_EVENT_REMOVE           -1
-
-typedef struct CARD_TYPE
-	{
-	char* atr;
-	char* label;
-	int   type;
-	} CARD_TYPE;
-
-//extern CARD_TYPE g_CardTypeTable[];
-
-#define CARD_TYPE_TABLE { \
-	{ "3B9813400AA503010101AD1311",						"BE eid",						CARD_TYPE_PTEID },		      \
-	{ "3B9894400AA503010101AD1310",						"BE eid",						CARD_TYPE_PTEID },		      \
-	{ "3B989440FFA503010101AD1310",						"BE eid",						CARD_TYPE_PTEID },		      \
-	{ "3BBA96008131865D0064057B0203318090007D",		"Telesec",				   	CARD_TYPE_TELESEC},	      \
-	{ "3BBA96008131865D0064056002033180900066",		"Telesec",				   	CARD_TYPE_TELESEC },       \
-	{ "3BA70040148065A214010137",						   "?Gemplus GPK4000",        CARD_TYPE_GEMPLUS },       \
-	{ "3B7D94000080318065B08301029083009000",			"?Gemplus XPresso 32K",    CARD_TYPE_NOTSUPPORTED },  \
-	{ "3BBF96008131FE5D00640411030131C073F701D00090007D", "Telesec TCOS 3.0",  CARD_TYPE_TELESEC_30 },    \
-	NULL \
-}
 
 #if 0
 typedef struct P11_TOKEN

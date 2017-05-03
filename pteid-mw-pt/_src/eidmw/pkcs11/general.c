@@ -17,7 +17,6 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
-//--module C:\develop\proj\eidmw\eidmw\_Binaries\Debug\pteidpkcs11.dll -t -l
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -33,7 +32,7 @@
 extern CK_FUNCTION_LIST pkcs11_function_list;
 //extern void *logmutex;
 
-static int g_final = 0; /* Belpic */
+static int g_final = 0; 
 static int g_init  = 0;
 
 #ifndef WIN32
@@ -153,7 +152,7 @@ if (pReserved != NULL)
    goto cleanup;
    }
 
-g_final = 0; /* Belpic */
+g_final = 0; 
 
 ret = cal_close();
 

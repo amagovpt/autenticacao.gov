@@ -34,8 +34,6 @@
 extern "C" {
 #endif
 
-//CARD_TYPE g_CardTypeTable[] = CARD_TYPE_TABLE;
-
 //SCARDCONTEXT   hSC;
 
 //DWORD        cchReaders = SCARD_AUTOALLOCATE;
