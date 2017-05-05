@@ -147,10 +147,6 @@ extern DWORD   PteidAuthenticateExternal
 				  DWORD			PinId
   
                );
-extern DWORD   PteidDeAuthenticate
-               (
-                  PCARD_DATA     pCardData
-               ); 
 
 extern DWORD   PteidMSE
 				(
@@ -193,6 +189,11 @@ extern DWORD createVerifyCommand
 extern DWORD createVerifyCommandGemPC
 				(
 					PPIN_VERIFY_STRUCTURE pVerifyCommand,
+					unsigned int pin_ref
+				);
+extern DWORD createVerifyCommandACR83
+				(
+					PPIN_VERIFY_STRUCTURE pVerifyCommand, 
 					unsigned int pin_ref
 				);
 #endif

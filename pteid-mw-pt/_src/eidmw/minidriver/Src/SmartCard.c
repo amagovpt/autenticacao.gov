@@ -30,7 +30,7 @@
 #include "winerror.h"
 /****************************************************************************************************/
 
-#define CHALLENGE_DATA_SIZE         16
+//#define CHALLENGE_DATA_SIZE         16
 
 #define PTEID_MIN_USER_PIN_LEN     4
 #define PTEID_MAX_USER_PIN_LEN     8
@@ -109,7 +109,6 @@ DWORD PteidAuthenticate(PCARD_DATA  pCardData,
    DWORD             dwReturn  = 0;
 
    SCARD_IO_REQUEST  ioSendPci = *g_pioSendPci;
-   //SCARD_IO_REQUEST  ioRecvPci = {0, sizeof(SCARD_IO_REQUEST)};
 
    unsigned char     Cmd[128];
    unsigned int      uiCmdLg   = 0;
@@ -145,7 +144,7 @@ DWORD PteidAuthenticate(PCARD_DATA  pCardData,
    }
 
    PteidSelectApplet(pCardData);
-  //00 20 00 81 08 32 31 34 38 FF FF FF FF
+
    /**********/
    /* Log On */
    /**********/
@@ -207,7 +206,7 @@ DWORD PteidAuthenticate(PCARD_DATA  pCardData,
       else if ( (SW1 == 0x69) && (SW2 == 0x83) )
       {
          dwReturn = SCARD_W_CHV_BLOCKED;
-		 LogTrace(LOGTYPE_ERROR, WHERE, "Card Blocked, watch out!!");
+		 LogTrace(LOGTYPE_ERROR, WHERE, "PIN with ID %d is blocked, watch out!!", (int)pin_id);
       }
    }
    else
@@ -472,69 +471,6 @@ cleanup:
 }
 #undef WHERE
 
-/****************************************************************************************************/
-
-#define WHERE "PteidDeAuthenticate"
-DWORD PteidDeAuthenticate(PCARD_DATA    pCardData) 
-{
-   DWORD             dwReturn  = 0;
-
-   SCARD_IO_REQUEST  ioSendPci = *g_pioSendPci;
-
-   unsigned char     Cmd[128];
-   unsigned int      uiCmdLg   = 0;
-   unsigned char     recvbuf[256];
-   unsigned long     recvlen   = sizeof(recvbuf);
-   BYTE              SW1, SW2;
-   int               i         = 0;
-
-   LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
-
-   /********************/
-   /* Check Parameters */
-   /********************/
-   if ( pCardData == NULL )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
-      CLEANUP(SCARD_E_INVALID_PARAMETER);
-   }
-
-   /***********/
-   /* Log Off */
-   /***********/
-   Cmd [0] = 0x80;
-   Cmd [1] = 0xE6; /* LOG OFF */
-   Cmd [2] = 0x00;
-   Cmd [3] = 0x00;
-   uiCmdLg = 4;
-   recvlen = sizeof(recvbuf);
-
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-   SW1 = recvbuf[recvlen-2];
-   SW2 = recvbuf[recvlen-1];
-   PteidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit errorcode: [0x%02X]", dwReturn);
-      CLEANUP(dwReturn);
-   }
-   if ( (SW1 != 0x90) || (SW2 != 0x00) )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit status bytes: [0x%02X][0x%02X]", SW1, SW2);
-      CLEANUP(SCARD_E_UNEXPECTED);
-   }
-
-cleanup:
-   LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-   return(dwReturn);
-}
-#undef WHERE
 
 /****************************************************************************************************/
 
@@ -799,6 +735,24 @@ cleanup:
    return(dwReturn);
 }
 #undef WHERE
+
+
+BOOL checkStatusCode(const char * context, DWORD dwReturn, BYTE SW1, BYTE SW2)
+{
+
+	if (dwReturn != SCARD_S_SUCCESS)
+	{
+		LogTrace(LOGTYPE_ERROR, context, "SCardTransmit errorcode: [0x%02X]", dwReturn);
+		return FALSE;
+	}
+	if ((SW1 != 0x90) || (SW2 != 0x00))
+	{
+		LogTrace(LOGTYPE_ERROR, context, "Select Failed: [0x%02X][0x%02X]", SW1, SW2);
+		return FALSE;
+	}
+
+	return TRUE;
+}
 
 /****************************************************************************************************/
 
@@ -1627,24 +1581,6 @@ DWORD PteidSelectAndReadFile(PCARD_DATA  pCardData, DWORD dwOffset, BYTE cbFileI
 cleanup:
    return (dwReturn);
 }
-
-BOOL checkStatusCode(const char * context, DWORD dwReturn, BYTE SW1, BYTE SW2)
-{
-
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
-      LogTrace(LOGTYPE_ERROR, context, "SCardTransmit errorcode: [0x%02X]", dwReturn);
-      return FALSE;
-   }
-   if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
-   {
-      LogTrace(LOGTYPE_ERROR, context, "Select Failed: [0x%02X][0x%02X]", SW1, SW2);
-      return FALSE;
-   }
-
-   return TRUE;
-}
-
 
 #undef WHERE
 /****************************************************************************************************/

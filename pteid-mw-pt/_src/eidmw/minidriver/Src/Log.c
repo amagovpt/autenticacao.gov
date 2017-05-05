@@ -30,14 +30,15 @@
 
 /****************************************************************************************************/
 
-#define MAX_LOG_FILE_NAME	512
-#define MAX_LOG_DIR_NAME	480
-char    g_szLogFile[MAX_LOG_FILE_NAME]  = "C:\\SmartCardMinidriverLog\\AZEPTEIDMDRV.LOG";
+
+#define MAX_LOG_DIR_NAME	4800
+#define MAX_LOG_FILE_NAME	5000
+char    g_szLogFile[MAX_LOG_FILE_NAME]  = "C:\\SmartCardMinidriverLog\\pteidmdrv.LOG";
 
 #ifdef _DEBUG
 unsigned int   g_uiLogLevel      = LOGTYPE_TRACE;
 #else
-unsigned int   g_uiLogLevel      = LOGTYPE_NONE;
+unsigned int   g_uiLogLevel      = LOGTYPE_INFO;
 #endif
 
 /****************************************************************************************************/
@@ -48,14 +49,18 @@ void LogInit()
 	BYTE        lpData[MAX_LOG_DIR_NAME];
 	DWORD       dwData = 0; 
 
-	printf("\nRetrieving the data from registry...\n"); 
-
 	dwRet = RegOpenKeyEx (HKEY_LOCAL_MACHINE, TEXT("Software\\PTEID\\Logging"), 0, KEY_READ, &hKey);
 
 	if (dwRet != ERROR_SUCCESS) {
-		// Key not found - return, keep default values
+		//If the registry key is not defined write the logfile in TMP directory
+		dwRet = GetEnvironmentVariable("TMP", lpData, MAX_LOG_DIR_NAME);
+		if (dwRet > 0 && dwRet <= MAX_LOG_DIR_NAME)
+		{
+			lstrcpy(g_szLogFile, lpData);
+			lstrcat(g_szLogFile, TEXT("\\pteidmdrv.log"));
+		}
 		return;
-	} 
+	}
 
 	// getting log_level
 	dwData = sizeof(lpData);

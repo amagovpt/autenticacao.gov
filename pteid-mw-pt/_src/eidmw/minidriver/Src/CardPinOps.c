@@ -183,44 +183,7 @@ DWORD WINAPI   CardDeauthenticate
 	__in     DWORD       dwFlags
 	)
 {
-	DWORD dwReturn = SCARD_S_SUCCESS;
-
-	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
-
-	/********************/
-	/* Check Parameters */
-	/********************/
-	if ( pCardData == NULL )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-	if ( pwszUserId == NULL )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pwszUserId]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-	if ( wcscmp(pwszUserId, wszCARD_USER_USER) != 0 ) 
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter value [pwszUserId]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-	if ( dwFlags != 0 )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [dwFlags]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-
-	dwReturn = PteidDeAuthenticate(pCardData);
-	if ( dwReturn != SCARD_S_SUCCESS )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "PteidDeAuthenticate: [0x%02X]", dwReturn);
-		CLEANUP(dwReturn);
-	}
-
-cleanup:
-	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return SCARD_E_UNSUPPORTED_FEATURE;
 }
 #undef WHERE
 
@@ -366,42 +329,8 @@ DWORD WINAPI   CardDeauthenticateEx
 	__in  DWORD       dwFlags
 	)
 {
-	DWORD dwReturn = SCARD_S_SUCCESS;
-
-	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
-
-	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
-
-	/********************/
-	/* Check Parameters */
-	/********************/
-	if ( pCardData == NULL )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-	if ( ( PinId == 0          ) ||
-		( PinId == 0xFFFFFFFF ) )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-	if ( dwFlags != 0 )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [dwFlags]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-
-	dwReturn = PteidDeAuthenticate(pCardData);
-	if ( dwReturn != SCARD_S_SUCCESS )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "PteidDeAuthenticate: [0x%02X]", dwReturn);
-		CLEANUP(dwReturn);
-	}
-
-cleanup:
-	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return SCARD_E_UNSUPPORTED_FEATURE;
+	
 }
 #undef WHERE
 

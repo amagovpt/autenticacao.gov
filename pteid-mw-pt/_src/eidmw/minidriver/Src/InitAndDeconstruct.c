@@ -201,20 +201,9 @@ DWORD WINAPI   CardAcquireContext
       LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData->hScard]");
       CLEANUP(SCARD_E_INVALID_HANDLE);
    }
-
-   /*
-	 IN SCARDHANDLE hCard,
-    OUT LPWSTR szReaderName,
-    IN OUT LPDWORD pcchReaderLen,
-    OUT LPDWORD pdwState,
-    OUT LPDWORD pdwProtocol,
-    OUT LPBYTE pbAtr,
-    IN OUT LPDWORD pcbAtrLen);
-
-   */
-   
+      
    SCardStatus(pCardData->hScard, readerName, &readername_len,
-	   NULL, &protocol, &bAtr, &cByte);
+	   NULL, &protocol, (LPBYTE)&bAtr, &cByte);
 	
    //Store active protocol
    switch(protocol)
