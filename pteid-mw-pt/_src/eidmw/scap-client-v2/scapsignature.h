@@ -288,6 +288,7 @@ private:
     bool card_present;
     bool horizontal_page_flag;
     bool m_small_signature;
+	bool network_error;
     int m_selected_reader;
 
     QAbstractItemModel *list_model;

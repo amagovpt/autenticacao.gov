@@ -78,6 +78,8 @@ ScapSignature::ScapSignature(QWidget* parent)
     success = SIG_ERROR;
     horizontal_page_flag = false;
     m_small_signature = false;
+
+	network_error = false;
     ui->spinBox_page->setValue(1);
     list_model = new QStringListModel();
     ui->pdf_listview->setModel(list_model);
@@ -1561,7 +1563,15 @@ void ScapSignature::on_btn_reloadAatributes_clicked()
 
     if (m_suppliersList.size() == 0)
     {
-        QMessageBox msgBoxp(QMessageBox::Warning, tr("Warning"), tr("Error loading entities"), 0, this);
+		QString error_msg(tr("Error loading entities"));
+		if (network_error)
+		{
+			error_msg += "\n\n" + tr("Please make sure you are connected to the Internet");
+			network_error = false;
+		}
+
+        QMessageBox msgBoxp(QMessageBox::Warning, tr("Warning"), error_msg, 0, this);
+
         msgBoxp.exec();
         return;
     }
@@ -1642,25 +1652,26 @@ void ScapSignature::getAttributeSuppliers()
     AttributeSupplierBindingProxy suppliers_proxy(sp);
     suppliers_proxy.soap_endpoint = c_sup_endpoint;
 
-    std::cout << "Attributes Supplier endpoint: " << sup_endpoint << std::endl;
-
     int ret = suppliers_proxy.AttributeSuppliers(suppliers_resp);
-    if (ret != SOAP_OK){
+    if (ret != SOAP_OK) {
+		if (ret == SOAP_TCP_ERROR)
+			network_error = true;
         eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR
                         , "ScapSignature"
-                        , "Error in getAttributeSuppliers: %d, suppliers end point: %s, host: %s, port: %s"
+                        , "Error in getAttributeSuppliers: Gsoap returned %d, Attribute suppliers end point: %s, host: %s, port: %s"
                         , ret
                         , c_sup_endpoint
                         , settings.getScapServerHost().toStdString().c_str()
                         , settings.getScapServerPort().toStdString().c_str() );
 
         if ( ( suppliers_proxy.soap->fault != NULL )
-            && ( suppliers_proxy.soap->fault->faultstring != NULL ) ){
+			&& (suppliers_proxy.soap->fault->faultstring != NULL)) {
+
             eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR
                             , "ScapSignature", "SOAP Fault: %s"
                             , suppliers_proxy.soap->fault->faultstring );
-        }/* if ( ( suppliers_proxy.soap->fault != NULL ) && ( ... ) ) */
-    }/* if (ret != SOAP_OK) */
+        }
+    }
     m_suppliersList = suppliers_resp.AttributeSupplier;
 }
 

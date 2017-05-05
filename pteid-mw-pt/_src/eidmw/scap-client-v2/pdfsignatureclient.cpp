@@ -10,6 +10,7 @@
 #include "settings.h"
 
 #include "eidlibdefines.h"
+#include "ACService/envStub.h"
 
 #include "PDFSignature/PDFSignatureH.h"
 #include "PDFSignature/PDFSignatureSoapBindingProxy.h"
@@ -29,7 +30,7 @@ const char * processId = "10001";
 const char * pdf_endpoint = "/PADES/PDFSignature";
 
 bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QString filepath, QString citizenName, QString citizenId, int ltv, PDFSignatureInfo signatureInfo, std::vector<ACService::ns3__AttributeType *> &attributeTypeList) {
-    const SOAP_ENV__Fault * fault = NULL;
+    //const SOAP_ENV__Fault * fault = NULL;
 
     soap * sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
 
@@ -158,22 +159,20 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
                         signatureField.toStdString(), *base64PDF, &ltv, signatureInfo.getSelectedPage(), signatureInfo.getX(), signatureInfo.getY(), orientationType);
 
         PDFSignature::ns1__SignResponse resp;
-        //ns1__SignRequest *ns1__SignRequest_, ns1__SignResponse &ns1__SignResponse_
         int rc = proxy.Sign(signRequest, resp);
 
         if (rc != SOAP_OK)
         {
-
             if (rc == SOAP_FAULT)
             {
-                fault = proxy.soap_fault();
-                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "PDF Service returned SOAP Fault: set a breakpoint after the call to see details");
-                fprintf(stderr, "SOAP Fault! "/*, fault->faultstring*/);
+                //fault = proxy.soap_fault();
+				if (proxy.soap->fault != NULL && proxy.soap->fault->faultstring != NULL)
+					eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "PDF Service returned SOAP Fault: %s", proxy.soap->fault->faultstring);
             }
             else
             {
-                fprintf(stderr, "Error in proxy.Sign(): Error code: %d\n", rc);
-                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "PDF Service returned HTTP error %d", rc);
+                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", 
+					"Error in PDFSignature::sign(): GSoap returned Error code: %d", rc);
             }
             return false;
         }

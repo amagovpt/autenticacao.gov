@@ -82,9 +82,6 @@
     <ClCompile Include="ASService\soapC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gsoap\stdsoap2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="debug\moc_attributesuppliers.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -114,6 +111,9 @@
     </ClCompile>
     <ClCompile Include="x64\release\qrc_logo.cpp">
       <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdsoap2.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

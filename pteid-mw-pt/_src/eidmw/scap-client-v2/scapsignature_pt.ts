@@ -99,6 +99,10 @@
         <translation>Assinatura PDF</translation>
     </message>
     <message>
+        <source>Please make sure you are connected to the Internet</source >
+        <translation>Por favor certifique-se que está ligado à internet</translation >
+    </message>
+    <message>
         <source>SCAP Signature - Sign using professional roles</source>
         <translation type="obsolete">Assinatura SCAP - Assinatura na qualidade com atributos profissionais</translation>
     </message>
