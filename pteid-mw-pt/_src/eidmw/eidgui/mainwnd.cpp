@@ -526,20 +526,23 @@ void MainWnd::showChangeAddressDialog(long code)
 		//The error code for connection error is common between SAM and OTP
 		case EIDMW_OTP_CONNECTION_ERROR:
 			icon = QMessageBox::Critical;
-			error_msg = tr("Connection Error") + "\n" +
+			error_msg = tr("Connection Error") + "\n\n" +
 				tr("Please make sure you are connected to the Internet");
 			break;
-		/*	
-		case EIDMW_SAM_PROTOCOL_ERROR:
-			error_msg = tr("Error in the Address Change operation. Please make sure you insert the correct process number and secret code.");
+
+		case 1121:
+		case 1122:
+			error_msg = tr("Error in the Address Change operation!") + "\n\n" + tr("Please make sure you typed the correct process number and confirmation code");
 			icon = QMessageBox::Critical;
+			sam_error_code = code;
 			break;
-		*/	
+
 		case EIDMW_SSL_PROTOCOL_ERROR:
-			error_msg = tr("Error in the Address Change operation. Please make sure you have a valid authentication certificate");
+			error_msg = tr("Error in the Address Change operation!") + "\n\n" + tr("Please make sure you have a valid authentication certificate");
 			icon = QMessageBox::Critical;
 			break;
 		default:
+			//Make sure we only show the user error codes from the SAM service and not some weird pteid exception error code
 			if (code > 1100 && code < 3500)
 				sam_error_code = code;
 			error_msg = tr("Error in the Address Change operation!");
@@ -547,13 +550,14 @@ void MainWnd::showChangeAddressDialog(long code)
 			break;
 	}
 
-	if (sam_error_code > 0)
+	if (sam_error_code != 0)
 	{
-		error_msg += "\n\n" + tr("Error code = ") + QString::number(sam_error_code) + "\n";
-		error_msg += "\n\n" + support_string;
+		error_msg += "\n\n" + tr("Error code = ") + QString::number(sam_error_code);
 	}
-	
 
+	if (code != 0)
+		error_msg += "\n\n" + support_string;
+	
 	QMessageBox msgBoxp(icon, caption, error_msg, 0, this);
   	msgBoxp.exec();
 

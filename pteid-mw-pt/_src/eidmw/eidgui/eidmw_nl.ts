@@ -52,7 +52,7 @@
         <translation>Erro na ligação ao servidor de OTP. Por favor verifique que tem o certificado de autenticação válido</translation>
     </message>
     <message>
-        <source>Error in the Address Change operation. Please make sure you have a valid authentication certificate</source>
+        <source>Please make sure you have a valid authentication certificate</source>
         <translation>Erro na operação de mudança de morada. Por favor verifique que tem o certificado de autenticação válido</translation>
     </message>
     <message>
@@ -116,8 +116,8 @@
         <translation>Pedimos desculpa, mas esta operação não é suportada neste leitor de cartões</translation>
     </message>
     <message>
-        <source>Error in the Address Change operation. Please make sure you insert the correct process number and secret code.</source>
-        <translation>Erro na operação de mudança de morada. Verifique por favor se inseriu correctamente o número de processo e código de confirmação.</translation>
+        <source>Please make sure you typed the correct process number and confirmation code</source>
+        <translation>Por favor verifique se introduziu corretamente o número de processo e código de confirmação</translation>
     </message>
     <message>
         <source>Verification of your current PIN failed</source>
