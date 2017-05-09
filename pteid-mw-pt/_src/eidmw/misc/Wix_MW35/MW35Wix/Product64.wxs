@@ -109,7 +109,7 @@
 		<Icon Id="pteid.ico" SourceFile="..\..\..\eidgui\Images\Icons\pteid.ico"/>
 
 		<Property Id="ARPPRODUCTICON" Value="pteid.ico" />
-		<Property Id="ARPURLINFOABOUT" Value="http://www.cartaodecidadao.pt"/>
+		<Property Id="ARPURLINFOABOUT" Value="https://www.autenticacao.gov.pt/o-cartao-de-cidadao"/>
 
 		<Property Id="ALLUSERS" Value="1" />
 
@@ -132,36 +132,6 @@
 					<Directory Id="ApplicationProgramsFolderUtilities" Name="Utilitários"/>
 				</Directory>
 			</Directory>
-<!--
-			<Directory Id="ProgramFilesFolder">
-				<Directory Id="FIREFOXROOTFOLDER" Name="Mozilla Firefox">
-					<Directory Id="FIREFOXEXTENSIONS" Name="extensions">
-						<Directory Id="XPIROOTFOLDER" Name="portugaleid@eid.portugal.pt">
-							<Directory Id="XPICONTENTFOLDER" Name="content"/>
-							<Directory Id="XPICOMPONENTSFOLDER" Name="components"/>
-							<Directory Id="XPIDEFAULTSFOLDER" Name="defaults">
-								<Directory Id="XPIDEFAULTSPREFSFOLDER" Name="preferences"/>
-							</Directory>
-							<Directory Id="XPILOCALEFOLDER" Name="locale">
-								<Directory Id="XPILOCALEENFOLDER" Name="en-US"/>
-								<Directory Id="XPILOCALEFRFOLDER" Name="fr-FR"/>
-								<Directory Id="XPILOCALENLFOLDER" Name="nl-NL"/>
-								<Directory Id="XPILOCALEDEFOLDER" Name="de-DE"/>
-							</Directory>
-							<Directory Id="XPISKINFOLDER" Name="skin"/>
-						</Directory>
-						<Directory Id="CERTINSTALLROOTFOLDER" Name="pteidcertinstall@caixamagica.pt">
-							<Directory Id="CERTINSTALLCONTENTFOLDER" Name="chrome"/>
-							<Directory Id="CERTINSTALLCOMPONENTSFOLDER" Name="components"/>
-							<Directory Id="CERTINSTALLMODULESFOLDER" Name="modules"/>
-							<Directory Id="CERTINSTALLDEFAULTSFOLDER" Name="defaults">
-								<Directory Id="CERTINSTALLPREFERENCESFOLDER" Name="preferences"/>
-							</Directory>
-						</Directory>
-					</Directory>
-				</Directory>
-			</Directory>
-      -->
 
 			<Directory Id="ProgramFiles64Folder">
 				<Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
@@ -175,7 +145,7 @@
 						<Directory Id="CERTSDIR" Name="certs"/>
 						<Directory Id="CRLDIR" Name="crl">
 							<Directory Id="HTTPDIR" Name="http">
-                <!--	<Directory Id="CRLPORTUGAL" Name="crl.eid.portugal.pt"/> -->
+
 					 </Directory>
 					</Directory>
 					</Directory>
@@ -293,165 +263,7 @@
 					<RemoveFolder Id="RemoveCacheFolder" On="uninstall"/>
 				</Component>
 			</DirectoryRef>
-    
-    <!--
-			<DirectoryRef Id="FIREFOXEXTENSIONS">
-				<Component Id="Extensions" Guid="{DBEFB6AD-3282-4625-8257-2CF7EA4E7264}" Win64="no">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users"/>
-					</CreateFolder>
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="FIREFOXROOTFOLDER">
-				<Component Id="FireFoxRoot" Guid="{3F6140E7-B25A-41c5-BACE-9DBCDE8019D9}" KeyPath="no" Win64="no">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="XPIROOTFOLDER">
-				<Component Id="XPIRoot" Guid="{6E56CA5C-29ED-47e0-9EEF-64FDF8A0B353}" KeyPath="no" Win64="no">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-					<File Id="chrome.manifest" Name="chrome.manifest" KeyPath="no" Source="..\..\..\xpi\src\chrome.manifest" />
-					<File Id="icon.png.root" Name="icon.png" KeyPath="no" Source="..\..\..\xpi\src\icon.png" />
-					<File Id="install.rdf" Name="install.rdf" KeyPath="no" Source="..\..\..\xpi\src\install.rdf" />
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="XPICONTENTFOLDER">
-				<Component Id="XPIContent" Guid="{DC052180-264F-4ace-ACF1-FC482715EB86}" KeyPath="no" Win64="no">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-					<File Id="portugaleidpkcs11.js" Name="portugaleidpkcs11.js" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidpkcs11.js" />
-					<File Id="portugaleidpkcs11.xul" Name="portugaleidpkcs11.xul" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidpkcs11.xul" />
-					<File Id="portugaleidprompt.js" Name="portugaleidprompt.js" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidprompt.js" />
-					<File Id="portugaleidprompt.xul" Name="portugaleidprompt.xul" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidprompt.xul" />
-					<File Id="portugaleidpromptsecure.js" Name="portugaleidpromptsecure.js" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidpromptsecure.js" />
-					<File Id="portugaleidpromptsecure.xul" Name="portugaleidpromptsecure.xul" KeyPath="no" Source="..\..\..\xpi\src\content\portugaleidpromptsecure.xul" />
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="XPICOMPONENTSFOLDER">
-				<Component Id="XPIComponents" Guid="{2761C1B0-4EA2-4047-8A31-32679BB4651D}" KeyPath="no" Win64="no">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-					<File Id="comp_portugaleidpkcs11.js" Name="portugaleidpkcs11.js" KeyPath="no" Source="..\..\..\xpi\src\components\portugaleidpkcs11.js" />
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="XPIDEFAULTSFOLDER">
-				<Component Id="XPIdefaults" Guid="{B635FD45-0FCE-4285-9FA6-F9559C0F7EBB}" KeyPath="no" Win64="no">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="XPIDEFAULTSPREFSFOLDER">
-				<Component Id="XPIdefaultsprefs" Guid="{FA937E34-AE32-4acd-AC77-3487EBC2ABCD}" KeyPath="no" Win64="no">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-					<File Id="portugaleid.js" Name="portugaleid.js" KeyPath="no" Source="..\..\..\xpi\src\defaults\preferences\portugaleid.js" />
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="XPILOCALEFOLDER">
-				<Component Id="XPIlocale" Guid="{B8A44A30-F2EF-44c3-BBE5-54395F47C869}" KeyPath="no" Win64="no">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="XPILOCALEENFOLDER">
-				<Component Id="XPIlocaleen" Guid="{F2BBAA41-E463-409d-B4AB-CE3626339663}" KeyPath="no" Win64="no">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-					<File Id="portugaleid.properties.en" Name="portugaleid.properties" KeyPath="no" Source="..\..\..\xpi\src\locale\en-US\portugaleid.properties" />
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="XPILOCALEFRFOLDER">
-				<Component Id="XPIlocalefr" Guid="{C0F969BB-3678-4828-BAE7-023054072A01}" KeyPath="no" Win64="no">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-					<File Id="portugaleid.properties.fr" Name="portugaleid.properties" KeyPath="no" Source="..\..\..\xpi\src\locale\fr-FR\portugaleid.properties" />
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="XPILOCALENLFOLDER">
-				<Component Id="XPIlocalenl" Guid="{E8587941-7B32-4a9d-8F4B-23C1E8EC1126}" KeyPath="no" Win64="no">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-					<File Id="portugaleid.properties.nl" Name="portugaleid.properties" KeyPath="no" Source="..\..\..\xpi\src\locale\nl-NL\portugaleid.properties" />
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="XPILOCALEDEFOLDER">
-				<Component Id="XPIlocalede" Guid="{54BC660D-7C9D-4ddc-AA96-29D7A5DD0E53}" KeyPath="no" Win64="no">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-					<File Id="portugaleid.properties.de" Name="portugaleid.properties" KeyPath="no" Source="..\..\..\xpi\src\locale\de-DE\portugaleid.properties" />
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="XPISKINFOLDER">
-				<Component Id="XPIskin" Guid="{7FF22F5F-E42E-47af-91EE-9A9491B196AC}" KeyPath="no" Win64="no">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-					<File Id="overlay.css" Name="overlay.css" KeyPath="no" Source="..\..\..\xpi\src\skin\overlay.css" />
-					<File Id="icon.png" Name="icon.png" KeyPath="no" Source="..\..\..\xpi\src\skin\icon.png" />
-					<File Id="icon40x40.png" Name="icon40x40.png" KeyPath="no" Source="..\..\..\xpi\src\skin\icon40x40.png" />
-				</Component>
-			</DirectoryRef>
-
-
-			<DirectoryRef Id="CERTINSTALLROOTFOLDER">
-				<Component Id="pteidcertinstallroot" Guid="9a02e931-4d7c-4dc5-aaf1-788e2f282941" Win64="no">
-					<File Id="cck.config" Name="cck.config" KeyPath="yes" Source="..\..\..\ffpteidcertinstall\xpi\cck.config" />
-					<File Id="install_certinstall.rdf" Name="install.rdf" KeyPath="no" Source="..\..\..\ffpteidcertinstall\xpi\install.rdf" />
-					<File Id="chrome_certinstall.manifest" Name="chrome.manifest" KeyPath="no" Source="..\..\..\ffpteidcertinstall\xpi\chrome.manifest" />
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="CERTINSTALLCONTENTFOLDER">
-				<Component Id="pteidcertinstallchrome" Guid="9a02e931-4d7c-4dc5-aaf1-788e2f282942" Win64="no">
-					<File Id="cck.jar" Name="cck.jar" KeyPath="yes" Source="..\..\..\ffpteidcertinstall\xpi\chrome\cck.jar"></File>
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="CERTINSTALLCOMPONENTSFOLDER">
-				<Component Id="pteidcertinstallcomponents" Guid="9a02e931-4d7c-4dc5-aaf1-788e2f282945" Win64="no">
-					<File Id="cckService.js" Name="cckService.js" KeyPath="yes" Source="..\..\..\ffpteidcertinstall\xpi\components\cckService.js"></File>
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="CERTINSTALLMODULESFOLDER">
-				<Component Id="pteidcertinstallmodules" Guid="9a02e931-4d7c-4dc5-aaf1-788e2f282943" Win64="no">
-					<File Id="cckModule.jsm" Name="cckModule.jsm" KeyPath="yes" Source="..\..\..\ffpteidcertinstall\xpi\modules\cckModule.jsm"></File>
-				</Component>
-			</DirectoryRef>
-
-			<DirectoryRef Id="CERTINSTALLPREFERENCESFOLDER">
-				<Component Id="pteidcertinstallpreferences" Guid="9a02e931-4d7c-4dc5-aaf1-788e2f282944" Win64="no">
-					<File Id="firefoxcck.js" Name="firefox-cck.js" KeyPath="yes" Source="..\..\..\ffpteidcertinstall\xpi\defaults\preferences\firefox-cck.js"></File>
-				</Component>
-			</DirectoryRef>
-      
-      -->
-
+   
 			<DirectoryRef Id="MINIDRIVERROOTFOLDER">
 				<Component Id="pteidmdrv" Guid="2bdf2bb0-4f7a-4ed6-a3d4-abcbe212fa14" Win64="yes">
 					<File Id="pteidmdrv.inf" Name="pteidmdrv.inf" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.inf" KeyPath="yes" DiskId="1" />
@@ -460,7 +272,7 @@
 					<File Id="pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" KeyPath="no" DiskId="1" />
 					<difx:Driver ForceInstall="no" PlugAndPlayPrompt="no" DeleteFiles="yes" />
 				</Component>
-				<!-- Certificate Propagation Service is a standard Windows service available in from Windows Vista on. In order to use the minidriver
+				<!-- Certificate Propagation Service is a standard Windows service available in Windows Vista and later versions. In order to use the minidriver
 			   it is necessary that this service is running. When a smart card reader is inserted this service should be started  by the smart card
 			   driver. As not all drivers are following this guidance, we start CertPropSvc during the minidriver install -->
 				<Component Id="CertPropService" Guid="932459d0-df59-11de-8a39-0800200c9a66" Permanent="yes" Win64="yes">
@@ -525,18 +337,6 @@
 
 
 			<DirectoryRef Id="WindowsFolder">
-        
-      <!-- 
-				<Component Id="pteidgui.conf" Guid="{D46BF825-5D1D-4FE9-AC90-5FDB45240DE0}">
-					<File Id="pteidgui.conf" Name="pteidgui.conf" KeyPath="yes" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidgui.conf" />
-					<IniFile Id="pteidguiconf1" Directory="WindowsFolder" Name="pteidgui.conf"
-					  Section="PTEID_default" Action="addLine" Key="certs"  Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\certs\"
-          />
-					<IniFile Id="pteidguiconf2" Directory="WindowsFolder" Name="pteidgui.conf"
-					  Section="PTEID_default" Action="addLine" Key="crl"  Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\crl\http\crl.eid.portugal.be\"
-          />
-				</Component>
-        -->
 
 			</DirectoryRef>
 
@@ -847,27 +647,6 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 				<ComponentRef Id="LogDir"/>
 				<ComponentRef Id="DSSApp"/>
 
-        <!-- 
-				<ComponentRef Id="Extensions"/>
-				<ComponentRef Id="FireFoxRoot"/>
-				<ComponentRef Id="XPIRoot"/>
-				<ComponentRef Id="XPIContent"/>
-				<ComponentRef Id="XPIComponents"/>
-				<ComponentRef Id="XPIdefaults"/>
-				<ComponentRef Id="XPIdefaultsprefs"/>
-				<ComponentRef Id="XPIlocale"/>
-				<ComponentRef Id="XPIlocaleen"/>
-				<ComponentRef Id="XPIlocalefr"/>
-				<ComponentRef Id="XPIlocalenl"/>
-				<ComponentRef Id="XPIlocalede"/>
-				<ComponentRef Id="XPIskin"/>
-				<ComponentRef Id="pteidcertinstallroot"/>
-				<ComponentRef Id="pteidcertinstallchrome"/>
-				<ComponentRef Id="pteidcertinstallcomponents"/>
-				<ComponentRef Id="pteidcertinstallmodules"/>
-				<ComponentRef Id="pteidcertinstallpreferences"/>
-         -->
-
 				<!-- System32 -->
 
 				<ComponentRef Id="Runtime35"/>
@@ -876,9 +655,6 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 		<!-- 		<ComponentRef Id="Runtime35ThirdPartyOpenSSL_64"/> -->
 				<ComponentRef Id="Runtime35ThirdPartyXerces"/>
 				<ComponentRef Id="Runtime35ThirdPartyXerces_64"/>
-
-				<!-- Windows Config file ?? -->
-        <!-- <ComponentRef Id="pteidgui.conf"/> -->
 
 				<!-- Registry -->
 				<ComponentRef Id="RegistryPteidSystem"/>
@@ -924,7 +700,7 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 					<ComponentRef Id="SCardSvrService"/>
 					<ComponentRef Id="pkcs11"/>
 					<ComponentRef Id="pkcs11_64"/>
-          <!--<ComponentRef Id="REGISTERXPI"/> -->
+
 					<ComponentRef Id="OutlookTool" />
 					<!-- Shortcuts -->
 					<ComponentRef Id ="OutlookShortcut"/>

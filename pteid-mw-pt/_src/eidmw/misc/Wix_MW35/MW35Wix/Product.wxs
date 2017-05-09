@@ -108,7 +108,7 @@
     <Icon Id="pteid.ico" SourceFile="..\..\..\eidgui\Images\Icons\pteid.ico"/>
 
     <Property Id="ARPPRODUCTICON" Value="pteid.ico" />
-    <Property Id="ARPURLINFOABOUT" Value="http://www.cartaodecidadao.pt"/>
+    <Property Id="ARPURLINFOABOUT" Value="https://www.autenticacao.gov.pt/o-cartao-de-cidadao"/>
 
     <Property Id="ALLUSERS" Value="1" />
 
@@ -156,37 +156,7 @@
             <Directory Id="CSHARP_SDK" Name="dotnet"/>
           </Directory>
         </Directory>
-        <!-- 
-        <Directory Id="FIREFOXROOTFOLDER" Name="Mozilla Firefox">
-          <Directory Id="FIREFOXEXTENSIONS" Name="extensions">
-            <Directory Id="XPIROOTFOLDER" Name="portugaleid@eid.portugal.pt">
-              <Directory Id="XPICONTENTFOLDER" Name="content"/>
-              <Directory Id="XPICOMPONENTSFOLDER" Name="components"/>
-              <Directory Id="XPIDEFAULTSFOLDER" Name="defaults">
-                <Directory Id="XPIDEFAULTSPREFSFOLDER" Name="preferences"/>
-              </Directory>
-              <Directory Id="XPILOCALEFOLDER" Name="locale">
-                <Directory Id="XPILOCALEENFOLDER" Name="en-US"/>
-                <Directory Id="XPILOCALEFRFOLDER" Name="fr-FR"/>
-                <Directory Id="XPILOCALENLFOLDER" Name="nl-NL"/>
-                <Directory Id="XPILOCALEDEFOLDER" Name="de-DE"/>
-              </Directory>
-              <Directory Id="XPISKINFOLDER" Name="skin"/>
-            </Directory>
-            <Directory Id="CERTINSTALLROOTFOLDER" Name="pteidcertinstall@caixamagica.pt">
-              <Directory Id="CERTINSTALLCONTENTFOLDER" Name="chrome"/>
-              <Directory Id="CERTINSTALLCOMPONENTSFOLDER" Name="components"/>
-              <Directory Id="CERTINSTALLMODULESFOLDER" Name="modules"/>
-              <Directory Id="CERTINSTALLDEFAULTSFOLDER" Name="defaults">
-                <Directory Id="CERTINSTALLPREFERENCESFOLDER" Name="preferences"/>
-              </Directory>
-
-            </Directory>
-          </Directory>
-          
-
-        </Directory>
-        -->
+    
         <Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
 
       </Directory>
@@ -396,14 +366,6 @@
 
     <DirectoryRef Id="WindowsFolder">
 
-      <Component Id="pteidgui.conf" Guid="{D46BF825-5D1D-4FE9-AC90-5FDB45240DE0}">
-        <File Id="pteidgui.conf" Name="pteidgui.conf" KeyPath="yes" Source="..\..\..\..\ThirdParty\pteid_sdk\2.6\bin\pteidgui.conf" />
-        <IniFile Id="pteidguiconf1" Directory="WindowsFolder" Name="pteidgui.conf"
-          Section="PTEID_default" Action="addLine" Key="certs"  Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\certs\" />
-        <IniFile Id="pteidguiconf2" Directory="WindowsFolder" Name="pteidgui.conf"
-          Section="PTEID_default" Action="addLine" Key="crl"  Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\crl\http\crl.eid.portugal.be\" />
-      </Component>
-
     </DirectoryRef>
 
     <DirectoryRef Id="SystemFolder">
@@ -456,16 +418,6 @@
         <!-- Start SCardSvr Service now -->
         <!--<ServiceControl Id="StartSCardSvrService" Name="SCardSvr" Start="install" />-->
       </Component>
-
-      <!--
-      <Component Id="REGISTERXPI" Guid="{946B85B6-99CC-4893-8A42-E7EC6FFE0D87}">
-        <RegistryKey Root="HKLM"
-                     Key="SOFTWARE\Mozilla\Firefox\Extensions"
-                     Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Name="portugaleid@eid.portugal.be" Value="C:\Program Files\Mozilla Firefox\extensions\portugaleid@eid.portugal.be" KeyPath="yes"/>
-        </RegistryKey>
-      </Component>
-      -->
 
       <Component Id="REGISTERMINIDRIVER" Guid="{B9980C19-883E-49F9-BDD2-AB3D75187C8F}">
         <RegistryKey Root="HKLM"
@@ -617,34 +569,12 @@
       <ComponentRef Id="License"/>
       <ComponentRef Id="LogDir"/>
       
-     <!-- 
-      <ComponentRef Id="Extensions"/>
-      <ComponentRef Id="FireFoxRoot"/>
-      <ComponentRef Id="XPIRoot"/>
-      <ComponentRef Id="XPIContent"/>
-      <ComponentRef Id="XPIComponents"/>
-      <ComponentRef Id="XPIdefaults"/>
-      <ComponentRef Id="XPIdefaultsprefs"/>
-      <ComponentRef Id="XPIlocale"/>
-      <ComponentRef Id="XPIlocaleen"/>
-      <ComponentRef Id="XPIlocalefr"/>
-      <ComponentRef Id="XPIlocalenl"/>
-      <ComponentRef Id="XPIlocalede"/>
-      <ComponentRef Id="XPIskin"/>
-      <ComponentRef Id="pteidcertinstallroot"/>
-      <ComponentRef Id="pteidcertinstallchrome"/>
-      <ComponentRef Id="pteidcertinstallcomponents"/>
-      <ComponentRef Id="pteidcertinstallmodules"/>
-      <ComponentRef Id="pteidcertinstallpreferences"/>
-      -->
-      
       <!-- System32 -->
       <ComponentRef Id="Runtime35"/>
       <ComponentRef Id="Runtime35ThirdPartyOpenSSL"/>
       <ComponentRef Id="Runtime35ThirdPartyXerces"/>
      
       <!-- Windows -->
-      <ComponentRef Id="pteidgui.conf"/>
 
       <!-- Registry -->
       <ComponentRef Id="RegistryPteidSystem"/>
@@ -681,9 +611,6 @@
                 Level="1">
         <ComponentRef Id="SCardSvrService"/>
         <ComponentRef Id="pkcs11"/>
-        <!-- <ComponentRef Id="REGISTERXPI"/>-->
-        <!--<ComponentRef Id="pkcs11_cfg"/>
-        <ComponentRef Id="pkcs11_register" />-->
         <ComponentRef Id="OutlookTool" />
         <!-- Shortcuts -->
         <ComponentRef Id ="OutlookShortcut"/>
