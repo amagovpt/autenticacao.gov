@@ -191,9 +191,6 @@
     <ClInclude Include="PhotoPteid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SAM.h">
       <Filter>Header Files</Filter>
     </ClInclude>

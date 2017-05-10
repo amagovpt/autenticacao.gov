@@ -273,7 +273,6 @@
     <ClInclude Include="OCSP.h" />
     <ClInclude Include="PDFSignature.h" />
     <ClInclude Include="PhotoPteid.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="SAM.h" />
     <ClInclude Include="SigContainer.h" />
     <ClInclude Include="sign-pkcs7.h" />
