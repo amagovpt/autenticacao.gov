@@ -758,6 +758,13 @@ void MainWnd::setup_addressChange_progress_bar()
 	m_progress_addr->setCancelButton(NULL);
 	m_progress_addr->setMinimum(0);
 	m_progress_addr->setMaximum(100);
+	QVBoxLayout *layout = new QVBoxLayout;
+	foreach (QObject *obj, m_progress_addr->children()) {
+	    QWidget *widget = qobject_cast<QWidget *>(obj);
+    	if (widget)
+        	layout->addWidget(widget);
+	}
+	m_progress_addr->setLayout(layout);
 	m_progress_addr->reset();
 	//Hack to force centered display of the popup dialog when running on "peculiar" window managers
 	//m_progress_addr->move(geometry().center().x(), geometry().center().y());
