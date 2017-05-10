@@ -174,7 +174,7 @@
       <CompileAs>Default</CompileAs>
       <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
-      <DebugInformationFormat>None</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -344,19 +344,17 @@
     <ClInclude Include="Source\DeprecationManager\DeprecationMgr.h" />
     <ClInclude Include="Source\MapIntrospector.h" />
     <ClInclude Include="Source\Metadata\FIRational.h" />
-    <ClInclude Include="Source\FreeImage.h" />
+    <ClInclude Include="Source\FreeImagePTEiD.h" />
     <ClInclude Include="Source\FreeImageIO.h" />
     <ClInclude Include="Source\Metadata\FreeImageTag.h" />
     <ClInclude Include="Source\FreeImage\J2KHelper.h" />
     <ClInclude Include="Source\Plugin.h" />
-    <ClInclude Include="Source\FreeImage\PSDParser.h" />
     <ClInclude Include="Source\Quantizers.h" />
     <ClInclude Include="Source\ToneMapping.h" />
     <ClInclude Include="Source\Utilities.h" />
     <ClInclude Include="Source\FreeImageToolkit\Resize.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Todo.txt" />
     <Text Include="Whatsnew.txt" />
   </ItemGroup>
   <ItemGroup>
