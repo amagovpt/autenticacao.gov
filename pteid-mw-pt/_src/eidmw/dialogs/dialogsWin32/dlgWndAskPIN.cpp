@@ -80,8 +80,6 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 	szPIN = PINName.c_str();
 
 	int Height = 280;
-	if( m_UseKeypad )
-		Height = 480;
 
 	if( CreateWnd( tmpTitle.c_str() , 420, Height, IDI_APPICON, Parent ) )
 	{
@@ -102,50 +100,6 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 			clientRect.right - 100, clientRect.bottom - 65, 72, 24, 
 			m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL );
 
-		m_KeypadHeight=0;
-
-		//Virtual Keypad
-		if( m_UseKeypad )
-		{
-			int top = 60;
-			int hMargin = 12;
-			int vMargin = 12;
-			int btnwidth = 48;
-			int btnheight = 48;
-			int totwidth = btnwidth*3 + 2*hMargin;
-			int totheight = btnheight*4 +3*vMargin;
-			int left = (clientRect.right - clientRect.left - totwidth)/2;
-			m_KeypadHeight = top + totheight + 8;
-
-			for( int i = 0; i < 4; i++ )
-			{
-				for( int  j = 0; j < 3; j++ )
-				{
-					if( i == 3 && j == 0 )
-						continue;
-					HWND hOkButton = CreateWindow(
-						L"BUTTON", L"", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_OWNERDRAW, //BS_FLAT, 
-						left + ( btnwidth + hMargin )* j, top + ( btnheight + vMargin ) * i, btnwidth, btnheight, 
-						m_hWnd, (HMENU)(long long)(IDB_KeypadStart + 3*i + j ), m_hInstance, NULL );
-				}
-			}
-
-			ImageKP_BTN[0] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_0) );
-			ImageKP_BTN[1] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_1) );
-			ImageKP_BTN[2] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_2) );
-			ImageKP_BTN[3] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_3) );
-			ImageKP_BTN[4] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_4) );
-			ImageKP_BTN[5] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_5) );
-			ImageKP_BTN[6] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_6) );
-			ImageKP_BTN[7] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_7) );
-			ImageKP_BTN[8] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_8) );
-			ImageKP_BTN[9] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_9) );
-			ImageKP_BTN[10] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_CE) );
-			ImageKP_BTN[11] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_BTN) );
-
-			CreateBitapMask( ImageKP_BTN[11], ImageKP_BTN_Mask );
-			//MWLOG(LEV_DEBUG, MOD_DLG, L" dlgWndAskPIN : Virtual pinpad - LoadBitmap");
-		}
 
 		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD;
 		if( pinInfo.ulFlags & PIN_FLAG_DIGITS )

@@ -59,7 +59,7 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 	std::wstring tmpTitle = L"";
 	/*if(wcscmp(L"nl",langchange.c_str())==0)
 		tmpTitle += (L"Renovar o código PIN");
-	else*/
+		else*/
 
 	if (PINName.find(L"PUK") != std::wstring::npos)
 		tmpTitle += GETSTRING_DLG(Unblock);
@@ -69,165 +69,95 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 	m_ulPinMaxLen = 8;
 	m_ulPin1MinLen = 4;
 	m_ulPin1MaxLen = 8;
-	
-	
+
+
 	szHeader = const_cast<wchar_t *>(Header.c_str());
 	szPIN = PINName.c_str();
 
 	int Height = 263;
-	if( m_UseKeypad )
+	if (m_UseKeypad)
 		Height = 430;
 
 	if (CreateWnd(tmpTitle.c_str(), 420, Height, IDI_APPICON, Parent))
 	{
 		RECT clientRect;
-		GetClientRect( m_hWnd, &clientRect );
+		GetClientRect(m_hWnd, &clientRect);
 
 
 		TextFont = GetSystemFont();
 
 		HWND hOkButton = CreateWindow(
-			L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP, 
-			clientRect.right - 180, clientRect.bottom - 55, 72, 24, 
-			m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL );
-		EnableWindow( hOkButton, false );
+			L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP,
+			clientRect.right - 180, clientRect.bottom - 55, 72, 24,
+			m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL);
+		EnableWindow(hOkButton, false);
 
 		HWND hCancelButton = CreateWindow(
-			L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_DEFPUSHBUTTON, 
-			clientRect.right - 100, clientRect.bottom - 55, 72, 24, 
-			m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL );
+			L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_DEFPUSHBUTTON,
+			clientRect.right - 100, clientRect.bottom - 55, 72, 24,
+			m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL);
 
 		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD;
-		if( pinInfo1.ulFlags & PIN_FLAG_DIGITS )
+		if (pinInfo1.ulFlags & PIN_FLAG_DIGITS)
 			dwStyle |= ES_NUMBER;
 
-		if( m_UseKeypad )
-		{
-			m_UK_InputField = 0;
 
-			HWND hTextEdit = CreateWindowEx( WS_EX_CLIENTEDGE,
-				L"EDIT", L"", dwStyle, 
-				62, clientRect.top + 20, clientRect.right - 94, 26, 
-				m_hWnd, (HMENU)IDC_EDIT, m_hInstance, NULL );
-			SendMessage( hTextEdit, EM_LIMITTEXT, m_ulPin1MaxLen, 0 );
+		HWND hTextEdit1 = CreateWindowEx(WS_EX_CLIENTEDGE,
+			L"EDIT", L"", dwStyle,
+			clientRect.right / 2 + 110, clientRect.bottom - 150, 80, 26,
+			m_hWnd, (HMENU)IDC_EDIT_PIN1, m_hInstance, NULL);
+		SendMessage(hTextEdit1, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
 
-			HWND hStaticText = CreateWindow( 
-				L"STATIC", szPIN, WS_CHILD | WS_VISIBLE | SS_RIGHT, 
-				16, clientRect.top + 24, 36, 22, 
-				m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
 
-			int top = 60;
-			int bottom = clientRect.bottom - 70 - IMG_SIZE;
-			int left = 46;
-			int right = clientRect.right - 46;
-			int hMargin = 12;
-			int vMargin = 12;
-			int totwidth = right - left;
-			int totheight = bottom - top;
-			int btnwidth = ( totwidth - 2*hMargin ) / 3;
-			int btnheight = ( totheight - 3*vMargin ) /4;
-			if( btnheight < btnwidth )
-			{
-				btnwidth = btnheight;
-				hMargin = (totwidth - 3*btnwidth)/2;
-			}
-			else if( btnheight > btnwidth )
-			{
-				btnheight = btnwidth;
-				vMargin = (totheight - 3*btnheight)/2;
-			}
-			for( int i = 0; i < 4; i++ )
-			{
-				for( int j = 0; j < 3; j++ )
-				{
-					if( i == 3 && j == 0 )
-						continue;
-					HWND hOkButton = CreateWindow(
-						L"BUTTON", L"", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_OWNERDRAW, //BS_FLAT, 
-						left + ( btnwidth + hMargin )* j, top + ( btnheight + vMargin ) * i, btnwidth, btnheight, 
-						m_hWnd, (HMENU)(long long)(IDB_KeypadStart + 3*i + j ), m_hInstance, NULL );
-				}
-			}
+		dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD;
+		if (pinInfo2.ulFlags & PIN_FLAG_DIGITS)
+			dwStyle |= ES_NUMBER;
 
-			ImageKP_BTN[0] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_0) );
-			ImageKP_BTN[1] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_1) );
-			ImageKP_BTN[2] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_2) );
-			ImageKP_BTN[3] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_3) );
-			ImageKP_BTN[4] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_4) );
-			ImageKP_BTN[5] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_5) );
-			ImageKP_BTN[6] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_6) );
-			ImageKP_BTN[7] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_7) );
-			ImageKP_BTN[8] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_8) );
-			ImageKP_BTN[9] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_9) );
-			ImageKP_BTN[10] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_CE) );
-			ImageKP_BTN[11] = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_KP_BTN) );
-			//for( unsigned  int i = 0; i < 12; i++ )
-				CreateBitapMask( ImageKP_BTN[11], ImageKP_BTN_Mask );
-			
-			SendMessage( hStaticText, WM_SETFONT, (WPARAM)TextFont, 0 );
-		}
+		HWND hTextEdit2 = CreateWindowEx(WS_EX_CLIENTEDGE,
+			L"EDIT", L"", dwStyle,
+			clientRect.right / 2 + 110, clientRect.bottom - 120, 80, 26,
+			m_hWnd, (HMENU)IDC_EDIT_PIN2, m_hInstance, NULL);
+		SendMessage(hTextEdit2, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
+
+		HWND hTextEdit3 = CreateWindowEx(WS_EX_CLIENTEDGE,
+			L"EDIT", L"", dwStyle,
+			clientRect.right / 2 + 110, clientRect.bottom - 90, 80, 26,
+			m_hWnd, (HMENU)IDC_EDIT_PIN3, m_hInstance, NULL);
+		SendMessage(hTextEdit3, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
+
+		std::wstring oldPin_label = PINName.find(L"PUK") != std::wstring::npos ? GETSTRING_DLG(Puk) : GETSTRING_DLG(CurrentPin);
+
+		HWND hStaticText1 = CreateWindow(
+			L"STATIC", oldPin_label.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
+			210, clientRect.bottom - 146, clientRect.right / 2 - 120, 22,
+			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+
+		HWND hStaticText2 = CreateWindow(
+			L"STATIC", GETSTRING_DLG(NewPin), WS_CHILD | WS_VISIBLE | SS_LEFT,
+			210, clientRect.bottom - 116, clientRect.right / 2 - 100, 22,
+			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+
+		HWND hStaticText3 = CreateWindow(
+			L"STATIC", GETSTRING_DLG(ConfirmNewPin), WS_CHILD | WS_VISIBLE | SS_LEFT,
+			210, clientRect.bottom - 86, clientRect.right / 2 - 100, 22,
+			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+
+
+		SendMessage(hStaticText1, WM_SETFONT, (WPARAM)TextFont, 0);
+		SendMessage(hStaticText2, WM_SETFONT, (WPARAM)TextFont, 0);
+		SendMessage(hStaticText3, WM_SETFONT, (WPARAM)TextFont, 0);
+
+		SendMessage(hOkButton, WM_SETFONT, (WPARAM)TextFont, 0);
+		SendMessage(hCancelButton, WM_SETFONT, (WPARAM)TextFont, 0);
+
+		if (wcscmp(L"PIN da Assinatura", PINName.c_str()) == 0)
+			ImagePIN = LoadBitmap(m_hInstance, MAKEINTRESOURCE(IDB_BITMAP2));
 		else
-		{
+			ImagePIN = LoadBitmap(m_hInstance, MAKEINTRESOURCE(IDB_BITMAP1));
 
-			HWND hTextEdit1 = CreateWindowEx( WS_EX_CLIENTEDGE,
-				L"EDIT", L"", dwStyle, 
-				clientRect.right/2 + 110, clientRect.bottom - 150, 80, 26, 
-				m_hWnd, (HMENU)IDC_EDIT_PIN1, m_hInstance, NULL );
-			SendMessage( hTextEdit1, EM_LIMITTEXT, m_ulPin1MaxLen, 0 );
+		CreateBitapMask(ImagePIN, ImagePIN_Mask);
 
-
-			dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD;
-			if( pinInfo2.ulFlags & PIN_FLAG_DIGITS )
-				dwStyle |= ES_NUMBER;
-
-			HWND hTextEdit2 = CreateWindowEx( WS_EX_CLIENTEDGE,
-				L"EDIT", L"", dwStyle, 
-				clientRect.right/2 + 110, clientRect.bottom - 120, 80, 26, 
-				m_hWnd, (HMENU)IDC_EDIT_PIN2, m_hInstance, NULL );
-			SendMessage( hTextEdit2, EM_LIMITTEXT, m_ulPin1MaxLen, 0 );
-
-			HWND hTextEdit3 = CreateWindowEx( WS_EX_CLIENTEDGE,
-				L"EDIT", L"", dwStyle, 
-				clientRect.right/2 + 110, clientRect.bottom - 90, 80, 26, 
-				m_hWnd, (HMENU)IDC_EDIT_PIN3, m_hInstance, NULL );
-			SendMessage( hTextEdit3, EM_LIMITTEXT, m_ulPin1MaxLen, 0 );
-			
-			std::wstring oldPin_label = PINName.find(L"PUK") != std::wstring::npos ? GETSTRING_DLG(Puk) : GETSTRING_DLG(CurrentPin);
-
-			HWND hStaticText1 = CreateWindow( 
-				L"STATIC", oldPin_label.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-				210, clientRect.bottom - 146, clientRect.right/2 - 120, 22, 
-				m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
-
-			HWND hStaticText2 = CreateWindow( 
-				L"STATIC", GETSTRING_DLG(NewPin), WS_CHILD | WS_VISIBLE | SS_LEFT,
-				210, clientRect.bottom - 116, clientRect.right/2 - 100, 22,
-				m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
-
-			HWND hStaticText3 = CreateWindow( 
-				L"STATIC", GETSTRING_DLG(ConfirmNewPin), WS_CHILD | WS_VISIBLE | SS_LEFT,
-				210, clientRect.bottom - 86, clientRect.right/2 - 100, 22, 
-				m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
-
-
-			//ImageKP_BTN = ImageKP_BTN_Mask = NULL;
-
-			SendMessage( hStaticText1, WM_SETFONT, (WPARAM)TextFont, 0 );
-			SendMessage( hStaticText2, WM_SETFONT, (WPARAM)TextFont, 0 );
-			SendMessage( hStaticText3, WM_SETFONT, (WPARAM)TextFont, 0 );
-		}
-
-		SendMessage( hOkButton, WM_SETFONT, (WPARAM)TextFont, 0 );
-		SendMessage( hCancelButton, WM_SETFONT, (WPARAM)TextFont, 0 );
-
-		if(wcscmp(L"PIN da Assinatura", PINName.c_str())==0)
-			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP2) );
-		else
-			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP1) );
-
-		CreateBitapMask( ImagePIN, ImagePIN_Mask );
-
-		SetFocus( GetDlgItem( m_hWnd, IDC_EDIT ) );
+		SetFocus(GetDlgItem(m_hWnd, IDC_EDIT));
 
 	}
 }

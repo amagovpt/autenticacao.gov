@@ -41,9 +41,6 @@
     <ClInclude Include="..\dialogs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dlgWndAskAccess.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="dlgWndAskPIN.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -56,9 +53,6 @@
     <ClInclude Include="dlgWndBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dlgWndModal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="dlgWndPinPadInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,9 +60,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\langUtil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
@@ -100,42 +91,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Images\ICO_CARD_WARNING_64x64.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\KeyPadButton.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\KeyPadButton0.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\KeyPadButton1.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\KeyPadButton2.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\KeyPadButton3.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\KeyPadButton4.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\KeyPadButton5.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\KeyPadButton6.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\KeyPadButton7.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\KeyPadButton8.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\KeyPadButton9.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\KeyPadButtonCE.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

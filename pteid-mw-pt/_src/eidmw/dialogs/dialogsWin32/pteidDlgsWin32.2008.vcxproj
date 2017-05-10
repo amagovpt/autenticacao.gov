@@ -211,14 +211,11 @@
     <ClInclude Include="..\dialogs.h" />
     <ClInclude Include="..\language.h" />
     <ClInclude Include="..\langUtil.h" />
-    <ClInclude Include="dlgWndAskAccess.h" />
     <ClInclude Include="dlgWndAskPIN.h" />
     <ClInclude Include="dlgWndAskPINs.h" />
     <ClInclude Include="dlgWndBadPIN.h" />
     <ClInclude Include="dlgWndBase.h" />
-    <ClInclude Include="dlgWndModal.h" />
     <ClInclude Include="dlgWndPinPadInfo.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -232,18 +229,6 @@
     <Image Include="Images\ICO_CARD_QUESTION_64x64.bmp" />
     <Image Include="Images\ICO_CARD_SIGN_128x128.bmp" />
     <Image Include="Images\ICO_CARD_WARNING_64x64.bmp" />
-    <Image Include="Images\KeyPadButton.bmp" />
-    <Image Include="Images\KeyPadButton0.bmp" />
-    <Image Include="Images\KeyPadButton1.bmp" />
-    <Image Include="Images\KeyPadButton2.bmp" />
-    <Image Include="Images\KeyPadButton3.bmp" />
-    <Image Include="Images\KeyPadButton4.bmp" />
-    <Image Include="Images\KeyPadButton5.bmp" />
-    <Image Include="Images\KeyPadButton6.bmp" />
-    <Image Include="Images\KeyPadButton7.bmp" />
-    <Image Include="Images\KeyPadButton8.bmp" />
-    <Image Include="Images\KeyPadButton9.bmp" />
-    <Image Include="Images\KeyPadButtonCE.bmp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\common\pteidcommon.2008.vcxproj">

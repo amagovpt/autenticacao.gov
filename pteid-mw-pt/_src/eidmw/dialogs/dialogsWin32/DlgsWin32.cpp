@@ -121,12 +121,11 @@ std::wstring getPinName( DlgPinUsage usage, const wchar_t *inPinName ){
     }/* switch( usage ) */
 
     return PinName;
-}/* getPinName() */
+}
 
 	/************************
 	*       DIALOGS
 	************************/
-//TODO: Add Keypad possibility in DlgAskPin(s)
 DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			DlgPinUsage usage, const wchar_t *csPinName,
 			DlgPinInfo pinInfo, wchar_t *csPin, unsigned long ulPinBufferLen, void *wndGeometry)

@@ -121,18 +121,6 @@ IDB_ICO_INFO            BITMAP                  "Images\\ICO_CARD_INFO_64x64.bmp
 IDB_ICO_NOK             BITMAP                  "Images\\ICO_CARD_NOK_64x64.bmp"
 IDB_ICO_QUESTION        BITMAP                  "Images\\ICO_CARD_QUESTION_64x64.bmp"
 IDB_ICO_WARNING         BITMAP                  "Images\\ICO_CARD_WARNING_64x64.bmp"
-IDB_KP_BTN              BITMAP                  "Images\\KeyPadButton.bmp"
-IDB_KP_0                BITMAP                  "Images\\KeyPadButton0.bmp"
-IDB_KP_1                BITMAP                  "Images\\KeyPadButton1.bmp"
-IDB_KP_2                BITMAP                  "Images\\KeyPadButton2.bmp"
-IDB_KP_3                BITMAP                  "Images\\KeyPadButton3.bmp"
-IDB_KP_4                BITMAP                  "Images\\KeyPadButton4.bmp"
-IDB_KP_5                BITMAP                  "Images\\KeyPadButton5.bmp"
-IDB_KP_6                BITMAP                  "Images\\KeyPadButton6.bmp"
-IDB_KP_7                BITMAP                  "Images\\KeyPadButton7.bmp"
-IDB_KP_8                BITMAP                  "Images\\KeyPadButton8.bmp"
-IDB_KP_9                BITMAP                  "Images\\KeyPadButton9.bmp"
-IDB_KP_CE               BITMAP                  "Images\\KeyPadButtonCE.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
