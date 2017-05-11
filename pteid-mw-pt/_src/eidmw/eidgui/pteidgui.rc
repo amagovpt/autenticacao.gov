@@ -92,13 +92,13 @@ BEGIN
     BEGIN
         BLOCK "080904b0"
         BEGIN
-            VALUE "CompanyName", "Portuguese Government"
+	        VALUE "CompanyName", PTEID_COMPANY_NAME
             VALUE "FileDescription", "Portugal Identity Card Utility Application"
             VALUE "FileVersion", WIN_GUI_VERSION_STRING
             VALUE "InternalName", "pteidgui"
-            VALUE "LegalCopyright", "Copyright (C) 2010-2012"
+			VALUE "LegalCopyright", PTEID_COPYRIGHT
             VALUE "OriginalFilename", "pteidgui.exe"
-            VALUE "ProductName", "Portugal eID MiddleWare"
+			VALUE "ProductName", PTEID_PRODUCT_NAME
             VALUE "ProductVersion", PTEID_PRODUCT_VERSION
         END
     END
