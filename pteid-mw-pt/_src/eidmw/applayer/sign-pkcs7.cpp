@@ -298,37 +298,32 @@ void addCertificateChain(PKCS7 *p7, CByteArray CA_certificate)
     add_certificate( p7, CA_certificate );
 
     /*
-        Cartao de Cidadao Root CA certificates as of July 2015
+        Cartao de Cidadao Root CA certificates as of May 2017
         (https://pki.cartaodecidadao.pt/publico/certificado/cc_ec_cidadao/)
     */
     CByteArray cc01, cc02, cc03;
-    cc01 = CByteArray( PTEID_CERTS[22].cert_data, PTEID_CERTS[22].cert_len );
-    cc02 = CByteArray( PTEID_CERTS[23].cert_data, PTEID_CERTS[23].cert_len );
-    cc03 = CByteArray( PTEID_CERTS[24].cert_data, PTEID_CERTS[24].cert_len );
+    cc01 = CByteArray(PTEID_CERTS[2].cert_data, PTEID_CERTS[2].cert_len );
+    cc02 = CByteArray(PTEID_CERTS[3].cert_data, PTEID_CERTS[3].cert_len );
+    cc03 = CByteArray(PTEID_CERTS[4].cert_data, PTEID_CERTS[4].cert_len );
 
     /* Add issuer of Signature SubCA */
-    if ( fwk->isIssuer( CA_certificate, cc01 ) ){
-        MWLOG( LEV_ERROR, MOD_APL, "Added_certificate - cc01");
-
-        add_certificate( p7, cc01 );
+    if ( fwk->isIssuer( CA_certificate, cc01 )) {
+        MWLOG(LEV_DEBUG, MOD_APL, "addCertificateChain() Added certificate - CC01");
+        add_certificate(p7, cc01 );
     } else if ( fwk->isIssuer( CA_certificate, cc02 ) ){
-        MWLOG( LEV_ERROR, MOD_APL, "Added_certificate - cc02");
+		MWLOG(LEV_DEBUG, MOD_APL, "addCertificateChain() Added certificate - CC02");
 
         add_certificate( p7, cc02 );
     } else if (fwk->isIssuer( CA_certificate, cc03 ) ) {
-        MWLOG( LEV_ERROR, MOD_APL, "Added_certificate - cc03");
+		MWLOG(LEV_DEBUG, MOD_APL, "addCertificateChain() Added certificate - CC03");
         add_certificate( p7, cc03 );
     }
     else {
-
-        MWLOG( LEV_ERROR
-                , MOD_APL
-                , "Couldn't find issuer for certificate SIGNATURE_SUBCA. "
-                , "The validation will be broken!");
+        MWLOG(LEV_ERROR, MOD_APL, "Couldn't find issuer for certificate SIGNATURE_SUBCA. The validation will be broken!");
     }
 
     /* Add ECRaizEstado certificate */
-    add_certificate( p7, PTEID_CERTS[21].cert_data, PTEID_CERTS[21].cert_len );
+    add_certificate(p7, PTEID_CERTS[1].cert_data, PTEID_CERTS[1].cert_len);
 }
 
 /*  *********************************************************

@@ -85,24 +85,40 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 }
 
 
-void SSLConnection::loadUserCert(SSL_CTX *ctx)
+void SSLConnection::loadCertsFromCard(SSL_CTX *ctx)
 {
 
 	APL_Card *card = AppLayer.getReader().getCard();
-	CByteArray user_cert;
-	card->readFile(PTEID_FILE_CERT_AUTHENTICATION, user_cert);
+	CByteArray card_cert;
+	X509 * pCert = NULL;
+	card->readFile(PTEID_FILE_CERT_AUTHENTICATION, card_cert);
 
-	//const unsigned char *p = user_cert.GetBytes();
-
-	//X509 * cert = d2i_X509(NULL, &p, user_cert.Size());
-
-	//if (cert != NULL)
-	//	SSL_CTX_use_certificate(ctx, cert);
-	int ret = SSL_CTX_use_certificate_ASN1(ctx, user_cert.Size(), user_cert.GetBytes());
+	int ret = SSL_CTX_use_certificate_ASN1(ctx, card_cert.Size(), card_cert.GetBytes());
 
 	if (ret != 1)
 	{
-		MWLOG(LEV_ERROR, MOD_APL, "Error loading auth certificate for SSL handshake! Detail: %s",
+		MWLOG(LEV_ERROR, MOD_APL, "Error loading Auth certificate for SSL handshake! Detail: %s",
+			ERR_error_string(ERR_get_error(), NULL));
+	}
+
+	card->readFile(PTEID_FILE_CERT_ROOT_AUTH, card_cert);
+
+	unsigned char * cert_data = card_cert.GetBytes();
+
+	pCert = d2i_X509(&pCert, (const unsigned char **)&cert_data,
+		card_cert.Size());
+
+	if (pCert == NULL)
+	{
+		MWLOG(LEV_ERROR, MOD_APL, "Error parsing Auth SubCA certificate from card file! This should never happen...");
+		return;
+	}
+
+	ret = SSL_CTX_add_extra_chain_cert(ctx, pCert);
+
+	if (ret != 1)
+	{
+		MWLOG(LEV_ERROR, MOD_APL, "Error loading Auth SubCA certificate for SSL handshake! Detail: %s",
 			ERR_error_string(ERR_get_error(), NULL));
 	}
 
@@ -137,7 +153,7 @@ void SSLConnection::loadCertChain(X509_STORE *store)
 
 }
 
-void SSLConnection::loadCertChain(X509_STORE *store, CByteArray &cert_data_ba)
+void SSLConnection::loadCertChain(SSL_CTX *ctx, CByteArray &cert_data_ba)
 {
 	X509 *pCert = NULL;
 	unsigned char * cert_data = cert_data_ba.GetBytes();
@@ -153,7 +169,7 @@ void SSLConnection::loadCertChain(X509_STORE *store, CByteArray &cert_data_ba)
 	}
 	else
 	{
-		if(X509_STORE_add_cert(store, pCert) == 0)
+		if(SSL_CTX_add_extra_chain_cert(ctx, pCert) == 0)
 			MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection::loadCertChainFromCard: error adding certificate");
 	}
 
@@ -844,26 +860,21 @@ void SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
     //NOTE: to get more debug output from the SSL layer uncomment this
     //SSL_CTX_set_info_callback(ctx, eIDMW::get_ssl_state_callback);
 
-    loadUserCert(ctx);
-
-    X509_STORE *store = SSL_CTX_get_cert_store(ctx);
+	loadCertsFromCard(ctx);
+	X509_STORE *store = SSL_CTX_get_cert_store(ctx);
 
     if (strstr(host_and_port, "teste") != NULL)
     {
     	APL_Card *card = AppLayer.getReader().getCard();
 		CByteArray ca_cert;
-
-		card->readFile(PTEID_FILE_CERT_ROOT_AUTH, ca_cert);
-		loadCertChain(store, ca_cert);
-
+		
+		//Load the self-signed root certificate from the test card
 		card->readFile(PTEID_FILE_CERT_ROOT, ca_cert);
-		loadCertChain(store, ca_cert);
+		loadCertChain(ctx, ca_cert);
 
-		//TODO: maybe load just the Multicert Test Root certificate
-		loadCertChain(store);
     }
-    else
-		loadCertChain(store);
+
+ 	loadCertChain(store);
 
     if(!(SSL_CTX_load_verify_locations(ctx,
 			NULL, "/etc/ssl/certs")))
