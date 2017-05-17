@@ -5,7 +5,7 @@
  *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *
  *  HTTPS Client with Client Certificate Authentication for PT-eID Middleware
- *  It provides the communication protocol with the OTP and Address Change HTTPS WebServices
+ *  It provides the communication protocol to the Address Change WebServices
  *
 */
 #include "SSLConnection.h"
