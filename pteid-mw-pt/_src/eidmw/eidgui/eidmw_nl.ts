@@ -100,8 +100,8 @@
         <translation>Código de erro = </translation>
     </message>
     <message>
-        <source>Please try again. If this error persists, please have your process number and error code ready, and contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail cartaodecidadao@dgrn.mj.pt.</source>
-        <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail cartaodecidadao@dgrn.mj.pt.</translation>
+        <source>Please try again. If this error persists, please have your process number and error code ready, and contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail cartaodecidadao@irn.mj.pt.</source>
+        <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail cartaodecidadao@irn.mj.pt.</translation>
     </message>
     <message>
         <source>Changing Address in card...</source>
