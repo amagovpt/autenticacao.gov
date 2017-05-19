@@ -435,92 +435,46 @@ PTEID_XMLDoc::~PTEID_XMLDoc()
 
 PTEID_ByteArray PTEID_XMLDoc::getXML()
 {
+	//Don't do anything, the previous implementation was broken
+	//Keep it just to maintain the API
 	PTEID_ByteArray out;
-
-	BEGIN_TRY_CATCH
-
-	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-
-	CByteArray result=pimpl->getXML();
-	out.Append(result.GetBytes(),result.Size());
-
-	END_TRY_CATCH
 
 	return out;
 }
 
 PTEID_ByteArray PTEID_XMLDoc::getCSV()
 {
+	//Keep it just to maintain the API
 	PTEID_ByteArray out;
-
-	BEGIN_TRY_CATCH
-
-	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-
-	CByteArray result=pimpl->getCSV();
-	out.Append(result.GetBytes(),result.Size());
-
-	END_TRY_CATCH
 
 	return out;
 }
 
 PTEID_ByteArray PTEID_XMLDoc::getTLV()
 {
+	//Keep it just to maintain the API
 	PTEID_ByteArray out;
-
-	BEGIN_TRY_CATCH
-
-	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-
-	CByteArray result=pimpl->getTLV();
-	out.Append(result.GetBytes(),result.Size());
-
-	END_TRY_CATCH
 
 	return out;
 }
 
 bool PTEID_XMLDoc::writeXmlToFile(const char * csFilePath)
 {
-	bool out = false;
-
-	BEGIN_TRY_CATCH
-
-	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-	out = pimpl->writeXmlToFile(csFilePath);
-
-	END_TRY_CATCH
-
-	return out;
+	//Don't do anything, the previous implementation was broken
+	//Keep it just to maintain the API
+	return true;
 }
 
 bool PTEID_XMLDoc::writeCsvToFile(const char * csFilePath)
 {
-	bool out = false;
-
-	BEGIN_TRY_CATCH
-
-	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-	out = pimpl->writeCsvToFile(csFilePath);
-
-	END_TRY_CATCH
-
-	return out;
+	//Keep it just to maintain the API
+	return true;
 }
 
 bool PTEID_XMLDoc::writeTlvToFile(const char * csFilePath)
 {
-	bool out = false;
-
-	BEGIN_TRY_CATCH
-
-	APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-	out = pimpl->writeTlvToFile(csFilePath);
-
-	END_TRY_CATCH
-
-	return out;
+	//Keep it just to maintain the API
+	return true;
 }
 
 /*****************************************************************************************
