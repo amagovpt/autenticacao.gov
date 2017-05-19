@@ -9,6 +9,7 @@
 #include "MiscUtil.h"
 #include "CardPteidDef.h"
 #include "Log.h"
+#include "APLConfig.h"
 
 #include <string>
 
@@ -407,11 +408,19 @@ namespace eIDMW
 		const char *reason, const char *outfile_path)
 	{
 
+		bool isLangPT = false;
 		PDFDoc *doc = m_doc;
 		//The class ctor initializes it to (0,0,0,0)
 		//so we can use this for invisible sig
 		PDFRectangle sig_location;
 		const char * signature_contents = NULL;
+
+		APL_Config config_language(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
+
+		//Default value of language config is PT
+		if (wcscmp(config_language.getWString(),
+			      CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE.csDefault) == 0)
+			isLangPT = true;
 
 		GooString *outputName;
 		outputName = new GooString(outfile_path);
@@ -519,7 +528,7 @@ namespace eIDMW
 			doc->addCustomSignatureImage(my_custom_image.img_data, my_custom_image.img_length);
 
                 doc->prepareSignature(incremental, &sig_location, m_citizen_fullname, m_civil_number,
-			location, reason, m_page, m_sector);
+			         location, reason, m_page, m_sector, isLangPT);
                 unsigned long len = doc->getSigByteArray(&to_sign, incremental);
 
 		int rc = 0;

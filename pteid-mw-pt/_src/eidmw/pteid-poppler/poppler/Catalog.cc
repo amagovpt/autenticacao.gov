@@ -262,7 +262,7 @@ fallback:
 void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *firstPageRef,
 	       	const char *location, const char *civil_number,
 		const char *reason, unsigned long filesize, int page, int sig_sector,
-		unsigned char *img_data, unsigned long img_length) 
+		unsigned char *img_data, unsigned long img_length, bool isPTLanguage)
 {
 
 	Object signature_field;
@@ -327,7 +327,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	}
 
 	addSignatureAppearance(&signature_field, name, civil_number, date_outstr,
-		 location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature);
+		 location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
 
 	memset(date_outstr, 0, sizeof(date_outstr));
 
@@ -890,8 +890,18 @@ GooString *formatMultilineString(char *content, double available_space, double f
 
 void Catalog::addSignatureAppearance(Object *signature_field, const char *name, const char *civil_number,
 	char * date_str, const char* location, const char* reason, int rect_x, int rect_y,
-	unsigned char *img_data, unsigned long img_length, bool rotate_signature)
+	unsigned char *img_data, unsigned long img_length, bool rotate_signature, bool isPTLanguage)
 {
+	char * strings_pt[] = { "(Assinado por : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n", 
+							"(Num. de Identifica\xE7\xE3o Civil: {0:s}) Tj\r\n",
+							"0 -10 Td\r\n(Data: {0:s}) Tj\r\n",
+							"Localiza\xE7\xE3o: {0:s}"};
+
+	char * strings_en[] = { "(Signed by : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
+							"(Civil identification number: {0:s}) Tj\r\n",
+							"0 -10 Td\r\n(Date: {0:s}) Tj\r\n",
+							"Location: {0:s}"};
+
 	Object ap_dict, appearance_obj, obj1, obj2, obj3,
 	       ref_to_dict, ref_to_dict2, ref_to_n2, ref_to_n0, font_dict, xobject_layers;
 
@@ -944,7 +954,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 
 	double assinado_por_length = 51.0;
 	//Change to bold font for the signer name
-	std::auto_ptr<GooString> str1(GooString::format("(Assinado por: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
+	std::auto_ptr<GooString> str1(GooString::format(isPTLanguage ? strings_pt[0] : strings_en[0],
 		assinado_por_length, (int)font_size));
 
 	n2_commands->append(str1.get());
@@ -975,11 +985,11 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	std::auto_ptr<GooString> str3(GooString::format("/F1 {0:d} Tf\r\n", (int)font_size));
 	n2_commands->append(str3.get());
 
-	std::auto_ptr<GooString> str4(GooString::format("(Num. de Identifica\xE7\xE3o Civil: {0:s}) Tj\r\n",
+	std::auto_ptr<GooString> str4(GooString::format(isPTLanguage ? strings_pt[1] : strings_en[1],
 				civil_number));
 	n2_commands->append(str4.get());
 
-	std::auto_ptr<GooString> str5(GooString::format("0 -10 Td\r\n(Data: {0:s}) Tj\r\n",
+	std::auto_ptr<GooString> str5(GooString::format(isPTLanguage ? strings_pt[2] : strings_en[2],
 		date_str));
 	n2_commands->append(str5.get());
 
@@ -987,7 +997,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	{
 		n2_commands->append("0 -10 Td\r\n");
 		char * location_latin1 = utf8_to_latin1(location);
-		GooString * tmp_location = GooString::format("Localiza\xE7\xE3o: {0:s}",
+		GooString * tmp_location = GooString::format(isPTLanguage ? strings_pt[3] : strings_en[3],
 					location_latin1);
 
 		GooString * multiline2 = formatMultilineString(tmp_location->getCString(), 
