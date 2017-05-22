@@ -42,7 +42,6 @@ std::wstring lang = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGU
 dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & Header, std::wstring & PINName, bool UseKeypad, HWND Parent )
 :Win32Dialog(L"WndAskPIN")
 {
-	m_UseKeypad = UseKeypad;
 
 	PinResult[0] = ' ';
 	PinResult[1] = (char)0;
@@ -108,10 +107,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 		LONG pinTop=0;
 		LONG pinLeft=clientRect.right/2 - 100 + 120;
 
-		if( m_UseKeypad )
-			pinTop = clientRect.top + 20;
-		else
-			pinTop = clientRect.bottom - 100;
+		pinTop = clientRect.bottom - 100;
 
 		HWND hTextEdit = CreateWindowEx( WS_EX_CLIENTEDGE,
 			L"EDIT", L"", dwStyle, 
@@ -297,29 +293,18 @@ LRESULT dlgWndAskPIN::ProcecEvent
 
 			GetClientRect( m_hWnd, &rect );
 			//Size of the background Image
-			MaskBlt( m_hDC, 4, m_KeypadHeight + 8,
-				410, 261,	hdcMem, 0, 0,
+			MaskBlt( m_hDC, 4, 8,
+				410, 261, hdcMem, 0, 0,
 				ImagePIN_Mask, 0, 0, MAKEROP4( SRCCOPY, 0x00AA0029 ) );
 		
 			
 			SelectObject( hdcMem, oldObj );
 			DeleteDC(hdcMem);
 
-			if( m_UseKeypad )
-			{
-				GetClientRect( m_hWnd, &rect );
-				rect.left += 8;
-				rect.right -= 8;
-				rect.top += 8;
-				rect.bottom = m_KeypadHeight;
-
-				DrawEdge( m_hDC, &rect, EDGE_RAISED, BF_RECT );
-			}
-
 			//Change top header dimensions
 			GetClientRect( m_hWnd, &rect );
 			rect.left += IMG_SIZE + 100;
-			rect.top = m_KeypadHeight + 60;
+			rect.top = 60;
 			rect.right -= 20;
 			rect.bottom = rect.bottom - 60;
 			SetBkColor( m_hDC, GetSysColor( COLOR_3DFACE ) );

@@ -47,7 +47,6 @@ std::wstring langchange = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL
 dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & PINName, bool UseKeypad, HWND Parent )
 :Win32Dialog(L"WndAskPINs")
 {
-	m_UseKeypad = UseKeypad;
 
 	InputField1_OK = InputField2_OK = InputField3_OK = false;
 	Pin1Result[0] = ' ';
@@ -75,8 +74,6 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 	szPIN = PINName.c_str();
 
 	int Height = 263;
-	if (m_UseKeypad)
-		Height = 430;
 
 	if (CreateWnd(tmpTitle.c_str(), 420, Height, IDI_APPICON, Parent))
 	{
@@ -229,20 +226,13 @@ LRESULT dlgWndAskPINs::ProcecEvent
 			{
 				case IDC_EDIT_PIN1: // == IDC_EDIT
 				{
-					if( EN_CHANGE == HIWORD(wParam) )
+					if (EN_CHANGE == HIWORD(wParam))
 					{
-						if( m_UseKeypad )
-						{
-							unsigned int len = (unsigned int)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN1 ), WM_GETTEXTLENGTH, 0, 0 );
-							unsigned int iTmp = m_ulPin1MinLen;
-							EnableWindow( GetDlgItem( m_hWnd, IDOK ), ( iTmp <= len ) );
-						}
-						else
-						{
-							unsigned int len = (unsigned int)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN1 ), WM_GETTEXTLENGTH, 0, 0 );
-							InputField1_OK = len >= m_ulPin1MinLen;
-							EnableWindow( GetDlgItem( m_hWnd, IDOK ), ( InputField1_OK && InputField2_OK && InputField3_OK ) );
-						}
+
+						unsigned int len = (unsigned int)SendMessage(GetDlgItem(m_hWnd, IDC_EDIT_PIN1), WM_GETTEXTLENGTH, 0, 0);
+						InputField1_OK = len >= m_ulPin1MinLen;
+						EnableWindow(GetDlgItem(m_hWnd, IDOK), (InputField1_OK && InputField2_OK && InputField3_OK));
+
 					}
 					return TRUE;
 				}
@@ -268,67 +258,8 @@ LRESULT dlgWndAskPINs::ProcecEvent
 				}
 
 				case IDB_OK:
-					if( m_UseKeypad )
-					{
-						if( m_UK_InputField == INPUTFIELD_OLD )
-						{
-							// Store the Input @ Pin1
-							wchar_t nameBuf[128];
-							long len = (long)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT ), WM_GETTEXTLENGTH, 0, 0 );
-							if( len < 128 )
-							{
-								SendMessage( GetDlgItem( m_hWnd, IDC_EDIT ), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf );
-								wcscpy_s( Pin1Result, nameBuf );
-							}
-							SetHeaderText( GETSTRING_DLG(EnterYourNewPinCode));
-						}
-						else if( m_UK_InputField == INPUTFIELD_NEW )
-						{
-							// Store the Input @ Pin2
-							wchar_t nameBuf[128];
-							long len = (long)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT ), WM_GETTEXTLENGTH, 0, 0 );
-							if( len < 128 )
-							{
-								SendMessage( GetDlgItem( m_hWnd, IDC_EDIT ), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf );
-								wcscpy_s( Pin2Result, nameBuf );
-							}
-							DrawError = false;
-							GetClientRect( m_hWnd, &rect );
-							rect.bottom -= 36;
-							rect.top = rect.bottom - 30;
-							InvalidateRect( m_hWnd, &rect, TRUE );
-							UpdateWindow( m_hWnd );
-							SetHeaderText( GETSTRING_DLG(EnterYourNewPinCodeAgainToConfirm) );
-						}
-						else // INPUTFIELD_CONFIRM
-						{
-							// Check if the Input is equal to Pin2
-							wchar_t nameBuf[128];
-							SendMessage( GetDlgItem( m_hWnd, IDC_EDIT ), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf );
-							if( wcscoll( nameBuf, Pin2Result ) == 0 )
-							{
-								dlgResult = eIDMW::DLG_OK;
-								close();
-							}
-							else // Not OK
-							{
-								m_UK_InputField = INPUTFIELD_NEW;
-								SendMessage( GetDlgItem( m_hWnd, IDC_EDIT ), WM_SETTEXT, 0, (LPARAM)"" );
-
-								SetHeaderText( GETSTRING_DLG(RetryEnterYourNewPinCode) );
-								DrawError = true;
-								GetClientRect( m_hWnd, &rect );
-								rect.bottom -= 36;
-								rect.top = rect.bottom - 30;
-								InvalidateRect( m_hWnd, &rect, TRUE );
-								UpdateWindow( m_hWnd );
-								return TRUE;
-							}
-						}
-						m_UK_InputField++;
-						SendMessage( GetDlgItem( m_hWnd, IDC_EDIT ), WM_SETTEXT, 0, (LPARAM)"" );
-					}
-					else if( !CheckPin2Result() ) // !m_UseKeypad
+					
+					if( !CheckPin2Result() )
 					{
 						DrawError = true;
 						GetClientRect( m_hWnd, &rect );
@@ -437,65 +368,43 @@ LRESULT dlgWndAskPINs::ProcecEvent
 
 		case WM_PAINT:
 		{
-			m_hDC = BeginPaint( m_hWnd, &ps );
+			m_hDC = BeginPaint(m_hWnd, &ps);
 
-				HDC hdcMem;
-				GetClientRect( m_hWnd, &rect );
+			HDC hdcMem;
+			GetClientRect(m_hWnd, &rect);
 
-				hdcMem = CreateCompatibleDC( m_hDC );
-				SelectObject( hdcMem , ImagePIN );
+			hdcMem = CreateCompatibleDC(m_hDC);
+			SelectObject(hdcMem, ImagePIN);
 
-				if( m_UseKeypad )
-				{
-					MaskBlt( m_hDC, 4, rect.bottom - 40 - IMG_SIZE,
-						IMG_SIZE, IMG_SIZE,	hdcMem, 0, 0,
-						ImagePIN_Mask, 0, 0, MAKEROP4( SRCCOPY, 0x00AA0029 ) );
-					rect.bottom -= 40;
-					rect.top = rect.bottom - IMG_SIZE + 32;
-				}
-				else
-				{
-					MaskBlt( m_hDC, 4, 4, 410, 261,
-						hdcMem, 0, 0, ImagePIN_Mask, 0, 0,
-						MAKEROP4( SRCCOPY, 0x00AA0029 ) );
-					rect.bottom = IMG_SIZE + 52;
-					rect.top += 52;
-				}
+			MaskBlt(m_hDC, 4, 4, 410, 261,
+				hdcMem, 0, 0, ImagePIN_Mask, 0, 0,
+				MAKEROP4(SRCCOPY, 0x00AA0029));
+			rect.bottom = IMG_SIZE + 52;
+			rect.top += 52;
 
-				DeleteDC(hdcMem);
+			DeleteDC(hdcMem);
 
-				rect.left += 225;
-				rect.right -= 20;
-				SetBkColor( m_hDC, GetSysColor( COLOR_3DFACE ) );
-				SelectObject( m_hDC, TextFont );
-				DrawText( m_hDC, szHeader, -1, &rect, DT_WORDBREAK );
+			rect.left += 225;
+			rect.right -= 20;
+			SetBkColor(m_hDC, GetSysColor(COLOR_3DFACE));
+			SelectObject(m_hDC, TextFont);
+			DrawText(m_hDC, szHeader, -1, &rect, DT_WORDBREAK);
 
-				if( DrawError )
-				{
-					SetTextColor( m_hDC, RGB(255, 0, 0) );
-					
-					GetClientRect( m_hWnd, &rect );
-					rect.left += 10;
-					rect.bottom -= 36;
-					rect.top = rect.bottom - 30;
+			if (DrawError)
+			{
+				SetTextColor(m_hDC, RGB(255, 0, 0));
 
-					DrawText( m_hDC, GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical), -1, &rect, DT_SINGLELINE | DT_VCENTER );
-				}
+				GetClientRect(m_hWnd, &rect);
+				rect.left += 10;
+				rect.bottom -= 36;
+				rect.top = rect.bottom - 30;
 
-				if( m_UseKeypad )
-				{
-					GetClientRect( m_hWnd, &rect );
-					rect.left += 8;
-					rect.right -= 8;
-					rect.top += 8;
-					rect.bottom -= 48 + IMG_SIZE;
+				DrawText(m_hDC, GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical), -1, &rect, DT_SINGLELINE | DT_VCENTER);
+			}
 
-					DrawEdge( m_hDC, &rect, EDGE_RAISED, BF_RECT );
-				}
+			EndPaint(m_hWnd, &ps);
 
-			EndPaint( m_hWnd, &ps );
-
-			SetForegroundWindow( m_hWnd );
+			SetForegroundWindow(m_hWnd);
 
 			return 0;
 		}
@@ -509,13 +418,7 @@ LRESULT dlgWndAskPINs::ProcecEvent
 		case WM_NCACTIVATE:
 		{
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPINs::ProcecEvent WM_NCACTIVATE (wParam=%X, lParam=%X)",wParam,lParam);
-
-			//if( !IsIconic( m_hWnd ) && m_ModalHold && Active_hWnd == m_hWnd )
-			//{
-			//	ShowWindow( m_hWnd, SW_SHOW );
-			//	SetFocus( m_hWnd );
-			//	return 0;
-			//}
+				
 			if(!wParam)
 			{
 				SetFocus( m_hWnd );
@@ -523,28 +426,7 @@ LRESULT dlgWndAskPINs::ProcecEvent
 			}
 			break;
 		}
-
-		case WM_SETFOCUS:
-		{
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPINs::ProcecEvent WM_SETFOCUS (wParam=%X, lParam=%X)",wParam,lParam);
-			break;
-		}
-
-		case WM_KILLFOCUS:
-		{
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPINs::ProcecEvent WM_KILLFOCUS (wParam=%X, lParam=%X)",wParam,lParam);
-
-			//if( !IsIconic( m_hWnd ) && m_ModalHold && Active_hWnd == m_hWnd )
-			//{
-			//	if( GetParent((HWND)wParam ) != m_hWnd )
-			//	{
-			//		SetFocus( m_hWnd );
-			//		return 0;
-			//	}
-			//}
-			break;
-		}
-
+		
 
 		case WM_CREATE:
 		{

@@ -39,7 +39,6 @@ class dlgWndAskPIN : public Win32Dialog
 	const wchar_t * szHeader;
 	const wchar_t * szPIN;
 
-	LONG m_KeypadHeight;
 
 public:
 	dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & Header, std::wstring & PINName, bool UseKeypad, HWND Parent = NULL );
