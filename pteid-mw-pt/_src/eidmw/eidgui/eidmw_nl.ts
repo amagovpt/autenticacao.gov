@@ -301,14 +301,6 @@
         <translation>Outros Dados</translation>
     </message>
     <message>
-        <source>Identificatienummer&lt;br&gt;&lt;i&gt;National Number&lt;/i&gt;</source>
-        <translation>Num. Identificação&lt;br&gt;&lt;i&gt;National Number&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Chip nummer / &lt;i&gt;Chip number&lt;/i&gt;</source>
-        <translation>Num. Chip / &lt;i&gt;Chip number&lt;/i&gt;</translation>
-    </message>
-    <message>
         <source>Special Status</source>
         <translation>Anotações especiais</translation>
     </message>
@@ -729,14 +721,6 @@ Please specify .xml, .csv or .eid</source>
         <translation>Sexo</translation>
     </message>
     <message>
-        <source>National Number</source>
-        <translation>Nationaal nummer</translation>
-    </message>
-    <message>
-        <source>Chip number</source>
-        <translation>Chip nummer</translation>
-    </message>
-    <message>
         <source>Retrieving certificates</source>
         <translation type="unfinished">Obtendo os certificados do cartão</translation>
     </message>
@@ -1023,6 +1007,10 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <source>The Citizen Card has been activated</source>
         <translation>O Cartão de Cidadão foi ativado</translation>
+    </message>
+    <message>
+        <source>The Citizen Card is not active</source>
+        <translation>O Cartão de Cidadão não se encontra ativo</translation>
     </message>
     <message>
         <source>To verify that the card is not suspended or revoked,you should validate the certificates on the Certificates tab</source>
@@ -1330,7 +1318,7 @@ Please specify .xml, .csv or .eid</source>
     </message>
     <message>
         <source>The Citizen Card is not active</source>
-        <translation>O cartão de Cidadão não se encontra ativo</translation>
+        <translation>O Cartão de Cidadão não se encontra ativo</translation>
     </message>
     <message>
         <source>Cancel</source>

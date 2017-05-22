@@ -3262,7 +3262,7 @@ void MainWnd::refreshTabIdentityExtra()
 
 	m_ui.txtIdentityExtra_LocalofRequest->setText( QString::fromUtf8(PersonFields[LOCALOFREQUEST].toStdString().c_str()) );
 	m_ui.txtIdentityExtra_LocalofRequest->setAccessibleName	( QString::fromUtf8(PersonFields[LOCALOFREQUEST].toStdString().c_str()) );
-	//Hackish translation
+
 	QString card_validation = QString::fromUtf8(PersonFields[VALIDATION].toStdString().c_str());
 	card_validation = translateText(card_validation);
 	m_ui.txtIdentityExtra_Validate->setText (card_validation);
