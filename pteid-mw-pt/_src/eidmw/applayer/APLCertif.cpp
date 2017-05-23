@@ -122,17 +122,17 @@ void APL_Certifs::initMyCerts()
         for(itrOrder=m_certifsOrder.begin();itrOrder!=m_certifsOrder.end();itrOrder++)
         {
             itrCert = m_certifs.find(*itrOrder);
-            if( itrCert == m_certifs.end() ){
+            if( itrCert == m_certifs.end() ) {
                 //The certif is not in the map
                 //Should not happend
                 MWLOG(LEV_ERROR, MOD_APL, L"Exception in initMyCerts(): certificate not found!" );
                 throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
-            }/* if( itrCert == m_certifs.end() ) */
+            }
 
             cert = itrCert->second;
             if ( strcmp( cert->getIssuerName(), "ECRaizEstado" ) == 0 ){
                 my_certifs.push_back(cert);
-            }/* if ( strcmp( cert->getIssuerName(), "ECRaizEstado" ) == 0 ) */
+            }
         }
 
 	APL_Certif * issuer = findIssuer(cert);

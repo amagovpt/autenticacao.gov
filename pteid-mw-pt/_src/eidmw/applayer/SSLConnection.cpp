@@ -113,8 +113,9 @@ void SSLConnection::loadCertsFromCard(SSL_CTX *ctx)
 		MWLOG(LEV_ERROR, MOD_APL, "Error parsing Auth SubCA certificate from card file! This should never happen...");
 		return;
 	}
+	X509_STORE *store = SSL_CTX_get_cert_store(ctx);
 
-	ret = SSL_CTX_add_extra_chain_cert(ctx, pCert);
+	ret = X509_STORE_add_cert(store, pCert);
 
 	if (ret != 1)
 	{
