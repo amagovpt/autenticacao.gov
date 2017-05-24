@@ -557,7 +557,7 @@ void MainWnd::showChangeAddressDialog(long code)
 
 	if (code != 0)
 		error_msg += "\n\n" + support_string;
-	
+
 	QMessageBox msgBoxp(icon, caption, error_msg, 0, this);
   	msgBoxp.exec();
 
@@ -2089,7 +2089,7 @@ void MainWnd::getCardForReading(PTEID_EIDCard * &new_card)
             PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
             if (m_Settings.getSelectedReader() != -1)
             {
-            	selected_reader = m_Settings.getSelectedReader(); 
+            	selected_reader = m_Settings.getSelectedReader();
             	std::cerr << "DEBUG: using selected reader index: " << selected_reader << std::endl;
             }
 
@@ -2133,7 +2133,7 @@ void MainWnd::getCardForReading(PTEID_EIDCard * &new_card)
                 else
                 {
                     //clearGuiContent();
-                    
+
                 }
                 enablePrintMenu();
 
@@ -2211,7 +2211,7 @@ void MainWnd::loadCardData( void )
     //if( m_CI_Data.isDataLoaded() ) return;
 
 	/* Fix more than 1 loadCardData reading */
-	if ( !m_mutex_ReadCard.tryLock () ) 
+	if ( !m_mutex_ReadCard.tryLock () )
 		return;
 
 	getCardForReading(new_card);
@@ -2463,15 +2463,26 @@ void MainWnd::actionVerifySignature_eID_triggered()
 //*****************************************************
 void MainWnd::actionSCAPSignature_triggered()
 {
-	QString SCAP_EXE("/ScapSignature");
+	if(m_CI_Data.isDataLoaded())
+	{
 
-	#ifdef _WIN32
-		SCAP_EXE += ".exe";
-	#endif
-		QStringList args;
+        QString SCAP_EXE("/ScapSignature");
 
-		QProcess::startDetached(m_Settings.getExePath()+SCAP_EXE, args);
+        #ifdef _WIN32
+            SCAP_EXE += ".exe";
+        #endif
+            QStringList args;
 
+            QProcess::startDetached(m_Settings.getExePath()+SCAP_EXE, args);
+	}
+	else
+	{
+		QString caption  = tr("Warning");
+	  	QString msg = tr("Please insert your card on the smart card reader");
+	  	QMessageBox msgBoxp(QMessageBox::Warning, caption, msg, 0, this);
+	  	msgBoxp.exec();
+
+	}
 }
 
 //*****************************************************
@@ -3101,10 +3112,10 @@ void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 
 	CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName);
 	//loader.LoadCertificateData();
-	
+
 	QFuture<void> future = QtConcurrent::run(loader, &CardDataLoader::LoadCertificateData);
 	this->FutureWatcher.setFuture(future);
-	//if(!m_CI_Data.isDataLoaded()) 
+	//if(!m_CI_Data.isDataLoaded())
 	ProgressExec();
 	this->FutureWatcher.waitForFinished();
 
@@ -3483,7 +3494,7 @@ void MainWnd::PersoDataSaveButtonClicked( void )
 
         PTEID_ReaderContext &ReaderContext  = ReaderSet.getReaderByName(m_CurrReaderName.toLatin1().data());
         PTEID_EIDCard	 &Card	= ReaderContext.getEIDCard();
-        
+
         if (pinNotes == 1)
             authPINRequest_triggered();
 
