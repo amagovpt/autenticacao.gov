@@ -14,7 +14,6 @@ namespace eIDMW
 
 	ScapSSLConnection::ScapSSLConnection(char * host, char *port)
 	{
-		bool insecure = true;
 		std::string host_and_port = std::string(host) +":"+ port;
 
 		/* initialise the OpenSSL library */
@@ -23,7 +22,7 @@ namespace eIDMW
 
     	MWLOG(LEV_DEBUG, MOD_APL, "SSLConnection: connecting to SCAP server: %s", host_and_port.c_str());
 
-    	connect_encrypted((char *)host_and_port.c_str(), insecure);
+    	connect_encrypted((char *)host_and_port.c_str());
 
     	if (m_ssl_connection == NULL)
         {

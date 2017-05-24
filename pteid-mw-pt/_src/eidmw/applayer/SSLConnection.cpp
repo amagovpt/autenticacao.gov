@@ -838,7 +838,7 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
 /**
  * Connect to a host using an encrypted stream
  */
-void SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
+void SSLConnection::connect_encrypted(char* host_and_port)
 {
 
     BIO* bio = NULL;
@@ -852,9 +852,8 @@ void SSLConnection::connect_encrypted(char* host_and_port, bool insecure)
 
     /* Set up the SSL pointers */
 
-    /* The insecure mode is used now for SCAP server only */
-
-    SSL_CTX *ctx = insecure ? SSL_CTX_new(TLSv1_client_method()) : SSL_CTX_new(TLSv1_1_client_method());
+    /* TLS v1.2 is not supported at the moment as it uses different hash functions for the client challenge */
+    SSL_CTX *ctx = SSL_CTX_new(TLSv1_1_client_method());
 
     SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
 
