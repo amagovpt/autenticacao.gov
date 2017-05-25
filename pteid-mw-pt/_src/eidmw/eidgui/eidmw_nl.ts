@@ -337,10 +337,6 @@
         <translation>Válido até</translation>
     </message>
     <message>
-        <source>To use your identity card with applications like Internet Explorer, Microsoft Offfice,OpenOffice.org, Adobe Reader, Outlook, ... you first have to register the card in Windows. Select a certificate and click the &quot;Register&quot; button to register your certificates</source>
-        <translation>To use your identity card with applications like Internet Explorer, Microsoft Offfice,OpenOffice.org, Adobe Reader, Outlook, ... you first have to register the card in Windows. Select a certificate and click the &quot;Register&quot; button to register your certificates</translation>
-    </message>
-    <message>
         <source>&amp;Register</source>
         <translation>&amp;Registar</translation>
     </message>
@@ -597,22 +593,6 @@
         <translation type="unfinished">Desconhecido</translation>
     </message>
     <message>
-        <source>txtIdentityCard_3</source>
-        <translation>PERSONALAUSWEIS</translation>
-    </message>
-    <message>
-        <source>txtIdentityCard_1</source>
-        <translation>IDENTITEITSKAART</translation>
-    </message>
-    <message>
-        <source>txtIdentityCard_2</source>
-        <translation>CARTE D&apos;IDENTITE</translation>
-    </message>
-    <message>
-        <source>txtIdentityCard_4</source>
-        <translation>IDENTITY CARD</translation>
-    </message>
-    <message>
         <source>The Root Certificate is not correct.
 This may be a test card.
 
@@ -747,10 +727,6 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <source>Identity E&amp;xtra</source>
         <translation>Outros Dados</translation>
-    </message>
-    <message>
-        <source>Card not present</source>
-        <translation type="unfinished">Kaart niet aanwezig</translation>
     </message>
     <message>
         <source>No card found</source>
@@ -1211,10 +1187,6 @@ Please specify .xml, .csv or .eid</source>
     <message>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <source>Use Virtual KeyPad</source>
-        <translation>Utilizar teclado virtual</translation>
     </message>
     <message>
         <source>Card reader</source>
