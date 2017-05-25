@@ -94,7 +94,7 @@ APL_Certifs::APL_Certifs(APL_SmartCard *card)
 	loadCard();
 	loadFromFile();
 
-	initMyCerts();
+	//initMyCerts();
 	initSODCAs();
 	defaultSODCertifs = true;
 
@@ -106,6 +106,7 @@ APL_Certifs::APL_Certifs()
 	loadFromFile();
 }
 
+/*
 void APL_Certifs::initMyCerts()
 {
 	//Fill a seperate cert vector that only contains the chain relevant for the current card
@@ -146,6 +147,7 @@ void APL_Certifs::initMyCerts()
 	}
 
 }
+*/
 
 //This should select the certificates which are part of the chain for SOD signatures for production cards
 
@@ -153,8 +155,6 @@ void APL_Certifs::initSODCAs()
 {
 	APL_Certif *cert=NULL;
 	unsigned long ulCount=0;
-	APL_Config sam_server(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER);
-	bool testMode = strstr(sam_server.getString(), "teste") != NULL;
 
 	defaultSODCertifs = true;
 
@@ -173,21 +173,11 @@ void APL_Certifs::initSODCAs()
 		}
 
 		cert = itrCert->second;
-
-		//Prod: Select Cartao de Cidadao PKI roots
-		if (!testMode && !cert->isFromCard() && (strcmp(cert->getIssuerName(), "ECRaizEstado")==0 || 
-			strcmp(cert->getOwnerName(), "ECRaizEstado") == 0 ||
-			strcmp(cert->getOwnerName(), "Baltimore CyberTrust Root") == 0))
+		//Add certificate if it was NOT loaded from card
+		if (!cert->isFromCard())
 		{
 			m_sod_cas.push_back(cert);
-			MWLOG(LEV_DEBUG, MOD_APL, "initSODCAs(): Adding certificate for PROD card: %s", cert->getOwnerName());
-
-		}
-		//Add certificate if it is self signed and NOT from card: it should be enough to pick up the test root certs available on file
-		else if (testMode && !cert->isFromCard() && cert->isRoot())
-		{
-			m_sod_cas.push_back(cert);
-			MWLOG(LEV_DEBUG, MOD_APL, "initSODCAs(): Adding certificate for test card: %s Valid from: %s to: %s", 
+			MWLOG(LEV_DEBUG, MOD_APL, "initSODCAs(): Adding certificate for card: %s Valid from: %s to: %s", 
 				cert->getOwnerName(), cert->getValidityBegin(), cert->getValidityEnd());
 
 		}
@@ -228,10 +218,18 @@ APL_Certif * APL_Certifs::getSODCA(int index)
 	return m_sod_cas[index];
 }
 
-void APL_Certifs::init(APL_SmartCard *card){
+void APL_Certifs::init(APL_SmartCard *card) {
 
 	APL_Config certs_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
+	APL_Config certs_dir_test(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TEST);
+
+	APL_Config sam_server(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER);
 	m_certs_dir = certs_dir.getString();
+
+	//Load test certificates from different directory
+	if (strstr(sam_server.getString(), "teste") != NULL)
+		m_certs_dir = certs_dir_test.getString();
+
 	m_cryptoFwk=AppLayer.getCryptoFwk();
 	//Crypto framework needs the card instance to access the CA certs
 	m_cryptoFwk->setActiveCard(card);
@@ -261,12 +259,6 @@ bool APL_Certifs::isAllowed()
 
 CByteArray APL_Certifs::getXML(bool bNoHeader)
 {
-/*
-	<certificates count=��>
-		<certificate>
-		</certificate>
-	</certificates>
-*/
 	char buffer[50];
 	CByteArray xml;
 
@@ -355,29 +347,8 @@ unsigned long APL_Certifs::countFromCard()
 unsigned long APL_Certifs::countAll()
 {
 
-	/*
-	if(bOnlyVisible)
-	{
-		unsigned long count=0;
-		std::map<unsigned long ,APL_Certif *>::const_iterator itr;
-		APL_Certif *cert=NULL;
 
-		for(itr=m_certifs.begin();itr!=m_certifs.end();itr++)
-		{
-			cert=itr->second;
-			if(!cert->isHidden())
-				count++;
-		}
-
-		return count;
-	}
-	else
-	{
-		return (unsigned long)m_certifs.size();
-	}
-	*/
-
-	return my_certifs.size();
+	return (unsigned long)m_certifs.size();
 }
 
 APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex)
@@ -409,51 +380,6 @@ APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex)
 		}
 
 		cert = new APL_Certif(m_card,this,ulIndex);
-
-		////////////////////////////Cert CACHE//////////////////////////
-		/*CByteArray certfilecache;
-		certfilecache.Append(cert->getData());
-		try
-		{
-			ofstream myfile;
-			APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
-			std::string	m_cachedirpath = conf_dir.getString();
-			std::string pteidfile = m_cachedirpath;
-			pteidfile.append("/pteidng-");
-			pteidfile.append(m_InitSerialNumber);
-			pteidfile.append("-");
-			if (ulIndex == 0)
-			{
-				pteidfile.append(PTEID_FILE_CERT_AUTHENTICATION);
-			}
-			else if (ulIndex == 1)
-			{
-				pteidfile.append(PTEID_FILE_CERT_SIGNATURE);
-			}
-			else if (ulIndex == 2)
-			{
-				pteidfile.append(PTEID_FILE_CERT_ROOT_SIGN);
-			}
-			else if (ulIndex == 3)
-			{
-				pteidfile.append(PTEID_FILE_CERT_ROOT_AUTH);
-			}
-			else if (ulIndex == 4)
-			{
-				pteidfile.append(PTEID_FILE_CERT_ROOT);
-			}
-			pteidfile.append(".bin");
-			myfile.open (pteidfile.c_str(), ios::binary);
-			std::string certFile;
-			certFile.assign((char*)certfilecache.GetBytes(), certfilecache.Size());
-			myfile << certFile;
-			myfile.close();
-		}
-		catch(CMWException& e)
-		{
-			MWLOG(LEV_INFO, MOD_APL, L"Write cache certificate file %d on disk failed", ulIndex);
-		}*/
-		////////////////////////////////////////////////////////////////
 
 		unsigned long ulUniqueId=cert->getUniqueId();
 		itr = m_certifs.find(ulUniqueId);
@@ -520,7 +446,7 @@ APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file,APL_CertifType t
 	}
 
 	{
-		CAutoMutex autoMutex(&m_Mutex);		//We lock for unly one instanciation
+		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
 
 		itr = m_certifs.find(ulUniqueId);
 		if(itr!=m_certifs.end())
@@ -561,11 +487,9 @@ APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file,APL_CertifType t
 }
 
 
-//TODO: test
 APL_Certif *APL_Certifs::getCert(unsigned long ulIndex)
 {
 
-	/*
 	APL_Certif *cert=NULL;
 	unsigned long ulCount=0;
 
@@ -578,28 +502,24 @@ APL_Certif *APL_Certifs::getCert(unsigned long ulIndex)
 		if(itrCert==m_certifs.end())
 		{
 			//The certif is not in the map
-			//Should not happend
+			//Shouldn't happen
 			throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
 		}
 
 		cert=itrCert->second;
 
-		if(!bOnlyVisible || !cert->isHidden())
-		{
-			if(ulCount==ulIndex)
-				return cert;
-			else
-				ulCount++;
-		}
+		if(ulCount==ulIndex)
+			return cert;
+		else
+			ulCount++;
 	}
 
 	throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
-	*/
 
-	if (ulIndex >= my_certifs.size())
-		throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
+	//if (ulIndex >= my_certifs.size())
+	//	throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
 
-	return my_certifs[ulIndex];
+	//return my_certifs[ulIndex];
 }
 
 APL_Certif *APL_Certifs::getCertUniqueId(unsigned long ulUniqueId)

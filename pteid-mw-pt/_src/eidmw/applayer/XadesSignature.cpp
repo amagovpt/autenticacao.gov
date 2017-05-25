@@ -15,6 +15,7 @@
 
 #include "APLCard.h"
 #include "APLConfig.h"
+#include "APLCertif.h"
 
 #include "CardPteidDef.h"
 #include "XadesSignature.h"
@@ -631,13 +632,13 @@ int XadesSignature::HashSignedPropertiesNode(XERCES_NS DOMDocument *doc, XMLByte
     return SHA256_LEN;
 }
 
-void XadesSignature::addCertificateToKeyInfo(CByteArray &cert, DSIGKeyInfoX509 *keyInfo)
+void XadesSignature::addCertificateToKeyInfo(const CByteArray &cert, DSIGKeyInfoX509 *keyInfo)
 {
 	OpenSSLCryptoX509 * ssl_cert = NULL;
 
-	unsigned char * data_cert = cert.GetBytes();
+	const unsigned char * data_cert = cert.GetBytes();
 
-	X509 *cert_ca_sign = d2i_X509(NULL, (const unsigned char**)(&data_cert), cert.Size());
+	X509 *cert_ca_sign = d2i_X509(NULL, &data_cert, cert.Size());
 
 	if (cert_ca_sign == NULL)
 	{
@@ -656,41 +657,23 @@ void XadesSignature::addCertificateToKeyInfo(CByteArray &cert, DSIGKeyInfoX509 *
 
 void XadesSignature::addCertificateChain(DSIGKeyInfoX509 *keyInfo)
 {
-	APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
-	CByteArray cert1, cc01, cc02, cc03, ec_raiz_estado;
 
-	mp_card->readFile(PTEID_FILE_CERT_ROOT_SIGN, cert1);
-	m_cert_bas.push_back(cert1);
+    APL_SmartCard * eid_card = static_cast<APL_SmartCard *> (mp_card);
+    APL_Certifs *certs = eid_card->getCertificates();
+    APL_Certif *auth_cert = certs->getCert(APL_CERTIF_TYPE_SIGNATURE);
 
-	addCertificateToKeyInfo(cert1, keyInfo);
+    APL_Certif *certif = auth_cert;
+    
+    int i = 0;
+    while(!certif->isRoot())
+    {
+        APL_Certif * issuer = certif->getIssuer();
 
-	cc01 = CByteArray(PTEID_CERTS[2].cert_data, PTEID_CERTS[2].cert_len);
-	cc02 = CByteArray(PTEID_CERTS[3].cert_data, PTEID_CERTS[3].cert_len);
-	cc03 = CByteArray(PTEID_CERTS[4].cert_data, PTEID_CERTS[4].cert_len);
-
-	// Add issuer of Signature SubCA
-	if (fwk->isIssuer(cert1, cc01))
-	{
-		addCertificateToKeyInfo(cc01, keyInfo);
-		m_cert_bas.push_back(cc01);
-	}
-	else if (fwk->isIssuer(cert1, cc02))
-	{
-		addCertificateToKeyInfo(cc02, keyInfo);
-		m_cert_bas.push_back(cc02);
-	}
-	else if (fwk->isIssuer(cert1, cc03))
-	{
-		addCertificateToKeyInfo(cc03, keyInfo);
-		m_cert_bas.push_back(cc03);
-	}
-	else
-		MWLOG(LEV_ERROR, MOD_APL, L"Couldn't find issuer for certificate SIGNATURE_SUBCA.The validation will be broken!");
-
-	// Add ECRaizEstado certificate
-	ec_raiz_estado = CByteArray(PTEID_CERTS[1].cert_data, PTEID_CERTS[1].cert_len);
-	m_cert_bas.push_back(ec_raiz_estado);
-	addCertificateToKeyInfo(ec_raiz_estado, keyInfo);
+        MWLOG(LEV_DEBUG, MOD_APL, "XadesSignature: addCertificateChain: Loading cert: %s", issuer->getOwnerName());
+        addCertificateToKeyInfo(issuer->getData(), keyInfo);
+		m_cert_bas.push_back(issuer->getData());
+        certif = issuer;
+    }
 }
 
 

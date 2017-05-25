@@ -1790,7 +1790,6 @@ const CByteArray& APL_SodEid::getData()
 	const CByteArray &cb = m_card->getFileSod()->getData();
 
 	m_card->getFileSod()->getAddressHash();
-	APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
 
 	return cb;
 }

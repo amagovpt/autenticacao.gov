@@ -20,6 +20,7 @@
 #include "eidlibException.h"
 #include "MWException.h"
 #include "eidErrors.h"
+#include <iostream>
 
 
 namespace eIDMW
@@ -43,6 +44,7 @@ long PTEID_Exception::GetError() const
 
 PTEID_Exception PTEID_Exception::THROWException(CMWException &e)
 {
+	std::cerr << "Exception thrown at: " << e.GetFile() << " Line: " << e.GetLine() << std::endl;
 	switch(e.GetError())
 	{
 	case EIDMW_ERR_RELEASE_NEEDED:

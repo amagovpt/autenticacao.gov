@@ -130,9 +130,9 @@ replace $install by string in install parameter
 
 #define EIDMW_CNF_SECTION_GENERAL       L"general"              //section with the general pupose parameters
 #define EIDMW_CNF_GENERAL_INSTALLDIR    L"install_dirname"      //string, directory of the basic eid software; �c:/Program Files/pteid/�
-#define EIDMW_CNF_GENERAL_INSTALL_PRO_DIR L"install_pro_dirname"  //string, directory of the pro eid software; �c:/Program Files/pteid/�
-#define EIDMW_CNF_GENERAL_INSTALL_SDK_DIR L"install_sdk_dirname"  //string, directory of the sdk eid software; �c:/Program Files/pteid/�
 #define EIDMW_CNF_GENERAL_CACHEDIR      L"cache_dirname"        //string, cache directory for card-file; $common/pteid/crlcache/
+#define EIDMW_CNF_GENERAL_CERTSDIR      L"certs_dir"
+#define EIDMW_CNF_GENERAL_CERTSDIR_TEST      L"certs_dir_test"
 #define EIDMW_CNF_GENERAL_LANGUAGE      L"language"             //string, user lanugage: fr, nl, en, de, es, �
 #define EIDMW_CNF_GENERAL_CARDTXDELAY   L"card_transmit_delay"  //number, delay while communicating with the smartcard, in mili-seconds, default 1 mSec
 #define EIDMW_CNF_GENERAL_CARDCONNDELAY L"card_connect_delay"   //number, delay before connecting to a smartcard, in mili-seconds, default 0 mSec
@@ -276,6 +276,7 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CACHEDIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TEST;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_CARDTXDELAY;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY;

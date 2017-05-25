@@ -4,6 +4,7 @@
  */
 
 #include "APLConfig.h"
+#include "APLCertif.h"
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
 #include <openssl/bio.h>
@@ -29,15 +30,21 @@ X509_STORE * setupStore()
 	X509_STORE *store = X509_STORE_new();
 
 	X509 *pCert = NULL;
-	unsigned char * cert_data = NULL;
+	const unsigned char * cert_data = NULL;
+	APL_Certif *certif = NULL;
+	APL_Card *card = AppLayer.getReader().getCard();
+
+	APL_SmartCard * eid_card = static_cast<APL_SmartCard *> (card);
+	APL_Certifs *certifs = eid_card->getCertificates();
+
 	char *parsing_error = NULL;
 
-	for (unsigned int i = 0; i != CERTS_N; i++)
+	for (unsigned int i = 0; i != certifs->countAll(); i++)
 	{
 		pCert = NULL;
-		cert_data = PTEID_CERTS[i].cert_data;
-	    pCert = d2i_X509(&pCert, (const unsigned char **)&cert_data,
-			PTEID_CERTS[i].cert_len);
+		certif = certifs->getCert(i);
+		cert_data = certif->getData().GetBytes();
+	    pCert = d2i_X509(&pCert, &cert_data, certif->getData().Size());
 
 		if (pCert == NULL)
 		{
@@ -52,6 +59,7 @@ X509_STORE * setupStore()
 		}
 
 	}
+
 	return store;
 }
 
@@ -163,7 +171,7 @@ CByteArray sendOCSPRequest(X509 *cert, X509* issuer, char *ocsp_url)
 
 	OCSP_RESPONSE * resp = NULL;
 	/*
-	* Adapted from the OCSP_sendreq_bio() implementation just to use our custom OCSP_CONTEXT so we can add the
+	Adapted from the OCSP_sendreq_bio() implementation just to use our custom OCSP_CONTEXT so we can add the
 	Authorization header if needed
 	*/
 	int rv = 0;

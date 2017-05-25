@@ -542,7 +542,8 @@ namespace eIDMW
             if ( isExternalCertificate() ){
                 certificate = getExternCertificate();
                 certificateCA = getExternCertificateCA();
-            } else{
+            } 
+            else{
                 m_card->readFile( PTEID_FILE_CERT_SIGNATURE, certificate );
                 m_card->readFile( PTEID_FILE_CERT_ROOT_SIGN, certificateCA );
                 /*
@@ -551,9 +552,9 @@ namespace eIDMW
                     and affect the certificate digest computation
                 */
                 certificate.TrimRight( 0 );
-            }/* !if ( isExternalCertificate() ) */
+            }
 
-            computeHash( to_sign, len, certificate, certificateCA );
+            computeHash(to_sign, len, certificate, certificateCA );
 
             m_signStarted = true;
 		}
@@ -573,55 +574,55 @@ namespace eIDMW
 
         if (to_sign) free(to_sign);
 
-        if ( !isExternalCertificate() ){
+        if ( !isExternalCertificate()) {
 
             /* Get card signature from card */
             CByteArray signature = PteidSign( m_card, m_hash );
             rc = signClose( signature );
-        }/* if ( !isExternalCertificate() ) */
+        }
 
         return rc;
-	}/* PDFSignature::signSingleFile() */
+	}
 
     /* Certificate */
     bool PDFSignature::isExternalCertificate(){
         return m_isExternalCertificate;
-    }/* PDFSignature::isExternalCertificate() */
+    }
 
     CByteArray PDFSignature::getIsExtCertificate(){
         return m_isExternalCertificate;
-    }/* PDFSignature::getIsExtCertificate() */
+    }
 
     void PDFSignature::setIsExtCertificate( bool in_IsExternalCertificate ){
         m_isExternalCertificate = in_IsExternalCertificate;
-    }/* PDFSignature::setIsExtCertificate() */
+    }
 
     CByteArray PDFSignature::getExternCertificate(){
         return m_externCertificate;
-    }/* PDFSignature::getExternCertificate() */
+    }
 
     void PDFSignature::setExternCertificate( CByteArray certificate ){
         m_externCertificate = certificate;
 
         setIsExtCertificate( true );
-    }/* PDFSignature::setExternCertificate() */
+    }
 
     CByteArray PDFSignature::getExternCertificateCA(){
         return m_externCertificateCA;
-    }/* PDFSignature::getExternCertificateCA() */
+    }
 
     void PDFSignature::setExternCertificateCA( CByteArray certificateCA ){
         m_externCertificateCA = certificateCA;
-    }/* PDFSignature::setExternCertificateCA() */
+    }
 
     /* Hash */
     CByteArray PDFSignature::getHash(){
         return m_hash;
-    }/* PDFSignature::getHash() */
+    }
 
     void PDFSignature::setHash( CByteArray in_hash ){
         m_hash = in_hash;
-    }/* PDFSignature::setHash() */
+    }
 
     void PDFSignature::computeHash( unsigned char *data, unsigned long dataLen
                                     , CByteArray certificate
@@ -640,24 +641,23 @@ namespace eIDMW
                                                 , m_pkcs7
                                                 , &m_signerInfo );
         setHash( in_hash );
-    }/* PDFSignature::computeHash() */
+    }
 
     int PDFSignature::signClose( CByteArray signature ){
 
-        printf( "m_signStarted: %s\n", (m_signStarted ? "TRUE" : "FALSE") );
-        if ( !m_signStarted ){
+        if ( !m_signStarted ) {
             MWLOG( LEV_DEBUG, MOD_APL, "signClose: Signature not started" );
             return -1;
-        }/* if ( !m_signStarted ) */
+        }
 
         const char *signature_contents = NULL;
 
-        if ( NULL == m_doc ){
+        if ( NULL == m_doc ) {
             fprintf( stderr, "NULL m_doc\n" );
 
             if ( m_pkcs7 != NULL ) PKCS7_free( m_pkcs7 );
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
-        }/* if ( NULL == m_doc ) */
+        }
 
         bool incremental = m_doc->isSigned() || m_doc->isReaderEnabled();
 
@@ -677,7 +677,8 @@ namespace eIDMW
             incremental ? writeForceIncremental : writeForceRewrite;
 
         int final_ret = m_doc->saveAs( m_outputName, pdfWriteMode );
-        if ( final_ret != errNone ) throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+        if ( final_ret != errNone )
+         throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 
         m_signStarted = false;
 
@@ -693,5 +694,5 @@ namespace eIDMW
         m_pkcs7 = NULL;
 
         return return_code;
-    }/* PDFSignature::signClose() */
+    }
 }

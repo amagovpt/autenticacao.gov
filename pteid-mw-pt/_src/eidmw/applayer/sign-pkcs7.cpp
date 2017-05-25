@@ -9,6 +9,7 @@
 #include "MiscUtil.h"
 #include "ByteArray.h"
 #include "APLCard.h"
+#include "APLCertif.h"
 #include "TsaClient.h"
 
 #include "CardPteidDef.h"
@@ -139,10 +140,10 @@ unsigned int SHA1_Wrapper(unsigned char *data, unsigned long data_len, unsigned 
 }
 
 
-void add_certificate(PKCS7 *p7, CByteArray &cert)
+void add_certificate(PKCS7 *p7, const CByteArray &cert)
 {
-	unsigned char * cert_data = cert.GetBytes();
-	X509 *x509 = d2i_X509(NULL, (const unsigned char**)&cert_data, cert.Size());
+	const unsigned char * cert_data = cert.GetBytes();
+	X509 *x509 = d2i_X509(NULL, &cert_data, cert.Size());
 	if (x509 == NULL)
 		goto err;
 
@@ -150,7 +151,7 @@ void add_certificate(PKCS7 *p7, CByteArray &cert)
 
 	return;
 	err:
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to add certificate from ByteArray\n");
+		MWLOG(LEV_ERROR, MOD_APL, L"Failed to add certificate from ByteArray");
 }
 
 void add_certificate(PKCS7 *p7, unsigned char * cert_data,
@@ -166,7 +167,7 @@ void add_certificate(PKCS7 *p7, unsigned char * cert_data,
 	return;
 
 	err:
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to add certificate.\n");
+		MWLOG(LEV_ERROR, MOD_APL, L"Failed to add certificate.");
 }
 
 
@@ -209,9 +210,8 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 	}
 	else
 	{
-	printf("NULL tsp\n");
 		MWLOG(LEV_ERROR, MOD_APL,
-			L"Error decoding timestamp token! The TSA is returning bogus data or we have proxy issues and we are getting HTML messages here\n");
+			L"Error decoding timestamp token! The TSA is returning bogus data or we have proxy issues and we are getting HTML messages here");
 		return 1;
 	}
 
@@ -284,46 +284,28 @@ void add_signingCertificate(PKCS7_SIGNER_INFO *si, X509 *x509, unsigned char * c
 	return;
 
 	end:
-	MWLOG(LEV_ERROR, MOD_APL, L"Failed to add SigningCertificateV2 attribute.\n");
+	MWLOG(LEV_ERROR, MOD_APL, L"Failed to add SigningCertificateV2 attribute.");
 }
 
-void addCertificateChain(PKCS7 *p7, CByteArray CA_certificate) 
+void addCertificateChain(PKCS7 *p7) 
 {
-    if ( 0 == CA_certificate.Size() ){
-        TRACE_ERR( "Invalid CA certificate" );
-        return;
-    }
-    APL_CryptoFwkPteid *fwk = AppLayer.getCryptoFwk();
+    
+    APL_Card *card = AppLayer.getReader().getCard();
+    APL_SmartCard * eid_card = static_cast<APL_SmartCard *> (card);
+    APL_Certifs *certs = eid_card->getCertificates();
+    APL_Certif *auth_cert = certs->getCert(APL_CERTIF_TYPE_SIGNATURE);
 
-    add_certificate( p7, CA_certificate );
+    APL_Certif *certif = auth_cert;
+    
+    while(!certif->isRoot())
+    {
+        APL_Certif * issuer = certif->getIssuer();
 
-    /*
-        Cartao de Cidadao Root CA certificates as of May 2017
-        (https://pki.cartaodecidadao.pt/publico/certificado/cc_ec_cidadao/)
-    */
-    CByteArray cc01, cc02, cc03;
-    cc01 = CByteArray(PTEID_CERTS[2].cert_data, PTEID_CERTS[2].cert_len );
-    cc02 = CByteArray(PTEID_CERTS[3].cert_data, PTEID_CERTS[3].cert_len );
-    cc03 = CByteArray(PTEID_CERTS[4].cert_data, PTEID_CERTS[4].cert_len );
-
-    /* Add issuer of Signature SubCA */
-    if ( fwk->isIssuer( CA_certificate, cc01 )) {
-        MWLOG(LEV_DEBUG, MOD_APL, "addCertificateChain() Added certificate - CC01");
-        add_certificate(p7, cc01 );
-    } else if ( fwk->isIssuer( CA_certificate, cc02 ) ){
-		MWLOG(LEV_DEBUG, MOD_APL, "addCertificateChain() Added certificate - CC02");
-
-        add_certificate( p7, cc02 );
-    } else if (fwk->isIssuer( CA_certificate, cc03 ) ) {
-		MWLOG(LEV_DEBUG, MOD_APL, "addCertificateChain() Added certificate - CC03");
-        add_certificate( p7, cc03 );
-    }
-    else {
-        MWLOG(LEV_ERROR, MOD_APL, "Couldn't find issuer for certificate SIGNATURE_SUBCA. The validation will be broken!");
+        MWLOG(LEV_DEBUG, MOD_APL, "signPKCS7: addCertificateChain: Loading cert: %s", issuer->getOwnerName());
+        add_certificate(p7, certif->getData());
+        certif = issuer;
     }
 
-    /* Add ECRaizEstado certificate */
-    add_certificate(p7, PTEID_CERTS[1].cert_data, PTEID_CERTS[1].cert_len);
 }
 
 /*  *********************************************************
@@ -412,10 +394,13 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
     }
 
     PKCS7_add_certificate( p7, x509 );
-    addCertificateChain( p7, CA_certificate );
-    PKCS7_set_detached( p7, 1 );
 
-    hash_fn( data, dataLen, out );
+    //TODO: use different implementation for CMD certificates
+    addCertificateChain(p7);
+
+    PKCS7_set_detached( p7, 1);
+
+    hash_fn( data, dataLen, out);
 
     /* Add the signing time and digest authenticated attributes */
     //With authenticated attributes

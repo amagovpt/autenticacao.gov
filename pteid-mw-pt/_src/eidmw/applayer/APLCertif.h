@@ -87,7 +87,7 @@ enum APL_ValidationLevel
 
 enum APL_HashAlgo {
 	APL_ALGO_MD5,      // 16-byte hash
-	APL_ALGO_SHA1     // 20-byte hash
+	APL_ALGO_SHA1      // 20-byte hash
 };
 
 class APL_CryptoFwk;

@@ -13,6 +13,7 @@
 #include "MWException.h"
 #include "eidErrors.h"
 #include "APLConfig.h"
+#include "APLCertif.h"
 #include "Log.h"
 #include "MiscUtil.h"
 #include "static_pteid_certs.h"
@@ -85,15 +86,22 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 }
 
 
-void SSLConnection::loadCertsFromCard(SSL_CTX *ctx)
+APL_Certif * SSLConnection::loadCertsFromCard(SSL_CTX *ctx)
 {
 
 	APL_Card *card = AppLayer.getReader().getCard();
-	CByteArray card_cert;
-	X509 * pCert = NULL;
-	card->readFile(PTEID_FILE_CERT_AUTHENTICATION, card_cert);
+	//CByteArray card_cert;
 
-	int ret = SSL_CTX_use_certificate_ASN1(ctx, card_cert.Size(), card_cert.GetBytes());
+	X509 * pCert = NULL;
+	APL_SmartCard * eid_card = static_cast<APL_SmartCard *> (card);
+	APL_Certifs *certs = eid_card->getCertificates();
+
+	APL_Certif *auth_cert = certs->getCert(APL_CERTIF_TYPE_AUTHENTICATION);
+
+	//card->readFile(PTEID_FILE_CERT_AUTHENTICATION, card_cert);
+
+	MWLOG(LEV_DEBUG, MOD_APL, "Loading from APL_Certifs -> cert length= %ld", auth_cert->getData().Size());
+	int ret = SSL_CTX_use_certificate_ASN1(ctx, auth_cert->getData().Size(), auth_cert->getData().GetBytes());
 
 	if (ret != 1)
 	{
@@ -101,44 +109,25 @@ void SSLConnection::loadCertsFromCard(SSL_CTX *ctx)
 			ERR_error_string(ERR_get_error(), NULL));
 	}
 
-	card->readFile(PTEID_FILE_CERT_ROOT_AUTH, card_cert);
-
-	unsigned char * cert_data = card_cert.GetBytes();
-
-	pCert = d2i_X509(&pCert, (const unsigned char **)&cert_data,
-		card_cert.Size());
-
-	if (pCert == NULL)
-	{
-		MWLOG(LEV_ERROR, MOD_APL, "Error parsing Auth SubCA certificate from card file! This should never happen...");
-		return;
-	}
-	X509_STORE *store = SSL_CTX_get_cert_store(ctx);
-
-	ret = X509_STORE_add_cert(store, pCert);
-
-	if (ret != 1)
-	{
-		MWLOG(LEV_ERROR, MOD_APL, "Error loading Auth SubCA certificate for SSL handshake! Detail: %s",
-			ERR_error_string(ERR_get_error(), NULL));
-	}
-
+	return auth_cert;
 }
 
-void SSLConnection::loadCertChain(X509_STORE *store)
+void SSLConnection::loadCertChain(X509_STORE *store, APL_Certif * authentication_cert)
 {
 
-	//Load all the CA certificates from our internal structures
-
-	for (unsigned int i = 0; i != CERTS_N;
-		i++)
+	APL_Certif * certif = authentication_cert;
+	X509 *pCert = NULL;
+	
+	int i = 0;
+	while (!certif->isRoot())
 	{
-		X509 *pCert = NULL;
-		unsigned char *cert_data = PTEID_CERTS[i].cert_data;
-	        pCert = d2i_X509(&pCert, (const unsigned char **)&cert_data,
-			PTEID_CERTS[i].cert_len);
+		APL_Certif * issuer = certif->getIssuer();
 
-		if (pCert == NULL)
+		MWLOG(LEV_DEBUG, MOD_APL, "loadCertChain: Loading cert: %s", issuer->getOwnerName());
+		const unsigned char *cert_data = issuer->getData().GetBytes();
+	    pCert = d2i_X509(&pCert, &cert_data, issuer->getData().Size());
+
+	    if (pCert == NULL)
 		{
 			char *parsing_error = ERR_error_string(ERR_get_error(), NULL);
 			MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection::loadCertChain: Error parsing certificate #%d. Details: %s",
@@ -147,9 +136,15 @@ void SSLConnection::loadCertChain(X509_STORE *store)
 		else
 		{
 			if (X509_STORE_add_cert(store, pCert) == 0)
-				MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection::loadCertChain: error adding certificate #%d\n",  i);
+			{
+				char *loading_error = ERR_error_string(ERR_get_error(), NULL);
+				MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection::loadCertChain: error adding certificate #%d Details: %s",
+				  i, loading_error);
+			}
 		}
-
+		pCert = NULL;
+		certif = issuer;
+		i++;
 	}
 
 }
@@ -223,7 +218,7 @@ unsigned int translate_openssl_error(unsigned int error)
 
 	char *error_string = ERR_error_string(error, NULL);
 
-	if(strstr(error_string, "Connection refused") != NULL
+	if (strstr(error_string, "Connection refused") != NULL
 	|| strstr(error_string, "bad hostname lookup") != NULL)
 		return EIDMW_OTP_CONNECTION_ERROR;
 
@@ -860,9 +855,10 @@ void SSLConnection::connect_encrypted(char* host_and_port)
     //NOTE: to get more debug output from the SSL layer uncomment this
     //SSL_CTX_set_info_callback(ctx, eIDMW::get_ssl_state_callback);
 
-	loadCertsFromCard(ctx);
+	APL_Certif * cert = loadCertsFromCard(ctx);
 	X509_STORE *store = SSL_CTX_get_cert_store(ctx);
 
+/*
     if (strstr(host_and_port, "teste") != NULL)
     {
     	APL_Card *card = AppLayer.getReader().getCard();
@@ -871,10 +867,10 @@ void SSLConnection::connect_encrypted(char* host_and_port)
 		//Load the self-signed root certificate from the test card
 		card->readFile(PTEID_FILE_CERT_ROOT, ca_cert);
 		loadCertChain(ctx, ca_cert);
-
     }
+*/
 
- 	loadCertChain(store);
+ 	loadCertChain(store, cert);
 
     if(!(SSL_CTX_load_verify_locations(ctx,
 			NULL, "/etc/ssl/certs")))
@@ -976,8 +972,8 @@ int validate_hex_number(char *str)
         int i = 0;
         while(str[i])
         {
-                if (!isxdigit(str[i++]))
-                        return 0;
+            if (!isxdigit(str[i++]))
+               return 0;
         }
 
         return 1;
