@@ -27,6 +27,7 @@
 #include <QFileDialog>
 #include <QApplication>
 #include <QPrintDialog>
+#include <QDir>
 #include <QtConcurrent>
 #include <QEvent>
 #include <QPixmap>
@@ -97,6 +98,11 @@ void ImportCertFromDisk(void *cert_path)
 		NULL,
 		(const void **)&pCertCtx) != 0)
 	{
+		//Don't register any self-signed cert (as it shouldn't be in Intermediate Certificates Store)
+		if (0 == memcmp(pCertCtx->pCertInfo->Issuer.pbData,
+			           pCertCtx->pCertInfo->Subject.pbData,
+			           pCertCtx->pCertInfo->Subject.cbData))
+			return;
 
 		HCERTSTORE hCertStore = CertOpenSystemStoreA (NULL, "CA");
 
@@ -123,6 +129,11 @@ void ImportCertFromDisk(void *cert_path)
 		{
 			CertFreeCertificateContext (pCertCtx);
 		}
+	}
+	else
+	{
+		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+		 "ImportCertFromDisk: CryptQueryObject returned error %08x", GetLastError());
 	}
 }
 
@@ -1274,6 +1285,7 @@ bool MainWnd::ImportCertificates( const char* readerName )
 	PCCERT_CONTEXT	pCertContext = NULL;
 	QString			strTip;
 	bool			bImported	= false;
+	wchar_t * cert_filepath = NULL;
 
 	PTEID_ReaderContext&  ReaderContext  = ReaderSet.getReaderByName(readerName);
 	if (!ReaderContext.isCardPresent())
@@ -1281,11 +1293,26 @@ bool MainWnd::ImportCertificates( const char* readerName )
 		return false;
 	}
 
-	//Register the higher-level CA Cert from disk file
-	ImportCertFromDisk(L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\ECRaizEstado_novo_assinado_GTE.der");
-	ImportCertFromDisk(L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\CartaodeCidadao001.der");
-	ImportCertFromDisk(L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\CartaodeCidadao002.der");
-	ImportCertFromDisk(L"C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\CartaodeCidadao003.der");
+	//Register the higher-level CA Cert from disk files
+	//TODO: maybe we should do the same for test cards
+	QString certsdir("C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\");
+	QDir dir(certsdir);
+
+	QStringList filter("*.der");
+	QStringList flist = dir.entryList(QStringList(filter),
+                                   QDir::Files | QDir::NoSymLinks);
+
+	foreach (QString str, flist) {
+		QString filename = QString("%1%2").arg(certsdir).arg(str);
+		unsigned int alloc_len = filename.size()+1;
+		cert_filepath = new wchar_t[alloc_len];
+		//This way we ensure the UTF-16 string is terminated
+		memset(cert_filepath, 0, sizeof(wchar_t)*alloc_len);
+		filename.toWCharArray(cert_filepath);
+		ImportCertFromDisk(cert_filepath);
+
+		delete[] cert_filepath;
+	}
 
 	try
 	{
