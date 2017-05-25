@@ -483,6 +483,9 @@
           <RegistryKey Key="general" Action="createAndRemoveOnUninstall">
             <RegistryValue Type="string" Name="language" Value="nl"/>
             <RegistryValue Type="string" Name="install_dirname" Value="[ProgramFilesFolder]Portugal Identity Card"/>
+            <RegistryValue Type="string" Name="certs_dir" Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\certs"/>
+            <RegistryValue Type="string" Name="certs_dir_test" Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\certs_test"/>
+
             <RegistryValue Type="integer" Name="show_java_apps" Value="0" />
           </RegistryKey>
 
