@@ -13,7 +13,6 @@
 #include "TsaClient.h"
 
 #include "CardPteidDef.h"
-#include "static_pteid_certs.h"
 #include "cryptoFwkPteid.h"
 
 #include "sign-pkcs7.h"

@@ -121,7 +121,6 @@ SOURCES += \
 	SODParser.cpp \
 	SSLConnection.cpp \
 	TSAClient.cpp \
-	static_pteid_certs.cpp \
 	SecurityContext.cpp \
 	sign-pkcs7.cpp \
 	cJSON.c \

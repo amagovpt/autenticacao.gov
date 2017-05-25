@@ -16,7 +16,6 @@
 #include "APLCertif.h"
 #include "Log.h"
 #include "MiscUtil.h"
-#include "static_pteid_certs.h"
 #include "CardPteidDef.h"
 #include "cJSON.h"
 

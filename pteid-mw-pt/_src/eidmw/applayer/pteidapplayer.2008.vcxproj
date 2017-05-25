@@ -239,7 +239,6 @@
     <ClCompile Include="sign-pkcs7.cpp" />
     <ClCompile Include="SODParser.cpp" />
     <ClCompile Include="SSLConnection.cpp" />
-    <ClCompile Include="static_pteid_certs.cpp" />
     <ClCompile Include="TsaClient.cpp" />
     <ClCompile Include="XadesSignature.cpp" />
     <ClCompile Include="XMLParser.cpp" />
@@ -278,7 +277,6 @@
     <ClInclude Include="sign-pkcs7.h" />
     <ClInclude Include="SODParser.h" />
     <ClInclude Include="SSLConnection.h" />
-    <ClInclude Include="static_pteid_certs.h" />
     <ClInclude Include="TsaClient.h" />
     <ClInclude Include="XadesSignature.h" />
   </ItemGroup>

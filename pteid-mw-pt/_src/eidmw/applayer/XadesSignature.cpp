@@ -22,7 +22,6 @@
 #include "MWException.h"
 #include "eidErrors.h"
 #include "Util.h"
-#include "static_pteid_certs.h"
 #include "cryptoFwkPteid.h"
 #include "CRLFetcher.h"
 #include "MiscUtil.h"
