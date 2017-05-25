@@ -12,15 +12,6 @@
 :find_vs
 @echo [INFO] Using PTEID_DIR_VS=%PTEID_DIR_VS%
 
-:: Check Doxygen
-:: =============
-::@call "%CHECKS%\PathDoxygen.bat"
-::@if %ERRORLEVEL%==0 goto find_doxygen
-::@echo [TIP] Use set_path.bat script to define PTEID_DIR_DOXYGEN
-::@goto end
-:::find_doxygen
-::@echo [INFO] Using PTEID_DIR_DOXYGEN=%PTEID_DIR_DOXYGEN%
-
 :: Check Swig
 :: ==========
 @call "%CHECKS%\PathSwig.bat"
@@ -102,15 +93,6 @@
 :find_xerces_31
 @echo [INFO] Using PTEID_DIR_XERCES_31=%PTEID_DIR_XERCES_31%
 
-:: Cairo
-::=============
-@call "%CHECKS%\PathCairo.bat"
-@if %ERRORLEVEL%==0 goto find_cairo
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_CAIRO
-@goto end
-:find_cairo
-@echo [INFO] Using PTEID_DIR_CAIRO=%PTEID_DIR_CAIRO%
-
 :: Curl
 ::=============
 @call "%CHECKS%\PathCurl.bat"
@@ -150,14 +132,6 @@
 :find_xerces_31_x64
 @echo [INFO] Using PTEID_DIR_XERCES_31_X64=%PTEID_DIR_XERCES_31_X64%
 
-:: Cairo X64
-::=============
-@call "%CHECKS%\PathCairo_x64.bat"
-@if %ERRORLEVEL%==0 goto find_cairo_x64
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_CAIRO_X64
-@goto end
-:find_cairo_x64
-@echo [INFO] Using PTEID_DIR_CAIRO_X64=%PTEID_DIR_CAIRO_X64%
 
 :: Curl X64
 ::=============

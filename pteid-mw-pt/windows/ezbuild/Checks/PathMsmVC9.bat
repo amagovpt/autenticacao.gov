@@ -1,5 +1,5 @@
 @echo [INFO] Input PTEID_DIR_MSM=%PTEID_DIR_MSM%
-@set FILE_TO_FIND="Microsoft_VC90_CRT_x86.msm" "policy_9_0_Microsoft_VC90_CRT_x86.msm"
+@set FILE_TO_FIND="Microsoft_VC120_CRT_x86.msm" "Microsoft_VC120_CRT_x64.msm"
 @echo [INFO] Looking for files: %FILE_TO_FIND%
 
 @set FILE_NOT_FOUND=

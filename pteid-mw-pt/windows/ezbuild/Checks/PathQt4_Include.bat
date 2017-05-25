@@ -1,5 +1,5 @@
 @echo [INFO] Input PTEID_DIR_QT_4_INCLUDE=%PTEID_DIR_QT_4%
-@set FILE_TO_FIND="include\QtGui\QtGui" "include\QtCore\QtCore" "src\gui\dialogs\qdialog.h" "src\corelib\kernel\qcoreapplication.h"
+@set FILE_TO_FIND="include\QtGui\QtGui" "include\QtCore\QtCore"
 @echo [INFO] Looking for files: %FILE_TO_FIND%
 
 @set FILE_NOT_FOUND=
