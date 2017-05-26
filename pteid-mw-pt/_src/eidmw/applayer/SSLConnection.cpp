@@ -117,7 +117,7 @@ void SSLConnection::loadAllRootCerts(X509_STORE *store)
 		    if (pCert == NULL)
 			{
 				char *parsing_error = ERR_error_string(ERR_get_error(), NULL);
-				MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection::loadCertChain: Error parsing certificate #%d. Details: %s",
+				MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection::loadAllRootCerts: Error parsing certificate #%d. Details: %s",
 					i, parsing_error);
 			}
 			else
@@ -125,7 +125,7 @@ void SSLConnection::loadAllRootCerts(X509_STORE *store)
 				if (X509_STORE_add_cert(store, pCert) == 0)
 				{
 					char *loading_error = ERR_error_string(ERR_get_error(), NULL);
-					MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection::loadCertChain: error adding certificate #%d Details: %s",
+					MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection::loadAllRootCerts: error adding certificate #%d Details: %s",
 					  i, loading_error);
 				}
 			}
