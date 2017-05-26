@@ -2095,7 +2095,7 @@ void MainWnd::showInsertCardMsg()
 }
 
 
-void MainWnd::getCardForReading(PTEID_EIDCard * &new_card)
+void MainWnd::getCardForReading(PTEID_EIDCard * &new_card, bool clearData)
 {
 	try
 	{
@@ -2106,7 +2106,8 @@ void MainWnd::getCardForReading(PTEID_EIDCard * &new_card)
         //getReaderIndexes( &ReaderStartIdx, &ReaderEndIdx, true );
 
         //We can safely clear previous data because we have successfully locked
-        m_CI_Data.Reset();
+        if (clearData)
+        	m_CI_Data.Reset();
 
         if ( ReaderEndIdx == 0 ) {
             clearGuiContent();
@@ -2241,7 +2242,7 @@ void MainWnd::loadCardData( void )
 	if ( !m_mutex_ReadCard.tryLock () )
 		return;
 
-	getCardForReading(new_card);
+	getCardForReading(new_card, true);
 
 	if (new_card != NULL)
 	{
@@ -4184,18 +4185,19 @@ void MainWnd::changeEvent(QEvent *event)
 	if (event->type() == QEvent::LanguageChange)
 	{
 		m_ui.retranslateUi(this);
+	
 		//initAllTabs();
 		try
 		{
 			refreshTabCardPin();
 			refreshTabIdentityExtra();
-			refreshTabPinCodes(); /*moved from on_btn_menu_language_clicked() */
+			refreshTabPinCodes(); //moved from on_btn_menu_language_clicked()
 
-			/* Refresh current certificate data */
-			if ( m_ui.treeCert->currentItem() ){
+			// Refresh current certificate data 
+			if (m_ui.treeCert->currentItem()) {
 				syncTreeItemWithSideinfo(
 						dynamic_cast<QTreeCertItem *>(m_ui.treeCert->currentItem()) );
-			}/* if ( m_ui.treeCert->currentItem() ) */
+			}
 		}
 		catch (PTEID_ExNoCardPresent& e)
 		{
