@@ -864,8 +864,9 @@ void SSLConnection::connect_encrypted(char* host_and_port)
     APL_Certif * cert = loadCertsFromCard(ctx);
     X509_STORE *store = SSL_CTX_get_cert_store(ctx);
 
-    //In test mode we need to load additional root certs to validate the SAM server certificate
-	if (strstr(host_and_port, "teste") != NULL)
+    //In test mode we need to load additional root certs to validate the SAM / SCAP server certificate
+	if (strstr(host_and_port, "teste") != NULL ||
+	    strstr(host_and_port, "preprod") != NULL)
 	{
 		  loadAllRootCerts(store);
 	}
