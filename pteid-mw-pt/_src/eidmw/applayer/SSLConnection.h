@@ -22,6 +22,8 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 
 #define REPLY_BUFSIZE 100000
 
+class APL_Certifs;
+
 class SSLConnection
 {
 	public:
@@ -66,11 +68,13 @@ class SSLConnection
 		BIO * connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_host, char *proxy_user, char * proxy_pwd, char *ssl_host_andport);
 		APL_Certif * loadCertsFromCard(SSL_CTX *ctx);
 		void loadCertChain(X509_STORE *store, APL_Certif * authentication_cert);
-		void loadCertChain(SSL_CTX *store, CByteArray &cert_data);
+		void loadAllRootCerts(X509_STORE *store);
 
 		char *m_session_cookie;
 
 		SSL * m_ssl_connection;
+
+		APL_Certifs *m_certs;
 		//Hostname of our OTP server
 		char * m_host;
 		//APL_Card card_handle;
