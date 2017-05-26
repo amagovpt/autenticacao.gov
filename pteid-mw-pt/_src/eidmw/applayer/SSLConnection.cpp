@@ -864,17 +864,13 @@ void SSLConnection::connect_encrypted(char* host_and_port)
     APL_Certif * cert = loadCertsFromCard(ctx);
     X509_STORE *store = SSL_CTX_get_cert_store(ctx);
 
-    //In test mode we need to load additional root certs to validate the SAM / SCAP server certificate
-	if (strstr(host_and_port, "teste") != NULL ||
-	    strstr(host_and_port, "preprod") != NULL)
-	{
-		  loadAllRootCerts(store);
-	}
-	else
-	{
- 		loadCertChain(store, cert);
- 	}
+    //Load cert chain for the current card
+    loadCertChain(store, cert);
 
+    //Load any available root cert to validate the server certificate
+    //It may load some cert already loaded by loadCertChain() but it's best not to miss anything...
+	loadAllRootCerts(store);
+	
     if(!(SSL_CTX_load_verify_locations(ctx,
 			NULL, "/etc/ssl/certs")))
 	fprintf(stderr, "Can't read CA list\n");
