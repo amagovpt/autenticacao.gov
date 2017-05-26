@@ -17,7 +17,6 @@
 
 #include "MiscUtil.h"
 #include "ByteArray.h"
-#include "static_pteid_certs.h"
 
 namespace eIDMW
 {

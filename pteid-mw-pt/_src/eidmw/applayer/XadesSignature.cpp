@@ -28,7 +28,6 @@
 
 //for Timestamping
 #include "TsaClient.h"
-#include "static_pteid_certs.h"
 
 //For OCSP
 #include "OCSP.h"
