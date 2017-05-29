@@ -61,15 +61,15 @@ Item {
             anchors.left: mainMenuView.right
 
             Rectangle {
-                width: parent.width
-                height: parent.height
+                width: parent.width * Constants.SUB_MENU_RELATIVE_H_SIZE
+                height: parent.height * Constants.SUB_MENU_RELATIVE_V_SIZE
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
                 border.width: 0
                 ListView {
                     id: subMenuListView
-                    width: parent.width * Constants.SUB_MENU_RELATIVE_H_SIZE
-                    height: parent.height * Constants.SUB_MENU_RELATIVE_V_SIZE
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
+                    width: parent.width
+                    height: parent.height
                     model: SubMenuModel {}
                     delegate: subMenuDelegate
                     highlight: Rectangle {
@@ -78,6 +78,16 @@ Item {
                         radius: 0
                     }
                     focus: true
+                }
+
+                Rectangle {
+                    id: subMenuViewVerticalLine
+                    x: subMenuListView.width
+                    width: subMenuListView.width * Constants.SUB_MENU_RELATIVE_LINE_H_SIZE
+                    height: subMenuListView.height
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: Constants.COLOR_LINE_SUB_MENU
+                    anchors.verticalCenterOffset: 0
                 }
             }
         }
