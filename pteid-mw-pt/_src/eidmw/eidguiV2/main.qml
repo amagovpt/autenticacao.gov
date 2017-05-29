@@ -38,6 +38,20 @@ Window {
                 hoverEnabled: true
                 onClicked: {
                     main.propertyMainMenuListView.currentIndex = index
+
+
+                    // Clear list model and then load a new sub menu
+                    main.propertySubMenuListView.model.clear()
+                    for(var i = 0; i < main.propertyMainMenuListView.model.get(index).subdata.count; ++i) {
+                        console.log("Sub Menu indice " + i + " - "
+                                    + main.propertyMainMenuListView.model.get(index).subdata.get(i).name);
+                        main.propertySubMenuListView.model.append({
+                             "subName": main.propertyMainMenuListView.model.get(index).subdata.get(i).name,
+                             "url": main.propertyMainMenuListView.model.get(index).subdata.get(i).url })
+                    }
+
+                    // Open the content page of the first item of the new sub menu
+                    main.propertyPageLoader.source = main.propertyMainMenuListView.model.get(index).subdata.get(0).url
                     onClicked: console.log("Main Menu index = " + index);
                 }
             }
@@ -75,7 +89,7 @@ Window {
                 }
             }
             Text {
-                text: name
+                text: subName
                 color:  main.propertySubMenuListView.currentIndex === index ?
                             Constants.COLOR_TEXT_SUB_MENU_SELECTED :
                             Constants.COLOR_TEXT_SUB_MENU_DEFAULT
@@ -85,6 +99,10 @@ Window {
                                  Font.Bold :
                                  Font.Normal
                 font.pointSize: Constants.SIZE_TEXT_SUB_MENU
+                wrapMode: Text.Wrap
+                                    width: parent.width
+                                    horizontalAlignment: Text.AlignHCenter
+
             }
         }
     }

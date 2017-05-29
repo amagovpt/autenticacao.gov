@@ -22,5 +22,17 @@
         <file>fonts/lato/Lato-Regular.ttf</file>
         <file>MainMenuModel.qml</file>
         <file>SubMenuModel.qml</file>
+        <file>contentPages/help/PageHelpAbout.qml</file>
+        <file>contentPages/help/PageHelpAboutForm.ui.qml</file>
+        <file>contentPages/help/PageHelpDocOnline.qml</file>
+        <file>contentPages/help/PageHelpDocOnlineForm.ui.qml</file>
+        <file>contentPages/help/PageHelpUpdates.qml</file>
+        <file>contentPages/help/PageHelpUpdatesForm.ui.qml</file>
+        <file>contentPages/services/PageServicesSignPdf.qml</file>
+        <file>contentPages/services/PageServicesSignPdfForm.ui.qml</file>
+        <file>contentPages/services/PageServicesSignProfessional.qml</file>
+        <file>contentPages/services/PageServicesSignProfessionalForm.ui.qml</file>
+        <file>contentPages/definitions/PageDefinitionsParameters.qml</file>
+        <file>contentPages/definitions/PageDefinitionsParametersForm.ui.qml</file>
     </qresource>
 </RCC>
