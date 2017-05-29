@@ -49,7 +49,7 @@ Item {
                 height: parent.height * Constants.MAIN_MENU_RELATIVE_V_SIZE
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                model: LeftMenuModel {}
+                model: MainMenuModel {}
                 delegate: mainMenuDelegate
                 focus: true
             }
@@ -72,7 +72,7 @@ Item {
                     height: parent.height * Constants.SUB_MENU_RELATIVE_V_SIZE
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    model: CenterMenuModel {}
+                    model: SubMenuModel {}
                     delegate: subMenuDelegate
                     highlight: Rectangle {
                         width: parent.width

@@ -5,8 +5,6 @@
         <file>MainForm.ui.qml</file>
         <file>images/logo-ag.svg</file>
         <file>scripts/Constants.js</file>
-        <file>CenterMenuModel.qml</file>
-        <file>LeftMenuModel.qml</file>
         <file>contentPages/card/PageCardIdentify.qml</file>
         <file>contentPages/card/PageCardIdentifyForm.ui.qml</file>
         <file>contentPages/card/PageCardOtherData.qml</file>
@@ -22,5 +20,7 @@
         <file>PageLoader.qml</file>
         <file>fonts/karma/Karma-Medium.ttf</file>
         <file>fonts/lato/Lato-Regular.ttf</file>
+        <file>MainMenuModel.qml</file>
+        <file>SubMenuModel.qml</file>
     </qresource>
 </RCC>
