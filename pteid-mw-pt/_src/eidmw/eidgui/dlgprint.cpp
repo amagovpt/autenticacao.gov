@@ -68,7 +68,7 @@ void CenterParent(QWidget* parent, QWidget* child)
 dlgPrint::dlgPrint( QWidget* parent, CardInformation& CI_Data, GenPur::UI_LANGUAGE lng)
 : QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
 , m_CI_Data(CI_Data)
-, m_CurrReaderName("")
+, m_CurrReaderName(CI_Data.m_cardReader)
 {
     if (CI_Data.isDataLoaded())
     {
@@ -226,6 +226,7 @@ void dlgPrint::on_pbGeneratePdf_clicked( void )
             nativepdfpath = QDir::toNativeSeparators(pdffilepath);
 
 			res = drawpdf(cdata, pdf_printer, nativepdfpath);
+
         }
     }
 	catch (PTEID_Exception &e) {
