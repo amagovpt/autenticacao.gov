@@ -12,8 +12,12 @@ Item {
 
     anchors.fill: parent
 
+    property alias propertyMainView: mainView
+
+    property alias propertyMainMenuView: mainMenuView
     property alias propertyMainMenuListView: mainMenuListView
 
+    property alias propertySubMenuView: subMenuView
     property alias propertySubMenuListView: subMenuListView
 
     property alias propertyPageLoader: pageLoaderID

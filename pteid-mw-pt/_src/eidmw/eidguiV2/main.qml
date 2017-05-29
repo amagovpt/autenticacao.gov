@@ -22,9 +22,58 @@ Window {
         id: main
         anchors.fill: parent
 
+        NumberAnimation
+        {
+            id: animationReduceMainMenuWidth
+            target: main.propertyMainMenuView
+            property: "width"
+            easing.type: Easing.OutQuad
+            to: main.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
+            duration: 200
+            onStopped: {
+                console.log("animationReduceMainMenuWidth stoped")
+                main.state = "STATE_NORMAL"
+            }
+        }
+        NumberAnimation
+        {
+            id: animationShowSubMenuWidth
+            target: main.propertySubMenuView
+            property: "width"
+            easing.type: Easing.OutQuad
+            to: main.propertyMainView.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE;
+            duration: 200
+            onStopped: {
+                console.log("animationShowSubMenuWidth stoped")
+                main.state = "STATE_NORMAL"
+            }
+        }
+
         Component.onCompleted: {
+            main.state = "STATE_HOME"
             console.log("MainForm Completed")
         }
+        //************************************************************************/
+        //**                  states
+        //************************************************************************/
+        states:[
+            State{
+                name: "STATE_HOME"
+                PropertyChanges {
+                    target: main.propertyMainMenuView
+                    width: 2 * parent.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
+                }
+                PropertyChanges {
+                    target: main.propertySubMenuView
+                    width:  0
+                }
+            },
+            State{
+                name: "STATE_NORMAL"
+                PropertyChanges {
+                }
+            }
+        ]
     }
     Component {
         id: mainMenuDelegate
@@ -53,6 +102,10 @@ Window {
                     // Open the content page of the first item of the new sub menu
                     main.propertyPageLoader.source = main.propertyMainMenuListView.model.get(index).subdata.get(0).url
                     onClicked: console.log("Main Menu index = " + index);
+
+                    animationReduceMainMenuWidth.start()
+                    animationShowSubMenuWidth.start()
+
                 }
             }
             Text {
