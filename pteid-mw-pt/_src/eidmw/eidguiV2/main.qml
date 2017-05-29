@@ -73,9 +73,7 @@ Window {
     Component {
         id: subMenuDelegate
         Item {
-            width: main.propertySplitView.width
-                   * Constants.SUB_MENU_VIEW_RELATIVE_SIZE
-                   * Constants.SUB_MENU_RELATIVE_H_SIZE
+            width: main.propertySubMenuListView.width
             height: main.propertySubMenuListView.height
                     / main.propertySubMenuListView.count
             MouseArea {

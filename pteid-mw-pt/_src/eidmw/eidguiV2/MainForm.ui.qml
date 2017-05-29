@@ -1,5 +1,4 @@
 import QtQuick 2.6
-import QtQuick.Controls 1.5
 import QtQuick.Layouts 1.3
 
 /* Constants imports */
@@ -13,18 +12,16 @@ Item {
 
     anchors.fill: parent
 
-    property alias propertySplitView: splitView
-
     property alias propertyMainMenuListView: mainMenuListView
 
     property alias propertySubMenuListView: subMenuListView
 
     property alias propertyPageLoader: pageLoaderID
 
-    /* SplitView */
-    SplitView {
+    /* Main View */
+    Item {
 
-        id: splitView
+        id: mainView
         anchors.fill: parent
 
         /* Main Menu View */
@@ -61,6 +58,7 @@ Item {
             width: parent.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE
             height: parent.height
             border.width: 0
+            anchors.left: mainMenuView.right
 
             Rectangle {
                 width: parent.width
@@ -84,10 +82,12 @@ Item {
             }
         }
 
-        /* Main Menu View */
+        /* Content Pages View */
         Rectangle {
             id: contentPagesView
             width: parent.width * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
+            height: parent.height
+            anchors.left: subMenuView.right
 
             Rectangle {
                 width: parent.width * Constants.PAGE_RELATIVE_H_SIZE
