@@ -39,7 +39,7 @@ enum ErrorCode
 	SIG_SUCCESS
 	,SIG_ERROR
 	,TS_WARNING
-
+    , CANCELED_BY_USER
 };
 
 

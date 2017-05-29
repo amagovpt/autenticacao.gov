@@ -586,9 +586,11 @@ void PDFSignWindow::run_sign(int selected_page, QString &savefilepath,
 				sig_coord_x, sig_coord_y, location, reason, save_path);
 
 			keepTrying = false;
-			if (sign_rc == 0)
-				this->success = SIG_SUCCESS;
-			else
+            if (sign_rc == 0){
+                this->success = this->FutureWatcher.future().isCanceled()
+                                ? CANCELED_BY_USER
+                                : SIG_SUCCESS;
+            } else
 				this->success = TS_WARNING;
 
 		}
@@ -740,7 +742,8 @@ void PDFSignWindow::on_button_sign_clicked()
 
 	pdialog->setMinimum(0);
 	pdialog->setMaximum(0);
-	connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(cancel()));
+    connect(&this->FutureWatcher, SIGNAL(finished()), pdialog, SLOT(reset()));
+    connect(pdialog, SIGNAL(canceled()), &this->FutureWatcher, SLOT(cancel()));
 
 	QFuture<void> future = QtConcurrent::run(this,
 			&PDFSignWindow::run_sign, selected_page, savefilepath, location, reason);
@@ -749,6 +752,7 @@ void PDFSignWindow::on_button_sign_clicked()
 	pdialog->reset();
 	pdialog->exec();
 
+    this->FutureWatcher.waitForFinished();
 	if (this->success == SIG_SUCCESS)
 		ShowSuccessMsgBox();
 	else if (this->success == TS_WARNING)
@@ -756,8 +760,17 @@ void PDFSignWindow::on_button_sign_clicked()
 		QString sig_detail = model->rowCount() > 1 ?  tr("some of the timestamps could not be applied") :
 				tr("the timestamp could not be applied");
 		ShowErrorMsgBox(tr("Signature(s) successfully generated but ")+ sig_detail);
-	}
-	else
+
+    } else if ( this->success == CANCELED_BY_USER ){
+        QFile::remove(savefilepath);
+        std::cout << "Operation canceled by user - No PDF Signature generated" << std::endl;
+        ShowErrorMsgBox(tr("Operation canceled by user"));
+
+        eIDMW::PTEID_LOG( eIDMW::PTEID_LOG_LEVEL_ERROR
+                        , "ScapSignature"
+                        , "Operation canceled by user - No PDF Signature generated");
+
+    } else
 		ShowErrorMsgBox(tr("Error Generating Signature!"));
 
 	this->close();
