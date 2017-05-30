@@ -42,6 +42,10 @@ Window {
                     target: main.propertySubMenuView
                     width:  0
                 }
+                PropertyChanges {
+                    target: main.propertyPageLoader
+                    source:  "contentPages/home/PageHome.qml"
+                }
             },
             State{
                 name: "STATE_NORMAL"
@@ -143,10 +147,9 @@ Window {
                     }
 
                     // Open the content page of the first item of the new sub menu
+                    main.state = "STATE_NORMAL"
                     main.propertyPageLoader.source = main.propertyMainMenuListView.model.get(index).subdata.get(0).url
                     onClicked: console.log("Main Menu index = " + index);
-
-                    main.state = "STATE_NORMAL"
                 }
             }
             Text {

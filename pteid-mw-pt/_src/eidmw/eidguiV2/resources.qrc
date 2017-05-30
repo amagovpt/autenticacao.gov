@@ -34,5 +34,7 @@
         <file>contentPages/services/PageServicesSignProfessionalForm.ui.qml</file>
         <file>contentPages/definitions/PageDefinitionsParameters.qml</file>
         <file>contentPages/definitions/PageDefinitionsParametersForm.ui.qml</file>
+        <file>contentPages/home/PageHome.qml</file>
+        <file>contentPages/home/PageHomeForm.ui.qml</file>
     </qresource>
 </RCC>
