@@ -35,7 +35,7 @@ Item {
             height: parent.height
             color: Constants.COLOR_BACKGROUND_MAIN_MENU
             border.width: 0
-
+            z: 1
             Image {
                 id: imageLogo
                 width: parent.width * Constants.IMAGE_LOGO_RELATIVE_H_SIZE
@@ -43,6 +43,10 @@ Item {
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
                 source: "images/logo-ag.svg"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: propertyMain.state = "STATE_HOME"
+                }
             }
             ListView {
                 id: mainMenuListView
@@ -63,7 +67,7 @@ Item {
             height: parent.height
             border.width: 0
             anchors.left: mainMenuView.right
-
+            z: 0
             Rectangle {
                 width: parent.width * Constants.SUB_MENU_RELATIVE_H_SIZE
                 height: parent.height * Constants.SUB_MENU_RELATIVE_V_SIZE
@@ -102,7 +106,7 @@ Item {
             width: parent.width * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
             height: parent.height
             anchors.left: subMenuView.right
-
+            z: 1
             Rectangle {
                 width: parent.width * Constants.PAGE_RELATIVE_H_SIZE
                 height: parent.height * Constants.PAGE_RELATIVE_V_SIZE

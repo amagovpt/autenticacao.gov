@@ -18,36 +18,11 @@ Window {
     FontLoader { id: karma; source: "qrc:/fonts/karma/Karma-Medium.ttf" }
     FontLoader { id: lato; source: "qrc:/fonts/lato/Lato-Regular.ttf" }
 
+    property alias propertyMain: main
+
     MainForm {
         id: main
         anchors.fill: parent
-
-        NumberAnimation
-        {
-            id: animationReduceMainMenuWidth
-            target: main.propertyMainMenuView
-            property: "width"
-            easing.type: Easing.OutQuad
-            to: main.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
-            duration: 200
-            onStopped: {
-                console.log("animationReduceMainMenuWidth stoped")
-                main.state = "STATE_NORMAL"
-            }
-        }
-        NumberAnimation
-        {
-            id: animationShowSubMenuWidth
-            target: main.propertySubMenuView
-            property: "width"
-            easing.type: Easing.OutQuad
-            to: main.propertyMainView.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE;
-            duration: 200
-            onStopped: {
-                console.log("animationShowSubMenuWidth stoped")
-                main.state = "STATE_NORMAL"
-            }
-        }
 
         Component.onCompleted: {
             main.state = "STATE_HOME"
@@ -70,7 +45,75 @@ Window {
             },
             State{
                 name: "STATE_NORMAL"
-                PropertyChanges {
+            }
+        ]
+        transitions: [
+            Transition {
+                from: "STATE_HOME"
+                to: "STATE_NORMAL"
+                NumberAnimation
+                {
+                    id: animationShowSubMenu
+                    target: main.propertySubMenuView
+                    property: "opacity"
+                    easing.type: Easing.Linear
+                    to: 1;
+                    duration: Constants.ANIMATION_STATE_OPACITY_TO_NORMAL
+                    onStarted: console.log("animationShowSubMenu")
+                }
+                NumberAnimation
+                {
+                    id: animationReduceMainMenuWidth
+                    target: main.propertyMainMenuView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: main.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
+                    duration: Constants.ANIMATION_STATE_TO_NORMAL
+                    onStarted: console.log("animationReduceMainMenuWidth")
+                }
+                NumberAnimation
+                {
+                    id: animationShowSubMenuWidth
+                    target: main.propertySubMenuView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: main.propertyMainView.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE;
+                    duration: Constants.ANIMATION_STATE_TO_NORMAL
+                    onStarted: console.log("animationShowSubMenuWidth")
+                }
+            },
+            Transition {
+                from: "STATE_NORMAL"
+                to: "STATE_HOME"
+                NumberAnimation
+                {
+                    id: animationHideSubMenu
+                    target: main.propertySubMenuView
+                    property: "opacity"
+                    easing.type: Easing.Linear
+                    to: 0;
+                    duration: Constants.ANIMATION_STATE_OPACITY_TO_HOME
+                    onStarted: console.log("animationHideSubMenu")
+                }
+                NumberAnimation
+                {
+                    id: animationIncreaseMainMenuWidth
+                    target: main.propertyMainMenuView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: 2 * main.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
+                    duration: Constants.ANIMATION_STATE_TO_HOME
+                    onStarted: console.log("animationIncreaseMainMenuWidth")
+                }
+                NumberAnimation
+                {
+                    id: animationHideSubMenuWidth
+                    target: main.propertySubMenuView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: 0;
+                    duration: Constants.ANIMATION_STATE_TO_HOME
+                    onStarted: console.log("animationHideSubMenuWidth")
                 }
             }
         ]
@@ -103,9 +146,7 @@ Window {
                     main.propertyPageLoader.source = main.propertyMainMenuListView.model.get(index).subdata.get(0).url
                     onClicked: console.log("Main Menu index = " + index);
 
-                    animationReduceMainMenuWidth.start()
-                    animationShowSubMenuWidth.start()
-
+                    main.state = "STATE_NORMAL"
                 }
             }
             Text {
