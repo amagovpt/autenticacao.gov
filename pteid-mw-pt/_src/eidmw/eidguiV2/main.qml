@@ -68,7 +68,6 @@ Window {
                 NumberAnimation
                 {
                     id: animationReduceMainMenuWidth
-                    target: main.propertyMainMenuView
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: main.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
@@ -102,7 +101,6 @@ Window {
                 NumberAnimation
                 {
                     id: animationIncreaseMainMenuWidth
-                    target: main.propertyMainMenuView
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: 2 * main.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
