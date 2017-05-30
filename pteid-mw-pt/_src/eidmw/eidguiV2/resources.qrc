@@ -36,5 +36,6 @@
         <file>contentPages/definitions/PageDefinitionsParametersForm.ui.qml</file>
         <file>contentPages/home/PageHome.qml</file>
         <file>contentPages/home/PageHomeForm.ui.qml</file>
+        <file>contentPages/card/photo.png</file>
     </qresource>
 </RCC>
