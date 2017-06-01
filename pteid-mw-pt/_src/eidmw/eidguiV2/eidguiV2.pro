@@ -26,3 +26,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    contentPages/security/PageSecurityCertificatesForm.ui.qml \
+    contentPages/security/PageSecurityPinCodesForm.ui.qml \
+    contentPages/security/PageSecurityCertificates.qml \
+    contentPages/security/PageSecurityPinCodes.qml

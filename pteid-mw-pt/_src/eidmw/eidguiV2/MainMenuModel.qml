@@ -9,20 +9,12 @@ ListModel {
                 url: "contentPages/card/PageCardIdentify.qml"
             },
             ListElement {
-                name: "Outros Dados"
+                name: "Outros dados"
                 url: "contentPages/card/PageCardOtherData.qml"
             },
             ListElement {
                 name: "Morada"
                 url: "contentPages/card/PageCardAdress.qml"
-            },
-            ListElement {
-                name: "Certificados"
-                url: "contentPages/card/PageCardCertificates.qml"
-            },
-            ListElement {
-                name: "Códigos PIN"
-                url: "contentPages/card/PageCardPinCodes.qml"
             },
             ListElement {
                 name: "Notas"
@@ -31,41 +23,28 @@ ListModel {
         ]
     }
     ListElement {
-        name: "Serviços"
+        name: "Assinatura"
         subdata:[
             ListElement {
-                name: "Assinatura de PDF"
+                name: "Simples"
                 url: "contentPages/services/PageServicesSignPdf.qml"
             },
             ListElement {
-                name: "Assinatura de Profissionais"
+                name: "Avançada"
                 url: "contentPages/services/PageServicesSignProfessional.qml"
             }
         ]
     }
     ListElement {
-        name: "Definições"
+        name: "Segurança"
         subdata:[
             ListElement {
-                name: "Parâmetros"
-                url: "contentPages/definitions/PageDefinitionsParameters.qml"
-            }
-        ]
-    }
-    ListElement {
-        name: "Ajuda"
-        subdata:[
-            ListElement {
-                name: "Documentação Online"
-                url: "contentPages/help/PageHelpDocOnline.qml"
+                name: "Certificados"
+                url: "contentPages/security/PageSecurityCertificates.qml"
             },
             ListElement {
-                name: "Atualizações"
-                url: "contentPages/help/PageHelpUpdates.qml"
-            },
-            ListElement {
-                name: "Acerca"
-                url: "contentPages/help/PageHelpAbout.qml"
+                name: "Códigos PIN"
+                url: "contentPages/security/PageSecurityPinCodes.qml"
             }
         ]
     }
