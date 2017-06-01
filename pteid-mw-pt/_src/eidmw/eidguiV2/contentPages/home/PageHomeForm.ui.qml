@@ -14,7 +14,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         Text {
             id: text0
-            font.pointSize: Constants.SIZE_TEXT_TITLE
+            font.pixelSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
             text: "Autenticação.gov.pt"
             wrapMode: Text.Wrap
@@ -27,7 +27,7 @@ Item {
             id: text1
             anchors.top: text0.bottom
             anchors.topMargin: Constants.SIZE_TEXT_BODY
-            font.pointSize: Constants.SIZE_TEXT_BODY
+            font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
             text: "A Aplicação Autenticação.gov.pt permite ao cidadão tirar partido das funcionalidades eletrónicas do \
 seu Cartão de Cidadão e da sua Chave Móvel Digital."
@@ -41,7 +41,7 @@ seu Cartão de Cidadão e da sua Chave Móvel Digital."
             id: text2
             anchors.top: text1.bottom
             anchors.topMargin: 3 * Constants.SIZE_TEXT_BODY
-            font.pointSize: Constants.SIZE_TEXT_TITLE
+            font.pixelSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
             text: "Aqui poderá, entre outras funcionalidades:"
             wrapMode: Text.Wrap
@@ -66,7 +66,7 @@ seu Cartão de Cidadão e da sua Chave Móvel Digital."
             }
             Text {
                 id: text3
-                font.pointSize: Constants.SIZE_TEXT_BODY
+                font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 text: "Ler os dados residentes no chip do seu Cartão de Cidadão"
                 wrapMode: Text.Wrap
@@ -94,7 +94,7 @@ seu Cartão de Cidadão e da sua Chave Móvel Digital."
             Text {
                 id: text4
 
-                font.pointSize: Constants.SIZE_TEXT_BODY
+                font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 text: "Alterar os códigos PIN associados ao seu Cartão de Cidadão"
                 wrapMode: Text.Wrap
@@ -119,7 +119,7 @@ seu Cartão de Cidadão e da sua Chave Móvel Digital."
                 width: Constants.SIZE_TEXT_BODY
             }
             Text {
-                font.pointSize: Constants.SIZE_TEXT_BODY
+                font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 text: "Confirmar e atualizar a morada no chip do seu Cartão de Cidadão"
                 wrapMode: Text.Wrap
@@ -144,7 +144,7 @@ seu Cartão de Cidadão e da sua Chave Móvel Digital."
                 width: Constants.SIZE_TEXT_BODY
             }
             Text {
-                font.pointSize: Constants.SIZE_TEXT_BODY
+                font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 text: "Assinar documentos, enquanto cidadão, profissional ou empresário, recorrendo ao seu Cartão de \
 Cidadão ou à sua Chave Móvel Digital."

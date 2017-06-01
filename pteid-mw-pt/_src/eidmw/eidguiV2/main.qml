@@ -161,7 +161,7 @@ Window {
                 font.weight: mouseAreaMainMenu.containsMouse ?
                                  Font.Bold :
                                  Font.Normal
-                font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
+                font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             }
         }
     }
@@ -191,7 +191,7 @@ Window {
                 font.weight: mouseAreaSubMenu.containsMouse ?
                                  Font.Bold :
                                  Font.Normal
-                font.pointSize: Constants.SIZE_TEXT_SUB_MENU
+                font.pixelSize: Constants.SIZE_TEXT_SUB_MENU
                 wrapMode: Text.Wrap
                                     width: parent.width
                                     horizontalAlignment: Text.AlignHCenter

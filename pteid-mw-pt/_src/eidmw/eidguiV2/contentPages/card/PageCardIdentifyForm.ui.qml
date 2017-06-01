@@ -24,7 +24,7 @@ Item {
                 Text {
                     id: givenNameText
                     text: "Nome"
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     font.capitalization: Font.AllUppercase
@@ -51,7 +51,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "Joana Ovilia"
                         font.capitalization: Font.AllUppercase
-                        font.pointSize: Constants.SIZE_TEXT_FIELD
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                     }
                 }
@@ -64,7 +64,7 @@ Item {
                 Text {
                     id: surnameText
                     text: "Apelido"
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     font.capitalization: Font.AllUppercase
@@ -92,7 +92,7 @@ Item {
                         text: "Ribeiro Martins Sousa Costa Mender Cavaco Soares"
                         wrapMode: Text.WordWrap
                         font.capitalization: Font.AllUppercase
-                        font.pointSize: Constants.SIZE_TEXT_FIELD
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                     }
                 }
@@ -118,9 +118,10 @@ Item {
                 Text {
                     id: sexText
                     text: "Sexo"
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
+                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectSex
@@ -143,7 +144,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "F"
                         font.capitalization: Font.AllUppercase
-                        font.pointSize: Constants.SIZE_TEXT_FIELD
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                     }
                 }
@@ -154,9 +155,10 @@ Item {
                 Text {
                     id: heightText
                     text: "Altura"
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
+                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectHeight
@@ -179,7 +181,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "1.77"
                         font.capitalization: Font.AllUppercase
-                        font.pointSize: Constants.SIZE_TEXT_FIELD
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                     }
                 }
@@ -190,9 +192,10 @@ Item {
                 Text {
                     id: nacionalityText
                     text: "Nacionalidade"
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
+                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectNacionality
@@ -215,7 +218,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "PRT"
                         font.capitalization: Font.AllUppercase
-                        font.pointSize: Constants.SIZE_TEXT_FIELD
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                     }
                 }
@@ -226,9 +229,10 @@ Item {
                 Text {
                     id: dateOfBirthText
                     text: "Data de Nascimento"
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
+                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectDateOfBirth
@@ -251,7 +255,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "25 12 1980"
                         font.capitalization: Font.AllUppercase
-                        font.pointSize: Constants.SIZE_TEXT_FIELD
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                     }
                 }
@@ -266,9 +270,10 @@ Item {
                 Text {
                     id: documentNumText
                     text: "Nº Documento"
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
+                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectDocumentNum
@@ -291,7 +296,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "1223456456"
                         font.capitalization: Font.AllUppercase
-                        font.pointSize: Constants.SIZE_TEXT_FIELD
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                     }
                 }
@@ -302,9 +307,10 @@ Item {
                 Text {
                     id: expiryDateText
                     text: "Altura"
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
+                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectExpiryDate
@@ -327,7 +333,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "1.77"
                         font.capitalization: Font.AllUppercase
-                        font.pointSize: Constants.SIZE_TEXT_FIELD
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                     }
                 }
@@ -342,9 +348,10 @@ Item {
                 Text {
                     id:  countryText
                     text: "País"
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
+                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectCountry
@@ -367,7 +374,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "PRT"
                         font.capitalization: Font.AllUppercase
-                        font.pointSize: Constants.SIZE_TEXT_FIELD
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                     }
                 }
@@ -382,9 +389,10 @@ Item {
                 Text {
                     id:  parentsText
                     text: "Filiação"
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
+                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectParents
@@ -407,7 +415,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "Antonio Maria Costa"
                         font.capitalization: Font.AllUppercase
-                        font.pointSize: Constants.SIZE_TEXT_FIELD
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                     }
                 }
@@ -438,7 +446,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "Olivia Maria Costa"
                         font.capitalization: Font.AllUppercase
-                        font.pointSize: Constants.SIZE_TEXT_FIELD
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                     }
                 }
@@ -452,9 +460,10 @@ Item {
                 Text {
                     id:  notesText
                     text: "Indicações Eventuais"
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
+                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectNotes
@@ -477,7 +486,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "Notes"
                         font.capitalization: Font.AllUppercase
-                        font.pointSize: Constants.SIZE_TEXT_FIELD
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                     }
                 }

@@ -7,7 +7,7 @@ Item {
     anchors.fill: parent
     Text {
         text: "PIN Codes"
-        font.pointSize: Constants.SIZE_TEXT_BODY
+        font.pixelSize: Constants.SIZE_TEXT_BODY
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         font.family: lato.name
