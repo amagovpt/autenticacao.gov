@@ -31,6 +31,8 @@ Item {
         /* Main Menu View */
         Rectangle {
             id: mainMenuView
+            x: 0
+            y: 0
             width: parent.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
             height: parent.height
             color: Constants.COLOR_BACKGROUND_MAIN_MENU
@@ -42,7 +44,7 @@ Item {
                 y: parent.height * Constants.IMAGE_LOGO_RELATIVE_V_POS
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
-                source: "images/logo-ag.svg"
+                source: "images/logo_autenticacao_gov.png"
                 MouseArea {
                     anchors.fill: parent
                     onClicked: propertyMain.state = "STATE_HOME"
@@ -57,6 +59,36 @@ Item {
                 model: MainMenuModel {}
                 delegate: mainMenuDelegate
                 focus: true
+            }
+            Rectangle{
+                width: parent.width / 2
+                anchors.topMargin: 30
+                anchors.horizontalCenterOffset: 0
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: mainMenuListView.bottom
+                Rectangle{
+                    id: rectImageHelp
+                    width: parent.width / 2
+                    Image {
+                        id: image_help
+                        scale: 2
+                        fillMode: Image.PreserveAspectFit
+                        source: "images/ajuda_icon.png"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+                }
+                Rectangle{
+                    width: parent.width / 2
+                    height: parent.height / 6
+                    anchors.left: rectImageHelp.right
+                    Image {
+                        id: image_definitions
+                        scale: 2
+                        fillMode: Image.PreserveAspectFit
+                        source: "images/definicoes_icon.png"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+                }
             }
         }
 
