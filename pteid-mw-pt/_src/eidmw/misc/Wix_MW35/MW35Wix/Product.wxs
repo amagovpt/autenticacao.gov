@@ -90,7 +90,7 @@
       <?define var.PTEID_BUILD_FOLDER_AnyCPU=..\..\..\_Binaries35\AnyCPU\VC9\Release\ ?>
     <?endif?>
 	  
-    <WixVariable Id="WixUILicenseRtf" Value="..\..\..\misc\licenses_files\License_en.rtf" />
+    <WixVariable Id="WixUILicenseRtf" Value="..\..\..\misc\licenses\License_pt.rtf" />
     <WixVariable Id="WixUIBannerBmp" Value="..\..\..\misc\Wix_MW35\new_banner.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="..\..\..\misc\Wix_MW35\dlgbmp.bmp" />
 
@@ -357,8 +357,8 @@
       </Component>
 
       <Component Id="License" Guid="{C00AF621-E882-4805-BA9C-B90AA5DBBCB6}" SharedDllRefCount="yes">
-        <File Source="..\..\..\misc\licenses_files\License_en.rtf" KeyPath="yes" />
-        <File Source="..\..\..\misc\licenses_files\THIRDPARTY-LICENSES.txt" />
+        <File Source="..\..\..\misc\licenses\License_pt.rtf" KeyPath="yes" />
+        <File Source="..\..\..\misc\licenses\THIRDPARTY-LICENSES.txt" />
       </Component>
 
     </DirectoryRef>
