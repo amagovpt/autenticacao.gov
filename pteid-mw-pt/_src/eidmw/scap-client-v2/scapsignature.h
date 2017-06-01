@@ -31,7 +31,7 @@
 #include "ui_scapsignature.h"
 #include "cardevent.h"
 #include <QTreeWidgetItem>
-
+#include "ErrorConn.h"
 
 enum ErrorCode
 {
@@ -246,6 +246,10 @@ public:
 private:
     Ui::ScapSignature *ui;
 
+    /* Connection error functions */
+    QString getConnErrStr();
+    void setConnErr( int soapConnectionErr, void *in_suppliers_resp );
+
     /* --- Start Functions -- */
     void clear_sig_position();
     void invertSelectionMode();
@@ -288,7 +292,7 @@ private:
     bool card_present;
     bool horizontal_page_flag;
     bool m_small_signature;
-	bool network_error;
+    ErrorConn connectionErr;
     int m_selected_reader;
 
     QAbstractItemModel *list_model;

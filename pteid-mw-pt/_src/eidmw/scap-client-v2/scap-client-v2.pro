@@ -46,6 +46,7 @@ SOURCES += main.cpp\
     PDFSignature/PDFSignatureSoapBindingProxy.cpp \
     PDFSignature/PDFSignatureC.cpp \
     pdfsignatureclient.cpp \
+    ErrorConn.cpp \
     scapsignature.cpp
 
 !macx:SOURCES += stdsoap2.cpp
@@ -65,6 +66,7 @@ HEADERS  += \
     pdfsignatureclient.h \
     treeiteminfo.h \
     scapsignature.h \
+    ErrorConn.h \
     settings.h
 
 FORMS    += \

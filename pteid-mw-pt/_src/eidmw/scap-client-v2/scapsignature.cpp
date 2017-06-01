@@ -79,7 +79,6 @@ ScapSignature::ScapSignature(QWidget* parent)
     horizontal_page_flag = false;
     m_small_signature = false;
 
-	network_error = false;
     ui->spinBox_page->setValue(1);
     list_model = new QStringListModel();
     ui->pdf_listview->setModel(list_model);
@@ -1542,6 +1541,26 @@ void ProxyInfo::getProxyForHost(std::string urlToFetch, std::string * proxy_host
 
 }
 
+QString ScapSignature::getConnErrStr(){
+    QString error_msg( tr( "Error loading entities" ) );
+
+    std::string strConnErr = connectionErr.getErrStr();
+    if ( strConnErr.empty() ){
+        qDebug() << "ScapSignature::getConnErrStr() - strConnErr empty";
+        return error_msg;
+    }/* if ( strConnErr.empty() ) */
+
+    error_msg += "\n\n";
+    error_msg += tr( strConnErr.c_str() );
+
+    return error_msg;
+}/* ScapSignature::getConnErrStr() */
+
+void ScapSignature::setConnErr( int soapConnErr, void *in_suppliers_resp ){
+    qDebug() << "ScapSignature::setConnErr() - soapConnErr: " << soapConnErr;
+    connectionErr.setErr( soapConnErr, in_suppliers_resp );
+}/* ScapSignature::setConnErr() */
+
 void ScapSignature::on_btn_reloadAatributes_clicked()
 {
     //Single File Signature case
@@ -1563,14 +1582,13 @@ void ScapSignature::on_btn_reloadAatributes_clicked()
 
     if (m_suppliersList.size() == 0)
     {
-		QString error_msg(tr("Error loading entities"));
-		if (network_error)
-		{
-			error_msg += "\n\n" + tr("Please make sure you are connected to the Internet");
-			network_error = false;
-		}
+        QString error_msg = getConnErrStr();
 
-        QMessageBox msgBoxp(QMessageBox::Warning, tr("Warning"), error_msg, 0, this);
+        QMessageBox msgBoxp( QMessageBox::Warning
+                            , tr( "Warning" )
+                            , error_msg
+                            , 0
+                            , this );
 
         msgBoxp.exec();
         return;
@@ -1653,9 +1671,9 @@ void ScapSignature::getAttributeSuppliers()
     suppliers_proxy.soap_endpoint = c_sup_endpoint;
 
     int ret = suppliers_proxy.AttributeSuppliers(suppliers_resp);
+    setConnErr( ret, &suppliers_resp );
+
     if (ret != SOAP_OK) {
-		if (ret == SOAP_TCP_ERROR)
-			network_error = true;
         eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR
                         , "ScapSignature"
                         , "Error in getAttributeSuppliers: Gsoap returned %d, Attribute suppliers end point: %s, host: %s, port: %s"

@@ -102,6 +102,238 @@
         <source>Please make sure you are connected to the Internet</source >
         <translation>Por favor certifique-se que está ligado à internet</translation >
     </message>
+
+    <message>
+        <source>Unknown error! Please verify your network connection</source >
+        <translation>Erro desconhecido! Por favor verifique sua conexão de rede</translation >
+    </message>
+
+
+
+    <message>
+        <source>Timeout expired without response from server. Please verify your network connection</source >
+        <translation>O tempo limite expirou sem resposta do servidor. Verifique sua conexão de rede</translation >
+    </message>
+
+    <message>
+        <source>Unexpected end of file, no input, or timeout receiving data</source >
+        <translation>Fim de ficheiro inesperado, sem entrada ou tempo limite de recepção de dados</translation >
+    </message>
+
+    <message>
+        <source>An SSL error occured</source >
+        <translation>Ocorreu um erro de SSL</translation >
+    </message>
+
+    <message>
+        <source>A data encoding unknown occured</source >
+        <translation>Ocorreu uma codificação de dados desconhecida</translation >
+    </message>
+
+    <message>
+        <source>SOAP version mismatch or no SOAP message. Please verify sent message</source >
+        <translation>A versão SOAP não corresponde a nenhuma mensagem SOAP. Verifique a mensagem enviada</translation >
+    </message>
+
+    <message>
+        <source>A message element was not understood. Please verify sent message</source >
+        <translation>Um elemento de mensagem não foi entendido. Verifique a mensagem enviada</translation >
+    </message>
+
+    <message>
+        <source>The message was incorrectly formed or contained incorrect information. Please verify sent message</source >
+        <translation>A mensagem foi incorretamente formado ou contido informações incorretas. Verifique a mensagem enviada</translation >
+    </message>
+
+    <message>
+        <source>There is a problem with the server. The message could not proceed</source >
+        <translation>Existe um problema com o servidor. A mensagem não pode prosseguir</translation >
+    </message>
+
+    <message>
+        <source>An XML element didn't correspond to anything expected</source >
+        <translation>Um elemento XML não corresponde ao esperado</translation >
+    </message>
+
+    <message>
+        <source>An XML syntax error occurred on the input</source >
+        <translation>Ocorreu um erro de sintaxe XML na entrada</translation >
+    </message>
+
+    <message>
+        <source>XML Schema type mismatch</source >
+        <translation>Incompatibilidade do tipo XML Schema</translation >
+    </message>
+
+    <message>
+        <source>Begin of an element expected, but not found</source >
+        <translation>Início de um elemento esperado, mas não encontrado</translation >
+    </message>
+
+    <message>
+        <source>Array index out of bounds</source >
+        <translation>Índice do array fora dos limites</translation >
+    </message>
+
+    <message>
+        <source>Namespace name mismatch (validation error)</source >
+        <translation>Nome da namespace não coincide (erro de validação)</translation >
+    </message>
+
+    <message>
+        <source>Internal error</source >
+        <translation>Erro interno</translation >
+    </message>
+
+    <message>
+        <source>User error</source >
+        <translation>Erro de utilizador</translation >
+    </message>
+
+    <message>
+        <source>An exception raised by the service</source >
+        <translation>Uma exceção levantada pelo serviço</translation >
+    </message>
+
+    <message>
+        <source>The dispatcher did not find a matching operation for a request</source >
+        <translation>O operador não encontrou uma operação correspondente para um pedido</translation >
+    </message>
+
+    <message>
+        <source>No data in HTTP message</source >
+        <translation>Nenhum dado na mensagem HTTP</translation >
+    </message>
+
+    <message>
+        <source>HTTP GET operation not handled</source >
+        <translation>Operação HTTP GET não tratada</translation >
+    </message>
+
+    <message>
+        <source>Out of memory</source >
+        <translation>Fora da memória</translation >
+    </message>
+
+    <message>
+        <source>Memory overflow/corruption error (DEBUG mode)</source >
+        <translation>Erro de estouro de memória / corrupção (modo DEBUG)</translation >
+    </message>
+
+    <message>
+        <source>An element was null, while it is not supposed to be null</source >
+        <translation>Um elemento era nulo, enquanto não deveria ser nulo</translation >
+    </message>
+
+    <message>
+        <source>Element's ID duplicated (multi-ref encoding)</source >
+        <translation>Identificação do elemento duplicado (codificação multi-ref)</translation >
+    </message>
+
+    <message>
+        <source>Element ID missing for an href/ref (multi-ref encoding)</source >
+        <translation>ID do elemento faltando para um href / ref (codificação multi-ref)</translation >
+    </message>
+
+    <message>
+        <source>Reference to object is incompatible with the object refered to</source >
+        <translation>A referência ao objeto é incompatível com o objeto referido</translation >
+    </message>
+
+    <message>
+        <source>An UTF-encoded message decoding error occured</source >
+        <translation>Ocorreu um erro de decodificação de mensagem codificado em UTF</translation >
+    </message>
+
+    <message>
+        <source>Message too large to store in UDP packet</source >
+        <translation>Mensagem muito grande para armazenar no pacote UDP</translation >
+    </message>
+
+    <message>
+        <source>A connection error occured. Please make sure you are connected to the Internet</source >
+        <translation>Ocorreu um erro de conexão. Certifique-se de estar conectado à Internet</translation >
+    </message>
+
+    <message>
+        <source>An HTTP error occured</source >
+        <translation>Ocorreu um erro HTTP</translation >
+    </message>
+
+    <message>
+        <source>An NTLM authentication handshake error occured</source >
+        <translation>Ocorreu um erro de handshake de autenticação NTLM</translation >
+    </message>
+
+    <message>
+        <source>A Zlib error occured</source >
+        <translation>Ocorreu um erro Zlib</translation >
+    </message>
+
+    <message>
+        <source>Failed to register plugin</source >
+        <translation>Falha ao registrar o plugin</translation >
+    </message>
+
+    <message>
+        <source>MIME parsing error</source >
+        <translation>Erro de análise MIME</translation >
+    </message>
+
+    <message>
+        <source>MIME attachment has no href from SOAP body error</source >
+        <translation>O anexo MIME não tem href do erro de corpo SOAP</translation >
+    </message>
+
+    <message>
+        <source>End of MIME attachments protocol error</source >
+        <translation>Erro de protocolo de fim do anexo MIME</translation >
+    </message>
+
+    <message>
+        <source>DIME formatting error or DIME size exceeds SOAP_MAXDIMESIZE</source >
+        <translation>O erro de formatação DIME ou tamanho DIME excede SOAP_MAXDIMESIZE</translation >
+    </message>
+
+    <message>
+        <source>End of DIME attachments protocol error</source >
+        <translation>Erro no protocolo End of DIME de anexos</translation >
+    </message>
+
+    <message>
+        <source>DIME attachment has no href from SOAP body</source >
+        <translation>O anexo DIME não tem href apartir do corpo SOAP</translation >
+    </message>
+
+    <message>
+        <source>DIME version/transmission error</source >
+        <translation>Erro de versão / transmissão DIME</translation >
+    </message>
+
+    <message>
+        <source>Attributed required validation error</source >
+        <translation>Erro de validação necessária atribuída</translation >
+    </message>
+
+    <message>
+        <source>Attributed prohibited validation error</source >
+        <translation>Erro de validação proibido atribuído</translation >
+    </message>
+
+    <message>
+        <source>Element minOccurs/maxOccurs validation error or SOAP_MAXOCCURS exceeded</source >
+        <translation>Elemento minOccurs / maxOccurs erro de validação ou SOAPs MAXOCCURS excedido</translation >
+    </message>
+
+    <message>
+        <source>Element length validation error or SOAP_MAXLENGTH exceeded</source >
+        <translation>Erro de validação do comprimento do elemento ou SOAP_MAXLENGTH excedido</translation >
+    </message>
+
+    <message>
+        <source>Too many open sockets - For non-win32 systems not supporting poll()</source >
+        <translation>Muitos sockets abertos - Para sistemas que não são win32 e que não suportam poll()</translation >
+    </message>
     <message>
         <source>SCAP Signature - Sign using professional roles</source>
         <translation type="obsolete">Assinatura SCAP - Assinatura na qualidade com atributos profissionais</translation>
