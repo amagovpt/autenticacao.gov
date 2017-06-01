@@ -17,10 +17,11 @@ Item {
             font.pixelSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
             text: "Autenticação.gov.pt"
+            font.bold: true
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
-            color: Constants.COLOR_TEXT_BODY
+            color: Constants.COLOR_TEXT_TITLE
             Layout.fillWidth: true
         }
         Text {
@@ -41,7 +42,7 @@ seu Cartão de Cidadão e da sua Chave Móvel Digital."
             id: text2
             anchors.top: text1.bottom
             anchors.topMargin: 3 * Constants.SIZE_TEXT_BODY
-            font.pixelSize: Constants.SIZE_TEXT_TITLE
+            font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
             text: "Aqui poderá, entre outras funcionalidades:"
             wrapMode: Text.Wrap

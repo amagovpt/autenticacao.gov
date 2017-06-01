@@ -13,7 +13,6 @@ Item {
     ColumnLayout {
         anchors.fill: parent
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
         RowLayout {
             Layout.fillWidth: true
             Item{
@@ -112,7 +111,9 @@ Item {
 
         RowLayout {
             spacing: 10
+            Layout.fillWidth: true
             Item{
+                width: main.width * 0.175
                 height: main.height * 0.10
                 Layout.fillWidth: true
                 Text {
@@ -149,7 +150,8 @@ Item {
                     }
                 }
             }
-            Rectangle{
+            Item{
+                width: main.width * 0.175
                 height: main.height * 0.10
                 Layout.fillWidth: true
                 Text {
@@ -186,7 +188,8 @@ Item {
                     }
                 }
             }
-            Rectangle{
+            Item{
+                width: main.width * 0.30
                 height: main.height * 0.10
                 Layout.fillWidth: true
                 Text {
@@ -223,7 +226,8 @@ Item {
                     }
                 }
             }
-            Rectangle{
+            Item{
+                width: main.width * 0.30
                 height: main.height * 0.10
                 Layout.fillWidth: true
                 Text {
@@ -421,8 +425,8 @@ Item {
                 }
                 Item{
                     id: rectSpaceParents
-                    width: Constants.SIZE_TEXT_LABEL
-                    height: Constants.SIZE_TEXT_LABEL
+                    width: 10
+                    height: 10
                     anchors.top :rectParentsField.bottom
                 }
                 RectangularGlow {
