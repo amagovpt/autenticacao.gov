@@ -17,10 +17,13 @@ Item {
     property alias propertyMainMenuView: mainMenuView
     property alias propertyMainMenuListView: mainMenuListView
 
+    property alias propertyMainMenuBottomListView: mainMenuBottomListView
     property alias propertySubMenuView: subMenuView
     property alias propertySubMenuListView: subMenuListView
 
     property alias propertyPageLoader: pageLoaderID
+
+    property alias propertyImageLogo : mouseAreaImageLogo
 
     /* Main View */
     Item {
@@ -46,8 +49,8 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 source: "images/logo_autenticacao_gov.png"
                 MouseArea {
+                    id: mouseAreaImageLogo
                     anchors.fill: parent
-                    onClicked: propertyMain.state = "STATE_HOME"
                 }
             }
             ListView {
@@ -60,38 +63,18 @@ Item {
                 delegate: mainMenuDelegate
                 focus: true
             }
-            Rectangle{
-                width: parent.width / 4
+            ListView {
+                id: mainMenuBottomListView
+                width: parent.width / 2
+                height: parent.height * Constants.MAIN_MENU_BOTTOM_RELATIVE_V_SIZE
+                y: parent.height * Constants.MAIN_MENU_BOTTOM_RELATIVE_V_POS
+                orientation: ListView.Horizontal
                 anchors.horizontalCenter: parent.horizontalCenter
-                y: parent.height - parent.height * Constants.RECT_HELP_DIFINITIONS_RELATIVE_V_POS
-                Rectangle{
-                    id: rectImageDefinitions
-                    width: parent.width / 2
-                    height: parent.height / 6
-                    Image {
-                        id: image_definitions
-                        antialiasing: true
-                        scale: 1
-                        fillMode: Image.PreserveAspectFit
-                        source: "images/definicoes_icon.png"
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-                }
-                Rectangle{
-                    id: rectImageHelp
-                    width: parent.width / 2
-                    anchors.left: rectImageDefinitions.right
-                    Image {
-                        id: image_help
-                        antialiasing: true
-                        scale: 1
-                        fillMode: Image.PreserveAspectFit
-                        source: "images/ajuda_icon.png"
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-                }
-
+                model: MainMenuBottomModel {}
+                delegate: mainMenuBottomDelegate
+                focus: true
             }
+
         }
 
         /* Sub Menu View */

@@ -26,7 +26,17 @@ Window {
 
         Component.onCompleted: {
             main.state = "STATE_FIRST_RUN"
+            // Do not select any option
+            main.propertyMainMenuListView.currentIndex = -1
+            main.propertyMainMenuBottomListView.currentIndex = -1
             console.log("MainForm Completed")
+        }
+        propertyImageLogo {
+            onClicked: {
+                propertyMain.state = "STATE_HOME"
+                propertyMainMenuListView.currentIndex = -1
+                propertyMainMenuBottomListView.currentIndex = -1
+            }
         }
         //************************************************************************/
         //**                  states
@@ -195,8 +205,8 @@ Window {
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
+                    main.propertyMainMenuBottomListView.currentIndex = -1
                     main.propertyMainMenuListView.currentIndex = index
-
 
                     // Clear list model and then load a new sub menu
                     main.propertySubMenuListView.model.clear()
@@ -230,6 +240,47 @@ Window {
         }
     }
     Component {
+        id: mainMenuBottomDelegate
+        Item {
+            width: main.propertyMainMenuBottomListView.width / 2
+            height: main.propertyMainMenuBottomListView.height
+            MouseArea {
+                id: mouseAreaMainMenuBottom
+                anchors.fill: parent
+                hoverEnabled: true
+                onClicked: {
+                    // Do not select any option
+                    main.propertyMainMenuListView.currentIndex = -1
+                    main.propertyMainMenuBottomListView.currentIndex = index
+                    // Clear list model and then load a new sub menu
+                    main.propertySubMenuListView.model.clear()
+                    for(var i = 0; i < main.propertyMainMenuBottomListView.model.get(index).subdata.count; ++i) {
+                        console.log("Sub Menu indice " + i + " - "
+                                    + main.propertyMainMenuBottomListView.model.get(index).subdata.get(i).name);
+                        main.propertySubMenuListView.model.append({
+                             "subName": main.propertyMainMenuBottomListView.model.get(index).subdata.get(i).name,
+                             "url": main.propertyMainMenuBottomListView.model.get(index).subdata.get(i).url })
+                    }
+                    // Open the content page of the first item of the new sub menu
+                    main.state = "STATE_NORMAL"
+                    main.propertyPageLoader.source = main.propertyMainMenuBottomListView.model.get(index).subdata.get(0).url
+                    onClicked: console.log("Main Menu Bottom index = " + index);
+                }
+            }
+            Image {
+                id: imageMainMenuBottom
+                fillMode: Image.PreserveAspectFit
+                anchors.horizontalCenter: parent.horizontalCenter
+                source:  main.propertyMainMenuBottomListView.currentIndex === index ?
+                             imageUrl :
+                             imageUrlSel
+                scale: mouseAreaMainMenuBottom.containsMouse ?
+                           1.5 :
+                           1
+            }
+        }
+    }
+    Component {
         id: subMenuDelegate
         Item {
             width: main.propertySubMenuListView.width
@@ -254,8 +305,8 @@ Window {
                                  Font.Normal
                 font.pixelSize: Constants.SIZE_TEXT_SUB_MENU
                 wrapMode: Text.Wrap
-                                    width: parent.width
-                                    horizontalAlignment: Text.AlignHCenter
+                width: parent.width
+                horizontalAlignment: Text.AlignHCenter
 
             }
         }
@@ -282,5 +333,4 @@ Window {
         return handColor
     }
 }
-
 

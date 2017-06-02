@@ -44,5 +44,8 @@
         <file>contentPages/security/PageSecurityPinCodes.qml</file>
         <file>contentPages/security/PageSecurityPinCodesForm.ui.qml</file>
         <file>images/logo_cartao_cidadao.png</file>
+        <file>MainMenuBottomModel.qml</file>
+        <file>images/ajuda_icon_sel.png</file>
+        <file>images/definicoes_icon_sel.png</file>
     </qresource>
 </RCC>
