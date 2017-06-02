@@ -49,7 +49,6 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
-                    font.capitalization: Font.AllUppercase
                     height: 1.2 * Constants.SIZE_TEXT_LABEL
                 }
                 RectangularGlow {
@@ -75,6 +74,7 @@ Item {
                         font.capitalization: Font.AllUppercase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
                     }
                 }
                 Item{
@@ -89,7 +89,6 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
-                    font.capitalization: Font.AllUppercase
                     anchors.top :rectSpace.bottom
                     height: 1.2 * Constants.SIZE_TEXT_LABEL
                 }
@@ -116,6 +115,7 @@ Item {
                         font.capitalization: Font.AllUppercase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
                     }
                 }
             }
@@ -165,7 +165,6 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
-                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectSex
@@ -190,6 +189,7 @@ Item {
                         font.capitalization: Font.AllUppercase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
                     }
                 }
             }
@@ -203,7 +203,6 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
-                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectHeight
@@ -228,6 +227,7 @@ Item {
                         font.capitalization: Font.AllUppercase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
                     }
                 }
             }
@@ -241,7 +241,6 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
-                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectNacionality
@@ -266,6 +265,7 @@ Item {
                         font.capitalization: Font.AllUppercase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
                     }
                 }
             }
@@ -279,7 +279,6 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
-                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectDateOfBirth
@@ -304,6 +303,7 @@ Item {
                         font.capitalization: Font.AllUppercase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
                     }
                 }
             }
@@ -316,11 +316,10 @@ Item {
                 Layout.fillWidth: true
                 Text {
                     id: documentNumText
-                    text: "Nº Documento"
+                    text: "N.º Documento"
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
-                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectDocumentNum
@@ -345,6 +344,7 @@ Item {
                         font.capitalization: Font.AllUppercase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
                     }
                 }
             }
@@ -357,7 +357,6 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
-                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectExpiryDate
@@ -382,6 +381,7 @@ Item {
                         font.capitalization: Font.AllUppercase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
                     }
                 }
             }
@@ -398,7 +398,6 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
-                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectCountry
@@ -423,6 +422,7 @@ Item {
                         font.capitalization: Font.AllUppercase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
                     }
                 }
             }
@@ -439,7 +439,6 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
-                    font.capitalization: Font.AllUppercase
                 }
                 RectangularGlow {
                     id: effectParents
@@ -464,6 +463,7 @@ Item {
                         font.capitalization: Font.AllUppercase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
                     }
                 }
                 //                Item{
@@ -511,7 +511,6 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
-                    font.capitalization: Font.AllUppercase
 
                 }
                 RectangularGlow {
@@ -537,6 +536,7 @@ Item {
                         font.capitalization: Font.AllUppercase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
                     }
                 }
             }

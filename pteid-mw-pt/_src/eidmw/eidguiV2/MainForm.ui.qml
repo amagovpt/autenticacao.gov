@@ -61,34 +61,36 @@ Item {
                 focus: true
             }
             Rectangle{
-                width: parent.width / 2
-                anchors.topMargin: 30
-                anchors.horizontalCenterOffset: 0
+                width: parent.width / 4
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: mainMenuListView.bottom
+                y: parent.height - parent.height * Constants.RECT_HELP_DIFINITIONS_RELATIVE_V_POS
                 Rectangle{
-                    id: rectImageHelp
-                    width: parent.width / 2
-                    Image {
-                        id: image_help
-                        scale: 2
-                        fillMode: Image.PreserveAspectFit
-                        source: "images/ajuda_icon.png"
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-                }
-                Rectangle{
+                    id: rectImageDefinitions
                     width: parent.width / 2
                     height: parent.height / 6
-                    anchors.left: rectImageHelp.right
                     Image {
                         id: image_definitions
-                        scale: 2
+                        antialiasing: true
+                        scale: 1
                         fillMode: Image.PreserveAspectFit
                         source: "images/definicoes_icon.png"
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
                 }
+                Rectangle{
+                    id: rectImageHelp
+                    width: parent.width / 2
+                    anchors.left: rectImageDefinitions.right
+                    Image {
+                        id: image_help
+                        antialiasing: true
+                        scale: 1
+                        fillMode: Image.PreserveAspectFit
+                        source: "images/ajuda_icon.png"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+                }
+
             }
         }
 

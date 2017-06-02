@@ -183,9 +183,7 @@ Window {
             }
             Text {
                 text: subName
-                color:  main.propertySubMenuListView.currentIndex === index ?
-                            Constants.COLOR_TEXT_SUB_MENU_SELECTED :
-                            Constants.COLOR_TEXT_SUB_MENU_DEFAULT
+                color: getSubNameColor(index, mouseAreaSubMenu.containsMouse)
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 font.weight: mouseAreaSubMenu.containsMouse ?
@@ -203,4 +201,23 @@ Window {
     Component.onCompleted: {
         console.log("Window mainWindow Completed")
     }
+
+    function getSubNameColor(index, containsMouse)
+    {
+        var handColor
+        if(main.propertySubMenuListView.currentIndex === index)
+        {
+            handColor =  Constants.COLOR_TEXT_SUB_MENU_SELECTED
+        }else{
+            if(containsMouse === true)
+            {
+                handColor = Constants.COLOR_TEXT_SUB_MENU_MOUSE_OVER
+            }else{
+                handColor = Constants.COLOR_TEXT_SUB_MENU_DEFAULT
+            }
+        }
+        return handColor
+    }
 }
+
+
