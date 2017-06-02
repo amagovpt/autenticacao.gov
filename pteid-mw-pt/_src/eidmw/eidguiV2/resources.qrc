@@ -43,6 +43,6 @@
         <file>contentPages/security/PageSecurityCertificatesForm.ui.qml</file>
         <file>contentPages/security/PageSecurityPinCodes.qml</file>
         <file>contentPages/security/PageSecurityPinCodesForm.ui.qml</file>
-        <file>images/logo_cc.png</file>
+        <file>images/logo_cartao_cidadao.png</file>
     </qresource>
 </RCC>

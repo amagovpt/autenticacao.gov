@@ -29,8 +29,9 @@ Item {
                 Image {
                     anchors.bottom: parent.bottom
                     width: parent.width
+                    antialiasing: true
                     fillMode: Image.PreserveAspectFit
-                    source: "../../images/logo_cc.png"
+                    source: "../../images/logo_cartao_cidadao.png"
                 }
             }
         }
