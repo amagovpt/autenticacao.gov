@@ -13,10 +13,32 @@ Item {
     ColumnLayout {
         anchors.fill: parent
         anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
         RowLayout {
             Layout.fillWidth: true
+            spacing: Constants.SIZE_ROW_SPACE
             Item{
-                id: rectLeft
+                width: main.width * Constants.SIZE_FORM_RECT_NAME_RELATIVE
+                height: main.height * Constants.SIZE_FORM_RECT_TOP_V_RELATIVE
+                Layout.fillWidth: true
+            }
+            Item{
+                width: main.width * Constants.SIZE_FORM_RECT_PHOTO_RELATIVE
+                height: main.height * Constants.SIZE_FORM_RECT_TOP_V_RELATIVE
+                Layout.fillWidth: true
+                Image {
+                    anchors.bottom: parent.bottom
+                    width: parent.width
+                    fillMode: Image.PreserveAspectFit
+                    source: "../../images/logo_cc.png"
+                }
+            }
+        }
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: Constants.SIZE_ROW_SPACE
+            Item{
+                id: rectLeftName
                 width: main.width * Constants.SIZE_FORM_RECT_NAME_RELATIVE
                 height: main.height * Constants.SIZE_FORM_RECT_NAME_V_RELATIVE
                 Layout.fillWidth: true
@@ -27,7 +49,7 @@ Item {
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     font.capitalization: Font.AllUppercase
-                    height: 2 * Constants.SIZE_TEXT_LABEL
+                    height: 1.2 * Constants.SIZE_TEXT_LABEL
                 }
                 RectangularGlow {
                     id: effect
@@ -39,14 +61,14 @@ Item {
                 }
                 Rectangle {
                     id: rectGivenNameTextField
-                    width: rectLeft.width
+                    width: rectLeftName.width
                     color: "white"
                     Layout.fillWidth: true
                     height: 2 * Constants.SIZE_TEXT_FIELD
                     anchors.top :givenNameText.bottom
                     Text {
                         id: givenNameTextField
-                        width: rectLeft.width
+                        width: rectLeftName.width
                         anchors.verticalCenter: parent.verticalCenter
                         text: "Joana Ovilia"
                         font.capitalization: Font.AllUppercase
@@ -68,7 +90,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     font.capitalization: Font.AllUppercase
                     anchors.top :rectSpace.bottom
-                    height: 2 * Constants.SIZE_TEXT_LABEL
+                    height: 1.2 * Constants.SIZE_TEXT_LABEL
                 }
                 RectangularGlow {
                     id: effectSurname
@@ -80,15 +102,15 @@ Item {
                 }
                 Rectangle {
                     id: rectSurnameTextField
-                    width: rectLeft.width
+                    width: rectLeftName.width
                     color: "white"
                     Layout.fillWidth: true
                     height: 4 * Constants.SIZE_TEXT_FIELD
                     anchors.top :surnameText.bottom
                     Text {
                         id: givenSurnameField
-                        width: rectLeft.width
-                        text: "Ribeiro Martins Sousa Costa Mender Cavaco Soares"
+                        width: rectLeftName.width
+                        text: "Ribeiro Martins Sousa Costa Mender Cavaco Soares Meireles Dinis Mendes"
                         wrapMode: Text.WordWrap
                         font.capitalization: Font.AllUppercase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -96,25 +118,45 @@ Item {
                     }
                 }
             }
-            Rectangle{
+            Item{
+                id: rectRightName
                 width: main.width * Constants.SIZE_FORM_RECT_PHOTO_RELATIVE
                 height: main.height * Constants.SIZE_FORM_RECT_NAME_V_RELATIVE
                 Layout.fillWidth: true
-                Image {
-                    id: photo
-                    anchors.fill: parent
-                    fillMode: Image.PreserveAspectFit
-                    source: "photo.png"
+                RectangularGlow {
+                    id: effectPhoto
+                    anchors.fill: rectPhotoField
+                    glowRadius: Constants.FORM_GROW_RADIUS
+                    spread: Constants.FORM_GLOW_SPREAD
+                    color: Constants.COLOR_FORM_GLOW
+                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                }
+                Rectangle {
+                    id: rectPhotoField
+                    y: 1.2 * Constants.SIZE_TEXT_LABEL
+                    anchors.top: rectRightName.Top
+                    width: parent.width
+                    height: 103
+                    color: "white"
+                    Layout.fillWidth: true
+                    Image {
+                        id: photo
+                        y: 1.2 * Constants.SIZE_TEXT_LABEL
+                        anchors.fill: parent
+                        scale: 1
+                        fillMode: Image.PreserveAspectFit
+                        source: "photo.png"
+                    }
                 }
             }
         }
 
         RowLayout {
-            spacing: 10
+            spacing: Constants.SIZE_ROW_SPACE
             Layout.fillWidth: true
             Item{
-                width: main.width * 0.175
-                height: main.height * 0.10
+                width: main.width * 0.10
+                height: main.height * 0.08
                 Layout.fillWidth: true
                 Text {
                     id: sexText
@@ -151,8 +193,8 @@ Item {
                 }
             }
             Item{
-                width: main.width * 0.175
-                height: main.height * 0.10
+                width: main.width * 0.10
+                height: main.height * 0.08
                 Layout.fillWidth: true
                 Text {
                     id: heightText
@@ -189,8 +231,8 @@ Item {
                 }
             }
             Item{
-                width: main.width * 0.30
-                height: main.height * 0.10
+                width: main.width * 0.20
+                height: main.height * 0.08
                 Layout.fillWidth: true
                 Text {
                     id: nacionalityText
@@ -227,8 +269,8 @@ Item {
                 }
             }
             Item{
-                width: main.width * 0.30
-                height: main.height * 0.10
+                width: main.width * 0.35
+                height: main.height * 0.08
                 Layout.fillWidth: true
                 Text {
                     id: dateOfBirthText
@@ -267,9 +309,9 @@ Item {
         }
 
         RowLayout {
-            spacing: 10
+            spacing: Constants.SIZE_ROW_SPACE
             Item{
-                height: main.height * 0.10
+                height: main.height * 0.08
                 Layout.fillWidth: true
                 Text {
                     id: documentNumText
@@ -306,7 +348,7 @@ Item {
                 }
             }
             Rectangle{
-                height: main.height * 0.10
+                height: main.height * 0.08
                 Layout.fillWidth: true
                 Text {
                     id: expiryDateText
@@ -345,9 +387,9 @@ Item {
         }
 
         RowLayout {
-            spacing: 10
+            spacing: Constants.SIZE_ROW_SPACE
             Item{
-                height: main.height * 0.10
+                height: main.height * 0.08
                 Layout.fillWidth: true
                 Text {
                     id:  countryText
@@ -386,9 +428,9 @@ Item {
         }
 
         RowLayout {
-            spacing: 10
+            spacing: Constants.SIZE_ROW_SPACE
             Item{
-                height: main.height * 0.10
+                height: main.height * 0.08
                 Layout.fillWidth: true
                 Text {
                     id:  parentsText
@@ -423,44 +465,45 @@ Item {
                         font.family: lato.name
                     }
                 }
-                Item{
-                    id: rectSpaceParents
-                    width: 10
-                    height: 10
-                    anchors.top :rectParentsField.bottom
-                }
-                RectangularGlow {
-                    id: effectParents2
-                    anchors.fill: rectParents2Field
-                    glowRadius: Constants.FORM_GROW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                }
-                Rectangle {
-                    id: rectParents2Field
-                    width: parent.width
-                    color: "white"
-                    Layout.fillWidth: true
-                    height: 2 * Constants.SIZE_TEXT_FIELD
-                    anchors.top :rectSpaceParents.bottom
-                    Text {
-                        id: parents2Field
-                        width: parent.width
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "Olivia Maria Costa"
-                        font.capitalization: Font.AllUppercase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                    }
-                }
+                //                Item{
+                //                    id: rectSpaceParents
+                //                    width: 5
+                //                    height: 5
+                //                    anchors.top :rectParentsField.bottom
+                //                }
+                //                RectangularGlow {
+                //                    id: effectParents2
+                //                    anchors.fill: rectParents2Field
+                //                    glowRadius: Constants.FORM_GROW_RADIUS
+                //                    spread: Constants.FORM_GLOW_SPREAD
+                //                    color: Constants.COLOR_FORM_GLOW
+                //                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                //                }
+                //                Rectangle {
+                //                    id: rectParents2Field
+                //                    width: parent.width
+                //                    color: "white"
+                //                    Layout.fillWidth: true
+                //                    height: 2 * Constants.SIZE_TEXT_FIELD
+                //                    anchors.top :rectSpaceParents.bottom
+                //                    Text {
+                //                        id: parents2Field
+                //                        width: parent.width
+                //                        anchors.verticalCenter: parent.verticalCenter
+                //                        text: "Olivia Maria Costa"
+                //                        font.capitalization: Font.AllUppercase
+                //                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                //                        font.family: lato.name
+                //                    }
+                //                }
             }
         }
         RowLayout {
-            spacing: 10
+            spacing: Constants.SIZE_ROW_SPACE
             Item{
-                height: main.height * 0.10
+                height: main.height * 0.08
                 Layout.fillWidth: true
+
                 Text {
                     id:  notesText
                     text: "Indicações Eventuais"
@@ -468,6 +511,7 @@ Item {
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     font.capitalization: Font.AllUppercase
+
                 }
                 RectangularGlow {
                     id: effectNotes
