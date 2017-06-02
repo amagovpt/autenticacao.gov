@@ -169,8 +169,7 @@ Window {
         id: subMenuDelegate
         Item {
             width: main.propertySubMenuListView.width
-            height: main.propertySubMenuListView.height
-                    / main.propertySubMenuListView.count
+            height: main.propertyMainView.height * Constants.SUB_MENU_RELATIVE_V_ITEM_SIZE
             MouseArea {
                 id: mouseAreaSubMenu
                 anchors.fill: parent

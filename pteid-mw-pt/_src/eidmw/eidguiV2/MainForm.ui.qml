@@ -104,7 +104,8 @@ Item {
             z: 0
             Rectangle {
                 width: parent.width * Constants.SUB_MENU_RELATIVE_H_SIZE
-                height: parent.height * Constants.SUB_MENU_RELATIVE_V_SIZE
+                height: subMenuListView.count *
+                        mainView.height * Constants.SUB_MENU_RELATIVE_V_ITEM_SIZE
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 border.width: 0
