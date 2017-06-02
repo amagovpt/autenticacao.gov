@@ -156,5 +156,24 @@ Cidadão ou à sua Chave Móvel Digital."
                 Layout.fillWidth: true
             }
         }
+        RowLayout {
+            id: rawCheckBox
+            anchors.top: raw4.bottom
+            anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
+            width: parent.width
+            CheckBox {
+                id: checkBox
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                style: CheckBoxStyle {
+                    label: Text {
+                        text: "Não voltar a mostrar"
+                        color: Constants.COLOR_TEXT_BODY
+                        font.pixelSize: Constants.SIZE_TEXT_BODY
+                        font.family: lato.name
+                    }
+                }
+            }
+        }
     }
 }

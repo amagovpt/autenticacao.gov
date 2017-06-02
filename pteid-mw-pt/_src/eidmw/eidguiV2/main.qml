@@ -25,7 +25,7 @@ Window {
         anchors.fill: parent
 
         Component.onCompleted: {
-            main.state = "STATE_HOME"
+            main.state = "STATE_FIRST_RUN"
             console.log("MainForm Completed")
         }
         //************************************************************************/
@@ -33,7 +33,7 @@ Window {
         //************************************************************************/
         states:[
             State{
-                name: "STATE_HOME"
+                name: "STATE_FIRST_RUN"
                 PropertyChanges {
                     target: main.propertyMainMenuView
                     width: 2 * parent.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
@@ -48,10 +48,54 @@ Window {
                 }
             },
             State{
+                name: "STATE_HOME"
+                PropertyChanges {
+                    target: main.propertyMainMenuView
+                    width: parent.width
+                }
+                PropertyChanges {
+                    target: main.propertySubMenuView
+                    width:  0
+                }
+            },
+            State{
                 name: "STATE_NORMAL"
             }
         ]
         transitions: [
+            Transition {
+                from: "STATE_FIRST_RUN"
+                to: "STATE_NORMAL"
+                NumberAnimation
+                {
+                    id: animationShowSubMenuFirstRun
+                    target: main.propertySubMenuView
+                    property: "opacity"
+                    easing.type: Easing.Linear
+                    to: 1;
+                    duration: Constants.ANIMATION_STATE_OPACITY_TO_NORMAL
+                    onStarted: console.log("animationShowSubMenu")
+                }
+                NumberAnimation
+                {
+                    id: animationReduceMainMenuWidthFirstRun
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: main.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
+                    duration: Constants.ANIMATION_STATE_TO_NORMAL
+                    onStarted: console.log("animationReduceMainMenuWidth")
+                }
+                NumberAnimation
+                {
+                    id: animationShowSubMenuWidthFirstRun
+                    target: main.propertySubMenuView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: main.propertyMainView.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE;
+                    duration: Constants.ANIMATION_STATE_TO_NORMAL
+                    onStarted: console.log("animationShowSubMenuWidth")
+                }
+            },
             Transition {
                 from: "STATE_HOME"
                 to: "STATE_NORMAL"
@@ -59,6 +103,16 @@ Window {
                 {
                     id: animationShowSubMenu
                     target: main.propertySubMenuView
+                    property: "opacity"
+                    easing.type: Easing.Linear
+                    to: 1;
+                    duration: Constants.ANIMATION_STATE_OPACITY_TO_NORMAL
+                    onStarted: console.log("animationShowSubMenu")
+                }
+                NumberAnimation
+                {
+                    id: animationShowContent
+                    target: main.propertyPageLoader
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 1;
@@ -100,10 +154,20 @@ Window {
                 }
                 NumberAnimation
                 {
+                    id: animationHideContent
+                    target: main.propertyPageLoader
+                    property: "opacity"
+                    easing.type: Easing.Linear
+                    to: 0;
+                    duration: Constants.ANIMATION_STATE_OPACITY_TO_HOME
+                    onStarted: console.log("animationHideSubMenu")
+                }
+                NumberAnimation
+                {
                     id: animationIncreaseMainMenuWidth
                     property: "width"
                     easing.type: Easing.OutQuad
-                    to: 2 * main.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
+                    to: main.propertyMainView.width;
                     duration: Constants.ANIMATION_STATE_TO_HOME
                     onStarted: console.log("animationIncreaseMainMenuWidth")
                 }
