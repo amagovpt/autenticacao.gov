@@ -49,5 +49,6 @@
         <file>images/definicoes_icon_sel.png</file>
         <file>components/LabelTextBox.qml</file>
         <file>components/LabelTextBoxForm.ui.qml</file>
+        <file>components/Button.qml</file>
     </qresource>
 </RCC>
