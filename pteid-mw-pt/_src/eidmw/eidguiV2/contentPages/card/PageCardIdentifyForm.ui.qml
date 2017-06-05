@@ -5,540 +5,259 @@ import QtQuick.Controls.Styles 1.4
 import QtGraphicalEffects 1.0
 
 import "../../scripts/Constants.js" as Constants
+import "../../components" as Components
+
 
 Item {
-    id: main
     anchors.fill: parent
 
-    ColumnLayout {
-        anchors.fill: parent
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        RowLayout {
-            Layout.fillWidth: true
-            spacing: Constants.SIZE_ROW_SPACE
+    Item {
+        id: rowTop
+        width: parent.width - Constants.WIDTH_PHOTO_IMAGE - 2 * Constants.SIZE_ROW_H_SPACE
+        height: parent.height * Constants.SIZE_FORM_RECT_TOP_V_RELATIVE
+
+        Item{
+            id: rectTopLeft
+            width: parent.width
+            height: parent.height
+        }
+        Item{
+            id: rectToRight
+            width: Constants.WIDTH_PHOTO_IMAGE + Constants.SIZE_ROW_H_SPACE
+            height: parent.height
+            anchors.left: rectTopLeft.right
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            Image {
+                anchors.bottom: parent.bottom
+                width: parent.width
+                antialiasing: true
+                fillMode: Image.PreserveAspectFit
+                source: "../../images/logo_cartao_cidadao.png"
+            }
+        }
+    }
+
+    Item {
+        id: rowNamePhoto
+        width: parent.width
+        height: Constants.HEIGHT_PHOTO_IMAGE + Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE
+        anchors.top: rowTop.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+
+        Item{
+            id: rectNamePhotoLeft
+            width: parent.width - Constants.WIDTH_PHOTO_IMAGE - Constants.SIZE_ROW_H_SPACE
+            height: parent.height
+
             Item{
-                width: main.width * Constants.SIZE_FORM_RECT_NAME_RELATIVE
-                height: main.height * Constants.SIZE_FORM_RECT_TOP_V_RELATIVE
-                Layout.fillWidth: true
+                id: givenNameTextForm
+                width: parent.width
+                height: Constants.SIZE_TEXT_LABEL
+                        + Constants.SIZE_TEXT_V_SPACE
+                        + 2 * Constants.SIZE_TEXT_FIELD
+                Components.LabelTextBoxForm{
+                    propertyDateText.text: "Nome"
+                    propertyDateField.text: "Joana Ovilia"
+                }
             }
             Item{
-                width: main.width * Constants.SIZE_FORM_RECT_PHOTO_RELATIVE
-                height: main.height * Constants.SIZE_FORM_RECT_TOP_V_RELATIVE
-                Layout.fillWidth: true
+                id: surNameTextTextForm
+                width: parent.width
+                height: parent.height -
+                        (2 * Constants.SIZE_TEXT_LABEL) -
+                        (2 * Constants.SIZE_TEXT_V_SPACE) -
+                        (2 * Constants.SIZE_TEXT_FIELD) -
+                        Constants.SIZE_ROW_V_SPACE
+                anchors.top :givenNameTextForm.bottom
+                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                Components.LabelTextBoxForm{
+                    propertyDateText.text: "Apelido"
+                    propertyDateField.text: "Ribeiro Martins Sousa Costa Mender Cavaco Soares Meireles Dinis Mendes"
+                    propertyRectField.height: parent.height
+                    propertyDateField.wrapMode: Text.WordWrap
+                }
+            }
+        }
+
+        Item{
+            id: rectNamePhotoRight
+            width: Constants.WIDTH_PHOTO_IMAGE
+            height: parent.height - Constants.SIZE_TEXT_LABEL - Constants.SIZE_TEXT_V_SPACE
+            anchors.left: rectNamePhotoLeft.right
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            anchors.bottom: parent.bottom
+
+            RectangularGlow {
+                id: effectPhoto
+                anchors.fill: rectPhotoField
+                glowRadius: Constants.FORM_GROW_RADIUS
+                spread: Constants.FORM_GLOW_SPREAD
+                color: Constants.COLOR_FORM_GLOW
+                cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+            }
+            Rectangle {
+                id: rectPhotoField
+                width: parent.width
+                height: parent.height
+                color: "white"
                 Image {
-                    anchors.bottom: parent.bottom
-                    width: parent.width
+                    anchors.fill: parent
                     antialiasing: true
-                    fillMode: Image.PreserveAspectFit
-                    source: "../../images/logo_cartao_cidadao.png"
+                    source: "photo.png"
                 }
             }
         }
-        RowLayout {
-            Layout.fillWidth: true
-            spacing: Constants.SIZE_ROW_SPACE
-            Item{
-                id: rectLeftName
-                width: main.width * Constants.SIZE_FORM_RECT_NAME_RELATIVE
-                height: main.height * Constants.SIZE_FORM_RECT_NAME_V_RELATIVE
-                Layout.fillWidth: true
-                Text {
-                    id: givenNameText
-                    text: "Nome"
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                    height: 1.2 * Constants.SIZE_TEXT_LABEL
-                }
-                RectangularGlow {
-                    id: effect
-                    anchors.fill: rectGivenNameTextField
-                    glowRadius: Constants.FORM_GROW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                }
-                Rectangle {
-                    id: rectGivenNameTextField
-                    width: rectLeftName.width
-                    color: "white"
-                    Layout.fillWidth: true
-                    height: 2 * Constants.SIZE_TEXT_FIELD
-                    anchors.top :givenNameText.bottom
-                    Text {
-                        id: givenNameTextField
-                        width: rectLeftName.width
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "Joana Ovilia"
-                        font.capitalization: Font.AllUppercase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        color: Constants.COLOR_TEXT_BODY
-                    }
-                }
-                Item{
-                    id: rectSpace
-                    width: Constants.SIZE_TEXT_LABEL
-                    height: Constants.SIZE_TEXT_LABEL
-                    anchors.top :rectGivenNameTextField.bottom
-                }
-                Text {
-                    id: surnameText
-                    text: "Apelido"
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                    anchors.top :rectSpace.bottom
-                    height: 1.2 * Constants.SIZE_TEXT_LABEL
-                }
-                RectangularGlow {
-                    id: effectSurname
-                    anchors.fill: rectSurnameTextField
-                    glowRadius: Constants.FORM_GROW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                }
-                Rectangle {
-                    id: rectSurnameTextField
-                    width: rectLeftName.width
-                    color: "white"
-                    Layout.fillWidth: true
-                    height: 4 * Constants.SIZE_TEXT_FIELD
-                    anchors.top :surnameText.bottom
-                    Text {
-                        id: givenSurnameField
-                        width: rectLeftName.width
-                        text: "Ribeiro Martins Sousa Costa Mender Cavaco Soares Meireles Dinis Mendes"
-                        wrapMode: Text.WordWrap
-                        font.capitalization: Font.AllUppercase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        color: Constants.COLOR_TEXT_BODY
-                    }
-                }
-            }
-            Item{
-                id: rectRightName
-                width: main.width * Constants.SIZE_FORM_RECT_PHOTO_RELATIVE
-                height: main.height * Constants.SIZE_FORM_RECT_NAME_V_RELATIVE
-                Layout.fillWidth: true
-                RectangularGlow {
-                    id: effectPhoto
-                    anchors.fill: rectPhotoField
-                    glowRadius: Constants.FORM_GROW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                }
-                Rectangle {
-                    id: rectPhotoField
-                    y: 1.2 * Constants.SIZE_TEXT_LABEL
-                    anchors.top: rectRightName.Top
-                    width: parent.width
-                    height: 103
-                    color: "white"
-                    Layout.fillWidth: true
-                    Image {
-                        id: photo
-                        y: 1.2 * Constants.SIZE_TEXT_LABEL
-                        anchors.fill: parent
-                        scale: 1
-                        fillMode: Image.PreserveAspectFit
-                        source: "photo.png"
-                    }
-                }
+    }
+
+    Item {
+        id: rowSex
+        width: parent.width
+        height: Constants.SIZE_TEXT_LABEL
+                + Constants.SIZE_TEXT_V_SPACE
+                + 2 * Constants.SIZE_TEXT_FIELD
+        anchors.top: rowNamePhoto.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+
+        Item{
+            id: rectSex
+            width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.20
+            Components.LabelTextBoxForm{
+                propertyDateText.text: "Sexo"
+                propertyDateField.text: "F"
             }
         }
-
-        RowLayout {
-            spacing: Constants.SIZE_ROW_SPACE
-            Layout.fillWidth: true
-            Item{
-                width: main.width * 0.10
-                height: main.height * 0.08
-                Layout.fillWidth: true
-                Text {
-                    id: sexText
-                    text: "Sexo"
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                }
-                RectangularGlow {
-                    id: effectSex
-                    anchors.fill: rectSexField
-                    glowRadius: Constants.FORM_GROW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                }
-                Rectangle {
-                    id: rectSexField
-                    width: parent.width
-                    color: "white"
-                    Layout.fillWidth: true
-                    height: 2 * Constants.SIZE_TEXT_FIELD
-                    anchors.top :sexText.bottom
-                    Text {
-                        id: sexField
-                        width: parent.width
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "F"
-                        font.capitalization: Font.AllUppercase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        color: Constants.COLOR_TEXT_BODY
-                    }
-                }
-            }
-            Item{
-                width: main.width * 0.10
-                height: main.height * 0.08
-                Layout.fillWidth: true
-                Text {
-                    id: heightText
-                    text: "Altura"
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                }
-                RectangularGlow {
-                    id: effectHeight
-                    anchors.fill: rectHeightField
-                    glowRadius: Constants.FORM_GROW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                }
-                Rectangle {
-                    id: rectHeightField
-                    width: parent.width
-                    color: "white"
-                    Layout.fillWidth: true
-                    height: 2 * Constants.SIZE_TEXT_FIELD
-                    anchors.top :heightText.bottom
-                    Text {
-                        id: heightField
-                        width: parent.width
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "1.77"
-                        font.capitalization: Font.AllUppercase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        color: Constants.COLOR_TEXT_BODY
-                    }
-                }
-            }
-            Item{
-                width: main.width * 0.20
-                height: main.height * 0.08
-                Layout.fillWidth: true
-                Text {
-                    id: nacionalityText
-                    text: "Nacionalidade"
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                }
-                RectangularGlow {
-                    id: effectNacionality
-                    anchors.fill: rectNacionalityField
-                    glowRadius: Constants.FORM_GROW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                }
-                Rectangle {
-                    id: rectNacionalityField
-                    width: parent.width
-                    color: "white"
-                    Layout.fillWidth: true
-                    height: 2 * Constants.SIZE_TEXT_FIELD
-                    anchors.top :nacionalityText.bottom
-                    Text {
-                        id: nacionalityField
-                        width: parent.width
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "PRT"
-                        font.capitalization: Font.AllUppercase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        color: Constants.COLOR_TEXT_BODY
-                    }
-                }
-            }
-            Item{
-                width: main.width * 0.35
-                height: main.height * 0.08
-                Layout.fillWidth: true
-                Text {
-                    id: dateOfBirthText
-                    text: "Data de Nascimento"
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                }
-                RectangularGlow {
-                    id: effectDateOfBirth
-                    anchors.fill: rectDateOfBirthField
-                    glowRadius: Constants.FORM_GROW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                }
-                Rectangle {
-                    id: rectDateOfBirthField
-                    width: parent.width
-                    color: "white"
-                    Layout.fillWidth: true
-                    height: 2 * Constants.SIZE_TEXT_FIELD
-                    anchors.top :dateOfBirthText.bottom
-                    Text {
-                        id: dateOfBirthField
-                        width: parent.width
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "25 12 1980"
-                        font.capitalization: Font.AllUppercase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        color: Constants.COLOR_TEXT_BODY
-                    }
-                }
+        Item{
+            id: rectHeight
+            width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.20
+            anchors.left: rectSex.right
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            Components.LabelTextBoxForm{
+                propertyDateText.text: "Altura"
+                propertyDateField.text: "1.77"
             }
         }
-
-        RowLayout {
-            spacing: Constants.SIZE_ROW_SPACE
-            Item{
-                height: main.height * 0.08
-                Layout.fillWidth: true
-                Text {
-                    id: documentNumText
-                    text: "N.º Documento"
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                }
-                RectangularGlow {
-                    id: effectDocumentNum
-                    anchors.fill: rectDocumentNumField
-                    glowRadius: Constants.FORM_GROW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                }
-                Rectangle {
-                    id: rectDocumentNumField
-                    width: parent.width
-                    color: "white"
-                    Layout.fillWidth: true
-                    height: 2 * Constants.SIZE_TEXT_FIELD
-                    anchors.top :documentNumText.bottom
-                    Text {
-                        id: documentNumField
-                        width: parent.width
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "1223456456"
-                        font.capitalization: Font.AllUppercase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        color: Constants.COLOR_TEXT_BODY
-                    }
-                }
-            }
-            Rectangle{
-                height: main.height * 0.08
-                Layout.fillWidth: true
-                Text {
-                    id: expiryDateText
-                    text: "Altura"
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                }
-                RectangularGlow {
-                    id: effectExpiryDate
-                    anchors.fill: rectExpiryDateField
-                    glowRadius: Constants.FORM_GROW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                }
-                Rectangle {
-                    id: rectExpiryDateField
-                    width: parent.width
-                    color: "white"
-                    Layout.fillWidth: true
-                    height: 2 * Constants.SIZE_TEXT_FIELD
-                    anchors.top :expiryDateText.bottom
-                    Text {
-                        id: expiryDateField
-                        width: parent.width
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "1.77"
-                        font.capitalization: Font.AllUppercase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        color: Constants.COLOR_TEXT_BODY
-                    }
-                }
+        Item{
+            id: rectNacionality
+            width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.20
+            anchors.left: rectHeight.right
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            Components.LabelTextBoxForm{
+                propertyDateText.text: "Nacionalidade"
+                propertyDateField.text: "PRT"
             }
         }
-
-        RowLayout {
-            spacing: Constants.SIZE_ROW_SPACE
-            Item{
-                height: main.height * 0.08
-                Layout.fillWidth: true
-                Text {
-                    id:  countryText
-                    text: "País"
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                }
-                RectangularGlow {
-                    id: effectCountry
-                    anchors.fill: rectCountryField
-                    glowRadius: Constants.FORM_GROW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                }
-                Rectangle {
-                    id: rectCountryField
-                    width: parent.width
-                    color: "white"
-                    Layout.fillWidth: true
-                    height: 2 * Constants.SIZE_TEXT_FIELD
-                    anchors.top :countryText.bottom
-                    Text {
-                        id: countryField
-                        width: parent.width
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "PRT"
-                        font.capitalization: Font.AllUppercase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        color: Constants.COLOR_TEXT_BODY
-                    }
-                }
+        Item{
+            id: rectDateOfBirth
+            width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.40
+            anchors.left: rectNacionality.right
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            Components.LabelTextBoxForm{
+                propertyDateText.text: "Data de Nascimento"
+                propertyDateField.text: "25 12 1980"
             }
         }
+    }
 
-        RowLayout {
-            spacing: Constants.SIZE_ROW_SPACE
-            Item{
-                height: main.height * 0.08
-                Layout.fillWidth: true
-                Text {
-                    id:  parentsText
-                    text: "Filiação"
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                }
-                RectangularGlow {
-                    id: effectParents
-                    anchors.fill: rectParentsField
-                    glowRadius: Constants.FORM_GROW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                }
-                Rectangle {
-                    id: rectParentsField
-                    width: parent.width
-                    color: "white"
-                    Layout.fillWidth: true
-                    height: 2 * Constants.SIZE_TEXT_FIELD
-                    anchors.top :parentsText.bottom
-                    Text {
-                        id: parentsField
-                        width: parent.width
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "Antonio Maria Costa"
-                        font.capitalization: Font.AllUppercase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        color: Constants.COLOR_TEXT_BODY
-                    }
-                }
-                //                Item{
-                //                    id: rectSpaceParents
-                //                    width: 5
-                //                    height: 5
-                //                    anchors.top :rectParentsField.bottom
-                //                }
-                //                RectangularGlow {
-                //                    id: effectParents2
-                //                    anchors.fill: rectParents2Field
-                //                    glowRadius: Constants.FORM_GROW_RADIUS
-                //                    spread: Constants.FORM_GLOW_SPREAD
-                //                    color: Constants.COLOR_FORM_GLOW
-                //                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                //                }
-                //                Rectangle {
-                //                    id: rectParents2Field
-                //                    width: parent.width
-                //                    color: "white"
-                //                    Layout.fillWidth: true
-                //                    height: 2 * Constants.SIZE_TEXT_FIELD
-                //                    anchors.top :rectSpaceParents.bottom
-                //                    Text {
-                //                        id: parents2Field
-                //                        width: parent.width
-                //                        anchors.verticalCenter: parent.verticalCenter
-                //                        text: "Olivia Maria Costa"
-                //                        font.capitalization: Font.AllUppercase
-                //                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                //                        font.family: lato.name
-                //                    }
-                //                }
+    Item {
+        id: rowDocumentMum
+        width: parent.width
+        height: Constants.SIZE_TEXT_LABEL
+                + Constants.SIZE_TEXT_V_SPACE
+                + 2 * Constants.SIZE_TEXT_FIELD
+        anchors.top: rowSex.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+
+        Item{
+            id: rectDocumentNum
+            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
+            Components.LabelTextBoxForm{
+                propertyDateText.text: "N.º Documento"
+                propertyDateField.text: "1223456456"
             }
         }
-        RowLayout {
-            spacing: Constants.SIZE_ROW_SPACE
-            Item{
-                height: main.height * 0.08
-                Layout.fillWidth: true
+        Item{
+            id: rectExpiryDate
+            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
+            anchors.left: rectDocumentNum.right
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            Components.LabelTextBoxForm{
+                propertyDateText.text: "Data de validade"
+                propertyDateField.text: "31 12 2019"
+            }
+        }
+    }
 
-                Text {
-                    id:  notesText
-                    text: "Indicações Eventuais"
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
+    Item {
+        id: rowCountry
+        width: parent.width
+        height: Constants.SIZE_TEXT_LABEL
+                + Constants.SIZE_TEXT_V_SPACE
+                + 2 * Constants.SIZE_TEXT_FIELD
+        anchors.top: rowDocumentMum.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
-                }
-                RectangularGlow {
-                    id: effectNotes
-                    anchors.fill: rectNotesField
-                    glowRadius: Constants.FORM_GROW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                }
-                Rectangle {
-                    id: rectNotesField
-                    width: parent.width
-                    color: "white"
-                    Layout.fillWidth: true
-                    height: 2 * Constants.SIZE_TEXT_FIELD
-                    anchors.top :notesText.bottom
-                    Text {
-                        id: notesField
-                        width: parent.width
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "Notes"
-                        font.capitalization: Font.AllUppercase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        color: Constants.COLOR_TEXT_BODY
-                    }
-                }
+        Item{
+            id: rectCountry
+            width: parent.width
+            Components.LabelTextBoxForm{
+                propertyDateText.text: "País"
+                propertyDateField.text: "PRT"
+            }
+        }
+    }
+
+    Item {
+        id: rowParents
+        width: parent.width
+        height: Constants.SIZE_TEXT_LABEL
+                + 3 * Constants.SIZE_TEXT_V_SPACE
+                + 4 * Constants.SIZE_TEXT_FIELD
+        anchors.top: rowCountry.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+
+        Item{
+            id: rectParentsFather
+            width: parent.width
+            height: Constants.SIZE_TEXT_LABEL
+                    + Constants.SIZE_TEXT_V_SPACE
+                    + 2 * Constants.SIZE_TEXT_FIELD
+            Components.LabelTextBoxForm{
+                propertyDateText.text: "Filiação"
+                propertyDateField.text: "Antonio Maria Costa"
+            }
+        }
+        Item{
+            id: rectParentsMother
+            width: parent.width
+            height: + 2 * Constants.SIZE_TEXT_V_SPACE
+                    + 2 * Constants.SIZE_TEXT_FIELD
+            anchors.top :rectParentsFather.bottom
+            Components.LabelTextBoxForm{
+                propertyDateText.height: 0
+                propertyRectField.anchors.topMargin: 2 * Constants.SIZE_TEXT_V_SPACE
+                propertyDateField.text: "Olivia Sousa Costa"
+            }
+        }
+    }
+
+    Item {
+        id: rowNotes
+        width: parent.width
+        height: Constants.SIZE_TEXT_LABEL
+                + Constants.SIZE_TEXT_V_SPACE
+                + 2 * Constants.SIZE_TEXT_FIELD
+        anchors.top: rowParents.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+
+        Item{
+            id: rectNotes
+            width: parent.width
+            height: Constants.SIZE_TEXT_LABEL
+                    + Constants.SIZE_TEXT_V_SPACE
+                    + 2 * Constants.SIZE_TEXT_FIELD
+            Components.LabelTextBoxForm{
+                propertyDateText.text: "Indicações Eventuais"
+                propertyDateField.text: ""
             }
         }
     }
