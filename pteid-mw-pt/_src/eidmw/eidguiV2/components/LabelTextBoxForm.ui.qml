@@ -21,6 +21,15 @@ Item {
         color: Constants.COLOR_TEXT_LABEL
         height: Constants.SIZE_TEXT_LABEL
     }
+    DropShadow {
+        anchors.fill: rectField
+        horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+        verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+        radius: Constants.FORM_SHADOW_RADIUS
+        samples: Constants.FORM_SHADOW_SAMPLES
+        color: Constants.COLOR_FORM_SHADOW
+        source: rectField
+    }
     RectangularGlow {
         id: effectGlow
         anchors.fill: rectField

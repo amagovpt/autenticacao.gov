@@ -87,6 +87,15 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.bottom: parent.bottom
 
+            DropShadow {
+                anchors.fill: rectPhotoField
+                horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                radius: Constants.FORM_SHADOW_RADIUS
+                samples: Constants.FORM_SHADOW_SAMPLES
+                color: Constants.COLOR_FORM_SHADOW
+                source: rectPhotoField
+            }
             RectangularGlow {
                 id: effectPhoto
                 anchors.fill: rectPhotoField

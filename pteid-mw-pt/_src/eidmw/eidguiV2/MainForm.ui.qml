@@ -128,7 +128,6 @@ Item {
             Rectangle {
                 width: parent.width * Constants.PAGE_RELATIVE_H_SIZE
                 height: parent.height * Constants.PAGE_RELATIVE_V_SIZE
-                anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 PageLoader{
                     id: pageLoaderID
