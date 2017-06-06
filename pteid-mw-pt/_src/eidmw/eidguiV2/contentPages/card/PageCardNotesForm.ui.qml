@@ -18,7 +18,7 @@ Item {
     Item {
         id: rowTop
         width: parent.width - Constants.WIDTH_PHOTO_IMAGE - 2 * Constants.SIZE_ROW_H_SPACE
-        height: parent.height * Constants.SIZE_FORM_RECT_TOP_V_RELATIVE
+        height: parent.height * Constants.SIZE_ROW_TOP_V_RELATIVE
 
         Item{
             id: rectTopLeft
@@ -45,7 +45,7 @@ Item {
     Item {
         id: rowText
         width: parent.width
-        height: 300
+        height: parent.height * Constants.PAGE_NOTES_TEXT_V_RELATIVE
         anchors.top: rowTop.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 

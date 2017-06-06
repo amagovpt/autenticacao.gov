@@ -14,7 +14,7 @@ Item {
     Item {
         id: rowTop
         width: parent.width - Constants.WIDTH_PHOTO_IMAGE - 2 * Constants.SIZE_ROW_H_SPACE
-        height: parent.height * Constants.SIZE_FORM_RECT_TOP_V_RELATIVE
+        height: parent.height * Constants.SIZE_ROW_TOP_V_RELATIVE
 
         Item{
             id: rectTopLeft
