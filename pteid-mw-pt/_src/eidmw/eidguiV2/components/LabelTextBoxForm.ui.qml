@@ -45,7 +45,7 @@ Item {
         height: 2 * Constants.SIZE_TEXT_FIELD
         anchors.top :dateText.bottom
         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-        Text {
+        TextEdit {
             id: dateField
             y: Constants.SIZE_TEXT_FIELD_V_SPACE
             width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
@@ -55,6 +55,8 @@ Item {
             font.pixelSize: Constants.SIZE_TEXT_FIELD
             font.family: lato.name
             color: Constants.COLOR_TEXT_BODY
+            selectByMouse :true
+            readOnly: true
         }
     }
 }
