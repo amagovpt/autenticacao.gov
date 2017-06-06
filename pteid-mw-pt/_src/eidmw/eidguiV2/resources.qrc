@@ -50,5 +50,6 @@
         <file>components/LabelTextBox.qml</file>
         <file>components/LabelTextBoxForm.ui.qml</file>
         <file>components/Button.qml</file>
+        <file>components/ScrollBar.qml</file>
     </qresource>
 </RCC>
