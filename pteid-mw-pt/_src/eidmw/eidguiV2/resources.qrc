@@ -10,12 +10,8 @@
         <file>contentPages/card/PageCardOtherDataForm.ui.qml</file>
         <file>contentPages/card/PageCardAdress.qml</file>
         <file>contentPages/card/PageCardAdressForm.ui.qml</file>
-        <file>contentPages/card/PageCardCertificatesForm.ui.qml</file>
         <file>contentPages/card/PageCardNotes.qml</file>
         <file>contentPages/card/PageCardNotesForm.ui.qml</file>
-        <file>contentPages/card/PageCardPinCodes.qml</file>
-        <file>contentPages/card/PageCardCertificates.qml</file>
-        <file>contentPages/card/PageCardPinCodesForm.ui.qml</file>
         <file>PageLoader.qml</file>
         <file>fonts/karma/Karma-Medium.ttf</file>
         <file>fonts/lato/Lato-Regular.ttf</file>
