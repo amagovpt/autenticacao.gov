@@ -237,6 +237,15 @@ Window {
                                  Font.Normal
                 font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             }
+            Image {
+                id: imageArrowMainMenu
+                width: Constants.SIZE_TEXT_MAIN_MENU
+                height: Constants.SIZE_TEXT_MAIN_MENU
+                fillMode: Image.PreserveAspectFit
+                x: parent.width * Constants.IMAGE_ARROW_MAIN_MENU_RELATIVE
+                anchors.verticalCenter: parent.verticalCenter
+                source: getMainMenuArrowSource(index, mouseAreaMainMenu.containsMouse)
+            }
             Rectangle {
                 id: mainMenuViewHorizontalLine
                 width: Constants.MAIN_MENU_LINE_H_SIZE
@@ -320,6 +329,15 @@ Window {
                 horizontalAlignment: Text.AlignHCenter
 
             }
+            Image {
+                id: imageArrowSubMenu
+                width: Constants.SIZE_TEXT_SUB_MENU
+                height: Constants.SIZE_TEXT_SUB_MENU
+                fillMode: Image.PreserveAspectFit
+                x: parent.width * Constants.IMAGE_ARROW_SUB_MENU_RELATIVE
+                anchors.verticalCenter: parent.verticalCenter
+                source: getSubMenuArrowSource(index, mouseAreaSubMenu.containsMouse)
+            }
         }
     }
 
@@ -343,5 +361,40 @@ Window {
         }
         return handColor
     }
+
+    function getSubMenuArrowSource(index, containsMouse)
+    {
+        var handSource
+        if(main.propertySubMenuListView.currentIndex === index)
+        {
+            handSource =  "images/arrow-right_white_AMA.png"
+        }else{
+            if(containsMouse === true)
+            {
+                handSource = "images/arrow-right_hover.png"
+            }else{
+                handSource = ""
+            }
+        }
+        return handSource
+    }
+
+    function getMainMenuArrowSource(index, containsMouse)
+    {
+        var handSource
+        if(main.propertyMainMenuListView.currentIndex === index)
+        {
+            handSource =  "images/arrow-right_white_AMA.png"
+        }else{
+            if(containsMouse === true)
+            {
+                handSource = "images/arrow-right_hover.png"
+            }else{
+                handSource = ""
+            }
+        }
+        return handSource
+    }
+
 }
 
