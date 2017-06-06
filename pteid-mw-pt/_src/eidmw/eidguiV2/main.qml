@@ -237,6 +237,17 @@ Window {
                                  Font.Normal
                 font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             }
+            Rectangle {
+                id: mainMenuViewHorizontalLine
+                width: Constants.MAIN_MENU_LINE_H_SIZE
+                height: Constants.MAIN_MENU_LINE_V_SIZE
+                color: Constants.COLOR_MAIN_DARK_GRAY
+                visible: main.propertyMainMenuListView.count - 1 === index ?
+                             false :
+                             true
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.bottom
+            }
         }
     }
     Component {
