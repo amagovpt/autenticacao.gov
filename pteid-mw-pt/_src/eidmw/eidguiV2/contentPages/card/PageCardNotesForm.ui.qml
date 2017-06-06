@@ -124,6 +124,7 @@ Item {
             // Attach scrollbars to the right and bottom edges of the view.
             Components.ScrollBar {
                 id: verticalScrollBar
+                property alias flickable: flick
                 width: 12;
                 height: parent.height
                 y:  - Constants.SIZE_TEXT_V_SPACE

@@ -75,4 +75,46 @@ Item {
         color: "black"
         opacity: 0.9
     }
+    function scrollDown () {
+        flickable.contentY = Math.min (flickable.contentY + (flickable.height / 4), flickable.contentHeight - flickable.height);
+    }
+    function scrollUp () {
+        flickable.contentY = Math.max (flickable.contentY - (flickable.height / 4), 0);
+    }
+
+    MouseArea {
+         id: btnUp;
+         height: width;
+         anchors {
+             top: parent.top;
+             left: parent.left;
+             right: parent.right;
+             margins: (bar.border.width +1);
+         }
+         onClicked: { scrollUp (); }
+
+         Text {
+             text: "V";
+             color: (btnUp.pressed ? "blue" : "black");
+             rotation: -180;
+             anchors.centerIn: parent;
+         }
+     }
+     MouseArea {
+         id: btnDown;
+         height: width;
+         anchors {
+             left: parent.left;
+             right: parent.right;
+             bottom: parent.bottom;
+             margins: (bar.border.width +1);
+         }
+         onClicked: { scrollDown (); }
+
+         Text {
+             text: "V";
+             color: (btnDown.pressed ? "blue" : "black");
+             anchors.centerIn: parent;
+         }
+     }
 }
