@@ -146,6 +146,12 @@ void SSLConnection::loadCertChain(X509_STORE *store, APL_Certif * authentication
 	{
 		APL_Certif * issuer = certif->getIssuer();
 
+		if (issuer == NULL)
+		{
+			break;
+			MWLOG(LEV_DEBUG, MOD_APL, "loadCertChain exited early without finding root: incomplete chain");
+		}
+
 		MWLOG(LEV_DEBUG, MOD_APL, "loadCertChain: Loading cert: %s", issuer->getOwnerName());
 		const unsigned char *cert_data = issuer->getData().GetBytes();
 	    pCert = d2i_X509(&pCert, &cert_data, issuer->getData().Size());
