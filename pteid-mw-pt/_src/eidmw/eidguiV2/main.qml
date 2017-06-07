@@ -1,10 +1,14 @@
 import QtQuick 2.6
-import QtQuick.Window 2.2
+import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.1
+import QtQuick.Controls.Material 2.1
+import QtQuick.Controls.Universal 2.1
+import Qt.labs.settings 1.0
 
 /* Constants imports */
 import "scripts/Constants.js" as Constants
 
-Window {
+ApplicationWindow {
     id: mainWindow
     visible: true
 

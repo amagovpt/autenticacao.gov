@@ -50,5 +50,6 @@
         <file>images/arrow-right_AMA.png</file>
         <file>images/arrow-right_hover.png</file>
         <file>images/arrow-right_white_AMA.png</file>
+        <file>qtquickcontrols2.conf</file>
     </qresource>
 </RCC>

@@ -1,4 +1,6 @@
 import QtQuick 2.6
+import QtQuick.Layouts 1.0
+import QtQuick.Controls 2.1
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -261,11 +263,11 @@ Item {
         width: parent.width
         height: Constants.SIZE_TEXT_LABEL
                 + Constants.SIZE_TEXT_V_SPACE
-                + 2 * Constants.SIZE_TEXT_FIELD
+                + 3 * Constants.SIZE_TEXT_FIELD
         anchors.top: rowZip4.bottom
         anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
 
-        Rectangle{
+        Item{
             id: rectConfirmationOfAddressText
             width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
             Text {
@@ -282,20 +284,18 @@ Item {
                 wrapMode: Text.WordWrap
             }
         }
-        Rectangle{
+        Item{
             id: rectConfirmationOfAddressButton
             width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
             height: parent.height
             anchors.left: rectConfirmationOfAddressText.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            Components.Button {
-                id: button
-                buttonText: "Alteração de morada"
+            Button {
+                text: "Alteração de morada"
                 width: parent.width
                 height: parent.height
-                color: Constants.COLOR_MAIN_SOFT_GRAY
-                hoverColor: Constants.COLOR_MAIN_DARK_GRAY
-                pressColor: Constants.COLOR_MAIN_BLUE
+                anchors.right: parent.right
+                font.family: lato.name
             }
         }
     }

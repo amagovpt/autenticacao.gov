@@ -1,5 +1,5 @@
 import QtQuick 2.6
-import QtQuick.Controls 1.5
+import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
 import QtGraphicalEffects 1.0
@@ -12,7 +12,7 @@ import "../../components" as Components
 Item {
     anchors.fill: parent
 
-    property alias propertyFlickNotes: flick
+    property alias propertyFlickNotes: flickable
     property alias propertyEditNotes: edit
 
     Item {
@@ -49,10 +49,11 @@ Item {
         anchors.top: rowTop.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
-        Item{
-            id: rectTextLeft
-            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * Constants.PAGE_NOTES_LEFT_RELATIVE_SIZE
+        Rectangle{
+            id: rectText
+            width: parent.width
             height: parent.height
+            opacity: 1
             Text {
                 id: notesText
                 text: "Notas"
@@ -87,8 +88,9 @@ Item {
                 anchors.top :notesText.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 opacity: 1
+
                 Flickable {
-                    id: flick
+                    id: flickable
                     x: Constants.SIZE_TEXT_FIELD_H_SPACE
                     y: Constants.SIZE_TEXT_FIELD_V_SPACE
                     width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
@@ -100,42 +102,24 @@ Item {
                     contentHeight: edit.paintedHeight
                     clip: true
 
-                    TextEdit {
-                        id: edit
-                        property string previousText: text
-                        width: flick.width
-                        height: flick.height
-                        focus: true
-                        wrapMode: TextEdit.Wrap
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        color: Constants.COLOR_TEXT_BODY
+                        TextEdit {
+                            id: edit
+                            property string previousText: text
+                            text: ""
+                            width: flickable.width
+                            height: flickable.height
+                            focus: true
+                            wrapMode: TextEdit.Wrap
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            color: Constants.COLOR_TEXT_BODY
+                        }
+
+                    ScrollBar.vertical: ScrollBar {
+                    active : true
                     }
                 }
-            }
-        }
-        Item{
-            id: rectTextRight
-            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * Constants.PAGE_NOTES_RIGHT_RELATIVE_SIZE
-            height: parent.height - notesText.height -  Constants.SIZE_TEXT_V_SPACE -  Constants.SIZE_TEXT_V_SPACE
-            anchors.left: rectTextLeft.right
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            anchors.bottom: rectTextLeft.bottom
 
-            // Attach scrollbars to the right and bottom edges of the view.
-            Components.ScrollBar {
-                id: verticalScrollBar
-                property alias flickable: flick
-                width: 12;
-                height: parent.height
-                y:  - Constants.SIZE_TEXT_V_SPACE
-                opacity: 1
-                orientation: Qt.Vertical
-                position: flick.visibleArea.yPosition
-                pageSize: flick.visibleArea.heightRatio
-                propertyBackground.color: Constants.COLOR_MAIN_BLUE
-                propertyBar.color: Constants.COLOR_MAIN_DARK_GRAY
-                propertyBackground.radius: 0
-                propertyBar.radius: 0
+
             }
         }
     }
@@ -145,13 +129,14 @@ Item {
         width: parent.width
         height: Constants.SIZE_TEXT_LABEL
                 + Constants.SIZE_TEXT_V_SPACE
-                + 2 * Constants.SIZE_TEXT_FIELD
+                + 3 * Constants.SIZE_TEXT_FIELD
         anchors.top: rowText.bottom
         anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
 
         Item{
             id: rectNotesCount
             width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
+            height: parent.height
             Components.LabelTextBoxForm{
                 propertyDateText.text: "Bytes Disponíveis"
                 propertyDateField.text: Constants.PAGE_NOTES_MAX_NOTES_LENGHT - edit.length + " / "
@@ -164,14 +149,13 @@ Item {
             height: parent.height
             anchors.left: rectNotesCount.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            Components.Button {
-                id: button
-                buttonText: "Gravar Notas"
+
+            Button {
+                text: "Gravar Notas"
                 width: parent.width
                 height: parent.height
-                color: Constants.COLOR_MAIN_SOFT_GRAY
-                hoverColor: Constants.COLOR_MAIN_DARK_GRAY
-                pressColor: Constants.COLOR_MAIN_BLUE
+                anchors.right: parent.right
+                font.family: lato.name
             }
         }
     }

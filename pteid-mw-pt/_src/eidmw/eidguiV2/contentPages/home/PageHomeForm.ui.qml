@@ -1,7 +1,6 @@
 import QtQuick 2.6
-import QtQuick.Controls 1.5
+import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.Styles 1.4
 
 import "../../scripts/Constants.js" as Constants
 
@@ -162,17 +161,12 @@ Cidadão ou à sua Chave Móvel Digital."
             anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
             width: parent.width
             CheckBox {
-                id: checkBox
+                text: "Não voltar a mostrar"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                style: CheckBoxStyle {
-                    label: Text {
-                        text: "Não voltar a mostrar"
-                        color: Constants.COLOR_TEXT_BODY
-                        font.pixelSize: Constants.SIZE_TEXT_BODY
-                        font.family: lato.name
-                    }
-                }
+                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.family: lato.name
+                checked: false
             }
         }
     }
