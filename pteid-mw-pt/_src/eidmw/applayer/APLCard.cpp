@@ -536,7 +536,9 @@ unsigned long APL_SmartCard::certificateCount()
 	if(m_certificateCount==COUNT_UNDEF)
 	{
 		BEGIN_CAL_OPERATION(m_reader)
-		m_certificateCount = m_reader->getCalReader()->CertCount();
+		// Minus one because we're excluding the Root Cert from card 
+		// (we're assuming it's always the last in the PKCS15 structure)
+		m_certificateCount = m_reader->getCalReader()->CertCount() -1;
 		END_CAL_OPERATION(m_reader)
 	}
 

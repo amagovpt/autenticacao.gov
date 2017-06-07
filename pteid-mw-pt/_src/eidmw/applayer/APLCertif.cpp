@@ -356,7 +356,7 @@ APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex)
 	if(!m_card)
 		throw CMWEXCEPTION(EIDMW_ERR_BAD_USAGE);
 
-	if(ulIndex >= countFromCard())
+	if (ulIndex >= countFromCard())
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
 
 	std::map<unsigned long ,APL_Certif *>::const_iterator itr;
@@ -380,6 +380,11 @@ APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex)
 		}
 
 		cert = new APL_Certif(m_card,this,ulIndex);
+
+		//Don't load the self-signed root cert from Card!
+		// We ship the right version in eidstore...
+		if (strcmp(cert->getLabel(), "ROOT CA") == 0)
+			return NULL; 
 
 		unsigned long ulUniqueId=cert->getUniqueId();
 		itr = m_certifs.find(ulUniqueId);
