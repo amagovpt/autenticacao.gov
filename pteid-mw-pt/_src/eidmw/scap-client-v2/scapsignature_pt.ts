@@ -108,11 +108,9 @@
         <translation>Erro desconhecido! Por favor verifique sua conexão de rede</translation >
     </message>
 
-
-
     <message>
-        <source>Timeout expired without response from server. Please verify your network connection</source >
-        <translation>O tempo limite expirou sem resposta do servidor. Verifique sua conexão de rede</translation >
+        <source>Service unavailable. Please try again later</source >
+        <translation>Serviço indisponível neste momento. Por favor tente novamente mais tarde</translation >
     </message>
 
     <message>

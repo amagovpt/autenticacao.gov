@@ -9,7 +9,7 @@ void ErrorConn::setErrConnInfo(){
     errConnInfo[index++] = ErrConnInfo( SOAP_OK                 , ER_NONE                   , EMPTY_STR                                                                                             );
 
     errConnInfo[index++] = ErrConnInfo( SOAP_EOF                , ER_EOF                    , "Unexpected end of file, no input, or timeout receiving data"                                         );
-    errConnInfo[index++] = ErrConnInfo( SOAP_TIMEOUT            , ER_TIMEOUT                , "Timeout expired without response from server. Please verify your network connection"                 );
+    errConnInfo[index++] = ErrConnInfo( SOAP_TIMEOUT            , ER_TIMEOUT                , "Service unavailable. Please try again later"                                                         );
     errConnInfo[index++] = ErrConnInfo( SOAP_SSL_ERROR          , ER_SSL                    , "An SSL error occured"                                                                                );
     errConnInfo[index++] = ErrConnInfo( SOAP_DATAENCODINGUNKNOWN, ER_DATA_ENCODING_UNKNOWN  , "A data encoding unknown occured"                                                                     );
     errConnInfo[index++] = ErrConnInfo( SOAP_VERSIONMISMATCH    , ER_VERSION_MISMATCH       , "SOAP version mismatch or no SOAP message. Please verify sent message"                                );
