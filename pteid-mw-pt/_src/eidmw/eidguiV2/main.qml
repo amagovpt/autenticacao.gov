@@ -69,6 +69,22 @@ Window {
                 }
             },
             State{
+                name: "STATE_EXPAND"
+                PropertyChanges {
+                    target: main.propertyMainMenuView
+                    width: parent.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
+                }
+                PropertyChanges {
+                    target: main.propertySubMenuView
+                    width:  0
+                }
+                PropertyChanges {
+                    target: main.propertyContentPagesView
+                    width:  parent.width
+                            * (Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE + Constants.SUB_MENU_VIEW_RELATIVE_SIZE)
+                }
+            },
+            State{
                 name: "STATE_NORMAL"
             }
         ]
@@ -83,8 +99,7 @@ Window {
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 1;
-                    duration: Constants.ANIMATION_STATE_OPACITY_TO_NORMAL
-                    onStarted: console.log("animationShowSubMenu")
+                    duration: Constants.ANIMATION_CHANGE_OPACITY
                 }
                 NumberAnimation
                 {
@@ -92,8 +107,7 @@ Window {
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: main.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
-                    duration: Constants.ANIMATION_STATE_TO_NORMAL
-                    onStarted: console.log("animationReduceMainMenuWidth")
+                    duration: Constants.ANIMATION_MOVE_VIEW
                 }
                 NumberAnimation
                 {
@@ -102,8 +116,7 @@ Window {
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: main.propertyMainView.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE;
-                    duration: Constants.ANIMATION_STATE_TO_NORMAL
-                    onStarted: console.log("animationShowSubMenuWidth")
+                    duration: Constants.ANIMATION_MOVE_VIEW
                 }
             },
             Transition {
@@ -116,8 +129,7 @@ Window {
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 1;
-                    duration: Constants.ANIMATION_STATE_OPACITY_TO_NORMAL
-                    onStarted: console.log("animationShowSubMenu")
+                    duration: Constants.ANIMATION_CHANGE_OPACITY
                 }
                 NumberAnimation
                 {
@@ -126,8 +138,7 @@ Window {
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 1;
-                    duration: Constants.ANIMATION_STATE_OPACITY_TO_NORMAL
-                    onStarted: console.log("animationShowSubMenu")
+                    duration: Constants.ANIMATION_CHANGE_OPACITY
                 }
                 NumberAnimation
                 {
@@ -135,8 +146,7 @@ Window {
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: main.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
-                    duration: Constants.ANIMATION_STATE_TO_NORMAL
-                    onStarted: console.log("animationReduceMainMenuWidth")
+                    duration: Constants.ANIMATION_MOVE_VIEW
                 }
                 NumberAnimation
                 {
@@ -145,8 +155,7 @@ Window {
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: main.propertyMainView.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE;
-                    duration: Constants.ANIMATION_STATE_TO_NORMAL
-                    onStarted: console.log("animationShowSubMenuWidth")
+                    duration: Constants.ANIMATION_MOVE_VIEW
                 }
             },
             Transition {
@@ -159,8 +168,7 @@ Window {
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 0;
-                    duration: Constants.ANIMATION_STATE_OPACITY_TO_HOME
-                    onStarted: console.log("animationHideSubMenu")
+                    duration: Constants.ANIMATION_CHANGE_OPACITY
                 }
                 NumberAnimation
                 {
@@ -169,8 +177,7 @@ Window {
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 0;
-                    duration: Constants.ANIMATION_STATE_OPACITY_TO_HOME
-                    onStarted: console.log("animationHideSubMenu")
+                    duration: Constants.ANIMATION_CHANGE_OPACITY
                 }
                 NumberAnimation
                 {
@@ -178,8 +185,7 @@ Window {
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: main.propertyMainView.width;
-                    duration: Constants.ANIMATION_STATE_TO_HOME
-                    onStarted: console.log("animationIncreaseMainMenuWidth")
+                    duration: Constants.ANIMATION_MOVE_VIEW
                 }
                 NumberAnimation
                 {
@@ -188,8 +194,70 @@ Window {
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: 0;
-                    duration: Constants.ANIMATION_STATE_TO_HOME
-                    onStarted: console.log("animationHideSubMenuWidth")
+                    duration: Constants.ANIMATION_MOVE_VIEW
+                }
+            },
+            Transition {
+                from: "STATE_NORMAL"
+                to: "STATE_EXPAND"
+                NumberAnimation
+                {
+                    id: animationHideSubMenuExpand
+                    target: main.propertySubMenuView
+                    property: "opacity"
+                    easing.type: Easing.Linear
+                    to: 0;
+                    duration: Constants.ANIMATION_CHANGE_OPACITY
+                }
+                NumberAnimation
+                {
+                    id: animationIncreaseContentPagesWidthExpand
+                    target: main.propertyContentPagesView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: main.propertyMainView.width
+                        * (Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE + Constants.SUB_MENU_VIEW_RELATIVE_SIZE)
+                    duration: Constants.ANIMATION_MOVE_VIEW
+                }
+                NumberAnimation
+                {
+                    id: animationHideSubMenuWidthExpand
+                    target: main.propertySubMenuView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: 0;
+                    duration: Constants.ANIMATION_MOVE_VIEW
+                }
+            },
+            Transition {
+                from: "STATE_EXPAND"
+                to: "STATE_NORMAL"
+                NumberAnimation
+                {
+                    id: animationShowSubMenuExpand
+                    target: main.propertySubMenuView
+                    property: "opacity"
+                    easing.type: Easing.Linear
+                    to: 1;
+                    duration: Constants.ANIMATION_CHANGE_OPACITY
+                }
+                NumberAnimation
+                {
+                    id: animationDecreaseContentPagesWidthExpand
+                    target: main.propertyContentPagesView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: main.propertyMainView.width * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
+                    duration: Constants.ANIMATION_MOVE_VIEW
+                }
+                NumberAnimation
+                {
+                    id: animationShowSubMenuWidthExpand
+                    target: main.propertySubMenuView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: main.propertyMainView.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE;
+                    duration: Constants.ANIMATION_MOVE_VIEW
                 }
             }
         ]
@@ -213,15 +281,28 @@ Window {
                     for(var i = 0; i < main.propertyMainMenuListView.model.get(index).subdata.count; ++i) {
                         console.log("Sub Menu indice " + i + " - "
                                     + main.propertyMainMenuListView.model.get(index).subdata.get(i).name);
-                        main.propertySubMenuListView.model.append({
-                             "subName": main.propertyMainMenuListView.model.get(index).subdata.get(i).name,
-                             "url": main.propertyMainMenuListView.model.get(index).subdata.get(i).url })
+                        main.propertySubMenuListView.model
+                        .append({
+                                    "subName": main.propertyMainMenuListView.model.get(index).subdata.get(i).name,
+                                    "expand": main.propertyMainMenuListView.model.get(index).subdata.get(i).expand,
+                                    "url": main.propertyMainMenuListView.model.get(index).subdata.get(i).url
+                                })
                     }
-
-                    // Open the content page of the first item of the new sub menu
                     main.state = "STATE_NORMAL"
-                    main.propertyPageLoader.source = main.propertyMainMenuListView.model.get(index).subdata.get(0).url
-                    onClicked: console.log("Main Menu index = " + index);
+
+                    console.log("Expand Sub Menu = " +  main.propertyMainMenuListView.model.get(index).expand)
+                    if( main.propertyMainMenuListView.model.get(index).expand === true){
+                        // Clean the content page
+                        main.propertyPageLoader.source = ""
+                        // Do not select any option in sub menu
+                        main.propertySubMenuListView.currentIndex = -1
+                    }else{
+                        // Open the content page of the first item of the new sub menu
+                        main.propertyPageLoader.source =
+                                main.propertyMainMenuListView.model.get(index).subdata.get(0).url
+                        main.propertySubMenuListView.currentIndex = 0
+                    }
+                    console.log("Main Menu index = " + index);
                 }
             }
             Text {
@@ -276,15 +357,33 @@ Window {
                     main.propertySubMenuListView.model.clear()
                     for(var i = 0; i < main.propertyMainMenuBottomListView.model.get(index).subdata.count; ++i) {
                         console.log("Sub Menu indice " + i + " - "
-                                    + main.propertyMainMenuBottomListView.model.get(index).subdata.get(i).name);
-                        main.propertySubMenuListView.model.append({
-                             "subName": main.propertyMainMenuBottomListView.model.get(index).subdata.get(i).name,
-                             "url": main.propertyMainMenuBottomListView.model.get(index).subdata.get(i).url })
+                                    + main.propertyMainMenuBottomListView.model.get(index).subdata.get(i).subName);
+                        main.propertySubMenuListView.model
+                        .append({
+                                    "subName": main.propertyMainMenuBottomListView.model.get(index).subdata.get(i)
+                                    .subName,
+                                    "expand": main.propertyMainMenuBottomListView.model.get(index).subdata.get(i)
+                                    .expand,
+                                    "url": main.propertyMainMenuBottomListView.model.get(index).subdata.get(i)
+                                    .url
+                                })
                     }
-                    // Open the content page of the first item of the new sub menu
+
                     main.state = "STATE_NORMAL"
-                    main.propertyPageLoader.source = main.propertyMainMenuBottomListView.model.get(index).subdata.get(0).url
-                    onClicked: console.log("Main Menu Bottom index = " + index);
+
+                    console.log("Expand Bottom Menu = " +  main.propertyMainMenuBottomListView.model.get(index).expand)
+                    if( main.propertyMainMenuBottomListView.model.get(index).expand === true){
+                        // Clean the content page
+                        main.propertyPageLoader.source = ""
+                        // Do not select any option in sub menu
+                        main.propertySubMenuListView.currentIndex = -1
+                    }else{
+                        // Open the content page of the first item of the new sub menu
+                        main.propertyPageLoader.source =
+                                main.propertyMainMenuBottomListView.model.get(index).subdata.get(0).url
+                        main.propertySubMenuListView.currentIndex = 0
+                    }
+                    console.log("Main Menu Bottom index = " + index);
                 }
             }
             Image {
@@ -311,8 +410,17 @@ Window {
                 hoverEnabled: true
                 onClicked: {
                     main.propertySubMenuListView.currentIndex = index
-                    onClicked: console.log("Sub Menu index = " + index);
-                    main.propertyPageLoader.source = url
+                    console.log("Sub Menu index = " + index);
+                    console.log("Sub Menu Expand Sub Menu" + main.propertySubMenuListView.model.get(0).expand)
+
+                    if(main.propertySubMenuListView.model.get(0).expand === true){
+                        // Clean the content page
+                        main.propertyPageLoader.source = url
+                        main.state = "STATE_EXPAND"
+                    }else{
+                        // Open the content page of the first item of the new sub menu
+                        main.propertyPageLoader.source = url
+                    }
                 }
             }
             Text {
@@ -395,6 +503,5 @@ Window {
         }
         return handSource
     }
-
 }
 

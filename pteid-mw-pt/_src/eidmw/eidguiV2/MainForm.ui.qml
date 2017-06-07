@@ -21,6 +21,8 @@ Item {
     property alias propertySubMenuView: subMenuView
     property alias propertySubMenuListView: subMenuListView
 
+    property alias propertyContentPagesView: contentPagesView
+
     property alias propertyPageLoader: pageLoaderID
 
     property alias propertyImageLogo : mouseAreaImageLogo
@@ -99,7 +101,6 @@ Item {
                     model: SubMenuModel {}
                     delegate: subMenuDelegate
                     highlight: Rectangle {
-                        width: parent.width
                         color: Constants.COLOR_BACKGROUND_SUB_MENU
                         radius: 0
                     }
@@ -134,6 +135,5 @@ Item {
                 }
             }
         }
-
     }
 }
