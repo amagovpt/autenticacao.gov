@@ -727,17 +727,13 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 	if(incremental_mode)
 	{
 		//We're adding additional signature so it has to be an incremental update
-	   	fprintf(stderr, "prepareSignature(): Incremental Update Mode\n");	
 		saveIncrementalUpdate(str);
 	}
 	else
 	{
 		saveAs(str, writeForceRewrite);
 	}
-	//DEBUG
-	//fprintf(stderr, "Dumping prepared Signature - with dummy ByteRanges...\n");
 
-	//fprintf(stderr, "Current size: %d\n", mem_stream.size());	
 	long haystack = (long)mem_stream.getData();
 
 	//Start searching after the end of current file	to skip previous
@@ -750,17 +746,17 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 	found = (long)memmem(base_search, mem_stream.size(),
 			       	(const void *) needle, sizeof(needle)-1);
 
-
 	m_sig_offset = found - haystack + 21;
 	if (found == 0)
-		fprintf(stderr, "Warning: can't find /Type /Sig... Abort!!\n");
-
-	//fprintf(stderr, "Sig offset: %d\n", m_sig_offset);	
+  {
+		error(errInternal, -1, "prepareSignature: can't find signature offset. Aborting signature!");
+    return;
+  }
 	
 	getCatalog()->setSignatureByteRange(m_sig_offset, ESTIMATED_LEN, mem_stream.size());
 
-
 }
+
 /* Allocates and fills a byte array with the PDF content that will be signed 
  * i.e. everything except the placeholder hex string <0000...>
    The return value is the size of the array
@@ -788,11 +784,7 @@ unsigned long PDFDoc::getSigByteArray(unsigned char **byte_array, bool increment
 	memcpy((*byte_array)+i, base_ptr + m_sig_offset+
 			ESTIMATED_LEN + 2, len2);
 
-	//DEBUG
-	//dump_to_file(*byte_array, (int)ret_len);
-
 	return ret_len;
-
 }
 
 void PDFDoc::closeSignature(const char *signature_contents)
