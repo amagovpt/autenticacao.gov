@@ -45,39 +45,23 @@ static const char *errorCategoryNames[] = {
   "Internal Error"
 };
 
-static void (*errorCbk)(void *data, ErrorCategory category,
-			int pos, char *msg) = NULL;
-static void *errorCbkData = NULL;
-
-void setErrorCallback(void (*cbk)(void *data, ErrorCategory category,
-				  int pos, char *msg),
-		      void *data) {
-  errorCbk = cbk;
-  errorCbkData = data;
-}
 
 void CDECL error(ErrorCategory category, int pos, const char *msg, ...) {
   va_list args;
   GooString *s;
 
-  // NB: this can be called before the globalParams object is created
-  if (!errorCbk) {
-    return;
-  }
   va_start(args, msg);
   s = GooString::formatv(msg, args);
   va_end(args);
-  if (errorCbk) {
-    (*errorCbk)(errorCbkData, category, pos, s->getCString());
-  } else {
-    if (pos >= 0) {
+  
+  if (pos >= 0) {
       fprintf(stderr, "%s (%d): %s\n",
 	      errorCategoryNames[category], pos, s->getCString());
-    } else {
+  } else {
       fprintf(stderr, "%s: %s\n",
 	      errorCategoryNames[category], s->getCString());
-    }
-    fflush(stderr);
   }
+  fflush(stderr);
+  
   delete s;
 }

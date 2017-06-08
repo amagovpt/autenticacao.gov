@@ -47,10 +47,6 @@ enum ErrorCategory {
   errInternal          // internal error - malfunction within the Xpdf code
 };
 
-extern void setErrorCallback(void (*cbk)(void *data, ErrorCategory category,
-					 int pos, char *msg),
-			     void *data);
-
 extern void CDECL error(ErrorCategory category, int pos, const char *msg, ...);
 
 #endif
