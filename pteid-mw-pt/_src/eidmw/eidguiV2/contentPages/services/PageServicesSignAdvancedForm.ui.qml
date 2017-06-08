@@ -1,15 +1,196 @@
 import QtQuick 2.6
+import QtQuick.Controls 2.1
+import QtQuick.Layouts 1.3
+import QtQuick.Controls.Styles 1.4
+import QtQuick.Dialogs 1.0
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
+import "../../components" as Components
 
 Item {
     anchors.fill: parent
-    Text {
-        text: "Sign Advanced"
-        font.pixelSize: Constants.SIZE_TEXT_BODY
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        font.family: lato.name
+
+    Item {
+        id: rowMain
+        width: parent.width
+        height: parent.height * Constants.PAGE_SERVICES_MAIN_V_RELATIVE
+
+        Item{
+            id: rectMainLeft
+            width: parent.width * 0.5 - Constants.SIZE_ROW_H_SPACE
+            height: parent.height
+            x: Constants.SIZE_ROW_H_SPACE
+
+            GroupBox {
+                id: groupBox
+                anchors.fill: parent
+                title: "Configurações"
+
+                Item{
+                    id: itemOptions
+                    width: parent.width * 0.9
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    Text {
+                        id: textSelectFiles
+                        text: "Selecione os ficheiros a assinar"
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        color: Constants.COLOR_TEXT_LABEL
+                        height: Constants.SIZE_TEXT_LABEL
+                    }
+                    ListView {
+                        id: listViewFiles
+                        width: parent.width;
+                        height: filesModel.count * Constants.SIZE_V_COMPONENTS
+                        anchors.top: textSelectFiles.bottom
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                        model: filesModel
+                        delegate: Rectangle
+                        {
+                            width: parent.width
+                            height: Constants.SIZE_V_COMPONENTS
+                            color: Constants.COLOR_MAIN_SOFT_GRAY
+                            Text {
+                                id: fileName
+                                text: name
+                            }
+                        }
+                    }
+
+                    ListModel {
+                        id: filesModel
+                        ListElement {
+                            name: "<< Click para adiconar ficheiros >>"
+                        }
+                    }
+
+
+                    Text {
+                        id: textFormatSign
+                        text: "Formato da Assinatura"
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        color: Constants.COLOR_TEXT_LABEL
+                        height: Constants.SIZE_TEXT_LABEL
+                        anchors.top: listViewFiles.bottom
+                    }
+
+                    RadioButton {
+                        id: radioButtonPADES
+                        height: Constants.SIZE_V_COMPONENTS
+                        anchors.top: textFormatSign.bottom
+                        text: "PADES"
+                        checked: true
+                    }
+
+                    RadioButton {
+                        id: radioButtonXADES
+                        height: Constants.SIZE_V_COMPONENTS
+                        anchors.top: textFormatSign.bottom
+                        anchors.left: radioButtonPADES.right
+                        text: "XADES"
+                    }
+                    TextField {
+                        id: textFieldReason
+                        width: parent.width
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        anchors.top: radioButtonXADES.bottom
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                        placeholderText:"Escreva a razão"
+                    }
+
+                    TextField {
+                        id: textFieldLocal
+                        width: parent.width
+                        anchors.top: textFieldReason.bottom
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                        placeholderText:"Escreva o local"
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    }
+                    Switch {
+                        id: switchSignTemp
+                        height: Constants.SIZE_V_COMPONENTS
+                        anchors.top: textFieldLocal.bottom
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                        text: "Adicionar selo temporal"
+                    }
+                    Switch {
+                        id: switchSignAdd
+                        height: Constants.SIZE_V_COMPONENTS
+                        anchors.top: switchSignTemp.bottom
+                        text: "Adicionar atribtutos profissionais"
+                    }
+
+                    Column {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: switchSignAdd.bottom
+                        width: parent.width - Constants.SIZE_TEXT_FIELD_H_SPACE
+                        x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        visible: switchSignAdd.checked
+
+                        CheckBox {
+                            text: "Engenheiro Civil"
+                        }
+                        CheckBox {
+                            text: "Socio da Empresa Obras Prontas"
+                        }
+                        CheckBox {
+                            text: "Presidente do Clube Futebol da Terra"
+                        }
+                    }
+                }
+            }
+        }
+
+        Item{
+            id: rectMainRight
+            width: parent.width * 0.5
+            height: parent.height
+            anchors.left: rectMainLeft.right
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+
+            GroupBox {
+                id: groupPre
+                anchors.fill: parent
+                title: qsTr("Pré-Visualização")
+
+                Image {
+                    id: imageTabPreView
+                    anchors.fill: parent
+                    antialiasing: true
+                    fillMode: Image.PreserveAspectFit
+                    source: "../../images/Pdfdemo.png"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+        }
+    }
+
+    Item {
+        id: rowBottom
+        width: parent.width
+        height: 40
+        anchors.top: rowMain.bottom
+        anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+
+        Item{
+            id: rectSignLeft
+            width: parent.width  * 0.50
+            height: parent.height
+        }
+        Item{
+            id: rectSignRight
+            width: parent.width * 0.50
+            height: parent.height
+            anchors.left: rectSignLeft.right
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+
+            Button {
+                text: "Assinar"
+                width: parent.width
+                height: parent.height
+                anchors.right: parent.right
+            }
+        }
     }
 }
