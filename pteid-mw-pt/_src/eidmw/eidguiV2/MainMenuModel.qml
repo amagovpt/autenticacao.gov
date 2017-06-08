@@ -34,12 +34,12 @@ ListModel {
             ListElement {
                 name: "Simples"
                 expand: true
-                url: "contentPages/services/PageServicesSignPdf.qml"
+                url: "contentPages/services/PageServicesSignSimple.qml"
             },
             ListElement {
                 name: "Avançada"
                 expand: true
-                url: "contentPages/services/PageServicesSignProfessional.qml"
+                url: "contentPages/services/PageServicesSignAdvanced.qml"
             }
         ]
     }

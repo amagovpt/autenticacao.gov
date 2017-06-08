@@ -23,10 +23,6 @@
         <file>contentPages/help/PageHelpDocOnlineForm.ui.qml</file>
         <file>contentPages/help/PageHelpUpdates.qml</file>
         <file>contentPages/help/PageHelpUpdatesForm.ui.qml</file>
-        <file>contentPages/services/PageServicesSignPdf.qml</file>
-        <file>contentPages/services/PageServicesSignPdfForm.ui.qml</file>
-        <file>contentPages/services/PageServicesSignProfessional.qml</file>
-        <file>contentPages/services/PageServicesSignProfessionalForm.ui.qml</file>
         <file>contentPages/definitions/PageDefinitionsParameters.qml</file>
         <file>contentPages/definitions/PageDefinitionsParametersForm.ui.qml</file>
         <file>contentPages/home/PageHome.qml</file>
@@ -51,5 +47,11 @@
         <file>images/arrow-right_hover.png</file>
         <file>images/arrow-right_white_AMA.png</file>
         <file>qtquickcontrols2.conf</file>
+        <file>images/CCdemo.png</file>
+        <file>images/Pdfdemo.png</file>
+        <file>contentPages/services/PageServicesSignAdvanced.qml</file>
+        <file>contentPages/services/PageServicesSignAdvancedForm.ui.qml</file>
+        <file>contentPages/services/PageServicesSignSimple.qml</file>
+        <file>contentPages/services/PageServicesSignSimpleForm.ui.qml</file>
     </qresource>
 </RCC>
