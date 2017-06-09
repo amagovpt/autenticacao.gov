@@ -5,6 +5,28 @@ import "../../scripts/Constants.js" as Constants
 
 PageServicesSignAdvancedForm {
 
+    propertyDropArea {
+
+        onEntered: {
+            console.log("You chose file(s): " + drag.urls.toString());
+            filesArray = drag.urls
+            console.log("Num files: "+filesArray.length);
+        }
+        onDropped: {
+            for(var i = 0; i < filesArray.length; i++){
+                console.log("Adding file: " + filesArray[i])
+                filesModel.append({
+                                      "fileUrl": filesArray[i]
+                                  })
+            }
+            // Force scroll and focus to the last item addded
+            forceScrollandFocus()
+        }
+        onExited: {
+            console.log ("onExited");
+            filesArray = []
+        }
+    }
     propertyFileDialog {
 
         onAccepted: {
@@ -19,11 +41,7 @@ PageServicesSignAdvancedForm {
             }
 
             // Force scroll and focus to the last item addded
-            propertyListViewFiles.positionViewAtEnd()
-            propertyListViewFiles.forceActiveFocus()
-            propertyListViewFiles.currentIndex = propertyListViewFiles.count -1
-            if(propertyFilesListViewScroll.position > 0)
-                propertyFilesListViewScroll.active = true
+            forceScrollandFocus()
         }
         onRejected: {
             console.log("Canceled")
@@ -109,5 +127,13 @@ PageServicesSignAdvancedForm {
                 fileLoaded = true
             }
         }
+    }
+    function forceScrollandFocus() {
+        // Force scroll and focus to the last item addded
+        propertyListViewFiles.positionViewAtEnd()
+        propertyListViewFiles.forceActiveFocus()
+        propertyListViewFiles.currentIndex = propertyListViewFiles.count -1
+        if(propertyFilesListViewScroll.position > 0)
+            propertyFilesListViewScroll.active = true
     }
 }

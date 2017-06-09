@@ -12,6 +12,7 @@ Item {
     anchors.fill: parent
 
     property string fileName: ""
+    property variant filesArray:[]
     property bool fileLoaded: false
 
     property alias propertyFileDialog: fileDialog
@@ -23,11 +24,17 @@ Item {
     property alias propertyButtonAdd: buttonAdd
     property alias propertyButtonRemoveAll: buttonRemoveAll
 
+    property alias propertyDropArea: dropArea
 
     Item {
         id: rowMain
         width: parent.width
         height: parent.height * Constants.PAGE_SERVICES_MAIN_V_RELATIVE
+
+        DropArea {
+            id: dropArea;
+            anchors.fill: parent;
+        }
 
         FileDialog {
             id: fileDialog
