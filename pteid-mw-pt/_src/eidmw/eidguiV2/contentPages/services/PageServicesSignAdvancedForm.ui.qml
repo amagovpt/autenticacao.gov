@@ -11,60 +11,131 @@ import "../../components" as Components
 Item {
     anchors.fill: parent
 
+    property string fileName: ""
+    property bool fileLoaded: false
+
+    property alias propertyFileDialog: fileDialog
+    property alias propertyMouseAreaRectMainRigh: mouseAreaRectMainRigh
+    property alias propertyMouseAreaItemOptionsFiles: mouseAreaItemOptionsFiles
+    property alias propertyTextDragMsgListView: textDragMsgListView
+    property alias propertyListViewFiles: listViewFiles
+    property alias propertyFilesListViewScroll: filesListViewScroll
+    property alias propertyButtonAdd: buttonAdd
+    property alias propertyButtonRemoveAll: buttonRemoveAll
+
+
     Item {
         id: rowMain
         width: parent.width
         height: parent.height * Constants.PAGE_SERVICES_MAIN_V_RELATIVE
 
+        FileDialog {
+            id: fileDialog
+            title: "Escolha o ficheiro para assinar"
+            folder: shortcuts.home
+            modality : Qt.WindowModal
+            selectMultiple: true
+            Component.onCompleted: visible = false
+        }
+
         Item{
-            id: rectMainLeft
+            id: rectMainLeftFile
             width: parent.width * 0.5 - Constants.SIZE_ROW_H_SPACE
-            height: parent.height
+            height: listViewFiles.height
+                    + itemBottonsFiles.height
+                    + 40
             x: Constants.SIZE_ROW_H_SPACE
 
             GroupBox {
-                id: groupBox
+                id: groupBoxFile
+                width: parent.width
+                height: parent.height
+                title: "Selecione os ficheiros a assinar"
+
+                Item{
+                    id: itemOptionsFiles
+                    width: parent.width
+                    height: 4 * Constants.SIZE_V_COMPONENTS
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    ListView {
+                        id: listViewFiles
+                        width: parent.width;
+                        height: 4 * Constants.SIZE_V_COMPONENTS
+                        clip: true
+                        spacing: Constants.SIZE_LISTVIEW_SPACING
+                        boundsBehavior: Flickable.StopAtBounds
+                        model: filesModel
+                        delegate: listViewFilesDelegate
+
+                        ScrollBar.vertical: ScrollBar {
+                            id: filesListViewScroll
+                            hoverEnabled: true
+                            active: hovered || pressed
+                        }
+                        Text {
+                            id: textDragMsgListView
+                            anchors.fill: parent
+                            text: "Arraste para esta zona o ficheiro a assinar \nou\n click para procurar o ficheiro"
+                            font.bold: true
+                            wrapMode: Text.WordWrap
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            font.pixelSize: Constants.SIZE_TEXT_BODY
+                            color: Constants.COLOR_TEXT_LABEL
+                            visible: !fileLoaded
+                        }
+                    }
+                    MouseArea {
+                        id: mouseAreaItemOptionsFiles
+                        width: parent.width
+                        height: 4 * Constants.SIZE_V_COMPONENTS
+                        enabled: !fileLoaded
+                    }
+
+                }
+                Item{
+                    id: itemBottonsFiles
+                    width: parent.width
+                    height: Constants.SIZE_V_COMPONENTS
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: itemOptionsFiles.bottom
+
+                    Button {
+                        id: buttonAdd
+                        height: Constants.SIZE_V_COMPONENTS
+                        text: "Adicionar ficheiro"
+                        font.bold: false
+                    }
+                    Button {
+                        id: buttonRemoveAll
+                        height: Constants.SIZE_V_COMPONENTS
+                        anchors.right: itemBottonsFiles.right
+                        text: "Remover todos"
+                        font.bold: false
+                        enabled: fileLoaded
+                    }
+                }
+            }
+        }
+        Item{
+            id: rectMainLeftOptions
+            width: parent.width * 0.5 - Constants.SIZE_ROW_H_SPACE
+            height: parent.height - rectMainLeftFile.height
+            anchors.top: rectMainLeftFile.bottom
+            anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
+            x: Constants.SIZE_ROW_H_SPACE
+
+            GroupBox {
+                id: groupBoxOptions
                 anchors.fill: parent
                 title: "Configurações"
 
                 Item{
                     id: itemOptions
-                    width: parent.width * 0.9
+                    width: parent.width
                     anchors.horizontalCenter: parent.horizontalCenter
-
-                    Text {
-                        id: textSelectFiles
-                        text: "Selecione os ficheiros a assinar"
-                        font.pixelSize: Constants.SIZE_TEXT_LABEL
-                        color: Constants.COLOR_TEXT_LABEL
-                        height: Constants.SIZE_TEXT_LABEL
-                    }
-                    ListView {
-                        id: listViewFiles
-                        width: parent.width;
-                        height: filesModel.count * Constants.SIZE_V_COMPONENTS
-                        anchors.top: textSelectFiles.bottom
-                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-                        model: filesModel
-                        delegate: Rectangle
-                        {
-                            width: parent.width
-                            height: Constants.SIZE_V_COMPONENTS
-                            color: Constants.COLOR_MAIN_SOFT_GRAY
-                            Text {
-                                id: fileName
-                                text: name
-                            }
-                        }
-                    }
-
-                    ListModel {
-                        id: filesModel
-                        ListElement {
-                            name: "<< Click para adiconar ficheiros >>"
-                        }
-                    }
-
+                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
                     Text {
                         id: textFormatSign
@@ -72,9 +143,8 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_LABEL
                         color: Constants.COLOR_TEXT_LABEL
                         height: Constants.SIZE_TEXT_LABEL
-                        anchors.top: listViewFiles.bottom
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                     }
-
                     RadioButton {
                         id: radioButtonPADES
                         height: Constants.SIZE_V_COMPONENTS
@@ -82,7 +152,6 @@ Item {
                         text: "PADES"
                         checked: true
                     }
-
                     RadioButton {
                         id: radioButtonXADES
                         height: Constants.SIZE_V_COMPONENTS
@@ -95,15 +164,12 @@ Item {
                         width: parent.width
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         anchors.top: radioButtonXADES.bottom
-                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                         placeholderText:"Escreva a razão"
                     }
-
                     TextField {
                         id: textFieldLocal
                         width: parent.width
                         anchors.top: textFieldReason.bottom
-                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                         placeholderText:"Escreva o local"
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                     }
@@ -111,7 +177,7 @@ Item {
                         id: switchSignTemp
                         height: Constants.SIZE_V_COMPONENTS
                         anchors.top: textFieldLocal.bottom
-                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+
                         text: "Adicionar selo temporal"
                     }
                     Switch {
@@ -120,22 +186,63 @@ Item {
                         anchors.top: switchSignTemp.bottom
                         text: "Adicionar atribtutos profissionais"
                     }
-
                     Column {
-                        anchors.horizontalCenter: parent.horizontalCenter
                         anchors.top: switchSignAdd.bottom
-                        width: parent.width - Constants.SIZE_TEXT_FIELD_H_SPACE
-                        x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                        x: 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
                         visible: switchSignAdd.checked
 
                         CheckBox {
                             text: "Engenheiro Civil"
+                            height: Constants.SIZE_V_COMPONENTS
                         }
                         CheckBox {
                             text: "Socio da Empresa Obras Prontas"
+                            height: Constants.SIZE_V_COMPONENTS
                         }
                         CheckBox {
+                            id: checkBox
                             text: "Presidente do Clube Futebol da Terra"
+                            height: Constants.SIZE_V_COMPONENTS
+                        }
+
+                        Item{
+                            anchors.top: checkBox.bottom
+                            height: Constants.SIZE_V_COMPONENTS
+
+                            Text {
+                                id: textPreserv
+                                text: "Preservar durante"
+                                verticalAlignment: Text.AlignVCenter
+                                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                                color: Constants.COLOR_TEXT_LABEL
+                                height: parent.height
+                                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                            ComboBox {
+                                id: comboBoxPreserve
+                                anchors.left: textPreserv.right
+                                anchors.leftMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
+                                height: parent.height
+                                width: 60
+                                // textPreservAnos.text is related with model values
+                                // if model is changed textPreservAnos.text may be changed
+                                model: [ "0", "1", "3", "5", "10" ]
+                            }
+                            Text {
+                                id: textPreservAnos
+                                text: comboBoxPreserve.currentIndex === 1 ?
+                                          "ano":
+                                          "anos"
+                                verticalAlignment: Text.AlignVCenter
+                                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                                color: Constants.COLOR_TEXT_LABEL
+                                height: parent.height
+                                anchors.left: comboBoxPreserve.right
+                                anchors.leftMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
                         }
                     }
                 }
@@ -146,7 +253,7 @@ Item {
             id: rectMainRight
             width: parent.width * 0.5
             height: parent.height
-            anchors.left: rectMainLeft.right
+            anchors.left: rectMainLeftFile.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
             GroupBox {
@@ -154,6 +261,18 @@ Item {
                 anchors.fill: parent
                 title: qsTr("Pré-Visualização")
 
+                Text {
+                    id: textDragMsgImg
+                    anchors.fill: parent
+                    text: "Arraste para esta zona o ficheiro a assinar \nou\n click para procurar o ficheiro"
+                    font.bold: true
+                    wrapMode: Text.WordWrap
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    font.pixelSize: Constants.SIZE_TEXT_BODY
+                    color: Constants.COLOR_TEXT_LABEL
+                    visible: !fileLoaded
+                }
                 Image {
                     id: imageTabPreView
                     anchors.fill: parent
@@ -161,7 +280,12 @@ Item {
                     fillMode: Image.PreserveAspectFit
                     source: "../../images/Pdfdemo.png"
                     anchors.horizontalCenter: parent.horizontalCenter
+                    visible: false
                 }
+            }
+            MouseArea {
+                id: mouseAreaRectMainRigh
+                anchors.fill: parent
             }
         }
     }
@@ -169,7 +293,7 @@ Item {
     Item {
         id: rowBottom
         width: parent.width
-        height: 40
+        height: Constants.SIZE_V_COMPONENTS
         anchors.top: rowMain.bottom
         anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 

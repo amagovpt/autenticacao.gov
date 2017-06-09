@@ -53,5 +53,7 @@
         <file>contentPages/services/PageServicesSignAdvancedForm.ui.qml</file>
         <file>contentPages/services/PageServicesSignSimple.qml</file>
         <file>contentPages/services/PageServicesSignSimpleForm.ui.qml</file>
+        <file>images/ic_highlight_off_black_24dp.png</file>
+        <file>images/ic_highlight_on_black_24dp.png</file>
     </qresource>
 </RCC>
