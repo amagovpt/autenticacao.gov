@@ -203,7 +203,8 @@ xcopy /D /Y $(PTEID_DIR_CURL_X64)\bin\libcurl.dll $(TargetDir)
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
-      <Command>..\set_build_nbr.bat</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <ClCompile>
       <PreprocessorDefinitions>PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_CMN_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -236,7 +237,8 @@ xcopy /D /Y $(PTEID_DIR_CURL_X64)\bin\libcurl.dll $(TargetDir)
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
-      <Command>..\set_build_nbr.bat</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
