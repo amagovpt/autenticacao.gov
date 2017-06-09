@@ -38,7 +38,7 @@
                                                     fprintf( to, format, ## __VA_ARGS__ ); }
     #define TRACE_ERR( format, ... )            _TRACE_( stderr, format, ## __VA_ARGS__ )
     #define TRACE_OUT( format, ... )            _TRACE_( stdout, format, ## __VA_ARGS__ )
-#endif // WIN32
+#endif
 
 namespace eIDMW
 {

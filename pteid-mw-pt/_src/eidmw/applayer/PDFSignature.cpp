@@ -522,7 +522,7 @@ namespace eIDMW
 		if (m_civil_number == NULL)
 		   getCitizenData();
 
-                bool incremental = doc->isSigned() || doc->isReaderEnabled();
+        bool incremental = doc->isSigned() || doc->isReaderEnabled();
 
 		if (this->my_custom_image.img_data != NULL)
 			doc->addCustomSignatureImage(my_custom_image.img_data, my_custom_image.img_length);

@@ -302,7 +302,6 @@ MainWnd::MainWnd( GUISettings& settings, QWidget *parent )
 	setEnabledCertifButtons( false );
 	setEnabledPinButtons( false );
 	enableTabPersoData(false);
-
 	//----------------------------------
 	// some items are not available on other platforms than windows
 	// so hide them, such that users can't click them.

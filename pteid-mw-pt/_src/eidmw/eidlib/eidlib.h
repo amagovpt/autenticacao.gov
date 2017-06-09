@@ -868,9 +868,9 @@ public:
 	    PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
 			const char *outfile_path);
 
-	    /* PDF Signature close:
+	    /* PDF Signature close: this method is intended for use by external signature methods: NOT eID
              * @param sig_handler: this defines the input file and some signature options
-             * @param signature: Signature metadata field
+             * @param signature: RSA Signature in binary format
              */
         PTEIDSDK_API int SignClose( PTEID_PDFSignature &sig_handler, PTEID_ByteArray signature );
 
