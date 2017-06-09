@@ -437,7 +437,7 @@ ApplicationWindow {
                                  Font.Normal
                 font.pixelSize: Constants.SIZE_TEXT_SUB_MENU
                 wrapMode: Text.Wrap
-                width: parent.width
+                width: parent.width - imageArrowSubMenu.width
                 horizontalAlignment: Text.AlignHCenter
 
             }
