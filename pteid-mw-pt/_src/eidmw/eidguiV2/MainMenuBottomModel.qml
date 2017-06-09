@@ -8,9 +8,14 @@ ListModel {
         imageUrlSel: "images/definicoes_icon_sel.png"
         subdata:[
             ListElement {
-                subName: "Parâmetros"
+                subName: "Personalização da Assinatura"
                 expand: false
                 url: "contentPages/definitions/PageDefinitionsParameters.qml"
+            },
+            ListElement {
+                subName: "Configuração da aplicação"
+                expand: false
+                url: "contentPages/definitions/PageDefinitionsApp.qml"
             }
         ]
     }
