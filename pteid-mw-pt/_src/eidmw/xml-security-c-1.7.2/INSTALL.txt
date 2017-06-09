@@ -1,4 +1,0 @@
-C++ Library Docs
-----------------
-
-See http://santuario.apache.org/
