@@ -55,5 +55,7 @@
         <file>contentPages/services/PageServicesSignSimpleForm.ui.qml</file>
         <file>images/ic_highlight_off_black_24dp.png</file>
         <file>images/ic_highlight_on_black_24dp.png</file>
+        <file>contentPages/definitions/PageDefinitionsApp.qml</file>
+        <file>contentPages/definitions/PageDefinitionsAppForm.ui.qml</file>
     </qresource>
 </RCC>
