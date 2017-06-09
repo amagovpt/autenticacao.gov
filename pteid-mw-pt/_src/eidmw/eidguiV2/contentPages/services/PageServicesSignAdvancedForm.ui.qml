@@ -137,6 +137,7 @@ Item {
                 id: groupBoxOptions
                 anchors.fill: parent
                 title: "Configurações"
+                enabled: fileLoaded
 
                 Item{
                     id: itemOptions
@@ -158,6 +159,7 @@ Item {
                         anchors.top: textFormatSign.bottom
                         text: "PADES"
                         checked: true
+                        enabled: fileLoaded
                     }
                     RadioButton {
                         id: radioButtonXADES
@@ -165,6 +167,7 @@ Item {
                         anchors.top: textFormatSign.bottom
                         anchors.left: radioButtonPADES.right
                         text: "XADES"
+                        enabled: fileLoaded
                     }
                     TextField {
                         id: textFieldReason
@@ -172,6 +175,7 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         anchors.top: radioButtonXADES.bottom
                         placeholderText:"Escreva a razão"
+                        enabled: fileLoaded
                     }
                     TextField {
                         id: textFieldLocal
@@ -179,19 +183,21 @@ Item {
                         anchors.top: textFieldReason.bottom
                         placeholderText:"Escreva o local"
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        enabled: fileLoaded
                     }
                     Switch {
                         id: switchSignTemp
                         height: Constants.SIZE_V_COMPONENTS
                         anchors.top: textFieldLocal.bottom
-
                         text: "Adicionar selo temporal"
+                        enabled: fileLoaded
                     }
                     Switch {
                         id: switchSignAdd
                         height: Constants.SIZE_V_COMPONENTS
                         anchors.top: switchSignTemp.bottom
                         text: "Adicionar atribtutos profissionais"
+                        enabled: fileLoaded
                     }
                     Column {
                         anchors.top: switchSignAdd.bottom
@@ -287,7 +293,7 @@ Item {
                     fillMode: Image.PreserveAspectFit
                     source: "../../images/Pdfdemo.png"
                     anchors.horizontalCenter: parent.horizontalCenter
-                    visible: false
+                    visible: fileLoaded
                 }
             }
             MouseArea {
@@ -321,6 +327,7 @@ Item {
                 width: parent.width
                 height: parent.height
                 anchors.right: parent.right
+                enabled: fileLoaded
             }
         }
     }
