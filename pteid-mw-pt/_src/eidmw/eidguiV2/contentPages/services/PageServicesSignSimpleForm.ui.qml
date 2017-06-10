@@ -21,7 +21,7 @@ Item {
     Item {
         id: rowMain
         width: parent.width
-        height: parent.height * Constants.PAGE_SERVICES_MAIN_V_RELATIVE
+        height: parent.height - Constants.SIZE_V_BOTTOM_COMPONENT - Constants.SIZE_ROW_V_SPACE
 
         DropArea {
             id: dropArea;
@@ -60,6 +60,7 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_BODY
                     color: Constants.COLOR_TEXT_LABEL
                     visible: !fileLoaded
+                    font.family: lato.name
                 }
                 Image {
                     id: imageTabPreView
@@ -81,8 +82,9 @@ Item {
     Item {
         id: rowBottom
         width: parent.width
-        height: Constants.SIZE_V_COMPONENTS
+        height: Constants.SIZE_V_BOTTOM_COMPONENT
         anchors.top: rowMain.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
         x: Constants.SIZE_ROW_H_SPACE
 
@@ -98,6 +100,8 @@ Item {
                 height: parent.height
                 anchors.right: parent.right
                 enabled: fileLoaded
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
             }
         }
         Item{
@@ -113,6 +117,8 @@ Item {
                 height: parent.height
                 anchors.right: parent.right
                 enabled: fileLoaded
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
             }
         }
     }
