@@ -57,5 +57,6 @@
         <file>images/ic_highlight_on_black_24dp.png</file>
         <file>contentPages/definitions/PageDefinitionsApp.qml</file>
         <file>contentPages/definitions/PageDefinitionsAppForm.ui.qml</file>
+        <file>images/logo_cor400.png</file>
     </qresource>
 </RCC>
