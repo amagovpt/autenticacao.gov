@@ -36,8 +36,6 @@ Item {
         /* Main Menu View */
         Rectangle {
             id: mainMenuView
-            x: 0
-            y: 0
             width: parent.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
             height: parent.height
             color: Constants.COLOR_BACKGROUND_MAIN_MENU
@@ -80,20 +78,18 @@ Item {
         }
 
         /* Sub Menu View */
-        Rectangle {
+        Item {
             id: subMenuView
             width: parent.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE
             height: parent.height
-            border.width: 0
             anchors.left: mainMenuView.right
             z: 0
-            Rectangle {
+            Item {
                 width: parent.width * Constants.SUB_MENU_RELATIVE_H_SIZE
                 height: subMenuListView.count *
                         mainView.height * Constants.SUB_MENU_RELATIVE_V_ITEM_SIZE
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                border.width: 0
                 ListView {
                     id: subMenuListView
                     width: parent.width
@@ -120,13 +116,13 @@ Item {
         }
 
         /* Content Pages View */
-        Rectangle {
+        Item {
             id: contentPagesView
             width: parent.width * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
             height: parent.height
             anchors.left: subMenuView.right
             z: 1
-            Rectangle {
+            Item {
                 width: parent.width * Constants.PAGE_RELATIVE_H_SIZE
                 height: parent.height * Constants.PAGE_RELATIVE_V_SIZE
                 anchors.verticalCenter: parent.verticalCenter
