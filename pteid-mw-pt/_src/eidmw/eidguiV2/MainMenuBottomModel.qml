@@ -31,7 +31,7 @@ ListModel {
         imageUrlSel: "images/ajuda_icon_sel.png"
         subdata:[
             ListElement {
-                subName: "Documentação Online"
+                subName: "Documentação"
                 expand: false
                 url: "contentPages/help/PageHelpDocOnline.qml"
             },
