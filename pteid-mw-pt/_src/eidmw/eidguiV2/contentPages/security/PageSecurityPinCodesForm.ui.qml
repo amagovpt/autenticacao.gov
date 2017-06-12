@@ -7,326 +7,113 @@ import "../../scripts/Constants.js" as Constants
 import "../../components" as Components
 
 Item {
-    property alias buttonTest: buttonTest
-    property alias buttonModify: buttonModify
+    property alias propertyPinCodesListView: pinCodesListView
+
     anchors.fill: parent
 
-    TabBar {
-        id: bar
-        x: 0
-        y: 0
-        width: parent.width
-        currentIndex: 0
-        TabButton {
-            text: "Pin de Autenticação"
-            rightPadding: 2
-            leftPadding: 2
-        }
-        TabButton {
-            text: "Pin de Assinatura"
-            rightPadding: 2
-            leftPadding: 2
-        }
-        TabButton {
-            text: "Pin de Morada"
-            rightPadding: 2
-            leftPadding: 2
-        }
-    }
+    /* Pin Codes List View */
+    Item {
+        id: pinCodesViewLeft
+        width: parent.width * 0.5
+        height: parent.height
+        anchors.verticalCenter: parent.verticalCenter
 
-    StackLayout {
-        width: parent.width
-        currentIndex: bar.currentIndex
         Item {
-            id: tabAuthentication
-            Item {
-                id: rowAuth
-                y: bar.height + 3 * Constants.SIZE_ROW_V_SPACE
-                width: parent.width
-                height: Constants.SIZE_TEXT_LABEL
-                        + Constants.SIZE_TEXT_V_SPACE
-                        + 2 * Constants.SIZE_TEXT_FIELD
-
-                Item{
-                    id: rectAuthLeft
-                    width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
-                    Components.LabelTextBoxForm{
-                        propertyDateText.text: "Tipo de Código PIN"
-                        propertyDateField.text: "PIN Autenticação"
-                    }
+            id: rectListView
+            width: parent.width
+            height: pinCodesListView.count *
+                    mainView.height * Constants.SUB_MENU_RELATIVE_V_ITEM_SIZE
+            anchors.verticalCenter: parent.verticalCenter
+            ListView {
+                id: pinCodesListView
+                width: parent.width * 0.9
+                height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+                model: PinCodesModel {}
+                delegate: pinCodesMenuDelegate
+                highlight: Rectangle {
+                    color: Constants.COLOR_BACKGROUND_SUB_MENU
+                    radius: 0
                 }
-                Item{
-                    id: rectAuthRight
-                    width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
-                    anchors.left: rectAuthLeft.right
-                    anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-                    Components.LabelTextBoxForm{
-                        propertyDateText.text: "Identificação do código PIN"
-                        propertyDateField.text: "1"
-                    }
-                }
-            }
-
-            Item {
-                id: rowStateAuth
-                width: parent.width
-                height: Constants.SIZE_TEXT_LABEL
-                        + Constants.SIZE_TEXT_V_SPACE
-                        + 2 * Constants.SIZE_TEXT_FIELD
-                anchors.top: rowAuth.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-                Item {
-                    id: rectStateAuth
-                    width: parent.width
-                    Components.LabelTextBoxForm {
-                        propertyDateText.text: "Estado do Código PIN"
-                        propertyDateField.text: "Restão 3 tentativas"
-                    }
-                }
-            }
-            Item {
-                id: rowBottomAuth
-                width: parent.width
-                height: Constants.SIZE_V_BOTTOM_COMPONENT
-                anchors.top: rowStateAuth.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-
-            }
-        }
-        Item {
-            id: tabSign
-
-            Item {
-                id: rowSign
-                y: bar.height + 3 * Constants.SIZE_ROW_V_SPACE
-                width: parent.width
-                height: Constants.SIZE_TEXT_LABEL
-                        + Constants.SIZE_TEXT_V_SPACE
-                        + 2 * Constants.SIZE_TEXT_FIELD
-
-                Item{
-                    id: rectSignLeft
-                    width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
-                    Components.LabelTextBoxForm{
-                        propertyDateText.text: "Tipo de Código PIN"
-                        propertyDateField.text: "PIN Assinatura"
-                    }
-                }
-                Item{
-                    id: rectSignRight
-                    width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
-                    anchors.left: rectSignLeft.right
-                    anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-                    Components.LabelTextBoxForm{
-                        propertyDateText.text: "Identificação do código PIN"
-                        propertyDateField.text: "2"
-                    }
-                }
-            }
-
-            Item {
-                id: rowStateSign
-                width: parent.width
-                height: Constants.SIZE_TEXT_LABEL
-                        + Constants.SIZE_TEXT_V_SPACE
-                        + 2 * Constants.SIZE_TEXT_FIELD
-                anchors.top: rowSign.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-                Item {
-                    id: rectStateSign
-                    width: parent.width
-                    Components.LabelTextBoxForm {
-                        propertyDateText.text: "Estado do Código PIN"
-                        propertyDateField.text: "Restão 3 tentativas"
-                    }
-                }
-            }
-
-            Item {
-                id: rowBottomSign
-                width: parent.width
-                height: Constants.SIZE_V_BOTTOM_COMPONENT
-                anchors.top: rowStateSign.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-
-            }
-        }
-        Item {
-            id: tabAddress
-
-            Item {
-                id: rowAddress
-                y: bar.height + 3 * Constants.SIZE_ROW_V_SPACE
-                width: parent.width
-                height: Constants.SIZE_TEXT_LABEL
-                        + Constants.SIZE_TEXT_V_SPACE
-                        + 2 * Constants.SIZE_TEXT_FIELD
-
-                Item{
-                    id: rectAddressLeft
-                    width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
-                    Components.LabelTextBoxForm{
-                        propertyDateText.text: "Tipo de Código PIN"
-                        propertyDateField.text: "PIN Morada"
-                    }
-                }
-                Item{
-                    id: rectAddressRight
-                    width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
-                    anchors.left: rectAddressLeft.right
-                    anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-                    Components.LabelTextBoxForm{
-                        propertyDateText.text: "Identificação do código PIN"
-                        propertyDateField.text: "3"
-                    }
-                }
-            }
-
-            Item {
-                id: rowStateAddress
-                width: parent.width
-                height: Constants.SIZE_TEXT_LABEL
-                        + Constants.SIZE_TEXT_V_SPACE
-                        + 2 * Constants.SIZE_TEXT_FIELD
-                anchors.top: rowAddress.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-                Item {
-                    id: rectStateAddress
-                    width: parent.width
-                    Components.LabelTextBoxForm {
-                        propertyDateText.text: "Estado do Código PIN"
-                        propertyDateField.text: "Restão 3 tentativas"
-                    }
-                }
-            }
-
-            Item {
-                id: rowBottomAddress
-                width: parent.width
-                height: Constants.SIZE_V_BOTTOM_COMPONENT
-                anchors.top: rowStateAddress.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                focus: true
             }
         }
     }
 
-    Frame {
-        id: frameTest
-        x: 0
-        y: 207
-        width: parent.width
-        height: 76
-    }
+    /* Pin Codes Right */
+    Item {
+        id: pinCodesViewRight
+        width: parent.width * 0.5
+        height: parent.height
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: pinCodesViewLeft.right
 
-    Frame {
-        id: frameModify
-        x: 0
-        y: 289
-        width: parent.width
-        height: 195
-    }
+        Item{
+            width: parent.width
+            height:rectType.height + rectPinID.height + rectState.height
+                   + buttonTest.height + buttonModify.height
+                   + 4 * Constants.SIZE_ROW_V_SPACE
+            anchors.verticalCenter: parent.verticalCenter
 
-    TextField {
-        id: textFieldTest
-        x: 156
-        y: 225
-        width: 100
-        height: 40
-        color: Constants.COLOR_TEXT_BODY
-        font.capitalization: Font.AllUppercase
-        echoMode: TextInput.Password
-        font.family: lato.name
-    }
+            Item{
+                id: rectType
+                width: parent.width
+                height: Constants.SIZE_TEXT_LABEL
+                        + Constants.SIZE_TEXT_V_SPACE
+                        + 2 * Constants.SIZE_TEXT_FIELD
 
-    TextField {
-        id: textFieldNew
-        x: 156
-        y: 363
-        width: 100
-        height: 40
-        echoMode:TextInput.Password
-    }
+                Components.LabelTextBoxForm{
+                    propertyDateText.text: "Tipo de Código PIN"
+                    propertyDateField.text: "PIN Autenticação"
+                }
+            }
+            Item{
+                id: rectPinID
+                width: parent.width
+                height: Constants.SIZE_TEXT_LABEL
+                        + Constants.SIZE_TEXT_V_SPACE
+                        + 2 * Constants.SIZE_TEXT_FIELD
 
-    TextField {
-        id: textFieldCurrent
-        x: 156
-        y: 309
-        width: 100
-        height: 40
-        echoMode:TextInput.Password
-        color: Constants.COLOR_TEXT_BODY
-        font.capitalization: Font.AllUppercase
-        font.family: lato.name
-    }
+                anchors.top: rectType.bottom
+                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                Components.LabelTextBoxForm{
+                    propertyDateText.text: "Identificação do código PIN"
+                    propertyDateField.text: "1"
+                }
+            }
+            Item {
+                id: rectState
+                width: parent.width
+                height: Constants.SIZE_TEXT_LABEL
+                        + Constants.SIZE_TEXT_V_SPACE
+                        + 2 * Constants.SIZE_TEXT_FIELD
 
-    Text {
-        id: textConfimr
-        x: 14
-        y: 431
-        color: Constants.COLOR_TEXT_BODY
-        text: "Confirmar novo PIN"
-        font.capitalization: Font.AllUppercase
-        font.family: lato.name
-        font.pixelSize: Constants.SIZE_TEXT_LABEL
-    }
+                anchors.top: rectPinID.bottom
+                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                Components.LabelTextBoxForm {
+                    propertyDateText.text: "Estado do Código PIN"
+                    propertyDateField.text: "Restão 3 tentativas"
+                }
+            }
+            Button {
+                id: buttonTest
+                width: 150
+                height: 40
+                anchors.top: rectState.bottom
+                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "Testar PIN"
+            }
 
-    Text {
-        id: textNew
-        x: 85
-        y: 377
-        color: Constants.COLOR_TEXT_BODY
-        text: "Novo PIN"
-        font.capitalization: Font.AllUppercase
-        font.family: lato.name
-        font.pixelSize: Constants.SIZE_TEXT_LABEL
-    }
-
-    Text {
-        id: textInput
-        x: 83
-        y: 239
-        color: Constants.COLOR_TEXT_BODY
-        text: "PIN Atual"
-        font.capitalization: Font.AllUppercase
-        font.family: lato.name
-        font.pixelSize: Constants.SIZE_TEXT_LABEL
-    }
-
-    Button {
-        id: buttonModify
-        x: 300
-        y: 417
-        width: 150
-        height: 40
-        text: "Modificar PIN"
-    }
-
-    Text {
-        id: textCurrent
-        x: 83
-        y: 323
-        text: "PIN Atual"
-        font.capitalization: Font.AllUppercase
-        font.family: lato.name
-        color: Constants.COLOR_TEXT_BODY
-        font.pixelSize: Constants.SIZE_TEXT_LABEL
-    }
-
-    Button {
-        id: buttonTest
-        x: 300
-        y: 225
-        width: 150
-        height: 40
-        text: "Testar PIN"
-    }
-
-    TextField {
-        id: textFieldConfimr
-        x: 156
-        y: 417
-        width: 100
-        height: 40
-        echoMode:TextInput.Password
+            Button {
+                id: buttonModify
+                width: 150
+                height: 40
+                anchors.top: buttonTest.bottom
+                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "Modificar PIN"
+            }
+        }
     }
 }

@@ -59,5 +59,6 @@
         <file>components/Accordion.qml</file>
         <file>contentPages/definitions/PageDefinitionsUpdates.qml</file>
         <file>contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml</file>
+        <file>contentPages/security/PinCodesModel.qml</file>
     </qresource>
 </RCC>
