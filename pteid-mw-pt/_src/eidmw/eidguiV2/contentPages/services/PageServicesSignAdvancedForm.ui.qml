@@ -168,7 +168,7 @@ Item {
                         x: 72
                         height: Constants.SIZE_V_COMPONENTS
                         anchors.top: textFormatSign.bottom
-                        text: "PADES"
+                        text: "PDF"
                         anchors.topMargin: -12
                         checked: true
                         enabled: fileLoaded
@@ -179,8 +179,8 @@ Item {
                         height: Constants.SIZE_V_COMPONENTS
                         anchors.top: textFormatSign.bottom
                         anchors.left: radioButtonPADES.right
-                        text: "XADES"
-                        anchors.leftMargin: 19
+                        text: "OUTROS FICHEIROS"
+                        anchors.leftMargin: 10
                         anchors.topMargin: -12
                         enabled: fileLoaded
                         font.family: lato.name
