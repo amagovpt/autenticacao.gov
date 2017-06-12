@@ -21,8 +21,6 @@
         <file>contentPages/help/PageHelpAboutForm.ui.qml</file>
         <file>contentPages/help/PageHelpDocOnline.qml</file>
         <file>contentPages/help/PageHelpDocOnlineForm.ui.qml</file>
-        <file>contentPages/help/PageHelpUpdates.qml</file>
-        <file>contentPages/help/PageHelpUpdatesForm.ui.qml</file>
         <file>contentPages/definitions/PageDefinitionsParameters.qml</file>
         <file>contentPages/definitions/PageDefinitionsParametersForm.ui.qml</file>
         <file>contentPages/home/PageHome.qml</file>
@@ -59,5 +57,7 @@
         <file>contentPages/definitions/PageDefinitionsAppForm.ui.qml</file>
         <file>images/logo_cor400.png</file>
         <file>components/Accordion.qml</file>
+        <file>contentPages/definitions/PageDefinitionsUpdates.qml</file>
+        <file>contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml</file>
     </qresource>
 </RCC>

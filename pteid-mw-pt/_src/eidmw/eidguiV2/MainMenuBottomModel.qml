@@ -16,6 +16,11 @@ ListModel {
                 subName: "Configuração da aplicação"
                 expand: false
                 url: "contentPages/definitions/PageDefinitionsApp.qml"
+            },
+            ListElement {
+                subName: "Atualizações"
+                expand: false
+                url: "contentPages/definitions/PageDefinitionsUpdates.qml"
             }
         ]
     }
@@ -29,11 +34,6 @@ ListModel {
                 subName: "Documentação Online"
                 expand: false
                 url: "contentPages/help/PageHelpDocOnline.qml"
-            },
-            ListElement {
-                subName: "Atualizações"
-                expand: false
-                url: "contentPages/help/PageHelpUpdates.qml"
             },
             ListElement {
                 subName: "Acerca"
