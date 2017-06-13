@@ -3,6 +3,7 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.0
+import QtGraphicalEffects 1.0
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -32,6 +33,8 @@ Item {
         width: parent.width
         height: parent.height - Constants.SIZE_V_BOTTOM_COMPONENT
 
+        x: Constants.SIZE_ROW_H_SPACE
+
         DropArea {
             id: dropArea;
             anchors.fill: parent;
@@ -49,27 +52,57 @@ Item {
         Item{
             id: rectMainLeftFile
             width: parent.width * 0.5 - Constants.SIZE_ROW_H_SPACE
-            height: listViewFiles.height
-                    + itemBottonsFiles.height
-                    + 50
-            x: Constants.SIZE_ROW_H_SPACE
+            height: titleSelectFile.height
+                    + rectFile.height
 
-            GroupBox {
-                id: groupBoxFile
+            DropShadow {
+                anchors.fill: rectFile
+                horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                radius: Constants.FORM_SHADOW_RADIUS
+                samples: Constants.FORM_SHADOW_SAMPLES
+                color: Constants.COLOR_FORM_SHADOW
+                source: rectFile
+            }
+            RectangularGlow {
+                id: effectPhoto
+                anchors.fill: rectFile
+                glowRadius: Constants.FORM_GROW_RADIUS
+                spread: Constants.FORM_GLOW_SPREAD
+                color: Constants.COLOR_FORM_GLOW
+                cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+            }
+
+            Text {
+                id: titleSelectFile
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                height: Constants.SIZE_TEXT_LABEL
+                text: "Selecione os ficheiros a assinar"
+            }
+            Rectangle {
+                id: rectFile
                 width: parent.width
-                height: parent.height
-                title: "Selecione os ficheiros a assinar"
+                height: itemOptionsFiles.height +
+                        itemBottonsFiles.height
+
+                color: "white"
+                anchors.top: titleSelectFile.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
                 Item{
                     id: itemOptionsFiles
-                    width: parent.width
+                    width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
                     height: 4 * Constants.SIZE_V_COMPONENTS
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     ListView {
                         id: listViewFiles
+                        y: Constants.SIZE_TEXT_V_SPACE
                         width: parent.width;
-                        height: 4 * Constants.SIZE_V_COMPONENTS
+                        height: parent.height
                         clip: true
                         spacing: Constants.SIZE_LISTVIEW_SPACING
                         boundsBehavior: Flickable.StopAtBounds
@@ -98,14 +131,14 @@ Item {
                     MouseArea {
                         id: mouseAreaItemOptionsFiles
                         width: parent.width
-                        height: 4 * Constants.SIZE_V_COMPONENTS
+                        height: parent.height
                         enabled: !fileLoaded
                     }
 
                 }
                 Item{
                     id: itemBottonsFiles
-                    width: parent.width
+                    width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
                     height: Constants.SIZE_V_BOTTOM_COMPONENT
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: itemOptionsFiles.bottom
@@ -137,28 +170,60 @@ Item {
             id: rectMainLeftOptions
             width: parent.width * 0.5 - Constants.SIZE_ROW_H_SPACE
             height: mainItem.height - rectMainLeftFile.height
-                - Constants.SIZE_ROW_V_SPACE
+                - 3 * Constants.SIZE_ROW_V_SPACE
             anchors.top: rectMainLeftFile.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-            x: Constants.SIZE_ROW_H_SPACE
+            anchors.topMargin: 3 * Constants.SIZE_ROW_V_SPACE
+            y: 188
 
-            GroupBox {
-                id: groupBoxOptions
-                anchors.fill: parent
-                title: "Configurações"
+            DropShadow {
+                anchors.fill: rectOptions
+                horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                radius: Constants.FORM_SHADOW_RADIUS
+                samples: Constants.FORM_SHADOW_SAMPLES
+                color: Constants.COLOR_FORM_SHADOW
+                source: rectOptions
+            }
+            RectangularGlow {
+                id: effectTitleConf
+                anchors.fill: rectOptions
+                glowRadius: Constants.FORM_GROW_RADIUS
+                spread: Constants.FORM_GLOW_SPREAD
+                color: Constants.COLOR_FORM_GLOW
+                cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+            }
+
+            Text {
+                id: titleConf
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                height: Constants.SIZE_TEXT_LABEL
+                text: "Configurações"
+            }
+
+            Rectangle {
+                id: rectOptions
+                width: parent.width
+                height: parent.height - titleConf.height - Constants.SIZE_TEXT_V_SPACE
                 enabled: fileLoaded
+                color: "white"
+                anchors.top: titleConf.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
                 Item{
                     id: itemOptions
-                    width: parent.width
+                    width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                    y: Constants.SIZE_TEXT_FIELD_V_SPACE
+                    height: parent.height
                     anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
                     Text {
                         id: textFormatSign
                         text: "Formato\nda Assinatura"
                         font.pixelSize: Constants.SIZE_TEXT_LABEL
-                        color: Constants.COLOR_TEXT_LABEL
+                        color: Constants.COLOR_TEXT_BODY
                         height: Constants.SIZE_TEXT_LABEL
                         anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
                         font.family: lato.name
@@ -297,10 +362,42 @@ Item {
             anchors.left: rectMainLeftFile.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
-            GroupBox {
-                id: groupPre
-                anchors.fill: parent
-                title: qsTr("Pré-Visualização")
+            DropShadow {
+                anchors.fill: rectPre
+                horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                radius: Constants.FORM_SHADOW_RADIUS
+                samples: Constants.FORM_SHADOW_SAMPLES
+                color: Constants.COLOR_FORM_SHADOW
+                source: rectPre
+            }
+            RectangularGlow {
+                id: effectPre
+                anchors.fill: rectPre
+                glowRadius: Constants.FORM_GROW_RADIUS
+                spread: Constants.FORM_GLOW_SPREAD
+                color: Constants.COLOR_FORM_GLOW
+                cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+            }
+
+            Text {
+                id: titlePre
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                height: Constants.SIZE_TEXT_LABEL
+                text: "Pré-Visualização"
+            }
+
+            Rectangle {
+                id: rectPre
+                width: parent.width
+                height: parent.height - titlePre.height - Constants.SIZE_TEXT_V_SPACE
+                enabled: fileLoaded
+                color: "white"
+                anchors.top: titlePre.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
                 Text {
                     id: textDragMsgImg
