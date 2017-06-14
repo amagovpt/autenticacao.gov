@@ -330,6 +330,9 @@ ApplicationWindow {
                 x: parent.width * Constants.IMAGE_ARROW_MAIN_MENU_RELATIVE
                 anchors.verticalCenter: parent.verticalCenter
                 source: getMainMenuArrowSource(index, mouseAreaMainMenu.containsMouse)
+                visible: main.state === "STATE_HOME" ?
+                             false:
+                             true
             }
             Rectangle {
                 id: mainMenuViewHorizontalLine
