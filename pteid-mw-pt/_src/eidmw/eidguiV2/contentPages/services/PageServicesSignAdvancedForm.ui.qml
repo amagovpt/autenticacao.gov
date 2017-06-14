@@ -13,7 +13,6 @@ Item {
     id: mainItem
     anchors.fill: parent
 
-    property string fileName: ""
     property variant filesArray:[]
     property bool fileLoaded: false
 
