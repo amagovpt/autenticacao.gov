@@ -13,7 +13,7 @@ PageDefinitionsParametersForm {
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
         Label {
-            text: "Só é possivel selecionar um fichieri de assinatura personalizada"
+            text: "Só é possivel selecionar um fichiero de assinatura personalizada"
         }
     }
 
@@ -29,8 +29,11 @@ PageDefinitionsParametersForm {
                 dialog.open()
             }else{
                 console.log("Adding file: " + filesArray[0])
+                var path =  filesArray[0]
+                //  Get the path itself without a regex
+                path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
                 filesModel.append({
-                                      "fileUrl": filesArray[0]
+                                      "fileUrl": path
                                   })
             }
         }
@@ -45,8 +48,11 @@ PageDefinitionsParametersForm {
         onAccepted: {
             console.log("You chose file(s): " + propertyFileDialog.fileUrls)
             console.log("Adding file: " + propertyFileDialog.fileUrls[0])
+            var path = propertyFileDialog.fileUrls[0];
+            //  Get the path itself without a regex
+            path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
             filesModel.append({
-                                  "fileUrl": propertyFileDialog.fileUrls[0]
+                                  "fileUrl": path
                               })
         }
         onRejected: {

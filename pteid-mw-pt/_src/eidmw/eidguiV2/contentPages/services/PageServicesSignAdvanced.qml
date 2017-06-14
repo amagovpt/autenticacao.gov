@@ -8,15 +8,18 @@ PageServicesSignAdvancedForm {
     propertyDropArea {
 
         onEntered: {
-            console.log("You chose file(s): " + drag.urls.toString());
+            console.log("You chose file(s): " + drag.urls);
             filesArray = drag.urls
             console.log("Num files: "+filesArray.length);
         }
         onDropped: {
             for(var i = 0; i < filesArray.length; i++){
                 console.log("Adding file: " + filesArray[i])
+                var path =  filesArray[i]
+                //  Get the path itself without a regex
+                path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
                 filesModel.append({
-                                      "fileUrl": filesArray[i]
+                                      "fileUrl": path
                                   })
             }
             // Force scroll and focus to the last item addded
@@ -35,8 +38,11 @@ PageServicesSignAdvancedForm {
 
             for(var i = 0; i < propertyFileDialog.fileUrls.length; i++){
                 console.log("Adding file: " + propertyFileDialog.fileUrls[i])
+                var path = propertyFileDialog.fileUrls[i];
+                //  Get the path itself without a regex
+                path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
                 filesModel.append({
-                                      "fileUrl": propertyFileDialog.fileUrls[i]
+                                      "fileUrl": path
                                   })
             }
 
