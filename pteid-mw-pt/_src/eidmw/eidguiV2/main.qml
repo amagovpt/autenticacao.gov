@@ -22,6 +22,13 @@ ApplicationWindow {
     FontLoader { id: karma; source: "qrc:/fonts/karma/Karma-Medium.ttf" }
     FontLoader { id: lato; source: "qrc:/fonts/lato/Lato-Regular.ttf" }
 
+    onWidthChanged: {
+        console.log("width: " + width + "height" + height)
+        mainFormID.propertyMainMenuView.width = getMainMenuWidth(width)
+        mainFormID.propertySubMenuView.width = getSubMenuWidth(width)
+        mainFormID.propertyContentPagesView.width = getContentPagesMenuWidth(width)
+    }
+
     MainForm {
         id: mainFormID
         anchors.fill: parent
@@ -47,30 +54,9 @@ ApplicationWindow {
             },
             State{
                 name: "STATE_HOME"
-                PropertyChanges {
-                    target: mainFormID.propertyMainMenuView
-                    width: parent.width
-                }
-                PropertyChanges {
-                    target: mainFormID.propertySubMenuView
-                    width:  0
-                }
             },
             State{
                 name: "STATE_EXPAND"
-                PropertyChanges {
-                    target: mainFormID.propertyMainMenuView
-                    width: parent.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
-                }
-                PropertyChanges {
-                    target: mainFormID.propertySubMenuView
-                    width:  0
-                }
-                PropertyChanges {
-                    target: mainFormID.propertyContentPagesView
-                    width:  parent.width
-                            * (Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE + Constants.SUB_MENU_VIEW_RELATIVE_SIZE)
-                }
             },
             State{
                 name: "STATE_NORMAL"
@@ -92,6 +78,7 @@ ApplicationWindow {
                 NumberAnimation
                 {
                     id: animationReduceMainMenuWidthFirstRun
+                    target: mainFormID.propertyMainMenuView
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
@@ -131,6 +118,7 @@ ApplicationWindow {
                 NumberAnimation
                 {
                     id: animationReduceMainMenuWidth
+                    target: mainFormID.propertyMainMenuView
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
@@ -170,6 +158,7 @@ ApplicationWindow {
                 NumberAnimation
                 {
                     id: animationIncreaseMainMenuWidth
+                    target: mainFormID.propertyMainMenuView
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width;
@@ -465,6 +454,62 @@ ApplicationWindow {
 
     Component.onCompleted: {
         console.log("Window mainWindow Completed")
+    }
+
+    function getMainMenuWidth(parentWidth){
+        var handColor
+
+        switch(mainFormID.state) {
+        case "STATE_FIRST_RUN":
+            handColor = parentWidth * 2 * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
+            break;
+        case "STATE_HOME":
+            handColor = parentWidth
+            break;
+        case "STATE_EXPAND":
+            handColor = parentWidth * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
+            break;
+        default: //STATE_NORMAL
+            handColor = parentWidth * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
+        }
+        return handColor
+    }
+    function getSubMenuWidth(parentWidth){
+        var handColor
+
+        switch(mainFormID.state) {
+        case "STATE_FIRST_RUN":
+            handColor = 0
+            break;
+        case "STATE_HOME":
+            handColor = 0
+            break;
+        case "STATE_EXPAND":
+            handColor = 0
+            break;
+        default: //STATE_NORMAL
+            handColor = parentWidth * Constants.SUB_MENU_VIEW_RELATIVE_SIZE
+        }
+        return handColor
+    }
+    function getContentPagesMenuWidth(parentWidth){
+        var handColor
+
+        switch(mainFormID.state) {
+        case "STATE_FIRST_RUN":
+            handColor = parentWidth * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
+            break;
+        case "STATE_HOME":
+            handColor = 0
+            break;
+        case "STATE_EXPAND":
+            handColor = parentWidth * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE +
+                    parentWidth * Constants.SUB_MENU_VIEW_RELATIVE_SIZE
+            break;
+        default: //STATE_NORMAL
+            handColor = parentWidth * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
+        }
+        return handColor
     }
 
     function getIsVisibleSubMenuViewHorizontalLine(index)
