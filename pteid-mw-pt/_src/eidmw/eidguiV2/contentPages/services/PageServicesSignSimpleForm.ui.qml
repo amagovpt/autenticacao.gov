@@ -1,6 +1,7 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
 import QtQuick.Dialogs 1.0
+import QtGraphicalEffects 1.0
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -21,7 +22,9 @@ Item {
     Item {
         id: rowMain
         width: parent.width
-        height: parent.height - Constants.SIZE_V_BOTTOM_COMPONENT - Constants.SIZE_ROW_V_SPACE
+        height: parent.height - Constants.SIZE_V_BOTTOM_COMPONENT
+
+        x: Constants.SIZE_ROW_H_SPACE
 
         DropArea {
             id: dropArea;
@@ -41,14 +44,44 @@ Item {
             id: rectMain
             width: parent.width
             height: parent.height
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            x: Constants.SIZE_ROW_H_SPACE
-            GroupBox {
-                id: groupPre
-                anchors.fill: parent
-                title: fileLoaded ?
+
+            DropShadow {
+                anchors.fill: rectPre
+                horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                radius: Constants.FORM_SHADOW_RADIUS
+                samples: Constants.FORM_SHADOW_SAMPLES
+                color: Constants.COLOR_FORM_SHADOW
+                source: rectPre
+            }
+            RectangularGlow {
+                id: effectRectPre
+                anchors.fill: rectPre
+                glowRadius: Constants.FORM_GROW_RADIUS
+                spread: Constants.FORM_GLOW_SPREAD
+                color: Constants.COLOR_FORM_GLOW
+                cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+            }
+            Text {
+                id: titlePre
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                height: Constants.SIZE_TEXT_LABEL
+                text: fileLoaded ?
                            "Selecione o lugar da assinatura" :
                            "Selecione o ficheiro"
+            }
+
+            Rectangle {
+                id: rectPre
+                width: parent.width
+                height: parent.height - titlePre.height - Constants.SIZE_TEXT_V_SPACE
+                color: "white"
+                anchors.top: titlePre.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
                 Text {
                     id: textDragMsgImg
                     anchors.fill: parent
@@ -84,8 +117,6 @@ Item {
         width: parent.width
         height: Constants.SIZE_V_BOTTOM_COMPONENT
         anchors.top: rowMain.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-        anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
         x: Constants.SIZE_ROW_H_SPACE
 
         Item{
@@ -96,6 +127,7 @@ Item {
             Button {
                 id: buttonRemove
                 text: "Remover ficheiro"
+                y: 5
                 width: parent.width
                 height: parent.height
                 anchors.right: parent.right
@@ -113,6 +145,7 @@ Item {
 
             Button {
                 text: "Assinar"
+                y: 5
                 width: parent.width
                 height: parent.height
                 anchors.right: parent.right
