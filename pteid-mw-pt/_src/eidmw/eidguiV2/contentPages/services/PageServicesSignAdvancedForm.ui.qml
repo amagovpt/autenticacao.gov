@@ -30,7 +30,7 @@ Item {
     Item {
         id: rowMain
         width: parent.width
-        height: parent.height - Constants.SIZE_V_BOTTOM_COMPONENT
+        height: parent.height - rowBottom.height
 
         x: Constants.SIZE_ROW_H_SPACE
 
@@ -170,7 +170,7 @@ Item {
             id: rectMainLeftOptions
             width: parent.width * 0.5 - Constants.SIZE_ROW_H_SPACE
             height: mainItem.height - rectMainLeftFile.height
-                - 3 * Constants.SIZE_ROW_V_SPACE
+                    - 3 * Constants.SIZE_ROW_V_SPACE
             anchors.top: rectMainLeftFile.bottom
             anchors.topMargin: 3 * Constants.SIZE_ROW_V_SPACE
             y: 188
@@ -479,21 +479,53 @@ Item {
     Item {
         id: rowBottom
         width: parent.width
-        height: Constants.SIZE_V_BOTTOM_COMPONENT
+        height: 2 * Constants.SIZE_V_BOTTOM_COMPONENT
         anchors.top: rowMain.bottom
         anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
+        x: Constants.SIZE_ROW_H_SPACE
+
         Item{
             id: rectSignLeft
-            width: parent.width  * 0.50
+            width: parent.width * 0.50
             height: parent.height
         }
         Item{
-            id: rectSignRight
+            id: rectSignOptions
             width: parent.width * 0.50
-            height: parent.height
+            height: Constants.SIZE_V_BOTTOM_COMPONENT
             anchors.left: rectSignLeft.right
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+
+            Item{
+                width: checkSignReduced.width + checkSignShow.width
+                anchors.horizontalCenter: parent.horizontalCenter
+                CheckBox {
+                    id: checkSignReduced
+                    text: "Assinatura reduzida"
+                    height: 25
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                    enabled: fileLoaded
+                }
+                CheckBox {
+                    id: checkSignShow
+                    text: "Assinatura visivel"
+                    height: 25
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                    anchors.left: checkSignReduced.right
+                    enabled: fileLoaded
+                }
+            }
+        }
+        Item{
+            id: rectSign
+            width: parent.width * 0.50
+            height: Constants.SIZE_V_BOTTOM_COMPONENT
+            anchors.left: rectSignLeft.right
+            anchors.top: rectSignOptions.bottom
 
             Button {
                 text: "Assinar"
