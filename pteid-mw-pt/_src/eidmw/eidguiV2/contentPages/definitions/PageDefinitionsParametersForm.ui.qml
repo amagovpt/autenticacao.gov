@@ -212,6 +212,7 @@ clique para procurar o ficheiro
                         enabled: fileLoaded
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        font.capitalization: Font.MixedCase
                     }
                 }
                 Item{
@@ -232,6 +233,7 @@ clique para procurar o ficheiro
                         enabled: !fileLoaded
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        font.capitalization: Font.MixedCase
                     }
                 }
             }

@@ -128,10 +128,10 @@ Item {
         id: rowNotesCount
         width: parent.width
         height: Constants.SIZE_TEXT_LABEL
-                + Constants.SIZE_TEXT_V_SPACE
-                + 3 * Constants.SIZE_TEXT_FIELD
+                + 2 * Constants.SIZE_TEXT_V_SPACE
+                + 2 * Constants.SIZE_TEXT_FIELD
         anchors.top: rowText.bottom
-        anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
         Item{
             id: rectNotesCount
@@ -153,9 +153,12 @@ Item {
             Button {
                 text: "Gravar Notas"
                 width: parent.width
-                height: parent.height
+                height:Constants.SIZE_V_BOTTOM_COMPONENT
                 anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
+                font.capitalization: Font.MixedCase
             }
         }
     }

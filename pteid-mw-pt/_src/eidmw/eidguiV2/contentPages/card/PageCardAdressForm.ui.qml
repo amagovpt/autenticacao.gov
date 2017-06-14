@@ -273,11 +273,11 @@ Item {
             Text {
                 id: dateField
                 y: Constants.SIZE_TEXT_FIELD_V_SPACE
-                text: "Para confirmar a alteração de morada, pressione o botão 'alteração de morada'"
+                text: "Para confirmar a alteração de morada, pressione o botão alteração de morada"
                 width: parent.width
                 height: parent.height
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.capitalization: Font.AllUppercase
+                font.capitalization: Font.MixedCase
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
@@ -293,9 +293,11 @@ Item {
             Button {
                 text: "Alteração de morada"
                 width: parent.width
-                height: parent.height
+                height:Constants.SIZE_V_BOTTOM_COMPONENT
                 anchors.right: parent.right
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
+                font.capitalization: Font.MixedCase
             }
         }
     }

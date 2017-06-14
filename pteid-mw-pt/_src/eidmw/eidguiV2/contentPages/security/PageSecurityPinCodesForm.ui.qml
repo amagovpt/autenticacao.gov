@@ -98,21 +98,27 @@ Item {
             Button {
                 id: buttonTest
                 width: 150
-                height: 40
+                height:Constants.SIZE_V_BOTTOM_COMPONENT
                 anchors.top: rectState.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "Testar PIN"
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
             }
 
             Button {
                 id: buttonModify
                 width: 150
-                height: 40
+                height:Constants.SIZE_V_BOTTOM_COMPONENT
                 anchors.top: buttonTest.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "Modificar PIN"
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
             }
         }
     }

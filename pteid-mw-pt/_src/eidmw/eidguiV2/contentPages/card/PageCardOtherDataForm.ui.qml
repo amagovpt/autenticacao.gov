@@ -153,11 +153,11 @@ Item {
                 id: dateField
                 y: Constants.SIZE_TEXT_FIELD_V_SPACE
                 text: "Para verificar se o cartão não está suspenso ou revogado, deverá validar os certificados no \
-separador Certificados"
+menu Segurança - Certificados"
                 width: parent.width
                 height: parent.height
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.capitalization: Font.AllUppercase
+                font.capitalization: Font.MixedCase
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL

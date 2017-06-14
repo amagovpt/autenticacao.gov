@@ -128,11 +128,12 @@ Item {
                 text: "Remover ficheiro"
                 y: 5
                 width: parent.width
-                height: parent.height
+                height:Constants.SIZE_V_BOTTOM_COMPONENT
                 anchors.right: parent.right
                 enabled: fileLoaded
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
+                font.capitalization: Font.MixedCase
             }
         }
         Item{
@@ -146,11 +147,12 @@ Item {
                 text: "Assinar"
                 y: 5
                 width: parent.width
-                height: parent.height
+                height:Constants.SIZE_V_BOTTOM_COMPONENT
                 anchors.right: parent.right
                 enabled: fileLoaded
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
+                font.capitalization: Font.MixedCase
             }
         }
     }

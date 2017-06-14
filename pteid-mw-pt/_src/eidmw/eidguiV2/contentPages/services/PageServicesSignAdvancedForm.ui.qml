@@ -147,9 +147,9 @@ Item {
                         width: 150
                         height: Constants.SIZE_V_BOTTOM_COMPONENT
                         text: "Adicionar ficheiro"
-                        font.bold: false
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        font.capitalization: Font.MixedCase
                     }
                     Button {
                         id: buttonRemoveAll
@@ -157,10 +157,10 @@ Item {
                         height: Constants.SIZE_V_BOTTOM_COMPONENT
                         anchors.right: itemBottonsFiles.right
                         text: "Remover todos"
-                        font.bold: false
                         enabled: fileLoaded
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        font.capitalization: Font.MixedCase
                     }
                 }
             }
@@ -221,43 +221,49 @@ Item {
                     Text {
                         id: textFormatSign
                         text: "Formato\nda Assinatura"
-                        font.pixelSize: Constants.SIZE_TEXT_LABEL
                         color: Constants.COLOR_TEXT_BODY
                         height: Constants.SIZE_TEXT_LABEL
                         anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
                         font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
                     }
                     RadioButton {
                         id: radioButtonPADES
-                        x: 72
+                        x: 90
                         height: Constants.SIZE_V_COMPONENTS
                         anchors.top: textFormatSign.bottom
-                        text: "PDF"
+                        text: "Pdf"
                         anchors.topMargin: -12
                         checked: true
                         enabled: fileLoaded
                         font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
                     }
                     RadioButton {
                         id: radioButtonXADES
                         height: Constants.SIZE_V_COMPONENTS
                         anchors.top: textFormatSign.bottom
                         anchors.left: radioButtonPADES.right
-                        text: "OUTROS FICHEIROS"
+                        text: "Outros ficheiros"
                         anchors.leftMargin: 10
                         anchors.topMargin: -12
                         enabled: fileLoaded
                         font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
                     }
                     TextField {
                         id: textFieldReason
                         width: parent.width
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         anchors.top: radioButtonXADES.bottom
                         anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
                         placeholderText:"Escreva a razão"
                         enabled: fileLoaded
                         font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
                     }
                     TextField {
                         id: textFieldLocal
@@ -276,16 +282,22 @@ Item {
                         text: "Adicionar selo temporal"
                         enabled: fileLoaded
                         font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
                     }
                     Switch {
                         id: switchSignAdd
                         height: Constants.SIZE_V_COMPONENTS
                         anchors.top: switchSignTemp.bottom
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                         text: "Adicionar atributos profissionais"
                         enabled: fileLoaded
                         font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
                     }
                     Column {
+                        id: columAttributes
                         anchors.top: switchSignAdd.bottom
                         width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
                         x: 6 * Constants.SIZE_TEXT_FIELD_H_SPACE
@@ -295,60 +307,95 @@ Item {
                             text: "Engenheiro Civil"
                             height: 25
                             font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
                         }
                         CheckBox {
                             text: "Socio da Empresa Obras Prontas"
                             height: 25
                             font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
                         }
                         CheckBox {
                             id: checkBox
                             text: "Presidente do Clube Futebol da Terra"
                             height: 25
                             font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
+                        }
+                    }
+                    Row {
+                        id: row
+                        anchors.top: columAttributes.bottom
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                        width: parent.width
+                        height: 30
+                        spacing: 5
+                        x: 40
+                        visible: switchSignAdd.checked
+
+                        Switch {
+                            id: switchPreserv
+                            text: ""
+                            spacing: -10
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
+                            height: 30
+                        }
+                        Text {
+                            id: textPreserv1
+                            x: 35
+                            text: "Preservar"
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.bold: false
+                            font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
+                            color: Constants.COLOR_TEXT_BODY
+                        }
+                        Text {
+                            id: textPreserv2
+                            text: "durante"
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.bold: false
+                            font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
+                            color: Constants.COLOR_TEXT_BODY
+                            visible: switchPreserv.checked
+                        }
+                        ComboBox {
+                            id: comboBoxPreserve
+                            width: 80
+                            anchors.verticalCenter: parent.verticalCenter
+                            height: 30
+                            // textPreservAnos.text is related with model values
+                            // if model is changed textPreservAnos.text may be changed
+                            model: [ "0", "1", "3", "5", "10" ]
+                            font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
+                            visible: switchPreserv.checked
+
+                        }
+                        Text {
+                            id: textPreservAnos
+                            text: comboBoxPreserve.currentIndex === 1 ?
+                                      "ano":
+                                      "anos"
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.bold: false
+                            font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
+                            color: Constants.COLOR_TEXT_BODY
+                            visible: switchPreserv.checked
                         }
 
-                        Item{
-                            anchors.top: checkBox.bottom
-                            height: 35
-
-                            Text {
-                                id: textPreserv
-                                text: "Preservar durante"
-                                verticalAlignment: Text.AlignVCenter
-                                font.pixelSize: Constants.SIZE_TEXT_LABEL
-                                color: Constants.COLOR_TEXT_LABEL
-                                height: parent.height
-                                x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                                anchors.verticalCenter: parent.verticalCenter
-                                font.family: lato.name
-                            }
-                            ComboBox {
-                                id: comboBoxPreserve
-                                anchors.left: textPreserv.right
-                                anchors.leftMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
-                                height: parent.height
-                                width: 80
-                                // textPreservAnos.text is related with model values
-                                // if model is changed textPreservAnos.text may be changed
-                                model: [ "0", "1", "3", "5", "10" ]
-                                font.family: lato.name
-                            }
-                            Text {
-                                id: textPreservAnos
-                                text: comboBoxPreserve.currentIndex === 1 ?
-                                          "ano":
-                                          "anos"
-                                verticalAlignment: Text.AlignVCenter
-                                font.pixelSize: Constants.SIZE_TEXT_LABEL
-                                color: Constants.COLOR_TEXT_LABEL
-                                height: parent.height
-                                anchors.left: comboBoxPreserve.right
-                                anchors.leftMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
-                                anchors.verticalCenter: parent.verticalCenter
-                                font.family: lato.name
-                            }
-                        }
                     }
                 }
             }
@@ -456,6 +503,7 @@ Item {
                 enabled: fileLoaded
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
+                font.capitalization: Font.MixedCase
             }
         }
     }
