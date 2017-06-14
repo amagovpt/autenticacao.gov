@@ -450,11 +450,34 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 source: getSubMenuArrowSource(index, mouseAreaSubMenu.containsMouse)
             }
+            Rectangle {
+                id: subMenuViewHorizontalLine
+                width: Constants.MAIN_MENU_LINE_H_SIZE
+                height: Constants.MAIN_MENU_LINE_V_SIZE
+                color: Constants.COLOR_MAIN_DARK_GRAY
+                visible: Boolean(getIsVisibleSubMenuViewHorizontalLine(index))
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.bottom
+            }
         }
     }
 
     Component.onCompleted: {
         console.log("Window mainWindow Completed")
+    }
+
+    function getIsVisibleSubMenuViewHorizontalLine(index)
+    {
+        var handVisible
+        if(main.propertySubMenuListView.count -1 === index ||
+                main.propertySubMenuListView.currentIndex === index ||
+                main.propertySubMenuListView.currentIndex -1 === index)
+        {
+            handVisible =  false
+        }else{
+            handVisible =  true
+        }
+        return handVisible
     }
 
     function getSubNameColor(index, containsMouse)
