@@ -36,6 +36,7 @@ Item {
             folder: shortcuts.home
             modality : Qt.WindowModal
             selectMultiple: false
+            nameFilters: [ "PDF document (*.pdf)", "All files (*)" ]
             Component.onCompleted: visible = false
         }
 
