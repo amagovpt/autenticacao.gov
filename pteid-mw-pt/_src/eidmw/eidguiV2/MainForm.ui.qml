@@ -43,7 +43,7 @@ Item {
             z: 1
             Image {
                 id: imageLogo
-                width: parent.width * Constants.IMAGE_LOGO_RELATIVE_H_SIZE
+                width: Constants.MAIN_MENU_IMAGE_WIDTH_SIZE
                 y: parent.height * Constants.IMAGE_LOGO_RELATIVE_V_POS
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -65,7 +65,7 @@ Item {
             }
             ListView {
                 id: mainMenuBottomListView
-                width: parent.width / 2
+                width: Constants.BOTTOM_MENU_WIDTH_SIZE
                 height: parent.height * Constants.MAIN_MENU_BOTTOM_RELATIVE_V_SIZE
                 y: parent.height * Constants.MAIN_MENU_BOTTOM_RELATIVE_V_POS
                 orientation: ListView.Horizontal
