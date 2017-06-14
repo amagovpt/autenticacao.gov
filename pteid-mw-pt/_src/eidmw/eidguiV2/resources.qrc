@@ -61,5 +61,6 @@
         <file>contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml</file>
         <file>contentPages/security/PinCodesModel.qml</file>
         <file>images/CCdemo_custom.png</file>
+        <file>components/TextBullet.qml</file>
     </qresource>
 </RCC>
