@@ -8,6 +8,7 @@ import "../../components" as Components
 
 Item {
     property alias propertyPinCodesListView: pinCodesListView
+    property alias propertyPinCodesViewLeft: pinCodesViewLeft
 
     anchors.fill: parent
 

@@ -9,7 +9,7 @@ PageSecurityPinCodesForm {
         id: pinCodesMenuDelegate
         Item {
             width: propertyPinCodesListView.width
-            height: main.propertyMainView.height * Constants.SUB_MENU_RELATIVE_V_ITEM_SIZE
+            height: propertyPinCodesViewLeft.height * Constants.SUB_MENU_RELATIVE_V_ITEM_SIZE
             MouseArea {
                 id: mouseAreaPinCodes
                 anchors.fill: parent
