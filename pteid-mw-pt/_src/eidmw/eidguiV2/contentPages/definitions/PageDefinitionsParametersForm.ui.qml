@@ -180,7 +180,7 @@ Item {
                     text:
                         "Arraste para esta zona o ficheiro da assinatura personalizada
 ou
-click para procurar o ficheiro
+clique para procurar o ficheiro
 ( Dimensão máxima da imagem: 185 x 41 px)"
                     font.bold: true
                     wrapMode: Text.WordWrap

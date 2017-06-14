@@ -116,7 +116,7 @@ Item {
                         Text {
                             id: textDragMsgListView
                             anchors.fill: parent
-                            text: "Arraste para esta zona o ficheiro a assinar \nou\n click para procurar o ficheiro"
+                            text: "Arraste para esta zona o ficheiro a assinar \nou\n clique para procurar o ficheiro"
                             font.bold: true
                             wrapMode: Text.WordWrap
                             horizontalAlignment: Text.AlignHCenter
@@ -401,7 +401,7 @@ Item {
                 Text {
                     id: textDragMsgImg
                     anchors.fill: parent
-                    text: "Arraste para esta zona o ficheiro a assinar \nou\n click para procurar o ficheiro"
+                    text: "Arraste para esta zona o ficheiro a assinar \nou\n clique para procurar o ficheiro"
                     font.bold: true
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter
