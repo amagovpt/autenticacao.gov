@@ -1,6 +1,7 @@
 import QtQuick 2.6
 import QtQuick 2.0
 import QtQuick.Window 2.2
+import QtGraphicalEffects 1.0
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -19,14 +20,45 @@ Item {
     property alias propertyTextStatus: textStatus
 
     Item {
-        id: rowTop
+        id: main
         width: parent.width
         height: parent.height
 
-        Item{
+        DropShadow {
+            anchors.fill: rectTop
+            horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+            verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+            radius: Constants.FORM_SHADOW_RADIUS
+            samples: Constants.FORM_SHADOW_SAMPLES
+            color: Constants.COLOR_FORM_SHADOW
+            source: rectTop
+        }
+        RectangularGlow {
+            id: effectRectTop
+            anchors.fill: rectTop
+            glowRadius: Constants.FORM_GROW_RADIUS
+            spread: Constants.FORM_GLOW_SPREAD
+            color: Constants.COLOR_FORM_GLOW
+            cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+        }
+        Text {
+            id: titleCertificatesTitle
+            x: Constants.SIZE_TEXT_FIELD_H_SPACE
+            font.pixelSize: Constants.SIZE_TEXT_LABEL
+            font.family: lato.name
+            color: Constants.COLOR_TEXT_LABEL
+            height: Constants.SIZE_TEXT_LABEL
+            text: "Selecione o certificado"
+        }
+
+        Rectangle{
             id: rectTop
             width: parent.width
-            height: parent.height * 0.4
+            height: parent.height * 0.4 - titleCertificatesTitle.height
+            color: "white"
+            anchors.top: titleCertificatesTitle.bottom
+            anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
             Components.Accordion {
                 id: acordion
                 anchors.fill: parent
