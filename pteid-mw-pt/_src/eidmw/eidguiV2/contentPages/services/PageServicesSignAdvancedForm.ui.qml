@@ -281,7 +281,7 @@ Item {
                         id: switchSignAdd
                         height: Constants.SIZE_V_COMPONENTS
                         anchors.top: switchSignTemp.bottom
-                        text: "Adicionar atribtutos profissionais"
+                        text: "Adicionar atributos profissionais"
                         enabled: fileLoaded
                         font.family: lato.name
                     }
