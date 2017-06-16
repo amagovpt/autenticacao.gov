@@ -12,7 +12,7 @@ import "scripts/Constants.js" as Constants
 Window {
     id: mainWindow
     visible: true
-    flags: Qt.FramelessWindowHint
+    flags: Qt.Window | Qt.CustomizeWindowHint
 
     width: Constants.SCREEN_MINIMUM_WIDTH
     height: Constants.SCREEN_MINIMUM_HEIGHT
