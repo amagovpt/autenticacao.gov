@@ -39,6 +39,7 @@
 ****************************************************************************/
 
 import QtQuick 2.6
+import QtQuick.Window 2.1
 
 /* Constants imports */
 import "scripts/Constants.js" as Constants
@@ -86,9 +87,10 @@ Item {
                 verticalCenter: parent.verticalCenter
             }
             source: "images/maximize.png"
+
             MouseArea {
                 anchors.fill: parent
-                onClicked: mainWindow.showMaximized()
+                onClicked: getScreenState()
             }
         }
         Image {
@@ -125,6 +127,16 @@ Item {
                 mainWindow.x = appStartPos.x+delta.x;
                 mainWindow.y = appStartPos.y+delta.y;
             }
+        }
+
+    }
+    function getScreenState(){
+        if(mainWindow.visibility === Window.FullScreen ){
+            console.log("isFullScreen"+ mainWindow.visibility)
+            mainWindow.showNormal()
+        }else{
+            console.log("not isFullScreen" + mainWindow.visibility)
+            mainWindow.showFullScreen()
         }
     }
 }
