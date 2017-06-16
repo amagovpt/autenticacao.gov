@@ -4,13 +4,15 @@ import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
 import QtQuick.Controls.Universal 2.1
 import Qt.labs.settings 1.0
+import QtQuick.Window 2.2
 
 /* Constants imports */
 import "scripts/Constants.js" as Constants
 
-ApplicationWindow {
+Window {
     id: mainWindow
     visible: true
+    flags: Qt.FramelessWindowHint
 
     width: Constants.SCREEN_MINIMUM_WIDTH
     height: Constants.SCREEN_MINIMUM_HEIGHT
@@ -31,7 +33,6 @@ ApplicationWindow {
 
     MainForm {
         id: mainFormID
-        anchors.fill: parent
 
         //************************************************************************/
         //**                  states

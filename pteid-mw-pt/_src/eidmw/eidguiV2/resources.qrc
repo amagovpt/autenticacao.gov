@@ -62,5 +62,9 @@
         <file>contentPages/security/PinCodesModel.qml</file>
         <file>images/CCdemo_custom.png</file>
         <file>components/TextBullet.qml</file>
+        <file>TitleBar.qml</file>
+        <file>images/maximize.png</file>
+        <file>images/minimize.png</file>
+        <file>images/quit.png</file>
     </qresource>
 </RCC>

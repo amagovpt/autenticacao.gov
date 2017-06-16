@@ -3,7 +3,8 @@ TEMPLATE = app
 QT += quick quickcontrols2
 CONFIG += c++11
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    appcontroller.cpp
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -31,3 +32,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES +=
+
+HEADERS += \
+    appcontroller.h

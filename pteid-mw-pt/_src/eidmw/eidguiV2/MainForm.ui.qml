@@ -5,11 +5,6 @@ import QtQuick.Layouts 1.3
 import "scripts/Constants.js" as Constants
 
 Item {
-    width: Constants.SCREEN_MINIMUM_WIDTH
-    height: Constants.SCREEN_MINIMUM_HEIGHT
-    Layout.minimumWidth: Constants.SCREEN_MINIMUM_WIDTH
-    Layout.minimumHeight: Constants.SCREEN_MINIMUM_HEIGHT
-
     anchors.fill: parent
 
     property alias propertyMainView: mainView
@@ -27,11 +22,21 @@ Item {
 
     property alias propertyImageLogo : mouseAreaImageLogo
 
+     /* Title bar */
+    TitleBar {
+        id: titleBar;
+        width: parent.width;
+        height: Constants.TITLE_BAR_SIZE;
+        opacity: 1
+    }
+
     /* Main View */
     Item {
 
         id: mainView
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height - Constants.TITLE_BAR_SIZE
+        y: Constants.TITLE_BAR_SIZE
 
         /* Main Menu View */
         Rectangle {
