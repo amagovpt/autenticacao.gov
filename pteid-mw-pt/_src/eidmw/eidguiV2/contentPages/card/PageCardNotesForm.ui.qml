@@ -71,14 +71,16 @@ Item {
                 samples: Constants.FORM_SHADOW_SAMPLES
                 color: Constants.COLOR_FORM_SHADOW
                 source: rectFieldFlick
+                spread: Constants.FORM_SHADOW_SPREAD
+                opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
             }
             RectangularGlow {
-                id: effectGlowFlick
                 anchors.fill: rectFieldFlick
-                glowRadius: Constants.FORM_GROW_RADIUS
+                glowRadius: Constants.FORM_GLOW_RADIUS
                 spread: Constants.FORM_GLOW_SPREAD
                 color: Constants.COLOR_FORM_GLOW
                 cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
             }
             Rectangle {
                 id: rectFieldFlick

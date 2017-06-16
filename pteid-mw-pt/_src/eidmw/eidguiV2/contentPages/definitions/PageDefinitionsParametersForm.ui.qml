@@ -47,14 +47,16 @@ Item {
                 samples: Constants.FORM_SHADOW_SAMPLES
                 color: Constants.COLOR_FORM_SHADOW
                 source: rectPreDefault
+                spread: Constants.FORM_SHADOW_SPREAD
+                opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
             }
             RectangularGlow {
-                id: effectPreDefault
                 anchors.fill: rectPreDefault
-                glowRadius: Constants.FORM_GROW_RADIUS
+                glowRadius: Constants.FORM_GLOW_RADIUS
                 spread: Constants.FORM_GLOW_SPREAD
                 color: Constants.COLOR_FORM_GLOW
                 cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
             }
 
             Text {
@@ -134,14 +136,16 @@ Item {
                 samples: Constants.FORM_SHADOW_SAMPLES
                 color: Constants.COLOR_FORM_SHADOW
                 source: rectPreCustom
+                spread: Constants.FORM_SHADOW_SPREAD
+                opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
             }
             RectangularGlow {
-                id: effectPreCustom
                 anchors.fill: rectPreCustom
-                glowRadius: Constants.FORM_GROW_RADIUS
+                glowRadius: Constants.FORM_GLOW_RADIUS
                 spread: Constants.FORM_GLOW_SPREAD
                 color: Constants.COLOR_FORM_GLOW
                 cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
             }
             Text {
                 id: titlePreCustom
