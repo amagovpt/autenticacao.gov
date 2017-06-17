@@ -43,7 +43,7 @@ seu Cartão de Cidadão e da sua Chave Móvel Digital."
         Text {
             id: text2
             anchors.top: text1.bottom
-            anchors.topMargin: 3 * Constants.SIZE_TEXT_BODY
+            anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
             text: "Aqui poderá, entre outras funcionalidades:"

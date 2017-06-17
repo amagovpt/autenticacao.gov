@@ -53,7 +53,7 @@ Item {
         color: Constants.COLOR_MAIN_BLUE
         Text {
             id: categoryText
-            x: 10
+            x: Constants.TITLE_BAR_H_ICON_SPACE
             anchors {
                 verticalCenter: parent.verticalCenter
             }
@@ -69,12 +69,16 @@ Item {
             width: Constants.TITLE_BAR_SIZE_ICON
             height: Constants.TITLE_BAR_SIZE_ICON
             anchors {
-                right: fullScreentButton.left; leftMargin: 10; rightMargin: 10
+                right: fullScreentButton.left;
+                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE; rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
                 verticalCenter: parent.verticalCenter
             }
             source: "images/minimize.png"
             MouseArea {
                 anchors.fill: parent
+                hoverEnabled: true
+                onEntered: minimizeButton.scale = 1.2
+                onExited: minimizeButton.scale = 1
                 onClicked: mainWindow.showMinimized()
             }
         }
@@ -83,13 +87,17 @@ Item {
             width: Constants.TITLE_BAR_SIZE_ICON
             height: Constants.TITLE_BAR_SIZE_ICON
             anchors {
-                right: quitButton.left; leftMargin: 10; rightMargin: 10
+                right: quitButton.left;
+                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE; rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
                 verticalCenter: parent.verticalCenter
             }
             source: "images/maximize.png"
 
             MouseArea {
                 anchors.fill: parent
+                hoverEnabled: true
+                onEntered: fullScreentButton.scale = 1.2
+                onExited: fullScreentButton.scale = 1
                 onClicked: getScreenState()
             }
         }
@@ -98,12 +106,16 @@ Item {
             width: Constants.TITLE_BAR_SIZE_ICON
             height: Constants.TITLE_BAR_SIZE_ICON
             anchors {
-                right: parent.right; leftMargin: 10; rightMargin: 10
+                right: parent.right;
+                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE; rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
                 verticalCenter: parent.verticalCenter
             }
             source: "images/quit.png"
             MouseArea {
                 anchors.fill: parent
+                hoverEnabled: true
+                onEntered: quitButton.scale = 1.2
+                onExited: quitButton.scale = 1
                 onClicked: Qt.quit()
             }
         }
@@ -128,15 +140,14 @@ Item {
                 mainWindow.y = appStartPos.y+delta.y;
             }
         }
-
     }
     function getScreenState(){
-        if(mainWindow.visibility === Window.FullScreen ){
-            console.log("isFullScreen"+ mainWindow.visibility)
+        if(mainWindow.visibility === Window.Maximized ){
+            console.log("Screen is Maximized"+ mainWindow.visibility)
             mainWindow.showNormal()
         }else{
-            console.log("not isFullScreen" + mainWindow.visibility)
-            mainWindow.showFullScreen()
+            console.log("Screen is not Maximized" + mainWindow.visibility)
+            mainWindow.showMaximized()
         }
     }
 }

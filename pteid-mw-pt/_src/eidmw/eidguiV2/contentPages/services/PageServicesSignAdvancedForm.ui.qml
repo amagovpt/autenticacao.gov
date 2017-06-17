@@ -172,10 +172,9 @@ Item {
             id: rectMainLeftOptions
             width: parent.width * 0.5 - Constants.SIZE_ROW_H_SPACE
             height: mainItem.height - rectMainLeftFile.height
-                    - 3 * Constants.SIZE_ROW_V_SPACE
+                    - 2 * Constants.SIZE_ROW_V_SPACE
             anchors.top: rectMainLeftFile.bottom
-            anchors.topMargin: 3 * Constants.SIZE_ROW_V_SPACE
-            y: 188
+            anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
 
             DropShadow {
                 anchors.fill: rectOptions
@@ -334,7 +333,7 @@ Item {
                     Row {
                         id: row
                         anchors.top: columAttributes.bottom
-                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
                         width: parent.width
                         height: 30
                         spacing: 5

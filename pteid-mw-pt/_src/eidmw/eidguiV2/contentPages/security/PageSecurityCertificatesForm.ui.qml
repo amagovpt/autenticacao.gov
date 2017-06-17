@@ -56,7 +56,7 @@ Item {
         Rectangle{
             id: rectTop
             width: parent.width
-            height: parent.height * 0.4 - titleCertificatesTitle.height
+            height: parent.height * 0.35 - titleCertificatesTitle.height
             color: "white"
             anchors.top: titleCertificatesTitle.bottom
             anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
@@ -139,7 +139,7 @@ Item {
         Item{
             id: rectBottom
             width: parent.width
-            height: parent.height * 0.6
+            height: parent.height * 0.65
             anchors.top: rectTop.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
