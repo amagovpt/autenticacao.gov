@@ -30,6 +30,26 @@ Item {
         opacity: 1
     }
 
+    /* Frame Window */
+   FrameWindow {
+       id: leftFrameBar;
+       z: 0
+       width: Constants.FRAME_WINDOW_SIZE;
+       height: mainView.height;
+       anchors.left:  mainView.left
+       propertyMouseRegion.cursorShape: Qt.SizeHorCursor
+       propertySide: "LEFT"
+   }
+   /* Frame Window */
+  FrameWindow {
+      id: rightFrameBar;
+      z: 0
+      width: Constants.FRAME_WINDOW_SIZE;
+      height: mainView.height;
+      anchors.right: mainView.right
+      propertyMouseRegion.cursorShape: Qt.SizeHorCursor
+      propertySide: "RIGHT"
+  }
     /* Main View */
     Item {
 
@@ -137,4 +157,13 @@ Item {
             }
         }
     }
+    /* Frame Window */
+   FrameWindow {
+       id: bottomFrameBar;
+       z: 0
+       width: parent.width;
+       height: Constants.FRAME_WINDOW_SIZE;
+       anchors.bottom: mainView.bottom
+       propertySide: "BOTTOM"
+   }
 }

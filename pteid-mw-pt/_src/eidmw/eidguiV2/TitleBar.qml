@@ -128,6 +128,8 @@ Item {
             property variant clickPos: ""
             property variant appStartPos: ""
 
+            cursorShape: Qt.OpenHandCursor
+
             onPressed: {
                 // fetch global position
                 clickPos = controler.getCursorPos()
