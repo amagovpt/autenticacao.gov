@@ -13,28 +13,11 @@ Item {
 
     Item {
         id: rowTop
-        width: parent.width - Constants.WIDTH_PHOTO_IMAGE - 2 * Constants.SIZE_ROW_H_SPACE
-        height: parent.height * Constants.SIZE_ROW_TOP_V_RELATIVE
-
-        Item{
-            id: rectTopLeft
-            width: parent.width
-            height: parent.height
-        }
-        Item{
-            id: rectToRight
-            width: Constants.WIDTH_PHOTO_IMAGE + Constants.SIZE_ROW_H_SPACE
-            height: parent.height
-            anchors.left: rectTopLeft.right
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            Image {
-                anchors.bottom: parent.bottom
-                width: parent.width
-                antialiasing: true
-                fillMode: Image.PreserveAspectFit
-                source: "../../images/logo_cartao_cidadao.png"
-            }
-        }
+        width: parent.width
+        height: parent.height * Constants.HEIGHT_CARD_IDENTIFY_ROW_TOP_V_RELATIVE
+                + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
+                * Constants.HEIGHT_CARD_IDENTIFY_ROW_TOP_INC_RELATIVE
+        Components.CardRowTop{}
     }
 
     Item {
