@@ -105,7 +105,7 @@ Item {
             anchors.left: rectIssuingEntity.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
-                propertyDateText.text: "Tipo de documento"
+                propertyDateText.text: "Tipo de Documento"
                 propertyDateField.text: "Cartão de Cidadão"
             }
         }

@@ -6,7 +6,7 @@ import "../../scripts/Constants.js" as Constants
 Item {
     anchors.fill: parent
     Text {
-        text: "Updates"
+        text: "Atualizações"
         font.pixelSize: Constants.SIZE_TEXT_BODY
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter

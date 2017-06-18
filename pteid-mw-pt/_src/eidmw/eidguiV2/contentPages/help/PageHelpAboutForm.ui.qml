@@ -26,7 +26,7 @@ Item {
     }
 
     Text {
-        text: "Caso tenha dificuldades na utilizaçãp desta aplicação consulte:"
+        text: "Caso tenha dificuldades na utilização desta aplicação consulte:"
         font.pixelSize: Constants.SIZE_TEXT_BODY
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: -54
@@ -58,7 +58,7 @@ Item {
     }
 
     Text {
-        text: "( Agência para a Modernização Administrativa, IP e \nInstituito dos Registos e do Notaiado, IP)"
+        text: "(Agência para a Modernização Administrativa, IP e \nInstituto dos Registos e do Notariado, IP)"
         font.pixelSize: Constants.SIZE_TEXT_BODY
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: 79

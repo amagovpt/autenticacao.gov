@@ -93,7 +93,7 @@ Item {
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 Components.LabelTextBoxForm {
                     propertyDateText.text: "Estado do Código PIN"
-                    propertyDateField.text: "Restão 3 tentativas"
+                    propertyDateField.text: "Restam 3 tentativas"
                 }
             }
             Button {

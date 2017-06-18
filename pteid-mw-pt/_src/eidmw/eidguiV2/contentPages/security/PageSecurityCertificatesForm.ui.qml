@@ -179,7 +179,7 @@ Item {
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 Components.LabelTextBoxForm{
                     id: textValid
-                    propertyDateText.text: "Valido desde"
+                    propertyDateText.text: "Válido desde"
                     propertyDateField.text: ""
                 }
             }
@@ -193,7 +193,7 @@ Item {
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 Components.LabelTextBoxForm{
                     id: textUntil
-                    propertyDateText.text: "Valid"
+                    propertyDateText.text: "Válido até"
                     propertyDateField.text: ""
                 }
             }

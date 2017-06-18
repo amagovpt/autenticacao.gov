@@ -515,7 +515,7 @@ Item {
                 }
                 CheckBox {
                     id: checkSignShow
-                    text: "Assinatura visivel"
+                    text: "Assinatura visível"
                     height: 25
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
