@@ -34,19 +34,16 @@ Column {
                 Image {
                     id: carot
 
-                    anchors {
-                        top: parent.top
-                        left: parent.left
-                        margins: 5
-                    }
+                    anchors.left: parent.left
+                    y: Constants.SIZE_TEXT_FIELD * 0.5
 
-                    sourceSize.width: 16
-                    sourceSize.height: 16
+                    sourceSize.width: Constants.SIZE_TEXT_FIELD
+                    sourceSize.height: Constants.SIZE_TEXT_FIELD
                     source: '../images/arrow-right_AMA.png'
                     visible: modelData.children ? true : false
                     transform: Rotation {
-                        origin.x: 5
-                        origin.y: 10
+                        origin.x: Constants.SIZE_TEXT_FIELD * 0.5
+                        origin.y: Constants.SIZE_TEXT_FIELD * 0.5
                         angle: infoRow.expanded ? 90 : 0
                         Behavior on angle { NumberAnimation { duration: 150 } }
                     }
@@ -57,7 +54,7 @@ Column {
                     anchors {
                         left: carot.visible ? carot.right : parent.left
                         top: parent.top
-                        margins: 5
+                        margins: Constants.SIZE_TEXT_FIELD * 0.5
                     }
                     visible: parent.visible
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
