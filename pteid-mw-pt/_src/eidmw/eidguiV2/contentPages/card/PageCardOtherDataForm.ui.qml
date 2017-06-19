@@ -44,7 +44,7 @@ Item {
         }
         Item{
             id: rectHealthNum
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
+            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.34
             anchors.left: rectSocialSecurityNum.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{

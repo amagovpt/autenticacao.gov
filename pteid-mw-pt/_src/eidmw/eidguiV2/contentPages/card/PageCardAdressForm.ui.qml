@@ -100,7 +100,7 @@ Item {
         }
         Item{
             id: rectStreetName
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
+            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.34
             anchors.left: rectStreetType.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
@@ -166,7 +166,7 @@ Item {
         }
         Item{
             id: rectSide
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
+            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.34
             anchors.left: rectFloor.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
@@ -232,7 +232,7 @@ Item {
         }
         Item{
             id: rectPostalLocality
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
+            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.34
             anchors.left: rectZip3.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
