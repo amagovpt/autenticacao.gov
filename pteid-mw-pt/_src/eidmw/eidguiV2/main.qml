@@ -385,12 +385,7 @@ Window {
                 id: imageMainMenuBottom
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
-                source:  mainFormID.propertyMainMenuBottomListView.currentIndex === index ?
-                             imageUrl :
-                             imageUrlSel
-                scale: mouseAreaMainMenuBottom.containsMouse ?
-                           1.5 :
-                           1
+                source: getBottomMenuImgSource(index,mouseAreaMainMenuBottom.containsMouse)
             }
         }
     }
@@ -573,6 +568,23 @@ Window {
                 handSource = "images/arrow-right_hover.png"
             }else{
                 handSource = ""
+            }
+        }
+        return handSource
+    }
+
+    function getBottomMenuImgSource(index, containsMouse)
+    {
+        var handSource
+        if(mainFormID.propertyMainMenuBottomListView.currentIndex === index)
+        {
+            handSource =  mainFormID.propertyMainMenuBottomListView.model.get(index).imageUrlSel
+        }else{
+            if(containsMouse === true)
+            {
+                handSource = mainFormID.propertyMainMenuBottomListView.model.get(index).imageUrlSel
+            }else{
+                handSource = mainFormID.propertyMainMenuBottomListView.model.get(index).imageUrl
             }
         }
         return handSource

@@ -4,8 +4,8 @@ ListModel {
     ListElement {
         name: "Definições"
         expand: false
-        imageUrl: "images/definicoes_icon.png"
-        imageUrlSel: "images/definicoes_icon_sel.png"
+        imageUrl: "images/definitions_icon.png"
+        imageUrlSel: "images/definitions_icon_selected.png"
         subdata:[
             ListElement {
                 subName: "Personalização da Assinatura"
@@ -27,8 +27,8 @@ ListModel {
     ListElement {
         name: "Ajuda"
         expand: false
-        imageUrl: "images/ajuda_icon.png"
-        imageUrlSel: "images/ajuda_icon_sel.png"
+        imageUrl: "images/help_icon.png"
+        imageUrlSel: "images/help_icon_selected.png"
         subdata:[
             ListElement {
                 subName: "Documentação"
