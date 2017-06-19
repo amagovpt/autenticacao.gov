@@ -36,7 +36,7 @@ Item {
         Item{
             id: rectTop
             width: parent.width
-            height: parent.height * 0.5 - rectTopOptions.height
+            height: parent.height * 0.5 - Constants.SIZE_ROW_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
             DropShadow {
@@ -59,22 +59,23 @@ Item {
                 opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
             }
 
-            Text {
-                id: titlePreDefault
-                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+            RadioButton {
+                id: radioButtonDefault
+                width: parent.width * 0.5
+                height: Constants.SIZE_V_COMPONENTS
+                text: "Usar assinatura padrão"
+                checked: true
+                T.ButtonGroup.group: radioGroup
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
-                color: Constants.COLOR_TEXT_LABEL
-                height: Constants.SIZE_TEXT_LABEL
-                text: "Pré-Visualização assinatura padrão"
             }
 
             Rectangle {
                 id: rectPreDefault
                 width: parent.width
-                height: parent.height - titlePreDefault.height
+                height: parent.height - radioButtonDefault.height
                 color: "white"
-                anchors.top: titlePreDefault.bottom
+                anchors.top: radioButtonDefault.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
                 Image {
@@ -86,34 +87,18 @@ Item {
                     source: "../../images/CCdemo.png"
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible: true
+                    opacity: radioButtonDefault.checked ? 1 : 0.3
                 }
 
             }
         }
-        Item{
-            id: rectTopOptions
-            width: parent.width
-            height: parent.height * 0.1
-            anchors.top: rectTop.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
-            RadioButton {
-                id: radioButtonDefault
-                width: parent.width * 0.5
-                height: Constants.SIZE_V_COMPONENTS
-                text: "Usar assinatura padrão"
-                checked: true
-                font.family: lato.name
-                T.ButtonGroup.group: radioGroup
-            }
-        }
         Item{
             id: rectBottom
             width: parent.width
-            height: parent.height * 0.5 - rectBottomOptions.height
-            anchors.top: rectTopOptions.bottom
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            height: parent.height * 0.5 - Constants.SIZE_ROW_V_SPACE
+            anchors.top: rectTop.bottom
+            anchors.topMargin: 3 * Constants.SIZE_ROW_V_SPACE
 
             DropArea {
                 id: dropArea;
@@ -147,21 +132,23 @@ Item {
                 cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
                 opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
             }
-            Text {
-                id: titlePreCustom
-                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+
+            RadioButton {
+                id: radioButtonCustom
+                width: parent.width * 0.5
+                height: Constants.SIZE_V_COMPONENTS
+                text: "Usar assinatura personalizada"
+                enabled: fileLoaded
+                T.ButtonGroup.group: radioGroup
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
-                color: Constants.COLOR_TEXT_LABEL
-                height: Constants.SIZE_TEXT_LABEL
-                text: "Pré-Visualização assinatura personalizada"
             }
             Rectangle {
                 id: rectPreCustom
                 width: parent.width
-                height: parent.height - titlePreCustom.height
+                height: parent.height - radioButtonCustom.height
                 color: "white"
-                anchors.top: titlePreCustom.bottom
+                anchors.top: radioButtonCustom.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
                 Image {
@@ -175,6 +162,7 @@ Item {
                     source: "../../images/CCdemo_custom.png"
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible: fileLoaded
+                    opacity: radioButtonCustom.checked ? 1 : 0.3
                 }
                 Text {
                     id: textDragMsgImg
@@ -241,24 +229,6 @@ clique para procurar o ficheiro
                         font.capitalization: Font.MixedCase
                     }
                 }
-            }
-        }
-        Item{
-            id: rectBottomOptions
-            width: parent.width
-            height: parent.height * 0.1
-            anchors.top: rectBottom.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-
-            RadioButton {
-                id: radioButtonCustom
-                width: parent.width * 0.5
-                height: Constants.SIZE_V_COMPONENTS
-                text: "Usar assinatura personalizada"
-                font.family: lato.name
-                enabled: fileLoaded
-                T.ButtonGroup.group: radioGroup
             }
         }
     }
