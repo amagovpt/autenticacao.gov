@@ -507,24 +507,28 @@ Item {
             Item{
                 width: checkSignReduced.width + checkSignShow.width
                 anchors.horizontalCenter: parent.horizontalCenter
-                CheckBox {
+                Switch {
                     id: checkSignReduced
                     text: "Assinatura reduzida"
-                    height: 25
+                    height: Constants.SIZE_V_COMPONENTS
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     enabled: fileLoaded
+                    anchors.top: parent.top
+                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
                 }
-                CheckBox {
+                Switch {
                     id: checkSignShow
                     text: "Assinatura visível"
-                    height: 25
+                    height: Constants.SIZE_V_COMPONENTS
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     anchors.left: checkSignReduced.right
                     enabled: fileLoaded
+                    anchors.top: parent.top
+                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
                 }
             }
         }
