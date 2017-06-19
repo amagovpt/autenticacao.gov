@@ -8,12 +8,12 @@ PageServicesSignSimpleForm {
 
     Dialog {
         id: dialog
-        title: "Arraste um unico ficheiro"
+        title: "Arraste um único ficheiro"
         standardButtons: Dialog.Ok
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
         Label {
-            text: "Para assinar multiplos ficheiros use a opção Assinatura avançada"
+            text: "Para assinar múltiplos ficheiros use a opção assinatura avançada"
         }
     }
 

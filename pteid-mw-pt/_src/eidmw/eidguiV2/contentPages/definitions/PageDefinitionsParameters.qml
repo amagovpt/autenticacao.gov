@@ -8,12 +8,12 @@ PageDefinitionsParametersForm {
 
     Dialog {
         id: dialog
-        title: "Arraste um unico ficheiro"
+        title: "Arraste um único ficheiro"
         standardButtons: Dialog.Ok
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
         Label {
-            text: "Só é possivel selecionar um fichiero de assinatura personalizada"
+            text: "Só é possível seleccionar um ficheiro de assinatura personalizada"
         }
     }
 
