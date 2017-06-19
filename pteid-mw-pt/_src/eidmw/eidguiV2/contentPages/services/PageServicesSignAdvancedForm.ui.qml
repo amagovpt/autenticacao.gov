@@ -261,9 +261,10 @@ Item {
                     TextField {
                         id: textFieldReason
                         width: parent.width
+                        font.italic: textFieldReason.text === "" ? true: false
                         anchors.top: radioButtonXADES.bottom
                         anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
-                        placeholderText:"Escreva a razão"
+                        placeholderText:"Motivo?"
                         enabled: fileLoaded
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -272,12 +273,14 @@ Item {
                     TextField {
                         id: textFieldLocal
                         width: parent.width
+                        font.italic: textFieldLocal.text === "" ? true: false
                         anchors.top: textFieldReason.bottom
                         anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
-                        placeholderText:"Escreva o local"
+                        placeholderText:"Localidade?"
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         enabled: fileLoaded
                         font.family: lato.name
+                        font.capitalization: Font.MixedCase
                     }
                     Switch {
                         id: switchSignTemp
