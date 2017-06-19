@@ -25,7 +25,7 @@ Window {
     FontLoader { id: lato; source: "qrc:/fonts/lato/Lato-Regular.ttf" }
 
     onWidthChanged: {
-        console.log("width: " + width + "height" + height)
+        console.log("Resizing app width: " + width + "height" + height)
         mainFormID.propertyMainMenuView.width = getMainMenuWidth(width)
         mainFormID.propertySubMenuView.width = getSubMenuWidth(width)
         mainFormID.propertyContentPagesView.width = getContentPagesMenuWidth(width)
@@ -40,18 +40,6 @@ Window {
         states:[
             State{
                 name: "STATE_FIRST_RUN"
-                PropertyChanges {
-                    target: mainFormID.propertyMainMenuView
-                    width: 2 * parent.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
-                }
-                PropertyChanges {
-                    target: mainFormID.propertySubMenuView
-                    width:  0
-                }
-                PropertyChanges {
-                    target: mainFormID.propertyPageLoader
-                    source:  "contentPages/home/PageHome.qml"
-                }
             },
             State{
                 name: "STATE_HOME"
@@ -134,6 +122,15 @@ Window {
                     to: mainFormID.propertyMainView.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE;
                     duration: Constants.ANIMATION_MOVE_VIEW
                 }
+                NumberAnimation
+                {
+                    id: animationIncreaseContentPagesWidthExpand
+                    target: mainFormID.propertyContentPagesView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: mainFormID.propertyMainView.width * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
+                    duration: Constants.ANIMATION_MOVE_VIEW
+                }
             },
             Transition {
                 from: "STATE_NORMAL"
@@ -176,6 +173,55 @@ Window {
                 }
             },
             Transition {
+                from: "STATE_FIRST_RUN"
+                to: "STATE_HOME"
+                NumberAnimation
+                {
+                    id: animationHideSubMenu2
+                    target: mainFormID.propertySubMenuView
+                    property: "opacity"
+                    easing.type: Easing.Linear
+                    to: 0;
+                    duration: Constants.ANIMATION_CHANGE_OPACITY
+                }
+                NumberAnimation
+                {
+                    id: animationHideContent2
+                    target: mainFormID.propertyContentPagesView
+                    property: "opacity"
+                    easing.type: Easing.Linear
+                    to: 0;
+                    duration: Constants.ANIMATION_CHANGE_OPACITY
+                }
+                NumberAnimation
+                {
+                    id: animationIncreaseMainMenuWidth2
+                    target: mainFormID.propertyMainMenuView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: mainFormID.propertyMainView.width;
+                    duration: Constants.ANIMATION_MOVE_VIEW
+                }
+                NumberAnimation
+                {
+                    id: animationHideSubMenuWidth2
+                    target: mainFormID.propertySubMenuView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: 0;
+                    duration: Constants.ANIMATION_MOVE_VIEW
+                }
+                NumberAnimation
+                {
+                    id: animationReduceContentPagesWidthExpand2
+                    target: mainFormID.propertyContentPagesView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: 0
+                    duration: Constants.ANIMATION_MOVE_VIEW
+                }
+            },
+            Transition {
                 from: "STATE_NORMAL"
                 to: "STATE_EXPAND"
                 NumberAnimation
@@ -189,7 +235,7 @@ Window {
                 }
                 NumberAnimation
                 {
-                    id: animationIncreaseContentPagesWidthExpand
+                    id: animationExpandContentPagesWidthExpand
                     target: mainFormID.propertyContentPagesView
                     property: "width"
                     easing.type: Easing.OutQuad
@@ -241,6 +287,18 @@ Window {
         ]
         Component.onCompleted: {
             mainFormID.state = "STATE_FIRST_RUN"
+            //mainFormID.state = "STATE_HOME"
+
+            if ( mainFormID.state === "STATE_FIRST_RUN"){
+                console.log("Runing First time" + mainWindow.width)
+                mainFormID.propertyMainMenuView.width = mainWindow.width * 2 * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
+                mainFormID.propertySubMenuView.width = 0
+                mainFormID.propertyContentPagesView.width = mainWindow.width * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
+                mainFormID.propertyPageLoader.source = "contentPages/home/PageHome.qml"
+            }else{
+                mainFormID.propertyMainMenuView.width = mainWindow.width
+            }
+
             // Do not select any option
             mainFormID.propertyMainMenuListView.currentIndex = -1
             mainFormID.propertyMainMenuBottomListView.currentIndex = -1
