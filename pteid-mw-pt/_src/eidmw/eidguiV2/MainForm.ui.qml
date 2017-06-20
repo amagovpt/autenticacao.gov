@@ -82,6 +82,7 @@ Item {
                 id: mainMenuListView
                 width: parent.width
                 height: parent.height * Constants.MAIN_MENU_RELATIVE_V_SIZE
+                boundsBehavior: Flickable.StopAtBounds
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 model: MainMenuModel {}
@@ -92,6 +93,7 @@ Item {
                 id: mainMenuBottomListView
                 width: Constants.BOTTOM_MENU_WIDTH_SIZE
                 height: parent.height * Constants.MAIN_MENU_BOTTOM_RELATIVE_V_SIZE
+                boundsBehavior: Flickable.StopAtBounds
                 y: parent.height * Constants.MAIN_MENU_BOTTOM_RELATIVE_V_POS
                 orientation: ListView.Horizontal
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -120,6 +122,9 @@ Item {
                     id: subMenuListView
                     width: parent.width
                     height: parent.height
+                    boundsBehavior: Flickable.StopAtBounds
+                    highlightFollowsCurrentItem: true
+                    highlightMoveDuration : 200
                     model: SubMenuModel {}
                     delegate: subMenuDelegate
                     highlight: Rectangle {
