@@ -27,7 +27,7 @@ Item {
     Item {
         id: rowMain
         width: parent.width
-        height: parent.height * Constants.PAGE_SERVICES_MAIN_V_RELATIVE
+        height: parent.height
 
         T.ButtonGroup {
             id: radioGroup
@@ -36,7 +36,7 @@ Item {
         Item{
             id: rectTop
             width: parent.width
-            height: parent.height * 0.5 - Constants.SIZE_ROW_V_SPACE
+            height: parent.height * 0.5 - Constants.SIZE_ROW_H_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
             DropShadow {
@@ -63,16 +63,15 @@ Item {
                 id: radioButtonDefault
                 text: "Usar assinatura padrão"
                 T.ButtonGroup.group: radioGroup
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
                 checked: true
                 opacity: enabled ? 1.0 : Constants.OPACITY_SIGNATURE_TEXT_DISABLED
 
                 contentItem: Text {
                     text: radioButtonDefault.text
-                    font: lato.name
-                    //opacity: enabled ? 1.0 : Constants.OPACITY_SIGNATURE_TEXT_DISABLED
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     color: Constants.COLOR_TEXT_LABEL
-                    horizontalAlignment: Text.AlignHCenter
+                    horizontalAlignment: Text.AlignRight
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: radioButtonDefault.indicator.width + radioButtonDefault.spacing
                 }
@@ -84,7 +83,6 @@ Item {
                 height: parent.height - radioButtonDefault.height
                 color: "white"
                 anchors.top: radioButtonDefault.bottom
-                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
                 Image {
                     id: imagePreDefault
@@ -104,9 +102,9 @@ Item {
         Item{
             id: rectBottom
             width: parent.width
-            height: parent.height * 0.5 - Constants.SIZE_ROW_V_SPACE
+            height: parent.height * 0.5 - Constants.SIZE_ROW_H_SPACE
             anchors.top: rectTop.bottom
-            anchors.topMargin: 3 * Constants.SIZE_ROW_V_SPACE
+            anchors.topMargin: Constants.SIZE_ROW_H_SPACE
 
             DropArea {
                 id: dropArea;
@@ -151,10 +149,10 @@ Item {
 
                 contentItem: Text {
                     text: radioButtonCustom.text
-                    font: lato.name
-                    opacity: enabled ? 1.0 : Constants.OPACITY_SIGNATURE_TEXT_DISABLED
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     color: Constants.COLOR_TEXT_LABEL
-                    horizontalAlignment: Text.AlignHCenter
+                    horizontalAlignment: Text.AlignRight
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: radioButtonCustom.indicator.width + radioButtonCustom.spacing
                 }
@@ -165,7 +163,6 @@ Item {
                 height: parent.height - radioButtonCustom.height
                 color: "white"
                 anchors.top: radioButtonCustom.bottom
-                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
                 Image {
                     id: imagePreCustom
