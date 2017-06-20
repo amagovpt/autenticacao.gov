@@ -483,16 +483,17 @@ Window {
                                  Font.Normal
                 font.pixelSize: Constants.SIZE_TEXT_SUB_MENU
                 wrapMode: Text.Wrap
-                width: parent.width - imageArrowSubMenu.width
+                width: parent.width - 2 * imageArrowSubMenu.width
+                       - 2 * Constants.IMAGE_ARROW_SUB_MENU_MARGIN
                 horizontalAlignment: Text.AlignHCenter
-
             }
             Image {
                 id: imageArrowSubMenu
                 width: Constants.SIZE_TEXT_SUB_MENU
                 height: Constants.SIZE_TEXT_SUB_MENU
                 fillMode: Image.PreserveAspectFit
-                x: parent.width * Constants.IMAGE_ARROW_SUB_MENU_RELATIVE
+                anchors.right: parent.right
+                anchors.rightMargin: Constants.IMAGE_ARROW_SUB_MENU_MARGIN
                 anchors.verticalCenter: parent.verticalCenter
                 source: getSubMenuArrowSource(index, mouseAreaSubMenu.containsMouse)
             }
