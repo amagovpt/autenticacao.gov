@@ -29,9 +29,10 @@ Item {
 
     Item {
         id: rowMain
-        width: parent.width
-        height: parent.height - rowBottom.height
+        width: parent.width - Constants.SIZE_ROW_H_SPACE
+        height: parent.height
 
+        // Expanded menu need a Horizontal space to Main Menu
         x: Constants.SIZE_ROW_H_SPACE
 
         DropArea {
@@ -97,7 +98,7 @@ Item {
                 Item{
                     id: itemOptionsFiles
                     width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                    height: 4 * Constants.SIZE_V_COMPONENTS
+                    height: 4 * Constants.SIZE_V_URL_FILES
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     ListView {
@@ -141,14 +142,14 @@ Item {
                 Item{
                     id: itemBottonsFiles
                     width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                    height: Constants.SIZE_V_BOTTOM_COMPONENT
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: itemOptionsFiles.bottom
 
                     Button {
                         id: buttonAdd
-                        width: 150
-                        height: Constants.SIZE_V_BOTTOM_COMPONENT
+                        width: Constants.WIDTH_BUTTON
+                        height: Constants.HEIGHT_BOTTOM_COMPONENT
                         text: "Adicionar ficheiro"
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
@@ -156,8 +157,8 @@ Item {
                     }
                     Button {
                         id: buttonRemoveAll
-                        width: 150
-                        height: Constants.SIZE_V_BOTTOM_COMPONENT
+                        width: Constants.WIDTH_BUTTON
+                        height: Constants.HEIGHT_BOTTOM_COMPONENT
                         anchors.right: itemBottonsFiles.right
                         text: "Remover todos"
                         enabled: fileLoaded
@@ -174,7 +175,7 @@ Item {
             height: mainItem.height - rectMainLeftFile.height
                     - 2 * Constants.SIZE_ROW_V_SPACE
             anchors.top: rectMainLeftFile.bottom
-            anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
+            anchors.topMargin: 1.5 * Constants.SIZE_ROW_V_SPACE
 
             DropShadow {
                 anchors.fill: rectOptions
@@ -209,7 +210,7 @@ Item {
             Rectangle {
                 id: rectOptions
                 width: parent.width
-                height: parent.height - titleConf.height - Constants.SIZE_TEXT_V_SPACE
+                height: parent.height - titleConf.height
                 enabled: fileLoaded
                 color: "white"
                 anchors.top: titleConf.bottom
@@ -235,7 +236,7 @@ Item {
                     RadioButton {
                         id: radioButtonPADES
                         x: 90
-                        height: Constants.SIZE_V_COMPONENTS
+                        height: Constants.SIZE_V_URL_FILES
                         anchors.top: textFormatSign.bottom
                         text: "Pdf"
                         anchors.topMargin: -12
@@ -247,7 +248,7 @@ Item {
                     }
                     RadioButton {
                         id: radioButtonXADES
-                        height: Constants.SIZE_V_COMPONENTS
+                        height: Constants.SIZE_V_URL_FILES
                         anchors.top: textFormatSign.bottom
                         anchors.left: radioButtonPADES.right
                         text: "Outros ficheiros"
@@ -284,7 +285,7 @@ Item {
                     }
                     Switch {
                         id: switchSignTemp
-                        height: Constants.SIZE_V_COMPONENTS
+                        height: Constants.SIZE_V_URL_FILES
                         anchors.top: textFieldLocal.bottom
                         text: "Adicionar selo temporal"
                         enabled: fileLoaded
@@ -294,7 +295,7 @@ Item {
                     }
                     Switch {
                         id: switchSignAdd
-                        height: Constants.SIZE_V_COMPONENTS
+                        height: Constants.SIZE_V_URL_FILES
                         anchors.top: switchSignTemp.bottom
                         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                         text: "Adicionar atributos profissionais"
@@ -411,7 +412,7 @@ Item {
         Item{
             id: rectMainRight
             width: parent.width * 0.5
-            height: parent.height
+            height: parent.height - 2 * Constants.HEIGHT_BOTTOM_COMPONENT
             anchors.left: rectMainLeftFile.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
@@ -482,74 +483,88 @@ Item {
                 anchors.fill: parent
             }
         }
-    }
-
-    Item {
-        id: rowBottom
-        width: parent.width
-        height: 2 * Constants.SIZE_V_BOTTOM_COMPONENT
-        anchors.top: rowMain.bottom
-        anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-
-        x: Constants.SIZE_ROW_H_SPACE
-
-        Item{
-            id: rectSignLeft
-            width: parent.width * 0.50
-            height: parent.height
-        }
-        Item{
-            id: rectSignOptions
-            width: parent.width * 0.50
-            height: Constants.SIZE_V_BOTTOM_COMPONENT
-            anchors.left: rectSignLeft.right
+        Item {
+            id: rowBottom
+            width: rectMainRight.width
+            height: 2 * Constants.HEIGHT_BOTTOM_COMPONENT
+            anchors.top: rectMainRight.bottom
+            anchors.left: rectMainRight.left
 
             Item{
-                width: checkSignReduced.width + checkSignShow.width
-                anchors.horizontalCenter: parent.horizontalCenter
-                Switch {
-                    id: checkSignReduced
-                    text: "Assinatura reduzida"
-                    height: Constants.SIZE_V_COMPONENTS
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.capitalization: Font.MixedCase
-                    enabled: fileLoaded
-                    anchors.top: parent.top
-                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
-                }
-                Switch {
-                    id: checkSignShow
-                    text: "Assinatura visível"
-                    height: Constants.SIZE_V_COMPONENTS
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.capitalization: Font.MixedCase
-                    anchors.left: checkSignReduced.right
-                    enabled: fileLoaded
-                    anchors.top: parent.top
-                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
-                }
-            }
-        }
-        Item{
-            id: rectSign
-            width: parent.width * 0.50
-            height: Constants.SIZE_V_BOTTOM_COMPONENT
-            anchors.left: rectSignLeft.right
-            anchors.top: rectSignOptions.bottom
-
-            Button {
-                text: "Assinar"
-                y: 5
+                id: rectSignOptions
                 width: parent.width
-                height: Constants.SIZE_V_BOTTOM_COMPONENT
-                anchors.right: parent.right
-                enabled: fileLoaded
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.capitalization: Font.MixedCase
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.left: parent.left
+                Item{
+                    id: itemCheckSignReduced
+                    width: parent.width * 0.5
+                    height: parent.height
+                    anchors.top: parent.top
+                    Switch {
+                        id: checkSignReduced
+                        text: "Assinatura reduzida"
+                        spacing: 0
+                        padding: 0
+                        rightPadding: 0
+                        bottomPadding: 0
+                        topPadding: 0
+                        leftPadding: 0
+                        height: Constants.SIZE_V_URL_FILES
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        enabled: fileLoaded
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+                Item{
+                    id: itemCheckSignShow
+                    width: parent.width * 0.5
+                    height: parent.height
+                    anchors.left: itemCheckSignReduced.right
+                    anchors.top: parent.top
+                    Switch {
+                        id: checkSignShow
+                        text: "Assinatura visível"
+                        spacing: 0
+                        padding: 0
+                        rightPadding: 0
+                        bottomPadding: 0
+                        topPadding: 0
+                        leftPadding: 0
+                        height: Constants.SIZE_V_URL_FILES
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        enabled: fileLoaded
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+
+            }
+            Item{
+                id: rectSign
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.left: parent.left
+                anchors.top: rectSignOptions.bottom
+
+                Button {
+                    text: "Assinar"
+                    y: 5
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    enabled: fileLoaded
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
             }
         }
     }
+
+
 }

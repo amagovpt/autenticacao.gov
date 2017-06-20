@@ -84,7 +84,7 @@ PageServicesSignAdvancedForm {
         Rectangle{
             width: parent.width - propertyFilesListViewScroll.width
                    - Constants.SIZE_LISTVIEW_SPACING
-            height: Constants.SIZE_V_COMPONENTS
+            height: Constants.SIZE_V_URL_FILES
             color: Constants.COLOR_MAIN_SOFT_GRAY
             Item {
                 width: parent.width
@@ -92,7 +92,7 @@ PageServicesSignAdvancedForm {
                 Text {
                     id: fileName
                     text: fileUrl
-                    width: parent.width - Constants.SIZE_V_COMPONENTS
+                    width: parent.width - Constants.SIZE_V_URL_FILES
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     verticalAlignment: Text.AlignVCenter
                     color: Constants.COLOR_TEXT_BODY
@@ -101,8 +101,8 @@ PageServicesSignAdvancedForm {
                 Image {
                     id: iconRemove
                     anchors.left: fileName.right
-                    width: Constants.SIZE_V_COMPONENTS
-                    height: Constants.SIZE_V_COMPONENTS
+                    width: Constants.SIZE_V_URL_FILES
+                    height: Constants.SIZE_V_URL_FILES
                     antialiasing: true
                     fillMode: Image.PreserveAspectFit
                     source:  mouseAreaIconDelete.containsMouse ?

@@ -7,31 +7,42 @@ Item {
     property alias propertyTextLinkCC: textLinkCC
 
     anchors.fill: parent
-    Text {
-        text: "Versão x.x.x - xxxx"
-        anchors.verticalCenterOffset: -88
-        font.pixelSize: Constants.SIZE_TEXT_BODY
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        font.family: lato.name
+
+    Item {
+        id: rowTop
+        width: parent.width
+        height: parent.height * Constants.HEIGHT_HELP_ABOUT_ROW_TOP_V_RELATIVE
+                + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
+                * Constants.HEIGHT_HELP_ABOUT_ROW_TOP_INC_RELATIVE
     }
 
     Text {
-        text: "Aplicação Oficial do Cartão de Cidadão Português"
-        font.pixelSize: Constants.SIZE_TEXT_BODY
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -112
-        anchors.horizontalCenter: parent.horizontalCenter
+        id: textAppName
+        text: "Aplicação oficial do " + mainWindow.title + " Português"
+        font.pixelSize: Constants.SIZE_TEXT_TITLE
+        color: Constants.COLOR_TEXT_TITLE
         font.family: lato.name
+        font.bold: true
+        anchors.top: rowTop.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
     }
 
     Text {
+        id: textVersion
+        text: mainWindow.appVersion
+        font.pixelSize: Constants.SIZE_TEXT_BODY
+        font.family: lato.name
+        anchors.top: textAppName.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+    }
+
+    Text {
+        id: textDifficult
         text: "Caso tenha dificuldades na utilização desta aplicação consulte:"
         font.pixelSize: Constants.SIZE_TEXT_BODY
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -54
-        anchors.horizontalCenter: parent.horizontalCenter
         font.family: lato.name
+        anchors.top: textVersion.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
     }
 
     Text {
@@ -41,47 +52,47 @@ Item {
         text: "<a href=\"https://www.autenticacao.gov.pt/o-cartao-de-cidadao\">https://www.autenticacao.gov.pt/o-cartao-de-cidadao</a>"
         font.italic: true
         font.pixelSize: Constants.SIZE_TEXT_BODY
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -23
-        anchors.horizontalCenter: parent.horizontalCenter
         font.family: lato.name
+        anchors.top: textDifficult.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
     }
 
     Text {
+        id: textDevBy
         text: "Desenvolvido pelo Estado Português"
         font.pixelSize: Constants.SIZE_TEXT_BODY
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: 38
-        anchors.horizontalCenter: parent.horizontalCenter
         font.family: lato.name
+        anchors.top: textLinkCC.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
     }
 
     Text {
-        text: "(Agência para a Modernização Administrativa, IP e \nInstituto dos Registos e do Notariado, IP)"
+        id: textDevByAgency
+        text: "(Agência para a Modernização Administrativa, IP e Instituto dos Registos e do Notariado, IP)"
         font.pixelSize: Constants.SIZE_TEXT_BODY
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: 79
-        anchors.horizontalCenter: parent.horizontalCenter
         font.family: lato.name
+        anchors.top: textDevBy.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+        width: parent.width
+        wrapMode: Text.Wrap
     }
 
     Image {
-        id: image1
+        id: imageCC
         y: parent.height * 0.1
         width: 218
-        height: 41
         source: "../../images/logo_cartao_cidadao.png"
         fillMode: Image.PreserveAspectFit
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: textDevByAgency.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
     }
     Image {
-        id: image
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: parent.height * 0.8
+        id: imageSupported
         width: 384
-        height: 90
         fillMode: Image.PreserveAspectFit
         source: "../../images/logo_cor400.png"
+        anchors.top: imageCC.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
     }
 }

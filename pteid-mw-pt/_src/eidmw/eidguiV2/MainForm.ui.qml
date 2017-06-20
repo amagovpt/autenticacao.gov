@@ -110,7 +110,8 @@ Item {
             anchors.left: mainMenuView.right
             z: 0
             Item {
-                width: parent.width * Constants.SUB_MENU_RELATIVE_H_SIZE
+                width: parent.width - 2 * Constants.SIZE_ROW_H_SPACE
+                       - subMenuViewVerticalLine.width
                 height: subMenuListView.count *
                         mainView.height * Constants.SUB_MENU_RELATIVE_V_ITEM_SIZE
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -131,7 +132,7 @@ Item {
                 Rectangle {
                     id: subMenuViewVerticalLine
                     x: subMenuListView.width
-                    width: subMenuListView.width * Constants.SUB_MENU_RELATIVE_LINE_H_SIZE
+                    width: subMenuView.width * Constants.SUB_MENU_RELATIVE_LINE_H_SIZE
                     height: subMenuListView.height
                     anchors.verticalCenter: parent.verticalCenter
                     color: Constants.COLOR_LINE_SUB_MENU
@@ -148,8 +149,8 @@ Item {
             anchors.left: subMenuView.right
             z: 1
             Item {
-                width: parent.width * Constants.PAGE_RELATIVE_H_SIZE
-                height: parent.height * Constants.PAGE_RELATIVE_V_SIZE
+                width: parent.width - Constants.SIZE_ROW_H_SPACE
+                height: parent.height - 2 * Constants.SIZE_ROW_V_SPACE
                 anchors.verticalCenter: parent.verticalCenter
                 PageLoader{
                     id: pageLoaderID

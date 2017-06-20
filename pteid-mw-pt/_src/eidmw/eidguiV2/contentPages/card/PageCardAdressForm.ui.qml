@@ -275,8 +275,8 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Button {
                 text: "Alteração de morada"
-                width: parent.width
-                height:Constants.SIZE_V_BOTTOM_COMPONENT
+                width: Constants.WIDTH_BUTTON
+                height:Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.right: parent.right
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name

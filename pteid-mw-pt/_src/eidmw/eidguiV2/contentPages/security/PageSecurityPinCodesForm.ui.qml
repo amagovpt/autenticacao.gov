@@ -98,8 +98,8 @@ Item {
             }
             Button {
                 id: buttonTest
-                width: 150
-                height:Constants.SIZE_V_BOTTOM_COMPONENT
+                width: Constants.WIDTH_BUTTON
+                height:Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.top: rectState.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -111,8 +111,8 @@ Item {
 
             Button {
                 id: buttonModify
-                width: 150
-                height:Constants.SIZE_V_BOTTOM_COMPONENT
+                width: Constants.WIDTH_BUTTON
+                height:Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.top: buttonTest.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 anchors.horizontalCenter: parent.horizontalCenter

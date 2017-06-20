@@ -21,7 +21,7 @@ Item {
     Item {
         id: rowMain
         width: parent.width
-        height: parent.height * Constants.PAGE_SERVICES_MAIN_V_RELATIVE
+        height: parent.height
         anchors.top: rowTop.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 

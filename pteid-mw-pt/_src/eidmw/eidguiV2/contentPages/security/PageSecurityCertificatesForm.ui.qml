@@ -24,6 +24,15 @@ Item {
         width: parent.width
         height: parent.height
 
+        Item {
+            id: rowTop
+            width: parent.width
+            height: parent.height * Constants.HEIGHT_SECURITY_CERTIFICARES_ROW_TOP_V_RELATIVE
+                    + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
+                    * Constants.HEIGHT_SECURITY_CERTIFICARES_ROW_TOP_INC_RELATIVE
+
+        }
+
         DropShadow {
             anchors.fill: rectTop
             horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
@@ -51,6 +60,8 @@ Item {
             color: Constants.COLOR_TEXT_LABEL
             height: Constants.SIZE_TEXT_LABEL
             text: "Selecione o certificado"
+            anchors.top: rowTop.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         }
 
         Rectangle{

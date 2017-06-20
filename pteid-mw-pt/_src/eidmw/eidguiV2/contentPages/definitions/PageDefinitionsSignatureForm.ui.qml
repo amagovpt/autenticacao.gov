@@ -36,7 +36,8 @@ Item {
         Item{
             id: rectTop
             width: parent.width
-            height: parent.height * 0.5 - Constants.SIZE_ROW_H_SPACE
+            height: parent.height * 0.5
+                    - ((Constants.HEIGHT_BOTTOM_COMPONENT + Constants.SIZE_ROW_V_SPACE) * 0.5)
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
             DropShadow {
@@ -102,14 +103,13 @@ Item {
         Item{
             id: rectBottom
             width: parent.width
-            height: parent.height * 0.5 - Constants.SIZE_ROW_H_SPACE
+            height: parent.height * 0.5
+                    - ((Constants.HEIGHT_BOTTOM_COMPONENT + Constants.SIZE_ROW_V_SPACE) * 0.5)
+                    + Constants.HEIGHT_BOTTOM_COMPONENT
             anchors.top: rectTop.bottom
-            anchors.topMargin: Constants.SIZE_ROW_H_SPACE
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
-            DropArea {
-                id: dropArea;
-                anchors.fill: parent;
-            }
+
             FileDialog {
                 id: fileDialog
                 title: "Escolha o ficheiro da assinatura personalizada"
@@ -167,10 +167,7 @@ Item {
                 Image {
                     id: imagePreCustom
                     width: parent.width
-                    height: parent.height
-                            - Constants.SIZE_V_BOTTOM_COMPONENT
-                            - 2 *Constants.SIZE_TEXT_V_SPACE
-                    y: Constants.SIZE_TEXT_V_SPACE
+                    height: parent.height - Constants.HEIGHT_BOTTOM_COMPONENT
                     antialiasing: true
                     fillMode: Image.PreserveAspectFit
                     source: "../../images/CCdemo_custom.png"
@@ -181,9 +178,7 @@ Item {
                 Text {
                     id: textDragMsgImg
                     width: parent.width
-                    height: parent.height
-                            - Constants.SIZE_V_BOTTOM_COMPONENT
-                            - 2 * Constants.SIZE_TEXT_V_SPACE
+                    height: parent.height - Constants.HEIGHT_BOTTOM_COMPONENT
                     text:
                         "Arraste para esta zona o ficheiro da assinatura personalizada
 ou
@@ -197,34 +192,39 @@ clique para procurar o ficheiro
                     color: Constants.COLOR_TEXT_LABEL
                     visible: !fileLoaded
                     font.family: lato.name
+                    DropArea {
+                        id: dropArea;
+                        anchors.fill: parent;
+                    }
                 }
                 MouseArea {
                     id: mouseAreaPreCustom
-                    anchors.fill: parent
+                    width: parent.width
+                    height: parent.height - Constants.HEIGHT_BOTTOM_COMPONENT
                 }
                 Item{
                     id: rectSignLeft
                     width: parent.width  * 0.50 - Constants.SIZE_ROW_H_SPACE
-                    height: Constants.SIZE_V_BOTTOM_COMPONENT
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
                     anchors.top: imagePreCustom.bottom
                     x: Constants.SIZE_ROW_H_SPACE / 2
 
                     Button {
                         id: buttonRemove
                         text: "Remover assinatura"
-                        width: parent.width
-                        height: Constants.SIZE_V_BOTTOM_COMPONENT
+                        width: Constants.WIDTH_BUTTON
+                        height:Constants.HEIGHT_BOTTOM_COMPONENT
                         anchors.right: parent.right
-                        enabled: fileLoaded
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        anchors.horizontalCenter: parent.horizontalCenter
                     }
                 }
                 Item{
                     id: rectSignRight
                     width: parent.width * 0.50 - Constants.SIZE_ROW_H_SPACE
-                    height: Constants.SIZE_V_BOTTOM_COMPONENT
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
                     anchors.top: imagePreCustom.bottom
                     anchors.left: rectSignLeft.right
                     anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
@@ -232,13 +232,13 @@ clique para procurar o ficheiro
                     Button {
                         id: buttonAdd
                         text: "Adicionar assinatura"
-                        width: parent.width
-                        height:Constants.SIZE_V_BOTTOM_COMPONENT
+                        width: Constants.WIDTH_BUTTON
+                        height:Constants.HEIGHT_BOTTOM_COMPONENT
                         anchors.right: parent.right
-                        enabled: !fileLoaded
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        anchors.horizontalCenter: parent.horizontalCenter
                     }
                 }
             }

@@ -20,9 +20,10 @@ Item {
 
     Item {
         id: rowMain
-        width: parent.width
-        height: parent.height - Constants.SIZE_V_BOTTOM_COMPONENT
+        width: parent.width - Constants.SIZE_ROW_H_SPACE
+        height: parent.height - Constants.HEIGHT_BOTTOM_COMPONENT
 
+        // Expanded menu need a Horizontal space to Main Menu
         x: Constants.SIZE_ROW_H_SPACE
 
         DropArea {
@@ -117,8 +118,8 @@ Item {
 
     Item {
         id: rowBottom
-        width: parent.width
-        height: Constants.SIZE_V_BOTTOM_COMPONENT
+        width: parent.width - Constants.SIZE_ROW_H_SPACE
+        height: Constants.HEIGHT_BOTTOM_COMPONENT
         anchors.top: rowMain.bottom
         x: Constants.SIZE_ROW_H_SPACE
 
@@ -129,15 +130,17 @@ Item {
 
             Button {
                 id: buttonRemove
+                x: 140
                 text: "Remover ficheiro"
-                y: 5
-                width: parent.width
-                height:Constants.SIZE_V_BOTTOM_COMPONENT
-                anchors.right: parent.right
+                anchors.rightMargin: 0
+                y: 8
+                width: Constants.WIDTH_BUTTON
+                height:Constants.HEIGHT_BOTTOM_COMPONENT
                 enabled: fileLoaded
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
         Item{
@@ -150,13 +153,13 @@ Item {
             Button {
                 text: "Assinar"
                 y: 5
-                width: parent.width
-                height:Constants.SIZE_V_BOTTOM_COMPONENT
-                anchors.right: parent.right
+                width: Constants.WIDTH_BUTTON
+                height:Constants.HEIGHT_BOTTOM_COMPONENT
                 enabled: fileLoaded
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
     }

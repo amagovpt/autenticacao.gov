@@ -21,6 +21,8 @@ Window {
 
     title: "Cartão de Cidadão"
 
+    property string appVersion: "Versão 0.0.0 - 0000"
+
     FontLoader { id: karma; source: "qrc:/fonts/karma/Karma-Medium.ttf" }
     FontLoader { id: lato; source: "qrc:/fonts/lato/Lato-Regular.ttf" }
 

@@ -8,15 +8,23 @@ import "../../components" as Components
 Item {
     anchors.fill: parent
     Item {
-        width: parent.width * Constants.HOME_PAGE_RELATIVE_H_SIZE
-        height: parent.height * Constants.HOME_PAGE_RELATIVE_V_SIZE
+        id: rowTop
+        width: parent.width
+        height: parent.height * Constants.HEIGHT_HOME_PAGE_ROW_TOP_V_RELATIVE
+                + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
+                * Constants.HEIGHT_HOME_PAGE_ROW_TOP_INC_RELATIVE
+    }
+    Item {
+        width: parent.width - 2 * Constants.SIZE_ROW_H_SPACE
+        height: parent.height - 2 * Constants.SIZE_ROW_V_SPACE
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.top: rowTop.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         Text {
             id: text0
             font.pixelSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
-            text: "Autenticação.gov.pt"
+            text: "Aplicação " + mainWindow.title
             font.bold: true
             wrapMode: Text.Wrap
             width: parent.width
@@ -30,11 +38,10 @@ Item {
             anchors.topMargin: Constants.SIZE_TEXT_BODY
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            text: "A Aplicação Autenticação.gov.pt permite ao cidadão tirar partido das funcionalidades eletrónicas do \
-seu Cartão de Cidadão e da sua Chave Móvel Digital."
+            text: "A Aplicação " + mainWindow.title + " permite ao cidadão tirar partido das funcionalidades eletrónicas \
+do seu Cartão de Cidadão e da sua Chave Móvel Digital."
             wrapMode: Text.Wrap
             width: parent.width
-            horizontalAlignment: Text.left
             color: Constants.COLOR_TEXT_BODY
             Layout.fillWidth: true
         }
