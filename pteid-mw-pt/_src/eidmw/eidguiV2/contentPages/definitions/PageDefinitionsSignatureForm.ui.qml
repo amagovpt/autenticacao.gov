@@ -61,13 +61,21 @@ Item {
 
             RadioButton {
                 id: radioButtonDefault
-                width: parent.width * 0.5
-                height: Constants.SIZE_V_COMPONENTS
                 text: "Usar assinatura padrão"
-                checked: true
                 T.ButtonGroup.group: radioGroup
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
-                font.family: lato.name
+                checked: true
+                opacity: enabled ? 1.0 : Constants.OPACITY_SIGNATURE_TEXT_DISABLED
+
+                contentItem: Text {
+                    text: radioButtonDefault.text
+                    font: lato.name
+                    //opacity: enabled ? 1.0 : Constants.OPACITY_SIGNATURE_TEXT_DISABLED
+                    color: Constants.COLOR_TEXT_LABEL
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    leftPadding: radioButtonDefault.indicator.width + radioButtonDefault.spacing
+                }
             }
 
             Rectangle {
@@ -87,7 +95,7 @@ Item {
                     source: "../../images/CCdemo.png"
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible: true
-                    opacity: radioButtonDefault.checked ? 1 : 0.3
+                    opacity: radioButtonDefault.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
                 }
 
             }
@@ -135,13 +143,21 @@ Item {
 
             RadioButton {
                 id: radioButtonCustom
-                width: parent.width * 0.5
-                height: Constants.SIZE_V_COMPONENTS
                 text: "Usar assinatura personalizada"
-                enabled: fileLoaded
                 T.ButtonGroup.group: radioGroup
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
-                font.family: lato.name
+                enabled: fileLoaded
+                opacity: enabled ? 1.0 : Constants.OPACITY_SIGNATURE_TEXT_DISABLED
+
+                contentItem: Text {
+                    text: radioButtonCustom.text
+                    font: lato.name
+                    opacity: enabled ? 1.0 : Constants.OPACITY_SIGNATURE_TEXT_DISABLED
+                    color: Constants.COLOR_TEXT_LABEL
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    leftPadding: radioButtonCustom.indicator.width + radioButtonCustom.spacing
+                }
             }
             Rectangle {
                 id: rectPreCustom
@@ -156,13 +172,14 @@ Item {
                     width: parent.width
                     height: parent.height
                             - Constants.SIZE_V_BOTTOM_COMPONENT
-                            - 2 * Constants.SIZE_TEXT_V_SPACE
+                            - 2 *Constants.SIZE_TEXT_V_SPACE
+                    y: Constants.SIZE_TEXT_V_SPACE
                     antialiasing: true
                     fillMode: Image.PreserveAspectFit
                     source: "../../images/CCdemo_custom.png"
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible: fileLoaded
-                    opacity: radioButtonCustom.checked ? 1 : 0.3
+                    opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
                 }
                 Text {
                     id: textDragMsgImg
@@ -193,7 +210,6 @@ clique para procurar o ficheiro
                     width: parent.width  * 0.50 - Constants.SIZE_ROW_H_SPACE
                     height: Constants.SIZE_V_BOTTOM_COMPONENT
                     anchors.top: imagePreCustom.bottom
-                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     x: Constants.SIZE_ROW_H_SPACE / 2
 
                     Button {
@@ -213,7 +229,6 @@ clique para procurar o ficheiro
                     width: parent.width * 0.50 - Constants.SIZE_ROW_H_SPACE
                     height: Constants.SIZE_V_BOTTOM_COMPONENT
                     anchors.top: imagePreCustom.bottom
-                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     anchors.left: rectSignLeft.right
                     anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 

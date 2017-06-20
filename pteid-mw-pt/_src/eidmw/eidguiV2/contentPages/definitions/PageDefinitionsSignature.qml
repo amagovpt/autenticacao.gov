@@ -4,7 +4,7 @@ import QtQuick.Controls 2.1
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
 
-PageDefinitionsParametersForm {
+PageDefinitionsSignatureForm {
 
     Dialog {
         id: dialog
@@ -89,6 +89,8 @@ PageDefinitionsParametersForm {
                 fileLoaded = false
             }else{
                 fileLoaded = true
+                propertyRadioButtonDefault.checked = false
+                propertyRadioButtonCustom.checked = true
             }
         }
     }

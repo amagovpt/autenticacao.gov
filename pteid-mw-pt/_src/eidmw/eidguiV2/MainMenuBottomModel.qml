@@ -10,7 +10,7 @@ ListModel {
             ListElement {
                 subName: "Personalização da Assinatura"
                 expand: false
-                url: "contentPages/definitions/PageDefinitionsParameters.qml"
+                url: "contentPages/definitions/PageDefinitionsSignature.qml"
             },
             ListElement {
                 subName: "Configuração da aplicação"

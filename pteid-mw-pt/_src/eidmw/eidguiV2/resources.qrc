@@ -21,8 +21,6 @@
         <file>contentPages/help/PageHelpAboutForm.ui.qml</file>
         <file>contentPages/help/PageHelpDocOnline.qml</file>
         <file>contentPages/help/PageHelpDocOnlineForm.ui.qml</file>
-        <file>contentPages/definitions/PageDefinitionsParameters.qml</file>
-        <file>contentPages/definitions/PageDefinitionsParametersForm.ui.qml</file>
         <file>contentPages/home/PageHome.qml</file>
         <file>contentPages/home/PageHomeForm.ui.qml</file>
         <file>contentPages/card/photo.png</file>
@@ -68,5 +66,7 @@
         <file>images/definitions_icon_selected.png</file>
         <file>images/help_icon.png</file>
         <file>images/help_icon_selected.png</file>
+        <file>contentPages/definitions/PageDefinitionsSignature.qml</file>
+        <file>contentPages/definitions/PageDefinitionsSignatureForm.ui.qml</file>
     </qresource>
 </RCC>
