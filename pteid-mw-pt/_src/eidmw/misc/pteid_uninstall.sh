@@ -39,8 +39,8 @@ rm -rf /usr/local/share/certs/
 rm -rf '/Applications/Validacao de assinaturas.app'
 
 #Remove the system package "receipts"
-pkgutil --forget pt.cartaodecidadao.pteidmiddleware.bin.pkg
-pkgutil --forget pt.cartaodecidadao.pteidmiddleware.lib.pkg
-pkgutil --forget pt.cartaodecidadao.pteidmiddleware.certs.pkg	
-pkgutil --forget pt.cartaodecidadao.pteidmiddleware.Validacaodeassinaturas.pkg
-pkgutil --forget pt.cartaodecidadao.pteidmiddleware.frameworks.pkg
+pkgutil --forget pt.cartaodecidadao.certs.pkg
+pkgutil --forget pt.cartaodecidadao.lib.pkg
+pkgutil --forget pt.cartaodecidadao.bin.pkg
+pkgutil --forget pt.cartaodecidadao.apps.pkg
+pkgutil --forget pt.cartaodecidadao.frameworks.pkg
