@@ -1,0 +1,11 @@
+Apache Santuario XML-Security-C Library
+Copyright 2010-2013 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+This product includes software developed by the OpenSSL Project
+for use in the OpenSSL Toolkit. (http://www.openssl.org/).
+
+This product also includes software developed, copyrighted, and
+contributed by The Ohio State University.

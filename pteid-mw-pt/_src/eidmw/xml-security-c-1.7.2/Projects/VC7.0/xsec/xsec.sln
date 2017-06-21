@@ -1,0 +1,126 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xsec_lib", "xsec_lib\xsec_lib.vcproj", "{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xtest", "xtest\xtest.vcproj", "{127B3E61-096C-438A-BF33-5A9F05C7035A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "c14n", "c14n\c14n.vcproj", "{ADFB4A1A-9CB4-4BEE-9DE8-6584708624C4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "checksig", "checksig\checksig.vcproj", "{B32B9596-E250-41D5-8AA8-A623226C9018}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cipher", "cipher\cipher.vcproj", "{0C455A95-991B-4019-8872-AA1FE6139F69}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "siginf", "siginf\siginf.vcproj", "{20E437FA-F184-4D60-9B3B-4358EFFA8B42}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "templatesign", "templatesign\templatesign.vcproj", "{10CE0E86-DF94-4244-9D81-C1D5CDDA6AD8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "threadTest", "threadTest\threadTest.vcproj", "{5EE9A0C7-72C8-48F3-A6DB-6E5BF0715DC3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "txfmout", "txfmout\txfmout.vcproj", "{E1A95507-B3E4-4075-8C31-A24C9460BF68}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xklient", "xklient\xklient.vcproj", "{48346695-1496-4881-8709-E5C02392930A}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Debug No Xalan
+		ConfigName.2 = Release
+		ConfigName.3 = Release No Xalan
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+		{127B3E61-096C-438A-BF33-5A9F05C7035A}.0 = {D5B5A007-E873-4D12-B4AF-60811AFD9EF1}
+		{ADFB4A1A-9CB4-4BEE-9DE8-6584708624C4}.0 = {D5B5A007-E873-4D12-B4AF-60811AFD9EF1}
+		{B32B9596-E250-41D5-8AA8-A623226C9018}.0 = {D5B5A007-E873-4D12-B4AF-60811AFD9EF1}
+		{0C455A95-991B-4019-8872-AA1FE6139F69}.0 = {D5B5A007-E873-4D12-B4AF-60811AFD9EF1}
+		{20E437FA-F184-4D60-9B3B-4358EFFA8B42}.0 = {D5B5A007-E873-4D12-B4AF-60811AFD9EF1}
+		{10CE0E86-DF94-4244-9D81-C1D5CDDA6AD8}.0 = {D5B5A007-E873-4D12-B4AF-60811AFD9EF1}
+		{5EE9A0C7-72C8-48F3-A6DB-6E5BF0715DC3}.0 = {D5B5A007-E873-4D12-B4AF-60811AFD9EF1}
+		{E1A95507-B3E4-4075-8C31-A24C9460BF68}.0 = {D5B5A007-E873-4D12-B4AF-60811AFD9EF1}
+		{48346695-1496-4881-8709-E5C02392930A}.0 = {D5B5A007-E873-4D12-B4AF-60811AFD9EF1}
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Debug.ActiveCfg = Debug|Win32
+		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Debug.Build.0 = Debug|Win32
+		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Debug No Xalan.ActiveCfg = Debug No Xalan|Win32
+		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Debug No Xalan.Build.0 = Debug No Xalan|Win32
+		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Release.ActiveCfg = Release|Win32
+		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Release.Build.0 = Release|Win32
+		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Release No Xalan.ActiveCfg = Release No Xalan|Win32
+		{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}.Release No Xalan.Build.0 = Release No Xalan|Win32
+		{127B3E61-096C-438A-BF33-5A9F05C7035A}.Debug.ActiveCfg = Debug|Win32
+		{127B3E61-096C-438A-BF33-5A9F05C7035A}.Debug.Build.0 = Debug|Win32
+		{127B3E61-096C-438A-BF33-5A9F05C7035A}.Debug No Xalan.ActiveCfg = Debug No Xalan|Win32
+		{127B3E61-096C-438A-BF33-5A9F05C7035A}.Debug No Xalan.Build.0 = Debug No Xalan|Win32
+		{127B3E61-096C-438A-BF33-5A9F05C7035A}.Release.ActiveCfg = Release|Win32
+		{127B3E61-096C-438A-BF33-5A9F05C7035A}.Release.Build.0 = Release|Win32
+		{127B3E61-096C-438A-BF33-5A9F05C7035A}.Release No Xalan.ActiveCfg = Release No Xalan|Win32
+		{127B3E61-096C-438A-BF33-5A9F05C7035A}.Release No Xalan.Build.0 = Release No Xalan|Win32
+		{ADFB4A1A-9CB4-4BEE-9DE8-6584708624C4}.Debug.ActiveCfg = Debug|Win32
+		{ADFB4A1A-9CB4-4BEE-9DE8-6584708624C4}.Debug.Build.0 = Debug|Win32
+		{ADFB4A1A-9CB4-4BEE-9DE8-6584708624C4}.Debug No Xalan.ActiveCfg = Debug No Xalan|Win32
+		{ADFB4A1A-9CB4-4BEE-9DE8-6584708624C4}.Debug No Xalan.Build.0 = Debug No Xalan|Win32
+		{ADFB4A1A-9CB4-4BEE-9DE8-6584708624C4}.Release.ActiveCfg = Release|Win32
+		{ADFB4A1A-9CB4-4BEE-9DE8-6584708624C4}.Release.Build.0 = Release|Win32
+		{ADFB4A1A-9CB4-4BEE-9DE8-6584708624C4}.Release No Xalan.ActiveCfg = Release No Xalan|Win32
+		{ADFB4A1A-9CB4-4BEE-9DE8-6584708624C4}.Release No Xalan.Build.0 = Release No Xalan|Win32
+		{B32B9596-E250-41D5-8AA8-A623226C9018}.Debug.ActiveCfg = Debug|Win32
+		{B32B9596-E250-41D5-8AA8-A623226C9018}.Debug.Build.0 = Debug|Win32
+		{B32B9596-E250-41D5-8AA8-A623226C9018}.Debug No Xalan.ActiveCfg = Debug No Xalan|Win32
+		{B32B9596-E250-41D5-8AA8-A623226C9018}.Debug No Xalan.Build.0 = Debug No Xalan|Win32
+		{B32B9596-E250-41D5-8AA8-A623226C9018}.Release.ActiveCfg = Release|Win32
+		{B32B9596-E250-41D5-8AA8-A623226C9018}.Release.Build.0 = Release|Win32
+		{B32B9596-E250-41D5-8AA8-A623226C9018}.Release No Xalan.ActiveCfg = Release No Xalan|Win32
+		{B32B9596-E250-41D5-8AA8-A623226C9018}.Release No Xalan.Build.0 = Release No Xalan|Win32
+		{0C455A95-991B-4019-8872-AA1FE6139F69}.Debug.ActiveCfg = Debug|Win32
+		{0C455A95-991B-4019-8872-AA1FE6139F69}.Debug.Build.0 = Debug|Win32
+		{0C455A95-991B-4019-8872-AA1FE6139F69}.Debug No Xalan.ActiveCfg = Debug No Xalan|Win32
+		{0C455A95-991B-4019-8872-AA1FE6139F69}.Debug No Xalan.Build.0 = Debug No Xalan|Win32
+		{0C455A95-991B-4019-8872-AA1FE6139F69}.Release.ActiveCfg = Release|Win32
+		{0C455A95-991B-4019-8872-AA1FE6139F69}.Release.Build.0 = Release|Win32
+		{0C455A95-991B-4019-8872-AA1FE6139F69}.Release No Xalan.ActiveCfg = Release No Xalan|Win32
+		{0C455A95-991B-4019-8872-AA1FE6139F69}.Release No Xalan.Build.0 = Release No Xalan|Win32
+		{20E437FA-F184-4D60-9B3B-4358EFFA8B42}.Debug.ActiveCfg = Debug|Win32
+		{20E437FA-F184-4D60-9B3B-4358EFFA8B42}.Debug.Build.0 = Debug|Win32
+		{20E437FA-F184-4D60-9B3B-4358EFFA8B42}.Debug No Xalan.ActiveCfg = Debug No Xalan|Win32
+		{20E437FA-F184-4D60-9B3B-4358EFFA8B42}.Debug No Xalan.Build.0 = Debug No Xalan|Win32
+		{20E437FA-F184-4D60-9B3B-4358EFFA8B42}.Release.ActiveCfg = Release|Win32
+		{20E437FA-F184-4D60-9B3B-4358EFFA8B42}.Release.Build.0 = Release|Win32
+		{20E437FA-F184-4D60-9B3B-4358EFFA8B42}.Release No Xalan.ActiveCfg = Release No Xalan|Win32
+		{20E437FA-F184-4D60-9B3B-4358EFFA8B42}.Release No Xalan.Build.0 = Release No Xalan|Win32
+		{10CE0E86-DF94-4244-9D81-C1D5CDDA6AD8}.Debug.ActiveCfg = Debug|Win32
+		{10CE0E86-DF94-4244-9D81-C1D5CDDA6AD8}.Debug.Build.0 = Debug|Win32
+		{10CE0E86-DF94-4244-9D81-C1D5CDDA6AD8}.Debug No Xalan.ActiveCfg = Debug No Xalan|Win32
+		{10CE0E86-DF94-4244-9D81-C1D5CDDA6AD8}.Debug No Xalan.Build.0 = Debug No Xalan|Win32
+		{10CE0E86-DF94-4244-9D81-C1D5CDDA6AD8}.Release.ActiveCfg = Release|Win32
+		{10CE0E86-DF94-4244-9D81-C1D5CDDA6AD8}.Release.Build.0 = Release|Win32
+		{10CE0E86-DF94-4244-9D81-C1D5CDDA6AD8}.Release No Xalan.ActiveCfg = Release No Xalan|Win32
+		{10CE0E86-DF94-4244-9D81-C1D5CDDA6AD8}.Release No Xalan.Build.0 = Release No Xalan|Win32
+		{5EE9A0C7-72C8-48F3-A6DB-6E5BF0715DC3}.Debug.ActiveCfg = Debug|Win32
+		{5EE9A0C7-72C8-48F3-A6DB-6E5BF0715DC3}.Debug.Build.0 = Debug|Win32
+		{5EE9A0C7-72C8-48F3-A6DB-6E5BF0715DC3}.Debug No Xalan.ActiveCfg = Debug No Xalan|Win32
+		{5EE9A0C7-72C8-48F3-A6DB-6E5BF0715DC3}.Debug No Xalan.Build.0 = Debug No Xalan|Win32
+		{5EE9A0C7-72C8-48F3-A6DB-6E5BF0715DC3}.Release.ActiveCfg = Release|Win32
+		{5EE9A0C7-72C8-48F3-A6DB-6E5BF0715DC3}.Release.Build.0 = Release|Win32
+		{5EE9A0C7-72C8-48F3-A6DB-6E5BF0715DC3}.Release No Xalan.ActiveCfg = Release No Xalan|Win32
+		{5EE9A0C7-72C8-48F3-A6DB-6E5BF0715DC3}.Release No Xalan.Build.0 = Release No Xalan|Win32
+		{E1A95507-B3E4-4075-8C31-A24C9460BF68}.Debug.ActiveCfg = Debug|Win32
+		{E1A95507-B3E4-4075-8C31-A24C9460BF68}.Debug.Build.0 = Debug|Win32
+		{E1A95507-B3E4-4075-8C31-A24C9460BF68}.Debug No Xalan.ActiveCfg = Debug No Xalan|Win32
+		{E1A95507-B3E4-4075-8C31-A24C9460BF68}.Debug No Xalan.Build.0 = Debug No Xalan|Win32
+		{E1A95507-B3E4-4075-8C31-A24C9460BF68}.Release.ActiveCfg = Release|Win32
+		{E1A95507-B3E4-4075-8C31-A24C9460BF68}.Release.Build.0 = Release|Win32
+		{E1A95507-B3E4-4075-8C31-A24C9460BF68}.Release No Xalan.ActiveCfg = Release No Xalan|Win32
+		{E1A95507-B3E4-4075-8C31-A24C9460BF68}.Release No Xalan.Build.0 = Release No Xalan|Win32
+		{48346695-1496-4881-8709-E5C02392930A}.Debug.ActiveCfg = Debug|Win32
+		{48346695-1496-4881-8709-E5C02392930A}.Debug.Build.0 = Debug|Win32
+		{48346695-1496-4881-8709-E5C02392930A}.Debug No Xalan.ActiveCfg = Debug No Xalan|Win32
+		{48346695-1496-4881-8709-E5C02392930A}.Debug No Xalan.Build.0 = Debug No Xalan|Win32
+		{48346695-1496-4881-8709-E5C02392930A}.Release.ActiveCfg = Release|Win32
+		{48346695-1496-4881-8709-E5C02392930A}.Release.Build.0 = Release|Win32
+		{48346695-1496-4881-8709-E5C02392930A}.Release No Xalan.ActiveCfg = Release No Xalan|Win32
+		{48346695-1496-4881-8709-E5C02392930A}.Release No Xalan.Build.0 = Release No Xalan|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

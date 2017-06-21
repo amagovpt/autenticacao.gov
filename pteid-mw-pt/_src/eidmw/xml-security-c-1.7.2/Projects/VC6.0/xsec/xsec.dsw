@@ -1,0 +1,164 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "c14n"=".\c14n\c14n.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name xsec_lib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "checksig"=".\checksig\checksig.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name xsec_lib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "cipher"=".\cipher\cipher.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name xsec_lib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "siginf"=".\siginf\siginf.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name xsec_lib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "templatesign"=".\templatesign\templatesign.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name xsec_lib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "threadTest"=".\threadTest\threadTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name xsec_lib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "txfmout"=".\txfmout\txfmout.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name xsec_lib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "xklient"=".\xklient\xklient.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name xsec_lib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "xsec_lib"=".\xsec_lib\xsec_lib.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "xtest"=".\xtest\xtest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name xsec_lib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+
