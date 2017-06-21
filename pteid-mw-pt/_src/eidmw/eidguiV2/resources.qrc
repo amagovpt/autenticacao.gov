@@ -71,5 +71,7 @@
         <file>images/logo_CC.png</file>
         <file>components/TitleBar.qml</file>
         <file>components/FrameWindow.qml</file>
+        <file>images/flags/pt32.png</file>
+        <file>images/flags/uk32.png</file>
     </qresource>
 </RCC>

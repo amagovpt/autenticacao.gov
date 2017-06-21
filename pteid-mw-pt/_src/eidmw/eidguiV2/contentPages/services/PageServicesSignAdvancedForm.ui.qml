@@ -236,7 +236,7 @@ Item {
                     RadioButton {
                         id: radioButtonPADES
                         x: 90
-                        height: Constants.SIZE_V_URL_FILES
+                        height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
                         anchors.top: textFormatSign.bottom
                         text: "Pdf"
                         anchors.topMargin: -12
@@ -248,7 +248,7 @@ Item {
                     }
                     RadioButton {
                         id: radioButtonXADES
-                        height: Constants.SIZE_V_URL_FILES
+                        height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
                         anchors.top: textFormatSign.bottom
                         anchors.left: radioButtonPADES.right
                         text: "Outros ficheiros"

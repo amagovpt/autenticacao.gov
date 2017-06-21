@@ -121,7 +121,7 @@ Item {
                 id: rectAppStartCheckBox
                 width: parent.width
                 color: "white"
-                height: checkboxAutoRead.height + checkboxStart.height + 3 * Constants.SIZE_TEXT_V_SPACE
+                height: checkboxAutoRead.height + Constants.SIZE_TEXT_V_SPACE
                 anchors.top : dateAppStart.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
@@ -142,17 +142,101 @@ Item {
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
-                    anchors.top: checkboxAutoRead.bottom
+                    x: rectAppStartCheckBox.width * 0.5
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 }
             }
         }
+
+        Item{
+            id: rectAppLanguage
+            width: parent.width
+            height: dateAppLanguage.height + rectAppLanguageCheckBox.height + Constants.SIZE_TEXT_V_SPACE
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            anchors.top: rectAppStart.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+
+            Text {
+                id: dateAppLanguage
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                height: Constants.SIZE_TEXT_LABEL
+                text: "Idioma"
+            }
+            DropShadow {
+                anchors.fill: rectAppLanguageCheckBox
+                horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                radius: Constants.FORM_SHADOW_RADIUS
+                samples: Constants.FORM_SHADOW_SAMPLES
+                color: Constants.COLOR_FORM_SHADOW
+                source: rectAppLanguageCheckBox
+                spread: Constants.FORM_SHADOW_SPREAD
+                opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
+            }
+            RectangularGlow {
+                anchors.fill: rectAppLanguageCheckBox
+                glowRadius: Constants.FORM_GLOW_RADIUS
+                spread: Constants.FORM_GLOW_SPREAD
+                color: Constants.COLOR_FORM_GLOW
+                cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
+            }
+            Rectangle {
+                id: rectAppLanguageCheckBox
+                width: parent.width
+                color: "white"
+                height: radioButtonPT.height
+                anchors.top : dateAppLanguage.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
+                RadioButton {
+                    id: radioButtonPT
+                    height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
+                    text: "Português"
+                    checked: true
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                }
+                Image {
+                    id: imagePT
+                    height: radioButtonPT.height
+                    fillMode: Image.PreserveAspectFit
+                    source: "../../images/flags/pt32.png"
+                    anchors.left: radioButtonPT.right
+                    opacity: radioButtonPT.checked ?
+                                 1 : Constants.OPACITY_DIFINITIONS_APP_LANGUAGE_IMAGE_DISABLED
+                }
+                RadioButton {
+                    id: radioButtonUK
+                    height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
+                    x: rectAppLanguageCheckBox.width * 0.5
+                    text: "Inglês"
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                }
+                Image {
+                    id: imageUK
+                    height: radioButtonPT.height
+                    fillMode: Image.PreserveAspectFit
+                    source: "../../images/flags/uk32.png"
+                    anchors.left: radioButtonUK.right
+                    opacity: radioButtonUK.checked ?
+                                 1 : Constants.OPACITY_DIFINITIONS_APP_LANGUAGE_IMAGE_DISABLED
+                }
+            }
+        }
+
         Item{
             id: rectAppLook
             width: parent.width
             height: dateAppStart.height + rectAppLookCheckBox.height + 2 * Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            anchors.top: rectAppStart.bottom
+            anchors.top: rectAppLanguage.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
             Text {
