@@ -4,7 +4,8 @@ QT += quick quickcontrols2
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    appcontroller.cpp
+    appcontroller.cpp \
+    gapi.cpp
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -34,4 +35,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES +=
 
 HEADERS += \
-    appcontroller.h
+    appcontroller.h \
+    gapi.h

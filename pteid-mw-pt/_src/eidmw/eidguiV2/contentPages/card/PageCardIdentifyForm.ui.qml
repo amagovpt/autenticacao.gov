@@ -11,6 +11,19 @@ import "../../components" as Components
 Item {
     anchors.fill: parent
 
+    property alias propertyTextBoxName: textBoxName
+    property alias propertyTextBoxSurName: textBoxSurName
+    property alias propertyTextBoxSex: textBoxSex
+    property alias propertyTextBoxHeight: textBoxHeight
+    property alias propertyTextBoxNacionality: textBoxNacionality
+    property alias propertyTextBoxDateOfBirth: textBoxDateOfBirth
+    property alias propertyTextBoxDocumentNum: textBoxDocumentNum
+    property alias propertyTextBoxExpirydate: textBoxExpirydate
+    property alias propertyTextBoxCountry: textBoxCountry
+    property alias propertyTextBoxParentsFather: textBoxParentsFather
+    property alias propertyTextBoxParentsMother: textBoxParentsMother
+    property alias propertyTextBoxNotes: textBoxNotes
+
     Item {
         id: rowTop
         width: parent.width
@@ -39,8 +52,8 @@ Item {
                         + Constants.SIZE_TEXT_V_SPACE
                         + 2 * Constants.SIZE_TEXT_FIELD
                 Components.LabelTextBoxForm{
+                    id: textBoxName
                     propertyDateText.text: "Nome"
-                    propertyDateField.text: "Joana Ovilia"
                 }
             }
             Item{
@@ -54,8 +67,8 @@ Item {
                 anchors.top :givenNameTextForm.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 Components.LabelTextBoxForm{
+                    id: textBoxSurName
                     propertyDateText.text: "Apelido"
-                    propertyDateField.text: "Ribeiro Martins Sousa Costa Mender Cavaco Soares Meireles Dinis Mendes"
                     propertyRectField.height: parent.height
                     propertyDateField.wrapMode: Text.WordWrap
                 }
@@ -119,8 +132,8 @@ Item {
             id: rectSex
             width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.20
             Components.LabelTextBoxForm{
+                id: textBoxSex
                 propertyDateText.text: "Sexo"
-                propertyDateField.text: "F"
             }
         }
         Item{
@@ -129,8 +142,8 @@ Item {
             anchors.left: rectSex.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
+                id: textBoxHeight
                 propertyDateText.text: "Altura"
-                propertyDateField.text: "1.77"
             }
         }
         Item{
@@ -139,8 +152,8 @@ Item {
             anchors.left: rectHeight.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
+                id: textBoxNacionality
                 propertyDateText.text: "Nacionalidade"
-                propertyDateField.text: "PRT"
             }
         }
         Item{
@@ -149,8 +162,8 @@ Item {
             anchors.left: rectNacionality.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
+                id: textBoxDateOfBirth
                 propertyDateText.text: "Data de Nascimento"
-                propertyDateField.text: "25 12 1980"
             }
         }
     }
@@ -168,8 +181,8 @@ Item {
             id: rectDocumentNum
             width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
             Components.LabelTextBoxForm{
+                id: textBoxDocumentNum
                 propertyDateText.text: "N.º Documento"
-                propertyDateField.text: "1223456456"
             }
         }
         Item{
@@ -178,8 +191,8 @@ Item {
             anchors.left: rectDocumentNum.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
+                id: textBoxExpirydate
                 propertyDateText.text: "Data de validade"
-                propertyDateField.text: "31 12 2019"
             }
         }
     }
@@ -197,8 +210,8 @@ Item {
             id: rectCountry
             width: parent.width
             Components.LabelTextBoxForm{
+                id: textBoxCountry
                 propertyDateText.text: "País"
-                propertyDateField.text: "PRT"
             }
         }
     }
@@ -219,8 +232,8 @@ Item {
                     + Constants.SIZE_TEXT_V_SPACE
                     + 2 * Constants.SIZE_TEXT_FIELD
             Components.LabelTextBoxForm{
+                id: textBoxParentsFather
                 propertyDateText.text: "Filiação"
-                propertyDateField.text: "Antonio Maria Costa"
             }
         }
         Item{
@@ -230,9 +243,9 @@ Item {
                     + 2 * Constants.SIZE_TEXT_FIELD
             anchors.top :rectParentsFather.bottom
             Components.LabelTextBoxForm{
+                id: textBoxParentsMother
                 propertyDateText.height: 0
                 propertyRectField.anchors.topMargin: 2 * Constants.SIZE_TEXT_V_SPACE
-                propertyDateField.text: "Olivia Sousa Costa"
             }
         }
     }
@@ -253,8 +266,8 @@ Item {
                     + Constants.SIZE_TEXT_V_SPACE
                     + 2 * Constants.SIZE_TEXT_FIELD
             Components.LabelTextBoxForm{
+                id: textBoxNotes
                 propertyDateText.text: "Indicações Eventuais"
-                propertyDateField.text: ""
             }
         }
     }
