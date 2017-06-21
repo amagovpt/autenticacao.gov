@@ -42,7 +42,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.1
 
 /* Constants imports */
-import "scripts/Constants.js" as Constants
+import "../scripts/Constants.js" as Constants
 
 Item {
     id: titleBar
@@ -76,8 +76,8 @@ Item {
                 verticalCenter: parent.verticalCenter
             }
             source: mouseAreaMinimizeButton.containsMouse ?
-                        "images/titleBar/minimize_hover.png" :
-                        "images/titleBar/minimize.png"
+                        "../images/titleBar/minimize_hover.png" :
+                        "../images/titleBar/minimize.png"
             MouseArea {
                 id: mouseAreaMinimizeButton
                 anchors.fill: parent
@@ -97,8 +97,8 @@ Item {
                 verticalCenter: parent.verticalCenter
             }
             source: mouseAreaFullScreentButton.containsMouse ?
-                        "images/titleBar/maximize_hover.png" :
-                        "images/titleBar/maximize.png"
+                        "../images/titleBar/maximize_hover.png" :
+                        "../images/titleBar/maximize.png"
             MouseArea {
                 id: mouseAreaFullScreentButton
                 anchors.fill: parent
@@ -118,8 +118,8 @@ Item {
                 verticalCenter: parent.verticalCenter
             }
             source: mouseAreaQuitButton.containsMouse ?
-                        "images/titleBar/quit_hover.png" :
-                        "images/titleBar/quit.png"
+                        "../images/titleBar/quit_hover.png" :
+                        "../images/titleBar/quit.png"
             MouseArea {
                 id: mouseAreaQuitButton
                 anchors.fill: parent

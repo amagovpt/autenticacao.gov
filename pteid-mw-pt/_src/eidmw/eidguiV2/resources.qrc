@@ -49,8 +49,6 @@
         <file>contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml</file>
         <file>contentPages/security/PinCodesModel.qml</file>
         <file>components/TextBullet.qml</file>
-        <file>TitleBar.qml</file>
-        <file>FrameWindow.qml</file>
         <file>components/CardRowTop.qml</file>
         <file>images/definitions_icon.png</file>
         <file>images/definitions_icon_selected.png</file>
@@ -71,5 +69,7 @@
         <file>images/remove_file.png</file>
         <file>images/remove_file_hover.png</file>
         <file>images/logo_CC.png</file>
+        <file>components/TitleBar.qml</file>
+        <file>components/FrameWindow.qml</file>
     </qresource>
 </RCC>

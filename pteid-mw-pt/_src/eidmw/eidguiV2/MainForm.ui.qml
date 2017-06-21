@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.3
 
 /* Constants imports */
 import "scripts/Constants.js" as Constants
+import "components" as Components
 
 Item {
     anchors.fill: parent
@@ -22,8 +23,8 @@ Item {
 
     property alias propertyImageLogo : mouseAreaImageLogo
 
-     /* Title bar */
-    TitleBar {
+    /* Title bar */
+    Components.TitleBar {
         id: titleBar;
         width: parent.width;
         height: Constants.TITLE_BAR_SIZE;
@@ -31,25 +32,34 @@ Item {
     }
 
     /* Frame Window */
-   FrameWindow {
-       id: leftFrameBar;
-       z: 0
-       width: Constants.FRAME_WINDOW_SIZE;
-       height: mainView.height;
-       anchors.left:  mainView.left
-       propertyMouseRegion.cursorShape: Qt.SizeHorCursor
-       propertySide: "LEFT"
-   }
-   /* Frame Window */
-  FrameWindow {
-      id: rightFrameBar;
-      z: 0
-      width: Constants.FRAME_WINDOW_SIZE;
-      height: mainView.height;
-      anchors.right: mainView.right
-      propertyMouseRegion.cursorShape: Qt.SizeHorCursor
-      propertySide: "RIGHT"
-  }
+    Components.FrameWindow {
+        id: leftFrameBar;
+        z: 0
+        width: Constants.FRAME_WINDOW_SIZE;
+        height: mainView.height;
+        anchors.left:  mainView.left
+        propertyMouseRegion.cursorShape: Qt.SizeHorCursor
+        propertySide: "LEFT"
+    }
+    /* Frame Window */
+    Components.FrameWindow {
+        id: rightFrameBar;
+        z: 0
+        width: Constants.FRAME_WINDOW_SIZE;
+        height: mainView.height;
+        anchors.right: mainView.right
+        propertyMouseRegion.cursorShape: Qt.SizeHorCursor
+        propertySide: "RIGHT"
+    }
+    /* Frame Window */
+    Components.FrameWindow {
+        id: bottomFrameBar;
+        z: 0
+        width: parent.width;
+        height: Constants.FRAME_WINDOW_SIZE;
+        anchors.bottom: mainView.bottom
+        propertySide: "BOTTOM"
+    }
     /* Main View */
     Item {
 
@@ -164,13 +174,4 @@ Item {
             }
         }
     }
-    /* Frame Window */
-   FrameWindow {
-       id: bottomFrameBar;
-       z: 0
-       width: parent.width;
-       height: Constants.FRAME_WINDOW_SIZE;
-       anchors.bottom: mainView.bottom
-       propertySide: "BOTTOM"
-   }
 }
