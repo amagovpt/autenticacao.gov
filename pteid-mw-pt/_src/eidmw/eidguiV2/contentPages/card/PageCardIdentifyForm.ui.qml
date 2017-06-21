@@ -100,7 +100,7 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
                     antialiasing: true
-                    source: "photo.png"
+                    source: "../../images/dummy/photo.png"
                 }
             }
         }

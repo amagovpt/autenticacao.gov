@@ -68,7 +68,8 @@ Item {
             z: 1
             Image {
                 id: imageLogo
-                width: Constants.MAIN_MENU_IMAGE_WIDTH_SIZE
+                width: Constants.SIZE_IMAGE_LOGO_MAIN_MENU_WIDTH
+                height: Constants.SIZE_IMAGE_LOGO_MAIN_MENU_HEIGHT
                 y: parent.height * Constants.IMAGE_LOGO_RELATIVE_V_POS
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter

@@ -101,13 +101,13 @@ PageServicesSignAdvancedForm {
                 Image {
                     id: iconRemove
                     anchors.left: fileName.right
-                    width: Constants.SIZE_V_URL_FILES
-                    height: Constants.SIZE_V_URL_FILES
+                    width: Constants.SIZE_IMAGE_FILE_REMOVE
+                    height: Constants.SIZE_IMAGE_FILE_REMOVE
                     antialiasing: true
                     fillMode: Image.PreserveAspectFit
                     source:  mouseAreaIconDelete.containsMouse ?
-                                 "../../images/ic_highlight_on_black_24dp.png" :
-                                 "../../images/ic_highlight_off_black_24dp.png"
+                                 "../../images/remove_file_hover.png" :
+                                 "../../images/remove_file.png"
                     MouseArea {
                         id: mouseAreaIconDelete
                         anchors.fill: parent

@@ -473,7 +473,7 @@ Item {
                     anchors.fill: parent
                     antialiasing: true
                     fillMode: Image.PreserveAspectFit
-                    source: "../../images/Pdfdemo.png"
+                    source: "../../images/dummy/Pdfdemo.png"
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible: fileLoaded
                 }

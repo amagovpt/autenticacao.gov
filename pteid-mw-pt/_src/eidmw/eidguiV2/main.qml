@@ -372,8 +372,8 @@ Window {
             }
             Image {
                 id: imageArrowMainMenu
-                width: Constants.SIZE_TEXT_MAIN_MENU
-                height: Constants.SIZE_TEXT_MAIN_MENU
+                width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
                 fillMode: Image.PreserveAspectFit
                 x: parent.width * Constants.IMAGE_ARROW_MAIN_MENU_RELATIVE
                 anchors.verticalCenter: parent.verticalCenter
@@ -443,6 +443,8 @@ Window {
             }
             Image {
                 id: imageMainMenuBottom
+                width: Constants.SIZE_IMAGE_BOTTOM_MENU
+                height: Constants.SIZE_IMAGE_BOTTOM_MENU
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
                 source: getBottomMenuImgSource(index,mouseAreaMainMenuBottom.containsMouse)

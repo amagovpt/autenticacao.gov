@@ -91,7 +91,7 @@ Item {
                     height: parent.height
                     antialiasing: true
                     fillMode: Image.PreserveAspectFit
-                    source: "../../images/CCdemo.png"
+                    source: "../../images/dummy/CCdemo.png"
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible: true
                     opacity: radioButtonDefault.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
@@ -170,7 +170,7 @@ Item {
                     height: parent.height - Constants.HEIGHT_BOTTOM_COMPONENT
                     antialiasing: true
                     fillMode: Image.PreserveAspectFit
-                    source: "../../images/CCdemo_custom.png"
+                    source: "../../images/dummy/CCdemo_custom.png"
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible: fileLoaded
                     opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED

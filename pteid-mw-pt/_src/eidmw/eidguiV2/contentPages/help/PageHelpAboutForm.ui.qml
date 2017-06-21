@@ -81,15 +81,17 @@ Item {
     Image {
         id: imageCC
         y: parent.height * 0.1
-        width: 218
-        source: "../../images/logo_cartao_cidadao.png"
+        width: Constants.SIZE_IMAGE_LOGO_CC_WIDTH
+        height: Constants.SIZE_IMAGE_LOGO_CC_HEIGHT
         fillMode: Image.PreserveAspectFit
+        source: "../../images/logo_CC.png"
         anchors.top: textDevByAgency.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
     }
     Image {
         id: imageSupported
-        width: 384
+        width: Constants.SIZE_IMAGE_LOGO_SUPPORTED_WIDTH
+        height: Constants.SIZE_IMAGE_LOGO_SUPPORTED_HEIGHT
         fillMode: Image.PreserveAspectFit
         source: "../../images/logo_cor400.png"
         anchors.top: imageCC.bottom

@@ -35,8 +35,8 @@ PageSecurityPinCodesForm {
             }
             Image {
                 id: imageArrowPinCodes
-                width: Constants.SIZE_TEXT_SUB_MENU
-                height: Constants.SIZE_TEXT_SUB_MENU
+                width: Constants.SIZE_IMAGE_ARROW_SUB_MENU
+                height: Constants.SIZE_IMAGE_ARROW_SUB_MENU
                 fillMode: Image.PreserveAspectFit
                 x: parent.width * Constants.IMAGE_ARROW_SUB_MENU_RELATIVE
                 anchors.verticalCenter: parent.verticalCenter

@@ -66,56 +66,64 @@ Item {
         }
         Image {
             id: minimizeButton
-            width: Constants.TITLE_BAR_SIZE_ICON
-            height: Constants.TITLE_BAR_SIZE_ICON
+            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+            height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+            fillMode: Image.PreserveAspectFit
             anchors {
                 right: fullScreentButton.left;
-                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE; rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
+                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE;
+                rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
                 verticalCenter: parent.verticalCenter
             }
-            source: "images/minimize.png"
+            source: mouseAreaMinimizeButton.containsMouse ?
+                        "images/titleBar/minimize_hover.png" :
+                        "images/titleBar/minimize.png"
             MouseArea {
+                id: mouseAreaMinimizeButton
                 anchors.fill: parent
                 hoverEnabled: true
-                onEntered: minimizeButton.scale = 1.2
-                onExited: minimizeButton.scale = 1
                 onClicked: mainWindow.showMinimized()
             }
         }
         Image {
             id: fullScreentButton
-            width: Constants.TITLE_BAR_SIZE_ICON
-            height: Constants.TITLE_BAR_SIZE_ICON
+            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+            height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+            fillMode: Image.PreserveAspectFit
             anchors {
                 right: quitButton.left;
-                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE; rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
+                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE;
+                rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
                 verticalCenter: parent.verticalCenter
             }
-            source: "images/maximize.png"
-
+            source: mouseAreaFullScreentButton.containsMouse ?
+                        "images/titleBar/maximize_hover.png" :
+                        "images/titleBar/maximize.png"
             MouseArea {
+                id: mouseAreaFullScreentButton
                 anchors.fill: parent
                 hoverEnabled: true
-                onEntered: fullScreentButton.scale = 1.2
-                onExited: fullScreentButton.scale = 1
                 onClicked: getScreenState()
             }
         }
         Image {
             id: quitButton
-            width: Constants.TITLE_BAR_SIZE_ICON
-            height: Constants.TITLE_BAR_SIZE_ICON
+            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+            height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+            fillMode: Image.PreserveAspectFit
             anchors {
                 right: parent.right;
-                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE; rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
+                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE;
+                rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
                 verticalCenter: parent.verticalCenter
             }
-            source: "images/quit.png"
+            source: mouseAreaQuitButton.containsMouse ?
+                        "images/titleBar/quit_hover.png" :
+                        "images/titleBar/quit.png"
             MouseArea {
+                id: mouseAreaQuitButton
                 anchors.fill: parent
                 hoverEnabled: true
-                onEntered: quitButton.scale = 1.2
-                onExited: quitButton.scale = 1
                 onClicked: Qt.quit()
             }
         }

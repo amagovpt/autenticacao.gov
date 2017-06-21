@@ -35,15 +35,15 @@ Column {
                     id: carot
 
                     anchors.left: parent.left
-                    y: Constants.SIZE_TEXT_FIELD * 0.5
+                    y: Constants.SIZE_IMAGE_ARROW_ACCORDION * 0.5
 
-                    sourceSize.width: Constants.SIZE_TEXT_FIELD
-                    sourceSize.height: Constants.SIZE_TEXT_FIELD
+                    sourceSize.width: Constants.SIZE_IMAGE_ARROW_ACCORDION
+                    sourceSize.height: Constants.SIZE_IMAGE_ARROW_ACCORDION
                     source: '../images/arrow-right_AMA.png'
                     visible: modelData.children ? true : false
                     transform: Rotation {
-                        origin.x: Constants.SIZE_TEXT_FIELD * 0.5
-                        origin.y: Constants.SIZE_TEXT_FIELD * 0.5
+                        origin.x: Constants.SIZE_IMAGE_ARROW_ACCORDION * 0.5
+                        origin.y: Constants.SIZE_IMAGE_ARROW_ACCORDION * 0.5
                         angle: infoRow.expanded ? 90 : 0
                         Behavior on angle { NumberAnimation { duration: 150 } }
                     }

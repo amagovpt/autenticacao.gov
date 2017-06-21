@@ -23,13 +23,11 @@
         <file>contentPages/help/PageHelpDocOnlineForm.ui.qml</file>
         <file>contentPages/home/PageHome.qml</file>
         <file>contentPages/home/PageHomeForm.ui.qml</file>
-        <file>contentPages/card/photo.png</file>
         <file>images/logo_autenticacao_gov.png</file>
         <file>contentPages/security/PageSecurityCertificates.qml</file>
         <file>contentPages/security/PageSecurityCertificatesForm.ui.qml</file>
         <file>contentPages/security/PageSecurityPinCodes.qml</file>
         <file>contentPages/security/PageSecurityPinCodesForm.ui.qml</file>
-        <file>images/logo_cartao_cidadao.png</file>
         <file>MainMenuBottomModel.qml</file>
         <file>components/LabelTextBox.qml</file>
         <file>components/LabelTextBoxForm.ui.qml</file>
@@ -39,14 +37,10 @@
         <file>images/arrow-right_hover.png</file>
         <file>images/arrow-right_white_AMA.png</file>
         <file>qtquickcontrols2.conf</file>
-        <file>images/CCdemo.png</file>
-        <file>images/Pdfdemo.png</file>
         <file>contentPages/services/PageServicesSignAdvanced.qml</file>
         <file>contentPages/services/PageServicesSignAdvancedForm.ui.qml</file>
         <file>contentPages/services/PageServicesSignSimple.qml</file>
         <file>contentPages/services/PageServicesSignSimpleForm.ui.qml</file>
-        <file>images/ic_highlight_off_black_24dp.png</file>
-        <file>images/ic_highlight_on_black_24dp.png</file>
         <file>contentPages/definitions/PageDefinitionsApp.qml</file>
         <file>contentPages/definitions/PageDefinitionsAppForm.ui.qml</file>
         <file>images/logo_cor400.png</file>
@@ -54,12 +48,8 @@
         <file>contentPages/definitions/PageDefinitionsUpdates.qml</file>
         <file>contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml</file>
         <file>contentPages/security/PinCodesModel.qml</file>
-        <file>images/CCdemo_custom.png</file>
         <file>components/TextBullet.qml</file>
         <file>TitleBar.qml</file>
-        <file>images/maximize.png</file>
-        <file>images/minimize.png</file>
-        <file>images/quit.png</file>
         <file>FrameWindow.qml</file>
         <file>components/CardRowTop.qml</file>
         <file>images/definitions_icon.png</file>
@@ -68,5 +58,18 @@
         <file>images/help_icon_selected.png</file>
         <file>contentPages/definitions/PageDefinitionsSignature.qml</file>
         <file>contentPages/definitions/PageDefinitionsSignatureForm.ui.qml</file>
+        <file>images/dummy/photo.png</file>
+        <file>images/titleBar/maximize.png</file>
+        <file>images/titleBar/minimize.png</file>
+        <file>images/titleBar/quit.png</file>
+        <file>images/titleBar/maximize_hover.png</file>
+        <file>images/titleBar/minimize_hover.png</file>
+        <file>images/titleBar/quit_hover.png</file>
+        <file>images/dummy/CCdemo.png</file>
+        <file>images/dummy/CCdemo_custom.png</file>
+        <file>images/dummy/Pdfdemo.png</file>
+        <file>images/remove_file.png</file>
+        <file>images/remove_file_hover.png</file>
+        <file>images/logo_CC.png</file>
     </qresource>
 </RCC>
