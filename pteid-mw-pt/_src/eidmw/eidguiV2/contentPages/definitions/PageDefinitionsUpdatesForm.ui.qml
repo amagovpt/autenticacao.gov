@@ -55,7 +55,7 @@ Item {
                 id: buttonSearch
                 text: "Procurar atualizações"
                 width: Constants.WIDTH_BUTTON
-                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                height: parent.height
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase

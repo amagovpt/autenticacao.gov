@@ -137,7 +137,7 @@ Item {
             Button {
                 text: "Gravar Notas"
                 width: Constants.WIDTH_BUTTON
-                height:Constants.HEIGHT_BOTTOM_COMPONENT
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 font.pixelSize: Constants.SIZE_TEXT_FIELD

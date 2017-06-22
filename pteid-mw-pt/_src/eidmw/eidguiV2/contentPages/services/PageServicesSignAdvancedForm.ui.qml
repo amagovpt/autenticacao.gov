@@ -137,7 +137,6 @@ Item {
                         height: parent.height
                         enabled: !fileLoaded
                     }
-
                 }
                 Item{
                     id: itemBottonsFiles
@@ -149,7 +148,7 @@ Item {
                     Button {
                         id: buttonAdd
                         width: Constants.WIDTH_BUTTON
-                        height: Constants.HEIGHT_BOTTOM_COMPONENT
+                        height: parent.height
                         text: "Adicionar ficheiro"
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
@@ -158,7 +157,7 @@ Item {
                     Button {
                         id: buttonRemoveAll
                         width: Constants.WIDTH_BUTTON
-                        height: Constants.HEIGHT_BOTTOM_COMPONENT
+                        height: parent.height
                         anchors.right: itemBottonsFiles.right
                         text: "Remover todos"
                         enabled: fileLoaded
@@ -285,7 +284,7 @@ Item {
                     }
                     Switch {
                         id: switchSignTemp
-                        height: Constants.SIZE_V_URL_FILES
+                        height: Constants.HEIGHT_SWITCH_COMPONENT
                         anchors.top: textFieldLocal.bottom
                         text: "Adicionar selo temporal"
                         enabled: fileLoaded
@@ -295,7 +294,7 @@ Item {
                     }
                     Switch {
                         id: switchSignAdd
-                        height: Constants.SIZE_V_URL_FILES
+                        height: Constants.HEIGHT_SWITCH_COMPONENT
                         anchors.top: switchSignTemp.bottom
                         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                         text: "Adicionar atributos profissionais"
@@ -352,7 +351,7 @@ Item {
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
-                            height: 30
+                            height: Constants.HEIGHT_SWITCH_COMPONENT
                         }
                         Text {
                             id: textPreserv1
@@ -509,7 +508,7 @@ Item {
                         bottomPadding: 0
                         topPadding: 0
                         leftPadding: 0
-                        height: Constants.SIZE_V_URL_FILES
+                        height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
@@ -533,7 +532,7 @@ Item {
                         bottomPadding: 0
                         topPadding: 0
                         leftPadding: 0
-                        height: Constants.SIZE_V_URL_FILES
+                        height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
@@ -555,7 +554,7 @@ Item {
                     text: "Assinar"
                     y: 5
                     width: Constants.WIDTH_BUTTON
-                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    height: parent.height
                     enabled: fileLoaded
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name

@@ -92,7 +92,7 @@ PageServicesSignAdvancedForm {
                 Text {
                     id: fileName
                     text: fileUrl
-                    width: parent.width - Constants.SIZE_V_URL_FILES
+                    width: parent.width - iconRemove.width
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     verticalAlignment: Text.AlignVCenter
                     color: Constants.COLOR_TEXT_BODY

@@ -135,7 +135,7 @@ Item {
                 anchors.rightMargin: 0
                 y: 8
                 width: Constants.WIDTH_BUTTON
-                height:Constants.HEIGHT_BOTTOM_COMPONENT
+                height: parent.height
                 enabled: fileLoaded
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
@@ -154,7 +154,7 @@ Item {
                 text: "Assinar"
                 y: 5
                 width: Constants.WIDTH_BUTTON
-                height:Constants.HEIGHT_BOTTOM_COMPONENT
+                height: parent.height
                 enabled: fileLoaded
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
