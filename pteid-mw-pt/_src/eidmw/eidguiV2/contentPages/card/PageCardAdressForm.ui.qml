@@ -28,10 +28,10 @@ Item {
 
         Item{
             id: rectNacionalDistrict
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
+            width: parent.width
             Components.LabelTextBoxForm{
-                propertyDateText.text: "Distrito Nacional"
-                propertyDateField.text: "LISBOA"
+                propertyDateText.text: "Distrito"
+                propertyDateField.text: "ANGRA DO HEROISMO"
             }
         }
     }
@@ -46,10 +46,10 @@ Item {
 
         Item{
             id: rectMunicipality
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
+            width: parent.width
             Components.LabelTextBoxForm{
                 propertyDateText.text: "Concelho"
-                propertyDateField.text: "LISBOA"
+                propertyDateField.text: "FIGUEIRA DE CASTELO RODRIGO"
             }
         }
     }
@@ -64,10 +64,10 @@ Item {
 
         Item{
             id: rectCivilParish
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
+            width: parent.width
             Components.LabelTextBoxForm{
                 propertyDateText.text: "Freguesia"
-                propertyDateField.text: "PARQUE DAS NAÇÔES"
+                propertyDateField.text: "Belazaima do Chão, Castanheira do Vouga e Agadão"
             }
         }
     }
@@ -81,36 +81,28 @@ Item {
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
         Item{
-            id: rectAbbreviationStreetType
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
-            Components.LabelTextBoxForm{
-                propertyDateText.text: "Abr. Tipo de Via"
-                propertyDateField.text: "R"
-            }
-        }
-        Item{
             id: rectStreetType
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
-            anchors.left: rectAbbreviationStreetType.right
+            width: (parent.width - Constants.SIZE_ROW_H_SPACE ) * 0.15
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
                 propertyDateText.text: "Tipo de Via"
-                propertyDateField.text: "RUA"
+                propertyDateField.text: "Avenida"
             }
         }
         Item{
             id: rectStreetName
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.34
+            width: (parent.width - Constants.SIZE_ROW_H_SPACE ) * 0.85
             anchors.left: rectStreetType.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
-                propertyDateText.text: "Designação da Via"
-                propertyDateField.text: "Fim do Caminho"
+                propertyDateText.text: "Via"
+                propertyDateField.text: "Professor Doutor António Augusto Gonçalves Rodrigues"
             }
         }
     }
+
     Item {
-        id: rowAbbreviationBuildingType
+        id: rowDoorNo
         width: parent.width
         height: Constants.SIZE_TEXT_LABEL
                 + Constants.SIZE_TEXT_V_SPACE
@@ -119,39 +111,11 @@ Item {
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
         Item{
-            id: rectAbbreviationBuildingType
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
-            Components.LabelTextBoxForm{
-                propertyDateText.text: "Abr. Tipo de Edifício"
-                propertyDateField.text: ""
-            }
-        }
-        Item{
-            id: rectBuildingType
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
-            anchors.left: rectAbbreviationBuildingType.right
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            Components.LabelTextBoxForm{
-                propertyDateText.text: "Tipo de Edifício"
-                propertyDateField.text: ""
-            }
-        }
-    }
-    Item {
-        id: rowDoorNo
-        width: parent.width
-        height: Constants.SIZE_TEXT_LABEL
-                + Constants.SIZE_TEXT_V_SPACE
-                + 2 * Constants.SIZE_TEXT_FIELD
-        anchors.top: rowAbbreviationBuildingType.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-
-        Item{
             id: rectDoorNo
             width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
             Components.LabelTextBoxForm{
-                propertyDateText.text: "N.º de Porta"
-                propertyDateField.text: "Nº 11"
+                propertyDateText.text: "N.º"
+                propertyDateField.text: "11"
             }
         }
         Item{
@@ -186,20 +150,20 @@ Item {
 
         Item{
             id: rectPlace
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
+            width: (parent.width - Constants.SIZE_ROW_H_SPACE ) * 0.50
             Components.LabelTextBoxForm{
                 propertyDateText.text: "Lugar"
-                propertyDateField.text: ""
+                propertyDateField.text: "Urbanização casas do lago"
             }
         }
         Item{
             id: rectLocality
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
+            width: (parent.width - Constants.SIZE_ROW_H_SPACE ) * 0.50
             anchors.left: rectPlace.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
                 propertyDateText.text: "Localidade"
-                propertyDateField.text: "Lisboa"
+                propertyDateField.text: "FIGUEIRA DE CASTELO RODRIGO"
             }
         }
     }
@@ -209,35 +173,50 @@ Item {
         height: Constants.SIZE_TEXT_LABEL
                 + Constants.SIZE_TEXT_V_SPACE
                 + 2 * Constants.SIZE_TEXT_FIELD
-        anchors.top: rowPlace.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+        anchors.top: rowPlace.bottom
 
         Item{
             id: rectZip4
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
+            width: 50
             Components.LabelTextBoxForm{
-                propertyDateText.text: "CP4"
+                propertyDateText.text: "Código Postal"
                 propertyDateField.text: "1990"
             }
         }
         Item{
-            id: rectZip3
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
+            id: textIfen
+            width: 5
+            height: parent.height
             anchors.left: rectZip4.right
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            anchors.leftMargin: 5
+            Text {
+                text: "-"
+                y: 20
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_BODY
+            }
+        }
+        Item{
+            id: rectZip3
+            width: 40
+            anchors.left: textIfen.right
+            anchors.leftMargin: 5
             Components.LabelTextBoxForm{
-                propertyDateText.text: "CP3"
+                propertyDateText.text: ""
                 propertyDateField.text: "303"
             }
         }
         Item{
             id: rectPostalLocality
-            width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.34
+            width: parent.width - 2 * Constants.SIZE_ROW_H_SPACE
+                   - rectZip4.width - rectZip3.width - textIfen.width + 10
             anchors.left: rectZip3.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
                 propertyDateText.text: "Localidade Postal"
-                propertyDateField.text: "Lisboa"
+                propertyDateField.text: "FIGUEIRA DE CASTELO RODRIGO"
             }
         }
     }
