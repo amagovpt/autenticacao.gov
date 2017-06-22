@@ -314,7 +314,7 @@ Item {
         Item{
             id: rectAppNetwork
             width: parent.width
-            height: dateAppNetwork.height + rectAppNetworkCheckBox.height + 2 * Constants.SIZE_TEXT_V_SPACE
+            height: dateAppNetwork.height + rectAppNetworkCheckBox.height + Constants.SIZE_ROW_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppLook.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
@@ -351,12 +351,9 @@ Item {
                 id: rectAppNetworkCheckBox
                 width: parent.width
                 color: "white"
-                anchors.topMargin: 6
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 height: checkboxProxy.height
                         + boxAppAdress.height
-                        + checkboxAutProxy.height
-                        + boxAppAutAdress.height
-                        + 3 * Constants.SIZE_TEXT_V_SPACE
                 anchors.top : dateAppNetwork.bottom
 
                 CheckBox {
@@ -367,76 +364,106 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                    checked: true
+                    checked: false
                 }
                 Item{
                     id: boxAppAdress
-                    width: 150
-                    height: Constants.SIZE_TEXT_LABEL
-                            + Constants.SIZE_TEXT_V_SPACE
-                            + 2 * Constants.SIZE_TEXT_FIELD
+                    width: 120
+                    height: textFieldAdress.height
                     anchors.top: checkboxProxy.bottom
-                    x: 6 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                    Components.LabelTextBoxForm{
-                        propertyDateText.text: "Endereço"
-                        propertyDateField.text: ""
-                        propertyDateField.readOnly: false
+                    x: Constants.SIZE_TEXT_FIELD_H_SPACE
+
+                    TextField {
+                        id: textFieldAdress
+                        width: parent.width
+                        font.italic: textFieldAdress.text === "" ? true: false
+                        placeholderText: "Endereço?"
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        clip: true
+                        maximumLength: 15
+                        enabled: checkboxProxy.checked
+                        opacity: checkboxProxy.checked ?
+                                     1.0 :
+                                     Constants.OPACITY_DIFINITIONS_APP_NETWORK_DISABLED
                     }
                 }
                 Item {
                     id: boxAppPort
-                    width: 150
-                    height: Constants.SIZE_TEXT_LABEL
-                            + Constants.SIZE_TEXT_V_SPACE
-                            + 2 * Constants.SIZE_TEXT_FIELD
+                    width: 40
+                    height: textFieldPort.height
                     anchors.leftMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
-                    anchors.topMargin: 0
                     anchors.top: checkboxProxy.bottom
                     anchors.left: boxAppAdress.right
-                    Components.LabelTextBoxForm {
-                        propertyDateText.text: "Porto"
-                        propertyDateField.text: "8080"
-                        propertyDateField.readOnly: false
+                    TextField {
+                        id: textFieldPort
+                        width: parent.width
+                        font.italic: textFieldPort.text === "" ? true: false
+                        placeholderText: "Porto?"
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        clip: true
+                        maximumLength: 4
+                        enabled: checkboxProxy.checked
+                        opacity: checkboxProxy.checked ?
+                                     1.0 :
+                                     Constants.OPACITY_DIFINITIONS_APP_NETWORK_DISABLED
                     }
                 }
                 CheckBox {
                     id: checkboxAutProxy
+                    x: parent.width * 0.40
                     text: "Utilizar autenticação de Proxy"
                     height: 25
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
-                    anchors.top: boxAppPort.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                    checked: true
+                    checked: false
                 }
                 Item{
-                    id: boxAppAutAdress
-                    width: 150
-                    height: Constants.SIZE_TEXT_LABEL
-                            + Constants.SIZE_TEXT_V_SPACE
-                            + 2 * Constants.SIZE_TEXT_FIELD
+                    id: boxAppAutUser
+                    width: parent.width * 0.3 - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                    height: textFieldAutUser.height
                     anchors.top: checkboxAutProxy.bottom
-                    x: 6 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                    Components.LabelTextBoxForm{
-                        propertyDateText.text: "Utilizador"
-                        propertyDateField.text: ""
-                        propertyDateField.readOnly: false
+                    anchors.left: checkboxAutProxy.left
+                    anchors.leftMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
+                    TextField {
+                        id: textFieldAutUser
+                        width: parent.width
+                        font.italic: textFieldAutUser.text === "" ? true: false
+                        placeholderText: "Utilizador?"
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        clip: false
+                        enabled: checkboxAutProxy.checked
+                        opacity: checkboxAutProxy.checked ?
+                                     1.0 :
+                                     Constants.OPACITY_DIFINITIONS_APP_NETWORK_DISABLED
                     }
                 }
                 Item {
-                    id: boxAppAutPort
-                    width: 150
-                    height: Constants.SIZE_TEXT_LABEL
-                            + Constants.SIZE_TEXT_V_SPACE
-                            + 2 * Constants.SIZE_TEXT_FIELD
+                    id: boxAppAutPass
+                    width: parent.width * 0.3 - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                    height: textFieldAutPass.height
                     anchors.top: checkboxAutProxy.bottom
-                    anchors.left: boxAppAutAdress.right
+                    anchors.left: boxAppAutUser.right
                     anchors.leftMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
-                    Components.LabelTextBoxForm {
-                        propertyDateText.text: "Palavra-passe"
-                        propertyDateField.text: ""
-                        propertyDateField.readOnly: false
+                    TextField {
+                        id: textFieldAutPass
+                        width: parent.width
+                        font.italic: textFieldAutPass.text === "" ? true: false
+                        placeholderText: "Palavra-passe?"
+                        echoMode : TextInput.Password
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        clip: false
+                        enabled: checkboxAutProxy.checked
+                        opacity: checkboxAutProxy.checked ?
+                                     1.0 :
+                                     Constants.OPACITY_DIFINITIONS_APP_NETWORK_DISABLED
                     }
                 }
             }
