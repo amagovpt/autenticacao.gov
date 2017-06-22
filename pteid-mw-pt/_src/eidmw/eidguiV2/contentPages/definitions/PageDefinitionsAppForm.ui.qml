@@ -87,7 +87,7 @@ Item {
             height: dateAppStart.height + rectAppStartCheckBox.height + 2 * Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectReader.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
 
             Text {
                 id: dateAppStart
@@ -154,7 +154,7 @@ Item {
             height: dateAppLanguage.height + rectAppLanguageCheckBox.height + Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppStart.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
 
             Text {
                 id: dateAppLanguage
@@ -237,7 +237,7 @@ Item {
             height: dateAppStart.height + rectAppLookCheckBox.height + 2 * Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppLanguage.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
 
             Text {
                 id: dateAppLook
@@ -273,8 +273,7 @@ Item {
                 color: "white"
                 height: checkboxShowNot.height
                         + checkboxShowPhoto.height
-                        + checkboxShowAnime.height
-                        + 3 * Constants.SIZE_TEXT_V_SPACE
+                        + 2 * Constants.SIZE_TEXT_V_SPACE
                 anchors.top : dateAppLook.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
@@ -305,8 +304,8 @@ Item {
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
-                    anchors.top: checkboxShowPhoto.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                    x: rectAppLookCheckBox.width * 0.5
                     checked: true
                 }
             }
@@ -318,7 +317,7 @@ Item {
                     + 2 * Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppLook.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
 
             Text {
                 id: dateAppCertificates
@@ -327,7 +326,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: "Aparência"
+                text: "Certificados"
             }
             DropShadow {
                 anchors.fill: rectAppCertificatesCheckBox
@@ -380,13 +379,94 @@ Item {
                 }
             }
         }
+
+        Item{
+            id: rectAppTimeStamp
+            width: parent.width
+            height: dateAppTimeStamp.height + rectAppTimeStampCheckBox.height + 2 * Constants.SIZE_TEXT_V_SPACE
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            anchors.top: rectAppCertificates.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
+
+            Text {
+                id: dateAppTimeStamp
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                height: Constants.SIZE_TEXT_LABEL
+                text: "Selos Temporais"
+            }
+            DropShadow {
+                anchors.fill: rectAppTimeStampCheckBox
+                horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                radius: Constants.FORM_SHADOW_RADIUS
+                samples: Constants.FORM_SHADOW_SAMPLES
+                color: Constants.COLOR_FORM_SHADOW
+                source: rectAppTimeStampCheckBox
+                spread: Constants.FORM_SHADOW_SPREAD
+                opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
+            }
+            RectangularGlow {
+                anchors.fill: rectAppTimeStampCheckBox
+                glowRadius: Constants.FORM_GLOW_RADIUS
+                spread: Constants.FORM_GLOW_SPREAD
+                color: Constants.COLOR_FORM_GLOW
+                cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
+            }
+            Rectangle {
+                id: rectAppTimeStampCheckBox
+                width: parent.width
+                color: "white"
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                height: checkboxTimeStamp.height
+                        + boxAppTimeStamp.height
+                anchors.top : dateAppTimeStamp.bottom
+
+                CheckBox {
+                    id: checkboxTimeStamp
+                    text: "Utilizar selo temporal"
+                    height: 25
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                    checked: false
+                }
+                Item{
+                    id: boxAppTimeStamp
+                    width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                    height: textFieldTimeStamp.height
+                    anchors.top: checkboxTimeStamp.bottom
+                    x: Constants.SIZE_TEXT_FIELD_H_SPACE
+
+                    TextField {
+                        id: textFieldTimeStamp
+                        width: parent.width
+                        font.italic: textFieldTimeStamp.text === "" ? true: false
+                        placeholderText: "URL do servidor de selos temporais?"
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        clip: false
+                        enabled: checkboxTimeStamp.checked
+                        opacity: checkboxTimeStamp.checked ?
+                                     1.0 :
+                                     Constants.OPACITY_DIFINITIONS_APP_OPTION_DISABLED
+                    }
+                }
+            }
+        }
+
         Item{
             id: rectAppNetwork
             width: parent.width
-            height: dateAppNetwork.height + rectAppNetworkCheckBox.height + Constants.SIZE_ROW_V_SPACE
+            height: dateAppNetwork.height + rectAppNetworkCheckBox.height
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            anchors.top: rectAppCertificates.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            anchors.top: rectAppTimeStamp.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
 
             Text {
                 id: dateAppNetwork
@@ -455,7 +535,7 @@ Item {
                         enabled: checkboxProxy.checked
                         opacity: checkboxProxy.checked ?
                                      1.0 :
-                                     Constants.OPACITY_DIFINITIONS_APP_NETWORK_DISABLED
+                                     Constants.OPACITY_DIFINITIONS_APP_OPTION_DISABLED
                     }
                 }
                 Item {
@@ -478,7 +558,7 @@ Item {
                         enabled: checkboxProxy.checked
                         opacity: checkboxProxy.checked ?
                                      1.0 :
-                                     Constants.OPACITY_DIFINITIONS_APP_NETWORK_DISABLED
+                                     Constants.OPACITY_DIFINITIONS_APP_OPTION_DISABLED
                     }
                 }
                 CheckBox {
@@ -510,7 +590,7 @@ Item {
                         enabled: checkboxAutProxy.checked
                         opacity: checkboxAutProxy.checked ?
                                      1.0 :
-                                     Constants.OPACITY_DIFINITIONS_APP_NETWORK_DISABLED
+                                     Constants.OPACITY_DIFINITIONS_APP_OPTION_DISABLED
                     }
                 }
                 Item {
@@ -532,7 +612,7 @@ Item {
                         enabled: checkboxAutProxy.checked
                         opacity: checkboxAutProxy.checked ?
                                      1.0 :
-                                     Constants.OPACITY_DIFINITIONS_APP_NETWORK_DISABLED
+                                     Constants.OPACITY_DIFINITIONS_APP_OPTION_DISABLED
                     }
                 }
             }
