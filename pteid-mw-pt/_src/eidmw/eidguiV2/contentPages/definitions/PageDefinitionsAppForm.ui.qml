@@ -312,11 +312,80 @@ Item {
             }
         }
         Item{
+            id: rectAppCertificates
+            width: parent.width
+            height: dateAppStart.height + rectAppCertificatesCheckBox.height
+                    + 2 * Constants.SIZE_TEXT_V_SPACE
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            anchors.top: rectAppLook.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+
+            Text {
+                id: dateAppCertificates
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                height: Constants.SIZE_TEXT_LABEL
+                text: "Aparência"
+            }
+            DropShadow {
+                anchors.fill: rectAppCertificatesCheckBox
+                horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                radius: Constants.FORM_SHADOW_RADIUS
+                samples: Constants.FORM_SHADOW_SAMPLES
+                color: Constants.COLOR_FORM_SHADOW
+                source: rectAppCertificatesCheckBox
+                spread: Constants.FORM_SHADOW_SPREAD
+                opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
+            }
+            RectangularGlow {
+                anchors.fill: rectAppCertificatesCheckBox
+                glowRadius: Constants.FORM_GLOW_RADIUS
+                spread: Constants.FORM_GLOW_SPREAD
+                color: Constants.COLOR_FORM_GLOW
+                cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
+            }
+            Rectangle {
+                id: rectAppCertificatesCheckBox
+                width: parent.width
+                color: "white"
+                height: checkboxRegister.height
+                        + checkboxRemove.height
+                        + 2 * Constants.SIZE_TEXT_V_SPACE
+                anchors.top : dateAppCertificates.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
+                CheckBox {
+                    id: checkboxRegister
+                    text: "Registar certificados com a inserção do cartão"
+                    height: 25
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                    checked: true
+                }
+                CheckBox {
+                    id: checkboxRemove
+                    text: "Remover certificados com a remoção do cartão"
+                    height: 25
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                    anchors.top: checkboxRegister.bottom
+                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                }
+            }
+        }
+        Item{
             id: rectAppNetwork
             width: parent.width
             height: dateAppNetwork.height + rectAppNetworkCheckBox.height + Constants.SIZE_ROW_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            anchors.top: rectAppLook.bottom
+            anchors.top: rectAppCertificates.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
             Text {
