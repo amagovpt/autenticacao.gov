@@ -53,8 +53,8 @@ Item {
         Item{
             id: rectMainLeftFile
             width: parent.width * 0.5 - Constants.SIZE_ROW_H_SPACE
-            height: titleSelectFile.height
-                    + rectFile.height
+            height: mainItem.height - rectMainLeftOptions.height
+                    - 4 * Constants.SIZE_ROW_V_SPACE
 
             DropShadow {
                 anchors.fill: rectFile
@@ -88,17 +88,17 @@ Item {
             Rectangle {
                 id: rectFile
                 width: parent.width
-                height: itemOptionsFiles.height +
-                        itemBottonsFiles.height
+                height: parent.height
 
                 color: "white"
                 anchors.top: titleSelectFile.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                anchors.horizontalCenter: parent.horizontalCenter
 
                 Item{
                     id: itemOptionsFiles
                     width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                    height: 4 * Constants.SIZE_V_URL_FILES
+                    height: parent.height - itemBottonsFiles.height - Constants.SIZE_ROW_V_SPACE
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     ListView {
@@ -144,6 +144,7 @@ Item {
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: itemOptionsFiles.bottom
+                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
                     Button {
                         id: buttonAdd
@@ -171,10 +172,12 @@ Item {
         Item{
             id: rectMainLeftOptions
             width: parent.width * 0.5 - Constants.SIZE_ROW_H_SPACE
-            height: mainItem.height - rectMainLeftFile.height
-                    - 2 * Constants.SIZE_ROW_V_SPACE
+
+            height: titleConf.height
+                    + rectOptions.height
+
             anchors.top: rectMainLeftFile.bottom
-            anchors.topMargin: 1.5 * Constants.SIZE_ROW_V_SPACE
+            anchors.topMargin: 3 * Constants.SIZE_ROW_V_SPACE
 
             DropShadow {
                 anchors.fill: rectOptions
@@ -209,7 +212,7 @@ Item {
             Rectangle {
                 id: rectOptions
                 width: parent.width
-                height: parent.height - titleConf.height
+                height: itemOptions.height
                 enabled: fileLoaded
                 color: "white"
                 anchors.top: titleConf.bottom
@@ -218,52 +221,67 @@ Item {
                 Item{
                     id: itemOptions
                     width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                    y: Constants.SIZE_TEXT_FIELD_V_SPACE
-                    height: parent.height
+                    height: Constants.SIZE_TEXT_V_SPACE + rectFormatOptions.height
+                            + textFieldReason.height
+                            + textFieldLocal.height
+                            + switchSignTemp.height
+                            + switchSignAdd.height
+                            + columAttributes.height
+                            + rowPreserv.height + Constants.SIZE_TEXT_V_SPACE
+                            + Constants.SIZE_TEXT_V_SPACE
+
                     anchors.horizontalCenter: parent.horizontalCenter
 
-                    Text {
-                        id: textFormatSign
-                        text: "Formato\nda Assinatura"
-                        color: Constants.COLOR_TEXT_BODY
-                        height: Constants.SIZE_TEXT_LABEL
-                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
-                        font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.capitalization: Font.MixedCase
+                    Item{
+                        id: rectFormatOptions
+                        width: parent.width
+                        height: radioButtonPADES.height
+                        anchors.top: itemOptions.top
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                        Text {
+                            id: textFormatSign
+                            text: "Formato\nda Assinatura"
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            color: Constants.COLOR_TEXT_BODY
+                            height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
+
+                            font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
+                        }
+                        RadioButton {
+                            id: radioButtonPADES
+                            x: 90
+                            height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
+
+                            text: "Pdf"
+                            checked: true
+                            enabled: fileLoaded
+                            font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
+                        }
+                        RadioButton {
+                            id: radioButtonXADES
+                            height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
+
+                            anchors.left: radioButtonPADES.right
+                            text: "Outros ficheiros"
+                            anchors.leftMargin: 10
+                            enabled: fileLoaded
+                            font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
+                        }
+
                     }
-                    RadioButton {
-                        id: radioButtonPADES
-                        x: 90
-                        height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                        anchors.top: textFormatSign.bottom
-                        text: "Pdf"
-                        anchors.topMargin: -12
-                        checked: true
-                        enabled: fileLoaded
-                        font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.capitalization: Font.MixedCase
-                    }
-                    RadioButton {
-                        id: radioButtonXADES
-                        height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                        anchors.top: textFormatSign.bottom
-                        anchors.left: radioButtonPADES.right
-                        text: "Outros ficheiros"
-                        anchors.leftMargin: 10
-                        anchors.topMargin: -12
-                        enabled: fileLoaded
-                        font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.capitalization: Font.MixedCase
-                    }
+
                     TextField {
                         id: textFieldReason
                         width: parent.width
                         font.italic: textFieldReason.text === "" ? true: false
-                        anchors.top: radioButtonXADES.bottom
-                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
+                        anchors.top: rectFormatOptions.bottom
                         placeholderText:"Motivo?"
                         enabled: fileLoaded
                         font.family: lato.name
@@ -275,7 +293,6 @@ Item {
                         width: parent.width
                         font.italic: textFieldLocal.text === "" ? true: false
                         anchors.top: textFieldReason.bottom
-                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
                         placeholderText:"Localidade?"
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         enabled: fileLoaded
@@ -296,7 +313,6 @@ Item {
                         id: switchSignAdd
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         anchors.top: switchSignTemp.bottom
-                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                         text: "Adicionar atributos profissionais"
                         enabled: fileLoaded
                         font.family: lato.name
@@ -307,10 +323,12 @@ Item {
                         id: columAttributes
                         anchors.top: switchSignAdd.bottom
                         width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                        height: checkBox1.height + checkBox2.height + checkBox3.height
                         x: 6 * Constants.SIZE_TEXT_FIELD_H_SPACE
                         visible: switchSignAdd.checked
 
                         CheckBox {
+                            id: checkBox1
                             text: "Engenheiro Civil"
                             height: 25
                             font.family: lato.name
@@ -318,6 +336,7 @@ Item {
                             font.capitalization: Font.MixedCase
                         }
                         CheckBox {
+                            id: checkBox2
                             text: "Socio da Empresa Obras Prontas"
                             height: 25
                             font.family: lato.name
@@ -325,7 +344,7 @@ Item {
                             font.capitalization: Font.MixedCase
                         }
                         CheckBox {
-                            id: checkBox
+                            id: checkBox3
                             text: "Presidente do Clube Futebol da Terra"
                             height: 25
                             font.family: lato.name
@@ -334,11 +353,11 @@ Item {
                         }
                     }
                     Row {
-                        id: row
+                        id: rowPreserv
                         anchors.top: columAttributes.bottom
-                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 0.5
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         width: parent.width
-                        height: 30
+                        height: Constants.HEIGHT_SWITCH_COMPONENT
                         spacing: 5
                         x: 40
                         visible: switchSignAdd.checked
@@ -351,22 +370,25 @@ Item {
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
-                            height: Constants.HEIGHT_SWITCH_COMPONENT
+                            height: parent.height
                         }
                         Text {
                             id: textPreserv1
                             x: 35
                             text: "Preservar"
+                            verticalAlignment: Text.AlignVCenter
                             anchors.verticalCenter: parent.verticalCenter
                             font.bold: false
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
                             color: Constants.COLOR_TEXT_BODY
+                            height: parent.height
                         }
                         Text {
                             id: textPreserv2
                             text: "durante"
+                            verticalAlignment: Text.AlignVCenter
                             anchors.verticalCenter: parent.verticalCenter
                             font.bold: false
                             font.family: lato.name
@@ -374,12 +396,13 @@ Item {
                             font.capitalization: Font.MixedCase
                             color: Constants.COLOR_TEXT_BODY
                             visible: switchPreserv.checked
+                            height: parent.height
                         }
                         ComboBox {
                             id: comboBoxPreserve
                             width: 80
                             anchors.verticalCenter: parent.verticalCenter
-                            height: 30
+                            height: parent.height
                             // textPreservAnos.text is related with model values
                             // if model is changed textPreservAnos.text may be changed
                             model: [ "0", "1", "3", "5", "10" ]
@@ -387,13 +410,13 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
                             visible: switchPreserv.checked
-
                         }
                         Text {
                             id: textPreservAnos
                             text: comboBoxPreserve.currentIndex === 1 ?
                                       "ano":
                                       "anos"
+                            verticalAlignment: Text.AlignVCenter
                             anchors.verticalCenter: parent.verticalCenter
                             font.bold: false
                             font.family: lato.name
@@ -401,6 +424,7 @@ Item {
                             font.capitalization: Font.MixedCase
                             color: Constants.COLOR_TEXT_BODY
                             visible: switchPreserv.checked
+                            height: parent.height
                         }
 
                     }
@@ -411,7 +435,7 @@ Item {
         Item{
             id: rectMainRight
             width: parent.width * 0.5
-            height: parent.height - 2 * Constants.HEIGHT_BOTTOM_COMPONENT
+            height: parent.height - rowBottom.height
             anchors.left: rectMainLeftFile.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
@@ -486,6 +510,7 @@ Item {
             id: rowBottom
             width: rectMainRight.width
             height: 2 * Constants.HEIGHT_BOTTOM_COMPONENT
+                    + Constants.SIZE_ROW_V_SPACE
             anchors.top: rectMainRight.bottom
             anchors.left: rectMainRight.left
 
@@ -541,7 +566,6 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                     }
                 }
-
             }
             Item{
                 id: rectSign
@@ -549,10 +573,10 @@ Item {
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.left: parent.left
                 anchors.top: rectSignOptions.bottom
+                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
                 Button {
                     text: "Assinar"
-                    y: 5
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
                     enabled: fileLoaded
@@ -564,6 +588,4 @@ Item {
             }
         }
     }
-
-
 }

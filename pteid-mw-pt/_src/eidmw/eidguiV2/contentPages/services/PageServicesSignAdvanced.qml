@@ -82,29 +82,47 @@ PageServicesSignAdvancedForm {
     Component {
         id: listViewFilesDelegate
         Rectangle{
+            id: rectlistViewFilesDelegate
             width: parent.width - propertyFilesListViewScroll.width
-                   - Constants.SIZE_LISTVIEW_SPACING
-            height: Constants.SIZE_V_URL_FILES
-            color: Constants.COLOR_MAIN_SOFT_GRAY
+                   - Constants.SIZE_ROW_H_SPACE * 0.5
+            color: getColorItem(mouseAreaFileName.containsMouse,
+                                mouseAreaIconDelete.containsMouse)
+            MouseArea {
+                id: mouseAreaFileName
+                anchors.fill: parent
+                hoverEnabled : true
+            }
+
             Item {
                 width: parent.width
+                height: parent.height
 
                 Text {
                     id: fileName
                     text: fileUrl
-                    width: parent.width - iconRemove.width
+                    width: parent.width - iconRemove.width - Constants.SIZE_LISTVIEW_IMAGE_SPACE
+                    x: Constants.SIZE_LISTVIEW_IMAGE_SPACE * 0.5
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
                     color: Constants.COLOR_TEXT_BODY
                     wrapMode: Text.WrapAnywhere
+                    Component.onCompleted: {
+                        if(fileName.height > iconRemove.height){
+                            rectlistViewFilesDelegate.height = fileName.height + 5
+                        }else{
+                            rectlistViewFilesDelegate.height = iconRemove.height
+                        }
+                    }
                 }
                 Image {
                     id: iconRemove
-                    anchors.left: fileName.right
+                    x: fileName.width + Constants.SIZE_LISTVIEW_IMAGE_SPACE * 0.5
                     width: Constants.SIZE_IMAGE_FILE_REMOVE
                     height: Constants.SIZE_IMAGE_FILE_REMOVE
                     antialiasing: true
                     fillMode: Image.PreserveAspectFit
+                    anchors.verticalCenter: parent.verticalCenter
                     source:  mouseAreaIconDelete.containsMouse ?
                                  "../../images/remove_file_hover.png" :
                                  "../../images/remove_file.png"
@@ -115,7 +133,6 @@ PageServicesSignAdvancedForm {
                         onClicked: {
                             console.log("Delete file index:" + index);
                             filesModel.remove(index)
-
                         }
                     }
                 }
@@ -126,11 +143,15 @@ PageServicesSignAdvancedForm {
         id: filesModel
 
         onCountChanged: {
-            console.log("filesModel onCountChanged")
+            console.log("filesModel onCountChanged count:"
+                        + propertyListViewFiles.count)
             if(filesModel.count === 0){
                 fileLoaded = false
             }else{
                 fileLoaded = true
+                var widthText = propertyListViewFiles.model.get(0).fileUrl
+                console.log("widthText" + widthText)
+
             }
         }
     }
@@ -141,5 +162,15 @@ PageServicesSignAdvancedForm {
         propertyListViewFiles.currentIndex = propertyListViewFiles.count -1
         if(propertyFilesListViewScroll.position > 0)
             propertyFilesListViewScroll.active = true
+    }
+    function getColorItem(mouseItem, mouseImage){
+
+        var handColor
+        if(mouseItem || mouseImage){
+            handColor = Constants.COLOR_MAIN_DARK_GRAY
+        }else{
+            handColor = Constants.COLOR_MAIN_SOFT_GRAY
+        }
+        return handColor
     }
 }
