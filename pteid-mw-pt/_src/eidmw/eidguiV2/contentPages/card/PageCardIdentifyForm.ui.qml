@@ -54,18 +54,18 @@ Item {
                 Components.LabelTextBoxForm{
                     id: textBoxName
                     propertyDateText.text: "Nome"
+                    propertyRectField.height: parent.height
+                    propertyDateField.wrapMode: Text.WordWrap
                 }
             }
             Item{
                 id: surNameTextTextForm
                 width: parent.width
-                height: parent.height -
-                        (2 * Constants.SIZE_TEXT_LABEL) -
-                        (2 * Constants.SIZE_TEXT_V_SPACE) -
-                        (2 * Constants.SIZE_TEXT_FIELD) -
-                        Constants.SIZE_ROW_V_SPACE
+                height: rectNamePhotoLeft.height - givenNameTextForm.height
+                    - 2 * Constants.SIZE_ROW_V_SPACE
+                    - Constants.SIZE_TEXT_LABEL - Constants.SIZE_TEXT_V_SPACE
                 anchors.top :givenNameTextForm.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
                 Components.LabelTextBoxForm{
                     id: textBoxSurName
                     propertyDateText.text: "Apelido"

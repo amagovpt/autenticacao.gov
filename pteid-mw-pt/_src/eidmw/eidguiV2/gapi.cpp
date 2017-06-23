@@ -56,9 +56,11 @@ void GAPI::fillDataCardIdentifyDummy(){
 
     QMap<QString, QString> testData;
 
-    testData["name"] = "Joana Ovilia";
-    testData["givenname"] = "Ribeiro Martins Sousa Costa Mender \
-Cavaco Soares Meireles Dinis Mendes";
+    testData["name"] = "\
+Joana Ovilia Maria Manuela Diana Rute Manuel Maria"; // Max. 50 chars
+    testData["givenname"] = "\
+Ribeiro Martins Sousa Costadas Mender Cavaco Soares Meireles\
+Ribeiro Martins Sousa Costadas Mender Cavao Soares"; // Max. 110 chars
     testData["sex"] = "F";
     testData["height"] = "1,77";
     testData["nationality"] = "PRT";
@@ -66,8 +68,10 @@ Cavaco Soares Meireles Dinis Mendes";
     testData["documentnumber"] = "12433954";
     testData["card_validuntil"] = "31 12 2019";
     testData["country"] = "PRT";
-    testData["father"] = "Antonio Maria Costa";
-    testData["mother"] = "Olivia Sousa Costa";
+    testData["father"] = "\
+João Ribeiro Martins Sousa Costadas Mender Cavaco Soares Meireles";
+    testData["mother"] = "\
+Maria Ribeiro Martins Sousa Costadas Mender Cavaco Soares Meireles";
     testData["ACCIDENTALINDICATIONS"] = "Não sabe assinar";
 
     setDataCardIdentify(testData);
