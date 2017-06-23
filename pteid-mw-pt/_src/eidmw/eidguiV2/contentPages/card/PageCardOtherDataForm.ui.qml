@@ -111,59 +111,60 @@ Item {
         }
     }
     Item {
-        id: rowCardStatus
-        width: parent.width
-        height: Constants.SIZE_TEXT_LABEL
-                + Constants.SIZE_TEXT_V_SPACE
-                + 3 * Constants.SIZE_TEXT_FIELD
-        anchors.top: rowIssuingEntity.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-
-        Item{
-            id: rectCardStatus
-            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.5
-            Components.LabelTextBoxForm{
-                propertyDateText.text: "Estado do Cartão"
-                propertyDateField.text: "O Cartão do Cidadão foi ativado"
-            }
-        }
-        Item{
-            id: rectCardStatusText
-            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.5
-            anchors.left: rectCardStatus.right
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            Text {
-                id: dateField
-                y: Constants.SIZE_TEXT_FIELD_V_SPACE
-                text: "Para verificar se o cartão não está suspenso ou revogado, deverá validar os certificados no \
-menu Segurança - Certificados"
-                width: parent.width
-                height: parent.height
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.capitalization: Font.MixedCase
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                color: Constants.COLOR_TEXT_LABEL
-                wrapMode: Text.WordWrap
-            }
-        }
-    }
-    Item {
         id: rowLocalOfRequest
         width: parent.width
         height: Constants.SIZE_TEXT_LABEL
                 + Constants.SIZE_TEXT_V_SPACE
                 + 2 * Constants.SIZE_TEXT_FIELD
-        anchors.top: rowCardStatus.bottom
+        anchors.top: rowIssuingEntity.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
         Item{
             id: rectLocalOfRequest
-            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.5
+            width: (parent.width )
             Components.LabelTextBoxForm{
                 propertyDateText.text: "Local de Pedido"
                 propertyDateField.text: "DIC Campus de Justiça Lisboa"
             }
+        }
+    }
+
+    Item {
+        id: rowCardStatus
+        width: parent.width
+        height: Constants.SIZE_TEXT_LABEL
+                + Constants.SIZE_TEXT_V_SPACE
+                + 2 * Constants.SIZE_TEXT_FIELD
+        anchors.top: rowLocalOfRequest.bottom
+        anchors.topMargin: 40
+
+        Item{
+            id: rectCardStatus
+            width: (parent.width )
+            Components.LabelTextBoxForm{
+                propertyDateText.text: "Estado do Cartão"
+                propertyDateField.text: "Ativado"
+            }
+        }
+    }
+
+    Item {
+        id: rowCardStatusText
+        width: parent.width
+        anchors.top: rowCardStatus.bottom
+        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
+        Text {
+            id: dateField
+            text: "Para verificar se o cartão não está suspenso ou revogado, \
+deverá validar os certificados em Segurança - Certificados"
+            width: parent.width
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.capitalization: Font.MixedCase
+            font.pixelSize: Constants.SIZE_TEXT_FIELD
+            font.family: lato.name
+            color: Constants.COLOR_TEXT_LABEL
+            wrapMode: Text.WordWrap
         }
     }
 }
