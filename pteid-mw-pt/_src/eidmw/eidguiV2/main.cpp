@@ -2,12 +2,16 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
+#include <QIcon>
 #include "appcontroller.h"
 #include "gapi.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+
+    // Set app icon
+    app.setWindowIcon(QIcon(":/favicon.ico"));
 
     QQuickStyle::setStyle("Material");
     //QQuickStyle::setStyle("Universal");

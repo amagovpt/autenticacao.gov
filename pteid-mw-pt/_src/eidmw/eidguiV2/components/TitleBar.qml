@@ -51,19 +51,22 @@ Item {
         id: container
         width: parent.width ; height: parent.height
         color: Constants.COLOR_MAIN_BLUE
-        Text {
-            id: categoryText
-            x: Constants.TITLE_BAR_H_ICON_SPACE
-            anchors {
-                verticalCenter: parent.verticalCenter
+        Item{
+            width: parent.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
+            height: parent.height
+            Text {
+                id: categoryText
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    horizontalCenter: parent.horizontalCenter
+                }
+                text: mainWindow.title
+                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.family: lato.name
+                color: "white"
             }
-            elide: Text.ElideLeft
-            text: mainWindow.title
-            font.pixelSize: Constants.SIZE_TEXT_BODY
-            font.family: lato.name
-            color: "white"
-            height: Constants.SIZE_TEXT_LABEL
         }
+
         Image {
             id: minimizeButton
             width: Constants.SIZE_IMAGE_ICON_TITLE_BAR

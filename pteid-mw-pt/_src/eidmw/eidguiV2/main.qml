@@ -19,7 +19,7 @@ Window {
     minimumWidth: Constants.SCREEN_MINIMUM_WIDTH
     minimumHeight: Constants.SCREEN_MINIMUM_HEIGHT
 
-    title: "Cartão de Cidadão"
+    title: "Autenticação.Gov"
 
     property string appVersion: "Versão 0.0.0 - 0000"
 

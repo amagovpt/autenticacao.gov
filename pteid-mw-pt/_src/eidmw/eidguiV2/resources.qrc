@@ -73,5 +73,6 @@
         <file>components/FrameWindow.qml</file>
         <file>images/flags/pt32.png</file>
         <file>images/flags/uk32.png</file>
+        <file>favicon.ico</file>
     </qresource>
 </RCC>
