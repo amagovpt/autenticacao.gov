@@ -527,11 +527,9 @@ Item {
                         width: parent.width
                         font.italic: textFieldAdress.text === "" ? true: false
                         placeholderText: "Endereço?"
-                        inputMethodHints: Qt.ImhDigitsOnly
+                        validator: RegExpValidator { regExp: /[0-9A-Fa-f.:]+/ }
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        clip: true
-                        maximumLength: 15
                         enabled: checkboxProxy.checked
                         opacity: checkboxProxy.checked ?
                                      1.0 :
@@ -540,7 +538,7 @@ Item {
                 }
                 Item {
                     id: boxAppPort
-                    width: 40
+                    width: 37
                     height: textFieldPort.height
                     anchors.leftMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
                     anchors.top: checkboxProxy.bottom
@@ -550,11 +548,11 @@ Item {
                         width: parent.width
                         font.italic: textFieldPort.text === "" ? true: false
                         placeholderText: "Porto?"
-                        inputMethodHints: Qt.ImhDigitsOnly
+                        validator: RegExpValidator { regExp: /[0-9]+/ }
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         clip: true
-                        maximumLength: 4
+                        maximumLength: 5
                         enabled: checkboxProxy.checked
                         opacity: checkboxProxy.checked ?
                                      1.0 :
