@@ -24,10 +24,30 @@ Item {
     property alias propertyFilesListViewScroll: filesListViewScroll
     property alias propertyButtonAdd: buttonAdd
     property alias propertyButtonRemoveAll: buttonRemoveAll
+    property alias propertyDropArea: dropArea
     property alias propertyRadioButtonPADES: radioButtonPADES
     property alias propertyRadioButtonXADES: radioButtonXADES
-
-    property alias propertyDropArea: dropArea
+    property alias propertyMouseAreaToolTipPades: mouseAreaToolTipPades
+    property alias propertyMouseAreaToolTipXades: mouseAreaToolTipXades
+    // Calculate ToolTip Position
+    property int propertyMouseAreaToolTipPadesX:
+        Constants.SIZE_ROW_H_SPACE
+        + Constants.SIZE_TEXT_FIELD_H_SPACE
+        + textFormatSign.width
+        + 10
+        + radioButtonPADES.width
+        + rectToolTipPades.width * 0.5
+    property int propertyMouseAreaToolTipXadesX:
+        Constants.SIZE_ROW_H_SPACE
+        + Constants.SIZE_TEXT_FIELD_H_SPACE
+        + textFormatSign.width
+        + 10
+        + radioButtonPADES.width
+        + rectToolTipPades.width
+        + 10
+        + radioButtonXADES.width
+        + rectToolTipXades.width * 0.5
+    property int propertyMouseAreaToolTipY: rectMainLeftFile.height
 
     Item {
         id: rowMain
@@ -272,23 +292,13 @@ Item {
                                 color: Constants.COLOR_MAIN_PRETO
                             }
                         }
-
-                        Button  {
-                            id: toolTipPades
+                        Item  {
+                            id: rectToolTipPades
                             width: Constants.SIZE_IMAGE_TOOLTIP
                             height: Constants.SIZE_IMAGE_TOOLTIP
                             anchors.leftMargin: 0
                             anchors.left: radioButtonPADES.right
-                            hoverEnabled: true
-                            ToolTip.delay: 0
-                            ToolTip.timeout: 5000
-                            ToolTip.visible: hovered
-                            ToolTip.text: "Ficheiros PDF"
 
-                            Rectangle{
-                                anchors.fill: parent
-                                color: "white"
-                            }
                             Image {
                                 anchors.fill: parent
                                 antialiasing: true
@@ -296,10 +306,15 @@ Item {
                                 source: "../../images/tooltip.png"
                                 anchors.horizontalCenter: parent.horizontalCenter
                             }
+                            MouseArea {
+                                id: mouseAreaToolTipPades
+                                anchors.fill: parent
+                                hoverEnabled: true
+                            }
                         }
                         RadioButton {
                             id: radioButtonXADES
-                            anchors.left: toolTipPades.right
+                            anchors.left: rectToolTipPades.right
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
                             text: "Em qualquer ficheiro"
                             anchors.leftMargin: 10
@@ -319,28 +334,25 @@ Item {
                                 verticalAlignment: Text.AlignVCenter
                                 color: Constants.COLOR_MAIN_PRETO
                             }
-
                         }
-                        Button  {
-                            id: toolTipRades
+                        Item  {
+                            id: rectToolTipXades
                             width: Constants.SIZE_IMAGE_TOOLTIP
                             height: Constants.SIZE_IMAGE_TOOLTIP
                             anchors.left: radioButtonXADES.right
-                            hoverEnabled: true
-                            ToolTip.delay: 0
-                            ToolTip.timeout: 5000
-                            ToolTip.visible: hovered
-                            ToolTip.text: "Pacote XADES / CCSIGN"
-                            Rectangle{
-                                anchors.fill: parent
-                                color: "white"
-                            }
+
                             Image {
                                 anchors.fill: parent
                                 antialiasing: true
                                 fillMode: Image.PreserveAspectFit
                                 source: "../../images/tooltip.png"
                                 anchors.horizontalCenter: parent.horizontalCenter
+                            }
+                            MouseArea {
+                                id: mouseAreaToolTipXades
+                                width: parent.width
+                                height: parent.height
+                                hoverEnabled: true
                             }
                         }
                     }

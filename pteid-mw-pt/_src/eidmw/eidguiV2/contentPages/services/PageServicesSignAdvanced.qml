@@ -1,10 +1,43 @@
 import QtQuick 2.6
+import QtQuick.Controls 2.1
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
 
 PageServicesSignAdvancedForm {
 
+    ToolTip {
+        id: controlToolTip
+        timeout: 5000
+        contentItem: Text {
+            text: controlToolTip.text
+            font: controlToolTip.font
+            color: Constants.COLOR_MAIN_PRETO
+        }
+        background: Rectangle {
+            border.color: Constants.COLOR_MAIN_DARK_GRAY
+            color: Constants.COLOR_MAIN_SOFT_GRAY
+        }
+    }
+
+    propertyMouseAreaToolTipPades{
+        onEntered: {
+            controlToolTip.close()
+            controlToolTip.text = "Ficheiros PDF"
+            controlToolTip.x = propertyMouseAreaToolTipPadesX - controlToolTip.width * 0.5
+            controlToolTip.y = propertyMouseAreaToolTipY + 22
+            controlToolTip.open()
+        }
+    }
+    propertyMouseAreaToolTipXades{
+        onEntered: {
+            controlToolTip.close()
+            controlToolTip.text = "Pacote XADES / CCSIGN"
+            controlToolTip.x = propertyMouseAreaToolTipXadesX - controlToolTip.width * 0.5
+            controlToolTip.y = propertyMouseAreaToolTipY + 22
+            controlToolTip.open()
+        }
+    }
     propertyDropArea {
 
         onEntered: {
