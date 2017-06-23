@@ -24,6 +24,8 @@ Item {
     property alias propertyFilesListViewScroll: filesListViewScroll
     property alias propertyButtonAdd: buttonAdd
     property alias propertyButtonRemoveAll: buttonRemoveAll
+    property alias propertyRadioButtonPADES: radioButtonPADES
+    property alias propertyRadioButtonXADES: radioButtonXADES
 
     property alias propertyDropArea: dropArea
 
@@ -213,7 +215,6 @@ Item {
                 id: rectOptions
                 width: parent.width
                 height: itemOptions.height
-                enabled: fileLoaded
                 color: "white"
                 anchors.top: titleConf.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
@@ -240,41 +241,108 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Text {
                             id: textFormatSign
-                            text: "Formato\nda Assinatura"
+                            text: "Formato"
+                            rightPadding: 0
+                            padding: 0
                             verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignLeft
                             color: Constants.COLOR_TEXT_BODY
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
                         }
                         RadioButton {
                             id: radioButtonPADES
-                            x: 90
+                            anchors.left: textFormatSign.right
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-
-                            text: "Pdf"
-                            checked: true
+                            text: "No documento"
+                            leftPadding: 0
+                            rightPadding: 0
+                            anchors.leftMargin: 10
                             enabled: fileLoaded
-                            font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
+                            opacity: enabled ? 1.0 : Constants.OPACITY_SERVICOS_SIGN_ADVANCE_TEXT_DISABLED
+                            contentItem: Text {
+                                text: radioButtonPADES.text
+                                leftPadding: 22
+                                font.family: lato.name
+                                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                                horizontalAlignment: Text.AlignRight
+                                verticalAlignment: Text.AlignVCenter
+                                color: Constants.COLOR_MAIN_PRETO
+                            }
+                        }
+
+                        Button  {
+                            id: toolTipPades
+                            width: Constants.SIZE_IMAGE_TOOLTIP
+                            height: Constants.SIZE_IMAGE_TOOLTIP
+                            anchors.leftMargin: 0
+                            anchors.left: radioButtonPADES.right
+                            hoverEnabled: true
+                            ToolTip.delay: 0
+                            ToolTip.timeout: 5000
+                            ToolTip.visible: hovered
+                            ToolTip.text: "Ficheiros PDF"
+
+                            Rectangle{
+                                anchors.fill: parent
+                                color: "white"
+                            }
+                            Image {
+                                anchors.fill: parent
+                                antialiasing: true
+                                fillMode: Image.PreserveAspectFit
+                                source: "../../images/tooltip.png"
+                                anchors.horizontalCenter: parent.horizontalCenter
+                            }
                         }
                         RadioButton {
                             id: radioButtonXADES
+                            anchors.left: toolTipPades.right
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-
-                            anchors.left: radioButtonPADES.right
-                            text: "Outros ficheiros"
+                            text: "Em qualquer ficheiro"
                             anchors.leftMargin: 10
+                            leftPadding: 0
+                            rightPadding: 0
                             enabled: fileLoaded
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
-                        }
+                            opacity: enabled ? 1.0 : Constants.OPACITY_SERVICOS_SIGN_ADVANCE_TEXT_DISABLED
+                            contentItem: Text {
+                                text: radioButtonXADES.text
+                                leftPadding: 22
+                                font.family: lato.name
+                                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                                horizontalAlignment: Text.AlignRight
+                                verticalAlignment: Text.AlignVCenter
+                                color: Constants.COLOR_MAIN_PRETO
+                            }
 
+                        }
+                        Button  {
+                            id: toolTipRades
+                            width: Constants.SIZE_IMAGE_TOOLTIP
+                            height: Constants.SIZE_IMAGE_TOOLTIP
+                            anchors.left: radioButtonXADES.right
+                            hoverEnabled: true
+                            ToolTip.delay: 0
+                            ToolTip.timeout: 5000
+                            ToolTip.visible: hovered
+                            ToolTip.text: "Pacote XADES / CCSIGN"
+                            Rectangle{
+                                anchors.fill: parent
+                                color: "white"
+                            }
+                            Image {
+                                anchors.fill: parent
+                                antialiasing: true
+                                fillMode: Image.PreserveAspectFit
+                                source: "../../images/tooltip.png"
+                                anchors.horizontalCenter: parent.horizontalCenter
+                            }
+                        }
                     }
 
                     TextField {

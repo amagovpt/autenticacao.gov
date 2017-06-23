@@ -74,5 +74,6 @@
         <file>images/flags/pt32.png</file>
         <file>images/flags/uk32.png</file>
         <file>favicon.ico</file>
+        <file>images/tooltip.png</file>
     </qresource>
 </RCC>

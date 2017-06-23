@@ -147,6 +147,8 @@ PageServicesSignAdvancedForm {
                         + propertyListViewFiles.count)
             if(filesModel.count === 0){
                 fileLoaded = false
+                propertyRadioButtonPADES.checked = false
+                propertyRadioButtonXADES.checked = false
             }else{
                 fileLoaded = true
                 var widthText = propertyListViewFiles.model.get(0).fileUrl
