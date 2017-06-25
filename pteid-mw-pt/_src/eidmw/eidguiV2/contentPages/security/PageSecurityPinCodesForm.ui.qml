@@ -7,8 +7,12 @@ import "../../scripts/Constants.js" as Constants
 import "../../components" as Components
 
 Item {
+    id: mainWindow
     property alias propertyPinCodesListView: pinCodesListView
     property alias propertyPinCodesViewLeft: pinCodesViewLeft
+
+    property alias propertyButtonModify : buttonModify
+    property alias propertyButtonTest: buttonTest
 
     anchors.fill: parent
 

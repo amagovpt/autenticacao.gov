@@ -5,6 +5,142 @@ import QtQuick.Controls 2.1
 import "../../scripts/Constants.js" as Constants
 
 PageSecurityPinCodesForm {
+
+    Dialog {
+        id: dialog
+        title: "Alteração de Pin de Morada"
+        width: 400
+        height: 300
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width
+           + mainView.width * 0.5 - dialog.width * 0.5
+        y: parent.height * 0.5 - dialog.height * 0.5
+
+        Item{
+            width: parent.width
+            height: rectPinCurrent.height + rectPinNew.height + rectPinConfirm.height
+
+            Item {
+                id: rectPinCurrent
+                width: textPinCurrent.width + textFieldPinCurrent.width
+                height: 50
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textPinCurrent
+                    text: "PIN Atual"
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: 150
+                    anchors.bottom: parent.bottom
+                }
+                TextField {
+                    id: textFieldPinCurrent
+                    width: 150
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.italic: textFieldPinCurrent.text === "" ? true: false
+                    placeholderText: "PIN Atual?"
+                    echoMode : TextInput.Password
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    clip: false
+                    anchors.left: textPinCurrent.right
+                    anchors.leftMargin: 20
+                    anchors.bottom: parent.bottom
+                }
+            }
+            Item {
+                id: rectPinNew
+                width: textPinNew.width + textFieldPinNew.width
+                height: 50
+                anchors.top: rectPinCurrent.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textPinNew
+                    text: "Novo PIN"
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: 150
+                    anchors.bottom: parent.bottom
+                }
+                TextField {
+                    id: textFieldPinNew
+                    width: 150
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.italic: textFieldPinNew.text === "" ? true: false
+                    placeholderText: "Novo PIN?"
+                    echoMode : TextInput.Password
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    clip: false
+                    anchors.left: textPinNew.right
+                    anchors.leftMargin: 20
+                    anchors.bottom: parent.bottom
+                }
+            }
+            Item {
+                id: rectPinConfirm
+                width: textPinConfirm.width + textFieldPinConfirm.width
+                height: 50
+                anchors.top: rectPinNew.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textPinConfirm
+                    text: "Confirmar novo PIN"
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: 150
+                    anchors.bottom: parent.bottom
+                }
+                TextField {
+                    id: textFieldPinConfirm
+                    width: 150
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.italic: textFieldPinConfirm.text === "" ? true: false
+                    placeholderText: "Confirmar novo PIN?"
+                    echoMode : TextInput.Password
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    clip: false
+                    anchors.left: textPinConfirm.right
+                    anchors.leftMargin: 20
+                    anchors.bottom: parent.bottom
+                }
+            }
+        }
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        onAccepted: {
+            mainFormID.opacity = 1.0
+        }
+        onRejected: {
+            mainFormID.opacity = 1.0
+        }
+    }
+    propertyButtonModify{
+        onClicked: {
+            mainFormID.opacity = 0.5
+            dialog.open()
+        }
+    }
+    propertyButtonTest{
+        onClicked: {
+            mainFormID.opacity = 0.5
+            dialog.open()
+        }
+    }
     Component {
         id: pinCodesMenuDelegate
         Item {
