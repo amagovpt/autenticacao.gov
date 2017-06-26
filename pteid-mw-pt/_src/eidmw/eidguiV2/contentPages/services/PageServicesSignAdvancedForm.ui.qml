@@ -607,12 +607,6 @@ Item {
                     Switch {
                         id: checkSignReduced
                         text: "Assinatura reduzida"
-                        spacing: 0
-                        padding: 0
-                        rightPadding: 0
-                        bottomPadding: 0
-                        topPadding: 0
-                        leftPadding: 0
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -631,12 +625,6 @@ Item {
                     Switch {
                         id: checkSignShow
                         text: "Assinatura visível"
-                        spacing: 0
-                        padding: 0
-                        rightPadding: 0
-                        bottomPadding: 0
-                        topPadding: 0
-                        leftPadding: 0
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
