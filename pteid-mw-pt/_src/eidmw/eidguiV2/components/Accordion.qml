@@ -23,7 +23,7 @@ Column {
                 id: infoRow
                 width: parent.width
                 height: childrenRect.height
-                property bool expanded: false
+                property bool expanded: true
 
                 MouseArea {
                     anchors.fill: parent

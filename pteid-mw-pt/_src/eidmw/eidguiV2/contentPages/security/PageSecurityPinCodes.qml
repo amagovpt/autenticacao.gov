@@ -7,14 +7,15 @@ import "../../scripts/Constants.js" as Constants
 PageSecurityPinCodesForm {
 
     Dialog {
-        id: dialog
+        id: changepin_dialog
         title: "Alteração de Pin de Morada"
         width: 400
         height: 300
+        font.family: lato.name
         // Center dialog in the main view
         x: - mainMenuView.width - subMenuView.width
-           + mainView.width * 0.5 - dialog.width * 0.5
-        y: parent.height * 0.5 - dialog.height * 0.5
+           + mainView.width * 0.5 - changepin_dialog.width * 0.5
+        y: parent.height * 0.5 - changepin_dialog.height * 0.5
 
         Item{
             width: parent.width
@@ -132,13 +133,13 @@ PageSecurityPinCodesForm {
     propertyButtonModify{
         onClicked: {
             mainFormID.opacity = 0.5
-            dialog.open()
+            changepin_dialog.open()
         }
     }
     propertyButtonTest{
         onClicked: {
             mainFormID.opacity = 0.5
-            dialog.open()
+            changepin_dialog.open()
         }
     }
     Component {
