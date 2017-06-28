@@ -390,20 +390,17 @@ try_again:
 		}
 #endif
 		MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardTransmit(): 0x%0x", lRet);
-		//throw CMWEXCEPTION(PcscToErr(lRet));
-	}
+		throw CMWEXCEPTION(PcscToErr(lRet));
+	}      
+
 	// Don't log the full response for privacy reasons, only SW1-SW2
-	//MWLOG(LEV_DEBUG, MOD_CAL, L"        
-
-	//DEBUG
-	//printf("SCardTransmit(): %ls .\n", CByteArray(tucRecv, (unsigned long) dwRecvLen).ToWString(true, true, 0, (unsigned long) dwRecvLen).c_str() );
-
 	MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardTransmit(): SW12 = %02X %02X",
 		tucRecv[dwRecvLen - 2], tucRecv[dwRecvLen - 1]);
+
 	//DEBUG
 	//printf ("SCardTransmit(): SW12 = %02X %02X\n", tucRecv[dwRecvLen - 2], tucRecv[dwRecvLen - 1]);
+	
 	//check response, and add 25 ms delay when error was returned
-
 	if( (tucRecv[dwRecvLen - 2] != 0x90) && (tucRecv[dwRecvLen - 1]!=0x00) &&
 		(tucRecv[dwRecvLen - 2] != 0x61) )
 	{
@@ -428,7 +425,7 @@ void CPCSC::Recover(SCARDHANDLE hCard, unsigned long * pulLockCount )
 	for (i = 0; (i < 10) && (lRet != SCARD_S_SUCCESS); i++)
 	{
 		if (i != 0)
-			CThread::SleepMillisecs(1000);
+			CThread::SleepMillisecs(100);
 
 		lRet = SCardReconnect(hCard, SCARD_SHARE_SHARED, SCARD_PROTOCOL_T0, SCARD_RESET_CARD, &ap);
 		if ( lRet != SCARD_S_SUCCESS )
