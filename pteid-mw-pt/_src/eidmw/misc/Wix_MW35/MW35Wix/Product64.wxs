@@ -224,8 +224,10 @@
 			<Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AD6}">
 		        <File Source="..\..\certs\CartaodeCidadao001.der" KeyPath="yes" />
 		        <File Source="..\..\certs\CartaodeCidadao002.der" />
-            <File Source="..\..\certs\CartaodeCidadao003.der" />
+                <File Source="..\..\certs\CartaodeCidadao003.der" />
 		        <File Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" />
+		        <File Source="..\..\certs\ECRaizEstado_MC.der" />
+		        <File Source="..\..\certs\Multicert_Root_01.der" />
 		        <File Source="..\..\certs\GTEGlobalRoot.der" />
 			</Component>
 		</DirectoryRef>
