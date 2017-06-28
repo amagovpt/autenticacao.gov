@@ -2270,14 +2270,22 @@ void MainWnd::loadCardDataAddress( void )
 
 	getCardForReading(new_card);
 
-	if (new_card != NULL)
+	try
 	{
-		Show_Address_Card(*new_card);
+
+		if (new_card != NULL)
+		{
+			LoadDataAddress(*new_card);
+		}
+		else
+		{
+			qDebug() << "loadCardDataAddress: Failed to getCardForReading() !" ;
+		}
 	}
-	else
-	{
-		qDebug() << "loadCardDataAddress: Failed to getCardForReading() !" ;
+	catch(PTEID_Exception &e) {
+		qDebug() << "loadCardDataAddress: caught exception loading address data. Error code: " << e.GetError(); 
 	}
+
 }
 
 //*****************************************************
@@ -2294,7 +2302,7 @@ bool MainWnd::loadCardDataPersoData( void )
 
 	if (new_card != NULL)
 	{
-		Show_PersoData_Card(*new_card);
+		LoadDataPersoData(*new_card);
 	}
 
 	return true;
@@ -2341,7 +2349,7 @@ void MainWnd::loadCardDataCertificates( void )
 
 	if (new_card != NULL)
 	{
-		Show_Certificates_Card(*new_card);
+		 LoadDataCertificates(*new_card);
 	}
 
 }
@@ -2950,21 +2958,6 @@ void MainWnd::Show_Identity_Card(PTEID_EIDCard& Card)
 	enableFileMenu();
 }
 
-void MainWnd::Show_Address_Card(PTEID_EIDCard& Card)
-{
-	LoadDataAddress(Card);
-}
-
-void MainWnd::Show_PersoData_Card(PTEID_EIDCard& Card)
-{
-	LoadDataPersoData(Card);
-}
-
-void MainWnd::Show_Certificates_Card(PTEID_EIDCard& Card)
-{
-	LoadDataCertificates(Card);
-}
-
 QTreeCertItem* MainWnd::buildTree(PTEID_Certificate &cert, bool &bEx)
 {
 	if (cert.isRoot())
@@ -3059,21 +3052,29 @@ void MainWnd::LoadDataID(PTEID_EIDCard& Card)
 	setEnabledCertifButtons(false);
 	m_TypeCard = Card.getType();
 
-	if(!m_CI_Data.isDataLoaded())
+	if (!m_CI_Data.isDataLoaded())
 	{
-	//Load data from card in a new thread
+	    //Load data from card in a new thread
 		CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName, this);
-		QFuture<void> future = QtConcurrent::run(&loader, &CardDataLoader::Load);
+		QFuture<LoadingErrorCode> future = QtConcurrent::run(&loader, &CardDataLoader::Load);
 		this->FutureWatcher.setFuture(future);
 		ProgressExec();
 
-		if (error_sod)
+		LoadingErrorCode rc = future.result();	
+		if (rc == LOADING_ERROR_SOD)
 		{
 			QString title = tr("SOD validation");
 			QString msg = tr("SOD validation failed: card data consistency is compromised!");
 			QMessageBox msgBoxcc(QMessageBox::Warning, title, msg, 0, this);
 			msgBoxcc.setModal(true);
 			msgBoxcc.exec();
+		}
+		else if (rc == LOADING_ERROR_GENERIC) 
+		{
+			
+			QString	msg = tr("Error loading card data");
+			
+			ShowPTEIDError( msg );
 		}
 		else
 		{
@@ -3127,7 +3128,7 @@ void MainWnd::LoadDataPersoData(PTEID_EIDCard& Card)
 	m_ui.btnPersoDataSave->setEnabled(true);
 	m_TypeCard = Card.getType();
 	CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName);
-	QFuture<void> future = QtConcurrent::run(loader, &CardDataLoader::LoadPersoData);
+	QFuture<LoadingErrorCode> future = QtConcurrent::run(loader, &CardDataLoader::LoadPersoData);
 	this->FutureWatcher.setFuture(future);
 	ProgressExec();
 }
@@ -3141,7 +3142,7 @@ void MainWnd::LoadDataCertificates(PTEID_EIDCard& Card)
 	CardDataLoader loader(m_CI_Data, Card, m_CurrReaderName);
 	//loader.LoadCertificateData();
 
-	QFuture<void> future = QtConcurrent::run(loader, &CardDataLoader::LoadCertificateData);
+	QFuture<LoadingErrorCode> future = QtConcurrent::run(loader, &CardDataLoader::LoadCertificateData);
 	this->FutureWatcher.setFuture(future);
 	//if(!m_CI_Data.isDataLoaded())
 	ProgressExec();
@@ -4386,7 +4387,7 @@ bool MainWnd::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
 #endif
 
 
-void CardDataLoader::Load()
+LoadingErrorCode CardDataLoader::Load()
 {
 	this->mwnd->clearErrorSOD();
 	try
@@ -4397,11 +4398,20 @@ void CardDataLoader::Load()
 
 	catch (PTEID_Exception &e)
 	{
+		qDebug() << "Caught exception in CardDataLoader::Load()..." << e.GetError();
+		long errorCode = e.GetError();	 	
+		 	
+	    if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE &&	 	
+	       errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN)	 	
+	    {	 	
+	       return LOADING_ERROR_SOD;
+	    }
 
-		this->mwnd->setErrorSOD();
-
-		qDebug() << "Caught exception in RetrieveData()..." << e.GetError();
-		return;
+		return LOADING_ERROR_GENERIC;
+	}
+	catch(std::exception &ex) {
+		qDebug() << "Caught std::exception in CardDataLoader::Load()..." << ex.what();
+		return LOADING_ERROR_GENERIC;
 	}
 
 	if (this->mwnd)
@@ -4417,16 +4427,36 @@ void CardDataLoader::Load()
 			this->mwnd->showCertImportMessage(bImported);
 		}
 	}
+	return LOADING_OK;
 }
 
-void CardDataLoader::LoadPersoData()
+LoadingErrorCode CardDataLoader::LoadPersoData()
 {
-	this->information.LoadDataPersoData(card, readerName);
+	try
+	{
+		this->information.LoadDataPersoData(card, readerName);
+	}
+	catch(PTEID_Exception &e)
+	{
+		return LOADING_ERROR_GENERIC;
+	}
+
+	return LOADING_OK;
+	
 }
 
-void CardDataLoader::LoadCertificateData()
+LoadingErrorCode CardDataLoader::LoadCertificateData()
 {
+	try {
 	this->information.LoadDataCertificates(card, readerName);
+
+	}
+	catch(PTEID_Exception &e)
+	{
+		return LOADING_ERROR_GENERIC;
+	}
+
+	return LOADING_OK;
 }
 
 

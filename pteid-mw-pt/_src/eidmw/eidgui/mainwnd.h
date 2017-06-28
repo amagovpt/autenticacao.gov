@@ -220,6 +220,8 @@ private slots:
 	void handleFutureCertStatus();
 };
 
+enum LoadingErrorCode{ LOADING_OK, LOADING_ERROR_SOD, LOADING_ERROR_GENERIC };
+
 /* Helper Class for Threaded Data Loading */
 class CardDataLoader
 {
@@ -235,9 +237,9 @@ public:
 		information(info), card(Card), readerName(ReaderName), mwnd(mw)
 	{ }
 
-	void Load();
-	void LoadPersoData();
-	void LoadCertificateData();
+	LoadingErrorCode Load();
+	LoadingErrorCode LoadPersoData();
+	LoadingErrorCode LoadCertificateData();
 };
 
 class MainWnd : public QMainWindow
@@ -375,7 +377,7 @@ protected:
 
 	QProgressDialog *m_progress;
 	QProgressDialog *m_progress_addr;
-	QFutureWatcher<void> FutureWatcher;
+	QFutureWatcher<LoadingErrorCode> FutureWatcher;
 
 	QFutureWatcher<PTEID_CertifStatus> watcherCertStatusAuth;
 	QFutureWatcher<PTEID_CertifStatus> watcherCertStatusSign;
@@ -421,10 +423,7 @@ private:
 
 	void Show_Splash( void );
 	void Show_Identity_Card(PTEID_EIDCard& Card);
-	void Show_Address_Card(PTEID_EIDCard& Card);
-	void Show_PersoData_Card(PTEID_EIDCard& Card);
-	void Show_Certificates_Card(PTEID_EIDCard& Card);
-	void Show_Memory_Card(PTEID_MemoryCard& Card);
+	
 	void LoadDataID(PTEID_EIDCard& Card);
 	void LoadDataAddress(PTEID_EIDCard& Card);
 	void LoadDataPersoData(PTEID_EIDCard& Card);
@@ -521,7 +520,7 @@ private:
 public:
 	static tCertPerReader			m_certContexts;			//!< certificate contexts of each reader
 
-friend void CardDataLoader::Load();
+friend LoadingErrorCode CardDataLoader::Load();
 };
 
 #endif
