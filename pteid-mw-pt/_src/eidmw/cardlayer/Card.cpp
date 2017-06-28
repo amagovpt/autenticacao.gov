@@ -119,9 +119,15 @@ void CCard::Unlock()
 	}
 }
 
+//Not supported for Unknown cards, only implemented in subclasses
 void CCard::SelectApplication(const CByteArray & oAID)
 {
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+}
+
+bool CCard::SelectApplet()
+{
+	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);	
 }
 
 CByteArray CCard::ReadCachedFile(const std::string & csPath, std::string & csName,
@@ -363,31 +369,20 @@ CByteArray CCard::GetRandom(unsigned long ulLen)
 
 CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 {
-    //DEBUG
-    //cout << "SendAPDU get response" << endl;
 	
 	CAutoLock oAutoLock(this);
 	long lRetVal = 0;
 
 	CByteArray oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal);
 
-	if ( (m_cardType == CARD_PTEID_IAS07 || m_cardType == CARD_PTEID_IAS101) &&
-			(lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED) )
+	if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED)
 	{
 		m_poContext->m_oPCSC.Recover(m_hCard, &m_ulLockCount);
 		// try again to select the applet
-		CByteArray oData;
-		/*CByteArray oCmd(40);
-		const unsigned char Cmd[] = {0x00,0xA4,0x04,0x00,0x0F,0xA0,0x00,0x00,0x00,0x30,0x29,0x05,0x70,0x00,0xAD,0x13,0x10,0x01,0x01,0xFF};
-		oCmd.Append(Cmd,sizeof(Cmd));
-
-		oData = m_poContext->m_oPCSC.Transmit(m_hCard, oCmd,&lRetVal);*/
-
-		if( (oData.Size() == 2) && 
-				( (oData.GetByte(0) == 0x61) || ((oData.GetByte(0) == 0x90) && (oData.GetByte(1) == 0x00)) ) )
+		if (SelectApplet())
 		{
 			//try again, now that the card has been reset
-			oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU,&lRetVal);
+			oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal);
 		}
 	}
 
@@ -396,7 +391,7 @@ CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 		// If SW1 = 0x61, then SW2 indicates the maximum value to be given to the
 		// short Le  field (length of extra/ data still available) in a GET RESPONSE.
 	    if (oResp.GetByte(0) == 0x61) {
-		return SendAPDU(0xC0, 0x00, 0x00, oResp.GetByte(1)); // Get Response
+		   return SendAPDU(0xC0, 0x00, 0x00, oResp.GetByte(1)); // Get Response
 	    }
 		// If SW1 = 0x6c, then SW2 indicates the value to be given to the short
 		// Le field (exact length of requested data) when re-issuing the same command.
@@ -410,11 +405,6 @@ CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 			if (ulCmdLen > 5)
 			oNewCmdAPDU.Append(pucCmd + 5, ulCmdLen - 5);
 
-			// for cards that may need a delay (e.g. Belpic V1)
-			//unsigned long ulDelay = Get6CDelay();
-			//if (ulDelay != 0)
-			//	CThread::SleepMillisecs(ulDelay);
-
 			return SendAPDU(oNewCmdAPDU);
 		}
 	}
@@ -426,7 +416,6 @@ CByteArray CCard::SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned cha
     unsigned long ulOutLen)
 {
     
-	//printf("--- This 1\n");
 	CByteArray oAPDU(5);
 
     oAPDU.Append(m_ucCLA);
@@ -443,7 +432,6 @@ CByteArray CCard::SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned cha
 CByteArray CCard::SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned char ucP2,
         const CByteArray & oData)
 {
-	//printf("--- This 2\n");
     CByteArray oAPDU(5 + oData.Size());
 
     oAPDU.Append(m_ucCLA);
@@ -454,11 +442,6 @@ CByteArray CCard::SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned cha
     oAPDU.Append(oData);
 
     return SendAPDU(oAPDU);
-}
-
-unsigned long CCard::Get6CDelay()
-{
-	return 0;
 }
 
 unsigned char CCard::Hex2Byte(char cHex)

@@ -864,11 +864,6 @@ CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFile
 	return CByteArray((unsigned char *)csPath.c_str(), (unsigned long)csPath.size());
 }
 
-unsigned long CPteidCard::Get6CDelay()
-{
-	return m_ul6CDelay;
-}
-
 tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 {
     tCacheInfo dontCache = {DONT_CACHE, 0};

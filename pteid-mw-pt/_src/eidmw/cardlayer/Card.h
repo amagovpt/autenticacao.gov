@@ -120,8 +120,8 @@ public:
     SCARDHANDLE m_hCard;
 
 protected:
-	// How long to wait (msec) before re-sending an APDU when SW12 = 6CXX is returned
-	virtual unsigned long Get6CDelay();
+	
+    virtual bool SelectApplet();
 
 	virtual unsigned char Hex2Byte(char cHex);
 	virtual unsigned char Hex2Byte(const std::string & csHex, unsigned long ulIdx);

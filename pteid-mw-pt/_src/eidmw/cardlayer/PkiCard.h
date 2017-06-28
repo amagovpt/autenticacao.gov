@@ -72,14 +72,9 @@ public:
     virtual CByteArray GetRandom(unsigned long ulLen);
 
 protected:
-
-
-    virtual bool ShouldSelectApplet(unsigned char ins, unsigned long ulSW12);
     virtual bool SelectApplet();
-
 	virtual tFileInfo SelectFile(const std::string & csPath, bool bReturnFileInfo = false);
     virtual CByteArray SelectByPath(const std::string & csPath, bool bReturnFileInfo = false);
-    //virtual tFileInfo ParseFileInfo(CByteArray & oFCI) = 0;
 
     virtual CByteArray ReadBinary(unsigned long ulOffset, unsigned long ulLen);
     virtual CByteArray UpdateBinary(unsigned long ulOffset, const CByteArray & oData);

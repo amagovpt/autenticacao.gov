@@ -59,12 +59,6 @@ CPkiCard::~CPkiCard(void)
 }
 
 
-bool CPkiCard::ShouldSelectApplet(unsigned char ins, unsigned long ulSW12)
-{
-	// Don't do anything by default
-	return false;
-}
-
 bool CPkiCard::SelectApplet()
 {
 	// Don't do anything by default
@@ -83,14 +77,11 @@ void CPkiCard::SelectApplication(const CByteArray & oAID)
 	// Select File command to select the Application by AID
     	CByteArray oResp = SendAPDU(0xA4, 0x04, 0x0C, oAID);
 
-	if (ShouldSelectApplet(0xA4, getSW12(oResp)))
+			// First try to select the applet
+	if (SelectApplet())
 	{
-		// First try to select the applet
-		if (SelectApplet())
-		{
-			m_selectAppletMode = ALW_SELECT_APPLET;
-			oResp = SendAPDU(0xA4, 0x04, 0x0C, oAID);
-		}
+		m_selectAppletMode = ALW_SELECT_APPLET;
+		oResp = SendAPDU(0xA4, 0x04, 0x0C, oAID);
 	}
 
 	getSW12(oResp, 0x9000);
@@ -534,18 +525,8 @@ try_again:
         unsigned char ucLen = (unsigned char) (ulLen - i > 20 ? 20 : ulLen - i);
 
         // Get challenge command
-	m_ucCLA = 0x80;
+	    m_ucCLA = 0x80;
         CByteArray oResp = SendAPDU(0x84, 0x00, 0x00, 0x08);
-		if (ShouldSelectApplet(0x84, getSW12(oResp)))
-		    /*{
-			// First try to select
-			if (SelectApplet())
-			{
-				m_selectAppletMode = ALW_SELECT_APPLET;
-				bAppletSelectDone = true;
-				goto try_again;
-			}
-		}*/
 		getSW12(oResp, 0x9000);
 
 		oRandom.Append(oResp.GetBytes(), oResp.Size() - 2);
@@ -613,14 +594,12 @@ CByteArray CPkiCard::SelectByPath(const std::string & csPath, bool bReturnFileIn
         oPath.Append(Hex2Byte(csPath, i));
 
     CByteArray oResp = SendAPDU(0xA4, 0x00, ucP2, oPath);
-    if (ShouldSelectApplet(0xA4, getSW12(oResp)))
+
+    // The file still wasn't found, so let's first try to select the applet
+    if (SelectApplet())
     {
-        // The file still wasn't found, so let's first try to select the applet
-        if (SelectApplet())
-        {
-            m_selectAppletMode = ALW_SELECT_APPLET;
-            oResp = SendAPDU(0xA4, 0x80, ucP2, oPath);
-        }
+        m_selectAppletMode = ALW_SELECT_APPLET;
+        oResp = SendAPDU(0xA4, 0x80, ucP2, oPath);
     }
 
 	getSW12(oResp, 0x9000);

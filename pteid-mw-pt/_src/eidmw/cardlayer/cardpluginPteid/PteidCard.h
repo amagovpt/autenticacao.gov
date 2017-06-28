@@ -96,8 +96,6 @@ protected:
 		
     virtual CByteArray SelectByPath(const std::string & csPath, bool bReturnFileInfo = false);
 
-	virtual unsigned long Get6CDelay();
-
     virtual void showPinDialog(tPinOperation operation, const tPin & Pin,
         std::string & csPin1, std::string & csPin2, const tPrivKey *pKey, void *wndGeometry = 0 );
 
@@ -112,7 +110,6 @@ protected:
 	CByteArray m_oSerialNr;
     unsigned char m_ucAppletVersion;
     unsigned int m_AppletVersion;
-	unsigned long m_ul6CDelay;
 
 };
 
