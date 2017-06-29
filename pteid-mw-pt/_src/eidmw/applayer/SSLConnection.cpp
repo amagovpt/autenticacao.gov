@@ -523,14 +523,29 @@ char *build_json_object_sam(StartWriteResponse &resp)
 bool SSLConnection::do_SAM_4thpost(StartWriteResponse &resp)
 {
 	cJSON *json = NULL;
+	char *server_response = NULL;
 	char *json_request = build_json_object_sam(resp);
 
 	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_4thpost()");
 
 	MWLOG(LEV_DEBUG, MOD_APL, "POSTing request: %s", json_request);
 
-	char *server_response = Post(this->m_session_cookie,
-	  "/changeaddress/followUpWrite", json_request);
+	try {
+		server_response = Post(this->m_session_cookie,
+	     "/changeaddress/followUpWrite", json_request);
+	
+	}
+	catch (CMWException &e) {
+
+		free(json_request);
+		MWLOG(LEV_ERROR, MOD_APL, 
+			"Error caught in do_SAM_4thpost: Error code: %08x File: %s: line %ld", 
+			e.GetError(), e.GetFile().c_str(), e.GetLine()); 
+
+		MWLOG(LEV_ERROR, MOD_APL, "The Address Change process WAS ABORTED after successful card write!");
+
+		throw CMWEXCEPTION(EIDMW_SAM_UNCONFIRMED_CHANGE);
+	}
 
 	MWLOG(LEV_DEBUG, MOD_APL, "do_SAM_4thpost: server response: %s", server_response);
 
@@ -1173,7 +1188,7 @@ unsigned int SSLConnection::write_to_stream(SSL* ssl, char* request_string) {
 
           print_ssl_error("BIO_Write should retry test failed.\n", stdout);
           r = 0;
-     }
+    }
 
     return r;
 }

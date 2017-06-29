@@ -1,7 +1,7 @@
 /* ****************************************************************************
  *
  *  PTeID Middleware Project.
- *  Copyright (C) 2014 - 2016
+ *  Copyright (C) 2014 - 2017
  *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *
  *  Card interaction necessary for the Change Address Operation
@@ -34,15 +34,15 @@ SAM::SAM(APL_Card *card)
 
 void binToHex(const unsigned char *in, size_t in_len, char *out, size_t out_len)
 {
-        unsigned int        n;
-        char                *pos;
+	unsigned int n;
+	char *pos;
 
-        pos = out;
-        for (n = 0; n < in_len; n++) {
-                sprintf(pos, "%02x", in[n]);
-                pos += 2;
-        }
-        *pos = '\0';
+	pos = out;
+	for (n = 0; n < in_len; n++) {
+		sprintf(pos, "%02x", in[n]);
+		pos += 2;
+	}
+	*pos = '\0';
 }
 
 
@@ -90,8 +90,6 @@ char * SAM::_getCVCPublicKey()
 
 	unsigned char apdu_cvc_pubkey_mod[] = {0x00, 0xCB, 0x00,
 	0xFF, 0x0A, 0xB6, 0x03, 0x83, 0x01, 0x44, 0x7F, 0x49, 0x02, 0x81, 0x00, 0x00};
-
-	//00 CB 00 FF 0A B6 03 83 01 44 7F 49 02 81 00 00 
 
 	unsigned  char apdu_cvc_pubkey_exponent[] = {0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03,
 	0x83, 0x01, 0x44, 0x7F, 0x49, 0x02, 0x82, 0x00, 0x00};
@@ -228,7 +226,6 @@ bool SAM::sendKIFD(char *kifd)
 	return true;	
 }
 
-//CB 00 FF 04 A6 02 91 00 00}
 char *SAM::getKICC()
 {
 	char *kicc_hex = NULL;

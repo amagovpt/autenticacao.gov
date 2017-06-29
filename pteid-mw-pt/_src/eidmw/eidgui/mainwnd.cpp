@@ -547,7 +547,10 @@ void MainWnd::showChangeAddressDialog(long code)
 			icon = QMessageBox::Critical;
 			sam_error_code = code;
 			break;
-
+		case EIDMW_SAM_UNCONFIRMED_CHANGE:
+			error_msg = tr("Address change process is incomplete!") + "\n\n" + tr("The address is changed in the card but not confirmed by the State central services");
+			icon = QMessageBox::Critical;
+			break;
 		case EIDMW_SSL_PROTOCOL_ERROR:
 			error_msg = tr("Error in the Address Change operation!") + "\n\n" + tr("Please make sure you have a valid authentication certificate");
 			icon = QMessageBox::Critical;
@@ -599,7 +602,7 @@ void MainWnd::doChangeAddress(const char *process, const char *secret_code)
 	}
 	catch(PTEID_Exception & exception)
 	{
-		qDebug() << "Caught exception in eidlib ChangeAddress()... closing progressBar";
+		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Caught exception in EidCard.ChangeAddress()... closing progressBar");
 		this->addressProgressChanged(100);
 		this->addressChangeFinished(exception.GetError());
 
@@ -608,7 +611,6 @@ void MainWnd::doChangeAddress(const char *process, const char *secret_code)
 		return;
 	}
 
-	//TODO: UI issue - we need to call refreshTabAddress() after the address is successfully changed...
 	free((char *)process);
 	free((char *)secret_code);
 	this->addressChangeFinished(0);

@@ -2,6 +2,7 @@
 
  * eID Middleware Project.
  * Copyright (C) 2008-2009 FedICT.
+ * Copyright (C) 2014-2017 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -343,12 +344,14 @@ void APL_EIDCard::ChangeAddress(char *secret_code, char *process, t_callback_add
 			callback(callback_data, 90);
 
 			// Report the results to the server for verification purposes,
-			// We only consider the Address Change successful if the server returns its "ACK"
-			if (!conn.do_SAM_4thpost(start_write_resp)){
+			// We only consider the Address Change successful if the server returns its "Acknowledge" message
+			if (!conn.do_SAM_4thpost(start_write_resp)) {
                 delete resp3;
                 free(resp_mse);
                 free(resp_internal_auth);
-				throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
+                MWLOG(LEV_ERROR, MOD_APL, 
+                	"The Address Change process WAS ABORTED after successful card write because of unexpected server reply!");
+				throw CMWEXCEPTION(EIDMW_SAM_UNCONFIRMED_CHANGE);
 			}
 
 			callback(callback_data, 100);

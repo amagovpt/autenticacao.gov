@@ -48,10 +48,6 @@
         <translation>Certificado de Assinatura:</translation>
     </message>
     <message>
-        <source>Error returned by the OTP server. Please make sure you have a valid authentication certificate</source>
-        <translation>Erro na ligação ao servidor de OTP. Por favor verifique que tem o certificado de autenticação válido</translation>
-    </message>
-    <message>
         <source>Please make sure you have a valid authentication certificate</source>
         <translation>Erro na operação de mudança de morada. Por favor verifique que tem o certificado de autenticação válido</translation>
     </message>
@@ -62,10 +58,6 @@
     <message>
         <source>Unfortunately the Address Change operation is unsupported for this card</source>
         <translation>A operação de Mudança de Morada não é suportada neste cartão</translation>
-    </message>
-    <message>
-        <source>Change Authentication and OTP PIN</source>
-        <translation>Alterar Pin de Autenticação e OTP</translation>
     </message>
     <message>
         <source>Address Change</source>
@@ -120,28 +112,16 @@
         <translation>Por favor verifique se introduziu corretamente o número de processo e código de confirmação</translation>
     </message>
     <message>
+        <source>The address is changed in the card but not confirmed by the State central services</source>
+        <translation>A morada foi alterada no cartão mas não foi confirmada pelos serviços centrais</translation>
+    </message>
+    <message>
+        <source>Address change process is incomplete!</source>
+        <translation>Processo de alteração de morada não foi concluído!</translation>
+    </message>
+    <message>
         <source>Verification of your current PIN failed</source>
         <translation>O PIN atual está incorrecto.</translation>
-    </message>
-    <message>
-        <source>Error connecting to the OTP Server. Please check your internet connection.</source>
-        <translation>Erro na ligação ao servidor de OTP. Por favor certifica-se de que está ligado à Internet.</translation>
-    </message>
-    <message>
-        <source>Error connecting to the OTP Server. Your authentication certificate was rejected.</source>
-        <translation>Erro na ligação ao servidor de OTP. O seu certificado de autenticação foi rejeitado.</translation>
-    </message>
-    <message>
-        <source>Error connecting to the OTP Server. </source>
-        <translation>Erro na ligação ao servidor de OTP.</translation>
-    </message>
-    <message>
-        <source> Unexpected error in the OTP Server results. Aborting Pin change operation&quot;</source>
-        <translation>Resultado inesperado recebido do servidor de OTP. Operação abortada.</translation>
-    </message>
-    <message>
-        <source>Error ocurred changing the authentication PIN. Please try again to avoid out-of-sync PINs</source>
-        <translation>Erro ocorrido na alteração de PIN de autenticação. Por favor tente outra vez para evitar ter PINs dessincronizados</translation>
     </message>
     <message>
         <source>%1 tries remaining</source>
@@ -325,10 +305,6 @@
         <translation>Issuer</translation>
     </message>
     <message>
-        <source>Key Lenght</source>
-        <translation>Comprimento da chave</translation>
-    </message>
-    <message>
         <source>Valid From</source>
         <translation>Válido desde</translation>
     </message>
@@ -495,7 +471,7 @@
     <message>
         <source>Close pinpad info</source>
         <translation>Fechar info PIN-pad</translation>
-    </message>
+    </message   >
     <message>
         <source>&amp;Identity Card</source>
         <translation>&amp;Identity Card</translation>
