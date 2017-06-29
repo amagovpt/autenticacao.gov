@@ -99,41 +99,6 @@ CByteArray CPCSC::ListReaders()
 	}
 }
 
-/*
-static char *state2string(char *buf, unsigned long state)
-{
-	sprintf(buf, "%0x = %0x 0000", state, state / 0x10000);
-	if (state & SCARD_STATE_UNPOWERED)
-		strcat(buf, " | SCARD_STATE_UNPOWERED");
-	if (state & SCARD_STATE_MUTE)
-		strcat(buf, " | SCARD_STATE_MUTE");
-	if (state & SCARD_STATE_INUSE)
-		strcat(buf, " | SCARD_STATE_INUSE");
-	if (state & SCARD_STATE_EXCLUSIVE)
-		strcat(buf, " | SCARD_STATE_EXCLUSIVE");
-	if (state & SCARD_STATE_ATRMATCH)
-		strcat(buf, " | SCARD_STATE_ATRMATCH");
-	if (state & SCARD_STATE_PRESENT)
-		strcat(buf, " | SCARD_STATE_PRESENT");
-	if (state & SCARD_STATE_EMPTY)
-		strcat(buf, " | SCARD_STATE_EMPTY");
-	if (state & SCARD_STATE_UNAVAILABLE)
-		strcat(buf, " | SCARD_STATE_UNAVAILABLE");
-	if (state & SCARD_STATE_UNKNOWN)
-		strcat(buf, " | SCARD_STATE_UNKNOWN");
-	if (state & SCARD_STATE_CHANGED)
-		strcat(buf, " | SCARD_STATE_CHANGED");
-	if (state & SCARD_STATE_IGNORE)
-		strcat(buf, " | SCARD_STATE_IGNORE");
-	if (state == SCARD_STATE_UNAWARE)
-		strcat(buf, " | SCARD_STATE_UNAWARE");
-
-	return buf;
-}
-char csCurrState[200];
-char csNextState[200];
-*/
-
 bool CPCSC::GetStatusChange(unsigned long ulTimeout,
 	tReaderInfo *pReaderInfos, unsigned long ulReaderCount)
 {
@@ -389,10 +354,6 @@ try_again:
 #endif
 		MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardTransmit(): 0x%0x", lRet);
 
-		//Log this specific case as error, it can be useful to know if the user removed the card in the middle of an operation
-		if (lRet == SCARD_W_REMOVED_CARD)
-			MWLOG(LEV_DEBUG, MOD_CAL, L"Smart card removed when performing SCardTransmit!");
-
 		throw CMWEXCEPTION(PcscToErr(lRet));
 	}
 
@@ -474,7 +435,7 @@ CByteArray CPCSC::Control(SCARDHANDLE hCard, unsigned long ulControl, const CByt
 #endif
 	if (SCARD_S_SUCCESS != lRet)
 	{
-#ifndef WIN32		
+#ifndef WIN32
 		//Special-casing the PIN Blocked response for GemPC Pinpad under pcscd
 		if (lRet == SCARD_E_NOT_TRANSACTED)
 		{
@@ -519,6 +480,10 @@ void CPCSC::EndTransaction(SCARDHANDLE hCard)
 {
 	LONG lRet = SCardEndTransaction(hCard, SCARD_LEAVE_CARD);
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardEndTransaction(0x%0x): 0x%0x", hCard, lRet);
+
+	//Log this specific case as error, it may be useful to know if the user removed the card in the middle of an operation
+	if (lRet == SCARD_W_REMOVED_CARD)
+		MWLOG(LEV_DEBUG, MOD_CAL, L"Smart card removed when performing SCardEndTransaction!");
 }
 
 long CPCSC::SW12ToErr(unsigned long ulSW12)
