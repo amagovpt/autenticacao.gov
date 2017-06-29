@@ -376,8 +376,6 @@ try_again:
 		pioSendPci, oCmdAPDU.GetBytes(), (DWORD) oCmdAPDU.Size(),
 		pioRecvPci, tucRecv, &dwRecvLen);
 
-	//printf(":::::: %ld vs2 %ld :::::\n",SCARD_S_SUCCESS,lRet);
-
 	*plRetVal = lRet;
 	if (SCARD_S_SUCCESS != lRet)
 	{
@@ -390,8 +388,13 @@ try_again:
 		}
 #endif
 		MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardTransmit(): 0x%0x", lRet);
+
+		//Log this specific case as error, it can be useful to know if the user removed the card in the middle of an operation
+		if (lRet == SCARD_W_REMOVED_CARD)
+			MWLOG(LEV_DEBUG, MOD_CAL, L"Smart card removed when performing SCardTransmit!");
+
 		throw CMWEXCEPTION(PcscToErr(lRet));
-	}      
+	}
 
 	// Don't log the full response for privacy reasons, only SW1-SW2
 	MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardTransmit(): SW12 = %02X %02X",
@@ -409,7 +412,6 @@ try_again:
 
 	return CByteArray(tucRecv, (unsigned long) dwRecvLen);
 }
-
 
 
 void CPCSC::Recover(SCARDHANDLE hCard, unsigned long * pulLockCount )
