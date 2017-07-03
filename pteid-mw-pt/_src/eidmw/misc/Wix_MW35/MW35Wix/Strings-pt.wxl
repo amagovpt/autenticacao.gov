@@ -8,15 +8,14 @@
   <String Id="PteidRuntimeDesc" Overridable="yes">Este módulo é necessário para utilizar o Cartão de Cidadão.</String>
   <String Id="PteidGui" Overridable="yes">Aplicação Utilitária</String>
   <String Id="PteidGuiDescr" Overridable="yes">Acesso aos dados de identificação do Cidadão e assinatura electrónica</String>
-  <String Id="CSP" Overridable="yes">Cryptographic Service Provider</String>
-  <String Id="CSPDescr" Overridable="yes">Este módulo fornece serviços criptográficos às aplcações que usam a Windows CryptoAPI no Windows XP</String>
-  <String Id="Minidriver" Overridable="yes">Smart Card Minidriver</String>
-  <String Id="MinidriverDescr" Overridable="yes">Este módulo fornece serviços criptográficos às aplicações que usam a Windows CryptoAPI no Windows Vista e 7</String>
-  <String Id="Crypto" Overridable="yes">Cryptographic Module</String>
-  <String Id="CryptoDescr" Overridable="yes">Este módulo é necessário para utilizar o Cartão de Cidadão como cartão de identidade eletrónico no Internet Explorer, Firefox, etc. ou para criar assinaturas digitais no Microsoft Office, OpenOffice.org, Microsoft Outlook, Thunderbird, etc.</String>
+  <String Id="Minidriver" Overridable="yes">Minidriver do Cartão de Cidadão</String>
+  <String Id="MinidriverDescr" Overridable="yes">Este módulo fornece serviços criptográficos às aplicações que usam a Microsoft CryptoAPI no Windows 7, 8 e 10</String>
+  <String Id="Crypto" Overridable="yes">Módulo Criptográfico</String>
+  <String Id="CryptoDescr" Overridable="yes">Este módulo é necessário para utilizar o Cartão de Cidadão como cartão de identidade eletrónico nos navegadores de Internet ou para criar assinaturas digitais no Microsoft Office, LibreOffice, Microsoft Outlook, Thunderbird, etc.</String>
   <String Id="XSign" Overridable="yes">Xsign</String>
   <String Id="XSignDescr" Overridable="yes">Aplicação XSign</String>
-  <String Id="OldMiddlewareErrorMsg" Overridable="yes">Foi detectada a versão 1 do software do Cartão de Cidadão no seu sistema, por favor desinstale-a antes de executar este instalador.</String>	
+  <String Id="OldMiddlewareErrorMsg" Overridable="yes">Foi detectada a versão 1 do software do Cartão de Cidadão no seu sistema, por favor desinstale-a antes de executar este instalador.</String>
+  <String Id="x86InstallerIn64bitSystem">Este pacote de instalação só deve ser utilizado em sistemas operativos Windows de 32 bits</String>
   <String Id="OutlookDescr" Overridable="yes">Configurar MS Outlook para o CC</String>
   <String Id="Users" Overridable="yes">Utilizadores</String>
   <String Id="msierrSecureObjectsFailedCreateSD" Overridable="yes">Could not create security descriptor [3]\[4], error: [2]</String>

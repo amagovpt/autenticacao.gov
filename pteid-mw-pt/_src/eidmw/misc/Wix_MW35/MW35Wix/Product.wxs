@@ -34,19 +34,7 @@
              InstallPrivileges="elevated"
     />
 
-    <Upgrade Id="$(var.UpgradeCode)">
-      <UpgradeVersion Minimum="$(var.ProductVersion)"
-                      IncludeMinimum="no"
-                      OnlyDetect="yes"
-                      Property="NEWPRODUCTFOUND"
-      />
-      <UpgradeVersion Minimum="1.0.0"
-                      IncludeMinimum="yes"
-                      Maximum="$(var.ProductVersion)"
-                      IncludeMaximum="no"
-                      Property="UPGRADEFOUND"
-      />
-    </Upgrade>
+    <MajorUpgrade DowngradeErrorMessage="!(loc.NoDowngrade)"/>
 
     <?ifndef env.PTEID_DIR_MSM?>
       <?error PTEID_DIR_MSM not defined ?>
@@ -102,6 +90,7 @@
       OR (VersionNT > 501)
       ]]>
     </Condition>
+   
 
     <Media Id="1" Cabinet="Middleware.cab" EmbedCab="yes" CompressionLevel="high"/>
 
@@ -123,6 +112,10 @@
 	<Condition Message="!(loc.OldMiddlewareErrorMsg)" >
 	   <![CDATA[Installed OR (NOT OLDMIDDLEWAREINSTALLED AND NOT OLDMIDDLEWAREINSTALLED2) ]]>
 	</Condition>
+    
+    <Condition Message="!(loc.x86InstallerIn64bitSystem)">
+      <![CDATA[ NOT Msix64 ]]>
+    </Condition>
 
     <Directory Id="TARGETDIR" Name="SourceDir">
 
@@ -670,23 +663,13 @@
     <?endif?>
 
     <CustomAction Id="IsPrivileged" Error="!(loc.AdminNeeded)" />
-    <CustomAction Id="PreventDowngrading" Error="!(loc.NoDowngrade)" />
-
-    <InstallUISequence>
-      <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
-    </InstallUISequence>
-
+    
     <InstallExecuteSequence>
-      <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
-      <RemoveExistingProducts After="InstallFinalize" />
-
       <Custom Action="SetARPINSTALLLOCATION" After="InstallValidate"></Custom>
 
       <Custom Action="IsPrivileged" Before="LaunchConditions">Not Privileged</Custom>
       <Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
-
-	  <Custom Action="CleanMinidriverKeys" After="RemoveRegistryValues">NOT Installed</Custom>
-
+	    <Custom Action="CleanMinidriverKeys" After="RemoveRegistryValues">NOT Installed</Custom>
       <ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>
     </InstallExecuteSequence>
 
