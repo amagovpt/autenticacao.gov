@@ -42,6 +42,7 @@ class GAPI : public QObject
     Q_OBJECT
     Q_PROPERTY(QMap<IDInfoKey, QString> m_data
                NOTIFY signalCardDataChanged)
+    Q_PROPERTY(QString persoData MEMBER m_persoData NOTIFY signalPersoDataLoaded)
 
 public:
     explicit GAPI(QObject *parent = 0);
@@ -80,7 +81,7 @@ signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed
     void signalCardDataChanged();
-    void signalPersoDataLoaded(QString persoNotes);
+    void signalPersoDataLoaded(const QString& persoNotes);
 
 private:
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
@@ -91,6 +92,7 @@ private:
     QMap<GAPI::IDInfoKey, QString> m_data;
     //Don't free this!, we release ownership to the QMLEngine in buildImageProvider()
     PhotoImageProvider *image_provider;
+    QString m_persoData;
 
 private slots:
     // Test functions

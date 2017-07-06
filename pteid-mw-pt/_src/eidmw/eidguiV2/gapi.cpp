@@ -63,6 +63,7 @@ bool isExpiredDate(const char * strDate) {
 
 //TODO: emit signal for errors
 void GAPI::getPersoDataFile() {
+    qDebug() << "getPersoDataFile() called";
     try
     {
         //TODO: we should store the readerContext or EIDCard reference in the GAPI object
@@ -83,6 +84,10 @@ void GAPI::getPersoDataFile() {
     }
 
     
+}
+
+void GAPI::verifyAddressPin(QString &pin) {
+    //TODO
 }
 
 QString GAPI::getCardActivation() {

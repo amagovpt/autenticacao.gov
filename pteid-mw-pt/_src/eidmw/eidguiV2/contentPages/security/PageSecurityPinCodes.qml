@@ -12,6 +12,7 @@ PageSecurityPinCodesForm {
         width: 400
         height: 300
         font.family: lato.name
+        //header.color: Constants.COLOR_MAIN_BLUE
         // Center dialog in the main view
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - changepin_dialog.width * 0.5
