@@ -83,7 +83,7 @@ Item {
                 y: parent.height * Constants.IMAGE_LOGO_RELATIVE_V_POS
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
-                source: "images/logo_autenticacao_gov.png"
+                source: "images/logo_autenticacao_gov100.png"
                 MouseArea {
                     id: mouseAreaImageLogo
                     anchors.fill: parent

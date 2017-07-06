@@ -6,6 +6,17 @@ import "../../components" as Components
 
 Item {
     anchors.fill: parent
+
+    property alias propertyTextBoxNIF: textBoxNIF
+    property alias propertyTextBoxNISS: textBoxNISS
+    property alias propertyTextBoxNSNS: textBoxNSNS
+    property alias propertyTextBoxCardVersion: textBoxCardVersion
+    property alias propertyTextBoxIssueDate: textBoxIssueDate
+    property alias propertyTextBoxIssuingEntity: textBoxIssuingEntity
+    property alias propertyTextBoxDocumentType: textBoxDocumentType
+    property alias propertyTextBoxPlaceOfRequest: textBoxPlaceOfRequest
+    property alias propertyTextBoxCardState: textBoxCardState
+
     Item {
         id: rowTop
         width: parent.width
@@ -27,9 +38,10 @@ Item {
         Item{
             id: rectTaxNum
             width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
-            Components.LabelTextBoxForm{
+            Components.LabelTextBoxForm {
+                id: textBoxNIF
                 propertyDateText.text: "N.º Identificação Fiscal"
-                propertyDateField.text: "21342342342342"
+                propertyDateField.text: ""
             }
         }
         Item{
@@ -37,9 +49,10 @@ Item {
             width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
             anchors.left: rectTaxNum.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            Components.LabelTextBoxForm{
+            Components.LabelTextBoxForm {
+                id: textBoxNISS
                 propertyDateText.text: "N.º Segurança Social"
-                propertyDateField.text: "3453452452345"
+                propertyDateField.text: ""
             }
         }
         Item{
@@ -47,9 +60,10 @@ Item {
             width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.34
             anchors.left: rectSocialSecurityNum.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            Components.LabelTextBoxForm{
+            Components.LabelTextBoxForm {
+                id: textBoxNSNS
                 propertyDateText.text: "N. º Utente de Saúde"
-                propertyDateField.text: "3453452452345234"
+                propertyDateField.text: ""
             }
         }
     }
@@ -66,9 +80,10 @@ Item {
         Item{
             id: rectCardVersion
             width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.5
-            Components.LabelTextBoxForm{
+            Components.LabelTextBoxForm {
+                id: textBoxCardVersion
                 propertyDateText.text: "Versão do Cartão"
-                propertyDateField.text: "004.004.21"
+                propertyDateField.text: ""
             }
         }
         Item{
@@ -76,9 +91,10 @@ Item {
             width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.5
             anchors.left: rectCardVersion.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            Components.LabelTextBoxForm{
+            Components.LabelTextBoxForm {
+                id: textBoxIssueDate
                 propertyDateText.text: "Data de Emissão"
-                propertyDateField.text: "23 10 2014"
+                propertyDateField.text: ""
             }
         }
     }
@@ -94,9 +110,10 @@ Item {
         Item{
             id: rectIssuingEntity
             width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.5
-            Components.LabelTextBoxForm{
+            Components.LabelTextBoxForm {
+                id: textBoxIssuingEntity
                 propertyDateText.text: "Entidade Emissora"
-                propertyDateField.text: "República Portuguesa"
+                propertyDateField.text: ""
             }
         }
         Item{
@@ -105,8 +122,9 @@ Item {
             anchors.left: rectIssuingEntity.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
+                id: textBoxDocumentType
                 propertyDateText.text: "Tipo de Documento"
-                propertyDateField.text: "Cartão de Cidadão"
+                propertyDateField.text: ""
             }
         }
     }
@@ -122,9 +140,10 @@ Item {
         Item{
             id: rectLocalOfRequest
             width: (parent.width )
-            Components.LabelTextBoxForm{
+            Components.LabelTextBoxForm {
+                id: textBoxPlaceOfRequest
                 propertyDateText.text: "Local de Pedido"
-                propertyDateField.text: "DIC Campus de Justiça Lisboa"
+                propertyDateField.text: ""
             }
         }
     }
@@ -142,8 +161,9 @@ Item {
             id: rectCardStatus
             width: (parent.width )
             Components.LabelTextBoxForm{
+                id: textBoxCardState
                 propertyDateText.text: "Estado do Cartão"
-                propertyDateField.text: "Ativado"
+                propertyDateField.text: ""
             }
         }
     }

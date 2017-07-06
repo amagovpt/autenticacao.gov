@@ -5,9 +5,12 @@
 #include <QIcon>
 #include "appcontroller.h"
 #include "gapi.h"
+#include "eidlib.h"
+using namespace eIDMW;
 
 int main(int argc, char *argv[])
 {
+    int retValue = 0;
     QGuiApplication app(argc, argv);
 
     // Set app icon
@@ -20,21 +23,31 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     // AppController init
-    AppController controler;
+    AppController controller;
 
     // GAPI init
     GAPI gapi;
+    GAPI::declareQMLTypes();
 
     // GAPI Test Functions
-    gapi.fillDataCardIdentifyDummy();
+    //gapi.fillDataCardIdentifyDummy();
+
+    //TODO: We shouldn't really try to connect on startup ...
+    //gapi.connectToCard();
 
     // Embedding C++ Objects into QML with Context Properties
     QQmlContext* ctx = engine.rootContext();
-        ctx->setContextProperty("gapi", &gapi);
-        ctx->setContextProperty("controler", &controler);
+    ctx->setContextProperty("gapi", &gapi);
+    ctx->setContextProperty("controler", &controller);
 
-    // Load main QMl file
+    engine.addImageProvider("myimageprovider", gapi.buildImageProvider());
+
+    // Load main QML file
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
-    return app.exec();
+    retValue = app.exec();
+
+    PTEID_ReleaseSDK();
+
+    return retValue;
 }

@@ -5,7 +5,9 @@ import "../../scripts/Constants.js" as Constants
 
 PageCardNotesForm {
 
-    propertyEditNotes{
+    propertyEditNotes {
+        //text: gapi.getNotesFile()
+        
         onCursorRectangleChanged: {
             ensureVisible(propertyEditNotes.cursorRectangle)
         }
@@ -23,6 +25,11 @@ PageCardNotesForm {
         }
     }
 
+    function loadPersoData(text) {
+        propertyEditNotes.text = text
+        propertyBusyIndicator.running = false
+    }
+
     function ensureVisible(r)
     {
         if (propertyFlickNotes.contentY >= r.y){
@@ -34,5 +41,8 @@ PageCardNotesForm {
 
     Component.onCompleted: {
         propertyEditNotes.forceActiveFocus()
+        propertyBusyIndicator.running = true
+        gapi.signalPersoDataChanged.connect(loadPersoData)
+        gapi.startReadingPersoNotes()
     }
 }

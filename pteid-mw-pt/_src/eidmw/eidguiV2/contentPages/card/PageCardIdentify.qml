@@ -1,64 +1,77 @@
 import QtQuick 2.6
+//Import C++ defined enums
+import eidguiV2 1.0
 
 PageCardIdentifyForm {
 
     Connections {
         target: gapi
-        onSignalCardIdentifyChanged: {
+        onSignalCardDataChanged: {
             console.log("Data Card Identify --> Data Changed")
-            propertyTextBoxName.propertyDateField.text = gapi.getDataCardIdentifyValue("name")
-            propertyTextBoxSurName.propertyDateField.text = gapi.getDataCardIdentifyValue("givenname")
-            propertyTextBoxSex.propertyDateField.text = gapi.getDataCardIdentifyValue("sex")
-            propertyTextBoxHeight.propertyDateField.text = gapi.getDataCardIdentifyValue("height")
-            propertyTextBoxNacionality.propertyDateField.text = gapi.getDataCardIdentifyValue("nationality")
-            propertyTextBoxDateOfBirth.propertyDateField.text = gapi.getDataCardIdentifyValue("birthdate")
-            propertyTextBoxDocumentNum.propertyDateField.text = gapi.getDataCardIdentifyValue("documentnumber")
-            propertyTextBoxExpirydate.propertyDateField.text = gapi.getDataCardIdentifyValue("card_validuntil")
-            propertyTextBoxCountry.propertyDateField.text = gapi.getDataCardIdentifyValue("country")
-            propertyTextBoxParentsFather.propertyDateField.text = gapi.getDataCardIdentifyValue("father")
-            propertyTextBoxParentsMother.propertyDateField.text = gapi.getDataCardIdentifyValue("mother")
-            propertyTextBoxNotes.propertyDateField.text = gapi.getDataCardIdentifyValue("ACCIDENTALINDICATIONS")
+            //console.trace();
+            propertyTextBoxName.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Givenname)
+            propertyTextBoxSurName.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Surname)
+            propertyTextBoxSex.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Sex)
+            propertyTextBoxHeight.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Height)
+
+                     
+            propertyTextBoxNacionality.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Nationality)
+            propertyTextBoxDateOfBirth.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Birthdate)
+            propertyTextBoxDocumentNum.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Documentnum)
+            propertyTextBoxExpirydate.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Validityenddate)
+            propertyTextBoxCountry.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Country)
+            propertyTextBoxParentsFather.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Father)
+            propertyTextBoxParentsMother.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Mother)
+            propertyTextBoxNotes.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.AccidentalIndications)
+            propertyPhoto.source = "image://myimageprovider/photo.png"
+            propertyBusyIndicator.running = false
         }
+
     }
 
+/*
     propertyTextBoxName{
-        propertyDateField.text: gapi.getDataCardIdentifyValue("name")
+        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Givenname)
     }
     propertyTextBoxSurName{
-        propertyDateField.text: gapi.getDataCardIdentifyValue("givenname")
+        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Surname)
     }
     propertyTextBoxSex{
-        propertyDateField.text: gapi.getDataCardIdentifyValue("sex")
+        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Sex)
     }
     propertyTextBoxHeight{
-        propertyDateField.text: gapi.getDataCardIdentifyValue("height")
+        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Height)
     }
     propertyTextBoxNacionality{
-        propertyDateField.text: gapi.getDataCardIdentifyValue("nationality")
+        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Nationality)
     }
     propertyTextBoxDateOfBirth{
-        propertyDateField.text: gapi.getDataCardIdentifyValue("birthdate")
+        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Birthdate)
     }
     propertyTextBoxDocumentNum{
-        propertyDateField.text: gapi.getDataCardIdentifyValue("documentnumber")
+        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Documentnum)
     }
     propertyTextBoxExpirydate{
-        propertyDateField.text: gapi.getDataCardIdentifyValue("card_validuntil")
+        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Validityenddate)
     }
     propertyTextBoxCountry{
-        propertyDateField.text: gapi.getDataCardIdentifyValue("country")
+        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Country)
     }
     propertyTextBoxParentsFather{
-        propertyDateField.text: gapi.getDataCardIdentifyValue("father")
+        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Father)
     }
     propertyTextBoxParentsMother{
-        propertyDateField.text: gapi.getDataCardIdentifyValue("mother")
+        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Mother)
     }
     propertyTextBoxNotes{
-        propertyDateField.text: gapi.getDataCardIdentifyValue("ACCIDENTALINDICATIONS")
+        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.AccidentalIndications)
     }
+    */
 
     Component.onCompleted: {
         console.log("Page Card Identify mainWindow Completed")
+
+        propertyBusyIndicator.running = true
+        gapi.startCardReading()
     }
 }

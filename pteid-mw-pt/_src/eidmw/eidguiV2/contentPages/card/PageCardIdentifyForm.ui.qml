@@ -11,6 +11,8 @@ import "../../components" as Components
 Item {
     anchors.fill: parent
 
+    property alias propertyBusyIndicator : busyIndication
+
     property alias propertyTextBoxName: textBoxName
     property alias propertyTextBoxSurName: textBoxSurName
     property alias propertyTextBoxSex: textBoxSex
@@ -23,6 +25,8 @@ Item {
     property alias propertyTextBoxParentsFather: textBoxParentsFather
     property alias propertyTextBoxParentsMother: textBoxParentsMother
     property alias propertyTextBoxNotes: textBoxNotes
+    property alias propertyPhoto: photoImage
+
 
     Item {
         id: rowTop
@@ -31,6 +35,14 @@ Item {
                 + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
                 * Constants.HEIGHT_CARD_IDENTIFY_ROW_TOP_INC_RELATIVE
         Components.CardRowTop{}
+    }
+
+    BusyIndicator {
+       id: busyIndication
+       running: false
+       anchors.centerIn: parent
+       // BusyIndicator should be on top of all other content
+       z: 1
     }
 
     Item {
@@ -108,12 +120,14 @@ Item {
                 height: parent.height
                 color: "white"
                 Image {
+                    id: photoImage
                     width: parent.width - 1
                     height: parent.height - 1
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
                     antialiasing: true
-                    source: "../../images/dummy/photo.png"
+                   // source: "../../images/dummy/photo.png"
+                   // source: "image://myimageprovider/photo.png"
                 }
             }
         }

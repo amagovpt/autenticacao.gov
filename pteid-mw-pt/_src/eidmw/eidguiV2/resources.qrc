@@ -24,6 +24,7 @@
         <file>contentPages/home/PageHome.qml</file>
         <file>contentPages/home/PageHomeForm.ui.qml</file>
         <file>images/logo_autenticacao_gov.png</file>
+        <file>images/logo_autenticacao_gov100.png</file>
         <file>contentPages/security/PageSecurityCertificates.qml</file>
         <file>contentPages/security/PageSecurityCertificatesForm.ui.qml</file>
         <file>contentPages/security/PageSecurityPinCodes.qml</file>
@@ -74,6 +75,6 @@
         <file>images/flags/pt32.png</file>
         <file>images/flags/uk32.png</file>
         <file>favicon.ico</file>
-        <file>images/tooltip.png</file>
+        <file>images/tooltip_grey.png</file>
     </qresource>
 </RCC>

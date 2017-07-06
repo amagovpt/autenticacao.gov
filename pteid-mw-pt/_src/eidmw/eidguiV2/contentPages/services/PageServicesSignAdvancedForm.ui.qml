@@ -303,7 +303,7 @@ Item {
                                 anchors.fill: parent
                                 antialiasing: true
                                 fillMode: Image.PreserveAspectFit
-                                source: "../../images/tooltip.png"
+                                source: "../../images/tooltip_grey.png"
                                 anchors.horizontalCenter: parent.horizontalCenter
                             }
                             MouseArea {
@@ -345,7 +345,7 @@ Item {
                                 anchors.fill: parent
                                 antialiasing: true
                                 fillMode: Image.PreserveAspectFit
-                                source: "../../images/tooltip.png"
+                                source: "../../images/tooltip_grey.png"
                                 anchors.horizontalCenter: parent.horizontalCenter
                             }
                             MouseArea {

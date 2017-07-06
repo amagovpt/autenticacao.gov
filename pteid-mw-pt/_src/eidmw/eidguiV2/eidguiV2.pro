@@ -1,11 +1,13 @@
 TEMPLATE = app
 
-QT += quick quickcontrols2
+QT += quick quickcontrols2 concurrent
 CONFIG += c++11
 
 SOURCES += main.cpp \
     appcontroller.cpp \
     gapi.cpp
+
+LIBS += -L../lib -lpteidlib
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

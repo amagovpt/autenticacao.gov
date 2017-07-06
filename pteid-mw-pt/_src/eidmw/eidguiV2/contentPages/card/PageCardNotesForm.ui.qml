@@ -14,6 +14,7 @@ Item {
 
     property alias propertyFlickNotes: flickable
     property alias propertyEditNotes: edit
+    property alias propertyBusyIndicator: busyIndicator
 
     Item {
         id: rowTop
@@ -22,6 +23,14 @@ Item {
                 + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
                 * Constants.HEIGHT_CARD_NOTES_ROW_TOP_INC_RELATIVE
         Components.CardRowTop{}
+    }
+    
+    BusyIndicator {
+       id: busyIndicator
+       running: false
+       anchors.centerIn: parent
+       // BusyIndicator should be on top of all other content
+       z: 1
     }
 
     Item {
