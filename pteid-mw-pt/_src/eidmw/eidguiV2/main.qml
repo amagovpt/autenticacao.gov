@@ -462,8 +462,8 @@ Window {
                 hoverEnabled: true
                 onClicked: {
                     mainFormID.propertySubMenuListView.currentIndex = index
-                    console.log("Sub Menu index = " + index);
-                    console.log("Sub Menu Expand Sub Menu" + mainFormID.propertySubMenuListView.model.get(0).expand)
+                    //console.log("Sub Menu index = " + index);
+                    //console.log("Sub Menu Expand Sub Menu" + mainFormID.propertySubMenuListView.model.get(0).expand)
 
                     if(mainFormID.propertySubMenuListView.model.get(0).expand === true){
                         // Clean the content page

@@ -73,7 +73,7 @@ public slots:
     
     void startCardReading();
     void startReadingPersoNotes();
-    void verifyAddressPin(QString &pin);
+    bool verifyAddressPin(QString pin);
     QString getCardActivation();
     QString getDataCardIdentifyValue(GAPI::IDInfoKey stringValue);
 
@@ -81,12 +81,14 @@ signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed
     void signalCardDataChanged();
+    void cardAcessError();
     void signalPersoDataLoaded(const QString& persoNotes);
 
 private:
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();
     void getPersoDataFile();
+    eIDMW::PTEID_EIDCard & getCardInstance();
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;

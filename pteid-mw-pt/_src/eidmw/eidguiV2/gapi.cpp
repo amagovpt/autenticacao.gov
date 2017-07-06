@@ -61,63 +61,43 @@ bool isExpiredDate(const char * strDate) {
     return false;
 }
 
-//TODO: emit signal for errors
 void GAPI::getPersoDataFile() {
+
     qDebug() << "getPersoDataFile() called";
-    try
-    {
-        //TODO: we should store the readerContext or EIDCard reference in the GAPI object
-        PTEID_ReaderContext& readerContext = ReaderSet.getReader();
+    PTEID_EIDCard &card = getCardInstance();
 
-        if (!readerContext.isCardPresent())
-        {
-            qDebug() << "No card found in the reader!" << endl;
-            return;
-        }
+    emit signalPersoDataLoaded(QString(card.readPersonalNotes()));
 
-        PTEID_EIDCard &card = readerContext.getEIDCard();
-        emit signalPersoDataLoaded(QString(card.readPersonalNotes()));
-    }
-    catch (PTEID_Exception &e)
-    {
-        qDebug() << "getPersoDataFile(): Generic MW exception ! Error code: " << e.GetError() ;
-    }
-
-    
 }
 
-void GAPI::verifyAddressPin(QString &pin) {
-    //TODO
+bool GAPI::verifyAddressPin(QString pin_value) {
+    unsigned long tries_left = 0;
+
+    PTEID_EIDCard &card = getCardInstance();
+
+    PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_ADDRESS_PIN_ID);
+    bool ret = address_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
+
+    if (tries_left == 0) {
+        qDebug() << "Address PIN blocked!";
+    }
+
+    return ret;
 }
 
 QString GAPI::getCardActivation() {
-    try
-    {
-        //TODO: we should store the readerContext or EIDCard reference in the GAPI object
-        PTEID_ReaderContext& readerContext = ReaderSet.getReader();
 
-        if (!readerContext.isCardPresent())
-        {
-            qDebug() << "No card found in the reader!" << endl;
-            return QString();
-        }
+    PTEID_EIDCard &card = getCardInstance();
+    PTEID_EId &eid_file = card.getID();
 
-        PTEID_EIDCard &card = readerContext.getEIDCard();
-        PTEID_EId &eid_file = card.getID();
-
-        if (isExpiredDate(eid_file.getValidityEndDate())) {
-            return QString("The Citizen Card is expired");
-        }
-        else if (!card.isActive()) {
-           return QString("The Citizen Card is not active");
-        }
-        else {
-            return QString("The Citizen Card has been activated");
-        }
+    if (isExpiredDate(eid_file.getValidityEndDate())) {
+        return QString("The Citizen Card is expired");
     }
-    catch (PTEID_Exception &e)
-    {
-        qDebug() << "getCardActivation(): Generic MW exception ! Error code: " << e.GetError() ;
+    else if (!card.isActive()) {
+        return QString("The Citizen Card is not active");
+    }
+    else {
+        return QString("The Citizen Card has been activated");
     }
 
     return QString();
@@ -154,21 +134,37 @@ void GAPI::startReadingPersoNotes() {
     QFuture<void> future = QtConcurrent::run(this, &GAPI::getPersoDataFile);
 }
 
-void GAPI::connectToCard() {
-
+PTEID_EIDCard & GAPI::getCardInstance() {
     try
     {
         PTEID_ReaderContext& readerContext = ReaderSet.getReader();
-        
         qDebug() << "Using Card Reader: " << readerContext.getName();
 
         if (!readerContext.isCardPresent())
         {
             qDebug() << "No card found in the reader!" << endl;
-            return;
+            //TODO: add specific error code for "No card found" error
+            emit cardAcessError();
         }
-
         PTEID_EIDCard &card = readerContext.getEIDCard();
+
+        return card;
+    }
+    catch (PTEID_ExNoReader &)
+    {
+        qDebug() << "No card reader found !";
+    }
+    catch (PTEID_Exception &e)
+    {
+        qDebug() << "getCardInstance: Generic MW exception ! Error code: " << e.GetError() ;
+    }
+
+    emit cardAcessError();
+}
+
+void GAPI::connectToCard() {
+
+        PTEID_EIDCard &card = getCardInstance();
         PTEID_EId &eid_file = card.getID();
 
         qDebug() << "C++: loading Card Data";
@@ -208,15 +204,5 @@ void GAPI::connectToCard() {
         //All data loaded: we can emit the signal to QML
         setDataCardIdentify(cardData);
 
-    }
-    catch (PTEID_ExNoReader &e)
-    {
-        qDebug() << "No card reader found !";
-    }
-    catch (PTEID_Exception &e)
-    {
-        qDebug() << "connectToCard: Generic MW exception ! Error code: " << e.GetError() ;
-    }
-
-    //TODO: emit signal for errors
 }
+
