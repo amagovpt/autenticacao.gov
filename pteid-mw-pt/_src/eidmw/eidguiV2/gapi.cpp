@@ -70,6 +70,34 @@ void GAPI::getPersoDataFile() {
 
 }
 
+QString GAPI::getAddressField(AddressInfoKey key) {
+    return m_addressData[key];
+}
+
+void GAPI::getAddressFile() {
+    qDebug() << "C++: getAddressFile()";
+    PTEID_EIDCard &card = getCardInstance();
+
+    PTEID_Address &addressFile = card.getAddr();
+
+    m_addressData[District] = QString::fromUtf8(addressFile.getDistrict());
+    m_addressData[Municipality] = QString::fromUtf8(addressFile.getMunicipality());
+    m_addressData[Parish] = QString::fromUtf8(addressFile.getCivilParish());
+    m_addressData[Streettype] = QString::fromUtf8(addressFile.getStreetType());
+    m_addressData[Streetname] = QString::fromUtf8(addressFile.getStreetName());
+    m_addressData[Buildingtype] = QString::fromUtf8(addressFile.getBuildingType());
+    m_addressData[Doorno] = QString::fromUtf8(addressFile.getDoorNo());
+    m_addressData[Floor] = QString::fromUtf8(addressFile.getFloor());
+    m_addressData[Side] = QString::fromUtf8(addressFile.getSide());
+    m_addressData[Locality] = QString::fromUtf8(addressFile.getLocality());
+    m_addressData[Place] = QString::fromUtf8(addressFile.getPlace());
+    m_addressData[Zip4] = QString::fromUtf8(addressFile.getZip4());
+    m_addressData[Zip3] = QString::fromUtf8(addressFile.getZip3());
+    m_addressData[PostalLocality] = QString::fromUtf8(addressFile.getPostalLocality());
+
+    emit signalAddressLoaded();
+}
+
 bool GAPI::verifyAddressPin(QString pin_value) {
     unsigned long tries_left = 0;
 
@@ -132,6 +160,10 @@ void GAPI::startCardReading() {
 
 void GAPI::startReadingPersoNotes() {
     QFuture<void> future = QtConcurrent::run(this, &GAPI::getPersoDataFile);
+}
+
+void GAPI::startReadingAddress() {
+    QtConcurrent::run(this, &GAPI::getAddressFile);
 }
 
 PTEID_EIDCard & GAPI::getCardInstance() {

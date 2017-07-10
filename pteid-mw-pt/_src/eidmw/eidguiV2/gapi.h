@@ -42,6 +42,7 @@ class GAPI : public QObject
     Q_OBJECT
     Q_PROPERTY(QMap<IDInfoKey, QString> m_data
                NOTIFY signalCardDataChanged)
+    Q_PROPERTY(QMap<AddressInfoKey, QString> m_addressData NOTIFY signalAddressLoaded)
     Q_PROPERTY(QString persoData MEMBER m_persoData NOTIFY signalPersoDataLoaded)
 
 public:
@@ -50,7 +51,7 @@ public:
     enum IDInfoKey { Documenttype, Documentversion, Surname, Givenname, Sex, Height, Nationality, Birthdate, Documentnum, Validitybegindate, Validityenddate, 
           NIC, NIF, NISS, NSNS, IssuingEntity, PlaceOfRequest, Country, Father, Mother, AccidentalIndications };
 
-    enum AddressInfoKey { District, Municipality, Parish, Streettype, Streetname, Buildingtype, Doorno, Floor, side, locality, place, zip4, zip3, postalLocality};
+    enum AddressInfoKey { District, Municipality, Parish, Streettype, Streetname, Buildingtype, Doorno, Floor, Side, Locality, Place, Zip4, Zip3, PostalLocality};
 
     Q_ENUMS(IDInfoKey)
     Q_ENUMS(AddressInfoKey)
@@ -73,14 +74,17 @@ public slots:
     
     void startCardReading();
     void startReadingPersoNotes();
+    void startReadingAddress();
     bool verifyAddressPin(QString pin);
     QString getCardActivation();
-    QString getDataCardIdentifyValue(GAPI::IDInfoKey stringValue);
+    QString getDataCardIdentifyValue(GAPI::IDInfoKey key);
+    QString getAddressField(GAPI::AddressInfoKey key);
 
 signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed
     void signalCardDataChanged();
+    void signalAddressLoaded();
     void cardAcessError();
     void signalPersoDataLoaded(const QString& persoNotes);
 
@@ -88,10 +92,12 @@ private:
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();
     void getPersoDataFile();
+    void getAddressFile();
     eIDMW::PTEID_EIDCard & getCardInstance();
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;
+    QMap<GAPI::AddressInfoKey, QString> m_addressData;
     //Don't free this!, we release ownership to the QMLEngine in buildImageProvider()
     PhotoImageProvider *image_provider;
     QString m_persoData;
