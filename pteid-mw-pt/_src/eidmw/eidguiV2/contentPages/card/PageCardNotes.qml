@@ -58,8 +58,8 @@ PageCardNotesForm {
     Component.onCompleted: {
         propertyEditNotes.forceActiveFocus()
         propertyBusyIndicator.running = true
-        console.log("Listing GAPI object properties in QML...")
-        listProperties(gapi)
+        //console.log("Listing GAPI object properties in QML...")
+        //listProperties(gapi)
         //gapi.signalPersoDataChanged.connect(loadPersoData)
         gapi.startReadingPersoNotes()
     }

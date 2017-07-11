@@ -13,6 +13,7 @@ using namespace eIDMW;
 GAPI::GAPI(QObject *parent) :
     QObject(parent) {
         image_provider = new PhotoImageProvider();
+        m_addressLoaded = false;
 }
 
 QString GAPI::getDataCardIdentifyValue(IDInfoKey key) {
@@ -98,19 +99,20 @@ void GAPI::getAddressFile() {
     emit signalAddressLoaded();
 }
 
-bool GAPI::verifyAddressPin(QString pin_value) {
+unsigned int GAPI::verifyAddressPin(QString pin_value) {
     unsigned long tries_left = 0;
 
     PTEID_EIDCard &card = getCardInstance();
 
     PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_ADDRESS_PIN_ID);
-    bool ret = address_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
+    address_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
 
     if (tries_left == 0) {
-        qDebug() << "Address PIN blocked!";
+        qDebug() << "WARNING: Address PIN blocked!";
     }
 
-    return ret;
+    //QML default types don't include long
+    return (unsigned int)tries_left;
 }
 
 QString GAPI::getCardActivation() {

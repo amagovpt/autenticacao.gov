@@ -24,6 +24,9 @@ PageCardAdressForm {
             propertyZip3.propertyDateField.text = gapi.getAddressField(GAPI.Zip3)
             propertyPostalLocality.propertyDateField.text = gapi.getAddressField(GAPI.PostalLocality)
             propertyBusyIndicator.running = false
+
+            gapi.setAddressLoaded(true)
+            verifypin_dialog.visible = false
         }
     }
 
@@ -31,6 +34,7 @@ PageCardAdressForm {
         id: badpin_dialog
         width: 400
         height: 200
+        visible: false
         font.family: lato.name
         // Center dialog in the main view
         x: - mainMenuView.width - subMenuView.width
@@ -38,8 +42,7 @@ PageCardAdressForm {
         y: parent.height * 0.5 - badpin_dialog.height * 0.5
 
         header: Label {
-              text: "PIN de morada Errado!"
-              visible: true
+              text: "Erro - verificação de PIN"
               elide: Label.ElideRight
               padding: 24
               bottomPadding: 0
@@ -47,12 +50,38 @@ PageCardAdressForm {
               font.pixelSize: 16
               color: Constants.COLOR_MAIN_BLUE
         }
+
+        Item {
+            width: parent.width
+            height: rectBadPin.height
+
+            Item {
+                id: rectBadPin
+                width: textPin.width + textFieldPin.width
+                height: 50
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textBadPin
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: 150
+                    anchors.bottom: parent.bottom
+                }
+            }
+        }
+        standardButtons: DialogButtonBox.Ok
     }
 
     Dialog {
         id: verifypin_dialog
         width: 400
         height: 200
+        visible: false
         font.family: lato.name
         // Center dialog in the main view
         x: - mainMenuView.width - subMenuView.width
@@ -61,7 +90,6 @@ PageCardAdressForm {
 
         header: Label {
               text: "Verificar o Pin da Morada"
-              visible: true
               elide: Label.ElideRight
               padding: 24
               bottomPadding: 0
@@ -111,12 +139,24 @@ PageCardAdressForm {
         standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
 
         onAccepted: {
+            if (gapi.isAddressLoaded) {
+                console.debug("Address is already loaded! Hiding pin dialog...")
+                verifypin_dialog.visible = false
+                return;
+            }
+
+            var triesLeft = gapi.verifyAddressPin(textFieldPin.text)
             mainFormID.opacity = 1.0
-            if (gapi.verifyAddressPin(textFieldPin.text)) {
+            if (triesLeft === 3) {
                 propertyBusyIndicator.running = true
                 gapi.startReadingAddress()
             }
+            else if (triesLeft === 0) {
+                textBadPin.text = "PIN de morada bloqueado!"
+                badpin_dialog.open()
+            }
             else {
+                textBadPin.text = "PIN errado! " + triesLeft + " tentativas restantes"
                 badpin_dialog.open()
             }
         }

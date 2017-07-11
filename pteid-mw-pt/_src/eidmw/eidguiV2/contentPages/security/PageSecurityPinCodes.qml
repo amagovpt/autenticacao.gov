@@ -68,29 +68,6 @@ PageSecurityPinCodesForm {
             }
        }
 
-        /*
-        footer: DialogButtonBox {
-            Button {
-                DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
-
-                contentItem: Text {
-                    text: qsTr("OK")
-                    font: lato.name
-                    color: Constants.COLOR_MAIN_PRETO
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-                background: Rectangle {
-                    width: 100
-                    height: Constants.HEIGHT_BOTTOM_COMPONENT
-                    color: Constants.COLOR_GREY_BUTTON_BACKGROUND
-                    radius: 2
-                }
-            }
-        }
-        */
         standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
 
         onAccepted: {
@@ -139,7 +116,7 @@ PageSecurityPinCodesForm {
               color: Constants.COLOR_MAIN_BLUE
        }
 
-        Item{
+       Item {
             width: parent.width
             height: rectPinCurrent.height + rectPinNew.height + rectPinConfirm.height
 

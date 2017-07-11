@@ -29,45 +29,6 @@ PageCardIdentifyForm {
 
     }
 
-/*
-    propertyTextBoxName{
-        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Givenname)
-    }
-    propertyTextBoxSurName{
-        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Surname)
-    }
-    propertyTextBoxSex{
-        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Sex)
-    }
-    propertyTextBoxHeight{
-        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Height)
-    }
-    propertyTextBoxNacionality{
-        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Nationality)
-    }
-    propertyTextBoxDateOfBirth{
-        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Birthdate)
-    }
-    propertyTextBoxDocumentNum{
-        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Documentnum)
-    }
-    propertyTextBoxExpirydate{
-        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Validityenddate)
-    }
-    propertyTextBoxCountry{
-        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Country)
-    }
-    propertyTextBoxParentsFather{
-        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Father)
-    }
-    propertyTextBoxParentsMother{
-        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.Mother)
-    }
-    propertyTextBoxNotes{
-        propertyDateField.text: gapi.getDataCardIdentifyValue(GAPI.AccidentalIndications)
-    }
-    */
-
     Component.onCompleted: {
         console.log("Page Card Identify mainWindow Completed")
 
