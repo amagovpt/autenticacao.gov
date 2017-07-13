@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.0
 import QtGraphicalEffects 1.0
+import eidguiV2 1.0
+
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -13,40 +15,40 @@ Item {
     id: mainItem
     anchors.fill: parent
 
-    property variant filesArray:[]
+    property variant filesArray: []
     property bool fileLoaded: false
 
+    property alias propertyPDFPreview: pdfPreviewArea
     property alias propertyFileDialog: fileDialog
-    property alias propertyMouseAreaRectMainRigh: mouseAreaRectMainRigh
+    property alias propertyFileDialogOutput: fileDialogOutput
+    //property alias propertyMouseAreaRectMainRigh: mouseAreaRectMainRigh
     property alias propertyMouseAreaItemOptionsFiles: mouseAreaItemOptionsFiles
     property alias propertyTextDragMsgListView: textDragMsgListView
     property alias propertyListViewFiles: listViewFiles
     property alias propertyFilesListViewScroll: filesListViewScroll
     property alias propertyButtonAdd: buttonAdd
     property alias propertyButtonRemoveAll: buttonRemoveAll
+    property alias propertyButtonSignWithCC: button_signCC
     property alias propertyDropArea: dropArea
+    property alias propertyTextFieldReason: textFieldReason
+    property alias propertyTextFieldLocal: textFieldLocal
+    property alias propertySwitchSignTemp: switchSignTemp
     property alias propertyRadioButtonPADES: radioButtonPADES
     property alias propertyRadioButtonXADES: radioButtonXADES
     property alias propertyMouseAreaToolTipPades: mouseAreaToolTipPades
     property alias propertyMouseAreaToolTipXades: mouseAreaToolTipXades
     // Calculate ToolTip Position
-    property int propertyMouseAreaToolTipPadesX:
-        Constants.SIZE_ROW_H_SPACE
-        + Constants.SIZE_TEXT_FIELD_H_SPACE
-        + textFormatSign.width
-        + 10
-        + radioButtonPADES.width
-        + rectToolTipPades.width * 0.5
-    property int propertyMouseAreaToolTipXadesX:
-        Constants.SIZE_ROW_H_SPACE
-        + Constants.SIZE_TEXT_FIELD_H_SPACE
-        + textFormatSign.width
-        + 10
-        + radioButtonPADES.width
-        + rectToolTipPades.width
-        + 10
-        + radioButtonXADES.width
-        + rectToolTipXades.width * 0.5
+    property int propertyMouseAreaToolTipPadesX: Constants.SIZE_ROW_H_SPACE
+                                                 + Constants.SIZE_TEXT_FIELD_H_SPACE
+                                                 + textFormatSign.width + 10
+                                                 + radioButtonPADES.width
+                                                 + rectToolTipPades.width * 0.5
+    property int propertyMouseAreaToolTipXadesX: Constants.SIZE_ROW_H_SPACE
+                                                 + Constants.SIZE_TEXT_FIELD_H_SPACE
+                                                 + textFormatSign.width + 10
+                                                 + radioButtonPADES.width + rectToolTipPades.width
+                                                 + 10 + radioButtonXADES.width
+                                                 + rectToolTipXades.width * 0.5
     property int propertyMouseAreaToolTipY: rectMainLeftFile.height
 
     Item {
@@ -58,25 +60,42 @@ Item {
         x: Constants.SIZE_ROW_H_SPACE
 
         DropArea {
-            id: dropArea;
-            anchors.fill: parent;
+            id: dropArea
+            anchors.fill: parent
         }
 
         FileDialog {
             id: fileDialog
             title: "Escolha o ficheiro para assinar"
             folder: shortcuts.home
-            modality : Qt.WindowModal
+            modality: Qt.WindowModal
             selectMultiple: true
-            nameFilters: [ "PDF document (*.pdf)", "All files (*)" ]
+            nameFilters: ["PDF document (*.pdf)", "All files (*)"]
             Component.onCompleted: visible = false
         }
 
-        Item{
+/*        FileDialog {
+            id: fileDialogOutput
+            title: "Escolha o ficheiro de destino"
+            folder: shortcuts.home
+            modality: Qt.WindowModal
+            selectExisting: false
+            nameFilters: ["PDF document (*.pdf)", "All files (*)"]
+            Component.onCompleted: visible = false
+        }
+        */
+
+        FileSaveDialog {
+            id: fileDialogOutput
+            title: "Escolha o ficheiro de destino"
+            nameFilters: ["Images (*.pdf)", "All files (*)"]
+
+        }
+
+        Item {
             id: rectMainLeftFile
             width: parent.width * 0.5 - Constants.SIZE_ROW_H_SPACE
-            height: mainItem.height - rectMainLeftOptions.height
-                    - 4 * Constants.SIZE_ROW_V_SPACE
+            height: mainItem.height - rectMainLeftOptions.height - 4 * Constants.SIZE_ROW_V_SPACE
 
             DropShadow {
                 anchors.fill: rectFile
@@ -117,7 +136,7 @@ Item {
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                Item{
+                Item {
                     id: itemOptionsFiles
                     width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
                     height: parent.height - itemBottonsFiles.height - Constants.SIZE_ROW_V_SPACE
@@ -126,7 +145,7 @@ Item {
                     ListView {
                         id: listViewFiles
                         y: Constants.SIZE_TEXT_V_SPACE
-                        width: parent.width;
+                        width: parent.width
                         height: parent.height
                         clip: true
                         spacing: Constants.SIZE_LISTVIEW_SPACING
@@ -160,7 +179,7 @@ Item {
                         enabled: !fileLoaded
                     }
                 }
-                Item{
+                Item {
                     id: itemBottonsFiles
                     width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
@@ -191,12 +210,11 @@ Item {
                 }
             }
         }
-        Item{
+        Item {
             id: rectMainLeftOptions
             width: parent.width * 0.5 - Constants.SIZE_ROW_H_SPACE
 
-            height: titleConf.height
-                    + rectOptions.height
+            height: titleConf.height + rectOptions.height
 
             anchors.top: rectMainLeftFile.bottom
             anchors.topMargin: 3 * Constants.SIZE_ROW_V_SPACE
@@ -239,21 +257,18 @@ Item {
                 anchors.top: titleConf.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
-                Item{
+                Item {
                     id: itemOptions
                     width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
                     height: Constants.SIZE_TEXT_V_SPACE + rectFormatOptions.height
-                            + textFieldReason.height
-                            + textFieldLocal.height
-                            + switchSignTemp.height
-                            + switchSignAdd.height
-                            + columAttributes.height
-                            + rowPreserv.height + Constants.SIZE_TEXT_V_SPACE
-                            + Constants.SIZE_TEXT_V_SPACE
+                            + textFieldReason.height + textFieldLocal.height
+                            + switchSignTemp.height + switchSignAdd.height
+                            + columAttributes.height + rowPreserv.height
+                            + Constants.SIZE_TEXT_V_SPACE + Constants.SIZE_TEXT_V_SPACE
 
                     anchors.horizontalCenter: parent.horizontalCenter
 
-                    Item{
+                    Item {
                         id: rectFormatOptions
                         width: parent.width
                         height: radioButtonPADES.height
@@ -292,7 +307,7 @@ Item {
                                 color: Constants.COLOR_MAIN_PRETO
                             }
                         }
-                        Item  {
+                        Item {
                             id: rectToolTipPades
                             width: Constants.SIZE_IMAGE_TOOLTIP
                             height: Constants.SIZE_IMAGE_TOOLTIP
@@ -335,7 +350,7 @@ Item {
                                 color: Constants.COLOR_MAIN_PRETO
                             }
                         }
-                        Item  {
+                        Item {
                             id: rectToolTipXades
                             width: Constants.SIZE_IMAGE_TOOLTIP
                             height: Constants.SIZE_IMAGE_TOOLTIP
@@ -360,9 +375,9 @@ Item {
                     TextField {
                         id: textFieldReason
                         width: parent.width
-                        font.italic: textFieldReason.text === "" ? true: false
+                        font.italic: textFieldReason.text === "" ? true : false
                         anchors.top: rectFormatOptions.bottom
-                        placeholderText:"Motivo?"
+                        placeholderText: "Motivo?"
                         enabled: fileLoaded
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -371,9 +386,9 @@ Item {
                     TextField {
                         id: textFieldLocal
                         width: parent.width
-                        font.italic: textFieldLocal.text === "" ? true: false
+                        font.italic: textFieldLocal.text === "" ? true : false
                         anchors.top: textFieldReason.bottom
-                        placeholderText:"Localidade?"
+                        placeholderText: "Localidade?"
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         enabled: fileLoaded
                         font.family: lato.name
@@ -403,7 +418,7 @@ Item {
                         id: columAttributes
                         anchors.top: switchSignAdd.bottom
                         width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                        height: checkBox1.height + checkBox2.height + checkBox3.height
+                        height: checkBox1.height + checkBox2.height
                         x: 6 * Constants.SIZE_TEXT_FIELD_H_SPACE
                         visible: switchSignAdd.checked
 
@@ -418,14 +433,6 @@ Item {
                         CheckBox {
                             id: checkBox2
                             text: "Socio da Empresa Obras Prontas"
-                            height: 25
-                            font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            font.capitalization: Font.MixedCase
-                        }
-                        CheckBox {
-                            id: checkBox3
-                            text: "Presidente do Clube Futebol da Terra"
                             height: 25
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -485,7 +492,7 @@ Item {
                             height: parent.height
                             // textPreservAnos.text is related with model values
                             // if model is changed textPreservAnos.text may be changed
-                            model: [ "0", "1", "3", "5", "10" ]
+                            model: ["0", "1", "3", "5", "10"]
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
@@ -493,9 +500,7 @@ Item {
                         }
                         Text {
                             id: textPreservAnos
-                            text: comboBoxPreserve.currentIndex === 1 ?
-                                      "ano":
-                                      "anos"
+                            text: comboBoxPreserve.currentIndex === 1 ? "ano" : "anos"
                             verticalAlignment: Text.AlignVCenter
                             anchors.verticalCenter: parent.verticalCenter
                             font.bold: false
@@ -506,13 +511,12 @@ Item {
                             visible: switchPreserv.checked
                             height: parent.height
                         }
-
                     }
                 }
             }
         }
 
-        Item{
+        Item {
             id: rectMainRight
             width: parent.width * 0.5
             height: parent.height - rowBottom.height
@@ -571,35 +575,31 @@ Item {
                     visible: !fileLoaded
                     font.family: lato.name
                 }
-                Image {
-                    id: imageTabPreView
+                Components.PDFPreview {
                     anchors.fill: parent
-                    antialiasing: true
-                    fillMode: Image.PreserveAspectFit
-                    source: "../../images/dummy/Pdfdemo.png"
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    visible: fileLoaded
+                    id: pdfPreviewArea
                 }
             }
+            /*
             MouseArea {
                 id: mouseAreaRectMainRigh
                 anchors.fill: parent
             }
+            */
         }
         Item {
             id: rowBottom
             width: rectMainRight.width
-            height: 2 * Constants.HEIGHT_BOTTOM_COMPONENT
-                    + Constants.SIZE_ROW_V_SPACE
+            height: 2 * Constants.HEIGHT_BOTTOM_COMPONENT + Constants.SIZE_ROW_V_SPACE
             anchors.top: rectMainRight.bottom
             anchors.left: rectMainRight.left
 
-            Item{
+            Item {
                 id: rectSignOptions
                 width: parent.width
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.left: parent.left
-                Item{
+                Item {
                     id: itemCheckSignReduced
                     width: parent.width * 0.5
                     height: parent.height
@@ -616,7 +616,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                     }
                 }
-                Item{
+                Item {
                     id: itemCheckSignShow
                     width: parent.width * 0.5
                     height: parent.height
@@ -635,7 +635,7 @@ Item {
                     }
                 }
             }
-            Item{
+            Item {
                 id: rectSign
                 width: parent.width
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
@@ -644,14 +644,26 @@ Item {
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
                 Button {
-                    text: "Assinar"
+                    id: button_signCC
+                    text: "Assinar com CC"
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
                     enabled: fileLoaded
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.left: parent.left
+                }
+                Button {
+                    id: button_signCMD
+                    text: "Assinar com CMD"
+                    width: Constants.WIDTH_BUTTON
+                    height: parent.height
+                    enabled: fileLoaded
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    anchors.right: parent.right
                 }
             }
         }

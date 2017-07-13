@@ -291,6 +291,20 @@ Window {
             mainFormID.state = "STATE_FIRST_RUN"
             //mainFormID.state = "STATE_HOME"
 
+            //Open Advanced Signature on startup
+            if (gapi.getShortcutFlag() > 0) {
+                //mainFormID.propertyMainMenuView.width = mainWindow.width
+                mainFormID.propertyMainMenuListView.currentIndex = 1
+                mainFormID.propertySubMenuListView.currentIndex = 1
+
+                mainFormID.state = "STATE_EXPAND"
+                // Clean the content page
+                mainFormID.propertyPageLoader.source = "contentPages/services/PageServicesSignAdvanced.qml"
+                //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
+                mainWindow.setWidth(Constants.SCREEN_MINIMUM_WIDTH + 1)
+                return;
+            }
+
             if ( mainFormID.state === "STATE_FIRST_RUN"){
                 console.log("Runing First time" + mainWindow.width)
                 mainFormID.propertyMainMenuView.width = mainWindow.width * 2 * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
@@ -513,6 +527,7 @@ Window {
 
     Component.onCompleted: {
         console.log("Window mainWindow Completed")
+
     }
 
     function getMainMenuWidth(parentWidth){

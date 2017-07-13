@@ -13,7 +13,9 @@ using namespace eIDMW;
 GAPI::GAPI(QObject *parent) :
     QObject(parent) {
         image_provider = new PhotoImageProvider();
+        image_provider_pdf = new PDFPreviewImageProvider();
         m_addressLoaded = false;
+        m_shortcutFlag = 0;
 }
 
 QString GAPI::getDataCardIdentifyValue(IDInfoKey key) {
@@ -154,6 +156,150 @@ QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const 
 
     return p;
 }
+
+void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
+                     QString reason, QString location, double isTimestamp, double isSmall) {
+
+    SignParams params = {loadedFilePath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall};
+    QFuture<void> future =
+          QtConcurrent::run(this, &GAPI::doSignPDF, params);
+
+}
+
+void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp) {
+    QFuture<void> future =
+          QtConcurrent::run(this, &GAPI::doSignXADES, loadedFilePath, outputFile, isTimestamp);
+
+}
+
+QString skipFileURL(QString input) {
+    const char * needle = "file://";
+    if (input.startsWith(needle))
+    {
+        return input.mid(strlen(needle));
+    }
+    else {
+        return input;
+    }
+}
+
+
+void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp) {
+    try {
+        PTEID_EIDCard &card = getCardInstance();
+
+        const char *files_to_sign[1];
+        files_to_sign[0] = loadedFilePath.toUtf8().constData();
+
+        if (isTimestamp > 0)
+            card.SignXadesT(outputFile.toUtf8().constData(), files_to_sign, 1);
+        else
+            card.SignXades(outputFile.toUtf8().constData(), files_to_sign, 1);
+
+    }
+    catch (PTEID_Exception &e) {
+        qDebug() << "GAPI::doSignXADES: Caught exception in eidlib. Error code: " << e.GetError();
+        emit signalPdfSignError();
+        return;
+    }
+
+    emit signalPdfSignSucess();
+}
+
+void GAPI::doSignPDF(SignParams &params) {
+
+    try {
+        PTEID_EIDCard &card = getCardInstance();
+        QString fullInputPath = "/" + params.loadedFilePath;
+        QString fullOutputPath = skipFileURL(params.outputFile);
+        PTEID_PDFSignature sig_handler(fullInputPath.toUtf8().data());
+
+        if (params.isTimestamp > 0)
+            sig_handler.enableTimestamp();
+        if (params.isSmallSignature > 0)
+            sig_handler.enableSmallSignatureFormat();
+
+        card.SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
+                         params.location.toUtf8().data(), params.reason.toUtf8().data(), fullOutputPath.toUtf8().data());
+    }
+    catch (PTEID_Exception &e)
+    {
+        qDebug() << "GAPI::doSignPDF: Caught exception in eidlib. Error code: " << e.GetError();
+        emit signalPdfSignError();
+        return;
+    }
+
+    emit signalPdfSignSucess();
+
+}
+
+QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
+{
+    qDebug() << "PDFPreviewImageProvider received request for: " << id;
+    QStringList strList = id.split("?");
+
+    //This should work on Windows too with QT APIs...
+    QString pdf_path = "/" + strList.at(0);
+
+    //URL param ?page=xx
+    unsigned int page = (unsigned int) strList.at(1).split("=").at(1).toInt();
+
+    if (m_doc == NULL || m_filePath != pdf_path) {
+
+        Poppler::Document *newdoc = Poppler::Document::load(pdf_path);
+        if (!newdoc) {
+            qDebug() << "Failed to load PDF file";
+            return QPixmap();
+        }
+        m_filePath = pdf_path;
+
+        //TODO: Close a previous document
+        //closeDocument();
+
+        m_doc = newdoc;
+
+        m_doc->setRenderHint(Poppler::Document::TextAntialiasing, true);
+        m_doc->setRenderHint(Poppler::Document::Antialiasing, true);
+        m_doc->setRenderBackend(Poppler::Document::RenderBackend::SplashBackend);
+    }
+
+    //TODO: Hardcoded image size...
+    int img_height = 420;
+    QPixmap p = renderPDFPage(page).scaledToHeight(img_height, Qt::SmoothTransformation);
+    size->setHeight(p.height());
+    size->setWidth(p.width());
+    return p;
+}
+
+QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
+{
+    // Document starts at page 0 in the poppler-qt5 API
+    Poppler::Page *popplerPage = m_doc->page(page-1);
+
+    //TODO: Test the resolution on Windows
+    const double resX = 40.0;
+    const double resY = 40.0;
+    if (popplerPage == NULL)
+    {
+        qDebug() << "Failed to get page object: " << page;
+        return QPixmap();
+    }
+
+    QImage image = popplerPage->renderToImage(resX, resY, -1, -1, -1, -1, Poppler::Page::Rotate0);
+    //DEBUG
+    //image.save("/tmp/pteid_preview.png");
+
+    delete popplerPage;
+
+    if (!image.isNull()) {
+        return QPixmap::fromImage(image);
+    } else {
+       qDebug() << "Error rendering PDF page to image!";
+       return QPixmap();
+    }
+
+}
+
 
 void GAPI::startCardReading() {
  QFuture<void> future = QtConcurrent::run(this, &GAPI::connectToCard);

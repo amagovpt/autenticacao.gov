@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QtQml>
 #include <QPixmap>
+#include <poppler-qt5.h>
 
 //MW libraries
 #include "eidlib.h"
@@ -32,6 +33,31 @@ public:
 
 private:
     QPixmap p;
+};
+
+struct SignParams {
+public:
+    QString loadedFilePath; QString outputFile;
+    int page;
+    double coord_x;
+    double coord_y;
+    QString reason;
+    QString location;
+    double isTimestamp;
+    double isSmallSignature;
+};
+
+class PDFPreviewImageProvider: public QQuickImageProvider
+{
+public:
+    PDFPreviewImageProvider() : QQuickImageProvider(QQuickImageProvider::Pixmap), m_doc(NULL) { }
+
+    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
+
+private:
+    QPixmap renderPDFPage(unsigned int page);
+    Poppler::Document *m_doc;
+    QString m_filePath;
 };
 
 class GAPI : public QObject
@@ -61,12 +87,15 @@ public:
     bool isAddressLoaded() {return m_addressLoaded; }
 
     QQuickImageProvider * buildImageProvider() { return image_provider; }
-
-    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
+    QQuickImageProvider * buildPdfImageProvider() { return image_provider_pdf; }
 
     // Public Method to Test GAPI
     //void fillDataCardIdentifyDummy();
     void testUpdateCardIdentify(int timerValue);
+
+    //This flag is used to start the application in specific subpage
+    void setShortcutFlag(int value) { m_shortcutFlag = value; }
+    void setShortcutPDFPath(QString &inputPdf) { m_shortcutInputPDF = inputPdf ;}
 
     // Do not forget to declare your class to the QML system.
     static void declareQMLTypes() {
@@ -79,6 +108,13 @@ public slots:
     void startCardReading();
     void startReadingPersoNotes();
     void startReadingAddress();
+    int getShortcutFlag() {return m_shortcutFlag; }
+    QString getShortcutInputPDF() { return m_shortcutInputPDF; }
+    //This method should be used by basic and advanced signature modes
+    void startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
+                         QString reason, QString location, double isTimestamp, double isSmall);
+
+    void startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
     unsigned int verifyAddressPin(QString pin);
     QString getCardActivation();
     QString getDataCardIdentifyValue(GAPI::IDInfoKey key);
@@ -92,12 +128,17 @@ signals:
     void cardAcessError();
     void signalPersoDataLoaded(const QString& persoNotes);
     void signalAddressLoadedChanged();
+    void signalPdfSignSucess();
+    void signalPdfSignError();
 
 private:
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();
     void getPersoDataFile();
     void getAddressFile();
+    void doSignPDF(SignParams &params);
+    void doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
+
     eIDMW::PTEID_EIDCard & getCardInstance();
 
     // Data Card Identify map
@@ -105,8 +146,12 @@ private:
     QMap<GAPI::AddressInfoKey, QString> m_addressData;
     //Don't free this!, we release ownership to the QMLEngine in buildImageProvider()
     PhotoImageProvider *image_provider;
+    PDFPreviewImageProvider * image_provider_pdf;
+
     QString m_persoData;
     bool m_addressLoaded;
+    int m_shortcutFlag;
+    QString m_shortcutInputPDF;
 
 private slots:
     // Test functions

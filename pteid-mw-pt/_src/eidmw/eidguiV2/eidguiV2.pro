@@ -1,13 +1,22 @@
 TEMPLATE = app
 
 QT += quick quickcontrols2 concurrent
+
+#Needed for the FileSaveDialog class
+QT += core-private
+QT += gui-private
+QT += widgets
+
 CONFIG += c++11
 
 SOURCES += main.cpp \
     appcontroller.cpp \
-    gapi.cpp
+    gapi.cpp \
+    filesavedialog.cpp
 
-LIBS += -L../lib -lpteidlib
+INCLUDEPATH += /usr/include/poppler/qt5/
+
+LIBS += -L../lib -lpteidlib -lpoppler-qt5
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -38,4 +47,5 @@ DISTFILES +=
 
 HEADERS += \
     appcontroller.h \
-    gapi.h
+    gapi.h \
+    filesavedialog.h

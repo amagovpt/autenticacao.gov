@@ -76,5 +76,7 @@
         <file>images/flags/uk32.png</file>
         <file>favicon.ico</file>
         <file>images/tooltip_grey.png</file>
+        <file>components/PDFPreview.qml</file>
+        <file>images/pteid_signature_small.png</file>
     </qresource>
 </RCC>

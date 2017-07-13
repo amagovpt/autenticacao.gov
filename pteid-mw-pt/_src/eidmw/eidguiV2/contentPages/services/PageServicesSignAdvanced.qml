@@ -20,6 +20,66 @@ PageServicesSignAdvancedForm {
         }
     }
 
+    Connections {
+        target: gapi
+        onSignalPdfSignSucess: {
+            signsuccess_dialog.visible = true
+        }
+
+        onSignalPdfSignError: {
+            signerror_dialog.visible = true
+        }
+    }
+
+    Dialog {
+        id: signsuccess_dialog
+        width: 400
+        height: 200
+        visible: false
+        font.family: lato.name
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width
+           + mainView.width * 0.5 - signsuccess_dialog.width * 0.5
+        y: parent.height * 0.5 - signsuccess_dialog.height * 0.5
+
+        header: Label {
+              text: "Ficheiro(s) assinado(s) com sucesso"
+              elide: Label.ElideRight
+              padding: 24
+              bottomPadding: 0
+              font.bold: true
+              font.pixelSize: 16
+              color: Constants.COLOR_MAIN_BLUE
+        }
+
+        standardButtons: DialogButtonBox.Ok
+    }
+
+    Dialog {
+        id: signerror_dialog
+        width: 400
+        height: 200
+        visible: false
+        font.family: lato.name
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width
+           + mainView.width * 0.5 - signerror_dialog.width * 0.5
+        y: parent.height * 0.5 - signerror_dialog.height * 0.5
+
+        header: Label {
+              text: "Erro na assinatura de PDF"
+              elide: Label.ElideRight
+              padding: 24
+              bottomPadding: 0
+              font.bold: true
+              font.pixelSize: 16
+              color: Constants.COLOR_MAIN_BLUE
+        }
+
+        standardButtons: DialogButtonBox.Ok
+    }
+
+    /*
     propertyMouseAreaToolTipPades{
         onEntered: {
             controlToolTip.close()
@@ -38,6 +98,7 @@ PageServicesSignAdvancedForm {
             controlToolTip.open()
         }
     }
+    */
     propertyDropArea {
 
         onEntered: {
@@ -63,6 +124,44 @@ PageServicesSignAdvancedForm {
             filesArray = []
         }
     }
+
+    propertyFileDialogOutput {
+        onAccepted: {
+
+            var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
+            var isTimestamp = propertySwitchSignTemp.position
+            var outputFile = propertyFileDialogOutput.fileUrl
+
+            if (propertyRadioButtonPADES.checked) {
+                //TODO: we need a way to change the page
+                var page = 1
+
+                var reason = propertyTextFieldReason.text
+                var location = propertyTextFieldLocal.text
+
+                //TODO: we need to read this value from settings
+                var isSmallSignature = false
+                var coord_x = propertyPDFPreview.propertyCoordX / 295.0
+
+                var sig_height = propertyPDFPreview.propertyDragImage.height
+                //coord_y must be the lower left corner of the signature rectangle
+                var coord_y = (propertyPDFPreview.propertyCoordY + sig_height) / 415.0
+
+                console.log("Output filename: " + outputFile)
+                console.log("Signing in position coord_x: " + coord_x  + " and coord_y: "+coord_y)
+
+                gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
+                                     reason, location, isTimestamp, isSmallSignature)
+            }
+            else {
+                console.debug("XADES signing is not implemented yet...")
+
+                gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp)
+            }
+
+        }
+    }
+
     propertyFileDialog {
 
         onAccepted: {
@@ -87,12 +186,14 @@ PageServicesSignAdvancedForm {
         }
     }
 
+/*
     propertyMouseAreaRectMainRigh {
         onClicked: {
             console.log("propertyMouseAreaRectMainRigh clicked")
             propertyFileDialog.visible = true
         }
     }
+    */
     propertyMouseAreaItemOptionsFiles {
         onClicked: {
             console.log("propertyMouseAreaItemOptionsFiles clicked")
@@ -109,6 +210,20 @@ PageServicesSignAdvancedForm {
         onClicked: {
             console.log("Removing all files")
             propertyListViewFiles.model.clear()
+        }
+    }
+
+    propertyButtonSignWithCC {
+        onClicked: {
+            console.log("Sign with CC")
+            if (propertyRadioButtonPADES.checked) {
+                propertyFileDialogOutput.filename = propertyListViewFiles.model.get(0).fileUrl + "_signed.pdf"
+            }
+            else {
+                propertyFileDialogOutput.filename = "xadessign.ccsigned"
+            }
+
+            propertyFileDialogOutput.open()
         }
     }
 
@@ -178,20 +293,33 @@ PageServicesSignAdvancedForm {
         onCountChanged: {
             console.log("filesModel onCountChanged count:"
                         + propertyListViewFiles.count)
-            if(filesModel.count === 0){
+            if(filesModel.count === 0) {
                 fileLoaded = false
                 propertyRadioButtonPADES.checked = false
                 propertyRadioButtonXADES.checked = false
-            }else{
+                propertyPDFPreview.propertyBackground.source = ""
+                propertyPDFPreview.propertyDragImage.source = ""
+            }
+            else {
                 fileLoaded = true
-                var widthText = propertyListViewFiles.model.get(0).fileUrl
-                console.log("widthText" + widthText)
-
+                var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
+                console.log("loadedFilePath: " + loadedFilePath)
+                propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
+                propertyPDFPreview.propertyDragImage.source = "qrc:/images/pteid_signature_small.png"
             }
         }
     }
+
+    Component.onCompleted: {
+        if (gapi.getShortcutFlag() > 0)
+            filesModel.append(
+            {
+             "fileUrl": gapi.getShortcutInputPDF()
+            });
+    }
+
     function forceScrollandFocus() {
-        // Force scroll and focus to the last item addded
+        // Force scroll and focus to the last item added
         propertyListViewFiles.positionViewAtEnd()
         propertyListViewFiles.forceActiveFocus()
         propertyListViewFiles.currentIndex = propertyListViewFiles.count -1
