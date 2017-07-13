@@ -8,7 +8,6 @@ PageServicesSignAdvancedForm {
 
     ToolTip {
         id: controlToolTip
-        timeout: 5000
         contentItem: Text {
             text: controlToolTip.text
             font: controlToolTip.font
@@ -79,7 +78,6 @@ PageServicesSignAdvancedForm {
         standardButtons: DialogButtonBox.Ok
     }
 
-    /*
     propertyMouseAreaToolTipPades{
         onEntered: {
             controlToolTip.close()
@@ -87,6 +85,10 @@ PageServicesSignAdvancedForm {
             controlToolTip.x = propertyMouseAreaToolTipPadesX - controlToolTip.width * 0.5
             controlToolTip.y = propertyMouseAreaToolTipY + 22
             controlToolTip.open()
+        }
+
+        onExited: {
+            controlToolTip.close()
         }
     }
     propertyMouseAreaToolTipXades{
@@ -97,8 +99,11 @@ PageServicesSignAdvancedForm {
             controlToolTip.y = propertyMouseAreaToolTipY + 22
             controlToolTip.open()
         }
+        onExited: {
+            controlToolTip.close()
+        }
     }
-    */
+
     propertyDropArea {
 
         onEntered: {
