@@ -3,7 +3,7 @@ import QtQuick.Window 2.2
 
 Rectangle {
         property alias propertyBackground: background_image
-        property alias propertyDragImage: drag_image
+        property alias propertyDragImage: dragImage
         property alias propertyCoordX: dragTarget.coord_x
         property alias propertyCoordY: dragTarget.coord_y
         id: pdfPreview
@@ -22,6 +22,8 @@ Rectangle {
                 id: background_image
                 x: 0
                 y: 0
+                sourceSize.width: dragTarget.width
+                sourceSize.height: dragTarget.height
                 fillMode: Image.PreserveAspectFit
             }
 
@@ -32,9 +34,12 @@ Rectangle {
             }
         }
         Image {
+            id: dragImage
             width: 53
             height: 42
-            id: drag_image
+
+            x: background_image.width < dragImage.x ? 0 : dragImage.x
+            y: background_image.height < dragImage.y ? 0: dragImage.y
             Drag.active: dragArea.drag.active
 
             MouseArea {
@@ -44,9 +49,9 @@ Rectangle {
                 drag.target: parent
                 drag.axis: Drag.XAndYAxis
                 drag.minimumX: 0
-                drag.maximumX: background_image.width - drag_image.width
+                drag.maximumX: background_image.width - dragImage.width
                 drag.minimumY: 0
-                drag.maximumY: background_image.height - drag_image.height
+                drag.maximumY: background_image.height - dragImage.height
             }
         }
 
