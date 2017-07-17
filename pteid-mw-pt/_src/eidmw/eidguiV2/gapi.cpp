@@ -2,6 +2,7 @@
 #include <QString>
 #include <QDate>
 #include <QtConcurrent>
+#include <cstdio>
 #include <QQuickImageProvider>
 
 using namespace eIDMW;
@@ -77,6 +78,28 @@ QString GAPI::getAddressField(AddressInfoKey key) {
     return m_addressData[key];
 }
 
+#define BEGIN_TRY_CATCH  \
+    try					  \
+    {
+
+#define END_TRY_CATCH    \
+    }                    \
+    catch (PTEID_ExNoReader &) \
+    {                           \
+        qDebug() << "No card reader found !"; \
+        emit signalCardAccessError(NoReaderFound); \
+    }     \
+    catch (PTEID_ExNoCardPresent &) \
+    {     \
+        qDebug() << "No card present."; \
+        emit signalCardAccessError(NoCardFound); \
+    }     \
+    catch (PTEID_Exception &e) \
+    { \
+        fprintf(stderr, "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx", e.GetError()); \
+        emit signalCardAccessError(CardUnknownError); \
+    }
+
 void GAPI::getAddressFile() {
     qDebug() << "C++: getAddressFile()";
     PTEID_EIDCard &card = getCardInstance();
@@ -104,6 +127,8 @@ void GAPI::getAddressFile() {
 unsigned int GAPI::verifyAddressPin(QString pin_value) {
     unsigned long tries_left = 0;
 
+    BEGIN_TRY_CATCH
+
     PTEID_EIDCard &card = getCardInstance();
 
     PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_ADDRESS_PIN_ID);
@@ -113,11 +138,14 @@ unsigned int GAPI::verifyAddressPin(QString pin_value) {
         qDebug() << "WARNING: Address PIN blocked!";
     }
 
+    END_TRY_CATCH
+
     //QML default types don't include long
     return (unsigned int)tries_left;
 }
 
 QString GAPI::getCardActivation() {
+    BEGIN_TRY_CATCH
 
     PTEID_EIDCard &card = getCardInstance();
     PTEID_EId &eid_file = card.getID();
@@ -131,6 +159,8 @@ QString GAPI::getCardActivation() {
     else {
         return QString("The Citizen Card has been activated");
     }
+
+    END_TRY_CATCH
 
     return QString();
 }
@@ -185,7 +215,8 @@ QString skipFileURL(QString input) {
 
 
 void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp) {
-    try {
+    BEGIN_TRY_CATCH
+
         PTEID_EIDCard &card = getCardInstance();
 
         const char *files_to_sign[1];
@@ -196,19 +227,15 @@ void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTime
         else
             card.SignXades(outputFile.toUtf8().constData(), files_to_sign, 1);
 
-    }
-    catch (PTEID_Exception &e) {
-        qDebug() << "GAPI::doSignXADES: Caught exception in eidlib. Error code: " << e.GetError();
-        emit signalPdfSignError();
-        return;
-    }
+    END_TRY_CATCH
 
     emit signalPdfSignSucess();
 }
 
 void GAPI::doSignPDF(SignParams &params) {
 
-    try {
+    BEGIN_TRY_CATCH
+
         PTEID_EIDCard &card = getCardInstance();
         QString fullInputPath = "/" + params.loadedFilePath;
         QString fullOutputPath = skipFileURL(params.outputFile);
@@ -221,16 +248,10 @@ void GAPI::doSignPDF(SignParams &params) {
 
         card.SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
                          params.location.toUtf8().data(), params.reason.toUtf8().data(), fullOutputPath.toUtf8().data());
-    }
-    catch (PTEID_Exception &e)
-    {
-        qDebug() << "GAPI::doSignPDF: Caught exception in eidlib. Error code: " << e.GetError();
-        emit signalPdfSignError();
-        return;
-    }
+
+    END_TRY_CATCH
 
     emit signalPdfSignSucess();
-
 }
 
 QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
@@ -315,34 +336,15 @@ void GAPI::startReadingAddress() {
 }
 
 PTEID_EIDCard & GAPI::getCardInstance() {
-    try
-    {
-        PTEID_ReaderContext& readerContext = ReaderSet.getReader();
-        qDebug() << "Using Card Reader: " << readerContext.getName();
 
-        if (!readerContext.isCardPresent())
-        {
-            qDebug() << "No card found in the reader!" << endl;
-            //TODO: add specific error code for "No card found" error
-            emit cardAcessError();
-        }
-        PTEID_EIDCard &card = readerContext.getEIDCard();
-
-        return card;
-    }
-    catch (PTEID_ExNoReader &)
-    {
-        qDebug() << "No card reader found !";
-    }
-    catch (PTEID_Exception &e)
-    {
-        qDebug() << "getCardInstance: Generic MW exception ! Error code: " << e.GetError() ;
-    }
-
-    emit cardAcessError();
+    PTEID_ReaderContext& readerContext = ReaderSet.getReader();
+    qDebug() << "Using Card Reader: " << readerContext.getName();
+    return readerContext.getEIDCard();
 }
 
 void GAPI::connectToCard() {
+
+    BEGIN_TRY_CATCH
 
         PTEID_EIDCard &card = getCardInstance();
         PTEID_EId &eid_file = card.getID();
@@ -384,5 +386,6 @@ void GAPI::connectToCard() {
         //All data loaded: we can emit the signal to QML
         setDataCardIdentify(cardData);
 
+        END_TRY_CATCH
 }
 

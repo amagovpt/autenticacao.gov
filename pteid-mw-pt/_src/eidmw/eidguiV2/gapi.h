@@ -81,6 +81,9 @@ public:
 
     enum AddressInfoKey { District, Municipality, Parish, Streettype, Streetname, Buildingtype, Doorno, Floor, Side, Locality, Place, Zip4, Zip3, PostalLocality};
 
+    enum CardAccessError { NoReaderFound, NoCardFound, CardReadError, CardUnknownError };
+
+    Q_ENUMS(CardAccessError)
     Q_ENUMS(IDInfoKey)
     Q_ENUMS(AddressInfoKey)
 
@@ -125,7 +128,7 @@ signals:
     // Notify about Card Identify changed
     void signalCardDataChanged();
     void signalAddressLoaded();
-    void cardAcessError();
+    void signalCardAccessError(int error_code);
     void signalPersoDataLoaded(const QString& persoNotes);
     void signalAddressLoadedChanged();
     void signalPdfSignSucess();

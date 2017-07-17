@@ -1,8 +1,35 @@
 import QtQuick 2.6
+import QtQuick.Controls 2.1
+import "../../scripts/Constants.js" as Constants
+
 //Import C++ defined enums
 import eidguiV2 1.0
 
 PageCardIdentifyForm {
+    property alias propertyLabelText: labelText
+    Dialog {
+        id: errorDialog
+        width: 400
+        height: 200
+        visible: false
+
+        font.family: lato.name
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width
+           + mainView.width * 0.5 - errorDialog.width * 0.5
+        y: parent.height * 0.5 - errorDialog.height * 0.5
+
+        header: Label {
+              id: labelText
+              elide: Label.ElideRight
+              padding: 24
+              bottomPadding: 0
+              font.bold: true
+              font.pixelSize: 16
+              color: Constants.COLOR_MAIN_BLUE
+        }
+        standardButtons: DialogButtonBox.Ok
+    }
 
     Connections {
         target: gapi
@@ -25,6 +52,17 @@ PageCardIdentifyForm {
             propertyTextBoxNotes.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.AccidentalIndications)
             propertyPhoto.source = "image://myimageprovider/photo.png"
             propertyBusyIndicator.running = false
+        }
+
+        onSignalCardAccessError: {
+            propertyBusyIndicator.running = false
+            if (error_code == GAPI.NoReaderFound) {
+                propertyLabelText.text = "Error: No card reader found!"
+            }
+            else if (error_code == GAPI.NoCardFound) {
+                propertyLabelText.text = "Error: No Card Found!"
+            }
+            errorDialog.visible = true
         }
 
     }
