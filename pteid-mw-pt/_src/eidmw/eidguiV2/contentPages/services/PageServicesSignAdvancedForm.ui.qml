@@ -50,6 +50,8 @@ Item {
                                                  + 10 + radioButtonXADES.width
                                                  + rectToolTipXades.width * 0.5
     property int propertyMouseAreaToolTipY: rectMainLeftFile.height
+    property alias propertyTextSpinBox: textSpinBox
+    property alias propertySpinBoxControl: spinBoxControl
 
     Item {
         id: rowMain
@@ -296,7 +298,7 @@ Item {
                             anchors.leftMargin: 10
                             enabled: fileLoaded
                             font.capitalization: Font.MixedCase
-                            opacity: enabled ? 1.0 : Constants.OPACITY_SERVICOS_SIGN_ADVANCE_TEXT_DISABLED
+                            opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                             contentItem: Text {
                                 text: radioButtonPADES.text
                                 leftPadding: 22
@@ -339,7 +341,7 @@ Item {
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
-                            opacity: enabled ? 1.0 : Constants.OPACITY_SERVICOS_SIGN_ADVANCE_TEXT_DISABLED
+                            opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                             contentItem: Text {
                                 text: radioButtonXADES.text
                                 leftPadding: 22
@@ -579,6 +581,7 @@ Item {
                 Components.PDFPreview {
                     anchors.fill: parent
                     id: pdfPreviewArea
+                    propertyDragImage.visible: checkSignShow.checked
                 }
             }
 
@@ -592,7 +595,7 @@ Item {
         Item {
             id: rowBottom
             width: rectMainRight.width
-            height: 2 * Constants.HEIGHT_BOTTOM_COMPONENT + Constants.SIZE_ROW_V_SPACE
+            height: 3 * Constants.HEIGHT_BOTTOM_COMPONENT
             anchors.top: rectMainRight.bottom
             anchors.left: rectMainRight.left
 
@@ -602,27 +605,9 @@ Item {
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.left: parent.left
                 Item {
-                    id: itemCheckSignReduced
-                    width: parent.width * 0.5
-                    height: parent.height
-                    anchors.top: parent.top
-                    Switch {
-                        id: checkSignReduced
-                        text: "Assinatura reduzida"
-                        height: Constants.HEIGHT_SWITCH_COMPONENT
-                        font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.capitalization: Font.MixedCase
-                        enabled: fileLoaded
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                }
-                Item {
                     id: itemCheckSignShow
-                    width: parent.width * 0.5
+                    width: parent.width * 0.6
                     height: parent.height
-                    anchors.left: itemCheckSignReduced.right
                     anchors.top: parent.top
                     Switch {
                         id: checkSignShow
@@ -632,18 +617,150 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         enabled: fileLoaded
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
+                        checked: true
+                    }
+                }
+
+            }
+
+            Item {
+                id: rectSignPageOptions
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.left: parent.left
+                anchors.top: rectSignOptions.bottom
+
+                Item {
+                    id: itemCheckSignReduced
+                    width: parent.width * 0.3
+                    height: parent.height
+                    anchors.top: parent.top
+
+                    Switch {
+                        id: checkSignReduced
+                        text: "Reduzida"
+                        height: Constants.HEIGHT_SWITCH_COMPONENT
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        enabled: checkSignShow.checked && fileLoaded
+                    }
+                }
+
+                Item {
+                    id: itemCheckPage
+                    width: parent.width * 0.4
+                    height: parent.height
+                    anchors.top: parent.top
+                    anchors.left: itemCheckSignReduced.right
+                    Text{
+                        id: pageText
+                        x: 11
+                        y: 8
+                        text: "Página:"
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        color: Constants.COLOR_MAIN_PRETO
+                        font.capitalization: Font.MixedCase
+                        opacity: checkSignShow.checked && fileLoaded && !checkLastPage.checked
+                                 ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                    }
+
+                    SpinBox {
+                        id: spinBoxControl
+                        y: 0
+                        from: 1
+                        to: 10000
+                        value: 1
+                        anchors.left: pageText.right
+                        width: parent.width - pageText.width - pageText.x
+                        height: parent.height
+                        anchors.leftMargin: 0
+                        enabled: checkSignShow.checked && fileLoaded && !checkLastPage.checked
+                        editable:  checkSignShow.checked && fileLoaded ? true : false
+
+                        contentItem: TextInput {
+                            id: textSpinBox
+                            z: 2
+                            font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_LABEL
+                            color: Constants.COLOR_MAIN_PRETO
+                            opacity: checkSignShow.checked && fileLoaded && !checkLastPage.checked
+                                     ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                            horizontalAlignment: Qt.AlignHCenter
+                            verticalAlignment: Qt.AlignVCenter
+
+                            readOnly: !spinBoxControl.editable
+                            validator: spinBoxControl.validator
+                            inputMethodHints: Qt.ImhFormattedNumbersOnly
+                        }
+
+
+                        up.indicator: Rectangle {
+                            x: spinBoxControl.mirrored ? 0 : parent.width - width
+                            height: parent.height
+                            implicitWidth: 20
+                            implicitHeight: Constants.HEIGHT_BOTTOM_COMPONENT
+
+                            Text {
+                                text: "+"
+                                font.family: lato.name
+                                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                                color: Constants.COLOR_MAIN_PRETO
+                                opacity: checkSignShow.checked && fileLoaded && !checkLastPage.checked
+                                         ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                                anchors.fill: parent
+                                fontSizeMode: Text.Fit
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                        }
+
+                        down.indicator: Rectangle {
+                            x: spinBoxControl.mirrored ? parent.width - width : 0
+                            height: parent.height
+                            implicitWidth: 20
+                            implicitHeight: Constants.HEIGHT_BOTTOM_COMPONENT
+
+                            Text {
+                                text: "-"
+                                font.family: lato.name
+                                font.pixelSize:  Constants.SIZE_TEXT_LABEL
+                                color: Constants.COLOR_MAIN_PRETO
+                                opacity: checkSignShow.checked && fileLoaded && !checkLastPage.checked
+                                         ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                                anchors.fill: parent
+                                fontSizeMode: Text.Fit
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                        }
+                    }
+                }
+                Item {
+                    id: itemLastPage
+                    width: parent.width * 0.3
+                    height: parent.height
+                    anchors.left: itemCheckPage.right
+                    anchors.top: parent.top
+                    Switch {
+                        id: checkLastPage
+                        text: "Ultima"
+                        height: Constants.HEIGHT_SWITCH_COMPONENT
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        enabled: checkSignShow.checked && fileLoaded
                     }
                 }
             }
+
             Item {
                 id: rectSign
                 width: parent.width
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.left: parent.left
-                anchors.top: rectSignOptions.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                anchors.top: rectSignPageOptions.bottom
 
                 Button {
                     id: button_signCC

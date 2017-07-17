@@ -235,6 +235,10 @@ PageServicesSignAdvancedForm {
         }
     }
 
+    propertyTextSpinBox{
+         text: propertySpinBoxControl.textFromValue(propertySpinBoxControl.value, propertySpinBoxControl.locale)
+    }
+
     Component {
         id: listViewFilesDelegate
         Rectangle{
