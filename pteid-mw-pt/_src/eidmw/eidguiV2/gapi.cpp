@@ -299,8 +299,8 @@ QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
     Poppler::Page *popplerPage = m_doc->page(page-1);
 
     //TODO: Test the resolution on Windows
-    const double resX = 40.0;
-    const double resY = 40.0;
+    const double resX = 120.0;
+    const double resY = 120.0;
     if (popplerPage == NULL)
     {
         qDebug() << "Failed to get page object: " << page;
