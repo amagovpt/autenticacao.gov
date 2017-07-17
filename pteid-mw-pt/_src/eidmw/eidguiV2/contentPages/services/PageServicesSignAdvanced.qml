@@ -191,14 +191,14 @@ PageServicesSignAdvancedForm {
         }
     }
 
-/*
+
     propertyMouseAreaRectMainRigh {
         onClicked: {
             console.log("propertyMouseAreaRectMainRigh clicked")
             propertyFileDialog.visible = true
         }
     }
-    */
+
     propertyMouseAreaItemOptionsFiles {
         onClicked: {
             console.log("propertyMouseAreaItemOptionsFiles clicked")

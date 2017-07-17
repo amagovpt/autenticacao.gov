@@ -21,7 +21,7 @@ Item {
     property alias propertyPDFPreview: pdfPreviewArea
     property alias propertyFileDialog: fileDialog
     property alias propertyFileDialogOutput: fileDialogOutput
-    //property alias propertyMouseAreaRectMainRigh: mouseAreaRectMainRigh
+    property alias propertyMouseAreaRectMainRigh: mouseAreaRectMainRigh
     property alias propertyMouseAreaItemOptionsFiles: mouseAreaItemOptionsFiles
     property alias propertyTextDragMsgListView: textDragMsgListView
     property alias propertyListViewFiles: listViewFiles
@@ -574,18 +574,19 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     visible: !fileLoaded
                     font.family: lato.name
+                    z: 1
                 }
                 Components.PDFPreview {
                     anchors.fill: parent
                     id: pdfPreviewArea
                 }
             }
-            /*
+
             MouseArea {
                 id: mouseAreaRectMainRigh
                 anchors.fill: parent
             }
-            */
+
         }
         Item {
             id: rowBottom
