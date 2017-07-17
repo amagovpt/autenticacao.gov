@@ -146,11 +146,14 @@ PageServicesSignAdvancedForm {
 
                 //TODO: we need to read this value from settings
                 var isSmallSignature = false
-                var coord_x = propertyPDFPreview.propertyCoordX / 295.0
+
+                var coord_x = propertyPDFPreview.propertyCoordX
+                           / propertyPDFPreview.propertyBackground.width
 
                 var sig_height = propertyPDFPreview.propertyDragImage.height
                 //coord_y must be the lower left corner of the signature rectangle
-                var coord_y = (propertyPDFPreview.propertyCoordY + sig_height) / 415.0
+                var coord_y = (propertyPDFPreview.propertyCoordY + sig_height) /
+                                    propertyPDFPreview.propertyBackground.height
 
                 console.log("Output filename: " + outputFile)
                 console.log("Signing in position coord_x: " + coord_x  + " and coord_y: "+coord_y)

@@ -35,8 +35,8 @@ Rectangle {
         }
         Image {
             id: dragImage
-            width: 53
-            height: 42
+            width: 0.29715 * background_image.width
+            height: 0.1 *background_image.height
 
             x: background_image.width < dragImage.x ? 0 : dragImage.x
             y: background_image.height < dragImage.y ? 0: dragImage.y
