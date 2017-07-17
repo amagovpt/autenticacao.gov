@@ -585,6 +585,7 @@ Item {
             MouseArea {
                 id: mouseAreaRectMainRigh
                 anchors.fill: parent
+                enabled: !fileLoaded
             }
 
         }
