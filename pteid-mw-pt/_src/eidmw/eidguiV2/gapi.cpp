@@ -7,6 +7,8 @@
 
 using namespace eIDMW;
 
+#define TRIES_LEFT_ERROR    1000
+
 /*
     GAPI - Graphic Application Programming Interface
 */
@@ -124,18 +126,118 @@ void GAPI::getAddressFile() {
     emit signalAddressLoaded();
 }
 
-unsigned int GAPI::verifyAddressPin(QString pin_value) {
-    unsigned long tries_left = 0;
+unsigned int GAPI::verifyAuthPin(QString pin_value) {
+    unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
 
     PTEID_EIDCard &card = getCardInstance();
 
-    PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_ADDRESS_PIN_ID);
+    PTEID_Pin & auth_pin = card.getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
+    auth_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
+
+    if (tries_left == 0) {
+        qDebug() << "WARNING: Auth PIN blocked!" + tries_left;
+    }
+
+    END_TRY_CATCH
+
+    //QML default types don't include long
+    return (unsigned int)tries_left;
+}
+
+unsigned int GAPI::getTriesLeftAuthPin() {
+    unsigned long tries_left = TRIES_LEFT_ERROR;
+
+    BEGIN_TRY_CATCH
+
+    PTEID_EIDCard &card = getCardInstance();
+
+    PTEID_Pin & auth_pin = card.getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
+    tries_left = auth_pin.getTriesLeft();
+
+    if (tries_left == 0) {
+        qDebug() << "WARNING: Auth PIN blocked!" + tries_left;
+    }
+
+    END_TRY_CATCH
+
+    //QML default types don't include long
+    return (unsigned int)tries_left;
+}
+
+unsigned int GAPI::verifySignPin(QString pin_value) {
+    unsigned long tries_left = TRIES_LEFT_ERROR;
+
+    BEGIN_TRY_CATCH
+
+    PTEID_EIDCard &card = getCardInstance();
+
+    PTEID_Pin & sign_pin = card.getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
+    sign_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
+
+    if (tries_left == 0) {
+        qDebug() << "WARNING: Sign PIN blocked!" + tries_left;
+    }
+
+    END_TRY_CATCH
+
+    //QML default types don't include long
+    return (unsigned int)tries_left;
+}
+
+unsigned int GAPI::getTriesLeftSignPin() {
+    unsigned long tries_left = TRIES_LEFT_ERROR;
+
+    BEGIN_TRY_CATCH
+
+    PTEID_EIDCard &card = getCardInstance();
+
+    PTEID_Pin & sign_pin = card.getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
+    tries_left = sign_pin.getTriesLeft();
+
+    if (tries_left == 0) {
+        qDebug() << "WARNING: Sign PIN blocked!" + tries_left;
+    }
+
+    END_TRY_CATCH
+
+    //QML default types don't include long
+    return (unsigned int)tries_left;
+}
+
+unsigned int GAPI::verifyAddressPin(QString pin_value) {
+    unsigned long tries_left = TRIES_LEFT_ERROR;
+
+    BEGIN_TRY_CATCH
+
+    PTEID_EIDCard &card = getCardInstance();
+
+    PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
     address_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
 
     if (tries_left == 0) {
-        qDebug() << "WARNING: Address PIN blocked!";
+        qDebug() << "WARNING: Address PIN blocked!" + tries_left;
+    }
+
+    END_TRY_CATCH
+
+    //QML default types don't include long
+    return (unsigned int)tries_left;
+}
+
+unsigned int GAPI::getTriesLeftAddressPin() {
+    unsigned long tries_left = TRIES_LEFT_ERROR;
+
+    BEGIN_TRY_CATCH
+
+    PTEID_EIDCard &card = getCardInstance();
+
+    PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
+    tries_left = address_pin.getTriesLeft();
+
+    if (tries_left == 0) {
+        qDebug() << "WARNING: Address PIN blocked!" + tries_left;
     }
 
     END_TRY_CATCH
@@ -355,10 +457,10 @@ void GAPI::connectToCard() {
         QMap<IDInfoKey, QString> cardData;
 
         cardData[Surname] = QString::fromUtf8(eid_file.getSurname());
-        cardData[Givenname] = QString::fromUtf8(eid_file.getGivenName()); 
-        cardData[Sex] =       QString::fromUtf8(eid_file.getGender()); 
-        cardData[Height] = QString::fromUtf8(eid_file.getHeight()); 
-        cardData[Country] = QString::fromUtf8(eid_file.getCountry()); 
+        cardData[Givenname] = QString::fromUtf8(eid_file.getGivenName());
+        cardData[Sex] =       QString::fromUtf8(eid_file.getGender());
+        cardData[Height] = QString::fromUtf8(eid_file.getHeight());
+        cardData[Country] = QString::fromUtf8(eid_file.getCountry());
         cardData[Birthdate] = QString::fromUtf8(eid_file.getDateOfBirth());
         cardData[Father] = QString::fromUtf8(eid_file.getGivenNameFather()) + " " +
                 QString::fromUtf8(eid_file.getSurnameFather());
@@ -389,4 +491,3 @@ void GAPI::connectToCard() {
 
         END_TRY_CATCH
 }
-

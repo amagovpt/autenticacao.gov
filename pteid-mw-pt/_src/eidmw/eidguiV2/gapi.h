@@ -118,7 +118,12 @@ public slots:
                          QString reason, QString location, double isTimestamp, double isSmall);
 
     void startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
+    unsigned int verifyAuthPin(QString pin);
+    unsigned int getTriesLeftAuthPin();
+    unsigned int verifySignPin(QString pin);
+    unsigned int getTriesLeftSignPin();
     unsigned int verifyAddressPin(QString pin);
+    unsigned int getTriesLeftAddressPin();
     QString getCardActivation();
     QString getDataCardIdentifyValue(GAPI::IDInfoKey key);
     QString getAddressField(GAPI::AddressInfoKey key);

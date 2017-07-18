@@ -5,28 +5,154 @@ import QtQuick.Controls 2.1
 import "../../scripts/Constants.js" as Constants
 import "../../components/" as Components
 
+//Import C++ defined enums
+import eidguiV2 1.0
+
 PageSecurityPinCodesForm {
 
+    Connections {
+        target: gapi
+
+        onSignalCardAccessError: {
+            var errorCode = 0
+            propertyBusyIndicator.running = false
+            if (errorCode === GAPI.NoReaderFound) {
+                console.log("Error: No card reader found!")
+                dialogError.propertyDialogErrorLabelText.text = "Error: No card reader found!"
+            }
+            else if (errorCode === GAPI.NoCardFound) {
+                console.log("Error: No Card Found!")
+                dialogError.propertyDialogErrorLabelText.text = "Error: No Card Found!"
+            }else {
+                console.log("Error: Reading Card Error")
+                dialogError.propertyDialogErrorLabelText.text = "Error: Reading Card Error!"
+            }
+
+            propertyTriesLeftAuthPin.text = ""
+            propertyTriesLeftSignPin.text = ""
+            propertyTriesLeftAddressPin.text = ""
+            propertyButtonModifyAuth.enabled = false
+            propertyButtonModifySign.enabled = false
+            propertyButtonModifyAddress.enabled = false
+            propertyButtonTestAuth.enabled = false
+            propertyButtonTestSign.enabled = false
+            propertyButtonTestAddress.enabled = false
+
+            dialogError.open()
+        }
+    }
 
     Dialog {
-        id: verifypin_dialog
+        id: dialogError
+        width: 400
+        height: 200
+        visible: false
+
+        font.family: lato.name
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width
+           + mainView.width * 0.5 - dialogError.width * 0.5
+        y: parent.height * 0.5 - dialogError.height * 0.5
+
+        property alias propertyDialogErrorLabelText: dialogErrorLabelText
+
+        header: Label {
+            id: dialogErrorLabelText
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: 16
+            color: Constants.COLOR_MAIN_BLUE
+        }
+        standardButtons: DialogButtonBox.Ok
+    }
+
+    Dialog {
+        id: dialogPinOK
+        width: 400
+        height: 200
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width
+           + mainView.width * 0.5 - dialogPinOK.width * 0.5
+        y: parent.height * 0.5 - dialogPinOK.height * 0.5
+        font.family: lato.name
+        font.pixelSize: 16
+        title: "PIN OK!"
+        standardButtons: Dialog.Ok
+        onAccepted: console.log("Ok clicked")
+    }
+
+    Dialog {
+        id: dialogBadPin
+        width: 400
+        height: 200
+        visible: false
+        font.family: lato.name
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width
+           + mainView.width * 0.5 - dialogBadPin.width * 0.5
+        y: parent.height * 0.5 - dialogBadPin.height * 0.5
+
+        header: Label {
+            text: "Erro - verificação de PIN"
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: 16
+            color: Constants.COLOR_MAIN_BLUE
+        }
+
+        Item {
+            width: parent.width
+            height: rectBadPin.height
+
+            Item {
+                id: rectBadPin
+                width: textTypePin.width + textFieldPin.width
+                height: 50
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textBadPin
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: 150
+                    anchors.bottom: parent.bottom
+                }
+            }
+        }
+        standardButtons: DialogButtonBox.Ok
+    }
+
+    Dialog {
+        id: dialogTestPin
         width: 400
         height: 200
         font.family: lato.name
         // Center dialog in the main view
         x: - mainMenuView.width - subMenuView.width
-           + mainView.width * 0.5 - changepin_dialog.width * 0.5
-        y: parent.height * 0.5 - changepin_dialog.height * 0.5
+           + mainView.width * 0.5 - dialogModifyPin.width * 0.5
+        y: parent.height * 0.5 - dialogModifyPin.height * 0.5
+
+        property alias propertyLabelTextTitle: labelTextTitle
+        property alias propertyTextTypePin: textTypePin
+        property alias propertyTextFieldPin: textFieldPin
 
         header: Label {
-              text: "Verificar o Pin da Morada"
-              visible: true
-              elide: Label.ElideRight
-              padding: 24
-              bottomPadding: 0
-              font.bold: true
-              font.pixelSize: 16
-              color: Constants.COLOR_MAIN_BLUE
+            id: labelTextTitle
+            visible: true
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: 16
+            color: Constants.COLOR_MAIN_BLUE
         }
 
         Item {
@@ -35,13 +161,12 @@ PageSecurityPinCodesForm {
 
             Item {
                 id: rectPin
-                width: textPin.width + textFieldPin.width
+                width: textTypePin.width + textFieldPin.width
                 height: 50
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
-                    id: textPin
-                    text: "PIN da Morada"
+                    id: textTypePin
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -61,19 +186,60 @@ PageSecurityPinCodesForm {
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
-                    anchors.left: textPin.right
+                    anchors.left: textTypePin.right
                     anchors.leftMargin: 20
                     anchors.bottom: parent.bottom
                 }
             }
-       }
+        }
 
         standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
 
         onAccepted: {
+            var triesLeft = 0
+            propertyBusyIndicator.running = true
+
+            console.log("StackLayout currentIndex = " + protertyStackLayout.currentIndex)
+            switch(protertyStackLayout.currentIndex) {
+            case 0:
+                triesLeft = gapi.verifyAuthPin(textFieldPin.text)
+                if(triesLeft !== Constants.TRIES_LEFT_ERROR)
+                    propertyTriesLeftAuthPin.text = "Restam " + triesLeft + " tentativas."
+                break;
+            case 1:
+                triesLeft = gapi.verifySignPin(textFieldPin.text)
+                if(triesLeft !== Constants.TRIES_LEFT_ERROR)
+                    propertyTriesLeftSignPin.text = "Restam " + triesLeft + " tentativas."
+                break;
+            case 2:
+                triesLeft = gapi.verifyAddressPin(textFieldPin.text)
+                if(triesLeft !== Constants.TRIES_LEFT_ERROR)
+                    propertyTriesLeftAddressPin.text = "Restam " + triesLeft + " tentativas."
+                break;
+            default:
+                break
+            }
+
+            dialogTestPin.visible = false
             mainFormID.opacity = 1.0
-            if(gapi.verifyAddressPin(textFieldPin.text))
-                pinOK_dialog.open()
+            propertyBusyIndicator.running = false
+
+            if (triesLeft === 3) {
+                dialogPinOK.open()
+            }
+            else if (triesLeft === 0) {
+                textBadPin.text = "PIN bloqueado!"
+                dialogBadPin.open()
+            }
+            else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                textBadPin.text = "Erro na leitura do cartão!"
+                dialogBadPin.open()
+            }
+            else {
+                textBadPin.text = "PIN errado! " + triesLeft + " tentativas restantes"
+
+                dialogBadPin.open()
+            }
         }
         onRejected: {
             mainFormID.opacity = 1.0
@@ -81,42 +247,27 @@ PageSecurityPinCodesForm {
     }
 
     Dialog {
-            id: pinOK_dialog
-            width: 400
-            height: 200
-            // Center dialog in the main view
-            x: - mainMenuView.width - subMenuView.width
-               + mainView.width * 0.5 - pinOK_dialog.width * 0.5
-            y: parent.height * 0.5 - pinOK_dialog.height * 0.5
-            font.family: lato.name
-            font.pixelSize: 16
-            title: "PIN OK!"
-            standardButtons: Dialog.Ok
-            onAccepted: console.log("Ok clicked")
-    }
-
-    Dialog {
-        id: changepin_dialog
+        id: dialogModifyPin
         width: 400
         height: 300
         font.family: lato.name
         // Center dialog in the main view
         x: - mainMenuView.width - subMenuView.width
-           + mainView.width * 0.5 - changepin_dialog.width * 0.5
-        y: parent.height * 0.5 - changepin_dialog.height * 0.5
+           + mainView.width * 0.5 - dialogModifyPin.width * 0.5
+        y: parent.height * 0.5 - dialogModifyPin.height * 0.5
 
         header: Label {
-              text: "Modificar o Pin da Morada"
-              visible: true
-              elide: Label.ElideRight
-              padding: 24
-              bottomPadding: 0
-              font.bold: true
-              font.pixelSize: 16
-              color: Constants.COLOR_MAIN_BLUE
-       }
+            text: "Modificar o Pin da Morada"
+            visible: true
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: 16
+            color: Constants.COLOR_MAIN_BLUE
+        }
 
-       Item {
+        Item {
             width: parent.width
             height: rectPinCurrent.height + rectPinNew.height + rectPinConfirm.height
 
@@ -229,89 +380,103 @@ PageSecurityPinCodesForm {
             mainFormID.opacity = 1.0
         }
     }
-    propertyButtonModify{
+
+    // Buttons actions
+    propertyButtonModifyAuth{
         onClicked: {
             mainFormID.opacity = 0.5
-            changepin_dialog.open()
+            dialogModifyPin.open()
         }
     }
-    propertyButtonTest{
+    propertyButtonTestAuth{
         onClicked: {
             mainFormID.opacity = 0.5
-            verifypin_dialog.open()
+            dialogTestPin.propertyLabelTextTitle.text = "Verificar o Pin da Autenticação"
+            dialogTestPin.propertyTextTypePin.text = "PIN da Autenticação"
+            dialogTestPin.propertyTextFieldPin.text = ""
+            dialogTestPin.open()
         }
     }
-    Component {
-        id: pinCodesMenuDelegate
-        Item {
-            width: propertyPinCodesListView.width
-            height: propertyPinCodesViewLeft.height * Constants.SUB_MENU_RELATIVE_V_ITEM_SIZE
-            MouseArea {
-                id: mouseAreaPinCodes
-                anchors.fill: parent
-                hoverEnabled: true
-                onClicked: {
-                    propertyPinCodesListView.currentIndex = index
-                    console.log("Pin Codes index = " + index);
+    propertyButtonModifySign{
+        onClicked: {
+            mainFormID.opacity = 0.5
+            dialogModifyPin.open()
+        }
+    }
+    propertyButtonTestSign{
+        onClicked: {
+            mainFormID.opacity = 0.5
+            dialogTestPin.propertyLabelTextTitle.text = "Verificar o Pin da Assinatura"
+            dialogTestPin.propertyTextTypePin.text = "PIN da Assinatura"
+            dialogTestPin.propertyTextFieldPin.text = ""
+            dialogTestPin.open()
+        }
+    }
+    propertyButtonModifyAddress{
+        onClicked: {
+            mainFormID.opacity = 0.5
+            dialogModifyPin.open()
+        }
+    }
+    propertyButtonTestAddress{
+        onClicked: {
+            mainFormID.opacity = 0.5
+            dialogTestPin.propertyLabelTextTitle.text = "Verificar o Pin da Morada"
+            dialogTestPin.propertyTextTypePin.text = "PIN da Morada"
+            dialogTestPin.propertyTextFieldPin.text = ""
+            dialogTestPin.open()
+        }
+    }
+    protertyStackLayout{
+
+        onCurrentIndexChanged: {
+            var triesLeft = 0
+            console.log("StackLayout currentIndex = " + protertyStackLayout.currentIndex)
+            switch(protertyStackLayout.currentIndex) {
+            case 0:
+                console.log("Auth Pin tries left = " + gapi.getTriesLeftAuthPin())
+                triesLeft = gapi.getTriesLeftAuthPin()
+                if(triesLeft !== Constants.TRIES_LEFT_ERROR){
+                    propertyTriesLeftAuthPin.text = "Restam " + triesLeft + " tentativas."
+                    propertyButtonModifyAuth.enabled = true
+                    propertyButtonTestAuth.enabled = true
                 }
-            }
-            Text {
-                text: name
-                color: getPinCodesColor(index, mouseAreaPinCodes.containsMouse)
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                font.weight: mouseAreaPinCodes.containsMouse ?
-                                 Font.Bold :
-                                 Font.Normal
-                font.pixelSize: Constants.SIZE_TEXT_SUB_MENU
-                wrapMode: Text.Wrap
-                width: parent.width - imageArrowPinCodes.width
-                horizontalAlignment: Text.AlignHCenter
-
-            }
-            Image {
-                id: imageArrowPinCodes
-                width: Constants.SIZE_IMAGE_ARROW_SUB_MENU
-                height: Constants.SIZE_IMAGE_ARROW_SUB_MENU
-                fillMode: Image.PreserveAspectFit
-                x: parent.width * Constants.IMAGE_ARROW_SUB_MENU_RELATIVE
-                anchors.verticalCenter: parent.verticalCenter
-                source: getPinCodesArrowSource(index, mouseAreaPinCodes.containsMouse)
+                break;
+            case 1:
+                console.log("Sign Pin tries left = " + gapi.getTriesLeftSignPin())
+                triesLeft = gapi.getTriesLeftSignPin()
+                if(triesLeft !== Constants.TRIES_LEFT_ERROR){
+                    propertyTriesLeftSignPin.text = "Restam " + triesLeft + " tentativas."
+                    propertyButtonModifySign.enabled = true
+                    propertyButtonTestSign.enabled = true
+                }
+                break;
+            case 2:
+                console.log("Address Pin tries left = " + gapi.getTriesLeftAddressPin())
+                triesLeft = gapi.getTriesLeftAddressPin()
+                if(triesLeft !== Constants.TRIES_LEFT_ERROR){
+                    propertyTriesLeftAddressPin.text = "Restam " + triesLeft + " tentativas."
+                    propertyButtonModifyAddress.enabled = true
+                    propertyButtonTestAddress.enabled = true
+                }
+                break;
+            default:
+                break
             }
         }
     }
+    Component.onCompleted: {
+        propertyBusyIndicator.running = true
+        console.log("StackLayout currentIndex = " + protertyStackLayout.currentIndex)
+        console.log("Auth Pin tries left = " + gapi.getTriesLeftAuthPin())
+        var triesLeft = 0
+        triesLeft = gapi.getTriesLeftAuthPin()
 
-    function getPinCodesColor(index, containsMouse)
-    {
-        var handColor
-        if(propertyPinCodesListView.currentIndex === index)
-        {
-            handColor =  Constants.COLOR_TEXT_SUB_MENU_SELECTED
-        }else{
-            if(containsMouse === true)
-            {
-                handColor = Constants.COLOR_TEXT_SUB_MENU_MOUSE_OVER
-            }else{
-                handColor = Constants.COLOR_TEXT_SUB_MENU_DEFAULT
-            }
+        if(triesLeft !== Constants.TRIES_LEFT_ERROR){
+            propertyTriesLeftAuthPin.text = "Restam " + triesLeft + " tentativas."
+            propertyButtonModifyAuth.enabled = true
+            propertyButtonTestAuth.enabled = true
+            propertyBusyIndicator.running = false
         }
-        return handColor
-    }
-
-    function getPinCodesArrowSource(index, containsMouse)
-    {
-        var handSource
-        if(propertyPinCodesListView.currentIndex === index)
-        {
-            handSource =  "../../images/arrow-right_white_AMA.png"
-        }else{
-            if(containsMouse === true)
-            {
-                handSource = "../../images/arrow-right_hover.png"
-            }else{
-                handSource = ""
-            }
-        }
-        return handSource
     }
 }
