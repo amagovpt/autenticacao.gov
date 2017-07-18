@@ -25,6 +25,7 @@
 #include <cstring>
 #include <string>
 
+
 /* OpenSSL headers */
 #include <openssl/bio.h>
 #include <openssl/ssl.h>
@@ -37,6 +38,14 @@
 
 namespace eIDMW
 {
+
+
+/* Defines used in libcurl*/
+#ifdef WIN32
+#define SOCKERRNO         ((int)WSAGetLastError())
+#else
+#define SOCKERRNO         (errno)
+#endif
 
 int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 		unsigned char *sigret, unsigned int *siglen, const RSA * rsa)
@@ -236,34 +245,31 @@ unsigned int translate_openssl_error(unsigned int error)
 
 }
 
-void translate_ssl_error(SSL *ssl, int error_code)
+static const char *SSL_ERROR_to_str(int err)
 {
+	switch (err) {
+	case SSL_ERROR_NONE:
+		return "SSL_ERROR_NONE";
+	case SSL_ERROR_SSL:
+		return "SSL_ERROR_SSL";
+	case SSL_ERROR_WANT_READ:
+		return "SSL_ERROR_WANT_READ";
+	case SSL_ERROR_WANT_WRITE:
+		return "SSL_ERROR_WANT_WRITE";
+	case SSL_ERROR_WANT_X509_LOOKUP:
+		return "SSL_ERROR_WANT_X509_LOOKUP";
+	case SSL_ERROR_SYSCALL:
+		return "SSL_ERROR_SYSCALL";
+	case SSL_ERROR_ZERO_RETURN:
+		return "SSL_ERROR_ZERO_RETURN";
+	case SSL_ERROR_WANT_CONNECT:
+		return "SSL_ERROR_WANT_CONNECT";
+	case SSL_ERROR_WANT_ACCEPT:
+		return "SSL_ERROR_WANT_ACCEPT";
 
-	switch(SSL_get_error(ssl, error_code))
-	{
-
-		case SSL_ERROR_NONE:
-		break;
-
-		case SSL_ERROR_ZERO_RETURN:
-		fprintf(stderr, "ssl_error: Connection closed!\n");
-		break;
-
-		case SSL_ERROR_WANT_READ:
-		case SSL_ERROR_WANT_WRITE:
-		fprintf(stderr, "ssl_error: Read/Write operation should be retried! or there's no more data in the buffers\n");
-
-		case SSL_ERROR_WANT_CONNECT:
-		fprintf(stderr, "ssl_error: Rad/Write operation should be retried!\n");
-
-		case SSL_ERROR_SSL:
-		fprintf(stderr, "ssl_error: SSL Protocol error, aborting!\n");
-
+	default:
+		return "SSL_ERROR unknown";
 	}
-
-	fprintf(stderr, "Complete error stack: \n");
-	ERR_print_errors_fp(stderr);
-
 }
 
 
@@ -462,14 +468,14 @@ SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *k
 			fprintf(stderr, "DEBUG: JSON does not contain signedChallenge element!\n");
 			goto err;
 		}
-		result->signed_challenge = strdup(child->valuestring);
+		result->signed_challenge = _strdup(child->valuestring);
 		cJSON *elem = cJSON_GetObjectItem(my_json, "InternalAuthenticateCommand");
 		if (!elem)
 		{
 			fprintf(stderr, "DEBUG: JSON does not contain InternalAuthenticateCommand element!\n");
 		}
 		else
-			result->internal_auth = strdup(elem->child->valuestring);
+			result->internal_auth = _strdup(elem->child->valuestring);
 		cJSON *elem2 = cJSON_GetObjectItem(my_json, "SetSECommand");
 
 		if (!elem2)
@@ -477,7 +483,7 @@ SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *k
 			fprintf(stderr, "DEBUG: JSON does not contain SetSECommand element!\n");
 		}
 		else
-			result->set_se_command = strdup(elem2->child->valuestring);
+			result->set_se_command = _strdup(elem2->child->valuestring);
 
 		cJSON_Delete(json);
 		return result;
@@ -631,13 +637,13 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 		int n_address = cJSON_GetArraySize(array_address);
 
 		for (int i=0; i!= n_address; i++)
-			resp->apdu_write_address.push_back(strdup(cJSON_GetArrayItem(array_address, i)->valuestring));
+			resp->apdu_write_address.push_back(_strdup(cJSON_GetArrayItem(array_address, i)->valuestring));
 
 		cJSON *array_sod= cJSON_GetObjectItem(my_json, "WriteSODCommand");
 		int n_sod = cJSON_GetArraySize(array_sod);
 
 		for (int i=0; i != n_sod; i++)
-			resp->apdu_write_sod.push_back(strdup(cJSON_GetArrayItem(array_sod, i)->valuestring));
+			resp->apdu_write_sod.push_back(_strdup(cJSON_GetArrayItem(array_sod, i)->valuestring));
 
 		cJSON_Delete(json);
 		delete server_response;
@@ -732,10 +738,10 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 
 	cJSON *child = cJSON_GetObjectItem(my_json, "kifd");
 	if (child)
-		server_params->kifd = strdup(child->valuestring);
+		server_params->kifd = _strdup(child->valuestring);
 	child = cJSON_GetObjectItem(my_json, "c_cv_ifd_aut");
 	if (child)
-		server_params->cv_ifd_aut = strdup(child->valuestring);
+		server_params->cv_ifd_aut = _strdup(child->valuestring);
 
 	free(server_response);
 	free(post_dhparams);
@@ -1029,6 +1035,29 @@ long parseLong(char *str)
 	return val;
 }
 
+
+int waitForRWSocket(SSL *ssl, bool wantRead)
+{
+	int rv = 0;
+	int fd = SSL_get_fd(ssl);
+	fd_set confds;
+
+	FD_ZERO(&confds);
+	FD_SET(fd, &confds);
+	struct timeval tv;
+	tv.tv_usec = 0;
+	//Timeout value in seconds
+	tv.tv_sec = 10;
+
+	if (wantRead)
+		rv = select(fd + 1, &confds, NULL, NULL, &tv);
+	else
+		rv = select(fd + 1, NULL, &confds, NULL, &tv);
+
+	return rv;
+}
+
+
 void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buffer_len, bool headersAlreadyRead)
 {
 	int r;
@@ -1080,35 +1109,37 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     		char * buffer_tmp = (char*)calloc(strlen(buffer)+1, 1);
     		strcpy(buffer_tmp, buffer);
     		if (!strstr(buffer, "Transfer-Encoding: chunked"))
-    			fprintf(stderr, "DEBUG: Unexpected server reply: HTTP response is not chunked!\n");
+				MWLOG(LEV_DEBUG, MOD_APL, "read_chunked_reply() Unexpected server reply: HTTP response is not chunked!\n");
 
 			free(buffer_tmp);
     	}
-    	if (r == -1)
-    	{
+		if (r <= 0)
+		{
 			int error_code = SSL_get_error(ssl, r);
-    		if (error_code == SSL_ERROR_WANT_READ)
-    		{
-    			fprintf(stderr, "SSL_ERROR_WANT_READ\n!");
-    			continue;
-    		}
-			else if (error_code == SSL_ERROR_SSL)
-			{
-				MWLOG(LEV_ERROR, MOD_APL, L"Aborted SSL Connection in read_chunked_reply() with error string %s",
-					ERR_error_string(ERR_get_error(), NULL));
+			switch (error_code) {
+			case SSL_ERROR_ZERO_RETURN:
+				MWLOG(LEV_ERROR, MOD_APL, "read_chunked_reply() TLS Connection has been closed cleanly");
+				throw CMWEXCEPTION(EIDMW_OTP_CONNECTION_ERROR);
+			case SSL_ERROR_WANT_READ:  /* there's data pending, re-invoke SSL_read() */
+			case SSL_ERROR_WANT_WRITE:
+				continue;
+			default:
+				unsigned long sslError = ERR_get_error();
+				if ((r < 0) || sslError) {
+					//SOCKERRNO can return here WSAETIMEDOUT (Windows socket error code)
+					MWLOG(LEV_ERROR, MOD_APL, "read_chunked_reply() Aborted TLS Connection with error string %s errno: %d",
+						(sslError ?
+						ERR_error_string(sslError, NULL) :
+						SSL_ERROR_to_str(error_code)),
+						SOCKERRNO);
 
-				throw CMWEXCEPTION(EIDMW_SSL_PROTOCOL_ERROR);
+					throw CMWEXCEPTION(EIDMW_SSL_PROTOCOL_ERROR);
+				}
 			}
-			else
-    			fprintf(stderr, "???\n");
-    	}
-    	else if (r == 0) {
-
-    		translate_ssl_error(ssl, r);
-
-    	}
+		}
+    	
     	//Only include the data if this string is NOT a chunk-length token or a CRLF after the previous chunk
-    	else if (!is_chunk_length && chunk_bytesToRead > 0)
+    	if (!is_chunk_length && chunk_bytesToRead > 0)
     	{
     		chunk_bytesToRead -= r;
     		bytes_read += r;
@@ -1124,71 +1155,101 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
 unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned int buffer_length)
 {
 
-    int r = -1;
-    unsigned int bytes_read = 0, header_len=0, content_length = 0;
+	int r = -1;
+	unsigned int bytes_read = 0, header_len = 0, content_length = 0;
 
-    do
-    {
-	    // We're using blocking IO so SSL_Write either succeeds completely or not...
-	    r = SSL_read(ssl, buffer+bytes_read, buffer_length-bytes_read);
-	    if (r > 0 && bytes_read == 0)
-	    {
+	do
+	{
+		// We're using blocking IO so SSL_Write either succeeds completely or not...
+		r = SSL_read(ssl, buffer + bytes_read, buffer_length - bytes_read);
+		if (r > 0)
+		{
+			if (bytes_read == 0) {
+				header_len = r;
+				char * buffer_tmp = (char*)calloc(strlen(buffer) + 1, 1);
+				strcpy(buffer_tmp, buffer);
+				content_length = parseContentLength(buffer_tmp);
+				free(buffer_tmp);
+			}
 
-		    header_len = r;
-		    char * buffer_tmp = (char*)calloc(strlen(buffer)+1, 1);
-		    strcpy(buffer_tmp, buffer);
-		    content_length = parseContentLength(buffer_tmp);
-			free(buffer_tmp);
-	    }
-		if (r == -1)
+			bytes_read += r;
+		}
+		else
 		{
 			int error_code = SSL_get_error(ssl, r);
-
-			if (error_code == SSL_ERROR_WANT_READ)
-			{
-				fprintf(stderr, "SSL_ERROR_WANT_READ\n!");
+			switch (error_code) {
+			case SSL_ERROR_ZERO_RETURN:
+				MWLOG(LEV_ERROR, MOD_APL, "read_from_stream() TLS Connection has been closed cleanly");
+				throw CMWEXCEPTION(EIDMW_OTP_CONNECTION_ERROR);
+			case SSL_ERROR_WANT_READ:  /* there's data pending, re-invoke SSL_read() */
+			case SSL_ERROR_WANT_WRITE:
 				continue;
+			default:
+				unsigned long sslError = ERR_get_error();
+
+				if ((r < 0) || sslError) {
+					//SOCKERRNO can return here WSAETIMEDOUT (Windows socket error code)
+					MWLOG(LEV_ERROR, MOD_APL, "read_from_stream() Aborted TLS Connection with error string %s errno: %d",
+						(sslError ?
+						ERR_error_string(sslError, NULL) :
+						SSL_ERROR_to_str(error_code)),
+						SOCKERRNO);
+
+					throw CMWEXCEPTION(EIDMW_SSL_PROTOCOL_ERROR);
+				}
+				
 			}
-			else if (error_code == SSL_ERROR_SSL)
-			{
-				MWLOG(LEV_ERROR, MOD_APL, "Aborted SSL Connection with error string %s",
-					ERR_error_string(ERR_get_error(), NULL));
-
-				throw CMWEXCEPTION(EIDMW_SSL_PROTOCOL_ERROR);
-			}
-			else
-				fprintf(stderr, "???\n");
 		}
+	} while (bytes_read == 0 || bytes_read - header_len < content_length);
 
-		else if (r == 0) {
+	if (bytes_read > 0)
+		buffer[bytes_read] = '\0';
 
-			translate_ssl_error(ssl, r);
-
-		}
-	    else
-		    bytes_read += r;
-    }
-    while(bytes_read == 0 || bytes_read - header_len  < content_length );
-
-    if (bytes_read > 0)
-	    buffer[bytes_read] = '\0';
-
-    return bytes_read;
+	return bytes_read;
 }
+
 
 /**
  * Write to a stream and handle restarts if necessary
  */
-unsigned int SSLConnection::write_to_stream(SSL* ssl, char* request_string) {
+unsigned int SSLConnection::write_to_stream(SSL* ssl, char* request_string) 
+{
 
     unsigned int r = -1;
-
-    r = SSL_write(ssl, request_string, strlen(request_string));
-    if (r <= 0) {
-
-          print_ssl_error("BIO_Write should retry test failed.\n", stdout);
-          r = 0;
-    }
+	do {
+		r = SSL_write(ssl, request_string, strlen(request_string));
+		if (r <= 0)
+		{
+			int error_code = SSL_get_error(ssl, r);
+			switch (error_code) {
+				case SSL_ERROR_ZERO_RETURN:
+					MWLOG(LEV_ERROR, MOD_APL, "write_to_stream() TLS Connection has been closed cleanly");
+					throw CMWEXCEPTION(EIDMW_OTP_CONNECTION_ERROR);
+				case SSL_ERROR_WANT_READ:  /* there's data pending, re-invoke SSL_write() */
+					if (waitForRWSocket(ssl, true) > 0)
+						continue;
+					else
+						throw CMWEXCEPTION(EIDMW_OTP_CONNECTION_ERROR);
+				case SSL_ERROR_WANT_WRITE:
+					if (waitForRWSocket(ssl, false) > 0)
+						continue;
+					else
+						throw CMWEXCEPTION(EIDMW_OTP_CONNECTION_ERROR);
+				default:
+					unsigned long sslError = ERR_get_error();
+					if (sslError) {
+						MWLOG(LEV_ERROR, MOD_APL, "write_to_stream: Aborted TLS Connection with error code %d and root cause %s",
+							error_code, ERR_error_string(sslError, NULL));
+					}
+					else
+					{
+						MWLOG(LEV_ERROR, MOD_APL, "write_to_stream: Aborted TLS Connection with error code %d",
+							error_code);
+					}
+					throw CMWEXCEPTION(EIDMW_SSL_PROTOCOL_ERROR);
+			}
+		}
+	} while (r <= 0);
 
     return r;
 }
@@ -1196,7 +1257,8 @@ unsigned int SSLConnection::write_to_stream(SSL* ssl, char* request_string) {
 /**
  * Perform TLS handshake to the SAM server: it may throw CMWException on connection error
  */
-bool SSLConnection::InitSAMConnection() {
+bool SSLConnection::InitSAMConnection() 
+{
 
     APL_Config sam_server(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER);
 

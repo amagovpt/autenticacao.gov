@@ -41,6 +41,11 @@ namespace eIDMW
 
 char *getCPtr( std::string inStr, int *outLen );
 
+//Use _strdup instead of strdup to silence Win32 warnings
+#ifndef WIN32
+#define _strdup strdup
+#endif
+
 const void *memmem(const void *haystack, size_t n, const void *needle, size_t m);
 
 //Implementation of some utility functions over POSIX and Win32
