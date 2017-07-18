@@ -120,13 +120,14 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;..\FreeImagePTEiD\Source;..\xml-security-c-1.7.2;$(PTEID_DIR_CURL)\include;$(PTEID_DIR_XERCES_31)\include;$(PTEID_DIR_OPENSSL_098)\include;$(PTEID_DIR_PLATFORMSDK)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;..\FreeImagePTEiD\Source;$(PTEID_XMLSECURITY);$(PTEID_DIR_CURL)\include;$(PTEID_DIR_XERCES_31)\include;$(PTEID_DIR_OPENSSL_098)\include;$(PTEID_DIR_PLATFORMSDK)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ShowIncludes>false</ShowIncludes>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -185,12 +186,13 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;..\FreeImagePTEiD\Source;..\xml-security-c-1.7.2;$(PTEID_DIR_CURL_X64)\include;$(PTEID_DIR_XERCES_31_X64)\include;$(PTEID_DIR_OPENSSL_098_X64)\include;$(PTEID_DIR_PLATFORMSDK)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY);..\FreeImagePTEiD\Source;$(PTEID_DIR_CURL_X64)\include;$(PTEID_DIR_XERCES_31_X64)\include;$(PTEID_DIR_OPENSSL_098_X64)\include;$(PTEID_DIR_PLATFORMSDK)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>

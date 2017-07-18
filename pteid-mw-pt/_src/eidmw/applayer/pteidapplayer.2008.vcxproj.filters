@@ -87,9 +87,6 @@
     <ClCompile Include="SSLConnection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="static_pteid_certs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TsaClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -204,9 +201,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SSLConnection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="static_pteid_certs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TsaClient.h">
