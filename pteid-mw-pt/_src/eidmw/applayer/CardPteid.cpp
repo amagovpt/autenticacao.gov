@@ -29,6 +29,7 @@
 #include "eidErrors.h"
 #include "APLConfig.h"
 #include "PhotoPteid.h"
+#include "MiscUtil.h"
 #include "APLPublicKey.h"
 #include "Log.h"
 #include "SODParser.h"
@@ -36,8 +37,6 @@
 #include <openssl/err.h>
 #include <iostream>
 #include <fstream>
-
-
 
 
 
