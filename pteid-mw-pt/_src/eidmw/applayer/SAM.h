@@ -66,7 +66,7 @@ public:
 	std::vector<char *> sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_array);
 
 private:
-	char * _getDH_Param(char specific_byte, unsigned long offset);
+	char * _getDH_Param(unsigned char specific_byte, unsigned long offset);
 	char * _getCVCPublicKey();
 	char * _getCardAuthPublicKey();
 	char * _getSODCert();

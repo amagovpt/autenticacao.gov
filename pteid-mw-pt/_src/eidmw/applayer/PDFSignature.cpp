@@ -104,7 +104,7 @@ namespace eIDMW
 
 	void PDFSignature::batchAddFile(char *file_path, bool last_page)
 	{
-		m_files_to_sign.push_back(std::make_pair(strdup(file_path), last_page));
+		m_files_to_sign.push_back(std::make_pair(_strdup(file_path), last_page));
 
 	}
 

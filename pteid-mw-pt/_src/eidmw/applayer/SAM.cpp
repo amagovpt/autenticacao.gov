@@ -54,7 +54,7 @@ bool checkResultSW12(CByteArray &result)
 	return ulSW12 == 0x9000;
 }
 
-char * SAM::_getDH_Param(char specific_byte, unsigned long offset)
+char * SAM::_getDH_Param(unsigned char specific_byte, unsigned long offset)
 {
 		char * hex_param = NULL;
 		// 00 CB 00 FF 0A A6 03 83 01 32 7F 49 02 87 00 00 

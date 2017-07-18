@@ -21,10 +21,6 @@
 
 #define CONST_STR (const unsigned char *)
 
-#ifndef WIN32
-#define _strdup strdup
-#endif
-
 
 XERCES_CPP_NAMESPACE_USE
 
