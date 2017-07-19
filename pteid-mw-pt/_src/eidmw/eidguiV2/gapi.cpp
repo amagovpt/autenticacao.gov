@@ -98,7 +98,7 @@ QString GAPI::getAddressField(AddressInfoKey key) {
     }     \
     catch (PTEID_Exception &e) \
     { \
-        fprintf(stderr, "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx", e.GetError()); \
+        fprintf(stderr, "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
         emit signalCardAccessError(CardUnknownError); \
     }
 
@@ -235,6 +235,66 @@ unsigned int GAPI::getTriesLeftAddressPin() {
 
     PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
     tries_left = address_pin.getTriesLeft();
+
+    if (tries_left == 0) {
+        qDebug() << "WARNING: Address PIN blocked!" + tries_left;
+    }
+
+    END_TRY_CATCH
+
+    //QML default types don't include long
+    return (unsigned int)tries_left;
+}
+
+unsigned int GAPI::changeAuthPin(QString currentPin, QString newPin) {
+    unsigned long tries_left = TRIES_LEFT_ERROR;
+
+    BEGIN_TRY_CATCH
+
+    PTEID_EIDCard &card = getCardInstance();
+
+    PTEID_Pin & auth_pin = card.getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
+    auth_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(),tries_left,"");
+
+    if (tries_left == 0) {
+        qDebug() << "WARNING: Auth PIN blocked!" + tries_left;
+    }
+
+    END_TRY_CATCH
+
+    //QML default types don't include long
+    return (unsigned int)tries_left;
+}
+
+unsigned int GAPI::changeSignPin(QString currentPin, QString newPin) {
+    unsigned long tries_left = TRIES_LEFT_ERROR;
+
+    BEGIN_TRY_CATCH
+
+    PTEID_EIDCard &card = getCardInstance();
+
+    PTEID_Pin & sign_pin = card.getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
+    sign_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(),tries_left,"");
+
+    if (tries_left == 0) {
+        qDebug() << "WARNING: Sign PIN blocked!" + tries_left;
+    }
+
+    END_TRY_CATCH
+
+    //QML default types don't include long
+    return (unsigned int)tries_left;
+}
+
+unsigned int GAPI::changeAddressPin(QString currentPin, QString newPin) {
+    unsigned long tries_left = TRIES_LEFT_ERROR;
+
+    BEGIN_TRY_CATCH
+
+    PTEID_EIDCard &card = getCardInstance();
+
+    PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
+    address_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(),tries_left,"");
 
     if (tries_left == 0) {
         qDebug() << "WARNING: Address PIN blocked!" + tries_left;

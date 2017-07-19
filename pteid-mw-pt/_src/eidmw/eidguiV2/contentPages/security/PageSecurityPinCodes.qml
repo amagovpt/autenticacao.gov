@@ -14,13 +14,12 @@ PageSecurityPinCodesForm {
         target: gapi
 
         onSignalCardAccessError: {
-            var errorCode = 0
             propertyBusyIndicator.running = false
-            if (errorCode === GAPI.NoReaderFound) {
+            if (error_code === GAPI.NoReaderFound) {
                 console.log("Error: No card reader found!")
                 dialogError.propertyDialogErrorLabelText.text = "Error: No card reader found!"
             }
-            else if (errorCode === GAPI.NoCardFound) {
+            else if (error_code === GAPI.NoCardFound) {
                 console.log("Error: No Card Found!")
                 dialogError.propertyDialogErrorLabelText.text = "Error: No Card Found!"
             }else {
@@ -161,7 +160,7 @@ PageSecurityPinCodesForm {
 
             Item {
                 id: rectPin
-                width: textTypePin.width + textFieldPin.width
+                width: parent.width
                 height: 50
 
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -173,12 +172,12 @@ PageSecurityPinCodesForm {
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
-                    width: 150
+                    width: parent.width * 0.5
                     anchors.bottom: parent.bottom
                 }
                 TextField {
                     id: textFieldPin
-                    width: 150
+                    width: parent.width * 0.5
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldPin.text === "" ? true: false
                     placeholderText: "PIN Atual?"
@@ -187,7 +186,6 @@ PageSecurityPinCodesForm {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textTypePin.right
-                    anchors.leftMargin: 20
                     anchors.bottom: parent.bottom
                 }
             }
@@ -256,8 +254,14 @@ PageSecurityPinCodesForm {
            + mainView.width * 0.5 - dialogModifyPin.width * 0.5
         y: parent.height * 0.5 - dialogModifyPin.height * 0.5
 
+        property alias propertyLabelModifyTextTitle: labelModifyTextTitle
+        property alias propertyTextFieldPinCurrent: textFieldPinCurrent
+        property alias propertyTextFieldPinNew: textFieldPinNew
+        property alias propertyTextFieldPinConfirm: textFieldPinConfirm
+
+
         header: Label {
-            text: "Modificar o Pin da Morada"
+            id: labelModifyTextTitle
             visible: true
             elide: Label.ElideRight
             padding: 24
@@ -269,13 +273,12 @@ PageSecurityPinCodesForm {
 
         Item {
             width: parent.width
-            height: rectPinCurrent.height + rectPinNew.height + rectPinConfirm.height
+            height: rectPinCurrent.height + rectPinNew.height + rectPinConfirm.height + rectPinMsgConfirm.height
 
             Item {
                 id: rectPinCurrent
-                width: textPinCurrent.width + textFieldPinCurrent.width
+                width: parent.width
                 height: 50
-
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textPinCurrent
@@ -286,12 +289,12 @@ PageSecurityPinCodesForm {
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
-                    width: 150
+                    width: parent.width * 0.5
                     anchors.bottom: parent.bottom
                 }
                 TextField {
                     id: textFieldPinCurrent
-                    width: 150
+                    width: parent.width * 0.5
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldPinCurrent.text === "" ? true: false
                     placeholderText: "PIN Atual?"
@@ -300,13 +303,12 @@ PageSecurityPinCodesForm {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textPinCurrent.right
-                    anchors.leftMargin: 20
                     anchors.bottom: parent.bottom
                 }
             }
             Item {
                 id: rectPinNew
-                width: textPinNew.width + textFieldPinNew.width
+                width: parent.width
                 height: 50
                 anchors.top: rectPinCurrent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -319,12 +321,12 @@ PageSecurityPinCodesForm {
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
-                    width: 150
+                    width: parent.width * 0.5
                     anchors.bottom: parent.bottom
                 }
                 TextField {
                     id: textFieldPinNew
-                    width: 150
+                    width: parent.width * 0.5
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldPinNew.text === "" ? true: false
                     placeholderText: "Novo PIN?"
@@ -333,13 +335,12 @@ PageSecurityPinCodesForm {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textPinNew.right
-                    anchors.leftMargin: 20
                     anchors.bottom: parent.bottom
                 }
             }
             Item {
                 id: rectPinConfirm
-                width: textPinConfirm.width + textFieldPinConfirm.width
+                width: parent.width
                 height: 50
                 anchors.top: rectPinNew.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -352,12 +353,12 @@ PageSecurityPinCodesForm {
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
-                    width: 150
+                    width: parent.width * 0.5
                     anchors.bottom: parent.bottom
                 }
                 TextField {
                     id: textFieldPinConfirm
-                    width: 150
+                    width: parent.width * 0.5
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldPinConfirm.text === "" ? true: false
                     placeholderText: "Confirmar novo PIN?"
@@ -366,7 +367,24 @@ PageSecurityPinCodesForm {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textPinConfirm.right
-                    anchors.leftMargin: 20
+                    anchors.bottom: parent.bottom
+                }
+            }
+            Item {
+                id: rectPinMsgConfirm
+                width: parent.width
+                height: 50
+                anchors.top: rectPinConfirm.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textPinMsgConfirm
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width
                     anchors.bottom: parent.bottom
                 }
             }
@@ -374,7 +392,58 @@ PageSecurityPinCodesForm {
         standardButtons: Dialog.Ok | Dialog.Cancel
 
         onAccepted: {
-            mainFormID.opacity = 1.0
+            var triesLeft = 0
+            propertyBusyIndicator.running = true
+
+            console.log("StackLayout currentIndex = " + protertyStackLayout.currentIndex)
+
+            if(textFieldPinNew.text === textFieldPinConfirm.text){
+
+                switch(protertyStackLayout.currentIndex) {
+                case 0:
+                    triesLeft = gapi.changeAuthPin(textFieldPinCurrent.text,textFieldPinNew.text)
+                    if(triesLeft !== Constants.TRIES_LEFT_ERROR)
+                        propertyTriesLeftAuthPin.text = "Restam " + triesLeft + " tentativas."
+                    break;
+                case 1:
+                    triesLeft = gapi.changeSignPin(textFieldPinCurrent.text,textFieldPinNew.text)
+                    if(triesLeft !== Constants.TRIES_LEFT_ERROR)
+                        propertyTriesLeftSignPin.text = "Restam " + triesLeft + " tentativas."
+                    break;
+                case 2:
+                    triesLeft = gapi.changeAddressPin(textFieldPinCurrent.text,textFieldPinNew.text)
+                    if(triesLeft !== Constants.TRIES_LEFT_ERROR)
+                        propertyTriesLeftAddressPin.text = "Restam " + triesLeft + " tentativas."
+                    break;
+                default:
+                    break
+                }
+
+                dialogTestPin.visible = false
+                mainFormID.opacity = 1.0
+                propertyBusyIndicator.running = false
+
+                if (triesLeft === 3) {
+                    dialogPinOK.open()
+                }
+                else if (triesLeft === 0) {
+                    textBadPin.text = "PIN bloqueado!"
+                    dialogBadPin.open()
+                }
+                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                    textBadPin.text = "Erro na leitura do cartão!"
+                    dialogBadPin.open()
+                }
+                else {
+                    textBadPin.text = "PIN errado! " + triesLeft + " tentativas restantes"
+
+                    dialogBadPin.open()
+                }
+            }else{
+                propertyBusyIndicator.running = false
+                textPinMsgConfirm.text = "PIN de confirmação não é igual!"
+                dialogModifyPin.open()
+            }
         }
         onRejected: {
             mainFormID.opacity = 1.0
@@ -385,6 +454,10 @@ PageSecurityPinCodesForm {
     propertyButtonModifyAuth{
         onClicked: {
             mainFormID.opacity = 0.5
+            dialogModifyPin.propertyLabelModifyTextTitle.text = "Modificar o Pin da Morada"
+            dialogModifyPin.propertyTextFieldPinCurrent.text = ""
+            dialogModifyPin.propertyTextFieldPinNew.text = ""
+            dialogModifyPin.propertyTextFieldPinConfirm.text = ""
             dialogModifyPin.open()
         }
     }
@@ -400,6 +473,10 @@ PageSecurityPinCodesForm {
     propertyButtonModifySign{
         onClicked: {
             mainFormID.opacity = 0.5
+            dialogModifyPin.propertyLabelModifyTextTitle.text = "Modificar o Pin da Assinatura"
+            dialogModifyPin.propertyTextFieldPinCurrent.text = ""
+            dialogModifyPin.propertyTextFieldPinNew.text = ""
+            dialogModifyPin.propertyTextFieldPinConfirm.text = ""
             dialogModifyPin.open()
         }
     }
@@ -415,6 +492,10 @@ PageSecurityPinCodesForm {
     propertyButtonModifyAddress{
         onClicked: {
             mainFormID.opacity = 0.5
+            dialogModifyPin.propertyLabelModifyTextTitle.text = "Modificar o Pin da Morada"
+            dialogModifyPin.propertyTextFieldPinCurrent.text = ""
+            dialogModifyPin.propertyTextFieldPinNew.text = ""
+            dialogModifyPin.propertyTextFieldPinConfirm.text = ""
             dialogModifyPin.open()
         }
     }

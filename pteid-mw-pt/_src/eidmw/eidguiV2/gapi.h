@@ -124,6 +124,11 @@ public slots:
     unsigned int getTriesLeftSignPin();
     unsigned int verifyAddressPin(QString pin);
     unsigned int getTriesLeftAddressPin();
+
+    unsigned int changeAuthPin(QString currentPin, QString newPin);
+    unsigned int changeSignPin(QString currentPin, QString newPin);
+    unsigned int changeAddressPin(QString currentPin, QString newPin);
+
     QString getCardActivation();
     QString getDataCardIdentifyValue(GAPI::IDInfoKey key);
     QString getAddressField(GAPI::AddressInfoKey key);
