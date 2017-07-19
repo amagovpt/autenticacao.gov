@@ -26,23 +26,23 @@ PageCardAdressForm {
             propertyBusyIndicator.running = false
 
             gapi.setAddressLoaded(true)
-            verifypin_dialog.visible = false
+            dialogTestPin.visible = false
         }
     }
 
     Dialog {
-        id: badpin_dialog
+        id: dialogBadPin
         width: 400
         height: 200
         visible: false
         font.family: lato.name
         // Center dialog in the main view
         x: - mainMenuView.width - subMenuView.width
-           + mainView.width * 0.5 - badpin_dialog.width * 0.5
-        y: parent.height * 0.5 - badpin_dialog.height * 0.5
+           + mainView.width * 0.5 - dialogBadPin.width * 0.5
+        y: parent.height * 0.5 - dialogBadPin.height * 0.5
 
         header: Label {
-              text: "Erro - verificação de PIN"
+              text: "Verificação de PIN"
               elide: Label.ElideRight
               padding: 24
               bottomPadding: 0
@@ -74,19 +74,24 @@ PageCardAdressForm {
                 }
             }
         }
-        standardButtons: DialogButtonBox.Ok
+        standardButtons: DialogButtonBox.Retry | DialogButtonBox.Cancel
+
+        onAccepted: {
+            textFieldPin.text = ""
+            dialogTestPin.open()
+        }
     }
 
     Dialog {
-        id: verifypin_dialog
+        id: dialogTestPin
         width: 400
         height: 200
         visible: false
         font.family: lato.name
         // Center dialog in the main view
         x: - mainMenuView.width - subMenuView.width
-           + mainView.width * 0.5 - verifypin_dialog.width * 0.5
-        y: parent.height * 0.5 - verifypin_dialog.height * 0.5
+           + mainView.width * 0.5 - dialogTestPin.width * 0.5
+        y: parent.height * 0.5 - dialogTestPin.height * 0.5
 
         header: Label {
               text: "Verificar o Pin da Morada"
@@ -104,7 +109,7 @@ PageCardAdressForm {
 
             Item {
                 id: rectPin
-                width: textPin.width + textFieldPin.width
+                width: parent.width
                 height: 50
 
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -117,31 +122,36 @@ PageCardAdressForm {
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
-                    width: 150
+                    width: parent.width * 0.5
                     anchors.bottom: parent.bottom
                 }
                 TextField {
                     id: textFieldPin
-                    width: 150
+                    width: parent.width * 0.5
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldPin.text === "" ? true: false
                     placeholderText: "PIN Atual?"
                     echoMode : TextInput.Password
+                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    maximumLength: 8
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textPin.right
-                    anchors.leftMargin: 20
                     anchors.bottom: parent.bottom
                 }
             }
        }
-        standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
+        standardButtons: {
+            textFieldPin.length >= 4 ? DialogButtonBox.Ok | DialogButtonBox.Cancel : DialogButtonBox.Cancel
+        }
 
         onAccepted: {
             if (gapi.isAddressLoaded) {
                 console.debug("Address is already loaded! Hiding pin dialog...")
-                verifypin_dialog.visible = false
+                dialogTestPin.visible = false
+                propertyBusyIndicator.running = true
+                gapi.startReadingAddress()
                 return;
             }
 
@@ -153,11 +163,11 @@ PageCardAdressForm {
             }
             else if (triesLeft === 0) {
                 textBadPin.text = "PIN de morada bloqueado!"
-                badpin_dialog.open()
+                dialogBadPin.open()
             }
             else {
-                textBadPin.text = "PIN errado! " + triesLeft + " tentativas restantes"
-                badpin_dialog.open()
+                textBadPin.text = "O PIN introduzido está errado! \n\n" + "Restam "+ triesLeft + " tentativas."
+                dialogBadPin.open()
             }
         }
         onRejected: {
@@ -167,6 +177,12 @@ PageCardAdressForm {
 
     Component.onCompleted: {
         console.log("Page Card Address Completed")
-        verifypin_dialog.open()
+        if (gapi.isAddressLoaded) {
+            propertyBusyIndicator.running = true
+            gapi.startReadingAddress()
+        }else{
+            textFieldPin.text = ""
+            dialogTestPin.open()
+        }
     }
 }
