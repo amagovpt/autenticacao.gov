@@ -75,11 +75,45 @@ PageSecurityPinCodesForm {
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - dialogPinOK.width * 0.5
         y: parent.height * 0.5 - dialogPinOK.height * 0.5
-        font.family: lato.name
-        font.pixelSize: 16
-        title: "PIN OK!"
-        standardButtons: Dialog.Ok
-        onAccepted: console.log("Ok clicked")
+
+        property alias propertyDialogOkLabelText: dialogOkLabelText
+        property alias propertyTextOkPin: textOkPin
+
+        header: Label {
+            id: dialogOkLabelText
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: 16
+            color: Constants.COLOR_MAIN_BLUE
+        }
+
+        Item {
+            width: parent.width
+            height: rectOkPin.height
+
+            Item {
+                id: rectOkPin
+                width: textTypePin.width + textFieldPin.width
+                height: 50
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textOkPin
+                    text: "PIN introduzido correctamente."
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: 150
+                    anchors.bottom: parent.bottom
+                }
+            }
+        }
+        standardButtons: DialogButtonBox.Ok
     }
 
     Dialog {
@@ -94,7 +128,7 @@ PageSecurityPinCodesForm {
         y: parent.height * 0.5 - dialogBadPin.height * 0.5
 
         header: Label {
-            text: "Erro - verificação de PIN"
+            text: "Verificação de PIN"
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
@@ -182,6 +216,8 @@ PageSecurityPinCodesForm {
                     font.italic: textFieldPin.text === "" ? true: false
                     placeholderText: "PIN Atual?"
                     echoMode : TextInput.Password
+                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    maximumLength: 8
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
@@ -191,7 +227,9 @@ PageSecurityPinCodesForm {
             }
         }
 
-        standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
+        standardButtons: {
+            textFieldPin.length >= 4 ? DialogButtonBox.Ok | DialogButtonBox.Cancel : DialogButtonBox.Cancel
+        }
 
         onAccepted: {
             var triesLeft = 0
@@ -223,6 +261,8 @@ PageSecurityPinCodesForm {
             propertyBusyIndicator.running = false
 
             if (triesLeft === 3) {
+                dialogPinOK.propertyDialogOkLabelText.text = "Verificação de PIN"
+                dialogPinOK.propertyTextOkPin.text = "PIN introduzido correctamente"
                 dialogPinOK.open()
             }
             else if (triesLeft === 0) {
@@ -234,8 +274,7 @@ PageSecurityPinCodesForm {
                 dialogBadPin.open()
             }
             else {
-                textBadPin.text = "PIN errado! " + triesLeft + " tentativas restantes"
-
+                textBadPin.text = "O PIN introduzido está errado! \n\n" + "Restam "+ triesLeft + " tentativas."
                 dialogBadPin.open()
             }
         }
@@ -258,6 +297,7 @@ PageSecurityPinCodesForm {
         property alias propertyTextFieldPinCurrent: textFieldPinCurrent
         property alias propertyTextFieldPinNew: textFieldPinNew
         property alias propertyTextFieldPinConfirm: textFieldPinConfirm
+        property alias propertyTextPinMsgConfirm: textPinMsgConfirm
 
 
         header: Label {
@@ -299,6 +339,8 @@ PageSecurityPinCodesForm {
                     font.italic: textFieldPinCurrent.text === "" ? true: false
                     placeholderText: "PIN Atual?"
                     echoMode : TextInput.Password
+                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    maximumLength: 8
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
@@ -331,6 +373,8 @@ PageSecurityPinCodesForm {
                     font.italic: textFieldPinNew.text === "" ? true: false
                     placeholderText: "Novo PIN?"
                     echoMode : TextInput.Password
+                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    maximumLength: 8
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
@@ -363,6 +407,8 @@ PageSecurityPinCodesForm {
                     font.italic: textFieldPinConfirm.text === "" ? true: false
                     placeholderText: "Confirmar novo PIN?"
                     echoMode : TextInput.Password
+                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    maximumLength: 8
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
@@ -389,7 +435,11 @@ PageSecurityPinCodesForm {
                 }
             }
         }
-        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        standardButtons: {
+            textFieldPinCurrent.length >= 4 && textFieldPinNew.length >=4 && textFieldPinConfirm.length >= 4
+                    ? DialogButtonBox.Ok | DialogButtonBox.Cancel : DialogButtonBox.Cancel
+        }
 
         onAccepted: {
             var triesLeft = 0
@@ -424,6 +474,8 @@ PageSecurityPinCodesForm {
                 propertyBusyIndicator.running = false
 
                 if (triesLeft === 3) {
+                    dialogPinOK.propertyDialogOkLabelText.text = "Modificação de PIN"
+                    dialogPinOK.propertyTextOkPin.text = "Alteração de PIN efectuada"
                     dialogPinOK.open()
                 }
                 else if (triesLeft === 0) {
@@ -435,13 +487,13 @@ PageSecurityPinCodesForm {
                     dialogBadPin.open()
                 }
                 else {
-                    textBadPin.text = "PIN errado! " + triesLeft + " tentativas restantes"
+                    textBadPin.text = "O PIN introduzido está errado! \n\n" + "Restam "+ triesLeft + " tentativas."
 
                     dialogBadPin.open()
                 }
             }else{
                 propertyBusyIndicator.running = false
-                textPinMsgConfirm.text = "PIN de confirmação não é igual!"
+                textPinMsgConfirm.text = "Novo PIN e PIN de confirmação têm de ser iguais"
                 dialogModifyPin.open()
             }
         }
@@ -454,10 +506,11 @@ PageSecurityPinCodesForm {
     propertyButtonModifyAuth{
         onClicked: {
             mainFormID.opacity = 0.5
-            dialogModifyPin.propertyLabelModifyTextTitle.text = "Modificar o Pin da Morada"
+            dialogModifyPin.propertyLabelModifyTextTitle.text = "Modificar o Pin de Autenticação"
             dialogModifyPin.propertyTextFieldPinCurrent.text = ""
             dialogModifyPin.propertyTextFieldPinNew.text = ""
             dialogModifyPin.propertyTextFieldPinConfirm.text = ""
+            dialogModifyPin.propertyTextPinMsgConfirm.text = ""
             dialogModifyPin.open()
         }
     }
@@ -477,6 +530,7 @@ PageSecurityPinCodesForm {
             dialogModifyPin.propertyTextFieldPinCurrent.text = ""
             dialogModifyPin.propertyTextFieldPinNew.text = ""
             dialogModifyPin.propertyTextFieldPinConfirm.text = ""
+            dialogModifyPin.propertyTextPinMsgConfirm.text = ""
             dialogModifyPin.open()
         }
     }
@@ -496,6 +550,7 @@ PageSecurityPinCodesForm {
             dialogModifyPin.propertyTextFieldPinCurrent.text = ""
             dialogModifyPin.propertyTextFieldPinNew.text = ""
             dialogModifyPin.propertyTextFieldPinConfirm.text = ""
+            dialogModifyPin.propertyTextPinMsgConfirm.text = ""
             dialogModifyPin.open()
         }
     }
