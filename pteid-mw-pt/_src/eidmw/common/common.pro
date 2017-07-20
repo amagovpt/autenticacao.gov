@@ -43,6 +43,11 @@ PROJECT_DIR = common
 DEPENDPATH += $${PROJECT_DIR} libtomcrypt Socket
 INCLUDEPATH += $${PROJECT_DIR} $${PROJECT_DIR}/libtomcrypt $${PROJECT_DIR}/Socket $${PCSC_INCLUDE_DIR}
 
+public_headers.files = eidErrors.h
+public_headers.path = $${INSTALL_DIR_INCLUDE}
+
+INSTALLS += public_headers
+
 QMAKE_CFLAGS_DEBUG += -O
 
 # Input
@@ -69,9 +74,6 @@ HEADERS += ByteArray.h \
            libtomcrypt/tomcrypt_cfg.h \
            libtomcrypt/tomcrypt_hash.h \
            libtomcrypt/tomcrypt_macros.h \
-           Socket/Socket.h \
-           Socket/SocketClient.h \
-           Socket/SocketServer.h
 
 SOURCES += ByteArray.cpp \
            ByteArrayReader.cpp \
@@ -94,7 +96,4 @@ SOURCES += ByteArray.cpp \
            libtomcrypt/sha256.c \
            libtomcrypt/sha384.c \
            libtomcrypt/sha512.c \
-	   libtomcrypt/rmd160.c \
-           Socket/Socket.cpp \
-           Socket/SocketClient.cpp \
-           Socket/SocketServer.cpp 
+	   libtomcrypt/rmd160.c
