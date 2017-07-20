@@ -210,7 +210,7 @@
         <File Id="eidlib.h" Name="eidlib.h" Source="..\..\..\eidlib\eidlib.h"/>
         <File Id="eidlibdefines.h" Name="eidlibdefines.h" Source="..\..\..\eidlib\eidlibdefines.h"/>
         <File Id="eidlibException.h" Name="eidlibException.h" Source="..\..\..\eidlib\eidlibException.h"/>
-        <File Id="eidErrors.h" Name="eidErrors.h" Source=""..\..\..\common\eidErrors.h" /> 
+        <File Id="eidErrors.h" Name="eidErrors.h" Source="..\..\..\common\eidErrors.h" /> 
       </Component>
     </DirectoryRef>
 
