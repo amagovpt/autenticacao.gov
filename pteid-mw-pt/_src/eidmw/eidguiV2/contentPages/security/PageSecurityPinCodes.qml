@@ -239,18 +239,39 @@ PageSecurityPinCodesForm {
             switch(protertyStackLayout.currentIndex) {
             case 0:
                 triesLeft = gapi.verifyAuthPin(textFieldPin.text)
-                if(triesLeft !== Constants.TRIES_LEFT_ERROR)
-                    propertyTriesLeftAuthPin.text = "Restam " + triesLeft + " tentativas."
+                if (triesLeft === 0) {
+                    propertyTriesLeftAuthPin.text = "PIN bloqueado!"
+                }
+                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                    propertyTriesLeftAuthPin.text = ""
+                }
+                else {
+                    propertyTriesLeftAuthPin.text = "Restam "+ triesLeft + " tentativas."
+                }
                 break;
             case 1:
                 triesLeft = gapi.verifySignPin(textFieldPin.text)
-                if(triesLeft !== Constants.TRIES_LEFT_ERROR)
-                    propertyTriesLeftSignPin.text = "Restam " + triesLeft + " tentativas."
+                if (triesLeft === 0) {
+                    propertyTriesLeftSignPin.text = "PIN bloqueado!"
+                }
+                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                    propertyTriesLeftSignPin.text = ""
+                }
+                else {
+                    propertyTriesLeftSignPin.text = "Restam "+ triesLeft + " tentativas."
+                }
                 break;
             case 2:
                 triesLeft = gapi.verifyAddressPin(textFieldPin.text)
-                if(triesLeft !== Constants.TRIES_LEFT_ERROR)
-                    propertyTriesLeftAddressPin.text = "Restam " + triesLeft + " tentativas."
+                if (triesLeft === 0) {
+                    propertyTriesLeftAddressPin.text = "PIN bloqueado!"
+                }
+                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                    propertyTriesLeftAddressPin.text = ""
+                }
+                else {
+                    propertyTriesLeftAddressPin.text = "Restam "+ triesLeft + " tentativas."
+                }
                 break;
             default:
                 break
@@ -428,7 +449,7 @@ PageSecurityPinCodesForm {
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
+                    color: Constants.COLOR_TEXT_BODY
                     height: parent.height
                     width: parent.width
                     anchors.bottom: parent.bottom
@@ -452,18 +473,39 @@ PageSecurityPinCodesForm {
                 switch(protertyStackLayout.currentIndex) {
                 case 0:
                     triesLeft = gapi.changeAuthPin(textFieldPinCurrent.text,textFieldPinNew.text)
-                    if(triesLeft !== Constants.TRIES_LEFT_ERROR)
-                        propertyTriesLeftAuthPin.text = "Restam " + triesLeft + " tentativas."
+                    if (triesLeft === 0) {
+                        propertyTriesLeftAuthPin.text = "PIN bloqueado!"
+                    }
+                    else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                        propertyTriesLeftAuthPin.text = ""
+                    }
+                    else {
+                        propertyTriesLeftAuthPin.text = "Restam "+ triesLeft + " tentativas."
+                    }
                     break;
                 case 1:
                     triesLeft = gapi.changeSignPin(textFieldPinCurrent.text,textFieldPinNew.text)
-                    if(triesLeft !== Constants.TRIES_LEFT_ERROR)
-                        propertyTriesLeftSignPin.text = "Restam " + triesLeft + " tentativas."
+                    if (triesLeft === 0) {
+                        propertyTriesLeftSignPin.text = "PIN bloqueado!"
+                    }
+                    else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                        propertyTriesLeftSignPin.text = ""
+                    }
+                    else {
+                        propertyTriesLeftSignPin.text = "Restam "+ triesLeft + " tentativas."
+                    }
                     break;
                 case 2:
                     triesLeft = gapi.changeAddressPin(textFieldPinCurrent.text,textFieldPinNew.text)
-                    if(triesLeft !== Constants.TRIES_LEFT_ERROR)
-                        propertyTriesLeftAddressPin.text = "Restam " + triesLeft + " tentativas."
+                    if (triesLeft === 0) {
+                        propertyTriesLeftAddressPin.text = "PIN bloqueado!"
+                    }
+                    else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                        propertyTriesLeftAddressPin.text = ""
+                    }
+                    else {
+                        propertyTriesLeftAddressPin.text = "Restam "+ triesLeft + " tentativas."
+                    }
                     break;
                 default:
                     break
@@ -572,8 +614,14 @@ PageSecurityPinCodesForm {
             case 0:
                 console.log("Auth Pin tries left = " + gapi.getTriesLeftAuthPin())
                 triesLeft = gapi.getTriesLeftAuthPin()
-                if(triesLeft !== Constants.TRIES_LEFT_ERROR){
-                    propertyTriesLeftAuthPin.text = "Restam " + triesLeft + " tentativas."
+                if (triesLeft === 0) {
+                    propertyTriesLeftAuthPin.text = "PIN bloqueado!"
+                }
+                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                    propertyTriesLeftAuthPin.text = ""
+                }
+                else {
+                    propertyTriesLeftAuthPin.text = "Restam "+ triesLeft + " tentativas."
                     propertyButtonModifyAuth.enabled = true
                     propertyButtonTestAuth.enabled = true
                 }
@@ -581,8 +629,14 @@ PageSecurityPinCodesForm {
             case 1:
                 console.log("Sign Pin tries left = " + gapi.getTriesLeftSignPin())
                 triesLeft = gapi.getTriesLeftSignPin()
-                if(triesLeft !== Constants.TRIES_LEFT_ERROR){
-                    propertyTriesLeftSignPin.text = "Restam " + triesLeft + " tentativas."
+                if (triesLeft === 0) {
+                    propertyTriesLeftSignPin.text = "PIN bloqueado!"
+                }
+                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                    propertyTriesLeftSignPin.text = ""
+                }
+                else {
+                    propertyTriesLeftSignPin.text = "Restam "+ triesLeft + " tentativas."
                     propertyButtonModifySign.enabled = true
                     propertyButtonTestSign.enabled = true
                 }
@@ -590,8 +644,14 @@ PageSecurityPinCodesForm {
             case 2:
                 console.log("Address Pin tries left = " + gapi.getTriesLeftAddressPin())
                 triesLeft = gapi.getTriesLeftAddressPin()
-                if(triesLeft !== Constants.TRIES_LEFT_ERROR){
-                    propertyTriesLeftAddressPin.text = "Restam " + triesLeft + " tentativas."
+                if (triesLeft === 0) {
+                    propertyTriesLeftAddressPin.text = "PIN bloqueado!"
+                }
+                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                    propertyTriesLeftAddressPin.text = ""
+                }
+                else {
+                    propertyTriesLeftAddressPin.text = "Restam "+ triesLeft + " tentativas."
                     propertyButtonModifyAddress.enabled = true
                     propertyButtonTestAddress.enabled = true
                 }
@@ -607,9 +667,14 @@ PageSecurityPinCodesForm {
         console.log("Auth Pin tries left = " + gapi.getTriesLeftAuthPin())
         var triesLeft = 0
         triesLeft = gapi.getTriesLeftAuthPin()
-
-        if(triesLeft !== Constants.TRIES_LEFT_ERROR){
-            propertyTriesLeftAuthPin.text = "Restam " + triesLeft + " tentativas."
+        if (triesLeft === 0) {
+            propertyTriesLeftAuthPin.text = "PIN bloqueado!"
+        }
+        else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+            propertyTriesLeftAuthPin.text = ""
+        }
+        else {
+            propertyTriesLeftAuthPin.text = "Restam "+ triesLeft + " tentativas."
             propertyButtonModifyAuth.enabled = true
             propertyButtonTestAuth.enabled = true
             propertyBusyIndicator.running = false
