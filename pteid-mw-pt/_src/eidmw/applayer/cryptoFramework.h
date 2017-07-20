@@ -96,6 +96,8 @@ struct tOcspCertID
 
 class CrlMemoryCache;
 
+void loadWindowsRootCertificates(X509_STORE *store);
+
 /******************************************************************************//**
   * Abstract class for cryptographic features 
   *

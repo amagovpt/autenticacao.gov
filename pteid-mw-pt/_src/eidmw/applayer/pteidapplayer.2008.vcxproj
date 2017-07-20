@@ -136,7 +136,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>wsock32.lib;Shlwapi.lib;libeay32.lib;ssleay32.lib;xerces-c_3.lib;libcurl.lib;freeimage.lib;pteid-poppler.lib;xsec_1.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;Shlwapi.lib;crypt32.lib;libeay32.lib;ssleay32.lib;xerces-c_3.lib;libcurl.lib;freeimage.lib;pteid-poppler.lib;xsec_1.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CURL)\lib;$(PTEID_DIR_XERCES_31)\lib;$(PTEID_DIR_OPENSSL_098)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -201,7 +201,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>wsock32.lib;Shlwapi.lib;libeay32.lib;ssleay32.lib;xerces-c_3.lib;libcurl.lib;freeimage.lib;pteid-poppler.lib;xsec_1.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;Shlwapi.lib;crypt32.lib;libeay32.lib;ssleay32.lib;xerces-c_3.lib;libcurl.lib;freeimage.lib;pteid-poppler.lib;xsec_1.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <Version />
       <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CURL_X64)\lib;$(PTEID_DIR_XERCES_31_X64)\lib;$(PTEID_DIR_OPENSSL_098_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

@@ -12,6 +12,7 @@
 
 #include "MWException.h"
 #include "eidErrors.h"
+#include "cryptoFramework.h"
 #include "APLConfig.h"
 #include "APLCertif.h"
 #include "Log.h"
@@ -134,7 +135,7 @@ void SSLConnection::loadAllRootCerts(X509_STORE *store)
 				if (X509_STORE_add_cert(store, pCert) == 0)
 				{
 					char *loading_error = ERR_error_string(ERR_get_error(), NULL);
-					MWLOG(LEV_ERROR, MOD_APL, "SSLConnection::loadAllRootCerts: error adding certificate #%d Details: %s",
+					MWLOG(LEV_DEBUG, MOD_APL, "SSLConnection::loadAllRootCerts: error adding certificate #%d Details: %s",
 					  i, loading_error);
 				}
 			}
@@ -894,13 +895,11 @@ void SSLConnection::connect_encrypted(char* host_and_port)
     //Load cert chain for the current card
     loadCertChain(store, cert);
 
-    //Load any available root cert to validate the server certificate
-    //It may load some cert already loaded by loadCertChain() but it's best not to miss anything...
-	loadAllRootCerts(store);
+    //Load any available root cert to validate the server certificate (needed for AddressChange test server)
+    loadAllRootCerts(store);
 	
-    if(!(SSL_CTX_load_verify_locations(ctx,
-			NULL, "/etc/ssl/certs")))
-	fprintf(stderr, "Can't read CA list\n");
+	loadWindowsRootCertificates(store);
+	SSL_CTX_set_default_verify_paths(ctx);
 
     SSL_CTX_set_options(ctx, SSL_OP_NO_TICKET | SSL_OP_NO_SSLv2);
     SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
