@@ -16,9 +16,6 @@
     <Filter Include="libtomcrypt">
       <UniqueIdentifier>{7bd84bcb-c1c8-49aa-a251-77ab27716a3e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sockets">
-      <UniqueIdentifier>{ac65b6df-fcf1-497f-bbe6-8769d634132a}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ByteArray.cpp">
@@ -87,15 +84,6 @@
     <ClCompile Include="libtomcrypt\sha512.c">
       <Filter>libtomcrypt</Filter>
     </ClCompile>
-    <ClCompile Include="Socket\Socket.cpp">
-      <Filter>Sockets</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\SocketClient.cpp">
-      <Filter>Sockets</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\SocketServer.cpp">
-      <Filter>Sockets</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ByteArray.h">
@@ -160,15 +148,6 @@
     </ClInclude>
     <ClInclude Include="libtomcrypt\tomcrypt_macros.h">
       <Filter>libtomcrypt</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\Socket.h">
-      <Filter>Sockets</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\SocketClient.h">
-      <Filter>Sockets</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\SocketServer.h">
-      <Filter>Sockets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

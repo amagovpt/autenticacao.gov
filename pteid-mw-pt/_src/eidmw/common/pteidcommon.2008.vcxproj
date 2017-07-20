@@ -291,9 +291,6 @@ xcopy /D /Y $(PTEID_DIR_CURL_X64)\bin\libcurl.dll $(TargetDir)
     <ClCompile Include="LogBase.cpp" />
     <ClCompile Include="Mutex.cpp" />
     <ClCompile Include="MWException.cpp" />
-    <ClCompile Include="Socket\Socket.cpp" />
-    <ClCompile Include="Socket\SocketClient.cpp" />
-    <ClCompile Include="Socket\SocketServer.cpp" />
     <ClCompile Include="StringOps.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="TLV.cpp" />
@@ -316,9 +313,6 @@ xcopy /D /Y $(PTEID_DIR_CURL_X64)\bin\libcurl.dll $(TargetDir)
     <ClInclude Include="LogBase.h" />
     <ClInclude Include="Mutex.h" />
     <ClInclude Include="MWException.h" />
-    <ClInclude Include="Socket\Socket.h" />
-    <ClInclude Include="Socket\SocketClient.h" />
-    <ClInclude Include="Socket\SocketServer.h" />
     <ClInclude Include="StringOps.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="ThreadDefines.h" />
