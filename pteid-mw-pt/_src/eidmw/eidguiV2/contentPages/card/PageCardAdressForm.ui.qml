@@ -24,6 +24,8 @@ Item {
 
     property alias propertyBusyIndicator: busyIndicator
 
+    property alias propertyButtonConfirmOfAddress : buttonConfirmOfAddress
+
     anchors.fill: parent
     Item {
         id: rowTop
@@ -284,6 +286,7 @@ Item {
             anchors.left: rectConfirmationOfAddressText.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Button {
+                id: buttonConfirmOfAddress
                 text: "Alteração de morada"
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT

@@ -286,6 +286,60 @@ unsigned int GAPI::changeSignPin(QString currentPin, QString newPin) {
     return (unsigned int)tries_left;
 }
 
+void GAPI::showChangeAddressDialog(long code)
+{
+    QString error_msg;
+    long sam_error_code = 0;
+    QString support_string = tr("Please try again. If this error persists, please have your"
+                                " process number and error code ready, and contact the"
+                                " Citizen Card support line at telephone number +351 211 950 500 or e-mail cartaodecidadao@irn.mj.pt.");
+
+    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code 0x%08x", code);
+
+    switch(code)
+    {
+        case 0:
+            error_msg = tr("Address Confirmed successfully.");
+            break;
+        //The error code for connection error is common between SAM and OTP
+        case EIDMW_OTP_CONNECTION_ERROR:
+            error_msg = tr("Connection Error") + "\n\n" +
+                tr("Please make sure you are connected to the Internet");
+            break;
+
+        case 1121:
+        case 1122:
+            error_msg = tr("Error in the Address Change operation!") + "\n\n" + tr("Please make sure you typed the correct process number and confirmation code");
+            sam_error_code = code;
+            break;
+        case EIDMW_SAM_UNCONFIRMED_CHANGE:
+            error_msg = tr("Address change process is incomplete!") + "\n\n" + tr("The address is changed in the card but not confirmed by the State central services");
+            break;
+        case EIDMW_SSL_PROTOCOL_ERROR:
+            error_msg = tr("Error in the Address Change operation!") + "\n\n" + tr("Please make sure you have a valid authentication certificate");
+            break;
+        default:
+            //Make sure we only show the user error codes from the SAM service and not some weird pteid exception error code
+            if (code > 1100 && code < 3500)
+                sam_error_code = code;
+            error_msg = tr("Error in the Address Change operation!");
+            break;
+    }
+
+    if (sam_error_code != 0)
+    {
+        error_msg += "\n\n" + tr("Error code = ") + QString::number(sam_error_code);
+    }
+
+    if (code != 0)
+        error_msg += "\n\n" + support_string;
+
+    qDebug() << error_msg;
+    signalUpdateProgressStatus(error_msg);
+
+    //TO-DO: Reload card information in case of successful address change
+}
+
 unsigned int GAPI::changeAddressPin(QString currentPin, QString newPin) {
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
@@ -304,6 +358,52 @@ unsigned int GAPI::changeAddressPin(QString currentPin, QString newPin) {
 
     //QML default types don't include long
     return (unsigned int)tries_left;
+}
+
+void GAPI::addressChangeCallback(void *instance, int value)
+{
+    qDebug() << "addressChangeCallback";
+    GAPI * gapi = (GAPI*) (instance);
+    gapi->signalUpdateProgressBar(value);
+}
+
+void GAPI::doChangeAddress(const char *process, const char *secret_code)
+{
+    qDebug() << "DoChangeAddress!";
+
+    PTEID_EIDCard& Card = getCardInstance();
+    try
+    {
+        Card.ChangeAddress((char *)secret_code, (char*)process, &GAPI::addressChangeCallback, (void*)this);
+    }
+    catch(PTEID_Exception & exception)
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Caught exception in EidCard.ChangeAddress()... closing progressBar");
+        this->signalUpdateProgressBar(100);
+        this->addressChangeFinished(exception.GetError());
+
+        free((char *)process);
+        free((char *)secret_code);
+        return;
+    }
+
+    free((char *)process);
+    free((char *)secret_code);
+    this->addressChangeFinished(0);
+}
+
+void GAPI::changeAddress(QString process, QString secret_code)
+{
+    qDebug() << "ChangeAddress! process = " + process + " secret_code = " + secret_code;
+
+    signalUpdateProgressStatus(tr("Mudando a morada no Cartão..."));
+
+    connect(this, SIGNAL(addressChangeFinished(long)),
+     this, SLOT(showChangeAddressDialog(long)), Qt::UniqueConnection);
+
+    char *processUtf8 = strdup(process.toUtf8().constData());
+    char *secret_codeUtf8 = strdup(secret_code.toUtf8().constData());
+    QtConcurrent::run(this, &GAPI::doChangeAddress, processUtf8, secret_codeUtf8);
 }
 
 QString GAPI::getCardActivation() {

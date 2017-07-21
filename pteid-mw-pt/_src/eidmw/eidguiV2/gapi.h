@@ -13,6 +13,7 @@
 
 //MW libraries
 #include "eidlib.h"
+#include "eidErrors.h"
 #include "eidlibException.h"
 
 /*
@@ -129,6 +130,11 @@ public slots:
     unsigned int changeSignPin(QString currentPin, QString newPin);
     unsigned int changeAddressPin(QString currentPin, QString newPin);
 
+    void changeAddress(QString process, QString secret_code);
+    void doChangeAddress(const char *process, const char *secret_code);
+    static void addressChangeCallback(void *, int);
+    void showChangeAddressDialog(long code);
+
     QString getCardActivation();
     QString getDataCardIdentifyValue(GAPI::IDInfoKey key);
     QString getAddressField(GAPI::AddressInfoKey key);
@@ -143,6 +149,9 @@ signals:
     void signalAddressLoadedChanged();
     void signalPdfSignSucess();
     void signalPdfSignError();
+    void signalUpdateProgressBar(int value);
+    void signalUpdateProgressStatus(const QString statusMessage);
+    void addressChangeFinished(long return_code);
 
 private:
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
