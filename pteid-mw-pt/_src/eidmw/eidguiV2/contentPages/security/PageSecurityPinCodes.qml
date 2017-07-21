@@ -17,14 +17,14 @@ PageSecurityPinCodesForm {
             propertyBusyIndicator.running = false
             if (error_code === GAPI.NoReaderFound) {
                 console.log("Error: No card reader found!")
-                dialogError.propertyDialogErrorLabelText.text = "Error: No card reader found!"
+                dialogError.propertyDialogErrorLabelText.text = "No card reader found!"
             }
             else if (error_code === GAPI.NoCardFound) {
                 console.log("Error: No Card Found!")
-                dialogError.propertyDialogErrorLabelText.text = "Error: No Card Found!"
+                dialogError.propertyDialogErrorLabelText.text = "No Card Found!"
             }else {
                 console.log("Error: Reading Card Error")
-                dialogError.propertyDialogErrorLabelText.text = "Error: Reading Card Error!"
+                dialogError.propertyDialogErrorLabelText.text = "Reading Card Error!"
             }
 
             propertyTriesLeftAuthPin.text = ""
@@ -53,10 +53,11 @@ PageSecurityPinCodesForm {
            + mainView.width * 0.5 - dialogError.width * 0.5
         y: parent.height * 0.5 - dialogError.height * 0.5
 
-        property alias propertyDialogErrorLabelText: dialogErrorLabelText
+        property alias propertyDialogErrorLabelText: textError
 
         header: Label {
             id: dialogErrorLabelText
+            text: "Error"
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
@@ -64,7 +65,40 @@ PageSecurityPinCodesForm {
             font.pixelSize: 16
             color: Constants.COLOR_MAIN_BLUE
         }
-        standardButtons: DialogButtonBox.Ok
+        Item {
+            width: parent.width
+            height: rectError.height
+
+            Item {
+                id: rectError
+                width: parent.width
+                height: 90
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textError
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                }
+            }
+            Button {
+                width: Constants.WIDTH_BUTTON
+                height:Constants.HEIGHT_BOTTOM_COMPONENT
+                text: "OK"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: rectError.bottom
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
+                onClicked: dialogError.close()
+            }
+        }
     }
 
     Dialog {
@@ -95,9 +129,8 @@ PageSecurityPinCodesForm {
 
             Item {
                 id: rectOkPin
-                width: textTypePin.width + textFieldPin.width
-                height: 50
-
+                width: parent.width
+                height: 90
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textOkPin
@@ -109,11 +142,21 @@ PageSecurityPinCodesForm {
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
                     width: 150
-                    anchors.bottom: parent.bottom
                 }
             }
+            Button {
+                width: Constants.WIDTH_BUTTON
+                height:Constants.HEIGHT_BOTTOM_COMPONENT
+                text: "OK"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: rectOkPin.bottom
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
+                onClicked: dialogPinOK.close()
+            }
         }
-        standardButtons: DialogButtonBox.Ok
+
     }
 
     Dialog {
@@ -144,7 +187,7 @@ PageSecurityPinCodesForm {
             Item {
                 id: rectBadPin
                 width: textTypePin.width + textFieldPin.width
-                height: 50
+                height: 90
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
@@ -159,8 +202,18 @@ PageSecurityPinCodesForm {
                     anchors.bottom: parent.bottom
                 }
             }
+            Button {
+                width: Constants.WIDTH_BUTTON
+                height:Constants.HEIGHT_BOTTOM_COMPONENT
+                text: "OK"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: rectBadPin.bottom
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
+                onClicked: dialogBadPin.close()
+            }
         }
-        standardButtons: DialogButtonBox.Ok
     }
 
     Dialog {
@@ -547,62 +600,183 @@ PageSecurityPinCodesForm {
     // Buttons actions
     propertyButtonModifyAuth{
         onClicked: {
-            mainFormID.opacity = 0.5
-            dialogModifyPin.propertyLabelModifyTextTitle.text = "Modificar o Pin de Autenticação"
-            dialogModifyPin.propertyTextFieldPinCurrent.text = ""
-            dialogModifyPin.propertyTextFieldPinNew.text = ""
-            dialogModifyPin.propertyTextFieldPinConfirm.text = ""
-            dialogModifyPin.propertyTextPinMsgConfirm.text = ""
-            dialogModifyPin.open()
+            if(Constants.USE_SDK_PIN_UI_POPUP){
+                var triesLeft = 0
+                triesLeft = gapi.changeAuthPin("","")
+                if (triesLeft === 3) {
+                    dialogPinOK.propertyDialogOkLabelText.text = "Modificação de PIN"
+                    dialogPinOK.propertyTextOkPin.text = "Alteração de PIN efectuada"
+                    dialogPinOK.open()
+                }
+                if (triesLeft === 0) {
+                    propertyTriesLeftAuthPin.text = "PIN bloqueado!"
+                }
+                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                    propertyTriesLeftAuthPin.text = ""
+                }
+                else {
+                    propertyTriesLeftAuthPin.text = "Restam "+ triesLeft + " tentativas."
+                }
+            }else{
+                mainFormID.opacity = 0.5
+                dialogModifyPin.propertyLabelModifyTextTitle.text = "Modificar o Pin de Autenticação"
+                dialogModifyPin.propertyTextFieldPinCurrent.text = ""
+                dialogModifyPin.propertyTextFieldPinNew.text = ""
+                dialogModifyPin.propertyTextFieldPinConfirm.text = ""
+                dialogModifyPin.propertyTextPinMsgConfirm.text = ""
+                dialogModifyPin.open()
+            }
         }
     }
     propertyButtonTestAuth{
         onClicked: {
-            mainFormID.opacity = 0.5
-            dialogTestPin.propertyLabelTextTitle.text = "Verificar o Pin da Autenticação"
-            dialogTestPin.propertyTextTypePin.text = "PIN da Autenticação"
-            dialogTestPin.propertyTextFieldPin.text = ""
-            dialogTestPin.open()
+            if(Constants.USE_SDK_PIN_UI_POPUP){
+                var triesLeft = 0
+                triesLeft = gapi.verifyAuthPin("")
+                if (triesLeft === 3) {
+                    dialogPinOK.propertyDialogOkLabelText.text = "Verificação de PIN"
+                    dialogPinOK.propertyTextOkPin.text = "PIN introduzido correctamente"
+                    dialogPinOK.open()
+                }
+                if (triesLeft === 0) {
+                    propertyTriesLeftAuthPin.text = "PIN bloqueado!"
+                }
+                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                    propertyTriesLeftAuthPin.text = ""
+                }
+                else {
+                    propertyTriesLeftAuthPin.text = "Restam "+ triesLeft + " tentativas."
+                }
+            }else{
+                mainFormID.opacity = 0.5
+                dialogTestPin.propertyLabelTextTitle.text = "Verificar o Pin da Autenticação"
+                dialogTestPin.propertyTextTypePin.text = "PIN da Autenticação"
+                dialogTestPin.propertyTextFieldPin.text = ""
+                dialogTestPin.open()
+            }
+
         }
     }
     propertyButtonModifySign{
         onClicked: {
-            mainFormID.opacity = 0.5
-            dialogModifyPin.propertyLabelModifyTextTitle.text = "Modificar o Pin da Assinatura"
-            dialogModifyPin.propertyTextFieldPinCurrent.text = ""
-            dialogModifyPin.propertyTextFieldPinNew.text = ""
-            dialogModifyPin.propertyTextFieldPinConfirm.text = ""
-            dialogModifyPin.propertyTextPinMsgConfirm.text = ""
-            dialogModifyPin.open()
+
+
+            if(Constants.USE_SDK_PIN_UI_POPUP){
+                var triesLeft = 0
+                triesLeft = gapi.changeSignPin("","")
+                if (triesLeft === 3) {
+                    dialogPinOK.propertyDialogOkLabelText.text = "Modificação de PIN"
+                    dialogPinOK.propertyTextOkPin.text = "Alteração de PIN efectuada"
+                    dialogPinOK.open()
+                }
+                if (triesLeft === 0) {
+                    propertyTriesLeftSignPin.text = "PIN bloqueado!"
+                }
+                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                    propertyTriesLeftSignPin.text = ""
+                }
+                else {
+                    propertyTriesLeftSignPin.text = "Restam "+ triesLeft + " tentativas."
+                }
+            }else{
+                mainFormID.opacity = 0.5
+                dialogModifyPin.propertyLabelModifyTextTitle.text = "Modificar o Pin da Assinatura"
+                dialogModifyPin.propertyTextFieldPinCurrent.text = ""
+                dialogModifyPin.propertyTextFieldPinNew.text = ""
+                dialogModifyPin.propertyTextFieldPinConfirm.text = ""
+                dialogModifyPin.propertyTextPinMsgConfirm.text = ""
+                dialogModifyPin.open()
+            }
         }
     }
     propertyButtonTestSign{
         onClicked: {
-            mainFormID.opacity = 0.5
-            dialogTestPin.propertyLabelTextTitle.text = "Verificar o Pin da Assinatura"
-            dialogTestPin.propertyTextTypePin.text = "PIN da Assinatura"
-            dialogTestPin.propertyTextFieldPin.text = ""
-            dialogTestPin.open()
+
+
+            if(Constants.USE_SDK_PIN_UI_POPUP){
+                var triesLeft = 0
+                triesLeft = gapi.verifySignPin("")
+                if (triesLeft === 3) {
+                    dialogPinOK.propertyDialogOkLabelText.text = "Verificação de PIN"
+                    dialogPinOK.propertyTextOkPin.text = "PIN introduzido correctamente"
+                    dialogPinOK.open()
+                }
+                if (triesLeft === 0) {
+                    propertyTriesLeftSignPin.text = "PIN bloqueado!"
+                }
+                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                    propertyTriesLeftSignPin.text = ""
+                }
+                else {
+                    propertyTriesLeftSignPin.text = "Restam "+ triesLeft + " tentativas."
+                }
+            }else{
+                mainFormID.opacity = 0.5
+                dialogTestPin.propertyLabelTextTitle.text = "Verificar o Pin da Assinatura"
+                dialogTestPin.propertyTextTypePin.text = "PIN da Assinatura"
+                dialogTestPin.propertyTextFieldPin.text = ""
+                dialogTestPin.open()
+            }
         }
     }
     propertyButtonModifyAddress{
         onClicked: {
-            mainFormID.opacity = 0.5
-            dialogModifyPin.propertyLabelModifyTextTitle.text = "Modificar o Pin da Morada"
-            dialogModifyPin.propertyTextFieldPinCurrent.text = ""
-            dialogModifyPin.propertyTextFieldPinNew.text = ""
-            dialogModifyPin.propertyTextFieldPinConfirm.text = ""
-            dialogModifyPin.propertyTextPinMsgConfirm.text = ""
-            dialogModifyPin.open()
+
+            if(Constants.USE_SDK_PIN_UI_POPUP){
+                var triesLeft = 0
+                triesLeft = gapi.changeSignPin("","")
+                if (triesLeft === 3) {
+                    dialogPinOK.propertyDialogOkLabelText.text = "Modificação de PIN"
+                    dialogPinOK.propertyTextOkPin.text = "Alteração de PIN efectuada"
+                    dialogPinOK.open()
+                }
+                if (triesLeft === 0) {
+                    propertyTriesLeftSignPin.text = "PIN bloqueado!"
+                }
+                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                    propertyTriesLeftSignPin.text = ""
+                }
+                else {
+                    propertyTriesLeftSignPin.text = "Restam "+ triesLeft + " tentativas."
+                }
+            }else{
+                mainFormID.opacity = 0.5
+                dialogModifyPin.propertyLabelModifyTextTitle.text = "Modificar o Pin da Morada"
+                dialogModifyPin.propertyTextFieldPinCurrent.text = ""
+                dialogModifyPin.propertyTextFieldPinNew.text = ""
+                dialogModifyPin.propertyTextFieldPinConfirm.text = ""
+                dialogModifyPin.propertyTextPinMsgConfirm.text = ""
+                dialogModifyPin.open()
+            }
         }
     }
     propertyButtonTestAddress{
         onClicked: {
-            mainFormID.opacity = 0.5
-            dialogTestPin.propertyLabelTextTitle.text = "Verificar o Pin da Morada"
-            dialogTestPin.propertyTextTypePin.text = "PIN da Morada"
-            dialogTestPin.propertyTextFieldPin.text = ""
-            dialogTestPin.open()
+
+            if(Constants.USE_SDK_PIN_UI_POPUP){
+                var triesLeft = 0
+                triesLeft = gapi.verifyAddressPin("")
+                if (triesLeft === 3) {
+                    dialogPinOK.propertyDialogOkLabelText.text = "Verificação de PIN"
+                    dialogPinOK.propertyTextOkPin.text = "PIN introduzido correctamente"
+                    dialogPinOK.open()
+                }
+                if (triesLeft === 0) {
+                    propertyTriesLeftAddressPin.text = "PIN bloqueado!"
+                }
+                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                    propertyTriesLeftAddressPin.text = ""
+                }
+                else {
+                    propertyTriesLeftAddressPin.text = "Restam "+ triesLeft + " tentativas."
+                }
+            }else{
+                mainFormID.opacity = 0.5
+                dialogTestPin.propertyLabelTextTitle.text = "Verificar o Pin da Morada"
+                dialogTestPin.propertyTextTypePin.text = "PIN da Morada"
+                dialogTestPin.propertyTextFieldPin.text = ""
+                dialogTestPin.open()
+            }
         }
     }
     protertyStackLayout{
@@ -649,6 +823,8 @@ PageSecurityPinCodesForm {
                 }
                 else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
                     propertyTriesLeftAddressPin.text = ""
+                    propertyButtonModifyAddress.enabled = true
+                    propertyButtonTestAddress.enabled = true
                 }
                 else {
                     propertyTriesLeftAddressPin.text = "Restam "+ triesLeft + " tentativas."
@@ -672,6 +848,8 @@ PageSecurityPinCodesForm {
         }
         else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
             propertyTriesLeftAuthPin.text = ""
+            propertyButtonModifyAuth.enabled = true
+            propertyButtonTestAuth.enabled = true
         }
         else {
             propertyTriesLeftAuthPin.text = "Restam "+ triesLeft + " tentativas."

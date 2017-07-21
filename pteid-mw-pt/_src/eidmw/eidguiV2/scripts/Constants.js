@@ -1,6 +1,9 @@
 // Constants.js
 .pragma library
 
+// Program options
+var USE_SDK_PIN_UI_POPUP = true
+
 // Error Constants
 var TRIES_LEFT_ERROR = 1000
 

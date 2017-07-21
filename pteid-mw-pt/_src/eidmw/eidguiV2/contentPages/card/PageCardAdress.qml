@@ -26,7 +26,8 @@ PageCardAdressForm {
             propertyBusyIndicator.running = false
 
             gapi.setAddressLoaded(true)
-            dialogTestPin.visible = false
+            if(!Constants.USE_SDK_PIN_UI_POPUP)
+                dialogTestPin.visible = false
         }
         onSignalUpdateProgressBar: {
             console.log("Address change --> update progress bar with value = " + value)
@@ -415,8 +416,16 @@ PageCardAdressForm {
             propertyBusyIndicator.running = true
             gapi.startReadingAddress()
         }else{
-            textFieldPin.text = ""
-            dialogTestPin.open()
+            if(Constants.USE_SDK_PIN_UI_POPUP){
+                var triesLeft = gapi.verifyAddressPin("")
+                if (triesLeft === 3) {
+                    propertyBusyIndicator.running = true
+                    gapi.startReadingAddress()
+                }
+            }else{
+                dialogTestPin.open()
+                textFieldPin.text = ""
+            }
         }
     }
 }
