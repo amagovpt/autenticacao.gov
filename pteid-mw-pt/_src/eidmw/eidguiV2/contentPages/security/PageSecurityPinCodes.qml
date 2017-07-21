@@ -677,7 +677,8 @@ PageSecurityPinCodesForm {
             propertyTriesLeftAuthPin.text = "Restam "+ triesLeft + " tentativas."
             propertyButtonModifyAuth.enabled = true
             propertyButtonTestAuth.enabled = true
-            propertyBusyIndicator.running = false
+
         }
+        propertyBusyIndicator.running = false
     }
 }
