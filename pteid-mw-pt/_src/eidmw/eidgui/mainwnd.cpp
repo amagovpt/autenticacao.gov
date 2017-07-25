@@ -526,7 +526,7 @@ void MainWnd::showChangeAddressDialog(long code)
 							    " process number and error code ready, and contact the"
 							    " Citizen Card support line at telephone number +351 211 950 500 or e-mail cartaodecidadao@irn.mj.pt.");
 
-	PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code 0x%08x", code);
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "AddressChange op finished with error code 0x%08x", code);
 	QMessageBox::Icon icon = QMessageBox::NoIcon;
 	switch(code)
 	{

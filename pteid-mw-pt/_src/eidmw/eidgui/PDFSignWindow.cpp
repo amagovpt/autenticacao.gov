@@ -1191,7 +1191,6 @@ void PDFSignWindow::setPosition(QPointF new_pos)
     //printf("eidgui: DEBUG: this->ry: %f\n", this->ry);
     //Vertical coordinate needs the rectangle height offset because new_pos contains the top-left corner
     sig_coord_y = (this->ry + scaled_rectangle_height) / (g_scene_height);
-    qDebug() << "New coordinates=  x: " <<sig_coord_x << "y: " << sig_coord_y;
 
 }
 
