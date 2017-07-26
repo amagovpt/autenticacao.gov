@@ -28,6 +28,15 @@ PageServicesSignAdvancedForm {
         onSignalPdfSignError: {
             signerror_dialog.visible = true
         }
+
+    }
+    Connections {
+        target: image_provider_pdf
+        onSignalPdfSourceChanged: {
+            console.log("Receive signal onSignalPdfSourceChanged pdfWidth = "+pdfWidth+" pdfHeight = "+pdfHeight);
+            propertyPDFPreview.propertyPdfOriginalWidth=pdfWidth
+            propertyPDFPreview.propertyPdfOriginalHeight=pdfHeight
+        }
     }
 
     Dialog {
@@ -148,15 +157,14 @@ PageServicesSignAdvancedForm {
                 var isSmallSignature = false
 
                 var coord_x = propertyPDFPreview.propertyCoordX
-                           / propertyPDFPreview.propertyBackground.width
 
-                var sig_height = propertyPDFPreview.propertyDragImage.height
                 //coord_y must be the lower left corner of the signature rectangle
-                var coord_y = (propertyPDFPreview.propertyCoordY + sig_height) /
-                                    propertyPDFPreview.propertyBackground.height
+
+                var coord_y = propertyPDFPreview.propertyCoordY
 
                 console.log("Output filename: " + outputFile)
-                console.log("Signing in position coord_x: " + coord_x  + " and coord_y: "+coord_y)
+                console.log("Signing in position coord_x: " + coord_x
+                            + " and coord_y: "+coord_y)
 
                 gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
                                      reason, location, isTimestamp, isSmallSignature)
@@ -316,6 +324,8 @@ PageServicesSignAdvancedForm {
                 fileLoaded = true
                 var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
                 console.log("loadedFilePath: " + loadedFilePath)
+                propertyPDFPreview.propertyBackground.cache = false
+                propertyPDFPreview.propertyDragImage.cache = false
                 propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
                 propertyPDFPreview.propertyDragImage.source = "qrc:/images/pteid_signature_small.png"
             }

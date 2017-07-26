@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     QQmlContext* ctx = engine.rootContext();
     ctx->setContextProperty("gapi", &gapi);
     ctx->setContextProperty("controler", &controller);
+    ctx->setContextProperty("image_provider_pdf", gapi.image_provider_pdf);
 
     qmlRegisterType<FileSaveDialog>("eidguiV2", 1, 0, "FileSaveDialog");
 

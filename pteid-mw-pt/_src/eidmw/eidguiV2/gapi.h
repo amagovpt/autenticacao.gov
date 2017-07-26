@@ -48,14 +48,18 @@ public:
     double isSmallSignature;
 };
 
-class PDFPreviewImageProvider: public QQuickImageProvider
+class PDFPreviewImageProvider: public QObject, public QQuickImageProvider
 {
+    Q_OBJECT
 public:
     PDFPreviewImageProvider() : QQuickImageProvider(QQuickImageProvider::Pixmap), m_doc(NULL) { }
 
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 
+signals:
+Q_SIGNAL    void signalPdfSourceChanged(int pdfWidth, int pdfHeight);
 private:
+    QPixmap renderPdf(int page,const QSize &requestedSize);
     QPixmap renderPDFPage(unsigned int page);
     Poppler::Document *m_doc;
     QString m_filePath;
@@ -92,6 +96,8 @@ public:
 
     QQuickImageProvider * buildImageProvider() { return image_provider; }
     QQuickImageProvider * buildPdfImageProvider() { return image_provider_pdf; }
+
+    PDFPreviewImageProvider * image_provider_pdf;
 
     // Public Method to Test GAPI
     //void fillDataCardIdentifyDummy();
@@ -168,7 +174,7 @@ private:
     QMap<GAPI::AddressInfoKey, QString> m_addressData;
     //Don't free this!, we release ownership to the QMLEngine in buildImageProvider()
     PhotoImageProvider *image_provider;
-    PDFPreviewImageProvider * image_provider_pdf;
+
 
     QString m_persoData;
     bool m_addressLoaded;

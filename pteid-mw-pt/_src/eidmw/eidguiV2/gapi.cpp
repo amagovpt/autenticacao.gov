@@ -519,7 +519,8 @@ void GAPI::doSignPDF(SignParams &params) {
 QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
     qDebug() << "PDFPreviewImageProvider received request for: " << id;
-    qDebug() << "PDFPreviewImageProvider received request for: " << requestedSize.height() << " - " << requestedSize.width();
+    qDebug() << "PDFPreviewImageProvider received request for: "
+             << requestedSize.width() << " - " << requestedSize.height();
     QStringList strList = id.split("?");
 
     //This should work on Windows too with QT APIs...
@@ -549,9 +550,24 @@ QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, c
 
     //TODO: Hardcoded image size...
     //int img_height = 420;
-    QPixmap p = renderPDFPage(page).scaledToHeight(requestedSize.height(), Qt::SmoothTransformation);
+    QPixmap pTest = renderPDFPage(page);
+    qDebug() << "PDFPreviewImageProvider sending signal signalPdfSourceChanged width : "
+             << pTest.width()<< " - height : " << pTest.height();
+    emit signalPdfSourceChanged(pTest.width(),pTest.height());
+
+    QFuture<QPixmap> future = QtConcurrent::run(this, &PDFPreviewImageProvider::renderPdf, page, requestedSize);
+
+    QPixmap p = future.result();
     size->setHeight(p.height());
     size->setWidth(p.width());
+
+    return p;
+}
+
+QPixmap PDFPreviewImageProvider::renderPdf(int page,const QSize &requestedSize) {
+
+    QPixmap p = renderPDFPage(page).scaled(requestedSize.width(), requestedSize.height(),
+                                           Qt::KeepAspectRatio, Qt::SmoothTransformation);
     return p;
 }
 
