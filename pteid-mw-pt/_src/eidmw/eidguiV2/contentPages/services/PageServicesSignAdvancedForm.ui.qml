@@ -18,6 +18,7 @@ Item {
     property variant filesArray: []
     property bool fileLoaded: false
 
+    property alias propertyBusyIndicator: busyIndicator
     property alias propertyPDFPreview: pdfPreviewArea
     property alias propertyFileDialog: fileDialog
     property alias propertyFileDialogOutput: fileDialogOutput
@@ -52,6 +53,14 @@ Item {
     property int propertyMouseAreaToolTipY: rectMainLeftFile.height
     property alias propertyTextSpinBox: textSpinBox
     property alias propertySpinBoxControl: spinBoxControl
+
+    BusyIndicator {
+       id: busyIndicator
+       running: false
+       anchors.centerIn: parent
+       // BusyIndicator should be on top of all other content
+       z: 1
+    }
 
     Item {
         id: rowMain
@@ -581,7 +590,10 @@ Item {
                 Components.PDFPreview {
                     anchors.fill: parent
                     id: pdfPreviewArea
-                    propertyDragImage.visible: checkSignShow.checked
+                    propertyDragSigRect.visible: checkSignShow.checked
+                    propertyDragSigReasonText.text: textFieldReason.text
+                    propertyDragSigLocationText.text: textFieldLocal.text
+
                 }
             }
 

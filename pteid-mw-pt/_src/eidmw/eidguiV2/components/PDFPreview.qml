@@ -8,7 +8,15 @@ Rectangle {
         id: pdfPreview
 
         property alias propertyBackground: background_image
-        property alias propertyDragImage: dragImage
+        property alias propertyDragSigRect: dragSigRect
+        property alias propertyDragSigReasonText: sigReasonText
+        property alias propertyDragSigSignedByText: sigSignedByText
+        property alias propertyDragSigSignedByNameText: sigSignedByNameText
+        property alias propertyDragSigNumIdText: sigNumIdText
+        property alias propertyDragSigDateText: sigDateText
+        property alias propertyDragSigLocationText: sigLocationText
+        property alias propertyDragSigImg: dragSigImage
+
         property alias propertyCoordX: dragTarget.coord_x
         property alias propertyCoordY: dragTarget.coord_y
 
@@ -48,8 +56,19 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
 
-                Image {
-                    id: dragImage
+
+                Rectangle {
+                    width: dragSigRect.width
+                    height: dragSigRect.height
+                    x: dragSigRect.x
+                    y: dragSigRect.y
+                    border.width : 1
+                    border.color: Constants.COLOR_MAIN_DARK_GRAY
+                    opacity: 0.7
+                    visible: dragSigRect.visible
+                }
+                Item {
+                    id: dragSigRect
                     width: (propertySigWidth) * propertyConvertPixelToPts * background_image.width
                            / (propertyPdfOriginalWidth / propertyConvertPixelToPts)
                     height: (propertySigHidth) * propertyConvertPixelToPts * background_image.height
@@ -57,45 +76,163 @@ Rectangle {
 
                     Drag.active: dragArea.drag.active
 
+                    Text {
+                        id: sigReasonText
+                        font.pixelSize: parent.height * 0.1
+                        height: parent.height * 0.1
+                        width: parent.width
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
+                        text: "Validação de contrato"
+                        anchors.topMargin: 2
+                        x: 2
+                        visible: false
+                    }
+                    Text {
+                        id: sigSignedByText
+                        font.pixelSize: parent.height * 0.1
+                        height: parent.height * 0.1
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigReasonText.bottom
+                        text: ""
+                        x: 2
+                        visible: false
+                    }
+                    Text {
+                        id: sigSignedByNameText
+                        font.pixelSize: parent.height * 0.11
+                        height: parent.height * 0.12
+                        width: parent.width - sigSignedByText.paintedWidth
+                        font.family: lato.name
+                        font.bold: true
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigReasonText.bottom
+                        anchors.left: sigSignedByText.right
+                        text: ""
+                        x: 2
+                        visible: false
+                    }
+                    Text {
+                        id: sigNumIdText
+                        font.pixelSize: parent.height * 0.095
+                        height: parent.height * 0.1
+                        width: parent.width
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigSignedByText.bottom
+                        text: ""
+                        x: 2
+                        visible: false
+                    }
+                    Text {
+                        id: sigDateText
+                        font.pixelSize: parent.height * 0.1
+                        height: parent.height * 0.1
+                        width: parent.width
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigNumIdText.bottom
+                        text: getData()
+                        x: 2
+                        visible: false
+                    }
+                    Text {
+                        id: sigLocationText
+                        font.pixelSize: parent.height * 0.1
+                        height: parent.height * 0.1
+                        width: parent.width
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigDateText.bottom
+                        text: ""
+                        x: 2
+                        visible: false
+                    }
+
+                    Image {
+                        id: dragSigImage
+                        height: parent.height * 0.3
+                        fillMode: Image.PreserveAspectFit
+                        anchors.top: sigLocationText.bottom
+                        anchors.topMargin: parent.height * 0.1
+                        x: 2
+                        visible: false
+                    }
+
                     MouseArea {
                         id: dragArea
-                        anchors.fill: parent
+                        width: dragSigRect.width + dragSigMoveImage.width * 0.5
+                        height: dragSigRect.height + dragSigMoveImage.height * 0.5
                         onReleased: parent.Drag.drop()
                         drag.target: parent
                         drag.axis: Drag.XAndYAxis
                         drag.minimumX: 0
-                        drag.maximumX: background_image.width - dragImage.width
+                        drag.maximumX: background_image.width - dragSigRect.width
                         drag.minimumY: 0
-                        drag.maximumY: background_image.height - dragImage.height
+                        drag.maximumY: background_image.height - dragSigRect.height
                     }
                     onHeightChanged: {
-                        if(dragImage.x === 0 && dragImage.y === 0){
+                        if(dragSigRect.x === 0 && dragSigRect.y === 0){
                             dragTarget.coord_x = 0
-                            dragTarget.coord_y = dragImage.height / background_image.height
+                            dragTarget.coord_y = dragSigRect.height / background_image.height
                         }else{
-                            dragTarget.coord_x = (dragImage.x) / background_image.width
-                            dragTarget.coord_y = (dragImage.y + dragImage.height) / background_image.height
+                            dragTarget.coord_x = (dragSigRect.x) / background_image.width
+                            dragTarget.coord_y = (dragSigRect.y + dragSigRect.height) / background_image.height
                         }
-                        if((dragImage.x + dragImage.width) > background_image.width
-                                || (dragImage.y + dragImage.height) > background_image.height){
-                            dragImage.x = 0
-                            dragImage.y = 0
+                        if((dragSigRect.x + dragSigRect.width) > background_image.width
+                                || (dragSigRect.y + dragSigRect.height) > background_image.height){
+                            dragSigRect.x = 0
+                            dragSigRect.y = 0
                         }
                     }
                 }
+                Image {
+                    id: dragSigMoveImage
+                    height: dragSigRect.height * 0.5
+                    fillMode: Image.PreserveAspectFit
+                    anchors.top: dragSigRect.bottom
+                    anchors.topMargin: -dragSigMoveImage.height * 0.5
+                    anchors.left: dragSigRect.right
+                    anchors.leftMargin: -dragSigMoveImage.width * 0.5
+
+                    visible: dragSigRect.visible
+                    source: "qrc:/images/icons-move.png"
+                }
+
                 onWidthChanged: {
-                    dragImage.x = dragTarget.lastCoord_x / dragTarget.lastScreenWidth * background_image.width
-                    dragImage.y = dragTarget.lastCoord_y / dragTarget.lastScreenHeight * background_image.height
+                    dragSigRect.x = dragTarget.lastCoord_x / dragTarget.lastScreenWidth * background_image.width
+                    dragSigRect.y = dragTarget.lastCoord_y / dragTarget.lastScreenHeight * background_image.height
                 }
             }
 
             onDropped: {
                 coord_x = (drop.x - background_image.x) / background_image.width
-                coord_y = (drop.y + dragImage.height - background_image.y) / background_image.height
-                dragTarget.lastCoord_x = dragImage.x
-                dragTarget.lastCoord_y = dragImage.y
+                coord_y = (drop.y + dragSigRect.height - background_image.y) / background_image.height
+                dragTarget.lastCoord_x = dragSigRect.x
+                dragTarget.lastCoord_y = dragSigRect.y
                 dragTarget.lastScreenWidth = background_image.width
                 dragTarget.lastScreenHeight = background_image.height
             }
+        }
+        function getData(){
+            var time = Qt.formatDateTime(new Date(), "yy.MM.dd hh:mm:ss")
+
+            function pad(number, length){
+                var str = "" + number
+                while (str.length < length) {
+                    str = '0'+str
+                }
+                return str
+            }
+
+            var offset = new Date().getTimezoneOffset()
+            offset = ((offset<0? '+':'-')+ // Note the reversed sign!
+                      pad(parseInt(Math.abs(offset/60)), 2)+
+                      pad(Math.abs(offset%60), 2))
+
+            time += " " + offset
+
+            return time
         }
 }

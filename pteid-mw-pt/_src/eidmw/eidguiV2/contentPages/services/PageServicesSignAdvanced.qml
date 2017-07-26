@@ -4,6 +4,9 @@ import QtQuick.Controls 2.1
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
 
+//Import C++ defined enums
+import eidguiV2 1.0
+
 PageServicesSignAdvancedForm {
 
     ToolTip {
@@ -28,7 +31,17 @@ PageServicesSignAdvancedForm {
         onSignalPdfSignError: {
             signerror_dialog.visible = true
         }
+        onSignalCardDataChanged: {
+            console.log("Services Sign Advanced --> Data Changed")
+            //console.trace();
+            propertyPDFPreview.propertyDragSigSignedByNameText.text = "Assinado por:"
+                    + gapi.getDataCardIdentifyValue(GAPI.Givenname)
+                    + " " +  gapi.getDataCardIdentifyValue(GAPI.Surname)
 
+            propertyPDFPreview.propertyDragSigNumIdText.text = "Num. de Identificação Civil:"
+                    + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
+            propertyBusyIndicator.running = false
+        }
     }
     Connections {
         target: image_provider_pdf
@@ -36,6 +49,7 @@ PageServicesSignAdvancedForm {
             console.log("Receive signal onSignalPdfSourceChanged pdfWidth = "+pdfWidth+" pdfHeight = "+pdfHeight);
             propertyPDFPreview.propertyPdfOriginalWidth=pdfWidth
             propertyPDFPreview.propertyPdfOriginalHeight=pdfHeight
+            propertyBusyIndicator.running = false
         }
     }
 
@@ -318,16 +332,31 @@ PageServicesSignAdvancedForm {
                 propertyRadioButtonPADES.checked = false
                 propertyRadioButtonXADES.checked = false
                 propertyPDFPreview.propertyBackground.source = ""
-                propertyPDFPreview.propertyDragImage.source = ""
+                propertyPDFPreview.propertyDragSigImg.visible = false
+                propertyPDFPreview.propertyDragSigReasonText.visible = false
+                propertyPDFPreview.propertyDragSigSignedByText.visible = false
+                propertyPDFPreview.propertyDragSigSignedByNameText.visible = false
+                propertyPDFPreview.propertyDragSigNumIdText.visible = false
+                propertyPDFPreview.propertyDragSigDateText.visible = false
+                propertyPDFPreview.propertyDragSigLocationText.visible = false
+                propertyPDFPreview.propertyDragSigImg.visible = false
             }
             else {
                 fileLoaded = true
+                propertyBusyIndicator.running = true
                 var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
                 console.log("loadedFilePath: " + loadedFilePath)
                 propertyPDFPreview.propertyBackground.cache = false
-                propertyPDFPreview.propertyDragImage.cache = false
                 propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
-                propertyPDFPreview.propertyDragImage.source = "qrc:/images/pteid_signature_small.png"
+                propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
+                propertyPDFPreview.propertyDragSigImg.visible = true
+                propertyPDFPreview.propertyDragSigReasonText.visible = true
+                propertyPDFPreview.propertyDragSigSignedByText.visible = true
+                propertyPDFPreview.propertyDragSigSignedByNameText.visible = true
+                propertyPDFPreview.propertyDragSigNumIdText.visible = true
+                propertyPDFPreview.propertyDragSigDateText.visible = true
+                propertyPDFPreview.propertyDragSigLocationText.visible = true
+                propertyPDFPreview.propertyDragSigImg.visible = true
             }
         }
     }
@@ -338,6 +367,10 @@ PageServicesSignAdvancedForm {
             {
              "fileUrl": gapi.getShortcutInputPDF()
             });
+
+        console.log("Page Services Sign Advanced mainWindowCompleted")
+        propertyBusyIndicator.running = true
+        gapi.startCardReading()
     }
 
     function forceScrollandFocus() {
