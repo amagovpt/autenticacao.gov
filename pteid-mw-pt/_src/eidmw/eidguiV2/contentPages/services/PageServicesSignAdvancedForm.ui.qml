@@ -34,6 +34,7 @@ Item {
     property alias propertyTextFieldReason: textFieldReason
     property alias propertyTextFieldLocal: textFieldLocal
     property alias propertySwitchSignTemp: switchSignTemp
+    property alias propertyCheckSignReduced: checkSignReduced
     property alias propertyRadioButtonPADES: radioButtonPADES
     property alias propertyRadioButtonXADES: radioButtonXADES
     property alias propertyMouseAreaToolTipPades: mouseAreaToolTipPades
@@ -591,9 +592,6 @@ Item {
                     anchors.fill: parent
                     id: pdfPreviewArea
                     propertyDragSigRect.visible: checkSignShow.checked
-                    propertyDragSigReasonText.text: textFieldReason.text
-                    propertyDragSigLocationText.text: textFieldLocal.text
-
                 }
             }
 

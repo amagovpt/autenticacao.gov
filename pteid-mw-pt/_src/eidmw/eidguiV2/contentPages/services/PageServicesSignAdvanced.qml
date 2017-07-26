@@ -65,13 +65,13 @@ PageServicesSignAdvancedForm {
         y: parent.height * 0.5 - signsuccess_dialog.height * 0.5
 
         header: Label {
-              text: "Ficheiro(s) assinado(s) com sucesso"
-              elide: Label.ElideRight
-              padding: 24
-              bottomPadding: 0
-              font.bold: true
-              font.pixelSize: 16
-              color: Constants.COLOR_MAIN_BLUE
+            text: "Ficheiro(s) assinado(s) com sucesso"
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: 16
+            color: Constants.COLOR_MAIN_BLUE
         }
 
         standardButtons: DialogButtonBox.Ok
@@ -89,13 +89,13 @@ PageServicesSignAdvancedForm {
         y: parent.height * 0.5 - signerror_dialog.height * 0.5
 
         header: Label {
-              text: "Erro na assinatura de PDF"
-              elide: Label.ElideRight
-              padding: 24
-              bottomPadding: 0
-              font.bold: true
-              font.pixelSize: 16
-              color: Constants.COLOR_MAIN_BLUE
+            text: "Erro na assinatura de PDF"
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: 16
+            color: Constants.COLOR_MAIN_BLUE
         }
 
         standardButtons: DialogButtonBox.Ok
@@ -167,8 +167,7 @@ PageServicesSignAdvancedForm {
                 var reason = propertyTextFieldReason.text
                 var location = propertyTextFieldLocal.text
 
-                //TODO: we need to read this value from settings
-                var isSmallSignature = false
+                var isSmallSignature = propertyCheckSignReduced.enabled
 
                 var coord_x = propertyPDFPreview.propertyCoordX
 
@@ -189,6 +188,39 @@ PageServicesSignAdvancedForm {
                 gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp)
             }
 
+        }
+    }
+
+    propertyTextFieldReason{
+        onTextChanged: {
+            propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
+        }
+    }
+    propertyTextFieldLocal{
+        onTextChanged: {
+            propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text
+        }
+    }
+
+    propertyCheckSignReduced{
+        onCheckedChanged: {
+            if(propertyCheckSignReduced.checked){
+                propertyPDFPreview.propertySigHidth = 45
+                propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.2
+                propertyPDFPreview.propertyDragSigReasonText.height = 0
+                propertyPDFPreview.propertyDragSigLocationText.height = 0
+                propertyPDFPreview.propertyDragSigReasonText.text = ""
+                propertyPDFPreview.propertyDragSigLocationText.text = ""
+                propertyPDFPreview.propertyDragSigImg.height = 0
+            }else{
+                propertyPDFPreview.propertySigHidth = 90
+                propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.1
+                propertyPDFPreview.propertyDragSigReasonText.height = propertyPDFPreview.propertySigLineHeight
+                propertyPDFPreview.propertyDragSigLocationText.height = propertyPDFPreview.propertySigLineHeight
+                propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
+                propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text
+                propertyPDFPreview.propertyDragSigImg.height = propertyPDFPreview.propertyDragSigRect.height * 0.3
+            }
         }
     }
 
@@ -258,7 +290,7 @@ PageServicesSignAdvancedForm {
     }
 
     propertyTextSpinBox{
-         text: propertySpinBoxControl.textFromValue(propertySpinBoxControl.value, propertySpinBoxControl.locale)
+        text: propertySpinBoxControl.textFromValue(propertySpinBoxControl.value, propertySpinBoxControl.locale)
     }
 
     Component {
@@ -364,9 +396,9 @@ PageServicesSignAdvancedForm {
     Component.onCompleted: {
         if (gapi.getShortcutFlag() > 0)
             filesModel.append(
-            {
-             "fileUrl": gapi.getShortcutInputPDF()
-            });
+                        {
+                            "fileUrl": gapi.getShortcutInputPDF()
+                        });
 
         console.log("Page Services Sign Advanced mainWindowCompleted")
         propertyBusyIndicator.running = true

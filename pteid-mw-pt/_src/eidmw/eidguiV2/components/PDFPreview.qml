@@ -17,6 +17,8 @@ Rectangle {
         property alias propertyDragSigLocationText: sigLocationText
         property alias propertyDragSigImg: dragSigImage
 
+        property real propertySigLineHeight: dragSigRect.height * 0.1
+
         property alias propertyCoordX: dragTarget.coord_x
         property alias propertyCoordY: dragTarget.coord_y
 
@@ -78,20 +80,20 @@ Rectangle {
 
                     Text {
                         id: sigReasonText
-                        font.pixelSize: parent.height * 0.1
-                        height: parent.height * 0.1
+                        font.pixelSize: propertySigLineHeight
+                        height: propertySigLineHeight
                         width: parent.width
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
-                        text: "Validação de contrato"
+                        text: ""
                         anchors.topMargin: 2
                         x: 2
                         visible: false
                     }
                     Text {
                         id: sigSignedByText
-                        font.pixelSize: parent.height * 0.1
-                        height: parent.height * 0.1
+                        font.pixelSize:propertySigLineHeight
+                        height: propertySigLineHeight
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigReasonText.bottom
@@ -101,8 +103,8 @@ Rectangle {
                     }
                     Text {
                         id: sigSignedByNameText
-                        font.pixelSize: parent.height * 0.11
-                        height: parent.height * 0.12
+                        font.pixelSize: propertySigLineHeight
+                        height: propertySigLineHeight
                         width: parent.width - sigSignedByText.paintedWidth
                         font.family: lato.name
                         font.bold: true
@@ -115,8 +117,8 @@ Rectangle {
                     }
                     Text {
                         id: sigNumIdText
-                        font.pixelSize: parent.height * 0.095
-                        height: parent.height * 0.1
+                        font.pixelSize: propertySigLineHeight
+                        height: propertySigLineHeight
                         width: parent.width
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
@@ -127,8 +129,8 @@ Rectangle {
                     }
                     Text {
                         id: sigDateText
-                        font.pixelSize: parent.height * 0.1
-                        height: parent.height * 0.1
+                        font.pixelSize: propertySigLineHeight
+                        height: propertySigLineHeight
                         width: parent.width
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
@@ -139,8 +141,8 @@ Rectangle {
                     }
                     Text {
                         id: sigLocationText
-                        font.pixelSize: parent.height * 0.1
-                        height: parent.height * 0.1
+                        font.pixelSize: propertySigLineHeight
+                        height: propertySigLineHeight
                         width: parent.width
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
@@ -152,7 +154,7 @@ Rectangle {
 
                     Image {
                         id: dragSigImage
-                        height: parent.height * 0.3
+                        height: dragSigRect.height * 0.3
                         fillMode: Image.PreserveAspectFit
                         anchors.top: sigLocationText.bottom
                         anchors.topMargin: parent.height * 0.1
