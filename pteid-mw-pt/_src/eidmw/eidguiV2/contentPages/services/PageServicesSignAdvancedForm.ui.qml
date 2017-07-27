@@ -592,6 +592,7 @@ Item {
                     anchors.fill: parent
                     id: pdfPreviewArea
                     propertyDragSigRect.visible: checkSignShow.checked
+                    propertyReducedChecked : checkSignReduced.checked
                 }
             }
 
