@@ -167,7 +167,7 @@ PageServicesSignAdvancedForm {
                 var reason = propertyTextFieldReason.text
                 var location = propertyTextFieldLocal.text
 
-                var isSmallSignature = propertyCheckSignReduced.enabled
+                var isSmallSignature = propertyCheckSignReduced.checked
 
                 var coord_x = propertyPDFPreview.propertyCoordX
 

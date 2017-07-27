@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick.Controls 2.1
 import QtQuick.Dialogs 1.0
 import QtGraphicalEffects 1.0
+import eidguiV2 1.0
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -13,10 +14,22 @@ Item {
     property variant filesArray:[]
     property bool fileLoaded: false
 
+    property alias propertyBusyIndicator: busyIndicator
+    property alias propertyPDFPreview: pdfPreviewArea
     property alias propertyFileDialog: fileDialog
+    property alias propertyFileDialogOutput: fileDialogOutput
     property alias propertyMouseAreaRectMain: mouseAreaRectMain
     property alias propertyButtonRemove: buttonRemove
+    property alias propertyButtonSignWithCC: button_signCC
     property alias propertyDropArea: dropArea
+
+    BusyIndicator {
+       id: busyIndicator
+       running: false
+       anchors.centerIn: parent
+       // BusyIndicator should be on top of all other content
+       z: 1
+    }
 
     Item {
         id: rowMain
@@ -39,6 +52,11 @@ Item {
             selectMultiple: false
             nameFilters: [ "PDF document (*.pdf)", "All files (*)" ]
             Component.onCompleted: visible = false
+        }
+        FileSaveDialog {
+            id: fileDialogOutput
+            title: "Escolha o ficheiro de destino"
+            nameFilters: ["Images (*.pdf)", "All files (*)"]
         }
 
         Item{
@@ -98,20 +116,19 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     visible: !fileLoaded
                     font.family: lato.name
+                    z: 1
                 }
-                Image {
-                    id: imageTabPreView
+                Components.PDFPreview {
                     anchors.fill: parent
-                    antialiasing: true
-                    fillMode: Image.PreserveAspectFit
-                    source: "../../images/dummy/Pdfdemo.png"
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    visible: fileLoaded
+                    id: pdfPreviewArea
+                    propertyDragSigRect.visible: true
+                    propertyReducedChecked : false
                 }
             }
             MouseArea {
                 id: mouseAreaRectMain
                 anchors.fill: parent
+                enabled: !fileLoaded
             }
         }
     }
@@ -133,7 +150,7 @@ Item {
                 x: 140
                 text: "Remover ficheiro"
                 anchors.rightMargin: 0
-                y: 8
+                y: 5
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
                 enabled: fileLoaded
@@ -151,7 +168,8 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
             Button {
-                text: "Assinar"
+                id: button_signCC
+                text: "Assinar com CC"
                 y: 5
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
@@ -159,7 +177,18 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
-                anchors.horizontalCenter: parent.horizontalCenter
+            }
+            Button {
+                id: button_signCMD
+                text: "Assinar com CMD"
+                y: 5
+                width: Constants.WIDTH_BUTTON
+                height: parent.height
+                enabled: fileLoaded
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
+                anchors.right: parent.right
             }
         }
     }
