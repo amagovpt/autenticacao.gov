@@ -1,0 +1,27 @@
+#!/bin/sh
+if [ "$1" = "remove" ]; then
+        rm -rf /usr/local/lib/libfreeimagePTEiD.so
+        rm -rf /usr/local/lib/libfreeimagePTEiD.so.3
+	rm -rf /usr/local/lib/libpteidcommon.so
+	rm -rf /usr/local/lib/libpteidcommon.so.2
+	rm -rf /usr/local/lib/libpteidcommon.so.2.0
+	rm -rf /usr/local/lib/libpteiddialogsQT.so              
+	rm -rf /usr/local/lib/libpteiddialogsQT.so.2
+	rm -rf /usr/local/lib/libpteiddialogsQT.so.2.0
+	rm -rf /usr/local/lib/libpteidcardlayer.so
+	rm -rf /usr/local/lib/libpteidcardlayer.so.2
+	rm -rf /usr/local/lib/libpteidcardlayer.so.2.0
+	rm -rf /usr/local/lib/libpteidpkcs11.so
+	rm -rf /usr/local/lib/libpteidpkcs11.so.2
+	rm -rf /usr/local/lib/libpteidpkcs11.so.2.0
+	rm -rf /usr/local/lib/libpteidapplayer.so
+	rm -rf /usr/local/lib/libpteidapplayer.so.2
+	rm -rf /usr/local/lib/libpteidapplayer.so.2.0
+	rm -rf /usr/local/lib/libpteidlib.so
+	rm -rf /usr/local/lib/libpteidlib.so.2
+	rm -rf /usr/local/lib/libpteidlib.so.2.0
+	rm -rf /usr/local/lib/libpteidlibJava_Wrapper.so
+	rm -rf /usr/local/lib/libpteidlibJava_Wrapper.so.2
+	rm -rf /usr/local/lib/libpteidlibJava_Wrapper.so.2.0
+fi
+#DEBHELPER#

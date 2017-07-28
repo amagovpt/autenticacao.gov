@@ -1,0 +1,34 @@
+Source: pteid-mw
+Section: utils
+Priority: extra
+Maintainer: André Guerreiro <andre.guerreiro@caixamagica.pt>
+Build-Depends: chrpath,
+               debhelper (>= 7.0.50~),
+               libpcsclite-dev,
+               libpoppler-qt5-dev,
+               default-jdk,
+               qtbase5-dev,
+               qt5-qmake,
+               qt5-default,
+               libssl-dev,
+               libxerces-c-dev,
+               libxml-security-c-dev,
+               swig,
+               libcurl4-openssl-dev
+Standards-Version: 3.9.1
+Homepage: http://svn.gov.pt/
+
+Package: pteid-mw
+Conflicts: cartaodecidadao
+Architecture: any
+Depends: pcsc-tools,
+         pcscd,
+         java7-runtime,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Description: Cartão de Cidadão
+ The Pteid Middleware provides a utility application (pteidgui), a set of
+ libraries and a PKCS#11 module to use the Portuguese Identity Card
+ (Cartão de Cidadão) in order to authenticate securely 
+ in certain websites and/or sign documents.
+
