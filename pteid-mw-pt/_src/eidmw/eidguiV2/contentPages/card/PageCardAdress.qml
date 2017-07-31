@@ -41,6 +41,18 @@ PageCardAdressForm {
             console.log("Address change --> update progress status with text = " + statusMessage)
             textMessageTop.text = statusMessage
         }
+        onSignalCardAccessError: {
+            propertyBusyIndicator.running = false
+            if (error_code == GAPI.NoReaderFound) {
+                propertyGeneralTitleText.text =  "Error"
+                propertyGeneralPopUpLabelText.text =  "No card reader found!"
+            }
+            else if (error_code == GAPI.NoCardFound) {
+                propertyGeneralTitleText.text =  "Error"
+                propertyGeneralPopUpLabelText.text = "No Card Found!"
+            }
+            propertyGeneralPopUp.visible = true;
+        }
     }
 
     Dialog {

@@ -170,6 +170,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 PageLoader{
                     id: pageLoaderID
+                    propertyGeneralPopUp.visible: false
                 }
             }
         }

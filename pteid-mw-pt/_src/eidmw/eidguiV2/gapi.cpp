@@ -67,15 +67,6 @@ bool isExpiredDate(const char * strDate) {
     return false;
 }
 
-void GAPI::getPersoDataFile() {
-
-    qDebug() << "getPersoDataFile() called";
-    PTEID_EIDCard &card = getCardInstance();
-
-    emit signalPersoDataLoaded(QString(card.readPersonalNotes()));
-
-}
-
 QString GAPI::getAddressField(AddressInfoKey key) {
     return m_addressData[key];
 }
@@ -104,6 +95,9 @@ QString GAPI::getAddressField(AddressInfoKey key) {
 
 void GAPI::getAddressFile() {
     qDebug() << "C++: getAddressFile()";
+
+    BEGIN_TRY_CATCH;
+
     PTEID_EIDCard &card = getCardInstance();
 
     PTEID_Address &addressFile = card.getAddr();
@@ -124,6 +118,22 @@ void GAPI::getAddressFile() {
     m_addressData[PostalLocality] = QString::fromUtf8(addressFile.getPostalLocality());
 
     emit signalAddressLoaded();
+
+    END_TRY_CATCH
+}
+
+void GAPI::getPersoDataFile() {
+
+    qDebug() << "getPersoDataFile() called";
+
+    BEGIN_TRY_CATCH;
+
+    PTEID_EIDCard &card = getCardInstance();
+
+    emit signalPersoDataLoaded(QString(card.readPersonalNotes()));
+
+    END_TRY_CATCH
+
 }
 
 unsigned int GAPI::verifyAuthPin(QString pin_value) {

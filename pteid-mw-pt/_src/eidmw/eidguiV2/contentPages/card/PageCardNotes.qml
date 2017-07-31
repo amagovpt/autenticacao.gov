@@ -3,6 +3,8 @@ import QtQuick 2.6
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
 
+//Import C++ defined enums
+import eidguiV2 1.0
 
 PageCardNotesForm {
 
@@ -12,6 +14,18 @@ PageCardNotesForm {
         onSignalPersoDataLoaded: {
             console.log("QML: onSignalPersoDataLoaded!")
             loadPersoData(persoNotes)
+        }
+        onSignalCardAccessError: {
+            propertyBusyIndicator.running = false
+            if (error_code == GAPI.NoReaderFound) {
+                propertyGeneralTitleText.text =  "Error"
+                propertyGeneralPopUpLabelText.text =  "No card reader found!"
+            }
+            else if (error_code == GAPI.NoCardFound) {
+                propertyGeneralTitleText.text =  "Error"
+                propertyGeneralPopUpLabelText.text = "No Card Found!"
+            }
+            propertyGeneralPopUp.visible = true;
         }
     }
 

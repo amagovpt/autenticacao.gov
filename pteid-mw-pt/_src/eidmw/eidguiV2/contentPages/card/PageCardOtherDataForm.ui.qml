@@ -1,4 +1,6 @@
 import QtQuick 2.6
+import QtQuick.Layouts 1.0
+import QtQuick.Controls 2.1
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -6,6 +8,8 @@ import "../../components" as Components
 
 Item {
     anchors.fill: parent
+
+    property alias propertyBusyIndicator : busyIndication
 
     property alias propertyTextBoxNIF: textBoxNIF
     property alias propertyTextBoxNISS: textBoxNISS
@@ -24,6 +28,14 @@ Item {
                 + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
                 * Constants.HEIGHT_CARD_OTHER_DATA_ROW_TOP_INC_RELATIVE
         Components.CardRowTop{}
+    }
+
+    BusyIndicator {
+       id: busyIndication
+       running: false
+       anchors.centerIn: parent
+       // BusyIndicator should be on top of all other content
+       z: 1
     }
 
     Item {
