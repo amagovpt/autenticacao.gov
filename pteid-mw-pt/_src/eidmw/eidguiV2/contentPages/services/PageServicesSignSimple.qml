@@ -215,6 +215,8 @@ PageServicesSignSimpleForm {
                 propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
                 propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
                 propertyPDFPreview.propertyDragSigImg.visible = true
+                propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
+                propertyPDFPreview.propertyDragSigWaterImg.visible = true
                 propertyPDFPreview.propertyDragSigSignedByText.visible = true
                 propertyPDFPreview.propertyDragSigSignedByNameText.visible = true
                 propertyPDFPreview.propertyDragSigNumIdText.visible = true

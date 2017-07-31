@@ -212,6 +212,7 @@ PageServicesSignAdvancedForm {
                 propertyPDFPreview.propertyDragSigReasonText.text = ""
                 propertyPDFPreview.propertyDragSigLocationText.text = ""
                 propertyPDFPreview.propertyDragSigImg.height = 0
+                propertyPDFPreview.propertyDragSigWaterImg.height = 0
             }else{
                 propertyPDFPreview.propertySigHidth = 90
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.1
@@ -220,6 +221,7 @@ PageServicesSignAdvancedForm {
                 propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
                 propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text
                 propertyPDFPreview.propertyDragSigImg.height = propertyPDFPreview.propertyDragSigRect.height * 0.3
+                propertyPDFPreview.propertyDragSigWaterImg.height = propertyPDFPreview.propertyDragSigRect.height * 0.4
             }
         }
     }
@@ -382,6 +384,8 @@ PageServicesSignAdvancedForm {
                 propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
                 propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
                 propertyPDFPreview.propertyDragSigImg.visible = true
+                propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
+                propertyPDFPreview.propertyDragSigWaterImg.visible = true
                 propertyPDFPreview.propertyDragSigReasonText.visible = true
                 propertyPDFPreview.propertyDragSigSignedByText.visible = true
                 propertyPDFPreview.propertyDragSigSignedByNameText.visible = true
