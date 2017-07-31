@@ -3,7 +3,6 @@ import QtQuick.Controls 2.1
 import QtQuick.Dialogs 1.0
 import QtGraphicalEffects 1.0
 
-
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
 import "../../components" as Components
@@ -17,12 +16,31 @@ Item {
     property variant filesArray:[]
     property bool fileLoaded: false
     property alias propertyFileDialog: fileDialog
+    property alias propertyBusyIndicator: busyIndicator
     property alias propertyMouseAreaPreCustom: mouseAreaPreCustom
     property alias propertyButtonAdd: buttonAdd
     property alias propertyButtonRemove: buttonRemove
     property alias propertyDropArea: dropArea
     property alias propertyRadioButtonDefault: radioButtonDefault
     property alias propertyRadioButtonCustom: radioButtonCustom
+
+    property real propertySigLineHeight: rectPreDefault.height * 0.1
+    property alias propertySigReasonText: sigReasonText
+    property alias propertySigSignedByText: sigSignedByText
+    property alias propertySigSignedByNameText: sigSignedByNameText
+    property alias propertySigNumIdText: sigNumIdText
+    property alias propertySigDateText: sigDateText
+    property alias propertySigLocationText: sigLocationText
+    property alias propertySigImg: dragSigImage
+    property alias propertySigWaterImg: dragSigWaterImage
+
+    BusyIndicator {
+        id: busyIndicator
+        running: false
+        anchors.centerIn: parent
+        // BusyIndicator should be on top of all other content
+        z: 1
+    }
 
     Item {
         id: rowMain
@@ -85,17 +103,109 @@ Item {
                 color: "white"
                 anchors.top: radioButtonDefault.bottom
 
-                Image {
-                    id: imagePreDefault
-                    width: parent.width
-                    height: parent.height
-                    antialiasing: true
-                    fillMode: Image.PreserveAspectFit
-                    source: "../../images/dummy/CCdemo.png"
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    visible: true
+                Item {
+                    anchors.fill: rectPreDefault
                     opacity: radioButtonDefault.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                    Text {
+                        id: sigReasonText
+                        font.pixelSize: propertySigLineHeight * 0.8
+                        font.italic: true
+                        height: propertySigLineHeight
+                        width: parent.width - 4
+                        clip: true
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_LABEL
+                        text: ""
+                        anchors.topMargin: 2
+                        x: 2
+                        visible: true
+                    }
+                    Image {
+                        id: dragSigWaterImage
+                        height: propertySigLineHeight * 4
+                        fillMode: Image.PreserveAspectFit
+                        anchors.top: sigReasonText.bottom
+                        anchors.topMargin: 2
+                        x: 2
+                        visible: true
+                    }
+                    Text {
+                        id: sigSignedByText
+                        font.pixelSize:propertySigLineHeight * 0.8
+                        height: propertySigLineHeight
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigReasonText.bottom
+                        text: ""
+                        x: 2
+                        visible: true
+                    }
+                    Text {
+                        id: sigSignedByNameText
+                        font.pixelSize: propertySigLineHeight * 0.8
+                        height: propertySigLineHeight
+                        width: parent.width - sigSignedByText.paintedWidth - 6
+                        clip: true
+                        font.family: lato.name
+                        font.bold: true
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigReasonText.bottom
+                        anchors.left: sigSignedByText.right
+                        text: ""
+                        x: 2
+                        visible: true
+                    }
+                    Text {
+                        id: sigNumIdText
+                        font.pixelSize: propertySigLineHeight * 0.8
+                        height: propertySigLineHeight
+                        width: parent.width - 4
+                        clip: true
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigSignedByText.bottom
+                        text: ""
+                        x: 2
+                        visible: true
+                    }
+                    Text {
+                        id: sigDateText
+                        font.pixelSize: propertySigLineHeight * 0.8
+                        height: propertySigLineHeight
+                        width: parent.width - 4
+                        clip: true
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigNumIdText.bottom
+                        x: 2
+                        visible: true
+                    }
+                    Text {
+                        id: sigLocationText
+                        font.pixelSize: propertySigLineHeight * 0.8
+                        height: propertySigLineHeight
+                        width: parent.width - 4
+                        clip: true
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigDateText.bottom
+                        text: ""
+                        x: 2
+                        visible: true
+                    }
+
+                    Image {
+                        id: dragSigImage
+                        height: propertySigLineHeight * 3
+                        fillMode: Image.PreserveAspectFit
+                        anchors.top: sigLocationText.bottom
+                        anchors.topMargin: parent.height * 0.1
+                        x: 2
+                        visible: true
+                    }
                 }
+
+
 
             }
         }

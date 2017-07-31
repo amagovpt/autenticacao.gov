@@ -1,6 +1,9 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
 
+//Import C++ defined enums
+import eidguiV2 1.0
+
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
 
@@ -14,6 +17,35 @@ PageDefinitionsSignatureForm {
         y: (parent.height - height) / 2
         Label {
             text: "Só é possível seleccionar um ficheiro de assinatura personalizada"
+        }
+    }
+
+    Connections {
+        target: gapi
+        onSignalPdfSignSucess: {
+            signsuccess_dialog.visible = true
+        }
+
+        onSignalPdfSignError: {
+            signerror_dialog.visible = true
+        }
+        onSignalCardDataChanged: {
+            console.log("Services Sign Advanced --> Data Changed")
+            //console.trace();
+            propertySigReasonText.text = "{ Motivo da assinatura }"
+            propertySigSignedByText.text = "Assinado por: "
+
+            propertySigSignedByNameText.text = gapi.getDataCardIdentifyValue(GAPI.Givenname)
+                  + " " +  gapi.getDataCardIdentifyValue(GAPI.Surname)
+
+            propertySigNumIdText.text = "Num. de Identificação Civil: "
+                    + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
+            propertySigLocationText.text = "{ Localização da assinatura }"
+
+            propertySigImg.source = "qrc:/images/logo_CC.png"
+            propertySigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
+
+            propertyBusyIndicator.running = false
         }
     }
 
@@ -93,5 +125,39 @@ PageDefinitionsSignatureForm {
                 propertyRadioButtonCustom.checked = true
             }
         }
+    }
+
+
+    Component.onCompleted: {
+        if (gapi.getShortcutFlag() > 0)
+            filesModel.append(
+                        {
+                            "fileUrl": gapi.getShortcutInputPDF()
+                        });
+
+        console.log("Page Difinitions Signature mainWindowCompleted")
+        propertyBusyIndicator.running = true
+        gapi.startCardReading()
+        propertySigDateText.text = getData()
+    }
+    function getData(){
+        var time = Qt.formatDateTime(new Date(), "yy.MM.dd hh:mm:ss")
+
+        function pad(number, length){
+            var str = "" + number
+            while (str.length < length) {
+                str = '0'+str
+            }
+            return str
+        }
+
+        var offset = new Date().getTimezoneOffset()
+        offset = ((offset<0? '+':'-')+ // Note the reversed sign!
+                  pad(parseInt(Math.abs(offset/60)), 2)+
+                  pad(Math.abs(offset%60), 2))
+
+        time += " " + offset
+
+        return time
     }
 }
