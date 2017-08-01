@@ -759,7 +759,7 @@ Item {
                     anchors.top: parent.top
                     Switch {
                         id: checkLastPage
-                        text: "Ultima"
+                        text: "Última"
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD

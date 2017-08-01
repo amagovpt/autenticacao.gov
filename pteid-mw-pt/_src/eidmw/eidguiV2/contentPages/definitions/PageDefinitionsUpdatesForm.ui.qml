@@ -23,7 +23,7 @@ Item {
             id: textTitle
             font.pixelSize: Constants.SIZE_TEXT_LABEL
             font.family: lato.name
-            text: "Atualizações Automáticas"
+            text: "Atualizações"
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
