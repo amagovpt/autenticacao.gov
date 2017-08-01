@@ -37,6 +37,7 @@ namespace eIDMW {
             if ( ( p[i] >= 0x30 ) && ( p[i] <= 0x39 )) {
                 hex.push_back( p[i] - 0x30 );
             }
+            else {
                 hex = str;
                 break;
             }
