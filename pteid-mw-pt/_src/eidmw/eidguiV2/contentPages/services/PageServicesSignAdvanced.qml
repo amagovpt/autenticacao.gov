@@ -49,7 +49,6 @@ PageServicesSignAdvancedForm {
             console.log("Receive signal onSignalPdfSourceChanged pdfWidth = "+pdfWidth+" pdfHeight = "+pdfHeight);
             propertyPDFPreview.propertyPdfOriginalWidth=pdfWidth
             propertyPDFPreview.propertyPdfOriginalHeight=pdfHeight
-            propertyBusyIndicator.running = false
         }
     }
 
@@ -157,7 +156,7 @@ PageServicesSignAdvancedForm {
         onAccepted: {
 
             var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
-            var isTimestamp = propertySwitchSignTemp.position
+            var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogOutput.fileUrl
 
             if (propertyRadioButtonPADES.checked) {
@@ -295,6 +294,25 @@ PageServicesSignAdvancedForm {
         text: propertySpinBoxControl.textFromValue(propertySpinBoxControl.value, propertySpinBoxControl.locale)
     }
 
+    propertyFileDialog{
+
+        nameFilters: propertyRadioButtonPADES.checked ?
+                         ["PDF document (*.pdf)"] :
+                         ["All files (*)"]
+    }
+
+    propertyRadioButtonPADES{
+        onCheckedChanged:{
+            if(propertyRadioButtonPADES.checked){
+                propertyRectMainRight.visible = true
+                filesModel.clear()
+            }else{
+                propertyRectMainRight.visible = false
+                filesModel.clear()
+            }
+        }
+    }
+
     Component {
         id: listViewFilesDelegate
         Rectangle{
@@ -363,8 +381,6 @@ PageServicesSignAdvancedForm {
                         + propertyListViewFiles.count)
             if(filesModel.count === 0) {
                 fileLoaded = false
-                propertyRadioButtonPADES.checked = false
-                propertyRadioButtonXADES.checked = false
                 propertyPDFPreview.propertyBackground.source = ""
                 propertyPDFPreview.propertyDragSigImg.visible = false
                 propertyPDFPreview.propertyDragSigReasonText.visible = false
@@ -380,19 +396,22 @@ PageServicesSignAdvancedForm {
                 propertyBusyIndicator.running = true
                 var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
                 console.log("loadedFilePath: " + loadedFilePath)
-                propertyPDFPreview.propertyBackground.cache = false
-                propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
-                propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
-                propertyPDFPreview.propertyDragSigImg.visible = true
-                propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
-                propertyPDFPreview.propertyDragSigWaterImg.visible = true
-                propertyPDFPreview.propertyDragSigReasonText.visible = true
-                propertyPDFPreview.propertyDragSigSignedByText.visible = true
-                propertyPDFPreview.propertyDragSigSignedByNameText.visible = true
-                propertyPDFPreview.propertyDragSigNumIdText.visible = true
-                propertyPDFPreview.propertyDragSigDateText.visible = true
-                propertyPDFPreview.propertyDragSigLocationText.visible = true
-                propertyPDFPreview.propertyDragSigImg.visible = true
+                if(propertyRadioButtonPADES.checked){
+                    propertyPDFPreview.propertyBackground.cache = false
+                    propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
+                    propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
+                    propertyPDFPreview.propertyDragSigImg.visible = true
+                    propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
+                    propertyPDFPreview.propertyDragSigWaterImg.visible = true
+                    propertyPDFPreview.propertyDragSigReasonText.visible = true
+                    propertyPDFPreview.propertyDragSigSignedByText.visible = true
+                    propertyPDFPreview.propertyDragSigSignedByNameText.visible = true
+                    propertyPDFPreview.propertyDragSigNumIdText.visible = true
+                    propertyPDFPreview.propertyDragSigDateText.visible = true
+                    propertyPDFPreview.propertyDragSigLocationText.visible = true
+                    propertyPDFPreview.propertyDragSigImg.visible = true
+                }
+                propertyBusyIndicator.running = false
             }
         }
     }

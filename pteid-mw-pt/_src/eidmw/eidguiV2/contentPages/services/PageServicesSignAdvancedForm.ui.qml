@@ -18,6 +18,7 @@ Item {
     property variant filesArray: []
     property bool fileLoaded: false
 
+    property alias propertyRectMainRight: rectMainRight
     property alias propertyBusyIndicator: busyIndicator
     property alias propertyPDFPreview: pdfPreviewArea
     property alias propertyFileDialog: fileDialog
@@ -82,7 +83,6 @@ Item {
             folder: shortcuts.home
             modality: Qt.WindowModal
             selectMultiple: true
-            nameFilters: ["PDF document (*.pdf)", "All files (*)"]
             Component.onCompleted: visible = false
         }
 
@@ -303,10 +303,11 @@ Item {
                             anchors.left: textFormatSign.right
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
                             text: "No documento"
+                            checked: true
                             leftPadding: 0
                             rightPadding: 0
                             anchors.leftMargin: 10
-                            enabled: fileLoaded
+                            enabled: true
                             font.capitalization: Font.MixedCase
                             opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                             contentItem: Text {
@@ -347,7 +348,7 @@ Item {
                             anchors.leftMargin: 10
                             leftPadding: 0
                             rightPadding: 0
-                            enabled: fileLoaded
+                            enabled: true
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
@@ -615,6 +616,7 @@ Item {
                 width: parent.width
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.left: parent.left
+                visible: rectMainRight.visible
                 Item {
                     id: itemCheckSignShow
                     width: parent.width * 0.6
@@ -640,6 +642,7 @@ Item {
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.left: parent.left
                 anchors.top: rectSignOptions.bottom
+                visible: rectMainRight.visible
 
                 Item {
                     id: itemCheckSignReduced
