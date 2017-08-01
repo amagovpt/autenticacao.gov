@@ -15,10 +15,10 @@ using namespace eIDMW;
 
 GAPI::GAPI(QObject *parent) :
     QObject(parent) {
-        image_provider = new PhotoImageProvider();
-        image_provider_pdf = new PDFPreviewImageProvider();
-        m_addressLoaded = false;
-        m_shortcutFlag = 0;
+    image_provider = new PhotoImageProvider();
+    image_provider_pdf = new PDFPreviewImageProvider();
+    m_addressLoaded = false;
+    m_shortcutFlag = 0;
 }
 
 QString GAPI::getDataCardIdentifyValue(IDInfoKey key) {
@@ -73,24 +73,24 @@ QString GAPI::getAddressField(AddressInfoKey key) {
 
 #define BEGIN_TRY_CATCH  \
     try					  \
-    {
+{
 
 #define END_TRY_CATCH    \
     }                    \
     catch (PTEID_ExNoReader &) \
-    {                           \
-        qDebug() << "No card reader found !"; \
-        emit signalCardAccessError(NoReaderFound); \
+{                           \
+    qDebug() << "No card reader found !"; \
+    emit signalCardAccessError(NoReaderFound); \
     }     \
     catch (PTEID_ExNoCardPresent &) \
-    {     \
-        qDebug() << "No card present."; \
-        emit signalCardAccessError(NoCardFound); \
+{     \
+    qDebug() << "No card present."; \
+    emit signalCardAccessError(NoCardFound); \
     }     \
     catch (PTEID_Exception &e) \
-    { \
-        fprintf(stderr, "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
-        emit signalCardAccessError(CardUnknownError); \
+{ \
+    fprintf(stderr, "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
+    emit signalCardAccessError(CardUnknownError); \
     }
 
 void GAPI::getAddressFile() {
@@ -141,7 +141,7 @@ unsigned int GAPI::verifyAuthPin(QString pin_value) {
 
     BEGIN_TRY_CATCH
 
-    PTEID_EIDCard &card = getCardInstance();
+            PTEID_EIDCard &card = getCardInstance();
 
     PTEID_Pin & auth_pin = card.getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
     auth_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
@@ -152,8 +152,8 @@ unsigned int GAPI::verifyAuthPin(QString pin_value) {
 
     END_TRY_CATCH
 
-    //QML default types don't include long
-    return (unsigned int)tries_left;
+            //QML default types don't include long
+            return (unsigned int)tries_left;
 }
 
 unsigned int GAPI::getTriesLeftAuthPin() {
@@ -161,7 +161,7 @@ unsigned int GAPI::getTriesLeftAuthPin() {
 
     BEGIN_TRY_CATCH
 
-    PTEID_EIDCard &card = getCardInstance();
+            PTEID_EIDCard &card = getCardInstance();
 
     PTEID_Pin & auth_pin = card.getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
     tries_left = auth_pin.getTriesLeft();
@@ -172,8 +172,8 @@ unsigned int GAPI::getTriesLeftAuthPin() {
 
     END_TRY_CATCH
 
-    //QML default types don't include long
-    return (unsigned int)tries_left;
+            //QML default types don't include long
+            return (unsigned int)tries_left;
 }
 
 unsigned int GAPI::verifySignPin(QString pin_value) {
@@ -181,7 +181,7 @@ unsigned int GAPI::verifySignPin(QString pin_value) {
 
     BEGIN_TRY_CATCH
 
-    PTEID_EIDCard &card = getCardInstance();
+            PTEID_EIDCard &card = getCardInstance();
 
     PTEID_Pin & sign_pin = card.getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
     sign_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
@@ -192,8 +192,8 @@ unsigned int GAPI::verifySignPin(QString pin_value) {
 
     END_TRY_CATCH
 
-    //QML default types don't include long
-    return (unsigned int)tries_left;
+            //QML default types don't include long
+            return (unsigned int)tries_left;
 }
 
 unsigned int GAPI::getTriesLeftSignPin() {
@@ -201,7 +201,7 @@ unsigned int GAPI::getTriesLeftSignPin() {
 
     BEGIN_TRY_CATCH
 
-    PTEID_EIDCard &card = getCardInstance();
+            PTEID_EIDCard &card = getCardInstance();
 
     PTEID_Pin & sign_pin = card.getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
     tries_left = sign_pin.getTriesLeft();
@@ -212,8 +212,8 @@ unsigned int GAPI::getTriesLeftSignPin() {
 
     END_TRY_CATCH
 
-    //QML default types don't include long
-    return (unsigned int)tries_left;
+            //QML default types don't include long
+            return (unsigned int)tries_left;
 }
 
 unsigned int GAPI::verifyAddressPin(QString pin_value) {
@@ -221,7 +221,7 @@ unsigned int GAPI::verifyAddressPin(QString pin_value) {
 
     BEGIN_TRY_CATCH
 
-    PTEID_EIDCard &card = getCardInstance();
+            PTEID_EIDCard &card = getCardInstance();
 
     PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
     address_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
@@ -232,8 +232,8 @@ unsigned int GAPI::verifyAddressPin(QString pin_value) {
 
     END_TRY_CATCH
 
-    //QML default types don't include long
-    return (unsigned int)tries_left;
+            //QML default types don't include long
+            return (unsigned int)tries_left;
 }
 
 unsigned int GAPI::getTriesLeftAddressPin() {
@@ -241,7 +241,7 @@ unsigned int GAPI::getTriesLeftAddressPin() {
 
     BEGIN_TRY_CATCH
 
-    PTEID_EIDCard &card = getCardInstance();
+            PTEID_EIDCard &card = getCardInstance();
 
     PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
     tries_left = address_pin.getTriesLeft();
@@ -252,8 +252,8 @@ unsigned int GAPI::getTriesLeftAddressPin() {
 
     END_TRY_CATCH
 
-    //QML default types don't include long
-    return (unsigned int)tries_left;
+            //QML default types don't include long
+            return (unsigned int)tries_left;
 }
 
 unsigned int GAPI::changeAuthPin(QString currentPin, QString newPin) {
@@ -261,7 +261,7 @@ unsigned int GAPI::changeAuthPin(QString currentPin, QString newPin) {
 
     BEGIN_TRY_CATCH
 
-    PTEID_EIDCard &card = getCardInstance();
+            PTEID_EIDCard &card = getCardInstance();
 
     PTEID_Pin & auth_pin = card.getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
     auth_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(),tries_left,"");
@@ -272,8 +272,8 @@ unsigned int GAPI::changeAuthPin(QString currentPin, QString newPin) {
 
     END_TRY_CATCH
 
-    //QML default types don't include long
-    return (unsigned int)tries_left;
+            //QML default types don't include long
+            return (unsigned int)tries_left;
 }
 
 unsigned int GAPI::changeSignPin(QString currentPin, QString newPin) {
@@ -281,7 +281,7 @@ unsigned int GAPI::changeSignPin(QString currentPin, QString newPin) {
 
     BEGIN_TRY_CATCH
 
-    PTEID_EIDCard &card = getCardInstance();
+            PTEID_EIDCard &card = getCardInstance();
 
     PTEID_Pin & sign_pin = card.getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
     sign_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(),tries_left,"");
@@ -292,8 +292,8 @@ unsigned int GAPI::changeSignPin(QString currentPin, QString newPin) {
 
     END_TRY_CATCH
 
-    //QML default types don't include long
-    return (unsigned int)tries_left;
+            //QML default types don't include long
+            return (unsigned int)tries_left;
 }
 
 void GAPI::showChangeAddressDialog(long code)
@@ -308,32 +308,32 @@ void GAPI::showChangeAddressDialog(long code)
 
     switch(code)
     {
-        case 0:
-            error_msg = tr("Address Confirmed successfully.");
-            break;
+    case 0:
+        error_msg = tr("Address Confirmed successfully.");
+        break;
         //The error code for connection error is common between SAM and OTP
-        case EIDMW_OTP_CONNECTION_ERROR:
-            error_msg = tr("Connection Error") + "\n\n" +
+    case EIDMW_OTP_CONNECTION_ERROR:
+        error_msg = tr("Connection Error") + "\n\n" +
                 tr("Please make sure you are connected to the Internet");
-            break;
+        break;
 
-        case 1121:
-        case 1122:
-            error_msg = tr("Error in the Address Change operation!") + "\n\n" + tr("Please make sure you typed the correct process number and confirmation code");
+    case 1121:
+    case 1122:
+        error_msg = tr("Error in the Address Change operation!") + "\n\n" + tr("Please make sure you typed the correct process number and confirmation code");
+        sam_error_code = code;
+        break;
+    case EIDMW_SAM_UNCONFIRMED_CHANGE:
+        error_msg = tr("Address change process is incomplete!") + "\n\n" + tr("The address is changed in the card but not confirmed by the State central services");
+        break;
+    case EIDMW_SSL_PROTOCOL_ERROR:
+        error_msg = tr("Error in the Address Change operation!") + "\n\n" + tr("Please make sure you have a valid authentication certificate");
+        break;
+    default:
+        //Make sure we only show the user error codes from the SAM service and not some weird pteid exception error code
+        if (code > 1100 && code < 3500)
             sam_error_code = code;
-            break;
-        case EIDMW_SAM_UNCONFIRMED_CHANGE:
-            error_msg = tr("Address change process is incomplete!") + "\n\n" + tr("The address is changed in the card but not confirmed by the State central services");
-            break;
-        case EIDMW_SSL_PROTOCOL_ERROR:
-            error_msg = tr("Error in the Address Change operation!") + "\n\n" + tr("Please make sure you have a valid authentication certificate");
-            break;
-        default:
-            //Make sure we only show the user error codes from the SAM service and not some weird pteid exception error code
-            if (code > 1100 && code < 3500)
-                sam_error_code = code;
-            error_msg = tr("Error in the Address Change operation!");
-            break;
+        error_msg = tr("Error in the Address Change operation!");
+        break;
     }
 
     if (sam_error_code != 0)
@@ -355,7 +355,7 @@ unsigned int GAPI::changeAddressPin(QString currentPin, QString newPin) {
 
     BEGIN_TRY_CATCH
 
-    PTEID_EIDCard &card = getCardInstance();
+            PTEID_EIDCard &card = getCardInstance();
 
     PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
     address_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(),tries_left,"");
@@ -366,8 +366,8 @@ unsigned int GAPI::changeAddressPin(QString currentPin, QString newPin) {
 
     END_TRY_CATCH
 
-    //QML default types don't include long
-    return (unsigned int)tries_left;
+            //QML default types don't include long
+            return (unsigned int)tries_left;
 }
 
 void GAPI::addressChangeCallback(void *instance, int value)
@@ -409,7 +409,7 @@ void GAPI::changeAddress(QString process, QString secret_code)
     signalUpdateProgressStatus(tr("Mudando a morada no Cartão..."));
 
     connect(this, SIGNAL(addressChangeFinished(long)),
-     this, SLOT(showChangeAddressDialog(long)), Qt::UniqueConnection);
+            this, SLOT(showChangeAddressDialog(long)), Qt::UniqueConnection);
 
     char *processUtf8 = strdup(process.toUtf8().constData());
     char *secret_codeUtf8 = strdup(secret_code.toUtf8().constData());
@@ -419,7 +419,7 @@ void GAPI::changeAddress(QString process, QString secret_code)
 QString GAPI::getCardActivation() {
     BEGIN_TRY_CATCH
 
-    PTEID_EIDCard &card = getCardInstance();
+            PTEID_EIDCard &card = getCardInstance();
     PTEID_EId &eid_file = card.getID();
 
     if (isExpiredDate(eid_file.getValidityEndDate())) {
@@ -434,7 +434,7 @@ QString GAPI::getCardActivation() {
 
     END_TRY_CATCH
 
-    return QString();
+            return QString();
 }
 
 QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
@@ -446,11 +446,11 @@ QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const 
 
     if (!requestedSize.isValid())
     {
-       if (requestedSize.height() > p.height() || requestedSize.width() > p.width())
-       {
+        if (requestedSize.height() > p.height() || requestedSize.width() > p.width())
+        {
             qDebug() << "PhotoImageProvider: Invalid requestedSize - " << requestedSize;
             return QPixmap();
-       }
+        }
     }
 
     size->setWidth(p.width());
@@ -460,17 +460,17 @@ QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const 
 }
 
 void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
-                     QString reason, QString location, double isTimestamp, double isSmall) {
+                           QString reason, QString location, double isTimestamp, double isSmall) {
 
     SignParams params = {loadedFilePath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall};
     QFuture<void> future =
-          QtConcurrent::run(this, &GAPI::doSignPDF, params);
+            QtConcurrent::run(this, &GAPI::doSignPDF, params);
 
 }
 
 void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp) {
     QFuture<void> future =
-          QtConcurrent::run(this, &GAPI::doSignXADES, loadedFilePath, outputFile, isTimestamp);
+            QtConcurrent::run(this, &GAPI::doSignXADES, loadedFilePath, outputFile, isTimestamp);
 
 }
 
@@ -489,41 +489,41 @@ QString skipFileURL(QString input) {
 void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp) {
     BEGIN_TRY_CATCH
 
-        PTEID_EIDCard &card = getCardInstance();
+            PTEID_EIDCard &card = getCardInstance();
 
-        const char *files_to_sign[1];
-        files_to_sign[0] = loadedFilePath.toUtf8().constData();
+    const char *files_to_sign[1];
+    files_to_sign[0] = loadedFilePath.toUtf8().constData();
 
-        if (isTimestamp > 0)
-            card.SignXadesT(outputFile.toUtf8().constData(), files_to_sign, 1);
-        else
-            card.SignXades(outputFile.toUtf8().constData(), files_to_sign, 1);
+    if (isTimestamp > 0)
+        card.SignXadesT(outputFile.toUtf8().constData(), files_to_sign, 1);
+    else
+        card.SignXades(outputFile.toUtf8().constData(), files_to_sign, 1);
 
     END_TRY_CATCH
 
-    emit signalPdfSignSucess();
+            emit signalPdfSignSucess();
 }
 
 void GAPI::doSignPDF(SignParams &params) {
 
     BEGIN_TRY_CATCH
 
-        PTEID_EIDCard &card = getCardInstance();
-        QString fullInputPath = "/" + params.loadedFilePath;
-        QString fullOutputPath = skipFileURL(params.outputFile);
-        PTEID_PDFSignature sig_handler(fullInputPath.toUtf8().data());
+            PTEID_EIDCard &card = getCardInstance();
+    QString fullInputPath = "/" + params.loadedFilePath;
+    QString fullOutputPath = skipFileURL(params.outputFile);
+    PTEID_PDFSignature sig_handler(fullInputPath.toUtf8().data());
 
-        if (params.isTimestamp > 0)
-            sig_handler.enableTimestamp();
-        if (params.isSmallSignature > 0)
-            sig_handler.enableSmallSignatureFormat();
+    if (params.isTimestamp > 0)
+        sig_handler.enableTimestamp();
+    if (params.isSmallSignature > 0)
+        sig_handler.enableSmallSignatureFormat();
 
-        card.SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
-                         params.location.toUtf8().data(), params.reason.toUtf8().data(), fullOutputPath.toUtf8().data());
+    card.SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
+                 params.location.toUtf8().data(), params.reason.toUtf8().data(), fullOutputPath.toUtf8().data());
 
     END_TRY_CATCH
 
-    emit signalPdfSignSucess();
+            emit signalPdfSignSucess();
 }
 
 QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
@@ -604,15 +604,15 @@ QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
     if (!image.isNull()) {
         return QPixmap::fromImage(image);
     } else {
-       qDebug() << "Error rendering PDF page to image!";
-       return QPixmap();
+        qDebug() << "Error rendering PDF page to image!";
+        return QPixmap();
     }
 
 }
 
 
 void GAPI::startCardReading() {
- QFuture<void> future = QtConcurrent::run(this, &GAPI::connectToCard);
+    QFuture<void> future = QtConcurrent::run(this, &GAPI::connectToCard);
 
 }
 
@@ -635,45 +635,140 @@ void GAPI::connectToCard() {
 
     BEGIN_TRY_CATCH
 
-        PTEID_EIDCard &card = getCardInstance();
-        PTEID_EId &eid_file = card.getID();
+            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EId &eid_file = card.getID();
 
-        qDebug() << "C++: loading Card Data";
+    qDebug() << "C++: loading Card Data";
 
-        QMap<IDInfoKey, QString> cardData;
+    QMap<IDInfoKey, QString> cardData;
 
-        cardData[Surname] = QString::fromUtf8(eid_file.getSurname());
-        cardData[Givenname] = QString::fromUtf8(eid_file.getGivenName());
-        cardData[Sex] =       QString::fromUtf8(eid_file.getGender());
-        cardData[Height] = QString::fromUtf8(eid_file.getHeight());
-        cardData[Country] = QString::fromUtf8(eid_file.getCountry());
-        cardData[Birthdate] = QString::fromUtf8(eid_file.getDateOfBirth());
-        cardData[Father] = QString::fromUtf8(eid_file.getGivenNameFather()) + " " +
-                QString::fromUtf8(eid_file.getSurnameFather());
-        cardData[Mother] = QString::fromUtf8(eid_file.getGivenNameMother()) + " " +
-                QString::fromUtf8(eid_file.getSurnameMother());
-        cardData[Documenttype] = QString::fromUtf8(eid_file.getDocumentType());
-        cardData[Documentnum] = QString::fromUtf8(eid_file.getDocumentNumber());
-        cardData[Documentversion] = QString::fromUtf8(eid_file.getDocumentVersion());
-        cardData[Nationality] = QString::fromUtf8(eid_file.getNationality());
-        cardData[Validityenddate] = QString::fromUtf8(eid_file.getValidityEndDate());
-        cardData[Validitybegindate] = QString::fromUtf8(eid_file.getValidityBeginDate());
-        cardData[PlaceOfRequest] = QString::fromUtf8(eid_file.getLocalofRequest());
-        cardData[IssuingEntity] = QString::fromUtf8(eid_file.getIssuingEntity());
-        cardData[NISS] = QString::fromUtf8(eid_file.getSocialSecurityNumber());
-        cardData[NSNS] = QString::fromUtf8(eid_file.getHealthNumber());
-        cardData[NIF]  = QString::fromUtf8(eid_file.getTaxNo());
+    cardData[Surname] = QString::fromUtf8(eid_file.getSurname());
+    cardData[Givenname] = QString::fromUtf8(eid_file.getGivenName());
+    cardData[Sex] =       QString::fromUtf8(eid_file.getGender());
+    cardData[Height] = QString::fromUtf8(eid_file.getHeight());
+    cardData[Country] = QString::fromUtf8(eid_file.getCountry());
+    cardData[Birthdate] = QString::fromUtf8(eid_file.getDateOfBirth());
+    cardData[Father] = QString::fromUtf8(eid_file.getGivenNameFather()) + " " +
+            QString::fromUtf8(eid_file.getSurnameFather());
+    cardData[Mother] = QString::fromUtf8(eid_file.getGivenNameMother()) + " " +
+            QString::fromUtf8(eid_file.getSurnameMother());
+    cardData[Documenttype] = QString::fromUtf8(eid_file.getDocumentType());
+    cardData[Documentnum] = QString::fromUtf8(eid_file.getDocumentNumber());
+    cardData[Documentversion] = QString::fromUtf8(eid_file.getDocumentVersion());
+    cardData[Nationality] = QString::fromUtf8(eid_file.getNationality());
+    cardData[Validityenddate] = QString::fromUtf8(eid_file.getValidityEndDate());
+    cardData[Validitybegindate] = QString::fromUtf8(eid_file.getValidityBeginDate());
+    cardData[PlaceOfRequest] = QString::fromUtf8(eid_file.getLocalofRequest());
+    cardData[IssuingEntity] = QString::fromUtf8(eid_file.getIssuingEntity());
+    cardData[NISS] = QString::fromUtf8(eid_file.getSocialSecurityNumber());
+    cardData[NSNS] = QString::fromUtf8(eid_file.getHealthNumber());
+    cardData[NIF]  = QString::fromUtf8(eid_file.getTaxNo());
 
-        //Load photo into a QPixmap
-        PTEID_ByteArray& photo = eid_file.getPhotoObj().getphoto();
+    //Load photo into a QPixmap
+    PTEID_ByteArray& photo = eid_file.getPhotoObj().getphoto();
 
-        QPixmap image_photo;
-        image_photo.loadFromData(photo.GetBytes(), photo.Size(), "PNG");
+    QPixmap image_photo;
+    image_photo.loadFromData(photo.GetBytes(), photo.Size(), "PNG");
 
-        image_provider->setPixmap(image_photo);
+    image_provider->setPixmap(image_photo);
 
-        //All data loaded: we can emit the signal to QML
-        setDataCardIdentify(cardData);
+    //All data loaded: we can emit the signal to QML
+    setDataCardIdentify(cardData);
 
-        END_TRY_CATCH
+    END_TRY_CATCH
+}
+
+//****************************************************
+// Callback function used by the Readercontext to notify insertion/removal of a card
+// The callback comes at:
+// - startup
+// - insertion of a card
+// - removal of a card
+// - add/remove of a cardreader
+// When a card is inserted we post a signal to the GUI telling that
+// a new card is inserted.
+//****************************************************
+void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBackData)
+{
+    //------------------------------------
+    // TODO: cleanup the callback data
+    //------------------------------------
+
+    try
+    {
+        PTEID_ReaderContext& readerContext = ReaderSet.getReaderByName(pCallBackData->getReaderName().toLatin1());
+
+        //------------------------------------
+        // is card retracted from reader?
+        //------------------------------------
+        if (!readerContext.isCardPresent())
+        {
+
+            //------------------------------------
+            // TODO: remove the certificates
+            //------------------------------------
+
+            //------------------------------------
+            // send an event to the main app to show the popup message
+            //------------------------------------
+            pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_REMOVED);
+
+            return;
+        }
+        //------------------------------------
+        // is card inserted ?
+        //------------------------------------
+        if (readerContext.isCardChanged(pCallBackData->m_cardID))
+        {
+            //------------------------------------
+            // send an event to the main app to show the popup message
+            //------------------------------------
+            pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_CHANGED);
+        }
+    }
+    catch (PTEID_ExBadTransaction& e)
+    {
+        long err = e.GetError();
+        err = err;
+    }
+    catch (...)
+    {
+        int x=0;
+        x++;
+        // we catch ALL exceptions. This is because otherwise the thread throwing the exception stops
+    }
+}
+
+void GAPI::setEventCallbacks( void )
+{
+    //----------------------------------------
+    // for all the readers, create a callback such we can know
+    // afterwards, which reader called us
+    //----------------------------------------
+
+    //------------------------------------
+    // TODO:     update the readerlist
+    //------------------------------------
+
+    try
+    {
+        size_t maxcount=ReaderSet.readerCount(true);
+        for (size_t Ix=0; Ix<maxcount; Ix++)
+        {
+            void (*fCallback)(long lRet, unsigned long ulState, void* pCBData);
+
+            const char*			 readerName		= ReaderSet.getReaderName(Ix);
+            PTEID_ReaderContext& readerContext  = ReaderSet.getReaderByNum(Ix);
+            CallBackData*		 pCBData		= new CallBackData(readerName, this);
+
+            fCallback = (void (*)(long,unsigned long,void *))&cardEventCallback;
+
+            m_callBackHandles[readerName] = readerContext.SetEventCallback(fCallback, pCBData);
+            m_callBackData[readerName]	  = pCBData;
+        }
+    }
+    catch(PTEID_Exception& e)
+    {
+        emit signalCardChanged(ET_UNKNOWN);
+    }
 }

@@ -6,6 +6,9 @@ import QtQuick.Controls.Universal 2.1
 import Qt.labs.settings 1.0
 import QtQuick.Window 2.2
 
+//Import C++ defined enums
+import eidguiV2 1.0
+
 /* Constants imports */
 import "scripts/Constants.js" as Constants
 
@@ -31,6 +34,44 @@ Window {
         mainFormID.propertyMainMenuView.width = getMainMenuWidth(width)
         mainFormID.propertySubMenuView.width = getSubMenuWidth(width)
         mainFormID.propertyContentPagesView.width = getContentPagesMenuWidth(width)
+    }
+
+    Connections {
+        target: gapi
+
+        onSignalCardAccessError: {
+            console.log("Main Page onSignalCardAccessError")
+            if (error_code == GAPI.NoReaderFound) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "No card reader found!"
+            }
+            else if (error_code == GAPI.NoCardFound) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "No Card Found!"
+            }
+            else {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Reading Card Error!"
+            }
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+        }
+        onSignalCardChanged: {
+            console.log("Main Page onSignalCardChanged")
+            if (error_code == GAPI.ET_CARD_REMOVED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Cartão do Cidadão removido"
+            }
+            else if (error_code == GAPI.ET_CARD_CHANGED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Cartão do Cidadão inserido"
+            }
+            else{
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        "Erro da aplicação! Por favor reinstale a aplicação:"
+            }
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+        }
     }
 
     MainForm {
@@ -527,7 +568,7 @@ Window {
 
     Component.onCompleted: {
         console.log("Window mainWindow Completed")
-
+        gapi.setEventCallbacks()
     }
 
     function getMainMenuWidth(parentWidth){

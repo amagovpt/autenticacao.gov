@@ -24,6 +24,57 @@
 
 */
 
+class GAPI;
+
+//***********************************************
+// callback data class
+// This class can be used to store whatever info we
+// need from the callback function
+//***********************************************
+class CallBackData
+{
+public:
+    CallBackData( void )
+        : m_readerName()
+        , m_mainWnd()
+        , m_cardID(0)
+    {
+    }
+    CallBackData( const char* pReaderName, GAPI* pGAPI )
+        : m_readerName(pReaderName)
+        , m_mainWnd(pGAPI)
+        , m_cardID(0)
+    {
+    }
+    virtual ~CallBackData( void )
+    {
+    }
+    QString const& getReaderName()
+    {
+        return m_readerName;
+    }
+    void setReaderName( QString const& readerName)
+    {
+        m_readerName = readerName;
+    }
+    void setReaderName( const char* readerName)
+    {
+        m_readerName = readerName;
+    }
+    GAPI* getMainWnd( void )
+    {
+        return m_mainWnd;
+    }
+private:
+    QString m_readerName;
+    GAPI*   m_mainWnd;
+public:
+    unsigned long   m_cardID;
+};
+
+typedef QMap<QString,unsigned long> tCallBackHandles;
+typedef QMap<QString,CallBackData*> tCallBackData;
+
 class PhotoImageProvider: public QQuickImageProvider 
 {
 public:
@@ -57,7 +108,7 @@ public:
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 
 signals:
-Q_SIGNAL    void signalPdfSourceChanged(int pdfWidth, int pdfHeight);
+    Q_SIGNAL    void signalPdfSourceChanged(int pdfWidth, int pdfHeight);
 private:
     QPixmap renderPdf(int page,const QSize &requestedSize);
     QPixmap renderPDFPage(unsigned int page);
@@ -81,14 +132,17 @@ public:
     //bool isPersoDateLoaded;
     //bool isAddressLoaded;
 
-    enum IDInfoKey { Documenttype, Documentversion, Surname, Givenname, Sex, Height, Nationality, Birthdate, Documentnum, Validitybegindate, Validityenddate, 
-          NIC, NIF, NISS, NSNS, IssuingEntity, PlaceOfRequest, Country, Father, Mother, AccidentalIndications };
+    enum IDInfoKey { Documenttype, Documentversion, Surname, Givenname, Sex, Height, Nationality, Birthdate, Documentnum, Validitybegindate, Validityenddate,
+                     NIC, NIF, NISS, NSNS, IssuingEntity, PlaceOfRequest, Country, Father, Mother, AccidentalIndications };
 
     enum AddressInfoKey { District, Municipality, Parish, Streettype, Streetname, Buildingtype, Doorno, Floor, Side, Locality, Place, Zip4, Zip3, PostalLocality};
 
     enum CardAccessError { NoReaderFound, NoCardFound, CardReadError, CardUnknownError };
 
+    enum eCustomEventType { ET_UNKNOWN, ET_CARD_CHANGED, ET_CARD_REMOVED };
+
     Q_ENUMS(CardAccessError)
+    Q_ENUMS(eCustomEventType)
     Q_ENUMS(IDInfoKey)
     Q_ENUMS(AddressInfoKey)
 
@@ -145,6 +199,8 @@ public slots:
     QString getDataCardIdentifyValue(GAPI::IDInfoKey key);
     QString getAddressField(GAPI::AddressInfoKey key);
 
+    void setEventCallbacks( void );
+
 signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed
@@ -158,6 +214,7 @@ signals:
     void signalUpdateProgressBar(int value);
     void signalUpdateProgressStatus(const QString statusMessage);
     void addressChangeFinished(long return_code);
+    void signalCardChanged(const int error_code);
 
 private:
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
@@ -180,6 +237,9 @@ private:
     bool m_addressLoaded;
     int m_shortcutFlag;
     QString m_shortcutInputPDF;
+
+    tCallBackHandles		m_callBackHandles;
+    tCallBackData			m_callBackData;
 
 private slots:
     // Test functions
