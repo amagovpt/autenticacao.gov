@@ -42,6 +42,7 @@ namespace eIDMW {
                 break;
             }
             return hex;
+        }
     }
 
         
@@ -100,12 +101,12 @@ namespace eIDMW {
         return m_receiveCode;
     }
 
-    void PDFSignatureCli::setReceiveCode( std::string in_receiveCode ){
+    void PDFSignatureCli::setReceiveCode( std::string in_receiveCode) {
         m_receiveCode = in_receiveCode;
     }
 
 
-    int PDFSignatureCli::cli_getCertificate( std::string in_userId ){
+    int PDFSignatureCli::cli_getCertificate( std::string in_userId) {
 #if defined(EXTERNAL_CERTIFICATE)
         if ( NULL == m_pdf_handler ){
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
@@ -123,7 +124,7 @@ namespace eIDMW {
                   "*** getCertificate          ***\n"
                   "*******************************\n" );
         CByteArray certificate;
-        int ret = cmdService.getCertificate( in_userId, certificate );
+        int ret = cmdService.getCertificate( in_userId, certificate);
         if ( ret != ERR_NONE ) return ret;
 
         if ( 0 == certificate.Size() ){
@@ -184,7 +185,7 @@ namespace eIDMW {
 /*  *********************************************************
     ***    PDFSignatureCli::cli_sendDataToSign()          ***
     ********************************************************* */
-    int PDFSignatureCli::cli_sendDataToSign( std::string in_pin ){
+    int PDFSignatureCli::cli_sendDataToSign( std::string in_pin) {
 #if defined(EXTERNAL_CERTIFICATE)
         if ( NULL == m_pdf_handler ){
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
