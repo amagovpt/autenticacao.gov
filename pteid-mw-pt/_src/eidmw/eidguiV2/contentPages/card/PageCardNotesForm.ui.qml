@@ -15,6 +15,10 @@ Item {
     property alias propertyFlickNotes: flickable
     property alias propertyEditNotes: edit
     property alias propertyBusyIndicator: busyIndicator
+    property alias propertySaveNotes: saveNotes
+    property alias propertyMouseAreaFlickable: mouseAreaFlickable
+    property alias propertyProgressBar: progressBar
+
 
     Item {
         id: rowTop
@@ -26,11 +30,11 @@ Item {
     }
     
     BusyIndicator {
-       id: busyIndicator
-       running: false
-       anchors.centerIn: parent
-       // BusyIndicator should be on top of all other content
-       z: 1
+        id: busyIndicator
+        running: false
+        anchors.centerIn: parent
+        // BusyIndicator should be on top of all other content
+        z: 1
     }
 
     Item {
@@ -82,6 +86,8 @@ Item {
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 opacity: 1
 
+
+
                 Flickable {
                     id: flickable
                     x: Constants.SIZE_TEXT_FIELD_H_SPACE
@@ -95,20 +101,31 @@ Item {
                     contentHeight: edit.paintedHeight
                     clip: true
 
-                        TextEdit {
-                            id: edit
-                            property string previousText: text
-                            text: ""
-                            width: flickable.width
-                            height: flickable.height
-                            focus: true
-                            wrapMode: TextEdit.Wrap
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            color: Constants.COLOR_TEXT_BODY
-                        }
+                    TextEdit {
+                        id: edit
+                        property string previousText: text
+                        text: ""
+                        width: flickable.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                        height: flickable.height
+                        focus: true
+                        wrapMode: TextEdit.Wrap
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        color: Constants.COLOR_TEXT_BODY
+                    }
 
                     ScrollBar.vertical: ScrollBar {
-                    active : true
+                        active : true
+                        visible: true
+                        width: Constants.SIZE_TEXT_FIELD_H_SPACE
+
+                        onActiveChanged: {
+                            if (!active)
+                                active = true;
+                        }
+                    }
+                    MouseArea {
+                        id: mouseAreaFlickable
+                        anchors.fill: parent
                     }
                 }
 
@@ -130,10 +147,27 @@ Item {
             id: rectNotesCount
             width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
             height: parent.height
-            Components.LabelTextBoxForm{
-                propertyDateText.text: "Bytes Disponíveis"
-                propertyDateField.text: Constants.PAGE_NOTES_MAX_NOTES_LENGHT - edit.length + " / "
-                                        + Constants.PAGE_NOTES_MAX_NOTES_LENGHT
+            Text {
+                id: dateText
+                text: "Espaço ocupado no Cartão"
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                height: Constants.SIZE_TEXT_LABEL
+            }
+            Rectangle {
+                id: rectField
+                width: parent.width
+                color: "white"
+                height: 2 * Constants.SIZE_TEXT_FIELD
+                anchors.top :dateText.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                ProgressBar {
+                    id: progressBar
+                    width: rectField.width
+                    height: rectField.height
+                }
             }
         }
         Item{
@@ -144,6 +178,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
             Button {
+                id: saveNotes
                 text: "Gravar Notas"
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT

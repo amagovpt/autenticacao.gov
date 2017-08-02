@@ -24,19 +24,32 @@ PageCardNotesForm {
             else if (error_code == GAPI.NoCardFound) {
                 propertyGeneralTitleText.text =  "Error"
                 propertyGeneralPopUpLabelText.text = "No Card Found!"
+            }else {
+                propertyGeneralTitleText.text =  "Error"
+                propertyGeneralPopUpLabelText.text = "Reading Card Error!"
             }
             propertyGeneralPopUp.visible = true;
+        }
+        onSignalSetPersoDataFile: {
+            propertyGeneralTitleText.text = titleMessage
+            propertyGeneralPopUpLabelText.text = statusMessage
+            propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
     }
 
     propertyEditNotes {
-        //text: gapi.getNotesFile()
-        
         onCursorRectangleChanged: {
             ensureVisible(propertyEditNotes.cursorRectangle)
         }
         onTextChanged: {
-            if (propertyEditNotes.length > Constants.PAGE_NOTES_MAX_NOTES_LENGHT) {
+            var strLenght = gapi.getStringByteLenght(propertyEditNotes.text);
+            propertyProgressBar.value = strLenght / (Constants.PAGE_NOTES_MAX_NOTES_LENGHT)
+            console.log("Personal Notes Text Size: " + strLenght + " - " + 100 * propertyProgressBar.value + " %" )
+
+            if (strLenght > Constants.PAGE_NOTES_MAX_NOTES_LENGHT) {
+                propertyGeneralTitleText.text = "Aviso"
+                propertyGeneralPopUpLabelText.text = "Atingiu o máximo espaço disponível"
+                propertyPageLoader.propertyGeneralPopUp.visible = true;
                 var cursor = propertyEditNotes.cursorPosition;
                 propertyEditNotes.text = propertyEditNotes.previousText;
                 if (cursor > propertyEditNotes.length) {
@@ -46,6 +59,19 @@ PageCardNotesForm {
                 }
             }
             propertyEditNotes.previousText = propertyEditNotes.text
+        }
+    }
+
+    propertyMouseAreaFlickable{
+        onClicked: {
+            // TODO: Move cursor to the clicked position
+            propertyEditNotes.forceActiveFocus()
+        }
+    }
+
+    propertySaveNotes{
+        onClicked: {
+            gapi.startWritingPersoNotes(propertyEditNotes.text)
         }
     }
 

@@ -170,7 +170,9 @@ public slots:
     // Slots to Gui request values
     void setAddressLoaded(bool addressLoaded) {m_addressLoaded = addressLoaded; }
     void startCardReading();
+    int getStringByteLenght(QString text);
     void startReadingPersoNotes();
+    void startWritingPersoNotes(QString text);
     void startReadingAddress();
     int getShortcutFlag() {return m_shortcutFlag; }
     QString getShortcutInputPDF() { return m_shortcutInputPDF; }
@@ -215,11 +217,13 @@ signals:
     void signalUpdateProgressStatus(const QString statusMessage);
     void addressChangeFinished(long return_code);
     void signalCardChanged(const int error_code);
+    void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage);
 
 private:
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();
     void getPersoDataFile();
+    void setPersoDataFile(QString text);
     void getAddressFile();
     void doSignPDF(SignParams &params);
     void doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp);

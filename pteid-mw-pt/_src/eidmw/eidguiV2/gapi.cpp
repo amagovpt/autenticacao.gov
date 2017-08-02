@@ -136,6 +136,44 @@ void GAPI::getPersoDataFile() {
 
 }
 
+void GAPI::setPersoDataFile(QString text) {
+
+    qDebug() << "setPersoDataFile() called";
+
+    int testAuthPin = verifyAuthPin("");
+
+    if( testAuthPin == 0 || testAuthPin == TRIES_LEFT_ERROR) {
+        return;
+    }
+
+    try {
+        QString TxtPersoDataString = text.toUtf8();;
+
+        PTEID_ReaderContext &ReaderContext  = ReaderSet.getReader();
+        PTEID_EIDCard	 &Card	= ReaderContext.getEIDCard();
+
+            if ( TxtPersoDataString.toStdString().size() > 0 ){
+                const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), (TxtPersoDataString.toStdString().size() + 1) );
+                Card.writePersonalNotes(oData);
+            }
+            else {
+                unsigned long ulSize = 1000;
+                unsigned char *pucData = (unsigned char *)calloc( ulSize, sizeof(char) );
+
+                const PTEID_ByteArray oData( (const unsigned char *)pucData, ulSize);
+                Card.writePersonalNotes(oData);
+                free(pucData);
+            }
+            qDebug() << "Personal notes successfully written!" ;
+            emit signalSetPersoDataFile("Success","Personal notes successfully written!");
+
+    } catch (PTEID_Exception& e) {
+        qDebug() << "Error writing personal notes!" ;
+        emit signalSetPersoDataFile("Error","Error writing personal notes!");
+    }
+
+}
+
 unsigned int GAPI::verifyAuthPin(QString pin_value) {
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
@@ -614,6 +652,19 @@ QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
 void GAPI::startCardReading() {
     QFuture<void> future = QtConcurrent::run(this, &GAPI::connectToCard);
 
+}
+
+void GAPI::startWritingPersoNotes(QString text) {
+    QFuture<void> future = QtConcurrent::run(this, &GAPI::setPersoDataFile, text);
+}
+
+int GAPI::getStringByteLenght(QString text) {
+
+    int strLenght;
+
+    strLenght = text.toStdString().size() + 1; // '\0' should be considered as a byte
+
+    return strLenght;
 }
 
 void GAPI::startReadingPersoNotes() {
