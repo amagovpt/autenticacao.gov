@@ -34,7 +34,7 @@ Item {
     Item {
         id: rowMain
         width: parent.width - Constants.SIZE_ROW_H_SPACE
-        height: parent.height - Constants.HEIGHT_BOTTOM_COMPONENT
+        height: parent.height - rowBottom.height - Constants.SIZE_ROW_V_SPACE
 
         // Expanded menu need a Horizontal space to Main Menu
         x: Constants.SIZE_ROW_H_SPACE
@@ -136,8 +136,9 @@ Item {
     Item {
         id: rowBottom
         width: parent.width - Constants.SIZE_ROW_H_SPACE
-        height: Constants.HEIGHT_BOTTOM_COMPONENT
+        height: Constants.HEIGHT_SIGN_BOTTOM_COMPONENT
         anchors.top: rowMain.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         x: Constants.SIZE_ROW_H_SPACE
 
         Item{
@@ -149,15 +150,13 @@ Item {
                 id: buttonRemove
                 x: 140
                 text: "Remover ficheiro"
-                anchors.rightMargin: 0
-                y: 5
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
                 enabled: fileLoaded
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.left: parent.left
             }
         }
         Item{
@@ -169,8 +168,7 @@ Item {
 
             Button {
                 id: button_signCC
-                text: "Assinar com CC"
-                y: 5
+                text: "Assinar \n Cartão do Cidadão"
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
                 enabled: fileLoaded
@@ -180,8 +178,7 @@ Item {
             }
             Button {
                 id: button_signCMD
-                text: "Assinar com CMD"
-                y: 5
+                text: "Assinar \n Chave Móvel Digital"
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
                 enabled: fileLoaded

@@ -607,7 +607,7 @@ Item {
         Item {
             id: rowBottom
             width: rectMainRight.width
-            height: 3 * Constants.HEIGHT_BOTTOM_COMPONENT
+            height: rectSignOptions.height + rectSignPageOptions.height + rectSign.height
             anchors.top: rectMainRight.bottom
             anchors.left: rectMainRight.left
 
@@ -772,13 +772,13 @@ Item {
             Item {
                 id: rectSign
                 width: parent.width
-                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                height: Constants.HEIGHT_SIGN_BOTTOM_COMPONENT
                 anchors.left: parent.left
                 anchors.top: rectSignPageOptions.bottom
 
                 Button {
                     id: button_signCC
-                    text: "Assinar com CC"
+                    text: "Assinar \n Cartão do Cidadão"
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
                     enabled: fileLoaded
@@ -789,7 +789,7 @@ Item {
                 }
                 Button {
                     id: button_signCMD
-                    text: "Assinar com CMD"
+                    text: "Assinar \n Chave Móvel Digital"
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
                     enabled: fileLoaded
