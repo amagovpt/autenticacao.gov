@@ -23,7 +23,7 @@ namespace eIDMW {
 
         for(int i = 0; i < dataLen; i++ ) {
             if ( ( i > 0) && ( 0 == ( i % 20 ))) printf("\n");
-            printf( "0x%02x ", data[i] );
+            printf( "%02x", data[i] );
         }
         printf( "\n" );
     }
@@ -107,7 +107,6 @@ namespace eIDMW {
 
 
     int PDFSignatureCli::cli_getCertificate( std::string in_userId) {
-#if defined(EXTERNAL_CERTIFICATE)
         if ( NULL == m_pdf_handler ){
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
             return ERR_NULL_PDF_HANDLER;
@@ -137,10 +136,12 @@ namespace eIDMW {
                   "*******************************\n" );
 
         /* printData */
-        if ( isDBG ){
+        if ( isDBG ) {
+            /*
             printData( (char *)"Certificate: "
                         , certificate.GetBytes()
                         , certificate.Size() );
+            */                        
         }
 
         PDFSignature *pdf = m_pdf_handler->getPdfSignature();
@@ -171,13 +172,11 @@ namespace eIDMW {
             return ERR_INV_CERTIFICATE_CA;
         }
 
-        /* At this moment, it is possible sign only one document.
-            Then, batch mode should be set tio false
+        /* TODO: At the moment, it is only possible to sign one document.
         */
-        pdf->setBatch_mode( false );
+        pdf->setBatch_mode(false);
         pdf->setExternCertificate( certificate );
         pdf->setExternCertificateCA( certificateCA );
-#endif /* defined(EXTERNAL_CERTIFICATE) */
 
         return ERR_NONE;
     }
@@ -186,20 +185,22 @@ namespace eIDMW {
     ***    PDFSignatureCli::cli_sendDataToSign()          ***
     ********************************************************* */
     int PDFSignatureCli::cli_sendDataToSign( std::string in_pin) {
-#if defined(EXTERNAL_CERTIFICATE)
-        if ( NULL == m_pdf_handler ){
+
+        if ( NULL == m_pdf_handler ) {
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
             return ERR_NULL_PDF_HANDLER;
         }
 
         /* printData */
-        if ( isDBG ){
+        if (isDBG) {
             printData( (char *)"\nIN - User Pin: "
                         , (unsigned char *)in_pin.c_str()
                         , in_pin.size() );
         }
 
-        std::string userPin = toHex( in_pin );
+        //std::string userPin = toHex( in_pin );
+        std::string userPin = in_pin;
+
         if ( 0 == userPin.size() ){
             MWLOG_ERR( logBuf, "Invalid converted PIN\n" );
             return ERR_INV_USERPIN;
@@ -233,32 +234,17 @@ namespace eIDMW {
         }
 
         /* Convert hashByteArray to hex std::string */
-        std::string in_hash = hashByteArray.ToString( true, false );
-        replace( in_hash, "\n", "" );
-        replace( in_hash, "\t", " " );
+        std::string in_hash((const char *)hashByteArray.GetBytes(), hashByteArray.Size());  //hashByteArray.ToString( true, false );
 
-        in_hash = rtrim( in_hash );
-        replace( in_hash, " ", "\\x" );
-        std::transform( in_hash.begin(), in_hash.end(), in_hash.begin(), ::tolower);
-
-        if ( isDBG ){
+        if ( isDBG ) {
             std::cout << "in_hash: <" << in_hash << ">\n";
         }
 
-        printf( "\n*******************************\n"
-                  "*** sendDataToSign          ***\n"
-                  "*******************************\n" );
-
-        int ret = cmdService.sendDataToSign( in_hash, userPin );
+        int ret = cmdService.sendDataToSign(in_hash, userPin);
         if ( ret != ERR_NONE ){
             MWLOG_ERR( logBuf, "main() - Error @ sendDataToSign()\n" );
             return ret;
         }
-
-        printf( "\n*******************************\n"
-                  "*** sendDataToSign: OK      ***\n"
-                  "*******************************\n" );
-#endif /* defined(EXTERNAL_CERTIFICATE) */
 
         return ERR_NONE;
     }
@@ -324,8 +310,8 @@ namespace eIDMW {
     }
 
 
-    int PDFSignatureCli::cli_getSignature( std::string in_code
-                                        , PTEID_ByteArray &out_sign ){
+    int PDFSignatureCli::cli_getSignature(std::string in_code,
+                                    PTEID_ByteArray &out_sign) {
         if ( NULL == m_pdf_handler ){
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
             return ERR_NULL_HANDLER;
@@ -354,8 +340,7 @@ namespace eIDMW {
 
     int PDFSignatureCli::signClose( std::string in_code )
     {
-#if defined(EXTERNAL_CERTIFICATE)
-        if ( NULL == m_card ){
+        if (NULL == m_card) {
             MWLOG_ERR( logBuf, "NULL card" );
             return ERR_NULL_CARD;
         }
@@ -379,7 +364,6 @@ namespace eIDMW {
         printf( "\n*******************************\n"
                   "*** getSignature: OK        ***\n"
                   "*******************************\n" );
-#endif /* defined(EXTERNAL_CERTIFICATE) */
         return ERR_NONE;
     }
 

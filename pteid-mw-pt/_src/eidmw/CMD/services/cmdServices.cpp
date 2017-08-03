@@ -697,7 +697,7 @@ int CMDServices::getCertificate( std::string in_userId
     int derLen = PEM_to_DER( pem, &der );
     free( pem );
 
-    if ( derLen < 0 ){
+    if ( derLen < 0 ) {
         MWLOG_ERR( logBuf, "PEM -> DER conversion failed - len: %d", derLen );
         return ERR_INV_CERTIFICATE;
     }

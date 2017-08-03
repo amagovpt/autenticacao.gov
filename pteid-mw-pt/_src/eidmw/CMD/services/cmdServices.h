@@ -29,7 +29,7 @@
     #define MWLOG_DEBUG( buf, format, ... )     _LOG_( buf, LEV_DEBUG, MOD_CMD, format, ## __VA_ARGS__ )
 #endif // WIN32
 
-namespace eIDMW{
+namespace eIDMW {
 
 void printCPtr( char *c_str, int c_str_len );
 xsd__base64Binary *encode_base64( soap *sp, std::string in_str );
