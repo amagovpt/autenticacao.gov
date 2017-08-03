@@ -67,7 +67,7 @@ char *getCPtr( std::string inStr, int *outLen ){
     if ( outLen != NULL ) *outLen = strlen( c_str );
 
     return c_str;
-}/* getCPtr() */
+}
 
 const void *memmem(const void *haystack, size_t n, const void *needle, size_t m)
 {
@@ -179,13 +179,13 @@ void replace_lastdot_inplace(char* str_in)
 /*  *********************************************************
     ***          string toPEM()                           ***
     ********************************************************* */
-char *toPEM( char *p_certificate, int certificateLen ){
+char *toPEM(char *p_certificate, int certificateLen) {
 
     string strCertificate( p_certificate, certificateLen );
 
     if ( strCertificate.empty() ){
         return NULL;
-    }/* if ( strCertificate.empty() ) */
+    }
 
     /*
         Search for STR_BEGIN_CERTIFICATE
@@ -194,7 +194,7 @@ char *toPEM( char *p_certificate, int certificateLen ){
     if ( found == string::npos ){
         found = 0;
         strCertificate.insert( found , STR_BEGIN_CERTIFICATE );
-    }/* if ( found == string::npos ) */
+    }
 
     /*
         Add newline after STR_BEGIN_CERTIFICATE
@@ -202,7 +202,7 @@ char *toPEM( char *p_certificate, int certificateLen ){
     found += strlen( STR_BEGIN_CERTIFICATE );
     if ( strCertificate.substr( found, 1 ) != "\n" ){
         strCertificate.insert( found, "\n" );
-    }/* if ( strCertificate.substr( (found - 1), 1 ) != "\n" ) */
+    }
 
     /*
         Search for STR_END_CERTIFICATE
@@ -211,18 +211,22 @@ char *toPEM( char *p_certificate, int certificateLen ){
     if ( found == string::npos ){
         found = strCertificate.length();
         strCertificate.insert( found, STR_END_CERTIFICATE );
-    }/* if ( found == string::npos ) */
+    }
 
     /*
         Add newline before STR_END_CERTIFICATE
     */
     if ( strCertificate.substr( (found - 1), 1 ) != "\n" ){
         strCertificate.insert( found, "\n" );
-    }/* if ( strCertificate.substr( (found - 1), 1 ) != "\n" ) */
+    }
+
+    //TODO: This deletes any following certificate
+    //TODO: add a loop to parse all the certificates
+    strCertificate.erase(found + strlen(STR_END_CERTIFICATE));
 
     char *pem = getCPtr( strCertificate, NULL );
     return pem;
-}/* toPEM() */
+}
 
 /*  *********************************************************
     ***          X509_to_PEM()                            ***
@@ -234,30 +238,30 @@ char *X509_to_PEM( X509 *x509 ){
 
     if ( NULL == x509 ){
         return NULL;
-    }/* if ( NULL == x509 ) */
+    }
 
     bio = BIO_new( BIO_s_mem() );
     if ( NULL == bio ){
         return NULL;
-    }/* if ( NULL == bio ) */
+    }
 
     if ( 0 == PEM_write_bio_X509( bio, x509 ) ){
         BIO_free( bio );
         return NULL;
-    }/* if ( 0 == PEM_write_bio_X509( bio, x509 ) ) */
+    }
 
     pem = (char *) malloc( bio->num_write + 1 );
     if ( NULL == pem ){
         BIO_free(bio);
         return NULL;
-    }/* if ( NULL == pem ) */
+    }
 
     memset( pem, 0, bio->num_write + 1 );
     BIO_read( bio, pem, bio->num_write );
     BIO_free( bio );
 
     return pem;
-}/* X509_to_PEM() */
+}
 
 /*  *********************************************************
     ***          PEM_to_X509()                            ***
@@ -268,18 +272,18 @@ X509 *PEM_to_X509( char *pem ){
 
     if ( NULL == pem ){
         return NULL;
-    }/* if ( NULL == pem ) */
+    }
 
     bio = BIO_new_mem_buf(pem, strlen(pem));
     if ( NULL == bio ){
         return NULL;
-    }/* if ( NULL == bio ) */
+    }
 
     x509 = PEM_read_bio_X509( bio, NULL, NULL, NULL );
     BIO_free( bio );
 
     return x509;
-}/* PEM_to_X509() */
+}
 
 /*  *********************************************************
     ***          X509_to_DER()                            ***
@@ -292,7 +296,7 @@ int X509_to_DER( X509 *x509, unsigned char **der ){
     int len = i2d_X509( x509, der );
 
     return len;
-}/* X509_to_DER() */
+}
 
 /*  *********************************************************
     ***          DER_to_X509()                            ***
@@ -302,7 +306,7 @@ X509 *DER_to_X509( unsigned char *der, int len ){
     X509 *x509 = d2i_X509( NULL, (const unsigned char**)&p, len );
 
     return x509;
-}/* DER_to_X509() */
+}
 
 /*  *********************************************************
     ***          DER_to_PEM()                            ***
@@ -313,7 +317,7 @@ char *DER_to_PEM( unsigned char *der, int len ){
     if ( NULL == x509) return (char *)NULL;
 
     return X509_to_PEM( x509 );
-}/* DER_to_PEM() */
+}
 
 /*  *********************************************************
     ***          DER_to_PEM()                            ***
@@ -324,7 +328,7 @@ int PEM_to_DER( char *pem, unsigned char **der ){
     if ( NULL == x509) return ((int )-1);
 
     return X509_to_DER( x509, der );
-}/* DER_to_PEM() */
+}
 
 /*
 Base64 encode binary-data: it can be used also for C-style strings if we ignore the 0x0 terminator
