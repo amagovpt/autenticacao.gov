@@ -305,21 +305,6 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coo
 
 }
 
-int PTEID_EIDCard::SignClose( PTEID_PDFSignature &sig_handler, PTEID_ByteArray signature ){
-    int rc = 0;
-
-    BEGIN_TRY_CATCH
-        CByteArray cb( (unsigned char*)signature.GetBytes(), signature.Size() );
-
-        APL_Card *pcard = static_cast<APL_Card *>(m_impl);
-
-        PDFSignature *pdf_sig = sig_handler.mp_signature;
-        rc = pcard->SignClose( pdf_sig, cb );
-    END_TRY_CATCH
-
-    return rc;
-}/* PTEID_EIDCard::SignClose() */
-
 PTEID_ScapConnection::PTEID_ScapConnection(char *host, char *port)
 {
 	m_connection = new ScapSSLConnection(host, port);
@@ -348,11 +333,6 @@ PTEID_PDFSignature::PTEID_PDFSignature(const char *input_path)
 PTEID_PDFSignature::~PTEID_PDFSignature()
 {
 	delete mp_signature;
-}
-
-PDFSignature *PTEID_PDFSignature::getPdfSignature(){
-
-    return mp_signature;
 }
 
 void PTEID_PDFSignature::addToBatchSigning(char *input_path)
@@ -393,6 +373,11 @@ char *PTEID_PDFSignature::getOccupiedSectors(int page)
 		throw PTEID_ExParamRange();
 	return mp_signature->getOccupiedSectors(page);
 
+}
+
+PDFSignature *PTEID_PDFSignature::getPdfSignature() {
+
+    return mp_signature;
 }
 
 int PTEID_PDFSignature::getPageCount()
@@ -1346,13 +1331,13 @@ PTEIDSDK_API long PTEID_WriteFile(unsigned char *file, int filelen,	unsigned cha
 PTEIDSDK_API long PTEID_WriteFile_inOffset(unsigned char *file, int filelen, unsigned char *in,
 	     unsigned long inOffset, unsigned long inlen, unsigned char PinId)
 {
-	if (readerContext!=NULL && (PinId == 1 || PinId == 129)){
+	if (readerContext!=NULL && (PinId == 1 || PinId == 129)) {
 		PTEID_EIDCard &card = readerContext->getEIDCard();
 		CByteArray temp;
 		PTEID_ByteArray out;
 		PTEID_Pin*	pin = NULL;
 
-		if (PinId != PTEID_NO_PIN_NEEDED){
+		if (PinId != PTEID_NO_PIN_NEEDED) {
 			PinId = 1;
 			PTEID_Pins &pins = readerContext->getEIDCard().getPins();
 			for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
@@ -1400,7 +1385,7 @@ PTEIDSDK_API long PTEID_Activate(char *pszPin, unsigned char *pucDate, unsigned 
 }
 
 PTEIDSDK_API long PTEID_SetSODChecking(int bDoCheck) {
-	if (readerContext!=NULL)
+	if (readerContext != NULL)
 		readerContext->getEIDCard().doSODCheck(bDoCheck!=0);
 
 	return 0;

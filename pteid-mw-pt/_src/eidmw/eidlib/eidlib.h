@@ -754,7 +754,6 @@ class PTEID_Certificate;
 class APL_EIDCard;
 class PTEID_XmlUserRequestedInfo;
 class PTEID_CCXML_Doc;
-
 class PDFSignature;
 
 
@@ -774,6 +773,7 @@ class PTEID_PDFSignature
 		PTEIDSDK_API bool isLandscapeFormat();
 		PTEIDSDK_API char *getOccupiedSectors(int page);
 		PTEIDSDK_API void setCustomImage(unsigned char *image_data, unsigned long image_length);
+
 		PTEIDSDK_API PDFSignature *getPdfSignature();
 
 	private:
@@ -800,6 +800,7 @@ class PTEID_ScapConnection
 };
 
 class SecurityContext;
+
 
 /******************************************************************************//**
   * This class represents a Portugal EID card.
@@ -867,12 +868,6 @@ public:
 		 */
 	    PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
 			const char *outfile_path);
-
-	    /* PDF Signature close: this method is intended for use by external signature methods: NOT eID
-             * @param sig_handler: this defines the input file and some signature options
-             * @param signature: RSA Signature in binary format
-             */
-        PTEIDSDK_API int SignClose( PTEID_PDFSignature &sig_handler, PTEID_ByteArray signature );
 
 	     /* Change the OTP/EMV-CAP PIN through interaction with the appropriate HTTPS server
 	      * Note: This method SHOULD be always called before any change to the Authentication PIN
