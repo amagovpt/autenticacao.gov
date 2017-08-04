@@ -38,7 +38,7 @@ Item {
             anchors.topMargin: Constants.SIZE_TEXT_BODY
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            text: "Pressione o botão para verificar se existem atualizações automáticas disponíveis."
+            text: "Pressione o botão para verificar se existem atualizações disponíveis."
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
