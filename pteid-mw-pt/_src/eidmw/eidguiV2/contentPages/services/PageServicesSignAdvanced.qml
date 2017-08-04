@@ -304,10 +304,12 @@ PageServicesSignAdvancedForm {
     propertyRadioButtonPADES{
         onCheckedChanged:{
             if(propertyRadioButtonPADES.checked){
-                propertyRectMainRight.visible = true
+                propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
+                        "Arraste para esta zona o ficheiro a assinar \nou\n clique para procurar o ficheiro"
                 filesModel.clear()
             }else{
-                propertyRectMainRight.visible = false
+                propertyTextDragMsgImg.text =
+                        "Pré-visualização não disponível"
                 filesModel.clear()
             }
         }
@@ -425,6 +427,8 @@ PageServicesSignAdvancedForm {
 
         console.log("Page Services Sign Advanced mainWindowCompleted")
         propertyBusyIndicator.running = true
+        propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
+                "Arraste para esta zona o ficheiro a assinar \nou\n clique para procurar o ficheiro"
         gapi.startCardReading()
     }
 

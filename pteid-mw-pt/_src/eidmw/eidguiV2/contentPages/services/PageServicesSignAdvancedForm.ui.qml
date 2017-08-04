@@ -26,6 +26,7 @@ Item {
     property alias propertyMouseAreaRectMainRigh: mouseAreaRectMainRigh
     property alias propertyMouseAreaItemOptionsFiles: mouseAreaItemOptionsFiles
     property alias propertyTextDragMsgListView: textDragMsgListView
+    property alias propertyTextDragMsgImg: textDragMsgImg
     property alias propertyListViewFiles: listViewFiles
     property alias propertyFilesListViewScroll: filesListViewScroll
     property alias propertyButtonAdd: buttonAdd
@@ -173,7 +174,6 @@ Item {
                         Text {
                             id: textDragMsgListView
                             anchors.fill: parent
-                            text: "Arraste para esta zona o ficheiro a assinar \nou\n clique para procurar o ficheiro"
                             font.bold: true
                             wrapMode: Text.WordWrap
                             horizontalAlignment: Text.AlignHCenter
@@ -578,7 +578,6 @@ Item {
                 Text {
                     id: textDragMsgImg
                     anchors.fill: parent
-                    text: "Arraste para esta zona o ficheiro a assinar \nou\n clique para procurar o ficheiro"
                     font.bold: true
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter
