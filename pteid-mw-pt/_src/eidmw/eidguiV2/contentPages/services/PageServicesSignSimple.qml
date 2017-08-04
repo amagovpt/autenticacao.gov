@@ -112,7 +112,7 @@ PageServicesSignSimpleForm {
                 console.log("Adding file: " + filesArray[0])
                 var path =  filesArray[0]
                 //  Get the path itself without a regex
-                path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
+                path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
                 filesModel.append({
                                       "fileUrl": path
                                   })
@@ -160,7 +160,7 @@ PageServicesSignSimpleForm {
             console.log("Adding file: " + propertyFileDialog.fileUrls[0])
             var path = propertyFileDialog.fileUrls[0];
             //  Get the path itself without a regex
-            path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
+            path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             filesModel.append({
                                   "fileUrl": path
                               })

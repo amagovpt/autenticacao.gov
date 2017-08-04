@@ -539,13 +539,18 @@ void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTime
 
             PTEID_EIDCard &card = getCardInstance();
 
+    QString fullOutputPath = skipFileURL(outputFile);
+
     const char *files_to_sign[1];
-    files_to_sign[0] = loadedFilePath.toUtf8().constData();
+    QByteArray tempLoadedFilePath= loadedFilePath.toUtf8();
+    files_to_sign[0] = tempLoadedFilePath.constData();
+
+    QByteArray tempOutputFile= fullOutputPath.toUtf8();
 
     if (isTimestamp > 0)
-        card.SignXadesT(outputFile.toUtf8().constData(), files_to_sign, 1);
+        card.SignXadesT(tempOutputFile.constData(), files_to_sign, 1);
     else
-        card.SignXades(outputFile.toUtf8().constData(), files_to_sign, 1);
+        card.SignXades(tempOutputFile.constData(), files_to_sign, 1);
 
     END_TRY_CATCH
 
@@ -557,7 +562,7 @@ void GAPI::doSignPDF(SignParams &params) {
     BEGIN_TRY_CATCH
 
             PTEID_EIDCard &card = getCardInstance();
-    QString fullInputPath = "/" + params.loadedFilePath;
+    QString fullInputPath = params.loadedFilePath;
     QString fullOutputPath = skipFileURL(params.outputFile);
     PTEID_PDFSignature sig_handler(fullInputPath.toUtf8().data());
 
@@ -582,7 +587,7 @@ QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, c
     QStringList strList = id.split("?");
 
     //This should work on Windows too with QT APIs...
-    QString pdf_path = "/" + strList.at(0);
+    QString pdf_path = strList.at(0);
 
     //URL param ?page=xx
     unsigned int page = (unsigned int) strList.at(1).split("=").at(1).toInt();

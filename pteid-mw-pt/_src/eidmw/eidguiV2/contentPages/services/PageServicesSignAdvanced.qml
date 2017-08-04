@@ -138,7 +138,7 @@ PageServicesSignAdvancedForm {
                 console.log("Adding file: " + filesArray[i])
                 var path =  filesArray[i]
                 //  Get the path itself without a regex
-                path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
+                path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
                 filesModel.append({
                                       "fileUrl": path
                                   })
@@ -182,8 +182,6 @@ PageServicesSignAdvancedForm {
                                      reason, location, isTimestamp, isSmallSignature)
             }
             else {
-                console.debug("XADES signing is not implemented yet...")
-
                 gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp)
             }
 
@@ -235,7 +233,7 @@ PageServicesSignAdvancedForm {
                 console.log("Adding file: " + propertyFileDialog.fileUrls[i])
                 var path = propertyFileDialog.fileUrls[i];
                 //  Get the path itself without a regex
-                path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
+                path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
                 filesModel.append({
                                       "fileUrl": path
                                   })
