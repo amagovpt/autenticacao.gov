@@ -12,6 +12,9 @@ using namespace eIDMW;
 int main(int argc, char *argv[])
 {
     int retValue = 0;
+    bool test_mode = false;
+    const char * default_sam_server = NULL;
+
     QApplication app(argc, argv);
 
     // Set app icon
@@ -26,6 +29,21 @@ int main(int argc, char *argv[])
     // AppController init
     AppController controller;
     PTEID_InitSDK();
+    PTEID_Config sam_server(PTEID_PARAM_GENERAL_SAM_SERVER);
+
+    if (argc == 2 && strcmp(argv[1], "-test") == 0)
+    {
+        test_mode = true;
+        default_sam_server = strdup(sam_server.getString());
+        sam_server.setString("pki.teste.cartaodecidadao.pt:443");
+    }
+    else
+    {
+        //Force production mode
+        sam_server.setString("pki.cartaodecidadao.pt:443");
+    }
+    if(test_mode)
+        qDebug() << "Starting App in test mode";
 
     // GAPI init
     GAPI gapi;
