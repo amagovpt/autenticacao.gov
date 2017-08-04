@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick 2.0
 import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
+import QtQuick.Controls 2.1
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -19,10 +20,20 @@ Item {
     property alias propertyTextKey: textKey
     property alias propertyTextStatus: textStatus
 
+    property alias propertyBusyIndicator: busyIndicator
+
     Item {
         id: main
         width: parent.width
         height: parent.height
+
+        BusyIndicator {
+            id: busyIndicator
+            running: false
+            anchors.centerIn: parent
+            // BusyIndicator should be on top of all other content
+            z: 1
+        }
 
         Item {
             id: rowTop
@@ -76,75 +87,6 @@ Item {
                 id: acordion
                 anchors.fill: parent
                 anchors.margins: 10
-
-                model: [
-                    {
-                        'entity': 'Baltimore CyberTrust Root',
-                        'auth': 'Baltimore CyberTrust Root',
-                        'valid': '23/10/2014',
-                        'until': '21/10/2019',
-                        'key': '2048',
-                        'status': 'Válido',
-                        'children': [
-                            {
-                                'entity': 'ECRaizEstado',
-                                'auth': 'Baltimore CyberTrust Root',
-                                'valid': '23/10/2014',
-                                'until': '21/10/2019',
-                                'key': '4096',
-                                'status': 'Válido',
-                                'children': [
-                                    {
-                                        'entity': 'Cartão de Cidadão 002',
-                                        'auth': 'ECRaizEstado',
-                                        'valid': '23/10/2014',
-                                        'until': '21/10/2019',
-                                        'key': '4096',
-                                        'status': 'Válido',
-                                        'children': [
-                                            {
-                                                'entity': 'EC de Autenticação do Cartão de Cidadão 0009',
-                                                'auth': 'Cartão de Cidadão 002',
-                                                'valid': '23/10/2014',
-                                                'until': '21/10/2019',
-                                                'key': '2048',
-                                                'status': 'Válido',
-                                                'children': [
-                                                    {
-                                                        'entity': 'ADRIANO JOSÉ RIBEIRO CAMPOS',
-                                                        'auth': 'EC de Autenticação do Cartão de Cidadão 0009',
-                                                        'valid': '23/10/2014',
-                                                        'until': '21/10/2019',
-                                                        'key': '1024',
-                                                        'status': 'Válido'
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                'entity': 'EC de Assinatura Digital Qualificada do Cartão de Cidadão 0009',
-                                                'auth': 'Cartão de Cidadão 002',
-                                                'valid': '23/10/2014',
-                                                'until': '21/10/2019',
-                                                'key': '2048',
-                                                'status': 'Válido',
-                                                'children': [
-                                                    {
-                                                        'entity': 'ADRIANO JOSÉ RIBEIRO CAMPOS',
-                                                        'auth': 'EC de Assinatura Digital Qualificada do Cartão de Cidadão 0009',
-                                                        'valid': '23/10/2014',
-                                                        'until': '21/10/2019',
-                                                        'key': '1024',
-                                                        'status': 'Válido'
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
             }
         }
         Item{

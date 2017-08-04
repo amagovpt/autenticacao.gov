@@ -202,6 +202,7 @@ public slots:
     QString getAddressField(GAPI::AddressInfoKey key);
 
     void setEventCallbacks( void );
+    void startfillCertificateList ( void );
 
 signals:
     // Signal from GAPI to Gui
@@ -218,7 +219,7 @@ signals:
     void addressChangeFinished(long return_code);
     void signalCardChanged(const int error_code);
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage);
-
+    void signalCertificatesChanged(const QVariantMap certificatesMap);
 private:
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();
@@ -227,6 +228,8 @@ private:
     void getAddressFile();
     void doSignPDF(SignParams &params);
     void doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
+    void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
+    void fillCertificateList (void );
 
     eIDMW::PTEID_EIDCard & getCardInstance();
 

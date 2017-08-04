@@ -152,20 +152,20 @@ void GAPI::setPersoDataFile(QString text) {
         PTEID_ReaderContext &ReaderContext  = ReaderSet.getReader();
         PTEID_EIDCard	 &Card	= ReaderContext.getEIDCard();
 
-            if ( TxtPersoDataString.toStdString().size() > 0 ){
-                const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), (TxtPersoDataString.toStdString().size() + 1) );
-                Card.writePersonalNotes(oData);
-            }
-            else {
-                unsigned long ulSize = 1000;
-                unsigned char *pucData = (unsigned char *)calloc( ulSize, sizeof(char) );
+        if ( TxtPersoDataString.toStdString().size() > 0 ){
+            const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), (TxtPersoDataString.toStdString().size() + 1) );
+            Card.writePersonalNotes(oData);
+        }
+        else {
+            unsigned long ulSize = 1000;
+            unsigned char *pucData = (unsigned char *)calloc( ulSize, sizeof(char) );
 
-                const PTEID_ByteArray oData( (const unsigned char *)pucData, ulSize);
-                Card.writePersonalNotes(oData);
-                free(pucData);
-            }
-            qDebug() << "Personal notes successfully written!" ;
-            emit signalSetPersoDataFile("Success","Personal notes successfully written!");
+            const PTEID_ByteArray oData( (const unsigned char *)pucData, ulSize);
+            Card.writePersonalNotes(oData);
+            free(pucData);
+        }
+        qDebug() << "Personal notes successfully written!" ;
+        emit signalSetPersoDataFile("Success","Personal notes successfully written!");
 
     } catch (PTEID_Exception& e) {
         qDebug() << "Error writing personal notes!" ;
@@ -822,4 +822,79 @@ void GAPI::setEventCallbacks( void )
     {
         emit signalCardChanged(ET_UNKNOWN);
     }
+}
+
+void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap)
+{
+    QVariantMap certificatesMapChildren;
+    static int level = 0;
+
+    if (cert.isRoot())
+    {
+        certificatesMapChildren.insert("OwnerName", cert.getOwnerName());
+        certificatesMapChildren.insert("IssuerName", cert.getIssuerName());
+        certificatesMapChildren.insert("ValidityBegin", cert.getValidityBegin());
+        certificatesMapChildren.insert("ValidityEnd", cert.getValidityEnd());
+        certificatesMapChildren.insert("KeyLength", QString::number(cert.getKeyLength()));
+        certificatesMapChildren.insert("Status", cert.getStatus());
+
+        certificatesMap.insert("level" + QString::number(level),certificatesMapChildren);
+        certificatesMap.insert("levelCount",level+1);
+        level = 0;
+    }
+    else
+    {
+        certificatesMapChildren.insert("OwnerName", cert.getOwnerName());
+        certificatesMapChildren.insert("IssuerName", cert.getIssuerName());
+        certificatesMapChildren.insert("ValidityBegin", cert.getValidityBegin());
+        certificatesMapChildren.insert("ValidityEnd", cert.getValidityEnd());
+        certificatesMapChildren.insert("KeyLength", QString::number(cert.getKeyLength()));
+        certificatesMapChildren.insert("Status", cert.getStatus());
+
+        if(certificatesMap.contains("level" + QString::number( level ))){
+            certificatesMap.insert("levelB" + QString::number(level),certificatesMapChildren);
+        }else{
+            certificatesMap.insert("level" + QString::number(level),certificatesMapChildren);
+        }
+
+        level++;
+
+        try {
+            buildTree(cert.getIssuer(), bEx, certificatesMap);
+        } catch (PTEID_ExCertNoIssuer &ex) {
+            bEx = true;
+        }
+    }
+}
+
+void GAPI::startfillCertificateList( void ) {
+    QtConcurrent::run(this, &GAPI::fillCertificateList);
+}
+
+void GAPI::fillCertificateList ( void )
+{
+    bool noIssuer = false;
+    QVariantMap certificatesMap;
+
+    qDebug() << "fillCertificateList";
+
+    BEGIN_TRY_CATCH
+
+
+    PTEID_EIDCard &card = getCardInstance();
+
+    //Enable SOD checking
+    card.doSODCheck(true);
+
+    PTEID_Certificates&	 certificates	= card.getCertificates();
+
+    // TODO: In test mode with production card or in production mode with test card
+    // this cause a segment fault
+
+    certificatesMap.clear();
+    buildTree(certificates.getCert(PTEID_Certificate::CITIZEN_AUTH), noIssuer,certificatesMap);
+    buildTree(certificates.getCert(PTEID_Certificate::CITIZEN_SIGN), noIssuer,certificatesMap);
+
+    emit signalCertificatesChanged(certificatesMap);
+    END_TRY_CATCH
 }

@@ -7,6 +7,15 @@ var USE_SDK_PIN_UI_POPUP = true
 // Error Constants
 var TRIES_LEFT_ERROR = 1000
 
+// Certificates Status
+var PTEID_CERTIF_STATUS_UNKNOWN = 0     /* Validity unknown */
+var PTEID_CERTIF_STATUS_REVOKED = 1     /* Revoked certificate */
+var PTEID_CERTIF_STATUS_SUSPENDED = 2
+var PTEID_CERTIF_STATUS_CONNECT = 3     /* Connection problem */
+var PTEID_CERTIF_STATUS_ISSUER = 4      /* An issuer is missing in the chain */
+var PTEID_CERTIF_STATUS_ERROR = 5       /* Error during validation */
+var PTEID_CERTIF_STATUS_VALID = 6       /* Valid certificate */
+
 // Screen Size
 var SCREEN_MINIMUM_WIDTH = 1024
 var SCREEN_MINIMUM_HEIGHT = 576;
