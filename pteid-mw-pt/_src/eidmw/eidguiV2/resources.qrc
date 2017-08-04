@@ -44,7 +44,6 @@
         <file>contentPages/services/PageServicesSignSimpleForm.ui.qml</file>
         <file>contentPages/definitions/PageDefinitionsApp.qml</file>
         <file>contentPages/definitions/PageDefinitionsAppForm.ui.qml</file>
-        <file>images/logo_cor400.png</file>
         <file>components/Accordion.qml</file>
         <file>contentPages/definitions/PageDefinitionsUpdates.qml</file>
         <file>contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml</file>
@@ -79,5 +78,6 @@
         <file>components/PDFPreview.qml</file>
         <file>images/icons-move.png</file>
         <file>images/pteid_signature_watermark.jpg</file>
+        <file>images/logo_compete2020.png</file>
     </qresource>
 </RCC>

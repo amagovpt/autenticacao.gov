@@ -18,7 +18,7 @@ Item {
 
     Text {
         id: textAppName
-        text: "Aplicação oficial do " + mainWindow.title + " Português"
+        text: "Aplicação oficial do Estado Português"
         font.pixelSize: Constants.SIZE_TEXT_TITLE
         color: Constants.COLOR_TEXT_TITLE
         font.family: lato.name
@@ -83,6 +83,7 @@ Item {
         y: parent.height * 0.1
         width: Constants.SIZE_IMAGE_LOGO_CC_WIDTH
         height: Constants.SIZE_IMAGE_LOGO_CC_HEIGHT
+        anchors.horizontalCenter: parent.horizontalCenter
         fillMode: Image.PreserveAspectFit
         source: "../../images/logo_CC.png"
         anchors.top: textDevByAgency.bottom
@@ -90,10 +91,10 @@ Item {
     }
     Image {
         id: imageSupported
-        width: Constants.SIZE_IMAGE_LOGO_SUPPORTED_WIDTH
-        height: Constants.SIZE_IMAGE_LOGO_SUPPORTED_HEIGHT
+        width: parent.width
+        anchors.horizontalCenter: parent.horizontalCenter
         fillMode: Image.PreserveAspectFit
-        source: "../../images/logo_cor400.png"
+        source: "../../images/logo_compete2020.png"
         anchors.top: imageCC.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
     }
