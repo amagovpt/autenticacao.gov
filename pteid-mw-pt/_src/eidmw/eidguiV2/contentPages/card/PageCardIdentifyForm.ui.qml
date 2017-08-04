@@ -121,13 +121,11 @@ Item {
                 color: "white"
                 Image {
                     id: photoImage
-                    width: parent.width - 1
-                    height: parent.height - 1
+                    height: parent.height
+                    fillMode: Image.PreserveAspectFit
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
                     antialiasing: true
-                   // source: "../../images/dummy/photo.png"
-                   // source: "image://myimageprovider/photo.png"
                 }
             }
         }
