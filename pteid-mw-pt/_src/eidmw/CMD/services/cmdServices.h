@@ -40,8 +40,7 @@ class CMDServices{
         virtual ~CMDServices();
 
         // Get certificate
-        int getCertificate( std::string in_userId
-                            , CByteArray& out_certificate );
+        int getCertificate( std::string in_userId, std::vector<CByteArray> &out_certificate );
 
         // CCMovelSign
         int sendDataToSign( std::string in_hash, std::string in_pin );

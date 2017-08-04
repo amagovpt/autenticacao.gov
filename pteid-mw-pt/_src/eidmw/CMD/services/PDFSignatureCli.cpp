@@ -3,11 +3,6 @@
 #include "MiscUtil.h"
 #include "StringOps.h"
 
-// retirar quando tivermos certificateCA - PTEID_FILE_CERT_ROOT_SIGN
-#include "CardPteidDef.h"
-
-#define EXTERNAL_CERTIFICATE
-
 static char logBuf[512];
 
 namespace eIDMW {
@@ -71,13 +66,11 @@ namespace eIDMW {
         return str.substr( first, ( last-first+1 ) );
     }
 
-    PDFSignatureCli::PDFSignatureCli( PTEID_EIDCard *in_card
-                                    , PTEID_PDFSignature *in_pdf_handler ) {
-        m_card = in_card;
+    PDFSignatureCli::PDFSignatureCli(PTEID_PDFSignature *in_pdf_handler ) {
         m_pdf_handler = in_pdf_handler;
     }
 
-    PDFSignatureCli::~PDFSignatureCli(){
+    PDFSignatureCli::~PDFSignatureCli() {
         m_pdf_handler = NULL;
     }
 
@@ -85,11 +78,11 @@ namespace eIDMW {
         return m_userId;
     }
 
-    void PDFSignatureCli::setUserId( std::string in_userId ){
+    void PDFSignatureCli::setUserId( std::string in_userId ) {
         m_userId = in_userId;
     }
 
-    std::string PDFSignatureCli::getUserPin(){
+    std::string PDFSignatureCli::getUserPin() {
         return m_pin;
     }
 
@@ -122,11 +115,12 @@ namespace eIDMW {
         printf( "\n*******************************\n"
                   "*** getCertificate          ***\n"
                   "*******************************\n" );
-        CByteArray certificate;
-        int ret = cmdService.getCertificate( in_userId, certificate);
+        std::vector<CByteArray> certificates;
+        int ret = cmdService.getCertificate( in_userId, certificates);
+
         if ( ret != ERR_NONE ) return ret;
 
-        if ( 0 == certificate.Size() ){
+        if ( 0 == certificates.size()) {
             MWLOG_ERR( logBuf, "getCertificate failed\n" );
             return ERR_GET_CERTIFICATE;
         }
@@ -150,33 +144,13 @@ namespace eIDMW {
             return ERR_NULL_PDF;
         }
 
-        //TODO - get certificateCA
-        PTEID_ByteArray iData;
-        long out = m_card->readFile( (const char *)PTEID_FILE_CERT_ROOT_SIGN
-                                    , iData );
-        if ( out < 1 ){
-            MWLOG_ERR( logBuf
-                    , "readFile() fail - certificate CA - read from file, out: %d"
-                    , out );
-            return ERR_INV_CERTIFICATE_CA;
-        }
-
-        if ( 0 == iData.Size() ){
-            MWLOG_ERR( logBuf, "Invalid certificate CA - read from file" );
-            return ERR_INV_CERTIFICATE_CA;
-        }
-
-        CByteArray certificateCA( iData.GetBytes(), iData.Size() );
-        if ( 0 == certificateCA.Size() ){
-            MWLOG_ERR( logBuf, "Invalid certificate CA" );
-            return ERR_INV_CERTIFICATE_CA;
-        }
-
-        /* TODO: At the moment, it is only possible to sign one document.
-        */
+        /* TODO: At the moment, it is only possible to sign one document. */
         pdf->setBatch_mode(false);
-        pdf->setExternCertificate( certificate );
-        pdf->setExternCertificateCA( certificateCA );
+
+        pdf->setExternCertificate(certificates.at(0));
+        
+        std::vector<CByteArray> newVec(certificates.begin()+1, certificates.end());
+        pdf->setExternCertificateCA( newVec );
 
         return ERR_NONE;
     }
@@ -207,27 +181,27 @@ namespace eIDMW {
         }
 
         /* printData */
-        if ( isDBG ){
+        if ( isDBG ) {
             printData( (char *)"\nUser Pin: "
                         , (unsigned char *)userPin.c_str()
                         , userPin.size() );
         }
 
         PDFSignature *pdf = m_pdf_handler->getPdfSignature();
-        if ( NULL == pdf ){
+        if ( NULL == pdf ) {
             MWLOG_ERR( logBuf, "NULL Pdf\n" );
             return ERR_NULL_PDF;
         }
 
         /* Calculate hash */
         CByteArray hashByteArray = pdf->getHash();
-        if ( 0 == hashByteArray.Size() ){
+        if ( 0 == hashByteArray.Size() ) {
             MWLOG_ERR( logBuf, "getHash failed\n" );
             return ERR_GET_HASH;
         }
 
         /* printData */
-        if ( isDBG ){
+        if ( isDBG ) {
             printData( (char *)"\nhash: "
                         , hashByteArray.GetBytes()
                         , hashByteArray.Size() );
@@ -235,10 +209,6 @@ namespace eIDMW {
 
         /* Convert hashByteArray to hex std::string */
         std::string in_hash((const char *)hashByteArray.GetBytes(), hashByteArray.Size());  //hashByteArray.ToString( true, false );
-
-        if ( isDBG ) {
-            std::cout << "in_hash: <" << in_hash << ">\n";
-        }
 
         int ret = cmdService.sendDataToSign(in_hash, userPin);
         if ( ret != ERR_NONE ){
@@ -257,51 +227,19 @@ namespace eIDMW {
                                     , double coord_x, double coord_y
                                     , const char *location
                                     , const char *reason
-                                    , const char *outfile_path ){
-
-        if ( NULL == m_card ){
-            MWLOG_ERR( logBuf, "NULL card" );
-            return ERR_NULL_CARD;
-        }
+                                    , const char *outfile_path) {
 
         int ret = cli_getCertificate( in_userId );
-        if ( ret != ERR_NONE ) return ret;
+        if (ret != ERR_NONE)
+           return ret;
 
-        ret = m_card->SignPDF( *m_pdf_handler
-                                , page, coord_x, coord_y
-                                , location, reason
-                                , outfile_path );
-        if ( ret != ERR_NONE ){
-            MWLOG_ERR( logBuf, "SignPDF failed: %d", ret );
-            return ERR_SIGN_PDF;
-        }
+        PDFSignature *pdf = m_pdf_handler->getPdfSignature();
 
-        ret = cli_sendDataToSign( in_pin );
-        return ret;
-    }
+        pdf->setVisibleCoordinates(page, coord_x, coord_y);
+        ret = pdf->signFiles(location, reason, outfile_path);
 
-    int PDFSignatureCli::signOpen( std::string in_userId, std::string in_pin
-                                    , int page
-                                    , int page_sector
-                                    , bool is_landscape
-                                    , const char *location
-                                    , const char *reason
-                                    , const char *outfile_path )
-    {
-        if ( NULL == m_card ){
-            MWLOG_ERR( logBuf, "NULL card" );
-            return ERR_NULL_CARD;
-        }
-
-        int ret = cli_getCertificate( in_userId );
-        if ( ret != ERR_NONE ) return ret;
-
-        ret = m_card->SignPDF( *m_pdf_handler
-                                , page, page_sector, is_landscape
-                                , location, reason
-                                , outfile_path );
-        if ( ret != ERR_NONE ){
-            MWLOG_ERR( logBuf, "SignPDF failed: %d", ret );
+        if ( ret != ERR_NONE ) {
+            MWLOG_ERR( logBuf, "PDFSignature::signFiles failed: %d", ret );
             return ERR_SIGN_PDF;
         }
 
@@ -312,24 +250,22 @@ namespace eIDMW {
 
     int PDFSignatureCli::cli_getSignature(std::string in_code,
                                     PTEID_ByteArray &out_sign) {
-        if ( NULL == m_pdf_handler ){
+        if ( NULL == m_pdf_handler ) {
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
             return ERR_NULL_HANDLER;
         }
 
         /* printData */
-        if ( isDBG ){
-            printData( (char *)"\nReceived code: "
-                        , (unsigned char *)in_code.c_str()
-                        , in_code.size() );
+        if ( isDBG ) {
+            printData( (char *)"\nReceived code: ",
+                        (unsigned char *)in_code.c_str(),
+                        in_code.size() );
         }
 
-        printf( "\n*******************************\n"
-                  "*** getSignature            ***\n"
-                  "*******************************\n" );
         CByteArray cb;
         int ret = cmdService.getSignature( in_code, cb );
-        if ( ret != ERR_NONE ) return ret;
+        if ( ret != ERR_NONE )
+            return ret;
 
         out_sign.Clear();
         out_sign.Append( (const unsigned char*)cb.GetBytes()
@@ -340,17 +276,19 @@ namespace eIDMW {
 
     int PDFSignatureCli::signClose( std::string in_code )
     {
-        if (NULL == m_card) {
-            MWLOG_ERR( logBuf, "NULL card" );
-            return ERR_NULL_CARD;
-        }
 
         PTEID_ByteArray signature;
         int ret = cli_getSignature( in_code, signature );
-        if ( ret != ERR_NONE ) return ret;
 
-        ret = m_card->SignClose( *m_pdf_handler, signature );
-        if ( ret != ERR_NONE ){
+        if ( ret != ERR_NONE ) 
+            return ret;
+
+        PDFSignature * pdf = m_pdf_handler->getPdfSignature();
+
+        CByteArray signature_cba(signature.GetBytes(), signature.Size());
+        ret = pdf->signClose(signature_cba);
+
+        if (ret != ERR_NONE) {
             MWLOG_ERR( logBuf, "SignClose failed" );
             return ERR_SIGN_CLOSE;
         }

@@ -14,23 +14,25 @@ TARGET = cmdTest
 INCPATH = -I. -I./services -I./../common -I./../eidlib -I./../applayer -I./../cardlayer
 
 LIBS_BASE_SO = crypto ssl pteidcommon pteidlib pteidapplayer pteidcardlayer
+#LIBS_BASE_SO = crypto ssl pteidcommon pteidlib pteidapplayer
 LIBS_SO = $(addprefix -l,$(LIBS_BASE_SO))
 LIBPATH_BASE_SO =
 LIBPATH_SO = $(addprefix -L,$(LIBPATH_BASE_SO))
 LIBFILES_SO = $(patsubst %, lib%.so, $(LIBS_BASE_SO))
 
-LIBS_BASE_USER = cmdServices
+LIBS_BASE_USER = CMDServices pteidlib
 LIBS_USER = $(addprefix -l,$(LIBS_BASE_USER))
 LIBPATH_BASE_USER = ./../lib
 LIBPATH_USER = $(addprefix -L,$(LIBPATH_BASE_USER))
 LIBFILES_USER = $(patsubst %,$(LIBPATH_BASE_USER)/lib%.so, $(LIBS_BASE_USER))
 
-LIBS = $(LIBS_USER) $(LIBS_SO)
+#LIBS = $(LIBS_USER) $(LIBS_SO)
+LIBS = $(LIBS_USER)
 LIBPATH = $(LIBPATH_USER) $(LIBPATH_SO)
 LIBFILES = $(LIBFILES_USER)
 
-CXXFLAGS= -fPIC
-CFLAGS = -DDEBUG -DWITH_OPENSSL
+CXXFLAGS= -fPIC -std=gnu++11
+CFLAGS =  -std=gnu++11 -DDEBUG -DWITH_OPENSSL
 LFLAGS  = $(LIBPATH) $(LIBS) -Wl,-R,'$$ORIGIN/../lib'
 
 SOURCES = cmdTest.cpp
