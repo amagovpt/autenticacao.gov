@@ -23,15 +23,6 @@ PageCardOtherDataForm {
 
         onSignalCardAccessError: {
             propertyBusyIndicator.running = false
-            if (error_code == GAPI.NoReaderFound) {
-                propertyGeneralTitleText.text =  "Error"
-                propertyGeneralPopUpLabelText.text =  "No card reader found!"
-            }
-            else if (error_code == GAPI.NoCardFound) {
-                propertyGeneralTitleText.text =  "Error"
-                propertyGeneralPopUpLabelText.text = "No Card Found!"
-            }
-            propertyGeneralPopUp.visible = true;
         }
     }
 

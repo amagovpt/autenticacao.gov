@@ -78,19 +78,29 @@ QString GAPI::getAddressField(AddressInfoKey key) {
 #define END_TRY_CATCH    \
     }                    \
     catch (PTEID_ExNoReader &) \
-{                           \
+    {                           \
     qDebug() << "No card reader found !"; \
     emit signalCardAccessError(NoReaderFound); \
     }     \
     catch (PTEID_ExNoCardPresent &) \
-{     \
+    {     \
     qDebug() << "No card present."; \
     emit signalCardAccessError(NoCardFound); \
     }     \
     catch (PTEID_Exception &e) \
-{ \
-    fprintf(stderr, "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
-    emit signalCardAccessError(CardUnknownError); \
+    { \
+    long errorCode = e.GetError(); \
+    if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && \
+        errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN) \
+    { \
+        fprintf(stderr, "SOD exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
+        emit signalCardAccessError(SodCardReadError); \
+    } \
+    else \
+    { \
+        fprintf(stderr, "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
+        emit signalCardAccessError(CardUnknownError); \
+    } \
     }
 
 void GAPI::getAddressFile() {
@@ -679,14 +689,20 @@ PTEID_EIDCard & GAPI::getCardInstance() {
 
     PTEID_ReaderContext& readerContext = ReaderSet.getReader();
     qDebug() << "Using Card Reader: " << readerContext.getName();
-    return readerContext.getEIDCard();
+
+    PTEID_EIDCard &ref = readerContext.getEIDCard();
+    ref.doSODCheck(true); //Enable SOD checking
+
+    return ref;
 }
 
 void GAPI::connectToCard() {
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard &card = getCardInstance();
+
+    card.doSODCheck(true); //Enable SOD checking
     PTEID_EId &eid_file = card.getID();
 
     qDebug() << "C++: loading Card Data";
@@ -880,11 +896,7 @@ void GAPI::fillCertificateList ( void )
 
     BEGIN_TRY_CATCH
 
-
     PTEID_EIDCard &card = getCardInstance();
-
-    //Enable SOD checking
-    card.doSODCheck(true);
 
     PTEID_Certificates&	 certificates	= card.getCertificates();
 

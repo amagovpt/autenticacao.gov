@@ -49,6 +49,11 @@ Window {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "No Card Found!"
             }
+            else if (error_code == GAPI.SodCardReadError) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        "Consistência da informação do cartão está comprometida!"
+            }
             else {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Reading Card Error!"

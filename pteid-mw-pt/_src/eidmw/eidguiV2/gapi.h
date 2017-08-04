@@ -137,7 +137,7 @@ public:
 
     enum AddressInfoKey { District, Municipality, Parish, Streettype, Streetname, Buildingtype, Doorno, Floor, Side, Locality, Place, Zip4, Zip3, PostalLocality};
 
-    enum CardAccessError { NoReaderFound, NoCardFound, CardReadError, CardUnknownError };
+    enum CardAccessError { NoReaderFound, NoCardFound, CardReadError, SodCardReadError, CardUnknownError };
 
     enum eCustomEventType { ET_UNKNOWN, ET_CARD_CHANGED, ET_CARD_REMOVED };
 

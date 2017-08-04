@@ -17,18 +17,6 @@ PageCardNotesForm {
         }
         onSignalCardAccessError: {
             propertyBusyIndicator.running = false
-            if (error_code == GAPI.NoReaderFound) {
-                propertyGeneralTitleText.text =  "Error"
-                propertyGeneralPopUpLabelText.text =  "No card reader found!"
-            }
-            else if (error_code == GAPI.NoCardFound) {
-                propertyGeneralTitleText.text =  "Error"
-                propertyGeneralPopUpLabelText.text = "No Card Found!"
-            }else {
-                propertyGeneralTitleText.text =  "Error"
-                propertyGeneralPopUpLabelText.text = "Reading Card Error!"
-            }
-            propertyGeneralPopUp.visible = true;
         }
         onSignalSetPersoDataFile: {
             propertyGeneralTitleText.text = titleMessage
