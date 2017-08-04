@@ -201,32 +201,14 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                 }
-                Image {
-                    id: imagePT
-                    height: radioButtonPT.height
-                    fillMode: Image.PreserveAspectFit
-                    source: "../../images/flags/pt32.png"
-                    anchors.left: radioButtonPT.right
-                    opacity: radioButtonPT.checked ?
-                                 1 : Constants.OPACITY_DIFINITIONS_APP_LANGUAGE_IMAGE_DISABLED
-                }
                 RadioButton {
                     id: radioButtonUK
                     height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
                     x: rectAppLanguageCheckBox.width * 0.5
-                    text: "Inglês"
+                    text: "English"
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
-                }
-                Image {
-                    id: imageUK
-                    height: radioButtonPT.height
-                    fillMode: Image.PreserveAspectFit
-                    source: "../../images/flags/uk32.png"
-                    anchors.left: radioButtonUK.right
-                    opacity: radioButtonUK.checked ?
-                                 1 : Constants.OPACITY_DIFINITIONS_APP_LANGUAGE_IMAGE_DISABLED
                 }
             }
         }
