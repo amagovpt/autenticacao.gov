@@ -19,7 +19,6 @@
 **************************************************************************** */
 #include "MiscUtil.h"
 
-
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/buffer.h>
@@ -36,7 +35,7 @@
 
 #include <cstdio>
 #include <cstring>
-
+#include <string>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -58,7 +57,7 @@ namespace eIDMW
 /*  *********************************************************
     ***          getCPtr()                                ***
     ********************************************************* */
-char *getCPtr( std::string inStr, int *outLen ){
+char *getCPtr( std::string inStr, int *outLen ) {
     char *c_str;
 
     c_str = (char *)malloc( inStr.length() + 1 );
@@ -176,76 +175,83 @@ void replace_lastdot_inplace(char* str_in)
 		*last_dot = '_';
 }
 
-/*  *********************************************************
-    ***          string toPEM()                           ***
-    ********************************************************* */
-char *toPEM(char *p_certificate, int certificateLen) {
+
+std::vector<std::string> toPEM(char *p_certificate, int certificateLen) {
+
+	std::vector<std::string> certs;
 
     string strCertificate( p_certificate, certificateLen );
 
-    if ( strCertificate.empty() ){
-        return NULL;
+    if (strCertificate.empty()) {
+        throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
     }
 
-    /*
-        Search for STR_BEGIN_CERTIFICATE
-    */
-    std::size_t found = strCertificate.find( STR_BEGIN_CERTIFICATE );
-    if ( found == string::npos ){
-        found = 0;
-        strCertificate.insert( found , STR_BEGIN_CERTIFICATE );
+    std::size_t found_init = 0;
+    std::size_t found_after = 0;
+    std::size_t found_end = 0;
+    while(true)
+    {
+    	std::string certificate;
+    	
+	    /*
+	      Search for STR_BEGIN_CERTIFICATE
+	    */
+	    found_init = strCertificate.find(STR_BEGIN_CERTIFICATE, found_init);
+	    if (found_init == string::npos) {
+	        break;
+	    }
+
+	    /*
+	      Add newline after STR_BEGIN_CERTIFICATE
+	    */
+	    found_after = found_init + strlen(STR_BEGIN_CERTIFICATE);
+	    if ( strCertificate.substr( found_after, 1 ) != "\n") {
+	        strCertificate.insert(found_after, "\n" );
+	    }
+
+	    /*
+	        Search for STR_END_CERTIFICATE
+	    */
+	    found_end = strCertificate.find(STR_END_CERTIFICATE, found_init);
+	    if ( found_end == string::npos ) {
+	        throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	    }
+
+	    /*
+	        Add newline before STR_END_CERTIFICATE
+	    */
+	    if ( strCertificate.substr( (found_end - 1), 1 ) != "\n") {
+	        strCertificate.insert( found_end, "\n" );
+	    }
+	    int pos_end = found_end + strlen(STR_END_CERTIFICATE) + 1;
+
+	    certificate = strCertificate.substr(found_init, pos_end-found_init);
+	    certs.push_back(certificate);
+
+	    found_init = found_end;
     }
 
-    /*
-        Add newline after STR_BEGIN_CERTIFICATE
-    */
-    found += strlen( STR_BEGIN_CERTIFICATE );
-    if ( strCertificate.substr( found, 1 ) != "\n" ){
-        strCertificate.insert( found, "\n" );
-    }
-
-    /*
-        Search for STR_END_CERTIFICATE
-    */
-    found = strCertificate.find( STR_END_CERTIFICATE );
-    if ( found == string::npos ){
-        found = strCertificate.length();
-        strCertificate.insert( found, STR_END_CERTIFICATE );
-    }
-
-    /*
-        Add newline before STR_END_CERTIFICATE
-    */
-    if ( strCertificate.substr( (found - 1), 1 ) != "\n" ){
-        strCertificate.insert( found, "\n" );
-    }
-
-    //TODO: This deletes any following certificate
-    //TODO: add a loop to parse all the certificates
-    strCertificate.erase(found + strlen(STR_END_CERTIFICATE));
-
-    char *pem = getCPtr( strCertificate, NULL );
-    return pem;
+    return certs;
 }
 
 /*  *********************************************************
     ***          X509_to_PEM()                            ***
     ********************************************************* */
-char *X509_to_PEM( X509 *x509 ){
+char *X509_to_PEM(X509 *x509) {
 
     BIO *bio = NULL;
     char *pem = NULL;
 
-    if ( NULL == x509 ){
+    if ( NULL == x509 ) {
         return NULL;
     }
 
     bio = BIO_new( BIO_s_mem() );
-    if ( NULL == bio ){
+    if ( NULL == bio ) {
         return NULL;
-    }
+   	}
 
-    if ( 0 == PEM_write_bio_X509( bio, x509 ) ){
+    if ( 0 == PEM_write_bio_X509(bio, x509)) {
         BIO_free( bio );
         return NULL;
     }
@@ -266,7 +272,7 @@ char *X509_to_PEM( X509 *x509 ){
 /*  *********************************************************
     ***          PEM_to_X509()                            ***
     ********************************************************* */
-X509 *PEM_to_X509( char *pem ){
+X509 *PEM_to_X509(char *pem) {
     X509 *x509 = NULL;
     BIO *bio = NULL;
 
@@ -288,7 +294,7 @@ X509 *PEM_to_X509( char *pem ){
 /*  *********************************************************
     ***          X509_to_DER()                            ***
     ********************************************************* */
-int X509_to_DER( X509 *x509, unsigned char **der ){
+int X509_to_DER( X509 *x509, unsigned char **der ) {
 
     if ( NULL == der ) return -1;
     *der = NULL;

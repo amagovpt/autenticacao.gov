@@ -126,8 +126,6 @@ public:
 	EIDMW_APL_API int SignPDF(PDFSignature *pdf_sig,  const char *location,
 	                       const char *reason, const char *outfile_path);
 
-	EIDMW_APL_API int SignClose(PDFSignature *pdf_sig, CByteArray signature);
-
 	/**
 	  * Read a file on the card
 	  *

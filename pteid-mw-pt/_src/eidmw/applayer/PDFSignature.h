@@ -56,29 +56,27 @@ namespace eIDMW
 
         /* isCertificate */
         bool isExternalCertificate();
-        CByteArray getIsExtCertificate();
         void setIsExtCertificate( bool in_IsExternalCertificate );
 
         /* Certificate */
-        CByteArray getExternCertificate();
         void setExternCertificate( CByteArray certificate );
 
-        /* Certificate CA */
-        CByteArray getExternCertificateCA();
-        void setExternCertificateCA( CByteArray certificateCA );
+        /* CA Certificates */
+        void setExternCertificateCA(std::vector<CByteArray> &certificateCAS);
 
         /* Hash */
         CByteArray getHash();
         void setHash( CByteArray in_hash );
-        void computeHash( unsigned char *data, unsigned long dataLen
-                        , CByteArray certificate
-                        , CByteArray CA_certificate );
+        void computeHash(unsigned char *data, unsigned long dataLen,
+                         CByteArray certificate,
+                         std::vector<CByteArray> &CA_certificates);
 
         /* signClose */
         int signClose( CByteArray signature );
 
 	private:
-		void getCitizenData();
+		void parseCitizenDataFromCert(CByteArray &certData);
+		CByteArray getCitizenCertificate();
 		std::string generateFinalPath(const char *output_dir, const char *path);
 		PDFRectangle computeSigLocationFromSector(double, double, int);
 		PDFRectangle computeSigLocationFromSectorLandscape(double, double, int);
@@ -112,7 +110,8 @@ namespace eIDMW
 
         PKCS7 *m_pkcs7;
         CByteArray m_externCertificate;
-        CByteArray m_externCertificateCA;
+        std::vector<CByteArray> m_ca_certificates;
+
         CByteArray m_hash;
         PKCS7_SIGNER_INFO *m_signerInfo;
         GooString *m_outputName;

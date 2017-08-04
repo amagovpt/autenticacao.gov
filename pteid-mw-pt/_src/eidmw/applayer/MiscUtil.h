@@ -57,7 +57,7 @@ char * utf8_to_latin1(char * in);
 
 void replace_lastdot_inplace(char *in);
 
-char *toPEM( char *p_certificate, int certificateLen );
+std::vector<std::string> toPEM( char *p_certificate, int certificateLen );
 char *X509_to_PEM( X509 *x509 );
 X509 *PEM_to_X509( char *pem );
 

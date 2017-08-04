@@ -191,11 +191,6 @@ int APL_Card::SignPDF(PDFSignature *pdf_sig,  const char *location,
 
 }
 
-int APL_Card::SignClose( PDFSignature *pdf_sig, CByteArray signature ){
-    if ( NULL == pdf_sig ) return -1;
-
-    return pdf_sig->signClose( signature );
-} /* APL_Card::SignClose() */
 
 CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const char *output_path)
 {
