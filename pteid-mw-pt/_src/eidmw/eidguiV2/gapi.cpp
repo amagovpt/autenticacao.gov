@@ -516,6 +516,15 @@ void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page,
 
 }
 
+unsigned int GAPI::getPDFpageCount(QString loadedFilePath) {
+
+    PTEID_PDFSignature sig_handler(loadedFilePath.toUtf8().data());
+
+    int pageCount = sig_handler.getPageCount();
+
+    return (unsigned int) pageCount;
+}
+
 void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp) {
     QFuture<void> future =
             QtConcurrent::run(this, &GAPI::doSignXADES, loadedFilePath, outputFile, isTimestamp);

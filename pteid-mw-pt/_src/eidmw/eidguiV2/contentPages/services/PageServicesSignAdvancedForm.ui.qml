@@ -56,6 +56,7 @@ Item {
     property int propertyMouseAreaToolTipY: rectMainLeftFile.height
     property alias propertyTextSpinBox: textSpinBox
     property alias propertySpinBoxControl: spinBoxControl
+    property alias propertyCheckLastPage: checkLastPage
 
     BusyIndicator {
        id: busyIndicator
@@ -730,6 +731,7 @@ Item {
                         }
 
                         down.indicator: Rectangle {
+                            visible: false
                             x: spinBoxControl.mirrored ? parent.width - width : 0
                             height: parent.height
                             implicitWidth: 20

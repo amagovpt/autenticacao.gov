@@ -179,6 +179,7 @@ public slots:
     //This method should be used by basic and advanced signature modes
     void startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
                          QString reason, QString location, double isTimestamp, double isSmall);
+    unsigned int getPDFpageCount(QString loadedFilePath);
 
     void startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
     unsigned int verifyAuthPin(QString pin);

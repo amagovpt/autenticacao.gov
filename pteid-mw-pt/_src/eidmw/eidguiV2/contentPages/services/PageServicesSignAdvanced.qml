@@ -160,8 +160,8 @@ PageServicesSignAdvancedForm {
             var outputFile = propertyFileDialogOutput.fileUrl
 
             if (propertyRadioButtonPADES.checked) {
-                //TODO: we need a way to change the page
-                var page = 1
+
+                var page = propertySpinBoxControl.value
 
                 var reason = propertyTextFieldReason.text
                 var location = propertyTextFieldLocal.text
@@ -176,8 +176,9 @@ PageServicesSignAdvancedForm {
 
                 console.log("Output filename: " + outputFile)
                 console.log("Signing in position coord_x: " + coord_x
-                            + " and coord_y: "+coord_y)
+                            + " and coord_y: "+coord_y + " page: " + page)
 
+                // TODO: Batch Sign to sign multi files at the same Timer
                 gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
                                      reason, location, isTimestamp, isSmallSignature)
             }
@@ -304,10 +305,12 @@ PageServicesSignAdvancedForm {
             if(propertyRadioButtonPADES.checked){
                 propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                         "Arraste para esta zona o ficheiro a assinar \nou\n clique para procurar o ficheiro"
+                propertySpinBoxControl.value = 1
                 filesModel.clear()
             }else{
                 propertyTextDragMsgImg.text =
                         "Pré-visualização não disponível"
+                propertySpinBoxControl.value = 1
                 filesModel.clear()
             }
         }
@@ -395,7 +398,10 @@ PageServicesSignAdvancedForm {
                 fileLoaded = true
                 propertyBusyIndicator.running = true
                 var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
-                console.log("loadedFilePath: " + loadedFilePath)
+                var pageCount = gapi.getPDFpageCount(loadedFilePath)
+                console.log("loadedFilePath: " + loadedFilePath + " page count: " + pageCount)
+                propertySpinBoxControl.value = 1
+                propertySpinBoxControl.to = pageCount
                 if(propertyRadioButtonPADES.checked){
                     propertyPDFPreview.propertyBackground.cache = false
                     propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
@@ -413,6 +419,39 @@ PageServicesSignAdvancedForm {
                 }
                 propertyBusyIndicator.running = false
             }
+        }
+    }
+
+    propertySpinBoxControl {
+        onValueChanged: {
+            var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
+            var pageCount = gapi.getPDFpageCount(loadedFilePath)
+            propertyPDFPreview.propertyBackground.source =
+                    "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
+
+            propertySpinBoxControl.up.indicator.visible = true
+            propertySpinBoxControl.down.indicator.visible = true
+            if(propertySpinBoxControl.value === gapi.getPDFpageCount(loadedFilePath)){
+                propertySpinBoxControl.up.indicator.visible = false
+            }
+            if (propertySpinBoxControl.value === 1){
+                propertySpinBoxControl.down.indicator.visible = false
+            }
+
+        }
+    }
+    propertyCheckLastPage {
+        onCheckedChanged: {
+            var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
+            var pageCount = gapi.getPDFpageCount(loadedFilePath)
+            if(propertyCheckLastPage.checked){
+                propertyPDFPreview.propertyBackground.source =
+                        "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + pageCount
+            }else{
+                propertyPDFPreview.propertyBackground.source =
+                        "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
+            }
+
         }
     }
 
