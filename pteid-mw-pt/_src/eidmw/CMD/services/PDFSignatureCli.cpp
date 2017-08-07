@@ -8,7 +8,7 @@ static char logBuf[512];
 namespace eIDMW {
     bool isDBG = true;
 
-    void printData( char *msg, unsigned char *data, unsigned int dataLen ) {
+    void printData(char *msg, unsigned char *data, unsigned int dataLen) {
         if ( NULL == msg ) {
             printf( "Data:\n" );
         }
@@ -38,32 +38,6 @@ namespace eIDMW {
             }
             return hex;
         }
-    }
-
-        
-
-    std::string ltrim( std::string& str) {
-        size_t pos = str.find_first_not_of(' ');
-        if ( string::npos == pos ) return str;
-
-        str.replace( 0, pos , "" );
-        return str;
-    }
-
-    std::string rtrim( std::string& str) {
-        size_t pos = str.find_last_not_of( ' ' );
-        if ( string::npos == pos ) return str;
-
-        str.replace( pos + 1, str.length(), "" );
-        return str;
-    }
-
-    std::string trim( std::string& str) {
-        size_t first = str.find_first_not_of(' ');
-        if ( string::npos == first ) return "";
-
-        size_t last = str.find_last_not_of(' ');
-        return str.substr( first, ( last-first+1 ) );
     }
 
     PDFSignatureCli::PDFSignatureCli(PTEID_PDFSignature *in_pdf_handler ) {
@@ -112,9 +86,6 @@ namespace eIDMW {
                         , in_userId.size() );
         }
 
-        printf( "\n*******************************\n"
-                  "*** getCertificate          ***\n"
-                  "*******************************\n" );
         std::vector<CByteArray> certificates;
         int ret = cmdService.getCertificate( in_userId, certificates);
 
@@ -124,10 +95,6 @@ namespace eIDMW {
             MWLOG_ERR( logBuf, "getCertificate failed\n" );
             return ERR_GET_CERTIFICATE;
         }
-
-        printf( "\n*******************************\n"
-                  "*** getCertificate: OK      ***\n"
-                  "*******************************\n" );
 
         /* printData */
         if ( isDBG ) {
@@ -172,7 +139,6 @@ namespace eIDMW {
                         , in_pin.size() );
         }
 
-        //std::string userPin = toHex( in_pin );
         std::string userPin = in_pin;
 
         if ( 0 == userPin.size() ){
@@ -299,9 +265,6 @@ namespace eIDMW {
                         , signature.Size() );
         }
 
-        printf( "\n*******************************\n"
-                  "*** getSignature: OK        ***\n"
-                  "*******************************\n" );
         return ERR_NONE;
     }
 
