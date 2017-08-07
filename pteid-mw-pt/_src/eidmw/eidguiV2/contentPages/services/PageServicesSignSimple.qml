@@ -139,9 +139,9 @@ PageServicesSignSimpleForm {
                 outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
 
-                //TODO: we need a way to change the page
                 var page = 1
-
+                propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
+                                            page = propertySpinBoxControl.value
                 var reason = ""
                 var location = ""
 
@@ -204,6 +204,10 @@ PageServicesSignSimpleForm {
         }
     }
 
+    propertyTextSpinBox{
+        text: propertySpinBoxControl.textFromValue(propertySpinBoxControl.value, propertySpinBoxControl.locale)
+    }
+
     ListModel {
         id: filesModel
 
@@ -223,7 +227,10 @@ PageServicesSignSimpleForm {
                 fileLoaded = true
                 propertyBusyIndicator.running = true
                 var loadedFilePath = filesModel.get(0).fileUrl
-                console.log("loadedFilePath: " + loadedFilePath)
+                var pageCount = gapi.getPDFpageCount(loadedFilePath)
+                console.log("loadedFilePath: " + loadedFilePath + " page count: " + pageCount)
+                propertySpinBoxControl.value = 1
+                propertySpinBoxControl.to = pageCount
                 propertyPDFPreview.propertyBackground.cache = false
                 propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
                 propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
@@ -235,6 +242,38 @@ PageServicesSignSimpleForm {
                 propertyPDFPreview.propertyDragSigNumIdText.visible = true
                 propertyPDFPreview.propertyDragSigDateText.visible = true
                 propertyPDFPreview.propertyDragSigImg.visible = true
+            }
+        }
+    }
+
+    propertySpinBoxControl {
+        onValueChanged: {
+            var loadedFilePath = filesModel.get(0).fileUrl
+            var pageCount = gapi.getPDFpageCount(loadedFilePath)
+            propertyPDFPreview.propertyBackground.source =
+                    "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
+
+            propertySpinBoxControl.up.indicator.visible = true
+            propertySpinBoxControl.down.indicator.visible = true
+            if(propertySpinBoxControl.value === gapi.getPDFpageCount(loadedFilePath)){
+                propertySpinBoxControl.up.indicator.visible = false
+            }
+            if (propertySpinBoxControl.value === 1){
+                propertySpinBoxControl.down.indicator.visible = false
+            }
+
+        }
+    }
+    propertyCheckLastPage {
+        onCheckedChanged: {
+            var loadedFilePath = filesModel.get(0).fileUrl
+            var pageCount = gapi.getPDFpageCount(loadedFilePath)
+            if(propertyCheckLastPage.checked){
+                propertyPDFPreview.propertyBackground.source =
+                        "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + pageCount
+            }else{
+                propertyPDFPreview.propertyBackground.source =
+                        "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
             }
         }
     }

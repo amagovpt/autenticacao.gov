@@ -23,6 +23,10 @@ Item {
     property alias propertyButtonSignWithCC: button_signCC
     property alias propertyDropArea: dropArea
 
+    property alias propertyTextSpinBox: textSpinBox
+    property alias propertySpinBoxControl: spinBoxControl
+    property alias propertyCheckLastPage: checkLastPage
+
     BusyIndicator {
        id: busyIndicator
        running: false
@@ -34,7 +38,7 @@ Item {
     Item {
         id: rowMain
         width: parent.width - Constants.SIZE_ROW_H_SPACE
-        height: parent.height - rowBottom.height - Constants.SIZE_ROW_V_SPACE
+        height: parent.height - rowBottom.height - rectSignPageOptions.height - 2 * Constants.SIZE_ROW_V_SPACE
 
         // Expanded menu need a Horizontal space to Main Menu
         x: Constants.SIZE_ROW_H_SPACE
@@ -134,10 +138,134 @@ Item {
     }
 
     Item {
+        id: rectSignPageOptions
+        width: parent.width
+        height: Constants.HEIGHT_BOTTOM_COMPONENT
+        anchors.left: parent.left
+        anchors.top: rowMain.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+
+        Item {
+            id: itemCheckSignReduced
+            width: parent.width * 0.3
+            height: parent.height
+            anchors.top: parent.top
+        }
+
+        Item {
+            id: itemCheckPage
+            width: parent.width * 0.4
+            height: parent.height
+            anchors.top: parent.top
+            anchors.left: itemCheckSignReduced.right
+            Text{
+                id: pageText
+                x: 11
+                y: 8
+                text: "Página:"
+                font.family: lato.name
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                color: Constants.COLOR_MAIN_PRETO
+                font.capitalization: Font.MixedCase
+                opacity: fileLoaded && !checkLastPage.checked
+                         ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+            }
+
+            SpinBox {
+                id: spinBoxControl
+                y: 0
+                from: 1
+                to: 10000
+                value: 1
+                anchors.left: pageText.right
+                width: parent.width - pageText.width - pageText.x
+                height: parent.height
+                anchors.leftMargin: 0
+                enabled: fileLoaded && !checkLastPage.checked
+                editable:  fileLoaded ? true : false
+
+                contentItem: TextInput {
+                    id: textSpinBox
+                    z: 2
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    color: Constants.COLOR_MAIN_PRETO
+                    opacity: fileLoaded && !checkLastPage.checked
+                             ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                    horizontalAlignment: Qt.AlignHCenter
+                    verticalAlignment: Qt.AlignVCenter
+
+                    readOnly: !spinBoxControl.editable
+                    validator: spinBoxControl.validator
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                }
+
+
+                up.indicator: Rectangle {
+                    x: spinBoxControl.mirrored ? 0 : parent.width - width
+                    height: parent.height
+                    implicitWidth: 20
+                    implicitHeight: parent.height
+
+                    Text {
+                        text: "+"
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        color: Constants.COLOR_MAIN_PRETO
+                        opacity: fileLoaded && !checkLastPage.checked
+                                 ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                        anchors.fill: parent
+                        fontSizeMode: Text.Fit
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                }
+
+                down.indicator: Rectangle {
+                    visible: false
+                    x: spinBoxControl.mirrored ? parent.width - width : 0
+                    height: parent.height
+                    implicitWidth: 20
+                    implicitHeight: parent.height
+
+                    Text {
+                        text: "-"
+                        font.family: lato.name
+                        font.pixelSize:  Constants.SIZE_TEXT_LABEL
+                        color: Constants.COLOR_MAIN_PRETO
+                        opacity: fileLoaded && !checkLastPage.checked
+                                 ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                        anchors.fill: parent
+                        fontSizeMode: Text.Fit
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                }
+            }
+        }
+        Item {
+            id: itemLastPage
+            width: parent.width * 0.3
+            height: parent.height
+            anchors.left: itemCheckPage.right
+            anchors.top: parent.top
+            Switch {
+                id: checkLastPage
+                text: "Última"
+                height: Constants.HEIGHT_SWITCH_COMPONENT
+                font.family: lato.name
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.capitalization: Font.MixedCase
+                enabled: fileLoaded
+            }
+        }
+    }
+
+    Item {
         id: rowBottom
         width: parent.width - Constants.SIZE_ROW_H_SPACE
         height: Constants.HEIGHT_SIGN_BOTTOM_COMPONENT
-        anchors.top: rowMain.bottom
+        anchors.top: rectSignPageOptions.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         x: Constants.SIZE_ROW_H_SPACE
 
