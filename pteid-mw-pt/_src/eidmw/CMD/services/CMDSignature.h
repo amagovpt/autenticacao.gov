@@ -10,11 +10,12 @@
 
 using namespace eIDMW;
 
-namespace eIDMW{
-    class PDFSignatureCli {
+namespace eIDMW {
+
+    class CMDSignature {
         public:
-            PDFSignatureCli(PTEID_PDFSignature *in_pdf_handler);
-            ~PDFSignatureCli();
+            CMDSignature(PTEID_PDFSignature *in_pdf_handler);
+            ~CMDSignature();
             int signOpen( std::string in_userId, std::string in_pin
                         , int page
                         , double coord_x, double coord_y
@@ -23,15 +24,6 @@ namespace eIDMW{
                         , const char *outfile_path );
 
             int signClose( std::string in_code );
-
-            std::string getUserId();
-            void setUserId( std::string in_userId );
-
-            std::string getUserPin();
-            void setUserPin( std::string in_pin );
-
-            std::string getReceiveCode();
-            void setReceiveCode( std::string in_receiveCode );
 
         private:
             CMDServices cmdService;
@@ -46,4 +38,5 @@ namespace eIDMW{
                                 , PTEID_ByteArray &out_sign );
     };
 }/* namespace eIDMW */
+
 #endif

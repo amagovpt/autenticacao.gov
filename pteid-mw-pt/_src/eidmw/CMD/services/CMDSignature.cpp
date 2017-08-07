@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "PDFSignatureCli.h"
+#include "CMDSignature.h"
 #include "MiscUtil.h"
 #include "StringOps.h"
 
@@ -16,64 +16,23 @@ namespace eIDMW {
             printf( "%s\n", msg );
         }
 
-        for(int i = 0; i < dataLen; i++ ) {
+        for(unsigned int i = 0; i < dataLen; i++ ) {
             if ( ( i > 0) && ( 0 == ( i % 20 ))) printf("\n");
             printf( "%02x", data[i] );
         }
         printf( "\n" );
     }
 
-    std::string toHex( std::string str ) {
-        std::string hex;
-
-        const char *p = str.c_str();
-        for(unsigned int i = 0; i < str.size(); i++){
-
-            if ( ( p[i] >= 0x30 ) && ( p[i] <= 0x39 )) {
-                hex.push_back( p[i] - 0x30 );
-            }
-            else {
-                hex = str;
-                break;
-            }
-            return hex;
-        }
-    }
-
-    PDFSignatureCli::PDFSignatureCli(PTEID_PDFSignature *in_pdf_handler ) {
+    CMDSignature::CMDSignature(PTEID_PDFSignature *in_pdf_handler ) {
         m_pdf_handler = in_pdf_handler;
     }
 
-    PDFSignatureCli::~PDFSignatureCli() {
+    CMDSignature::~CMDSignature() {
         m_pdf_handler = NULL;
     }
 
-    std::string PDFSignatureCli::getUserId(){
-        return m_userId;
-    }
 
-    void PDFSignatureCli::setUserId( std::string in_userId ) {
-        m_userId = in_userId;
-    }
-
-    std::string PDFSignatureCli::getUserPin() {
-        return m_pin;
-    }
-
-    void PDFSignatureCli::setUserPin( std::string in_pin ){
-        m_pin = in_pin;
-    }
-
-    std::string PDFSignatureCli::getReceiveCode(){
-        return m_receiveCode;
-    }
-
-    void PDFSignatureCli::setReceiveCode( std::string in_receiveCode) {
-        m_receiveCode = in_receiveCode;
-    }
-
-
-    int PDFSignatureCli::cli_getCertificate( std::string in_userId) {
+    int CMDSignature::cli_getCertificate( std::string in_userId) {
         if ( NULL == m_pdf_handler ){
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
             return ERR_NULL_PDF_HANDLER;
@@ -123,9 +82,9 @@ namespace eIDMW {
     }
 
 /*  *********************************************************
-    ***    PDFSignatureCli::cli_sendDataToSign()          ***
+    ***    CMDSignature::cli_sendDataToSign()          ***
     ********************************************************* */
-    int PDFSignatureCli::cli_sendDataToSign( std::string in_pin) {
+    int CMDSignature::cli_sendDataToSign( std::string in_pin) {
 
         if ( NULL == m_pdf_handler ) {
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
@@ -173,8 +132,7 @@ namespace eIDMW {
                         , hashByteArray.Size() );
         }
 
-        /* Convert hashByteArray to hex std::string */
-        std::string in_hash((const char *)hashByteArray.GetBytes(), hashByteArray.Size());  //hashByteArray.ToString( true, false );
+        std::string in_hash((const char *)hashByteArray.GetBytes(), hashByteArray.Size());
 
         int ret = cmdService.sendDataToSign(in_hash, userPin);
         if ( ret != ERR_NONE ){
@@ -186,9 +144,9 @@ namespace eIDMW {
     }
 
 /*  *********************************************************
-    ***    PDFSignatureCli::signOpen()                    ***
+    ***    CMDSignature::signOpen()                    ***
     ********************************************************* */
-    int PDFSignatureCli::signOpen( std::string in_userId, std::string in_pin
+    int CMDSignature::signOpen( std::string in_userId, std::string in_pin
                                     , int page
                                     , double coord_x, double coord_y
                                     , const char *location
@@ -214,7 +172,7 @@ namespace eIDMW {
     }
 
 
-    int PDFSignatureCli::cli_getSignature(std::string in_code,
+    int CMDSignature::cli_getSignature(std::string in_code,
                                     PTEID_ByteArray &out_sign) {
         if ( NULL == m_pdf_handler ) {
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
@@ -240,7 +198,7 @@ namespace eIDMW {
         return ERR_NONE;
     }
 
-    int PDFSignatureCli::signClose( std::string in_code )
+    int CMDSignature::signClose( std::string in_code )
     {
 
         PTEID_ByteArray signature;

@@ -1,4 +1,4 @@
-#include "PDFSignatureCli.h"
+#include "CMDSignature.h"
 #include "eidlib.h"
 #include "eidErrors.h"
 
@@ -19,7 +19,7 @@
 using namespace std;
 using namespace eIDMW;
 
-int main()   
+int main()
 {
 	const int page = 1;
 	int sector = 3;
@@ -41,9 +41,9 @@ int main()
 	try {
 		PTEID_PDFSignature sig_handler( in_file );
 
-		PDFSignatureCli client( &sig_handler );
+		CMDSignature cmd_signature(&sig_handler);
 
-		ret = client.signOpen( in_userId, in_pin,
+		ret = cmd_signature.signOpen( in_userId, in_pin,
 				page,
 				coord_x, coord_y,
 				"LISBOA, PT", "Concordo com todo o conteudo - Teste", outfile_path );
@@ -53,13 +53,13 @@ int main()
 			return -2;
 		}
 
-		ret = client.signClose( sms_token );
+		ret = cmd_signature.signClose( sms_token );
 		if ( ret != 0 ) {
 			cout << "signClose failed!" << endl;
 			return -3;
 		}
 
-	} catch (PTEID_Exception &e){
+	} catch (PTEID_Exception &e) {
 		cerr << "Caught exception in some SDK method. Error code: " << hex << e.GetError() << endl;
 	}
 
