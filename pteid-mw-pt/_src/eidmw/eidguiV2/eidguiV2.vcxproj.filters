@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Generated Files">
@@ -32,6 +32,24 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="filesavedialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gapi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_gapi.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_filesavedialog.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="appcontroller.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug\qrc_resources.cpp">
@@ -63,12 +81,6 @@
     <None Include="contentPages\card\PageCardAdressForm.ui.qml">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="contentPages\card\PageCardCertificates.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="contentPages\card\PageCardCertificatesForm.ui.qml">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="contentPages\card\PageCardIdentify.qml">
       <Filter>Resource Files</Filter>
     </None>
@@ -87,18 +99,6 @@
     <None Include="contentPages\card\PageCardOtherDataForm.ui.qml">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="contentPages\card\PageCardPinCodes.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="contentPages\card\PageCardPinCodesForm.ui.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="contentPages\definitions\PageDefinitionsParameters.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="contentPages\definitions\PageDefinitionsParametersForm.ui.qml">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="contentPages\help\PageHelpAbout.qml">
       <Filter>Resource Files</Filter>
     </None>
@@ -111,12 +111,6 @@
     <None Include="contentPages\help\PageHelpDocOnlineForm.ui.qml">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="contentPages\help\PageHelpUpdates.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="contentPages\help\PageHelpUpdatesForm.ui.qml">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="contentPages\home\PageHome.qml">
       <Filter>Resource Files</Filter>
     </None>
@@ -126,22 +120,7 @@
     <None Include="PageLoader.qml">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="contentPages\services\PageServicesSignPdf.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="contentPages\services\PageServicesSignPdfForm.ui.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="contentPages\services\PageServicesSignProfessional.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="contentPages\services\PageServicesSignProfessionalForm.ui.qml">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="SubMenuModel.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="images\logo-ag.svg">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="main.cpp">
@@ -150,11 +129,73 @@
     <None Include="main.qml">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="contentPages\card\photo.png">
-      <Filter>Resource Files</Filter>
-    </None>
     <CustomBuild Include="resources.qrc">
       <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <None Include="components\Accordion.qml" />
+    <None Include="components\Button.qml" />
+    <None Include="images\dummy\CCdemo.png" />
+    <None Include="images\dummy\CCdemo_custom.png" />
+    <None Include="components\CardRowTop.qml" />
+    <None Include="components\FrameWindow.qml" />
+    <None Include="components\LabelTextBox.qml" />
+    <None Include="components\LabelTextBoxForm.ui.qml" />
+    <None Include="MainMenuBottomModel.qml" />
+    <None Include="components\PDFPreview.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsApp.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsAppForm.ui.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSignature.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSignatureForm.ui.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsUpdates.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsUpdatesForm.ui.qml" />
+    <None Include="contentPages\security\PageSecurityCertificates.qml" />
+    <None Include="contentPages\security\PageSecurityCertificatesForm.ui.qml" />
+    <None Include="contentPages\security\PageSecurityPinCodes.qml" />
+    <None Include="contentPages\security\PageSecurityPinCodesForm.ui.qml" />
+    <None Include="contentPages\services\PageServicesSignAdvanced.qml" />
+    <None Include="contentPages\services\PageServicesSignAdvancedForm.ui.qml" />
+    <None Include="contentPages\services\PageServicesSignSimple.qml" />
+    <None Include="contentPages\services\PageServicesSignSimpleForm.ui.qml" />
+    <None Include="images\dummy\Pdfdemo.png" />
+    <None Include="contentPages\security\PinCodesModel.qml" />
+    <None Include="components\ScrollBar.qml" />
+    <None Include="components\TextBullet.qml" />
+    <None Include="components\TitleBar.qml" />
+    <None Include="images\arrow-right_AMA.png" />
+    <None Include="images\arrow-right_hover.png" />
+    <None Include="images\arrow-right_white_AMA.png" />
+    <None Include="images\definitions_icon.png" />
+    <None Include="images\definitions_icon_selected.png" />
+    <None Include="favicon.ico" />
+    <None Include="images\help_icon.png" />
+    <None Include="images\help_icon_selected.png" />
+    <None Include="images\icons-move.png" />
+    <None Include="images\logo_CC.png" />
+    <None Include="images\logo_autenticacao_gov.png" />
+    <None Include="images\logo_autenticacao_gov100.png" />
+    <None Include="images\logo_compete2020.png" />
+    <None Include="images\titleBar\maximize.png" />
+    <None Include="images\titleBar\maximize_hover.png" />
+    <None Include="images\titleBar\minimize.png" />
+    <None Include="images\titleBar\minimize_hover.png" />
+    <None Include="images\dummy\photo.png" />
+    <None Include="images\pteid_signature_watermark.jpg" />
+    <None Include="qtquickcontrols2.conf" />
+    <None Include="images\titleBar\quit.png" />
+    <None Include="images\titleBar\quit_hover.png" />
+    <None Include="images\remove_file.png" />
+    <None Include="images\remove_file_hover.png" />
+    <None Include="images\tooltip_grey.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="gapi.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filesavedialog.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="appcontroller.h">
+      <Filter>Generated Files</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

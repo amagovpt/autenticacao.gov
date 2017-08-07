@@ -93,7 +93,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;$(PTEID_DIR_QT_4_X64)\include;$(PTEID_DIR_QT_4_X64)\include\QtQuick;$(PTEID_DIR_QT_4_X64)\include\QtGui;$(PTEID_DIR_QT_4_X64)\include\QtANGLE;$(PTEID_DIR_QT_4_X64)\include\QtQml;$(PTEID_DIR_QT_4_X64)\include\QtNetwork;$(PTEID_DIR_QT_4_X64)\include\QtCore;release;$(PTEID_DIR_QT_4_X64)\mkspecs\win32-msvc2013;..\eidlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(PTEID_DIR_QT_4_X64)\include;$(PTEID_DIR_QT_4_X64)\include\QtQuick;$(PTEID_DIR_QT_4_X64)\include\QtGui\5.9.1\;..\common;$(PTEID_DIR_QT_4_X64)\include\QtCore\5.9.1\QtCore;$(PTEID_DIR_QT_4_X64)\include\QtCore\5.9.1;$(PTEID_DIR_QT_4_X64)\include\QtGui\5.9.1\QtGui;$(PTEID_DIR_QT_4_X64)\mkspecs\win32-msvc;$(PTEID_DIR_QT_4_X64)\include\QtGui;$(PTEID_DIR_QT_4_X64)\include\QtConcurrent;$(PTEID_DIR_QT_4_X64)\include\QtQuickControls2;$(PTEID_DIR_QT_4_X64)\include\QtWidgets;$(PTEID_DIR_QT_4_X64)\include\QtANGLE;$(PTEID_DIR_QT_4_X64)\include\QtQml;$(PTEID_DIR_QT_4_X64)\include\QtNetwork;$(PTEID_DIR_QT_4_X64)\include\QtCore;$(PTEID_POPPLER_QT5);release;$(PTEID_DIR_QT_4_X64)\mkspecs\win32-msvc2013;..\eidlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -112,7 +112,7 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>C:\Qt\5.6\msvc2013_64\lib\qtmain.lib;shell32.lib;C:\Qt\5.6\msvc2013_64\lib\Qt5Quick.lib;C:\Qt\5.6\msvc2013_64\lib\Qt5Gui.lib;C:\Qt\5.6\msvc2013_64\lib\Qt5Qml.lib;C:\Qt\5.6\msvc2013_64\lib\Qt5Network.lib;C:\Qt\5.6\msvc2013_64\lib\Qt5Core.lib;pteidlibCpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmain.lib;shell32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidlibCpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(PTEID_DIR_QT_4_X64)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
@@ -121,7 +121,7 @@
       <LinkIncremental>false</LinkIncremental>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Link>
     <Midl>
@@ -254,7 +254,13 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="filesavedialog.cpp" />
+    <ClCompile Include="gapi.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="appcontroller.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_gapi.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_filesavedialog.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug\qrc_resources.cpp">
@@ -267,61 +273,131 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="components\Accordion.qml" />
+    <None Include="components\Button.qml" />
+    <None Include="images\dummy\CCdemo.png" />
+    <None Include="images\dummy\CCdemo_custom.png" />
+    <None Include="components\CardRowTop.qml" />
     <None Include="scripts\Constants.js" />
+    <None Include="components\FrameWindow.qml" />
     <None Include="fonts\karma\Karma-Medium.ttf" />
+    <None Include="components\LabelTextBox.qml" />
+    <None Include="components\LabelTextBoxForm.ui.qml" />
     <None Include="fonts\lato\Lato-Regular.ttf" />
     <None Include="MainForm.ui.qml" />
+    <None Include="MainMenuBottomModel.qml" />
     <None Include="MainMenuModel.qml" />
+    <None Include="components\PDFPreview.qml" />
     <None Include="contentPages\card\PageCardAdress.qml" />
     <None Include="contentPages\card\PageCardAdressForm.ui.qml" />
-    <None Include="contentPages\card\PageCardCertificates.qml" />
-    <None Include="contentPages\card\PageCardCertificatesForm.ui.qml" />
     <None Include="contentPages\card\PageCardIdentify.qml" />
     <None Include="contentPages\card\PageCardIdentifyForm.ui.qml" />
     <None Include="contentPages\card\PageCardNotes.qml" />
     <None Include="contentPages\card\PageCardNotesForm.ui.qml" />
     <None Include="contentPages\card\PageCardOtherData.qml" />
     <None Include="contentPages\card\PageCardOtherDataForm.ui.qml" />
-    <None Include="contentPages\card\PageCardPinCodes.qml" />
-    <None Include="contentPages\card\PageCardPinCodesForm.ui.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsParameters.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsParametersForm.ui.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsApp.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsAppForm.ui.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSignature.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSignatureForm.ui.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsUpdates.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsUpdatesForm.ui.qml" />
     <None Include="contentPages\help\PageHelpAbout.qml" />
     <None Include="contentPages\help\PageHelpAboutForm.ui.qml" />
     <None Include="contentPages\help\PageHelpDocOnline.qml" />
     <None Include="contentPages\help\PageHelpDocOnlineForm.ui.qml" />
-    <None Include="contentPages\help\PageHelpUpdates.qml" />
-    <None Include="contentPages\help\PageHelpUpdatesForm.ui.qml" />
     <None Include="contentPages\home\PageHome.qml" />
     <None Include="contentPages\home\PageHomeForm.ui.qml" />
     <None Include="PageLoader.qml" />
-    <None Include="contentPages\services\PageServicesSignPdf.qml" />
-    <None Include="contentPages\services\PageServicesSignPdfForm.ui.qml" />
-    <None Include="contentPages\services\PageServicesSignProfessional.qml" />
-    <None Include="contentPages\services\PageServicesSignProfessionalForm.ui.qml" />
+    <None Include="contentPages\security\PageSecurityCertificates.qml" />
+    <None Include="contentPages\security\PageSecurityCertificatesForm.ui.qml" />
+    <None Include="contentPages\security\PageSecurityPinCodes.qml" />
+    <None Include="contentPages\security\PageSecurityPinCodesForm.ui.qml" />
+    <None Include="contentPages\services\PageServicesSignAdvanced.qml" />
+    <None Include="contentPages\services\PageServicesSignAdvancedForm.ui.qml" />
+    <None Include="contentPages\services\PageServicesSignSimple.qml" />
+    <None Include="contentPages\services\PageServicesSignSimpleForm.ui.qml" />
+    <None Include="images\dummy\Pdfdemo.png" />
+    <None Include="contentPages\security\PinCodesModel.qml" />
+    <None Include="components\ScrollBar.qml" />
     <None Include="SubMenuModel.qml" />
-    <None Include="images\logo-ag.svg" />
+    <None Include="components\TextBullet.qml" />
+    <None Include="components\TitleBar.qml" />
+    <None Include="images\arrow-right_AMA.png" />
+    <None Include="images\arrow-right_hover.png" />
+    <None Include="images\arrow-right_white_AMA.png" />
+    <None Include="images\definitions_icon.png" />
+    <None Include="images\definitions_icon_selected.png" />
+    <None Include="favicon.ico" />
+    <None Include="images\help_icon.png" />
+    <None Include="images\help_icon_selected.png" />
+    <None Include="images\icons-move.png" />
+    <None Include="images\logo_CC.png" />
+    <None Include="images\logo_autenticacao_gov.png" />
+    <None Include="images\logo_autenticacao_gov100.png" />
+    <None Include="images\logo_compete2020.png" />
     <None Include="main.cpp" />
     <None Include="main.qml" />
-    <None Include="contentPages\card\photo.png" />
+    <None Include="images\titleBar\maximize.png" />
+    <None Include="images\titleBar\maximize_hover.png" />
+    <None Include="images\titleBar\minimize.png" />
+    <None Include="images\titleBar\minimize_hover.png" />
+    <None Include="images\dummy\photo.png" />
+    <None Include="images\pteid_signature_watermark.jpg" />
+    <None Include="qtquickcontrols2.conf" />
+    <None Include="images\titleBar\quit.png" />
+    <None Include="images\titleBar\quit_hover.png" />
+    <None Include="images\remove_file.png" />
+    <None Include="images\remove_file_hover.png" />
+    <None Include="images\tooltip_grey.png" />
     <CustomBuild Include="resources.qrc">
       <FileType>Document</FileType>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">resources.qrc;MainForm.ui.qml;main.cpp;PageLoader.qml;MainMenuModel.qml;SubMenuModel.qml;main.qml;scripts\Constants.js;images\logo-ag.svg;contentPages\card\PageCardOtherData.qml;contentPages\card\PageCardPinCodesForm.ui.qml;contentPages\card\PageCardNotesForm.ui.qml;contentPages\card\PageCardIdentify.qml;contentPages\card\PageCardPinCodes.qml;contentPages\card\PageCardAdressForm.ui.qml;contentPages\card\PageCardAdress.qml;contentPages\card\PageCardNotes.qml;contentPages\card\PageCardIdentifyForm.ui.qml;contentPages\card\PageCardCertificatesForm.ui.qml;contentPages\card\PageCardCertificates.qml;contentPages\card\photo.png;contentPages\card\PageCardOtherDataForm.ui.qml;contentPages\definitions\PageDefinitionsParameters.qml;contentPages\definitions\PageDefinitionsParametersForm.ui.qml;contentPages\help\PageHelpAbout.qml;contentPages\help\PageHelpDocOnline.qml;contentPages\help\PageHelpUpdates.qml;contentPages\help\PageHelpUpdatesForm.ui.qml;contentPages\help\PageHelpAboutForm.ui.qml;contentPages\help\PageHelpDocOnlineForm.ui.qml;contentPages\services\PageServicesSignPdfForm.ui.qml;contentPages\services\PageServicesSignPdf.qml;contentPages\services\PageServicesSignProfessionalForm.ui.qml;contentPages\services\PageServicesSignProfessional.qml;contentPages\home\PageHomeForm.ui.qml;contentPages\home\PageHome.qml;fonts\lato\Lato-Regular.ttf;fonts\karma\Karma-Medium.ttf;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">resources.qrc;MainForm.ui.qml;main.cpp;PageLoader.qml;MainMenuModel.qml;SubMenuModel.qml;main.qml;scripts\Constants.js;images\logo-ag.svg;contentPages\card\PageCardOtherData.qml;contentPages\card\PageCardPinCodesForm.ui.qml;contentPages\card\PageCardNotesForm.ui.qml;contentPages\card\PageCardIdentify.qml;contentPages\card\PageCardPinCodes.qml;contentPages\card\PageCardAdressForm.ui.qml;contentPages\card\PageCardAdress.qml;contentPages\card\PageCardNotes.qml;contentPages\card\PageCardIdentifyForm.ui.qml;contentPages\card\PageCardCertificatesForm.ui.qml;contentPages\card\PageCardCertificates.qml;contentPages\card\photo.png;contentPages\card\PageCardOtherDataForm.ui.qml;contentPages\definitions\PageDefinitionsParameters.qml;contentPages\definitions\PageDefinitionsParametersForm.ui.qml;contentPages\help\PageHelpAbout.qml;contentPages\help\PageHelpDocOnline.qml;contentPages\help\PageHelpUpdates.qml;contentPages\help\PageHelpUpdatesForm.ui.qml;contentPages\help\PageHelpAboutForm.ui.qml;contentPages\help\PageHelpDocOnlineForm.ui.qml;contentPages\services\PageServicesSignPdfForm.ui.qml;contentPages\services\PageServicesSignPdf.qml;contentPages\services\PageServicesSignProfessionalForm.ui.qml;contentPages\services\PageServicesSignProfessional.qml;contentPages\home\PageHomeForm.ui.qml;contentPages\home\PageHome.qml;fonts\lato\Lato-Regular.ttf;fonts\karma\Karma-Medium.ttf;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.6\msvc2013_64\bin\rcc.exe -name resources resources.qrc -o release\qrc_resources.cpp</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Qt\5.6\msvc2013_64\bin\rcc.exe -name resources resources.qrc -o release\qrc_resources.cpp</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4)\bin\rcc.exe -name resources resources.qrc -o release\qrc_resources.cpp</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\rcc.exe -name resources resources.qrc -o release\qrc_resources.cpp</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RCC resources.qrc</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">RCC resources.qrc</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\qrc_resources.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\qrc_resources.cpp;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">resources.qrc;MainForm.ui.qml;main.cpp;PageLoader.qml;MainMenuModel.qml;SubMenuModel.qml;main.qml;scripts\Constants.js;images\logo-ag.svg;contentPages\card\PageCardOtherData.qml;contentPages\card\PageCardPinCodesForm.ui.qml;contentPages\card\PageCardNotesForm.ui.qml;contentPages\card\PageCardIdentify.qml;contentPages\card\PageCardPinCodes.qml;contentPages\card\PageCardAdressForm.ui.qml;contentPages\card\PageCardAdress.qml;contentPages\card\PageCardNotes.qml;contentPages\card\PageCardIdentifyForm.ui.qml;contentPages\card\PageCardCertificatesForm.ui.qml;contentPages\card\PageCardCertificates.qml;contentPages\card\photo.png;contentPages\card\PageCardOtherDataForm.ui.qml;contentPages\definitions\PageDefinitionsParameters.qml;contentPages\definitions\PageDefinitionsParametersForm.ui.qml;contentPages\help\PageHelpAbout.qml;contentPages\help\PageHelpDocOnline.qml;contentPages\help\PageHelpUpdates.qml;contentPages\help\PageHelpUpdatesForm.ui.qml;contentPages\help\PageHelpAboutForm.ui.qml;contentPages\help\PageHelpDocOnlineForm.ui.qml;contentPages\services\PageServicesSignPdfForm.ui.qml;contentPages\services\PageServicesSignPdf.qml;contentPages\services\PageServicesSignProfessionalForm.ui.qml;contentPages\services\PageServicesSignProfessional.qml;contentPages\home\PageHomeForm.ui.qml;contentPages\home\PageHome.qml;fonts\lato\Lato-Regular.ttf;fonts\karma\Karma-Medium.ttf;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">resources.qrc;MainForm.ui.qml;main.cpp;PageLoader.qml;MainMenuModel.qml;SubMenuModel.qml;main.qml;scripts\Constants.js;images\logo-ag.svg;contentPages\card\PageCardOtherData.qml;contentPages\card\PageCardPinCodesForm.ui.qml;contentPages\card\PageCardNotesForm.ui.qml;contentPages\card\PageCardIdentify.qml;contentPages\card\PageCardPinCodes.qml;contentPages\card\PageCardAdressForm.ui.qml;contentPages\card\PageCardAdress.qml;contentPages\card\PageCardNotes.qml;contentPages\card\PageCardIdentifyForm.ui.qml;contentPages\card\PageCardCertificatesForm.ui.qml;contentPages\card\PageCardCertificates.qml;contentPages\card\photo.png;contentPages\card\PageCardOtherDataForm.ui.qml;contentPages\definitions\PageDefinitionsParameters.qml;contentPages\definitions\PageDefinitionsParametersForm.ui.qml;contentPages\help\PageHelpAbout.qml;contentPages\help\PageHelpDocOnline.qml;contentPages\help\PageHelpUpdates.qml;contentPages\help\PageHelpUpdatesForm.ui.qml;contentPages\help\PageHelpAboutForm.ui.qml;contentPages\help\PageHelpDocOnlineForm.ui.qml;contentPages\services\PageServicesSignPdfForm.ui.qml;contentPages\services\PageServicesSignPdf.qml;contentPages\services\PageServicesSignProfessionalForm.ui.qml;contentPages\services\PageServicesSignProfessional.qml;contentPages\home\PageHomeForm.ui.qml;contentPages\home\PageHome.qml;fonts\lato\Lato-Regular.ttf;fonts\karma\Karma-Medium.ttf;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.6\msvc2013_64\bin\rcc.exe -name resources resources.qrc -o debug\qrc_resources.cpp</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Qt\5.6\msvc2013_64\bin\rcc.exe -name resources resources.qrc -o debug\qrc_resources.cpp</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4)\bin\rcc.exe -name resources resources.qrc -o debug\qrc_resources.cpp</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\rcc.exe -name resources resources.qrc -o debug\qrc_resources.cpp</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RCC resources.qrc</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">RCC resources.qrc</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\qrc_resources.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\qrc_resources.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="filesavedialog.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+			</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+		  </Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="appcontroller.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+			</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+		  </Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="gapi.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+		</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+	  </Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
