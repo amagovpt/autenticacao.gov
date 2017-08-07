@@ -172,7 +172,9 @@ PageServicesSignAdvancedForm {
 
             if (propertyRadioButtonPADES.checked) {
 
-                var page = propertySpinBoxControl.value
+                var page = 1
+                propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
+                                                page = propertySpinBoxControl.value
 
                 var reason = propertyTextFieldReason.text
                 var location = propertyTextFieldLocal.text
@@ -466,7 +468,6 @@ PageServicesSignAdvancedForm {
                 propertyPDFPreview.propertyBackground.source =
                         "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
             }
-
         }
     }
 
