@@ -10,6 +10,9 @@ Item {
 
     anchors.fill: parent
 
+    enabled: false
+    opacity: 0.3
+
     Item {
         id: rowTop
         width: parent.width

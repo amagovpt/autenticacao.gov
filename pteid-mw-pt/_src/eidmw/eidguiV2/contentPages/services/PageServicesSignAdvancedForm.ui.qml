@@ -423,7 +423,9 @@ Item {
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         anchors.top: switchSignTemp.bottom
                         text: "Adicionar atributos profissionais"
-                        enabled: fileLoaded
+                        //enabled: fileLoaded
+                        enabled: false
+                        opacity: 0.3
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
@@ -779,7 +781,7 @@ Item {
 
                 Button {
                     id: button_signCC
-                    text: "Assinar \n Cartão do Cidadão"
+                    text: "Assinar \n Cartão de Cidadão"
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
                     enabled: fileLoaded
@@ -793,7 +795,7 @@ Item {
                     text: "Assinar \n Chave Móvel Digital"
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
-                    enabled: fileLoaded
+                    enabled: false
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase

@@ -296,7 +296,7 @@ Item {
 
             Button {
                 id: button_signCC
-                text: "Assinar \n Cartão do Cidadão"
+                text: "Assinar \n Cartão de Cidadão"
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
                 enabled: fileLoaded
@@ -309,7 +309,7 @@ Item {
                 text: "Assinar \n Chave Móvel Digital"
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
-                enabled: fileLoaded
+                enabled: false
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase

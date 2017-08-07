@@ -7,6 +7,8 @@ import "../../scripts/Constants.js" as Constants
 
 Item {
     anchors.fill: parent
+    enabled: false
+    opacity: 0.3
     Item {
         width: parent.width
         height: parent.height

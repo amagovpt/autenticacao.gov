@@ -219,6 +219,8 @@ Item {
             anchors.top: rectTop.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
+            enabled: false
+            opacity: 0.3
 
             FileDialog {
                 id: fileDialog
