@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "..\common\pteidcommon.2008.vcxproj", "{39710980-B40E-4B06-B8E8-D86B125007F3}"
 EndProject
@@ -14,6 +14,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "applayer", "..\applayer\pte
 		{C7DE2B79-F890-4ACB-804A-BDD14E1A9CAE} = {C7DE2B79-F890-4ACB-804A-BDD14E1A9CAE}
 		{39710980-B40E-4B06-B8E8-D86B125007F3} = {39710980-B40E-4B06-B8E8-D86B125007F3}
 		{9CF14E97-F045-4A1F-951A-445CA1316338} = {9CF14E97-F045-4A1F-951A-445CA1316338}
+		{5AA075F8-394E-4C6E-824A-39096E21869F} = {5AA075F8-394E-4C6E-824A-39096E21869F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCpp", "..\eidlib\pteidlib.2008.vcxproj", "{3A09DD63-945E-40EB-9053-5FE50F74B7C1}"
@@ -93,6 +94,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wintestApp", "wintestApp\wintestApp.vcxproj", "{241CC207-60ED-4FF4-826D-E1F23782DADA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScapSignature", "..\scap-client-v2\scap-client.vcxproj", "{B3A05E82-1921-3FC3-9B2A-EF964405796D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "eidguiV2", "..\eidguiV2\eidguiV2.vcxproj", "{8669C59A-52C0-32D6-A32D-91546481FAEA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3A09DD63-945E-40EB-9053-5FE50F74B7C1} = {3A09DD63-945E-40EB-9053-5FE50F74B7C1}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -361,6 +367,18 @@ Global
 		{B3A05E82-1921-3FC3-9B2A-EF964405796D}.Release|Win32.Build.0 = Release|Win32
 		{B3A05E82-1921-3FC3-9B2A-EF964405796D}.Release|x64.ActiveCfg = Release|x64
 		{B3A05E82-1921-3FC3-9B2A-EF964405796D}.Release|x64.Build.0 = Release|x64
+		{8669C59A-52C0-32D6-A32D-91546481FAEA}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{8669C59A-52C0-32D6-A32D-91546481FAEA}.Debug|Mixed Platforms.Build.0 = Debug|x64
+		{8669C59A-52C0-32D6-A32D-91546481FAEA}.Debug|Win32.ActiveCfg = Debug|x64
+		{8669C59A-52C0-32D6-A32D-91546481FAEA}.Debug|Win32.Build.0 = Debug|x64
+		{8669C59A-52C0-32D6-A32D-91546481FAEA}.Debug|x64.ActiveCfg = Debug|x64
+		{8669C59A-52C0-32D6-A32D-91546481FAEA}.Debug|x64.Build.0 = Debug|x64
+		{8669C59A-52C0-32D6-A32D-91546481FAEA}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{8669C59A-52C0-32D6-A32D-91546481FAEA}.Release|Mixed Platforms.Build.0 = Release|x64
+		{8669C59A-52C0-32D6-A32D-91546481FAEA}.Release|Win32.ActiveCfg = Release|Win32
+		{8669C59A-52C0-32D6-A32D-91546481FAEA}.Release|Win32.Build.0 = Release|Win32
+		{8669C59A-52C0-32D6-A32D-91546481FAEA}.Release|x64.ActiveCfg = Release|x64
+		{8669C59A-52C0-32D6-A32D-91546481FAEA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

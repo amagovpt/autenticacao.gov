@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="debug\qrc_resources.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\qrc_resources.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scripts\Constants.js">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="fonts\karma\Karma-Medium.ttf">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="fonts\lato\Lato-Regular.ttf">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="MainForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="MainMenuModel.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardAdress.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardAdressForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardCertificates.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardCertificatesForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardIdentify.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardIdentifyForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardNotes.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardNotesForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardOtherData.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardOtherDataForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardPinCodes.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardPinCodesForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\definitions\PageDefinitionsParameters.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\definitions\PageDefinitionsParametersForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\help\PageHelpAbout.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\help\PageHelpAboutForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\help\PageHelpDocOnline.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\help\PageHelpDocOnlineForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\help\PageHelpUpdates.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\help\PageHelpUpdatesForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\home\PageHome.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\home\PageHomeForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="PageLoader.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\services\PageServicesSignPdf.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\services\PageServicesSignPdfForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\services\PageServicesSignProfessional.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\services\PageServicesSignProfessionalForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="SubMenuModel.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\logo-ag.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="main.cpp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="main.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\photo.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <CustomBuild Include="resources.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
