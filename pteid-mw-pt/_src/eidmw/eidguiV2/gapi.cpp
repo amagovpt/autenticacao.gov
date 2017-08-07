@@ -531,30 +531,16 @@ void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, double 
 
 }
 
-QString skipFileURL(QString input) {
-    const char * needle = "file://";
-    if (input.startsWith(needle))
-    {
-        return input.mid(strlen(needle));
-    }
-    else {
-        return input;
-    }
-}
-
-
 void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp) {
     BEGIN_TRY_CATCH
 
             PTEID_EIDCard &card = getCardInstance();
 
-    QString fullOutputPath = skipFileURL(outputFile);
-
     const char *files_to_sign[1];
     QByteArray tempLoadedFilePath= loadedFilePath.toUtf8();
     files_to_sign[0] = tempLoadedFilePath.constData();
 
-    QByteArray tempOutputFile= fullOutputPath.toUtf8();
+    QByteArray tempOutputFile= outputFile.toUtf8();
 
     if (isTimestamp > 0)
         card.SignXadesT(tempOutputFile.constData(), files_to_sign, 1);
@@ -572,7 +558,6 @@ void GAPI::doSignPDF(SignParams &params) {
 
             PTEID_EIDCard &card = getCardInstance();
     QString fullInputPath = params.loadedFilePath;
-    QString fullOutputPath = skipFileURL(params.outputFile);
     PTEID_PDFSignature sig_handler(fullInputPath.toUtf8().data());
 
     if (params.isTimestamp > 0)
@@ -581,7 +566,8 @@ void GAPI::doSignPDF(SignParams &params) {
         sig_handler.enableSmallSignatureFormat();
 
     card.SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
-                 params.location.toUtf8().data(), params.reason.toUtf8().data(), fullOutputPath.toUtf8().data());
+                 params.location.toUtf8().data(), params.reason.toUtf8().data(),
+                 params.outputFile.toUtf8().data());
 
     END_TRY_CATCH
 

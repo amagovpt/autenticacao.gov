@@ -63,7 +63,11 @@ PageDefinitionsSignatureForm {
                 console.log("Adding file: " + filesArray[0])
                 var path =  filesArray[0]
                 //  Get the path itself without a regex
-                path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+                if (Qt.platform.os === "windows") {
+                    path = path.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+                }else{
+                    path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+                }
                 filesModel.append({
                                       "fileUrl": path
                                   })
@@ -82,7 +86,11 @@ PageDefinitionsSignatureForm {
             console.log("Adding file: " + propertyFileDialog.fileUrls[0])
             var path = propertyFileDialog.fileUrls[0];
             //  Get the path itself without a regex
-            path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+            if (Qt.platform.os === "windows") {
+                path = path.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+            }else{
+                path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+            }
             filesModel.append({
                                   "fileUrl": path
                               })

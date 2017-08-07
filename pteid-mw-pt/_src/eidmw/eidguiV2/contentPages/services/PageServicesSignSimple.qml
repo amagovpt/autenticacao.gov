@@ -112,7 +112,11 @@ PageServicesSignSimpleForm {
                 console.log("Adding file: " + filesArray[0])
                 var path =  filesArray[0]
                 //  Get the path itself without a regex
-                path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+                if (Qt.platform.os === "windows") {
+                    path = path.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+                }else{
+                    path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+                }
                 filesModel.append({
                                       "fileUrl": path
                                   })
@@ -128,7 +132,12 @@ PageServicesSignSimpleForm {
 
             var loadedFilePath = filesModel.get(0).fileUrl
             var isTimestamp = false
-            var outputFile = propertyFileDialogOutput.fileUrl
+            var outputFile = propertyFileDialogOutput.fileUrl.toString()
+            if (Qt.platform.os === "windows") {
+                outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+            }else{
+                outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+            }
 
                 //TODO: we need a way to change the page
                 var page = 1
@@ -160,7 +169,11 @@ PageServicesSignSimpleForm {
             console.log("Adding file: " + propertyFileDialog.fileUrls[0])
             var path = propertyFileDialog.fileUrls[0];
             //  Get the path itself without a regex
-            path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+            if (Qt.platform.os === "windows") {
+                path = path.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+            }else{
+                path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+            }
             filesModel.append({
                                   "fileUrl": path
                               })

@@ -138,7 +138,13 @@ PageServicesSignAdvancedForm {
                 console.log("Adding file: " + filesArray[i])
                 var path =  filesArray[i]
                 //  Get the path itself without a regex
-                path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+                if (Qt.platform.os === "windows") {
+                    path = path.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+                }else{
+                    path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+                }
+
+
                 filesModel.append({
                                       "fileUrl": path
                                   })
@@ -157,7 +163,12 @@ PageServicesSignAdvancedForm {
 
             var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
             var isTimestamp = propertySwitchSignTemp.checked
-            var outputFile = propertyFileDialogOutput.fileUrl
+            var outputFile = propertyFileDialogOutput.fileUrl.toString()
+            if (Qt.platform.os === "windows") {
+                outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+            }else{
+                outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+            }
 
             if (propertyRadioButtonPADES.checked) {
 
@@ -234,7 +245,11 @@ PageServicesSignAdvancedForm {
                 console.log("Adding file: " + propertyFileDialog.fileUrls[i])
                 var path = propertyFileDialog.fileUrls[i];
                 //  Get the path itself without a regex
-                path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+                if (Qt.platform.os === "windows") {
+                    path = path.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+                }else{
+                    path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+                }
                 filesModel.append({
                                       "fileUrl": path
                                   })
