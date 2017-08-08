@@ -273,6 +273,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="eidguiV2.rc" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <None Include="components\Accordion.qml" />
     <None Include="components\Button.qml" />
     <None Include="images\dummy\CCdemo.png" />
