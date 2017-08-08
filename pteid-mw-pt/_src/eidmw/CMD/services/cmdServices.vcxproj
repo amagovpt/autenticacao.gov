@@ -83,7 +83,7 @@
     <TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <OutDir>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)</TargetName>
@@ -204,7 +204,7 @@
     </ProjectReference>
     <Link>
       <AdditionalDependencies>WS2_32.Lib;libeay32.lib;ssleay32.lib;pteidcommon.lib;pteidapplayer.lib;pteidlibCpp.lib;Qt5Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
+      <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_QT_4_X64)\lib;$(PTEID_DIR_OPENSSL_098_X64)\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
