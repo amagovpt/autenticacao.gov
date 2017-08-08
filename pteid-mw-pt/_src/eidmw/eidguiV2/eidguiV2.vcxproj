@@ -93,7 +93,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;$(PTEID_DIR_QT_4_X64)\include;$(PTEID_DIR_QT_4_X64)\include\QtQuick;$(PTEID_DIR_QT_4_X64)\include\QtGui\5.9.1\;..\common;$(PTEID_DIR_QT_4_X64)\include\QtCore\5.9.1\QtCore;$(PTEID_DIR_QT_4_X64)\include\QtCore\5.9.1;$(PTEID_DIR_QT_4_X64)\include\QtGui\5.9.1\QtGui;$(PTEID_DIR_QT_4_X64)\mkspecs\win32-msvc;$(PTEID_DIR_QT_4_X64)\include\QtGui;$(PTEID_DIR_QT_4_X64)\include\QtConcurrent;$(PTEID_DIR_QT_4_X64)\include\QtQuickControls2;$(PTEID_DIR_QT_4_X64)\include\QtWidgets;$(PTEID_DIR_QT_4_X64)\include\QtANGLE;$(PTEID_DIR_QT_4_X64)\include\QtQml;$(PTEID_DIR_QT_4_X64)\include\QtNetwork;$(PTEID_DIR_QT_4_X64)\include\QtCore;$(PTEID_POPPLER_QT5);release;$(PTEID_DIR_QT_4_X64)\mkspecs\win32-msvc2013;..\eidlib;..\CMD\services\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(PTEID_DIR_QT_4_X64)\include;$(PTEID_DIR_QT_4_X64)\include\QtQuick;$(PTEID_DIR_QT_4_X64)\include\QtGui\5.9.1\;..\common;$(PTEID_DIR_QT_4_X64)\include\QtCore\5.9.1\QtCore;$(PTEID_DIR_QT_4_X64)\include\QtCore\5.9.1;$(PTEID_DIR_QT_4_X64)\include\QtGui\5.9.1\QtGui;$(PTEID_DIR_QT_4_X64)\mkspecs\win32-msvc;$(PTEID_DIR_QT_4_X64)\include\QtGui;$(PTEID_DIR_QT_4_X64)\include\QtConcurrent;$(PTEID_DIR_QT_4_X64)\include\QtQuickControls2;$(PTEID_DIR_QT_4_X64)\include\QtWidgets;$(PTEID_DIR_QT_4_X64)\include\QtANGLE;$(PTEID_DIR_QT_4_X64)\include\QtQml;$(PTEID_DIR_QT_4_X64)\include\QtNetwork;$(PTEID_DIR_QT_4_X64)\include\QtCore;$(PTEID_POPPLER_QT5);release;$(PTEID_DIR_QT_4_X64)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL_098_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -275,7 +275,6 @@
   <ItemGroup>
     <ResourceCompile Include="eidguiV2.rc" />
   </ItemGroup>
-  
   <ItemGroup>
     <None Include="components\Accordion.qml" />
     <None Include="components\Button.qml" />

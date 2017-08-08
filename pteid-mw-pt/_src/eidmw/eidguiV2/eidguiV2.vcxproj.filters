@@ -198,4 +198,7 @@
       <Filter>Generated Files</Filter>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="eidguiV2.rc" />
+  </ItemGroup>
 </Project>
