@@ -2,6 +2,7 @@
 #include "CMDSignature.h"
 #include "MiscUtil.h"
 #include "StringOps.h"
+#include "PDFSignature.h"
 
 static char logBuf[512];
 

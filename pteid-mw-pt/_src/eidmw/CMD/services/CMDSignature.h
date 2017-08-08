@@ -1,29 +1,39 @@
 #ifndef PDF_SIGNATURE_CLI_H
 #define PDF_SIGNATURE_CLI_H
 
-#include "PDFSignature.h"
 #include "cmdServices.h"
 #include "eidlib.h"
+#include "ByteArray.h"
 
 #include "cmdErrors.h"
 #define IS_NETWORK_ERROR(error)    IS_SOAP_ERROR(error)
 
 using namespace eIDMW;
 
+#ifdef WIN32
+#ifdef EIDMW_CMDSERVICES_EXPORTS
+#define PTEIDCMD_API  __declspec(dllexport)
+#else
+#define PTEIDCMD_API  __declspec(dllimport)
+#endif
+#else
+#define PTEIDCMD_API
+#endif
+
 namespace eIDMW {
 
-    class CMDSignature {
+	class CMDSignature{
         public:
-            CMDSignature(PTEID_PDFSignature *in_pdf_handler);
-            ~CMDSignature();
-            int signOpen( std::string in_userId, std::string in_pin
+			PTEIDCMD_API CMDSignature(PTEID_PDFSignature *in_pdf_handler);
+			PTEIDCMD_API ~CMDSignature();
+			PTEIDCMD_API int signOpen(std::string in_userId, std::string in_pin
                         , int page
                         , double coord_x, double coord_y
                         , const char *location
                         , const char *reason
                         , const char *outfile_path );
 
-            int signClose( std::string in_code );
+			PTEIDCMD_API int signClose(std::string in_code);
 
         private:
             CMDServices cmdService;
