@@ -16,6 +16,9 @@
 #include "eidErrors.h"
 #include "eidlibException.h"
 
+#include "CMDSignature.h"
+#include "cmdErrors.h"
+
 /*
     GAPI - Graphic Application Programming Interface
 
@@ -90,6 +93,21 @@ private:
 struct SignParams {
 public:
     QString loadedFilePath; QString outputFile;
+    int page;
+    double coord_x;
+    double coord_y;
+    QString reason;
+    QString location;
+    double isTimestamp;
+    double isSmallSignature;
+};
+
+struct CmdSignParams {
+public:
+    QString mobileNumber;
+    QString secret_code;
+    QString loadedFilePath;
+    QString outputFile;
     int page;
     double coord_x;
     double coord_y;
@@ -195,8 +213,13 @@ public slots:
 
     void changeAddress(QString process, QString secret_code);
     void doChangeAddress(const char *process, const char *secret_code);
+    void signCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
+                  QString outputFile, int page, double coord_x, double coord_y, QString reason, QString location,
+                 double isTimestamp, double isSmall);
+    void doSignCMD(CmdSignParams &params);
     static void addressChangeCallback(void *, int);
     void showChangeAddressDialog(long code);
+    void showSignCMDDialog(long code);
 
     QString getCardActivation();
     QString getDataCardIdentifyValue(GAPI::IDInfoKey key);
@@ -218,6 +241,7 @@ signals:
     void signalUpdateProgressBar(int value);
     void signalUpdateProgressStatus(const QString statusMessage);
     void addressChangeFinished(long return_code);
+    void signCMDFinished(long return_code);
     void signalCardChanged(const int error_code);
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage);
     void signalCertificatesChanged(const QVariantMap certificatesMap);

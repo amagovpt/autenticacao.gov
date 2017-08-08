@@ -15,8 +15,13 @@ SOURCES += main.cpp \
     filesavedialog.cpp
 
 INCLUDEPATH += /usr/include/poppler/qt5/
+INCLUDEPATH += ../CMD/services
+INCLUDEPATH += ../applayer
+INCLUDEPATH += ../common
+INCLUDEPATH += ../cardlayer
 
-LIBS += -L../lib -lpteidlib -lpoppler-qt5
+
+LIBS += -L../lib -lpteidlib -lpoppler-qt5 -lcmdServices
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

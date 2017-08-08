@@ -31,6 +31,10 @@ PageServicesSignAdvancedForm {
         onSignalPdfSignError: {
             signerror_dialog.visible = true
         }
+        onSignalCardAccessError: {
+            propertyBusyIndicator.running = false
+            propertyButtonSignWithCC.enabled = false
+        }
         onSignalCardDataChanged: {
             console.log("Services Sign Advanced --> Data Changed")
             //console.trace();
@@ -42,6 +46,33 @@ PageServicesSignAdvancedForm {
                     + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
             propertyBusyIndicator.running = false
         }
+        onSignalCardChanged: {
+            console.log("Services Sign Advanced onSignalCardChanged")
+            if (error_code == GAPI.ET_CARD_REMOVED) {
+                propertyPDFPreview.propertyDragSigSignedByNameText.text = "Assinado por:"
+                propertyPDFPreview.propertyDragSigNumIdText.text = "Num. de Identificação Civil:"
+                propertyButtonSignWithCC.enabled = false
+            }
+            else if (error_code == GAPI.ET_CARD_CHANGED) {
+                propertyButtonSignWithCC.enabled = true
+                gapi.startCardReading()
+            }
+            else{
+                propertyButtonSignWithCC.enabled = false
+            }
+        }
+        onSignalUpdateProgressStatus: {
+            console.log("CMD sign change --> update progress status with text = " + statusMessage)
+            textMessageTop.text = statusMessage
+        }
+        onSignalUpdateProgressBar: {
+            console.log("CMD sign change --> update progress bar with value = " + value)
+            progressBar.value = value
+            if(value === 100) {
+                progressBar.visible = false
+                progressBarIndeterminate.visible = false
+            }
+        }
     }
     Connections {
         target: image_provider_pdf
@@ -49,6 +80,251 @@ PageServicesSignAdvancedForm {
             console.log("Receive signal onSignalPdfSourceChanged pdfWidth = "+pdfWidth+" pdfHeight = "+pdfHeight);
             propertyPDFPreview.propertyPdfOriginalWidth=pdfWidth
             propertyPDFPreview.propertyPdfOriginalHeight=pdfHeight
+        }
+    }
+
+    Dialog {
+        id: dialogSignCMD
+        width: 600
+        height: 300
+        font.family: lato.name
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width
+           + mainView.width * 0.5 - dialogSignCMD.width * 0.5
+        y: parent.height * 0.5 - dialogSignCMD.height * 0.5
+
+        header: Label {
+            id: labelTextTitle
+            text: "Assinar com Chave Móvel Digital"
+            visible: true
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: 16
+            color: Constants.COLOR_MAIN_BLUE
+        }
+
+        Item {
+            width: parent.width
+            height: rectMessage.height + rectNumTelemovel.height + rectPin.height
+
+            Item {
+                id: rectMessage
+                width: parent.width
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textLinkCMD
+                    textFormat: Text.RichText
+                    text: "<a href=\"https://cmd.autenticacao.gov.pt/Ama.Authentication.Frontend\">\
+                    Click para conhecer a Chave Móvel Digital</a>"
+                    font.italic: true
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_BODY
+                    height: parent.height
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                    onLinkActivated: {
+                        Qt.openUrlExternally(link)
+                    }
+                }
+            }
+
+            Item {
+                id: rectNumTelemovel
+                width: parent.width
+                height: 50
+                anchors.top: rectMessage.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textPinCurrent
+                    text: "Nº de Telemóvel"
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width * 0.5
+                    anchors.bottom: parent.bottom
+                }
+                TextField {
+                    id: textFieldMobileNumber
+                    width: parent.width * 0.5
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.italic: textFieldMobileNumber.text === "" ? true: false
+                    placeholderText: "Nº de Telemóvel? ex: +351 900000000"
+                    validator: RegExpValidator { regExp: /\+[0-9]+\ [0-9]+/ }
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    clip: false
+                    anchors.left: textPinCurrent.right
+                    anchors.bottom: parent.bottom
+                }
+            }
+            Item {
+                id: rectPin
+                width: parent.width
+                height: 50
+                anchors.top: rectNumTelemovel.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textPinNew
+                    text: "PIN da Chave Móvel Digital"
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width * 0.5
+                    anchors.bottom: parent.bottom
+                }
+                TextField {
+                    id: textFieldPin
+                    width: parent.width * 0.5
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.italic: textFieldPin.text === "" ? true: false
+                    placeholderText: "PIN?"
+                    echoMode : TextInput.Password
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    clip: false
+                    anchors.left: textPinNew.right
+                    anchors.bottom: parent.bottom
+                }
+            }
+        }
+
+        standardButtons: {
+            textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0
+                    ? DialogButtonBox.Ok | DialogButtonBox.Cancel : DialogButtonBox.Cancel
+        }
+
+        onAccepted: {
+            var loadedFilePath = filesModel.get(0).fileUrl
+            var isTimestamp = propertySwitchSignTemp.checked
+            var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
+            if (Qt.platform.os === "windows") {
+                outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+            }else{
+                outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+            }
+            var page = 1
+            propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
+                                        page = propertySpinBoxControl.value
+
+            var reason = propertyTextFieldReason.text
+            var location = propertyTextFieldLocal.text
+            var isSmallSignature = propertyCheckSignReduced.checked
+            var coord_x = propertyPDFPreview.propertyCoordX
+            //coord_y must be the lower left corner of the signature rectangle
+            var coord_y = propertyPDFPreview.propertyCoordY
+
+            gapi.signCMD(textFieldMobileNumber.text,textFieldPin.text,
+                         loadedFilePath,outputFile,page,
+                         coord_x,coord_y,
+                         reason,location,
+                         isTimestamp, isSmallSignature)
+
+            progressBarIndeterminate.visible = true
+            progressBar.visible = true
+            textFieldMobileNumber.text = ""
+            textFieldPin.text = ""
+            dialogCMDProgress.open()
+        }
+        onRejected: {
+            mainFormID.opacity = 1.0
+        }
+    }
+    Dialog {
+        id: dialogCMDProgress
+        width: 600
+        height: 300
+        font.family: lato.name
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width
+           + mainView.width * 0.5 - dialogCMDProgress.width * 0.5
+        y: parent.height * 0.5 - dialogCMDProgress.height * 0.5
+
+        header: Label {
+            id: labelConfirmOfAddressProgressTextTitle
+            text: "Assinar com Chave Móvel Digital"
+            visible: true
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: 16
+            color: Constants.COLOR_MAIN_BLUE
+        }
+
+        Item {
+            width: parent.width
+            height: rectMessageTop.height + progressBar.height + progressBarIndeterminate.height
+
+            Item {
+                id: rectMessageTop
+                width: parent.width
+                height: 150
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textMessageTop
+                    text: ""
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_BODY
+                    height: parent.height
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                    wrapMode: Text.WordWrap
+                }
+            }
+
+            ProgressBar {
+                id: progressBar
+                width: parent.width * 0.5
+                anchors.top: rectMessageTop.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: 20
+                to: 100
+                value: 0
+                visible: true
+                indeterminate: false
+                z:1
+
+            }
+
+            ProgressBar {
+                id: progressBarIndeterminate
+                width: parent.width * 0.5
+                anchors.top: progressBar.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: 20
+                to: 100
+                value: 0
+                visible: true
+                indeterminate: true
+                z:1
+            }
+
+        }
+
+        standardButtons: {
+            DialogButtonBox.Ok
+        }
+
+        onAccepted: {
+            mainFormID.opacity = 1.0
+        }
+        onRejected: {
+            mainFormID.opacity = 1.0
         }
     }
 
@@ -202,6 +478,39 @@ PageServicesSignAdvancedForm {
         }
     }
 
+    propertyFileDialogCMDOutput {
+        onAccepted: {
+
+            var loadedFilePath = filesModel.get(0).fileUrl
+            var isTimestamp = false
+            var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
+            if (Qt.platform.os === "windows") {
+                outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+            }else{
+                outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+            }
+
+                var page = 1
+                propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
+                                            page = propertySpinBoxControl.value
+                var reason = ""
+                var location = ""
+
+                var isSmallSignature = false
+
+                var coord_x = propertyPDFPreview.propertyCoordX
+
+                //coord_y must be the lower left corner of the signature rectangle
+
+                var coord_y = propertyPDFPreview.propertyCoordY
+
+                console.log("Output filename: " + outputFile)
+                console.log("Signing in position coord_x: " + coord_x
+                            + " and coord_y: "+coord_y)
+                dialogSignCMD.open()
+        }
+    }
+
     propertyTextFieldReason{
         onTextChanged: {
             propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
@@ -303,6 +612,13 @@ PageServicesSignAdvancedForm {
             }
 
             propertyFileDialogOutput.open()
+        }
+    }
+    propertyButtonSignCMD {
+        onClicked: {
+            console.log("Sign with CMD")
+            propertyFileDialogCMDOutput.filename = filesModel.get(0).fileUrl + "_signed.pdf"
+            propertyFileDialogCMDOutput.open()
         }
     }
 
@@ -482,6 +798,8 @@ PageServicesSignAdvancedForm {
         propertyBusyIndicator.running = true
         propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                 "Arraste para esta zona o ficheiro a assinar \nou\n clique para procurar o ficheiro"
+        propertyPDFPreview.propertyDragSigSignedByNameText.text = "Assinado por:"
+        propertyPDFPreview.propertyDragSigNumIdText.text = "Num. de Identificação Civil:"
         gapi.startCardReading()
     }
 

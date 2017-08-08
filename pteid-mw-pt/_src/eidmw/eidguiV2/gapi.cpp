@@ -5,6 +5,9 @@
 #include <cstdio>
 #include <QQuickImageProvider>
 
+#include "CMDSignature.h"
+#include "cmdErrors.h"
+
 using namespace eIDMW;
 
 #define TRIES_LEFT_ERROR    1000
@@ -78,28 +81,28 @@ QString GAPI::getAddressField(AddressInfoKey key) {
 #define END_TRY_CATCH    \
     }                    \
     catch (PTEID_ExNoReader &) \
-    {                           \
+{                           \
     qDebug() << "No card reader found !"; \
     emit signalCardAccessError(NoReaderFound); \
     }     \
     catch (PTEID_ExNoCardPresent &) \
-    {     \
+{     \
     qDebug() << "No card present."; \
     emit signalCardAccessError(NoCardFound); \
     }     \
     catch (PTEID_Exception &e) \
-    { \
+{ \
     long errorCode = e.GetError(); \
     if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && \
-        errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN) \
-    { \
-        fprintf(stderr, "SOD exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
-        emit signalCardAccessError(SodCardReadError); \
+    errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN) \
+{ \
+    fprintf(stderr, "SOD exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
+    emit signalCardAccessError(SodCardReadError); \
     } \
     else \
-    { \
-        fprintf(stderr, "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
-        emit signalCardAccessError(CardUnknownError); \
+{ \
+    fprintf(stderr, "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
+    emit signalCardAccessError(CardUnknownError); \
     } \
     }
 
@@ -343,7 +346,6 @@ unsigned int GAPI::changeSignPin(QString currentPin, QString newPin) {
             //QML default types don't include long
             return (unsigned int)tries_left;
 }
-
 void GAPI::showChangeAddressDialog(long code)
 {
     QString error_msg;
@@ -396,6 +398,41 @@ void GAPI::showChangeAddressDialog(long code)
     signalUpdateProgressStatus(error_msg);
 
     //TO-DO: Reload card information in case of successful address change
+}
+
+void GAPI::showSignCMDDialog(long code)
+{
+    QString error_msg;
+    long sam_error_code = 0;
+    QString support_string = tr("Please try again. If this error persists, please have your"
+                                " process number and error code ready, and contact the"
+                                " CMD support line at telephone number +351 xxx xxx xxx or e-mail xxxx@xxx.pt.");
+
+    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "CMD signature op finished with error code 0x%08x", code);
+
+    switch(code)
+    {
+    case 0:
+        error_msg = tr("Assinatura com Chave Móvel Digital com sucesso.");
+        break;
+        //The error code for connection error is common between SAM and OTP
+    default:
+        //Make sure we only show the user error codes from the SAM service and not some weird pteid exception error code
+        sam_error_code = code;
+        error_msg = tr("Error in the Chave Móvel Digital Login operation!");
+        break;
+    }
+
+    if (sam_error_code != 0)
+    {
+        error_msg += "\n\n" + tr("Error code = ") + QString::number(sam_error_code);
+    }
+
+    if (code != 0)
+        error_msg += "\n\n" + support_string;
+
+    qDebug() << error_msg;
+    signalUpdateProgressStatus(error_msg);
 }
 
 unsigned int GAPI::changeAddressPin(QString currentPin, QString newPin) {
@@ -462,6 +499,85 @@ void GAPI::changeAddress(QString process, QString secret_code)
     char *processUtf8 = strdup(process.toUtf8().constData());
     char *secret_codeUtf8 = strdup(secret_code.toUtf8().constData());
     QtConcurrent::run(this, &GAPI::doChangeAddress, processUtf8, secret_codeUtf8);
+}
+
+void GAPI::doSignCMD(CmdSignParams &params)
+{
+    qDebug() << "doSignCMD! MobileNumber = " << params.mobileNumber << " secret_code = " << params.secret_code <<
+                " loadedFilePath = " << params.loadedFilePath << " outputFile = " << params.outputFile <<
+                "page = " << params.page << "coord_x" << params.coord_x << "coord_y" << params.coord_y <<
+                "reason = " << params.reason << "location = " << params.location;
+
+    int ret = 0;
+    std::string sms_token = "111111";
+
+    try {
+
+        QString fullInputPath = params.loadedFilePath;
+        PTEID_PDFSignature sig_handler(fullInputPath.toUtf8().data());
+
+        signalUpdateProgressBar(10);
+
+        if (params.isTimestamp > 0)
+            sig_handler.enableTimestamp();
+        if (params.isSmallSignature > 0)
+            sig_handler.enableSmallSignatureFormat();
+
+        eIDMW::CMDSignature cmd_signature(&sig_handler);
+
+        ret = cmd_signature.signOpen( params.mobileNumber.toStdString(), params.secret_code.toStdString(),
+                                      params.page,
+                                      params.coord_x, params.coord_y,
+                                      params.location.toUtf8().data(), params.reason.toUtf8().data(),
+                                      params.outputFile.toUtf8().data());
+
+        if ( ret != 0 ) {
+            qDebug() << "signOpen failed! - ret: " << ret << endl;
+            signCMDFinished(ret);
+            signalUpdateProgressBar(100);
+            return;
+        }
+        signalUpdateProgressBar(50);
+        signalUpdateProgressStatus("Assinando com Chave Móvel Digital ...");
+
+        ret = cmd_signature.signClose( sms_token );
+        if ( ret != 0 ) {
+            qDebug() << "signClose failed!" << endl;
+            signCMDFinished(ret);
+            signalUpdateProgressBar(100);
+            return;
+        }
+
+
+    } catch (PTEID_Exception &e) {
+        qDebug() << "Caught exception in some SDK method. Error code: " << hex << e.GetError() << endl;
+        signalUpdateProgressBar(100);
+    }
+
+    signCMDFinished(ret);
+    signalUpdateProgressBar(100);
+    emit signalPdfSignSucess();
+}
+
+void GAPI::signCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
+                   QString outputFile, int page, double coord_x, double coord_y,
+                   QString reason, QString location, double isTimestamp, double isSmall)
+{
+    qDebug() << "signCMD! MobileNumber = " + mobileNumber + " secret_code = " + secret_code +
+                " loadedFilePath = " + loadedFilePath + " outputFile = " + outputFile +
+                "page = " + page + "coord_x" + coord_x + "coord_y" + coord_y +
+                "reason = " + reason + "location = " + location +
+                "isTimestamp = " +  isTimestamp + "isSmall = " + isSmall;
+
+    signalUpdateProgressStatus("Conectando com o servidor da Chave Móvel Digital ...");
+
+    connect(this, SIGNAL(signCMDFinished(long)),
+            this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
+
+    CmdSignParams params = {mobileNumber, secret_code,loadedFilePath,outputFile,
+                            page,coord_x,coord_y,reason,location,isTimestamp,isSmall};
+
+    QtConcurrent::run(this, &GAPI::doSignCMD, params);
 }
 
 QString GAPI::getCardActivation() {
@@ -700,7 +816,7 @@ void GAPI::connectToCard() {
 
     BEGIN_TRY_CATCH
 
-    PTEID_EIDCard &card = getCardInstance();
+            PTEID_EIDCard &card = getCardInstance();
 
     card.doSODCheck(true); //Enable SOD checking
     PTEID_EId &eid_file = card.getID();
@@ -898,7 +1014,7 @@ void GAPI::fillCertificateList ( void )
 
     BEGIN_TRY_CATCH
 
-    PTEID_EIDCard &card = getCardInstance();
+            PTEID_EIDCard &card = getCardInstance();
 
     PTEID_Certificates&	 certificates	= card.getCertificates();
 

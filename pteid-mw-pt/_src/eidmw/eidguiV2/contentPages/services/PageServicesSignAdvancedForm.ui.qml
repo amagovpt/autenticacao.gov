@@ -23,6 +23,7 @@ Item {
     property alias propertyPDFPreview: pdfPreviewArea
     property alias propertyFileDialog: fileDialog
     property alias propertyFileDialogOutput: fileDialogOutput
+    property alias propertyFileDialogCMDOutput: fileDialogCMDOutput
     property alias propertyMouseAreaRectMainRigh: mouseAreaRectMainRigh
     property alias propertyMouseAreaItemOptionsFiles: mouseAreaItemOptionsFiles
     property alias propertyTextDragMsgListView: textDragMsgListView
@@ -32,6 +33,7 @@ Item {
     property alias propertyButtonAdd: buttonAdd
     property alias propertyButtonRemoveAll: buttonRemoveAll
     property alias propertyButtonSignWithCC: button_signCC
+    property alias propertyButtonSignCMD: button_signCMD
     property alias propertyDropArea: dropArea
     property alias propertyTextFieldReason: textFieldReason
     property alias propertyTextFieldLocal: textFieldLocal
@@ -104,6 +106,11 @@ Item {
             title: "Escolha o ficheiro de destino"
             nameFilters: ["Images (*.pdf)", "All files (*)"]
 
+        }
+        FileSaveDialog {
+            id: fileDialogCMDOutput
+            title: "Escolha o ficheiro de destino"
+            nameFilters: ["Images (*.pdf)", "All files (*)"]
         }
 
         Item {
@@ -795,7 +802,7 @@ Item {
                     text: "Assinar \n Chave Móvel Digital"
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
-                    enabled: false
+                    enabled: true
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
