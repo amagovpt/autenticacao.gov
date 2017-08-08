@@ -39,7 +39,15 @@ namespace eIDMW
 #define PTEID_USER_AGENT "User-Agent: PTeID Middleware v2"
 #define PTEID_USER_AGENT_VALUE "PTeID Middleware v2"
 
-char *getCPtr( std::string inStr, int *outLen );
+	EIDMW_APL_API std::vector<std::string> toPEM(char *p_certificate, int certificateLen);
+	EIDMW_APL_API char *X509_to_PEM(X509 *x509);
+	X509 *PEM_to_X509(char *pem);
+
+	int X509_to_DER(X509 *x509, unsigned char **der);
+	X509 *DER_to_X509(unsigned char *der, int len);
+	char *DER_to_PEM(unsigned char *der, int len);
+	EIDMW_APL_API int PEM_to_DER(char *pem, unsigned char **der);
+	EIDMW_APL_API char *getCPtr(std::string inStr, int *outLen);
 
 //Use _strdup instead of strdup to silence Win32 warnings
 #ifndef WIN32
@@ -56,15 +64,6 @@ void latin1_to_utf8(unsigned char * in, unsigned char *out);
 char * utf8_to_latin1(char * in);
 
 void replace_lastdot_inplace(char *in);
-
-std::vector<std::string> toPEM( char *p_certificate, int certificateLen );
-char *X509_to_PEM( X509 *x509 );
-X509 *PEM_to_X509( char *pem );
-
-int X509_to_DER( X509 *x509, unsigned char **der );
-X509 *DER_to_X509( unsigned char *der, int len );
-char *DER_to_PEM( unsigned char *der, int len );
-int PEM_to_DER( char *pem, unsigned char **der );
 
 char *Base64Encode(const unsigned char *input, long length);
 void Base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded, unsigned int &decoded_len);

@@ -52,27 +52,28 @@ namespace eIDMW
 		EIDMW_APL_API void enableSmallSignature();
 
         bool getBatch_mode();
-        void setBatch_mode( bool batch_mode );
+		EIDMW_APL_API void setBatch_mode(bool batch_mode);
 
         /* isCertificate */
         bool isExternalCertificate();
         void setIsExtCertificate( bool in_IsExternalCertificate );
 
         /* Certificate */
-        void setExternCertificate( CByteArray certificate );
+		EIDMW_APL_API void setExternCertificate(CByteArray certificate);
 
         /* CA Certificates */
-        void setExternCertificateCA(std::vector<CByteArray> &certificateCAS);
+		EIDMW_APL_API void setExternCertificateCA(std::vector<CByteArray> &certificateCAS);
 
         /* Hash */
-        CByteArray getHash();
+		EIDMW_APL_API CByteArray getHash();
+        
         void setHash( CByteArray in_hash );
         void computeHash(unsigned char *data, unsigned long dataLen,
                          CByteArray certificate,
                          std::vector<CByteArray> &CA_certificates);
 
-        /* signClose */
-        int signClose( CByteArray signature );
+        
+		EIDMW_APL_API int signClose(CByteArray signature);
 
 	private:
 		void parseCitizenDataFromCert(CByteArray &certData);
