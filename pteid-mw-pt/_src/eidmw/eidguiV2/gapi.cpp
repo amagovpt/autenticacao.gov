@@ -779,6 +779,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
             // send an event to the main app to show the popup message
             //------------------------------------
             pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_REMOVED);
+            pCallBackData->getMainWnd()->setAddressLoaded(false);
 
             return;
         }
@@ -791,6 +792,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
             // send an event to the main app to show the popup message
             //------------------------------------
             pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_CHANGED);
+            pCallBackData->getMainWnd()->setAddressLoaded(false);
         }
     }
     catch (PTEID_ExBadTransaction& e)

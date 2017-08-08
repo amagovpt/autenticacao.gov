@@ -16,12 +16,35 @@ PageCardNotesForm {
             loadPersoData(persoNotes)
         }
         onSignalCardAccessError: {
+            propertyEditNotes.text = ""
             propertyBusyIndicator.running = false
         }
         onSignalSetPersoDataFile: {
             propertyGeneralTitleText.text = titleMessage
             propertyGeneralPopUpLabelText.text = statusMessage
             propertyPageLoader.propertyGeneralPopUp.visible = true;
+        }
+        onSignalCardChanged: {
+            console.log("Card Notes Page onSignalCardChanged")
+            if (error_code == GAPI.ET_CARD_REMOVED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Cartão do Cidadão removido"
+                propertyEditNotes.text = ""
+            }
+            else if (error_code == GAPI.ET_CARD_CHANGED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Cartão do Cidadão inserido"
+                propertyBusyIndicator.running = true
+                gapi.startReadingPersoNotes()
+            }
+            else{
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        "Erro da aplicação! Por favor reinstale a aplicação:"
+                propertyEditNotes.text = ""
+            }
+
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
     }
 

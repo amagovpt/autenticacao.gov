@@ -29,9 +29,54 @@ PageCardIdentifyForm {
             propertyPhoto.source = "image://myimageprovider/photo.png"
             propertyBusyIndicator.running = false
         }
-
         onSignalCardAccessError: {
+            propertyTextBoxName.propertyDateField.text = ""
+            propertyTextBoxSurName.propertyDateField.text = ""
+            propertyTextBoxSex.propertyDateField.text = ""
+            propertyTextBoxHeight.propertyDateField.text = ""
+            propertyTextBoxNacionality.propertyDateField.text = ""
+            propertyTextBoxDateOfBirth.propertyDateField.text = ""
+            propertyTextBoxDocumentNum.propertyDateField.text = ""
+            propertyTextBoxExpirydate.propertyDateField.text = ""
+            propertyTextBoxCountry.propertyDateField.text = ""
+            propertyTextBoxParentsFather.propertyDateField.text = ""
+            propertyTextBoxParentsMother.propertyDateField.text = ""
+            propertyTextBoxNotes.propertyDateField.text = ""
+            propertyPhoto.source = ""
             propertyBusyIndicator.running = false
+        }
+        onSignalCardChanged: {
+            console.log("Card Identify Page onSignalCardChanged")
+            if (error_code == GAPI.ET_CARD_REMOVED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Cartão do Cidadão removido"
+                propertyTextBoxName.propertyDateField.text = ""
+                propertyTextBoxSurName.propertyDateField.text = ""
+                propertyTextBoxSex.propertyDateField.text = ""
+                propertyTextBoxHeight.propertyDateField.text = ""
+                propertyTextBoxNacionality.propertyDateField.text = ""
+                propertyTextBoxDateOfBirth.propertyDateField.text = ""
+                propertyTextBoxDocumentNum.propertyDateField.text = ""
+                propertyTextBoxExpirydate.propertyDateField.text = ""
+                propertyTextBoxCountry.propertyDateField.text = ""
+                propertyTextBoxParentsFather.propertyDateField.text = ""
+                propertyTextBoxParentsMother.propertyDateField.text = ""
+                propertyTextBoxNotes.propertyDateField.text = ""
+                propertyPhoto.source = ""
+            }
+            else if (error_code == GAPI.ET_CARD_CHANGED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Cartão do Cidadão inserido"
+                propertyBusyIndicator.running = true
+                gapi.startCardReading()
+            }
+            else{
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        "Erro da aplicação! Por favor reinstale a aplicação:"
+            }
+
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
 
     }

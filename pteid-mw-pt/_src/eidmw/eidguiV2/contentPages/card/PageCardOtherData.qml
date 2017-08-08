@@ -22,7 +22,45 @@ PageCardOtherDataForm {
         }
 
         onSignalCardAccessError: {
+            propertyTextBoxNIF.propertyDateField.text = ""
+            propertyTextBoxNISS.propertyDateField.text = ""
+            propertyTextBoxNSNS.propertyDateField.text = ""
+            propertyTextBoxCardVersion.propertyDateField.text = ""
+            propertyTextBoxIssueDate.propertyDateField.text = ""
+            propertyTextBoxIssuingEntity.propertyDateField.text = ""
+            propertyTextBoxDocumentType.propertyDateField.text = ""
+            propertyTextBoxPlaceOfRequest.propertyDateField.text = ""
+            propertyTextBoxCardState.propertyDateField.text = ""
             propertyBusyIndicator.running = false
+        }
+        onSignalCardChanged: {
+            console.log("Card Other Data Page onSignalCardChanged")
+            if (error_code == GAPI.ET_CARD_REMOVED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Cartão do Cidadão removido"
+                propertyTextBoxNIF.propertyDateField.text = ""
+                propertyTextBoxNISS.propertyDateField.text = ""
+                propertyTextBoxNSNS.propertyDateField.text = ""
+                propertyTextBoxCardVersion.propertyDateField.text = ""
+                propertyTextBoxIssueDate.propertyDateField.text = ""
+                propertyTextBoxIssuingEntity.propertyDateField.text = ""
+                propertyTextBoxDocumentType.propertyDateField.text = ""
+                propertyTextBoxPlaceOfRequest.propertyDateField.text = ""
+                propertyTextBoxCardState.propertyDateField.text = ""
+            }
+            else if (error_code == GAPI.ET_CARD_CHANGED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Cartão do Cidadão inserido"
+                propertyBusyIndicator.running = true
+                gapi.startCardReading()
+            }
+            else{
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        "Erro da aplicação! Por favor reinstale a aplicação:"
+            }
+
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
     }
 

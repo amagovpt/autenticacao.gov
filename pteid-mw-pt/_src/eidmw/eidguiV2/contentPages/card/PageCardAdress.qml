@@ -42,7 +42,61 @@ PageCardAdressForm {
             textMessageTop.text = statusMessage
         }
         onSignalCardAccessError: {
+            propertyDistrict.propertyDateField.text = ""
+            propertyMunicipality.propertyDateField.text = ""
+            propertyParish.propertyDateField.text = ""
+            propertyStreetType.propertyDateField.text = ""
+            propertyStreetName.propertyDateField.text = ""
+            propertyDoorNo.propertyDateField.text = ""
+            propertyFloor.propertyDateField.text = ""
+            propertyPlace.propertyDateField.text = ""
+            propertySide.propertyDateField.text = ""
+            propertyLocality.propertyDateField.text = ""
+            propertyZip4.propertyDateField.text = ""
+            propertyZip3.propertyDateField.text = ""
+            propertyPostalLocality.propertyDateField.text = ""
             propertyBusyIndicator.running = false
+        }
+        onSignalCardChanged: {
+            console.log("Card Adress onSignalCardChanged")
+            if (error_code == GAPI.ET_CARD_REMOVED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Cartão do Cidadão removido"
+                propertyDistrict.propertyDateField.text = ""
+                propertyMunicipality.propertyDateField.text = ""
+                propertyParish.propertyDateField.text = ""
+                propertyStreetType.propertyDateField.text = ""
+                propertyStreetName.propertyDateField.text = ""
+                propertyDoorNo.propertyDateField.text = ""
+                propertyFloor.propertyDateField.text = ""
+                propertyPlace.propertyDateField.text = ""
+                propertySide.propertyDateField.text = ""
+                propertyLocality.propertyDateField.text = ""
+                propertyZip4.propertyDateField.text = ""
+                propertyZip3.propertyDateField.text = ""
+                propertyPostalLocality.propertyDateField.text = ""
+            }
+            else if (error_code == GAPI.ET_CARD_CHANGED) {
+                if(Constants.USE_SDK_PIN_UI_POPUP){
+                    var triesLeft = gapi.verifyAddressPin("")
+                    if (triesLeft === 3) {
+                        propertyBusyIndicator.running = true
+                        gapi.startReadingAddress()
+                    }
+                }else{
+                    dialogTestPin.open()
+                    textFieldPin.text = ""
+                }
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Cartão do Cidadão inserido"
+                propertyBusyIndicator.running = true
+            }
+            else{
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        "Erro da aplicação! Por favor reinstale a aplicação:"
+            }
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
     }
 
@@ -416,6 +470,7 @@ PageCardAdressForm {
     Component.onCompleted: {
         console.log("Page Card Address Completed")
         if (gapi.isAddressLoaded) {
+            console.log("Page Card Address isAddressLoaded")
             propertyBusyIndicator.running = true
             gapi.startReadingAddress()
         }else{
