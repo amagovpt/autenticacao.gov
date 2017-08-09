@@ -632,6 +632,15 @@ void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page,
 
 }
 
+void GAPI::startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outputFile, int page, double coord_x, double coord_y,
+                           QString reason, QString location, double isTimestamp, double isSmall) {
+
+    SignBatchParams params = {loadedFileBatchPath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall};
+
+    QFuture<void> future =
+            QtConcurrent::run(this, &GAPI::doSignBatchPDF, params);
+}
+
 unsigned int GAPI::getPDFpageCount(QString loadedFilePath) {
 
     PTEID_PDFSignature sig_handler(loadedFilePath.toUtf8().data());
@@ -682,6 +691,38 @@ void GAPI::doSignPDF(SignParams &params) {
         sig_handler.enableSmallSignatureFormat();
 
     card.SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
+                 params.location.toUtf8().data(), params.reason.toUtf8().data(),
+                 params.outputFile.toUtf8().data());
+
+    END_TRY_CATCH
+
+            emit signalPdfSignSucess();
+}
+
+void GAPI::doSignBatchPDF(SignBatchParams &params) {
+
+    qDebug() << "doSignBatchPDF! loadedFilePath = " << params.loadedFileBatchPath << " outputFile = " << params.outputFile <<
+                "page = " << params.page << "coord_x" << params.coord_x << "coord_y" << params.coord_y <<
+                "reason = " << params.reason << "location = " << params.location;
+    BEGIN_TRY_CATCH
+
+            PTEID_EIDCard &card = getCardInstance();
+
+    PTEID_PDFSignature *sig_handler;
+    sig_handler = new PTEID_PDFSignature();
+
+    for( int i = 0; i < params.loadedFileBatchPath.count(); i++ ){
+        qDebug() << params.loadedFileBatchPath[i];
+        QString fullInputPath = params.loadedFileBatchPath[i];
+        sig_handler->addToBatchSigning( fullInputPath.toUtf8().data() , false );
+    }
+
+    if (params.isTimestamp > 0)
+        sig_handler->enableTimestamp();
+    if (params.isSmallSignature > 0)
+        sig_handler->enableSmallSignatureFormat();
+
+    card.SignPDF(*sig_handler, params.page, params.coord_x, params.coord_y,
                  params.location.toUtf8().data(), params.reason.toUtf8().data(),
                  params.outputFile.toUtf8().data());
 

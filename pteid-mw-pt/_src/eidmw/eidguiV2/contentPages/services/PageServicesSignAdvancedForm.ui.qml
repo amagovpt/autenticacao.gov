@@ -23,6 +23,7 @@ Item {
     property alias propertyPDFPreview: pdfPreviewArea
     property alias propertyFileDialog: fileDialog
     property alias propertyFileDialogOutput: fileDialogOutput
+    property alias propertyFileDialogBatchOutput: fileDialogBatchOutput
     property alias propertyFileDialogCMDOutput: fileDialogCMDOutput
     property alias propertyMouseAreaRectMainRigh: mouseAreaRectMainRigh
     property alias propertyMouseAreaItemOptionsFiles: mouseAreaItemOptionsFiles
@@ -38,7 +39,10 @@ Item {
     property alias propertyTextFieldReason: textFieldReason
     property alias propertyTextFieldLocal: textFieldLocal
     property alias propertySwitchSignTemp: switchSignTemp
+    property alias propertyCheckSignShow: checkSignShow
     property alias propertyCheckSignReduced: checkSignReduced
+    property alias propertyRectSignPageOptions: rectSignPageOptions
+    property alias propertyItemCheckPage: itemCheckPage
     property alias propertyRadioButtonPADES: radioButtonPADES
     property alias propertyRadioButtonXADES: radioButtonXADES
     property alias propertyMouseAreaToolTipPades: mouseAreaToolTipPades
@@ -61,11 +65,11 @@ Item {
     property alias propertyCheckLastPage: checkLastPage
 
     BusyIndicator {
-       id: busyIndicator
-       running: false
-       anchors.centerIn: parent
-       // BusyIndicator should be on top of all other content
-       z: 1
+        id: busyIndicator
+        running: false
+        anchors.centerIn: parent
+        // BusyIndicator should be on top of all other content
+        z: 1
     }
 
     Item {
@@ -90,7 +94,7 @@ Item {
             Component.onCompleted: visible = false
         }
 
-/*        FileDialog {
+        /*        FileDialog {
             id: fileDialogOutput
             title: "Escolha o ficheiro de destino"
             folder: shortcuts.home
@@ -104,13 +108,17 @@ Item {
         FileSaveDialog {
             id: fileDialogOutput
             title: "Escolha o ficheiro de destino"
-            nameFilters: ["Images (*.pdf)", "All files (*)"]
-
+            nameFilters: ["PDF (*.pdf)", "All files (*)"]
         }
         FileSaveDialog {
             id: fileDialogCMDOutput
             title: "Escolha o ficheiro de destino"
-            nameFilters: ["Images (*.pdf)", "All files (*)"]
+            nameFilters: ["PDF (*.pdf)", "All files (*)"]
+        }
+        FileDialog {
+            id: fileDialogBatchOutput
+            folder: shortcuts.home;
+            selectFolder: true
         }
 
         Item {
@@ -638,7 +646,7 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
-                        enabled: fileLoaded
+                        enabled: fileLoaded && propertyRadioButtonPADES.checked
                         checked: true
                     }
                 }
@@ -666,7 +674,7 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
-                        enabled: checkSignShow.checked && fileLoaded
+                        enabled: fileLoaded && propertyRadioButtonPADES.checked
                     }
                 }
 
@@ -685,7 +693,7 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_LABEL
                         color: Constants.COLOR_MAIN_PRETO
                         font.capitalization: Font.MixedCase
-                        opacity: checkSignShow.checked && fileLoaded && !checkLastPage.checked
+                        opacity: fileLoaded && propertyRadioButtonPADES.checked && !checkLastPage.checked
                                  ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                     }
 
@@ -699,7 +707,7 @@ Item {
                         width: parent.width - pageText.width - pageText.x
                         height: parent.height
                         anchors.leftMargin: 0
-                        enabled: checkSignShow.checked && fileLoaded && !checkLastPage.checked
+                        enabled: fileLoaded && propertyRadioButtonPADES.checked && !checkLastPage.checked
                         editable:  checkSignShow.checked && fileLoaded ? true : false
 
                         contentItem: TextInput {
@@ -708,7 +716,7 @@ Item {
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_LABEL
                             color: Constants.COLOR_MAIN_PRETO
-                            opacity: checkSignShow.checked && fileLoaded && !checkLastPage.checked
+                            opacity: fileLoaded && propertyRadioButtonPADES.checked && !checkLastPage.checked
                                      ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                             horizontalAlignment: Qt.AlignHCenter
                             verticalAlignment: Qt.AlignVCenter
@@ -730,7 +738,7 @@ Item {
                                 font.family: lato.name
                                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                                 color: Constants.COLOR_MAIN_PRETO
-                                opacity: checkSignShow.checked && fileLoaded && !checkLastPage.checked
+                                opacity: fileLoaded && propertyRadioButtonPADES.checked && !checkLastPage.checked
                                          ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                                 anchors.fill: parent
                                 fontSizeMode: Text.Fit
@@ -751,7 +759,7 @@ Item {
                                 font.family: lato.name
                                 font.pixelSize:  Constants.SIZE_TEXT_LABEL
                                 color: Constants.COLOR_MAIN_PRETO
-                                opacity: checkSignShow.checked && fileLoaded && !checkLastPage.checked
+                                opacity: fileLoaded && propertyRadioButtonPADES.checked && !checkLastPage.checked
                                          ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                                 anchors.fill: parent
                                 fontSizeMode: Text.Fit
@@ -774,7 +782,7 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
-                        enabled: checkSignShow.checked && fileLoaded
+                        enabled: fileLoaded && propertyRadioButtonPADES.checked
                     }
                 }
             }

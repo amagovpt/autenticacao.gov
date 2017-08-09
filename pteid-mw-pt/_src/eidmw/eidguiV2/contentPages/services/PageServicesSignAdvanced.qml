@@ -214,10 +214,7 @@ PageServicesSignAdvancedForm {
             }else{
                 outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
-            var page = 1
-            propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
-                                        page = propertySpinBoxControl.value
-
+            var page = propertySpinBoxControl.value
             var reason = propertyTextFieldReason.text
             var location = propertyTextFieldLocal.text
             var isSmallSignature = propertyCheckSignReduced.checked
@@ -448,15 +445,10 @@ PageServicesSignAdvancedForm {
 
             if (propertyRadioButtonPADES.checked) {
 
-                var page = 1
-                propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
-                                                page = propertySpinBoxControl.value
-
+                var page = propertySpinBoxControl.value
                 var reason = propertyTextFieldReason.text
                 var location = propertyTextFieldLocal.text
-
                 var isSmallSignature = propertyCheckSignReduced.checked
-
                 var coord_x = propertyPDFPreview.propertyCoordX
 
                 //coord_y must be the lower left corner of the signature rectangle
@@ -467,7 +459,6 @@ PageServicesSignAdvancedForm {
                 console.log("Signing in position coord_x: " + coord_x
                             + " and coord_y: "+coord_y + " page: " + page)
 
-                // TODO: Batch Sign to sign multi files at the same Timer
                 gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
                                      reason, location, isTimestamp, isSmallSignature)
             }
@@ -477,7 +468,6 @@ PageServicesSignAdvancedForm {
 
         }
     }
-
     propertyFileDialogCMDOutput {
         onAccepted: {
 
@@ -490,14 +480,42 @@ PageServicesSignAdvancedForm {
                 outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
 
-                var page = 1
-                propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
-                                            page = propertySpinBoxControl.value
-                var reason = ""
-                var location = ""
+            var page = propertySpinBoxControl.value
+            var reason = ""
+            var location = ""
 
-                var isSmallSignature = false
+            var isSmallSignature = false
 
+            var coord_x = propertyPDFPreview.propertyCoordX
+
+            //coord_y must be the lower left corner of the signature rectangle
+
+            var coord_y = propertyPDFPreview.propertyCoordY
+
+            console.log("Output filename: " + outputFile)
+            console.log("Signing in position coord_x: " + coord_x
+                        + " and coord_y: "+coord_y)
+            dialogSignCMD.open()
+        }
+    }
+    propertyFileDialogBatchOutput {
+        onAccepted: {
+
+            var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
+            var isTimestamp = propertySwitchSignTemp.checked
+            var outputFile = propertyFileDialogBatchOutput.folder.toString()
+            if (Qt.platform.os === "windows") {
+                outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+            }else{
+                outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+            }
+
+            if (propertyRadioButtonPADES.checked) {
+
+                var page = propertySpinBoxControl.value
+                var reason = propertyTextFieldReason.text
+                var location = propertyTextFieldLocal.text
+                var isSmallSignature = propertyCheckSignReduced.checked
                 var coord_x = propertyPDFPreview.propertyCoordX
 
                 //coord_y must be the lower left corner of the signature rectangle
@@ -505,9 +523,22 @@ PageServicesSignAdvancedForm {
                 var coord_y = propertyPDFPreview.propertyCoordY
 
                 console.log("Output filename: " + outputFile)
-                console.log("Signing in position coord_x: " + coord_x
-                            + " and coord_y: "+coord_y)
-                dialogSignCMD.open()
+                console.log("Signing Batch in position coord_x: " + coord_x
+                            + " and coord_y: "+coord_y + " page: " + page)
+
+                var batchFilesArray = []
+                for(var i = 0; i < propertyListViewFiles.count; i++){
+                    batchFilesArray[i] =  propertyListViewFiles.model.get(i).fileUrl;
+                }
+                gapi.startSigningBatchPDF(batchFilesArray, outputFile, page, coord_x, coord_y,
+                                          reason, location, isTimestamp, isSmallSignature)
+
+            }
+            else {
+                // TODO: Implement signing batch in Xades mode
+                gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp)
+            }
+
         }
     }
 
@@ -604,14 +635,21 @@ PageServicesSignAdvancedForm {
     propertyButtonSignWithCC {
         onClicked: {
             console.log("Sign with CC")
-            if (propertyRadioButtonPADES.checked) {
-                propertyFileDialogOutput.filename = propertyListViewFiles.model.get(0).fileUrl + "_signed.pdf"
+            if (propertyListViewFiles.count == 1){
+                propertyFileDialogBatchOutput.title = "Escolha o ficheiro de destino"
+                if (propertyRadioButtonPADES.checked) {
+                    var outputFile =  propertyListViewFiles.model.get(0).fileUrl
+                    outputFile =  outputFile.substring(0, outputFile.lastIndexOf('.'));
+                    propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
+                }
+                else {
+                    propertyFileDialogOutput.filename = "xadessign.ccsigned"
+                }
+                propertyFileDialogOutput.open()
+            }else{
+                propertyFileDialogBatchOutput.title = "Escolha a pasta de destino dos ficheiros"
+                propertyFileDialogBatchOutput.open()
             }
-            else {
-                propertyFileDialogOutput.filename = "xadessign.ccsigned"
-            }
-
-            propertyFileDialogOutput.open()
         }
     }
     propertyButtonSignCMD {
@@ -730,12 +768,10 @@ PageServicesSignAdvancedForm {
             else {
                 fileLoaded = true
                 propertyBusyIndicator.running = true
-                var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
-                var pageCount = gapi.getPDFpageCount(loadedFilePath)
-                console.log("loadedFilePath: " + loadedFilePath + " page count: " + pageCount)
-                propertySpinBoxControl.value = 1
-                propertySpinBoxControl.to = pageCount
                 if(propertyRadioButtonPADES.checked){
+                    var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
+                    propertySpinBoxControl.value = 1
+                    propertySpinBoxControl.to = getMinimumPage()
                     propertyPDFPreview.propertyBackground.cache = false
                     propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
                     propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
@@ -750,6 +786,7 @@ PageServicesSignAdvancedForm {
                     propertyPDFPreview.propertyDragSigLocationText.visible = true
                     propertyPDFPreview.propertyDragSigImg.visible = true
                 }
+
                 propertyBusyIndicator.running = false
             }
         }
@@ -776,10 +813,10 @@ PageServicesSignAdvancedForm {
     propertyCheckLastPage {
         onCheckedChanged: {
             var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
-            var pageCount = gapi.getPDFpageCount(loadedFilePath)
             if(propertyCheckLastPage.checked){
+                propertySpinBoxControl.value = getMinimumPage()
                 propertyPDFPreview.propertyBackground.source =
-                        "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + pageCount
+                        "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + getMinimumPage()
             }else{
                 propertyPDFPreview.propertyBackground.source =
                         "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
@@ -820,5 +857,19 @@ PageServicesSignAdvancedForm {
             handColor = Constants.COLOR_MAIN_SOFT_GRAY
         }
         return handColor
+    }
+    function getMinimumPage(){
+        // Function to detect minimum number of pages of all loaded pdfs to sign
+        var minimumPage = 0
+        for(var i = 0 ; i < propertyListViewFiles.count ; i++ ){
+            var loadedFilePath = propertyListViewFiles.model.get(i).fileUrl
+            var pageCount = gapi.getPDFpageCount(loadedFilePath)
+            if(minimumPage == 0 || pageCount < minimumPage)
+                minimumPage = pageCount
+
+            console.log("loadedFilePath: " + loadedFilePath + " page count: " + pageCount
+                        + "minimum: " + minimumPage)
+        }
+        return minimumPage
     }
 }

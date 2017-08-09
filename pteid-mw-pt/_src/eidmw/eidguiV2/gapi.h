@@ -117,6 +117,18 @@ public:
     double isSmallSignature;
 };
 
+struct SignBatchParams {
+public:
+    QList<QString> loadedFileBatchPath; QString outputFile;
+    int page;
+    double coord_x;
+    double coord_y;
+    QString reason;
+    QString location;
+    double isTimestamp;
+    double isSmallSignature;
+};
+
 class PDFPreviewImageProvider: public QObject, public QQuickImageProvider
 {
     Q_OBJECT
@@ -197,6 +209,8 @@ public slots:
     //This method should be used by basic and advanced signature modes
     void startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
                          QString reason, QString location, double isTimestamp, double isSmall);
+    void startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outputFile, int page, double coord_x, double coord_y,
+                         QString reason, QString location, double isTimestamp, double isSmall);
     unsigned int getPDFpageCount(QString loadedFilePath);
 
     void startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
@@ -252,6 +266,7 @@ private:
     void setPersoDataFile(QString text);
     void getAddressFile();
     void doSignPDF(SignParams &params);
+    void doSignBatchPDF(SignBatchParams &params);
     void doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
     void fillCertificateList (void );
