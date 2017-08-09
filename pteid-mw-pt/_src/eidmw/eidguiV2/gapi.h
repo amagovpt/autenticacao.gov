@@ -251,7 +251,6 @@ signals:
     void signalPersoDataLoaded(const QString& persoNotes);
     void signalAddressLoadedChanged();
     void signalPdfSignSucess();
-    void signalPdfSignError();
     void signalUpdateProgressBar(int value);
     void signalUpdateProgressStatus(const QString statusMessage);
     void addressChangeFinished(long return_code);

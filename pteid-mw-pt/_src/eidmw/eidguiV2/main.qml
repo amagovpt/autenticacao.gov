@@ -56,7 +56,7 @@ Window {
             }
             else {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Reading Card Error!"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Card Access Error!"
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }

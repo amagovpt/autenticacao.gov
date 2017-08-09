@@ -633,7 +633,7 @@ void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page,
 }
 
 void GAPI::startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outputFile, int page, double coord_x, double coord_y,
-                           QString reason, QString location, double isTimestamp, double isSmall) {
+                                QString reason, QString location, double isTimestamp, double isSmall) {
 
     SignBatchParams params = {loadedFileBatchPath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall};
 
@@ -672,9 +672,9 @@ void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTime
     else
         card.SignXades(tempOutputFile.constData(), files_to_sign, 1);
 
-    END_TRY_CATCH
+    emit signalPdfSignSucess();
 
-            emit signalPdfSignSucess();
+    END_TRY_CATCH
 }
 
 void GAPI::doSignPDF(SignParams &params) {
@@ -691,12 +691,12 @@ void GAPI::doSignPDF(SignParams &params) {
         sig_handler.enableSmallSignatureFormat();
 
     card.SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
-                 params.location.toUtf8().data(), params.reason.toUtf8().data(),
-                 params.outputFile.toUtf8().data());
+                             params.location.toUtf8().data(), params.reason.toUtf8().data(),
+                             params.outputFile.toUtf8().data());
+
+    emit signalPdfSignSucess();
 
     END_TRY_CATCH
-
-            emit signalPdfSignSucess();
 }
 
 void GAPI::doSignBatchPDF(SignBatchParams &params) {
@@ -726,9 +726,9 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
                  params.location.toUtf8().data(), params.reason.toUtf8().data(),
                  params.outputFile.toUtf8().data());
 
-    END_TRY_CATCH
+    emit signalPdfSignSucess();
 
-            emit signalPdfSignSucess();
+    END_TRY_CATCH
 }
 
 QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)

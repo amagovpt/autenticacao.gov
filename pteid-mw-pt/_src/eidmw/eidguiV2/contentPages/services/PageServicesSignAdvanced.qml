@@ -27,13 +27,8 @@ PageServicesSignAdvancedForm {
         onSignalPdfSignSucess: {
             signsuccess_dialog.visible = true
         }
-
-        onSignalPdfSignError: {
-            signerror_dialog.visible = true
-        }
         onSignalCardAccessError: {
             propertyBusyIndicator.running = false
-            propertyButtonSignWithCC.enabled = false
         }
         onSignalCardDataChanged: {
             console.log("Services Sign Advanced --> Data Changed")

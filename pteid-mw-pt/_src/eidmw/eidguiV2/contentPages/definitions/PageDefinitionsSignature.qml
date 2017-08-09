@@ -25,10 +25,6 @@ PageDefinitionsSignatureForm {
         onSignalPdfSignSucess: {
             signsuccess_dialog.visible = true
         }
-
-        onSignalPdfSignError: {
-            signerror_dialog.visible = true
-        }
         onSignalCardDataChanged: {
             console.log("Services Sign Advanced --> Data Changed")
             //console.trace();
