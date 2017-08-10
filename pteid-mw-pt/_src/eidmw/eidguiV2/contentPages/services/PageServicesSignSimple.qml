@@ -43,7 +43,7 @@ PageServicesSignSimpleForm {
 
         Item {
             width: parent.width
-            height: rectMessage.height + rectNumTelemovel.height + rectPin.height
+            height: rectMessage.height + rectMobilNumber.height + rectPin.height
 
             Item {
                 id: rectMessage
@@ -71,7 +71,7 @@ PageServicesSignSimpleForm {
             }
 
             Item {
-                id: rectNumTelemovel
+                id: rectMobilNumber
                 width: parent.width
                 height: 50
                 anchors.top: rectMessage.bottom
@@ -88,17 +88,31 @@ PageServicesSignSimpleForm {
                     width: parent.width * 0.5
                     anchors.bottom: parent.bottom
                 }
+                ComboBox {
+                    id: comboBoxIndicative
+                    width: parent.width * 0.15
+                    height: parent.height
+                    anchors.verticalCenter: parent.verticalCenter
+                    model: ["+351"]
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                    visible: true
+                    anchors.left: textPinCurrent.right
+                    anchors.bottom: parent.bottom
+                }
                 TextField {
                     id: textFieldMobileNumber
-                    width: parent.width * 0.5
+                    width: parent.width * 0.3
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldMobileNumber.text === "" ? true: false
-                    placeholderText: "Nº de Telemóvel? ex: +351 900000000"
-                    validator: RegExpValidator { regExp: /\+[0-9]+\ [0-9]+/ }
+                    placeholderText: "Nº de Telemóvel?"
+                    validator: RegExpValidator { regExp: /[0-9]+/ }
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
-                    anchors.left: textPinCurrent.right
+                    anchors.left: comboBoxIndicative.right
+                    anchors.leftMargin:  parent.width * 0.05
                     anchors.bottom: parent.bottom
                 }
             }
@@ -106,7 +120,7 @@ PageServicesSignSimpleForm {
                 id: rectPin
                 width: parent.width
                 height: 50
-                anchors.top: rectNumTelemovel.bottom
+                anchors.top: rectMobilNumber.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textPinNew
@@ -164,7 +178,9 @@ PageServicesSignSimpleForm {
             console.log("Signing in position coord_x: " + coord_x
                         + " and coord_y: "+coord_y)
 
-            gapi.signCMD(textFieldMobileNumber.text,textFieldPin.text,
+            var mobileNumber = comboBoxIndicative.currentText + " " + textFieldMobileNumber.text
+
+            gapi.signCMD(mobileNumber,textFieldPin.text,
                          loadedFilePath,outputFile,page,
                          coord_x,coord_y,
                          reason,location,
