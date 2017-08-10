@@ -381,6 +381,8 @@ PageServicesSignSimpleForm {
             console.log("Num files: "+filesArray.length);
         }
         onDropped: {
+            // Update sign preview position variables to be used to send to sdk
+            propertyPDFPreview.updateSignPreview(drop.x,drop.y)
             //TODO: Validate files type
             if(filesArray.length > 1){
                 dialog.open()

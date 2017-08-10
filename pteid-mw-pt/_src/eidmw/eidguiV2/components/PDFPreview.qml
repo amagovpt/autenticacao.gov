@@ -236,16 +236,17 @@ Rectangle {
                 dragSigRect.y = dragTarget.lastCoord_y / dragTarget.lastScreenHeight * background_image.height
             }
         }
-
-        onDropped: {
-            coord_x = (drop.x - background_image.x) / background_image.width
-            coord_y = (drop.y + dragSigRect.height - background_image.y) / background_image.height
-            dragTarget.lastCoord_x = dragSigRect.x
-            dragTarget.lastCoord_y = dragSigRect.y
-            dragTarget.lastScreenWidth = background_image.width
-            dragTarget.lastScreenHeight = background_image.height
-        }
     }
+    function updateSignPreview(droped_x,droped_y){
+
+        dragTarget.coord_x = (droped_x - background_image.x) / background_image.width
+        dragTarget.coord_y = (droped_y + dragSigRect.height - background_image.y) / background_image.height
+        dragTarget.lastCoord_x = dragSigRect.x
+        dragTarget.lastCoord_y = dragSigRect.y
+        dragTarget.lastScreenWidth = background_image.width
+        dragTarget.lastScreenHeight = background_image.height
+    }
+
     function getData(){
         var time = Qt.formatDateTime(new Date(), "yy.MM.dd hh:mm:ss")
 

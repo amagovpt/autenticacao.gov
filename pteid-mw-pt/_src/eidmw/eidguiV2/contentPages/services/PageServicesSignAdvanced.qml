@@ -404,6 +404,8 @@ PageServicesSignAdvancedForm {
             console.log("Num files: "+filesArray.length);
         }
         onDropped: {
+            // Update sign preview position variables to be used to send to sdk
+            propertyPDFPreview.updateSignPreview(drop.x,drop.y)
             //TODO: Validate files type
             for(var i = 0; i < filesArray.length; i++){
                 console.log("Adding file: " + filesArray[i])
@@ -416,6 +418,35 @@ PageServicesSignAdvancedForm {
                 }
 
 
+                filesModel.append({
+                                      "fileUrl": path
+                                  })
+            }
+            // Force scroll and focus to the last item addded
+            forceScrollandFocus()
+        }
+        onExited: {
+            console.log ("onExited");
+            filesArray = []
+        }
+    }
+    propertyDropFileArea {
+        onEntered: {
+            console.log("Signature advanced Drop File Area! You chose file(s): " + drag.urls);
+            filesArray = drag.urls
+            console.log("Num files: "+filesArray.length);
+        }
+        onDropped: {
+            //TODO: Validate files type
+            for(var i = 0; i < filesArray.length; i++){
+                console.log("Adding file: " + filesArray[i])
+                var path =  filesArray[i]
+                //  Get the path itself without a regex
+                if (Qt.platform.os === "windows") {
+                    path = path.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+                }else{
+                    path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+                }
                 filesModel.append({
                                       "fileUrl": path
                                   })

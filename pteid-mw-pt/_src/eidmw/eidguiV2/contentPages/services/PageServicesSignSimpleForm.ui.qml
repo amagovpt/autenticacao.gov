@@ -46,12 +46,6 @@ Item {
         // Expanded menu need a Horizontal space to Main Menu
         x: Constants.SIZE_ROW_H_SPACE
 
-        DropArea {
-            id: dropArea;
-            anchors.fill: parent;
-            z: 1
-        }
-
         FileDialog {
             id: fileDialog
             title: "Escolha o ficheiro para assinar"
@@ -129,6 +123,11 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     visible: !fileLoaded
                     font.family: lato.name
+                    z: 1
+                }
+                DropArea {
+                    id: dropArea;
+                    anchors.fill: parent;
                     z: 1
                 }
                 Components.PDFPreview {
@@ -318,7 +317,7 @@ Item {
                 text: "Assinar \n Chave Móvel Digital"
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
-                enabled: fileLoaded && cardLoaded
+                enabled: fileLoaded
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase

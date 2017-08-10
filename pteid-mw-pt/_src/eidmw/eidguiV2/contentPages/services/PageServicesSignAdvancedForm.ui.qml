@@ -37,6 +37,7 @@ Item {
     property alias propertyButtonSignWithCC: button_signCC
     property alias propertyButtonSignCMD: button_signCMD
     property alias propertyDropArea: dropArea
+    property alias propertyDropFileArea: dropFileArea
     property alias propertyTextFieldReason: textFieldReason
     property alias propertyTextFieldLocal: textFieldLocal
     property alias propertySwitchSignTemp: switchSignTemp
@@ -81,11 +82,7 @@ Item {
         // Expanded menu need a Horizontal space to Main Menu
         x: Constants.SIZE_ROW_H_SPACE
 
-        DropArea {
-            id: dropArea
-            anchors.fill: parent
-            z: 1
-        }
+
 
         FileDialog {
             id: fileDialog
@@ -238,6 +235,11 @@ Item {
                         font.capitalization: Font.MixedCase
                     }
                 }
+            }
+            DropArea {
+                id: dropFileArea
+                anchors.fill: parent
+                z: 1
             }
         }
         Item {
@@ -606,6 +608,11 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     visible: !fileLoaded
                     font.family: lato.name
+                    z: 1
+                }
+                DropArea {
+                    id: dropArea
+                    anchors.fill: parent
                     z: 1
                 }
                 Components.PDFPreview {
