@@ -39,27 +39,6 @@ Window {
     Connections {
         target: gapi
 
-        onSignalCardAccessError: {
-            console.log("Main Page onSignalCardAccessError")
-            if (error_code == GAPI.NoReaderFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "No card reader found!"
-            }
-            else if (error_code == GAPI.NoCardFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "No Card Found!"
-            }
-            else if (error_code == GAPI.SodCardReadError) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        "Consistência da informação do cartão está comprometida!"
-            }
-            else {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Card Access Error!"
-            }
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-        }
         onSignalCardChanged: {
             console.log("Main Page onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {

@@ -273,7 +273,7 @@ PageServicesSignSimpleForm {
         }
         onSignalCardAccessError: {
             propertyBusyIndicator.running = false
-            propertyButtonSignWithCC.enabled = false
+            cardLoaded = false
         }
         onSignalCardDataChanged: {
             console.log("Services Sign Simple --> Data Changed")
@@ -285,20 +285,21 @@ PageServicesSignSimpleForm {
             propertyPDFPreview.propertyDragSigNumIdText.text = "Num. de Identificação Civil:"
                     + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
             propertyBusyIndicator.running = false
+            cardLoaded = true
         }
         onSignalCardChanged: {
             console.log("Services Sign Simple onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
                 propertyPDFPreview.propertyDragSigSignedByNameText.text = "Assinado por:"
                 propertyPDFPreview.propertyDragSigNumIdText.text = "Num. de Identificação Civil:"
-                propertyButtonSignWithCC.enabled = false
+                cardLoaded = false
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
-                propertyButtonSignWithCC.enabled = true
+                cardLoaded = true
                 gapi.startCardReading()
             }
             else{
-                propertyButtonSignWithCC.enabled = false
+                cardLoaded = false
             }
         }
         onSignalUpdateProgressStatus: {

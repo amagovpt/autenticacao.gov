@@ -17,6 +17,7 @@ Item {
 
     property variant filesArray: []
     property bool fileLoaded: false
+    property bool cardLoaded: false
 
     property alias propertyRectMainRight: rectMainRight
     property alias propertyBusyIndicator: busyIndicator
@@ -799,7 +800,7 @@ Item {
                     text: "Assinar \n Cartão de Cidadão"
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
-                    enabled: fileLoaded
+                    enabled: fileLoaded && cardLoaded
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
@@ -810,7 +811,7 @@ Item {
                     text: "Assinar \n Chave Móvel Digital"
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
-                    enabled: true
+                    enabled: fileLoaded
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
