@@ -375,11 +375,13 @@ PageServicesSignSimpleForm {
     propertyDropArea {
 
         onEntered: {
-            console.log("You chose file(s): " + drag.urls);
+            console.log("Signature simple ! You chose file(s): " + drag.urls);
+
             filesArray = drag.urls
             console.log("Num files: "+filesArray.length);
         }
         onDropped: {
+            //TODO: Validate files type
             if(filesArray.length > 1){
                 dialog.open()
             }else{
@@ -391,9 +393,7 @@ PageServicesSignSimpleForm {
                 }else{
                     path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
                 }
-                filesModel.append({
-                                      "fileUrl": path
-                                  })
+                filesModel.insert(0, {"fileUrl": path})
             }
         }
         onExited: {

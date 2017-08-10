@@ -49,6 +49,7 @@ Item {
         DropArea {
             id: dropArea;
             anchors.fill: parent;
+            z: 1
         }
 
         FileDialog {

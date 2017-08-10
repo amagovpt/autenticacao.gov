@@ -399,11 +399,12 @@ PageServicesSignAdvancedForm {
     propertyDropArea {
 
         onEntered: {
-            console.log("You chose file(s): " + drag.urls);
+            console.log("Signature advanced ! You chose file(s): " + drag.urls);
             filesArray = drag.urls
             console.log("Num files: "+filesArray.length);
         }
         onDropped: {
+            //TODO: Validate files type
             for(var i = 0; i < filesArray.length; i++){
                 console.log("Adding file: " + filesArray[i])
                 var path =  filesArray[i]
