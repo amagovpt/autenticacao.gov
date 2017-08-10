@@ -684,7 +684,9 @@ PageServicesSignAdvancedForm {
     propertyButtonSignCMD {
         onClicked: {
             console.log("Sign with CMD")
-            propertyFileDialogCMDOutput.filename = filesModel.get(0).fileUrl + "_signed.pdf"
+            var outputFile =  filesModel.get(0).fileUrl
+            outputFile =  outputFile.substring(0, outputFile.lastIndexOf('.'));
+            propertyFileDialogCMDOutput.filename = outputFile + "_signed.pdf"
             propertyFileDialogCMDOutput.open()
         }
     }

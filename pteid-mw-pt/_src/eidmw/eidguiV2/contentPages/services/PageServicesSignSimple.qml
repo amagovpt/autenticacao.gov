@@ -481,14 +481,19 @@ PageServicesSignSimpleForm {
     propertyButtonSignWithCC {
         onClicked: {
             console.log("Sign with CC")
-            propertyFileDialogOutput.filename = filesModel.get(0).fileUrl + "_signed.pdf"
+
+            var outputFile = filesModel.get(0).fileUrl
+            var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'));
+            propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
             propertyFileDialogOutput.open()
         }
     }
     propertyButtonSignCMD {
         onClicked: {
             console.log("Sign with CMD")
-            propertyFileDialogCMDOutput.filename = filesModel.get(0).fileUrl + "_signed.pdf"
+            var outputFile = filesModel.get(0).fileUrl
+            var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'));
+            propertyFileDialogCMDOutput.filename = outputFile + "_signed.pdf";
             propertyFileDialogCMDOutput.open()
         }
     }
