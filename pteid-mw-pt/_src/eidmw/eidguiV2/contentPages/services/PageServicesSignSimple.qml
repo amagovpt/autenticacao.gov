@@ -384,7 +384,8 @@ PageServicesSignSimpleForm {
             //TODO: Validate files type
             if(filesArray.length > 1){
                 dialog.open()
-            }else{
+            }else if(filesArray.length == 1){
+                // Needed because the PDFPreview
                 console.log("Adding file: " + filesArray[0])
                 var path =  filesArray[0]
                 //  Get the path itself without a regex
