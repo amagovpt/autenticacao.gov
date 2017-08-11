@@ -299,6 +299,8 @@
     <None Include="contentPages\card\PageCardNotesForm.ui.qml" />
     <None Include="contentPages\card\PageCardOtherData.qml" />
     <None Include="contentPages\card\PageCardOtherDataForm.ui.qml" />
+	<None Include="contentPages\card\PageCardPrint.qml" />
+    <None Include="contentPages\card\PageCardPrintForm.ui.qml" />
     <None Include="contentPages\definitions\PageDefinitionsApp.qml" />
     <None Include="contentPages\definitions\PageDefinitionsAppForm.ui.qml" />
     <None Include="contentPages\definitions\PageDefinitionsSignature.qml" />
