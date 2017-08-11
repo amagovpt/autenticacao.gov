@@ -24,6 +24,11 @@ ListModel {
                 name: "Notas"
                 expand: false
                 url: "contentPages/card/PageCardNotes.qml"
+            },
+            ListElement {
+                name: "Imprimir"
+                expand: false
+                url: "contentPages/card/PageCardPrint.qml"
             }
         ]
     }
