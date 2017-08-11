@@ -842,19 +842,17 @@ PageServicesSignAdvancedForm {
     propertySpinBoxControl {
         onValueChanged: {
             var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
-            var pageCount = gapi.getPDFpageCount(loadedFilePath)
             propertyPDFPreview.propertyBackground.source =
                     "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
 
             propertySpinBoxControl.up.indicator.visible = true
             propertySpinBoxControl.down.indicator.visible = true
-            if(propertySpinBoxControl.value === gapi.getPDFpageCount(loadedFilePath)){
+            if(propertySpinBoxControl.value === getMinimumPage()){
                 propertySpinBoxControl.up.indicator.visible = false
             }
             if (propertySpinBoxControl.value === 1){
                 propertySpinBoxControl.down.indicator.visible = false
             }
-
         }
     }
     propertyCheckLastPage {

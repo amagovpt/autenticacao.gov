@@ -128,7 +128,7 @@ Item {
                 DropArea {
                     id: dropArea;
                     anchors.fill: parent;
-                    z: 1
+                    z: 2
                 }
                 Components.PDFPreview {
                     anchors.fill: parent

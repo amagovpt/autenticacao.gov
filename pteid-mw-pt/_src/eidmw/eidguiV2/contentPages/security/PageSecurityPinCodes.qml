@@ -33,7 +33,47 @@ PageSecurityPinCodesForm {
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Card Access Error!"
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            propertyButtonModifyAuth.enabled = false
+            propertyButtonTestAuth.enabled = false
+            propertyButtonModifySign.enabled = false
+            propertyButtonTestSign.enabled = false
+            propertyButtonModifyAddress.enabled = false
+            propertyButtonTestAddress.enabled = false
+
             propertyBusyIndicator.running = false
+        }
+        onSignalCardDataChanged: {
+            console.log("Security Pin Codes --> Data Changed")
+            propertyButtonModifyAuth.enabled = true
+            propertyButtonTestAuth.enabled = true
+            propertyButtonModifySign.enabled = true
+            propertyButtonTestSign.enabled = true
+            propertyButtonModifyAddress.enabled = true
+            propertyButtonTestAddress.enabled = true
+            propertyBusyIndicator.running = false
+        }
+        onSignalCardChanged: {
+            console.log("Security Pin Codes onSignalCardChanged")
+            if (error_code == GAPI.ET_CARD_REMOVED) {
+                propertyButtonModifyAuth.enabled = false
+                propertyButtonTestAuth.enabled = false
+                propertyButtonModifySign.enabled = false
+                propertyButtonTestSign.enabled = false
+                propertyButtonModifyAddress.enabled = false
+                propertyButtonTestAddress.enabled = false
+            }
+            else if (error_code == GAPI.ET_CARD_CHANGED) {
+                propertyBusyIndicator.running = true
+                gapi.startCardReading()
+            }
+            else{
+                propertyButtonModifyAuth.enabled = false
+                propertyButtonTestAuth.enabled = false
+                propertyButtonModifySign.enabled = false
+                propertyButtonTestSign.enabled = false
+                propertyButtonModifyAddress.enabled = false
+                propertyButtonTestAddress.enabled = false
+            }
         }
     }
 
