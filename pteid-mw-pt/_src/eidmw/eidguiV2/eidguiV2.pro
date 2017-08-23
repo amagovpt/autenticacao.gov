@@ -6,6 +6,7 @@ QT += quick quickcontrols2 concurrent
 QT += core-private
 QT += gui-private
 QT += widgets
+QT += printsupport
 
 CONFIG += c++11
 

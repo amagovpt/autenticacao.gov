@@ -4,6 +4,8 @@
 #include <QtConcurrent>
 #include <cstdio>
 #include <QQuickImageProvider>
+#include <QPrinter>
+#include "qpainter.h"
 
 #include "CMDSignature.h"
 #include "cmdErrors.h"
@@ -623,6 +625,386 @@ QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const 
     return p;
 }
 
+void GAPI::startPrintPDF(QString outputFile, double isBasicInfo,double isAddicionalInfo,
+                         double isAddress,double isNotes,double isSign) {
+
+    PrintParams params = {outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isSign};
+    QtConcurrent::run(this, &GAPI::doPrintPDF, params);
+}
+
+bool GAPI::doSignPrintPDF(QString &file_to_sign, QString &outputsign) {
+
+    BEGIN_TRY_CATCH
+
+            PTEID_EIDCard &card = getCardInstance();
+    PTEID_PDFSignature sig_handler(file_to_sign.toUtf8().data());
+
+    card.SignPDF(sig_handler, 0, 0, false, "", "", outputsign.toUtf8().data());
+
+    return true;
+
+    END_TRY_CATCH
+
+            return false;
+}
+
+void GAPI::doPrintPDF(PrintParams &params) {
+
+    qDebug() << "doPrintPDF! outputFile = " << params.outputFile <<
+                "isBasicInfo = " << params.isBasicInfo << "isAddicionalInfo" << params.isAddicionalInfo << "isAddress"
+             << params.isAddress << "isNotes = " << params.isNotes << "isSign = " << params.isSign;
+
+    QString pdffiletmp;
+    QPrinter pdf_printer;
+    QString nativepdftmp;
+    QString originalOutputFile;
+    bool res = false;
+
+    BEGIN_TRY_CATCH;
+    if (params.isSign)
+    {
+        // Print PDF Signed
+        pdffiletmp = QDir::tempPath();
+        pdffiletmp.append("/CartaoCidadao.pdf");
+        nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
+        originalOutputFile = params.outputFile;
+        params.outputFile = nativepdftmp;
+        res = drawpdf(pdf_printer, params);
+        if (!res)
+        {
+            emit signalPdfPrintFail();
+            return;
+        }
+
+        QFuture<bool> new_thread = QtConcurrent::run(this, &GAPI::doSignPrintPDF, nativepdftmp,
+                                                     originalOutputFile);
+
+        res = new_thread.result();
+        // Emit signal if success but if false a popup about some error is already sent
+        if (res)
+            emit signalPdfPrintSignSucess();
+    } else {
+        // Print PDF not Signed
+        res = drawpdf(pdf_printer, params);
+        if (res) {
+            emit signalPdfPrintSucess();
+        }else{
+            emit signalPdfPrintFail();
+        }
+    }
+    END_TRY_CATCH
+}
+
+static QPen black_pen;
+static QPen blue_pen;
+
+void drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name, QString value, bool single_column=false)
+{
+    int line_length = single_column ? 300 : 180;
+
+    painter.setPen(blue_pen);
+    painter.drawText(QPointF(pos_x, pos_y), name);
+    pos_y += 7;
+
+    painter.drawLine(QPointF(pos_x, pos_y), QPointF(pos_x+line_length, pos_y));
+    pos_y += 15;
+    painter.setPen(black_pen);
+    painter.drawText(QPointF(pos_x, pos_y), value);
+}
+
+void drawSectionHeader(QPainter &painter, double pos_x, double pos_y, QString section_name)
+{
+    QFont header_font("DIN Light");
+    header_font.setPointSize(11);
+    QFont regular_font("DIN Medium");
+    regular_font.setPointSize(12);
+
+    painter.setFont(header_font);
+
+    QColor light_grey(233, 233, 233);
+    painter.setBrush(light_grey);
+    painter.setPen(light_grey);
+
+    painter.drawRoundedRect(QRectF(pos_x, pos_y, 250, 30), 10.0, 10.0);
+    painter.setPen(black_pen);
+
+    painter.drawText(pos_x+20, pos_y+20, section_name);
+
+    painter.setFont(regular_font);
+}
+
+QPixmap loadHeader()
+{
+    return QPixmap(":/images/pdf_document_header.png");
+}
+
+bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
+{
+    qDebug() << "drawpdf! outputFile = " << params.outputFile <<
+                "isBasicInfo = " << params.isBasicInfo << "isAddicionalInfo" << params.isAddicionalInfo << "isAddress"
+             << params.isAddress << "isNotes = " << params.isNotes << "isSign = " << params.isSign;
+
+    double pos_x, pos_y, res;
+    int sections_to_print = 0;
+
+    PTEID_EIDCard &card = getCardInstance();
+    card.doSODCheck(true); //Enable SOD checking
+    PTEID_EId &eid_file = card.getID();
+
+    //QPrinter printer;
+    printer.setResolution(96);
+    printer.setColorMode(QPrinter::Color);
+    printer.setPaperSize(QPrinter::A4);
+
+    if ( params.outputFile.toUtf8().size() > 0){
+        printer.setOutputFileName(params.outputFile.toUtf8().data());
+    }else{
+        return false;
+    }
+
+    //TODO: Add custom fonts
+    //addFonts();
+
+    //Start drawing
+    pos_x = 0, pos_y = 0;
+    QPainter painter;
+    res = painter.begin(&printer);
+    if(res == false){
+        qDebug() << "Start drawing return error: " <<  res;
+        return false;
+    }
+
+    //Font setup
+    QFont din_font("DIN Medium");
+    din_font.setPixelSize(18);
+
+    //  Include header as png pixmap
+    QPixmap header = loadHeader();
+
+    painter.drawPixmap(QPointF(pos_x, pos_y), header);
+
+    //  //Alternative using the QtSVG module, not enabled for now because the rendering is far from perfect
+    //QSvgRenderer renderer(QString("C:\\Users\\agrr\\Desktop\\GMC_logo.svg"));
+    //std::cout << renderer.defaultSize().width() << "x" << renderer.defaultSize().height() << std::endl;
+
+    //renderer.render(&painter, QRect(pos_x, pos_y, 504, 132));
+    //renderer.render(&painter, QRect(pos_x, pos_y, 250, 120));
+
+    pos_y += header.height() + 15;
+    black_pen = painter.pen();
+
+    blue_pen.setColor(QColor(78, 138, 190));
+    painter.setPen(blue_pen);
+
+    int line_length = 487;
+    //Horizontal separator below the CC logo
+    painter.drawLine(QPointF(pos_x, pos_y), QPointF(pos_x+line_length, pos_y));
+    pos_y += 25;
+
+    //Change text color
+    blue_pen = painter.pen();
+
+    const int COLUMN_WIDTH = 220;
+    const int LINE_HEIGHT = 45;
+
+    //    din_font.setBold(true);
+    painter.setFont(din_font);
+
+    painter.drawText(QPointF(pos_x, pos_y), tr("PERSONAL DATA"));
+
+    pos_y += 15;
+    int circle_radius = 6;
+
+    //Draw 4 blue circles
+    painter.setBrush(QColor(78, 138, 190));
+    painter.drawEllipse(QPointF(pos_x+10, pos_y), circle_radius, circle_radius);
+    painter.drawEllipse(QPointF(pos_x+40, pos_y), circle_radius, circle_radius);
+    painter.drawEllipse(QPointF(pos_x+70, pos_y), circle_radius, circle_radius);
+    painter.drawEllipse(QPointF(pos_x+100, pos_y), circle_radius, circle_radius);
+
+    painter.setPen(black_pen);
+    //Reset font
+    din_font.setPixelSize(10);
+    din_font.setBold(false);
+    painter.setFont(din_font);
+
+    pos_y += 30;
+
+    if (params.isBasicInfo)
+    {
+
+        drawSectionHeader(painter, pos_x, pos_y, tr("BASIC INFORMATION"));
+        sections_to_print++;
+
+        //Load photo into a QPixmap
+        PTEID_ByteArray& photo = eid_file.getPhotoObj().getphoto();
+
+        //Image
+        QPixmap pixmap_photo;
+        pixmap_photo.loadFromData(photo.GetBytes(), photo.Size(), "PNG");
+
+        const int img_height = 200;
+
+        //Scale height if needed
+        QPixmap scaled = pixmap_photo.scaledToHeight(img_height, Qt::SmoothTransformation);
+
+        painter.drawPixmap(QPointF(pos_x + 500, pos_y-80), scaled);
+
+        pos_y += 50;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Given Name(s)"), QString::fromUtf8(eid_file.getGivenName()), true);
+
+        pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Surname(s)"), QString::fromUtf8(eid_file.getSurname()), true);
+
+        pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Gender"), QString::fromUtf8(eid_file.getGender()));
+        drawSingleField(painter, pos_x + COLUMN_WIDTH, pos_y, tr("Height"), QString::fromUtf8(eid_file.getHeight()));
+        drawSingleField(painter, pos_x + COLUMN_WIDTH*2, pos_y, tr("Date of birth"),
+                        QString::fromUtf8(eid_file.getDateOfBirth()));
+
+        pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Document Number"), QString::fromUtf8(eid_file.getDocumentNumber()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Validity Date"),
+                        QString::fromUtf8(eid_file.getValidityEndDate()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Country"), QString::fromUtf8(eid_file.getCountry()));
+
+        pos_y += LINE_HEIGHT;
+        drawSingleField(painter, pos_x, pos_y, tr("Father"), QString::fromUtf8(eid_file.getGivenNameFather()) + " " +
+                        QString::fromUtf8(eid_file.getSurnameFather()), true);
+        pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Mother"), QString::fromUtf8(eid_file.getGivenNameMother()) + " " +
+                        QString::fromUtf8(eid_file.getSurnameMother()), true);
+        pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Notes"),
+                        QString::fromUtf8(eid_file.getAccidentalIndications()), true);
+
+        pos_y += 50;
+    }
+
+    if (params.isAddicionalInfo)
+    {
+        drawSectionHeader(painter, pos_x, pos_y, tr("ADDITIONAL INFORMATION"));
+        sections_to_print++;
+        pos_y += 50;
+
+        drawSingleField(painter, pos_x, pos_y, tr("VAT identification no."), QString::fromUtf8(eid_file.getTaxNo()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Social Security no."),
+                        QString::fromUtf8(eid_file.getSocialSecurityNumber()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("National Health System no."),
+                        QString::fromUtf8(eid_file.getHealthNumber()));
+        pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Card Version"), QString::fromUtf8(eid_file.getDocumentVersion()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Delivery Date"),
+                        QString::fromUtf8(eid_file.getValidityBeginDate()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Delivery Entity"),
+                        QString::fromUtf8(eid_file.getIssuingEntity()));
+        pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Card State"), getCardActivation());
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Document type"),
+                        QString::fromUtf8(eid_file.getDocumentType()));
+        pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Delivery Location"),
+                        QString::fromUtf8(eid_file.getLocalofRequest()));
+
+        pos_y += 50;
+    }
+
+    if (params.isAddress)
+    {
+        drawSectionHeader(painter, pos_x, pos_y, tr("ADDRESS"));
+        sections_to_print++;
+        pos_y += 50;
+
+        PTEID_Address &addressFile = card.getAddr();
+
+        // TODO: Foreign address
+
+        drawSingleField(painter, pos_x, pos_y, tr("District"),
+                        QString::fromUtf8(addressFile.getDistrict()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Municipality"),
+                        QString::fromUtf8(addressFile.getMunicipality()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Civil Parish"),
+                        QString::fromUtf8(addressFile.getCivilParish()));
+
+        pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Ab. street type"),
+                        QString::fromUtf8(addressFile.getAbbrStreetType()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Street type"),
+                        QString::fromUtf8(addressFile.getStreetType()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Street Name"),
+                        QString::fromUtf8(addressFile.getStreetName()));
+
+        pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Ab. Building Type"),
+                        QString::fromUtf8(addressFile.getAbbrBuildingType()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Building Type"),
+                        QString::fromUtf8(addressFile.getBuildingType()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("House/building no."),
+                        QString::fromUtf8(addressFile.getDoorNo()));
+        pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Floor"),
+                        QString::fromUtf8(addressFile.getFloor()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Side"),
+                        QString::fromUtf8(addressFile.getSide()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Place"),
+                        QString::fromUtf8(addressFile.getPlace()));
+        pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Zip Code 4"),
+                        QString::fromUtf8(addressFile.getZip4()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Zip Code 3"),
+                        QString::fromUtf8(addressFile.getZip3()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Postal Locality"),
+                        QString::fromUtf8(addressFile.getPostalLocality()));
+
+        pos_y += LINE_HEIGHT;
+
+        drawSingleField(painter, pos_x, pos_y, tr("Locality"),
+                        QString::fromUtf8(addressFile.getLocality()));
+
+        pos_y += 80;
+    }
+
+    if (params.isNotes)
+    {
+        QString perso_data;
+        perso_data = QString(card.readPersonalNotes());
+
+        if (perso_data.size() > 0)
+        {
+            //Force a page-break before PersoData only if we're drawing all the sections
+            if (sections_to_print == 3)
+            {
+                printer.newPage();
+                pos_y = 0;
+            }
+            pos_x = 0;
+
+
+            drawSectionHeader(painter, pos_x, pos_y, tr("PERSONAL NOTES"));
+
+            pos_y += 75;
+            painter.drawText(QRectF(pos_x, pos_y, 700, 700), Qt::TextWordWrap, perso_data);
+        }
+    }
+
+    //Finish drawing/printing
+    painter.end();
+    return true;
+}
+
 void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
                            QString reason, QString location, double isTimestamp, double isSmall) {
 
@@ -691,8 +1073,8 @@ void GAPI::doSignPDF(SignParams &params) {
         sig_handler.enableSmallSignatureFormat();
 
     card.SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
-                             params.location.toUtf8().data(), params.reason.toUtf8().data(),
-                             params.outputFile.toUtf8().data());
+                 params.location.toUtf8().data(), params.reason.toUtf8().data(),
+                 params.outputFile.toUtf8().data());
 
     emit signalPdfSignSucess();
 

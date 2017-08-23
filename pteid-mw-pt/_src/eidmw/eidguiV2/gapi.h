@@ -10,6 +10,7 @@
 #include <QtQml>
 #include <QPixmap>
 #include <poppler-qt5.h>
+#include <QPrinter>
 
 //MW libraries
 #include "eidlib.h"
@@ -88,6 +89,16 @@ public:
 
 private:
     QPixmap p;
+};
+
+struct PrintParams {
+public:
+    QString outputFile;
+    double isBasicInfo;
+    double isAddicionalInfo;
+    double isAddress;
+    double isNotes;
+    double isSign;
 };
 
 struct SignParams {
@@ -206,6 +217,8 @@ public slots:
     void startReadingAddress();
     int getShortcutFlag() {return m_shortcutFlag; }
     QString getShortcutInputPDF() { return m_shortcutInputPDF; }
+    void startPrintPDF(QString outputFile, double isBasicInfo,double isAddicionalInfo,
+                       double isAddress,double isNotes,double isSign);
     //This method should be used by basic and advanced signature modes
     void startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
                          QString reason, QString location, double isTimestamp, double isSmall);
@@ -258,6 +271,9 @@ signals:
     void signalCardChanged(const int error_code);
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage);
     void signalCertificatesChanged(const QVariantMap certificatesMap);
+    void signalPdfPrintSucess();
+    void signalPdfPrintSignSucess();
+    void signalPdfPrintFail();
 private:
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();
@@ -265,6 +281,9 @@ private:
     void setPersoDataFile(QString text);
     void getAddressFile();
     void doSignPDF(SignParams &params);
+    bool doSignPrintPDF(QString &file_to_sign, QString &outputsign);
+    void doPrintPDF(PrintParams &params);
+    bool drawpdf(QPrinter &printer, PrintParams params);
     void doSignBatchPDF(SignBatchParams &params);
     void doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);

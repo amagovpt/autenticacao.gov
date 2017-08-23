@@ -79,5 +79,6 @@
         <file>images/logo_compete2020.png</file>
         <file>contentPages/card/PageCardPrint.qml</file>
         <file>contentPages/card/PageCardPrintForm.ui.qml</file>
+        <file>images/pdf_document_header.png</file>
     </qresource>
 </RCC>

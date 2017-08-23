@@ -14,9 +14,15 @@ Item {
     anchors.fill: parent
 
     property alias propertyBusyIndicator : busyIndication
+    property alias propertyFileDialogOutput: fileDialogOutput
+    property alias propertyButtonPrint: buttonPrint
+    property alias propertyButtonPdf: buttonPdf
+    property alias propertySwitchBasic: switchBasic
+    property alias propertySwitchAdditional: switchAdditional
+    property alias propertySwitchAddress: switchAddress
+    property alias propertySwitchNotes: switchNotes
+    property alias propertySwitchPdfSign: switchPdfSign
 
-    enabled: false
-    opacity: 0.3
     Item {
         id: rowTop
         width: parent.width
@@ -32,6 +38,12 @@ Item {
         anchors.centerIn: parent
         // BusyIndicator should be on top of all other content
         z: 1
+    }
+
+    FileSaveDialog {
+        id: fileDialogOutput
+        title: "Escolha o ficheiro de destino"
+        nameFilters: ["Images (*.pdf)", "All files (*)"]
     }
 
     Item {
@@ -183,24 +195,9 @@ Item {
         anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
 
         Item {
-            id: rectCancel
-            width: parent.width / 3
-            Button {
-                id: buttonCancel
-                text: "Cancelar"
-                width: Constants.WIDTH_BUTTON
-                height: Constants.HEIGHT_BOTTOM_COMPONENT
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.capitalization: Font.MixedCase
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-        }
-        Item {
             id: rectPrint
-            width: parent.width / 3
+            width: parent.width / 2
             height: parent.height
-            anchors.left: rectCancel.right
             Button {
                 id: buttonPrint
                 text: "Imprimir"
@@ -216,7 +213,7 @@ Item {
         }
         Item {
             id: rectPdf
-            width: parent.width / 3
+            width: parent.width / 2
             height: parent.height
             anchors.left: rectPrint.right
             Button {
