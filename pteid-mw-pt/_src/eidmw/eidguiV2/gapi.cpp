@@ -632,6 +632,30 @@ void GAPI::startPrintPDF(QString outputFile, double isBasicInfo,double isAddicio
     QtConcurrent::run(this, &GAPI::doPrintPDF, params);
 }
 
+void GAPI::startPrint(QString outputFile, double isBasicInfo,double isAddicionalInfo,
+                         double isAddress,double isNotes,double isSign) {
+
+    PrintParams params = {outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isSign};
+
+    QPrinter printer;
+    bool res = false;
+
+    printer.setDocName("CartaoCidadao_signed.pdf");
+    QPrintDialog *dlg = new QPrintDialog(&printer);
+    if(dlg->exec() == QDialog::Accepted) {
+         qDebug() << "QPrintDialog! Accepted";
+         BEGIN_TRY_CATCH;
+         // Print PDF not Signed
+         res = drawpdf(printer, params);
+         if (res) {
+             emit signalPdfPrintSucess();
+         }else{
+             emit signalPdfPrintFail();
+         }
+         END_TRY_CATCH
+    }
+}
+
 bool GAPI::doSignPrintPDF(QString &file_to_sign, QString &outputsign) {
 
     BEGIN_TRY_CATCH
@@ -744,7 +768,8 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
                 "isBasicInfo = " << params.isBasicInfo << "isAddicionalInfo" << params.isAddicionalInfo << "isAddress"
              << params.isAddress << "isNotes = " << params.isNotes << "isSign = " << params.isSign;
 
-    double pos_x, pos_y, res;
+    double pos_x = 0, pos_y = 0;
+    bool res = false;
     int sections_to_print = 0;
 
     PTEID_EIDCard &card = getCardInstance();
@@ -758,15 +783,15 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
     if ( params.outputFile.toUtf8().size() > 0){
         printer.setOutputFileName(params.outputFile.toUtf8().data());
+        qDebug() << "Printing PDF";
     }else{
-        return false;
+        qDebug() << "Printing to default printer";
     }
 
     //TODO: Add custom fonts
     //addFonts();
 
     //Start drawing
-    pos_x = 0, pos_y = 0;
     QPainter painter;
     res = painter.begin(&printer);
     if(res == false){

@@ -78,7 +78,7 @@ PageCardPrintForm {
         onSignalPdfPrintFail: {
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text = "Gerar PDF"
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Erro ao gerar pdf. \
-\nVerifique se tem permissoes de escrita no ficheiro e no directorio de destino."
+Verifique se tem permissoes de escrita no ficheiro  \ne no directorio de destino."
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
         onSignalCardDataChanged: {
@@ -172,6 +172,17 @@ PageCardPrintForm {
             propertyFileDialogOutput.open()
         }
     }
+    propertyButtonPrint {
+        onClicked: {
+            console.log("Printing file")
+            gapi.startPrint("",
+                               propertySwitchBasic.checked,
+                               propertySwitchAdditional.checked,
+                               propertySwitchAddress.checked,
+                               propertySwitchNotes.checked,
+                               propertySwitchPdfSign.checked)
+        }
+    }
 
     propertySwitchAddress{
         onCheckedChanged: {
@@ -185,6 +196,17 @@ PageCardPrintForm {
                 }else {
                     propertySwitchAddress.checked = false
                 }
+            }
+        }
+    }
+    propertySwitchPdfSign {
+        onCheckedChanged: {
+            if(propertySwitchPdfSign.checked){
+                propertyButtonPrint.enabled = false
+                propertyButtonPrint.checked = false
+            } else {
+                propertyButtonPrint.enabled = true
+                propertyButtonPrint.checked = false
             }
         }
     }

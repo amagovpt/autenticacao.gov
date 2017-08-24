@@ -11,6 +11,7 @@
 #include <QPixmap>
 #include <poppler-qt5.h>
 #include <QPrinter>
+#include <QPrintDialog>
 
 //MW libraries
 #include "eidlib.h"
@@ -219,6 +220,8 @@ public slots:
     QString getShortcutInputPDF() { return m_shortcutInputPDF; }
     void startPrintPDF(QString outputFile, double isBasicInfo,double isAddicionalInfo,
                        double isAddress,double isNotes,double isSign);
+    void startPrint(QString outputFile, double isBasicInfo,double isAddicionalInfo,
+                       double isAddress,double isNotes,double isSign);
     //This method should be used by basic and advanced signature modes
     void startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
                          QString reason, QString location, double isTimestamp, double isSmall);
@@ -283,6 +286,7 @@ private:
     void doSignPDF(SignParams &params);
     bool doSignPrintPDF(QString &file_to_sign, QString &outputsign);
     void doPrintPDF(PrintParams &params);
+    void doPrint(PrintParams &params);
     bool drawpdf(QPrinter &printer, PrintParams params);
     void doSignBatchPDF(SignBatchParams &params);
     void doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
