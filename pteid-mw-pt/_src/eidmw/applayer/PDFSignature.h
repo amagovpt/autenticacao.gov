@@ -33,6 +33,7 @@ namespace eIDMW
 		EIDMW_APL_API PDFSignature(const char *path);
 		EIDMW_APL_API ~PDFSignature();
 
+                EIDMW_APL_API void setFile(char *pdf_file_path);
 		//Batch Operations (with PIN caching)
 		EIDMW_APL_API void batchAddFile(char *file_path, bool last_page);
 		EIDMW_APL_API void enableTimestamp();

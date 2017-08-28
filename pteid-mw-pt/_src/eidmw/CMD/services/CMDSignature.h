@@ -24,6 +24,7 @@ namespace eIDMW {
 
 	class CMDSignature{
         public:
+                        PTEIDCMD_API CMDSignature();
 			PTEIDCMD_API CMDSignature(PTEID_PDFSignature *in_pdf_handler);
 			PTEIDCMD_API ~CMDSignature();
 			PTEIDCMD_API int signOpen(std::string in_userId, std::string in_pin
@@ -34,6 +35,7 @@ namespace eIDMW {
                         , const char *outfile_path );
 
 			PTEIDCMD_API int signClose(std::string in_code);
+                        PTEIDCMD_API void set_pdf_handler(PTEID_PDFSignature *in_pdf_handler );
 
         private:
             CMDServices cmdService;

@@ -9,281 +9,20 @@ import eidguiV2 1.0
 
 PageServicesSignSimpleForm {
 
-    Dialog {
-        id: dialog
-        title: "Arraste um único ficheiro"
-        standardButtons: Dialog.Ok
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
-        Label {
-            text: "Para assinar múltiplos ficheiros use a opção assinatura avançada"
-        }
-    }
-    Dialog {
-        id: dialogSignCMD
-        width: 600
-        height: 300
-        font.family: lato.name
-        // Center dialog in the main view
-        x: - mainMenuView.width - subMenuView.width
-           + mainView.width * 0.5 - dialogSignCMD.width * 0.5
-        y: parent.height * 0.5 - dialogSignCMD.height * 0.5
-
-        header: Label {
-            id: labelTextTitle
-            text: "Assinar com Chave Móvel Digital"
-            visible: true
-            elide: Label.ElideRight
-            padding: 24
-            bottomPadding: 0
-            font.bold: true
-            font.pixelSize: 16
-            color: Constants.COLOR_MAIN_BLUE
-        }
-
-        Item {
-            width: parent.width
-            height: rectMessage.height + rectMobilNumber.height + rectPin.height
-
-            Item {
-                id: rectMessage
-                width: parent.width
-                height: 50
-                anchors.horizontalCenter: parent.horizontalCenter
-                Text {
-                    id: textLinkCMD
-                    textFormat: Text.RichText
-                    text: "<a href=\"https://cmd.autenticacao.gov.pt/Ama.Authentication.Frontend\">\
-                    Click para conhecer a Chave Móvel Digital</a>"
-                    font.italic: true
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_BODY
-                    height: parent.height
-                    width: parent.width
-                    anchors.bottom: parent.bottom
-                    onLinkActivated: {
-                        Qt.openUrlExternally(link)
-                    }
-                }
-            }
-
-            Item {
-                id: rectMobilNumber
-                width: parent.width
-                height: 50
-                anchors.top: rectMessage.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                Text {
-                    id: textPinCurrent
-                    text: "Nº de Telemóvel"
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                    height: parent.height
-                    width: parent.width * 0.5
-                    anchors.bottom: parent.bottom
-                }
-                ComboBox {
-                    id: comboBoxIndicative
-                    width: parent.width * 0.15
-                    height: parent.height
-                    anchors.verticalCenter: parent.verticalCenter
-                    model: ["+351"]
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.capitalization: Font.MixedCase
-                    visible: true
-                    anchors.left: textPinCurrent.right
-                    anchors.bottom: parent.bottom
-                }
-                TextField {
-                    id: textFieldMobileNumber
-                    width: parent.width * 0.3
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.italic: textFieldMobileNumber.text === "" ? true: false
-                    placeholderText: "Nº de Telemóvel?"
-                    validator: RegExpValidator { regExp: /[0-9]+/ }
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    clip: false
-                    anchors.left: comboBoxIndicative.right
-                    anchors.leftMargin:  parent.width * 0.05
-                    anchors.bottom: parent.bottom
-                }
-            }
-            Item {
-                id: rectPin
-                width: parent.width
-                height: 50
-                anchors.top: rectMobilNumber.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                Text {
-                    id: textPinNew
-                    text: "PIN da Chave Móvel Digital"
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                    height: parent.height
-                    width: parent.width * 0.5
-                    anchors.bottom: parent.bottom
-                }
-                TextField {
-                    id: textFieldPin
-                    width: parent.width * 0.5
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.italic: textFieldPin.text === "" ? true: false
-                    placeholderText: "PIN?"
-                    echoMode : TextInput.Password
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    clip: false
-                    anchors.left: textPinNew.right
-                    anchors.bottom: parent.bottom
-                }
-            }
-        }
-
-        standardButtons: {
-            textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0
-                    ? DialogButtonBox.Ok | DialogButtonBox.Cancel : DialogButtonBox.Cancel
-        }
-
-        onAccepted: {
-            var loadedFilePath = filesModel.get(0).fileUrl
-            var isTimestamp = ""
-            var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
-            if (Qt.platform.os === "windows") {
-                outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
-            }else{
-                outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-            }
-            var page = 1
-            propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
-                                        page = propertySpinBoxControl.value
-            var reason = ""
-            var location = ""
-            var isSmallSignature = ""
-            var coord_x = propertyPDFPreview.propertyCoordX
-            //coord_y must be the lower left corner of the signature rectangle
-            var coord_y = propertyPDFPreview.propertyCoordY
-
-            console.log("Output filename: " + outputFile)
-            console.log("Signing in position coord_x: " + coord_x
-                        + " and coord_y: "+coord_y)
-
-            var mobileNumber = comboBoxIndicative.currentText + " " + textFieldMobileNumber.text
-
-            gapi.signCMD(mobileNumber,textFieldPin.text,
-                         loadedFilePath,outputFile,page,
-                         coord_x,coord_y,
-                         reason,location,
-                         isTimestamp, isSmallSignature)
-
-            progressBarIndeterminate.visible = true
-            progressBar.visible = true
-            textFieldMobileNumber.text = ""
-            textFieldPin.text = ""
-            dialogCMDProgress.open()
-        }
-        onRejected: {
-            mainFormID.opacity = 1.0
-        }
-    }
-    Dialog {
-        id: dialogCMDProgress
-        width: 600
-        height: 300
-        font.family: lato.name
-        // Center dialog in the main view
-        x: - mainMenuView.width - subMenuView.width
-           + mainView.width * 0.5 - dialogCMDProgress.width * 0.5
-        y: parent.height * 0.5 - dialogCMDProgress.height * 0.5
-
-        header: Label {
-            id: labelConfirmOfAddressProgressTextTitle
-            text: "Assinar com Chave Móvel Digital"
-            visible: true
-            elide: Label.ElideRight
-            padding: 24
-            bottomPadding: 0
-            font.bold: true
-            font.pixelSize: 16
-            color: Constants.COLOR_MAIN_BLUE
-        }
-
-        Item {
-            width: parent.width
-            height: rectMessageTop.height + progressBar.height + progressBarIndeterminate.height
-
-            Item {
-                id: rectMessageTop
-                width: parent.width
-                height: 150
-                anchors.horizontalCenter: parent.horizontalCenter
-                Text {
-                    id: textMessageTop
-                    text: ""
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_BODY
-                    height: parent.height
-                    width: parent.width
-                    anchors.bottom: parent.bottom
-                    wrapMode: Text.WordWrap
-                }
-            }
-
-            ProgressBar {
-                id: progressBar
-                width: parent.width * 0.5
-                anchors.top: rectMessageTop.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                height: 20
-                to: 100
-                value: 0
-                visible: true
-                indeterminate: false
-                z:1
-
-            }
-
-            ProgressBar {
-                id: progressBarIndeterminate
-                width: parent.width * 0.5
-                anchors.top: progressBar.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                height: 20
-                to: 100
-                value: 0
-                visible: true
-                indeterminate: true
-                z:1
-            }
-
-        }
-
-        standardButtons: {
-            DialogButtonBox.Ok
-        }
-
-        onAccepted: {
-            mainFormID.opacity = 1.0
-        }
-        onRejected: {
-            mainFormID.opacity = 1.0
-        }
-    }
     Connections {
         target: gapi
+        onSignalOpenCMDSucess: {
+            console.log("Signal Open CMD Sucess")
+            progressBarIndeterminate.visible = false
+            rectReturnCode.visible = true
+            dialogCMDProgress.standardButtons = DialogButtonBox.Ok | DialogButtonBox.Cancel
+        }
+        onSignalCloseCMDSucess: {
+            console.log("Signal Close CMD Sucess")
+            progressBarIndeterminate.visible = false
+            dialogCMDProgress.standardButtons = DialogButtonBox.Ok
+        }
+
         onSignalPdfSignSucess: {
             signsuccess_dialog.visible = true
         }
@@ -326,7 +65,6 @@ PageServicesSignSimpleForm {
             console.log("CMD sign change --> update progress bar with value = " + value)
             progressBar.value = value
             if(value === 100) {
-                progressBar.visible = false
                 progressBarIndeterminate.visible = false
             }
         }
@@ -340,6 +78,340 @@ PageServicesSignSimpleForm {
             propertyBusyIndicator.running = false
         }
     }
+    Dialog {
+        id: dialog
+        title: "Arraste um único ficheiro"
+        standardButtons: Dialog.Ok
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        Label {
+            text: "Para assinar múltiplos ficheiros use a opção assinatura avançada"
+        }
+    }
+    Dialog {
+        id: dialogSignCMD
+        width: 400
+        height: 300
+        font.family: lato.name
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width
+           + mainView.width * 0.5 - dialogSignCMD.width * 0.5
+        y: parent.height * 0.5 - dialogSignCMD.height * 0.5
+
+        header: Label {
+            id: labelTextTitle
+            text: "Assinar com Chave Móvel Digital"
+            visible: true
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: 16
+            color: Constants.COLOR_MAIN_BLUE
+        }
+
+        Item {
+            width: parent.width
+            height: rectMessageTopLogin.height + rectMobilNumber.height + rectPin.height
+
+            Item {
+                id: rectMessageTopLogin
+                width: parent.width
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textMessageTopLogin
+                    text: "Introduza dados de login"
+
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                    wrapMode: Text.WordWrap
+                }
+            }
+            Item {
+                id: rectMobilNumber
+                width: parent.width
+                height: 50
+                anchors.top: rectMessageTopLogin.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textPinCurrent
+                    text: "Número de Telemóvel"
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_BODY
+                    height: parent.height
+                    width: parent.width * 0.5
+                    anchors.bottom: parent.bottom
+                }
+                ComboBox {
+                    id: comboBoxIndicative
+                    width: parent.width * 0.20
+                    height: parent.height
+                    anchors.verticalCenter: parent.verticalCenter
+                    model: ["+351"]
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                    visible: true
+                    anchors.left: textPinCurrent.right
+                    anchors.bottom: parent.bottom
+                }
+                TextField {
+                    id: textFieldMobileNumber
+                    width: parent.width * 0.25
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.italic: textFieldMobileNumber.text === "" ? true: false
+                    placeholderText: "Número?"
+                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    clip: false
+                    anchors.left: comboBoxIndicative.right
+                    anchors.leftMargin:  parent.width * 0.05
+                    anchors.bottom: parent.bottom
+                }
+            }
+            Item {
+                id: rectPin
+                width: parent.width
+                height: 50
+                anchors.top: rectMobilNumber.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textPinNew
+                    text: "PIN"
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_BODY
+                    height: parent.height
+                    width: parent.width * 0.5
+                    anchors.bottom: parent.bottom
+                }
+                TextField {
+                    id: textFieldPin
+                    width: parent.width * 0.5
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.italic: textFieldPin.text === "" ? true: false
+                    placeholderText: "PIN?"
+                    echoMode : TextInput.Password
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    clip: false
+                    anchors.left: textPinNew.right
+                    anchors.bottom: parent.bottom
+                }
+            }
+            Item {
+                id: rectMessage
+                width: parent.width
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: rectPin.bottom
+                Text {
+                    id: textLinkCMD
+                    textFormat: Text.RichText
+                    text: "<a href=\"https://cmd.autenticacao.gov.pt/Ama.Authentication.Frontend\">\
+                    Clique para conhecer a Chave Móvel Digital</a>"
+                    font.italic: true
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_BODY
+                    height: parent.height
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                    onLinkActivated: {
+                        Qt.openUrlExternally(link)
+                    }
+                }
+            }
+        }
+
+        standardButtons: {
+            textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0
+                    ? DialogButtonBox.Ok | DialogButtonBox.Cancel : DialogButtonBox.Cancel
+        }
+
+        onAccepted: {
+            var loadedFilePath = filesModel.get(0).fileUrl
+            var isTimestamp = ""
+            var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
+            if (Qt.platform.os === "windows") {
+                outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+            }else{
+                outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+            }
+            var page = 1
+            propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
+                                        page = propertySpinBoxControl.value
+            var reason = ""
+            var location = ""
+            var isSmallSignature = ""
+            var coord_x = propertyPDFPreview.propertyCoordX
+            //coord_y must be the lower left corner of the signature rectangle
+            var coord_y = propertyPDFPreview.propertyCoordY
+
+            console.log("Output filename: " + outputFile)
+            console.log("Signing in position coord_x: " + coord_x
+                        + " and coord_y: "+coord_y)
+
+            var mobileNumber = comboBoxIndicative.currentText + " " + textFieldMobileNumber.text
+
+            gapi.signOpenCMD(mobileNumber,textFieldPin.text,
+                         loadedFilePath,outputFile,page,
+                         coord_x,coord_y,
+                         reason,location,
+                         isTimestamp, isSmallSignature)
+
+            progressBarIndeterminate.visible = true
+            progressBar.visible = true
+            textFieldMobileNumber.text = ""
+            textFieldPin.text = ""
+            dialogCMDProgress.open()
+        }
+        onRejected: {
+            mainFormID.opacity = 1.0
+        }
+    }
+    Dialog {
+        id: dialogCMDProgress
+        width: 400
+        height: 300
+        font.family: lato.name
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width
+           + mainView.width * 0.5 - dialogCMDProgress.width * 0.5
+        y: parent.height * 0.5 - dialogCMDProgress.height * 0.5
+
+        header: Label {
+            id: labelConfirmOfAddressProgressTextTitle
+            text: "Assinar com Chave Móvel Digital"
+            visible: true
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: 16
+            color: Constants.COLOR_MAIN_BLUE
+        }
+        ProgressBar {
+            id: progressBar
+            width: parent.width
+            anchors.horizontalCenter: parent.horizontalCenter
+            height: 20
+            to: 100
+            value: 0
+            visible: true
+            indeterminate: false
+            z:1
+        }
+
+        Item {
+            width: parent.width
+            height: rectMessageTop.height + rectReturnCode.height + progressBarIndeterminate.height
+            anchors.top: progressBar.bottom
+
+            Item {
+                id: rectMessageTop
+                width: parent.width
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textMessageTop
+                    text: ""
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                    wrapMode: Text.WordWrap
+                }
+            }
+            Item {
+                id: rectReturnCode
+                width: parent.width
+                height: 50
+                anchors.top: rectMessageTop.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: false
+                Text {
+                    id: textReturnCode
+                    text: "Introduza o código :"
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_BODY
+                    height: parent.height
+                    width: parent.width * 0.5
+                    anchors.bottom: parent.bottom
+                }
+                TextField {
+                    id: textFieldReturnCode
+                    width: parent.width * 0.5
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.italic: textFieldReturnCode.text === "" ? true: false
+                    placeholderText: "Código?"
+                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    clip: false
+                    anchors.left: textReturnCode.right
+                    anchors.bottom: parent.bottom
+                }
+            }
+
+            ProgressBar {
+                id: progressBarIndeterminate
+                width: parent.width
+                anchors.top: rectReturnCode.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: 20
+                to: 100
+                value: 0
+                visible: true
+                indeterminate: true
+                z:1
+            }
+
+        }
+
+        standardButtons: {
+            DialogButtonBox.Cancel
+        }
+
+        onAccepted: {
+            console.log("Send sms_token : " + textFieldReturnCode.text)
+            if( progressBar.value < 100){
+                gapi.signCloseCMD(textFieldReturnCode.text)
+                progressBarIndeterminate.visible = true
+                rectReturnCode.visible = false
+                textFieldReturnCode.text = ""
+                dialogCMDProgress.open()
+                dialogCMDProgress.standardButtons = DialogButtonBox.Cancel
+            }else{
+                dialogCMDProgress.close()
+                mainFormID.opacity = 1.0
+            }
+        }
+        onRejected: {
+            mainFormID.opacity = 1.0
+        }
+    }
+
     Dialog {
         id: signsuccess_dialog
         width: 400
@@ -456,6 +528,7 @@ PageServicesSignSimpleForm {
     }
     propertyFileDialogCMDOutput {
         onAccepted: {
+            mainFormID.opacity = 0.5
             dialogSignCMD.open()
         }
     }

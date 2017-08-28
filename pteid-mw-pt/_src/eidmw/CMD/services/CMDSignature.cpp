@@ -24,6 +24,10 @@ namespace eIDMW {
         printf( "\n" );
     }
 
+    CMDSignature::CMDSignature() {
+        m_pdf_handler = NULL;
+    }
+
     CMDSignature::CMDSignature(PTEID_PDFSignature *in_pdf_handler ) {
         m_pdf_handler = in_pdf_handler;
     }
@@ -32,6 +36,9 @@ namespace eIDMW {
         m_pdf_handler = NULL;
     }
 
+    void CMDSignature::set_pdf_handler(PTEID_PDFSignature *in_pdf_handler ) {
+        m_pdf_handler = in_pdf_handler;
+    }
 
     int CMDSignature::cli_getCertificate( std::string in_userId) {
         if ( NULL == m_pdf_handler ){

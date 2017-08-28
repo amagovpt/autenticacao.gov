@@ -22,6 +22,8 @@ GAPI::GAPI(QObject *parent) :
     QObject(parent) {
     image_provider = new PhotoImageProvider();
     image_provider_pdf = new PDFPreviewImageProvider();
+    cmd_signature = new eIDMW::CMDSignature();
+    cmd_pdfSignature = new eIDMW::PTEID_PDFSignature();
     m_addressLoaded = false;
     m_shortcutFlag = 0;
 }
@@ -427,7 +429,8 @@ void GAPI::showSignCMDDialog(long code)
 
     if (sam_error_code != 0)
     {
-        error_msg += "\n\n" + tr("Error code = ") + QString::number(sam_error_code);
+        error_msg += "\n\n";
+        error_msg += "Error code = " + QString::number(sam_error_code);
     }
 
     if (code != 0)
@@ -503,31 +506,18 @@ void GAPI::changeAddress(QString process, QString secret_code)
     QtConcurrent::run(this, &GAPI::doChangeAddress, processUtf8, secret_codeUtf8);
 }
 
-void GAPI::doSignCMD(CmdSignParams &params)
+void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdSignParams &params)
 {
-    qDebug() << "doSignCMD! MobileNumber = " << params.mobileNumber << " secret_code = " << params.secret_code <<
+    qDebug() << "doOpenSignCMD! MobileNumber = " << params.mobileNumber << " secret_code = " << params.secret_code <<
                 " loadedFilePath = " << params.loadedFilePath << " outputFile = " << params.outputFile <<
                 "page = " << params.page << "coord_x" << params.coord_x << "coord_y" << params.coord_y <<
                 "reason = " << params.reason << "location = " << params.location;
 
     int ret = 0;
-    std::string sms_token = "111111";
 
     try {
-
-        QString fullInputPath = params.loadedFilePath;
-        PTEID_PDFSignature sig_handler(fullInputPath.toUtf8().data());
-
-        signalUpdateProgressBar(10);
-
-        if (params.isTimestamp > 0)
-            sig_handler.enableTimestamp();
-        if (params.isSmallSignature > 0)
-            sig_handler.enableSmallSignatureFormat();
-
-        eIDMW::CMDSignature cmd_signature(&sig_handler);
-
-        ret = cmd_signature.signOpen( params.mobileNumber.toStdString(), params.secret_code.toStdString(),
+        signalUpdateProgressBar(25);
+        ret = cmd_signature->signOpen( params.mobileNumber.toStdString(), params.secret_code.toStdString(),
                                       params.page,
                                       params.coord_x, params.coord_y,
                                       params.location.toUtf8().data(), params.reason.toUtf8().data(),
@@ -539,16 +529,6 @@ void GAPI::doSignCMD(CmdSignParams &params)
             signalUpdateProgressBar(100);
             return;
         }
-        signalUpdateProgressBar(50);
-        signalUpdateProgressStatus("Assinando com Chave Móvel Digital ...");
-
-        ret = cmd_signature.signClose( sms_token );
-        if ( ret != 0 ) {
-            qDebug() << "signClose failed!" << endl;
-            signCMDFinished(ret);
-            signalUpdateProgressBar(100);
-            return;
-        }
 
 
     } catch (PTEID_Exception &e) {
@@ -556,22 +536,49 @@ void GAPI::doSignCMD(CmdSignParams &params)
         signalUpdateProgressBar(100);
     }
 
-    signCMDFinished(ret);
-    signalUpdateProgressBar(100);
-    emit signalPdfSignSucess();
+    signalUpdateProgressBar(50);
+    signalUpdateProgressStatus("Login com sucesso. Aguarde a recepção do código enviado por sms!");
+    emit signalOpenCMDSucess();
 }
 
-void GAPI::signCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
+void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
+{
+    qDebug() << "doCloseSignCMD! " << "sms_token = " << sms_token;
+
+    int ret = 0;
+    std::string local_sms_token = sms_token.toUtf8().data();
+    //std::string local_sms_token =  "111111";
+
+    try {
+        signalUpdateProgressBar(75);
+        ret = cmd_signature->signClose( local_sms_token );
+        if ( ret != 0 ) {
+            qDebug() << "signClose failed!" << endl;
+            signCMDFinished(ret);
+            signalUpdateProgressBar(100);
+            return;
+        }
+
+    } catch (PTEID_Exception &e) {
+        qDebug() << "Caught exception in some SDK method. Error code: " << hex << e.GetError() << endl;
+    }
+
+    signCMDFinished(ret);
+    signalUpdateProgressBar(100);
+    emit signalCloseCMDSucess();
+}
+
+void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
                    QString outputFile, int page, double coord_x, double coord_y,
                    QString reason, QString location, double isTimestamp, double isSmall)
 {
-    qDebug() << "signCMD! MobileNumber = " + mobileNumber + " secret_code = " + secret_code +
+    qDebug() << "signOpenCMD! MobileNumber = " + mobileNumber + " secret_code = " + secret_code +
                 " loadedFilePath = " + loadedFilePath + " outputFile = " + outputFile +
                 "page = " + page + "coord_x" + coord_x + "coord_y" + coord_y +
                 "reason = " + reason + "location = " + location +
                 "isTimestamp = " +  isTimestamp + "isSmall = " + isSmall;
 
-    signalUpdateProgressStatus("Conectando com o servidor da Chave Móvel Digital ...");
+    signalUpdateProgressStatus("Conectando com o servidor");
 
     connect(this, SIGNAL(signCMDFinished(long)),
             this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
@@ -579,7 +586,30 @@ void GAPI::signCMD(QString mobileNumber, QString secret_code, QString loadedFile
     CmdSignParams params = {mobileNumber, secret_code,loadedFilePath,outputFile,
                             page,coord_x,coord_y,reason,location,isTimestamp,isSmall};
 
-    QtConcurrent::run(this, &GAPI::doSignCMD, params);
+    QString fullInputPath = params.loadedFilePath;
+
+    cmd_pdfSignature->setFileSigning(fullInputPath.toUtf8().data());
+
+
+    if (params.isTimestamp > 0)
+        cmd_pdfSignature->enableTimestamp();
+    if (params.isSmallSignature > 0)
+        cmd_pdfSignature->enableSmallSignatureFormat();
+
+    cmd_signature->set_pdf_handler(cmd_pdfSignature);
+    QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, params);
+}
+
+void GAPI::signCloseCMD(QString sms_token)
+{
+    qDebug() << "signCloseCMD! sms_token = " + sms_token;
+
+    signalUpdateProgressStatus("Enviando código de confirmação para o servidor");
+
+    connect(this, SIGNAL(signCMDFinished(long)),
+            this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
+
+    QtConcurrent::run(this, &GAPI::doCloseSignCMD, cmd_signature, sms_token);
 }
 
 QString GAPI::getCardActivation() {

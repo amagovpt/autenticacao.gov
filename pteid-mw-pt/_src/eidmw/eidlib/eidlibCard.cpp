@@ -338,6 +338,11 @@ PTEID_PDFSignature::~PTEID_PDFSignature()
 void PTEID_PDFSignature::addToBatchSigning(char *input_path)
 {
 	mp_signature->batchAddFile(input_path, false);
+}
+
+void PTEID_PDFSignature::setFileSigning(char *input_path)
+{
+        mp_signature->setFile(input_path);
 
 }
 

@@ -243,10 +243,12 @@ public slots:
 
     void changeAddress(QString process, QString secret_code);
     void doChangeAddress(const char *process, const char *secret_code);
-    void signCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
+    void signOpenCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
                   QString outputFile, int page, double coord_x, double coord_y, QString reason, QString location,
                  double isTimestamp, double isSmall);
-    void doSignCMD(CmdSignParams &params);
+    void signCloseCMD(QString sms_token);
+    void doOpenSignCMD(CMDSignature *cmd_signature, CmdSignParams &params);
+    void doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token);
     static void addressChangeCallback(void *, int);
     void showChangeAddressDialog(long code);
     void showSignCMDDialog(long code);
@@ -271,6 +273,8 @@ signals:
     void signalUpdateProgressStatus(const QString statusMessage);
     void addressChangeFinished(long return_code);
     void signCMDFinished(long return_code);
+    void signalOpenCMDSucess();
+    void signalCloseCMDSucess();
     void signalCardChanged(const int error_code);
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage);
     void signalCertificatesChanged(const QVariantMap certificatesMap);
@@ -301,7 +305,8 @@ private:
     //Don't free this!, we release ownership to the QMLEngine in buildImageProvider()
     PhotoImageProvider *image_provider;
 
-
+    CMDSignature *cmd_signature;
+    PTEID_PDFSignature *cmd_pdfSignature;
     QString m_persoData;
     bool m_addressLoaded;
     int m_shortcutFlag;

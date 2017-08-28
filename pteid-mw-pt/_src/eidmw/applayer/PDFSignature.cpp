@@ -102,6 +102,30 @@ namespace eIDMW
 			delete m_doc;
 	}
 
+        void PDFSignature::setFile(char *pdf_file_path)
+        {
+            m_visible = false;
+            m_page = 1;
+            m_sector = 0;
+            //Illegal values to start with
+            location_x = -1;
+            location_y = -1;
+            m_civil_number = NULL;
+            m_citizen_fullname = NULL;
+            m_batch_mode = false;
+            m_timestamp = false;
+            m_isLandscape = false;
+            m_small_signature = false;
+            my_custom_image.img_data = NULL;
+            m_doc = new PDFDoc(new GooString(pdf_file_path));
+
+            m_card = NULL;
+            m_signerInfo = NULL;
+            m_pkcs7 = NULL;
+            m_outputName = NULL;
+            m_signStarted = false;
+            m_isExternalCertificate = false;
+        }
 	void PDFSignature::batchAddFile(char *file_path, bool last_page)
 	{
 		m_files_to_sign.push_back(std::make_pair(_strdup(file_path), last_page));

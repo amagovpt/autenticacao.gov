@@ -764,6 +764,7 @@ class PTEID_PDFSignature
 		PTEIDSDK_API PTEID_PDFSignature(const char *input_path);
 		PTEIDSDK_API ~PTEID_PDFSignature();
 
+                PTEIDSDK_API void setFileSigning(char *input_path);
 		PTEIDSDK_API void addToBatchSigning(char *input_path);
 		PTEIDSDK_API void addToBatchSigning(char *input_path, bool last_page);
 		PTEIDSDK_API int getPageCount();
