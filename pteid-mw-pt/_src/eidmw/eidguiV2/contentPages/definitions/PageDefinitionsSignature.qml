@@ -26,7 +26,7 @@ PageDefinitionsSignatureForm {
             signsuccess_dialog.visible = true
         }
         onSignalCardDataChanged: {
-            console.log("Services Sign Advanced --> Data Changed")
+            console.log("Definitions Signature --> Data Changed")
             //console.trace();
             propertySigReasonText.text = "{ Motivo da assinatura }"
             propertySigSignedByText.text = "Assinado por: "
@@ -42,6 +42,64 @@ PageDefinitionsSignatureForm {
             propertySigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
 
             propertyBusyIndicator.running = false
+        }
+        onSignalCardAccessError: {
+            console.log("Definitions Signature --> onSignalCardAccessError")
+            if (error_code == GAPI.NoReaderFound) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "No card reader found!"
+            }
+            else if (error_code == GAPI.NoCardFound) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "No Card Found!"
+            }
+            else if (error_code == GAPI.SodCardReadError) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        "Consistência da informação do cartão está comprometida!"
+            }
+            else {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Card Access Error!"
+            }
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+
+            propertySigReasonText.text = "{ Motivo da assinatura }"
+            propertySigSignedByText.text = "Assinado por: "
+            propertySigSignedByNameText.text = ""
+            propertySigNumIdText.text = "Num. de Identificação Civil: "
+            propertySigLocationText.text = "{ Localização da assinatura }"
+            propertySigImg.source = "qrc:/images/logo_CC.png"
+            propertySigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
+
+            propertyBusyIndicator.running = false
+        }
+        onSignalCardChanged: {
+            console.log("Definitions Signature --> onSignalCardChanged")
+            if (error_code == GAPI.ET_CARD_REMOVED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Cartão do Cidadão removido"
+                propertySigReasonText.text = "{ Motivo da assinatura }"
+                propertySigSignedByText.text = "Assinado por: "
+                propertySigSignedByNameText.text = ""
+                propertySigNumIdText.text = "Num. de Identificação Civil: "
+                propertySigLocationText.text = "{ Localização da assinatura }"
+                propertySigImg.source = "qrc:/images/logo_CC.png"
+                propertySigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
+            }
+            else if (error_code == GAPI.ET_CARD_CHANGED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Cartão do Cidadão inserido"
+                propertyBusyIndicator.running = true
+                gapi.startCardReading()
+            }
+            else{
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        "Erro da aplicação! Por favor reinstale a aplicação:"
+            }
+
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
     }
 
