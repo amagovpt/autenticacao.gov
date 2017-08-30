@@ -1652,14 +1652,14 @@ void ScapSignature::getAttributeSuppliers()
 	}
 	else if (m_proxyInfo.getProxyHost().size() > 0)
 	{
-		sp->proxy_host = m_proxyInfo.getProxyHost().toUtf8().constData();
+		sp->proxy_host = strdup(m_proxyInfo.getProxyHost().toUtf8().constData());
 		sp->proxy_port = m_proxyInfo.getProxyPort().toLong();
 		eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Using Manual Proxy: host=%s, port=%ld", sp->proxy_host, sp->proxy_port);
 
 		if (m_proxyInfo.getProxyUser().size() > 0)
 		{
-			sp->proxy_userid = m_proxyInfo.getProxyUser().toUtf8().constData();
-			sp->proxy_passwd = m_proxyInfo.getProxyPwd().toUtf8().constData();
+			sp->proxy_userid = strdup(m_proxyInfo.getProxyUser().toUtf8().constData());
+			sp->proxy_passwd = strdup(m_proxyInfo.getProxyPwd().toUtf8().constData());
 		}
 	}
 
