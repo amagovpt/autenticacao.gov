@@ -17,7 +17,7 @@ namespace eIDMW {
             printf( "%s\n", msg );
         }
 
-        for(unsigned int i = 0; i < dataLen; i++ ) {
+        for (unsigned int i = 0; i < dataLen; i++ ) {
             if ( ( i > 0) && ( 0 == ( i % 20 ))) printf("\n");
             printf( "%02x", data[i] );
         }

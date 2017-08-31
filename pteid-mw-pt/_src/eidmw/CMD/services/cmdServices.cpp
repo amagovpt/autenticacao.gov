@@ -10,12 +10,14 @@
 #include "WSHttpBinding_USCORECCMovelSignature.nsmap"
 #include "soapWSHttpBinding_USCORECCMovelSignatureProxy.h"
 
+#include "Util.h"
+#include "Config.h"
 #include "MiscUtil.h"
 
 #define CC_MOVEL_SERVICE_GET_CERTIFICATE    ( (char *)"http://Ama.Authentication.Service/CCMovelSignature/GetCertificate" )
 #define CC_MOVEL_SERVICE_SIGN               ( (char *)"http://Ama.Authentication.Service/CCMovelSignature/CCMovelSign" )
 #define CC_MOVEL_SERVICE_VALIDATE_OTP       ( (char *)"http://Ama.Authentication.Service/CCMovelSignature/ValidateOtp" )
-#define ENDPOINT_CC_MOVEL_SIGNATURE         ( (const char *)"https://dev.cmd.autenticacao.gov.pt/Ama.Authentication.Service/CCMovelSignature.svc" )
+#define ENDPOINT_CC_MOVEL_SIGNATURE         ( (const char *)"/Ama.Authentication.Service/CCMovelSignature.svc" )
 
 #define STR_EMPTY                           ""
 #define SOAP_MAX_RETRIES                    3
@@ -79,13 +81,14 @@ xsd__base64Binary *encode_base64( soap *sp, std::string in_str ){
     ***    handleError()                                  ***
     ********************************************************* */
 int handleError( WSHttpBinding_USCORECCMovelSignatureProxy proxy, int ret ){
-    if ( ret != SOAP_OK ){
+    if ( ret != SOAP_OK ) {
         if ( ( proxy.soap_fault() != NULL )
-            && ( proxy.soap_fault()->faultstring ) ){
+            && ( proxy.soap_fault()->faultstring)) {
             MWLOG_ERR( logBuf
                         , "SOAP Fault! %s"
                         , proxy.soap_fault()->faultstring );
-        }else{
+        }
+        else{
             MWLOG_ERR( logBuf, "Unknown SOAP Fault! - ret: %d", ret );
         }
 
@@ -105,22 +108,28 @@ int handleError( WSHttpBinding_USCORECCMovelSignatureProxy proxy, int ret ){
 /*  *********************************************************
     ***    CMDServices::CMDServices()                     ***
     ********************************************************* */
-CMDServices::CMDServices( const char *endpoint ){
+CMDServices::CMDServices( const char *endpoint ) {
     if ( !init( SOAP_RECV_TIMEOUT_DEFAULT
               , SOAP_SEND_TIMEOUT_DEFAULT
               , SOAP_CONNECT_TIMEOUT_DEFAULT
-              , SOAP_MUST_NO_UNDERSTAND ) ) return;
+              , SOAP_MUST_NO_UNDERSTAND ) ) 
+        return;
 
     const char *new_endpoint = NULL;
-    new_endpoint = ( NULL == endpoint ) ? ENDPOINT_CC_MOVEL_SIGNATURE : endpoint;
+    std::string cmd_host = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_HOST));
+    std::string cmd_endpoint = "https://" + cmd_host + ENDPOINT_CC_MOVEL_SIGNATURE;
+      
+    new_endpoint = ( NULL == endpoint ) ? cmd_endpoint.c_str() : endpoint;
 
-    setEndPoint( new_endpoint );
+    MWLOG_DEBUG(logBuf, "Using Endpoint: %s", new_endpoint);
+
+    setEndPoint(strdup(new_endpoint));
 }
 
 /*  *********************************************************
     ***    CMDServices::~CMDServices()                    ***
     ********************************************************* */
-CMDServices::~CMDServices(){
+CMDServices::~CMDServices() {
     soap *sp = getSoap();
     if ( NULL == sp ) return;
 
@@ -133,8 +142,8 @@ CMDServices::~CMDServices(){
 /*  *********************************************************
     ***    CMDServices::init()                            ***
     ********************************************************* */
-bool CMDServices::init( int recv_timeout, int send_timeout
-                        , int connect_timeout, short mustUnderstand ){
+bool CMDServices::init(int recv_timeout, int send_timeout,
+                        int connect_timeout, short mustUnderstand) {
     soap *sp = soap_new2( SOAP_C_UTFSTRING, SOAP_C_UTFSTRING );
     if ( sp == NULL ){
         MWLOG_ERR( logBuf, "Null soap" );
