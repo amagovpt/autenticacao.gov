@@ -1379,7 +1379,6 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                 }
             }else{ //Card Reader was not previously selected
                 if(CardIdx == 1){
-                    qDebug() << "11111111";
                     PTEID_ReaderContext& readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
                     PTEID_CardType CardType = readerContext.getCardType();
                     lastFoundCardType = CardType;
@@ -1403,26 +1402,65 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                         break;
                     }
                 }
-                if (!bCardPresent)
-                {
-                    emit signalCardAccessError(NoCardFound);
-                }
-                else if (CardIdx == 1 && lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
-                {
-                    selectedReaderIndex = -1;
-                    emit signalCardAccessError(CardUnknownError);
-                }
                 if(CardIdx > 1 && selectedReaderIndex == -1){
                     emit signalReaderContext("Warning","Multiple smart card reader detected! Select one.");
                     selectedReaderIndex = -1;
+                }else{
+                    if (!bCardPresent)
+                    {
+                        emit signalCardAccessError(NoCardFound);
+                    }
+                    else if (CardIdx == 1 && lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
+                    {
+                        selectedReaderIndex = -1;
+                        emit signalCardAccessError(CardUnknownError);
+                    }
+                    else if (CardIdx == 1 && lastFoundCardType != PTEID_CARDTYPE_UNKNOWN)
+                    {
+                        selectedReaderIndex = tempReaderIndex;
+                    }
                 }
             }
         }
     }
+    catch (PTEID_ExParamRange e)
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
+        emit signalCardAccessError(CardUnknownError);
+    }
+    catch (PTEID_ExCardBadType e)
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
+        emit signalCardAccessError(CardUnknownError);
+    }
+    catch (PTEID_ExNoCardPresent e)
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
+        emit signalCardAccessError(NoCardFound);
+    }
+    catch (PTEID_ExCardChanged e)
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
+        emit signalCardAccessError(CardUnknownError);
+    }
+    catch (PTEID_ExReaderSetChanged e)
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
+        emit signalCardAccessError(CardUnknownError);
+    }
+    catch (PTEID_ExBadTransaction& e)
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
+        emit signalCardAccessError(CardUnknownError);
+    }
+    catch (PTEID_ExCertNoRoot& e)
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
+        emit signalCardAccessError(CardUnknownError);
+    }
     catch (PTEID_Exception e)
     {
-        qDebug() << "Exception in loadCardData(). Error code: " << e.GetError();
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed %s", e.GetError());
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(CardUnknownError);
     }
 }
@@ -1451,7 +1489,6 @@ QVariantList GAPI::getRetReaderList()
             const char* readerName = ReaderList[Idx];
             list << readerName;
         }
-
         if ( selectedReaderIndex >= 0 ) {
             if ((unsigned long)selectedReaderIndex >= ReaderSet.readerCount()) {
                 selectedReaderIndex = ReaderSet.readerCount() - 1;
@@ -1571,6 +1608,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
             //------------------------------------
             pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_CHANGED);
             pCallBackData->getMainWnd()->setAddressLoaded(false);
+            pCallBackData->getMainWnd()->resetReaderSelected();
         }
     }
     catch (...)
