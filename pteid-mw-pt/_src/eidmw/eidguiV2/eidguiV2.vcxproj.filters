@@ -186,6 +186,8 @@
     <None Include="images\remove_file.png" />
     <None Include="images\remove_file_hover.png" />
     <None Include="images\tooltip_grey.png" />
+    <None Include="contentPages\card\PageCardPrint.qml" />
+    <None Include="contentPages\card\PageCardPrintForm.ui.qml" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="gapi.h">
