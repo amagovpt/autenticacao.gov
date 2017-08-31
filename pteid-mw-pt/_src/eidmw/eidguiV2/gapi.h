@@ -210,6 +210,10 @@ public:
 
 public slots:
     // Slots to Gui request values
+    QVariantList getRetReaderList(void);
+    void setReaderByUser(unsigned long setReaderIndex);
+    void resetReaderSelected(void) {selectedReaderIndex =  -1; }
+    signed int returnReaderSelected(void) {return selectedReaderIndex; }
     void setAddressLoaded(bool addressLoaded) {m_addressLoaded = addressLoaded; }
     void startCardReading();
     int getStringByteLenght(QString text);
@@ -263,6 +267,8 @@ public slots:
 signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed
+    void signalReaderContext(const QString titleMessage, const QString statusMessage);
+    void signalSetReaderComboIndex(long selected_reader);
     void signalCardDataChanged();
     void signalAddressLoaded();
     void signalCardAccessError(int error_code);
@@ -296,8 +302,7 @@ private:
     void doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
     void fillCertificateList (void );
-
-    eIDMW::PTEID_EIDCard & getCardInstance();
+    void getCardInstance(PTEID_EIDCard *&new_card);
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;
@@ -311,6 +316,7 @@ private:
     bool m_addressLoaded;
     int m_shortcutFlag;
     QString m_shortcutInputPDF;
+    signed int selectedReaderIndex = -1;
 
     tCallBackHandles		m_callBackHandles;
     tCallBackData			m_callBackData;

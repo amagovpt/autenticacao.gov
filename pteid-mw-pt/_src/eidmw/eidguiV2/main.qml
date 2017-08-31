@@ -39,22 +39,121 @@ Window {
     Connections {
         target: gapi
 
-        onSignalCardChanged: {
-            console.log("Main Page onSignalCardChanged")
-            if (error_code == GAPI.ET_CARD_REMOVED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Cartão do Cidadão removido"
+        onSignalSetReaderComboIndex: {
+            console.log("onSignalSetReaderComboIndex index = " + selected_reader)
+            comboBoxReader.currentIndex = selected_reader
+        }
+
+        onSignalReaderContext: {
+            labelReaderContext.text = titleMessage
+            textMessageTop.text = statusMessage
+            //console.log("Reader List: " + gapi.getRetReaderList())
+            //console.log("Reader List Count: " + gapi.getRetReaderList().length)
+
+            for ( var i = 0; i < gapi.getRetReaderList().length; ++i ) {
+              //  console.log("Reader List " + "i = " + i +" : "+ gapi.getRetReaderList()[i])
+                comboBoxReader.model = gapi.getRetReaderList()
             }
-            else if (error_code == GAPI.ET_CARD_CHANGED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Cartão do Cidadão inserido"
+            mainFormID.opacity = 0.5
+            readerContext.open()
+        }
+    }
+    Dialog {
+        id: readerContext
+        width: 400
+        height: 250
+        visible: false
+        font.family: lato.name
+        // Center dialog in the main view
+        x: parent.width * 0.5 - readerContext.width * 0.5
+        y: parent.height * 0.5 - readerContext.height * 0.5
+
+        header: Label {
+            id: labelReaderContext
+            text: ""
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: 16
+            color: Constants.COLOR_MAIN_BLUE
+        }
+        Item {
+            width: parent.width
+            height: rectMessageTop.height + rectReaderCombo.height + rectSwitchRemember.height
+
+            Item {
+                id: rectMessageTop
+                width: parent.width
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textMessageTop
+                    text: ""
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                    wrapMode: Text.WordWrap
+                }
             }
-            else{
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        "Erro da aplicação! Por favor reinstale a aplicação:"
+            Rectangle {
+                id: rectReaderCombo
+                width: parent.width
+                color: "white"
+                height: 3 * Constants.SIZE_TEXT_FIELD
+                anchors.top : rectMessageTop.bottom
+
+                ComboBox {
+                    id: comboBoxReader
+                    width: parent.width
+                    height: 3 * Constants.SIZE_TEXT_FIELD
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                    visible: true
+                }
             }
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            Item {
+                id: rectSwitchRemember
+                width: parent.width
+                height: 50
+                anchors.top: rectReaderCombo.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: true
+                Text {
+                    id: textNote
+                    text: "To change this option go to the settings menu"
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                    wrapMode: Text.WordWrap
+                }
+            }
+        }
+
+        standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
+        onAccepted: {
+            console.log("propertyComboBoxReader onActivated index = " + comboBoxReader.currentIndex)
+            gapi.setReaderByUser(comboBoxReader.currentIndex)
+
+            mainFormID.opacity = 1
+            mainFormID.propertyPageLoader.source = mainFormID.propertyPageLoader.source
+
+            // Force reload page loader
+            var temp = mainFormID.propertyPageLoader.source
+            mainFormID.propertyPageLoader.source = ""
+            mainFormID.propertyPageLoader.source = temp
+        }
+        onRejected: {
+            mainFormID.opacity = 1
         }
     }
 

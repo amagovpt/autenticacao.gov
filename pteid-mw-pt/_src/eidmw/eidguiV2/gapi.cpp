@@ -115,9 +115,11 @@ void GAPI::getAddressFile() {
 
     BEGIN_TRY_CATCH;
 
-    PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
 
-    PTEID_Address &addressFile = card.getAddr();
+    PTEID_Address &addressFile = card->getAddr();
 
     m_addressData[District] = QString::fromUtf8(addressFile.getDistrict());
     m_addressData[Municipality] = QString::fromUtf8(addressFile.getMunicipality());
@@ -145,9 +147,11 @@ void GAPI::getPersoDataFile() {
 
     BEGIN_TRY_CATCH;
 
-    PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
 
-    emit signalPersoDataLoaded(QString(card.readPersonalNotes()));
+    emit signalPersoDataLoaded(QString(card->readPersonalNotes()));
 
     END_TRY_CATCH
 
@@ -196,9 +200,11 @@ unsigned int GAPI::verifyAuthPin(QString pin_value) {
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return TRIES_LEFT_ERROR;
 
-    PTEID_Pin & auth_pin = card.getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
+    PTEID_Pin & auth_pin = card->getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
     auth_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
 
     if (tries_left == 0) {
@@ -216,9 +222,11 @@ unsigned int GAPI::getTriesLeftAuthPin() {
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return TRIES_LEFT_ERROR;
 
-    PTEID_Pin & auth_pin = card.getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
+    PTEID_Pin & auth_pin = card->getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
     tries_left = auth_pin.getTriesLeft();
 
     if (tries_left == 0) {
@@ -236,9 +244,11 @@ unsigned int GAPI::verifySignPin(QString pin_value) {
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return TRIES_LEFT_ERROR;
 
-    PTEID_Pin & sign_pin = card.getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
+    PTEID_Pin & sign_pin = card->getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
     sign_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
 
     if (tries_left == 0) {
@@ -256,9 +266,11 @@ unsigned int GAPI::getTriesLeftSignPin() {
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return TRIES_LEFT_ERROR;
 
-    PTEID_Pin & sign_pin = card.getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
+    PTEID_Pin & sign_pin = card->getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
     tries_left = sign_pin.getTriesLeft();
 
     if (tries_left == 0) {
@@ -276,9 +288,11 @@ unsigned int GAPI::verifyAddressPin(QString pin_value) {
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return TRIES_LEFT_ERROR;
 
-    PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
+    PTEID_Pin & address_pin = card->getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
     address_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
 
     if (tries_left == 0) {
@@ -296,9 +310,11 @@ unsigned int GAPI::getTriesLeftAddressPin() {
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return TRIES_LEFT_ERROR;
 
-    PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
+    PTEID_Pin & address_pin = card->getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
     tries_left = address_pin.getTriesLeft();
 
     if (tries_left == 0) {
@@ -316,9 +332,11 @@ unsigned int GAPI::changeAuthPin(QString currentPin, QString newPin) {
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return TRIES_LEFT_ERROR;
 
-    PTEID_Pin & auth_pin = card.getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
+    PTEID_Pin & auth_pin = card->getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
     auth_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(),tries_left,"");
 
     if (tries_left == 0) {
@@ -336,9 +354,11 @@ unsigned int GAPI::changeSignPin(QString currentPin, QString newPin) {
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return TRIES_LEFT_ERROR;
 
-    PTEID_Pin & sign_pin = card.getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
+    PTEID_Pin & sign_pin = card->getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
     sign_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(),tries_left,"");
 
     if (tries_left == 0) {
@@ -445,9 +465,11 @@ unsigned int GAPI::changeAddressPin(QString currentPin, QString newPin) {
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return TRIES_LEFT_ERROR;
 
-    PTEID_Pin & address_pin = card.getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
+    PTEID_Pin & address_pin = card->getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
     address_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(),tries_left,"");
 
     if (tries_left == 0) {
@@ -471,10 +493,13 @@ void GAPI::doChangeAddress(const char *process, const char *secret_code)
 {
     qDebug() << "DoChangeAddress!";
 
-    PTEID_EIDCard& Card = getCardInstance();
     try
     {
-        Card.ChangeAddress((char *)secret_code, (char*)process, &GAPI::addressChangeCallback, (void*)this);
+        PTEID_EIDCard * card = NULL;
+        getCardInstance(card);
+        if (card == NULL) return;
+
+        card->ChangeAddress((char *)secret_code, (char*)process, &GAPI::addressChangeCallback, (void*)this);
     }
     catch(PTEID_Exception & exception)
     {
@@ -615,13 +640,16 @@ void GAPI::signCloseCMD(QString sms_token)
 QString GAPI::getCardActivation() {
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
-    PTEID_EId &eid_file = card.getID();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return "Error getting Card Activation";
+
+    PTEID_EId &eid_file = card->getID();
 
     if (isExpiredDate(eid_file.getValidityEndDate())) {
         return QString("The Citizen Card is expired");
     }
-    else if (!card.isActive()) {
+    else if (!card->isActive()) {
         return QString("The Citizen Card is not active");
     }
     else {
@@ -690,10 +718,14 @@ bool GAPI::doSignPrintPDF(QString &file_to_sign, QString &outputsign) {
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+
+    getCardInstance(card);
+    if (card == NULL) return false;
+
     PTEID_PDFSignature sig_handler(file_to_sign.toUtf8().data());
 
-    card.SignPDF(sig_handler, 0, 0, false, "", "", outputsign.toUtf8().data());
+    card->SignPDF(sig_handler, 0, 0, false, "", "", outputsign.toUtf8().data());
 
     return true;
 
@@ -802,9 +834,14 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     bool res = false;
     int sections_to_print = 0;
 
-    PTEID_EIDCard &card = getCardInstance();
-    card.doSODCheck(true); //Enable SOD checking
-    PTEID_EId &eid_file = card.getID();
+    BEGIN_TRY_CATCH;
+
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return false;
+
+    card->doSODCheck(true); //Enable SOD checking
+    PTEID_EId &eid_file = card->getID();
 
     //QPrinter printer;
     printer.setResolution(96);
@@ -979,7 +1016,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
         sections_to_print++;
         pos_y += 50;
 
-        PTEID_Address &addressFile = card.getAddr();
+        PTEID_Address &addressFile = card->getAddr();
 
         // TODO: Foreign address
 
@@ -1035,7 +1072,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     if (params.isNotes)
     {
         QString perso_data;
-        perso_data = QString(card.readPersonalNotes());
+        perso_data = QString(card->readPersonalNotes());
 
         if (perso_data.size() > 0)
         {
@@ -1057,6 +1094,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
     //Finish drawing/printing
     painter.end();
+    END_TRY_CATCH
     return true;
 }
 
@@ -1096,7 +1134,9 @@ void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, double 
 void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp) {
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
 
     const char *files_to_sign[1];
     QByteArray tempLoadedFilePath= loadedFilePath.toUtf8();
@@ -1105,9 +1145,9 @@ void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTime
     QByteArray tempOutputFile= outputFile.toUtf8();
 
     if (isTimestamp > 0)
-        card.SignXadesT(tempOutputFile.constData(), files_to_sign, 1);
+        card->SignXadesT(tempOutputFile.constData(), files_to_sign, 1);
     else
-        card.SignXades(tempOutputFile.constData(), files_to_sign, 1);
+        card->SignXades(tempOutputFile.constData(), files_to_sign, 1);
 
     emit signalPdfSignSucess();
 
@@ -1118,7 +1158,10 @@ void GAPI::doSignPDF(SignParams &params) {
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
+
     QString fullInputPath = params.loadedFilePath;
     PTEID_PDFSignature sig_handler(fullInputPath.toUtf8().data());
 
@@ -1127,7 +1170,7 @@ void GAPI::doSignPDF(SignParams &params) {
     if (params.isSmallSignature > 0)
         sig_handler.enableSmallSignatureFormat();
 
-    card.SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
+    card->SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
                  params.location.toUtf8().data(), params.reason.toUtf8().data(),
                  params.outputFile.toUtf8().data());
 
@@ -1143,7 +1186,9 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
                 "reason = " << params.reason << "location = " << params.location;
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
 
     PTEID_PDFSignature *sig_handler;
     sig_handler = new PTEID_PDFSignature();
@@ -1159,7 +1204,7 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
     if (params.isSmallSignature > 0)
         sig_handler->enableSmallSignatureFormat();
 
-    card.SignPDF(*sig_handler, params.page, params.coord_x, params.coord_y,
+    card->SignPDF(*sig_handler, params.page, params.coord_x, params.coord_y,
                  params.location.toUtf8().data(), params.reason.toUtf8().data(),
                  params.outputFile.toUtf8().data());
 
@@ -1279,25 +1324,159 @@ void GAPI::startReadingAddress() {
     QtConcurrent::run(this, &GAPI::getAddressFile);
 }
 
-PTEID_EIDCard & GAPI::getCardInstance() {
+void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
 
-    PTEID_ReaderContext& readerContext = ReaderSet.getReader();
-    qDebug() << "Using Card Reader: " << readerContext.getName();
+    try
+    {
+        unsigned long ReaderEndIdx = ReaderSet.readerCount();
+        long ReaderIdx = 0;
+        long CardIdx = 0;
+        long tempReaderIndex = 0;
 
-    PTEID_EIDCard &ref = readerContext.getEIDCard();
-    ref.doSODCheck(true); //Enable SOD checking
+        if ( ReaderEndIdx == 0 ) {
+            emit signalCardAccessError(NoReaderFound);
+        } else {
+            bool bCardPresent = false;
+            PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
 
-    return ref;
+            // Count number of cards
+            for (ReaderIdx = 0; ReaderIdx < ReaderEndIdx; ReaderIdx++)
+            {
+                PTEID_ReaderContext& readerContext = ReaderSet.getReaderByNum(ReaderIdx);
+
+                if (readerContext.isCardPresent())
+                {
+                    bCardPresent = true;
+                    CardIdx++;
+                    tempReaderIndex = ReaderIdx;
+                }
+            }
+            // Test if Card Reader was previously selected
+            if(selectedReaderIndex != -1){ // Card Reader was previously selected
+                PTEID_ReaderContext& readerContext = ReaderSet.getReaderByNum(selectedReaderIndex);
+                PTEID_CardType CardType = readerContext.getCardType();
+                lastFoundCardType = CardType;
+                switch (CardType)
+                {
+                case PTEID_CARDTYPE_IAS07:
+                {
+                    try
+                    {
+                        PTEID_EIDCard& Card = readerContext.getEIDCard();
+                        new_card = &Card;
+                    }
+                    catch (PTEID_ExCardBadType const& e)
+                    {
+                        QString errcode;
+                        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed %s", e.GetError());
+                        errcode = errcode.setNum(e.GetError());
+                    }
+                }
+                    break;
+                case PTEID_CARDTYPE_UNKNOWN:
+                default:
+                    break;
+                }
+            }else{ //Card Reader was not previously selected
+                if(CardIdx == 1){
+                    qDebug() << "11111111";
+                    PTEID_ReaderContext& readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
+                    PTEID_CardType CardType = readerContext.getCardType();
+                    lastFoundCardType = CardType;
+                    switch (CardType)
+                    {
+                    case PTEID_CARDTYPE_IAS07:
+                    {
+                        try
+                        {
+                            PTEID_EIDCard& Card = readerContext.getEIDCard();
+                            new_card = &Card;
+                        }
+                        catch (PTEID_ExCardBadType const& e)
+                        {
+                            PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed %s", e.GetError());
+                        }
+                    }
+                        break;
+                    case PTEID_CARDTYPE_UNKNOWN:
+                    default:
+                        break;
+                    }
+                }
+                if (!bCardPresent)
+                {
+                    emit signalCardAccessError(NoCardFound);
+                }
+                else if (CardIdx == 1 && lastFoundCardType == PTEID_CARDTYPE_UNKNOWN)
+                {
+                    selectedReaderIndex = -1;
+                    emit signalCardAccessError(CardUnknownError);
+                }
+                if(CardIdx > 1 && selectedReaderIndex == -1){
+                    emit signalReaderContext("Warning","Multiple smart card reader detected! Select one.");
+                    selectedReaderIndex = -1;
+                }
+            }
+        }
+    }
+    catch (PTEID_Exception e)
+    {
+        qDebug() << "Exception in loadCardData(). Error code: " << e.GetError();
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed %s", e.GetError());
+        emit signalCardAccessError(CardUnknownError);
+    }
+}
+
+void GAPI::setReaderByUser(unsigned long setReaderIndex){
+
+    qDebug() << "AppController GAPI::setReader!" << setReaderIndex;
+
+    if (setReaderIndex >= ReaderSet.readerCount()) {
+        setReaderIndex = ReaderSet.readerCount() - 1;
+    }
+    selectedReaderIndex = setReaderIndex;
+}
+
+QVariantList GAPI::getRetReaderList()
+{
+    qDebug() << "AppController GAPI::getRetReaderList!" ;
+
+    QVariantList list;
+
+    try {
+        const char* const* ReaderList = ReaderSet.readerList();
+
+        for (unsigned long Idx=0; Idx < ReaderSet.readerCount(); Idx++)
+        {
+            const char* readerName = ReaderList[Idx];
+            list << readerName;
+        }
+
+        if ( selectedReaderIndex >= 0 ) {
+            if ((unsigned long)selectedReaderIndex >= ReaderSet.readerCount()) {
+                selectedReaderIndex = ReaderSet.readerCount() - 1;
+            }
+            emit signalSetReaderComboIndex(selectedReaderIndex);
+        }
+
+
+    }catch (PTEID_Exception& e) {
+        qDebug() << "Error getRetReaderList!" ;
+    }
+
+    return list;
 }
 
 void GAPI::connectToCard() {
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
 
-    card.doSODCheck(true); //Enable SOD checking
-    PTEID_EId &eid_file = card.getID();
+    card->doSODCheck(true); //Enable SOD checking
+    PTEID_EId &eid_file = card->getID();
 
     qDebug() << "C++: loading Card Data";
 
@@ -1372,8 +1551,13 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
             //------------------------------------
             // send an event to the main app to show the popup message
             //------------------------------------
-            pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_REMOVED);
+            if(pCallBackData->getMainWnd()->returnReaderSelected() != -1){
+                pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_CHANGED);
+            }else{
+                pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_REMOVED);
+            }
             pCallBackData->getMainWnd()->setAddressLoaded(false);
+            pCallBackData->getMainWnd()->resetReaderSelected();
 
             return;
         }
@@ -1389,15 +1573,9 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
             pCallBackData->getMainWnd()->setAddressLoaded(false);
         }
     }
-    catch (PTEID_ExBadTransaction& e)
-    {
-        long err = e.GetError();
-        err = err;
-    }
     catch (...)
     {
-        int x=0;
-        x++;
+        emit pCallBackData->getMainWnd()->signalCardAccessError(GAPI::CardUnknownError);
         // we catch ALL exceptions. This is because otherwise the thread throwing the exception stops
     }
 }
@@ -1492,9 +1670,11 @@ void GAPI::fillCertificateList ( void )
 
     BEGIN_TRY_CATCH
 
-            PTEID_EIDCard &card = getCardInstance();
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
 
-    PTEID_Certificates&	 certificates	= card.getCertificates();
+    PTEID_Certificates&	 certificates	= card->getCertificates();
 
     // TODO: In test mode with production card or in production mode with test card
     // this cause a segment fault

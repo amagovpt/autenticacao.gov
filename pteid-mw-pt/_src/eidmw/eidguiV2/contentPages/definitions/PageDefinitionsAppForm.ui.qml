@@ -7,11 +7,8 @@ import "../../scripts/Constants.js" as Constants
 import "../../components" as Components
 
 Item {
-
+    property alias propertyComboBoxReader: comboBoxReader
     anchors.fill: parent
-
-    enabled: false
-    opacity: 0.3
 
     Item {
         id: rowTop
@@ -76,7 +73,6 @@ Item {
                     height: 3 * Constants.SIZE_TEXT_FIELD
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    model: [ "Bit4id minilector 00 00", "Bit4id minilector 00 02", "Bit4id minilector 00 03"]
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase

@@ -45,17 +45,26 @@ PageServicesSignSimpleForm {
         onSignalCardChanged: {
             console.log("Services Sign Simple onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Cartão do Cidadão removido"
                 propertyPDFPreview.propertyDragSigSignedByNameText.text = "Assinado por:"
                 propertyPDFPreview.propertyDragSigNumIdText.text = "Num. de Identificação Civil:"
                 cardLoaded = false
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Cartão do Cidadão inserido"
+                propertyBusyIndicator.running = true
                 cardLoaded = true
                 gapi.startCardReading()
             }
             else{
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        "Erro da aplicação! Por favor reinstale a aplicação:"
                 cardLoaded = false
             }
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
         onSignalUpdateProgressStatus: {
             console.log("CMD sign change --> update progress status with text = " + statusMessage)

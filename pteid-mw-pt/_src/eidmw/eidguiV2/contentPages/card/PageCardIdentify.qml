@@ -9,6 +9,9 @@ PageCardIdentifyForm {
 
     Connections {
         target: gapi
+        onSignalReaderContext: {
+            propertyBusyIndicator.running = false
+        }
         onSignalCardDataChanged: {
             console.log("Data Card Identify --> Data Changed")
             //console.trace();
@@ -26,6 +29,8 @@ PageCardIdentifyForm {
             propertyTextBoxParentsFather.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Father)
             propertyTextBoxParentsMother.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Mother)
             propertyTextBoxNotes.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.AccidentalIndications)
+            propertyPhoto.source = ""
+            propertyPhoto.cache = false
             propertyPhoto.source = "image://myimageprovider/photo.png"
             propertyBusyIndicator.running = false
         }
@@ -63,6 +68,7 @@ PageCardIdentifyForm {
             propertyTextBoxParentsMother.propertyDateField.text = ""
             propertyTextBoxNotes.propertyDateField.text = ""
             propertyPhoto.source = ""
+            propertyPhoto.cache = false
             propertyBusyIndicator.running = false
         }
         onSignalCardChanged: {
@@ -83,6 +89,7 @@ PageCardIdentifyForm {
                 propertyTextBoxParentsMother.propertyDateField.text = ""
                 propertyTextBoxNotes.propertyDateField.text = ""
                 propertyPhoto.source = ""
+                propertyPhoto.cache = false
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
