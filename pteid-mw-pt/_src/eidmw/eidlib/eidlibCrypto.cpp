@@ -238,7 +238,7 @@ PTEID_Certificate &PTEID_Certificate::getIssuer()
 		//if(!pIssuer)
 		//{
 			APL_Certif *aplIssuer=pimpl->getIssuer();
-			if (aplIssuer == pimpl)
+			if (aplIssuer == NULL || aplIssuer == pimpl)
 			{
 				throw PTEID_ExCertNoIssuer();
 			}
