@@ -168,7 +168,7 @@ Verifique se tem permissoes de escrita no ficheiro  \ne no directorio de destino
 
     propertyButtonPdf {
         onClicked: {
-            propertyFileDialogOutput.filename = "CartaoCidadao_signed.pdf"
+            propertyFileDialogOutput.filename = propertySwitchPdfSign.checked ? "CartaoCidadao_signed.pdf" : "CartaoCidadao.pdf"
             propertyFileDialogOutput.open()
         }
     }
