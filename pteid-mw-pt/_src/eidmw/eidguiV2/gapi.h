@@ -222,10 +222,10 @@ public slots:
     void startReadingAddress();
     int getShortcutFlag() {return m_shortcutFlag; }
     QString getShortcutInputPDF() { return m_shortcutInputPDF; }
-    void startPrintPDF(QString outputFile, double isBasicInfo,double isAddicionalInfo,
+    void startPrintPDF(QString outputFile, double isBasicInfo,double isAdditionalInfo,
                        double isAddress,double isNotes,double isSign);
-    void startPrint(QString outputFile, double isBasicInfo,double isAddicionalInfo,
-                       double isAddress,double isNotes,double isSign);
+    void startPrint(QString outputFile, double isBasicInfo,double isAdditionalInfo,
+                       double isAddress, double isNotes, double isSign);
     //This method should be used by basic and advanced signature modes
     void startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
                          QString reason, QString location, double isTimestamp, double isSmall);

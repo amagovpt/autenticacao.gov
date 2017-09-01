@@ -1714,12 +1714,14 @@ void GAPI::fillCertificateList ( void )
 
     PTEID_Certificates&	 certificates	= card->getCertificates();
 
-    // TODO: In test mode with production card or in production mode with test card
-    // this cause a segment fault
-
     certificatesMap.clear();
     buildTree(certificates.getCert(PTEID_Certificate::CITIZEN_AUTH), noIssuer,certificatesMap);
+
     buildTree(certificates.getCert(PTEID_Certificate::CITIZEN_SIGN), noIssuer,certificatesMap);
+    if (noIssuer)
+    {
+        qDebug() << "fillCertificateList failed because certificate chain couldn't be completed!";
+    }
 
     emit signalCertificatesChanged(certificatesMap);
     END_TRY_CATCH
