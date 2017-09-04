@@ -113,6 +113,8 @@ enum PTEID_Param
 	PTEID_PARAM_CERTCACHE_VALIDITY,		//number
 	PTEID_PARAM_CERTCACHE_WAITDELAY,		//number
 
+        //PROXY
+        PTEID_PARAM_TIMESTAMP_HOST,                     //string;
 	//PROXY
 	PTEID_PARAM_PROXY_HOST,				//string;
 	PTEID_PARAM_PROXY_PORT,				//number
@@ -142,6 +144,7 @@ enum PTEID_Param
 
 	//GUITOOL
 	PTEID_PARAM_GUITOOL_SHOWNOTIFICATION,//number; 0=no(default), 1=yes
+        PTEID_PARAM_GUITOOL_SHOWANIMATIONS,//number; 0=no(default), 1=yes
 
 	//PROXY
 	PTEID_PARAM_PROXY_CONNECT_TIMEOUT,	//number

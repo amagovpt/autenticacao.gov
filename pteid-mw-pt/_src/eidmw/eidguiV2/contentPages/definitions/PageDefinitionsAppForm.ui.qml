@@ -8,6 +8,29 @@ import "../../components" as Components
 
 Item {
     property alias propertyComboBoxReader: comboBoxReader
+    property alias propertyRectAppStartCheckBox: rectAppStartCheckBox
+    property alias propertyCheckboxAutoRead: checkboxAutoRead
+    property alias propertyCheckboxAutoStart: checkboxAutoStart
+    property alias propertyCheckboxStart: checkboxStart
+    property alias propertyRadioButtonPT: radioButtonPT
+    property alias propertyRadioButtonUK: radioButtonUK
+    property alias propertyRectAppLook: rectAppLook
+    property alias propertyCheckboxShowNot: checkboxShowNot
+    property alias propertyCheckboxShowPhoto: checkboxShowPhoto
+    property alias propertyCheckboxShowAnime: checkboxShowAnime
+    property alias propertyRectAppCertificates: rectAppCertificates
+    property alias propertyCheckboxRegister: checkboxRegister
+    property alias propertyCheckboxRemove: checkboxRemove
+    property alias propertyRectAppTimeStamp: rectAppTimeStamp
+    property alias propertyCheckboxTimeStamp: checkboxTimeStamp
+    property alias propertyTextFieldTimeStamp: textFieldTimeStamp
+    property alias propertyCheckboxProxy: checkboxProxy
+    property alias propertyTextFieldAdress: textFieldAdress
+    property alias propertyTextFieldPort: textFieldPort
+    property alias propertyCheckboxAutProxy: checkboxAutProxy
+    property alias propertyTextFieldAutUser: textFieldAutUser
+    property alias propertyTextFieldAutPass: textFieldAutPass
+
     anchors.fill: parent
 
     Item {
@@ -132,7 +155,16 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                    checked: true
+                }
+                CheckBox {
+                    id: checkboxAutoStart
+                    text: "Iniciar automaticamente"
+                    height: 25
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                    x: rectAppStartCheckBox.width * 0.37
+                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 }
                 CheckBox {
                     id: checkboxStart
@@ -141,7 +173,7 @@ Item {
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
-                    x: rectAppStartCheckBox.width * 0.5
+                    x: rectAppStartCheckBox.width * 0.70
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 }
             }
@@ -195,7 +227,6 @@ Item {
                     id: radioButtonPT
                     height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
                     text: "Português"
-                    checked: true
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
@@ -266,7 +297,6 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                    checked: true
                 }
                 CheckBox {
                     id: checkboxShowPhoto
@@ -287,7 +317,6 @@ Item {
                     font.capitalization: Font.MixedCase
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     x: rectAppLookCheckBox.width * 0.5
-                    checked: true
                 }
             }
         }
@@ -346,7 +375,6 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                    checked: true
                 }
                 CheckBox {
                     id: checkboxRemove
@@ -428,7 +456,6 @@ Item {
                         width: parent.width
                         font.italic: textFieldTimeStamp.text === "" ? true: false
                         placeholderText: "URL do servidor de selos temporais?"
-                        inputMethodHints: Qt.ImhDigitsOnly
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         clip: false
@@ -508,7 +535,6 @@ Item {
                         width: parent.width
                         font.italic: textFieldAdress.text === "" ? true: false
                         placeholderText: "Endereço?"
-                        validator: RegExpValidator { regExp: /[0-9A-Fa-f.:]+/ }
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         enabled: checkboxProxy.checked

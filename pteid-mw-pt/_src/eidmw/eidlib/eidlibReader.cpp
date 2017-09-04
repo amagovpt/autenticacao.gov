@@ -785,7 +785,10 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 	case PTEID_PARAM_CERTCACHE_WAITDELAY:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_CERTCACHE_WAITDELAY);	break;
 
-	//PROXY
+        //TIMESTAMP
+        case PTEID_PARAM_TIMESTAMP_HOST:
+                m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_TIMESTAMP_HOST);              break;
+        //PROXY
 	case PTEID_PARAM_PROXY_HOST:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);			break;
 	case PTEID_PARAM_PROXY_PORT:
@@ -809,6 +812,8 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_SHOWPIC);			break;
 	case PTEID_PARAM_GUITOOL_SHOWNOTIFICATION:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_SHOWNOTIFICATION);break;
+        case PTEID_PARAM_GUITOOL_SHOWANIMATIONS:
+                m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_SHOWANIMATIONS);    break;
 	case PTEID_PARAM_GUITOOL_SHOWTBAR:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_SHOWTBAR);		break;
 	case PTEID_PARAM_GUITOOL_VIRTUALKBD:

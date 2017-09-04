@@ -13,7 +13,8 @@ CONFIG += c++11
 SOURCES += main.cpp \
     appcontroller.cpp \
     gapi.cpp \
-    filesavedialog.cpp
+    filesavedialog.cpp \
+    genpur.cpp
 
 INCLUDEPATH += /usr/include/poppler/qt5/
 INCLUDEPATH += ../CMD/services
@@ -22,7 +23,7 @@ INCLUDEPATH += ../common
 INCLUDEPATH += ../cardlayer
 
 
-LIBS += -L../lib -lpteidlib -lpoppler-qt5 -lCMDServices
+LIBS += -L../lib -lpteidlib -lpoppler-qt5 -lcmdServices
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -54,4 +55,6 @@ DISTFILES +=
 HEADERS += \
     appcontroller.h \
     gapi.h \
-    filesavedialog.h
+    filesavedialog.h \
+    Settings.h \
+    genpur.h

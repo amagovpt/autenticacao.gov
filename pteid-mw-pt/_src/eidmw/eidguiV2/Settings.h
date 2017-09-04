@@ -167,6 +167,7 @@ public:
 	//------------------------------------------------------
 	GUISettings( void )
 		: m_GuiLanguage("en")
+        , m_bShowAnimations(false)
 		, m_bStartMinimized(false)
 		, m_bShowPicture(false)
 		, m_bShowNotification(false)
@@ -175,7 +176,6 @@ public:
 		, m_bRegCert(false)
 		, m_bRemoveCert(false)
 		, m_strExePath("")
-		, m_SelectedReader(-1)
 		, m_test_mode(false)
 
 	{
@@ -230,6 +230,17 @@ public:
 				setShowNotification(true);
 			}
 		}
+        //----------------------------------------------------------
+        // check ShowAnimations
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWANIMATIONS);
+            long ShowAnimations = config.getLong();
+            if ( 0 != ShowAnimations )
+            {
+                setShowAnimations(true);
+            }
+        }
 		//----------------------------------------------------------
 		// check AutoCardReading
 		//----------------------------------------------------------
@@ -284,6 +295,15 @@ public:
 				setRemoveCert(true);
 			}
 		}
+        //---------------------------------------------------------
+        // Check timestamp settings
+        //---------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_TIMESTAMP_HOST);
+            QString timeStamp_host = config.getString();
+            m_time_stamp_host = timeStamp_host;
+
+        }
 		//----------------------------------------------------------
 		// check file save path
 		//----------------------------------------------------------
@@ -388,6 +408,16 @@ public:
 	{
 		return m_bShowNotification;
 	}
+    bool getShowAnimations( void )
+    {
+        return m_bShowAnimations;
+    }
+    void setShowAnimations(  bool bShowAnimations )
+    {
+        m_bShowAnimations = bShowAnimations;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWANIMATIONS);
+        config.setLong(m_bShowAnimations);
+    }
 	void setShowNotification( bool bShowNotification )
 	{
 		m_bShowNotification = bShowNotification;
@@ -410,7 +440,7 @@ public:
 	}
 	void setAutoStartup( bool bAutoStartup )
 	{
-		m_bAutoStartup = bAutoStartup;
+        m_bAutoStartup = bAutoStartup;
 		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTWIN);
 		config.setLong(m_bAutoStartup);
 
@@ -483,6 +513,19 @@ public:
 		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_REMOVECERTIF);
 		config.setLong(m_bRemoveCert);
 	}
+
+    QString getTimeStampHost(void){
+        return m_time_stamp_host;
+    }
+
+    void setTimeStampHost(QString const& timeStamp_host)
+    {
+        m_time_stamp_host = timeStamp_host;
+
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_TIMESTAMP_HOST);
+        config.setString(timeStamp_host.toUtf8());
+    }
+
 	void setExePath( QString const& strExePath )
 	{
 		m_strExePath = strExePath;
@@ -492,16 +535,6 @@ public:
 	{
 		return m_strExePath;
 	}
-        /*void setSelectedReader( int Idx )
-	{
-		m_SelectedReader = Idx;
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_CARDREADNUMB);
-		config.setLong(m_SelectedReader);
-	}
-	unsigned long getSelectedReader( void )
-	{
-		return m_SelectedReader;
-        }*/
 
 	void setGuiVersion( QString const& GUIVersion )
 	{
@@ -606,8 +639,11 @@ private:
 	QString m_pteid_cachedir;
 	bool m_test_mode;
 
+    //Time Stamp Host Settings
+    QString m_time_stamp_host;
 
 	QString	m_GuiLanguage;			//!< the GUI language
+    bool    m_bShowAnimations ;     //!< the GUI Animations
 	bool	m_bStartMinimized;		//!< startup minimized (T/F)
 	bool	m_bShowPicture;			//!< show the picture (T/F)
 	bool	m_bShowNotification;	//!< show the notification (T/F)
@@ -617,7 +653,6 @@ private:
 	bool	m_bRemoveCert;			//!< remove certificates on close (T/F)
 	bool 	m_showJavaApps;     // wether we should show the SCAP/DSS buttons...
 	QString m_strExePath;			//!< path to the executable
-	unsigned long		m_SelectedReader;		//!< selected reader (-1=none)
 
 	QString	m_GUIVersion;			//!! Full version of the GUI
 	QString	m_DefSavePath;			//!< default save path for eid,xml,tlv files

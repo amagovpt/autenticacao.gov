@@ -183,10 +183,22 @@ public:
 
     enum eCustomEventType { ET_UNKNOWN, ET_CARD_CHANGED, ET_CARD_REMOVED };
 
+    enum UI_LANGUAGE
+    {
+        LANG_XX
+        , LANG_EN
+        , LANG_DEF = LANG_EN
+        , LANG_NL
+        , LANG_FR
+        , LANG_DE
+        , LANG_LAST
+    };
+
     Q_ENUMS(CardAccessError)
     Q_ENUMS(eCustomEventType)
     Q_ENUMS(IDInfoKey)
     Q_ENUMS(AddressInfoKey)
+    Q_ENUMS(UI_LANGUAGE)
 
     bool isAddressLoaded() {return m_addressLoaded; }
 

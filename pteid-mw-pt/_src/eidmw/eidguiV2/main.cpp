@@ -7,6 +7,7 @@
 #include "filesavedialog.h"
 #include "gapi.h"
 #include "eidlib.h"
+
 using namespace eIDMW;
 
 int main(int argc, char *argv[])
@@ -26,8 +27,11 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    // GUISettings init
+    GUISettings settings;
     // AppController init
-    AppController controller;
+    AppController controller(settings);
+
     PTEID_InitSDK();
     PTEID_Config sam_server(PTEID_PARAM_GENERAL_SAM_SERVER);
 
