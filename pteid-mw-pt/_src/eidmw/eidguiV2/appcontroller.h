@@ -16,15 +16,21 @@ class AppController;
 class AppController : public QObject
 {
     Q_OBJECT
+    //  Used to dynamic translation in QML (QTBUG-15602)
+    Q_PROPERTY(QString autoTr READ getAutoTr NOTIFY languageChanged)
 public:
     explicit AppController(GUISettings &settings, QObject *parent = 0);
     GUISettings&    getSettings( void )
     {
         return m_Settings;
     }
+    QString getAutoTr() {
+     return "";
+    }
 
 public slots:
     Q_INVOKABLE QVariant getCursorPos();
+    void initTranslation(void);
     bool getAutoCardReadingValue(void);
     void setAutoCardReadingValue (bool bAutoCardReading );
 
@@ -63,12 +69,13 @@ public slots:
 
 private:
     GUISettings&    m_Settings;
-    GenPur::UI_LANGUAGE LoadTranslationFile( GenPur::UI_LANGUAGE NewLanguage );
-    GenPur::UI_LANGUAGE m_Language;
+    bool LoadTranslationFile( GenPur::UI_LANGUAGE NewLanguage );
+    void setLanguage(GenPur::UI_LANGUAGE language);
 protected:
     QTranslator m_translator;
 signals:
-    void signalSetReaderComboIndex(long selected_reader);
+    void languageChanged();
+    void signalLanguageChangedError();
 };
 
 #endif // APPCONTROLLER_H

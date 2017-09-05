@@ -61,7 +61,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: "Leitor de Cartões"
+                text: qsTr("STR_CARD_READER_TITLE") + controler.autoTr
             }
             DropShadow {
                 anchors.fill: rectReaderCombo
@@ -118,7 +118,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: "Início"
+                text: qsTr("STR_START_TITLE") + controler.autoTr
             }
             DropShadow {
                 anchors.fill: rectAppStartCheckBox
@@ -149,7 +149,7 @@ Item {
 
                 CheckBox {
                     id: checkboxAutoRead
-                    text: "Leitura automática do cartão"
+                    text: qsTr("STR_AUTO_READ_OP") + controler.autoTr
                     height: 25
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -158,7 +158,7 @@ Item {
                 }
                 CheckBox {
                     id: checkboxAutoStart
-                    text: "Iniciar automaticamente"
+                    text: qsTr("STR_AUTO_START_OP") + controler.autoTr
                     height: 25
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -168,7 +168,7 @@ Item {
                 }
                 CheckBox {
                     id: checkboxStart
-                    text: "Iniciar minimizada"
+                    text: qsTr("STR_START_MINIMIZED_OP") + controler.autoTr
                     height: 25
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -194,7 +194,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: "Idioma"
+                text: qsTr("STR_LANGUAGE_TITLE") + controler.autoTr
             }
             DropShadow {
                 anchors.fill: rectAppLanguageCheckBox
@@ -226,7 +226,7 @@ Item {
                 RadioButton {
                     id: radioButtonPT
                     height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                    text: "Português"
+                    text: qsTr("STR_PT_NAME_OP") + controler.autoTr
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
@@ -235,7 +235,7 @@ Item {
                     id: radioButtonUK
                     height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
                     x: rectAppLanguageCheckBox.width * 0.5
-                    text: "English"
+                    text: qsTr("STR_UK_NAME_OP") + controler.autoTr
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
@@ -258,7 +258,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: "Aparência"
+                text: qsTr("STR_APP_LOOK_TITLE") + controler.autoTr
             }
             DropShadow {
                 anchors.fill: rectAppLookCheckBox
@@ -291,7 +291,7 @@ Item {
 
                 CheckBox {
                     id: checkboxShowNot
-                    text: "Apresentar notificações"
+                    text: qsTr("STR_SHOW_NOT_OP") + controler.autoTr
                     height: 25
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -300,7 +300,7 @@ Item {
                 }
                 CheckBox {
                     id: checkboxShowPhoto
-                    text: "Mostrar fotografia ao iniciar"
+                    text: qsTr("STR_SHOW_PHOTO_OP") + controler.autoTr
                     height: 25
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -310,7 +310,7 @@ Item {
                 }
                 CheckBox {
                     id: checkboxShowAnime
-                    text: "Activar menu animações"
+                    text: qsTr("STR_SHOW_ANIME_OP") + controler.autoTr
                     height: 25
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -336,7 +336,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: "Certificados"
+                text: qsTr("STR_CERTIFICATES_TITLE") + controler.autoTr
             }
             DropShadow {
                 anchors.fill: rectAppCertificatesCheckBox
@@ -369,7 +369,7 @@ Item {
 
                 CheckBox {
                     id: checkboxRegister
-                    text: "Registar certificados com a inserção do cartão"
+                    text: qsTr("STR_CERTIFICATES_REGISTER_OP") + controler.autoTr
                     height: 25
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -378,7 +378,7 @@ Item {
                 }
                 CheckBox {
                     id: checkboxRemove
-                    text: "Remover certificados com a remoção do cartão"
+                    text: qsTr("STR_CERTIFICATES_REMOVE_OP") + controler.autoTr
                     height: 25
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -404,7 +404,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: "Selos Temporais"
+                text: qsTr("STR_TIMESTAMP_TITLE") + controler.autoTr
             }
             DropShadow {
                 anchors.fill: rectAppTimeStampCheckBox
@@ -436,7 +436,7 @@ Item {
 
                 CheckBox {
                     id: checkboxTimeStamp
-                    text: "Utilizar serviço temporal personalizado"
+                    text: qsTr("STR_TIMESTAMP_OP") + controler.autoTr
                     height: 25
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -455,7 +455,7 @@ Item {
                         id: textFieldTimeStamp
                         width: parent.width
                         font.italic: textFieldTimeStamp.text === "" ? true: false
-                        placeholderText: "URL do servidor de selos temporais?"
+                        placeholderText: qsTr("STR_TIMESTAMP_URL_OP") + controler.autoTr
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         clip: false
@@ -483,7 +483,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: "Configurações de rede"
+                text: qsTr("STR_NETWORK_TITLE") + controler.autoTr
             }
             DropShadow {
                 anchors.fill: rectAppNetworkCheckBox
@@ -515,7 +515,7 @@ Item {
 
                 CheckBox {
                     id: checkboxProxy
-                    text: "Utilizar servidor Proxy"
+                    text: qsTr("STR_NETWORK_PROXY_OP") + controler.autoTr
                     height: 25
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -534,7 +534,7 @@ Item {
                         id: textFieldAdress
                         width: parent.width
                         font.italic: textFieldAdress.text === "" ? true: false
-                        placeholderText: "Endereço?"
+                        placeholderText: qsTr("STR_NETWORK_PROXY_ADDRESS_OP") + controler.autoTr
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         enabled: checkboxProxy.checked
@@ -554,7 +554,7 @@ Item {
                         id: textFieldPort
                         width: parent.width
                         font.italic: textFieldPort.text === "" ? true: false
-                        placeholderText: "Porto?"
+                        placeholderText: qsTr("STR_NETWORK_PROXY_PORT_OP") + controler.autoTr
                         validator: RegExpValidator { regExp: /[0-9]+/ }
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -569,7 +569,7 @@ Item {
                 CheckBox {
                     id: checkboxAutProxy
                     x: parent.width * 0.40
-                    text: "Utilizar autenticação de Proxy"
+                    text: qsTr("STR_NETWORK_AUTH_OP") + controler.autoTr
                     height: 25
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -588,7 +588,7 @@ Item {
                         id: textFieldAutUser
                         width: parent.width
                         font.italic: textFieldAutUser.text === "" ? true: false
-                        placeholderText: "Utilizador?"
+                        placeholderText: qsTr("STR_NETWORK_AUTH_USERNAME_OP") + controler.autoTr
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         clip: false
@@ -609,7 +609,7 @@ Item {
                         id: textFieldAutPass
                         width: parent.width
                         font.italic: textFieldAutPass.text === "" ? true: false
-                        placeholderText: "Palavra-passe?"
+                        placeholderText: qsTr("STR_NETWORK_AUTH_PASSWORD_OP") + controler.autoTr
                         echoMode : TextInput.Password
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD

@@ -12,6 +12,8 @@
 #include <poppler-qt5.h>
 #include <QPrinter>
 #include <QPrintDialog>
+#include "Settings.h"
+#include "genpur.h"
 
 //MW libraries
 #include "eidlib.h"
@@ -276,6 +278,8 @@ public slots:
     void setEventCallbacks( void );
     void startfillCertificateList ( void );
 
+    void initTranslation();
+
 signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed
@@ -299,7 +303,11 @@ signals:
     void signalPdfPrintSucess();
     void signalPdfPrintSignSucess();
     void signalPdfPrintFail();
+    void signalLanguageChangedError();
+
 private:
+    GUISettings    m_Settings;
+    bool LoadTranslationFile( GenPur::UI_LANGUAGE NewLanguage );
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();
     void getPersoDataFile();
@@ -332,7 +340,8 @@ private:
 
     tCallBackHandles		m_callBackHandles;
     tCallBackData			m_callBackData;
-
+protected:
+    QTranslator m_translator;
 private slots:
     // Test functions
     void triggerTestUpdateCardIdentify();

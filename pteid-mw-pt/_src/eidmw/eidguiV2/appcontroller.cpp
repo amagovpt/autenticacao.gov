@@ -5,35 +5,39 @@
 
 AppController::AppController(GUISettings& settings,QObject *parent) :
     QObject(parent)
-  , m_Language(GenPur::LANG_EN)
   , m_Settings(settings)
 {
-    //------------------------------------
-    // install the translator object and load the .qm file for
-    // the given language.
-    //------------------------------------
-    qApp->installTranslator(&m_translator);
-
-    GenPur::UI_LANGUAGE CurrLng   = m_Settings.getGuiLanguageCode();
-    GenPur::UI_LANGUAGE LoadedLng = LoadTranslationFile(CurrLng);
-
-    m_Language = LoadedLng;
 }
 
-GenPur::UI_LANGUAGE AppController::LoadTranslationFile(GenPur::UI_LANGUAGE NewLanguage)
+void AppController::initTranslation(){
+
+    GenPur::UI_LANGUAGE CurrLng   = m_Settings.getGuiLanguageCode();
+    if (LoadTranslationFile(CurrLng)==false){
+        emit signalLanguageChangedError();
+    }
+}
+
+bool AppController::LoadTranslationFile(GenPur::UI_LANGUAGE NewLanguage)
 {
 
     QString strTranslationFile;
     strTranslationFile = QString("eidmw_") + GenPur::getLanguage(NewLanguage);
 
-    if (!m_translator.load(strTranslationFile,m_Settings.getExePath()+"/"))
+    qDebug() << "C++: AppController LoadTranslationFile" << strTranslationFile;
+
+    if (!m_translator.load(strTranslationFile))
     {
         // this should not happen, since we've built the menu with the translation filenames
+        qDebug() << "C++: AppController LoadTranslationFile Error";
+        return false;
     }
-
-    return NewLanguage;
+    //------------------------------------
+    // install the translator object and load the .qm file for
+    // the given language.
+    //------------------------------------
+    qApp->installTranslator(&m_translator);
+    return true;
 }
-
 QVariant AppController::getCursorPos()
 {
     return QVariant(QCursor::pos());
@@ -67,7 +71,13 @@ int AppController::getGuiLanguageCodeValue (void){
     return m_Settings.getGuiLanguageCode();
 }
 void AppController::setGuiLanguageCodeValue (int language){
-     m_Settings.setGuiLanguage((GenPur::UI_LANGUAGE)language);
+
+    if (LoadTranslationFile((GenPur::UI_LANGUAGE)language)){
+        m_Settings.setGuiLanguage((GenPur::UI_LANGUAGE)language);
+        emit languageChanged();
+    }else{
+        emit signalLanguageChangedError();
+    }
 }
 bool AppController::getShowNotificationValue (void){
 

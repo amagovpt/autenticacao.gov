@@ -27,6 +27,34 @@ GAPI::GAPI(QObject *parent) :
     m_addressLoaded = false;
     m_shortcutFlag = 0;
 }
+void GAPI::initTranslation(){
+
+    GenPur::UI_LANGUAGE CurrLng   = m_Settings.getGuiLanguageCode();
+    if (LoadTranslationFile(CurrLng)==false){
+        emit signalLanguageChangedError();
+    }
+}
+bool GAPI::LoadTranslationFile(GenPur::UI_LANGUAGE NewLanguage)
+{
+
+    QString strTranslationFile;
+    strTranslationFile = QString("eidmw_") + GenPur::getLanguage(NewLanguage);
+
+    qDebug() << "C++: GAPI LoadTranslationFile" << strTranslationFile;
+
+    if (!m_translator.load(strTranslationFile))
+    {
+        // this should not happen, since we've built the menu with the translation filenames
+        qDebug() << "C++: GAPI LoadTranslationFile Error";
+        return false;
+    }
+    //------------------------------------
+    // install the translator object and load the .qm file for
+    // the given language.
+    //------------------------------------
+    qApp->installTranslator(&m_translator);
+    return true;
+}
 
 QString GAPI::getDataCardIdentifyValue(IDInfoKey key) {
 

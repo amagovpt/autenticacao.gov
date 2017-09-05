@@ -38,14 +38,12 @@ PageDefinitionsAppForm {
                                                             controler.setStartMinimizedValue(false)
     }
     propertyRadioButtonUK{
-        onCheckedChanged: propertyRadioButtonUK.checked ?
-                              controler.setGuiLanguageCodeValue(GAPI.LANG_EN) :
-                              controler.setGuiLanguageCodeValue(GAPI.LANG_NL)
+        onCheckedChanged: if (propertyRadioButtonUK.checked)
+                              controler.setGuiLanguageCodeValue(GAPI.LANG_EN)
     }
     propertyRadioButtonPT{
-        onCheckedChanged: propertyRadioButtonPT.checked ?
-                              controler.setGuiLanguageCodeValue(GAPI.LANG_NL) :
-                              controler.setGuiLanguageCodeValue(GAPI.LANG_EN)
+        onCheckedChanged: if (propertyRadioButtonPT.checked)
+                              controler.setGuiLanguageCodeValue(GAPI.LANG_NL)
     }
 
 

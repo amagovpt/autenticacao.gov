@@ -37,7 +37,26 @@ Window {
     }
 
     Connections {
+        target: controler
+        onSignalLanguageChangedError: {
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    "STR_LOAD_LANGUAGE_TITLE"
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    "STR_LOAD_LANGUAGE_MSG"
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+        }
+    }
+
+    Connections {
         target: gapi
+
+        onSignalLanguageChangedError: {
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    "STR_LOAD_LANGUAGE_TITLE"
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    "STR_LOAD_LANGUAGE_MSG"
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+        }
 
         onSignalSetReaderComboIndex: {
             console.log("onSignalSetReaderComboIndex index = " + selected_reader)
@@ -652,6 +671,8 @@ Window {
     Component.onCompleted: {
         console.log("Window mainWindow Completed")
         gapi.setEventCallbacks()
+        controler.initTranslation()
+        gapi.initTranslation()
     }
 
     function getMainMenuWidth(parentWidth){
