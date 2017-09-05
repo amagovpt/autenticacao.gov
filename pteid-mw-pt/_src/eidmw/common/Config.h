@@ -170,8 +170,6 @@ replace $install by string in install parameter
 #define EIDMW_CNF_CERTCACHE_VALIDITY    L"cert_cache_validity"      //number
 #define EIDMW_CNF_CERTCACHE_WAITDELAY   L"cert_cache_waitdelay"     //number
 
-#define EIDMW_CNF_SECTION_TIMESTAMP     L"timestamp"                //section with the timestamp parameters
-#define EIDMW_CNF_TIMESTAMP_HOST        L"timestamp_host"           //string;
 #define EIDMW_CNF_SECTION_PROXY         L"proxy"                    //section with the proxy parameters
 #define EIDMW_CNF_PROXY_HOST            L"proxy_host"               //string;
 #define EIDMW_CNF_PROXY_PORT            L"proxy_port"               //number
@@ -187,7 +185,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GUITOOL_STARTMINI     L"start_minimized"          //number; 0=no(default), 1=yes
 #define EIDMW_CNF_GUITOOL_SHOWPIC       L"show_picture"             //number; 0=no(default), 1=yes
 #define EIDMW_CNF_GUITOOL_SHOWNOTIFICATION  L"show_notification"    //number; 0=no, 1=yes(default)
-#define EIDMW_CNF_GUITOOL_SHOWANIMATIONS  L"show_animations"    //number; 0=no, 1=yes(default)
+#define EIDMW_CNF_GUITOOL_SHOWANIMATIONS  L"show_animations"        //number; 0=no, 1=yes(default)
 #define EIDMW_CNF_GUITOOL_SHOWTBAR      L"show_toolbar"             //number; 0=no, 1=yes
 #define EIDMW_CNF_GUITOOL_VIRTUALKBD    L"use_virtual_keypad"       //number; 0=no, 1=yes
 #define EIDMW_CNF_GUITOOL_AUTOCARDREAD  L"automatic_cardreading"    //number; 0=no, 1=yes(default)
@@ -197,7 +195,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GUITOOL_FILESAVE		L"default_save_path"        //string; path, ""(default)
 
 #define EIDMW_CNF_SECTION_XSIGN			L"xsign"					//section for xsign
-#define EIDMW_CNF_XSIGN_TSAURL			L"tsa_url"					//string url of the tsa
+#define EIDMW_CNF_XSIGN_TSAURL			L"tsa_url"					//string URL of the Timestamp Server
 #define EIDMW_CNF_XSIGN_ONLINE			L"online"					//number; 0=no(default), 1=yes
 #define EIDMW_CNF_XSIGN_WORKINGDIR		L"working_dir"				//string working directory
 #define EIDMW_CNF_XSIGN_TIMEOUT			L"timeout"					//number;

@@ -299,9 +299,9 @@ public:
         // Check timestamp settings
         //---------------------------------------------------------
         {
-            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_TIMESTAMP_HOST);
-            QString timeStamp_host = config.getString();
-            m_time_stamp_host = timeStamp_host;
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_XSIGN_TSAURL);
+            QString timeStamp_url = config.getString();
+            m_time_stamp_host = timeStamp_url;
 
         }
 		//----------------------------------------------------------
@@ -522,7 +522,7 @@ public:
     {
         m_time_stamp_host = timeStamp_host;
 
-        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_TIMESTAMP_HOST);
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_XSIGN_TSAURL);
         config.setString(timeStamp_host.toUtf8());
     }
 

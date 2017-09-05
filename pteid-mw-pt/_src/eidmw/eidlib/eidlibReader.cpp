@@ -784,11 +784,8 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_CERTCACHE_VALIDITY);	break;
 	case PTEID_PARAM_CERTCACHE_WAITDELAY:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_CERTCACHE_WAITDELAY);	break;
-
-        //TIMESTAMP
-        case PTEID_PARAM_TIMESTAMP_HOST:
-                m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_TIMESTAMP_HOST);              break;
-        //PROXY
+    
+    //PROXY
 	case PTEID_PARAM_PROXY_HOST:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);			break;
 	case PTEID_PARAM_PROXY_PORT:
