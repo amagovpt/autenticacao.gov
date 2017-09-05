@@ -31,11 +31,12 @@ RESOURCES += \
         resources.qrc \
         qtquickcontrols2.conf
 
+#TODO: Copy the translation files to the destination directory
 TRANSLATIONS = eidmw_nl.ts \
                eidmw_en.ts \
 
 lupdate_only{
-SOURCES = contentPages/definitions/*.qml
+SOURCES += contentPages/definitions/*.qml
 }
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =

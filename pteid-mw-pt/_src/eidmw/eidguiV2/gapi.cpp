@@ -214,11 +214,11 @@ void GAPI::setPersoDataFile(QString text) {
             free(pucData);
         }
         qDebug() << "Personal notes successfully written!" ;
-        emit signalSetPersoDataFile("Success","Personal notes successfully written!");
+        emit signalSetPersoDataFile(tr("STR_POPUP_SUCESS"),tr("STR_PERSONAL_NOTES_SUCESS"));
 
     } catch (PTEID_Exception& e) {
         qDebug() << "Error writing personal notes!" ;
-        emit signalSetPersoDataFile("Error","Error writing personal notes!");
+        emit signalSetPersoDataFile(tr("STR_POPUP_ERROR"),tr("STR_PERSONAL_NOTES_ERROR"));
     }
 
 }
@@ -402,45 +402,43 @@ void GAPI::showChangeAddressDialog(long code)
 {
     QString error_msg;
     long sam_error_code = 0;
-    QString support_string = tr("Please try again. If this error persists, please have your"
-                                " process number and error code ready, and contact the"
-                                " Citizen Card support line at telephone number +351 211 950 500 or e-mail cartaodecidadao@irn.mj.pt.");
+    QString support_string = tr("STR_CHANGE_ADDRESS_ERROR_MSG");
 
     PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code 0x%08x", code);
 
     switch(code)
     {
     case 0:
-        error_msg = tr("Address Confirmed successfully.");
+        error_msg = tr("STR_CHANGE_ADDRESS_SUCESS");
         break;
         //The error code for connection error is common between SAM and OTP
     case EIDMW_OTP_CONNECTION_ERROR:
-        error_msg = tr("Connection Error") + "\n\n" +
-                tr("Please make sure you are connected to the Internet");
+        error_msg = tr("STR_CONNECTION ERROR") + "\n\n" +
+                tr("STR_VERIFY_INTERNET");
         break;
 
     case 1121:
     case 1122:
-        error_msg = tr("Error in the Address Change operation!") + "\n\n" + tr("Please make sure you typed the correct process number and confirmation code");
+        error_msg = tr("STR_CHANGE_ADDRESS_ERROR") + "\n\n" + tr("STR_CHANGE_ADDRESS_CHECK_PROCESS_NUMBER");
         sam_error_code = code;
         break;
     case EIDMW_SAM_UNCONFIRMED_CHANGE:
-        error_msg = tr("Address change process is incomplete!") + "\n\n" + tr("The address is changed in the card but not confirmed by the State central services");
+        error_msg = tr("STR_CHANGE_ADDRESS_ERROR_INCOMPLETE") + "\n\n" + tr("STR_CHANGE_ADDRESS_NOT_CONFIRMED");
         break;
     case EIDMW_SSL_PROTOCOL_ERROR:
-        error_msg = tr("Error in the Address Change operation!") + "\n\n" + tr("Please make sure you have a valid authentication certificate");
+        error_msg = tr("STR_CHANGE_ADDRESS_ERROR") + "\n\n" + tr("STR_CHANGE_ADDRESS_CHECK_AUTHENTICATION_CERTIFICATE");
         break;
     default:
         //Make sure we only show the user error codes from the SAM service and not some weird pteid exception error code
         if (code > 1100 && code < 3500)
             sam_error_code = code;
-        error_msg = tr("Error in the Address Change operation!");
+        error_msg = tr("STR_CHANGE_ADDRESS_ERROR");
         break;
     }
 
     if (sam_error_code != 0)
     {
-        error_msg += "\n\n" + tr("Error code = ") + QString::number(sam_error_code);
+        error_msg += "\n\n" + tr("STR_ERROR_CODE = ") + QString::number(sam_error_code);
     }
 
     if (code != 0)
@@ -456,29 +454,26 @@ void GAPI::showSignCMDDialog(long code)
 {
     QString error_msg;
     long sam_error_code = 0;
-    QString support_string = tr("Please try again. If this error persists, please have your"
-                                " process number and error code ready, and contact the"
-                                " CMD support line at telephone number +351 xxx xxx xxx or e-mail xxxx@xxx.pt.");
+    QString support_string = tr("STR_CMD_ERROR_MSG");
 
     PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "CMD signature op finished with error code 0x%08x", code);
 
     switch(code)
     {
     case 0:
-        error_msg = tr("Assinatura com Chave Móvel Digital com sucesso.");
+        error_msg = tr("STR_CMD_SUCESS");
         break;
         //The error code for connection error is common between SAM and OTP
     default:
         //Make sure we only show the user error codes from the SAM service and not some weird pteid exception error code
         sam_error_code = code;
-        error_msg = tr("Error in the Chave Móvel Digital Login operation!");
+        error_msg = tr("STR_CMD_LOGIN_ERROR");
         break;
     }
 
     if (sam_error_code != 0)
     {
-        error_msg += "\n\n";
-        error_msg += "Error code = " + QString::number(sam_error_code);
+        error_msg += "\n\n" + tr("STR_ERROR_CODE = ") + QString::number(sam_error_code);
     }
 
     if (code != 0)
@@ -549,7 +544,7 @@ void GAPI::changeAddress(QString process, QString secret_code)
 {
     qDebug() << "ChangeAddress! process = " + process + " secret_code = " + secret_code;
 
-    signalUpdateProgressStatus(tr("Mudando a morada no Cartão..."));
+    signalUpdateProgressStatus(tr("STR_CHANGING_ADDRESS"));
 
     connect(this, SIGNAL(addressChangeFinished(long)),
             this, SLOT(showChangeAddressDialog(long)), Qt::UniqueConnection);
@@ -590,7 +585,7 @@ void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdSignParams &params)
     }
 
     signalUpdateProgressBar(50);
-    signalUpdateProgressStatus("Login com sucesso. Aguarde a recepção do código enviado por sms!");
+    signalUpdateProgressStatus(tr("STR_CMD_LOGIN_SUCESS"));
     emit signalOpenCMDSucess();
 }
 
@@ -600,7 +595,6 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
 
     int ret = 0;
     std::string local_sms_token = sms_token.toUtf8().data();
-    //std::string local_sms_token =  "111111";
 
     try {
         signalUpdateProgressBar(75);
@@ -631,7 +625,7 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QString loaded
                 "reason = " + reason + "location = " + location +
                 "isTimestamp = " +  isTimestamp + "isSmall = " + isSmall;
 
-    signalUpdateProgressStatus("Conectando com o servidor");
+    signalUpdateProgressStatus(tr("STR_CMD_CONNECTING"));
 
     connect(this, SIGNAL(signCMDFinished(long)),
             this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
@@ -657,7 +651,7 @@ void GAPI::signCloseCMD(QString sms_token)
 {
     qDebug() << "signCloseCMD! sms_token = " + sms_token;
 
-    signalUpdateProgressStatus("Enviando código de confirmação para o servidor");
+    signalUpdateProgressStatus(tr("STR_CMD_SENDING_CODE"));
 
     connect(this, SIGNAL(signCMDFinished(long)),
             this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
@@ -675,13 +669,13 @@ QString GAPI::getCardActivation() {
     PTEID_EId &eid_file = card->getID();
 
     if (isExpiredDate(eid_file.getValidityEndDate())) {
-        return QString("The Citizen Card is expired");
+        return QString(tr("STR_CARD_EXPIRED"));
     }
     else if (!card->isActive()) {
-        return QString("The Citizen Card is not active");
+        return QString(tr("STR_CARD_NOT_ACTIVE"));
     }
     else {
-        return QString("The Citizen Card has been activated");
+        return QString(tr("STR_CARD_HAS_BEEN_ACTIVATED"));
     }
 
     END_TRY_CATCH
@@ -930,7 +924,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     //    din_font.setBold(true);
     painter.setFont(din_font);
 
-    painter.drawText(QPointF(pos_x, pos_y), tr("PERSONAL DATA"));
+    painter.drawText(QPointF(pos_x, pos_y), tr("STR_PERSONAL_DATA"));
 
     pos_y += 15;
     int circle_radius = 6;
@@ -953,7 +947,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     if (params.isBasicInfo)
     {
 
-        drawSectionHeader(painter, pos_x, pos_y, tr("BASIC INFORMATION"));
+        drawSectionHeader(painter, pos_x, pos_y, tr("STR_BASIC_INFORMATION"));
         sections_to_print++;
 
         //Load photo into a QPixmap
@@ -972,36 +966,36 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
         pos_y += 50;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Given Name(s)"), QString::fromUtf8(eid_file.getGivenName()), true);
+        drawSingleField(painter, pos_x, pos_y, tr("STR_GIVEN_NAME"), QString::fromUtf8(eid_file.getGivenName()), true);
 
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Surname(s)"), QString::fromUtf8(eid_file.getSurname()), true);
+        drawSingleField(painter, pos_x, pos_y, tr("STR_SURNAME"), QString::fromUtf8(eid_file.getSurname()), true);
 
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Gender"), QString::fromUtf8(eid_file.getGender()));
-        drawSingleField(painter, pos_x + COLUMN_WIDTH, pos_y, tr("Height"), QString::fromUtf8(eid_file.getHeight()));
-        drawSingleField(painter, pos_x + COLUMN_WIDTH*2, pos_y, tr("Date of birth"),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_GENDER"), QString::fromUtf8(eid_file.getGender()));
+        drawSingleField(painter, pos_x + COLUMN_WIDTH, pos_y, tr("STR_HEIGHT"), QString::fromUtf8(eid_file.getHeight()));
+        drawSingleField(painter, pos_x + COLUMN_WIDTH*2, pos_y, tr("STR_DATE_OF_BIRTH"),
                         QString::fromUtf8(eid_file.getDateOfBirth()));
 
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Document Number"), QString::fromUtf8(eid_file.getDocumentNumber()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Validity Date"),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_DOCUMENT_NUMBER"), QString::fromUtf8(eid_file.getDocumentNumber()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_VALIDITY_DATE"),
                         QString::fromUtf8(eid_file.getValidityEndDate()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Country"), QString::fromUtf8(eid_file.getCountry()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_COUNTRY"), QString::fromUtf8(eid_file.getCountry()));
 
         pos_y += LINE_HEIGHT;
-        drawSingleField(painter, pos_x, pos_y, tr("Father"), QString::fromUtf8(eid_file.getGivenNameFather()) + " " +
+        drawSingleField(painter, pos_x, pos_y, tr("STR_FATHER"), QString::fromUtf8(eid_file.getGivenNameFather()) + " " +
                         QString::fromUtf8(eid_file.getSurnameFather()), true);
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Mother"), QString::fromUtf8(eid_file.getGivenNameMother()) + " " +
+        drawSingleField(painter, pos_x, pos_y, tr("STR_MOTHER"), QString::fromUtf8(eid_file.getGivenNameMother()) + " " +
                         QString::fromUtf8(eid_file.getSurnameMother()), true);
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Notes"),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_NOTES"),
                         QString::fromUtf8(eid_file.getAccidentalIndications()), true);
 
         pos_y += 50;
@@ -1009,30 +1003,30 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
     if (params.isAddicionalInfo)
     {
-        drawSectionHeader(painter, pos_x, pos_y, tr("ADDITIONAL INFORMATION"));
+        drawSectionHeader(painter, pos_x, pos_y, tr("STR_ADDITIONAL_INFORMATION"));
         sections_to_print++;
         pos_y += 50;
 
-        drawSingleField(painter, pos_x, pos_y, tr("VAT identification no."), QString::fromUtf8(eid_file.getTaxNo()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Social Security no."),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_VAT_NUM"), QString::fromUtf8(eid_file.getTaxNo()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_SOCIAL_SECURITY_NUM"),
                         QString::fromUtf8(eid_file.getSocialSecurityNumber()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("National Health System no."),
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_NATIONAL_HEALTH_NUM"),
                         QString::fromUtf8(eid_file.getHealthNumber()));
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Card Version"), QString::fromUtf8(eid_file.getDocumentVersion()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Delivery Date"),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_CARD_VERSION"), QString::fromUtf8(eid_file.getDocumentVersion()));
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_DELIVERY_DATE"),
                         QString::fromUtf8(eid_file.getValidityBeginDate()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Delivery Entity"),
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_DELIVERY_ENTITY"),
                         QString::fromUtf8(eid_file.getIssuingEntity()));
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Card State"), getCardActivation());
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Document type"),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_CARD_STATE"), getCardActivation());
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_DOCUMENT_TYPE"),
                         QString::fromUtf8(eid_file.getDocumentType()));
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Delivery Location"),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_DELIVERY_LOCATION"),
                         QString::fromUtf8(eid_file.getLocalofRequest()));
 
         pos_y += 50;
@@ -1040,7 +1034,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
     if (params.isAddress)
     {
-        drawSectionHeader(painter, pos_x, pos_y, tr("ADDRESS"));
+        drawSectionHeader(painter, pos_x, pos_y, tr("STR_ADDRESS"));
         sections_to_print++;
         pos_y += 50;
 
@@ -1048,50 +1042,50 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
         // TODO: Foreign address
 
-        drawSingleField(painter, pos_x, pos_y, tr("District"),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_DISTRICT"),
                         QString::fromUtf8(addressFile.getDistrict()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Municipality"),
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_MUNICIPALY"),
                         QString::fromUtf8(addressFile.getMunicipality()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Civil Parish"),
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_CICIL_PARISH"),
                         QString::fromUtf8(addressFile.getCivilParish()));
 
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Ab. street type"),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_AB_STREET_TYPE"),
                         QString::fromUtf8(addressFile.getAbbrStreetType()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Street type"),
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_STREET_TYPE"),
                         QString::fromUtf8(addressFile.getStreetType()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Street Name"),
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_STREET_NAME"),
                         QString::fromUtf8(addressFile.getStreetName()));
 
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Ab. Building Type"),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_AB_BUILDING_TYPE"),
                         QString::fromUtf8(addressFile.getAbbrBuildingType()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Building Type"),
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_BUILDING_TYPE"),
                         QString::fromUtf8(addressFile.getBuildingType()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("House/building no."),
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_HOUSE_BUILDING_NUM"),
                         QString::fromUtf8(addressFile.getDoorNo()));
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Floor"),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_FLOOR"),
                         QString::fromUtf8(addressFile.getFloor()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Side"),
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_SIDE"),
                         QString::fromUtf8(addressFile.getSide()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Place"),
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_PLACE"),
                         QString::fromUtf8(addressFile.getPlace()));
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Zip Code 4"),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_ZIP_CODE_4"),
                         QString::fromUtf8(addressFile.getZip4()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Zip Code 3"),
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_ZIP_CODE_3"),
                         QString::fromUtf8(addressFile.getZip3()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("Postal Locality"),
+        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_POSTAL_LOCALITY"),
                         QString::fromUtf8(addressFile.getPostalLocality()));
 
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("Locality"),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_LOCALITY"),
                         QString::fromUtf8(addressFile.getLocality()));
 
         pos_y += 80;
@@ -1113,7 +1107,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             pos_x = 0;
 
 
-            drawSectionHeader(painter, pos_x, pos_y, tr("PERSONAL NOTES"));
+            drawSectionHeader(painter, pos_x, pos_y, tr("STR_PERSONAL_NOTES"));
 
             pos_y += 75;
             painter.drawText(QRectF(pos_x, pos_y, 700, 700), Qt::TextWordWrap, perso_data);
@@ -1431,7 +1425,7 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                     }
                 }
                 if(CardIdx > 1 && selectedReaderIndex == -1){
-                    emit signalReaderContext("Warning","Multiple smart card reader detected! Select one.");
+                    emit signalReaderContext("STR_WARNING","STR_MULTI_CARD");
                     selectedReaderIndex = -1;
                 }else{
                     if (!bCardPresent)
