@@ -492,7 +492,8 @@ public:
 	{
 		return m_strExePath;
 	}
-        /*void setSelectedReader( int Idx )
+	
+    void setSelectedReader( int Idx )
 	{
 		m_SelectedReader = Idx;
 		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_CARDREADNUMB);
@@ -501,7 +502,7 @@ public:
 	unsigned long getSelectedReader( void )
 	{
 		return m_SelectedReader;
-        }*/
+    }
 
 	void setGuiVersion( QString const& GUIVersion )
 	{
