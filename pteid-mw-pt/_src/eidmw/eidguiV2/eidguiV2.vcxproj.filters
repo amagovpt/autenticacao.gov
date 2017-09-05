@@ -50,6 +50,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="genpur.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug\qrc_resources.cpp">

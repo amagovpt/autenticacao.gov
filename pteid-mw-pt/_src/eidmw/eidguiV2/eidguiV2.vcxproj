@@ -116,7 +116,7 @@
       <AdditionalLibraryDirectories>$(PTEID_DIR_QT_4_X64)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <LinkIncremental>false</LinkIncremental>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
@@ -256,6 +256,7 @@
   <ItemGroup>
     <ClCompile Include="filesavedialog.cpp" />
     <ClCompile Include="gapi.cpp" />
+    <ClCompile Include="genpur.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="appcontroller.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_gapi.cpp" />
