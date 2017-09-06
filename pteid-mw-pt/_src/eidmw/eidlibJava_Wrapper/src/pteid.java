@@ -27,12 +27,15 @@ public class pteid {
     public static final int UNBLOCK_FLAG_PUK_MERGE = 2;
     public static final int MODE_ACTIVATE_BLOCK_PIN = 1;
 
+    //Error codes inherited from Pteid Middleware V1: documented in CC_Technical_Reference_1.61
     private static int SC_ERROR_AUTH_METHOD_BLOCKED = -1212;
+    private static int SC_ERROR_INVALID_CARD = -1210;
     private static int SC_ERROR_PIN_CODE_INCORRECT = -1214;
     private static int SC_ERROR_KEYPAD_TIMEOUT = -1108;
     private static int SC_ERROR_KEYPAD_CANCELLED = -1109;
+    private static int SC_ERROR_NO_READERS_FOUND = -1101;
+    private static int SC_ERROR_CARD_NOT_PRESENT = -1104;
     
-
     protected static final char[] hexChars = {
         '0', '1', '2', '3', '4', '5',
         '6', '7', '8', '9', 'A', 'B',
@@ -40,18 +43,17 @@ public class pteid {
     };
 
 
-
-   private static String ashex(byte[] b){
+    private static String ashex(byte[] b) {
        String st = "";
 
-       for(int i=0; i<b.length;i++){
+       for(int i=0; i<b.length;i++) {
           int temp = b[i] & 0x000000FF;
           st += hexChars[(temp >> 4)];
           st += hexChars[(temp & 0xf)];
        }
 
        return st;
-   }
+    }
 
 
     private static int trimStart(byte[] array) {
@@ -65,18 +67,29 @@ public class pteid {
     }
 
 
-   public static void Init(String readerName) throws PteidException{
+    public static void Init(String readerName) throws PteidException {
         try {
             PTEID_ReaderSet.initSDK();
             readerSet = PTEID_ReaderSet.instance();
             if (readerName == null || readerName.isEmpty())
-                readerContext = readerSet.getReaderByNum(0);
+                readerContext = readerSet.getReader();
             else
                 readerContext = readerSet.getReaderByName(readerName);
 			
-			 pteidlibJava_Wrapper.setCompatReaderContext(readerContext);
+			pteidlibJava_Wrapper.setCompatReaderContext(readerContext);
             idCard = readerContext.getEIDCard();
-        } catch (Exception ex) {
+        }
+        catch(PTEID_ExNoReader ex) {
+            throw new PteidException(SC_ERROR_NO_READERS_FOUND);
+        }
+        catch (PTEID_ExNoCardPresent ex) {
+            throw new PteidException(SC_ERROR_CARD_NOT_PRESENT);
+        }
+        catch (PTEID_ExCardBadType ex) {
+            throw new PteidException(SC_ERROR_INVALID_CARD);
+        }
+        catch (Exception ex) {
+            //ex.printStackTrace();
             throw new PteidException();
         }
    }
@@ -353,27 +366,28 @@ public class pteid {
         if (readerContext!=null) {
             try {
 
-              if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131)
-                 return 0;
+                if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131)
+                    return 0;
 
-            PTEID_Pins pins = idCard.getPins();
-            for (long pinIdx=0; pinIdx < pins.count(); pinIdx++) {
+                PTEID_Pins pins = idCard.getPins();
+                for (long pinIdx=0; pinIdx < pins.count(); pinIdx++) {
 
-                 pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
+                    pt.gov.cartaodecidadao.PTEID_Pin pin = pins.getPinByNumber(pinIdx);
 
-                 if (pin.getPinRef() == pinId) {
-                    boolean ret = pin.unlockPin(puk, newPin, tries_left, flags);
+                    if (pin.getPinRef() == pinId) {
+                        boolean ret = pin.unlockPin(puk, newPin, tries_left, flags);
 
-                    if (!ret)
-                    {
-                        if (tries_left.m_long == 0)
-                            throw new PteidException(SC_ERROR_AUTH_METHOD_BLOCKED);
-                        else
-                            throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
+                        if (!ret)
+                        {
+                            if (tries_left.m_long == 0)
+                                throw new PteidException(SC_ERROR_AUTH_METHOD_BLOCKED);
+                            else
+                                throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
+                        }
                     }
-                 }
+                }
             }
-            } catch (PTEID_Exception ex) {
+            catch (PTEID_Exception ex) {
                 if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_TIMEOUT)
                     throw new PteidException(SC_ERROR_KEYPAD_TIMEOUT);
                 else if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_PIN_CANCEL)
@@ -436,14 +450,17 @@ public class pteid {
                 retArray = new byte[trimmedSize];
 
                 System.arraycopy(pb.GetBytes(), 0, retArray, 0, retArray.length);
-            } catch (Exception ex) {
-                System.err.println("Erro no ReadFile: " + ex.getMessage() );
+            }
+            catch (PTEID_Exception ex) {
+                throw new PteidException(ex.GetError());
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
                 throw new PteidException();
             }
         }
         return retArray;
     }
-
 
     public static void WriteFile(byte[] file, byte[] data, byte bpin) throws PteidException {
         WriteFileInOffset( file, data, bpin, 0/*inOffset*/);
