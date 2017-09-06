@@ -58,7 +58,7 @@ Item {
             width: parent.width
             Components.LabelTextBoxForm {
                 id: textBoxDistrict
-                propertyDateText.text: "Distrito"
+                propertyDateText.text: qsTranslate("GAPI","STR_DISTRICT")
                 propertyDateField.text: ""
             }
         }
@@ -76,7 +76,7 @@ Item {
             width: parent.width
             Components.LabelTextBoxForm {
                 id: textBoxMunicipality
-                propertyDateText.text: "Concelho"
+                propertyDateText.text: qsTranslate("GAPI","STR_MUNICIPALY")
                 propertyDateField.text: ""
             }
         }
@@ -94,7 +94,7 @@ Item {
             width: parent.width
             Components.LabelTextBoxForm {
                 id: textBoxParish
-                propertyDateText.text: "Freguesia"
+                propertyDateText.text: qsTranslate("GAPI","STR_CICIL_PARISH")
                 propertyDateField.text: ""
             }
         }
@@ -113,7 +113,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm {
                 id: textBoxStreetType
-                propertyDateText.text: "Tipo de Via"
+                propertyDateText.text: qsTranslate("GAPI","STR_STREET_TYPE")
                 propertyDateField.text: ""
             }
         }
@@ -124,7 +124,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm {
                 id: textBoxStreetName
-                propertyDateText.text: "Via"
+                propertyDateText.text: qsTranslate("GAPI","STR_STREET_NAME")
                 propertyDateField.text: ""
             }
         }
@@ -143,7 +143,7 @@ Item {
             width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE) * 0.33
             Components.LabelTextBoxForm {
                 id: textBoxDoorNo
-                propertyDateText.text: "N.º"
+                propertyDateText.text: qsTranslate("GAPI","STR_HOUSE_BUILDING_NUM")
                 propertyDateField.text: ""
             }
         }
@@ -154,7 +154,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm {
                 id: textBoxFloor
-                propertyDateText.text: "Andar"
+                propertyDateText.text: qsTranslate("GAPI","STR_FLOOR")
                 propertyDateField.text: ""
             }
         }
@@ -165,7 +165,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm {
                 id: textBoxSide
-                propertyDateText.text: "Lado"
+                propertyDateText.text: qsTranslate("GAPI","STR_SIDE")
                 propertyDateField.text: ""
             }
         }
@@ -183,7 +183,7 @@ Item {
             width: (parent.width - Constants.SIZE_ROW_H_SPACE) * 0.50
             Components.LabelTextBoxForm {
                 id: textBoxPlace
-                propertyDateText.text: "Lugar"
+                propertyDateText.text: qsTranslate("GAPI","STR_PLACE")
                 propertyDateField.text: ""
             }
         }
@@ -194,7 +194,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm {
                 id: textBoxLocality
-                propertyDateText.text: "Localidade"
+                propertyDateText.text: qsTranslate("GAPI","STR_LOCALITY")
                 propertyDateField.text: ""
             }
         }
@@ -212,7 +212,7 @@ Item {
             width: 50
             Components.LabelTextBoxForm {
                 id: textBoxZip4
-                propertyDateText.text: "Código Postal"
+                propertyDateText.text: qsTranslate("GAPI","STR_ZIP_CODE")
                 propertyDateField.text: ""
             }
         }
@@ -249,7 +249,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm {
                 id: textBoxPostalLocality
-                propertyDateText.text: "Localidade Postal"
+                propertyDateText.text: qsTranslate("GAPI","STR_POSTAL_LOCALITY")
                 propertyDateField.text: ""
             }
         }
@@ -268,7 +268,7 @@ Item {
             Text {
                 id: dateField
                 y: Constants.SIZE_TEXT_FIELD_V_SPACE
-                text: "Para confirmar a alteração de morada, pressione o botão alteração de morada"
+                text: qsTranslate("PageCardAdress","STR_ADDRESS_CHANGE_CONFIRMATION_TEXT")
                 width: parent.width
                 height: parent.height
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -287,7 +287,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Button {
                 id: buttonConfirmOfAddress
-                text: "Alteração de morada"
+                text: qsTranslate("PageCardAdress","STR_ADDRESS_CHANGE_BUTTON")
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.right: parent.right

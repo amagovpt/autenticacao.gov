@@ -42,7 +42,7 @@ Item {
 
     FileSaveDialog {
         id: fileDialogOutput
-        title: "Escolha o ficheiro de destino"
+        title: qsTranslate("PageCardPrint","STR_PRINT_OUTPUT_FILE")
         nameFilters: ["Images (*.pdf)", "All files (*)"]
     }
 
@@ -80,7 +80,7 @@ Item {
             font.family: lato.name
             color: Constants.COLOR_TEXT_LABEL
             height: Constants.SIZE_TEXT_LABEL
-            text: "Configurações"
+            text: qsTranslate("PageCardPrint","STR_PRINT_SETTINGS")
         }
 
         Rectangle {
@@ -93,41 +93,37 @@ Item {
             Switch {
                 id: switchBasic
                 height: Constants.HEIGHT_SWITCH_COMPONENT
-                text: "Informações Básicas"
+                text: qsTranslate("GAPI","STR_BASIC_INFORMATION_UPPERCASE")
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.capitalization: Font.MixedCase
             }
             Switch {
                 id: switchAdditional
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchBasic.bottom
-                text: "Informações Adicionais"
+                text: qsTranslate("GAPI","STR_ADDITIONAL_INFORMATION_UPPERCASE")
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.capitalization: Font.MixedCase
             }
             Switch {
                 id: switchAddress
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchAdditional.bottom
-                text: "Morada"
+                text: qsTranslate("GAPI","STR_ADDRESS_UPPERCASE")
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.capitalization: Font.MixedCase
             }
             Switch {
                 id: switchNotes
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchAddress.bottom
-                text: "Notas Pessoais"
+                text: qsTranslate("GAPI","STR_PERSONAL_NOTES_UPPERCASE")
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.capitalization: Font.MixedCase
             }
         }
     }
@@ -166,7 +162,7 @@ Item {
             font.family: lato.name
             color: Constants.COLOR_TEXT_LABEL
             height: Constants.SIZE_TEXT_LABEL
-            text: "Opções"
+            text: qsTranslate("PageCardPrint","STR_PRINT_SETTINGS")
         }
 
         Rectangle {
@@ -179,7 +175,7 @@ Item {
             Switch {
                 id: switchPdfSign
                 height: Constants.HEIGHT_SWITCH_COMPONENT
-                text: "Documento PDF assinado"
+                text: qsTranslate("PageCardPrint","STR_PRINT_SIGN_PDF")
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -200,7 +196,7 @@ Item {
             height: parent.height
             Button {
                 id: buttonPrint
-                text: "Imprimir"
+                text: qsTranslate("PageCardPrint","STR_PRINT_BUTTON")
                 enabled: false
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
@@ -218,7 +214,7 @@ Item {
             anchors.left: rectPrint.right
             Button {
                 id: buttonPdf
-                text: "Gerar PDF"
+                text: qsTranslate("PageCardPrint","STR_PRINT_PDF_BUTTON")
                 enabled: false
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT

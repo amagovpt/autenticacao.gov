@@ -40,7 +40,7 @@ PageCardPrintForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textOkPin
-                    text: "PIN introduzido correctamente."
+                    text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -66,19 +66,18 @@ PageCardPrintForm {
     Connections {
         target: gapi
         onSignalPdfPrintSignSucess: {
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text = "Gerar PDF"
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Ficheiro PDF assinado gerado com sucesso"
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTr("STR_PRINT_CREATE_PDF")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTr("STR_PRINT_CREATE_PDF_SUCESS")
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
         onSignalPdfPrintSucess: {
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text = "Gerar PDF"
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Ficheiro PDF gerado com sucesso"
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTr("STR_PRINT_CREATE_PDF")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTr("STR_PRINT_CREATE_PDF_SUCESS")
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
         onSignalPdfPrintFail: {
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text = "Gerar PDF"
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Erro ao gerar pdf. \
-Verifique se tem permissoes de escrita no ficheiro  \ne no directorio de destino."
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTr("STR_PRINT_CREATE_PDF")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  qsTr("STR_PRINT_CREATE_PDF_FAIL")
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
         onSignalCardDataChanged: {
@@ -100,24 +99,31 @@ Verifique se tem permissoes de escrita no ficheiro  \ne no directorio de destino
         onSignalCardAccessError: {
             console.log("Card Print Page onSignalCardAccessError")
             if (error_code == GAPI.NoReaderFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "No card reader found!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
                 disableComponents()
             }
             else if (error_code == GAPI.NoCardFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "No Card Found!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD")
                 disableComponents()
             }
             else if (error_code == GAPI.SodCardReadError) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        "Consistência da informação do cartão está comprometida!"
+                        qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
                 disableComponents()
             }
             else {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Card Access Error!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             propertyBusyIndicator.running = false
@@ -125,19 +131,24 @@ Verifique se tem permissoes de escrita no ficheiro  \ne no directorio de destino
         onSignalCardChanged: {
             console.log("Card Print Page onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Cartão do Cidadão removido"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Cartão do Cidadão inserido"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
                 gapi.startCardReading()
             }
             else{
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        "Erro da aplicação! Por favor reinstale a aplicação:"
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
 
             }
             disableComponents()
@@ -190,8 +201,8 @@ Verifique se tem permissoes de escrita no ficheiro  \ne no directorio de destino
                 var triesLeft = 0
                 triesLeft = gapi.verifyAddressPin("")
                 if (triesLeft === 3) {
-                    dialogPinOK.propertyDialogOkLabelText.text = "Verificação de PIN"
-                    dialogPinOK.propertyTextOkPin.text = "PIN introduzido correctamente"
+                    dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
+                    dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
                     dialogPinOK.open()
                 }else {
                     propertySwitchAddress.checked = false

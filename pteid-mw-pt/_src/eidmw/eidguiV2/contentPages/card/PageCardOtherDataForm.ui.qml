@@ -52,7 +52,7 @@ Item {
             width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE ) * 0.33
             Components.LabelTextBoxForm {
                 id: textBoxNIF
-                propertyDateText.text: "N.º Identificação Fiscal"
+                propertyDateText.text: qsTranslate("GAPI","STR_VAT_NUM")
                 propertyDateField.text: ""
             }
         }
@@ -63,7 +63,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm {
                 id: textBoxNISS
-                propertyDateText.text: "N.º Segurança Social"
+                propertyDateText.text: qsTranslate("GAPI","STR_SOCIAL_SECURITY_NUM")
                 propertyDateField.text: ""
             }
         }
@@ -74,7 +74,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm {
                 id: textBoxNSNS
-                propertyDateText.text: "N. º Utente de Saúde"
+                propertyDateText.text: qsTranslate("GAPI","STR_NATIONAL_HEALTH_NUM")
                 propertyDateField.text: ""
             }
         }
@@ -94,7 +94,7 @@ Item {
             width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.5
             Components.LabelTextBoxForm {
                 id: textBoxCardVersion
-                propertyDateText.text: "Versão do Cartão"
+                propertyDateText.text: qsTranslate("GAPI","STR_CARD_VERSION")
                 propertyDateField.text: ""
             }
         }
@@ -105,7 +105,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm {
                 id: textBoxIssueDate
-                propertyDateText.text: "Data de Emissão"
+                propertyDateText.text: qsTranslate("GAPI","STR_DELIVERY_DATE")
                 propertyDateField.text: ""
             }
         }
@@ -124,7 +124,7 @@ Item {
             width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.5
             Components.LabelTextBoxForm {
                 id: textBoxIssuingEntity
-                propertyDateText.text: "Entidade Emissora"
+                propertyDateText.text: qsTranslate("GAPI","STR_DELIVERY_ENTITY")
                 propertyDateField.text: ""
             }
         }
@@ -135,7 +135,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
                 id: textBoxDocumentType
-                propertyDateText.text: "Tipo de Documento"
+                propertyDateText.text: qsTranslate("GAPI","STR_DOCUMENT_TYPE")
                 propertyDateField.text: ""
             }
         }
@@ -154,7 +154,7 @@ Item {
             width: (parent.width )
             Components.LabelTextBoxForm {
                 id: textBoxPlaceOfRequest
-                propertyDateText.text: "Local de Pedido"
+                propertyDateText.text: qsTranslate("GAPI","STR_DELIVERY_LOCATION")
                 propertyDateField.text: ""
             }
         }
@@ -174,7 +174,7 @@ Item {
             width: (parent.width )
             Components.LabelTextBoxForm{
                 id: textBoxCardState
-                propertyDateText.text: "Estado do Cartão"
+                propertyDateText.text: qsTranslate("GAPI","STR_CARD_STATE")
                 propertyDateField.text: ""
             }
         }
@@ -188,8 +188,7 @@ Item {
 
         Text {
             id: dateField
-            text: "Para verificar se o cartão não está suspenso ou revogado, \
-deverá validar os certificados em Segurança - Certificados"
+            text: qsTranslate("PageCardOther","STR_CARD_OTHER_STATE")
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             font.capitalization: Font.MixedCase

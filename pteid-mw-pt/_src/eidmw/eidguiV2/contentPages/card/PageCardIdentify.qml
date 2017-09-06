@@ -37,21 +37,28 @@ PageCardIdentifyForm {
         onSignalCardAccessError: {
             console.log("Card Identify Page onSignalCardAccessError")
             if (error_code == GAPI.NoReaderFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "No card reader found!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
             }
             else if (error_code == GAPI.NoCardFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "No Card Found!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD")
             }
             else if (error_code == GAPI.SodCardReadError) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        "Consistência da informação do cartão está comprometida!"
+                        qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
             }
             else {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Card Access Error!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
 
@@ -74,8 +81,10 @@ PageCardIdentifyForm {
         onSignalCardChanged: {
             console.log("Card Identify Page onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Cartão do Cidadão removido"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 propertyTextBoxName.propertyDateField.text = ""
                 propertyTextBoxSurName.propertyDateField.text = ""
                 propertyTextBoxSex.propertyDateField.text = ""
@@ -92,15 +101,18 @@ PageCardIdentifyForm {
                 propertyPhoto.cache = false
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Cartão do Cidadão inserido"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
                 gapi.startCardReading()
             }
             else{
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        "Erro da aplicação! Por favor reinstale a aplicação:"
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
             }
 
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;

@@ -16,21 +16,28 @@ PageSecurityPinCodesForm {
         onSignalCardAccessError: {
             console.log("Security Pin Codes onSignalCardAccessError")
             if (error_code == GAPI.NoReaderFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "No card reader found!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
             }
             else if (error_code == GAPI.NoCardFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "No Card Found!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD")
             }
             else if (error_code == GAPI.SodCardReadError) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        "Consistência da informação do cartão está comprometida!"
+                        qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
             }
             else {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Card Access Error!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             propertyButtonModifyAuth.enabled = false
@@ -110,7 +117,7 @@ PageSecurityPinCodesForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textOkPin
-                    text: "PIN introduzido correctamente."
+                    text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -147,7 +154,7 @@ PageSecurityPinCodesForm {
         y: parent.height * 0.5 - dialogBadPin.height * 0.5
 
         header: Label {
-            text: "Verificação de PIN"
+            text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
@@ -243,7 +250,7 @@ PageSecurityPinCodesForm {
                     width: parent.width * 0.5
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldPin.text === "" ? true: false
-                    placeholderText: "PIN Atual?"
+                    placeholderText: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_CURRENT")
                     echoMode : TextInput.Password
                     validator: RegExpValidator { regExp: /[0-9]+/ }
                     maximumLength: 8
@@ -311,8 +318,8 @@ PageSecurityPinCodesForm {
             propertyBusyIndicator.running = false
 
             if (triesLeft === 3) {
-                dialogPinOK.propertyDialogOkLabelText.text = "Verificação de PIN"
-                dialogPinOK.propertyTextOkPin.text = "PIN introduzido correctamente"
+                dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
+                dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
                 dialogPinOK.open()
             }
             else if (triesLeft === 0) {
@@ -324,7 +331,11 @@ PageSecurityPinCodesForm {
                 dialogBadPin.open()
             }
             else {
-                textBadPin.text = "O PIN introduzido está errado! \n\n" + "Restam "+ triesLeft + " tentativas."
+                textBadPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_WRONG")
+                        + " \n\n"
+                        + qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
+                        + " " + triesLeft + " "
+                        + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
                 dialogBadPin.open()
             }
         }
@@ -372,7 +383,7 @@ PageSecurityPinCodesForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textPinCurrent
-                    text: "PIN Atual"
+                    text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_CURRENT")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -387,7 +398,7 @@ PageSecurityPinCodesForm {
                     width: parent.width * 0.5
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldPinCurrent.text === "" ? true: false
-                    placeholderText: "PIN Atual?"
+                    placeholderText: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_CURRENT")
                     echoMode : TextInput.Password
                     validator: RegExpValidator { regExp: /[0-9]+/ }
                     maximumLength: 8
@@ -558,7 +569,11 @@ PageSecurityPinCodesForm {
                     dialogBadPin.open()
                 }
                 else {
-                    textBadPin.text = "O PIN introduzido está errado! \n\n" + "Restam "+ triesLeft + " tentativas."
+                    textBadPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_WRONG")
+                            + " \n\n"
+                            + qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
+                            + " " + triesLeft + " "
+                            + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
 
                     dialogBadPin.open()
                 }
@@ -610,8 +625,8 @@ PageSecurityPinCodesForm {
                 var triesLeft = 0
                 triesLeft = gapi.verifyAuthPin("")
                 if (triesLeft === 3) {
-                    dialogPinOK.propertyDialogOkLabelText.text = "Verificação de PIN"
-                    dialogPinOK.propertyTextOkPin.text = "PIN introduzido correctamente"
+                    dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
+                    dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
                     dialogPinOK.open()
                 }
                 if (triesLeft === 0) {
@@ -673,8 +688,8 @@ PageSecurityPinCodesForm {
                 var triesLeft = 0
                 triesLeft = gapi.verifySignPin("")
                 if (triesLeft === 3) {
-                    dialogPinOK.propertyDialogOkLabelText.text = "Verificação de PIN"
-                    dialogPinOK.propertyTextOkPin.text = "PIN introduzido correctamente"
+                    dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
+                    dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
                     dialogPinOK.open()
                 }
                 if (triesLeft === 0) {
@@ -733,8 +748,8 @@ PageSecurityPinCodesForm {
                 var triesLeft = 0
                 triesLeft = gapi.verifyAddressPin("")
                 if (triesLeft === 3) {
-                    dialogPinOK.propertyDialogOkLabelText.text = "Verificação de PIN"
-                    dialogPinOK.propertyTextOkPin.text = "PIN introduzido correctamente"
+                    dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
+                    dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
                     dialogPinOK.open()
                 }
                 if (triesLeft === 0) {
@@ -748,8 +763,10 @@ PageSecurityPinCodesForm {
                 }
             }else{
                 mainFormID.opacity = 0.5
-                dialogTestPin.propertyLabelTextTitle.text = "Verificar o Pin da Morada"
-                dialogTestPin.propertyTextTypePin.text = "PIN da Morada"
+                dialogTestPin.propertyLabelTextTitle.text =
+                        qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY_ADDRESS")
+                dialogTestPin.propertyTextTypePin.text =
+                        qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_ADDRESS")
                 dialogTestPin.propertyTextFieldPin.text = ""
                 dialogTestPin.open()
             }

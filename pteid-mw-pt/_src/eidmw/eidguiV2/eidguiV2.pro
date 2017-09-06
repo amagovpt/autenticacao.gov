@@ -36,7 +36,13 @@ TRANSLATIONS = eidmw_nl.ts \
                eidmw_en.ts \
 
 lupdate_only{
-SOURCES += contentPages/definitions/*.qml
+SOURCES += contentPages/card/*.qml \
+            contentPages/definitions/*.qml \
+            contentPages/help/*.qml \
+            contentPages/home/*.qml \
+            contentPages/security/*.qml \
+            contentPages/services/*.qml
+
 }
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =

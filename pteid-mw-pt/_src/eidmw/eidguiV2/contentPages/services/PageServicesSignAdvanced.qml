@@ -57,23 +57,28 @@ PageServicesSignAdvancedForm {
         onSignalCardChanged: {
             console.log("Services Sign Advanced onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Cartão do Cidadão removido"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 propertyPDFPreview.propertyDragSigSignedByNameText.text = "Assinado por:"
                 propertyPDFPreview.propertyDragSigNumIdText.text = "Num. de Identificação Civil:"
                 cardLoaded = false
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Cartão do Cidadão inserido"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
                 cardLoaded = true
                 gapi.startCardReading()
             }
             else{
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        "Erro da aplicação! Por favor reinstale a aplicação:"
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
                 cardLoaded = false
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;

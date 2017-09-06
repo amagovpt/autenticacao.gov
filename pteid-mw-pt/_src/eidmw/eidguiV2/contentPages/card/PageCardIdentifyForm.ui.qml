@@ -65,7 +65,7 @@ Item {
                         + 2 * Constants.SIZE_TEXT_FIELD
                 Components.LabelTextBoxForm{
                     id: textBoxName
-                    propertyDateText.text: "Nome"
+                    propertyDateText.text: qsTranslate("GAPI","STR_GIVEN_NAME")
                     propertyRectField.height: parent.height
                     propertyDateField.wrapMode: Text.WordWrap
                 }
@@ -80,7 +80,7 @@ Item {
                 anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
                 Components.LabelTextBoxForm{
                     id: textBoxSurName
-                    propertyDateText.text: "Apelido"
+                    propertyDateText.text: qsTranslate("GAPI","STR_SURNAME")
                     propertyRectField.height: parent.height
                     propertyDateField.wrapMode: Text.WordWrap
                 }
@@ -146,7 +146,7 @@ Item {
             width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.20
             Components.LabelTextBoxForm{
                 id: textBoxSex
-                propertyDateText.text: "Sexo"
+                propertyDateText.text: qsTranslate("GAPI","STR_GENDER")
             }
         }
         Item{
@@ -156,7 +156,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
                 id: textBoxHeight
-                propertyDateText.text: "Altura"
+                propertyDateText.text: qsTranslate("GAPI","STR_HEIGHT")
             }
         }
         Item{
@@ -166,7 +166,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
                 id: textBoxNacionality
-                propertyDateText.text: "Nacionalidade"
+                propertyDateText.text: qsTranslate("GAPI","STR_NATIONALITY")
             }
         }
         Item{
@@ -176,7 +176,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
                 id: textBoxDateOfBirth
-                propertyDateText.text: "Data de Nascimento"
+                propertyDateText.text: qsTranslate("GAPI","STR_DATE_OF_BIRTH")
             }
         }
     }
@@ -195,7 +195,7 @@ Item {
             width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
             Components.LabelTextBoxForm{
                 id: textBoxDocumentNum
-                propertyDateText.text: "N.º Documento"
+                propertyDateText.text: qsTranslate("GAPI","STR_DOCUMENT_NUMBER")
             }
         }
         Item{
@@ -205,7 +205,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
                 id: textBoxExpirydate
-                propertyDateText.text: "Data de validade"
+                propertyDateText.text: qsTranslate("GAPI","STR_VALIDITY_DATE")
             }
         }
     }
@@ -224,7 +224,7 @@ Item {
             width: parent.width
             Components.LabelTextBoxForm{
                 id: textBoxCountry
-                propertyDateText.text: "País"
+                propertyDateText.text: qsTranslate("GAPI","STR_COUNTRY")
             }
         }
     }
@@ -246,7 +246,7 @@ Item {
                     + 2 * Constants.SIZE_TEXT_FIELD
             Components.LabelTextBoxForm{
                 id: textBoxParentsFather
-                propertyDateText.text: "Filiação"
+                propertyDateText.text: qsTranslate("GAPI","STR_AFFILIATION")
             }
         }
         Item{
@@ -280,7 +280,7 @@ Item {
                     + 2 * Constants.SIZE_TEXT_FIELD
             Components.LabelTextBoxForm{
                 id: textBoxNotes
-                propertyDateText.text: "Indicações Eventuais"
+                propertyDateText.text: qsTranslate("GAPI","STR_NOTES")
             }
         }
     }

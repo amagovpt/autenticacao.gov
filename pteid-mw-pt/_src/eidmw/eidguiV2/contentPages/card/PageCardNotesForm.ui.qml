@@ -51,7 +51,7 @@ Item {
             opacity: 1
             Text {
                 id: notesText
-                text: "Notas"
+                text: qsTranslate("PageCardNotes","STR_NOTES_PAGE")
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
@@ -149,7 +149,7 @@ Item {
             height: parent.height
             Text {
                 id: dateText
-                text: "Espaço ocupado no Cartão"
+                text: qsTranslate("PageCardNotes","STR_NOTES_PAGE_SIZE")
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
@@ -179,7 +179,7 @@ Item {
 
             Button {
                 id: saveNotes
-                text: "Gravar Notas"
+                text: qsTranslate("PageCardNotes","STR_NOTES_PAGE_SAVE")
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.right: parent.right

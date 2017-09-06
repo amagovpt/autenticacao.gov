@@ -44,21 +44,28 @@ PageCardAdressForm {
         onSignalCardAccessError: {
             console.log("Card Adress onSignalCardAccessError")
             if (error_code == GAPI.NoReaderFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "No card reader found!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
             }
             else if (error_code == GAPI.NoCardFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "No Card Found!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD")
             }
             else if (error_code == GAPI.SodCardReadError) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        "Consistência da informação do cartão está comprometida!"
+                        qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
             }
             else {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Card Access Error!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
 
@@ -80,8 +87,10 @@ PageCardAdressForm {
         onSignalCardChanged: {
             console.log("Card Adress onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Cartão do Cidadão removido"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 propertyDistrict.propertyDateField.text = ""
                 propertyMunicipality.propertyDateField.text = ""
                 propertyParish.propertyDateField.text = ""
@@ -107,14 +116,17 @@ PageCardAdressForm {
                     dialogTestPin.open()
                     textFieldPin.text = ""
                 }
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Cartão do Cidadão inserido"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
             }
             else{
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        "Erro da aplicação! Por favor reinstale a aplicação:"
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
@@ -132,7 +144,7 @@ PageCardAdressForm {
         y: parent.height * 0.5 - dialogBadPin.height * 0.5
 
         header: Label {
-            text: "Verificação de PIN"
+            text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
@@ -184,7 +196,7 @@ PageCardAdressForm {
         y: parent.height * 0.5 - dialogTestPin.height * 0.5
 
         header: Label {
-            text: "Verificar o Pin da Morada"
+            text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY_ADDRESS")
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
@@ -205,7 +217,7 @@ PageCardAdressForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textPin
-                    text: "PIN da Morada"
+                    text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_ADDRESS")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -220,7 +232,7 @@ PageCardAdressForm {
                     width: parent.width * 0.5
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldPin.text === "" ? true: false
-                    placeholderText: "PIN Atual?"
+                    placeholderText: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_CURRENT")
                     echoMode : TextInput.Password
                     validator: RegExpValidator { regExp: /[0-9]+/ }
                     maximumLength: 8
@@ -252,11 +264,15 @@ PageCardAdressForm {
                 gapi.startReadingAddress()
             }
             else if (triesLeft === 0) {
-                textBadPin.text = "PIN de morada bloqueado!"
+                textBadPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_ADDRESS_BLOCKED")
                 dialogBadPin.open()
             }
             else {
-                textBadPin.text = "O PIN introduzido está errado! \n\n" + "Restam "+ triesLeft + " tentativas."
+                textBadPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_WRONG")
+                        + " \n\n"
+                        + qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
+                        + " " + triesLeft + " "
+                        + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
                 dialogBadPin.open()
             }
         }
@@ -277,7 +293,7 @@ PageCardAdressForm {
 
         header: Label {
             id: labelConfirmOfAddressTextTitle
-            text: "Confirmação de Morada"
+            text: qsTr("STR_ADDRESS_CHANGE_CONFIRMATION")
             visible: true
             elide: Label.ElideRight
             padding: 24
@@ -298,7 +314,7 @@ PageCardAdressForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textPinMsgConfirm
-                    text: "Por favor insira o número de processo e o código secreto recebido pelo correio"
+                    text: qsTr("STR_ADDRESS_CHANGE_TEXT")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -318,7 +334,7 @@ PageCardAdressForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textPinCurrent
-                    text: "Nº de Processo de alteração de Morada"
+                    text:  qsTr("STR_ADDRESS_CHANGE_NUMBER")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -333,7 +349,7 @@ PageCardAdressForm {
                     width: parent.width * 0.5
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldNumProcess.text === "" ? true: false
-                    placeholderText: "Número de processo?"
+                    placeholderText: qsTr("STR_ADDRESS_CHANGE_NUMBER_OP")
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
@@ -349,7 +365,7 @@ PageCardAdressForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textPinNew
-                    text: "Código de Confirmação de Morada"
+                    text: qsTr("STR_ADDRESS_CHANGE_CODE")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -364,7 +380,7 @@ PageCardAdressForm {
                     width: parent.width * 0.5
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldConfirmAddress.text === "" ? true: false
-                    placeholderText: "Código de confirmação de Morada?"
+                    placeholderText: qsTr("STR_ADDRESS_CHANGE_CODE_OP")
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
@@ -403,7 +419,7 @@ PageCardAdressForm {
 
         header: Label {
             id: labelConfirmOfAddressProgressTextTitle
-            text: "Confirmação de Morada"
+            text: qsTr("STR_ADDRESS_CHANGE_CONFIRMATION")
             visible: true
             elide: Label.ElideRight
             padding: 24

@@ -18,21 +18,28 @@ PageCardNotesForm {
         onSignalCardAccessError: {
             console.log("Card Notes onSignalCardAccessError")
             if (error_code == GAPI.NoReaderFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "No card reader found!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
             }
             else if (error_code == GAPI.NoCardFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "No Card Found!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD")
             }
             else if (error_code == GAPI.SodCardReadError) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        "Consistência da informação do cartão está comprometida!"
+                        qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
             }
             else {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Error"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Card Access Error!"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             propertyEditNotes.text = ""
@@ -46,20 +53,25 @@ PageCardNotesForm {
         onSignalCardChanged: {
             console.log("Card Notes Page onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  "Cartão do Cidadão removido"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 propertyEditNotes.text = ""
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = "Cartão do Cidadão inserido"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
                 gapi.startReadingPersoNotes()
             }
             else{
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =  "Leitura do Cartão"
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        "Erro da aplicação! Por favor reinstale a aplicação:"
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
                 propertyEditNotes.text = ""
             }
 
@@ -77,8 +89,8 @@ PageCardNotesForm {
             console.log("Personal Notes Text Size: " + strLenght + " - " + 100 * propertyProgressBar.value + " %" )
 
             if (strLenght > Constants.PAGE_NOTES_MAX_NOTES_LENGHT) {
-                propertyGeneralTitleText.text = "Aviso"
-                propertyGeneralPopUpLabelText.text = "Atingiu o máximo espaço disponível"
+                propertyGeneralTitleText.text = qsTr("STR_NOTES_PAGE_WARNING")
+                propertyGeneralPopUpLabelText.text = qsTr("STR_NOTES_PAGE_MAX_SIZE")
                 propertyPageLoader.propertyGeneralPopUp.visible = true;
                 var cursor = propertyEditNotes.cursorPosition;
                 propertyEditNotes.text = propertyEditNotes.previousText;
