@@ -425,7 +425,7 @@ namespace eidpt
                 getForeignerAddressFields(addressRaw);
             }
 
-        } catch (Exception ex) {
+        } catch (Exception) {
             Console.WriteLine("Error in PteidAddr constructor: should never happen!");
         }
     }

@@ -39,6 +39,9 @@ namespace eidpt
     private static readonly int SC_ERROR_PIN_CODE_INCORRECT = -1214;
     private static readonly int SC_ERROR_KEYPAD_TIMEOUT = -1108;
     private static readonly int SC_ERROR_KEYPAD_CANCELLED = -1109;
+    private static readonly int SC_ERROR_NO_READERS_FOUND = -1101;
+    private static readonly int SC_ERROR_CARD_NOT_PRESENT = -1104;
+    private static readonly int SC_ERROR_INVALID_CARD = -1210;
 
     //Flag used in the Activate method
     private static readonly uint MODE_ACTIVATE_BLOCK_PIN = 1;
@@ -77,7 +80,7 @@ namespace eidpt
            PTEID_ReaderSet.initSDK();
            readerSet = PTEID_ReaderSet.instance();
            if (readerName == null || readerName == String.Empty)
-               readerContext = readerSet.getReaderByNum(0);
+               readerContext = readerSet.getReader();
            else
                readerContext = readerSet.getReaderByName(readerName);
 
@@ -85,13 +88,25 @@ namespace eidpt
 
            idCard = readerContext.getEIDCard();
        }
+       catch (PTEID_ExNoReader)
+       {
+           throw new PteidException(SC_ERROR_NO_READERS_FOUND);
+       }
+       catch (PTEID_ExNoCardPresent)
+       {
+           throw new PteidException(SC_ERROR_CARD_NOT_PRESENT);
+       }
+       catch (PTEID_ExCardBadType)
+       {
+           throw new PteidException(SC_ERROR_INVALID_CARD);
+       }
        catch (PTEID_Exception ex)
        {
            throw new PteidException(ex.GetError());
        }
+       
    }
   
-   
    public static void Exit(uint value) {
         try {
             PTEID_ReaderSet.releaseSDK();
