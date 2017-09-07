@@ -741,7 +741,7 @@ PageServicesSignAdvancedForm {
         onClicked: {
             console.log("Sign with CC")
             if (propertyListViewFiles.count == 1){
-                propertyFileDialogBatchOutput.title = "Escolha o ficheiro de destino"
+                propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
                 if (propertyRadioButtonPADES.checked) {
                     var outputFile =  propertyListViewFiles.model.get(0).fileUrl
                     outputFile =  outputFile.substring(0, outputFile.lastIndexOf('.'));
@@ -752,7 +752,7 @@ PageServicesSignAdvancedForm {
                 }
                 propertyFileDialogOutput.open()
             }else{
-                propertyFileDialogBatchOutput.title = "Escolha a pasta de destino dos ficheiros"
+                propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
                 propertyFileDialogBatchOutput.open()
             }
         }

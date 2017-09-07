@@ -224,7 +224,7 @@ Item {
 
             FileDialog {
                 id: fileDialog
-                title: "Escolha o ficheiro da assinatura personalizada"
+                title: qsTranslate("Popup File","STR_POPUP_FILE_INPUT")
                 folder: shortcuts.home
                 modality : Qt.WindowModal
                 selectMultiple: false

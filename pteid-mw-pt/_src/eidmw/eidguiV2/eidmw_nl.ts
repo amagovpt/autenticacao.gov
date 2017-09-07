@@ -505,11 +505,6 @@
         <translation>Erro ao gerar ficheiro PDF!</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="45"/>
-        <source>STR_PRINT_OUTPUT_FILE</source>
-        <translation>Escolha o ficheiro de destino</translation>
-    </message>
-    <message>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="83"/>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="165"/>
         <source>STR_PRINT_SETTINGS</source>
@@ -808,6 +803,51 @@
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="69"/>
         <source>STR_POPUP_CARD_READ_UNKNOWN</source>
         <translation>Erro da aplicação! Por favor reinstale a aplicação</translation>
+    </message>
+</context>
+<context>
+    <name>Popup File</name>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="14"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="97"/>
+        <source>STR_POPUP_FILE_UNIQUE</source>
+        <translation>Arraste um único ficheiro</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="19"/>
+        <source>STR_POPUP_FILE_UNIQUE_TEXT</source>
+        <translation>Só é possível selecionar um ficheiro de assinatura personalizada</translation>
+    </message>
+    <message>
+        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="45"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="744"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="98"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="103"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="60"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="65"/>
+        <source>STR_POPUP_FILE_OUTPUT</source>
+        <translation>Escolha o ficheiro de destino</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="227"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="51"/>
+        <source>STR_POPUP_FILE_INPUT</source>
+        <translation>Escolha o ficheiro</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="755"/>
+        <source>STR_POPUP_FILE_OUTPUT_FOLDER</source>
+        <translation>Escolha a pasta de destino dos ficheiros</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="102"/>
+        <source>STR_POPUP_FILE_UNIQUE_MULTI</source>
+        <translation>Para assinar múltiplos ficheiros use a opção assinatura avançada</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="89"/>
+        <source>STR_POPUP_FILE_INPUT_MULTI</source>
+        <translation>Escolha os ficheiros</translation>
     </message>
 </context>
 <context>

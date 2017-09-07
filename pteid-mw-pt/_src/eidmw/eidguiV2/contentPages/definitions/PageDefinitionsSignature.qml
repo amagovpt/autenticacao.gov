@@ -11,12 +11,12 @@ PageDefinitionsSignatureForm {
 
     Dialog {
         id: dialog
-        title: "Arraste um único ficheiro"
+        title: qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE")
         standardButtons: Dialog.Ok
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
         Label {
-            text: "Só é possível seleccionar um ficheiro de assinatura personalizada"
+            text: qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE_TEXT")
         }
     }
 

@@ -42,7 +42,7 @@ Item {
 
     FileSaveDialog {
         id: fileDialogOutput
-        title: qsTranslate("PageCardPrint","STR_PRINT_OUTPUT_FILE")
+        title: qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
         nameFilters: ["Images (*.pdf)", "All files (*)"]
     }
 

@@ -48,7 +48,7 @@ Item {
 
         FileDialog {
             id: fileDialog
-            title: "Escolha o ficheiro para assinar"
+            title: qsTranslate("Popup File","STR_POPUP_FILE_INPUT")
             folder: shortcuts.home
             modality : Qt.WindowModal
             selectMultiple: false
@@ -57,12 +57,12 @@ Item {
         }
         FileSaveDialog {
             id: fileDialogOutput
-            title: "Escolha o ficheiro de destino"
+            title: qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
             nameFilters: ["Images (*.pdf)", "All files (*)"]
         }
         FileSaveDialog {
             id: fileDialogCMDOutput
-            title: "Escolha o ficheiro de destino"
+            title: qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
             nameFilters: ["Images (*.pdf)", "All files (*)"]
         }
 
