@@ -235,7 +235,7 @@ public slots:
     void startWritingPersoNotes(QString text);
     void startReadingAddress();
     int getShortcutFlag() {return m_shortcutFlag; }
-    QString getShortcutInputPDF() { return m_shortcutInputPDF; }
+	QString getShortcutInputPDF() {	return m_shortcutInputPDF.replace(QChar('\\'), QChar('/')); }
     void startPrintPDF(QString outputFile, double isBasicInfo,double isAdditionalInfo,
                        double isAddress,double isNotes,double isSign);
     void startPrint(QString outputFile, double isBasicInfo,double isAdditionalInfo,
