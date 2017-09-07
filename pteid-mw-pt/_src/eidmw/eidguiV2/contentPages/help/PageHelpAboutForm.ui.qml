@@ -18,7 +18,7 @@ Item {
 
     Text {
         id: textAppName
-        text: "Aplicação oficial do Estado Português"
+        text: qsTranslate("PageHelpAbout","STR_HELP_TITLE")
         font.pixelSize: Constants.SIZE_TEXT_TITLE
         color: Constants.COLOR_TEXT_TITLE
         font.family: lato.name
@@ -38,7 +38,7 @@ Item {
 
     Text {
         id: textDifficult
-        text: "Caso tenha dificuldades na utilização desta aplicação consulte:"
+        text: qsTranslate("PageHelpAbout","STR_HELP_LINK") + ": "
         font.pixelSize: Constants.SIZE_TEXT_BODY
         font.family: lato.name
         anchors.top: textVersion.bottom
@@ -60,7 +60,7 @@ Item {
 
     Text {
         id: textDevBy
-        text: "Desenvolvido pelo Estado Português"
+        text: qsTranslate("PageHelpAbout","STR_HELP_DEV_BY")
         font.pixelSize: Constants.SIZE_TEXT_BODY
         font.family: lato.name
         anchors.top: textLinkCC.bottom
@@ -69,7 +69,7 @@ Item {
 
     Text {
         id: textDevByAgency
-        text: "(Agência para a Modernização Administrativa, IP e Instituto dos Registos e do Notariado, IP)"
+        text: qsTranslate("PageHelpAbout","STR_HELP_DEV_AGENCY")
         font.pixelSize: Constants.SIZE_TEXT_BODY
         font.family: lato.name
         anchors.top: textDevBy.bottom

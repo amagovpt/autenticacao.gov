@@ -80,7 +80,7 @@ Item {
 
             RadioButton {
                 id: radioButtonDefault
-                text: "Usar assinatura padrão"
+                text: qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_TITLE")
                 T.ButtonGroup.group: radioGroup
                 checked: true
                 opacity: enabled ? 1.0 : Constants.OPACITY_SIGNATURE_TEXT_DISABLED
@@ -253,7 +253,7 @@ Item {
 
             RadioButton {
                 id: radioButtonCustom
-                text: "Usar assinatura personalizada"
+                text: qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_CUSTOM_TITLE")
                 T.ButtonGroup.group: radioGroup
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 enabled: fileLoaded
@@ -291,11 +291,7 @@ Item {
                     id: textDragMsgImg
                     width: parent.width
                     height: parent.height - Constants.HEIGHT_BOTTOM_COMPONENT
-                    text:
-                        "Arraste para esta zona o ficheiro da assinatura personalizada
-ou
-clique para procurar o ficheiro
-( Dimensão máxima da imagem: 185 x 41 px)"
+                    text: qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_FILE_LOAD")
                     font.bold: true
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter
@@ -323,7 +319,7 @@ clique para procurar o ficheiro
 
                     Button {
                         id: buttonRemove
-                        text: "Remover assinatura"
+                        text: qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_REMOVE_BUTTON")
                         width: Constants.WIDTH_BUTTON
                         height:Constants.HEIGHT_BOTTOM_COMPONENT
                         anchors.right: parent.right
@@ -343,7 +339,7 @@ clique para procurar o ficheiro
 
                     Button {
                         id: buttonAdd
-                        text: "Adicionar assinatura"
+                        text: qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_ADD_BUTTON")
                         width: Constants.WIDTH_BUTTON
                         height:Constants.HEIGHT_BOTTOM_COMPONENT
                         anchors.right: parent.right

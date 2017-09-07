@@ -71,11 +71,11 @@ PageDefinitionsSignatureForm {
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
 
-            propertySigReasonText.text = "{ Motivo da assinatura }"
-            propertySigSignedByText.text = "Assinado por: "
+            propertySigReasonText.text = "{" + qsTr("STR_CUSTOM_SIGN_REASON") + "}"
+            propertySigSignedByText.text = qsTr("STR_CUSTOM_SIGN_BY") + ": "
             propertySigSignedByNameText.text = ""
-            propertySigNumIdText.text = "Num. de Identificação Civil: "
-            propertySigLocationText.text = "{ Localização da assinatura }"
+            propertySigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
+            propertySigLocationText.text = "{" + qsTr("STR_CUSTOM_SIGN_LOCATION") + "}"
             propertySigImg.source = "qrc:/images/logo_CC.png"
             propertySigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
 
@@ -88,11 +88,11 @@ PageDefinitionsSignatureForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED") + controler.autoTr
-                propertySigReasonText.text = "{ Motivo da assinatura }"
-                propertySigSignedByText.text = "Assinado por: "
+                propertySigReasonText.text = "{" + qsTr("STR_CUSTOM_SIGN_REASON") + "}"
+                propertySigSignedByText.text = qsTr("STR_CUSTOM_SIGN_BY") + ": "
                 propertySigSignedByNameText.text = ""
-                propertySigNumIdText.text = "Num. de Identificação Civil: "
-                propertySigLocationText.text = "{ Localização da assinatura }"
+                propertySigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
+                propertySigLocationText.text = "{" + qsTr("STR_CUSTOM_SIGN_LOCATION") + "}"
                 propertySigImg.source = "qrc:/images/logo_CC.png"
                 propertySigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
             }

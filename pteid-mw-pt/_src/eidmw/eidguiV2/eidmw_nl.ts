@@ -168,6 +168,8 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="198"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="77"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="94"/>
         <location filename="gapi.cpp" line="984"/>
         <source>STR_DOCUMENT_NUMBER</source>
         <translation>Número de documento</translation>
@@ -527,7 +529,7 @@
     </message>
 </context>
 <context>
-    <name>PageDefinitionsAppForm.ui</name>
+    <name>PageDefinitionsApp</name>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="64"/>
         <source>STR_CARD_READER_TITLE</source>
@@ -652,6 +654,140 @@
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="612"/>
         <source>STR_NETWORK_AUTH_PASSWORD_OP</source>
         <translation>Palavra-passe?</translation>
+    </message>
+</context>
+<context>
+    <name>PageDefinitionsSignature</name>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="74"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="91"/>
+        <source>STR_CUSTOM_SIGN_REASON</source>
+        <translation>Motivo da assinatura</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="75"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="92"/>
+        <source>STR_CUSTOM_SIGN_BY</source>
+        <translation>Assinado por:</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="78"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="95"/>
+        <source>STR_CUSTOM_SIGN_LOCATION</source>
+        <translation>Localização da assinatura</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="83"/>
+        <source>STR_CUSTOM_SIGN_TITLE</source>
+        <translation>Usar assinatura padrão</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="256"/>
+        <source>STR_CUSTOM_SIGN_CUSTOM_TITLE</source>
+        <translation>Usar assinatura personalizada</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="294"/>
+        <source>STR_CUSTOM_SIGN_FILE_LOAD</source>
+        <translation>Arraste para esta zona o ficheiro da assinatura personalizada
+ou
+clique para procurar o ficheiro
+( Dimensão máxima da imagem: 185 x 41 px)</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="322"/>
+        <source>STR_CUSTOM_SIGN_REMOVE_BUTTON</source>
+        <translation>Remover assinatura</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="342"/>
+        <source>STR_CUSTOM_SIGN_ADD_BUTTON</source>
+        <translation>Adicionar assinatura</translation>
+    </message>
+</context>
+<context>
+    <name>PageDefinitionsUpdates</name>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="28"/>
+        <source>STR_UPDATE_TITLE</source>
+        <translation>Atualizações</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="43"/>
+        <source>STR_UPDATE_TEXT</source>
+        <translation>Pressione o botão para verificar se existem atualizações disponíveis.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="58"/>
+        <source>STR_UPDATE_BUTTON</source>
+        <translation>Procurar atualizações</translation>
+    </message>
+</context>
+<context>
+    <name>PageHelpAbout</name>
+    <message>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="21"/>
+        <source>STR_HELP_TITLE</source>
+        <translation>Aplicação Oficial do Cartão de Cidadão Português.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="41"/>
+        <source>STR_HELP_LINK</source>
+        <oldsource>STR_HELP_</oldsource>
+        <translation>Caso tenha dificuldades na utilização desta aplicação consulte</translation>
+    </message>
+    <message>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="63"/>
+        <source>STR_HELP_DEV_BY</source>
+        <translation>Desenvolvido pelo Estado Português</translation>
+    </message>
+    <message>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="72"/>
+        <source>STR_HELP_DEV_AGENCY</source>
+        <translation>(Agência para a Modernização Administrativa, IP e Instituto dos Registos e do Notariado, IP)</translation>
+    </message>
+</context>
+<context>
+    <name>PageHelpDocOnline</name>
+    <message>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="26"/>
+        <source>STR_HELP_DOC_TITLE</source>
+        <translation>Aplicação Autentificação.Gov</translation>
+    </message>
+    <message>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="42"/>
+        <source>STR_HELP_DOC_SUB_TITLE</source>
+        <translation>A aplicação Autenticação.Gov permite ao cidadão tirar partido das funcionalidades eletrónicas do seu Cartão de Cidadão e da sua Chave Móvel Digital.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="55"/>
+        <source>STR_HELP_DOC_TOPIC</source>
+        <translation>Aqui poderá, entre outras funcionalidades</translation>
+    </message>
+    <message>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="73"/>
+        <source>STR_HELP_DOC_TOPIC_1</source>
+        <translation>Ler os dados residentes no chip do seu Cartão de Cidadão</translation>
+    </message>
+    <message>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="94"/>
+        <source>STR_HELP_DOC_TOPIC_2</source>
+        <translation>Alterar os códigos PIN associados ao seu Cartão de Cidadão</translation>
+    </message>
+    <message>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="112"/>
+        <source>STR_HELP_DOC_TOPIC_3</source>
+        <translation>Confirmar e atualizar a morada no chip do seu Cartão de Cidadão</translation>
+    </message>
+    <message>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="130"/>
+        <source>STR_HELP_DOC_TOPIC_4</source>
+        <translation>Assinar documentos, enquanto cidadão, profissional ou empresário, recorrendo ao seu Cartão de Cidadão ou à sua Chave Móvel Digital.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="146"/>
+        <source>STR_HELP_DOC_ONLINE</source>
+        <translation>Documentação online</translation>
     </message>
 </context>
 <context>

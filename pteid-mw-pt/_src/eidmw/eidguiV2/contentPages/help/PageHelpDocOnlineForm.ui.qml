@@ -23,7 +23,7 @@ Item {
             id: text0
             font.pixelSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
-            text: "Aplicação " + mainWindow.title
+            text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TITLE") + mainWindow.title
             font.bold: true
             wrapMode: Text.Wrap
             width: parent.width
@@ -39,8 +39,7 @@ Item {
             anchors.topMargin: Constants.SIZE_TEXT_BODY
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            text: "A Aplicação " + mainWindow.title + " permite ao cidadão tirar partido das funcionalidades eletrónicas \
-do seu Cartão de Cidadão e da sua Chave Móvel Digital."
+            text:  qsTranslate("PageHelpDocOnline","STR_HELP_DOC_SUB_TITLE")
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
@@ -53,7 +52,7 @@ do seu Cartão de Cidadão e da sua Chave Móvel Digital."
             anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            text: "Aqui poderá, entre outras funcionalidades:"
+            text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC") + ":"
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
@@ -71,7 +70,7 @@ do seu Cartão de Cidadão e da sua Chave Móvel Digital."
                 id: text3
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
-                text: "Ler os dados residentes no chip do seu Cartão de Cidadão"
+                text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC_1")
                 wrapMode: Text.Wrap
                 width: parent.width
                 horizontalAlignment: Text.left
@@ -92,7 +91,7 @@ do seu Cartão de Cidadão e da sua Chave Móvel Digital."
 
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
-                text: "Alterar os códigos PIN associados ao seu Cartão de Cidadão"
+                text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC_2")
                 wrapMode: Text.Wrap
                 width: parent.width
                 horizontalAlignment: Text.left
@@ -110,7 +109,7 @@ do seu Cartão de Cidadão e da sua Chave Móvel Digital."
             Text {
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
-                text: "Confirmar e atualizar a morada no chip do seu Cartão de Cidadão"
+                text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC_3")
                 wrapMode: Text.Wrap
                 width: parent.width
                 horizontalAlignment: Text.left
@@ -128,8 +127,7 @@ do seu Cartão de Cidadão e da sua Chave Móvel Digital."
             Text {
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
-                text: "Assinar documentos, enquanto cidadão, profissional ou empresário, recorrendo ao seu Cartão de \
-Cidadão ou à sua Chave Móvel Digital."
+                text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC_4")
                 width: parent.width
                 wrapMode: Text.Wrap
                 horizontalAlignment: Text.left
@@ -145,7 +143,7 @@ Cidadão ou à sua Chave Móvel Digital."
 
             Text {
                 id: textLinks
-                text: "Documentação online:"
+                text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_ONLINE") + ":"
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
             }

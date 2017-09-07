@@ -25,7 +25,7 @@ Item {
             id: textTitle
             font.pixelSize: Constants.SIZE_TEXT_LABEL
             font.family: lato.name
-            text: "Atualizações"
+            text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TITLE")
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
@@ -40,7 +40,7 @@ Item {
             anchors.topMargin: Constants.SIZE_TEXT_BODY
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            text: "Pressione o botão para verificar se existem atualizações disponíveis."
+            text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
@@ -55,7 +55,7 @@ Item {
             height: Constants.HEIGHT_BOTTOM_COMPONENT
             Button {
                 id: buttonSearch
-                text: "Procurar atualizações"
+                text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_BUTTON")
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
