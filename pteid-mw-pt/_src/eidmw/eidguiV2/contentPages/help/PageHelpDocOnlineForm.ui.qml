@@ -23,7 +23,7 @@ Item {
             id: text0
             font.pixelSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
-            text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TITLE") + mainWindow.title
+            text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TITLE") + " " + mainWindow.title
             font.bold: true
             wrapMode: Text.Wrap
             width: parent.width

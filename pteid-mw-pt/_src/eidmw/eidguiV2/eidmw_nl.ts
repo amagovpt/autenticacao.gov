@@ -728,7 +728,7 @@ clique para procurar o ficheiro
     <message>
         <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="21"/>
         <source>STR_HELP_TITLE</source>
-        <translation>Aplicação Oficial do Cartão de Cidadão Português.</translation>
+        <translation type="unfinished">Aplicação Oficial do Cartão de Cidadão Português</translation>
     </message>
     <message>
         <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="41"/>
@@ -752,7 +752,7 @@ clique para procurar o ficheiro
     <message>
         <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="26"/>
         <source>STR_HELP_DOC_TITLE</source>
-        <translation>Aplicação Autentificação.Gov</translation>
+        <translation type="unfinished">Aplicação</translation>
     </message>
     <message>
         <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="42"/>

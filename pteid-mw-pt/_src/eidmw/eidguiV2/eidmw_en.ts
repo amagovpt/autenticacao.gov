@@ -752,7 +752,7 @@ click to browse the file
     <message>
         <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="26"/>
         <source>STR_HELP_DOC_TITLE</source>
-        <translation>Application Autentificação.Gov</translation>
+        <translation type="unfinished">Application</translation>
     </message>
     <message>
         <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="42"/>
