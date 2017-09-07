@@ -70,7 +70,7 @@ Item {
             font.family: lato.name
             color: Constants.COLOR_TEXT_LABEL
             height: Constants.SIZE_TEXT_LABEL
-            text: "Selecione o certificado"
+            text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_SELECT")
             anchors.top: rowTop.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         }
@@ -104,7 +104,7 @@ Item {
                         + 2 * Constants.SIZE_TEXT_FIELD
                 Components.LabelTextBoxForm{
                     id: textEntity
-                    propertyDateText.text: "Cidadão / Entidade"
+                    propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_ENTITY")
                     propertyDateField.text: ""
                 }
             }
@@ -118,7 +118,7 @@ Item {
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 Components.LabelTextBoxForm{
                     id: textAuth
-                    propertyDateText.text: "Entidade Emissora"
+                    propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_ENTITY_ISSUER")
                     propertyDateField.text: ""
                 }
             }
@@ -132,7 +132,7 @@ Item {
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 Components.LabelTextBoxForm{
                     id: textValid
-                    propertyDateText.text: "Válido desde"
+                    propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_VALID_FROM")
                     propertyDateField.text: ""
                 }
             }
@@ -146,7 +146,7 @@ Item {
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 Components.LabelTextBoxForm{
                     id: textUntil
-                    propertyDateText.text: "Válido até"
+                    propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_VALID_UNTIL")
                     propertyDateField.text: ""
                 }
             }
@@ -160,7 +160,7 @@ Item {
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 Components.LabelTextBoxForm{
                     id: textKey
-                    propertyDateText.text: "Tamanho da chave"
+                    propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_KEY_SIZE")
                     propertyDateField.text: ""
                 }
             }
@@ -174,7 +174,8 @@ Item {
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 Components.LabelTextBoxForm{
                     id: textStatus
-                    propertyDateText.text: "Estado do certificado"
+                    propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_STATE")
+                    //"Estado do certificado"
                     propertyDateField.text: ""
                 }
             }

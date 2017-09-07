@@ -184,26 +184,26 @@ PageSecurityCertificatesForm {
     }
     function getCertStatus(certStatus){
 
-        var networkError = "Could not validate certificate. Please check your Internet connection";
+        var networkError = qsTr("STR_STATUS_NETWORK_ERROR")
         var strCertStatus
 
         switch(certStatus)
         {
         case Constants.PTEID_CERTIF_STATUS_REVOKED:
-            strCertStatus = "Revoked";
+            strCertStatus = qsTr("STR_STATUS_REVOKED")
             break;
         case Constants.PTEID_CERTIF_STATUS_SUSPENDED:
-            strCertStatus = "Inactive or Suspended";
+            strCertStatus = qsTr("STR_STATUS_SUSPENDED")
             break;
         case Constants.PTEID_CERTIF_STATUS_VALID:
-            strCertStatus = "Valid";
+            strCertStatus = qsTr("STR_STATUS_VALID")
             break;
         //TODO: Handle the network error with a different string such as "cant validate certificate status"
         case Constants.PTEID_CERTIF_STATUS_CONNECT:
             strCertStatus = networkError
             break;
         case Constants.PTEID_CERTIF_STATUS_UNKNOWN:
-            strCertStatus = "Unknown";
+            strCertStatus = qsTr("STR_STATUS_UNKNOWN")
             break;
         default:
             strCertStatus = networkError;

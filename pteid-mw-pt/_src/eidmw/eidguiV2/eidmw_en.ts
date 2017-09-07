@@ -810,6 +810,69 @@ click to browse the file
     </message>
 </context>
 <context>
+    <name>PageSecurityCertificates</name>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="187"/>
+        <source>STR_STATUS_NETWORK_ERROR</source>
+        <translation>Could not validate certificate. Please check your Internet connection.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="193"/>
+        <source>STR_STATUS_REVOKED</source>
+        <translation>Revoked</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="196"/>
+        <source>STR_STATUS_SUSPENDED</source>
+        <translation>Inactive or Suspended</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="199"/>
+        <source>STR_STATUS_VALID</source>
+        <translation>Valid</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="206"/>
+        <source>STR_STATUS_UNKNOWN</source>
+        <translation>Unknown</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="73"/>
+        <source>STR_CERTIFICATES_SELECT</source>
+        <translation>Select the certificate</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="107"/>
+        <source>STR_CERTIFICATES_ENTITY</source>
+        <translation>Citizen / Entity</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="121"/>
+        <source>STR_CERTIFICATES_ENTITY_ISSUER</source>
+        <translation>Issuing Entity</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="135"/>
+        <source>STR_CERTIFICATES_VALID_FROM</source>
+        <translation>Valid from</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="149"/>
+        <source>STR_CERTIFICATES_VALID_UNTIL</source>
+        <translation>Valid until</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="163"/>
+        <source>STR_CERTIFICATES_KEY_SIZE</source>
+        <translation>Key size</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="177"/>
+        <source>STR_CERTIFICATES_STATE</source>
+        <translation>Certificate status</translation>
+    </message>
+</context>
+<context>
     <name>PageServicesSign</name>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="121"/>
