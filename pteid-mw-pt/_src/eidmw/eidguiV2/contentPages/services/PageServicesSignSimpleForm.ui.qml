@@ -99,8 +99,8 @@ Item {
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: fileLoaded ?
-                           "Selecione o lugar da assinatura" :
-                           "Selecione o ficheiro"
+                           qsTranslate("PageServicesSign","STR_SIGN_TITLE_SIGN") :
+                           qsTranslate("PageServicesSign","STR_SIGN_TITLE_FILE")
             }
 
             Rectangle {
@@ -114,7 +114,7 @@ Item {
                 Text {
                     id: textDragMsgImg
                     anchors.fill: parent
-                    text: "Arraste para esta zona o ficheiro a assinar \nou\n clique para procurar o ficheiro"
+                    text: qsTranslate("PageServicesSign","STR_SIGN_DROP")
                     font.bold: true
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter
@@ -170,7 +170,7 @@ Item {
                 id: pageText
                 x: 11
                 y: 8
-                text: "Página:"
+                text: qsTranslate("PageServicesSign","STR_SIGN_PAGE") + ":"
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 color: Constants.COLOR_MAIN_PRETO
@@ -259,7 +259,7 @@ Item {
             anchors.top: parent.top
             Switch {
                 id: checkLastPage
-                text: "Última"
+                text: qsTranslate("PageServicesSign","STR_SIGN_LAST")
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -285,7 +285,7 @@ Item {
             Button {
                 id: buttonRemove
                 x: 140
-                text: "Remover ficheiro"
+                text: qsTranslate("PageServicesSign","STR_SIGN_REMOVE_BUTTON")
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
                 enabled: fileLoaded
@@ -304,7 +304,8 @@ Item {
 
             Button {
                 id: button_signCC
-                text: "Assinar \n Cartão de Cidadão"
+                text: qsTranslate("PageServicesSign","STR_SIGN_SIGN_BUTTON") + "\n"
+                      + qsTranslate("PageServicesSign","STR_SIGN_CARD_BUTTON")
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
                 enabled: fileLoaded && cardLoaded
@@ -314,7 +315,8 @@ Item {
             }
             Button {
                 id: button_signCMD
-                text: "Assinar \n Chave Móvel Digital"
+                text: qsTranslate("PageServicesSign","STR_SIGN_SIGN_BUTTON") + "\n"
+                      + qsTranslate("PageServicesSign","STR_SIGN_CMD_BUTTON")
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
                 enabled: fileLoaded

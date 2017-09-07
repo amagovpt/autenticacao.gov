@@ -33,11 +33,12 @@ PageServicesSignSimpleForm {
         onSignalCardDataChanged: {
             console.log("Services Sign Simple --> Data Changed")
             //console.trace();
-            propertyPDFPreview.propertyDragSigSignedByNameText.text = "Assinado por:"
+            propertyPDFPreview.propertyDragSigSignedByNameText.text =
+                    qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
                     + gapi.getDataCardIdentifyValue(GAPI.Givenname)
                     + " " +  gapi.getDataCardIdentifyValue(GAPI.Surname)
 
-            propertyPDFPreview.propertyDragSigNumIdText.text = "Num. de Identificação Civil:"
+            propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
                     + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
             propertyBusyIndicator.running = false
             cardLoaded = true
@@ -49,8 +50,9 @@ PageServicesSignSimpleForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
-                propertyPDFPreview.propertyDragSigSignedByNameText.text = "Assinado por:"
-                propertyPDFPreview.propertyDragSigNumIdText.text = "Num. de Identificação Civil:"
+                propertyPDFPreview.propertyDragSigSignedByNameText.text =
+                        qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
+                propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
                 cardLoaded = false
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
@@ -114,7 +116,7 @@ PageServicesSignSimpleForm {
 
         header: Label {
             id: labelTextTitle
-            text: "Assinar com Chave Móvel Digital"
+            text: qsTranslate("PageServicesSign","STR_SIGN_CMD")
             visible: true
             elide: Label.ElideRight
             padding: 24
@@ -135,8 +137,7 @@ PageServicesSignSimpleForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textMessageTopLogin
-                    text: "Introduza dados de login"
-
+                    text: qsTranslate("PageServicesSign","STR_SIGN_INSERT_LOGIN")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -156,7 +157,7 @@ PageServicesSignSimpleForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textPinCurrent
-                    text: "Número de Telemóvel"
+                    text: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -184,7 +185,7 @@ PageServicesSignSimpleForm {
                     width: parent.width * 0.25
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldMobileNumber.text === "" ? true: false
-                    placeholderText: "Número?"
+                    placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM_OP") + "?"
                     validator: RegExpValidator { regExp: /[0-9]+/ }
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -202,7 +203,7 @@ PageServicesSignSimpleForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textPinNew
-                    text: "PIN"
+                    text: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -217,7 +218,7 @@ PageServicesSignSimpleForm {
                     width: parent.width * 0.5
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldPin.text === "" ? true: false
-                    placeholderText: "PIN?"
+                    placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN_OP") + "?"
                     echoMode : TextInput.Password
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -235,8 +236,8 @@ PageServicesSignSimpleForm {
                 Text {
                     id: textLinkCMD
                     textFormat: Text.RichText
-                    text: "<a href=\"https://cmd.autenticacao.gov.pt/Ama.Authentication.Frontend\">\
-                    Clique para conhecer a Chave Móvel Digital</a>"
+                    text: "<a href=\"https://cmd.autenticacao.gov.pt/Ama.Authentication.Frontend\">"
+                          + qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
                     font.italic: true
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
@@ -311,7 +312,7 @@ PageServicesSignSimpleForm {
 
         header: Label {
             id: labelConfirmOfAddressProgressTextTitle
-            text: "Assinar com Chave Móvel Digital"
+            text: qsTranslate("PageServicesSign","STR_SIGN_CMD")
             visible: true
             elide: Label.ElideRight
             padding: 24
@@ -363,7 +364,7 @@ PageServicesSignSimpleForm {
                 visible: false
                 Text {
                     id: textReturnCode
-                    text: "Introduza o código :"
+                    text: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE") + ":"
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -378,7 +379,7 @@ PageServicesSignSimpleForm {
                     width: parent.width * 0.5
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldReturnCode.text === "" ? true: false
-                    placeholderText: "Código?"
+                    placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE_OP") + "?"
                     validator: RegExpValidator { regExp: /[0-9]+/ }
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -438,7 +439,7 @@ PageServicesSignSimpleForm {
         y: parent.height * 0.5 - signsuccess_dialog.height * 0.5
 
         header: Label {
-            text: "Ficheiro(s) assinado(s) com sucesso"
+            text: qsTranslate("PageServicesSign","STR_SIGN_SUCESS")
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
@@ -462,7 +463,7 @@ PageServicesSignSimpleForm {
         y: parent.height * 0.5 - signerror_dialog.height * 0.5
 
         header: Label {
-            text: "Erro na assinatura de PDF"
+            text: qsTranslate("PageServicesSign","STR_SIGN_FAIL")
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0

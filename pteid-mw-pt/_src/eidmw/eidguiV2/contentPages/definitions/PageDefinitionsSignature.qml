@@ -28,15 +28,15 @@ PageDefinitionsSignatureForm {
         onSignalCardDataChanged: {
             console.log("Definitions Signature --> Data Changed")
             //console.trace();
-            propertySigReasonText.text = "{ Motivo da assinatura }"
-            propertySigSignedByText.text = "Assinado por: "
+            propertySigReasonText.text = "{" + qsTr("STR_CUSTOM_SIGN_REASON") + "}"
+            propertySigSignedByText.text = qsTr("STR_CUSTOM_SIGN_BY") + ": "
 
             propertySigSignedByNameText.text = gapi.getDataCardIdentifyValue(GAPI.Givenname)
                   + " " +  gapi.getDataCardIdentifyValue(GAPI.Surname)
 
-            propertySigNumIdText.text = "Num. de Identificação Civil: "
+            propertySigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
                     + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
-            propertySigLocationText.text = "{ Localização da assinatura }"
+            propertySigLocationText.text = "{" + qsTr("STR_CUSTOM_SIGN_LOCATION") + "}"
 
             propertySigImg.source = "qrc:/images/logo_CC.png"
             propertySigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"

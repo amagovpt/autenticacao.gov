@@ -141,7 +141,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: "Selecione os ficheiros a assinar"
+                text: qsTranslate("Popup File","STR_POPUP_FILE_INPUT_MULTI")
             }
             Rectangle {
                 id: rectFile
@@ -207,7 +207,7 @@ Item {
                         id: buttonAdd
                         width: Constants.WIDTH_BUTTON
                         height: parent.height
-                        text: "Adicionar ficheiro"
+                        text: qsTranslate("PageServicesSign","STR_SIGN_ADD_MULTI_BUTTON")
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
@@ -217,7 +217,7 @@ Item {
                         width: Constants.WIDTH_BUTTON
                         height: parent.height
                         anchors.right: itemBottonsFiles.right
-                        text: "Remover todos"
+                        text: qsTranslate("PageServicesSign","STR_SIGN_REMOVE_MULTI_BUTTON")
                         enabled: fileLoaded
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
@@ -267,7 +267,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: "Configurações"
+                text: qsTranslate("PageServicesSign","STR_SIGN_SETTINGS")
             }
 
             Rectangle {
@@ -297,7 +297,7 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Text {
                             id: textFormatSign
-                            text: "Formato"
+                            text: qsTranslate("PageServicesSign","STR_SIGN_FORMAT")
                             rightPadding: 0
                             padding: 0
                             verticalAlignment: Text.AlignVCenter
@@ -311,7 +311,7 @@ Item {
                             id: radioButtonPADES
                             anchors.left: textFormatSign.right
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                            text: "No documento"
+                            text: qsTranslate("PageServicesSign","STR_SIGN_WHERE")
                             checked: true
                             leftPadding: 0
                             rightPadding: 0
@@ -353,7 +353,7 @@ Item {
                             id: radioButtonXADES
                             anchors.left: rectToolTipPades.right
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                            text: "Em qualquer ficheiro"
+                            text: qsTranslate("PageServicesSign","STR_SIGN_ANY_FILE")
                             anchors.leftMargin: 10
                             leftPadding: 0
                             rightPadding: 0
@@ -399,7 +399,7 @@ Item {
                         width: parent.width
                         font.italic: textFieldReason.text === "" ? true : false
                         anchors.top: rectFormatOptions.bottom
-                        placeholderText: "Motivo?"
+                        placeholderText: qsTranslate("PageServicesSign","STR_SIGN_REASON") + "?"
                         enabled: fileLoaded
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -410,7 +410,7 @@ Item {
                         width: parent.width
                         font.italic: textFieldLocal.text === "" ? true : false
                         anchors.top: textFieldReason.bottom
-                        placeholderText: "Localidade?"
+                        placeholderText: qsTranslate("PageServicesSign","STR_SIGN_LOCAL") + "?"
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         enabled: fileLoaded
                         font.family: lato.name
@@ -420,7 +420,7 @@ Item {
                         id: switchSignTemp
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         anchors.top: textFieldLocal.bottom
-                        text: "Adicionar selo temporal"
+                        text: qsTranslate("PageServicesSign","STR_SIGN_ADD_TIMESTAMP")
                         enabled: fileLoaded
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -430,7 +430,7 @@ Item {
                         id: switchSignAdd
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         anchors.top: switchSignTemp.bottom
-                        text: "Adicionar atributos profissionais"
+                        text: qsTranslate("PageServicesSign","STR_SIGN_ADD_ATTRIBUTES")
                         //enabled: fileLoaded
                         enabled: false
                         opacity: 0.3
@@ -486,7 +486,7 @@ Item {
                         Text {
                             id: textPreserv1
                             x: 35
-                            text: "Preservar"
+                            text: qsTranslate("PageServicesSign","STR_SIGN_ATTRIBUTES_SAVE")
                             verticalAlignment: Text.AlignVCenter
                             anchors.verticalCenter: parent.verticalCenter
                             font.bold: false
@@ -498,7 +498,7 @@ Item {
                         }
                         Text {
                             id: textPreserv2
-                            text: "durante"
+                            text: qsTranslate("PageServicesSign","STR_SIGN_ATTRIBUTES_SAVE_HOW_LONG")
                             verticalAlignment: Text.AlignVCenter
                             anchors.verticalCenter: parent.verticalCenter
                             font.bold: false
@@ -524,7 +524,9 @@ Item {
                         }
                         Text {
                             id: textPreservAnos
-                            text: comboBoxPreserve.currentIndex === 1 ? "ano" : "anos"
+                            text: comboBoxPreserve.currentIndex === 1 ?
+                                      qsTranslate("PageServicesSign","STR_SIGN_ATTRIBUTES_YEAR") :
+                                      qsTranslate("PageServicesSign","STR_SIGN_ATTRIBUTES_YEARS")
                             verticalAlignment: Text.AlignVCenter
                             anchors.verticalCenter: parent.verticalCenter
                             font.bold: false
@@ -574,7 +576,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: "Pré-Visualização"
+                text: qsTranslate("PageServicesSign","STR_SIGN_PREVIEW")
             }
 
             Rectangle {
@@ -639,7 +641,7 @@ Item {
                     anchors.top: parent.top
                     Switch {
                         id: checkSignShow
-                        text: "Assinatura visível"
+                        text: qsTranslate("PageServicesSign","STR_SIGN_VISIBLE")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -667,7 +669,7 @@ Item {
 
                     Switch {
                         id: checkSignReduced
-                        text: "Reduzida"
+                        text: qsTranslate("PageServicesSign","STR_SIGN_REDUCED")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -686,7 +688,7 @@ Item {
                         id: pageText
                         x: 11
                         y: 8
-                        text: "Página:"
+                        text: qsTranslate("PageServicesSign","STR_SIGN_PAGE") + ":"
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_LABEL
                         color: Constants.COLOR_MAIN_PRETO
@@ -775,7 +777,7 @@ Item {
                     anchors.top: parent.top
                     Switch {
                         id: checkLastPage
-                        text: "Última"
+                        text: qsTranslate("PageServicesSign","STR_SIGN_LAST")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -794,7 +796,8 @@ Item {
 
                 Button {
                     id: button_signCC
-                    text: "Assinar \n Cartão de Cidadão"
+                    text: qsTranslate("PageServicesSign","STR_SIGN_SIGN_BUTTON") + "\n"
+                          + qsTranslate("PageServicesSign","STR_SIGN_CARD_BUTTON")
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
                     enabled: fileLoaded && cardLoaded
@@ -805,7 +808,8 @@ Item {
                 }
                 Button {
                     id: button_signCMD
-                    text: "Assinar \n Chave Móvel Digital"
+                    text: qsTranslate("PageServicesSign","STR_SIGN_SIGN_BUTTON") + "\n"
+                          + qsTranslate("PageServicesSign","STR_SIGN_CMD_BUTTON")
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
                     enabled: fileLoaded

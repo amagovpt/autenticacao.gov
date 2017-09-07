@@ -161,8 +161,8 @@ Item {
                 id: textLinkCC
                 textFormat: Text.RichText
                 text: "<a href=\"https://www.autenticacao.gov.pt/documents/10179/11465/\
-Manual+de+Utiliza%C3%A7%C3%A3o+da+Aplica%C3%A7%C3%A3o+do+Cart%C3%A3o+de+Cidad%C3%A3o\">
-Manual de utilização da aplicação do cartão de cidadão</a>"
+Manual+de+Utiliza%C3%A7%C3%A3o+da+Aplica%C3%A7%C3%A3o+do+Cart%C3%A3o+de+Cidad%C3%A3o\">"
+                      + qsTranslate("PageHelpDocOnline","STR_HELP_URL")
                 font.italic: true
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name

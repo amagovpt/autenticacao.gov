@@ -52,17 +52,17 @@ Item {
             width: parent.width
             currentIndex: 0
             TabButton {
-                text: "Autenticação"
+                text: qsTranslate("Popup PIN","STR_PIN_AUTH")
                 rightPadding: 2
                 leftPadding: 2
             }
             TabButton {
-                text: "Assinatura"
+                text: qsTranslate("Popup PIN","STR_PIN_SIGN")
                 rightPadding: 2
                 leftPadding: 2
             }
             TabButton {
-                text: "Morada"
+                text: qsTranslate("Popup PIN","STR_PIN_ADDRESS")
                 rightPadding: 2
                 leftPadding: 2
             }
@@ -88,7 +88,7 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
                         font.pixelSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
-                        text: "Este PIN é usado para se autenticar em sites."
+                        text: qsTranslate("Popup PIN","STR_PIN_AUTH_TEXT")
                         wrapMode: Text.Wrap
                         width: parent.width
                         color: Constants.COLOR_MAIN_BLUE
@@ -128,7 +128,7 @@ Item {
                             id: buttonTestAuth
                             width: Constants.WIDTH_BUTTON
                             height:Constants.HEIGHT_BOTTOM_COMPONENT
-                            text: "Testar PIN"
+                            text: qsTranslate("Popup PIN","STR_PIN_TEST")
                             anchors.horizontalCenter: parent.horizontalCenter
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
@@ -144,7 +144,7 @@ Item {
                             id: buttonModifyAuth
                             width: Constants.WIDTH_BUTTON
                             height:Constants.HEIGHT_BOTTOM_COMPONENT
-                            text: "Modificar PIN"
+                            text: qsTranslate("Popup PIN","STR_PIN_MODIFY")
                             anchors.horizontalCenter: parent.horizontalCenter
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
@@ -167,7 +167,7 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
                         font.pixelSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
-                        text: "Este PIN é usado para assinar documentos."
+                        text: qsTranslate("Popup PIN","STR_PIN_SIGN_TEXT")
                         wrapMode: Text.Wrap
                         width: parent.width
                         color: Constants.COLOR_MAIN_BLUE
@@ -208,7 +208,7 @@ Item {
                             id: buttonTestSign
                             width: Constants.WIDTH_BUTTON
                             height:Constants.HEIGHT_BOTTOM_COMPONENT
-                            text: "Testar PIN"
+                            text: qsTranslate("Popup PIN","STR_PIN_TEST")
                             anchors.horizontalCenter: parent.horizontalCenter
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
@@ -224,7 +224,7 @@ Item {
                             id: buttonModifySign
                             width: Constants.WIDTH_BUTTON
                             height:Constants.HEIGHT_BOTTOM_COMPONENT
-                            text: "Modificar PIN"
+                            text: qsTranslate("Popup PIN","STR_PIN_MODIFY")
                             anchors.horizontalCenter: parent.horizontalCenter
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
@@ -247,7 +247,7 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
                         font.pixelSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
-                        text: "Este PIN é usado para alteração e verificação de morada."
+                        text: qsTranslate("Popup PIN","STR_PIN_ADDRESS_TEXT")
                         wrapMode: Text.Wrap
                         width: parent.width
                         color: Constants.COLOR_MAIN_BLUE
@@ -287,7 +287,7 @@ Item {
                             id: buttonTestAddress
                             width: Constants.WIDTH_BUTTON
                             height:Constants.HEIGHT_BOTTOM_COMPONENT
-                            text: "Testar PIN"
+                            text: qsTranslate("Popup PIN","STR_PIN_TEST")
                             anchors.horizontalCenter: parent.horizontalCenter
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
@@ -303,7 +303,7 @@ Item {
                             id: buttonModifyAddress
                             width: Constants.WIDTH_BUTTON
                             height:Constants.HEIGHT_BOTTOM_COMPONENT
-                            text: "Modificar PIN"
+                            text: qsTranslate("Popup PIN","STR_PIN_MODIFY")
                             anchors.horizontalCenter: parent.horizontalCenter
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
