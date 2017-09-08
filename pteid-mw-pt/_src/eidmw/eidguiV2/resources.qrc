@@ -47,7 +47,6 @@
         <file>components/Accordion.qml</file>
         <file>contentPages/definitions/PageDefinitionsUpdates.qml</file>
         <file>contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml</file>
-        <file>contentPages/security/PinCodesModel.qml</file>
         <file>components/TextBullet.qml</file>
         <file>components/CardRowTop.qml</file>
         <file>images/definitions_icon.png</file>

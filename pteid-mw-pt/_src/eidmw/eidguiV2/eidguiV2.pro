@@ -36,7 +36,9 @@ TRANSLATIONS = eidmw_nl.ts \
                eidmw_en.ts \
 
 lupdate_only{
-SOURCES += contentPages/card/*.qml \
+SOURCES += MainMenuModel.qml \
+            MainMenuBottomModel.qml \
+            contentPages/card/*.qml \
             contentPages/definitions/*.qml \
             contentPages/help/*.qml \
             contentPages/home/*.qml \
