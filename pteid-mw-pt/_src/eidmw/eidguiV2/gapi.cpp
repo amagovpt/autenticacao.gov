@@ -7,6 +7,7 @@
 #include <QPrinter>
 #include "qpainter.h"
 
+#include "scapsignature.h"
 #include "CMDSignature.h"
 #include "cmdErrors.h"
 
@@ -26,14 +27,20 @@ GAPI::GAPI(QObject *parent) :
     cmd_pdfSignature = new eIDMW::PTEID_PDFSignature();
     m_addressLoaded = false;
     m_shortcutFlag = 0;
+
+    //TODO: remove this call from here
+    ScapServices services;
+    services.getAttributeSuppliers();
 }
-void GAPI::initTranslation(){
+
+void GAPI::initTranslation() {
 
     GenPur::UI_LANGUAGE CurrLng   = m_Settings.getGuiLanguageCode();
     if (LoadTranslationFile(CurrLng)==false){
         emit signalLanguageChangedError();
     }
 }
+
 bool GAPI::LoadTranslationFile(GenPur::UI_LANGUAGE NewLanguage)
 {
 
