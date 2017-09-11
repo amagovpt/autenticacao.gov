@@ -1925,7 +1925,7 @@ void MainWnd::on_treePIN_itemClicked(QTreeWidgetItem* item, int column)
 	}
 
 
-	/* BEGIN - the pin information have to be always sinchronized - quick fix
+	/* BEGIN - the pin information have to be always synchronized - quick fix
 	 * this chunk of code can be removed if in the future the pin information sinchronization requirement is dropped
 	 */
 	unsigned int _pinRef = item->data(0,Qt::UserRole).value<uint>();
@@ -1937,7 +1937,6 @@ void MainWnd::on_treePIN_itemClicked(QTreeWidgetItem* item, int column)
 	unsigned long pinId = pin.getId();
 	m_pinsInfo[_pinRef] = new PinInfo( pinId, pin.getLabelById(pinId), pin.getTriesLeft() ); /*llemos*/
 
-	/* END - the pin information have to be always sinchronized */
 
 
 	unsigned int pinRef = item->data(0,Qt::UserRole).value<uint>();
@@ -2226,7 +2225,7 @@ void MainWnd::getCardForReading(PTEID_EIDCard * &new_card, bool clearData)
 	}
 	catch (PTEID_Exception e)
 	{
-		qDebug() << "Exception in loadCardData(). Error code: " << e.GetError();
+		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Exception in getCardForReading(). Error code: 0x%08x", e.GetError());
 		QString msg(tr("Error loading card data"));
 		ShowPTEIDError( msg );
 	}
@@ -2264,17 +2263,15 @@ unlock:
 //*****************************************************
 // load the card data (Address Tab)
 //*****************************************************
-void MainWnd::loadCardDataAddress( void )
-{
+void MainWnd::loadCardDataAddress( void ) {
 	PTEID_EIDCard * new_card = NULL;
     if (!m_CI_Data.isDataLoaded())
         return;
 
 	getCardForReading(new_card);
 
-	try
+	try	
 	{
-
 		if (new_card != NULL)
 		{
 			LoadDataAddress(*new_card);
@@ -2285,7 +2282,19 @@ void MainWnd::loadCardDataAddress( void )
 		}
 	}
 	catch(PTEID_Exception &e) {
-		qDebug() << "loadCardDataAddress: caught exception loading address data. Error code: " << e.GetError(); 
+		long errorCode = e.GetError();	 	
+		 	
+	    if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE &&	 	
+	       errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN)
+	    {
+			QString title = tr("SOD validation");
+			QString msg = tr("SOD validation failed: card data consistency is compromised!");
+			QMessageBox msgBoxcc(QMessageBox::Warning, title, msg, 0, this);
+			msgBoxcc.setModal(true);
+			msgBoxcc.exec();
+	    }
+
+		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "loadCardDataAddress: Error loading address data. Error code: 0x%08x", e.GetError()); 
 	}
 
 }
@@ -3164,17 +3173,17 @@ void MainWnd::fillPinList()
 	clearTabPins();
 
 	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, translateText( m_pinsInfo[PTEID_Pin::AUTH_PIN]->pin_name ) ); /*llemos*/
+	pinTreeItem->setText(COLUMN_PIN_NAME, translateText( m_pinsInfo[PTEID_Pin::AUTH_PIN]->pin_name ) ); 
 	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
 	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::AUTH_PIN));
 
 	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, translateText( m_pinsInfo[PTEID_Pin::SIGN_PIN]->pin_name ) ); /*llemos*/
+	pinTreeItem->setText(COLUMN_PIN_NAME, translateText( m_pinsInfo[PTEID_Pin::SIGN_PIN]->pin_name ) ); 
 	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
 	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::SIGN_PIN));
 
 	pinTreeItem = new QTreeWidgetItem( TYPE_PINTREE_ITEM );
-	pinTreeItem->setText(COLUMN_PIN_NAME, translateText( m_pinsInfo[PTEID_Pin::ADDR_PIN]->pin_name ) ); /*llemos*/
+	pinTreeItem->setText(COLUMN_PIN_NAME, translateText( m_pinsInfo[PTEID_Pin::ADDR_PIN]->pin_name ) );
 	m_ui.treePIN->addTopLevelItem ( pinTreeItem );
 	pinTreeItem->setData(0, Qt::UserRole, QVariant((uint)PTEID_Pin::ADDR_PIN));
 
@@ -3191,15 +3200,15 @@ void MainWnd::loadPinData(PTEID_EIDCard& Card)
 
 	PTEID_Pin& pinAuth = Pins.getPinByPinRef(PTEID_Pin::AUTH_PIN);
 	pinId = pinAuth.getId();
-	m_pinsInfo[PTEID_Pin::AUTH_PIN] = new PinInfo(pinId, pinAuth.getLabelById(pinId), pinAuth.getTriesLeft());/*llemos*/
+	m_pinsInfo[PTEID_Pin::AUTH_PIN] = new PinInfo(pinId, pinAuth.getLabelById(pinId), pinAuth.getTriesLeft());
 
 	PTEID_Pin& pinSign = Pins.getPinByPinRef(PTEID_Pin::SIGN_PIN);
 	pinId = pinSign.getId();
-	m_pinsInfo[PTEID_Pin::SIGN_PIN] = new PinInfo(pinId, pinSign.getLabelById(pinId), pinSign.getTriesLeft());/*llemos*/
+	m_pinsInfo[PTEID_Pin::SIGN_PIN] = new PinInfo(pinId, pinSign.getLabelById(pinId), pinSign.getTriesLeft());
 
 	PTEID_Pin& pinAddr = Pins.getPinByPinRef(PTEID_Pin::ADDR_PIN);
 	pinId = pinAddr.getId();
-	m_pinsInfo[PTEID_Pin::ADDR_PIN] = new PinInfo(pinId, pinAddr.getLabelById(pinId), pinAddr.getTriesLeft());/*llemos*/
+	m_pinsInfo[PTEID_Pin::ADDR_PIN] = new PinInfo(pinId, pinAddr.getLabelById(pinId), pinAddr.getTriesLeft());
 }
 
 
@@ -3278,7 +3287,7 @@ void MainWnd::refreshTabIdentity( void )
 QString MainWnd::translateText(QString &qStr)
 {
     return tr( qStr.toUtf8().constData() );
-}/* translateText() */
+}
 
 //*****************************************************
 // refresh the tab with the ID extra info (card back side)
@@ -3320,16 +3329,16 @@ void MainWnd::refreshTabIdentityExtra()
         m_ui.btnIdentityExtra_linkToCert->setAccessibleName ( linkStr );
         m_ui.btnIdentityExtra_linkToCert->setVisible(true);
         m_ui.btnIdentityExtra_linkToCert->resize(m_ui.btnIdentityExtra_linkToCert->sizeHint());
-    } else{
+    } else {
         m_ui.btnIdentityExtra_linkToCert->setVisible(false);
-    }/* if ( PersonFields[LINK_TO_CERT] != "" ) */
+    }
 
 	m_ui.txtIdentityExtra_ValidFrom->setText( QString::fromUtf8(CardFields[CARD_VALIDFROM].toStdString().c_str()));
 	m_ui.txtIdentityExtra_ValidFrom->setAccessibleName( QString::fromUtf8(CardFields[CARD_VALIDFROM].toStdString().c_str()));
 
 }
 
-void MainWnd::clearAddressData(void){
+void MainWnd::clearAddressData(void) {
 	m_ui.txtAddress_Municipality->setText(QString());
 	m_ui.txtAddress_Municipality->setAccessibleName(QString());
 	m_ui.txtAddress_District->setText(QString());
@@ -3386,7 +3395,7 @@ bool MainWnd::refreshTabAddress( void )
 	const int streetName_offset = 7;
 	if (m_CI_Data.m_AddressInfo.isForeign())
 	{
-		//TODO: Improve this...
+
 		m_ui.page_Address->setStyleSheet("");
 		m_ui.page_Address->setStyleSheet("background-image: url(:/images/Images/tab-backgrounds/bg_address_foreign.png);");
 
