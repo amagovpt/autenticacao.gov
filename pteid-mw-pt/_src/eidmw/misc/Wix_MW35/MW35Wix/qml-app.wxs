@@ -20,6 +20,8 @@
                 </Component>
                 <Component Id="cmpF7D4B937B6CC948CB191AA956CEEE7B0" Guid="{EF253B94-DE9C-490F-8E8A-11E8A7C0F4B9}">
                     <File Id="fil532B63275F24DCA11F229D2F2A4A676C" KeyPath="yes" Source="$(var.QMLDIR)\pteidguiV2.exe" />
+                    <File Id="fil532B63275F24DCA11F229D2F2A4A6718" Source="..\..\..\eidguiV2\eidmw_nl.qm" />
+                    <File Id="fil532B63275F24DCA11F229D2F2A4A6719" Source="..\..\..\eidguiV2\eidmw_en.qm" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A676D" Source="$(var.QMLDIR)\cmdServices.dll" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A676E" Source="$(var.QMLDIR)\ssleay32.dll" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A676F" Source="$(var.QMLDIR)\libeay32.dll" />
