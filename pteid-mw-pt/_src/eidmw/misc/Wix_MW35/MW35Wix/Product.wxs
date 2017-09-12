@@ -4,7 +4,7 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <?include ..\..\..\svn_revision.wxs ?>
 
-  <?define var.OfficialProductVersion =2.4.1?>
+  <?define var.OfficialProductVersion = 2.4.1?>
   <?define var.ProductVersion = 2.4.$(var.RevisionNumber)?>
   <?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
@@ -28,7 +28,7 @@
              InstallerVersion="405"
              Keywords="Portugal e-ID Middleware Installer"
              Platform="x86"
-             Comments="Portuguese eID Middleware 2.4.0 SVN Revision $(var.RevisionNumber)"
+             Comments="Portuguese eID Middleware 2.4.1 SVN Revision $(var.RevisionNumber)"
              Manufacturer="Portuguese Government"
              Compressed="yes"
              InstallPrivileges="elevated"
@@ -187,7 +187,7 @@
 
     <DirectoryRef Id="QT5PLATFORMS">
       <Component Id="qt5PlatformDll" Guid="{C65667C8-D72C-4CD4-BF7F-1D2DAC5B0BDA}">
-        <File Id="qwindows.dll" Name="qwindows.dll" KeyPath="yes" Source="$(var.PTEID_BUILD_FOLDER_X86)\qwindows.dll" />
+        <File Id="qwindows.dll" Name="qwindows.dll" KeyPath="yes" Source="$(env.PTEID_DIR_QT_4)\plugins\platforms\qwindows.dll" />
       </Component>
     </DirectoryRef>
 
@@ -325,10 +325,12 @@
         <File Source="..\..\..\scap-client-v2\scapsignature_pt.qm" />
       </Component>
 
+      <!--
       <Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
         <File Id="libeay32A" Source="$(var.PTEID_BUILD_FOLDER_X86)libeay32.dll" KeyPath="yes"/>
         <File Id="ssleay32A" Source="$(var.PTEID_BUILD_FOLDER_X86)ssleay32.dll" />
       </Component>
+      -->
 
       <Component Id="GuiLang" Guid="{6B03ED1B-DF24-4CE6-A70C-476AF4C0941B}" SharedDllRefCount="yes">
         <File Source="..\..\..\eidgui\eidmw_en.qm" KeyPath="yes" />
@@ -342,13 +344,13 @@
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)QtGui4.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)QtNetwork4.dll" />  -->
         <!-- QT5  -->
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Core.dll" KeyPath="yes" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Gui.dll" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Network.dll" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Widgets.dll" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Xml.dll" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5Concurrent.dll" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)Qt5PrintSupport.dll" />
+        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Core.dll" KeyPath="yes" />
+        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Gui.dll" />
+        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Network.dll" />
+        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Widgets.dll" />
+        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Xml.dll" />
+        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Concurrent.dll" />
+        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5PrintSupport.dll" />
         
       </Component>
 
@@ -368,6 +370,8 @@
 
       <Component Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
+        <File Id="libeay32A" Source="$(var.PTEID_BUILD_FOLDER_X86)libeay32.dll" />
+        <File Id="ssleay32A" Source="$(var.PTEID_BUILD_FOLDER_X86)ssleay32.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll" />
@@ -570,7 +574,7 @@
       
       <!-- System32 -->
       <ComponentRef Id="Runtime35"/>
-      <ComponentRef Id="Runtime35ThirdPartyOpenSSL"/>
+      <!-- <ComponentRef Id="Runtime35ThirdPartyOpenSSL"/> -->
       <ComponentRef Id="Runtime35ThirdPartyXerces"/>
      
       <!-- Windows -->

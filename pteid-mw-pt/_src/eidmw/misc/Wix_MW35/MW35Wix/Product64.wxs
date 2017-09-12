@@ -4,8 +4,8 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<?include ..\..\..\svn_revision.wxs ?>
 
-	<?define var.OfficialProductVersion =2.4.1?>
-	<?define var.ProductVersion =2.4.$(var.RevisionNumber)?>
+	<?define var.OfficialProductVersion = 2.4.1?>
+	<?define var.ProductVersion = 2.4.$(var.RevisionNumber)?>
 	<?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
 	<?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
@@ -186,7 +186,7 @@
 
       <DirectoryRef Id="QT5PLATFORMS">
           <Component Id="qt5PlatformDll" Guid="{C65667C8-D72C-4CD4-BF7F-1D2DAC5B0BDA}">
-              <File Id="qwindows.dll" Name="qwindows.dll" KeyPath="yes" Source="$(var.PTEID_QT_PLATFORMPLUGINS)\qwindows.dll" />
+              <File Id="qwindows.dll" Name="qwindows.dll" KeyPath="yes" Source="$(env.PTEID_DIR_QT_4_X64)\plugins\platforms\qwindows.dll" />
           </Component>
       </DirectoryRef>
 
@@ -300,11 +300,6 @@
           <File Source="..\..\..\scap-client-v2\scapsignature_pt.qm" />
 				</Component>
 
-        <Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F8}" SharedDllRefCount="yes">
-          <File Id="libeay_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)libeay32.dll" KeyPath="yes"/>
-          <File Id="ssleay_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)ssleay32.dll" />
-        </Component>
-
 				<Component Id="GuiLang" Guid="{6B03ED1B-DF24-4CE6-A70C-476AF4C0941B}" SharedDllRefCount="yes">
 			          <File Source="..\..\..\eidgui\eidmw_en.qm" KeyPath="yes" />
 			          <File Source="..\..\..\eidgui\eidmw_nl.qm" />
@@ -312,13 +307,13 @@
 
 				<Component Id="Qt" Guid="{AF5AF018-EE70-4EA9-98BA-9C2947F19060}" SharedDllRefCount="yes">
           <!-- QT5  -->
-          <File Source="$(var.PTEID_BUILD_FOLDER_X64)Qt5Core.dll" KeyPath="yes" />
-          <File Source="$(var.PTEID_BUILD_FOLDER_X64)Qt5Gui.dll" />
-          <File Source="$(var.PTEID_BUILD_FOLDER_X64)Qt5Network.dll" />
-          <File Source="$(var.PTEID_BUILD_FOLDER_X64)Qt5Widgets.dll" />
-          <File Source="$(var.PTEID_BUILD_FOLDER_X64)Qt5Xml.dll" />
-          <File Source="$(var.PTEID_BUILD_FOLDER_X64)Qt5Concurrent.dll" />
-          <File Source="$(var.PTEID_BUILD_FOLDER_X64)Qt5PrintSupport.dll" />
+          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5Core.dll" KeyPath="yes" />
+          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5Gui.dll" />
+          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5Network.dll" />
+          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5Widgets.dll" />
+          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5Xml.dll" />
+          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5Concurrent.dll" />
+          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5PrintSupport.dll" />
 				</Component>
 
 				<Component Id="License" Guid="{C00AF621-E882-4805-BA9C-B90AA5DBBCB6}" SharedDllRefCount="yes">
@@ -385,6 +380,8 @@
 			          <File Id="pteidapplayer_64.dll"  Source="$(var.PTEID_BUILD_FOLDER_X64)pteidapplayer.dll" KeyPath="yes" />
 			          <File Id="pteidcardlayer_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcardlayer.dll" />
                 <File Id="pteidlibj_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibj.dll"/>
+                <File Id="libeay_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)libeay32.dll" />
+                <File Id="ssleay_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)ssleay32.dll" />
                 <File Id="pteidlibCS_Wrapper_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" />
 			          <File Id="pteidcommon_64.dll"    Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
 			          <File Id="pteidDlgsWin32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
@@ -579,13 +576,11 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 					
 				</Component>
         
-        <!-- 
         <Component Id="RegisterPteidAutoStart" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA6}">
           <RegistryKey Root="HKCU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
             <RegistryValue Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteidgui.exe&quot;"/>
           </RegistryKey>
         </Component>
-        -->
 
 			</DirectoryRef>
 
@@ -648,24 +643,24 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 				<ComponentRef Id="CrlDir"/>
 				<ComponentRef Id="HttpDir"/>
         <ComponentRef Id="ImagePlugins"/>
-				<!--<ComponentRef Id="CrlPortugal"/> -->
+
 				<ComponentRef Id="DirectoryCache"/>
 				<ComponentRef Id="License"/>
 				<ComponentRef Id="LogDir"/>
 				<ComponentRef Id="DSSApp"/>
-        <ComponentGroupRef Id="qmlAppComponentGroup"/>
-				<!-- System32 -->
+        <!-- <ComponentGroupRef Id="qmlAppComponentGroup"/> -->
+        <!-- System32 -->
 
 				<ComponentRef Id="Runtime35"/>
 				<ComponentRef Id="Runtime35_64"/>
-				<ComponentRef Id="Runtime35ThirdPartyOpenSSL"/>
-		<!-- 		<ComponentRef Id="Runtime35ThirdPartyOpenSSL_64"/> -->
+    <!--<ComponentRef Id="Runtime35ThirdPartyOpenSSL"/> -->
+		<!--<ComponentRef Id="Runtime35ThirdPartyOpenSSL_64"/> -->
 				<ComponentRef Id="Runtime35ThirdPartyXerces"/>
 				<ComponentRef Id="Runtime35ThirdPartyXerces_64"/>
 
 				<!-- Registry -->
 				<ComponentRef Id="RegistryPteidSystem"/>
-        <!-- <ComponentRef Id="RegisterPteidAutoStart"/> -->
+        <ComponentRef Id="RegisterPteidAutoStart"/>
         <ComponentRef Id="RegistryXadesFileType"/>
 
 				<Feature Id="GUI"
