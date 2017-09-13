@@ -1,13 +1,15 @@
 #include "scapsignature.h"
 #include "eidlib.h"
-
-//tr() function
-#include <QObject>
+#include "eidlibException.h"
 
 #include "ScapSettings.h"
+
 #include "ASService/soapH.h"
 #include "ASService/soapAttributeSupplierBindingProxy.h"
 #include "ASService/AttributeSupplierBinding.nsmap"
+
+// Client for WS PADES/PDFSignature
+#include "pdfsignatureclient.h"
 #include <string>
 
 /*
@@ -79,9 +81,92 @@ QString ScapServices::getConnErrStr() {
 }
 */
 
-void ScapServices::setConnErr( int soapConnErr, void *in_suppliers_resp ){
+void ScapServices::setConnErr( int soapConnErr, void *in_suppliers_resp ) {
     qDebug() << "ScapSignature::setConnErr() - soapConnErr: " << soapConnErr;
     connectionErr.setErr( soapConnErr, in_suppliers_resp );
+}
+
+using namespace eIDMW;
+
+void ScapServices::executeSCAPSignature(int selected_page, QString &inputPath, QString &savefilepath, 
+    double location_x, double location_y, int ltv_years, std::vector<ACService::ns3__AttributeType *> selected_attributes)
+{
+    // Sets user selected file save path
+    const char* citizenId;
+
+    // Creates a temporary file
+    QTemporaryFile tempFile;
+
+    if (!tempFile.open()) {
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "PDF Signature error: Error creating temporary file");
+        return;
+    }
+
+    char *temp_save_path = strdup(tempFile.fileName().toStdString().c_str());
+    int sign_rc = 0;
+
+    try {
+        PTEID_ReaderContext& readerContext = ReaderSet.getReader();
+        if (!readerContext.isCardPresent())
+        {
+            std::cerr << "PDF Signature error: No card found in the reader!" << std::endl;
+            //this->success = SIG_ERROR;
+        }
+
+        try
+        {
+            eIDMW::PTEID_EIDCard &card = readerContext.getEIDCard();
+
+            // Get Citizen info
+            QString citizenName = card.getID().getGivenName();
+            citizenName.append(" ");
+            citizenName.append(card.getID().getSurname());
+
+            citizenId = card.getID().getCivilianIdNumber();
+
+            std::cout << "Sent PDF Signature coordinates. X:" << location_x << " Y:" << location_y << std::endl;
+
+            PTEID_PDFSignature pdf_sig(strdup(inputPath.toUtf8().constData()));
+
+            // Sign pdf
+            sign_rc = card.SignPDF(pdf_sig, selected_page, 0, false, "" , "", temp_save_path);
+
+            if (sign_rc == 0)
+            {
+                //this->success = SIG_ERROR;
+                bool successful = PDFSignatureClient::signPDF(m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
+                    QString(citizenId), ltv_years, PDFSignatureInfo(selected_page, location_x, location_y, false), selected_attributes);
+
+                if (successful) {
+                	/*
+                    if ( this->FutureWatcher.future().isCanceled() ){
+                        this->success = CANCELED_BY_USER;
+                    } else{
+                        this->success = SIG_SUCCESS;
+                    }
+                    */
+                }
+            }
+            else {
+
+            	//TODO: Handle error in the local signature
+            }
+                
+        }
+        catch (eIDMW::PTEID_Exception &e)
+        {
+            std::cerr << "Caught exception getting EID Card. Error code: " << hex << e.GetError() << std::endl;
+            //this->success = SIG_ERROR;
+        }
+
+    }
+    catch(eIDMW::PTEID_Exception &e) {
+        std::cerr << "Caught exception getting reader. Error code: " << hex << e.GetError() << std::endl;
+        //this->success = SIG_ERROR;
+    }
+
+    free(temp_save_path);
+    free((char *)citizenId);
 }
 
 

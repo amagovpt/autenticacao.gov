@@ -28,9 +28,15 @@ GAPI::GAPI(QObject *parent) :
     m_addressLoaded = false;
     m_shortcutFlag = 0;
 
-    //TODO: remove this call from here
+    /*TODO: remove this call from here
     ScapServices services;
-    services.getAttributeSuppliers();
+    
+    //services.getAttributeSuppliers();
+
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    services.getCompanyAttributes(*card);
+    */
 }
 
 void GAPI::initTranslation() {
@@ -1708,9 +1714,10 @@ void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificat
         certificatesMapChildren.insert("KeyLength", QString::number(cert.getKeyLength()));
         certificatesMapChildren.insert("Status", cert.getStatus());
 
-        if(certificatesMap.contains("level" + QString::number( level ))){
+        if(certificatesMap.contains("level" + QString::number(level))) {
             certificatesMap.insert("levelB" + QString::number(level),certificatesMapChildren);
-        }else{
+        }
+        else {
             certificatesMap.insert("level" + QString::number(level),certificatesMapChildren);
         }
 

@@ -3,7 +3,8 @@
 #include <vector>
 #include <QString>
 #include <string>
-#include "ASService/soapH.h"
+#include <vector>
+//#include "ASService/soapH.h"
 #include "ErrorConn.h"
 
 
@@ -37,6 +38,15 @@ private:
 };
 
 //Fwd declarations
+namespace eIDMW {
+	class PTEID_EIDCard;
+}
+
+namespace ACService {
+	class ns2__AttributesType;
+	class ns3__AttributeType;
+}
+
 class ns3__AttributeSupplierType;
 
 class ScapServices {
@@ -45,9 +55,10 @@ public:
 	void getAttributeSuppliers();
 
 	void getEntityAttributes();
-	void getCompanyAttributes();
-
-	void signPDF(const char *content, unsigned long pdf_len);
+	void getCompanyAttributes(eIDMW::PTEID_EIDCard &card);
+	void executeSCAPSignature(int selected_page, QString &inputPath, QString &savefilepath,
+	     double location_x, double location_y, int ltv_years, std::vector<ACService::ns3__AttributeType *> selected_attributes);
+	std::vector<ACService::ns2__AttributesType *> loadAttributesFromCache(eIDMW::PTEID_EIDCard &card);
 
 	/* Connection error functions */
 	//The error message should be in the GUI, we should just return an enum

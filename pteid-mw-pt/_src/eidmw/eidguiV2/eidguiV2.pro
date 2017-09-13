@@ -16,13 +16,14 @@ SOURCES += main.cpp \
     ASService/soapAttributeSupplierBindingProxy.cpp \
     ASService/soapC.cpp \
     ACService/ACServiceC.cpp \
-#    acserviceclient.cpp \
-#    PDFSignature/PDFSignatureSoapBindingProxy.cpp \
-#    PDFSignature/PDFSignatureC.cpp \
-#    pdfsignatureclient.cpp \
+    #acserviceclient.cpp \
+    PDFSignature/PDFSignatureSoapBindingProxy.cpp \
+    PDFSignature/PDFSignatureC.cpp \
+    pdfsignatureclient.cpp \
     ErrorConn.cpp \
     stdsoap2.cpp \
     scapsignature.cpp \
+    scapcompanies.cpp \
     filesavedialog.cpp \
     genpur.cpp
 

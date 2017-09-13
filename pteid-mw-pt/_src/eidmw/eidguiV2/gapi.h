@@ -26,9 +26,6 @@
 /*
     GAPI - Graphic Application Programming Interface
 
-    // GAPI init
-    GAPI gapi;
-
 */
 
 class GAPI;
