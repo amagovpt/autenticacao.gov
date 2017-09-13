@@ -114,7 +114,7 @@ Catalog::Catalog(PDFDoc *docA) {
   kidsIdxList = NULL;
   lastCachedPage = 0;
   m_sig_dict = NULL;
-
+  useCCLogo = false;
 
   xref->getCatalog(&catDict);
    
@@ -262,7 +262,7 @@ fallback:
 void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *firstPageRef,
 	       	const char *location, const char *civil_number,
 		const char *reason, unsigned long filesize, int page, int sig_sector,
-		unsigned char *img_data, unsigned long img_length, bool isPTLanguage)
+		unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature)
 {
 
 	Object signature_field;
@@ -270,6 +270,8 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	Object build_prop_app;
 	Object *signature_dict = new Object();
 	Object acroform;
+
+	useCCLogo = isCCSignature;
 
 	char date_outstr[200];
 	time_t t;
@@ -660,12 +662,19 @@ Ref Catalog::newXObject(char *plain_text_stream, int height, int width, bool nee
 			img_width = CUSTOM_IMAGE_BITMAP_WIDTH;
 			img_height = CUSTOM_IMAGE_BITMAP_HEIGHT;
 		}
-		else //Use the CC Official logo encoded as JPEG from a static array 
+		else if (useCCLogo) //Use the CC Official logo encoded as JPEG from a static array 
 		{
 			data = CC_LOGO_BITMAP_COMPRESSED;
 			data_length = sizeof(CC_LOGO_BITMAP_COMPRESSED);
 			img_width = CC_LOGO_BITMAP_WIDTH;
 			img_height = CC_LOGO_BITMAP_HEIGHT;
+		}
+		else 
+		{
+			data = CMD_LOGO_BITMAP_COMPRESSED;
+			data_length = sizeof(CMD_LOGO_BITMAP_COMPRESSED);
+			img_width = CMD_LOGO_WIDTH;
+			img_height = CMD_LOGO_HEIGHT;
 		}
 
 		Ref image_background = addImageXObject(img_width, img_height, data,	data_length);
@@ -918,9 +927,10 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	//Small signature formats only includes one image: Im1
 	if (small_signature_format)
 		commands_template = "q\r\n40.5 0 0 31.5 0 0 cm\r\n/Im1 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
-	else
+	else if (useCCLogo)
 		commands_template = "q\r\n40.5 0 0 31.5 0 43 cm\r\n/Im1 Do\r\nQ\r\nq\r\n139.29 0 0 30.87 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
-		//commands_template = "q\r\n/Im1 Do\r\nQ\r\nq\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
+	else
+		commands_template = "q\r\n40.5 0 0 31.5 0 43 cm\r\n/Im1 Do\r\nQ\r\nq\r\n109.29 0 0 31.00 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
 
 	initBuiltinFontTables();
 	

@@ -122,7 +122,9 @@ public:
   void setIncrementalSignature(bool);
 
   void prepareSignature(PDFRectangle *rect, const char * name, Ref *first_page_ref, const char *location,
-	  const char * civil_number, const char *reason, unsigned long, int page, int sig_sector, unsigned char *img_data, unsigned long img_length, bool isPTLanguage);
+	  const char * civil_number, const char *reason, unsigned long, int page, int sig_sector, 
+    unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature);
+  
   Ref addFontDict(const char *basefont, const char *name);
   Ref addImageXObject(int width, int height, unsigned char *data, unsigned long length_in_bytes);
 
@@ -252,6 +254,8 @@ private:
   PageLabelInfo *pageLabelInfo; // info about page labels
   PageMode pageMode;		// page mode
   PageLayout pageLayout;	// page layout
+
+  GBool useCCLogo;
 
   GBool cachePageTree(int page); // Cache first <page> pages.
   Object *findDestInTree(Object *tree, GooString *name, Object *obj);
