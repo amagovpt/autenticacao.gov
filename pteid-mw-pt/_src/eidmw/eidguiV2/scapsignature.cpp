@@ -4,9 +4,12 @@
 
 #include "ScapSettings.h"
 
-#include "ASService/soapH.h"
-#include "ASService/soapAttributeSupplierBindingProxy.h"
-#include "ASService/AttributeSupplierBinding.nsmap"
+//#include "ASService/soapH.h"
+//#include "ASService/soapAttributeSupplierBindingProxy.h"
+//#include "ASService/AttributeSupplierBinding.nsmap"
+#include "SCAPServices/SCAPH.h"
+#include "SCAPServices/SCAPAttributeSupplierBindingProxy.h"
+//#include "SCAPServices/SCAP.nsmap"
 
 // Client for WS PADES/PDFSignature
 #include "pdfsignatureclient.h"
@@ -89,7 +92,7 @@ void ScapServices::setConnErr( int soapConnErr, void *in_suppliers_resp ) {
 using namespace eIDMW;
 
 void ScapServices::executeSCAPSignature(int selected_page, QString &inputPath, QString &savefilepath, 
-    double location_x, double location_y, int ltv_years, std::vector<ACService::ns3__AttributeType *> selected_attributes)
+    double location_x, double location_y, int ltv_years, std::vector<ns3__AttributeType *> selected_attributes)
 {
     // Sets user selected file save path
     const char* citizenId;
@@ -170,9 +173,11 @@ void ScapServices::executeSCAPSignature(int selected_page, QString &inputPath, Q
 }
 
 
-void ScapServices::getAttributeSuppliers()
+std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
 {
 	const char * as_endpoint = "/DSS/ASService";
+
+    //TODO: should we cache the suppliers list ??
 
 	qDebug() << "getAttributeSuppliers(): " << m_suppliersList.size();
 
@@ -217,7 +222,7 @@ void ScapServices::getAttributeSuppliers()
 		}
 	}
 
-    ns2__AttributeSupplierResponseType suppliers_resp;
+    ns3__AttributeSupplierResponseType suppliers_resp;
 
     const char * c_sup_endpoint = sup_endpoint.c_str();
     const char * entities_soapAction = 
@@ -250,5 +255,7 @@ void ScapServices::getAttributeSuppliers()
     }
 
     m_suppliersList = suppliers_resp.AttributeSupplier;
-    qDebug() << "List of attribute suppliers Size= " << m_suppliersList.size();
+    qDebug() << "Reloaded list of attribute suppliers Size= " << m_suppliersList.size();
+
+    return m_suppliersList;
 }

@@ -1,5 +1,5 @@
 #include "ErrorConn.h"
-#include "ASService/soapH.h"
+#include "SCAPServices/SCAPH.h"
 
 void ErrorConn::setErrConnInfo(){
     int index = 0;
@@ -123,8 +123,8 @@ tErrConnInfo* ErrorConn::getEntry( int soapErr ){
 
 void ErrorConn::setErr( int soapErr, void *in_suppliers_resp ){
 
-    ns2__AttributeSupplierResponseType *suppliers_resp =
-        (ns2__AttributeSupplierResponseType*)in_suppliers_resp;
+    ns3__AttributeSupplierResponseType *suppliers_resp =
+        (ns3__AttributeSupplierResponseType*)in_suppliers_resp;
 
     if ( ( SOAP_EOF == soapErr )
         && ( suppliers_resp->soap != NULL )

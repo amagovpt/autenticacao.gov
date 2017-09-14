@@ -1,4 +1,5 @@
 #ifndef SCAPSIGNATURE_H
+#define SCAPSIGNATURE_H
 
 #include <vector>
 #include <QString>
@@ -42,23 +43,24 @@ namespace eIDMW {
 	class PTEID_EIDCard;
 }
 
-namespace ACService {
-	class ns2__AttributesType;
-	class ns3__AttributeType;
-}
+
+class ns2__AttributesType;
+class ns3__AttributeType;
 
 class ns3__AttributeSupplierType;
+
+
 
 class ScapServices {
 public:
 
-	void getAttributeSuppliers();
+	std::vector<ns3__AttributeSupplierType *> getAttributeSuppliers();
 
 	void getEntityAttributes();
 	void getCompanyAttributes(eIDMW::PTEID_EIDCard &card);
 	void executeSCAPSignature(int selected_page, QString &inputPath, QString &savefilepath,
-	     double location_x, double location_y, int ltv_years, std::vector<ACService::ns3__AttributeType *> selected_attributes);
-	std::vector<ACService::ns2__AttributesType *> loadAttributesFromCache(eIDMW::PTEID_EIDCard &card);
+	     double location_x, double location_y, int ltv_years, std::vector<ns3__AttributeType *> selected_attributes);
+	std::vector<ns2__AttributesType *> loadAttributesFromCache(eIDMW::PTEID_EIDCard &card);
 
 	/* Connection error functions */
 	//The error message should be in the GUI, we should just return an enum
@@ -66,10 +68,11 @@ public:
 
 private:
 	std::vector<ns3__AttributeSupplierType *> m_suppliersList;
+	std::vector<ns3__AttributeType *> m_attributesList;
 	ProxyInfo m_proxyInfo;
 	ErrorConn connectionErr;
 	void setConnErr( int soapConnectionErr, void *in_suppliers_resp );
 	
 };
 
-#endif
+#endif //SCAPSIGNATURE_H

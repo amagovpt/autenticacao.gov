@@ -10,19 +10,18 @@
 #include "ScapSettings.h"
 
 #include "eidlibdefines.h"
-#include "PDFSignature/envStub.h"
+//#include "PDFSignature/envStub.h"
 //#include "ASService/soapH.h"
-#include "ACService/ACServiceH.h"
+//#include "ACService/ACServiceH.h"
 
-#include "PDFSignature/PDFSignatureH.h"
-#include "PDFSignature/PDFSignatureSoapBindingProxy.h"
-#include "PDFSignature/PDFSignatureSoapBinding.nsmap"
+#include "SCAPServices/SCAPH.h"
+#include "SCAPServices/SCAPPDFSignatureSoapBindingProxy.h"
 
 //#include "ACService/ACServiceH.h"
 
 //using namespace PDFSignature;
 
-PDFSignature::ns1__AttributeType* convertAttributeType(ACService::ns3__AttributeType *, soap *);
+ns4__AttributeType* convertAttributeType(ns3__AttributeType *, soap *);
 
 PDFSignatureClient::PDFSignatureClient()
 {
@@ -31,7 +30,7 @@ PDFSignatureClient::PDFSignatureClient()
 const char * processId = "10001";
 const char * pdf_endpoint = "/PADES/PDFSignature";
 
-bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QString filepath, QString citizenName, QString citizenId, int ltv, PDFSignatureInfo signatureInfo, std::vector<ACService::ns3__AttributeType *> &attributeTypeList) {
+bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QString filepath, QString citizenName, QString citizenId, int ltv, PDFSignatureInfo signatureInfo, std::vector<ns3__AttributeType *> &attributeTypeList) {
     //const SOAP_ENV__Fault * fault = NULL;
 
     soap * sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
@@ -41,12 +40,12 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
     sp->send_timeout = 20;
     sp->connect_timeout = 20;
 
-    soap_set_namespaces(sp, namespacesPDFSignature);
+    //soap_set_namespaces(sp, SCAPnamespaces);
 
 	//TODO: this disables server certificate verification !!
 	soap_ssl_client_context(sp, SOAP_SSL_NO_AUTHENTICATION, NULL, NULL, NULL, NULL, NULL);
 
-    PDFSignature::PDFSignatureSoapBindingProxy proxy(sp);
+    PDFSignatureSoapBindingProxy proxy(sp);
 
     // Get endpoint from settings
     ScapSettings settings;
@@ -127,40 +126,40 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
 
 
     // Gets PDF Base 64
-    PDFSignature::xsd__base64Binary * base64PDF = PDFSignature::soap_new_set_xsd__base64Binary(sp, (unsigned char *)fileBinary, pdfBinaryLen, NULL, NULL, NULL);
+    xsd__base64Binary * base64PDF = soap_new_set_xsd__base64Binary(sp, (unsigned char *)fileBinary, pdfBinaryLen, NULL, NULL, NULL);
 
 
     std::string citizenNIC = citizenId.toStdString();
     citizenNIC = citizenNIC.substr(2, citizenNIC.length() - 2);
     // Get Citizen Info
-    PDFSignature::ns1__PersonalDataType * personalData = PDFSignature::soap_new_req_ns1__PersonalDataType(sp, citizenName.toStdString(), citizenNIC);
+    ns4__PersonalDataType * personalData = soap_new_req_ns4__PersonalDataType(sp, citizenName.toStdString(), citizenNIC);
     std::cerr << "Citizen Name : " << citizenName.toStdString() << std::endl;
     std::cerr << "Citizen NIC : " << citizenNIC << std::endl;
 
 
     // Get Attributes selected on Tree
-    std::vector<PDFSignature::ns1__AttributeType *> attributes;
+    std::vector<ns4__AttributeType *> attributes;
     for (uint pos = 0; pos < attributeTypeList.size(); pos++)
     {
-        ACService::ns3__AttributeType * acAttributeType = attributeTypeList.at(pos);
+        ns3__AttributeType * acAttributeType = attributeTypeList.at(pos);
 
-        PDFSignature::ns1__AttributeType * convertedAttribute = convertAttributeType(acAttributeType, sp);
+        ns4__AttributeType * convertedAttribute = convertAttributeType(acAttributeType, sp);
         attributes.push_back(convertedAttribute);
     }
 
     // Create Attribute list type
-    PDFSignature::ns1__AttributeListType *attributeList = PDFSignature::soap_new_req_ns1__AttributeListType(sp, attributes);
+    ns4__AttributeListType *attributeList = soap_new_req_ns4__AttributeListType(sp, attributes);
 
-    PDFSignature::ns1__SignatureOrientationEnumType orientationType =
-            signatureInfo.isPortrait() ? PDFSignature::ns1__SignatureOrientationEnumType__PORTRAIT : PDFSignature::ns1__SignatureOrientationEnumType__LANDSCAPE;
+    ns4__SignatureOrientationEnumType orientationType =
+            signatureInfo.isPortrait() ? ns4__SignatureOrientationEnumType__PORTRAIT : ns4__SignatureOrientationEnumType__LANDSCAPE;
 
     // Request Sign PDF
     try
     {
-        PDFSignature::ns1__SignRequest * signRequest = PDFSignature::soap_new_set_ns1__SignRequest(sp, processId, personalData, attributeList,
+        ns4__SignRequest * signRequest = soap_new_set_ns4__SignRequest(sp, processId, personalData, attributeList,
                         signatureField.toStdString(), *base64PDF, &ltv, signatureInfo.getSelectedPage(), signatureInfo.getX(), signatureInfo.getY(), orientationType);
 
-        PDFSignature::ns1__SignResponse resp;
+        ns4__SignResponse resp;
         int rc = proxy.Sign(signRequest, resp);
 
         if (rc != SOAP_OK)
@@ -174,7 +173,7 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
             else
             {
                 eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", 
-					"Error in PDFSignature::sign(): GSoap returned Error code: %d", rc);
+					"Error in sign(): GSoap returned Error code: %d", rc);
             }
             return false;
         }
@@ -192,7 +191,7 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
         std::cout << "Service returned Message: " << resp.Status->Message << std::endl;
 
         // Save PDF to final destination
-        PDFSignature::xsd__base64Binary *signedDoc = resp.SignedDocument;
+        xsd__base64Binary *signedDoc = resp.SignedDocument;
         QFile signedDocFile(finalfilepath);
 
         if (!signedDocFile.open(QIODevice::ReadWrite))
@@ -208,7 +207,7 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
     }
     catch(...)
     {
-        const char * error_msg = "Exception thrown in ns1__SignResponse. Signed PDF File not written";
+        const char * error_msg = "Exception thrown in ns4__SignResponse. Signed PDF File not written";
         fputs(error_msg, stderr);
 
         eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "%S", error_msg);
@@ -217,26 +216,26 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
 
 }
 
-PDFSignature::ns1__AttributeType* convertAttributeType(ACService::ns3__AttributeType * attributeType, soap * sp){
-    PDFSignature::ns1__AttributeType * convertedAttribute = PDFSignature::soap_new_ns1__AttributeType(sp);
+ns4__AttributeType* convertAttributeType(ns3__AttributeType * attributeType, soap * sp){
+    ns4__AttributeType * convertedAttribute = soap_new_ns4__AttributeType(sp);
 
     // Attribute suppliers
-    PDFSignature::ns1__AttributeSupplierType * attrSuppl = PDFSignature::soap_new_ns1__AttributeSupplierType(sp);
+    ns4__AttributeSupplierType * attrSuppl = soap_new_ns4__AttributeSupplierType(sp);
     attrSuppl->Id = attributeType->AttributeSupplier->Id;
     attrSuppl->Name = attributeType->AttributeSupplier->Name;
 
     // Personal Data
-    PDFSignature::ns1__PersonalDataType * persData = PDFSignature::soap_new_ns1__PersonalDataType(sp);
+    ns4__PersonalDataType * persData = soap_new_ns4__PersonalDataType(sp);
     persData->Name = attributeType->PersonalData->Name;
     persData->NIC = attributeType->PersonalData->NIC;
 
     // Main Attribute
-    PDFSignature::ns1__MainAttributeType *main_attrib = PDFSignature::soap_new_ns1__MainAttributeType(sp);
+    ns4__MainAttributeType *main_attrib = soap_new_ns4__MainAttributeType(sp);
     main_attrib->AttributeID = attributeType->MainAttribute->AttributeID;
     main_attrib->Description = attributeType->MainAttribute->Description;
 
     //Main LegalAct List
-    PDFSignature::ns1__LegalActListType *legalActList = PDFSignature::soap_new_ns1__LegalActListType(sp);
+    ns4__LegalActListType *legalActList = soap_new_ns4__LegalActListType(sp);
 //    std::cout << "Legal act: " << std::endl;
 //    for(uint i = 0; i < attributeType->MainAttribute->LegalActList->LegalAct.size(); i++){
 //        std::string string = attributeType->MainAttribute->LegalActList->LegalAct.at(0);
@@ -256,10 +255,10 @@ PDFSignature::ns1__AttributeType* convertAttributeType(ACService::ns3__Attribute
     {
 
         //Main Sub AttributeList
-        PDFSignature::ns1__SubAttributeListType *subAttrList = PDFSignature::soap_new_ns1__SubAttributeListType(sp);
+        ns4__SubAttributeListType *subAttrList = soap_new_ns4__SubAttributeListType(sp);
         for(uint i = 0; i < attributeType->MainAttribute->SubAttributeList->SubAttribute.size(); i++){
-            ACService::ns3__SubAttributeType *acSubAttr = attributeType->MainAttribute->SubAttributeList->SubAttribute.at(i);
-            PDFSignature::ns1__SubAttributeType * subAttr = PDFSignature::soap_new_ns1__SubAttributeType(sp);
+            ns3__SubAttributeType *acSubAttr = attributeType->MainAttribute->SubAttributeList->SubAttribute.at(i);
+            ns4__SubAttributeType * subAttr = soap_new_ns4__SubAttributeType(sp);
             subAttr->AttributeID = acSubAttr->AttributeID;
             subAttr->Description = acSubAttr->Description;
             subAttr->Value = acSubAttr->Value;

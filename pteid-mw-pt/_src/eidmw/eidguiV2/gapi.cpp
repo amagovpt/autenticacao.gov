@@ -7,9 +7,16 @@
 #include <QPrinter>
 #include "qpainter.h"
 
-#include "scapsignature.h"
+
 #include "CMDSignature.h"
 #include "cmdErrors.h"
+
+//SCAP
+#include "scapsignature.h"
+#include "SCAPServices/SCAPH.h"
+//#include "ASService/ASServiceH.h"   
+//#include "PDFSignature/envStub.h"
+
 
 using namespace eIDMW;
 
@@ -28,15 +35,6 @@ GAPI::GAPI(QObject *parent) :
     m_addressLoaded = false;
     m_shortcutFlag = 0;
 
-    /*TODO: remove this call from here
-    ScapServices services;
-    
-    //services.getAttributeSuppliers();
-
-    PTEID_EIDCard * card = NULL;
-    getCardInstance(card);
-    services.getCompanyAttributes(*card);
-    */
 }
 
 void GAPI::initTranslation() {
@@ -1344,12 +1342,13 @@ void GAPI::startWritingPersoNotes(QString text) {
 
 int GAPI::getStringByteLength(QString text) {
 
-    int strLenght;
-
-    strLenght = text.toStdString().size() + 1; // '\0' should be considered as a byte
-
-    return strLenght;
+    return text.toStdString().size() + 1; // '\0' should be considered as a byte
 }
+
+void GAPI::startGettingEntities() {
+    QtConcurrent::run(this, &GAPI::getSCAPEntities);
+}
+
 
 void GAPI::startReadingPersoNotes() {
     QFuture<void> future = QtConcurrent::run(this, &GAPI::getPersoDataFile);
@@ -1357,6 +1356,17 @@ void GAPI::startReadingPersoNotes() {
 
 void GAPI::startReadingAddress() {
     QtConcurrent::run(this, &GAPI::getAddressFile);
+}
+
+void GAPI::getSCAPEntities() {
+    
+    QList<QString> attributeSuppliers;
+    std::vector<ns3__AttributeSupplierType *> entities = scapServices.getAttributeSuppliers();
+
+    for (int i = 0; i!=entities.size(); i++)
+        attributeSuppliers.append(QString::fromStdString(entities.at(i)->Name));
+    
+    emit signalSCAPEntitiesLoaded(attributeSuppliers);
 }
 
 void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {

@@ -9,14 +9,12 @@ class SelectedTreeInfo;
 class soap;
 class ProxyInfo;
 
-namespace ACService{
-    class ns2__AttributesType;
-    class ns3__AttributeType;
-}
+class ns2__AttributesType;
+class ns3__AttributeType;
 
-namespace PDFSignature {
-    class ns1__AttributeType;
-}
+//PDFSignature version of Attribute type
+class ns4__AttributeType;
+
 
 class PDFSignatureInfo{
 public:
@@ -27,9 +25,9 @@ public:
         portrait = _isPortrait;
     }
 
-    int getSelectedPage(){return selectedPage;}
-    int getX(){return x;}
-    int getY(){return y;}
+    int getSelectedPage() { return selectedPage; }
+    int getX (){ return x; }
+    int getY(){ return y; }
     bool isPortrait(){return portrait;}
 private:
     int selectedPage;
@@ -43,7 +41,7 @@ class PDFSignatureClient
 public:
     PDFSignatureClient();
 
-    static bool signPDF(ProxyInfo, QString, QString, QString, QString, int, PDFSignatureInfo, std::vector<ACService::ns3__AttributeType *> &);
+    static bool signPDF(ProxyInfo, QString, QString, QString, QString, int, PDFSignatureInfo, std::vector<ns3__AttributeType *> &);
 };
 
 #endif // PDFSIGNATURECLIENT_H

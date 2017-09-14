@@ -13,12 +13,9 @@ CONFIG += c++11
 SOURCES += main.cpp \
     appcontroller.cpp \
     gapi.cpp \
-    ASService/soapAttributeSupplierBindingProxy.cpp \
-    ASService/soapC.cpp \
-    ACService/ACServiceC.cpp \
-    #acserviceclient.cpp \
-    PDFSignature/PDFSignatureSoapBindingProxy.cpp \
-    PDFSignature/PDFSignatureC.cpp \
+    SCAPServices/SCAPAttributeSupplierBindingProxy.cpp \
+    SCAPServices/SCAPC.cpp \
+    SCAPServices/SCAPPDFSignatureSoapBindingProxy.cpp \
     pdfsignatureclient.cpp \
     ErrorConn.cpp \
     stdsoap2.cpp \

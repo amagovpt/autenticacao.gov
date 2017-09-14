@@ -23,6 +23,8 @@
 #include "CMDSignature.h"
 #include "cmdErrors.h"
 
+#include "scapsignature.h"
+
 /*
     GAPI - Graphic Application Programming Interface
 
@@ -245,6 +247,18 @@ public slots:
     unsigned int getPDFpageCount(QString loadedFilePath);
 
     void startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
+
+    /* SCAP Methods  */
+    
+    void startGettingEntities();
+
+#ifdef NOT_YET_IMPLEMENTED
+    void startLoadingAttributesFromCache();
+    void startGettingEntityAttributes(QString entityName);
+    void startGettingCompanyAttributes();
+    void startSigningSCAP(QString inputPdf, QString outputPDF /* TODO: How do we pass the selected attributes?? */);
+#endif    
+
     unsigned int verifyAuthPin(QString pin);
     unsigned int getTriesLeftAuthPin();
     unsigned int verifySignPin(QString pin);
@@ -297,6 +311,7 @@ signals:
     void signalCardChanged(const int error_code);
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage);
     void signalCertificatesChanged(const QVariantMap certificatesMap);
+    void signalSCAPEntitiesLoaded(const QList<QString> attributesList);
     void signalPdfPrintSucess();
     void signalPdfPrintSignSucess();
     void signalPdfPrintFail();
@@ -307,6 +322,7 @@ private:
     bool LoadTranslationFile( GenPur::UI_LANGUAGE NewLanguage );
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();
+    void getSCAPEntities();
     void getPersoDataFile();
     void setPersoDataFile(QString text);
     void getAddressFile();
@@ -329,6 +345,7 @@ private:
 
     CMDSignature *cmd_signature;
     PTEID_PDFSignature *cmd_pdfSignature;
+    ScapServices scapServices;
     QString m_persoData;
     bool m_addressLoaded;
     int m_shortcutFlag;

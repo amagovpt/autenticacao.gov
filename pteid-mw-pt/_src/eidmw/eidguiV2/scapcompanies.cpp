@@ -1,17 +1,18 @@
 #include <vector>
 #include <sstream>
 #include "eidlib.h"
-#include "ACService/ACServiceH.h"
-#include "ACService/AttributeClientServiceBinding.nsmap"
+
+#include "SCAPServices/SCAPH.h"
+#include "SCAPServices/SCAP.nsmap"
 #include "scapsignature.h"
 #include "ScapSettings.h"
 #include <QDir>
 
 
-std::vector<ACService::ns2__AttributesType *> 
+std::vector<ns2__AttributesType *> 
     ScapServices::loadAttributesFromCache(eIDMW::PTEID_EIDCard &card) {
 
-    std::vector<ACService::ns2__AttributesType *> attributesType;
+    std::vector<ns2__AttributesType *> attributesType;
     try
     {
 
@@ -38,12 +39,12 @@ std::vector<ACService::ns2__AttributesType *>
         // Create soap request with generated body content.
         soap * soap2 = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
         //TODO: this disables server certificate verification !!
-        soap_set_namespaces(soap2, namespacesACService);
+        soap_set_namespaces(soap2, SCAPnamespaces);
 
         soap2->is = istream;
 
         // Retrieve ns2__AttributeResponseType
-        ACService::ns2__AttributeResponseType attr_response;
+        ns2__AttributeResponseType attr_response;
         long ret = soap_read_ns2__AttributeResponseType(soap2, &attr_response);
 
         qDebug() << "Retrieved attributes from converting XML to object. Size: "<< attr_response.AttributeResponseValues.size();
@@ -63,7 +64,7 @@ std::vector<ACService::ns2__AttributesType *>
 
 void ScapServices::getCompanyAttributes(eIDMW::PTEID_EIDCard &card) {
 
-    std::vector<ACService::ns2__AttributesType *> result;
+    std::vector<ns2__AttributesType *> result;
     bool allEnterprises = true;
     const char * soapAction = "http://www.cartaodecidadao.pt/services/ccc/ACS/Operations/Attributes";
 	const char * ac_endpoint = "/DSS/ACService";
@@ -76,18 +77,18 @@ void ScapServices::getCompanyAttributes(eIDMW::PTEID_EIDCard &card) {
 		soap_ssl_client_context(sp, SOAP_SSL_NO_AUTHENTICATION, NULL, NULL, NULL, NULL, NULL);
 
         // Get suppliers List
-        std::vector<ACService::ns3__AttributeSupplierType *> vec_suppliers;
+        std::vector<ns3__AttributeSupplierType *> vec_suppliers;
 
         /*TODO: what do we do to fill the dummy attribute suppliers ??
         for(int i = 0; i < attributeSupplierTypeVec.size(); i++)
         {
             ns3__AttributeSupplierType * attSupType = attributeSupplierTypeVec.at(i);
 
-            ACService::ns3__AttributeSupplierType * ac_attributeSupplierType = ACService::soap_new_req_ns3__AttributeSupplierType(sp,attSupType->Id, attSupType->Name);
+            ns3__AttributeSupplierType * ac_attributeSupplierType = soap_new_req_ns3__AttributeSupplierType(sp,attSupType->Id, attSupType->Name);
             vec_suppliers.push_back(ac_attributeSupplierType);
         }
         */
-        ACService::ns2__AttributeSupplierListType * suppliers = ACService::soap_new_req_ns2__AttributeSupplierListType(sp, vec_suppliers);
+        ns2__AttributeSupplierListType * suppliers = soap_new_req_ns2__AttributeSupplierListType(sp, vec_suppliers);
 
 
         // Get Citizen info
@@ -97,11 +98,11 @@ void ScapServices::getCompanyAttributes(eIDMW::PTEID_EIDCard &card) {
 
         const char* idNumber = card.getID().getCivilianIdNumber();
 
-        ACService::ns3__PersonalDataType * citizen = ACService::soap_new_req_ns3__PersonalDataType(sp, fullname.toStdString(), idNumber);
+        ns3__PersonalDataType * citizen = soap_new_req_ns3__PersonalDataType(sp, fullname.toStdString(), idNumber);
 
         // Get Attribute request
-        //ACService::ns2__AttributeRequestType * attr_request = ACService::soap_new_req_ns2__AttributeRequestType(sp, "10001", citizen, suppliers);
-        ACService::ns2__AttributeRequestType * attr_request = ACService::soap_new_set_ns2__AttributeRequestType(sp, "10001", citizen, suppliers, &allEnterprises);
+        //ns2__AttributeRequestType * attr_request = soap_new_req_ns2__AttributeRequestType(sp, "10001", citizen, suppliers);
+        ns2__AttributeRequestType * attr_request = soap_new_set_ns2__AttributeRequestType(sp, "10001", citizen, suppliers, &allEnterprises);
         std::stringstream ss;
         sp->os = &ss;
         if (soap_write_ns2__AttributeRequestType(sp, attr_request))
@@ -169,12 +170,12 @@ void ScapServices::getCompanyAttributes(eIDMW::PTEID_EIDCard &card) {
         // Create soap request with generated body content.
         soap * soap2 = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
 
-        soap_set_namespaces(soap2, namespacesACService);
+        soap_set_namespaces(soap2, SCAPnamespaces);
 
         soap2->is = istream;
 
         // Retrieve ns2__AttributeResponseType
-        ACService::ns2__AttributeResponseType attr_response;
+        ns2__AttributeResponseType attr_response;
         long ret = soap_read_ns2__AttributeResponseType(soap2, &attr_response);
 
 
