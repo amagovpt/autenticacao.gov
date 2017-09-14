@@ -227,7 +227,7 @@ public slots:
     signed int returnReaderSelected(void) {return selectedReaderIndex; }
     void setAddressLoaded(bool addressLoaded) {m_addressLoaded = addressLoaded; }
     void startCardReading();
-    int getStringByteLenght(QString text);
+    int getStringByteLength(QString text);
     void startReadingPersoNotes();
     void startWritingPersoNotes(QString text);
     void startReadingAddress();

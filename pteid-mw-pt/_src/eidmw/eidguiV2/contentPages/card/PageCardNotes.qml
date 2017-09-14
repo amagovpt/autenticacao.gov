@@ -84,7 +84,7 @@ PageCardNotesForm {
             ensureVisible(propertyEditNotes.cursorRectangle)
         }
         onTextChanged: {
-            var strLenght = gapi.getStringByteLenght(propertyEditNotes.text);
+            var strLenght = gapi.getStringByteLength(propertyEditNotes.text);
             propertyProgressBar.value = strLenght / (Constants.PAGE_NOTES_MAX_NOTES_LENGHT)
             console.log("Personal Notes Text Size: " + strLenght + " - " + 100 * propertyProgressBar.value + " %" )
 

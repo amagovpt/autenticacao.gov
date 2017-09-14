@@ -1342,7 +1342,7 @@ void GAPI::startWritingPersoNotes(QString text) {
     QFuture<void> future = QtConcurrent::run(this, &GAPI::setPersoDataFile, text);
 }
 
-int GAPI::getStringByteLenght(QString text) {
+int GAPI::getStringByteLength(QString text) {
 
     int strLenght;
 
