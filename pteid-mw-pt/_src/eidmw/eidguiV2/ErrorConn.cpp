@@ -67,7 +67,7 @@ void ErrorConn::setErrConnInfo(){
                 , errConnInfo[i].connErr
                 , errConnInfo[i].description.c_str() );
     }*/
-}/* setErrConnInfo() */
+}
 
 ErrorConn::ErrorConn(){
     m_connErr = ER_UNKNOWN;
@@ -77,49 +77,45 @@ ErrorConn::ErrorConn(){
 
     // No selected error yet
     curErrConnInfo = NULL;
-}/* ErrorConn() */
+}
 
 ErrorConn::~ErrorConn(){
     delete[] errConnInfo;
-}/* ~ErrorConn() */
+}
 
 void ErrorConn::setErrConnInfoSize( int Size ){
     errConnInfoSize = Size;
-}/* getErrConnInfoSize() */
+}
 
 int ErrorConn::getErrConnInfoSize(){
     printf( "getErrConnInfoSize() - errConnInfoSize: %d\n", errConnInfoSize );
 
     return errConnInfoSize;
-}/* getErrConnInfoSize() */
+}
 
-tErrConnInfo* ErrorConn::getEntry( int soapErr ){
-    printf( "[1] getEntry() - Start\n" );
+tErrConnInfo* ErrorConn::getEntry( int soapErr ) {
 
     tErrConnInfo* p, *cur = NULL;
     int infoSize = getErrConnInfoSize();
     int index;
-    for( index = 0, p = errConnInfo
-        ; ( p != NULL ) && ( index < infoSize )
-        ; index++, p++ ){
+    for( index = 0, p = errConnInfo ; ( p != NULL ) && ( index < infoSize ) ; index++, p++ ) {
 
         if ( soapErr == p->soapErr ){
             printf( "[2] getEntry() - soapErr: %d\n", (int)p->soapErr );
             cur = p;
             break;
-        }/* if ( soapErr == p->soapErr ) */
-    }/* for( int index ) */
+        }
+    }
 
-    if ( NULL == cur ){
-        if ( p != NULL ){
+    if ( NULL == cur ) {
+        if ( p != NULL ) {
             cur = p--;
             printf( "[3] getEntry() - soapErr: %d\n", (int)cur->soapErr );
         }
-    }/* if ( NULL == cur ) */
+    }
 
-    printf( "[4] getEntry() - End\n" );
     return cur;
-}/* getEntry() */
+}
 
 void ErrorConn::setErr( int soapErr, void *in_suppliers_resp ){
 
@@ -130,11 +126,11 @@ void ErrorConn::setErr( int soapErr, void *in_suppliers_resp ){
         && ( suppliers_resp->soap != NULL )
         && ( 0 == suppliers_resp->soap->errnum ) ){
         soapErr = SOAP_TIMEOUT;
-    }/* if ( ( SOAP_EOF == soapErr ) && ( ... ) ) */
+    }
 
     printf( "setErr() - soapErr: %d\n", soapErr );
     curErrConnInfo = getEntry( soapErr );
-}/* setErr() */
+}
 
 int ErrorConn::getErr(){
     m_connErr = ( curErrConnInfo != NULL ) ? curErrConnInfo->connErr : ER_UNKNOWN;
@@ -142,21 +138,22 @@ int ErrorConn::getErr(){
     //printf( "getErr() - m_connErr: %d\n", ((int)m_connErr) );
 
     return ((int)m_connErr);
-}/* getErr() */
+}
 
 std::string ErrorConn::getErrStr(){
-    if ( curErrConnInfo != NULL ){
+    if (curErrConnInfo != NULL) {
         m_connErrStr =  curErrConnInfo->description;
-    } else{
+    }
+    else{
         curErrConnInfo = getEntry( SOAP_UNKNOWN );
         if ( curErrConnInfo != NULL ){
             m_connErrStr = curErrConnInfo->description;
         } else{
             printf( "getErrStr() - NULL curErrConnInfo\n" );
             m_connErrStr = EMPTY_STR;
-        }/* if ( curErrConnInfo != NULL ) */
-    }/* if ( curErrConnInfo != NULL ) */
+        }
+    }
 
     printf( "getErrStr() - m_connErrStr: %s\n", m_connErrStr.c_str() );
     return m_connErrStr;
-}/* getErrStr() */
+}
