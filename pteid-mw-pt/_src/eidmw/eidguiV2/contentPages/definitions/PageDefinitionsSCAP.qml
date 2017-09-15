@@ -113,6 +113,6 @@ PageDefinitionsSCAPForm {
         console.log("Page Definitions SCAP Completed")
         propertyBusyIndicator.running = true
         gapi.startGettingEntities()
-        gapi.loadCompanyAttributesFromCache()
+        gapi.startLoadingAttributesFromCache()
     }
 }

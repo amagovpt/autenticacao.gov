@@ -252,11 +252,11 @@ public slots:
     
     void startGettingEntities();
     void startGettingCompanyAttributes();
+    void startLoadingAttributesFromCache();
 
 #ifdef NOT_YET_IMPLEMENTED
-    void startLoadingAttributesFromCache();
-    void startGettingEntityAttributes(QString entityName);
 
+    void startGettingEntityAttributes(QString entityName);
     void startSigningSCAP(QString inputPdf, QString outputPDF /* TODO: How do we pass the selected attributes?? */);
 #endif    
 
@@ -328,6 +328,7 @@ private:
     void connectToCard();
     void getSCAPEntities();
     void getSCAPCompanyAttributes();
+    void getSCAPAttributesFromCache();
     void getPersoDataFile();
     void setPersoDataFile(QString text);
     void getAddressFile();

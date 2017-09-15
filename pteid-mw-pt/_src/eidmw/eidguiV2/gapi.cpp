@@ -1362,6 +1362,10 @@ void GAPI::startReadingAddress() {
     QtConcurrent::run(this, &GAPI::getAddressFile);
 }
 
+void GAPI::startLoadingAttributesFromCache() {
+    QtConcurrent::run(this, &GAPI::getSCAPAttributesFromCache);
+}
+
 void GAPI::getSCAPEntities() {
     
     QList<QString> attributeSuppliers;
@@ -1421,13 +1425,40 @@ void GAPI::getSCAPCompanyAttributes() {
 
     std::vector<ns2__AttributesType *> attributes = scapServices.getCompanyAttributes(*card);
 
-
     if (attributes.size() == 0)
     {
         //TODO: emit signal for error
         //emit
         return;
     }
+
+    for(uint i = 0; i < attributes.size() ; i++)
+    {
+       std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
+       std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i));
+
+       if (childAttributes.size() > 1)
+       {
+           qDebug() << "TODO: multiple attributes from the same supplier is not supported yet...";
+       }
+
+       attribute_map.insert(QString::fromStdString(attrSupplier),
+                            QString::fromStdString(childAttributes.at(0)));
+    }
+
+    emit signalCompanyAttributesLoaded(attribute_map);
+}
+
+void GAPI::getSCAPAttributesFromCache() {
+
+    PTEID_EIDCard * card = NULL;
+    QVariantMap attribute_map;
+
+    getCardInstance(card);
+    if (card == NULL)
+        return;
+
+    std::vector<ns2__AttributesType *> attributes = scapServices.loadAttributesFromCache(*card);
 
     for(uint i = 0; i < attributes.size() ; i++)
     {
