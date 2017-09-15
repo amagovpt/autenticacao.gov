@@ -218,7 +218,7 @@ void GAPI::setPersoDataFile(QString text) {
         }
         else {
             unsigned long ulSize = 1000;
-            unsigned char *pucData = (unsigned char *)calloc( ulSize, sizeof(char) );
+            unsigned char *pucData = (unsigned char *)calloc(ulSize, sizeof(unsigned char));
 
             const PTEID_ByteArray oData( (const unsigned char *)pucData, ulSize);
             Card.writePersonalNotes(oData);
@@ -1363,7 +1363,7 @@ void GAPI::getSCAPEntities() {
     QList<QString> attributeSuppliers;
     std::vector<ns3__AttributeSupplierType *> entities = scapServices.getAttributeSuppliers();
 
-    for (int i = 0; i!=entities.size(); i++)
+    for (unsigned int i = 0; i!=entities.size(); i++)
         attributeSuppliers.append(QString::fromStdString(entities.at(i)->Name));
     
     emit signalSCAPEntitiesLoaded(attributeSuppliers);
