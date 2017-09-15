@@ -196,7 +196,7 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
     sp->connect_timeout = 20;
 
 	std::string proxy_host;
-	long proxy_port;
+    long proxy_port = 0;
 	//Proxy support using the gsoap BindingProxy
 	if (m_proxyInfo.isSystemProxy())
 	{
@@ -222,7 +222,7 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
 		}
 	}
 
-    ns3__AttributeSupplierResponseType suppliers_resp;
+    ns9__AttributeSupplierResponseType suppliers_resp;
 
     const char * c_sup_endpoint = sup_endpoint.c_str();
     const char * entities_soapAction = 

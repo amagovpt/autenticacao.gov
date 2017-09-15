@@ -77,7 +77,7 @@ class SOAP_CMAC PDFSignatureSoapBindingProxy
 #endif
 
 	/// Web service operation 'Sign' (returns error code or SOAP_OK)
-	virtual	int Sign(ns4__SignRequest *ns4__SignRequest_, ns4__SignResponse &ns4__SignResponse_) { return this->Sign(NULL, NULL, ns4__SignRequest_, ns4__SignResponse_); }
-	virtual	int Sign(const char *endpoint, const char *soap_action, ns4__SignRequest *ns4__SignRequest_, ns4__SignResponse &ns4__SignResponse_);
+	virtual	int Sign(pdf__SignRequest *pdf__SignRequest_, pdf__SignResponse &pdf__SignResponse_) { return this->Sign(NULL, NULL, pdf__SignRequest_, pdf__SignResponse_); }
+	virtual	int Sign(const char *endpoint, const char *soap_action, pdf__SignRequest *pdf__SignRequest_, pdf__SignResponse &pdf__SignResponse_);
 };
 #endif

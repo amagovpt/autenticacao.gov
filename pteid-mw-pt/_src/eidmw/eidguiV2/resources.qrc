@@ -79,5 +79,7 @@
         <file>contentPages/card/PageCardPrint.qml</file>
         <file>contentPages/card/PageCardPrintForm.ui.qml</file>
         <file>images/pdf_document_header.png</file>
+        <file>contentPages/definitions/PageDefinitionsSCAP.qml</file>
+        <file>contentPages/definitions/PageDefinitionsSCAPForm.ui.qml</file>
     </qresource>
 </RCC>

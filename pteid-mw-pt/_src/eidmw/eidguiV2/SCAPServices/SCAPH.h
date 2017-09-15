@@ -152,117 +152,117 @@ SOAP_FMAC3 unsigned int * SOAP_FMAC4 soap_get_unsignedInt(struct soap*, unsigned
 #define soap_read_unsignedInt(soap, data) ( ((data) ? (soap_default_unsignedInt(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_unsignedInt(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-/* _ns1__SigningTime is a typedef synonym for ns1__SigningTimeType */
+/* _ns6__SigningTime is a typedef synonym for ns6__SigningTimeType */
 
-#ifndef SOAP_TYPE__ns1__SigningTime
-#define SOAP_TYPE__ns1__SigningTime (272)
+#ifndef SOAP_TYPE__ns6__SigningTime
+#define SOAP_TYPE__ns6__SigningTime (272)
 #endif
 
-#define soap_default__ns1__SigningTime(soap, a) soap_default_ns1__SigningTimeType(soap, a)
+#define soap_default__ns6__SigningTime(soap, a) soap_default_ns6__SigningTimeType(soap, a)
 
 
-#define soap__ns1__SigningTime2s soap_ns1__SigningTimeType2s
+#define soap__ns6__SigningTime2s soap_ns6__SigningTimeType2s
 
 
-#define soap_out__ns1__SigningTime soap_out_ns1__SigningTimeType
+#define soap_out__ns6__SigningTime soap_out_ns6__SigningTimeType
 
 
-#define soap_s2_ns1__SigningTime soap_s2ns1__SigningTimeType
+#define soap_s2_ns6__SigningTime soap_s2ns6__SigningTimeType
 
 
-#define soap_in__ns1__SigningTime soap_in_ns1__SigningTimeType
+#define soap_in__ns6__SigningTime soap_in_ns6__SigningTimeType
 
 
-#define soap_put__ns1__SigningTime soap_put_ns1__SigningTimeType
+#define soap_put__ns6__SigningTime soap_put_ns6__SigningTimeType
 
 
-#define soap_write__ns1__SigningTime soap_write_ns1__SigningTimeType
+#define soap_write__ns6__SigningTime soap_write_ns6__SigningTimeType
 
 
-#define soap_get__ns1__SigningTime soap_get_ns1__SigningTimeType
+#define soap_get__ns6__SigningTime soap_get_ns6__SigningTimeType
 
 
-#define soap_read__ns1__SigningTime soap_read_ns1__SigningTimeType
+#define soap_read__ns6__SigningTime soap_read_ns6__SigningTimeType
 
 
-#ifndef SOAP_TYPE_ns1__ProducedAtType
-#define SOAP_TYPE_ns1__ProducedAtType (132)
+#ifndef SOAP_TYPE_ns6__ProducedAtType
+#define SOAP_TYPE_ns6__ProducedAtType (132)
 #endif
 
-#define soap_default_ns1__ProducedAtType(soap, a) soap_default_dateTime(soap, a)
+#define soap_default_ns6__ProducedAtType(soap, a) soap_default_dateTime(soap, a)
 
 
-#define soap_ns1__ProducedAtType2s soap_dateTime2s
+#define soap_ns6__ProducedAtType2s soap_dateTime2s
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__ProducedAtType(struct soap*, const char*, int, const time_t *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__ProducedAtType(struct soap*, const char*, int, const time_t *, const char*);
 
-#define soap_s2ns1__ProducedAtType soap_s2dateTime
+#define soap_s2ns6__ProducedAtType soap_s2dateTime
 
-SOAP_FMAC3 time_t * SOAP_FMAC4 soap_in_ns1__ProducedAtType(struct soap*, const char*, time_t *, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns1__ProducedAtType(struct soap*, const time_t *, const char*, const char*);
+SOAP_FMAC3 time_t * SOAP_FMAC4 soap_in_ns6__ProducedAtType(struct soap*, const char*, time_t *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns6__ProducedAtType(struct soap*, const time_t *, const char*, const char*);
 
-#ifndef soap_write_ns1__ProducedAtType
-#define soap_write_ns1__ProducedAtType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || soap_put_ns1__ProducedAtType(soap, data, "ns1:ProducedAtType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__ProducedAtType
+#define soap_write_ns6__ProducedAtType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || soap_put_ns6__ProducedAtType(soap, data, "ns6:ProducedAtType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 time_t * SOAP_FMAC4 soap_get_ns1__ProducedAtType(struct soap*, time_t *, const char*, const char*);
+SOAP_FMAC3 time_t * SOAP_FMAC4 soap_get_ns6__ProducedAtType(struct soap*, time_t *, const char*, const char*);
 
-#ifndef soap_read_ns1__ProducedAtType
-#define soap_read_ns1__ProducedAtType(soap, data) ( ((data) ? (soap_default_ns1__ProducedAtType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__ProducedAtType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_ns1__IssueTimeType
-#define SOAP_TYPE_ns1__IssueTimeType (129)
-#endif
-
-#define soap_default_ns1__IssueTimeType(soap, a) soap_default_dateTime(soap, a)
-
-
-#define soap_ns1__IssueTimeType2s soap_dateTime2s
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__IssueTimeType(struct soap*, const char*, int, const time_t *, const char*);
-
-#define soap_s2ns1__IssueTimeType soap_s2dateTime
-
-SOAP_FMAC3 time_t * SOAP_FMAC4 soap_in_ns1__IssueTimeType(struct soap*, const char*, time_t *, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns1__IssueTimeType(struct soap*, const time_t *, const char*, const char*);
-
-#ifndef soap_write_ns1__IssueTimeType
-#define soap_write_ns1__IssueTimeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || soap_put_ns1__IssueTimeType(soap, data, "ns1:IssueTimeType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 time_t * SOAP_FMAC4 soap_get_ns1__IssueTimeType(struct soap*, time_t *, const char*, const char*);
-
-#ifndef soap_read_ns1__IssueTimeType
-#define soap_read_ns1__IssueTimeType(soap, data) ( ((data) ? (soap_default_ns1__IssueTimeType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__IssueTimeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__ProducedAtType
+#define soap_read_ns6__ProducedAtType(soap, data) ( ((data) ? (soap_default_ns6__ProducedAtType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__ProducedAtType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__SigningTimeType
-#define SOAP_TYPE_ns1__SigningTimeType (126)
+#ifndef SOAP_TYPE_ns6__IssueTimeType
+#define SOAP_TYPE_ns6__IssueTimeType (129)
 #endif
 
-#define soap_default_ns1__SigningTimeType(soap, a) soap_default_dateTime(soap, a)
+#define soap_default_ns6__IssueTimeType(soap, a) soap_default_dateTime(soap, a)
 
 
-#define soap_ns1__SigningTimeType2s soap_dateTime2s
+#define soap_ns6__IssueTimeType2s soap_dateTime2s
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__SigningTimeType(struct soap*, const char*, int, const time_t *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__IssueTimeType(struct soap*, const char*, int, const time_t *, const char*);
 
-#define soap_s2ns1__SigningTimeType soap_s2dateTime
+#define soap_s2ns6__IssueTimeType soap_s2dateTime
 
-SOAP_FMAC3 time_t * SOAP_FMAC4 soap_in_ns1__SigningTimeType(struct soap*, const char*, time_t *, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns1__SigningTimeType(struct soap*, const time_t *, const char*, const char*);
+SOAP_FMAC3 time_t * SOAP_FMAC4 soap_in_ns6__IssueTimeType(struct soap*, const char*, time_t *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns6__IssueTimeType(struct soap*, const time_t *, const char*, const char*);
 
-#ifndef soap_write_ns1__SigningTimeType
-#define soap_write_ns1__SigningTimeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || soap_put_ns1__SigningTimeType(soap, data, "ns1:SigningTimeType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__IssueTimeType
+#define soap_write_ns6__IssueTimeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || soap_put_ns6__IssueTimeType(soap, data, "ns6:IssueTimeType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 time_t * SOAP_FMAC4 soap_get_ns1__SigningTimeType(struct soap*, time_t *, const char*, const char*);
+SOAP_FMAC3 time_t * SOAP_FMAC4 soap_get_ns6__IssueTimeType(struct soap*, time_t *, const char*, const char*);
 
-#ifndef soap_read_ns1__SigningTimeType
-#define soap_read_ns1__SigningTimeType(soap, data) ( ((data) ? (soap_default_ns1__SigningTimeType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__SigningTimeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__IssueTimeType
+#define soap_read_ns6__IssueTimeType(soap, data) ( ((data) ? (soap_default_ns6__IssueTimeType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__IssueTimeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+
+#ifndef SOAP_TYPE_ns6__SigningTimeType
+#define SOAP_TYPE_ns6__SigningTimeType (126)
+#endif
+
+#define soap_default_ns6__SigningTimeType(soap, a) soap_default_dateTime(soap, a)
+
+
+#define soap_ns6__SigningTimeType2s soap_dateTime2s
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__SigningTimeType(struct soap*, const char*, int, const time_t *, const char*);
+
+#define soap_s2ns6__SigningTimeType soap_s2dateTime
+
+SOAP_FMAC3 time_t * SOAP_FMAC4 soap_in_ns6__SigningTimeType(struct soap*, const char*, time_t *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns6__SigningTimeType(struct soap*, const time_t *, const char*, const char*);
+
+#ifndef soap_write_ns6__SigningTimeType
+#define soap_write_ns6__SigningTimeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || soap_put_ns6__SigningTimeType(soap, data, "ns6:SigningTimeType", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 time_t * SOAP_FMAC4 soap_get_ns6__SigningTimeType(struct soap*, time_t *, const char*, const char*);
+
+#ifndef soap_read_ns6__SigningTimeType
+#define soap_read_ns6__SigningTimeType(soap, data) ( ((data) ? (soap_default_ns6__SigningTimeType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__SigningTimeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
@@ -348,166 +348,166 @@ SOAP_FMAC3 bool * SOAP_FMAC4 soap_get_bool(struct soap*, bool *, const char*, co
 #endif
 
 
-#ifndef SOAP_TYPE_ns4__SignatureOrientationEnumType
-#define SOAP_TYPE_ns4__SignatureOrientationEnumType (134)
+#ifndef SOAP_TYPE_pdf__SignatureOrientationEnumType
+#define SOAP_TYPE_pdf__SignatureOrientationEnumType (134)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns4__SignatureOrientationEnumType(struct soap*, enum ns4__SignatureOrientationEnumType *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns4__SignatureOrientationEnumType(struct soap*, const char*, int, const enum ns4__SignatureOrientationEnumType *, const char*);
-SOAP_FMAC3S const char* SOAP_FMAC4S soap_ns4__SignatureOrientationEnumType2s(struct soap*, enum ns4__SignatureOrientationEnumType);
-SOAP_FMAC3 enum ns4__SignatureOrientationEnumType * SOAP_FMAC4 soap_in_ns4__SignatureOrientationEnumType(struct soap*, const char*, enum ns4__SignatureOrientationEnumType *, const char*);
-SOAP_FMAC3S int SOAP_FMAC4S soap_s2ns4__SignatureOrientationEnumType(struct soap*, const char*, enum ns4__SignatureOrientationEnumType *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns4__SignatureOrientationEnumType(struct soap*, const enum ns4__SignatureOrientationEnumType *, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_pdf__SignatureOrientationEnumType(struct soap*, enum pdf__SignatureOrientationEnumType *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_pdf__SignatureOrientationEnumType(struct soap*, const char*, int, const enum pdf__SignatureOrientationEnumType *, const char*);
+SOAP_FMAC3S const char* SOAP_FMAC4S soap_pdf__SignatureOrientationEnumType2s(struct soap*, enum pdf__SignatureOrientationEnumType);
+SOAP_FMAC3 enum pdf__SignatureOrientationEnumType * SOAP_FMAC4 soap_in_pdf__SignatureOrientationEnumType(struct soap*, const char*, enum pdf__SignatureOrientationEnumType *, const char*);
+SOAP_FMAC3S int SOAP_FMAC4S soap_s2pdf__SignatureOrientationEnumType(struct soap*, const char*, enum pdf__SignatureOrientationEnumType *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_pdf__SignatureOrientationEnumType(struct soap*, const enum pdf__SignatureOrientationEnumType *, const char*, const char*);
 
-#ifndef soap_write_ns4__SignatureOrientationEnumType
-#define soap_write_ns4__SignatureOrientationEnumType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || soap_put_ns4__SignatureOrientationEnumType(soap, data, "ns4:SignatureOrientationEnumType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 enum ns4__SignatureOrientationEnumType * SOAP_FMAC4 soap_get_ns4__SignatureOrientationEnumType(struct soap*, enum ns4__SignatureOrientationEnumType *, const char*, const char*);
-
-#ifndef soap_read_ns4__SignatureOrientationEnumType
-#define soap_read_ns4__SignatureOrientationEnumType(soap, data) ( ((data) ? (soap_default_ns4__SignatureOrientationEnumType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns4__SignatureOrientationEnumType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_write_pdf__SignatureOrientationEnumType
+#define soap_write_pdf__SignatureOrientationEnumType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || soap_put_pdf__SignatureOrientationEnumType(soap, data, "pdf:SignatureOrientationEnumType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-/* _ns4__SignResponse is a typedef synonym for ns4__SignResponse */
+SOAP_FMAC3 enum pdf__SignatureOrientationEnumType * SOAP_FMAC4 soap_get_pdf__SignatureOrientationEnumType(struct soap*, enum pdf__SignatureOrientationEnumType *, const char*, const char*);
 
-#ifndef SOAP_TYPE__ns4__SignResponse
-#define SOAP_TYPE__ns4__SignResponse (305)
+#ifndef soap_read_pdf__SignatureOrientationEnumType
+#define soap_read_pdf__SignatureOrientationEnumType(soap, data) ( ((data) ? (soap_default_pdf__SignatureOrientationEnumType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_pdf__SignatureOrientationEnumType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-#define soap_default__ns4__SignResponse(soap, a) (a)->ns4__SignResponse::soap_default(soap)
+/* _pdf__SignResponse is a typedef synonym for pdf__SignResponse */
 
-
-#define soap_serialize__ns4__SignResponse(soap, a) (a)->soap_serialize(soap)
-
-
-#define soap__ns4__SignResponse2s soap_ns4__SignResponse2s
-
-
-#define soap_out__ns4__SignResponse soap_out_ns4__SignResponse
-
-
-#define soap_s2_ns4__SignResponse soap_s2ns4__SignResponse
-
-
-#define soap_in__ns4__SignResponse soap_in_ns4__SignResponse
-
-
-#define soap_instantiate__ns4__SignResponse soap_instantiate_ns4__SignResponse
-
-
-#define soap_new__ns4__SignResponse soap_new_ns4__SignResponse
-
-
-#define soap_new_req__ns4__SignResponse soap_new_req_ns4__SignResponse
-
-
-#define soap_new_set__ns4__SignResponse soap_new_set_ns4__SignResponse
-
-
-#define soap_put__ns4__SignResponse soap_put_ns4__SignResponse
-
-
-#define soap_write__ns4__SignResponse soap_write_ns4__SignResponse
-
-
-#define soap_get__ns4__SignResponse soap_get_ns4__SignResponse
-
-
-#define soap_read__ns4__SignResponse soap_read_ns4__SignResponse
-
-/* _ns4__SignRequest is a typedef synonym for ns4__SignRequest */
-
-#ifndef SOAP_TYPE__ns4__SignRequest
-#define SOAP_TYPE__ns4__SignRequest (304)
+#ifndef SOAP_TYPE__pdf__SignResponse
+#define SOAP_TYPE__pdf__SignResponse (305)
 #endif
 
-#define soap_default__ns4__SignRequest(soap, a) (a)->ns4__SignRequest::soap_default(soap)
+#define soap_default__pdf__SignResponse(soap, a) (a)->pdf__SignResponse::soap_default(soap)
 
 
-#define soap_serialize__ns4__SignRequest(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__pdf__SignResponse(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns4__SignRequest2s soap_ns4__SignRequest2s
+#define soap__pdf__SignResponse2s soap_pdf__SignResponse2s
 
 
-#define soap_out__ns4__SignRequest soap_out_ns4__SignRequest
+#define soap_out__pdf__SignResponse soap_out_pdf__SignResponse
 
 
-#define soap_s2_ns4__SignRequest soap_s2ns4__SignRequest
+#define soap_s2_pdf__SignResponse soap_s2pdf__SignResponse
 
 
-#define soap_in__ns4__SignRequest soap_in_ns4__SignRequest
+#define soap_in__pdf__SignResponse soap_in_pdf__SignResponse
 
 
-#define soap_instantiate__ns4__SignRequest soap_instantiate_ns4__SignRequest
+#define soap_instantiate__pdf__SignResponse soap_instantiate_pdf__SignResponse
 
 
-#define soap_new__ns4__SignRequest soap_new_ns4__SignRequest
+#define soap_new__pdf__SignResponse soap_new_pdf__SignResponse
 
 
-#define soap_new_req__ns4__SignRequest soap_new_req_ns4__SignRequest
+#define soap_new_req__pdf__SignResponse soap_new_req_pdf__SignResponse
 
 
-#define soap_new_set__ns4__SignRequest soap_new_set_ns4__SignRequest
+#define soap_new_set__pdf__SignResponse soap_new_set_pdf__SignResponse
 
 
-#define soap_put__ns4__SignRequest soap_put_ns4__SignRequest
+#define soap_put__pdf__SignResponse soap_put_pdf__SignResponse
 
 
-#define soap_write__ns4__SignRequest soap_write_ns4__SignRequest
+#define soap_write__pdf__SignResponse soap_write_pdf__SignResponse
 
 
-#define soap_get__ns4__SignRequest soap_get_ns4__SignRequest
+#define soap_get__pdf__SignResponse soap_get_pdf__SignResponse
 
 
-#define soap_read__ns4__SignRequest soap_read_ns4__SignRequest
+#define soap_read__pdf__SignResponse soap_read_pdf__SignResponse
 
-/* _ns3__AttributeSupplierResponse is a typedef synonym for ns3__AttributeSupplierResponseType */
+/* _pdf__SignRequest is a typedef synonym for pdf__SignRequest */
 
-#ifndef SOAP_TYPE__ns3__AttributeSupplierResponse
-#define SOAP_TYPE__ns3__AttributeSupplierResponse (303)
+#ifndef SOAP_TYPE__pdf__SignRequest
+#define SOAP_TYPE__pdf__SignRequest (304)
 #endif
 
-#define soap_default__ns3__AttributeSupplierResponse(soap, a) (a)->ns3__AttributeSupplierResponseType::soap_default(soap)
+#define soap_default__pdf__SignRequest(soap, a) (a)->pdf__SignRequest::soap_default(soap)
 
 
-#define soap_serialize__ns3__AttributeSupplierResponse(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__pdf__SignRequest(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns3__AttributeSupplierResponse2s soap_ns3__AttributeSupplierResponseType2s
+#define soap__pdf__SignRequest2s soap_pdf__SignRequest2s
 
 
-#define soap_out__ns3__AttributeSupplierResponse soap_out_ns3__AttributeSupplierResponseType
+#define soap_out__pdf__SignRequest soap_out_pdf__SignRequest
 
 
-#define soap_s2_ns3__AttributeSupplierResponse soap_s2ns3__AttributeSupplierResponseType
+#define soap_s2_pdf__SignRequest soap_s2pdf__SignRequest
 
 
-#define soap_in__ns3__AttributeSupplierResponse soap_in_ns3__AttributeSupplierResponseType
+#define soap_in__pdf__SignRequest soap_in_pdf__SignRequest
 
 
-#define soap_instantiate__ns3__AttributeSupplierResponse soap_instantiate_ns3__AttributeSupplierResponseType
+#define soap_instantiate__pdf__SignRequest soap_instantiate_pdf__SignRequest
 
 
-#define soap_new__ns3__AttributeSupplierResponse soap_new_ns3__AttributeSupplierResponseType
+#define soap_new__pdf__SignRequest soap_new_pdf__SignRequest
 
 
-#define soap_new_req__ns3__AttributeSupplierResponse soap_new_req_ns3__AttributeSupplierResponseType
+#define soap_new_req__pdf__SignRequest soap_new_req_pdf__SignRequest
 
 
-#define soap_new_set__ns3__AttributeSupplierResponse soap_new_set_ns3__AttributeSupplierResponseType
+#define soap_new_set__pdf__SignRequest soap_new_set_pdf__SignRequest
 
 
-#define soap_put__ns3__AttributeSupplierResponse soap_put_ns3__AttributeSupplierResponseType
+#define soap_put__pdf__SignRequest soap_put_pdf__SignRequest
 
 
-#define soap_write__ns3__AttributeSupplierResponse soap_write_ns3__AttributeSupplierResponseType
+#define soap_write__pdf__SignRequest soap_write_pdf__SignRequest
 
 
-#define soap_get__ns3__AttributeSupplierResponse soap_get_ns3__AttributeSupplierResponseType
+#define soap_get__pdf__SignRequest soap_get_pdf__SignRequest
 
 
-#define soap_read__ns3__AttributeSupplierResponse soap_read_ns3__AttributeSupplierResponseType
+#define soap_read__pdf__SignRequest soap_read_pdf__SignRequest
+
+/* _ns9__AttributeSupplierResponse is a typedef synonym for ns9__AttributeSupplierResponseType */
+
+#ifndef SOAP_TYPE__ns9__AttributeSupplierResponse
+#define SOAP_TYPE__ns9__AttributeSupplierResponse (303)
+#endif
+
+#define soap_default__ns9__AttributeSupplierResponse(soap, a) (a)->ns9__AttributeSupplierResponseType::soap_default(soap)
+
+
+#define soap_serialize__ns9__AttributeSupplierResponse(soap, a) (a)->soap_serialize(soap)
+
+
+#define soap__ns9__AttributeSupplierResponse2s soap_ns9__AttributeSupplierResponseType2s
+
+
+#define soap_out__ns9__AttributeSupplierResponse soap_out_ns9__AttributeSupplierResponseType
+
+
+#define soap_s2_ns9__AttributeSupplierResponse soap_s2ns9__AttributeSupplierResponseType
+
+
+#define soap_in__ns9__AttributeSupplierResponse soap_in_ns9__AttributeSupplierResponseType
+
+
+#define soap_instantiate__ns9__AttributeSupplierResponse soap_instantiate_ns9__AttributeSupplierResponseType
+
+
+#define soap_new__ns9__AttributeSupplierResponse soap_new_ns9__AttributeSupplierResponseType
+
+
+#define soap_new_req__ns9__AttributeSupplierResponse soap_new_req_ns9__AttributeSupplierResponseType
+
+
+#define soap_new_set__ns9__AttributeSupplierResponse soap_new_set_ns9__AttributeSupplierResponseType
+
+
+#define soap_put__ns9__AttributeSupplierResponse soap_put_ns9__AttributeSupplierResponseType
+
+
+#define soap_write__ns9__AttributeSupplierResponse soap_write_ns9__AttributeSupplierResponseType
+
+
+#define soap_get__ns9__AttributeSupplierResponse soap_get_ns9__AttributeSupplierResponseType
+
+
+#define soap_read__ns9__AttributeSupplierResponse soap_read_ns9__AttributeSupplierResponseType
 
 /* _ns7__SVG is a typedef synonym for ns7__SVGType */
 
@@ -593,1640 +593,1640 @@ SOAP_FMAC3 xsd__base64Binary * SOAP_FMAC4 soap_in__ns7__SVG(struct soap*, const 
 
 #define soap_read__ns7__SVGList soap_read_ns7__SVGListType
 
-/* _ns1__ArchiveTimeStamp is a typedef synonym for ns1__ArchiveTimeStampType */
+/* _ns6__ArchiveTimeStamp is a typedef synonym for ns6__ArchiveTimeStampType */
 
-#ifndef SOAP_TYPE__ns1__ArchiveTimeStamp
-#define SOAP_TYPE__ns1__ArchiveTimeStamp (300)
+#ifndef SOAP_TYPE__ns6__ArchiveTimeStamp
+#define SOAP_TYPE__ns6__ArchiveTimeStamp (300)
 #endif
 
-#define soap_default__ns1__ArchiveTimeStamp(soap, a) (a)->ns1__ArchiveTimeStampType::soap_default(soap)
+#define soap_default__ns6__ArchiveTimeStamp(soap, a) (a)->ns6__ArchiveTimeStampType::soap_default(soap)
 
 
-#define soap_serialize__ns1__ArchiveTimeStamp(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__ArchiveTimeStamp(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__ArchiveTimeStamp2s soap_ns1__ArchiveTimeStampType2s
+#define soap__ns6__ArchiveTimeStamp2s soap_ns6__ArchiveTimeStampType2s
 
 
-#define soap_out__ns1__ArchiveTimeStamp soap_out_ns1__ArchiveTimeStampType
+#define soap_out__ns6__ArchiveTimeStamp soap_out_ns6__ArchiveTimeStampType
 
 
-#define soap_s2_ns1__ArchiveTimeStamp soap_s2ns1__ArchiveTimeStampType
+#define soap_s2_ns6__ArchiveTimeStamp soap_s2ns6__ArchiveTimeStampType
 
 
-#define soap_in__ns1__ArchiveTimeStamp soap_in_ns1__ArchiveTimeStampType
+#define soap_in__ns6__ArchiveTimeStamp soap_in_ns6__ArchiveTimeStampType
 
 
-#define soap_instantiate__ns1__ArchiveTimeStamp soap_instantiate_ns1__ArchiveTimeStampType
+#define soap_instantiate__ns6__ArchiveTimeStamp soap_instantiate_ns6__ArchiveTimeStampType
 
 
-#define soap_new__ns1__ArchiveTimeStamp soap_new_ns1__ArchiveTimeStampType
+#define soap_new__ns6__ArchiveTimeStamp soap_new_ns6__ArchiveTimeStampType
 
 
-#define soap_new_req__ns1__ArchiveTimeStamp soap_new_req_ns1__ArchiveTimeStampType
+#define soap_new_req__ns6__ArchiveTimeStamp soap_new_req_ns6__ArchiveTimeStampType
 
 
-#define soap_new_set__ns1__ArchiveTimeStamp soap_new_set_ns1__ArchiveTimeStampType
+#define soap_new_set__ns6__ArchiveTimeStamp soap_new_set_ns6__ArchiveTimeStampType
 
 
-#define soap_put__ns1__ArchiveTimeStamp soap_put_ns1__ArchiveTimeStampType
+#define soap_put__ns6__ArchiveTimeStamp soap_put_ns6__ArchiveTimeStampType
 
 
-#define soap_write__ns1__ArchiveTimeStamp soap_write_ns1__ArchiveTimeStampType
+#define soap_write__ns6__ArchiveTimeStamp soap_write_ns6__ArchiveTimeStampType
 
 
-#define soap_get__ns1__ArchiveTimeStamp soap_get_ns1__ArchiveTimeStampType
+#define soap_get__ns6__ArchiveTimeStamp soap_get_ns6__ArchiveTimeStampType
 
 
-#define soap_read__ns1__ArchiveTimeStamp soap_read_ns1__ArchiveTimeStampType
+#define soap_read__ns6__ArchiveTimeStamp soap_read_ns6__ArchiveTimeStampType
 
-/* _ns1__EncapsulatedOCSPValue is a typedef synonym for ns1__EncapsulatedOCSPValueType */
+/* _ns6__EncapsulatedOCSPValue is a typedef synonym for ns6__EncapsulatedOCSPValueType */
 
-#ifndef SOAP_TYPE__ns1__EncapsulatedOCSPValue
-#define SOAP_TYPE__ns1__EncapsulatedOCSPValue (299)
+#ifndef SOAP_TYPE__ns6__EncapsulatedOCSPValue
+#define SOAP_TYPE__ns6__EncapsulatedOCSPValue (299)
 #endif
 
-#define soap_default__ns1__EncapsulatedOCSPValue(soap, a) (a)->ns1__EncapsulatedOCSPValueType::soap_default(soap)
+#define soap_default__ns6__EncapsulatedOCSPValue(soap, a) (a)->ns6__EncapsulatedOCSPValueType::soap_default(soap)
 
 
-#define soap_serialize__ns1__EncapsulatedOCSPValue(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__EncapsulatedOCSPValue(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__EncapsulatedOCSPValue2s soap_ns1__EncapsulatedOCSPValueType2s
+#define soap__ns6__EncapsulatedOCSPValue2s soap_ns6__EncapsulatedOCSPValueType2s
 
 
-#define soap_out__ns1__EncapsulatedOCSPValue soap_out_ns1__EncapsulatedOCSPValueType
+#define soap_out__ns6__EncapsulatedOCSPValue soap_out_ns6__EncapsulatedOCSPValueType
 
 
-#define soap_s2_ns1__EncapsulatedOCSPValue soap_s2ns1__EncapsulatedOCSPValueType
+#define soap_s2_ns6__EncapsulatedOCSPValue soap_s2ns6__EncapsulatedOCSPValueType
 
 
-#define soap_in__ns1__EncapsulatedOCSPValue soap_in_ns1__EncapsulatedOCSPValueType
+#define soap_in__ns6__EncapsulatedOCSPValue soap_in_ns6__EncapsulatedOCSPValueType
 
 
-#define soap_instantiate__ns1__EncapsulatedOCSPValue soap_instantiate_ns1__EncapsulatedOCSPValueType
+#define soap_instantiate__ns6__EncapsulatedOCSPValue soap_instantiate_ns6__EncapsulatedOCSPValueType
 
 
-#define soap_new__ns1__EncapsulatedOCSPValue soap_new_ns1__EncapsulatedOCSPValueType
+#define soap_new__ns6__EncapsulatedOCSPValue soap_new_ns6__EncapsulatedOCSPValueType
 
 
-#define soap_new_req__ns1__EncapsulatedOCSPValue soap_new_req_ns1__EncapsulatedOCSPValueType
+#define soap_new_req__ns6__EncapsulatedOCSPValue soap_new_req_ns6__EncapsulatedOCSPValueType
 
 
-#define soap_new_set__ns1__EncapsulatedOCSPValue soap_new_set_ns1__EncapsulatedOCSPValueType
+#define soap_new_set__ns6__EncapsulatedOCSPValue soap_new_set_ns6__EncapsulatedOCSPValueType
 
 
-#define soap_put__ns1__EncapsulatedOCSPValue soap_put_ns1__EncapsulatedOCSPValueType
+#define soap_put__ns6__EncapsulatedOCSPValue soap_put_ns6__EncapsulatedOCSPValueType
 
 
-#define soap_write__ns1__EncapsulatedOCSPValue soap_write_ns1__EncapsulatedOCSPValueType
+#define soap_write__ns6__EncapsulatedOCSPValue soap_write_ns6__EncapsulatedOCSPValueType
 
 
-#define soap_get__ns1__EncapsulatedOCSPValue soap_get_ns1__EncapsulatedOCSPValueType
+#define soap_get__ns6__EncapsulatedOCSPValue soap_get_ns6__EncapsulatedOCSPValueType
 
 
-#define soap_read__ns1__EncapsulatedOCSPValue soap_read_ns1__EncapsulatedOCSPValueType
+#define soap_read__ns6__EncapsulatedOCSPValue soap_read_ns6__EncapsulatedOCSPValueType
 
-/* _ns1__OCSPValues is a typedef synonym for ns1__OCSPValuesType */
+/* _ns6__OCSPValues is a typedef synonym for ns6__OCSPValuesType */
 
-#ifndef SOAP_TYPE__ns1__OCSPValues
-#define SOAP_TYPE__ns1__OCSPValues (298)
+#ifndef SOAP_TYPE__ns6__OCSPValues
+#define SOAP_TYPE__ns6__OCSPValues (298)
 #endif
 
-#define soap_default__ns1__OCSPValues(soap, a) (a)->ns1__OCSPValuesType::soap_default(soap)
+#define soap_default__ns6__OCSPValues(soap, a) (a)->ns6__OCSPValuesType::soap_default(soap)
 
 
-#define soap_serialize__ns1__OCSPValues(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__OCSPValues(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__OCSPValues2s soap_ns1__OCSPValuesType2s
+#define soap__ns6__OCSPValues2s soap_ns6__OCSPValuesType2s
 
 
-#define soap_out__ns1__OCSPValues soap_out_ns1__OCSPValuesType
+#define soap_out__ns6__OCSPValues soap_out_ns6__OCSPValuesType
 
 
-#define soap_s2_ns1__OCSPValues soap_s2ns1__OCSPValuesType
+#define soap_s2_ns6__OCSPValues soap_s2ns6__OCSPValuesType
 
 
-#define soap_in__ns1__OCSPValues soap_in_ns1__OCSPValuesType
+#define soap_in__ns6__OCSPValues soap_in_ns6__OCSPValuesType
 
 
-#define soap_instantiate__ns1__OCSPValues soap_instantiate_ns1__OCSPValuesType
+#define soap_instantiate__ns6__OCSPValues soap_instantiate_ns6__OCSPValuesType
 
 
-#define soap_new__ns1__OCSPValues soap_new_ns1__OCSPValuesType
+#define soap_new__ns6__OCSPValues soap_new_ns6__OCSPValuesType
 
 
-#define soap_new_req__ns1__OCSPValues soap_new_req_ns1__OCSPValuesType
+#define soap_new_req__ns6__OCSPValues soap_new_req_ns6__OCSPValuesType
 
 
-#define soap_new_set__ns1__OCSPValues soap_new_set_ns1__OCSPValuesType
+#define soap_new_set__ns6__OCSPValues soap_new_set_ns6__OCSPValuesType
 
 
-#define soap_put__ns1__OCSPValues soap_put_ns1__OCSPValuesType
+#define soap_put__ns6__OCSPValues soap_put_ns6__OCSPValuesType
 
 
-#define soap_write__ns1__OCSPValues soap_write_ns1__OCSPValuesType
+#define soap_write__ns6__OCSPValues soap_write_ns6__OCSPValuesType
 
 
-#define soap_get__ns1__OCSPValues soap_get_ns1__OCSPValuesType
+#define soap_get__ns6__OCSPValues soap_get_ns6__OCSPValuesType
 
 
-#define soap_read__ns1__OCSPValues soap_read_ns1__OCSPValuesType
+#define soap_read__ns6__OCSPValues soap_read_ns6__OCSPValuesType
 
-/* _ns1__EncapsulatedCRLValue is a typedef synonym for ns1__EncapsulatedCRLValueType */
+/* _ns6__EncapsulatedCRLValue is a typedef synonym for ns6__EncapsulatedCRLValueType */
 
-#ifndef SOAP_TYPE__ns1__EncapsulatedCRLValue
-#define SOAP_TYPE__ns1__EncapsulatedCRLValue (297)
+#ifndef SOAP_TYPE__ns6__EncapsulatedCRLValue
+#define SOAP_TYPE__ns6__EncapsulatedCRLValue (297)
 #endif
 
-#define soap_default__ns1__EncapsulatedCRLValue(soap, a) (a)->ns1__EncapsulatedCRLValueType::soap_default(soap)
+#define soap_default__ns6__EncapsulatedCRLValue(soap, a) (a)->ns6__EncapsulatedCRLValueType::soap_default(soap)
 
 
-#define soap_serialize__ns1__EncapsulatedCRLValue(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__EncapsulatedCRLValue(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__EncapsulatedCRLValue2s soap_ns1__EncapsulatedCRLValueType2s
+#define soap__ns6__EncapsulatedCRLValue2s soap_ns6__EncapsulatedCRLValueType2s
 
 
-#define soap_out__ns1__EncapsulatedCRLValue soap_out_ns1__EncapsulatedCRLValueType
+#define soap_out__ns6__EncapsulatedCRLValue soap_out_ns6__EncapsulatedCRLValueType
 
 
-#define soap_s2_ns1__EncapsulatedCRLValue soap_s2ns1__EncapsulatedCRLValueType
+#define soap_s2_ns6__EncapsulatedCRLValue soap_s2ns6__EncapsulatedCRLValueType
 
 
-#define soap_in__ns1__EncapsulatedCRLValue soap_in_ns1__EncapsulatedCRLValueType
+#define soap_in__ns6__EncapsulatedCRLValue soap_in_ns6__EncapsulatedCRLValueType
 
 
-#define soap_instantiate__ns1__EncapsulatedCRLValue soap_instantiate_ns1__EncapsulatedCRLValueType
+#define soap_instantiate__ns6__EncapsulatedCRLValue soap_instantiate_ns6__EncapsulatedCRLValueType
 
 
-#define soap_new__ns1__EncapsulatedCRLValue soap_new_ns1__EncapsulatedCRLValueType
+#define soap_new__ns6__EncapsulatedCRLValue soap_new_ns6__EncapsulatedCRLValueType
 
 
-#define soap_new_req__ns1__EncapsulatedCRLValue soap_new_req_ns1__EncapsulatedCRLValueType
+#define soap_new_req__ns6__EncapsulatedCRLValue soap_new_req_ns6__EncapsulatedCRLValueType
 
 
-#define soap_new_set__ns1__EncapsulatedCRLValue soap_new_set_ns1__EncapsulatedCRLValueType
+#define soap_new_set__ns6__EncapsulatedCRLValue soap_new_set_ns6__EncapsulatedCRLValueType
 
 
-#define soap_put__ns1__EncapsulatedCRLValue soap_put_ns1__EncapsulatedCRLValueType
+#define soap_put__ns6__EncapsulatedCRLValue soap_put_ns6__EncapsulatedCRLValueType
 
 
-#define soap_write__ns1__EncapsulatedCRLValue soap_write_ns1__EncapsulatedCRLValueType
+#define soap_write__ns6__EncapsulatedCRLValue soap_write_ns6__EncapsulatedCRLValueType
 
 
-#define soap_get__ns1__EncapsulatedCRLValue soap_get_ns1__EncapsulatedCRLValueType
+#define soap_get__ns6__EncapsulatedCRLValue soap_get_ns6__EncapsulatedCRLValueType
 
 
-#define soap_read__ns1__EncapsulatedCRLValue soap_read_ns1__EncapsulatedCRLValueType
+#define soap_read__ns6__EncapsulatedCRLValue soap_read_ns6__EncapsulatedCRLValueType
 
-/* _ns1__CRLValues is a typedef synonym for ns1__CRLValuesType */
+/* _ns6__CRLValues is a typedef synonym for ns6__CRLValuesType */
 
-#ifndef SOAP_TYPE__ns1__CRLValues
-#define SOAP_TYPE__ns1__CRLValues (296)
+#ifndef SOAP_TYPE__ns6__CRLValues
+#define SOAP_TYPE__ns6__CRLValues (296)
 #endif
 
-#define soap_default__ns1__CRLValues(soap, a) (a)->ns1__CRLValuesType::soap_default(soap)
+#define soap_default__ns6__CRLValues(soap, a) (a)->ns6__CRLValuesType::soap_default(soap)
 
 
-#define soap_serialize__ns1__CRLValues(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__CRLValues(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__CRLValues2s soap_ns1__CRLValuesType2s
+#define soap__ns6__CRLValues2s soap_ns6__CRLValuesType2s
 
 
-#define soap_out__ns1__CRLValues soap_out_ns1__CRLValuesType
+#define soap_out__ns6__CRLValues soap_out_ns6__CRLValuesType
 
 
-#define soap_s2_ns1__CRLValues soap_s2ns1__CRLValuesType
+#define soap_s2_ns6__CRLValues soap_s2ns6__CRLValuesType
 
 
-#define soap_in__ns1__CRLValues soap_in_ns1__CRLValuesType
+#define soap_in__ns6__CRLValues soap_in_ns6__CRLValuesType
 
 
-#define soap_instantiate__ns1__CRLValues soap_instantiate_ns1__CRLValuesType
+#define soap_instantiate__ns6__CRLValues soap_instantiate_ns6__CRLValuesType
 
 
-#define soap_new__ns1__CRLValues soap_new_ns1__CRLValuesType
+#define soap_new__ns6__CRLValues soap_new_ns6__CRLValuesType
 
 
-#define soap_new_req__ns1__CRLValues soap_new_req_ns1__CRLValuesType
+#define soap_new_req__ns6__CRLValues soap_new_req_ns6__CRLValuesType
 
 
-#define soap_new_set__ns1__CRLValues soap_new_set_ns1__CRLValuesType
+#define soap_new_set__ns6__CRLValues soap_new_set_ns6__CRLValuesType
 
 
-#define soap_put__ns1__CRLValues soap_put_ns1__CRLValuesType
+#define soap_put__ns6__CRLValues soap_put_ns6__CRLValuesType
 
 
-#define soap_write__ns1__CRLValues soap_write_ns1__CRLValuesType
+#define soap_write__ns6__CRLValues soap_write_ns6__CRLValuesType
 
 
-#define soap_get__ns1__CRLValues soap_get_ns1__CRLValuesType
+#define soap_get__ns6__CRLValues soap_get_ns6__CRLValuesType
 
 
-#define soap_read__ns1__CRLValues soap_read_ns1__CRLValuesType
+#define soap_read__ns6__CRLValues soap_read_ns6__CRLValuesType
 
-/* _ns1__RevocationValues is a typedef synonym for ns1__RevocationValuesType */
+/* _ns6__RevocationValues is a typedef synonym for ns6__RevocationValuesType */
 
-#ifndef SOAP_TYPE__ns1__RevocationValues
-#define SOAP_TYPE__ns1__RevocationValues (295)
+#ifndef SOAP_TYPE__ns6__RevocationValues
+#define SOAP_TYPE__ns6__RevocationValues (295)
 #endif
 
-#define soap_default__ns1__RevocationValues(soap, a) (a)->ns1__RevocationValuesType::soap_default(soap)
+#define soap_default__ns6__RevocationValues(soap, a) (a)->ns6__RevocationValuesType::soap_default(soap)
 
 
-#define soap_serialize__ns1__RevocationValues(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__RevocationValues(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__RevocationValues2s soap_ns1__RevocationValuesType2s
+#define soap__ns6__RevocationValues2s soap_ns6__RevocationValuesType2s
 
 
-#define soap_out__ns1__RevocationValues soap_out_ns1__RevocationValuesType
+#define soap_out__ns6__RevocationValues soap_out_ns6__RevocationValuesType
 
 
-#define soap_s2_ns1__RevocationValues soap_s2ns1__RevocationValuesType
+#define soap_s2_ns6__RevocationValues soap_s2ns6__RevocationValuesType
 
 
-#define soap_in__ns1__RevocationValues soap_in_ns1__RevocationValuesType
+#define soap_in__ns6__RevocationValues soap_in_ns6__RevocationValuesType
 
 
-#define soap_instantiate__ns1__RevocationValues soap_instantiate_ns1__RevocationValuesType
+#define soap_instantiate__ns6__RevocationValues soap_instantiate_ns6__RevocationValuesType
 
 
-#define soap_new__ns1__RevocationValues soap_new_ns1__RevocationValuesType
+#define soap_new__ns6__RevocationValues soap_new_ns6__RevocationValuesType
 
 
-#define soap_new_req__ns1__RevocationValues soap_new_req_ns1__RevocationValuesType
+#define soap_new_req__ns6__RevocationValues soap_new_req_ns6__RevocationValuesType
 
 
-#define soap_new_set__ns1__RevocationValues soap_new_set_ns1__RevocationValuesType
+#define soap_new_set__ns6__RevocationValues soap_new_set_ns6__RevocationValuesType
 
 
-#define soap_put__ns1__RevocationValues soap_put_ns1__RevocationValuesType
+#define soap_put__ns6__RevocationValues soap_put_ns6__RevocationValuesType
 
 
-#define soap_write__ns1__RevocationValues soap_write_ns1__RevocationValuesType
+#define soap_write__ns6__RevocationValues soap_write_ns6__RevocationValuesType
 
 
-#define soap_get__ns1__RevocationValues soap_get_ns1__RevocationValuesType
+#define soap_get__ns6__RevocationValues soap_get_ns6__RevocationValuesType
 
 
-#define soap_read__ns1__RevocationValues soap_read_ns1__RevocationValuesType
+#define soap_read__ns6__RevocationValues soap_read_ns6__RevocationValuesType
 
-/* _ns1__EncapsulatedX509Certificate is a typedef synonym for ns1__EncapsulatedX509CertificateType */
+/* _ns6__EncapsulatedX509Certificate is a typedef synonym for ns6__EncapsulatedX509CertificateType */
 
-#ifndef SOAP_TYPE__ns1__EncapsulatedX509Certificate
-#define SOAP_TYPE__ns1__EncapsulatedX509Certificate (294)
+#ifndef SOAP_TYPE__ns6__EncapsulatedX509Certificate
+#define SOAP_TYPE__ns6__EncapsulatedX509Certificate (294)
 #endif
 
-#define soap_default__ns1__EncapsulatedX509Certificate(soap, a) (a)->ns1__EncapsulatedX509CertificateType::soap_default(soap)
+#define soap_default__ns6__EncapsulatedX509Certificate(soap, a) (a)->ns6__EncapsulatedX509CertificateType::soap_default(soap)
 
 
-#define soap_serialize__ns1__EncapsulatedX509Certificate(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__EncapsulatedX509Certificate(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__EncapsulatedX509Certificate2s soap_ns1__EncapsulatedX509CertificateType2s
+#define soap__ns6__EncapsulatedX509Certificate2s soap_ns6__EncapsulatedX509CertificateType2s
 
 
-#define soap_out__ns1__EncapsulatedX509Certificate soap_out_ns1__EncapsulatedX509CertificateType
+#define soap_out__ns6__EncapsulatedX509Certificate soap_out_ns6__EncapsulatedX509CertificateType
 
 
-#define soap_s2_ns1__EncapsulatedX509Certificate soap_s2ns1__EncapsulatedX509CertificateType
+#define soap_s2_ns6__EncapsulatedX509Certificate soap_s2ns6__EncapsulatedX509CertificateType
 
 
-#define soap_in__ns1__EncapsulatedX509Certificate soap_in_ns1__EncapsulatedX509CertificateType
+#define soap_in__ns6__EncapsulatedX509Certificate soap_in_ns6__EncapsulatedX509CertificateType
 
 
-#define soap_instantiate__ns1__EncapsulatedX509Certificate soap_instantiate_ns1__EncapsulatedX509CertificateType
+#define soap_instantiate__ns6__EncapsulatedX509Certificate soap_instantiate_ns6__EncapsulatedX509CertificateType
 
 
-#define soap_new__ns1__EncapsulatedX509Certificate soap_new_ns1__EncapsulatedX509CertificateType
+#define soap_new__ns6__EncapsulatedX509Certificate soap_new_ns6__EncapsulatedX509CertificateType
 
 
-#define soap_new_req__ns1__EncapsulatedX509Certificate soap_new_req_ns1__EncapsulatedX509CertificateType
+#define soap_new_req__ns6__EncapsulatedX509Certificate soap_new_req_ns6__EncapsulatedX509CertificateType
 
 
-#define soap_new_set__ns1__EncapsulatedX509Certificate soap_new_set_ns1__EncapsulatedX509CertificateType
+#define soap_new_set__ns6__EncapsulatedX509Certificate soap_new_set_ns6__EncapsulatedX509CertificateType
 
 
-#define soap_put__ns1__EncapsulatedX509Certificate soap_put_ns1__EncapsulatedX509CertificateType
+#define soap_put__ns6__EncapsulatedX509Certificate soap_put_ns6__EncapsulatedX509CertificateType
 
 
-#define soap_write__ns1__EncapsulatedX509Certificate soap_write_ns1__EncapsulatedX509CertificateType
+#define soap_write__ns6__EncapsulatedX509Certificate soap_write_ns6__EncapsulatedX509CertificateType
 
 
-#define soap_get__ns1__EncapsulatedX509Certificate soap_get_ns1__EncapsulatedX509CertificateType
+#define soap_get__ns6__EncapsulatedX509Certificate soap_get_ns6__EncapsulatedX509CertificateType
 
 
-#define soap_read__ns1__EncapsulatedX509Certificate soap_read_ns1__EncapsulatedX509CertificateType
+#define soap_read__ns6__EncapsulatedX509Certificate soap_read_ns6__EncapsulatedX509CertificateType
 
-/* _ns1__CertificateValues is a typedef synonym for ns1__CertificateValuesType */
+/* _ns6__CertificateValues is a typedef synonym for ns6__CertificateValuesType */
 
-#ifndef SOAP_TYPE__ns1__CertificateValues
-#define SOAP_TYPE__ns1__CertificateValues (293)
+#ifndef SOAP_TYPE__ns6__CertificateValues
+#define SOAP_TYPE__ns6__CertificateValues (293)
 #endif
 
-#define soap_default__ns1__CertificateValues(soap, a) (a)->ns1__CertificateValuesType::soap_default(soap)
+#define soap_default__ns6__CertificateValues(soap, a) (a)->ns6__CertificateValuesType::soap_default(soap)
 
 
-#define soap_serialize__ns1__CertificateValues(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__CertificateValues(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__CertificateValues2s soap_ns1__CertificateValuesType2s
+#define soap__ns6__CertificateValues2s soap_ns6__CertificateValuesType2s
 
 
-#define soap_out__ns1__CertificateValues soap_out_ns1__CertificateValuesType
+#define soap_out__ns6__CertificateValues soap_out_ns6__CertificateValuesType
 
 
-#define soap_s2_ns1__CertificateValues soap_s2ns1__CertificateValuesType
+#define soap_s2_ns6__CertificateValues soap_s2ns6__CertificateValuesType
 
 
-#define soap_in__ns1__CertificateValues soap_in_ns1__CertificateValuesType
+#define soap_in__ns6__CertificateValues soap_in_ns6__CertificateValuesType
 
 
-#define soap_instantiate__ns1__CertificateValues soap_instantiate_ns1__CertificateValuesType
+#define soap_instantiate__ns6__CertificateValues soap_instantiate_ns6__CertificateValuesType
 
 
-#define soap_new__ns1__CertificateValues soap_new_ns1__CertificateValuesType
+#define soap_new__ns6__CertificateValues soap_new_ns6__CertificateValuesType
 
 
-#define soap_new_req__ns1__CertificateValues soap_new_req_ns1__CertificateValuesType
+#define soap_new_req__ns6__CertificateValues soap_new_req_ns6__CertificateValuesType
 
 
-#define soap_new_set__ns1__CertificateValues soap_new_set_ns1__CertificateValuesType
+#define soap_new_set__ns6__CertificateValues soap_new_set_ns6__CertificateValuesType
 
 
-#define soap_put__ns1__CertificateValues soap_put_ns1__CertificateValuesType
+#define soap_put__ns6__CertificateValues soap_put_ns6__CertificateValuesType
 
 
-#define soap_write__ns1__CertificateValues soap_write_ns1__CertificateValuesType
+#define soap_write__ns6__CertificateValues soap_write_ns6__CertificateValuesType
 
 
-#define soap_get__ns1__CertificateValues soap_get_ns1__CertificateValuesType
+#define soap_get__ns6__CertificateValues soap_get_ns6__CertificateValuesType
 
 
-#define soap_read__ns1__CertificateValues soap_read_ns1__CertificateValuesType
+#define soap_read__ns6__CertificateValues soap_read_ns6__CertificateValuesType
 
-/* _ns1__SigAndRefsTimeStamp is a typedef synonym for ns1__SigAndRefsTimeStampType */
+/* _ns6__SigAndRefsTimeStamp is a typedef synonym for ns6__SigAndRefsTimeStampType */
 
-#ifndef SOAP_TYPE__ns1__SigAndRefsTimeStamp
-#define SOAP_TYPE__ns1__SigAndRefsTimeStamp (292)
+#ifndef SOAP_TYPE__ns6__SigAndRefsTimeStamp
+#define SOAP_TYPE__ns6__SigAndRefsTimeStamp (292)
 #endif
 
-#define soap_default__ns1__SigAndRefsTimeStamp(soap, a) (a)->ns1__SigAndRefsTimeStampType::soap_default(soap)
+#define soap_default__ns6__SigAndRefsTimeStamp(soap, a) (a)->ns6__SigAndRefsTimeStampType::soap_default(soap)
 
 
-#define soap_serialize__ns1__SigAndRefsTimeStamp(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__SigAndRefsTimeStamp(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__SigAndRefsTimeStamp2s soap_ns1__SigAndRefsTimeStampType2s
+#define soap__ns6__SigAndRefsTimeStamp2s soap_ns6__SigAndRefsTimeStampType2s
 
 
-#define soap_out__ns1__SigAndRefsTimeStamp soap_out_ns1__SigAndRefsTimeStampType
+#define soap_out__ns6__SigAndRefsTimeStamp soap_out_ns6__SigAndRefsTimeStampType
 
 
-#define soap_s2_ns1__SigAndRefsTimeStamp soap_s2ns1__SigAndRefsTimeStampType
+#define soap_s2_ns6__SigAndRefsTimeStamp soap_s2ns6__SigAndRefsTimeStampType
 
 
-#define soap_in__ns1__SigAndRefsTimeStamp soap_in_ns1__SigAndRefsTimeStampType
+#define soap_in__ns6__SigAndRefsTimeStamp soap_in_ns6__SigAndRefsTimeStampType
 
 
-#define soap_instantiate__ns1__SigAndRefsTimeStamp soap_instantiate_ns1__SigAndRefsTimeStampType
+#define soap_instantiate__ns6__SigAndRefsTimeStamp soap_instantiate_ns6__SigAndRefsTimeStampType
 
 
-#define soap_new__ns1__SigAndRefsTimeStamp soap_new_ns1__SigAndRefsTimeStampType
+#define soap_new__ns6__SigAndRefsTimeStamp soap_new_ns6__SigAndRefsTimeStampType
 
 
-#define soap_new_req__ns1__SigAndRefsTimeStamp soap_new_req_ns1__SigAndRefsTimeStampType
+#define soap_new_req__ns6__SigAndRefsTimeStamp soap_new_req_ns6__SigAndRefsTimeStampType
 
 
-#define soap_new_set__ns1__SigAndRefsTimeStamp soap_new_set_ns1__SigAndRefsTimeStampType
+#define soap_new_set__ns6__SigAndRefsTimeStamp soap_new_set_ns6__SigAndRefsTimeStampType
 
 
-#define soap_put__ns1__SigAndRefsTimeStamp soap_put_ns1__SigAndRefsTimeStampType
+#define soap_put__ns6__SigAndRefsTimeStamp soap_put_ns6__SigAndRefsTimeStampType
 
 
-#define soap_write__ns1__SigAndRefsTimeStamp soap_write_ns1__SigAndRefsTimeStampType
+#define soap_write__ns6__SigAndRefsTimeStamp soap_write_ns6__SigAndRefsTimeStampType
 
 
-#define soap_get__ns1__SigAndRefsTimeStamp soap_get_ns1__SigAndRefsTimeStampType
+#define soap_get__ns6__SigAndRefsTimeStamp soap_get_ns6__SigAndRefsTimeStampType
 
 
-#define soap_read__ns1__SigAndRefsTimeStamp soap_read_ns1__SigAndRefsTimeStampType
+#define soap_read__ns6__SigAndRefsTimeStamp soap_read_ns6__SigAndRefsTimeStampType
 
-/* _ns1__ResponderID is a typedef synonym for ns1__ResponderIDType */
+/* _ns6__ResponderID is a typedef synonym for ns6__ResponderIDType */
 
-#ifndef SOAP_TYPE__ns1__ResponderID
-#define SOAP_TYPE__ns1__ResponderID (291)
+#ifndef SOAP_TYPE__ns6__ResponderID
+#define SOAP_TYPE__ns6__ResponderID (291)
 #endif
 
-#define soap_default__ns1__ResponderID(soap, a) (a)->ns1__ResponderIDType::soap_default(soap)
+#define soap_default__ns6__ResponderID(soap, a) (a)->ns6__ResponderIDType::soap_default(soap)
 
 
-#define soap_serialize__ns1__ResponderID(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__ResponderID(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__ResponderID2s soap_ns1__ResponderIDType2s
+#define soap__ns6__ResponderID2s soap_ns6__ResponderIDType2s
 
 
-#define soap_out__ns1__ResponderID soap_out_ns1__ResponderIDType
+#define soap_out__ns6__ResponderID soap_out_ns6__ResponderIDType
 
 
-#define soap_s2_ns1__ResponderID soap_s2ns1__ResponderIDType
+#define soap_s2_ns6__ResponderID soap_s2ns6__ResponderIDType
 
 
-#define soap_in__ns1__ResponderID soap_in_ns1__ResponderIDType
+#define soap_in__ns6__ResponderID soap_in_ns6__ResponderIDType
 
 
-#define soap_instantiate__ns1__ResponderID soap_instantiate_ns1__ResponderIDType
+#define soap_instantiate__ns6__ResponderID soap_instantiate_ns6__ResponderIDType
 
 
-#define soap_new__ns1__ResponderID soap_new_ns1__ResponderIDType
+#define soap_new__ns6__ResponderID soap_new_ns6__ResponderIDType
 
 
-#define soap_new_req__ns1__ResponderID soap_new_req_ns1__ResponderIDType
+#define soap_new_req__ns6__ResponderID soap_new_req_ns6__ResponderIDType
 
 
-#define soap_new_set__ns1__ResponderID soap_new_set_ns1__ResponderIDType
+#define soap_new_set__ns6__ResponderID soap_new_set_ns6__ResponderIDType
 
 
-#define soap_put__ns1__ResponderID soap_put_ns1__ResponderIDType
+#define soap_put__ns6__ResponderID soap_put_ns6__ResponderIDType
 
 
-#define soap_write__ns1__ResponderID soap_write_ns1__ResponderIDType
+#define soap_write__ns6__ResponderID soap_write_ns6__ResponderIDType
 
 
-#define soap_get__ns1__ResponderID soap_get_ns1__ResponderIDType
+#define soap_get__ns6__ResponderID soap_get_ns6__ResponderIDType
 
 
-#define soap_read__ns1__ResponderID soap_read_ns1__ResponderIDType
+#define soap_read__ns6__ResponderID soap_read_ns6__ResponderIDType
 
-/* _ns1__OCSPIdentifier is a typedef synonym for ns1__OCSPIdentifierType */
+/* _ns6__OCSPIdentifier is a typedef synonym for ns6__OCSPIdentifierType */
 
-#ifndef SOAP_TYPE__ns1__OCSPIdentifier
-#define SOAP_TYPE__ns1__OCSPIdentifier (290)
+#ifndef SOAP_TYPE__ns6__OCSPIdentifier
+#define SOAP_TYPE__ns6__OCSPIdentifier (290)
 #endif
 
-#define soap_default__ns1__OCSPIdentifier(soap, a) (a)->ns1__OCSPIdentifierType::soap_default(soap)
+#define soap_default__ns6__OCSPIdentifier(soap, a) (a)->ns6__OCSPIdentifierType::soap_default(soap)
 
 
-#define soap_serialize__ns1__OCSPIdentifier(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__OCSPIdentifier(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__OCSPIdentifier2s soap_ns1__OCSPIdentifierType2s
+#define soap__ns6__OCSPIdentifier2s soap_ns6__OCSPIdentifierType2s
 
 
-#define soap_out__ns1__OCSPIdentifier soap_out_ns1__OCSPIdentifierType
+#define soap_out__ns6__OCSPIdentifier soap_out_ns6__OCSPIdentifierType
 
 
-#define soap_s2_ns1__OCSPIdentifier soap_s2ns1__OCSPIdentifierType
+#define soap_s2_ns6__OCSPIdentifier soap_s2ns6__OCSPIdentifierType
 
 
-#define soap_in__ns1__OCSPIdentifier soap_in_ns1__OCSPIdentifierType
+#define soap_in__ns6__OCSPIdentifier soap_in_ns6__OCSPIdentifierType
 
 
-#define soap_instantiate__ns1__OCSPIdentifier soap_instantiate_ns1__OCSPIdentifierType
+#define soap_instantiate__ns6__OCSPIdentifier soap_instantiate_ns6__OCSPIdentifierType
 
 
-#define soap_new__ns1__OCSPIdentifier soap_new_ns1__OCSPIdentifierType
+#define soap_new__ns6__OCSPIdentifier soap_new_ns6__OCSPIdentifierType
 
 
-#define soap_new_req__ns1__OCSPIdentifier soap_new_req_ns1__OCSPIdentifierType
+#define soap_new_req__ns6__OCSPIdentifier soap_new_req_ns6__OCSPIdentifierType
 
 
-#define soap_new_set__ns1__OCSPIdentifier soap_new_set_ns1__OCSPIdentifierType
+#define soap_new_set__ns6__OCSPIdentifier soap_new_set_ns6__OCSPIdentifierType
 
 
-#define soap_put__ns1__OCSPIdentifier soap_put_ns1__OCSPIdentifierType
+#define soap_put__ns6__OCSPIdentifier soap_put_ns6__OCSPIdentifierType
 
 
-#define soap_write__ns1__OCSPIdentifier soap_write_ns1__OCSPIdentifierType
+#define soap_write__ns6__OCSPIdentifier soap_write_ns6__OCSPIdentifierType
 
 
-#define soap_get__ns1__OCSPIdentifier soap_get_ns1__OCSPIdentifierType
+#define soap_get__ns6__OCSPIdentifier soap_get_ns6__OCSPIdentifierType
 
 
-#define soap_read__ns1__OCSPIdentifier soap_read_ns1__OCSPIdentifierType
+#define soap_read__ns6__OCSPIdentifier soap_read_ns6__OCSPIdentifierType
 
-/* _ns1__OCSPRef is a typedef synonym for ns1__OCSPRefType */
+/* _ns6__OCSPRef is a typedef synonym for ns6__OCSPRefType */
 
-#ifndef SOAP_TYPE__ns1__OCSPRef
-#define SOAP_TYPE__ns1__OCSPRef (289)
+#ifndef SOAP_TYPE__ns6__OCSPRef
+#define SOAP_TYPE__ns6__OCSPRef (289)
 #endif
 
-#define soap_default__ns1__OCSPRef(soap, a) (a)->ns1__OCSPRefType::soap_default(soap)
+#define soap_default__ns6__OCSPRef(soap, a) (a)->ns6__OCSPRefType::soap_default(soap)
 
 
-#define soap_serialize__ns1__OCSPRef(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__OCSPRef(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__OCSPRef2s soap_ns1__OCSPRefType2s
+#define soap__ns6__OCSPRef2s soap_ns6__OCSPRefType2s
 
 
-#define soap_out__ns1__OCSPRef soap_out_ns1__OCSPRefType
+#define soap_out__ns6__OCSPRef soap_out_ns6__OCSPRefType
 
 
-#define soap_s2_ns1__OCSPRef soap_s2ns1__OCSPRefType
+#define soap_s2_ns6__OCSPRef soap_s2ns6__OCSPRefType
 
 
-#define soap_in__ns1__OCSPRef soap_in_ns1__OCSPRefType
+#define soap_in__ns6__OCSPRef soap_in_ns6__OCSPRefType
 
 
-#define soap_instantiate__ns1__OCSPRef soap_instantiate_ns1__OCSPRefType
+#define soap_instantiate__ns6__OCSPRef soap_instantiate_ns6__OCSPRefType
 
 
-#define soap_new__ns1__OCSPRef soap_new_ns1__OCSPRefType
+#define soap_new__ns6__OCSPRef soap_new_ns6__OCSPRefType
 
 
-#define soap_new_req__ns1__OCSPRef soap_new_req_ns1__OCSPRefType
+#define soap_new_req__ns6__OCSPRef soap_new_req_ns6__OCSPRefType
 
 
-#define soap_new_set__ns1__OCSPRef soap_new_set_ns1__OCSPRefType
+#define soap_new_set__ns6__OCSPRef soap_new_set_ns6__OCSPRefType
 
 
-#define soap_put__ns1__OCSPRef soap_put_ns1__OCSPRefType
+#define soap_put__ns6__OCSPRef soap_put_ns6__OCSPRefType
 
 
-#define soap_write__ns1__OCSPRef soap_write_ns1__OCSPRefType
+#define soap_write__ns6__OCSPRef soap_write_ns6__OCSPRefType
 
 
-#define soap_get__ns1__OCSPRef soap_get_ns1__OCSPRefType
+#define soap_get__ns6__OCSPRef soap_get_ns6__OCSPRefType
 
 
-#define soap_read__ns1__OCSPRef soap_read_ns1__OCSPRefType
+#define soap_read__ns6__OCSPRef soap_read_ns6__OCSPRefType
 
-/* _ns1__OCSPRefs is a typedef synonym for ns1__OCSPRefsType */
+/* _ns6__OCSPRefs is a typedef synonym for ns6__OCSPRefsType */
 
-#ifndef SOAP_TYPE__ns1__OCSPRefs
-#define SOAP_TYPE__ns1__OCSPRefs (288)
+#ifndef SOAP_TYPE__ns6__OCSPRefs
+#define SOAP_TYPE__ns6__OCSPRefs (288)
 #endif
 
-#define soap_default__ns1__OCSPRefs(soap, a) (a)->ns1__OCSPRefsType::soap_default(soap)
+#define soap_default__ns6__OCSPRefs(soap, a) (a)->ns6__OCSPRefsType::soap_default(soap)
 
 
-#define soap_serialize__ns1__OCSPRefs(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__OCSPRefs(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__OCSPRefs2s soap_ns1__OCSPRefsType2s
+#define soap__ns6__OCSPRefs2s soap_ns6__OCSPRefsType2s
 
 
-#define soap_out__ns1__OCSPRefs soap_out_ns1__OCSPRefsType
+#define soap_out__ns6__OCSPRefs soap_out_ns6__OCSPRefsType
 
 
-#define soap_s2_ns1__OCSPRefs soap_s2ns1__OCSPRefsType
+#define soap_s2_ns6__OCSPRefs soap_s2ns6__OCSPRefsType
 
 
-#define soap_in__ns1__OCSPRefs soap_in_ns1__OCSPRefsType
+#define soap_in__ns6__OCSPRefs soap_in_ns6__OCSPRefsType
 
 
-#define soap_instantiate__ns1__OCSPRefs soap_instantiate_ns1__OCSPRefsType
+#define soap_instantiate__ns6__OCSPRefs soap_instantiate_ns6__OCSPRefsType
 
 
-#define soap_new__ns1__OCSPRefs soap_new_ns1__OCSPRefsType
+#define soap_new__ns6__OCSPRefs soap_new_ns6__OCSPRefsType
 
 
-#define soap_new_req__ns1__OCSPRefs soap_new_req_ns1__OCSPRefsType
+#define soap_new_req__ns6__OCSPRefs soap_new_req_ns6__OCSPRefsType
 
 
-#define soap_new_set__ns1__OCSPRefs soap_new_set_ns1__OCSPRefsType
+#define soap_new_set__ns6__OCSPRefs soap_new_set_ns6__OCSPRefsType
 
 
-#define soap_put__ns1__OCSPRefs soap_put_ns1__OCSPRefsType
+#define soap_put__ns6__OCSPRefs soap_put_ns6__OCSPRefsType
 
 
-#define soap_write__ns1__OCSPRefs soap_write_ns1__OCSPRefsType
+#define soap_write__ns6__OCSPRefs soap_write_ns6__OCSPRefsType
 
 
-#define soap_get__ns1__OCSPRefs soap_get_ns1__OCSPRefsType
+#define soap_get__ns6__OCSPRefs soap_get_ns6__OCSPRefsType
 
 
-#define soap_read__ns1__OCSPRefs soap_read_ns1__OCSPRefsType
+#define soap_read__ns6__OCSPRefs soap_read_ns6__OCSPRefsType
 
-/* _ns1__CRLIdentifier is a typedef synonym for ns1__CRLIdentifierType */
+/* _ns6__CRLIdentifier is a typedef synonym for ns6__CRLIdentifierType */
 
-#ifndef SOAP_TYPE__ns1__CRLIdentifier
-#define SOAP_TYPE__ns1__CRLIdentifier (287)
+#ifndef SOAP_TYPE__ns6__CRLIdentifier
+#define SOAP_TYPE__ns6__CRLIdentifier (287)
 #endif
 
-#define soap_default__ns1__CRLIdentifier(soap, a) (a)->ns1__CRLIdentifierType::soap_default(soap)
+#define soap_default__ns6__CRLIdentifier(soap, a) (a)->ns6__CRLIdentifierType::soap_default(soap)
 
 
-#define soap_serialize__ns1__CRLIdentifier(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__CRLIdentifier(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__CRLIdentifier2s soap_ns1__CRLIdentifierType2s
+#define soap__ns6__CRLIdentifier2s soap_ns6__CRLIdentifierType2s
 
 
-#define soap_out__ns1__CRLIdentifier soap_out_ns1__CRLIdentifierType
+#define soap_out__ns6__CRLIdentifier soap_out_ns6__CRLIdentifierType
 
 
-#define soap_s2_ns1__CRLIdentifier soap_s2ns1__CRLIdentifierType
+#define soap_s2_ns6__CRLIdentifier soap_s2ns6__CRLIdentifierType
 
 
-#define soap_in__ns1__CRLIdentifier soap_in_ns1__CRLIdentifierType
+#define soap_in__ns6__CRLIdentifier soap_in_ns6__CRLIdentifierType
 
 
-#define soap_instantiate__ns1__CRLIdentifier soap_instantiate_ns1__CRLIdentifierType
+#define soap_instantiate__ns6__CRLIdentifier soap_instantiate_ns6__CRLIdentifierType
 
 
-#define soap_new__ns1__CRLIdentifier soap_new_ns1__CRLIdentifierType
+#define soap_new__ns6__CRLIdentifier soap_new_ns6__CRLIdentifierType
 
 
-#define soap_new_req__ns1__CRLIdentifier soap_new_req_ns1__CRLIdentifierType
+#define soap_new_req__ns6__CRLIdentifier soap_new_req_ns6__CRLIdentifierType
 
 
-#define soap_new_set__ns1__CRLIdentifier soap_new_set_ns1__CRLIdentifierType
+#define soap_new_set__ns6__CRLIdentifier soap_new_set_ns6__CRLIdentifierType
 
 
-#define soap_put__ns1__CRLIdentifier soap_put_ns1__CRLIdentifierType
+#define soap_put__ns6__CRLIdentifier soap_put_ns6__CRLIdentifierType
 
 
-#define soap_write__ns1__CRLIdentifier soap_write_ns1__CRLIdentifierType
+#define soap_write__ns6__CRLIdentifier soap_write_ns6__CRLIdentifierType
 
 
-#define soap_get__ns1__CRLIdentifier soap_get_ns1__CRLIdentifierType
+#define soap_get__ns6__CRLIdentifier soap_get_ns6__CRLIdentifierType
 
 
-#define soap_read__ns1__CRLIdentifier soap_read_ns1__CRLIdentifierType
+#define soap_read__ns6__CRLIdentifier soap_read_ns6__CRLIdentifierType
 
-/* _ns1__DigestAlgAndValue is a typedef synonym for ns1__DigestAlgAndValueType */
+/* _ns6__DigestAlgAndValue is a typedef synonym for ns6__DigestAlgAndValueType */
 
-#ifndef SOAP_TYPE__ns1__DigestAlgAndValue
-#define SOAP_TYPE__ns1__DigestAlgAndValue (286)
+#ifndef SOAP_TYPE__ns6__DigestAlgAndValue
+#define SOAP_TYPE__ns6__DigestAlgAndValue (286)
 #endif
 
-#define soap_default__ns1__DigestAlgAndValue(soap, a) (a)->ns1__DigestAlgAndValueType::soap_default(soap)
+#define soap_default__ns6__DigestAlgAndValue(soap, a) (a)->ns6__DigestAlgAndValueType::soap_default(soap)
 
 
-#define soap_serialize__ns1__DigestAlgAndValue(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__DigestAlgAndValue(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__DigestAlgAndValue2s soap_ns1__DigestAlgAndValueType2s
+#define soap__ns6__DigestAlgAndValue2s soap_ns6__DigestAlgAndValueType2s
 
 
-#define soap_out__ns1__DigestAlgAndValue soap_out_ns1__DigestAlgAndValueType
+#define soap_out__ns6__DigestAlgAndValue soap_out_ns6__DigestAlgAndValueType
 
 
-#define soap_s2_ns1__DigestAlgAndValue soap_s2ns1__DigestAlgAndValueType
+#define soap_s2_ns6__DigestAlgAndValue soap_s2ns6__DigestAlgAndValueType
 
 
-#define soap_in__ns1__DigestAlgAndValue soap_in_ns1__DigestAlgAndValueType
+#define soap_in__ns6__DigestAlgAndValue soap_in_ns6__DigestAlgAndValueType
 
 
-#define soap_instantiate__ns1__DigestAlgAndValue soap_instantiate_ns1__DigestAlgAndValueType
+#define soap_instantiate__ns6__DigestAlgAndValue soap_instantiate_ns6__DigestAlgAndValueType
 
 
-#define soap_new__ns1__DigestAlgAndValue soap_new_ns1__DigestAlgAndValueType
+#define soap_new__ns6__DigestAlgAndValue soap_new_ns6__DigestAlgAndValueType
 
 
-#define soap_new_req__ns1__DigestAlgAndValue soap_new_req_ns1__DigestAlgAndValueType
+#define soap_new_req__ns6__DigestAlgAndValue soap_new_req_ns6__DigestAlgAndValueType
 
 
-#define soap_new_set__ns1__DigestAlgAndValue soap_new_set_ns1__DigestAlgAndValueType
+#define soap_new_set__ns6__DigestAlgAndValue soap_new_set_ns6__DigestAlgAndValueType
 
 
-#define soap_put__ns1__DigestAlgAndValue soap_put_ns1__DigestAlgAndValueType
+#define soap_put__ns6__DigestAlgAndValue soap_put_ns6__DigestAlgAndValueType
 
 
-#define soap_write__ns1__DigestAlgAndValue soap_write_ns1__DigestAlgAndValueType
+#define soap_write__ns6__DigestAlgAndValue soap_write_ns6__DigestAlgAndValueType
 
 
-#define soap_get__ns1__DigestAlgAndValue soap_get_ns1__DigestAlgAndValueType
+#define soap_get__ns6__DigestAlgAndValue soap_get_ns6__DigestAlgAndValueType
 
 
-#define soap_read__ns1__DigestAlgAndValue soap_read_ns1__DigestAlgAndValueType
+#define soap_read__ns6__DigestAlgAndValue soap_read_ns6__DigestAlgAndValueType
 
-/* _ns1__CRLRef is a typedef synonym for ns1__CRLRefType */
+/* _ns6__CRLRef is a typedef synonym for ns6__CRLRefType */
 
-#ifndef SOAP_TYPE__ns1__CRLRef
-#define SOAP_TYPE__ns1__CRLRef (285)
+#ifndef SOAP_TYPE__ns6__CRLRef
+#define SOAP_TYPE__ns6__CRLRef (285)
 #endif
 
-#define soap_default__ns1__CRLRef(soap, a) (a)->ns1__CRLRefType::soap_default(soap)
+#define soap_default__ns6__CRLRef(soap, a) (a)->ns6__CRLRefType::soap_default(soap)
 
 
-#define soap_serialize__ns1__CRLRef(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__CRLRef(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__CRLRef2s soap_ns1__CRLRefType2s
+#define soap__ns6__CRLRef2s soap_ns6__CRLRefType2s
 
 
-#define soap_out__ns1__CRLRef soap_out_ns1__CRLRefType
+#define soap_out__ns6__CRLRef soap_out_ns6__CRLRefType
 
 
-#define soap_s2_ns1__CRLRef soap_s2ns1__CRLRefType
+#define soap_s2_ns6__CRLRef soap_s2ns6__CRLRefType
 
 
-#define soap_in__ns1__CRLRef soap_in_ns1__CRLRefType
+#define soap_in__ns6__CRLRef soap_in_ns6__CRLRefType
 
 
-#define soap_instantiate__ns1__CRLRef soap_instantiate_ns1__CRLRefType
+#define soap_instantiate__ns6__CRLRef soap_instantiate_ns6__CRLRefType
 
 
-#define soap_new__ns1__CRLRef soap_new_ns1__CRLRefType
+#define soap_new__ns6__CRLRef soap_new_ns6__CRLRefType
 
 
-#define soap_new_req__ns1__CRLRef soap_new_req_ns1__CRLRefType
+#define soap_new_req__ns6__CRLRef soap_new_req_ns6__CRLRefType
 
 
-#define soap_new_set__ns1__CRLRef soap_new_set_ns1__CRLRefType
+#define soap_new_set__ns6__CRLRef soap_new_set_ns6__CRLRefType
 
 
-#define soap_put__ns1__CRLRef soap_put_ns1__CRLRefType
+#define soap_put__ns6__CRLRef soap_put_ns6__CRLRefType
 
 
-#define soap_write__ns1__CRLRef soap_write_ns1__CRLRefType
+#define soap_write__ns6__CRLRef soap_write_ns6__CRLRefType
 
 
-#define soap_get__ns1__CRLRef soap_get_ns1__CRLRefType
+#define soap_get__ns6__CRLRef soap_get_ns6__CRLRefType
 
 
-#define soap_read__ns1__CRLRef soap_read_ns1__CRLRefType
+#define soap_read__ns6__CRLRef soap_read_ns6__CRLRefType
 
-/* _ns1__CRLRefs is a typedef synonym for ns1__CRLRefsType */
+/* _ns6__CRLRefs is a typedef synonym for ns6__CRLRefsType */
 
-#ifndef SOAP_TYPE__ns1__CRLRefs
-#define SOAP_TYPE__ns1__CRLRefs (284)
+#ifndef SOAP_TYPE__ns6__CRLRefs
+#define SOAP_TYPE__ns6__CRLRefs (284)
 #endif
 
-#define soap_default__ns1__CRLRefs(soap, a) (a)->ns1__CRLRefsType::soap_default(soap)
+#define soap_default__ns6__CRLRefs(soap, a) (a)->ns6__CRLRefsType::soap_default(soap)
 
 
-#define soap_serialize__ns1__CRLRefs(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__CRLRefs(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__CRLRefs2s soap_ns1__CRLRefsType2s
+#define soap__ns6__CRLRefs2s soap_ns6__CRLRefsType2s
 
 
-#define soap_out__ns1__CRLRefs soap_out_ns1__CRLRefsType
+#define soap_out__ns6__CRLRefs soap_out_ns6__CRLRefsType
 
 
-#define soap_s2_ns1__CRLRefs soap_s2ns1__CRLRefsType
+#define soap_s2_ns6__CRLRefs soap_s2ns6__CRLRefsType
 
 
-#define soap_in__ns1__CRLRefs soap_in_ns1__CRLRefsType
+#define soap_in__ns6__CRLRefs soap_in_ns6__CRLRefsType
 
 
-#define soap_instantiate__ns1__CRLRefs soap_instantiate_ns1__CRLRefsType
+#define soap_instantiate__ns6__CRLRefs soap_instantiate_ns6__CRLRefsType
 
 
-#define soap_new__ns1__CRLRefs soap_new_ns1__CRLRefsType
+#define soap_new__ns6__CRLRefs soap_new_ns6__CRLRefsType
 
 
-#define soap_new_req__ns1__CRLRefs soap_new_req_ns1__CRLRefsType
+#define soap_new_req__ns6__CRLRefs soap_new_req_ns6__CRLRefsType
 
 
-#define soap_new_set__ns1__CRLRefs soap_new_set_ns1__CRLRefsType
+#define soap_new_set__ns6__CRLRefs soap_new_set_ns6__CRLRefsType
 
 
-#define soap_put__ns1__CRLRefs soap_put_ns1__CRLRefsType
+#define soap_put__ns6__CRLRefs soap_put_ns6__CRLRefsType
 
 
-#define soap_write__ns1__CRLRefs soap_write_ns1__CRLRefsType
+#define soap_write__ns6__CRLRefs soap_write_ns6__CRLRefsType
 
 
-#define soap_get__ns1__CRLRefs soap_get_ns1__CRLRefsType
+#define soap_get__ns6__CRLRefs soap_get_ns6__CRLRefsType
 
 
-#define soap_read__ns1__CRLRefs soap_read_ns1__CRLRefsType
+#define soap_read__ns6__CRLRefs soap_read_ns6__CRLRefsType
 
-/* _ns1__CompleteRevocationRefs is a typedef synonym for ns1__CompleteRevocationRefsType */
+/* _ns6__CompleteRevocationRefs is a typedef synonym for ns6__CompleteRevocationRefsType */
 
-#ifndef SOAP_TYPE__ns1__CompleteRevocationRefs
-#define SOAP_TYPE__ns1__CompleteRevocationRefs (283)
+#ifndef SOAP_TYPE__ns6__CompleteRevocationRefs
+#define SOAP_TYPE__ns6__CompleteRevocationRefs (283)
 #endif
 
-#define soap_default__ns1__CompleteRevocationRefs(soap, a) (a)->ns1__CompleteRevocationRefsType::soap_default(soap)
+#define soap_default__ns6__CompleteRevocationRefs(soap, a) (a)->ns6__CompleteRevocationRefsType::soap_default(soap)
 
 
-#define soap_serialize__ns1__CompleteRevocationRefs(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__CompleteRevocationRefs(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__CompleteRevocationRefs2s soap_ns1__CompleteRevocationRefsType2s
+#define soap__ns6__CompleteRevocationRefs2s soap_ns6__CompleteRevocationRefsType2s
 
 
-#define soap_out__ns1__CompleteRevocationRefs soap_out_ns1__CompleteRevocationRefsType
+#define soap_out__ns6__CompleteRevocationRefs soap_out_ns6__CompleteRevocationRefsType
 
 
-#define soap_s2_ns1__CompleteRevocationRefs soap_s2ns1__CompleteRevocationRefsType
+#define soap_s2_ns6__CompleteRevocationRefs soap_s2ns6__CompleteRevocationRefsType
 
 
-#define soap_in__ns1__CompleteRevocationRefs soap_in_ns1__CompleteRevocationRefsType
+#define soap_in__ns6__CompleteRevocationRefs soap_in_ns6__CompleteRevocationRefsType
 
 
-#define soap_instantiate__ns1__CompleteRevocationRefs soap_instantiate_ns1__CompleteRevocationRefsType
+#define soap_instantiate__ns6__CompleteRevocationRefs soap_instantiate_ns6__CompleteRevocationRefsType
 
 
-#define soap_new__ns1__CompleteRevocationRefs soap_new_ns1__CompleteRevocationRefsType
+#define soap_new__ns6__CompleteRevocationRefs soap_new_ns6__CompleteRevocationRefsType
 
 
-#define soap_new_req__ns1__CompleteRevocationRefs soap_new_req_ns1__CompleteRevocationRefsType
+#define soap_new_req__ns6__CompleteRevocationRefs soap_new_req_ns6__CompleteRevocationRefsType
 
 
-#define soap_new_set__ns1__CompleteRevocationRefs soap_new_set_ns1__CompleteRevocationRefsType
+#define soap_new_set__ns6__CompleteRevocationRefs soap_new_set_ns6__CompleteRevocationRefsType
 
 
-#define soap_put__ns1__CompleteRevocationRefs soap_put_ns1__CompleteRevocationRefsType
+#define soap_put__ns6__CompleteRevocationRefs soap_put_ns6__CompleteRevocationRefsType
 
 
-#define soap_write__ns1__CompleteRevocationRefs soap_write_ns1__CompleteRevocationRefsType
+#define soap_write__ns6__CompleteRevocationRefs soap_write_ns6__CompleteRevocationRefsType
 
 
-#define soap_get__ns1__CompleteRevocationRefs soap_get_ns1__CompleteRevocationRefsType
+#define soap_get__ns6__CompleteRevocationRefs soap_get_ns6__CompleteRevocationRefsType
 
 
-#define soap_read__ns1__CompleteRevocationRefs soap_read_ns1__CompleteRevocationRefsType
+#define soap_read__ns6__CompleteRevocationRefs soap_read_ns6__CompleteRevocationRefsType
 
-/* _ns1__CertRefs is a typedef synonym for ns1__CertRefsType */
+/* _ns6__CertRefs is a typedef synonym for ns6__CertRefsType */
 
-#ifndef SOAP_TYPE__ns1__CertRefs
-#define SOAP_TYPE__ns1__CertRefs (282)
+#ifndef SOAP_TYPE__ns6__CertRefs
+#define SOAP_TYPE__ns6__CertRefs (282)
 #endif
 
-#define soap_default__ns1__CertRefs(soap, a) (a)->ns1__CertRefsType::soap_default(soap)
+#define soap_default__ns6__CertRefs(soap, a) (a)->ns6__CertRefsType::soap_default(soap)
 
 
-#define soap_serialize__ns1__CertRefs(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__CertRefs(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__CertRefs2s soap_ns1__CertRefsType2s
+#define soap__ns6__CertRefs2s soap_ns6__CertRefsType2s
 
 
-#define soap_out__ns1__CertRefs soap_out_ns1__CertRefsType
+#define soap_out__ns6__CertRefs soap_out_ns6__CertRefsType
 
 
-#define soap_s2_ns1__CertRefs soap_s2ns1__CertRefsType
+#define soap_s2_ns6__CertRefs soap_s2ns6__CertRefsType
 
 
-#define soap_in__ns1__CertRefs soap_in_ns1__CertRefsType
+#define soap_in__ns6__CertRefs soap_in_ns6__CertRefsType
 
 
-#define soap_instantiate__ns1__CertRefs soap_instantiate_ns1__CertRefsType
+#define soap_instantiate__ns6__CertRefs soap_instantiate_ns6__CertRefsType
 
 
-#define soap_new__ns1__CertRefs soap_new_ns1__CertRefsType
+#define soap_new__ns6__CertRefs soap_new_ns6__CertRefsType
 
 
-#define soap_new_req__ns1__CertRefs soap_new_req_ns1__CertRefsType
+#define soap_new_req__ns6__CertRefs soap_new_req_ns6__CertRefsType
 
 
-#define soap_new_set__ns1__CertRefs soap_new_set_ns1__CertRefsType
+#define soap_new_set__ns6__CertRefs soap_new_set_ns6__CertRefsType
 
 
-#define soap_put__ns1__CertRefs soap_put_ns1__CertRefsType
+#define soap_put__ns6__CertRefs soap_put_ns6__CertRefsType
 
 
-#define soap_write__ns1__CertRefs soap_write_ns1__CertRefsType
+#define soap_write__ns6__CertRefs soap_write_ns6__CertRefsType
 
 
-#define soap_get__ns1__CertRefs soap_get_ns1__CertRefsType
+#define soap_get__ns6__CertRefs soap_get_ns6__CertRefsType
 
 
-#define soap_read__ns1__CertRefs soap_read_ns1__CertRefsType
+#define soap_read__ns6__CertRefs soap_read_ns6__CertRefsType
 
-/* _ns1__CompleteCertificateRefs is a typedef synonym for ns1__CompleteCertificateRefsType */
+/* _ns6__CompleteCertificateRefs is a typedef synonym for ns6__CompleteCertificateRefsType */
 
-#ifndef SOAP_TYPE__ns1__CompleteCertificateRefs
-#define SOAP_TYPE__ns1__CompleteCertificateRefs (281)
+#ifndef SOAP_TYPE__ns6__CompleteCertificateRefs
+#define SOAP_TYPE__ns6__CompleteCertificateRefs (281)
 #endif
 
-#define soap_default__ns1__CompleteCertificateRefs(soap, a) (a)->ns1__CompleteCertificateRefsType::soap_default(soap)
+#define soap_default__ns6__CompleteCertificateRefs(soap, a) (a)->ns6__CompleteCertificateRefsType::soap_default(soap)
 
 
-#define soap_serialize__ns1__CompleteCertificateRefs(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__CompleteCertificateRefs(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__CompleteCertificateRefs2s soap_ns1__CompleteCertificateRefsType2s
+#define soap__ns6__CompleteCertificateRefs2s soap_ns6__CompleteCertificateRefsType2s
 
 
-#define soap_out__ns1__CompleteCertificateRefs soap_out_ns1__CompleteCertificateRefsType
+#define soap_out__ns6__CompleteCertificateRefs soap_out_ns6__CompleteCertificateRefsType
 
 
-#define soap_s2_ns1__CompleteCertificateRefs soap_s2ns1__CompleteCertificateRefsType
+#define soap_s2_ns6__CompleteCertificateRefs soap_s2ns6__CompleteCertificateRefsType
 
 
-#define soap_in__ns1__CompleteCertificateRefs soap_in_ns1__CompleteCertificateRefsType
+#define soap_in__ns6__CompleteCertificateRefs soap_in_ns6__CompleteCertificateRefsType
 
 
-#define soap_instantiate__ns1__CompleteCertificateRefs soap_instantiate_ns1__CompleteCertificateRefsType
+#define soap_instantiate__ns6__CompleteCertificateRefs soap_instantiate_ns6__CompleteCertificateRefsType
 
 
-#define soap_new__ns1__CompleteCertificateRefs soap_new_ns1__CompleteCertificateRefsType
+#define soap_new__ns6__CompleteCertificateRefs soap_new_ns6__CompleteCertificateRefsType
 
 
-#define soap_new_req__ns1__CompleteCertificateRefs soap_new_req_ns1__CompleteCertificateRefsType
+#define soap_new_req__ns6__CompleteCertificateRefs soap_new_req_ns6__CompleteCertificateRefsType
 
 
-#define soap_new_set__ns1__CompleteCertificateRefs soap_new_set_ns1__CompleteCertificateRefsType
+#define soap_new_set__ns6__CompleteCertificateRefs soap_new_set_ns6__CompleteCertificateRefsType
 
 
-#define soap_put__ns1__CompleteCertificateRefs soap_put_ns1__CompleteCertificateRefsType
+#define soap_put__ns6__CompleteCertificateRefs soap_put_ns6__CompleteCertificateRefsType
 
 
-#define soap_write__ns1__CompleteCertificateRefs soap_write_ns1__CompleteCertificateRefsType
+#define soap_write__ns6__CompleteCertificateRefs soap_write_ns6__CompleteCertificateRefsType
 
 
-#define soap_get__ns1__CompleteCertificateRefs soap_get_ns1__CompleteCertificateRefsType
+#define soap_get__ns6__CompleteCertificateRefs soap_get_ns6__CompleteCertificateRefsType
 
 
-#define soap_read__ns1__CompleteCertificateRefs soap_read_ns1__CompleteCertificateRefsType
+#define soap_read__ns6__CompleteCertificateRefs soap_read_ns6__CompleteCertificateRefsType
 
-/* _ns1__EncapsulatedTimeStamp is a typedef synonym for ns1__EncapsulatedTimeStampType */
+/* _ns6__EncapsulatedTimeStamp is a typedef synonym for ns6__EncapsulatedTimeStampType */
 
-#ifndef SOAP_TYPE__ns1__EncapsulatedTimeStamp
-#define SOAP_TYPE__ns1__EncapsulatedTimeStamp (280)
+#ifndef SOAP_TYPE__ns6__EncapsulatedTimeStamp
+#define SOAP_TYPE__ns6__EncapsulatedTimeStamp (280)
 #endif
 
-#define soap_default__ns1__EncapsulatedTimeStamp(soap, a) (a)->ns1__EncapsulatedTimeStampType::soap_default(soap)
+#define soap_default__ns6__EncapsulatedTimeStamp(soap, a) (a)->ns6__EncapsulatedTimeStampType::soap_default(soap)
 
 
-#define soap_serialize__ns1__EncapsulatedTimeStamp(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__EncapsulatedTimeStamp(soap, a) (a)->soap_serialize(soap)
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out__ns1__EncapsulatedTimeStamp(struct soap*, const char*, int, const xsd__base64Binary *, const char*);
-SOAP_FMAC3 xsd__base64Binary * SOAP_FMAC4 soap_in__ns1__EncapsulatedTimeStamp(struct soap*, const char*, xsd__base64Binary *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out__ns6__EncapsulatedTimeStamp(struct soap*, const char*, int, const xsd__base64Binary *, const char*);
+SOAP_FMAC3 xsd__base64Binary * SOAP_FMAC4 soap_in__ns6__EncapsulatedTimeStamp(struct soap*, const char*, xsd__base64Binary *, const char*);
 
-#define soap_instantiate__ns1__EncapsulatedTimeStamp soap_instantiate_ns1__EncapsulatedTimeStampType
-
-
-#define soap_new__ns1__EncapsulatedTimeStamp soap_new_ns1__EncapsulatedTimeStampType
+#define soap_instantiate__ns6__EncapsulatedTimeStamp soap_instantiate_ns6__EncapsulatedTimeStampType
 
 
-#define soap_new_req__ns1__EncapsulatedTimeStamp soap_new_req_ns1__EncapsulatedTimeStampType
+#define soap_new__ns6__EncapsulatedTimeStamp soap_new_ns6__EncapsulatedTimeStampType
 
 
-#define soap_new_set__ns1__EncapsulatedTimeStamp soap_new_set_ns1__EncapsulatedTimeStampType
+#define soap_new_req__ns6__EncapsulatedTimeStamp soap_new_req_ns6__EncapsulatedTimeStampType
 
 
-#define soap_put__ns1__EncapsulatedTimeStamp soap_put_ns1__EncapsulatedTimeStampType
+#define soap_new_set__ns6__EncapsulatedTimeStamp soap_new_set_ns6__EncapsulatedTimeStampType
 
 
-#define soap_write__ns1__EncapsulatedTimeStamp soap_write_ns1__EncapsulatedTimeStampType
+#define soap_put__ns6__EncapsulatedTimeStamp soap_put_ns6__EncapsulatedTimeStampType
 
 
-#define soap_get__ns1__EncapsulatedTimeStamp soap_get_ns1__EncapsulatedTimeStampType
+#define soap_write__ns6__EncapsulatedTimeStamp soap_write_ns6__EncapsulatedTimeStampType
 
 
-#define soap_read__ns1__EncapsulatedTimeStamp soap_read_ns1__EncapsulatedTimeStampType
+#define soap_get__ns6__EncapsulatedTimeStamp soap_get_ns6__EncapsulatedTimeStampType
 
-/* _ns1__SignatureTimeStamp is a typedef synonym for ns1__SignatureTimeStampType */
 
-#ifndef SOAP_TYPE__ns1__SignatureTimeStamp
-#define SOAP_TYPE__ns1__SignatureTimeStamp (279)
+#define soap_read__ns6__EncapsulatedTimeStamp soap_read_ns6__EncapsulatedTimeStampType
+
+/* _ns6__SignatureTimeStamp is a typedef synonym for ns6__SignatureTimeStampType */
+
+#ifndef SOAP_TYPE__ns6__SignatureTimeStamp
+#define SOAP_TYPE__ns6__SignatureTimeStamp (279)
 #endif
 
-#define soap_default__ns1__SignatureTimeStamp(soap, a) (a)->ns1__SignatureTimeStampType::soap_default(soap)
+#define soap_default__ns6__SignatureTimeStamp(soap, a) (a)->ns6__SignatureTimeStampType::soap_default(soap)
 
 
-#define soap_serialize__ns1__SignatureTimeStamp(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__SignatureTimeStamp(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__SignatureTimeStamp2s soap_ns1__SignatureTimeStampType2s
+#define soap__ns6__SignatureTimeStamp2s soap_ns6__SignatureTimeStampType2s
 
 
-#define soap_out__ns1__SignatureTimeStamp soap_out_ns1__SignatureTimeStampType
+#define soap_out__ns6__SignatureTimeStamp soap_out_ns6__SignatureTimeStampType
 
 
-#define soap_s2_ns1__SignatureTimeStamp soap_s2ns1__SignatureTimeStampType
+#define soap_s2_ns6__SignatureTimeStamp soap_s2ns6__SignatureTimeStampType
 
 
-#define soap_in__ns1__SignatureTimeStamp soap_in_ns1__SignatureTimeStampType
+#define soap_in__ns6__SignatureTimeStamp soap_in_ns6__SignatureTimeStampType
 
 
-#define soap_instantiate__ns1__SignatureTimeStamp soap_instantiate_ns1__SignatureTimeStampType
+#define soap_instantiate__ns6__SignatureTimeStamp soap_instantiate_ns6__SignatureTimeStampType
 
 
-#define soap_new__ns1__SignatureTimeStamp soap_new_ns1__SignatureTimeStampType
+#define soap_new__ns6__SignatureTimeStamp soap_new_ns6__SignatureTimeStampType
 
 
-#define soap_new_req__ns1__SignatureTimeStamp soap_new_req_ns1__SignatureTimeStampType
+#define soap_new_req__ns6__SignatureTimeStamp soap_new_req_ns6__SignatureTimeStampType
 
 
-#define soap_new_set__ns1__SignatureTimeStamp soap_new_set_ns1__SignatureTimeStampType
+#define soap_new_set__ns6__SignatureTimeStamp soap_new_set_ns6__SignatureTimeStampType
 
 
-#define soap_put__ns1__SignatureTimeStamp soap_put_ns1__SignatureTimeStampType
+#define soap_put__ns6__SignatureTimeStamp soap_put_ns6__SignatureTimeStampType
 
 
-#define soap_write__ns1__SignatureTimeStamp soap_write_ns1__SignatureTimeStampType
+#define soap_write__ns6__SignatureTimeStamp soap_write_ns6__SignatureTimeStampType
 
 
-#define soap_get__ns1__SignatureTimeStamp soap_get_ns1__SignatureTimeStampType
+#define soap_get__ns6__SignatureTimeStamp soap_get_ns6__SignatureTimeStampType
 
 
-#define soap_read__ns1__SignatureTimeStamp soap_read_ns1__SignatureTimeStampType
+#define soap_read__ns6__SignatureTimeStamp soap_read_ns6__SignatureTimeStampType
 
-/* _ns1__CounterSignature is a typedef synonym for ns1__CounterSignatureType */
+/* _ns6__CounterSignature is a typedef synonym for ns6__CounterSignatureType */
 
-#ifndef SOAP_TYPE__ns1__CounterSignature
-#define SOAP_TYPE__ns1__CounterSignature (278)
+#ifndef SOAP_TYPE__ns6__CounterSignature
+#define SOAP_TYPE__ns6__CounterSignature (278)
 #endif
 
-#define soap_default__ns1__CounterSignature(soap, a) (a)->ns1__CounterSignatureType::soap_default(soap)
+#define soap_default__ns6__CounterSignature(soap, a) (a)->ns6__CounterSignatureType::soap_default(soap)
 
 
-#define soap_serialize__ns1__CounterSignature(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__CounterSignature(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__CounterSignature2s soap_ns1__CounterSignatureType2s
+#define soap__ns6__CounterSignature2s soap_ns6__CounterSignatureType2s
 
 
-#define soap_out__ns1__CounterSignature soap_out_ns1__CounterSignatureType
+#define soap_out__ns6__CounterSignature soap_out_ns6__CounterSignatureType
 
 
-#define soap_s2_ns1__CounterSignature soap_s2ns1__CounterSignatureType
+#define soap_s2_ns6__CounterSignature soap_s2ns6__CounterSignatureType
 
 
-#define soap_in__ns1__CounterSignature soap_in_ns1__CounterSignatureType
+#define soap_in__ns6__CounterSignature soap_in_ns6__CounterSignatureType
 
 
-#define soap_instantiate__ns1__CounterSignature soap_instantiate_ns1__CounterSignatureType
+#define soap_instantiate__ns6__CounterSignature soap_instantiate_ns6__CounterSignatureType
 
 
-#define soap_new__ns1__CounterSignature soap_new_ns1__CounterSignatureType
+#define soap_new__ns6__CounterSignature soap_new_ns6__CounterSignatureType
 
 
-#define soap_new_req__ns1__CounterSignature soap_new_req_ns1__CounterSignatureType
+#define soap_new_req__ns6__CounterSignature soap_new_req_ns6__CounterSignatureType
 
 
-#define soap_new_set__ns1__CounterSignature soap_new_set_ns1__CounterSignatureType
+#define soap_new_set__ns6__CounterSignature soap_new_set_ns6__CounterSignatureType
 
 
-#define soap_put__ns1__CounterSignature soap_put_ns1__CounterSignatureType
+#define soap_put__ns6__CounterSignature soap_put_ns6__CounterSignatureType
 
 
-#define soap_write__ns1__CounterSignature soap_write_ns1__CounterSignatureType
+#define soap_write__ns6__CounterSignature soap_write_ns6__CounterSignatureType
 
 
-#define soap_get__ns1__CounterSignature soap_get_ns1__CounterSignatureType
+#define soap_get__ns6__CounterSignature soap_get_ns6__CounterSignatureType
 
 
-#define soap_read__ns1__CounterSignature soap_read_ns1__CounterSignatureType
+#define soap_read__ns6__CounterSignature soap_read_ns6__CounterSignatureType
 
-/* _ns1__UnsignedSignatureProperties is a typedef synonym for ns1__UnsignedSignaturePropertiesType */
+/* _ns6__UnsignedSignatureProperties is a typedef synonym for ns6__UnsignedSignaturePropertiesType */
 
-#ifndef SOAP_TYPE__ns1__UnsignedSignatureProperties
-#define SOAP_TYPE__ns1__UnsignedSignatureProperties (277)
+#ifndef SOAP_TYPE__ns6__UnsignedSignatureProperties
+#define SOAP_TYPE__ns6__UnsignedSignatureProperties (277)
 #endif
 
-#define soap_default__ns1__UnsignedSignatureProperties(soap, a) (a)->ns1__UnsignedSignaturePropertiesType::soap_default(soap)
+#define soap_default__ns6__UnsignedSignatureProperties(soap, a) (a)->ns6__UnsignedSignaturePropertiesType::soap_default(soap)
 
 
-#define soap_serialize__ns1__UnsignedSignatureProperties(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__UnsignedSignatureProperties(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__UnsignedSignatureProperties2s soap_ns1__UnsignedSignaturePropertiesType2s
+#define soap__ns6__UnsignedSignatureProperties2s soap_ns6__UnsignedSignaturePropertiesType2s
 
 
-#define soap_out__ns1__UnsignedSignatureProperties soap_out_ns1__UnsignedSignaturePropertiesType
+#define soap_out__ns6__UnsignedSignatureProperties soap_out_ns6__UnsignedSignaturePropertiesType
 
 
-#define soap_s2_ns1__UnsignedSignatureProperties soap_s2ns1__UnsignedSignaturePropertiesType
+#define soap_s2_ns6__UnsignedSignatureProperties soap_s2ns6__UnsignedSignaturePropertiesType
 
 
-#define soap_in__ns1__UnsignedSignatureProperties soap_in_ns1__UnsignedSignaturePropertiesType
+#define soap_in__ns6__UnsignedSignatureProperties soap_in_ns6__UnsignedSignaturePropertiesType
 
 
-#define soap_instantiate__ns1__UnsignedSignatureProperties soap_instantiate_ns1__UnsignedSignaturePropertiesType
+#define soap_instantiate__ns6__UnsignedSignatureProperties soap_instantiate_ns6__UnsignedSignaturePropertiesType
 
 
-#define soap_new__ns1__UnsignedSignatureProperties soap_new_ns1__UnsignedSignaturePropertiesType
+#define soap_new__ns6__UnsignedSignatureProperties soap_new_ns6__UnsignedSignaturePropertiesType
 
 
-#define soap_new_req__ns1__UnsignedSignatureProperties soap_new_req_ns1__UnsignedSignaturePropertiesType
+#define soap_new_req__ns6__UnsignedSignatureProperties soap_new_req_ns6__UnsignedSignaturePropertiesType
 
 
-#define soap_new_set__ns1__UnsignedSignatureProperties soap_new_set_ns1__UnsignedSignaturePropertiesType
+#define soap_new_set__ns6__UnsignedSignatureProperties soap_new_set_ns6__UnsignedSignaturePropertiesType
 
 
-#define soap_put__ns1__UnsignedSignatureProperties soap_put_ns1__UnsignedSignaturePropertiesType
+#define soap_put__ns6__UnsignedSignatureProperties soap_put_ns6__UnsignedSignaturePropertiesType
 
 
-#define soap_write__ns1__UnsignedSignatureProperties soap_write_ns1__UnsignedSignaturePropertiesType
+#define soap_write__ns6__UnsignedSignatureProperties soap_write_ns6__UnsignedSignaturePropertiesType
 
 
-#define soap_get__ns1__UnsignedSignatureProperties soap_get_ns1__UnsignedSignaturePropertiesType
+#define soap_get__ns6__UnsignedSignatureProperties soap_get_ns6__UnsignedSignaturePropertiesType
 
 
-#define soap_read__ns1__UnsignedSignatureProperties soap_read_ns1__UnsignedSignaturePropertiesType
+#define soap_read__ns6__UnsignedSignatureProperties soap_read_ns6__UnsignedSignaturePropertiesType
 
-/* _ns1__UnsignedProperties is a typedef synonym for ns1__UnsignedPropertiesType */
+/* _ns6__UnsignedProperties is a typedef synonym for ns6__UnsignedPropertiesType */
 
-#ifndef SOAP_TYPE__ns1__UnsignedProperties
-#define SOAP_TYPE__ns1__UnsignedProperties (276)
+#ifndef SOAP_TYPE__ns6__UnsignedProperties
+#define SOAP_TYPE__ns6__UnsignedProperties (276)
 #endif
 
-#define soap_default__ns1__UnsignedProperties(soap, a) (a)->ns1__UnsignedPropertiesType::soap_default(soap)
+#define soap_default__ns6__UnsignedProperties(soap, a) (a)->ns6__UnsignedPropertiesType::soap_default(soap)
 
 
-#define soap_serialize__ns1__UnsignedProperties(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__UnsignedProperties(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__UnsignedProperties2s soap_ns1__UnsignedPropertiesType2s
+#define soap__ns6__UnsignedProperties2s soap_ns6__UnsignedPropertiesType2s
 
 
-#define soap_out__ns1__UnsignedProperties soap_out_ns1__UnsignedPropertiesType
+#define soap_out__ns6__UnsignedProperties soap_out_ns6__UnsignedPropertiesType
 
 
-#define soap_s2_ns1__UnsignedProperties soap_s2ns1__UnsignedPropertiesType
+#define soap_s2_ns6__UnsignedProperties soap_s2ns6__UnsignedPropertiesType
 
 
-#define soap_in__ns1__UnsignedProperties soap_in_ns1__UnsignedPropertiesType
+#define soap_in__ns6__UnsignedProperties soap_in_ns6__UnsignedPropertiesType
 
 
-#define soap_instantiate__ns1__UnsignedProperties soap_instantiate_ns1__UnsignedPropertiesType
+#define soap_instantiate__ns6__UnsignedProperties soap_instantiate_ns6__UnsignedPropertiesType
 
 
-#define soap_new__ns1__UnsignedProperties soap_new_ns1__UnsignedPropertiesType
+#define soap_new__ns6__UnsignedProperties soap_new_ns6__UnsignedPropertiesType
 
 
-#define soap_new_req__ns1__UnsignedProperties soap_new_req_ns1__UnsignedPropertiesType
+#define soap_new_req__ns6__UnsignedProperties soap_new_req_ns6__UnsignedPropertiesType
 
 
-#define soap_new_set__ns1__UnsignedProperties soap_new_set_ns1__UnsignedPropertiesType
+#define soap_new_set__ns6__UnsignedProperties soap_new_set_ns6__UnsignedPropertiesType
 
 
-#define soap_put__ns1__UnsignedProperties soap_put_ns1__UnsignedPropertiesType
+#define soap_put__ns6__UnsignedProperties soap_put_ns6__UnsignedPropertiesType
 
 
-#define soap_write__ns1__UnsignedProperties soap_write_ns1__UnsignedPropertiesType
+#define soap_write__ns6__UnsignedProperties soap_write_ns6__UnsignedPropertiesType
 
 
-#define soap_get__ns1__UnsignedProperties soap_get_ns1__UnsignedPropertiesType
+#define soap_get__ns6__UnsignedProperties soap_get_ns6__UnsignedPropertiesType
 
 
-#define soap_read__ns1__UnsignedProperties soap_read_ns1__UnsignedPropertiesType
+#define soap_read__ns6__UnsignedProperties soap_read_ns6__UnsignedPropertiesType
 
-/* _ns1__ClaimedRole is a typedef synonym for ns1__ClaimedRoleType */
+/* _ns6__ClaimedRole is a typedef synonym for ns6__ClaimedRoleType */
 
-#ifndef SOAP_TYPE__ns1__ClaimedRole
-#define SOAP_TYPE__ns1__ClaimedRole (275)
+#ifndef SOAP_TYPE__ns6__ClaimedRole
+#define SOAP_TYPE__ns6__ClaimedRole (275)
 #endif
 
-#define soap_default__ns1__ClaimedRole(soap, a) (a)->ns1__ClaimedRoleType::soap_default(soap)
+#define soap_default__ns6__ClaimedRole(soap, a) (a)->ns6__ClaimedRoleType::soap_default(soap)
 
 
-#define soap_serialize__ns1__ClaimedRole(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__ClaimedRole(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__ClaimedRole2s soap_ns1__ClaimedRoleType2s
+#define soap__ns6__ClaimedRole2s soap_ns6__ClaimedRoleType2s
 
 
-#define soap_out__ns1__ClaimedRole soap_out_ns1__ClaimedRoleType
+#define soap_out__ns6__ClaimedRole soap_out_ns6__ClaimedRoleType
 
 
-#define soap_s2_ns1__ClaimedRole soap_s2ns1__ClaimedRoleType
+#define soap_s2_ns6__ClaimedRole soap_s2ns6__ClaimedRoleType
 
 
-#define soap_in__ns1__ClaimedRole soap_in_ns1__ClaimedRoleType
+#define soap_in__ns6__ClaimedRole soap_in_ns6__ClaimedRoleType
 
 
-#define soap_instantiate__ns1__ClaimedRole soap_instantiate_ns1__ClaimedRoleType
+#define soap_instantiate__ns6__ClaimedRole soap_instantiate_ns6__ClaimedRoleType
 
 
-#define soap_new__ns1__ClaimedRole soap_new_ns1__ClaimedRoleType
+#define soap_new__ns6__ClaimedRole soap_new_ns6__ClaimedRoleType
 
 
-#define soap_new_req__ns1__ClaimedRole soap_new_req_ns1__ClaimedRoleType
+#define soap_new_req__ns6__ClaimedRole soap_new_req_ns6__ClaimedRoleType
 
 
-#define soap_new_set__ns1__ClaimedRole soap_new_set_ns1__ClaimedRoleType
+#define soap_new_set__ns6__ClaimedRole soap_new_set_ns6__ClaimedRoleType
 
 
-#define soap_put__ns1__ClaimedRole soap_put_ns1__ClaimedRoleType
+#define soap_put__ns6__ClaimedRole soap_put_ns6__ClaimedRoleType
 
 
-#define soap_write__ns1__ClaimedRole soap_write_ns1__ClaimedRoleType
+#define soap_write__ns6__ClaimedRole soap_write_ns6__ClaimedRoleType
 
 
-#define soap_get__ns1__ClaimedRole soap_get_ns1__ClaimedRoleType
+#define soap_get__ns6__ClaimedRole soap_get_ns6__ClaimedRoleType
 
 
-#define soap_read__ns1__ClaimedRole soap_read_ns1__ClaimedRoleType
+#define soap_read__ns6__ClaimedRole soap_read_ns6__ClaimedRoleType
 
-/* _ns1__ClaimedRoles is a typedef synonym for ns1__ClaimedRolesListType */
+/* _ns6__ClaimedRoles is a typedef synonym for ns6__ClaimedRolesListType */
 
-#ifndef SOAP_TYPE__ns1__ClaimedRoles
-#define SOAP_TYPE__ns1__ClaimedRoles (274)
+#ifndef SOAP_TYPE__ns6__ClaimedRoles
+#define SOAP_TYPE__ns6__ClaimedRoles (274)
 #endif
 
-#define soap_default__ns1__ClaimedRoles(soap, a) (a)->ns1__ClaimedRolesListType::soap_default(soap)
+#define soap_default__ns6__ClaimedRoles(soap, a) (a)->ns6__ClaimedRolesListType::soap_default(soap)
 
 
-#define soap_serialize__ns1__ClaimedRoles(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__ClaimedRoles(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__ClaimedRoles2s soap_ns1__ClaimedRolesListType2s
+#define soap__ns6__ClaimedRoles2s soap_ns6__ClaimedRolesListType2s
 
 
-#define soap_out__ns1__ClaimedRoles soap_out_ns1__ClaimedRolesListType
+#define soap_out__ns6__ClaimedRoles soap_out_ns6__ClaimedRolesListType
 
 
-#define soap_s2_ns1__ClaimedRoles soap_s2ns1__ClaimedRolesListType
+#define soap_s2_ns6__ClaimedRoles soap_s2ns6__ClaimedRolesListType
 
 
-#define soap_in__ns1__ClaimedRoles soap_in_ns1__ClaimedRolesListType
+#define soap_in__ns6__ClaimedRoles soap_in_ns6__ClaimedRolesListType
 
 
-#define soap_instantiate__ns1__ClaimedRoles soap_instantiate_ns1__ClaimedRolesListType
+#define soap_instantiate__ns6__ClaimedRoles soap_instantiate_ns6__ClaimedRolesListType
 
 
-#define soap_new__ns1__ClaimedRoles soap_new_ns1__ClaimedRolesListType
+#define soap_new__ns6__ClaimedRoles soap_new_ns6__ClaimedRolesListType
 
 
-#define soap_new_req__ns1__ClaimedRoles soap_new_req_ns1__ClaimedRolesListType
+#define soap_new_req__ns6__ClaimedRoles soap_new_req_ns6__ClaimedRolesListType
 
 
-#define soap_new_set__ns1__ClaimedRoles soap_new_set_ns1__ClaimedRolesListType
+#define soap_new_set__ns6__ClaimedRoles soap_new_set_ns6__ClaimedRolesListType
 
 
-#define soap_put__ns1__ClaimedRoles soap_put_ns1__ClaimedRolesListType
+#define soap_put__ns6__ClaimedRoles soap_put_ns6__ClaimedRolesListType
 
 
-#define soap_write__ns1__ClaimedRoles soap_write_ns1__ClaimedRolesListType
+#define soap_write__ns6__ClaimedRoles soap_write_ns6__ClaimedRolesListType
 
 
-#define soap_get__ns1__ClaimedRoles soap_get_ns1__ClaimedRolesListType
+#define soap_get__ns6__ClaimedRoles soap_get_ns6__ClaimedRolesListType
 
 
-#define soap_read__ns1__ClaimedRoles soap_read_ns1__ClaimedRolesListType
+#define soap_read__ns6__ClaimedRoles soap_read_ns6__ClaimedRolesListType
 
-/* _ns1__SignerRole is a typedef synonym for ns1__SignerRoleType */
+/* _ns6__SignerRole is a typedef synonym for ns6__SignerRoleType */
 
-#ifndef SOAP_TYPE__ns1__SignerRole
-#define SOAP_TYPE__ns1__SignerRole (273)
+#ifndef SOAP_TYPE__ns6__SignerRole
+#define SOAP_TYPE__ns6__SignerRole (273)
 #endif
 
-#define soap_default__ns1__SignerRole(soap, a) (a)->ns1__SignerRoleType::soap_default(soap)
+#define soap_default__ns6__SignerRole(soap, a) (a)->ns6__SignerRoleType::soap_default(soap)
 
 
-#define soap_serialize__ns1__SignerRole(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__SignerRole(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__SignerRole2s soap_ns1__SignerRoleType2s
+#define soap__ns6__SignerRole2s soap_ns6__SignerRoleType2s
 
 
-#define soap_out__ns1__SignerRole soap_out_ns1__SignerRoleType
+#define soap_out__ns6__SignerRole soap_out_ns6__SignerRoleType
 
 
-#define soap_s2_ns1__SignerRole soap_s2ns1__SignerRoleType
+#define soap_s2_ns6__SignerRole soap_s2ns6__SignerRoleType
 
 
-#define soap_in__ns1__SignerRole soap_in_ns1__SignerRoleType
+#define soap_in__ns6__SignerRole soap_in_ns6__SignerRoleType
 
 
-#define soap_instantiate__ns1__SignerRole soap_instantiate_ns1__SignerRoleType
+#define soap_instantiate__ns6__SignerRole soap_instantiate_ns6__SignerRoleType
 
 
-#define soap_new__ns1__SignerRole soap_new_ns1__SignerRoleType
+#define soap_new__ns6__SignerRole soap_new_ns6__SignerRoleType
 
 
-#define soap_new_req__ns1__SignerRole soap_new_req_ns1__SignerRoleType
+#define soap_new_req__ns6__SignerRole soap_new_req_ns6__SignerRoleType
 
 
-#define soap_new_set__ns1__SignerRole soap_new_set_ns1__SignerRoleType
+#define soap_new_set__ns6__SignerRole soap_new_set_ns6__SignerRoleType
 
 
-#define soap_put__ns1__SignerRole soap_put_ns1__SignerRoleType
+#define soap_put__ns6__SignerRole soap_put_ns6__SignerRoleType
 
 
-#define soap_write__ns1__SignerRole soap_write_ns1__SignerRoleType
+#define soap_write__ns6__SignerRole soap_write_ns6__SignerRoleType
 
 
-#define soap_get__ns1__SignerRole soap_get_ns1__SignerRoleType
+#define soap_get__ns6__SignerRole soap_get_ns6__SignerRoleType
 
 
-#define soap_read__ns1__SignerRole soap_read_ns1__SignerRoleType
+#define soap_read__ns6__SignerRole soap_read_ns6__SignerRoleType
 
-/* _ns1__IssuerSerial is a typedef synonym for ns1__IssuerSerialType */
+/* _ns6__IssuerSerial is a typedef synonym for ns6__IssuerSerialType */
 
-#ifndef SOAP_TYPE__ns1__IssuerSerial
-#define SOAP_TYPE__ns1__IssuerSerial (271)
+#ifndef SOAP_TYPE__ns6__IssuerSerial
+#define SOAP_TYPE__ns6__IssuerSerial (271)
 #endif
 
-#define soap_default__ns1__IssuerSerial(soap, a) (a)->ns1__IssuerSerialType::soap_default(soap)
+#define soap_default__ns6__IssuerSerial(soap, a) (a)->ns6__IssuerSerialType::soap_default(soap)
 
 
-#define soap_serialize__ns1__IssuerSerial(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__IssuerSerial(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__IssuerSerial2s soap_ns1__IssuerSerialType2s
+#define soap__ns6__IssuerSerial2s soap_ns6__IssuerSerialType2s
 
 
-#define soap_out__ns1__IssuerSerial soap_out_ns1__IssuerSerialType
+#define soap_out__ns6__IssuerSerial soap_out_ns6__IssuerSerialType
 
 
-#define soap_s2_ns1__IssuerSerial soap_s2ns1__IssuerSerialType
+#define soap_s2_ns6__IssuerSerial soap_s2ns6__IssuerSerialType
 
 
-#define soap_in__ns1__IssuerSerial soap_in_ns1__IssuerSerialType
+#define soap_in__ns6__IssuerSerial soap_in_ns6__IssuerSerialType
 
 
-#define soap_instantiate__ns1__IssuerSerial soap_instantiate_ns1__IssuerSerialType
+#define soap_instantiate__ns6__IssuerSerial soap_instantiate_ns6__IssuerSerialType
 
 
-#define soap_new__ns1__IssuerSerial soap_new_ns1__IssuerSerialType
+#define soap_new__ns6__IssuerSerial soap_new_ns6__IssuerSerialType
 
 
-#define soap_new_req__ns1__IssuerSerial soap_new_req_ns1__IssuerSerialType
+#define soap_new_req__ns6__IssuerSerial soap_new_req_ns6__IssuerSerialType
 
 
-#define soap_new_set__ns1__IssuerSerial soap_new_set_ns1__IssuerSerialType
+#define soap_new_set__ns6__IssuerSerial soap_new_set_ns6__IssuerSerialType
 
 
-#define soap_put__ns1__IssuerSerial soap_put_ns1__IssuerSerialType
+#define soap_put__ns6__IssuerSerial soap_put_ns6__IssuerSerialType
 
 
-#define soap_write__ns1__IssuerSerial soap_write_ns1__IssuerSerialType
+#define soap_write__ns6__IssuerSerial soap_write_ns6__IssuerSerialType
 
 
-#define soap_get__ns1__IssuerSerial soap_get_ns1__IssuerSerialType
+#define soap_get__ns6__IssuerSerial soap_get_ns6__IssuerSerialType
 
 
-#define soap_read__ns1__IssuerSerial soap_read_ns1__IssuerSerialType
+#define soap_read__ns6__IssuerSerial soap_read_ns6__IssuerSerialType
 
-/* _ns1__CertDigest is a typedef synonym for ns1__CertDigestType */
+/* _ns6__CertDigest is a typedef synonym for ns6__CertDigestType */
 
-#ifndef SOAP_TYPE__ns1__CertDigest
-#define SOAP_TYPE__ns1__CertDigest (270)
+#ifndef SOAP_TYPE__ns6__CertDigest
+#define SOAP_TYPE__ns6__CertDigest (270)
 #endif
 
-#define soap_default__ns1__CertDigest(soap, a) (a)->ns1__CertDigestType::soap_default(soap)
+#define soap_default__ns6__CertDigest(soap, a) (a)->ns6__CertDigestType::soap_default(soap)
 
 
-#define soap_serialize__ns1__CertDigest(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__CertDigest(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__CertDigest2s soap_ns1__CertDigestType2s
+#define soap__ns6__CertDigest2s soap_ns6__CertDigestType2s
 
 
-#define soap_out__ns1__CertDigest soap_out_ns1__CertDigestType
+#define soap_out__ns6__CertDigest soap_out_ns6__CertDigestType
 
 
-#define soap_s2_ns1__CertDigest soap_s2ns1__CertDigestType
+#define soap_s2_ns6__CertDigest soap_s2ns6__CertDigestType
 
 
-#define soap_in__ns1__CertDigest soap_in_ns1__CertDigestType
+#define soap_in__ns6__CertDigest soap_in_ns6__CertDigestType
 
 
-#define soap_instantiate__ns1__CertDigest soap_instantiate_ns1__CertDigestType
+#define soap_instantiate__ns6__CertDigest soap_instantiate_ns6__CertDigestType
 
 
-#define soap_new__ns1__CertDigest soap_new_ns1__CertDigestType
+#define soap_new__ns6__CertDigest soap_new_ns6__CertDigestType
 
 
-#define soap_new_req__ns1__CertDigest soap_new_req_ns1__CertDigestType
+#define soap_new_req__ns6__CertDigest soap_new_req_ns6__CertDigestType
 
 
-#define soap_new_set__ns1__CertDigest soap_new_set_ns1__CertDigestType
+#define soap_new_set__ns6__CertDigest soap_new_set_ns6__CertDigestType
 
 
-#define soap_put__ns1__CertDigest soap_put_ns1__CertDigestType
+#define soap_put__ns6__CertDigest soap_put_ns6__CertDigestType
 
 
-#define soap_write__ns1__CertDigest soap_write_ns1__CertDigestType
+#define soap_write__ns6__CertDigest soap_write_ns6__CertDigestType
 
 
-#define soap_get__ns1__CertDigest soap_get_ns1__CertDigestType
+#define soap_get__ns6__CertDigest soap_get_ns6__CertDigestType
 
 
-#define soap_read__ns1__CertDigest soap_read_ns1__CertDigestType
+#define soap_read__ns6__CertDigest soap_read_ns6__CertDigestType
 
-/* _ns1__Cert is a typedef synonym for ns1__CertType */
+/* _ns6__Cert is a typedef synonym for ns6__CertType */
 
-#ifndef SOAP_TYPE__ns1__Cert
-#define SOAP_TYPE__ns1__Cert (269)
+#ifndef SOAP_TYPE__ns6__Cert
+#define SOAP_TYPE__ns6__Cert (269)
 #endif
 
-#define soap_default__ns1__Cert(soap, a) (a)->ns1__CertType::soap_default(soap)
+#define soap_default__ns6__Cert(soap, a) (a)->ns6__CertType::soap_default(soap)
 
 
-#define soap_serialize__ns1__Cert(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__Cert(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__Cert2s soap_ns1__CertType2s
+#define soap__ns6__Cert2s soap_ns6__CertType2s
 
 
-#define soap_out__ns1__Cert soap_out_ns1__CertType
+#define soap_out__ns6__Cert soap_out_ns6__CertType
 
 
-#define soap_s2_ns1__Cert soap_s2ns1__CertType
+#define soap_s2_ns6__Cert soap_s2ns6__CertType
 
 
-#define soap_in__ns1__Cert soap_in_ns1__CertType
+#define soap_in__ns6__Cert soap_in_ns6__CertType
 
 
-#define soap_instantiate__ns1__Cert soap_instantiate_ns1__CertType
+#define soap_instantiate__ns6__Cert soap_instantiate_ns6__CertType
 
 
-#define soap_new__ns1__Cert soap_new_ns1__CertType
+#define soap_new__ns6__Cert soap_new_ns6__CertType
 
 
-#define soap_new_req__ns1__Cert soap_new_req_ns1__CertType
+#define soap_new_req__ns6__Cert soap_new_req_ns6__CertType
 
 
-#define soap_new_set__ns1__Cert soap_new_set_ns1__CertType
+#define soap_new_set__ns6__Cert soap_new_set_ns6__CertType
 
 
-#define soap_put__ns1__Cert soap_put_ns1__CertType
+#define soap_put__ns6__Cert soap_put_ns6__CertType
 
 
-#define soap_write__ns1__Cert soap_write_ns1__CertType
+#define soap_write__ns6__Cert soap_write_ns6__CertType
 
 
-#define soap_get__ns1__Cert soap_get_ns1__CertType
+#define soap_get__ns6__Cert soap_get_ns6__CertType
 
 
-#define soap_read__ns1__Cert soap_read_ns1__CertType
+#define soap_read__ns6__Cert soap_read_ns6__CertType
 
-/* _ns1__SigningCertificate is a typedef synonym for ns1__SigningCertificateType */
+/* _ns6__SigningCertificate is a typedef synonym for ns6__SigningCertificateType */
 
-#ifndef SOAP_TYPE__ns1__SigningCertificate
-#define SOAP_TYPE__ns1__SigningCertificate (268)
+#ifndef SOAP_TYPE__ns6__SigningCertificate
+#define SOAP_TYPE__ns6__SigningCertificate (268)
 #endif
 
-#define soap_default__ns1__SigningCertificate(soap, a) (a)->ns1__SigningCertificateType::soap_default(soap)
+#define soap_default__ns6__SigningCertificate(soap, a) (a)->ns6__SigningCertificateType::soap_default(soap)
 
 
-#define soap_serialize__ns1__SigningCertificate(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__SigningCertificate(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__SigningCertificate2s soap_ns1__SigningCertificateType2s
+#define soap__ns6__SigningCertificate2s soap_ns6__SigningCertificateType2s
 
 
-#define soap_out__ns1__SigningCertificate soap_out_ns1__SigningCertificateType
+#define soap_out__ns6__SigningCertificate soap_out_ns6__SigningCertificateType
 
 
-#define soap_s2_ns1__SigningCertificate soap_s2ns1__SigningCertificateType
+#define soap_s2_ns6__SigningCertificate soap_s2ns6__SigningCertificateType
 
 
-#define soap_in__ns1__SigningCertificate soap_in_ns1__SigningCertificateType
+#define soap_in__ns6__SigningCertificate soap_in_ns6__SigningCertificateType
 
 
-#define soap_instantiate__ns1__SigningCertificate soap_instantiate_ns1__SigningCertificateType
+#define soap_instantiate__ns6__SigningCertificate soap_instantiate_ns6__SigningCertificateType
 
 
-#define soap_new__ns1__SigningCertificate soap_new_ns1__SigningCertificateType
+#define soap_new__ns6__SigningCertificate soap_new_ns6__SigningCertificateType
 
 
-#define soap_new_req__ns1__SigningCertificate soap_new_req_ns1__SigningCertificateType
+#define soap_new_req__ns6__SigningCertificate soap_new_req_ns6__SigningCertificateType
 
 
-#define soap_new_set__ns1__SigningCertificate soap_new_set_ns1__SigningCertificateType
+#define soap_new_set__ns6__SigningCertificate soap_new_set_ns6__SigningCertificateType
 
 
-#define soap_put__ns1__SigningCertificate soap_put_ns1__SigningCertificateType
+#define soap_put__ns6__SigningCertificate soap_put_ns6__SigningCertificateType
 
 
-#define soap_write__ns1__SigningCertificate soap_write_ns1__SigningCertificateType
+#define soap_write__ns6__SigningCertificate soap_write_ns6__SigningCertificateType
 
 
-#define soap_get__ns1__SigningCertificate soap_get_ns1__SigningCertificateType
+#define soap_get__ns6__SigningCertificate soap_get_ns6__SigningCertificateType
 
 
-#define soap_read__ns1__SigningCertificate soap_read_ns1__SigningCertificateType
+#define soap_read__ns6__SigningCertificate soap_read_ns6__SigningCertificateType
 
-/* _ns1__SignedSignatureProperties is a typedef synonym for ns1__SignedSignaturePropertiesType */
+/* _ns6__SignedSignatureProperties is a typedef synonym for ns6__SignedSignaturePropertiesType */
 
-#ifndef SOAP_TYPE__ns1__SignedSignatureProperties
-#define SOAP_TYPE__ns1__SignedSignatureProperties (267)
+#ifndef SOAP_TYPE__ns6__SignedSignatureProperties
+#define SOAP_TYPE__ns6__SignedSignatureProperties (267)
 #endif
 
-#define soap_default__ns1__SignedSignatureProperties(soap, a) (a)->ns1__SignedSignaturePropertiesType::soap_default(soap)
+#define soap_default__ns6__SignedSignatureProperties(soap, a) (a)->ns6__SignedSignaturePropertiesType::soap_default(soap)
 
 
-#define soap_serialize__ns1__SignedSignatureProperties(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__SignedSignatureProperties(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__SignedSignatureProperties2s soap_ns1__SignedSignaturePropertiesType2s
+#define soap__ns6__SignedSignatureProperties2s soap_ns6__SignedSignaturePropertiesType2s
 
 
-#define soap_out__ns1__SignedSignatureProperties soap_out_ns1__SignedSignaturePropertiesType
+#define soap_out__ns6__SignedSignatureProperties soap_out_ns6__SignedSignaturePropertiesType
 
 
-#define soap_s2_ns1__SignedSignatureProperties soap_s2ns1__SignedSignaturePropertiesType
+#define soap_s2_ns6__SignedSignatureProperties soap_s2ns6__SignedSignaturePropertiesType
 
 
-#define soap_in__ns1__SignedSignatureProperties soap_in_ns1__SignedSignaturePropertiesType
+#define soap_in__ns6__SignedSignatureProperties soap_in_ns6__SignedSignaturePropertiesType
 
 
-#define soap_instantiate__ns1__SignedSignatureProperties soap_instantiate_ns1__SignedSignaturePropertiesType
+#define soap_instantiate__ns6__SignedSignatureProperties soap_instantiate_ns6__SignedSignaturePropertiesType
 
 
-#define soap_new__ns1__SignedSignatureProperties soap_new_ns1__SignedSignaturePropertiesType
+#define soap_new__ns6__SignedSignatureProperties soap_new_ns6__SignedSignaturePropertiesType
 
 
-#define soap_new_req__ns1__SignedSignatureProperties soap_new_req_ns1__SignedSignaturePropertiesType
+#define soap_new_req__ns6__SignedSignatureProperties soap_new_req_ns6__SignedSignaturePropertiesType
 
 
-#define soap_new_set__ns1__SignedSignatureProperties soap_new_set_ns1__SignedSignaturePropertiesType
+#define soap_new_set__ns6__SignedSignatureProperties soap_new_set_ns6__SignedSignaturePropertiesType
 
 
-#define soap_put__ns1__SignedSignatureProperties soap_put_ns1__SignedSignaturePropertiesType
+#define soap_put__ns6__SignedSignatureProperties soap_put_ns6__SignedSignaturePropertiesType
 
 
-#define soap_write__ns1__SignedSignatureProperties soap_write_ns1__SignedSignaturePropertiesType
+#define soap_write__ns6__SignedSignatureProperties soap_write_ns6__SignedSignaturePropertiesType
 
 
-#define soap_get__ns1__SignedSignatureProperties soap_get_ns1__SignedSignaturePropertiesType
+#define soap_get__ns6__SignedSignatureProperties soap_get_ns6__SignedSignaturePropertiesType
 
 
-#define soap_read__ns1__SignedSignatureProperties soap_read_ns1__SignedSignaturePropertiesType
+#define soap_read__ns6__SignedSignatureProperties soap_read_ns6__SignedSignaturePropertiesType
 
-/* _ns1__SignedProperties is a typedef synonym for ns1__SignedPropertiesType */
+/* _ns6__SignedProperties is a typedef synonym for ns6__SignedPropertiesType */
 
-#ifndef SOAP_TYPE__ns1__SignedProperties
-#define SOAP_TYPE__ns1__SignedProperties (266)
+#ifndef SOAP_TYPE__ns6__SignedProperties
+#define SOAP_TYPE__ns6__SignedProperties (266)
 #endif
 
-#define soap_default__ns1__SignedProperties(soap, a) (a)->ns1__SignedPropertiesType::soap_default(soap)
+#define soap_default__ns6__SignedProperties(soap, a) (a)->ns6__SignedPropertiesType::soap_default(soap)
 
 
-#define soap_serialize__ns1__SignedProperties(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__SignedProperties(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__SignedProperties2s soap_ns1__SignedPropertiesType2s
+#define soap__ns6__SignedProperties2s soap_ns6__SignedPropertiesType2s
 
 
-#define soap_out__ns1__SignedProperties soap_out_ns1__SignedPropertiesType
+#define soap_out__ns6__SignedProperties soap_out_ns6__SignedPropertiesType
 
 
-#define soap_s2_ns1__SignedProperties soap_s2ns1__SignedPropertiesType
+#define soap_s2_ns6__SignedProperties soap_s2ns6__SignedPropertiesType
 
 
-#define soap_in__ns1__SignedProperties soap_in_ns1__SignedPropertiesType
+#define soap_in__ns6__SignedProperties soap_in_ns6__SignedPropertiesType
 
 
-#define soap_instantiate__ns1__SignedProperties soap_instantiate_ns1__SignedPropertiesType
+#define soap_instantiate__ns6__SignedProperties soap_instantiate_ns6__SignedPropertiesType
 
 
-#define soap_new__ns1__SignedProperties soap_new_ns1__SignedPropertiesType
+#define soap_new__ns6__SignedProperties soap_new_ns6__SignedPropertiesType
 
 
-#define soap_new_req__ns1__SignedProperties soap_new_req_ns1__SignedPropertiesType
+#define soap_new_req__ns6__SignedProperties soap_new_req_ns6__SignedPropertiesType
 
 
-#define soap_new_set__ns1__SignedProperties soap_new_set_ns1__SignedPropertiesType
+#define soap_new_set__ns6__SignedProperties soap_new_set_ns6__SignedPropertiesType
 
 
-#define soap_put__ns1__SignedProperties soap_put_ns1__SignedPropertiesType
+#define soap_put__ns6__SignedProperties soap_put_ns6__SignedPropertiesType
 
 
-#define soap_write__ns1__SignedProperties soap_write_ns1__SignedPropertiesType
+#define soap_write__ns6__SignedProperties soap_write_ns6__SignedPropertiesType
 
 
-#define soap_get__ns1__SignedProperties soap_get_ns1__SignedPropertiesType
+#define soap_get__ns6__SignedProperties soap_get_ns6__SignedPropertiesType
 
 
-#define soap_read__ns1__SignedProperties soap_read_ns1__SignedPropertiesType
+#define soap_read__ns6__SignedProperties soap_read_ns6__SignedPropertiesType
 
-/* _ns1__QualifyingProperties is a typedef synonym for ns1__QualifyingPropertiesType */
+/* _ns6__QualifyingProperties is a typedef synonym for ns6__QualifyingPropertiesType */
 
-#ifndef SOAP_TYPE__ns1__QualifyingProperties
-#define SOAP_TYPE__ns1__QualifyingProperties (265)
+#ifndef SOAP_TYPE__ns6__QualifyingProperties
+#define SOAP_TYPE__ns6__QualifyingProperties (265)
 #endif
 
-#define soap_default__ns1__QualifyingProperties(soap, a) (a)->ns1__QualifyingPropertiesType::soap_default(soap)
+#define soap_default__ns6__QualifyingProperties(soap, a) (a)->ns6__QualifyingPropertiesType::soap_default(soap)
 
 
-#define soap_serialize__ns1__QualifyingProperties(soap, a) (a)->soap_serialize(soap)
+#define soap_serialize__ns6__QualifyingProperties(soap, a) (a)->soap_serialize(soap)
 
 
-#define soap__ns1__QualifyingProperties2s soap_ns1__QualifyingPropertiesType2s
+#define soap__ns6__QualifyingProperties2s soap_ns6__QualifyingPropertiesType2s
 
 
-#define soap_out__ns1__QualifyingProperties soap_out_ns1__QualifyingPropertiesType
+#define soap_out__ns6__QualifyingProperties soap_out_ns6__QualifyingPropertiesType
 
 
-#define soap_s2_ns1__QualifyingProperties soap_s2ns1__QualifyingPropertiesType
+#define soap_s2_ns6__QualifyingProperties soap_s2ns6__QualifyingPropertiesType
 
 
-#define soap_in__ns1__QualifyingProperties soap_in_ns1__QualifyingPropertiesType
+#define soap_in__ns6__QualifyingProperties soap_in_ns6__QualifyingPropertiesType
 
 
-#define soap_instantiate__ns1__QualifyingProperties soap_instantiate_ns1__QualifyingPropertiesType
+#define soap_instantiate__ns6__QualifyingProperties soap_instantiate_ns6__QualifyingPropertiesType
 
 
-#define soap_new__ns1__QualifyingProperties soap_new_ns1__QualifyingPropertiesType
+#define soap_new__ns6__QualifyingProperties soap_new_ns6__QualifyingPropertiesType
 
 
-#define soap_new_req__ns1__QualifyingProperties soap_new_req_ns1__QualifyingPropertiesType
+#define soap_new_req__ns6__QualifyingProperties soap_new_req_ns6__QualifyingPropertiesType
 
 
-#define soap_new_set__ns1__QualifyingProperties soap_new_set_ns1__QualifyingPropertiesType
+#define soap_new_set__ns6__QualifyingProperties soap_new_set_ns6__QualifyingPropertiesType
 
 
-#define soap_put__ns1__QualifyingProperties soap_put_ns1__QualifyingPropertiesType
+#define soap_put__ns6__QualifyingProperties soap_put_ns6__QualifyingPropertiesType
 
 
-#define soap_write__ns1__QualifyingProperties soap_write_ns1__QualifyingPropertiesType
+#define soap_write__ns6__QualifyingProperties soap_write_ns6__QualifyingPropertiesType
 
 
-#define soap_get__ns1__QualifyingProperties soap_get_ns1__QualifyingPropertiesType
+#define soap_get__ns6__QualifyingProperties soap_get_ns6__QualifyingPropertiesType
 
 
-#define soap_read__ns1__QualifyingProperties soap_read_ns1__QualifyingPropertiesType
+#define soap_read__ns6__QualifyingProperties soap_read_ns6__QualifyingPropertiesType
 
 /* _ns3__SignatureAttribute is a typedef synonym for ns5__SignatureType */
 
@@ -3285,146 +3285,146 @@ SOAP_FMAC3 xsd__base64Binary * SOAP_FMAC4 soap_get_ns7__SVGType(struct soap*, xs
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__ByNameType
-#define SOAP_TYPE_ns1__ByNameType (131)
+#ifndef SOAP_TYPE_ns6__ByNameType
+#define SOAP_TYPE_ns6__ByNameType (131)
 #endif
 
-#define soap_default_ns1__ByNameType(soap, a) soap_default_std__string(soap, a)
+#define soap_default_ns6__ByNameType(soap, a) soap_default_std__string(soap, a)
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns1__ByNameType(struct soap*, const std::string *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns6__ByNameType(struct soap*, const std::string *);
 
-#define soap_ns1__ByNameType2s soap_std__string2s
+#define soap_ns6__ByNameType2s soap_std__string2s
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__ByNameType(struct soap*, const char*, int, const std::string*, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__ByNameType(struct soap*, const char*, int, const std::string*, const char*);
 
-#define soap_s2ns1__ByNameType soap_s2std__string
+#define soap_s2ns6__ByNameType soap_s2std__string
 
-SOAP_FMAC3 std::string * SOAP_FMAC4 soap_in_ns1__ByNameType(struct soap*, const char*, std::string*, const char*);
+SOAP_FMAC3 std::string * SOAP_FMAC4 soap_in_ns6__ByNameType(struct soap*, const char*, std::string*, const char*);
 
-#define soap_instantiate_ns1__ByNameType soap_instantiate_std__string
+#define soap_instantiate_ns6__ByNameType soap_instantiate_std__string
 
 
-#define soap_new_ns1__ByNameType soap_new_std__string
+#define soap_new_ns6__ByNameType soap_new_std__string
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns1__ByNameType(struct soap*, const std::string *, const char*, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns6__ByNameType(struct soap*, const std::string *, const char*, const char*);
 
-#ifndef soap_write_ns1__ByNameType
-#define soap_write_ns1__ByNameType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns1__ByNameType(soap, data), 0) || soap_put_ns1__ByNameType(soap, data, "ns1:ByNameType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__ByNameType
+#define soap_write_ns6__ByNameType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns6__ByNameType(soap, data), 0) || soap_put_ns6__ByNameType(soap, data, "ns6:ByNameType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 std::string * SOAP_FMAC4 soap_get_ns1__ByNameType(struct soap*, std::string *, const char*, const char*);
+SOAP_FMAC3 std::string * SOAP_FMAC4 soap_get_ns6__ByNameType(struct soap*, std::string *, const char*, const char*);
 
-#ifndef soap_read_ns1__ByNameType
-#define soap_read_ns1__ByNameType(soap, data) ( ((data) ? (soap_default_ns1__ByNameType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__ByNameType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__ByNameType
+#define soap_read_ns6__ByNameType(soap, data) ( ((data) ? (soap_default_ns6__ByNameType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__ByNameType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-/* ns1__NumberType is a typedef synonym for xsd__integer */
+/* ns6__NumberType is a typedef synonym for xsd__integer */
 
-#ifndef SOAP_TYPE_ns1__NumberType
-#define SOAP_TYPE_ns1__NumberType (130)
+#ifndef SOAP_TYPE_ns6__NumberType
+#define SOAP_TYPE_ns6__NumberType (130)
 #endif
 
-#define soap_default_ns1__NumberType(soap, a) soap_default_xsd__integer(soap, a)
+#define soap_default_ns6__NumberType(soap, a) soap_default_xsd__integer(soap, a)
 
 
-#define soap_serialize_ns1__NumberType soap_serialize_xsd__integer
+#define soap_serialize_ns6__NumberType soap_serialize_xsd__integer
 
 
-#define soap_ns1__NumberType2s soap_xsd__integer2s
+#define soap_ns6__NumberType2s soap_xsd__integer2s
 
 
-#define soap_out_ns1__NumberType soap_out_xsd__integer
+#define soap_out_ns6__NumberType soap_out_xsd__integer
 
 
-#define soap_s2ns1__NumberType soap_s2xsd__integer
+#define soap_s2ns6__NumberType soap_s2xsd__integer
 
 
-#define soap_in_ns1__NumberType soap_in_xsd__integer
+#define soap_in_ns6__NumberType soap_in_xsd__integer
 
 
-#define soap_instantiate_ns1__NumberType soap_instantiate_xsd__integer
+#define soap_instantiate_ns6__NumberType soap_instantiate_xsd__integer
 
 
-#define soap_new_ns1__NumberType soap_new_xsd__integer
+#define soap_new_ns6__NumberType soap_new_xsd__integer
 
 
-#define soap_put_ns1__NumberType soap_put_xsd__integer
+#define soap_put_ns6__NumberType soap_put_xsd__integer
 
 
-#define soap_write_ns1__NumberType soap_write_xsd__integer
+#define soap_write_ns6__NumberType soap_write_xsd__integer
 
 
-#define soap_get_ns1__NumberType soap_get_xsd__integer
+#define soap_get_ns6__NumberType soap_get_xsd__integer
 
 
-#define soap_read_ns1__NumberType soap_read_xsd__integer
+#define soap_read_ns6__NumberType soap_read_xsd__integer
 
 
-#ifndef SOAP_TYPE_ns1__IssuerType
-#define SOAP_TYPE_ns1__IssuerType (128)
+#ifndef SOAP_TYPE_ns6__IssuerType
+#define SOAP_TYPE_ns6__IssuerType (128)
 #endif
 
-#define soap_default_ns1__IssuerType(soap, a) soap_default_std__string(soap, a)
+#define soap_default_ns6__IssuerType(soap, a) soap_default_std__string(soap, a)
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns1__IssuerType(struct soap*, const std::string *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns6__IssuerType(struct soap*, const std::string *);
 
-#define soap_ns1__IssuerType2s soap_std__string2s
+#define soap_ns6__IssuerType2s soap_std__string2s
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__IssuerType(struct soap*, const char*, int, const std::string*, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__IssuerType(struct soap*, const char*, int, const std::string*, const char*);
 
-#define soap_s2ns1__IssuerType soap_s2std__string
+#define soap_s2ns6__IssuerType soap_s2std__string
 
-SOAP_FMAC3 std::string * SOAP_FMAC4 soap_in_ns1__IssuerType(struct soap*, const char*, std::string*, const char*);
+SOAP_FMAC3 std::string * SOAP_FMAC4 soap_in_ns6__IssuerType(struct soap*, const char*, std::string*, const char*);
 
-#define soap_instantiate_ns1__IssuerType soap_instantiate_std__string
+#define soap_instantiate_ns6__IssuerType soap_instantiate_std__string
 
 
-#define soap_new_ns1__IssuerType soap_new_std__string
+#define soap_new_ns6__IssuerType soap_new_std__string
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns1__IssuerType(struct soap*, const std::string *, const char*, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns6__IssuerType(struct soap*, const std::string *, const char*, const char*);
 
-#ifndef soap_write_ns1__IssuerType
-#define soap_write_ns1__IssuerType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns1__IssuerType(soap, data), 0) || soap_put_ns1__IssuerType(soap, data, "ns1:IssuerType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__IssuerType
+#define soap_write_ns6__IssuerType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns6__IssuerType(soap, data), 0) || soap_put_ns6__IssuerType(soap, data, "ns6:IssuerType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 std::string * SOAP_FMAC4 soap_get_ns1__IssuerType(struct soap*, std::string *, const char*, const char*);
+SOAP_FMAC3 std::string * SOAP_FMAC4 soap_get_ns6__IssuerType(struct soap*, std::string *, const char*, const char*);
 
-#ifndef soap_read_ns1__IssuerType
-#define soap_read_ns1__IssuerType(soap, data) ( ((data) ? (soap_default_ns1__IssuerType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__IssuerType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__IssuerType
+#define soap_read_ns6__IssuerType(soap, data) ( ((data) ? (soap_default_ns6__IssuerType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__IssuerType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__EncapsulatedTimeStampType
-#define SOAP_TYPE_ns1__EncapsulatedTimeStampType (127)
+#ifndef SOAP_TYPE_ns6__EncapsulatedTimeStampType
+#define SOAP_TYPE_ns6__EncapsulatedTimeStampType (127)
 #endif
 
-#define soap_default_ns1__EncapsulatedTimeStampType(soap, a) (a)->xsd__base64Binary::soap_default(soap)
+#define soap_default_ns6__EncapsulatedTimeStampType(soap, a) (a)->xsd__base64Binary::soap_default(soap)
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns1__EncapsulatedTimeStampType(struct soap*, const xsd__base64Binary *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__EncapsulatedTimeStampType(struct soap*, const char*, int, const xsd__base64Binary *, const char*);
-SOAP_FMAC3 xsd__base64Binary * SOAP_FMAC4 soap_in_ns1__EncapsulatedTimeStampType(struct soap*, const char*, xsd__base64Binary *, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns6__EncapsulatedTimeStampType(struct soap*, const xsd__base64Binary *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__EncapsulatedTimeStampType(struct soap*, const char*, int, const xsd__base64Binary *, const char*);
+SOAP_FMAC3 xsd__base64Binary * SOAP_FMAC4 soap_in_ns6__EncapsulatedTimeStampType(struct soap*, const char*, xsd__base64Binary *, const char*);
 
-#define soap_instantiate_ns1__EncapsulatedTimeStampType soap_instantiate_xsd__base64Binary
-
-
-#define soap_new_ns1__EncapsulatedTimeStampType soap_new_xsd__base64Binary
+#define soap_instantiate_ns6__EncapsulatedTimeStampType soap_instantiate_xsd__base64Binary
 
 
-#define soap_new_req_ns1__EncapsulatedTimeStampType soap_new_req_xsd__base64Binary
+#define soap_new_ns6__EncapsulatedTimeStampType soap_new_xsd__base64Binary
 
 
-#define soap_new_set_ns1__EncapsulatedTimeStampType soap_new_set_xsd__base64Binary
+#define soap_new_req_ns6__EncapsulatedTimeStampType soap_new_req_xsd__base64Binary
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns1__EncapsulatedTimeStampType(struct soap*, const xsd__base64Binary *, const char*, const char*);
 
-#ifndef soap_write_ns1__EncapsulatedTimeStampType
-#define soap_write_ns1__EncapsulatedTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:EncapsulatedTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
+#define soap_new_set_ns6__EncapsulatedTimeStampType soap_new_set_xsd__base64Binary
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns6__EncapsulatedTimeStampType(struct soap*, const xsd__base64Binary *, const char*, const char*);
+
+#ifndef soap_write_ns6__EncapsulatedTimeStampType
+#define soap_write_ns6__EncapsulatedTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:EncapsulatedTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 xsd__base64Binary * SOAP_FMAC4 soap_get_ns1__EncapsulatedTimeStampType(struct soap*, xsd__base64Binary *, const char*, const char*);
+SOAP_FMAC3 xsd__base64Binary * SOAP_FMAC4 soap_get_ns6__EncapsulatedTimeStampType(struct soap*, xsd__base64Binary *, const char*, const char*);
 
-#ifndef soap_read_ns1__EncapsulatedTimeStampType
-#define soap_read_ns1__EncapsulatedTimeStampType(soap, data) ( ((data) ? (soap_default_ns1__EncapsulatedTimeStampType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__EncapsulatedTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__EncapsulatedTimeStampType
+#define soap_read_ns6__EncapsulatedTimeStampType(soap, data) ( ((data) ? (soap_default_ns6__EncapsulatedTimeStampType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__EncapsulatedTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
@@ -3993,583 +3993,583 @@ SOAP_FMAC3 std::string * SOAP_FMAC4 soap_get_ns5__X509IssuerNameType(struct soap
 #endif
 
 
-#ifndef SOAP_TYPE_ns4__Status
-#define SOAP_TYPE_ns4__Status (108)
+#ifndef SOAP_TYPE_pdf__Status
+#define SOAP_TYPE_pdf__Status (108)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns4__Status(struct soap*, const char*, int, const ns4__Status *, const char*);
-SOAP_FMAC3 ns4__Status * SOAP_FMAC4 soap_in_ns4__Status(struct soap*, const char*, ns4__Status *, const char*);
-SOAP_FMAC1 ns4__Status * SOAP_FMAC2 soap_instantiate_ns4__Status(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_pdf__Status(struct soap*, const char*, int, const pdf__Status *, const char*);
+SOAP_FMAC3 pdf__Status * SOAP_FMAC4 soap_in_pdf__Status(struct soap*, const char*, pdf__Status *, const char*);
+SOAP_FMAC1 pdf__Status * SOAP_FMAC2 soap_instantiate_pdf__Status(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns4__Status * soap_new_ns4__Status(struct soap *soap, int n = -1) { return soap_instantiate_ns4__Status(soap, n, NULL, NULL, NULL); }
+inline pdf__Status * soap_new_pdf__Status(struct soap *soap, int n = -1) { return soap_instantiate_pdf__Status(soap, n, NULL, NULL, NULL); }
 
-inline ns4__Status * soap_new_req_ns4__Status(
+inline pdf__Status * soap_new_req_pdf__Status(
 	struct soap *soap,
 	const std::string& Code,
 	const std::string& Message)
-{	ns4__Status *_p = soap_new_ns4__Status(soap);
+{	pdf__Status *_p = soap_new_pdf__Status(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__Status::Code = Code;
-		_p->ns4__Status::Message = Message;
+		_p->pdf__Status::Code = Code;
+		_p->pdf__Status::Message = Message;
 	}
 	return _p;
 }
 
-inline ns4__Status * soap_new_set_ns4__Status(
+inline pdf__Status * soap_new_set_pdf__Status(
 	struct soap *soap,
 	const std::string& Code,
 	const std::string& Message,
 	std::string *Field,
 	std::string *FieldValue)
-{	ns4__Status *_p = soap_new_ns4__Status(soap);
+{	pdf__Status *_p = soap_new_pdf__Status(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__Status::Code = Code;
-		_p->ns4__Status::Message = Message;
-		_p->ns4__Status::Field = Field;
-		_p->ns4__Status::FieldValue = FieldValue;
+		_p->pdf__Status::Code = Code;
+		_p->pdf__Status::Message = Message;
+		_p->pdf__Status::Field = Field;
+		_p->pdf__Status::FieldValue = FieldValue;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns4__Status
-#define soap_write_ns4__Status(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns4:Status", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_pdf__Status
+#define soap_write_pdf__Status(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "pdf:Status", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__Status * SOAP_FMAC4 soap_get_ns4__Status(struct soap*, ns4__Status *, const char*, const char*);
+SOAP_FMAC3 pdf__Status * SOAP_FMAC4 soap_get_pdf__Status(struct soap*, pdf__Status *, const char*, const char*);
 
-#ifndef soap_read_ns4__Status
-#define soap_read_ns4__Status(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns4__Status(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_pdf__Status
+#define soap_read_pdf__Status(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_pdf__Status(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns4__SignResponse
-#define SOAP_TYPE_ns4__SignResponse (107)
+#ifndef SOAP_TYPE_pdf__SignResponse
+#define SOAP_TYPE_pdf__SignResponse (107)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns4__SignResponse(struct soap*, const char*, int, const ns4__SignResponse *, const char*);
-SOAP_FMAC3 ns4__SignResponse * SOAP_FMAC4 soap_in_ns4__SignResponse(struct soap*, const char*, ns4__SignResponse *, const char*);
-SOAP_FMAC1 ns4__SignResponse * SOAP_FMAC2 soap_instantiate_ns4__SignResponse(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_pdf__SignResponse(struct soap*, const char*, int, const pdf__SignResponse *, const char*);
+SOAP_FMAC3 pdf__SignResponse * SOAP_FMAC4 soap_in_pdf__SignResponse(struct soap*, const char*, pdf__SignResponse *, const char*);
+SOAP_FMAC1 pdf__SignResponse * SOAP_FMAC2 soap_instantiate_pdf__SignResponse(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns4__SignResponse * soap_new_ns4__SignResponse(struct soap *soap, int n = -1) { return soap_instantiate_ns4__SignResponse(soap, n, NULL, NULL, NULL); }
+inline pdf__SignResponse * soap_new_pdf__SignResponse(struct soap *soap, int n = -1) { return soap_instantiate_pdf__SignResponse(soap, n, NULL, NULL, NULL); }
 
-inline ns4__SignResponse * soap_new_req_ns4__SignResponse(
+inline pdf__SignResponse * soap_new_req_pdf__SignResponse(
 	struct soap *soap,
 	const std::string& ProcessId,
-	ns4__Status *Status)
-{	ns4__SignResponse *_p = soap_new_ns4__SignResponse(soap);
+	pdf__Status *Status)
+{	pdf__SignResponse *_p = soap_new_pdf__SignResponse(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__SignResponse::ProcessId = ProcessId;
-		_p->ns4__SignResponse::Status = Status;
+		_p->pdf__SignResponse::ProcessId = ProcessId;
+		_p->pdf__SignResponse::Status = Status;
 	}
 	return _p;
 }
 
-inline ns4__SignResponse * soap_new_set_ns4__SignResponse(
+inline pdf__SignResponse * soap_new_set_pdf__SignResponse(
 	struct soap *soap,
 	const std::string& ProcessId,
-	ns4__Status *Status,
+	pdf__Status *Status,
 	xsd__base64Binary *SignedDocument)
-{	ns4__SignResponse *_p = soap_new_ns4__SignResponse(soap);
+{	pdf__SignResponse *_p = soap_new_pdf__SignResponse(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__SignResponse::ProcessId = ProcessId;
-		_p->ns4__SignResponse::Status = Status;
-		_p->ns4__SignResponse::SignedDocument = SignedDocument;
+		_p->pdf__SignResponse::ProcessId = ProcessId;
+		_p->pdf__SignResponse::Status = Status;
+		_p->pdf__SignResponse::SignedDocument = SignedDocument;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns4__SignResponse
-#define soap_write_ns4__SignResponse(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns4:SignResponse", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_pdf__SignResponse
+#define soap_write_pdf__SignResponse(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "pdf:SignResponse", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__SignResponse * SOAP_FMAC4 soap_get_ns4__SignResponse(struct soap*, ns4__SignResponse *, const char*, const char*);
+SOAP_FMAC3 pdf__SignResponse * SOAP_FMAC4 soap_get_pdf__SignResponse(struct soap*, pdf__SignResponse *, const char*, const char*);
 
-#ifndef soap_read_ns4__SignResponse
-#define soap_read_ns4__SignResponse(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns4__SignResponse(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_pdf__SignResponse
+#define soap_read_pdf__SignResponse(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_pdf__SignResponse(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns4__SubAttributeType
-#define SOAP_TYPE_ns4__SubAttributeType (106)
+#ifndef SOAP_TYPE_pdf__SubAttributeType
+#define SOAP_TYPE_pdf__SubAttributeType (106)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns4__SubAttributeType(struct soap*, const char*, int, const ns4__SubAttributeType *, const char*);
-SOAP_FMAC3 ns4__SubAttributeType * SOAP_FMAC4 soap_in_ns4__SubAttributeType(struct soap*, const char*, ns4__SubAttributeType *, const char*);
-SOAP_FMAC1 ns4__SubAttributeType * SOAP_FMAC2 soap_instantiate_ns4__SubAttributeType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_pdf__SubAttributeType(struct soap*, const char*, int, const pdf__SubAttributeType *, const char*);
+SOAP_FMAC3 pdf__SubAttributeType * SOAP_FMAC4 soap_in_pdf__SubAttributeType(struct soap*, const char*, pdf__SubAttributeType *, const char*);
+SOAP_FMAC1 pdf__SubAttributeType * SOAP_FMAC2 soap_instantiate_pdf__SubAttributeType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns4__SubAttributeType * soap_new_ns4__SubAttributeType(struct soap *soap, int n = -1) { return soap_instantiate_ns4__SubAttributeType(soap, n, NULL, NULL, NULL); }
+inline pdf__SubAttributeType * soap_new_pdf__SubAttributeType(struct soap *soap, int n = -1) { return soap_instantiate_pdf__SubAttributeType(soap, n, NULL, NULL, NULL); }
 
-inline ns4__SubAttributeType * soap_new_req_ns4__SubAttributeType(
+inline pdf__SubAttributeType * soap_new_req_pdf__SubAttributeType(
 	struct soap *soap,
 	const std::string& AttributeID)
-{	ns4__SubAttributeType *_p = soap_new_ns4__SubAttributeType(soap);
+{	pdf__SubAttributeType *_p = soap_new_pdf__SubAttributeType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__SubAttributeType::AttributeID = AttributeID;
+		_p->pdf__SubAttributeType::AttributeID = AttributeID;
 	}
 	return _p;
 }
 
-inline ns4__SubAttributeType * soap_new_set_ns4__SubAttributeType(
+inline pdf__SubAttributeType * soap_new_set_pdf__SubAttributeType(
 	struct soap *soap,
 	const std::string& AttributeID,
 	std::string *Description,
 	std::string *Value,
-	ns4__LegalActListType *LegalActList,
+	pdf__LegalActListType *LegalActList,
 	std::string *Type)
-{	ns4__SubAttributeType *_p = soap_new_ns4__SubAttributeType(soap);
+{	pdf__SubAttributeType *_p = soap_new_pdf__SubAttributeType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__SubAttributeType::AttributeID = AttributeID;
-		_p->ns4__SubAttributeType::Description = Description;
-		_p->ns4__SubAttributeType::Value = Value;
-		_p->ns4__SubAttributeType::LegalActList = LegalActList;
-		_p->ns4__SubAttributeType::Type = Type;
+		_p->pdf__SubAttributeType::AttributeID = AttributeID;
+		_p->pdf__SubAttributeType::Description = Description;
+		_p->pdf__SubAttributeType::Value = Value;
+		_p->pdf__SubAttributeType::LegalActList = LegalActList;
+		_p->pdf__SubAttributeType::Type = Type;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns4__SubAttributeType
-#define soap_write_ns4__SubAttributeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns4:SubAttributeType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_pdf__SubAttributeType
+#define soap_write_pdf__SubAttributeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "pdf:SubAttributeType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__SubAttributeType * SOAP_FMAC4 soap_get_ns4__SubAttributeType(struct soap*, ns4__SubAttributeType *, const char*, const char*);
+SOAP_FMAC3 pdf__SubAttributeType * SOAP_FMAC4 soap_get_pdf__SubAttributeType(struct soap*, pdf__SubAttributeType *, const char*, const char*);
 
-#ifndef soap_read_ns4__SubAttributeType
-#define soap_read_ns4__SubAttributeType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns4__SubAttributeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_pdf__SubAttributeType
+#define soap_read_pdf__SubAttributeType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_pdf__SubAttributeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns4__SubAttributeListType
-#define SOAP_TYPE_ns4__SubAttributeListType (105)
+#ifndef SOAP_TYPE_pdf__SubAttributeListType
+#define SOAP_TYPE_pdf__SubAttributeListType (105)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns4__SubAttributeListType(struct soap*, const char*, int, const ns4__SubAttributeListType *, const char*);
-SOAP_FMAC3 ns4__SubAttributeListType * SOAP_FMAC4 soap_in_ns4__SubAttributeListType(struct soap*, const char*, ns4__SubAttributeListType *, const char*);
-SOAP_FMAC1 ns4__SubAttributeListType * SOAP_FMAC2 soap_instantiate_ns4__SubAttributeListType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_pdf__SubAttributeListType(struct soap*, const char*, int, const pdf__SubAttributeListType *, const char*);
+SOAP_FMAC3 pdf__SubAttributeListType * SOAP_FMAC4 soap_in_pdf__SubAttributeListType(struct soap*, const char*, pdf__SubAttributeListType *, const char*);
+SOAP_FMAC1 pdf__SubAttributeListType * SOAP_FMAC2 soap_instantiate_pdf__SubAttributeListType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns4__SubAttributeListType * soap_new_ns4__SubAttributeListType(struct soap *soap, int n = -1) { return soap_instantiate_ns4__SubAttributeListType(soap, n, NULL, NULL, NULL); }
+inline pdf__SubAttributeListType * soap_new_pdf__SubAttributeListType(struct soap *soap, int n = -1) { return soap_instantiate_pdf__SubAttributeListType(soap, n, NULL, NULL, NULL); }
 
-inline ns4__SubAttributeListType * soap_new_req_ns4__SubAttributeListType(
+inline pdf__SubAttributeListType * soap_new_req_pdf__SubAttributeListType(
 	struct soap *soap,
-	const std::vector<ns4__SubAttributeType *> & SubAttribute)
-{	ns4__SubAttributeListType *_p = soap_new_ns4__SubAttributeListType(soap);
+	const std::vector<pdf__SubAttributeType *> & SubAttribute)
+{	pdf__SubAttributeListType *_p = soap_new_pdf__SubAttributeListType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__SubAttributeListType::SubAttribute = SubAttribute;
+		_p->pdf__SubAttributeListType::SubAttribute = SubAttribute;
 	}
 	return _p;
 }
 
-inline ns4__SubAttributeListType * soap_new_set_ns4__SubAttributeListType(
+inline pdf__SubAttributeListType * soap_new_set_pdf__SubAttributeListType(
 	struct soap *soap,
-	const std::vector<ns4__SubAttributeType *> & SubAttribute)
-{	ns4__SubAttributeListType *_p = soap_new_ns4__SubAttributeListType(soap);
+	const std::vector<pdf__SubAttributeType *> & SubAttribute)
+{	pdf__SubAttributeListType *_p = soap_new_pdf__SubAttributeListType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__SubAttributeListType::SubAttribute = SubAttribute;
+		_p->pdf__SubAttributeListType::SubAttribute = SubAttribute;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns4__SubAttributeListType
-#define soap_write_ns4__SubAttributeListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns4:SubAttributeListType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_pdf__SubAttributeListType
+#define soap_write_pdf__SubAttributeListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "pdf:SubAttributeListType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__SubAttributeListType * SOAP_FMAC4 soap_get_ns4__SubAttributeListType(struct soap*, ns4__SubAttributeListType *, const char*, const char*);
+SOAP_FMAC3 pdf__SubAttributeListType * SOAP_FMAC4 soap_get_pdf__SubAttributeListType(struct soap*, pdf__SubAttributeListType *, const char*, const char*);
 
-#ifndef soap_read_ns4__SubAttributeListType
-#define soap_read_ns4__SubAttributeListType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns4__SubAttributeListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_pdf__SubAttributeListType
+#define soap_read_pdf__SubAttributeListType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_pdf__SubAttributeListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns4__LegalActListType
-#define SOAP_TYPE_ns4__LegalActListType (104)
+#ifndef SOAP_TYPE_pdf__LegalActListType
+#define SOAP_TYPE_pdf__LegalActListType (104)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns4__LegalActListType(struct soap*, const char*, int, const ns4__LegalActListType *, const char*);
-SOAP_FMAC3 ns4__LegalActListType * SOAP_FMAC4 soap_in_ns4__LegalActListType(struct soap*, const char*, ns4__LegalActListType *, const char*);
-SOAP_FMAC1 ns4__LegalActListType * SOAP_FMAC2 soap_instantiate_ns4__LegalActListType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_pdf__LegalActListType(struct soap*, const char*, int, const pdf__LegalActListType *, const char*);
+SOAP_FMAC3 pdf__LegalActListType * SOAP_FMAC4 soap_in_pdf__LegalActListType(struct soap*, const char*, pdf__LegalActListType *, const char*);
+SOAP_FMAC1 pdf__LegalActListType * SOAP_FMAC2 soap_instantiate_pdf__LegalActListType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns4__LegalActListType * soap_new_ns4__LegalActListType(struct soap *soap, int n = -1) { return soap_instantiate_ns4__LegalActListType(soap, n, NULL, NULL, NULL); }
+inline pdf__LegalActListType * soap_new_pdf__LegalActListType(struct soap *soap, int n = -1) { return soap_instantiate_pdf__LegalActListType(soap, n, NULL, NULL, NULL); }
 
-inline ns4__LegalActListType * soap_new_req_ns4__LegalActListType(
-	struct soap *soap,
-	const std::vector<std::string> & LegalAct)
-{	ns4__LegalActListType *_p = soap_new_ns4__LegalActListType(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->ns4__LegalActListType::LegalAct = LegalAct;
-	}
-	return _p;
-}
-
-inline ns4__LegalActListType * soap_new_set_ns4__LegalActListType(
+inline pdf__LegalActListType * soap_new_req_pdf__LegalActListType(
 	struct soap *soap,
 	const std::vector<std::string> & LegalAct)
-{	ns4__LegalActListType *_p = soap_new_ns4__LegalActListType(soap);
+{	pdf__LegalActListType *_p = soap_new_pdf__LegalActListType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__LegalActListType::LegalAct = LegalAct;
+		_p->pdf__LegalActListType::LegalAct = LegalAct;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns4__LegalActListType
-#define soap_write_ns4__LegalActListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns4:LegalActListType", NULL) || soap_end_send(soap), (soap)->error )
+inline pdf__LegalActListType * soap_new_set_pdf__LegalActListType(
+	struct soap *soap,
+	const std::vector<std::string> & LegalAct)
+{	pdf__LegalActListType *_p = soap_new_pdf__LegalActListType(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->pdf__LegalActListType::LegalAct = LegalAct;
+	}
+	return _p;
+}
+
+#ifndef soap_write_pdf__LegalActListType
+#define soap_write_pdf__LegalActListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "pdf:LegalActListType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__LegalActListType * SOAP_FMAC4 soap_get_ns4__LegalActListType(struct soap*, ns4__LegalActListType *, const char*, const char*);
+SOAP_FMAC3 pdf__LegalActListType * SOAP_FMAC4 soap_get_pdf__LegalActListType(struct soap*, pdf__LegalActListType *, const char*, const char*);
 
-#ifndef soap_read_ns4__LegalActListType
-#define soap_read_ns4__LegalActListType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns4__LegalActListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_pdf__LegalActListType
+#define soap_read_pdf__LegalActListType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_pdf__LegalActListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns4__MainAttributeType
-#define SOAP_TYPE_ns4__MainAttributeType (103)
+#ifndef SOAP_TYPE_pdf__MainAttributeType
+#define SOAP_TYPE_pdf__MainAttributeType (103)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns4__MainAttributeType(struct soap*, const char*, int, const ns4__MainAttributeType *, const char*);
-SOAP_FMAC3 ns4__MainAttributeType * SOAP_FMAC4 soap_in_ns4__MainAttributeType(struct soap*, const char*, ns4__MainAttributeType *, const char*);
-SOAP_FMAC1 ns4__MainAttributeType * SOAP_FMAC2 soap_instantiate_ns4__MainAttributeType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_pdf__MainAttributeType(struct soap*, const char*, int, const pdf__MainAttributeType *, const char*);
+SOAP_FMAC3 pdf__MainAttributeType * SOAP_FMAC4 soap_in_pdf__MainAttributeType(struct soap*, const char*, pdf__MainAttributeType *, const char*);
+SOAP_FMAC1 pdf__MainAttributeType * SOAP_FMAC2 soap_instantiate_pdf__MainAttributeType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns4__MainAttributeType * soap_new_ns4__MainAttributeType(struct soap *soap, int n = -1) { return soap_instantiate_ns4__MainAttributeType(soap, n, NULL, NULL, NULL); }
+inline pdf__MainAttributeType * soap_new_pdf__MainAttributeType(struct soap *soap, int n = -1) { return soap_instantiate_pdf__MainAttributeType(soap, n, NULL, NULL, NULL); }
 
-inline ns4__MainAttributeType * soap_new_req_ns4__MainAttributeType(
+inline pdf__MainAttributeType * soap_new_req_pdf__MainAttributeType(
 	struct soap *soap,
 	const std::string& AttributeID)
-{	ns4__MainAttributeType *_p = soap_new_ns4__MainAttributeType(soap);
+{	pdf__MainAttributeType *_p = soap_new_pdf__MainAttributeType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__MainAttributeType::AttributeID = AttributeID;
+		_p->pdf__MainAttributeType::AttributeID = AttributeID;
 	}
 	return _p;
 }
 
-inline ns4__MainAttributeType * soap_new_set_ns4__MainAttributeType(
+inline pdf__MainAttributeType * soap_new_set_pdf__MainAttributeType(
 	struct soap *soap,
 	const std::string& AttributeID,
 	std::string *Description,
-	ns4__LegalActListType *LegalActList,
-	ns4__SubAttributeListType *SubAttributeList)
-{	ns4__MainAttributeType *_p = soap_new_ns4__MainAttributeType(soap);
+	pdf__LegalActListType *LegalActList,
+	pdf__SubAttributeListType *SubAttributeList)
+{	pdf__MainAttributeType *_p = soap_new_pdf__MainAttributeType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__MainAttributeType::AttributeID = AttributeID;
-		_p->ns4__MainAttributeType::Description = Description;
-		_p->ns4__MainAttributeType::LegalActList = LegalActList;
-		_p->ns4__MainAttributeType::SubAttributeList = SubAttributeList;
+		_p->pdf__MainAttributeType::AttributeID = AttributeID;
+		_p->pdf__MainAttributeType::Description = Description;
+		_p->pdf__MainAttributeType::LegalActList = LegalActList;
+		_p->pdf__MainAttributeType::SubAttributeList = SubAttributeList;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns4__MainAttributeType
-#define soap_write_ns4__MainAttributeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns4:MainAttributeType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_pdf__MainAttributeType
+#define soap_write_pdf__MainAttributeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "pdf:MainAttributeType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__MainAttributeType * SOAP_FMAC4 soap_get_ns4__MainAttributeType(struct soap*, ns4__MainAttributeType *, const char*, const char*);
+SOAP_FMAC3 pdf__MainAttributeType * SOAP_FMAC4 soap_get_pdf__MainAttributeType(struct soap*, pdf__MainAttributeType *, const char*, const char*);
 
-#ifndef soap_read_ns4__MainAttributeType
-#define soap_read_ns4__MainAttributeType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns4__MainAttributeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_pdf__MainAttributeType
+#define soap_read_pdf__MainAttributeType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_pdf__MainAttributeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns4__AttributeSupplierType
-#define SOAP_TYPE_ns4__AttributeSupplierType (102)
+#ifndef SOAP_TYPE_pdf__AttributeSupplierType
+#define SOAP_TYPE_pdf__AttributeSupplierType (102)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns4__AttributeSupplierType(struct soap*, const char*, int, const ns4__AttributeSupplierType *, const char*);
-SOAP_FMAC3 ns4__AttributeSupplierType * SOAP_FMAC4 soap_in_ns4__AttributeSupplierType(struct soap*, const char*, ns4__AttributeSupplierType *, const char*);
-SOAP_FMAC1 ns4__AttributeSupplierType * SOAP_FMAC2 soap_instantiate_ns4__AttributeSupplierType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_pdf__AttributeSupplierType(struct soap*, const char*, int, const pdf__AttributeSupplierType *, const char*);
+SOAP_FMAC3 pdf__AttributeSupplierType * SOAP_FMAC4 soap_in_pdf__AttributeSupplierType(struct soap*, const char*, pdf__AttributeSupplierType *, const char*);
+SOAP_FMAC1 pdf__AttributeSupplierType * SOAP_FMAC2 soap_instantiate_pdf__AttributeSupplierType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns4__AttributeSupplierType * soap_new_ns4__AttributeSupplierType(struct soap *soap, int n = -1) { return soap_instantiate_ns4__AttributeSupplierType(soap, n, NULL, NULL, NULL); }
+inline pdf__AttributeSupplierType * soap_new_pdf__AttributeSupplierType(struct soap *soap, int n = -1) { return soap_instantiate_pdf__AttributeSupplierType(soap, n, NULL, NULL, NULL); }
 
-inline ns4__AttributeSupplierType * soap_new_req_ns4__AttributeSupplierType(
+inline pdf__AttributeSupplierType * soap_new_req_pdf__AttributeSupplierType(
 	struct soap *soap,
 	const std::string& Id,
 	const std::string& Name)
-{	ns4__AttributeSupplierType *_p = soap_new_ns4__AttributeSupplierType(soap);
+{	pdf__AttributeSupplierType *_p = soap_new_pdf__AttributeSupplierType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__AttributeSupplierType::Id = Id;
-		_p->ns4__AttributeSupplierType::Name = Name;
+		_p->pdf__AttributeSupplierType::Id = Id;
+		_p->pdf__AttributeSupplierType::Name = Name;
 	}
 	return _p;
 }
 
-inline ns4__AttributeSupplierType * soap_new_set_ns4__AttributeSupplierType(
+inline pdf__AttributeSupplierType * soap_new_set_pdf__AttributeSupplierType(
 	struct soap *soap,
 	const std::string& Id,
 	const std::string& Name,
 	std::string *Type)
-{	ns4__AttributeSupplierType *_p = soap_new_ns4__AttributeSupplierType(soap);
+{	pdf__AttributeSupplierType *_p = soap_new_pdf__AttributeSupplierType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__AttributeSupplierType::Id = Id;
-		_p->ns4__AttributeSupplierType::Name = Name;
-		_p->ns4__AttributeSupplierType::Type = Type;
+		_p->pdf__AttributeSupplierType::Id = Id;
+		_p->pdf__AttributeSupplierType::Name = Name;
+		_p->pdf__AttributeSupplierType::Type = Type;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns4__AttributeSupplierType
-#define soap_write_ns4__AttributeSupplierType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns4:AttributeSupplierType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_pdf__AttributeSupplierType
+#define soap_write_pdf__AttributeSupplierType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "pdf:AttributeSupplierType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__AttributeSupplierType * SOAP_FMAC4 soap_get_ns4__AttributeSupplierType(struct soap*, ns4__AttributeSupplierType *, const char*, const char*);
+SOAP_FMAC3 pdf__AttributeSupplierType * SOAP_FMAC4 soap_get_pdf__AttributeSupplierType(struct soap*, pdf__AttributeSupplierType *, const char*, const char*);
 
-#ifndef soap_read_ns4__AttributeSupplierType
-#define soap_read_ns4__AttributeSupplierType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns4__AttributeSupplierType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_pdf__AttributeSupplierType
+#define soap_read_pdf__AttributeSupplierType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_pdf__AttributeSupplierType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns4__AttributeType
-#define SOAP_TYPE_ns4__AttributeType (101)
+#ifndef SOAP_TYPE_pdf__AttributeType
+#define SOAP_TYPE_pdf__AttributeType (101)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns4__AttributeType(struct soap*, const char*, int, const ns4__AttributeType *, const char*);
-SOAP_FMAC3 ns4__AttributeType * SOAP_FMAC4 soap_in_ns4__AttributeType(struct soap*, const char*, ns4__AttributeType *, const char*);
-SOAP_FMAC1 ns4__AttributeType * SOAP_FMAC2 soap_instantiate_ns4__AttributeType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_pdf__AttributeType(struct soap*, const char*, int, const pdf__AttributeType *, const char*);
+SOAP_FMAC3 pdf__AttributeType * SOAP_FMAC4 soap_in_pdf__AttributeType(struct soap*, const char*, pdf__AttributeType *, const char*);
+SOAP_FMAC1 pdf__AttributeType * SOAP_FMAC2 soap_instantiate_pdf__AttributeType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns4__AttributeType * soap_new_ns4__AttributeType(struct soap *soap, int n = -1) { return soap_instantiate_ns4__AttributeType(soap, n, NULL, NULL, NULL); }
+inline pdf__AttributeType * soap_new_pdf__AttributeType(struct soap *soap, int n = -1) { return soap_instantiate_pdf__AttributeType(soap, n, NULL, NULL, NULL); }
 
-inline ns4__AttributeType * soap_new_req_ns4__AttributeType(
+inline pdf__AttributeType * soap_new_req_pdf__AttributeType(
 	struct soap *soap,
-	ns4__AttributeSupplierType *AttributeSupplier,
-	ns4__MainAttributeType *MainAttribute)
-{	ns4__AttributeType *_p = soap_new_ns4__AttributeType(soap);
+	pdf__AttributeSupplierType *AttributeSupplier,
+	pdf__MainAttributeType *MainAttribute)
+{	pdf__AttributeType *_p = soap_new_pdf__AttributeType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__AttributeType::AttributeSupplier = AttributeSupplier;
-		_p->ns4__AttributeType::MainAttribute = MainAttribute;
+		_p->pdf__AttributeType::AttributeSupplier = AttributeSupplier;
+		_p->pdf__AttributeType::MainAttribute = MainAttribute;
 	}
 	return _p;
 }
 
-inline ns4__AttributeType * soap_new_set_ns4__AttributeType(
+inline pdf__AttributeType * soap_new_set_pdf__AttributeType(
 	struct soap *soap,
-	ns4__AttributeSupplierType *AttributeSupplier,
-	ns4__MainAttributeType *MainAttribute)
-{	ns4__AttributeType *_p = soap_new_ns4__AttributeType(soap);
+	pdf__AttributeSupplierType *AttributeSupplier,
+	pdf__MainAttributeType *MainAttribute)
+{	pdf__AttributeType *_p = soap_new_pdf__AttributeType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__AttributeType::AttributeSupplier = AttributeSupplier;
-		_p->ns4__AttributeType::MainAttribute = MainAttribute;
+		_p->pdf__AttributeType::AttributeSupplier = AttributeSupplier;
+		_p->pdf__AttributeType::MainAttribute = MainAttribute;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns4__AttributeType
-#define soap_write_ns4__AttributeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns4:AttributeType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_pdf__AttributeType
+#define soap_write_pdf__AttributeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "pdf:AttributeType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__AttributeType * SOAP_FMAC4 soap_get_ns4__AttributeType(struct soap*, ns4__AttributeType *, const char*, const char*);
+SOAP_FMAC3 pdf__AttributeType * SOAP_FMAC4 soap_get_pdf__AttributeType(struct soap*, pdf__AttributeType *, const char*, const char*);
 
-#ifndef soap_read_ns4__AttributeType
-#define soap_read_ns4__AttributeType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns4__AttributeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_pdf__AttributeType
+#define soap_read_pdf__AttributeType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_pdf__AttributeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns4__AttributeListType
-#define SOAP_TYPE_ns4__AttributeListType (100)
+#ifndef SOAP_TYPE_pdf__AttributeListType
+#define SOAP_TYPE_pdf__AttributeListType (100)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns4__AttributeListType(struct soap*, const char*, int, const ns4__AttributeListType *, const char*);
-SOAP_FMAC3 ns4__AttributeListType * SOAP_FMAC4 soap_in_ns4__AttributeListType(struct soap*, const char*, ns4__AttributeListType *, const char*);
-SOAP_FMAC1 ns4__AttributeListType * SOAP_FMAC2 soap_instantiate_ns4__AttributeListType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_pdf__AttributeListType(struct soap*, const char*, int, const pdf__AttributeListType *, const char*);
+SOAP_FMAC3 pdf__AttributeListType * SOAP_FMAC4 soap_in_pdf__AttributeListType(struct soap*, const char*, pdf__AttributeListType *, const char*);
+SOAP_FMAC1 pdf__AttributeListType * SOAP_FMAC2 soap_instantiate_pdf__AttributeListType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns4__AttributeListType * soap_new_ns4__AttributeListType(struct soap *soap, int n = -1) { return soap_instantiate_ns4__AttributeListType(soap, n, NULL, NULL, NULL); }
+inline pdf__AttributeListType * soap_new_pdf__AttributeListType(struct soap *soap, int n = -1) { return soap_instantiate_pdf__AttributeListType(soap, n, NULL, NULL, NULL); }
 
-inline ns4__AttributeListType * soap_new_req_ns4__AttributeListType(
+inline pdf__AttributeListType * soap_new_req_pdf__AttributeListType(
 	struct soap *soap,
-	const std::vector<ns4__AttributeType *> & Attribute)
-{	ns4__AttributeListType *_p = soap_new_ns4__AttributeListType(soap);
+	const std::vector<pdf__AttributeType *> & Attribute)
+{	pdf__AttributeListType *_p = soap_new_pdf__AttributeListType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__AttributeListType::Attribute = Attribute;
+		_p->pdf__AttributeListType::Attribute = Attribute;
 	}
 	return _p;
 }
 
-inline ns4__AttributeListType * soap_new_set_ns4__AttributeListType(
+inline pdf__AttributeListType * soap_new_set_pdf__AttributeListType(
 	struct soap *soap,
-	const std::vector<ns4__AttributeType *> & Attribute)
-{	ns4__AttributeListType *_p = soap_new_ns4__AttributeListType(soap);
+	const std::vector<pdf__AttributeType *> & Attribute)
+{	pdf__AttributeListType *_p = soap_new_pdf__AttributeListType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__AttributeListType::Attribute = Attribute;
+		_p->pdf__AttributeListType::Attribute = Attribute;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns4__AttributeListType
-#define soap_write_ns4__AttributeListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns4:AttributeListType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_pdf__AttributeListType
+#define soap_write_pdf__AttributeListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "pdf:AttributeListType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__AttributeListType * SOAP_FMAC4 soap_get_ns4__AttributeListType(struct soap*, ns4__AttributeListType *, const char*, const char*);
+SOAP_FMAC3 pdf__AttributeListType * SOAP_FMAC4 soap_get_pdf__AttributeListType(struct soap*, pdf__AttributeListType *, const char*, const char*);
 
-#ifndef soap_read_ns4__AttributeListType
-#define soap_read_ns4__AttributeListType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns4__AttributeListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_pdf__AttributeListType
+#define soap_read_pdf__AttributeListType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_pdf__AttributeListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns4__PersonalDataType
-#define SOAP_TYPE_ns4__PersonalDataType (99)
+#ifndef SOAP_TYPE_pdf__PersonalDataType
+#define SOAP_TYPE_pdf__PersonalDataType (99)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns4__PersonalDataType(struct soap*, const char*, int, const ns4__PersonalDataType *, const char*);
-SOAP_FMAC3 ns4__PersonalDataType * SOAP_FMAC4 soap_in_ns4__PersonalDataType(struct soap*, const char*, ns4__PersonalDataType *, const char*);
-SOAP_FMAC1 ns4__PersonalDataType * SOAP_FMAC2 soap_instantiate_ns4__PersonalDataType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_pdf__PersonalDataType(struct soap*, const char*, int, const pdf__PersonalDataType *, const char*);
+SOAP_FMAC3 pdf__PersonalDataType * SOAP_FMAC4 soap_in_pdf__PersonalDataType(struct soap*, const char*, pdf__PersonalDataType *, const char*);
+SOAP_FMAC1 pdf__PersonalDataType * SOAP_FMAC2 soap_instantiate_pdf__PersonalDataType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns4__PersonalDataType * soap_new_ns4__PersonalDataType(struct soap *soap, int n = -1) { return soap_instantiate_ns4__PersonalDataType(soap, n, NULL, NULL, NULL); }
+inline pdf__PersonalDataType * soap_new_pdf__PersonalDataType(struct soap *soap, int n = -1) { return soap_instantiate_pdf__PersonalDataType(soap, n, NULL, NULL, NULL); }
 
-inline ns4__PersonalDataType * soap_new_req_ns4__PersonalDataType(
-	struct soap *soap,
-	const std::string& Name,
-	const std::string& NIC)
-{	ns4__PersonalDataType *_p = soap_new_ns4__PersonalDataType(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->ns4__PersonalDataType::Name = Name;
-		_p->ns4__PersonalDataType::NIC = NIC;
-	}
-	return _p;
-}
-
-inline ns4__PersonalDataType * soap_new_set_ns4__PersonalDataType(
+inline pdf__PersonalDataType * soap_new_req_pdf__PersonalDataType(
 	struct soap *soap,
 	const std::string& Name,
 	const std::string& NIC)
-{	ns4__PersonalDataType *_p = soap_new_ns4__PersonalDataType(soap);
+{	pdf__PersonalDataType *_p = soap_new_pdf__PersonalDataType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__PersonalDataType::Name = Name;
-		_p->ns4__PersonalDataType::NIC = NIC;
+		_p->pdf__PersonalDataType::Name = Name;
+		_p->pdf__PersonalDataType::NIC = NIC;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns4__PersonalDataType
-#define soap_write_ns4__PersonalDataType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns4:PersonalDataType", NULL) || soap_end_send(soap), (soap)->error )
+inline pdf__PersonalDataType * soap_new_set_pdf__PersonalDataType(
+	struct soap *soap,
+	const std::string& Name,
+	const std::string& NIC)
+{	pdf__PersonalDataType *_p = soap_new_pdf__PersonalDataType(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->pdf__PersonalDataType::Name = Name;
+		_p->pdf__PersonalDataType::NIC = NIC;
+	}
+	return _p;
+}
+
+#ifndef soap_write_pdf__PersonalDataType
+#define soap_write_pdf__PersonalDataType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "pdf:PersonalDataType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__PersonalDataType * SOAP_FMAC4 soap_get_ns4__PersonalDataType(struct soap*, ns4__PersonalDataType *, const char*, const char*);
+SOAP_FMAC3 pdf__PersonalDataType * SOAP_FMAC4 soap_get_pdf__PersonalDataType(struct soap*, pdf__PersonalDataType *, const char*, const char*);
 
-#ifndef soap_read_ns4__PersonalDataType
-#define soap_read_ns4__PersonalDataType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns4__PersonalDataType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_pdf__PersonalDataType
+#define soap_read_pdf__PersonalDataType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_pdf__PersonalDataType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns4__SignRequest
-#define SOAP_TYPE_ns4__SignRequest (98)
+#ifndef SOAP_TYPE_pdf__SignRequest
+#define SOAP_TYPE_pdf__SignRequest (98)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns4__SignRequest(struct soap*, const char*, int, const ns4__SignRequest *, const char*);
-SOAP_FMAC3 ns4__SignRequest * SOAP_FMAC4 soap_in_ns4__SignRequest(struct soap*, const char*, ns4__SignRequest *, const char*);
-SOAP_FMAC1 ns4__SignRequest * SOAP_FMAC2 soap_instantiate_ns4__SignRequest(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_pdf__SignRequest(struct soap*, const char*, int, const pdf__SignRequest *, const char*);
+SOAP_FMAC3 pdf__SignRequest * SOAP_FMAC4 soap_in_pdf__SignRequest(struct soap*, const char*, pdf__SignRequest *, const char*);
+SOAP_FMAC1 pdf__SignRequest * SOAP_FMAC2 soap_instantiate_pdf__SignRequest(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns4__SignRequest * soap_new_ns4__SignRequest(struct soap *soap, int n = -1) { return soap_instantiate_ns4__SignRequest(soap, n, NULL, NULL, NULL); }
+inline pdf__SignRequest * soap_new_pdf__SignRequest(struct soap *soap, int n = -1) { return soap_instantiate_pdf__SignRequest(soap, n, NULL, NULL, NULL); }
 
-inline ns4__SignRequest * soap_new_req_ns4__SignRequest(
+inline pdf__SignRequest * soap_new_req_pdf__SignRequest(
 	struct soap *soap,
 	const std::string& ProcessId,
-	ns4__PersonalDataType *PersonalData,
-	ns4__AttributeListType *AttributeList,
+	pdf__PersonalDataType *PersonalData,
+	pdf__AttributeListType *AttributeList,
 	const std::string& SignatureFieldName,
 	const xsd__base64Binary& SignDocument,
 	int Page,
 	int X,
 	int Y,
-	enum ns4__SignatureOrientationEnumType Orientation)
-{	ns4__SignRequest *_p = soap_new_ns4__SignRequest(soap);
+	enum pdf__SignatureOrientationEnumType Orientation)
+{	pdf__SignRequest *_p = soap_new_pdf__SignRequest(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__SignRequest::ProcessId = ProcessId;
-		_p->ns4__SignRequest::PersonalData = PersonalData;
-		_p->ns4__SignRequest::AttributeList = AttributeList;
-		_p->ns4__SignRequest::SignatureFieldName = SignatureFieldName;
-		_p->ns4__SignRequest::SignDocument = SignDocument;
-		_p->ns4__SignRequest::Page = Page;
-		_p->ns4__SignRequest::X = X;
-		_p->ns4__SignRequest::Y = Y;
-		_p->ns4__SignRequest::Orientation = Orientation;
+		_p->pdf__SignRequest::ProcessId = ProcessId;
+		_p->pdf__SignRequest::PersonalData = PersonalData;
+		_p->pdf__SignRequest::AttributeList = AttributeList;
+		_p->pdf__SignRequest::SignatureFieldName = SignatureFieldName;
+		_p->pdf__SignRequest::SignDocument = SignDocument;
+		_p->pdf__SignRequest::Page = Page;
+		_p->pdf__SignRequest::X = X;
+		_p->pdf__SignRequest::Y = Y;
+		_p->pdf__SignRequest::Orientation = Orientation;
 	}
 	return _p;
 }
 
-inline ns4__SignRequest * soap_new_set_ns4__SignRequest(
+inline pdf__SignRequest * soap_new_set_pdf__SignRequest(
 	struct soap *soap,
 	const std::string& ProcessId,
-	ns4__PersonalDataType *PersonalData,
-	ns4__AttributeListType *AttributeList,
+	pdf__PersonalDataType *PersonalData,
+	pdf__AttributeListType *AttributeList,
 	const std::string& SignatureFieldName,
 	const xsd__base64Binary& SignDocument,
 	int *LTV,
 	int Page,
 	int X,
 	int Y,
-	enum ns4__SignatureOrientationEnumType Orientation)
-{	ns4__SignRequest *_p = soap_new_ns4__SignRequest(soap);
+	enum pdf__SignatureOrientationEnumType Orientation)
+{	pdf__SignRequest *_p = soap_new_pdf__SignRequest(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns4__SignRequest::ProcessId = ProcessId;
-		_p->ns4__SignRequest::PersonalData = PersonalData;
-		_p->ns4__SignRequest::AttributeList = AttributeList;
-		_p->ns4__SignRequest::SignatureFieldName = SignatureFieldName;
-		_p->ns4__SignRequest::SignDocument = SignDocument;
-		_p->ns4__SignRequest::LTV = LTV;
-		_p->ns4__SignRequest::Page = Page;
-		_p->ns4__SignRequest::X = X;
-		_p->ns4__SignRequest::Y = Y;
-		_p->ns4__SignRequest::Orientation = Orientation;
+		_p->pdf__SignRequest::ProcessId = ProcessId;
+		_p->pdf__SignRequest::PersonalData = PersonalData;
+		_p->pdf__SignRequest::AttributeList = AttributeList;
+		_p->pdf__SignRequest::SignatureFieldName = SignatureFieldName;
+		_p->pdf__SignRequest::SignDocument = SignDocument;
+		_p->pdf__SignRequest::LTV = LTV;
+		_p->pdf__SignRequest::Page = Page;
+		_p->pdf__SignRequest::X = X;
+		_p->pdf__SignRequest::Y = Y;
+		_p->pdf__SignRequest::Orientation = Orientation;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns4__SignRequest
-#define soap_write_ns4__SignRequest(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns4:SignRequest", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_pdf__SignRequest
+#define soap_write_pdf__SignRequest(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "pdf:SignRequest", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__SignRequest * SOAP_FMAC4 soap_get_ns4__SignRequest(struct soap*, ns4__SignRequest *, const char*, const char*);
+SOAP_FMAC3 pdf__SignRequest * SOAP_FMAC4 soap_get_pdf__SignRequest(struct soap*, pdf__SignRequest *, const char*, const char*);
 
-#ifndef soap_read_ns4__SignRequest
-#define soap_read_ns4__SignRequest(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns4__SignRequest(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_pdf__SignRequest
+#define soap_read_pdf__SignRequest(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_pdf__SignRequest(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns3__AttributeSupplierResponseType
-#define SOAP_TYPE_ns3__AttributeSupplierResponseType (97)
+#ifndef SOAP_TYPE_ns9__AttributeSupplierResponseType
+#define SOAP_TYPE_ns9__AttributeSupplierResponseType (97)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns3__AttributeSupplierResponseType(struct soap*, const char*, int, const ns3__AttributeSupplierResponseType *, const char*);
-SOAP_FMAC3 ns3__AttributeSupplierResponseType * SOAP_FMAC4 soap_in_ns3__AttributeSupplierResponseType(struct soap*, const char*, ns3__AttributeSupplierResponseType *, const char*);
-SOAP_FMAC1 ns3__AttributeSupplierResponseType * SOAP_FMAC2 soap_instantiate_ns3__AttributeSupplierResponseType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns9__AttributeSupplierResponseType(struct soap*, const char*, int, const ns9__AttributeSupplierResponseType *, const char*);
+SOAP_FMAC3 ns9__AttributeSupplierResponseType * SOAP_FMAC4 soap_in_ns9__AttributeSupplierResponseType(struct soap*, const char*, ns9__AttributeSupplierResponseType *, const char*);
+SOAP_FMAC1 ns9__AttributeSupplierResponseType * SOAP_FMAC2 soap_instantiate_ns9__AttributeSupplierResponseType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns3__AttributeSupplierResponseType * soap_new_ns3__AttributeSupplierResponseType(struct soap *soap, int n = -1) { return soap_instantiate_ns3__AttributeSupplierResponseType(soap, n, NULL, NULL, NULL); }
+inline ns9__AttributeSupplierResponseType * soap_new_ns9__AttributeSupplierResponseType(struct soap *soap, int n = -1) { return soap_instantiate_ns9__AttributeSupplierResponseType(soap, n, NULL, NULL, NULL); }
 
-inline ns3__AttributeSupplierResponseType * soap_new_req_ns3__AttributeSupplierResponseType(
+inline ns9__AttributeSupplierResponseType * soap_new_req_ns9__AttributeSupplierResponseType(
 	struct soap *soap)
-{	ns3__AttributeSupplierResponseType *_p = soap_new_ns3__AttributeSupplierResponseType(soap);
+{	ns9__AttributeSupplierResponseType *_p = soap_new_ns9__AttributeSupplierResponseType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
 	}
 	return _p;
 }
 
-inline ns3__AttributeSupplierResponseType * soap_new_set_ns3__AttributeSupplierResponseType(
+inline ns9__AttributeSupplierResponseType * soap_new_set_ns9__AttributeSupplierResponseType(
 	struct soap *soap,
 	const std::vector<ns3__AttributeSupplierType *> & AttributeSupplier,
 	std::string *ErrorMessage)
-{	ns3__AttributeSupplierResponseType *_p = soap_new_ns3__AttributeSupplierResponseType(soap);
+{	ns9__AttributeSupplierResponseType *_p = soap_new_ns9__AttributeSupplierResponseType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns3__AttributeSupplierResponseType::AttributeSupplier = AttributeSupplier;
-		_p->ns3__AttributeSupplierResponseType::ErrorMessage = ErrorMessage;
+		_p->ns9__AttributeSupplierResponseType::AttributeSupplier = AttributeSupplier;
+		_p->ns9__AttributeSupplierResponseType::ErrorMessage = ErrorMessage;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns3__AttributeSupplierResponseType
-#define soap_write_ns3__AttributeSupplierResponseType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns3:AttributeSupplierResponseType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns9__AttributeSupplierResponseType
+#define soap_write_ns9__AttributeSupplierResponseType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns9:AttributeSupplierResponseType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns3__AttributeSupplierResponseType * SOAP_FMAC4 soap_get_ns3__AttributeSupplierResponseType(struct soap*, ns3__AttributeSupplierResponseType *, const char*, const char*);
+SOAP_FMAC3 ns9__AttributeSupplierResponseType * SOAP_FMAC4 soap_get_ns9__AttributeSupplierResponseType(struct soap*, ns9__AttributeSupplierResponseType *, const char*, const char*);
 
-#ifndef soap_read_ns3__AttributeSupplierResponseType
-#define soap_read_ns3__AttributeSupplierResponseType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns3__AttributeSupplierResponseType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns9__AttributeSupplierResponseType
+#define soap_read_ns9__AttributeSupplierResponseType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns9__AttributeSupplierResponseType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
@@ -4615,1557 +4615,1557 @@ SOAP_FMAC3 ns7__SVGListType * SOAP_FMAC4 soap_get_ns7__SVGListType(struct soap*,
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__ArchiveTimeStampType
-#define SOAP_TYPE_ns1__ArchiveTimeStampType (90)
+#ifndef SOAP_TYPE_ns6__ArchiveTimeStampType
+#define SOAP_TYPE_ns6__ArchiveTimeStampType (90)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__ArchiveTimeStampType(struct soap*, const char*, int, const ns1__ArchiveTimeStampType *, const char*);
-SOAP_FMAC3 ns1__ArchiveTimeStampType * SOAP_FMAC4 soap_in_ns1__ArchiveTimeStampType(struct soap*, const char*, ns1__ArchiveTimeStampType *, const char*);
-SOAP_FMAC1 ns1__ArchiveTimeStampType * SOAP_FMAC2 soap_instantiate_ns1__ArchiveTimeStampType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__ArchiveTimeStampType(struct soap*, const char*, int, const ns6__ArchiveTimeStampType *, const char*);
+SOAP_FMAC3 ns6__ArchiveTimeStampType * SOAP_FMAC4 soap_in_ns6__ArchiveTimeStampType(struct soap*, const char*, ns6__ArchiveTimeStampType *, const char*);
+SOAP_FMAC1 ns6__ArchiveTimeStampType * SOAP_FMAC2 soap_instantiate_ns6__ArchiveTimeStampType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__ArchiveTimeStampType * soap_new_ns1__ArchiveTimeStampType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__ArchiveTimeStampType(soap, n, NULL, NULL, NULL); }
+inline ns6__ArchiveTimeStampType * soap_new_ns6__ArchiveTimeStampType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__ArchiveTimeStampType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__ArchiveTimeStampType * soap_new_req_ns1__ArchiveTimeStampType(
+inline ns6__ArchiveTimeStampType * soap_new_req_ns6__ArchiveTimeStampType(
 	struct soap *soap,
 	ns5__CanonicalizationMethodType *ns5__CanonicalizationMethod,
-	const xsd__base64Binary& ns1__EncapsulatedTimeStamp)
-{	ns1__ArchiveTimeStampType *_p = soap_new_ns1__ArchiveTimeStampType(soap);
+	const xsd__base64Binary& ns6__EncapsulatedTimeStamp)
+{	ns6__ArchiveTimeStampType *_p = soap_new_ns6__ArchiveTimeStampType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__ArchiveTimeStampType::ns5__CanonicalizationMethod = ns5__CanonicalizationMethod;
-		_p->ns1__ArchiveTimeStampType::ns1__EncapsulatedTimeStamp = ns1__EncapsulatedTimeStamp;
+		_p->ns6__ArchiveTimeStampType::ns5__CanonicalizationMethod = ns5__CanonicalizationMethod;
+		_p->ns6__ArchiveTimeStampType::ns6__EncapsulatedTimeStamp = ns6__EncapsulatedTimeStamp;
 	}
 	return _p;
 }
 
-inline ns1__ArchiveTimeStampType * soap_new_set_ns1__ArchiveTimeStampType(
+inline ns6__ArchiveTimeStampType * soap_new_set_ns6__ArchiveTimeStampType(
 	struct soap *soap,
 	ns5__CanonicalizationMethodType *ns5__CanonicalizationMethod,
-	const xsd__base64Binary& ns1__EncapsulatedTimeStamp)
-{	ns1__ArchiveTimeStampType *_p = soap_new_ns1__ArchiveTimeStampType(soap);
+	const xsd__base64Binary& ns6__EncapsulatedTimeStamp)
+{	ns6__ArchiveTimeStampType *_p = soap_new_ns6__ArchiveTimeStampType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__ArchiveTimeStampType::ns5__CanonicalizationMethod = ns5__CanonicalizationMethod;
-		_p->ns1__ArchiveTimeStampType::ns1__EncapsulatedTimeStamp = ns1__EncapsulatedTimeStamp;
+		_p->ns6__ArchiveTimeStampType::ns5__CanonicalizationMethod = ns5__CanonicalizationMethod;
+		_p->ns6__ArchiveTimeStampType::ns6__EncapsulatedTimeStamp = ns6__EncapsulatedTimeStamp;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__ArchiveTimeStampType
-#define soap_write_ns1__ArchiveTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:ArchiveTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__ArchiveTimeStampType
+#define soap_write_ns6__ArchiveTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:ArchiveTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__ArchiveTimeStampType * SOAP_FMAC4 soap_get_ns1__ArchiveTimeStampType(struct soap*, ns1__ArchiveTimeStampType *, const char*, const char*);
+SOAP_FMAC3 ns6__ArchiveTimeStampType * SOAP_FMAC4 soap_get_ns6__ArchiveTimeStampType(struct soap*, ns6__ArchiveTimeStampType *, const char*, const char*);
 
-#ifndef soap_read_ns1__ArchiveTimeStampType
-#define soap_read_ns1__ArchiveTimeStampType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__ArchiveTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__ArchiveTimeStampType
+#define soap_read_ns6__ArchiveTimeStampType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__ArchiveTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__EncapsulatedOCSPValueType
-#define SOAP_TYPE_ns1__EncapsulatedOCSPValueType (89)
+#ifndef SOAP_TYPE_ns6__EncapsulatedOCSPValueType
+#define SOAP_TYPE_ns6__EncapsulatedOCSPValueType (89)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__EncapsulatedOCSPValueType(struct soap*, const char*, int, const ns1__EncapsulatedOCSPValueType *, const char*);
-SOAP_FMAC3 ns1__EncapsulatedOCSPValueType * SOAP_FMAC4 soap_in_ns1__EncapsulatedOCSPValueType(struct soap*, const char*, ns1__EncapsulatedOCSPValueType *, const char*);
-SOAP_FMAC1 ns1__EncapsulatedOCSPValueType * SOAP_FMAC2 soap_instantiate_ns1__EncapsulatedOCSPValueType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__EncapsulatedOCSPValueType(struct soap*, const char*, int, const ns6__EncapsulatedOCSPValueType *, const char*);
+SOAP_FMAC3 ns6__EncapsulatedOCSPValueType * SOAP_FMAC4 soap_in_ns6__EncapsulatedOCSPValueType(struct soap*, const char*, ns6__EncapsulatedOCSPValueType *, const char*);
+SOAP_FMAC1 ns6__EncapsulatedOCSPValueType * SOAP_FMAC2 soap_instantiate_ns6__EncapsulatedOCSPValueType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__EncapsulatedOCSPValueType * soap_new_ns1__EncapsulatedOCSPValueType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__EncapsulatedOCSPValueType(soap, n, NULL, NULL, NULL); }
+inline ns6__EncapsulatedOCSPValueType * soap_new_ns6__EncapsulatedOCSPValueType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__EncapsulatedOCSPValueType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__EncapsulatedOCSPValueType * soap_new_req_ns1__EncapsulatedOCSPValueType(
+inline ns6__EncapsulatedOCSPValueType * soap_new_req_ns6__EncapsulatedOCSPValueType(
 	struct soap *soap,
 	const xsd__base64Binary& __item,
 	const std::string& Id)
-{	ns1__EncapsulatedOCSPValueType *_p = soap_new_ns1__EncapsulatedOCSPValueType(soap);
+{	ns6__EncapsulatedOCSPValueType *_p = soap_new_ns6__EncapsulatedOCSPValueType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__EncapsulatedOCSPValueType::__item = __item;
-		_p->ns1__EncapsulatedOCSPValueType::Id = Id;
+		_p->ns6__EncapsulatedOCSPValueType::__item = __item;
+		_p->ns6__EncapsulatedOCSPValueType::Id = Id;
 	}
 	return _p;
 }
 
-inline ns1__EncapsulatedOCSPValueType * soap_new_set_ns1__EncapsulatedOCSPValueType(
+inline ns6__EncapsulatedOCSPValueType * soap_new_set_ns6__EncapsulatedOCSPValueType(
 	struct soap *soap,
 	const xsd__base64Binary& __item,
 	const std::string& Id)
-{	ns1__EncapsulatedOCSPValueType *_p = soap_new_ns1__EncapsulatedOCSPValueType(soap);
+{	ns6__EncapsulatedOCSPValueType *_p = soap_new_ns6__EncapsulatedOCSPValueType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__EncapsulatedOCSPValueType::__item = __item;
-		_p->ns1__EncapsulatedOCSPValueType::Id = Id;
+		_p->ns6__EncapsulatedOCSPValueType::__item = __item;
+		_p->ns6__EncapsulatedOCSPValueType::Id = Id;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__EncapsulatedOCSPValueType
-#define soap_write_ns1__EncapsulatedOCSPValueType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:EncapsulatedOCSPValueType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__EncapsulatedOCSPValueType
+#define soap_write_ns6__EncapsulatedOCSPValueType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:EncapsulatedOCSPValueType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__EncapsulatedOCSPValueType * SOAP_FMAC4 soap_get_ns1__EncapsulatedOCSPValueType(struct soap*, ns1__EncapsulatedOCSPValueType *, const char*, const char*);
+SOAP_FMAC3 ns6__EncapsulatedOCSPValueType * SOAP_FMAC4 soap_get_ns6__EncapsulatedOCSPValueType(struct soap*, ns6__EncapsulatedOCSPValueType *, const char*, const char*);
 
-#ifndef soap_read_ns1__EncapsulatedOCSPValueType
-#define soap_read_ns1__EncapsulatedOCSPValueType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__EncapsulatedOCSPValueType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__EncapsulatedOCSPValueType
+#define soap_read_ns6__EncapsulatedOCSPValueType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__EncapsulatedOCSPValueType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__OCSPValuesType
-#define SOAP_TYPE_ns1__OCSPValuesType (88)
+#ifndef SOAP_TYPE_ns6__OCSPValuesType
+#define SOAP_TYPE_ns6__OCSPValuesType (88)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__OCSPValuesType(struct soap*, const char*, int, const ns1__OCSPValuesType *, const char*);
-SOAP_FMAC3 ns1__OCSPValuesType * SOAP_FMAC4 soap_in_ns1__OCSPValuesType(struct soap*, const char*, ns1__OCSPValuesType *, const char*);
-SOAP_FMAC1 ns1__OCSPValuesType * SOAP_FMAC2 soap_instantiate_ns1__OCSPValuesType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__OCSPValuesType(struct soap*, const char*, int, const ns6__OCSPValuesType *, const char*);
+SOAP_FMAC3 ns6__OCSPValuesType * SOAP_FMAC4 soap_in_ns6__OCSPValuesType(struct soap*, const char*, ns6__OCSPValuesType *, const char*);
+SOAP_FMAC1 ns6__OCSPValuesType * SOAP_FMAC2 soap_instantiate_ns6__OCSPValuesType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__OCSPValuesType * soap_new_ns1__OCSPValuesType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__OCSPValuesType(soap, n, NULL, NULL, NULL); }
+inline ns6__OCSPValuesType * soap_new_ns6__OCSPValuesType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__OCSPValuesType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__OCSPValuesType * soap_new_req_ns1__OCSPValuesType(
+inline ns6__OCSPValuesType * soap_new_req_ns6__OCSPValuesType(
 	struct soap *soap,
-	const std::vector<ns1__EncapsulatedOCSPValueType *> & ns1__EncapsulatedOCSPValue,
+	const std::vector<ns6__EncapsulatedOCSPValueType *> & ns6__EncapsulatedOCSPValue,
 	const std::string& Id)
-{	ns1__OCSPValuesType *_p = soap_new_ns1__OCSPValuesType(soap);
+{	ns6__OCSPValuesType *_p = soap_new_ns6__OCSPValuesType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__OCSPValuesType::ns1__EncapsulatedOCSPValue = ns1__EncapsulatedOCSPValue;
-		_p->ns1__OCSPValuesType::Id = Id;
+		_p->ns6__OCSPValuesType::ns6__EncapsulatedOCSPValue = ns6__EncapsulatedOCSPValue;
+		_p->ns6__OCSPValuesType::Id = Id;
 	}
 	return _p;
 }
 
-inline ns1__OCSPValuesType * soap_new_set_ns1__OCSPValuesType(
+inline ns6__OCSPValuesType * soap_new_set_ns6__OCSPValuesType(
 	struct soap *soap,
-	const std::vector<ns1__EncapsulatedOCSPValueType *> & ns1__EncapsulatedOCSPValue,
+	const std::vector<ns6__EncapsulatedOCSPValueType *> & ns6__EncapsulatedOCSPValue,
 	const std::string& Id)
-{	ns1__OCSPValuesType *_p = soap_new_ns1__OCSPValuesType(soap);
+{	ns6__OCSPValuesType *_p = soap_new_ns6__OCSPValuesType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__OCSPValuesType::ns1__EncapsulatedOCSPValue = ns1__EncapsulatedOCSPValue;
-		_p->ns1__OCSPValuesType::Id = Id;
+		_p->ns6__OCSPValuesType::ns6__EncapsulatedOCSPValue = ns6__EncapsulatedOCSPValue;
+		_p->ns6__OCSPValuesType::Id = Id;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__OCSPValuesType
-#define soap_write_ns1__OCSPValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:OCSPValuesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__OCSPValuesType
+#define soap_write_ns6__OCSPValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:OCSPValuesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__OCSPValuesType * SOAP_FMAC4 soap_get_ns1__OCSPValuesType(struct soap*, ns1__OCSPValuesType *, const char*, const char*);
+SOAP_FMAC3 ns6__OCSPValuesType * SOAP_FMAC4 soap_get_ns6__OCSPValuesType(struct soap*, ns6__OCSPValuesType *, const char*, const char*);
 
-#ifndef soap_read_ns1__OCSPValuesType
-#define soap_read_ns1__OCSPValuesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__OCSPValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__OCSPValuesType
+#define soap_read_ns6__OCSPValuesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__OCSPValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__EncapsulatedCRLValueType
-#define SOAP_TYPE_ns1__EncapsulatedCRLValueType (87)
+#ifndef SOAP_TYPE_ns6__EncapsulatedCRLValueType
+#define SOAP_TYPE_ns6__EncapsulatedCRLValueType (87)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__EncapsulatedCRLValueType(struct soap*, const char*, int, const ns1__EncapsulatedCRLValueType *, const char*);
-SOAP_FMAC3 ns1__EncapsulatedCRLValueType * SOAP_FMAC4 soap_in_ns1__EncapsulatedCRLValueType(struct soap*, const char*, ns1__EncapsulatedCRLValueType *, const char*);
-SOAP_FMAC1 ns1__EncapsulatedCRLValueType * SOAP_FMAC2 soap_instantiate_ns1__EncapsulatedCRLValueType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__EncapsulatedCRLValueType(struct soap*, const char*, int, const ns6__EncapsulatedCRLValueType *, const char*);
+SOAP_FMAC3 ns6__EncapsulatedCRLValueType * SOAP_FMAC4 soap_in_ns6__EncapsulatedCRLValueType(struct soap*, const char*, ns6__EncapsulatedCRLValueType *, const char*);
+SOAP_FMAC1 ns6__EncapsulatedCRLValueType * SOAP_FMAC2 soap_instantiate_ns6__EncapsulatedCRLValueType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__EncapsulatedCRLValueType * soap_new_ns1__EncapsulatedCRLValueType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__EncapsulatedCRLValueType(soap, n, NULL, NULL, NULL); }
+inline ns6__EncapsulatedCRLValueType * soap_new_ns6__EncapsulatedCRLValueType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__EncapsulatedCRLValueType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__EncapsulatedCRLValueType * soap_new_req_ns1__EncapsulatedCRLValueType(
-	struct soap *soap,
-	const xsd__base64Binary& __item,
-	const std::string& Id)
-{	ns1__EncapsulatedCRLValueType *_p = soap_new_ns1__EncapsulatedCRLValueType(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->ns1__EncapsulatedCRLValueType::__item = __item;
-		_p->ns1__EncapsulatedCRLValueType::Id = Id;
-	}
-	return _p;
-}
-
-inline ns1__EncapsulatedCRLValueType * soap_new_set_ns1__EncapsulatedCRLValueType(
+inline ns6__EncapsulatedCRLValueType * soap_new_req_ns6__EncapsulatedCRLValueType(
 	struct soap *soap,
 	const xsd__base64Binary& __item,
 	const std::string& Id)
-{	ns1__EncapsulatedCRLValueType *_p = soap_new_ns1__EncapsulatedCRLValueType(soap);
+{	ns6__EncapsulatedCRLValueType *_p = soap_new_ns6__EncapsulatedCRLValueType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__EncapsulatedCRLValueType::__item = __item;
-		_p->ns1__EncapsulatedCRLValueType::Id = Id;
+		_p->ns6__EncapsulatedCRLValueType::__item = __item;
+		_p->ns6__EncapsulatedCRLValueType::Id = Id;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__EncapsulatedCRLValueType
-#define soap_write_ns1__EncapsulatedCRLValueType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:EncapsulatedCRLValueType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 ns1__EncapsulatedCRLValueType * SOAP_FMAC4 soap_get_ns1__EncapsulatedCRLValueType(struct soap*, ns1__EncapsulatedCRLValueType *, const char*, const char*);
-
-#ifndef soap_read_ns1__EncapsulatedCRLValueType
-#define soap_read_ns1__EncapsulatedCRLValueType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__EncapsulatedCRLValueType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_ns1__CRLValuesType
-#define SOAP_TYPE_ns1__CRLValuesType (86)
-#endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__CRLValuesType(struct soap*, const char*, int, const ns1__CRLValuesType *, const char*);
-SOAP_FMAC3 ns1__CRLValuesType * SOAP_FMAC4 soap_in_ns1__CRLValuesType(struct soap*, const char*, ns1__CRLValuesType *, const char*);
-SOAP_FMAC1 ns1__CRLValuesType * SOAP_FMAC2 soap_instantiate_ns1__CRLValuesType(struct soap*, int, const char*, const char*, size_t*);
-
-inline ns1__CRLValuesType * soap_new_ns1__CRLValuesType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__CRLValuesType(soap, n, NULL, NULL, NULL); }
-
-inline ns1__CRLValuesType * soap_new_req_ns1__CRLValuesType(
-	struct soap *soap,
-	const std::vector<ns1__EncapsulatedCRLValueType *> & ns1__EncapsulatedCRLValue,
-	const std::string& Id)
-{	ns1__CRLValuesType *_p = soap_new_ns1__CRLValuesType(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->ns1__CRLValuesType::ns1__EncapsulatedCRLValue = ns1__EncapsulatedCRLValue;
-		_p->ns1__CRLValuesType::Id = Id;
-	}
-	return _p;
-}
-
-inline ns1__CRLValuesType * soap_new_set_ns1__CRLValuesType(
-	struct soap *soap,
-	const std::vector<ns1__EncapsulatedCRLValueType *> & ns1__EncapsulatedCRLValue,
-	const std::string& Id)
-{	ns1__CRLValuesType *_p = soap_new_ns1__CRLValuesType(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->ns1__CRLValuesType::ns1__EncapsulatedCRLValue = ns1__EncapsulatedCRLValue;
-		_p->ns1__CRLValuesType::Id = Id;
-	}
-	return _p;
-}
-
-#ifndef soap_write_ns1__CRLValuesType
-#define soap_write_ns1__CRLValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:CRLValuesType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 ns1__CRLValuesType * SOAP_FMAC4 soap_get_ns1__CRLValuesType(struct soap*, ns1__CRLValuesType *, const char*, const char*);
-
-#ifndef soap_read_ns1__CRLValuesType
-#define soap_read_ns1__CRLValuesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__CRLValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_ns1__RevocationValuesType
-#define SOAP_TYPE_ns1__RevocationValuesType (85)
-#endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__RevocationValuesType(struct soap*, const char*, int, const ns1__RevocationValuesType *, const char*);
-SOAP_FMAC3 ns1__RevocationValuesType * SOAP_FMAC4 soap_in_ns1__RevocationValuesType(struct soap*, const char*, ns1__RevocationValuesType *, const char*);
-SOAP_FMAC1 ns1__RevocationValuesType * SOAP_FMAC2 soap_instantiate_ns1__RevocationValuesType(struct soap*, int, const char*, const char*, size_t*);
-
-inline ns1__RevocationValuesType * soap_new_ns1__RevocationValuesType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__RevocationValuesType(soap, n, NULL, NULL, NULL); }
-
-inline ns1__RevocationValuesType * soap_new_req_ns1__RevocationValuesType(
-	struct soap *soap,
-	ns1__CRLValuesType *ns1__CRLValues,
-	ns1__OCSPValuesType *ns1__OCSPValues,
-	const std::string& Id)
-{	ns1__RevocationValuesType *_p = soap_new_ns1__RevocationValuesType(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->ns1__RevocationValuesType::ns1__CRLValues = ns1__CRLValues;
-		_p->ns1__RevocationValuesType::ns1__OCSPValues = ns1__OCSPValues;
-		_p->ns1__RevocationValuesType::Id = Id;
-	}
-	return _p;
-}
-
-inline ns1__RevocationValuesType * soap_new_set_ns1__RevocationValuesType(
-	struct soap *soap,
-	ns1__CRLValuesType *ns1__CRLValues,
-	ns1__OCSPValuesType *ns1__OCSPValues,
-	const std::string& Id)
-{	ns1__RevocationValuesType *_p = soap_new_ns1__RevocationValuesType(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->ns1__RevocationValuesType::ns1__CRLValues = ns1__CRLValues;
-		_p->ns1__RevocationValuesType::ns1__OCSPValues = ns1__OCSPValues;
-		_p->ns1__RevocationValuesType::Id = Id;
-	}
-	return _p;
-}
-
-#ifndef soap_write_ns1__RevocationValuesType
-#define soap_write_ns1__RevocationValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:RevocationValuesType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 ns1__RevocationValuesType * SOAP_FMAC4 soap_get_ns1__RevocationValuesType(struct soap*, ns1__RevocationValuesType *, const char*, const char*);
-
-#ifndef soap_read_ns1__RevocationValuesType
-#define soap_read_ns1__RevocationValuesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__RevocationValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_ns1__EncapsulatedX509CertificateType
-#define SOAP_TYPE_ns1__EncapsulatedX509CertificateType (84)
-#endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__EncapsulatedX509CertificateType(struct soap*, const char*, int, const ns1__EncapsulatedX509CertificateType *, const char*);
-SOAP_FMAC3 ns1__EncapsulatedX509CertificateType * SOAP_FMAC4 soap_in_ns1__EncapsulatedX509CertificateType(struct soap*, const char*, ns1__EncapsulatedX509CertificateType *, const char*);
-SOAP_FMAC1 ns1__EncapsulatedX509CertificateType * SOAP_FMAC2 soap_instantiate_ns1__EncapsulatedX509CertificateType(struct soap*, int, const char*, const char*, size_t*);
-
-inline ns1__EncapsulatedX509CertificateType * soap_new_ns1__EncapsulatedX509CertificateType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__EncapsulatedX509CertificateType(soap, n, NULL, NULL, NULL); }
-
-inline ns1__EncapsulatedX509CertificateType * soap_new_req_ns1__EncapsulatedX509CertificateType(
+inline ns6__EncapsulatedCRLValueType * soap_new_set_ns6__EncapsulatedCRLValueType(
 	struct soap *soap,
 	const xsd__base64Binary& __item,
 	const std::string& Id)
-{	ns1__EncapsulatedX509CertificateType *_p = soap_new_ns1__EncapsulatedX509CertificateType(soap);
+{	ns6__EncapsulatedCRLValueType *_p = soap_new_ns6__EncapsulatedCRLValueType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__EncapsulatedX509CertificateType::__item = __item;
-		_p->ns1__EncapsulatedX509CertificateType::Id = Id;
+		_p->ns6__EncapsulatedCRLValueType::__item = __item;
+		_p->ns6__EncapsulatedCRLValueType::Id = Id;
 	}
 	return _p;
 }
 
-inline ns1__EncapsulatedX509CertificateType * soap_new_set_ns1__EncapsulatedX509CertificateType(
+#ifndef soap_write_ns6__EncapsulatedCRLValueType
+#define soap_write_ns6__EncapsulatedCRLValueType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:EncapsulatedCRLValueType", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns6__EncapsulatedCRLValueType * SOAP_FMAC4 soap_get_ns6__EncapsulatedCRLValueType(struct soap*, ns6__EncapsulatedCRLValueType *, const char*, const char*);
+
+#ifndef soap_read_ns6__EncapsulatedCRLValueType
+#define soap_read_ns6__EncapsulatedCRLValueType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__EncapsulatedCRLValueType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+
+#ifndef SOAP_TYPE_ns6__CRLValuesType
+#define SOAP_TYPE_ns6__CRLValuesType (86)
+#endif
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__CRLValuesType(struct soap*, const char*, int, const ns6__CRLValuesType *, const char*);
+SOAP_FMAC3 ns6__CRLValuesType * SOAP_FMAC4 soap_in_ns6__CRLValuesType(struct soap*, const char*, ns6__CRLValuesType *, const char*);
+SOAP_FMAC1 ns6__CRLValuesType * SOAP_FMAC2 soap_instantiate_ns6__CRLValuesType(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns6__CRLValuesType * soap_new_ns6__CRLValuesType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__CRLValuesType(soap, n, NULL, NULL, NULL); }
+
+inline ns6__CRLValuesType * soap_new_req_ns6__CRLValuesType(
+	struct soap *soap,
+	const std::vector<ns6__EncapsulatedCRLValueType *> & ns6__EncapsulatedCRLValue,
+	const std::string& Id)
+{	ns6__CRLValuesType *_p = soap_new_ns6__CRLValuesType(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->ns6__CRLValuesType::ns6__EncapsulatedCRLValue = ns6__EncapsulatedCRLValue;
+		_p->ns6__CRLValuesType::Id = Id;
+	}
+	return _p;
+}
+
+inline ns6__CRLValuesType * soap_new_set_ns6__CRLValuesType(
+	struct soap *soap,
+	const std::vector<ns6__EncapsulatedCRLValueType *> & ns6__EncapsulatedCRLValue,
+	const std::string& Id)
+{	ns6__CRLValuesType *_p = soap_new_ns6__CRLValuesType(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->ns6__CRLValuesType::ns6__EncapsulatedCRLValue = ns6__EncapsulatedCRLValue;
+		_p->ns6__CRLValuesType::Id = Id;
+	}
+	return _p;
+}
+
+#ifndef soap_write_ns6__CRLValuesType
+#define soap_write_ns6__CRLValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:CRLValuesType", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns6__CRLValuesType * SOAP_FMAC4 soap_get_ns6__CRLValuesType(struct soap*, ns6__CRLValuesType *, const char*, const char*);
+
+#ifndef soap_read_ns6__CRLValuesType
+#define soap_read_ns6__CRLValuesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__CRLValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+
+#ifndef SOAP_TYPE_ns6__RevocationValuesType
+#define SOAP_TYPE_ns6__RevocationValuesType (85)
+#endif
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__RevocationValuesType(struct soap*, const char*, int, const ns6__RevocationValuesType *, const char*);
+SOAP_FMAC3 ns6__RevocationValuesType * SOAP_FMAC4 soap_in_ns6__RevocationValuesType(struct soap*, const char*, ns6__RevocationValuesType *, const char*);
+SOAP_FMAC1 ns6__RevocationValuesType * SOAP_FMAC2 soap_instantiate_ns6__RevocationValuesType(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns6__RevocationValuesType * soap_new_ns6__RevocationValuesType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__RevocationValuesType(soap, n, NULL, NULL, NULL); }
+
+inline ns6__RevocationValuesType * soap_new_req_ns6__RevocationValuesType(
+	struct soap *soap,
+	ns6__CRLValuesType *ns6__CRLValues,
+	ns6__OCSPValuesType *ns6__OCSPValues,
+	const std::string& Id)
+{	ns6__RevocationValuesType *_p = soap_new_ns6__RevocationValuesType(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->ns6__RevocationValuesType::ns6__CRLValues = ns6__CRLValues;
+		_p->ns6__RevocationValuesType::ns6__OCSPValues = ns6__OCSPValues;
+		_p->ns6__RevocationValuesType::Id = Id;
+	}
+	return _p;
+}
+
+inline ns6__RevocationValuesType * soap_new_set_ns6__RevocationValuesType(
+	struct soap *soap,
+	ns6__CRLValuesType *ns6__CRLValues,
+	ns6__OCSPValuesType *ns6__OCSPValues,
+	const std::string& Id)
+{	ns6__RevocationValuesType *_p = soap_new_ns6__RevocationValuesType(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->ns6__RevocationValuesType::ns6__CRLValues = ns6__CRLValues;
+		_p->ns6__RevocationValuesType::ns6__OCSPValues = ns6__OCSPValues;
+		_p->ns6__RevocationValuesType::Id = Id;
+	}
+	return _p;
+}
+
+#ifndef soap_write_ns6__RevocationValuesType
+#define soap_write_ns6__RevocationValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:RevocationValuesType", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns6__RevocationValuesType * SOAP_FMAC4 soap_get_ns6__RevocationValuesType(struct soap*, ns6__RevocationValuesType *, const char*, const char*);
+
+#ifndef soap_read_ns6__RevocationValuesType
+#define soap_read_ns6__RevocationValuesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__RevocationValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+
+#ifndef SOAP_TYPE_ns6__EncapsulatedX509CertificateType
+#define SOAP_TYPE_ns6__EncapsulatedX509CertificateType (84)
+#endif
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__EncapsulatedX509CertificateType(struct soap*, const char*, int, const ns6__EncapsulatedX509CertificateType *, const char*);
+SOAP_FMAC3 ns6__EncapsulatedX509CertificateType * SOAP_FMAC4 soap_in_ns6__EncapsulatedX509CertificateType(struct soap*, const char*, ns6__EncapsulatedX509CertificateType *, const char*);
+SOAP_FMAC1 ns6__EncapsulatedX509CertificateType * SOAP_FMAC2 soap_instantiate_ns6__EncapsulatedX509CertificateType(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns6__EncapsulatedX509CertificateType * soap_new_ns6__EncapsulatedX509CertificateType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__EncapsulatedX509CertificateType(soap, n, NULL, NULL, NULL); }
+
+inline ns6__EncapsulatedX509CertificateType * soap_new_req_ns6__EncapsulatedX509CertificateType(
 	struct soap *soap,
 	const xsd__base64Binary& __item,
 	const std::string& Id)
-{	ns1__EncapsulatedX509CertificateType *_p = soap_new_ns1__EncapsulatedX509CertificateType(soap);
+{	ns6__EncapsulatedX509CertificateType *_p = soap_new_ns6__EncapsulatedX509CertificateType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__EncapsulatedX509CertificateType::__item = __item;
-		_p->ns1__EncapsulatedX509CertificateType::Id = Id;
+		_p->ns6__EncapsulatedX509CertificateType::__item = __item;
+		_p->ns6__EncapsulatedX509CertificateType::Id = Id;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__EncapsulatedX509CertificateType
-#define soap_write_ns1__EncapsulatedX509CertificateType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:EncapsulatedX509CertificateType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 ns1__EncapsulatedX509CertificateType * SOAP_FMAC4 soap_get_ns1__EncapsulatedX509CertificateType(struct soap*, ns1__EncapsulatedX509CertificateType *, const char*, const char*);
-
-#ifndef soap_read_ns1__EncapsulatedX509CertificateType
-#define soap_read_ns1__EncapsulatedX509CertificateType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__EncapsulatedX509CertificateType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_ns1__CertificateValuesType
-#define SOAP_TYPE_ns1__CertificateValuesType (83)
-#endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__CertificateValuesType(struct soap*, const char*, int, const ns1__CertificateValuesType *, const char*);
-SOAP_FMAC3 ns1__CertificateValuesType * SOAP_FMAC4 soap_in_ns1__CertificateValuesType(struct soap*, const char*, ns1__CertificateValuesType *, const char*);
-SOAP_FMAC1 ns1__CertificateValuesType * SOAP_FMAC2 soap_instantiate_ns1__CertificateValuesType(struct soap*, int, const char*, const char*, size_t*);
-
-inline ns1__CertificateValuesType * soap_new_ns1__CertificateValuesType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__CertificateValuesType(soap, n, NULL, NULL, NULL); }
-
-inline ns1__CertificateValuesType * soap_new_req_ns1__CertificateValuesType(
+inline ns6__EncapsulatedX509CertificateType * soap_new_set_ns6__EncapsulatedX509CertificateType(
 	struct soap *soap,
-	const std::vector<ns1__EncapsulatedX509CertificateType *> & ns1__EncapsulatedX509Certificate,
+	const xsd__base64Binary& __item,
 	const std::string& Id)
-{	ns1__CertificateValuesType *_p = soap_new_ns1__CertificateValuesType(soap);
+{	ns6__EncapsulatedX509CertificateType *_p = soap_new_ns6__EncapsulatedX509CertificateType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CertificateValuesType::ns1__EncapsulatedX509Certificate = ns1__EncapsulatedX509Certificate;
-		_p->ns1__CertificateValuesType::Id = Id;
+		_p->ns6__EncapsulatedX509CertificateType::__item = __item;
+		_p->ns6__EncapsulatedX509CertificateType::Id = Id;
 	}
 	return _p;
 }
 
-inline ns1__CertificateValuesType * soap_new_set_ns1__CertificateValuesType(
+#ifndef soap_write_ns6__EncapsulatedX509CertificateType
+#define soap_write_ns6__EncapsulatedX509CertificateType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:EncapsulatedX509CertificateType", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns6__EncapsulatedX509CertificateType * SOAP_FMAC4 soap_get_ns6__EncapsulatedX509CertificateType(struct soap*, ns6__EncapsulatedX509CertificateType *, const char*, const char*);
+
+#ifndef soap_read_ns6__EncapsulatedX509CertificateType
+#define soap_read_ns6__EncapsulatedX509CertificateType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__EncapsulatedX509CertificateType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+
+#ifndef SOAP_TYPE_ns6__CertificateValuesType
+#define SOAP_TYPE_ns6__CertificateValuesType (83)
+#endif
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__CertificateValuesType(struct soap*, const char*, int, const ns6__CertificateValuesType *, const char*);
+SOAP_FMAC3 ns6__CertificateValuesType * SOAP_FMAC4 soap_in_ns6__CertificateValuesType(struct soap*, const char*, ns6__CertificateValuesType *, const char*);
+SOAP_FMAC1 ns6__CertificateValuesType * SOAP_FMAC2 soap_instantiate_ns6__CertificateValuesType(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns6__CertificateValuesType * soap_new_ns6__CertificateValuesType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__CertificateValuesType(soap, n, NULL, NULL, NULL); }
+
+inline ns6__CertificateValuesType * soap_new_req_ns6__CertificateValuesType(
 	struct soap *soap,
-	const std::vector<ns1__EncapsulatedX509CertificateType *> & ns1__EncapsulatedX509Certificate,
+	const std::vector<ns6__EncapsulatedX509CertificateType *> & ns6__EncapsulatedX509Certificate,
 	const std::string& Id)
-{	ns1__CertificateValuesType *_p = soap_new_ns1__CertificateValuesType(soap);
+{	ns6__CertificateValuesType *_p = soap_new_ns6__CertificateValuesType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CertificateValuesType::ns1__EncapsulatedX509Certificate = ns1__EncapsulatedX509Certificate;
-		_p->ns1__CertificateValuesType::Id = Id;
+		_p->ns6__CertificateValuesType::ns6__EncapsulatedX509Certificate = ns6__EncapsulatedX509Certificate;
+		_p->ns6__CertificateValuesType::Id = Id;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__CertificateValuesType
-#define soap_write_ns1__CertificateValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:CertificateValuesType", NULL) || soap_end_send(soap), (soap)->error )
+inline ns6__CertificateValuesType * soap_new_set_ns6__CertificateValuesType(
+	struct soap *soap,
+	const std::vector<ns6__EncapsulatedX509CertificateType *> & ns6__EncapsulatedX509Certificate,
+	const std::string& Id)
+{	ns6__CertificateValuesType *_p = soap_new_ns6__CertificateValuesType(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->ns6__CertificateValuesType::ns6__EncapsulatedX509Certificate = ns6__EncapsulatedX509Certificate;
+		_p->ns6__CertificateValuesType::Id = Id;
+	}
+	return _p;
+}
+
+#ifndef soap_write_ns6__CertificateValuesType
+#define soap_write_ns6__CertificateValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:CertificateValuesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CertificateValuesType * SOAP_FMAC4 soap_get_ns1__CertificateValuesType(struct soap*, ns1__CertificateValuesType *, const char*, const char*);
+SOAP_FMAC3 ns6__CertificateValuesType * SOAP_FMAC4 soap_get_ns6__CertificateValuesType(struct soap*, ns6__CertificateValuesType *, const char*, const char*);
 
-#ifndef soap_read_ns1__CertificateValuesType
-#define soap_read_ns1__CertificateValuesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__CertificateValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__CertificateValuesType
+#define soap_read_ns6__CertificateValuesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__CertificateValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__SigAndRefsTimeStampType
-#define SOAP_TYPE_ns1__SigAndRefsTimeStampType (82)
+#ifndef SOAP_TYPE_ns6__SigAndRefsTimeStampType
+#define SOAP_TYPE_ns6__SigAndRefsTimeStampType (82)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__SigAndRefsTimeStampType(struct soap*, const char*, int, const ns1__SigAndRefsTimeStampType *, const char*);
-SOAP_FMAC3 ns1__SigAndRefsTimeStampType * SOAP_FMAC4 soap_in_ns1__SigAndRefsTimeStampType(struct soap*, const char*, ns1__SigAndRefsTimeStampType *, const char*);
-SOAP_FMAC1 ns1__SigAndRefsTimeStampType * SOAP_FMAC2 soap_instantiate_ns1__SigAndRefsTimeStampType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__SigAndRefsTimeStampType(struct soap*, const char*, int, const ns6__SigAndRefsTimeStampType *, const char*);
+SOAP_FMAC3 ns6__SigAndRefsTimeStampType * SOAP_FMAC4 soap_in_ns6__SigAndRefsTimeStampType(struct soap*, const char*, ns6__SigAndRefsTimeStampType *, const char*);
+SOAP_FMAC1 ns6__SigAndRefsTimeStampType * SOAP_FMAC2 soap_instantiate_ns6__SigAndRefsTimeStampType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__SigAndRefsTimeStampType * soap_new_ns1__SigAndRefsTimeStampType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__SigAndRefsTimeStampType(soap, n, NULL, NULL, NULL); }
+inline ns6__SigAndRefsTimeStampType * soap_new_ns6__SigAndRefsTimeStampType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__SigAndRefsTimeStampType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__SigAndRefsTimeStampType * soap_new_req_ns1__SigAndRefsTimeStampType(
+inline ns6__SigAndRefsTimeStampType * soap_new_req_ns6__SigAndRefsTimeStampType(
 	struct soap *soap,
 	ns5__CanonicalizationMethodType *ns5__CanonicalizationMethod,
-	const xsd__base64Binary& ns1__EncapsulatedTimeStamp)
-{	ns1__SigAndRefsTimeStampType *_p = soap_new_ns1__SigAndRefsTimeStampType(soap);
+	const xsd__base64Binary& ns6__EncapsulatedTimeStamp)
+{	ns6__SigAndRefsTimeStampType *_p = soap_new_ns6__SigAndRefsTimeStampType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__SigAndRefsTimeStampType::ns5__CanonicalizationMethod = ns5__CanonicalizationMethod;
-		_p->ns1__SigAndRefsTimeStampType::ns1__EncapsulatedTimeStamp = ns1__EncapsulatedTimeStamp;
+		_p->ns6__SigAndRefsTimeStampType::ns5__CanonicalizationMethod = ns5__CanonicalizationMethod;
+		_p->ns6__SigAndRefsTimeStampType::ns6__EncapsulatedTimeStamp = ns6__EncapsulatedTimeStamp;
 	}
 	return _p;
 }
 
-inline ns1__SigAndRefsTimeStampType * soap_new_set_ns1__SigAndRefsTimeStampType(
+inline ns6__SigAndRefsTimeStampType * soap_new_set_ns6__SigAndRefsTimeStampType(
 	struct soap *soap,
 	ns5__CanonicalizationMethodType *ns5__CanonicalizationMethod,
-	const xsd__base64Binary& ns1__EncapsulatedTimeStamp)
-{	ns1__SigAndRefsTimeStampType *_p = soap_new_ns1__SigAndRefsTimeStampType(soap);
+	const xsd__base64Binary& ns6__EncapsulatedTimeStamp)
+{	ns6__SigAndRefsTimeStampType *_p = soap_new_ns6__SigAndRefsTimeStampType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__SigAndRefsTimeStampType::ns5__CanonicalizationMethod = ns5__CanonicalizationMethod;
-		_p->ns1__SigAndRefsTimeStampType::ns1__EncapsulatedTimeStamp = ns1__EncapsulatedTimeStamp;
+		_p->ns6__SigAndRefsTimeStampType::ns5__CanonicalizationMethod = ns5__CanonicalizationMethod;
+		_p->ns6__SigAndRefsTimeStampType::ns6__EncapsulatedTimeStamp = ns6__EncapsulatedTimeStamp;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__SigAndRefsTimeStampType
-#define soap_write_ns1__SigAndRefsTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:SigAndRefsTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__SigAndRefsTimeStampType
+#define soap_write_ns6__SigAndRefsTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:SigAndRefsTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__SigAndRefsTimeStampType * SOAP_FMAC4 soap_get_ns1__SigAndRefsTimeStampType(struct soap*, ns1__SigAndRefsTimeStampType *, const char*, const char*);
+SOAP_FMAC3 ns6__SigAndRefsTimeStampType * SOAP_FMAC4 soap_get_ns6__SigAndRefsTimeStampType(struct soap*, ns6__SigAndRefsTimeStampType *, const char*, const char*);
 
-#ifndef soap_read_ns1__SigAndRefsTimeStampType
-#define soap_read_ns1__SigAndRefsTimeStampType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__SigAndRefsTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__SigAndRefsTimeStampType
+#define soap_read_ns6__SigAndRefsTimeStampType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__SigAndRefsTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__ResponderIDType
-#define SOAP_TYPE_ns1__ResponderIDType (81)
+#ifndef SOAP_TYPE_ns6__ResponderIDType
+#define SOAP_TYPE_ns6__ResponderIDType (81)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__ResponderIDType(struct soap*, const char*, int, const ns1__ResponderIDType *, const char*);
-SOAP_FMAC3 ns1__ResponderIDType * SOAP_FMAC4 soap_in_ns1__ResponderIDType(struct soap*, const char*, ns1__ResponderIDType *, const char*);
-SOAP_FMAC1 ns1__ResponderIDType * SOAP_FMAC2 soap_instantiate_ns1__ResponderIDType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__ResponderIDType(struct soap*, const char*, int, const ns6__ResponderIDType *, const char*);
+SOAP_FMAC3 ns6__ResponderIDType * SOAP_FMAC4 soap_in_ns6__ResponderIDType(struct soap*, const char*, ns6__ResponderIDType *, const char*);
+SOAP_FMAC1 ns6__ResponderIDType * SOAP_FMAC2 soap_instantiate_ns6__ResponderIDType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__ResponderIDType * soap_new_ns1__ResponderIDType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__ResponderIDType(soap, n, NULL, NULL, NULL); }
+inline ns6__ResponderIDType * soap_new_ns6__ResponderIDType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__ResponderIDType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__ResponderIDType * soap_new_req_ns1__ResponderIDType(
+inline ns6__ResponderIDType * soap_new_req_ns6__ResponderIDType(
 	struct soap *soap,
-	char *ns1__ByName)
-{	ns1__ResponderIDType *_p = soap_new_ns1__ResponderIDType(soap);
+	char *ns6__ByName)
+{	ns6__ResponderIDType *_p = soap_new_ns6__ResponderIDType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__ResponderIDType::ns1__ByName = ns1__ByName;
+		_p->ns6__ResponderIDType::ns6__ByName = ns6__ByName;
 	}
 	return _p;
 }
 
-inline ns1__ResponderIDType * soap_new_set_ns1__ResponderIDType(
+inline ns6__ResponderIDType * soap_new_set_ns6__ResponderIDType(
 	struct soap *soap,
-	char *ns1__ByName)
-{	ns1__ResponderIDType *_p = soap_new_ns1__ResponderIDType(soap);
+	char *ns6__ByName)
+{	ns6__ResponderIDType *_p = soap_new_ns6__ResponderIDType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__ResponderIDType::ns1__ByName = ns1__ByName;
+		_p->ns6__ResponderIDType::ns6__ByName = ns6__ByName;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__ResponderIDType
-#define soap_write_ns1__ResponderIDType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:ResponderIDType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__ResponderIDType
+#define soap_write_ns6__ResponderIDType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:ResponderIDType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__ResponderIDType * SOAP_FMAC4 soap_get_ns1__ResponderIDType(struct soap*, ns1__ResponderIDType *, const char*, const char*);
+SOAP_FMAC3 ns6__ResponderIDType * SOAP_FMAC4 soap_get_ns6__ResponderIDType(struct soap*, ns6__ResponderIDType *, const char*, const char*);
 
-#ifndef soap_read_ns1__ResponderIDType
-#define soap_read_ns1__ResponderIDType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__ResponderIDType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__ResponderIDType
+#define soap_read_ns6__ResponderIDType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__ResponderIDType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__OCSPIdentifierType
-#define SOAP_TYPE_ns1__OCSPIdentifierType (80)
+#ifndef SOAP_TYPE_ns6__OCSPIdentifierType
+#define SOAP_TYPE_ns6__OCSPIdentifierType (80)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__OCSPIdentifierType(struct soap*, const char*, int, const ns1__OCSPIdentifierType *, const char*);
-SOAP_FMAC3 ns1__OCSPIdentifierType * SOAP_FMAC4 soap_in_ns1__OCSPIdentifierType(struct soap*, const char*, ns1__OCSPIdentifierType *, const char*);
-SOAP_FMAC1 ns1__OCSPIdentifierType * SOAP_FMAC2 soap_instantiate_ns1__OCSPIdentifierType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__OCSPIdentifierType(struct soap*, const char*, int, const ns6__OCSPIdentifierType *, const char*);
+SOAP_FMAC3 ns6__OCSPIdentifierType * SOAP_FMAC4 soap_in_ns6__OCSPIdentifierType(struct soap*, const char*, ns6__OCSPIdentifierType *, const char*);
+SOAP_FMAC1 ns6__OCSPIdentifierType * SOAP_FMAC2 soap_instantiate_ns6__OCSPIdentifierType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__OCSPIdentifierType * soap_new_ns1__OCSPIdentifierType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__OCSPIdentifierType(soap, n, NULL, NULL, NULL); }
+inline ns6__OCSPIdentifierType * soap_new_ns6__OCSPIdentifierType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__OCSPIdentifierType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__OCSPIdentifierType * soap_new_req_ns1__OCSPIdentifierType(
+inline ns6__OCSPIdentifierType * soap_new_req_ns6__OCSPIdentifierType(
 	struct soap *soap,
-	ns1__ResponderIDType *ns1__ResponderID,
-	char *ns1__ProducedAt)
-{	ns1__OCSPIdentifierType *_p = soap_new_ns1__OCSPIdentifierType(soap);
+	ns6__ResponderIDType *ns6__ResponderID,
+	char *ns6__ProducedAt)
+{	ns6__OCSPIdentifierType *_p = soap_new_ns6__OCSPIdentifierType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__OCSPIdentifierType::ns1__ResponderID = ns1__ResponderID;
-		_p->ns1__OCSPIdentifierType::ns1__ProducedAt = ns1__ProducedAt;
+		_p->ns6__OCSPIdentifierType::ns6__ResponderID = ns6__ResponderID;
+		_p->ns6__OCSPIdentifierType::ns6__ProducedAt = ns6__ProducedAt;
 	}
 	return _p;
 }
 
-inline ns1__OCSPIdentifierType * soap_new_set_ns1__OCSPIdentifierType(
+inline ns6__OCSPIdentifierType * soap_new_set_ns6__OCSPIdentifierType(
 	struct soap *soap,
-	ns1__ResponderIDType *ns1__ResponderID,
-	char *ns1__ProducedAt)
-{	ns1__OCSPIdentifierType *_p = soap_new_ns1__OCSPIdentifierType(soap);
+	ns6__ResponderIDType *ns6__ResponderID,
+	char *ns6__ProducedAt)
+{	ns6__OCSPIdentifierType *_p = soap_new_ns6__OCSPIdentifierType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__OCSPIdentifierType::ns1__ResponderID = ns1__ResponderID;
-		_p->ns1__OCSPIdentifierType::ns1__ProducedAt = ns1__ProducedAt;
+		_p->ns6__OCSPIdentifierType::ns6__ResponderID = ns6__ResponderID;
+		_p->ns6__OCSPIdentifierType::ns6__ProducedAt = ns6__ProducedAt;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__OCSPIdentifierType
-#define soap_write_ns1__OCSPIdentifierType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:OCSPIdentifierType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__OCSPIdentifierType
+#define soap_write_ns6__OCSPIdentifierType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:OCSPIdentifierType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__OCSPIdentifierType * SOAP_FMAC4 soap_get_ns1__OCSPIdentifierType(struct soap*, ns1__OCSPIdentifierType *, const char*, const char*);
+SOAP_FMAC3 ns6__OCSPIdentifierType * SOAP_FMAC4 soap_get_ns6__OCSPIdentifierType(struct soap*, ns6__OCSPIdentifierType *, const char*, const char*);
 
-#ifndef soap_read_ns1__OCSPIdentifierType
-#define soap_read_ns1__OCSPIdentifierType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__OCSPIdentifierType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__OCSPIdentifierType
+#define soap_read_ns6__OCSPIdentifierType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__OCSPIdentifierType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__OCSPRefType
-#define SOAP_TYPE_ns1__OCSPRefType (79)
+#ifndef SOAP_TYPE_ns6__OCSPRefType
+#define SOAP_TYPE_ns6__OCSPRefType (79)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__OCSPRefType(struct soap*, const char*, int, const ns1__OCSPRefType *, const char*);
-SOAP_FMAC3 ns1__OCSPRefType * SOAP_FMAC4 soap_in_ns1__OCSPRefType(struct soap*, const char*, ns1__OCSPRefType *, const char*);
-SOAP_FMAC1 ns1__OCSPRefType * SOAP_FMAC2 soap_instantiate_ns1__OCSPRefType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__OCSPRefType(struct soap*, const char*, int, const ns6__OCSPRefType *, const char*);
+SOAP_FMAC3 ns6__OCSPRefType * SOAP_FMAC4 soap_in_ns6__OCSPRefType(struct soap*, const char*, ns6__OCSPRefType *, const char*);
+SOAP_FMAC1 ns6__OCSPRefType * SOAP_FMAC2 soap_instantiate_ns6__OCSPRefType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__OCSPRefType * soap_new_ns1__OCSPRefType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__OCSPRefType(soap, n, NULL, NULL, NULL); }
+inline ns6__OCSPRefType * soap_new_ns6__OCSPRefType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__OCSPRefType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__OCSPRefType * soap_new_req_ns1__OCSPRefType(
+inline ns6__OCSPRefType * soap_new_req_ns6__OCSPRefType(
 	struct soap *soap,
-	ns1__OCSPIdentifierType *ns1__OCSPIdentifier,
-	ns1__DigestAlgAndValueType *ns1__DigestAlgAndValue)
-{	ns1__OCSPRefType *_p = soap_new_ns1__OCSPRefType(soap);
+	ns6__OCSPIdentifierType *ns6__OCSPIdentifier,
+	ns6__DigestAlgAndValueType *ns6__DigestAlgAndValue)
+{	ns6__OCSPRefType *_p = soap_new_ns6__OCSPRefType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__OCSPRefType::ns1__OCSPIdentifier = ns1__OCSPIdentifier;
-		_p->ns1__OCSPRefType::ns1__DigestAlgAndValue = ns1__DigestAlgAndValue;
+		_p->ns6__OCSPRefType::ns6__OCSPIdentifier = ns6__OCSPIdentifier;
+		_p->ns6__OCSPRefType::ns6__DigestAlgAndValue = ns6__DigestAlgAndValue;
 	}
 	return _p;
 }
 
-inline ns1__OCSPRefType * soap_new_set_ns1__OCSPRefType(
+inline ns6__OCSPRefType * soap_new_set_ns6__OCSPRefType(
 	struct soap *soap,
-	ns1__OCSPIdentifierType *ns1__OCSPIdentifier,
-	ns1__DigestAlgAndValueType *ns1__DigestAlgAndValue)
-{	ns1__OCSPRefType *_p = soap_new_ns1__OCSPRefType(soap);
+	ns6__OCSPIdentifierType *ns6__OCSPIdentifier,
+	ns6__DigestAlgAndValueType *ns6__DigestAlgAndValue)
+{	ns6__OCSPRefType *_p = soap_new_ns6__OCSPRefType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__OCSPRefType::ns1__OCSPIdentifier = ns1__OCSPIdentifier;
-		_p->ns1__OCSPRefType::ns1__DigestAlgAndValue = ns1__DigestAlgAndValue;
+		_p->ns6__OCSPRefType::ns6__OCSPIdentifier = ns6__OCSPIdentifier;
+		_p->ns6__OCSPRefType::ns6__DigestAlgAndValue = ns6__DigestAlgAndValue;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__OCSPRefType
-#define soap_write_ns1__OCSPRefType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:OCSPRefType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__OCSPRefType
+#define soap_write_ns6__OCSPRefType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:OCSPRefType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__OCSPRefType * SOAP_FMAC4 soap_get_ns1__OCSPRefType(struct soap*, ns1__OCSPRefType *, const char*, const char*);
+SOAP_FMAC3 ns6__OCSPRefType * SOAP_FMAC4 soap_get_ns6__OCSPRefType(struct soap*, ns6__OCSPRefType *, const char*, const char*);
 
-#ifndef soap_read_ns1__OCSPRefType
-#define soap_read_ns1__OCSPRefType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__OCSPRefType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__OCSPRefType
+#define soap_read_ns6__OCSPRefType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__OCSPRefType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__OCSPRefsType
-#define SOAP_TYPE_ns1__OCSPRefsType (78)
+#ifndef SOAP_TYPE_ns6__OCSPRefsType
+#define SOAP_TYPE_ns6__OCSPRefsType (78)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__OCSPRefsType(struct soap*, const char*, int, const ns1__OCSPRefsType *, const char*);
-SOAP_FMAC3 ns1__OCSPRefsType * SOAP_FMAC4 soap_in_ns1__OCSPRefsType(struct soap*, const char*, ns1__OCSPRefsType *, const char*);
-SOAP_FMAC1 ns1__OCSPRefsType * SOAP_FMAC2 soap_instantiate_ns1__OCSPRefsType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__OCSPRefsType(struct soap*, const char*, int, const ns6__OCSPRefsType *, const char*);
+SOAP_FMAC3 ns6__OCSPRefsType * SOAP_FMAC4 soap_in_ns6__OCSPRefsType(struct soap*, const char*, ns6__OCSPRefsType *, const char*);
+SOAP_FMAC1 ns6__OCSPRefsType * SOAP_FMAC2 soap_instantiate_ns6__OCSPRefsType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__OCSPRefsType * soap_new_ns1__OCSPRefsType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__OCSPRefsType(soap, n, NULL, NULL, NULL); }
+inline ns6__OCSPRefsType * soap_new_ns6__OCSPRefsType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__OCSPRefsType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__OCSPRefsType * soap_new_req_ns1__OCSPRefsType(
+inline ns6__OCSPRefsType * soap_new_req_ns6__OCSPRefsType(
 	struct soap *soap,
-	const std::vector<ns1__OCSPRefType *> & ns1__OCSPRef)
-{	ns1__OCSPRefsType *_p = soap_new_ns1__OCSPRefsType(soap);
+	const std::vector<ns6__OCSPRefType *> & ns6__OCSPRef)
+{	ns6__OCSPRefsType *_p = soap_new_ns6__OCSPRefsType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__OCSPRefsType::ns1__OCSPRef = ns1__OCSPRef;
+		_p->ns6__OCSPRefsType::ns6__OCSPRef = ns6__OCSPRef;
 	}
 	return _p;
 }
 
-inline ns1__OCSPRefsType * soap_new_set_ns1__OCSPRefsType(
+inline ns6__OCSPRefsType * soap_new_set_ns6__OCSPRefsType(
 	struct soap *soap,
-	const std::vector<ns1__OCSPRefType *> & ns1__OCSPRef)
-{	ns1__OCSPRefsType *_p = soap_new_ns1__OCSPRefsType(soap);
+	const std::vector<ns6__OCSPRefType *> & ns6__OCSPRef)
+{	ns6__OCSPRefsType *_p = soap_new_ns6__OCSPRefsType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__OCSPRefsType::ns1__OCSPRef = ns1__OCSPRef;
+		_p->ns6__OCSPRefsType::ns6__OCSPRef = ns6__OCSPRef;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__OCSPRefsType
-#define soap_write_ns1__OCSPRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:OCSPRefsType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__OCSPRefsType
+#define soap_write_ns6__OCSPRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:OCSPRefsType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__OCSPRefsType * SOAP_FMAC4 soap_get_ns1__OCSPRefsType(struct soap*, ns1__OCSPRefsType *, const char*, const char*);
+SOAP_FMAC3 ns6__OCSPRefsType * SOAP_FMAC4 soap_get_ns6__OCSPRefsType(struct soap*, ns6__OCSPRefsType *, const char*, const char*);
 
-#ifndef soap_read_ns1__OCSPRefsType
-#define soap_read_ns1__OCSPRefsType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__OCSPRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__OCSPRefsType
+#define soap_read_ns6__OCSPRefsType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__OCSPRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__CRLIdentifierType
-#define SOAP_TYPE_ns1__CRLIdentifierType (77)
+#ifndef SOAP_TYPE_ns6__CRLIdentifierType
+#define SOAP_TYPE_ns6__CRLIdentifierType (77)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__CRLIdentifierType(struct soap*, const char*, int, const ns1__CRLIdentifierType *, const char*);
-SOAP_FMAC3 ns1__CRLIdentifierType * SOAP_FMAC4 soap_in_ns1__CRLIdentifierType(struct soap*, const char*, ns1__CRLIdentifierType *, const char*);
-SOAP_FMAC1 ns1__CRLIdentifierType * SOAP_FMAC2 soap_instantiate_ns1__CRLIdentifierType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__CRLIdentifierType(struct soap*, const char*, int, const ns6__CRLIdentifierType *, const char*);
+SOAP_FMAC3 ns6__CRLIdentifierType * SOAP_FMAC4 soap_in_ns6__CRLIdentifierType(struct soap*, const char*, ns6__CRLIdentifierType *, const char*);
+SOAP_FMAC1 ns6__CRLIdentifierType * SOAP_FMAC2 soap_instantiate_ns6__CRLIdentifierType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__CRLIdentifierType * soap_new_ns1__CRLIdentifierType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__CRLIdentifierType(soap, n, NULL, NULL, NULL); }
+inline ns6__CRLIdentifierType * soap_new_ns6__CRLIdentifierType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__CRLIdentifierType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__CRLIdentifierType * soap_new_req_ns1__CRLIdentifierType(
+inline ns6__CRLIdentifierType * soap_new_req_ns6__CRLIdentifierType(
 	struct soap *soap,
-	char *ns1__Issuer,
-	char *ns1__IssueTime,
-	char *ns1__Number)
-{	ns1__CRLIdentifierType *_p = soap_new_ns1__CRLIdentifierType(soap);
+	char *ns6__Issuer,
+	char *ns6__IssueTime,
+	char *ns6__Number)
+{	ns6__CRLIdentifierType *_p = soap_new_ns6__CRLIdentifierType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CRLIdentifierType::ns1__Issuer = ns1__Issuer;
-		_p->ns1__CRLIdentifierType::ns1__IssueTime = ns1__IssueTime;
-		_p->ns1__CRLIdentifierType::ns1__Number = ns1__Number;
+		_p->ns6__CRLIdentifierType::ns6__Issuer = ns6__Issuer;
+		_p->ns6__CRLIdentifierType::ns6__IssueTime = ns6__IssueTime;
+		_p->ns6__CRLIdentifierType::ns6__Number = ns6__Number;
 	}
 	return _p;
 }
 
-inline ns1__CRLIdentifierType * soap_new_set_ns1__CRLIdentifierType(
+inline ns6__CRLIdentifierType * soap_new_set_ns6__CRLIdentifierType(
 	struct soap *soap,
-	char *ns1__Issuer,
-	char *ns1__IssueTime,
-	char *ns1__Number)
-{	ns1__CRLIdentifierType *_p = soap_new_ns1__CRLIdentifierType(soap);
+	char *ns6__Issuer,
+	char *ns6__IssueTime,
+	char *ns6__Number)
+{	ns6__CRLIdentifierType *_p = soap_new_ns6__CRLIdentifierType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CRLIdentifierType::ns1__Issuer = ns1__Issuer;
-		_p->ns1__CRLIdentifierType::ns1__IssueTime = ns1__IssueTime;
-		_p->ns1__CRLIdentifierType::ns1__Number = ns1__Number;
+		_p->ns6__CRLIdentifierType::ns6__Issuer = ns6__Issuer;
+		_p->ns6__CRLIdentifierType::ns6__IssueTime = ns6__IssueTime;
+		_p->ns6__CRLIdentifierType::ns6__Number = ns6__Number;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__CRLIdentifierType
-#define soap_write_ns1__CRLIdentifierType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:CRLIdentifierType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__CRLIdentifierType
+#define soap_write_ns6__CRLIdentifierType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:CRLIdentifierType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CRLIdentifierType * SOAP_FMAC4 soap_get_ns1__CRLIdentifierType(struct soap*, ns1__CRLIdentifierType *, const char*, const char*);
+SOAP_FMAC3 ns6__CRLIdentifierType * SOAP_FMAC4 soap_get_ns6__CRLIdentifierType(struct soap*, ns6__CRLIdentifierType *, const char*, const char*);
 
-#ifndef soap_read_ns1__CRLIdentifierType
-#define soap_read_ns1__CRLIdentifierType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__CRLIdentifierType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__CRLIdentifierType
+#define soap_read_ns6__CRLIdentifierType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__CRLIdentifierType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__DigestAlgAndValueType
-#define SOAP_TYPE_ns1__DigestAlgAndValueType (76)
+#ifndef SOAP_TYPE_ns6__DigestAlgAndValueType
+#define SOAP_TYPE_ns6__DigestAlgAndValueType (76)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__DigestAlgAndValueType(struct soap*, const char*, int, const ns1__DigestAlgAndValueType *, const char*);
-SOAP_FMAC3 ns1__DigestAlgAndValueType * SOAP_FMAC4 soap_in_ns1__DigestAlgAndValueType(struct soap*, const char*, ns1__DigestAlgAndValueType *, const char*);
-SOAP_FMAC1 ns1__DigestAlgAndValueType * SOAP_FMAC2 soap_instantiate_ns1__DigestAlgAndValueType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__DigestAlgAndValueType(struct soap*, const char*, int, const ns6__DigestAlgAndValueType *, const char*);
+SOAP_FMAC3 ns6__DigestAlgAndValueType * SOAP_FMAC4 soap_in_ns6__DigestAlgAndValueType(struct soap*, const char*, ns6__DigestAlgAndValueType *, const char*);
+SOAP_FMAC1 ns6__DigestAlgAndValueType * SOAP_FMAC2 soap_instantiate_ns6__DigestAlgAndValueType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__DigestAlgAndValueType * soap_new_ns1__DigestAlgAndValueType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__DigestAlgAndValueType(soap, n, NULL, NULL, NULL); }
+inline ns6__DigestAlgAndValueType * soap_new_ns6__DigestAlgAndValueType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__DigestAlgAndValueType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__DigestAlgAndValueType * soap_new_req_ns1__DigestAlgAndValueType(
+inline ns6__DigestAlgAndValueType * soap_new_req_ns6__DigestAlgAndValueType(
 	struct soap *soap,
 	ns5__DigestMethodType *ns5__DigestMethod,
 	ns5__DigestValueType *ns5__DigestValue)
-{	ns1__DigestAlgAndValueType *_p = soap_new_ns1__DigestAlgAndValueType(soap);
+{	ns6__DigestAlgAndValueType *_p = soap_new_ns6__DigestAlgAndValueType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__DigestAlgAndValueType::ns5__DigestMethod = ns5__DigestMethod;
-		_p->ns1__DigestAlgAndValueType::ns5__DigestValue = ns5__DigestValue;
+		_p->ns6__DigestAlgAndValueType::ns5__DigestMethod = ns5__DigestMethod;
+		_p->ns6__DigestAlgAndValueType::ns5__DigestValue = ns5__DigestValue;
 	}
 	return _p;
 }
 
-inline ns1__DigestAlgAndValueType * soap_new_set_ns1__DigestAlgAndValueType(
+inline ns6__DigestAlgAndValueType * soap_new_set_ns6__DigestAlgAndValueType(
 	struct soap *soap,
 	ns5__DigestMethodType *ns5__DigestMethod,
 	ns5__DigestValueType *ns5__DigestValue)
-{	ns1__DigestAlgAndValueType *_p = soap_new_ns1__DigestAlgAndValueType(soap);
+{	ns6__DigestAlgAndValueType *_p = soap_new_ns6__DigestAlgAndValueType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__DigestAlgAndValueType::ns5__DigestMethod = ns5__DigestMethod;
-		_p->ns1__DigestAlgAndValueType::ns5__DigestValue = ns5__DigestValue;
+		_p->ns6__DigestAlgAndValueType::ns5__DigestMethod = ns5__DigestMethod;
+		_p->ns6__DigestAlgAndValueType::ns5__DigestValue = ns5__DigestValue;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__DigestAlgAndValueType
-#define soap_write_ns1__DigestAlgAndValueType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:DigestAlgAndValueType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__DigestAlgAndValueType
+#define soap_write_ns6__DigestAlgAndValueType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:DigestAlgAndValueType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__DigestAlgAndValueType * SOAP_FMAC4 soap_get_ns1__DigestAlgAndValueType(struct soap*, ns1__DigestAlgAndValueType *, const char*, const char*);
+SOAP_FMAC3 ns6__DigestAlgAndValueType * SOAP_FMAC4 soap_get_ns6__DigestAlgAndValueType(struct soap*, ns6__DigestAlgAndValueType *, const char*, const char*);
 
-#ifndef soap_read_ns1__DigestAlgAndValueType
-#define soap_read_ns1__DigestAlgAndValueType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__DigestAlgAndValueType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__DigestAlgAndValueType
+#define soap_read_ns6__DigestAlgAndValueType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__DigestAlgAndValueType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__CRLRefType
-#define SOAP_TYPE_ns1__CRLRefType (75)
+#ifndef SOAP_TYPE_ns6__CRLRefType
+#define SOAP_TYPE_ns6__CRLRefType (75)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__CRLRefType(struct soap*, const char*, int, const ns1__CRLRefType *, const char*);
-SOAP_FMAC3 ns1__CRLRefType * SOAP_FMAC4 soap_in_ns1__CRLRefType(struct soap*, const char*, ns1__CRLRefType *, const char*);
-SOAP_FMAC1 ns1__CRLRefType * SOAP_FMAC2 soap_instantiate_ns1__CRLRefType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__CRLRefType(struct soap*, const char*, int, const ns6__CRLRefType *, const char*);
+SOAP_FMAC3 ns6__CRLRefType * SOAP_FMAC4 soap_in_ns6__CRLRefType(struct soap*, const char*, ns6__CRLRefType *, const char*);
+SOAP_FMAC1 ns6__CRLRefType * SOAP_FMAC2 soap_instantiate_ns6__CRLRefType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__CRLRefType * soap_new_ns1__CRLRefType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__CRLRefType(soap, n, NULL, NULL, NULL); }
+inline ns6__CRLRefType * soap_new_ns6__CRLRefType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__CRLRefType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__CRLRefType * soap_new_req_ns1__CRLRefType(
+inline ns6__CRLRefType * soap_new_req_ns6__CRLRefType(
 	struct soap *soap,
-	ns1__DigestAlgAndValueType *ns1__DigestAlgAndValue,
-	ns1__CRLIdentifierType *ns1__CRLIdentifier)
-{	ns1__CRLRefType *_p = soap_new_ns1__CRLRefType(soap);
+	ns6__DigestAlgAndValueType *ns6__DigestAlgAndValue,
+	ns6__CRLIdentifierType *ns6__CRLIdentifier)
+{	ns6__CRLRefType *_p = soap_new_ns6__CRLRefType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CRLRefType::ns1__DigestAlgAndValue = ns1__DigestAlgAndValue;
-		_p->ns1__CRLRefType::ns1__CRLIdentifier = ns1__CRLIdentifier;
+		_p->ns6__CRLRefType::ns6__DigestAlgAndValue = ns6__DigestAlgAndValue;
+		_p->ns6__CRLRefType::ns6__CRLIdentifier = ns6__CRLIdentifier;
 	}
 	return _p;
 }
 
-inline ns1__CRLRefType * soap_new_set_ns1__CRLRefType(
+inline ns6__CRLRefType * soap_new_set_ns6__CRLRefType(
 	struct soap *soap,
-	ns1__DigestAlgAndValueType *ns1__DigestAlgAndValue,
-	ns1__CRLIdentifierType *ns1__CRLIdentifier)
-{	ns1__CRLRefType *_p = soap_new_ns1__CRLRefType(soap);
+	ns6__DigestAlgAndValueType *ns6__DigestAlgAndValue,
+	ns6__CRLIdentifierType *ns6__CRLIdentifier)
+{	ns6__CRLRefType *_p = soap_new_ns6__CRLRefType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CRLRefType::ns1__DigestAlgAndValue = ns1__DigestAlgAndValue;
-		_p->ns1__CRLRefType::ns1__CRLIdentifier = ns1__CRLIdentifier;
+		_p->ns6__CRLRefType::ns6__DigestAlgAndValue = ns6__DigestAlgAndValue;
+		_p->ns6__CRLRefType::ns6__CRLIdentifier = ns6__CRLIdentifier;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__CRLRefType
-#define soap_write_ns1__CRLRefType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:CRLRefType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__CRLRefType
+#define soap_write_ns6__CRLRefType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:CRLRefType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CRLRefType * SOAP_FMAC4 soap_get_ns1__CRLRefType(struct soap*, ns1__CRLRefType *, const char*, const char*);
+SOAP_FMAC3 ns6__CRLRefType * SOAP_FMAC4 soap_get_ns6__CRLRefType(struct soap*, ns6__CRLRefType *, const char*, const char*);
 
-#ifndef soap_read_ns1__CRLRefType
-#define soap_read_ns1__CRLRefType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__CRLRefType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__CRLRefType
+#define soap_read_ns6__CRLRefType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__CRLRefType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__CRLRefsType
-#define SOAP_TYPE_ns1__CRLRefsType (74)
+#ifndef SOAP_TYPE_ns6__CRLRefsType
+#define SOAP_TYPE_ns6__CRLRefsType (74)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__CRLRefsType(struct soap*, const char*, int, const ns1__CRLRefsType *, const char*);
-SOAP_FMAC3 ns1__CRLRefsType * SOAP_FMAC4 soap_in_ns1__CRLRefsType(struct soap*, const char*, ns1__CRLRefsType *, const char*);
-SOAP_FMAC1 ns1__CRLRefsType * SOAP_FMAC2 soap_instantiate_ns1__CRLRefsType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__CRLRefsType(struct soap*, const char*, int, const ns6__CRLRefsType *, const char*);
+SOAP_FMAC3 ns6__CRLRefsType * SOAP_FMAC4 soap_in_ns6__CRLRefsType(struct soap*, const char*, ns6__CRLRefsType *, const char*);
+SOAP_FMAC1 ns6__CRLRefsType * SOAP_FMAC2 soap_instantiate_ns6__CRLRefsType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__CRLRefsType * soap_new_ns1__CRLRefsType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__CRLRefsType(soap, n, NULL, NULL, NULL); }
+inline ns6__CRLRefsType * soap_new_ns6__CRLRefsType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__CRLRefsType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__CRLRefsType * soap_new_req_ns1__CRLRefsType(
+inline ns6__CRLRefsType * soap_new_req_ns6__CRLRefsType(
 	struct soap *soap,
-	const std::vector<ns1__CRLRefType *> & ns1__CRLRef)
-{	ns1__CRLRefsType *_p = soap_new_ns1__CRLRefsType(soap);
+	const std::vector<ns6__CRLRefType *> & ns6__CRLRef)
+{	ns6__CRLRefsType *_p = soap_new_ns6__CRLRefsType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CRLRefsType::ns1__CRLRef = ns1__CRLRef;
+		_p->ns6__CRLRefsType::ns6__CRLRef = ns6__CRLRef;
 	}
 	return _p;
 }
 
-inline ns1__CRLRefsType * soap_new_set_ns1__CRLRefsType(
+inline ns6__CRLRefsType * soap_new_set_ns6__CRLRefsType(
 	struct soap *soap,
-	const std::vector<ns1__CRLRefType *> & ns1__CRLRef)
-{	ns1__CRLRefsType *_p = soap_new_ns1__CRLRefsType(soap);
+	const std::vector<ns6__CRLRefType *> & ns6__CRLRef)
+{	ns6__CRLRefsType *_p = soap_new_ns6__CRLRefsType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CRLRefsType::ns1__CRLRef = ns1__CRLRef;
+		_p->ns6__CRLRefsType::ns6__CRLRef = ns6__CRLRef;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__CRLRefsType
-#define soap_write_ns1__CRLRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:CRLRefsType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__CRLRefsType
+#define soap_write_ns6__CRLRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:CRLRefsType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CRLRefsType * SOAP_FMAC4 soap_get_ns1__CRLRefsType(struct soap*, ns1__CRLRefsType *, const char*, const char*);
+SOAP_FMAC3 ns6__CRLRefsType * SOAP_FMAC4 soap_get_ns6__CRLRefsType(struct soap*, ns6__CRLRefsType *, const char*, const char*);
 
-#ifndef soap_read_ns1__CRLRefsType
-#define soap_read_ns1__CRLRefsType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__CRLRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__CRLRefsType
+#define soap_read_ns6__CRLRefsType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__CRLRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__CompleteRevocationRefsType
-#define SOAP_TYPE_ns1__CompleteRevocationRefsType (73)
+#ifndef SOAP_TYPE_ns6__CompleteRevocationRefsType
+#define SOAP_TYPE_ns6__CompleteRevocationRefsType (73)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__CompleteRevocationRefsType(struct soap*, const char*, int, const ns1__CompleteRevocationRefsType *, const char*);
-SOAP_FMAC3 ns1__CompleteRevocationRefsType * SOAP_FMAC4 soap_in_ns1__CompleteRevocationRefsType(struct soap*, const char*, ns1__CompleteRevocationRefsType *, const char*);
-SOAP_FMAC1 ns1__CompleteRevocationRefsType * SOAP_FMAC2 soap_instantiate_ns1__CompleteRevocationRefsType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__CompleteRevocationRefsType(struct soap*, const char*, int, const ns6__CompleteRevocationRefsType *, const char*);
+SOAP_FMAC3 ns6__CompleteRevocationRefsType * SOAP_FMAC4 soap_in_ns6__CompleteRevocationRefsType(struct soap*, const char*, ns6__CompleteRevocationRefsType *, const char*);
+SOAP_FMAC1 ns6__CompleteRevocationRefsType * SOAP_FMAC2 soap_instantiate_ns6__CompleteRevocationRefsType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__CompleteRevocationRefsType * soap_new_ns1__CompleteRevocationRefsType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__CompleteRevocationRefsType(soap, n, NULL, NULL, NULL); }
+inline ns6__CompleteRevocationRefsType * soap_new_ns6__CompleteRevocationRefsType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__CompleteRevocationRefsType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__CompleteRevocationRefsType * soap_new_req_ns1__CompleteRevocationRefsType(
+inline ns6__CompleteRevocationRefsType * soap_new_req_ns6__CompleteRevocationRefsType(
 	struct soap *soap,
-	ns1__CRLRefsType *ns1__CRLRefs,
-	ns1__OCSPRefsType *ns1__OCSPRefs)
-{	ns1__CompleteRevocationRefsType *_p = soap_new_ns1__CompleteRevocationRefsType(soap);
+	ns6__CRLRefsType *ns6__CRLRefs,
+	ns6__OCSPRefsType *ns6__OCSPRefs)
+{	ns6__CompleteRevocationRefsType *_p = soap_new_ns6__CompleteRevocationRefsType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CompleteRevocationRefsType::ns1__CRLRefs = ns1__CRLRefs;
-		_p->ns1__CompleteRevocationRefsType::ns1__OCSPRefs = ns1__OCSPRefs;
+		_p->ns6__CompleteRevocationRefsType::ns6__CRLRefs = ns6__CRLRefs;
+		_p->ns6__CompleteRevocationRefsType::ns6__OCSPRefs = ns6__OCSPRefs;
 	}
 	return _p;
 }
 
-inline ns1__CompleteRevocationRefsType * soap_new_set_ns1__CompleteRevocationRefsType(
+inline ns6__CompleteRevocationRefsType * soap_new_set_ns6__CompleteRevocationRefsType(
 	struct soap *soap,
-	ns1__CRLRefsType *ns1__CRLRefs,
-	ns1__OCSPRefsType *ns1__OCSPRefs)
-{	ns1__CompleteRevocationRefsType *_p = soap_new_ns1__CompleteRevocationRefsType(soap);
+	ns6__CRLRefsType *ns6__CRLRefs,
+	ns6__OCSPRefsType *ns6__OCSPRefs)
+{	ns6__CompleteRevocationRefsType *_p = soap_new_ns6__CompleteRevocationRefsType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CompleteRevocationRefsType::ns1__CRLRefs = ns1__CRLRefs;
-		_p->ns1__CompleteRevocationRefsType::ns1__OCSPRefs = ns1__OCSPRefs;
+		_p->ns6__CompleteRevocationRefsType::ns6__CRLRefs = ns6__CRLRefs;
+		_p->ns6__CompleteRevocationRefsType::ns6__OCSPRefs = ns6__OCSPRefs;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__CompleteRevocationRefsType
-#define soap_write_ns1__CompleteRevocationRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:CompleteRevocationRefsType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__CompleteRevocationRefsType
+#define soap_write_ns6__CompleteRevocationRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:CompleteRevocationRefsType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CompleteRevocationRefsType * SOAP_FMAC4 soap_get_ns1__CompleteRevocationRefsType(struct soap*, ns1__CompleteRevocationRefsType *, const char*, const char*);
+SOAP_FMAC3 ns6__CompleteRevocationRefsType * SOAP_FMAC4 soap_get_ns6__CompleteRevocationRefsType(struct soap*, ns6__CompleteRevocationRefsType *, const char*, const char*);
 
-#ifndef soap_read_ns1__CompleteRevocationRefsType
-#define soap_read_ns1__CompleteRevocationRefsType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__CompleteRevocationRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__CompleteRevocationRefsType
+#define soap_read_ns6__CompleteRevocationRefsType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__CompleteRevocationRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__CertRefsType
-#define SOAP_TYPE_ns1__CertRefsType (72)
+#ifndef SOAP_TYPE_ns6__CertRefsType
+#define SOAP_TYPE_ns6__CertRefsType (72)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__CertRefsType(struct soap*, const char*, int, const ns1__CertRefsType *, const char*);
-SOAP_FMAC3 ns1__CertRefsType * SOAP_FMAC4 soap_in_ns1__CertRefsType(struct soap*, const char*, ns1__CertRefsType *, const char*);
-SOAP_FMAC1 ns1__CertRefsType * SOAP_FMAC2 soap_instantiate_ns1__CertRefsType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__CertRefsType(struct soap*, const char*, int, const ns6__CertRefsType *, const char*);
+SOAP_FMAC3 ns6__CertRefsType * SOAP_FMAC4 soap_in_ns6__CertRefsType(struct soap*, const char*, ns6__CertRefsType *, const char*);
+SOAP_FMAC1 ns6__CertRefsType * SOAP_FMAC2 soap_instantiate_ns6__CertRefsType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__CertRefsType * soap_new_ns1__CertRefsType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__CertRefsType(soap, n, NULL, NULL, NULL); }
+inline ns6__CertRefsType * soap_new_ns6__CertRefsType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__CertRefsType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__CertRefsType * soap_new_req_ns1__CertRefsType(
+inline ns6__CertRefsType * soap_new_req_ns6__CertRefsType(
 	struct soap *soap,
-	const std::vector<ns1__CertType *> & ns1__Cert)
-{	ns1__CertRefsType *_p = soap_new_ns1__CertRefsType(soap);
+	const std::vector<ns6__CertType *> & ns6__Cert)
+{	ns6__CertRefsType *_p = soap_new_ns6__CertRefsType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CertRefsType::ns1__Cert = ns1__Cert;
+		_p->ns6__CertRefsType::ns6__Cert = ns6__Cert;
 	}
 	return _p;
 }
 
-inline ns1__CertRefsType * soap_new_set_ns1__CertRefsType(
+inline ns6__CertRefsType * soap_new_set_ns6__CertRefsType(
 	struct soap *soap,
-	const std::vector<ns1__CertType *> & ns1__Cert)
-{	ns1__CertRefsType *_p = soap_new_ns1__CertRefsType(soap);
+	const std::vector<ns6__CertType *> & ns6__Cert)
+{	ns6__CertRefsType *_p = soap_new_ns6__CertRefsType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CertRefsType::ns1__Cert = ns1__Cert;
+		_p->ns6__CertRefsType::ns6__Cert = ns6__Cert;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__CertRefsType
-#define soap_write_ns1__CertRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:CertRefsType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__CertRefsType
+#define soap_write_ns6__CertRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:CertRefsType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CertRefsType * SOAP_FMAC4 soap_get_ns1__CertRefsType(struct soap*, ns1__CertRefsType *, const char*, const char*);
+SOAP_FMAC3 ns6__CertRefsType * SOAP_FMAC4 soap_get_ns6__CertRefsType(struct soap*, ns6__CertRefsType *, const char*, const char*);
 
-#ifndef soap_read_ns1__CertRefsType
-#define soap_read_ns1__CertRefsType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__CertRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__CertRefsType
+#define soap_read_ns6__CertRefsType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__CertRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__CompleteCertificateRefsType
-#define SOAP_TYPE_ns1__CompleteCertificateRefsType (71)
+#ifndef SOAP_TYPE_ns6__CompleteCertificateRefsType
+#define SOAP_TYPE_ns6__CompleteCertificateRefsType (71)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__CompleteCertificateRefsType(struct soap*, const char*, int, const ns1__CompleteCertificateRefsType *, const char*);
-SOAP_FMAC3 ns1__CompleteCertificateRefsType * SOAP_FMAC4 soap_in_ns1__CompleteCertificateRefsType(struct soap*, const char*, ns1__CompleteCertificateRefsType *, const char*);
-SOAP_FMAC1 ns1__CompleteCertificateRefsType * SOAP_FMAC2 soap_instantiate_ns1__CompleteCertificateRefsType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__CompleteCertificateRefsType(struct soap*, const char*, int, const ns6__CompleteCertificateRefsType *, const char*);
+SOAP_FMAC3 ns6__CompleteCertificateRefsType * SOAP_FMAC4 soap_in_ns6__CompleteCertificateRefsType(struct soap*, const char*, ns6__CompleteCertificateRefsType *, const char*);
+SOAP_FMAC1 ns6__CompleteCertificateRefsType * SOAP_FMAC2 soap_instantiate_ns6__CompleteCertificateRefsType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__CompleteCertificateRefsType * soap_new_ns1__CompleteCertificateRefsType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__CompleteCertificateRefsType(soap, n, NULL, NULL, NULL); }
+inline ns6__CompleteCertificateRefsType * soap_new_ns6__CompleteCertificateRefsType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__CompleteCertificateRefsType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__CompleteCertificateRefsType * soap_new_req_ns1__CompleteCertificateRefsType(
+inline ns6__CompleteCertificateRefsType * soap_new_req_ns6__CompleteCertificateRefsType(
 	struct soap *soap,
-	ns1__CertRefsType *ns1__CertRefs)
-{	ns1__CompleteCertificateRefsType *_p = soap_new_ns1__CompleteCertificateRefsType(soap);
+	ns6__CertRefsType *ns6__CertRefs)
+{	ns6__CompleteCertificateRefsType *_p = soap_new_ns6__CompleteCertificateRefsType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CompleteCertificateRefsType::ns1__CertRefs = ns1__CertRefs;
+		_p->ns6__CompleteCertificateRefsType::ns6__CertRefs = ns6__CertRefs;
 	}
 	return _p;
 }
 
-inline ns1__CompleteCertificateRefsType * soap_new_set_ns1__CompleteCertificateRefsType(
+inline ns6__CompleteCertificateRefsType * soap_new_set_ns6__CompleteCertificateRefsType(
 	struct soap *soap,
-	ns1__CertRefsType *ns1__CertRefs)
-{	ns1__CompleteCertificateRefsType *_p = soap_new_ns1__CompleteCertificateRefsType(soap);
+	ns6__CertRefsType *ns6__CertRefs)
+{	ns6__CompleteCertificateRefsType *_p = soap_new_ns6__CompleteCertificateRefsType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CompleteCertificateRefsType::ns1__CertRefs = ns1__CertRefs;
+		_p->ns6__CompleteCertificateRefsType::ns6__CertRefs = ns6__CertRefs;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__CompleteCertificateRefsType
-#define soap_write_ns1__CompleteCertificateRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:CompleteCertificateRefsType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__CompleteCertificateRefsType
+#define soap_write_ns6__CompleteCertificateRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:CompleteCertificateRefsType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CompleteCertificateRefsType * SOAP_FMAC4 soap_get_ns1__CompleteCertificateRefsType(struct soap*, ns1__CompleteCertificateRefsType *, const char*, const char*);
+SOAP_FMAC3 ns6__CompleteCertificateRefsType * SOAP_FMAC4 soap_get_ns6__CompleteCertificateRefsType(struct soap*, ns6__CompleteCertificateRefsType *, const char*, const char*);
 
-#ifndef soap_read_ns1__CompleteCertificateRefsType
-#define soap_read_ns1__CompleteCertificateRefsType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__CompleteCertificateRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__CompleteCertificateRefsType
+#define soap_read_ns6__CompleteCertificateRefsType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__CompleteCertificateRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__SignatureTimeStampType
-#define SOAP_TYPE_ns1__SignatureTimeStampType (70)
+#ifndef SOAP_TYPE_ns6__SignatureTimeStampType
+#define SOAP_TYPE_ns6__SignatureTimeStampType (70)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__SignatureTimeStampType(struct soap*, const char*, int, const ns1__SignatureTimeStampType *, const char*);
-SOAP_FMAC3 ns1__SignatureTimeStampType * SOAP_FMAC4 soap_in_ns1__SignatureTimeStampType(struct soap*, const char*, ns1__SignatureTimeStampType *, const char*);
-SOAP_FMAC1 ns1__SignatureTimeStampType * SOAP_FMAC2 soap_instantiate_ns1__SignatureTimeStampType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__SignatureTimeStampType(struct soap*, const char*, int, const ns6__SignatureTimeStampType *, const char*);
+SOAP_FMAC3 ns6__SignatureTimeStampType * SOAP_FMAC4 soap_in_ns6__SignatureTimeStampType(struct soap*, const char*, ns6__SignatureTimeStampType *, const char*);
+SOAP_FMAC1 ns6__SignatureTimeStampType * SOAP_FMAC2 soap_instantiate_ns6__SignatureTimeStampType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__SignatureTimeStampType * soap_new_ns1__SignatureTimeStampType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__SignatureTimeStampType(soap, n, NULL, NULL, NULL); }
+inline ns6__SignatureTimeStampType * soap_new_ns6__SignatureTimeStampType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__SignatureTimeStampType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__SignatureTimeStampType * soap_new_req_ns1__SignatureTimeStampType(
-	struct soap *soap,
-	ns5__CanonicalizationMethodType *ns5__CanonicalizationMethod,
-	const xsd__base64Binary& ns1__EncapsulatedTimeStamp)
-{	ns1__SignatureTimeStampType *_p = soap_new_ns1__SignatureTimeStampType(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->ns1__SignatureTimeStampType::ns5__CanonicalizationMethod = ns5__CanonicalizationMethod;
-		_p->ns1__SignatureTimeStampType::ns1__EncapsulatedTimeStamp = ns1__EncapsulatedTimeStamp;
-	}
-	return _p;
-}
-
-inline ns1__SignatureTimeStampType * soap_new_set_ns1__SignatureTimeStampType(
+inline ns6__SignatureTimeStampType * soap_new_req_ns6__SignatureTimeStampType(
 	struct soap *soap,
 	ns5__CanonicalizationMethodType *ns5__CanonicalizationMethod,
-	const xsd__base64Binary& ns1__EncapsulatedTimeStamp)
-{	ns1__SignatureTimeStampType *_p = soap_new_ns1__SignatureTimeStampType(soap);
+	const xsd__base64Binary& ns6__EncapsulatedTimeStamp)
+{	ns6__SignatureTimeStampType *_p = soap_new_ns6__SignatureTimeStampType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__SignatureTimeStampType::ns5__CanonicalizationMethod = ns5__CanonicalizationMethod;
-		_p->ns1__SignatureTimeStampType::ns1__EncapsulatedTimeStamp = ns1__EncapsulatedTimeStamp;
+		_p->ns6__SignatureTimeStampType::ns5__CanonicalizationMethod = ns5__CanonicalizationMethod;
+		_p->ns6__SignatureTimeStampType::ns6__EncapsulatedTimeStamp = ns6__EncapsulatedTimeStamp;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__SignatureTimeStampType
-#define soap_write_ns1__SignatureTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:SignatureTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
+inline ns6__SignatureTimeStampType * soap_new_set_ns6__SignatureTimeStampType(
+	struct soap *soap,
+	ns5__CanonicalizationMethodType *ns5__CanonicalizationMethod,
+	const xsd__base64Binary& ns6__EncapsulatedTimeStamp)
+{	ns6__SignatureTimeStampType *_p = soap_new_ns6__SignatureTimeStampType(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->ns6__SignatureTimeStampType::ns5__CanonicalizationMethod = ns5__CanonicalizationMethod;
+		_p->ns6__SignatureTimeStampType::ns6__EncapsulatedTimeStamp = ns6__EncapsulatedTimeStamp;
+	}
+	return _p;
+}
+
+#ifndef soap_write_ns6__SignatureTimeStampType
+#define soap_write_ns6__SignatureTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:SignatureTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__SignatureTimeStampType * SOAP_FMAC4 soap_get_ns1__SignatureTimeStampType(struct soap*, ns1__SignatureTimeStampType *, const char*, const char*);
+SOAP_FMAC3 ns6__SignatureTimeStampType * SOAP_FMAC4 soap_get_ns6__SignatureTimeStampType(struct soap*, ns6__SignatureTimeStampType *, const char*, const char*);
 
-#ifndef soap_read_ns1__SignatureTimeStampType
-#define soap_read_ns1__SignatureTimeStampType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__SignatureTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__SignatureTimeStampType
+#define soap_read_ns6__SignatureTimeStampType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__SignatureTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__CounterSignatureType
-#define SOAP_TYPE_ns1__CounterSignatureType (69)
+#ifndef SOAP_TYPE_ns6__CounterSignatureType
+#define SOAP_TYPE_ns6__CounterSignatureType (69)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__CounterSignatureType(struct soap*, const char*, int, const ns1__CounterSignatureType *, const char*);
-SOAP_FMAC3 ns1__CounterSignatureType * SOAP_FMAC4 soap_in_ns1__CounterSignatureType(struct soap*, const char*, ns1__CounterSignatureType *, const char*);
-SOAP_FMAC1 ns1__CounterSignatureType * SOAP_FMAC2 soap_instantiate_ns1__CounterSignatureType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__CounterSignatureType(struct soap*, const char*, int, const ns6__CounterSignatureType *, const char*);
+SOAP_FMAC3 ns6__CounterSignatureType * SOAP_FMAC4 soap_in_ns6__CounterSignatureType(struct soap*, const char*, ns6__CounterSignatureType *, const char*);
+SOAP_FMAC1 ns6__CounterSignatureType * SOAP_FMAC2 soap_instantiate_ns6__CounterSignatureType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__CounterSignatureType * soap_new_ns1__CounterSignatureType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__CounterSignatureType(soap, n, NULL, NULL, NULL); }
+inline ns6__CounterSignatureType * soap_new_ns6__CounterSignatureType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__CounterSignatureType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__CounterSignatureType * soap_new_req_ns1__CounterSignatureType(
+inline ns6__CounterSignatureType * soap_new_req_ns6__CounterSignatureType(
 	struct soap *soap,
 	ns5__SignatureType *ns5__Signature)
-{	ns1__CounterSignatureType *_p = soap_new_ns1__CounterSignatureType(soap);
+{	ns6__CounterSignatureType *_p = soap_new_ns6__CounterSignatureType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CounterSignatureType::ns5__Signature = ns5__Signature;
+		_p->ns6__CounterSignatureType::ns5__Signature = ns5__Signature;
 	}
 	return _p;
 }
 
-inline ns1__CounterSignatureType * soap_new_set_ns1__CounterSignatureType(
+inline ns6__CounterSignatureType * soap_new_set_ns6__CounterSignatureType(
 	struct soap *soap,
 	ns5__SignatureType *ns5__Signature)
-{	ns1__CounterSignatureType *_p = soap_new_ns1__CounterSignatureType(soap);
+{	ns6__CounterSignatureType *_p = soap_new_ns6__CounterSignatureType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CounterSignatureType::ns5__Signature = ns5__Signature;
+		_p->ns6__CounterSignatureType::ns5__Signature = ns5__Signature;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__CounterSignatureType
-#define soap_write_ns1__CounterSignatureType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:CounterSignatureType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__CounterSignatureType
+#define soap_write_ns6__CounterSignatureType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:CounterSignatureType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CounterSignatureType * SOAP_FMAC4 soap_get_ns1__CounterSignatureType(struct soap*, ns1__CounterSignatureType *, const char*, const char*);
+SOAP_FMAC3 ns6__CounterSignatureType * SOAP_FMAC4 soap_get_ns6__CounterSignatureType(struct soap*, ns6__CounterSignatureType *, const char*, const char*);
 
-#ifndef soap_read_ns1__CounterSignatureType
-#define soap_read_ns1__CounterSignatureType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__CounterSignatureType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__CounterSignatureType
+#define soap_read_ns6__CounterSignatureType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__CounterSignatureType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__UnsignedSignaturePropertiesType
-#define SOAP_TYPE_ns1__UnsignedSignaturePropertiesType (68)
+#ifndef SOAP_TYPE_ns6__UnsignedSignaturePropertiesType
+#define SOAP_TYPE_ns6__UnsignedSignaturePropertiesType (68)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__UnsignedSignaturePropertiesType(struct soap*, const char*, int, const ns1__UnsignedSignaturePropertiesType *, const char*);
-SOAP_FMAC3 ns1__UnsignedSignaturePropertiesType * SOAP_FMAC4 soap_in_ns1__UnsignedSignaturePropertiesType(struct soap*, const char*, ns1__UnsignedSignaturePropertiesType *, const char*);
-SOAP_FMAC1 ns1__UnsignedSignaturePropertiesType * SOAP_FMAC2 soap_instantiate_ns1__UnsignedSignaturePropertiesType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__UnsignedSignaturePropertiesType(struct soap*, const char*, int, const ns6__UnsignedSignaturePropertiesType *, const char*);
+SOAP_FMAC3 ns6__UnsignedSignaturePropertiesType * SOAP_FMAC4 soap_in_ns6__UnsignedSignaturePropertiesType(struct soap*, const char*, ns6__UnsignedSignaturePropertiesType *, const char*);
+SOAP_FMAC1 ns6__UnsignedSignaturePropertiesType * SOAP_FMAC2 soap_instantiate_ns6__UnsignedSignaturePropertiesType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__UnsignedSignaturePropertiesType * soap_new_ns1__UnsignedSignaturePropertiesType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__UnsignedSignaturePropertiesType(soap, n, NULL, NULL, NULL); }
+inline ns6__UnsignedSignaturePropertiesType * soap_new_ns6__UnsignedSignaturePropertiesType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__UnsignedSignaturePropertiesType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__UnsignedSignaturePropertiesType * soap_new_req_ns1__UnsignedSignaturePropertiesType(
+inline ns6__UnsignedSignaturePropertiesType * soap_new_req_ns6__UnsignedSignaturePropertiesType(
 	struct soap *soap,
-	ns1__SignatureTimeStampType *ns1__SignatureTimeStamp,
-	ns1__CompleteCertificateRefsType *ns1__CompleteCertificateRefs,
-	ns1__CompleteRevocationRefsType *ns1__CompleteRevocationRefs,
-	ns1__SigAndRefsTimeStampType *ns1__SigAndRefsTimeStamp,
-	ns1__CertificateValuesType *ns1__CertificateValues,
-	ns1__RevocationValuesType *ns1__RevocationValues,
-	ns1__ArchiveTimeStampType *ns1__ArchiveTimeStamp)
-{	ns1__UnsignedSignaturePropertiesType *_p = soap_new_ns1__UnsignedSignaturePropertiesType(soap);
+	ns6__SignatureTimeStampType *ns6__SignatureTimeStamp,
+	ns6__CompleteCertificateRefsType *ns6__CompleteCertificateRefs,
+	ns6__CompleteRevocationRefsType *ns6__CompleteRevocationRefs,
+	ns6__SigAndRefsTimeStampType *ns6__SigAndRefsTimeStamp,
+	ns6__CertificateValuesType *ns6__CertificateValues,
+	ns6__RevocationValuesType *ns6__RevocationValues,
+	ns6__ArchiveTimeStampType *ns6__ArchiveTimeStamp)
+{	ns6__UnsignedSignaturePropertiesType *_p = soap_new_ns6__UnsignedSignaturePropertiesType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__SignatureTimeStamp = ns1__SignatureTimeStamp;
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__CompleteCertificateRefs = ns1__CompleteCertificateRefs;
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__CompleteRevocationRefs = ns1__CompleteRevocationRefs;
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__SigAndRefsTimeStamp = ns1__SigAndRefsTimeStamp;
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__CertificateValues = ns1__CertificateValues;
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__RevocationValues = ns1__RevocationValues;
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__ArchiveTimeStamp = ns1__ArchiveTimeStamp;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__SignatureTimeStamp = ns6__SignatureTimeStamp;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__CompleteCertificateRefs = ns6__CompleteCertificateRefs;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__CompleteRevocationRefs = ns6__CompleteRevocationRefs;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__SigAndRefsTimeStamp = ns6__SigAndRefsTimeStamp;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__CertificateValues = ns6__CertificateValues;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__RevocationValues = ns6__RevocationValues;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__ArchiveTimeStamp = ns6__ArchiveTimeStamp;
 	}
 	return _p;
 }
 
-inline ns1__UnsignedSignaturePropertiesType * soap_new_set_ns1__UnsignedSignaturePropertiesType(
+inline ns6__UnsignedSignaturePropertiesType * soap_new_set_ns6__UnsignedSignaturePropertiesType(
 	struct soap *soap,
-	ns1__CounterSignatureType *ns1__CounterSignature,
-	ns1__SignatureTimeStampType *ns1__SignatureTimeStamp,
-	ns1__CompleteCertificateRefsType *ns1__CompleteCertificateRefs,
-	ns1__CompleteRevocationRefsType *ns1__CompleteRevocationRefs,
-	ns1__SigAndRefsTimeStampType *ns1__SigAndRefsTimeStamp,
-	ns1__CertificateValuesType *ns1__CertificateValues,
-	ns1__RevocationValuesType *ns1__RevocationValues,
-	ns1__ArchiveTimeStampType *ns1__ArchiveTimeStamp)
-{	ns1__UnsignedSignaturePropertiesType *_p = soap_new_ns1__UnsignedSignaturePropertiesType(soap);
+	ns6__CounterSignatureType *ns6__CounterSignature,
+	ns6__SignatureTimeStampType *ns6__SignatureTimeStamp,
+	ns6__CompleteCertificateRefsType *ns6__CompleteCertificateRefs,
+	ns6__CompleteRevocationRefsType *ns6__CompleteRevocationRefs,
+	ns6__SigAndRefsTimeStampType *ns6__SigAndRefsTimeStamp,
+	ns6__CertificateValuesType *ns6__CertificateValues,
+	ns6__RevocationValuesType *ns6__RevocationValues,
+	ns6__ArchiveTimeStampType *ns6__ArchiveTimeStamp)
+{	ns6__UnsignedSignaturePropertiesType *_p = soap_new_ns6__UnsignedSignaturePropertiesType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__CounterSignature = ns1__CounterSignature;
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__SignatureTimeStamp = ns1__SignatureTimeStamp;
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__CompleteCertificateRefs = ns1__CompleteCertificateRefs;
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__CompleteRevocationRefs = ns1__CompleteRevocationRefs;
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__SigAndRefsTimeStamp = ns1__SigAndRefsTimeStamp;
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__CertificateValues = ns1__CertificateValues;
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__RevocationValues = ns1__RevocationValues;
-		_p->ns1__UnsignedSignaturePropertiesType::ns1__ArchiveTimeStamp = ns1__ArchiveTimeStamp;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__CounterSignature = ns6__CounterSignature;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__SignatureTimeStamp = ns6__SignatureTimeStamp;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__CompleteCertificateRefs = ns6__CompleteCertificateRefs;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__CompleteRevocationRefs = ns6__CompleteRevocationRefs;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__SigAndRefsTimeStamp = ns6__SigAndRefsTimeStamp;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__CertificateValues = ns6__CertificateValues;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__RevocationValues = ns6__RevocationValues;
+		_p->ns6__UnsignedSignaturePropertiesType::ns6__ArchiveTimeStamp = ns6__ArchiveTimeStamp;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__UnsignedSignaturePropertiesType
-#define soap_write_ns1__UnsignedSignaturePropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:UnsignedSignaturePropertiesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__UnsignedSignaturePropertiesType
+#define soap_write_ns6__UnsignedSignaturePropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:UnsignedSignaturePropertiesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__UnsignedSignaturePropertiesType * SOAP_FMAC4 soap_get_ns1__UnsignedSignaturePropertiesType(struct soap*, ns1__UnsignedSignaturePropertiesType *, const char*, const char*);
+SOAP_FMAC3 ns6__UnsignedSignaturePropertiesType * SOAP_FMAC4 soap_get_ns6__UnsignedSignaturePropertiesType(struct soap*, ns6__UnsignedSignaturePropertiesType *, const char*, const char*);
 
-#ifndef soap_read_ns1__UnsignedSignaturePropertiesType
-#define soap_read_ns1__UnsignedSignaturePropertiesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__UnsignedSignaturePropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__UnsignedSignaturePropertiesType
+#define soap_read_ns6__UnsignedSignaturePropertiesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__UnsignedSignaturePropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__UnsignedPropertiesType
-#define SOAP_TYPE_ns1__UnsignedPropertiesType (67)
+#ifndef SOAP_TYPE_ns6__UnsignedPropertiesType
+#define SOAP_TYPE_ns6__UnsignedPropertiesType (67)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__UnsignedPropertiesType(struct soap*, const char*, int, const ns1__UnsignedPropertiesType *, const char*);
-SOAP_FMAC3 ns1__UnsignedPropertiesType * SOAP_FMAC4 soap_in_ns1__UnsignedPropertiesType(struct soap*, const char*, ns1__UnsignedPropertiesType *, const char*);
-SOAP_FMAC1 ns1__UnsignedPropertiesType * SOAP_FMAC2 soap_instantiate_ns1__UnsignedPropertiesType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__UnsignedPropertiesType(struct soap*, const char*, int, const ns6__UnsignedPropertiesType *, const char*);
+SOAP_FMAC3 ns6__UnsignedPropertiesType * SOAP_FMAC4 soap_in_ns6__UnsignedPropertiesType(struct soap*, const char*, ns6__UnsignedPropertiesType *, const char*);
+SOAP_FMAC1 ns6__UnsignedPropertiesType * SOAP_FMAC2 soap_instantiate_ns6__UnsignedPropertiesType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__UnsignedPropertiesType * soap_new_ns1__UnsignedPropertiesType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__UnsignedPropertiesType(soap, n, NULL, NULL, NULL); }
+inline ns6__UnsignedPropertiesType * soap_new_ns6__UnsignedPropertiesType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__UnsignedPropertiesType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__UnsignedPropertiesType * soap_new_req_ns1__UnsignedPropertiesType(
+inline ns6__UnsignedPropertiesType * soap_new_req_ns6__UnsignedPropertiesType(
 	struct soap *soap,
-	ns1__UnsignedSignaturePropertiesType *ns1__UnsignedSignatureProperties)
-{	ns1__UnsignedPropertiesType *_p = soap_new_ns1__UnsignedPropertiesType(soap);
+	ns6__UnsignedSignaturePropertiesType *ns6__UnsignedSignatureProperties)
+{	ns6__UnsignedPropertiesType *_p = soap_new_ns6__UnsignedPropertiesType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__UnsignedPropertiesType::ns1__UnsignedSignatureProperties = ns1__UnsignedSignatureProperties;
+		_p->ns6__UnsignedPropertiesType::ns6__UnsignedSignatureProperties = ns6__UnsignedSignatureProperties;
 	}
 	return _p;
 }
 
-inline ns1__UnsignedPropertiesType * soap_new_set_ns1__UnsignedPropertiesType(
+inline ns6__UnsignedPropertiesType * soap_new_set_ns6__UnsignedPropertiesType(
 	struct soap *soap,
-	ns1__UnsignedSignaturePropertiesType *ns1__UnsignedSignatureProperties)
-{	ns1__UnsignedPropertiesType *_p = soap_new_ns1__UnsignedPropertiesType(soap);
+	ns6__UnsignedSignaturePropertiesType *ns6__UnsignedSignatureProperties)
+{	ns6__UnsignedPropertiesType *_p = soap_new_ns6__UnsignedPropertiesType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__UnsignedPropertiesType::ns1__UnsignedSignatureProperties = ns1__UnsignedSignatureProperties;
+		_p->ns6__UnsignedPropertiesType::ns6__UnsignedSignatureProperties = ns6__UnsignedSignatureProperties;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__UnsignedPropertiesType
-#define soap_write_ns1__UnsignedPropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:UnsignedPropertiesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__UnsignedPropertiesType
+#define soap_write_ns6__UnsignedPropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:UnsignedPropertiesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__UnsignedPropertiesType * SOAP_FMAC4 soap_get_ns1__UnsignedPropertiesType(struct soap*, ns1__UnsignedPropertiesType *, const char*, const char*);
+SOAP_FMAC3 ns6__UnsignedPropertiesType * SOAP_FMAC4 soap_get_ns6__UnsignedPropertiesType(struct soap*, ns6__UnsignedPropertiesType *, const char*, const char*);
 
-#ifndef soap_read_ns1__UnsignedPropertiesType
-#define soap_read_ns1__UnsignedPropertiesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__UnsignedPropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__UnsignedPropertiesType
+#define soap_read_ns6__UnsignedPropertiesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__UnsignedPropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__ClaimedRoleType
-#define SOAP_TYPE_ns1__ClaimedRoleType (66)
+#ifndef SOAP_TYPE_ns6__ClaimedRoleType
+#define SOAP_TYPE_ns6__ClaimedRoleType (66)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__ClaimedRoleType(struct soap*, const char*, int, const ns1__ClaimedRoleType *, const char*);
-SOAP_FMAC3 ns1__ClaimedRoleType * SOAP_FMAC4 soap_in_ns1__ClaimedRoleType(struct soap*, const char*, ns1__ClaimedRoleType *, const char*);
-SOAP_FMAC1 ns1__ClaimedRoleType * SOAP_FMAC2 soap_instantiate_ns1__ClaimedRoleType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__ClaimedRoleType(struct soap*, const char*, int, const ns6__ClaimedRoleType *, const char*);
+SOAP_FMAC3 ns6__ClaimedRoleType * SOAP_FMAC4 soap_in_ns6__ClaimedRoleType(struct soap*, const char*, ns6__ClaimedRoleType *, const char*);
+SOAP_FMAC1 ns6__ClaimedRoleType * SOAP_FMAC2 soap_instantiate_ns6__ClaimedRoleType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__ClaimedRoleType * soap_new_ns1__ClaimedRoleType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__ClaimedRoleType(soap, n, NULL, NULL, NULL); }
+inline ns6__ClaimedRoleType * soap_new_ns6__ClaimedRoleType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__ClaimedRoleType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__ClaimedRoleType * soap_new_req_ns1__ClaimedRoleType(
-	struct soap *soap,
-	ns5__SignatureType *ns3__SignatureAttribute)
-{	ns1__ClaimedRoleType *_p = soap_new_ns1__ClaimedRoleType(soap);
-	if (_p)
-	{	_p->soap_default(soap);
-		_p->ns1__ClaimedRoleType::ns3__SignatureAttribute = ns3__SignatureAttribute;
-	}
-	return _p;
-}
-
-inline ns1__ClaimedRoleType * soap_new_set_ns1__ClaimedRoleType(
+inline ns6__ClaimedRoleType * soap_new_req_ns6__ClaimedRoleType(
 	struct soap *soap,
 	ns5__SignatureType *ns3__SignatureAttribute)
-{	ns1__ClaimedRoleType *_p = soap_new_ns1__ClaimedRoleType(soap);
+{	ns6__ClaimedRoleType *_p = soap_new_ns6__ClaimedRoleType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__ClaimedRoleType::ns3__SignatureAttribute = ns3__SignatureAttribute;
+		_p->ns6__ClaimedRoleType::ns3__SignatureAttribute = ns3__SignatureAttribute;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__ClaimedRoleType
-#define soap_write_ns1__ClaimedRoleType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:ClaimedRoleType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 ns1__ClaimedRoleType * SOAP_FMAC4 soap_get_ns1__ClaimedRoleType(struct soap*, ns1__ClaimedRoleType *, const char*, const char*);
-
-#ifndef soap_read_ns1__ClaimedRoleType
-#define soap_read_ns1__ClaimedRoleType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__ClaimedRoleType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_ns1__ClaimedRolesListType
-#define SOAP_TYPE_ns1__ClaimedRolesListType (65)
-#endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__ClaimedRolesListType(struct soap*, const char*, int, const ns1__ClaimedRolesListType *, const char*);
-SOAP_FMAC3 ns1__ClaimedRolesListType * SOAP_FMAC4 soap_in_ns1__ClaimedRolesListType(struct soap*, const char*, ns1__ClaimedRolesListType *, const char*);
-SOAP_FMAC1 ns1__ClaimedRolesListType * SOAP_FMAC2 soap_instantiate_ns1__ClaimedRolesListType(struct soap*, int, const char*, const char*, size_t*);
-
-inline ns1__ClaimedRolesListType * soap_new_ns1__ClaimedRolesListType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__ClaimedRolesListType(soap, n, NULL, NULL, NULL); }
-
-inline ns1__ClaimedRolesListType * soap_new_req_ns1__ClaimedRolesListType(
+inline ns6__ClaimedRoleType * soap_new_set_ns6__ClaimedRoleType(
 	struct soap *soap,
-	const std::vector<ns1__ClaimedRoleType *> & ns1__ClaimedRole)
-{	ns1__ClaimedRolesListType *_p = soap_new_ns1__ClaimedRolesListType(soap);
+	ns5__SignatureType *ns3__SignatureAttribute)
+{	ns6__ClaimedRoleType *_p = soap_new_ns6__ClaimedRoleType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__ClaimedRolesListType::ns1__ClaimedRole = ns1__ClaimedRole;
+		_p->ns6__ClaimedRoleType::ns3__SignatureAttribute = ns3__SignatureAttribute;
 	}
 	return _p;
 }
 
-inline ns1__ClaimedRolesListType * soap_new_set_ns1__ClaimedRolesListType(
+#ifndef soap_write_ns6__ClaimedRoleType
+#define soap_write_ns6__ClaimedRoleType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:ClaimedRoleType", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns6__ClaimedRoleType * SOAP_FMAC4 soap_get_ns6__ClaimedRoleType(struct soap*, ns6__ClaimedRoleType *, const char*, const char*);
+
+#ifndef soap_read_ns6__ClaimedRoleType
+#define soap_read_ns6__ClaimedRoleType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__ClaimedRoleType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+
+#ifndef SOAP_TYPE_ns6__ClaimedRolesListType
+#define SOAP_TYPE_ns6__ClaimedRolesListType (65)
+#endif
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__ClaimedRolesListType(struct soap*, const char*, int, const ns6__ClaimedRolesListType *, const char*);
+SOAP_FMAC3 ns6__ClaimedRolesListType * SOAP_FMAC4 soap_in_ns6__ClaimedRolesListType(struct soap*, const char*, ns6__ClaimedRolesListType *, const char*);
+SOAP_FMAC1 ns6__ClaimedRolesListType * SOAP_FMAC2 soap_instantiate_ns6__ClaimedRolesListType(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns6__ClaimedRolesListType * soap_new_ns6__ClaimedRolesListType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__ClaimedRolesListType(soap, n, NULL, NULL, NULL); }
+
+inline ns6__ClaimedRolesListType * soap_new_req_ns6__ClaimedRolesListType(
 	struct soap *soap,
-	const std::vector<ns1__ClaimedRoleType *> & ns1__ClaimedRole)
-{	ns1__ClaimedRolesListType *_p = soap_new_ns1__ClaimedRolesListType(soap);
+	const std::vector<ns6__ClaimedRoleType *> & ns6__ClaimedRole)
+{	ns6__ClaimedRolesListType *_p = soap_new_ns6__ClaimedRolesListType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__ClaimedRolesListType::ns1__ClaimedRole = ns1__ClaimedRole;
+		_p->ns6__ClaimedRolesListType::ns6__ClaimedRole = ns6__ClaimedRole;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__ClaimedRolesListType
-#define soap_write_ns1__ClaimedRolesListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:ClaimedRolesListType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 ns1__ClaimedRolesListType * SOAP_FMAC4 soap_get_ns1__ClaimedRolesListType(struct soap*, ns1__ClaimedRolesListType *, const char*, const char*);
-
-#ifndef soap_read_ns1__ClaimedRolesListType
-#define soap_read_ns1__ClaimedRolesListType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__ClaimedRolesListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_ns1__SignerRoleType
-#define SOAP_TYPE_ns1__SignerRoleType (64)
-#endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__SignerRoleType(struct soap*, const char*, int, const ns1__SignerRoleType *, const char*);
-SOAP_FMAC3 ns1__SignerRoleType * SOAP_FMAC4 soap_in_ns1__SignerRoleType(struct soap*, const char*, ns1__SignerRoleType *, const char*);
-SOAP_FMAC1 ns1__SignerRoleType * SOAP_FMAC2 soap_instantiate_ns1__SignerRoleType(struct soap*, int, const char*, const char*, size_t*);
-
-inline ns1__SignerRoleType * soap_new_ns1__SignerRoleType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__SignerRoleType(soap, n, NULL, NULL, NULL); }
-
-inline ns1__SignerRoleType * soap_new_req_ns1__SignerRoleType(
+inline ns6__ClaimedRolesListType * soap_new_set_ns6__ClaimedRolesListType(
 	struct soap *soap,
-	ns1__ClaimedRolesListType *ns1__ClaimedRoles)
-{	ns1__SignerRoleType *_p = soap_new_ns1__SignerRoleType(soap);
+	const std::vector<ns6__ClaimedRoleType *> & ns6__ClaimedRole)
+{	ns6__ClaimedRolesListType *_p = soap_new_ns6__ClaimedRolesListType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__SignerRoleType::ns1__ClaimedRoles = ns1__ClaimedRoles;
+		_p->ns6__ClaimedRolesListType::ns6__ClaimedRole = ns6__ClaimedRole;
 	}
 	return _p;
 }
 
-inline ns1__SignerRoleType * soap_new_set_ns1__SignerRoleType(
+#ifndef soap_write_ns6__ClaimedRolesListType
+#define soap_write_ns6__ClaimedRolesListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:ClaimedRolesListType", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns6__ClaimedRolesListType * SOAP_FMAC4 soap_get_ns6__ClaimedRolesListType(struct soap*, ns6__ClaimedRolesListType *, const char*, const char*);
+
+#ifndef soap_read_ns6__ClaimedRolesListType
+#define soap_read_ns6__ClaimedRolesListType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__ClaimedRolesListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+
+#ifndef SOAP_TYPE_ns6__SignerRoleType
+#define SOAP_TYPE_ns6__SignerRoleType (64)
+#endif
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__SignerRoleType(struct soap*, const char*, int, const ns6__SignerRoleType *, const char*);
+SOAP_FMAC3 ns6__SignerRoleType * SOAP_FMAC4 soap_in_ns6__SignerRoleType(struct soap*, const char*, ns6__SignerRoleType *, const char*);
+SOAP_FMAC1 ns6__SignerRoleType * SOAP_FMAC2 soap_instantiate_ns6__SignerRoleType(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns6__SignerRoleType * soap_new_ns6__SignerRoleType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__SignerRoleType(soap, n, NULL, NULL, NULL); }
+
+inline ns6__SignerRoleType * soap_new_req_ns6__SignerRoleType(
 	struct soap *soap,
-	ns1__ClaimedRolesListType *ns1__ClaimedRoles)
-{	ns1__SignerRoleType *_p = soap_new_ns1__SignerRoleType(soap);
+	ns6__ClaimedRolesListType *ns6__ClaimedRoles)
+{	ns6__SignerRoleType *_p = soap_new_ns6__SignerRoleType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__SignerRoleType::ns1__ClaimedRoles = ns1__ClaimedRoles;
+		_p->ns6__SignerRoleType::ns6__ClaimedRoles = ns6__ClaimedRoles;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__SignerRoleType
-#define soap_write_ns1__SignerRoleType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:SignerRoleType", NULL) || soap_end_send(soap), (soap)->error )
+inline ns6__SignerRoleType * soap_new_set_ns6__SignerRoleType(
+	struct soap *soap,
+	ns6__ClaimedRolesListType *ns6__ClaimedRoles)
+{	ns6__SignerRoleType *_p = soap_new_ns6__SignerRoleType(soap);
+	if (_p)
+	{	_p->soap_default(soap);
+		_p->ns6__SignerRoleType::ns6__ClaimedRoles = ns6__ClaimedRoles;
+	}
+	return _p;
+}
+
+#ifndef soap_write_ns6__SignerRoleType
+#define soap_write_ns6__SignerRoleType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:SignerRoleType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__SignerRoleType * SOAP_FMAC4 soap_get_ns1__SignerRoleType(struct soap*, ns1__SignerRoleType *, const char*, const char*);
+SOAP_FMAC3 ns6__SignerRoleType * SOAP_FMAC4 soap_get_ns6__SignerRoleType(struct soap*, ns6__SignerRoleType *, const char*, const char*);
 
-#ifndef soap_read_ns1__SignerRoleType
-#define soap_read_ns1__SignerRoleType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__SignerRoleType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__SignerRoleType
+#define soap_read_ns6__SignerRoleType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__SignerRoleType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__IssuerSerialType
-#define SOAP_TYPE_ns1__IssuerSerialType (63)
+#ifndef SOAP_TYPE_ns6__IssuerSerialType
+#define SOAP_TYPE_ns6__IssuerSerialType (63)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__IssuerSerialType(struct soap*, const char*, int, const ns1__IssuerSerialType *, const char*);
-SOAP_FMAC3 ns1__IssuerSerialType * SOAP_FMAC4 soap_in_ns1__IssuerSerialType(struct soap*, const char*, ns1__IssuerSerialType *, const char*);
-SOAP_FMAC1 ns1__IssuerSerialType * SOAP_FMAC2 soap_instantiate_ns1__IssuerSerialType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__IssuerSerialType(struct soap*, const char*, int, const ns6__IssuerSerialType *, const char*);
+SOAP_FMAC3 ns6__IssuerSerialType * SOAP_FMAC4 soap_in_ns6__IssuerSerialType(struct soap*, const char*, ns6__IssuerSerialType *, const char*);
+SOAP_FMAC1 ns6__IssuerSerialType * SOAP_FMAC2 soap_instantiate_ns6__IssuerSerialType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__IssuerSerialType * soap_new_ns1__IssuerSerialType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__IssuerSerialType(soap, n, NULL, NULL, NULL); }
+inline ns6__IssuerSerialType * soap_new_ns6__IssuerSerialType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__IssuerSerialType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__IssuerSerialType * soap_new_req_ns1__IssuerSerialType(
+inline ns6__IssuerSerialType * soap_new_req_ns6__IssuerSerialType(
 	struct soap *soap,
 	const std::string& ns5__X509IssuerName,
 	const std::string& ns5__X509SerialNumber)
-{	ns1__IssuerSerialType *_p = soap_new_ns1__IssuerSerialType(soap);
+{	ns6__IssuerSerialType *_p = soap_new_ns6__IssuerSerialType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__IssuerSerialType::ns5__X509IssuerName = ns5__X509IssuerName;
-		_p->ns1__IssuerSerialType::ns5__X509SerialNumber = ns5__X509SerialNumber;
+		_p->ns6__IssuerSerialType::ns5__X509IssuerName = ns5__X509IssuerName;
+		_p->ns6__IssuerSerialType::ns5__X509SerialNumber = ns5__X509SerialNumber;
 	}
 	return _p;
 }
 
-inline ns1__IssuerSerialType * soap_new_set_ns1__IssuerSerialType(
+inline ns6__IssuerSerialType * soap_new_set_ns6__IssuerSerialType(
 	struct soap *soap,
 	const std::string& ns5__X509IssuerName,
 	const std::string& ns5__X509SerialNumber)
-{	ns1__IssuerSerialType *_p = soap_new_ns1__IssuerSerialType(soap);
+{	ns6__IssuerSerialType *_p = soap_new_ns6__IssuerSerialType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__IssuerSerialType::ns5__X509IssuerName = ns5__X509IssuerName;
-		_p->ns1__IssuerSerialType::ns5__X509SerialNumber = ns5__X509SerialNumber;
+		_p->ns6__IssuerSerialType::ns5__X509IssuerName = ns5__X509IssuerName;
+		_p->ns6__IssuerSerialType::ns5__X509SerialNumber = ns5__X509SerialNumber;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__IssuerSerialType
-#define soap_write_ns1__IssuerSerialType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:IssuerSerialType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__IssuerSerialType
+#define soap_write_ns6__IssuerSerialType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:IssuerSerialType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__IssuerSerialType * SOAP_FMAC4 soap_get_ns1__IssuerSerialType(struct soap*, ns1__IssuerSerialType *, const char*, const char*);
+SOAP_FMAC3 ns6__IssuerSerialType * SOAP_FMAC4 soap_get_ns6__IssuerSerialType(struct soap*, ns6__IssuerSerialType *, const char*, const char*);
 
-#ifndef soap_read_ns1__IssuerSerialType
-#define soap_read_ns1__IssuerSerialType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__IssuerSerialType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__IssuerSerialType
+#define soap_read_ns6__IssuerSerialType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__IssuerSerialType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__CertDigestType
-#define SOAP_TYPE_ns1__CertDigestType (62)
+#ifndef SOAP_TYPE_ns6__CertDigestType
+#define SOAP_TYPE_ns6__CertDigestType (62)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__CertDigestType(struct soap*, const char*, int, const ns1__CertDigestType *, const char*);
-SOAP_FMAC3 ns1__CertDigestType * SOAP_FMAC4 soap_in_ns1__CertDigestType(struct soap*, const char*, ns1__CertDigestType *, const char*);
-SOAP_FMAC1 ns1__CertDigestType * SOAP_FMAC2 soap_instantiate_ns1__CertDigestType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__CertDigestType(struct soap*, const char*, int, const ns6__CertDigestType *, const char*);
+SOAP_FMAC3 ns6__CertDigestType * SOAP_FMAC4 soap_in_ns6__CertDigestType(struct soap*, const char*, ns6__CertDigestType *, const char*);
+SOAP_FMAC1 ns6__CertDigestType * SOAP_FMAC2 soap_instantiate_ns6__CertDigestType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__CertDigestType * soap_new_ns1__CertDigestType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__CertDigestType(soap, n, NULL, NULL, NULL); }
+inline ns6__CertDigestType * soap_new_ns6__CertDigestType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__CertDigestType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__CertDigestType * soap_new_req_ns1__CertDigestType(
+inline ns6__CertDigestType * soap_new_req_ns6__CertDigestType(
 	struct soap *soap,
 	ns5__DigestMethodType *ns5__DigestMethod,
 	ns5__DigestValueType *ns5__DigestValue)
-{	ns1__CertDigestType *_p = soap_new_ns1__CertDigestType(soap);
+{	ns6__CertDigestType *_p = soap_new_ns6__CertDigestType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CertDigestType::ns5__DigestMethod = ns5__DigestMethod;
-		_p->ns1__CertDigestType::ns5__DigestValue = ns5__DigestValue;
+		_p->ns6__CertDigestType::ns5__DigestMethod = ns5__DigestMethod;
+		_p->ns6__CertDigestType::ns5__DigestValue = ns5__DigestValue;
 	}
 	return _p;
 }
 
-inline ns1__CertDigestType * soap_new_set_ns1__CertDigestType(
+inline ns6__CertDigestType * soap_new_set_ns6__CertDigestType(
 	struct soap *soap,
 	ns5__DigestMethodType *ns5__DigestMethod,
 	ns5__DigestValueType *ns5__DigestValue)
-{	ns1__CertDigestType *_p = soap_new_ns1__CertDigestType(soap);
+{	ns6__CertDigestType *_p = soap_new_ns6__CertDigestType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CertDigestType::ns5__DigestMethod = ns5__DigestMethod;
-		_p->ns1__CertDigestType::ns5__DigestValue = ns5__DigestValue;
+		_p->ns6__CertDigestType::ns5__DigestMethod = ns5__DigestMethod;
+		_p->ns6__CertDigestType::ns5__DigestValue = ns5__DigestValue;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__CertDigestType
-#define soap_write_ns1__CertDigestType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:CertDigestType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__CertDigestType
+#define soap_write_ns6__CertDigestType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:CertDigestType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CertDigestType * SOAP_FMAC4 soap_get_ns1__CertDigestType(struct soap*, ns1__CertDigestType *, const char*, const char*);
+SOAP_FMAC3 ns6__CertDigestType * SOAP_FMAC4 soap_get_ns6__CertDigestType(struct soap*, ns6__CertDigestType *, const char*, const char*);
 
-#ifndef soap_read_ns1__CertDigestType
-#define soap_read_ns1__CertDigestType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__CertDigestType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__CertDigestType
+#define soap_read_ns6__CertDigestType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__CertDigestType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__CertType
-#define SOAP_TYPE_ns1__CertType (61)
+#ifndef SOAP_TYPE_ns6__CertType
+#define SOAP_TYPE_ns6__CertType (61)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__CertType(struct soap*, const char*, int, const ns1__CertType *, const char*);
-SOAP_FMAC3 ns1__CertType * SOAP_FMAC4 soap_in_ns1__CertType(struct soap*, const char*, ns1__CertType *, const char*);
-SOAP_FMAC1 ns1__CertType * SOAP_FMAC2 soap_instantiate_ns1__CertType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__CertType(struct soap*, const char*, int, const ns6__CertType *, const char*);
+SOAP_FMAC3 ns6__CertType * SOAP_FMAC4 soap_in_ns6__CertType(struct soap*, const char*, ns6__CertType *, const char*);
+SOAP_FMAC1 ns6__CertType * SOAP_FMAC2 soap_instantiate_ns6__CertType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__CertType * soap_new_ns1__CertType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__CertType(soap, n, NULL, NULL, NULL); }
+inline ns6__CertType * soap_new_ns6__CertType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__CertType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__CertType * soap_new_req_ns1__CertType(
+inline ns6__CertType * soap_new_req_ns6__CertType(
 	struct soap *soap,
-	ns1__CertDigestType *ns1__CertDigest,
-	ns1__IssuerSerialType *ns1__IssuerSerial)
-{	ns1__CertType *_p = soap_new_ns1__CertType(soap);
+	ns6__CertDigestType *ns6__CertDigest,
+	ns6__IssuerSerialType *ns6__IssuerSerial)
+{	ns6__CertType *_p = soap_new_ns6__CertType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CertType::ns1__CertDigest = ns1__CertDigest;
-		_p->ns1__CertType::ns1__IssuerSerial = ns1__IssuerSerial;
+		_p->ns6__CertType::ns6__CertDigest = ns6__CertDigest;
+		_p->ns6__CertType::ns6__IssuerSerial = ns6__IssuerSerial;
 	}
 	return _p;
 }
 
-inline ns1__CertType * soap_new_set_ns1__CertType(
+inline ns6__CertType * soap_new_set_ns6__CertType(
 	struct soap *soap,
-	ns1__CertDigestType *ns1__CertDigest,
-	ns1__IssuerSerialType *ns1__IssuerSerial)
-{	ns1__CertType *_p = soap_new_ns1__CertType(soap);
+	ns6__CertDigestType *ns6__CertDigest,
+	ns6__IssuerSerialType *ns6__IssuerSerial)
+{	ns6__CertType *_p = soap_new_ns6__CertType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__CertType::ns1__CertDigest = ns1__CertDigest;
-		_p->ns1__CertType::ns1__IssuerSerial = ns1__IssuerSerial;
+		_p->ns6__CertType::ns6__CertDigest = ns6__CertDigest;
+		_p->ns6__CertType::ns6__IssuerSerial = ns6__IssuerSerial;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__CertType
-#define soap_write_ns1__CertType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:CertType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__CertType
+#define soap_write_ns6__CertType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:CertType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CertType * SOAP_FMAC4 soap_get_ns1__CertType(struct soap*, ns1__CertType *, const char*, const char*);
+SOAP_FMAC3 ns6__CertType * SOAP_FMAC4 soap_get_ns6__CertType(struct soap*, ns6__CertType *, const char*, const char*);
 
-#ifndef soap_read_ns1__CertType
-#define soap_read_ns1__CertType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__CertType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__CertType
+#define soap_read_ns6__CertType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__CertType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__SigningCertificateType
-#define SOAP_TYPE_ns1__SigningCertificateType (60)
+#ifndef SOAP_TYPE_ns6__SigningCertificateType
+#define SOAP_TYPE_ns6__SigningCertificateType (60)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__SigningCertificateType(struct soap*, const char*, int, const ns1__SigningCertificateType *, const char*);
-SOAP_FMAC3 ns1__SigningCertificateType * SOAP_FMAC4 soap_in_ns1__SigningCertificateType(struct soap*, const char*, ns1__SigningCertificateType *, const char*);
-SOAP_FMAC1 ns1__SigningCertificateType * SOAP_FMAC2 soap_instantiate_ns1__SigningCertificateType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__SigningCertificateType(struct soap*, const char*, int, const ns6__SigningCertificateType *, const char*);
+SOAP_FMAC3 ns6__SigningCertificateType * SOAP_FMAC4 soap_in_ns6__SigningCertificateType(struct soap*, const char*, ns6__SigningCertificateType *, const char*);
+SOAP_FMAC1 ns6__SigningCertificateType * SOAP_FMAC2 soap_instantiate_ns6__SigningCertificateType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__SigningCertificateType * soap_new_ns1__SigningCertificateType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__SigningCertificateType(soap, n, NULL, NULL, NULL); }
+inline ns6__SigningCertificateType * soap_new_ns6__SigningCertificateType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__SigningCertificateType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__SigningCertificateType * soap_new_req_ns1__SigningCertificateType(
+inline ns6__SigningCertificateType * soap_new_req_ns6__SigningCertificateType(
 	struct soap *soap,
-	ns1__CertType *ns1__Cert)
-{	ns1__SigningCertificateType *_p = soap_new_ns1__SigningCertificateType(soap);
+	ns6__CertType *ns6__Cert)
+{	ns6__SigningCertificateType *_p = soap_new_ns6__SigningCertificateType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__SigningCertificateType::ns1__Cert = ns1__Cert;
+		_p->ns6__SigningCertificateType::ns6__Cert = ns6__Cert;
 	}
 	return _p;
 }
 
-inline ns1__SigningCertificateType * soap_new_set_ns1__SigningCertificateType(
+inline ns6__SigningCertificateType * soap_new_set_ns6__SigningCertificateType(
 	struct soap *soap,
-	ns1__CertType *ns1__Cert)
-{	ns1__SigningCertificateType *_p = soap_new_ns1__SigningCertificateType(soap);
+	ns6__CertType *ns6__Cert)
+{	ns6__SigningCertificateType *_p = soap_new_ns6__SigningCertificateType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__SigningCertificateType::ns1__Cert = ns1__Cert;
+		_p->ns6__SigningCertificateType::ns6__Cert = ns6__Cert;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__SigningCertificateType
-#define soap_write_ns1__SigningCertificateType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:SigningCertificateType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__SigningCertificateType
+#define soap_write_ns6__SigningCertificateType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:SigningCertificateType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__SigningCertificateType * SOAP_FMAC4 soap_get_ns1__SigningCertificateType(struct soap*, ns1__SigningCertificateType *, const char*, const char*);
+SOAP_FMAC3 ns6__SigningCertificateType * SOAP_FMAC4 soap_get_ns6__SigningCertificateType(struct soap*, ns6__SigningCertificateType *, const char*, const char*);
 
-#ifndef soap_read_ns1__SigningCertificateType
-#define soap_read_ns1__SigningCertificateType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__SigningCertificateType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__SigningCertificateType
+#define soap_read_ns6__SigningCertificateType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__SigningCertificateType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__SignedSignaturePropertiesType
-#define SOAP_TYPE_ns1__SignedSignaturePropertiesType (59)
+#ifndef SOAP_TYPE_ns6__SignedSignaturePropertiesType
+#define SOAP_TYPE_ns6__SignedSignaturePropertiesType (59)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__SignedSignaturePropertiesType(struct soap*, const char*, int, const ns1__SignedSignaturePropertiesType *, const char*);
-SOAP_FMAC3 ns1__SignedSignaturePropertiesType * SOAP_FMAC4 soap_in_ns1__SignedSignaturePropertiesType(struct soap*, const char*, ns1__SignedSignaturePropertiesType *, const char*);
-SOAP_FMAC1 ns1__SignedSignaturePropertiesType * SOAP_FMAC2 soap_instantiate_ns1__SignedSignaturePropertiesType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__SignedSignaturePropertiesType(struct soap*, const char*, int, const ns6__SignedSignaturePropertiesType *, const char*);
+SOAP_FMAC3 ns6__SignedSignaturePropertiesType * SOAP_FMAC4 soap_in_ns6__SignedSignaturePropertiesType(struct soap*, const char*, ns6__SignedSignaturePropertiesType *, const char*);
+SOAP_FMAC1 ns6__SignedSignaturePropertiesType * SOAP_FMAC2 soap_instantiate_ns6__SignedSignaturePropertiesType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__SignedSignaturePropertiesType * soap_new_ns1__SignedSignaturePropertiesType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__SignedSignaturePropertiesType(soap, n, NULL, NULL, NULL); }
+inline ns6__SignedSignaturePropertiesType * soap_new_ns6__SignedSignaturePropertiesType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__SignedSignaturePropertiesType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__SignedSignaturePropertiesType * soap_new_req_ns1__SignedSignaturePropertiesType(
+inline ns6__SignedSignaturePropertiesType * soap_new_req_ns6__SignedSignaturePropertiesType(
 	struct soap *soap,
-	time_t ns1__SigningTime,
-	ns1__SigningCertificateType *ns1__SigningCertificate)
-{	ns1__SignedSignaturePropertiesType *_p = soap_new_ns1__SignedSignaturePropertiesType(soap);
+	time_t ns6__SigningTime,
+	ns6__SigningCertificateType *ns6__SigningCertificate)
+{	ns6__SignedSignaturePropertiesType *_p = soap_new_ns6__SignedSignaturePropertiesType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__SignedSignaturePropertiesType::ns1__SigningTime = ns1__SigningTime;
-		_p->ns1__SignedSignaturePropertiesType::ns1__SigningCertificate = ns1__SigningCertificate;
+		_p->ns6__SignedSignaturePropertiesType::ns6__SigningTime = ns6__SigningTime;
+		_p->ns6__SignedSignaturePropertiesType::ns6__SigningCertificate = ns6__SigningCertificate;
 	}
 	return _p;
 }
 
-inline ns1__SignedSignaturePropertiesType * soap_new_set_ns1__SignedSignaturePropertiesType(
+inline ns6__SignedSignaturePropertiesType * soap_new_set_ns6__SignedSignaturePropertiesType(
 	struct soap *soap,
-	time_t ns1__SigningTime,
-	ns1__SigningCertificateType *ns1__SigningCertificate,
-	ns1__SignerRoleType *ns1__SignerRole)
-{	ns1__SignedSignaturePropertiesType *_p = soap_new_ns1__SignedSignaturePropertiesType(soap);
+	time_t ns6__SigningTime,
+	ns6__SigningCertificateType *ns6__SigningCertificate,
+	ns6__SignerRoleType *ns6__SignerRole)
+{	ns6__SignedSignaturePropertiesType *_p = soap_new_ns6__SignedSignaturePropertiesType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__SignedSignaturePropertiesType::ns1__SigningTime = ns1__SigningTime;
-		_p->ns1__SignedSignaturePropertiesType::ns1__SigningCertificate = ns1__SigningCertificate;
-		_p->ns1__SignedSignaturePropertiesType::ns1__SignerRole = ns1__SignerRole;
+		_p->ns6__SignedSignaturePropertiesType::ns6__SigningTime = ns6__SigningTime;
+		_p->ns6__SignedSignaturePropertiesType::ns6__SigningCertificate = ns6__SigningCertificate;
+		_p->ns6__SignedSignaturePropertiesType::ns6__SignerRole = ns6__SignerRole;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__SignedSignaturePropertiesType
-#define soap_write_ns1__SignedSignaturePropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:SignedSignaturePropertiesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__SignedSignaturePropertiesType
+#define soap_write_ns6__SignedSignaturePropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:SignedSignaturePropertiesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__SignedSignaturePropertiesType * SOAP_FMAC4 soap_get_ns1__SignedSignaturePropertiesType(struct soap*, ns1__SignedSignaturePropertiesType *, const char*, const char*);
+SOAP_FMAC3 ns6__SignedSignaturePropertiesType * SOAP_FMAC4 soap_get_ns6__SignedSignaturePropertiesType(struct soap*, ns6__SignedSignaturePropertiesType *, const char*, const char*);
 
-#ifndef soap_read_ns1__SignedSignaturePropertiesType
-#define soap_read_ns1__SignedSignaturePropertiesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__SignedSignaturePropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__SignedSignaturePropertiesType
+#define soap_read_ns6__SignedSignaturePropertiesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__SignedSignaturePropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__SignedPropertiesType
-#define SOAP_TYPE_ns1__SignedPropertiesType (58)
+#ifndef SOAP_TYPE_ns6__SignedPropertiesType
+#define SOAP_TYPE_ns6__SignedPropertiesType (58)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__SignedPropertiesType(struct soap*, const char*, int, const ns1__SignedPropertiesType *, const char*);
-SOAP_FMAC3 ns1__SignedPropertiesType * SOAP_FMAC4 soap_in_ns1__SignedPropertiesType(struct soap*, const char*, ns1__SignedPropertiesType *, const char*);
-SOAP_FMAC1 ns1__SignedPropertiesType * SOAP_FMAC2 soap_instantiate_ns1__SignedPropertiesType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__SignedPropertiesType(struct soap*, const char*, int, const ns6__SignedPropertiesType *, const char*);
+SOAP_FMAC3 ns6__SignedPropertiesType * SOAP_FMAC4 soap_in_ns6__SignedPropertiesType(struct soap*, const char*, ns6__SignedPropertiesType *, const char*);
+SOAP_FMAC1 ns6__SignedPropertiesType * SOAP_FMAC2 soap_instantiate_ns6__SignedPropertiesType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__SignedPropertiesType * soap_new_ns1__SignedPropertiesType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__SignedPropertiesType(soap, n, NULL, NULL, NULL); }
+inline ns6__SignedPropertiesType * soap_new_ns6__SignedPropertiesType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__SignedPropertiesType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__SignedPropertiesType * soap_new_req_ns1__SignedPropertiesType(
+inline ns6__SignedPropertiesType * soap_new_req_ns6__SignedPropertiesType(
 	struct soap *soap,
-	ns1__SignedSignaturePropertiesType *ns1__SignedSignatureProperties,
+	ns6__SignedSignaturePropertiesType *ns6__SignedSignatureProperties,
 	const std::string& Id)
-{	ns1__SignedPropertiesType *_p = soap_new_ns1__SignedPropertiesType(soap);
+{	ns6__SignedPropertiesType *_p = soap_new_ns6__SignedPropertiesType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__SignedPropertiesType::ns1__SignedSignatureProperties = ns1__SignedSignatureProperties;
-		_p->ns1__SignedPropertiesType::Id = Id;
+		_p->ns6__SignedPropertiesType::ns6__SignedSignatureProperties = ns6__SignedSignatureProperties;
+		_p->ns6__SignedPropertiesType::Id = Id;
 	}
 	return _p;
 }
 
-inline ns1__SignedPropertiesType * soap_new_set_ns1__SignedPropertiesType(
+inline ns6__SignedPropertiesType * soap_new_set_ns6__SignedPropertiesType(
 	struct soap *soap,
-	ns1__SignedSignaturePropertiesType *ns1__SignedSignatureProperties,
+	ns6__SignedSignaturePropertiesType *ns6__SignedSignatureProperties,
 	const std::string& Id)
-{	ns1__SignedPropertiesType *_p = soap_new_ns1__SignedPropertiesType(soap);
+{	ns6__SignedPropertiesType *_p = soap_new_ns6__SignedPropertiesType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__SignedPropertiesType::ns1__SignedSignatureProperties = ns1__SignedSignatureProperties;
-		_p->ns1__SignedPropertiesType::Id = Id;
+		_p->ns6__SignedPropertiesType::ns6__SignedSignatureProperties = ns6__SignedSignatureProperties;
+		_p->ns6__SignedPropertiesType::Id = Id;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__SignedPropertiesType
-#define soap_write_ns1__SignedPropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:SignedPropertiesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__SignedPropertiesType
+#define soap_write_ns6__SignedPropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:SignedPropertiesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__SignedPropertiesType * SOAP_FMAC4 soap_get_ns1__SignedPropertiesType(struct soap*, ns1__SignedPropertiesType *, const char*, const char*);
+SOAP_FMAC3 ns6__SignedPropertiesType * SOAP_FMAC4 soap_get_ns6__SignedPropertiesType(struct soap*, ns6__SignedPropertiesType *, const char*, const char*);
 
-#ifndef soap_read_ns1__SignedPropertiesType
-#define soap_read_ns1__SignedPropertiesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__SignedPropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__SignedPropertiesType
+#define soap_read_ns6__SignedPropertiesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__SignedPropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_ns1__QualifyingPropertiesType
-#define SOAP_TYPE_ns1__QualifyingPropertiesType (57)
+#ifndef SOAP_TYPE_ns6__QualifyingPropertiesType
+#define SOAP_TYPE_ns6__QualifyingPropertiesType (57)
 #endif
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns1__QualifyingPropertiesType(struct soap*, const char*, int, const ns1__QualifyingPropertiesType *, const char*);
-SOAP_FMAC3 ns1__QualifyingPropertiesType * SOAP_FMAC4 soap_in_ns1__QualifyingPropertiesType(struct soap*, const char*, ns1__QualifyingPropertiesType *, const char*);
-SOAP_FMAC1 ns1__QualifyingPropertiesType * SOAP_FMAC2 soap_instantiate_ns1__QualifyingPropertiesType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns6__QualifyingPropertiesType(struct soap*, const char*, int, const ns6__QualifyingPropertiesType *, const char*);
+SOAP_FMAC3 ns6__QualifyingPropertiesType * SOAP_FMAC4 soap_in_ns6__QualifyingPropertiesType(struct soap*, const char*, ns6__QualifyingPropertiesType *, const char*);
+SOAP_FMAC1 ns6__QualifyingPropertiesType * SOAP_FMAC2 soap_instantiate_ns6__QualifyingPropertiesType(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns1__QualifyingPropertiesType * soap_new_ns1__QualifyingPropertiesType(struct soap *soap, int n = -1) { return soap_instantiate_ns1__QualifyingPropertiesType(soap, n, NULL, NULL, NULL); }
+inline ns6__QualifyingPropertiesType * soap_new_ns6__QualifyingPropertiesType(struct soap *soap, int n = -1) { return soap_instantiate_ns6__QualifyingPropertiesType(soap, n, NULL, NULL, NULL); }
 
-inline ns1__QualifyingPropertiesType * soap_new_req_ns1__QualifyingPropertiesType(
+inline ns6__QualifyingPropertiesType * soap_new_req_ns6__QualifyingPropertiesType(
 	struct soap *soap,
-	ns1__SignedPropertiesType *ns1__SignedProperties,
+	ns6__SignedPropertiesType *ns6__SignedProperties,
 	const std::string& Target)
-{	ns1__QualifyingPropertiesType *_p = soap_new_ns1__QualifyingPropertiesType(soap);
+{	ns6__QualifyingPropertiesType *_p = soap_new_ns6__QualifyingPropertiesType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__QualifyingPropertiesType::ns1__SignedProperties = ns1__SignedProperties;
-		_p->ns1__QualifyingPropertiesType::Target = Target;
+		_p->ns6__QualifyingPropertiesType::ns6__SignedProperties = ns6__SignedProperties;
+		_p->ns6__QualifyingPropertiesType::Target = Target;
 	}
 	return _p;
 }
 
-inline ns1__QualifyingPropertiesType * soap_new_set_ns1__QualifyingPropertiesType(
+inline ns6__QualifyingPropertiesType * soap_new_set_ns6__QualifyingPropertiesType(
 	struct soap *soap,
-	ns1__SignedPropertiesType *ns1__SignedProperties,
-	ns1__UnsignedPropertiesType *ns1__UnsignedProperties,
+	ns6__SignedPropertiesType *ns6__SignedProperties,
+	ns6__UnsignedPropertiesType *ns6__UnsignedProperties,
 	const std::string& Target)
-{	ns1__QualifyingPropertiesType *_p = soap_new_ns1__QualifyingPropertiesType(soap);
+{	ns6__QualifyingPropertiesType *_p = soap_new_ns6__QualifyingPropertiesType(soap);
 	if (_p)
 	{	_p->soap_default(soap);
-		_p->ns1__QualifyingPropertiesType::ns1__SignedProperties = ns1__SignedProperties;
-		_p->ns1__QualifyingPropertiesType::ns1__UnsignedProperties = ns1__UnsignedProperties;
-		_p->ns1__QualifyingPropertiesType::Target = Target;
+		_p->ns6__QualifyingPropertiesType::ns6__SignedProperties = ns6__SignedProperties;
+		_p->ns6__QualifyingPropertiesType::ns6__UnsignedProperties = ns6__UnsignedProperties;
+		_p->ns6__QualifyingPropertiesType::Target = Target;
 	}
 	return _p;
 }
 
-#ifndef soap_write_ns1__QualifyingPropertiesType
-#define soap_write_ns1__QualifyingPropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns1:QualifyingPropertiesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns6__QualifyingPropertiesType
+#define soap_write_ns6__QualifyingPropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "ns6:QualifyingPropertiesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__QualifyingPropertiesType * SOAP_FMAC4 soap_get_ns1__QualifyingPropertiesType(struct soap*, ns1__QualifyingPropertiesType *, const char*, const char*);
+SOAP_FMAC3 ns6__QualifyingPropertiesType * SOAP_FMAC4 soap_get_ns6__QualifyingPropertiesType(struct soap*, ns6__QualifyingPropertiesType *, const char*, const char*);
 
-#ifndef soap_read_ns1__QualifyingPropertiesType
-#define soap_read_ns1__QualifyingPropertiesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns1__QualifyingPropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns6__QualifyingPropertiesType
+#define soap_read_ns6__QualifyingPropertiesType(soap, data) ( ((data) ? ((data)->soap_default(soap), 0) : 0) || soap_begin_recv(soap) || !soap_get_ns6__QualifyingPropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
@@ -8074,87 +8074,87 @@ SOAP_FMAC3 xsd__base64Binary * SOAP_FMAC4 soap_get_xsd__base64Binary(struct soap
 #endif
 
 
-#ifndef SOAP_TYPE___ns4__Sign
-#define SOAP_TYPE___ns4__Sign (351)
+#ifndef SOAP_TYPE___pdf__Sign
+#define SOAP_TYPE___pdf__Sign (351)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___ns4__Sign(struct soap*, struct __ns4__Sign *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___ns4__Sign(struct soap*, const struct __ns4__Sign *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___ns4__Sign(struct soap*, const char*, int, const struct __ns4__Sign *, const char*);
-SOAP_FMAC3 struct __ns4__Sign * SOAP_FMAC4 soap_in___ns4__Sign(struct soap*, const char*, struct __ns4__Sign *, const char*);
-SOAP_FMAC1 struct __ns4__Sign * SOAP_FMAC2 soap_instantiate___ns4__Sign(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___pdf__Sign(struct soap*, struct __pdf__Sign *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___pdf__Sign(struct soap*, const struct __pdf__Sign *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___pdf__Sign(struct soap*, const char*, int, const struct __pdf__Sign *, const char*);
+SOAP_FMAC3 struct __pdf__Sign * SOAP_FMAC4 soap_in___pdf__Sign(struct soap*, const char*, struct __pdf__Sign *, const char*);
+SOAP_FMAC1 struct __pdf__Sign * SOAP_FMAC2 soap_instantiate___pdf__Sign(struct soap*, int, const char*, const char*, size_t*);
 
-inline struct __ns4__Sign * soap_new___ns4__Sign(struct soap *soap, int n = -1) { return soap_instantiate___ns4__Sign(soap, n, NULL, NULL, NULL); }
+inline struct __pdf__Sign * soap_new___pdf__Sign(struct soap *soap, int n = -1) { return soap_instantiate___pdf__Sign(soap, n, NULL, NULL, NULL); }
 
-inline struct __ns4__Sign * soap_new_req___ns4__Sign(
+inline struct __pdf__Sign * soap_new_req___pdf__Sign(
 	struct soap *soap)
-{	struct __ns4__Sign *_p = soap_new___ns4__Sign(soap);
+{	struct __pdf__Sign *_p = soap_new___pdf__Sign(soap);
 	if (_p)
-	{	soap_default___ns4__Sign(soap, _p);
+	{	soap_default___pdf__Sign(soap, _p);
 	}
 	return _p;
 }
 
-inline struct __ns4__Sign * soap_new_set___ns4__Sign(
+inline struct __pdf__Sign * soap_new_set___pdf__Sign(
 	struct soap *soap,
-	ns4__SignRequest *ns4__SignRequest_)
-{	struct __ns4__Sign *_p = soap_new___ns4__Sign(soap);
+	pdf__SignRequest *pdf__SignRequest_)
+{	struct __pdf__Sign *_p = soap_new___pdf__Sign(soap);
 	if (_p)
-	{	soap_default___ns4__Sign(soap, _p);
-		_p->ns4__SignRequest_ = ns4__SignRequest_;
+	{	soap_default___pdf__Sign(soap, _p);
+		_p->pdf__SignRequest_ = pdf__SignRequest_;
 	}
 	return _p;
 }
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___ns4__Sign(struct soap*, const struct __ns4__Sign *, const char*, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___pdf__Sign(struct soap*, const struct __pdf__Sign *, const char*, const char*);
 
-#ifndef soap_write___ns4__Sign
-#define soap_write___ns4__Sign(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize___ns4__Sign(soap, data), 0) || soap_put___ns4__Sign(soap, data, "-ns4:Sign", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write___pdf__Sign
+#define soap_write___pdf__Sign(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize___pdf__Sign(soap, data), 0) || soap_put___pdf__Sign(soap, data, "-pdf:Sign", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 struct __ns4__Sign * SOAP_FMAC4 soap_get___ns4__Sign(struct soap*, struct __ns4__Sign *, const char*, const char*);
+SOAP_FMAC3 struct __pdf__Sign * SOAP_FMAC4 soap_get___pdf__Sign(struct soap*, struct __pdf__Sign *, const char*, const char*);
 
-#ifndef soap_read___ns4__Sign
-#define soap_read___ns4__Sign(soap, data) ( ((data) ? (soap_default___ns4__Sign(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get___ns4__Sign(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read___pdf__Sign
+#define soap_read___pdf__Sign(soap, data) ( ((data) ? (soap_default___pdf__Sign(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get___pdf__Sign(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE___ns2__AttributeSuppliers
-#define SOAP_TYPE___ns2__AttributeSuppliers (347)
+#ifndef SOAP_TYPE___ns8__AttributeSuppliers
+#define SOAP_TYPE___ns8__AttributeSuppliers (347)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___ns2__AttributeSuppliers(struct soap*, struct __ns2__AttributeSuppliers *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___ns2__AttributeSuppliers(struct soap*, const struct __ns2__AttributeSuppliers *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___ns2__AttributeSuppliers(struct soap*, const char*, int, const struct __ns2__AttributeSuppliers *, const char*);
-SOAP_FMAC3 struct __ns2__AttributeSuppliers * SOAP_FMAC4 soap_in___ns2__AttributeSuppliers(struct soap*, const char*, struct __ns2__AttributeSuppliers *, const char*);
-SOAP_FMAC1 struct __ns2__AttributeSuppliers * SOAP_FMAC2 soap_instantiate___ns2__AttributeSuppliers(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___ns8__AttributeSuppliers(struct soap*, struct __ns8__AttributeSuppliers *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___ns8__AttributeSuppliers(struct soap*, const struct __ns8__AttributeSuppliers *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___ns8__AttributeSuppliers(struct soap*, const char*, int, const struct __ns8__AttributeSuppliers *, const char*);
+SOAP_FMAC3 struct __ns8__AttributeSuppliers * SOAP_FMAC4 soap_in___ns8__AttributeSuppliers(struct soap*, const char*, struct __ns8__AttributeSuppliers *, const char*);
+SOAP_FMAC1 struct __ns8__AttributeSuppliers * SOAP_FMAC2 soap_instantiate___ns8__AttributeSuppliers(struct soap*, int, const char*, const char*, size_t*);
 
-inline struct __ns2__AttributeSuppliers * soap_new___ns2__AttributeSuppliers(struct soap *soap, int n = -1) { return soap_instantiate___ns2__AttributeSuppliers(soap, n, NULL, NULL, NULL); }
+inline struct __ns8__AttributeSuppliers * soap_new___ns8__AttributeSuppliers(struct soap *soap, int n = -1) { return soap_instantiate___ns8__AttributeSuppliers(soap, n, NULL, NULL, NULL); }
 
-inline struct __ns2__AttributeSuppliers * soap_new_req___ns2__AttributeSuppliers(
+inline struct __ns8__AttributeSuppliers * soap_new_req___ns8__AttributeSuppliers(
 	struct soap *soap)
-{	struct __ns2__AttributeSuppliers *_p = soap_new___ns2__AttributeSuppliers(soap);
+{	struct __ns8__AttributeSuppliers *_p = soap_new___ns8__AttributeSuppliers(soap);
 	if (_p)
-	{	soap_default___ns2__AttributeSuppliers(soap, _p);
+	{	soap_default___ns8__AttributeSuppliers(soap, _p);
 	}
 	return _p;
 }
 
-inline struct __ns2__AttributeSuppliers * soap_new_set___ns2__AttributeSuppliers(
+inline struct __ns8__AttributeSuppliers * soap_new_set___ns8__AttributeSuppliers(
 	struct soap *soap)
-{	struct __ns2__AttributeSuppliers *_p = soap_new___ns2__AttributeSuppliers(soap);
+{	struct __ns8__AttributeSuppliers *_p = soap_new___ns8__AttributeSuppliers(soap);
 	if (_p)
-	{	soap_default___ns2__AttributeSuppliers(soap, _p);
+	{	soap_default___ns8__AttributeSuppliers(soap, _p);
 	}
 	return _p;
 }
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___ns2__AttributeSuppliers(struct soap*, const struct __ns2__AttributeSuppliers *, const char*, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___ns8__AttributeSuppliers(struct soap*, const struct __ns8__AttributeSuppliers *, const char*, const char*);
 
-#ifndef soap_write___ns2__AttributeSuppliers
-#define soap_write___ns2__AttributeSuppliers(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize___ns2__AttributeSuppliers(soap, data), 0) || soap_put___ns2__AttributeSuppliers(soap, data, "-ns2:AttributeSuppliers", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write___ns8__AttributeSuppliers
+#define soap_write___ns8__AttributeSuppliers(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize___ns8__AttributeSuppliers(soap, data), 0) || soap_put___ns8__AttributeSuppliers(soap, data, "-ns8:AttributeSuppliers", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 struct __ns2__AttributeSuppliers * SOAP_FMAC4 soap_get___ns2__AttributeSuppliers(struct soap*, struct __ns2__AttributeSuppliers *, const char*, const char*);
+SOAP_FMAC3 struct __ns8__AttributeSuppliers * SOAP_FMAC4 soap_get___ns8__AttributeSuppliers(struct soap*, struct __ns8__AttributeSuppliers *, const char*, const char*);
 
-#ifndef soap_read___ns2__AttributeSuppliers
-#define soap_read___ns2__AttributeSuppliers(soap, data) ( ((data) ? (soap_default___ns2__AttributeSuppliers(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get___ns2__AttributeSuppliers(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read___ns8__AttributeSuppliers
+#define soap_read___ns8__AttributeSuppliers(soap, data) ( ((data) ? (soap_default___ns8__AttributeSuppliers(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get___ns8__AttributeSuppliers(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
@@ -8971,22 +8971,22 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_serialize__ns5__union_ObjectType(struct soap*, i
 SOAP_FMAC3 int SOAP_FMAC4 soap_out__ns5__union_ObjectType(struct soap*, int, const union _ns5__union_ObjectType *);
 SOAP_FMAC3 union _ns5__union_ObjectType * SOAP_FMAC4 soap_in__ns5__union_ObjectType(struct soap*, int*, union _ns5__union_ObjectType *);
 
-#ifndef SOAP_TYPE_PointerTons4__SignRequest
-#define SOAP_TYPE_PointerTons4__SignRequest (348)
+#ifndef SOAP_TYPE_PointerTopdf__SignRequest
+#define SOAP_TYPE_PointerTopdf__SignRequest (348)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons4__SignRequest(struct soap*, ns4__SignRequest *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons4__SignRequest(struct soap*, const char *, int, ns4__SignRequest *const*, const char *);
-SOAP_FMAC3 ns4__SignRequest ** SOAP_FMAC4 soap_in_PointerTons4__SignRequest(struct soap*, const char*, ns4__SignRequest **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons4__SignRequest(struct soap*, ns4__SignRequest *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTopdf__SignRequest(struct soap*, pdf__SignRequest *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTopdf__SignRequest(struct soap*, const char *, int, pdf__SignRequest *const*, const char *);
+SOAP_FMAC3 pdf__SignRequest ** SOAP_FMAC4 soap_in_PointerTopdf__SignRequest(struct soap*, const char*, pdf__SignRequest **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTopdf__SignRequest(struct soap*, pdf__SignRequest *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons4__SignRequest
-#define soap_write_PointerTons4__SignRequest(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons4__SignRequest(soap, data), 0) || soap_put_PointerTons4__SignRequest(soap, data, "ns4:SignRequest", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTopdf__SignRequest
+#define soap_write_PointerTopdf__SignRequest(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTopdf__SignRequest(soap, data), 0) || soap_put_PointerTopdf__SignRequest(soap, data, "pdf:SignRequest", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__SignRequest ** SOAP_FMAC4 soap_get_PointerTons4__SignRequest(struct soap*, ns4__SignRequest **, const char*, const char*);
+SOAP_FMAC3 pdf__SignRequest ** SOAP_FMAC4 soap_get_PointerTopdf__SignRequest(struct soap*, pdf__SignRequest **, const char*, const char*);
 
-#ifndef soap_read_PointerTons4__SignRequest
-#define soap_read_PointerTons4__SignRequest(soap, data) ( ((data) ? (soap_default_PointerTons4__SignRequest(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons4__SignRequest(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTopdf__SignRequest
+#define soap_read_PointerTopdf__SignRequest(soap, data) ( ((data) ? (soap_default_PointerTopdf__SignRequest(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTopdf__SignRequest(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
@@ -9373,136 +9373,136 @@ SOAP_FMAC3 xsd__base64Binary ** SOAP_FMAC4 soap_get_PointerToxsd__base64Binary(s
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons4__Status
-#define SOAP_TYPE_PointerTons4__Status (240)
+#ifndef SOAP_TYPE_PointerTopdf__Status
+#define SOAP_TYPE_PointerTopdf__Status (240)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons4__Status(struct soap*, ns4__Status *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons4__Status(struct soap*, const char *, int, ns4__Status *const*, const char *);
-SOAP_FMAC3 ns4__Status ** SOAP_FMAC4 soap_in_PointerTons4__Status(struct soap*, const char*, ns4__Status **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons4__Status(struct soap*, ns4__Status *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTopdf__Status(struct soap*, pdf__Status *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTopdf__Status(struct soap*, const char *, int, pdf__Status *const*, const char *);
+SOAP_FMAC3 pdf__Status ** SOAP_FMAC4 soap_in_PointerTopdf__Status(struct soap*, const char*, pdf__Status **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTopdf__Status(struct soap*, pdf__Status *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons4__Status
-#define soap_write_PointerTons4__Status(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons4__Status(soap, data), 0) || soap_put_PointerTons4__Status(soap, data, "ns4:Status", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 ns4__Status ** SOAP_FMAC4 soap_get_PointerTons4__Status(struct soap*, ns4__Status **, const char*, const char*);
-
-#ifndef soap_read_PointerTons4__Status
-#define soap_read_PointerTons4__Status(soap, data) ( ((data) ? (soap_default_PointerTons4__Status(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons4__Status(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_write_PointerTopdf__Status
+#define soap_write_PointerTopdf__Status(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTopdf__Status(soap, data), 0) || soap_put_PointerTopdf__Status(soap, data, "pdf:Status", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
+SOAP_FMAC3 pdf__Status ** SOAP_FMAC4 soap_get_PointerTopdf__Status(struct soap*, pdf__Status **, const char*, const char*);
 
-#ifndef SOAP_TYPE_PointerTons4__SubAttributeType
-#define SOAP_TYPE_PointerTons4__SubAttributeType (238)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons4__SubAttributeType(struct soap*, ns4__SubAttributeType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons4__SubAttributeType(struct soap*, const char *, int, ns4__SubAttributeType *const*, const char *);
-SOAP_FMAC3 ns4__SubAttributeType ** SOAP_FMAC4 soap_in_PointerTons4__SubAttributeType(struct soap*, const char*, ns4__SubAttributeType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons4__SubAttributeType(struct soap*, ns4__SubAttributeType *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons4__SubAttributeType
-#define soap_write_PointerTons4__SubAttributeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons4__SubAttributeType(soap, data), 0) || soap_put_PointerTons4__SubAttributeType(soap, data, "ns4:SubAttributeType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 ns4__SubAttributeType ** SOAP_FMAC4 soap_get_PointerTons4__SubAttributeType(struct soap*, ns4__SubAttributeType **, const char*, const char*);
-
-#ifndef soap_read_PointerTons4__SubAttributeType
-#define soap_read_PointerTons4__SubAttributeType(soap, data) ( ((data) ? (soap_default_PointerTons4__SubAttributeType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons4__SubAttributeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTopdf__Status
+#define soap_read_PointerTopdf__Status(soap, data) ( ((data) ? (soap_default_PointerTopdf__Status(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTopdf__Status(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons4__SubAttributeListType
-#define SOAP_TYPE_PointerTons4__SubAttributeListType (236)
+#ifndef SOAP_TYPE_PointerTopdf__SubAttributeType
+#define SOAP_TYPE_PointerTopdf__SubAttributeType (238)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons4__SubAttributeListType(struct soap*, ns4__SubAttributeListType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons4__SubAttributeListType(struct soap*, const char *, int, ns4__SubAttributeListType *const*, const char *);
-SOAP_FMAC3 ns4__SubAttributeListType ** SOAP_FMAC4 soap_in_PointerTons4__SubAttributeListType(struct soap*, const char*, ns4__SubAttributeListType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons4__SubAttributeListType(struct soap*, ns4__SubAttributeListType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTopdf__SubAttributeType(struct soap*, pdf__SubAttributeType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTopdf__SubAttributeType(struct soap*, const char *, int, pdf__SubAttributeType *const*, const char *);
+SOAP_FMAC3 pdf__SubAttributeType ** SOAP_FMAC4 soap_in_PointerTopdf__SubAttributeType(struct soap*, const char*, pdf__SubAttributeType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTopdf__SubAttributeType(struct soap*, pdf__SubAttributeType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons4__SubAttributeListType
-#define soap_write_PointerTons4__SubAttributeListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons4__SubAttributeListType(soap, data), 0) || soap_put_PointerTons4__SubAttributeListType(soap, data, "ns4:SubAttributeListType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 ns4__SubAttributeListType ** SOAP_FMAC4 soap_get_PointerTons4__SubAttributeListType(struct soap*, ns4__SubAttributeListType **, const char*, const char*);
-
-#ifndef soap_read_PointerTons4__SubAttributeListType
-#define soap_read_PointerTons4__SubAttributeListType(soap, data) ( ((data) ? (soap_default_PointerTons4__SubAttributeListType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons4__SubAttributeListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_write_PointerTopdf__SubAttributeType
+#define soap_write_PointerTopdf__SubAttributeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTopdf__SubAttributeType(soap, data), 0) || soap_put_PointerTopdf__SubAttributeType(soap, data, "pdf:SubAttributeType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
+SOAP_FMAC3 pdf__SubAttributeType ** SOAP_FMAC4 soap_get_PointerTopdf__SubAttributeType(struct soap*, pdf__SubAttributeType **, const char*, const char*);
 
-#ifndef SOAP_TYPE_PointerTons4__LegalActListType
-#define SOAP_TYPE_PointerTons4__LegalActListType (235)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons4__LegalActListType(struct soap*, ns4__LegalActListType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons4__LegalActListType(struct soap*, const char *, int, ns4__LegalActListType *const*, const char *);
-SOAP_FMAC3 ns4__LegalActListType ** SOAP_FMAC4 soap_in_PointerTons4__LegalActListType(struct soap*, const char*, ns4__LegalActListType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons4__LegalActListType(struct soap*, ns4__LegalActListType *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons4__LegalActListType
-#define soap_write_PointerTons4__LegalActListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons4__LegalActListType(soap, data), 0) || soap_put_PointerTons4__LegalActListType(soap, data, "ns4:LegalActListType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 ns4__LegalActListType ** SOAP_FMAC4 soap_get_PointerTons4__LegalActListType(struct soap*, ns4__LegalActListType **, const char*, const char*);
-
-#ifndef soap_read_PointerTons4__LegalActListType
-#define soap_read_PointerTons4__LegalActListType(soap, data) ( ((data) ? (soap_default_PointerTons4__LegalActListType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons4__LegalActListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTopdf__SubAttributeType
+#define soap_read_PointerTopdf__SubAttributeType(soap, data) ( ((data) ? (soap_default_PointerTopdf__SubAttributeType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTopdf__SubAttributeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons4__MainAttributeType
-#define SOAP_TYPE_PointerTons4__MainAttributeType (234)
+#ifndef SOAP_TYPE_PointerTopdf__SubAttributeListType
+#define SOAP_TYPE_PointerTopdf__SubAttributeListType (236)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons4__MainAttributeType(struct soap*, ns4__MainAttributeType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons4__MainAttributeType(struct soap*, const char *, int, ns4__MainAttributeType *const*, const char *);
-SOAP_FMAC3 ns4__MainAttributeType ** SOAP_FMAC4 soap_in_PointerTons4__MainAttributeType(struct soap*, const char*, ns4__MainAttributeType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons4__MainAttributeType(struct soap*, ns4__MainAttributeType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTopdf__SubAttributeListType(struct soap*, pdf__SubAttributeListType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTopdf__SubAttributeListType(struct soap*, const char *, int, pdf__SubAttributeListType *const*, const char *);
+SOAP_FMAC3 pdf__SubAttributeListType ** SOAP_FMAC4 soap_in_PointerTopdf__SubAttributeListType(struct soap*, const char*, pdf__SubAttributeListType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTopdf__SubAttributeListType(struct soap*, pdf__SubAttributeListType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons4__MainAttributeType
-#define soap_write_PointerTons4__MainAttributeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons4__MainAttributeType(soap, data), 0) || soap_put_PointerTons4__MainAttributeType(soap, data, "ns4:MainAttributeType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 ns4__MainAttributeType ** SOAP_FMAC4 soap_get_PointerTons4__MainAttributeType(struct soap*, ns4__MainAttributeType **, const char*, const char*);
-
-#ifndef soap_read_PointerTons4__MainAttributeType
-#define soap_read_PointerTons4__MainAttributeType(soap, data) ( ((data) ? (soap_default_PointerTons4__MainAttributeType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons4__MainAttributeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_write_PointerTopdf__SubAttributeListType
+#define soap_write_PointerTopdf__SubAttributeListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTopdf__SubAttributeListType(soap, data), 0) || soap_put_PointerTopdf__SubAttributeListType(soap, data, "pdf:SubAttributeListType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
+SOAP_FMAC3 pdf__SubAttributeListType ** SOAP_FMAC4 soap_get_PointerTopdf__SubAttributeListType(struct soap*, pdf__SubAttributeListType **, const char*, const char*);
 
-#ifndef SOAP_TYPE_PointerTons4__AttributeSupplierType
-#define SOAP_TYPE_PointerTons4__AttributeSupplierType (233)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons4__AttributeSupplierType(struct soap*, ns4__AttributeSupplierType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons4__AttributeSupplierType(struct soap*, const char *, int, ns4__AttributeSupplierType *const*, const char *);
-SOAP_FMAC3 ns4__AttributeSupplierType ** SOAP_FMAC4 soap_in_PointerTons4__AttributeSupplierType(struct soap*, const char*, ns4__AttributeSupplierType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons4__AttributeSupplierType(struct soap*, ns4__AttributeSupplierType *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons4__AttributeSupplierType
-#define soap_write_PointerTons4__AttributeSupplierType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons4__AttributeSupplierType(soap, data), 0) || soap_put_PointerTons4__AttributeSupplierType(soap, data, "ns4:AttributeSupplierType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 ns4__AttributeSupplierType ** SOAP_FMAC4 soap_get_PointerTons4__AttributeSupplierType(struct soap*, ns4__AttributeSupplierType **, const char*, const char*);
-
-#ifndef soap_read_PointerTons4__AttributeSupplierType
-#define soap_read_PointerTons4__AttributeSupplierType(soap, data) ( ((data) ? (soap_default_PointerTons4__AttributeSupplierType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons4__AttributeSupplierType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTopdf__SubAttributeListType
+#define soap_read_PointerTopdf__SubAttributeListType(soap, data) ( ((data) ? (soap_default_PointerTopdf__SubAttributeListType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTopdf__SubAttributeListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons4__AttributeType
-#define SOAP_TYPE_PointerTons4__AttributeType (231)
+#ifndef SOAP_TYPE_PointerTopdf__LegalActListType
+#define SOAP_TYPE_PointerTopdf__LegalActListType (235)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons4__AttributeType(struct soap*, ns4__AttributeType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons4__AttributeType(struct soap*, const char *, int, ns4__AttributeType *const*, const char *);
-SOAP_FMAC3 ns4__AttributeType ** SOAP_FMAC4 soap_in_PointerTons4__AttributeType(struct soap*, const char*, ns4__AttributeType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons4__AttributeType(struct soap*, ns4__AttributeType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTopdf__LegalActListType(struct soap*, pdf__LegalActListType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTopdf__LegalActListType(struct soap*, const char *, int, pdf__LegalActListType *const*, const char *);
+SOAP_FMAC3 pdf__LegalActListType ** SOAP_FMAC4 soap_in_PointerTopdf__LegalActListType(struct soap*, const char*, pdf__LegalActListType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTopdf__LegalActListType(struct soap*, pdf__LegalActListType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons4__AttributeType
-#define soap_write_PointerTons4__AttributeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons4__AttributeType(soap, data), 0) || soap_put_PointerTons4__AttributeType(soap, data, "ns4:AttributeType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTopdf__LegalActListType
+#define soap_write_PointerTopdf__LegalActListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTopdf__LegalActListType(soap, data), 0) || soap_put_PointerTopdf__LegalActListType(soap, data, "pdf:LegalActListType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__AttributeType ** SOAP_FMAC4 soap_get_PointerTons4__AttributeType(struct soap*, ns4__AttributeType **, const char*, const char*);
+SOAP_FMAC3 pdf__LegalActListType ** SOAP_FMAC4 soap_get_PointerTopdf__LegalActListType(struct soap*, pdf__LegalActListType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons4__AttributeType
-#define soap_read_PointerTons4__AttributeType(soap, data) ( ((data) ? (soap_default_PointerTons4__AttributeType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons4__AttributeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTopdf__LegalActListType
+#define soap_read_PointerTopdf__LegalActListType(soap, data) ( ((data) ? (soap_default_PointerTopdf__LegalActListType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTopdf__LegalActListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+
+#ifndef SOAP_TYPE_PointerTopdf__MainAttributeType
+#define SOAP_TYPE_PointerTopdf__MainAttributeType (234)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTopdf__MainAttributeType(struct soap*, pdf__MainAttributeType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTopdf__MainAttributeType(struct soap*, const char *, int, pdf__MainAttributeType *const*, const char *);
+SOAP_FMAC3 pdf__MainAttributeType ** SOAP_FMAC4 soap_in_PointerTopdf__MainAttributeType(struct soap*, const char*, pdf__MainAttributeType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTopdf__MainAttributeType(struct soap*, pdf__MainAttributeType *const*, const char*, const char*);
+
+#ifndef soap_write_PointerTopdf__MainAttributeType
+#define soap_write_PointerTopdf__MainAttributeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTopdf__MainAttributeType(soap, data), 0) || soap_put_PointerTopdf__MainAttributeType(soap, data, "pdf:MainAttributeType", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 pdf__MainAttributeType ** SOAP_FMAC4 soap_get_PointerTopdf__MainAttributeType(struct soap*, pdf__MainAttributeType **, const char*, const char*);
+
+#ifndef soap_read_PointerTopdf__MainAttributeType
+#define soap_read_PointerTopdf__MainAttributeType(soap, data) ( ((data) ? (soap_default_PointerTopdf__MainAttributeType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTopdf__MainAttributeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+
+#ifndef SOAP_TYPE_PointerTopdf__AttributeSupplierType
+#define SOAP_TYPE_PointerTopdf__AttributeSupplierType (233)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTopdf__AttributeSupplierType(struct soap*, pdf__AttributeSupplierType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTopdf__AttributeSupplierType(struct soap*, const char *, int, pdf__AttributeSupplierType *const*, const char *);
+SOAP_FMAC3 pdf__AttributeSupplierType ** SOAP_FMAC4 soap_in_PointerTopdf__AttributeSupplierType(struct soap*, const char*, pdf__AttributeSupplierType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTopdf__AttributeSupplierType(struct soap*, pdf__AttributeSupplierType *const*, const char*, const char*);
+
+#ifndef soap_write_PointerTopdf__AttributeSupplierType
+#define soap_write_PointerTopdf__AttributeSupplierType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTopdf__AttributeSupplierType(soap, data), 0) || soap_put_PointerTopdf__AttributeSupplierType(soap, data, "pdf:AttributeSupplierType", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 pdf__AttributeSupplierType ** SOAP_FMAC4 soap_get_PointerTopdf__AttributeSupplierType(struct soap*, pdf__AttributeSupplierType **, const char*, const char*);
+
+#ifndef soap_read_PointerTopdf__AttributeSupplierType
+#define soap_read_PointerTopdf__AttributeSupplierType(soap, data) ( ((data) ? (soap_default_PointerTopdf__AttributeSupplierType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTopdf__AttributeSupplierType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+
+#ifndef SOAP_TYPE_PointerTopdf__AttributeType
+#define SOAP_TYPE_PointerTopdf__AttributeType (231)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTopdf__AttributeType(struct soap*, pdf__AttributeType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTopdf__AttributeType(struct soap*, const char *, int, pdf__AttributeType *const*, const char *);
+SOAP_FMAC3 pdf__AttributeType ** SOAP_FMAC4 soap_in_PointerTopdf__AttributeType(struct soap*, const char*, pdf__AttributeType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTopdf__AttributeType(struct soap*, pdf__AttributeType *const*, const char*, const char*);
+
+#ifndef soap_write_PointerTopdf__AttributeType
+#define soap_write_PointerTopdf__AttributeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTopdf__AttributeType(soap, data), 0) || soap_put_PointerTopdf__AttributeType(soap, data, "pdf:AttributeType", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 pdf__AttributeType ** SOAP_FMAC4 soap_get_PointerTopdf__AttributeType(struct soap*, pdf__AttributeType **, const char*, const char*);
+
+#ifndef soap_read_PointerTopdf__AttributeType
+#define soap_read_PointerTopdf__AttributeType(soap, data) ( ((data) ? (soap_default_PointerTopdf__AttributeType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTopdf__AttributeType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
@@ -9525,668 +9525,668 @@ SOAP_FMAC3 int ** SOAP_FMAC4 soap_get_PointerToint(struct soap*, int **, const c
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons4__AttributeListType
-#define SOAP_TYPE_PointerTons4__AttributeListType (229)
+#ifndef SOAP_TYPE_PointerTopdf__AttributeListType
+#define SOAP_TYPE_PointerTopdf__AttributeListType (229)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons4__AttributeListType(struct soap*, ns4__AttributeListType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons4__AttributeListType(struct soap*, const char *, int, ns4__AttributeListType *const*, const char *);
-SOAP_FMAC3 ns4__AttributeListType ** SOAP_FMAC4 soap_in_PointerTons4__AttributeListType(struct soap*, const char*, ns4__AttributeListType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons4__AttributeListType(struct soap*, ns4__AttributeListType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTopdf__AttributeListType(struct soap*, pdf__AttributeListType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTopdf__AttributeListType(struct soap*, const char *, int, pdf__AttributeListType *const*, const char *);
+SOAP_FMAC3 pdf__AttributeListType ** SOAP_FMAC4 soap_in_PointerTopdf__AttributeListType(struct soap*, const char*, pdf__AttributeListType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTopdf__AttributeListType(struct soap*, pdf__AttributeListType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons4__AttributeListType
-#define soap_write_PointerTons4__AttributeListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons4__AttributeListType(soap, data), 0) || soap_put_PointerTons4__AttributeListType(soap, data, "ns4:AttributeListType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTopdf__AttributeListType
+#define soap_write_PointerTopdf__AttributeListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTopdf__AttributeListType(soap, data), 0) || soap_put_PointerTopdf__AttributeListType(soap, data, "pdf:AttributeListType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__AttributeListType ** SOAP_FMAC4 soap_get_PointerTons4__AttributeListType(struct soap*, ns4__AttributeListType **, const char*, const char*);
+SOAP_FMAC3 pdf__AttributeListType ** SOAP_FMAC4 soap_get_PointerTopdf__AttributeListType(struct soap*, pdf__AttributeListType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons4__AttributeListType
-#define soap_read_PointerTons4__AttributeListType(soap, data) ( ((data) ? (soap_default_PointerTons4__AttributeListType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons4__AttributeListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTopdf__AttributeListType
+#define soap_read_PointerTopdf__AttributeListType(soap, data) ( ((data) ? (soap_default_PointerTopdf__AttributeListType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTopdf__AttributeListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons4__PersonalDataType
-#define SOAP_TYPE_PointerTons4__PersonalDataType (228)
+#ifndef SOAP_TYPE_PointerTopdf__PersonalDataType
+#define SOAP_TYPE_PointerTopdf__PersonalDataType (228)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons4__PersonalDataType(struct soap*, ns4__PersonalDataType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons4__PersonalDataType(struct soap*, const char *, int, ns4__PersonalDataType *const*, const char *);
-SOAP_FMAC3 ns4__PersonalDataType ** SOAP_FMAC4 soap_in_PointerTons4__PersonalDataType(struct soap*, const char*, ns4__PersonalDataType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons4__PersonalDataType(struct soap*, ns4__PersonalDataType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTopdf__PersonalDataType(struct soap*, pdf__PersonalDataType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTopdf__PersonalDataType(struct soap*, const char *, int, pdf__PersonalDataType *const*, const char *);
+SOAP_FMAC3 pdf__PersonalDataType ** SOAP_FMAC4 soap_in_PointerTopdf__PersonalDataType(struct soap*, const char*, pdf__PersonalDataType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTopdf__PersonalDataType(struct soap*, pdf__PersonalDataType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons4__PersonalDataType
-#define soap_write_PointerTons4__PersonalDataType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons4__PersonalDataType(soap, data), 0) || soap_put_PointerTons4__PersonalDataType(soap, data, "ns4:PersonalDataType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTopdf__PersonalDataType
+#define soap_write_PointerTopdf__PersonalDataType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTopdf__PersonalDataType(soap, data), 0) || soap_put_PointerTopdf__PersonalDataType(soap, data, "pdf:PersonalDataType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns4__PersonalDataType ** SOAP_FMAC4 soap_get_PointerTons4__PersonalDataType(struct soap*, ns4__PersonalDataType **, const char*, const char*);
+SOAP_FMAC3 pdf__PersonalDataType ** SOAP_FMAC4 soap_get_PointerTopdf__PersonalDataType(struct soap*, pdf__PersonalDataType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons4__PersonalDataType
-#define soap_read_PointerTons4__PersonalDataType(soap, data) ( ((data) ? (soap_default_PointerTons4__PersonalDataType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons4__PersonalDataType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTopdf__PersonalDataType
+#define soap_read_PointerTopdf__PersonalDataType(soap, data) ( ((data) ? (soap_default_PointerTopdf__PersonalDataType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTopdf__PersonalDataType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__EncapsulatedOCSPValueType
-#define SOAP_TYPE_PointerTons1__EncapsulatedOCSPValueType (225)
+#ifndef SOAP_TYPE_PointerTons6__EncapsulatedOCSPValueType
+#define SOAP_TYPE_PointerTons6__EncapsulatedOCSPValueType (225)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__EncapsulatedOCSPValueType(struct soap*, ns1__EncapsulatedOCSPValueType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__EncapsulatedOCSPValueType(struct soap*, const char *, int, ns1__EncapsulatedOCSPValueType *const*, const char *);
-SOAP_FMAC3 ns1__EncapsulatedOCSPValueType ** SOAP_FMAC4 soap_in_PointerTons1__EncapsulatedOCSPValueType(struct soap*, const char*, ns1__EncapsulatedOCSPValueType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__EncapsulatedOCSPValueType(struct soap*, ns1__EncapsulatedOCSPValueType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__EncapsulatedOCSPValueType(struct soap*, ns6__EncapsulatedOCSPValueType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__EncapsulatedOCSPValueType(struct soap*, const char *, int, ns6__EncapsulatedOCSPValueType *const*, const char *);
+SOAP_FMAC3 ns6__EncapsulatedOCSPValueType ** SOAP_FMAC4 soap_in_PointerTons6__EncapsulatedOCSPValueType(struct soap*, const char*, ns6__EncapsulatedOCSPValueType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__EncapsulatedOCSPValueType(struct soap*, ns6__EncapsulatedOCSPValueType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__EncapsulatedOCSPValueType
-#define soap_write_PointerTons1__EncapsulatedOCSPValueType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__EncapsulatedOCSPValueType(soap, data), 0) || soap_put_PointerTons1__EncapsulatedOCSPValueType(soap, data, "ns1:EncapsulatedOCSPValueType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__EncapsulatedOCSPValueType
+#define soap_write_PointerTons6__EncapsulatedOCSPValueType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__EncapsulatedOCSPValueType(soap, data), 0) || soap_put_PointerTons6__EncapsulatedOCSPValueType(soap, data, "ns6:EncapsulatedOCSPValueType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__EncapsulatedOCSPValueType ** SOAP_FMAC4 soap_get_PointerTons1__EncapsulatedOCSPValueType(struct soap*, ns1__EncapsulatedOCSPValueType **, const char*, const char*);
+SOAP_FMAC3 ns6__EncapsulatedOCSPValueType ** SOAP_FMAC4 soap_get_PointerTons6__EncapsulatedOCSPValueType(struct soap*, ns6__EncapsulatedOCSPValueType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__EncapsulatedOCSPValueType
-#define soap_read_PointerTons1__EncapsulatedOCSPValueType(soap, data) ( ((data) ? (soap_default_PointerTons1__EncapsulatedOCSPValueType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__EncapsulatedOCSPValueType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__EncapsulatedOCSPValueType
+#define soap_read_PointerTons6__EncapsulatedOCSPValueType(soap, data) ( ((data) ? (soap_default_PointerTons6__EncapsulatedOCSPValueType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__EncapsulatedOCSPValueType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__EncapsulatedCRLValueType
-#define SOAP_TYPE_PointerTons1__EncapsulatedCRLValueType (223)
+#ifndef SOAP_TYPE_PointerTons6__EncapsulatedCRLValueType
+#define SOAP_TYPE_PointerTons6__EncapsulatedCRLValueType (223)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__EncapsulatedCRLValueType(struct soap*, ns1__EncapsulatedCRLValueType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__EncapsulatedCRLValueType(struct soap*, const char *, int, ns1__EncapsulatedCRLValueType *const*, const char *);
-SOAP_FMAC3 ns1__EncapsulatedCRLValueType ** SOAP_FMAC4 soap_in_PointerTons1__EncapsulatedCRLValueType(struct soap*, const char*, ns1__EncapsulatedCRLValueType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__EncapsulatedCRLValueType(struct soap*, ns1__EncapsulatedCRLValueType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__EncapsulatedCRLValueType(struct soap*, ns6__EncapsulatedCRLValueType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__EncapsulatedCRLValueType(struct soap*, const char *, int, ns6__EncapsulatedCRLValueType *const*, const char *);
+SOAP_FMAC3 ns6__EncapsulatedCRLValueType ** SOAP_FMAC4 soap_in_PointerTons6__EncapsulatedCRLValueType(struct soap*, const char*, ns6__EncapsulatedCRLValueType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__EncapsulatedCRLValueType(struct soap*, ns6__EncapsulatedCRLValueType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__EncapsulatedCRLValueType
-#define soap_write_PointerTons1__EncapsulatedCRLValueType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__EncapsulatedCRLValueType(soap, data), 0) || soap_put_PointerTons1__EncapsulatedCRLValueType(soap, data, "ns1:EncapsulatedCRLValueType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__EncapsulatedCRLValueType
+#define soap_write_PointerTons6__EncapsulatedCRLValueType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__EncapsulatedCRLValueType(soap, data), 0) || soap_put_PointerTons6__EncapsulatedCRLValueType(soap, data, "ns6:EncapsulatedCRLValueType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__EncapsulatedCRLValueType ** SOAP_FMAC4 soap_get_PointerTons1__EncapsulatedCRLValueType(struct soap*, ns1__EncapsulatedCRLValueType **, const char*, const char*);
+SOAP_FMAC3 ns6__EncapsulatedCRLValueType ** SOAP_FMAC4 soap_get_PointerTons6__EncapsulatedCRLValueType(struct soap*, ns6__EncapsulatedCRLValueType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__EncapsulatedCRLValueType
-#define soap_read_PointerTons1__EncapsulatedCRLValueType(soap, data) ( ((data) ? (soap_default_PointerTons1__EncapsulatedCRLValueType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__EncapsulatedCRLValueType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__EncapsulatedCRLValueType
+#define soap_read_PointerTons6__EncapsulatedCRLValueType(soap, data) ( ((data) ? (soap_default_PointerTons6__EncapsulatedCRLValueType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__EncapsulatedCRLValueType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__OCSPValuesType
-#define SOAP_TYPE_PointerTons1__OCSPValuesType (222)
+#ifndef SOAP_TYPE_PointerTons6__OCSPValuesType
+#define SOAP_TYPE_PointerTons6__OCSPValuesType (222)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__OCSPValuesType(struct soap*, ns1__OCSPValuesType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__OCSPValuesType(struct soap*, const char *, int, ns1__OCSPValuesType *const*, const char *);
-SOAP_FMAC3 ns1__OCSPValuesType ** SOAP_FMAC4 soap_in_PointerTons1__OCSPValuesType(struct soap*, const char*, ns1__OCSPValuesType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__OCSPValuesType(struct soap*, ns1__OCSPValuesType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__OCSPValuesType(struct soap*, ns6__OCSPValuesType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__OCSPValuesType(struct soap*, const char *, int, ns6__OCSPValuesType *const*, const char *);
+SOAP_FMAC3 ns6__OCSPValuesType ** SOAP_FMAC4 soap_in_PointerTons6__OCSPValuesType(struct soap*, const char*, ns6__OCSPValuesType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__OCSPValuesType(struct soap*, ns6__OCSPValuesType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__OCSPValuesType
-#define soap_write_PointerTons1__OCSPValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__OCSPValuesType(soap, data), 0) || soap_put_PointerTons1__OCSPValuesType(soap, data, "ns1:OCSPValuesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__OCSPValuesType
+#define soap_write_PointerTons6__OCSPValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__OCSPValuesType(soap, data), 0) || soap_put_PointerTons6__OCSPValuesType(soap, data, "ns6:OCSPValuesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__OCSPValuesType ** SOAP_FMAC4 soap_get_PointerTons1__OCSPValuesType(struct soap*, ns1__OCSPValuesType **, const char*, const char*);
+SOAP_FMAC3 ns6__OCSPValuesType ** SOAP_FMAC4 soap_get_PointerTons6__OCSPValuesType(struct soap*, ns6__OCSPValuesType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__OCSPValuesType
-#define soap_read_PointerTons1__OCSPValuesType(soap, data) ( ((data) ? (soap_default_PointerTons1__OCSPValuesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__OCSPValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__OCSPValuesType
+#define soap_read_PointerTons6__OCSPValuesType(soap, data) ( ((data) ? (soap_default_PointerTons6__OCSPValuesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__OCSPValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__CRLValuesType
-#define SOAP_TYPE_PointerTons1__CRLValuesType (221)
+#ifndef SOAP_TYPE_PointerTons6__CRLValuesType
+#define SOAP_TYPE_PointerTons6__CRLValuesType (221)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__CRLValuesType(struct soap*, ns1__CRLValuesType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__CRLValuesType(struct soap*, const char *, int, ns1__CRLValuesType *const*, const char *);
-SOAP_FMAC3 ns1__CRLValuesType ** SOAP_FMAC4 soap_in_PointerTons1__CRLValuesType(struct soap*, const char*, ns1__CRLValuesType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__CRLValuesType(struct soap*, ns1__CRLValuesType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__CRLValuesType(struct soap*, ns6__CRLValuesType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__CRLValuesType(struct soap*, const char *, int, ns6__CRLValuesType *const*, const char *);
+SOAP_FMAC3 ns6__CRLValuesType ** SOAP_FMAC4 soap_in_PointerTons6__CRLValuesType(struct soap*, const char*, ns6__CRLValuesType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__CRLValuesType(struct soap*, ns6__CRLValuesType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__CRLValuesType
-#define soap_write_PointerTons1__CRLValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__CRLValuesType(soap, data), 0) || soap_put_PointerTons1__CRLValuesType(soap, data, "ns1:CRLValuesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__CRLValuesType
+#define soap_write_PointerTons6__CRLValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__CRLValuesType(soap, data), 0) || soap_put_PointerTons6__CRLValuesType(soap, data, "ns6:CRLValuesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CRLValuesType ** SOAP_FMAC4 soap_get_PointerTons1__CRLValuesType(struct soap*, ns1__CRLValuesType **, const char*, const char*);
+SOAP_FMAC3 ns6__CRLValuesType ** SOAP_FMAC4 soap_get_PointerTons6__CRLValuesType(struct soap*, ns6__CRLValuesType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__CRLValuesType
-#define soap_read_PointerTons1__CRLValuesType(soap, data) ( ((data) ? (soap_default_PointerTons1__CRLValuesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__CRLValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__CRLValuesType
+#define soap_read_PointerTons6__CRLValuesType(soap, data) ( ((data) ? (soap_default_PointerTons6__CRLValuesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__CRLValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__EncapsulatedX509CertificateType
-#define SOAP_TYPE_PointerTons1__EncapsulatedX509CertificateType (219)
+#ifndef SOAP_TYPE_PointerTons6__EncapsulatedX509CertificateType
+#define SOAP_TYPE_PointerTons6__EncapsulatedX509CertificateType (219)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__EncapsulatedX509CertificateType(struct soap*, ns1__EncapsulatedX509CertificateType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__EncapsulatedX509CertificateType(struct soap*, const char *, int, ns1__EncapsulatedX509CertificateType *const*, const char *);
-SOAP_FMAC3 ns1__EncapsulatedX509CertificateType ** SOAP_FMAC4 soap_in_PointerTons1__EncapsulatedX509CertificateType(struct soap*, const char*, ns1__EncapsulatedX509CertificateType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__EncapsulatedX509CertificateType(struct soap*, ns1__EncapsulatedX509CertificateType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__EncapsulatedX509CertificateType(struct soap*, ns6__EncapsulatedX509CertificateType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__EncapsulatedX509CertificateType(struct soap*, const char *, int, ns6__EncapsulatedX509CertificateType *const*, const char *);
+SOAP_FMAC3 ns6__EncapsulatedX509CertificateType ** SOAP_FMAC4 soap_in_PointerTons6__EncapsulatedX509CertificateType(struct soap*, const char*, ns6__EncapsulatedX509CertificateType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__EncapsulatedX509CertificateType(struct soap*, ns6__EncapsulatedX509CertificateType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__EncapsulatedX509CertificateType
-#define soap_write_PointerTons1__EncapsulatedX509CertificateType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__EncapsulatedX509CertificateType(soap, data), 0) || soap_put_PointerTons1__EncapsulatedX509CertificateType(soap, data, "ns1:EncapsulatedX509CertificateType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__EncapsulatedX509CertificateType
+#define soap_write_PointerTons6__EncapsulatedX509CertificateType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__EncapsulatedX509CertificateType(soap, data), 0) || soap_put_PointerTons6__EncapsulatedX509CertificateType(soap, data, "ns6:EncapsulatedX509CertificateType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__EncapsulatedX509CertificateType ** SOAP_FMAC4 soap_get_PointerTons1__EncapsulatedX509CertificateType(struct soap*, ns1__EncapsulatedX509CertificateType **, const char*, const char*);
+SOAP_FMAC3 ns6__EncapsulatedX509CertificateType ** SOAP_FMAC4 soap_get_PointerTons6__EncapsulatedX509CertificateType(struct soap*, ns6__EncapsulatedX509CertificateType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__EncapsulatedX509CertificateType
-#define soap_read_PointerTons1__EncapsulatedX509CertificateType(soap, data) ( ((data) ? (soap_default_PointerTons1__EncapsulatedX509CertificateType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__EncapsulatedX509CertificateType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__EncapsulatedX509CertificateType
+#define soap_read_PointerTons6__EncapsulatedX509CertificateType(soap, data) ( ((data) ? (soap_default_PointerTons6__EncapsulatedX509CertificateType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__EncapsulatedX509CertificateType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__ResponderIDType
-#define SOAP_TYPE_PointerTons1__ResponderIDType (218)
+#ifndef SOAP_TYPE_PointerTons6__ResponderIDType
+#define SOAP_TYPE_PointerTons6__ResponderIDType (218)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__ResponderIDType(struct soap*, ns1__ResponderIDType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__ResponderIDType(struct soap*, const char *, int, ns1__ResponderIDType *const*, const char *);
-SOAP_FMAC3 ns1__ResponderIDType ** SOAP_FMAC4 soap_in_PointerTons1__ResponderIDType(struct soap*, const char*, ns1__ResponderIDType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__ResponderIDType(struct soap*, ns1__ResponderIDType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__ResponderIDType(struct soap*, ns6__ResponderIDType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__ResponderIDType(struct soap*, const char *, int, ns6__ResponderIDType *const*, const char *);
+SOAP_FMAC3 ns6__ResponderIDType ** SOAP_FMAC4 soap_in_PointerTons6__ResponderIDType(struct soap*, const char*, ns6__ResponderIDType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__ResponderIDType(struct soap*, ns6__ResponderIDType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__ResponderIDType
-#define soap_write_PointerTons1__ResponderIDType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__ResponderIDType(soap, data), 0) || soap_put_PointerTons1__ResponderIDType(soap, data, "ns1:ResponderIDType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__ResponderIDType
+#define soap_write_PointerTons6__ResponderIDType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__ResponderIDType(soap, data), 0) || soap_put_PointerTons6__ResponderIDType(soap, data, "ns6:ResponderIDType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__ResponderIDType ** SOAP_FMAC4 soap_get_PointerTons1__ResponderIDType(struct soap*, ns1__ResponderIDType **, const char*, const char*);
+SOAP_FMAC3 ns6__ResponderIDType ** SOAP_FMAC4 soap_get_PointerTons6__ResponderIDType(struct soap*, ns6__ResponderIDType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__ResponderIDType
-#define soap_read_PointerTons1__ResponderIDType(soap, data) ( ((data) ? (soap_default_PointerTons1__ResponderIDType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__ResponderIDType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__ResponderIDType
+#define soap_read_PointerTons6__ResponderIDType(soap, data) ( ((data) ? (soap_default_PointerTons6__ResponderIDType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__ResponderIDType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__OCSPIdentifierType
-#define SOAP_TYPE_PointerTons1__OCSPIdentifierType (217)
+#ifndef SOAP_TYPE_PointerTons6__OCSPIdentifierType
+#define SOAP_TYPE_PointerTons6__OCSPIdentifierType (217)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__OCSPIdentifierType(struct soap*, ns1__OCSPIdentifierType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__OCSPIdentifierType(struct soap*, const char *, int, ns1__OCSPIdentifierType *const*, const char *);
-SOAP_FMAC3 ns1__OCSPIdentifierType ** SOAP_FMAC4 soap_in_PointerTons1__OCSPIdentifierType(struct soap*, const char*, ns1__OCSPIdentifierType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__OCSPIdentifierType(struct soap*, ns1__OCSPIdentifierType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__OCSPIdentifierType(struct soap*, ns6__OCSPIdentifierType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__OCSPIdentifierType(struct soap*, const char *, int, ns6__OCSPIdentifierType *const*, const char *);
+SOAP_FMAC3 ns6__OCSPIdentifierType ** SOAP_FMAC4 soap_in_PointerTons6__OCSPIdentifierType(struct soap*, const char*, ns6__OCSPIdentifierType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__OCSPIdentifierType(struct soap*, ns6__OCSPIdentifierType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__OCSPIdentifierType
-#define soap_write_PointerTons1__OCSPIdentifierType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__OCSPIdentifierType(soap, data), 0) || soap_put_PointerTons1__OCSPIdentifierType(soap, data, "ns1:OCSPIdentifierType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__OCSPIdentifierType
+#define soap_write_PointerTons6__OCSPIdentifierType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__OCSPIdentifierType(soap, data), 0) || soap_put_PointerTons6__OCSPIdentifierType(soap, data, "ns6:OCSPIdentifierType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__OCSPIdentifierType ** SOAP_FMAC4 soap_get_PointerTons1__OCSPIdentifierType(struct soap*, ns1__OCSPIdentifierType **, const char*, const char*);
+SOAP_FMAC3 ns6__OCSPIdentifierType ** SOAP_FMAC4 soap_get_PointerTons6__OCSPIdentifierType(struct soap*, ns6__OCSPIdentifierType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__OCSPIdentifierType
-#define soap_read_PointerTons1__OCSPIdentifierType(soap, data) ( ((data) ? (soap_default_PointerTons1__OCSPIdentifierType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__OCSPIdentifierType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__OCSPIdentifierType
+#define soap_read_PointerTons6__OCSPIdentifierType(soap, data) ( ((data) ? (soap_default_PointerTons6__OCSPIdentifierType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__OCSPIdentifierType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__OCSPRefType
-#define SOAP_TYPE_PointerTons1__OCSPRefType (215)
+#ifndef SOAP_TYPE_PointerTons6__OCSPRefType
+#define SOAP_TYPE_PointerTons6__OCSPRefType (215)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__OCSPRefType(struct soap*, ns1__OCSPRefType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__OCSPRefType(struct soap*, const char *, int, ns1__OCSPRefType *const*, const char *);
-SOAP_FMAC3 ns1__OCSPRefType ** SOAP_FMAC4 soap_in_PointerTons1__OCSPRefType(struct soap*, const char*, ns1__OCSPRefType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__OCSPRefType(struct soap*, ns1__OCSPRefType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__OCSPRefType(struct soap*, ns6__OCSPRefType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__OCSPRefType(struct soap*, const char *, int, ns6__OCSPRefType *const*, const char *);
+SOAP_FMAC3 ns6__OCSPRefType ** SOAP_FMAC4 soap_in_PointerTons6__OCSPRefType(struct soap*, const char*, ns6__OCSPRefType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__OCSPRefType(struct soap*, ns6__OCSPRefType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__OCSPRefType
-#define soap_write_PointerTons1__OCSPRefType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__OCSPRefType(soap, data), 0) || soap_put_PointerTons1__OCSPRefType(soap, data, "ns1:OCSPRefType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__OCSPRefType
+#define soap_write_PointerTons6__OCSPRefType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__OCSPRefType(soap, data), 0) || soap_put_PointerTons6__OCSPRefType(soap, data, "ns6:OCSPRefType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__OCSPRefType ** SOAP_FMAC4 soap_get_PointerTons1__OCSPRefType(struct soap*, ns1__OCSPRefType **, const char*, const char*);
+SOAP_FMAC3 ns6__OCSPRefType ** SOAP_FMAC4 soap_get_PointerTons6__OCSPRefType(struct soap*, ns6__OCSPRefType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__OCSPRefType
-#define soap_read_PointerTons1__OCSPRefType(soap, data) ( ((data) ? (soap_default_PointerTons1__OCSPRefType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__OCSPRefType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__OCSPRefType
+#define soap_read_PointerTons6__OCSPRefType(soap, data) ( ((data) ? (soap_default_PointerTons6__OCSPRefType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__OCSPRefType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__CRLIdentifierType
-#define SOAP_TYPE_PointerTons1__CRLIdentifierType (214)
+#ifndef SOAP_TYPE_PointerTons6__CRLIdentifierType
+#define SOAP_TYPE_PointerTons6__CRLIdentifierType (214)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__CRLIdentifierType(struct soap*, ns1__CRLIdentifierType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__CRLIdentifierType(struct soap*, const char *, int, ns1__CRLIdentifierType *const*, const char *);
-SOAP_FMAC3 ns1__CRLIdentifierType ** SOAP_FMAC4 soap_in_PointerTons1__CRLIdentifierType(struct soap*, const char*, ns1__CRLIdentifierType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__CRLIdentifierType(struct soap*, ns1__CRLIdentifierType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__CRLIdentifierType(struct soap*, ns6__CRLIdentifierType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__CRLIdentifierType(struct soap*, const char *, int, ns6__CRLIdentifierType *const*, const char *);
+SOAP_FMAC3 ns6__CRLIdentifierType ** SOAP_FMAC4 soap_in_PointerTons6__CRLIdentifierType(struct soap*, const char*, ns6__CRLIdentifierType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__CRLIdentifierType(struct soap*, ns6__CRLIdentifierType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__CRLIdentifierType
-#define soap_write_PointerTons1__CRLIdentifierType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__CRLIdentifierType(soap, data), 0) || soap_put_PointerTons1__CRLIdentifierType(soap, data, "ns1:CRLIdentifierType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__CRLIdentifierType
+#define soap_write_PointerTons6__CRLIdentifierType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__CRLIdentifierType(soap, data), 0) || soap_put_PointerTons6__CRLIdentifierType(soap, data, "ns6:CRLIdentifierType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CRLIdentifierType ** SOAP_FMAC4 soap_get_PointerTons1__CRLIdentifierType(struct soap*, ns1__CRLIdentifierType **, const char*, const char*);
+SOAP_FMAC3 ns6__CRLIdentifierType ** SOAP_FMAC4 soap_get_PointerTons6__CRLIdentifierType(struct soap*, ns6__CRLIdentifierType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__CRLIdentifierType
-#define soap_read_PointerTons1__CRLIdentifierType(soap, data) ( ((data) ? (soap_default_PointerTons1__CRLIdentifierType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__CRLIdentifierType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__CRLIdentifierType
+#define soap_read_PointerTons6__CRLIdentifierType(soap, data) ( ((data) ? (soap_default_PointerTons6__CRLIdentifierType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__CRLIdentifierType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__DigestAlgAndValueType
-#define SOAP_TYPE_PointerTons1__DigestAlgAndValueType (213)
+#ifndef SOAP_TYPE_PointerTons6__DigestAlgAndValueType
+#define SOAP_TYPE_PointerTons6__DigestAlgAndValueType (213)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__DigestAlgAndValueType(struct soap*, ns1__DigestAlgAndValueType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__DigestAlgAndValueType(struct soap*, const char *, int, ns1__DigestAlgAndValueType *const*, const char *);
-SOAP_FMAC3 ns1__DigestAlgAndValueType ** SOAP_FMAC4 soap_in_PointerTons1__DigestAlgAndValueType(struct soap*, const char*, ns1__DigestAlgAndValueType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__DigestAlgAndValueType(struct soap*, ns1__DigestAlgAndValueType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__DigestAlgAndValueType(struct soap*, ns6__DigestAlgAndValueType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__DigestAlgAndValueType(struct soap*, const char *, int, ns6__DigestAlgAndValueType *const*, const char *);
+SOAP_FMAC3 ns6__DigestAlgAndValueType ** SOAP_FMAC4 soap_in_PointerTons6__DigestAlgAndValueType(struct soap*, const char*, ns6__DigestAlgAndValueType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__DigestAlgAndValueType(struct soap*, ns6__DigestAlgAndValueType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__DigestAlgAndValueType
-#define soap_write_PointerTons1__DigestAlgAndValueType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__DigestAlgAndValueType(soap, data), 0) || soap_put_PointerTons1__DigestAlgAndValueType(soap, data, "ns1:DigestAlgAndValueType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__DigestAlgAndValueType
+#define soap_write_PointerTons6__DigestAlgAndValueType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__DigestAlgAndValueType(soap, data), 0) || soap_put_PointerTons6__DigestAlgAndValueType(soap, data, "ns6:DigestAlgAndValueType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__DigestAlgAndValueType ** SOAP_FMAC4 soap_get_PointerTons1__DigestAlgAndValueType(struct soap*, ns1__DigestAlgAndValueType **, const char*, const char*);
+SOAP_FMAC3 ns6__DigestAlgAndValueType ** SOAP_FMAC4 soap_get_PointerTons6__DigestAlgAndValueType(struct soap*, ns6__DigestAlgAndValueType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__DigestAlgAndValueType
-#define soap_read_PointerTons1__DigestAlgAndValueType(soap, data) ( ((data) ? (soap_default_PointerTons1__DigestAlgAndValueType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__DigestAlgAndValueType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__DigestAlgAndValueType
+#define soap_read_PointerTons6__DigestAlgAndValueType(soap, data) ( ((data) ? (soap_default_PointerTons6__DigestAlgAndValueType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__DigestAlgAndValueType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__CRLRefType
-#define SOAP_TYPE_PointerTons1__CRLRefType (211)
+#ifndef SOAP_TYPE_PointerTons6__CRLRefType
+#define SOAP_TYPE_PointerTons6__CRLRefType (211)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__CRLRefType(struct soap*, ns1__CRLRefType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__CRLRefType(struct soap*, const char *, int, ns1__CRLRefType *const*, const char *);
-SOAP_FMAC3 ns1__CRLRefType ** SOAP_FMAC4 soap_in_PointerTons1__CRLRefType(struct soap*, const char*, ns1__CRLRefType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__CRLRefType(struct soap*, ns1__CRLRefType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__CRLRefType(struct soap*, ns6__CRLRefType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__CRLRefType(struct soap*, const char *, int, ns6__CRLRefType *const*, const char *);
+SOAP_FMAC3 ns6__CRLRefType ** SOAP_FMAC4 soap_in_PointerTons6__CRLRefType(struct soap*, const char*, ns6__CRLRefType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__CRLRefType(struct soap*, ns6__CRLRefType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__CRLRefType
-#define soap_write_PointerTons1__CRLRefType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__CRLRefType(soap, data), 0) || soap_put_PointerTons1__CRLRefType(soap, data, "ns1:CRLRefType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__CRLRefType
+#define soap_write_PointerTons6__CRLRefType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__CRLRefType(soap, data), 0) || soap_put_PointerTons6__CRLRefType(soap, data, "ns6:CRLRefType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CRLRefType ** SOAP_FMAC4 soap_get_PointerTons1__CRLRefType(struct soap*, ns1__CRLRefType **, const char*, const char*);
+SOAP_FMAC3 ns6__CRLRefType ** SOAP_FMAC4 soap_get_PointerTons6__CRLRefType(struct soap*, ns6__CRLRefType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__CRLRefType
-#define soap_read_PointerTons1__CRLRefType(soap, data) ( ((data) ? (soap_default_PointerTons1__CRLRefType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__CRLRefType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__CRLRefType
+#define soap_read_PointerTons6__CRLRefType(soap, data) ( ((data) ? (soap_default_PointerTons6__CRLRefType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__CRLRefType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__OCSPRefsType
-#define SOAP_TYPE_PointerTons1__OCSPRefsType (210)
+#ifndef SOAP_TYPE_PointerTons6__OCSPRefsType
+#define SOAP_TYPE_PointerTons6__OCSPRefsType (210)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__OCSPRefsType(struct soap*, ns1__OCSPRefsType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__OCSPRefsType(struct soap*, const char *, int, ns1__OCSPRefsType *const*, const char *);
-SOAP_FMAC3 ns1__OCSPRefsType ** SOAP_FMAC4 soap_in_PointerTons1__OCSPRefsType(struct soap*, const char*, ns1__OCSPRefsType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__OCSPRefsType(struct soap*, ns1__OCSPRefsType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__OCSPRefsType(struct soap*, ns6__OCSPRefsType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__OCSPRefsType(struct soap*, const char *, int, ns6__OCSPRefsType *const*, const char *);
+SOAP_FMAC3 ns6__OCSPRefsType ** SOAP_FMAC4 soap_in_PointerTons6__OCSPRefsType(struct soap*, const char*, ns6__OCSPRefsType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__OCSPRefsType(struct soap*, ns6__OCSPRefsType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__OCSPRefsType
-#define soap_write_PointerTons1__OCSPRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__OCSPRefsType(soap, data), 0) || soap_put_PointerTons1__OCSPRefsType(soap, data, "ns1:OCSPRefsType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__OCSPRefsType
+#define soap_write_PointerTons6__OCSPRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__OCSPRefsType(soap, data), 0) || soap_put_PointerTons6__OCSPRefsType(soap, data, "ns6:OCSPRefsType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__OCSPRefsType ** SOAP_FMAC4 soap_get_PointerTons1__OCSPRefsType(struct soap*, ns1__OCSPRefsType **, const char*, const char*);
+SOAP_FMAC3 ns6__OCSPRefsType ** SOAP_FMAC4 soap_get_PointerTons6__OCSPRefsType(struct soap*, ns6__OCSPRefsType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__OCSPRefsType
-#define soap_read_PointerTons1__OCSPRefsType(soap, data) ( ((data) ? (soap_default_PointerTons1__OCSPRefsType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__OCSPRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__OCSPRefsType
+#define soap_read_PointerTons6__OCSPRefsType(soap, data) ( ((data) ? (soap_default_PointerTons6__OCSPRefsType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__OCSPRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__CRLRefsType
-#define SOAP_TYPE_PointerTons1__CRLRefsType (209)
+#ifndef SOAP_TYPE_PointerTons6__CRLRefsType
+#define SOAP_TYPE_PointerTons6__CRLRefsType (209)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__CRLRefsType(struct soap*, ns1__CRLRefsType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__CRLRefsType(struct soap*, const char *, int, ns1__CRLRefsType *const*, const char *);
-SOAP_FMAC3 ns1__CRLRefsType ** SOAP_FMAC4 soap_in_PointerTons1__CRLRefsType(struct soap*, const char*, ns1__CRLRefsType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__CRLRefsType(struct soap*, ns1__CRLRefsType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__CRLRefsType(struct soap*, ns6__CRLRefsType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__CRLRefsType(struct soap*, const char *, int, ns6__CRLRefsType *const*, const char *);
+SOAP_FMAC3 ns6__CRLRefsType ** SOAP_FMAC4 soap_in_PointerTons6__CRLRefsType(struct soap*, const char*, ns6__CRLRefsType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__CRLRefsType(struct soap*, ns6__CRLRefsType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__CRLRefsType
-#define soap_write_PointerTons1__CRLRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__CRLRefsType(soap, data), 0) || soap_put_PointerTons1__CRLRefsType(soap, data, "ns1:CRLRefsType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__CRLRefsType
+#define soap_write_PointerTons6__CRLRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__CRLRefsType(soap, data), 0) || soap_put_PointerTons6__CRLRefsType(soap, data, "ns6:CRLRefsType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CRLRefsType ** SOAP_FMAC4 soap_get_PointerTons1__CRLRefsType(struct soap*, ns1__CRLRefsType **, const char*, const char*);
+SOAP_FMAC3 ns6__CRLRefsType ** SOAP_FMAC4 soap_get_PointerTons6__CRLRefsType(struct soap*, ns6__CRLRefsType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__CRLRefsType
-#define soap_read_PointerTons1__CRLRefsType(soap, data) ( ((data) ? (soap_default_PointerTons1__CRLRefsType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__CRLRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__CRLRefsType
+#define soap_read_PointerTons6__CRLRefsType(soap, data) ( ((data) ? (soap_default_PointerTons6__CRLRefsType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__CRLRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__CertRefsType
-#define SOAP_TYPE_PointerTons1__CertRefsType (207)
+#ifndef SOAP_TYPE_PointerTons6__CertRefsType
+#define SOAP_TYPE_PointerTons6__CertRefsType (207)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__CertRefsType(struct soap*, ns1__CertRefsType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__CertRefsType(struct soap*, const char *, int, ns1__CertRefsType *const*, const char *);
-SOAP_FMAC3 ns1__CertRefsType ** SOAP_FMAC4 soap_in_PointerTons1__CertRefsType(struct soap*, const char*, ns1__CertRefsType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__CertRefsType(struct soap*, ns1__CertRefsType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__CertRefsType(struct soap*, ns6__CertRefsType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__CertRefsType(struct soap*, const char *, int, ns6__CertRefsType *const*, const char *);
+SOAP_FMAC3 ns6__CertRefsType ** SOAP_FMAC4 soap_in_PointerTons6__CertRefsType(struct soap*, const char*, ns6__CertRefsType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__CertRefsType(struct soap*, ns6__CertRefsType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__CertRefsType
-#define soap_write_PointerTons1__CertRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__CertRefsType(soap, data), 0) || soap_put_PointerTons1__CertRefsType(soap, data, "ns1:CertRefsType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__CertRefsType
+#define soap_write_PointerTons6__CertRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__CertRefsType(soap, data), 0) || soap_put_PointerTons6__CertRefsType(soap, data, "ns6:CertRefsType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CertRefsType ** SOAP_FMAC4 soap_get_PointerTons1__CertRefsType(struct soap*, ns1__CertRefsType **, const char*, const char*);
+SOAP_FMAC3 ns6__CertRefsType ** SOAP_FMAC4 soap_get_PointerTons6__CertRefsType(struct soap*, ns6__CertRefsType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__CertRefsType
-#define soap_read_PointerTons1__CertRefsType(soap, data) ( ((data) ? (soap_default_PointerTons1__CertRefsType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__CertRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__CertRefsType
+#define soap_read_PointerTons6__CertRefsType(soap, data) ( ((data) ? (soap_default_PointerTons6__CertRefsType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__CertRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__ArchiveTimeStampType
-#define SOAP_TYPE_PointerTons1__ArchiveTimeStampType (206)
+#ifndef SOAP_TYPE_PointerTons6__ArchiveTimeStampType
+#define SOAP_TYPE_PointerTons6__ArchiveTimeStampType (206)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__ArchiveTimeStampType(struct soap*, ns1__ArchiveTimeStampType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__ArchiveTimeStampType(struct soap*, const char *, int, ns1__ArchiveTimeStampType *const*, const char *);
-SOAP_FMAC3 ns1__ArchiveTimeStampType ** SOAP_FMAC4 soap_in_PointerTons1__ArchiveTimeStampType(struct soap*, const char*, ns1__ArchiveTimeStampType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__ArchiveTimeStampType(struct soap*, ns1__ArchiveTimeStampType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__ArchiveTimeStampType(struct soap*, ns6__ArchiveTimeStampType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__ArchiveTimeStampType(struct soap*, const char *, int, ns6__ArchiveTimeStampType *const*, const char *);
+SOAP_FMAC3 ns6__ArchiveTimeStampType ** SOAP_FMAC4 soap_in_PointerTons6__ArchiveTimeStampType(struct soap*, const char*, ns6__ArchiveTimeStampType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__ArchiveTimeStampType(struct soap*, ns6__ArchiveTimeStampType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__ArchiveTimeStampType
-#define soap_write_PointerTons1__ArchiveTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__ArchiveTimeStampType(soap, data), 0) || soap_put_PointerTons1__ArchiveTimeStampType(soap, data, "ns1:ArchiveTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__ArchiveTimeStampType
+#define soap_write_PointerTons6__ArchiveTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__ArchiveTimeStampType(soap, data), 0) || soap_put_PointerTons6__ArchiveTimeStampType(soap, data, "ns6:ArchiveTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__ArchiveTimeStampType ** SOAP_FMAC4 soap_get_PointerTons1__ArchiveTimeStampType(struct soap*, ns1__ArchiveTimeStampType **, const char*, const char*);
+SOAP_FMAC3 ns6__ArchiveTimeStampType ** SOAP_FMAC4 soap_get_PointerTons6__ArchiveTimeStampType(struct soap*, ns6__ArchiveTimeStampType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__ArchiveTimeStampType
-#define soap_read_PointerTons1__ArchiveTimeStampType(soap, data) ( ((data) ? (soap_default_PointerTons1__ArchiveTimeStampType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__ArchiveTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__ArchiveTimeStampType
+#define soap_read_PointerTons6__ArchiveTimeStampType(soap, data) ( ((data) ? (soap_default_PointerTons6__ArchiveTimeStampType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__ArchiveTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__RevocationValuesType
-#define SOAP_TYPE_PointerTons1__RevocationValuesType (205)
+#ifndef SOAP_TYPE_PointerTons6__RevocationValuesType
+#define SOAP_TYPE_PointerTons6__RevocationValuesType (205)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__RevocationValuesType(struct soap*, ns1__RevocationValuesType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__RevocationValuesType(struct soap*, const char *, int, ns1__RevocationValuesType *const*, const char *);
-SOAP_FMAC3 ns1__RevocationValuesType ** SOAP_FMAC4 soap_in_PointerTons1__RevocationValuesType(struct soap*, const char*, ns1__RevocationValuesType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__RevocationValuesType(struct soap*, ns1__RevocationValuesType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__RevocationValuesType(struct soap*, ns6__RevocationValuesType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__RevocationValuesType(struct soap*, const char *, int, ns6__RevocationValuesType *const*, const char *);
+SOAP_FMAC3 ns6__RevocationValuesType ** SOAP_FMAC4 soap_in_PointerTons6__RevocationValuesType(struct soap*, const char*, ns6__RevocationValuesType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__RevocationValuesType(struct soap*, ns6__RevocationValuesType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__RevocationValuesType
-#define soap_write_PointerTons1__RevocationValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__RevocationValuesType(soap, data), 0) || soap_put_PointerTons1__RevocationValuesType(soap, data, "ns1:RevocationValuesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__RevocationValuesType
+#define soap_write_PointerTons6__RevocationValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__RevocationValuesType(soap, data), 0) || soap_put_PointerTons6__RevocationValuesType(soap, data, "ns6:RevocationValuesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__RevocationValuesType ** SOAP_FMAC4 soap_get_PointerTons1__RevocationValuesType(struct soap*, ns1__RevocationValuesType **, const char*, const char*);
+SOAP_FMAC3 ns6__RevocationValuesType ** SOAP_FMAC4 soap_get_PointerTons6__RevocationValuesType(struct soap*, ns6__RevocationValuesType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__RevocationValuesType
-#define soap_read_PointerTons1__RevocationValuesType(soap, data) ( ((data) ? (soap_default_PointerTons1__RevocationValuesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__RevocationValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__RevocationValuesType
+#define soap_read_PointerTons6__RevocationValuesType(soap, data) ( ((data) ? (soap_default_PointerTons6__RevocationValuesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__RevocationValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__CertificateValuesType
-#define SOAP_TYPE_PointerTons1__CertificateValuesType (204)
+#ifndef SOAP_TYPE_PointerTons6__CertificateValuesType
+#define SOAP_TYPE_PointerTons6__CertificateValuesType (204)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__CertificateValuesType(struct soap*, ns1__CertificateValuesType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__CertificateValuesType(struct soap*, const char *, int, ns1__CertificateValuesType *const*, const char *);
-SOAP_FMAC3 ns1__CertificateValuesType ** SOAP_FMAC4 soap_in_PointerTons1__CertificateValuesType(struct soap*, const char*, ns1__CertificateValuesType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__CertificateValuesType(struct soap*, ns1__CertificateValuesType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__CertificateValuesType(struct soap*, ns6__CertificateValuesType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__CertificateValuesType(struct soap*, const char *, int, ns6__CertificateValuesType *const*, const char *);
+SOAP_FMAC3 ns6__CertificateValuesType ** SOAP_FMAC4 soap_in_PointerTons6__CertificateValuesType(struct soap*, const char*, ns6__CertificateValuesType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__CertificateValuesType(struct soap*, ns6__CertificateValuesType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__CertificateValuesType
-#define soap_write_PointerTons1__CertificateValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__CertificateValuesType(soap, data), 0) || soap_put_PointerTons1__CertificateValuesType(soap, data, "ns1:CertificateValuesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__CertificateValuesType
+#define soap_write_PointerTons6__CertificateValuesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__CertificateValuesType(soap, data), 0) || soap_put_PointerTons6__CertificateValuesType(soap, data, "ns6:CertificateValuesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CertificateValuesType ** SOAP_FMAC4 soap_get_PointerTons1__CertificateValuesType(struct soap*, ns1__CertificateValuesType **, const char*, const char*);
+SOAP_FMAC3 ns6__CertificateValuesType ** SOAP_FMAC4 soap_get_PointerTons6__CertificateValuesType(struct soap*, ns6__CertificateValuesType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__CertificateValuesType
-#define soap_read_PointerTons1__CertificateValuesType(soap, data) ( ((data) ? (soap_default_PointerTons1__CertificateValuesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__CertificateValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__CertificateValuesType
+#define soap_read_PointerTons6__CertificateValuesType(soap, data) ( ((data) ? (soap_default_PointerTons6__CertificateValuesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__CertificateValuesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__SigAndRefsTimeStampType
-#define SOAP_TYPE_PointerTons1__SigAndRefsTimeStampType (203)
+#ifndef SOAP_TYPE_PointerTons6__SigAndRefsTimeStampType
+#define SOAP_TYPE_PointerTons6__SigAndRefsTimeStampType (203)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__SigAndRefsTimeStampType(struct soap*, ns1__SigAndRefsTimeStampType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__SigAndRefsTimeStampType(struct soap*, const char *, int, ns1__SigAndRefsTimeStampType *const*, const char *);
-SOAP_FMAC3 ns1__SigAndRefsTimeStampType ** SOAP_FMAC4 soap_in_PointerTons1__SigAndRefsTimeStampType(struct soap*, const char*, ns1__SigAndRefsTimeStampType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__SigAndRefsTimeStampType(struct soap*, ns1__SigAndRefsTimeStampType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__SigAndRefsTimeStampType(struct soap*, ns6__SigAndRefsTimeStampType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__SigAndRefsTimeStampType(struct soap*, const char *, int, ns6__SigAndRefsTimeStampType *const*, const char *);
+SOAP_FMAC3 ns6__SigAndRefsTimeStampType ** SOAP_FMAC4 soap_in_PointerTons6__SigAndRefsTimeStampType(struct soap*, const char*, ns6__SigAndRefsTimeStampType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__SigAndRefsTimeStampType(struct soap*, ns6__SigAndRefsTimeStampType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__SigAndRefsTimeStampType
-#define soap_write_PointerTons1__SigAndRefsTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__SigAndRefsTimeStampType(soap, data), 0) || soap_put_PointerTons1__SigAndRefsTimeStampType(soap, data, "ns1:SigAndRefsTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__SigAndRefsTimeStampType
+#define soap_write_PointerTons6__SigAndRefsTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__SigAndRefsTimeStampType(soap, data), 0) || soap_put_PointerTons6__SigAndRefsTimeStampType(soap, data, "ns6:SigAndRefsTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__SigAndRefsTimeStampType ** SOAP_FMAC4 soap_get_PointerTons1__SigAndRefsTimeStampType(struct soap*, ns1__SigAndRefsTimeStampType **, const char*, const char*);
+SOAP_FMAC3 ns6__SigAndRefsTimeStampType ** SOAP_FMAC4 soap_get_PointerTons6__SigAndRefsTimeStampType(struct soap*, ns6__SigAndRefsTimeStampType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__SigAndRefsTimeStampType
-#define soap_read_PointerTons1__SigAndRefsTimeStampType(soap, data) ( ((data) ? (soap_default_PointerTons1__SigAndRefsTimeStampType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__SigAndRefsTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__SigAndRefsTimeStampType
+#define soap_read_PointerTons6__SigAndRefsTimeStampType(soap, data) ( ((data) ? (soap_default_PointerTons6__SigAndRefsTimeStampType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__SigAndRefsTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__CompleteRevocationRefsType
-#define SOAP_TYPE_PointerTons1__CompleteRevocationRefsType (202)
+#ifndef SOAP_TYPE_PointerTons6__CompleteRevocationRefsType
+#define SOAP_TYPE_PointerTons6__CompleteRevocationRefsType (202)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__CompleteRevocationRefsType(struct soap*, ns1__CompleteRevocationRefsType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__CompleteRevocationRefsType(struct soap*, const char *, int, ns1__CompleteRevocationRefsType *const*, const char *);
-SOAP_FMAC3 ns1__CompleteRevocationRefsType ** SOAP_FMAC4 soap_in_PointerTons1__CompleteRevocationRefsType(struct soap*, const char*, ns1__CompleteRevocationRefsType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__CompleteRevocationRefsType(struct soap*, ns1__CompleteRevocationRefsType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__CompleteRevocationRefsType(struct soap*, ns6__CompleteRevocationRefsType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__CompleteRevocationRefsType(struct soap*, const char *, int, ns6__CompleteRevocationRefsType *const*, const char *);
+SOAP_FMAC3 ns6__CompleteRevocationRefsType ** SOAP_FMAC4 soap_in_PointerTons6__CompleteRevocationRefsType(struct soap*, const char*, ns6__CompleteRevocationRefsType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__CompleteRevocationRefsType(struct soap*, ns6__CompleteRevocationRefsType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__CompleteRevocationRefsType
-#define soap_write_PointerTons1__CompleteRevocationRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__CompleteRevocationRefsType(soap, data), 0) || soap_put_PointerTons1__CompleteRevocationRefsType(soap, data, "ns1:CompleteRevocationRefsType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__CompleteRevocationRefsType
+#define soap_write_PointerTons6__CompleteRevocationRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__CompleteRevocationRefsType(soap, data), 0) || soap_put_PointerTons6__CompleteRevocationRefsType(soap, data, "ns6:CompleteRevocationRefsType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CompleteRevocationRefsType ** SOAP_FMAC4 soap_get_PointerTons1__CompleteRevocationRefsType(struct soap*, ns1__CompleteRevocationRefsType **, const char*, const char*);
+SOAP_FMAC3 ns6__CompleteRevocationRefsType ** SOAP_FMAC4 soap_get_PointerTons6__CompleteRevocationRefsType(struct soap*, ns6__CompleteRevocationRefsType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__CompleteRevocationRefsType
-#define soap_read_PointerTons1__CompleteRevocationRefsType(soap, data) ( ((data) ? (soap_default_PointerTons1__CompleteRevocationRefsType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__CompleteRevocationRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__CompleteRevocationRefsType
+#define soap_read_PointerTons6__CompleteRevocationRefsType(soap, data) ( ((data) ? (soap_default_PointerTons6__CompleteRevocationRefsType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__CompleteRevocationRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__CompleteCertificateRefsType
-#define SOAP_TYPE_PointerTons1__CompleteCertificateRefsType (201)
+#ifndef SOAP_TYPE_PointerTons6__CompleteCertificateRefsType
+#define SOAP_TYPE_PointerTons6__CompleteCertificateRefsType (201)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__CompleteCertificateRefsType(struct soap*, ns1__CompleteCertificateRefsType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__CompleteCertificateRefsType(struct soap*, const char *, int, ns1__CompleteCertificateRefsType *const*, const char *);
-SOAP_FMAC3 ns1__CompleteCertificateRefsType ** SOAP_FMAC4 soap_in_PointerTons1__CompleteCertificateRefsType(struct soap*, const char*, ns1__CompleteCertificateRefsType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__CompleteCertificateRefsType(struct soap*, ns1__CompleteCertificateRefsType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__CompleteCertificateRefsType(struct soap*, ns6__CompleteCertificateRefsType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__CompleteCertificateRefsType(struct soap*, const char *, int, ns6__CompleteCertificateRefsType *const*, const char *);
+SOAP_FMAC3 ns6__CompleteCertificateRefsType ** SOAP_FMAC4 soap_in_PointerTons6__CompleteCertificateRefsType(struct soap*, const char*, ns6__CompleteCertificateRefsType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__CompleteCertificateRefsType(struct soap*, ns6__CompleteCertificateRefsType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__CompleteCertificateRefsType
-#define soap_write_PointerTons1__CompleteCertificateRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__CompleteCertificateRefsType(soap, data), 0) || soap_put_PointerTons1__CompleteCertificateRefsType(soap, data, "ns1:CompleteCertificateRefsType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__CompleteCertificateRefsType
+#define soap_write_PointerTons6__CompleteCertificateRefsType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__CompleteCertificateRefsType(soap, data), 0) || soap_put_PointerTons6__CompleteCertificateRefsType(soap, data, "ns6:CompleteCertificateRefsType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CompleteCertificateRefsType ** SOAP_FMAC4 soap_get_PointerTons1__CompleteCertificateRefsType(struct soap*, ns1__CompleteCertificateRefsType **, const char*, const char*);
+SOAP_FMAC3 ns6__CompleteCertificateRefsType ** SOAP_FMAC4 soap_get_PointerTons6__CompleteCertificateRefsType(struct soap*, ns6__CompleteCertificateRefsType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__CompleteCertificateRefsType
-#define soap_read_PointerTons1__CompleteCertificateRefsType(soap, data) ( ((data) ? (soap_default_PointerTons1__CompleteCertificateRefsType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__CompleteCertificateRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__CompleteCertificateRefsType
+#define soap_read_PointerTons6__CompleteCertificateRefsType(soap, data) ( ((data) ? (soap_default_PointerTons6__CompleteCertificateRefsType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__CompleteCertificateRefsType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__SignatureTimeStampType
-#define SOAP_TYPE_PointerTons1__SignatureTimeStampType (200)
+#ifndef SOAP_TYPE_PointerTons6__SignatureTimeStampType
+#define SOAP_TYPE_PointerTons6__SignatureTimeStampType (200)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__SignatureTimeStampType(struct soap*, ns1__SignatureTimeStampType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__SignatureTimeStampType(struct soap*, const char *, int, ns1__SignatureTimeStampType *const*, const char *);
-SOAP_FMAC3 ns1__SignatureTimeStampType ** SOAP_FMAC4 soap_in_PointerTons1__SignatureTimeStampType(struct soap*, const char*, ns1__SignatureTimeStampType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__SignatureTimeStampType(struct soap*, ns1__SignatureTimeStampType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__SignatureTimeStampType(struct soap*, ns6__SignatureTimeStampType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__SignatureTimeStampType(struct soap*, const char *, int, ns6__SignatureTimeStampType *const*, const char *);
+SOAP_FMAC3 ns6__SignatureTimeStampType ** SOAP_FMAC4 soap_in_PointerTons6__SignatureTimeStampType(struct soap*, const char*, ns6__SignatureTimeStampType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__SignatureTimeStampType(struct soap*, ns6__SignatureTimeStampType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__SignatureTimeStampType
-#define soap_write_PointerTons1__SignatureTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__SignatureTimeStampType(soap, data), 0) || soap_put_PointerTons1__SignatureTimeStampType(soap, data, "ns1:SignatureTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__SignatureTimeStampType
+#define soap_write_PointerTons6__SignatureTimeStampType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__SignatureTimeStampType(soap, data), 0) || soap_put_PointerTons6__SignatureTimeStampType(soap, data, "ns6:SignatureTimeStampType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__SignatureTimeStampType ** SOAP_FMAC4 soap_get_PointerTons1__SignatureTimeStampType(struct soap*, ns1__SignatureTimeStampType **, const char*, const char*);
+SOAP_FMAC3 ns6__SignatureTimeStampType ** SOAP_FMAC4 soap_get_PointerTons6__SignatureTimeStampType(struct soap*, ns6__SignatureTimeStampType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__SignatureTimeStampType
-#define soap_read_PointerTons1__SignatureTimeStampType(soap, data) ( ((data) ? (soap_default_PointerTons1__SignatureTimeStampType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__SignatureTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__SignatureTimeStampType
+#define soap_read_PointerTons6__SignatureTimeStampType(soap, data) ( ((data) ? (soap_default_PointerTons6__SignatureTimeStampType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__SignatureTimeStampType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__CounterSignatureType
-#define SOAP_TYPE_PointerTons1__CounterSignatureType (199)
+#ifndef SOAP_TYPE_PointerTons6__CounterSignatureType
+#define SOAP_TYPE_PointerTons6__CounterSignatureType (199)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__CounterSignatureType(struct soap*, ns1__CounterSignatureType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__CounterSignatureType(struct soap*, const char *, int, ns1__CounterSignatureType *const*, const char *);
-SOAP_FMAC3 ns1__CounterSignatureType ** SOAP_FMAC4 soap_in_PointerTons1__CounterSignatureType(struct soap*, const char*, ns1__CounterSignatureType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__CounterSignatureType(struct soap*, ns1__CounterSignatureType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__CounterSignatureType(struct soap*, ns6__CounterSignatureType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__CounterSignatureType(struct soap*, const char *, int, ns6__CounterSignatureType *const*, const char *);
+SOAP_FMAC3 ns6__CounterSignatureType ** SOAP_FMAC4 soap_in_PointerTons6__CounterSignatureType(struct soap*, const char*, ns6__CounterSignatureType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__CounterSignatureType(struct soap*, ns6__CounterSignatureType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__CounterSignatureType
-#define soap_write_PointerTons1__CounterSignatureType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__CounterSignatureType(soap, data), 0) || soap_put_PointerTons1__CounterSignatureType(soap, data, "ns1:CounterSignatureType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__CounterSignatureType
+#define soap_write_PointerTons6__CounterSignatureType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__CounterSignatureType(soap, data), 0) || soap_put_PointerTons6__CounterSignatureType(soap, data, "ns6:CounterSignatureType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CounterSignatureType ** SOAP_FMAC4 soap_get_PointerTons1__CounterSignatureType(struct soap*, ns1__CounterSignatureType **, const char*, const char*);
+SOAP_FMAC3 ns6__CounterSignatureType ** SOAP_FMAC4 soap_get_PointerTons6__CounterSignatureType(struct soap*, ns6__CounterSignatureType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__CounterSignatureType
-#define soap_read_PointerTons1__CounterSignatureType(soap, data) ( ((data) ? (soap_default_PointerTons1__CounterSignatureType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__CounterSignatureType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__CounterSignatureType
+#define soap_read_PointerTons6__CounterSignatureType(soap, data) ( ((data) ? (soap_default_PointerTons6__CounterSignatureType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__CounterSignatureType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__UnsignedSignaturePropertiesType
-#define SOAP_TYPE_PointerTons1__UnsignedSignaturePropertiesType (198)
+#ifndef SOAP_TYPE_PointerTons6__UnsignedSignaturePropertiesType
+#define SOAP_TYPE_PointerTons6__UnsignedSignaturePropertiesType (198)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__UnsignedSignaturePropertiesType(struct soap*, ns1__UnsignedSignaturePropertiesType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__UnsignedSignaturePropertiesType(struct soap*, const char *, int, ns1__UnsignedSignaturePropertiesType *const*, const char *);
-SOAP_FMAC3 ns1__UnsignedSignaturePropertiesType ** SOAP_FMAC4 soap_in_PointerTons1__UnsignedSignaturePropertiesType(struct soap*, const char*, ns1__UnsignedSignaturePropertiesType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__UnsignedSignaturePropertiesType(struct soap*, ns1__UnsignedSignaturePropertiesType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__UnsignedSignaturePropertiesType(struct soap*, ns6__UnsignedSignaturePropertiesType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__UnsignedSignaturePropertiesType(struct soap*, const char *, int, ns6__UnsignedSignaturePropertiesType *const*, const char *);
+SOAP_FMAC3 ns6__UnsignedSignaturePropertiesType ** SOAP_FMAC4 soap_in_PointerTons6__UnsignedSignaturePropertiesType(struct soap*, const char*, ns6__UnsignedSignaturePropertiesType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__UnsignedSignaturePropertiesType(struct soap*, ns6__UnsignedSignaturePropertiesType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__UnsignedSignaturePropertiesType
-#define soap_write_PointerTons1__UnsignedSignaturePropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__UnsignedSignaturePropertiesType(soap, data), 0) || soap_put_PointerTons1__UnsignedSignaturePropertiesType(soap, data, "ns1:UnsignedSignaturePropertiesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__UnsignedSignaturePropertiesType
+#define soap_write_PointerTons6__UnsignedSignaturePropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__UnsignedSignaturePropertiesType(soap, data), 0) || soap_put_PointerTons6__UnsignedSignaturePropertiesType(soap, data, "ns6:UnsignedSignaturePropertiesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__UnsignedSignaturePropertiesType ** SOAP_FMAC4 soap_get_PointerTons1__UnsignedSignaturePropertiesType(struct soap*, ns1__UnsignedSignaturePropertiesType **, const char*, const char*);
+SOAP_FMAC3 ns6__UnsignedSignaturePropertiesType ** SOAP_FMAC4 soap_get_PointerTons6__UnsignedSignaturePropertiesType(struct soap*, ns6__UnsignedSignaturePropertiesType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__UnsignedSignaturePropertiesType
-#define soap_read_PointerTons1__UnsignedSignaturePropertiesType(soap, data) ( ((data) ? (soap_default_PointerTons1__UnsignedSignaturePropertiesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__UnsignedSignaturePropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__UnsignedSignaturePropertiesType
+#define soap_read_PointerTons6__UnsignedSignaturePropertiesType(soap, data) ( ((data) ? (soap_default_PointerTons6__UnsignedSignaturePropertiesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__UnsignedSignaturePropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__ClaimedRoleType
-#define SOAP_TYPE_PointerTons1__ClaimedRoleType (196)
+#ifndef SOAP_TYPE_PointerTons6__ClaimedRoleType
+#define SOAP_TYPE_PointerTons6__ClaimedRoleType (196)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__ClaimedRoleType(struct soap*, ns1__ClaimedRoleType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__ClaimedRoleType(struct soap*, const char *, int, ns1__ClaimedRoleType *const*, const char *);
-SOAP_FMAC3 ns1__ClaimedRoleType ** SOAP_FMAC4 soap_in_PointerTons1__ClaimedRoleType(struct soap*, const char*, ns1__ClaimedRoleType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__ClaimedRoleType(struct soap*, ns1__ClaimedRoleType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__ClaimedRoleType(struct soap*, ns6__ClaimedRoleType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__ClaimedRoleType(struct soap*, const char *, int, ns6__ClaimedRoleType *const*, const char *);
+SOAP_FMAC3 ns6__ClaimedRoleType ** SOAP_FMAC4 soap_in_PointerTons6__ClaimedRoleType(struct soap*, const char*, ns6__ClaimedRoleType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__ClaimedRoleType(struct soap*, ns6__ClaimedRoleType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__ClaimedRoleType
-#define soap_write_PointerTons1__ClaimedRoleType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__ClaimedRoleType(soap, data), 0) || soap_put_PointerTons1__ClaimedRoleType(soap, data, "ns1:ClaimedRoleType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__ClaimedRoleType
+#define soap_write_PointerTons6__ClaimedRoleType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__ClaimedRoleType(soap, data), 0) || soap_put_PointerTons6__ClaimedRoleType(soap, data, "ns6:ClaimedRoleType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__ClaimedRoleType ** SOAP_FMAC4 soap_get_PointerTons1__ClaimedRoleType(struct soap*, ns1__ClaimedRoleType **, const char*, const char*);
+SOAP_FMAC3 ns6__ClaimedRoleType ** SOAP_FMAC4 soap_get_PointerTons6__ClaimedRoleType(struct soap*, ns6__ClaimedRoleType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__ClaimedRoleType
-#define soap_read_PointerTons1__ClaimedRoleType(soap, data) ( ((data) ? (soap_default_PointerTons1__ClaimedRoleType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__ClaimedRoleType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__ClaimedRoleType
+#define soap_read_PointerTons6__ClaimedRoleType(soap, data) ( ((data) ? (soap_default_PointerTons6__ClaimedRoleType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__ClaimedRoleType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__ClaimedRolesListType
-#define SOAP_TYPE_PointerTons1__ClaimedRolesListType (195)
+#ifndef SOAP_TYPE_PointerTons6__ClaimedRolesListType
+#define SOAP_TYPE_PointerTons6__ClaimedRolesListType (195)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__ClaimedRolesListType(struct soap*, ns1__ClaimedRolesListType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__ClaimedRolesListType(struct soap*, const char *, int, ns1__ClaimedRolesListType *const*, const char *);
-SOAP_FMAC3 ns1__ClaimedRolesListType ** SOAP_FMAC4 soap_in_PointerTons1__ClaimedRolesListType(struct soap*, const char*, ns1__ClaimedRolesListType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__ClaimedRolesListType(struct soap*, ns1__ClaimedRolesListType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__ClaimedRolesListType(struct soap*, ns6__ClaimedRolesListType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__ClaimedRolesListType(struct soap*, const char *, int, ns6__ClaimedRolesListType *const*, const char *);
+SOAP_FMAC3 ns6__ClaimedRolesListType ** SOAP_FMAC4 soap_in_PointerTons6__ClaimedRolesListType(struct soap*, const char*, ns6__ClaimedRolesListType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__ClaimedRolesListType(struct soap*, ns6__ClaimedRolesListType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__ClaimedRolesListType
-#define soap_write_PointerTons1__ClaimedRolesListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__ClaimedRolesListType(soap, data), 0) || soap_put_PointerTons1__ClaimedRolesListType(soap, data, "ns1:ClaimedRolesListType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__ClaimedRolesListType
+#define soap_write_PointerTons6__ClaimedRolesListType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__ClaimedRolesListType(soap, data), 0) || soap_put_PointerTons6__ClaimedRolesListType(soap, data, "ns6:ClaimedRolesListType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__ClaimedRolesListType ** SOAP_FMAC4 soap_get_PointerTons1__ClaimedRolesListType(struct soap*, ns1__ClaimedRolesListType **, const char*, const char*);
+SOAP_FMAC3 ns6__ClaimedRolesListType ** SOAP_FMAC4 soap_get_PointerTons6__ClaimedRolesListType(struct soap*, ns6__ClaimedRolesListType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__ClaimedRolesListType
-#define soap_read_PointerTons1__ClaimedRolesListType(soap, data) ( ((data) ? (soap_default_PointerTons1__ClaimedRolesListType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__ClaimedRolesListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__ClaimedRolesListType
+#define soap_read_PointerTons6__ClaimedRolesListType(soap, data) ( ((data) ? (soap_default_PointerTons6__ClaimedRolesListType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__ClaimedRolesListType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__IssuerSerialType
-#define SOAP_TYPE_PointerTons1__IssuerSerialType (194)
+#ifndef SOAP_TYPE_PointerTons6__IssuerSerialType
+#define SOAP_TYPE_PointerTons6__IssuerSerialType (194)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__IssuerSerialType(struct soap*, ns1__IssuerSerialType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__IssuerSerialType(struct soap*, const char *, int, ns1__IssuerSerialType *const*, const char *);
-SOAP_FMAC3 ns1__IssuerSerialType ** SOAP_FMAC4 soap_in_PointerTons1__IssuerSerialType(struct soap*, const char*, ns1__IssuerSerialType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__IssuerSerialType(struct soap*, ns1__IssuerSerialType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__IssuerSerialType(struct soap*, ns6__IssuerSerialType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__IssuerSerialType(struct soap*, const char *, int, ns6__IssuerSerialType *const*, const char *);
+SOAP_FMAC3 ns6__IssuerSerialType ** SOAP_FMAC4 soap_in_PointerTons6__IssuerSerialType(struct soap*, const char*, ns6__IssuerSerialType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__IssuerSerialType(struct soap*, ns6__IssuerSerialType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__IssuerSerialType
-#define soap_write_PointerTons1__IssuerSerialType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__IssuerSerialType(soap, data), 0) || soap_put_PointerTons1__IssuerSerialType(soap, data, "ns1:IssuerSerialType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__IssuerSerialType
+#define soap_write_PointerTons6__IssuerSerialType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__IssuerSerialType(soap, data), 0) || soap_put_PointerTons6__IssuerSerialType(soap, data, "ns6:IssuerSerialType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__IssuerSerialType ** SOAP_FMAC4 soap_get_PointerTons1__IssuerSerialType(struct soap*, ns1__IssuerSerialType **, const char*, const char*);
+SOAP_FMAC3 ns6__IssuerSerialType ** SOAP_FMAC4 soap_get_PointerTons6__IssuerSerialType(struct soap*, ns6__IssuerSerialType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__IssuerSerialType
-#define soap_read_PointerTons1__IssuerSerialType(soap, data) ( ((data) ? (soap_default_PointerTons1__IssuerSerialType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__IssuerSerialType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__IssuerSerialType
+#define soap_read_PointerTons6__IssuerSerialType(soap, data) ( ((data) ? (soap_default_PointerTons6__IssuerSerialType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__IssuerSerialType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__CertDigestType
-#define SOAP_TYPE_PointerTons1__CertDigestType (193)
+#ifndef SOAP_TYPE_PointerTons6__CertDigestType
+#define SOAP_TYPE_PointerTons6__CertDigestType (193)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__CertDigestType(struct soap*, ns1__CertDigestType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__CertDigestType(struct soap*, const char *, int, ns1__CertDigestType *const*, const char *);
-SOAP_FMAC3 ns1__CertDigestType ** SOAP_FMAC4 soap_in_PointerTons1__CertDigestType(struct soap*, const char*, ns1__CertDigestType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__CertDigestType(struct soap*, ns1__CertDigestType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__CertDigestType(struct soap*, ns6__CertDigestType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__CertDigestType(struct soap*, const char *, int, ns6__CertDigestType *const*, const char *);
+SOAP_FMAC3 ns6__CertDigestType ** SOAP_FMAC4 soap_in_PointerTons6__CertDigestType(struct soap*, const char*, ns6__CertDigestType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__CertDigestType(struct soap*, ns6__CertDigestType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__CertDigestType
-#define soap_write_PointerTons1__CertDigestType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__CertDigestType(soap, data), 0) || soap_put_PointerTons1__CertDigestType(soap, data, "ns1:CertDigestType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__CertDigestType
+#define soap_write_PointerTons6__CertDigestType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__CertDigestType(soap, data), 0) || soap_put_PointerTons6__CertDigestType(soap, data, "ns6:CertDigestType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CertDigestType ** SOAP_FMAC4 soap_get_PointerTons1__CertDigestType(struct soap*, ns1__CertDigestType **, const char*, const char*);
+SOAP_FMAC3 ns6__CertDigestType ** SOAP_FMAC4 soap_get_PointerTons6__CertDigestType(struct soap*, ns6__CertDigestType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__CertDigestType
-#define soap_read_PointerTons1__CertDigestType(soap, data) ( ((data) ? (soap_default_PointerTons1__CertDigestType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__CertDigestType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__CertDigestType
+#define soap_read_PointerTons6__CertDigestType(soap, data) ( ((data) ? (soap_default_PointerTons6__CertDigestType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__CertDigestType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__CertType
-#define SOAP_TYPE_PointerTons1__CertType (192)
+#ifndef SOAP_TYPE_PointerTons6__CertType
+#define SOAP_TYPE_PointerTons6__CertType (192)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__CertType(struct soap*, ns1__CertType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__CertType(struct soap*, const char *, int, ns1__CertType *const*, const char *);
-SOAP_FMAC3 ns1__CertType ** SOAP_FMAC4 soap_in_PointerTons1__CertType(struct soap*, const char*, ns1__CertType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__CertType(struct soap*, ns1__CertType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__CertType(struct soap*, ns6__CertType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__CertType(struct soap*, const char *, int, ns6__CertType *const*, const char *);
+SOAP_FMAC3 ns6__CertType ** SOAP_FMAC4 soap_in_PointerTons6__CertType(struct soap*, const char*, ns6__CertType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__CertType(struct soap*, ns6__CertType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__CertType
-#define soap_write_PointerTons1__CertType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__CertType(soap, data), 0) || soap_put_PointerTons1__CertType(soap, data, "ns1:CertType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__CertType
+#define soap_write_PointerTons6__CertType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__CertType(soap, data), 0) || soap_put_PointerTons6__CertType(soap, data, "ns6:CertType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__CertType ** SOAP_FMAC4 soap_get_PointerTons1__CertType(struct soap*, ns1__CertType **, const char*, const char*);
+SOAP_FMAC3 ns6__CertType ** SOAP_FMAC4 soap_get_PointerTons6__CertType(struct soap*, ns6__CertType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__CertType
-#define soap_read_PointerTons1__CertType(soap, data) ( ((data) ? (soap_default_PointerTons1__CertType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__CertType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__CertType
+#define soap_read_PointerTons6__CertType(soap, data) ( ((data) ? (soap_default_PointerTons6__CertType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__CertType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__SignerRoleType
-#define SOAP_TYPE_PointerTons1__SignerRoleType (191)
+#ifndef SOAP_TYPE_PointerTons6__SignerRoleType
+#define SOAP_TYPE_PointerTons6__SignerRoleType (191)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__SignerRoleType(struct soap*, ns1__SignerRoleType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__SignerRoleType(struct soap*, const char *, int, ns1__SignerRoleType *const*, const char *);
-SOAP_FMAC3 ns1__SignerRoleType ** SOAP_FMAC4 soap_in_PointerTons1__SignerRoleType(struct soap*, const char*, ns1__SignerRoleType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__SignerRoleType(struct soap*, ns1__SignerRoleType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__SignerRoleType(struct soap*, ns6__SignerRoleType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__SignerRoleType(struct soap*, const char *, int, ns6__SignerRoleType *const*, const char *);
+SOAP_FMAC3 ns6__SignerRoleType ** SOAP_FMAC4 soap_in_PointerTons6__SignerRoleType(struct soap*, const char*, ns6__SignerRoleType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__SignerRoleType(struct soap*, ns6__SignerRoleType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__SignerRoleType
-#define soap_write_PointerTons1__SignerRoleType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__SignerRoleType(soap, data), 0) || soap_put_PointerTons1__SignerRoleType(soap, data, "ns1:SignerRoleType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__SignerRoleType
+#define soap_write_PointerTons6__SignerRoleType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__SignerRoleType(soap, data), 0) || soap_put_PointerTons6__SignerRoleType(soap, data, "ns6:SignerRoleType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__SignerRoleType ** SOAP_FMAC4 soap_get_PointerTons1__SignerRoleType(struct soap*, ns1__SignerRoleType **, const char*, const char*);
+SOAP_FMAC3 ns6__SignerRoleType ** SOAP_FMAC4 soap_get_PointerTons6__SignerRoleType(struct soap*, ns6__SignerRoleType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__SignerRoleType
-#define soap_read_PointerTons1__SignerRoleType(soap, data) ( ((data) ? (soap_default_PointerTons1__SignerRoleType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__SignerRoleType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__SignerRoleType
+#define soap_read_PointerTons6__SignerRoleType(soap, data) ( ((data) ? (soap_default_PointerTons6__SignerRoleType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__SignerRoleType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__SigningCertificateType
-#define SOAP_TYPE_PointerTons1__SigningCertificateType (190)
+#ifndef SOAP_TYPE_PointerTons6__SigningCertificateType
+#define SOAP_TYPE_PointerTons6__SigningCertificateType (190)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__SigningCertificateType(struct soap*, ns1__SigningCertificateType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__SigningCertificateType(struct soap*, const char *, int, ns1__SigningCertificateType *const*, const char *);
-SOAP_FMAC3 ns1__SigningCertificateType ** SOAP_FMAC4 soap_in_PointerTons1__SigningCertificateType(struct soap*, const char*, ns1__SigningCertificateType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__SigningCertificateType(struct soap*, ns1__SigningCertificateType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__SigningCertificateType(struct soap*, ns6__SigningCertificateType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__SigningCertificateType(struct soap*, const char *, int, ns6__SigningCertificateType *const*, const char *);
+SOAP_FMAC3 ns6__SigningCertificateType ** SOAP_FMAC4 soap_in_PointerTons6__SigningCertificateType(struct soap*, const char*, ns6__SigningCertificateType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__SigningCertificateType(struct soap*, ns6__SigningCertificateType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__SigningCertificateType
-#define soap_write_PointerTons1__SigningCertificateType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__SigningCertificateType(soap, data), 0) || soap_put_PointerTons1__SigningCertificateType(soap, data, "ns1:SigningCertificateType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__SigningCertificateType
+#define soap_write_PointerTons6__SigningCertificateType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__SigningCertificateType(soap, data), 0) || soap_put_PointerTons6__SigningCertificateType(soap, data, "ns6:SigningCertificateType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__SigningCertificateType ** SOAP_FMAC4 soap_get_PointerTons1__SigningCertificateType(struct soap*, ns1__SigningCertificateType **, const char*, const char*);
+SOAP_FMAC3 ns6__SigningCertificateType ** SOAP_FMAC4 soap_get_PointerTons6__SigningCertificateType(struct soap*, ns6__SigningCertificateType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__SigningCertificateType
-#define soap_read_PointerTons1__SigningCertificateType(soap, data) ( ((data) ? (soap_default_PointerTons1__SigningCertificateType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__SigningCertificateType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__SigningCertificateType
+#define soap_read_PointerTons6__SigningCertificateType(soap, data) ( ((data) ? (soap_default_PointerTons6__SigningCertificateType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__SigningCertificateType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__SignedSignaturePropertiesType
-#define SOAP_TYPE_PointerTons1__SignedSignaturePropertiesType (189)
+#ifndef SOAP_TYPE_PointerTons6__SignedSignaturePropertiesType
+#define SOAP_TYPE_PointerTons6__SignedSignaturePropertiesType (189)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__SignedSignaturePropertiesType(struct soap*, ns1__SignedSignaturePropertiesType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__SignedSignaturePropertiesType(struct soap*, const char *, int, ns1__SignedSignaturePropertiesType *const*, const char *);
-SOAP_FMAC3 ns1__SignedSignaturePropertiesType ** SOAP_FMAC4 soap_in_PointerTons1__SignedSignaturePropertiesType(struct soap*, const char*, ns1__SignedSignaturePropertiesType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__SignedSignaturePropertiesType(struct soap*, ns1__SignedSignaturePropertiesType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__SignedSignaturePropertiesType(struct soap*, ns6__SignedSignaturePropertiesType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__SignedSignaturePropertiesType(struct soap*, const char *, int, ns6__SignedSignaturePropertiesType *const*, const char *);
+SOAP_FMAC3 ns6__SignedSignaturePropertiesType ** SOAP_FMAC4 soap_in_PointerTons6__SignedSignaturePropertiesType(struct soap*, const char*, ns6__SignedSignaturePropertiesType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__SignedSignaturePropertiesType(struct soap*, ns6__SignedSignaturePropertiesType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__SignedSignaturePropertiesType
-#define soap_write_PointerTons1__SignedSignaturePropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__SignedSignaturePropertiesType(soap, data), 0) || soap_put_PointerTons1__SignedSignaturePropertiesType(soap, data, "ns1:SignedSignaturePropertiesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__SignedSignaturePropertiesType
+#define soap_write_PointerTons6__SignedSignaturePropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__SignedSignaturePropertiesType(soap, data), 0) || soap_put_PointerTons6__SignedSignaturePropertiesType(soap, data, "ns6:SignedSignaturePropertiesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__SignedSignaturePropertiesType ** SOAP_FMAC4 soap_get_PointerTons1__SignedSignaturePropertiesType(struct soap*, ns1__SignedSignaturePropertiesType **, const char*, const char*);
+SOAP_FMAC3 ns6__SignedSignaturePropertiesType ** SOAP_FMAC4 soap_get_PointerTons6__SignedSignaturePropertiesType(struct soap*, ns6__SignedSignaturePropertiesType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__SignedSignaturePropertiesType
-#define soap_read_PointerTons1__SignedSignaturePropertiesType(soap, data) ( ((data) ? (soap_default_PointerTons1__SignedSignaturePropertiesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__SignedSignaturePropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__SignedSignaturePropertiesType
+#define soap_read_PointerTons6__SignedSignaturePropertiesType(soap, data) ( ((data) ? (soap_default_PointerTons6__SignedSignaturePropertiesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__SignedSignaturePropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__UnsignedPropertiesType
-#define SOAP_TYPE_PointerTons1__UnsignedPropertiesType (188)
+#ifndef SOAP_TYPE_PointerTons6__UnsignedPropertiesType
+#define SOAP_TYPE_PointerTons6__UnsignedPropertiesType (188)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__UnsignedPropertiesType(struct soap*, ns1__UnsignedPropertiesType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__UnsignedPropertiesType(struct soap*, const char *, int, ns1__UnsignedPropertiesType *const*, const char *);
-SOAP_FMAC3 ns1__UnsignedPropertiesType ** SOAP_FMAC4 soap_in_PointerTons1__UnsignedPropertiesType(struct soap*, const char*, ns1__UnsignedPropertiesType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__UnsignedPropertiesType(struct soap*, ns1__UnsignedPropertiesType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__UnsignedPropertiesType(struct soap*, ns6__UnsignedPropertiesType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__UnsignedPropertiesType(struct soap*, const char *, int, ns6__UnsignedPropertiesType *const*, const char *);
+SOAP_FMAC3 ns6__UnsignedPropertiesType ** SOAP_FMAC4 soap_in_PointerTons6__UnsignedPropertiesType(struct soap*, const char*, ns6__UnsignedPropertiesType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__UnsignedPropertiesType(struct soap*, ns6__UnsignedPropertiesType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__UnsignedPropertiesType
-#define soap_write_PointerTons1__UnsignedPropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__UnsignedPropertiesType(soap, data), 0) || soap_put_PointerTons1__UnsignedPropertiesType(soap, data, "ns1:UnsignedPropertiesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__UnsignedPropertiesType
+#define soap_write_PointerTons6__UnsignedPropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__UnsignedPropertiesType(soap, data), 0) || soap_put_PointerTons6__UnsignedPropertiesType(soap, data, "ns6:UnsignedPropertiesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__UnsignedPropertiesType ** SOAP_FMAC4 soap_get_PointerTons1__UnsignedPropertiesType(struct soap*, ns1__UnsignedPropertiesType **, const char*, const char*);
+SOAP_FMAC3 ns6__UnsignedPropertiesType ** SOAP_FMAC4 soap_get_PointerTons6__UnsignedPropertiesType(struct soap*, ns6__UnsignedPropertiesType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__UnsignedPropertiesType
-#define soap_read_PointerTons1__UnsignedPropertiesType(soap, data) ( ((data) ? (soap_default_PointerTons1__UnsignedPropertiesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__UnsignedPropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__UnsignedPropertiesType
+#define soap_read_PointerTons6__UnsignedPropertiesType(soap, data) ( ((data) ? (soap_default_PointerTons6__UnsignedPropertiesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__UnsignedPropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__SignedPropertiesType
-#define SOAP_TYPE_PointerTons1__SignedPropertiesType (187)
+#ifndef SOAP_TYPE_PointerTons6__SignedPropertiesType
+#define SOAP_TYPE_PointerTons6__SignedPropertiesType (187)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__SignedPropertiesType(struct soap*, ns1__SignedPropertiesType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__SignedPropertiesType(struct soap*, const char *, int, ns1__SignedPropertiesType *const*, const char *);
-SOAP_FMAC3 ns1__SignedPropertiesType ** SOAP_FMAC4 soap_in_PointerTons1__SignedPropertiesType(struct soap*, const char*, ns1__SignedPropertiesType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__SignedPropertiesType(struct soap*, ns1__SignedPropertiesType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__SignedPropertiesType(struct soap*, ns6__SignedPropertiesType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__SignedPropertiesType(struct soap*, const char *, int, ns6__SignedPropertiesType *const*, const char *);
+SOAP_FMAC3 ns6__SignedPropertiesType ** SOAP_FMAC4 soap_in_PointerTons6__SignedPropertiesType(struct soap*, const char*, ns6__SignedPropertiesType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__SignedPropertiesType(struct soap*, ns6__SignedPropertiesType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__SignedPropertiesType
-#define soap_write_PointerTons1__SignedPropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__SignedPropertiesType(soap, data), 0) || soap_put_PointerTons1__SignedPropertiesType(soap, data, "ns1:SignedPropertiesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__SignedPropertiesType
+#define soap_write_PointerTons6__SignedPropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__SignedPropertiesType(soap, data), 0) || soap_put_PointerTons6__SignedPropertiesType(soap, data, "ns6:SignedPropertiesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__SignedPropertiesType ** SOAP_FMAC4 soap_get_PointerTons1__SignedPropertiesType(struct soap*, ns1__SignedPropertiesType **, const char*, const char*);
+SOAP_FMAC3 ns6__SignedPropertiesType ** SOAP_FMAC4 soap_get_PointerTons6__SignedPropertiesType(struct soap*, ns6__SignedPropertiesType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__SignedPropertiesType
-#define soap_read_PointerTons1__SignedPropertiesType(soap, data) ( ((data) ? (soap_default_PointerTons1__SignedPropertiesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__SignedPropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__SignedPropertiesType
+#define soap_read_PointerTons6__SignedPropertiesType(soap, data) ( ((data) ? (soap_default_PointerTons6__SignedPropertiesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__SignedPropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
@@ -10380,22 +10380,22 @@ SOAP_FMAC3 ns7__SVGListType ** SOAP_FMAC4 soap_get_PointerTons7__SVGListType(str
 #endif
 
 
-#ifndef SOAP_TYPE_PointerTons1__QualifyingPropertiesType
-#define SOAP_TYPE_PointerTons1__QualifyingPropertiesType (172)
+#ifndef SOAP_TYPE_PointerTons6__QualifyingPropertiesType
+#define SOAP_TYPE_PointerTons6__QualifyingPropertiesType (172)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons1__QualifyingPropertiesType(struct soap*, ns1__QualifyingPropertiesType *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons1__QualifyingPropertiesType(struct soap*, const char *, int, ns1__QualifyingPropertiesType *const*, const char *);
-SOAP_FMAC3 ns1__QualifyingPropertiesType ** SOAP_FMAC4 soap_in_PointerTons1__QualifyingPropertiesType(struct soap*, const char*, ns1__QualifyingPropertiesType **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons1__QualifyingPropertiesType(struct soap*, ns1__QualifyingPropertiesType *const*, const char*, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons6__QualifyingPropertiesType(struct soap*, ns6__QualifyingPropertiesType *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons6__QualifyingPropertiesType(struct soap*, const char *, int, ns6__QualifyingPropertiesType *const*, const char *);
+SOAP_FMAC3 ns6__QualifyingPropertiesType ** SOAP_FMAC4 soap_in_PointerTons6__QualifyingPropertiesType(struct soap*, const char*, ns6__QualifyingPropertiesType **, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons6__QualifyingPropertiesType(struct soap*, ns6__QualifyingPropertiesType *const*, const char*, const char*);
 
-#ifndef soap_write_PointerTons1__QualifyingPropertiesType
-#define soap_write_PointerTons1__QualifyingPropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons1__QualifyingPropertiesType(soap, data), 0) || soap_put_PointerTons1__QualifyingPropertiesType(soap, data, "ns1:QualifyingPropertiesType", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_PointerTons6__QualifyingPropertiesType
+#define soap_write_PointerTons6__QualifyingPropertiesType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons6__QualifyingPropertiesType(soap, data), 0) || soap_put_PointerTons6__QualifyingPropertiesType(soap, data, "ns6:QualifyingPropertiesType", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns1__QualifyingPropertiesType ** SOAP_FMAC4 soap_get_PointerTons1__QualifyingPropertiesType(struct soap*, ns1__QualifyingPropertiesType **, const char*, const char*);
+SOAP_FMAC3 ns6__QualifyingPropertiesType ** SOAP_FMAC4 soap_get_PointerTons6__QualifyingPropertiesType(struct soap*, ns6__QualifyingPropertiesType **, const char*, const char*);
 
-#ifndef soap_read_PointerTons1__QualifyingPropertiesType
-#define soap_read_PointerTons1__QualifyingPropertiesType(soap, data) ( ((data) ? (soap_default_PointerTons1__QualifyingPropertiesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons1__QualifyingPropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_PointerTons6__QualifyingPropertiesType
+#define soap_read_PointerTons6__QualifyingPropertiesType(soap, data) ( ((data) ? (soap_default_PointerTons6__QualifyingPropertiesType(soap, (data)), 0) : 0) || soap_begin_recv(soap) || !soap_get_PointerTons6__QualifyingPropertiesType(soap, (data), NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
 
@@ -10992,16 +10992,16 @@ SOAP_FMAC3 char ** SOAP_FMAC4 soap_get_string(struct soap*, char **, const char*
 #endif
 
 
-#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons4__SubAttributeType
-#define SOAP_TYPE_std__vectorTemplateOfPointerTons4__SubAttributeType (239)
+#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTopdf__SubAttributeType
+#define SOAP_TYPE_std__vectorTemplateOfPointerTopdf__SubAttributeType (239)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons4__SubAttributeType(struct soap*, std::vector<ns4__SubAttributeType *> *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons4__SubAttributeType(struct soap*, const std::vector<ns4__SubAttributeType *> *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons4__SubAttributeType(struct soap*, const char*, int, const std::vector<ns4__SubAttributeType *> *, const char*);
-SOAP_FMAC3 std::vector<ns4__SubAttributeType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons4__SubAttributeType(struct soap*, const char*, std::vector<ns4__SubAttributeType *> *, const char*);
-SOAP_FMAC1 std::vector<ns4__SubAttributeType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons4__SubAttributeType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTopdf__SubAttributeType(struct soap*, std::vector<pdf__SubAttributeType *> *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTopdf__SubAttributeType(struct soap*, const std::vector<pdf__SubAttributeType *> *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTopdf__SubAttributeType(struct soap*, const char*, int, const std::vector<pdf__SubAttributeType *> *, const char*);
+SOAP_FMAC3 std::vector<pdf__SubAttributeType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTopdf__SubAttributeType(struct soap*, const char*, std::vector<pdf__SubAttributeType *> *, const char*);
+SOAP_FMAC1 std::vector<pdf__SubAttributeType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTopdf__SubAttributeType(struct soap*, int, const char*, const char*, size_t*);
 
-inline std::vector<ns4__SubAttributeType *>  * soap_new_std__vectorTemplateOfPointerTons4__SubAttributeType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons4__SubAttributeType(soap, n, NULL, NULL, NULL); }
+inline std::vector<pdf__SubAttributeType *>  * soap_new_std__vectorTemplateOfPointerTopdf__SubAttributeType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTopdf__SubAttributeType(soap, n, NULL, NULL, NULL); }
 
 #ifndef SOAP_TYPE_std__vectorTemplateOfstd__string
 #define SOAP_TYPE_std__vectorTemplateOfstd__string (237)
@@ -11014,16 +11014,16 @@ SOAP_FMAC1 std::vector<std::string>  * SOAP_FMAC2 soap_instantiate_std__vectorTe
 
 inline std::vector<std::string>  * soap_new_std__vectorTemplateOfstd__string(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfstd__string(soap, n, NULL, NULL, NULL); }
 
-#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons4__AttributeType
-#define SOAP_TYPE_std__vectorTemplateOfPointerTons4__AttributeType (232)
+#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTopdf__AttributeType
+#define SOAP_TYPE_std__vectorTemplateOfPointerTopdf__AttributeType (232)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons4__AttributeType(struct soap*, std::vector<ns4__AttributeType *> *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons4__AttributeType(struct soap*, const std::vector<ns4__AttributeType *> *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons4__AttributeType(struct soap*, const char*, int, const std::vector<ns4__AttributeType *> *, const char*);
-SOAP_FMAC3 std::vector<ns4__AttributeType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons4__AttributeType(struct soap*, const char*, std::vector<ns4__AttributeType *> *, const char*);
-SOAP_FMAC1 std::vector<ns4__AttributeType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons4__AttributeType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTopdf__AttributeType(struct soap*, std::vector<pdf__AttributeType *> *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTopdf__AttributeType(struct soap*, const std::vector<pdf__AttributeType *> *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTopdf__AttributeType(struct soap*, const char*, int, const std::vector<pdf__AttributeType *> *, const char*);
+SOAP_FMAC3 std::vector<pdf__AttributeType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTopdf__AttributeType(struct soap*, const char*, std::vector<pdf__AttributeType *> *, const char*);
+SOAP_FMAC1 std::vector<pdf__AttributeType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTopdf__AttributeType(struct soap*, int, const char*, const char*, size_t*);
 
-inline std::vector<ns4__AttributeType *>  * soap_new_std__vectorTemplateOfPointerTons4__AttributeType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons4__AttributeType(soap, n, NULL, NULL, NULL); }
+inline std::vector<pdf__AttributeType *>  * soap_new_std__vectorTemplateOfPointerTopdf__AttributeType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTopdf__AttributeType(soap, n, NULL, NULL, NULL); }
 
 #ifndef SOAP_TYPE_std__vectorTemplateOfns7__SVGType
 #define SOAP_TYPE_std__vectorTemplateOfns7__SVGType (227)
@@ -11036,82 +11036,82 @@ SOAP_FMAC1 std::vector<xsd__base64Binary>  * SOAP_FMAC2 soap_instantiate_std__ve
 
 inline std::vector<xsd__base64Binary>  * soap_new_std__vectorTemplateOfns7__SVGType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfns7__SVGType(soap, n, NULL, NULL, NULL); }
 
-#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons1__EncapsulatedOCSPValueType
-#define SOAP_TYPE_std__vectorTemplateOfPointerTons1__EncapsulatedOCSPValueType (226)
+#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons6__EncapsulatedOCSPValueType
+#define SOAP_TYPE_std__vectorTemplateOfPointerTons6__EncapsulatedOCSPValueType (226)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons1__EncapsulatedOCSPValueType(struct soap*, std::vector<ns1__EncapsulatedOCSPValueType *> *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons1__EncapsulatedOCSPValueType(struct soap*, const std::vector<ns1__EncapsulatedOCSPValueType *> *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons1__EncapsulatedOCSPValueType(struct soap*, const char*, int, const std::vector<ns1__EncapsulatedOCSPValueType *> *, const char*);
-SOAP_FMAC3 std::vector<ns1__EncapsulatedOCSPValueType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons1__EncapsulatedOCSPValueType(struct soap*, const char*, std::vector<ns1__EncapsulatedOCSPValueType *> *, const char*);
-SOAP_FMAC1 std::vector<ns1__EncapsulatedOCSPValueType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons1__EncapsulatedOCSPValueType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons6__EncapsulatedOCSPValueType(struct soap*, std::vector<ns6__EncapsulatedOCSPValueType *> *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons6__EncapsulatedOCSPValueType(struct soap*, const std::vector<ns6__EncapsulatedOCSPValueType *> *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons6__EncapsulatedOCSPValueType(struct soap*, const char*, int, const std::vector<ns6__EncapsulatedOCSPValueType *> *, const char*);
+SOAP_FMAC3 std::vector<ns6__EncapsulatedOCSPValueType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons6__EncapsulatedOCSPValueType(struct soap*, const char*, std::vector<ns6__EncapsulatedOCSPValueType *> *, const char*);
+SOAP_FMAC1 std::vector<ns6__EncapsulatedOCSPValueType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons6__EncapsulatedOCSPValueType(struct soap*, int, const char*, const char*, size_t*);
 
-inline std::vector<ns1__EncapsulatedOCSPValueType *>  * soap_new_std__vectorTemplateOfPointerTons1__EncapsulatedOCSPValueType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons1__EncapsulatedOCSPValueType(soap, n, NULL, NULL, NULL); }
+inline std::vector<ns6__EncapsulatedOCSPValueType *>  * soap_new_std__vectorTemplateOfPointerTons6__EncapsulatedOCSPValueType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons6__EncapsulatedOCSPValueType(soap, n, NULL, NULL, NULL); }
 
-#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons1__EncapsulatedCRLValueType
-#define SOAP_TYPE_std__vectorTemplateOfPointerTons1__EncapsulatedCRLValueType (224)
+#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons6__EncapsulatedCRLValueType
+#define SOAP_TYPE_std__vectorTemplateOfPointerTons6__EncapsulatedCRLValueType (224)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons1__EncapsulatedCRLValueType(struct soap*, std::vector<ns1__EncapsulatedCRLValueType *> *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons1__EncapsulatedCRLValueType(struct soap*, const std::vector<ns1__EncapsulatedCRLValueType *> *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons1__EncapsulatedCRLValueType(struct soap*, const char*, int, const std::vector<ns1__EncapsulatedCRLValueType *> *, const char*);
-SOAP_FMAC3 std::vector<ns1__EncapsulatedCRLValueType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons1__EncapsulatedCRLValueType(struct soap*, const char*, std::vector<ns1__EncapsulatedCRLValueType *> *, const char*);
-SOAP_FMAC1 std::vector<ns1__EncapsulatedCRLValueType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons1__EncapsulatedCRLValueType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons6__EncapsulatedCRLValueType(struct soap*, std::vector<ns6__EncapsulatedCRLValueType *> *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons6__EncapsulatedCRLValueType(struct soap*, const std::vector<ns6__EncapsulatedCRLValueType *> *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons6__EncapsulatedCRLValueType(struct soap*, const char*, int, const std::vector<ns6__EncapsulatedCRLValueType *> *, const char*);
+SOAP_FMAC3 std::vector<ns6__EncapsulatedCRLValueType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons6__EncapsulatedCRLValueType(struct soap*, const char*, std::vector<ns6__EncapsulatedCRLValueType *> *, const char*);
+SOAP_FMAC1 std::vector<ns6__EncapsulatedCRLValueType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons6__EncapsulatedCRLValueType(struct soap*, int, const char*, const char*, size_t*);
 
-inline std::vector<ns1__EncapsulatedCRLValueType *>  * soap_new_std__vectorTemplateOfPointerTons1__EncapsulatedCRLValueType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons1__EncapsulatedCRLValueType(soap, n, NULL, NULL, NULL); }
+inline std::vector<ns6__EncapsulatedCRLValueType *>  * soap_new_std__vectorTemplateOfPointerTons6__EncapsulatedCRLValueType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons6__EncapsulatedCRLValueType(soap, n, NULL, NULL, NULL); }
 
-#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons1__EncapsulatedX509CertificateType
-#define SOAP_TYPE_std__vectorTemplateOfPointerTons1__EncapsulatedX509CertificateType (220)
+#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons6__EncapsulatedX509CertificateType
+#define SOAP_TYPE_std__vectorTemplateOfPointerTons6__EncapsulatedX509CertificateType (220)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons1__EncapsulatedX509CertificateType(struct soap*, std::vector<ns1__EncapsulatedX509CertificateType *> *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons1__EncapsulatedX509CertificateType(struct soap*, const std::vector<ns1__EncapsulatedX509CertificateType *> *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons1__EncapsulatedX509CertificateType(struct soap*, const char*, int, const std::vector<ns1__EncapsulatedX509CertificateType *> *, const char*);
-SOAP_FMAC3 std::vector<ns1__EncapsulatedX509CertificateType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons1__EncapsulatedX509CertificateType(struct soap*, const char*, std::vector<ns1__EncapsulatedX509CertificateType *> *, const char*);
-SOAP_FMAC1 std::vector<ns1__EncapsulatedX509CertificateType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons1__EncapsulatedX509CertificateType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons6__EncapsulatedX509CertificateType(struct soap*, std::vector<ns6__EncapsulatedX509CertificateType *> *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons6__EncapsulatedX509CertificateType(struct soap*, const std::vector<ns6__EncapsulatedX509CertificateType *> *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons6__EncapsulatedX509CertificateType(struct soap*, const char*, int, const std::vector<ns6__EncapsulatedX509CertificateType *> *, const char*);
+SOAP_FMAC3 std::vector<ns6__EncapsulatedX509CertificateType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons6__EncapsulatedX509CertificateType(struct soap*, const char*, std::vector<ns6__EncapsulatedX509CertificateType *> *, const char*);
+SOAP_FMAC1 std::vector<ns6__EncapsulatedX509CertificateType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons6__EncapsulatedX509CertificateType(struct soap*, int, const char*, const char*, size_t*);
 
-inline std::vector<ns1__EncapsulatedX509CertificateType *>  * soap_new_std__vectorTemplateOfPointerTons1__EncapsulatedX509CertificateType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons1__EncapsulatedX509CertificateType(soap, n, NULL, NULL, NULL); }
+inline std::vector<ns6__EncapsulatedX509CertificateType *>  * soap_new_std__vectorTemplateOfPointerTons6__EncapsulatedX509CertificateType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons6__EncapsulatedX509CertificateType(soap, n, NULL, NULL, NULL); }
 
-#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons1__OCSPRefType
-#define SOAP_TYPE_std__vectorTemplateOfPointerTons1__OCSPRefType (216)
+#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons6__OCSPRefType
+#define SOAP_TYPE_std__vectorTemplateOfPointerTons6__OCSPRefType (216)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons1__OCSPRefType(struct soap*, std::vector<ns1__OCSPRefType *> *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons1__OCSPRefType(struct soap*, const std::vector<ns1__OCSPRefType *> *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons1__OCSPRefType(struct soap*, const char*, int, const std::vector<ns1__OCSPRefType *> *, const char*);
-SOAP_FMAC3 std::vector<ns1__OCSPRefType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons1__OCSPRefType(struct soap*, const char*, std::vector<ns1__OCSPRefType *> *, const char*);
-SOAP_FMAC1 std::vector<ns1__OCSPRefType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons1__OCSPRefType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons6__OCSPRefType(struct soap*, std::vector<ns6__OCSPRefType *> *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons6__OCSPRefType(struct soap*, const std::vector<ns6__OCSPRefType *> *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons6__OCSPRefType(struct soap*, const char*, int, const std::vector<ns6__OCSPRefType *> *, const char*);
+SOAP_FMAC3 std::vector<ns6__OCSPRefType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons6__OCSPRefType(struct soap*, const char*, std::vector<ns6__OCSPRefType *> *, const char*);
+SOAP_FMAC1 std::vector<ns6__OCSPRefType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons6__OCSPRefType(struct soap*, int, const char*, const char*, size_t*);
 
-inline std::vector<ns1__OCSPRefType *>  * soap_new_std__vectorTemplateOfPointerTons1__OCSPRefType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons1__OCSPRefType(soap, n, NULL, NULL, NULL); }
+inline std::vector<ns6__OCSPRefType *>  * soap_new_std__vectorTemplateOfPointerTons6__OCSPRefType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons6__OCSPRefType(soap, n, NULL, NULL, NULL); }
 
-#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons1__CRLRefType
-#define SOAP_TYPE_std__vectorTemplateOfPointerTons1__CRLRefType (212)
+#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons6__CRLRefType
+#define SOAP_TYPE_std__vectorTemplateOfPointerTons6__CRLRefType (212)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons1__CRLRefType(struct soap*, std::vector<ns1__CRLRefType *> *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons1__CRLRefType(struct soap*, const std::vector<ns1__CRLRefType *> *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons1__CRLRefType(struct soap*, const char*, int, const std::vector<ns1__CRLRefType *> *, const char*);
-SOAP_FMAC3 std::vector<ns1__CRLRefType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons1__CRLRefType(struct soap*, const char*, std::vector<ns1__CRLRefType *> *, const char*);
-SOAP_FMAC1 std::vector<ns1__CRLRefType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons1__CRLRefType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons6__CRLRefType(struct soap*, std::vector<ns6__CRLRefType *> *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons6__CRLRefType(struct soap*, const std::vector<ns6__CRLRefType *> *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons6__CRLRefType(struct soap*, const char*, int, const std::vector<ns6__CRLRefType *> *, const char*);
+SOAP_FMAC3 std::vector<ns6__CRLRefType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons6__CRLRefType(struct soap*, const char*, std::vector<ns6__CRLRefType *> *, const char*);
+SOAP_FMAC1 std::vector<ns6__CRLRefType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons6__CRLRefType(struct soap*, int, const char*, const char*, size_t*);
 
-inline std::vector<ns1__CRLRefType *>  * soap_new_std__vectorTemplateOfPointerTons1__CRLRefType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons1__CRLRefType(soap, n, NULL, NULL, NULL); }
+inline std::vector<ns6__CRLRefType *>  * soap_new_std__vectorTemplateOfPointerTons6__CRLRefType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons6__CRLRefType(soap, n, NULL, NULL, NULL); }
 
-#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons1__CertType
-#define SOAP_TYPE_std__vectorTemplateOfPointerTons1__CertType (208)
+#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons6__CertType
+#define SOAP_TYPE_std__vectorTemplateOfPointerTons6__CertType (208)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons1__CertType(struct soap*, std::vector<ns1__CertType *> *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons1__CertType(struct soap*, const std::vector<ns1__CertType *> *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons1__CertType(struct soap*, const char*, int, const std::vector<ns1__CertType *> *, const char*);
-SOAP_FMAC3 std::vector<ns1__CertType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons1__CertType(struct soap*, const char*, std::vector<ns1__CertType *> *, const char*);
-SOAP_FMAC1 std::vector<ns1__CertType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons1__CertType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons6__CertType(struct soap*, std::vector<ns6__CertType *> *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons6__CertType(struct soap*, const std::vector<ns6__CertType *> *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons6__CertType(struct soap*, const char*, int, const std::vector<ns6__CertType *> *, const char*);
+SOAP_FMAC3 std::vector<ns6__CertType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons6__CertType(struct soap*, const char*, std::vector<ns6__CertType *> *, const char*);
+SOAP_FMAC1 std::vector<ns6__CertType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons6__CertType(struct soap*, int, const char*, const char*, size_t*);
 
-inline std::vector<ns1__CertType *>  * soap_new_std__vectorTemplateOfPointerTons1__CertType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons1__CertType(soap, n, NULL, NULL, NULL); }
+inline std::vector<ns6__CertType *>  * soap_new_std__vectorTemplateOfPointerTons6__CertType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons6__CertType(soap, n, NULL, NULL, NULL); }
 
-#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons1__ClaimedRoleType
-#define SOAP_TYPE_std__vectorTemplateOfPointerTons1__ClaimedRoleType (197)
+#ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons6__ClaimedRoleType
+#define SOAP_TYPE_std__vectorTemplateOfPointerTons6__ClaimedRoleType (197)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons1__ClaimedRoleType(struct soap*, std::vector<ns1__ClaimedRoleType *> *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons1__ClaimedRoleType(struct soap*, const std::vector<ns1__ClaimedRoleType *> *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons1__ClaimedRoleType(struct soap*, const char*, int, const std::vector<ns1__ClaimedRoleType *> *, const char*);
-SOAP_FMAC3 std::vector<ns1__ClaimedRoleType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons1__ClaimedRoleType(struct soap*, const char*, std::vector<ns1__ClaimedRoleType *> *, const char*);
-SOAP_FMAC1 std::vector<ns1__ClaimedRoleType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons1__ClaimedRoleType(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTons6__ClaimedRoleType(struct soap*, std::vector<ns6__ClaimedRoleType *> *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTons6__ClaimedRoleType(struct soap*, const std::vector<ns6__ClaimedRoleType *> *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTons6__ClaimedRoleType(struct soap*, const char*, int, const std::vector<ns6__ClaimedRoleType *> *, const char*);
+SOAP_FMAC3 std::vector<ns6__ClaimedRoleType *> * SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTons6__ClaimedRoleType(struct soap*, const char*, std::vector<ns6__ClaimedRoleType *> *, const char*);
+SOAP_FMAC1 std::vector<ns6__ClaimedRoleType *>  * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTons6__ClaimedRoleType(struct soap*, int, const char*, const char*, size_t*);
 
-inline std::vector<ns1__ClaimedRoleType *>  * soap_new_std__vectorTemplateOfPointerTons1__ClaimedRoleType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons1__ClaimedRoleType(soap, n, NULL, NULL, NULL); }
+inline std::vector<ns6__ClaimedRoleType *>  * soap_new_std__vectorTemplateOfPointerTons6__ClaimedRoleType(struct soap *soap, int n = -1) { return soap_instantiate_std__vectorTemplateOfPointerTons6__ClaimedRoleType(soap, n, NULL, NULL, NULL); }
 
 #ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons3__SubAttributeType
 #define SOAP_TYPE_std__vectorTemplateOfPointerTons3__SubAttributeType (184)

@@ -1349,6 +1349,10 @@ void GAPI::startGettingEntities() {
     QtConcurrent::run(this, &GAPI::getSCAPEntities);
 }
 
+void GAPI::startGettingCompanyAttributes() {
+    QtConcurrent::run(this, &GAPI::getSCAPCompanyAttributes);
+}
+
 
 void GAPI::startReadingPersoNotes() {
     QFuture<void> future = QtConcurrent::run(this, &GAPI::getPersoDataFile);
@@ -1366,7 +1370,80 @@ void GAPI::getSCAPEntities() {
     for (unsigned int i = 0; i!=entities.size(); i++)
         attributeSuppliers.append(QString::fromStdString(entities.at(i)->Name));
     
+    //TODO: emit signal for error
     emit signalSCAPEntitiesLoaded(attributeSuppliers);
+}
+
+std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes) {
+    std::vector<std::string> childrensList;
+
+    std::vector<ns5__SignatureType *> signatureAttributeList = attributes->SignedAttributes->ns3__SignatureAttribute;
+
+    for (uint i = 0; i < signatureAttributeList.size(); i++) {
+        ns5__SignatureType * signatureType = signatureAttributeList.at(i);
+        if(signatureType->ns5__Object.size() > 0)
+        {
+            ns5__ObjectType * signatureObject = signatureType->ns5__Object.at(0);
+            ns3__MainAttributeType * mainAttributeObject = signatureObject->union_ObjectType.ns3__Attribute->MainAttribute;
+
+            std::string description = mainAttributeObject->Description->c_str();
+
+            QString subAttributes(" (");
+            QString subAttributesValues;
+            for(uint subAttributePos = 0; subAttributePos < mainAttributeObject->SubAttributeList->SubAttribute.size(); subAttributePos++){
+                ns3__SubAttributeType * subAttribute = mainAttributeObject->SubAttributeList->SubAttribute.at(subAttributePos);
+
+                QString subDescription(subAttribute->Description->c_str());
+                QString subValue(subAttribute->Value->c_str());
+                subAttributesValues.append(subDescription + ": " + subValue + ", ");
+            }
+            // Chop 2 to remove last 2 chars (', ')
+            subAttributesValues.chop(2);
+            subAttributes.append(subAttributesValues + ")");
+
+            qDebug() << "Sub attributes : " << subAttributes;
+
+            description += subAttributes.toStdString();
+            childrensList.push_back(description.c_str());
+        }
+    }
+    return childrensList;
+}
+
+
+void GAPI::getSCAPCompanyAttributes() {
+
+    PTEID_EIDCard * card = NULL;
+    QVariantMap attribute_map;
+    getCardInstance(card);
+    if (card == NULL)
+        return;
+
+    std::vector<ns2__AttributesType *> attributes = scapServices.getCompanyAttributes(*card);
+
+
+    if (attributes.size() == 0)
+    {
+        //TODO: emit signal for error
+        //emit
+        return;
+    }
+
+    for(uint i = 0; i < attributes.size() ; i++)
+    {
+       std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
+       std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i));
+
+       if (childAttributes.size() > 1)
+       {
+           qDebug() << "TODO: multiple attributes from the same supplier is not supported yet...";
+       }
+
+       attribute_map.insert(QString::fromStdString(attrSupplier),
+                            QString::fromStdString(childAttributes.at(0)));
+    }
+
+    emit signalCompanyAttributesLoaded(attribute_map);
 }
 
 void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {

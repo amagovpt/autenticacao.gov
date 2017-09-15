@@ -62,7 +62,7 @@ std::vector<ns2__AttributesType *>
     return attributesType;
 }
 
-void ScapServices::getCompanyAttributes(eIDMW::PTEID_EIDCard &card) {
+std::vector<ns2__AttributesType *> ScapServices::getCompanyAttributes(eIDMW::PTEID_EIDCard &card) {
 
     std::vector<ns2__AttributesType *> result;
     bool allEnterprises = true;
@@ -191,4 +191,5 @@ void ScapServices::getCompanyAttributes(eIDMW::PTEID_EIDCard &card) {
         qDebug() << "reqAttributeSupplierListType ERROR << - TODO: improve error handling";
     }
 
+    return result;
 }

@@ -15,12 +15,16 @@ A commercial use license is available from Genivia Inc., contact@genivia.com
 #include <list>
 #include <vector>
 #include <set>
+#define SOAP_NAMESPACE_OF_ns1	"http://www.cartaodecidadao.pt/ccc/sccc/services/AttributeClientService"
+#define SOAP_NAMESPACE_OF_ns2	"http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeClientService"
 #define SOAP_NAMESPACE_OF_ns5	"http://www.w3.org/2000/09/xmldsig#"
-#define SOAP_NAMESPACE_OF_ns1	"http://uri.etsi.org/01903/v1.3.2#"
+#define SOAP_NAMESPACE_OF_ns3	"http://www.cartaodecidadao.pt/ccc/commons/messages/Attribute"
+#define SOAP_NAMESPACE_OF_ns4	"http://www.cartaodecidadao.pt/ccc/commons/messages/Types"
+#define SOAP_NAMESPACE_OF_ns6	"http://uri.etsi.org/01903/v1.3.2#"
 #define SOAP_NAMESPACE_OF_ns7	"http://www.cartaodecidadao.pt/ccc/commons/messages/SVG"
-#define SOAP_NAMESPACE_OF_ns2	"http://www.cartaodecidadao.pt/ccc/sccc/services/AttributeSupplierService"
-#define SOAP_NAMESPACE_OF_ns3	"http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeSupplierService"
-#define SOAP_NAMESPACE_OF_ns4	"http://www.cartaodecidadao.pt/ccc/sccc/services/PDFSignature"
+#define SOAP_NAMESPACE_OF_ns8	"http://www.cartaodecidadao.pt/ccc/sccc/services/AttributeSupplierService"
+#define SOAP_NAMESPACE_OF_ns9	"http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeSupplierService"
+#define SOAP_NAMESPACE_OF_pdf	"http://www.cartaodecidadao.pt/ccc/sccc/services/PDFSignature"
 #define SOAP_WSA_200408
 
 #ifndef SCAPStub_H
@@ -39,13 +43,13 @@ A commercial use license is available from Genivia Inc., contact@genivia.com
 
 
 /* SCAP-Services.h:736 */
-#ifndef SOAP_TYPE_ns4__SignatureOrientationEnumType
-#define SOAP_TYPE_ns4__SignatureOrientationEnumType (134)
-/* ns4:SignatureOrientationEnumType */
-enum ns4__SignatureOrientationEnumType
+#ifndef SOAP_TYPE_pdf__SignatureOrientationEnumType
+#define SOAP_TYPE_pdf__SignatureOrientationEnumType (134)
+/* pdf:SignatureOrientationEnumType */
+enum pdf__SignatureOrientationEnumType
 {
-	ns4__SignatureOrientationEnumType__LANDSCAPE = 0,
-	ns4__SignatureOrientationEnumType__PORTRAIT = 1
+	pdf__SignatureOrientationEnumType__LANDSCAPE = 0,
+	pdf__SignatureOrientationEnumType__PORTRAIT = 1
 };
 #endif
 
@@ -121,64 +125,64 @@ class ns3__LegalActListType;	/* SCAP-Services.h:321 */
 class ns3__SubAttributeListType;	/* SCAP-Services.h:324 */
 class ns3__SubAttributeType;	/* SCAP-Services.h:327 */
 class ns3__ResponseCodeStatusType;	/* SCAP-Services.h:330 */
-class ns1__QualifyingPropertiesType;	/* SCAP-Services.h:333 */
-class ns1__SignedPropertiesType;	/* SCAP-Services.h:336 */
-class ns1__SignedSignaturePropertiesType;	/* SCAP-Services.h:339 */
-class ns1__SigningCertificateType;	/* SCAP-Services.h:342 */
-class ns1__CertType;	/* SCAP-Services.h:345 */
-class ns1__CertDigestType;	/* SCAP-Services.h:348 */
-class ns1__IssuerSerialType;	/* SCAP-Services.h:351 */
-class ns1__SignerRoleType;	/* SCAP-Services.h:354 */
-class ns1__ClaimedRolesListType;	/* SCAP-Services.h:357 */
-class ns1__ClaimedRoleType;	/* SCAP-Services.h:360 */
-class ns1__UnsignedPropertiesType;	/* SCAP-Services.h:363 */
-class ns1__UnsignedSignaturePropertiesType;	/* SCAP-Services.h:366 */
-class ns1__CounterSignatureType;	/* SCAP-Services.h:369 */
-class ns1__SignatureTimeStampType;	/* SCAP-Services.h:372 */
-class ns1__CompleteCertificateRefsType;	/* SCAP-Services.h:375 */
-class ns1__CertRefsType;	/* SCAP-Services.h:378 */
-class ns1__CompleteRevocationRefsType;	/* SCAP-Services.h:381 */
-class ns1__CRLRefsType;	/* SCAP-Services.h:384 */
-class ns1__CRLRefType;	/* SCAP-Services.h:387 */
-class ns1__DigestAlgAndValueType;	/* SCAP-Services.h:390 */
-class ns1__CRLIdentifierType;	/* SCAP-Services.h:393 */
-class ns1__OCSPRefsType;	/* SCAP-Services.h:396 */
-class ns1__OCSPRefType;	/* SCAP-Services.h:399 */
-class ns1__OCSPIdentifierType;	/* SCAP-Services.h:402 */
-class ns1__ResponderIDType;	/* SCAP-Services.h:405 */
-class ns1__SigAndRefsTimeStampType;	/* SCAP-Services.h:408 */
-class ns1__CertificateValuesType;	/* SCAP-Services.h:411 */
-class ns1__RevocationValuesType;	/* SCAP-Services.h:417 */
-class ns1__CRLValuesType;	/* SCAP-Services.h:420 */
-class ns1__OCSPValuesType;	/* SCAP-Services.h:426 */
-class ns1__ArchiveTimeStampType;	/* SCAP-Services.h:432 */
+class ns6__QualifyingPropertiesType;	/* SCAP-Services.h:333 */
+class ns6__SignedPropertiesType;	/* SCAP-Services.h:336 */
+class ns6__SignedSignaturePropertiesType;	/* SCAP-Services.h:339 */
+class ns6__SigningCertificateType;	/* SCAP-Services.h:342 */
+class ns6__CertType;	/* SCAP-Services.h:345 */
+class ns6__CertDigestType;	/* SCAP-Services.h:348 */
+class ns6__IssuerSerialType;	/* SCAP-Services.h:351 */
+class ns6__SignerRoleType;	/* SCAP-Services.h:354 */
+class ns6__ClaimedRolesListType;	/* SCAP-Services.h:357 */
+class ns6__ClaimedRoleType;	/* SCAP-Services.h:360 */
+class ns6__UnsignedPropertiesType;	/* SCAP-Services.h:363 */
+class ns6__UnsignedSignaturePropertiesType;	/* SCAP-Services.h:366 */
+class ns6__CounterSignatureType;	/* SCAP-Services.h:369 */
+class ns6__SignatureTimeStampType;	/* SCAP-Services.h:372 */
+class ns6__CompleteCertificateRefsType;	/* SCAP-Services.h:375 */
+class ns6__CertRefsType;	/* SCAP-Services.h:378 */
+class ns6__CompleteRevocationRefsType;	/* SCAP-Services.h:381 */
+class ns6__CRLRefsType;	/* SCAP-Services.h:384 */
+class ns6__CRLRefType;	/* SCAP-Services.h:387 */
+class ns6__DigestAlgAndValueType;	/* SCAP-Services.h:390 */
+class ns6__CRLIdentifierType;	/* SCAP-Services.h:393 */
+class ns6__OCSPRefsType;	/* SCAP-Services.h:396 */
+class ns6__OCSPRefType;	/* SCAP-Services.h:399 */
+class ns6__OCSPIdentifierType;	/* SCAP-Services.h:402 */
+class ns6__ResponderIDType;	/* SCAP-Services.h:405 */
+class ns6__SigAndRefsTimeStampType;	/* SCAP-Services.h:408 */
+class ns6__CertificateValuesType;	/* SCAP-Services.h:411 */
+class ns6__RevocationValuesType;	/* SCAP-Services.h:417 */
+class ns6__CRLValuesType;	/* SCAP-Services.h:420 */
+class ns6__OCSPValuesType;	/* SCAP-Services.h:426 */
+class ns6__ArchiveTimeStampType;	/* SCAP-Services.h:432 */
 class ns7__SVGListType;	/* SCAP-Services.h:450 */
-class ns3__AttributeSupplierResponseType;	/* SCAP-Services.h:453 */
-class ns4__SignRequest;	/* SCAP-Services.h:456 */
-class ns4__PersonalDataType;	/* SCAP-Services.h:459 */
-class ns4__AttributeListType;	/* SCAP-Services.h:462 */
-class ns4__AttributeType;	/* SCAP-Services.h:465 */
-class ns4__AttributeSupplierType;	/* SCAP-Services.h:468 */
-class ns4__MainAttributeType;	/* SCAP-Services.h:471 */
-class ns4__LegalActListType;	/* SCAP-Services.h:474 */
-class ns4__SubAttributeListType;	/* SCAP-Services.h:477 */
-class ns4__SubAttributeType;	/* SCAP-Services.h:480 */
-class ns4__SignResponse;	/* SCAP-Services.h:483 */
-class ns4__Status;	/* SCAP-Services.h:486 */
+class ns9__AttributeSupplierResponseType;	/* SCAP-Services.h:453 */
+class pdf__SignRequest;	/* SCAP-Services.h:456 */
+class pdf__PersonalDataType;	/* SCAP-Services.h:459 */
+class pdf__AttributeListType;	/* SCAP-Services.h:462 */
+class pdf__AttributeType;	/* SCAP-Services.h:465 */
+class pdf__AttributeSupplierType;	/* SCAP-Services.h:468 */
+class pdf__MainAttributeType;	/* SCAP-Services.h:471 */
+class pdf__LegalActListType;	/* SCAP-Services.h:474 */
+class pdf__SubAttributeListType;	/* SCAP-Services.h:477 */
+class pdf__SubAttributeType;	/* SCAP-Services.h:480 */
+class pdf__SignResponse;	/* SCAP-Services.h:483 */
+class pdf__Status;	/* SCAP-Services.h:486 */
 class ns5__X509CertificateType;	/* SCAP-Services.h:294 */
 class ns5__DigestValueType;	/* SCAP-Services.h:297 */
 class ns5__SignatureValueType;	/* SCAP-Services.h:300 */
-class ns1__EncapsulatedX509CertificateType;	/* SCAP-Services.h:414 */
-class ns1__EncapsulatedCRLValueType;	/* SCAP-Services.h:423 */
-class ns1__EncapsulatedOCSPValueType;	/* SCAP-Services.h:429 */
+class ns6__EncapsulatedX509CertificateType;	/* SCAP-Services.h:414 */
+class ns6__EncapsulatedCRLValueType;	/* SCAP-Services.h:423 */
+class ns6__EncapsulatedOCSPValueType;	/* SCAP-Services.h:429 */
 struct wsa__EndpointReferenceType;	/* wsa.h:94 */
 struct wsa__ReferencePropertiesType;	/* wsa.h:97 */
 struct wsa__ReferenceParametersType;	/* wsa.h:100 */
 struct wsa__ServiceNameType;	/* wsa.h:103 */
 struct wsa__Relationship;	/* wsa.h:106 */
 struct __ns1__Attributes;	/* SCAP-Services.h:3251 */
-struct __ns2__AttributeSuppliers;	/* SCAP-Services.h:3332 */
-struct __ns4__Sign;	/* SCAP-Services.h:3416 */
+struct __ns8__AttributeSuppliers;	/* SCAP-Services.h:3332 */
+struct __pdf__Sign;	/* SCAP-Services.h:3416 */
 
 /* SCAP-Services.h:197 */
 #ifndef SOAP_TYPE_xsd__base64Binary
@@ -959,8 +963,8 @@ public:
 /* xsd:choice complex type: */
 union _ns5__union_ObjectType
 {
-#define SOAP_UNION__ns5__union_ObjectType_ns1__QualifyingProperties	(1)
-	ns1__QualifyingPropertiesType *ns1__QualifyingProperties;
+#define SOAP_UNION__ns5__union_ObjectType_ns6__QualifyingProperties	(1)
+	ns6__QualifyingPropertiesType *ns6__QualifyingProperties;
 #define SOAP_UNION__ns5__union_ObjectType_ns7__SVGList	(2)
 	ns7__SVGListType *ns7__SVGList;
 #define SOAP_UNION__ns5__union_ObjectType_ns3__Attribute	(3)
@@ -1338,18 +1342,18 @@ public:
 #endif
 
 /* SCAP-Services.h:333 */
-#ifndef SOAP_TYPE_ns1__QualifyingPropertiesType
-#define SOAP_TYPE_ns1__QualifyingPropertiesType (57)
-/* ns1:QualifyingPropertiesType complex type: */
-class SOAP_CMAC ns1__QualifyingPropertiesType
+#ifndef SOAP_TYPE_ns6__QualifyingPropertiesType
+#define SOAP_TYPE_ns6__QualifyingPropertiesType (57)
+/* ns6:QualifyingPropertiesType complex type: */
+class SOAP_CMAC ns6__QualifyingPropertiesType
 {
 public:
-	ns1__SignedPropertiesType *ns1__SignedProperties;	/* required element of XSD type ns1:SignedPropertiesType */
-	ns1__UnsignedPropertiesType *ns1__UnsignedProperties;	/* optional element of XSD type ns1:UnsignedPropertiesType */
+	ns6__SignedPropertiesType *ns6__SignedProperties;	/* required element of XSD type ns6:SignedPropertiesType */
+	ns6__UnsignedPropertiesType *ns6__UnsignedProperties;	/* optional element of XSD type ns6:UnsignedPropertiesType */
 	std::string Target;	/* required attribute of XSD type xsd:anyURI */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__QualifyingPropertiesType (57)
+	/// Return the unique type ID value SOAP_TYPE_ns6__QualifyingPropertiesType (57)
 	virtual int soap_type(void) const { return 57; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1363,26 +1367,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__QualifyingPropertiesType, default initialized and not managed by a soap context
-	virtual ns1__QualifyingPropertiesType *soap_alloc(void) const { return SOAP_NEW(ns1__QualifyingPropertiesType); }
-	         ns1__QualifyingPropertiesType() { ns1__QualifyingPropertiesType::soap_default(NULL); }
-	virtual ~ns1__QualifyingPropertiesType() { }
-	friend SOAP_FMAC1 ns1__QualifyingPropertiesType * SOAP_FMAC2 soap_instantiate_ns1__QualifyingPropertiesType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__QualifyingPropertiesType, default initialized and not managed by a soap context
+	virtual ns6__QualifyingPropertiesType *soap_alloc(void) const { return SOAP_NEW(ns6__QualifyingPropertiesType); }
+	         ns6__QualifyingPropertiesType() { ns6__QualifyingPropertiesType::soap_default(NULL); }
+	virtual ~ns6__QualifyingPropertiesType() { }
+	friend SOAP_FMAC1 ns6__QualifyingPropertiesType * SOAP_FMAC2 soap_instantiate_ns6__QualifyingPropertiesType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:336 */
-#ifndef SOAP_TYPE_ns1__SignedPropertiesType
-#define SOAP_TYPE_ns1__SignedPropertiesType (58)
-/* ns1:SignedPropertiesType complex type: */
-class SOAP_CMAC ns1__SignedPropertiesType
+#ifndef SOAP_TYPE_ns6__SignedPropertiesType
+#define SOAP_TYPE_ns6__SignedPropertiesType (58)
+/* ns6:SignedPropertiesType complex type: */
+class SOAP_CMAC ns6__SignedPropertiesType
 {
 public:
-	ns1__SignedSignaturePropertiesType *ns1__SignedSignatureProperties;	/* required element of XSD type ns1:SignedSignaturePropertiesType */
+	ns6__SignedSignaturePropertiesType *ns6__SignedSignatureProperties;	/* required element of XSD type ns6:SignedSignaturePropertiesType */
 	std::string Id;	/* required attribute of XSD type xsd:ID */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__SignedPropertiesType (58)
+	/// Return the unique type ID value SOAP_TYPE_ns6__SignedPropertiesType (58)
 	virtual int soap_type(void) const { return 58; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1396,27 +1400,27 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__SignedPropertiesType, default initialized and not managed by a soap context
-	virtual ns1__SignedPropertiesType *soap_alloc(void) const { return SOAP_NEW(ns1__SignedPropertiesType); }
-	         ns1__SignedPropertiesType() { ns1__SignedPropertiesType::soap_default(NULL); }
-	virtual ~ns1__SignedPropertiesType() { }
-	friend SOAP_FMAC1 ns1__SignedPropertiesType * SOAP_FMAC2 soap_instantiate_ns1__SignedPropertiesType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__SignedPropertiesType, default initialized and not managed by a soap context
+	virtual ns6__SignedPropertiesType *soap_alloc(void) const { return SOAP_NEW(ns6__SignedPropertiesType); }
+	         ns6__SignedPropertiesType() { ns6__SignedPropertiesType::soap_default(NULL); }
+	virtual ~ns6__SignedPropertiesType() { }
+	friend SOAP_FMAC1 ns6__SignedPropertiesType * SOAP_FMAC2 soap_instantiate_ns6__SignedPropertiesType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:339 */
-#ifndef SOAP_TYPE_ns1__SignedSignaturePropertiesType
-#define SOAP_TYPE_ns1__SignedSignaturePropertiesType (59)
-/* ns1:SignedSignaturePropertiesType complex type: */
-class SOAP_CMAC ns1__SignedSignaturePropertiesType
+#ifndef SOAP_TYPE_ns6__SignedSignaturePropertiesType
+#define SOAP_TYPE_ns6__SignedSignaturePropertiesType (59)
+/* ns6:SignedSignaturePropertiesType complex type: */
+class SOAP_CMAC ns6__SignedSignaturePropertiesType
 {
 public:
-	time_t ns1__SigningTime;	/* required element of XSD type ns1:SigningTimeType */
-	ns1__SigningCertificateType *ns1__SigningCertificate;	/* required element of XSD type ns1:SigningCertificateType */
-	ns1__SignerRoleType *ns1__SignerRole;	/* optional element of XSD type ns1:SignerRoleType */
+	time_t ns6__SigningTime;	/* required element of XSD type ns6:SigningTimeType */
+	ns6__SigningCertificateType *ns6__SigningCertificate;	/* required element of XSD type ns6:SigningCertificateType */
+	ns6__SignerRoleType *ns6__SignerRole;	/* optional element of XSD type ns6:SignerRoleType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__SignedSignaturePropertiesType (59)
+	/// Return the unique type ID value SOAP_TYPE_ns6__SignedSignaturePropertiesType (59)
 	virtual int soap_type(void) const { return 59; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1430,25 +1434,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__SignedSignaturePropertiesType, default initialized and not managed by a soap context
-	virtual ns1__SignedSignaturePropertiesType *soap_alloc(void) const { return SOAP_NEW(ns1__SignedSignaturePropertiesType); }
-	         ns1__SignedSignaturePropertiesType() { ns1__SignedSignaturePropertiesType::soap_default(NULL); }
-	virtual ~ns1__SignedSignaturePropertiesType() { }
-	friend SOAP_FMAC1 ns1__SignedSignaturePropertiesType * SOAP_FMAC2 soap_instantiate_ns1__SignedSignaturePropertiesType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__SignedSignaturePropertiesType, default initialized and not managed by a soap context
+	virtual ns6__SignedSignaturePropertiesType *soap_alloc(void) const { return SOAP_NEW(ns6__SignedSignaturePropertiesType); }
+	         ns6__SignedSignaturePropertiesType() { ns6__SignedSignaturePropertiesType::soap_default(NULL); }
+	virtual ~ns6__SignedSignaturePropertiesType() { }
+	friend SOAP_FMAC1 ns6__SignedSignaturePropertiesType * SOAP_FMAC2 soap_instantiate_ns6__SignedSignaturePropertiesType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:342 */
-#ifndef SOAP_TYPE_ns1__SigningCertificateType
-#define SOAP_TYPE_ns1__SigningCertificateType (60)
-/* ns1:SigningCertificateType complex type: */
-class SOAP_CMAC ns1__SigningCertificateType
+#ifndef SOAP_TYPE_ns6__SigningCertificateType
+#define SOAP_TYPE_ns6__SigningCertificateType (60)
+/* ns6:SigningCertificateType complex type: */
+class SOAP_CMAC ns6__SigningCertificateType
 {
 public:
-	ns1__CertType *ns1__Cert;	/* required element of XSD type ns1:CertType */
+	ns6__CertType *ns6__Cert;	/* required element of XSD type ns6:CertType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__SigningCertificateType (60)
+	/// Return the unique type ID value SOAP_TYPE_ns6__SigningCertificateType (60)
 	virtual int soap_type(void) const { return 60; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1462,26 +1466,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__SigningCertificateType, default initialized and not managed by a soap context
-	virtual ns1__SigningCertificateType *soap_alloc(void) const { return SOAP_NEW(ns1__SigningCertificateType); }
-	         ns1__SigningCertificateType() { ns1__SigningCertificateType::soap_default(NULL); }
-	virtual ~ns1__SigningCertificateType() { }
-	friend SOAP_FMAC1 ns1__SigningCertificateType * SOAP_FMAC2 soap_instantiate_ns1__SigningCertificateType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__SigningCertificateType, default initialized and not managed by a soap context
+	virtual ns6__SigningCertificateType *soap_alloc(void) const { return SOAP_NEW(ns6__SigningCertificateType); }
+	         ns6__SigningCertificateType() { ns6__SigningCertificateType::soap_default(NULL); }
+	virtual ~ns6__SigningCertificateType() { }
+	friend SOAP_FMAC1 ns6__SigningCertificateType * SOAP_FMAC2 soap_instantiate_ns6__SigningCertificateType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:345 */
-#ifndef SOAP_TYPE_ns1__CertType
-#define SOAP_TYPE_ns1__CertType (61)
-/* ns1:CertType complex type: */
-class SOAP_CMAC ns1__CertType
+#ifndef SOAP_TYPE_ns6__CertType
+#define SOAP_TYPE_ns6__CertType (61)
+/* ns6:CertType complex type: */
+class SOAP_CMAC ns6__CertType
 {
 public:
-	ns1__CertDigestType *ns1__CertDigest;	/* required element of XSD type ns1:CertDigestType */
-	ns1__IssuerSerialType *ns1__IssuerSerial;	/* required element of XSD type ns1:IssuerSerialType */
+	ns6__CertDigestType *ns6__CertDigest;	/* required element of XSD type ns6:CertDigestType */
+	ns6__IssuerSerialType *ns6__IssuerSerial;	/* required element of XSD type ns6:IssuerSerialType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__CertType (61)
+	/// Return the unique type ID value SOAP_TYPE_ns6__CertType (61)
 	virtual int soap_type(void) const { return 61; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1495,26 +1499,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__CertType, default initialized and not managed by a soap context
-	virtual ns1__CertType *soap_alloc(void) const { return SOAP_NEW(ns1__CertType); }
-	         ns1__CertType() { ns1__CertType::soap_default(NULL); }
-	virtual ~ns1__CertType() { }
-	friend SOAP_FMAC1 ns1__CertType * SOAP_FMAC2 soap_instantiate_ns1__CertType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__CertType, default initialized and not managed by a soap context
+	virtual ns6__CertType *soap_alloc(void) const { return SOAP_NEW(ns6__CertType); }
+	         ns6__CertType() { ns6__CertType::soap_default(NULL); }
+	virtual ~ns6__CertType() { }
+	friend SOAP_FMAC1 ns6__CertType * SOAP_FMAC2 soap_instantiate_ns6__CertType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:348 */
-#ifndef SOAP_TYPE_ns1__CertDigestType
-#define SOAP_TYPE_ns1__CertDigestType (62)
-/* ns1:CertDigestType complex type: */
-class SOAP_CMAC ns1__CertDigestType
+#ifndef SOAP_TYPE_ns6__CertDigestType
+#define SOAP_TYPE_ns6__CertDigestType (62)
+/* ns6:CertDigestType complex type: */
+class SOAP_CMAC ns6__CertDigestType
 {
 public:
 	ns5__DigestMethodType *ns5__DigestMethod;	/* required element of XSD type ns5:DigestMethodType */
 	ns5__DigestValueType *ns5__DigestValue;	/* required element of XSD type ns5:DigestValueType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__CertDigestType (62)
+	/// Return the unique type ID value SOAP_TYPE_ns6__CertDigestType (62)
 	virtual int soap_type(void) const { return 62; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1528,26 +1532,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__CertDigestType, default initialized and not managed by a soap context
-	virtual ns1__CertDigestType *soap_alloc(void) const { return SOAP_NEW(ns1__CertDigestType); }
-	         ns1__CertDigestType() { ns1__CertDigestType::soap_default(NULL); }
-	virtual ~ns1__CertDigestType() { }
-	friend SOAP_FMAC1 ns1__CertDigestType * SOAP_FMAC2 soap_instantiate_ns1__CertDigestType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__CertDigestType, default initialized and not managed by a soap context
+	virtual ns6__CertDigestType *soap_alloc(void) const { return SOAP_NEW(ns6__CertDigestType); }
+	         ns6__CertDigestType() { ns6__CertDigestType::soap_default(NULL); }
+	virtual ~ns6__CertDigestType() { }
+	friend SOAP_FMAC1 ns6__CertDigestType * SOAP_FMAC2 soap_instantiate_ns6__CertDigestType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:351 */
-#ifndef SOAP_TYPE_ns1__IssuerSerialType
-#define SOAP_TYPE_ns1__IssuerSerialType (63)
-/* ns1:IssuerSerialType complex type: */
-class SOAP_CMAC ns1__IssuerSerialType
+#ifndef SOAP_TYPE_ns6__IssuerSerialType
+#define SOAP_TYPE_ns6__IssuerSerialType (63)
+/* ns6:IssuerSerialType complex type: */
+class SOAP_CMAC ns6__IssuerSerialType
 {
 public:
 	std::string ns5__X509IssuerName;	/* required element of XSD type ns5:X509IssuerNameType */
 	std::string ns5__X509SerialNumber;	/* required element of XSD type ns5:X509SerialNumberType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__IssuerSerialType (63)
+	/// Return the unique type ID value SOAP_TYPE_ns6__IssuerSerialType (63)
 	virtual int soap_type(void) const { return 63; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1561,25 +1565,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__IssuerSerialType, default initialized and not managed by a soap context
-	virtual ns1__IssuerSerialType *soap_alloc(void) const { return SOAP_NEW(ns1__IssuerSerialType); }
-	         ns1__IssuerSerialType() { ns1__IssuerSerialType::soap_default(NULL); }
-	virtual ~ns1__IssuerSerialType() { }
-	friend SOAP_FMAC1 ns1__IssuerSerialType * SOAP_FMAC2 soap_instantiate_ns1__IssuerSerialType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__IssuerSerialType, default initialized and not managed by a soap context
+	virtual ns6__IssuerSerialType *soap_alloc(void) const { return SOAP_NEW(ns6__IssuerSerialType); }
+	         ns6__IssuerSerialType() { ns6__IssuerSerialType::soap_default(NULL); }
+	virtual ~ns6__IssuerSerialType() { }
+	friend SOAP_FMAC1 ns6__IssuerSerialType * SOAP_FMAC2 soap_instantiate_ns6__IssuerSerialType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:354 */
-#ifndef SOAP_TYPE_ns1__SignerRoleType
-#define SOAP_TYPE_ns1__SignerRoleType (64)
-/* ns1:SignerRoleType complex type: */
-class SOAP_CMAC ns1__SignerRoleType
+#ifndef SOAP_TYPE_ns6__SignerRoleType
+#define SOAP_TYPE_ns6__SignerRoleType (64)
+/* ns6:SignerRoleType complex type: */
+class SOAP_CMAC ns6__SignerRoleType
 {
 public:
-	ns1__ClaimedRolesListType *ns1__ClaimedRoles;	/* required element of XSD type ns1:ClaimedRolesListType */
+	ns6__ClaimedRolesListType *ns6__ClaimedRoles;	/* required element of XSD type ns6:ClaimedRolesListType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__SignerRoleType (64)
+	/// Return the unique type ID value SOAP_TYPE_ns6__SignerRoleType (64)
 	virtual int soap_type(void) const { return 64; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1593,25 +1597,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__SignerRoleType, default initialized and not managed by a soap context
-	virtual ns1__SignerRoleType *soap_alloc(void) const { return SOAP_NEW(ns1__SignerRoleType); }
-	         ns1__SignerRoleType() { ns1__SignerRoleType::soap_default(NULL); }
-	virtual ~ns1__SignerRoleType() { }
-	friend SOAP_FMAC1 ns1__SignerRoleType * SOAP_FMAC2 soap_instantiate_ns1__SignerRoleType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__SignerRoleType, default initialized and not managed by a soap context
+	virtual ns6__SignerRoleType *soap_alloc(void) const { return SOAP_NEW(ns6__SignerRoleType); }
+	         ns6__SignerRoleType() { ns6__SignerRoleType::soap_default(NULL); }
+	virtual ~ns6__SignerRoleType() { }
+	friend SOAP_FMAC1 ns6__SignerRoleType * SOAP_FMAC2 soap_instantiate_ns6__SignerRoleType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:357 */
-#ifndef SOAP_TYPE_ns1__ClaimedRolesListType
-#define SOAP_TYPE_ns1__ClaimedRolesListType (65)
-/* ns1:ClaimedRolesListType complex type: */
-class SOAP_CMAC ns1__ClaimedRolesListType
+#ifndef SOAP_TYPE_ns6__ClaimedRolesListType
+#define SOAP_TYPE_ns6__ClaimedRolesListType (65)
+/* ns6:ClaimedRolesListType complex type: */
+class SOAP_CMAC ns6__ClaimedRolesListType
 {
 public:
-	std::vector<ns1__ClaimedRoleType *> ns1__ClaimedRole;	/* required element of XSD type ns1:ClaimedRoleType */
+	std::vector<ns6__ClaimedRoleType *> ns6__ClaimedRole;	/* required element of XSD type ns6:ClaimedRoleType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__ClaimedRolesListType (65)
+	/// Return the unique type ID value SOAP_TYPE_ns6__ClaimedRolesListType (65)
 	virtual int soap_type(void) const { return 65; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1625,25 +1629,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__ClaimedRolesListType, default initialized and not managed by a soap context
-	virtual ns1__ClaimedRolesListType *soap_alloc(void) const { return SOAP_NEW(ns1__ClaimedRolesListType); }
-	         ns1__ClaimedRolesListType() { ns1__ClaimedRolesListType::soap_default(NULL); }
-	virtual ~ns1__ClaimedRolesListType() { }
-	friend SOAP_FMAC1 ns1__ClaimedRolesListType * SOAP_FMAC2 soap_instantiate_ns1__ClaimedRolesListType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__ClaimedRolesListType, default initialized and not managed by a soap context
+	virtual ns6__ClaimedRolesListType *soap_alloc(void) const { return SOAP_NEW(ns6__ClaimedRolesListType); }
+	         ns6__ClaimedRolesListType() { ns6__ClaimedRolesListType::soap_default(NULL); }
+	virtual ~ns6__ClaimedRolesListType() { }
+	friend SOAP_FMAC1 ns6__ClaimedRolesListType * SOAP_FMAC2 soap_instantiate_ns6__ClaimedRolesListType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:360 */
-#ifndef SOAP_TYPE_ns1__ClaimedRoleType
-#define SOAP_TYPE_ns1__ClaimedRoleType (66)
-/* ns1:ClaimedRoleType complex type: */
-class SOAP_CMAC ns1__ClaimedRoleType
+#ifndef SOAP_TYPE_ns6__ClaimedRoleType
+#define SOAP_TYPE_ns6__ClaimedRoleType (66)
+/* ns6:ClaimedRoleType complex type: */
+class SOAP_CMAC ns6__ClaimedRoleType
 {
 public:
 	ns5__SignatureType *ns3__SignatureAttribute;	/* required element of XSD type ns5:SignatureType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__ClaimedRoleType (66)
+	/// Return the unique type ID value SOAP_TYPE_ns6__ClaimedRoleType (66)
 	virtual int soap_type(void) const { return 66; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1657,25 +1661,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__ClaimedRoleType, default initialized and not managed by a soap context
-	virtual ns1__ClaimedRoleType *soap_alloc(void) const { return SOAP_NEW(ns1__ClaimedRoleType); }
-	         ns1__ClaimedRoleType() { ns1__ClaimedRoleType::soap_default(NULL); }
-	virtual ~ns1__ClaimedRoleType() { }
-	friend SOAP_FMAC1 ns1__ClaimedRoleType * SOAP_FMAC2 soap_instantiate_ns1__ClaimedRoleType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__ClaimedRoleType, default initialized and not managed by a soap context
+	virtual ns6__ClaimedRoleType *soap_alloc(void) const { return SOAP_NEW(ns6__ClaimedRoleType); }
+	         ns6__ClaimedRoleType() { ns6__ClaimedRoleType::soap_default(NULL); }
+	virtual ~ns6__ClaimedRoleType() { }
+	friend SOAP_FMAC1 ns6__ClaimedRoleType * SOAP_FMAC2 soap_instantiate_ns6__ClaimedRoleType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:363 */
-#ifndef SOAP_TYPE_ns1__UnsignedPropertiesType
-#define SOAP_TYPE_ns1__UnsignedPropertiesType (67)
-/* ns1:UnsignedPropertiesType complex type: */
-class SOAP_CMAC ns1__UnsignedPropertiesType
+#ifndef SOAP_TYPE_ns6__UnsignedPropertiesType
+#define SOAP_TYPE_ns6__UnsignedPropertiesType (67)
+/* ns6:UnsignedPropertiesType complex type: */
+class SOAP_CMAC ns6__UnsignedPropertiesType
 {
 public:
-	ns1__UnsignedSignaturePropertiesType *ns1__UnsignedSignatureProperties;	/* required element of XSD type ns1:UnsignedSignaturePropertiesType */
+	ns6__UnsignedSignaturePropertiesType *ns6__UnsignedSignatureProperties;	/* required element of XSD type ns6:UnsignedSignaturePropertiesType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__UnsignedPropertiesType (67)
+	/// Return the unique type ID value SOAP_TYPE_ns6__UnsignedPropertiesType (67)
 	virtual int soap_type(void) const { return 67; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1689,32 +1693,32 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__UnsignedPropertiesType, default initialized and not managed by a soap context
-	virtual ns1__UnsignedPropertiesType *soap_alloc(void) const { return SOAP_NEW(ns1__UnsignedPropertiesType); }
-	         ns1__UnsignedPropertiesType() { ns1__UnsignedPropertiesType::soap_default(NULL); }
-	virtual ~ns1__UnsignedPropertiesType() { }
-	friend SOAP_FMAC1 ns1__UnsignedPropertiesType * SOAP_FMAC2 soap_instantiate_ns1__UnsignedPropertiesType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__UnsignedPropertiesType, default initialized and not managed by a soap context
+	virtual ns6__UnsignedPropertiesType *soap_alloc(void) const { return SOAP_NEW(ns6__UnsignedPropertiesType); }
+	         ns6__UnsignedPropertiesType() { ns6__UnsignedPropertiesType::soap_default(NULL); }
+	virtual ~ns6__UnsignedPropertiesType() { }
+	friend SOAP_FMAC1 ns6__UnsignedPropertiesType * SOAP_FMAC2 soap_instantiate_ns6__UnsignedPropertiesType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:366 */
-#ifndef SOAP_TYPE_ns1__UnsignedSignaturePropertiesType
-#define SOAP_TYPE_ns1__UnsignedSignaturePropertiesType (68)
-/* ns1:UnsignedSignaturePropertiesType complex type: */
-class SOAP_CMAC ns1__UnsignedSignaturePropertiesType
+#ifndef SOAP_TYPE_ns6__UnsignedSignaturePropertiesType
+#define SOAP_TYPE_ns6__UnsignedSignaturePropertiesType (68)
+/* ns6:UnsignedSignaturePropertiesType complex type: */
+class SOAP_CMAC ns6__UnsignedSignaturePropertiesType
 {
 public:
-	ns1__CounterSignatureType *ns1__CounterSignature;	/* optional element of XSD type ns1:CounterSignatureType */
-	ns1__SignatureTimeStampType *ns1__SignatureTimeStamp;	/* required element of XSD type ns1:SignatureTimeStampType */
-	ns1__CompleteCertificateRefsType *ns1__CompleteCertificateRefs;	/* required element of XSD type ns1:CompleteCertificateRefsType */
-	ns1__CompleteRevocationRefsType *ns1__CompleteRevocationRefs;	/* required element of XSD type ns1:CompleteRevocationRefsType */
-	ns1__SigAndRefsTimeStampType *ns1__SigAndRefsTimeStamp;	/* required element of XSD type ns1:SigAndRefsTimeStampType */
-	ns1__CertificateValuesType *ns1__CertificateValues;	/* required element of XSD type ns1:CertificateValuesType */
-	ns1__RevocationValuesType *ns1__RevocationValues;	/* required element of XSD type ns1:RevocationValuesType */
-	ns1__ArchiveTimeStampType *ns1__ArchiveTimeStamp;	/* required element of XSD type ns1:ArchiveTimeStampType */
+	ns6__CounterSignatureType *ns6__CounterSignature;	/* optional element of XSD type ns6:CounterSignatureType */
+	ns6__SignatureTimeStampType *ns6__SignatureTimeStamp;	/* required element of XSD type ns6:SignatureTimeStampType */
+	ns6__CompleteCertificateRefsType *ns6__CompleteCertificateRefs;	/* required element of XSD type ns6:CompleteCertificateRefsType */
+	ns6__CompleteRevocationRefsType *ns6__CompleteRevocationRefs;	/* required element of XSD type ns6:CompleteRevocationRefsType */
+	ns6__SigAndRefsTimeStampType *ns6__SigAndRefsTimeStamp;	/* required element of XSD type ns6:SigAndRefsTimeStampType */
+	ns6__CertificateValuesType *ns6__CertificateValues;	/* required element of XSD type ns6:CertificateValuesType */
+	ns6__RevocationValuesType *ns6__RevocationValues;	/* required element of XSD type ns6:RevocationValuesType */
+	ns6__ArchiveTimeStampType *ns6__ArchiveTimeStamp;	/* required element of XSD type ns6:ArchiveTimeStampType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__UnsignedSignaturePropertiesType (68)
+	/// Return the unique type ID value SOAP_TYPE_ns6__UnsignedSignaturePropertiesType (68)
 	virtual int soap_type(void) const { return 68; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1728,25 +1732,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__UnsignedSignaturePropertiesType, default initialized and not managed by a soap context
-	virtual ns1__UnsignedSignaturePropertiesType *soap_alloc(void) const { return SOAP_NEW(ns1__UnsignedSignaturePropertiesType); }
-	         ns1__UnsignedSignaturePropertiesType() { ns1__UnsignedSignaturePropertiesType::soap_default(NULL); }
-	virtual ~ns1__UnsignedSignaturePropertiesType() { }
-	friend SOAP_FMAC1 ns1__UnsignedSignaturePropertiesType * SOAP_FMAC2 soap_instantiate_ns1__UnsignedSignaturePropertiesType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__UnsignedSignaturePropertiesType, default initialized and not managed by a soap context
+	virtual ns6__UnsignedSignaturePropertiesType *soap_alloc(void) const { return SOAP_NEW(ns6__UnsignedSignaturePropertiesType); }
+	         ns6__UnsignedSignaturePropertiesType() { ns6__UnsignedSignaturePropertiesType::soap_default(NULL); }
+	virtual ~ns6__UnsignedSignaturePropertiesType() { }
+	friend SOAP_FMAC1 ns6__UnsignedSignaturePropertiesType * SOAP_FMAC2 soap_instantiate_ns6__UnsignedSignaturePropertiesType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:369 */
-#ifndef SOAP_TYPE_ns1__CounterSignatureType
-#define SOAP_TYPE_ns1__CounterSignatureType (69)
-/* ns1:CounterSignatureType complex type: */
-class SOAP_CMAC ns1__CounterSignatureType
+#ifndef SOAP_TYPE_ns6__CounterSignatureType
+#define SOAP_TYPE_ns6__CounterSignatureType (69)
+/* ns6:CounterSignatureType complex type: */
+class SOAP_CMAC ns6__CounterSignatureType
 {
 public:
 	ns5__SignatureType *ns5__Signature;	/* required element of XSD type ns5:SignatureType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__CounterSignatureType (69)
+	/// Return the unique type ID value SOAP_TYPE_ns6__CounterSignatureType (69)
 	virtual int soap_type(void) const { return 69; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1760,26 +1764,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__CounterSignatureType, default initialized and not managed by a soap context
-	virtual ns1__CounterSignatureType *soap_alloc(void) const { return SOAP_NEW(ns1__CounterSignatureType); }
-	         ns1__CounterSignatureType() { ns1__CounterSignatureType::soap_default(NULL); }
-	virtual ~ns1__CounterSignatureType() { }
-	friend SOAP_FMAC1 ns1__CounterSignatureType * SOAP_FMAC2 soap_instantiate_ns1__CounterSignatureType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__CounterSignatureType, default initialized and not managed by a soap context
+	virtual ns6__CounterSignatureType *soap_alloc(void) const { return SOAP_NEW(ns6__CounterSignatureType); }
+	         ns6__CounterSignatureType() { ns6__CounterSignatureType::soap_default(NULL); }
+	virtual ~ns6__CounterSignatureType() { }
+	friend SOAP_FMAC1 ns6__CounterSignatureType * SOAP_FMAC2 soap_instantiate_ns6__CounterSignatureType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:372 */
-#ifndef SOAP_TYPE_ns1__SignatureTimeStampType
-#define SOAP_TYPE_ns1__SignatureTimeStampType (70)
-/* ns1:SignatureTimeStampType complex type: */
-class SOAP_CMAC ns1__SignatureTimeStampType
+#ifndef SOAP_TYPE_ns6__SignatureTimeStampType
+#define SOAP_TYPE_ns6__SignatureTimeStampType (70)
+/* ns6:SignatureTimeStampType complex type: */
+class SOAP_CMAC ns6__SignatureTimeStampType
 {
 public:
 	ns5__CanonicalizationMethodType *ns5__CanonicalizationMethod;	/* required element of XSD type ns5:CanonicalizationMethodType */
-	xsd__base64Binary ns1__EncapsulatedTimeStamp;	/* required element of XSD type ns1:EncapsulatedTimeStampType */
+	xsd__base64Binary ns6__EncapsulatedTimeStamp;	/* required element of XSD type ns6:EncapsulatedTimeStampType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__SignatureTimeStampType (70)
+	/// Return the unique type ID value SOAP_TYPE_ns6__SignatureTimeStampType (70)
 	virtual int soap_type(void) const { return 70; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1793,25 +1797,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__SignatureTimeStampType, default initialized and not managed by a soap context
-	virtual ns1__SignatureTimeStampType *soap_alloc(void) const { return SOAP_NEW(ns1__SignatureTimeStampType); }
-	         ns1__SignatureTimeStampType() { ns1__SignatureTimeStampType::soap_default(NULL); }
-	virtual ~ns1__SignatureTimeStampType() { }
-	friend SOAP_FMAC1 ns1__SignatureTimeStampType * SOAP_FMAC2 soap_instantiate_ns1__SignatureTimeStampType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__SignatureTimeStampType, default initialized and not managed by a soap context
+	virtual ns6__SignatureTimeStampType *soap_alloc(void) const { return SOAP_NEW(ns6__SignatureTimeStampType); }
+	         ns6__SignatureTimeStampType() { ns6__SignatureTimeStampType::soap_default(NULL); }
+	virtual ~ns6__SignatureTimeStampType() { }
+	friend SOAP_FMAC1 ns6__SignatureTimeStampType * SOAP_FMAC2 soap_instantiate_ns6__SignatureTimeStampType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:375 */
-#ifndef SOAP_TYPE_ns1__CompleteCertificateRefsType
-#define SOAP_TYPE_ns1__CompleteCertificateRefsType (71)
-/* ns1:CompleteCertificateRefsType complex type: */
-class SOAP_CMAC ns1__CompleteCertificateRefsType
+#ifndef SOAP_TYPE_ns6__CompleteCertificateRefsType
+#define SOAP_TYPE_ns6__CompleteCertificateRefsType (71)
+/* ns6:CompleteCertificateRefsType complex type: */
+class SOAP_CMAC ns6__CompleteCertificateRefsType
 {
 public:
-	ns1__CertRefsType *ns1__CertRefs;	/* required element of XSD type ns1:CertRefsType */
+	ns6__CertRefsType *ns6__CertRefs;	/* required element of XSD type ns6:CertRefsType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__CompleteCertificateRefsType (71)
+	/// Return the unique type ID value SOAP_TYPE_ns6__CompleteCertificateRefsType (71)
 	virtual int soap_type(void) const { return 71; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1825,25 +1829,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__CompleteCertificateRefsType, default initialized and not managed by a soap context
-	virtual ns1__CompleteCertificateRefsType *soap_alloc(void) const { return SOAP_NEW(ns1__CompleteCertificateRefsType); }
-	         ns1__CompleteCertificateRefsType() { ns1__CompleteCertificateRefsType::soap_default(NULL); }
-	virtual ~ns1__CompleteCertificateRefsType() { }
-	friend SOAP_FMAC1 ns1__CompleteCertificateRefsType * SOAP_FMAC2 soap_instantiate_ns1__CompleteCertificateRefsType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__CompleteCertificateRefsType, default initialized and not managed by a soap context
+	virtual ns6__CompleteCertificateRefsType *soap_alloc(void) const { return SOAP_NEW(ns6__CompleteCertificateRefsType); }
+	         ns6__CompleteCertificateRefsType() { ns6__CompleteCertificateRefsType::soap_default(NULL); }
+	virtual ~ns6__CompleteCertificateRefsType() { }
+	friend SOAP_FMAC1 ns6__CompleteCertificateRefsType * SOAP_FMAC2 soap_instantiate_ns6__CompleteCertificateRefsType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:378 */
-#ifndef SOAP_TYPE_ns1__CertRefsType
-#define SOAP_TYPE_ns1__CertRefsType (72)
-/* ns1:CertRefsType complex type: */
-class SOAP_CMAC ns1__CertRefsType
+#ifndef SOAP_TYPE_ns6__CertRefsType
+#define SOAP_TYPE_ns6__CertRefsType (72)
+/* ns6:CertRefsType complex type: */
+class SOAP_CMAC ns6__CertRefsType
 {
 public:
-	std::vector<ns1__CertType *> ns1__Cert;	/* required element of XSD type ns1:CertType */
+	std::vector<ns6__CertType *> ns6__Cert;	/* required element of XSD type ns6:CertType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__CertRefsType (72)
+	/// Return the unique type ID value SOAP_TYPE_ns6__CertRefsType (72)
 	virtual int soap_type(void) const { return 72; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1857,26 +1861,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__CertRefsType, default initialized and not managed by a soap context
-	virtual ns1__CertRefsType *soap_alloc(void) const { return SOAP_NEW(ns1__CertRefsType); }
-	         ns1__CertRefsType() { ns1__CertRefsType::soap_default(NULL); }
-	virtual ~ns1__CertRefsType() { }
-	friend SOAP_FMAC1 ns1__CertRefsType * SOAP_FMAC2 soap_instantiate_ns1__CertRefsType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__CertRefsType, default initialized and not managed by a soap context
+	virtual ns6__CertRefsType *soap_alloc(void) const { return SOAP_NEW(ns6__CertRefsType); }
+	         ns6__CertRefsType() { ns6__CertRefsType::soap_default(NULL); }
+	virtual ~ns6__CertRefsType() { }
+	friend SOAP_FMAC1 ns6__CertRefsType * SOAP_FMAC2 soap_instantiate_ns6__CertRefsType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:381 */
-#ifndef SOAP_TYPE_ns1__CompleteRevocationRefsType
-#define SOAP_TYPE_ns1__CompleteRevocationRefsType (73)
-/* ns1:CompleteRevocationRefsType complex type: */
-class SOAP_CMAC ns1__CompleteRevocationRefsType
+#ifndef SOAP_TYPE_ns6__CompleteRevocationRefsType
+#define SOAP_TYPE_ns6__CompleteRevocationRefsType (73)
+/* ns6:CompleteRevocationRefsType complex type: */
+class SOAP_CMAC ns6__CompleteRevocationRefsType
 {
 public:
-	ns1__CRLRefsType *ns1__CRLRefs;	/* required element of XSD type ns1:CRLRefsType */
-	ns1__OCSPRefsType *ns1__OCSPRefs;	/* required element of XSD type ns1:OCSPRefsType */
+	ns6__CRLRefsType *ns6__CRLRefs;	/* required element of XSD type ns6:CRLRefsType */
+	ns6__OCSPRefsType *ns6__OCSPRefs;	/* required element of XSD type ns6:OCSPRefsType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__CompleteRevocationRefsType (73)
+	/// Return the unique type ID value SOAP_TYPE_ns6__CompleteRevocationRefsType (73)
 	virtual int soap_type(void) const { return 73; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1890,25 +1894,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__CompleteRevocationRefsType, default initialized and not managed by a soap context
-	virtual ns1__CompleteRevocationRefsType *soap_alloc(void) const { return SOAP_NEW(ns1__CompleteRevocationRefsType); }
-	         ns1__CompleteRevocationRefsType() { ns1__CompleteRevocationRefsType::soap_default(NULL); }
-	virtual ~ns1__CompleteRevocationRefsType() { }
-	friend SOAP_FMAC1 ns1__CompleteRevocationRefsType * SOAP_FMAC2 soap_instantiate_ns1__CompleteRevocationRefsType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__CompleteRevocationRefsType, default initialized and not managed by a soap context
+	virtual ns6__CompleteRevocationRefsType *soap_alloc(void) const { return SOAP_NEW(ns6__CompleteRevocationRefsType); }
+	         ns6__CompleteRevocationRefsType() { ns6__CompleteRevocationRefsType::soap_default(NULL); }
+	virtual ~ns6__CompleteRevocationRefsType() { }
+	friend SOAP_FMAC1 ns6__CompleteRevocationRefsType * SOAP_FMAC2 soap_instantiate_ns6__CompleteRevocationRefsType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:384 */
-#ifndef SOAP_TYPE_ns1__CRLRefsType
-#define SOAP_TYPE_ns1__CRLRefsType (74)
-/* ns1:CRLRefsType complex type: */
-class SOAP_CMAC ns1__CRLRefsType
+#ifndef SOAP_TYPE_ns6__CRLRefsType
+#define SOAP_TYPE_ns6__CRLRefsType (74)
+/* ns6:CRLRefsType complex type: */
+class SOAP_CMAC ns6__CRLRefsType
 {
 public:
-	std::vector<ns1__CRLRefType *> ns1__CRLRef;	/* required element of XSD type ns1:CRLRefType */
+	std::vector<ns6__CRLRefType *> ns6__CRLRef;	/* required element of XSD type ns6:CRLRefType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__CRLRefsType (74)
+	/// Return the unique type ID value SOAP_TYPE_ns6__CRLRefsType (74)
 	virtual int soap_type(void) const { return 74; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1922,26 +1926,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__CRLRefsType, default initialized and not managed by a soap context
-	virtual ns1__CRLRefsType *soap_alloc(void) const { return SOAP_NEW(ns1__CRLRefsType); }
-	         ns1__CRLRefsType() { ns1__CRLRefsType::soap_default(NULL); }
-	virtual ~ns1__CRLRefsType() { }
-	friend SOAP_FMAC1 ns1__CRLRefsType * SOAP_FMAC2 soap_instantiate_ns1__CRLRefsType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__CRLRefsType, default initialized and not managed by a soap context
+	virtual ns6__CRLRefsType *soap_alloc(void) const { return SOAP_NEW(ns6__CRLRefsType); }
+	         ns6__CRLRefsType() { ns6__CRLRefsType::soap_default(NULL); }
+	virtual ~ns6__CRLRefsType() { }
+	friend SOAP_FMAC1 ns6__CRLRefsType * SOAP_FMAC2 soap_instantiate_ns6__CRLRefsType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:387 */
-#ifndef SOAP_TYPE_ns1__CRLRefType
-#define SOAP_TYPE_ns1__CRLRefType (75)
-/* ns1:CRLRefType complex type: */
-class SOAP_CMAC ns1__CRLRefType
+#ifndef SOAP_TYPE_ns6__CRLRefType
+#define SOAP_TYPE_ns6__CRLRefType (75)
+/* ns6:CRLRefType complex type: */
+class SOAP_CMAC ns6__CRLRefType
 {
 public:
-	ns1__DigestAlgAndValueType *ns1__DigestAlgAndValue;	/* required element of XSD type ns1:DigestAlgAndValueType */
-	ns1__CRLIdentifierType *ns1__CRLIdentifier;	/* required element of XSD type ns1:CRLIdentifierType */
+	ns6__DigestAlgAndValueType *ns6__DigestAlgAndValue;	/* required element of XSD type ns6:DigestAlgAndValueType */
+	ns6__CRLIdentifierType *ns6__CRLIdentifier;	/* required element of XSD type ns6:CRLIdentifierType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__CRLRefType (75)
+	/// Return the unique type ID value SOAP_TYPE_ns6__CRLRefType (75)
 	virtual int soap_type(void) const { return 75; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1955,26 +1959,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__CRLRefType, default initialized and not managed by a soap context
-	virtual ns1__CRLRefType *soap_alloc(void) const { return SOAP_NEW(ns1__CRLRefType); }
-	         ns1__CRLRefType() { ns1__CRLRefType::soap_default(NULL); }
-	virtual ~ns1__CRLRefType() { }
-	friend SOAP_FMAC1 ns1__CRLRefType * SOAP_FMAC2 soap_instantiate_ns1__CRLRefType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__CRLRefType, default initialized and not managed by a soap context
+	virtual ns6__CRLRefType *soap_alloc(void) const { return SOAP_NEW(ns6__CRLRefType); }
+	         ns6__CRLRefType() { ns6__CRLRefType::soap_default(NULL); }
+	virtual ~ns6__CRLRefType() { }
+	friend SOAP_FMAC1 ns6__CRLRefType * SOAP_FMAC2 soap_instantiate_ns6__CRLRefType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:390 */
-#ifndef SOAP_TYPE_ns1__DigestAlgAndValueType
-#define SOAP_TYPE_ns1__DigestAlgAndValueType (76)
-/* ns1:DigestAlgAndValueType complex type: */
-class SOAP_CMAC ns1__DigestAlgAndValueType
+#ifndef SOAP_TYPE_ns6__DigestAlgAndValueType
+#define SOAP_TYPE_ns6__DigestAlgAndValueType (76)
+/* ns6:DigestAlgAndValueType complex type: */
+class SOAP_CMAC ns6__DigestAlgAndValueType
 {
 public:
 	ns5__DigestMethodType *ns5__DigestMethod;	/* required element of XSD type ns5:DigestMethodType */
 	ns5__DigestValueType *ns5__DigestValue;	/* required element of XSD type ns5:DigestValueType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__DigestAlgAndValueType (76)
+	/// Return the unique type ID value SOAP_TYPE_ns6__DigestAlgAndValueType (76)
 	virtual int soap_type(void) const { return 76; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -1988,27 +1992,27 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__DigestAlgAndValueType, default initialized and not managed by a soap context
-	virtual ns1__DigestAlgAndValueType *soap_alloc(void) const { return SOAP_NEW(ns1__DigestAlgAndValueType); }
-	         ns1__DigestAlgAndValueType() { ns1__DigestAlgAndValueType::soap_default(NULL); }
-	virtual ~ns1__DigestAlgAndValueType() { }
-	friend SOAP_FMAC1 ns1__DigestAlgAndValueType * SOAP_FMAC2 soap_instantiate_ns1__DigestAlgAndValueType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__DigestAlgAndValueType, default initialized and not managed by a soap context
+	virtual ns6__DigestAlgAndValueType *soap_alloc(void) const { return SOAP_NEW(ns6__DigestAlgAndValueType); }
+	         ns6__DigestAlgAndValueType() { ns6__DigestAlgAndValueType::soap_default(NULL); }
+	virtual ~ns6__DigestAlgAndValueType() { }
+	friend SOAP_FMAC1 ns6__DigestAlgAndValueType * SOAP_FMAC2 soap_instantiate_ns6__DigestAlgAndValueType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:393 */
-#ifndef SOAP_TYPE_ns1__CRLIdentifierType
-#define SOAP_TYPE_ns1__CRLIdentifierType (77)
-/* ns1:CRLIdentifierType complex type: */
-class SOAP_CMAC ns1__CRLIdentifierType
+#ifndef SOAP_TYPE_ns6__CRLIdentifierType
+#define SOAP_TYPE_ns6__CRLIdentifierType (77)
+/* ns6:CRLIdentifierType complex type: */
+class SOAP_CMAC ns6__CRLIdentifierType
 {
 public:
-	char *ns1__Issuer;	/* required element of XSD type xsd:anyType */
-	char *ns1__IssueTime;	/* required element of XSD type xsd:anyType */
-	char *ns1__Number;	/* required element of XSD type xsd:anyType */
+	char *ns6__Issuer;	/* required element of XSD type xsd:anyType */
+	char *ns6__IssueTime;	/* required element of XSD type xsd:anyType */
+	char *ns6__Number;	/* required element of XSD type xsd:anyType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__CRLIdentifierType (77)
+	/// Return the unique type ID value SOAP_TYPE_ns6__CRLIdentifierType (77)
 	virtual int soap_type(void) const { return 77; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2022,25 +2026,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__CRLIdentifierType, default initialized and not managed by a soap context
-	virtual ns1__CRLIdentifierType *soap_alloc(void) const { return SOAP_NEW(ns1__CRLIdentifierType); }
-	         ns1__CRLIdentifierType() { ns1__CRLIdentifierType::soap_default(NULL); }
-	virtual ~ns1__CRLIdentifierType() { }
-	friend SOAP_FMAC1 ns1__CRLIdentifierType * SOAP_FMAC2 soap_instantiate_ns1__CRLIdentifierType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__CRLIdentifierType, default initialized and not managed by a soap context
+	virtual ns6__CRLIdentifierType *soap_alloc(void) const { return SOAP_NEW(ns6__CRLIdentifierType); }
+	         ns6__CRLIdentifierType() { ns6__CRLIdentifierType::soap_default(NULL); }
+	virtual ~ns6__CRLIdentifierType() { }
+	friend SOAP_FMAC1 ns6__CRLIdentifierType * SOAP_FMAC2 soap_instantiate_ns6__CRLIdentifierType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:396 */
-#ifndef SOAP_TYPE_ns1__OCSPRefsType
-#define SOAP_TYPE_ns1__OCSPRefsType (78)
-/* ns1:OCSPRefsType complex type: */
-class SOAP_CMAC ns1__OCSPRefsType
+#ifndef SOAP_TYPE_ns6__OCSPRefsType
+#define SOAP_TYPE_ns6__OCSPRefsType (78)
+/* ns6:OCSPRefsType complex type: */
+class SOAP_CMAC ns6__OCSPRefsType
 {
 public:
-	std::vector<ns1__OCSPRefType *> ns1__OCSPRef;	/* required element of XSD type ns1:OCSPRefType */
+	std::vector<ns6__OCSPRefType *> ns6__OCSPRef;	/* required element of XSD type ns6:OCSPRefType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__OCSPRefsType (78)
+	/// Return the unique type ID value SOAP_TYPE_ns6__OCSPRefsType (78)
 	virtual int soap_type(void) const { return 78; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2054,26 +2058,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__OCSPRefsType, default initialized and not managed by a soap context
-	virtual ns1__OCSPRefsType *soap_alloc(void) const { return SOAP_NEW(ns1__OCSPRefsType); }
-	         ns1__OCSPRefsType() { ns1__OCSPRefsType::soap_default(NULL); }
-	virtual ~ns1__OCSPRefsType() { }
-	friend SOAP_FMAC1 ns1__OCSPRefsType * SOAP_FMAC2 soap_instantiate_ns1__OCSPRefsType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__OCSPRefsType, default initialized and not managed by a soap context
+	virtual ns6__OCSPRefsType *soap_alloc(void) const { return SOAP_NEW(ns6__OCSPRefsType); }
+	         ns6__OCSPRefsType() { ns6__OCSPRefsType::soap_default(NULL); }
+	virtual ~ns6__OCSPRefsType() { }
+	friend SOAP_FMAC1 ns6__OCSPRefsType * SOAP_FMAC2 soap_instantiate_ns6__OCSPRefsType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:399 */
-#ifndef SOAP_TYPE_ns1__OCSPRefType
-#define SOAP_TYPE_ns1__OCSPRefType (79)
-/* ns1:OCSPRefType complex type: */
-class SOAP_CMAC ns1__OCSPRefType
+#ifndef SOAP_TYPE_ns6__OCSPRefType
+#define SOAP_TYPE_ns6__OCSPRefType (79)
+/* ns6:OCSPRefType complex type: */
+class SOAP_CMAC ns6__OCSPRefType
 {
 public:
-	ns1__OCSPIdentifierType *ns1__OCSPIdentifier;	/* required element of XSD type ns1:OCSPIdentifierType */
-	ns1__DigestAlgAndValueType *ns1__DigestAlgAndValue;	/* required element of XSD type ns1:DigestAlgAndValueType */
+	ns6__OCSPIdentifierType *ns6__OCSPIdentifier;	/* required element of XSD type ns6:OCSPIdentifierType */
+	ns6__DigestAlgAndValueType *ns6__DigestAlgAndValue;	/* required element of XSD type ns6:DigestAlgAndValueType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__OCSPRefType (79)
+	/// Return the unique type ID value SOAP_TYPE_ns6__OCSPRefType (79)
 	virtual int soap_type(void) const { return 79; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2087,26 +2091,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__OCSPRefType, default initialized and not managed by a soap context
-	virtual ns1__OCSPRefType *soap_alloc(void) const { return SOAP_NEW(ns1__OCSPRefType); }
-	         ns1__OCSPRefType() { ns1__OCSPRefType::soap_default(NULL); }
-	virtual ~ns1__OCSPRefType() { }
-	friend SOAP_FMAC1 ns1__OCSPRefType * SOAP_FMAC2 soap_instantiate_ns1__OCSPRefType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__OCSPRefType, default initialized and not managed by a soap context
+	virtual ns6__OCSPRefType *soap_alloc(void) const { return SOAP_NEW(ns6__OCSPRefType); }
+	         ns6__OCSPRefType() { ns6__OCSPRefType::soap_default(NULL); }
+	virtual ~ns6__OCSPRefType() { }
+	friend SOAP_FMAC1 ns6__OCSPRefType * SOAP_FMAC2 soap_instantiate_ns6__OCSPRefType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:402 */
-#ifndef SOAP_TYPE_ns1__OCSPIdentifierType
-#define SOAP_TYPE_ns1__OCSPIdentifierType (80)
-/* ns1:OCSPIdentifierType complex type: */
-class SOAP_CMAC ns1__OCSPIdentifierType
+#ifndef SOAP_TYPE_ns6__OCSPIdentifierType
+#define SOAP_TYPE_ns6__OCSPIdentifierType (80)
+/* ns6:OCSPIdentifierType complex type: */
+class SOAP_CMAC ns6__OCSPIdentifierType
 {
 public:
-	ns1__ResponderIDType *ns1__ResponderID;	/* required element of XSD type ns1:ResponderIDType */
-	char *ns1__ProducedAt;	/* required element of XSD type xsd:anyType */
+	ns6__ResponderIDType *ns6__ResponderID;	/* required element of XSD type ns6:ResponderIDType */
+	char *ns6__ProducedAt;	/* required element of XSD type xsd:anyType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__OCSPIdentifierType (80)
+	/// Return the unique type ID value SOAP_TYPE_ns6__OCSPIdentifierType (80)
 	virtual int soap_type(void) const { return 80; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2120,25 +2124,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__OCSPIdentifierType, default initialized and not managed by a soap context
-	virtual ns1__OCSPIdentifierType *soap_alloc(void) const { return SOAP_NEW(ns1__OCSPIdentifierType); }
-	         ns1__OCSPIdentifierType() { ns1__OCSPIdentifierType::soap_default(NULL); }
-	virtual ~ns1__OCSPIdentifierType() { }
-	friend SOAP_FMAC1 ns1__OCSPIdentifierType * SOAP_FMAC2 soap_instantiate_ns1__OCSPIdentifierType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__OCSPIdentifierType, default initialized and not managed by a soap context
+	virtual ns6__OCSPIdentifierType *soap_alloc(void) const { return SOAP_NEW(ns6__OCSPIdentifierType); }
+	         ns6__OCSPIdentifierType() { ns6__OCSPIdentifierType::soap_default(NULL); }
+	virtual ~ns6__OCSPIdentifierType() { }
+	friend SOAP_FMAC1 ns6__OCSPIdentifierType * SOAP_FMAC2 soap_instantiate_ns6__OCSPIdentifierType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:405 */
-#ifndef SOAP_TYPE_ns1__ResponderIDType
-#define SOAP_TYPE_ns1__ResponderIDType (81)
-/* ns1:ResponderIDType complex type: */
-class SOAP_CMAC ns1__ResponderIDType
+#ifndef SOAP_TYPE_ns6__ResponderIDType
+#define SOAP_TYPE_ns6__ResponderIDType (81)
+/* ns6:ResponderIDType complex type: */
+class SOAP_CMAC ns6__ResponderIDType
 {
 public:
-	char *ns1__ByName;	/* required element of XSD type xsd:anyType */
+	char *ns6__ByName;	/* required element of XSD type xsd:anyType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__ResponderIDType (81)
+	/// Return the unique type ID value SOAP_TYPE_ns6__ResponderIDType (81)
 	virtual int soap_type(void) const { return 81; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2152,26 +2156,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__ResponderIDType, default initialized and not managed by a soap context
-	virtual ns1__ResponderIDType *soap_alloc(void) const { return SOAP_NEW(ns1__ResponderIDType); }
-	         ns1__ResponderIDType() { ns1__ResponderIDType::soap_default(NULL); }
-	virtual ~ns1__ResponderIDType() { }
-	friend SOAP_FMAC1 ns1__ResponderIDType * SOAP_FMAC2 soap_instantiate_ns1__ResponderIDType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__ResponderIDType, default initialized and not managed by a soap context
+	virtual ns6__ResponderIDType *soap_alloc(void) const { return SOAP_NEW(ns6__ResponderIDType); }
+	         ns6__ResponderIDType() { ns6__ResponderIDType::soap_default(NULL); }
+	virtual ~ns6__ResponderIDType() { }
+	friend SOAP_FMAC1 ns6__ResponderIDType * SOAP_FMAC2 soap_instantiate_ns6__ResponderIDType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:408 */
-#ifndef SOAP_TYPE_ns1__SigAndRefsTimeStampType
-#define SOAP_TYPE_ns1__SigAndRefsTimeStampType (82)
-/* ns1:SigAndRefsTimeStampType complex type: */
-class SOAP_CMAC ns1__SigAndRefsTimeStampType
+#ifndef SOAP_TYPE_ns6__SigAndRefsTimeStampType
+#define SOAP_TYPE_ns6__SigAndRefsTimeStampType (82)
+/* ns6:SigAndRefsTimeStampType complex type: */
+class SOAP_CMAC ns6__SigAndRefsTimeStampType
 {
 public:
 	ns5__CanonicalizationMethodType *ns5__CanonicalizationMethod;	/* required element of XSD type ns5:CanonicalizationMethodType */
-	xsd__base64Binary ns1__EncapsulatedTimeStamp;	/* required element of XSD type ns1:EncapsulatedTimeStampType */
+	xsd__base64Binary ns6__EncapsulatedTimeStamp;	/* required element of XSD type ns6:EncapsulatedTimeStampType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__SigAndRefsTimeStampType (82)
+	/// Return the unique type ID value SOAP_TYPE_ns6__SigAndRefsTimeStampType (82)
 	virtual int soap_type(void) const { return 82; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2185,26 +2189,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__SigAndRefsTimeStampType, default initialized and not managed by a soap context
-	virtual ns1__SigAndRefsTimeStampType *soap_alloc(void) const { return SOAP_NEW(ns1__SigAndRefsTimeStampType); }
-	         ns1__SigAndRefsTimeStampType() { ns1__SigAndRefsTimeStampType::soap_default(NULL); }
-	virtual ~ns1__SigAndRefsTimeStampType() { }
-	friend SOAP_FMAC1 ns1__SigAndRefsTimeStampType * SOAP_FMAC2 soap_instantiate_ns1__SigAndRefsTimeStampType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__SigAndRefsTimeStampType, default initialized and not managed by a soap context
+	virtual ns6__SigAndRefsTimeStampType *soap_alloc(void) const { return SOAP_NEW(ns6__SigAndRefsTimeStampType); }
+	         ns6__SigAndRefsTimeStampType() { ns6__SigAndRefsTimeStampType::soap_default(NULL); }
+	virtual ~ns6__SigAndRefsTimeStampType() { }
+	friend SOAP_FMAC1 ns6__SigAndRefsTimeStampType * SOAP_FMAC2 soap_instantiate_ns6__SigAndRefsTimeStampType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:411 */
-#ifndef SOAP_TYPE_ns1__CertificateValuesType
-#define SOAP_TYPE_ns1__CertificateValuesType (83)
-/* ns1:CertificateValuesType complex type: */
-class SOAP_CMAC ns1__CertificateValuesType
+#ifndef SOAP_TYPE_ns6__CertificateValuesType
+#define SOAP_TYPE_ns6__CertificateValuesType (83)
+/* ns6:CertificateValuesType complex type: */
+class SOAP_CMAC ns6__CertificateValuesType
 {
 public:
-	std::vector<ns1__EncapsulatedX509CertificateType *> ns1__EncapsulatedX509Certificate;	/* required element of XSD type ns1:EncapsulatedX509CertificateType */
+	std::vector<ns6__EncapsulatedX509CertificateType *> ns6__EncapsulatedX509Certificate;	/* required element of XSD type ns6:EncapsulatedX509CertificateType */
 	std::string Id;	/* required attribute of XSD type xsd:ID */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__CertificateValuesType (83)
+	/// Return the unique type ID value SOAP_TYPE_ns6__CertificateValuesType (83)
 	virtual int soap_type(void) const { return 83; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2218,27 +2222,27 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__CertificateValuesType, default initialized and not managed by a soap context
-	virtual ns1__CertificateValuesType *soap_alloc(void) const { return SOAP_NEW(ns1__CertificateValuesType); }
-	         ns1__CertificateValuesType() { ns1__CertificateValuesType::soap_default(NULL); }
-	virtual ~ns1__CertificateValuesType() { }
-	friend SOAP_FMAC1 ns1__CertificateValuesType * SOAP_FMAC2 soap_instantiate_ns1__CertificateValuesType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__CertificateValuesType, default initialized and not managed by a soap context
+	virtual ns6__CertificateValuesType *soap_alloc(void) const { return SOAP_NEW(ns6__CertificateValuesType); }
+	         ns6__CertificateValuesType() { ns6__CertificateValuesType::soap_default(NULL); }
+	virtual ~ns6__CertificateValuesType() { }
+	friend SOAP_FMAC1 ns6__CertificateValuesType * SOAP_FMAC2 soap_instantiate_ns6__CertificateValuesType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:417 */
-#ifndef SOAP_TYPE_ns1__RevocationValuesType
-#define SOAP_TYPE_ns1__RevocationValuesType (85)
-/* ns1:RevocationValuesType complex type: */
-class SOAP_CMAC ns1__RevocationValuesType
+#ifndef SOAP_TYPE_ns6__RevocationValuesType
+#define SOAP_TYPE_ns6__RevocationValuesType (85)
+/* ns6:RevocationValuesType complex type: */
+class SOAP_CMAC ns6__RevocationValuesType
 {
 public:
-	ns1__CRLValuesType *ns1__CRLValues;	/* required element of XSD type ns1:CRLValuesType */
-	ns1__OCSPValuesType *ns1__OCSPValues;	/* required element of XSD type ns1:OCSPValuesType */
+	ns6__CRLValuesType *ns6__CRLValues;	/* required element of XSD type ns6:CRLValuesType */
+	ns6__OCSPValuesType *ns6__OCSPValues;	/* required element of XSD type ns6:OCSPValuesType */
 	std::string Id;	/* required attribute of XSD type xsd:ID */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__RevocationValuesType (85)
+	/// Return the unique type ID value SOAP_TYPE_ns6__RevocationValuesType (85)
 	virtual int soap_type(void) const { return 85; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2252,26 +2256,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__RevocationValuesType, default initialized and not managed by a soap context
-	virtual ns1__RevocationValuesType *soap_alloc(void) const { return SOAP_NEW(ns1__RevocationValuesType); }
-	         ns1__RevocationValuesType() { ns1__RevocationValuesType::soap_default(NULL); }
-	virtual ~ns1__RevocationValuesType() { }
-	friend SOAP_FMAC1 ns1__RevocationValuesType * SOAP_FMAC2 soap_instantiate_ns1__RevocationValuesType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__RevocationValuesType, default initialized and not managed by a soap context
+	virtual ns6__RevocationValuesType *soap_alloc(void) const { return SOAP_NEW(ns6__RevocationValuesType); }
+	         ns6__RevocationValuesType() { ns6__RevocationValuesType::soap_default(NULL); }
+	virtual ~ns6__RevocationValuesType() { }
+	friend SOAP_FMAC1 ns6__RevocationValuesType * SOAP_FMAC2 soap_instantiate_ns6__RevocationValuesType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:420 */
-#ifndef SOAP_TYPE_ns1__CRLValuesType
-#define SOAP_TYPE_ns1__CRLValuesType (86)
-/* ns1:CRLValuesType complex type: */
-class SOAP_CMAC ns1__CRLValuesType
+#ifndef SOAP_TYPE_ns6__CRLValuesType
+#define SOAP_TYPE_ns6__CRLValuesType (86)
+/* ns6:CRLValuesType complex type: */
+class SOAP_CMAC ns6__CRLValuesType
 {
 public:
-	std::vector<ns1__EncapsulatedCRLValueType *> ns1__EncapsulatedCRLValue;	/* required element of XSD type ns1:EncapsulatedCRLValueType */
+	std::vector<ns6__EncapsulatedCRLValueType *> ns6__EncapsulatedCRLValue;	/* required element of XSD type ns6:EncapsulatedCRLValueType */
 	std::string Id;	/* required attribute of XSD type xsd:ID */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__CRLValuesType (86)
+	/// Return the unique type ID value SOAP_TYPE_ns6__CRLValuesType (86)
 	virtual int soap_type(void) const { return 86; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2285,26 +2289,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__CRLValuesType, default initialized and not managed by a soap context
-	virtual ns1__CRLValuesType *soap_alloc(void) const { return SOAP_NEW(ns1__CRLValuesType); }
-	         ns1__CRLValuesType() { ns1__CRLValuesType::soap_default(NULL); }
-	virtual ~ns1__CRLValuesType() { }
-	friend SOAP_FMAC1 ns1__CRLValuesType * SOAP_FMAC2 soap_instantiate_ns1__CRLValuesType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__CRLValuesType, default initialized and not managed by a soap context
+	virtual ns6__CRLValuesType *soap_alloc(void) const { return SOAP_NEW(ns6__CRLValuesType); }
+	         ns6__CRLValuesType() { ns6__CRLValuesType::soap_default(NULL); }
+	virtual ~ns6__CRLValuesType() { }
+	friend SOAP_FMAC1 ns6__CRLValuesType * SOAP_FMAC2 soap_instantiate_ns6__CRLValuesType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:426 */
-#ifndef SOAP_TYPE_ns1__OCSPValuesType
-#define SOAP_TYPE_ns1__OCSPValuesType (88)
-/* ns1:OCSPValuesType complex type: */
-class SOAP_CMAC ns1__OCSPValuesType
+#ifndef SOAP_TYPE_ns6__OCSPValuesType
+#define SOAP_TYPE_ns6__OCSPValuesType (88)
+/* ns6:OCSPValuesType complex type: */
+class SOAP_CMAC ns6__OCSPValuesType
 {
 public:
-	std::vector<ns1__EncapsulatedOCSPValueType *> ns1__EncapsulatedOCSPValue;	/* required element of XSD type ns1:EncapsulatedOCSPValueType */
+	std::vector<ns6__EncapsulatedOCSPValueType *> ns6__EncapsulatedOCSPValue;	/* required element of XSD type ns6:EncapsulatedOCSPValueType */
 	std::string Id;	/* required attribute of XSD type xsd:ID */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__OCSPValuesType (88)
+	/// Return the unique type ID value SOAP_TYPE_ns6__OCSPValuesType (88)
 	virtual int soap_type(void) const { return 88; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2318,26 +2322,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__OCSPValuesType, default initialized and not managed by a soap context
-	virtual ns1__OCSPValuesType *soap_alloc(void) const { return SOAP_NEW(ns1__OCSPValuesType); }
-	         ns1__OCSPValuesType() { ns1__OCSPValuesType::soap_default(NULL); }
-	virtual ~ns1__OCSPValuesType() { }
-	friend SOAP_FMAC1 ns1__OCSPValuesType * SOAP_FMAC2 soap_instantiate_ns1__OCSPValuesType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__OCSPValuesType, default initialized and not managed by a soap context
+	virtual ns6__OCSPValuesType *soap_alloc(void) const { return SOAP_NEW(ns6__OCSPValuesType); }
+	         ns6__OCSPValuesType() { ns6__OCSPValuesType::soap_default(NULL); }
+	virtual ~ns6__OCSPValuesType() { }
+	friend SOAP_FMAC1 ns6__OCSPValuesType * SOAP_FMAC2 soap_instantiate_ns6__OCSPValuesType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:432 */
-#ifndef SOAP_TYPE_ns1__ArchiveTimeStampType
-#define SOAP_TYPE_ns1__ArchiveTimeStampType (90)
-/* ns1:ArchiveTimeStampType complex type: */
-class SOAP_CMAC ns1__ArchiveTimeStampType
+#ifndef SOAP_TYPE_ns6__ArchiveTimeStampType
+#define SOAP_TYPE_ns6__ArchiveTimeStampType (90)
+/* ns6:ArchiveTimeStampType complex type: */
+class SOAP_CMAC ns6__ArchiveTimeStampType
 {
 public:
 	ns5__CanonicalizationMethodType *ns5__CanonicalizationMethod;	/* required element of XSD type ns5:CanonicalizationMethodType */
-	xsd__base64Binary ns1__EncapsulatedTimeStamp;	/* required element of XSD type ns1:EncapsulatedTimeStampType */
+	xsd__base64Binary ns6__EncapsulatedTimeStamp;	/* required element of XSD type ns6:EncapsulatedTimeStampType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__ArchiveTimeStampType (90)
+	/// Return the unique type ID value SOAP_TYPE_ns6__ArchiveTimeStampType (90)
 	virtual int soap_type(void) const { return 90; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2351,11 +2355,11 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__ArchiveTimeStampType, default initialized and not managed by a soap context
-	virtual ns1__ArchiveTimeStampType *soap_alloc(void) const { return SOAP_NEW(ns1__ArchiveTimeStampType); }
-	         ns1__ArchiveTimeStampType() { ns1__ArchiveTimeStampType::soap_default(NULL); }
-	virtual ~ns1__ArchiveTimeStampType() { }
-	friend SOAP_FMAC1 ns1__ArchiveTimeStampType * SOAP_FMAC2 soap_instantiate_ns1__ArchiveTimeStampType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__ArchiveTimeStampType, default initialized and not managed by a soap context
+	virtual ns6__ArchiveTimeStampType *soap_alloc(void) const { return SOAP_NEW(ns6__ArchiveTimeStampType); }
+	         ns6__ArchiveTimeStampType() { ns6__ArchiveTimeStampType::soap_default(NULL); }
+	virtual ~ns6__ArchiveTimeStampType() { }
+	friend SOAP_FMAC1 ns6__ArchiveTimeStampType * SOAP_FMAC2 soap_instantiate_ns6__ArchiveTimeStampType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
@@ -2392,17 +2396,17 @@ public:
 #endif
 
 /* SCAP-Services.h:453 */
-#ifndef SOAP_TYPE_ns3__AttributeSupplierResponseType
-#define SOAP_TYPE_ns3__AttributeSupplierResponseType (97)
-/* ns3:AttributeSupplierResponseType complex type: */
-class SOAP_CMAC ns3__AttributeSupplierResponseType
+#ifndef SOAP_TYPE_ns9__AttributeSupplierResponseType
+#define SOAP_TYPE_ns9__AttributeSupplierResponseType (97)
+/* ns9:AttributeSupplierResponseType complex type: */
+class SOAP_CMAC ns9__AttributeSupplierResponseType
 {
 public:
 	std::vector<ns3__AttributeSupplierType *> AttributeSupplier;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* optional element of XSD type ns3:AttributeSupplierType */
 	std::string *ErrorMessage;	/* optional element of XSD type xsd:string */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns3__AttributeSupplierResponseType (97)
+	/// Return the unique type ID value SOAP_TYPE_ns9__AttributeSupplierResponseType (97)
 	virtual int soap_type(void) const { return 97; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2416,34 +2420,34 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns3__AttributeSupplierResponseType, default initialized and not managed by a soap context
-	virtual ns3__AttributeSupplierResponseType *soap_alloc(void) const { return SOAP_NEW(ns3__AttributeSupplierResponseType); }
-	         ns3__AttributeSupplierResponseType() { ns3__AttributeSupplierResponseType::soap_default(NULL); }
-	virtual ~ns3__AttributeSupplierResponseType() { }
-	friend SOAP_FMAC1 ns3__AttributeSupplierResponseType * SOAP_FMAC2 soap_instantiate_ns3__AttributeSupplierResponseType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns9__AttributeSupplierResponseType, default initialized and not managed by a soap context
+	virtual ns9__AttributeSupplierResponseType *soap_alloc(void) const { return SOAP_NEW(ns9__AttributeSupplierResponseType); }
+	         ns9__AttributeSupplierResponseType() { ns9__AttributeSupplierResponseType::soap_default(NULL); }
+	virtual ~ns9__AttributeSupplierResponseType() { }
+	friend SOAP_FMAC1 ns9__AttributeSupplierResponseType * SOAP_FMAC2 soap_instantiate_ns9__AttributeSupplierResponseType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:456 */
-#ifndef SOAP_TYPE_ns4__SignRequest
-#define SOAP_TYPE_ns4__SignRequest (98)
-/* ns4:SignRequest complex type: */
-class SOAP_CMAC ns4__SignRequest
+#ifndef SOAP_TYPE_pdf__SignRequest
+#define SOAP_TYPE_pdf__SignRequest (98)
+/* pdf:SignRequest complex type: */
+class SOAP_CMAC pdf__SignRequest
 {
 public:
 	std::string ProcessId;	/* required element of XSD type xsd:string */
-	ns4__PersonalDataType *PersonalData;	/* required element of XSD type ns4:PersonalDataType */
-	ns4__AttributeListType *AttributeList;	/* required element of XSD type ns4:AttributeListType */
+	pdf__PersonalDataType *PersonalData;	/* required element of XSD type pdf:PersonalDataType */
+	pdf__AttributeListType *AttributeList;	/* required element of XSD type pdf:AttributeListType */
 	std::string SignatureFieldName;	/* required element of XSD type xsd:string */
 	xsd__base64Binary SignDocument;	/* required element of XSD type xsd:base64Binary */
 	int *LTV;	/* optional element of XSD type xsd:int */
 	int Page;	/* required element of XSD type xsd:int */
 	int X;	/* required element of XSD type xsd:int */
 	int Y;	/* required element of XSD type xsd:int */
-	enum ns4__SignatureOrientationEnumType Orientation;	/* required element of XSD type ns4:SignatureOrientationEnumType */
+	enum pdf__SignatureOrientationEnumType Orientation;	/* required element of XSD type pdf:SignatureOrientationEnumType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns4__SignRequest (98)
+	/// Return the unique type ID value SOAP_TYPE_pdf__SignRequest (98)
 	virtual int soap_type(void) const { return 98; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2457,26 +2461,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns4__SignRequest, default initialized and not managed by a soap context
-	virtual ns4__SignRequest *soap_alloc(void) const { return SOAP_NEW(ns4__SignRequest); }
-	         ns4__SignRequest() { ns4__SignRequest::soap_default(NULL); }
-	virtual ~ns4__SignRequest() { }
-	friend SOAP_FMAC1 ns4__SignRequest * SOAP_FMAC2 soap_instantiate_ns4__SignRequest(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type pdf__SignRequest, default initialized and not managed by a soap context
+	virtual pdf__SignRequest *soap_alloc(void) const { return SOAP_NEW(pdf__SignRequest); }
+	         pdf__SignRequest() { pdf__SignRequest::soap_default(NULL); }
+	virtual ~pdf__SignRequest() { }
+	friend SOAP_FMAC1 pdf__SignRequest * SOAP_FMAC2 soap_instantiate_pdf__SignRequest(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:459 */
-#ifndef SOAP_TYPE_ns4__PersonalDataType
-#define SOAP_TYPE_ns4__PersonalDataType (99)
-/* ns4:PersonalDataType complex type: */
-class SOAP_CMAC ns4__PersonalDataType
+#ifndef SOAP_TYPE_pdf__PersonalDataType
+#define SOAP_TYPE_pdf__PersonalDataType (99)
+/* pdf:PersonalDataType complex type: */
+class SOAP_CMAC pdf__PersonalDataType
 {
 public:
 	std::string Name;	/* required element of XSD type xsd:string */
 	std::string NIC;	/* required element of XSD type xsd:string */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns4__PersonalDataType (99)
+	/// Return the unique type ID value SOAP_TYPE_pdf__PersonalDataType (99)
 	virtual int soap_type(void) const { return 99; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2490,25 +2494,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns4__PersonalDataType, default initialized and not managed by a soap context
-	virtual ns4__PersonalDataType *soap_alloc(void) const { return SOAP_NEW(ns4__PersonalDataType); }
-	         ns4__PersonalDataType() { ns4__PersonalDataType::soap_default(NULL); }
-	virtual ~ns4__PersonalDataType() { }
-	friend SOAP_FMAC1 ns4__PersonalDataType * SOAP_FMAC2 soap_instantiate_ns4__PersonalDataType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type pdf__PersonalDataType, default initialized and not managed by a soap context
+	virtual pdf__PersonalDataType *soap_alloc(void) const { return SOAP_NEW(pdf__PersonalDataType); }
+	         pdf__PersonalDataType() { pdf__PersonalDataType::soap_default(NULL); }
+	virtual ~pdf__PersonalDataType() { }
+	friend SOAP_FMAC1 pdf__PersonalDataType * SOAP_FMAC2 soap_instantiate_pdf__PersonalDataType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:462 */
-#ifndef SOAP_TYPE_ns4__AttributeListType
-#define SOAP_TYPE_ns4__AttributeListType (100)
-/* ns4:AttributeListType complex type: */
-class SOAP_CMAC ns4__AttributeListType
+#ifndef SOAP_TYPE_pdf__AttributeListType
+#define SOAP_TYPE_pdf__AttributeListType (100)
+/* pdf:AttributeListType complex type: */
+class SOAP_CMAC pdf__AttributeListType
 {
 public:
-	std::vector<ns4__AttributeType *> Attribute;	/* required element of XSD type ns4:AttributeType */
+	std::vector<pdf__AttributeType *> Attribute;	/* required element of XSD type pdf:AttributeType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns4__AttributeListType (100)
+	/// Return the unique type ID value SOAP_TYPE_pdf__AttributeListType (100)
 	virtual int soap_type(void) const { return 100; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2522,26 +2526,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns4__AttributeListType, default initialized and not managed by a soap context
-	virtual ns4__AttributeListType *soap_alloc(void) const { return SOAP_NEW(ns4__AttributeListType); }
-	         ns4__AttributeListType() { ns4__AttributeListType::soap_default(NULL); }
-	virtual ~ns4__AttributeListType() { }
-	friend SOAP_FMAC1 ns4__AttributeListType * SOAP_FMAC2 soap_instantiate_ns4__AttributeListType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type pdf__AttributeListType, default initialized and not managed by a soap context
+	virtual pdf__AttributeListType *soap_alloc(void) const { return SOAP_NEW(pdf__AttributeListType); }
+	         pdf__AttributeListType() { pdf__AttributeListType::soap_default(NULL); }
+	virtual ~pdf__AttributeListType() { }
+	friend SOAP_FMAC1 pdf__AttributeListType * SOAP_FMAC2 soap_instantiate_pdf__AttributeListType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:465 */
-#ifndef SOAP_TYPE_ns4__AttributeType
-#define SOAP_TYPE_ns4__AttributeType (101)
-/* ns4:AttributeType complex type: */
-class SOAP_CMAC ns4__AttributeType
+#ifndef SOAP_TYPE_pdf__AttributeType
+#define SOAP_TYPE_pdf__AttributeType (101)
+/* pdf:AttributeType complex type: */
+class SOAP_CMAC pdf__AttributeType
 {
 public:
-	ns4__AttributeSupplierType *AttributeSupplier;	/* required element of XSD type ns4:AttributeSupplierType */
-	ns4__MainAttributeType *MainAttribute;	/* required element of XSD type ns4:MainAttributeType */
+	pdf__AttributeSupplierType *AttributeSupplier;	/* required element of XSD type pdf:AttributeSupplierType */
+	pdf__MainAttributeType *MainAttribute;	/* required element of XSD type pdf:MainAttributeType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns4__AttributeType (101)
+	/// Return the unique type ID value SOAP_TYPE_pdf__AttributeType (101)
 	virtual int soap_type(void) const { return 101; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2555,19 +2559,19 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns4__AttributeType, default initialized and not managed by a soap context
-	virtual ns4__AttributeType *soap_alloc(void) const { return SOAP_NEW(ns4__AttributeType); }
-	         ns4__AttributeType() { ns4__AttributeType::soap_default(NULL); }
-	virtual ~ns4__AttributeType() { }
-	friend SOAP_FMAC1 ns4__AttributeType * SOAP_FMAC2 soap_instantiate_ns4__AttributeType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type pdf__AttributeType, default initialized and not managed by a soap context
+	virtual pdf__AttributeType *soap_alloc(void) const { return SOAP_NEW(pdf__AttributeType); }
+	         pdf__AttributeType() { pdf__AttributeType::soap_default(NULL); }
+	virtual ~pdf__AttributeType() { }
+	friend SOAP_FMAC1 pdf__AttributeType * SOAP_FMAC2 soap_instantiate_pdf__AttributeType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:468 */
-#ifndef SOAP_TYPE_ns4__AttributeSupplierType
-#define SOAP_TYPE_ns4__AttributeSupplierType (102)
-/* ns4:AttributeSupplierType complex type: */
-class SOAP_CMAC ns4__AttributeSupplierType
+#ifndef SOAP_TYPE_pdf__AttributeSupplierType
+#define SOAP_TYPE_pdf__AttributeSupplierType (102)
+/* pdf:AttributeSupplierType complex type: */
+class SOAP_CMAC pdf__AttributeSupplierType
 {
 public:
 	std::string Id;	/* required element of XSD type xsd:anyURI */
@@ -2575,7 +2579,7 @@ public:
 	std::string *Type;	/* optional element of XSD type xsd:string */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns4__AttributeSupplierType (102)
+	/// Return the unique type ID value SOAP_TYPE_pdf__AttributeSupplierType (102)
 	virtual int soap_type(void) const { return 102; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2589,28 +2593,28 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns4__AttributeSupplierType, default initialized and not managed by a soap context
-	virtual ns4__AttributeSupplierType *soap_alloc(void) const { return SOAP_NEW(ns4__AttributeSupplierType); }
-	         ns4__AttributeSupplierType() { ns4__AttributeSupplierType::soap_default(NULL); }
-	virtual ~ns4__AttributeSupplierType() { }
-	friend SOAP_FMAC1 ns4__AttributeSupplierType * SOAP_FMAC2 soap_instantiate_ns4__AttributeSupplierType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type pdf__AttributeSupplierType, default initialized and not managed by a soap context
+	virtual pdf__AttributeSupplierType *soap_alloc(void) const { return SOAP_NEW(pdf__AttributeSupplierType); }
+	         pdf__AttributeSupplierType() { pdf__AttributeSupplierType::soap_default(NULL); }
+	virtual ~pdf__AttributeSupplierType() { }
+	friend SOAP_FMAC1 pdf__AttributeSupplierType * SOAP_FMAC2 soap_instantiate_pdf__AttributeSupplierType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:471 */
-#ifndef SOAP_TYPE_ns4__MainAttributeType
-#define SOAP_TYPE_ns4__MainAttributeType (103)
-/* ns4:MainAttributeType complex type: */
-class SOAP_CMAC ns4__MainAttributeType
+#ifndef SOAP_TYPE_pdf__MainAttributeType
+#define SOAP_TYPE_pdf__MainAttributeType (103)
+/* pdf:MainAttributeType complex type: */
+class SOAP_CMAC pdf__MainAttributeType
 {
 public:
 	std::string AttributeID;	/* required element of XSD type xsd:string */
 	std::string *Description;	/* optional element of XSD type xsd:string */
-	ns4__LegalActListType *LegalActList;	/* optional element of XSD type ns4:LegalActListType */
-	ns4__SubAttributeListType *SubAttributeList;	/* optional element of XSD type ns4:SubAttributeListType */
+	pdf__LegalActListType *LegalActList;	/* optional element of XSD type pdf:LegalActListType */
+	pdf__SubAttributeListType *SubAttributeList;	/* optional element of XSD type pdf:SubAttributeListType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns4__MainAttributeType (103)
+	/// Return the unique type ID value SOAP_TYPE_pdf__MainAttributeType (103)
 	virtual int soap_type(void) const { return 103; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2624,25 +2628,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns4__MainAttributeType, default initialized and not managed by a soap context
-	virtual ns4__MainAttributeType *soap_alloc(void) const { return SOAP_NEW(ns4__MainAttributeType); }
-	         ns4__MainAttributeType() { ns4__MainAttributeType::soap_default(NULL); }
-	virtual ~ns4__MainAttributeType() { }
-	friend SOAP_FMAC1 ns4__MainAttributeType * SOAP_FMAC2 soap_instantiate_ns4__MainAttributeType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type pdf__MainAttributeType, default initialized and not managed by a soap context
+	virtual pdf__MainAttributeType *soap_alloc(void) const { return SOAP_NEW(pdf__MainAttributeType); }
+	         pdf__MainAttributeType() { pdf__MainAttributeType::soap_default(NULL); }
+	virtual ~pdf__MainAttributeType() { }
+	friend SOAP_FMAC1 pdf__MainAttributeType * SOAP_FMAC2 soap_instantiate_pdf__MainAttributeType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:474 */
-#ifndef SOAP_TYPE_ns4__LegalActListType
-#define SOAP_TYPE_ns4__LegalActListType (104)
-/* ns4:LegalActListType complex type: */
-class SOAP_CMAC ns4__LegalActListType
+#ifndef SOAP_TYPE_pdf__LegalActListType
+#define SOAP_TYPE_pdf__LegalActListType (104)
+/* pdf:LegalActListType complex type: */
+class SOAP_CMAC pdf__LegalActListType
 {
 public:
 	std::vector<std::string> LegalAct;	/* required element of XSD type xsd:string */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns4__LegalActListType (104)
+	/// Return the unique type ID value SOAP_TYPE_pdf__LegalActListType (104)
 	virtual int soap_type(void) const { return 104; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2656,25 +2660,25 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns4__LegalActListType, default initialized and not managed by a soap context
-	virtual ns4__LegalActListType *soap_alloc(void) const { return SOAP_NEW(ns4__LegalActListType); }
-	         ns4__LegalActListType() { ns4__LegalActListType::soap_default(NULL); }
-	virtual ~ns4__LegalActListType() { }
-	friend SOAP_FMAC1 ns4__LegalActListType * SOAP_FMAC2 soap_instantiate_ns4__LegalActListType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type pdf__LegalActListType, default initialized and not managed by a soap context
+	virtual pdf__LegalActListType *soap_alloc(void) const { return SOAP_NEW(pdf__LegalActListType); }
+	         pdf__LegalActListType() { pdf__LegalActListType::soap_default(NULL); }
+	virtual ~pdf__LegalActListType() { }
+	friend SOAP_FMAC1 pdf__LegalActListType * SOAP_FMAC2 soap_instantiate_pdf__LegalActListType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:477 */
-#ifndef SOAP_TYPE_ns4__SubAttributeListType
-#define SOAP_TYPE_ns4__SubAttributeListType (105)
-/* ns4:SubAttributeListType complex type: */
-class SOAP_CMAC ns4__SubAttributeListType
+#ifndef SOAP_TYPE_pdf__SubAttributeListType
+#define SOAP_TYPE_pdf__SubAttributeListType (105)
+/* pdf:SubAttributeListType complex type: */
+class SOAP_CMAC pdf__SubAttributeListType
 {
 public:
-	std::vector<ns4__SubAttributeType *> SubAttribute;	/* required element of XSD type ns4:SubAttributeType */
+	std::vector<pdf__SubAttributeType *> SubAttribute;	/* required element of XSD type pdf:SubAttributeType */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns4__SubAttributeListType (105)
+	/// Return the unique type ID value SOAP_TYPE_pdf__SubAttributeListType (105)
 	virtual int soap_type(void) const { return 105; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2688,29 +2692,29 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns4__SubAttributeListType, default initialized and not managed by a soap context
-	virtual ns4__SubAttributeListType *soap_alloc(void) const { return SOAP_NEW(ns4__SubAttributeListType); }
-	         ns4__SubAttributeListType() { ns4__SubAttributeListType::soap_default(NULL); }
-	virtual ~ns4__SubAttributeListType() { }
-	friend SOAP_FMAC1 ns4__SubAttributeListType * SOAP_FMAC2 soap_instantiate_ns4__SubAttributeListType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type pdf__SubAttributeListType, default initialized and not managed by a soap context
+	virtual pdf__SubAttributeListType *soap_alloc(void) const { return SOAP_NEW(pdf__SubAttributeListType); }
+	         pdf__SubAttributeListType() { pdf__SubAttributeListType::soap_default(NULL); }
+	virtual ~pdf__SubAttributeListType() { }
+	friend SOAP_FMAC1 pdf__SubAttributeListType * SOAP_FMAC2 soap_instantiate_pdf__SubAttributeListType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:480 */
-#ifndef SOAP_TYPE_ns4__SubAttributeType
-#define SOAP_TYPE_ns4__SubAttributeType (106)
-/* ns4:SubAttributeType complex type: */
-class SOAP_CMAC ns4__SubAttributeType
+#ifndef SOAP_TYPE_pdf__SubAttributeType
+#define SOAP_TYPE_pdf__SubAttributeType (106)
+/* pdf:SubAttributeType complex type: */
+class SOAP_CMAC pdf__SubAttributeType
 {
 public:
 	std::string AttributeID;	/* required element of XSD type xsd:string */
 	std::string *Description;	/* optional element of XSD type xsd:string */
 	std::string *Value;	/* optional element of XSD type xsd:string */
-	ns4__LegalActListType *LegalActList;	/* optional element of XSD type ns4:LegalActListType */
+	pdf__LegalActListType *LegalActList;	/* optional element of XSD type pdf:LegalActListType */
 	std::string *Type;	/* optional element of XSD type xsd:string */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns4__SubAttributeType (106)
+	/// Return the unique type ID value SOAP_TYPE_pdf__SubAttributeType (106)
 	virtual int soap_type(void) const { return 106; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2724,27 +2728,27 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns4__SubAttributeType, default initialized and not managed by a soap context
-	virtual ns4__SubAttributeType *soap_alloc(void) const { return SOAP_NEW(ns4__SubAttributeType); }
-	         ns4__SubAttributeType() { ns4__SubAttributeType::soap_default(NULL); }
-	virtual ~ns4__SubAttributeType() { }
-	friend SOAP_FMAC1 ns4__SubAttributeType * SOAP_FMAC2 soap_instantiate_ns4__SubAttributeType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type pdf__SubAttributeType, default initialized and not managed by a soap context
+	virtual pdf__SubAttributeType *soap_alloc(void) const { return SOAP_NEW(pdf__SubAttributeType); }
+	         pdf__SubAttributeType() { pdf__SubAttributeType::soap_default(NULL); }
+	virtual ~pdf__SubAttributeType() { }
+	friend SOAP_FMAC1 pdf__SubAttributeType * SOAP_FMAC2 soap_instantiate_pdf__SubAttributeType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:483 */
-#ifndef SOAP_TYPE_ns4__SignResponse
-#define SOAP_TYPE_ns4__SignResponse (107)
-/* ns4:SignResponse complex type: */
-class SOAP_CMAC ns4__SignResponse
+#ifndef SOAP_TYPE_pdf__SignResponse
+#define SOAP_TYPE_pdf__SignResponse (107)
+/* pdf:SignResponse complex type: */
+class SOAP_CMAC pdf__SignResponse
 {
 public:
 	std::string ProcessId;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of XSD type xsd:string */
-	ns4__Status *Status;	/* required element of XSD type ns4:Status */
+	pdf__Status *Status;	/* required element of XSD type pdf:Status */
 	xsd__base64Binary *SignedDocument;	/* optional element of XSD type xsd:base64Binary */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns4__SignResponse (107)
+	/// Return the unique type ID value SOAP_TYPE_pdf__SignResponse (107)
 	virtual int soap_type(void) const { return 107; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2758,19 +2762,19 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns4__SignResponse, default initialized and not managed by a soap context
-	virtual ns4__SignResponse *soap_alloc(void) const { return SOAP_NEW(ns4__SignResponse); }
-	         ns4__SignResponse() { ns4__SignResponse::soap_default(NULL); }
-	virtual ~ns4__SignResponse() { }
-	friend SOAP_FMAC1 ns4__SignResponse * SOAP_FMAC2 soap_instantiate_ns4__SignResponse(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type pdf__SignResponse, default initialized and not managed by a soap context
+	virtual pdf__SignResponse *soap_alloc(void) const { return SOAP_NEW(pdf__SignResponse); }
+	         pdf__SignResponse() { pdf__SignResponse::soap_default(NULL); }
+	virtual ~pdf__SignResponse() { }
+	friend SOAP_FMAC1 pdf__SignResponse * SOAP_FMAC2 soap_instantiate_pdf__SignResponse(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:486 */
-#ifndef SOAP_TYPE_ns4__Status
-#define SOAP_TYPE_ns4__Status (108)
-/* ns4:Status complex type: */
-class SOAP_CMAC ns4__Status
+#ifndef SOAP_TYPE_pdf__Status
+#define SOAP_TYPE_pdf__Status (108)
+/* pdf:Status complex type: */
+class SOAP_CMAC pdf__Status
 {
 public:
 	std::string Code;	/* required element of XSD type xsd:string */
@@ -2779,7 +2783,7 @@ public:
 	std::string *FieldValue;	/* optional element of XSD type xsd:string */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns4__Status (108)
+	/// Return the unique type ID value SOAP_TYPE_pdf__Status (108)
 	virtual int soap_type(void) const { return 108; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2793,11 +2797,11 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns4__Status, default initialized and not managed by a soap context
-	virtual ns4__Status *soap_alloc(void) const { return SOAP_NEW(ns4__Status); }
-	         ns4__Status() { ns4__Status::soap_default(NULL); }
-	virtual ~ns4__Status() { }
-	friend SOAP_FMAC1 ns4__Status * SOAP_FMAC2 soap_instantiate_ns4__Status(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type pdf__Status, default initialized and not managed by a soap context
+	virtual pdf__Status *soap_alloc(void) const { return SOAP_NEW(pdf__Status); }
+	         pdf__Status() { pdf__Status::soap_default(NULL); }
+	virtual ~pdf__Status() { }
+	friend SOAP_FMAC1 pdf__Status * SOAP_FMAC2 soap_instantiate_pdf__Status(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
@@ -2901,17 +2905,17 @@ public:
 #endif
 
 /* SCAP-Services.h:414 */
-#ifndef SOAP_TYPE_ns1__EncapsulatedX509CertificateType
-#define SOAP_TYPE_ns1__EncapsulatedX509CertificateType (84)
-/* ns1:EncapsulatedX509CertificateType simple type: */
-class SOAP_CMAC ns1__EncapsulatedX509CertificateType
+#ifndef SOAP_TYPE_ns6__EncapsulatedX509CertificateType
+#define SOAP_TYPE_ns6__EncapsulatedX509CertificateType (84)
+/* ns6:EncapsulatedX509CertificateType simple type: */
+class SOAP_CMAC ns6__EncapsulatedX509CertificateType
 {
 public:
 	xsd__base64Binary __item;	/* mixed XML content */
 	std::string Id;	/* required attribute of XSD type xsd:ID */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__EncapsulatedX509CertificateType (84)
+	/// Return the unique type ID value SOAP_TYPE_ns6__EncapsulatedX509CertificateType (84)
 	virtual int soap_type(void) const { return 84; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2925,26 +2929,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__EncapsulatedX509CertificateType, default initialized and not managed by a soap context
-	virtual ns1__EncapsulatedX509CertificateType *soap_alloc(void) const { return SOAP_NEW(ns1__EncapsulatedX509CertificateType); }
-	         ns1__EncapsulatedX509CertificateType() { ns1__EncapsulatedX509CertificateType::soap_default(NULL); }
-	virtual ~ns1__EncapsulatedX509CertificateType() { }
-	friend SOAP_FMAC1 ns1__EncapsulatedX509CertificateType * SOAP_FMAC2 soap_instantiate_ns1__EncapsulatedX509CertificateType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__EncapsulatedX509CertificateType, default initialized and not managed by a soap context
+	virtual ns6__EncapsulatedX509CertificateType *soap_alloc(void) const { return SOAP_NEW(ns6__EncapsulatedX509CertificateType); }
+	         ns6__EncapsulatedX509CertificateType() { ns6__EncapsulatedX509CertificateType::soap_default(NULL); }
+	virtual ~ns6__EncapsulatedX509CertificateType() { }
+	friend SOAP_FMAC1 ns6__EncapsulatedX509CertificateType * SOAP_FMAC2 soap_instantiate_ns6__EncapsulatedX509CertificateType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:423 */
-#ifndef SOAP_TYPE_ns1__EncapsulatedCRLValueType
-#define SOAP_TYPE_ns1__EncapsulatedCRLValueType (87)
-/* ns1:EncapsulatedCRLValueType simple type: */
-class SOAP_CMAC ns1__EncapsulatedCRLValueType
+#ifndef SOAP_TYPE_ns6__EncapsulatedCRLValueType
+#define SOAP_TYPE_ns6__EncapsulatedCRLValueType (87)
+/* ns6:EncapsulatedCRLValueType simple type: */
+class SOAP_CMAC ns6__EncapsulatedCRLValueType
 {
 public:
 	xsd__base64Binary __item;	/* mixed XML content */
 	std::string Id;	/* required attribute of XSD type xsd:ID */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__EncapsulatedCRLValueType (87)
+	/// Return the unique type ID value SOAP_TYPE_ns6__EncapsulatedCRLValueType (87)
 	virtual int soap_type(void) const { return 87; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2958,26 +2962,26 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__EncapsulatedCRLValueType, default initialized and not managed by a soap context
-	virtual ns1__EncapsulatedCRLValueType *soap_alloc(void) const { return SOAP_NEW(ns1__EncapsulatedCRLValueType); }
-	         ns1__EncapsulatedCRLValueType() { ns1__EncapsulatedCRLValueType::soap_default(NULL); }
-	virtual ~ns1__EncapsulatedCRLValueType() { }
-	friend SOAP_FMAC1 ns1__EncapsulatedCRLValueType * SOAP_FMAC2 soap_instantiate_ns1__EncapsulatedCRLValueType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__EncapsulatedCRLValueType, default initialized and not managed by a soap context
+	virtual ns6__EncapsulatedCRLValueType *soap_alloc(void) const { return SOAP_NEW(ns6__EncapsulatedCRLValueType); }
+	         ns6__EncapsulatedCRLValueType() { ns6__EncapsulatedCRLValueType::soap_default(NULL); }
+	virtual ~ns6__EncapsulatedCRLValueType() { }
+	friend SOAP_FMAC1 ns6__EncapsulatedCRLValueType * SOAP_FMAC2 soap_instantiate_ns6__EncapsulatedCRLValueType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:429 */
-#ifndef SOAP_TYPE_ns1__EncapsulatedOCSPValueType
-#define SOAP_TYPE_ns1__EncapsulatedOCSPValueType (89)
-/* ns1:EncapsulatedOCSPValueType simple type: */
-class SOAP_CMAC ns1__EncapsulatedOCSPValueType
+#ifndef SOAP_TYPE_ns6__EncapsulatedOCSPValueType
+#define SOAP_TYPE_ns6__EncapsulatedOCSPValueType (89)
+/* ns6:EncapsulatedOCSPValueType simple type: */
+class SOAP_CMAC ns6__EncapsulatedOCSPValueType
 {
 public:
 	xsd__base64Binary __item;	/* mixed XML content */
 	std::string Id;	/* required attribute of XSD type xsd:ID */
 	struct soap *soap;	/* transient (not serialized) */
 public:
-	/// Return the unique type ID value SOAP_TYPE_ns1__EncapsulatedOCSPValueType (89)
+	/// Return the unique type ID value SOAP_TYPE_ns6__EncapsulatedOCSPValueType (89)
 	virtual int soap_type(void) const { return 89; }
 	/// Set object's data members to default values
 	virtual void soap_default(struct soap*);
@@ -2991,11 +2995,11 @@ public:
 	virtual void *soap_get(struct soap*, const char *tag, const char *type);
 	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
 	virtual void *soap_in(struct soap*, const char *tag, const char *type);
-	/// Return a new object of type ns1__EncapsulatedOCSPValueType, default initialized and not managed by a soap context
-	virtual ns1__EncapsulatedOCSPValueType *soap_alloc(void) const { return SOAP_NEW(ns1__EncapsulatedOCSPValueType); }
-	         ns1__EncapsulatedOCSPValueType() { ns1__EncapsulatedOCSPValueType::soap_default(NULL); }
-	virtual ~ns1__EncapsulatedOCSPValueType() { }
-	friend SOAP_FMAC1 ns1__EncapsulatedOCSPValueType * SOAP_FMAC2 soap_instantiate_ns1__EncapsulatedOCSPValueType(struct soap*, int, const char*, const char*, size_t*);
+	/// Return a new object of type ns6__EncapsulatedOCSPValueType, default initialized and not managed by a soap context
+	virtual ns6__EncapsulatedOCSPValueType *soap_alloc(void) const { return SOAP_NEW(ns6__EncapsulatedOCSPValueType); }
+	         ns6__EncapsulatedOCSPValueType() { ns6__EncapsulatedOCSPValueType::soap_default(NULL); }
+	virtual ~ns6__EncapsulatedOCSPValueType() { }
+	friend SOAP_FMAC1 ns6__EncapsulatedOCSPValueType * SOAP_FMAC2 soap_instantiate_ns6__EncapsulatedOCSPValueType(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
@@ -3207,30 +3211,30 @@ public:
 #endif
 
 /* SCAP-Services.h:3332 */
-#ifndef SOAP_TYPE___ns2__AttributeSuppliers
-#define SOAP_TYPE___ns2__AttributeSuppliers (347)
+#ifndef SOAP_TYPE___ns8__AttributeSuppliers
+#define SOAP_TYPE___ns8__AttributeSuppliers (347)
 /* Operation wrapper: */
-struct __ns2__AttributeSuppliers
+struct __ns8__AttributeSuppliers
 {
 public:
-	int soap_type() const { return 347; } /* = unique type id SOAP_TYPE___ns2__AttributeSuppliers */
-	         __ns2__AttributeSuppliers();
-	friend SOAP_FMAC1 __ns2__AttributeSuppliers * SOAP_FMAC2 soap_instantiate___ns2__AttributeSuppliers(struct soap*, int, const char*, const char*, size_t*);
+	int soap_type() const { return 347; } /* = unique type id SOAP_TYPE___ns8__AttributeSuppliers */
+	         __ns8__AttributeSuppliers();
+	friend SOAP_FMAC1 __ns8__AttributeSuppliers * SOAP_FMAC2 soap_instantiate___ns8__AttributeSuppliers(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
 /* SCAP-Services.h:3416 */
-#ifndef SOAP_TYPE___ns4__Sign
-#define SOAP_TYPE___ns4__Sign (351)
+#ifndef SOAP_TYPE___pdf__Sign
+#define SOAP_TYPE___pdf__Sign (351)
 /* Operation wrapper: */
-struct __ns4__Sign
+struct __pdf__Sign
 {
 public:
-	ns4__SignRequest *ns4__SignRequest_;	/* optional element of XSD type ns4:SignRequest */
+	pdf__SignRequest *pdf__SignRequest_;	/* optional element of XSD type pdf:SignRequest */
 public:
-	int soap_type() const { return 351; } /* = unique type id SOAP_TYPE___ns4__Sign */
-	         __ns4__Sign();
-	friend SOAP_FMAC1 __ns4__Sign * SOAP_FMAC2 soap_instantiate___ns4__Sign(struct soap*, int, const char*, const char*, size_t*);
+	int soap_type() const { return 351; } /* = unique type id SOAP_TYPE___pdf__Sign */
+	         __pdf__Sign();
+	friend SOAP_FMAC1 __pdf__Sign * SOAP_FMAC2 soap_instantiate___pdf__Sign(struct soap*, int, const char*, const char*, size_t*);
 };
 #endif
 
@@ -3278,33 +3282,33 @@ typedef std::string xsd__integer;
 #endif
 
 /* SCAP-Services.h:435 */
-#ifndef SOAP_TYPE__ns1__Issuer
-#define SOAP_TYPE__ns1__Issuer (91)
-typedef _XML _ns1__Issuer;
+#ifndef SOAP_TYPE__ns6__Issuer
+#define SOAP_TYPE__ns6__Issuer (91)
+typedef _XML _ns6__Issuer;
 #endif
 
 /* SCAP-Services.h:438 */
-#ifndef SOAP_TYPE__ns1__IssueTime
-#define SOAP_TYPE__ns1__IssueTime (92)
-typedef _XML _ns1__IssueTime;
+#ifndef SOAP_TYPE__ns6__IssueTime
+#define SOAP_TYPE__ns6__IssueTime (92)
+typedef _XML _ns6__IssueTime;
 #endif
 
 /* SCAP-Services.h:441 */
-#ifndef SOAP_TYPE__ns1__Number
-#define SOAP_TYPE__ns1__Number (93)
-typedef _XML _ns1__Number;
+#ifndef SOAP_TYPE__ns6__Number
+#define SOAP_TYPE__ns6__Number (93)
+typedef _XML _ns6__Number;
 #endif
 
 /* SCAP-Services.h:444 */
-#ifndef SOAP_TYPE__ns1__ByName
-#define SOAP_TYPE__ns1__ByName (94)
-typedef _XML _ns1__ByName;
+#ifndef SOAP_TYPE__ns6__ByName
+#define SOAP_TYPE__ns6__ByName (94)
+typedef _XML _ns6__ByName;
 #endif
 
 /* SCAP-Services.h:447 */
-#ifndef SOAP_TYPE__ns1__ProducedAt
-#define SOAP_TYPE__ns1__ProducedAt (95)
-typedef _XML _ns1__ProducedAt;
+#ifndef SOAP_TYPE__ns6__ProducedAt
+#define SOAP_TYPE__ns6__ProducedAt (95)
+typedef _XML _ns6__ProducedAt;
 #endif
 
 /* SCAP-Services.h:570 */
@@ -3404,45 +3408,45 @@ typedef std::string ns4__ResponseCodeMessage;
 #endif
 
 /* SCAP-Services.h:670 */
-#ifndef SOAP_TYPE_ns1__SigningTimeType
-#define SOAP_TYPE_ns1__SigningTimeType (126)
-typedef time_t ns1__SigningTimeType;
+#ifndef SOAP_TYPE_ns6__SigningTimeType
+#define SOAP_TYPE_ns6__SigningTimeType (126)
+typedef time_t ns6__SigningTimeType;
 #endif
 
 /* SCAP-Services.h:674 */
-#ifndef SOAP_TYPE_ns1__EncapsulatedTimeStampType
-#define SOAP_TYPE_ns1__EncapsulatedTimeStampType (127)
-typedef xsd__base64Binary ns1__EncapsulatedTimeStampType;
+#ifndef SOAP_TYPE_ns6__EncapsulatedTimeStampType
+#define SOAP_TYPE_ns6__EncapsulatedTimeStampType (127)
+typedef xsd__base64Binary ns6__EncapsulatedTimeStampType;
 #endif
 
 /* SCAP-Services.h:678 */
-#ifndef SOAP_TYPE_ns1__IssuerType
-#define SOAP_TYPE_ns1__IssuerType (128)
-typedef std::string ns1__IssuerType;
+#ifndef SOAP_TYPE_ns6__IssuerType
+#define SOAP_TYPE_ns6__IssuerType (128)
+typedef std::string ns6__IssuerType;
 #endif
 
 /* SCAP-Services.h:682 */
-#ifndef SOAP_TYPE_ns1__IssueTimeType
-#define SOAP_TYPE_ns1__IssueTimeType (129)
-typedef time_t ns1__IssueTimeType;
+#ifndef SOAP_TYPE_ns6__IssueTimeType
+#define SOAP_TYPE_ns6__IssueTimeType (129)
+typedef time_t ns6__IssueTimeType;
 #endif
 
 /* SCAP-Services.h:686 */
-#ifndef SOAP_TYPE_ns1__NumberType
-#define SOAP_TYPE_ns1__NumberType (130)
-typedef xsd__integer ns1__NumberType;
+#ifndef SOAP_TYPE_ns6__NumberType
+#define SOAP_TYPE_ns6__NumberType (130)
+typedef xsd__integer ns6__NumberType;
 #endif
 
 /* SCAP-Services.h:690 */
-#ifndef SOAP_TYPE_ns1__ByNameType
-#define SOAP_TYPE_ns1__ByNameType (131)
-typedef std::string ns1__ByNameType;
+#ifndef SOAP_TYPE_ns6__ByNameType
+#define SOAP_TYPE_ns6__ByNameType (131)
+typedef std::string ns6__ByNameType;
 #endif
 
 /* SCAP-Services.h:694 */
-#ifndef SOAP_TYPE_ns1__ProducedAtType
-#define SOAP_TYPE_ns1__ProducedAtType (132)
-typedef time_t ns1__ProducedAtType;
+#ifndef SOAP_TYPE_ns6__ProducedAtType
+#define SOAP_TYPE_ns6__ProducedAtType (132)
+typedef time_t ns6__ProducedAtType;
 #endif
 
 /* SCAP-Services.h:706 */
@@ -3584,219 +3588,219 @@ typedef ns5__SignatureType _ns3__SignatureAttribute;
 #endif
 
 /* SCAP-Services.h:2867 */
-#ifndef SOAP_TYPE__ns1__QualifyingProperties
-#define SOAP_TYPE__ns1__QualifyingProperties (265)
-typedef ns1__QualifyingPropertiesType _ns1__QualifyingProperties;
+#ifndef SOAP_TYPE__ns6__QualifyingProperties
+#define SOAP_TYPE__ns6__QualifyingProperties (265)
+typedef ns6__QualifyingPropertiesType _ns6__QualifyingProperties;
 #endif
 
 /* SCAP-Services.h:2870 */
-#ifndef SOAP_TYPE__ns1__SignedProperties
-#define SOAP_TYPE__ns1__SignedProperties (266)
-typedef ns1__SignedPropertiesType _ns1__SignedProperties;
+#ifndef SOAP_TYPE__ns6__SignedProperties
+#define SOAP_TYPE__ns6__SignedProperties (266)
+typedef ns6__SignedPropertiesType _ns6__SignedProperties;
 #endif
 
 /* SCAP-Services.h:2873 */
-#ifndef SOAP_TYPE__ns1__SignedSignatureProperties
-#define SOAP_TYPE__ns1__SignedSignatureProperties (267)
-typedef ns1__SignedSignaturePropertiesType _ns1__SignedSignatureProperties;
+#ifndef SOAP_TYPE__ns6__SignedSignatureProperties
+#define SOAP_TYPE__ns6__SignedSignatureProperties (267)
+typedef ns6__SignedSignaturePropertiesType _ns6__SignedSignatureProperties;
 #endif
 
 /* SCAP-Services.h:2876 */
-#ifndef SOAP_TYPE__ns1__SigningCertificate
-#define SOAP_TYPE__ns1__SigningCertificate (268)
-typedef ns1__SigningCertificateType _ns1__SigningCertificate;
+#ifndef SOAP_TYPE__ns6__SigningCertificate
+#define SOAP_TYPE__ns6__SigningCertificate (268)
+typedef ns6__SigningCertificateType _ns6__SigningCertificate;
 #endif
 
 /* SCAP-Services.h:2879 */
-#ifndef SOAP_TYPE__ns1__Cert
-#define SOAP_TYPE__ns1__Cert (269)
-typedef ns1__CertType _ns1__Cert;
+#ifndef SOAP_TYPE__ns6__Cert
+#define SOAP_TYPE__ns6__Cert (269)
+typedef ns6__CertType _ns6__Cert;
 #endif
 
 /* SCAP-Services.h:2882 */
-#ifndef SOAP_TYPE__ns1__CertDigest
-#define SOAP_TYPE__ns1__CertDigest (270)
-typedef ns1__CertDigestType _ns1__CertDigest;
+#ifndef SOAP_TYPE__ns6__CertDigest
+#define SOAP_TYPE__ns6__CertDigest (270)
+typedef ns6__CertDigestType _ns6__CertDigest;
 #endif
 
 /* SCAP-Services.h:2885 */
-#ifndef SOAP_TYPE__ns1__IssuerSerial
-#define SOAP_TYPE__ns1__IssuerSerial (271)
-typedef ns1__IssuerSerialType _ns1__IssuerSerial;
+#ifndef SOAP_TYPE__ns6__IssuerSerial
+#define SOAP_TYPE__ns6__IssuerSerial (271)
+typedef ns6__IssuerSerialType _ns6__IssuerSerial;
 #endif
 
 /* SCAP-Services.h:2888 */
-#ifndef SOAP_TYPE__ns1__SigningTime
-#define SOAP_TYPE__ns1__SigningTime (272)
-typedef ns1__SigningTimeType _ns1__SigningTime;
+#ifndef SOAP_TYPE__ns6__SigningTime
+#define SOAP_TYPE__ns6__SigningTime (272)
+typedef ns6__SigningTimeType _ns6__SigningTime;
 #endif
 
 /* SCAP-Services.h:2891 */
-#ifndef SOAP_TYPE__ns1__SignerRole
-#define SOAP_TYPE__ns1__SignerRole (273)
-typedef ns1__SignerRoleType _ns1__SignerRole;
+#ifndef SOAP_TYPE__ns6__SignerRole
+#define SOAP_TYPE__ns6__SignerRole (273)
+typedef ns6__SignerRoleType _ns6__SignerRole;
 #endif
 
 /* SCAP-Services.h:2894 */
-#ifndef SOAP_TYPE__ns1__ClaimedRoles
-#define SOAP_TYPE__ns1__ClaimedRoles (274)
-typedef ns1__ClaimedRolesListType _ns1__ClaimedRoles;
+#ifndef SOAP_TYPE__ns6__ClaimedRoles
+#define SOAP_TYPE__ns6__ClaimedRoles (274)
+typedef ns6__ClaimedRolesListType _ns6__ClaimedRoles;
 #endif
 
 /* SCAP-Services.h:2897 */
-#ifndef SOAP_TYPE__ns1__ClaimedRole
-#define SOAP_TYPE__ns1__ClaimedRole (275)
-typedef ns1__ClaimedRoleType _ns1__ClaimedRole;
+#ifndef SOAP_TYPE__ns6__ClaimedRole
+#define SOAP_TYPE__ns6__ClaimedRole (275)
+typedef ns6__ClaimedRoleType _ns6__ClaimedRole;
 #endif
 
 /* SCAP-Services.h:2900 */
-#ifndef SOAP_TYPE__ns1__UnsignedProperties
-#define SOAP_TYPE__ns1__UnsignedProperties (276)
-typedef ns1__UnsignedPropertiesType _ns1__UnsignedProperties;
+#ifndef SOAP_TYPE__ns6__UnsignedProperties
+#define SOAP_TYPE__ns6__UnsignedProperties (276)
+typedef ns6__UnsignedPropertiesType _ns6__UnsignedProperties;
 #endif
 
 /* SCAP-Services.h:2903 */
-#ifndef SOAP_TYPE__ns1__UnsignedSignatureProperties
-#define SOAP_TYPE__ns1__UnsignedSignatureProperties (277)
-typedef ns1__UnsignedSignaturePropertiesType _ns1__UnsignedSignatureProperties;
+#ifndef SOAP_TYPE__ns6__UnsignedSignatureProperties
+#define SOAP_TYPE__ns6__UnsignedSignatureProperties (277)
+typedef ns6__UnsignedSignaturePropertiesType _ns6__UnsignedSignatureProperties;
 #endif
 
 /* SCAP-Services.h:2906 */
-#ifndef SOAP_TYPE__ns1__CounterSignature
-#define SOAP_TYPE__ns1__CounterSignature (278)
-typedef ns1__CounterSignatureType _ns1__CounterSignature;
+#ifndef SOAP_TYPE__ns6__CounterSignature
+#define SOAP_TYPE__ns6__CounterSignature (278)
+typedef ns6__CounterSignatureType _ns6__CounterSignature;
 #endif
 
 /* SCAP-Services.h:2909 */
-#ifndef SOAP_TYPE__ns1__SignatureTimeStamp
-#define SOAP_TYPE__ns1__SignatureTimeStamp (279)
-typedef ns1__SignatureTimeStampType _ns1__SignatureTimeStamp;
+#ifndef SOAP_TYPE__ns6__SignatureTimeStamp
+#define SOAP_TYPE__ns6__SignatureTimeStamp (279)
+typedef ns6__SignatureTimeStampType _ns6__SignatureTimeStamp;
 #endif
 
 /* SCAP-Services.h:2912 */
-#ifndef SOAP_TYPE__ns1__EncapsulatedTimeStamp
-#define SOAP_TYPE__ns1__EncapsulatedTimeStamp (280)
-typedef ns1__EncapsulatedTimeStampType _ns1__EncapsulatedTimeStamp;
+#ifndef SOAP_TYPE__ns6__EncapsulatedTimeStamp
+#define SOAP_TYPE__ns6__EncapsulatedTimeStamp (280)
+typedef ns6__EncapsulatedTimeStampType _ns6__EncapsulatedTimeStamp;
 #endif
 
 /* SCAP-Services.h:2915 */
-#ifndef SOAP_TYPE__ns1__CompleteCertificateRefs
-#define SOAP_TYPE__ns1__CompleteCertificateRefs (281)
-typedef ns1__CompleteCertificateRefsType _ns1__CompleteCertificateRefs;
+#ifndef SOAP_TYPE__ns6__CompleteCertificateRefs
+#define SOAP_TYPE__ns6__CompleteCertificateRefs (281)
+typedef ns6__CompleteCertificateRefsType _ns6__CompleteCertificateRefs;
 #endif
 
 /* SCAP-Services.h:2918 */
-#ifndef SOAP_TYPE__ns1__CertRefs
-#define SOAP_TYPE__ns1__CertRefs (282)
-typedef ns1__CertRefsType _ns1__CertRefs;
+#ifndef SOAP_TYPE__ns6__CertRefs
+#define SOAP_TYPE__ns6__CertRefs (282)
+typedef ns6__CertRefsType _ns6__CertRefs;
 #endif
 
 /* SCAP-Services.h:2921 */
-#ifndef SOAP_TYPE__ns1__CompleteRevocationRefs
-#define SOAP_TYPE__ns1__CompleteRevocationRefs (283)
-typedef ns1__CompleteRevocationRefsType _ns1__CompleteRevocationRefs;
+#ifndef SOAP_TYPE__ns6__CompleteRevocationRefs
+#define SOAP_TYPE__ns6__CompleteRevocationRefs (283)
+typedef ns6__CompleteRevocationRefsType _ns6__CompleteRevocationRefs;
 #endif
 
 /* SCAP-Services.h:2924 */
-#ifndef SOAP_TYPE__ns1__CRLRefs
-#define SOAP_TYPE__ns1__CRLRefs (284)
-typedef ns1__CRLRefsType _ns1__CRLRefs;
+#ifndef SOAP_TYPE__ns6__CRLRefs
+#define SOAP_TYPE__ns6__CRLRefs (284)
+typedef ns6__CRLRefsType _ns6__CRLRefs;
 #endif
 
 /* SCAP-Services.h:2927 */
-#ifndef SOAP_TYPE__ns1__CRLRef
-#define SOAP_TYPE__ns1__CRLRef (285)
-typedef ns1__CRLRefType _ns1__CRLRef;
+#ifndef SOAP_TYPE__ns6__CRLRef
+#define SOAP_TYPE__ns6__CRLRef (285)
+typedef ns6__CRLRefType _ns6__CRLRef;
 #endif
 
 /* SCAP-Services.h:2930 */
-#ifndef SOAP_TYPE__ns1__DigestAlgAndValue
-#define SOAP_TYPE__ns1__DigestAlgAndValue (286)
-typedef ns1__DigestAlgAndValueType _ns1__DigestAlgAndValue;
+#ifndef SOAP_TYPE__ns6__DigestAlgAndValue
+#define SOAP_TYPE__ns6__DigestAlgAndValue (286)
+typedef ns6__DigestAlgAndValueType _ns6__DigestAlgAndValue;
 #endif
 
 /* SCAP-Services.h:2933 */
-#ifndef SOAP_TYPE__ns1__CRLIdentifier
-#define SOAP_TYPE__ns1__CRLIdentifier (287)
-typedef ns1__CRLIdentifierType _ns1__CRLIdentifier;
+#ifndef SOAP_TYPE__ns6__CRLIdentifier
+#define SOAP_TYPE__ns6__CRLIdentifier (287)
+typedef ns6__CRLIdentifierType _ns6__CRLIdentifier;
 #endif
 
 /* SCAP-Services.h:2936 */
-#ifndef SOAP_TYPE__ns1__OCSPRefs
-#define SOAP_TYPE__ns1__OCSPRefs (288)
-typedef ns1__OCSPRefsType _ns1__OCSPRefs;
+#ifndef SOAP_TYPE__ns6__OCSPRefs
+#define SOAP_TYPE__ns6__OCSPRefs (288)
+typedef ns6__OCSPRefsType _ns6__OCSPRefs;
 #endif
 
 /* SCAP-Services.h:2939 */
-#ifndef SOAP_TYPE__ns1__OCSPRef
-#define SOAP_TYPE__ns1__OCSPRef (289)
-typedef ns1__OCSPRefType _ns1__OCSPRef;
+#ifndef SOAP_TYPE__ns6__OCSPRef
+#define SOAP_TYPE__ns6__OCSPRef (289)
+typedef ns6__OCSPRefType _ns6__OCSPRef;
 #endif
 
 /* SCAP-Services.h:2942 */
-#ifndef SOAP_TYPE__ns1__OCSPIdentifier
-#define SOAP_TYPE__ns1__OCSPIdentifier (290)
-typedef ns1__OCSPIdentifierType _ns1__OCSPIdentifier;
+#ifndef SOAP_TYPE__ns6__OCSPIdentifier
+#define SOAP_TYPE__ns6__OCSPIdentifier (290)
+typedef ns6__OCSPIdentifierType _ns6__OCSPIdentifier;
 #endif
 
 /* SCAP-Services.h:2945 */
-#ifndef SOAP_TYPE__ns1__ResponderID
-#define SOAP_TYPE__ns1__ResponderID (291)
-typedef ns1__ResponderIDType _ns1__ResponderID;
+#ifndef SOAP_TYPE__ns6__ResponderID
+#define SOAP_TYPE__ns6__ResponderID (291)
+typedef ns6__ResponderIDType _ns6__ResponderID;
 #endif
 
 /* SCAP-Services.h:2948 */
-#ifndef SOAP_TYPE__ns1__SigAndRefsTimeStamp
-#define SOAP_TYPE__ns1__SigAndRefsTimeStamp (292)
-typedef ns1__SigAndRefsTimeStampType _ns1__SigAndRefsTimeStamp;
+#ifndef SOAP_TYPE__ns6__SigAndRefsTimeStamp
+#define SOAP_TYPE__ns6__SigAndRefsTimeStamp (292)
+typedef ns6__SigAndRefsTimeStampType _ns6__SigAndRefsTimeStamp;
 #endif
 
 /* SCAP-Services.h:2951 */
-#ifndef SOAP_TYPE__ns1__CertificateValues
-#define SOAP_TYPE__ns1__CertificateValues (293)
-typedef ns1__CertificateValuesType _ns1__CertificateValues;
+#ifndef SOAP_TYPE__ns6__CertificateValues
+#define SOAP_TYPE__ns6__CertificateValues (293)
+typedef ns6__CertificateValuesType _ns6__CertificateValues;
 #endif
 
 /* SCAP-Services.h:2954 */
-#ifndef SOAP_TYPE__ns1__EncapsulatedX509Certificate
-#define SOAP_TYPE__ns1__EncapsulatedX509Certificate (294)
-typedef ns1__EncapsulatedX509CertificateType _ns1__EncapsulatedX509Certificate;
+#ifndef SOAP_TYPE__ns6__EncapsulatedX509Certificate
+#define SOAP_TYPE__ns6__EncapsulatedX509Certificate (294)
+typedef ns6__EncapsulatedX509CertificateType _ns6__EncapsulatedX509Certificate;
 #endif
 
 /* SCAP-Services.h:2957 */
-#ifndef SOAP_TYPE__ns1__RevocationValues
-#define SOAP_TYPE__ns1__RevocationValues (295)
-typedef ns1__RevocationValuesType _ns1__RevocationValues;
+#ifndef SOAP_TYPE__ns6__RevocationValues
+#define SOAP_TYPE__ns6__RevocationValues (295)
+typedef ns6__RevocationValuesType _ns6__RevocationValues;
 #endif
 
 /* SCAP-Services.h:2960 */
-#ifndef SOAP_TYPE__ns1__CRLValues
-#define SOAP_TYPE__ns1__CRLValues (296)
-typedef ns1__CRLValuesType _ns1__CRLValues;
+#ifndef SOAP_TYPE__ns6__CRLValues
+#define SOAP_TYPE__ns6__CRLValues (296)
+typedef ns6__CRLValuesType _ns6__CRLValues;
 #endif
 
 /* SCAP-Services.h:2963 */
-#ifndef SOAP_TYPE__ns1__EncapsulatedCRLValue
-#define SOAP_TYPE__ns1__EncapsulatedCRLValue (297)
-typedef ns1__EncapsulatedCRLValueType _ns1__EncapsulatedCRLValue;
+#ifndef SOAP_TYPE__ns6__EncapsulatedCRLValue
+#define SOAP_TYPE__ns6__EncapsulatedCRLValue (297)
+typedef ns6__EncapsulatedCRLValueType _ns6__EncapsulatedCRLValue;
 #endif
 
 /* SCAP-Services.h:2966 */
-#ifndef SOAP_TYPE__ns1__OCSPValues
-#define SOAP_TYPE__ns1__OCSPValues (298)
-typedef ns1__OCSPValuesType _ns1__OCSPValues;
+#ifndef SOAP_TYPE__ns6__OCSPValues
+#define SOAP_TYPE__ns6__OCSPValues (298)
+typedef ns6__OCSPValuesType _ns6__OCSPValues;
 #endif
 
 /* SCAP-Services.h:2969 */
-#ifndef SOAP_TYPE__ns1__EncapsulatedOCSPValue
-#define SOAP_TYPE__ns1__EncapsulatedOCSPValue (299)
-typedef ns1__EncapsulatedOCSPValueType _ns1__EncapsulatedOCSPValue;
+#ifndef SOAP_TYPE__ns6__EncapsulatedOCSPValue
+#define SOAP_TYPE__ns6__EncapsulatedOCSPValue (299)
+typedef ns6__EncapsulatedOCSPValueType _ns6__EncapsulatedOCSPValue;
 #endif
 
 /* SCAP-Services.h:2972 */
-#ifndef SOAP_TYPE__ns1__ArchiveTimeStamp
-#define SOAP_TYPE__ns1__ArchiveTimeStamp (300)
-typedef ns1__ArchiveTimeStampType _ns1__ArchiveTimeStamp;
+#ifndef SOAP_TYPE__ns6__ArchiveTimeStamp
+#define SOAP_TYPE__ns6__ArchiveTimeStamp (300)
+typedef ns6__ArchiveTimeStampType _ns6__ArchiveTimeStamp;
 #endif
 
 /* SCAP-Services.h:2991 */
@@ -3812,21 +3816,21 @@ typedef ns7__SVGType _ns7__SVG;
 #endif
 
 /* SCAP-Services.h:3029 */
-#ifndef SOAP_TYPE__ns3__AttributeSupplierResponse
-#define SOAP_TYPE__ns3__AttributeSupplierResponse (303)
-typedef ns3__AttributeSupplierResponseType _ns3__AttributeSupplierResponse;
+#ifndef SOAP_TYPE__ns9__AttributeSupplierResponse
+#define SOAP_TYPE__ns9__AttributeSupplierResponse (303)
+typedef ns9__AttributeSupplierResponseType _ns9__AttributeSupplierResponse;
 #endif
 
 /* SCAP-Services.h:3048 */
-#ifndef SOAP_TYPE__ns4__SignRequest
-#define SOAP_TYPE__ns4__SignRequest (304)
-typedef ns4__SignRequest _ns4__SignRequest;
+#ifndef SOAP_TYPE__pdf__SignRequest
+#define SOAP_TYPE__pdf__SignRequest (304)
+typedef pdf__SignRequest _pdf__SignRequest;
 #endif
 
 /* SCAP-Services.h:3051 */
-#ifndef SOAP_TYPE__ns4__SignResponse
-#define SOAP_TYPE__ns4__SignResponse (305)
-typedef ns4__SignResponse _ns4__SignResponse;
+#ifndef SOAP_TYPE__pdf__SignResponse
+#define SOAP_TYPE__pdf__SignResponse (305)
+typedef pdf__SignResponse _pdf__SignResponse;
 #endif
 
 /* wsa.h:220 */

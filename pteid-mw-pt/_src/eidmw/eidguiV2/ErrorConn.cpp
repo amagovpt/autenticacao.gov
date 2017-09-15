@@ -123,8 +123,8 @@ tErrConnInfo* ErrorConn::getEntry( int soapErr ){
 
 void ErrorConn::setErr( int soapErr, void *in_suppliers_resp ){
 
-    ns3__AttributeSupplierResponseType *suppliers_resp =
-        (ns3__AttributeSupplierResponseType*)in_suppliers_resp;
+    ns9__AttributeSupplierResponseType *suppliers_resp =
+        (ns9__AttributeSupplierResponseType*)in_suppliers_resp;
 
     if ( ( SOAP_EOF == soapErr )
         && ( suppliers_resp->soap != NULL )

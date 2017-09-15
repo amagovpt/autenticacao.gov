@@ -57,7 +57,7 @@ public:
 	std::vector<ns3__AttributeSupplierType *> getAttributeSuppliers();
 
 	void getEntityAttributes();
-	void getCompanyAttributes(eIDMW::PTEID_EIDCard &card);
+    std::vector<ns2__AttributesType *> getCompanyAttributes(eIDMW::PTEID_EIDCard &card);
 	void executeSCAPSignature(int selected_page, QString &inputPath, QString &savefilepath,
 	     double location_x, double location_y, int ltv_years, std::vector<ns3__AttributeType *> selected_attributes);
 	std::vector<ns2__AttributesType *> loadAttributesFromCache(eIDMW::PTEID_EIDCard &card);

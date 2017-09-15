@@ -72,13 +72,17 @@ void PDFSignatureSoapBindingProxy::PDFSignatureSoapBindingProxy_init(soap_mode i
 	{"SOAP-ENC", "http://schemas.xmlsoap.org/soap/encoding/", "http://www.w3.org/*/soap-encoding", NULL},
 	{"xsi", "http://www.w3.org/2001/XMLSchema-instance", "http://www.w3.org/*/XMLSchema-instance", NULL},
 	{"xsd", "http://www.w3.org/2001/XMLSchema", "http://www.w3.org/*/XMLSchema", NULL},
+	{"ns4", "http://www.cartaodecidadao.pt/ccc/commons/messages/Types", NULL, NULL},
 	{"ns5", "http://www.w3.org/2000/09/xmldsig#", NULL, NULL},
+	{"ns3", "http://www.cartaodecidadao.pt/ccc/commons/messages/Attribute", NULL, NULL},
+	{"ns6", "http://uri.etsi.org/01903/v1.3.2#", NULL, NULL},
 	{"ns7", "http://www.cartaodecidadao.pt/ccc/commons/messages/SVG", NULL, NULL},
 	{"wsa", "http://schemas.xmlsoap.org/ws/2004/08/addressing", NULL, NULL},
-	{"ns1", "http://uri.etsi.org/01903/v1.3.2#", NULL, NULL},
-	{"ns2", "http://www.cartaodecidadao.pt/ccc/sccc/services/AttributeSupplierService", NULL, NULL},
-	{"ns3", "http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeSupplierService", NULL, NULL},
-	{"ns4", "http://www.cartaodecidadao.pt/ccc/sccc/services/PDFSignature", NULL, NULL},
+	{"ns1", "http://www.cartaodecidadao.pt/ccc/sccc/services/AttributeClientService", NULL, NULL},
+	{"ns2", "http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeClientService", NULL, NULL},
+	{"ns8", "http://www.cartaodecidadao.pt/ccc/sccc/services/AttributeSupplierService", NULL, NULL},
+	{"ns9", "http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeSupplierService", NULL, NULL},
+	{"pdf", "http://www.cartaodecidadao.pt/ccc/sccc/services/PDFSignature", NULL, NULL},
 	{NULL, NULL, NULL, NULL}
 };
 	soap_set_namespaces(this->soap, namespaces);
@@ -169,27 +173,27 @@ char *PDFSignatureSoapBindingProxy::soap_sprint_fault(char *buf, size_t len)
 }
 #endif
 
-int PDFSignatureSoapBindingProxy::Sign(const char *endpoint, const char *soap_action, ns4__SignRequest *ns4__SignRequest_, ns4__SignResponse &ns4__SignResponse_)
+int PDFSignatureSoapBindingProxy::Sign(const char *endpoint, const char *soap_action, pdf__SignRequest *pdf__SignRequest_, pdf__SignResponse &pdf__SignResponse_)
 {	struct soap *soap = this->soap;
-	struct __ns4__Sign soap_tmp___ns4__Sign;
+	struct __pdf__Sign soap_tmp___pdf__Sign;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
 		soap_endpoint = "https://preprod.scap.autenticacao.gov.pt/PADES/PDFSignature";
 	if (soap_action == NULL)
 		soap_action = "http://www.cartaodecidadao.pt/services/ccc/PDFSignature/Operations/Sign";
-	soap_tmp___ns4__Sign.ns4__SignRequest_ = ns4__SignRequest_;
+	soap_tmp___pdf__Sign.pdf__SignRequest_ = pdf__SignRequest_;
 	soap_begin(soap);
 	soap->encodingStyle = NULL;
 	soap_serializeheader(soap);
-	soap_serialize___ns4__Sign(soap, &soap_tmp___ns4__Sign);
+	soap_serialize___pdf__Sign(soap, &soap_tmp___pdf__Sign);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put___ns4__Sign(soap, &soap_tmp___ns4__Sign, "-ns4:Sign", NULL)
+		 || soap_put___pdf__Sign(soap, &soap_tmp___pdf__Sign, "-pdf:Sign", NULL)
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -200,20 +204,20 @@ int PDFSignatureSoapBindingProxy::Sign(const char *endpoint, const char *soap_ac
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put___ns4__Sign(soap, &soap_tmp___ns4__Sign, "-ns4:Sign", NULL)
+	 || soap_put___pdf__Sign(soap, &soap_tmp___pdf__Sign, "-pdf:Sign", NULL)
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!&ns4__SignResponse_)
+	if (!&pdf__SignResponse_)
 		return soap_closesock(soap);
-	ns4__SignResponse_.soap_default(soap);
+	pdf__SignResponse_.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
 	 || soap_body_begin_in(soap))
 		return soap_closesock(soap);
-	ns4__SignResponse_.soap_get(soap, "ns4:SignResponse", NULL);
+	pdf__SignResponse_.soap_get(soap, "pdf:SignResponse", NULL);
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)

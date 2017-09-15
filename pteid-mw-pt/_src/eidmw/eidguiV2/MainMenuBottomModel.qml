@@ -13,6 +13,11 @@ ListModel {
                 url: "contentPages/definitions/PageDefinitionsSignature.qml"
             },
             ListElement {
+                subName: "Atributos Profissionais"
+                expand: false
+                url: "contentPages/definitions/PageDefinitionsSCAP.qml"
+            },
+            ListElement {
                 subName: "Configuração da aplicação"
                 expand: false
                 url: "contentPages/definitions/PageDefinitionsApp.qml"
@@ -22,6 +27,7 @@ ListModel {
                 expand: false
                 url: "contentPages/definitions/PageDefinitionsUpdates.qml"
             }
+
         ]
     }
     ListElement {

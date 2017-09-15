@@ -21,7 +21,7 @@
 
 //using namespace PDFSignature;
 
-ns4__AttributeType* convertAttributeType(ns3__AttributeType *, soap *);
+pdf__AttributeType* convertAttributeType(ns3__AttributeType *, soap *);
 
 PDFSignatureClient::PDFSignatureClient()
 {
@@ -132,34 +132,34 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
     std::string citizenNIC = citizenId.toStdString();
     citizenNIC = citizenNIC.substr(2, citizenNIC.length() - 2);
     // Get Citizen Info
-    ns4__PersonalDataType * personalData = soap_new_req_ns4__PersonalDataType(sp, citizenName.toStdString(), citizenNIC);
+    pdf__PersonalDataType * personalData = soap_new_req_pdf__PersonalDataType(sp, citizenName.toStdString(), citizenNIC);
     std::cerr << "Citizen Name : " << citizenName.toStdString() << std::endl;
     std::cerr << "Citizen NIC : " << citizenNIC << std::endl;
 
 
     // Get Attributes selected on Tree
-    std::vector<ns4__AttributeType *> attributes;
+    std::vector<pdf__AttributeType *> attributes;
     for (uint pos = 0; pos < attributeTypeList.size(); pos++)
     {
         ns3__AttributeType * acAttributeType = attributeTypeList.at(pos);
 
-        ns4__AttributeType * convertedAttribute = convertAttributeType(acAttributeType, sp);
+        pdf__AttributeType * convertedAttribute = convertAttributeType(acAttributeType, sp);
         attributes.push_back(convertedAttribute);
     }
 
     // Create Attribute list type
-    ns4__AttributeListType *attributeList = soap_new_req_ns4__AttributeListType(sp, attributes);
+    pdf__AttributeListType *attributeList = soap_new_req_pdf__AttributeListType(sp, attributes);
 
-    ns4__SignatureOrientationEnumType orientationType =
-            signatureInfo.isPortrait() ? ns4__SignatureOrientationEnumType__PORTRAIT : ns4__SignatureOrientationEnumType__LANDSCAPE;
+    pdf__SignatureOrientationEnumType orientationType =
+            signatureInfo.isPortrait() ? pdf__SignatureOrientationEnumType__PORTRAIT : pdf__SignatureOrientationEnumType__LANDSCAPE;
 
     // Request Sign PDF
     try
     {
-        ns4__SignRequest * signRequest = soap_new_set_ns4__SignRequest(sp, processId, personalData, attributeList,
+        pdf__SignRequest * signRequest = soap_new_set_pdf__SignRequest(sp, processId, personalData, attributeList,
                         signatureField.toStdString(), *base64PDF, &ltv, signatureInfo.getSelectedPage(), signatureInfo.getX(), signatureInfo.getY(), orientationType);
 
-        ns4__SignResponse resp;
+        pdf__SignResponse resp;
         int rc = proxy.Sign(signRequest, resp);
 
         if (rc != SOAP_OK)
@@ -207,7 +207,7 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
     }
     catch(...)
     {
-        const char * error_msg = "Exception thrown in ns4__SignResponse. Signed PDF File not written";
+        const char * error_msg = "Exception thrown in pdf__SignResponse. Signed PDF File not written";
         fputs(error_msg, stderr);
 
         eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "%S", error_msg);
@@ -216,26 +216,26 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
 
 }
 
-ns4__AttributeType* convertAttributeType(ns3__AttributeType * attributeType, soap * sp){
-    ns4__AttributeType * convertedAttribute = soap_new_ns4__AttributeType(sp);
+pdf__AttributeType* convertAttributeType(ns3__AttributeType * attributeType, soap * sp){
+    pdf__AttributeType * convertedAttribute = soap_new_pdf__AttributeType(sp);
 
     // Attribute suppliers
-    ns4__AttributeSupplierType * attrSuppl = soap_new_ns4__AttributeSupplierType(sp);
+    pdf__AttributeSupplierType * attrSuppl = soap_new_pdf__AttributeSupplierType(sp);
     attrSuppl->Id = attributeType->AttributeSupplier->Id;
     attrSuppl->Name = attributeType->AttributeSupplier->Name;
 
     // Personal Data
-    ns4__PersonalDataType * persData = soap_new_ns4__PersonalDataType(sp);
+    pdf__PersonalDataType * persData = soap_new_pdf__PersonalDataType(sp);
     persData->Name = attributeType->PersonalData->Name;
     persData->NIC = attributeType->PersonalData->NIC;
 
     // Main Attribute
-    ns4__MainAttributeType *main_attrib = soap_new_ns4__MainAttributeType(sp);
+    pdf__MainAttributeType *main_attrib = soap_new_pdf__MainAttributeType(sp);
     main_attrib->AttributeID = attributeType->MainAttribute->AttributeID;
     main_attrib->Description = attributeType->MainAttribute->Description;
 
     //Main LegalAct List
-    ns4__LegalActListType *legalActList = soap_new_ns4__LegalActListType(sp);
+    pdf__LegalActListType *legalActList = soap_new_pdf__LegalActListType(sp);
 //    std::cout << "Legal act: " << std::endl;
 //    for(uint i = 0; i < attributeType->MainAttribute->LegalActList->LegalAct.size(); i++){
 //        std::string string = attributeType->MainAttribute->LegalActList->LegalAct.at(0);
@@ -255,10 +255,10 @@ ns4__AttributeType* convertAttributeType(ns3__AttributeType * attributeType, soa
     {
 
         //Main Sub AttributeList
-        ns4__SubAttributeListType *subAttrList = soap_new_ns4__SubAttributeListType(sp);
+        pdf__SubAttributeListType *subAttrList = soap_new_pdf__SubAttributeListType(sp);
         for(uint i = 0; i < attributeType->MainAttribute->SubAttributeList->SubAttribute.size(); i++){
             ns3__SubAttributeType *acSubAttr = attributeType->MainAttribute->SubAttributeList->SubAttribute.at(i);
-            ns4__SubAttributeType * subAttr = soap_new_ns4__SubAttributeType(sp);
+            pdf__SubAttributeType * subAttr = soap_new_pdf__SubAttributeType(sp);
             subAttr->AttributeID = acSubAttr->AttributeID;
             subAttr->Description = acSubAttr->Description;
             subAttr->Value = acSubAttr->Value;

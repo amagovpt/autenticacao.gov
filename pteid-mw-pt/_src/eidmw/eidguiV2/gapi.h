@@ -251,11 +251,12 @@ public slots:
     /* SCAP Methods  */
     
     void startGettingEntities();
+    void startGettingCompanyAttributes();
 
 #ifdef NOT_YET_IMPLEMENTED
     void startLoadingAttributesFromCache();
     void startGettingEntityAttributes(QString entityName);
-    void startGettingCompanyAttributes();
+
     void startSigningSCAP(QString inputPdf, QString outputPDF /* TODO: How do we pass the selected attributes?? */);
 #endif    
 
@@ -311,7 +312,10 @@ signals:
     void signalCardChanged(const int error_code);
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage);
     void signalCertificatesChanged(const QVariantMap certificatesMap);
-    void signalSCAPEntitiesLoaded(const QList<QString> attributesList);
+
+    //SCAP signals
+    void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
+    void signalCompanyAttributesLoaded(const QVariantMap attribute_map);
     void signalPdfPrintSucess();
     void signalPdfPrintSignSucess();
     void signalPdfPrintFail();
@@ -323,6 +327,7 @@ private:
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();
     void getSCAPEntities();
+    void getSCAPCompanyAttributes();
     void getPersoDataFile();
     void setPersoDataFile(QString text);
     void getAddressFile();

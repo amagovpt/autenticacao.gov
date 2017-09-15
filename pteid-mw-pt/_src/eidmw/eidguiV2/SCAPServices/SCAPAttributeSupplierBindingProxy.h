@@ -77,7 +77,7 @@ class SOAP_CMAC AttributeSupplierBindingProxy
 #endif
 
 	/// Web service operation 'AttributeSuppliers' (returns error code or SOAP_OK)
-	virtual	int AttributeSuppliers(ns3__AttributeSupplierResponseType &ns3__AttributeSupplierResponse) { return this->AttributeSuppliers(NULL, NULL, ns3__AttributeSupplierResponse); }
-	virtual	int AttributeSuppliers(const char *endpoint, const char *soap_action, ns3__AttributeSupplierResponseType &ns3__AttributeSupplierResponse);
+	virtual	int AttributeSuppliers(ns9__AttributeSupplierResponseType &ns9__AttributeSupplierResponse) { return this->AttributeSuppliers(NULL, NULL, ns9__AttributeSupplierResponse); }
+	virtual	int AttributeSuppliers(const char *endpoint, const char *soap_action, ns9__AttributeSupplierResponseType &ns9__AttributeSupplierResponse);
 };
 #endif

@@ -72,13 +72,17 @@ void AttributeSupplierBindingProxy::AttributeSupplierBindingProxy_init(soap_mode
 	{"SOAP-ENC", "http://schemas.xmlsoap.org/soap/encoding/", "http://www.w3.org/*/soap-encoding", NULL},
 	{"xsi", "http://www.w3.org/2001/XMLSchema-instance", "http://www.w3.org/*/XMLSchema-instance", NULL},
 	{"xsd", "http://www.w3.org/2001/XMLSchema", "http://www.w3.org/*/XMLSchema", NULL},
+	{"ns4", "http://www.cartaodecidadao.pt/ccc/commons/messages/Types", NULL, NULL},
 	{"ns5", "http://www.w3.org/2000/09/xmldsig#", NULL, NULL},
+	{"ns3", "http://www.cartaodecidadao.pt/ccc/commons/messages/Attribute", NULL, NULL},
+	{"ns6", "http://uri.etsi.org/01903/v1.3.2#", NULL, NULL},
 	{"ns7", "http://www.cartaodecidadao.pt/ccc/commons/messages/SVG", NULL, NULL},
 	{"wsa", "http://schemas.xmlsoap.org/ws/2004/08/addressing", NULL, NULL},
-	{"ns1", "http://uri.etsi.org/01903/v1.3.2#", NULL, NULL},
-	{"ns2", "http://www.cartaodecidadao.pt/ccc/sccc/services/AttributeSupplierService", NULL, NULL},
-	{"ns3", "http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeSupplierService", NULL, NULL},
-	{"ns4", "http://www.cartaodecidadao.pt/ccc/sccc/services/PDFSignature", NULL, NULL},
+	{"ns1", "http://www.cartaodecidadao.pt/ccc/sccc/services/AttributeClientService", NULL, NULL},
+	{"ns2", "http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeClientService", NULL, NULL},
+	{"ns8", "http://www.cartaodecidadao.pt/ccc/sccc/services/AttributeSupplierService", NULL, NULL},
+	{"ns9", "http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeSupplierService", NULL, NULL},
+	{"pdf", "http://www.cartaodecidadao.pt/ccc/sccc/services/PDFSignature", NULL, NULL},
 	{NULL, NULL, NULL, NULL}
 };
 	soap_set_namespaces(this->soap, namespaces);
@@ -169,9 +173,9 @@ char *AttributeSupplierBindingProxy::soap_sprint_fault(char *buf, size_t len)
 }
 #endif
 
-int AttributeSupplierBindingProxy::AttributeSuppliers(const char *endpoint, const char *soap_action, ns3__AttributeSupplierResponseType &ns3__AttributeSupplierResponse)
+int AttributeSupplierBindingProxy::AttributeSuppliers(const char *endpoint, const char *soap_action, ns9__AttributeSupplierResponseType &ns9__AttributeSupplierResponse)
 {	struct soap *soap = this->soap;
-	struct __ns2__AttributeSuppliers soap_tmp___ns2__AttributeSuppliers;
+	struct __ns8__AttributeSuppliers soap_tmp___ns8__AttributeSuppliers;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
@@ -181,14 +185,14 @@ int AttributeSupplierBindingProxy::AttributeSuppliers(const char *endpoint, cons
 	soap_begin(soap);
 	soap->encodingStyle = NULL;
 	soap_serializeheader(soap);
-	soap_serialize___ns2__AttributeSuppliers(soap, &soap_tmp___ns2__AttributeSuppliers);
+	soap_serialize___ns8__AttributeSuppliers(soap, &soap_tmp___ns8__AttributeSuppliers);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put___ns2__AttributeSuppliers(soap, &soap_tmp___ns2__AttributeSuppliers, "-ns2:AttributeSuppliers", NULL)
+		 || soap_put___ns8__AttributeSuppliers(soap, &soap_tmp___ns8__AttributeSuppliers, "-ns8:AttributeSuppliers", NULL)
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -199,20 +203,20 @@ int AttributeSupplierBindingProxy::AttributeSuppliers(const char *endpoint, cons
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put___ns2__AttributeSuppliers(soap, &soap_tmp___ns2__AttributeSuppliers, "-ns2:AttributeSuppliers", NULL)
+	 || soap_put___ns8__AttributeSuppliers(soap, &soap_tmp___ns8__AttributeSuppliers, "-ns8:AttributeSuppliers", NULL)
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!&ns3__AttributeSupplierResponse)
+	if (!&ns9__AttributeSupplierResponse)
 		return soap_closesock(soap);
-	ns3__AttributeSupplierResponse.soap_default(soap);
+	ns9__AttributeSupplierResponse.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
 	 || soap_body_begin_in(soap))
 		return soap_closesock(soap);
-	ns3__AttributeSupplierResponse.soap_get(soap, "ns3:AttributeSupplierResponse", NULL);
+	ns9__AttributeSupplierResponse.soap_get(soap, "ns9:AttributeSupplierResponse", NULL);
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
