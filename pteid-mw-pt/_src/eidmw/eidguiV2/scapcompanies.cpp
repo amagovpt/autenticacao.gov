@@ -91,6 +91,11 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(eIDMW::PTEID_EIDC
         // Get suppliers List
         std::vector<ns3__AttributeSupplierType *> vec_suppliers;
 
+        if (supplier_ids.size() > 0)
+        {
+            allEnterprises = false;
+        }
+
         //TODO: what do we do to fill the dummy attribute suppliers ??
         for(int i = 0; i < supplier_ids.size(); i++)
         {
