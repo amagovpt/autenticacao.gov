@@ -260,7 +260,7 @@ public slots:
     /* SCAP Methods  */
     void startGettingEntities();
     void startGettingCompanyAttributes();
-    void startLoadingAttributesFromCache(bool isCompanies);
+    void startLoadingAttributesFromCache(bool isCompanies, bool isShortDescription);
     void startGettingEntityAttributes(QList<int> entity_index);
 
     void startSigningSCAP(QString inputPdf, QString outputPDF, int page, int location_x, int location_y, 
@@ -337,7 +337,7 @@ private:
     void connectToCard();
     void getSCAPEntities();
     void getSCAPCompanyAttributes();
-    void getSCAPAttributesFromCache(bool isCompanies);
+    void getSCAPAttributesFromCache(bool isCompanies, bool isShortDescription);
     void getSCAPEntityAttributes(QList<int> entityIDs);
     void doSignSCAP(SCAPSignParams params);
     void getPersoDataFile();

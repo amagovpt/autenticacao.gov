@@ -1365,8 +1365,8 @@ void GAPI::startReadingAddress() {
     QtConcurrent::run(this, &GAPI::getAddressFile);
 }
 
-void GAPI::startLoadingAttributesFromCache(bool isCompanies) {
-    QtConcurrent::run(this, &GAPI::getSCAPAttributesFromCache, isCompanies);
+void GAPI::startLoadingAttributesFromCache(bool isCompanies, bool isShortDescription) {
+    QtConcurrent::run(this, &GAPI::getSCAPAttributesFromCache, isCompanies, isShortDescription);
 }
 
 void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, int location_x, int location_y,
@@ -1405,7 +1405,7 @@ void GAPI::getSCAPEntities() {
     emit signalSCAPEntitiesLoaded(attributeSuppliers);
 }
 
-std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes) {
+std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, bool isShortDescription) {
     std::vector<std::string> childrensList;
 
     std::vector<ns5__SignatureType *> signatureAttributeList = attributes->SignedAttributes->ns3__SignatureAttribute;
@@ -1418,23 +1418,25 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes) {
             ns3__MainAttributeType * mainAttributeObject = signatureObject->union_ObjectType.ns3__Attribute->MainAttribute;
 
             std::string description = mainAttributeObject->Description->c_str();
+            if (!isShortDescription) {
 
-            QString subAttributes(" (");
-            QString subAttributesValues;
-            for(uint subAttributePos = 0; subAttributePos < mainAttributeObject->SubAttributeList->SubAttribute.size(); subAttributePos++){
-                ns3__SubAttributeType * subAttribute = mainAttributeObject->SubAttributeList->SubAttribute.at(subAttributePos);
+                QString subAttributes(" (");
+                QString subAttributesValues;
+                for(uint subAttributePos = 0; subAttributePos < mainAttributeObject->SubAttributeList->SubAttribute.size(); subAttributePos++){
+                    ns3__SubAttributeType * subAttribute = mainAttributeObject->SubAttributeList->SubAttribute.at(subAttributePos);
 
-                QString subDescription(subAttribute->Description->c_str());
-                QString subValue(subAttribute->Value->c_str());
-                subAttributesValues.append(subDescription + ": " + subValue + ", ");
+                    QString subDescription(subAttribute->Description->c_str());
+                    QString subValue(subAttribute->Value->c_str());
+                    subAttributesValues.append(subDescription + ": " + subValue + ", ");
+                }
+                // Chop 2 to remove last 2 chars (', ')
+                subAttributesValues.chop(2);
+                subAttributes.append(subAttributesValues + ")");
+
+                qDebug() << "Sub attributes : " << subAttributes;
+                description += subAttributes.toStdString();
             }
-            // Chop 2 to remove last 2 chars (', ')
-            subAttributesValues.chop(2);
-            subAttributes.append(subAttributesValues + ")");
-
-            qDebug() << "Sub attributes : " << subAttributes;
-
-            description += subAttributes.toStdString();
+            
             childrensList.push_back(description.c_str());
         }
     }
@@ -1469,7 +1471,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
     for(uint i = 0; i < attributes.size() ; i++)
     {
        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
-       std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i));
+       std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), false);
 
        if (childAttributes.size() > 1)
        {
@@ -1507,7 +1509,7 @@ void GAPI::getSCAPCompanyAttributes() {
     for(uint i = 0; i < attributes.size() ; i++)
     {
        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
-       std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i));
+       std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), false);
 
        if (childAttributes.size() > 1)
        {
@@ -1521,7 +1523,7 @@ void GAPI::getSCAPCompanyAttributes() {
     emit signalCompanyAttributesLoaded(attribute_map);
 }
 
-void GAPI::getSCAPAttributesFromCache(bool isCompanies) {
+void GAPI::getSCAPAttributesFromCache(bool isCompanies, bool isShortDescription) {
 
     PTEID_EIDCard * card = NULL;
     QVariantMap attribute_map;
@@ -1535,7 +1537,7 @@ void GAPI::getSCAPAttributesFromCache(bool isCompanies) {
     for(uint i = 0; i < attributes.size() ; i++)
     {
        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
-       std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i));
+       std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), isShortDescription);
 
        if (childAttributes.size() > 1)
        {
