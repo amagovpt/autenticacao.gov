@@ -1,7 +1,6 @@
 #ifndef PDF_SIGNATURE_CLI_H
 #define PDF_SIGNATURE_CLI_H
 
-#include "cmdServices.h"
 #include "eidlib.h"
 #include "ByteArray.h"
 
@@ -20,11 +19,15 @@ using namespace eIDMW;
 #define PTEIDCMD_API
 #endif
 
+
 namespace eIDMW {
 
-	class CMDSignature{
+    //Forward declare this class to avoid deep-includes
+    class CMDServices;
+
+	class CMDSignature {
         public:
-                        PTEIDCMD_API CMDSignature();
+            PTEIDCMD_API CMDSignature();
 			PTEIDCMD_API CMDSignature(PTEID_PDFSignature *in_pdf_handler);
 			PTEIDCMD_API ~CMDSignature();
 			PTEIDCMD_API int signOpen(std::string in_userId, std::string in_pin
@@ -38,7 +41,7 @@ namespace eIDMW {
                         PTEIDCMD_API void set_pdf_handler(PTEID_PDFSignature *in_pdf_handler );
 
         private:
-            CMDServices cmdService;
+            CMDServices *cmdService;
             PTEID_PDFSignature *m_pdf_handler;
 
             std::string m_userId;

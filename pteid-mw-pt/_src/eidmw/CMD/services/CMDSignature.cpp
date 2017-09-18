@@ -3,6 +3,7 @@
 #include "MiscUtil.h"
 #include "StringOps.h"
 #include "PDFSignature.h"
+#include "cmdServices.h"
 
 static char logBuf[512];
 
@@ -26,14 +27,17 @@ namespace eIDMW {
 
     CMDSignature::CMDSignature() {
         m_pdf_handler = NULL;
+        cmdService = new CMDServices();
     }
 
     CMDSignature::CMDSignature(PTEID_PDFSignature *in_pdf_handler ) {
         m_pdf_handler = in_pdf_handler;
+        cmdService = new CMDServices();
     }
 
     CMDSignature::~CMDSignature() {
         m_pdf_handler = NULL;
+        delete cmdService;
     }
 
     void CMDSignature::set_pdf_handler(PTEID_PDFSignature *in_pdf_handler ) {
@@ -54,7 +58,7 @@ namespace eIDMW {
         }
 
         std::vector<CByteArray> certificates;
-        int ret = cmdService.getCertificate( in_userId, certificates);
+        int ret = cmdService->getCertificate( in_userId, certificates);
 
         if ( ret != ERR_NONE ) return ret;
 
@@ -142,7 +146,7 @@ namespace eIDMW {
 
         std::string in_hash((const char *)hashByteArray.GetBytes(), hashByteArray.Size());
 
-        int ret = cmdService.sendDataToSign(in_hash, userPin);
+        int ret = cmdService->sendDataToSign(in_hash, userPin);
         if ( ret != ERR_NONE ){
             MWLOG_ERR( logBuf, "main() - Error @ sendDataToSign()\n" );
             return ret;
@@ -195,7 +199,7 @@ namespace eIDMW {
         }
 
         CByteArray cb;
-        int ret = cmdService.getSignature( in_code, cb );
+        int ret = cmdService->getSignature( in_code, cb );
         if ( ret != ERR_NONE )
             return ret;
 
