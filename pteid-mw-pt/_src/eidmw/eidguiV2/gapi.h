@@ -158,6 +158,8 @@ public:
     PDFPreviewImageProvider() : QQuickImageProvider(QQuickImageProvider::Pixmap), m_doc(NULL) { }
 
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
+    //Returns page size in postscript points
+    QSize getPageSize(int page);
 
 signals:
     Q_SIGNAL void signalPdfSourceChanged(int pdfWidth, int pdfHeight);
@@ -266,6 +268,8 @@ public slots:
     void startSigningSCAP(QString inputPdf, QString outputPDF, int page, int location_x, int location_y, 
                           int ltv, QList<int> attribute_index);
 
+    //Returns page size in postscript points
+    QSize getPageSize(int page) { return image_provider_pdf->getPageSize(page); };
     unsigned int verifyAuthPin(QString pin);
     unsigned int getTriesLeftAuthPin();
     unsigned int verifySignPin(QString pin);

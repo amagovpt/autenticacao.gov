@@ -1301,6 +1301,13 @@ QPixmap PDFPreviewImageProvider::renderPdf(int page,const QSize &requestedSize) 
     return p;
 }
 
+QSize PDFPreviewImageProvider::getPageSize(int page) {
+
+    Poppler::Page *popplerPage = m_doc->page(page-1);
+
+    return popplerPage->pageSize();
+}
+
 QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
 {
     // Document starts at page 0 in the poppler-qt5 API
