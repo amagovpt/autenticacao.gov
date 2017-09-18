@@ -1365,8 +1365,8 @@ void GAPI::startReadingAddress() {
     QtConcurrent::run(this, &GAPI::getAddressFile);
 }
 
-void GAPI::startLoadingAttributesFromCache() {
-    QtConcurrent::run(this, &GAPI::getSCAPAttributesFromCache);
+void GAPI::startLoadingAttributesFromCache(bool isCompanies) {
+    QtConcurrent::run(this, &GAPI::getSCAPAttributesFromCache, isCompanies);
 }
 
 void GAPI::getSCAPEntities() {
@@ -1495,7 +1495,7 @@ void GAPI::getSCAPCompanyAttributes() {
     emit signalCompanyAttributesLoaded(attribute_map);
 }
 
-void GAPI::getSCAPAttributesFromCache() {
+void GAPI::getSCAPAttributesFromCache(bool isCompanies) {
 
     PTEID_EIDCard * card = NULL;
     QVariantMap attribute_map;
@@ -1504,7 +1504,7 @@ void GAPI::getSCAPAttributesFromCache() {
     if (card == NULL)
         return;
 
-    std::vector<ns2__AttributesType *> attributes = scapServices.loadAttributesFromCache(*card);
+    std::vector<ns2__AttributesType *> attributes = scapServices.loadAttributesFromCache(*card, isCompanies);
 
     for(uint i = 0; i < attributes.size() ; i++)
     {
@@ -1519,8 +1519,10 @@ void GAPI::getSCAPAttributesFromCache() {
        attribute_map.insert(QString::fromStdString(attrSupplier),
                             QString::fromStdString(childAttributes.at(0)));
     }
-
-    emit signalCompanyAttributesLoaded(attribute_map);
+    if (isCompanies)
+        emit signalCompanyAttributesLoaded(attribute_map);
+    else
+        emit signalEntityAttributesLoaded(attribute_map);
 }
 
 void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {

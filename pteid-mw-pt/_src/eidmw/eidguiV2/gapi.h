@@ -251,7 +251,7 @@ public slots:
     /* SCAP Methods  */
     void startGettingEntities();
     void startGettingCompanyAttributes();
-    void startLoadingAttributesFromCache();
+    void startLoadingAttributesFromCache(bool isCompanies);
     void startGettingEntityAttributes(QList<int> entity_index);
 
 #ifdef NOT_YET_IMPLEMENTED
@@ -314,6 +314,7 @@ signals:
     //SCAP signals
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
     void signalCompanyAttributesLoaded(const QVariantMap attribute_map);
+    void signalEntityAttributesLoaded(const QVariantMap attribute_map);
     void signalPdfPrintSucess();
     void signalPdfPrintSignSucess();
     void signalPdfPrintFail();
@@ -326,7 +327,7 @@ private:
     void connectToCard();
     void getSCAPEntities();
     void getSCAPCompanyAttributes();
-    void getSCAPAttributesFromCache();
+    void getSCAPAttributesFromCache(bool isCompanies);
     void getSCAPEntityAttributes(QList<int> entityIDs);
     void getPersoDataFile();
     void setPersoDataFile(QString text);

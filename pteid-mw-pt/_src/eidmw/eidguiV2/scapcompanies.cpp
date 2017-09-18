@@ -45,7 +45,7 @@ std::vector<ns2__AttributesType *> loadCacheFile(QString &filePath) {
 }
 
 std::vector<ns2__AttributesType *> 
-    ScapServices::loadAttributesFromCache(eIDMW::PTEID_EIDCard &card) {
+    ScapServices::loadAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies) {
 
     std::vector<ns2__AttributesType *> attributesType;
     try
@@ -54,27 +54,23 @@ std::vector<ns2__AttributesType *>
 
         ScapSettings settings;
         QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
-        QString companies_filePath = scapCacheDir + citizenNIC + COMPANIES_SUFFIX;
 
-        attributesType = loadCacheFile(companies_filePath);
-        QString entities_filePath = scapCacheDir + citizenNIC + ENTITIES_SUFFIX;        
+        QString filePath = scapCacheDir + citizenNIC + (isCompanies ? COMPANIES_SUFFIX : ENTITIES_SUFFIX);
 
-        std::vector<ns2__AttributesType *> attributesEntities = loadCacheFile(entities_filePath);
+        attributesType = loadCacheFile(filePath);
 
-        if (attributesEntities.size() > 0)
+        if (attributesType.size() > 0)
         {
             //Merge into single vector
-            attributesType.insert(attributesType.end(), attributesEntities.begin(), attributesEntities.end());
+            m_attributesList.insert(m_attributesList.end(), attributesType.begin(), attributesType.end());
 
         }
-
     }
     catch(...) {
         std::cerr << "Error ocurred while loading attributes from cache!";
         //TODO: report error
     }
 
-    m_attributesList = attributesType;
     return attributesType;
 }
 
