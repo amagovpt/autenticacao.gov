@@ -1,111 +1,155 @@
 import QtQuick 2.4
+import QtQuick.Controls 2.1
 
 import "../../scripts/Constants.js" as Constants
 
 PageDefinitionsSCAPForm {
 
     Connections {
-            target: gapi
-            onSignalSCAPEntitiesLoaded: {
-                console.log("Definitions SCAP - Signal SCAP entities loaded")
-
-                for (var i = 0; i < entitiesList.length; i++)
-                {
-                    entityAttributesModel.append({
-                        entityName: entitiesList[i], attribute: ""
-                    });
-                }
-
+        target: gapi
+        onSignalEntityAttributesLoadedError: {
+            console.log("Definitions SCAP - Signal SCAP entities loaded error")
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    "Error"
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    "SCAP entities loaded error"
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            if(propertyBar.currentIndex == 0)
                 propertyBusyIndicator.running = false
+        }
+        onSignalCompanyAttributesLoadedError: {
+            console.log("Definitions SCAP - Signal SCAP company loaded error")
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    "Error"
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    "SCAP company loaded error"
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            if(propertyBar.currentIndex == 1)
+                propertyBusyIndicator.running = false
+        }
+        onSignalSCAPEntitiesLoaded: {
+            console.log("Definitions SCAP - Signal SCAP entities loaded")
+
+            for (var i = 0; i < entitiesList.length; i++)
+            {
+                entityAttributesModel.append({
+                                                 entityName: entitiesList[i], attribute: "", checkBoxAttr: false
+                                             });
             }
 
-            onSignalCompanyAttributesLoaded: {
-                console.log("Definitions SCAP - Signal SCAP company attributes loaded")
+            if(propertyBar.currentIndex == 0)propertyBusyIndicator.running = false
 
-                for (var company in attribute_map) {
+        }
 
-                    companyAttributesModel.append({
-                        entityName: company, attribute: attribute_map[company]
-                    });
-                }
+        onSignalCompanyAttributesLoaded: {
+            console.log("Definitions SCAP - Signal SCAP company attributes loaded")
 
-                propertyBusyIndicator.running = false
+            for (var company in attribute_map) {
+
+                companyAttributesModel.clear()
+                companyAttributesModel.append({
+                                                  entityName: company, attribute: attribute_map[company]
+                                              });
             }
+
+            if(propertyBar.currentIndex == 1)propertyBusyIndicator.running = false
+        }
     }
 
     Component {
         id: attributeListDelegate
-        Item {
+        Rectangle {
             width: parent.width
-            height: 40
+            height: columnItem.height + 10
             id: container
+            color: Constants.COLOR_MAIN_SOFT_GRAY
+            CheckBox {
+                id: checkboxSel
+                height: 25
+                width: 50
+                font.family: lato.name
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.capitalization: Font.MixedCase
+                anchors.verticalCenter: parent.verticalCenter
+                checked: checkBoxAttr
+                onCheckedChanged: entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
+            }
             Column {
+                id: columnItem
+                anchors.left: checkboxSel.right
+                width: parent.width
+                anchors.verticalCenter: parent.verticalCenter
                 Text {
                     text: '<b>Entidade:</b> ' + entityName
+                    width: parent.width - checkboxSel.width
+                    wrapMode: Text.WordWrap
                 }
                 Text {
-                    text: attribute.length > 0 ? '      <b>Atributo:</b> ' + attribute : ""
+                    text: attribute.length > 0 ? '      <b>Atributo:</b> ' + attribute : "<b>Atributo:</b>"
+                    width: parent.width - checkboxSel.width
+                    wrapMode: Text.WordWrap
                 }
-                /*
-                MouseArea {
-                    id: mouse_area1
-                    z: 1
-                    hoverEnabled: false
-                    anchors.fill: parent
-
-                    onClicked:{
-                        console.log("AttribuetList item clicked");
-                        container.ListView.view.currentIndex = index
-                        container.forceActiveFocus()
-                    }
-                } */
             }
 
         }
     }
-
     Component {
-        id: companiesAttributeListDelegate
-        Item {
+        id: attributeListDelegateCompanies
+        Rectangle {
             width: parent.width
-            height: 40
+            height: columnItem.height + 10
+            id: container
+            color: Constants.COLOR_MAIN_SOFT_GRAY
             Column {
+                id: columnItem
+                width: parent.width
+                anchors.verticalCenter: parent.verticalCenter
                 Text {
-                    text: '<b>Empresa:</b> ' + entityName
+                    text: '<b>Entidade:</b> ' + entityName
+                    width: parent.width
+                    wrapMode: Text.WordWrap
                 }
                 Text {
-                    text: attribute.length > 0 ? '      <b>Atributo:</b> ' + attribute : ""
+                    text: attribute.length > 0 ? '      <b>Atributo:</b> ' + attribute : "<b>Atributo:</b>"
+                    width: parent.width
+                    wrapMode: Text.WordWrap
                 }
             }
+
         }
     }
 
     ListModel {
-            id: companyAttributesModel
-
-            onCountChanged: {
-            }
+        id: companyAttributesModel
     }
 
     ListModel {
-            id: entityAttributesModel
-
-            onCountChanged: {
-            }
+        id: entityAttributesModel
     }
 
     propertyButtonLoadCompanyAttributes {
-           onClicked: {
-               console.log("ButtonLoadCompanyAttributes clicked!")
-               propertyBusyIndicator.running = true
-               gapi.startGettingCompanyAttributes()
-           }
+        onClicked: {
+            console.log("ButtonLoadCompanyAttributes clicked!")
+            propertyBusyIndicator.running = true
+            gapi.startGettingCompanyAttributes()
+        }
 
     }
 
     propertyButtonLoadEntityAttributes {
         onClicked: {
             console.log("ButtonLoadEntityAttributes clicked!")
+            propertyBusyIndicator.running = true
+            var attributeList = []
+            var count = 0
+            for (var i = 0; i < entityAttributesModel.count; i++){
+                if(entityAttributesModel.get(i).checkBoxAttr == true){
+                    attributeList[count] = i
+                    count++
+                }
+            }
+            console.log("QML AttributeList: ", attributeList)
+            gapi.startGettingEntityAttributes(attributeList)
         }
     }
 
@@ -113,6 +157,7 @@ PageDefinitionsSCAPForm {
         console.log("Page Definitions SCAP Completed")
         propertyBusyIndicator.running = true
         gapi.startGettingEntities()
-        gapi.startLoadingAttributesFromCache()
+        gapi.startLoadingAttributesFromCache(0)
+        gapi.startLoadingAttributesFromCache(1)
     }
 }

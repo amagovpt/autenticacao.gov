@@ -1422,8 +1422,10 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
     QVariantMap attribute_map;
     PTEID_EIDCard * card = NULL;
     getCardInstance(card);
-    if (card == NULL)
+    if (card == NULL){
+        emit signalEntityAttributesLoadedError();
         return;
+    }
 
     std::vector<int> supplier_ids;
     
@@ -1436,8 +1438,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
 
     if (attributes.size() == 0)
     {
-        //TODO: emit signal for error
-        //emit
+        emit signalEntityAttributesLoadedError();
         return;
     }
 
@@ -1464,8 +1465,10 @@ void GAPI::getSCAPCompanyAttributes() {
     PTEID_EIDCard * card = NULL;
     QVariantMap attribute_map;
     getCardInstance(card);
-    if (card == NULL)
+    if (card == NULL){
+        emit signalCompanyAttributesLoadedError();
         return;
+    }
 
     std::vector<int> supplierIDs;
 
@@ -1473,8 +1476,7 @@ void GAPI::getSCAPCompanyAttributes() {
 
     if (attributes.size() == 0)
     {
-        //TODO: emit signal for error
-        //emit
+        emit signalCompanyAttributesLoadedError();
         return;
     }
 

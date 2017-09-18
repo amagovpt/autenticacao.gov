@@ -315,6 +315,8 @@ signals:
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
     void signalCompanyAttributesLoaded(const QVariantMap attribute_map);
     void signalEntityAttributesLoaded(const QVariantMap attribute_map);
+    void signalCompanyAttributesLoadedError();
+    void signalEntityAttributesLoadedError();
     void signalPdfPrintSucess();
     void signalPdfPrintSignSucess();
     void signalPdfPrintFail();

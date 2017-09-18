@@ -9,6 +9,8 @@ Item {
     property alias propertyButtonLoadCompanyAttributes: buttonLoadCompanyAttributes
     property alias propertyButtonLoadEntityAttributes: buttonLoadEntityAttributes
     property alias propertyBusyIndicator: busyIndicator
+    property alias propertyBar : bar
+    property alias propertyListViewEntities: listViewEntities
 
     anchors.fill: parent
     Item {
@@ -26,121 +28,136 @@ Item {
         Item {
             id: rowTop
             width: parent.width
-            height: 20
+            height: 0
         }
 
-        Text {
-            id: textTitle
-            font.pixelSize: Constants.SIZE_TEXT_LABEL
-            font.family: lato.name
-            text: "Atributos profissionais"
-            wrapMode: Text.Wrap
-            width: parent.width
-            horizontalAlignment: Text.left
-            color: Constants.COLOR_TEXT_LABEL
-            Layout.fillWidth: true
+        TabBar {
+            id: bar
             anchors.top: rowTop.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-        }
-        Text {
-            id: entitiesDescription
-            anchors.top: textTitle.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_BODY
-            font.pixelSize: Constants.SIZE_TEXT_BODY
-            font.family: lato.name
-            text: "Escolha a entidade fornecedora dos atributos"
-            wrapMode: Text.Wrap
             width: parent.width
-            horizontalAlignment: Text.left
-            color: Constants.COLOR_TEXT_BODY
-            Layout.fillWidth: true
+            currentIndex: 0
+            TabButton {
+                text: "Atributos profissionais"
+                rightPadding: 2
+                leftPadding: 2
+            }
+            TabButton {
+                text: "Atributos empresariais"
+                rightPadding: 2
+                leftPadding: 2
+            }
         }
-
-        Rectangle {
-            id: rectangleEntities
+        StackLayout {
+            id: stackLayout
             width: parent.width
-            height: 120
-            anchors.top: entitiesDescription.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_BODY
+            height: parent.height - rowTop.height - bar.height
+            currentIndex: bar.currentIndex
+            anchors.top: bar.bottom
 
-            ListView {
-                anchors.fill: parent
-                model: entityAttributesModel
-                delegate: attributeListDelegate
-                highlight: Rectangle {
-                    color: "lightsteelblue"
-                    radius: 5
+            //TODO: Add Scroll bar
+
+            Item {
+                id: tabProfessional
+                Rectangle {
+                    id: rowProfessional
+                    width: parent.width
+                    height: 5 * Constants.SIZE_TEXT_BODY
+
+                    Text {
+                        font.pixelSize: Constants.SIZE_TEXT_BODY
+                        font.family: lato.name
+                        text: "Escolha a entidade para a qual pretende carregar os atributos profissionais"
+                        wrapMode: Text.Wrap
+                        width: parent.width
+                        color: Constants.COLOR_MAIN_BLUE
+                        Layout.fillWidth: true
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
                 }
-                focus: true
-            }
-        }
+                Item {
+                    id: rectangleEntities
+                    width: parent.width
+                    height: stackLayout.height - rowProfessional.height - rawButtonLoadEntityAttributes.height
+                    anchors.top: rowProfessional.bottom
 
-        Item {
-            id: rawButtonLoadEntityAttributes
-            anchors.top: rectangleEntities.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-            width: parent.width
-            height: Constants.HEIGHT_BOTTOM_COMPONENT
-            Button {
-                id: buttonLoadEntityAttributes
-                text: "Carregar atributos"
-                width: Constants.WIDTH_BUTTON
-                height: parent.height
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.capitalization: Font.MixedCase
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-        }
+                    ListView {
+                        id: listViewEntities
+                        anchors.fill: parent
+                        model: entityAttributesModel
+                        delegate: attributeListDelegate
+                        focus: true
+                        spacing: 10
 
-        Text {
-            id: textCompaniesTitle
-            anchors.top: rawButtonLoadEntityAttributes.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-            font.pixelSize: Constants.SIZE_TEXT_LABEL
-            font.family: lato.name
-            text: "Atributos empresariais"
-            wrapMode: Text.Wrap
-            width: parent.width
-            horizontalAlignment: Text.left
-            color: Constants.COLOR_TEXT_LABEL
-            Layout.fillWidth: true
-        }
-
-        Rectangle {
-            id: rectangleCompanies
-            width: parent.width
-            height: 120
-            anchors.top: textCompaniesTitle.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_BODY
-
-            ListView {
-                anchors.fill: parent
-                model: companyAttributesModel
-                delegate: attributeListDelegate
-                highlight: Rectangle {
-                    color: "lightsteelblue"
-                    radius: 5
+                    }
                 }
-                focus: true
-            }
-        }
 
-        Item {
-            id: rawButtonLoadCompanyAttributes
-            anchors.top: rectangleCompanies.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-            width: parent.width
-            height: Constants.HEIGHT_BOTTOM_COMPONENT
-            Button {
-                id: buttonLoadCompanyAttributes
-                text: "Carregar atributos"
-                width: Constants.WIDTH_BUTTON
-                height: parent.height
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.capitalization: Font.MixedCase
-                anchors.horizontalCenter: parent.horizontalCenter
+                Item {
+                    id: rawButtonLoadEntityAttributes
+                    anchors.top: rectangleEntities.bottom
+                    width: parent.width
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    Button {
+                        id: buttonLoadEntityAttributes
+                        text: "Carregar atributos profissionais"
+                        width: 2 * Constants.WIDTH_BUTTON
+                        height: parent.height
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.capitalization: Font.MixedCase
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+                }
+            }
+            Item {
+                id: tabCompanies
+
+                Item {
+                    id: rowCompanies
+                    width: parent.width
+                    height: 5 * Constants.SIZE_TEXT_BODY
+                    Text {
+                        font.pixelSize: Constants.SIZE_TEXT_BODY
+                        font.family: lato.name
+                        text: "Lista das entidades para a qual tem atributos empresariais"
+                        wrapMode: Text.Wrap
+                        width: parent.width
+                        color: Constants.COLOR_MAIN_BLUE
+                        Layout.fillWidth: true
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+                Item {
+                    id: rectangleCompanies
+                    width: parent.width
+                    height: stackLayout.height - rowCompanies.height - rawButtonLoadCompanyAttributes.height
+                    anchors.top: rowCompanies.bottom
+
+                    ListView {
+                        anchors.fill: parent
+                        model: companyAttributesModel
+                        delegate: attributeListDelegateCompanies
+                        focus: true
+                        spacing: 10
+                    }
+                }
+
+                Item {
+                    id: rawButtonLoadCompanyAttributes
+                    anchors.top: rectangleCompanies.bottom
+                    width: parent.width
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    Button {
+                        id: buttonLoadCompanyAttributes
+                        text: "Carregar atributos empresariais"
+                        width: 2 * Constants.WIDTH_BUTTON
+                        height: parent.height
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.capitalization: Font.MixedCase
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+                }
+
             }
         }
     }

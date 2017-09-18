@@ -80,7 +80,12 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(eIDMW::PTEID_EIDC
     bool allEnterprises = true;
     const char * soapAction = "http://www.cartaodecidadao.pt/services/ccc/ACS/Operations/Attributes";
 	const char * ac_endpoint = "/DSS/ACService";
-    qDebug() << "C++: getCompanyAttributes called";
+    qDebug() << "C++: getAttributes called supplier_ids size = " << supplier_ids.size();
+    for(unsigned int i=0;i<supplier_ids.size();i++){
+        qDebug() << "C++: getAttributes called indice= " << supplier_ids.at(i);
+    }
+
+
 
     try {
 
