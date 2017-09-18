@@ -1455,7 +1455,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
                             QString::fromStdString(childAttributes.at(0)));
     }
 
-    emit signalCompanyAttributesLoaded(attribute_map);
+    emit signalEntityAttributesLoaded(attribute_map);
 }
 
 
