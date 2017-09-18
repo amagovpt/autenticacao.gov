@@ -142,6 +142,15 @@ public:
     double isSmallSignature;
 };
 
+struct SCAPSignParams {
+public:
+    QString inputPDF;
+    QString outputPDF;
+    int page; int location_x; int location_y;
+    int ltv;
+    QList<int> attribute_index;
+};
+
 class PDFPreviewImageProvider: public QObject, public QQuickImageProvider
 {
     Q_OBJECT
@@ -151,7 +160,7 @@ public:
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 
 signals:
-    Q_SIGNAL    void signalPdfSourceChanged(int pdfWidth, int pdfHeight);
+    Q_SIGNAL void signalPdfSourceChanged(int pdfWidth, int pdfHeight);
 private:
     QPixmap renderPdf(int page,const QSize &requestedSize);
     QPixmap renderPDFPage(unsigned int page);
@@ -254,9 +263,8 @@ public slots:
     void startLoadingAttributesFromCache(bool isCompanies);
     void startGettingEntityAttributes(QList<int> entity_index);
 
-#ifdef NOT_YET_IMPLEMENTED
-    void startSigningSCAP(QString inputPdf, QString outputPDF /* TODO: How do we pass the selected attributes?? */);
-#endif    
+    void startSigningSCAP(QString inputPdf, QString outputPDF, int page, int location_x, int location_y, 
+                          int ltv, QList<int> attribute_index);
 
     unsigned int verifyAuthPin(QString pin);
     unsigned int getTriesLeftAuthPin();
@@ -331,6 +339,7 @@ private:
     void getSCAPCompanyAttributes();
     void getSCAPAttributesFromCache(bool isCompanies);
     void getSCAPEntityAttributes(QList<int> entityIDs);
+    void doSignSCAP(SCAPSignParams params);
     void getPersoDataFile();
     void setPersoDataFile(QString text);
     void getAddressFile();

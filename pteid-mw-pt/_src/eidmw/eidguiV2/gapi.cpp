@@ -1369,6 +1369,30 @@ void GAPI::startLoadingAttributesFromCache(bool isCompanies) {
     QtConcurrent::run(this, &GAPI::getSCAPAttributesFromCache, isCompanies);
 }
 
+void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, int location_x, int location_y,
+                            int ltv, QList<int> attribute_index) {
+    SCAPSignParams signParams = {inputPDF, outputPDF, page, location_x, location_y,
+                            ltv, attribute_index};
+
+
+    QtConcurrent::run(this, &GAPI::doSignSCAP, signParams);
+
+}
+
+
+void GAPI::doSignSCAP(SCAPSignParams params) {
+
+    std::vector<int> attrs;
+    for (unsigned int i = 0; i!= params.attribute_index.size(); i++) {
+        attrs.push_back(params.attribute_index.at(i));
+    }
+
+    scapServices.executeSCAPSignature(params.inputPDF, params.outputPDF, params.page,
+                params.location_x, params.location_y, params.ltv, attrs);
+
+}
+
+
 void GAPI::getSCAPEntities() {
     
     QList<QString> attributeSuppliers;

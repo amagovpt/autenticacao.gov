@@ -59,8 +59,8 @@ public:
 
 	void getEntityAttributes();
     std::vector<ns2__AttributesType *> getAttributes(eIDMW::PTEID_EIDCard &card, std::vector<int> supplier_ids);
-	void executeSCAPSignature(int selected_page, QString &inputPath, QString &savefilepath,
-	     double location_x, double location_y, int ltv_years, std::vector<ns3__AttributeType *> selected_attributes);
+	void executeSCAPSignature(QString &inputPath, QString &savefilepath, int selected_page,
+	     double location_x, double location_y, int ltv_years, std::vector<int> selected_attributes);
 
 	std::vector<ns2__AttributesType *> loadAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies);
 
@@ -73,6 +73,7 @@ private:
 	std::vector<ns2__AttributesType *> m_attributesList;
 	ProxyInfo m_proxyInfo;
 	ErrorConn connectionErr;
+	std::vector<ns3__AttributeType*> getSelectedAttributes(std::vector<int> attributes_index);
 	void setConnErr( int soapConnectionErr, void *in_suppliers_resp );
 	
 };

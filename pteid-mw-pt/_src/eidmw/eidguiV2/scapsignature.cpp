@@ -91,11 +91,57 @@ void ScapServices::setConnErr( int soapConnErr, void *in_suppliers_resp ) {
 
 using namespace eIDMW;
 
-void ScapServices::executeSCAPSignature(int selected_page, QString &inputPath, QString &savefilepath, 
-    double location_x, double location_y, int ltv_years, std::vector<ns3__AttributeType *> selected_attributes)
+
+std::vector<ns3__AttributeType*> ScapServices::getSelectedAttributes(std::vector<int> attributes_index) {
+
+    std::vector<ns3__AttributeType*> parsedAttributes;
+    ns2__AttributesType * parent = NULL;
+
+    for (int i=0; i!=attributes_index.size(); i++) {
+        try {
+            parent = m_attributesList.at(attributes_index[i]);    
+        }
+        catch (std::out_of_range &e) 
+        {
+            qDebug() << "Invalid attribute index: "
+                     << attributes_index[i] <<"This shouldn't happen!";
+            continue;
+        }
+
+        std::vector<ns5__SignatureType *> childs = parent->SignedAttributes->ns3__SignatureAttribute;
+        for(uint childPos = 0;  childPos < childs.size(); childPos++)
+        {
+            ns5__SignatureType * child = childs.at(childPos);
+            if ( child->ns5__Object.size() > 0 )
+            {
+                ns5__ObjectType * objType = child->ns5__Object.at(0);
+                ns3__AttributeType * attr = objType->union_ObjectType.ns3__Attribute;
+                //"Fix" the AttributeSupplier (ID and Name): they can have different values in SCAP and the actual entity Attribute
+                attr->AttributeSupplier->Id = parent->ATTRSupplier->Id;
+                attr->AttributeSupplier->Name = parent->ATTRSupplier->Name;
+                parsedAttributes.push_back(attr);
+               
+           }
+       }
+
+    }
+
+    return parsedAttributes;
+}
+
+void ScapServices::executeSCAPSignature(QString &inputPath, QString &savefilepath, int selected_page,
+         double location_x, double location_y, int ltv_years, std::vector<int> attributes_index)
 {
     // Sets user selected file save path
-    const char* citizenId;
+    const char* citizenId = NULL;
+
+    std::vector<ns3__AttributeType*> selected_attributes = getSelectedAttributes(attributes_index);
+
+    if (selected_attributes.size() == 0)
+    {
+        qDebug() << "Couldn't find any index in m_attributesList!";
+        return;
+    }
 
     // Creates a temporary file
     QTemporaryFile tempFile;
@@ -141,13 +187,10 @@ void ScapServices::executeSCAPSignature(int selected_page, QString &inputPath, Q
                     QString(citizenId), ltv_years, PDFSignatureInfo(selected_page, location_x, location_y, false), selected_attributes);
 
                 if (successful) {
-                	/*
-                    if ( this->FutureWatcher.future().isCanceled() ){
-                        this->success = CANCELED_BY_USER;
-                    } else{
-                        this->success = SIG_SUCCESS;
-                    }
-                    */
+                	
+                }
+                else {
+                    qDebug() << "Error in PADES/PDFSignature service!";
                 }
             }
             else {
@@ -169,7 +212,6 @@ void ScapServices::executeSCAPSignature(int selected_page, QString &inputPath, Q
     }
 
     free(temp_save_path);
-    free((char *)citizenId);
 }
 
 

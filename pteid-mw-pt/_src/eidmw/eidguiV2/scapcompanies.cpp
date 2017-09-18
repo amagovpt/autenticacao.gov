@@ -80,18 +80,13 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(eIDMW::PTEID_EIDC
     bool allEnterprises = true;
     const char * soapAction = "http://www.cartaodecidadao.pt/services/ccc/ACS/Operations/Attributes";
 	const char * ac_endpoint = "/DSS/ACService";
-    qDebug() << "C++: getAttributes called supplier_ids size = " << supplier_ids.size();
-    for(unsigned int i=0;i<supplier_ids.size();i++){
-        qDebug() << "C++: getAttributes called indice= " << supplier_ids.at(i);
-    }
+    qDebug() << "C++: getAttributes called";
 
 
 
     try {
 
         soap * sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
-		//TODO: this disables server certificate verification !!
-		soap_ssl_client_context(sp, SOAP_SSL_NO_AUTHENTICATION, NULL, NULL, NULL, NULL, NULL);
 
         // Get suppliers List
         std::vector<ns3__AttributeSupplierType *> vec_suppliers;
