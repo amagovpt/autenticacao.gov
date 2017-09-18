@@ -179,7 +179,7 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
 
     //TODO: should we cache the suppliers list ??
 
-	qDebug() << "getAttributeSuppliers(): " << m_suppliersList.size();
+	//qDebug() << "getAttributeSuppliers(): " << m_suppliersList.size();
 
 	soap * sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
 	//TODO: this disables server certificate verification !!

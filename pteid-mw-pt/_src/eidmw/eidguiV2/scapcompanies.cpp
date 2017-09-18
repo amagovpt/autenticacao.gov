@@ -9,60 +9,76 @@
 #include <QDir>
 
 
+std::vector<ns2__AttributesType *> loadCacheFile(QString &filePath) {
+    std::vector<ns2__AttributesType *> attributesType;
+    QFile cacheFile(filePath);
+    if( !cacheFile.open(QIODevice::ReadOnly) ) {
+        std::cerr << "loadCacheFile() Error: " << cacheFile.errorString().toStdString() << std::endl;
+        return attributesType;
+    }
+    qDebug() << "Reading XML cached file";
+
+    QByteArray fileContent = cacheFile.readAll();
+
+    // Convert string to istream
+    std::istringstream replyStream(fileContent.data());
+    std::istream * istream = &replyStream;
+
+    soap * soap2 = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
+    soap_set_namespaces(soap2, SCAPnamespaces);
+
+    soap2->is = istream;
+
+    // Retrieve ns2__AttributeResponseType
+    ns2__AttributeResponseType attr_response;
+    long ret = soap_read_ns2__AttributeResponseType(soap2, &attr_response);
+
+    qDebug() << "Retrieved attributes from converting XML to object. Size: "<< attr_response.AttributeResponseValues.size();
+
+    if (ret != 0) {
+        std::cerr << "Error reading AttributeResponseType" << std::endl;
+        return attributesType;
+    }
+    attributesType = attr_response.AttributeResponseValues;
+
+    return attributesType;
+}
+
 std::vector<ns2__AttributesType *> 
     ScapServices::loadAttributesFromCache(eIDMW::PTEID_EIDCard &card) {
 
     std::vector<ns2__AttributesType *> attributesType;
     try
     {
+        QString citizenNIC(card.getID().getCivilianIdNumber());
 
-        QString citizenNIC (card.getID().getCivilianIdNumber());
-
-        // Save to cache
         ScapSettings settings;
         QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
-        QString fileLocation = scapCacheDir + citizenNIC + ".xml";
+        QString companies_filePath = scapCacheDir + citizenNIC + COMPANIES_SUFFIX;
 
-        QFile cacheFile(fileLocation);
-        if( !cacheFile.open(QIODevice::ReadOnly) ) {
-            std::cerr << "Couldn't load attributes from cache. Error: " << cacheFile.errorString().toStdString() << std::endl;
-            return attributesType;
+        attributesType = loadCacheFile(companies_filePath);
+        QString entities_filePath = scapCacheDir + citizenNIC + ENTITIES_SUFFIX;        
+
+        std::vector<ns2__AttributesType *> attributesEntities = loadCacheFile(entities_filePath);
+
+        if (attributesEntities.size() > 0)
+        {
+            //Merge into single vector
+            attributesType.insert(attributesType.end(), attributesEntities.begin(), attributesEntities.end());
+
         }
-        qDebug() << "Reading XML cached file";
 
-        QByteArray fileContent = cacheFile.readAll();
-
-        // Convert string to istream
-        std::istringstream replyStream(fileContent.data());
-        std::istream * istream = &replyStream;
-
-        // Create soap request with generated body content.
-        soap * soap2 = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
-        //TODO: this disables server certificate verification !!
-        soap_set_namespaces(soap2, SCAPnamespaces);
-
-        soap2->is = istream;
-
-        // Retrieve ns2__AttributeResponseType
-        ns2__AttributeResponseType attr_response;
-        long ret = soap_read_ns2__AttributeResponseType(soap2, &attr_response);
-
-        qDebug() << "Retrieved attributes from converting XML to object. Size: "<< attr_response.AttributeResponseValues.size();
-
-        if (ret != 0) {
-            std::cerr << "Error reading AttributeResponseType" << std::endl;
-            return attributesType;
-        }
-        attributesType = attr_response.AttributeResponseValues;
     }
     catch(...) {
-        std::cerr << "Error ocurred while loading attributes from cache";
+        std::cerr << "Error ocurred while loading attributes from cache!";
+        //TODO: report error
     }
 
+    m_attributesList = attributesType;
     return attributesType;
 }
 
-std::vector<ns2__AttributesType *> ScapServices::getCompanyAttributes(eIDMW::PTEID_EIDCard &card) {
+std::vector<ns2__AttributesType *> ScapServices::getAttributes(eIDMW::PTEID_EIDCard &card, std::vector<int> supplier_ids) {
 
     std::vector<ns2__AttributesType *> result;
     bool allEnterprises = true;
@@ -79,15 +95,21 @@ std::vector<ns2__AttributesType *> ScapServices::getCompanyAttributes(eIDMW::PTE
         // Get suppliers List
         std::vector<ns3__AttributeSupplierType *> vec_suppliers;
 
-        /*TODO: what do we do to fill the dummy attribute suppliers ??
-        for(int i = 0; i < attributeSupplierTypeVec.size(); i++)
+        //TODO: what do we do to fill the dummy attribute suppliers ??
+        for(int i = 0; i < supplier_ids.size(); i++)
         {
-            ns3__AttributeSupplierType * attSupType = attributeSupplierTypeVec.at(i);
+            ns3__AttributeSupplierType * supplier = m_suppliersList.at(supplier_ids.at(i));
 
-            ns3__AttributeSupplierType * ac_attributeSupplierType = soap_new_req_ns3__AttributeSupplierType(sp,attSupType->Id, attSupType->Name);
+            if (supplier == NULL)
+            {
+                qDebug() << "Couldn't find attributeSupplier with index: " << supplier_ids.at(i);
+                continue;
+            }
+
+            ns3__AttributeSupplierType * ac_attributeSupplierType = soap_new_req_ns3__AttributeSupplierType(sp, supplier->Id, supplier->Name);
             vec_suppliers.push_back(ac_attributeSupplierType);
         }
-        */
+        
         ns2__AttributeSupplierListType * suppliers = soap_new_req_ns2__AttributeSupplierListType(sp, vec_suppliers);
 
 
@@ -151,7 +173,7 @@ std::vector<ns2__AttributesType *> ScapServices::getCompanyAttributes(eIDMW::PTE
         QDir scapCacheDir;
         scapCacheDir.mkpath(s_scapCacheDir);
 
-        QString fileLocation = s_scapCacheDir + idNumber + ".xml";
+        QString fileLocation = s_scapCacheDir + idNumber + COMPANIES_SUFFIX;
 
         qDebug() << "Creating cache file on location: " << fileLocation;
         QFile cacheFile(fileLocation);

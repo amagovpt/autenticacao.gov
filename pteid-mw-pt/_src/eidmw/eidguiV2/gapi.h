@@ -249,14 +249,12 @@ public slots:
     void startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
 
     /* SCAP Methods  */
-    
     void startGettingEntities();
     void startGettingCompanyAttributes();
     void startLoadingAttributesFromCache();
+    void startGettingEntityAttributes(QList<int> entity_index);
 
 #ifdef NOT_YET_IMPLEMENTED
-
-    void startGettingEntityAttributes(QString entityName);
     void startSigningSCAP(QString inputPdf, QString outputPDF /* TODO: How do we pass the selected attributes?? */);
 #endif    
 
@@ -329,6 +327,7 @@ private:
     void getSCAPEntities();
     void getSCAPCompanyAttributes();
     void getSCAPAttributesFromCache();
+    void getSCAPEntityAttributes(QList<int> entityIDs);
     void getPersoDataFile();
     void setPersoDataFile(QString text);
     void getAddressFile();

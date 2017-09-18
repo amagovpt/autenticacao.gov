@@ -1353,6 +1353,9 @@ void GAPI::startGettingCompanyAttributes() {
     QtConcurrent::run(this, &GAPI::getSCAPCompanyAttributes);
 }
 
+void GAPI::startGettingEntityAttributes(QList<int> entities_index) {
+    QtConcurrent::run(this, &GAPI::getSCAPEntityAttributes, entities_index);       
+}
 
 void GAPI::startReadingPersoNotes() {
     QFuture<void> future = QtConcurrent::run(this, &GAPI::getPersoDataFile);
@@ -1414,6 +1417,47 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes) {
     return childrensList;
 }
 
+void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
+
+    QVariantMap attribute_map;
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL)
+        return;
+
+    std::vector<int> supplier_ids;
+    
+    int supplier_id;
+    foreach (supplier_id, entityIDs) {
+        supplier_ids.push_back(supplier_id);
+    }
+
+    std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(*card, supplier_ids);
+
+    if (attributes.size() == 0)
+    {
+        //TODO: emit signal for error
+        //emit
+        return;
+    }
+
+    for(uint i = 0; i < attributes.size() ; i++)
+    {
+       std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
+       std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i));
+
+       if (childAttributes.size() > 1)
+       {
+           qDebug() << "TODO: multiple attributes from the same supplier is not supported yet...";
+       }
+
+       attribute_map.insert(QString::fromStdString(attrSupplier),
+                            QString::fromStdString(childAttributes.at(0)));
+    }
+
+    emit signalCompanyAttributesLoaded(attribute_map);
+}
+
 
 void GAPI::getSCAPCompanyAttributes() {
 
@@ -1423,7 +1467,9 @@ void GAPI::getSCAPCompanyAttributes() {
     if (card == NULL)
         return;
 
-    std::vector<ns2__AttributesType *> attributes = scapServices.getCompanyAttributes(*card);
+    std::vector<int> supplierIDs;
+
+    std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(*card, supplierIDs);
 
     if (attributes.size() == 0)
     {

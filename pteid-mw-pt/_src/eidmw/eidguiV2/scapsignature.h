@@ -49,7 +49,8 @@ class ns3__AttributeType;
 
 class ns3__AttributeSupplierType;
 
-
+#define COMPANIES_SUFFIX "_ENTERPRISES.xml"
+#define ENTITIES_SUFFIX "_INSTITUTIONS.xml"
 
 class ScapServices {
 public:
@@ -57,7 +58,7 @@ public:
 	std::vector<ns3__AttributeSupplierType *> getAttributeSuppliers();
 
 	void getEntityAttributes();
-    std::vector<ns2__AttributesType *> getCompanyAttributes(eIDMW::PTEID_EIDCard &card);
+    std::vector<ns2__AttributesType *> getAttributes(eIDMW::PTEID_EIDCard &card, std::vector<int> supplier_ids);
 	void executeSCAPSignature(int selected_page, QString &inputPath, QString &savefilepath,
 	     double location_x, double location_y, int ltv_years, std::vector<ns3__AttributeType *> selected_attributes);
 
@@ -69,7 +70,7 @@ public:
 
 private:
 	std::vector<ns3__AttributeSupplierType *> m_suppliersList;
-	std::vector<ns3__AttributeType *> m_attributesList;
+	std::vector<ns2__AttributesType *> m_attributesList;
 	ProxyInfo m_proxyInfo;
 	ErrorConn connectionErr;
 	void setConnErr( int soapConnectionErr, void *in_suppliers_resp );
