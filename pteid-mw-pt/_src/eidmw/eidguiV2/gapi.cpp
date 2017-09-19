@@ -1394,7 +1394,7 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
         attrs.push_back(params.attribute_index.at(i));
     }
 
-    scapServices.executeSCAPSignature(params.inputPDF, params.outputPDF, params.page,
+    scapServices.executeSCAPSignature(this, params.inputPDF, params.outputPDF, params.page,
                 params.location_x, params.location_y, params.ltv, attrs);
 
 }

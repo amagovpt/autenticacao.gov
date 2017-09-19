@@ -1,5 +1,5 @@
-#ifndef _SETTINGS_H_
-#define _SETTINGS_H_
+#ifndef _SCAPSETTINGS_H_
+#define _SCAPSETTINGS_H_
 
 #include <Qt>
 #include <QtCore>

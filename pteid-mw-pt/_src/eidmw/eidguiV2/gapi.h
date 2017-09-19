@@ -193,6 +193,7 @@ private:
     QString m_filePath;
 };
 
+
 class GAPI : public QObject
 {
     Q_OBJECT
@@ -336,6 +337,7 @@ signals:
     void signalPersoDataLoaded(const QString& persoNotes);
     void signalAddressLoadedChanged();
     void signalPdfSignSucess();
+    void signalPdfSignFail();
     void signalUpdateProgressBar(int value);
     void signalUpdateProgressStatus(const QString statusMessage);
     void addressChangeFinished(long return_code);

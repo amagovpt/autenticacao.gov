@@ -3,6 +3,7 @@
 #include "eidlibException.h"
 
 #include "ScapSettings.h"
+#include "gapi.h"
 
 //#include "ASService/soapH.h"
 //#include "ASService/soapAttributeSupplierBindingProxy.h"
@@ -129,7 +130,7 @@ std::vector<ns3__AttributeType*> ScapServices::getSelectedAttributes(std::vector
     return parsedAttributes;
 }
 
-void ScapServices::executeSCAPSignature(QString &inputPath, QString &savefilepath, int selected_page,
+void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QString &savefilepath, int selected_page,
          double location_x, double location_y, int ltv_years, std::vector<int> attributes_index)
 {
     // Sets user selected file save path
@@ -162,8 +163,7 @@ void ScapServices::executeSCAPSignature(QString &inputPath, QString &savefilepat
             //this->success = SIG_ERROR;
         }
 
-        try
-        {
+
             eIDMW::PTEID_EIDCard &card = readerContext.getEIDCard();
 
             // Get Citizen info
@@ -187,10 +187,12 @@ void ScapServices::executeSCAPSignature(QString &inputPath, QString &savefilepat
                     QString(citizenId), ltv_years, PDFSignatureInfo(selected_page, location_x, location_y, false), selected_attributes);
 
                 if (successful) {
+                    parent->signalPdfSignSucess();
                 	
                 }
                 else {
                     qDebug() << "Error in PADES/PDFSignature service!";
+                    parent->signalPdfSignFail();
                 }
             }
             else {
@@ -201,15 +203,10 @@ void ScapServices::executeSCAPSignature(QString &inputPath, QString &savefilepat
         }
         catch (eIDMW::PTEID_Exception &e)
         {
+            parent->signalPdfSignFail();
             std::cerr << "Caught exception getting EID Card. Error code: " << hex << e.GetError() << std::endl;
             //this->success = SIG_ERROR;
         }
-
-    }
-    catch(eIDMW::PTEID_Exception &e) {
-        std::cerr << "Caught exception getting reader. Error code: " << hex << e.GetError() << std::endl;
-        //this->success = SIG_ERROR;
-    }
 
     free(temp_save_path);
 }
