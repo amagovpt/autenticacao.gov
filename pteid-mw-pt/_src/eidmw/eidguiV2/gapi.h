@@ -151,18 +151,23 @@ public:
     QList<int> attribute_index;
 };
 
-class SCAPAttribute: public QObject {
+class SCAPAttributeList: public QObject {
     Q_OBJECT
 public:
-    explicit SCAPAttribute(QObject *parent = 0): QObject(parent) {}
-    SCAPAttribute(const SCAPAttribute & attribute) { provider = attribute.provider; name = attribute.name; }
-    SCAPAttribute(QString prov, QString attr_name) { provider = prov; name = attr_name;}
-    SCAPAttribute& operator=(const SCAPAttribute& attribute) { provider = attribute.provider; name = attribute.name; }
-    QString getProvider() { return provider; }
-    QString getName() { return name; }
- private:   
-    QString provider;
-    QString name;
+    explicit SCAPAttributeList(QObject *parent = 0): QObject(parent) {}
+    SCAPAttributeList (const SCAPAttributeList& list) {
+        for (int i=0; i < list.size(); i++)
+            data.append(QPair<QString, QString>(list.getProvider(i), list.getName(i)));
+    };
+    
+    void append(QString provider, QString name) {
+        data.append(QPair<QString, QString>(provider, name));
+    }
+    QString getProvider(int i) const { return data[i].first; }
+    QString getName(int i) const { return data[i].second; }
+    int size() const {return data.size(); }
+ private:
+    QList<QPair<QString, QString>> data;
 };
 
 class PDFPreviewImageProvider: public QObject, public QQuickImageProvider
@@ -339,8 +344,8 @@ signals:
 
     //SCAP signals
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
-    void signalCompanyAttributesLoaded(const QList<SCAPAttribute> attribute_list);
-    void signalEntityAttributesLoaded(const QList<SCAPAttribute> attribute_list);
+    void signalCompanyAttributesLoaded(const SCAPAttributeList attribute_list);
+    void signalEntityAttributesLoaded(const SCAPAttributeList attribute_list);
     void signalCompanyAttributesLoadedError();
     void signalEntityAttributesLoadedError();
     void signalPdfPrintSucess();
