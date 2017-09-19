@@ -1452,7 +1452,7 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
 
 void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
 
-    SCAPAttributeList attribute_list;
+    QList<QString> attribute_list;
     PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card == NULL){
@@ -1491,8 +1491,8 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
            qDebug() << "TODO: multiple attributes from the same supplier is not supported yet...";
        }
 
-       attribute_list.append(QString::fromStdString(attrSupplier),
-                            QString::fromStdString(childAttributes.at(0)));
+       attribute_list.append(QString::fromStdString(attrSupplier));
+       attribute_list.append(QString::fromStdString(childAttributes.at(0)));
     }
 
     emit signalEntityAttributesLoaded(attribute_list);
@@ -1502,7 +1502,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
 void GAPI::getSCAPCompanyAttributes() {
 
     PTEID_EIDCard * card = NULL;
-    SCAPAttributeList attribute_list;
+    QList<QString> attribute_list;
     getCardInstance(card);
     if (card == NULL){
         emit signalCompanyAttributesLoadedError();
@@ -1537,8 +1537,8 @@ void GAPI::getSCAPCompanyAttributes() {
            qDebug() << "TODO: multiple attributes from the same supplier is not supported yet...";
        }
 
-       attribute_list.append(QString::fromStdString(attrSupplier),
-                            QString::fromStdString(childAttributes.at(0)));
+       attribute_list.append(QString::fromStdString(attrSupplier));
+       attribute_list.append(QString::fromStdString(childAttributes.at(0)));
     }
 
     emit signalCompanyAttributesLoaded(attribute_list);
@@ -1547,7 +1547,7 @@ void GAPI::getSCAPCompanyAttributes() {
 void GAPI::getSCAPAttributesFromCache(bool isCompanies, bool isShortDescription) {
 
     PTEID_EIDCard * card = NULL;
-    SCAPAttributeList attribute_list;
+    QList<QString> attribute_list;
 
     getCardInstance(card);
     if (card == NULL)
@@ -1565,8 +1565,8 @@ void GAPI::getSCAPAttributesFromCache(bool isCompanies, bool isShortDescription)
            qDebug() << "TODO: multiple attributes from the same supplier is not supported yet...";
        }
 
-       attribute_list.append(QString::fromStdString(attrSupplier),
-                            QString::fromStdString(childAttributes.at(0)));
+       attribute_list.append(QString::fromStdString(attrSupplier));
+       attribute_list.append(QString::fromStdString(childAttributes.at(0)));
     }
     if (isCompanies)
         emit signalCompanyAttributesLoaded(attribute_list);

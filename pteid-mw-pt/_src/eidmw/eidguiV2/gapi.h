@@ -151,6 +151,7 @@ public:
     QList<int> attribute_index;
 };
 
+/*
 class SCAPAttributeList: public QObject {
     Q_OBJECT
 public:
@@ -169,8 +170,9 @@ public:
  private:
     QList<QPair<QString, QString>> data;
 };
+*/
 
-Q_DECLARE_METATYPE(SCAPAttributeList)
+//Q_DECLARE_METATYPE(SCAPAttributeList)
 
 class PDFPreviewImageProvider: public QObject, public QQuickImageProvider
 {
@@ -346,8 +348,8 @@ signals:
 
     //SCAP signals
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
-    void signalCompanyAttributesLoaded(const SCAPAttributeList attribute_list);
-    void signalEntityAttributesLoaded(const SCAPAttributeList attribute_list);
+    void signalCompanyAttributesLoaded(const QList<QString> attribute_list);
+    void signalEntityAttributesLoaded(const QList<QString> attribute_list);
     void signalCompanyAttributesLoadedError();
     void signalEntityAttributesLoadedError();
     void signalPdfPrintSucess();
