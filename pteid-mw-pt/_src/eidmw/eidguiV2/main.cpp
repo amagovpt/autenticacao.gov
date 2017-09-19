@@ -67,6 +67,7 @@ int main(int argc, char *argv[])
     ctx->setContextProperty("image_provider_pdf", gapi.image_provider_pdf);
 
     qmlRegisterType<FileSaveDialog>("eidguiV2", 1, 0, "FileSaveDialog");
+    qmlRegisterType<SCAPAttribute>("eidguiV2", 1, 0, "SCAPAttribute");
 
     engine.addImageProvider("myimageprovider", gapi.buildImageProvider());
     engine.addImageProvider("pdfpreview_imageprovider", gapi.buildPdfImageProvider());
