@@ -146,6 +146,7 @@ Window {
                 visible: true
                 Text {
                     id: textNote
+                    // TODO: Is used?
                     text: "To change this option go to the settings menu"
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name

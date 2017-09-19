@@ -656,7 +656,7 @@ PageServicesSignAdvancedForm {
                     var count = 0
                     for (var i = 0; i < entityAttributesModel.count; i++){
                         if(entityAttributesModel.get(i).checkBoxAttr == true){
-                            attributeList[count] = i+1
+                            attributeList[count] = i
                             count++
                         }
                     }
@@ -762,6 +762,10 @@ PageServicesSignAdvancedForm {
     }
     ListModel {
         id: entityAttributesModel
+        onCountChanged: {
+            propertyTextAttributesMsg.visible = false
+            propertyMouseAreaTextAttributesMsg.enabled = false
+        }
     }
 
     Component {
@@ -799,6 +803,31 @@ PageServicesSignAdvancedForm {
         }
     }
 
+    propertyMouseAreaTextAttributesMsg{
+        onClicked: {
+            // Jump to Menu Definitions - PageDefinitionsSCAP
+            mainFormID.state = "STATE_NORMAL"
+            mainFormID.propertySubMenuListView.model.clear()
+            for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
+                console.log("Sub Menu indice " + i + " - "
+                            + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);
+                mainFormID.propertySubMenuListView.model
+                .append({
+                            "subName": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
+                            .subName,
+                            "expand": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
+                            .expand,
+                            "url": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
+                            .url
+                        })
+            }
+            mainFormID.propertyMainMenuListView.currentIndex = -1
+            mainFormID.propertyMainMenuBottomListView.currentIndex = 0
+            mainFormID.propertySubMenuListView.currentIndex = 1
+            mainFormID.propertyPageLoader.source = "/contentPages/definitions/PageDefinitionsSCAP.qml"
+        }
+    }
+
     propertySwitchSignAdd{
         onCheckedChanged: {
             if(propertySwitchSignAdd.checked){
@@ -812,6 +841,8 @@ PageServicesSignAdvancedForm {
                 propertyCheckSignShow.enabled = false
                 propertyCheckSignReduced.enabled = false
                 propertyRadioButtonXADES.enabled = false
+                propertyTextAttributesMsg.visible = true
+                propertyMouseAreaTextAttributesMsg.enabled = true
                 // Load attributes from cache (isCompanies, isShortDescription)
                 gapi.startLoadingAttributesFromCache(0, 1)
                 gapi.startLoadingAttributesFromCache(1, 1)
@@ -825,6 +856,9 @@ PageServicesSignAdvancedForm {
                 propertyCheckSignReduced.enabled = true
                 propertyCheckSignShow.enabled = true
                 propertyRadioButtonXADES.enabled = true
+                propertyTextAttributesMsg.visible = false
+                propertyMouseAreaTextAttributesMsg.enabled = false
+
             }
         }
     }

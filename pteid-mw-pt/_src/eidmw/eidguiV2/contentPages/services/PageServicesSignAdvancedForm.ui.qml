@@ -50,6 +50,8 @@ Item {
     property alias propertyMouseAreaToolTipPades: mouseAreaToolTipPades
     property alias propertyMouseAreaToolTipXades: mouseAreaToolTipXades
     property alias propertySwitchSignAdd: switchSignAdd
+    property alias propertyTextAttributesMsg: textAttributesMsg
+    property alias propertyMouseAreaTextAttributesMsg: mouseAreaTextAttributesMsg
     // Calculate ToolTip Position
     property int propertyMouseAreaToolTipPadesX: Constants.SIZE_ROW_H_SPACE
                                                  + Constants.SIZE_TEXT_FIELD_H_SPACE
@@ -442,7 +444,25 @@ Item {
                         width: parent.width
                         height: 50
                         anchors.top: switchSignAdd.bottom
+                        MouseArea {
+                            id: mouseAreaTextAttributesMsg
+                            anchors.fill: parent
+                            enabled: true
+                            hoverEnabled: true
+                            z:1
+                        }
 
+                        Text {
+                            id: textAttributesMsg
+                            text: qsTranslate("PageServicesSign","STR_ATTRIBUTES_EMPTY")
+                            verticalAlignment: Text.AlignVCenter
+                            color: Constants.COLOR_TEXT_LABEL
+                            height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
+                            font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
+                            visible: false
+                        }
                         ListView {
                             id: listViewEntities
                             anchors.fill: parent
