@@ -83,7 +83,6 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(eIDMW::PTEID_EIDC
     qDebug() << "C++: getAttributes called";
 
 
-
     try {
 
         soap * sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
@@ -198,9 +197,17 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(eIDMW::PTEID_EIDC
 
         unsigned int resp_size = attr_response.AttributeResponseValues.size();
 
-        std::cerr << "Got response from converting XML to object. Size: " << resp_size  << std::endl;
+        //std::cerr << "Got response from converting XML to object. Size: " << resp_size  << std::endl;
+        
 
         if (resp_size > 0) {
+            ns2__AttributesType * parent = attr_response.AttributeResponseValues.at(0);
+            std::vector<ns5__SignatureType *> childs = parent->SignedAttributes->ns3__SignatureAttribute;
+
+            if (childs.size() == 0) {
+                qDebug() << "getAttributes(): Empty attributes response!";
+                return result;
+            }
 
             qDebug() << "Creating cache file on location: " << fileLocation;
             QFile cacheFile(fileLocation);

@@ -101,10 +101,10 @@ std::vector<ns3__AttributeType*> ScapServices::getSelectedAttributes(std::vector
         try {
             parent = m_attributesList.at(attributes_index[i]);    
         }
-        catch (std::out_of_range &e) 
+        catch (std::out_of_range &e)
         {
             qDebug() << "Invalid attribute index: "
-                     << attributes_index[i] <<"This shouldn't happen!";
+                     << attributes_index[i] << "This shouldn't happen!";
             continue;
         }
 
