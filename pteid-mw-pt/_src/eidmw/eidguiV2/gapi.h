@@ -158,7 +158,7 @@ public:
     SCAPAttributeList (const SCAPAttributeList& list) {
         for (int i=0; i < list.size(); i++)
             data.append(QPair<QString, QString>(list.getProvider(i), list.getName(i)));
-    };
+    }
     
     void append(QString provider, QString name) {
         data.append(QPair<QString, QString>(provider, name));
@@ -169,6 +169,8 @@ public:
  private:
     QList<QPair<QString, QString>> data;
 };
+
+Q_DECLARE_METATYPE(SCAPAttributeList)
 
 class PDFPreviewImageProvider: public QObject, public QQuickImageProvider
 {
