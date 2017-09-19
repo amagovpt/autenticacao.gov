@@ -174,17 +174,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(eIDMW::PTEID_EIDC
         QDir scapCacheDir;
         scapCacheDir.mkpath(s_scapCacheDir);
 
-        QString fileLocation = s_scapCacheDir + idNumber + COMPANIES_SUFFIX;
-
-        qDebug() << "Creating cache file on location: " << fileLocation;
-        QFile cacheFile(fileLocation);
-        if (cacheFile.open(QIODevice::WriteOnly)) {
-            cacheFile.write(replyString.c_str(), replyString.length());
-        }
-        else
-        {
-            std::cerr << "Couldn't save attribute result to cache. Error: " << cacheFile.errorString().toStdString() << std::endl;
-        }
+        QString fileLocation = s_scapCacheDir + idNumber + (allEnterprises ? COMPANIES_SUFFIX : ENTITIES_SUFFIX);
 
         // Convert string to istream
         std::istringstream replyStream(replyString);
@@ -200,14 +190,31 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(eIDMW::PTEID_EIDC
         // Retrieve ns2__AttributeResponseType
         ns2__AttributeResponseType attr_response;
         long ret = soap_read_ns2__AttributeResponseType(soap2, &attr_response);
-
-
-        std::cerr << "Got response from converting XML to object. Size: "<< attr_response.AttributeResponseValues.size()  << std::endl;
-
+        
         if (ret != 0) {
-            std::cerr << "Error reading AttributeResponseType" << std::endl;
-            //return result;
+            std::cerr << "Error reading AttributeResponseType! Malformed XML response" << std::endl;
+            return result;
         }
+
+        unsigned int resp_size = attr_response.AttributeResponseValues.size();
+
+        std::cerr << "Got response from converting XML to object. Size: " << resp_size  << std::endl;
+
+        if (resp_size > 0) {
+
+            qDebug() << "Creating cache file on location: " << fileLocation;
+            QFile cacheFile(fileLocation);
+            
+            if (cacheFile.open(QIODevice::WriteOnly)) {
+                cacheFile.write(replyString.c_str(), replyString.length());
+            }
+            else
+            {
+                std::cerr << "Couldn't save attribute result to cache. Error: " << cacheFile.errorString().toStdString() << std::endl;
+            }
+        }
+
+        
         result = attr_response.AttributeResponseValues;
     }
     catch(...) {

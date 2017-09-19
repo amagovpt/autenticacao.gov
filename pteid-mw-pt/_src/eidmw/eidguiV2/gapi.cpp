@@ -1480,6 +1480,12 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
        std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), false);
 
+       if (childAttributes.size() == 0) {
+        qDebug() << "Zero child attributes in AttributeResponseValues!";
+        emit signalEntityAttributesLoadedError();
+        return;   
+       }
+
        if (childAttributes.size() > 1)
        {
            qDebug() << "TODO: multiple attributes from the same supplier is not supported yet...";
@@ -1517,6 +1523,14 @@ void GAPI::getSCAPCompanyAttributes() {
     {
        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
        std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), false);
+
+       PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Attribute from supplier: %s containing %d child attributes", attrSupplier.c_str(), childAttributes.size()) ;
+
+       if (childAttributes.size() == 0) {
+        qDebug() << "Zero child attributes in AttributeResponseValues!";
+        emit signalCompanyAttributesLoadedError();
+        return; 
+       }
 
        if (childAttributes.size() > 1)
        {
