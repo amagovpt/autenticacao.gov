@@ -163,9 +163,9 @@ public:
     void append(QString provider, QString name) {
         data.append(QPair<QString, QString>(provider, name));
     }
-    QString getProvider(int i) const { return data[i].first; }
-    QString getName(int i) const { return data[i].second; }
-    int size() const {return data.size(); }
+    Q_INVOKABLE QString getProvider(int i) const { return data[i].first; }
+    Q_INVOKABLE QString getName(int i) const { return data[i].second; }
+    Q_INVOKABLE int size() const {return data.size(); }
  private:
     QList<QPair<QString, QString>> data;
 };
