@@ -158,6 +158,8 @@ public:
     SCAPAttribute(const SCAPAttribute & attribute) { provider = attribute.provider; name = attribute.name; }
     SCAPAttribute(QString prov, QString attr_name) { provider = prov; name = attr_name;}
     SCAPAttribute& operator=(const SCAPAttribute& attribute) { provider = attribute.provider; name = attribute.name; }
+    QString getProvider() { return provider; }
+    QString getName() { return name; }
  private:   
     QString provider;
     QString name;
