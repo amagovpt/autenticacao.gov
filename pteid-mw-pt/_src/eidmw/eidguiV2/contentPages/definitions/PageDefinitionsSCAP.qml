@@ -15,7 +15,7 @@ PageDefinitionsSCAPForm {
                     "SCAP entities loaded error"
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
             if(propertyBar.currentIndex == 0)
-                propertyBusyIndicator.running = false
+                propertyBusyIndicatorAttributes.running = false
         }
         onSignalCompanyAttributesLoadedError: {
             console.log("Definitions SCAP - Signal SCAP company loaded error")
@@ -25,7 +25,7 @@ PageDefinitionsSCAPForm {
                     "SCAP company loaded error"
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
             if(propertyBar.currentIndex == 1)
-                propertyBusyIndicator.running = false
+                propertyBusyIndicatorAttributes.running = false
         }
         onSignalSCAPEntitiesLoaded: {
             console.log("Definitions SCAP - Signal SCAP entities loaded")
@@ -40,19 +40,30 @@ PageDefinitionsSCAPForm {
             if(propertyBar.currentIndex == 0)propertyBusyIndicator.running = false
 
         }
+        onSignalEntityAttributesLoaded:{
+            console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
 
+            for (var company in attribute_map) {
+
+                entityAttributesModel.clear()
+                entityAttributesModel.append({
+                                                  entityName: company, attribute: attribute_map[company]
+                                              });
+            }
+
+            if(propertyBar.currentIndex == 0)propertyBusyIndicatorAttributes.running = false
+        }
         onSignalCompanyAttributesLoaded: {
             console.log("Definitions SCAP - Signal SCAP company attributes loaded")
 
             for (var company in attribute_map) {
 
-                companyAttributesModel.clear()
                 companyAttributesModel.append({
                                                   entityName: company, attribute: attribute_map[company]
                                               });
             }
 
-            if(propertyBar.currentIndex == 1)propertyBusyIndicator.running = false
+            if(propertyBar.currentIndex == 1)propertyBusyIndicatorAttributes.running = false
         }
     }
 
@@ -72,7 +83,19 @@ PageDefinitionsSCAPForm {
                 font.capitalization: Font.MixedCase
                 anchors.verticalCenter: parent.verticalCenter
                 checked: checkBoxAttr
-                onCheckedChanged: entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
+                onCheckedChanged: {
+
+                    entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
+
+                    propertyButtonLoadEntityAttributes.enabled = false
+                    for (var i = 0; i < entityAttributesModel.count; i++){
+                        if(entityAttributesModel.get(i).checkBoxAttr === true){
+                            propertyButtonLoadEntityAttributes.enabled = true
+                            break
+                        }
+                    }
+
+                }
             }
             Column {
                 id: columnItem
@@ -130,7 +153,8 @@ PageDefinitionsSCAPForm {
     propertyButtonLoadCompanyAttributes {
         onClicked: {
             console.log("ButtonLoadCompanyAttributes clicked!")
-            propertyBusyIndicator.running = true
+            companyAttributesModel.clear()
+            propertyBusyIndicatorAttributes.running = true
             gapi.startGettingCompanyAttributes()
         }
 
@@ -139,7 +163,7 @@ PageDefinitionsSCAPForm {
     propertyButtonLoadEntityAttributes {
         onClicked: {
             console.log("ButtonLoadEntityAttributes clicked!")
-            propertyBusyIndicator.running = true
+            propertyBusyIndicatorAttributes.running = true
             var attributeList = []
             var count = 0
             for (var i = 0; i < entityAttributesModel.count; i++){
@@ -156,8 +180,10 @@ PageDefinitionsSCAPForm {
     Component.onCompleted: {
         console.log("Page Definitions SCAP Completed")
         propertyBusyIndicator.running = true
+        propertyBusyIndicatorAttributes.running = true
         gapi.startGettingEntities()
-        gapi.startLoadingAttributesFromCache(0)
-        gapi.startLoadingAttributesFromCache(1)
+        // Load attributes from cache (isCompanies, isShortDescription)
+        gapi.startLoadingAttributesFromCache(0, 0)
+        gapi.startLoadingAttributesFromCache(1, 0)
     }
 }

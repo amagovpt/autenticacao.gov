@@ -49,6 +49,7 @@ Item {
     property alias propertyRadioButtonXADES: radioButtonXADES
     property alias propertyMouseAreaToolTipPades: mouseAreaToolTipPades
     property alias propertyMouseAreaToolTipXades: mouseAreaToolTipXades
+    property alias propertySwitchSignAdd: switchSignAdd
     // Calculate ToolTip Position
     property int propertyMouseAreaToolTipPadesX: Constants.SIZE_ROW_H_SPACE
                                                  + Constants.SIZE_TEXT_FIELD_H_SPACE
@@ -284,7 +285,7 @@ Item {
                     height: Constants.SIZE_TEXT_V_SPACE + rectFormatOptions.height
                             + textFieldReason.height + textFieldLocal.height
                             + switchSignTemp.height + switchSignAdd.height
-                            + columAttributes.height + rowPreserv.height
+                            + rectangleEntities.height + rowPreserv.height
                             + Constants.SIZE_TEXT_V_SPACE + Constants.SIZE_TEXT_V_SPACE
 
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -431,47 +432,35 @@ Item {
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         anchors.top: switchSignTemp.bottom
                         text: qsTranslate("PageServicesSign","STR_SIGN_ADD_ATTRIBUTES")
-                        //enabled: fileLoaded
-                        enabled: false
-                        opacity: 0.3
+                        enabled: fileLoaded
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                     }
-                    Column {
-                        id: columAttributes
+                    Item {
+                        id: rectangleEntities
+                        width: parent.width
+                        height: 50
                         anchors.top: switchSignAdd.bottom
-                        width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                        height: checkBox1.height + checkBox2.height
-                        x: 6 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                        visible: switchSignAdd.checked
 
-                        CheckBox {
-                            id: checkBox1
-                            text: "Engenheiro Civil"
-                            height: 25
-                            font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            font.capitalization: Font.MixedCase
-                        }
-                        CheckBox {
-                            id: checkBox2
-                            text: "Socio da Empresa Obras Prontas"
-                            height: 25
-                            font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            font.capitalization: Font.MixedCase
+                        ListView {
+                            id: listViewEntities
+                            anchors.fill: parent
+                            model: entityAttributesModel
+                            delegate: attributeListDelegate
+                            focus: true
+                            spacing: 2
                         }
                     }
                     Row {
                         id: rowPreserv
-                        anchors.top: columAttributes.bottom
+                        anchors.top: rectangleEntities.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         width: parent.width
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         spacing: 5
                         x: 40
-                        visible: switchSignAdd.checked
+                        visible: false
 
                         Switch {
                             id: switchPreserv

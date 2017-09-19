@@ -9,6 +9,7 @@ Item {
     property alias propertyButtonLoadCompanyAttributes: buttonLoadCompanyAttributes
     property alias propertyButtonLoadEntityAttributes: buttonLoadEntityAttributes
     property alias propertyBusyIndicator: busyIndicator
+    property alias propertyBusyIndicatorAttributes: busyIndicatorAttributes
     property alias propertyBar : bar
     property alias propertyListViewEntities: listViewEntities
 
@@ -24,11 +25,20 @@ Item {
             // BusyIndicator should be on top of all other content
             z: 1
         }
+        BusyIndicator {
+            id: busyIndicatorAttributes
+            running: false
+            anchors.centerIn: parent
+            // BusyIndicator should be on top of all other content
+            z: 1
+        }
 
         Item {
             id: rowTop
             width: parent.width
-            height: 0
+            height: parent.height * Constants.HEIGHT_DIFINITIONS_ATTRIBUTES_ROW_TOP_V_RELATIVE
+                    + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
+                    * Constants.HEIGHT_DIFINITIONS_ATTRIBUTES_ROW_TOP_INC_RELATIVE
         }
 
         TabBar {
@@ -105,6 +115,7 @@ Item {
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         anchors.horizontalCenter: parent.horizontalCenter
+                        enabled: false
                     }
                 }
             }

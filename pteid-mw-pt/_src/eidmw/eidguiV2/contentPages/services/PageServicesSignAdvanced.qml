@@ -24,6 +24,63 @@ PageServicesSignAdvancedForm {
 
     Connections {
         target: gapi
+        onSignalEntityAttributesLoadedError: {
+            console.log("Definitions SCAP - Signal SCAP entities loaded error")
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    "Error"
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    "SCAP entities loaded error"
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            if(propertyBar.currentIndex == 0)
+                propertyBusyIndicator.running = false
+        }
+        onSignalCompanyAttributesLoadedError: {
+            console.log("Definitions SCAP - Signal SCAP company loaded error")
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    "Error"
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    "SCAP company loaded error"
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            if(propertyBar.currentIndex == 1)
+                propertyBusyIndicator.running = false
+        }
+        onSignalSCAPEntitiesLoaded: {
+            console.log("Definitions SCAP - Signal SCAP entities loaded")
+
+            for (var i = 0; i < entitiesList.length; i++)
+            {
+                entityAttributesModel.append({
+                                                 entityName: entitiesList[i], attribute: "", checkBoxAttr: false
+                                             });
+            }
+
+            propertyBusyIndicator.running = false
+
+        }
+        onSignalEntityAttributesLoaded:{
+            console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
+
+            for (var company in attribute_map) {
+
+                entityAttributesModel.append({
+                                                  entityName: company, attribute: attribute_map[company]
+                                              });
+            }
+
+            propertyBusyIndicator.running = false
+        }
+        onSignalCompanyAttributesLoaded: {
+            console.log("Definitions SCAP - Signal SCAP company attributes loaded")
+
+            for (var company in attribute_map) {
+
+                entityAttributesModel.append({
+                                                  entityName: company, attribute: attribute_map[company], checkBoxAttr: false
+                                              });
+            }
+
+            propertyBusyIndicator.running = false
+        }
         onSignalOpenCMDSucess: {
             console.log("Sign Advanced - Signal Open CMD Sucess")
             progressBarIndeterminate.visible = false
@@ -680,6 +737,72 @@ PageServicesSignAdvancedForm {
                 propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text
                 propertyPDFPreview.propertyDragSigImg.height = propertyPDFPreview.propertyDragSigRect.height * 0.3
                 propertyPDFPreview.propertyDragSigWaterImg.height = propertyPDFPreview.propertyDragSigRect.height * 0.4
+            }
+        }
+    }
+    ListModel {
+        id: entityAttributesModel
+    }
+
+    Component {
+        id: attributeListDelegate
+        Rectangle {
+            id: container
+            width: parent.width - 40
+            height: columnItem.height + 10
+            color: Constants.COLOR_MAIN_SOFT_GRAY
+            x: 40
+            CheckBox {
+                id: checkboxSel
+                font.family: lato.name
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.capitalization: Font.MixedCase
+                anchors.verticalCenter: parent.verticalCenter
+                checked: checkBoxAttr
+                onCheckedChanged: entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
+            }
+            Column {
+                id: columnItem
+                anchors.left: checkboxSel.right
+                width: parent.width - checkboxSel.width
+                anchors.verticalCenter: parent.verticalCenter
+                Text {
+                    text: entityName + " - " + attribute
+                    width: parent.width
+                    wrapMode: Text.WordWrap
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                }
+            }
+
+        }
+    }
+
+    propertySwitchSignAdd{
+        onCheckedChanged: {
+            if(propertySwitchSignAdd.checked){
+                console.log("propertySwitchSignAdd checked")
+                propertyBusyIndicator.running = true
+                propertyTextFieldReason.enabled = false
+                propertyTextFieldLocal.enabled = false
+                propertySwitchSignTemp.enabled = false
+                propertyButtonSignCMD.enabled = false
+                propertyCheckSignShow.checked = true
+                propertyCheckSignShow.enabled = false
+                propertyCheckSignReduced.enabled = false
+                // Load attributes from cache (isCompanies, isShortDescription)
+                gapi.startLoadingAttributesFromCache(0, 1)
+                gapi.startLoadingAttributesFromCache(1, 1)
+            }else{
+                console.log("propertySwitchSignAdd not checked")
+                entityAttributesModel.clear()
+                propertyTextFieldReason.enabled = true
+                propertyTextFieldLocal.enabled = true
+                propertySwitchSignTemp.enabled = true
+                propertyButtonSignCMD.enabled = true
+                propertyCheckSignReduced.enabled = true
+                propertyCheckSignShow.enabled = true
             }
         }
     }
