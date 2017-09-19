@@ -432,7 +432,7 @@ Item {
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         anchors.top: switchSignTemp.bottom
                         text: qsTranslate("PageServicesSign","STR_SIGN_ADD_ATTRIBUTES")
-                        enabled: fileLoaded
+                        enabled: fileLoaded && cardLoaded
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
@@ -451,6 +451,7 @@ Item {
                             focus: true
                             spacing: 2
                         }
+
                     }
                     Row {
                         id: rowPreserv

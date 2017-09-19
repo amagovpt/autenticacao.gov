@@ -173,7 +173,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="94"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="110"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="124"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1088"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1108"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="41"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="55"/>
         <location filename="gapi.cpp" line="995"/>
@@ -677,7 +677,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="92"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="106"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="123"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1087"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1107"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="37"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="54"/>
         <source>STR_CUSTOM_SIGN_BY</source>
@@ -952,33 +952,33 @@ click to browse the file
         <translation>XADES / CCSIGN Package</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="884"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="904"/>
         <source>STR_MULTI_FILE_ATTRIBUTES_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="886"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="906"/>
         <source>STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG</source>
         <translation>Unable to sign multiple files with professional attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="905"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="925"/>
         <source>STR_MULTI_FILE_CMD_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="907"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="927"/>
         <source>STR_MULTI_FILE_CMD_WARNING_MSG</source>
         <translation>Can not sign multiple files with CMD</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="928"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1085"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="948"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1105"/>
         <source>STR_SIGN_DROP_MULTI</source>
         <translation>Drag here files to be signed or click here to find files</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="933"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="953"/>
         <source>STR_SIGN_NOT_PREVIEW</source>
         <translation>No preview available</translation>
     </message>
@@ -1065,62 +1065,67 @@ click to browse the file
         <translation>Add professional attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="478"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="448"/>
+        <source>STR_ATTRIBUTES_EMPTY</source>
+        <translation>Load attributes in the menu Options  - Professional Attributes</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="490"/>
         <source>STR_SIGN_ATTRIBUTES_SAVE</source>
         <translation>Preserve</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="490"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="502"/>
         <source>STR_SIGN_ATTRIBUTES_SAVE_HOW_LONG</source>
         <translation>during</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="517"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="529"/>
         <source>STR_SIGN_ATTRIBUTES_YEAR</source>
         <translation>year</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="518"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="530"/>
         <source>STR_SIGN_ATTRIBUTES_YEARS</source>
         <translation>years</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="568"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="580"/>
         <source>STR_SIGN_PREVIEW</source>
         <translation>Preview</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="633"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="645"/>
         <source>STR_SIGN_VISIBLE</source>
         <translation>Visible</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="661"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="673"/>
         <source>STR_SIGN_REDUCED</source>
         <translation>Reduced</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="680"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="692"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="173"/>
         <source>STR_SIGN_PAGE</source>
         <translation>Page</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="788"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="800"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="812"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="307"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="318"/>
         <source>STR_SIGN_SIGN_BUTTON</source>
         <translation>Sign</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="801"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="813"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="319"/>
         <source>STR_SIGN_CMD_BUTTON</source>
         <translation>Chave Móvel Digital</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="769"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="781"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="262"/>
         <source>STR_SIGN_LAST</source>
         <translation>Last</translation>
@@ -1131,7 +1136,7 @@ click to browse the file
         <translation>Remove file</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="789"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="801"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="308"/>
         <source>STR_SIGN_CARD_BUTTON</source>
         <oldsource>STR_SIGN_CARD</oldsource>
@@ -1306,7 +1311,7 @@ click to browse the file
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="45"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="871"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="891"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="99"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="104"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="60"/>
@@ -1321,7 +1326,7 @@ click to browse the file
         <translation>Choose file</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="889"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="909"/>
         <source>STR_POPUP_FILE_OUTPUT_FOLDER</source>
         <translation>Choose the destination folder of the files</translation>
     </message>

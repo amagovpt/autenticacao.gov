@@ -647,8 +647,28 @@ PageServicesSignAdvancedForm {
                 console.log("Signing in position coord_x: " + coord_x
                             + " and coord_y: "+coord_y + " page: " + page)
 
-                gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
-                                     reason, location, isTimestamp, isSmallSignature)
+
+                if(propertySwitchSignAdd.checked){
+                    coord_x = gapi.getPageSize(page).width * coord_x
+                    coord_y = gapi.getPageSize(page).height * (1 - coord_y)
+
+                    var attributeList = []
+                    var count = 0
+                    for (var i = 0; i < entityAttributesModel.count; i++){
+                        if(entityAttributesModel.get(i).checkBoxAttr == true){
+                            attributeList[count] = i+1
+                            count++
+                        }
+                    }
+                    console.log("QML AttributeList: ", attributeList)
+
+                    gapi.startSigningSCAP(loadedFilePath, outputFile, page, coord_x, coord_y,
+                                         0, attributeList)
+                }else{
+
+                    gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
+                                         reason, location, isTimestamp, isSmallSignature)
+                }
             }
             else {
                 gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp)

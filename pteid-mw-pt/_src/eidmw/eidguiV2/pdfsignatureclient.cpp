@@ -130,7 +130,6 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
 
 
     std::string citizenNIC = citizenId.toStdString();
-    citizenNIC = citizenNIC.substr(2, citizenNIC.length() - 2);
     // Get Citizen Info
     pdf__PersonalDataType * personalData = soap_new_req_pdf__PersonalDataType(sp, citizenName.toStdString(), citizenNIC);
     std::cerr << "Citizen Name : " << citizenName.toStdString() << std::endl;
