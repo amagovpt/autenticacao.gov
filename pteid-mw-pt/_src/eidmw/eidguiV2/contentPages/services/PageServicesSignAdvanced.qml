@@ -791,6 +791,7 @@ PageServicesSignAdvancedForm {
                 propertyCheckSignShow.checked = true
                 propertyCheckSignShow.enabled = false
                 propertyCheckSignReduced.enabled = false
+                propertyRadioButtonXADES.enabled = false
                 // Load attributes from cache (isCompanies, isShortDescription)
                 gapi.startLoadingAttributesFromCache(0, 1)
                 gapi.startLoadingAttributesFromCache(1, 1)
@@ -803,6 +804,7 @@ PageServicesSignAdvancedForm {
                 propertyButtonSignCMD.enabled = true
                 propertyCheckSignReduced.enabled = true
                 propertyCheckSignShow.enabled = true
+                propertyRadioButtonXADES.enabled = true
             }
         }
     }
@@ -877,18 +879,34 @@ PageServicesSignAdvancedForm {
                 }
                 propertyFileDialogOutput.open()
             }else{
-                propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
-                propertyFileDialogBatchOutput.open()
+                if (propertySwitchSignAdd.checked){
+                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                            qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+                }else{
+                    propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
+                    propertyFileDialogBatchOutput.open()
+                }
             }
         }
     }
     propertyButtonSignCMD {
         onClicked: {
             console.log("Sign with CMD" )
-            var outputFile =  filesModel.get(0).fileUrl
-            outputFile =  outputFile.substring(0, outputFile.lastIndexOf('.'));
-            propertyFileDialogCMDOutput.filename = outputFile + "_signed.pdf"
-            propertyFileDialogCMDOutput.open()
+            if (propertyListViewFiles.count == 1){
+                var outputFile =  filesModel.get(0).fileUrl
+                outputFile =  outputFile.substring(0, outputFile.lastIndexOf('.'));
+                propertyFileDialogCMDOutput.filename = outputFile + "_signed.pdf"
+                propertyFileDialogCMDOutput.open()
+            }else{
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("PageServicesSign","STR_MULTI_FILE_CMD_WARNING")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("PageServicesSign","STR_MULTI_FILE_CMD_WARNING_MSG")
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            }
         }
     }
 
