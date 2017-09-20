@@ -177,7 +177,7 @@ PageServicesSignSimpleForm {
                     width: parent.width * 0.4
                     height: parent.height
                     anchors.verticalCenter: parent.verticalCenter
-                    model: ["+351 - Portugal","++55 - Brazil","+34 - Spain","+-------------------","+93 - Afghanistan",
+                    model: ["+351 - Portugal","+55 - Brazil","+34 - Spain","-------------------","+93 - Afghanistan",
                         "+355 - Albania","+213 - Algeria","+684 - American Samoa","+376 - Andorra","+244 - Angola",
                         "+809 - Anguilla","+268 - Antigua","+54 - Argentina","+374 - Armenia","+297 - Aruba",
                         "+247 - Ascension Island","+61 - Australia","+672 - Australian External Territories",

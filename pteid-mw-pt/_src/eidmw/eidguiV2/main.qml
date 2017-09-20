@@ -24,7 +24,7 @@ Window {
 
     title: "Autenticação.Gov"
 
-    property string appVersion: "Versão 3.0.2 - 5055"
+    property string appVersion: "Versão 3.0.4 - 5137"
 
     FontLoader { id: karma; source: "qrc:/fonts/karma/Karma-Medium.ttf" }
     FontLoader { id: lato; source: "qrc:/fonts/lato/Lato-Regular.ttf" }
