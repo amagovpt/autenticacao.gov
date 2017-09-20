@@ -43,11 +43,10 @@ PageDefinitionsSCAPForm {
         onSignalEntityAttributesLoaded:{
             console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
 
-            for (var company in attribute_map) {
-
-                entityAttributesModel.clear()
+            for(var i = 0; i < attribute_list.length; i=i+2)
+            {
                 entityAttributesModel.append({
-                                                  entityName: company, attribute: attribute_map[company]
+                                                  entityName: attribute_list[i], attribute: attribute_list[i+1]
                                               });
             }
 
@@ -56,10 +55,10 @@ PageDefinitionsSCAPForm {
         onSignalCompanyAttributesLoaded: {
             console.log("Definitions SCAP - Signal SCAP company attributes loaded")
 
-            for (var company in attribute_map) {
-
+            for(var i = 0; i < attribute_list.length; i=i+2)
+            {
                 companyAttributesModel.append({
-                                                  entityName: company, attribute: attribute_map[company]
+                                                  entityName: attribute_list[i], attribute: attribute_list[i+1]
                                               });
             }
 

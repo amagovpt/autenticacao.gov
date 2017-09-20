@@ -151,29 +151,6 @@ public:
     QList<int> attribute_index;
 };
 
-/*
-class SCAPAttributeList: public QObject {
-    Q_OBJECT
-public:
-    explicit SCAPAttributeList(QObject *parent = 0): QObject(parent) {}
-    SCAPAttributeList (const SCAPAttributeList& list) {
-        for (int i=0; i < list.size(); i++)
-            data.append(QPair<QString, QString>(list.getProvider(i), list.getName(i)));
-    }
-    
-    void append(QString provider, QString name) {
-        data.append(QPair<QString, QString>(provider, name));
-    }
-    Q_INVOKABLE QString getProvider(int i) const { return data[i].first; }
-    Q_INVOKABLE QString getName(int i) const { return data[i].second; }
-    Q_INVOKABLE int size() const {return data.size(); }
- private:
-    QList<QPair<QString, QString>> data;
-};
-*/
-
-//Q_DECLARE_METATYPE(SCAPAttributeList)
-
 class PDFPreviewImageProvider: public QObject, public QQuickImageProvider
 {
     Q_OBJECT

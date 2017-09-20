@@ -22,9 +22,6 @@ PageDefinitionsSignatureForm {
 
     Connections {
         target: gapi
-        onSignalPdfSignSucess: {
-            signsuccess_dialog.visible = true
-        }
         onSignalCardDataChanged: {
             console.log("Definitions Signature --> Data Changed")
             //console.trace();

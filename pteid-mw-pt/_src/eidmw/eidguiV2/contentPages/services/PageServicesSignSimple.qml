@@ -25,6 +25,11 @@ PageServicesSignSimpleForm {
 
         onSignalPdfSignSucess: {
             signsuccess_dialog.visible = true
+            propertyBusyIndicator.running = false
+        }
+        onSignalPdfSignFail: {
+            signerror_dialog.visible = true
+            propertyBusyIndicator.running = false
         }
         onSignalCardAccessError: {
             propertyBusyIndicator.running = false

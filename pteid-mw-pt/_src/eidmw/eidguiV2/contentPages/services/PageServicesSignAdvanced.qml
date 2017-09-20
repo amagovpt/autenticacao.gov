@@ -60,10 +60,10 @@ PageServicesSignAdvancedForm {
         onSignalEntityAttributesLoaded:{
             console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
 
-            for (var company in attribute_map) {
-
+            for(var i = 0; i < attribute_list.length; i=i+2)
+            {
                 entityAttributesModel.append({
-                                                  entityName: company, attribute: attribute_map[company]
+                                                  entityName: attribute_list[i], attribute: attribute_list[i+1], checkBoxAttr: false
                                               });
             }
 
@@ -72,10 +72,10 @@ PageServicesSignAdvancedForm {
         onSignalCompanyAttributesLoaded: {
             console.log("Definitions SCAP - Signal SCAP company attributes loaded")
 
-            for (var company in attribute_map) {
-
+            for(var i = 0; i < attribute_list.length; i=i+2)
+            {
                 entityAttributesModel.append({
-                                                  entityName: company, attribute: attribute_map[company], checkBoxAttr: false
+                                                  entityName: attribute_list[i], attribute: attribute_list[i+1], checkBoxAttr: false
                                               });
             }
 
@@ -94,6 +94,11 @@ PageServicesSignAdvancedForm {
         }
         onSignalPdfSignSucess: {
             signsuccess_dialog.visible = true
+            propertyBusyIndicator.running = false
+        }
+        onSignalPdfSignFail: {
+            signerror_dialog.visible = true
+            propertyBusyIndicator.running = false
         }
         onSignalCardAccessError: {
             propertyBusyIndicator.running = false
