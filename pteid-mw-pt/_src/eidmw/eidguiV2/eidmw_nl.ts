@@ -768,6 +768,55 @@ clique para procurar o ficheiro
     </message>
 </context>
 <context>
+    <name>PageDifinitionsSCAP</name>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="13"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="24"/>
+        <source>STR_SCAP_ERROR</source>
+        <translation>Erro</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="15"/>
+        <source>STR_SCAP_LOAD_ENTITIES_ERROR</source>
+        <translation>Erro carregando atributos de entidades</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="26"/>
+        <source>STR_SCAP_LOAD_COMPANY_ERROR</source>
+        <translation>Erro carregando atributos de empresas</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="50"/>
+        <source>STR_SCAP_ATTRIBUTES_ENTITIES</source>
+        <translation>Atributos profissionais</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="56"/>
+        <source>STR_SCAP_ATTRIBUTES_COMPANY</source>
+        <translation>Atributos empresariais</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="81"/>
+        <source>STR_SCAP_ATTRIBUTES_ENTITIES_MSG</source>
+        <translation>Escolha a entidade para a qual pretende carregar os atributos profissionais</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="114"/>
+        <source>STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON</source>
+        <translation>Carregar atributos profissionais</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="136"/>
+        <source>STR_SCAP_ATTRIBUTES_COMPANY_MSG</source>
+        <translation>Lista das entidades para a qual tem atributos empresariais</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="167"/>
+        <source>STR_SCAP_ATTRIBUTES_COMPANY_BUTTON</source>
+        <translation>Carregar atributos empresariais</translation>
+    </message>
+</context>
+<context>
     <name>PageHelpAbout</name>
     <message>
         <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="21"/>

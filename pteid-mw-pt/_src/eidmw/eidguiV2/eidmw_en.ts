@@ -768,6 +768,55 @@ click to browse the file
     </message>
 </context>
 <context>
+    <name>PageDifinitionsSCAP</name>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="13"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="24"/>
+        <source>STR_SCAP_ERROR</source>
+        <translation>Error</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="15"/>
+        <source>STR_SCAP_LOAD_ENTITIES_ERROR</source>
+        <translation>SCAP entities load error</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="26"/>
+        <source>STR_SCAP_LOAD_COMPANY_ERROR</source>
+        <translation>SCAP company loaded error</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="50"/>
+        <source>STR_SCAP_ATTRIBUTES_ENTITIES</source>
+        <translation>Professional Attributes</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="56"/>
+        <source>STR_SCAP_ATTRIBUTES_COMPANY</source>
+        <translation>Business Attributes</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="81"/>
+        <source>STR_SCAP_ATTRIBUTES_ENTITIES_MSG</source>
+        <translation>Choose the entity for which you want to load the professional attributes</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="114"/>
+        <source>STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON</source>
+        <translation>Load professional attributes</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="136"/>
+        <source>STR_SCAP_ATTRIBUTES_COMPANY_MSG</source>
+        <translation>List of entities for which you have business attributes</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="167"/>
+        <source>STR_SCAP_ATTRIBUTES_COMPANY_BUTTON</source>
+        <translation>Load business attributes</translation>
+    </message>
+</context>
+<context>
     <name>PageHelpAbout</name>
     <message>
         <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="21"/>

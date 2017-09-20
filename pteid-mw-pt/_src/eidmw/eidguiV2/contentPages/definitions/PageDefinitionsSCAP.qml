@@ -10,9 +10,9 @@ PageDefinitionsSCAPForm {
         onSignalEntityAttributesLoadedError: {
             console.log("Definitions SCAP - Signal SCAP entities loaded error")
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    "Error"
+                    qsTranslate("PageDifinitionsSCAP","STR_SCAP_ERROR")
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    "SCAP entities loaded error"
+                    qsTranslate("PageDifinitionsSCAP","STR_SCAP_LOAD_ENTITIES_ERROR")
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
             if(propertyBar.currentIndex == 0)
                 propertyBusyIndicatorAttributes.running = false
@@ -20,9 +20,9 @@ PageDefinitionsSCAPForm {
         onSignalCompanyAttributesLoadedError: {
             console.log("Definitions SCAP - Signal SCAP company loaded error")
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    "Error"
+                    qsTranslate("PageDifinitionsSCAP","STR_SCAP_ERROR")
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    "SCAP company loaded error"
+                    qsTranslate("PageDifinitionsSCAP","STR_SCAP_LOAD_COMPANY_ERROR")
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
             if(propertyBar.currentIndex == 1)
                 propertyBusyIndicatorAttributes.running = false

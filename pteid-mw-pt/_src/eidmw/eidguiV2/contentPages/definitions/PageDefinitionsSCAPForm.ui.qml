@@ -47,12 +47,12 @@ Item {
             width: parent.width
             currentIndex: 0
             TabButton {
-                text: "Atributos profissionais"
+                text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES")
                 rightPadding: 2
                 leftPadding: 2
             }
             TabButton {
-                text: "Atributos empresariais"
+                text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_COMPANY")
                 rightPadding: 2
                 leftPadding: 2
             }
@@ -76,7 +76,7 @@ Item {
                     Text {
                         font.pixelSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
-                        text: "Escolha a entidade para a qual pretende carregar os atributos profissionais"
+                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES_MSG")
                         wrapMode: Text.Wrap
                         width: parent.width
                         color: Constants.COLOR_MAIN_BLUE
@@ -108,7 +108,7 @@ Item {
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     Button {
                         id: buttonLoadEntityAttributes
-                        text: "Carregar atributos profissionais"
+                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON")
                         width: 2 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -129,7 +129,7 @@ Item {
                     Text {
                         font.pixelSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
-                        text: "Lista das entidades para a qual tem atributos empresariais"
+                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_COMPANY_MSG")
                         wrapMode: Text.Wrap
                         width: parent.width
                         color: Constants.COLOR_MAIN_BLUE
@@ -159,7 +159,7 @@ Item {
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     Button {
                         id: buttonLoadCompanyAttributes
-                        text: "Carregar atributos empresariais"
+                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_COMPANY_BUTTON")
                         width: 2 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -168,7 +168,6 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
                 }
-
             }
         }
     }
