@@ -28,6 +28,9 @@ A commercial use license is available from Genivia Inc., contact@genivia.com
 # error "GSOAP VERSION 20830 MISMATCH IN GENERATED CODE VERSUS LIBRARY CODE: PLEASE REINSTALL PACKAGE"
 #endif
 
+#ifndef WIN32
+#pragma GCC visibility push(hidden)
+#endif
 
 /******************************************************************************\
  *                                                                            *
@@ -3358,6 +3361,10 @@ typedef char *wsc__FaultCodeOpenEnumType;
 /* char * has binding name 'string' for type 'xsd:string' */
 #ifndef SOAP_TYPE_string
 #define SOAP_TYPE_string (4)
+#endif
+
+#ifndef WIN32
+#pragma GCC visibility pop
 #endif
 
 /******************************************************************************\

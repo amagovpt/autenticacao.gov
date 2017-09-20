@@ -28,21 +28,6 @@
 #define SOAP_MUST_NO_UNDERSTAND             0
 #define SOAP_MUST_UNDERSTAND                1
 
-#define SOAP_RETRY_START  unsigned char retries = 0;                                  \
-                          bool exitFlag = false;                                      \
-                          while ( ( !exitFlag ) && ( retries < SOAP_MAX_RETRIES )) {  \
-                            if ( retries > 0 ) MWLOG_ERR( logBuf, "Retry: %d", retries );
-
-#define SOAP_RETRY_END(ret) switch( ret ){                                      \
-                                case ERR_NONE:                                  \
-                                    exitFlag = true;                            \
-                                    break;                                      \
-                                default:                                        \
-                                    if ( !IS_SOAP_ERROR(ret) ) exitFlag = true; \
-                            }                                                  \
-                            retries++;                                          \
-                        }
-
 static char logBuf[512];
 
 namespace eIDMW{
@@ -345,9 +330,8 @@ int CMDServices::GetCertificate( std::string in_userId
     */
     _ns2__GetCertificateResponse response;
     int ret;
-    SOAP_RETRY_START
-        ret = proxy.GetCertificate( send, response );
-    SOAP_RETRY_END(ret)
+
+    ret = proxy.GetCertificate( send, response );
 
     /* Clean pointers before exit */
     if ( send->applicationId != NULL ) {
@@ -481,9 +465,7 @@ int CMDServices::CCMovelSign( std::string in_hash, std::string in_pin ){
     */
     _ns2__CCMovelSignResponse response;
     int ret;
-    SOAP_RETRY_START
-        ret = proxy.CCMovelSign( NULL, NULL, send, response );
-    SOAP_RETRY_END(ret)
+    ret = proxy.CCMovelSign( NULL, NULL, send, response );
 
     /* Clean pointers before exit */
     if ( send->request != NULL ){
@@ -630,9 +612,8 @@ int CMDServices::ValidateOtp( std::string in_code
     */
     _ns2__ValidateOtpResponse response;
     int ret;
-    SOAP_RETRY_START
-        ret = proxy.ValidateOtp( NULL, NULL, send, response );
-    SOAP_RETRY_END(ret)
+    ret = proxy.ValidateOtp( NULL, NULL, send, response );
+
 
     /* Clean pointers before exit */
     if ( send->applicationId != NULL ){

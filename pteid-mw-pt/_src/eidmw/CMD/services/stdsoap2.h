@@ -1827,6 +1827,10 @@ typedef soap_int32 soap_mode;
 # define DBGHEX(DBGFILE, MSG, LEN)
 #endif
 
+#ifndef WIN32
+#pragma GCC visibility push(hidden)
+#endif
+
 /* UCS-4 requires 32 bits (0-7FFFFFFF, the sign bit is used by gSOAP to distinguish XML entities) */
 typedef soap_int32 soap_wchar;
 
@@ -2472,6 +2476,7 @@ SOAP_FMAC1 int SOAP_FMAC2 soap_dom_call(struct soap *soap, const char *endpoint,
 #if defined(__cplusplus)
 extern "C" {
 #endif
+
 
 /******************************************************************************/
 
@@ -3405,6 +3410,10 @@ struct soap_block
     soap_end_block(soap, b);
   }
 };
+
+#ifndef WIN32
+#pragma GCC visibility pop
+#endif
 
 #endif
 
