@@ -666,7 +666,7 @@ PageServicesSignAdvancedForm {
                         }
                     }
                     console.log("QML AttributeList: ", attributeList)
-
+                    propertyBusyIndicator.running = true
                     gapi.startSigningSCAP(loadedFilePath, outputFile, page, coord_x, coord_y,
                                          0, attributeList)
                 }else{
@@ -929,18 +929,40 @@ PageServicesSignAdvancedForm {
             if (propertyListViewFiles.count == 1){
                 propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
                 if (propertyRadioButtonPADES.checked) {
-                    var outputFile =  propertyListViewFiles.model.get(0).fileUrl
-                    outputFile =  outputFile.substring(0, outputFile.lastIndexOf('.'));
-                    propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
+                    if(propertySwitchSignAdd.checked){
+                        var count = 0
+                        for (var i = 0; i < entityAttributesModel.count; i++){
+                            if(entityAttributesModel.get(i).checkBoxAttr == true){
+                                count++
+                            }
+                        }
+                        if(count == 0){
+                            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                                    qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+                            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                                    qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
+                            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+                        }else{
+                            var outputFile =  propertyListViewFiles.model.get(0).fileUrl
+                            outputFile =  outputFile.substring(0, outputFile.lastIndexOf('.'));
+                            propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
+                            propertyFileDialogOutput.open()
+                        }
+                    }else{
+                        var outputFile =  propertyListViewFiles.model.get(0).fileUrl
+                        outputFile =  outputFile.substring(0, outputFile.lastIndexOf('.'));
+                        propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
+                        propertyFileDialogOutput.open()
+                    }
                 }
                 else {
                     propertyFileDialogOutput.filename = "xadessign.ccsigned"
+                    propertyFileDialogOutput.open()
                 }
-                propertyFileDialogOutput.open()
             }else{
                 if (propertySwitchSignAdd.checked){
                     mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING")
+                            qsTranslate("PageServicesSign","STR_SCAP_WARNING")
                     mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                             qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
                     mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true

@@ -173,7 +173,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="91"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="115"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="129"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1147"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1171"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="46"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="60"/>
         <location filename="gapi.cpp" line="1011"/>
@@ -707,7 +707,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="89"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="111"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="128"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1146"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1170"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="42"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="59"/>
         <source>STR_CUSTOM_SIGN_BY</source>
@@ -771,7 +771,7 @@ click to browse the file
     <name>PageDifinitionsSCAP</name>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="13"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="24"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="23"/>
         <source>STR_SCAP_ERROR</source>
         <translation>Error</translation>
     </message>
@@ -781,7 +781,7 @@ click to browse the file
         <translation>SCAP entities load error</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="26"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="25"/>
         <source>STR_SCAP_LOAD_COMPANY_ERROR</source>
         <translation>SCAP company loaded error</translation>
     </message>
@@ -791,27 +791,27 @@ click to browse the file
         <translation>Professional Attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="56"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="55"/>
         <source>STR_SCAP_ATTRIBUTES_COMPANY</source>
         <translation>Business Attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="81"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="79"/>
         <source>STR_SCAP_ATTRIBUTES_ENTITIES_MSG</source>
         <translation>Choose the entity for which you want to load the professional attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="114"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="111"/>
         <source>STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON</source>
         <translation>Load professional attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="136"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="132"/>
         <source>STR_SCAP_ATTRIBUTES_COMPANY_MSG</source>
         <translation>List of entities for which you have business attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="167"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="162"/>
         <source>STR_SCAP_ATTRIBUTES_COMPANY_BUTTON</source>
         <translation>Load business attributes</translation>
     </message>
@@ -1031,33 +1031,40 @@ click to browse the file
         <translation>XADES / CCSIGN Package</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="943"/>
-        <source>STR_MULTI_FILE_ATTRIBUTES_WARNING</source>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="941"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="966"/>
+        <source>STR_SCAP_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="945"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="943"/>
+        <source>STR_SCAP_ATTRIBUTES_NOT_SELECT</source>
+        <oldsource>STR_MULTI_FILE_ATTRIBUTES_WARNING</oldsource>
+        <translation>Attributes not selected</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="968"/>
         <source>STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG</source>
         <translation>Unable to sign multiple files with professional attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="964"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="988"/>
         <source>STR_MULTI_FILE_CMD_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="966"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="990"/>
         <source>STR_MULTI_FILE_CMD_WARNING_MSG</source>
         <translation>Can not sign multiple files with CMD</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="987"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1144"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1011"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1168"/>
         <source>STR_SIGN_DROP_MULTI</source>
         <translation>Drag here files to be signed or click here to find files</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="992"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1016"/>
         <source>STR_SIGN_NOT_PREVIEW</source>
         <translation>No preview available</translation>
     </message>
@@ -1421,7 +1428,7 @@ click to browse the file
         <translation>Choose file</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="948"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="971"/>
         <source>STR_POPUP_FILE_OUTPUT_FOLDER</source>
         <translation>Choose the destination folder of the files</translation>
     </message>
