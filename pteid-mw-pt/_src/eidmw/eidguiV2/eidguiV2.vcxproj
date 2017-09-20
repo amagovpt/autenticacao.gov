@@ -79,7 +79,7 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pteidguiV2</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">eidguiV2</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pteidguiV2</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
@@ -101,7 +101,7 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>release\</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;WITH_OPENSSL;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <ProgramDataBaseFileName>
       </ProgramDataBaseFileName>
@@ -135,7 +135,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;..\eidlib;..\;$(PTEID_DIR_QT_4)\include;$(PTEID_DIR_QT_4)\include\QtQuick;$(PTEID_DIR_QT_4)\include\QtGui;$(PTEID_DIR_QT_4)\include\QtANGLE;$(PTEID_DIR_QT_4)\include\QtQml;$(PTEID_DIR_QT_4)\include\QtNetwork;$(PTEID_DIR_QT_4)\include\QtCore;release;$(PTEID_DIR_QT_4)\mkspecs\win32-msvc2013;..\CMD\services\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(PTEID_DIR_QT_4)\include;$(PTEID_DIR_QT_4)\include\QtQuick;$(PTEID_DIR_QT_4)\include\QtGui\5.9.1\;..\common;$(PTEID_DIR_QT_4)\include\QtCore\5.9.1\QtCore;$(PTEID_DIR_QT_4)\include\QtCore\5.9.1;$(PTEID_DIR_QT_4)\include\QtGui\5.9.1\QtGui;$(PTEID_DIR_QT_4)\mkspecs\win32-msvc;$(PTEID_DIR_QT_4)\include\QtGui;$(PTEID_DIR_QT_4)\include\QtConcurrent;$(PTEID_DIR_QT_4)\include\QtQuickControls2;$(PTEID_DIR_QT_4)\include\QtWidgets;$(PTEID_DIR_QT_4)\include\QtPrintSupport;$(PTEID_DIR_QT_4)\include\QtANGLE;$(PTEID_DIR_QT_4)\include\QtQml;$(PTEID_DIR_QT_4)\include\QtNetwork;$(PTEID_DIR_QT_4)\include\QtCore;$(PTEID_POPPLER_QT5);release;$(PTEID_DIR_QT_4)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL_098)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -143,7 +143,7 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>release\</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WITH_OPENSSL;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <ProgramDataBaseFileName>
       </ProgramDataBaseFileName>
@@ -154,8 +154,8 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>qtmain.lib;shell32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;cmdServices.lib;pteidlibCpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_QT_4)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>qtmain.lib;shell32.lib;ssleay32.lib;libeay32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidlibCpp.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_OPENSSL_098)\lib\;$(PTEID_DIR_QT_4)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -254,6 +254,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ErrorConn.cpp" />
     <ClCompile Include="filesavedialog.cpp" />
     <ClCompile Include="gapi.cpp" />
     <ClCompile Include="genpur.cpp" />
@@ -262,12 +263,19 @@
     <ClCompile Include="GeneratedFiles\Release\moc_gapi.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_filesavedialog.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp" />
+    <ClCompile Include="scapcompanies.cpp" />
+    <ClCompile Include="SCAPServices\SCAPAttributeSupplierBindingProxy.cpp" />
+    <ClCompile Include="SCAPServices\SCAPC.cpp" />
+    <ClCompile Include="SCAPServices\SCAPPDFSignatureSoapBindingProxy.cpp" />
+    <ClCompile Include="scapsignature.cpp" />
+    <ClCompile Include="stdsoap2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug\qrc_resources.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="pdfsignatureclient.cpp" />
     <ClCompile Include="release\qrc_resources.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
