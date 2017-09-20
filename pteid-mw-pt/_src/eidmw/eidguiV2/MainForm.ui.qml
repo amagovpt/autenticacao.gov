@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 import "scripts/Constants.js" as Constants
 import "components" as Components
 
-Item {
+Rectangle {
     anchors.fill: parent
 
     property alias propertyMainView: mainView
@@ -22,6 +22,9 @@ Item {
     property alias propertyPageLoader: pageLoaderID
 
     property alias propertyImageLogo : mouseAreaImageLogo
+
+    border.width: 1
+    border.color : Constants.COLOR_MAIN_BLUE
 
     /* Title bar */
     Components.TitleBar {
