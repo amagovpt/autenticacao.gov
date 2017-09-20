@@ -10,19 +10,33 @@ PageCardAdressForm {
         target: gapi
         onSignalAddressLoaded: {
             console.log("Address --> Data Changed")
-            propertyDistrict.propertyDateField.text = gapi.getAddressField(GAPI.District)
-            propertyMunicipality.propertyDateField.text = gapi.getAddressField(GAPI.Municipality)
-            propertyParish.propertyDateField.text = gapi.getAddressField(GAPI.Parish)
-            propertyStreetType.propertyDateField.text = gapi.getAddressField(GAPI.Streettype)
-            propertyStreetName.propertyDateField.text = gapi.getAddressField(GAPI.Streetname)
-            propertyDoorNo.propertyDateField.text = gapi.getAddressField(GAPI.Doorno)
-            propertyFloor.propertyDateField.text = gapi.getAddressField(GAPI.Floor)
-            propertyPlace.propertyDateField.text = gapi.getAddressField(GAPI.Place)
-            propertySide.propertyDateField.text = gapi.getAddressField(GAPI.Side)
-            propertyLocality.propertyDateField.text = gapi.getAddressField(GAPI.Locality)
-            propertyZip4.propertyDateField.text = gapi.getAddressField(GAPI.Zip4)
-            propertyZip3.propertyDateField.text = gapi.getAddressField(GAPI.Zip3)
-            propertyPostalLocality.propertyDateField.text = gapi.getAddressField(GAPI.PostalLocality)
+            if(m_foreign){
+                propertyItemForeignCitizen.visible = true
+                propertyItemNationalCitizen.visible = false
+                propertyForeignCountry.propertyDateField.text = gapi.getAddressField(GAPI.Foreigncountry)
+                propertyForeignAddress.propertyDateField.text = gapi.getAddressField(GAPI.Foreignaddress)
+                propertyForeignCity.propertyDateField.text = gapi.getAddressField(GAPI.Foreigncity)
+                propertyForeignRegion.propertyDateField.text = gapi.getAddressField(GAPI.Foreignregion)
+                propertyForeignLocality.propertyDateField.text = gapi.getAddressField(GAPI.Foreignlocality)
+                propertyForeignPostalCode.propertyDateField.text = gapi.getAddressField(GAPI.Foreignpostalcode)
+            }else{
+                propertyItemNationalCitizen.visible = true
+                propertyItemForeignCitizen.visible = false
+                propertyDistrict.propertyDateField.text = gapi.getAddressField(GAPI.District)
+                propertyMunicipality.propertyDateField.text = gapi.getAddressField(GAPI.Municipality)
+                propertyParish.propertyDateField.text = gapi.getAddressField(GAPI.Parish)
+                propertyStreetType.propertyDateField.text = gapi.getAddressField(GAPI.Streettype)
+                propertyStreetName.propertyDateField.text = gapi.getAddressField(GAPI.Streetname)
+                propertyDoorNo.propertyDateField.text = gapi.getAddressField(GAPI.Doorno)
+                propertyFloor.propertyDateField.text = gapi.getAddressField(GAPI.Floor)
+                propertyPlace.propertyDateField.text = gapi.getAddressField(GAPI.Place)
+                propertySide.propertyDateField.text = gapi.getAddressField(GAPI.Side)
+                propertyLocality.propertyDateField.text = gapi.getAddressField(GAPI.Locality)
+                propertyZip4.propertyDateField.text = gapi.getAddressField(GAPI.Zip4)
+                propertyZip3.propertyDateField.text = gapi.getAddressField(GAPI.Zip3)
+                propertyPostalLocality.propertyDateField.text = gapi.getAddressField(GAPI.PostalLocality)
+            }
+
             propertyBusyIndicator.running = false
 
             gapi.setAddressLoaded(true)
@@ -82,15 +96,17 @@ PageCardAdressForm {
             propertyZip4.propertyDateField.text = ""
             propertyZip3.propertyDateField.text = ""
             propertyPostalLocality.propertyDateField.text = ""
+            propertyForeignCountry.propertyDateField.text = ""
+            propertyForeignAddress.propertyDateField.text = ""
+            propertyForeignCity.propertyDateField.text = ""
+            propertyForeignRegion.propertyDateField.text = ""
+            propertyForeignLocality.propertyDateField.text = ""
+            propertyForeignPostalCode.propertyDateField.text = ""
             propertyBusyIndicator.running = false
         }
         onSignalCardChanged: {
             console.log("Card Adress onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 propertyDistrict.propertyDateField.text = ""
                 propertyMunicipality.propertyDateField.text = ""
                 propertyParish.propertyDateField.text = ""
@@ -116,19 +132,14 @@ PageCardAdressForm {
                     dialogTestPin.open()
                     textFieldPin.text = ""
                 }
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
-                propertyBusyIndicator.running = true
             }
             else{
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             }
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
     }
 

@@ -40,9 +40,9 @@ Window {
         target: controler
         onSignalLanguageChangedError: {
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    "STR_LOAD_LANGUAGE_TITLE"
+                    "Erro"
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    "STR_LOAD_LANGUAGE_MSG"
+                    "Erro na leitura dos idiomas. Por favor, reinstale a aplicação"
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
         }
     }
@@ -52,9 +52,9 @@ Window {
 
         onSignalLanguageChangedError: {
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    "STR_LOAD_LANGUAGE_TITLE"
+                    "Erro"
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    "STR_LOAD_LANGUAGE_MSG"
+                    "Erro na leitura dos idiomas. Por favor, reinstale a aplicação"
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
         }
 
@@ -64,8 +64,6 @@ Window {
         }
 
         onSignalReaderContext: {
-            labelReaderContext.text = titleMessage
-            textMessageTop.text = statusMessage
             //console.log("Reader List: " + gapi.getRetReaderList())
             //console.log("Reader List Count: " + gapi.getRetReaderList().length)
 
@@ -89,7 +87,7 @@ Window {
 
         header: Label {
             id: labelReaderContext
-            text: ""
+            text: "Aviso"
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
@@ -108,7 +106,7 @@ Window {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textMessageTop
-                    text: ""
+                    text: "Múltiplos cartões detectados"
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
@@ -146,8 +144,7 @@ Window {
                 visible: true
                 Text {
                     id: textNote
-                    // TODO: Is used?
-                    text: "To change this option go to the settings menu"
+                    text:  "Para alterar essa opção mais tarde, vá para o menu de configuração"
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL

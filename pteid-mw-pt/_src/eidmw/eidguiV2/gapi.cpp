@@ -151,6 +151,7 @@ QString GAPI::getAddressField(AddressInfoKey key) {
 
 void GAPI::getAddressFile() {
     qDebug() << "C++: getAddressFile()";
+    bool m_foreign;
 
     BEGIN_TRY_CATCH;
 
@@ -160,22 +161,37 @@ void GAPI::getAddressFile() {
 
     PTEID_Address &addressFile = card->getAddr();
 
-    m_addressData[District] = QString::fromUtf8(addressFile.getDistrict());
-    m_addressData[Municipality] = QString::fromUtf8(addressFile.getMunicipality());
-    m_addressData[Parish] = QString::fromUtf8(addressFile.getCivilParish());
-    m_addressData[Streettype] = QString::fromUtf8(addressFile.getStreetType());
-    m_addressData[Streetname] = QString::fromUtf8(addressFile.getStreetName());
-    m_addressData[Buildingtype] = QString::fromUtf8(addressFile.getBuildingType());
-    m_addressData[Doorno] = QString::fromUtf8(addressFile.getDoorNo());
-    m_addressData[Floor] = QString::fromUtf8(addressFile.getFloor());
-    m_addressData[Side] = QString::fromUtf8(addressFile.getSide());
-    m_addressData[Locality] = QString::fromUtf8(addressFile.getLocality());
-    m_addressData[Place] = QString::fromUtf8(addressFile.getPlace());
-    m_addressData[Zip4] = QString::fromUtf8(addressFile.getZip4());
-    m_addressData[Zip3] = QString::fromUtf8(addressFile.getZip3());
-    m_addressData[PostalLocality] = QString::fromUtf8(addressFile.getPostalLocality());
-
-    emit signalAddressLoaded();
+    if (!addressFile.isNationalAddress())
+    {
+        qDebug() << "Is foreign citizen";
+        m_foreign = true;
+        m_addressData[Foreigncountry] = QString::fromUtf8(addressFile.getForeignCountry());
+        m_addressData[Foreignaddress] = QString::fromUtf8(addressFile.getForeignAddress());
+        m_addressData[Foreigncity] = QString::fromUtf8(addressFile.getForeignCity());
+        m_addressData[Foreignregion] = QString::fromUtf8(addressFile.getForeignRegion());
+        m_addressData[Foreignlocality] = QString::fromUtf8(addressFile.getForeignLocality());
+        m_addressData[Foreignpostalcode] = QString::fromUtf8(addressFile.getForeignPostalCode());
+    }
+    else
+    {
+        qDebug() << "Is national citizen";
+        m_foreign = false;
+        m_addressData[District] = QString::fromUtf8(addressFile.getDistrict());
+        m_addressData[Municipality] = QString::fromUtf8(addressFile.getMunicipality());
+        m_addressData[Parish] = QString::fromUtf8(addressFile.getCivilParish());
+        m_addressData[Streettype] = QString::fromUtf8(addressFile.getStreetType());
+        m_addressData[Streetname] = QString::fromUtf8(addressFile.getStreetName());
+        m_addressData[Buildingtype] = QString::fromUtf8(addressFile.getBuildingType());
+        m_addressData[Doorno] = QString::fromUtf8(addressFile.getDoorNo());
+        m_addressData[Floor] = QString::fromUtf8(addressFile.getFloor());
+        m_addressData[Side] = QString::fromUtf8(addressFile.getSide());
+        m_addressData[Locality] = QString::fromUtf8(addressFile.getLocality());
+        m_addressData[Place] = QString::fromUtf8(addressFile.getPlace());
+        m_addressData[Zip4] = QString::fromUtf8(addressFile.getZip4());
+        m_addressData[Zip3] = QString::fromUtf8(addressFile.getZip3());
+        m_addressData[PostalLocality] = QString::fromUtf8(addressFile.getPostalLocality());
+    }
+    emit signalAddressLoaded(m_foreign);
 
     END_TRY_CATCH
 }
@@ -1653,7 +1669,7 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                     }
                 }
                 if(CardIdx > 1 && selectedReaderIndex == -1){
-                    emit signalReaderContext("STR_WARNING","STR_MULTI_CARD");
+                    emit signalReaderContext();
                     selectedReaderIndex = -1;
                 }else{
                     if (!bCardPresent)

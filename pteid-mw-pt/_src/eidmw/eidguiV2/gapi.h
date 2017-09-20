@@ -190,7 +190,8 @@ public:
     enum IDInfoKey { Documenttype, Documentversion, Surname, Givenname, Sex, Height, Nationality, Birthdate, Documentnum, Validitybegindate, Validityenddate,
                      NIC, NIF, NISS, NSNS, IssuingEntity, PlaceOfRequest, Country, Father, Mother, AccidentalIndications };
 
-    enum AddressInfoKey { District, Municipality, Parish, Streettype, Streetname, Buildingtype, Doorno, Floor, Side, Locality, Place, Zip4, Zip3, PostalLocality};
+    enum AddressInfoKey { District, Municipality, Parish, Streettype, Streetname, Buildingtype, Doorno, Floor, Side, Locality, Place, Zip4, Zip3, PostalLocality,
+                          Foreigncountry, Foreignaddress, Foreigncity, Foreignregion, Foreignlocality, Foreignpostalcode};
 
     enum CardAccessError { NoReaderFound, NoCardFound, CardReadError, SodCardReadError, CardUnknownError };
 
@@ -306,10 +307,10 @@ public slots:
 signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed
-    void signalReaderContext(const QString titleMessage, const QString statusMessage);
+    void signalReaderContext();
     void signalSetReaderComboIndex(long selected_reader);
     void signalCardDataChanged();
-    void signalAddressLoaded();
+    void signalAddressLoaded(bool m_foreign);
     void signalCardAccessError(int error_code);
     void signalPersoDataLoaded(const QString& persoNotes);
     void signalAddressLoadedChanged();
