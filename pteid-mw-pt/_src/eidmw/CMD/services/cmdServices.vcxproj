@@ -77,10 +77,10 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <OutDir>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>pteid$(ProjectName)</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
@@ -150,10 +150,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;WITH_OPENSSL;EIDMW_CMDSERVICES_EXPORTS;_USRDLL;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL_098)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;$(PTEID_DIR_QT_4)\include;$(PTEID_DIR_QT_4)\include\QtCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
@@ -163,9 +164,9 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>Qt5Core.lib;libeay32.lib;ssleay32.lib;WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_QT_4_X64)\lib;$(PTEID_DIR_OPENSSL_098_X64)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Qt5Core.lib;libeay32.lib;ssleay32.lib;pteidcommon.lib;pteidapplayer.lib;pteidlibCpp.lib;WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
+      <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_QT_4)\lib;$(PTEID_DIR_OPENSSL_098)\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
