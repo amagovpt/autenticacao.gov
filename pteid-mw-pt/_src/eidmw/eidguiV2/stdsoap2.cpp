@@ -9788,7 +9788,7 @@ soap_versioning(soap_init)(struct soap *soap, soap_mode imode, soap_mode omode)
   soap->labidx = 0;
   soap->encodingStyle = NULL;
 #ifndef WITH_NONAMESPACES
-  soap->namespaces = namespaces;
+  soap->namespaces = SCAPnamespaces;
 #else
   soap->namespaces = NULL;
 #endif
