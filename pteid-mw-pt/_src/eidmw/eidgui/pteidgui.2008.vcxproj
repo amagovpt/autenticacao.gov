@@ -186,7 +186,7 @@
     <ClCompile>
       <AdditionalOptions>-Zm200 -w34100 -w34189 -Zm200 -w34100 -w34189 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>.\GeneratedFiles;..\_Builds;..\common;..\dialogs;..\eidlib;..\;$(PTEID_DIR_QT_4)\include;$(PTEID_DIR_QT_4)\include\QtGui;$(PTEID_DIR_QT_4)\include\QtCore;$(PTEID_DIR_QT_4)\include\QtNetwork;$(PTEID_DIR_QT_4)\include\QtWidgets;$(PTEID_DIR_QT_4)\include\QtPrintSupport;$(PTEID_DIR_QT_4)\include\QtConcurrent;$(PTEID_POPPLER_QT5);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;..\_Builds;..\common;..\dialogs;..\eidlib;..\;$(PTEID_DIR_QT_4)\include;$(PTEID_DIR_QT_4)\include\QtGui;$(PTEID_DIR_QT_4)\include\QtCore;$(PTEID_DIR_QT_4)\include\QtNetwork;$(PTEID_DIR_QT_4)\include\QtWidgets;$(PTEID_DIR_QT_4)\include\QtPrintSupport;$(PTEID_DIR_QT_4)\include\QtConcurrent;$(PTEID_DIR_QT_4)\include\QtANGLE;$(PTEID_POPPLER_QT5);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PTEID_35;QT_NO_DEBUG;NDEBUG;_WINDOWS;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT;QAPPLICATION_CLASS=QApplication;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
