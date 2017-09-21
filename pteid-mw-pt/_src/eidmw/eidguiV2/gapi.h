@@ -330,6 +330,7 @@ signals:
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
     void signalCompanyAttributesLoaded(const QList<QString> attribute_list);
     void signalEntityAttributesLoaded(const QList<QString> attribute_list);
+    void signalAttributesLoaded(const QList<QString> attribute_list);
     void signalCompanyAttributesLoadedError();
     void signalEntityAttributesLoadedError();
     void signalPdfPrintSucess();
@@ -344,7 +345,9 @@ private:
     void connectToCard();
     void getSCAPEntities();
     void getSCAPCompanyAttributes();
-    void getSCAPAttributesFromCache(bool isCompanies, bool isShortDescription);
+
+    //querytype - 0 = Entities, 1 = Companies, 2 = All Attributes 
+    void getSCAPAttributesFromCache(int queryType, bool isShortDescription);
     void getSCAPEntityAttributes(QList<int> entityIDs);
     void doSignSCAP(SCAPSignParams params);
     void getPersoDataFile();

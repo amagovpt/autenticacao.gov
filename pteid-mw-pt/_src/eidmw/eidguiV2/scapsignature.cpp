@@ -121,6 +121,7 @@ std::vector<ns3__AttributeType*> ScapServices::getSelectedAttributes(std::vector
                 attr->AttributeSupplier->Id = parent->ATTRSupplier->Id;
                 attr->AttributeSupplier->Name = parent->ATTRSupplier->Name;
                 parsedAttributes.push_back(attr);
+                qDebug() << "Selected attribute from supplier: " << attr->AttributeSupplier->Name.c_str();
                
            }
        }

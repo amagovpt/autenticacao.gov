@@ -1560,16 +1560,23 @@ void GAPI::getSCAPCompanyAttributes() {
     emit signalCompanyAttributesLoaded(attribute_list);
 }
 
-void GAPI::getSCAPAttributesFromCache(bool isCompanies, bool isShortDescription) {
+void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
 
     PTEID_EIDCard * card = NULL;
+    std::vector<ns2__AttributesType *> attributes;
     QList<QString> attribute_list;
 
     getCardInstance(card);
     if (card == NULL)
         return;
 
-    std::vector<ns2__AttributesType *> attributes = scapServices.loadAttributesFromCache(*card, isCompanies);
+    if (queryType == 0 || queryType == 2)
+        attributes = scapServices.loadAttributesFromCache(*card, false);
+
+    if (queryType == 1 || queryType == 2) {
+        std::vector<ns2__AttributesType *> attributes2 = scapServices.loadAttributesFromCache(*card, true);
+        attributes.insert(attributes.end(), attributes2.begin(), attributes2.end());
+    }
 
     for(uint i = 0; i < attributes.size() ; i++)
     {
@@ -1584,10 +1591,12 @@ void GAPI::getSCAPAttributesFromCache(bool isCompanies, bool isShortDescription)
        attribute_list.append(QString::fromStdString(attrSupplier));
        attribute_list.append(QString::fromStdString(childAttributes.at(0)));
     }
-    if (isCompanies)
+    if (queryType == 1)
         emit signalCompanyAttributesLoaded(attribute_list);
-    else
+    else if (queryType == 0)
         emit signalEntityAttributesLoaded(attribute_list);
+    else if (queryType == 2)
+        emit signalAttributesLoaded(attribute_list);
 }
 
 void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
