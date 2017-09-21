@@ -29,6 +29,12 @@ Window {
     FontLoader { id: karma; source: "qrc:/fonts/karma/Karma-Medium.ttf" }
     FontLoader { id: lato; source: "qrc:/fonts/lato/Lato-Regular.ttf" }
 
+    onMinimumWidthChanged: {
+        console.log("Window Loaded")
+        controler.initTranslation()
+        gapi.initTranslation()
+    }
+
     onWidthChanged: {
         console.log("Resizing app width: " + width + "height" + height)
         mainFormID.propertyMainMenuView.width = getMainMenuWidth(width)
@@ -40,9 +46,10 @@ Window {
         target: controler
         onSignalLanguageChangedError: {
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    "Erro"
+                    "Erro / Error"
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    "Erro na leitura dos idiomas. Por favor, reinstale a aplicação"
+                    "Erro na leitura dos idiomas. Por favor, reinstale a aplicação \n
+Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
         }
     }
@@ -52,9 +59,10 @@ Window {
 
         onSignalLanguageChangedError: {
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    "Erro"
+                    "Erro / Error"
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    "Erro na leitura dos idiomas. Por favor, reinstale a aplicação"
+                    "Erro na leitura dos idiomas. Por favor, reinstale a aplicação \n
+Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
         }
 
@@ -513,7 +521,7 @@ Window {
                 }
             }
             Text {
-                text: name
+                text: qsTranslate("MainMenuModel", name) + controler.autoTr
                 color:  mainFormID.propertyMainMenuListView.currentIndex === index ?
                             Constants.COLOR_TEXT_MAIN_MENU_SELECTED :
                             Constants.COLOR_TEXT_MAIN_MENU_DEFAULT
@@ -570,8 +578,8 @@ Window {
                                     + mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i).subName);
                         mainFormID.propertySubMenuListView.model
                         .append({
-                                    "subName": mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i)
-                                    .subName,
+                                    "subName": qsTranslate("MainMenuBottomModel",
+                                                           mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i).subName),
                                     "expand": mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i)
                                     .expand,
                                     "url": mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i)
@@ -631,7 +639,7 @@ Window {
                 }
             }
             Text {
-                text: subName
+                text: qsTranslate("MainMenuModel", subName)
                 color: getSubNameColor(index, mouseAreaSubMenu.containsMouse)
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -811,4 +819,3 @@ Window {
         return handSource
     }
 }
-

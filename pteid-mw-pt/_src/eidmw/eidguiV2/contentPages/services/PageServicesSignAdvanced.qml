@@ -872,8 +872,8 @@ PageServicesSignAdvancedForm {
                             + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);
                 mainFormID.propertySubMenuListView.model
                 .append({
-                            "subName": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
-                            .subName,
+                            "subName": qsTranslate("MainMenuBottomModel",
+                                                   mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName),
                             "expand": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
                             .expand,
                             "url": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)

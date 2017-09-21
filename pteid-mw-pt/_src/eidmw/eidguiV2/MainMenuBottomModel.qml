@@ -2,47 +2,46 @@ import QtQuick 2.6
 
 ListModel {
     ListElement {
-        name: "Definições"
+        name: "Difinitions"
         expand: false
         imageUrl: "images/definitions_icon.png"
         imageUrlSel: "images/definitions_icon_selected.png"
         subdata:[
             ListElement {
-                subName: "Personalização da Assinatura"
+                subName: QT_TR_NOOP("STR_MENU_CUSTOM_SIGN")
                 expand: false
                 url: "contentPages/definitions/PageDefinitionsSignature.qml"
             },
             ListElement {
-                subName: "Atributos Profissionais"
+                subName: QT_TR_NOOP("STR_MENU_ATTRIBUTES")
                 expand: false
                 url: "contentPages/definitions/PageDefinitionsSCAP.qml"
             },
             ListElement {
-                subName: "Configuração da aplicação"
+                subName: QT_TR_NOOP("STR_MENU_APP_SETTINGS")
                 expand: false
                 url: "contentPages/definitions/PageDefinitionsApp.qml"
             },
             ListElement {
-                subName: "Atualizações"
+                subName: QT_TR_NOOP("STR_MENU_UPDATES")
                 expand: false
                 url: "contentPages/definitions/PageDefinitionsUpdates.qml"
             }
-
         ]
     }
     ListElement {
-        name: "Ajuda"
+        name: "Help"
         expand: false
         imageUrl: "images/help_icon.png"
         imageUrlSel: "images/help_icon_selected.png"
         subdata:[
             ListElement {
-                subName: "Documentação"
+                subName: QT_TR_NOOP("STR_MENU_DOCUMENTATION")
                 expand: false
                 url: "contentPages/help/PageHelpDocOnline.qml"
             },
             ListElement {
-                subName: "Acerca"
+                subName: QT_TR_NOOP("STR_MENU_ABOUT")
                 expand: false
                 url: "contentPages/help/PageHelpAbout.qml"
             }

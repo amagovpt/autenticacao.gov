@@ -38,14 +38,49 @@ PageDefinitionsAppForm {
                                                             controler.setStartMinimizedValue(false)
     }
     propertyRadioButtonUK{
-        onCheckedChanged: if (propertyRadioButtonUK.checked)
-                              controler.setGuiLanguageCodeValue(GAPI.LANG_EN)
+        onCheckedChanged: {
+            if (propertyRadioButtonUK.checked)
+                controler.setGuiLanguageCodeValue(GAPI.LANG_EN)
+            // Update submenu
+            mainFormID.state = "STATE_NORMAL"
+            mainFormID.propertySubMenuListView.model.clear()
+            for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
+                console.log("Sub Menu indice " + i + " - "
+                            + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);
+                mainFormID.propertySubMenuListView.model
+                .append({
+                            "subName": qsTranslate("MainMenuBottomModel",
+                                                   mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName),
+                            "expand": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
+                            .expand,
+                            "url": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
+                            .url
+                        })
+            }
+        }
     }
     propertyRadioButtonPT{
-        onCheckedChanged: if (propertyRadioButtonPT.checked)
-                              controler.setGuiLanguageCodeValue(GAPI.LANG_NL)
+        onCheckedChanged: {
+            if (propertyRadioButtonPT.checked)
+                controler.setGuiLanguageCodeValue(GAPI.LANG_NL)
+            // Update submenu
+            mainFormID.state = "STATE_NORMAL"
+            mainFormID.propertySubMenuListView.model.clear()
+            for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
+                console.log("Sub Menu indice " + i + " - "
+                            + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);
+                mainFormID.propertySubMenuListView.model
+                .append({
+                            "subName": qsTranslate("MainMenuBottomModel",
+                                                   mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName),
+                            "expand": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
+                            .expand,
+                            "url": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
+                            .url
+                        })
+            }
+        }
     }
-
 
     propertyCheckboxShowNot{
         onCheckedChanged: propertyCheckboxShowNot.checked ? controler.setShowNotificationValue(true) :
