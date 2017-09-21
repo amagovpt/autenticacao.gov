@@ -1388,7 +1388,7 @@ void GAPI::startReadingAddress() {
     QtConcurrent::run(this, &GAPI::getAddressFile);
 }
 
-void GAPI::startLoadingAttributesFromCache(bool isCompanies, bool isShortDescription) {
+void GAPI::startLoadingAttributesFromCache(int isCompanies, bool isShortDescription) {
     QtConcurrent::run(this, &GAPI::getSCAPAttributesFromCache, isCompanies, isShortDescription);
 }
 

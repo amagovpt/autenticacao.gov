@@ -442,7 +442,7 @@ Item {
                     Item {
                         id: rectangleEntities
                         width: parent.width
-                        height: 50
+                        height: 100
                         anchors.top: switchSignAdd.bottom
                         MouseArea {
                             id: mouseAreaTextAttributesMsg
@@ -478,7 +478,7 @@ Item {
                         anchors.top: rectangleEntities.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         width: parent.width
-                        height: Constants.HEIGHT_SWITCH_COMPONENT
+                        height: 0
                         spacing: 5
                         x: 40
                         visible: false

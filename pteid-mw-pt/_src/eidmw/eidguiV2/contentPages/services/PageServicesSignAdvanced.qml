@@ -44,33 +44,8 @@ PageServicesSignAdvancedForm {
             if(propertyBar.currentIndex == 1)
                 propertyBusyIndicator.running = false
         }
-        onSignalSCAPEntitiesLoaded: {
-            console.log("Definitions SCAP - Signal SCAP entities loaded")
-
-            for (var i = 0; i < entitiesList.length; i++)
-            {
-                entityAttributesModel.append({
-                                                 entityName: entitiesList[i], attribute: "", checkBoxAttr: false
-                                             });
-            }
-
-            propertyBusyIndicator.running = false
-
-        }
-        onSignalEntityAttributesLoaded:{
-            console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
-
-            for(var i = 0; i < attribute_list.length; i=i+2)
-            {
-                entityAttributesModel.append({
-                                                  entityName: attribute_list[i], attribute: attribute_list[i+1], checkBoxAttr: false
-                                              });
-            }
-
-            propertyBusyIndicator.running = false
-        }
-        onSignalCompanyAttributesLoaded: {
-            console.log("Definitions SCAP - Signal SCAP company attributes loaded")
+        onSignalAttributesLoaded:{
+            console.log("Definitions SCAP - Signal SCAP attributes loaded")
 
             for(var i = 0; i < attribute_list.length; i=i+2)
             {
@@ -542,7 +517,7 @@ PageServicesSignAdvancedForm {
 
     Dialog {
         id: signsuccess_dialog
-        width: 600
+        width: 300
         height: 200
         visible: false
         font.family: lato.name
@@ -566,7 +541,7 @@ PageServicesSignAdvancedForm {
 
     Dialog {
         id: signerror_dialog
-        width: 600
+        width: 300
         height: 200
         visible: false
         font.family: lato.name
@@ -902,9 +877,8 @@ PageServicesSignAdvancedForm {
                 propertyRadioButtonXADES.enabled = false
                 propertyTextAttributesMsg.visible = true
                 propertyMouseAreaTextAttributesMsg.enabled = true
-                // Load attributes from cache (isCompanies, isShortDescription)
-                gapi.startLoadingAttributesFromCache(0, 1)
-                gapi.startLoadingAttributesFromCache(1, 1)
+                // Load attributes from cache (all, isShortDescription)
+                gapi.startLoadingAttributesFromCache(2, 1)
             }else{
                 console.log("propertySwitchSignAdd not checked")
                 entityAttributesModel.clear()

@@ -29,39 +29,49 @@ PageDefinitionsSCAPForm {
         }
         onSignalSCAPEntitiesLoaded: {
             console.log("Definitions SCAP - Signal SCAP entities loaded")
+                for (var i = 0; i < entitiesList.length; i++)
+                {
+                    entityAttributesModel.append({
+                                                     entityName: entitiesList[i], attribute: "", checkBoxAttr: false
+                                                 });
+                }
 
-            for (var i = 0; i < entitiesList.length; i++)
-            {
-                entityAttributesModel.append({
-                                                 entityName: entitiesList[i], attribute: "", checkBoxAttr: false
-                                             });
-            }
-
+                // Load attributes from cache (Entities, isShortDescription)
+                gapi.startLoadingAttributesFromCache(0, 0)
+                // Load attributes from cache (Companies, isShortDescription)
+                gapi.startLoadingAttributesFromCache(1, 0)
             if(propertyBar.currentIndex == 0)propertyBusyIndicator.running = false
 
         }
         onSignalEntityAttributesLoaded:{
             console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
-
-            for(var i = 0; i < attribute_list.length; i=i+2)
-            {
-                entityAttributesModel.append({
-                                                  entityName: attribute_list[i], attribute: attribute_list[i+1]
-                                              });
+            if(entityAttributesModel.count == 0){
+                for(var i = 0; i < attribute_list.length; i=i+2)
+                {
+                    entityAttributesModel.append({
+                                                     entityName: attribute_list[i], attribute: attribute_list[i+1]
+                                                 });
+                }
+            }else{
+                for(var i = 0; i < attribute_list.length; i=i+2)
+                {
+                    for (var j = 0; j < entityAttributesModel.count; j++){
+                        if(entityAttributesModel.get(j).entityName === attribute_list[i]){
+                            entityAttributesModel.set(j, {"entityName": attribute_list[i], "attribute":attribute_list[i+1]})
+                        }
+                    }
+                }
             }
-
             if(propertyBar.currentIndex == 0)propertyBusyIndicatorAttributes.running = false
         }
         onSignalCompanyAttributesLoaded: {
             console.log("Definitions SCAP - Signal SCAP company attributes loaded")
-
             for(var i = 0; i < attribute_list.length; i=i+2)
             {
                 companyAttributesModel.append({
                                                   entityName: attribute_list[i], attribute: attribute_list[i+1]
                                               });
             }
-
             if(propertyBar.currentIndex == 1)propertyBusyIndicatorAttributes.running = false
         }
     }
@@ -81,7 +91,6 @@ PageDefinitionsSCAPForm {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.capitalization: Font.MixedCase
                 anchors.verticalCenter: parent.verticalCenter
-                checked: checkBoxAttr
                 onCheckedChanged: {
 
                     entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
@@ -181,8 +190,5 @@ PageDefinitionsSCAPForm {
         propertyBusyIndicator.running = true
         propertyBusyIndicatorAttributes.running = true
         gapi.startGettingEntities()
-        // Load attributes from cache (isCompanies, isShortDescription)
-        gapi.startLoadingAttributesFromCache(0, 0)
-        gapi.startLoadingAttributesFromCache(1, 0)
     }
 }

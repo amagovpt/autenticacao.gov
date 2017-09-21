@@ -488,7 +488,7 @@ PageServicesSignSimpleForm {
 
     Dialog {
         id: signsuccess_dialog
-        width: 600
+        width: 300
         height: 200
         visible: false
         font.family: lato.name
@@ -512,7 +512,7 @@ PageServicesSignSimpleForm {
 
     Dialog {
         id: signerror_dialog
-        width: 600
+        width: 300
         height: 200
         visible: false
         font.family: lato.name
