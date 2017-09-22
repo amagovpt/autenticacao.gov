@@ -74,6 +74,7 @@ typedef enum {
 	DLG_PIN_UNKNOWN,
 	DLG_PIN_AUTH,
 	DLG_PIN_SIGN,
+	DLG_PIN_ACTIVATE,
 	DLG_PIN_ADDRESS,
 } DlgPinUsage;
 

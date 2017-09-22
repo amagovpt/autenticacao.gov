@@ -639,8 +639,6 @@ DlgPinOperation CPkiCard::PinOperation2Dlg(tPinOperation operation)
 		 //We ignore the RESET with no change case for now
 		case PIN_OP_RESET:
 		   return DLG_PIN_OP_UNBLOCK_CHANGE;
-		case PIN_OP_ACTIVATE:
-		   return DLG_PIN_OP_ACTIVATE;
 		default:
 		   return DLG_PIN_OP_VERIFY;
 	}

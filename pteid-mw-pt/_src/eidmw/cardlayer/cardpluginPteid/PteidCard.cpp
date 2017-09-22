@@ -472,6 +472,8 @@ DlgPinUsage CPteidCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)
         usage = DLG_PIN_SIGN;
     else if (Pin.ulID == 3)
         usage = DLG_PIN_ADDRESS;
+    else 
+    	usage = DLG_PIN_ACTIVATE;
 
 	return usage;
 }
