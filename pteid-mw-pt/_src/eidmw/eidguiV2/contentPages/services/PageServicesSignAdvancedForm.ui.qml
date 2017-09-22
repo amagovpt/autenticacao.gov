@@ -464,6 +464,7 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
                             visible: false
+                            x: 54
                         }
                         ListView {
                             id: listViewEntities

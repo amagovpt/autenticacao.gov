@@ -1133,7 +1133,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
             drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_LOCALITY"),
                             QString::fromUtf8(addressFile.getForeignLocality()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Zip Code"),
+            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_FOREIGN_POSTAL_CODE"),
                             QString::fromUtf8(addressFile.getForeignPostalCode()));
 
             pos_y += LINE_HEIGHT;
