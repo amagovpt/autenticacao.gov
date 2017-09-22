@@ -57,6 +57,7 @@ PageDefinitionsAppForm {
                             .url
                         })
             }
+            mainFormID.propertySubMenuListView.currentIndex = 2
         }
     }
     propertyRadioButtonPT{
@@ -79,6 +80,7 @@ PageDefinitionsAppForm {
                             .url
                         })
             }
+            mainFormID.propertySubMenuListView.currentIndex = 2
         }
     }
 
