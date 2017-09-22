@@ -1071,54 +1071,73 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
         PTEID_Address &addressFile = card->getAddr();
 
-        // TODO: Foreign address
+        if (addressFile.isNationalAddress()){
+            drawSingleField(painter, pos_x, pos_y, tr("STR_DISTRICT"),
+                            QString::fromUtf8(addressFile.getDistrict()));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_MUNICIPALY"),
+                            QString::fromUtf8(addressFile.getMunicipality()));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_CICIL_PARISH"),
+                            QString::fromUtf8(addressFile.getCivilParish()));
 
-        drawSingleField(painter, pos_x, pos_y, tr("STR_DISTRICT"),
-                        QString::fromUtf8(addressFile.getDistrict()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_MUNICIPALY"),
-                        QString::fromUtf8(addressFile.getMunicipality()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_CICIL_PARISH"),
-                        QString::fromUtf8(addressFile.getCivilParish()));
+            pos_y += LINE_HEIGHT;
 
-        pos_y += LINE_HEIGHT;
+            drawSingleField(painter, pos_x, pos_y, tr("STR_AB_STREET_TYPE"),
+                            QString::fromUtf8(addressFile.getAbbrStreetType()));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_STREET_TYPE"),
+                            QString::fromUtf8(addressFile.getStreetType()));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_STREET_NAME"),
+                            QString::fromUtf8(addressFile.getStreetName()));
 
-        drawSingleField(painter, pos_x, pos_y, tr("STR_AB_STREET_TYPE"),
-                        QString::fromUtf8(addressFile.getAbbrStreetType()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_STREET_TYPE"),
-                        QString::fromUtf8(addressFile.getStreetType()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_STREET_NAME"),
-                        QString::fromUtf8(addressFile.getStreetName()));
+            pos_y += LINE_HEIGHT;
 
-        pos_y += LINE_HEIGHT;
+            drawSingleField(painter, pos_x, pos_y, tr("STR_AB_BUILDING_TYPE"),
+                            QString::fromUtf8(addressFile.getAbbrBuildingType()));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_BUILDING_TYPE"),
+                            QString::fromUtf8(addressFile.getBuildingType()));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_HOUSE_BUILDING_NUM"),
+                            QString::fromUtf8(addressFile.getDoorNo()));
+            pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("STR_AB_BUILDING_TYPE"),
-                        QString::fromUtf8(addressFile.getAbbrBuildingType()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_BUILDING_TYPE"),
-                        QString::fromUtf8(addressFile.getBuildingType()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_HOUSE_BUILDING_NUM"),
-                        QString::fromUtf8(addressFile.getDoorNo()));
-        pos_y += LINE_HEIGHT;
+            drawSingleField(painter, pos_x, pos_y, tr("STR_FLOOR"),
+                            QString::fromUtf8(addressFile.getFloor()));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_SIDE"),
+                            QString::fromUtf8(addressFile.getSide()));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_PLACE"),
+                            QString::fromUtf8(addressFile.getPlace()));
+            pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("STR_FLOOR"),
-                        QString::fromUtf8(addressFile.getFloor()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_SIDE"),
-                        QString::fromUtf8(addressFile.getSide()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_PLACE"),
-                        QString::fromUtf8(addressFile.getPlace()));
-        pos_y += LINE_HEIGHT;
+            drawSingleField(painter, pos_x, pos_y, tr("STR_ZIP_CODE_4"),
+                            QString::fromUtf8(addressFile.getZip4()));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_ZIP_CODE_3"),
+                            QString::fromUtf8(addressFile.getZip3()));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_POSTAL_LOCALITY"),
+                            QString::fromUtf8(addressFile.getPostalLocality()));
 
-        drawSingleField(painter, pos_x, pos_y, tr("STR_ZIP_CODE_4"),
-                        QString::fromUtf8(addressFile.getZip4()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_ZIP_CODE_3"),
-                        QString::fromUtf8(addressFile.getZip3()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_POSTAL_LOCALITY"),
-                        QString::fromUtf8(addressFile.getPostalLocality()));
+            pos_y += LINE_HEIGHT;
 
-        pos_y += LINE_HEIGHT;
+            drawSingleField(painter, pos_x, pos_y, tr("STR_LOCALITY"),
+                            QString::fromUtf8(addressFile.getLocality()));
+        }else{
+            /* Foreign Address*/
+            drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_COUNTRY"),
+                            QString::fromUtf8(addressFile.getForeignCountry()));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_FOREIGN_REGION"),
+                            QString::fromUtf8(addressFile.getForeignRegion()));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_FOREIGN_CITY"),
+                            QString::fromUtf8(addressFile.getForeignCity()));
 
-        drawSingleField(painter, pos_x, pos_y, tr("STR_LOCALITY"),
-                        QString::fromUtf8(addressFile.getLocality()));
+            pos_y += LINE_HEIGHT;
 
+            drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_LOCALITY"),
+                            QString::fromUtf8(addressFile.getForeignLocality()));
+            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("Zip Code"),
+                            QString::fromUtf8(addressFile.getForeignPostalCode()));
+
+            pos_y += LINE_HEIGHT;
+
+            drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_ADDRESS"),
+                            QString::fromUtf8(addressFile.getForeignAddress()));
+        }
         pos_y += 80;
     }
 
