@@ -4,8 +4,8 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<?include ..\..\..\svn_revision.wxs ?>
 
-	<?define var.OfficialProductVersion = 2.4.1?>
-	<?define var.ProductVersion = 2.4.$(var.RevisionNumber)?>
+	<?define var.OfficialProductVersion = 3.0.4?>
+	<?define var.ProductVersion = 3.0.$(var.RevisionNumber)?>
 	<?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
 	<?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
@@ -186,7 +186,7 @@
 
       <DirectoryRef Id="QT5PLATFORMS">
           <Component Id="qt5PlatformDll" Guid="{C65667C8-D72C-4CD4-BF7F-1D2DAC5B0BDA}">
-              <File Id="qwindows.dll" Name="qwindows.dll" KeyPath="yes" Source="$(env.PTEID_DIR_QT_4_X64)\plugins\platforms\qwindows.dll" />
+              <File Id="qwindows.dll" Name="qwindows.dll" KeyPath="yes" Source="$(var.PTEID_QT_PLATFORMPLUGINS)\qwindows.dll" />
           </Component>
       </DirectoryRef>
 
@@ -215,7 +215,7 @@
 			<Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AD6}">
 		        <File Source="..\..\certs\CartaodeCidadao001.der" KeyPath="yes" />
 		        <File Source="..\..\certs\CartaodeCidadao002.der" />
-            <File Source="..\..\certs\CartaodeCidadao003.der" />
+                <File Source="..\..\certs\CartaodeCidadao003.der" />
 		       <!--  <File Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" /> -->
 		        <File Source="..\..\certs\ECRaizEstado_MC.der" />
 		        <File Source="..\..\certs\Multicert_Root_01.der" />
@@ -576,11 +576,13 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 					
 				</Component>
         
+		<!--
         <Component Id="RegisterPteidAutoStart" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA6}">
           <RegistryKey Root="HKCU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
             <RegistryValue Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteidgui.exe&quot;"/>
           </RegistryKey>
         </Component>
+		-->
 
 			</DirectoryRef>
 
@@ -592,13 +594,19 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 							  Target="[APPLICATIONROOTFOLDER]pteidgui.exe"
 							  WorkingDirectory="APPLICATIONROOTFOLDER"/>
           
-          <!-- 
+
           <Shortcut Id="eidguiV2StartMenuShortcut"
-							  Name="Autenticação.gov"
+							  Name="Autenticação.Gov"
 							  Description="!(loc.PteidGuiDescr)"
 							  Target="[EIDGUIV2DIR]pteidguiV2.exe"
-							  WorkingDirectory="eidguiV2Dir"/>
-          -->      
+							  WorkingDirectory="EIDGUIV2DIR"/>
+
+          <Shortcut Id="eidguiV2Shortcut"
+							  Name="Autenticação.Gov"
+							  Directory="DesktopFolder"
+							  Description="!(loc.PteidGuiDescr)"
+							  Target="[EIDGUIV2DIR]pteidguiV2.exe"
+							  WorkingDirectory="EIDGUIV2DIR"/>
           
 					<Shortcut Id="EidViewerShortcut"
 							  Name="Cartão de Cidadão"
@@ -648,19 +656,19 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 				<ComponentRef Id="License"/>
 				<ComponentRef Id="LogDir"/>
 				<ComponentRef Id="DSSApp"/>
-        <!-- <ComponentGroupRef Id="qmlAppComponentGroup"/> -->
+        <ComponentGroupRef Id="qmlAppComponentGroup"/>
         <!-- System32 -->
 
 				<ComponentRef Id="Runtime35"/>
 				<ComponentRef Id="Runtime35_64"/>
-    <!--<ComponentRef Id="Runtime35ThirdPartyOpenSSL"/> -->
-		<!--<ComponentRef Id="Runtime35ThirdPartyOpenSSL_64"/> -->
+                <!--<ComponentRef Id="Runtime35ThirdPartyOpenSSL"/> -->
+		        <!--<ComponentRef Id="Runtime35ThirdPartyOpenSSL_64"/> -->
 				<ComponentRef Id="Runtime35ThirdPartyXerces"/>
 				<ComponentRef Id="Runtime35ThirdPartyXerces_64"/>
 
 				<!-- Registry -->
 				<ComponentRef Id="RegistryPteidSystem"/>
-        <ComponentRef Id="RegisterPteidAutoStart"/>
+                <!-- <ComponentRef Id="RegisterPteidAutoStart"/> -->
         <ComponentRef Id="RegistryXadesFileType"/>
 
 				<Feature Id="GUI"

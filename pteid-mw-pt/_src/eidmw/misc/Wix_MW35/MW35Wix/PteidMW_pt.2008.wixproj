@@ -30,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
+    <Compile Include="qml-app_x86.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixDifxAppExtension">
@@ -61,8 +62,10 @@
 	</Target>
 	-->
   <PropertyGroup>
-    <PostBuildEvent>set SIGNTOOL_PATH=$(PTEID_DRIVERS_DDK)\bin\x86</PostBuildEvent>
     <PreBuildEvent>
     </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent />
   </PropertyGroup>
 </Project>

@@ -4,8 +4,8 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <?include ..\..\..\svn_revision.wxs ?>
 
-  <?define var.OfficialProductVersion = 2.4.1?>
-  <?define var.ProductVersion = 2.4.$(var.RevisionNumber)?>
+  <?define var.OfficialProductVersion = 3.0.4?>
+  <?define var.ProductVersion = 3.0.$(var.RevisionNumber)?>
   <?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
   <?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
@@ -506,13 +506,13 @@
         </RegistryKey>
 
       </Component>
-      
+      <!--      
       <Component Id="RegisterPteidAutoStart" Guid="{EA9E5719-C20F-411A-8690-1D85F7D11E41}">
         <RegistryKey Root="HKCU"
               Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
           <RegistryValue KeyPath="yes" Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteidgui.exe&quot;"/>
         </RegistryKey>
-      </Component>
+      </Component>  -->
       
     </DirectoryRef>
 
@@ -523,12 +523,28 @@
                   Description="!(loc.PteidGuiDescr)"
                   Target="[APPLICATIONROOTFOLDER]pteidgui.exe"
                   WorkingDirectory="APPLICATIONROOTFOLDER"/>
+        
         <Shortcut Id="EidViewerShortcut"
                   Name="Cartão de Cidadão"
                   Directory="DesktopFolder"
                   Description="!(loc.PteidGuiDescr)"
                   Target="[APPLICATIONROOTFOLDER]pteidgui.exe"
                   WorkingDirectory="APPLICATIONROOTFOLDER"/>
+        
+        <!-- Shortcuts for the new app -->
+        <Shortcut Id="eidguiV2StartMenuShortcut"
+							  Name="Autenticação.Gov"
+							  Description="!(loc.PteidGuiDescr)"
+							  Target="[EIDGUIV2DIR]pteidguiV2.exe"
+							  WorkingDirectory="EIDGUIV2DIR"/>
+
+        <Shortcut Id="eidguiV2Shortcut"
+              Name="Autenticação.Gov"
+              Directory="DesktopFolder"
+              Description="!(loc.PteidGuiDescr)"
+              Target="[EIDGUIV2DIR]pteidguiV2.exe"
+              WorkingDirectory="EIDGUIV2DIR"/>
+        
         <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
         <RegistryValue Root="HKCU" Key="SOFTWARE\PTEID\Installer" Name="GuiShortcut" Type="integer" Value="1" KeyPath="yes" />
       </Component>
@@ -566,6 +582,7 @@
       <ComponentRef Id="HttpDir"/>
       
       <ComponentRef Id="DSSApp"/>
+      <ComponentGroupRef Id="qmlAppComponentGroup"/>
 
       <ComponentRef Id="ImagePlugins"/>
       <ComponentRef Id="DirectoryCache"/>
@@ -581,7 +598,7 @@
 
       <!-- Registry -->
       <ComponentRef Id="RegistryPteidSystem"/>
-      <ComponentRef Id="RegisterPteidAutoStart"/>
+      <!-- <ComponentRef Id="RegisterPteidAutoStart"/> -->
 	    <ComponentRef Id="RegistryXadesFileType"/>
 
       <Feature Id="GUI"
