@@ -261,7 +261,7 @@ bool GenericPinpad::ShowDlg(unsigned char pinpadOperation, unsigned char ucPinty
 {
 
 	const char *csMesg = "";
-	DlgPinUsage dlgUsage = DLG_PIN_UNKNOWN;
+	DlgPinUsage dlgUsage = DLG_PIN_ACTIVATE;
 	switch(ucPintype)
 	{
 		case EIDMW_PP_TYPE_AUTH: dlgUsage = DLG_PIN_AUTH; break;

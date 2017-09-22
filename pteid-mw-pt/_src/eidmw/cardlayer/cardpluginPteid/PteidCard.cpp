@@ -402,7 +402,7 @@ bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate, bool blockAc
 	unsigned long ulRemaining;
 	std::string strPinCode = pinCode != NULL ? std::string(pinCode) : "";
 
-	bool bOK = PinCmd(PIN_OP_ACTIVATE, activationPin, strPinCode, "", ulRemaining, NULL);
+	bool bOK = PinCmd(PIN_OP_VERIFY, activationPin, strPinCode, "", ulRemaining, NULL);
 	if (!bOK)
 		return bOK;
 

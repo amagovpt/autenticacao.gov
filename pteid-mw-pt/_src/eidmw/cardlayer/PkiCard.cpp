@@ -226,7 +226,7 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
 	bool defineNewPin = unblockFlags & UNBLOCK_FLAG_NEW_PIN || operation == PIN_OP_CHANGE;
 	bool bAskPIN = true;
 
-	if ((operation == PIN_OP_VERIFY || operation == PIN_OP_ACTIVATE) && !csPin1.empty())
+	if ((operation == PIN_OP_VERIFY) && !csPin1.empty())
 		bAskPIN = false;
 	if (operation == PIN_OP_CHANGE && !csPin1.empty())
 		bAskPIN = false;
