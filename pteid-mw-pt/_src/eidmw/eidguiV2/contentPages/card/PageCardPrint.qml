@@ -65,6 +65,9 @@ PageCardPrintForm {
     }
     Connections {
         target: gapi
+        onSignalGenericError: {
+            propertyBusyIndicator.running = false
+        }
         onSignalPdfPrintSignSucess: {
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTr("STR_PRINT_CREATE_PDF")
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTr("STR_PRINT_CREATE_PDF_SUCESS")

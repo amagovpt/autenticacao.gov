@@ -22,6 +22,9 @@ PageDefinitionsSignatureForm {
 
     Connections {
         target: gapi
+        onSignalGenericError: {
+            propertyBusyIndicator.running = false
+        }
         onSignalCardDataChanged: {
             console.log("Definitions Signature --> Data Changed")
             //console.trace();

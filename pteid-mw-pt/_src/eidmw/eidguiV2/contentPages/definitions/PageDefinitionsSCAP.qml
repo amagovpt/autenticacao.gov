@@ -7,6 +7,9 @@ PageDefinitionsSCAPForm {
 
     Connections {
         target: gapi
+        onSignalGenericError: {
+            propertyBusyIndicator.running = false
+        }
         onSignalEntityAttributesLoadedError: {
             console.log("Definitions SCAP - Signal SCAP entities loaded error")
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =

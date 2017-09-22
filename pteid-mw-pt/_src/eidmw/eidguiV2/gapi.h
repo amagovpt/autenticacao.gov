@@ -312,6 +312,7 @@ signals:
     void signalCardDataChanged();
     void signalAddressLoaded(bool m_foreign);
     void signalCardAccessError(int error_code);
+    void signalGenericError(const QString error_code);
     void signalPersoDataLoaded(const QString& persoNotes);
     void signalAddressLoadedChanged();
     void signalPdfSignSucess();

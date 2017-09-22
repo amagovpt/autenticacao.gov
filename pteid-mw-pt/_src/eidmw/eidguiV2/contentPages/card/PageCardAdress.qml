@@ -8,6 +8,9 @@ PageCardAdressForm {
 
     Connections {
         target: gapi
+        onSignalGenericError: {
+            propertyBusyIndicator.running = false
+        }
         onSignalAddressLoaded: {
             console.log("Address --> Data Changed")
             if(m_foreign){

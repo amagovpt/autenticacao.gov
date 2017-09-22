@@ -145,7 +145,8 @@ QString GAPI::getAddressField(AddressInfoKey key) {
     else \
 { \
     fprintf(stderr, "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
-    emit signalCardAccessError(CardUnknownError); \
+    QString msgError = QString("%08\n").arg(e.GetError()); \
+    emit signalGenericError(msgError); \
     } \
     }
 
@@ -465,7 +466,7 @@ void GAPI::showChangeAddressDialog(long code)
 
     if (sam_error_code != 0)
     {
-        error_msg += "\n\n" + tr("STR_ERROR_CODE = ") + QString::number(sam_error_code);
+        error_msg += "\n\n" + tr("STR_ERROR_CODE") + QString::number(sam_error_code);
     }
 
     if (code != 0)
@@ -500,7 +501,7 @@ void GAPI::showSignCMDDialog(long code)
 
     if (sam_error_code != 0)
     {
-        error_msg += "\n\n" + tr("STR_ERROR_CODE = ") + QString::number(sam_error_code);
+        error_msg += "\n\n" + tr("STR_ERROR_CODE") + QString::number(sam_error_code);
     }
 
     if (code != 0)

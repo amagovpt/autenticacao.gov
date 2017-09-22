@@ -53,8 +53,9 @@ Loader{
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
-                    width: parent.width
+                    width: parent.width - 48
                     anchors.bottom: parent.bottom
+                    wrapMode: Text.Wrap
                 }
             }
             Button {

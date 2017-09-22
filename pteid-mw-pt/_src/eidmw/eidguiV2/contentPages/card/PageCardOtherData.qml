@@ -7,6 +7,9 @@ PageCardOtherDataForm {
 
     Connections {
         target: gapi
+        onSignalGenericError: {
+            propertyBusyIndicator.running = false
+        }
         onSignalCardDataChanged: {
             console.log("Data Card Identify --> Data Changed")
             propertyTextBoxNIF.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.NIF)

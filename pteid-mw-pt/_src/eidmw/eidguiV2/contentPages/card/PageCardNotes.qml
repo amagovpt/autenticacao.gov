@@ -11,6 +11,9 @@ PageCardNotesForm {
 
     Connections {
         target: gapi
+        onSignalGenericError: {
+            propertyBusyIndicator.running = false
+        }
         onSignalPersoDataLoaded: {
             console.log("QML: onSignalPersoDataLoaded!")
             loadPersoData(persoNotes)

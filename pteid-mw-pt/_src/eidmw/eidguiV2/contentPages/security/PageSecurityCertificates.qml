@@ -11,6 +11,9 @@ PageSecurityCertificatesForm {
 
     Connections {
         target: gapi
+        onSignalGenericError: {
+            propertyBusyIndicator.running = false
+        }
         onSignalCardAccessError: {
             console.log("Security Pin Codes onSignalCardAccessError")
             if (error_code == GAPI.NoReaderFound) {

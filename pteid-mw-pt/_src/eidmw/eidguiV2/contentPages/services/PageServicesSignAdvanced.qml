@@ -24,6 +24,9 @@ PageServicesSignAdvancedForm {
 
     Connections {
         target: gapi
+        onSignalGenericError: {
+            propertyBusyIndicator.running = false
+        }
         onSignalEntityAttributesLoadedError: {
             console.log("Definitions SCAP - Signal SCAP entities loaded error")
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
@@ -76,6 +79,34 @@ PageServicesSignAdvancedForm {
             propertyBusyIndicator.running = false
         }
         onSignalCardAccessError: {
+            console.log("Sign Advanced Page onSignalCardAccessError")
+            if(cardLoaded ){
+                if (error_code == GAPI.NoReaderFound) {
+                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                            qsTranslate("Popup Card","STR_POPUP_ERROR")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
+                }
+                else if (error_code == GAPI.NoCardFound) {
+                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                            qsTranslate("Popup Card","STR_POPUP_ERROR")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("Popup Card","STR_POPUP_NO_CARD")
+                }
+                else if (error_code == GAPI.SodCardReadError) {
+                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                            qsTranslate("Popup Card","STR_POPUP_ERROR")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
+                }
+                else {
+                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                            qsTranslate("Popup Card","STR_POPUP_ERROR")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
+                }
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            }
             propertyBusyIndicator.running = false
             cardLoaded = false
         }
@@ -655,7 +686,7 @@ PageServicesSignAdvancedForm {
 
     propertyFileDialogOutput {
         onAccepted: {
-
+            propertyBusyIndicator.running = true
             var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogOutput.fileUrl.toString()
@@ -666,7 +697,6 @@ PageServicesSignAdvancedForm {
             }
 
             if (propertyRadioButtonPADES.checked) {
-
                 var page = propertySpinBoxControl.value
                 var reason = propertyTextFieldReason.text
                 var location = propertyTextFieldLocal.text
@@ -695,7 +725,6 @@ PageServicesSignAdvancedForm {
                         }
                     }
                     console.log("QML AttributeList: ", attributeList)
-                    propertyBusyIndicator.running = true
                     gapi.startSigningSCAP(loadedFilePath, outputFile, page, coord_x, coord_y,
                                          0, attributeList)
                 }else{
@@ -718,7 +747,7 @@ PageServicesSignAdvancedForm {
     }
     propertyFileDialogBatchOutput {
         onAccepted: {
-
+            propertyBusyIndicator.running = true
             var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogBatchOutput.folder.toString()

@@ -9,6 +9,9 @@ PageCardIdentifyForm {
 
     Connections {
         target: gapi
+        onSignalGenericError: {
+            propertyBusyIndicator.running = false
+        }
         onSignalReaderContext: {
             propertyBusyIndicator.running = false
         }

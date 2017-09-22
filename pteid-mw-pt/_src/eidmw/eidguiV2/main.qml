@@ -56,7 +56,15 @@ Load language error. Please reinstall the application"
 
     Connections {
         target: gapi
-
+        onSignalGenericError: {
+            console.log("Signal onSignalGenericError")
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    qsTranslate("Popup Card","STR_POPUP_ERROR")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    qsTranslate("Popup Card","STR_GENERIC_ERROR_MSG") + "\n\n" +
+                    qsTranslate("Popup Card","STR_ERROR_CODE") + error_code
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+        }
         onSignalLanguageChangedError: {
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                     "Erro / Error"
