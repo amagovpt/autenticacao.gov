@@ -920,6 +920,7 @@ return $jnicall;
 // class PTEID_EIDCard
 //------------------------------------------------------------
 %javaexception("PTEID_Exception") isApplicationAllowed	JAVA_CODE_THROW
+%javaexception("PTEID_Exception") Activate				JAVA_CODE_THROW
 %javaexception("PTEID_Exception") isTestCard			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getAllowTestCard		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") setAllowTestCard		JAVA_CODE_THROW
