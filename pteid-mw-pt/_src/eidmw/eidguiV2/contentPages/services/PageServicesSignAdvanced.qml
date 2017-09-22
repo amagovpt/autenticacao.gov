@@ -73,6 +73,18 @@ PageServicesSignAdvancedForm {
         onSignalPdfSignSucess: {
             signsuccess_dialog.visible = true
             propertyBusyIndicator.running = false
+            // test time stamp
+            if(error_code == GAPI.SignMessageTimestampFailed){
+                if(propertyListViewFiles.count > 1){
+                    signsuccess_dialog.propertySignSuccessDialogText.text =
+                            qsTranslate("PageServicesSign","STR_TIME_STAMP_MULTI_FAILED")
+                }else{
+                    signsuccess_dialog.propertySignSuccessDialogText.text =
+                            qsTranslate("PageServicesSign","STR_TIME_STAMP_FAILED")
+                }
+            }else{ // Sign with time stamp succefull
+                signsuccess_dialog.propertySignSuccessDialogText.text = ""
+            }
         }
         onSignalPdfSignFail: {
             signerror_dialog.visible = true
@@ -556,6 +568,7 @@ PageServicesSignAdvancedForm {
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - signsuccess_dialog.width * 0.5
         y: parent.height * 0.5 - signsuccess_dialog.height * 0.5
+        property alias propertySignSuccessDialogText: labelText
 
         header: Label {
             text: qsTranslate("PageServicesSign","STR_SIGN_SUCESS_MULTI")
@@ -566,7 +579,27 @@ PageServicesSignAdvancedForm {
             font.pixelSize: 16
             color: Constants.COLOR_MAIN_BLUE
         }
+        Item {
+            width: signsuccess_dialog.width
+            height: signsuccess_dialog.height
 
+            Item {
+                id: rectLabelText
+                width: parent.width
+                height: 90
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: labelText
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width - 48
+                    wrapMode: Text.Wrap
+                }
+            }
+        }
         standardButtons: DialogButtonBox.Ok
     }
 
@@ -709,7 +742,7 @@ PageServicesSignAdvancedForm {
 
                 console.log("Output filename: " + outputFile)
                 console.log("Signing in position coord_x: " + coord_x
-                            + " and coord_y: "+coord_y + " page: " + page)
+                            + " and coord_y: "+coord_y + " page: " + page + " timestamp: " + isTimestamp)
 
 
                 if(propertySwitchSignAdd.checked){
@@ -771,7 +804,7 @@ PageServicesSignAdvancedForm {
 
                 console.log("Output filename: " + outputFile)
                 console.log("Signing Batch in position coord_x: " + coord_x
-                            + " and coord_y: "+coord_y + " page: " + page)
+                            + " and coord_y: "+coord_y + " page: " + page + " timestamp: " + isTimestamp)
 
                 var batchFilesArray = []
                 for(var i = 0; i < propertyListViewFiles.count; i++){

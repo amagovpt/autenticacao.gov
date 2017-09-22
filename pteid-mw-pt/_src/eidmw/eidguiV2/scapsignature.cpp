@@ -188,7 +188,7 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
                     QString(citizenId), ltv_years, PDFSignatureInfo(selected_page, location_x, location_y, false), selected_attributes);
 
                 if (successful) {
-                    parent->signalPdfSignSucess();
+                    parent->signalPdfSignSucess(parent->SignMessageOK);
                 	
                 }
                 else {

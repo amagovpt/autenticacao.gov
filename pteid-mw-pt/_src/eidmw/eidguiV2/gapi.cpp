@@ -141,6 +141,9 @@ QString GAPI::getAddressField(AddressInfoKey key) {
 { \
     fprintf(stderr, "SOD exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
     emit signalCardAccessError(SodCardReadError); \
+    } else if (errorCode == EIDMW_TIMESTAMP_ERROR) \
+{ \
+    emit signalPdfSignSucess(SignMessageTimestampFailed); \
     } \
     else \
 { \
@@ -1199,7 +1202,7 @@ void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTime
     else
         card->SignXades(tempOutputFile.constData(), files_to_sign, 1);
 
-    emit signalPdfSignSucess();
+    emit signalPdfSignSucess(SignMessageOK);
 
     END_TRY_CATCH
 }
@@ -1224,7 +1227,7 @@ void GAPI::doSignPDF(SignParams &params) {
                  params.location.toUtf8().data(), params.reason.toUtf8().data(),
                  params.outputFile.toUtf8().data());
 
-    emit signalPdfSignSucess();
+    emit signalPdfSignSucess(SignMessageOK);
 
     END_TRY_CATCH
 }
@@ -1258,7 +1261,7 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
                  params.location.toUtf8().data(), params.reason.toUtf8().data(),
                  params.outputFile.toUtf8().data());
 
-    emit signalPdfSignSucess();
+    emit signalPdfSignSucess(SignMessageOK);
 
     END_TRY_CATCH
 }
