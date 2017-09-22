@@ -677,7 +677,8 @@ namespace eIDMW
         if ( NULL == m_doc ) {
             fprintf( stderr, "NULL m_doc\n" );
 
-            if ( m_pkcs7 != NULL ) PKCS7_free( m_pkcs7 );
+            if ( m_pkcs7 != NULL ) 
+            	PKCS7_free( m_pkcs7 );
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
 
@@ -691,7 +692,9 @@ namespace eIDMW
                                 , m_pkcs7
                                 , &signature_contents );
 
-        if ( return_code != errNone ) throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+        //Don't report "unknown error" exception in the case of timestamp error     
+        if (return_code > 1)
+        	throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 
         m_doc->closeSignature( signature_contents );
 
@@ -714,6 +717,10 @@ namespace eIDMW
 
         PKCS7_free( m_pkcs7 );
         m_pkcs7 = NULL;
+
+        if (return_code == 1) {
+        	throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
+        }
 
         return return_code;
     }

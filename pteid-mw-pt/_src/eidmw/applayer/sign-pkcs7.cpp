@@ -498,11 +498,11 @@ int getSignedData_pkcs7( unsigned char *signature, unsigned int signatureLen
     signer_info->enc_digest = ASN1_OCTET_STRING_new();
     ASN1_OCTET_STRING_set( signer_info->enc_digest, signature, signatureLen );
 
-    if (timestamp){
+    if (timestamp) {
         TSAClient tsp;
         unsigned char *digest_tp = (unsigned char *)malloc( SHA256_LEN );
         if ( NULL == digest_tp ){
-            TRACE_ERR( "Null digest_tp" );
+            TRACE_ERR( "digest_tp: malloc failed" );
             return 2;
         }
 
@@ -512,14 +512,14 @@ int getSignedData_pkcs7( unsigned char *signature, unsigned int signatureLen
         tsp.timestamp_data( digest_tp, SHA256_LEN );
         tsresp = tsp.getResponse();
 
-        if (tsresp.Size() == 0){
+        if (tsresp.Size() == 0) {
             MWLOG( LEV_ERROR, MOD_APL, L"PKCS7 Sign: Timestamp Error - response is empty\n" );
             return_code = 1;
-        } else{
+        } else {
             timestamp_token = tsresp.GetBytes();
             tsp_token_len = tsresp.Size();
         }
-        free( digest_tp );
+        free(digest_tp);
     }
 
     if ( timestamp_token && tsp_token_len > 0 ) {
