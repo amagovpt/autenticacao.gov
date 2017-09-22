@@ -619,7 +619,7 @@ PageSecurityPinCodesForm {
                     propertyTriesLeftAuthPin.text = ""
                 }
                 else {
-                    propertyTriesLeftAddressPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
+                    propertyTriesLeftAuthPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
                                             + " " + triesLeft + " "
                                             + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
                 }
@@ -651,7 +651,7 @@ PageSecurityPinCodesForm {
                     propertyTriesLeftAuthPin.text = ""
                 }
                 else {
-                    propertyTriesLeftAddressPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
+                    propertyTriesLeftAuthPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
                                             + " " + triesLeft + " "
                                             + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
                 }
@@ -736,7 +736,7 @@ PageSecurityPinCodesForm {
 
             if(Constants.USE_SDK_PIN_UI_POPUP){
                 var triesLeft = 0
-                triesLeft = gapi.changeSignPin("","")
+                triesLeft = gapi.changeAddressPin("","")
                 if (triesLeft === 3) {
                     dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_PIN_MODIFY")
                     dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_PIN_MODIFY_SUCESS")
