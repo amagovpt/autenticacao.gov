@@ -71,6 +71,8 @@ Item {
 
     BusyIndicator {
         id: busyIndicator
+        anchors.verticalCenterOffset: -50 // Avoid conflit with mouseAreaToolTipXades
+        anchors.horizontalCenterOffset: 0
         running: false
         anchors.centerIn: parent
         // BusyIndicator should be on top of all other content

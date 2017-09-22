@@ -11,6 +11,7 @@ PageServicesSignAdvancedForm {
 
     ToolTip {
         id: controlToolTip
+        timeout: Constants.TOOLTIP_TIMEOUT_MS
         contentItem: Text {
             text: controlToolTip.text
             font: controlToolTip.font
@@ -635,10 +636,6 @@ PageServicesSignAdvancedForm {
             controlToolTip.y = propertyMouseAreaToolTipY + 22
             controlToolTip.open()
         }
-
-        onExited: {
-            controlToolTip.close()
-        }
     }
     propertyMouseAreaToolTipXades{
         onEntered: {
@@ -647,9 +644,6 @@ PageServicesSignAdvancedForm {
             controlToolTip.x = propertyMouseAreaToolTipXadesX - controlToolTip.width * 0.5
             controlToolTip.y = propertyMouseAreaToolTipY + 22
             controlToolTip.open()
-        }
-        onExited: {
-            controlToolTip.close()
         }
     }
 
