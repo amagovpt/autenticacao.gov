@@ -55,7 +55,7 @@ Item {
     }
     Item {
         id: itemForeignCitizen
-        visible: true
+        visible: false
         height: rowNacionalDistrict.height + rowMunicipality.height + rowCivilParish.height
                 + rowAbbreviationStreetType.height + rowDoorNo.height + rowPlace.height + rowZip4.height
                 + 6 * Constants.SIZE_ROW_V_SPACE
@@ -174,7 +174,7 @@ Item {
     }
     Item {
         id: itemNationalCitizen
-        visible: false
+        visible: true
         height: rowNacionalDistrict.height + rowMunicipality.height + rowCivilParish.height
                 + rowAbbreviationStreetType.height + rowDoorNo.height + rowPlace.height + rowZip4.height
                 + 6 * Constants.SIZE_ROW_V_SPACE

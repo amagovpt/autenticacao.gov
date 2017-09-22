@@ -36,7 +36,7 @@ PageServicesSignSimpleForm {
         }
         onSignalCardAccessError: {
             console.log("Sign simple Page onSignalCardAccessError")
-            if(cardLoaded ){
+            if(cardLoaded && error_code != GAPI.CardUserPinCancel){
                 if (error_code == GAPI.NoReaderFound) {
                     mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                             qsTranslate("Popup Card","STR_POPUP_ERROR")
@@ -62,9 +62,9 @@ PageServicesSignSimpleForm {
                             qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
                 }
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                cardLoaded = false
             }
             propertyBusyIndicator.running = false
-            cardLoaded = false
         }
         onSignalCardDataChanged: {
             console.log("Services Sign Simple --> Data Changed")

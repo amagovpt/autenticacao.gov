@@ -92,7 +92,7 @@ PageServicesSignAdvancedForm {
         }
         onSignalCardAccessError: {
             console.log("Sign Advanced Page onSignalCardAccessError")
-            if(cardLoaded ){
+            if(cardLoaded && error_code != GAPI.CardUserPinCancel){
                 if (error_code == GAPI.NoReaderFound) {
                     mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                             qsTranslate("Popup Card","STR_POPUP_ERROR")
@@ -118,9 +118,9 @@ PageServicesSignAdvancedForm {
                             qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
                 }
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                cardLoaded = false
             }
             propertyBusyIndicator.running = false
-            cardLoaded = false
         }
         onSignalCardDataChanged: {
             console.log("Services Sign Advanced --> Data Changed")

@@ -193,7 +193,7 @@ public:
     enum AddressInfoKey { District, Municipality, Parish, Streettype, Streetname, Buildingtype, Doorno, Floor, Side, Locality, Place, Zip4, Zip3, PostalLocality,
                           Foreigncountry, Foreignaddress, Foreigncity, Foreignregion, Foreignlocality, Foreignpostalcode};
 
-    enum CardAccessError { NoReaderFound, NoCardFound, CardReadError, SodCardReadError, CardUnknownError };
+    enum CardAccessError { NoReaderFound, NoCardFound, CardReadError, SodCardReadError, CardUserPinCancel, CardUnknownError };
 
     enum SignMessage { SignMessageOK, SignMessageTimestampFailed };
 
