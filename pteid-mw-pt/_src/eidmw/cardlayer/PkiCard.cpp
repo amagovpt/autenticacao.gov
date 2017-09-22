@@ -226,7 +226,7 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
 	bool defineNewPin = unblockFlags & UNBLOCK_FLAG_NEW_PIN || operation == PIN_OP_CHANGE;
 	bool bAskPIN = true;
 
-	if (operation == PIN_OP_VERIFY && !csPin1.empty())
+	if ((operation == PIN_OP_VERIFY || operation == PIN_OP_ACTIVATE) && !csPin1.empty())
 		bAskPIN = false;
 	if (operation == PIN_OP_CHANGE && !csPin1.empty())
 		bAskPIN = false;
@@ -242,7 +242,7 @@ bad_pin:
     // If no Pin(s) provided and it's no Pinpad reader -> ask Pins
     if (bAskPIN && !bUsePinpad)
 	{
-        showPinDialog(operation, Pin, csReadPin1, csReadPin2, pKey, wndGeometry );
+        showPinDialog(operation, Pin, csReadPin1, csReadPin2, pKey, wndGeometry);
 		pcsPin1 = &csReadPin1;
 		pcsPin2 = &csReadPin2;
 	}
@@ -635,12 +635,14 @@ DlgPinOperation CPkiCard::PinOperation2Dlg(tPinOperation operation)
 	switch(operation)
 	{
 		case PIN_OP_CHANGE:
-		 return DLG_PIN_OP_CHANGE;
+		   return DLG_PIN_OP_CHANGE;
 		 //We ignore the RESET with no change case for now
 		case PIN_OP_RESET:
-		 return DLG_PIN_OP_UNBLOCK_CHANGE;
+		   return DLG_PIN_OP_UNBLOCK_CHANGE;
+		case PIN_OP_ACTIVATE:
+		   return DLG_PIN_OP_ACTIVATE;
 		default:
-			return DLG_PIN_OP_VERIFY;
+		   return DLG_PIN_OP_VERIFY;
 	}
 }
 

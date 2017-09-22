@@ -44,6 +44,7 @@ typedef enum
 typedef enum
 {
     PIN_OP_VERIFY,
+    PIN_OP_ACTIVATE,
     PIN_OP_CHANGE,
     PIN_OP_RESET
 } tPinOperation;
