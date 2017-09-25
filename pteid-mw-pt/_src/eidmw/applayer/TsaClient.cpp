@@ -144,7 +144,7 @@ namespace eIDMW
 
 			struct curl_slist *headers= NULL;
 
-			headers = curl_slist_append(headers, "Content-Type: application/timestamp-request");
+			headers = curl_slist_append(headers, "Content-Type: application/timestamp-query");
 			headers = curl_slist_append(headers, "Content-Transfer-Encoding: binary");
 			headers = curl_slist_append(headers, PTEID_USER_AGENT);
 
