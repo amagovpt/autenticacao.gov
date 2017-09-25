@@ -293,6 +293,9 @@
     <ClInclude Include="poppler\XpdfPluginAPI.h" />
     <ClInclude Include="poppler\XRef.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="pteid-poppler.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
