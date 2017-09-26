@@ -7,8 +7,10 @@ import "../../scripts/Constants.js" as Constants
 
 Item {
     anchors.fill: parent
-    enabled: false
-    opacity: 0.3
+    property alias propertyButtonSearch: buttonSearch
+    property alias propertyProgressBar: progressBar
+    property alias propertyTextDescription: textDescription
+    property alias propertyButtonStartUpdate: buttonStartUpdate
     Item {
         width: parent.width
         height: parent.height
@@ -48,8 +50,26 @@ Item {
             Layout.fillWidth: true
         }
         Item {
-            id: rawButtonSearch
+            id: textProgressBar
             anchors.top: textDescription.bottom
+            anchors.topMargin: Constants.SIZE_TEXT_BODY
+            width: parent.width
+            height: 50
+            ProgressBar {
+                id: progressBar
+                width: parent.width
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: 20
+                to: 100
+                value: 0
+                visible: false
+                indeterminate: false
+                z:1
+            }
+        }
+        Item {
+            id: rawButtonSearch
+            anchors.top: textProgressBar.bottom
             anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
             width: parent.width
             height: Constants.HEIGHT_BOTTOM_COMPONENT
@@ -62,6 +82,24 @@ Item {
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 anchors.horizontalCenter: parent.horizontalCenter
+            }
+        }
+        Item {
+            id: rawButtonStartUpdate
+            anchors.top: rawButtonSearch.bottom
+            anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+            width: parent.width
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            Button {
+                id: buttonStartUpdate
+                text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_BUTTON_START")
+                width: Constants.WIDTH_BUTTON
+                height: parent.height
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: false
             }
         }
     }

@@ -210,12 +210,15 @@ public:
         , LANG_LAST
     };
 
+    enum AutoUpdateMessage { GenericError, NoUpdatesAvailable, DownloadFailed, LinuxNotSupported,UpdatesAvailable,
+                           UnableSaveFile};
     Q_ENUMS(CardAccessError)
     Q_ENUMS(eCustomEventType)
     Q_ENUMS(IDInfoKey)
     Q_ENUMS(AddressInfoKey)
     Q_ENUMS(UI_LANGUAGE)
     Q_ENUMS(SignMessage)
+    Q_ENUMS(AutoUpdateMessage)
 
 
     bool isAddressLoaded() {return m_addressLoaded; }

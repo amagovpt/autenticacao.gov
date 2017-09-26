@@ -854,17 +854,58 @@ click to browse the file
 <context>
     <name>PageDefinitionsUpdates</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="28"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="30"/>
         <source>STR_UPDATE_TITLE</source>
         <translation>Updates</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="43"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="95"/>
+        <source>STR_UPDATE_BUTTON_START</source>
+        <translation>Install</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="14"/>
+        <source>STR_UPDATE_ERROR</source>
+        <translation>Unable to download the update please check your Network Connection.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="17"/>
+        <source>STR_UPDATE_NO_UPDATES</source>
+        <translation>No updates available at the moment</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="20"/>
+        <source>STR_UPDATE_LINUX_NOT_SUPPORTED</source>
+        <translation>Your Linux distribution is not supported by Automatic Updates</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="23"/>
+        <source>STR_UPDATE_SAVE_FILE</source>
+        <translation>Unable to save the update.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="26"/>
+        <source>STR_UPDATE_DOWNLOAD_FAIL</source>
+        <translation>Download failed.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="40"/>
+        <source>STR_UPDATE_AVAILABLE</source>
+        <translation>There are updates available press Install do perform the updates.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="47"/>
+        <source>STR_UPDATE_STARTING_DOWNLOAD</source>
+        <translation>Downloading</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="58"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="45"/>
         <source>STR_UPDATE_TEXT</source>
         <translation>Press the button to check for available updates.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="58"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="78"/>
         <source>STR_UPDATE_BUTTON</source>
         <translation>Check for updates</translation>
     </message>
@@ -1148,7 +1189,7 @@ click to browse the file
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1034"/>
         <source>STR_SCAP_MAX_FILESIZE</source>
-        <translation type="unfinished">File size was exceeded. Max supported file size is</translation>
+        <translation>File size was exceeded. Max supported file size is</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1059"/>

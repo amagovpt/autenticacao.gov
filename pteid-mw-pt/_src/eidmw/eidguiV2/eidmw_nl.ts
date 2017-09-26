@@ -854,17 +854,58 @@ clique para procurar o ficheiro
 <context>
     <name>PageDefinitionsUpdates</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="28"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="30"/>
         <source>STR_UPDATE_TITLE</source>
         <translation>Atualizações</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="43"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="95"/>
+        <source>STR_UPDATE_BUTTON_START</source>
+        <translation>Instalar</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="14"/>
+        <source>STR_UPDATE_ERROR</source>
+        <translation>Impossível transferir o ficheiro. Verifique a sua ligação à internet.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="17"/>
+        <source>STR_UPDATE_NO_UPDATES</source>
+        <translation>Não existem atualizações de momento</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="20"/>
+        <source>STR_UPDATE_LINUX_NOT_SUPPORTED</source>
+        <translation>A sua distribuição Linux não é suportada pelas Atualizações Automáticas</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="23"/>
+        <source>STR_UPDATE_SAVE_FILE</source>
+        <translation>Impossível guardar o ficheiro.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="26"/>
+        <source>STR_UPDATE_DOWNLOAD_FAIL</source>
+        <translation>A Transferência falhou.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="40"/>
+        <source>STR_UPDATE_AVAILABLE</source>
+        <translation>Existem atualizações disponíves. Clique em Instalar para prosseguir.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="47"/>
+        <source>STR_UPDATE_STARTING_DOWNLOAD</source>
+        <translation>A transferir</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="58"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="45"/>
         <source>STR_UPDATE_TEXT</source>
         <translation>Pressione o botão para verificar se existem atualizações disponíveis.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="58"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="78"/>
         <source>STR_UPDATE_BUTTON</source>
         <translation>Procurar atualizações</translation>
     </message>
@@ -1148,7 +1189,7 @@ clique para procurar o ficheiro
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1034"/>
         <source>STR_SCAP_MAX_FILESIZE</source>
-        <translation type="unfinished">Tamanho de ficheiro foi excedido. Tamanho máximo suportado é de </translation>
+        <translation>Tamanho de ficheiro foi excedido. Tamanho máximo suportado é de </translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1059"/>
