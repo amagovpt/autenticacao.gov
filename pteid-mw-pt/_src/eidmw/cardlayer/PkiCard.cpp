@@ -263,7 +263,7 @@ bad_pin:
     // add CLA, INS, P1, P2 (we only need a special P1 value if Unblocking PIN without defining new PIN)
     CByteArray oAPDU = MakePinCmd(operation, Pin, operation == PIN_OP_RESET && !defineNewPin); 
     // add Lc
-    oAPDU.Append((unsigned char) oPinBuf.Size());  
+    oAPDU.Append((unsigned char) oPinBuf.Size());
     oAPDU.Append(oPinBuf);
 
 	CByteArray oResp;
@@ -318,6 +318,12 @@ bad_pin:
 	{
 		DlgPinUsage usage = PinUsage2Dlg(Pin, pKey);
 		DlgRet dlgret = DlgBadPin(usage, utilStringWiden(Pin.csLabel).c_str(), ulRemaining, wndGeometry );
+
+		MWLOG(LEV_DEBUG, MOD_CAL, L"DlgBadPin returned %d", dlgret);
+
+		if (dlgret == DLG_CANCEL)
+			throw CMWEXCEPTION(EIDMW_ERR_PIN_CANCEL);
+		
 		if (0 != ulRemaining && DLG_RETRY == dlgret)
 			goto bad_pin;
 	}
