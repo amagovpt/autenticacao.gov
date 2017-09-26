@@ -247,6 +247,7 @@ public slots:
     void setAddressLoaded(bool addressLoaded) {m_addressLoaded = addressLoaded; }
     void startCardReading();
     int getStringByteLength(QString text);
+    long getFileSize(QString filePath);
     void startReadingPersoNotes();
     void startWritingPersoNotes(QString text);
     void startReadingAddress();

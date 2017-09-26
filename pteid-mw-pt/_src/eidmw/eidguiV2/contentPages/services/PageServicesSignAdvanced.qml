@@ -399,11 +399,8 @@ PageServicesSignAdvancedForm {
             var loadedFilePath = filesModel.get(0).fileUrl
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
-            if (Qt.platform.os === "windows") {
-                outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
-            }else{
-                outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-            }
+            outputFile = stripFilePrefix(outputFile)
+
             var page = propertySpinBoxControl.value
             var reason = propertyTextFieldReason.text
             var location = propertyTextFieldLocal.text
@@ -1015,19 +1012,30 @@ PageServicesSignAdvancedForm {
                 if (propertyRadioButtonPADES.checked) {
                     if(propertySwitchSignAdd.checked){
                         var count = 0
+                        //15 MB filesize limit for SCAP
+                        var MAX_SIZE = 15 * 1024 *1024
+                        var outputNativePath = stripFilePrefix(propertyListViewFiles.model.get(0).fileUrl)
                         for (var i = 0; i < entityAttributesModel.count; i++){
                             if(entityAttributesModel.get(i).checkBoxAttr == true){
                                 count++
                             }
                         }
-                        if(count == 0){
+                        if(count == 0) {
                             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                                     qsTranslate("PageServicesSign","STR_SCAP_WARNING")
                             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                                     qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
                             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-                        }else{
-                            var outputFile =  propertyListViewFiles.model.get(0).fileUrl
+                        }
+                        else if (gapi.getFileSize(outputNativePath) > MAX_SIZE) {
+                             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                                    qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+                            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                                    qsTranslate("PageServicesSign","STR_SCAP_MAX_FILESIZE") + " 15 MB"
+                            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+                        }
+                        else {
+                            var outputFile = propertyListViewFiles.model.get(0).fileUrl
                             outputFile =  outputFile.substring(0, outputFile.lastIndexOf('.'));
                             propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
                             propertyFileDialogOutput.open()
@@ -1252,6 +1260,15 @@ PageServicesSignAdvancedForm {
                 qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
         propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
         gapi.startCardReading()
+    }
+
+    function stripFilePrefix(filePath) {
+        if (Qt.platform.os === "windows") {
+               return filePath.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+        }
+        else {
+            return filePath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+        }
     }
 
     function forceScrollandFocus() {

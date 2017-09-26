@@ -45,6 +45,16 @@ void GAPI::initTranslation() {
     }
 }
 
+
+long GAPI::getFileSize(QString filePath) {
+    QFile file(filePath);
+      if (!file.exists()) {
+          qDebug() << "GAPI::getFileSize() - File missing: " << filePath;
+          return 1;
+      }
+      return file.size();
+}
+
 bool GAPI::LoadTranslationFile(GenPur::UI_LANGUAGE NewLanguage)
 {
 
