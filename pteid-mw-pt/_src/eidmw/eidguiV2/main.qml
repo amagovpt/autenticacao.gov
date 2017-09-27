@@ -6,6 +6,8 @@ import QtQuick.Controls.Universal 2.1
 import Qt.labs.settings 1.0
 import QtQuick.Window 2.2
 
+import "scripts/Functions.js" as Functions
+
 //Import C++ defined enums
 import eidguiV2 1.0
 
@@ -37,9 +39,9 @@ Window {
 
     onWidthChanged: {
         console.log("Resizing app width: " + width + "height" + height)
-        mainFormID.propertyMainMenuView.width = getMainMenuWidth(width)
-        mainFormID.propertySubMenuView.width = getSubMenuWidth(width)
-        mainFormID.propertyContentPagesView.width = getContentPagesMenuWidth(width)
+        mainFormID.propertyMainMenuView.width = Functions.getMainMenuWidth(width)
+        mainFormID.propertySubMenuView.width = Functions.getSubMenuWidth(width)
+        mainFormID.propertyContentPagesView.width = Functions.getContentPagesMenuWidth(width)
     }
 
     Connections {
@@ -548,7 +550,7 @@ Load language error. Please reinstall the application"
                 fillMode: Image.PreserveAspectFit
                 x: parent.width * Constants.IMAGE_ARROW_MAIN_MENU_RELATIVE
                 anchors.verticalCenter: parent.verticalCenter
-                source: getMainMenuArrowSource(index, mouseAreaMainMenu.containsMouse)
+                source: Functions.getMainMenuArrowSource(index, mouseAreaMainMenu.containsMouse)
                 visible: mainFormID.state === "STATE_HOME" ?
                              false:
                              true
@@ -563,6 +565,9 @@ Load language error. Please reinstall the application"
                              true
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.bottom
+            }
+            Component.onDestruction: {
+                imageArrowMainMenu.source = ""
             }
         }
     }
@@ -618,9 +623,14 @@ Load language error. Please reinstall the application"
                 height: Constants.SIZE_IMAGE_BOTTOM_MENU
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
-                source: getBottomMenuImgSource(index,mouseAreaMainMenuBottom.containsMouse)
+                source: Functions.getBottomMenuImgSource(index,mouseAreaMainMenuBottom.containsMouse)
+
+            }
+            Component.onDestruction: {
+                imageMainMenuBottom.source = ""
             }
         }
+
     }
     Component {
         id: subMenuDelegate
@@ -648,7 +658,7 @@ Load language error. Please reinstall the application"
             }
             Text {
                 text: qsTranslate("MainMenuModel", subName)
-                color: getSubNameColor(index, mouseAreaSubMenu.containsMouse)
+                color: Functions.getSubNameColor(index, mouseAreaSubMenu.containsMouse)
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 font.weight: mouseAreaSubMenu.containsMouse ?
@@ -668,16 +678,19 @@ Load language error. Please reinstall the application"
                 anchors.right: parent.right
                 anchors.rightMargin: Constants.IMAGE_ARROW_SUB_MENU_MARGIN
                 anchors.verticalCenter: parent.verticalCenter
-                source: getSubMenuArrowSource(index, mouseAreaSubMenu.containsMouse)
+                source: Functions.getSubMenuArrowSource(index, mouseAreaSubMenu.containsMouse)
             }
             Rectangle {
                 id: subMenuViewHorizontalLine
                 width: Constants.MAIN_MENU_LINE_H_SIZE
                 height: Constants.MAIN_MENU_LINE_V_SIZE
                 color: Constants.COLOR_MAIN_DARK_GRAY
-                visible: Boolean(getIsVisibleSubMenuViewHorizontalLine(index))
+                visible: Boolean(Functions.getIsVisibleSubMenuViewHorizontalLine(index))
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.bottom
+            }
+            Component.onDestruction: {
+                imageArrowSubMenu.source = ""
             }
         }
     }
@@ -687,143 +700,5 @@ Load language error. Please reinstall the application"
         gapi.setEventCallbacks()
         controler.initTranslation()
         gapi.initTranslation()
-    }
-
-    function getMainMenuWidth(parentWidth){
-        var handColor
-
-        switch(mainFormID.state) {
-        case "STATE_FIRST_RUN":
-            handColor = parentWidth * 2 * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
-            break;
-        case "STATE_HOME":
-            handColor = parentWidth
-            break;
-        case "STATE_EXPAND":
-            handColor = parentWidth * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
-            break;
-        default: //STATE_NORMAL
-            handColor = parentWidth * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
-        }
-        return handColor
-    }
-    function getSubMenuWidth(parentWidth){
-        var handColor
-
-        switch(mainFormID.state) {
-        case "STATE_FIRST_RUN":
-            handColor = 0
-            break;
-        case "STATE_HOME":
-            handColor = 0
-            break;
-        case "STATE_EXPAND":
-            handColor = 0
-            break;
-        default: //STATE_NORMAL
-            handColor = parentWidth * Constants.SUB_MENU_VIEW_RELATIVE_SIZE
-        }
-        return handColor
-    }
-    function getContentPagesMenuWidth(parentWidth){
-        var handColor
-
-        switch(mainFormID.state) {
-        case "STATE_FIRST_RUN":
-            handColor = parentWidth * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
-            break;
-        case "STATE_HOME":
-            handColor = 0
-            break;
-        case "STATE_EXPAND":
-            handColor = parentWidth * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE +
-                    parentWidth * Constants.SUB_MENU_VIEW_RELATIVE_SIZE
-            break;
-        default: //STATE_NORMAL
-            handColor = parentWidth * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
-        }
-        return handColor
-    }
-
-    function getIsVisibleSubMenuViewHorizontalLine(index)
-    {
-        var handVisible
-        if(mainFormID.propertySubMenuListView.count -1 === index ||
-                mainFormID.propertySubMenuListView.currentIndex === index ||
-                mainFormID.propertySubMenuListView.currentIndex -1 === index)
-        {
-            handVisible =  false
-        }else{
-            handVisible =  true
-        }
-        return handVisible
-    }
-
-    function getSubNameColor(index, containsMouse)
-    {
-        var handColor
-        if(mainFormID.propertySubMenuListView.currentIndex === index)
-        {
-            handColor =  Constants.COLOR_TEXT_SUB_MENU_SELECTED
-        }else{
-            if(containsMouse === true)
-            {
-                handColor = Constants.COLOR_TEXT_SUB_MENU_MOUSE_OVER
-            }else{
-                handColor = Constants.COLOR_TEXT_SUB_MENU_DEFAULT
-            }
-        }
-        return handColor
-    }
-
-    function getSubMenuArrowSource(index, containsMouse)
-    {
-        var handSource
-        if(mainFormID.propertySubMenuListView.currentIndex === index)
-        {
-            handSource =  "images/arrow-right_white_AMA.png"
-        }else{
-            if(containsMouse === true)
-            {
-                handSource = "images/arrow-right_hover.png"
-            }else{
-                handSource = ""
-            }
-        }
-        return handSource
-    }
-
-    function getMainMenuArrowSource(index, containsMouse)
-    {
-        var handSource
-        if(mainFormID.propertyMainMenuListView.currentIndex === index)
-        {
-            handSource =  "images/arrow-right_white_AMA.png"
-        }else{
-            if(containsMouse === true)
-            {
-                handSource = "images/arrow-right_hover.png"
-            }else{
-                handSource = ""
-            }
-        }
-        return handSource
-    }
-
-    function getBottomMenuImgSource(index, containsMouse)
-    {
-        var handSource
-        if(mainFormID.propertyMainMenuBottomListView.currentIndex === index)
-        {
-            handSource =  mainFormID.propertyMainMenuBottomListView.model.get(index).imageUrlSel
-        }else{
-            if(containsMouse === true)
-            {
-                handSource = mainFormID.propertyMainMenuBottomListView.model.get(index).imageUrlSel
-            }else{
-                handSource = mainFormID.propertyMainMenuBottomListView.model.get(index).imageUrl
-            }
-        }
-        return handSource
     }
 }
