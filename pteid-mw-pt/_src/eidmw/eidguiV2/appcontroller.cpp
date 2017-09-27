@@ -59,6 +59,8 @@ AppController::AppController(GUISettings& settings,QObject *parent) :
 
 void AppController::initTranslation(){
 
+    QString     appPath = QCoreApplication::applicationDirPath();
+    m_Settings.setExePath(appPath);
     GenPur::UI_LANGUAGE CurrLng   = m_Settings.getGuiLanguageCode();
     if (LoadTranslationFile(CurrLng)==false){
         emit signalLanguageChangedError();
@@ -71,9 +73,9 @@ bool AppController::LoadTranslationFile(GenPur::UI_LANGUAGE NewLanguage)
     QString strTranslationFile;
     strTranslationFile = QString("eidmw_") + GenPur::getLanguage(NewLanguage);
 
-    qDebug() << "C++: AppController LoadTranslationFile" << strTranslationFile;
+    qDebug() << "C++: AppController LoadTranslationFile" << strTranslationFile << m_Settings.getExePath();
 
-    if (!m_translator.load(strTranslationFile))
+    if (!m_translator.load(strTranslationFile,m_Settings.getExePath()+"/"))
     {
         // this should not happen, since we've built the menu with the translation filenames
         qDebug() << "C++: AppController LoadTranslationFile Error";
