@@ -706,7 +706,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="238"/>
         <source>STR_UK_NAME_OP</source>
-        <translation>Inglês</translation>
+        <translation>English</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="261"/>
