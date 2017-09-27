@@ -39,7 +39,6 @@ RESOURCES += \
         resources.qrc \
         qtquickcontrols2.conf
 
-#TODO: Copy the translation files to the destination directory
 TRANSLATIONS = eidmw_nl.ts \
                eidmw_en.ts \
 
