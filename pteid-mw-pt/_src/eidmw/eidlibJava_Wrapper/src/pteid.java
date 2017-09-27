@@ -511,8 +511,12 @@ public class pteid {
             try {
 		        boolean mode = activateMode == MODE_ACTIVATE_BLOCK_PIN;
                 idCard.Activate(actPin, pb, mode);
-            } catch (Exception ex) {
-                throw new PteidException();
+            } 
+            catch (PTEID_Exception ex) {
+                if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_PIN_CANCEL)
+                    throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
+                else
+                    throw new PteidException(ex.GetError());
             }
         }
     }
