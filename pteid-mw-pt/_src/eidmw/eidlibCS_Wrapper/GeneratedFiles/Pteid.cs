@@ -533,7 +533,10 @@ namespace eidpt
                 idCard.Activate(actPin, pb, mode);
             }
             catch (PTEID_Exception ex) {
-                throw new PteidException(ex.GetError());
+				if (ex.GetError() == pteidlib_dotNet.EIDMW_ERR_PIN_CANCEL)
+					throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
+				else
+					throw new PteidException(ex.GetError());
             }
         }
     }
