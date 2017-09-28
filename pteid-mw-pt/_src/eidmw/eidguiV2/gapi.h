@@ -173,6 +173,7 @@ private:
 
 class GAPI : public QObject
 {
+    #define TIMERREADERLIST 5000
     Q_OBJECT
     Q_PROPERTY(QMap<IDInfoKey, QString> m_data
                NOTIFY signalCardDataChanged)
@@ -316,6 +317,8 @@ public slots:
     bool customSignImageExist(void);
     void customSignRemove(void);
 
+    void updateReaderList( void );
+
 signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed
@@ -377,6 +380,8 @@ private:
     void fillCertificateList (void );
     void getCardInstance(PTEID_EIDCard *&new_card);
     bool useCustomSignature(void);
+    void stopAllEventCallbacks(void);
+    void cleanupCallbackData(void);
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;
@@ -398,6 +403,9 @@ private:
 
     QImage m_custom_image;
     QByteArray m_jpeg_scaled_data;
+
+    QTimer* m_timerReaderList;
+
 protected:
     QTranslator m_translator;
 private slots:

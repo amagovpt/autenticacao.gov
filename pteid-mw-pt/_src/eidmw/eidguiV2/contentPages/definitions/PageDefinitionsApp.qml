@@ -14,28 +14,37 @@ PageDefinitionsAppForm {
             console.log("onSignalSetReaderComboIndex index = " + selected_reader)
             propertyComboBoxReader.currentIndex = selected_reader
         }
+        onSignalCardAccessError:{
+            propertyComboBoxReader.model = gapi.getRetReaderList()
+        }
+        onSignalCardDataChanged:{
+            propertyComboBoxReader.model = gapi.getRetReaderList()
+        }
+        onSignalCardChanged:{
+            propertyComboBoxReader.model = gapi.getRetReaderList()
+        }
     }
     Connections {
         target: controler
     }
 
     propertyComboBoxReader.onActivated:  {
-            console.log("propertyComboBoxReader onActivated index = "
-                        + propertyComboBoxReader.currentIndex)
-            gapi.setReaderByUser(propertyComboBoxReader.currentIndex)
+        console.log("propertyComboBoxReader onActivated index = "
+                    + propertyComboBoxReader.currentIndex)
+        gapi.setReaderByUser(propertyComboBoxReader.currentIndex)
     }
     propertyCheckboxAutoRead{
         onCheckedChanged: propertyCheckboxAutoRead.checked ? controler.setAutoCardReadingValue(true) :
-                                                            controler.setAutoCardReadingValue(false)
+                                                             controler.setAutoCardReadingValue(false)
 
     }
     propertyCheckboxAutoStart{
         onCheckedChanged: propertyCheckboxAutoStart.checked ? controler.setStartAutoValue(true) :
-                                                            controler.setStartAutoValue(false)
+                                                              controler.setStartAutoValue(false)
     }
     propertyCheckboxStart{
         onCheckedChanged: propertyCheckboxStart.checked ? controler.setStartMinimizedValue(true) :
-                                                            controler.setStartMinimizedValue(false)
+                                                          controler.setStartMinimizedValue(false)
     }
     propertyRadioButtonUK{
         onCheckedChanged: {
@@ -90,19 +99,19 @@ PageDefinitionsAppForm {
     }
     propertyCheckboxShowPhoto{
         onCheckedChanged: propertyCheckboxShowPhoto.checked ? controler.setShowPictureValue(true) :
-                                                            controler.setShowPictureValue(false)
+                                                              controler.setShowPictureValue(false)
     }
     propertyCheckboxShowAnime{
         onCheckedChanged: propertyCheckboxShowAnime.checked ? controler.setShowAnimationsValue(true) :
-                                                            controler.setShowAnimationsValue(false)
+                                                              controler.setShowAnimationsValue(false)
     }
     propertyCheckboxRegister{
         onCheckedChanged: propertyCheckboxRegister.checked ? controler.setRegCertValue(true) :
-                                                            controler.setRegCertValue(false)
+                                                             controler.setRegCertValue(false)
     }
     propertyCheckboxRemove{
         onCheckedChanged: propertyCheckboxRemove.checked ? controler.setRemoveCertValue(true) :
-                                                            controler.setRemoveCertValue(false)
+                                                           controler.setRemoveCertValue(false)
     }
     Connections {
         target: propertyTextFieldTimeStamp
@@ -121,7 +130,7 @@ PageDefinitionsAppForm {
     propertyCheckboxProxy{
         onCheckedChanged: if (!propertyCheckboxProxy.checked ){
                               controler.setProxyHostValue("")
-                               controler.setProxyPortValue(0)
+                              controler.setProxyPortValue(0)
                               propertyTextFieldAdress.text = ""
                               propertyTextFieldPort.text = ""
                           }
@@ -167,10 +176,7 @@ PageDefinitionsAppForm {
     Component.onCompleted: {
         console.log("Page difinitions onCompleted")
 
-        for ( var i = 0; i < gapi.getRetReaderList().length; ++i ) {
-            console.log("Reader List " + "i = " + i +" : "+ gapi.getRetReaderList()[i])
-            propertyComboBoxReader.model = gapi.getRetReaderList()
-        }
+        propertyComboBoxReader.model = gapi.getRetReaderList()
 
         propertyCheckboxAutoRead.checked = controler.getAutoCardReadingValue()
         if (Qt.platform.os === "linux") {

@@ -22,6 +22,9 @@ using namespace eIDMW;
 
 #define TRIES_LEFT_ERROR    1000
 
+static  bool    g_cleaningCallback=false;
+static  int g_runningCallback=0;
+
 /*
     GAPI - Graphic Application Programming Interface
 */
@@ -35,6 +38,12 @@ GAPI::GAPI(QObject *parent) :
     m_addressLoaded = false;
     m_shortcutFlag = 0;
 
+    //----------------------------------
+    // set a timer to check if the number of card readers is changed
+    //----------------------------------
+    m_timerReaderList = new QTimer(this);
+    connect(m_timerReaderList, SIGNAL(timeout()), this, SLOT(updateReaderList()));
+    m_timerReaderList->start(TIMERREADERLIST);
 }
 
 void GAPI::initTranslation() {
@@ -1886,9 +1895,7 @@ void GAPI::connectToCard() {
 //****************************************************
 void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBackData)
 {
-    //------------------------------------
-    // TODO: cleanup the callback data
-    //------------------------------------
+    g_runningCallback++;
 
     try
     {
@@ -1915,6 +1922,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
             pCallBackData->getMainWnd()->setAddressLoaded(false);
             pCallBackData->getMainWnd()->resetReaderSelected();
 
+            g_runningCallback--;
             return;
         }
         //------------------------------------
@@ -1935,18 +1943,46 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
         emit pCallBackData->getMainWnd()->signalCardAccessError(GAPI::CardUnknownError);
         // we catch ALL exceptions. This is because otherwise the thread throwing the exception stops
     }
+    g_runningCallback--;
 }
 
+//*****************************************************
+// update the readerlist. In case a reader is added to the machine
+// at runtime.
+//*****************************************************
+void GAPI::updateReaderList( void )
+{
+    //----------------------------------------------------
+    // check if the number of readers is changed
+    //----------------------------------------------------
+    try
+    {
+        if (ReaderSet.isReadersChanged())
+        {
+            stopAllEventCallbacks();
+            ReaderSet.releaseReaders();
+
+                    if ( 0 == ReaderSet.readerCount() ){
+                        emit signalCardAccessError(NoReaderFound);
+                      }
+        }
+        if ( 0 == m_callBackHandles.size() )
+        {
+            setEventCallbacks();
+        }
+    }
+    catch(...)
+    {
+        stopAllEventCallbacks();
+        ReaderSet.releaseReaders();
+    }
+}
 void GAPI::setEventCallbacks( void )
 {
     //----------------------------------------
     // for all the readers, create a callback such we can know
     // afterwards, which reader called us
     //----------------------------------------
-
-    //------------------------------------
-    // TODO:     update the readerlist
-    //------------------------------------
 
     try
     {
@@ -1969,6 +2005,55 @@ void GAPI::setEventCallbacks( void )
     {
         emit signalCardChanged(ET_UNKNOWN);
     }
+}
+
+//*****************************************************
+// stop the event callbacks and delete the corresponding callback data
+// objects.
+//*****************************************************
+void GAPI::stopAllEventCallbacks( void )
+{
+
+    for (tCallBackHandles::iterator it = m_callBackHandles.begin()
+            ; it != m_callBackHandles.end()
+            ; it++
+    )
+    {
+        PTEID_ReaderContext& readerContext = ReaderSet.getReaderByName(it.key().toLatin1());
+        unsigned long handle = it.value();
+        readerContext.StopEventCallback(handle);
+    }
+    m_callBackHandles.clear();
+    cleanupCallbackData();
+}
+
+//*****************************************************
+// cleanup the callback data
+//*****************************************************
+void GAPI::cleanupCallbackData(void)
+{
+
+    while(g_runningCallback)
+    {
+#ifdef WIN32
+        ::Sleep(100);
+#else
+        ::usleep(100000);
+#endif
+    }
+
+    g_cleaningCallback = true;
+
+    for (tCallBackData::iterator it = m_callBackData.begin()
+            ; it != m_callBackData.end()
+            ; it++
+    )
+    {
+        CallBackData* pCallbackData = it.value();
+        delete pCallbackData;
+    }
+    m_callBackData.clear();
+    g_cleaningCallback = false;
 }
 
 void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap)
