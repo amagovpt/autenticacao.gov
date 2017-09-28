@@ -797,9 +797,12 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder,const 
 	case FWK_ALGO_MD5:
 		nid = EVP_MD_type(EVP_md5());
 		break;
-    case FWK_ALGO_SHA1:
+	case FWK_ALGO_SHA1:
 		nid = EVP_MD_type(EVP_sha1());
 		break;
+	case FWK_ALGO_SHA256:
+		nid = EVP_MD_type(EVP_sha256());
+		break;	
 	}
 
 	if (!(astype = ASN1_TYPE_new()))
