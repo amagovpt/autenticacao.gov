@@ -2132,12 +2132,12 @@ void GAPI::fillCertificateList ( void )
     END_TRY_CATCH
 }
 
-QString GAPI::getCurrentPath(void){
-    return m_Settings.getExePath();
+QString GAPI::getCachePath(void){
+    return m_Settings.getPteidCachedir();
 }
 
 bool GAPI::customSignImageExist(void){
-    QString path = m_Settings.getExePath()+"/CustomSignPicture.jpeg";
+    QString path = m_Settings.getPteidCachedir()+"/CustomSignPicture.jpeg";
     QFileInfo check_file(path);
     // check if file exists and if yes: Is it really a file and no directory?
     if (check_file.exists()) {
@@ -2148,14 +2148,14 @@ bool GAPI::customSignImageExist(void){
 }
 
 void GAPI::customSignRemove(void){
-    QString path = m_Settings.getExePath()+"/CustomSignPicture.jpeg";
+    QString path = m_Settings.getPteidCachedir()+"/CustomSignPicture.jpeg";
     QFile file (path);
     file.remove();
 }
 
 bool GAPI::useCustomSignature(void){
     // Detect Custom Signature Image
-    m_custom_image = QImage(m_Settings.getExePath()+"/CustomSignPicture.jpeg");
+    m_custom_image = QImage(m_Settings.getPteidCachedir()+"/CustomSignPicture.jpeg");
     if (!m_custom_image.isNull())
     {
         qDebug() << "Using Custom Picture to CC sign";

@@ -1197,7 +1197,7 @@ PageServicesSignAdvancedForm {
                     propertySpinBoxControl.to = getMinimumPage()
                     propertyPDFPreview.propertyBackground.cache = false
                     propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
-                    var urlCustomImage = gapi.getCurrentPath()+"/CustomSignPicture.jpeg"
+                    var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpeg"
                     if(gapi.customSignImageExist()){
                         if (Qt.platform.os === "windows") {
                             urlCustomImage = "file:///"+urlCustomImage

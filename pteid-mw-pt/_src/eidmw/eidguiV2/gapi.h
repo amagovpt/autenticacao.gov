@@ -313,7 +313,7 @@ public slots:
 
     void initTranslation();
 
-    QString getCurrentPath(void);
+    QString getCachePath(void);
     bool customSignImageExist(void);
     void customSignRemove(void);
 

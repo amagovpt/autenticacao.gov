@@ -352,7 +352,7 @@ public:
 
 		{
 			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CACHEDIR);
-			QString m_pteid_cachedir = config.getString();
+            m_pteid_cachedir = config.getString();
 		}
 	}
 	//------------------------------------------------------
