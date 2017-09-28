@@ -1,3 +1,9 @@
+pteid-mw (2.4.4svn5176-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 5176 - Public Release supporting new cert chain with 10 year citizen certificates
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 28 Sep 2017 16:37:50 +0100
+
 pteid-mw (2.4.0svn4973-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 4973
