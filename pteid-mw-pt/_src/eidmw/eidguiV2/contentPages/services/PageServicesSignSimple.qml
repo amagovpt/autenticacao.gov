@@ -721,7 +721,17 @@ PageServicesSignSimpleForm {
                 propertySpinBoxControl.to = pageCount
                 propertyPDFPreview.propertyBackground.cache = false
                 propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
-                propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
+                var urlCustomImage = gapi.getCurrentPath()+"/CustomSignPicture.jpeg"
+                if(gapi.customSignImageExist()){
+                    if (Qt.platform.os === "windows") {
+                        urlCustomImage = "file:///"+urlCustomImage
+                    }else{
+                        urlCustomImage = "file://"+urlCustomImage
+                    }
+                    propertyPDFPreview.propertyDragSigImg.source = urlCustomImage
+                }else{
+                    propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
+                }
                 propertyPDFPreview.propertyDragSigImg.visible = true
                 propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
                 propertyPDFPreview.propertyDragSigWaterImg.visible = true

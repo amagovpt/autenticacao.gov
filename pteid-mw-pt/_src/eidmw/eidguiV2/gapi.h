@@ -312,6 +312,10 @@ public slots:
 
     void initTranslation();
 
+    QString getCurrentPath(void);
+    bool customSignImageExist(void);
+    void customSignRemove(void);
+
 signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed
@@ -372,6 +376,7 @@ private:
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
     void fillCertificateList (void );
     void getCardInstance(PTEID_EIDCard *&new_card);
+    bool useCustomSignature(void);
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;
@@ -390,6 +395,9 @@ private:
 
     tCallBackHandles		m_callBackHandles;
     tCallBackData			m_callBackData;
+
+    QImage m_custom_image;
+    QByteArray m_jpeg_scaled_data;
 protected:
     QTranslator m_translator;
 private slots:

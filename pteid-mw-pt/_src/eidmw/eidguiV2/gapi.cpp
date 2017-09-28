@@ -1257,6 +1257,9 @@ void GAPI::doSignPDF(SignParams &params) {
     if (params.isSmallSignature > 0)
         sig_handler.enableSmallSignatureFormat();
 
+    if(useCustomSignature())
+        sig_handler.setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
+
     card->SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
                  params.location.toUtf8().data(), params.reason.toUtf8().data(),
                  params.outputFile.toUtf8().data());
@@ -1290,6 +1293,9 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
         sig_handler->enableTimestamp();
     if (params.isSmallSignature > 0)
         sig_handler->enableSmallSignatureFormat();
+
+    if(useCustomSignature())
+        sig_handler->setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
 
     card->SignPDF(*sig_handler, params.page, params.coord_x, params.coord_y,
                  params.location.toUtf8().data(), params.reason.toUtf8().data(),
@@ -2039,4 +2045,43 @@ void GAPI::fillCertificateList ( void )
 
     emit signalCertificatesChanged(certificatesMap);
     END_TRY_CATCH
+}
+
+QString GAPI::getCurrentPath(void){
+    return m_Settings.getExePath();
+}
+
+bool GAPI::customSignImageExist(void){
+    QString path = m_Settings.getExePath()+"/CustomSignPicture.jpeg";
+    QFileInfo check_file(path);
+    // check if file exists and if yes: Is it really a file and no directory?
+    if (check_file.exists()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void GAPI::customSignRemove(void){
+    QString path = m_Settings.getExePath()+"/CustomSignPicture.jpeg";
+    QFile file (path);
+    file.remove();
+}
+
+bool GAPI::useCustomSignature(void){
+    // Detect Custom Signature Image
+    m_custom_image = QImage(m_Settings.getExePath()+"/CustomSignPicture.jpeg");
+    if (!m_custom_image.isNull())
+    {
+        qDebug() << "Using Custom Picture to CC sign";
+        QBuffer buffer(&m_jpeg_scaled_data);
+        buffer.open(QIODevice::WriteOnly);
+        //Save the generated image as high-quality JPEG data
+        QImage generated_img ("CustomSignPicture.jpeg");
+        generated_img.save(&buffer, "JPG", 100);
+        return true;
+    }else{
+        qDebug() << "Using default Picture to CC sign";
+        return false;
+    }
 }
