@@ -16,8 +16,6 @@ Item {
     property alias propertyRadioButtonPT: radioButtonPT
     property alias propertyRadioButtonUK: radioButtonUK
     property alias propertyRectAppLook: rectAppLook
-    property alias propertyCheckboxShowNot: checkboxShowNot
-    property alias propertyCheckboxShowPhoto: checkboxShowPhoto
     property alias propertyCheckboxShowAnime: checkboxShowAnime
     property alias propertyRectAppCertificates: rectAppCertificates
     property alias propertyCheckboxRegister: checkboxRegister
@@ -264,31 +262,10 @@ Item {
                 id: rectAppLookCheckBox
                 width: parent.width
                 color: "white"
-                height: checkboxShowNot.height
-                        + checkboxShowPhoto.height
-                        + 2 * Constants.SIZE_TEXT_V_SPACE
+                height: 25 + Constants.SIZE_TEXT_V_SPACE
                 anchors.top : dateAppLook.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
-                CheckBox {
-                    id: checkboxShowNot
-                    text: qsTranslate("PageDefinitionsApp","STR_SHOW_NOT_OP") + controler.autoTr
-                    height: 25
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.capitalization: Font.MixedCase
-                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                }
-                CheckBox {
-                    id: checkboxShowPhoto
-                    text: qsTranslate("PageDefinitionsApp","STR_SHOW_PHOTO_OP") + controler.autoTr
-                    height: 25
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.capitalization: Font.MixedCase
-                    anchors.top: checkboxShowNot.bottom
-                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                }
                 CheckBox {
                     id: checkboxShowAnime
                     text: qsTranslate("PageDefinitionsApp","STR_SHOW_ANIME_OP") + controler.autoTr
@@ -297,7 +274,6 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                    x: rectAppLookCheckBox.width * 0.5
                 }
             }
         }

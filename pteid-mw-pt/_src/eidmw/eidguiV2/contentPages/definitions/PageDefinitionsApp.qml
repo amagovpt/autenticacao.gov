@@ -84,14 +84,6 @@ PageDefinitionsAppForm {
         }
     }
 
-    propertyCheckboxShowNot{
-        onCheckedChanged: propertyCheckboxShowNot.checked ? controler.setShowNotificationValue(true) :
-                                                            controler.setShowNotificationValue(false)
-    }
-    propertyCheckboxShowPhoto{
-        onCheckedChanged: propertyCheckboxShowPhoto.checked ? controler.setShowPictureValue(true) :
-                                                              controler.setShowPictureValue(false)
-    }
     propertyCheckboxShowAnime{
         onCheckedChanged: if(propertyCheckboxShowAnime.checked){
                               controler.setShowAnimationsValue(true)
@@ -188,8 +180,7 @@ PageDefinitionsAppForm {
             propertyRadioButtonUK.checked = false
             propertyRadioButtonPT.checked = true
         }
-        propertyCheckboxShowNot.checked = controler.getShowNotificationValue()
-        propertyCheckboxShowPhoto.checked = controler.getShowPictureValue()
+
         propertyCheckboxShowAnime.checked = controler.getShowAnimationsValue()
 
         if (Qt.platform.os === "windows") {
