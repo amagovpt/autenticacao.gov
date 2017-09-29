@@ -102,8 +102,13 @@ PageDefinitionsAppForm {
                                                               controler.setShowPictureValue(false)
     }
     propertyCheckboxShowAnime{
-        onCheckedChanged: propertyCheckboxShowAnime.checked ? controler.setShowAnimationsValue(true) :
-                                                              controler.setShowAnimationsValue(false)
+        onCheckedChanged: if(propertyCheckboxShowAnime.checked){
+                              controler.setShowAnimationsValue(true)
+                              mainFormID.propertShowAnimation = true
+                          }else{
+                              controler.setShowAnimationsValue(false)
+                              mainFormID.propertShowAnimation = false
+                          }
     }
     propertyCheckboxRegister{
         onCheckedChanged: propertyCheckboxRegister.checked ? controler.setRegCertValue(true) :

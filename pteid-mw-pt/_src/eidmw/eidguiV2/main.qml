@@ -223,7 +223,7 @@ Load language error. Please reinstall the application"
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 1;
-                    duration: Constants.ANIMATION_CHANGE_OPACITY
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation
                 {
@@ -232,7 +232,7 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 NumberAnimation
                 {
@@ -241,7 +241,7 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE;
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
             },
             Transition {
@@ -254,7 +254,7 @@ Load language error. Please reinstall the application"
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 1;
-                    duration: Constants.ANIMATION_CHANGE_OPACITY
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation
                 {
@@ -263,7 +263,7 @@ Load language error. Please reinstall the application"
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 1;
-                    duration: Constants.ANIMATION_CHANGE_OPACITY
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation
                 {
@@ -272,7 +272,7 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 NumberAnimation
                 {
@@ -281,7 +281,7 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE;
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 NumberAnimation
                 {
@@ -290,7 +290,7 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
             },
             Transition {
@@ -303,7 +303,7 @@ Load language error. Please reinstall the application"
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 0;
-                    duration: Constants.ANIMATION_CHANGE_OPACITY
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation
                 {
@@ -312,7 +312,7 @@ Load language error. Please reinstall the application"
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 0;
-                    duration: Constants.ANIMATION_CHANGE_OPACITY
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation
                 {
@@ -321,7 +321,7 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width;
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 NumberAnimation
                 {
@@ -330,7 +330,7 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: 0;
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
             },
             Transition {
@@ -343,7 +343,7 @@ Load language error. Please reinstall the application"
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 0;
-                    duration: Constants.ANIMATION_CHANGE_OPACITY
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation
                 {
@@ -352,7 +352,7 @@ Load language error. Please reinstall the application"
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 0;
-                    duration: Constants.ANIMATION_CHANGE_OPACITY
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation
                 {
@@ -361,7 +361,7 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width;
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 NumberAnimation
                 {
@@ -370,7 +370,7 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: 0;
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 NumberAnimation
                 {
@@ -379,7 +379,7 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: 0
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
             },
             Transition {
@@ -392,7 +392,7 @@ Load language error. Please reinstall the application"
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 0;
-                    duration: Constants.ANIMATION_CHANGE_OPACITY
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation
                 {
@@ -402,7 +402,7 @@ Load language error. Please reinstall the application"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width
                         * (Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE + Constants.SUB_MENU_VIEW_RELATIVE_SIZE)
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 NumberAnimation
                 {
@@ -411,7 +411,7 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: 0;
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
             },
             Transition {
@@ -424,7 +424,7 @@ Load language error. Please reinstall the application"
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 1;
-                    duration: Constants.ANIMATION_CHANGE_OPACITY
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation
                 {
@@ -433,7 +433,7 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 NumberAnimation
                 {
@@ -442,7 +442,7 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE;
-                    duration: Constants.ANIMATION_MOVE_VIEW
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
             }
         ]
@@ -699,6 +699,7 @@ Load language error. Please reinstall the application"
         console.log("Window mainWindow Completed")
         gapi.setEventCallbacks()
         controler.initTranslation()
+        mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
         gapi.initTranslation()
     }
 }

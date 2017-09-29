@@ -57,6 +57,11 @@ AppController::AppController(GUISettings& settings,QObject *parent) :
 {
 }
 
+bool AppController::isAnimationsEnabled(void){
+
+    return m_Settings.getShowAnimations();
+}
+
 void AppController::initTranslation(){
 
     QString     appPath = QCoreApplication::applicationDirPath();

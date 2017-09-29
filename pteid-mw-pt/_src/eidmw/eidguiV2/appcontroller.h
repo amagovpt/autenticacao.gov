@@ -33,6 +33,7 @@ public:
 
 public slots:
     Q_INVOKABLE QVariant getCursorPos();
+    bool isAnimationsEnabled(void);
     void initTranslation(void);
     bool getAutoCardReadingValue(void);
     void setAutoCardReadingValue (bool bAutoCardReading );
@@ -80,7 +81,6 @@ public slots:
     QString getProxyPwdValue (void);
     void setProxyPwdValue (QString const& proxy_pwd);
 
-public slots:
     void cancelDownload();
     void httpFinished();
     void httpReadyRead();
