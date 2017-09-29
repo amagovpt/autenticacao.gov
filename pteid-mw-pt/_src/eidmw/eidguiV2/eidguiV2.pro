@@ -29,6 +29,7 @@ INCLUDEPATH += ../CMD/services
 INCLUDEPATH += ../applayer
 INCLUDEPATH += ../common
 INCLUDEPATH += ../cardlayer
+INCLUDEPATH += ../_Builds
 
 
 LIBS += -L../lib -lpteidlib -lssl -lcrypto -lpoppler-qt5 -lCMDServices

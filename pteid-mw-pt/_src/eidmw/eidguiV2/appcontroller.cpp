@@ -55,6 +55,14 @@ AppController::AppController(GUISettings& settings,QObject *parent) :
     QObject(parent)
   , m_Settings(settings)
 {
+    QString strVersion (PTEID_PRODUCT_VERSION);
+    m_Settings.setGuiVersion(strVersion);
+    qDebug() << "C++: AppController started. App version: " << m_Settings.getGuiVersion() +" - "+ SVN_REVISION_STR;
+}
+
+QString AppController::getAppVersion(void){
+
+    return m_Settings.getGuiVersion() +" - "+ SVN_REVISION_STR;
 }
 
 bool AppController::isAnimationsEnabled(void){

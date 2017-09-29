@@ -33,6 +33,7 @@ public:
 
 public slots:
     Q_INVOKABLE QVariant getCursorPos();
+    QString getAppVersion(void);
     bool isAnimationsEnabled(void);
     void initTranslation(void);
     bool getAutoCardReadingValue(void);

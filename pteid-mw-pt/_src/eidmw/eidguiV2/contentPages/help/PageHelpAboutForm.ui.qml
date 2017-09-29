@@ -5,6 +5,7 @@ import "../../scripts/Constants.js" as Constants
 
 Item {
     property alias propertyTextLinkCC: textLinkCC
+    property alias propertyTextVersion: textVersion
 
     anchors.fill: parent
 
@@ -29,7 +30,6 @@ Item {
 
     Text {
         id: textVersion
-        text: mainWindow.appVersion
         font.pixelSize: Constants.SIZE_TEXT_BODY
         font.family: lato.name
         anchors.top: textAppName.bottom

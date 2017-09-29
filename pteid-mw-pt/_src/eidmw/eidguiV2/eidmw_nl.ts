@@ -955,7 +955,7 @@
 <context>
     <name>PageHelpAbout</name>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="21"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="22"/>
         <source>STR_HELP_TITLE</source>
         <translation>Aplicação Oficial do Cartão de Cidadão Português</translation>
     </message>
@@ -974,6 +974,11 @@
         <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="72"/>
         <source>STR_HELP_DEV_AGENCY</source>
         <translation>(Agência para a Modernização Administrativa, IP e Instituto dos Registos e do Notariado, IP)</translation>
+    </message>
+    <message>
+        <location filename="contentPages/help/PageHelpAbout.qml" line="14"/>
+        <source>STR_HELP_APP_VERSION</source>
+        <translation>Versão</translation>
     </message>
 </context>
 <context>
