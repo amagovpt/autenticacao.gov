@@ -474,8 +474,6 @@ PageServicesSignAdvancedForm {
                 Text {
                     id: textMessageTop
                     text: ""
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL

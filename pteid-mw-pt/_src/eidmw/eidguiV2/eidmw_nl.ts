@@ -1142,7 +1142,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="357"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="310"/>
         <source>STR_SIGN_CMD_PIN_OP</source>
-        <translation>PIN?</translation>
+        <translation>PIN</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="376"/>
