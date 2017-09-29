@@ -33,18 +33,9 @@ PageDefinitionsAppForm {
                     + propertyComboBoxReader.currentIndex)
         gapi.setReaderByUser(propertyComboBoxReader.currentIndex)
     }
-    propertyCheckboxAutoRead{
-        onCheckedChanged: propertyCheckboxAutoRead.checked ? controler.setAutoCardReadingValue(true) :
-                                                             controler.setAutoCardReadingValue(false)
-
-    }
     propertyCheckboxAutoStart{
         onCheckedChanged: propertyCheckboxAutoStart.checked ? controler.setStartAutoValue(true) :
                                                               controler.setStartAutoValue(false)
-    }
-    propertyCheckboxStart{
-        onCheckedChanged: propertyCheckboxStart.checked ? controler.setStartMinimizedValue(true) :
-                                                          controler.setStartMinimizedValue(false)
     }
     propertyRadioButtonUK{
         onCheckedChanged: {
@@ -183,15 +174,13 @@ PageDefinitionsAppForm {
 
         propertyComboBoxReader.model = gapi.getRetReaderList()
 
-        propertyCheckboxAutoRead.checked = controler.getAutoCardReadingValue()
-        if (Qt.platform.os === "linux") {
-            propertyCheckboxAutoStart.visible = false
-            propertyCheckboxStart.x = propertyRectAppStartCheckBox.width * 0.5
-        }else{
+        if (Qt.platform.os === "windows") {
             propertyCheckboxAutoStart.checked = controler.getStartAutoValue()
+        }else{
+            propertyRectAppStart.visible = false
+            propertyRectAppLanguage.anchors.top = propertyRectReader.bottom
         }
 
-        propertyCheckboxStart.checked = controler.getStartMinimizedValue()
         if(controler.getGuiLanguageCodeValue() === GAPI.LANG_EN){
             propertyRadioButtonUK.checked = true
             propertyRadioButtonPT.checked = false

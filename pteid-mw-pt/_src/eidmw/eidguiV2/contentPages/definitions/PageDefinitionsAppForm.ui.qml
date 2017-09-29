@@ -8,10 +8,11 @@ import "../../components" as Components
 
 Item {
     property alias propertyComboBoxReader: comboBoxReader
+    property alias propertyRectReader: rectReader
+    property alias propertyRectAppStart: rectAppStart
     property alias propertyRectAppStartCheckBox: rectAppStartCheckBox
-    property alias propertyCheckboxAutoRead: checkboxAutoRead
     property alias propertyCheckboxAutoStart: checkboxAutoStart
-    property alias propertyCheckboxStart: checkboxStart
+    property alias propertyRectAppLanguage: rectAppLanguage
     property alias propertyRadioButtonPT: radioButtonPT
     property alias propertyRadioButtonUK: radioButtonUK
     property alias propertyRectAppLook: rectAppLook
@@ -143,19 +144,10 @@ Item {
                 id: rectAppStartCheckBox
                 width: parent.width
                 color: "white"
-                height: checkboxAutoRead.height + Constants.SIZE_TEXT_V_SPACE
+                height: 25 + Constants.SIZE_TEXT_V_SPACE
                 anchors.top : dateAppStart.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
-                CheckBox {
-                    id: checkboxAutoRead
-                    text: qsTranslate("PageDefinitionsApp","STR_AUTO_READ_OP") + controler.autoTr
-                    height: 25
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.capitalization: Font.MixedCase
-                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                }
                 CheckBox {
                     id: checkboxAutoStart
                     text: qsTranslate("PageDefinitionsApp","STR_AUTO_START_OP") + controler.autoTr
@@ -163,17 +155,6 @@ Item {
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
-                    x: rectAppStartCheckBox.width * 0.37
-                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                }
-                CheckBox {
-                    id: checkboxStart
-                    text: qsTranslate("PageDefinitionsApp","STR_START_MINIMIZED_OP") + controler.autoTr
-                    height: 25
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.capitalization: Font.MixedCase
-                    x: rectAppStartCheckBox.width * 0.70
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 }
             }
