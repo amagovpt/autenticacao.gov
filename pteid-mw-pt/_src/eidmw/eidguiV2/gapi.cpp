@@ -1212,13 +1212,13 @@ void GAPI::startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outp
             QtConcurrent::run(this, &GAPI::doSignBatchPDF, params);
 }
 
-unsigned int GAPI::getPDFpageCount(QString loadedFilePath) {
+int GAPI::getPDFpageCount(QString loadedFilePath) {
 
     PTEID_PDFSignature sig_handler(loadedFilePath.toUtf8().data());
 
     int pageCount = sig_handler.getPageCount();
 
-    return (unsigned int) pageCount;
+    return pageCount;
 }
 
 void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp) {

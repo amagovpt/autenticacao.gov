@@ -677,7 +677,9 @@ PageServicesSignSimpleForm {
             console.log("Sign with CC")
 
             var outputFile = filesModel.get(0).fileUrl
-            var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'));
+            //Check if filename has extension and remove it.
+            if( outputFile.lastIndexOf('.') > 0)
+                var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'));
             propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
             propertyFileDialogOutput.open()
         }
@@ -686,7 +688,9 @@ PageServicesSignSimpleForm {
         onClicked: {
             console.log("Sign with CMD")
             var outputFile = filesModel.get(0).fileUrl
-            var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'));
+            //Check if filename has extension and remove it.
+            if( outputFile.lastIndexOf('.') > 0)
+                var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'));
             propertyFileDialogCMDOutput.filename = outputFile + "_signed.pdf";
             propertyFileDialogCMDOutput.open()
         }
@@ -712,34 +716,47 @@ PageServicesSignSimpleForm {
                 propertyPDFPreview.propertyDragSigDateText.visible = false
                 propertyPDFPreview.propertyDragSigImg.visible = false
             }else{
-                fileLoaded = true
                 propertyBusyIndicator.running = true
                 var loadedFilePath = filesModel.get(0).fileUrl
                 var pageCount = gapi.getPDFpageCount(loadedFilePath)
-                console.log("loadedFilePath: " + loadedFilePath + " page count: " + pageCount)
-                propertySpinBoxControl.value = 1
-                propertySpinBoxControl.to = pageCount
-                propertyPDFPreview.propertyBackground.cache = false
-                propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
-                var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpeg"
-                if(gapi.customSignImageExist()){
-                    if (Qt.platform.os === "windows") {
-                        urlCustomImage = "file:///"+urlCustomImage
+                if(pageCount > 0){
+                    console.log("loadedFilePath: " + loadedFilePath + " page count: " + pageCount)
+                    fileLoaded = true
+                    propertySpinBoxControl.value = 1
+                    propertySpinBoxControl.to = pageCount
+                    propertyPDFPreview.propertyBackground.cache = false
+                    propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
+                    var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpeg"
+                    if(gapi.customSignImageExist()){
+                        if (Qt.platform.os === "windows") {
+                            urlCustomImage = "file:///"+urlCustomImage
+                        }else{
+                            urlCustomImage = "file://"+urlCustomImage
+                        }
+                        propertyPDFPreview.propertyDragSigImg.source = urlCustomImage
                     }else{
-                        urlCustomImage = "file://"+urlCustomImage
+                        propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
                     }
-                    propertyPDFPreview.propertyDragSigImg.source = urlCustomImage
+                    propertyPDFPreview.propertyDragSigImg.visible = true
+                    propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
+                    propertyPDFPreview.propertyDragSigWaterImg.visible = true
+                    propertyPDFPreview.propertyDragSigSignedByText.visible = true
+                    propertyPDFPreview.propertyDragSigSignedByNameText.visible = true
+                    propertyPDFPreview.propertyDragSigNumIdText.visible = true
+                    propertyPDFPreview.propertyDragSigDateText.visible = true
+                    propertyPDFPreview.propertyDragSigImg.visible = true
                 }else{
-                    propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
+                    console.log("Error loading pdf file")
+                    propertyBusyIndicator.running = false
+                    filesModel.remove(filesModel.count-1)
+                    fileLoaded = false
+                    propertyPDFPreview.propertyBackground.source = ""
+                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                            qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR_MSG")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                 }
-                propertyPDFPreview.propertyDragSigImg.visible = true
-                propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
-                propertyPDFPreview.propertyDragSigWaterImg.visible = true
-                propertyPDFPreview.propertyDragSigSignedByText.visible = true
-                propertyPDFPreview.propertyDragSigSignedByNameText.visible = true
-                propertyPDFPreview.propertyDragSigNumIdText.visible = true
-                propertyPDFPreview.propertyDragSigDateText.visible = true
-                propertyPDFPreview.propertyDragSigImg.visible = true
             }
         }
     }

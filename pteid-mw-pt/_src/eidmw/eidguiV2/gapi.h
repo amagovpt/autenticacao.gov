@@ -266,7 +266,7 @@ public slots:
                          QString reason, QString location, double isTimestamp, double isSmall);
     void startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outputFile, int page, double coord_x, double coord_y,
                          QString reason, QString location, double isTimestamp, double isSmall);
-    unsigned int getPDFpageCount(QString loadedFilePath);
+    int getPDFpageCount(QString loadedFilePath);
 
     void startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
 
