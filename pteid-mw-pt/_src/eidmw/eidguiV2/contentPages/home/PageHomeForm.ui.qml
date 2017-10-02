@@ -7,6 +7,9 @@ import "../../components" as Components
 
 Item {
     anchors.fill: parent
+    property alias propertyTextLinkCC: textLinkCC
+    property alias propertyReminderCheckBox: reminderCheckBox
+
     Item {
         id: rowTop
         width: parent.width
@@ -47,7 +50,7 @@ Item {
         Text {
             id: text2
             anchors.top: text1.bottom
-            anchors.topMargin: 3 * Constants.SIZE_TEXT_BODY
+            anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
             text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC") + ":"
@@ -134,17 +137,50 @@ Item {
             }
         }
         RowLayout {
-            id: rawCheckBox
+            id: raw5
             anchors.top: raw4.bottom
-            anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
+            anchors.topMargin: Constants.SIZE_TEXT_BODY
+            width: parent.width
+
+            Text {
+                id: textLinks
+                text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_ONLINE") + ":"
+                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_BODY
+            }
+        }
+        RowLayout {
+            id: rawLinks
+            anchors.top: raw5.bottom
+            anchors.topMargin: Constants.SIZE_TEXT_BODY
+            width: parent.width
+
+            Components.TextBullet{}
+            Text {
+                id: textLinkCC
+                textFormat: Text.RichText
+                text: "<a href=\"https://www.autenticacao.gov.pt/documents/10179/11465/\
+Manual+de+Utiliza%C3%A7%C3%A3o+da+Aplica%C3%A7%C3%A3o+do+Cart%C3%A3o+de+Cidad%C3%A3o\">"
+                      + qsTranslate("PageHelpDocOnline","STR_HELP_URL")
+                font.italic: true
+                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.family: lato.name
+            }
+        }
+        RowLayout {
+            id: rawCheckBox
+            anchors.top: rawLinks.bottom
+            anchors.topMargin: Constants.SIZE_TEXT_BODY
             width: parent.width
             CheckBox {
+                id: reminderCheckBox
                 text: qsTranslate("PageHelpDocOnline","STR_HOME_REMINDER")
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
-                checked: false
+                enabled: true
             }
         }
     }

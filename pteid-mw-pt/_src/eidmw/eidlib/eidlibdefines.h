@@ -145,6 +145,7 @@ enum PTEID_Param
 	//GUITOOL
 	PTEID_PARAM_GUITOOL_SHOWNOTIFICATION,//number; 0=no(default), 1=yes
         PTEID_PARAM_GUITOOL_SHOWANIMATIONS,//number; 0=no(default), 1=yes
+        PTEID_PARAM_GUITOOL_SHOWSTARTUPHELP,//number; 0=no(default), 1=yes
 
 	//PROXY
 	PTEID_PARAM_PROXY_CONNECT_TIMEOUT,	//number

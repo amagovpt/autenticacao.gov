@@ -445,8 +445,11 @@ Load language error. Please reinstall the application"
             }
         ]
         Component.onCompleted: {
-            mainFormID.state = "STATE_FIRST_RUN"
-            //mainFormID.state = "STATE_HOME"
+            if(controler.getNotShowHelpStartUp()){
+                mainFormID.state = "STATE_HOME"
+            }else{
+                mainFormID.state = "STATE_FIRST_RUN"
+            }
 
             //Open Advanced Signature on startup
             if (gapi.getShortcutFlag() > 0) {

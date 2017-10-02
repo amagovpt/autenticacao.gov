@@ -60,10 +60,10 @@
 // Resize Resolutions -> Common
 enum eZOOMSTATUS
 {
-	 ZOOM_SMALL			// ( 800 x 600 )
-	,ZOOM_MEDIUM		// ( 1024 x 768)
-	,ZOOM_LARGE			// ( 1280 x 1024 )
-	,ZOOM_HUGE			// ( 1600 x 1200 )
+    ZOOM_SMALL			// ( 800 x 600 )
+    ,ZOOM_MEDIUM		// ( 1024 x 768)
+    ,ZOOM_LARGE			// ( 1280 x 1024 )
+    ,ZOOM_HUGE			// ( 1600 x 1200 )
 };
 
 // Resize Resolutions -> Window width
@@ -162,74 +162,75 @@ enum eZOOMSTATUS
 class GUISettings
 {
 public:
-	//------------------------------------------------------
-	// ctor
-	//------------------------------------------------------
-	GUISettings( void )
-		: m_GuiLanguage("en")
+    //------------------------------------------------------
+    // ctor
+    //------------------------------------------------------
+    GUISettings( void )
+        : m_GuiLanguage("en")
         , m_bShowAnimations(false)
-		, m_bStartMinimized(false)
-		, m_bShowPicture(false)
-		, m_bShowNotification(false)
-		, m_bAutoCardReading(false)
-		, m_bAutoStartup(false)
-		, m_bRegCert(false)
-		, m_bRemoveCert(false)
-		, m_strExePath("")
-		, m_test_mode(false)
+        , m_bNotShowStartUpHelp(false)
+        , m_bStartMinimized(false)
+        , m_bShowPicture(false)
+        , m_bShowNotification(false)
+        , m_bAutoCardReading(false)
+        , m_bAutoStartup(false)
+        , m_bRegCert(false)
+        , m_bRemoveCert(false)
+        , m_strExePath("")
+        , m_test_mode(false)
 
-	{
-		//----------------------------------------------------------
-		// Check always what is set in the registry
-		//----------------------------------------------------------
+    {
+        //----------------------------------------------------------
+        // Check always what is set in the registry
+        //----------------------------------------------------------
 
-		//----------------------------------------------------------
-		// check the GUI language
-		//----------------------------------------------------------
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_LANGUAGE);
-			QString lng = config.getString();
-			if ( GenPur::LANG_XX==GenPur::getLanguage(lng))
-			{
-				lng = GenPur::getLanguage(GenPur::LANG_DEF);
-			}
-			setGuiLanguage(lng);
-		}
+        //----------------------------------------------------------
+        // check the GUI language
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_LANGUAGE);
+            QString lng = config.getString();
+            if ( GenPur::LANG_XX==GenPur::getLanguage(lng))
+            {
+                lng = GenPur::getLanguage(GenPur::LANG_DEF);
+            }
+            setGuiLanguage(lng);
+        }
 
-		//----------------------------------------------------------
-		// check start minimized
-		//----------------------------------------------------------
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTMINI);
-			long StartMinimized = config.getLong();
+        //----------------------------------------------------------
+        // check start minimized
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTMINI);
+            long StartMinimized = config.getLong();
 
-			if ( 0 != StartMinimized )
-			{
-				setStartMinimized(true);
-			}
-		}
-		//----------------------------------------------------------
-		// check ShowPicture
-		//----------------------------------------------------------
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWPIC);
-			long ShowPicture = config.getLong();
-			if ( 0 != ShowPicture )
-			{
-				setShowPicture(true);
-			}
-		}
-		//----------------------------------------------------------
-		// check ShowNotification
-		//----------------------------------------------------------
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWNOTIFICATION);
-			long ShowNotification = config.getLong();
-			if ( 0 != ShowNotification )
-			{
-				setShowNotification(true);
-			}
-		}
+            if ( 0 != StartMinimized )
+            {
+                setStartMinimized(true);
+            }
+        }
+        //----------------------------------------------------------
+        // check ShowPicture
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWPIC);
+            long ShowPicture = config.getLong();
+            if ( 0 != ShowPicture )
+            {
+                setShowPicture(true);
+            }
+        }
+        //----------------------------------------------------------
+        // check ShowNotification
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWNOTIFICATION);
+            long ShowNotification = config.getLong();
+            if ( 0 != ShowNotification )
+            {
+                setShowNotification(true);
+            }
+        }
         //----------------------------------------------------------
         // check ShowAnimations
         //----------------------------------------------------------
@@ -241,60 +242,71 @@ public:
                 setShowAnimations(true);
             }
         }
-		//----------------------------------------------------------
-		// check AutoCardReading
-		//----------------------------------------------------------
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_AUTOCARDREAD);
-			long AutoCardReading = config.getLong();
-			if ( 0 != AutoCardReading )
-			{
-				setAutoCardReading(true);
-			}
-		}
-		//----------------------------------------------------------
-		// check AutoStartup
-		//----------------------------------------------------------
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTWIN);
-			long AutoStartup = config.getLong();
-			if ( 0 != AutoStartup )
-			{
-				setAutoStartup(true);
-			}
-		}
-		//----------------------------------------------------------
-		// check card reader to use 
-		// We shouldn't load the selected reader from settings initially
-		//----------------------------------------------------------
-	/*	{
+        //----------------------------------------------------------
+        // check ShowHelpStartUp
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWSTARTUPHELP);
+            long ShowHelpStartUp = config.getLong();
+            if ( 0 != ShowHelpStartUp )
+            {
+                setNotShowHelpStartUp(true);
+            }
+        }
+        //----------------------------------------------------------
+        // check AutoCardReading
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_AUTOCARDREAD);
+            long AutoCardReading = config.getLong();
+            if ( 0 != AutoCardReading )
+            {
+                setAutoCardReading(true);
+            }
+        }
+        //----------------------------------------------------------
+        // check AutoStartup
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTWIN);
+            long AutoStartup = config.getLong();
+            if ( 0 != AutoStartup )
+            {
+                setAutoStartup(true);
+            }
+        }
+        //----------------------------------------------------------
+        // check card reader to use
+        // We shouldn't load the selected reader from settings initially
+        //----------------------------------------------------------
+        /*	{
 
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_CARDREADNUMB);
-			long CardReader = config.getLong();
-			setSelectedReader(CardReader);
-		} */
-		//----------------------------------------------------------
-		// check RegCert
-		//----------------------------------------------------------
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_REGCERTIF);
-			long RegCert = config.getLong();
-			if ( 0 != RegCert )
-			{
-				setRegCert(true);
-			}
-		}
-		//----------------------------------------------------------
-		// check RemoveCert
-		//----------------------------------------------------------
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_REMOVECERTIF);
-			long RemoveCert = config.getLong();
-			if ( 0 != RemoveCert )
-			{
-				setRemoveCert(true);
-			}
-		}
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_CARDREADNUMB);
+            long CardReader = config.getLong();
+            setSelectedReader(CardReader);
+        } */
+        //----------------------------------------------------------
+        // check RegCert
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_REGCERTIF);
+            long RegCert = config.getLong();
+            if ( 0 != RegCert )
+            {
+                setRegCert(true);
+            }
+        }
+        //----------------------------------------------------------
+        // check RemoveCert
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_REMOVECERTIF);
+            long RemoveCert = config.getLong();
+            if ( 0 != RemoveCert )
+            {
+                setRemoveCert(true);
+            }
+        }
         //---------------------------------------------------------
         // Check timestamp settings
         //---------------------------------------------------------
@@ -304,110 +316,110 @@ public:
             m_time_stamp_host = timeStamp_url;
 
         }
-		//----------------------------------------------------------
-		// check file save path
-		//----------------------------------------------------------
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_FILESAVE);
-			QString fileSave = config.getString();
-			m_DefSavePath = fileSave;
-		}
+        //----------------------------------------------------------
+        // check file save path
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_FILESAVE);
+            QString fileSave = config.getString();
+            m_DefSavePath = fileSave;
+        }
 
-		//---------------------------------------------------------
-		// Check proxy settings
-		//---------------------------------------------------------
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_HOST);
-			QString proxy_host = config.getString();
-			m_proxy_host = proxy_host;
+        //---------------------------------------------------------
+        // Check proxy settings
+        //---------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_HOST);
+            QString proxy_host = config.getString();
+            m_proxy_host = proxy_host;
 
-		}
+        }
 
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_PORT);
-			long proxy_port = config.getLong();
-			m_proxy_port = proxy_port;
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_PORT);
+            long proxy_port = config.getLong();
+            m_proxy_port = proxy_port;
 
-		}
+        }
 
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_USERNAME);
-			QString proxy_user = config.getString();
-			m_proxy_username = proxy_user;
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_USERNAME);
+            QString proxy_user = config.getString();
+            m_proxy_username = proxy_user;
 
-		}
+        }
 
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_PWD);
-			QString pwd = config.getString();
-			m_proxy_pwd = pwd;
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_PWD);
+            QString pwd = config.getString();
+            m_proxy_pwd = pwd;
 
-		}
+        }
 
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SHOW_JAVA_APPS);
-			m_showJavaApps = config.getLong() == 1;
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SHOW_JAVA_APPS);
+            m_showJavaApps = config.getLong() == 1;
 
-		}
+        }
 
-		{
-			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CACHEDIR);
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CACHEDIR);
             m_pteid_cachedir = config.getString();
-		}
-	}
-	//------------------------------------------------------
-	// dtor
-	//------------------------------------------------------
-	~GUISettings( void )
-	{
-	}
-	//------------------------------------------------------
-	// Read the setting
-	//------------------------------------------------------
-	QString const& getGuiLanguageString( void ) const
-	{
-		return m_GuiLanguage;
-	}
-	GenPur::UI_LANGUAGE getGuiLanguageCode( void ) const
-	{
-		return GenPur::getLanguage(m_GuiLanguage);
-	}
-	void setGuiLanguage( QString const& GuiLanguage=STR_DEF_GUILANGUAGE )
-	{
-		m_GuiLanguage = GuiLanguage;
-	}
-	void setGuiLanguage( GenPur::UI_LANGUAGE language )
-	{
-		m_GuiLanguage = GenPur::getLanguage(language);
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_LANGUAGE);
-		config.setString(m_GuiLanguage.toLatin1());
-	}
-	bool getStartMinimized( void ) const
-	{
-		return m_bStartMinimized;
-	}
-	void setStartMinimized( bool bStartMinimized)
-	{
-		m_bStartMinimized = bStartMinimized;
+        }
+    }
+    //------------------------------------------------------
+    // dtor
+    //------------------------------------------------------
+    ~GUISettings( void )
+    {
+    }
+    //------------------------------------------------------
+    // Read the setting
+    //------------------------------------------------------
+    QString const& getGuiLanguageString( void ) const
+    {
+        return m_GuiLanguage;
+    }
+    GenPur::UI_LANGUAGE getGuiLanguageCode( void ) const
+    {
+        return GenPur::getLanguage(m_GuiLanguage);
+    }
+    void setGuiLanguage( QString const& GuiLanguage=STR_DEF_GUILANGUAGE )
+    {
+        m_GuiLanguage = GuiLanguage;
+    }
+    void setGuiLanguage( GenPur::UI_LANGUAGE language )
+    {
+        m_GuiLanguage = GenPur::getLanguage(language);
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_LANGUAGE);
+        config.setString(m_GuiLanguage.toLatin1());
+    }
+    bool getStartMinimized( void ) const
+    {
+        return m_bStartMinimized;
+    }
+    void setStartMinimized( bool bStartMinimized)
+    {
+        m_bStartMinimized = bStartMinimized;
 
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTMINI);
-		config.setLong(m_bStartMinimized);
-	}
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTMINI);
+        config.setLong(m_bStartMinimized);
+    }
 
-	bool getShowPicture( void )
-	{
-		return m_bShowPicture;
-	}
-	void setShowPicture( bool bShowPicture )
-	{
-		m_bShowPicture = bShowPicture;
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWPIC);
-		config.setLong(m_bShowPicture);
-	}
-	bool getShowNotification( void )
-	{
-		return m_bShowNotification;
-	}
+    bool getShowPicture( void )
+    {
+        return m_bShowPicture;
+    }
+    void setShowPicture( bool bShowPicture )
+    {
+        m_bShowPicture = bShowPicture;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWPIC);
+        config.setLong(m_bShowPicture);
+    }
+    bool getShowNotification( void )
+    {
+        return m_bShowNotification;
+    }
     bool getShowAnimations( void )
     {
         return m_bShowAnimations;
@@ -418,101 +430,111 @@ public:
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWANIMATIONS);
         config.setLong(m_bShowAnimations);
     }
-	void setShowNotification( bool bShowNotification )
-	{
-		m_bShowNotification = bShowNotification;
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWNOTIFICATION);
-		config.setLong(m_bShowNotification);
-	}
-	bool getAutoCardReading( void )
-	{
-		return m_bAutoCardReading;
-	}
-	void setAutoCardReading( bool bAutoCardReading )
-	{
-		m_bAutoCardReading = bAutoCardReading;
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_AUTOCARDREAD);
-		config.setLong(m_bAutoCardReading);
-	}
-	bool getAutoStartup( void )
-	{
-		return m_bAutoStartup;
-	}
-	void setAutoStartup( bool bAutoStartup )
-	{
+    bool getNotShowHelpStartUp( void )
+    {
+        return m_bNotShowStartUpHelp;
+    }
+    void setNotShowHelpStartUp(  bool bNotShowStartUpHelp )
+    {
+        m_bNotShowStartUpHelp = bNotShowStartUpHelp;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWSTARTUPHELP);
+        config.setLong(m_bNotShowStartUpHelp);
+    }
+    void setShowNotification( bool bShowNotification )
+    {
+        m_bShowNotification = bShowNotification;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWNOTIFICATION);
+        config.setLong(m_bShowNotification);
+    }
+    bool getAutoCardReading( void )
+    {
+        return m_bAutoCardReading;
+    }
+    void setAutoCardReading( bool bAutoCardReading )
+    {
+        m_bAutoCardReading = bAutoCardReading;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_AUTOCARDREAD);
+        config.setLong(m_bAutoCardReading);
+    }
+    bool getAutoStartup( void )
+    {
+        return m_bAutoStartup;
+    }
+    void setAutoStartup( bool bAutoStartup )
+    {
         m_bAutoStartup = bAutoStartup;
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTWIN);
-		config.setLong(m_bAutoStartup);
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTWIN);
+        config.setLong(m_bAutoStartup);
 
 #ifdef WIN32
-		QSettings s("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+        QSettings s("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
 #endif
 
-		if (m_bAutoStartup)
-		{
+        if (m_bAutoStartup)
+        {
 #ifdef WIN32
-			QString filePath = QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
-			s.setValue("pteid", filePath);
+            QString filePath = QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+            s.setValue("pteid", filePath);
 #endif
 #ifdef __APPLE__
-//            QProcess::execute("sudo defaults write com.apple.loginwindow LoginHook" + m_strExePath);
+            //            QProcess::execute("sudo defaults write com.apple.loginwindow LoginHook" + m_strExePath);
 #endif
-		}
-		else
-		{
+        }
+        else
+        {
 #ifdef WIN32
-			s.remove("pteid");
+            s.remove("pteid");
 #endif
 #ifdef __APPLE__
-//            QProcess::execute("sudo defaults delete com.apple.loginwindow LoginHook" + m_strExePath);
+            //            QProcess::execute("sudo defaults delete com.apple.loginwindow LoginHook" + m_strExePath);
 #endif
-		}
+        }
 
-	}
-	bool getRegCertSetting( void )
-	{
-		return m_bRegCert;
-	}
-	bool getRegCert( void )
-	{
-		if (!m_bAutoCardReading)
-		{
-			return false;
-		}
-		return m_bRegCert;
-	}
+    }
+    bool getRegCertSetting( void )
+    {
+        return m_bRegCert;
+    }
+    bool getRegCert( void )
+    {
+        if (!m_bAutoCardReading)
+        {
+            return false;
+        }
+        return m_bRegCert;
+    }
 
-	bool areJavaAppsEnabled()
-	{
-		return m_showJavaApps;
-	}
+    bool areJavaAppsEnabled()
+    {
+        return m_showJavaApps;
+    }
 
-	void setRegCert( bool bRegCert )
-	{
-		m_bRegCert = bRegCert;
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_REGCERTIF);
-		config.setLong(m_bRegCert);
-	}
+    void setRegCert( bool bRegCert )
+    {
+        m_bRegCert = bRegCert;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_REGCERTIF);
+        config.setLong(m_bRegCert);
+    }
 
-	bool getRemoveCertSetting( void )
-	{
-		return m_bRemoveCert;
-	}
+    bool getRemoveCertSetting( void )
+    {
+        return m_bRemoveCert;
+    }
 
-	bool getRemoveCert( void )
-	{
-		if (!m_bAutoCardReading)
-		{
-			return false;
-		}
-		return m_bRemoveCert;
-	}
-	void setRemoveCert( bool bRemoveCert )
-	{
-		m_bRemoveCert = bRemoveCert;
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_REMOVECERTIF);
-		config.setLong(m_bRemoveCert);
-	}
+    bool getRemoveCert( void )
+    {
+        if (!m_bAutoCardReading)
+        {
+            return false;
+        }
+        return m_bRemoveCert;
+    }
+    void setRemoveCert( bool bRemoveCert )
+    {
+        m_bRemoveCert = bRemoveCert;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_REMOVECERTIF);
+        config.setLong(m_bRemoveCert);
+    }
 
     QString getTimeStampHost(void){
         return m_time_stamp_host;
@@ -526,101 +548,101 @@ public:
         config.setString(timeStamp_host.toUtf8());
     }
 
-	void setExePath( QString const& strExePath )
-	{
-		m_strExePath = strExePath;
-	}
+    void setExePath( QString const& strExePath )
+    {
+        m_strExePath = strExePath;
+    }
 
-	QString const& getExePath( void )
-	{
-		return m_strExePath;
-	}
+    QString const& getExePath( void )
+    {
+        return m_strExePath;
+    }
 
-	void setGuiVersion( QString const& GUIVersion )
-	{
-		m_GUIVersion = GUIVersion;
-	}
-	QString const& getGuiVersion( void )
-	{
-		return m_GUIVersion;
-	}
-	void setDefSavePath( QString const& defSavePath )
-	{
-		m_DefSavePath = defSavePath;
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_FILESAVE);
-		config.setString(m_DefSavePath.toLatin1());
-	}
+    void setGuiVersion( QString const& GUIVersion )
+    {
+        m_GUIVersion = GUIVersion;
+    }
+    QString const& getGuiVersion( void )
+    {
+        return m_GUIVersion;
+    }
+    void setDefSavePath( QString const& defSavePath )
+    {
+        m_DefSavePath = defSavePath;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_FILESAVE);
+        config.setString(m_DefSavePath.toLatin1());
+    }
 
-	QString const& getDefSavePath( void )
-	{
-		return m_DefSavePath;
-	}
+    QString const& getDefSavePath( void )
+    {
+        return m_DefSavePath;
+    }
 
-	void setProxyHost(QString const& proxy_host)
-	{
-		m_proxy_host = proxy_host;
+    void setProxyHost(QString const& proxy_host)
+    {
+        m_proxy_host = proxy_host;
 
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_HOST);
-		config.setString(proxy_host.toUtf8());
-	}
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_HOST);
+        config.setString(proxy_host.toUtf8());
+    }
 
-	QString getProxyHost()
-	{
-		return m_proxy_host;
-	}
+    QString getProxyHost()
+    {
+        return m_proxy_host;
+    }
 
-	void setProxyUsername(QString const& proxy_user)
-	{
-		m_proxy_username = proxy_user;
+    void setProxyUsername(QString const& proxy_user)
+    {
+        m_proxy_username = proxy_user;
 
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_USERNAME);
-		config.setString(proxy_user.toUtf8());
-	}
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_USERNAME);
+        config.setString(proxy_user.toUtf8());
+    }
 
-	void setProxyPwd(QString const& proxy_pwd)
-	{
-		m_proxy_pwd = proxy_pwd;
+    void setProxyPwd(QString const& proxy_pwd)
+    {
+        m_proxy_pwd = proxy_pwd;
 
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_PWD);
-		config.setString(proxy_pwd.toUtf8());
-	}
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_PWD);
+        config.setString(proxy_pwd.toUtf8());
+    }
 
-	QString getProxyUsername()
-	{
-		return m_proxy_username;
-	}
+    QString getProxyUsername()
+    {
+        return m_proxy_username;
+    }
 
-	QString getProxyPwd()
-	{
-		return m_proxy_pwd;
-	}
+    QString getProxyPwd()
+    {
+        return m_proxy_pwd;
+    }
 
-	long getProxyPort()
-	{
-		return m_proxy_port;
-	}
+    long getProxyPort()
+    {
+        return m_proxy_port;
+    }
 
-	void setProxyPort(int proxy_port)
-	{
-		m_proxy_port = proxy_port;
+    void setProxyPort(int proxy_port)
+    {
+        m_proxy_port = proxy_port;
 
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_PORT);
-		config.setLong(proxy_port);
-	}
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_PORT);
+        config.setLong(proxy_port);
+    }
 
-	QString getPteidCachedir(){
+    QString getPteidCachedir(){
         return m_pteid_cachedir;
-	}
+    }
 
-	void setPteidCachedir(QString const& pteid_cachedir)
-	{
-		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CACHEDIR);
-		config.setString(pteid_cachedir.toUtf8());
+    void setPteidCachedir(QString const& pteid_cachedir)
+    {
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CACHEDIR);
+        config.setString(pteid_cachedir.toUtf8());
 
-		m_pteid_cachedir = pteid_cachedir;
-	}
+        m_pteid_cachedir = pteid_cachedir;
+    }
 
-	/* Test Mode */
+    /* Test Mode */
     bool getTestMode()	{
         return m_test_mode;
     }
@@ -631,32 +653,32 @@ public:
 
 
 private:
-	//Proxy Settings
-	QString m_proxy_host;
-	long m_proxy_port;
-	QString m_proxy_username;
-	QString m_proxy_pwd;
-	QString m_pteid_cachedir;
-	bool m_test_mode;
+    //Proxy Settings
+    QString m_proxy_host;
+    long m_proxy_port;
+    QString m_proxy_username;
+    QString m_proxy_pwd;
+    QString m_pteid_cachedir;
+    bool m_test_mode;
 
     //Time Stamp Host Settings
     QString m_time_stamp_host;
 
-	QString	m_GuiLanguage;			//!< the GUI language
-    bool    m_bShowAnimations ;     //!< the GUI Animations
-	bool	m_bStartMinimized;		//!< startup minimized (T/F)
-	bool	m_bShowPicture;			//!< show the picture (T/F)
-	bool	m_bShowNotification;	//!< show the notification (T/F)
-	bool	m_bAutoCardReading;		//!< read the inserted card at startup (T/F)
-	bool	m_bAutoStartup;			//!< start the app when windows starts (T/F)
-	bool	m_bRegCert;				//!< register certificates on insert (T/F)
-	bool	m_bRemoveCert;			//!< remove certificates on close (T/F)
-	bool 	m_showJavaApps;     // wether we should show the SCAP/DSS buttons...
-	QString m_strExePath;			//!< path to the executable
+    QString m_GuiLanguage;          //!< the GUI language
+    bool    m_bShowAnimations;      //!< the GUI Animations
+    bool    m_bStartMinimized;      //!< startup minimized (T/F)
+    bool    m_bNotShowStartUpHelp;  //!< the GUI Show Help	bool	m_bStartMinimized;		//!< startup minimized (T/F)
+    bool    m_bShowPicture;         //!< show the picture (T/F)
+    bool    m_bShowNotification;    //!< show the notification (T/F)
+    bool    m_bAutoCardReading;     //!< read the inserted card at startup (T/F)
+    bool    m_bAutoStartup;         //!< start the app when windows starts (T/F)
+    bool    m_bRegCert;             //!< register certificates on insert (T/F)
+    bool    m_bRemoveCert;          //!< remove certificates on close (T/F)
+    bool    m_showJavaApps;         // wether we should show the SCAP/DSS buttons...
+    QString m_strExePath;           //!< path to the executable
 
-	QString	m_GUIVersion;			//!! Full version of the GUI
-	QString	m_DefSavePath;			//!< default save path for eid,xml,tlv files
-
+    QString m_GUIVersion;           //!! Full version of the GUI
+    QString m_DefSavePath;          //!< default save path for eid,xml,tlv files
 };
 
 #endif // SETTINGS_H

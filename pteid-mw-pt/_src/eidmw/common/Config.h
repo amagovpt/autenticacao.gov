@@ -180,19 +180,20 @@ replace $install by string in install parameter
 
 #define EIDMW_CNF_SECTION_SECURITY      L"security"                 //section with the security parameters
 
-#define EIDMW_CNF_SECTION_GUITOOL       L"configuretool"            //section with the configure tool parameters
-#define EIDMW_CNF_GUITOOL_STARTWIN      L"start_with_windows"       //number; 0=no(default), 1=yes
-#define EIDMW_CNF_GUITOOL_STARTMINI     L"start_minimized"          //number; 0=no(default), 1=yes
-#define EIDMW_CNF_GUITOOL_SHOWPIC       L"show_picture"             //number; 0=no(default), 1=yes
-#define EIDMW_CNF_GUITOOL_SHOWNOTIFICATION  L"show_notification"    //number; 0=no, 1=yes(default)
-#define EIDMW_CNF_GUITOOL_SHOWANIMATIONS  L"show_animations"        //number; 0=no, 1=yes(default)
-#define EIDMW_CNF_GUITOOL_SHOWTBAR      L"show_toolbar"             //number; 0=no, 1=yes
-#define EIDMW_CNF_GUITOOL_VIRTUALKBD    L"use_virtual_keypad"       //number; 0=no, 1=yes
-#define EIDMW_CNF_GUITOOL_AUTOCARDREAD  L"automatic_cardreading"    //number; 0=no, 1=yes(default)
-#define EIDMW_CNF_GUITOOL_CARDREADNUMB  L"cardreader"               //number; -1(not specified), 0-10
-#define EIDMW_CNF_GUITOOL_REGCERTIF     L"registrate_certificate"   //number; 0=no, 1=yes(default)
-#define EIDMW_CNF_GUITOOL_REMOVECERTIF  L"remove_certificate"       //number; 0=no, 1=yes(default)
-#define EIDMW_CNF_GUITOOL_FILESAVE		L"default_save_path"        //string; path, ""(default)
+#define EIDMW_CNF_SECTION_GUITOOL           L"configuretool"            //section with the configure tool parameters
+#define EIDMW_CNF_GUITOOL_STARTWIN          L"start_with_windows"       //number; 0=no(default), 1=yes
+#define EIDMW_CNF_GUITOOL_STARTMINI         L"start_minimized"          //number; 0=no(default), 1=yes
+#define EIDMW_CNF_GUITOOL_SHOWPIC           L"show_picture"             //number; 0=no(default), 1=yes
+#define EIDMW_CNF_GUITOOL_SHOWNOTIFICATION  L"show_notification"        //number; 0=no, 1=yes(default)
+#define EIDMW_CNF_GUITOOL_SHOWANIMATIONS    L"show_animations"          //number; 0=no, 1=yes(default)
+#define EIDMW_CNF_GUITOOL_SHOWSTARTUPHELP   L"not_show_startup_help"    //number; 0=no(default), 1=yes
+#define EIDMW_CNF_GUITOOL_SHOWTBAR          L"show_toolbar"             //number; 0=no, 1=yes
+#define EIDMW_CNF_GUITOOL_VIRTUALKBD        L"use_virtual_keypad"       //number; 0=no, 1=yes
+#define EIDMW_CNF_GUITOOL_AUTOCARDREAD      L"automatic_cardreading"    //number; 0=no, 1=yes(default)
+#define EIDMW_CNF_GUITOOL_CARDREADNUMB      L"cardreader"               //number; -1(not specified), 0-10
+#define EIDMW_CNF_GUITOOL_REGCERTIF         L"registrate_certificate"   //number; 0=no, 1=yes(default)
+#define EIDMW_CNF_GUITOOL_REMOVECERTIF      L"remove_certificate"       //number; 0=no, 1=yes(default)
+#define EIDMW_CNF_GUITOOL_FILESAVE          L"default_save_path"        //string; path, ""(default)
 
 #define EIDMW_CNF_SECTION_XSIGN			L"xsign"					//section for xsign
 #define EIDMW_CNF_XSIGN_TSAURL			L"tsa_url"					//string URL of the Timestamp Server
@@ -333,6 +334,7 @@ public:
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWPIC;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWNOTIFICATION;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWANIMATIONS;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWSTARTUPHELP;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWTBAR;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_VIRTUALKBD;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_AUTOCARDREAD;

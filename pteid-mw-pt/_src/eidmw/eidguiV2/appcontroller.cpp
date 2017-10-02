@@ -69,7 +69,14 @@ bool AppController::isAnimationsEnabled(void){
 
     return m_Settings.getShowAnimations();
 }
+bool AppController::getNotShowHelpStartUp(void){
 
+    return m_Settings.getNotShowHelpStartUp();
+}
+void AppController::setNotShowHelpStartUp(bool notshowhelpStartUp){
+
+    m_Settings.setNotShowHelpStartUp(notshowhelpStartUp);
+}
 void AppController::initTranslation(){
 
     QString     appPath = QCoreApplication::applicationDirPath();

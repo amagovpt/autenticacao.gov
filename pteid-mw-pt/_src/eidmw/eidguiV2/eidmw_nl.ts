@@ -1038,7 +1038,7 @@
     <message>
         <location filename="contentPages/home/PageHomeForm.ui.qml" line="142"/>
         <source>STR_HOME_REMINDER</source>
-        <translation>Não voltar a mostrar</translation>
+        <translation>Não voltar a mostrar esta ajuda no arranque</translation>
     </message>
 </context>
 <context>

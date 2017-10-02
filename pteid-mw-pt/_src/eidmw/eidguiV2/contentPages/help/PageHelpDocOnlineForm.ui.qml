@@ -7,6 +7,7 @@ import "../../components" as Components
 
 Item {
     property alias propertyTextLinkCC: textLinkCC
+    property alias propertyReminderCheckBox: reminderCheckBox
 
     anchors.fill: parent
     Item {
@@ -146,6 +147,7 @@ Item {
                 text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_ONLINE") + ":"
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
+                color: Constants.COLOR_TEXT_BODY
             }
         }
 
@@ -166,6 +168,21 @@ Manual+de+Utiliza%C3%A7%C3%A3o+da+Aplica%C3%A7%C3%A3o+do+Cart%C3%A3o+de+Cidad%C3
                 font.italic: true
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
+            }
+        }
+        RowLayout {
+            id: rawCheckBox
+            anchors.top: rawLinks.bottom
+            anchors.topMargin: Constants.SIZE_TEXT_BODY
+            width: parent.width
+            CheckBox {
+                id: reminderCheckBox
+                text: qsTranslate("PageHelpDocOnline","STR_HOME_REMINDER")
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                enabled: true
             }
         }
     }
