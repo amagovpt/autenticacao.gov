@@ -27,6 +27,12 @@
 #include "Config.h"
 #include "Util.h"
 
+#ifdef WIN32
+#include <windows.h>
+#include <wchar.h>
+#include <Shlobj.h>
+#endif
+
 #ifndef WIN32
 #include "PCSC/wintypes.h"
 #include "sys/stat.h"
@@ -171,6 +177,34 @@ void CLogger::init(const char *directory,const char *prefix,long filesize,long f
 	init(utilStringWiden(directory).c_str(),utilStringWiden(prefix).c_str(),filesize,filenr,maxlevel,groupinnewfile);
 }
 
+#ifdef WIN32
+
+/*
+ Check for the presence of a pteid-debug.conf file in current user Desktop folder or %WINDIR%
+*/
+bool isWindowsDebugFlag() {
+	DWORD dwError = 0;
+	PWSTR pszPath = NULL;
+	DWORD dwAttr = 0;
+	
+	SHGetKnownFolderPath(FOLDERID_Desktop, 0, NULL, &pszPath);
+
+	std::wstring debugFlag(pszPath);
+
+	debugFlag += L"\\pteid-debug.conf";
+
+	dwAttr = GetFileAttributes(debugFlag.c_str());
+	bool is_windows_debug = dwAttr != INVALID_FILE_ATTRIBUTES;
+
+	std::wstring debugFlag2(_wgetenv(L"WINDIR"));
+	debugFlag2 += L"\\pteid-debug.conf";
+
+	dwAttr = GetFileAttributes(debugFlag2.c_str());
+
+	return (dwAttr != INVALID_FILE_ATTRIBUTES) || is_windows_debug;
+}
+#endif
+
 //Set the default values
 void CLogger::initFromConfig() 
 {
@@ -182,6 +216,12 @@ void CLogger::initFromConfig()
 	long lFileSize = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_LOGGING_FILESIZE);
 	std::wstring wcsMaxLevel = config.GetString(CConfig::EIDMW_CONFIG_PARAM_LOGGING_LEVEL);
 	tLOG_Level maxLevel = MapLevel(wcsMaxLevel.c_str());
+#ifdef WIN32
+	if (isWindowsDebugFlag())
+	{
+		maxLevel = LOG_LEVEL_DEBUG;
+	}
+#endif	
 	long lGroup = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_LOGGING_GROUP);
 
 	init(wcsLogDir.c_str(), wcsPrefix.c_str(), lFileSize, lFileNbr, maxLevel, (lGroup?true:false));
