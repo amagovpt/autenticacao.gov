@@ -173,7 +173,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="95"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="134"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="148"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1271"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1269"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="77"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="91"/>
         <location filename="gapi.cpp" line="1039"/>
@@ -805,7 +805,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="93"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="130"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="147"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1270"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1268"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="73"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="90"/>
         <source>STR_CUSTOM_SIGN_BY</source>
@@ -976,7 +976,7 @@
         <translation>(Agência para a Modernização Administrativa, IP e Instituto dos Registos e do Notariado, IP)</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAbout.qml" line="14"/>
+        <location filename="contentPages/help/PageHelpAbout.qml" line="11"/>
         <source>STR_HELP_APP_VERSION</source>
         <translation>Version</translation>
     </message>
@@ -984,59 +984,62 @@
 <context>
     <name>PageHelpDocOnline</name>
     <message>
-        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="26"/>
-        <location filename="contentPages/home/PageHomeForm.ui.qml" line="27"/>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="27"/>
+        <location filename="contentPages/home/PageHomeForm.ui.qml" line="30"/>
         <source>STR_HELP_DOC_TITLE</source>
         <translation>Application</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="42"/>
-        <location filename="contentPages/home/PageHomeForm.ui.qml" line="41"/>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="43"/>
+        <location filename="contentPages/home/PageHomeForm.ui.qml" line="44"/>
         <source>STR_HELP_DOC_SUB_TITLE</source>
         <translation>The Autenticação.Gov application allows citizens to take advantage of the electronic features of their Citizen Card and the Chave Móvel Digital.</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="55"/>
-        <location filename="contentPages/home/PageHomeForm.ui.qml" line="53"/>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="56"/>
+        <location filename="contentPages/home/PageHomeForm.ui.qml" line="56"/>
         <source>STR_HELP_DOC_TOPIC</source>
         <translation>Here you can, among other features</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="73"/>
-        <location filename="contentPages/home/PageHomeForm.ui.qml" line="71"/>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="74"/>
+        <location filename="contentPages/home/PageHomeForm.ui.qml" line="74"/>
         <source>STR_HELP_DOC_TOPIC_1</source>
         <translation>Read the data residing on the chip of your Citizen Card</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="94"/>
-        <location filename="contentPages/home/PageHomeForm.ui.qml" line="92"/>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="95"/>
+        <location filename="contentPages/home/PageHomeForm.ui.qml" line="95"/>
         <source>STR_HELP_DOC_TOPIC_2</source>
         <translation>Change the PIN codes associated with your Citizen Card</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="112"/>
-        <location filename="contentPages/home/PageHomeForm.ui.qml" line="110"/>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="113"/>
+        <location filename="contentPages/home/PageHomeForm.ui.qml" line="113"/>
         <source>STR_HELP_DOC_TOPIC_3</source>
         <translation>Confirm and update the address on the chip of your Citizen Card</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="130"/>
-        <location filename="contentPages/home/PageHomeForm.ui.qml" line="128"/>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="131"/>
+        <location filename="contentPages/home/PageHomeForm.ui.qml" line="131"/>
         <source>STR_HELP_DOC_TOPIC_4</source>
         <translation>Sign documents, as a citizen, professional or entrepreneur, using your Citizen&apos;s Card or your Chave Móvel Digital.</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="146"/>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="147"/>
+        <location filename="contentPages/home/PageHomeForm.ui.qml" line="147"/>
         <source>STR_HELP_DOC_ONLINE</source>
         <translation>Online documentation</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="165"/>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="167"/>
+        <location filename="contentPages/home/PageHomeForm.ui.qml" line="165"/>
         <source>STR_HELP_URL</source>
         <translation>Cartão de cidadão application manual</translation>
     </message>
     <message>
-        <location filename="contentPages/home/PageHomeForm.ui.qml" line="142"/>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="180"/>
+        <location filename="contentPages/home/PageHomeForm.ui.qml" line="178"/>
         <source>STR_HOME_REMINDER</source>
         <translation>Do not show again this help at startup</translation>
     </message>
@@ -1151,72 +1154,72 @@
         <translation>Click to know the Chave Móvel Digital</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="572"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="570"/>
         <source>STR_SIGN_SUCESS_MULTI</source>
         <translation>File(s) successfully signed</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="616"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="614"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="556"/>
         <source>STR_SIGN_FAIL</source>
         <translation>PDF signature failed</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="631"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="629"/>
         <source>STR_SIGN_PDF_FILES</source>
         <translation>PDF files</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="640"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="638"/>
         <source>STR_SIGN_PACKAGE</source>
         <translation>XADES / CCSIGN Package</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1025"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1032"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1057"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1023"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1030"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1055"/>
         <source>STR_SCAP_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1027"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1025"/>
         <source>STR_SCAP_ATTRIBUTES_NOT_SELECT</source>
         <oldsource>STR_MULTI_FILE_ATTRIBUTES_WARNING</oldsource>
         <translation>Attributes not selected</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1034"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1032"/>
         <source>STR_SCAP_MAX_FILESIZE</source>
         <translation>File size was exceeded. Max supported file size is</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1059"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1057"/>
         <source>STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG</source>
         <translation>Unable to sign multiple files with professional attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1078"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1076"/>
         <source>STR_MULTI_FILE_CMD_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1080"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1078"/>
         <source>STR_MULTI_FILE_CMD_WARNING_MSG</source>
         <translation>Can not sign multiple files with CMD</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1101"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1268"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1099"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1266"/>
         <source>STR_SIGN_DROP_MULTI</source>
         <translation>Drag here files to be signed or click here to find files</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1106"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1104"/>
         <source>STR_SIGN_NOT_PREVIEW</source>
         <translation>No preview available</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="497"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="495"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="457"/>
         <source>STR_SIGN_CMD_CODE</source>
         <translation>Enter the code</translation>
@@ -1232,7 +1235,7 @@
         <translation>But the timestamp could not be applied</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="512"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="510"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="472"/>
         <source>STR_SIGN_CMD_CODE_OP</source>
         <translation>Code</translation>
@@ -1577,7 +1580,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="45"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1011"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1009"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="103"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="108"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="60"/>
@@ -1592,7 +1595,7 @@
         <translation>Choose file</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1062"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1060"/>
         <source>STR_POPUP_FILE_OUTPUT_FOLDER</source>
         <translation>Choose the destination folder of the files</translation>
     </message>
@@ -1839,6 +1842,14 @@
         <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="250"/>
         <source>STR_PIN_ADDRESS_TEXT</source>
         <translation>This PIN is used for change and check of address.</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <location filename="main.qml" line="483"/>
+        <source>STR_RUN_MODE</source>
+        <translation>Test mode</translation>
     </message>
 </context>
 </TS>

@@ -478,7 +478,9 @@ Load language error. Please reinstall the application"
             // Do not select any option
             mainFormID.propertyMainMenuListView.currentIndex = -1
             mainFormID.propertyMainMenuBottomListView.currentIndex = -1
-            console.log("MainForm Completed")
+            console.log("MainForm Completed testmode: "+controler.getTestMode())
+            if(controler.getTestMode())
+                mainWindow.title = mainWindow.title + "   [ " + qsTr("STR_RUN_MODE") + " ]"
         }
         propertyImageLogo {
             onClicked: {

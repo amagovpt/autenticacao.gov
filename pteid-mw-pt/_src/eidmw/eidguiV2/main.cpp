@@ -40,14 +40,15 @@ int main(int argc, char *argv[])
         test_mode = true;
         default_sam_server = strdup(sam_server.getString());
         sam_server.setString("pki.teste.cartaodecidadao.pt:443");
+        settings.setTestMode( test_mode );
+        if(test_mode)
+            qDebug() << "Starting App in test mode";
     }
     else
     {
         //Force production mode
         sam_server.setString("pki.cartaodecidadao.pt:443");
     }
-    if(test_mode)
-        qDebug() << "Starting App in test mode";
 
     // GAPI init
     GAPI gapi;

@@ -52,7 +52,7 @@ Item {
         width: parent.width ; height: parent.height
         color: Constants.COLOR_MAIN_BLUE
         Item{
-            width: parent.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
+            width:  mainFormID.propertyMainMenuView.width
             height: parent.height
             Text {
                 id: categoryText

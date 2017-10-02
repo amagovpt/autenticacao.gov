@@ -36,6 +36,7 @@ public slots:
     QString getAppVersion(void);
     bool isAnimationsEnabled(void);
     bool getNotShowHelpStartUp(void);
+    bool getTestMode(void);
     void setNotShowHelpStartUp(bool notshowhelpStartUp);
     void initTranslation(void);
     bool getAutoCardReadingValue(void);
