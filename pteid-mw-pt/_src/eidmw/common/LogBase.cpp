@@ -182,7 +182,7 @@ void CLogger::init(const char *directory,const char *prefix,long filesize,long f
 /*
  Check for the presence of a pteid-debug.conf file in current user Desktop folder or %WINDIR%
 */
-bool isWindowsDebugFlag() {
+bool isWindowsDebugActive() {
 	DWORD dwError = 0;
 	PWSTR pszPath = NULL;
 	DWORD dwAttr = 0;
@@ -217,7 +217,7 @@ void CLogger::initFromConfig()
 	std::wstring wcsMaxLevel = config.GetString(CConfig::EIDMW_CONFIG_PARAM_LOGGING_LEVEL);
 	tLOG_Level maxLevel = MapLevel(wcsMaxLevel.c_str());
 #ifdef WIN32
-	if (isWindowsDebugFlag())
+	if (isWindowsDebugActive())
 	{
 		maxLevel = LOG_LEVEL_DEBUG;
 	}
