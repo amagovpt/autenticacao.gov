@@ -381,6 +381,50 @@ Load language error. Please reinstall the application"
                 }
             },
             Transition {
+                from: "STATE_EXPAND"
+                to: "STATE_HOME"
+                NumberAnimation
+                {
+                    target: mainFormID.propertySubMenuView
+                    property: "opacity"
+                    easing.type: Easing.Linear
+                    to: 0;
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+                }
+                NumberAnimation
+                {
+                    target: mainFormID.propertyContentPagesView
+                    property: "opacity"
+                    easing.type: Easing.Linear
+                    to: 0;
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+                }
+                NumberAnimation
+                {
+                    target: mainFormID.propertyMainMenuView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: mainFormID.propertyMainView.width;
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
+                }
+                NumberAnimation
+                {
+                    target: mainFormID.propertySubMenuView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: 0;
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
+                }
+                NumberAnimation
+                {
+                    target: mainFormID.propertyContentPagesView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: 0
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
+                }
+            },
+            Transition {
                 from: "STATE_NORMAL"
                 to: "STATE_EXPAND"
                 NumberAnimation
