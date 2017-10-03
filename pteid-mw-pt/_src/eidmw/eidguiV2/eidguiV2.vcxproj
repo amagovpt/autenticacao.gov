@@ -93,7 +93,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;$(PTEID_DIR_QT_4_X64)\include;$(PTEID_DIR_QT_4_X64)\include\QtQuick;$(PTEID_DIR_QT_4_X64)\include\QtGui\5.9.1\;..\common;$(PTEID_DIR_QT_4_X64)\include\QtCore\5.9.1\QtCore;$(PTEID_DIR_QT_4_X64)\include\QtCore\5.9.1;$(PTEID_DIR_QT_4_X64)\include\QtGui\5.9.1\QtGui;$(PTEID_DIR_QT_4_X64)\mkspecs\win32-msvc;$(PTEID_DIR_QT_4_X64)\include\QtGui;$(PTEID_DIR_QT_4_X64)\include\QtConcurrent;$(PTEID_DIR_QT_4_X64)\include\QtQuickControls2;$(PTEID_DIR_QT_4_X64)\include\QtWidgets;$(PTEID_DIR_QT_4_X64)\include\QtPrintSupport;$(PTEID_DIR_QT_4_X64)\include\QtANGLE;$(PTEID_DIR_QT_4_X64)\include\QtQml;$(PTEID_DIR_QT_4_X64)\include\QtNetwork;$(PTEID_DIR_QT_4_X64)\include\QtCore;$(PTEID_POPPLER_QT5);release;$(PTEID_DIR_QT_4_X64)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL_098_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(PTEID_DIR_QT_4_X64)\include;$(PTEID_DIR_QT_4_X64)\include\QtQuick;$(PTEID_DIR_QT_4_X64)\include\QtGui\5.9.1\;..\_Builds;..\common;$(PTEID_DIR_QT_4_X64)\include\QtCore\5.9.1\QtCore;$(PTEID_DIR_QT_4_X64)\include\QtCore\5.9.1;$(PTEID_DIR_QT_4_X64)\include\QtGui\5.9.1\QtGui;$(PTEID_DIR_QT_4_X64)\mkspecs\win32-msvc;$(PTEID_DIR_QT_4_X64)\include\QtGui;$(PTEID_DIR_QT_4_X64)\include\QtConcurrent;$(PTEID_DIR_QT_4_X64)\include\QtQuickControls2;$(PTEID_DIR_QT_4_X64)\include\QtWidgets;$(PTEID_DIR_QT_4_X64)\include\QtPrintSupport;$(PTEID_DIR_QT_4_X64)\include\QtANGLE;$(PTEID_DIR_QT_4_X64)\include\QtQml;$(PTEID_DIR_QT_4_X64)\include\QtNetwork;$(PTEID_DIR_QT_4_X64)\include\QtCore;$(PTEID_POPPLER_QT5);release;$(PTEID_DIR_QT_4_X64)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL_098_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -135,7 +135,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;$(PTEID_DIR_QT_4)\include;$(PTEID_DIR_QT_4)\include\QtQuick;$(PTEID_DIR_QT_4)\include\QtGui\5.9.1\;..\common;$(PTEID_DIR_QT_4)\include\QtCore\5.9.1\QtCore;$(PTEID_DIR_QT_4)\include\QtCore\5.9.1;$(PTEID_DIR_QT_4)\include\QtGui\5.9.1\QtGui;$(PTEID_DIR_QT_4)\mkspecs\win32-msvc;$(PTEID_DIR_QT_4)\include\QtGui;$(PTEID_DIR_QT_4)\include\QtConcurrent;$(PTEID_DIR_QT_4)\include\QtQuickControls2;$(PTEID_DIR_QT_4)\include\QtWidgets;$(PTEID_DIR_QT_4)\include\QtPrintSupport;$(PTEID_DIR_QT_4)\include\QtANGLE;$(PTEID_DIR_QT_4)\include\QtQml;$(PTEID_DIR_QT_4)\include\QtNetwork;$(PTEID_DIR_QT_4)\include\QtCore;$(PTEID_POPPLER_QT5);release;$(PTEID_DIR_QT_4)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL_098)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(PTEID_DIR_QT_4)\include;$(PTEID_DIR_QT_4)\include\QtQuick;$(PTEID_DIR_QT_4)\include\QtGui\5.9.1\;..\_Builds;..\common;$(PTEID_DIR_QT_4)\include\QtCore\5.9.1\QtCore;$(PTEID_DIR_QT_4)\include\QtCore\5.9.1;$(PTEID_DIR_QT_4)\include\QtGui\5.9.1\QtGui;$(PTEID_DIR_QT_4)\mkspecs\win32-msvc;$(PTEID_DIR_QT_4)\include\QtGui;$(PTEID_DIR_QT_4)\include\QtConcurrent;$(PTEID_DIR_QT_4)\include\QtQuickControls2;$(PTEID_DIR_QT_4)\include\QtWidgets;$(PTEID_DIR_QT_4)\include\QtPrintSupport;$(PTEID_DIR_QT_4)\include\QtANGLE;$(PTEID_DIR_QT_4)\include\QtQml;$(PTEID_DIR_QT_4)\include\QtNetwork;$(PTEID_DIR_QT_4)\include\QtCore;$(PTEID_POPPLER_QT5);release;$(PTEID_DIR_QT_4)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL_098)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -161,7 +161,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <LinkIncremental>false</LinkIncremental>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteidguiV2.exe</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>

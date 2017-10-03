@@ -14,12 +14,11 @@
 #ifdef WIN32
 #include <windows.h>
 #include <stdio.h>
-#include "verinfo.h"
 #include <QSysInfo>
 #include <QNetworkProxy>
-#else
-#include "pteidversions.h"
 #endif
+
+#include "pteidversions.h"
 
 #ifndef WIN32
 #include <unistd.h>
@@ -466,19 +465,8 @@ bool AppController::VerifyUpdates(std::string filedata)
     std::string distrover;
     std::string archver;
 
-#ifdef WIN32
-    QString filename = QCoreApplication::arguments().at(0);
-    CFileVersionInfo VerInfo;
-    char version[256];
-    if(VerInfo.Open(filename.toLatin1()))
-    {
-        VerInfo.QueryStringValue(VI_STR_FILEVERSION, version);
-    }
-    QString ver = QString::fromLatin1(version);
-
-#else
     QString ver (WIN_GUI_VERSION_STRING);
-#endif
+
 
     QStringList list1 = ver.split(",");
 
