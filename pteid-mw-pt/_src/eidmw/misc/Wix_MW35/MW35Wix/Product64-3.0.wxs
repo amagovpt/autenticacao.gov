@@ -594,13 +594,18 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 							  Target="[APPLICATIONROOTFOLDER]pteidgui.exe"
 							  WorkingDirectory="APPLICATIONROOTFOLDER"/>
           
-          <!-- 
           <Shortcut Id="eidguiV2StartMenuShortcut"
 							  Name="Autenticação.gov"
 							  Description="!(loc.PteidGuiDescr)"
 							  Target="[EIDGUIV2DIR]pteidguiV2.exe"
 							  WorkingDirectory="eidguiV2Dir"/>
-          -->      
+
+          <Shortcut Id="eidguiV2Shortcut"
+                Name="Autenticação.Gov"
+                Directory="DesktopFolder"
+                Description="!(loc.PteidGuiDescr)"
+                Target="[EIDGUIV2DIR]pteidguiV2.exe"
+                WorkingDirectory="EIDGUIV2DIR"/>
           
 					<Shortcut Id="EidViewerShortcut"
 							  Name="Cartão de Cidadão"
