@@ -1598,13 +1598,10 @@ void GAPI::getSCAPCompanyAttributes() {
          return;
        }
 
-       if (childAttributes.size() > 1)
-       {
-           qDebug() << "TODO: multiple attributes from the same supplier is not supported yet...";
-       }
-
-       attribute_list.append(QString::fromStdString(attrSupplier));
-       attribute_list.append(QString::fromStdString(childAttributes.at(0)));
+        for(uint j = 0; j < attributes.size(); j++) {
+            attribute_list.append(QString::fromStdString(attrSupplier));
+            attribute_list.append(QString::fromStdString(childAttributes.at(j)));
+        }
     }
 
     emit signalCompanyAttributesLoaded(attribute_list);
@@ -1628,18 +1625,15 @@ void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
         attributes.insert(attributes.end(), attributes2.begin(), attributes2.end());
     }
 
-    for(uint i = 0; i < attributes.size() ; i++)
-    {
+    for(uint i = 0; i < attributes.size() ; i++) {
+        
        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
        std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), isShortDescription);
 
-       if (childAttributes.size() > 1)
-       {
-           qDebug() << "TODO: multiple attributes from the same supplier is not supported yet...";
+       for(uint j = 0; j < childAttributes.size() ; j++) {
+          attribute_list.append(QString::fromStdString(attrSupplier));
+          attribute_list.append(QString::fromStdString(childAttributes.at(j)));
        }
-
-       attribute_list.append(QString::fromStdString(attrSupplier));
-       attribute_list.append(QString::fromStdString(childAttributes.at(0)));
     }
     if (queryType == 1)
         emit signalCompanyAttributesLoaded(attribute_list);
