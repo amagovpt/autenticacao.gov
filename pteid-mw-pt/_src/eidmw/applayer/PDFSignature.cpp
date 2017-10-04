@@ -300,10 +300,9 @@ namespace eIDMW
 		return sig_rect;
 	}
 
-	//TODO: split this into 1) reading cert from card  2) and parsing cert
 	CByteArray PDFSignature::getCitizenCertificate()
 	{
-			fprintf(stderr, "DEBUG: getCitizenData() This should only be called for Card Signature!\n");
+			MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: getCitizenCertificate() This should only be called for Card Signature!");
 
             CByteArray certData;
            
@@ -338,8 +337,7 @@ namespace eIDMW
 		X509_free(x509);
 	}
 
-	int PDFSignature::getPageCount()
-	{
+	int PDFSignature::getPageCount()  {
 		if (!m_doc->isOk())
 		{
 			fprintf(stderr, "getPageCount(): Probably broken PDF...\n");
@@ -352,7 +350,6 @@ namespace eIDMW
 			return -1;
 		}
 		return m_doc->getNumPages();
-
 	}
 
 	char* PDFSignature::getOccupiedSectors(int page)
@@ -459,9 +456,8 @@ namespace eIDMW
 			fprintf(stderr, "Poppler returned error loading PDF document %s\n",
 					doc->getFileName()->getCString());
 
-			delete doc;
 			delete outputName;
-			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+			throw CMWEXCEPTION(EIDMW_PDF_INVALID_ERROR);
 		}
 
 		if (doc->isEncrypted())
@@ -469,14 +465,14 @@ namespace eIDMW
 			fprintf(stderr, "Encrypted PDF: This is in the TODO List\n");
 			//TODO: Add proper error code(s)
 			delete outputName;
-			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+			throw CMWEXCEPTION(EIDMW_PDF_UNSUPPORTED_ERROR);
 		}
 
 		if (m_page > (unsigned int)doc->getNumPages())
 		{
 			fprintf(stderr, "Error: Signature Page %u is out of bounds for document %s",
 				m_page, doc->getFileName()->getCString());
-			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+			throw CMWEXCEPTION(EIDMW_PDF_INVALID_PAGE_ERROR);
 		}
 
 		// A little ugly hack:
@@ -486,7 +482,7 @@ namespace eIDMW
 		if (p == NULL)
 		{
 			fprintf(stderr, "Failed to get page from PDFDoc object\n");
-			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+			throw CMWEXCEPTION(EIDMW_PDF_INVALID_ERROR);
 		}
 
 		//By the spec, the visible/writable area can be cropped by the CropBox, BleedBox, etc...
@@ -618,7 +614,6 @@ namespace eIDMW
         return rc;
 	}
 
-    /* Certificate */
     bool PDFSignature::isExternalCertificate(){
         return m_isExternalCertificate;
     }

@@ -206,7 +206,7 @@ bool isWindowsDebugActive() {
 #endif
 
 //Set the default values
-void CLogger::initFromConfig() 
+void CLogger::initFromConfig()
 {
 	CConfig config;
 
