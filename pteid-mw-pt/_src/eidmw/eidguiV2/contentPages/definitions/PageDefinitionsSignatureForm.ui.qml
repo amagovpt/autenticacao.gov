@@ -419,7 +419,7 @@ Item {
                         anchors.top: sigLocationTextCustom.bottom
                         anchors.topMargin: parent.height * 0.1
                         anchors.left: rectPreCustomImage.right
-                        font.pixelSize: Constants.SIZE_TEXT_BODY
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
                         color: Constants.COLOR_TEXT_LABEL
                         visible: !fileLoaded
                         font.family: lato.name
