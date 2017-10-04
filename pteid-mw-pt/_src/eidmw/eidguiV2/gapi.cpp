@@ -1554,7 +1554,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
         return;   
        }
 
-       for(uint j = 0; j < attributes.size() ; j++) {
+       for(uint j = 0; j < childAttributes.size() ; j++) {
 
            attribute_list.append(QString::fromStdString(attrSupplier));
            attribute_list.append(QString::fromStdString(childAttributes.at(j)));
@@ -1598,7 +1598,7 @@ void GAPI::getSCAPCompanyAttributes() {
          return;
        }
 
-        for(uint j = 0; j < attributes.size(); j++) {
+        for(uint j = 0; j < childAttributes.size(); j++) {
             attribute_list.append(QString::fromStdString(attrSupplier));
             attribute_list.append(QString::fromStdString(childAttributes.at(j)));
         }
