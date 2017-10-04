@@ -14,6 +14,7 @@
 #include <QPrintDialog>
 #include "Settings.h"
 #include "genpur.h"
+#include "certificates.h"
 
 //MW libraries
 #include "eidlib.h"
@@ -241,6 +242,8 @@ public:
     static void declareQMLTypes() {
         qmlRegisterType<GAPI>("eidguiV2", 1, 0, "GAPI");
     }
+    GUISettings    m_Settings;
+    CERTIFICATES    m_Certificates;
 
 public slots:
     // Slots to Gui request values
@@ -354,8 +357,11 @@ signals:
     void signalPdfPrintFail();
     void signalLanguageChangedError();
 
+    // Import Certificates
+    void signalImportCertificatesFail();
+    void signalRemoveCertificatesFail();
+
 private:
-    GUISettings    m_Settings;
     bool LoadTranslationFile( GenPur::UI_LANGUAGE NewLanguage );
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();

@@ -65,6 +65,22 @@ Load language error. Please reinstall the application"
                     qsTranslate("Popup Card","STR_ERROR_CODE") + error_code
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
+        onSignalImportCertificatesFail: {
+            console.log("Signal onSignalImportCertificatesFail")
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    qsTranslate("Popup Card","STR_POPUP_ERROR")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    qsTranslate("Popup Card","STR_CERTIFICATES_IMPORT_ERROR_MSG")
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+        }
+        onSignalRemoveCertificatesFail: {
+            console.log("Signal onSignalRemoveCertificatesFail")
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    qsTranslate("Popup Card","STR_POPUP_ERROR")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    qsTranslate("Popup Card","STR_CERTIFICATES_REMOVE_ERROR_MSG")
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+        }
         onSignalLanguageChangedError: {
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                     "Erro / Error"

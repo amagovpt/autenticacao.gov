@@ -1910,6 +1910,15 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
             //------------------------------------
             // TODO: remove the certificates
             //------------------------------------
+            if (pCallBackData->getMainWnd()->m_Settings.getRemoveCert())
+            {
+                bool bImported = pCallBackData->getMainWnd()->m_Certificates.RemoveCertificates(pCallBackData->getReaderName());
+
+                if(!bImported){
+                    qDebug() << "RemoveCertificates fail";
+					emit  pCallBackData->getMainWnd()->signalRemoveCertificatesFail();
+                }
+            }
 
             //------------------------------------
             // send an event to the main app to show the popup message
@@ -1936,6 +1945,19 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
             pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_CHANGED);
             pCallBackData->getMainWnd()->setAddressLoaded(false);
             pCallBackData->getMainWnd()->resetReaderSelected();
+
+            //------------------------------------
+            // register certificates when needed
+            //------------------------------------
+			if (pCallBackData->getMainWnd()->m_Settings.getRegCert())
+            {
+                bool bImported = pCallBackData->getMainWnd()->m_Certificates.ImportCertificates(pCallBackData->getReaderName());
+
+                if(!bImported){
+                    qDebug() << "ImportCertificates fail";
+					emit  pCallBackData->getMainWnd()->signalImportCertificatesFail();
+                }
+            }
         }
     }
     catch (...)
