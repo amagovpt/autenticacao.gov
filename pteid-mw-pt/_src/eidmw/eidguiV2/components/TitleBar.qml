@@ -127,6 +127,7 @@ Item {
                 id: mouseAreaQuitButton
                 anchors.fill: parent
                 hoverEnabled: true
+                //TODO: implement some similar with MainWnd::quit_application
                 onClicked: Qt.quit()
             }
         }
