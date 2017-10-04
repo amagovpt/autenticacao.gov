@@ -301,12 +301,12 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	//Visible Signature location 
 	if (rect)
 	{
-		//XXX: crappy logic to determine if we have small signature format 
-		small_signature_format = (rect->y2 - rect->y1) < 90.0;
+		//Check if signature height (y2 - y1) is less than 90 considering rounding errors
+		small_signature_format = (rect->y2 - rect->y1) - 90.0 < -0.00001;
 				
 		r0=rect->x1;
 		r1=rect->y1;
-		r2=rect->x2; 
+		r2=rect->x2;
 		r3=rect->y2;
 	}
 	obj4.arrayAdd (obj2.initReal(r0));
