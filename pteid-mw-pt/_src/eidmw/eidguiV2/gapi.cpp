@@ -1524,7 +1524,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
     QList<QString> attribute_list;
     PTEID_EIDCard * card = NULL;
     getCardInstance(card);
-    if (card == NULL){
+    if (card == NULL) {
         emit signalEntityAttributesLoadedError();
         return;
     }
@@ -1538,14 +1538,13 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
 
     std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(*card, supplier_ids);
 
-    if (attributes.size() == 0)
-    {
+    if (attributes.size() == 0) {
         emit signalEntityAttributesLoadedError();
         return;
     }
 
-    for(uint i = 0; i < attributes.size() ; i++)
-    {
+    for(uint i = 0; i < attributes.size() ; i++) {
+
        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
        std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), false);
 
@@ -1555,13 +1554,11 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
         return;   
        }
 
-       if (childAttributes.size() > 1)
-       {
-           qDebug() << "TODO: multiple attributes from the same supplier is not supported yet...";
-       }
+       for(uint j = 0; j < attributes.size() ; j++) {
 
-       attribute_list.append(QString::fromStdString(attrSupplier));
-       attribute_list.append(QString::fromStdString(childAttributes.at(0)));
+           attribute_list.append(QString::fromStdString(attrSupplier));
+           attribute_list.append(QString::fromStdString(childAttributes.at(j)));
+       }
     }
 
     emit signalEntityAttributesLoaded(attribute_list);
@@ -1596,9 +1593,9 @@ void GAPI::getSCAPCompanyAttributes() {
        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Attribute from supplier: %s containing %d child attributes", attrSupplier.c_str(), childAttributes.size()) ;
 
        if (childAttributes.size() == 0) {
-        qDebug() << "Zero child attributes in AttributeResponseValues!";
-        emit signalCompanyAttributesLoadedError();
-        return; 
+         qDebug() << "Zero child attributes in AttributeResponseValues!";
+         emit signalCompanyAttributesLoadedError();
+         return;
        }
 
        if (childAttributes.size() > 1)
