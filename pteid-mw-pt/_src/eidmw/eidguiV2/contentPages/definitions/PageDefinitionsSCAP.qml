@@ -82,7 +82,8 @@ PageDefinitionsSCAPForm {
     Component {
         id: attributeListDelegate
         Rectangle {
-            width: parent.width
+            width: parent.width - propertyEntitiesListViewScroll.width
+                   - Constants.SIZE_ROW_H_SPACE * 0.5
             height: columnItem.height + 10
             id: container
             color: Constants.COLOR_MAIN_SOFT_GRAY
@@ -130,7 +131,8 @@ PageDefinitionsSCAPForm {
     Component {
         id: attributeListDelegateCompanies
         Rectangle {
-            width: parent.width
+            width: parent.width - propertyCompaniesListViewScroll.width
+                   - Constants.SIZE_ROW_H_SPACE * 0.5
             height: columnItem.height + 10
             id: container
             color: Constants.COLOR_MAIN_SOFT_GRAY

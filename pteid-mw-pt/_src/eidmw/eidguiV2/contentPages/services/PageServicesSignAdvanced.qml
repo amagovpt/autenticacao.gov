@@ -857,10 +857,10 @@ PageServicesSignAdvancedForm {
         id: attributeListDelegate
         Rectangle {
             id: container
-            width: parent.width - 40
+            width: parent.width - Constants.SIZE_ROW_H_SPACE
             height: columnItem.height + 10
             color: Constants.COLOR_MAIN_SOFT_GRAY
-            x: 40
+
             CheckBox {
                 id: checkboxSel
                 font.family: lato.name

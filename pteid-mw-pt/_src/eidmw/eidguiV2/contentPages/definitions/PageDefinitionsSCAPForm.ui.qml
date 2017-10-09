@@ -10,8 +10,10 @@ Item {
     property alias propertyButtonLoadEntityAttributes: buttonLoadEntityAttributes
     property alias propertyBusyIndicator: busyIndicator
     property alias propertyBusyIndicatorAttributes: busyIndicatorAttributes
-    property alias propertyBar : bar
+    property alias propertyBar: bar
     property alias propertyListViewEntities: listViewEntities
+    property alias propertyCompaniesListViewScroll: companiesListViewScroll
+    property alias propertyEntitiesListViewScroll: entitiesListViewScroll
 
     anchors.fill: parent
     Item {
@@ -92,12 +94,21 @@ Item {
 
                     ListView {
                         id: listViewEntities
-                        anchors.fill: parent
+                        width: parent.width
+                        height: parent.height
+                        clip: true
                         model: entityAttributesModel
                         delegate: attributeListDelegate
                         focus: true
                         spacing: 10
+                        boundsBehavior: Flickable.StopAtBounds
 
+                        ScrollBar.vertical: ScrollBar {
+                            id: entitiesListViewScroll
+                            active: true
+                            visible: true
+                            width: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        }
                     }
                 }
 
@@ -129,7 +140,8 @@ Item {
                     Text {
                         font.pixelSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
-                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_COMPANY_MSG")
+                        text: qsTranslate("PageDifinitionsSCAP",
+                                          "STR_SCAP_ATTRIBUTES_COMPANY_MSG")
                         wrapMode: Text.Wrap
                         width: parent.width
                         color: Constants.COLOR_MAIN_BLUE
@@ -140,15 +152,27 @@ Item {
                 Item {
                     id: rectangleCompanies
                     width: parent.width
-                    height: stackLayout.height - rowCompanies.height - rawButtonLoadCompanyAttributes.height
+                    height: stackLayout.height - rowCompanies.height
+                            - rawButtonLoadCompanyAttributes.height
                     anchors.top: rowCompanies.bottom
 
                     ListView {
-                        anchors.fill: parent
+                        id: listViewCompanies
+                        width: parent.width
+                        height: parent.height
+                        clip: true
                         model: companyAttributesModel
                         delegate: attributeListDelegateCompanies
                         focus: true
                         spacing: 10
+                        boundsBehavior: Flickable.StopAtBounds
+
+                        ScrollBar.vertical: ScrollBar {
+                            id: companiesListViewScroll
+                            active: true
+                            visible: true
+                            width: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        }
                     }
                 }
 

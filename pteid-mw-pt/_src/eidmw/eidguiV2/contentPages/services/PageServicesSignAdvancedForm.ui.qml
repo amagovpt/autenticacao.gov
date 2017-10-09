@@ -469,10 +469,19 @@ Item {
                         ListView {
                             id: listViewEntities
                             anchors.fill: parent
+                            clip: true
                             model: entityAttributesModel
                             delegate: attributeListDelegate
                             focus: true
                             spacing: 2
+                            boundsBehavior: Flickable.StopAtBounds
+
+                            ScrollBar.vertical: ScrollBar {
+                                id: attributesListViewScroll
+                                active: true
+                                visible: true
+                                width: Constants.SIZE_TEXT_FIELD_H_SPACE
+                            }
                         }
 
                     }
