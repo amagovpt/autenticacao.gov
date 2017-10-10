@@ -440,11 +440,12 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
+                        z:1
                     }
                     Item {
                         id: rectangleEntities
                         width: parent.width
-                        height: 100
+                        height: 120
                         anchors.top: switchSignAdd.bottom
                         MouseArea {
                             id: mouseAreaTextAttributesMsg

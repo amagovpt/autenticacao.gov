@@ -32,18 +32,18 @@ PageDefinitionsSCAPForm {
         }
         onSignalSCAPEntitiesLoaded: {
             console.log("Definitions SCAP - Signal SCAP entities loaded")
-                for (var i = 0; i < entitiesList.length; i++)
-                {
-                    entityAttributesModel.append({
-                                                     entityName: entitiesList[i], attribute: "", checkBoxAttr: false
-                                                 });
-                }
+            for (var i = 0; i < entitiesList.length; i++)
+            {
+                entityAttributesModel.append({
+                                                 entityName: entitiesList[i], attribute: "", checkBoxAttr: false
+                                             });
+            }
 
-                // Load attributes from cache (Entities, isShortDescription)
-                gapi.startLoadingAttributesFromCache(0, 0)
-                // Load attributes from cache (Companies, isShortDescription)
-                gapi.startLoadingAttributesFromCache(1, 0)
-            if(propertyBar.currentIndex == 0)propertyBusyIndicator.running = false
+            // Load attributes from cache (Entities, isShortDescription)
+            gapi.startLoadingAttributesFromCache(0, 0)
+            // Load attributes from cache (Companies, isShortDescription)
+            gapi.startLoadingAttributesFromCache(1, 0)
+            propertyBusyIndicator.running = false
 
         }
         onSignalEntityAttributesLoaded:{
@@ -52,30 +52,52 @@ PageDefinitionsSCAPForm {
                 for(var i = 0; i < attribute_list.length; i=i+2)
                 {
                     entityAttributesModel.append({
-                                                     entityName: attribute_list[i], attribute: attribute_list[i+1]
+                                                     entityName: attribute_list[i], attribute: "<ul><li>"+attribute_list[i+1]+"</li></ul>"
                                                  });
                 }
             }else{
-                for(var i = 0; i < attribute_list.length; i=i+2)
+                // Remove old attributes
+                for(i = 0; i < attribute_list.length; i=i+2)
                 {
                     for (var j = 0; j < entityAttributesModel.count; j++){
                         if(entityAttributesModel.get(j).entityName === attribute_list[i]){
-                            entityAttributesModel.set(j, {"entityName": attribute_list[i], "attribute":attribute_list[i+1]})
+                            entityAttributesModel.set(j, {"entityName": attribute_list[i], "attribute":""})
+                        }
+                    }
+                }
+                // Add new attribute
+                for(i = 0; i < attribute_list.length; i=i+2)
+                {
+                    for (var j = 0; j < entityAttributesModel.count; j++){
+                        if(entityAttributesModel.get(j).entityName === attribute_list[i]){
+                            entityAttributesModel.set(j, {"entityName": attribute_list[i], "attribute":
+                                                          entityAttributesModel.get(j).attribute
+                                                          + "<ul><li>"+attribute_list[i+1]+"</li></ul>"})
                         }
                     }
                 }
             }
-            if(propertyBar.currentIndex == 0)propertyBusyIndicatorAttributes.running = false
+            propertyBusyIndicatorAttributes.running = false
         }
         onSignalCompanyAttributesLoaded: {
             console.log("Definitions SCAP - Signal SCAP company attributes loaded")
             for(var i = 0; i < attribute_list.length; i=i+2)
             {
-                companyAttributesModel.append({
-                                                  entityName: attribute_list[i], attribute: attribute_list[i+1]
-                                              });
+                if(companyAttributesModel.count>0 &&
+                        companyAttributesModel.get(companyAttributesModel.count-1).entityName === attribute_list[i]){
+                    companyAttributesModel.set(companyAttributesModel.count-1,{
+                                                   entityName: attribute_list[i],
+                                                   attribute: companyAttributesModel.get
+                                                              (companyAttributesModel.count-1).attribute
+                                                              + "<ul><li>"+attribute_list[i+1]+"</li></ul>"
+                                               });
+                }else{
+                    companyAttributesModel.append({
+                                                      entityName: attribute_list[i], attribute: "<ul><li>"+attribute_list[i+1]+"</li></ul>"
+                                                  });
+                }
             }
-            if(propertyBar.currentIndex == 1)propertyBusyIndicatorAttributes.running = false
+            propertyBusyIndicatorAttributes.running = false
         }
     }
 
@@ -94,7 +116,7 @@ PageDefinitionsSCAPForm {
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.capitalization: Font.MixedCase
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.top: parent.top
                 onCheckedChanged: {
 
                     entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
@@ -112,17 +134,22 @@ PageDefinitionsSCAPForm {
             Column {
                 id: columnItem
                 anchors.left: checkboxSel.right
-                width: parent.width
+                width: parent.width - checkboxSel.width - Constants.SIZE_ROW_H_SPACE * 0.5
                 anchors.verticalCenter: parent.verticalCenter
                 Text {
                     text: '<b>Entidade:</b> ' + entityName
-                    width: parent.width - checkboxSel.width
+                    width: parent.width
                     wrapMode: Text.WordWrap
                 }
                 Text {
-                    text: attribute.length > 0 ? '      <b>Atributo:</b> ' + attribute : "<b>Atributo:</b>"
-                    width: parent.width - checkboxSel.width
+                    text: "<b>Atributos:</b>"
+                    width: parent.width
                     wrapMode: Text.WordWrap
+                }
+                Text {
+                    width: parent.width
+                    wrapMode: Text.WordWrap
+                    text: attribute
                 }
             }
 
@@ -138,17 +165,23 @@ PageDefinitionsSCAPForm {
             color: Constants.COLOR_MAIN_SOFT_GRAY
             Column {
                 id: columnItem
-                width: parent.width
+                width: parent.width - Constants.SIZE_ROW_H_SPACE
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     text: '<b>Entidade:</b> ' + entityName
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
                 Text {
-                    text: attribute.length > 0 ? '      <b>Atributo:</b> ' + attribute : "<b>Atributo:</b>"
+                    text: "<b>Atributos:</b>"
                     width: parent.width
                     wrapMode: Text.WordWrap
+                }
+                Text {
+                    width: parent.width
+                    wrapMode: Text.WordWrap
+                    text: attribute
                 }
             }
 
