@@ -723,19 +723,42 @@ QString GAPI::getCardActivation() {
 
     PTEID_EId &eid_file = card->getID();
 
-    if (isExpiredDate(eid_file.getValidityEndDate())) {
+    PTEID_Certificates&	 certificates	= card->getCertificates();
+
+    int certificateStatus = PTEID_CERTIF_STATUS_UNKNOWN;
+
+    certificateStatus = certificates.getCert(PTEID_Certificate::CITIZEN_AUTH).getStatus();
+
+    // If state active AND validity not expired AND certificate active
+    if(card->isActive() && !isExpiredDate(eid_file.getValidityEndDate())
+            && certificateStatus == PTEID_CERTIF_STATUS_VALID)
+    {
+        return QString(tr("STR_CARD_ACTIVE_AND_VALID"));
+    }
+    // Else If state active AND validity not expired AND certificate error
+    else if(card->isActive() && !isExpiredDate(eid_file.getValidityEndDate())
+            && (certificateStatus == PTEID_CERTIF_STATUS_CONNECT || certificateStatus == PTEID_CERTIF_STATUS_ERROR
+            || certificateStatus == PTEID_CERTIF_STATUS_ISSUER || certificateStatus == PTEID_CERTIF_STATUS_UNKNOWN))
+    {
+        return QString(tr("STR_CARD_CONNECTION_ERROR"));
+    }
+    //Else If state active AND validity not expired AND certificate suspended or revoked
+    else if(card->isActive() && !isExpiredDate(eid_file.getValidityEndDate())
+            && (certificateStatus == PTEID_CERTIF_STATUS_SUSPENDED || certificateStatus == PTEID_CERTIF_STATUS_REVOKED))
+    {
+        return QString(tr("STR_CARD_CANCELED"));
+    }
+    //Else If state active AND validity expired
+    else if(card->isActive() && isExpiredDate(eid_file.getValidityEndDate()))
+    {
         return QString(tr("STR_CARD_EXPIRED"));
     }
-    else if (!card->isActive()) {
+    //Else If state not active
+    else if(!card->isActive())
+    {
         return QString(tr("STR_CARD_NOT_ACTIVE"));
     }
-    else {
-        return QString(tr("STR_CARD_HAS_BEEN_ACTIVATED"));
-    }
-
     END_TRY_CATCH
-
-            return QString();
 }
 
 QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
@@ -1075,14 +1098,12 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
         drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_DELIVERY_ENTITY"),
                         QString::fromUtf8(eid_file.getIssuingEntity()));
         pos_y += LINE_HEIGHT;
-
-        drawSingleField(painter, pos_x, pos_y, tr("STR_CARD_STATE"), getCardActivation());
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_DOCUMENT_TYPE"),
+        drawSingleField(painter, pos_x, pos_y, tr("STR_DOCUMENT_TYPE"),
                         QString::fromUtf8(eid_file.getDocumentType()));
-        pos_y += LINE_HEIGHT;
-
-        drawSingleField(painter, pos_x, pos_y, tr("STR_DELIVERY_LOCATION"),
+        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_DELIVERY_LOCATION"),
                         QString::fromUtf8(eid_file.getLocalofRequest()));
+        pos_y += LINE_HEIGHT;
+        drawSingleField(painter, pos_x, pos_y, tr("STR_CARD_STATE"), getCardActivation());
 
         pos_y += 50;
     }
@@ -2115,6 +2136,44 @@ void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificat
 
 void GAPI::startfillCertificateList( void ) {
     QtConcurrent::run(this, &GAPI::fillCertificateList);
+}
+
+void GAPI::startGetCardActivation( void ) {
+
+    connect(this, SIGNAL(getCertificateAuthStatusFinished(int)),
+            this, SLOT(showCertificateAuthStatus(int)), Qt::UniqueConnection);
+
+    QtConcurrent::run(this, &GAPI::getCertificateAuthStatus);
+}
+
+void GAPI::showCertificateAuthStatus(int certificateStatus)
+{
+    QString returnString;
+
+    returnString = getCardActivation();
+
+    emit signalShowCardActivation(returnString);
+}
+
+void GAPI::getCertificateAuthStatus ( void )
+{
+    int certificateStatus = PTEID_CERTIF_STATUS_UNKNOWN;
+
+    qDebug() << "getCertificateAuthStatus";
+
+    BEGIN_TRY_CATCH
+
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
+
+    PTEID_Certificates&	 certificates	= card->getCertificates();
+
+    certificateStatus = certificates.getCert(PTEID_Certificate::CITIZEN_AUTH).getStatus();
+
+    emit getCertificateAuthStatusFinished(certificateStatus);
+
+    END_TRY_CATCH
 }
 
 void GAPI::fillCertificateList ( void )

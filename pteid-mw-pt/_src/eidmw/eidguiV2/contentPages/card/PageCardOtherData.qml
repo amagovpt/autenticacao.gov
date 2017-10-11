@@ -12,6 +12,7 @@ PageCardOtherDataForm {
         }
         onSignalCardDataChanged: {
             console.log("Data Card Identify --> Data Changed")
+            gapi.startGetCardActivation()
             propertyTextBoxNIF.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.NIF)
             propertyTextBoxNISS.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.NISS)
             propertyTextBoxNSNS.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.NSNS)
@@ -20,8 +21,12 @@ PageCardOtherDataForm {
             propertyTextBoxIssuingEntity.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.IssuingEntity)
             propertyTextBoxDocumentType.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Documenttype)
             propertyTextBoxPlaceOfRequest.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.PlaceOfRequest)
-            propertyTextBoxCardState.propertyDateField.text = gapi.getCardActivation()
+            propertyTextBoxCardState.propertyDateField.text = ""
+
+        }
+        onSignalShowCardActivation: {
             propertyBusyIndicator.running = false
+            propertyTextBoxCardState.propertyDateField.text = statusMessage
         }
 
         onSignalCardAccessError: {

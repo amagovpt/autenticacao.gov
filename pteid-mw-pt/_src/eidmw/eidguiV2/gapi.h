@@ -313,6 +313,8 @@ public slots:
 
     void setEventCallbacks( void );
     void startfillCertificateList ( void );
+    void startGetCardActivation ( void );
+    void showCertificateAuthStatus(int certificateStatus);
 
     void initTranslation();
 
@@ -344,6 +346,8 @@ signals:
     void signalCardChanged(const int error_code);
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage);
     void signalCertificatesChanged(const QVariantMap certificatesMap);
+    void getCertificateAuthStatusFinished(int certificateStatus);
+    void signalShowCardActivation(QString statusMessage);
 
     //SCAP signals
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
@@ -384,6 +388,7 @@ private:
     void doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
     void fillCertificateList (void );
+    void getCertificateAuthStatus(void );
     void getCardInstance(PTEID_EIDCard *&new_card);
     bool useCustomSignature(void);
     void stopAllEventCallbacks(void);
