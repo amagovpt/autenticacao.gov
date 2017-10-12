@@ -83,6 +83,16 @@ PageCardPrintForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  qsTr("STR_PRINT_CREATE_PDF_FAIL")
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
+        onSignalPrinterPrintSucess: {
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTr("STR_PRINT_PRINTER")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTr("STR_PRINT_PRINTER_SUCESS")
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+        }
+        onSignalPrinterPrintFail: {
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTr("STR_PRINT_PRINTER")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  qsTr("STR_PRINT_PRINTER_FAIL")
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+        }
         onSignalCardDataChanged: {
             console.log("Data Card Print --> Data Changed")
             propertyBusyIndicator.running = false

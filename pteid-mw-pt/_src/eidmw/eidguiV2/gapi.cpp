@@ -798,17 +798,28 @@ void GAPI::startPrint(QString outputFile, double isBasicInfo,double isAddicional
     QPrinter printer;
     bool res = false;
 
-    printer.setDocName("CartaoCidadao_signed.pdf");
+    printer.setDocName("CartaoCidadao.pdf");
     QPrintDialog *dlg = new QPrintDialog(&printer);
     if(dlg->exec() == QDialog::Accepted) {
          qDebug() << "QPrintDialog! Accepted";
          BEGIN_TRY_CATCH;
          // Print PDF not Signed
          res = drawpdf(printer, params);
-         if (res) {
-             emit signalPdfPrintSucess();
+
+         if ( params.outputFile.toUtf8().size() > 0){
+             qDebug() << "Create PDF";
+             if (res) {
+                 emit signalPdfPrintSucess();
+             }else{
+                 emit signalPdfPrintFail();
+             }
          }else{
-             emit signalPdfPrintFail();
+             qDebug() << "Printing to a printer";
+             if (res) {
+                 emit signalPrinterPrintSucess();
+             }else{
+                 emit signalPrinterPrintFail();
+             }
          }
          END_TRY_CATCH
     }

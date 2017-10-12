@@ -357,8 +357,10 @@ signals:
     void signalCompanyAttributesLoadedError();
     void signalEntityAttributesLoadedError();
     void signalPdfPrintSucess();
+    void signalPrinterPrintSucess();
     void signalPdfPrintSignSucess();
     void signalPdfPrintFail();
+    void signalPrinterPrintFail();
     void signalLanguageChangedError();
 
     // Import Certificates
