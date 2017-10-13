@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <?define var.QMLDIR=..\..\..\_Binaries35\x64\VC9\Release\qml-app\ ?>
+  <?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_4_X64)\plugins\printsupport\?>
   <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC9\Release\ ?>
     <Fragment>
         <DirectoryRef Id="TARGETDIR">
@@ -104,6 +105,11 @@
                         <File Id="filA44B96E0C39B366A3127AB12E7C1B52D" KeyPath="yes" Source="$(var.QMLDIR)\imageformats\qwebp.dll" />
                     </Component>
                 </Directory>
+              <Directory Id="dirC09DA36A115015E9038FA12E538F7779" Name="printsupport">
+                <Component Id="cmpE27765DBB8CE176CE8FC7A3E4DDBBF6F" Guid="{79F0F042-EB69-415E-92C1-24E4E5C9BD65}">
+                  <File Id="fil66E1A02D5E2D7906F866A89E88C46908" KeyPath="yes" Source="$(var.PTEID_QT_PRINTSUPPORT)\windowsprintersupport.dll" />
+                </Component>
+              </Directory>
                 <Directory Id="dirC09DA36A115015E9038FA12E538F7749" Name="platforms">
                     <Component Id="cmpE27765DBB8CE176CE8FC7A3E4DDBBF3F" Guid="{79F0F042-EB69-415E-92C1-24E4E5C9BD45}">
                         <File Id="fil66E1A02D5E2D7906F866A89E88C42908" KeyPath="yes" Source="$(var.QMLDIR)\platforms\qwindows.dll" />
@@ -2632,6 +2638,7 @@
             <ComponentRef Id="cmp2A331590386EDED45BE0A7FDC0FA06F7" />
             <ComponentRef Id="cmp63825F910B4734870FAE000EAF020243" />
             <ComponentRef Id="cmpE27765DBB8CE176CE8FC7A3E4DDBBF3F" />
+            <ComponentRef Id="cmpE27765DBB8CE176CE8FC7A3E4DDBBF6F" />
             <ComponentRef Id="cmp0FB0EAE0175EF9B7BC21419AE1DADFC7" />
             <ComponentRef Id="cmpE5AE9A6BD245065012D54551561E27E4" />
             <ComponentRef Id="cmp5C785E8A73D0E3D802573E9FAB186B22" />
