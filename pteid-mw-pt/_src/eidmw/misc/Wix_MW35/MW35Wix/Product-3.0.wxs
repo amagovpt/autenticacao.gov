@@ -4,8 +4,6 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <?include ..\..\..\svn_revision.wxs ?>
 
-  <?define var.OfficialProductVersion = 3.0.0?>
-  <?define var.ProductVersion = 3.0.$(var.RevisionNumber)?>
   <?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
   <?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
@@ -20,7 +18,7 @@
            Name="$(var.ProductName)"
            Language="!(loc.Lang)"
            Codepage="1252"
-           Version="$(var.ProductVersion)"
+           Version="$(var.FullProductVersion)"
            Manufacturer="Portuguese Government"
            UpgradeCode="$(var.UpgradeCode)">
 
@@ -28,7 +26,7 @@
              InstallerVersion="405"
              Keywords="Portugal e-ID Middleware Installer"
              Platform="x86"
-             Comments="Portuguese eID Middleware 2.4.2 SVN Revision $(var.RevisionNumber)"
+             Comments="Portuguese eID Middleware $(var.OfficialProductVersion) SVN Revision $(var.RevisionNumber)"
              Manufacturer="Portuguese Government"
              Compressed="yes"
              InstallPrivileges="elevated"
