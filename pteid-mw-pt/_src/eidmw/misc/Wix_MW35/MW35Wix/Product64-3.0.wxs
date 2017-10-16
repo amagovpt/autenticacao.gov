@@ -18,7 +18,7 @@
 			 Name="$(var.ProductName)"
 			 Language="!(loc.Lang)"
 			 Codepage="1252"
-			 Version="$(var.ProductVersion)"
+			 Version="$(var.FullProductVersion)"
 			 Manufacturer="Portuguese Government"
 			 UpgradeCode="$(var.UpgradeCode)">
 

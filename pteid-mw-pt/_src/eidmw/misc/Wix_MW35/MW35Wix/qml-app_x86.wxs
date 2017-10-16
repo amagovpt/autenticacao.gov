@@ -45,9 +45,6 @@
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6716" Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6717" Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
             </Component>
-            <Component Id="cmp5C98AF73A820875DE3E906689837279D" Directory="dirBC67EA3582AD2F5EC993CA7F1B5AD34B" Guid="{E44C4665-0DE6-419C-AE32-DA1FB525846E}">
-                <File Id="filEB10F5E790AF05C54DF2A546BA20A59C" KeyPath="yes" Source="$(var.QMLDIR)\qml-app-x86.wxs" />
-            </Component>
             <Component Id="cmpD90C57D3866413E9483172896BD5F8CE" Directory="dirBC67EA3582AD2F5EC993CA7F1B5AD34B" Guid="{C30484BF-362F-4194-BFCA-F6060AD1B12C}">
                 <File Id="fil6CDFD7BC016B64DBD3E26297A346DCEF" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Core.dll" />
             </Component>
@@ -83,9 +80,6 @@
             </Component>
             <Component Id="cmpF07BE982D065286C3FC172AB46B6D8EA" Directory="dirBC67EA3582AD2F5EC993CA7F1B5AD34B" Guid="{849D97CD-D348-4AE4-B86F-5455BC5206E3}">
                 <File Id="fil0E8793A78873CF798FD851918CC09B23" KeyPath="yes" Source="$(var.QMLDIR)\ssleay32.dll" />
-            </Component>
-            <Component Id="cmpDCA5480C5133453061CD58D1F1C891D8" Directory="dirBC67EA3582AD2F5EC993CA7F1B5AD34B" Guid="{F3B551B9-998A-44DB-AED7-FE44F07558C4}">
-                <File Id="fil53CF31900E7576B49BC5B99F0E8BBC15" KeyPath="yes" Source="$(var.QMLDIR)\vcredist_x86.exe" />
             </Component>
             <Component Id="cmp537602E31CE3380A1561177D7DBF2819" Directory="dir2C96DF9BF68D36FECFDCFBE5DE37120F" Guid="{D1D8A970-165F-455A-96C1-A74603DF7027}">
                 <File Id="fil51268DE9F8E9E51B00979CE0107AD64F" KeyPath="yes" Source="$(var.QMLDIR)\bearer\qgenericbearer.dll" />
