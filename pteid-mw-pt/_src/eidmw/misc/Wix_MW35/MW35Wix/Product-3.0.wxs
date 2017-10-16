@@ -505,14 +505,12 @@
 
       </Component>
       
-      <!--
       <Component Id="RegisterPteidAutoStart" Guid="{EA9E5719-C20F-411A-8690-1D85F7D11E41}">
         <RegistryKey Root="HKCU"
               Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
-          <RegistryValue KeyPath="yes" Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteidgui.exe&quot;"/>
+          <RegistryValue KeyPath="yes" Type="string" Name="pteid" Value="&quot;[EIDGUIV2DIR]pteidguiV2.exe&quot;"/>
         </RegistryKey>
       </Component>
-      -->
 
     </DirectoryRef>
 
@@ -599,6 +597,7 @@
 
       <!-- Registry -->
       <ComponentRef Id="RegistryPteidSystem"/>
+	  <ComponentRef Id="RegisterPteidAutoStart"/>
       <ComponentRef Id="RegistryXadesFileType"/>
 
       <Feature Id="GUI"

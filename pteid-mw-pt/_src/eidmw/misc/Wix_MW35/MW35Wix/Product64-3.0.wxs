@@ -574,13 +574,11 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 					
 				</Component>
         
-		<!--
         <Component Id="RegisterPteidAutoStart" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA6}">
           <RegistryKey Root="HKCU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
-            <RegistryValue Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteidgui.exe&quot;"/>
+            <RegistryValue Type="string" Name="pteid" Value="&quot;[EIDGUIV2DIR]pteidguiV2.exe&quot;"/>
           </RegistryKey>
         </Component>
-		-->
 
 			</DirectoryRef>
 
@@ -665,7 +663,7 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 
 				<!-- Registry -->
 				<ComponentRef Id="RegistryPteidSystem"/>
-                <!-- <ComponentRef Id="RegisterPteidAutoStart"/> -->
+                <ComponentRef Id="RegisterPteidAutoStart"/>
         <ComponentRef Id="RegistryXadesFileType"/>
 
 				<Feature Id="GUI"
