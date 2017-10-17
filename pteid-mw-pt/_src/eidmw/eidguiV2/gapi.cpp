@@ -2239,13 +2239,13 @@ void GAPI::customSignRemove(void){
 bool GAPI::useCustomSignature(void){
     // Detect Custom Signature Image
     m_custom_image = QImage(m_Settings.getPteidCachedir()+"/CustomSignPicture.jpeg");
-    if (!m_custom_image.isNull())
+    if (m_Settings.getUseCustomSignature() && !m_custom_image.isNull())
     {
         qDebug() << "Using Custom Picture to CC sign";
         QBuffer buffer(&m_jpeg_scaled_data);
         buffer.open(QIODevice::WriteOnly);
         //Save the generated image as high-quality JPEG data
-        QImage generated_img ("CustomSignPicture.jpeg");
+        QImage generated_img (m_Settings.getPteidCachedir()+"/CustomSignPicture.jpeg");
         generated_img.save(&buffer, "JPG", 100);
         return true;
     }else{

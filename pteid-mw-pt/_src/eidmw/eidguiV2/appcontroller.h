@@ -60,10 +60,12 @@ public slots:
 
     int getGuiLanguageCodeValue(void);
     void setGuiLanguageCodeValue (int language);
+    void setUseCustomSignature (bool UseCustomSignature);
 
     bool getShowNotificationValue(void);
     bool getShowPictureValue(void);
     bool getShowAnimationsValue(void);
+    bool getUseCustomSignature(void);
     bool getRegCertValue(void);
     bool getRemoveCertValue(void);
 

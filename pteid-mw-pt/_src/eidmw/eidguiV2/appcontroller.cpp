@@ -715,6 +715,10 @@ int AppController::getGuiLanguageCodeValue (void){
 
     return m_Settings.getGuiLanguageCode();
 }
+void AppController::setUseCustomSignature (bool UseCustomSignature){
+
+    m_Settings.setUseCustomSignature(UseCustomSignature);
+}
 void AppController::setGuiLanguageCodeValue (int language){
 
     if (LoadTranslationFile((GenPur::UI_LANGUAGE)language)){
@@ -734,6 +738,9 @@ bool AppController::getShowPictureValue (void){
 }
 bool AppController::getShowAnimationsValue(void){
     return m_Settings.getShowAnimations();
+}
+bool AppController::getUseCustomSignature(void){
+    return m_Settings.getUseCustomSignature();
 }
 bool AppController::getRegCertValue (void){
 

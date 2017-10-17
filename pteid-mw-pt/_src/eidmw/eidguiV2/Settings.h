@@ -168,6 +168,7 @@ public:
     GUISettings( void )
         : m_GuiLanguage("en")
         , m_bShowAnimations(false)
+        , m_bUseCustomSignature(false)
         , m_bNotShowStartUpHelp(false)
         , m_bStartMinimized(false)
         , m_bShowPicture(false)
@@ -240,6 +241,17 @@ public:
             if ( 0 != ShowAnimations )
             {
                 setShowAnimations(true);
+            }
+        }
+        //----------------------------------------------------------
+        // check USECUSTOMSIGNATURE
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_USECUSTOMSIGN);
+            long UseCustomSignature = config.getLong();
+            if ( 0 != UseCustomSignature )
+            {
+                setUseCustomSignature(true);
             }
         }
         //----------------------------------------------------------
@@ -429,6 +441,16 @@ public:
         m_bShowAnimations = bShowAnimations;
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWANIMATIONS);
         config.setLong(m_bShowAnimations);
+    }
+    bool getUseCustomSignature( void )
+    {
+        return m_bUseCustomSignature;
+    }
+    void setUseCustomSignature(  bool bUseCustomSignature )
+    {
+        m_bUseCustomSignature = bUseCustomSignature;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_USECUSTOMSIGN);
+        config.setLong(m_bUseCustomSignature);
     }
     bool getNotShowHelpStartUp( void )
     {
@@ -666,6 +688,7 @@ private:
 
     QString m_GuiLanguage;          //!< the GUI language
     bool    m_bShowAnimations;      //!< the GUI Animations
+    bool    m_bUseCustomSignature;  //!< the GUI use custom signature image
     bool    m_bStartMinimized;      //!< startup minimized (T/F)
     bool    m_bNotShowStartUpHelp;  //!< the GUI Show Help	bool	m_bStartMinimized;		//!< startup minimized (T/F)
     bool    m_bShowPicture;         //!< show the picture (T/F)

@@ -19,7 +19,9 @@ PageDefinitionsSignatureForm {
             text: qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE_TEXT")
         }
     }
-
+    Connections {
+        target: controler
+    }
     Connections {
         target: gapi
         onSignalGenericError: {
@@ -210,26 +212,40 @@ PageDefinitionsSignatureForm {
         }
     }
 
+    propertyRadioButtonDefault {
+        onCheckedChanged: {
+            if (propertyRadioButtonDefault.checked){
+                controler.setUseCustomSignature(false)
+            }else{
+                controler.setUseCustomSignature(true)
+            }
+        }
+    }
+
     Component.onCompleted: {
 
         console.log("Page Difinitions Signature mainWindowCompleted")
         propertyBusyIndicator.running = true
         gapi.startCardReading()
         propertySigDateText.text = propertySigDateTextCustom.text =getData()
-        var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpeg"
-        if(gapi.customSignImageExist()){
 
+        if(controler.getUseCustomSignature()){
+            propertyRadioButtonDefault.checked = false
+            propertyRadioButtonCustom.checked = true
+        }else{
+            propertyRadioButtonDefault.checked = true
+            propertyRadioButtonCustom.checked = false
+        }
+        if(gapi.customSignImageExist()){
+            var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpeg"
             if (Qt.platform.os === "windows") {
                 urlCustomImage = "file:///"+urlCustomImage
             }else{
                 urlCustomImage = "file://"+urlCustomImage
             }
             fileLoaded = true
-            propertyRadioButtonDefault.checked = false
-            propertyRadioButtonCustom.checked = true
             propertyImagePreCustom.source = urlCustomImage
         }
-
     }
     function getData(){
         var time = Qt.formatDateTime(new Date(), "yy.MM.dd hh:mm:ss")

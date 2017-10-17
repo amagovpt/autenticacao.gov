@@ -185,6 +185,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GUITOOL_STARTMINI         L"start_minimized"          //number; 0=no(default), 1=yes
 #define EIDMW_CNF_GUITOOL_SHOWPIC           L"show_picture"             //number; 0=no(default), 1=yes
 #define EIDMW_CNF_GUITOOL_SHOWNOTIFICATION  L"show_notification"        //number; 0=no, 1=yes(default)
+#define EIDMW_CNF_GUITOOL_USECUSTOMSIGN     L"use_custom_sign"          //number; 0=no(default), 1=yes
 #define EIDMW_CNF_GUITOOL_SHOWANIMATIONS    L"show_animations"          //number; 0=no, 1=yes(default)
 #define EIDMW_CNF_GUITOOL_SHOWSTARTUPHELP   L"not_show_startup_help"    //number; 0=no(default), 1=yes
 #define EIDMW_CNF_GUITOOL_SHOWTBAR          L"show_toolbar"             //number; 0=no, 1=yes
@@ -333,6 +334,7 @@ public:
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_STARTMINI;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWPIC;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWNOTIFICATION;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_USECUSTOMSIGN;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWANIMATIONS;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWSTARTUPHELP;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWTBAR;
