@@ -4,7 +4,7 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<?include ..\..\..\svn_revision.wxs ?>
 
-	<?define var.OfficialProductVersion = 2.4.3?>
+	<?define var.OfficialProductVersion = 2.4.6?>
 	<?define var.ProductVersion = 2.4.$(var.RevisionNumber)?>
 	<?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
@@ -28,7 +28,7 @@
 				 InstallerVersion="405"
 				 Keywords="Portugal e-ID Middleware Installer"
 				 Platform="x64"
-         Comments="Portuguese eID Middleware 2.4.3 SVN Revision $(var.RevisionNumber)"
+         Comments="Portuguese eID Middleware 2.4.6 SVN Revision $(var.RevisionNumber)"
 				 Manufacturer="Portuguese Government"
 				 Compressed="yes"
 				 InstallPrivileges="elevated" />
@@ -594,21 +594,6 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 							  Description="!(loc.PteidGuiDescr)"
 							  Target="[APPLICATIONROOTFOLDER]pteidgui.exe"
 							  WorkingDirectory="APPLICATIONROOTFOLDER"/>
-
-          <!--
-          <Shortcut Id="eidguiV2StartMenuShortcut"
-							  Name="Autenticação.Gov"
-							  Description="!(loc.PteidGuiDescr)"
-							  Target="[EIDGUIV2DIR]pteidguiV2.exe"
-							  WorkingDirectory="EIDGUIV2DIR"/>
-
-          <Shortcut Id="eidguiV2Shortcut"
-							  Name="Autenticação.Gov"
-							  Directory="DesktopFolder"
-							  Description="!(loc.PteidGuiDescr)"
-							  Target="[EIDGUIV2DIR]pteidguiV2.exe"
-							  WorkingDirectory="EIDGUIV2DIR"/>
-                -->
           
 					<Shortcut Id="EidViewerShortcut"
 							  Name="Cartão de Cidadão"
@@ -658,13 +643,12 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
 				<ComponentRef Id="License"/>
 				<ComponentRef Id="LogDir"/>
 				<ComponentRef Id="DSSApp"/>
-        <!--<ComponentGroupRef Id="qmlAppComponentGroup"/> -->
         <!-- System32 -->
 
 				<ComponentRef Id="Runtime35"/>
 				<ComponentRef Id="Runtime35_64"/>
-                <!--<ComponentRef Id="Runtime35ThirdPartyOpenSSL"/> -->
-		        <!--<ComponentRef Id="Runtime35ThirdPartyOpenSSL_64"/> -->
+        <!--<ComponentRef Id="Runtime35ThirdPartyOpenSSL"/> -->
+		    <!--<ComponentRef Id="Runtime35ThirdPartyOpenSSL_64"/> -->
 				<ComponentRef Id="Runtime35ThirdPartyXerces"/>
 				<ComponentRef Id="Runtime35ThirdPartyXerces_64"/>
 
