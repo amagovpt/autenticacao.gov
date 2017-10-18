@@ -60,7 +60,7 @@ std::string remoteversion = "https://svn.gov.pt/projects/ccidadao/repository/mid
 
 std::string WINDOWS32 = "PteidMW-Basic.msi";
 std::string WINDOWS64 = "PteidMW-Basic-x64.msi";
-std::string MAC_OS = "pteidgui.dmg";
+std::string MAC_OS = "pteid-mw.pkg";
 std::string DEBIAN32 = "pteid-mw_debian_i386.deb";
 std::string DEBIAN64 = "pteid-mw_debian_amd64.deb";
 std::string UBUNTU32 = "pteid-mw_ubuntu_i386.deb";
@@ -362,9 +362,16 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	QString ver (WIN_GUI_VERSION_STRING);
 #endif
 
+	//Only consider the first line of version.txt
+	QString remote_data(filedata.c_str());
+
+	remote_data = remote_data.left(remote_data.indexOf('\n'));
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Local version: %s", ver.toUtf8().constData());
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Remote version: %s", remote_data.toUtf8().constData());
+
 	QStringList list1 = ver.split(",");
 
-	QStringList list2 = QString(filedata.c_str()).split(",");
+	QStringList list2 = remote_data.split(",");
 
 	if (list2.size() < 3)
 	{
@@ -387,7 +394,10 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	remote_version.minor = list2.at(1).toInt();
 	remote_version.release = list2.at(2).toInt();
 
-	//return true;
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Parsed versions: Remote= %d.%d.%d Local= %d.%d.%d", 
+		remote_version.major, remote_version.minor, remote_version.release, 
+		local_version.major, local_version.minor, local_version.release);
+
 	if (compareVersions(local_version, remote_version) > 0)
 	{
 		this->close();

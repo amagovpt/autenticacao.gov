@@ -291,29 +291,23 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
 	exit(0);
 
 #elif __APPLE__
-    // This doesn't actually start the package installation it just mounts the dmg
-    // and then the user has to install the .pkg and copy the pteidgui.app
-	execl("/usr/bin/hdiutil", "hdiutil", "attach", pkgpath.c_str(), NULL);
-
+    // This launches the GUI installation process, the user has to follow the wizard to actually perform the installation
+	execl("/usr/bin/open", pkgpath.c_str(), NULL);
 #else
 
     //Normalize distro string to lowercase
     std::transform(distro.begin(), distro.end(), distro.begin(), ::tolower);
 
-	std::cout << "pkgpath " << pkgpath << " distro " << distro << std::endl;
-
-	if (distro == "debian" || distro == "ubuntu" || distro == "caixamagica")
-	{
-	  	execl ("/usr/bin/software-center", "software-center", pkgpath.c_str(), NULL);
+	if (distro == "debian" || distro == "ubuntu" || distro == "caixamagica") {
+	  	// TODO: Ubunto < 17
+        execl ("/usr/bin/software-center", "software-center", pkgpath.c_str(), NULL);
+        pkgpath.insert(0,"--local-filename=");
+        execl ("/usr/bin/ubuntu-software", "gnome-software", pkgpath.c_str(), NULL);
 	}
-
-	else if (distro == "fedora")
-	{
+	else if (distro == "fedora") {
 	  	execl ("/usr/bin/gpk-install-local-file", "gpk-install-local-file", pkgpath.c_str(), NULL);
 	}
-
-	else if (distro == "suse")
-	{
+	else if (distro == "suse") {
 	    	execl ("/usr/bin/gpk-install-local-file", "gpk-install-local-file", pkgpath.c_str(), NULL);
 	}
 #endif
