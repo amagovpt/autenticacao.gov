@@ -215,9 +215,9 @@ PageDefinitionsSignatureForm {
     propertyRadioButtonDefault {
         onCheckedChanged: {
             if (propertyRadioButtonDefault.checked){
-                controler.setUseCustomSignature(false)
+                gapi.setUseCustomSignature(false)
             }else{
-                controler.setUseCustomSignature(true)
+                gapi.setUseCustomSignature(true)
             }
         }
     }
@@ -229,7 +229,7 @@ PageDefinitionsSignatureForm {
         gapi.startCardReading()
         propertySigDateText.text = propertySigDateTextCustom.text =getData()
 
-        if(controler.getUseCustomSignature()){
+        if(gapi.getUseCustomSignature()){
             propertyRadioButtonDefault.checked = false
             propertyRadioButtonCustom.checked = true
         }else{

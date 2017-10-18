@@ -2253,3 +2253,10 @@ bool GAPI::useCustomSignature(void){
         return false;
     }
 }
+void GAPI::setUseCustomSignature (bool UseCustomSignature){
+
+    m_Settings.setUseCustomSignature(UseCustomSignature);
+}
+bool GAPI::getUseCustomSignature(void){
+    return m_Settings.getUseCustomSignature();
+}

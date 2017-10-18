@@ -727,7 +727,7 @@ PageServicesSignSimpleForm {
                     propertyPDFPreview.propertyBackground.cache = false
                     propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
                     var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpeg"
-                    if(controler.getUseCustomSignature() && gapi.customSignImageExist()){
+                    if(gapi.getUseCustomSignature() && gapi.customSignImageExist()){
                         if (Qt.platform.os === "windows") {
                             urlCustomImage = "file:///"+urlCustomImage
                         }else{

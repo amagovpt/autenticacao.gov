@@ -323,6 +323,8 @@ public slots:
     void customSignRemove(void);
 
     void updateReaderList( void );
+    void setUseCustomSignature (bool UseCustomSignature);
+    bool getUseCustomSignature(void);
 
 signals:
     // Signal from GAPI to Gui
