@@ -31,7 +31,7 @@ std::string remoteversion = "https://svn.gov.pt/projects/ccidadao/repository/mid
 
 std::string WINDOWS32 = "PteidMW-Basic.msi";
 std::string WINDOWS64 = "PteidMW-Basic-x64.msi";
-std::string MAC_OS = "pteidgui.dmg";
+std::string MAC_OS = "pteid-mw.pkg";
 std::string DEBIAN32 = "pteid-mw_debian_i386.deb";
 std::string DEBIAN64 = "pteid-mw_debian_amd64.deb";
 std::string UBUNTU32 = "pteid-mw_ubuntu_i386.deb";
@@ -331,10 +331,8 @@ void AppController::RunPackage(std::string pkg, std::string distro){
     exit(0);
 
 #elif __APPLE__
-    // This doesn't actually start the package installation it just mounts the dmg
-    // and then the user has to install the .pkg and copy the pteidgui.app
-    execl("/usr/bin/hdiutil", "hdiutil", "attach", pkgpath.c_str(), NULL);
-
+    // This launches the GUI installation process, the user has to follow the wizard to actually perform the installation
+    execl("/usr/bin/open", pkgpath.c_str(), NULL);
 #else
 
     //Normalize distro string to lowercase
@@ -467,10 +465,13 @@ bool AppController::VerifyUpdates(std::string filedata)
 
     QString ver (WIN_GUI_VERSION_STRING);
 
+    //Only consider the first line of version.txt
+    QString remote_data(filedata.c_str());
+    remote_data = remote_data.left(remote_data.indexOf('\n'));
 
     QStringList list1 = ver.split(",");
 
-    QStringList list2 = QString(filedata.c_str()).split(",");
+    QStringList list2 = remote_data.split(",");
 
     if (list2.size() < 3)
     {
