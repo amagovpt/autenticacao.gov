@@ -30,6 +30,7 @@ INCLUDEPATH += ../CMD/services
 INCLUDEPATH += ../applayer
 INCLUDEPATH += ../common
 INCLUDEPATH += ../cardlayer
+INCLUDEPATH += ../eidlib
 INCLUDEPATH += ../_Builds
 
 
