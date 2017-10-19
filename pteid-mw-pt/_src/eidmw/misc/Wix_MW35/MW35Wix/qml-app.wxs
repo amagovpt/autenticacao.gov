@@ -2608,9 +2608,38 @@
                 </Directory>
             </Directory>
         </DirectoryRef>
+		<DirectoryRef Id="ApplicationProgramsFolder">
+			<Component Id="PteidGuiShortcut" Guid="{CBD0F388-EAE5-4FA1-8C38-EC223928FF13}">
+          
+			<Shortcut Id="eidguiV2StartMenuShortcut"
+							  Name="Autenticação.gov"
+							  Description="!(loc.PteidGuiDescr)"
+							  Target="[EIDGUIV2DIR]pteidguiV2.exe"
+							  WorkingDirectory="eidguiV2Dir"/>
+
+			<Shortcut Id="eidguiV2Shortcut"
+                Name="Autenticação.Gov"
+                Directory="DesktopFolder"
+                Description="!(loc.PteidGuiDescr)"
+                Target="[EIDGUIV2DIR]pteidguiV2.exe"
+                WorkingDirectory="EIDGUIV2DIR"/>
+          
+					<RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+					<RegistryValue Root="HKCU" Key="SOFTWARE\PTEID\Installer" Name="GuiShortcut" Type="integer" Value="1" KeyPath="yes" />
+				</Component>
+				
+		<Component Id="RegisterPteidAutoStart" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA6}">
+          <RegistryKey Root="HKCU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
+            <RegistryValue Type="string" Name="pteid" Value="&quot;[EIDGUIV2DIR]pteidguiV2.exe&quot;"/>
+          </RegistryKey>
+        </Component>
+		
+		</DirectoryRef>
     </Fragment>
     <Fragment>
         <ComponentGroup Id="qmlAppComponentGroup">
+			<ComponentRef Id="PteidGuiShortcut"/>
+			<ComponentRef Id="RegisterPteidAutoStart"/>
             <ComponentRef Id="cmpCC914190102D9CDC82EA7078F7C9EBC4" />
             <ComponentRef Id="cmpF47C4BA3E56746CDA8910145CEB3D8A6" />
             <ComponentRef Id="cmp7AD83D9FA870B89EC1FDCA9CB0B2E5C8" />
