@@ -184,8 +184,27 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 
 	TS_RESP *tsp = d2i_TS_RESP(NULL, (const unsigned char**)&token, token_len);
 
+#ifdef DEBUG
+    BIO *bio_out;
+    bio_out = BIO_new(BIO_s_file());
+
+    BIO_set_fp(bio_out, stderr, BIO_NOCLOSE);
+
+    TS_RESP_print_bio(bio_out, tsp);
+#endif
+
+    TS_VERIFY_CTX * verify_ctx = TS_VERIFY_CTX_new();
+    verify_ctx->flags = TS_VFY_VERSION;
+
+    if(TS_RESP_verify_response(verify_ctx, tsp) != 1) {
+
+        MWLOG(LEV_ERROR, MOD_APL, "Failed to verify TS response! Details: %s", 
+            ERR_error_string(ERR_get_error(), NULL));
+        return 1;
+    }
 	if (tsp != NULL)
 	{
+
 		PKCS7* token = tsp->token;
 
 		int p7_len = i2d_PKCS7(token, NULL);
