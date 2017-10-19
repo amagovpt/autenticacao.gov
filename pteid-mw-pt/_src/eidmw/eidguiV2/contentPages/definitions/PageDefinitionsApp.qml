@@ -110,7 +110,7 @@ PageDefinitionsAppForm {
     }
     propertyCheckboxTimeStamp{
         onCheckedChanged: if (!propertyCheckboxTimeStamp.checked ){
-                              controler.setTimeStampHostValue("")
+                              controler.setTimeStampHostValue("http://ts.cartaodecidadao.pt/tsa/server")
                               propertyTextFieldTimeStamp.text = ""
                           }
     }
@@ -191,8 +191,13 @@ PageDefinitionsAppForm {
             propertyRectAppTimeStamp.anchors.top = propertyRectAppLook.bottom
         }
 
-        propertyCheckboxTimeStamp.checked = controler.getTimeStampHostValue().length > 0 ? true : false
-        propertyTextFieldTimeStamp.text = controler.getTimeStampHostValue()
+        if (controler.getTimeStampHostValue().length > 0
+                && controler.getTimeStampHostValue() !== "http://ts.cartaodecidadao.pt/tsa/server"){
+            propertyCheckboxTimeStamp.checked = true
+            propertyTextFieldTimeStamp.text = controler.getTimeStampHostValue()
+        }else{
+            propertyCheckboxTimeStamp.checked = false
+        }
 
         propertyCheckboxProxy.checked = controler.getProxyHostValue().length > 0 ? true : false
         propertyTextFieldAdress.text = controler.getProxyHostValue()
