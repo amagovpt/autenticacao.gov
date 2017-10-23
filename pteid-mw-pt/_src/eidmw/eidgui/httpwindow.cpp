@@ -52,7 +52,7 @@ HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
     urli = uri;
     getdistro = distro;
 
-    statusLabel = new QLabel(tr("There are updates available press Install do perform the updates."));
+    statusLabel = new QLabel(tr("There are updates available. Click Install to proceed."));
 
     cancelButton = new QPushButton(tr("Cancel"));
     cancelButton->setDefault(true);
@@ -85,7 +85,7 @@ HttpWindow::HttpWindow(std::string uri, std::string distro, QWidget *parent)
     setLayout(mainLayout);
 	const QIcon app_icon = QIcon(":/images/Images/Icons/ICO_CARD_EID_PLAIN_16x16.png");
 	setWindowIcon(app_icon);
-    setWindowTitle(tr("Auto-Update"));
+    setWindowTitle(tr("Software Updates"));
 	
 }
 
@@ -147,7 +147,7 @@ void HttpWindow::downloadFile()
 	fileName = fileInfo.fileName();
 	if (fileName.isEmpty())
 	{
-		QMessageBox::information(this, tr("Auto-Update"),
+		QMessageBox::information(this, tr("Software Updates"),
 				tr("Unable to download the update please check your Network Connection.")
 		.arg(fileName).arg(file->errorString()));
 	}
@@ -161,7 +161,7 @@ void HttpWindow::downloadFile()
 
 	file = new QFile(QString::fromUtf8((tmpfile.c_str())));
 	if (!file->open(QIODevice::WriteOnly)) {
-		QMessageBox::information(this, tr("Auto-Update"),
+		QMessageBox::information(this, tr("Software Updates"),
 				tr("Unable to save the file %1: %2.")
 		.arg(fileName).arg(file->errorString()));
 		delete file;
@@ -169,7 +169,7 @@ void HttpWindow::downloadFile()
 		return;
 	}
 
-	progressDialog->setWindowTitle(tr("Auto-Update"));
+	progressDialog->setWindowTitle(tr("Software Updates"));
 	progressDialog->setLabelText(tr("Downloading %1.").arg(fileName));
 	downloadButton->setEnabled(false);
 
@@ -211,7 +211,7 @@ void HttpWindow::httpFinished()
     if (reply->error())
     {
         file->remove();
-        QMessageBox::information(this, tr("Auto-Update"),
+        QMessageBox::information(this, tr("Software Updates"),
                                  tr("Download failed: %1.")
                                  .arg(reply->errorString()));
         downloadButton->setEnabled(true);
@@ -221,7 +221,7 @@ void HttpWindow::httpFinished()
     {
         QUrl newUrl = url.resolved(redirectionTarget.toUrl());
 
-        if (QMessageBox::question(this, tr("Auto-Update"),
+        if (QMessageBox::question(this, tr("Software Updates"),
                                   tr("Redirect to %1 ?").arg(newUrl.toString()),
                                   QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
         {

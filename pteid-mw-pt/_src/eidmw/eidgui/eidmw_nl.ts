@@ -976,11 +976,11 @@ Please specify .xml, .csv or .eid</source>
 <context>
     <name>HttpWindow</name>
     <message>
-        <source>Auto-Update</source>
-        <translation>Atualização automática</translation>
+        <source>Software Updates</source>
+        <translation>Atualizações de software</translation>
     </message>
     <message>
-        <source>There are updates available press Install do perform the updates.</source>
+        <source>There are updates available. Click Install to proceed.</source>
         <translation>Existem atualizações disponíves. Clique em Instalar para prosseguir.</translation>
     </message>
     <message>
@@ -1007,8 +1007,8 @@ Please specify .xml, .csv or .eid</source>
 <context>
     <name>AutoUpdates</name>
     <message>
-        <source>Auto-update</source>
-        <translation>Atualizações Automáticas</translation>
+        <source>Software Updates</source>
+        <translation>Atualizações de software</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -1023,8 +1023,8 @@ Please specify .xml, .csv or .eid</source>
         <translation>Aviso</translation>
     </message>
     <message>
-        <source>A sua distribuição não é suportada pelas Atualizações Automáticas</source>
-        <translation></translation>
+        <source>Your Linux distribution is not supported by Software Updates</source>
+        <translation>A sua distribuição não é suportada pelas Atualizações de software</translation>
     </message>
     <message>
         <source>Do you want to check for updates?</source>

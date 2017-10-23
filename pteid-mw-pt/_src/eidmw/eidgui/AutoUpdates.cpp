@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
  * PTeID Middleware Project.
- * Copyright (C) 2011-2012 Caixa Mágica Software.
+ * Copyright (C) 2011-2017 Caixa Mágica Software.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -16,7 +16,8 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  *
- * Author: Luis Medinas <luis.medinas@caixamagica.pt>
+ * Author: Luis Medinas    <luis.medinas@caixamagica.pt>
+ * Author: Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  **************************************************************************** */
 
 #include <QtGui>
@@ -63,14 +64,14 @@ std::string WINDOWS64 = "PteidMW-Basic-x64.msi";
 std::string MAC_OS = "pteid-mw.pkg";
 std::string DEBIAN32 = "pteid-mw_debian_i386.deb";
 std::string DEBIAN64 = "pteid-mw_debian_amd64.deb";
-std::string UBUNTU32 = "pteid-mw_ubuntu_i386.deb";
-std::string UBUNTU64 = "pteid-mw_ubuntu_amd64.deb";
+std::string UBUNTU_14_32 = "pteid-mw_ubuntu14_i386.deb";
+std::string UBUNTU_16_32 = "pteid-mw_ubuntu16_i386.deb";
+std::string UBUNTU_14_64 = "pteid-mw_ubuntu14_amd64.deb";
+std::string UBUNTU_16_64 = "pteid-mw_ubuntu16_amd64.deb";
 std::string FEDORA32 = "pteid-mw-fedora.i386.rpm";
 std::string FEDORA64 = "pteid-mw-fedora.x86_64.rpm";
 std::string SUSE32 = "pteid-mw-suse.i586.rpm";
 std::string SUSE64 = "pteid-mw-suse.x86_64.rpm";
-std::string MANDRIVA32 = "pteid-mw-mandriva.i586.rpm";
-std::string MANDRIVA64 = "pteid-mw-mandriva.x86_64.rpm";
 
 struct PteidVersion
 {
@@ -83,7 +84,7 @@ struct PteidVersion
 AutoUpdates::AutoUpdates(QWidget *parent)
 : QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
 {
-	QString ddtitle = tr("Auto-update");
+	QString ddtitle = tr("Software Update");
 	statusLabel = new QLabel(tr("Do you want to check for updates?"));
 
 	cancelButton = new QPushButton(tr("Cancel"));
@@ -214,7 +215,7 @@ void AutoUpdates::downloadFile()
 	QString fileName = fileInfo.fileName();
 	if (fileName.isEmpty())
 	{
-		QMessageBox::critical(this, tr("Auto-update"),
+		QMessageBox::critical(this, tr("Software Update"),
 				tr("Unable to download the update please check your Network Connection.")
 		.arg(fileName).arg(file->errorString()));
 	}
@@ -226,7 +227,7 @@ void AutoUpdates::downloadFile()
 
 	file = new QFile(QString::fromUtf8((tmpfile.c_str())));
 	if (!file->open(QIODevice::WriteOnly)) {
-		QMessageBox::critical(this, tr("Auto-update"),
+		QMessageBox::critical(this, tr("Software Update"),
 				tr("Unable to save the file %1: %2.")
 		.arg(fileName).arg(file->errorString()));
 		delete file;
@@ -234,7 +235,7 @@ void AutoUpdates::downloadFile()
 		return;
 	}
 
-	progressDialog->setWindowTitle(tr("Auto-update"));
+	progressDialog->setWindowTitle(tr("Software Update"));
 	progressDialog->setLabelText(tr("Checking for newer versions"));
 	downloadButton->setEnabled(false);
 
@@ -254,7 +255,7 @@ void AutoUpdates::httpFinished()
 			file = 0;
 		}
 
-		QMessageBox::critical(this, tr("Auto-update"),
+		QMessageBox::critical(this, tr("Software Update"),
 				tr("Download failed. Please check your Network Connection."));
 
 		reply->deleteLater();
@@ -271,7 +272,7 @@ void AutoUpdates::httpFinished()
 	QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
 	if (reply->error()) {
 		file->remove();
-		QMessageBox::critical(this, tr("Auto-update"),
+		QMessageBox::critical(this, tr("Software Update"),
 				tr("Download failed. Please check your Network Connection.") );
 
 		downloadButton->setEnabled(true);
@@ -282,7 +283,7 @@ void AutoUpdates::httpFinished()
 
 	} else if (!redirectionTarget.isNull()) {
 		QUrl newUrl = url.resolved(redirectionTarget.toUrl());
-		if (QMessageBox::question(this, tr("Auto-update"),
+		if (QMessageBox::question(this, tr("Software Update"),
 				tr("Redirect to %1 ?").arg(newUrl.toString()),
 				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
 			url = newUrl;
@@ -358,16 +359,14 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	QString ver = QString::fromLatin1(version);
 
 #else
-
 	QString ver (WIN_GUI_VERSION_STRING);
 #endif
 
-	//Only consider the first line of version.txt
 	QString remote_data(filedata.c_str());
-
+	//Only consider the first line of version.txt
 	remote_data = remote_data.left(remote_data.indexOf('\n'));
-	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Local version: %s", ver.toUtf8().constData());
-	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Remote version: %s", remote_data.toUtf8().constData());
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "%s: Local version: %s", __FUNCTION__, ver.toUtf8().constData());
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "%s: Remote version: %s", __FUNCTION__, remote_data.toUtf8().constData());
 
 	QStringList list1 = ver.split(",");
 
@@ -376,7 +375,7 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	if (list2.size() < 3)
 	{
 		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-			"AutoUpdates::VerifyUpdates: Wrong data returned from server or Proxy HTML error!");
+			"%s: Wrong data returned from server or Proxy HTML error!", __FUNCTION__);
 
 		this->close();
 		return false;
@@ -394,7 +393,8 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	remote_version.minor = list2.at(1).toInt();
 	remote_version.release = list2.at(2).toInt();
 
-	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Parsed versions: Remote= %d.%d.%d Local= %d.%d.%d", 
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "%s: Parsed versions: Remote= %d.%d.%d Local= %d.%d.%d", 
+		__FUNCTION__,
 		remote_version.major, remote_version.minor, remote_version.release, 
 		local_version.major, local_version.minor, local_version.release);
 
@@ -409,7 +409,7 @@ bool AutoUpdates::VerifyUpdates(std::string filedata)
 	}
 	else {
 
-		QMessageBox msgBoxnoupdates(QMessageBox::Information, tr("Auto-update"),
+		QMessageBox msgBoxnoupdates(QMessageBox::Information, tr("Software Update"),
 			       	tr("No updates available at the moment"), 0, this);
 		msgBoxnoupdates.exec();
 		this->close();
@@ -421,6 +421,29 @@ bool AutoUpdates::FileExists(const char *filename)
 {
 	std::ifstream ifile(filename);
 	return ifile.is_open();
+}
+
+std::string getDistroVersion(QString &content) {
+
+	QRegExp rx = QRegExp("VERSION_ID=\"(\\d{2}).*\"");
+	rx.setMinimal(true);
+
+	rx.indexIn(content);
+
+	QStringList list = rx.capturedTexts();
+
+	if (list.size() > 1)
+	{
+		QString match = list.at(1);
+		uint match_version = match.toUInt();
+
+		if (match_version >= 16)
+			return "Ubuntu16";
+		else if (match_version >= 14)
+			return "Ubuntu14";		
+	}
+
+	return "";
 }
 
 
@@ -449,7 +472,7 @@ std::string AutoUpdates::VerifyOS(std::string param)
 	{
 		qDebug() << "Not Linux or too old distro!";
 		distrostr = "unsupported";
-		goto done; 
+		goto done;
 	}
 
 	if (!osFile.open(QFile::ReadOnly | QFile::Text))
@@ -467,10 +490,14 @@ std::string AutoUpdates::VerifyOS(std::string param)
 	if (list.size() > 1)
 	{
 		distrostr = list.at(1).toStdString();
+
+		if (distrostr == "Ubuntu") {
+			distrostr = getDistroVersion(content);
+		}
 	}
-	
 #endif
 
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "%s: retrieved distro = %s", __FUNCTION__, distrostr.c_str());
 done:
 	if (param == "distro")
 		return distrostr;
@@ -491,114 +518,74 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
         downloadurl.append(configurl);
 
 #ifdef WIN32
-	if (arch == "i386")
-	{
+	if (arch == "i386") {
         downloadurl.append(WINDOWS32);
-		HttpWindow httpWin(downloadurl, distro);
-		httpWin.show();
-		httpWin.exec();
-	} else {
+	}
+	else {
         downloadurl.append(WINDOWS64);
-		HttpWindow httpWin(downloadurl, distro);
-		httpWin.show();
-		httpWin.exec();
 	}
 #elif __APPLE__
-    	
-    downloadurl.append(MAC_OS);
-    HttpWindow httpWin(downloadurl, distro);
-    httpWin.show();
-    httpWin.exec();
-#else
 
+    downloadurl.append(MAC_OS);
+#else
 	if (distro == "unsupported")
 	{
 	  	QMessageBox msgBoxp(QMessageBox::Warning, tr("Warning"),
-			tr("Your Linux distribution is not supported by Auto-updates"), 0, this);
+			tr("Your Linux distribution is not supported by Software Updates"), 0, this);
 	  	msgBoxp.exec();
 	}
 
     //Name of the deb/rpm will be distro specific
-
 	if (arch == "x86_64")
 	{
 		if (distro == "debian")
 		{
             downloadurl.append(DEBIAN64);
-			HttpWindow httpWin(downloadurl, distro);
-			httpWin.show();
-			httpWin.exec();
-			//delete httpWin;
 		}
-        if (distro == "Ubuntu" || distro == "CaixaMagica")
+        else if (distro == "Ubuntu14" || distro == "CaixaMagica")
         {
-            downloadurl.append(UBUNTU64);
-            HttpWindow httpWin(downloadurl, distro);
-            httpWin.show();
-            httpWin.exec();
-            //delete httpWin;
+            downloadurl.append(UBUNTU_14_64);
+        }
+        else if (distro == "Ubuntu16") 
+        {
+        	downloadurl.append(UBUNTU_16_64);	
         }
 		else if (distro == "fedora")
         {
             downloadurl.append(FEDORA64);
-			HttpWindow httpWin(downloadurl, distro);
-			httpWin.show();
-			httpWin.exec();
 		}
 		else if (distro == "suse")
 		{
-                downloadurl.append(SUSE64);
-		    	HttpWindow httpWin(downloadurl, distro);
-		    	httpWin.show();
-		    	httpWin.exec();
+            downloadurl.append(SUSE64);
 		}
-        else if (distro == "mandriva")
-        {
-                downloadurl.append(MANDRIVA64);
-                HttpWindow httpWin(downloadurl, distro);
-                httpWin.show();
-                httpWin.exec();
-        }
-
-	} else {
+	}
+	else 
+	{
 		//32bits
 		if (distro == "debian")
 		{
             downloadurl.append(DEBIAN32);
-			HttpWindow httpWin(downloadurl, distro);
-			httpWin.show();
-			httpWin.exec();
 		}
-        if (distro == "Ubuntu" || distro == "CaixaMagica")
+        else if (distro == "Ubuntu14" || distro == "CaixaMagica")
         {
-            downloadurl.append(UBUNTU32);
-            HttpWindow httpWin(downloadurl, distro);
-            httpWin.show();
-            httpWin.exec();
-            //delete httpWin;
+            downloadurl.append(UBUNTU_14_32);
+        }
+        else if (distro == "Ubuntu16")
+        {
+            downloadurl.append(UBUNTU_16_32);
         }
 		else if (distro == "fedora")
 		{
             downloadurl.append(FEDORA32);
-			HttpWindow httpWin(downloadurl, distro);
-			httpWin.show();
-			httpWin.exec();
 		}
 		else if (distro == "suse")
 		{
-                downloadurl.append(SUSE32);
-		    	HttpWindow httpWin(downloadurl, distro);
-		    	httpWin.show();
-		    	httpWin.exec();
+            downloadurl.append(SUSE32);
 		}
-        else if (distro == "mandriva")
-        {
-                downloadurl.append(MANDRIVA32);
-                HttpWindow httpWin(downloadurl, distro);
-                httpWin.show();
-                httpWin.exec();
-        }
 	}
-#endif
+#endif	
+	HttpWindow httpWin(downloadurl, distro);
+	httpWin.show();
+	httpWin.exec();
 }
 
