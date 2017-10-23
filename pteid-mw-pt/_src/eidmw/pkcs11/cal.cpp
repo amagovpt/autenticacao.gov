@@ -428,7 +428,6 @@ for (i=0; (info = &table[i]) && (info->type) &&(info->type != type); i++)
 
 if ((info) && (info->type))
    {
-   //TODO
    pInfo->ulMinKeySize = info->ulMinKeySize;
    pInfo->ulMaxKeySize = info->ulMaxKeySize;
    pInfo->flags = info->flags;
