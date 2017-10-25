@@ -288,6 +288,9 @@ void HttpWindow::RunPackage(std::string pkg, std::string distro)
     winpath.append(QDir::tempPath().toStdString());
     winpath.append("\\Pteid-MSI.log");
 	CreateProcess(NULL, LPTSTR(winpath.c_str()), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
+	
+	PTEID_ReleaseSDK();
+
 	exit(0);
 
 #elif __APPLE__
