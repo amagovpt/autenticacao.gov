@@ -7,10 +7,12 @@ BASENAME=libpteid-poppler
 ifeq ($(shell uname), Darwin)
 	LIB_FILENAME=$(BASENAME).dylib
 	LDFLAGS += -liconv
-	CFLAGS= -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
+	CXXFLAGS += -std=c++11 -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
+	CFLAGS += -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
 else
 	LIB_FILENAME=$(BASENAME).a
-	CFLAGS= -fno-omit-frame-pointer --std=c++98 -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
+	override CXXFLAGS += -std=c++11 -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
+	override CFLAGS += -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
 endif
 
 SOURCES =		\
@@ -86,16 +88,16 @@ $(LIB_FILENAME): $(OBJS) $(GOO_OBJS) memmem.o
 	cp $(LIB_FILENAME) ../../lib
 
 ../goo/%.o : ../goo/%.cc
-	$(CXX) -o $@  $(CFLAGS) -c $<
+	$(CXX) -o $@  $(CXXFLAGS) -c $<
 
 ../fofi/%.o : ../fofi/%.cc
-	$(CXX) -o $@ $(CFLAGS) -c $<
+	$(CXX) -o $@ $(CXXFLAGS) -c $<
 
 memmem.o: memmem.c
 	$(CC) $(CFLAGS) -c memmem.c
 
 %.o: %.cc
-	$(CXX) $(CFLAGS) -c $<
+	$(CXX) $(CXXFLAGS) -c $<
 
 clean:
 	rm -fv ../goo/*.o

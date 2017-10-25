@@ -536,7 +536,7 @@ char *PDFDoc::getOccupiedSectors(int page)
 		    if (sector.isNull())
 			    continue;
 
-        std::auto_ptr<GooString> sector_str(sectors->getLength() == 0 ? GooString::format("{0:d}", sector.getInt()) :
+        std::unique_ptr<GooString> sector_str(sectors->getLength() == 0 ? GooString::format("{0:d}", sector.getInt()) :
              GooString::format(",{0:d}", sector.getInt()));
 
 		    // If we find a signature field marked
