@@ -23,9 +23,11 @@ CXXFLAGS ?= -O3 -fPIC
 override CXXFLAGS += -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy
 override CXXFLAGS += $(INCLUDE)
 
-ifeq ($(shell sh -c 'uname -m 2>/dev/null || echo not'),x86_64)
-	CFLAGS += -fPIC
-	CXXFLAGS += -fPIC
+ARCH_TEST := $(shell sh -c 'uname -m 2>/dev/null || echo not')
+ARCH_TEST ?= error
+ifeq ($(ARCH_TEST),x86_64)
+	override CFLAGS += -fPIC
+	override CXXFLAGS += -fPIC
 endif
 
 TARGET  = freeimagePTEiD
