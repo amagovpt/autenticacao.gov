@@ -734,7 +734,7 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
 		{
 			cached_pin = m_verifiedPINs[pPin->ulID];
 
-    			MWLOG(LEV_DEBUG, MOD_CAL, L"Debug: Using cached pin for %s", pPin->csLabel.c_str());
+    			MWLOG(LEV_DEBUG, MOD_CAL, "Using cached pin for %s", pPin->csLabel.c_str());
 		}
         	bOK = PinCmd(PIN_OP_VERIFY, *pPin, cached_pin, "", ulRemaining, &key);
 	}

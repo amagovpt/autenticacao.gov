@@ -101,6 +101,7 @@ namespace eIDMW
 		APL_Config tsa_url(CConfig::EIDMW_CONFIG_PARAM_XSIGN_TSAURL);
 		const char * TSA_URL = tsa_url.getString();
 
+		MWLOG(LEV_DEBUG, MOD_APL, "Requesting timestamp with TSA url: %s", TSA_URL);
 #ifdef WIN32
 		//Get system proxy configuration
 		APL_Config conf_pac(CConfig::EIDMW_CONFIG_PARAM_PROXY_PACFILE);
@@ -191,8 +192,8 @@ namespace eIDMW
 
 			if (res != 0)
 			{
-				MWLOG(LEV_ERROR, MOD_APL, L"Timestamping error in HTTP POST request. LibcURL returned %ls\n", 
-						utilStringWiden(string(error_buf)).c_str());
+				MWLOG(LEV_ERROR, MOD_APL, "Timestamping error in HTTP POST request. LibcURL returned %s", 
+						error_buf);
 			}
 
 			curl_slist_free_all(headers);
