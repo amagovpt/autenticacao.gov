@@ -105,7 +105,7 @@
 
     <message>
         <source>Unknown error! Please verify your network connection</source >
-        <translation>Erro desconhecido! Por favor verifique sua conexão de rede</translation >
+        <translation>Erro desconhecido! Por favor verifique a sua ligação à Internet</translation >
     </message>
 
     <message>
@@ -175,7 +175,7 @@
 
     <message>
         <source>Namespace name mismatch (validation error)</source >
-        <translation>Nome da namespace não coincide (erro de validação)</translation >
+        <translation>Nome do namespace não coincide (erro de validação)</translation >
     </message>
 
     <message>

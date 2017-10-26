@@ -94,34 +94,31 @@ int ErrorConn::getErrConnInfoSize(){
 }
 
 tErrConnInfo* ErrorConn::getEntry( int soapErr ) {
-    printf( "[1] getEntry() - Start\n" );
 
     tErrConnInfo* p, *cur = NULL;
     int infoSize = getErrConnInfoSize();
     int index;
-    for( index = 0, p = errConnInfo
-        ; ( p != NULL ) && ( index < infoSize )
-        ; index++, p++ ){
+    for( index = 0, p = errConnInfo ; ( p != NULL ) && ( index < infoSize )
+        ; index++, p++ ) {
 
-        if ( soapErr == p->soapErr ){
-            printf( "[2] getEntry() - soapErr: %d\n", (int)p->soapErr );
+        if ( soapErr == p->soapErr ) {
             cur = p;
             break;
         }
     }
 
-    if ( NULL == cur ){
-        if ( p != NULL ){
-            cur = p--;
-            printf( "[3] getEntry() - soapErr: %d\n", (int)cur->soapErr );
+    if ( NULL == cur ) {
+        if ( p != NULL ) {
+            //Assign to the last element of the errConnInfo array
+            p--;
+            cur = p;
         }
     }
 
-    printf( "[4] getEntry() - End\n" );
     return cur;
 }
 
-void ErrorConn::setErr( int soapErr, void *in_suppliers_resp ){
+void ErrorConn::setErr( int soapErr, void *in_suppliers_resp ) {
 
     ns2__AttributeSupplierResponseType *suppliers_resp =
         (ns2__AttributeSupplierResponseType*)in_suppliers_resp;
@@ -145,11 +142,12 @@ int ErrorConn::getErr(){
 }
 
 std::string ErrorConn::getErrStr() {
+
     if ( curErrConnInfo != NULL ){
         m_connErrStr =  curErrConnInfo->description;
     } else {
         curErrConnInfo = getEntry( SOAP_UNKNOWN );
-        if ( curErrConnInfo != NULL ){
+        if ( curErrConnInfo != NULL ) {
             m_connErrStr = curErrConnInfo->description;
         } else {
             printf( "getErrStr() - NULL curErrConnInfo\n" );
