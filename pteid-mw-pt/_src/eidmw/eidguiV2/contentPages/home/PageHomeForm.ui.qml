@@ -160,12 +160,18 @@ Item {
             Text {
                 id: textLinkCC
                 textFormat: Text.RichText
+                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.family: lato.name
+                font.italic: true
                 text: "<a href=\"https://www.autenticacao.gov.pt/documents/10179/11465/\
 Manual+de+Utiliza%C3%A7%C3%A3o+da+Aplica%C3%A7%C3%A3o+do+Cart%C3%A3o+de+Cidad%C3%A3o\">"
                       + qsTranslate("PageHelpDocOnline","STR_HELP_URL")
-                font.italic: true
-                font.pixelSize: Constants.SIZE_TEXT_BODY
-                font.family: lato.name
+                width: parent.width
+                wrapMode: Text.Wrap
+                horizontalAlignment: Text.left
+                color: Constants.COLOR_TEXT_BODY
+                Layout.fillWidth: true
+                anchors.top: parent.top
             }
         }
         RowLayout {
