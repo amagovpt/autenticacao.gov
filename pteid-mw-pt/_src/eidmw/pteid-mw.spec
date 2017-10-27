@@ -206,9 +206,6 @@ ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplaye
 ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so
 ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2
 ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2.0
-ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.2.0.0 /usr/local/lib/libpteidlibJava_Wrapper.so
-ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.2.0.0 /usr/local/lib/libpteidlibJava_Wrapper.so.2
-ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.2.0.0 /usr/local/lib/libpteidlibJava_Wrapper.so.2.0
 
 ln -s /usr/share/pixmaps/pteid-signature.png /usr/share/icons/hicolor/64x64/mimetypes/application-x-signedcc.png
 ln -s /usr/share/pixmaps/pteid-signature.png /usr/share/icons/hicolor/64x64/mimetypes/gnome-mime-application-x-signedcc.png
@@ -293,9 +290,6 @@ rm -rf /usr/local/lib/libpteidapplayer.so.2.0
 rm -rf /usr/local/lib/libpteidlib.so
 rm -rf /usr/local/lib/libpteidlib.so.2
 rm -rf /usr/local/lib/libpteidlib.so.2.0
-rm -rf /usr/local/lib/libpteidlibJava_Wrapper.so
-rm -rf /usr/local/lib/libpteidlibJava_Wrapper.so.2
-rm -rf /usr/local/lib/libpteidlibJava_Wrapper.so.2.0
 
 rm -rf /usr/share/icons/hicolor/64x64/mimetypes/application-x-signedcc.png
 rm -rf /usr/share/icons/hicolor/64x64/mimetypes/gnome-mime-application-x-signedcc.png
@@ -340,7 +334,7 @@ fi
 * Tue Jul 04 2017 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New SVN snapshot: revision 4943 - New Production CA Certificates - ECRaizEstado and Multicert Root CA
 
-* Thu Jun 09 2017 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+* Fri Jun 09 2017 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New SVN snapshot: revision 4823
 
 * Thu Apr 27 2017 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
@@ -365,7 +359,7 @@ fi
   New SVN snapshot: revision 4309
   Remove libgsoap dependency
 
-* Wed Dec 22 2016 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+* Thu Dec 22 2016 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New SVN snapshot: revision 4301
   Add new dependency on QT5, drop SCAP hacks
 
@@ -388,7 +382,7 @@ fi
 * Tue Nov 18 2014 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New SVN snapshot: revision 3771
 
-* Wed Oct 14 2014 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+* Tue Oct 14 2014 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New SVN snapshot: revision 3715 (Without changes related to the PDF Signature redesign and new features)
 
 * Wed Oct 08 2014 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
@@ -409,7 +403,7 @@ fi
 * Fri Dec 13 2013 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New SVN snapshot: revision 3484 - Fixed locking issue on SignPDF
 
-* Fri Dec 09 2013 Andre Guerreiro 
+* Mon Dec 09 2013 Andre Guerreiro 
   New SVN snapshot: revision 3468 - Fix CAP Pin change functionality
 
 * Fri Nov 22 2013 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
@@ -427,7 +421,7 @@ fi
 * Wed Sep 11 2013 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New SVN snapshot : revision 3400 - GUI Changes as requested by AMA, various bugfixes and new CA Certificates
 
-* Wed Jan 31 2013 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+* Thu Jan 31 2013 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New SVN snapshot : revision 3271 - Fix in PKCS11 module to support acroread SHA-256 signatures
 
 * Wed Jan 30 2013 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
