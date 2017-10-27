@@ -22,7 +22,7 @@
 %endif
 %endif
 
-%define svn_revision 4973
+%define svn_revision 5239
 
 Name:           pteid-mw
 BuildRequires:  pcsc-lite-devel make swig automake autoconf libtool
@@ -36,11 +36,11 @@ Requires: pcsc-ccid xerces-c
 %endif
 
 %if 0%{?suse_version}
-BuildRequires:	java-1_8_0-openjdk-devel
+BuildRequires:  java-1_8_0-openjdk-devel
 Requires:       java-1_8_0-openjdk
 BuildRequires:  libpoppler-qt5-devel
-BuildRequires:	libqt5-qtbase-devel
-BuildRequires:	libqt5-qttools-devel
+BuildRequires:  libqt5-qtbase-devel
+BuildRequires:  libqt5-qttools-devel
 
 BuildRequires:  libxml-security-c-devel
 %endif
@@ -51,21 +51,21 @@ BuildConflicts: brp-check-suse
 BuildRequires:  java-1.8.0-openjdk-devel
 Requires:       java-1.8.0-openjdk
 
-BuildRequires:	qt5-qtbase-devel
-BuildRequires:	qt5-qttools-devel
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qttools-devel
 
 BuildRequires:  xml-security-c-devel
 BuildRequires:  poppler-qt5-devel
 BuildRequires:  cairo-devel gcc gcc-c++ xerces-c-devel openssl-devel
 BuildRequires:  qt-devel pcsc-lite-ccid curl-devel
-Requires:	pcsc-lite-ccid
+Requires: pcsc-lite-ccid
 %endif
 
-Conflicts:	cartao_de_cidadao
+Conflicts:  cartao_de_cidadao
 
 License:        GPLv2+
 Group:          System/Libraries
-Version:        2.4.0.%{svn_revision}
+Version:        2.4.6.%{svn_revision}
 %if 0%{?fedora}
 Release:        1%{?dist}
 %else
@@ -75,8 +75,8 @@ Summary:        Portuguese eID middleware
 Url:            https://svn.gov.pt/projects/ccidadao/
 Vendor:         Portuguese Government
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-Source0:        pteid-mw_2.4.0svn%{svn_revision}-1.tar.gz
-Source1:	pteid-mw-gui.desktop
+Source0:        pteid-mw_2.4.6svn%{svn_revision}-1.tar.gz
+Source1:        pteid-mw-gui.desktop
 Source2:        pteid-scalable.svg
 Source3:        pteid-signature.png
 Source4:        pteid-dss.desktop
@@ -98,7 +98,7 @@ Identity Card (Cartão de Cidadão) in order to authenticate securely
 in certain websites and/or sign documents.
 
 %prep
-%setup -q -n pteid-mw_2.4.0svn%{svn_revision}
+%setup -q -n pteid-mw_2.4.6svn%{svn_revision}
 
 %if 0%{?fedora} || 0%{?centos_ver}
 sed -i 's/$QT4DIR/"$QT4DIR"/g' configure_fedora.sh
@@ -253,7 +253,7 @@ echo "/usr/local/lib" > /etc/ld.so.conf.d/pteid.conf
 # MDV still uses old pcscd services
 if [ -x /etc/init.d/pcscd ]
 then
-	/etc/init.d/pcscd restart
+  /etc/init.d/pcscd restart
 fi
 
 %if 0%{?fedora} >= 16
@@ -265,7 +265,7 @@ systemctl restart pcscd.service
 %if 0%{?suse_version}  > 1140
 if [ -x /etc/init.d/pcscd ]
 then
-	/etc/init.d/pcscd restart
+  /etc/init.d/pcscd restart
 fi
 %endif
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
@@ -325,6 +325,12 @@ fi
 /usr/local/share/certs
 
 %changelog
+* Fri Oct 27 2017 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+  New SVN snapshot: revision 5239 - PKCS#11 corrections and new ECRaizEstado certificate
+
+* Thu Sep 28 2017 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+  New SVN snapshot: revision 5176 - Java SDK compatibility work and new CC 004 cert
+
 * Tue Jul 25 2017 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New SVN snapshot: revision 4973 - Address Change bugfixes and add missing eidlib headers
 

@@ -1,3 +1,8 @@
+pteid-mw (2.4.6svn5239-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 5239 - PKCS#1 fixes and new ECRaizEstado Certificate
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 27 Oct 2017 11:32:55 +0100
 pteid-mw (2.4.4svn5176-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 5176 - Public Release supporting new cert chain with 10 year citizen certificates
