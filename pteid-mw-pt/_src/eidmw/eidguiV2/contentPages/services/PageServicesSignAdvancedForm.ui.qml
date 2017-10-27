@@ -613,21 +613,17 @@ Item {
 
                 Text {
                     id: textDragMsgImg
-                    anchors.fill: parent
+                    width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+					height: parent.height
                     font.bold: true
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     font.pixelSize: Constants.SIZE_TEXT_BODY
                     color: Constants.COLOR_TEXT_LABEL
-                    visible: !fileLoaded
+                    visible: true
                     font.family: lato.name
                     z: 1
-                }
-                DropArea {
-                    id: dropArea
-                    anchors.fill: parent
-                    z: 2
                 }
                 Components.PDFPreview {
                     anchors.fill: parent
@@ -641,6 +637,11 @@ Item {
                 id: mouseAreaRectMainRigh
                 anchors.fill: parent
                 enabled: !fileLoaded
+            }
+			DropArea {
+                id: dropArea
+                anchors.fill: parent
+                z: 2
             }
 
         }

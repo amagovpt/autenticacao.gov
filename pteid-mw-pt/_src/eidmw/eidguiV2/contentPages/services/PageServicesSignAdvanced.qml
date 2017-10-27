@@ -1101,12 +1101,12 @@ PageServicesSignAdvancedForm {
     propertyRadioButtonPADES{
         onCheckedChanged:{
             if(propertyRadioButtonPADES.checked){
-                propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
+				propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                         qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
                 propertySpinBoxControl.value = 1
                 filesModel.clear()
             }else{
-                propertyTextDragMsgImg.text =
+				propertyTextDragMsgImg.text =
                         qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW")
                 propertySpinBoxControl.value = 1
                 filesModel.clear()
@@ -1182,6 +1182,7 @@ PageServicesSignAdvancedForm {
                         + propertyListViewFiles.count)
             if(filesModel.count === 0) {
                 fileLoaded = false
+				propertyTextDragMsgImg.visible = true
                 propertyPDFPreview.propertyBackground.source = ""
                 propertyPDFPreview.propertyDragSigImg.visible = false
                 propertyPDFPreview.propertyDragSigReasonText.visible = false
@@ -1193,12 +1194,13 @@ PageServicesSignAdvancedForm {
                 propertyPDFPreview.propertyDragSigImg.visible = false
             }
             else {
+				fileLoaded = true
                 if(propertyRadioButtonPADES.checked){
+				    propertyTextDragMsgImg.visible = false
                     var loadedFilePath = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
                     var pageCount = gapi.getPDFpageCount(loadedFilePath)
                     if(pageCount > 0){
                         propertyBusyIndicator.running = true
-                        fileLoaded = true
                         propertySpinBoxControl.value = 1
                         propertySpinBoxControl.to = getMinimumPage()
                         propertyPDFPreview.propertyBackground.cache = false
@@ -1234,7 +1236,9 @@ PageServicesSignAdvancedForm {
                                 qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR_MSG")
                         mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                     }
-                }
+                }else{
+				    propertyTextDragMsgImg.visible = true
+				}
             }
         }
     }
