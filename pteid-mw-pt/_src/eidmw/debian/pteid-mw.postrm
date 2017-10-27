@@ -20,8 +20,5 @@ if [ "$1" = "remove" ]; then
 	rm -rf /usr/local/lib/libpteidlib.so
 	rm -rf /usr/local/lib/libpteidlib.so.2
 	rm -rf /usr/local/lib/libpteidlib.so.2.0
-	rm -rf /usr/local/lib/libpteidlibJava_Wrapper.so
-	rm -rf /usr/local/lib/libpteidlibJava_Wrapper.so.2
-	rm -rf /usr/local/lib/libpteidlibJava_Wrapper.so.2.0
 fi
 #DEBHELPER#

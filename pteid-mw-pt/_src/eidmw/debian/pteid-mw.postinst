@@ -1,5 +1,4 @@
 #!/bin/sh
-ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.2.0.0 /usr/local/lib/libpteidlibJava_Wrapper.so
 ln -f -s /usr/local/lib/libfreeimagePTEiD-3.15.1.so /usr/local/lib/libfreeimagePTEiD.so
 ln -f -s /usr/local/lib/libfreeimagePTEiD-3.15.1.so /usr/local/lib/libfreeimagePTEiD.so.3
 ln -s -f /usr/local/lib/libpteidcommon.so.2.0.0 /usr/local/lib/libpteidcommon.so
@@ -20,9 +19,6 @@ ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplaye
 ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so
 ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2
 ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2.0
-ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.2.0.0 /usr/local/lib/libpteidlibJava_Wrapper.so
-ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.2.0.0 /usr/local/lib/libpteidlibJava_Wrapper.so.2
-ln -s -f /usr/local/lib/libpteidlibJava_Wrapper.so.2.0.0 /usr/local/lib/libpteidlibJava_Wrapper.so.2.0
 
 /sbin/ldconfig
 
