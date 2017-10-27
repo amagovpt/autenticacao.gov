@@ -28,7 +28,7 @@ Item {
                 * Constants.HEIGHT_CARD_NOTES_ROW_TOP_INC_RELATIVE
         Components.CardRowTop{}
     }
-    
+
     BusyIndicator {
         id: busyIndicator
         running: false
@@ -58,6 +58,18 @@ Item {
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
             }
+            Text {
+                id: notesTextDescription
+                text: qsTranslate("PageCardNotes","STR_NOTES_DESCRIPTION_PAGE")
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_MAIN_PRETO
+                anchors.top: notesText.bottom
+                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                width: parent.width - Constants.SIZE_TEXT_FIELD_H_SPACE
+                wrapMode: Text.Wrap
+            }
             DropShadow {
                 anchors.fill: rectFieldFlick
                 horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
@@ -80,9 +92,9 @@ Item {
             Rectangle {
                 id: rectFieldFlick
                 width: parent.width
-                height: parent.height - notesText.height - Constants.SIZE_ROW_V_SPACE
+                height: parent.height - notesText.height - notesTextDescription.height - 2 * Constants.SIZE_ROW_V_SPACE
                 color: "white"
-                anchors.top :notesText.bottom
+                anchors.top :notesTextDescription.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 opacity: 1
 
