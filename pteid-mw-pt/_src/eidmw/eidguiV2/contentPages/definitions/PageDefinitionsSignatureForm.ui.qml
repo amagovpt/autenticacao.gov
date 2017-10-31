@@ -234,7 +234,7 @@ Item {
                 folder: shortcuts.home
                 modality: Qt.WindowModal
                 selectMultiple: false
-                nameFilters: ["Image files (*.jpg *.png)", "All files (*)"]
+                nameFilters: ["Image files (*.bmp *.jpeg *.jpg *.png)", "All files (*)"]
                 Component.onCompleted: visible = false
             }
             DropShadow {
