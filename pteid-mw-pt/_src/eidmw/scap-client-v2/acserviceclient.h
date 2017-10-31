@@ -16,7 +16,6 @@ namespace ACService {
     class ns3__AttributeType;
 };
 
-class soap;
 class ns2__AttributeSupplierListType;
 class ns3__AttributeSupplierType;
 class TreeItemInfo;
