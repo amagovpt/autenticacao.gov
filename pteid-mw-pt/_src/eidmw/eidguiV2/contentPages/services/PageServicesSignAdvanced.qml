@@ -921,10 +921,16 @@ PageServicesSignAdvancedForm {
                 propertyBusyIndicator.running = true
                 propertyTextFieldReason.enabled = false
                 propertyTextFieldLocal.enabled = false
+                propertyTextFieldReason.opacity = Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                propertyTextFieldLocal.opacity = Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                propertyTextFieldReason.text = ""
+                propertyTextFieldLocal.text = ""
+                propertySwitchSignTemp.checked = false
                 propertySwitchSignTemp.enabled = false
                 propertyButtonSignCMD.enabled = false
                 propertyCheckSignShow.checked = true
                 propertyCheckSignShow.enabled = false
+                propertyCheckSignReduced.checked = false
                 propertyCheckSignReduced.enabled = false
                 propertyRadioButtonXADES.enabled = false
                 propertyTextAttributesMsg.visible = true
@@ -936,6 +942,8 @@ PageServicesSignAdvancedForm {
                 entityAttributesModel.clear()
                 propertyTextFieldReason.enabled = true
                 propertyTextFieldLocal.enabled = true
+                propertyTextFieldReason.opacity = 1.0
+                propertyTextFieldLocal.opacity = 1.0
                 propertySwitchSignTemp.enabled = true
                 propertyButtonSignCMD.enabled = true
                 propertyCheckSignReduced.enabled = true
@@ -943,7 +951,6 @@ PageServicesSignAdvancedForm {
                 propertyRadioButtonXADES.enabled = true
                 propertyTextAttributesMsg.visible = false
                 propertyMouseAreaTextAttributesMsg.enabled = false
-
             }
         }
     }
