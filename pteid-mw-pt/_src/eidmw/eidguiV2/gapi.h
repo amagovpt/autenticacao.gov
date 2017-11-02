@@ -26,6 +26,14 @@
 
 #include "scapsignature.h"
 
+/* For filenames we need to maintain latin-1 or UTF-8 native encoding */
+//This macro's argument is a QString
+#ifdef _WIN32
+#define getPlatformNativeString(s) s.toLatin1().constData()
+#else
+#define getPlatformNativeString(s) s.toUtf8().constData()
+#endif
+
 /*
     GAPI - Graphic Application Programming Interface
 

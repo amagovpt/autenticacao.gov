@@ -357,6 +357,7 @@ PageServicesSignSimpleForm {
             }else{
                 outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
+			outputFile = decodeURIComponent(outputFile)
             var page = 1
             propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
                                         page = propertySpinBoxControl.value
@@ -581,7 +582,6 @@ PageServicesSignSimpleForm {
                 dialog.open()
             }else if(filesArray.length == 1){
                 // Needed because the PDFPreview
-                console.log("Adding file: " + filesArray[0])
                 var path =  filesArray[0]
                 //  Get the path itself without a regex
                 if (Qt.platform.os === "windows") {
@@ -589,6 +589,8 @@ PageServicesSignSimpleForm {
                 }else{
                     path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
                 }
+				path = decodeURIComponent(path)
+				console.log("Adding file: " + path)
                 filesModel.insert(0, {"fileUrl": path})
             }
         }
@@ -608,6 +610,7 @@ PageServicesSignSimpleForm {
             }else{
                 outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
+			outputFile = decodeURIComponent(outputFile)
 
                 var page = 1
                 propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
@@ -642,7 +645,6 @@ PageServicesSignSimpleForm {
 
         onAccepted: {
             console.log("You chose file(s): " + propertyFileDialog.fileUrls)
-            console.log("Adding file: " + propertyFileDialog.fileUrls[0])
             var path = propertyFileDialog.fileUrls[0];
             //  Get the path itself without a regex
             if (Qt.platform.os === "windows") {
@@ -650,6 +652,8 @@ PageServicesSignSimpleForm {
             }else{
                 path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
+			path = decodeURIComponent(path)
+			console.log("Adding file: " + path)
             filesModel.append({
                                   "fileUrl": path
                               })

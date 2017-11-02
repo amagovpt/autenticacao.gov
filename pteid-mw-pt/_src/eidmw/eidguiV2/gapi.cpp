@@ -624,7 +624,7 @@ void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdSignParams &params)
                                       params.page,
                                       params.coord_x, params.coord_y,
                                       params.location.toUtf8().data(), params.reason.toUtf8().data(),
-                                      params.outputFile.toUtf8().data());
+									  getPlatformNativeString(params.outputFile));
 
         if ( ret != 0 ) {
             qDebug() << "signOpen failed! - ret: " << ret << endl;
@@ -690,7 +690,7 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QString loaded
 
     QString fullInputPath = params.loadedFilePath;
 
-    cmd_pdfSignature->setFileSigning(fullInputPath.toUtf8().data());
+	cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
 
 
     if (params.isTimestamp > 0)
@@ -834,9 +834,9 @@ bool GAPI::doSignPrintPDF(QString &file_to_sign, QString &outputsign) {
     getCardInstance(card);
     if (card == NULL) return false;
 
-    PTEID_PDFSignature sig_handler(file_to_sign.toUtf8().data());
+	PTEID_PDFSignature sig_handler(getPlatformNativeString(file_to_sign));
 
-    card->SignPDF(sig_handler, 0, 0, false, "", "", outputsign.toUtf8().data());
+	card->SignPDF(sig_handler, 0, 0, false, "", "", getPlatformNativeString(outputsign));
 
     return true;
 
@@ -1246,7 +1246,7 @@ void GAPI::startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outp
 
 int GAPI::getPDFpageCount(QString loadedFilePath) {
 
-    PTEID_PDFSignature sig_handler(loadedFilePath.toUtf8().data());
+	PTEID_PDFSignature sig_handler(getPlatformNativeString(loadedFilePath));
 
     int pageCount = sig_handler.getPageCount();
 
@@ -1267,10 +1267,10 @@ void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTime
     if (card == NULL) return;
 
     const char *files_to_sign[1];
-    QByteArray tempLoadedFilePath= loadedFilePath.toUtf8();
+	QByteArray tempLoadedFilePath = getPlatformNativeString(loadedFilePath);
     files_to_sign[0] = tempLoadedFilePath.constData();
 
-    QByteArray tempOutputFile= outputFile.toUtf8();
+	QByteArray tempOutputFile = getPlatformNativeString(outputFile);
 
     if (isTimestamp > 0)
         card->SignXadesT(tempOutputFile.constData(), files_to_sign, 1);
@@ -1291,7 +1291,7 @@ void GAPI::doSignPDF(SignParams &params) {
     if (card == NULL) return;
 
     QString fullInputPath = params.loadedFilePath;
-    PTEID_PDFSignature sig_handler(fullInputPath.toUtf8().data());
+	PTEID_PDFSignature sig_handler(getPlatformNativeString(fullInputPath));
 
     if (params.isTimestamp > 0)
         sig_handler.enableTimestamp();
@@ -1302,8 +1302,8 @@ void GAPI::doSignPDF(SignParams &params) {
         sig_handler.setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
 
     card->SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
-                 params.location.toUtf8().data(), params.reason.toUtf8().data(),
-                 params.outputFile.toUtf8().data());
+					params.location.toUtf8().data(), params.reason.toUtf8().data(),
+					getPlatformNativeString(params.outputFile));
 
     emit signalPdfSignSucess(SignMessageOK);
 
@@ -1327,7 +1327,7 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
     for( int i = 0; i < params.loadedFileBatchPath.count(); i++ ){
         qDebug() << params.loadedFileBatchPath[i];
         QString fullInputPath = params.loadedFileBatchPath[i];
-        sig_handler->addToBatchSigning( fullInputPath.toUtf8().data() , false );
+		sig_handler->addToBatchSigning((char *)getPlatformNativeString(fullInputPath), false);
     }
 
     if (params.isTimestamp > 0)
@@ -1339,8 +1339,8 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
         sig_handler->setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
 
     card->SignPDF(*sig_handler, params.page, params.coord_x, params.coord_y,
-                 params.location.toUtf8().data(), params.reason.toUtf8().data(),
-                 params.outputFile.toUtf8().data());
+		params.location.toUtf8().data(), params.reason.toUtf8().data(),
+				 getPlatformNativeString(params.outputFile));
 
     emit signalPdfSignSucess(SignMessageOK);
 
@@ -1349,13 +1349,12 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
 
 QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
-    qDebug() << "PDFPreviewImageProvider received request for: " << id;
+	qDebug() << "PDFPreviewImageProvider received request for: " << id;
     qDebug() << "PDFPreviewImageProvider received request for: "
              << requestedSize.width() << " - " << requestedSize.height();
     QStringList strList = id.split("?");
 
-    //This should work on Windows too with QT APIs...
-    QString pdf_path = strList.at(0);
+	QString pdf_path = QUrl::fromPercentEncoding(strList.at(0).toUtf8());
 
     //URL param ?page=xx
     unsigned int page = (unsigned int) strList.at(1).split("=").at(1).toInt();

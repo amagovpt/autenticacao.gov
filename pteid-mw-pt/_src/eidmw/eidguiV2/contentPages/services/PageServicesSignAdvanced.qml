@@ -400,6 +400,7 @@ PageServicesSignAdvancedForm {
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
             outputFile = stripFilePrefix(outputFile)
+			outputFile = decodeURIComponent(outputFile)
 
             var page = propertySpinBoxControl.value
             var reason = propertyTextFieldReason.text
@@ -662,8 +663,7 @@ PageServicesSignAdvancedForm {
                 }else{
                     path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
                 }
-
-
+				path = decodeURIComponent(path)
                 filesModel.append({
                                       "fileUrl": path
                                   })
@@ -693,6 +693,7 @@ PageServicesSignAdvancedForm {
                 }else{
                     path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
                 }
+				path = decodeURIComponent(path)
                 filesModel.append({
                                       "fileUrl": path
                                   })
@@ -717,7 +718,7 @@ PageServicesSignAdvancedForm {
             }else{
                 outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
-
+			outputFile = decodeURIComponent(outputFile)
             if (propertyRadioButtonPADES.checked) {
                 var page = propertySpinBoxControl.value
                 var reason = propertyTextFieldReason.text
@@ -778,7 +779,7 @@ PageServicesSignAdvancedForm {
             }else{
                 outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
-
+			outputFile = decodeURIComponent(outputFile)
             if (propertyRadioButtonPADES.checked) {
 
                 var page = propertySpinBoxControl.value
@@ -962,6 +963,7 @@ PageServicesSignAdvancedForm {
                 }else{
                     path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
                 }
+				path = decodeURIComponent(path)
                 filesModel.append({
                                       "fileUrl": path
                                   })
