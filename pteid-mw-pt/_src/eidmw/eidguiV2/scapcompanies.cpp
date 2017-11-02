@@ -74,6 +74,29 @@ std::vector<ns2__AttributesType *>
     return attributesType;
 }
 
+bool ScapServices::removeAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies) {
+
+    try
+    {
+        QString citizenNIC(card.getID().getCivilianIdNumber());
+
+        ScapSettings settings;
+        QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
+
+        QString filePath = scapCacheDir + citizenNIC + (isCompanies ? COMPANIES_SUFFIX : ENTITIES_SUFFIX);
+
+        qDebug() << "C++: Removing cache file: " << filePath;
+
+        QFile file (filePath);
+        return file.remove();
+
+    }
+    catch(...) {
+        std::cerr << "Error ocurred while removing attributes from cache!";
+        return false;
+    }
+}
+
 std::vector<ns2__AttributesType *> ScapServices::getAttributes(eIDMW::PTEID_EIDCard &card, std::vector<int> supplier_ids) {
 
     std::vector<ns2__AttributesType *> result;

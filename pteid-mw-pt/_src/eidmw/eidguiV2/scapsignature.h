@@ -65,7 +65,7 @@ public:
 	     double location_x, double location_y, int ltv_years, std::vector<int> selected_attributes);
 
 	std::vector<ns2__AttributesType *> loadAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies);
-
+    bool removeAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies);
 	/* Connection error functions */
 	//The error message should be in the GUI, we should just return an enum
     //QString getConnErrStr();

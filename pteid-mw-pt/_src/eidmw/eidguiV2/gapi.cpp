@@ -1476,6 +1476,10 @@ void GAPI::startLoadingAttributesFromCache(int isCompanies, bool isShortDescript
     QtConcurrent::run(this, &GAPI::getSCAPAttributesFromCache, isCompanies, isShortDescription);
 }
 
+void GAPI::startRemovingAttributesFromCache(int isCompanies) {
+    QtConcurrent::run(this, &GAPI::removeSCAPAttributesFromCache, isCompanies);
+}
+
 void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, int location_x, int location_y,
                             int ltv, QList<int> attribute_index) {
     SCAPSignParams signParams = {inputPDF, outputPDF, page, location_x, location_y,
@@ -1672,6 +1676,25 @@ void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
         emit signalEntityAttributesLoaded(attribute_list);
     else if (queryType == 2)
         emit signalAttributesLoaded(attribute_list);
+}
+
+void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
+
+    qDebug() << "removeSCAPAttributesFromCache : " << isCompanies;
+
+    PTEID_EIDCard * card = NULL;
+    bool error_code = false;
+
+    getCardInstance(card);
+    if (card == NULL)
+        return;
+
+    error_code = scapServices.removeAttributesFromCache(*card, isCompanies);
+
+    if (error_code == true)
+        emit signalRemoveSCAPAttributesSucess(isCompanies);
+    else
+        emit signalRemoveSCAPAttributesFail(isCompanies);
 }
 
 void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {

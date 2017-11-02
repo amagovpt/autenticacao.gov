@@ -1,6 +1,9 @@
 import QtQuick 2.4
 import QtQuick.Controls 2.1
 
+//Import C++ defined enums
+import eidguiV2 1.0
+
 import "../../scripts/Constants.js" as Constants
 
 PageDefinitionsSCAPForm {
@@ -9,6 +12,68 @@ PageDefinitionsSCAPForm {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicator.running = false
+        }
+        onSignalCardDataChanged: {
+            console.log("Definitions SCAP Signature --> Data Changed")
+            propertyBusyIndicator.running = true
+            propertyBusyIndicatorAttributes.running = true
+            gapi.startGettingEntities()
+            propertyBusyIndicator.running = false
+        }
+        onSignalCardAccessError: {
+            console.log("Definitions SCAP Signature --> onSignalCardAccessError")
+            if (error_code == GAPI.NoReaderFound) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER") + controler.autoTr
+            }
+            else if (error_code == GAPI.NoCardFound) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD") + controler.autoTr
+            }
+            else if (error_code == GAPI.SodCardReadError) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR") + controler.autoTr
+            }
+            else {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR") + controler.autoTr
+            }
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+
+            propertyBusyIndicator.running = false
+        }
+        onSignalCardChanged: {
+            console.log("Definitions SCAP Signature --> onSignalCardChanged")
+            if (error_code == GAPI.ET_CARD_REMOVED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED") + controler.autoTr
+            }
+            else if (error_code == GAPI.ET_CARD_CHANGED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED") + controler.autoTr
+                propertyBusyIndicator.running = true
+                gapi.startCardReading()
+            }
+            else{
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN") + controler.autoTr
+            }
+
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
         }
         onSignalEntityAttributesLoadedError: {
             console.log("Definitions SCAP - Signal SCAP entities loaded error")
@@ -98,6 +163,22 @@ PageDefinitionsSCAPForm {
                 }
             }
             propertyBusyIndicatorAttributes.running = false
+        }
+        onSignalRemoveSCAPAttributesSucess: {
+            console.log("Definitions SCAP - Signal SCAP Signal Remove SCAP Attributes Sucess")
+            propertyBusyIndicatorAttributes.running = false
+            if(isCompanies == false){
+                gapi.startGettingEntities()
+                propertyBusyIndicator.running = true
+            }
+        }
+        onSignalRemoveSCAPAttributesFail: {
+            console.log("Definitions SCAP - Signal Remove SCAP Attributes Fail")
+            propertyBusyIndicatorAttributes.running = false
+            if(isCompanies == false){
+                gapi.startGettingEntities()
+                propertyBusyIndicator.running = true
+            }
         }
     }
 
@@ -222,11 +303,28 @@ PageDefinitionsSCAPForm {
             gapi.startGettingEntityAttributes(attributeList)
         }
     }
+    propertyButtonRemoveCompanyAttributes {
+        onClicked: {
+            console.log("propertyButtonRemoveCompanyAttributes clicked!")
+            companyAttributesModel.clear()
+            propertyBusyIndicatorAttributes.running = true
+            gapi.startRemovingAttributesFromCache(1)
+        }
+
+    }
+
+    propertyButtonRemoveEntityAttributes {
+        onClicked: {
+            console.log("propertyButtonRemoveEntityAttributes clicked!")
+            entityAttributesModel.clear()
+            propertyBusyIndicatorAttributes.running = true
+            gapi.startRemovingAttributesFromCache(0)
+        }
+    }
 
     Component.onCompleted: {
         console.log("Page Definitions SCAP Completed")
         propertyBusyIndicator.running = true
-        propertyBusyIndicatorAttributes.running = true
-        gapi.startGettingEntities()
+        gapi.startCardReading()
     }
 }

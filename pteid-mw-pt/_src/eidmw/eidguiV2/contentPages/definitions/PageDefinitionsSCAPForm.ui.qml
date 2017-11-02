@@ -8,6 +8,9 @@ Item {
 
     property alias propertyButtonLoadCompanyAttributes: buttonLoadCompanyAttributes
     property alias propertyButtonLoadEntityAttributes: buttonLoadEntityAttributes
+    property alias propertyButtonRemoveCompanyAttributes: buttonRemoveCompanyAttributes
+    property alias propertyButtonRemoveEntityAttributes: buttonRemoveEntityAttributes
+
     property alias propertyBusyIndicator: busyIndicator
     property alias propertyBusyIndicatorAttributes: busyIndicatorAttributes
     property alias propertyBar: bar
@@ -118,14 +121,25 @@ Item {
                     width: parent.width
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     Button {
-                        id: buttonLoadEntityAttributes
-                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON")
-                        width: 2 * Constants.WIDTH_BUTTON
+                        id: buttonRemoveEntityAttributes
+                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
+                        width: 1.5 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.left: parent.left
+                        enabled: entityAttributesModel.count > 1
+                    }
+                    Button {
+                        id: buttonLoadEntityAttributes
+                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD")
+                        width: 1.5 * Constants.WIDTH_BUTTON
+                        height: parent.height
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.capitalization: Font.MixedCase
+                        anchors.right: parent.right
                         enabled: false
                     }
                 }
@@ -182,14 +196,25 @@ Item {
                     width: parent.width
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     Button {
-                        id: buttonLoadCompanyAttributes
-                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_COMPANY_BUTTON")
-                        width: 2 * Constants.WIDTH_BUTTON
+                        id: buttonRemoveCompanyAttributes
+                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
+                        width: 1.5 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.left: parent.left
+                        enabled: companyAttributesModel.count > 0
+                    }
+                    Button {
+                        id: buttonLoadCompanyAttributes
+                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD")
+                        width: 1.5 * Constants.WIDTH_BUTTON
+                        height: parent.height
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.capitalization: Font.MixedCase
+                        anchors.right: parent.right
                     }
                 }
             }

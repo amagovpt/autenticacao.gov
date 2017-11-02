@@ -285,6 +285,7 @@ public slots:
     void startGettingEntities();
     void startGettingCompanyAttributes();
     void startLoadingAttributesFromCache(int isCompanies, bool isShortDescription);
+    void startRemovingAttributesFromCache(int isCompanies);
     void startGettingEntityAttributes(QList<int> entity_index);
 
     void startSigningSCAP(QString inputPdf, QString outputPDF, int page, int location_x, int location_y, 
@@ -372,6 +373,8 @@ signals:
     void signalPdfPrintFail();
     void signalPrinterPrintFail();
     void signalLanguageChangedError();
+    void signalRemoveSCAPAttributesSucess(int isCompanies);
+    void signalRemoveSCAPAttributesFail(int isCompanies);
 
     // Import Certificates
     void signalImportCertificatesFail();
@@ -386,6 +389,8 @@ private:
 
     //querytype - 0 = Entities, 1 = Companies, 2 = All Attributes 
     void getSCAPAttributesFromCache(int queryType, bool isShortDescription);
+    //querytype - 0 = Entities, 1 = Companies
+    void removeSCAPAttributesFromCache(int queryType);
     void getSCAPEntityAttributes(QList<int> entityIDs);
     void doSignSCAP(SCAPSignParams params);
     void getPersoDataFile();
