@@ -718,7 +718,7 @@ PageServicesSignAdvancedForm {
             }else{
                 outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
-			outputFile = decodeURIComponent(outputFile)
+            outputFile = decodeURIComponent(outputFile)
             if (propertyRadioButtonPADES.checked) {
                 var page = propertySpinBoxControl.value
                 var reason = propertyTextFieldReason.text
@@ -749,7 +749,7 @@ PageServicesSignAdvancedForm {
                     }
                     console.log("QML AttributeList: ", attributeList)
                     gapi.startSigningSCAP(loadedFilePath, outputFile, page, coord_x, coord_y,
-                                         0, attributeList)
+                                          0, attributeList)
                 }else{
 
                     gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
@@ -757,7 +757,16 @@ PageServicesSignAdvancedForm {
                 }
             }
             else {
-                gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp)
+
+                if (propertyListViewFiles.count == 1){
+                    gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp)
+                }else{
+                    var batchFilesArray = []
+                    for(var i = 0; i < propertyListViewFiles.count; i++){
+                        batchFilesArray[i] =  propertyListViewFiles.model.get(i).fileUrl;
+                    }
+                    gapi.startSigningBatchXADES(batchFilesArray, outputFile, isTimestamp)
+                }
             }
 
         }
@@ -804,11 +813,6 @@ PageServicesSignAdvancedForm {
                                           reason, location, isTimestamp, isSmallSignature)
 
             }
-            else {
-                // TODO: Implement signing batch in Xades mode
-                gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp)
-            }
-
         }
     }
 
@@ -1035,7 +1039,7 @@ PageServicesSignAdvancedForm {
                             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
                         }
                         else if (gapi.getFileSize(outputNativePath) > MAX_SIZE) {
-                             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                                     qsTranslate("PageServicesSign","STR_SCAP_WARNING")
                             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                                     qsTranslate("PageServicesSign","STR_SCAP_MAX_FILESIZE") + " 15 MB"
@@ -1070,8 +1074,13 @@ PageServicesSignAdvancedForm {
                             qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
                     mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
                 }else{
-                    propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
-                    propertyFileDialogBatchOutput.open()
+                    if(propertyRadioButtonPADES.checked){
+                        propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
+                        propertyFileDialogBatchOutput.open()
+                    }else{
+                        propertyFileDialogOutput.filename = "xadessign.ccsigned"
+                        propertyFileDialogOutput.open()
+                    }
                 }
             }
         }
@@ -1113,11 +1122,19 @@ PageServicesSignAdvancedForm {
 				propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                         qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
                 propertySpinBoxControl.value = 1
+                propertyTextFieldReason.enabled = true
+                propertyTextFieldLocal.enabled = true
+                propertyTextFieldReason.opacity = 1.0
+                propertyTextFieldLocal.opacity = 1.0
                 filesModel.clear()
             }else{
 				propertyTextDragMsgImg.text =
                         qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW")
                 propertySpinBoxControl.value = 1
+                propertyTextFieldReason.enabled = false
+                propertyTextFieldLocal.enabled = false
+                propertyTextFieldReason.opacity = Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                propertyTextFieldLocal.opacity = Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                 filesModel.clear()
             }
         }

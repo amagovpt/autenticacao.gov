@@ -280,6 +280,7 @@ public slots:
     int getPDFpageCount(QString loadedFilePath);
 
     void startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
+    void startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, double isTimestamp);
 
     /* SCAP Methods  */
     void startGettingEntities();
@@ -403,6 +404,7 @@ private:
     bool drawpdf(QPrinter &printer, PrintParams params);
     void doSignBatchPDF(SignBatchParams &params);
     void doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
+    void doSignBatchXADES(SignBatchParams &params);
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
     void fillCertificateList (void );
     void getCertificateAuthStatus(void );

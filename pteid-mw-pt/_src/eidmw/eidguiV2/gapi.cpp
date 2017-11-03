@@ -1259,6 +1259,43 @@ void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, double 
 
 }
 
+void GAPI::startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, double isTimestamp) {
+
+    SignBatchParams params = {loadedFileBatchPath, outputFile, 0, 0, 0, "", "", isTimestamp, 0};
+
+    QFuture<void> future =
+            QtConcurrent::run(this, &GAPI::doSignBatchXADES, params);
+}
+
+void GAPI::doSignBatchXADES(SignBatchParams &params) {
+    qDebug() << "doSignBatchXADES! loadedFilePath = " << params.loadedFileBatchPath << " outputFile = " << params.outputFile <<
+                "page = " << params.page << "coord_x" << params.coord_x << "coord_y" << params.coord_y <<
+                "reason = " << params.reason << "location = " << params.location << "isTimestamp = " <<  params.isTimestamp;
+
+    BEGIN_TRY_CATCH
+
+        PTEID_EIDCard * card = NULL;
+        getCardInstance(card);
+        if (card == NULL) return;
+
+        const char *files_to_sign[params.loadedFileBatchPath.count()];
+
+        for( int i = 0; i < params.loadedFileBatchPath.count(); i++ ){
+            files_to_sign[i] = strdup(getPlatformNativeString(params.loadedFileBatchPath[i]));
+        }
+
+        QByteArray tempOutputFile = getPlatformNativeString(params.outputFile);
+
+        if (params.isTimestamp > 0)
+            card->SignXadesT(tempOutputFile.constData(), files_to_sign, params.loadedFileBatchPath.count());
+        else
+            card->SignXades(tempOutputFile.constData(), files_to_sign, params.loadedFileBatchPath.count());
+
+        emit signalPdfSignSucess(SignMessageOK);
+
+        END_TRY_CATCH
+}
+
 void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp) {
     BEGIN_TRY_CATCH
 
