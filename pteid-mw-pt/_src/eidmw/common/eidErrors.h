@@ -144,34 +144,6 @@
 /** The cached files have been tampered with */
 #define EIDMW_CACHE_TAMPERED           0xe1d0040A
 
-
-// Socket related errors
-
-/** Creation of a socket failed */
-#define EIDMW_ERR_SOCKET_CREATE		   0xe1d00500
-
-/** Socket 'send()' failed */
-#define EIDMW_ERR_SOCKET_SEND		   0xe1d00501
-
-/** Socket 'recv()' failed */
-#define EIDMW_ERR_SOCKET_RECV		   0xe1d00502
-
-/** Call to 'gethostbyname()' in SocketClient failed */
-#define EIDMW_ERR_SOCKET_GETHOST	   0xe1d00503
-
-/** Call to 'connect()' in SocketClient failed */
-#define EIDMW_ERR_SOCKET_CONNECT	   0xe1d00504
-
-/** Invalid in SocketServer, call to 'socket()' failed */
-#define EIDMW_ERR_SOCKET_SOCKET		   0xe1d00510
-
-/** Call to 'bind()' in SocketServer failed */
-#define EIDMW_ERR_SOCKET_BIND		   0xe1d00511
-
-/** Call to 'Accept()' in SocketServer failed */
-#define EIDMW_ERR_SOCKET_ACCEPT		   0xe1d00512
-
-
 // User errors/events
 
 /** User pressed Cancel in PIN dialog */
