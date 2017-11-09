@@ -246,6 +246,11 @@ Rectangle {
         dragTarget.lastScreenWidth = background_image.width
         dragTarget.lastScreenHeight = background_image.height
     }
+    function setSignPreview(droped_x,droped_y){
+
+        dragSigRect.x = droped_x
+        dragSigRect.y = droped_y
+    }
 
     function getData(){
         var time = Qt.formatDateTime(new Date(), "yy.MM.dd hh:mm:ss")

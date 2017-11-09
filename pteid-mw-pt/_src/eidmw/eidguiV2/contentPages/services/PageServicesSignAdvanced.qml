@@ -9,6 +9,8 @@ import eidguiV2 1.0
 
 PageServicesSignAdvancedForm {
 
+    property bool isAnimationFinished: mainFormID.propertyPageLoader.propertyAnimationExtendedFinished
+
     ToolTip {
         id: controlToolTip
         timeout: Constants.TOOLTIP_TIMEOUT_MS
@@ -56,6 +58,11 @@ PageServicesSignAdvancedForm {
                 entityAttributesModel.append({
                                                   entityName: attribute_list[i], attribute: attribute_list[i+1], checkBoxAttr: false
                                               });
+            }
+
+            for (var i = 0; i < propertyPageLoader.attributeListBackup.length; i++){
+                console.log(propertyPageLoader.attributeListBackup[i])
+                entityAttributesModel.get(propertyPageLoader.attributeListBackup[i]).checkBoxAttr = true
             }
 
             propertyBusyIndicator.running = false
@@ -184,6 +191,7 @@ PageServicesSignAdvancedForm {
             console.log("Receive signal onSignalPdfSourceChanged pdfWidth = "+pdfWidth+" pdfHeight = "+pdfHeight);
             propertyPDFPreview.propertyPdfOriginalWidth=pdfWidth
             propertyPDFPreview.propertyPdfOriginalHeight=pdfHeight
+            propertyPDFPreview.setSignPreview(propertyPageLoader.propertyBackupCoordX,propertyPageLoader.propertyBackupCoordY)
         }
     }
 
@@ -653,7 +661,9 @@ PageServicesSignAdvancedForm {
         onDropped: {
             // Update sign preview position variables to be used to send to sdk
             propertyPDFPreview.updateSignPreview(drop.x,drop.y)
-            //TODO: Validate files type
+            propertyPageLoader.propertyBackupCoordX = propertyPDFPreview.propertyDragSigRect.x
+            propertyPageLoader.propertyBackupCoordY = propertyPDFPreview.propertyDragSigRect.y
+
             for(var i = 0; i < filesArray.length; i++){
                 console.log("Adding file: " + filesArray[i])
                 var path =  filesArray[i]
@@ -665,6 +675,9 @@ PageServicesSignAdvancedForm {
                 }
 				path = decodeURIComponent(path)
                 filesModel.append({
+                                      "fileUrl": path
+                                  })
+                mainFormID.propertyBackupfilesModel.append({
                                       "fileUrl": path
                                   })
             }
@@ -695,6 +708,9 @@ PageServicesSignAdvancedForm {
                 }
 				path = decodeURIComponent(path)
                 filesModel.append({
+                                      "fileUrl": path
+                                  })
+                propertyPageLoader.propertyBackupfilesModel.append({
                                       "fileUrl": path
                                   })
             }
@@ -819,16 +835,19 @@ PageServicesSignAdvancedForm {
     propertyTextFieldReason{
         onTextChanged: {
             propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
+            propertyPageLoader.propertyBackupLocal = propertyTextFieldReason.text
         }
     }
     propertyTextFieldLocal{
         onTextChanged: {
             propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text
+            propertyPageLoader.propertyBackupReason = propertyTextFieldLocal.text
         }
     }
 
     propertyCheckSignReduced{
         onCheckedChanged: {
+            propertyPageLoader.propertyBackupSignReduced = propertyCheckSignReduced.checked
             if(propertyCheckSignReduced.checked){
                 propertyPDFPreview.propertySigHidth = 45
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.2
@@ -863,7 +882,7 @@ PageServicesSignAdvancedForm {
         Rectangle {
             id: container
             width: parent.width - Constants.SIZE_ROW_H_SPACE
-            height: columnItem.height + 10
+            height: columnItem.height + 15
             color: Constants.COLOR_MAIN_SOFT_GRAY
 
             CheckBox {
@@ -873,7 +892,16 @@ PageServicesSignAdvancedForm {
                 font.capitalization: Font.MixedCase
                 anchors.verticalCenter: parent.verticalCenter
                 checked: checkBoxAttr
-                onCheckedChanged: entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
+                onCheckedChanged: {
+                    entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
+                    var count = 0
+                    for (var i = 0; i < entityAttributesModel.count; i++){
+                        if(entityAttributesModel.get(i).checkBoxAttr == true){
+                            propertyPageLoader.attributeListBackup[count] = i
+                            count++
+                        }
+                    }
+                }
             }
             Column {
                 id: columnItem
@@ -918,8 +946,21 @@ PageServicesSignAdvancedForm {
         }
     }
 
+    propertySwitchSignTemp{
+        onCheckedChanged: {
+            propertyPageLoader.propertyBackupTempSign = propertySwitchSignTemp.checked
+        }
+    }
+
+    propertyCheckSignShow{
+        onCheckedChanged: {
+            propertyPageLoader.propertyBackupSignShow = propertyCheckSignShow.checked
+        }
+    }
+
     propertySwitchSignAdd{
         onCheckedChanged: {
+            propertyPageLoader.propertyBackupSignAdd = propertySwitchSignAdd.checked
             if(propertySwitchSignAdd.checked){
                 console.log("propertySwitchSignAdd checked")
                 propertyBusyIndicator.running = true
@@ -978,6 +1019,9 @@ PageServicesSignAdvancedForm {
                 filesModel.append({
                                       "fileUrl": path
                                   })
+                propertyPageLoader.propertyBackupfilesModel.append({
+                                      "fileUrl": path
+                                  })
             }
 
             // Force scroll and focus to the last item addded
@@ -1011,7 +1055,8 @@ PageServicesSignAdvancedForm {
     propertyButtonRemoveAll {
         onClicked: {
             console.log("Removing all files")
-            propertyListViewFiles.model.clear()
+            filesModel.clear()
+            propertyPageLoader.propertyBackupfilesModel.clear()
         }
     }
 
@@ -1118,24 +1163,35 @@ PageServicesSignAdvancedForm {
 
     propertyRadioButtonPADES{
         onCheckedChanged:{
+            propertyPageLoader.propertyBackupFormatPades = propertyRadioButtonPADES.checked
             if(propertyRadioButtonPADES.checked){
 				propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                         qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
-                propertySpinBoxControl.value = 1
                 propertyTextFieldReason.enabled = true
                 propertyTextFieldLocal.enabled = true
                 propertyTextFieldReason.opacity = 1.0
                 propertyTextFieldLocal.opacity = 1.0
                 filesModel.clear()
+                for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
+                {
+                    filesModel.append({
+                                          "fileUrl": propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
+                                      })
+                }
             }else{
 				propertyTextDragMsgImg.text =
                         qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW")
-                propertySpinBoxControl.value = 1
                 propertyTextFieldReason.enabled = false
                 propertyTextFieldLocal.enabled = false
                 propertyTextFieldReason.opacity = Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                 propertyTextFieldLocal.opacity = Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                 filesModel.clear()
+                for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
+                {
+                    filesModel.append({
+                                          "fileUrl": propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
+                                      })
+                }
             }
         }
     }
@@ -1204,7 +1260,7 @@ PageServicesSignAdvancedForm {
         id: filesModel
 
         onCountChanged: {
-            console.log("filesModel onCountChanged count:"
+            console.log("propertyListViewFiles onCountChanged count:"
                         + propertyListViewFiles.count)
             if(filesModel.count === 0) {
                 fileLoaded = false
@@ -1223,14 +1279,14 @@ PageServicesSignAdvancedForm {
 				fileLoaded = true
                 if(propertyRadioButtonPADES.checked){
 				    propertyTextDragMsgImg.visible = false
-                    var loadedFilePath = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
+                    var loadedFilePath = filesModel.get(filesModel.count-1).fileUrl
                     var pageCount = gapi.getPDFpageCount(loadedFilePath)
                     if(pageCount > 0){
                         propertyBusyIndicator.running = true
-                        propertySpinBoxControl.value = 1
                         propertySpinBoxControl.to = getMinimumPage()
                         propertyPDFPreview.propertyBackground.cache = false
-                        propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
+                        propertyPDFPreview.propertyBackground.source =
+                                "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
                         var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpeg"
                         if(gapi.getUseCustomSignature() && gapi.customSignImageExist()){
                             if (Qt.platform.os === "windows") {
@@ -1259,7 +1315,7 @@ PageServicesSignAdvancedForm {
                         mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                                 qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR")
                         mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                                qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR_MSG")
+                                qsTranslate("PageServicesSign","STR_LOAD_ADVANCED_PDF_ERROR_MSG")
                         mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                     }
                 }else{
@@ -1271,10 +1327,10 @@ PageServicesSignAdvancedForm {
 
     propertySpinBoxControl {
         onValueChanged: {
-            var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
+            var loadedFilePath = filesModel.get(0).fileUrl
             propertyPDFPreview.propertyBackground.source =
                     "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
-
+            propertyPageLoader.propertyBackupPage =  propertySpinBoxControl.value
             propertySpinBoxControl.up.indicator.visible = true
             propertySpinBoxControl.down.indicator.visible = true
             if(propertySpinBoxControl.value === getMinimumPage()){
@@ -1288,6 +1344,7 @@ PageServicesSignAdvancedForm {
     propertyCheckLastPage {
         onCheckedChanged: {
             var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
+            propertyPageLoader.propertyBackupLastPage =  propertyCheckLastPage.checked
             if(propertyCheckLastPage.checked){
                 propertySpinBoxControl.value = getMinimumPage()
                 propertyPDFPreview.propertyBackground.source =
@@ -1299,21 +1356,51 @@ PageServicesSignAdvancedForm {
         }
     }
 
+    onIsAnimationFinishedChanged: {
+        if(isAnimationFinished == true){
+            loadUnfinishedSignature()
+        }
+    }
+
     Component.onCompleted: {
+        console.log("Page Services Sign Advanced mainWindowCompleted")
+        propertyBusyIndicator.running = true
+        gapi.startCardReading()
+    }
+
+    function loadUnfinishedSignature(){
+        // Load backup data about unfinished advance signature
+        propertyRadioButtonPADES.checked = propertyPageLoader.propertyBackupFormatPades
+        propertyRadioButtonXADES.checked = !propertyPageLoader.propertyBackupFormatPades
+        propertySwitchSignTemp.checked = propertyPageLoader.propertyBackupTempSign
+        propertySwitchSignAdd.checked = propertyPageLoader.propertyBackupSignAdd
+        propertyCheckSignShow.checked = propertyPageLoader.propertyBackupSignShow
+        propertyCheckSignReduced.checked = propertyPageLoader.propertyBackupSignReduced
+
+        filesModel.clear()
+        for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
+        {
+            filesModel.append({
+                                  "fileUrl": propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
+                              })
+        }
+
+        propertySpinBoxControl.value = propertyPageLoader.propertyBackupPage
+        propertyCheckLastPage.checked = propertyPageLoader.propertyBackupLastPage
+        propertyTextFieldReason.text = propertyPageLoader.propertyBackupLocal
+        propertyTextFieldLocal.text = propertyPageLoader.propertyBackupReason
+
         if (gapi.getShortcutFlag() > 0)
             filesModel.append(
                         {
                             "fileUrl": gapi.getShortcutInputPDF()
                         });
 
-        console.log("Page Services Sign Advanced mainWindowCompleted")
-        propertyBusyIndicator.running = true
         propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                 qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
         propertyPDFPreview.propertyDragSigSignedByNameText.text =
                 qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
         propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
-        gapi.startCardReading()
     }
 
     function stripFilePrefix(filePath) {
@@ -1346,8 +1433,8 @@ PageServicesSignAdvancedForm {
     function getMinimumPage(){
         // Function to detect minimum number of pages of all loaded pdfs to sign
         var minimumPage = 0
-        for(var i = 0 ; i < propertyListViewFiles.count ; i++ ){
-            var loadedFilePath = propertyListViewFiles.model.get(i).fileUrl
+        for(var i = 0 ; i < filesModel.count ; i++ ){
+            var loadedFilePath = filesModel.get(i).fileUrl
             var pageCount = gapi.getPDFpageCount(loadedFilePath)
             if(minimumPage == 0 || pageCount < minimumPage)
                 minimumPage = pageCount

@@ -13,6 +13,26 @@ Loader{
     property alias propertyGeneralTitleText: titleText
     property alias propertyGeneralPopUpLabelText: labelText
 
+    // Backup data about unfinished advance signature
+    property alias propertyBackupfilesModel: backupfilesModel
+    property bool propertyAnimationExtendedFinished: false
+    property bool propertyBackupFormatPades: true
+    property bool propertyBackupTempSign: false
+    property bool propertyBackupSignAdd: false
+    property variant attributeListBackup: []
+    property bool propertyBackupSignShow: true
+    property double propertyBackupCoordX: 0
+    property double propertyBackupCoordY: 0
+    property bool propertyBackupSignReduced: false
+    property int propertyBackupPage: 1
+    property bool propertyBackupLastPage: false
+    property string propertyBackupLocal: ""
+    property string propertyBackupReason: ""
+
+    ListModel {
+        id: backupfilesModel
+    }
+
     Dialog {
         id: generalPopUp
         width: 400

@@ -439,6 +439,12 @@ Load language error. Please reinstall the application"
                     to: 0
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
+                onRunningChanged: {
+                    if (( mainFormID.state == "STATE_HOME") && (!running))
+                    {
+                        mainFormID.propertyPageLoader.propertyAnimationExtendedFinished = false
+                    }
+                }
             },
             Transition {
                 from: "STATE_NORMAL"
@@ -471,6 +477,12 @@ Load language error. Please reinstall the application"
                     to: 0;
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
+                onRunningChanged: {
+                    if (( mainFormID.state == "STATE_EXPAND") && (!running))
+                    {
+                        mainFormID.propertyPageLoader.propertyAnimationExtendedFinished = true
+                    }
+                }
             },
             Transition {
                 from: "STATE_EXPAND"
@@ -501,6 +513,12 @@ Load language error. Please reinstall the application"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE;
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
+                }
+                onRunningChanged: {
+                    if (( mainFormID.state == "STATE_NORMAL") && (!running))
+                    {
+                        mainFormID.propertyPageLoader.propertyAnimationExtendedFinished = false
+                    }
                 }
             }
         ]
