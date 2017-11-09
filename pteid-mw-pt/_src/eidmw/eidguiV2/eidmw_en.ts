@@ -1446,6 +1446,36 @@
         <oldsource>STR_SIGN_CARD</oldsource>
         <translation>Cartão de Cidadão</translation>
     </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignHelpForm.ui.qml" line="28"/>
+        <source>STR_SIGN_HELP_TITLE</source>
+        <translation>Digital signature</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignHelpForm.ui.qml" line="42"/>
+        <source>STR_SIGN_HELP_SUB_TITLE</source>
+        <translation>The digital signature allows the holder of a Citizen&apos;s Card or the Digital Mobile Key, by his own will, to sign with the personal key existing on his Citizen&apos;s Card or with the Digital Mobile Key.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignHelpForm.ui.qml" line="54"/>
+        <source>STR_SIGN_HELP_TOPIC_1</source>
+        <translation>Simple</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignHelpForm.ui.qml" line="72"/>
+        <source>STR_SIGN_HELP_SUB_TOPIC_1</source>
+        <translation>Digital signature of a PDF document</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignHelpForm.ui.qml" line="86"/>
+        <source>STR_SIGN_HELP_TOPIC_2</source>
+        <translation>Advance</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignHelpForm.ui.qml" line="104"/>
+        <source>STR_SIGN_HELP_SUB_TOPIC_2</source>
+        <translation>Digital signature of a PDF document or any other document with possibility to sign multiple documents at the same time, add professional attributes as well as configure other options.</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
@@ -1931,7 +1961,7 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="main.qml" line="561"/>
+        <location filename="main.qml" line="586"/>
         <source>STR_RUN_MODE</source>
         <translation>Test mode</translation>
     </message>

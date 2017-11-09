@@ -82,5 +82,7 @@
         <file>contentPages/definitions/PageDefinitionsSCAP.qml</file>
         <file>contentPages/definitions/PageDefinitionsSCAPForm.ui.qml</file>
         <file>scripts/Functions.js</file>
+        <file>contentPages/services/PageServicesSignHelp.qml</file>
+        <file>contentPages/services/PageServicesSignHelpForm.ui.qml</file>
     </qresource>
 </RCC>

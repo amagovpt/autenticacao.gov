@@ -15,6 +15,8 @@ Rectangle {
 
     property alias propertyMainMenuBottomListView: mainMenuBottomListView
     property alias propertySubMenuView: subMenuView
+    property alias propertySubMenuViewMenu: subMenuViewMenu
+    property alias propertyMouseAreaSubMenuViewReduced : mouseAreaSubMenuViewReduced
     property alias propertySubMenuListView: subMenuListView
 
     property alias propertyContentPagesView: contentPagesView
@@ -127,13 +129,15 @@ Rectangle {
         }
 
         /* Sub Menu View */
-        Item {
+        Rectangle {
             id: subMenuView
             width: parent.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE
             height: parent.height
             anchors.left: mainMenuView.right
+            color: "white"
             z: 0
             Item {
+                id: subMenuViewMenu
                 width: parent.width - 2 * Constants.SIZE_ROW_H_SPACE
                        - subMenuViewVerticalLine.width
                 height: subMenuListView.count *
@@ -165,6 +169,28 @@ Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
                     color: Constants.COLOR_LINE_SUB_MENU
                     anchors.verticalCenterOffset: 0
+                }
+            }
+            Item {
+                id: subMenuViewReduced
+                anchors.fill: parent
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                opacity: 1 - subMenuViewMenu.opacity
+
+                MouseArea {
+                    id: mouseAreaSubMenuViewReduced
+                    anchors.fill: parent
+                     enabled: subMenuViewReduced.opacity == 1 ? true : false
+                }
+                Image {
+                    id: imageReduced
+                    width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                    height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                    fillMode: Image.PreserveAspectFit
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "images/arrow-right_AMA.png"
                 }
             }
         }

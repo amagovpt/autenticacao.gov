@@ -29,7 +29,7 @@ function getSubMenuWidth(parentWidth){
         handColor = 0
         break;
     case "STATE_EXPAND":
-        handColor = 0
+        handColor = parentWidth * Constants.SUB_MENU_EXPAND_VIEW_RELATIVE_SIZE
         break;
     default: //STATE_NORMAL
         handColor = parentWidth * Constants.SUB_MENU_VIEW_RELATIVE_SIZE

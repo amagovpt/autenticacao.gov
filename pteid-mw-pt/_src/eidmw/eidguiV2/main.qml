@@ -208,6 +208,7 @@ Load language error. Please reinstall the application"
 
     MainForm {
         id: mainFormID
+        property bool isAnimationFinished: mainFormID.propertyPageLoader.propertyAnimationExtendedFinished
 
         //************************************************************************/
         //**                  states
@@ -401,10 +402,19 @@ Load language error. Please reinstall the application"
                 to: "STATE_HOME"
                 NumberAnimation
                 {
-                    target: mainFormID.propertySubMenuView
+                    target: mainFormID.propertySubMenuViewMenu
                     property: "opacity"
                     easing.type: Easing.Linear
-                    to: 0;
+                    to: 1;
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+                }
+                ColorAnimation
+                {
+                    id: animationColorSubMenuExpanded
+                    target: mainFormID.propertySubMenuView
+                    property: "color"
+                    easing.type: Easing.Linear
+                    to: "white";
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation
@@ -452,10 +462,19 @@ Load language error. Please reinstall the application"
                 NumberAnimation
                 {
                     id: animationHideSubMenuExpand
-                    target: mainFormID.propertySubMenuView
+                    target: mainFormID.propertySubMenuViewMenu
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 0;
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+                }
+                ColorAnimation
+                {
+                    id: animationColorSubMenuExpand
+                    target: mainFormID.propertySubMenuView
+                    property: "color"
+                    easing.type: Easing.Linear
+                    to: Constants.COLOR_MAIN_DARK_GRAY;
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation
@@ -465,7 +484,8 @@ Load language error. Please reinstall the application"
                     property: "width"
                     easing.type: Easing.OutQuad
                     to: mainFormID.propertyMainView.width
-                        * (Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE + Constants.SUB_MENU_VIEW_RELATIVE_SIZE)
+                        * (Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE + Constants.SUB_MENU_VIEW_RELATIVE_SIZE
+                           -Constants.SUB_MENU_EXPAND_VIEW_RELATIVE_SIZE)
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 NumberAnimation
@@ -474,7 +494,7 @@ Load language error. Please reinstall the application"
                     target: mainFormID.propertySubMenuView
                     property: "width"
                     easing.type: Easing.OutQuad
-                    to: 0;
+                    to: mainFormID.propertyMainView.width * Constants.SUB_MENU_EXPAND_VIEW_RELATIVE_SIZE;
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 onRunningChanged: {
@@ -490,10 +510,19 @@ Load language error. Please reinstall the application"
                 NumberAnimation
                 {
                     id: animationShowSubMenuExpand
-                    target: mainFormID.propertySubMenuView
+                    target: mainFormID.propertySubMenuViewMenu
                     property: "opacity"
                     easing.type: Easing.Linear
                     to: 1;
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+                }
+                ColorAnimation
+                {
+                    id: animationColorSubMenuExpandedNormal
+                    target: mainFormID.propertySubMenuView
+                    property: "color"
+                    easing.type: Easing.Linear
+                    to: "white";
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation
@@ -567,6 +596,14 @@ Load language error. Please reinstall the application"
                 propertyMainMenuBottomListView.currentIndex = -1
             }
         }
+        propertyMouseAreaSubMenuViewReduced {
+            onClicked: {
+                mainFormID.state = "STATE_NORMAL"
+                mainFormID.propertyPageLoader.source = "contentPages/services/PageServicesSignHelp.qml"
+                // Do not select any option in sub menu
+                mainFormID.propertySubMenuListView.currentIndex = -1
+            }
+        }
     }
     Component {
         id: mainMenuDelegate
@@ -599,7 +636,7 @@ Load language error. Please reinstall the application"
                     console.log("Expand Sub Menu = " +  mainFormID.propertyMainMenuListView.model.get(index).expand)
                     if( mainFormID.propertyMainMenuListView.model.get(index).expand === true){
                         // Clean the content page
-                        mainFormID.propertyPageLoader.source = ""
+                        mainFormID.propertyPageLoader.source = "contentPages/services/PageServicesSignHelp.qml"
                         // Do not select any option in sub menu
                         mainFormID.propertySubMenuListView.currentIndex = -1
                     }else{
