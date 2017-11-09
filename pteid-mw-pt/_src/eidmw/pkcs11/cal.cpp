@@ -1301,10 +1301,6 @@ switch(err)
    case EIDMW_ERR_LIMIT:                     return(CKR_DEVICE_ERROR);     break;
    /** An internal check failed */
    case EIDMW_ERR_CHECK:                     return(CKR_DEVICE_ERROR);     break;
-   /** The PCSC library could not be located */
-   case EIDMW_ERR_PCSC_LIB:                  return(CKR_DEVICE_ERROR);     break;
-   /** An attempt to resolve a Z-lib address failed */
-   case EIDMW_ERR_ZLIB_RESOLVE:              return(CKR_GENERAL_ERROR);    break;
    /** And unknown error occurred */
    case EIDMW_ERR_UNKNOWN:                   return(CKR_GENERAL_ERROR);    break;
    /** The pinpad reader received a wrong/unknown value */

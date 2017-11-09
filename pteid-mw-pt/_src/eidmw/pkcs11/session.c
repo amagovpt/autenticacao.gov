@@ -28,6 +28,11 @@
 #include <mach-o/dyld.h>
 #endif
 
+#ifdef __linux__
+//readlink(2)
+#include <unistd.h>
+#endif
+
 #include "pteid_p11.h"
 #include "p11.h"
 #include "log.h"
@@ -356,92 +361,66 @@ CK_RV C_Login(CK_SESSION_HANDLE hSession,  /* the session's handle */
               CK_CHAR_PTR       pPin,      /* the user's PIN */
               CK_ULONG          ulPinLen)  /* the length of the PIN */
 {
-   int ret;
-   P11_SESSION *pSession = NULL;
-   P11_SLOT *pSlot = NULL;
-   CK_TOKEN_INFO tokeninfo;
-   	printf("\n********************\n");
-	printf("CK_RV C_Login called\n");
+  int ret;
+  P11_SESSION *pSession = NULL;
+  P11_SLOT *pSlot = NULL;
+  CK_TOKEN_INFO tokeninfo;
 
-//return(CKR_OK);
-log_trace(WHERE, "I: enter");
-   ret = p11_lock();
-//printf("p11_lock returns: %s\n",!ret ? "OK" : "ERROR");
-if (ret != CKR_OK)
-{
-	log_trace(WHERE, "I: leave, p11_lock failed with %i",ret);
-	//printf("LOCK failled!\n");
-   	//printf("\n********************\n");
-   return ((CK_RV)ret);
-}
+  log_trace(WHERE, "I: enter");
+  ret = p11_lock();
 
-if (isAcroread())
-{
-	return CKR_OK;
-}
+  if (ret != CKR_OK)
+  {
+    log_trace(WHERE, "I: leave, p11_lock failed with %i",ret);
+    return ((CK_RV)ret);
+  }
 
-memset(&tokeninfo, 0, sizeof(CK_TOKEN_INFO));
+  if (isAcroread())
+  {
+   return CKR_OK;
+  }
 
-log_trace(WHERE, "S: Login (session %d)", hSession);
+  memset(&tokeninfo, 0, sizeof(CK_TOKEN_INFO));
 
-	printf("Login (session %d)\n",hSession);
+  log_trace(WHERE, "S: Login (session %d)", hSession);
 
-   if (userType != CKU_USER && userType != CKU_SO)
-      {
-      ret = CKR_USER_TYPE_INVALID;
-	//printf("TIPO DE UTILIZADOR INVALIDO\n");
-      goto cleanup;
-      }
-   ret = p11_get_session(hSession, &pSession);
-   if (ret)
-      {
-      //log_trace(WHERE, "E: Invalid session handle (%d)", hSession);
-	//printf("INVALID SESSION HANDLE - %d -\n",hSession);
-      goto cleanup;
-      }
+  if (userType != CKU_USER && userType != CKU_SO)
+  {
+    ret = CKR_USER_TYPE_INVALID;
 
-   pSlot = p11_get_slot(pSession->hslot);
-   if (pSlot == NULL)
-      {
-      log_trace(WHERE, "E: Slot not found for session %d", hSession);
-      ret = CKR_SESSION_HANDLE_INVALID;
-	//printf("SLOT NOT FOUND FOR SESSION\n");
-      goto cleanup;
-      }
+    goto cleanup;
+  }
+  ret = p11_get_session(hSession, &pSession);
+  if (ret)
+  {
+    log_trace(WHERE, "E: Invalid session handle (%d)", hSession);
+    goto cleanup;
+  }
 
-   if (pSlot->login_type >= 0)
-      {
+  pSlot = p11_get_slot(pSession->hslot);
+  if (pSlot == NULL)
+  {
+    log_trace(WHERE, "E: Slot not found for session %d", hSession);
+    ret = CKR_SESSION_HANDLE_INVALID;
+    goto cleanup;
+  }
+
+  if (pSlot->login_type >= 0)
+  {
 	  // Needed for Acrobat, in case you want to sign with a 2nd card
       ret = CKR_OK; //CKR_USER_ALREADY_LOGGED_IN;
-	//printf("Acrobat caso especial!");
       goto cleanup;
-      }
+  }
 
-/*   ret = cal_get_token_info(pSlot, &tokeninfo);
-   if (ret != CKR_OK)
-      {
-      log_trace(WHERE, "E: could not find tokeninfo for slot %d", pSession->hslot);
-      goto cleanup;
-      }
-
-    if ( !(tokeninfo.flags & CKF_USER_PIN_INITIALIZED) )
-      {
-      ret = CKR_USER_PIN_NOT_INITIALIZED;
-      goto cleanup;
-      }*/
-
-   ret = cal_logon(pSession->hslot, ulPinLen, pPin, 0);
-   if (ret == CKR_OK){
+  ret = cal_logon(pSession->hslot, ulPinLen, pPin, 0);
+  if (ret == CKR_OK) {
       pSlot->login_type = userType;
-      //printf("Tudo OK! - ret = %d\n",ret);
-   }
+  }
 cleanup:
-   p11_unlock();
-   log_trace(WHERE, "I: leave, ret = %i",ret);
-   	//printf("RET = %d\n",ret);
-	//printf("\n********************\n");
+  p11_unlock();
+  log_trace(WHERE, "I: leave, ret = %i",ret);
 
-   return ((CK_RV)ret);
+  return ((CK_RV)ret);
 }
 #undef WHERE
 
