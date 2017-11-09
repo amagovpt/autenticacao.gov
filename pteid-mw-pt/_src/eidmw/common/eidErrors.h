@@ -117,12 +117,6 @@
 /** An internal check failed */
 #define EIDMW_ERR_CHECK	               0xe1d00401
 
-/** The PCSC library could not be located */
-#define EIDMW_ERR_PCSC_LIB            0xe1d00402
-
-/** An attempt to resolve a Z-lib address failed */
-#define EIDMW_ERR_ZLIB_RESOLVE         0xe1d00403
-
 /** And unknown error occurred */
 #define EIDMW_ERR_UNKNOWN              0xe1d00404
 
