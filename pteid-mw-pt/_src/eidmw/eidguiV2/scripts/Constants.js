@@ -4,6 +4,9 @@
 // Program options
 var USE_SDK_PIN_UI_POPUP = true
 
+// Border
+var APP_BORDER = 1
+
 // Error Constants
 var TRIES_LEFT_ERROR = 1000
 

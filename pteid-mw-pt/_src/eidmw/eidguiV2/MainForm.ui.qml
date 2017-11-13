@@ -27,7 +27,7 @@ Rectangle {
 
     property bool propertShowAnimation: true
 
-    border.width: 1
+    border.width: Constants.APP_BORDER
     border.color : Constants.COLOR_MAIN_BLUE
 
     /* Title bar */
@@ -132,7 +132,7 @@ Rectangle {
         Rectangle {
             id: subMenuView
             width: parent.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE
-            height: parent.height
+            height: parent.height - Constants.APP_BORDER
             anchors.left: mainMenuView.right
             color: "white"
             z: 0
