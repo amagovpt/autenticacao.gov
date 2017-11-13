@@ -48,7 +48,8 @@ function getContentPagesMenuWidth(parentWidth){
         break;
     case "STATE_EXPAND":
         handColor = parentWidth * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE +
-                parentWidth * Constants.SUB_MENU_VIEW_RELATIVE_SIZE
+                parentWidth * Constants.SUB_MENU_VIEW_RELATIVE_SIZE -
+                parentWidth * Constants.SUB_MENU_EXPAND_VIEW_RELATIVE_SIZE
         break;
     default: //STATE_NORMAL
         handColor = parentWidth * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
