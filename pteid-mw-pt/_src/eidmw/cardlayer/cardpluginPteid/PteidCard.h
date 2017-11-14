@@ -38,7 +38,8 @@ namespace eIDMW
 {
 
 
-//Workaround needed for Windows 8 and later: With the do-nothing call to SCardStatus() in PCSC::Status() we make sure the transaction has activity so that Windows doesn't kill it
+// Workaround needed for Windows 8 and later: With the do-nothing call to SCardStatus() in PCSC::Status()
+// we make sure the transaction has activity so that Windows doesn't kill it
 class KeepAliveThread : public CThread
 {
 public:
@@ -67,8 +68,6 @@ public:
 	CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad,
 		  const CByteArray & oData, tSelectAppletMode selectAppletMode, unsigned long ulVersion);
     ~CPteidCard(void);
-
-	virtual std::string GetPinpadPrefix();
 
 	virtual tCardType GetType();
     virtual CByteArray GetSerialNrBytes();

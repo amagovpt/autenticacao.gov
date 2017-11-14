@@ -524,7 +524,6 @@ CByteArray CPkiCard::GetRandom(unsigned long ulLen)
 
 	CByteArray oRandom(ulLen);
 
-try_again:
     // Use a Get Challenge command to gather 8 bytes with each loop
     for (unsigned long i = 0; i < ulLen; i += 20)
     {

@@ -148,7 +148,6 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 			bool bNeedToSelectApplet = false;
 			CByteArray oData;
 			CByteArray oCmd(40);
-			// lmedinas CONFIRMED
 			unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
 			oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
 			oCmd.Append((unsigned char) sizeof(GEMSAFE_PTEID_APPLET_AID));
@@ -185,7 +184,7 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 		}
 		catch(...)
 		{
-			cout << "Exception in cardPluginPteid.CardGetInstance() \(...)" << endl;
+			std::cerr << "Exception thrown in cardPluginPteid.CardGetInstance() 1" << endl;
 		}
 
 	} else {
@@ -198,7 +197,6 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 			oCmd.Append((unsigned char) sizeof(IAS_PTEID_APPLET_AID));
 			oCmd.Append(IAS_PTEID_APPLET_AID, sizeof(IAS_PTEID_APPLET_AID));
 
-			//std::cout << "--------------------------------------This is read: " << oCmd.ToString() << " with bytes: " << oCmd.Size() <<"\n";
 			long lRetVal;
 			// Don't remove these brackets, CAutoLock dtor must be called!
 			{
@@ -231,7 +229,7 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 		}
 		catch(...)
 		{
-			cout << "Exception in cardPluginPteid.CardGetInstance() \(...)" << endl;
+			std::cerr << "Exception thrown in cardPluginPteid.CardGetInstance() 2" << endl;
 		}
 	}
 
@@ -240,40 +238,40 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 
 CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
 		     GenericPinpad *poPinpad, const CByteArray & oData, tSelectAppletMode selectAppletMode, unsigned long ulVersion) :
-CPkiCard(hCard, poContext, poPinpad)
+			 CPkiCard(hCard, poContext, poPinpad)
 {
-    switch (ulVersion){
-		case 1:
-			m_cardType = CARD_PTEID_IAS07;
-			break;
-		case 2:
-			m_cardType = CARD_PTEID_IAS101;
-			break;
+	switch (ulVersion){
+	case 1:
+		m_cardType = CARD_PTEID_IAS07;
+		break;
+	case 2:
+		m_cardType = CARD_PTEID_IAS101;
+		break;
 	}
-  try {
-        // Get Card Serial Number
-        m_oCardData = ReadFile("3f004f005032");
-        m_ucCLA = 0x00;
+	try {
+		// Get Card Serial Number
+		m_oCardData = ReadFile("3F004F005032");
+		m_ucCLA = 0x00;
 
-        m_oCardData.Chop(2); // remove SW12 = '90 00'
+		m_oCardData.Chop(2); // remove SW12
 
-        CByteArray parsesrnr;
-        parsesrnr = CByteArray(m_oCardData.GetBytes(), m_oCardData.Size());
-        m_oSerialNr  = parsesrnr.GetBytes(7,8);
+		CByteArray parsesrnr;
+		parsesrnr = CByteArray(m_oCardData.GetBytes(), m_oCardData.Size());
+		m_oSerialNr = parsesrnr.GetBytes(7, 8);
 
-        // Get Card Applet Version
-        m_AppletVersion = ulVersion;
-    }
-    catch(CMWException e)
-    {
-        MWLOG(LEV_CRIT, MOD_CAL, "Failed to get CardData: 0x%0x File: %s, Line:%ld", e.GetError(), e.GetFile().c_str(), e.GetLine());
-        Disconnect(DISCONNECT_LEAVE_CARD);
-    }
-    catch(...)
-    {
-        MWLOG(LEV_CRIT, MOD_CAL, L"Failed to get CardData");
-        Disconnect(DISCONNECT_LEAVE_CARD);
-    }
+		// Get Card Applet Version
+		m_AppletVersion = ulVersion;
+	}
+	catch (CMWException e)
+	{
+		MWLOG(LEV_CRIT, MOD_CAL, "Failed to get CardData: 0x%0x File: %s, Line:%ld", e.GetError(), e.GetFile().c_str(), e.GetLine());
+		Disconnect(DISCONNECT_LEAVE_CARD);
+	}
+	catch (...)
+	{
+		MWLOG(LEV_CRIT, MOD_CAL, L"Failed to get CardData");
+		Disconnect(DISCONNECT_LEAVE_CARD);
+	}
 }
 
 CPteidCard::~CPteidCard(void)
@@ -295,20 +293,12 @@ CByteArray CPteidCard::GetInfo()
     return m_oCardData;
 }
 
-std::string CPteidCard::GetPinpadPrefix()
-{
-	return "pteidpp";
-}
-
 unsigned long CPteidCard::PinStatus(const tPin & Pin)
 {
 	unsigned long ulSW12 = 0;
 
 	try
 	{
-
-		//if (m_cardType == CARD_PTEID_IAS101)
-		//	SelectFile((!Pin.csPath.empty()) ? Pin.csPath : "3F005F00"); // martinho pin 1 does not have cspath... why?
 
 		CByteArray oResp = SendAPDU(0x20, 0x00, (unsigned char) Pin.ulPinRef, 0);
 		ulSW12 = getSW12(oResp);
