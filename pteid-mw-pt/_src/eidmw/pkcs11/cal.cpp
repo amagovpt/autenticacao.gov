@@ -1245,7 +1245,7 @@ switch (calstatus)
 int cal_translate_error(const char *WHERE, long err)
 {
 log_trace(WHERE, "E: MiddlewareException thrown: 0x%0x", err);
-printf("Translate error....\n");
+
 switch(err)
    {
    case EIDMW_OK:                            return(0);                    break;
@@ -1365,12 +1365,6 @@ switch(err)
    case EIDMW_ERR_CERT_NOISSUER:             return(CKR_FUNCTION_FAILED);  break;
    /** No release of SDK object has been done before closing the application */
    case EIDMW_ERR_RELEASE_NEEDED:            return(CKR_FUNCTION_FAILED);  break;
-
-   // Errors in system calls
-   /** a system call returned an error */
-   case EIDMW_ERR_SYSTEM:                    return(CKR_GENERAL_ERROR);  break;
-   /** a signal function returned an error */
-   case EIDMW_ERR_SIGNAL:                    return(CKR_FUNCTION_FAILED);  break;
 
    default:
       return(CKR_GENERAL_ERROR);

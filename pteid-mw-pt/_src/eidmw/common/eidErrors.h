@@ -271,12 +271,3 @@
 #define EIDMW_PDF_INVALID_ERROR           0xe1d00e05
 #define EIDMW_PDF_UNSUPPORTED_ERROR       0xe1d00e06
 #define EIDMW_PDF_INVALID_PAGE_ERROR      0xe1d00e07
-
-
-// Errors in system calls
-
-/** a system call returned an error */
-#define EIDMW_ERR_SYSTEM                   0xe1d00f01
-
-/** a signal function returned an error */
-#define EIDMW_ERR_SIGNAL                   0xe1d00f12
