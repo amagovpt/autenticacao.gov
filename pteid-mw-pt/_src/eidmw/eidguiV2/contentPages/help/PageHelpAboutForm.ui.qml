@@ -19,7 +19,7 @@ Item {
 
     Text {
         id: textAppName
-        text: qsTranslate("PageHelpAbout","STR_HELP_TITLE")
+        text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TITLE") + " " + mainWindow.title
         font.pixelSize: Constants.SIZE_TEXT_TITLE
         color: Constants.COLOR_TEXT_TITLE
         font.family: lato.name
@@ -29,10 +29,19 @@ Item {
     }
 
     Text {
-        id: textVersion
+        id: textDescription
+        text: qsTranslate("PageHelpAbout","STR_HELP_TITLE")
         font.pixelSize: Constants.SIZE_TEXT_BODY
         font.family: lato.name
         anchors.top: textAppName.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+    }
+
+    Text {
+        id: textVersion
+        font.pixelSize: Constants.SIZE_TEXT_BODY
+        font.family: lato.name
+        anchors.top: textDescription.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
     }
 
