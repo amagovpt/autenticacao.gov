@@ -2,6 +2,7 @@
 
  * eID Middleware Project.
  * Copyright (C) 2008-2009 FedICT.
+ * Copyright (C) 2012-2017 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -201,7 +202,7 @@ if ((status == P11_CARD_REMOVED) || (status == P11_CARD_NOT_PRESENT) )
 try
    {
    // Take the last 16 hex chars of the serialnr.
-   // For BE eID cards, the serial nr. is 32 hex chars long,
+   // For PTeID cards, the serial nr. is 32 hex chars long,
    // and the first one are the same for all cards
    CReader &oReader = oCardLayer->getReader(reader);
    std::string oSerialNr = oReader.GetSerialNr();
@@ -228,12 +229,7 @@ catch (...)
 
 strcpy_n(pInfo->manufacturerID, "Portuguese Government", 32, ' ');
 strcpy_n(pInfo->model, "Portuguese eID NG", 16, ' ');
-/* Take the last 16 chars of the serial number (if the are more then 16).
-   _Assuming_ that the serial number is a Big Endian counter, this will
-   assure that the serial within each type of card will be unique in pkcs11
-   (at least for the first 16^16 cards :-) */
-//if (sn_start < 0)
-//   sn_start = 0;
+
 
 pInfo->ulMaxSessionCount = MAX_SESSIONS; //CK_EFFECTIVELY_INFINITE;
 pInfo->ulSessionCount = pSlot->nsessions;
@@ -640,14 +636,13 @@ try
    }
 catch (CMWException e)
    {
-     printf ("cal.cpp\n");
-   return(cal_translate_error(WHERE, e.GetError()));
+      return(cal_translate_error(WHERE, e.GetError()));
    }
 catch (...)
    {
-	lRet = -1;
-	log_trace(WHERE, "E: unkown exception thrown");
-   return (CKR_FUNCTION_FAILED);
+   	lRet = -1;
+   	log_trace(WHERE, "E: unknown exception thrown");
+      return (CKR_FUNCTION_FAILED);
 	}
 
 cleanup:
@@ -1213,7 +1208,7 @@ catch (CMWException e)
 catch (...)
    {
    lRet = -1;
-   log_trace(WHERE, "E: unkown exception thrown");
+   log_trace(WHERE, "E: unknown exception thrown");
    CLEANUP(CKR_FUNCTION_FAILED);
    }
 cleanup:
@@ -1343,12 +1338,6 @@ switch(err)
    /** {OPEN_MAX} file descriptors are currently open in the calling process. */
    /** Too many files are currently open in the system.*/
    case EIDMW_TOO_MANY_OPENED_FILES:         return(CKR_FUNCTION_FAILED);  break;
-   /** The argument of closedir or readdir does not refer to an open directory stream. */
-   case EIDMW_DIR_NOT_OPENED:                return(CKR_FUNCTION_FAILED);  break;
-   /** Interrupted by a signal */
-   case EIDMW_INTERRUPTION:                  return(CKR_FUNCTION_FAILED);  break;
-   /** One of the values in the structure to be returned cannot be represented correctly. */
-   case EIDMW_OVERFLOW:                      return(CKR_FUNCTION_FAILED);  break;
    /** An I/O error occurred while reading from the file system.*/
    case EIDMW_ERROR_IO:                      return(CKR_FUNCTION_FAILED);  break;
    /** Call of the Logger after destruct time */

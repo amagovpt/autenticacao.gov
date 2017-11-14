@@ -180,15 +180,6 @@
 /** Too many files are currently open in the system.*/
 #define EIDMW_TOO_MANY_OPENED_FILES    0xe1d00803
 
-/** The argument of closedir or readdir does not refer to an open directory stream. */
-#define EIDMW_DIR_NOT_OPENED           0xe1d00804
-
-/** Interrupted by a signal */
-#define EIDMW_INTERRUPTION             0xe1d00805
-
-/** One of the values in the structure to be returned cannot be represented correctly. */
-#define EIDMW_OVERFLOW                 0xe1d00806
-
 /** An I/O error occurred while reading from the file system.*/
 #define EIDMW_ERROR_IO                 0xe1d00807
 
@@ -220,9 +211,6 @@
 
 /** The card has been changed */
 #define EIDMW_ERR_CARD_CHANGED			0xe1d00b07
-
-/** The reader set has been changed */
-#define EIDMW_ERR_READERSET_CHANGED		0xe1d00b08
 
 /** This Certificate has no CDP */
 #define EIDMW_ERR_CERT_NOCRL			0xe1d00b0A
