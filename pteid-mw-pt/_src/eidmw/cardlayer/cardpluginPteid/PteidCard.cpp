@@ -164,14 +164,14 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 					poContext->m_oPCSC.Recover(hCard, &ulLockCount);
 
 					bNeedToSelectApplet = PteidCardSelectApplet(poContext, hCard);
-					if (bNeedToSelectApplet)// try again to select the belpic app
+					if (bNeedToSelectApplet)// try again to select the card app
 						oData = poContext->m_oPCSC.Transmit(hCard, oCmd,&lRetVal);
 				}
 				if (oData.Size() == 2 && oData.GetByte(0) == 0x6A &&
 						(oData.GetByte(1) == 0x82 || oData.GetByte(1) == 0x86))
 				{
 					// Perhaps the applet is no longer selected; so try to select it
-					// first; and if successfull then try to select the Belpic AID again
+					// first; and if successfull then try to select the AID again
 					bNeedToSelectApplet = PteidCardSelectApplet(poContext, hCard);
 					if (bNeedToSelectApplet)
 						oData = poContext->m_oPCSC.Transmit(hCard, oCmd,&lRetVal);
@@ -209,14 +209,14 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 					poContext->m_oPCSC.Recover(hCard, &ulLockCount);
 
 					bNeedToSelectApplet = PteidCardSelectApplet(poContext, hCard);
-					if (bNeedToSelectApplet)// try again to select the belpic app
+					if (bNeedToSelectApplet)// try again to select the card app
 						oData = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal);
 				}
 				if (oData.Size() == 2 && oData.GetByte(0) == 0x6A &&
 						(oData.GetByte(1) == 0x82 || oData.GetByte(1) == 0x86))
 				{
 					// Perhaps the applet is no longer selected; so try to select it
-					// first; and if successfull then try to select the Belpic AID again
+					// first; and if successfull then try to select the card AID again
 					bNeedToSelectApplet = PteidCardSelectApplet(poContext, hCard);
 					if (bNeedToSelectApplet)
 						oData = poContext->m_oPCSC.Transmit(hCard, oCmd,&lRetVal);
@@ -796,25 +796,6 @@ bool CPteidCard::SelectApplet()
 	return PteidCardSelectApplet(m_poContext, m_hCard);
 }
 
-
-/*
-tFileInfo CPteidCard::SelectFile(const std::string & csPath, bool bReturnFileInfo)
-{
-    CPkiCard::SelectFile(csPath, false);
-
-    // The EF(Preferences) file can be written using the authentication PIN;
-    // that's the only exception to the 'read always' - 'write never' ACs.
-    if (csPath.substr(csPath.size() - 4, 4) == "4039")
-    {
-        if (m_ucAppletVersion < 0x20)
-            return PREFS_FILE_INFO_V1;
-        else
-            return PREFS_FILE_INFO_V2;
-    }
-    else
-        return DEFAULT_FILE_INFO;
-}
-*/
 
 /**
  * The Pteid card doesn't support select by path (only
