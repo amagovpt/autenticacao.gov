@@ -89,9 +89,6 @@
     <TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <PreBuildEvent>
-      <Command>..\set_build_nbr.bat</Command>
-    </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>PTEID_35;WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_CMN_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -117,36 +114,8 @@
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy /D /Y $(PTEID_DIR_QT_4)\bin\QtCored4.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_QT_4)\bin\QtGuid4.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_QT_4)\bin\QtNetworkd4.dll $(TargetDir)
-
-xcopy /D /Y ..\eidgui\eidmw_en.qm $(TargetDir)
-xcopy /D /Y ..\eidgui\eidmw_nl.qm $(TargetDir)
-::xcopy /D /Y ..\eidgui\eidmw_fr.qm $(TargetDir)
-::xcopy /D /Y ..\eidgui\eidmw_de.qm $(TargetDir)
-
-xcopy /D /Y $(PTEID_DIR_OPENSSL_098)\bin\libeay32.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_OPENSSL_098)\bin\ssleay32.dll $(TargetDir)
-
-xcopy /D /Y $(PTEID_DIR_XERCES_31)\bin\xerces-c_3_1D.dll $(TargetDir)
-
-xcopy /D /Y $(PTEID_DIR_CAIRO)\bin\libcairo-2.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_CAIRO)\bin\freetype6.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_CAIRO)\bin\libpng14-14.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_CAIRO)\bin\libfontconfig-1.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_CAIRO)\bin\libexpat-1.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_CAIRO)\bin\zlib1.dll $(TargetDir)
-
-xcopy /D /Y $(PTEID_DIR_CURL)\bin\libcurl.dll $(TargetDir)
-</Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
+    </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PreBuildEvent>
-      <Command>..\set_build_nbr.bat</Command>
-    </PreBuildEvent>
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
@@ -175,31 +144,6 @@ xcopy /D /Y $(PTEID_DIR_CURL)\bin\libcurl.dll $(TargetDir)
       <DataExecutionPrevention />
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy /D /Y $(PTEID_DIR_QT_4_X64)\bin\QtCored4.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_QT_4_X64)\bin\QtGuid4.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_QT_4_X64)\bin\QtNetworkd4.dll $(TargetDir)
-
-xcopy /D /Y ..\eidgui\eidmw_en.qm $(TargetDir)
-xcopy /D /Y ..\eidgui\eidmw_nl.qm $(TargetDir)
-::xcopy /D /Y ..\eidgui\eidmw_fr.qm $(TargetDir)
-::xcopy /D /Y ..\eidgui\eidmw_de.qm $(TargetDir)
-
-xcopy /D /Y $(PTEID_DIR_OPENSSL_098_X64)\bin\libeay32.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_OPENSSL_098_X64)\bin\ssleay32.dll $(TargetDir)
-
-xcopy /D /Y $(PTEID_DIR_XERCES_31_X64)\bin\xerces-c_3_1D.dll $(TargetDir)
-
-xcopy /D /Y $(PTEID_DIR_CAIRO_X64)\bin\libcairo-2.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_CAIRO_X64)\bin\libfreetype-6.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_CAIRO_X64)\bin\libpng14-14.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_CAIRO_X64)\bin\libfontconfig-1.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_CAIRO_X64)\bin\libexpat-1.dll $(TargetDir)
-xcopy /D /Y $(PTEID_DIR_CAIRO_X64)\bin\zlib1.dll $(TargetDir)
-
-xcopy /D /Y $(PTEID_DIR_CURL_X64)\bin\libcurl.dll $(TargetDir)
-</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
@@ -250,6 +194,7 @@ xcopy /D /Y $(PTEID_DIR_CURL_X64)\bin\libcurl.dll $(TargetDir)
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
