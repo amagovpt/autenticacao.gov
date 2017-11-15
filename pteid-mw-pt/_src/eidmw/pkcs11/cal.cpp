@@ -134,14 +134,13 @@ try
    }
 catch (CMWException e)
    {
-     printf ("nReaders = oReadersInfo->ReaderCount");
-   return(cal_translate_error(WHERE, e.GetError()));
+      return(cal_translate_error(WHERE, e.GetError()));
    }
 catch (...)
    {
-	lRet = -1;
-	log_trace(WHERE, "E: unkown exception thrown");
-   return (CKR_FUNCTION_FAILED);
+   	lRet = -1;
+   	log_trace(WHERE, "E: unkown exception thrown");
+      return (CKR_FUNCTION_FAILED);
 	}
 
 return (ret);
@@ -154,7 +153,7 @@ int cal_token_present(CK_SLOT_ID hSlot)
 {
 int status;
 status = cal_update_token(hSlot);
-//printf("UP WUTS\n");
+
 switch (status)
    {
    case P11_CARD_INSERTED:
@@ -1278,8 +1277,6 @@ switch(err)
    case EIDMW_ERR_FILE_NOT_FOUND:            return(CKR_DEVICE_ERROR);     break;
    /** Unable to read applet version from the card */
    case EIDMW_ERR_APPLET_VERSION_NOT_FOUND:  return(CKR_DEVICE_ERROR);     break;
-   /** Card not activated */
-   case EIDMW_ERR_NOT_ACTIVATED:             return(CKR_DEVICE_ERROR);     break;
 
    // Reader errors
    /** Error communicating with the card */
@@ -1346,8 +1343,6 @@ switch(err)
    // SDK error
    /** The document type is unknown for this card */
    case EIDMW_ERR_DOCTYPE_UNKNOWN:           return(CKR_FUNCTION_FAILED);  break;
-   /** The card type asked doesn't correspond with the real card type */
-   case EIDMW_ERR_CARDTYPE_BAD:              return(CKR_FUNCTION_FAILED);  break;
    /** This card type is unknown */
    case EIDMW_ERR_CARDTYPE_UNKNOWN:          return(CKR_TOKEN_NOT_RECOGNIZED); break;
    /** This Certificate has no issuer (=root) */

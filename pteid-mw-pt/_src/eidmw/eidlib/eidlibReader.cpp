@@ -130,8 +130,6 @@ void PTEID_Object::checkContextStillOk() const
 	{
 		if(contextid==0)
 			throw PTEID_ExNoReader();
-		else
-			throw PTEID_ExReaderSetChanged();
 	}
 
 	if(!m_context->reader)
@@ -662,8 +660,9 @@ PTEID_EIDCard &PTEID_ReaderContext::getEIDCard()
 
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	PTEID_CardType type=ConvertCardType(pimpl->getCardType());
-	if(type!=PTEID_CARDTYPE_IAS07 && type!=PTEID_CARDTYPE_IAS101){
-		throw PTEID_ExCardBadType();
+
+	if (type!=PTEID_CARDTYPE_IAS07 && type!=PTEID_CARDTYPE_IAS101) {
+		throw PTEID_ExCardTypeUnknown();
 	}
 
 	END_TRY_CATCH

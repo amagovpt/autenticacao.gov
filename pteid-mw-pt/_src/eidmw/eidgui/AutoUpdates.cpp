@@ -56,22 +56,21 @@
 
 using namespace eIDMW;
 
-std::string serverurl = "https://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/";
-std::string remoteversion = "https://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/version.txt";
+//std::string serverurl = "https://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/";
+std::string remoteversion = "https://www.autenticacao.gov.pt/documents/10179/11461/version.txt";
 
-std::string WINDOWS32 = "PteidMW-Basic.msi";
-std::string WINDOWS64 = "PteidMW-Basic-x64.msi";
-std::string MAC_OS = "pteid-mw.pkg";
-std::string DEBIAN32 = "pteid-mw_debian_i386.deb";
-std::string DEBIAN64 = "pteid-mw_debian_amd64.deb";
-std::string UBUNTU_14_32 = "pteid-mw_ubuntu14_i386.deb";
-std::string UBUNTU_16_32 = "pteid-mw_ubuntu16_i386.deb";
-std::string UBUNTU_14_64 = "pteid-mw_ubuntu14_amd64.deb";
-std::string UBUNTU_16_64 = "pteid-mw_ubuntu16_amd64.deb";
-std::string FEDORA32 = "pteid-mw-fedora.i386.rpm";
-std::string FEDORA64 = "pteid-mw-fedora.x86_64.rpm";
-std::string SUSE32 = "pteid-mw-suse.i586.rpm";
-std::string SUSE64 = "pteid-mw-suse.x86_64.rpm";
+std::string WINDOWS32 = "https://www.autenticacao.gov.pt/documents/10179/12084/pteid-mw-x86.msi";
+std::string WINDOWS64 = "https://www.autenticacao.gov.pt/documents/10179/12084/pteid-mw-x64.msi";
+std::string MAC_OS = "https://www.autenticacao.gov.pt/documents/10179/11955/pteid-mw.pkg";
+
+std::string UBUNTU_14_32 = "https://www.autenticacao.gov.pt/documents/10179/11962/pteid-mw_ubuntu14_i386.deb";
+std::string UBUNTU_16_32 = "https://www.autenticacao.gov.pt/documents/10179/11962/pteid-mw_ubuntu16_i386.deb";
+std::string UBUNTU_14_64 = "https://www.autenticacao.gov.pt/documents/10179/11962/pteid-mw_ubuntu14_amd64.deb";
+std::string UBUNTU_16_64 = "https://www.autenticacao.gov.pt/documents/10179/11962/pteid-mw_ubuntu16_amd64.deb";
+std::string FEDORA32 = "https://www.autenticacao.gov.pt/documents/10179/11962/pteid-mw-fedora.i386.rpm";
+std::string FEDORA64 = "https://www.autenticacao.gov.pt/documents/10179/11962/pteid-mw-fedora.x86_64.rpm";
+
+std::string SUSE64 = "https://www.autenticacao.gov.pt/documents/10179/11962/pteid-mw-suse.x86_64.rpm";
 
 struct PteidVersion
 {
@@ -508,7 +507,7 @@ done:
 void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 {
 	std::string downloadurl;
-
+	/*
     eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_URL);
     std::string configurl = config.getString();
 
@@ -516,6 +515,7 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
         downloadurl.append(serverurl);
     else
         downloadurl.append(configurl);
+    */    
 
 #ifdef WIN32
 	if (arch == "i386") {
@@ -528,7 +528,7 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 
     downloadurl.append(MAC_OS);
 #else
-	if (distro == "unsupported")
+	if (distro == "unsupported" || (distro == "suse" && arch != "x86_64"))
 	{
 	  	QMessageBox msgBoxp(QMessageBox::Warning, tr("Warning"),
 			tr("Your Linux distribution is not supported by Software Updates"), 0, this);
@@ -538,11 +538,7 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
     //Name of the deb/rpm will be distro specific
 	if (arch == "x86_64")
 	{
-		if (distro == "debian")
-		{
-            downloadurl.append(DEBIAN64);
-		}
-        else if (distro == "Ubuntu14" || distro == "CaixaMagica")
+        if (distro == "Ubuntu14" || distro == "CaixaMagica")
         {
             downloadurl.append(UBUNTU_14_64);
         }
@@ -562,11 +558,7 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 	else 
 	{
 		//32bits
-		if (distro == "debian")
-		{
-            downloadurl.append(DEBIAN32);
-		}
-        else if (distro == "Ubuntu14" || distro == "CaixaMagica")
+        if (distro == "Ubuntu14" || distro == "CaixaMagica")
         {
             downloadurl.append(UBUNTU_14_32);
         }
@@ -577,10 +569,6 @@ void AutoUpdates::ChooseVersion(std::string distro, std::string arch)
 		else if (distro == "fedora")
 		{
             downloadurl.append(FEDORA32);
-		}
-		else if (distro == "suse")
-		{
-            downloadurl.append(SUSE32);
 		}
 	}
 #endif	

@@ -76,9 +76,6 @@
 /** Unable to read applet version from the card */
 #define EIDMW_ERR_APPLET_VERSION_NOT_FOUND 0xe1d00209
 
-/** Card not activated */
-#define EIDMW_ERR_NOT_ACTIVATED        0xe1d0020A
-
 #define EIDMW_ERR_PINREF_NOT_FOUND	   0xe1d0020B
 
 
@@ -190,9 +187,6 @@
 // SDK error
 /** The document type is unknown for this card */
 #define EIDMW_ERR_DOCTYPE_UNKNOWN		0xe1d00b00
-
-/** The card type asked doesn't correspond with the real card type */
-#define EIDMW_ERR_CARDTYPE_BAD			0xe1d00b01
 
 /** This card type is unknown */
 #define EIDMW_ERR_CARDTYPE_UNKNOWN		0xe1d00b02

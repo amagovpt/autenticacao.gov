@@ -6,7 +6,6 @@
 #include "cstdio"
 
 class SelectedTreeInfo;
-class soap;
 class ProxyInfo;
 
 namespace ACService{

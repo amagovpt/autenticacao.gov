@@ -62,8 +62,6 @@ PTEID_Exception PTEID_Exception::THROWException(CMWException &e)
 		throw PTEID_ExCmdNotSupported();
 	case EIDMW_ERR_NO_CARD:
 		throw PTEID_ExNoCardPresent();
-	case EIDMW_ERR_CARDTYPE_BAD:
-		throw PTEID_ExCardBadType();
 	case EIDMW_ERR_CARDTYPE_UNKNOWN:
 		throw PTEID_ExCardTypeUnknown();
 	case EIDMW_ERR_CERT_NOISSUER:
@@ -76,8 +74,6 @@ PTEID_Exception PTEID_Exception::THROWException(CMWException &e)
 		throw PTEID_ExBadTransaction();
 	case EIDMW_ERR_CARD_CHANGED:
 		throw PTEID_ExCardChanged();
-	case EIDMW_ERR_READERSET_CHANGED:
-		throw PTEID_ExReaderSetChanged();
 	case EIDMW_ERR_NO_READER:
 		throw PTEID_ExNoReader();
 	case EIDMW_SOD_UNEXPECTED_VALUE:
@@ -191,17 +187,6 @@ PTEID_ExNoCardPresent::~PTEID_ExNoCardPresent()
 }
 
 /*****************************************************************************************
----------------------------------------- PTEID_ExCardBadType --------------------------------------
-*****************************************************************************************/
-PTEID_ExCardBadType::PTEID_ExCardBadType():PTEID_Exception(EIDMW_ERR_CARDTYPE_BAD)
-{
-}
-
-PTEID_ExCardBadType::~PTEID_ExCardBadType()
-{
-}
-
-/*****************************************************************************************
 ---------------------------------------- PTEID_ExCardTypeUnknown --------------------------------------
 *****************************************************************************************/
 PTEID_ExCardTypeUnknown::PTEID_ExCardTypeUnknown():PTEID_Exception(EIDMW_ERR_CARDTYPE_UNKNOWN)
@@ -264,17 +249,6 @@ PTEID_ExCardChanged::PTEID_ExCardChanged():PTEID_Exception(EIDMW_ERR_CARD_CHANGE
 }
 
 PTEID_ExCardChanged::~PTEID_ExCardChanged()
-{
-}
-
-/*****************************************************************************************
----------------------------------------- PTEID_ExReaderSetChanged --------------------------------------
-*****************************************************************************************/
-PTEID_ExReaderSetChanged::PTEID_ExReaderSetChanged():PTEID_Exception(EIDMW_ERR_READERSET_CHANGED)
-{
-}
-
-PTEID_ExReaderSetChanged::~PTEID_ExReaderSetChanged()
 {
 }
 

@@ -860,10 +860,6 @@ PTEIDSDK_API long PTEID_Init(char *ReaderName){
 		PTEID_Config config(PTEID_PARAM_GENERAL_LANGUAGE);
 		config.setString("nl");
 	}
-	catch(PTEID_ExCardBadType &)
-	{
-		std::cerr << "No Pteid Card detected!" << std::endl;
-	}
 	catch(PTEID_ExNoCardPresent &)
 	{
 		return -1104;

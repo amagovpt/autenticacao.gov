@@ -120,8 +120,6 @@ CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,
 		}
 		else if (ulSW12 == 0x6B00)
 			throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
-		else if (ulSW12 == 0x6D00)
-			throw CMWEXCEPTION(EIDMW_ERR_NOT_ACTIVATED);
 		else
             throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
 
@@ -185,8 +183,6 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
             throw CNotAuthenticatedException(EIDMW_ERR_NOT_AUTHENTICATED, fileInfo.lReadPINRef);
         else if (ulSW12 == 0x6B00)
             throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
-        else if (ulSW12 == 0x6D00)
-            throw CMWEXCEPTION(EIDMW_ERR_NOT_ACTIVATED);
         //EOF for Gemsafe cards
         else if (ulSW12 == 0x6282)
             bEOF = false; /* false */

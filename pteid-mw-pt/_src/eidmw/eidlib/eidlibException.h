@@ -150,19 +150,6 @@ public:
 };
 
 /******************************************************************************//**
-  * Exception class Bad Card Type (error code = EIDMW_ERR_CARDTYPE_BAD)
-  *
-  *	Throw when the card type doesn't correspond to what is asked
-  * Used in : - PTEID_ReaderContext::getEIDCard()
-  *********************************************************************************/
-class PTEID_ExCardBadType: public PTEID_Exception
-{
-public:
-	PTEIDSDK_API PTEID_ExCardBadType();				/**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExCardBadType();		/**< Destructor */
-};
-
-/******************************************************************************//**
   * Exception class Card Type Unknown (error code = EIDMW_ERR_CARDTYPE_UNKNOWN)
   *
   *	Throw when the card type is not supported
@@ -239,19 +226,6 @@ class PTEID_ExCardChanged: public PTEID_Exception
 public:
 	PTEIDSDK_API PTEID_ExCardChanged();				/**< Constructor */
 	PTEIDSDK_API virtual ~PTEID_ExCardChanged();		/**< Destructor */
-};
-
-/******************************************************************************//**
-  * Exception class Readerset changed (error code = EIDMW_ERR_READERSET_CHANGED)
-  *
-  *	Throw when accessing to a card object but the readerset has been changed
-  * Used in : - PTEID_Object::checkContextStillOk()
-  *********************************************************************************/
-class PTEID_ExReaderSetChanged: public PTEID_Exception
-{
-public:
-	PTEIDSDK_API PTEID_ExReaderSetChanged();				/**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExReaderSetChanged();		/**< Destructor */
 };
 
 /******************************************************************************//**

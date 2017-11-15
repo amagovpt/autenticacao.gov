@@ -550,15 +550,8 @@ PTEID_EIDCard& PDFSignWindow::getNewCard()
 			PTEID_ReaderContext& ReaderContext = ReaderSet.getReaderByNum(ReaderIdx);
 			if (ReaderContext.isCardPresent())
 			{
-				try
-				{
-					PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-					return Card;
-
-				}
-				catch (PTEID_ExCardBadType const& e) {
-
-				}
+				
+				return ReaderContext.getEIDCard();
 			}
 		}
 

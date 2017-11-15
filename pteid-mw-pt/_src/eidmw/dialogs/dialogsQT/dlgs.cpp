@@ -18,9 +18,6 @@
 
 **************************************************************************** */
 /********************************************************************************
-*
-*	dlgs.cpp
-*
 ********************************************************************************/
 #include <stdlib.h>
 #include <signal.h>
@@ -241,7 +238,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
     lRet = oData->returnValue;
 
     if (lRet != DLG_OK) {
-      throw CMWEXCEPTION(EIDMW_ERR_SYSTEM);
+      throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
     }
 
     // for the killing need to store:
@@ -288,23 +285,23 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo( unsigned long ulHandle )
 
     // check if the process is still running
     // and send SIGTERM if so
-    if( ! kill(pIt->second->tRunningProcess,0) ){
+    if( ! kill(pIt->second->tRunningProcess,0)) {
 
       MWLOG(LEV_DEBUG, MOD_DLG,L"  eIDMW::DlgClosePinpadInfo :  sending kill signal to process %d",
 	    pIt->second->tRunningProcess);
 
       if( kill(pIt->second->tRunningProcess, SIGINT) ) {
 
-	MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgClosePinpadInfo sent signal SIGINT to proc %d : %s ",
-	      pIt->second->tRunningProcess, strerror(errno) );
+	     MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgClosePinpadInfo sent signal SIGINT to proc %d Error: %s ",
+	          pIt->second->tRunningProcess, strerror(errno) );
 
-	throw CMWEXCEPTION(EIDMW_ERR_SIGNAL);
+	      throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
       }
 
     } else {
-      MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgClosePinpadInfo sent signal 0 to proc %d : %s ",
+      MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgClosePinpadInfo sent signal 0 to proc %d : Error %s ",
 	    pIt->second->tRunningProcess, strerror(errno) );
-      throw CMWEXCEPTION(EIDMW_ERR_SIGNAL);
+      throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
     }
 
     // delete the random file
@@ -328,36 +325,38 @@ DLGS_EXPORT void eIDMW::DlgCloseAllPinpadInfo()
 
   // check if we have this handle
   for(std::map < unsigned long,DlgRunningProc* >::iterator pIt =
-	dlgPinPadInfoCollector.begin(); pIt != dlgPinPadInfoCollector.end(); ++pIt){
+   dlgPinPadInfoCollector.begin(); pIt != dlgPinPadInfoCollector.end(); ++pIt){
 
     // check if the process is still running
     // and send SIGTERM if so
-    if( ! kill(pIt->second->tRunningProcess,0) ){
+    if( ! kill(pIt->second->tRunningProcess,0) )
+    {
 
       MWLOG(LEV_INFO, MOD_DLG,L"  eIDMW::DlgCloseAllPinpadInfo :  sending kill signal to process %d\n",
-	    pIt->second->tRunningProcess);
+       pIt->second->tRunningProcess);
 
-      if( kill(pIt->second->tRunningProcess, SIGINT) ) {
-	MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseAllPinpadInfo sent signal SIGINT to proc %d : %s ",
-	      pIt->second->tRunningProcess, strerror(errno) );
-	throw CMWEXCEPTION(EIDMW_ERR_SIGNAL);
+      if (kill(pIt->second->tRunningProcess, SIGINT) ) {
+         MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseAllPinpadInfo sent signal SIGINT to proc %d : %s ",
+              pIt->second->tRunningProcess, strerror(errno) );
+         throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
       }
-    } else {
-      MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseAllPinpadInfo sent signal 0 to proc %d : %s ",
-	    pIt->second->tRunningProcess, strerror(errno) );
-      throw CMWEXCEPTION(EIDMW_ERR_SIGNAL);
-    }
+   }
+   else {
+    MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseAllPinpadInfo sent signal 0 to proc %d : %s ",
+         pIt->second->tRunningProcess, strerror(errno) );
+    throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+  }
 
     // delete the random file
-    DeleteFile(pIt->second->csRandomFilename.c_str());
+  DeleteFile(pIt->second->csRandomFilename.c_str());
 
-    delete pIt->second;
-    pIt->second = NULL;
+  delete pIt->second;
+  pIt->second = NULL;
 
     // memory is cleaned up in the child process
-  }
+}
     // delete the map
-  dlgPinPadInfoCollector.clear();
+dlgPinPadInfoCollector.clear();
 }
 
 
@@ -389,7 +388,7 @@ std::string eIDMW::RandomFileName(){
 }
 
 
-std::string eIDMW::CreateRandomFile(){
+std::string eIDMW::CreateRandomFile() {
 
   std::string csFilePath = RandomFileName();
   // create this file
@@ -401,15 +400,15 @@ std::string eIDMW::CreateRandomFile(){
     // call was successfull.
     FILE *test = fopen(csFilePath.c_str(), "r");
     if (test) {
-	fclose(test);
-	g_bSystemCallsFail = true;
-	MWLOG(LEV_WARN, MOD_DLG, L"  eIDMW::CreateRandomFile %s : %s (%d)",
-	  csFilePath.c_str(), strerror(errno), errno );
+    	fclose(test);
+    	g_bSystemCallsFail = true;
+    	MWLOG(LEV_WARN, MOD_DLG, L"  eIDMW::CreateRandomFile %s : %s (%d)",
+    	  csFilePath.c_str(), strerror(errno), errno );
     }
     else {
-	MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CreateRandomFile %s : %s (%d)",
-	  csFilePath.c_str(), strerror(errno), errno );
-	throw CMWEXCEPTION(EIDMW_ERR_SYSTEM);
+    	MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CreateRandomFile %s : %s (%d)",
+    	  csFilePath.c_str(), strerror(errno), errno );
+    	throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
     }
   }
   return csFilePath;
@@ -435,7 +434,7 @@ void eIDMW::CallQTServer(const DlgFunctionIndex index,
 
   if  ( ( pWndGeometry != NULL )
         && ( pWndGeometry->x >= 0 ) && ( pWndGeometry->y >= 0 )
-        && ( pWndGeometry->width >= 0 ) && ( pWndGeometry->height >= 0 ) ){
+        && ( pWndGeometry->width >= 0 ) && ( pWndGeometry->height >= 0 ) ) {
         int len = strlen( csCommand );
         sprintf(  &csCommand[len]
                 , " %i %i %i %i"
@@ -443,37 +442,27 @@ void eIDMW::CallQTServer(const DlgFunctionIndex index,
                 , pWndGeometry->y
                 , pWndGeometry->width
                 , pWndGeometry->height  );
-  }/*  if  ( ( pWndGeometry != NULL ) && ... ) */
+  }
 
   int code = system(csCommand);
   if(code != 0) {
-    MWLOG(g_bSystemCallsFail ? LEV_WARN : LEV_ERROR,
-	MOD_DLG, L"  eIDMW::CallQTServer %i %s : %s ",
-	  index, csFilename, strerror(errno) );
+    MWLOG(g_bSystemCallsFail ? LEV_WARN : LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServer %i %s : %s ",
+	       index, csFilename, strerror(errno) );
     if (!g_bSystemCallsFail)
-	throw CMWEXCEPTION(EIDMW_ERR_SYSTEM);
+	     throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
   }
   return;
 }
 
-bool eIDMW::getWndCenterPos( Type_WndGeometry *pWndGeometry
-                            , int desktop_width, int desktop_height
-                            , int wnd_width, int wnd_height
-                            , Type_WndGeometry *outWndGeometry ){
+bool eIDMW::getWndCenterPos(Type_WndGeometry *pWndGeometry,
+                             int desktop_width, int desktop_height,
+                             int wnd_width, int wnd_height,
+                             Type_WndGeometry *outWndGeometry) {
     if ( outWndGeometry != NULL ){
         memset( outWndGeometry, -1, sizeof(Type_WndGeometry) );
-    }/* if ( outWndGeometry != NULL ) */
-
-    /*printf( "eIDMW::getWndCenterPos - pWndGeometry: %ld\n", pWndGeometry );*/
+    }
 
     if ( pWndGeometry == NULL ) return false;
-
-    /*printf( "eIDMW::getWndCenterPos - desktop_width: %ld, desktop_height: %ld"
-            , desktop_width, desktop_height );
-
-    printf( "eIDMW::getWndCenterPos - wnd_width: %ld, wnd_height: %ld\n"
-            , wnd_width, wnd_height );
-    */
 
     if ( ( desktop_width < 0 ) || ( desktop_height < 0 ) ) return false;
     if ( ( wnd_width < 0 ) || ( wnd_height < 0 ) ) return false;
@@ -483,14 +472,10 @@ bool eIDMW::getWndCenterPos( Type_WndGeometry *pWndGeometry
     outWndGeometry->x = pWndGeometry->x + ( ( pWndGeometry->width - wnd_width ) / 2 );
     outWndGeometry->y = pWndGeometry->y + ( ( pWndGeometry->height - wnd_height ) / 2 );
 
-    /*printf( "eIDMW::getWndCenterPos - x: %ld, y: %ld\n"
-            , outWndGeometry->x, outWndGeometry->y );
-            */
-
     if ( outWndGeometry->x < 0 ) return false;
     if ( outWndGeometry->y < 0 ) return false;
     if ( outWndGeometry->x > desktop_width  ) return false;
     if ( outWndGeometry->y > desktop_height ) return false;
 
     return true;
-}/* getWndCenterPos() */
+}

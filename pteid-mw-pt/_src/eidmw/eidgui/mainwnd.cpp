@@ -2136,22 +2136,15 @@ void MainWnd::getCardForReading(PTEID_EIDCard * &new_card, bool clearData)
                     case PTEID_CARDTYPE_IAS07:
                     case PTEID_CARDTYPE_IAS101:
                     {
-                        try
-                        {
-                            PTEID_EIDCard& Card = ReaderContext.getEIDCard();
-                            new_card = &Card;
+                        
+                        PTEID_EIDCard& Card = ReaderContext.getEIDCard();
+                        new_card = &Card;
 
-                            const char* readerName = ReaderSet.getReaderName(ReaderIdx);
-                            m_CurrReaderName = readerName;
+                        const char* readerName = ReaderSet.getReaderName(ReaderIdx);
+                        m_CurrReaderName = readerName;
 
-                            ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
-                        }
-                        catch (PTEID_ExCardBadType const& e)
-                        {
-                            QString errcode;
-                            PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed %s", e.GetError());
-                            errcode = errcode.setNum(e.GetError());
-                        }
+                        ReaderIdx=ReaderEndIdx;		// stop looping as soon as we found a card
+
                     }
                     break;
                     case PTEID_CARDTYPE_UNKNOWN:
@@ -2189,11 +2182,6 @@ void MainWnd::getCardForReading(PTEID_EIDCard * &new_card, bool clearData)
 		QString msg(tr("Index out of range"));
 		ShowPTEIDError( msg );
 	}
-	catch (PTEID_ExCardBadType e)
-	{
-		QString msg(tr("Bad card type"));
-		ShowPTEIDError( msg );
-	}
 	catch (PTEID_ExNoCardPresent e)
 	{
 		QString msg(tr("No card present"));
@@ -2207,11 +2195,6 @@ void MainWnd::getCardForReading(PTEID_EIDCard * &new_card, bool clearData)
 		/* Allow new card data reading */
 		m_mutex_ReadCard.unlock();
 		loadCardData();
-	}
-	catch (PTEID_ExReaderSetChanged e)
-	{
-		QString msg(tr("Readers changed"));
-		ShowPTEIDError( msg );
 	}
 	catch (PTEID_ExBadTransaction& e)
 	{
