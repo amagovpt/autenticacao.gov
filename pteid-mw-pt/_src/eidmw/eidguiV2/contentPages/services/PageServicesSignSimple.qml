@@ -9,6 +9,8 @@ import eidguiV2 1.0
 
 PageServicesSignSimpleForm {
 
+    property string propertyOutputSignedFile : ""
+
     Connections {
         target: gapi
         onSignalGenericError: {
@@ -23,7 +25,8 @@ PageServicesSignSimpleForm {
         onSignalCloseCMDSucess: {
             console.log("Signal Close CMD Sucess")
             progressBarIndeterminate.visible = false
-            dialogCMDProgress.standardButtons = DialogButtonBox.Ok
+            rectLabelCMDText.visible = true
+            dialogCMDProgress.standardButtons = DialogButtonBox.Ok | DialogButtonBox.Cancel
         }
 
         onSignalPdfSignSucess: {
@@ -33,6 +36,7 @@ PageServicesSignSimpleForm {
         onSignalPdfSignFail: {
             signerror_dialog.visible = true
             propertyBusyIndicator.running = false
+            propertyOutputSignedFile = ""
         }
         onSignalCardAccessError: {
             console.log("Sign simple Page onSignalCardAccessError")
@@ -357,7 +361,8 @@ PageServicesSignSimpleForm {
             }else{
                 outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
-			outputFile = decodeURIComponent(outputFile)
+            outputFile = decodeURIComponent(outputFile)
+
             var page = 1
             propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
                                         page = propertySpinBoxControl.value
@@ -375,6 +380,8 @@ PageServicesSignSimpleForm {
             var indicatice = comboBoxIndicative.currentText.substring(0, comboBoxIndicative.currentText.indexOf(' '));
             var mobileNumber = indicatice + " " + textFieldMobileNumber.text
 
+            propertyOutputSignedFile = outputFile
+            rectLabelCMDText.visible = false
             gapi.signOpenCMD(mobileNumber,textFieldPin.text,
                          loadedFilePath,outputFile,page,
                          coord_x,coord_y,
@@ -447,6 +454,24 @@ PageServicesSignSimpleForm {
                 }
             }
             Item {
+                id: rectLabelCMDText
+                width: parent.width
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: rectMessageTop.bottom
+                visible: false
+                Text {
+                    id: labelCMDText
+                    text: qsTranslate("PageServicesSign","STR_SIGN_OPEN")
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                }
+            }
+            Item {
                 id: rectReturnCode
                 width: parent.width
                 height: 50
@@ -510,9 +535,17 @@ PageServicesSignSimpleForm {
                 dialogCMDProgress.standardButtons = DialogButtonBox.Cancel
             }else{
                 dialogCMDProgress.close()
+                if (Qt.platform.os === "windows") {
+                    propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+                }else{
+                    propertyOutputSignedFile = "file://" + propertyOutputSignedFile
+                }
+                console.log("Open Url Externally: " + propertyOutputSignedFile)
+                Qt.openUrlExternally(propertyOutputSignedFile)
                 mainFormID.opacity = 1.0
             }
         }
+
         onRejected: {
             mainFormID.opacity = 1.0
         }
@@ -520,7 +553,7 @@ PageServicesSignSimpleForm {
 
     Dialog {
         id: signsuccess_dialog
-        width: 300
+        width: 400
         height: 200
         visible: false
         font.family: lato.name
@@ -539,12 +572,44 @@ PageServicesSignSimpleForm {
             color: Constants.COLOR_MAIN_BLUE
         }
 
-        standardButtons: DialogButtonBox.Ok
+        Item {
+            width: signsuccess_dialog.width
+            height: signsuccess_dialog.height
+
+            Item {
+                id: rectLabelText
+                width: parent.width
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: labelText
+                    text: qsTranslate("PageServicesSign","STR_SIGN_OPEN")
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width - 48
+                    wrapMode: Text.Wrap
+                }
+            }
+        }
+
+        standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
+
+        onAccepted: {
+            if (Qt.platform.os === "windows") {
+                propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+            }else{
+                propertyOutputSignedFile = "file://" + propertyOutputSignedFile
+            }
+            console.log("Open Url Externally: " + propertyOutputSignedFile)
+            Qt.openUrlExternally(propertyOutputSignedFile)
+        }
     }
 
     Dialog {
         id: signerror_dialog
-        width: 300
+        width: 400
         height: 200
         visible: false
         font.family: lato.name
@@ -630,6 +695,8 @@ PageServicesSignSimpleForm {
                 console.log("Signing in position coord_x: " + coord_x
                             + " and coord_y: "+coord_y)
 
+                propertyOutputSignedFile = outputFile;
+
                 gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
                                      reason, location, isTimestamp, isSmallSignature)
         }
@@ -646,6 +713,7 @@ PageServicesSignSimpleForm {
         onAccepted: {
             console.log("You chose file(s): " + propertyFileDialog.fileUrls)
             var path = propertyFileDialog.fileUrls[0];
+
             //  Get the path itself without a regex
             if (Qt.platform.os === "windows") {
                 path = path.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");

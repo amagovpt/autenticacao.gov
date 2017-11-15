@@ -10,6 +10,7 @@ import eidguiV2 1.0
 PageServicesSignAdvancedForm {
 
     property bool isAnimationFinished: mainFormID.propertyPageLoader.propertyAnimationExtendedFinished
+    property string propertyOutputSignedFile : ""
 
     ToolTip {
         id: controlToolTip
@@ -76,7 +77,8 @@ PageServicesSignAdvancedForm {
         onSignalCloseCMDSucess: {
             console.log("Sign Advanced - Signal Close CMD Sucess")
             progressBarIndeterminate.visible = false
-            dialogCMDProgress.standardButtons = DialogButtonBox.Ok
+            rectLabelCMDText.visible = true
+            dialogCMDProgress.standardButtons = DialogButtonBox.Ok | DialogButtonBox.Cancel
         }
         onSignalPdfSignSucess: {
             signsuccess_dialog.visible = true
@@ -97,6 +99,7 @@ PageServicesSignAdvancedForm {
         onSignalPdfSignFail: {
             signerror_dialog.visible = true
             propertyBusyIndicator.running = false
+            propertyOutputSignedFile = ""
         }
         onSignalCardAccessError: {
             console.log("Sign Advanced Page onSignalCardAccessError")
@@ -421,6 +424,8 @@ PageServicesSignAdvancedForm {
             var indicatice = comboBoxIndicative.currentText.substring(0, comboBoxIndicative.currentText.indexOf(' '));
             var mobileNumber = indicatice + " " + textFieldMobileNumber.text
 
+            propertyOutputSignedFile = outputFile;
+            rectLabelCMDText.visible = false
             gapi.signOpenCMD(mobileNumber,textFieldPin.text,
                          loadedFilePath,outputFile,page,
                          coord_x,coord_y,
@@ -493,6 +498,24 @@ PageServicesSignAdvancedForm {
                 }
             }
             Item {
+                id: rectLabelCMDText
+                width: parent.width
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: rectMessageTop.bottom
+                visible: false
+                Text {
+                    id: labelCMDText
+                    text: qsTranslate("PageServicesSign","STR_SIGN_OPEN")
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                }
+            }
+            Item {
                 id: rectReturnCode
                 width: parent.width
                 height: 50
@@ -555,6 +578,13 @@ PageServicesSignAdvancedForm {
                 dialogCMDProgress.standardButtons = DialogButtonBox.Cancel
             }else{
                 dialogCMDProgress.close()
+                if (Qt.platform.os === "windows") {
+                    propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+                }else{
+                    propertyOutputSignedFile = "file://" + propertyOutputSignedFile
+                }
+                console.log("Open Url Externally: " + propertyOutputSignedFile)
+                Qt.openUrlExternally(propertyOutputSignedFile)
                 mainFormID.opacity = 1.0
             }
         }
@@ -565,7 +595,7 @@ PageServicesSignAdvancedForm {
 
     Dialog {
         id: signsuccess_dialog
-        width: 300
+        width: 400
         height: 200
         visible: false
         font.family: lato.name
@@ -591,8 +621,7 @@ PageServicesSignAdvancedForm {
             Item {
                 id: rectLabelText
                 width: parent.width
-                height: 90
-
+                height: 50
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: labelText
@@ -604,13 +633,41 @@ PageServicesSignAdvancedForm {
                     wrapMode: Text.Wrap
                 }
             }
+            Item {
+                id: rectLabelOpenText
+                width: parent.width
+                height: 50
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: rectLabelText.bottom
+                Text {
+                    id: labelOpenText
+                    text: qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI")
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width - 48
+                    wrapMode: Text.Wrap
+                }
+            }
         }
-        standardButtons: DialogButtonBox.Ok
+        standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
+
+        onAccepted: {
+            if (Qt.platform.os === "windows") {
+                propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+            }else{
+                propertyOutputSignedFile = "file://" + propertyOutputSignedFile
+            }
+            console.log("Open Url Externally: " + propertyOutputSignedFile)
+            Qt.openUrlExternally(propertyOutputSignedFile)
+        }
     }
 
     Dialog {
         id: signerror_dialog
-        width: 300
+        width: 400
         height: 200
         visible: false
         font.family: lato.name
@@ -750,7 +807,7 @@ PageServicesSignAdvancedForm {
                 console.log("Signing in position coord_x: " + coord_x
                             + " and coord_y: "+coord_y + " page: " + page + " timestamp: " + isTimestamp)
 
-
+                propertyOutputSignedFile = outputFile;
                 if(propertySwitchSignAdd.checked){
                     coord_x = gapi.getPageSize(page).width * coord_x
                     coord_y = gapi.getPageSize(page).height * (1 - coord_y)
@@ -767,13 +824,14 @@ PageServicesSignAdvancedForm {
                     gapi.startSigningSCAP(loadedFilePath, outputFile, page, coord_x, coord_y,
                                           0, attributeList)
                 }else{
-
                     gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
                                          reason, location, isTimestamp, isSmallSignature)
                 }
             }
             else {
-
+                propertyOutputSignedFile = outputFile;
+                propertyOutputSignedFile =
+                        propertyOutputSignedFile.substring(0, propertyOutputSignedFile.lastIndexOf('/'))
                 if (propertyListViewFiles.count == 1){
                     gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp)
                 }else{
@@ -784,7 +842,6 @@ PageServicesSignAdvancedForm {
                     gapi.startSigningBatchXADES(batchFilesArray, outputFile, isTimestamp)
                 }
             }
-
         }
     }
     propertyFileDialogCMDOutput {
@@ -825,6 +882,7 @@ PageServicesSignAdvancedForm {
                 for(var i = 0; i < propertyListViewFiles.count; i++){
                     batchFilesArray[i] =  propertyListViewFiles.model.get(i).fileUrl;
                 }
+                propertyOutputSignedFile = outputFile;
                 gapi.startSigningBatchPDF(batchFilesArray, outputFile, page, coord_x, coord_y,
                                           reason, location, isTimestamp, isSmallSignature)
 
