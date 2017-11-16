@@ -1770,19 +1770,12 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                 {
                 case PTEID_CARDTYPE_IAS07:
                 {
-                    try
-                    {
-                        PTEID_EIDCard& Card = readerContext.getEIDCard();
-                        new_card = &Card;
-                    }
-                    catch (PTEID_ExCardBadType const& e)
-                    {
-                        QString errcode;
-                        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed %s", e.GetError());
-                        errcode = errcode.setNum(e.GetError());
-                    }
-                }
+
+                    PTEID_EIDCard& Card = readerContext.getEIDCard();
+                    new_card = &Card;
                     break;
+                }
+                    
                 case PTEID_CARDTYPE_UNKNOWN:
                 default:
                     break;
@@ -1794,28 +1787,24 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                     lastFoundCardType = CardType;
                     switch (CardType)
                     {
-                    case PTEID_CARDTYPE_IAS07:
-                    {
-                        try
+                        case PTEID_CARDTYPE_IAS07:
                         {
+
                             PTEID_EIDCard& Card = readerContext.getEIDCard();
                             new_card = &Card;
+                            break;
                         }
-                        catch (PTEID_ExCardBadType const& e)
-                        {
-                            PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed %s", e.GetError());
-                        }
-                    }
-                        break;
-                    case PTEID_CARDTYPE_UNKNOWN:
-                    default:
-                        break;
+                            
+                        case PTEID_CARDTYPE_UNKNOWN:
+                        default:
+                            break;
                     }
                 }
                 if(CardIdx > 1 && selectedReaderIndex == -1){
                     emit signalReaderContext();
                     selectedReaderIndex = -1;
-                }else{
+                }
+                else{
                     if (!bCardPresent)
                     {
                         emit signalCardAccessError(NoCardFound);
@@ -1838,22 +1827,12 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(CardUnknownError);
     }
-    catch (PTEID_ExCardBadType e)
-    {
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
-        emit signalCardAccessError(CardUnknownError);
-    }
     catch (PTEID_ExNoCardPresent e)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(NoCardFound);
     }
     catch (PTEID_ExCardChanged e)
-    {
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
-        emit signalCardAccessError(CardUnknownError);
-    }
-    catch (PTEID_ExReaderSetChanged e)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(CardUnknownError);
