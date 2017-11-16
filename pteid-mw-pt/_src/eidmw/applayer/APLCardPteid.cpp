@@ -397,6 +397,16 @@ void APL_EIDCard::invalidateAddressSOD()
 		m_FileAddress = NULL;
 	}
 }
+/* Discard the current trace file after Activate()
+*/
+void APL_EIDCard::invalidateTraceFile()
+{
+	if (m_FileTrace)
+	{
+		delete m_FileTrace;
+		m_FileTrace = NULL;
+	}
+}
 
 APL_EidFile_Sod *APL_EIDCard::getFileSod()
 {
@@ -761,6 +771,9 @@ bool APL_EIDCard::Activate(const char *pinCode, CByteArray &BCDDate, bool blockA
 
 	BEGIN_CAL_OPERATION(m_reader)
 	out = m_reader->getCalReader()->Activate(pinCode,BCDDate, blockActivationPIN);
+	//After activate is called discard the previous Trace File, otherwise we would
+	//require a card reset to see the new activation state
+	invalidateTraceFile();
 	END_CAL_OPERATION(m_reader)
 
 	return out;

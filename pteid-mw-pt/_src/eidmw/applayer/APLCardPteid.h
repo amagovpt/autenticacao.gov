@@ -180,6 +180,7 @@ private:
 	APL_EIDCard(const APL_EIDCard& card);				/**< Copy not allowed - not implemented */
 	APL_EIDCard &operator= (const APL_EIDCard& card);	/**< Copy not allowed - not implemented */
 	void invalidateAddressSOD();
+	void invalidateTraceFile();
 
 	CByteArray *m_cardinfosign;
 	APL_CardType	m_cardType;
