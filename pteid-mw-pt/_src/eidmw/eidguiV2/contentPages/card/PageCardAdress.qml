@@ -411,20 +411,42 @@ PageCardAdressForm {
             }
         }
 
-        standardButtons: {
-            textFieldNumProcess.length !== 0 && textFieldConfirmAddress.length !== 0
-                    ? DialogButtonBox.Ok | DialogButtonBox.Cancel : DialogButtonBox.Cancel
-        }
-
-        onAccepted: {
-            gapi.changeAddress(textFieldNumProcess.text,textFieldConfirmAddress.text)
-            progressBarIndeterminate.visible = true
-            textFieldNumProcess.text = ""
-            textFieldConfirmAddress.text = ""
-            dialogConfirmOfAddressProgress.open()
-        }
-        onRejected: {
-            mainFormID.opacity = 1.0
+        Item {
+            width: dialogConfirmOfAddress.availableWidth
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: 180
+            Button {
+                width: Constants.WIDTH_BUTTON
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                text: qsTr("STR_ADDRESS_CHANGE_CANCEL")
+                anchors.left: parent.left
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
+                onClicked: {
+                    dialogConfirmOfAddress.close()
+                    mainFormID.opacity = 1.0
+                }
+            }
+            Button {
+                width: Constants.WIDTH_BUTTON
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                text: qsTr("STR_ADDRESS_CHANGE_CONFIRM")
+                anchors.right: parent.right
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
+                enabled: textFieldNumProcess.length !== 0 && textFieldConfirmAddress.length !== 0 ? true : false
+                onClicked: {
+                    gapi.changeAddress(textFieldNumProcess.text,textFieldConfirmAddress.text)
+                    progressBarIndeterminate.visible = true
+                    textFieldNumProcess.text = ""
+                    textFieldConfirmAddress.text = ""
+                    dialogConfirmOfAddress.close()
+                    dialogConfirmOfAddressProgress.open()
+                }
+            }
         }
     }
 
@@ -485,7 +507,6 @@ PageCardAdressForm {
                 visible: true
                 indeterminate: false
                 z:1
-
             }
 
             ProgressBar {
@@ -500,21 +521,30 @@ PageCardAdressForm {
                 indeterminate: true
                 z:1
             }
-
         }
 
-        standardButtons: {
-            DialogButtonBox.Ok
-        }
+        Item {
+            width: dialogConfirmOfAddress.availableWidth
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: 180
 
-        onAccepted: {
-            mainFormID.opacity = 1.0
-        }
-        onRejected: {
-            mainFormID.opacity = 1.0
+            Button {
+                width: Constants.WIDTH_BUTTON
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                text: qsTr("STR_ADDRESS_CHANGE_OK")
+                anchors.right: parent.right
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
+                visible: progressBarIndeterminate.visible ? false : true
+                onClicked: {
+                    mainFormID.opacity = 1.0
+                    dialogConfirmOfAddressProgress.close()
+                }
+            }
         }
     }
-
 
     propertyButtonConfirmOfAddress{
         onClicked: {
