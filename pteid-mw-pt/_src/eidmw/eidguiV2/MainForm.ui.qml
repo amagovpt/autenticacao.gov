@@ -185,12 +185,12 @@ Rectangle {
                 }
                 Image {
                     id: imageReduced
-                    width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
-                    height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                    width: Constants.SIZE_TEXT_SUB_MENU
+                    height: Constants.SIZE_TEXT_SUB_MENU
                     fillMode: Image.PreserveAspectFit
                     anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    source: "images/arrow-right_AMA.png"
+                    y: parent.height / 2 - Constants.SIZE_TEXT_SUB_MENU / 2 + Constants.APP_BORDER
+                    source: "images/arrow-right_white_AMA.png"
                 }
             }
         }

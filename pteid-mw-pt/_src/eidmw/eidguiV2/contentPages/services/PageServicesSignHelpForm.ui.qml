@@ -7,6 +7,8 @@ import "../../components" as Components
 
 Item {
     anchors.fill: parent
+    property alias propertyTextSubTitle: textSubTitle
+    property alias propertyTextAutenticacaoGovLink: autenticacaoGovLink
 
     Item {
         id: rowTop
@@ -40,6 +42,8 @@ Item {
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
             text: qsTranslate("PageServicesSign","STR_SIGN_HELP_SUB_TITLE")
+                  + "<a href=\"https://www.autenticacao.gov.pt/cmd-pedido-chave\">"
+                  + " " + qsTranslate("PageServicesSign","STR_SIGN_HELP_CMD_LINK")
             wrapMode: Text.Wrap
             width: parent.width
             color: Constants.COLOR_TEXT_BODY
@@ -51,63 +55,28 @@ Item {
             anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            text: qsTranslate("PageServicesSign","STR_SIGN_HELP_TOPIC_1") + ":"
+            text: qsTranslate("PageServicesSign","STR_SIGN_HELP_TOPIC_1")
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
             color: Constants.COLOR_TEXT_BODY
             Layout.fillWidth: true
         }
-        RowLayout {
-            id: rawSubTopic1
-            anchors.top: textTopic1.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_BODY
-            width: parent.width
 
-            Components.TextBullet{}
-            Text {
-                id: textBulletSubTopic1
-                font.pixelSize: Constants.SIZE_TEXT_BODY
-                font.family: lato.name
-                text: qsTranslate("PageServicesSign","STR_SIGN_HELP_SUB_TOPIC_1")
-                wrapMode: Text.Wrap
-                width: parent.width
-                horizontalAlignment: Text.left
-                color: Constants.COLOR_TEXT_BODY
-                Layout.fillWidth: true
-            }
-        }
         Text {
-            id: textTopic2
-            anchors.top: rawSubTopic1.bottom
+            id: autenticacaoGovLink
+            anchors.top: textTopic1.bottom
             anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            text: qsTranslate("PageServicesSign","STR_SIGN_HELP_TOPIC_2") + ":"
+            text: qsTranslate("PageServicesSign","STR_SIGN_HELP_TOPIC_2")
+                  + "<a href=\"https://www.autenticacao.gov.pt\">"
+                  + " " + qsTranslate("PageServicesSign","STR_SIGN_HELP_AUTENTICACAO.GOV_LINK")
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
             color: Constants.COLOR_TEXT_BODY
             Layout.fillWidth: true
-        }
-        RowLayout {
-            id: rawSubTopic2
-            anchors.top: textTopic2.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_BODY
-            width: parent.width
-
-            Components.TextBullet{}
-            Text {
-                id: text5
-                font.pixelSize: Constants.SIZE_TEXT_BODY
-                font.family: lato.name
-                text: qsTranslate("PageServicesSign","STR_SIGN_HELP_SUB_TOPIC_2")
-                wrapMode: Text.Wrap
-                width: parent.width
-                horizontalAlignment: Text.left
-                color: Constants.COLOR_TEXT_BODY
-                Layout.fillWidth: true
-            }
         }
     }
 }

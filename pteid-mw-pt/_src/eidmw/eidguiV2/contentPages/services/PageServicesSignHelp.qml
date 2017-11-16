@@ -3,4 +3,15 @@ import QtQuick.Controls 2.1
 
 PageServicesSignHelpForm {
 
+    propertyTextSubTitle{
+        onLinkActivated: {
+            Qt.openUrlExternally(link)
+        }
+    }
+
+    propertyTextAutenticacaoGovLink{
+        onLinkActivated: {
+            Qt.openUrlExternally(link)
+        }
+    }
 }

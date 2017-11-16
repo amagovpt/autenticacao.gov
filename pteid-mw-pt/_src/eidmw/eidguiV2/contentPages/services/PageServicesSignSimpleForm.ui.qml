@@ -211,15 +211,17 @@ Item {
 
                 up.indicator: Rectangle {
                     x: spinBoxControl.mirrored ? 0 : parent.width - width
+                    y: Constants.SIZE_ARROW_OFFSET
                     height: parent.height
                     implicitWidth: 20
                     implicitHeight: parent.height
 
                     Text {
-                        text: "+"
+                        text: ">"
                         font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_LABEL
-                        color: Constants.COLOR_MAIN_PRETO
+                        font.pixelSize: Constants.SIZE_ARROW_INDICATOR
+                        color: Constants.COLOR_MAIN_BLUE
+                        font.bold : true
                         opacity: fileLoaded && !checkLastPage.checked
                                  ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                         anchors.fill: parent
@@ -232,15 +234,17 @@ Item {
                 down.indicator: Rectangle {
                     visible: false
                     x: spinBoxControl.mirrored ? parent.width - width : 0
+                    y: Constants.SIZE_ARROW_OFFSET
                     height: parent.height
                     implicitWidth: 20
                     implicitHeight: parent.height
 
                     Text {
-                        text: "-"
+                        text: "<"
                         font.family: lato.name
-                        font.pixelSize:  Constants.SIZE_TEXT_LABEL
-                        color: Constants.COLOR_MAIN_PRETO
+                        font.pixelSize:  Constants.SIZE_ARROW_INDICATOR
+                        color: Constants.COLOR_MAIN_BLUE
+                        font.bold : true
                         opacity: fileLoaded && !checkLastPage.checked
                                  ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                         anchors.fill: parent

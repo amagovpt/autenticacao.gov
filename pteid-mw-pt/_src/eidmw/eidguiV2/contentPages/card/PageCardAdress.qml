@@ -330,6 +330,8 @@ PageCardAdressForm {
                 Text {
                     id: textPinMsgConfirm
                     text: qsTr("STR_ADDRESS_CHANGE_TEXT")
+                          + "<a href=\"https://www.portaldocidadao.pt/web/instituto-dos-registos-e-do-notariado/cartao-de-cidadao-alteracao-de-morada\">"
+                          + " "+ qsTr("STR_ADDRESS_CHANGE_TEXT_LINK")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -338,6 +340,10 @@ PageCardAdressForm {
                     height: parent.height
                     width: parent.width
                     anchors.bottom: parent.bottom
+                    wrapMode: Text.WordWrap
+                    onLinkActivated: {
+                        Qt.openUrlExternally(link)
+                    }
                 }
             }
 
