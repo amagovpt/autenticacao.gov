@@ -81,6 +81,7 @@ PageServicesSignAdvancedForm {
             dialogCMDProgress.standardButtons = DialogButtonBox.Ok | DialogButtonBox.Cancel
         }
         onSignalPdfSignSucess: {
+            mainFormID.opacity = 0.5
             signsuccess_dialog.visible = true
             propertyBusyIndicator.running = false
             // test time stamp
@@ -615,9 +616,8 @@ PageServicesSignAdvancedForm {
             color: Constants.COLOR_MAIN_BLUE
         }
         Item {
-            width: signsuccess_dialog.width
-            height: signsuccess_dialog.height
-
+            width: signsuccess_dialog.availableWidth
+            height: 50
             Item {
                 id: rectLabelText
                 width: parent.width
@@ -652,16 +652,48 @@ PageServicesSignAdvancedForm {
                 }
             }
         }
-        standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
-
-        onAccepted: {
-            if (Qt.platform.os === "windows") {
-                propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
-            }else{
-                propertyOutputSignedFile = "file://" + propertyOutputSignedFile
+        Item {
+            width: signsuccess_dialog.availableWidth
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            y: 80
+            Item {
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.horizontalCenter: parent.horizontalCenter
+                Button {
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("Popup File","STR_POPUP_FILE_CANCEL")
+                    anchors.left: parent.left
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    onClicked: {
+                        signsuccess_dialog.close()
+                        mainFormID.opacity = 1.0
+                    }
+                }
+                Button {
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("Popup File","STR_POPUP_FILE_OPEN")
+                    anchors.right: parent.right
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    onClicked: {
+                        if (Qt.platform.os === "windows") {
+                            propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+                        }else{
+                            propertyOutputSignedFile = "file://" + propertyOutputSignedFile
+                        }
+                        console.log("Open Url Externally: " + propertyOutputSignedFile)
+                        Qt.openUrlExternally(propertyOutputSignedFile)
+                        signsuccess_dialog.close()
+                        mainFormID.opacity = 1.0
+                    }
+                }
             }
-            console.log("Open Url Externally: " + propertyOutputSignedFile)
-            Qt.openUrlExternally(propertyOutputSignedFile)
         }
     }
 

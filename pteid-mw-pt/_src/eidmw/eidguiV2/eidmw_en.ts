@@ -1220,7 +1220,7 @@
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="680"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="622"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="652"/>
         <source>STR_SIGN_FAIL</source>
         <translation>PDF signature failed</translation>
     </message>
@@ -1280,7 +1280,7 @@
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1374"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="827"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="857"/>
         <source>STR_LOAD_PDF_ERROR</source>
         <translation>Error</translation>
     </message>
@@ -1290,7 +1290,7 @@
         <translation>PDF format is selected. Only PDF files can be selected. Check the file format that you understand.</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="829"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="859"/>
         <source>STR_LOAD_PDF_ERROR_MSG</source>
         <translation>Error reading PDF file. Please check the format of the file.</translation>
     </message>
@@ -1743,6 +1743,16 @@
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="144"/>
         <source>STR_POPUP_FILE_UNIQUE_MULTI</source>
         <translation>To sign multiple files use the advanced signature page</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="608"/>
+        <source>STR_POPUP_FILE_CANCEL</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="619"/>
+        <source>STR_POPUP_FILE_OPEN</source>
+        <translation>Open</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="94"/>
