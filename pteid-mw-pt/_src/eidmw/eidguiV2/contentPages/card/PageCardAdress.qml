@@ -42,6 +42,8 @@ PageCardAdressForm {
 
             propertyBusyIndicator.running = false
 
+            propertyButtonConfirmOfAddress.enabled = true
+
             gapi.setAddressLoaded(true)
             if(!Constants.USE_SDK_PIN_UI_POPUP)
                 dialogTestPin.visible = false
@@ -85,6 +87,7 @@ PageCardAdressForm {
                     mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                             qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
                 }
+                propertyButtonConfirmOfAddress.enabled = false
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             }
             propertyDistrict.propertyDateField.text = ""

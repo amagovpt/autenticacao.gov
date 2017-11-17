@@ -429,6 +429,7 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                enabled: false
             }
         }
     }
