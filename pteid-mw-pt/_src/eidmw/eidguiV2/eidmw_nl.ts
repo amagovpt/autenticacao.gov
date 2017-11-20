@@ -99,7 +99,7 @@
     <message>
         <location filename="gapi.cpp" line="643"/>
         <source>STR_CMD_LOGIN_SUCESS</source>
-        <translation>Login com sucesso. Aguarde a recepção do código enviado por sms!</translation>
+        <translation>Login com sucesso. Aguarde a recepção do código enviado por SMS!</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="683"/>
@@ -463,12 +463,12 @@
     <message>
         <location filename="MainMenuBottomModel.qml" line="11"/>
         <source>STR_MENU_CUSTOM_SIGN</source>
-        <translation>Personalização da Assinatura</translation>
+        <translation>Personalização da assinatura</translation>
     </message>
     <message>
         <location filename="MainMenuBottomModel.qml" line="16"/>
         <source>STR_MENU_ATTRIBUTES</source>
-        <translation>Atributos Profissionais</translation>
+        <translation>Atributos profissionais</translation>
     </message>
     <message>
         <location filename="MainMenuBottomModel.qml" line="21"/>
@@ -884,12 +884,12 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="437"/>
         <source>STR_CUSTOM_SIGN_REMOVE_BUTTON</source>
-        <translation>Remover assinatura</translation>
+        <translation>Remover imagem</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="459"/>
         <source>STR_CUSTOM_SIGN_ADD_BUTTON</source>
-        <translation>Adicionar assinatura</translation>
+        <translation>Adicionar imagem</translation>
     </message>
 </context>
 <context>
@@ -1445,7 +1445,7 @@
     <message>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="602"/>
         <source>STR_SIGN_PREVIEW</source>
-        <translation>Pré-Visualização</translation>
+        <translation>Pré-visualização</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="668"/>

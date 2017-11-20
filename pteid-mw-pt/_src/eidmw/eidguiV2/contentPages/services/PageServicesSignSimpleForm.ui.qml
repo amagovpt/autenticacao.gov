@@ -147,25 +147,19 @@ Item {
 
     Item {
         id: rectSignPageOptions
-        width: parent.width
+        width: parent.width - Constants.SIZE_ROW_H_SPACE
         height: Constants.HEIGHT_BOTTOM_COMPONENT
-        anchors.left: parent.left
         anchors.top: rowMain.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-
-        Item {
-            id: itemCheckSignReduced
-            width: parent.width * 0.3
-            height: parent.height
-            anchors.top: parent.top
-        }
+        // Expanded menu need a Horizontal space to Main Menu
+        x: Constants.SIZE_ROW_H_SPACE
 
         Item {
             id: itemCheckPage
-            width: parent.width * 0.4
+            width: parent.width * 0.30
             height: parent.height
             anchors.top: parent.top
-            anchors.left: itemCheckSignReduced.right
+            anchors.horizontalCenter: parent.horizontalCenter
             Text{
                 id: pageText
                 x: 11
@@ -186,9 +180,9 @@ Item {
                 to: 10000
                 value: 1
                 anchors.left: pageText.right
-                width: parent.width - pageText.width - pageText.x
+                width: 100
                 height: parent.height
-                anchors.leftMargin: 0
+                anchors.horizontalCenter: parent.horizontalCenter
                 enabled: fileLoaded && !checkLastPage.checked
                 editable:  fileLoaded ? true : false
 
@@ -257,7 +251,7 @@ Item {
         }
         Item {
             id: itemLastPage
-            width: parent.width * 0.3
+            width: parent.width * 0.4
             height: parent.height
             anchors.left: itemCheckPage.right
             anchors.top: parent.top

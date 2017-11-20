@@ -385,7 +385,7 @@ PageServicesSignAdvancedForm {
                 Text {
                     id: textLinkCMD
                     textFormat: Text.RichText
-                    text: "<a href=\"https://cmd.autenticacao.gov.pt/Ama.Authentication.Frontend\">"
+                    text: "<a href=\"https://www.autenticacao.gov.pt/cmd-pedido-chave\">"
                           + qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
                     font.italic: true
                     verticalAlignment: Text.AlignVCenter

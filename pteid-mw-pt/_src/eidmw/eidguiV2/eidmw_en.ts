@@ -99,7 +99,7 @@
     <message>
         <location filename="gapi.cpp" line="643"/>
         <source>STR_CMD_LOGIN_SUCESS</source>
-        <translation>Login successfully. Wait for the code sent by sms!</translation>
+        <translation>Login successfully. Wait for the code sent by SMS!</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="683"/>
@@ -468,7 +468,7 @@
     <message>
         <location filename="MainMenuBottomModel.qml" line="16"/>
         <source>STR_MENU_ATTRIBUTES</source>
-        <translation>Professional Attributes</translation>
+        <translation>Professional attributes</translation>
     </message>
     <message>
         <location filename="MainMenuBottomModel.qml" line="21"/>
@@ -884,12 +884,12 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="437"/>
         <source>STR_CUSTOM_SIGN_REMOVE_BUTTON</source>
-        <translation>Remove signature</translation>
+        <translation>Remove image</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="459"/>
         <source>STR_CUSTOM_SIGN_ADD_BUTTON</source>
-        <translation>Add signature</translation>
+        <translation>Add Image</translation>
     </message>
 </context>
 <context>
