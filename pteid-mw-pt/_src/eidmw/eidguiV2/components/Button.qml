@@ -39,7 +39,7 @@
 ****************************************************************************/
 
 //Import the declarative plugins
-import QtQuick 2.0
+import QtQuick 2.6
 
 //Implementation of the Button control.
 Item {

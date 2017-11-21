@@ -1,11 +1,8 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
-import QtQuick.Layouts 1.3
-import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.0
 import QtGraphicalEffects 1.0
 import eidguiV2 1.0
-
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -87,11 +84,9 @@ Item {
         // Expanded menu need a Horizontal space to Main Menu
         x: Constants.SIZE_ROW_H_SPACE
 
-
-
         FileDialog {
             id: fileDialog
-            title: qsTranslate("Popup File","STR_POPUP_FILE_INPUT_MULTI")
+            title: qsTranslate("Popup File", "STR_POPUP_FILE_INPUT_MULTI")
             folder: shortcuts.home
             modality: Qt.WindowModal
             selectMultiple: true
@@ -100,17 +95,17 @@ Item {
 
         FileSaveDialog {
             id: fileDialogOutput
-            title: qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
+            title: qsTranslate("Popup File", "STR_POPUP_FILE_OUTPUT")
             nameFilters: ["PDF (*.pdf)", "All files (*)"]
         }
         FileSaveDialog {
             id: fileDialogCMDOutput
-            title: qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
+            title: qsTranslate("Popup File", "STR_POPUP_FILE_OUTPUT")
             nameFilters: ["PDF (*.pdf)", "All files (*)"]
         }
         FileDialog {
             id: fileDialogBatchOutput
-            folder: shortcuts.home;
+            folder: shortcuts.home
             selectFolder: true
         }
 
@@ -146,7 +141,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: qsTranslate("Popup File","STR_POPUP_FILE_INPUT_MULTI")
+                text: qsTranslate("Popup File", "STR_POPUP_FILE_INPUT_MULTI")
             }
             Rectangle {
                 id: rectFile
@@ -212,7 +207,8 @@ Item {
                         id: buttonAdd
                         width: Constants.WIDTH_BUTTON
                         height: parent.height
-                        text: qsTranslate("PageServicesSign","STR_SIGN_ADD_MULTI_BUTTON")
+                        text: qsTranslate("PageServicesSign",
+                                          "STR_SIGN_ADD_MULTI_BUTTON")
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
@@ -222,7 +218,8 @@ Item {
                         width: Constants.WIDTH_BUTTON
                         height: parent.height
                         anchors.right: itemBottonsFiles.right
-                        text: qsTranslate("PageServicesSign","STR_SIGN_REMOVE_MULTI_BUTTON")
+                        text: qsTranslate("PageServicesSign",
+                                          "STR_SIGN_REMOVE_MULTI_BUTTON")
                         enabled: fileLoaded
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
@@ -272,7 +269,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: qsTranslate("PageServicesSign","STR_SIGN_SETTINGS")
+                text: qsTranslate("PageServicesSign", "STR_SIGN_SETTINGS")
             }
 
             Rectangle {
@@ -302,7 +299,8 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Text {
                             id: textFormatSign
-                            text: qsTranslate("PageServicesSign","STR_SIGN_FORMAT")
+                            text: qsTranslate("PageServicesSign",
+                                              "STR_SIGN_FORMAT")
                             rightPadding: 0
                             padding: 0
                             verticalAlignment: Text.AlignVCenter
@@ -316,7 +314,8 @@ Item {
                             id: radioButtonPADES
                             anchors.left: textFormatSign.right
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                            text: qsTranslate("PageServicesSign","STR_SIGN_WHERE")
+                            text: qsTranslate("PageServicesSign",
+                                              "STR_SIGN_WHERE")
                             checked: true
                             leftPadding: 0
                             rightPadding: 0
@@ -358,7 +357,8 @@ Item {
                             id: radioButtonXADES
                             anchors.left: rectToolTipPades.right
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                            text: qsTranslate("PageServicesSign","STR_SIGN_ANY_FILE")
+                            text: qsTranslate("PageServicesSign",
+                                              "STR_SIGN_ANY_FILE")
                             anchors.leftMargin: 10
                             leftPadding: 0
                             rightPadding: 0
@@ -404,7 +404,8 @@ Item {
                         width: parent.width
                         font.italic: textFieldReason.text === "" ? true : false
                         anchors.top: rectFormatOptions.bottom
-                        placeholderText: qsTranslate("PageServicesSign","STR_SIGN_REASON") + "?"
+                        placeholderText: qsTranslate("PageServicesSign",
+                                                     "STR_SIGN_REASON") + "?"
                         enabled: fileLoaded
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -415,7 +416,8 @@ Item {
                         width: parent.width
                         font.italic: textFieldLocal.text === "" ? true : false
                         anchors.top: textFieldReason.bottom
-                        placeholderText: qsTranslate("PageServicesSign","STR_SIGN_LOCAL") + "?"
+                        placeholderText: qsTranslate("PageServicesSign",
+                                                     "STR_SIGN_LOCAL") + "?"
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         enabled: fileLoaded
                         font.family: lato.name
@@ -425,7 +427,8 @@ Item {
                         id: switchSignTemp
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         anchors.top: textFieldLocal.bottom
-                        text: qsTranslate("PageServicesSign","STR_SIGN_ADD_TIMESTAMP")
+                        text: qsTranslate("PageServicesSign",
+                                          "STR_SIGN_ADD_TIMESTAMP")
                         enabled: fileLoaded
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -435,12 +438,13 @@ Item {
                         id: switchSignAdd
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         anchors.top: switchSignTemp.bottom
-                        text: qsTranslate("PageServicesSign","STR_SIGN_ADD_ATTRIBUTES")
+                        text: qsTranslate("PageServicesSign",
+                                          "STR_SIGN_ADD_ATTRIBUTES")
                         enabled: fileLoaded && cardLoaded
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
-                        z:1
+                        z: 1
                     }
                     Item {
                         id: rectangleEntities
@@ -452,12 +456,13 @@ Item {
                             anchors.fill: parent
                             enabled: true
                             hoverEnabled: true
-                            z:1
+                            z: 1
                         }
 
                         Text {
                             id: textAttributesMsg
-                            text: qsTranslate("PageServicesSign","STR_ATTRIBUTES_EMPTY")
+                            text: qsTranslate("PageServicesSign",
+                                              "STR_ATTRIBUTES_EMPTY")
                             verticalAlignment: Text.AlignVCenter
                             color: Constants.COLOR_TEXT_LABEL
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
@@ -484,7 +489,6 @@ Item {
                                 width: Constants.SIZE_TEXT_FIELD_H_SPACE
                             }
                         }
-
                     }
                     Row {
                         id: rowPreserv
@@ -509,7 +513,8 @@ Item {
                         Text {
                             id: textPreserv1
                             x: 35
-                            text: qsTranslate("PageServicesSign","STR_SIGN_ATTRIBUTES_SAVE")
+                            text: qsTranslate("PageServicesSign",
+                                              "STR_SIGN_ATTRIBUTES_SAVE")
                             verticalAlignment: Text.AlignVCenter
                             anchors.verticalCenter: parent.verticalCenter
                             font.bold: false
@@ -521,7 +526,9 @@ Item {
                         }
                         Text {
                             id: textPreserv2
-                            text: qsTranslate("PageServicesSign","STR_SIGN_ATTRIBUTES_SAVE_HOW_LONG")
+                            text: qsTranslate(
+                                      "PageServicesSign",
+                                      "STR_SIGN_ATTRIBUTES_SAVE_HOW_LONG")
                             verticalAlignment: Text.AlignVCenter
                             anchors.verticalCenter: parent.verticalCenter
                             font.bold: false
@@ -547,9 +554,12 @@ Item {
                         }
                         Text {
                             id: textPreservAnos
-                            text: comboBoxPreserve.currentIndex === 1 ?
-                                      qsTranslate("PageServicesSign","STR_SIGN_ATTRIBUTES_YEAR") :
-                                      qsTranslate("PageServicesSign","STR_SIGN_ATTRIBUTES_YEARS")
+                            text: comboBoxPreserve.currentIndex
+                                  === 1 ? qsTranslate(
+                                              "PageServicesSign",
+                                              "STR_SIGN_ATTRIBUTES_YEAR") : qsTranslate(
+                                              "PageServicesSign",
+                                              "STR_SIGN_ATTRIBUTES_YEARS")
                             verticalAlignment: Text.AlignVCenter
                             anchors.verticalCenter: parent.verticalCenter
                             font.bold: false
@@ -599,7 +609,7 @@ Item {
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: qsTranslate("PageServicesSign","STR_SIGN_PREVIEW")
+                text: qsTranslate("PageServicesSign", "STR_SIGN_PREVIEW")
             }
 
             Rectangle {
@@ -614,7 +624,7 @@ Item {
                 Text {
                     id: textDragMsgImg
                     width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-					height: parent.height
+                    height: parent.height
                     font.bold: true
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter
@@ -629,7 +639,7 @@ Item {
                     anchors.fill: parent
                     id: pdfPreviewArea
                     propertyDragSigRect.visible: checkSignShow.checked
-                    propertyReducedChecked : checkSignReduced.checked
+                    propertyReducedChecked: checkSignReduced.checked
                 }
             }
 
@@ -638,12 +648,11 @@ Item {
                 anchors.fill: parent
                 enabled: !fileLoaded
             }
-			DropArea {
+            DropArea {
                 id: dropArea
                 anchors.fill: parent
                 z: 2
             }
-
         }
         Item {
             id: rowBottom
@@ -665,7 +674,8 @@ Item {
                     anchors.top: parent.top
                     Switch {
                         id: checkSignShow
-                        text: qsTranslate("PageServicesSign","STR_SIGN_VISIBLE")
+                        text: qsTranslate("PageServicesSign",
+                                          "STR_SIGN_VISIBLE")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -674,7 +684,6 @@ Item {
                         checked: true
                     }
                 }
-
             }
 
             Item {
@@ -693,7 +702,8 @@ Item {
 
                     Switch {
                         id: checkSignReduced
-                        text: qsTranslate("PageServicesSign","STR_SIGN_REDUCED")
+                        text: qsTranslate("PageServicesSign",
+                                          "STR_SIGN_REDUCED")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -708,17 +718,18 @@ Item {
                     height: parent.height
                     anchors.top: parent.top
                     anchors.left: itemCheckSignReduced.right
-                    Text{
+                    Text {
                         id: pageText
                         x: 11
                         y: 8
-                        text: qsTranslate("PageServicesSign","STR_SIGN_PAGE") + ":"
+                        text: qsTranslate("PageServicesSign",
+                                          "STR_SIGN_PAGE") + ":"
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_LABEL
                         color: Constants.COLOR_MAIN_PRETO
                         font.capitalization: Font.MixedCase
-                        opacity: fileLoaded && propertyRadioButtonPADES.checked && !checkLastPage.checked
-                                 ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                        opacity: fileLoaded && propertyRadioButtonPADES.checked
+                                 && !checkLastPage.checked ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                     }
 
                     SpinBox {
@@ -731,8 +742,10 @@ Item {
                         width: parent.width - pageText.width - pageText.x
                         height: parent.height
                         anchors.leftMargin: 0
-                        enabled: fileLoaded && propertyRadioButtonPADES.checked && !checkLastPage.checked
-                        editable:  checkSignShow.checked && fileLoaded ? true : false
+                        enabled: fileLoaded && propertyRadioButtonPADES.checked
+                                 && !checkLastPage.checked
+                        editable: checkSignShow.checked
+                                  && fileLoaded ? true : false
 
                         contentItem: TextInput {
                             id: textSpinBox
@@ -740,8 +753,9 @@ Item {
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_LABEL
                             color: Constants.COLOR_MAIN_PRETO
-                            opacity: fileLoaded && propertyRadioButtonPADES.checked && !checkLastPage.checked
-                                     ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                            opacity: fileLoaded
+                                     && propertyRadioButtonPADES.checked
+                                     && !checkLastPage.checked ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                             horizontalAlignment: Qt.AlignHCenter
                             verticalAlignment: Qt.AlignVCenter
 
@@ -749,7 +763,6 @@ Item {
                             validator: spinBoxControl.validator
                             inputMethodHints: Qt.ImhFormattedNumbersOnly
                         }
-
 
                         up.indicator: Rectangle {
                             x: spinBoxControl.mirrored ? 0 : parent.width - width
@@ -763,9 +776,10 @@ Item {
                                 font.family: lato.name
                                 font.pixelSize: Constants.SIZE_ARROW_INDICATOR
                                 color: Constants.COLOR_MAIN_BLUE
-                                font.bold : true
-                                opacity: fileLoaded && propertyRadioButtonPADES.checked && !checkLastPage.checked
-                                         ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                                font.bold: true
+                                opacity: fileLoaded
+                                         && propertyRadioButtonPADES.checked
+                                         && !checkLastPage.checked ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                                 anchors.fill: parent
                                 fontSizeMode: Text.Fit
                                 horizontalAlignment: Text.AlignHCenter
@@ -784,10 +798,11 @@ Item {
                             Text {
                                 text: "<"
                                 font.family: lato.name
-                                font.pixelSize:  Constants.SIZE_ARROW_INDICATOR
+                                font.pixelSize: Constants.SIZE_ARROW_INDICATOR
                                 color: Constants.COLOR_MAIN_BLUE
-                                opacity: fileLoaded && propertyRadioButtonPADES.checked && !checkLastPage.checked
-                                         ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                                opacity: fileLoaded
+                                         && propertyRadioButtonPADES.checked
+                                         && !checkLastPage.checked ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                                 anchors.fill: parent
                                 fontSizeMode: Text.Fit
                                 horizontalAlignment: Text.AlignHCenter
@@ -804,7 +819,7 @@ Item {
                     anchors.top: parent.top
                     Switch {
                         id: checkLastPage
-                        text: qsTranslate("PageServicesSign","STR_SIGN_LAST")
+                        text: qsTranslate("PageServicesSign", "STR_SIGN_LAST")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -823,8 +838,10 @@ Item {
 
                 Button {
                     id: button_signCC
-                    text: qsTranslate("PageServicesSign","STR_SIGN_SIGN_BUTTON") + "\n"
-                          + qsTranslate("PageServicesSign","STR_SIGN_CARD_BUTTON")
+                    text: qsTranslate(
+                              "PageServicesSign",
+                              "STR_SIGN_SIGN_BUTTON") + "\n" + qsTranslate(
+                              "PageServicesSign", "STR_SIGN_CARD_BUTTON")
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
                     enabled: fileLoaded && cardLoaded
@@ -835,8 +852,10 @@ Item {
                 }
                 Button {
                     id: button_signCMD
-                    text: qsTranslate("PageServicesSign","STR_SIGN_SIGN_BUTTON") + "\n"
-                          + qsTranslate("PageServicesSign","STR_SIGN_CMD_BUTTON")
+                    text: qsTranslate(
+                              "PageServicesSign",
+                              "STR_SIGN_SIGN_BUTTON") + "\n" + qsTranslate(
+                              "PageServicesSign", "STR_SIGN_CMD_BUTTON")
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
                     enabled: fileLoaded
