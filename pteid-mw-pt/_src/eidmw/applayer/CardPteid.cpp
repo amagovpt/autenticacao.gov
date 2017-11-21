@@ -752,7 +752,7 @@ void APL_EidFile_Address::PackAddressData(CByteArray &cb, bool isNational){
 
 void APL_EidFile_Address::MapFieldsInternal(){
 
-	if (m_mappedFields) // MARTINHO: have we mapped the fields yet?
+	if (m_mappedFields) // have we mapped the fields yet?
 		return;
 
 	CByteArray pteidngAddressBuffer;
@@ -772,7 +772,7 @@ void APL_EidFile_Address::MapFieldsInternal(){
 	else
 		AddressFields();
 
-	// MARTINHO: so we've mapped the fields no need to map them again
+	// So we've mapped the fields no need to map them again
 	m_mappedFields = true;
 }
 
@@ -782,20 +782,20 @@ tCardFileStatus APL_EidFile_Address::VerifyFile()
 		return CARDFILESTATUS_ERROR;
 
 	if (m_isVerified)
-			return CARDFILESTATUS_OK;
+		return CARDFILESTATUS_OK;
 
-		APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
+	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
-		MapFieldsInternal();
+	MapFieldsInternal();
 
-		if (m_SODCheck){
-			CByteArray addrData;
-			PackAddressData(addrData, m_AddressType != m_FOREIGN);
+	if (m_SODCheck){
+		CByteArray addrData;
+		PackAddressData(addrData, m_AddressType != m_FOREIGN);
 
-			if (!m_cryptoFwk->VerifyHashSha256(addrData,pcard->getFileSod()->getAddressHash()))
-				throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS);
-		}
-		m_isVerified = true;
+		if (!m_cryptoFwk->VerifyHashSha256(addrData,pcard->getFileSod()->getAddressHash()))
+			throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS);
+	}
+	m_isVerified = true;
 
 	return CARDFILESTATUS_OK;
 }
@@ -1282,7 +1282,7 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 
 	const unsigned char *temp = m_data.GetBytes();
 	long int len = m_data.Size();
-	temp+=4; //martinho: jump the response message template format 2" (DER type 77)
+	temp+=4; //jump the response message template format 2" (DER type 77)
 
 	p7 = d2i_PKCS7(NULL, (const unsigned char **)&temp, len);
 
@@ -1292,7 +1292,7 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 
 	// Load only the SOD relevant root certificates
 
-	// martinho: load all certificates, let openssl do the job and find the needed ones...
+	// load all certificates, let openssl do the job and find the needed ones...
 	for (unsigned long i = 0; i < pcard->getCertificates()->countSODCAs(); i++){
 		APL_Certif * sod_ca = pcard->getCertificates()->getSODCA(i);
 		X509 *pX509 = NULL;

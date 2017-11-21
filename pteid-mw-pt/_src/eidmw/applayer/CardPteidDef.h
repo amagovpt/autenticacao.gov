@@ -175,7 +175,6 @@ namespace eIDMW
 #define PTEID_FIELD_BYTE_TOKENINFO_ElectricalPersonalisation            38
 #define PTEID_FIELD_BYTE_TOKENINFO_ElectricalPersonalisationInterface   39
 
-//martinho - ok
 #define PTEIDNG_FIELD_ROOTCA_PK_POS_MODULUS_IAS101		23
 #define PTEIDNG_FIELD_ROOTCA_PK_POS_EXPONENT_IAS_101	153
 #define PTEIDNG_FIELD_ROOTCA_PK_POS_MODULUS_IAS07		14

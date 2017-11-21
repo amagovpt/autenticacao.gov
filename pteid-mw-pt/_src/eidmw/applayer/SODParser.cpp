@@ -63,7 +63,7 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray & contents){
 	if ((xLev2Item.l_data < 2)|| (asn1_next_item(&xLev2Item, &xLev3Item)!= 0) ||(xLev3Item.tag != ASN_OID))
 		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
-	// martinho: not the intended way, but for now it will do just fine.
+	// not the intended way, but for now it will do just fine.
 	if (memcmp(xLev3Item.p_data, OID_SHA256_ALGORITHM, xLev3Item.l_data) != 0)
 		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ALGO_OID);
 

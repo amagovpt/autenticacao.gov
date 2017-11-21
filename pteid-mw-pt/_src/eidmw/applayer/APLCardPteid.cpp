@@ -57,7 +57,6 @@ APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType):APL_S
 
 	m_FileTrace=NULL;
 	m_FileID=NULL;
-	m_FileIDSign=NULL;
 	m_FileAddress=NULL;
 	m_FileSod=NULL;
 	m_FilePersoData=NULL;
@@ -121,13 +120,7 @@ APL_EIDCard::~APL_EIDCard()
 		delete m_FileID;
 		m_FileID=NULL;
 	}
-
-	if(m_FileIDSign)
-	{
-		delete m_FileIDSign;
-		m_FileIDSign=NULL;
-	}
-
+	
 	if(m_FileAddress)
 	{
 		delete m_FileAddress;
@@ -204,14 +197,9 @@ APL_EIDCard::~APL_EIDCard()
 
 APL_EidFile_Trace *APL_EIDCard::getFileTrace()
 {
-	if(!m_FileTrace)
-	{
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
-		if(!m_FileTrace)
-		{
-			m_FileTrace=new APL_EidFile_Trace(this);
-		}
-	}
+		m_FileTrace=new APL_EidFile_Trace(this);
+
 
 	return m_FileTrace;
 }
@@ -395,16 +383,6 @@ void APL_EIDCard::invalidateAddressSOD()
 	{
 		delete m_FileAddress;
 		m_FileAddress = NULL;
-	}
-}
-/* Discard the current trace file after Activate()
-*/
-void APL_EIDCard::invalidateTraceFile()
-{
-	if (m_FileTrace)
-	{
-		delete m_FileTrace;
-		m_FileTrace = NULL;
 	}
 }
 
@@ -771,9 +749,6 @@ bool APL_EIDCard::Activate(const char *pinCode, CByteArray &BCDDate, bool blockA
 
 	BEGIN_CAL_OPERATION(m_reader)
 	out = m_reader->getCalReader()->Activate(pinCode,BCDDate, blockActivationPIN);
-	//After activate is called discard the previous Trace File, otherwise we would
-	//require a card reset to see the new activation state
-	invalidateTraceFile();
 	END_CAL_OPERATION(m_reader)
 
 	return out;

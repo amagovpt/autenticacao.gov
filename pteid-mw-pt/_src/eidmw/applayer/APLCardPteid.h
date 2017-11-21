@@ -155,7 +155,6 @@ public:
 
  	APL_EidFile_Trace *getFileTrace();					/**< Return a pointer to the file Trace (NOT EXPORTED) */
 	APL_EidFile_ID *getFileID();					/**< Return a pointer to the file ID (NOT EXPORTED) */
-	APL_EidFile_IDSign *getFileIDSign();			/**< Return a pointer to the file ID signature (NOT EXPORTED) */
 	APL_EidFile_Address *getFileAddress();			/**< Return a pointer to the file Address (NOT EXPORTED) */
 	APL_EidFile_Sod *getFileSod();				/**< Return a pointer to the file Photo (NOT EXPORTED) */
 	EIDMW_APL_API APL_EidFile_PersoData *getFilePersoData();				/**< Return a pointer to the file PersoData (NOT EXPORTED) */
@@ -171,7 +170,6 @@ protected:
 	  * Constructor
 	  *		Used only in APL_ReaderContext::connectCard
 	  */    
-	//MARTINHO: APL_EIDCard(APL_ReaderContext *reader);
 	APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType);
 
 
@@ -180,7 +178,6 @@ private:
 	APL_EIDCard(const APL_EIDCard& card);				/**< Copy not allowed - not implemented */
 	APL_EIDCard &operator= (const APL_EIDCard& card);	/**< Copy not allowed - not implemented */
 	void invalidateAddressSOD();
-	void invalidateTraceFile();
 
 	CByteArray *m_cardinfosign;
 	APL_CardType	m_cardType;
@@ -193,7 +190,6 @@ private:
 
 	APL_EidFile_Trace *m_FileTrace;						/**< Pointer to the file Trace */
 	APL_EidFile_ID *m_FileID;							/**< Pointer to the file ID */
-	APL_EidFile_IDSign *m_FileIDSign;					/**< Pointer to the file ID signature */
 	APL_EidFile_Address *m_FileAddress;					/**< Pointer to the file Address */
 	APL_EidFile_Sod *m_FileSod;							/**< Pointer to the file Sod */
 	APL_EidFile_TokenInfo *m_FileTokenInfo;				/**< Pointer to the file Token Info */
