@@ -371,6 +371,8 @@ CByteArray CPteidCard::RootCAPubKey(){
 	return oResp;
 }
 
+#define COMPAT_ERR_PIN_CODE_BLOCKED    -1212
+#define COMPAT_ERR_PIN_CODE_INCORRECT  -1214	 
 
 bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN) {
 	unsigned char padChar;
@@ -393,8 +395,12 @@ bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate, bool blockAc
 	std::string strPinCode = pinCode != NULL ? std::string(pinCode) : "";
 
 	bool bOK = PinCmd(PIN_OP_VERIFY, activationPin, strPinCode, "", ulRemaining, NULL);
-	if (!bOK)
-		return bOK;
+	if (!bOK) {
+		if(ulRemaining == 0)
+			throw CMWEXCEPTION(COMPAT_ERR_PIN_CODE_BLOCKED);
+		else
+			throw CMWEXCEPTION(COMPAT_ERR_PIN_CODE_INCORRECT);
+	}
 
 	if (BCDDate.Size() != BCDSIZE)
 		return false;
