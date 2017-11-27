@@ -1,5 +1,6 @@
 #include "gapi.h"
 #include <QString>
+#include <QVector>
 #include <QDate>
 #include <QtConcurrent>
 #include <cstdio>
@@ -1278,22 +1279,22 @@ void GAPI::doSignBatchXADES(SignBatchParams &params) {
         getCardInstance(card);
         if (card == NULL) return;
 
-        const char *files_to_sign[params.loadedFileBatchPath.count()];
+        QVector<const char *> files_to_sign;
 
         for( int i = 0; i < params.loadedFileBatchPath.count(); i++ ){
-            files_to_sign[i] = strdup(getPlatformNativeString(params.loadedFileBatchPath[i]));
+            files_to_sign.push_back(strdup(getPlatformNativeString(params.loadedFileBatchPath[i])));
         }
 
         QByteArray tempOutputFile = getPlatformNativeString(params.outputFile);
 
         if (params.isTimestamp > 0)
-            card->SignXadesT(tempOutputFile.constData(), files_to_sign, params.loadedFileBatchPath.count());
+            card->SignXadesT(tempOutputFile.constData(), files_to_sign.data(), params.loadedFileBatchPath.count());
         else
-            card->SignXades(tempOutputFile.constData(), files_to_sign, params.loadedFileBatchPath.count());
+            card->SignXades(tempOutputFile.constData(), files_to_sign.data(), params.loadedFileBatchPath.count());
 
         emit signalPdfSignSucess(SignMessageOK);
 
-        END_TRY_CATCH
+    END_TRY_CATCH
 }
 
 void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp) {
