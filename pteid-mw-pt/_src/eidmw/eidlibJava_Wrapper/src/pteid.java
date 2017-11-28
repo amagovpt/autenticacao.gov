@@ -85,7 +85,7 @@ public class pteid {
         catch (PTEID_ExNoCardPresent ex) {
             throw new PteidException(SC_ERROR_CARD_NOT_PRESENT);
         }
-        catch (PTEID_ExCardBadType ex) {
+        catch (PTEID_ExCardTypeUnknown ex) {
             throw new PteidException(SC_ERROR_INVALID_CARD);
         }
         catch (Exception ex) {
