@@ -21,7 +21,7 @@ DESTDIR = ./../../lib
 DEPENDPATH += .
 
 LIBS += -L./../../lib -l$${COMMONLIB} -l$${APPLAYERLIB} -l$${CARDLAYERLIB}
-INCLUDEPATH += . ../../common ../../applayer ../../cardlayer
+INCLUDEPATH += . ../../common ../../applayer ../../eidlib ../../cardlayer
 
 unix: DEFINES += __UNIX__ DEBUG WITH_OPENSSL
 #Support Fat binaries on Mac with both x86 and x86_64 architectures
