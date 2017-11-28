@@ -164,14 +164,12 @@
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_NO_READER)		ex = new PTEID_ExNoReader();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_UNKNOWN)			ex = new PTEID_ExUnknown();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_DOCTYPE_UNKNOWN)	ex = new PTEID_ExDocTypeUnknown();
-			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_CARDTYPE_BAD)		ex = new PTEID_ExCardBadType();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_CARDTYPE_UNKNOWN)	ex = new PTEID_ExCardTypeUnknown();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_CERT_NOISSUER)	ex = new PTEID_ExCertNoIssuer();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_RELEASE_NEEDED)	ex = new PTEID_ExReleaseNeeded();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_BAD_TRANSACTION)	ex = new PTEID_ExBadTransaction();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_FILETYPE_UNKNOWN)	ex = new PTEID_ExFileTypeUnknown();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_CARD_CHANGED)		ex = new PTEID_ExCardChanged();
-			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_READERSET_CHANGED)ex = new PTEID_ExReaderSetChanged();
 			else if(pteid_excode==pteidlib_dotNet.EIDMW_ERR_CERT_NOROOT)		ex = new PTEID_ExCertNoRoot();
 			else															ex = new PTEID_Exception(pteid_excode);
 
@@ -680,9 +678,6 @@ return $jnicall;
 			case EIDMW_ERR_NO_CARD:
 				classDescription += "/PTEID_ExNoCardPresent";
 				break;
-			case EIDMW_ERR_CARDTYPE_BAD:
-				classDescription += "/PTEID_ExCardBadType";
-				break;
 			case EIDMW_ERR_CARDTYPE_UNKNOWN:
 				classDescription += "/PTEID_ExCardTypeUnknown";
 				break;
@@ -700,9 +695,6 @@ return $jnicall;
 				break;
 			case EIDMW_ERR_CARD_CHANGED:
 				classDescription += "/PTEID_ExCardChanged";
-				break;
-			case EIDMW_ERR_READERSET_CHANGED:
-				classDescription += "/PTEID_ExReaderSetChanged";
 				break;
 			case EIDMW_ERR_NO_READER:
 				classDescription += "/PTEID_ExNoReader";
