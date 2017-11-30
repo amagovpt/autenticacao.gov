@@ -26,13 +26,13 @@
 					<RegistryValue Root="HKCU" Key="SOFTWARE\PTEID\Installer" Name="GuiShortcut" Type="integer" Value="1" KeyPath="yes" />
 				</Component>
 				
-		<Component Id="RegisterPteidAutoStart" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA6}">
+		    <Component Id="RegisterPteidAutoStart" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA6}">
           <RegistryKey Root="HKCU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
             <RegistryValue Type="string" Name="pteid" Value="&quot;[EIDGUIV2DIR]pteidguiV2.exe&quot;"/>
           </RegistryKey>
         </Component>
 		
-		</DirectoryRef>
+		 </DirectoryRef>
     </Fragment>
     <Fragment>
         <ComponentGroup Id="qmlAppComponentGroup">
@@ -43,9 +43,6 @@
             </Component>
             <Component Id="cmpD94D987CD7CEE5C9E964633DD52E7305" Directory="EIDGUIV2DIR" Guid="{A747CEB7-27BB-49DF-BA08-7E09BC6CBFF8}">
                 <File Id="fil5A03D03833CC9B3BB9FCCB5FE1121279" KeyPath="yes" Source="$(var.QMLDIR)\d3dcompiler_47.dll" />
-            </Component>
-            <Component Id="cmp5F435878FAABFF8E0F8AB55AD6C365D0" Directory="EIDGUIV2DIR" Guid="{D6BD87CD-DF40-425C-900D-62B7FE3C981A}">
-                <File Id="fil937BE69443A1D9710805F72D59788AB5" KeyPath="yes" Source="$(var.QMLDIR)\libeay32.dll" />
             </Component>
             <Component Id="cmpF47C4BA3E56746CDA8910145CEB3D8A6" Directory="EIDGUIV2DIR" Guid="{F5D2B943-457E-40F2-BB3B-52A22837C6CD}">
                 <File Id="filA983C9033291E390B326ABDC5CE51C42" KeyPath="yes" Source="$(var.QMLDIR)\libEGL.dll" />
@@ -64,15 +61,6 @@
 					          <File Id="fil532B63275F24DCA11F229D2F2A4A6718" Source="..\..\..\eidguiV2\eidmw_nl.qm" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6719" Source="..\..\..\eidguiV2\eidmw_en.qm" />
 				            <File Id="fil532B63275F24DCA11F229D2F2A4A6789" Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCpp.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6790" Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6710" Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6711" Source="$(var.PTEID_BUILD_FOLDER_X86)xerces-c_3_1.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6712" Source="$(var.PTEID_BUILD_FOLDER_X86)libcurl.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6713" Source="$(var.PTEID_BUILD_FOLDER_X86)FreeImage.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6714" Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-poppler.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6715" Source="$(var.PTEID_BUILD_FOLDER_X86)xsec_1_7.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6716" Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6717" Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
             </Component>
             <Component Id="cmpD90C57D3866413E9483172896BD5F8CE" Directory="EIDGUIV2DIR" Guid="{C30484BF-362F-4194-BFCA-F6060AD1B12C}">
                 <File Id="fil6CDFD7BC016B64DBD3E26297A346DCEF" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Core.dll" />
@@ -106,9 +94,6 @@
             </Component>
             <Component Id="cmp2187091A9C7BFEBC4A15E92B1675BD66" Directory="EIDGUIV2DIR" Guid="{1E6DA848-81BC-4138-A6AC-49DB69F0F468}">
                 <File Id="filB7DB93213389A34B74FC8C211109E174" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Xml.dll" />
-            </Component>
-            <Component Id="cmpF07BE982D065286C3FC172AB46B6D8EA" Directory="EIDGUIV2DIR" Guid="{849D97CD-D348-4AE4-B86F-5455BC5206E3}">
-                <File Id="fil0E8793A78873CF798FD851918CC09B23" KeyPath="yes" Source="$(var.QMLDIR)\ssleay32.dll" />
             </Component>
             <Component Id="cmp537602E31CE3380A1561177D7DBF2819" Directory="dir2C96DF9BF68D36FECFDCFBE5DE37120F" Guid="{D1D8A970-165F-455A-96C1-A74603DF7027}">
                 <File Id="fil51268DE9F8E9E51B00979CE0107AD64F" KeyPath="yes" Source="$(var.QMLDIR)\bearer\qgenericbearer.dll" />

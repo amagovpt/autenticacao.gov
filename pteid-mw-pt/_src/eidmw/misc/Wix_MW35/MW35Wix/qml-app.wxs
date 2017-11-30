@@ -23,19 +23,13 @@
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6718" Source="..\..\..\eidguiV2\eidmw_nl.qm" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6719" Source="..\..\..\eidguiV2\eidmw_en.qm" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A676D" Source="$(var.QMLDIR)\cmdServices.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A676E" Source="$(var.QMLDIR)\ssleay32.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A676F" Source="$(var.QMLDIR)\libeay32.dll" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6789" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCpp.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6790" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidapplayer.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6710" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6711" Source="$(var.PTEID_BUILD_FOLDER_X64)xerces-c_3_1.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6712" Source="$(var.PTEID_BUILD_FOLDER_X64)libcurl.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6713" Source="$(var.PTEID_BUILD_FOLDER_X64)FreeImage.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6714" Source="$(var.PTEID_BUILD_FOLDER_X64)pteid-poppler.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6715" Source="$(var.PTEID_BUILD_FOLDER_X64)xsec_1_7.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6716" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcardlayer.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6717" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
+                    <File Id="fil532B63275F24DCA11F229D2F2A4A6818" Source="$(var.QMLDIR)\Qt5Xml.dll" />
+                    <File Id="fil532B63275F24DCA11F229D2F2A4A6919" Source="$(var.QMLDIR)\Qt5PrintSupport.dll" />
                 </Component>
+              <Component Id="cmp7F40CCD4FD162222E744B7B74F9DF5A3" Guid="{F64668D0-3ACB-4E29-AB95-742B18B6AF3D}">
+                <File Id="fil3CBCB4A9EED52796624FC6C8977CC71C" KeyPath="yes" Source="$(var.QMLDIR)\poppler-qt5.dll" />
+              </Component>
                 <Component Id="cmpD90C57D3866413E9483172896BD5F8CE" Guid="{CF2F9F8B-6CCA-4D43-A9E0-98B062B51368}">
                     <File Id="fil6CDFD7BC016B64DBD3E26297A346DCEF" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Core.dll" />
                 </Component>
@@ -3477,6 +3471,7 @@
             <ComponentRef Id="cmp9DC29AC95C27F968F7D46BF43ED48AE6" />
             <ComponentRef Id="cmp6C967D9C0F7488191043359B3BF9AEF3" />
             <ComponentRef Id="cmpDF93FDBD7C9AE17BEC1F7261F28B52CC" />
+            <ComponentRef Id="cmp7F40CCD4FD162222E744B7B74F9DF5A3" />
         </ComponentGroup>
     </Fragment>
 </Wix>
