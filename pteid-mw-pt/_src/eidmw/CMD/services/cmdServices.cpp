@@ -364,13 +364,11 @@ int CMDServices::GetCertificate( std::string in_userId
 /*  *********************************************************
     ***    CMDServices::get_CCMovelSignRequest()          ***
     ********************************************************* */
-_ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(
-                                                soap *sp
-                                              , char *endpoint
-                                              , std::string in_applicationID
-                                              , std::string in_hash
+_ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp , char *endpoint,
+                                                std::string in_applicationID
+                                              , unsigned char *in_hash
                                               , std::string in_pin
-                                              , std::string *in_userId ){
+                                              , std::string *in_userId) {
     SOAP_ENV__Header *soapHeader = soap_new_SOAP_ENV__Header( sp );
     soapHeader->wsa__To = endpoint;
 
@@ -379,11 +377,13 @@ _ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(
     //Set the created header in our soap structure
     sp->header = soapHeader;
 
-    _ns3__SignRequest *soapBody = soap_new_ns3__SignRequest( sp );
+    _ns3__SignRequest *soapBody = soap_new_ns3__SignRequest(sp);
 
-    soapBody->ApplicationId = encode_base64( sp, in_applicationID );
-    soapBody->Hash          = encode_base64( sp, in_hash );
-    soapBody->Pin           = encode_base64( sp, in_pin );
+    soapBody->ApplicationId = encode_base64(sp, in_applicationID );
+    int hash_len = 51;
+    soapBody->Hash          = soap_new_set_xsd__base64Binary(sp, in_hash, hash_len,
+                                             NULL, NULL, NULL);  //encode_base64( sp, in_hash );
+    soapBody->Pin           = encode_base64(sp, in_pin );
     soapBody->UserId        = in_userId;
 
     _ns2__CCMovelSign *send = soap_new_set__ns2__CCMovelSign( sp, soapBody );
@@ -410,26 +410,26 @@ int CMDServices::checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response )
 /*  *********************************************************
     ***    CMDServices::CCMovelSign()                     ***
     ********************************************************* */
-int CMDServices::CCMovelSign( std::string in_hash, std::string in_pin ){
+int CMDServices::CCMovelSign( unsigned char * in_hash, std::string in_pin ) {
 
     soap *sp = getSoap();
-    if ( sp == NULL ){
+    if (sp == NULL) {
         MWLOG_ERR( logBuf, "Null soap" );
         return ERR_NULL_HANDLER;
     }
 
-    if ( in_hash.empty() ){
-        MWLOG_ERR( logBuf, "Empty hash" );
+    if (in_hash == NULL) {
+        MWLOG_ERR( logBuf, "NULL hash" );
         return ERR_INV_HASH;
     }
 
-    if ( in_pin.empty() ){
+    if (in_pin.empty()) {
         MWLOG_ERR( logBuf, "Empty pin" );
         return ERR_INV_USERPIN;
     }
 
     std::string in_userId = getUserId();
-    if ( in_userId.empty() ){
+    if (in_userId.empty()) {
         MWLOG_ERR( logBuf, "Empty userId" );
         return ERR_INV_USERID;
     }
@@ -468,16 +468,11 @@ int CMDServices::CCMovelSign( std::string in_hash, std::string in_pin ){
     ret = proxy.CCMovelSign( NULL, NULL, send, response );
 
     /* Clean pointers before exit */
-    if ( send->request != NULL ){
+    if ( send->request != NULL ) {
         /* Clean pointers before leaving function */
         if ( send->request->Pin != NULL ){
             if ( send->request->Pin->__ptr != NULL )
                 free( send->request->Pin->__ptr );
-        }
-
-        if ( send->request->Hash != NULL ){
-            if ( send->request->Hash->__ptr != NULL )
-                free( send->request->Hash->__ptr );
         }
 
         if ( send->request->ApplicationId != NULL ){
@@ -494,7 +489,8 @@ int CMDServices::CCMovelSign( std::string in_hash, std::string in_pin ){
     if ( ret != ERR_NONE ) return ret;
 
     /* Save ProcessId */
-    cout << "ProcessId: " << *response.CCMovelSignResult->ProcessId << endl;
+    //std::cerr << "ProcessId: " << *response.CCMovelSignResult->ProcessId << endl;
+
     setProcessID( *response.CCMovelSignResult->ProcessId );
 
     return ERR_NONE;
@@ -677,7 +673,7 @@ int CMDServices::getCertificate(std::string in_userId,
     std::vector<std::string> certs = toPEM(p_certificate, certificateLen );
     free(p_certificate);
 
-    for (int i=0; i != certs.size(); i++)
+    for (size_t i=0; i != certs.size(); i++)
     {
         CByteArray ba;
         unsigned char *der = NULL;
@@ -702,7 +698,7 @@ int CMDServices::getCertificate(std::string in_userId,
 /*  *********************************************************
     ***    CMDServices::sendDataToSign()                  ***
     ********************************************************* */
-int CMDServices::sendDataToSign( std::string in_hash, std::string in_pin ){
+int CMDServices::sendDataToSign(unsigned char * in_hash, std::string in_pin ){
     return CCMovelSign( in_hash, in_pin );
 }
 

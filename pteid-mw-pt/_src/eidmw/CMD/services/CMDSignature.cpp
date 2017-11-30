@@ -8,7 +8,8 @@
 static char logBuf[512];
 
 namespace eIDMW {
-    bool isDBG = true;
+
+    bool isDBG = false;
 
     void printData(char *msg, unsigned char *data, unsigned int dataLen) {
         if ( NULL == msg ) {
@@ -67,15 +68,6 @@ namespace eIDMW {
             return ERR_GET_CERTIFICATE;
         }
 
-        /* printData */
-        if ( isDBG ) {
-            /*
-            printData( (char *)"Certificate: "
-                        , certificate.GetBytes()
-                        , certificate.Size() );
-            */                        
-        }
-
         PDFSignature *pdf = m_pdf_handler->getPdfSignature();
         if ( NULL == pdf ){
             MWLOG_ERR( logBuf, "NULL Pdf\n" );
@@ -112,18 +104,6 @@ namespace eIDMW {
 
         std::string userPin = in_pin;
 
-        if ( 0 == userPin.size() ){
-            MWLOG_ERR( logBuf, "Invalid converted PIN\n" );
-            return ERR_INV_USERPIN;
-        }
-
-        /* printData */
-        if ( isDBG ) {
-            printData( (char *)"\nUser Pin: "
-                        , (unsigned char *)userPin.c_str()
-                        , userPin.size() );
-        }
-
         PDFSignature *pdf = m_pdf_handler->getPdfSignature();
         if ( NULL == pdf ) {
             MWLOG_ERR( logBuf, "NULL Pdf\n" );
@@ -144,11 +124,26 @@ namespace eIDMW {
                         , hashByteArray.Size() );
         }
 
-        std::string in_hash((const char *)hashByteArray.GetBytes(), hashByteArray.Size());
+        /*
+          The actual signature input for RSA is a DigestInfo ASN.1 structure according to PKCS #1
+          and we are always using SHA-256 digest so it should work like this
+          For reference
+          DigestInfo ::= SEQUENCE {
+                  digestAlgorithm AlgorithmIdentifier,
+                  digest OCTET STRING
+               }
+        */
+        unsigned char sha256SigPrefix[] = {
+            0x30, 0x31, 0x30, 0x0d, 0x06, 0x09,
+        0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01,
+        0x05, 0x00, 0x04, 0x20 };
 
-        int ret = cmdService->sendDataToSign(in_hash, userPin);
-        if ( ret != ERR_NONE ){
-            MWLOG_ERR( logBuf, "main() - Error @ sendDataToSign()\n" );
+        CByteArray signatureInput(sha256SigPrefix, sizeof(sha256SigPrefix));
+        signatureInput.Append(hashByteArray);
+
+        int ret = cmdService->sendDataToSign(signatureInput.GetBytes(), userPin);
+        if ( ret != ERR_NONE ) {
+            MWLOG_ERR( logBuf, "CMDSignature - Error @ sendDataToSign()" );
             return ret;
         }
 
