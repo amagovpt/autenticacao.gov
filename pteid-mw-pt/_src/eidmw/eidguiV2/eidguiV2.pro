@@ -33,7 +33,7 @@ INCLUDEPATH += ../cardlayer
 INCLUDEPATH += ../eidlib
 INCLUDEPATH += ../_Builds
 
-
+unix:!macx: LIBS += -Wl,-rpath-link,../lib
 LIBS += -L../lib -lpteidlib -lssl -lcrypto -lpoppler-qt5 -lCMDServices
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
