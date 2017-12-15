@@ -1680,7 +1680,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="157"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="93"/>
         <source>STR_POPUP_CARD_REMOVED</source>
-        <translation>Cartão do Cidadão removido</translation>
+        <translation>Cartão de Cidadão removido</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentify.qml" line="112"/>
@@ -1692,7 +1692,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="167"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="103"/>
         <source>STR_POPUP_CARD_CHANGED</source>
-        <translation>Cartão do Cidadão inserido</translation>
+        <translation>Cartão de Cidadão inserido</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="144"/>
