@@ -47,6 +47,9 @@
     <ClInclude Include="InternalUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="eidlibcompat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="eidlib.h">

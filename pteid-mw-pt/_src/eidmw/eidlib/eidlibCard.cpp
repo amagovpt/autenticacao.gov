@@ -65,6 +65,10 @@
 
 #define BCD_DATE_LEN					4
 
+
+//Global variable used by the compatibility functions defined in eidlibcompat.h
+eIDMW::PTEID_ReaderContext* readerContext = NULL;
+
 namespace eIDMW
 {
 
@@ -837,10 +841,88 @@ void PTEID_XmlUserRequestedInfo::add(XMLUserData xmlUData){
 	customXml->add(xmlUData);
 }
 
+
+
+PTEIDSDK_API PTEID_ByteArray PTEID_CVC_Init(PTEID_ByteArray cvc_cert)
+{
+	unsigned char challenge[128];
+	long ret = ::PTEID_CVC_Init(cvc_cert.GetBytes(), cvc_cert.Size(), challenge, sizeof(challenge));
+
+	if (ret != PTEID_OK)
+	{
+		throw PTEID_Exception(ret);
+	}
+
+	return PTEID_ByteArray(challenge, sizeof(challenge));
+}
+
+PTEIDSDK_API PTEID_ByteArray PTEID_CVC_ReadFile(PTEID_ByteArray fileID)
+{
+	//Should be enough for any file on the card
+	unsigned char buffer[15000];
+	unsigned long outlen = sizeof(buffer);
+
+	long ret = ::PTEID_CVC_ReadFile(fileID.GetBytes(), fileID.Size(), buffer, &outlen);
+
+	if (ret != PTEID_OK)
+	{
+		throw PTEID_Exception(ret);
+	}
+	return PTEID_ByteArray(buffer, outlen);
+}
+
+PTEIDSDK_API void PTEID_CVC_Authenticate(PTEID_ByteArray signedChallenge)
+{
+	long ret = ::PTEID_CVC_Authenticate((unsigned char *)signedChallenge.GetBytes(), signedChallenge.Size());
+
+	if (ret != PTEID_OK)
+		throw PTEID_Exception(ret);
+}
+
+//This is needed so that the native PTEID_CVC_* methods can be called without calling PTEID_Init()
+PTEIDSDK_API void setCompatReaderContext(PTEID_ReaderContext *ctx)
+{
+	::readerContext = ctx;
+}
+
+
+
+} //Namespace eIDMW
+
 /*****************************************************************************************
 ----------------------------- pteid compatibility layer ---------------------------------
 *****************************************************************************************/
-PTEID_ReaderContext* readerContext = NULL;
+
+
+
+//The compatibility functions live outside the eIDMW namespace so we have to explicitly qualify these classes
+using eIDMW::SecurityContext;
+using eIDMW::PTEID_ReaderSet;
+using eIDMW::PTEID_ReaderContext;
+using eIDMW::PTEID_Exception;
+using eIDMW::PTEID_EIDCard;
+using eIDMW::PTEID_Config;
+using eIDMW::PTEID_ExCardBadType;
+using eIDMW::PTEID_ExNoReader;
+using eIDMW::PTEID_ExNoCardPresent;
+using eIDMW::PTEID_CardType;
+using eIDMW::PTEID_Pin;
+using eIDMW::PTEID_Pins;
+using eIDMW::PTEID_Address;
+using eIDMW::PTEID_PARAM_GENERAL_LANGUAGE;
+using eIDMW::PTEID_CARDTYPE_IAS07;
+using eIDMW::PTEID_CARDTYPE_IAS101;
+using eIDMW::PTEID_EId;
+using eIDMW::PTEID_Photo;
+using eIDMW::PTEID_ByteArray;
+using eIDMW::PTEID_Certificate;
+using eIDMW::PTEID_Certificates;
+using eIDMW::PTEID_CardVersionInfo;
+using eIDMW::CByteArray;
+using eIDMW::PTEID_PublicKey;
+using eIDMW::APL_Card;
+using eIDMW::CMWException;
+
 
 //This object should be initialized by calling PTEID_CVC_Init() and freed after a CVC_WriteFile() or CVC_ReadFile() operation
 //It will hold all the keys and other values necessary for Secure Messaging operations
@@ -879,22 +961,17 @@ PTEIDSDK_API long PTEID_Init(char *ReaderName){
 	return 0;
 }
 
+PTEIDSDK_API long PTEID_Exit(unsigned long ulMode) {
+	if (readerContext != NULL) {
+		readerContext->Release();
+		readerContext = NULL;
+	}
 
-//This is needed so that the native PTEID_CVC_* methods can be called without calling PTEID_Init()
-PTEIDSDK_API void setCompatReaderContext(PTEID_ReaderContext *ctx)
-{
-	readerContext = ctx;
-}
-
-PTEIDSDK_API long PTEID_Exit(unsigned long ulMode){
-	readerContext->Release();
 	PTEID_ReleaseSDK();
-	readerContext = NULL;
-
 	return 0;
 }
 
-PTEIDSDK_API tCompCardType PTEID_GetCardType(){
+PTEIDSDK_API tCompCardType PTEID_GetCardType() {
 
 	if (readerContext!=NULL){
 		PTEID_CardType type = readerContext->getCardType();
@@ -1519,41 +1596,6 @@ PTEIDSDK_API long PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen,
 
 }
 
-PTEIDSDK_API PTEID_ByteArray PTEID_CVC_Init(PTEID_ByteArray cvc_cert)
-{
-	unsigned char challenge[128];
-	long ret = PTEID_CVC_Init(cvc_cert.GetBytes(), cvc_cert.Size(), challenge, sizeof(challenge));
-
-	if (ret != PTEID_OK)
-	{
-		throw PTEID_Exception(ret);
-	}
-
-	return PTEID_ByteArray(challenge, sizeof(challenge));
-}
-
-PTEIDSDK_API PTEID_ByteArray PTEID_CVC_ReadFile(PTEID_ByteArray fileID)
-{
-	//Should be enough for any file on the card
-	unsigned char buffer[15000];
-	unsigned long outlen = sizeof(buffer);
-
-	long ret = PTEID_CVC_ReadFile(fileID.GetBytes(), fileID.Size(), buffer, &outlen);
-
-	if (ret != PTEID_OK)
-	{
-		throw PTEID_Exception(ret);
-	}
-	return PTEID_ByteArray(buffer, outlen);
-}
-
-PTEIDSDK_API void PTEID_CVC_Authenticate(PTEID_ByteArray signedChallenge)
-{
-	long ret = PTEID_CVC_Authenticate((unsigned char *)signedChallenge.GetBytes(), signedChallenge.Size());
-
-	if (ret != PTEID_OK)
-		throw PTEID_Exception(ret);
-}
 
 PTEIDSDK_API long PTEID_CVC_Authenticate(unsigned char *pucSignedChallenge, int iSignedChallengeLen)
 {
@@ -1682,6 +1724,3 @@ PTEIDSDK_API void PTEID_CAP_CancelCapPinChange(){
 	return;
 }
 
-
-
-}
