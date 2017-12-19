@@ -902,7 +902,6 @@ using eIDMW::PTEID_ReaderContext;
 using eIDMW::PTEID_Exception;
 using eIDMW::PTEID_EIDCard;
 using eIDMW::PTEID_Config;
-using eIDMW::PTEID_ExCardBadType;
 using eIDMW::PTEID_ExNoReader;
 using eIDMW::PTEID_ExNoCardPresent;
 using eIDMW::PTEID_CardType;

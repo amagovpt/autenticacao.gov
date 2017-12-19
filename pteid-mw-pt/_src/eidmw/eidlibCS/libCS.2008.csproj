@@ -120,9 +120,6 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExBadUsage.cs">
       <Link>GeneratedFiles\PTEID_ExBadUsage.cs</Link>
     </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExCardBadType.cs">
-      <Link>GeneratedFiles\PTEID_ExCardBadType.cs</Link>
-    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExCardChanged.cs">
       <Link>GeneratedFiles\PTEID_ExCardChanged.cs</Link>
     </Compile>
@@ -158,9 +155,6 @@
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExParamRange.cs">
       <Link>GeneratedFiles\PTEID_ExParamRange.cs</Link>
-    </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExReaderSetChanged.cs">
-      <Link>GeneratedFiles\PTEID_ExReaderSetChanged.cs</Link>
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ExReleaseNeeded.cs">
       <Link>GeneratedFiles\PTEID_ExReleaseNeeded.cs</Link>
