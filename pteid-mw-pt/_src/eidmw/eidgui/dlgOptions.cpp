@@ -156,21 +156,21 @@ void dlgOptions::checkBox_proxy_EnableGroup(bool checked){
 
 	ui.label_proxyPort->setEnabled(checked);
 	ui.spinBox->setEnabled(checked);
-}/* checkBox_proxy_EnableGroup() */
+}
 
 //Enable or disable the proxy-related elements when the main checkbox is used
 void dlgOptions::on_checkBox_proxy_toggled(bool checked)
 {
 	if ( !checked ){
 		ui.lineEdit_proxyHost->setText("");
-	}/* if ( !checked ) */
+	}
 
 	checkBox_proxy_EnableGroup( checked );
     ui.checkBox_proxyAuth->setEnabled(checked);
 
     if ( ( checked && getProxyAuth() ) || (!checked) ){
         checkBox_proxyAuth_EnableGroup( checked );
-    }/* if (...) */
+    }
 }
 
 void dlgOptions::checkBox_proxyAuth_EnableGroup(bool checked){
@@ -179,7 +179,7 @@ void dlgOptions::checkBox_proxyAuth_EnableGroup(bool checked){
 
 	ui.lineEdit_proxyPwd->setEnabled(checked);
     ui.label_proxyPwd->setEnabled(checked);
-}/* checkBox_proxyAuth_EnableGroup() */
+}
 
 void dlgOptions::on_checkBox_proxyAuth_toggled(bool checked)
 {
@@ -189,7 +189,7 @@ void dlgOptions::on_checkBox_proxyAuth_toggled(bool checked)
 	}
 
     checkBox_proxyAuth_EnableGroup( checked );
-}/* on_checkBox_proxyAuth_toggled() */
+}
 
 void dlgOptions::on_okButton_clicked()
 {
@@ -245,7 +245,7 @@ void dlgOptions::on_okButton_clicked()
 
 	}
 
-	this->close();
+	this->done(QDialog::Accepted);
 }
 
 void dlgOptions::on_chbAutoCardReading_toggled( bool bChecked )

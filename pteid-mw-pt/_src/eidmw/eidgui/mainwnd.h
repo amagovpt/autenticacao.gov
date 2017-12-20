@@ -28,6 +28,7 @@
 #include <QPrinter>
 #include <QMessageBox>
 #include <QFutureWatcher>
+#include <QNetworkReply>
 #include <QProgressDialog>
 #include <QSystemTrayIcon>
 
@@ -220,7 +221,7 @@ private slots:
 	void handleFutureCertStatus();
 };
 
-enum LoadingErrorCode{ LOADING_OK, LOADING_ERROR_SOD, LOADING_ERROR_GENERIC };
+enum LoadingErrorCode{ LOADING_OK, LOADING_ERROR_SOD, LOADING_ERROR_SOD_OUTDATED, LOADING_ERROR_GENERIC };
 
 /* Helper Class for Threaded Data Loading */
 class CardDataLoader
@@ -230,7 +231,9 @@ private:
 	PTEID_EIDCard &card;
 	QString &readerName;
 	MainWnd *mwnd;
+	QNetworkReply *reply;
 
+	bool isUpdateAvailable(QString const &remote_data);
 
 public:
 	CardDataLoader(CardInformation& info, PTEID_EIDCard& Card, QString& ReaderName, MainWnd *mw = NULL):
@@ -395,6 +398,7 @@ private:
 	void loadCardDataAddress ();
 	bool loadCardDataPersoData ();
 	void loadCardDataCertificates ();
+	void applyProxyConfiguration();
 	void setup_addressChange_progress_bar();
 	void doChangeAddress(const char *process, const char *secret_code);
 

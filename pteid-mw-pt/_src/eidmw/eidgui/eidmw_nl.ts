@@ -96,6 +96,15 @@
         <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail cartaodecidadao@irn.mj.pt.</translation>
     </message>
     <message>
+        <source>If this error persists, please contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail cartaodecidadao@irn.mj.pt.</source>
+        <translation>Caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail cartaodecidadao@irn.mj.pt.</translation>
+    </message>
+
+    <message>
+        <source>Please update your software at </source>
+        <translation>Por favor atualize o software em </translation>
+    </message>
+    <message>
         <source>Changing Address in card...</source>
         <translation>Mudando a morada no Cartão...</translation>
     </message>

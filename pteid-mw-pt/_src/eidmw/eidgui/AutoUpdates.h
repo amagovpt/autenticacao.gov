@@ -41,6 +41,15 @@ class QPushButton;
 class QAuthenticator;
 class QNetworkReply;
 
+struct PteidVersion
+{
+	int major;
+	int minor;
+	int release;
+};
+
+int compareVersions(PteidVersion v1, PteidVersion v2);
+
 class AutoUpdates : public QDialog
 {
 	Q_OBJECT
@@ -73,7 +82,6 @@ private:
     	QProgressDialog *progressDialog;
 
 	QUrl url;
-	QNetworkProxy proxy;
 	QNetworkAccessManager qnam;
 	QNetworkReply *reply;
 	QHBoxLayout *topLayout;
