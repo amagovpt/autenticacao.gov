@@ -4,7 +4,7 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <?include ..\..\..\svn_revision.wxs ?>
 
-  <?define var.OfficialProductVersion = 2.4.9?>
+  <?define var.OfficialProductVersion = 2.4.10?>
   <?define var.ProductVersion = 2.4.$(var.RevisionNumber)?>
   <?define var.FullProductVersion =$(var.OfficialProductVersion).$(var.RevisionNumber)?>
 
@@ -28,11 +28,10 @@
              InstallerVersion="405"
              Keywords="Portugal e-ID Middleware Installer"
              Platform="x86"
-             Comments="Portuguese eID Middleware 2.4.9 SVN Revision $(var.RevisionNumber)"
+             Comments="Portuguese eID Middleware 2.4.10 SVN Revision $(var.RevisionNumber)"
              Manufacturer="Portuguese Government"
              Compressed="yes"
-             InstallPrivileges="elevated"
-    />
+             InstallPrivileges="elevated" />
 
     <MajorUpgrade DowngradeErrorMessage="!(loc.NoDowngrade)"/>
 
@@ -206,7 +205,7 @@
 
     <DirectoryRef Id="SDK">
       <Component Id="Cpp_SDK_component" Guid="{CDA14D17-04E8-4F4B-BEE1-771A0DDC3578}">
-        <File Id="pteidlibCpp.lib" KeyPath="yes" Name="pteidlibCpp.lib" Source="$(var.PTEID_BUILD_FOLDER_X86)\pteidlibCpp.lib"/>
+        <File Id="pteidlib.lib" KeyPath="yes" Name="pteidlib.lib" Source="$(var.PTEID_BUILD_FOLDER_X86)\pteidlib.lib"/>
         <File Id="eidlib.h" Name="eidlib.h" Source="..\..\..\eidlib\eidlib.h"/>
         <File Id="eidlibdefines.h" Name="eidlibdefines.h" Source="..\..\..\eidlib\eidlibdefines.h"/>
         <File Id="eidlibException.h" Name="eidlibException.h" Source="..\..\..\eidlib\eidlibException.h"/>
@@ -318,7 +317,6 @@
 
       <Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidgui.exe" KeyPath="yes" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCpp.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)poppler-qt5.dll" />
         <!-- SCAP v2 has a dependency on pteidlibCpp.dll so its practical to include it here -->
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)\ScapSignature.exe" />
@@ -377,6 +375,7 @@
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCS_Wrapper.dll"/>
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlib.dll" />
       </Component>
 
       <Component Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44D4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">

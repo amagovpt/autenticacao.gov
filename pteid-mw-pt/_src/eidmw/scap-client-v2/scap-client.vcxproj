@@ -156,7 +156,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type=%27win32%27 name=%27Microsoft.Windows.Common-Controls%27 version=%276.0.0.0%27 publicKeyToken=%276595b64144ccf1df%27 language=%27*%27 processorArchitecture=%27*%27" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>$(PTEID_DIR_QT_4)\lib\qtmaind.lib;pteidlibCpp.lib;$(PTEID_DIR_QT_4)\lib\QtGuid4.lib;$(PTEID_DIR_QT_4)\lib\QtCored4.lib;ssleay32.lib;libeay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(PTEID_DIR_QT_4)\lib\qtmaind.lib;pteidlib.lib;$(PTEID_DIR_QT_4)\lib\QtGuid4.lib;$(PTEID_DIR_QT_4)\lib\QtCored4.lib;ssleay32.lib;libeay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)ScapSignature.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PTEID_DIR_QT_4)\lib;C:\Users\agrr\openssl-1.0.2j-WIN64\lib;C:\Users\agrr\pteid-mw-pt\_src\eidmw\_Binaries35\x64\VC9\Release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -198,11 +198,11 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type=%27win32%27 name=%27Microsoft.Windows.Common-Controls%27 version=%276.0.0.0%27 publicKeyToken=%276595b64144ccf1df%27 language=%27*%27 processorArchitecture=%27*%27" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>qtmain.lib;pteidlibCpp.lib;Qt5Gui.lib;Qt5Core.lib;Qt5Widgets.lib;Qt5Concurrent.lib;libeay32.lib;ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmain.lib;pteidlib.lib;Qt5Gui.lib;Qt5Core.lib;Qt5Widgets.lib;Qt5Concurrent.lib;libeay32.lib;ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\ScapSignature.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PTEID_DIR_QT_4)\lib;$(PTEID_DIR_OPENSSL_098)\lib;..\_Binaries35\Win32\VC9\Release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile />
       <SubSystem>Windows</SubSystem>
       <LinkTimeCodeGeneration />
@@ -233,13 +233,14 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat />
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_NO_DEBUG;QT_GUI_LIB;QT_CORE_LIB;QT_HAVE_MMX;QT_HAVE_3DNOW;QT_HAVE_SSE;QT_HAVE_MMXEXT;QT_HAVE_SSE2;QT_THREAD_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type=%27win32%27 name=%27Microsoft.Windows.Common-Controls%27 version=%276.0.0.0%27 publicKeyToken=%276595b64144ccf1df%27 language=%27*%27 processorArchitecture=%27*%27" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>qtmain.lib;pteidlibCpp.lib;Qt5Gui.lib;Qt5Core.lib;Qt5Widgets.lib;Qt5Concurrent.lib;libeay32.lib;ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmain.lib;pteidlib.lib;Qt5Gui.lib;Qt5Core.lib;Qt5Widgets.lib;Qt5Concurrent.lib;libeay32.lib;ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\ScapSignature.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PTEID_DIR_OPENSSL_098_X64)\lib;$(PTEID_DIR_QT_4_X64)\lib;..\_Binaries35\x64\VC9\Release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
