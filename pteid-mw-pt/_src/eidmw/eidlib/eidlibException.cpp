@@ -274,4 +274,31 @@ PTEID_ExSOD::PTEID_ExSOD(long lError):PTEID_Exception(lError)
 PTEID_ExSOD::~PTEID_ExSOD()
 {
 }
+
+//Deprecated Classes - we leave them here just to support old pteidlibj versions
+
+/*****************************************************************************************
+----------------------------------------- PTEID_ExCardBadType --------------------------------------
+-*****************************************************************************************/
+PTEID_ExCardBadType::PTEID_ExCardBadType() :PTEID_Exception(-1)
+{
+}
+
+PTEID_ExCardBadType::~PTEID_ExCardBadType()
+{
+}
+
+
+/*****************************************************************************************
+----------------------------------------- PTEID_ExReaderSetChanged --------------------------------------
+-*****************************************************************************************/
+PTEID_ExReaderSetChanged::PTEID_ExReaderSetChanged() :PTEID_Exception(-1)
+{
+}
+
+PTEID_ExReaderSetChanged::~PTEID_ExReaderSetChanged()
+{
+}
+
+
 }

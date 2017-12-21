@@ -260,6 +260,23 @@ public:
 	PTEIDSDK_API PTEID_ExSOD(long lError);				/**< Constructor */
 	PTEIDSDK_API virtual ~PTEID_ExSOD();				/**< Destructor */
 };
+
+//DEPRECATED EXCEPTION Classes: not currently used
+class PTEID_ExCardBadType : public PTEID_Exception
+{
+	public:
+		PTEIDSDK_API PTEID_ExCardBadType();				/**< Constructor */
+		PTEIDSDK_API virtual ~PTEID_ExCardBadType();		/**< Destructor */
+};
+
+class PTEID_ExReaderSetChanged : public PTEID_Exception
+{
+	public:
+		PTEIDSDK_API PTEID_ExReaderSetChanged();				/**< Constructor */
+		PTEIDSDK_API virtual ~PTEID_ExReaderSetChanged();		/**< Destructor */
+};
+
+
 }
 
 #endif //__EIDLIB_EXCEPTION_H__
