@@ -23,7 +23,7 @@
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6718" Source="..\..\..\eidguiV2\eidmw_nl.qm" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6719" Source="..\..\..\eidguiV2\eidmw_en.qm" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A676D" Source="$(var.QMLDIR)\cmdServices.dll" />
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A6789" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCpp.dll" />
+                    <File Id="fil532B63275F24DCA11F229D2F2A4A6789" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlib.dll" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6818" Source="$(var.QMLDIR)\Qt5Xml.dll" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6919" Source="$(var.QMLDIR)\Qt5PrintSupport.dll" />
                 </Component>

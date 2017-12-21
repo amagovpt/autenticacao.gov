@@ -5,7 +5,7 @@
 	<?include ..\..\..\svn_revision.wxs ?>
 
 	<?define var.ProductVersion = 3.0.$(var.RevisionNumber)?>
-  <?define var.OfficialProductVersion = 3.0.6 ?>
+  <?define var.OfficialProductVersion = 3.0.7 ?>
 
 	<?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
 	<?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F20$(var.RevisionNumber)}?>
@@ -289,6 +289,7 @@
 
 				<Component Win64="no" Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
+					  <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlib.dll" KeyPath="yes" />
                 <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll"/>
                 <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCS_Wrapper.dll" />
                 <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
@@ -335,10 +336,11 @@
 				<Component Id="Runtime35_64" Guid="{8FE1C7FB-F06A-40db-8454-88D9E8BDD626}" SharedDllRefCount="yes" Win64="yes">
 			          <File Id="pteidapplayer_64.dll"  Source="$(var.PTEID_BUILD_FOLDER_X64)pteidapplayer.dll" KeyPath="yes" />
 			          <File Id="pteidcardlayer_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcardlayer.dll" />
-                <File Id="pteidlibj_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibj.dll"/>
-                <File Id="libeay_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)libeay32.dll" />
-                <File Id="ssleay_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)ssleay32.dll" />
-                <File Id="pteidlibCS_Wrapper_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" />
+					  <File Id="pteidlib_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlib.dll"/>
+					  <File Id="pteidlibj_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibj.dll"/>
+                      <File Id="libeay_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)libeay32.dll" />
+                      <File Id="ssleay_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)ssleay32.dll" />
+                      <File Id="pteidlibCS_Wrapper_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" />
 			          <File Id="pteidcommon_64.dll"    Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
 			          <File Id="pteidDlgsWin32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
 				</Component>
@@ -377,7 +379,7 @@
 
     <DirectoryRef Id="SDK">
       <Component Id="Cpp_SDK_component" Guid="{CDA14D17-04E8-4F4B-BEE1-771A0DDC3578}">
-        <File Id="pteidlibCpp.lib" KeyPath="yes" Name="pteidlibCpp.lib" Source="$(var.PTEID_BUILD_FOLDER_X64)\pteidlibCpp.lib"/>
+        <File Id="pteidlib.lib" KeyPath="yes" Name="pteidlib.lib" Source="$(var.PTEID_BUILD_FOLDER_X64)\pteidlib.lib"/>
         <File Id="eidlib.h" Name="eidlib.h" Source="..\..\..\eidlib\eidlib.h"/>
         <File Id="eidlibdefines.h" Name="eidlibdefines.h" Source="..\..\..\eidlib\eidlibdefines.h"/>
         <File Id="eidlibException.h" Name="eidlibException.h" Source="..\..\..\eidlib\eidlibException.h"/>
