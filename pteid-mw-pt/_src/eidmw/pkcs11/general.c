@@ -228,90 +228,89 @@ CK_RV C_GetSlotList(CK_BBOOL       tokenPresent,  /* only slots with token prese
                     CK_ULONG_PTR   pulCount)      /* receives the number of slots */
 {
 
-P11_SLOT *pSlot;
-CK_RV ret = CKR_OK;
-int h;
-CK_ULONG c = 0;
-static int l=0;
+   P11_SLOT *pSlot;
+   CK_RV ret = CKR_OK;
+   int h;
+   CK_ULONG c = 0;
+   static int l=0;
 
-//printf("==== WAS I CALLED?\n");
 	log_trace(WHERE, "I: enter");
-if (!g_init)
-{
-	log_trace(WHERE, "I: CKR_CRYPTOKI_NOT_INITIALIZED");
-   return (CKR_CRYPTOKI_NOT_INITIALIZED);
-}
-ret = p11_lock();
-log_trace(WHERE, "I: p11_lock() acquiered");
-if (ret != CKR_OK)
-{
-	log_trace(WHERE, "I: leave, p11_lock failed with %i",ret);
-   return (ret);
-}
-
-if (++l<LOG_MAX_REC)
-   log_trace(WHERE, "S: C_GetSlotList()");
-
-if (pulCount == NULL_PTR)
+   if (!g_init)
    {
-   ret = CKR_ARGUMENTS_BAD;
-   goto cleanup;
+   	log_trace(WHERE, "I: CKR_CRYPTOKI_NOT_INITIALIZED");
+      return (CKR_CRYPTOKI_NOT_INITIALIZED);
+   }
+   ret = p11_lock();
+   log_trace(WHERE, "I: p11_lock() acquired");
+   if (ret != CKR_OK)
+   {
+   	log_trace(WHERE, "I: leave, p11_lock failed with %i",ret);
+      return (ret);
    }
 
-//init slots allready done
+   if (++l<LOG_MAX_REC)
+      log_trace(WHERE, "S: C_GetSlotList()");
+
+   if (pulCount == NULL_PTR)
+   {
+      ret = CKR_ARGUMENTS_BAD;
+      goto cleanup;
+   }
+
+//init slots already done
 //update info on tokens in slot, could be removed if thread keeps track of these token states
 //BUG in Adobe Acrobat reader: adobe asks for slots with pSlotList = NULL, so only nr of slots will be returned. This is ok.
 //a second time Adobe calls this, pSlotList still is NULL, so the array with SlotIDs cannot be returned, again, nr of slots is returned.
 //Adobe just assumes that the first slot has ID=0 !!! and uses this ID=0 for all further actions.
 //to overcome this problem, we start our SlotIDs from 0 and not 1 !!!
-log_trace(WHERE, "I: h=0");
-for (h=0; h < p11_get_nreaders(); h++)
+   log_trace(WHERE, "I: h=0");
+   for (h=0; h < p11_get_nreaders(); h++)
    {
-	   log_trace(WHERE, "I: h=%i",h);
-   pSlot = p11_get_slot(h);
+   	   log_trace(WHERE, "I: h=%i",h);
+      pSlot = p11_get_slot(h);
 
-   if (l < LOG_MAX_REC)
-      log_trace(WHERE, "I: slot[%d]: %s", h, pSlot->name);
+      if (l < LOG_MAX_REC)
+         log_trace(WHERE, "I: slot[%d]: %s", h, pSlot->name);
 
-   if (tokenPresent == CK_TRUE)
-      {
-	//printf("... go cal... \n");
-      if (cal_token_present(h))
+      if (tokenPresent == CK_TRUE)
          {
-		//printf("cal_token_present?\n");
-			 log_trace(WHERE, "I: cal_token_present");
+   	//printf("... go cal... \n");
+         if (cal_token_present(h))
+            {
+   		//printf("cal_token_present?\n");
+   			 log_trace(WHERE, "I: cal_token_present");
+            c++;
+            if ((pSlotList != NULL_PTR) && (c <= *pulCount) )
+               pSlotList[c-1] =  h;
+            }
+   	//printf("why???\n");
+         continue;
+         }
+      else
+         {
+         //get all slots
          c++;
          if ((pSlotList != NULL_PTR) && (c <= *pulCount) )
+            {
             pSlotList[c-1] =  h;
+            }
+         continue;
          }
-	//printf("why???\n");
-      continue;
-      }
-   else
-      {
-      //get all slots
-      c++;
-      if ((pSlotList != NULL_PTR) && (c <= *pulCount) )
-         {
-         pSlotList[c-1] =  h;
-         }
-      continue;
-      }
-   } //end for
+      } //end for
 
-//if more slots are found than can be returned in slotlist, return buffer too smal
-if ((c > *pulCount) && (pSlotList != NULL_PTR) )
-   ret = CKR_BUFFER_TOO_SMALL;
+   //if more slots are found than can be returned in slotlist, return buffer too smal
+   if ((c > *pulCount) && (pSlotList != NULL_PTR) )
+      ret = CKR_BUFFER_TOO_SMALL;
 
-//number of slots should always be returned.
-*pulCount = c;
-//printf("There are %d slots\n",c);
-cleanup:
-log_trace(WHERE, "I: p11_unlock()");
-   p11_unlock();
-   log_trace(WHERE, "I: leave, ret = %i",ret);
-//printf("... bye... bye\n");
-return ret;
+   //number of slots should always be returned.
+   *pulCount = c;
+   //printf("There are %d slots\n",c);
+   cleanup:
+      log_trace(WHERE, "I: p11_unlock()");
+      p11_unlock();
+      log_trace(WHERE, "I: leave, ret = %i",ret);
+   //printf("... bye... bye\n");
+   return ret;
 }
 #undef WHERE
 

@@ -26,7 +26,6 @@
 #include "cal.h"
 #include "phash.h"
 
-
 #define WHERE "C_DigestInit()"
 CK_RV C_DigestInit(CK_SESSION_HANDLE hSession,   /* the session's handle */
                    CK_MECHANISM_PTR  pMechanism) /* the digesting mechanism */
@@ -335,7 +334,7 @@ CK_RV C_SignInit(CK_SESSION_HANDLE hSession,    /* the session's handle */
    if (ret != CKR_OK)
       return ((CK_RV)ret);
 
-   log_trace(WHERE, "S: C_SignInit()");
+   log_trace(WHERE, "S: C_SignInit() called with mechanism %d", pMechanism->mechanism);
 
    ret = p11_get_session(hSession, &pSession);
    if (ret)
@@ -684,48 +683,64 @@ CK_RV C_SignFinal(CK_SESSION_HANDLE hSession,        /* the session's handle */
 
    ret = p11_get_session(hSession, &pSession);
    if (ret)
-      {
+   {
       log_trace(WHERE, "E: Invalid session handle (%d)", hSession);      
       goto cleanup;
-      }
+   }
 
    //is there an active search operation for this session
    if (pSession->Operation[P11_OPERATION_SIGN].active == 0)
-      {
+   {
       log_trace(WHERE, "E: Session %d: no sign operation initialized", hSession);
       ret = CKR_OPERATION_NOT_INITIALIZED;
       goto cleanup;
-      }
+   }
 
    /* get sign operation */
    if((pSignData = pSession->Operation[P11_OPERATION_SIGN].pData) == NULL)
-      {
+   {
       log_trace( WHERE, "E: no sign operation initialized");
       ret = CKR_OPERATION_NOT_INITIALIZED;
       goto cleanup;
-      }
+   }
 
-   
+   /* Specific call to get the allocation size needed for the signature: 
+      described in section 5.2 of the PKCS#11 spec
+   */
+   if(pSignature == NULL)
+   {
+      *pulSignatureLen = pSignData->l_sign;
+      ret = CKR_OK;
+      goto cleanup;
+   }
+
+   if(*pulSignatureLen < pSignData->l_sign)
+   {
+      *pulSignatureLen = pSignData->l_sign;
+      ret = CKR_BUFFER_TOO_SMALL;
+      goto cleanup;
+   }   
+
    if (pSignData->phash)
-      {
+   {
       /* get hash */
       pDigest = (unsigned char*) malloc(pSignData->l_hash);
       if (pDigest == NULL)
-         {
+      {
          ret = CKR_HOST_MEMORY;
          goto cleanup;
-         }
+      }
       
       ret = hash_final(pSignData->phash, pDigest, &ulDigestLen);
       if(ret)
-         {
+      {
          log_trace(WHERE, "E: hash_final failed()");
          ret = CKR_FUNCTION_FAILED;
          goto cleanup;
-         }
       }
+   }
    else
-      {
+   {
       /* no hash: get buffer to sign directly */
       pDigest = (unsigned char*) malloc(pSignData->lbuf);
       if (pDigest == NULL)
@@ -735,7 +750,7 @@ CK_RV C_SignFinal(CK_SESSION_HANDLE hSession,        /* the session's handle */
          }
       memcpy(pDigest, pSignData->pbuf, pSignData->lbuf);
       ulDigestLen = pSignData->lbuf;
-      }
+   }
 
    ret = cal_sign(pSession->hslot, pSignData, pDigest, ulDigestLen, pSignature, pulSignatureLen);
    if (ret != CKR_OK)
