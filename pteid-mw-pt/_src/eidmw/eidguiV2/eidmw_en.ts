@@ -1749,7 +1749,7 @@
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="60"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="65"/>
         <source>STR_POPUP_FILE_OUTPUT</source>
-        <translation>Choose the destination file</translation>
+        <translation>Choose the folder and the name of the destination file</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="233"/>

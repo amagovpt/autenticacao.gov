@@ -1255,7 +1255,12 @@ PageServicesSignAdvancedForm {
                     }
                 }
                 else {
-                    propertyFileDialogOutput.filename = "xadessign.ccsigned"
+                    var outputFile = propertyListViewFiles.model.get(0).fileUrl
+                    //Check if filename has extension and remove it.
+                    if( outputFile.lastIndexOf('.') > 0)
+                        var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
+
+                    propertyFileDialogOutput.filename = outputFile + "_xadessign.ccsigned"
                     propertyFileDialogOutput.open()
                 }
             }else{
@@ -1266,11 +1271,21 @@ PageServicesSignAdvancedForm {
                             qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
                     mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
                 }else{
+                    var outputFile = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
+                    //Check if filename has extension and remove it.
+                    if( outputFile.lastIndexOf('.') > 0)
+                        var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
+                    //Check if filename has file name and remove it.
+                    if( outputFile.lastIndexOf('/') > 0)
+                        var outputFile = outputFile.substring(0, outputFile.lastIndexOf('/'))
+
                     if(propertyRadioButtonPADES.checked){
                         propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
+                        propertyFileDialogBatchOutput.folder = "file://" + outputFile
                         propertyFileDialogBatchOutput.open()
                     }else{
-                        propertyFileDialogOutput.filename = "xadessign.ccsigned"
+
+                        propertyFileDialogOutput.filename = outputFile + "/" + "xadessign.ccsigned"
                         propertyFileDialogOutput.open()
                     }
                 }

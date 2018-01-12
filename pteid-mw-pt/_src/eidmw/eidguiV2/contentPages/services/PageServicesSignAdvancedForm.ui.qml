@@ -105,7 +105,6 @@ Item {
         }
         FileDialog {
             id: fileDialogBatchOutput
-            folder: shortcuts.home
             selectFolder: true
         }
 
