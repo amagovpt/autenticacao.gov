@@ -662,62 +662,18 @@ Item {
             anchors.left: rectMainRight.left
 
             Item {
-                id: rectSignOptions
-                width: parent.width
-                height: Constants.HEIGHT_BOTTOM_COMPONENT
-                anchors.left: parent.left
-                visible: rectMainRight.visible
-                Item {
-                    id: itemCheckSignShow
-                    width: parent.width * 0.6
-                    height: parent.height
-                    anchors.top: parent.top
-                    Switch {
-                        id: checkSignShow
-                        text: qsTranslate("PageServicesSign",
-                                          "STR_SIGN_VISIBLE")
-                        height: Constants.HEIGHT_SWITCH_COMPONENT
-                        font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.capitalization: Font.MixedCase
-                        enabled: fileLoaded && propertyRadioButtonPADES.checked
-                        checked: true
-                    }
-                }
-            }
-
-            Item {
                 id: rectSignPageOptions
-                width: parent.width
+                width: parent.width * 0.60
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
-                anchors.left: parent.left
-                anchors.top: rectSignOptions.bottom
                 visible: rectMainRight.visible
-
-                Item {
-                    id: itemCheckSignReduced
-                    width: parent.width * 0.3
-                    height: parent.height
-                    anchors.top: parent.top
-
-                    Switch {
-                        id: checkSignReduced
-                        text: qsTranslate("PageServicesSign",
-                                          "STR_SIGN_REDUCED")
-                        height: Constants.HEIGHT_SWITCH_COMPONENT
-                        font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.capitalization: Font.MixedCase
-                        enabled: fileLoaded && propertyRadioButtonPADES.checked
-                    }
-                }
+                anchors.horizontalCenter: parent.horizontalCenter
 
                 Item {
                     id: itemCheckPage
-                    width: parent.width * 0.4
+                    width: 150
                     height: parent.height
                     anchors.top: parent.top
-                    anchors.left: itemCheckSignReduced.right
+
                     Text {
                         id: pageText
                         x: 11
@@ -739,7 +695,7 @@ Item {
                         to: 10000
                         value: 1
                         anchors.left: pageText.right
-                        width: parent.width - pageText.width - pageText.x
+                        width: 100
                         height: parent.height
                         anchors.leftMargin: 0
                         enabled: fileLoaded && propertyRadioButtonPADES.checked
@@ -769,7 +725,7 @@ Item {
                             y: Constants.SIZE_ARROW_OFFSET
                             height: parent.height
                             implicitWidth: 20
-                            implicitHeight: Constants.HEIGHT_BOTTOM_COMPONENT
+                            implicitHeight: parent.height
 
                             Text {
                                 text: ">"
@@ -830,11 +786,55 @@ Item {
             }
 
             Item {
+                id: rectSignOptions
+                width: parent.width * 0.60
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.top: rectSignPageOptions.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: rectMainRight.visible
+                Item {
+                    id: itemCheckSignShow
+                    width: parent.width * 0.5
+                    height: parent.height
+                    anchors.top: parent.top
+                    Switch {
+                        id: checkSignShow
+                        text: qsTranslate("PageServicesSign",
+                                          "STR_SIGN_VISIBLE")
+                        height: Constants.HEIGHT_SWITCH_COMPONENT
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        enabled: fileLoaded && propertyRadioButtonPADES.checked
+                        checked: true
+                    }
+                }
+                Item {
+                    id: itemCheckSignReduced
+                    width: parent.width * 0.5
+                    height: parent.height
+                    anchors.top: parent.top
+                    anchors.left: itemCheckSignShow.right
+
+                    Switch {
+                        id: checkSignReduced
+                        text: qsTranslate("PageServicesSign",
+                                          "STR_SIGN_REDUCED")
+                        height: Constants.HEIGHT_SWITCH_COMPONENT
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        enabled: fileLoaded && propertyRadioButtonPADES.checked
+                    }
+                }
+            }
+
+            Item {
                 id: rectSign
                 width: parent.width
                 height: Constants.HEIGHT_SIGN_BOTTOM_COMPONENT
                 anchors.left: parent.left
-                anchors.top: rectSignPageOptions.bottom
+                anchors.top: rectSignOptions.bottom
 
                 Button {
                     id: button_signCC
