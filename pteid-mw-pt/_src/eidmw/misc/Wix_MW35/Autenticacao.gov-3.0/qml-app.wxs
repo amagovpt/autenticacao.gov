@@ -28,7 +28,7 @@
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6919" Source="$(var.QMLDIR)\Qt5PrintSupport.dll" />
                 </Component>
               <Component Id="cmp7F40CCD4FD162222E744B7B74F9DF5A3" Guid="{F64668D0-3ACB-4E29-AB95-742B18B6AF3D}">
-                <File Id="fil3CBCB4A9EED52796624FC6C8977CC71C" KeyPath="yes" Source="$(var.QMLDIR)\poppler-qt5.dll" />
+                <File Id="fil3CBCB4A9EED52796624FC6C8977CC71C" KeyPath="yes" Source="$(env.PTEID_POPPLER_QT5)\poppler-qt5-x64\poppler-qt5.dll" />
               </Component>
                 <Component Id="cmpD90C57D3866413E9483172896BD5F8CE" Guid="{CF2F9F8B-6CCA-4D43-A9E0-98B062B51368}">
                     <File Id="fil6CDFD7BC016B64DBD3E26297A346DCEF" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Core.dll" />

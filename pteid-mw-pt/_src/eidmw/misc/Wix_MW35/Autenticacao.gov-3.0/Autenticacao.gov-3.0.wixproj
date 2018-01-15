@@ -17,12 +17,37 @@
     <DefineConstants>Debug</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <WixExtension Include="WixDifxAppExtension">
+      <HintPath>$(WixExtDir)\WixDifxAppExtension.dll</HintPath>
+      <Name>WixDifxAppExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <WixLibrary Include="difxapp_x86">
+      <HintPath>C:\Program Files (x86)\Windows Installer XML v3.5\bin\difxapp_x86.wixlib</HintPath>
+      <Name>difxapp_x86</Name>
+    </WixLibrary>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Product-3.0.wxs" />
-	<Compile Include="qml-app_x86.wxs" />
+    <Compile Include="qml-app_x86.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\MW35Wix\Strings-pt.wxl">
+      <Link>Strings-pt.wxl</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

@@ -54,7 +54,7 @@
                 <File Id="fil54F2A8534F90BD016136AAAC44C0161D" KeyPath="yes" Source="$(var.QMLDIR)\opengl32sw.dll" />
             </Component>
             <Component Id="cmp7F40CCD4FD162222E744B7B74F9DF5A3" Directory="EIDGUIV2DIR" Guid="{F64668D0-3ACB-4E29-AB95-742B18B6AF3D}">
-                <File Id="fil3CBCB4A9EED52796624FC6C8977CC71C" KeyPath="yes" Source="$(var.QMLDIR)\poppler-qt5.dll" />
+                <File Id="fil3CBCB4A9EED52796624FC6C8977CC71C" KeyPath="yes" Source="$(env.PTEID_POPPLER_QT5)\poppler-qt5-win32\poppler-qt5.dll" />
             </Component>
             <Component Id="cmpF7D4B937B6CC948CB191AA956CEEE7B0" Directory="EIDGUIV2DIR" Guid="{7502708F-3CCF-4D23-8540-6AD5BCBC7EDD}">
                     <File Id="fil532B63275F24DCA11F229D2F2A4A676C" KeyPath="yes" Source="$(var.QMLDIR)\pteidguiV2.exe" />

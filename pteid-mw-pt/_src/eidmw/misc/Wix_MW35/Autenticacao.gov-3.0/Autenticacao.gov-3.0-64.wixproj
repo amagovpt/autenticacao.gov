@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProductVersion>3.10</ProductVersion>
-    <ProjectGuid>96a4d2ea-e05b-4543-b40a-11edf067779a</ProjectGuid>
+    <ProjectGuid>{da88ba5a-fb08-468f-9ddb-e8dcb311a339}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>Autenticacao.gov_3.0</OutputName>
     <OutputType>Package</OutputType>
@@ -21,8 +21,33 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\MW35Wix\Strings-pt.wxl">
+      <Link>Strings-pt.wxl</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixDifxAppExtension">
+      <HintPath>$(WixExtDir)\WixDifxAppExtension.dll</HintPath>
+      <Name>WixDifxAppExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <WixLibrary Include="difxapp_x64">
+      <HintPath>C:\Program Files (x86)\Windows Installer XML v3.5\bin\difxapp_x64.wixlib</HintPath>
+      <Name>difxapp_x64</Name>
+    </WixLibrary>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Product64-3.0.wxs" />
-	<Compile Include="qml-app.wxs" />
+    <Compile Include="qml-app.wxs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

@@ -294,7 +294,7 @@
 
       <!-- It needs NSI to build from Source -->
       <Component Id="OutlookTool" Guid="{F36A543C-CB17-4D91-BF0C-2EAEFEC3CB3A}">
-        <File Source="pteidoutlooksnc.exe" KeyPath="yes" />
+        <File Source="..\MW35Wix\pteidoutlooksnc.exe" KeyPath="yes" />
       </Component>
 
       <!--
@@ -321,8 +321,8 @@
       <Component Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
 		<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlib.dll" />
-        <File Id="libeay32A" Source="$(var.PTEID_BUILD_FOLDER_X86)libeay32.dll" />
-        <File Id="ssleay32A" Source="$(var.PTEID_BUILD_FOLDER_X86)ssleay32.dll" />
+        <File Id="libeay32A" Source="$(env.PTEID_DIR_OPENSSL_098)\bin\libeay32.dll" />
+        <File Id="ssleay32A" Source="$(env.PTEID_DIR_OPENSSL_098)\bin\ssleay32.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll" />
@@ -331,12 +331,12 @@
       </Component>
 
       <Component Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44D4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)xerces-c_3_1.dll" KeyPath="yes"/>
+        <File Source="$(env.PTEID_DIR_XERCES_31)\bin\xerces-c_3_1.dll" KeyPath="yes"/>
       </Component>
 
       <!--Our Build of LibCurl - custom build options to remove unneeded features-->
       <Component Id="Curl" Guid="{1BA8207B-BEC4-43E3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)libcurl.dll" KeyPath="yes" />
+        <File Source="$(env.PTEID_DIR_CURL)\build\Win32\VC12\DLL Release\libcurl.dll" KeyPath="yes" />
       </Component>
 
       <!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
@@ -353,7 +353,7 @@
       </Component>
 
       <Component Id="XMLSecurity" Guid="{EF7A30DC-47CC-4385-832A-8E871EF69F65}" SharedDllRefCount="yes">
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)xsec_1_7.dll" KeyPath="yes" />
+        <File Source="$(env.PTEID_XMLSECURITY)\Build\Win32\VC10\Release No Xalan\xsec_1_7.dll" KeyPath="yes" />
       </Component>
 
       <Component Id="pkcs11" Guid="{D54164C0-795D-4B2D-96C6-C8E395100896}" SharedDllRefCount="yes">
